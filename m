@@ -1,63 +1,63 @@
-Return-Path: <linux-arch+bounces-3332-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3333-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41FC08922C0
-	for <lists+linux-arch@lfdr.de>; Fri, 29 Mar 2024 18:29:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C13628922C5
+	for <lists+linux-arch@lfdr.de>; Fri, 29 Mar 2024 18:30:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2EB121C27AE8
-	for <lists+linux-arch@lfdr.de>; Fri, 29 Mar 2024 17:29:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 79ACA2823CB
+	for <lists+linux-arch@lfdr.de>; Fri, 29 Mar 2024 17:30:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4C05134412;
-	Fri, 29 Mar 2024 17:28:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06FDF6A8D2;
+	Fri, 29 Mar 2024 17:30:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QVFN7BIf"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c48I5SJI"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5503485925;
-	Fri, 29 Mar 2024 17:28:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69CB62033E;
+	Fri, 29 Mar 2024 17:30:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711733327; cv=none; b=Vi3GGI/nXlDXCV1D2qqUA1JlzeBAGQqiksdYUYoKqG4q/tA7HfC4cqSBj3k4lymTnT8v8vLnRZYOzo2CEE/FPYKV73Cv2oPjjrLN7krOqEc8PIX5g2zlao9UGcN8MFOkBnDmEg63rfnVr0siTl5YJhcbQhJJ8IWD604tJU+K8M4=
+	t=1711733418; cv=none; b=AUC/HdYPS7SKR9cjFvb+VS116Sb5F9XcTyjr/6SRKalrxrSSPrkGgfIlHHCLkze0GcWQIvMFvlv6wnSn3+aez1ApjCMO6yCDu6TGEtDVCgWolfiHyib1US6CdYFHPZ4XL4Hi3U1ZljcYQ69q7dADCCtKUQ2BuaY3Sr2dtwMvY+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711733327; c=relaxed/simple;
-	bh=yFDVjGYfjWII0t1wE88WD1st8TP3w0lvfG9W2m2CZOE=;
+	s=arc-20240116; t=1711733418; c=relaxed/simple;
+	bh=skmiPVy+9TKQ2YOwN5z49H0coa6SVnQShC/bqYFiK/I=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WcW6c3Ao1+e3iA+naMeh3HVBsY6BvHZZjyNNXJ4ELs6jvpC4hBsdkURsy2SqzU9MX4MGbtdS3zQ6IOC4AmMmB/Z27kR24t1fP+aQI35V7P6CijfGWe9aWDmGISiGrb7oVdBzahd0A2IRN7ipQbYRfX/yB74qvZLfkJSwKBdN0og=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QVFN7BIf; arc=none smtp.client-ip=192.198.163.13
+	 In-Reply-To:Content-Type; b=rJ4ydCjmQ+gXdJH+rjFqozfdccHKDcpH/GI4olFhaPz8hSfanoGhP5fMpRt6YREX+d4XnJM/lIr5/sba/CeQ2Oe8bSvjsZSSyjKqyQAVXcjPz1g0Saeb5uQmTnEzfYljqjZQad3no/UPm8esVfyxlEteF+Yngk481OcTY2OHxk0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c48I5SJI; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711733326; x=1743269326;
+  t=1711733417; x=1743269417;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=yFDVjGYfjWII0t1wE88WD1st8TP3w0lvfG9W2m2CZOE=;
-  b=QVFN7BIfnn4x8y7CpO+mo+KH7FiVqfbhR6OvfgL/VD24ZsFFxuIJLG++
-   wcZX+p57CZig7RkmU/l1z7i1CInY+mFguaalyrPK5iKWO81E0W9gycLCb
-   RM9XV8TOoyjdHTL+lRLHOaWd1uzJ8ADSP1SWjElfllugUJNzd2MDrlA4p
-   Wu0fkcPYmAzQmW89dY7wU4Sy60hW4kbBR5hzCIF5yBmKwyJImjBTxn+0j
-   9bzVf6AEhhsNfgxGVgSfsQLIxYdz+yUQk5W8dwKnxea7xXc+M+hamd19H
-   N65mTUuF/k+G+rL9msFsgsMoVNo665fmKsKmNAmgUPEgGq401/PBB/6iX
+  bh=skmiPVy+9TKQ2YOwN5z49H0coa6SVnQShC/bqYFiK/I=;
+  b=c48I5SJIPwR+axUrPh8WKPG9Xmp+U1nOkEWOPu29HeEK6Rav38F0O/z/
+   SdndiDYOLISAoljPgHfYFIn9/2JbzTyBSC9v+irUK6tsvTBYHKtP6otHT
+   q4VHRCVy2daRQuZQfxxwFe9lE7D9Kx/zITvJjUQ2cd210KwvvKr78aNCl
+   rbUDvVy3NHwKXBNFhtgbiBtFS5qCH58gbyDKaDhnRNMEj02wIj9mqYIWW
+   vze8bPv+vuG3rJnFcXluJ1HVWV+Wn1oVczpWx6cdAga5R5dvQI894aVOR
+   cMDH6fPwbI6LjE3wIYc5taFWR5ag82coGG4Y+2dxLCPU5VxFMKN/gPPvE
    g==;
-X-CSE-ConnectionGUID: 7cYnQ/HkRS2eXCJq+KMszw==
-X-CSE-MsgGUID: qu73ez8KSIi+Kg22f2Z7eA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11028"; a="9882635"
+X-CSE-ConnectionGUID: Jh8sEoFYQ5m3zD/htvjIOA==
+X-CSE-MsgGUID: IsOowuHcRCuXHyfYeCwwmQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11028"; a="9882786"
 X-IronPort-AV: E=Sophos;i="6.07,165,1708416000"; 
-   d="scan'208";a="9882635"
+   d="scan'208";a="9882786"
 Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2024 10:28:45 -0700
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2024 10:30:17 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,165,1708416000"; 
-   d="scan'208";a="40178285"
+   d="scan'208";a="40178522"
 Received: from sergeyko-mobl.amr.corp.intel.com (HELO [10.212.56.129]) ([10.212.56.129])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2024 10:28:45 -0700
-Message-ID: <d2c3cd78-cdc6-4a39-9804-4f30402751b1@intel.com>
-Date: Fri, 29 Mar 2024 10:28:44 -0700
+  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2024 10:30:16 -0700
+Message-ID: <d795b1ac-5e3d-4450-8ca7-3da7f53a5482@intel.com>
+Date: Fri, 29 Mar 2024 10:30:15 -0700
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -65,7 +65,7 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 10/15] x86: Implement ARCH_HAS_KERNEL_FPU_SUPPORT
+Subject: Re: [PATCH v4 09/15] x86/fpu: Fix asm/fpu/types.h include guard
 To: Samuel Holland <samuel.holland@sifive.com>,
  Andrew Morton <akpm@linux-foundation.org>,
  linux-arm-kernel@lists.infradead.org, x86@kernel.org
@@ -76,7 +76,7 @@ Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
  Dave Hansen <dave.hansen@linux.intel.com>, Ingo Molnar <mingo@redhat.com>,
  Thomas Gleixner <tglx@linutronix.de>
 References: <20240329072441.591471-1-samuel.holland@sifive.com>
- <20240329072441.591471-11-samuel.holland@sifive.com>
+ <20240329072441.591471-10-samuel.holland@sifive.com>
 Content-Language: en-US
 From: Dave Hansen <dave.hansen@intel.com>
 Autocrypt: addr=dave.hansen@intel.com; keydata=
@@ -122,33 +122,13 @@ Autocrypt: addr=dave.hansen@intel.com; keydata=
  MTsCeQDdjpgHsj+P2ZDeEKCbma4m6Ez/YWs4+zDm1X8uZDkZcfQlD9NldbKDJEXLIjYWo1PH
  hYepSffIWPyvBMBTW2W5FRjJ4vLRrJSUoEfJuPQ3vW9Y73foyo/qFoURHO48AinGPZ7PC7TF
  vUaNOTjKedrqHkaOcqB185ahG2had0xnFsDPlx5y
-In-Reply-To: <20240329072441.591471-11-samuel.holland@sifive.com>
+In-Reply-To: <20240329072441.591471-10-samuel.holland@sifive.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 3/29/24 00:18, Samuel Holland wrote:
-> +#
-> +# CFLAGS for compiling floating point code inside the kernel.
-> +#
-> +CC_FLAGS_FPU := -msse -msse2
-> +ifdef CONFIG_CC_IS_GCC
-> +# Stack alignment mismatch, proceed with caution.
-> +# GCC < 7.1 cannot compile code using `double` and -mpreferred-stack-boundary=3
-> +# (8B stack alignment).
-> +# See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=53383
-> +#
-> +# The "-msse" in the first argument is there so that the
-> +# -mpreferred-stack-boundary=3 build error:
-> +#
-> +#  -mpreferred-stack-boundary=3 is not between 4 and 12
-> +#
-> +# can be triggered. Otherwise gcc doesn't complain.
-> +CC_FLAGS_FPU += -mhard-float
-> +CC_FLAGS_FPU += $(call cc-option,-msse -mpreferred-stack-boundary=3,-mpreferred-stack-boundary=4)
-> +endif
+> The include guard should match the filename, or it will conflict with
+> the newly-added asm/fpu.h.
 
-I was expecting to see this (now duplicate) hunk come _out_ of
-lib/Makefile somewhere in the series.
-
-Did I miss that, or is there something keeping the duplicate there?
+Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
 
