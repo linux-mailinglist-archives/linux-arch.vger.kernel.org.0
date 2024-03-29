@@ -1,158 +1,128 @@
-Return-Path: <linux-arch+bounces-3326-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3327-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10BD789144F
-	for <lists+linux-arch@lfdr.de>; Fri, 29 Mar 2024 08:29:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA14C891617
+	for <lists+linux-arch@lfdr.de>; Fri, 29 Mar 2024 10:34:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BB3EE287A08
-	for <lists+linux-arch@lfdr.de>; Fri, 29 Mar 2024 07:29:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 73F832879F9
+	for <lists+linux-arch@lfdr.de>; Fri, 29 Mar 2024 09:34:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2440742044;
-	Fri, 29 Mar 2024 07:26:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FA09482E9;
+	Fri, 29 Mar 2024 09:34:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="q9KYzPmV"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wcU3pgyb"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f74.google.com (mail-wr1-f74.google.com [209.85.221.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B234640852;
-	Fri, 29 Mar 2024 07:26:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F61238FA6
+	for <linux-arch@vger.kernel.org>; Fri, 29 Mar 2024 09:34:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711697187; cv=none; b=hw6Eis9ddJb9IwD2cv+WrzkxEgnn3ggAGYt54NetTIUX2no+Qrv0lhTaC+E5WVBzbiJIvjMpiaLQysG1JxwHd770r0LyUJHdm1b/q8aDwKBYYlSxZoRZslPS3kXXSgQ5MgGh57+kr4yI6ZvJX+kDedmgKjv3cgW5fKfFcadPR2I=
+	t=1711704854; cv=none; b=fRiGVYmMQM4Ke23V2rzfCzOypwJafx7PsaMyRy+qULkxwFMfilTuM4PFQqBPGGuaFOVsEV8opLZSFy5rPG9CvI4+3FPVRMoFkBIFv/tTIDR8OJbKJKzlZTmX+bamFQ+K247lwvFuifrP0001IlJqee0H9ye0UCxVRAtGyh2P1tc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711697187; c=relaxed/simple;
-	bh=bInZpQe27T+FP7otvnqd8TxPV4Zh13QdnbFoeMPgJnc=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eENRMVkbYq0Ozk126qilqOn8vnqfbV0JoR/eKYpsdKXVETtdecyS5UKOqPO2VsixeRY8cHbpY3eohIsJcaUAL0650rRGo3ZD6Ky4pa1pBOc1DO8djG6pkN3YaZLCtmRqcOv45EDzuuHsmkBVbYlLSmYaXF/XLFhSY51t1mbEMJo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=q9KYzPmV; arc=none smtp.client-ip=68.232.154.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1711697184; x=1743233184;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bInZpQe27T+FP7otvnqd8TxPV4Zh13QdnbFoeMPgJnc=;
-  b=q9KYzPmVJjrJ6tgXYfLM0nykx+0MF85Rv9lRi5SK4IlswgbmhkfvpkU1
-   McZnx1IyjywhW5dOhKUiDz/GYTG5lhKOpC8z/eLroZ2E3dNbOdE4dc0Sx
-   CoQYB1SdH2Uud/yTiymvOP7RFYNJkYnOWMq9kpmSTTTz1obfHZI/eeWhL
-   kndenZr2p7+q6SLDRTRiSav3rYwG2B8fTT8xWvhCQfj9Yr5NrRZORoGDm
-   axA2QjRMetVFd7MbTexiRrdvy3hwf5j8IFtHXTN5d8Fnz1CaJaKV+OGOD
-   kLrwA7mokw6PLG5tkRX9l5VAMPE8t22/nfeLGPiJZsp6kDMAQZ5Lv2HUh
-   Q==;
-X-CSE-ConnectionGUID: 15IXURycT2uyFkZ6j12usw==
-X-CSE-MsgGUID: 3NX0TeF6T2SxAshBbDmoVA==
-X-IronPort-AV: E=Sophos;i="6.07,164,1708412400"; 
-   d="asc'?scan'208";a="18569006"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 29 Mar 2024 00:26:21 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Fri, 29 Mar 2024 00:25:57 -0700
-Received: from wendy (10.10.85.11) by chn-vm-ex03.mchp-main.com (10.10.85.151)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
- Transport; Fri, 29 Mar 2024 00:25:45 -0700
-Date: Fri, 29 Mar 2024 07:24:57 +0000
-From: Conor Dooley <conor.dooley@microchip.com>
-To: Deepak Gupta <debug@rivosinc.com>
-CC: <paul.walmsley@sifive.com>, <rick.p.edgecombe@intel.com>,
-	<broonie@kernel.org>, <Szabolcs.Nagy@arm.com>, <kito.cheng@sifive.com>,
-	<keescook@chromium.org>, <ajones@ventanamicro.com>, <cleger@rivosinc.com>,
-	<atishp@atishpatra.org>, <alex@ghiti.fr>, <bjorn@rivosinc.com>,
-	<alexghiti@rivosinc.com>, <samuel.holland@sifive.com>, <palmer@sifive.com>,
-	<conor@kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-mm@kvack.org>,
-	<linux-arch@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<corbet@lwn.net>, <tech-j-ext@lists.risc-v.org>, <palmer@dabbelt.com>,
-	<aou@eecs.berkeley.edu>, <robh+dt@kernel.org>,
-	<krzysztof.kozlowski+dt@linaro.org>, <oleg@redhat.com>,
-	<akpm@linux-foundation.org>, <arnd@arndb.de>, <ebiederm@xmission.com>,
-	<Liam.Howlett@oracle.com>, <vbabka@suse.cz>, <lstoakes@gmail.com>,
-	<shuah@kernel.org>, <brauner@kernel.org>, <andy.chiu@sifive.com>,
-	<jerry.shih@sifive.com>, <hankuan.chen@sifive.com>,
-	<greentime.hu@sifive.com>, <evan@rivosinc.com>, <xiao.w.wang@intel.com>,
-	<charlie@rivosinc.com>, <apatel@ventanamicro.com>,
-	<mchitale@ventanamicro.com>, <dbarboza@ventanamicro.com>,
-	<sameo@rivosinc.com>, <shikemeng@huaweicloud.com>, <willy@infradead.org>,
-	<vincent.chen@sifive.com>, <guoren@kernel.org>, <samitolvanen@google.com>,
-	<songshuaishuai@tinylab.org>, <gerg@kernel.org>, <heiko@sntech.de>,
-	<bhe@redhat.com>, <jeeheng.sia@starfivetech.com>, <cyy@cyyself.name>,
-	<maskray@google.com>, <ancientmodern4@gmail.com>, <mathis.salmen@matsal.de>,
-	<cuiyunhui@bytedance.com>, <bgray@linux.ibm.com>, <mpe@ellerman.id.au>,
-	<baruch@tkos.co.il>, <alx@kernel.org>, <david@redhat.com>,
-	<catalin.marinas@arm.com>, <revest@chromium.org>, <josh@joshtriplett.org>,
-	<shr@devkernel.io>, <deller@gmx.de>, <omosnace@redhat.com>,
-	<ojeda@kernel.org>, <jhubbard@nvidia.com>
-Subject: Re: [PATCH v2 04/27] riscv: zicfiss/zicfilp enumeration
-Message-ID: <20240329-condition-morse-c3d02720853a@wendy>
-References: <20240329044459.3990638-1-debug@rivosinc.com>
- <20240329044459.3990638-5-debug@rivosinc.com>
+	s=arc-20240116; t=1711704854; c=relaxed/simple;
+	bh=YqzLsUuh++ZlBracS/PXtopG9p7kP2UzeZKBKBcMbbY=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=UMSEpUNS8Pw1VoiUrIKjuKJbr44EAliNeQxznEbBm/1JKVr5oetmn2iAxfAXpXWDroKPLfDBNs7+GM8lCJn9FNqjKRTcocw7vAQqWNkBqC0h8ynMSpbPiOg+9UwOQWIzUNeBlcKyjIIQXwpyGD9OWhf3uNTfN9wizFaBRnBiCRM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wcU3pgyb; arc=none smtp.client-ip=209.85.221.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
+Received: by mail-wr1-f74.google.com with SMTP id ffacd0b85a97d-3419f517aceso808842f8f.3
+        for <linux-arch@vger.kernel.org>; Fri, 29 Mar 2024 02:34:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1711704850; x=1712309650; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=kSI+K3Sj79xTDwp3kEwJFO6zCHnVt2HEzFL8mdP9uWo=;
+        b=wcU3pgybbRvCTZ1vJMWfwkW7xBg7/ga1kZvWCgcRCxQyjEVQoXHXOjjjDHHWz/xnl+
+         CK48PX5YV7EKeDv8C48L2k20pe6TfywKVEVTSzGmUGMAyzfYpo+IkoDdE1Mweleo+Y7j
+         N3FmaHxZZQl6jhQUx/LP+WZi0DE/gGeoHpkSPHx7e8PIrS0Rp5B/op6beWYfMiXwcZM5
+         8V+nlVYg4b4F+4yz2vu71jge92y3gCLP5eHzctjUEEz82aFXmuW8NKULquHHPo/16IuU
+         MTD0MUjheKHP3s8F7F7T91dTCmmRBKI16G5WGkRBCfiGKobq6gBXoy/EgeSECWFsbxkS
+         FQVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711704850; x=1712309650;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kSI+K3Sj79xTDwp3kEwJFO6zCHnVt2HEzFL8mdP9uWo=;
+        b=QWEKPvCcgNhYdrL35SINtNVVD8XMik5bOkgIGFYUIRIHEK0nlvVpBXnRajWX/7ycnW
+         vmYy5JcVyE03RS+Tuk6EzpdjAeLje2S0yGTPrB8bpSh7TU4oxEsMZNN/UmwOn5AL/9Ik
+         w6XxVOcn7Yo3Cb08nJ0Hj0RPEsxEfXvWksTt+rZYwBNyvgGulAnw8iqyKr7MubcxyqNP
+         3w9GIDfDmg4bTfc14WZRsaGE/KrXzBnc569rda22m+OcKXdoAjHQPJUpAk0Z7Baubf/O
+         8UzWUssNDDJSD5Xw8OBFKKKq3mUA8vWoGYKmWY/xGuU+X/3aTyvFJaSFauy3HerdgSmG
+         6sXQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV2+7vZA7O+GT4QOjVHemMgdpxPE41y7vkeTrQi+4Asobyg+jZeLiTPD8L1KsYPtLsRhovC4vrZ1uGYC1OLPfsIUlYqWiedDYzLBQ==
+X-Gm-Message-State: AOJu0Yygz13OMzYXBWMWfgUKYBKzHFfHwMDRhd2KYEPe6J3JGM4+2Mdx
+	f7GBZLGRcJ1s9qiXgeGgaVQQzgnKGyIEJLEcdgtMZcKce68Z1baSaVzuYK9hvDL57NrOFA==
+X-Google-Smtp-Source: AGHT+IGcwlMy3+7hgVTbOD2Y2cNsSH8oCeqS+0FGa05sbpjsthtpwwKqM1asTqo0T9/0yAvtPJ1tq/sc
+X-Received: from palermo.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:118a])
+ (user=ardb job=sendgmr) by 2002:a5d:6a10:0:b0:343:3e4a:3e73 with SMTP id
+ m16-20020a5d6a10000000b003433e4a3e73mr147wru.5.1711704849580; Fri, 29 Mar
+ 2024 02:34:09 -0700 (PDT)
+Date: Fri, 29 Mar 2024 10:33:57 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="kiXl0dlDZ9ZIiu8P"
-Content-Disposition: inline
-In-Reply-To: <20240329044459.3990638-5-debug@rivosinc.com>
+Mime-Version: 1.0
+X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1576; i=ardb@kernel.org;
+ h=from:subject; bh=O3B+MP1L7ukd5u8YOc4vTvrdKdbfN6TIr9UOdzn8cCc=;
+ b=owGbwMvMwCFmkMcZplerG8N4Wi2JIY2tm/X8qeDsk1anEj4xy3xvMXDL+PvbzvfTVLOvZkIrt
+ WZm2N7sKGVhEONgkBVTZBGY/ffdztMTpWqdZ8nCzGFlAhnCwMUpABOp8WNk2BrKNsf/Rvoj06Ay
+ Nr7quce9uhbwTF3UumaK9qeZaxwnWjIyvBC/c3X//Vqfio13YwOnnz6X6CzX933tJmYWK453R1d b8wIA
+X-Mailer: git-send-email 2.44.0.478.gd926399ef9-goog
+Message-ID: <20240329093356.276289-5-ardb+git@google.com>
+Subject: [PATCH 0/3] kbuild: Avoid weak external linkage where possible
+From: Ard Biesheuvel <ardb+git@google.com>
+To: linux-kernel@vger.kernel.org
+Cc: Ard Biesheuvel <ardb@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, linux-arch@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
---kiXl0dlDZ9ZIiu8P
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+From: Ard Biesheuvel <ardb@kernel.org>
 
-On Thu, Mar 28, 2024 at 09:44:36PM -0700, Deepak Gupta wrote:
-> Adds description in dt-bindings (extensions.yaml)
->=20
-> This patch adds support for detecting zicfiss and zicfilp. zicfiss and zi=
-cfilp
-> stands for unprivleged integer spec extension for shadow stack and branch
-> tracking on indirect branches, respectively.
->=20
-> This patch looks for zicfiss and zicfilp in device tree and accordinlgy l=
-ights
-> up bit in cpu feature bitmap. Furthermore this patch adds detection utili=
-ty
-> functions to return whether shadow stack or landing pads are supported by
-> cpu.
->=20
-> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
-> ---
+Weak external linkage is intended for cases where a symbol reference
+can remain unsatisfied in the final link. Taking the address of such a
+symbol should yield NULL if the reference was not satisfied.
 
->  .../devicetree/bindings/riscv/extensions.yaml       | 10 ++++++++++
+Given that ordinary RIP or PC relative references cannot produce NULL,
+some kind of indirection is always needed in such cases, and in position
+independent code, this results in a GOT entry. In ordinary code, it is
+arch specific but amounts to the same thing.
 
-Checkpatch should have told you that bindings changes need to be in
-separate patches.
+While unavoidable in some cases, weak references are currently also used
+to declare symbols that are always defined in the final link, but not in
+the first linker pass. This means we end up with worse codegen for no
+good reason. So let's clean this up, by providing preliminary
+definitions that are only used as a fallback.
 
-Thanks,
-Conor.
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: linux-arch@vger.kernel.org
+Cc: linux-kbuild@vger.kernel.org
+Cc: bpf@vger.kernel.org
 
->  arch/riscv/include/asm/cpufeature.h                 | 13 +++++++++++++
->  arch/riscv/include/asm/hwcap.h                      |  2 ++
->  arch/riscv/include/asm/processor.h                  |  1 +
->  arch/riscv/kernel/cpufeature.c                      |  2 ++
+Ard Biesheuvel (3):
+  kallsyms: Avoid weak references for kallsyms symbols
+  vmlinux: Avoid weak reference to notes section
+  btf: Avoid weak external references
 
---kiXl0dlDZ9ZIiu8P
-Content-Type: application/pgp-signature; name="signature.asc"
+ include/asm-generic/vmlinux.lds.h | 21 ++++++++++++++
+ kernel/bpf/btf.c                  |  4 +--
+ kernel/kallsyms.c                 |  6 ----
+ kernel/kallsyms_internal.h        | 30 ++++++++------------
+ kernel/ksysfs.c                   |  4 +--
+ lib/buildid.c                     |  4 +--
+ 6 files changed, 39 insertions(+), 30 deletions(-)
 
------BEGIN PGP SIGNATURE-----
+-- 
+2.44.0.478.gd926399ef9-goog
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZgZsvgAKCRB4tDGHoIJi
-0iYTAQD/x2jCSMw3PvwFsNJ6v7adg+YdWitg5NvBburVYvIikAEA0Qu7dWdDtcJk
-H0K8lWXiWqqumgSgXhcWgk/Gp2U1igQ=
-=0twh
------END PGP SIGNATURE-----
-
---kiXl0dlDZ9ZIiu8P--
 
