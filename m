@@ -1,82 +1,82 @@
-Return-Path: <linux-arch+bounces-3343-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3344-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C910893246
-	for <lists+linux-arch@lfdr.de>; Sun, 31 Mar 2024 18:03:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B1358933EC
+	for <lists+linux-arch@lfdr.de>; Sun, 31 Mar 2024 18:51:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF9B61F22598
-	for <lists+linux-arch@lfdr.de>; Sun, 31 Mar 2024 16:03:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 746FE1F25B13
+	for <lists+linux-arch@lfdr.de>; Sun, 31 Mar 2024 16:51:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE01F146A8D;
-	Sun, 31 Mar 2024 16:02:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F27C615689D;
+	Sun, 31 Mar 2024 16:40:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="SuO/o9hH";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="CFzrdsSx"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="0N/h/M4o";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="pmoyIzmQ"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C18FC14601B;
-	Sun, 31 Mar 2024 16:02:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 718E6156644;
+	Sun, 31 Mar 2024 16:40:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=62.96.220.36
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711900930; cv=pass; b=cr+ZJjXgBkVjlMMIsjOYxl7oC9PjSQMqOGLfWzr15f5GKIccue0faYUZDKT/wouZP4+KALuj4lkmwjj+ER8vzs4HR0547tDF6b8jVFi2G2L4Ef5rd6ofLjV7CRpoBAiiz1G25MF5w5DyiaMKLAbMEfseS2L1g91MrHoXEVlfWy0=
+	t=1711903216; cv=pass; b=RLnsW9pKms7Cew/z1feP0p7lUnd+GLRhu4CCfJxD6HfKctCm/MF05KrRvpWI9mHmr0Q+E068UlV7LUkPlssNpYDyaMblfwAU0GGW6A49J8ypDkir3gKlpK2iNKBX+Z4lD1m+nm83+Ahv/nRGtqtCLyyp6C5oAzcjKC4/x/bVWRk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711900930; c=relaxed/simple;
-	bh=wjr0wxurAHUDsgUa3LOd+Gda+u2lXRCA/UsEWyt8a0Q=;
+	s=arc-20240116; t=1711903216; c=relaxed/simple;
+	bh=1F3bC9AfluAx91aimWFrXnEkMkyhFJNbxwKmrZG2b8A=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=j+r+4Lt5pxK4bV2jX7aW5Ge9oDb21S6H/NsiAp6M/2Ro2LbU8pN0G/PYVK601TzV03k5KBHV7TI7iDdDKgTF26EaOXGD2jof0H4Mf6q0OkTYffXEFBaP+7S59M/VQLjRnr+vtoUPrtXUjwO+3pPkT3p28mKBcgG1zvQkGz4DUhA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=fail smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=SuO/o9hH; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=CFzrdsSx; arc=none smtp.client-ip=195.135.223.131; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; arc=pass smtp.client-ip=62.96.220.36
+	 MIME-Version:Content-Type; b=aE/77ZOXUeBpAmsW0+KWqswvxXCZU13wJ8cho4j62zluTfk7p6d6ZoTXo6UKgTNyKRi5v4w4ZEh2hk/1EHFqAP4SGGA/2ZuLDew42K2/XGmDxMTAeEZkfLTZf4CX1TMME/6K27/geyPbmfmUtAKGEsApKU990O0A8Gi6Sf1nSZw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=fail smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=0N/h/M4o; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=pmoyIzmQ; arc=none smtp.client-ip=195.135.223.130; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; arc=pass smtp.client-ip=62.96.220.36
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=suse.de
 Received: from localhost (localhost [127.0.0.1])
-	by a.mx.secunet.com (Postfix) with ESMTP id 31568207D8;
-	Sun, 31 Mar 2024 18:02:06 +0200 (CEST)
+	by a.mx.secunet.com (Postfix) with ESMTP id 080B4208CC;
+	Sun, 31 Mar 2024 18:40:11 +0200 (CEST)
 X-Virus-Scanned: by secunet
 Received: from a.mx.secunet.com ([127.0.0.1])
 	by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id cqbkxE7dvfka; Sun, 31 Mar 2024 18:02:05 +0200 (CEST)
-Received: from mailout2.secunet.com (mailout2.secunet.com [62.96.220.49])
+	with ESMTP id EEfopbYeUoOB; Sun, 31 Mar 2024 18:40:09 +0200 (CEST)
+Received: from mailout1.secunet.com (mailout1.secunet.com [62.96.220.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by a.mx.secunet.com (Postfix) with ESMTPS id 97B452084A;
-	Sun, 31 Mar 2024 18:02:03 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 a.mx.secunet.com 97B452084A
+	by a.mx.secunet.com (Postfix) with ESMTPS id A8A0B208BE;
+	Sun, 31 Mar 2024 18:40:05 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 a.mx.secunet.com A8A0B208BE
 Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
-	by mailout2.secunet.com (Postfix) with ESMTP id 8977580004A;
-	Sun, 31 Mar 2024 18:02:03 +0200 (CEST)
+	by mailout1.secunet.com (Postfix) with ESMTP id 9B42680004A;
+	Sun, 31 Mar 2024 18:40:05 +0200 (CEST)
 Received: from mbx-essen-01.secunet.de (10.53.40.197) by
  cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Sun, 31 Mar 2024 18:02:03 +0200
+ 15.1.2507.35; Sun, 31 Mar 2024 18:40:05 +0200
 Received: from Pickup by mbx-essen-01.secunet.de with Microsoft SMTP Server id
- 15.1.2507.17; Sun, 31 Mar 2024 15:52:40 +0000
-X-sender: <linux-kernel+bounces-125398-steffen.klassert=secunet.com@vger.kernel.org>
-X-Receiver: <steffen.klassert@secunet.com>
- ORCPT=rfc822;steffen.klassert@secunet.com NOTIFY=NEVER;
- X-ExtendedProps=BQAVABYAAgAAAAUAFAARAPDFCS25BAlDktII2g02frgPADUAAABNaWNyb3NvZnQuRXhjaGFuZ2UuVHJhbnNwb3J0LkRpcmVjdG9yeURhdGEuSXNSZXNvdXJjZQIAAAUAagAJAAEAAAAAAAAABQAWAAIAAAUAQwACAAAFAEYABwADAAAABQBHAAIAAAUAEgAPAGIAAAAvbz1zZWN1bmV0L291PUV4Y2hhbmdlIEFkbWluaXN0cmF0aXZlIEdyb3VwIChGWURJQk9IRjIzU1BETFQpL2NuPVJlY2lwaWVudHMvY249U3RlZmZlbiBLbGFzc2VydDY4YwUACwAXAL4AAACheZxkHSGBRqAcAp3ukbifQ049REI2LENOPURhdGFiYXNlcyxDTj1FeGNoYW5nZSBBZG1pbmlzdHJhdGl2ZSBHcm91cCAoRllESUJPSEYyM1NQRExUKSxDTj1BZG1pbmlzdHJhdGl2ZSBHcm91cHMsQ049c2VjdW5ldCxDTj1NaWNyb3NvZnQgRXhjaGFuZ2UsQ049U2VydmljZXMsQ049Q29uZmlndXJhdGlvbixEQz1zZWN1bmV0LERDPWRlBQAOABEABiAS9uuMOkqzwmEZDvWNNQUAHQAPAAwAAABtYngtZXNzZW4tMDIFADwAAgAADwA2AAAATWljcm9zb2Z0LkV4Y2hhbmdlLlRyYW5zcG9ydC5NYWlsUmVjaXBpZW50LkRpc3BsYXlOYW1lDwARAAAAS2xhc3NlcnQsIFN0ZWZmZW4FAAwAAgAABQBsAAIAAAUAWAAXAEoAAADwxQktuQQJQ5LSCNoNNn64Q049S2xhc3NlcnQgU3RlZmZlbixPVT1Vc2VycyxPVT1NaWdyYXRpb24sREM9c2VjdW5ldCxEQz1kZQUAJgACAAEFACIADwAxAAAAQXV0b1Jlc3BvbnNlU3VwcHJlc3M6IDANClRyYW5zbWl0SGlzdG9ye
-	TogRmFsc2UNCg8ALwAAAE1pY3Jvc29mdC5FeGNoYW5nZS5UcmFuc3BvcnQuRXhwYW5zaW9uR3JvdXBUeXBlDwAVAAAATWVtYmVyc0dyb3VwRXhwYW5zaW9uBQAjAAIAAQ==
+ 15.1.2507.17; Sun, 31 Mar 2024 16:36:39 +0000
+X-sender: <linux-kernel+bounces-125395-steffen.klassert=secunet.com@vger.kernel.org>
+X-Receiver: <steffen.klassert@secunet.com> ORCPT=rfc822;steffen.klassert@secunet.com
 X-CreatedBy: MSExchange15
-X-HeloDomain: a.mx.secunet.com
-X-ExtendedProps: BQBjAAoAqwprGbMv3AgFAGEACAABAAAABQA3AAIAAA8APAAAAE1pY3Jvc29mdC5FeGNoYW5nZS5UcmFuc3BvcnQuTWFpbFJlY2lwaWVudC5Pcmdhbml6YXRpb25TY29wZREAAAAAAAAAAAAAAAAAAAAAAAUASQACAAEFAAQAFCABAAAAHAAAAHN0ZWZmZW4ua2xhc3NlcnRAc2VjdW5ldC5jb20FAAYAAgABBQApAAIAAQ8ACQAAAENJQXVkaXRlZAIAAQUAAgAHAAEAAAAFAAMABwAAAAAABQAFAAIAAQUAYgAKAH4AAADKigAABQBkAA8AAwAAAEh1Yg==
-X-Source: SMTP:Default MBX-ESSEN-01
-X-SourceIPAddress: 62.96.220.36
-X-EndOfInjectedXHeaders: 26157
+X-HeloDomain: mbx-essen-01.secunet.de
+X-ExtendedProps: BQBjAAoAAEamlidQ3AgFADcAAgAADwA8AAAATWljcm9zb2Z0LkV4Y2hhbmdlLlRyYW5zcG9ydC5NYWlsUmVjaXBpZW50Lk9yZ2FuaXphdGlvblNjb3BlEQAAAAAAAAAAAAAAAAAAAAAADwA/AAAATWljcm9zb2Z0LkV4Y2hhbmdlLlRyYW5zcG9ydC5EaXJlY3RvcnlEYXRhLk1haWxEZWxpdmVyeVByaW9yaXR5DwADAAAATG93
+X-Source: SMTP:Default MBX-ESSEN-02
+X-SourceIPAddress: 10.53.40.197
+X-EndOfInjectedXHeaders: 13533
 X-Virus-Scanned: by secunet
-Received-SPF: Pass (sender SPF authorized) identity=mailfrom; client-ip=147.75.80.249; helo=am.mirrors.kernel.org; envelope-from=linux-kernel+bounces-125398-steffen.klassert=secunet.com@vger.kernel.org; receiver=steffen.klassert@secunet.com 
-DKIM-Filter: OpenDKIM Filter v2.11.0 a.mx.secunet.com 57823207E4
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+Received-SPF: Pass (sender SPF authorized) identity=mailfrom; client-ip=139.178.88.99; helo=sv.mirrors.kernel.org; envelope-from=linux-kernel+bounces-125395-steffen.klassert=secunet.com@vger.kernel.org; receiver=steffen.klassert@secunet.com 
+DKIM-Filter: OpenDKIM Filter v2.11.0 b.mx.secunet.com 6546C20270
+Authentication-Results: b.mx.secunet.com;
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="0N/h/M4o";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="pmoyIzmQ"
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal: i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711744505; cv=none; b=D2ofjUhYBPAnqU8lGAhowDvfKwsItz+8XiC0p7wMkxuzWnDcahsqJl+Z5HKtPDPI+MetQI3YaOVOv5tLpSvIPWVaMMXdp4qlViEK/xXHpxCcdra9ZZYwrzYgXUPMe+gtt1DDxvanHOYB5LZYgh8ofD7NZbGMk2iUTxrdnwldbao=
+	t=1711744502; cv=none; b=fjcYnOCS7m7++i3mArJETlO99jp5LHVpDekfQ1dZyeMRjBF0Cpe2hAUeUh2A4DcERRQvb3/72zlFOhXnasMv3uwJDatB2vi6zhTUazXTg8DkWm3iACGEOAO17G8ZyrRSvG2VBCQOb1TYOIZ8Ue6RVuO2+O0Zb7+44GJq7IXaYNk=
 ARC-Message-Signature: i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711744505; c=relaxed/simple;
-	bh=wjr0wxurAHUDsgUa3LOd+Gda+u2lXRCA/UsEWyt8a0Q=;
+	s=arc-20240116; t=1711744502; c=relaxed/simple;
+	bh=1F3bC9AfluAx91aimWFrXnEkMkyhFJNbxwKmrZG2b8A=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=c6zWdb/QOiyoMceMcDcA8vFwnlVuJc7LbUAkHuhp4UngvEgzwkOlU+xd4pRYMEBWm4nDCWGwYto5FgcEGk+gQpyLpmDmAyhWtlQu7cCQyduJxRLVHrvx2TE59dXWhY+fyvmLekudePofipY77J7tV5atAcY5sj1zdGBfrkj9Vps=
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=SuO/o9hH; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=CFzrdsSx; arc=none smtp.client-ip=195.135.223.131
+	 MIME-Version; b=G5m4m4klNzHchv/BCT9LAxOunHNrRG5DniTGhZxfquKU2Y+5GL5EBmjVQhVT8gyUxaqW9x8dKZHhDQyqbgpeTkCOlH0oaYaAi2JgP+/hXICleYyN1nG/9uDj6lqzsMNni7Vl6viIdW0A3GDviyJB4Ixk0z4xyDAK1WJnM3JMMzg=
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=0N/h/M4o; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=pmoyIzmQ; arc=none smtp.client-ip=195.135.223.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
@@ -84,20 +84,20 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
 	 mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=5zPhAoJzxNIA+Zyc3rmr96I44yGrbHHtvC/kao9p1aE=;
-	b=SuO/o9hHDFaqftV6eI2MO+utLXpa5M51LlMEE/ka1+JY65aMSjaH8l+mhXYN1LzyI8ehHU
-	l3zrsO0NpwIzc6+J2xu7Ll5okFEvpYRyqkfHV/uZdikGklfdJnlx2cBZLXMkLSVp1fsXfp
-	fAld15I8m5n7cmZldzEBJFN/cF4IxAM=
+	bh=MEcgOTyAQAoXByBYKUR2lBKOa8ZhmGZAbpGTc5urdcs=;
+	b=0N/h/M4oFKP9e6JE78XEh1S/v6uJSKh1uvA1wPsCajar4AYYVB5MtoSQURwicU0FjTA3ZA
+	61MBm+lwJkoVB7qIrNvH3IDBG4ar+09OTaZYiATVbRQqTa3K+2VbkUVT17xAR/I3rqyXWN
+	Z87CE1W9k4JpKCgCEwSFnBh/TZXfcOY=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
 	s=susede2_ed25519; t=1711744499;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=5zPhAoJzxNIA+Zyc3rmr96I44yGrbHHtvC/kao9p1aE=;
-	b=CFzrdsSxhUSmaQoySt/OHi2C7T3Mr3nGK4vRoiBbHJIe1ukVeOpu2ckjXSBd+87oJ2dZu7
-	/PzLmNyBpir4viCQ==
-Authentication-Results: smtp-out2.suse.de;
+	bh=MEcgOTyAQAoXByBYKUR2lBKOa8ZhmGZAbpGTc5urdcs=;
+	b=pmoyIzmQMCIpxEEegRU389t/9HfEGPbkrxeN/Z4w3PlV59F1yC09nX/ACLDPrFrN/Qx5Ay
+	FEGw4evB+gjhIACQ==
+Authentication-Results: smtp-out1.suse.de;
 	dkim=none
 From: Thomas Zimmermann <tzimmermann@suse.de>
 To: arnd@arndb.de,
@@ -128,9 +128,9 @@ Cc: linux-arch@vger.kernel.org,
 	Dave Hansen <dave.hansen@linux.intel.com>,
 	x86@kernel.org,
 	"H. Peter Anvin" <hpa@zytor.com>
-Subject: [PATCH v3 2/3] arch: Remove struct fb_info from video helpers
-Date: Fri, 29 Mar 2024 21:32:11 +0100
-Message-ID: <20240329203450.7824-3-tzimmermann@suse.de>
+Subject: [PATCH v3 1/3] arch: Select fbdev helpers with CONFIG_VIDEO
+Date: Fri, 29 Mar 2024 21:32:10 +0100
+Message-ID: <20240329203450.7824-2-tzimmermann@suse.de>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <20240329203450.7824-1-tzimmermann@suse.de>
 References: <20240329203450.7824-1-tzimmermann@suse.de>
@@ -142,40 +142,49 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: C36DD5CACF
-X-Spamd-Result: default: False [-1.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	NEURAL_HAM_SHORT(-0.19)[-0.968];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	ARC_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[28];
-	MIME_TRACE(0.00)[0:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap2.dmz-prg2.suse.org:rdns,imap2.dmz-prg2.suse.org:helo];
-	FREEMAIL_TO(0.00)[arndb.de,ravnborg.org,redhat.com,gmx.de,linux.dev];
-	R_DKIM_NA(0.00)[];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:98:from];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_EQ_ENVFROM(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	TO_DN_SOME(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmx.de]
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Bar: ++
+X-Spamd-Result: default: False [2.89 / 50.00];
+	 ARC_NA(0.00)[];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 FROM_HAS_DN(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 FREEMAIL_ENVRCPT(0.00)[gmx.de];
+	 R_MISSING_CHARSET(2.50)[];
+	 MIME_GOOD(-0.10)[text/plain];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 BROKEN_CONTENT_TYPE(1.50)[];
+	 DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:98:from];
+	 NEURAL_HAM_LONG(-1.00)[-1.000];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	 MX_GOOD(-0.01)[];
+	 NEURAL_HAM_SHORT(-0.20)[-0.999];
+	 RCPT_COUNT_TWELVE(0.00)[28];
+	 MID_CONTAINS_FROM(1.00)[];
+	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email,intel.com:email];
+	 FREEMAIL_TO(0.00)[arndb.de,ravnborg.org,redhat.com,gmx.de,linux.dev];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 R_DKIM_NA(2.20)[];
+	 MIME_TRACE(0.00)[0:+];
+	 RCVD_TLS_ALL(0.00)[];
+	 BAYES_HAM(-3.00)[100.00%]
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Rspamd-Queue-Id: EFC633528A
 Content-Type: text/plain
 X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
 
-The per-architecture video helpers do not depend on struct fb_info
-or anything else from fbdev. Remove it from the interface and replace
-fb_is_primary_device() with video_is_primary_device(). The new helper
-is similar in functionality, but can operate on non-fbdev devices.
+Various Kconfig options selected the per-architecture helpers for
+fbdev. But none of the contained code depends on fbdev. Standardize
+on CONFIG_VIDEO, which will allow to add more general helpers for
+video functionality.
+
+CONFIG_VIDEO protects each architecture's video/ directory. This
+allows for the use of more fine-grained control for each directory's
+files, such as the use of CONFIG_STI_CORE on parisc.
+
+v2:
+- sparc: rebased onto Makefile changes
 
 Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
 Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
@@ -190,244 +199,72 @@ Cc: Dave Hansen <dave.hansen@linux.intel.com>
 Cc: x86@kernel.org
 Cc: "H. Peter Anvin" <hpa@zytor.com>
 ---
- arch/parisc/include/asm/fb.h     |  8 +++++---
- arch/parisc/video/fbdev.c        |  9 +++++----
- arch/sparc/include/asm/fb.h      |  7 ++++---
- arch/sparc/video/fbdev.c         | 17 ++++++++---------
- arch/x86/include/asm/fb.h        |  8 +++++---
- arch/x86/video/fbdev.c           | 18 +++++++-----------
- drivers/video/fbdev/core/fbcon.c |  2 +-
- include/asm-generic/fb.h         | 11 ++++++-----
- 8 files changed, 41 insertions(+), 39 deletions(-)
+ arch/parisc/Makefile      | 2 +-
+ arch/sparc/Makefile       | 4 ++--
+ arch/sparc/video/Makefile | 2 +-
+ arch/x86/Makefile         | 2 +-
+ arch/x86/video/Makefile   | 3 ++-
+ 5 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/arch/parisc/include/asm/fb.h b/arch/parisc/include/asm/fb.h
-index 658a8a7dc5312..ed2a195a3e762 100644
---- a/arch/parisc/include/asm/fb.h
-+++ b/arch/parisc/include/asm/fb.h
-@@ -2,11 +2,13 @@
- #ifndef _ASM_FB_H_
- #define _ASM_FB_H_
+diff --git a/arch/parisc/Makefile b/arch/parisc/Makefile
+index 316f84f1d15c8..21b8166a68839 100644
+--- a/arch/parisc/Makefile
++++ b/arch/parisc/Makefile
+@@ -119,7 +119,7 @@ export LIBGCC
  
--struct fb_info;
-+#include <linux/types.h>
+ libs-y	+= arch/parisc/lib/ $(LIBGCC)
+ 
+-drivers-y += arch/parisc/video/
++drivers-$(CONFIG_VIDEO) += arch/parisc/video/
+ 
+ boot	:= arch/parisc/boot
+ 
+diff --git a/arch/sparc/Makefile b/arch/sparc/Makefile
+index 2a03daa68f285..757451c3ea1df 100644
+--- a/arch/sparc/Makefile
++++ b/arch/sparc/Makefile
+@@ -59,8 +59,8 @@ endif
+ libs-y                 += arch/sparc/prom/
+ libs-y                 += arch/sparc/lib/
+ 
+-drivers-$(CONFIG_PM) += arch/sparc/power/
+-drivers-$(CONFIG_FB_CORE) += arch/sparc/video/
++drivers-$(CONFIG_PM)    += arch/sparc/power/
++drivers-$(CONFIG_VIDEO) += arch/sparc/video/
+ 
+ boot := arch/sparc/boot
+ 
+diff --git a/arch/sparc/video/Makefile b/arch/sparc/video/Makefile
+index d4d83f1702c61..9dd82880a027a 100644
+--- a/arch/sparc/video/Makefile
++++ b/arch/sparc/video/Makefile
+@@ -1,3 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ 
+-obj-$(CONFIG_FB_CORE) += fbdev.o
++obj-y	+= fbdev.o
+diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+index 662d9d4033e6b..b80d15c29ecc6 100644
+--- a/arch/x86/Makefile
++++ b/arch/x86/Makefile
+@@ -260,7 +260,7 @@ drivers-$(CONFIG_PCI)            += arch/x86/pci/
+ # suspend and hibernation support
+ drivers-$(CONFIG_PM) += arch/x86/power/
+ 
+-drivers-$(CONFIG_FB_CORE) += arch/x86/video/
++drivers-$(CONFIG_VIDEO) += arch/x86/video/
+ 
+ ####
+ # boot loader support. Several targets are kept for legacy purposes
+diff --git a/arch/x86/video/Makefile b/arch/x86/video/Makefile
+index 5ebe48752ffc4..9dd82880a027a 100644
+--- a/arch/x86/video/Makefile
++++ b/arch/x86/video/Makefile
+@@ -1,2 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+-obj-$(CONFIG_FB_CORE)		+= fbdev.o
 +
-+struct device;
- 
- #if defined(CONFIG_STI_CORE)
--int fb_is_primary_device(struct fb_info *info);
--#define fb_is_primary_device fb_is_primary_device
-+bool video_is_primary_device(struct device *dev);
-+#define video_is_primary_device video_is_primary_device
- #endif
- 
- #include <asm-generic/fb.h>
-diff --git a/arch/parisc/video/fbdev.c b/arch/parisc/video/fbdev.c
-index e4f8ac99fc9e0..540fa0c919d59 100644
---- a/arch/parisc/video/fbdev.c
-+++ b/arch/parisc/video/fbdev.c
-@@ -5,12 +5,13 @@
-  * Copyright (C) 2001-2002 Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-  */
- 
--#include <linux/fb.h>
- #include <linux/module.h>
- 
- #include <video/sticore.h>
- 
--int fb_is_primary_device(struct fb_info *info)
-+#include <asm/fb.h>
-+
-+bool video_is_primary_device(struct device *dev)
- {
- 	struct sti_struct *sti;
- 
-@@ -21,6 +22,6 @@ int fb_is_primary_device(struct fb_info *info)
- 		return true;
- 
- 	/* return true if it's the default built-in framebuffer driver */
--	return (sti->dev == info->device);
-+	return (sti->dev == dev);
- }
--EXPORT_SYMBOL(fb_is_primary_device);
-+EXPORT_SYMBOL(video_is_primary_device);
-diff --git a/arch/sparc/include/asm/fb.h b/arch/sparc/include/asm/fb.h
-index 24440c0fda490..07f0325d6921c 100644
---- a/arch/sparc/include/asm/fb.h
-+++ b/arch/sparc/include/asm/fb.h
-@@ -3,10 +3,11 @@
- #define _SPARC_FB_H_
- 
- #include <linux/io.h>
-+#include <linux/types.h>
- 
- #include <asm/page.h>
- 
--struct fb_info;
-+struct device;
- 
- #ifdef CONFIG_SPARC32
- static inline pgprot_t pgprot_framebuffer(pgprot_t prot,
-@@ -18,8 +19,8 @@ static inline pgprot_t pgprot_framebuffer(pgprot_t prot,
- #define pgprot_framebuffer pgprot_framebuffer
- #endif
- 
--int fb_is_primary_device(struct fb_info *info);
--#define fb_is_primary_device fb_is_primary_device
-+bool video_is_primary_device(struct device *dev);
-+#define video_is_primary_device video_is_primary_device
- 
- static inline void fb_memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
- {
-diff --git a/arch/sparc/video/fbdev.c b/arch/sparc/video/fbdev.c
-index bff66dd1909a4..e46f0499c2774 100644
---- a/arch/sparc/video/fbdev.c
-+++ b/arch/sparc/video/fbdev.c
-@@ -1,26 +1,25 @@
- // SPDX-License-Identifier: GPL-2.0
- 
- #include <linux/console.h>
--#include <linux/fb.h>
-+#include <linux/device.h>
- #include <linux/module.h>
- 
-+#include <asm/fb.h>
- #include <asm/prom.h>
- 
--int fb_is_primary_device(struct fb_info *info)
-+bool video_is_primary_device(struct device *dev)
- {
--	struct device *dev = info->device;
--	struct device_node *node;
-+	struct device_node *node = dev->of_node;
- 
- 	if (console_set_on_cmdline)
--		return 0;
-+		return false;
- 
--	node = dev->of_node;
- 	if (node && node == of_console_device)
--		return 1;
-+		return true;
- 
--	return 0;
-+	return false;
- }
--EXPORT_SYMBOL(fb_is_primary_device);
-+EXPORT_SYMBOL(video_is_primary_device);
- 
- MODULE_DESCRIPTION("Sparc fbdev helpers");
- MODULE_LICENSE("GPL");
-diff --git a/arch/x86/include/asm/fb.h b/arch/x86/include/asm/fb.h
-index c3b9582de7efd..999db33792869 100644
---- a/arch/x86/include/asm/fb.h
-+++ b/arch/x86/include/asm/fb.h
-@@ -2,17 +2,19 @@
- #ifndef _ASM_X86_FB_H
- #define _ASM_X86_FB_H
- 
-+#include <linux/types.h>
-+
- #include <asm/page.h>
- 
--struct fb_info;
-+struct device;
- 
- pgprot_t pgprot_framebuffer(pgprot_t prot,
- 			    unsigned long vm_start, unsigned long vm_end,
- 			    unsigned long offset);
- #define pgprot_framebuffer pgprot_framebuffer
- 
--int fb_is_primary_device(struct fb_info *info);
--#define fb_is_primary_device fb_is_primary_device
-+bool video_is_primary_device(struct device *dev);
-+#define video_is_primary_device video_is_primary_device
- 
- #include <asm-generic/fb.h>
- 
-diff --git a/arch/x86/video/fbdev.c b/arch/x86/video/fbdev.c
-index 1dd6528cc947c..4d87ce8e257fe 100644
---- a/arch/x86/video/fbdev.c
-+++ b/arch/x86/video/fbdev.c
-@@ -7,7 +7,6 @@
-  *
-  */
- 
--#include <linux/fb.h>
- #include <linux/module.h>
- #include <linux/pci.h>
- #include <linux/vgaarb.h>
-@@ -25,20 +24,17 @@ pgprot_t pgprot_framebuffer(pgprot_t prot,
- }
- EXPORT_SYMBOL(pgprot_framebuffer);
- 
--int fb_is_primary_device(struct fb_info *info)
-+bool video_is_primary_device(struct device *dev)
- {
--	struct device *device = info->device;
--	struct pci_dev *pci_dev;
-+	struct pci_dev *pdev;
- 
--	if (!device || !dev_is_pci(device))
--		return 0;
-+	if (!dev_is_pci(dev))
-+		return false;
- 
--	pci_dev = to_pci_dev(device);
-+	pdev = to_pci_dev(dev);
- 
--	if (pci_dev == vga_default_device())
--		return 1;
--	return 0;
-+	return (pdev == vga_default_device());
- }
--EXPORT_SYMBOL(fb_is_primary_device);
-+EXPORT_SYMBOL(video_is_primary_device);
- 
- MODULE_LICENSE("GPL");
-diff --git a/drivers/video/fbdev/core/fbcon.c b/drivers/video/fbdev/core/fbcon.c
-index fcabc668e9fbe..3f7333dca508c 100644
---- a/drivers/video/fbdev/core/fbcon.c
-+++ b/drivers/video/fbdev/core/fbcon.c
-@@ -2907,7 +2907,7 @@ void fbcon_remap_all(struct fb_info *info)
- static void fbcon_select_primary(struct fb_info *info)
- {
- 	if (!map_override && primary_device == -1 &&
--	    fb_is_primary_device(info)) {
-+	    video_is_primary_device(info->device)) {
- 		int i;
- 
- 		printk(KERN_INFO "fbcon: %s (fb%i) is primary device\n",
-diff --git a/include/asm-generic/fb.h b/include/asm-generic/fb.h
-index 6ccabb400aa66..4788c1e1c6bc0 100644
---- a/include/asm-generic/fb.h
-+++ b/include/asm-generic/fb.h
-@@ -10,8 +10,9 @@
- #include <linux/io.h>
- #include <linux/mm_types.h>
- #include <linux/pgtable.h>
-+#include <linux/types.h>
- 
--struct fb_info;
-+struct device;
- 
- #ifndef pgprot_framebuffer
- #define pgprot_framebuffer pgprot_framebuffer
-@@ -23,11 +24,11 @@ static inline pgprot_t pgprot_framebuffer(pgprot_t prot,
- }
- #endif
- 
--#ifndef fb_is_primary_device
--#define fb_is_primary_device fb_is_primary_device
--static inline int fb_is_primary_device(struct fb_info *info)
-+#ifndef video_is_primary_device
-+#define video_is_primary_device video_is_primary_device
-+static inline bool video_is_primary_device(struct device *dev)
- {
--	return 0;
-+	return false;
- }
- #endif
- 
++obj-y	+= fbdev.o
 -- 
 2.44.0
 
