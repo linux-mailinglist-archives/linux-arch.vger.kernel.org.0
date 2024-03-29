@@ -1,147 +1,154 @@
-Return-Path: <linux-arch+bounces-3331-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3332-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EFC5189209E
-	for <lists+linux-arch@lfdr.de>; Fri, 29 Mar 2024 16:40:14 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41FC08922C0
+	for <lists+linux-arch@lfdr.de>; Fri, 29 Mar 2024 18:29:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AA2D4283FD5
-	for <lists+linux-arch@lfdr.de>; Fri, 29 Mar 2024 15:40:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2EB121C27AE8
+	for <lists+linux-arch@lfdr.de>; Fri, 29 Mar 2024 17:29:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2C0414A82;
-	Fri, 29 Mar 2024 15:40:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4C05134412;
+	Fri, 29 Mar 2024 17:28:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MUnOUR7H"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QVFN7BIf"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 322D41FBA;
-	Fri, 29 Mar 2024 15:40:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5503485925;
+	Fri, 29 Mar 2024 17:28:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711726810; cv=none; b=HdL6QUR0uK57/gTcFmuwvsxwp7Is231eNnIyOK3oJoSeiErgq7txZMZXkemJ706h/3MmF23TBwrqyhDa9y9T797U3gTA7l+PYCyGN3Vb9GQ6TMhG45bwnPk+c/GXRpXpOdQ5QM7Yl7gPnUD9NcZZiU/zvvniuIML2PnCNLTipfo=
+	t=1711733327; cv=none; b=Vi3GGI/nXlDXCV1D2qqUA1JlzeBAGQqiksdYUYoKqG4q/tA7HfC4cqSBj3k4lymTnT8v8vLnRZYOzo2CEE/FPYKV73Cv2oPjjrLN7krOqEc8PIX5g2zlao9UGcN8MFOkBnDmEg63rfnVr0siTl5YJhcbQhJJ8IWD604tJU+K8M4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711726810; c=relaxed/simple;
-	bh=XCgoZLnAXnGDp3scNF5htnbob5J7JStC8D45eQoM9R4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oCDryKTCwNBa1XESY+HXrS2fCn9Ozuiym1DVVy5CR6Vvze0hKrsJPXVEBXqEViTLFl7Ah4vNuiXZkU1sw6aoJwNBYy/7swRzdJ6OJ4/g2oFdS5u6stGkcvDtlZvAxMIncnK4B4wXmzWtYqljaYhhZLEz+CdqsKwIqq45swgykpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MUnOUR7H; arc=none smtp.client-ip=209.85.215.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-53fa455cd94so1519286a12.2;
-        Fri, 29 Mar 2024 08:40:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711726808; x=1712331608; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iN31wd2vCkiTGMz1OBtEaB4JW8VyiA1XbISlyEebr3E=;
-        b=MUnOUR7HY6vwYa92neIZHYGUvH5I1dF1Bo7/9/nYC/METJ1LcvRfTJ3UrdSMmUe6FC
-         gOsAAcZI5fuMBtnYd1XYteTpD7iilDnzNJGQCDkjNtdSbNtsjQ+H+tT/p1giGio6N6XG
-         c/fOoWgNLNBTXbnefO75MQyI51dLo+b1SVQJb2BkA3/hB5pZIlony882eQZu9ZFNh0ep
-         33bUFemjBqO3ZNk+x0tiQjkOnJ9fcXv2MQdOFypkFGG4FahpdXL6b/Vj7wCz/gfVSbTO
-         MJv/wJzO/jQ7Kdcxmde4Pb9pySSflIuFcgkUN32tfKWGxoR+Pm6mK6F5SJkvChQwYmRp
-         iBRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711726808; x=1712331608;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iN31wd2vCkiTGMz1OBtEaB4JW8VyiA1XbISlyEebr3E=;
-        b=UZeXNTugUFF7ZLvxjcEC/t4b+REmywz0B1oaHxSC/FPLuIS2hcg1pnvyr0iY283ORN
-         J5yEbOt82e+srx1WEoeZxx18mHADhxIVjqxIVbQNtO4YiNF84vQOwZMaHanx1QVhiyzi
-         30wGweoNPXMcu+4ZWuBv3tB2/AoFu/tSpvKnPAWTc7R6lGG+QXfoQhPIQ7qjxKDGkZ/v
-         ZJQajuGvmLhkcxFBNd/VvXMN8OomN4lQ8AYg3AZRV7z5QGBJz9SzBiYDR89eJ0i3NxkZ
-         b5QdJT8wzr3pwABneBZST1fjtCVvHVrB0uBTt6LeVO0XZJ6PaIXbQAQEZLISaKtvJJrU
-         M9VA==
-X-Forwarded-Encrypted: i=1; AJvYcCVJOnvfqDstoGNWqya9c2CpvRlfeBuOGCz4oaW4BjNSstCi+JbsgNWSWKPkJTvDezGHP1l1yt3hbnjRuFMnFnP+ODAPa9B0KTgUzCTR4wBP509TYdlj1Yoc63C0gBx0PyATOTXRoU50jgTOCW5LOyzh02XO+PpOPZrzO6aKzu2WEDkkG11VeaYfUts4cuOCmJsj3BdXu8Ah9dTKuzXBAT0pXxXfErO3rzYezy4btqFL9YZzGWecZIDTEK13C8CLPsUfnn+9dXWOLXiWYAyrOYsmXUR2uml0icj4IJpVvUdrtlcQ8t8eBsSlQqEEb3VDGg==
-X-Gm-Message-State: AOJu0Yzacj+0ODnB61m4DFEwTd9U4g+aPd/faEYvzFALoBq7a3kkjEky
-	RWWg6gr0dcatrVIFarTUu05/TalspZjQ1+zHRsDZleqZmcPuyvLR
-X-Google-Smtp-Source: AGHT+IF0O7HII5MYlv2g0E+BHBSm5qRGKAR+0KxI+xwk6+g8c7fXn65jtKX0C7ci+tZdnr/ge20LGw==
-X-Received: by 2002:a05:6a20:3c90:b0:1a5:6bfb:76de with SMTP id b16-20020a056a203c9000b001a56bfb76demr2694088pzj.2.1711726808383;
-        Fri, 29 Mar 2024 08:40:08 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m9-20020a170902db0900b001dd578121d4sm3581907plx.204.2024.03.29.08.40.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Mar 2024 08:40:07 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 29 Mar 2024 08:40:05 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Simon Horman <horms@kernel.org>
-Cc: linux-kselftest@vger.kernel.org, David Airlie <airlied@gmail.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	=?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Kees Cook <keescook@chromium.org>,
-	Daniel Diaz <daniel.diaz@linaro.org>,
-	David Gow <davidgow@google.com>,
-	Arthur Grillo <arthurgrillo@riseup.net>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	Naresh Kamboju <naresh.kamboju@linaro.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Maxime Ripard <mripard@kernel.org>,
-	Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	linux-sh@vger.kernel.org, loongarch@lists.linux.dev,
-	netdev@vger.kernel.org,
-	Linux Kernel Functional Testing <lkft@linaro.org>
-Subject: Re: [PATCH v2 12/14] sh: Add support for suppressing warning
- backtraces
-Message-ID: <d7663e19-74d5-478d-becc-0a080075e7d6@roeck-us.net>
-References: <20240325175248.1499046-1-linux@roeck-us.net>
- <20240325175248.1499046-13-linux@roeck-us.net>
- <20240327144431.GL403975@kernel.org>
- <320aacc6-b7e5-4c3d-948e-d0743ab26c5d@roeck-us.net>
- <20240327193920.GV403975@kernel.org>
+	s=arc-20240116; t=1711733327; c=relaxed/simple;
+	bh=yFDVjGYfjWII0t1wE88WD1st8TP3w0lvfG9W2m2CZOE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WcW6c3Ao1+e3iA+naMeh3HVBsY6BvHZZjyNNXJ4ELs6jvpC4hBsdkURsy2SqzU9MX4MGbtdS3zQ6IOC4AmMmB/Z27kR24t1fP+aQI35V7P6CijfGWe9aWDmGISiGrb7oVdBzahd0A2IRN7ipQbYRfX/yB74qvZLfkJSwKBdN0og=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QVFN7BIf; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1711733326; x=1743269326;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=yFDVjGYfjWII0t1wE88WD1st8TP3w0lvfG9W2m2CZOE=;
+  b=QVFN7BIfnn4x8y7CpO+mo+KH7FiVqfbhR6OvfgL/VD24ZsFFxuIJLG++
+   wcZX+p57CZig7RkmU/l1z7i1CInY+mFguaalyrPK5iKWO81E0W9gycLCb
+   RM9XV8TOoyjdHTL+lRLHOaWd1uzJ8ADSP1SWjElfllugUJNzd2MDrlA4p
+   Wu0fkcPYmAzQmW89dY7wU4Sy60hW4kbBR5hzCIF5yBmKwyJImjBTxn+0j
+   9bzVf6AEhhsNfgxGVgSfsQLIxYdz+yUQk5W8dwKnxea7xXc+M+hamd19H
+   N65mTUuF/k+G+rL9msFsgsMoVNo665fmKsKmNAmgUPEgGq401/PBB/6iX
+   g==;
+X-CSE-ConnectionGUID: 7cYnQ/HkRS2eXCJq+KMszw==
+X-CSE-MsgGUID: qu73ez8KSIi+Kg22f2Z7eA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11028"; a="9882635"
+X-IronPort-AV: E=Sophos;i="6.07,165,1708416000"; 
+   d="scan'208";a="9882635"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2024 10:28:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,165,1708416000"; 
+   d="scan'208";a="40178285"
+Received: from sergeyko-mobl.amr.corp.intel.com (HELO [10.212.56.129]) ([10.212.56.129])
+  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2024 10:28:45 -0700
+Message-ID: <d2c3cd78-cdc6-4a39-9804-4f30402751b1@intel.com>
+Date: Fri, 29 Mar 2024 10:28:44 -0700
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240327193920.GV403975@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 10/15] x86: Implement ARCH_HAS_KERNEL_FPU_SUPPORT
+To: Samuel Holland <samuel.holland@sifive.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ linux-arm-kernel@lists.infradead.org, x86@kernel.org
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+ Christoph Hellwig <hch@lst.de>, loongarch@lists.linux.dev,
+ amd-gfx@lists.freedesktop.org, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, Ingo Molnar <mingo@redhat.com>,
+ Thomas Gleixner <tglx@linutronix.de>
+References: <20240329072441.591471-1-samuel.holland@sifive.com>
+ <20240329072441.591471-11-samuel.holland@sifive.com>
+Content-Language: en-US
+From: Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <20240329072441.591471-11-samuel.holland@sifive.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Mar 27, 2024 at 07:39:20PM +0000, Simon Horman wrote:
-[ ... ]
-> > > 
-> > > Hi Guenter,
-> > > 
-> > > a minor nit from my side: this change results in a Kernel doc warning.
-> > > 
-> > >       .../bug.h:29: warning: expecting prototype for _EMIT_BUG_ENTRY(). Prototype was for HAVE_BUG_FUNCTION() instead
-> > > 
-> > > Perhaps either the new code should be placed above the Kernel doc,
-> > > or scripts/kernel-doc should be enhanced?
-> > > 
-> > 
-> > Thanks a lot for the feedback.
-> > 
-> > The definition block needs to be inside CONFIG_DEBUG_BUGVERBOSE,
-> > so it would be a bit odd to move it above the documentation
-> > just to make kerneldoc happy. I am not really sure that to do
-> > about it.
-> 
-> FWIIW, I agree that would be odd.
-> But perhaps the #ifdef could also move above the Kernel doc?
-> Maybe not a great idea, but the best one I've had so far.
-> 
+On 3/29/24 00:18, Samuel Holland wrote:
+> +#
+> +# CFLAGS for compiling floating point code inside the kernel.
+> +#
+> +CC_FLAGS_FPU := -msse -msse2
+> +ifdef CONFIG_CC_IS_GCC
+> +# Stack alignment mismatch, proceed with caution.
+> +# GCC < 7.1 cannot compile code using `double` and -mpreferred-stack-boundary=3
+> +# (8B stack alignment).
+> +# See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=53383
+> +#
+> +# The "-msse" in the first argument is there so that the
+> +# -mpreferred-stack-boundary=3 build error:
+> +#
+> +#  -mpreferred-stack-boundary=3 is not between 4 and 12
+> +#
+> +# can be triggered. Otherwise gcc doesn't complain.
+> +CC_FLAGS_FPU += -mhard-float
+> +CC_FLAGS_FPU += $(call cc-option,-msse -mpreferred-stack-boundary=3,-mpreferred-stack-boundary=4)
+> +endif
 
-I did that for the next version of the patch series. It is a bit more
-clumsy, so I left it as separate patch on top of this patch. I'd
-still like to get input from others before making the change final.
+I was expecting to see this (now duplicate) hunk come _out_ of
+lib/Makefile somewhere in the series.
 
-Thanks,
-Guenter
+Did I miss that, or is there something keeping the duplicate there?
 
