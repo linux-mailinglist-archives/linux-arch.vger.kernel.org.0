@@ -1,113 +1,255 @@
-Return-Path: <linux-arch+bounces-3355-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3356-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D948F894EA5
-	for <lists+linux-arch@lfdr.de>; Tue,  2 Apr 2024 11:25:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 257C18954CB
+	for <lists+linux-arch@lfdr.de>; Tue,  2 Apr 2024 15:12:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 42DF7281268
-	for <lists+linux-arch@lfdr.de>; Tue,  2 Apr 2024 09:25:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D3CE9289BDE
+	for <lists+linux-arch@lfdr.de>; Tue,  2 Apr 2024 13:12:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 799FE57875;
-	Tue,  2 Apr 2024 09:25:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D424133293;
+	Tue,  2 Apr 2024 13:08:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="sQZucdhh";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="t7amywlH"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="m0EBIbrR"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C25C557323;
-	Tue,  2 Apr 2024 09:25:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A9D9134CEF
+	for <linux-arch@vger.kernel.org>; Tue,  2 Apr 2024 13:08:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712049917; cv=none; b=AFPgrTvZmFRE8IH8Fz7h3wCYHlJACVwxVN7j8k14AXQKzj+Z0C8eElpiI4+q0+wISlmz3K3FB2PEIjqMMoNANskX4h/D2xBlyB0/lITXkKam6j98H20L19GKN5fXlsNe5FzhY3i3V5pf70pMiPXxkzlyLEpH88JiPqi7kT5nKG4=
+	t=1712063283; cv=none; b=mJRzj5TcrehJ6msnBI3p59al5zVoJsvGm30w3NDhaWL7GCOnbrR85LweW5Ckck7sHzNPnJR3D4QCjeXq3k/s5s8bSa6vdywzBovTpXZKrmaMNG27x7kDaZqvR+lcvfxKuQThAM+f3Rwv7tHuOWKptBeleoKgKFgcE/TeH7h7y64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712049917; c=relaxed/simple;
-	bh=D+pmTJbWD+F5FqLLVUmPGKhvuuWcaJlICv2fiuRLyOA=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=BiMtNEjEZyJkTlGaRJ2TsJZ9y1j9M3fW2ULkFCT4Qm3cYkDRyIr4UW1Gba4Hx3LMTU6MGsvpZHZvUFAAuxTnKJNSBPo8kXQi5J5ZlZtSfUoYbx8dwz1vJfw0KZakXG3QhWiSzNnCIPVQgiDljsqjvWkV9KKpFw2W/+uTMKdz/QQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=sQZucdhh; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=t7amywlH; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1712049908;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gxnU7oHDRvp2KKF4I0w+Kk9loooljsfq/6TvcopJ+7o=;
-	b=sQZucdhhQgMO5Ub+2Bs5zKZwhGZhWDZq8Mzo8Nb6wtWyyY8QiM6jWdXjFlN1EzlOxDD8GS
-	3mq6hIH/aPV9iVke03eUBejlFlW5yYzEkfTdoUZKgnpMD6Lb+/n2wuV0JPlP8u5ArNpCgA
-	Dx12Z25LyjjUJPiGJsrhWpHJOl+R30Qv2pGyq5eholxM2Qn9nnUUVkIX5yqqu41iZcTZQK
-	pybYPVzDYdB9rdXq1OlYPJ8ubMLy1de8gRySvOznWT2ffzJaAAEz0kW/lZUGw5335D92Qu
-	pnMgy/B3GR7ml4RHAspOuGp4hpotADKcxTmFW+kfAGoNs6/JIyn94/fUfY6S6g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1712049908;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gxnU7oHDRvp2KKF4I0w+Kk9loooljsfq/6TvcopJ+7o=;
-	b=t7amywlHQ/7Ooi3w3AkZlkjifY46KwOg8Sjbg0P2ctA3ECbK6LB+5mh1AhvWM28e7KRWuZ
-	7k9GgRKqQPwWpsBQ==
-To: =?utf-8?B?TWFoZXNoIEJhbmRld2FyICjgpK7gpLngpYfgpLYg4KSs4KSC4KSh4KWH4KS1?=
- =?utf-8?B?4KS+4KSwKQ==?= <maheshb@google.com>
-Cc: Sagi Maimon <maimon.sagi@gmail.com>, richardcochran@gmail.com,
- luto@kernel.org, mingo@redhat.com, bp@alien8.de,
- dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, arnd@arndb.de,
- geert@linux-m68k.org, peterz@infradead.org, hannes@cmpxchg.org,
- sohil.mehta@intel.com, rick.p.edgecombe@intel.com, nphamcs@gmail.com,
- palmer@sifive.com, keescook@chromium.org, legion@kernel.org,
- mark.rutland@arm.com, mszeredi@redhat.com, casey@schaufler-ca.com,
- reibax@gmail.com, davem@davemloft.net, brauner@kernel.org,
- linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
- linux-arch@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v7] posix-timers: add clock_compare system call
-In-Reply-To: <CAF2d9jjA8iM1AoPUhQPK62tdd7gPnCnt51f_NMhOAs546rU3dA@mail.gmail.com>
-References: <CAMuE1bHBky9NGP22PVHKdi2+WniwxiLSmMnwRM6wm36sU8W4jA@mail.gmail.com>
- <878r29hjds.ffs@tglx>
- <CAMuE1bF9ioo39_08Eh26X4WOtnvJ1geJ=WRVt5DhU8gEbYJNdA@mail.gmail.com>
- <87o7asdd65.ffs@tglx>
- <CAF2d9jjA8iM1AoPUhQPK62tdd7gPnCnt51f_NMhOAs546rU3dA@mail.gmail.com>
-Date: Tue, 02 Apr 2024 11:24:59 +0200
-Message-ID: <87il10ce1g.ffs@tglx>
+	s=arc-20240116; t=1712063283; c=relaxed/simple;
+	bh=vgP+36VWKafj4cVC7SyOoL9SCfau5bABFyH+Csakpn0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=b9rq1kGQUsDUknpXNxjxiTNe8jkpjk6cqkD3uCxyxyyf3nGzFiCIIY/o+75NU8qyASmMyhq+PlbYwNmSa9zDRXokpXXZ3p2cuBZDaFXDyBNYTeqoq1QKB+ECPmlkADIMvtYlqY3t1Q/XVTL0bxzH2cmafoPmWvFxBsAfq69/ZkI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=m0EBIbrR; arc=none smtp.client-ip=209.85.210.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-6e695470280so2946197a34.3
+        for <linux-arch@vger.kernel.org>; Tue, 02 Apr 2024 06:08:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1712063280; x=1712668080; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lwz+te3v25y+UIyojEIFe5So3l8Pl+raR0jXQRZwL4g=;
+        b=m0EBIbrRo2aNG3nZVIb2tMspivbN+KZS3njoFjN1mf343kOEkVlYfc4JUGFuRcYUWm
+         jwpHFyOPJ5LxYONiIWZxr92uUbAPqMXpn0N2Vo7YRj8XDTeiS5RIWyaDDO9Zns3s0sh+
+         zleHL5NXKjRmX2MBcsLga2nXl6RDH4EpD8Bwn3nElV7t+6Cjc3gedndiSXNKegEfIkdd
+         s6+UB95VAdRVZzStBT/AokHkIhiKQWIl6QAXzeoT/J7GqIXg7wCoCdzl6GvDwZGgaiqF
+         6g6XQz6WToQiGl1FVZQnWXpcaIxSfmh+doj97Jv9gtbE3XcFskjd29IcgjL+QifaJajM
+         nOSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712063280; x=1712668080;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lwz+te3v25y+UIyojEIFe5So3l8Pl+raR0jXQRZwL4g=;
+        b=Qrvf3KUVNT0jxRjCS3APsfKA6QgS+ZcrIiIBdsjMIdpNUJ+BTh2nLbd5nasCEqL6aR
+         J0sjuK5aGKA4BAhDvcSijw9bWHxx3yaKk3t23sK1f0dIn8aQwnRar9QIdkZD+rdnBvZv
+         Ad3QsXli7Au7sOQ5LHLTzxcNwr5wLMysW+7Xs98rGXE/tQpiHnzdFyuWOPPsPwVHly8E
+         Rc/WPXt9qhA3PQwfZXP3Oc45BVqV19vO2JP0r5imrNN373jY8g16fJ4hTMzzmr0Gb8DE
+         /pPMxoh8l5z5irB9rwe9jNwBJ8910ryiVfMaPMJpXrI5KF0TSbs5zw5MEwDmSF/BkoDr
+         VlxA==
+X-Forwarded-Encrypted: i=1; AJvYcCXJO0z1dKsaXNrJecQrlkbtEHZhghwLQ/daDZJX/v4MQoIuQA3hoOXUt5fDuNxyfdMJBLd6mGMP+N8j0SJtxlpZziX0kAyyJfYMWg==
+X-Gm-Message-State: AOJu0Yws/gYuAxj3QExkscmo0PGUgVAMgRlyb1m01zn9AYQeDh+0oXRD
+	dkdkn+4ay6S+9z0ygBl0K5RycceSOaaTDAn394GPrARLiu3GSid0tg/dYBsotRzYURk9ZYN5xpJ
+	gkVOKpwuJPVQS9CZoDW/+GFIeYtwkgJWVUANk
+X-Google-Smtp-Source: AGHT+IFfjHomY9Q1pqJvyjMwrOtxO9qwBxdriDeV+1TZPmKhKqftTRLWP/h8EQ6LJ6NPd7qWAALGTCn/qXfM/KNFjPs=
+X-Received: by 2002:a05:6808:1707:b0:3c4:f08d:544d with SMTP id
+ bc7-20020a056808170700b003c4f08d544dmr4327794oib.17.1712063280344; Tue, 02
+ Apr 2024 06:08:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+References: <31c82dcc-e203-48a9-aadd-f2fcd57d94c1@paulmck-laptop> <20240401213950.3910531-1-paulmck@kernel.org>
+In-Reply-To: <20240401213950.3910531-1-paulmck@kernel.org>
+From: Marco Elver <elver@google.com>
+Date: Tue, 2 Apr 2024 15:07:22 +0200
+Message-ID: <CANpmjNNSCWSndpf-N7=ifSUFhLWjYJibRf58hETjHeW25RzWYg@mail.gmail.com>
+Subject: Re: [PATCH RFC cmpxchg 1/8] lib: Add one-byte and two-byte cmpxchg()
+ emulation functions
+To: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: linux-kernel@vger.kernel.org, kernel-team@meta.com, 
+	Andrew Morton <akpm@linux-foundation.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>, Douglas Anderson <dianders@chromium.org>, 
+	Petr Mladek <pmladek@suse.com>, linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Apr 01 2024 at 22:42, Mahesh Bandewar (=E0=A4=AE=E0=A4=B9=E0=A5=87=
-=E0=A4=B6 =E0=A4=AC=E0=A4=82=E0=A4=A1=E0=A5=87=E0=A4=B5=E0=A4=BE=E0=A4=B0) =
-wrote:
-> On Mon, Apr 1, 2024 at 1:46=E2=80=AFPM Thomas Gleixner <tglx@linutronix.d=
-e> wrote:
->> So if there is a backwards compability issue with PTP_SYS_OFFSET2, then
->> you need to introduce PTP_SYS_OFFSET3. The PTP_SYS_*2 variants were
->> introduced to avoid backwards compatibility issues as well, but
->> unfortunately that did not address the reserved fields problem for
->> PTP_SYS_OFFSET2. PTP_SYS_OFFSET_EXTENDED2 should just work, but maybe
->> the PTP maintainers want a full extension to '3'. Either way is fine.
->>
-> https://patchwork.kernel.org/project/netdevbpf/patch/20240104212436.32760=
-57-1-maheshb@google.com/
+On Mon, 1 Apr 2024 at 23:39, Paul E. McKenney <paulmck@kernel.org> wrote:
 >
-> This was my attempt to solve a similar issue with the new ioctl op to
-> avoid backward compatibility issues.  Instead of flags I used the
-> clockid_t in a similar fashion.
+> Architectures are required to provide four-byte cmpxchg() and 64-bit
+> architectures are additionally required to provide eight-byte cmpxchg().
+> However, there are cases where one-byte and two-byte cmpxchg()
+> would be extremely useful.  Therefore, provide cmpxchg_emu_u8() and
+> cmpxchg_emu_u16() that emulate one-byte and two-byte cmpxchg() in terms
+> of four-byte cmpxchg().
+>
+> Note that these emulations are fully ordered, and can (for example)
+> cause one-byte cmpxchg_relaxed() to incur the overhead of full ordering.
+> If this causes problems for a given architecture, that architecture is
+> free to provide its own lighter-weight primitives.
+>
+> [ paulmck: Apply Marco Elver feedback. ]
+> [ paulmck: Apply kernel test robot feedback. ]
+>
+> Link: https://lore.kernel.org/all/0733eb10-5e7a-4450-9b8a-527b97c842ff@paulmck-laptop/
+>
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> Cc: Marco Elver <elver@google.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: "Peter Zijlstra (Intel)" <peterz@infradead.org>
+> Cc: Douglas Anderson <dianders@chromium.org>
+> Cc: Petr Mladek <pmladek@suse.com>
+> Cc: <linux-arch@vger.kernel.org>
 
-Works as well. I'm not seing the point for CLOCK_MONOTONIC and the
-change logs are not really telling anything about the problem being
-solved....
+Acked-by: Marco Elver <elver@google.com>
 
-Thanks,
-
-        tglx
+> ---
+>  arch/Kconfig                |  3 ++
+>  include/linux/cmpxchg-emu.h | 16 ++++++++
+>  lib/Makefile                |  1 +
+>  lib/cmpxchg-emu.c           | 74 +++++++++++++++++++++++++++++++++++++
+>  4 files changed, 94 insertions(+)
+>  create mode 100644 include/linux/cmpxchg-emu.h
+>  create mode 100644 lib/cmpxchg-emu.c
+>
+> diff --git a/arch/Kconfig b/arch/Kconfig
+> index ae4a4f37bbf08..01093c60952a5 100644
+> --- a/arch/Kconfig
+> +++ b/arch/Kconfig
+> @@ -1609,4 +1609,7 @@ config CC_HAS_SANE_FUNCTION_ALIGNMENT
+>         # strict alignment always, even with -falign-functions.
+>         def_bool CC_HAS_MIN_FUNCTION_ALIGNMENT || CC_IS_CLANG
+>
+> +config ARCH_NEED_CMPXCHG_1_2_EMU
+> +       bool
+> +
+>  endmenu
+> diff --git a/include/linux/cmpxchg-emu.h b/include/linux/cmpxchg-emu.h
+> new file mode 100644
+> index 0000000000000..fee8171fa05eb
+> --- /dev/null
+> +++ b/include/linux/cmpxchg-emu.h
+> @@ -0,0 +1,16 @@
+> +/* SPDX-License-Identifier: GPL-2.0+ */
+> +/*
+> + * Emulated 1-byte and 2-byte cmpxchg operations for architectures
+> + * lacking direct support for these sizes.  These are implemented in terms
+> + * of 4-byte cmpxchg operations.
+> + *
+> + * Copyright (C) 2024 Paul E. McKenney.
+> + */
+> +
+> +#ifndef __LINUX_CMPXCHG_EMU_H
+> +#define __LINUX_CMPXCHG_EMU_H
+> +
+> +uintptr_t cmpxchg_emu_u8(volatile u8 *p, uintptr_t old, uintptr_t new);
+> +uintptr_t cmpxchg_emu_u16(volatile u16 *p, uintptr_t old, uintptr_t new);
+> +
+> +#endif /* __LINUX_CMPXCHG_EMU_H */
+> diff --git a/lib/Makefile b/lib/Makefile
+> index ffc6b2341b45a..1d93b61a7ecbe 100644
+> --- a/lib/Makefile
+> +++ b/lib/Makefile
+> @@ -236,6 +236,7 @@ obj-$(CONFIG_FUNCTION_ERROR_INJECTION) += error-inject.o
+>  lib-$(CONFIG_GENERIC_BUG) += bug.o
+>
+>  obj-$(CONFIG_HAVE_ARCH_TRACEHOOK) += syscall.o
+> +obj-$(CONFIG_ARCH_NEED_CMPXCHG_1_2_EMU) += cmpxchg-emu.o
+>
+>  obj-$(CONFIG_DYNAMIC_DEBUG_CORE) += dynamic_debug.o
+>  #ensure exported functions have prototypes
+> diff --git a/lib/cmpxchg-emu.c b/lib/cmpxchg-emu.c
+> new file mode 100644
+> index 0000000000000..a88c4f3c88430
+> --- /dev/null
+> +++ b/lib/cmpxchg-emu.c
+> @@ -0,0 +1,74 @@
+> +/* SPDX-License-Identifier: GPL-2.0+ */
+> +/*
+> + * Emulated 1-byte and 2-byte cmpxchg operations for architectures
+> + * lacking direct support for these sizes.  These are implemented in terms
+> + * of 4-byte cmpxchg operations.
+> + *
+> + * Copyright (C) 2024 Paul E. McKenney.
+> + */
+> +
+> +#include <linux/types.h>
+> +#include <linux/export.h>
+> +#include <linux/instrumented.h>
+> +#include <linux/atomic.h>
+> +#include <linux/panic.h>
+> +#include <linux/bug.h>
+> +#include <asm-generic/rwonce.h>
+> +#include <linux/cmpxchg-emu.h>
+> +
+> +union u8_32 {
+> +       u8 b[4];
+> +       u32 w;
+> +};
+> +
+> +/* Emulate one-byte cmpxchg() in terms of 4-byte cmpxchg. */
+> +uintptr_t cmpxchg_emu_u8(volatile u8 *p, uintptr_t old, uintptr_t new)
+> +{
+> +       u32 *p32 = (u32 *)(((uintptr_t)p) & ~0x3);
+> +       int i = ((uintptr_t)p) & 0x3;
+> +       union u8_32 old32;
+> +       union u8_32 new32;
+> +       u32 ret;
+> +
+> +       ret = READ_ONCE(*p32);
+> +       do {
+> +               old32.w = ret;
+> +               if (old32.b[i] != old)
+> +                       return old32.b[i];
+> +               new32.w = old32.w;
+> +               new32.b[i] = new;
+> +               instrument_atomic_read_write(p, 1);
+> +               ret = data_race(cmpxchg(p32, old32.w, new32.w));
+> +       } while (ret != old32.w);
+> +       return old;
+> +}
+> +EXPORT_SYMBOL_GPL(cmpxchg_emu_u8);
+> +
+> +union u16_32 {
+> +       u16 h[2];
+> +       u32 w;
+> +};
+> +
+> +/* Emulate two-byte cmpxchg() in terms of 4-byte cmpxchg. */
+> +uintptr_t cmpxchg_emu_u16(volatile u16 *p, uintptr_t old, uintptr_t new)
+> +{
+> +       u32 *p32 = (u32 *)(((uintptr_t)p) & ~0x3);
+> +       int i = (((uintptr_t)p) & 0x2) / 2;
+> +       union u16_32 old32;
+> +       union u16_32 new32;
+> +       u32 ret;
+> +
+> +       WARN_ON_ONCE(((uintptr_t)p) & 0x1);
+> +       ret = READ_ONCE(*p32);
+> +       do {
+> +               old32.w = ret;
+> +               if (old32.h[i] != old)
+> +                       return old32.h[i];
+> +               new32.w = old32.w;
+> +               new32.h[i] = new;
+> +               instrument_atomic_read_write(p, 2);
+> +               ret = data_race(cmpxchg(p32, old32.w, new32.w));
+> +       } while (ret != old32.w);
+> +       return old;
+> +}
+> +EXPORT_SYMBOL_GPL(cmpxchg_emu_u16);
+> --
+> 2.40.1
+>
 
