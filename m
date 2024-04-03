@@ -1,230 +1,239 @@
-Return-Path: <linux-arch+bounces-3377-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3378-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 353A9896F67
-	for <lists+linux-arch@lfdr.de>; Wed,  3 Apr 2024 14:53:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7F4C897021
+	for <lists+linux-arch@lfdr.de>; Wed,  3 Apr 2024 15:19:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ACEF71F2974F
-	for <lists+linux-arch@lfdr.de>; Wed,  3 Apr 2024 12:53:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 185F41C21B06
+	for <lists+linux-arch@lfdr.de>; Wed,  3 Apr 2024 13:19:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D10A1474AD;
-	Wed,  3 Apr 2024 12:51:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F23C21482F3;
+	Wed,  3 Apr 2024 13:19:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IKSsvjLp"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g8+qq+KH"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 208371419BA;
-	Wed,  3 Apr 2024 12:51:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27F5F146A7E;
+	Wed,  3 Apr 2024 13:19:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712148672; cv=none; b=VUGTJbZ6SLNi8h7Bz14sKR/EsDyysWItPx4ZtqSs2n28Ef07x7CJUY3iHy3/3gSpPdSxoqoyeg2+LNcUo/XCWeVW8taral8k34g/NRQKDy2aZ824F2RrDL9u8VtHOESxPn5Yq8+eFmQPZwcXmK0Gk+SwJ8r7AGQ4vSLMBvsIsBg=
+	t=1712150384; cv=none; b=QkgYaXcpKo9orSgros14iuQLoKodmHdXOmQ0ouhWtHbo6/BT0NTDlQR0SkkP1CcrA1XL35zpHjkqprOV1ZJSRk7qEvg0JRrMbt5+xc/GBswEKywueLcTO+5viE3300frtUOkEqApkDT6gwJKVuvvoH/mW5OP3SBwdUdiHJP0Psg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712148672; c=relaxed/simple;
-	bh=zwy5/UeNKw0rdFTNUIENurIiqNiqQ2OzHWaKd+hx69E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nCiEOOoSVq06tOmvJQibRuYZv+0GOgQhX2d/F8ktP57j1LvOC2dudHA8xH4n8I2LPnQF1rJiTFFpCE5kQWLxyY6FOe1PDARjrLAP3f0VbNc8FBpELmLg+FwC4uUKATUWzmhw2WmKPeeMfatzTc6IKNlxr8YP4QoTTzH/EuQms1s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IKSsvjLp; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1712150384; c=relaxed/simple;
+	bh=l/Ke/wiPt7/TaV9ybG3TveTzs1CGNNNgzCBPCA58cXg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=T2XKSWFqepNHm0ZwXRLashhbvkytXagXL/k4dX0R9wdymoH3N+/jKn7516MDyDCcJY4EeoVOBLqLEgr4o+ZRAbpmFZDr7NXnZRjjITu32HbVGETRiUQ94CVc3Yoom5KQLDjbx9LBHHtrtSHooNQNDvoZcSvw90zmFaVgRVO2oPE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g8+qq+KH; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-416262d747dso717435e9.0;
-        Wed, 03 Apr 2024 05:51:10 -0700 (PDT)
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1e0f2798cd8so52875975ad.3;
+        Wed, 03 Apr 2024 06:19:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712148669; x=1712753469; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=29BgQt41fxpDRMixAlECbaCmewv1mm5rdtRovSAulMA=;
-        b=IKSsvjLp0pJJD2zzd42kk8JKagUJBhyhBAbjFRxMcnVC69OY+OmP3vSc+uBBbzoKwo
-         qyjcDHAEPDimmutVqfD2UK8TPYcdUSLswOHb6t7OuvpMdTAEhSkvBtv+Vyc0VRzEXg77
-         xRyY63/Jaubow1Fko4loce8URvZgTriZHa3LILOSwAOUuZ22rH863YQcL1tgGlI0iLQE
-         8dcOwyalOwzZBS6P3DyPgamV/ouMX93NZfcoZBePxuVnmYBOn31xyfT1x9gxE2BHoGjY
-         gX/SVQ51YDIIgd3TGiFmKfo8Cf5I7fw1Bh8qbRH5EdkNcWH1cU+cTRr2A5wbFIfuzXeE
-         8LuQ==
+        d=gmail.com; s=20230601; t=1712150381; x=1712755181; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=5jeOyVY2AHqhv0KvV6kieVXey6Da3SBwUwdCTK976WY=;
+        b=g8+qq+KH/4ZOw4yKmBeAN1AEjHVv4iug/VmhgFNn9K3CpsBNyhSrCcyW9HDX4iUS3w
+         /zOuq23Y7ylAmJ4g4SKSm5GrP+9Hqr6mx5kq8xfut73OVqpZgFccbQufMji2kpyz3nfO
+         WSRP0qc8YcgQIWWCuGBmNtnMRy8uHFeX7UmbnrEVJ+WdKNlhVeJe2PxSE29c8fb/UuPF
+         cM+41js+04qz9ygVpN/pJELTfwE2hs7qLkiAIj6xdSS0+HXwRtraj8/WGlsPpvq7JPOT
+         23hJBjMtOmfbX7uNlA3nB/TKAiZlRrLRsMTzScAcHJfYJqpdvOMj4dNodseyrs5d4QoS
+         ye3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712148669; x=1712753469;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=29BgQt41fxpDRMixAlECbaCmewv1mm5rdtRovSAulMA=;
-        b=ANO5y9mj4fTiF+3he8HNrJEYRh3AYs+oSBNQUrsd/pMFxU/rSrFGR1ZYoUW5kWEPOb
-         d42xhxAONMH3lioFvlQxcdiV8aieRUeFSqFqG0PRo1CGoqKQT6V6D2V6Ryw0SDnmy12L
-         jKS0Le/4z6lreRN1zYLiRdw6qNdgOMeIggo8ntTqIuqj6CkHTyGR8L387CnyUyAbtvP1
-         cYNsvAIgGUaEN85IyXr+3bd2dMQd/9JpE8ZuC7K20Vnoc+0FAPbj06HbpSVOS1pkKWGk
-         BKf17qz8p0f+zhg7i+6x7o0y1X+ffPwImN9rJHfVMViEsaENlwGL0W/IJG0ZKVESLivc
-         iJpA==
-X-Forwarded-Encrypted: i=1; AJvYcCVeBqG7IYbGwrNarsNgrJEs/lDNRU/C9LTqpwlVfuQyI1Emk9/+7f201Ke2jBa/Xs47Gr6pAl9e8tBM2u81hRxJ/KmFBflU3blif0a+SmmNIQCanbp3LFKUXTYj185lhXnSxI3JI9GSg2eLd8gvTgB2L91R2cwif/KZ7TP6YWWya3Shjg==
-X-Gm-Message-State: AOJu0YxI5yfO2XiPv3Mb5x7XPgYG7BGQr9rQP6vz5zZBgLax60jYYhXm
-	OpMMXCSd4s/DJkUXIhK510vEH1TEjpn/J+YXMSnF1MlV/Ukki9cr
-X-Google-Smtp-Source: AGHT+IGiMxFFkzEMKwErZDGMsEh8QQujgECEb7hAYrnmXSB8PanQ6hfDeg6f6lJ/1vv3KfoIi9fU0w==
-X-Received: by 2002:a05:600c:5710:b0:414:9103:e38c with SMTP id jv16-20020a05600c571000b004149103e38cmr10494666wmb.22.1712148669149;
-        Wed, 03 Apr 2024 05:51:09 -0700 (PDT)
-Received: from [10.254.108.81] (munvpn.amd.com. [165.204.72.6])
-        by smtp.gmail.com with ESMTPSA id dj11-20020a0560000b0b00b003437799a373sm3724238wrb.83.2024.04.03.05.51.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Apr 2024 05:51:08 -0700 (PDT)
-Message-ID: <0c95aa84-63e6-41be-8c70-3a6dadefd682@gmail.com>
-Date: Wed, 3 Apr 2024 14:51:04 +0200
+        d=1e100.net; s=20230601; t=1712150381; x=1712755181;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5jeOyVY2AHqhv0KvV6kieVXey6Da3SBwUwdCTK976WY=;
+        b=Te9qcRJDk+wo+ljEOihoLhkG/BO1zjSc8CsltTQQV3pbB0vrTGVdqzy9NJZeqazZPW
+         vyBNrS2F2O3EPCWckNAGeJSFhbMAFHg1jO0eVYt2+501YhSDUsssAhPCP91CNLtc+yg2
+         5hBeNrp8SU3rkC7Rha2I99Uv5nAeObtwC1XaNhabZF5GakQTnew36LLfgdz4iXWaFxkD
+         8BXE2lioeV1/WsrOLlv4Fw7zgr1hpIuMz8KL2FdPHQRsfmCDvuklMa7NWObtgW6G8IqB
+         610kBPh7nlCBHy7/lzBmzrLrqzsGMlrf4o2YtQp9Kz8MLDbWxhaA24Q5ZL6sp7KwGMum
+         vWaQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVn0tQYIthAh+dAgS8It5Dh0e3tsOptMMWzEWD/SPt3Ish5IZRiZqXw0uINqRmcZxvGGcp+89IvG/mMP7dY8wvxoRQ6rOSFkG0yLOeimq9lTis3JTucGBfm/YpMyj4Z0BQmES0q80vOEM10OqYR+pKMFj0BjfCwDWk/m5GIkvfhHY4wnChUpiwWxhKtE8BAUMguqT0Whm5VCbZMEG7J5SLP5jnkT+LaX03yGTnRoREmVufV2u+DT4EF11djn8CafzBoycRVj8jg54Mz5ZsvmTpu2apKGcR1pgcQsMDBUVS8UZzqbD+1jn3U5agG/sCmbw==
+X-Gm-Message-State: AOJu0YwwkDi2irBujbKEOLv/JDyRJlsvoxKJjgfm2x6yf9eVUoHMGxJy
+	vdVkc3vj9oZ2iOJHypcpRflgPNmTlWltVpHF6nDNmdo/z/TR9wrdovK/eWbd
+X-Google-Smtp-Source: AGHT+IGUUHIUOOsCxCF/TsSf8IWxMRQa7fBTBtgLaZOyDBRCO0Z9+JW6g9cTcLQ9TLR427e8GbHcQA==
+X-Received: by 2002:a17:902:f68b:b0:1e2:8ec0:90c4 with SMTP id l11-20020a170902f68b00b001e28ec090c4mr2621403plg.2.1712150381396;
+        Wed, 03 Apr 2024 06:19:41 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id p2-20020a170902780200b001e00e17c6e2sm13430178pll.138.2024.04.03.06.19.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Apr 2024 06:19:40 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
+To: linux-kselftest@vger.kernel.org
+Cc: David Airlie <airlied@gmail.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	=?UTF-8?q?Ma=C3=ADra=20Canal?= <mcanal@igalia.com>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Kees Cook <keescook@chromium.org>,
+	Daniel Diaz <daniel.diaz@linaro.org>,
+	David Gow <davidgow@google.com>,
+	Arthur Grillo <arthurgrillo@riseup.net>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	Naresh Kamboju <naresh.kamboju@linaro.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Maxime Ripard <mripard@kernel.org>,
+	=?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= <ville.syrjala@linux.intel.com>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	dri-devel@lists.freedesktop.org,
+	kunit-dev@googlegroups.com,
+	linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-parisc@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org,
+	linux-sh@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	netdev@vger.kernel.org,
+	x86@kernel.org,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH v3 00/15] Add support for suppressing warning backtraces
+Date: Wed,  3 Apr 2024 06:19:21 -0700
+Message-Id: <20240403131936.787234-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 00/15] Unified cross-architecture kernel-mode FPU API
-To: Samuel Holland <samuel.holland@sifive.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- linux-arm-kernel@lists.infradead.org, x86@kernel.org
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
- Christoph Hellwig <hch@lst.de>, loongarch@lists.linux.dev,
- amd-gfx@lists.freedesktop.org, Borislav Petkov <bp@alien8.de>,
- Catalin Marinas <catalin.marinas@arm.com>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Jonathan Corbet <corbet@lwn.net>, Masahiro Yamada <masahiroy@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>,
- Russell King <linux@armlinux.org.uk>, Thomas Gleixner <tglx@linutronix.de>,
- Will Deacon <will@kernel.org>, linux-doc@vger.kernel.org,
- linux-kbuild@vger.kernel.org, "Wentland, Harry" <Harry.Wentland@amd.com>,
- Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
-References: <20240329072441.591471-1-samuel.holland@sifive.com>
-Content-Language: en-US
-From: =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>
-In-Reply-To: <20240329072441.591471-1-samuel.holland@sifive.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-I only skimmed over the platform patches and spend only a few minutes on 
-the amdgpu stuff.
+Some unit tests intentionally trigger warning backtraces by passing bad
+parameters to kernel API functions. Such unit tests typically check the
+return value from such calls, not the existence of the warning backtrace.
 
- From what I've seen this series seems to make perfect sense to me, I 
-just can't fully judge everything.
+Such intentionally generated warning backtraces are neither desirable
+nor useful for a number of reasons.
+- They can result in overlooked real problems.
+- A warning that suddenly starts to show up in unit tests needs to be
+  investigated and has to be marked to be ignored, for example by
+  adjusting filter scripts. Such filters are ad-hoc because there is
+  no real standard format for warnings. On top of that, such filter
+  scripts would require constant maintenance.
 
-So feel free to add Acked-by: Christian König <christian.koenig@amd.com> 
-but I strongly suggest that Harry and Rodrigo take a look as well.
+One option to address problem would be to add messages such as "expected
+warning backtraces start / end here" to the kernel log.  However, that
+would again require filter scripts, it might result in missing real
+problematic warning backtraces triggered while the test is running, and
+the irrelevant backtrace(s) would still clog the kernel log.
 
-Regards,
-Christian.
+Solve the problem by providing a means to identify and suppress specific
+warning backtraces while executing test code. Support suppressing multiple
+backtraces while at the same time limiting changes to generic code to the
+absolute minimum. Architecture specific changes are kept at minimum by
+retaining function names only if both CONFIG_DEBUG_BUGVERBOSE and
+CONFIG_KUNIT are enabled.
 
-Am 29.03.24 um 08:18 schrieb Samuel Holland:
-> This series unifies the kernel-mode FPU API across several architectures
-> by wrapping the existing functions (where needed) in consistently-named
-> functions placed in a consistent header location, with mostly the same
-> semantics: they can be called from preemptible or non-preemptible task
-> context, and are not assumed to be reentrant. Architectures are also
-> expected to provide CFLAGS adjustments for compiling FPU-dependent code.
-> For the moment, SIMD/vector units are out of scope for this common API.
->
-> This allows us to remove the ifdeffery and duplicated Makefile logic at
-> each FPU user. It then implements the common API on RISC-V, and converts
-> a couple of users to the new API: the AMDGPU DRM driver, and the FPU
-> self test.
->
-> The underlying goal of this series is to allow using newer AMD GPUs
-> (e.g. Navi) on RISC-V boards such as SiFive's HiFive Unmatched. Those
-> GPUs need CONFIG_DRM_AMD_DC_FP to initialize, which requires kernel-mode
-> FPU support.
->
-> Previous versions:
-> v3: https://lore.kernel.org/linux-kernel/20240327200157.1097089-1-samuel.holland@sifive.com/
-> v2: https://lore.kernel.org/linux-kernel/20231228014220.3562640-1-samuel.holland@sifive.com/
-> v1: https://lore.kernel.org/linux-kernel/20231208055501.2916202-1-samuel.holland@sifive.com/
-> v0: https://lore.kernel.org/linux-kernel/20231122030621.3759313-1-samuel.holland@sifive.com/
->
-> Changes in v4:
->   - Add missed CFLAGS changes for recov_neon_inner.c
->     (fixes arm build failures)
->   - Fix x86 include guard issue (fixes x86 build failures)
->
-> Changes in v3:
->   - Rebase on v6.9-rc1
->   - Limit riscv ARCH_HAS_KERNEL_FPU_SUPPORT to 64BIT
->
-> Changes in v2:
->   - Add documentation explaining the built-time and runtime APIs
->   - Add a linux/fpu.h header for generic isolation enforcement
->   - Remove file name from header comment
->   - Clean up arch/arm64/lib/Makefile, like for arch/arm
->   - Remove RISC-V architecture-specific preprocessor check
->   - Split altivec removal to a separate patch
->   - Use linux/fpu.h instead of asm/fpu.h in consumers
->   - Declare test_fpu() in a header
->
-> Michael Ellerman (1):
->    drm/amd/display: Only use hard-float, not altivec on powerpc
->
-> Samuel Holland (14):
->    arch: Add ARCH_HAS_KERNEL_FPU_SUPPORT
->    ARM: Implement ARCH_HAS_KERNEL_FPU_SUPPORT
->    ARM: crypto: Use CC_FLAGS_FPU for NEON CFLAGS
->    arm64: Implement ARCH_HAS_KERNEL_FPU_SUPPORT
->    arm64: crypto: Use CC_FLAGS_FPU for NEON CFLAGS
->    lib/raid6: Use CC_FLAGS_FPU for NEON CFLAGS
->    LoongArch: Implement ARCH_HAS_KERNEL_FPU_SUPPORT
->    powerpc: Implement ARCH_HAS_KERNEL_FPU_SUPPORT
->    x86/fpu: Fix asm/fpu/types.h include guard
->    x86: Implement ARCH_HAS_KERNEL_FPU_SUPPORT
->    riscv: Add support for kernel-mode FPU
->    drm/amd/display: Use ARCH_HAS_KERNEL_FPU_SUPPORT
->    selftests/fpu: Move FP code to a separate translation unit
->    selftests/fpu: Allow building on other architectures
->
->   Documentation/core-api/floating-point.rst     | 78 +++++++++++++++++++
->   Documentation/core-api/index.rst              |  1 +
->   Makefile                                      |  5 ++
->   arch/Kconfig                                  |  6 ++
->   arch/arm/Kconfig                              |  1 +
->   arch/arm/Makefile                             |  7 ++
->   arch/arm/include/asm/fpu.h                    | 15 ++++
->   arch/arm/lib/Makefile                         |  3 +-
->   arch/arm64/Kconfig                            |  1 +
->   arch/arm64/Makefile                           |  9 ++-
->   arch/arm64/include/asm/fpu.h                  | 15 ++++
->   arch/arm64/lib/Makefile                       |  6 +-
->   arch/loongarch/Kconfig                        |  1 +
->   arch/loongarch/Makefile                       |  5 +-
->   arch/loongarch/include/asm/fpu.h              |  1 +
->   arch/powerpc/Kconfig                          |  1 +
->   arch/powerpc/Makefile                         |  5 +-
->   arch/powerpc/include/asm/fpu.h                | 28 +++++++
->   arch/riscv/Kconfig                            |  1 +
->   arch/riscv/Makefile                           |  3 +
->   arch/riscv/include/asm/fpu.h                  | 16 ++++
->   arch/riscv/kernel/Makefile                    |  1 +
->   arch/riscv/kernel/kernel_mode_fpu.c           | 28 +++++++
->   arch/x86/Kconfig                              |  1 +
->   arch/x86/Makefile                             | 20 +++++
->   arch/x86/include/asm/fpu.h                    | 13 ++++
->   arch/x86/include/asm/fpu/types.h              |  6 +-
->   drivers/gpu/drm/amd/display/Kconfig           |  2 +-
->   .../gpu/drm/amd/display/amdgpu_dm/dc_fpu.c    | 35 +--------
->   drivers/gpu/drm/amd/display/dc/dml/Makefile   | 36 +--------
->   drivers/gpu/drm/amd/display/dc/dml2/Makefile  | 36 +--------
->   include/linux/fpu.h                           | 12 +++
->   lib/Kconfig.debug                             |  2 +-
->   lib/Makefile                                  | 26 +------
->   lib/raid6/Makefile                            | 33 +++-----
->   lib/test_fpu.h                                |  8 ++
->   lib/{test_fpu.c => test_fpu_glue.c}           | 37 ++-------
->   lib/test_fpu_impl.c                           | 37 +++++++++
->   38 files changed, 348 insertions(+), 193 deletions(-)
->   create mode 100644 Documentation/core-api/floating-point.rst
->   create mode 100644 arch/arm/include/asm/fpu.h
->   create mode 100644 arch/arm64/include/asm/fpu.h
->   create mode 100644 arch/powerpc/include/asm/fpu.h
->   create mode 100644 arch/riscv/include/asm/fpu.h
->   create mode 100644 arch/riscv/kernel/kernel_mode_fpu.c
->   create mode 100644 arch/x86/include/asm/fpu.h
->   create mode 100644 include/linux/fpu.h
->   create mode 100644 lib/test_fpu.h
->   rename lib/{test_fpu.c => test_fpu_glue.c} (71%)
->   create mode 100644 lib/test_fpu_impl.c
->
+The first patch of the series introduces the necessary infrastructure.
+The second patch introduces support for counting suppressed backtraces.
+This capability is used in patch three to implement unit tests.
+Patch four documents the new API.
+The next two patches add support for suppressing backtraces in drm_rect
+and dev_addr_lists unit tests. These patches are intended to serve as
+examples for the use of the functionality introduced with this series.
+The remaining patches implement the necessary changes for all
+architectures with GENERIC_BUG support.
 
+With CONFIG_KUNIT enabled, image size increase with this series applied is
+approximately 1%. The image size increase (and with it the functionality
+introduced by this series) can be avoided by disabling
+CONFIG_KUNIT_SUPPRESS_BACKTRACE.
+
+This series is based on the RFC patch and subsequent discussion at
+https://patchwork.kernel.org/project/linux-kselftest/patch/02546e59-1afe-4b08-ba81-d94f3b691c9a@moroto.mountain/
+and offers a more comprehensive solution of the problem discussed there.
+
+Design note:
+  Function pointers are only added to the __bug_table section if both
+  CONFIG_KUNIT_SUPPRESS_BACKTRACE and CONFIG_DEBUG_BUGVERBOSE are enabled
+  to avoid image size increases if CONFIG_KUNIT is disabled. There would be
+  some benefits to adding those pointers all the time (reduced complexity,
+  ability to display function names in BUG/WARNING messages). That change,
+  if desired, can be made later.
+
+Checkpatch note:
+  Remaining checkpatch errors and warnings were deliberately ignored.
+  Some are triggered by matching coding style or by comments interpreted
+  as code, others by assembler macros which are disliked by checkpatch.
+  Suggestions for improvements are welcome.
+
+Changes since RFC:
+- Introduced CONFIG_KUNIT_SUPPRESS_BACKTRACE
+- Minor cleanups and bug fixes
+- Added support for all affected architectures
+- Added support for counting suppressed warnings
+- Added unit tests using those counters
+- Added patch to suppress warning backtraces in dev_addr_lists tests
+
+Changes since v1:
+- Rebased to v6.9-rc1
+- Added Tested-by:, Acked-by:, and Reviewed-by: tags
+  [I retained those tags since there have been no functional changes]
+- Introduced KUNIT_SUPPRESS_BACKTRACE configuration option, enabled by
+  default.
+
+Changes since v2:
+- Rebased to v6.9-rc2
+- Added comments to drm warning suppression explaining why it is needed.
+- Added patch to move conditional code in arch/sh/include/asm/bug.h
+  to avoid kerneldoc warning
+- Added architecture maintainers to Cc: for architecture specific patches
+- No functional changes
+
+----------------------------------------------------------------
+Guenter Roeck (15):
+      bug/kunit: Core support for suppressing warning backtraces
+      kunit: bug: Count suppressed warning backtraces
+      kunit: Add test cases for backtrace warning suppression
+      kunit: Add documentation for warning backtrace suppression API
+      drm: Suppress intentional warning backtraces in scaling unit tests
+      net: kunit: Suppress lock warning noise at end of dev_addr_lists tests
+      x86: Add support for suppressing warning backtraces
+      arm64: Add support for suppressing warning backtraces
+      loongarch: Add support for suppressing warning backtraces
+      parisc: Add support for suppressing warning backtraces
+      s390: Add support for suppressing warning backtraces
+      sh: Add support for suppressing warning backtraces
+      sh: Move defines needed for suppressing warning backtraces
+      riscv: Add support for suppressing warning backtraces
+      powerpc: Add support for suppressing warning backtraces
+
+ Documentation/dev-tools/kunit/usage.rst |  30 ++++++++-
+ arch/arm64/include/asm/asm-bug.h        |  29 ++++++---
+ arch/arm64/include/asm/bug.h            |   8 ++-
+ arch/loongarch/include/asm/bug.h        |  38 ++++++++----
+ arch/parisc/include/asm/bug.h           |  29 ++++++---
+ arch/powerpc/include/asm/bug.h          |  37 +++++++++---
+ arch/riscv/include/asm/bug.h            |  38 ++++++++----
+ arch/s390/include/asm/bug.h             |  17 +++++-
+ arch/sh/include/asm/bug.h               |  28 +++++++--
+ arch/x86/include/asm/bug.h              |  21 +++++--
+ drivers/gpu/drm/tests/drm_rect_test.c   |  16 +++++
+ include/asm-generic/bug.h               |  16 ++++-
+ include/kunit/bug.h                     |  56 +++++++++++++++++
+ include/kunit/test.h                    |   1 +
+ include/linux/bug.h                     |  13 ++++
+ lib/bug.c                               |  51 ++++++++++++++--
+ lib/kunit/Kconfig                       |   9 +++
+ lib/kunit/Makefile                      |   7 ++-
+ lib/kunit/backtrace-suppression-test.c  | 104 ++++++++++++++++++++++++++++++++
+ lib/kunit/bug.c                         |  42 +++++++++++++
+ net/core/dev_addr_lists_test.c          |   6 ++
+ 21 files changed, 524 insertions(+), 72 deletions(-)
+ create mode 100644 include/kunit/bug.h
+ create mode 100644 lib/kunit/backtrace-suppression-test.c
+ create mode 100644 lib/kunit/bug.c
 
