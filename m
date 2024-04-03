@@ -1,72 +1,72 @@
-Return-Path: <linux-arch+bounces-3383-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3384-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77DDB897057
-	for <lists+linux-arch@lfdr.de>; Wed,  3 Apr 2024 15:21:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1630897062
+	for <lists+linux-arch@lfdr.de>; Wed,  3 Apr 2024 15:21:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2E0B928F922
-	for <lists+linux-arch@lfdr.de>; Wed,  3 Apr 2024 13:21:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 30DE91F26E12
+	for <lists+linux-arch@lfdr.de>; Wed,  3 Apr 2024 13:21:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BBD9149DE2;
-	Wed,  3 Apr 2024 13:19:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 795A414A093;
+	Wed,  3 Apr 2024 13:19:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KmnCkyTD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mvRJZeCF"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE0BA1494D8;
-	Wed,  3 Apr 2024 13:19:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF84E149DF0;
+	Wed,  3 Apr 2024 13:19:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712150394; cv=none; b=gjpRws1PIMmjRBbB2SmaXd3mGSO1kyAkQQsABkR0BhdWyb/TLBwRcEEIesDZ5NMO5916pXX8VW222nG1r0aaiEX0I/KEonKwn6OjD55+nVarxdrTsmoNQOU49aUeZvw20m+24edEypbdhQnmcM9RCvYQaPJOlj1KbxNv58liUjo=
+	t=1712150396; cv=none; b=qWlIowxBoqOuezImpoLHVo+fSI/xDOr/Vy8/huzvu3qEwp9/pVmKcUuyY3QYwxI4hE1fF8ARxapdG1nC/95fvFy3MjDfKc8WfJsUX66CYEkZkZlirYWaIjXYlw93UCaLsiMkQtZd6U77GMrWNHrOj6chFxreYaqkerUgBoK7iQM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712150394; c=relaxed/simple;
-	bh=kq5+RMCvHSKQHxJsCA0Sj8YeDyJpY+oX/LlT/96C6xo=;
+	s=arc-20240116; t=1712150396; c=relaxed/simple;
+	bh=euFd9pdOgYqNo0qCqbH/AlBY7kEWMpZ/eka8k6xSTcg=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hKSvL1qAIBwv6Wv8ugflknNTlRIp1G02rtTX0qt0kjyEfx3EmhO+oJ++DwE1qHSnIWJY4MBw7YV5i4To9mXCof3f+VbqcXruViknCgZUg6RQ5NsBRxVRTbCNBL5pVrl9/2vgftEpAfEQQE15WQ1GhKjEmEjYYZjQ49XVFaACBU0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KmnCkyTD; arc=none smtp.client-ip=209.85.214.182
+	 MIME-Version; b=dXiGtk2nK/mI/RyVojDhtGictCYYAKmIaQjSo6PVETvEQ2/G+UR7IuPhW3d5zRci8lhj1q7kpAJcvnzh8APtBQCvn5dy13wcgjy8gzf4FCEVDnpHKjxCd2ogbw4gkZ+A8DdE3DoGzOQnOD8nxXMSEHd9KgWl/SgIPPM4stbR8JA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mvRJZeCF; arc=none smtp.client-ip=209.85.210.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1e29328289eso4704835ad.0;
-        Wed, 03 Apr 2024 06:19:52 -0700 (PDT)
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-6e7425a6714so5222870b3a.0;
+        Wed, 03 Apr 2024 06:19:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712150391; x=1712755191; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1712150393; x=1712755193; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0HH3He2M5JGBbpn1IyUzwQbFpqNeS8i3zDjnB0NO5L0=;
-        b=KmnCkyTDVQ8LTmmPVRaWQmewlpAXMAbluotff3psu5SqqHRsDUqb1WDVVJhpfSwt6D
-         qeNPXiD3fjotHJFAO2xIhTDu3Bx3oe+wdBvY6IbvBKIfElt7gOwqeDRlVhylYKIDdexT
-         nSGvn6TGNo+YfQWpGrczNNcHUoaMNcGmqwjmVtxlfDpEVN/U/GbUQVRVZ2oLO4GyrZxa
-         gNHkqqOOx2wAUuBKryz2EH0NU0pXsiOqNgNzwCDp62Y9lC+vGqC839aRicD3013tLjGL
-         ZI0f6v61/JJWK7dxndRRMrHKcsqQ2ardbcbV/KezywD5dF9Nmrpzucf2rxV3ZNl4GM+b
-         otHQ==
+        bh=MvARuQ+3VmnrmzgmqFSmVu3cd4NVfa8l1fZDGFIcUBg=;
+        b=mvRJZeCFy9RLfkzM9y8eEZ8gItsE9HDRAx+h9xFN7H3l+GfAHEDNc+qF35554bL4Un
+         alxC7DfUTWnv9XbZqlLOTgvwtq50/UjxD0cBYbw2H4jBWAw7Gh5ahqtZDt3go7Rj4+tz
+         vb1+2Lux6DUhvbqDyGv6g+66/OTZyS2U8EEtt5E10/SakY15lUH/JPeZJRGu1cp0hU8A
+         7Q2ucuS5qaKEKNETcf2qBimyYSLxjLmMPsvrkvSqA83/69UAXgifDPemQyszJ+XA/Tel
+         8JMLvTN72RPEBHopkPgPenYBMQ8SotfYVt32Ol6P8uFCEfeI99LgpxXAQKKI3p/NhFl9
+         XPtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712150391; x=1712755191;
+        d=1e100.net; s=20230601; t=1712150393; x=1712755193;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=0HH3He2M5JGBbpn1IyUzwQbFpqNeS8i3zDjnB0NO5L0=;
-        b=QnGx9lj/SIqw7CmbpP1dVYK9Ebggu0GiaZNHXTPsXcRieo3oAnu9WPP7rCQBNt+Zy/
-         fWDgkEW+SJZs/u2kN5AK4Yl89SKuKF9pdDCrVHIGH1DXCCzLVcNbkyMDtKRZCq3VmkOt
-         SmSELE3MOx3LeQ0KRDyMys4Ozg/z924TAFUyUdbbkz0k2H3PrDb5xsvEIJbSKDS9ZuS3
-         QaKnbEEkHvYUGWxcoBciMiOvdATMhxMXIksdNqwp37/eMCzwHEA0yphkwnmYsfZc40N+
-         6epW8dwxlgSymkzVE5uEujjKSMrGXkQP9VqgxBBFOTRaeH4QLGDyjBOa743AofmH7hsq
-         24/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCX4su6MLSBZl/joLOGT38EAsbC2D20Q2SCQF0A+b/tHZ9HOa6GuoJGTAZBaEqtE4X9ORB63Zo2BYhD+kl7e0vDR2CD5J0oXNna8ixWP9Vcl1jueZWrZhTqSIUm7YYsRF2bd5Qzf778CwXbd8pJ5OmK5wmqbTynRq84c7cxKB5Cn2bOfGsEFERW9oom1olZXTPQh1RhMqKY7GTBy6jwoaf/f5vbAX9rMkmOTT9s0SmR5PCKj3eVtI0B07KhrDP5QjrkMEvmuV9MobGmG0sl/ri94HiryfoexwHf2tWXixPOZzCiy/sHiCuJEikJEH5gr5A==
-X-Gm-Message-State: AOJu0YzYBFwfxuYK8gIJD2Ug3iQAUSCHSU5PDtYLhtXz5ojGn6dOZ9BX
-	lXHb/jKVaXX93AdLPFLNNKD3vaLulPbYuGicqnpx/Up220tv3XwuY6myKsNu
-X-Google-Smtp-Source: AGHT+IGzp4oN8GRSo/9EyN0xy1NOVYsP3l70Car4fBvR2s7g6gbB9/O+yleAACI5/eSTY78txokLLg==
-X-Received: by 2002:a17:903:d1:b0:1e2:a177:d6b with SMTP id x17-20020a17090300d100b001e2a1770d6bmr229571plc.19.1712150391428;
-        Wed, 03 Apr 2024 06:19:51 -0700 (PDT)
+        bh=MvARuQ+3VmnrmzgmqFSmVu3cd4NVfa8l1fZDGFIcUBg=;
+        b=SbOK7RQSC3r7MgKcTJGVYH99Soqr0xqd+rF07CMB7tNdDUIM6hGxWIRPy3zemVdkIJ
+         zReb4tPVHg2JrxQ/PZnzetvvL0q+VDqVM42NYUadIK5cm/wX8gx/u06t8awlWkpIAh34
+         kNU3+oqSjB2JUt/OcCHFJPFwlOLcQtxeQ9/r9vco7QA6FxEJpgFMU46ZTd8UQ9vKTh4c
+         7LdO26cJt42R2Wv+6chWIaiQBjE3Pa08I2c5BEVTWyg7Em4YUDmyt/W7qoBxc39i0LnK
+         qt+Xu/wj9ECDSzHAZx0TwkHiBuRxVG5oUF+epm3bnR5v03Odro4oFQG8ESvw+5UpmD2k
+         y6NQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWPzjHzsNHmOKxgo3yYmgGxlt/sc0cUPco5YYtWrUeO6x/3mjXxRkG8z7/z9URuzZLxahpd3zfkSHvVI3paF1oVm6b64sBVlFeR+OxU0plXQ0YNPSPYNL13Ta6g8h8RTVXcw1y26MriqLd/3x6v8vG5ZGHXEOenWNrMclsH+L3Nrp7NFbVjgfwzW6EToWGpE+F89kVntFQcy3vsJNPijb9BwcqQvONgdtSuHc1Zr99W2sIikwPOuMSjjV+Hpahwchu5Hf5X7aPzvkYwpWXYBCVhQTGZ3/Gc0g20aet48uZBGDsuBC0NNi5c2xeI3aV1lA==
+X-Gm-Message-State: AOJu0YyUF2iwUlnH4UuNaDJJKtlgZrOYGusd+he0mEr60LKPca/fOLAB
+	R5WO6yjgg/PTjw+g6pztc15E1CoghS7tIccgYHLiAsGXiyKpn9KLdha/h427
+X-Google-Smtp-Source: AGHT+IFzkfgfwanXAd82f8i8ef5Fjpgbc/yneRFMHGOwV59qDNS3Awm153uRnJZYSeIbwOl4zm4JYA==
+X-Received: by 2002:a05:6a00:190b:b0:6ea:73d3:d3a with SMTP id y11-20020a056a00190b00b006ea73d30d3amr17312402pfi.22.1712150393007;
+        Wed, 03 Apr 2024 06:19:53 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h1-20020a170902b94100b001dd0c5d5227sm13149194pls.193.2024.04.03.06.19.50
+        by smtp.gmail.com with ESMTPSA id j3-20020a62b603000000b006e56bf07483sm11720837pff.77.2024.04.03.06.19.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Apr 2024 06:19:50 -0700 (PDT)
+        Wed, 03 Apr 2024 06:19:52 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 To: linux-kselftest@vger.kernel.org
@@ -101,10 +101,12 @@ Cc: David Airlie <airlied@gmail.com>,
 	netdev@vger.kernel.org,
 	x86@kernel.org,
 	Guenter Roeck <linux@roeck-us.net>,
-	Linux Kernel Functional Testing <lkft@linaro.org>
-Subject: [PATCH v3 05/15] drm: Suppress intentional warning backtraces in scaling unit tests
-Date: Wed,  3 Apr 2024 06:19:26 -0700
-Message-Id: <20240403131936.787234-6-linux@roeck-us.net>
+	Linux Kernel Functional Testing <lkft@linaro.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Eric Dumazet <edumazet@google.com>
+Subject: [PATCH v3 06/15] net: kunit: Suppress lock warning noise at end of dev_addr_lists tests
+Date: Wed,  3 Apr 2024 06:19:27 -0700
+Message-Id: <20240403131936.787234-7-linux@roeck-us.net>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240403131936.787234-1-linux@roeck-us.net>
 References: <20240403131936.787234-1-linux@roeck-us.net>
@@ -114,21 +116,32 @@ List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The drm_test_rect_calc_hscale and drm_test_rect_calc_vscale unit tests
-intentionally trigger warning backtraces by providing bad parameters to
-the tested functions. What is tested is the return value, not the existence
-of a warning backtrace. Suppress the backtraces to avoid clogging the
-kernel log and distraction from real problems.
+dev_addr_lists_test generates lock warning noise at the end of tests
+if lock debugging is enabled. There are two sets of warnings.
+
+WARNING: CPU: 0 PID: 689 at kernel/locking/mutex.c:923 __mutex_unlock_slowpath.constprop.0+0x13c/0x368
+DEBUG_LOCKS_WARN_ON(__owner_task(owner) != __get_current())
+
+WARNING: kunit_try_catch/1336 still has locks held!
+
+KUnit test cleanup is not guaranteed to run in the same thread as the test
+itself. For this test, this means that rtnl_lock() and rtnl_unlock() may
+be called from different threads. This triggers the warnings.
+Suppress the warnings because they are irrelevant for the test and just
+confusing and distracting.
+
+The first warning can be suppressed by using START_SUPPRESSED_WARNING()
+and END_SUPPRESSED_WARNING() around the call to rtnl_unlock(). To suppress
+the second warning, it is necessary to set debug_locks_silent while the
+rtnl lock is held.
 
 Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Cc: David Gow <davidgow@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Eric Dumazet <edumazet@google.com>
 Acked-by: Dan Carpenter <dan.carpenter@linaro.org>
-Acked-by: Maíra Canal <mcanal@igalia.com>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Cc: David Airlie <airlied@gmail.com>
-Cc: Daniel Vetter <daniel@ffwll.ch>
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 ---
 v2:
@@ -137,51 +150,41 @@ v2:
 v3:
 - Rebased to v6.9-rc2
 
- drivers/gpu/drm/tests/drm_rect_test.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ net/core/dev_addr_lists_test.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/gpu/drm/tests/drm_rect_test.c b/drivers/gpu/drm/tests/drm_rect_test.c
-index 76332cd2ead8..66851769ee32 100644
---- a/drivers/gpu/drm/tests/drm_rect_test.c
-+++ b/drivers/gpu/drm/tests/drm_rect_test.c
-@@ -406,22 +406,38 @@ KUNIT_ARRAY_PARAM(drm_rect_scale, drm_rect_scale_cases, drm_rect_scale_case_desc
+diff --git a/net/core/dev_addr_lists_test.c b/net/core/dev_addr_lists_test.c
+index 4dbd0dc6aea2..b427dd1a3c93 100644
+--- a/net/core/dev_addr_lists_test.c
++++ b/net/core/dev_addr_lists_test.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0-or-later
  
- static void drm_test_rect_calc_hscale(struct kunit *test)
- {
-+	DEFINE_SUPPRESSED_WARNING(drm_calc_scale);
- 	const struct drm_rect_scale_case *params = test->param_value;
- 	int scaling_factor;
+ #include <kunit/test.h>
++#include <linux/debug_locks.h>
+ #include <linux/etherdevice.h>
+ #include <linux/netdevice.h>
+ #include <linux/rtnetlink.h>
+@@ -49,6 +50,7 @@ static int dev_addr_test_init(struct kunit *test)
+ 		KUNIT_FAIL(test, "Can't register netdev %d", err);
+ 	}
  
-+	/*
-+	 * drm_rect_calc_hscale() generates a warning backtrace whenever bad
-+	 * parameters are passed to it. This affects all unit tests with an
-+	 * error code in expected_scaling_factor.
-+	 */
-+	START_SUPPRESSED_WARNING(drm_calc_scale);
- 	scaling_factor = drm_rect_calc_hscale(&params->src, &params->dst,
- 					      params->min_range, params->max_range);
-+	END_SUPPRESSED_WARNING(drm_calc_scale);
- 
- 	KUNIT_EXPECT_EQ(test, scaling_factor, params->expected_scaling_factor);
++	debug_locks_silent = 1;
+ 	rtnl_lock();
+ 	return 0;
  }
- 
- static void drm_test_rect_calc_vscale(struct kunit *test)
+@@ -56,8 +58,12 @@ static int dev_addr_test_init(struct kunit *test)
+ static void dev_addr_test_exit(struct kunit *test)
  {
-+	DEFINE_SUPPRESSED_WARNING(drm_calc_scale);
- 	const struct drm_rect_scale_case *params = test->param_value;
- 	int scaling_factor;
+ 	struct net_device *netdev = test->priv;
++	DEFINE_SUPPRESSED_WARNING(__mutex_unlock_slowpath);
  
-+	/*
-+	 * drm_rect_calc_vscale() generates a warning backtrace whenever bad
-+	 * parameters are passed to it. This affects all unit tests with an
-+	 * error code in expected_scaling_factor.
-+	 */
-+	START_SUPPRESSED_WARNING(drm_calc_scale);
- 	scaling_factor = drm_rect_calc_vscale(&params->src, &params->dst,
- 					      params->min_range, params->max_range);
-+	END_SUPPRESSED_WARNING(drm_calc_scale);
- 
- 	KUNIT_EXPECT_EQ(test, scaling_factor, params->expected_scaling_factor);
++	START_SUPPRESSED_WARNING(__mutex_unlock_slowpath);
+ 	rtnl_unlock();
++	END_SUPPRESSED_WARNING(__mutex_unlock_slowpath);
++	debug_locks_silent = 0;
+ 	unregister_netdev(netdev);
+ 	free_netdev(netdev);
  }
 -- 
 2.39.2
