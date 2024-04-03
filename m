@@ -1,96 +1,75 @@
-Return-Path: <linux-arch+bounces-3399-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3400-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63E36897A89
-	for <lists+linux-arch@lfdr.de>; Wed,  3 Apr 2024 23:20:43 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B1C3897AF4
+	for <lists+linux-arch@lfdr.de>; Wed,  3 Apr 2024 23:42:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 14702288BE9
-	for <lists+linux-arch@lfdr.de>; Wed,  3 Apr 2024 21:20:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9B8EDB24821
+	for <lists+linux-arch@lfdr.de>; Wed,  3 Apr 2024 21:42:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEA5A156677;
-	Wed,  3 Apr 2024 21:20:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40225156961;
+	Wed,  3 Apr 2024 21:42:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Ptx5/DWJ"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lGMlDuct"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9881156671
-	for <linux-arch@vger.kernel.org>; Wed,  3 Apr 2024 21:20:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69117156870;
+	Wed,  3 Apr 2024 21:42:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712179238; cv=none; b=C9ks0DFEnOaHH3d+IPGa88ZMwxmwyH+V4B181bUSYESalfVHr+m1QCPAE0i0+5aq1Dq42QfqQIZJcJtQHAgiDIV0M8ASNtUoXDchFA7P47RUX4mDBTogiIfVjHEer6FWPqo/AngJEhPS79tpE8p79CVR/b5LpaV6gF/Mlhtbj1I=
+	t=1712180534; cv=none; b=h6+Ii62YyI7aIIHlYaI4BtzzEzROpi/zu9qJWFyu6+bkbqTkJQIYPHs3ZnWA0pGXO/F6vV334h0qk70jXwe7p6dDHPsyU6iN5EY/69LRttT36q3GNub/E9eFHP/EGtWl+MAA6LJe/pV2R3CB9Cd0D1Kat6ouYb+n4jl6qiZqUPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712179238; c=relaxed/simple;
-	bh=qNCBndGvASRj94i9gCbn2Ois8Kwv0gWWiWeAMOMLgEQ=;
+	s=arc-20240116; t=1712180534; c=relaxed/simple;
+	bh=x+FV5GoB+NEz6+1MxtrN8DBzkMq3eDfL9fgL9YEpHyw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=civ2Xe7YNab3qFZDFK3aSgDwAsrgvGOf47pkI3XDym/qLk8RIVl36COFBNa5DsWERad4UoXVYeQySPael9d0CF/bz98HmZXes532m3WaH+JVKrsc7kxGgGoKE4drunAYKz+OeAooWZBxhIUq6h85vdidxfpvOqIla/OB/dlM6Y4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Ptx5/DWJ; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1e2235c630aso1668165ad.2
-        for <linux-arch@vger.kernel.org>; Wed, 03 Apr 2024 14:20:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1712179236; x=1712784036; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gk/7t8bB/vPp5RYyhmHYp9/pKPIZpl1c0Hpc1VIArKM=;
-        b=Ptx5/DWJGOU9bqEoPLyU4ZVnUh9y3Xg9DvWbgEX4H/YrkQLkMUJSAnSiWexQ4Gzw1R
-         647vdzB8MXYOeAzQ/sAS2yYZmG3d071l5agv91Eq+IyAH5kdO42jY6PPSVrRvxB+lNOk
-         xCuL5r/sFUNSFKhut5mZeJ47HjuCvvl+8N89U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712179236; x=1712784036;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gk/7t8bB/vPp5RYyhmHYp9/pKPIZpl1c0Hpc1VIArKM=;
-        b=w9c9biEs60pf92660dlGyYE1N35yM8Ps1kWKAXmRVVpSq6916cw6z6uxtIItU3e2GV
-         cGQrEfMCXjZw80fCaoiHK513Z2dji84aGqYv6vnWu6M95+tLunGeYzGHkv397BbGW1Ng
-         DAFZVQLmMlVKaWJW5U9xUULocOsfQyI+BvUnIJuNDDeOdzu56pkoeyQTNuHc2zy+HK6H
-         7HWD6G4sZj9PiOMfedn0Xo1o3rrk0iWyUdo0tlCROoLNma0NvuU/IU3PJ6CX+o2eYjR8
-         7JHLiIx2qpCETfTbMWb+bK8xcB29rygVAzcQl7HJ2ivm6N7TuEegXDueL2tqt7XmkCR1
-         6u8w==
-X-Forwarded-Encrypted: i=1; AJvYcCUtVKe2BXSorh2s2yCnPMTX5Xz25OfT/TvR00vhx8wAenP59i+TdnbCoRZlfT70GxzmkDucJnlLhZCbGc6Vr3YvhHS5Ssu6kc4HKQ==
-X-Gm-Message-State: AOJu0YwOeH5DFcrPzdOdYcRSvDrfZnFb6f9d2vuulTxEAbRk5/y+Tam8
-	tyB4ZE8yxVSOHMNlxntXfB00HjrpFOucRtU5zc6wHo7xu72Vue4OWOP/81PrAQ==
-X-Google-Smtp-Source: AGHT+IFNWSt+grv0aoo3QXgpCvCZ7QxZ9IBnA1B4gdZs5eLtWkdhNXO9ogb9Q/XDMKHoC6MfZl34Wg==
-X-Received: by 2002:a17:903:110f:b0:1e0:f25b:e795 with SMTP id n15-20020a170903110f00b001e0f25be795mr509491plh.11.1712179236057;
-        Wed, 03 Apr 2024 14:20:36 -0700 (PDT)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id m16-20020a170902bb9000b001e2a87d7d2dsm163988pls.253.2024.04.03.14.20.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Apr 2024 14:20:35 -0700 (PDT)
-Date: Wed, 3 Apr 2024 14:20:34 -0700
-From: Kees Cook <keescook@chromium.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-kselftest@vger.kernel.org, David Airlie <airlied@gmail.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	=?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Daniel Diaz <daniel.diaz@linaro.org>,
-	David Gow <davidgow@google.com>,
-	Arthur Grillo <arthurgrillo@riseup.net>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	Naresh Kamboju <naresh.kamboju@linaro.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Maxime Ripard <mripard@kernel.org>,
-	Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	linux-sh@vger.kernel.org, loongarch@lists.linux.dev,
-	netdev@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v3 00/15] Add support for suppressing warning backtraces
-Message-ID: <202404031414.645255D868@keescook>
-References: <20240403131936.787234-1-linux@roeck-us.net>
+	 Content-Type:Content-Disposition:In-Reply-To; b=gc0ykouNvp2V8YL01pVcapvpR+affyC2QG04JcreWfiQEg32eCWQYf/XCYkpTSvVUO/6qVD28/1VCMhRH4uoyOR8A+1R5DfNiQB+kDe4a+w9XU8MYHbw28stUPz8SBlcLSgadFKzzGqbCIuhs9lQi9xiNYWowA+dRktmyQiWSWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lGMlDuct; arc=none smtp.client-ip=95.215.58.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Wed, 3 Apr 2024 17:41:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1712180527;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=I8oAok5It38shVDkwL940Pa8qX3ifwx6XR6MQgkhnY4=;
+	b=lGMlDuctByVDszORVgYlbk2emZzNfH18lVbOM3PP8QqASVaLVaaVhE4vLYrvnQGixqKQn+
+	JoBwih61WSwFWMdg5hVCAoj/8hdJcJ9cfeJ6GbrYKLCxCnMqAOBy1GlT1ZzritCAT4+N6a
+	jWAURONL2YqX3Zp+MfY4wq5MmwF4PmI=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kent Overstreet <kent.overstreet@linux.dev>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org, 
+	mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev, 
+	mgorman@suse.de, dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com, 
+	penguin-kernel@i-love.sakura.ne.jp, corbet@lwn.net, void@manifault.com, peterz@infradead.org, 
+	juri.lelli@redhat.com, catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de, 
+	tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org, 
+	peterx@redhat.com, david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, 
+	masahiroy@kernel.org, dennis@kernel.org, jhubbard@nvidia.com, tj@kernel.org, 
+	muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com, 
+	yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com, hughd@google.com, 
+	andreyknvl@gmail.com, keescook@chromium.org, ndesaulniers@google.com, 
+	vvvvvv@google.com, gregkh@linuxfoundation.org, ebiggers@google.com, 
+	ytcoode@gmail.com, vincent.guittot@linaro.org, dietmar.eggemann@arm.com, 
+	rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com, vschneid@redhat.com, 
+	cl@linux.com, penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, 
+	glider@google.com, elver@google.com, dvyukov@google.com, songmuchun@bytedance.com, 
+	jbaron@akamai.com, aliceryhl@google.com, rientjes@google.com, minchan@google.com, 
+	kaleshsingh@google.com, kernel-team@android.com, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, iommu@lists.linux.dev, linux-arch@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, linux-modules@vger.kernel.org, 
+	kasan-dev@googlegroups.com, cgroups@vger.kernel.org
+Subject: Re: [PATCH v6 01/37] fix missing vmalloc.h includes
+Message-ID: <4qk7f3ra5lrqhtvmipmacgzo5qwnugrfxn5dd3j4wubzwqvmv4@vzdhpalbmob3>
+References: <20240321163705.3067592-1-surenb@google.com>
+ <20240321163705.3067592-2-surenb@google.com>
+ <20240403211240.GA307137@dev-arch.thelio-3990X>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -99,119 +78,69 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240403131936.787234-1-linux@roeck-us.net>
+In-Reply-To: <20240403211240.GA307137@dev-arch.thelio-3990X>
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, Apr 03, 2024 at 06:19:21AM -0700, Guenter Roeck wrote:
-> Some unit tests intentionally trigger warning backtraces by passing bad
-> parameters to kernel API functions. Such unit tests typically check the
-> return value from such calls, not the existence of the warning backtrace.
+On Wed, Apr 03, 2024 at 02:12:40PM -0700, Nathan Chancellor wrote:
+> On Thu, Mar 21, 2024 at 09:36:23AM -0700, Suren Baghdasaryan wrote:
+> > From: Kent Overstreet <kent.overstreet@linux.dev>
+> > 
+> > The next patch drops vmalloc.h from a system header in order to fix
+> > a circular dependency; this adds it to all the files that were pulling
+> > it in implicitly.
+> > 
+> > Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
+> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > Reviewed-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 > 
-> Such intentionally generated warning backtraces are neither desirable
-> nor useful for a number of reasons.
-> - They can result in overlooked real problems.
-> - A warning that suddenly starts to show up in unit tests needs to be
->   investigated and has to be marked to be ignored, for example by
->   adjusting filter scripts. Such filters are ad-hoc because there is
->   no real standard format for warnings. On top of that, such filter
->   scripts would require constant maintenance.
-> 
-> One option to address problem would be to add messages such as "expected
-> warning backtraces start / end here" to the kernel log.  However, that
-> would again require filter scripts, it might result in missing real
-> problematic warning backtraces triggered while the test is running, and
-> the irrelevant backtrace(s) would still clog the kernel log.
-> 
-> Solve the problem by providing a means to identify and suppress specific
-> warning backtraces while executing test code. Support suppressing multiple
-> backtraces while at the same time limiting changes to generic code to the
-> absolute minimum. Architecture specific changes are kept at minimum by
-> retaining function names only if both CONFIG_DEBUG_BUGVERBOSE and
-> CONFIG_KUNIT are enabled.
-> 
-> The first patch of the series introduces the necessary infrastructure.
-> The second patch introduces support for counting suppressed backtraces.
-> This capability is used in patch three to implement unit tests.
-> Patch four documents the new API.
-> The next two patches add support for suppressing backtraces in drm_rect
-> and dev_addr_lists unit tests. These patches are intended to serve as
-> examples for the use of the functionality introduced with this series.
-> The remaining patches implement the necessary changes for all
-> architectures with GENERIC_BUG support.
-> 
-> With CONFIG_KUNIT enabled, image size increase with this series applied is
-> approximately 1%. The image size increase (and with it the functionality
-> introduced by this series) can be avoided by disabling
-> CONFIG_KUNIT_SUPPRESS_BACKTRACE.
-> 
-> This series is based on the RFC patch and subsequent discussion at
-> https://patchwork.kernel.org/project/linux-kselftest/patch/02546e59-1afe-4b08-ba81-d94f3b691c9a@moroto.mountain/
-> and offers a more comprehensive solution of the problem discussed there.
-> 
-> Design note:
->   Function pointers are only added to the __bug_table section if both
->   CONFIG_KUNIT_SUPPRESS_BACKTRACE and CONFIG_DEBUG_BUGVERBOSE are enabled
->   to avoid image size increases if CONFIG_KUNIT is disabled. There would be
->   some benefits to adding those pointers all the time (reduced complexity,
->   ability to display function names in BUG/WARNING messages). That change,
->   if desired, can be made later.
-> 
-> Checkpatch note:
->   Remaining checkpatch errors and warnings were deliberately ignored.
->   Some are triggered by matching coding style or by comments interpreted
->   as code, others by assembler macros which are disliked by checkpatch.
->   Suggestions for improvements are welcome.
-> 
-> Changes since RFC:
-> - Introduced CONFIG_KUNIT_SUPPRESS_BACKTRACE
-> - Minor cleanups and bug fixes
-> - Added support for all affected architectures
-> - Added support for counting suppressed warnings
-> - Added unit tests using those counters
-> - Added patch to suppress warning backtraces in dev_addr_lists tests
-> 
-> Changes since v1:
-> - Rebased to v6.9-rc1
-> - Added Tested-by:, Acked-by:, and Reviewed-by: tags
->   [I retained those tags since there have been no functional changes]
-> - Introduced KUNIT_SUPPRESS_BACKTRACE configuration option, enabled by
->   default.
-> 
-> Changes since v2:
-> - Rebased to v6.9-rc2
-> - Added comments to drm warning suppression explaining why it is needed.
-> - Added patch to move conditional code in arch/sh/include/asm/bug.h
->   to avoid kerneldoc warning
-> - Added architecture maintainers to Cc: for architecture specific patches
-> - No functional changes
-> 
-> ----------------------------------------------------------------
-> Guenter Roeck (15):
->       bug/kunit: Core support for suppressing warning backtraces
->       kunit: bug: Count suppressed warning backtraces
->       kunit: Add test cases for backtrace warning suppression
->       kunit: Add documentation for warning backtrace suppression API
->       drm: Suppress intentional warning backtraces in scaling unit tests
->       net: kunit: Suppress lock warning noise at end of dev_addr_lists tests
->       x86: Add support for suppressing warning backtraces
->       arm64: Add support for suppressing warning backtraces
->       loongarch: Add support for suppressing warning backtraces
->       parisc: Add support for suppressing warning backtraces
->       s390: Add support for suppressing warning backtraces
->       sh: Add support for suppressing warning backtraces
->       sh: Move defines needed for suppressing warning backtraces
->       riscv: Add support for suppressing warning backtraces
->       powerpc: Add support for suppressing warning backtraces
+> I bisected an error that I see when building ARCH=loongarch allmodconfig
+> to commit 302519d9e80a ("asm-generic/io.h: kill vmalloc.h dependency")
+> in -next, which tells me that this patch likely needs to contain
+> something along the following lines, as LoongArch was getting
+> include/linux/sizes.h transitively through the vmalloc.h include in
+> include/asm-generic/io.h.
 
-Tested-by: Kees Cook <keescook@chromium.org>
+gcc doesn't appear to be packaged for loongarch for debian (most other
+cross compilers are), so that's going to make it hard for me to test
+anything...
 
-(for x86 and um)
-
-I was planning to add warning suppression for the "overflow" KUnit
-tests, but it seems the vmalloc routines aren't calling warn_alloc() any
-more for impossible sizes. So, I think, no patches needed for
-lib/overflow_kunit.c, but at the end of the day, I've tested this series
-is working for me. :P
-
--- 
-Kees Cook
+> 
+> Cheers,
+> Nathan
+> 
+>   In file included from arch/loongarch/include/asm/io.h:11,
+>                    from include/linux/io.h:13,
+>                    from arch/loongarch/mm/mmap.c:6:
+>   include/asm-generic/io.h: In function 'ioport_map':
+>   arch/loongarch/include/asm/addrspace.h:124:25: error: 'SZ_32M' undeclared (first use in this function); did you mean 'PS_32M'?
+>     124 | #define PCI_IOSIZE      SZ_32M
+>         |                         ^~~~~~
+>   arch/loongarch/include/asm/addrspace.h:126:26: note: in expansion of macro 'PCI_IOSIZE'
+>     126 | #define IO_SPACE_LIMIT  (PCI_IOSIZE - 1)
+>         |                          ^~~~~~~~~~
+>   include/asm-generic/io.h:1113:17: note: in expansion of macro 'IO_SPACE_LIMIT'
+>    1113 |         port &= IO_SPACE_LIMIT;
+>         |                 ^~~~~~~~~~~~~~
+>   arch/loongarch/include/asm/addrspace.h:124:25: note: each undeclared identifier is reported only once for each function it appears in
+>     124 | #define PCI_IOSIZE      SZ_32M
+>         |                         ^~~~~~
+>   arch/loongarch/include/asm/addrspace.h:126:26: note: in expansion of macro 'PCI_IOSIZE'
+>     126 | #define IO_SPACE_LIMIT  (PCI_IOSIZE - 1)
+>         |                          ^~~~~~~~~~
+>   include/asm-generic/io.h:1113:17: note: in expansion of macro 'IO_SPACE_LIMIT'
+>    1113 |         port &= IO_SPACE_LIMIT;
+>         |                 ^~~~~~~~~~~~~~
+> 
+> diff --git a/arch/loongarch/include/asm/addrspace.h b/arch/loongarch/include/asm/addrspace.h
+> index b24437e28c6e..7bd47d65bf7a 100644
+> --- a/arch/loongarch/include/asm/addrspace.h
+> +++ b/arch/loongarch/include/asm/addrspace.h
+> @@ -11,6 +11,7 @@
+>  #define _ASM_ADDRSPACE_H
+>  
+>  #include <linux/const.h>
+> +#include <linux/sizes.h>
+>  
+>  #include <asm/loongarch.h>
+>  
 
