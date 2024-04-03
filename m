@@ -1,119 +1,80 @@
-Return-Path: <linux-arch+bounces-3397-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3398-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E8CC89774B
-	for <lists+linux-arch@lfdr.de>; Wed,  3 Apr 2024 19:49:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E8FB897A6C
+	for <lists+linux-arch@lfdr.de>; Wed,  3 Apr 2024 23:12:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E3C3528FEFC
-	for <lists+linux-arch@lfdr.de>; Wed,  3 Apr 2024 17:49:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9613B1C25B7A
+	for <lists+linux-arch@lfdr.de>; Wed,  3 Apr 2024 21:12:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 720BE154C1E;
-	Wed,  3 Apr 2024 17:28:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2605156655;
+	Wed,  3 Apr 2024 21:12:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pJpsqN23"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AvVi8LMC"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FF49154C12;
-	Wed,  3 Apr 2024 17:28:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DAE75DF0E;
+	Wed,  3 Apr 2024 21:12:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712165287; cv=none; b=TFOsEpHPHvMpsXSVOrzdJ3xGTcagVMBNbbDwbmjf+qVtNIX0VuATQVq3fneF066Qom8Xs5LS2t4j+H9tYTDnf8IotFc28fiFCSiiPEGQOg+qRqzm/2YA9t5d2gVpxJlGToWYeXoivbOjEGcAVkFxtmS2i0mp2UY4NwbU6EIEgD8=
+	t=1712178766; cv=none; b=Bny2k+UmT8PAEEW3PyRu7QIALA53HYWPTT7j8COy5WUvgI51/IxlVdKvguft1cb/fmbGk+3lg/1c2/GNpD+Ygz0gRvoZq8Rwv1UkvLtWYOeQ5slrAwHs34hoKKfI7fqbBX4p9V/AktHwWNUczrTw2cA3ALR26ZaUEYgH940l3qc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712165287; c=relaxed/simple;
-	bh=ev9qwjumkVBT21OJLnRxmj6j+tcZWLWc9gYIuhQP4YA=;
+	s=arc-20240116; t=1712178766; c=relaxed/simple;
+	bh=eAxmNahq0qz4MjguPAZcqC0KPuy9iIiFN/TD17zLp6k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ia2opbuoxHt0lFkgWDWQ6GW72TwXxCw0yfeQSJ/LhG7sn01WZkrj8WZRUJRsE4888fMYzSyz3Ech/P1f6Gxg8GCCmQni6+lw8lB91KappKy7elE43A1OQAfDim+Rx3i92Q5ooTwIdQtz8KoPEYKbLRt0tvnVMBkb7I6ZXCcHAOA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pJpsqN23; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25477C433F1;
-	Wed,  3 Apr 2024 17:27:51 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=LqmLIkAWp+8WuvT6Y1hZED1BHuinEdoe52jifK7r/QahXOpucjCH4WE4ISReD5Ja2gu5TJZC8qM2xatfYZU8D6S8cE1fPKRghRpxpZePciFRyQWHSW4pc/HwPjVoPv6u3u1REOsv5KQvKJ1zgU0XEju4uZtU2k33ZtCHkvs9DL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AvVi8LMC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E15A6C433C7;
+	Wed,  3 Apr 2024 21:12:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712165286;
-	bh=ev9qwjumkVBT21OJLnRxmj6j+tcZWLWc9gYIuhQP4YA=;
+	s=k20201202; t=1712178766;
+	bh=eAxmNahq0qz4MjguPAZcqC0KPuy9iIiFN/TD17zLp6k=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pJpsqN23a/bTPCDYI46/mddJ60857N8gxl0704dxwCHxM5gKzPHc731EgK6XTky8d
-	 UTSvCE/t886wLCwR1UtYWv7Xweb+uKowOagxSx/lUTLkXov7Dsf3h7EJVqcumDwZqs
-	 tOZb0mWrfqCf+8IONESe5080Pxu9nMjALf/FMnCDXF9xhUlL3R67eN2rH1I5mN6bzF
-	 1n8OJA3VkfjnGjVp4Z+o4CVz2zIgJ7Dmv0gNexlQEtkyGLrPexZxzjQpZtQ6ml5ppR
-	 mZhUqv9H4p4rGkxe60L9FXP3YjGI6r2+YWhPDeKU2GGU7vXAeDQM5+N6jWyDCaqmEM
-	 CqEUGy0nok9lw==
-Date: Wed, 3 Apr 2024 18:27:49 +0100
-From: Simon Horman <horms@kernel.org>
-To: Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	David Ahern <dsahern@kernel.org>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-	Amritha Nambiar <amritha.nambiar@intel.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Alexander Mikhalitsyn <alexander@mihalicyn.com>,
-	Kaiyuan Zhang <kaiyuanz@google.com>,
-	Christian Brauner <brauner@kernel.org>,
-	David Howells <dhowells@redhat.com>,
-	Florian Westphal <fw@strlen.de>,
-	Yunsheng Lin <linyunsheng@huawei.com>,
-	Kuniyuki Iwashima <kuniyu@amazon.com>, Jens Axboe <axboe@kernel.dk>,
-	Arseniy Krasnov <avkrasnov@salutedevices.com>,
-	Aleksander Lobakin <aleksander.lobakin@intel.com>,
-	Michael Lass <bevan@bi-co.net>, Jiri Pirko <jiri@resnulli.us>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	Richard Gobert <richardbgobert@gmail.com>,
-	Sridhar Samudrala <sridhar.samudrala@intel.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Johannes Berg <johannes.berg@intel.com>,
-	Abel Wu <wuyun.abel@bytedance.com>,
-	Breno Leitao <leitao@debian.org>,
-	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Shailend Chand <shailend@google.com>,
-	Harshitha Ramamurthy <hramamurthy@google.com>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Jeroen de Borst <jeroendb@google.com>,
-	Praveen Kaligineedi <pkaligineedi@google.com>, linux-mm@kvack.org,
-	Matthew Wilcox <willy@infradead.org>
-Subject: Re: [RFC PATCH net-next v8 06/14] page_pool: convert to use netmem
-Message-ID: <20240403172749.GP26556@kernel.org>
-References: <20240403002053.2376017-1-almasrymina@google.com>
- <20240403002053.2376017-7-almasrymina@google.com>
+	b=AvVi8LMCPmD4vtizYlqbbrKdv6QHneAbgdsDhvVCwOCKlEjxORkOrxxsJaVKKe7ib
+	 YfLM/rXrgmOgLEfBvFZMk7h4uuO1i9LQJ8M/6UOuM3j1UhfgLRc8vtGUdYkyvOB7qF
+	 FK0zIrKPLUKf2X5PFEHqblNLkN3++ZGBDxB0Ckhu7GEuMY1ENqC6PtyP4PptCVwaCA
+	 a2tbItT4M2CDmlu7PtN/anCWs0FKgXZEkpfh6sPHkTM077WDUkJUHG5B3YhvYpuPju
+	 xPxmHBxAuN4+ZSpTgL2wp6f5XhRGsP7bV4GU68Ip1Yj2vPHXgYGKnLcD5SyRvdfCp0
+	 PZSDJCo+DH2qQ==
+Date: Wed, 3 Apr 2024 14:12:40 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
+Cc: kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
+	hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de,
+	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+	penguin-kernel@i-love.sakura.ne.jp, corbet@lwn.net,
+	void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
+	catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+	tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+	x86@kernel.org, peterx@redhat.com, david@redhat.com,
+	axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
+	dennis@kernel.org, jhubbard@nvidia.com, tj@kernel.org,
+	muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
+	pasha.tatashin@soleen.com, yosryahmed@google.com, yuzhao@google.com,
+	dhowells@redhat.com, hughd@google.com, andreyknvl@gmail.com,
+	keescook@chromium.org, ndesaulniers@google.com, vvvvvv@google.com,
+	gregkh@linuxfoundation.org, ebiggers@google.com, ytcoode@gmail.com,
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+	rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
+	vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
+	iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
+	elver@google.com, dvyukov@google.com, songmuchun@bytedance.com,
+	jbaron@akamai.com, aliceryhl@google.com, rientjes@google.com,
+	minchan@google.com, kaleshsingh@google.com, kernel-team@android.com,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	iommu@lists.linux.dev, linux-arch@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
+	cgroups@vger.kernel.org
+Subject: Re: [PATCH v6 01/37] fix missing vmalloc.h includes
+Message-ID: <20240403211240.GA307137@dev-arch.thelio-3990X>
+References: <20240321163705.3067592-1-surenb@google.com>
+ <20240321163705.3067592-2-surenb@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -122,59 +83,62 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240403002053.2376017-7-almasrymina@google.com>
+In-Reply-To: <20240321163705.3067592-2-surenb@google.com>
 
-On Tue, Apr 02, 2024 at 05:20:43PM -0700, Mina Almasry wrote:
-> Abstrace the memory type from the page_pool so we can later add support
-> for new memory types. Convert the page_pool to use the new netmem type
-> abstraction, rather than use struct page directly.
+On Thu, Mar 21, 2024 at 09:36:23AM -0700, Suren Baghdasaryan wrote:
+> From: Kent Overstreet <kent.overstreet@linux.dev>
 > 
-> As of this patch the netmem type is a no-op abstraction: it's always a
-> struct page underneath. All the page pool internals are converted to
-> use struct netmem instead of struct page, and the page pool now exports
-> 2 APIs:
+> The next patch drops vmalloc.h from a system header in order to fix
+> a circular dependency; this adds it to all the files that were pulling
+> it in implicitly.
 > 
-> 1. The existing struct page API.
-> 2. The new struct netmem API.
-> 
-> Keeping the existing API is transitional; we do not want to refactor all
-> the current drivers using the page pool at once.
-> 
-> The netmem abstraction is currently a no-op. The page_pool uses
-> page_to_netmem() to convert allocated pages to netmem, and uses
-> netmem_to_page() to convert the netmem back to pages to pass to mm APIs,
-> 
-> Follow up patches to this series add non-paged netmem support to the
-> page_pool. This change is factored out on its own to limit the code
-> churn to this 1 patch, for ease of code review.
-> 
-> Signed-off-by: Mina Almasry <almasrymina@google.com>
+> Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> Reviewed-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 
-...
+I bisected an error that I see when building ARCH=loongarch allmodconfig
+to commit 302519d9e80a ("asm-generic/io.h: kill vmalloc.h dependency")
+in -next, which tells me that this patch likely needs to contain
+something along the following lines, as LoongArch was getting
+include/linux/sizes.h transitively through the vmalloc.h include in
+include/asm-generic/io.h.
 
-> diff --git a/include/net/page_pool/helpers.h b/include/net/page_pool/helpers.h
+Cheers,
+Nathan
 
-...
+  In file included from arch/loongarch/include/asm/io.h:11,
+                   from include/linux/io.h:13,
+                   from arch/loongarch/mm/mmap.c:6:
+  include/asm-generic/io.h: In function 'ioport_map':
+  arch/loongarch/include/asm/addrspace.h:124:25: error: 'SZ_32M' undeclared (first use in this function); did you mean 'PS_32M'?
+    124 | #define PCI_IOSIZE      SZ_32M
+        |                         ^~~~~~
+  arch/loongarch/include/asm/addrspace.h:126:26: note: in expansion of macro 'PCI_IOSIZE'
+    126 | #define IO_SPACE_LIMIT  (PCI_IOSIZE - 1)
+        |                          ^~~~~~~~~~
+  include/asm-generic/io.h:1113:17: note: in expansion of macro 'IO_SPACE_LIMIT'
+   1113 |         port &= IO_SPACE_LIMIT;
+        |                 ^~~~~~~~~~~~~~
+  arch/loongarch/include/asm/addrspace.h:124:25: note: each undeclared identifier is reported only once for each function it appears in
+    124 | #define PCI_IOSIZE      SZ_32M
+        |                         ^~~~~~
+  arch/loongarch/include/asm/addrspace.h:126:26: note: in expansion of macro 'PCI_IOSIZE'
+    126 | #define IO_SPACE_LIMIT  (PCI_IOSIZE - 1)
+        |                          ^~~~~~~~~~
+  include/asm-generic/io.h:1113:17: note: in expansion of macro 'IO_SPACE_LIMIT'
+   1113 |         port &= IO_SPACE_LIMIT;
+        |                 ^~~~~~~~~~~~~~
 
-> @@ -170,9 +172,10 @@ static inline void *page_pool_alloc_va(struct page_pool *pool,
->  	struct page *page;
->  
->  	/* Mask off __GFP_HIGHMEM to ensure we can use page_address() */
-> -	page = page_pool_alloc(pool, &offset, size, gfp & ~__GFP_HIGHMEM);
-> +	page = netmem_to_page(
-> +		page_pool_alloc(pool, &offset, size, gfp & ~__GFP_HIGHMEM));
->  	if (unlikely(!page))
-> -		return NULL;
-> +		return 0;
-
-Hi Mina,
-
-This doesn't seem right, as the return type is a pointer rather than an
-integer.
-
-Flagged by Sparse.
-
->  
->  	return page_address(page) + offset;
->  }
+diff --git a/arch/loongarch/include/asm/addrspace.h b/arch/loongarch/include/asm/addrspace.h
+index b24437e28c6e..7bd47d65bf7a 100644
+--- a/arch/loongarch/include/asm/addrspace.h
++++ b/arch/loongarch/include/asm/addrspace.h
+@@ -11,6 +11,7 @@
+ #define _ASM_ADDRSPACE_H
+ 
+ #include <linux/const.h>
++#include <linux/sizes.h>
+ 
+ #include <asm/loongarch.h>
+ 
 
