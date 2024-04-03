@@ -1,1027 +1,230 @@
-Return-Path: <linux-arch+bounces-3376-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3377-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBAF3896152
-	for <lists+linux-arch@lfdr.de>; Wed,  3 Apr 2024 02:29:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 353A9896F67
+	for <lists+linux-arch@lfdr.de>; Wed,  3 Apr 2024 14:53:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 503501F28147
-	for <lists+linux-arch@lfdr.de>; Wed,  3 Apr 2024 00:29:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ACEF71F2974F
+	for <lists+linux-arch@lfdr.de>; Wed,  3 Apr 2024 12:53:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2FAA1373;
-	Wed,  3 Apr 2024 00:24:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D10A1474AD;
+	Wed,  3 Apr 2024 12:51:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kIaB3c0d"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IKSsvjLp"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 776041843;
-	Wed,  3 Apr 2024 00:24:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 208371419BA;
+	Wed,  3 Apr 2024 12:51:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712103894; cv=none; b=ktmEBLAMPzBpseHhMbWryH4vIodATHHAllKhYIvL9ecBVeh8V4vYGOj/LSlMsD4LcKVbRjP80GqAfUXk1MPZJS+u9cScj1CUSAyyHYWTXmIU5gZn1UU3j6yViiJshQMbLLCv8mVb7xzYEFNHwfPFe2O1w+PRLDo56HuZ8e06CzE=
+	t=1712148672; cv=none; b=VUGTJbZ6SLNi8h7Bz14sKR/EsDyysWItPx4ZtqSs2n28Ef07x7CJUY3iHy3/3gSpPdSxoqoyeg2+LNcUo/XCWeVW8taral8k34g/NRQKDy2aZ824F2RrDL9u8VtHOESxPn5Yq8+eFmQPZwcXmK0Gk+SwJ8r7AGQ4vSLMBvsIsBg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712103894; c=relaxed/simple;
-	bh=ZdqtK3ZZfETjnpTi81gJ5nlOHi2ROi6+EkBjJs+SqA8=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=jxPsOR+TNsKeyrq/FYWeJy5RCOY40EJ22Qf7DTvohhsN2/aPrHVboVVidcltPaHUKOI5HBRpbjohqMJRzvED13IaVHMjy1T/Jn3Dfpw7UFWt7oqa5QIP7p9P4rmg/KtHbF8cPyFk9Xzh9laggKYrk6C/dTRf5zQcdSE080lhXos=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kIaB3c0d; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712103891; x=1743639891;
-  h=date:from:to:cc:subject:message-id;
-  bh=ZdqtK3ZZfETjnpTi81gJ5nlOHi2ROi6+EkBjJs+SqA8=;
-  b=kIaB3c0dw+c3RszJlCIUnDribIR3jTYBfZ6lUj8ECBoJPYkGoFme23zw
-   fpzjpqhrO4SNyGBrdRZzqf+Wk+juULo9k0ux1/LCt9N0Q81nghdvIMLSS
-   PGQgn/llknBFnb7f+Ogb1+aWLXnGdPMeLCA+LF5L9ofvUPnwgvKy81oMe
-   72O33+D51ldJJc5hNlT0ZZPloKtlfeqHnEg0eK5E7BrCeQSEOiWAqZs10
-   WA2TIabthS4anHlJiksDSonFyFQmFK1r4Iqti3eeIC1F7WMBl9e4jnJT6
-   g7fJVMTenAisYwlcTkN3c6lnU9vQnFPFrInlQGZgUbUe8wawCDIKvb+do
-   g==;
-X-CSE-ConnectionGUID: jAg0L+n6RDuHKppxymXlAg==
-X-CSE-MsgGUID: I4mp2qH2RHex5cr1QFbt0A==
-X-IronPort-AV: E=McAfee;i="6600,9927,11032"; a="18674628"
-X-IronPort-AV: E=Sophos;i="6.07,176,1708416000"; 
-   d="scan'208";a="18674628"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2024 17:24:49 -0700
-X-CSE-ConnectionGUID: vEjj95jXQwuHDE5mRRIX5A==
-X-CSE-MsgGUID: y62IkkeASwCpzElDPyHKCQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,176,1708416000"; 
-   d="scan'208";a="18224102"
-Received: from lkp-server02.sh.intel.com (HELO 90ee3aa53dbd) ([10.239.97.151])
-  by orviesa009.jf.intel.com with ESMTP; 02 Apr 2024 17:24:44 -0700
-Received: from kbuild by 90ee3aa53dbd with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rroQj-0001fF-0x;
-	Wed, 03 Apr 2024 00:24:41 +0000
-Date: Wed, 03 Apr 2024 08:24:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Linux Memory Management List <linux-mm@kvack.org>,
- amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
- freedreno@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
- intel-xe@lists.freedesktop.org, lima@lists.freedesktop.org,
- linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-arm-msm@vger.kernel.org, linux-csky@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-pwm@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
- linux-usb@vger.kernel.org, nouveau@lists.freedesktop.org,
- spice-devel@lists.freedesktop.org, virtualization@lists.linux.dev
-Subject: [linux-next:master] BUILD REGRESSION
- c0b832517f627ead3388c6f0c74e8ac10ad5774b
-Message-ID: <202404030831.bzhKcrln-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1712148672; c=relaxed/simple;
+	bh=zwy5/UeNKw0rdFTNUIENurIiqNiqQ2OzHWaKd+hx69E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nCiEOOoSVq06tOmvJQibRuYZv+0GOgQhX2d/F8ktP57j1LvOC2dudHA8xH4n8I2LPnQF1rJiTFFpCE5kQWLxyY6FOe1PDARjrLAP3f0VbNc8FBpELmLg+FwC4uUKATUWzmhw2WmKPeeMfatzTc6IKNlxr8YP4QoTTzH/EuQms1s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IKSsvjLp; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-416262d747dso717435e9.0;
+        Wed, 03 Apr 2024 05:51:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712148669; x=1712753469; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=29BgQt41fxpDRMixAlECbaCmewv1mm5rdtRovSAulMA=;
+        b=IKSsvjLp0pJJD2zzd42kk8JKagUJBhyhBAbjFRxMcnVC69OY+OmP3vSc+uBBbzoKwo
+         qyjcDHAEPDimmutVqfD2UK8TPYcdUSLswOHb6t7OuvpMdTAEhSkvBtv+Vyc0VRzEXg77
+         xRyY63/Jaubow1Fko4loce8URvZgTriZHa3LILOSwAOUuZ22rH863YQcL1tgGlI0iLQE
+         8dcOwyalOwzZBS6P3DyPgamV/ouMX93NZfcoZBePxuVnmYBOn31xyfT1x9gxE2BHoGjY
+         gX/SVQ51YDIIgd3TGiFmKfo8Cf5I7fw1Bh8qbRH5EdkNcWH1cU+cTRr2A5wbFIfuzXeE
+         8LuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712148669; x=1712753469;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=29BgQt41fxpDRMixAlECbaCmewv1mm5rdtRovSAulMA=;
+        b=ANO5y9mj4fTiF+3he8HNrJEYRh3AYs+oSBNQUrsd/pMFxU/rSrFGR1ZYoUW5kWEPOb
+         d42xhxAONMH3lioFvlQxcdiV8aieRUeFSqFqG0PRo1CGoqKQT6V6D2V6Ryw0SDnmy12L
+         jKS0Le/4z6lreRN1zYLiRdw6qNdgOMeIggo8ntTqIuqj6CkHTyGR8L387CnyUyAbtvP1
+         cYNsvAIgGUaEN85IyXr+3bd2dMQd/9JpE8ZuC7K20Vnoc+0FAPbj06HbpSVOS1pkKWGk
+         BKf17qz8p0f+zhg7i+6x7o0y1X+ffPwImN9rJHfVMViEsaENlwGL0W/IJG0ZKVESLivc
+         iJpA==
+X-Forwarded-Encrypted: i=1; AJvYcCVeBqG7IYbGwrNarsNgrJEs/lDNRU/C9LTqpwlVfuQyI1Emk9/+7f201Ke2jBa/Xs47Gr6pAl9e8tBM2u81hRxJ/KmFBflU3blif0a+SmmNIQCanbp3LFKUXTYj185lhXnSxI3JI9GSg2eLd8gvTgB2L91R2cwif/KZ7TP6YWWya3Shjg==
+X-Gm-Message-State: AOJu0YxI5yfO2XiPv3Mb5x7XPgYG7BGQr9rQP6vz5zZBgLax60jYYhXm
+	OpMMXCSd4s/DJkUXIhK510vEH1TEjpn/J+YXMSnF1MlV/Ukki9cr
+X-Google-Smtp-Source: AGHT+IGiMxFFkzEMKwErZDGMsEh8QQujgECEb7hAYrnmXSB8PanQ6hfDeg6f6lJ/1vv3KfoIi9fU0w==
+X-Received: by 2002:a05:600c:5710:b0:414:9103:e38c with SMTP id jv16-20020a05600c571000b004149103e38cmr10494666wmb.22.1712148669149;
+        Wed, 03 Apr 2024 05:51:09 -0700 (PDT)
+Received: from [10.254.108.81] (munvpn.amd.com. [165.204.72.6])
+        by smtp.gmail.com with ESMTPSA id dj11-20020a0560000b0b00b003437799a373sm3724238wrb.83.2024.04.03.05.51.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Apr 2024 05:51:08 -0700 (PDT)
+Message-ID: <0c95aa84-63e6-41be-8c70-3a6dadefd682@gmail.com>
+Date: Wed, 3 Apr 2024 14:51:04 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 00/15] Unified cross-architecture kernel-mode FPU API
+To: Samuel Holland <samuel.holland@sifive.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ linux-arm-kernel@lists.infradead.org, x86@kernel.org
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+ Christoph Hellwig <hch@lst.de>, loongarch@lists.linux.dev,
+ amd-gfx@lists.freedesktop.org, Borislav Petkov <bp@alien8.de>,
+ Catalin Marinas <catalin.marinas@arm.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Jonathan Corbet <corbet@lwn.net>, Masahiro Yamada <masahiroy@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>,
+ Russell King <linux@armlinux.org.uk>, Thomas Gleixner <tglx@linutronix.de>,
+ Will Deacon <will@kernel.org>, linux-doc@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, "Wentland, Harry" <Harry.Wentland@amd.com>,
+ Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+References: <20240329072441.591471-1-samuel.holland@sifive.com>
+Content-Language: en-US
+From: =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>
+In-Reply-To: <20240329072441.591471-1-samuel.holland@sifive.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-branch HEAD: c0b832517f627ead3388c6f0c74e8ac10ad5774b  Add linux-next specific files for 20240402
+I only skimmed over the platform patches and spend only a few minutes on 
+the amdgpu stuff.
 
-Error/Warning reports:
+ From what I've seen this series seems to make perfect sense to me, I 
+just can't fully judge everything.
 
-https://lore.kernel.org/oe-kbuild-all/202404021504.YTP51bL3-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202404021556.0JVcNC13-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202404021638.QKhbdQ4E-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202404021700.LbyYZGFd-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202404022106.mYwpypit-lkp@intel.com
+So feel free to add Acked-by: Christian König <christian.koenig@amd.com> 
+but I strongly suggest that Harry and Rodrigo take a look as well.
 
-Error/Warning: (recently discovered and may have been fixed)
+Regards,
+Christian.
 
-ERROR: modpost: "__drm_atomic_helper_private_obj_duplicate_state" [drivers/gpu/drm/display/drm_display_helper.ko] undefined!
-ERROR: modpost: "drm_kms_helper_hotplug_event" [drivers/gpu/drm/display/drm_display_helper.ko] undefined!
-arch/csky/include/asm/cmpxchg.h:138:25: error: implicit declaration of function 'cmpxchg_emu_u8' [-Werror=implicit-function-declaration]
-arch/csky/include/asm/cmpxchg.h:141:25: error: implicit declaration of function 'cmpxchg_emu_u16' [-Werror=implicit-function-declaration]
-arch/riscv/include/asm/cmpxchg.h:329:23: warning: assignment to 'const struct gre_protocol *' from 'uintptr_t' {aka 'long unsigned int'} makes pointer from integer without a cast [-Wint-conversion]
-arch/riscv/include/asm/cmpxchg.h:329:23: warning: assignment to 'struct bdi_writeback *' from 'uintptr_t' {aka 'long unsigned int'} makes pointer from integer without a cast [-Wint-conversion]
-arch/riscv/include/asm/cmpxchg.h:329:23: warning: assignment to 'struct rtrs_clt_path *' from 'uintptr_t' {aka 'long unsigned int'} makes pointer from integer without a cast [-Wint-conversion]
-arch/riscv/include/asm/cmpxchg.h:329:23: warning: assignment to 'struct tty_struct *' from 'uintptr_t' {aka 'long unsigned int'} makes pointer from integer without a cast [-Wint-conversion]
-arch/riscv/include/asm/cmpxchg.h:329:23: warning: assignment to 'z_erofs_next_pcluster_t' {aka 'void *'} from 'uintptr_t' {aka 'long unsigned int'} makes pointer from integer without a cast [-Wint-conversion]
-cfi_probe.c:(.xiptext+0xdb): dangerous relocation: windowed longcall crosses 1GB boundary; return may fail: __kmalloc_noprof
-cfi_util.c:(.xiptext+0x40b): dangerous relocation: windowed longcall crosses 1GB boundary; return may fail: __kmalloc_noprof
-drivers/gpu/drm/display/drm_dp_mst_topology.c:5074:(.text+0x4da0): undefined reference to `drm_kms_helper_hotplug_event'
-drivers/gpu/drm/display/drm_dp_mst_topology.c:5088:(.text+0x40a8): undefined reference to `__drm_atomic_helper_private_obj_duplicate_state'
-drivers/gpu/drm/lima/lima_drv.c:387:13: error: cast to smaller integer type 'enum lima_gpu_id' from 'const void *' [-Werror,-Wvoid-pointer-to-enum-cast]
-drivers/gpu/drm/panthor/panthor_sched.c:2048:6: error: variable 'csg_mod_mask' set but not used [-Werror,-Wunused-but-set-variable]
-drivers/gpu/drm/pl111/pl111_versatile.c:488:24: error: cast to smaller integer type 'enum versatile_clcd' from 'const void *' [-Werror,-Wvoid-pointer-to-enum-cast]
-drivers/gpu/drm/qxl/qxl_cmd.c:424:6: error: variable 'count' set but not used [-Werror,-Wunused-but-set-variable]
-drivers/gpu/drm/qxl/qxl_ioctl.c:148:14: error: variable 'num_relocs' set but not used [-Werror,-Wunused-but-set-variable]
-drivers/s390/char/hmcdrv_cache.c:221:13: error: '__section__' attribute only applies to functions, global variables, Objective-C methods, and Objective-C properties
-drivers/s390/char/hmcdrv_cache.c:221:13: error: 'section' attribute only applies to functions, global variables, Objective-C methods, and Objective-C properties
-drivers/s390/char/hmcdrv_cache.c:221:13: error: non-extern declaration of '__pcpu_unique__alloc_tag_cntr' follows extern declaration
-drivers/s390/char/hmcdrv_ftp.c:196:21: error: '__section__' attribute only applies to functions, global variables, Objective-C methods, and Objective-C properties
-drivers/s390/char/hmcdrv_ftp.c:196:21: error: 'section' attribute only applies to functions, global variables, Objective-C methods, and Objective-C properties
-drivers/s390/char/hmcdrv_ftp.c:196:21: error: non-extern declaration of '__pcpu_unique__alloc_tag_cntr' follows extern declaration
-drivers/s390/char/hmcdrv_ftp.c:196:21: error: non-extern declaration of '_alloc_tag_cntr' follows extern declaration
-drivers/s390/char/hmcdrv_ftp.c:196:21: error: weak declaration cannot have internal linkage
-drm_dp_helper.c:(.text+0x36e8): undefined reference to `devm_backlight_device_register'
-drm_dp_mst_topology.c:(.text+0x350c): undefined reference to `__drm_atomic_helper_private_obj_duplicate_state'
-drm_dp_mst_topology.c:(.text+0x3f00): undefined reference to `drm_kms_helper_hotplug_event'
-include/asm-generic/io.h:547:31: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-include/linux/alloc_tag.h:43:2: error: "Memory allocation profiling is incompatible with ARCH_NEEDS_WEAK_PER_CPU"
-include/linux/gfp.h:295:9: error: '__section__' attribute only applies to functions, global variables, Objective-C methods, and Objective-C properties
-include/linux/gfp.h:295:9: error: 'section' attribute only applies to functions, global variables, Objective-C methods, and Objective-C properties
-include/linux/gfp.h:295:9: error: non-extern declaration of '__pcpu_unique__alloc_tag_cntr' follows extern declaration
-include/linux/gfp.h:295:9: error: non-extern declaration of '_alloc_tag_cntr' follows extern declaration
-include/linux/gfp.h:295:9: error: weak declaration cannot have internal linkage
-include/linux/mm.h:2862:22: error: '__section__' attribute only applies to functions, global variables, Objective-C methods, and Objective-C properties
-include/linux/mm.h:2862:22: error: 'section' attribute only applies to functions, global variables, Objective-C methods, and Objective-C properties
-include/linux/mm.h:2862:22: error: non-extern declaration of '__pcpu_unique__alloc_tag_cntr' follows extern declaration
-include/linux/mm.h:2862:22: error: non-extern declaration of '_alloc_tag_cntr' follows extern declaration
-include/linux/mm.h:2862:22: error: weak declaration cannot have internal linkage
-include/linux/pagemap.h:558:10: error: '__section__' attribute only applies to functions, global variables, Objective-C methods, and Objective-C properties
-include/linux/pagemap.h:558:10: error: 'section' attribute only applies to functions, global variables, Objective-C methods, and Objective-C properties
-include/linux/pagemap.h:558:10: error: non-extern declaration of '__pcpu_unique__alloc_tag_cntr' follows extern declaration
-ld.lld: error: undefined symbol: __drm_atomic_helper_private_obj_duplicate_state
-ld.lld: error: undefined symbol: drm_kms_helper_hotplug_event
-lib/test_lockup.c:310:10: error: '__section__' attribute only applies to functions, global variables, Objective-C methods, and Objective-C properties
-lib/test_lockup.c:310:10: error: 'section' attribute only applies to functions, global variables, Objective-C methods, and Objective-C properties
-lib/test_lockup.c:310:10: error: non-extern declaration of '__pcpu_unique__alloc_tag_cntr' follows extern declaration
+Am 29.03.24 um 08:18 schrieb Samuel Holland:
+> This series unifies the kernel-mode FPU API across several architectures
+> by wrapping the existing functions (where needed) in consistently-named
+> functions placed in a consistent header location, with mostly the same
+> semantics: they can be called from preemptible or non-preemptible task
+> context, and are not assumed to be reentrant. Architectures are also
+> expected to provide CFLAGS adjustments for compiling FPU-dependent code.
+> For the moment, SIMD/vector units are out of scope for this common API.
+>
+> This allows us to remove the ifdeffery and duplicated Makefile logic at
+> each FPU user. It then implements the common API on RISC-V, and converts
+> a couple of users to the new API: the AMDGPU DRM driver, and the FPU
+> self test.
+>
+> The underlying goal of this series is to allow using newer AMD GPUs
+> (e.g. Navi) on RISC-V boards such as SiFive's HiFive Unmatched. Those
+> GPUs need CONFIG_DRM_AMD_DC_FP to initialize, which requires kernel-mode
+> FPU support.
+>
+> Previous versions:
+> v3: https://lore.kernel.org/linux-kernel/20240327200157.1097089-1-samuel.holland@sifive.com/
+> v2: https://lore.kernel.org/linux-kernel/20231228014220.3562640-1-samuel.holland@sifive.com/
+> v1: https://lore.kernel.org/linux-kernel/20231208055501.2916202-1-samuel.holland@sifive.com/
+> v0: https://lore.kernel.org/linux-kernel/20231122030621.3759313-1-samuel.holland@sifive.com/
+>
+> Changes in v4:
+>   - Add missed CFLAGS changes for recov_neon_inner.c
+>     (fixes arm build failures)
+>   - Fix x86 include guard issue (fixes x86 build failures)
+>
+> Changes in v3:
+>   - Rebase on v6.9-rc1
+>   - Limit riscv ARCH_HAS_KERNEL_FPU_SUPPORT to 64BIT
+>
+> Changes in v2:
+>   - Add documentation explaining the built-time and runtime APIs
+>   - Add a linux/fpu.h header for generic isolation enforcement
+>   - Remove file name from header comment
+>   - Clean up arch/arm64/lib/Makefile, like for arch/arm
+>   - Remove RISC-V architecture-specific preprocessor check
+>   - Split altivec removal to a separate patch
+>   - Use linux/fpu.h instead of asm/fpu.h in consumers
+>   - Declare test_fpu() in a header
+>
+> Michael Ellerman (1):
+>    drm/amd/display: Only use hard-float, not altivec on powerpc
+>
+> Samuel Holland (14):
+>    arch: Add ARCH_HAS_KERNEL_FPU_SUPPORT
+>    ARM: Implement ARCH_HAS_KERNEL_FPU_SUPPORT
+>    ARM: crypto: Use CC_FLAGS_FPU for NEON CFLAGS
+>    arm64: Implement ARCH_HAS_KERNEL_FPU_SUPPORT
+>    arm64: crypto: Use CC_FLAGS_FPU for NEON CFLAGS
+>    lib/raid6: Use CC_FLAGS_FPU for NEON CFLAGS
+>    LoongArch: Implement ARCH_HAS_KERNEL_FPU_SUPPORT
+>    powerpc: Implement ARCH_HAS_KERNEL_FPU_SUPPORT
+>    x86/fpu: Fix asm/fpu/types.h include guard
+>    x86: Implement ARCH_HAS_KERNEL_FPU_SUPPORT
+>    riscv: Add support for kernel-mode FPU
+>    drm/amd/display: Use ARCH_HAS_KERNEL_FPU_SUPPORT
+>    selftests/fpu: Move FP code to a separate translation unit
+>    selftests/fpu: Allow building on other architectures
+>
+>   Documentation/core-api/floating-point.rst     | 78 +++++++++++++++++++
+>   Documentation/core-api/index.rst              |  1 +
+>   Makefile                                      |  5 ++
+>   arch/Kconfig                                  |  6 ++
+>   arch/arm/Kconfig                              |  1 +
+>   arch/arm/Makefile                             |  7 ++
+>   arch/arm/include/asm/fpu.h                    | 15 ++++
+>   arch/arm/lib/Makefile                         |  3 +-
+>   arch/arm64/Kconfig                            |  1 +
+>   arch/arm64/Makefile                           |  9 ++-
+>   arch/arm64/include/asm/fpu.h                  | 15 ++++
+>   arch/arm64/lib/Makefile                       |  6 +-
+>   arch/loongarch/Kconfig                        |  1 +
+>   arch/loongarch/Makefile                       |  5 +-
+>   arch/loongarch/include/asm/fpu.h              |  1 +
+>   arch/powerpc/Kconfig                          |  1 +
+>   arch/powerpc/Makefile                         |  5 +-
+>   arch/powerpc/include/asm/fpu.h                | 28 +++++++
+>   arch/riscv/Kconfig                            |  1 +
+>   arch/riscv/Makefile                           |  3 +
+>   arch/riscv/include/asm/fpu.h                  | 16 ++++
+>   arch/riscv/kernel/Makefile                    |  1 +
+>   arch/riscv/kernel/kernel_mode_fpu.c           | 28 +++++++
+>   arch/x86/Kconfig                              |  1 +
+>   arch/x86/Makefile                             | 20 +++++
+>   arch/x86/include/asm/fpu.h                    | 13 ++++
+>   arch/x86/include/asm/fpu/types.h              |  6 +-
+>   drivers/gpu/drm/amd/display/Kconfig           |  2 +-
+>   .../gpu/drm/amd/display/amdgpu_dm/dc_fpu.c    | 35 +--------
+>   drivers/gpu/drm/amd/display/dc/dml/Makefile   | 36 +--------
+>   drivers/gpu/drm/amd/display/dc/dml2/Makefile  | 36 +--------
+>   include/linux/fpu.h                           | 12 +++
+>   lib/Kconfig.debug                             |  2 +-
+>   lib/Makefile                                  | 26 +------
+>   lib/raid6/Makefile                            | 33 +++-----
+>   lib/test_fpu.h                                |  8 ++
+>   lib/{test_fpu.c => test_fpu_glue.c}           | 37 ++-------
+>   lib/test_fpu_impl.c                           | 37 +++++++++
+>   38 files changed, 348 insertions(+), 193 deletions(-)
+>   create mode 100644 Documentation/core-api/floating-point.rst
+>   create mode 100644 arch/arm/include/asm/fpu.h
+>   create mode 100644 arch/arm64/include/asm/fpu.h
+>   create mode 100644 arch/powerpc/include/asm/fpu.h
+>   create mode 100644 arch/riscv/include/asm/fpu.h
+>   create mode 100644 arch/riscv/kernel/kernel_mode_fpu.c
+>   create mode 100644 arch/x86/include/asm/fpu.h
+>   create mode 100644 include/linux/fpu.h
+>   create mode 100644 lib/test_fpu.h
+>   rename lib/{test_fpu.c => test_fpu_glue.c} (71%)
+>   create mode 100644 lib/test_fpu_impl.c
+>
 
-Unverified Error/Warning (likely false positive, please contact us if interested):
-
-WARNING: modpost: "strcpy" [net/core/net_test.ko] has no CRC!
-
-Error/Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- alpha-allnoconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- alpha-allyesconfig
-|   |-- drivers-gpu-drm-imx-ipuv3-imx-ldb.c:error:_sel-directive-output-may-be-truncated-writing-bytes-into-a-region-of-size-between-and
-|   |-- drivers-gpu-drm-nouveau-nouveau_backlight.c:error:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- alpha-defconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- alpha-randconfig-r012-20220524
-|   `-- WARNING:modpost:strcpy-net-core-net_test.ko-has-no-CRC
-|-- alpha-randconfig-r051-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- arm-allmodconfig
-|   |-- drivers-gpu-drm-imx-ipuv3-imx-ldb.c:error:_sel-directive-output-may-be-truncated-writing-bytes-into-a-region-of-size-between-and
-|   |-- drivers-gpu-drm-nouveau-nouveau_backlight.c:error:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- arm-allyesconfig
-|   |-- drivers-gpu-drm-imx-ipuv3-imx-ldb.c:error:_sel-directive-output-may-be-truncated-writing-bytes-into-a-region-of-size-between-and
-|   |-- drivers-gpu-drm-nouveau-nouveau_backlight.c:error:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- arm-hisi_defconfig
-|   |-- drm_dp_mst_topology.c:(.text):undefined-reference-to-__drm_atomic_helper_private_obj_duplicate_state
-|   `-- drm_dp_mst_topology.c:(.text):undefined-reference-to-drm_kms_helper_hotplug_event
-|-- arm-randconfig-001-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- arm-randconfig-r062-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- arm64-allnoconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- arm64-defconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- arm64-randconfig-004-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- arm64-randconfig-r051-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- arm64-randconfig-r133-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- csky-allmodconfig
-|   |-- drivers-gpu-drm-imx-ipuv3-imx-ldb.c:error:_sel-directive-output-may-be-truncated-writing-bytes-into-a-region-of-size-between-and
-|   |-- drivers-gpu-drm-nouveau-nouveau_backlight.c:error:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- csky-allnoconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- csky-allyesconfig
-|   |-- drivers-gpu-drm-imx-ipuv3-imx-ldb.c:error:_sel-directive-output-may-be-truncated-writing-bytes-into-a-region-of-size-between-and
-|   |-- drivers-gpu-drm-nouveau-nouveau_backlight.c:error:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- csky-defconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- csky-randconfig-001-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- csky-randconfig-002-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- csky-randconfig-r012-20230202
-|   |-- arch-csky-include-asm-cmpxchg.h:error:implicit-declaration-of-function-cmpxchg_emu_u16
-|   `-- arch-csky-include-asm-cmpxchg.h:error:implicit-declaration-of-function-cmpxchg_emu_u8
-|-- i386-allyesconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- i386-buildonly-randconfig-001-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- i386-buildonly-randconfig-002-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- i386-randconfig-001-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- i386-randconfig-011-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- i386-randconfig-015-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- i386-randconfig-016-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- i386-randconfig-051-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- i386-randconfig-053-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- i386-randconfig-062-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- i386-randconfig-141-20240402
-|   |-- drivers-pwm-core.c-pwm_cdev_ioctl()-warn:maybe-return-EFAULT-instead-of-the-bytes-remaining
-|   |-- drivers-pwm-core.c-pwm_cdev_ioctl()-warn:possible-spectre-second-half.-pwm
-|   |-- drivers-pwm-core.c-pwm_cdev_ioctl()-warn:potential-spectre-issue-cdata-pwm-r
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- loongarch-allmodconfig
-|   |-- drivers-gpu-drm-imx-ipuv3-imx-ldb.c:error:_sel-directive-output-may-be-truncated-writing-bytes-into-a-region-of-size-between-and
-|   |-- drivers-gpu-drm-nouveau-nouveau_backlight.c:error:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- loongarch-allnoconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- loongarch-defconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- loongarch-randconfig-001-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- loongarch-randconfig-002-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- m68k-allmodconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- m68k-allnoconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- m68k-allyesconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- m68k-defconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- m68k-m5272c3_defconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- m68k-mac_defconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- m68k-randconfig-r006-20220328
-|   `-- drm_dp_helper.c:(.text):undefined-reference-to-devm_backlight_device_register
-|-- m68k-randconfig-r054-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- microblaze-allmodconfig
-|   |-- drivers-gpu-drm-imx-ipuv3-imx-ldb.c:error:_sel-directive-output-may-be-truncated-writing-bytes-into-a-region-of-size-between-and
-|   |-- drivers-gpu-drm-nouveau-nouveau_backlight.c:error:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- microblaze-allnoconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- microblaze-allyesconfig
-|   |-- drivers-gpu-drm-imx-ipuv3-imx-ldb.c:error:_sel-directive-output-may-be-truncated-writing-bytes-into-a-region-of-size-between-and
-|   |-- drivers-gpu-drm-nouveau-nouveau_backlight.c:error:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- microblaze-defconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- mips-allnoconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- mips-allyesconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- mips-cavium_octeon_defconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- mips-cu1830-neo_defconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- mips-loongson2k_defconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- nios2-allmodconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- nios2-allnoconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- nios2-allyesconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- nios2-defconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- nios2-randconfig-001-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- nios2-randconfig-002-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- nios2-randconfig-r052-20240402
-|   |-- drivers-firmware-arm_scmi-raw_mode.c:WARNING:scmi_dbg_raw_mode_reset_fops:write()-has-stream-semantic-safe-to-change-nonseekable_open-stream_open.
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- nios2-randconfig-r063-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- openrisc-allnoconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- openrisc-allyesconfig
-|   |-- drivers-gpu-drm-imx-ipuv3-imx-ldb.c:error:_sel-directive-output-may-be-truncated-writing-bytes-into-a-region-of-size-between-and
-|   |-- drivers-gpu-drm-nouveau-nouveau_backlight.c:error:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- openrisc-defconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- openrisc-or1klitex_defconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- powerpc-allmodconfig
-|   |-- drivers-gpu-drm-imx-ipuv3-imx-ldb.c:error:_sel-directive-output-may-be-truncated-writing-bytes-into-a-region-of-size-between-and
-|   |-- drivers-gpu-drm-nouveau-nouveau_backlight.c:error:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- powerpc-allnoconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- powerpc-amigaone_defconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- powerpc-mpc5200_defconfig
-|   |-- drivers-gpu-drm-display-drm_dp_mst_topology.c:(.text):undefined-reference-to-__drm_atomic_helper_private_obj_duplicate_state
-|   `-- drivers-gpu-drm-display-drm_dp_mst_topology.c:(.text):undefined-reference-to-drm_kms_helper_hotplug_event
-|-- powerpc-randconfig-002-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- powerpc-randconfig-r132-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- powerpc-sam440ep_defconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- powerpc-stx_gp3_defconfig
-|   |-- ERROR:__drm_atomic_helper_private_obj_duplicate_state-drivers-gpu-drm-display-drm_display_helper.ko-undefined
-|   `-- ERROR:drm_kms_helper_hotplug_event-drivers-gpu-drm-display-drm_display_helper.ko-undefined
-|-- powerpc64-randconfig-001-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- powerpc64-randconfig-002-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- powerpc64-randconfig-003-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- riscv-allnoconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- riscv-randconfig-r011-20230105
-|   `-- arch-riscv-include-asm-cmpxchg.h:warning:assignment-to-struct-bdi_writeback-from-uintptr_t-aka-long-unsigned-int-makes-pointer-from-integer-without-a-cast
-|-- riscv-randconfig-r036-20230619
-|   |-- arch-riscv-include-asm-cmpxchg.h:warning:assignment-to-const-struct-gre_protocol-from-uintptr_t-aka-long-unsigned-int-makes-pointer-from-integer-without-a-cast
-|   |-- arch-riscv-include-asm-cmpxchg.h:warning:assignment-to-struct-rtrs_clt_path-from-uintptr_t-aka-long-unsigned-int-makes-pointer-from-integer-without-a-cast
-|   `-- arch-riscv-include-asm-cmpxchg.h:warning:assignment-to-z_erofs_next_pcluster_t-aka-void-from-uintptr_t-aka-long-unsigned-int-makes-pointer-from-integer-without-a-cast
-|-- riscv-randconfig-r061-20240402
-|   `-- arch-riscv-include-asm-cmpxchg.h:warning:assignment-to-struct-tty_struct-from-uintptr_t-aka-long-unsigned-int-makes-pointer-from-integer-without-a-cast
-|-- s390-allyesconfig
-|   |-- drivers-gpu-drm-imx-ipuv3-imx-ldb.c:error:_sel-directive-output-may-be-truncated-writing-bytes-into-a-region-of-size-between-and
-|   |-- drivers-gpu-drm-nouveau-nouveau_backlight.c:error:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- s390-randconfig-001-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- s390-randconfig-002-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- sparc-allmodconfig
-|   |-- drivers-gpu-drm-imx-ipuv3-imx-ldb.c:error:_sel-directive-output-may-be-truncated-writing-bytes-into-a-region-of-size-between-and
-|   |-- drivers-gpu-drm-nouveau-nouveau_backlight.c:error:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- sparc-allnoconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- sparc-defconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- sparc-randconfig-001-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- sparc-randconfig-002-20240402
-|   |-- (.head.text):relocation-truncated-to-fit:R_SPARC_WDISP22-against-init.text
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- sparc64-allmodconfig
-|   |-- drivers-gpu-drm-imx-ipuv3-imx-ldb.c:error:_sel-directive-output-may-be-truncated-writing-bytes-into-a-region-of-size-between-and
-|   |-- drivers-gpu-drm-nouveau-nouveau_backlight.c:error:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- sparc64-allyesconfig
-|   |-- drivers-gpu-drm-imx-ipuv3-imx-ldb.c:error:_sel-directive-output-may-be-truncated-writing-bytes-into-a-region-of-size-between-and
-|   |-- drivers-gpu-drm-nouveau-nouveau_backlight.c:error:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- sparc64-defconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- sparc64-randconfig-002-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- sparc64-randconfig-r064-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- sparc64-randconfig-r113-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- sparc64-randconfig-r131-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- um-allyesconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- um-i386_defconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- x86_64-defconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- x86_64-randconfig-003-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- x86_64-randconfig-005-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- x86_64-randconfig-006-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- x86_64-randconfig-011-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- x86_64-randconfig-012-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- x86_64-randconfig-014-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- x86_64-randconfig-016-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- x86_64-randconfig-074-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- x86_64-randconfig-123-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- x86_64-randconfig-161-20240402
-|   |-- drivers-usb-dwc2-hcd_ddma.c-dwc2_cmpl_host_isoc_dma_desc()-warn:variable-dereferenced-before-check-qtd-urb-(see-line-)
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- xtensa-allnoconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- xtensa-buildonly-randconfig-r002-20220225
-|   |-- cfi_probe.c:(.xiptext):dangerous-relocation:windowed-longcall-crosses-1GB-boundary-return-may-fail:__kmalloc_noprof
-|   `-- cfi_util.c:(.xiptext):dangerous-relocation:windowed-longcall-crosses-1GB-boundary-return-may-fail:__kmalloc_noprof
-|-- xtensa-randconfig-002-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-`-- xtensa-virt_defconfig
-    |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-    `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-clang_recent_errors
-|-- arm-allnoconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- arm-aspeed_g4_defconfig
-|   |-- ld.lld:error:undefined-symbol:__drm_atomic_helper_private_obj_duplicate_state
-|   |-- ld.lld:error:undefined-symbol:drm_kms_helper_hotplug_event
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- arm-defconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- arm-randconfig-002-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- arm-randconfig-003-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- arm-randconfig-004-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- arm-randconfig-r123-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- arm64-randconfig-001-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- arm64-randconfig-002-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- arm64-randconfig-003-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- arm64-randconfig-r112-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- arm64-randconfig-r121-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- hexagon-allmodconfig
-|   |-- include-asm-generic-io.h:error:performing-pointer-arithmetic-on-a-null-pointer-has-undefined-behavior-Werror-Wnull-pointer-arithmetic
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- hexagon-allnoconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- hexagon-allyesconfig
-|   |-- include-asm-generic-io.h:error:performing-pointer-arithmetic-on-a-null-pointer-has-undefined-behavior-Werror-Wnull-pointer-arithmetic
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- hexagon-defconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- hexagon-randconfig-001-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- hexagon-randconfig-002-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- hexagon-randconfig-r062-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- hexagon-randconfig-r111-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- i386-buildonly-randconfig-003-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- i386-buildonly-randconfig-004-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- i386-buildonly-randconfig-005-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- i386-buildonly-randconfig-006-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- i386-defconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- i386-randconfig-002-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- i386-randconfig-003-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- i386-randconfig-004-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- i386-randconfig-005-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- i386-randconfig-006-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- i386-randconfig-012-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- i386-randconfig-013-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- i386-randconfig-014-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- i386-randconfig-052-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- i386-randconfig-054-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- i386-randconfig-061-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- i386-randconfig-063-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- mips-randconfig-r053-20240402
-|   |-- drivers-firmware-arm_scmi-raw_mode.c:WARNING:scmi_dbg_raw_mode_reset_fops:write()-has-stream-semantic-safe-to-change-nonseekable_open-stream_open.
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- powerpc-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_drv.c:error:bitwise-operation-between-different-enumeration-types-(-enum-amd_asic_type-and-enum-amd_chip_flags-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_ras.c:error:arithmetic-between-different-enumeration-types-(-enum-amdgpu_ras_block-and-enum-amdgpu_ras_mca_block-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-lima-lima_drv.c:error:cast-to-smaller-integer-type-enum-lima_gpu_id-from-const-void-Werror-Wvoid-pointer-to-enum-cast
-|   |-- drivers-gpu-drm-msm-adreno-a6xx_gpu_state.c:error:variable-out-set-but-not-used-Werror-Wunused-but-set-variable
-|   |-- drivers-gpu-drm-nouveau-nvkm-subdev-bios-shadowof.c:error:cast-from-void-(-)(const-void-)-to-void-(-)(void-)-converts-to-incompatible-function-type-Werror-Wcast-function-type-strict
-|   |-- drivers-gpu-drm-panthor-panthor_sched.c:error:variable-csg_mod_mask-set-but-not-used-Werror-Wunused-but-set-variable
-|   |-- drivers-gpu-drm-pl111-pl111_versatile.c:error:cast-to-smaller-integer-type-enum-versatile_clcd-from-const-void-Werror-Wvoid-pointer-to-enum-cast
-|   |-- drivers-gpu-drm-radeon-radeon_drv.c:error:bitwise-operation-between-different-enumeration-types-(-enum-radeon_family-and-enum-radeon_chip_flags-)-Werror-Wenum-enum-conversion
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- powerpc-chrp32_defconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- powerpc-maple_defconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- powerpc-mpc5200_defconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- powerpc-randconfig-001-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- powerpc-sequoia_defconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- riscv-allmodconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-amdgpu_dm-amdgpu_dm.c:error:arithmetic-between-different-enumeration-types-(-enum-dc_irq_source-and-enum-irq_type-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-irq-dce110-irq_service_dce110.c:error:arithmetic-between-different-enumeration-types-(-enum-dc_irq_source-and-enum-irq_type-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_drv.c:error:bitwise-operation-between-different-enumeration-types-(-enum-amd_asic_type-and-enum-amd_chip_flags-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_ras.c:error:arithmetic-between-different-enumeration-types-(-enum-amdgpu_ras_block-and-enum-amdgpu_ras_mca_block-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-intel_ddi.c:error:arithmetic-between-different-enumeration-types-(-enum-hpd_pin-and-enum-port-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-intel_display.c:error:arithmetic-between-different-enumeration-types-(-enum-pipe-and-enum-intel_display_power_domain-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-i915-display-intel_display.c:error:arithmetic-between-different-enumeration-types-(-enum-tc_port-and-enum-port-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-lima-lima_drv.c:error:cast-to-smaller-integer-type-enum-lima_gpu_id-from-const-void-Werror-Wvoid-pointer-to-enum-cast
-|   |-- drivers-gpu-drm-msm-adreno-a6xx_gpu_state.c:error:variable-out-set-but-not-used-Werror-Wunused-but-set-variable
-|   |-- drivers-gpu-drm-panthor-panthor_sched.c:error:variable-csg_mod_mask-set-but-not-used-Werror-Wunused-but-set-variable
-|   |-- drivers-gpu-drm-pl111-pl111_versatile.c:error:cast-to-smaller-integer-type-enum-versatile_clcd-from-const-void-Werror-Wvoid-pointer-to-enum-cast
-|   |-- drivers-gpu-drm-radeon-radeon_drv.c:error:bitwise-operation-between-different-enumeration-types-(-enum-radeon_family-and-enum-radeon_chip_flags-)-Werror-Wenum-enum-conversion
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- riscv-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-amdgpu_dm-amdgpu_dm.c:error:arithmetic-between-different-enumeration-types-(-enum-dc_irq_source-and-enum-irq_type-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-irq-dce110-irq_service_dce110.c:error:arithmetic-between-different-enumeration-types-(-enum-dc_irq_source-and-enum-irq_type-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_drv.c:error:bitwise-operation-between-different-enumeration-types-(-enum-amd_asic_type-and-enum-amd_chip_flags-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_ras.c:error:arithmetic-between-different-enumeration-types-(-enum-amdgpu_ras_block-and-enum-amdgpu_ras_mca_block-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-lima-lima_drv.c:error:cast-to-smaller-integer-type-enum-lima_gpu_id-from-const-void-Werror-Wvoid-pointer-to-enum-cast
-|   |-- drivers-gpu-drm-msm-adreno-a6xx_gpu_state.c:error:variable-out-set-but-not-used-Werror-Wunused-but-set-variable
-|   |-- drivers-gpu-drm-panthor-panthor_sched.c:error:variable-csg_mod_mask-set-but-not-used-Werror-Wunused-but-set-variable
-|   |-- drivers-gpu-drm-pl111-pl111_versatile.c:error:cast-to-smaller-integer-type-enum-versatile_clcd-from-const-void-Werror-Wvoid-pointer-to-enum-cast
-|   |-- drivers-gpu-drm-radeon-radeon_drv.c:error:bitwise-operation-between-different-enumeration-types-(-enum-radeon_family-and-enum-radeon_chip_flags-)-Werror-Wenum-enum-conversion
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- riscv-defconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- riscv-randconfig-001-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- riscv-randconfig-002-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- s390-allmodconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_drv.c:error:bitwise-operation-between-different-enumeration-types-(-enum-amd_asic_type-and-enum-amd_chip_flags-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_ras.c:error:arithmetic-between-different-enumeration-types-(-enum-amdgpu_ras_block-and-enum-amdgpu_ras_mca_block-)-Werror-Wenum-enum-conversion
-|   |-- drivers-gpu-drm-lima-lima_drv.c:error:cast-to-smaller-integer-type-enum-lima_gpu_id-from-const-void-Werror-Wvoid-pointer-to-enum-cast
-|   |-- drivers-gpu-drm-panthor-panthor_sched.c:error:variable-csg_mod_mask-set-but-not-used-Werror-Wunused-but-set-variable
-|   |-- drivers-gpu-drm-pl111-pl111_versatile.c:error:cast-to-smaller-integer-type-enum-versatile_clcd-from-const-void-Werror-Wvoid-pointer-to-enum-cast
-|   |-- drivers-gpu-drm-qxl-qxl_cmd.c:error:variable-count-set-but-not-used-Werror-Wunused-but-set-variable
-|   |-- drivers-gpu-drm-qxl-qxl_ioctl.c:error:variable-num_relocs-set-but-not-used-Werror-Wunused-but-set-variable
-|   |-- drivers-gpu-drm-radeon-radeon_drv.c:error:bitwise-operation-between-different-enumeration-types-(-enum-radeon_family-and-enum-radeon_chip_flags-)-Werror-Wenum-enum-conversion
-|   |-- include-asm-generic-io.h:error:performing-pointer-arithmetic-on-a-null-pointer-has-undefined-behavior-Werror-Wnull-pointer-arithmetic
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- s390-allnoconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- s390-defconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- s390-randconfig-002-20240328
-|   |-- drivers-s390-char-hmcdrv_cache.c:error:__section__-attribute-only-applies-to-functions-global-variables-Objective-C-methods-and-Objective-C-properties
-|   |-- drivers-s390-char-hmcdrv_cache.c:error:non-extern-declaration-of-__pcpu_unique__alloc_tag_cntr-follows-extern-declaration
-|   |-- drivers-s390-char-hmcdrv_cache.c:error:section-attribute-only-applies-to-functions-global-variables-Objective-C-methods-and-Objective-C-properties
-|   |-- drivers-s390-char-hmcdrv_ftp.c:error:__section__-attribute-only-applies-to-functions-global-variables-Objective-C-methods-and-Objective-C-properties
-|   |-- drivers-s390-char-hmcdrv_ftp.c:error:non-extern-declaration-of-__pcpu_unique__alloc_tag_cntr-follows-extern-declaration
-|   |-- drivers-s390-char-hmcdrv_ftp.c:error:non-extern-declaration-of-_alloc_tag_cntr-follows-extern-declaration
-|   |-- drivers-s390-char-hmcdrv_ftp.c:error:section-attribute-only-applies-to-functions-global-variables-Objective-C-methods-and-Objective-C-properties
-|   |-- drivers-s390-char-hmcdrv_ftp.c:error:weak-declaration-cannot-have-internal-linkage
-|   |-- include-linux-alloc_tag.h:error:Memory-allocation-profiling-is-incompatible-with-ARCH_NEEDS_WEAK_PER_CPU
-|   |-- include-linux-gfp.h:error:__section__-attribute-only-applies-to-functions-global-variables-Objective-C-methods-and-Objective-C-properties
-|   |-- include-linux-gfp.h:error:non-extern-declaration-of-__pcpu_unique__alloc_tag_cntr-follows-extern-declaration
-|   |-- include-linux-gfp.h:error:non-extern-declaration-of-_alloc_tag_cntr-follows-extern-declaration
-|   |-- include-linux-gfp.h:error:section-attribute-only-applies-to-functions-global-variables-Objective-C-methods-and-Objective-C-properties
-|   |-- include-linux-gfp.h:error:weak-declaration-cannot-have-internal-linkage
-|   |-- include-linux-mm.h:error:__section__-attribute-only-applies-to-functions-global-variables-Objective-C-methods-and-Objective-C-properties
-|   |-- include-linux-mm.h:error:non-extern-declaration-of-__pcpu_unique__alloc_tag_cntr-follows-extern-declaration
-|   |-- include-linux-mm.h:error:non-extern-declaration-of-_alloc_tag_cntr-follows-extern-declaration
-|   |-- include-linux-mm.h:error:section-attribute-only-applies-to-functions-global-variables-Objective-C-methods-and-Objective-C-properties
-|   |-- include-linux-mm.h:error:weak-declaration-cannot-have-internal-linkage
-|   |-- include-linux-pagemap.h:error:__section__-attribute-only-applies-to-functions-global-variables-Objective-C-methods-and-Objective-C-properties
-|   |-- include-linux-pagemap.h:error:non-extern-declaration-of-__pcpu_unique__alloc_tag_cntr-follows-extern-declaration
-|   |-- include-linux-pagemap.h:error:section-attribute-only-applies-to-functions-global-variables-Objective-C-methods-and-Objective-C-properties
-|   |-- lib-test_lockup.c:error:__section__-attribute-only-applies-to-functions-global-variables-Objective-C-methods-and-Objective-C-properties
-|   |-- lib-test_lockup.c:error:non-extern-declaration-of-__pcpu_unique__alloc_tag_cntr-follows-extern-declaration
-|   `-- lib-test_lockup.c:error:section-attribute-only-applies-to-functions-global-variables-Objective-C-methods-and-Objective-C-properties
-|-- um-allmodconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- um-allnoconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- um-defconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- um-randconfig-r061-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- um-x86_64_defconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- x86_64-allmodconfig
-|   |-- drivers-gpu-drm-kmb-kmb_dsi.c:error:unused-function-set_test_mode_src_osc_freq_target_hi_bits-Werror-Wunused-function
-|   |-- drivers-gpu-drm-kmb-kmb_dsi.c:error:unused-function-set_test_mode_src_osc_freq_target_low_bits-Werror-Wunused-function
-|   |-- drivers-gpu-drm-lima-lima_drv.c:error:cast-to-smaller-integer-type-enum-lima_gpu_id-from-const-void-Werror-Wvoid-pointer-to-enum-cast
-|   |-- drivers-gpu-drm-msm-adreno-a6xx_gpu_state.c:error:variable-out-set-but-not-used-Werror-Wunused-but-set-variable
-|   |-- drivers-gpu-drm-panthor-panthor_sched.c:error:variable-csg_mod_mask-set-but-not-used-Werror-Wunused-but-set-variable
-|   |-- drivers-gpu-drm-pl111-pl111_versatile.c:error:cast-to-smaller-integer-type-enum-versatile_clcd-from-const-void-Werror-Wvoid-pointer-to-enum-cast
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- x86_64-allnoconfig
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- x86_64-allyesconfig
-|   |-- drivers-gpu-drm-kmb-kmb_dsi.c:error:unused-function-set_test_mode_src_osc_freq_target_hi_bits-Werror-Wunused-function
-|   |-- drivers-gpu-drm-kmb-kmb_dsi.c:error:unused-function-set_test_mode_src_osc_freq_target_low_bits-Werror-Wunused-function
-|   |-- drivers-gpu-drm-lima-lima_drv.c:error:cast-to-smaller-integer-type-enum-lima_gpu_id-from-const-void-Werror-Wvoid-pointer-to-enum-cast
-|   |-- drivers-gpu-drm-msm-adreno-a6xx_gpu_state.c:error:variable-out-set-but-not-used-Werror-Wunused-but-set-variable
-|   |-- drivers-gpu-drm-panthor-panthor_sched.c:error:variable-csg_mod_mask-set-but-not-used-Werror-Wunused-but-set-variable
-|   |-- drivers-gpu-drm-pl111-pl111_versatile.c:error:cast-to-smaller-integer-type-enum-versatile_clcd-from-const-void-Werror-Wvoid-pointer-to-enum-cast
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- x86_64-buildonly-randconfig-001-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- x86_64-randconfig-004-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- x86_64-randconfig-013-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- x86_64-randconfig-015-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- x86_64-randconfig-071-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- x86_64-randconfig-072-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- x86_64-randconfig-073-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- x86_64-randconfig-075-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- x86_64-randconfig-076-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- x86_64-randconfig-101-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- x86_64-randconfig-102-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- x86_64-randconfig-103-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- x86_64-randconfig-104-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-|-- x86_64-randconfig-121-20240402
-|   |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-|   `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-`-- x86_64-randconfig-122-20240402
-    |-- mm-mempool.c:warning:Function-parameter-or-struct-member-gfp_mask-not-described-in-mempool_create_node
-    `-- mm-mempool.c:warning:Function-parameter-or-struct-member-node_id-not-described-in-mempool_create_node
-
-elapsed time: 1204m
-
-configs tested: 180
-configs skipped: 3
-
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20240402   gcc  
-arc                   randconfig-002-20240402   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   clang
-arm                              allyesconfig   gcc  
-arm                       aspeed_g4_defconfig   clang
-arm                                 defconfig   clang
-arm                   randconfig-001-20240402   gcc  
-arm                   randconfig-002-20240402   clang
-arm                   randconfig-003-20240402   clang
-arm                   randconfig-004-20240402   clang
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20240402   clang
-arm64                 randconfig-002-20240402   clang
-arm64                 randconfig-003-20240402   clang
-arm64                 randconfig-004-20240402   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240402   gcc  
-csky                  randconfig-002-20240402   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-hexagon               randconfig-001-20240402   clang
-hexagon               randconfig-002-20240402   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20240402   gcc  
-i386         buildonly-randconfig-002-20240402   gcc  
-i386         buildonly-randconfig-003-20240402   clang
-i386         buildonly-randconfig-004-20240402   clang
-i386         buildonly-randconfig-005-20240402   clang
-i386         buildonly-randconfig-006-20240402   clang
-i386                                defconfig   clang
-i386                  randconfig-001-20240402   gcc  
-i386                  randconfig-002-20240402   clang
-i386                  randconfig-003-20240402   clang
-i386                  randconfig-004-20240402   clang
-i386                  randconfig-005-20240402   clang
-i386                  randconfig-006-20240402   clang
-i386                  randconfig-011-20240402   gcc  
-i386                  randconfig-012-20240402   clang
-i386                  randconfig-013-20240402   clang
-i386                  randconfig-014-20240402   clang
-i386                  randconfig-015-20240402   gcc  
-i386                  randconfig-016-20240402   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20240402   gcc  
-loongarch             randconfig-002-20240402   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                        m5272c3_defconfig   gcc  
-m68k                            mac_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                  cavium_octeon_defconfig   gcc  
-mips                     cu1830-neo_defconfig   gcc  
-mips                     loongson2k_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20240402   gcc  
-nios2                 randconfig-002-20240402   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-openrisc                  or1klitex_defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20240402   gcc  
-parisc                randconfig-002-20240402   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                    amigaone_defconfig   gcc  
-powerpc                      chrp32_defconfig   clang
-powerpc                       maple_defconfig   clang
-powerpc                     mpc5200_defconfig   clang
-powerpc               randconfig-001-20240402   clang
-powerpc               randconfig-002-20240402   gcc  
-powerpc               randconfig-003-20240402   clang
-powerpc                    sam440ep_defconfig   gcc  
-powerpc                     sequoia_defconfig   clang
-powerpc64             randconfig-001-20240402   gcc  
-powerpc64             randconfig-002-20240402   gcc  
-powerpc64             randconfig-003-20240402   gcc  
-riscv                            allmodconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   clang
-riscv                               defconfig   clang
-riscv                 randconfig-001-20240402   clang
-riscv                 randconfig-002-20240402   clang
-s390                             allmodconfig   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                                defconfig   clang
-s390                  randconfig-001-20240402   gcc  
-s390                  randconfig-002-20240402   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                        dreamcast_defconfig   gcc  
-sh                    randconfig-001-20240402   gcc  
-sh                    randconfig-002-20240402   gcc  
-sh                           se7206_defconfig   gcc  
-sh                        sh7763rdp_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20240402   gcc  
-sparc64               randconfig-002-20240402   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                             i386_defconfig   gcc  
-um                    randconfig-001-20240402   gcc  
-um                    randconfig-002-20240402   gcc  
-um                           x86_64_defconfig   clang
-x86_64                            allnoconfig   clang
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20240402   clang
-x86_64       buildonly-randconfig-002-20240402   clang
-x86_64       buildonly-randconfig-003-20240402   clang
-x86_64       buildonly-randconfig-004-20240402   clang
-x86_64       buildonly-randconfig-005-20240402   clang
-x86_64       buildonly-randconfig-006-20240402   clang
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20240402   clang
-x86_64                randconfig-002-20240402   clang
-x86_64                randconfig-003-20240402   gcc  
-x86_64                randconfig-004-20240402   clang
-x86_64                randconfig-005-20240402   gcc  
-x86_64                randconfig-006-20240402   gcc  
-x86_64                randconfig-011-20240402   gcc  
-x86_64                randconfig-012-20240402   gcc  
-x86_64                randconfig-013-20240402   clang
-x86_64                randconfig-014-20240402   gcc  
-x86_64                randconfig-015-20240402   clang
-x86_64                randconfig-016-20240402   gcc  
-x86_64                randconfig-071-20240402   clang
-x86_64                randconfig-072-20240402   clang
-x86_64                randconfig-073-20240402   clang
-x86_64                randconfig-074-20240402   gcc  
-x86_64                randconfig-075-20240402   clang
-x86_64                randconfig-076-20240402   clang
-x86_64                          rhel-8.3-rust   clang
-xtensa                            allnoconfig   gcc  
-xtensa                randconfig-001-20240402   gcc  
-xtensa                randconfig-002-20240402   gcc  
-xtensa                         virt_defconfig   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
