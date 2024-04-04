@@ -1,145 +1,184 @@
-Return-Path: <linux-arch+bounces-3435-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3436-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4155A897DE9
-	for <lists+linux-arch@lfdr.de>; Thu,  4 Apr 2024 04:56:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9494897E3A
+	for <lists+linux-arch@lfdr.de>; Thu,  4 Apr 2024 06:40:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6E0A01C232B1
-	for <lists+linux-arch@lfdr.de>; Thu,  4 Apr 2024 02:56:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 65524284E7D
+	for <lists+linux-arch@lfdr.de>; Thu,  4 Apr 2024 04:40:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C75F01CD2D;
-	Thu,  4 Apr 2024 02:55:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 985351AAC4;
+	Thu,  4 Apr 2024 04:40:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="DOYOq1kt"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="DP9mSBmn"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F74EEEB2;
-	Thu,  4 Apr 2024 02:55:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A350F18AF4;
+	Thu,  4 Apr 2024 04:40:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712199359; cv=none; b=mSiz+APlstW1ljXZskE8dV+mg/iOxpb6u7p1+aCINou+Wy/MMTqUKqo0Z73Dp+3HUt1ZYevStMNpWVylHKEFhIjXVyJiiXAz6V9wDZVxDFEWd+cFL8kJL/R1V03jjnJ3TNGfCNxhV6AizvhvQUbDqn4FhHNFlbBkF5GuVJcSENc=
+	t=1712205604; cv=none; b=uktONWpaiBYBP9ByuYnqDYfwpRHIzuUc4rglIVoToVDYH/uei2DhOvDmaZVKx97cZhJRwRlEz2m9NGxMRZHoT+93rHF5Qkc7WxKNTHm/Y6AtKQXLop+7IpLB6kccEZvDfoVaAwDw06ZHp8Uri3gvhMHM8AO6+jkhH5RhStkrk1s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712199359; c=relaxed/simple;
-	bh=woQPwN94SfTkVo2nkrzwmeNCeR1tcNFP0GrDX8U1n6g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oOO6hyjDrgYEyeqM6WiNg0nyVqPu4f/vz4XKFWPHMz52UQcdoxzDazSOxB3oMqBMcUMfT9xHtWHAHrFelZi4N6L4fTB5JuVDDJyWtG6G12VxXrEr2PKDTX5Gcy88ddmGjA+XXOnAq17cq/5d5nbGonlnwxcRHSIDi4brBAW34r4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=DOYOq1kt; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=b2H16tqCkJ6i90mQLPDpV1ZsYZDW4KEWWz9R9e+0Oig=; b=DOYOq1ktip9OrPqyMbwDoNqDtq
-	VB6HauYA/GGMAstDHOFp3X/FsrrMKv6YfXGD+QUD67yFNWCAcxzrPxwIanfV6S3L97X/TEZcue6x1
-	DEi6bN9guWRaHhck/D7JnDVcfH/ggNwDsVGjKVdBzXBBK0zM3jPjOcv259vAlag3vudS0kmURSzoM
-	aJYzWCso5E+7of2Er2nfWcoIvHsHbXLcHILwObAIYPaSB1QJuojxjuRFiDBF8ddzqHDVt2GWbVL/+
-	xR+0t7YyOlbaQgK6MbdXjKGC7weqzQ++wCpmLrtM1OisyiYiLNHGQ3qfa4nDy1kb8yHh9fC1vn6Yz
-	GUTgK+bw==;
-Received: from [50.53.2.121] (helo=[192.168.254.15])
-	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rsDGA-000000012Up-3OOS;
-	Thu, 04 Apr 2024 02:55:27 +0000
-Message-ID: <5a349108-afd9-4290-acb6-8ec176a80a84@infradead.org>
-Date: Wed, 3 Apr 2024 19:55:22 -0700
+	s=arc-20240116; t=1712205604; c=relaxed/simple;
+	bh=yW5zh/WIH8R/yRb5Gwi6AMngO1LlznnvHlFhpdnXQ68=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lvxC88c96Yy0vL/yjOEIWPnuoR5NPZcp9eLWrl6a05WtixEMiHJXN+JARqlnCj4GW2SBGIfcesbNDXxC7Tn3BO73EibZR+3M9xbzVGxPBeY/PpRaA2X1NspegZkIpwxln7XqQuK94rFDxntmKyD2JtpX51pVqbMTZxyBBHtsxYM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=DP9mSBmn; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 4344QOaP009131;
+	Thu, 4 Apr 2024 04:39:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=fGMDDAqpuyHFT8CKRZIXuj4gzQ7iSrp2EictdMfn1CE=;
+ b=DP9mSBmnzD94+0HDDDTwpCcl/NqzDVUzytUGtkoc9JAg3mGiVEmhdsVbp9aRpiZil3q2
+ hRXuYYZKxSRKAsvJiM+Tvc1rcGrdOuFvUXnROg5EGKJcH6kFbLugbRPrcEiOd7USIj57
+ CMb+4NT6qbOuiXG7G1961fhMeJBCl+RjyY4B45GEoIrSzr4E38Eg5vhEtSsgFONdAcJu
+ 0gDSxYWo+xwcMWpfEbiDDI+l9QVnNVvbsaK1c53YfOraHh8a4D/nYJCExNRHYd/VQlI4
+ 6XEu6ShvG0vKCjiaR2KtsGH3tRS3BLm9YmbRwDnwzXcFceWNd+Wtvv88LSEV6XpiHIju 4A== 
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3x9mw902et-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 04 Apr 2024 04:39:42 +0000
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 43441Bep008629;
+	Thu, 4 Apr 2024 04:39:41 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3x9epw1ysu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 04 Apr 2024 04:39:41 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4344dbUS48103904
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 4 Apr 2024 04:39:39 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 025652004D;
+	Thu,  4 Apr 2024 04:39:37 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 88B222004B;
+	Thu,  4 Apr 2024 04:39:36 +0000 (GMT)
+Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Thu,  4 Apr 2024 04:39:36 +0000 (GMT)
+Received: from socotra.ozlabs.ibm.com (haven.au.ibm.com [9.192.254.114])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 706A36005D;
+	Thu,  4 Apr 2024 15:39:31 +1100 (AEDT)
+From: Rohan McLure <rmclure@linux.ibm.com>
+To: linuxppc-dev@lists.ozlabs.org
+Cc: Rohan McLure <rmclure@linux.ibm.com>, mpe@ellerman.id.au,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        will@kernel.org, arnd@arndb.de, gautam@linux.ibm.com
+Subject: [PATCH] asm-generic/mmiowb: Mark accesses to fix KCSAN warnings
+Date: Thu,  4 Apr 2024 15:38:53 +1100
+Message-ID: <20240404043855.640578-2-rmclure@linux.ibm.com>
+X-Mailer: git-send-email 2.44.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: KhBNUZPSy1wpOqZ_MTFza7poyGKrUl6y
+X-Proofpoint-ORIG-GUID: KhBNUZPSy1wpOqZ_MTFza7poyGKrUl6y
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 01/37] fix missing vmalloc.h includes
-To: Kent Overstreet <kent.overstreet@linux.dev>,
- David Hildenbrand <david@redhat.com>
-Cc: Nathan Chancellor <nathan@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
- mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
- roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
- willy@infradead.org, liam.howlett@oracle.com,
- penguin-kernel@i-love.sakura.ne.jp, corbet@lwn.net, void@manifault.com,
- peterz@infradead.org, juri.lelli@redhat.com, catalin.marinas@arm.com,
- will@kernel.org, arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
- dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
- axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org, dennis@kernel.org,
- jhubbard@nvidia.com, tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
- paulmck@kernel.org, pasha.tatashin@soleen.com, yosryahmed@google.com,
- yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
- andreyknvl@gmail.com, keescook@chromium.org, ndesaulniers@google.com,
- vvvvvv@google.com, gregkh@linuxfoundation.org, ebiggers@google.com,
- ytcoode@gmail.com, vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
- rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
- vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
- iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
- elver@google.com, dvyukov@google.com, songmuchun@bytedance.com,
- jbaron@akamai.com, aliceryhl@google.com, rientjes@google.com,
- minchan@google.com, kaleshsingh@google.com, kernel-team@android.com,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- iommu@lists.linux.dev, linux-arch@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
- linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
- cgroups@vger.kernel.org
-References: <20240321163705.3067592-1-surenb@google.com>
- <20240321163705.3067592-2-surenb@google.com>
- <20240403211240.GA307137@dev-arch.thelio-3990X>
- <4qk7f3ra5lrqhtvmipmacgzo5qwnugrfxn5dd3j4wubzwqvmv4@vzdhpalbmob3>
- <9e2d09f8-2234-42f3-8481-87bbd9ad4def@redhat.com>
- <qyyo6mjctqm734utdjen4ozhoo3t4ikswzjfjnemp7olwdgyt4@qifwishdzul4>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <qyyo6mjctqm734utdjen4ozhoo3t4ikswzjfjnemp7olwdgyt4@qifwishdzul4>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-04-03_26,2024-04-03_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1011
+ phishscore=0 mlxlogscore=634 spamscore=0 impostorscore=0 mlxscore=0
+ priorityscore=1501 lowpriorityscore=0 suspectscore=0 malwarescore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2404010000 definitions=main-2404040028
 
+Prior to this patch, data races are detectable by KCSAN of the following
+forms:
 
+[1] Asynchronous calls to mmiowb_set_pending() from an interrupt context
+    or otherwise outside of a critical section
+[2] Interrupted critical sections, where the interrupt will itself
+    acquire a lock
 
-On 4/3/24 3:57 PM, Kent Overstreet wrote:
-> On Wed, Apr 03, 2024 at 11:48:12PM +0200, David Hildenbrand wrote:
->> On 03.04.24 23:41, Kent Overstreet wrote:
->>> On Wed, Apr 03, 2024 at 02:12:40PM -0700, Nathan Chancellor wrote:
->>>> On Thu, Mar 21, 2024 at 09:36:23AM -0700, Suren Baghdasaryan wrote:
->>>>> From: Kent Overstreet <kent.overstreet@linux.dev>
->>>>>
->>>>> The next patch drops vmalloc.h from a system header in order to fix
->>>>> a circular dependency; this adds it to all the files that were pulling
->>>>> it in implicitly.
->>>>>
->>>>> Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
->>>>> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
->>>>> Reviewed-by: Pasha Tatashin <pasha.tatashin@soleen.com>
->>>>
->>>> I bisected an error that I see when building ARCH=loongarch allmodconfig
->>>> to commit 302519d9e80a ("asm-generic/io.h: kill vmalloc.h dependency")
->>>> in -next, which tells me that this patch likely needs to contain
->>>> something along the following lines, as LoongArch was getting
->>>> include/linux/sizes.h transitively through the vmalloc.h include in
->>>> include/asm-generic/io.h.
->>>
->>> gcc doesn't appear to be packaged for loongarch for debian (most other
->>> cross compilers are), so that's going to make it hard for me to test
->>> anything...
->>
->> The latest cross-compilers from Arnd [1] include a 13.2.0 one for
->> loongarch64 that works for me. Just in case you haven't heard of Arnds work
->> before and want to give it a shot.
->>
->> [1] https://mirrors.edge.kernel.org/pub/tools/crosstool/
-> 
-> Thanks for the pointer - but something seems to be busted with the
-> loongarch build, if I'm not mistaken; one of the included headers
-> references loongarch-def.h, but that's not included.
-> 
+In case [1], calling context does not need an mmiowb() call to be
+issued, otherwise it would do so itself. Such calls to
+mmiowb_set_pending() are either idempotent or no-ops.
 
-That file is part of gcc plugins. If you disable CONFIG_GCC_PLUGINS,
-it should build without having that issue. Of course, there may be other
-unrelated issues....
+In case [2], irrespective of when the interrupt occurs, the interrupt
+will acquire and release its locks prior to its return, nesting_count
+will continue balanced. In the worst case, the interrupted critical
+section during a mmiowb_spin_unlock() call observes an mmiowb to be
+pending and afterward is interrupted, leading to an extraneous call to
+mmiowb(). This data race is clearly innocuous.
 
+Resolve KCSAN warnings of type [1] by means of READ_ONCE, WRITE_ONCE.
+As increments and decrements to nesting_count are balanced by interrupt
+contexts, resolve type [2] warnings by simply revoking instrumentation,
+with data_race() rather than READ_ONCE() and WRITE_ONCE(), the memory
+consistency semantics of plain-accesses will still lead to correct
+behaviour.
 
+Signed-off-by: Rohan McLure <rmclure@linux.ibm.com>
+Reported-by: Michael Ellerman <mpe@ellerman.id.au>
+Reported-by: Gautam Menghani <gautam@linux.ibm.com>
+Tested-by: Gautam Menghani <gautam@linux.ibm.com>
+Acked-by: Arnd Bergmann <arnd@arndb.de>
+---
+Previously discussed here:
+https://lore.kernel.org/linuxppc-dev/20230510033117.1395895-4-rmclure@linux.ibm.com/
+But pushed back due to affecting other architectures. Reissuing, to
+linuxppc-dev, as it does not enact a functional change.
+---
+ include/asm-generic/mmiowb.h | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
+
+diff --git a/include/asm-generic/mmiowb.h b/include/asm-generic/mmiowb.h
+index 5698fca3bf56..f8c7c8a84e9e 100644
+--- a/include/asm-generic/mmiowb.h
++++ b/include/asm-generic/mmiowb.h
+@@ -37,25 +37,28 @@ static inline void mmiowb_set_pending(void)
+ 	struct mmiowb_state *ms = __mmiowb_state();
+ 
+ 	if (likely(ms->nesting_count))
+-		ms->mmiowb_pending = ms->nesting_count;
++		WRITE_ONCE(ms->mmiowb_pending, ms->nesting_count);
+ }
+ 
+ static inline void mmiowb_spin_lock(void)
+ {
+ 	struct mmiowb_state *ms = __mmiowb_state();
+-	ms->nesting_count++;
++
++	/* Increment need not be atomic. Nestedness is balanced over interrupts. */
++	data_race(ms->nesting_count++);
+ }
+ 
+ static inline void mmiowb_spin_unlock(void)
+ {
+ 	struct mmiowb_state *ms = __mmiowb_state();
++	u16 pending = READ_ONCE(ms->mmiowb_pending);
+ 
+-	if (unlikely(ms->mmiowb_pending)) {
+-		ms->mmiowb_pending = 0;
++	WRITE_ONCE(ms->mmiowb_pending, 0);
++	if (unlikely(pending))
+ 		mmiowb();
+-	}
+ 
+-	ms->nesting_count--;
++	/* Decrement need not be atomic. Nestedness is balanced over interrupts. */
++	data_race(ms->nesting_count--);
+ }
+ #else
+ #define mmiowb_set_pending()		do { } while (0)
 -- 
-#Randy
+2.44.0
+
 
