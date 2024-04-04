@@ -1,146 +1,199 @@
-Return-Path: <linux-arch+bounces-3451-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3452-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EED5899089
-	for <lists+linux-arch@lfdr.de>; Thu,  4 Apr 2024 23:39:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F3BF899123
+	for <lists+linux-arch@lfdr.de>; Fri,  5 Apr 2024 00:18:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 722F91C224FC
-	for <lists+linux-arch@lfdr.de>; Thu,  4 Apr 2024 21:39:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E2CE71F23293
+	for <lists+linux-arch@lfdr.de>; Thu,  4 Apr 2024 22:18:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F43B13BC36;
-	Thu,  4 Apr 2024 21:39:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7007413C664;
+	Thu,  4 Apr 2024 22:18:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="XK1jAX6K"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iNpgHmou"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B001413BAF5
-	for <linux-arch@vger.kernel.org>; Thu,  4 Apr 2024 21:39:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D80AB1C6AF
+	for <linux-arch@vger.kernel.org>; Thu,  4 Apr 2024 22:17:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712266766; cv=none; b=VeGn0ukGdkiPi6hZEYWB1CFxxFN/Ti5LHrCDwecUhJinpS2ZWslcpg4gti8Q6xs/q5hkpIaIz5ZqYDqZ0BAe6Q9D4g2k2k9jYAw3ZrHjwi93b5G8ELVI8X8Z2WWPBP6WhWHPYEJu82TAArKHU46k5bvXs02dFJqaEXIup6QSiII=
+	t=1712269081; cv=none; b=rvyJTNZG//ZQIA14DFgk137jj0y2Jp7uzYC2ENVtokh9XmBlZB426m3UFm4XsHPLYFvy1icsGnM6D1QZijwM/7BLP/k/55zL5ElijvLGfkJemFtxfw2rtMie8FxNDMlAOBITlamW+NvHlz3Nx5ELgXpxNauRU92MfskKsFP+UrY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712266766; c=relaxed/simple;
-	bh=Zt3p9tm6ccxc55MDuLlmUGMbvykDWgHwcdcfZ9QX5/k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PJHAvQAJFeEdyv1IpIofvNOGV3lVvIdVe6Yco0Ge0gETEiCUrNqDV5bFo3OHebpOu/V3P+rHsXS/+xnHRC+zQHXDWrAoFqn2/3TariDw1lMSitN/Wi4JVFPgdcYCDFfr1N1c307adghNN81QjVj7SlzmMxHeWDGJ5smZlVF996g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=XK1jAX6K; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1e220e40998so11149555ad.1
-        for <linux-arch@vger.kernel.org>; Thu, 04 Apr 2024 14:39:24 -0700 (PDT)
+	s=arc-20240116; t=1712269081; c=relaxed/simple;
+	bh=RZPrq+xVDjiyzuvgmiC5bztMCL91wQIMW6JQhQhfvYY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YcEP+wzhB4yXYyEqPlV1ANgUiiDh38SHo85u7QcMqypdtokubuzrGo3JIsSOpzPICzu7cvf35etIMjSjICbp7l9u5ssg2yaaHYgUIKdKFayrh4q3xtxx0NxWAVYb/UM5DU8NMw4trI96EaasFzvYsJmWsW8eT2AJOqfncUe96Dk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=iNpgHmou; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-34388753650so718195f8f.3
+        for <linux-arch@vger.kernel.org>; Thu, 04 Apr 2024 15:17:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1712266764; x=1712871564; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fPArP3ejLo3l+aX8ToKGJxurh8OEHx4iQxc5XkqOF4g=;
-        b=XK1jAX6K8VflAzuRMINM++28+YHBOii5vu8nrxPFZ3gyFsnviquih7GU0vTtK6FX+2
-         1sGWaS2U8myytUsmi7UmwKxVQQGZl+vWd6wrkz2OA2mLNKomKepdIhp8jk9h0ZSQ76XV
-         5MeG/9wWhrDQ1qlxAGKRtmV/SGtznnQbJsMjxbwH4YheOtY3pq02RKu82sgXTnpMCy+R
-         JQ+mvfq2QOaE8zwWRXGBgTQ7wjESzbqnc888VZq/cVJTO3vtU662o00QO+lYpiQC6i/1
-         6irOXT1XRWWzOSKw3WpArC5/sQTCltw++pzk8kcPHQC/9dH46cmh4fgwxbx5ng5n4VQa
-         UBlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712266764; x=1712871564;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1712269077; x=1712873877; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fPArP3ejLo3l+aX8ToKGJxurh8OEHx4iQxc5XkqOF4g=;
-        b=XMtjGp7WaG0aITIN82JIqE3jMp4GvqHOCQ5P4BlTtJ2aOwDtf6ZsF+p0VD7crnoZTU
-         U5pBMZy9LJoNhofzYR+tHsnxi5mkFOjZAJvvY4uR/CIn9AevKCDPmA9LppaCwZ1ZTT42
-         YXPtt65zzp2/RO6BPgsrSdjOK/SfN9e8G3k3DEFKjPJ+QIHHs0l1I043Aqh86Fkh/4EG
-         Qsa5iSMLwfSvn7J+uMxd66BKUB+Q0plgjyI2Elqne6Mji28cvqhmCRJovDeVIihKZnbf
-         9XPfNpyk6E1gW084qi50ye8Tk/ySXAkChIPMnklLDn5lH12Fm5c4kzJAipEpzHH7mpxL
-         ICJw==
-X-Forwarded-Encrypted: i=1; AJvYcCXVtS7bPiGlKwubBEFaFOY0ZY66/447yxZQ/HC18w1fqee3Qm/3MiPuq/cH5X960Y/Y+LJt8blg1AKKm30tEG0FnvE//AYBU0OgxA==
-X-Gm-Message-State: AOJu0Yzarcamzk/9y0owjZLOfXlcl1WR7w8iSR4zo1sDhwQ4BPRMFj1v
-	48UKDgeMuKYibJK4yQquh0xD2Ts2s4GkKtIXcJCGQZ95yGaCAMT0GZYXN+W5I6o=
-X-Google-Smtp-Source: AGHT+IFPYkwFkCWA+SA7mff7SB9WJfJBYnvlFHy9eSaPUSq9JIjSJtsLm/B02BDU1sUJv+HfqHd+4Q==
-X-Received: by 2002:a17:902:f68a:b0:1e2:887a:68a7 with SMTP id l10-20020a170902f68a00b001e2887a68a7mr4103646plg.33.1712266763893;
-        Thu, 04 Apr 2024 14:39:23 -0700 (PDT)
-Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id l10-20020a170903244a00b001e29833ada6sm89367pls.140.2024.04.04.14.39.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Apr 2024 14:39:23 -0700 (PDT)
-Date: Thu, 4 Apr 2024 14:39:20 -0700
-From: Deepak Gupta <debug@rivosinc.com>
-To: David Hildenbrand <david@redhat.com>
-Cc: paul.walmsley@sifive.com, rick.p.edgecombe@intel.com,
-	broonie@kernel.org, Szabolcs.Nagy@arm.com, kito.cheng@sifive.com,
-	keescook@chromium.org, ajones@ventanamicro.com,
-	conor.dooley@microchip.com, cleger@rivosinc.com,
-	atishp@atishpatra.org, alex@ghiti.fr, bjorn@rivosinc.com,
-	alexghiti@rivosinc.com, samuel.holland@sifive.com, conor@kernel.org,
-	linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-mm@kvack.org, linux-arch@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, corbet@lwn.net, palmer@dabbelt.com,
-	aou@eecs.berkeley.edu, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, oleg@redhat.com,
-	akpm@linux-foundation.org, arnd@arndb.de, ebiederm@xmission.com,
-	Liam.Howlett@oracle.com, vbabka@suse.cz, lstoakes@gmail.com,
-	shuah@kernel.org, brauner@kernel.org, andy.chiu@sifive.com,
-	jerry.shih@sifive.com, hankuan.chen@sifive.com,
-	greentime.hu@sifive.com, evan@rivosinc.com, xiao.w.wang@intel.com,
-	charlie@rivosinc.com, apatel@ventanamicro.com,
-	mchitale@ventanamicro.com, dbarboza@ventanamicro.com,
-	sameo@rivosinc.com, shikemeng@huaweicloud.com, willy@infradead.org,
-	vincent.chen@sifive.com, guoren@kernel.org, samitolvanen@google.com,
-	songshuaishuai@tinylab.org, gerg@kernel.org, heiko@sntech.de,
-	bhe@redhat.com, jeeheng.sia@starfivetech.com, cyy@cyyself.name,
-	maskray@google.com, ancientmodern4@gmail.com,
-	mathis.salmen@matsal.de, cuiyunhui@bytedance.com,
-	bgray@linux.ibm.com, mpe@ellerman.id.au, baruch@tkos.co.il,
-	alx@kernel.org, catalin.marinas@arm.com, revest@chromium.org,
-	josh@joshtriplett.org, shr@devkernel.io, deller@gmx.de,
-	omosnace@redhat.com, ojeda@kernel.org, jhubbard@nvidia.com,
-	Mike Rapoport <rppt@kernel.org>
-Subject: Re: [PATCH v3 09/29] mm: abstract shadow stack vma behind
- `vma_is_shadow_stack`
-Message-ID: <Zg8eCPJvmk93vKQK@debug.ba.rivosinc.com>
-References: <20240403234054.2020347-1-debug@rivosinc.com>
- <20240403234054.2020347-10-debug@rivosinc.com>
- <c438ea3a-24bc-470b-a2eb-6e7517bd4362@redhat.com>
+        bh=eIW+Z3FuH4Tlrbj9QrjroPzWQnEb4hQ4AxEw1tDZfk4=;
+        b=iNpgHmouikM3eS2bzDsViRnQPf4IYT0AntRq/pLUycBts1tEtNDBhLAHPWLbGGQuwD
+         QJtB2nqOmcrDZKQqkypAxU9t8BXasLVzM76U6doxh0UD6M0mrI/XgijigKuOcMI2NCIb
+         whmis5i9jCy0XZKIvDNYWGW+znPQeHBEMsfX8rggozuXIuCHf0B+o1YIbhjdkYuLbC6k
+         nmWR9tyq0QFPwh7UUDhI4p73EwefaEhKQVvrdC/li4M77bvJ/3+wYenQP3FJrzs+WVyB
+         h/Tam1ckIRELByLvoQC8mEYZ6O8sMXwbWpK4qyuHRrWaDSukD/B1KlHnI6ojMiGvDvbK
+         uIeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712269077; x=1712873877;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eIW+Z3FuH4Tlrbj9QrjroPzWQnEb4hQ4AxEw1tDZfk4=;
+        b=JsznC2lHlm8kHBqyvut1D0f1l2D9s5oM3F8eswd2R0VPogC8ec5amswIPizzMJlJto
+         Z+q8eKPluEox3nVQ1iOLuG6ZfePADKkOYUgsKz8Mfbn8FI7PRunOuVlDnz37o/Aqxwx1
+         TLrV8NLWLKVhTmdFgygyeqrYl9iNqCRnRobHMjUHsf6v29OmY7ja8VVZysPTTPqJwkZk
+         x04FvF09ZHx4xd6yH7WEq7P0zsRiPbGPZNJ30qKUqQQUsfBomgz2RuVERXcOiLDXXRYQ
+         DAFEx6nCpB/OHvT3V+lgtLVv+ODzOczKb5vFUfgO1DgojnA8rdHmx1ptKtH7I0J8GSw7
+         CluA==
+X-Forwarded-Encrypted: i=1; AJvYcCVjWjPx6Cjhu6G9OkS/QJVnUQOFd+CK6rh2pz9WmWkkZ+ruRR36MGAVzT9eog254Njq60PTmGVQ4Xesd9BGzmUaM/+V93ZxtBHdWA==
+X-Gm-Message-State: AOJu0Yyr/8jXuumVzZnX/c+AaOVnJZ+ObPOkaR6za5sUI2sFIJQHnzCS
+	wYUwzec6wQK/ZzddNJOIVa9W0AXSfwyuR2+OvODJPgu6kcgfgLjaX2RZ622/fmt7TYUcNq+2MVE
+	9WGMSwORK6PQORz0CN5aLUmaIDfp6nD8zMNW6
+X-Google-Smtp-Source: AGHT+IEoGycg7Q6yz1U10yVcrqSmmGhsvl59dTKCzdbY+AGkKJwTyJBRF58S2bqCqewHCyhhbzL+kREAY0nZt0Z/KC8=
+X-Received: by 2002:a5d:56cd:0:b0:343:a117:7d2 with SMTP id
+ m13-20020a5d56cd000000b00343a11707d2mr434133wrw.71.1712269077043; Thu, 04 Apr
+ 2024 15:17:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <c438ea3a-24bc-470b-a2eb-6e7517bd4362@redhat.com>
+References: <20240404165404.3805498-1-surenb@google.com> <Zg7dmp5VJkm1nLRM@casper.infradead.org>
+ <CAJuCfpHbTCwDERz+Hh+aLZzNdtSFKA+Q7sW-xzvmFmtyHCqROg@mail.gmail.com>
+In-Reply-To: <CAJuCfpHbTCwDERz+Hh+aLZzNdtSFKA+Q7sW-xzvmFmtyHCqROg@mail.gmail.com>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Thu, 4 Apr 2024 15:17:43 -0700
+Message-ID: <CAJuCfpHy5Xo76S7h9rEuA3cQ1pVqurL=wmtQ2cx9-xN1aa_C_A@mail.gmail.com>
+Subject: Re: [PATCH 1/1] mm: change inlined allocation helpers to account at
+ the call site
+To: Matthew Wilcox <willy@infradead.org>
+Cc: akpm@linux-foundation.org, joro@8bytes.org, will@kernel.org, 
+	trond.myklebust@hammerspace.com, anna@kernel.org, arnd@arndb.de, 
+	herbert@gondor.apana.org.au, davem@davemloft.net, jikos@kernel.org, 
+	benjamin.tissoires@redhat.com, tytso@mit.edu, jack@suse.com, 
+	dennis@kernel.org, tj@kernel.org, cl@linux.com, jakub@cloudflare.com, 
+	penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com, 
+	vbabka@suse.cz, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	iommu@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	linux-nfs@vger.kernel.org, linux-acpi@vger.kernel.org, 
+	acpica-devel@lists.linux.dev, linux-arch@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-input@vger.kernel.org, linux-ext4@vger.kernel.org, linux-mm@kvack.org, 
+	netdev@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	kent.overstreet@linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 04, 2024 at 09:02:17PM +0200, David Hildenbrand wrote:
->On 04.04.24 01:34, Deepak Gupta wrote:
->>  		}
->>-	} else if (!(vm_flags & VM_READ)) {
->>+	} else if (!(vm_flags & VM_READ) && !vma_is_shadow_stack(vm_flags)) {
->>+	/* reads allowed if its shadow stack vma */
->>  		if (!(gup_flags & FOLL_FORCE))
->>  			return -EFAULT;
->>  		/*
+On Thu, Apr 4, 2024 at 10:08=E2=80=AFAM Suren Baghdasaryan <surenb@google.c=
+om> wrote:
 >
->Unless I am missing something, this is not a simple cleanup. It should 
->go into a separate patch with a clearly documented reason for that 
->change.
+> On Thu, Apr 4, 2024 at 10:04=E2=80=AFAM Matthew Wilcox <willy@infradead.o=
+rg> wrote:
+> >
+> > On Thu, Apr 04, 2024 at 09:54:04AM -0700, Suren Baghdasaryan wrote:
+> > > +++ b/include/linux/dma-fence-chain.h
+> > > @@ -86,10 +86,7 @@ dma_fence_chain_contained(struct dma_fence *fence)
+> > >   *
+> > >   * Returns a new struct dma_fence_chain object or NULL on failure.
+> > >   */
+> > > -static inline struct dma_fence_chain *dma_fence_chain_alloc(void)
+> > > -{
+> > > -     return kmalloc(sizeof(struct dma_fence_chain), GFP_KERNEL);
+> > > -};
+> > > +#define dma_fence_chain_alloc()      kmalloc(sizeof(struct dma_fence=
+_chain), GFP_KERNEL)
+> >
+> > You've removed some typesafety here.  Before, if I wrote:
+> >
+> >         struct page *page =3D dma_fence_chain_alloc();
+> >
+> > the compiler would warn me that I've done something stupid.  Now it
+> > can't tell.  Suggest perhaps:
+> >
+> > #define dma_fence_chain_alloc()                                        =
+   \
+> >         (struct dma_fence_chain *)kmalloc(sizeof(struct dma_fence_chain=
+), \
+> >                                                 GFP_KERNEL)
+> >
+> > but maybe there's a better way of doing that.  There are a few other
+> > occurrences of the same problem in this monster patch.
+>
+> Got your point.
 
-I tried that here
-https://lore.kernel.org/linux-mm/CAKC1njTPBqtsAOn-CWhB+-8FaZ2KWkkz-vRZr7MZq=0yLUdjcQ@mail.gmail.com/T/
-But at that time, VM_SHADOW_STACK for riscv meant only VM_WRITE. So I think
-there was obvious uneasiness with that part.
+Ironically, checkpatch generates warnings for these type casts:
 
-Now we have VM_SHADOW_STACK pretty much same for all arches and only 64bit.
-I'll try it again as a separate patch.
+WARNING: unnecessary cast may hide bugs, see
+http://c-faq.com/malloc/mallocnocast.html
+#425: FILE: include/linux/dma-fence-chain.h:90:
++ ((struct dma_fence_chain *)kmalloc(sizeof(struct dma_fence_chain),
+GFP_KERNEL))
+
+I guess I can safely ignore them in this case (since we cast to the
+expected type)?
 
 >
->-- 
->Cheers,
+> >
+> > > +++ b/include/linux/hid_bpf.h
+> > > @@ -149,10 +149,7 @@ static inline int hid_bpf_connect_device(struct =
+hid_device *hdev) { return 0; }
+> > >  static inline void hid_bpf_disconnect_device(struct hid_device *hdev=
+) {}
+> > >  static inline void hid_bpf_destroy_device(struct hid_device *hid) {}
+> > >  static inline void hid_bpf_device_init(struct hid_device *hid) {}
+> > > -static inline u8 *call_hid_bpf_rdesc_fixup(struct hid_device *hdev, =
+u8 *rdesc, unsigned int *size)
+> > > -{
+> > > -     return kmemdup(rdesc, *size, GFP_KERNEL);
+> > > -}
+> > > +#define call_hid_bpf_rdesc_fixup(_hdev, _rdesc, _size) kmemdup(_rdes=
+c, *(_size), GFP_KERNEL)
+> >
+> > here
+> >
+> > > -static inline handle_t *jbd2_alloc_handle(gfp_t gfp_flags)
+> > > -{
+> > > -     return kmem_cache_zalloc(jbd2_handle_cache, gfp_flags);
+> > > -}
+> > > +#define jbd2_alloc_handle(_gfp_flags)        kmem_cache_zalloc(jbd2_=
+handle_cache, _gfp_flags)
+> >
+> > here
+> >
+> > > +++ b/include/linux/skmsg.h
+> > > @@ -410,11 +410,8 @@ void sk_psock_stop_verdict(struct sock *sk, stru=
+ct sk_psock *psock);
+> > >  int sk_psock_msg_verdict(struct sock *sk, struct sk_psock *psock,
+> > >                        struct sk_msg *msg);
+> > >
+> > > -static inline struct sk_psock_link *sk_psock_init_link(void)
+> > > -{
+> > > -     return kzalloc(sizeof(struct sk_psock_link),
+> > > -                    GFP_ATOMIC | __GFP_NOWARN);
+> > > -}
+> > > +#define sk_psock_init_link() \
+> > > +             kzalloc(sizeof(struct sk_psock_link), GFP_ATOMIC | __GF=
+P_NOWARN)
+> >
+> > here
+> >
+> > ... I kind of gave up at this point.  You'll want to audit for yourself
+> > anyway ;-)
 >
->David / dhildenb
->
+> Yes, I'll go over it and will make the required changes. Thanks for
+> looking into it!
+> Suren.
 
