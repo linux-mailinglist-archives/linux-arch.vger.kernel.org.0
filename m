@@ -1,131 +1,89 @@
-Return-Path: <linux-arch+bounces-3446-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3447-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 880A3898EE2
-	for <lists+linux-arch@lfdr.de>; Thu,  4 Apr 2024 21:21:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3EF78898EF4
+	for <lists+linux-arch@lfdr.de>; Thu,  4 Apr 2024 21:26:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 289531F21DD2
-	for <lists+linux-arch@lfdr.de>; Thu,  4 Apr 2024 19:21:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E87A81F21B8A
+	for <lists+linux-arch@lfdr.de>; Thu,  4 Apr 2024 19:26:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 520751339A6;
-	Thu,  4 Apr 2024 19:21:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6641E134438;
+	Thu,  4 Apr 2024 19:26:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="KBQj/lSE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ubo7Ap3m"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE2CC133439
-	for <linux-arch@vger.kernel.org>; Thu,  4 Apr 2024 19:21:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D9D7134434;
+	Thu,  4 Apr 2024 19:26:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712258474; cv=none; b=Uj9dizwS23QyTKFdDsFlwKZoY6ABy8nAuCuSrVmDwFPjQpAOyiPqVpZg1KtH58o9yWmV6FvOU8+rjY+gCio2gWZ7RDGSnDqYnLpIni2qgvyoDpzWpCfrxZQyIogd+oko/pOKTIB6UG6B1fqV6/27zKOsqoZ/YrWgGUnzXKCjYMM=
+	t=1712258801; cv=none; b=D4hCaClkkqW8e7THKmOKKtGmAcURNjU7ypd+ZLtzK8fwxd/65JfYDxwm9UHd9S5L/R4iq6pcJmeI+QHt31Ky61ftCW4/ncUlffS0dzh9KATmv2ht4cXpsxuUDdUY5gjDj3WgI6hGADo1Bp3D1gEd0L+n7tfcpA/epr239FTZCE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712258474; c=relaxed/simple;
-	bh=CVr2IxXDHjqtPIjdakFNnsSdpqceotjDCl0kfyrywLA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iN3iyYiu5Oh1Fk1CL6hJ8iut91NeVi98ECRp7lovWGuz+DhxOQfyfQcpSWvPuY+rdVadfPYx20tQvRU19acqzHUdiC8eXG4k4EJWqgR8LYU8ai0JYH7um9lpFhAsul+4cLiKKfd2faI/9VlousE8HVPKhztGhN8LPWwdo++uOSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=KBQj/lSE; arc=none smtp.client-ip=209.85.128.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-614b02f8ed6so21959317b3.0
-        for <linux-arch@vger.kernel.org>; Thu, 04 Apr 2024 12:21:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1712258472; x=1712863272; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Dl/FopeODNdULB5NSwrsajN91zng/VnqM090COn1yWc=;
-        b=KBQj/lSEZpu6lpVtuj6vzcFweWjT8/rKVwz+ZUh6Lv3d8KOkBbvx5uXejk73IwFE35
-         wdKPc+rm0gS14kpdoo06ZOpjSb8GIKeVAh6ZDJdBKJXsIXoB2ZmYJU+yy6gzGJJFmX3P
-         rcJe1Uhilps6C5LDxJUWay3FSyt4mwewYB2J5ANZB/0e6H/WDkTSyoZCL4stNx6dkZjM
-         j2NvxGCyjfPxVs47V+zWIOO9AZmtUvBT4m0snww90NXGvRpfGyUiyUDiIP77xBYD5pZO
-         9Gv2qNFtM1BalkylcoJUt6mXM834x79Rr0oVTr6MaUbOo0F5ZN/Dfr8aNgjNkpR9ePCW
-         +DhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712258472; x=1712863272;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Dl/FopeODNdULB5NSwrsajN91zng/VnqM090COn1yWc=;
-        b=ja4jToLRvJAdNVSpHDbNqRefUZ9DEXf7s3+7Le5kUVjRoYBii81ZDzPeA+8PgJwRR0
-         F+LctvHHQ1IrCtDIxWJt0OHh2pUieTNTQ8sYSL8qnEMhQKzxx6wxP1Xx5Q9fp6Lmad8f
-         YxMMDb3qif63am3ufM2GD2fZ24wocL94I2/rNkI6BnTp+KCz220I2o4cDsIvJDkhsxO6
-         tvLyHqAtqok1JTJfgAVVmAzF3h27i4Rl0hhJIyMRrf+61kSOBbHCZ83GIAzg3iiy+012
-         tbgOO5xipWddMtWfbp6NuKBaIv+VtGL6iHmKLimYGhT5rwSOlFdA/j3I23Ymy+eA4FL9
-         SQeA==
-X-Forwarded-Encrypted: i=1; AJvYcCWBUy9kwZEMEFV5LJflPE8hTH8nEBl37fhHJAHvF17mUHxPcpRw0YxmZwollSopsLnanEOWIwW2akVU7A6+Hys5C7hglGDepPvBYA==
-X-Gm-Message-State: AOJu0YzQJDPNOAJustWMZTISJ/7Gv7BFnQHbAMV/1PLes3wUN6wZqkmA
-	N7r10Vno34mAMlaxCaHFqG6sHKFLZDfJSYB/kGmAU5SmZHqJyOcV8P2+WCqBxqsbBxOKtoie0RY
-	ey6qTnBYeOWL/OUxk8y3AlTyrwksX7XRbga6KNQ==
-X-Google-Smtp-Source: AGHT+IGyZ3JMNrz8F2bkpirKnyuGQawxZoeXVCC/y6GzZBE4nmRVGOFkLbxGUyQaEHSmHXKt9NtfMMywjFKnI39zfuA=
-X-Received: by 2002:a0d:dd8c:0:b0:615:e10:691c with SMTP id
- g134-20020a0ddd8c000000b006150e10691cmr414269ywe.1.1712258471733; Thu, 04 Apr
- 2024 12:21:11 -0700 (PDT)
+	s=arc-20240116; t=1712258801; c=relaxed/simple;
+	bh=ssP3YZU5waXQiH22YNGD9yi3Jxi9Fignl3F7DVlkXhE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=OcvZxndPgUoLm5lVGDfr7fmVG1J2n2is/lLsUkR1/aa/1EqlXAeD4AoMuwmnut0l+lkyLW6eNdyO2u5SQ/N5ISy9269uWahsQOLkshFo9T/qdpMmclxw/ypWF6HFCWvVq8Pkdl+KMq5biMM5AZ4kJSgv35khYiG8eoV6LDhJl7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ubo7Ap3m; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B4B3C433A6;
+	Thu,  4 Apr 2024 19:26:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712258800;
+	bh=ssP3YZU5waXQiH22YNGD9yi3Jxi9Fignl3F7DVlkXhE=;
+	h=Date:From:To:Cc:Subject:Reply-To:From;
+	b=Ubo7Ap3msJY2jhF+Fdpiy/tPVJqdY2ghywksCUmuOxIcWarKKCFIGLCSLmCcFWQFy
+	 z7+EaZXi/KipZzeLXfqmMNv8SdAckGxUiPyjPU6mz5Q+KPFzwWGQN+Qpq4dAClxKMa
+	 asq1j+4scmaJMTATIrLpHkJMPK/Sinig8MhoBmwC6JeSb4XrRnipAaNsBGaTxnLVnV
+	 mBZhpVj0J9CAP4qFrbyrqY/mGAOa27vkZ6NcjF9uv0vPL4BZpIiycl9tC4hFVRG7Om
+	 pT9jMwnFF1saTqf6Q7vC2Awrar6ksf2d/RMAsen53kDcSesmkjmvkc3Q8W6+RGJUi9
+	 Kul/ENOo9QqYA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 46CE1CE0D0C; Thu,  4 Apr 2024 12:26:40 -0700 (PDT)
+Date: Thu, 4 Apr 2024 12:26:40 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	kernel-team@meta.com, mingo@kernel.org
+Cc: stern@rowland.harvard.edu, parri.andrea@gmail.com, will@kernel.org,
+	peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
+	dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+	akiyks@gmail.com
+Subject: [PATCH memory-model 0/3] LKMM updates for v6.10
+Message-ID: <8550daf1-4bfd-4607-8325-bfb7c1e2d8c7@paulmck-laptop>
+Reply-To: paulmck@kernel.org
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240403234054.2020347-1-debug@rivosinc.com> <20240403234054.2020347-9-debug@rivosinc.com>
- <8fb37319-288c-4f77-9cd7-92f17bb567ee@redhat.com> <d3689521-58a7-47df-bd6a-0e2e60464491@sirena.org.uk>
- <604863a6-0387-4f29-9c4e-5ef86a8ca904@redhat.com>
-In-Reply-To: <604863a6-0387-4f29-9c4e-5ef86a8ca904@redhat.com>
-From: Deepak Gupta <debug@rivosinc.com>
-Date: Thu, 4 Apr 2024 12:21:00 -0700
-Message-ID: <CAKC1njRT0GHJEY2NYWuPm7Az7yCj0ZWSevYj1NY6npr136jfsA@mail.gmail.com>
-Subject: Re: [PATCH v3 08/29] mm: Define VM_SHADOW_STACK for RISC-V
-To: David Hildenbrand <david@redhat.com>
-Cc: Mark Brown <broonie@kernel.org>, paul.walmsley@sifive.com, 
-	rick.p.edgecombe@intel.com, Szabolcs.Nagy@arm.com, kito.cheng@sifive.com, 
-	keescook@chromium.org, ajones@ventanamicro.com, conor.dooley@microchip.com, 
-	cleger@rivosinc.com, atishp@atishpatra.org, alex@ghiti.fr, bjorn@rivosinc.com, 
-	alexghiti@rivosinc.com, samuel.holland@sifive.com, conor@kernel.org, 
-	linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, linux-mm@kvack.org, 
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, corbet@lwn.net, 
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, robh+dt@kernel.org, 
-	krzysztof.kozlowski+dt@linaro.org, oleg@redhat.com, akpm@linux-foundation.org, 
-	arnd@arndb.de, ebiederm@xmission.com, Liam.Howlett@oracle.com, vbabka@suse.cz, 
-	lstoakes@gmail.com, shuah@kernel.org, brauner@kernel.org, 
-	andy.chiu@sifive.com, jerry.shih@sifive.com, hankuan.chen@sifive.com, 
-	greentime.hu@sifive.com, evan@rivosinc.com, xiao.w.wang@intel.com, 
-	charlie@rivosinc.com, apatel@ventanamicro.com, mchitale@ventanamicro.com, 
-	dbarboza@ventanamicro.com, sameo@rivosinc.com, shikemeng@huaweicloud.com, 
-	willy@infradead.org, vincent.chen@sifive.com, guoren@kernel.org, 
-	samitolvanen@google.com, songshuaishuai@tinylab.org, gerg@kernel.org, 
-	heiko@sntech.de, bhe@redhat.com, jeeheng.sia@starfivetech.com, 
-	cyy@cyyself.name, maskray@google.com, ancientmodern4@gmail.com, 
-	mathis.salmen@matsal.de, cuiyunhui@bytedance.com, bgray@linux.ibm.com, 
-	mpe@ellerman.id.au, baruch@tkos.co.il, alx@kernel.org, 
-	catalin.marinas@arm.com, revest@chromium.org, josh@joshtriplett.org, 
-	shr@devkernel.io, deller@gmx.de, omosnace@redhat.com, ojeda@kernel.org, 
-	jhubbard@nvidia.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, Apr 4, 2024 at 12:15=E2=80=AFPM David Hildenbrand <david@redhat.com=
-> wrote:
->
-> On 04.04.24 21:04, Mark Brown wrote:
-> > On Thu, Apr 04, 2024 at 08:58:06PM +0200, David Hildenbrand wrote:
-> >
-> >> or even introduce some ARCH_HAS_SHADOW_STACK so we can remove these
-> >> arch-specific thingies here.
-> >
-> > It would be convenient if you could pull the ARCH_HAS_USER_SHADOW_STACK
-> > patch out of my clone3 series to do that:
-> >
-> >     https://lore.kernel.org/all/20240203-clone3-shadow-stack-v5-3-322c6=
-9598e4b@kernel.org/
->
-> Crazy, I completely forgot about that one. Yes!
+Hello!
 
-I missed that. Roger.
-Will do that in the next series.
-Thanks.
+This series contains LKMM documentation updates:
+
+1.	Documentation/litmus-tests: Add locking tests to README.
+
+2.	Documentation/litmus-tests: Demonstrate unordered failing cmpxchg.
+
+3.	Documentation/atomic_t: Emphasize that failed atomic operations
+	give no ordering.
+
+						Thanx, Paul
+
+------------------------------------------------------------------------
+
+ Documentation/litmus-tests/README                                   |   48 ++++++----
+ b/Documentation/atomic_t.txt                                        |    4 
+ b/Documentation/litmus-tests/README                                 |   29 ++++++
+ b/Documentation/litmus-tests/atomic/cmpxchg-fail-ordered-1.litmus   |   34 +++++++
+ b/Documentation/litmus-tests/atomic/cmpxchg-fail-ordered-2.litmus   |   30 ++++++
+ b/Documentation/litmus-tests/atomic/cmpxchg-fail-unordered-1.litmus |   33 ++++++
+ b/Documentation/litmus-tests/atomic/cmpxchg-fail-unordered-2.litmus |   30 ++++++
+ 7 files changed, 190 insertions(+), 18 deletions(-)
 
