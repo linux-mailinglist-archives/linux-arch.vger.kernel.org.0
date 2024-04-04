@@ -1,118 +1,145 @@
-Return-Path: <linux-arch+bounces-3434-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3435-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 918A2897DA0
-	for <lists+linux-arch@lfdr.de>; Thu,  4 Apr 2024 04:14:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4155A897DE9
+	for <lists+linux-arch@lfdr.de>; Thu,  4 Apr 2024 04:56:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4D1E4287698
-	for <lists+linux-arch@lfdr.de>; Thu,  4 Apr 2024 02:14:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6E0A01C232B1
+	for <lists+linux-arch@lfdr.de>; Thu,  4 Apr 2024 02:56:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CC5A1AAD3;
-	Thu,  4 Apr 2024 02:14:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C75F01CD2D;
+	Thu,  4 Apr 2024 02:55:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="VyMVQ3zt"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="DOYOq1kt"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3E123233;
-	Thu,  4 Apr 2024 02:14:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F74EEEB2;
+	Thu,  4 Apr 2024 02:55:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712196868; cv=none; b=nUKkBUYxIFwNq3txgVe70WcL44+XfLNoqR5RzlRTYKnsLllyRrFl8q0/QikyNyjrxtVUAuySGAzpwpxuAl5BOk3I12WP46VlBfCwpabjqkPUo0aOrU9AqMYtx/WV+PuW4mJMOYDJtogHUJRsfOwZbTlyw/jE/KnW/bmfBwUz2CQ=
+	t=1712199359; cv=none; b=mSiz+APlstW1ljXZskE8dV+mg/iOxpb6u7p1+aCINou+Wy/MMTqUKqo0Z73Dp+3HUt1ZYevStMNpWVylHKEFhIjXVyJiiXAz6V9wDZVxDFEWd+cFL8kJL/R1V03jjnJ3TNGfCNxhV6AizvhvQUbDqn4FhHNFlbBkF5GuVJcSENc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712196868; c=relaxed/simple;
-	bh=R4aUilhN/aKLzJiF+HvkOFiYVxByUuTPeENIZPQUzeM=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=RmIjYTi/IF4DjLMYkZQSBBYwcWRfhMoRhZXBKulQQl1GO4SrYk0fZmZR3wHZf9tNjT1hk8ehz1ZxnQvF7hUG95hUl+7GQ3KKVYafn/jS0L5Bwey9bC14FNU0c2/Lxv1gD3jOPZ15A6Z5ImWS5B130/TR4QT42IbBYID/EX5NbdQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=VyMVQ3zt; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-	s=201909; t=1712196863;
-	bh=0PcvpW5SQPrf4QnOqaQeX/XXu99U3a1qNIXPB0jb71k=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=VyMVQ3ztogSJTiIgLxBnLkNGFUgd68Qe2KDkfvwgzAo6UXogiTKbR69fLdEZZdu7n
-	 j3iNV2JgacCj30EfVfA0nufM6LLB0HhkUu4/gC0cH9GF15bjP6K55yY/SHfDcHG5LZ
-	 C6A3Ro/1onK6pyPh3jlVC2U8y95oPYSyx7VeOvKtcmV57g7fuqL83rvaMyFKYOVpxw
-	 oxm58pQDGWVdn2ucF5HZ6tep2QVSw9tARy9V9golouCtHYA3Tik7KGkuZEvWcLHYKF
-	 3HCUbzR0cNgClz2PklZaCGNb+9TQaIfvB8jeqaIi2XVH6tgkaEYydsWFGiIh6MP6A8
-	 HT6H386UWr5YA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4V94th0jq3z4wcQ;
-	Thu,  4 Apr 2024 13:14:19 +1100 (AEDT)
-From: Michael Ellerman <mpe@ellerman.id.au>
-To: Guenter Roeck <linux@roeck-us.net>, linux-kselftest@vger.kernel.org
-Cc: David Airlie <airlied@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
- =?utf-8?Q?Ma=C3=ADra?=
- Canal <mcanal@igalia.com>, Dan Carpenter <dan.carpenter@linaro.org>, Kees
- Cook <keescook@chromium.org>, Daniel Diaz <daniel.diaz@linaro.org>, David
- Gow <davidgow@google.com>, Arthur Grillo <arthurgrillo@riseup.net>,
- Brendan Higgins <brendan.higgins@linux.dev>, Naresh Kamboju
- <naresh.kamboju@linaro.org>, Maarten Lankhorst
- <maarten.lankhorst@linux.intel.com>, Andrew Morton
- <akpm@linux-foundation.org>, Maxime Ripard <mripard@kernel.org>, Ville
- =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>, Daniel Vetter
- <daniel@ffwll.ch>,
- Thomas Zimmermann <tzimmermann@suse.de>, dri-devel@lists.freedesktop.org,
- kunit-dev@googlegroups.com, linux-arch@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
- linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
- loongarch@lists.linux.dev, netdev@vger.kernel.org, x86@kernel.org, Guenter
- Roeck <linux@roeck-us.net>, Linux Kernel Functional Testing
- <lkft@linaro.org>
-Subject: Re: [PATCH v3 15/15] powerpc: Add support for suppressing warning
- backtraces
-In-Reply-To: <20240403131936.787234-16-linux@roeck-us.net>
-References: <20240403131936.787234-1-linux@roeck-us.net>
- <20240403131936.787234-16-linux@roeck-us.net>
-Date: Thu, 04 Apr 2024 13:14:16 +1100
-Message-ID: <874jch98nb.fsf@mail.lhotse>
+	s=arc-20240116; t=1712199359; c=relaxed/simple;
+	bh=woQPwN94SfTkVo2nkrzwmeNCeR1tcNFP0GrDX8U1n6g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oOO6hyjDrgYEyeqM6WiNg0nyVqPu4f/vz4XKFWPHMz52UQcdoxzDazSOxB3oMqBMcUMfT9xHtWHAHrFelZi4N6L4fTB5JuVDDJyWtG6G12VxXrEr2PKDTX5Gcy88ddmGjA+XXOnAq17cq/5d5nbGonlnwxcRHSIDi4brBAW34r4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=DOYOq1kt; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=b2H16tqCkJ6i90mQLPDpV1ZsYZDW4KEWWz9R9e+0Oig=; b=DOYOq1ktip9OrPqyMbwDoNqDtq
+	VB6HauYA/GGMAstDHOFp3X/FsrrMKv6YfXGD+QUD67yFNWCAcxzrPxwIanfV6S3L97X/TEZcue6x1
+	DEi6bN9guWRaHhck/D7JnDVcfH/ggNwDsVGjKVdBzXBBK0zM3jPjOcv259vAlag3vudS0kmURSzoM
+	aJYzWCso5E+7of2Er2nfWcoIvHsHbXLcHILwObAIYPaSB1QJuojxjuRFiDBF8ddzqHDVt2GWbVL/+
+	xR+0t7YyOlbaQgK6MbdXjKGC7weqzQ++wCpmLrtM1OisyiYiLNHGQ3qfa4nDy1kb8yHh9fC1vn6Yz
+	GUTgK+bw==;
+Received: from [50.53.2.121] (helo=[192.168.254.15])
+	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rsDGA-000000012Up-3OOS;
+	Thu, 04 Apr 2024 02:55:27 +0000
+Message-ID: <5a349108-afd9-4290-acb6-8ec176a80a84@infradead.org>
+Date: Wed, 3 Apr 2024 19:55:22 -0700
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 01/37] fix missing vmalloc.h includes
+To: Kent Overstreet <kent.overstreet@linux.dev>,
+ David Hildenbrand <david@redhat.com>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
+ mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
+ roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
+ willy@infradead.org, liam.howlett@oracle.com,
+ penguin-kernel@i-love.sakura.ne.jp, corbet@lwn.net, void@manifault.com,
+ peterz@infradead.org, juri.lelli@redhat.com, catalin.marinas@arm.com,
+ will@kernel.org, arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
+ dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
+ axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org, dennis@kernel.org,
+ jhubbard@nvidia.com, tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
+ paulmck@kernel.org, pasha.tatashin@soleen.com, yosryahmed@google.com,
+ yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
+ andreyknvl@gmail.com, keescook@chromium.org, ndesaulniers@google.com,
+ vvvvvv@google.com, gregkh@linuxfoundation.org, ebiggers@google.com,
+ ytcoode@gmail.com, vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+ rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
+ vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
+ iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
+ elver@google.com, dvyukov@google.com, songmuchun@bytedance.com,
+ jbaron@akamai.com, aliceryhl@google.com, rientjes@google.com,
+ minchan@google.com, kaleshsingh@google.com, kernel-team@android.com,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ iommu@lists.linux.dev, linux-arch@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+ linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
+ cgroups@vger.kernel.org
+References: <20240321163705.3067592-1-surenb@google.com>
+ <20240321163705.3067592-2-surenb@google.com>
+ <20240403211240.GA307137@dev-arch.thelio-3990X>
+ <4qk7f3ra5lrqhtvmipmacgzo5qwnugrfxn5dd3j4wubzwqvmv4@vzdhpalbmob3>
+ <9e2d09f8-2234-42f3-8481-87bbd9ad4def@redhat.com>
+ <qyyo6mjctqm734utdjen4ozhoo3t4ikswzjfjnemp7olwdgyt4@qifwishdzul4>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <qyyo6mjctqm734utdjen4ozhoo3t4ikswzjfjnemp7olwdgyt4@qifwishdzul4>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Guenter Roeck <linux@roeck-us.net> writes:
-> Add name of functions triggering warning backtraces to the __bug_table
-> object section to enable support for suppressing WARNING backtraces.
->
-> To limit image size impact, the pointer to the function name is only added
-> to the __bug_table section if both CONFIG_KUNIT_SUPPRESS_BACKTRACE and
-> CONFIG_DEBUG_BUGVERBOSE are enabled. Otherwise, the __func__ assembly
-> parameter is replaced with a (dummy) NULL parameter to avoid an image size
-> increase due to unused __func__ entries (this is necessary because __func__
-> is not a define but a virtual variable).
->
-> Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> Acked-by: Dan Carpenter <dan.carpenter@linaro.org>
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> ---
-> v2:
-> - Rebased to v6.9-rc1
-> - Added Tested-by:, Acked-by:, and Reviewed-by: tags
-> - Introduced KUNIT_SUPPRESS_BACKTRACE configuration option
-> v3:
-> - Rebased to v6.9-rc2
->
->  arch/powerpc/include/asm/bug.h | 37 +++++++++++++++++++++++++---------
->  1 file changed, 28 insertions(+), 9 deletions(-)
 
-I ran it through some build and boot tests, LGTM.
 
-Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+On 4/3/24 3:57 PM, Kent Overstreet wrote:
+> On Wed, Apr 03, 2024 at 11:48:12PM +0200, David Hildenbrand wrote:
+>> On 03.04.24 23:41, Kent Overstreet wrote:
+>>> On Wed, Apr 03, 2024 at 02:12:40PM -0700, Nathan Chancellor wrote:
+>>>> On Thu, Mar 21, 2024 at 09:36:23AM -0700, Suren Baghdasaryan wrote:
+>>>>> From: Kent Overstreet <kent.overstreet@linux.dev>
+>>>>>
+>>>>> The next patch drops vmalloc.h from a system header in order to fix
+>>>>> a circular dependency; this adds it to all the files that were pulling
+>>>>> it in implicitly.
+>>>>>
+>>>>> Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
+>>>>> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+>>>>> Reviewed-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+>>>>
+>>>> I bisected an error that I see when building ARCH=loongarch allmodconfig
+>>>> to commit 302519d9e80a ("asm-generic/io.h: kill vmalloc.h dependency")
+>>>> in -next, which tells me that this patch likely needs to contain
+>>>> something along the following lines, as LoongArch was getting
+>>>> include/linux/sizes.h transitively through the vmalloc.h include in
+>>>> include/asm-generic/io.h.
+>>>
+>>> gcc doesn't appear to be packaged for loongarch for debian (most other
+>>> cross compilers are), so that's going to make it hard for me to test
+>>> anything...
+>>
+>> The latest cross-compilers from Arnd [1] include a 13.2.0 one for
+>> loongarch64 that works for me. Just in case you haven't heard of Arnds work
+>> before and want to give it a shot.
+>>
+>> [1] https://mirrors.edge.kernel.org/pub/tools/crosstool/
+> 
+> Thanks for the pointer - but something seems to be busted with the
+> loongarch build, if I'm not mistaken; one of the included headers
+> references loongarch-def.h, but that's not included.
+> 
 
-cheers
+That file is part of gcc plugins. If you disable CONFIG_GCC_PLUGINS,
+it should build without having that issue. Of course, there may be other
+unrelated issues....
+
+
+-- 
+#Randy
 
