@@ -1,165 +1,138 @@
-Return-Path: <linux-arch+bounces-3471-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3472-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90FCA89A171
-	for <lists+linux-arch@lfdr.de>; Fri,  5 Apr 2024 17:38:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D67B89A188
+	for <lists+linux-arch@lfdr.de>; Fri,  5 Apr 2024 17:41:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 173991F213FB
-	for <lists+linux-arch@lfdr.de>; Fri,  5 Apr 2024 15:38:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6EBC71C20821
+	for <lists+linux-arch@lfdr.de>; Fri,  5 Apr 2024 15:41:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9415D16FF22;
-	Fri,  5 Apr 2024 15:38:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C5F316F919;
+	Fri,  5 Apr 2024 15:41:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bDJqVZLF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zrbi3bY6"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE92916F827;
-	Fri,  5 Apr 2024 15:38:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62A501DFE4;
+	Fri,  5 Apr 2024 15:41:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712331487; cv=none; b=bU9JkAR2x4C1ednzPuCe/Wudzt6d9smHsrUWZ1mbFHD3lnLXub+o4HG2o+HtqQf5w97FSjOkvGjmNkgCdYqbM7Aqp+rH3j8J8QBciD18XFxUNkW+Y8+uN0FVS6m2ldGEQL5SlauLtTEG7976KUI3xRhqbiV7EXZEYYEqiDS8eJk=
+	t=1712331677; cv=none; b=JHP+3zWJ2nzeQZAXmGpuQvNT32eebRUrCMySdeEQwx/EEDDAwiUdJvd6olUzxlsSNpD30G3JV4ndcMTZFLNOmrNKQLsGECCQVWbc2Jy0EngSqS+NTgQ6/UTMIxHUXdfM9MyH8lKL2/PY55GUi97nOAbywtlboyuAQNRACaXKcG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712331487; c=relaxed/simple;
-	bh=dPM81dfP4eacKZ5qLTkJlDyNq94WsZPQVAMWDYyYoJQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cHO7LxAtm52WLatNGql5xMzCEjApaOvCpd1PAxINsJ7JXoxsBCoZsYSCKLJitoGkIyUReL7j8+O0EvQ75EzbwoR3Fo6RE1I4v7BOlrEhpNF9uvAVvOUDOiEwTDIELTTX3tMS5UNJdoP7Y+wLsnuQKtqYgdeABnDAgbtBnuQbJcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bDJqVZLF; arc=none smtp.client-ip=209.85.167.53
+	s=arc-20240116; t=1712331677; c=relaxed/simple;
+	bh=rZJGyKNtzoutcmvD9yBAQBRLOt5WkG7MywHLVvMRWZ4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=N1U25hQPW7/iEgBTPtKJl0Pwx6+vJJfyPr2l0HHxlDOKrJ/irLWSyiljqZNkXgO3SvlMRwu1txNMHVt8MnxAZLK1/Vdi33g/IKno/zyPeNa9SbGeRzVfsLOGF6llGqDk9Z9vENwGMTzHYt7qRfBoQC9S3/hELWFtaZIhujcLT98=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zrbi3bY6; arc=none smtp.client-ip=209.85.128.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-513cf9bacf1so3084756e87.0;
-        Fri, 05 Apr 2024 08:38:05 -0700 (PDT)
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4163181a7ceso4796085e9.0;
+        Fri, 05 Apr 2024 08:41:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712331484; x=1712936284; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=A5HKjia/bBxV9bwJewCR86FUIvkQ6YbpSmsf0h/yiVw=;
-        b=bDJqVZLFSigRf74BaNCNTlJ2WMgFDsWC2nIF3nMfUUAaBDwsRWuW/gGb8JipCeHwWO
-         38PHPh7JUxy/0TBDb6lAjj36QXfx1vCLJXOLUKTDKNO3LN4zHGpTcuX6htW9uWlvpr/w
-         W6l7N45UQnK18ae/EEFfelcrX25KWAuQekgUPV17Pu20l9bGR3QFSO8w+mc9IZzWcBne
-         IkEL/Dp8rf4osO7PUptNNoCXrgVJDliuM0T5fQAiQGGVRJMFicEynEucCGiKkWbFwQ1W
-         Vn7nlE+PL63HOiRYAY7jNXjOTFg0P1wvBGeg1HSPvHJ3NWoSqVCYrx6GVLKnqkkRhEwX
-         8lDg==
+        d=gmail.com; s=20230601; t=1712331674; x=1712936474; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vWae/TQVR4lDMRxTHKpFB8Vkf/PIFo/hlHy1KJVttno=;
+        b=Zrbi3bY6TWu8nzzhcBUiUS9i51HQAy+PP8m+ions/eaLgCT2afnymTyF6ZPX2L5jj0
+         O2QUpcQZOZhGVF33VidqinJidL9dDTLqFjp49lcpGxmx5OcoEqDhkSY+0IjFB1SuAZbn
+         vbuwk/TXT/DXX0SkoqZhQQFJC1l58Y1LpCxn9bh1ofqHrp47m4toz847at/FEXioKin9
+         mGHqBf7upSb3L5vCOPZHVXtjooiQe5+C2TsZgmVzUIPuHdu1SYdbo5JG9mDLDzu8m60v
+         DFDoYqFODUUXR4MWq/T2ZklzdBF4qVWsWUdJJUxs7j2eMPBCOtx7olJcQpfWG+aTXpbC
+         Y9BA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712331484; x=1712936284;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=A5HKjia/bBxV9bwJewCR86FUIvkQ6YbpSmsf0h/yiVw=;
-        b=XjNRwRORDeaseB4SmI6PllnDHiCKTe35NzVkoZhkcyRA8P6AloH4vG/o8bepmBu5os
-         N1C2iHr29w/mLXoqxcCf/KXFxkF8/zpNfl16x2RIORvngV0NXvyLjrOVpNQS03KKxISj
-         3R8lwGtUpSXgXA31anVBdrnaKtMFNEEzOQlVvBldgP+EM89gDDf9wa4XYebMnhWzvoTd
-         RcXyUkHr1Z/c+noeSkvpLSmMJen9D2hsH2aY2Y9bG3NPm12ZK6f0ZqHJlINQg9xMm+Ep
-         ggNNoi2NFNd+qFp8dJ0X2rM1OeFrrutJv2a8rbglC8qEttx9eUGMcX2lywbmC040GUpq
-         ukcA==
-X-Forwarded-Encrypted: i=1; AJvYcCWOdB/+o6gdhoqa2nySt/mWKM3eA8DBv5y4QqIK5kuasJCKkr34+GS4WHWnBPluOy9BBXBB1CEoEjDy1gXE7jffeh+rc1MAjVaYBRUJEZDSeW8ugwgJy04JR+wsUFwDg8CJgCbzOW/2mHGqdcK5te+rH5lhcKQGt2B71OFx1HFKC29IMiseNCmy4eLkaZOc3nSgkbq+pAIlCRIL3IGjxH9FfQ3BnCO0sidL/eUujQ6lmNucbthZS/H9Kr2R/wIqrYiBNMNhMIBeW8T5Q4Vz0EbLX4tgQ2mpLMtf8Q==
-X-Gm-Message-State: AOJu0YxhSOl30Z4CnRLXmfFl5QaARPd04/mggMd2kaT/8WsDqJE9gZvs
-	j1JoOqPrPWqGgtZJPfta2njNrlMVhkmdhJ2l5WReXPCU2qSmuz+3
-X-Google-Smtp-Source: AGHT+IEIEEmughiSiBHY8eCIsSnqVoMqZUWDTHfuKcBEPEydDjJRjHpHyQHuQL28VLtLT7iqCSGbkw==
-X-Received: by 2002:a05:6512:2fa:b0:516:d029:b513 with SMTP id m26-20020a05651202fa00b00516d029b513mr1341784lfq.69.1712331483357;
-        Fri, 05 Apr 2024 08:38:03 -0700 (PDT)
-Received: from ?IPV6:2001:678:a5c:1202:2659:d6e4:5d55:b864? (soda.int.kasm.eu. [2001:678:a5c:1202:2659:d6e4:5d55:b864])
-        by smtp.gmail.com with ESMTPSA id j11-20020a056512344b00b0051589cc26afsm218610lfr.72.2024.04.05.08.38.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Apr 2024 08:38:02 -0700 (PDT)
-Message-ID: <3d496797-4173-43de-b597-af3668fd0eca@gmail.com>
-Date: Fri, 5 Apr 2024 17:37:59 +0200
+        d=1e100.net; s=20230601; t=1712331674; x=1712936474;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vWae/TQVR4lDMRxTHKpFB8Vkf/PIFo/hlHy1KJVttno=;
+        b=V75OqEkMGHuO5XVOOCwDm+4cIjcenJ1nPTCI9ZnLXWPZrXneHknzLZTYWlyi8dNPGD
+         nKRepRjtonTaLSfrbp4eALSXjg4n07U8Z4Aem9LY7fcZAFO54Gq80i4zpDM56jDjSZOV
+         mcLy+0G6sUnkfPSVvKXoS0/4KobrsRT4V6nevsufh3/rZRGeZmr9pUzK1Xf++w1LuyZO
+         pHT88Znvf8xOeVB/SPhpt5AsN8JdOBAqu3/cV74g9JBU2KYEUsQuDQPoGi27Qz4GTAQ5
+         Rs7CLY14RzHQDRCf6fxsO+PqvJnAdWkXT6kDVMUP87t93Pj3Gjk8lD76ddv4hIEZ8jED
+         +Rxw==
+X-Forwarded-Encrypted: i=1; AJvYcCX87hIdpjqcDNB/8KoGLWp571LT54RgXumry5CJI9sfUglLdNSHYiJqA3qAfYpyySN6pIHbchSvu8zwqD+LXCyfuaBlik6TyoJRRgwz/fGrmN8d9704Q8PlfTpmJxcHBVI5Utox8cJFy69vcCLVQPFbHoKMYFD30w+op1m0Jg9izaX+umoxh09+qycKTKXZZy5JNTuOdy/+ikyGrzfGZWlfzbQ11eVtXlhPp/qmuiXp7z/A5TQfzNUgyb1YxyMYNdt3WpPRPl494mhZCvTWF6UfjBBH8d3nCKbj45LhlxOkJe6S6QwsogXegaHvwJaRkr9QuIc=
+X-Gm-Message-State: AOJu0YzGFCrTxq/voXaZURL2XeOsNKwiwup2aFnrQvotGneJ5wkuJfQ7
+	vH16VVKnVivchoc0yFchZtCMZoSu+8KNeDLkxLpU0RlVoJNCkAuns24H+e5XnzyO+futuy3jq1X
+	qs2BHpd7Vj7VhoPLQ6hR2GMklOEfjpfcMYYc=
+X-Google-Smtp-Source: AGHT+IEH9WiGdwQmFDR3UUpRkcaEXiGYsc+rbm05qeGkTnAd0VuAIEH5g2EodOENEkeRm+TdhthkOlf3f027HucPkCY=
+X-Received: by 2002:a05:600c:19cd:b0:416:2bef:ce81 with SMTP id
+ u13-20020a05600c19cd00b004162befce81mr1484706wmq.1.1712331657141; Fri, 05 Apr
+ 2024 08:40:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 00/37] Memory allocation profiling
-To: Suren Baghdasaryan <surenb@google.com>
-Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, mhocko@suse.com,
- vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev,
- mgorman@suse.de, dave@stgolabs.net, willy@infradead.org,
- liam.howlett@oracle.com, penguin-kernel@i-love.sakura.ne.jp, corbet@lwn.net,
- void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
- catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de, tglx@linutronix.de,
- mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org,
- peterx@redhat.com, david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
- masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
- jhubbard@nvidia.com, tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
- paulmck@kernel.org, pasha.tatashin@soleen.com, yosryahmed@google.com,
- yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
- andreyknvl@gmail.com, keescook@chromium.org, ndesaulniers@google.com,
- vvvvvv@google.com, gregkh@linuxfoundation.org, ebiggers@google.com,
- ytcoode@gmail.com, vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
- rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
- vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
- iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
- elver@google.com, dvyukov@google.com, songmuchun@bytedance.com,
- jbaron@akamai.com, aliceryhl@google.com, rientjes@google.com,
- minchan@google.com, kaleshsingh@google.com, kernel-team@android.com,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- iommu@lists.linux.dev, linux-arch@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
- linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
- cgroups@vger.kernel.org
-References: <20240321163705.3067592-1-surenb@google.com>
- <c14cd89b-c879-4474-a800-d60fc29c1820@gmail.com>
- <CAJuCfpHEt2n6sA7m5zvc-F+z=3-twVEKfVGCa0+y62bT10b0Bw@mail.gmail.com>
- <41328d5a-3e41-4936-bcb7-c0a85e6ce332@gmail.com>
- <CAJuCfpERj52X8DB64b=6+9WLcnuEBkpjnfgYBgvPs0Rq7kxOkw@mail.gmail.com>
-Content-Language: en-US, sv-SE
-From: Klara Modin <klarasmodin@gmail.com>
-In-Reply-To: <CAJuCfpERj52X8DB64b=6+9WLcnuEBkpjnfgYBgvPs0Rq7kxOkw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <202404052349.lQch9J7G-lkp@intel.com>
+In-Reply-To: <202404052349.lQch9J7G-lkp@intel.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 5 Apr 2024 08:40:45 -0700
+Message-ID: <CAADnVQJXq1bSe20FgBN=BL1E5d8qOfLv_Ettq+724h5QfRuuKg@mail.gmail.com>
+Subject: Re: [linux-next:master] BUILD REGRESSION 8568bb2ccc278f344e6ac44af6ed010a90aa88dc
+To: kernel test robot <lkp@intel.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	Linux Memory Management List <linux-mm@kvack.org>, amd-gfx list <amd-gfx@lists.freedesktop.org>, 
+	bpf <bpf@vger.kernel.org>, dri-devel@lists.freedesktop.org, 
+	freedreno@lists.freedesktop.org, intel-gfx@lists.freedesktop.org, 
+	intel-xe@lists.freedesktop.org, lima@lists.freedesktop.org, 
+	linux-arch <linux-arch@vger.kernel.org>, linux-arm-msm@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-pwm@vger.kernel.org, Linux-Renesas <linux-renesas-soc@vger.kernel.org>, 
+	nouveau@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Fri, Apr 5, 2024 at 8:37=E2=80=AFAM kernel test robot <lkp@intel.com> wr=
+ote:
+>
+> tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-n=
+ext.git master
+> branch HEAD: 8568bb2ccc278f344e6ac44af6ed010a90aa88dc  Add linux-next spe=
+cific files for 20240405
+>
+> Error/Warning reports:
+>
+> https://lore.kernel.org/oe-kbuild-all/202404051333.7und7PPW-lkp@intel.com
+> https://lore.kernel.org/oe-kbuild-all/202404051423.eiaXLwhX-lkp@intel.com
+> https://lore.kernel.org/oe-kbuild-all/202404051659.aawUkGUQ-lkp@intel.com
+> https://lore.kernel.org/oe-kbuild-all/202404052022.Cwf2ilBp-lkp@intel.com
+>
+> Error/Warning: (recently discovered and may have been fixed)
+>
+> aarch64-linux-ld: kernel/bpf/verifier.c:20223:(.text+0xdbb4): undefined r=
+eference to `__SCK__perf_snapshot_branch_stack'
+> aarch64-linux-ld: verifier.c:(.text+0x17c3c): undefined reference to `__S=
+CK__perf_snapshot_branch_stack'
+> drivers/i2c/busses/i2c-i801.c:1407:(.text+0x1d2ef4a): undefined reference=
+ to `i2c_root_adapter'
+> kernel/bpf/verifier.c:20223:(.text+0xdba4): dangerous relocation: unsuppo=
+rted relocation
+> loongarch64-linux-ld: kernel/bpf/verifier.c:20223:(.text+0xa818): undefin=
+ed reference to `__SCK__perf_snapshot_branch_stack'
+> loongarch64-linux-ld: verifier.c:(.text+0xa964): undefined reference to `=
+__SCK__perf_snapshot_branch_stack'
+> mips64el-linux-ld: verifier.c:(.text.do_misc_fixups+0xd9c): undefined ref=
+erence to `__SCK__perf_snapshot_branch_stack'
+> riscv32-linux-ld: section .data LMA [00369000,00907967] overlaps section =
+.text LMA [0007899c,01a6a6af]
+> s390-linux-ld: verifier.c:(.text+0x13038): undefined reference to `__SCK_=
+_perf_snapshot_branch_stack'
+> verifier.c:(.text+0x17c14): relocation truncated to fit: R_AARCH64_ADR_PR=
+EL_PG_HI21 against undefined symbol `__SCK__perf_snapshot_branch_stack'
+> verifier.c:(.text+0xa960): undefined reference to `__SCK__perf_snapshot_b=
+ranch_stack'
+> verifier.c:(.text+0xadd0): dangerous relocation: unsupported relocation
+> verifier.c:(.text.do_misc_fixups+0xd98): undefined reference to `__SCK__p=
+erf_snapshot_branch_stack'
 
-
-On 2024-04-05 17:20, Suren Baghdasaryan wrote:
-> On Fri, Apr 5, 2024 at 7:30 AM Klara Modin <klarasmodin@gmail.com> wrote:
->>
->> On 2024-04-05 16:14, Suren Baghdasaryan wrote:
->>> On Fri, Apr 5, 2024 at 6:37 AM Klara Modin <klarasmodin@gmail.com> wrote:
->>>> If I enable this, I consistently get percpu allocation failures. I can
->>>> occasionally reproduce it in qemu. I've attached the logs and my config,
->>>> please let me know if there's anything else that could be relevant.
->>>
->>> Thanks for the report!
->>> In debug_alloc_profiling.log I see:
->>>
->>> [    7.445127] percpu: limit reached, disable warning
->>>
->>> That's probably the reason. I'll take a closer look at the cause of
->>> that and how we can fix it.
->>
->> Thanks!
-> 
-> In the build that produced debug_alloc_profiling.log I think we are
-> consuming all the per-cpu memory reserved for the modules. Could you
-> please try this change and see if that fixes the issue:
-> 
->   include/linux/percpu.h | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/percpu.h b/include/linux/percpu.h
-> index a790afba9386..03053de557cf 100644
-> --- a/include/linux/percpu.h
-> +++ b/include/linux/percpu.h
-> @@ -17,7 +17,7 @@
->   /* enough to cover all DEFINE_PER_CPUs in modules */
->   #ifdef CONFIG_MODULES
->   #ifdef CONFIG_MEM_ALLOC_PROFILING
-> -#define PERCPU_MODULE_RESERVE (8 << 12)
-> +#define PERCPU_MODULE_RESERVE (8 << 13)
->   #else
->   #define PERCPU_MODULE_RESERVE (8 << 10)
->   #endif
-> 
-
-Yeah, that patch fixes the issue for me.
-
-Thanks,
-Tested-by: Klara Modin
+Fixed in bpf-next with commit:
+https://lore.kernel.org/all/20240405142637.577046-1-arnd@kernel.org/
 
