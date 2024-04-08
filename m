@@ -1,169 +1,103 @@
-Return-Path: <linux-arch+bounces-3506-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3507-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB61A89CCC2
-	for <lists+linux-arch@lfdr.de>; Mon,  8 Apr 2024 22:05:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F8D689CCD6
+	for <lists+linux-arch@lfdr.de>; Mon,  8 Apr 2024 22:11:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 822F02841DA
-	for <lists+linux-arch@lfdr.de>; Mon,  8 Apr 2024 20:05:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 823921C21D33
+	for <lists+linux-arch@lfdr.de>; Mon,  8 Apr 2024 20:11:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBDD41465B5;
-	Mon,  8 Apr 2024 20:05:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACF4F146A62;
+	Mon,  8 Apr 2024 20:11:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Z5ir6u5T"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="aPs+q7yA"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEF59146596
-	for <linux-arch@vger.kernel.org>; Mon,  8 Apr 2024 20:05:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA6E01465BC
+	for <linux-arch@vger.kernel.org>; Mon,  8 Apr 2024 20:11:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712606743; cv=none; b=LiaMTU9acn4QMq/NpPd7UUboS9MYA5tFu83GGIIx37oXZDyW57a5zDLd6WxtvQ8fcWyLbRAME03H8igyhpse3kbn6w+d/Wpju+osZHa7Mg+Il0zaWMMS+TFykqQNcyXl+qndImbSTKvB2VNYcxWPGGGUf7HFw1uFrtC6G/7jZCQ=
+	t=1712607062; cv=none; b=PnlazZ3oZOGg9g2S25KOfHKTZdJgZSAqiBgqRhhIui+qLQuielkHUSIVMnXxZRoRM1YuBcH7ePIa7GWka0ZeW7hogvhle++QNYlDjEOC+x8x6xU2D9S3gzIxoH7MAMp0WgV4gOOUEwjNYIzxFjnZ/fxIDz8yzIIwpSL6qISUtEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712606743; c=relaxed/simple;
-	bh=82F1MgsQLgdYIQgatWxiRfAXR/TCmhkAjQEqWWRhptw=;
+	s=arc-20240116; t=1712607062; c=relaxed/simple;
+	bh=T9Axq0K/iXwEnSWdW8NNAFCF+A5jnAQA1gx3vfuBArU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JmIIkTfzu2af70orcKU4byzZHHmy2flaPjqQgkmN4raY0QMMFjgr6B8Kq/vQumDu5rcAjVxRP+lkr3lV9kaB5VvHK02lLgxBgZMhpFuGSUeTyI0A0t+DCFd1N6ehajhHu7Xo1sCnUnXP0Ghm3/gc2nF3ejkr9SXAaYhOIb9+xiA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Z5ir6u5T; arc=none smtp.client-ip=209.85.167.50
+	 To:Cc:Content-Type; b=Oe/Q74VPJmLI92s3ZVvVBI65TCxJigxZXuG6V06KDqygJwMl2lgX8mm6wkHMzY/MBUN2++OS+n7NQLKDL9Jkw5XrRWf7R/GYS3Hrtz4ALOWoJr1mvDnaPnQUpaffOY5JOP8yT53gKtLrFpvQw68XBY1Q3LVqT/zzyOq5iZCXqtA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=aPs+q7yA; arc=none smtp.client-ip=209.85.167.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-516b6e75dc3so6110668e87.3
-        for <linux-arch@vger.kernel.org>; Mon, 08 Apr 2024 13:05:41 -0700 (PDT)
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-516d6e23253so3440646e87.1
+        for <linux-arch@vger.kernel.org>; Mon, 08 Apr 2024 13:11:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1712606740; x=1713211540; darn=vger.kernel.org;
+        d=linux-foundation.org; s=google; t=1712607059; x=1713211859; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rRKPouMe4xkFwANgjkQYrxaOlNKZlWPMAGzB1iq7Iyc=;
-        b=Z5ir6u5TTSrqp2kfcCqQQa7plMKqZZ++fUjPyADCsDbaO3AsrDV3x3BRDeDzNMUHAd
-         6vZlMhVWYZcKq1cXOqCO6hCDc1v+Epgvo6ERiSklQTL4THHGRKzQOty42mPqrQmf/NnE
-         qbl81x42hbtlXmRRQGezjdgo3wMaeCiSjFuUo=
+        bh=ciB+yk+sxj3WjvAOZ3AtBhLNrg4E8Qyg/edsGuYwbwE=;
+        b=aPs+q7yAgBVasoggG4grCJ3UPNqX/QnLIDqUzlKgr8AEcslwhpXb1i0hq/k/hwXr8r
+         70PPe0HnvTM9sYksj5qT7iElMJ1a8W1UxYWTj9rsGnaD0LxhNgC8LRtNFzgCO8FHWnkV
+         g6bDcPTL/ebjPSwi9IgZX1DeTZw+fQBgK5NjQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712606740; x=1713211540;
+        d=1e100.net; s=20230601; t=1712607059; x=1713211859;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=rRKPouMe4xkFwANgjkQYrxaOlNKZlWPMAGzB1iq7Iyc=;
-        b=vpIBlmvzMGwq4Zs3FmK5AzBSXm98Cc63iJhdnZVLhNGJJpKSDGtSTsce84PT3BJbZn
-         DBckrZWd9UMCo21rflqn2nJWbshpDa+42dXHDqNuFRxDSne+uHWSlcFLWZ5yootEFEem
-         /BtMbuHb1wxDvFj1x272qsQ42o8M52QJBSy+m6EZFsk5JfO4CtEy3li/ByTN3wvHAp5H
-         BC4avG15cA25PL4/Lbpfw8DcaoiL2uZIPRx45lr3NzHWj8dKeiu5fzhsEm8YbRMT1NY8
-         dzBdrxIxMM8FzOVDBxIivCCOyzfVJieie8bjiAyIflyTeUrYWdnLrTajXN7SjbbbegS8
-         QoTA==
-X-Forwarded-Encrypted: i=1; AJvYcCW3xpHYq4pcxXXEhBKFh1fURs9CIg4/WsXd4TjHELM3pDu/OUE/Lf4Tps7crZFZ/tPTbeDlNbvBsi4TzklzFJn00jHqsiwvxJfvMw==
-X-Gm-Message-State: AOJu0YzoYzBD2jDjVDlsN9dtC8BOnnVHrNqKT0DtCr7CtESkco5za5/i
-	xEXgCDPFAjfsLH24ik4T5nx5ogR71QJbJrDpMti86X08uF2XMtDcz6sU1Ky1eVtcB53Y00+2I/H
-	sI9QvhQ==
-X-Google-Smtp-Source: AGHT+IEbUnDmlhn879knYfWpTq1BM/W67smQ/OeFP7gaUijso0cWSwFXbON1lCc8F9YSAjVZMUar0g==
-X-Received: by 2002:a19:6a0a:0:b0:513:b062:98c4 with SMTP id u10-20020a196a0a000000b00513b06298c4mr6227995lfu.11.1712606739677;
-        Mon, 08 Apr 2024 13:05:39 -0700 (PDT)
+        bh=ciB+yk+sxj3WjvAOZ3AtBhLNrg4E8Qyg/edsGuYwbwE=;
+        b=eoc6pqyYRjvcopMVtnR3CtAlXXAh75b9FIxB+PRuIlM7iq7idCI7lSG+xQ+UACfaVm
+         3Y8hiVzMGxEAxiXpsBL5AxfOXZ4U/8FAMgnTXj3QE9ynhmdG2nPR1UoCKt77dheQWDoc
+         vYmSbppFYgQBIAC4R/2MKNjqMqmqfUtJq/Fkfvyy6NkX70IZoh1OwRGSpPM23C0jYiOa
+         x4bWMpbwVF3Fplq2LN+U+vaJjSmYfEEdtbi0Lm9VI6uyYFwGekjVvnMrEiF+2yQPt6v9
+         gf2dVxxNPFK2hstnx3TgEEUNn7cmAi4cE0rHYvJjzRB7QbboUSnVWYedBM7xBSz2cC9T
+         HfuA==
+X-Gm-Message-State: AOJu0YwCmGUEISZGyO9IrkenD/tRUZSDPmq9KsdtI334kXCN0SUYJxO1
+	fQ6/O1VyhLWr0UKvKzFEuHMfxmDJRi8/2QBNrlipB1W6HQrCSrCltFl654elW4Y6H30KyS7lSn0
+	gX9nwZQ==
+X-Google-Smtp-Source: AGHT+IENfIWrl0cRUwgbvhNC80NKGXQFbm41uoZDZBNgFytEpOSM9pc4lBTHG/GAPKa5RX7ofYc7oQ==
+X-Received: by 2002:a05:6512:3c8e:b0:514:88df:88b9 with SMTP id h14-20020a0565123c8e00b0051488df88b9mr9609262lfv.45.1712607058775;
+        Mon, 08 Apr 2024 13:10:58 -0700 (PDT)
 Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com. [209.85.167.43])
-        by smtp.gmail.com with ESMTPSA id i16-20020ac25230000000b00513d13ede82sm1283166lfl.147.2024.04.08.13.05.37
+        by smtp.gmail.com with ESMTPSA id t27-20020a19911b000000b00516a096a35asm1312844lfd.123.2024.04.08.13.10.57
         for <linux-arch@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Apr 2024 13:05:39 -0700 (PDT)
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-516d487659bso4707344e87.2
-        for <linux-arch@vger.kernel.org>; Mon, 08 Apr 2024 13:05:37 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVslaOANKb9Zj63h1ckhHtluQUHLk2BiVAfax0urK+TBltd6TKq1s4jbPYCe38F7/S96SzLgoRT70QED5hGdHQ2aEKNrns9qRHRmA==
-X-Received: by 2002:a05:6512:60f:b0:516:9fdc:2621 with SMTP id
- b15-20020a056512060f00b005169fdc2621mr6538971lfe.0.1712606737016; Mon, 08 Apr
- 2024 13:05:37 -0700 (PDT)
+        Mon, 08 Apr 2024 13:10:57 -0700 (PDT)
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-516d0c004b1so5504081e87.2
+        for <linux-arch@vger.kernel.org>; Mon, 08 Apr 2024 13:10:57 -0700 (PDT)
+X-Received: by 2002:ac2:54bc:0:b0:516:afb5:6a71 with SMTP id
+ w28-20020ac254bc000000b00516afb56a71mr6509617lfk.67.1712607057038; Mon, 08
+ Apr 2024 13:10:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240322233838.868874-1-boqun.feng@gmail.com> <s2jeqq22n5ef5jknaps37mfdjvuqrns4w7i22qp2r7r4bzjqs2@my3eyxoa3pl3>
- <CAHk-=whY5A=S=bLwCFL=043DoR0TTgSDUmfPDx2rXhkk3KANPQ@mail.gmail.com>
- <u2suttqa4c423q4ojehbucaxsm6wguqtgouj7vudp55jmuivq3@okzfgryarwnv>
- <CAHk-=whkQk=zq5XiMcaU3xj4v69+jyoP-y6Sywhq-TvxSSvfEA@mail.gmail.com>
- <c51227c9a4103ad1de43fc3cda5396b1196c31d7.camel@redhat.com>
- <CAHk-=wjP1i014DGPKTsAC6TpByC3xeNHDjVA4E4gsnzUgJBYBQ@mail.gmail.com>
- <ZhQVHZnU3beOhEGU@casper.infradead.org> <CAHk-=whmmeU_r_o+sPMcr7tPr-EU+HLnmL+GaWUkMUW0kDzDxw@mail.gmail.com>
- <20240408181436.GO538574@ZenIV>
-In-Reply-To: <20240408181436.GO538574@ZenIV>
+References: <7b3646e0-667c-48e2-8f09-e493c43c30cb@paulmck-laptop> <20240408174944.907695-8-paulmck@kernel.org>
+In-Reply-To: <20240408174944.907695-8-paulmck@kernel.org>
 From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Mon, 8 Apr 2024 13:05:20 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wispSt+JezguriGPKnJ0xOUWG_LFDgaM-NVJu6cVa+-xw@mail.gmail.com>
-Message-ID: <CAHk-=wispSt+JezguriGPKnJ0xOUWG_LFDgaM-NVJu6cVa+-xw@mail.gmail.com>
-Subject: Re: [WIP 0/3] Memory model and atomic API in Rust
-To: Al Viro <viro@zeniv.linux.org.uk>
-Cc: Matthew Wilcox <willy@infradead.org>, Philipp Stanner <pstanner@redhat.com>, 
-	Kent Overstreet <kent.overstreet@linux.dev>, Boqun Feng <boqun.feng@gmail.com>, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev, 
-	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
-	Alice Ryhl <aliceryhl@google.com>, Alan Stern <stern@rowland.harvard.edu>, 
-	Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Nicholas Piggin <npiggin@gmail.com>, 
-	David Howells <dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>, 
-	Luc Maranget <luc.maranget@inria.fr>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Akira Yokosawa <akiyks@gmail.com>, Daniel Lustig <dlustig@nvidia.com>, 
-	Joel Fernandes <joel@joelfernandes.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, kent.overstreet@gmail.com, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com, 
-	Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	linux-arm-kernel@lists.infradead.org, linux-fsdevel@vger.kernel.org
+Date: Mon, 8 Apr 2024 13:10:40 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whwbdbNXeJ0m+YZqZcxKPD3v4dbcPVCd6gP7YkwCM=X7w@mail.gmail.com>
+Message-ID: <CAHk-=whwbdbNXeJ0m+YZqZcxKPD3v4dbcPVCd6gP7YkwCM=X7w@mail.gmail.com>
+Subject: Re: [PATCH cmpxchg 08/14] parisc: add u16 support to cmpxchg()
+To: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, elver@google.com, 
+	akpm@linux-foundation.org, tglx@linutronix.de, peterz@infradead.org, 
+	dianders@chromium.org, pmladek@suse.com, Arnd Bergmann <arnd@arndb.de>, 
+	Al Viro <viro@zeniv.linux.org.uk>
 Content-Type: text/plain; charset="UTF-8"
 
-On Mon, 8 Apr 2024 at 11:14, Al Viro <viro@zeniv.linux.org.uk> wrote:
+On Mon, 8 Apr 2024 at 10:50, Paul E. McKenney <paulmck@kernel.org> wrote:
 >
-> FWIW, PA-RISC is no better - the same "fetch and replace with constant"
-> kind of primitive as for sparc32, only the constant is (u32)0 instead
-> of (u8)~0.  And unlike sparc64, 64bit variant didn't get better.
+> And get rid of manual truncation down to u8, etc. in there - the
+> only reason for those is to avoid bogus warnings about constant
+> truncation from sparse, and those are easy to avoid by turning
+> that switch into conditional expression.
 
-Heh. The thing about PA-RISC is that it is actually *so* much worse
-that it was never useful for an arithmetic type.
+I support the use of the conditional, but why add the 16-bit case when
+it turns out we don't want it after all?
 
-IOW, the fact that sparc used just a byte meant that the aotmic_t
-hackery on sparc still gave us 24 useful bits in a 32-bit atomic_t.
-
-So long ago, we used to have an arithmetic atomic_t that was 32-bit on
-all sane architectures, but only had a 24-bit range on sparc.
-
-And I know you know all this, I'm just explaining the horror for the audience.
-
-On PA-RISC you couldn't do that horrendous trick, so parist just used
-the "we use a hashed spinlock for all atomics", and "atomic_t" was a
-regular full-sized integer type.
-
-Anyway, the sparc 24-bit atomics were actually replaced by the PA-RISC
-version back twenty years ago (almost to the day):
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/history.git/commit/?id=373f1583c5c5
-
-and while we still had some left-over of that horror in the git tree
-up until 2011 (until commit 348738afe530: "sparc32: drop unused
-atomic24 support") we probably should have made the
-"arch_atomic_xyz()" ops work on generic types rather than "atomic_t"
-for a long long time, so that you could use them on other things than
-"atomic_t" and friends.
-
-You can see the casting horror here, for example:
-
-   include/asm-generic/bitops/atomic.h
-
-where we do that cast from "volatile unsigned long *p" to
-"atomic_long_t *" just to use the raw_atomic_long_xyz() operations.
-
-It would make more sense if the raw atomics took that "native"
-volatile unsigned long pointer directly.
-
-(And here that "volatile" is not because it's necessary used as a
-volatile - it is - but simply because it's the most permissive type of
-pointer. You can see other places using "const volatile unsigned long"
-pointers for the same reason: passing in a non-const or non-volatile
-pointer is perfectly fine).
-
-              Linus
+                 Linus
 
