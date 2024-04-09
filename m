@@ -1,121 +1,138 @@
-Return-Path: <linux-arch+bounces-3517-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3518-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C38089D741
-	for <lists+linux-arch@lfdr.de>; Tue,  9 Apr 2024 12:50:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1D6289DD95
+	for <lists+linux-arch@lfdr.de>; Tue,  9 Apr 2024 17:02:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DC189B21749
-	for <lists+linux-arch@lfdr.de>; Tue,  9 Apr 2024 10:50:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5267D28D843
+	for <lists+linux-arch@lfdr.de>; Tue,  9 Apr 2024 15:02:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A269882D7F;
-	Tue,  9 Apr 2024 10:50:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF6041304B4;
+	Tue,  9 Apr 2024 15:01:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="A6+c2l4N"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DoVWC4q2"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f73.google.com (mail-wr1-f73.google.com [209.85.221.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2690C823AE;
-	Tue,  9 Apr 2024 10:50:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6A87130A4D
+	for <linux-arch@vger.kernel.org>; Tue,  9 Apr 2024 15:01:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712659841; cv=none; b=h/yZy94C2zJgbCJrFFSHSJnfGvAmsGCggBYIzQzLzN0a++6ytLRmPsQs5n30WBAG4ifeQtfcCFobaTaEn+nbJEWKDdj881kKpT1I0aBhMNvmIi8JImbTN+ZJoj/yGDH0VsHtXun2zxIwCKPZiqQFd1NbUrpzZjyxykJHl33Z9ok=
+	t=1712674903; cv=none; b=oUoVWfmZ6Ue+TMDVgsz93AaWC+a6ZvMQuADXqVmzaG3gVJd6PmZNY258o7GeQxviWV/gs0EmbiKcQ3fxVx4Uq1cGZlJ5ucxV3Xdy1UEHogzgf9XRCfB7wxNVVsDnqrL3KNdT9hNicO+BFlFGQmaO9eWtYCbnG86R3bEJiMq08sU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712659841; c=relaxed/simple;
-	bh=7d49H/3MDKc37vAmRfm+8BB1JMNOPrM2MZ5puWV2Yvo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dy3UBQLITymu/Ecm0KDnRnu+dbOr+UcUKio5dY9Y7L0OkSD0+3Ugsd7Px5UUmJ25QKzM1YxJXjpDzxz9FdJjMQH7rZBDIqch7rYM4HcqgIfuuBXwn075pwBqSDga3RxLBIcmChy2/pjsUFKy6s/iG/LKhh5qkJ/BaZZDra1s/OE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=A6+c2l4N; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=fdPl3WFCWHLRN70qmtNx/X3LaV4RnMmwDJdJ+T0QErQ=; b=A6+c2l4NtzCr3n9/z3r782zwiM
-	t8LFZ2Y+6asvkVk0ieqbUPKWxtF67/X0IAKbJiidA9qgUMCQu80Bd3Ys70P+z1te0VntRDE6sSgSY
-	od9Q4gM6yCXEsrnDuoAvwP49i2cA1aJ4AV5t5dJJJ9TI4oHZ6vjCMcMcrqZTcf8Xm5TXOwyzEkmJD
-	aeVg+rKtRVKRuL2YMkIfLqGYTnjFPe+NQBKSioszfByY63QFkGFeO0C4uaypuWZ4L2Qd1pDGR4ooc
-	xgsclxyA2Ldrsb2q7geUJ5Qs31a4NVyzYmJc97Jplwk1LT2VPVVjQylOoLtgQk5zMsBgGEgMjtG9B
-	zNw4txXA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1ru93Q-00000007Z81-2AVo;
-	Tue, 09 Apr 2024 10:50:17 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 0C0F630040C; Tue,  9 Apr 2024 12:50:16 +0200 (CEST)
-Date: Tue, 9 Apr 2024 12:50:15 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Boqun Feng <boqun.feng@gmail.com>
-Cc: Mark Rutland <mark.rutland@arm.com>, rust-for-linux@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	"Bj\"orn Roy Baron" <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Andrea Parri <parri.andrea@gmail.com>,
-	Will Deacon <will@kernel.org>, Nicholas Piggin <npiggin@gmail.com>,
-	David Howells <dhowells@redhat.com>,
-	Jade Alglave <j.alglave@ucl.ac.uk>,
-	Luc Maranget <luc.maranget@inria.fr>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Akira Yokosawa <akiyks@gmail.com>,
-	Daniel Lustig <dlustig@nvidia.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	kent.overstreet@gmail.com,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	torvalds@linux-foundation.org, linux-arm-kernel@lists.infradead.org,
-	linux-fsdevel@vger.kernel.org
-Subject: Re: [WIP 0/3] Memory model and atomic API in Rust
-Message-ID: <20240409105015.GC21779@noisy.programming.kicks-ass.net>
-References: <20240322233838.868874-1-boqun.feng@gmail.com>
- <ZgFVnar3nS4F8eIX@FVFF77S0Q05N>
- <ZgHly_fioG7X4wGE@boqun-archlinux>
+	s=arc-20240116; t=1712674903; c=relaxed/simple;
+	bh=alFFKiP7O8OXDXrwrinQEc5sBVduOBPmxmITpEnO00Y=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=rVXd16NsietpQjdZBjUp62AsNtqromrhmn2lSbSMQZL8rZtimKmsv0BVT5qZZLxBUbM4XWZfj8Dv3btbI2fOOAarP3urbPcBkQt/+cQz2qWADXRR5xt0aKXj75EQVZLlhbERQps/5lMlsA/ZymrT7giMhbKT6RNAC/HYin1WlsA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DoVWC4q2; arc=none smtp.client-ip=209.85.221.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
+Received: by mail-wr1-f73.google.com with SMTP id ffacd0b85a97d-33ed489edcaso3359376f8f.3
+        for <linux-arch@vger.kernel.org>; Tue, 09 Apr 2024 08:01:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1712674900; x=1713279700; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=tfocfhDuzyWI0gzZPzgtgcqFin70HaxvYji+27WTX8o=;
+        b=DoVWC4q2NOqBhhc41O2uVHSuJ/yMC5YkEeJOHGGzWx+TO7zr9ViDNe+rAlG+wdndQk
+         nJCske8OCx5PxFjoP1GZoPORoE1KZu1dBdf6b53iYN8ESZBuuokmG+7VSAwiSfZO+cUW
+         9oUbnNnzzaGh18ayAzLd0NAMcRGV8TSlriXGpE2FWtoc3Q8UEa/NrMj+HZRGp3QGEgA6
+         KBECNGU4vzu8L44TIJFLbscw0GmdkWRZ1qOr0BzoguYZ6IGD7Fqz3wZLTQVMiU5GoJ04
+         VS6GskQOf00uHpsR0vAgBzPRCuSKZ1VgQtA5CuT6GequamaGwANBwc+ZTlXl9Wxxwo57
+         ArmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712674900; x=1713279700;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tfocfhDuzyWI0gzZPzgtgcqFin70HaxvYji+27WTX8o=;
+        b=VHS1e9aJGrIByAwj3dj/8S5R1sKAEHOGxzlK+k+5g0wyuIZtNoEidwp8g+MRsO05gq
+         P2C8WCBue0vWo9juCEXm95dFz1nEwjBpjZawhx42udnI8K6WFIBDUyVQ9glAf+96iwac
+         FzqbxNDCOe/p+3stat/XqmI8uOzthAyQfMAc5uNpc6cY2POGdTP5INEvPrBsJLMRRAFd
+         A3bpLDj9cOPEwPIJeujOj1sZ/4om4ZIm6/GI7AQAjOQA3zbNplKMmKbb2va5x5UyDChl
+         4fwxmgRRLnxS/mV0PrC8yxnbDfTNROgzPrAmtETn1iHNFg71m7ewy9W3h8RSqv5sItUq
+         absA==
+X-Forwarded-Encrypted: i=1; AJvYcCVRTtDYn6cj9grzqjpZvdrtIU0JOKEPbIEYXYPwv1Q9O49YcE8hrYVSLq/ILqzh5r7hOy5RnYjDpZ8iXPlZK1ylfrHo1W7Z2g/SjA==
+X-Gm-Message-State: AOJu0Ywt4KDP/s5V4bkYX3i6yNzUVkMnkvNKRexWHOESUVoU+IXUYK6Q
+	oTXxCmM/tna4RnoTA7qsKfZV2bE4tNkVHTITu9zg3pBoIDTZwNf8HURx4c+no5WS+eW9fA==
+X-Google-Smtp-Source: AGHT+IFYuevMhVCNS8J4a0W+Y4P/tX4ObfbT6n8GZHMYJQGV+TZpStj+eAbIHkNNPAqkAizanpcTzDes
+X-Received: from palermo.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:118a])
+ (user=ardb job=sendgmr) by 2002:adf:fcd0:0:b0:343:3f5b:8be5 with SMTP id
+ f16-20020adffcd0000000b003433f5b8be5mr25778wrs.5.1712674900036; Tue, 09 Apr
+ 2024 08:01:40 -0700 (PDT)
+Date: Tue,  9 Apr 2024 17:01:33 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZgHly_fioG7X4wGE@boqun-archlinux>
+Mime-Version: 1.0
+X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1943; i=ardb@kernel.org;
+ h=from:subject; bh=vvI7uP53jbbpjHBqTcIzGIhjjZ2G0+4ci+o39TUrohg=;
+ b=owGbwMvMwCFmkMcZplerG8N4Wi2JIU00wkfJaMX8/7u/nL26uVyuuT46dDI7j0x7Ta/W0beLi
+ zK9y9w6SlkYxDgYZMUUWQRm/3238/REqVrnWbIwc1iZQIYwcHEKwESS9jP8L0m8H9OefeJLbG/7
+ hGtcCW9eBda5aPCvW5W/wpw9al/8R0aG+zYX6vKnHOW6oeDcYh3n9k9mXqGwfnv4p0ifvsL85FN MAA==
+X-Mailer: git-send-email 2.44.0.478.gd926399ef9-goog
+Message-ID: <20240409150132.4097042-5-ardb+git@google.com>
+Subject: [PATCH v2 0/3] kbuild: Avoid weak external linkage where possible
+From: Ard Biesheuvel <ardb+git@google.com>
+To: linux-kernel@vger.kernel.org
+Cc: Ard Biesheuvel <ardb@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, linux-arch@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, 
+	Andrii Nakryiko <andrii@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Mar 25, 2024 at 01:59:55PM -0700, Boqun Feng wrote:
-> On Mon, Mar 25, 2024 at 10:44:45AM +0000, Mark Rutland wrote:
-> [...]
-> > > 
-> > > * I choose to re-implement atomics in Rust `asm` because we are still
-> > >   figuring out how we can make it easy and maintainable for Rust to call
-> > >   a C function _inlinely_ (Gary makes some progress [2]). Otherwise,
-> > >   atomic primitives would be function calls, and that can be performance
-> > >   bottleneck in a few cases.
-> > 
-> > I don't think we want to maintain two copies of each architecture's atomics.
-> > This gets painful very quickly (e.g. as arm64's atomics get patched between
-> > LL/SC and LSE forms).
-> > 
-> 
-> No argument here ;-)
+From: Ard Biesheuvel <ardb@kernel.org>
 
-Didn't we talk about bindgen being able to convert inline C functions
-into equivalent inline Rust functions? ISTR that getting stuck on Rust
-not having a useful inline asm.
+Weak external linkage is intended for cases where a symbol reference
+can remain unsatisfied in the final link. Taking the address of such a
+symbol should yield NULL if the reference was not satisfied.
 
-But fixing all that in a hurry seems like the much saner path forward.
+Given that ordinary RIP or PC relative references cannot produce NULL,
+some kind of indirection is always needed in such cases, and in position
+independent code, this results in a GOT entry. In ordinary code, it is
+arch specific but amounts to the same thing.
+
+While unavoidable in some cases, weak references are currently also used
+to declare symbols that are always defined in the final link, but not in
+the first linker pass. This means we end up with worse codegen for no
+good reason. So let's clean this up, by providing preliminary
+definitions that are only used as a fallback.
+
+Changes since v1:
+- update second occurrence of BTF start/end markers
+- drop NULL check of __start_BTF[] which is no longer meaningful
+- avoid the preliminary BTF symbols if CONFIG_DEBUG_INFO_BTF is not set
+- add Andrii's ack to patch #3
+- patches #1 and #2 unchanged
+
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: linux-arch@vger.kernel.org
+Cc: linux-kbuild@vger.kernel.org
+Cc: bpf@vger.kernel.org
+Cc: Andrii Nakryiko <andrii@kernel.org>
+
+Ard Biesheuvel (3):
+  kallsyms: Avoid weak references for kallsyms symbols
+  vmlinux: Avoid weak reference to notes section
+  btf: Avoid weak external references
+
+ include/asm-generic/vmlinux.lds.h | 28 ++++++++++++++++++
+ kernel/bpf/btf.c                  |  4 +--
+ kernel/bpf/sysfs_btf.c            |  6 ++--
+ kernel/kallsyms.c                 |  6 ----
+ kernel/kallsyms_internal.h        | 30 ++++++++------------
+ kernel/ksysfs.c                   |  4 +--
+ lib/buildid.c                     |  4 +--
+ 7 files changed, 49 insertions(+), 33 deletions(-)
+
+-- 
+2.44.0.478.gd926399ef9-goog
+
 
