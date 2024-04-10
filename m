@@ -1,147 +1,176 @@
-Return-Path: <linux-arch+bounces-3549-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3550-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DDF48A0241
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Apr 2024 23:37:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FB6E8A033C
+	for <lists+linux-arch@lfdr.de>; Thu, 11 Apr 2024 00:21:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6279BB22FFF
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Apr 2024 21:37:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A9D2C1F22C79
+	for <lists+linux-arch@lfdr.de>; Wed, 10 Apr 2024 22:21:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46A4C184103;
-	Wed, 10 Apr 2024 21:37:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28220184119;
+	Wed, 10 Apr 2024 22:21:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="KiVwqHtB"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TZtD/VsK"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 248EE1836E1
-	for <linux-arch@vger.kernel.org>; Wed, 10 Apr 2024 21:37:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60D3F12FF7C
+	for <linux-arch@vger.kernel.org>; Wed, 10 Apr 2024 22:21:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712785058; cv=none; b=VXmgp35kfodieYTfTUHbHK6f0vbwLU/GPG9SJWXOLLxYs6A+DrAq4YSws3ZuJfVVvVLK9gXGelGY0vsLjrmdZtxPUWDdBqzg7Uxs53VF/I2bMs/DXF2ooF/q4O9rB0ODHrh//76gGSDsJrOPNbqNWvz92eyYBWPouCjMVwf++UY=
+	t=1712787704; cv=none; b=Ll795hq1hwyFvJ9hOortieboaVo3+kS4KW65NLHA40850/0RdFKOo27FarRNRqcElFTDRVV/6yu3FTUpCR+t5X1usmGr3bHZ4xwSCU44dA8IAMSMLv/chi2X8sFHndwogobamqobKMCy+3cL/Jyxp3ppaXdFIFQeW5PsqTBqVRI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712785058; c=relaxed/simple;
-	bh=4GvtKHSmijEdL/CsYuX2Z0N3Y9AqHnP3iFWsMznXnNQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ErlXdzLrsdIACi1p8JXMoPb5IvyBk3VfAH6wOSC3i9fjWQKRdSupBozZ+1tWcNBCQOZ8+8h3YBtupvWp9rX2kB6YBrj0MxZvsiHstyuXrs2dLJXxmyyO+fD7zzIkTr6ohqmZ4/f5kg3UYXNbS1NiXJFASTE7VMzczXsFT660Wsg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=KiVwqHtB; arc=none smtp.client-ip=209.85.128.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-614ec7ee902so73671147b3.2
-        for <linux-arch@vger.kernel.org>; Wed, 10 Apr 2024 14:37:35 -0700 (PDT)
+	s=arc-20240116; t=1712787704; c=relaxed/simple;
+	bh=SQyfDI1p8mtUjtI3BfAFLemnAtOtjnfc4UlRkBuRrI0=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=hETtSix4dWmrUlUDFZSKWAKFTY0FtGjCOGF7vTltuJAW+7//35bNstmBmo8kV8RuBhkcWI+krxBjAlNAjGhU5S17DidxxU+4Akgr+D4LtKMIDkCKHhaYF+huCyx3/L6pfH6Bn0jAxTCoYHO4Qf45EwTx8cZmHxOW5yAr3p2vAXU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=TZtD/VsK; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1e3f17c64daso30127925ad.3
+        for <linux-arch@vger.kernel.org>; Wed, 10 Apr 2024 15:21:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1712785055; x=1713389855; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=linaro.org; s=google; t=1712787702; x=1713392502; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:user-agent
+         :references:in-reply-to:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XPYtaW73cXDTPjMujaADVZvLP6wj8QcIF+jSWGr8Oms=;
-        b=KiVwqHtBFDGaTHxkLwpBJZ8nZtOaAMtftz4m9SplzBL/szgqU2Lg2cMpixSvpMpYte
-         rHRYAWiaT6P1SIg+LkCbWptwiHwhSBI7Rn0pmXKQDiawvH70WAxy4E9b/6bUZTgItkPr
-         orfuGcRRw1sAwoiTppDx7ppCAUotzO76vVUeEV2chTGX/EtVPKF4km8Thh8lUOLWSGpM
-         RwOhhtg6wH/N93iBzX4rpUfjKukCQQT1XY/iH8NwaQqWjP8jPGodmPU1IOLhfUc5g5Nr
-         SLleFet3R1LIwzJ/L/d8anCH4SJHal4Y6gYrXoBMlIa5wQ4VnCw2FUecgPONCuD6byMa
-         i6fA==
+        bh=UQ9C1Cr3AvASEU86K/hlf2OO0iCRrNUVuyjVHdlWHE4=;
+        b=TZtD/VsK+Z8FsufyHKK/cZe7E4ZmfhA0V+FOSy/jn7ulFlKbyySF3NETO59AtLHzhp
+         doGV91IEpxMkF9SBODmmYXHD341v8hn4G/Vfd+9bOh0UJq2PaKxcGTeYRzVorRB0qwVw
+         x1hcl1K4kMuZogOvwNTxutBc+aO71hcFDGXv7aF81b+5KWNyVl+WqpKWXqveFcriOiUx
+         IyQWA2AszsSAoz3tINgNr7OFHdwWAwDPTFLCwBWe+uqJU/i28mSd+Yo8xVA/EQwBLIAk
+         z8MR3Ky0ScgmcoOjR9do1rZAug5w1B7yu4NIaqETouvs8g4e0p8XAw2/kAui2Q/4Tflm
+         xKBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712785055; x=1713389855;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XPYtaW73cXDTPjMujaADVZvLP6wj8QcIF+jSWGr8Oms=;
-        b=cjElrE6p7IIHiasSvPzmhwNqXnlGUwKKjC3rkwLwBZ+RE/Pm1AFglDYyKDv3c6/6RX
-         mvHqv52M3nQzKEeyqjD5OEEceYpz8yaWHy6oal5Z47zwLTr+6wQLAKU/k+0sotSKXixz
-         KQYcUoNH5lZPAOBuXMXd5HZiXEATisQYRSihN4aVznOkMbuLT1oGMraD/l6mIWCgkogp
-         /yMCTkInVylA2SQKQYVuQtwCXghteFs6Rnn+jsVAgu+giE+RtsQArz8z3XRYQcXqLEFZ
-         we6XgbkCXxXj65uhdbYJWdytVNg9pemd+MEMQHv5Z3TPwRDTaIGNdxw2A+SxcDJaLVjA
-         jtdQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVvzR7XeMv7xdB2bBYi1MUWoq4kAaZ1YOSvKnxEO5GZnDd5Yq+NOiVVphwOjS1LawgtHxWcJWD7Dpt8fUAKON6qFbSgW8giZGIEzw==
-X-Gm-Message-State: AOJu0YwvXqTlk9TzUaWIr9iYQSPOKldTZKHSLWdn17som27xHhSV0vJ7
-	U7WykAUT0o5Cpz2DEzwlBrlTXLpPjAtDIfIQAW8shi/LJh/e3G/8/lypPWGacA4NUeIFcqjhziP
-	iH23vYz7qizVW+XWfEgr6IZbn7bywKJzUK0VCHA==
-X-Google-Smtp-Source: AGHT+IF51UvfuZW8F9SKiS3fB7NFequCpltyvy4yxCVwUJis6yJOQ1I5zvJY27CgXu6F/WYzUCxY2XbedDRG3tneEwI=
-X-Received: by 2002:a0d:c306:0:b0:615:4700:94c5 with SMTP id
- f6-20020a0dc306000000b00615470094c5mr4293525ywd.22.1712785055129; Wed, 10 Apr
- 2024 14:37:35 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1712787702; x=1713392502;
+        h=content-transfer-encoding:mime-version:message-id:date:user-agent
+         :references:in-reply-to:subject:cc:to:from:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=UQ9C1Cr3AvASEU86K/hlf2OO0iCRrNUVuyjVHdlWHE4=;
+        b=u9x9x3r9zSrp2B3I+55sguuz96xjGick8MkLdCPfAG4vOCf8xSFj36Wghhz7SfYtcC
+         5LwL86REbiL9xMH7pXqfkUOZKV3JunhE4w6I4yvXLqc5pl8QdnCxwaHQ9ye/bC8R25Ai
+         w5Ec/RH1ui8s9+glWUV/O68U0G/EJ8i/ujKRVwwfs7yplzAycIlqZMBA0Rb6GUGT7UOU
+         mr7/zHFGAVkdBCnmyy+lAB8nsbBrqc+e0fgFnf/KWMQgbPr93RGTqtbltPL6+Jw5NqTM
+         1n7/4ytuKzfeJxN5iKK5z8e2Gj957XATnmb5tIHY401swzxO+Q+j5WEdnn6+NN4azmjO
+         1W+g==
+X-Forwarded-Encrypted: i=1; AJvYcCWMf0QDvuxs4Wt9++MXO5zDAS6ZjtY25h27WcyyFwKIyK6d117ws4D5yYqPxXXuHqR7zxcYbqWtyuz2AxmZdJNlKJVWb3X/ZsMUyQ==
+X-Gm-Message-State: AOJu0YzvGcbFbwnh6dqcrKZwcERCqjMZnB6GIOnGMKXFSkecoGD8XmNg
+	gAW6SkC0L+2ZQsX+FCuTrXFZVjyvwCu/iL2Wdi6/Wube+uiJDTmg+NtWEQ0WO8E=
+X-Google-Smtp-Source: AGHT+IEyXjz5iWD+JzMbxman4f15iRJH7qvrzDvYbxC6J1pXkyjcclFUtxHEFXG2Dt+UzEnUxH7BCA==
+X-Received: by 2002:a17:902:e810:b0:1e3:e081:e7f5 with SMTP id u16-20020a170902e81000b001e3e081e7f5mr5334384plg.66.1712787701595;
+        Wed, 10 Apr 2024 15:21:41 -0700 (PDT)
+Received: from localhost ([2804:214:8686:5e16:705e:67c9:b3ef:a558])
+        by smtp.gmail.com with ESMTPSA id q8-20020a170902b10800b001e107222eb5sm39198plr.191.2024.04.10.15.21.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Apr 2024 15:21:41 -0700 (PDT)
+From: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
+To: Samuel Holland <samuel.holland@sifive.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+  linux-arm-kernel@lists.infradead.org,  x86@kernel.org,
+  linux-kernel@vger.kernel.org,  linux-arch@vger.kernel.org,
+  linuxppc-dev@lists.ozlabs.org,  linux-riscv@lists.infradead.org,
+  Christoph Hellwig <hch@lst.de>,  loongarch@lists.linux.dev,
+  amd-gfx@lists.freedesktop.org,  Alex Deucher <alexander.deucher@amd.com>
+Subject: Re: [PATCH v4 13/15] drm/amd/display: Use ARCH_HAS_KERNEL_FPU_SUPPORT
+In-Reply-To: <20240329072441.591471-14-samuel.holland@sifive.com> (Samuel
+	Holland's message of "Fri, 29 Mar 2024 00:18:28 -0700")
+References: <20240329072441.591471-1-samuel.holland@sifive.com>
+	<20240329072441.591471-14-samuel.holland@sifive.com>
+User-Agent: mu4e 1.12.2; emacs 29.3
+Date: Wed, 10 Apr 2024 19:21:37 -0300
+Message-ID: <87wmp4oo3y.fsf@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240403234054.2020347-1-debug@rivosinc.com> <20240403234054.2020347-5-debug@rivosinc.com>
- <20240410115806.GA4044117-robh@kernel.org>
-In-Reply-To: <20240410115806.GA4044117-robh@kernel.org>
-From: Deepak Gupta <debug@rivosinc.com>
-Date: Wed, 10 Apr 2024 14:37:21 -0700
-Message-ID: <CAKC1njSsZ6wfvJtXkp4J4J6wXFtU92W9JGca-atKxBy8UvUwRg@mail.gmail.com>
-Subject: Re: [PATCH v3 04/29] riscv: zicfilp / zicfiss in dt-bindings (extensions.yaml)
-To: Rob Herring <robh@kernel.org>
-Cc: paul.walmsley@sifive.com, rick.p.edgecombe@intel.com, broonie@kernel.org, 
-	Szabolcs.Nagy@arm.com, kito.cheng@sifive.com, keescook@chromium.org, 
-	ajones@ventanamicro.com, conor.dooley@microchip.com, cleger@rivosinc.com, 
-	atishp@atishpatra.org, alex@ghiti.fr, bjorn@rivosinc.com, 
-	alexghiti@rivosinc.com, samuel.holland@sifive.com, conor@kernel.org, 
-	linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, linux-mm@kvack.org, 
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, corbet@lwn.net, 
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, krzysztof.kozlowski+dt@linaro.org, 
-	oleg@redhat.com, akpm@linux-foundation.org, arnd@arndb.de, 
-	ebiederm@xmission.com, Liam.Howlett@oracle.com, vbabka@suse.cz, 
-	lstoakes@gmail.com, shuah@kernel.org, brauner@kernel.org, 
-	andy.chiu@sifive.com, jerry.shih@sifive.com, hankuan.chen@sifive.com, 
-	greentime.hu@sifive.com, evan@rivosinc.com, xiao.w.wang@intel.com, 
-	charlie@rivosinc.com, apatel@ventanamicro.com, mchitale@ventanamicro.com, 
-	dbarboza@ventanamicro.com, sameo@rivosinc.com, shikemeng@huaweicloud.com, 
-	willy@infradead.org, vincent.chen@sifive.com, guoren@kernel.org, 
-	samitolvanen@google.com, songshuaishuai@tinylab.org, gerg@kernel.org, 
-	heiko@sntech.de, bhe@redhat.com, jeeheng.sia@starfivetech.com, 
-	cyy@cyyself.name, maskray@google.com, ancientmodern4@gmail.com, 
-	mathis.salmen@matsal.de, cuiyunhui@bytedance.com, bgray@linux.ibm.com, 
-	mpe@ellerman.id.au, baruch@tkos.co.il, alx@kernel.org, david@redhat.com, 
-	catalin.marinas@arm.com, revest@chromium.org, josh@joshtriplett.org, 
-	shr@devkernel.io, deller@gmx.de, omosnace@redhat.com, ojeda@kernel.org, 
-	jhubbard@nvidia.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 10, 2024 at 4:58=E2=80=AFAM Rob Herring <robh@kernel.org> wrote=
-:
->
-> On Wed, Apr 03, 2024 at 04:34:52PM -0700, Deepak Gupta wrote:
-> > Make an entry for cfi extensions in extensions.yaml.
-> >
-> > Signed-off-by: Deepak Gupta <debug@rivosinc.com>
-> > ---
-> >  .../devicetree/bindings/riscv/extensions.yaml          | 10 ++++++++++
-> >  1 file changed, 10 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/riscv/extensions.yaml b/=
-Documentation/devicetree/bindings/riscv/extensions.yaml
-> > index 63d81dc895e5..45b87ad6cc1c 100644
-> > --- a/Documentation/devicetree/bindings/riscv/extensions.yaml
-> > +++ b/Documentation/devicetree/bindings/riscv/extensions.yaml
-> > @@ -317,6 +317,16 @@ properties:
-> >              The standard Zicboz extension for cache-block zeroing as r=
-atified
-> >              in commit 3dd606f ("Create cmobase-v1.0.pdf") of riscv-CMO=
-s.
-> >
-> > +        - const: zicfilp
-> > +          description:
-> > +            The standard Zicfilp extension for enforcing forward edge =
-control-flow
-> > +            integrity in commit 3a20dc9 of riscv-cfi and is in public =
-review.
->
-> Does in public review mean the commit sha is going to change?
->
 
-Less likely. Next step after public review is to gather comments from
-public review.
-If something is really pressing and needs to be addressed, then yes
-this will change.
-Else this gets ratified as it is.
+Hello,
+
+Samuel Holland <samuel.holland@sifive.com> writes:
+
+> Now that all previously-supported architectures select
+> ARCH_HAS_KERNEL_FPU_SUPPORT, this code can depend on that symbol instead
+> of the existing list of architectures. It can also take advantage of the
+> common kernel-mode FPU API and method of adjusting CFLAGS.
+>
+> Acked-by: Alex Deucher <alexander.deucher@amd.com>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> Signed-off-by: Samuel Holland <samuel.holland@sifive.com>
+
+Unfortunately this patch causes build failures on arm with allyesconfig
+and allmodconfig. Tested with next-20240410.
+
+Error with allyesconfig:
+
+$ make -j 8 \
+    O=3D$HOME/.cache/builds/linux-cross-arm \
+    ARCH=3Darm \
+    CROSS_COMPILE=3Darm-linux-gnueabihf-
+make[1]: Entering directory '/home/bauermann/.cache/builds/linux-cross-arm'
+    =E2=8B=AE
+arm-linux-gnueabihf-ld: drivers/gpu/drm/amd/display/dc/dml/dcn20/dcn20_fpu.=
+o: in function `dcn20_populate_dml_pipes_from_context':
+dcn20_fpu.c:(.text+0x20f4): undefined reference to `__aeabi_l2d'
+arm-linux-gnueabihf-ld: dcn20_fpu.c:(.text+0x210c): undefined reference to =
+`__aeabi_l2d'
+arm-linux-gnueabihf-ld: dcn20_fpu.c:(.text+0x2124): undefined reference to =
+`__aeabi_l2d'
+arm-linux-gnueabihf-ld: dcn20_fpu.c:(.text+0x213c): undefined reference to =
+`__aeabi_l2d'
+arm-linux-gnueabihf-ld: drivers/gpu/drm/amd/display/dc/dml/calcs/dcn_calcs.=
+o: in function `pipe_ctx_to_e2e_pipe_params':
+dcn_calcs.c:(.text+0x390): undefined reference to `__aeabi_l2d'
+arm-linux-gnueabihf-ld: drivers/gpu/drm/amd/display/dc/dml/calcs/dcn_calcs.=
+o:dcn_calcs.c:(.text+0x3a4): more undefined references to `__aeabi_l2d' fol=
+low
+arm-linux-gnueabihf-ld: drivers/gpu/drm/amd/display/dc/dml2/dml2_wrapper.o:=
+ in function `optimize_configuration':
+dml2_wrapper.c:(.text+0xcbc): undefined reference to `__aeabi_d2ulz'
+arm-linux-gnueabihf-ld: drivers/gpu/drm/amd/display/dc/dml2/dml2_translatio=
+n_helper.o: in function `populate_dml_plane_cfg_from_plane_state':
+dml2_translation_helper.c:(.text+0x9e4): undefined reference to `__aeabi_l2=
+d'
+arm-linux-gnueabihf-ld: dml2_translation_helper.c:(.text+0xa20): undefined =
+reference to `__aeabi_l2d'
+arm-linux-gnueabihf-ld: dml2_translation_helper.c:(.text+0xa58): undefined =
+reference to `__aeabi_l2d'
+arm-linux-gnueabihf-ld: dml2_translation_helper.c:(.text+0xa90): undefined =
+reference to `__aeabi_l2d'
+make[3]: *** [/home/bauermann/src/linux/scripts/Makefile.vmlinux:37: vmlinu=
+x] Error 1
+make[2]: *** [/home/bauermann/src/linux/Makefile:1165: vmlinux] Error 2
+make[1]: *** [/home/bauermann/src/linux/Makefile:240: __sub-make] Error 2
+make[1]: Leaving directory '/home/bauermann/.cache/builds/linux-cross-arm'
+make: *** [Makefile:240: __sub-make] Error 2
+
+The error with allmodconfig is slightly different:
+
+$ make -j 8 \
+    O=3D$HOME/.cache/builds/linux-cross-arm \
+    ARCH=3Darm \
+    CROSS_COMPILE=3Darm-linux-gnueabihf-
+make[1]: Entering directory '/home/bauermann/.cache/builds/linux-cross-arm'
+    =E2=8B=AE
+ERROR: modpost: "__aeabi_d2ulz" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] unde=
+fined!
+ERROR: modpost: "__aeabi_l2d" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefi=
+ned!
+make[3]: *** [/home/bauermann/src/linux/scripts/Makefile.modpost:145: Modul=
+e.symvers] Error 1
+make[2]: *** [/home/bauermann/src/linux/Makefile:1876: modpost] Error 2
+make[1]: *** [/home/bauermann/src/linux/Makefile:240: __sub-make] Error 2
+make[1]: Leaving directory '/home/bauermann/.cache/builds/linux-cross-arm'
+make: *** [Makefile:240: __sub-make] Error 2
+
+--
+Thiago
 
