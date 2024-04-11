@@ -1,81 +1,99 @@
-Return-Path: <linux-arch+bounces-3563-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3564-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39E8D8A1856
-	for <lists+linux-arch@lfdr.de>; Thu, 11 Apr 2024 17:16:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C76C68A18A8
+	for <lists+linux-arch@lfdr.de>; Thu, 11 Apr 2024 17:28:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CE1C11F2135D
-	for <lists+linux-arch@lfdr.de>; Thu, 11 Apr 2024 15:16:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 82E812862DA
+	for <lists+linux-arch@lfdr.de>; Thu, 11 Apr 2024 15:27:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9243C14A9F;
-	Thu, 11 Apr 2024 15:13:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 383022942A;
+	Thu, 11 Apr 2024 15:25:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="R7pDm3GO"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="U5YRkVIs"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20D0F13ADC;
-	Thu, 11 Apr 2024 15:13:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C141175A5
+	for <linux-arch@vger.kernel.org>; Thu, 11 Apr 2024 15:25:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712848399; cv=none; b=pEK4+7MVatbTy6goEo2CweqIiVtaOlXXMNiQ+i2/CzexVEIR3yUf8qvIMferVpHMirGpoIvZ0pKDYfnyK5BL+HJ+S39k5Fk6WSihKotk0UxuvYSw6D063b2ZA30d6UL8BIGLU2dEP58V2oIDsCxHR1e1knT5MQjEeQK0Wb6FJVA=
+	t=1712849142; cv=none; b=qSLVjLNNoSwKu8cHpYcExrTq7ngvj7x40Bnml+Xxt7LaIJpq5Zt5yAyh6+9TeOdYiGEqJeeV3Nx+JwQItdjcGJqgiuVN1Yrx8I3y9w2QLhsPAuRlNypFIGVtDHZYID81JTJ4Rk8Gzr2GLlqetdAXKvqHwCqDiVNmLWKQPjTu3t4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712848399; c=relaxed/simple;
-	bh=pN56ayWZsVC8Qsmxepu8PbsNstNvWyI8do9fFIC3f0E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tc1ykkZQuNnkHO+r52jlJf4vFhj9p1MgE5wIMi/53CLCY1mHdVsjXqo89TYGDZYauSrBfitO6YgRF5MCVXlLb5H1VV+AH+7dA0NUF6fQ5zfIbj+rQ6QYI3FdGLI4X6G80SppGWjujEjVmi7lybIgB8ii5ASPbMgBpS4b5pYvCwU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=R7pDm3GO; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=h/MHPqAJUaQnVuOJ9LRPRm8bT9y8j34KRGcWL/KK0UA=; b=R7pDm3GO8Ii5Ili8nlCHbqY/ci
-	HwQiGoHrPt0/QFJGLkfOYWapAgqNSD0m7dN47qkovXWmIJGWNxm24EBH2uEXCEf1pwbP/T0uTO8gR
-	/rf/ABFbrwhzwh1YaFsnJvOjD4FFPRlfjqXYQ4RRF8PPw0rOa25/OIn9ZdvO0hQc8wJpxKcRL7i/l
-	0y/jb12ZbyYiTzdtSNeuMI4b98guH1CwWtzoAnQiVaDAeoxaKUcUwh1eqyGFcqjXXvAmxC4RhZeLx
-	5jIDVlbbv4+L8DyPrR2/AwByKwg+ryYd7CukrFp9FKQQRznSA/iPSrw4ecKOwVRqeyHtPJVHvE+yq
-	YiNbS37w==;
-Received: from [50.53.2.121] (helo=[192.168.254.15])
-	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1ruw71-0000000CgHE-2Zjz;
-	Thu, 11 Apr 2024 15:13:15 +0000
-Message-ID: <5ca63761-93e4-47e2-8fd0-e300a08f044a@infradead.org>
-Date: Thu, 11 Apr 2024 08:13:13 -0700
+	s=arc-20240116; t=1712849142; c=relaxed/simple;
+	bh=S0tSkli8JleHY8iE9O2afY6bV3mjLC/eVHPCMEho8Ww=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Fsk8dbQetVKEZBqNSFDZFsL+Gt03+iASl0FOywurA2Q9YqqIyJN0YtvnW4OBe6k5Rc5EHAmIxjR+P11an5li0ZD1eu3KWmhvNcf1LpOY9/DWY6/1/sTSqmgvxkMoXuyACWxym+ujcVM/UjI1pDwa7CXIq1qxI4CSLqY+ldHH09g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=U5YRkVIs; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a4715991c32so1055888066b.1
+        for <linux-arch@vger.kernel.org>; Thu, 11 Apr 2024 08:25:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1712849138; x=1713453938; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=CABfqMACNUngHNLxS+WM0hHJ1yaxWLelGbJxYjHioD0=;
+        b=U5YRkVIsfjsdxYrqviqFldW3aGgJpxI95Xx9WtuZtRE4oGNUou/5vryJRC9Fm9mbWI
+         0oW0BHPWPWBNjOdKKZtlJlPuSTA7JCxqdpogQMFdoBWF1OD3kPk3rs7hdHqbvgvZDg0g
+         FPiIFMNvhw/PbASOX8xkWBMy8iKmqHbZbXdnniQgC1etonGUdgwPRRGtUD4z+eu6vlgb
+         Hnq5Ee+6VznM1khG44NboOAIt8kYqj5Q2zDb+onyXfL4pNnVpUZMlB7sfzDCSNFLZ1Ss
+         C8s8Fb2FJ1eVCLip9agNb+b1Vd0rUZFWc6akd2nrOheBpdsw0oUWp/Fy5ElLUlEqV/k0
+         LcXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712849138; x=1713453938;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CABfqMACNUngHNLxS+WM0hHJ1yaxWLelGbJxYjHioD0=;
+        b=LybAgCyVo4MXbUi/mFDn1PsYWPIdNk1ewkjoLO/cdJPH4K6rgFyPIhHABM71peykED
+         9ItsXZgiybNarMhAVVGKWssYmEXokol3douBNFLTfKivc+Dktu/ao3QgqRG66027fuFh
+         c0BIAMuGlQdAkifog+WT6YehpgVYiB3Xol2n9dRqt3A/LDL4N/agdnOh9+r0K9L6OXxA
+         p84dldWMTNoMr+0g3QSwuacIssdTaUUPvNbem6em6lrTZH5plDBGEFJ3WmGr4duATnbT
+         ahNSAV+bXZp7yKVxvbvXBO+usBzC9aJRCCuLl031qtiZugvugZbnIIHD/yOvFXn46iv6
+         mPIw==
+X-Forwarded-Encrypted: i=1; AJvYcCX977XuVIBI9hrlzuH6MxmFoa5+HHyf5uHdGupVeCKSgyX04PAavTy1ztFSJVCAwRkJA/FnRYrqrTOoLOy/qtS3VVfXnNPsz4al/g==
+X-Gm-Message-State: AOJu0YzcGZ8HRu4pIEsiqmsSgXBrYTRxIX7xMf31QyFqM4HfqvK8MKPf
+	TlVQ0WCrLj9ihbWxa501n0Lxr9sK5FStjV6Tt2HgP83i7t4BdRSVz9VztjaiGHs=
+X-Google-Smtp-Source: AGHT+IEEewk7llSPmgrxe/7mA2rySV/OUDonUpYE2d0l2M0z39pI2HKiyjdOd8AbAw/PCbmxmW//Bg==
+X-Received: by 2002:a17:906:4f06:b0:a52:3d1:6769 with SMTP id t6-20020a1709064f0600b00a5203d16769mr44591eju.14.1712849137563;
+        Thu, 11 Apr 2024 08:25:37 -0700 (PDT)
+Received: from localhost ([102.222.70.76])
+        by smtp.gmail.com with ESMTPSA id r3-20020a170906350300b00a522c69f28asm225076eja.216.2024.04.11.08.25.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Apr 2024 08:25:36 -0700 (PDT)
+Date: Thu, 11 Apr 2024 18:25:32 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Thorsten Blum <thorsten.blum@toblux.com>
+Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org,
+	speakup@linux-speakup.org, intel-gfx@lists.freedesktop.org,
+	intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	linux-wireless@vger.kernel.org, linux-scsi@vger.kernel.org,
+	linux-afs@lists.infradead.org, ecryptfs@vger.kernel.org,
+	netfs@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-unionfs@vger.kernel.org, linux-arch@vger.kernel.org,
+	io-uring@vger.kernel.org, cocci@inria.fr,
+	linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH] treewide: Fix common grammar mistake "the the"
+Message-ID: <0bd7ccc2-4d8c-455b-a6c2-972ebe1fcb08@moroto.mountain>
+References: <20240411150437.496153-4-thorsten.blum@toblux.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] treewide: Fix common grammar mistake "the the"
-To: Thorsten Blum <thorsten.blum@toblux.com>, kernel-janitors@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-s390@vger.kernel.org, speakup@linux-speakup.org,
- intel-gfx@lists.freedesktop.org, intel-xe@lists.freedesktop.org,
- dri-devel@lists.freedesktop.org, linux-wireless@vger.kernel.org,
- linux-scsi@vger.kernel.org, linux-afs@lists.infradead.org,
- ecryptfs@vger.kernel.org, netfs@lists.linux.dev,
- linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org,
- linux-arch@vger.kernel.org, io-uring@vger.kernel.org, cocci@inria.fr,
- linux-perf-users@vger.kernel.org
-References: <20240411150437.496153-4-thorsten.blum@toblux.com>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <20240411150437.496153-4-thorsten.blum@toblux.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-
-
-On 4/11/24 8:04 AM, Thorsten Blum wrote:
+On Thu, Apr 11, 2024 at 05:04:40PM +0200, Thorsten Blum wrote:
 > Use `find . -type f -exec sed -i 's/\<the the\>/the/g' {} +` to find all
 > occurrences of "the the" and replace them with a single "the".
 > 
@@ -83,43 +101,13 @@ On 4/11/24 8:04 AM, Thorsten Blum wrote:
 > 
 > Signed-off-by: Thorsten Blum <thorsten.blum@toblux.com>
 > ---
->  Documentation/trace/histogram.rst                 | 2 +-
->  arch/arm/Kconfig                                  | 4 ++--
->  arch/arm/include/asm/unwind.h                     | 2 +-
->  arch/arm64/Kconfig                                | 2 +-
->  arch/arm64/kernel/entry-ftrace.S                  | 2 +-
->  arch/s390/kernel/perf_cpum_sf.c                   | 2 +-
->  arch/s390/kernel/sthyi.c                          | 2 +-
->  drivers/accessibility/speakup/speakup_soft.c      | 2 +-
->  drivers/gpu/drm/i915/display/intel_crt.c          | 2 +-
->  drivers/gpu/drm/i915/i915_request.c               | 2 +-
->  drivers/mailbox/Kconfig                           | 2 +-
->  drivers/net/wireless/intel/iwlwifi/fw/api/tx.h    | 4 ++--
->  drivers/net/wireless/intel/iwlwifi/mvm/phy-ctxt.c | 2 +-
->  drivers/scsi/bfa/bfa_fcs_rport.c                  | 2 +-
->  drivers/scsi/fcoe/fcoe_ctlr.c                     | 2 +-
->  drivers/scsi/isci/host.h                          | 2 +-
->  drivers/scsi/isci/remote_device.h                 | 2 +-
->  drivers/scsi/isci/remote_node_context.h           | 2 +-
->  drivers/scsi/isci/task.c                          | 2 +-
->  fs/afs/flock.c                                    | 2 +-
->  fs/ecryptfs/keystore.c                            | 2 +-
->  fs/netfs/direct_read.c                            | 2 +-
->  fs/netfs/direct_write.c                           | 2 +-
->  fs/overlayfs/super.c                              | 2 +-
->  include/uapi/asm-generic/fcntl.h                  | 2 +-
->  io_uring/kbuf.c                                   | 2 +-
->  lib/zstd/common/fse_decompress.c                  | 2 +-
->  lib/zstd/decompress/zstd_decompress_block.c       | 2 +-
->  scripts/coccinelle/misc/badty.cocci               | 2 +-
->  tools/perf/Documentation/perf-diff.txt            | 2 +-
->  30 files changed, 32 insertions(+), 32 deletions(-)
-> 
 
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+It's tricky to know which tree a patch like this would go through.  We
+used to have a trivial tree for this stuff but I guess that didn't work.
+It's possible that it could go through linux-doc, but probably it has to
+go as a set of patches through each of the trees in the CC list.
 
-Thanks.
+regards,
+dan carpenter
 
--- 
-#Randy
 
