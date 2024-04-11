@@ -1,62 +1,62 @@
-Return-Path: <linux-arch+bounces-3596-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3594-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8430E8A1D02
-	for <lists+linux-arch@lfdr.de>; Thu, 11 Apr 2024 20:01:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3170D8A1CFC
+	for <lists+linux-arch@lfdr.de>; Thu, 11 Apr 2024 20:01:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 127EB1F22A55
-	for <lists+linux-arch@lfdr.de>; Thu, 11 Apr 2024 18:01:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D9656287A8E
+	for <lists+linux-arch@lfdr.de>; Thu, 11 Apr 2024 18:01:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC5FD1C68AD;
-	Thu, 11 Apr 2024 16:46:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14D511C6884;
+	Thu, 11 Apr 2024 16:46:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="d5b3yzMw"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="WltAjyD4"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2080.outbound.protection.outlook.com [40.107.237.80])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 037461C689F;
-	Thu, 11 Apr 2024 16:46:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 662D11C6614;
+	Thu, 11 Apr 2024 16:46:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.80
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712853995; cv=fail; b=NQXjK3ZsiadK7OsHs1fvX4J9aBqmpOGOvSj77kyEv27DXQvpcZnfxgBaMdM+KULJVUjo/hySVVn0YxCcdv6wA2br17BmF2seXMHtDdXFCse9AFodSDHXKg8+/gzeMHE3nAOJS1drTVNJ2+/VVTZGDlIRmdphz8evrn7vCYK0TgY=
+	t=1712853992; cv=fail; b=WGlroHRqQwECawDUZq9TWRp5dkUfzMVclguFPbuv83YjSywxfRUI3PxKnUstj6rcxIIjbzSUDXU4ZNoLDpE4FL5mqyLjEYog46ZzSLrghXmijwW7HAcm120H4PM0RVZqD5xt+EZDEQWVqYTIWHJCFJJwHv1t3BawpVBcAMyHKSw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712853995; c=relaxed/simple;
-	bh=NOJg/hPWHhcWU41gXULSFdl2k7IGpgNTF2ccfXto48c=;
+	s=arc-20240116; t=1712853992; c=relaxed/simple;
+	bh=8X0JGd6PYwFznOK/k+8Q/tJawDZXr5NfPUgiV3pVVTM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ovpMYzH9oBOaYUbVQhpeayyHzGAIBvEGidH42pTM5srRMUaEN+l1pYrHGgAg9Z+AqLvXMOq21fHP2THCgIc0XY3zvZHCWZqijSGcTxpoBRMlI9CAIZfu1OjR3iZ0iVUIK87V19wyu1zIhbTeqtEbNFMYnl6iE7OQE3/ViI+IAS4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=d5b3yzMw; arc=fail smtp.client-ip=40.107.237.80
+	 Content-Type:MIME-Version; b=YLCwu2mrOdaypCRW5udxzPqooNv5KRt3QaaNTWKs9A8alDKCAqCwe2QrrXnZzX64/cqQRYR6KYxNjUT3IhHmxO6AuZj1AQevak5ec+EoR2v/d0G+eOFmykv0de7NOLTje9jNIXqAE9FZDaJv2jWcGLo/TijOWNlGJLZbFmtR5N8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=WltAjyD4; arc=fail smtp.client-ip=40.107.237.80
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TJEMRd1Tx0CtllvCZUIu6q7Fl4LV4yJCj7nzJuH8p+EzuH/jMriR/JT3rq0zAx7OnOS0ZXGU3lgYQKYQkzvYv3L5Je5n3e7uUGbXn4tp12fG55ypLj736xhjjau9FCsSyQxSlseVvw+7HtGy3yqaYeOWzskauPr1bLVjvRqTzN4wJ4tpaDgcZYR4LgrpwOMwCCxOORXqxaZZPx+e+Y0ibJ9GOXWFx/GCekE7phMB8kMg0xz/B/oHJSwVbTBGV8wfpfSUB8EZ5v6jcJdP1hwd4SwYF4AM8dqY8DbHxIAv2opR76GOd8Kk1LQaNqal//R9//8uMLn4H+ZE4EUv5zJHxw==
+ b=WfetvjP0bRsA7pApjR90PEzjVf5iqzjj4EwUMwx1GS0WYSxbAQIcMzvy1lG3hSBkCKsASjNCVfDwg4Hazwgvxlp7vzkemALmMOJILISl6F/czFDSqk6es0MGP2ohDSzVlVz7ELm0xJY++fz8wpYtLlQtOiB4/aPuRHa9kOkZTN8X/Z1zbkU3I/K2Vh5+MmUZM2r/MDXzdTRK49WHtHSyAvYb4nfv4NLgaJMegPbASkVqZ6QPVp4Ske7iPCQC+zS+mIk2LIeu1KARWBlLouQit0HVQysaWRjFSVqkFhzb/yVnG6rJ+WosRe5Bv9qS6xyexXJu7qTBWi7kEV3SY//KaA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QdkM2UeXpLcuC+zg1KbbyqRpkGfk4PfuMlT6xAklK9E=;
- b=Y1kL+svoKTmo08Ir8vy2mQ6rUWm1Q4n7WYM7c4oEfGz1X8vfXGrN6NclA9fhlPu47KMbVYsv34Hv9hOdxHO7tL6AkG1SoHTRVuNTyb1K0f+kzEixUVUfemgVIxkulMwwKCHkMD3CLgrGGCDxYKa0bXOWi7tjP0zWUxH5LZXFMdUnC8VQRux1Jguc3CC1S+qkDnUQRehFwUAbbRQ4Rhh0VEysYYmZBgxYfkhLrU2GcXOLVq31NNie6IokR1LX05rZiJKR1myFFPoGRjznyANKqffzfj1fhBPHbDS0GAz8CczJtSY9fXQIAwMlK8hLlfR8Fm/dEFLo415XcLQbS6B8jw==
+ bh=iL/+1Ovzzk5ip+yquiKZoDvD1L09FZj6JaZuh5HD2sM=;
+ b=W56kkzgzr9xa90yAWcPTo4mDU5iV9gRBqTDmYgJVQArgWFddISXXwKw7E9vrBIoddEI2IFaqEGkWGQTSzsx4E4PqbgheUZO6q+cTP2OHrZR/bqLlDcqmNyFWXxQwe4EoZ1uncYLDuQcLAWqV+0c8J6qTAZTy5gnJzLjRX2WlS0vQ17hXM2FAHRIn9berYAJiIsIFlTHP2nDBRDdxoMXSBZi9KYLMDA8BKUxalMrTtdZ174ftYhgoqRdLyxEpdQ6SvzsgxeGfAwTkLIZ9knedWdN0epMGlT5Qon+iGHkh6gel+bUHoUn7tK/KUVLTHuNGwzc0CJV5zeaxQiZ6dFYEng==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QdkM2UeXpLcuC+zg1KbbyqRpkGfk4PfuMlT6xAklK9E=;
- b=d5b3yzMwZp2PfMPIDS5x7ziKGCf4mR8hJ+OGbldd51xr2V2qPfTgm7T2ACF6oCQjsEmvW8i2/Ic6AlcmWyzf8qpIIohGoovG7SiiffvBPzlLWy9aLI8+5SiYoIcUiK/1Xd6VFJwp64PPaiRjIPrIb9flM/qmuRB0X3antaRhKjpCppBhZLx0gMBQChzm0b7FgDD21cMxrmFrupigbqrY7SlWFkOfHwTQYAg0yQa2X3cUB7QK+20GrndVdvQlRBuk9j8IogxYrHwW0HUravuz9t7Jgba3inzsBdfwVNBtcr2ep3t86gs1nH4DRikmjid4oMbqdyltgAGnugGynPd5tA==
+ bh=iL/+1Ovzzk5ip+yquiKZoDvD1L09FZj6JaZuh5HD2sM=;
+ b=WltAjyD4WBz27CJmwOp742fSbs8E3sJikV40Ffa0MXy1S+DP6iuKIByZ5I95ps4eJ0eCyEpIeXb3JEHDfDBKfsVevsEPnKQlcBpFTS0Gm+XTDWw1EBq4bEV+WaryC8atHfSlymMuycaekcC/Ar+d9v+AzPjobHMe8G7kTAcsySdAtSNvx74pm94Iy3+9cMZMkDtQZZEwskuB5vLYEBbaz81pL0SMYJTZMe9uY/UNO7KCG4KMmqIEmHaDz4Euotl/weUdBDIP6ZJQQwWgMKRfHZQ5BA4bL9ToyPbOCTKw7mfrPZf+hy1+o4ue4bQfZI4j919RdztTxznFYa2BWu9Skg==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from DM6PR12MB3849.namprd12.prod.outlook.com (2603:10b6:5:1c7::26)
  by SJ2PR12MB8064.namprd12.prod.outlook.com (2603:10b6:a03:4cc::17) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.46; Thu, 11 Apr
- 2024 16:46:21 +0000
+ 2024 16:46:22 +0000
 Received: from DM6PR12MB3849.namprd12.prod.outlook.com
  ([fe80::6aec:dbca:a593:a222]) by DM6PR12MB3849.namprd12.prod.outlook.com
  ([fe80::6aec:dbca:a593:a222%5]) with mapi id 15.20.7409.053; Thu, 11 Apr 2024
- 16:46:21 +0000
+ 16:46:22 +0000
 From: Jason Gunthorpe <jgg@nvidia.com>
 To: Alexander Gordeev <agordeev@linux.ibm.com>,
 	Andrew Morton <akpm@linux-foundation.org>,
@@ -97,15 +97,15 @@ Cc: Arnd Bergmann <arnd@arndb.de>,
 	Niklas Schnelle <schnelle@linux.ibm.com>,
 	Jijie Shao <shaojijie@huawei.com>,
 	Will Deacon <will@kernel.org>
-Subject: [PATCH v3 4/6] arm64/io: Provide a WC friendly __iowriteXX_copy()
-Date: Thu, 11 Apr 2024 13:46:17 -0300
-Message-ID: <4-v3-1893cd8b9369+1925-mlx5_arm_wc_jgg@nvidia.com>
+Subject: [PATCH v3 5/6] net: hns3: Remove io_stop_wc() calls after __iowrite64_copy()
+Date: Thu, 11 Apr 2024 13:46:18 -0300
+Message-ID: <5-v3-1893cd8b9369+1925-mlx5_arm_wc_jgg@nvidia.com>
 In-Reply-To: <0-v3-1893cd8b9369+1925-mlx5_arm_wc_jgg@nvidia.com>
 References:
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: MN2PR07CA0027.namprd07.prod.outlook.com
- (2603:10b6:208:1a0::37) To DM6PR12MB3849.namprd12.prod.outlook.com
+X-ClientProxiedBy: BLAPR03CA0071.namprd03.prod.outlook.com
+ (2603:10b6:208:329::16) To DM6PR12MB3849.namprd12.prod.outlook.com
  (2603:10b6:5:1c7::26)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -115,298 +115,86 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: DM6PR12MB3849:EE_|SJ2PR12MB8064:EE_
-X-MS-Office365-Filtering-Correlation-Id: c64ce94c-f38d-4ded-fb14-08dc5a46ea88
+X-MS-Office365-Filtering-Correlation-Id: 162f02e4-4c68-4f16-202b-08dc5a46eac6
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	FrMUx/egIULNisnlgtTRQjHeUD1fYlXWH3Fr+pttxLHUwtbUq0OXKk/91UfBuXlJjr/mUtrkpdZtgcpxBEsHievATJhHWv/YyU+b0PIkqBtx3B0ACFWsNOlyVZ2rW1ysIUfg8eHuRdAozlUtyzOb4J3bpFDThnsmf3s1AKsnDrzivNTeJHKbjl72pXAW3LxLpYY6ZjAWpXI5LL65bs0FgCHU/INZj82XQAjiQ9qR8nhUCnrL28KLHNye7j9lQDM1Fia1gj2C3LWDxbUF/gsvoykek8ay2OI0HaMCXA4x34SG5ptWQ4ukdrIx/T293QlI7Tt4lMsvnP3HZ0kHaWp5MiyDv/QkeIAGI0SIaYaN9qeVYAZuVmqoyS80/WmgJxE0OtClX4el1KuBUVXazfNidHJvHBMbGTcm4gmo/pDlmkwk6YgnjbwAm7pxoKzDkf/UU+nyu+0g5X6cRQhu7t7/mfIMU2sTuC8OydamA8JlTt4tw0swapwNi/uAetrmHQr+O1V/NhhGNwox5MiCYKK+CwiDBH6+B7ABb5tcBVyvVUzZuNP+iBda15lnWQ93uyMSRmWKPUJ4C3WUXleJZ7kr0dJE+Us3F2lOncQkp0ULAJiiGbzwn7WDfuJWOBAlxWkX0sLggsN4UoPmEsGYrKYWaWQiFup+fKjX+aNA2qIOG3Lt4dvt34Yx5Vu/BDLmQlaCMsEz3+hmD1+eMSV+ljSHaA==
+	7JAzZB7dIhZczOp87EmeQ3lo4R0RBRwn9quRWo3Az8U065VXuJTfjNHCCWWt/2Kh0T9JPZNqMYTCbxmZi3cXDDuKr+jqIkJooQ9aJM7xzy8yts26tHkXzPU7xHzhWS89dZ66HeqcU5Z+OokWjnbuk4Beo4fvPAVfnKphT0qVQEiSa0S83gATAVlIoPeyzBfFrEXZdfczbbtpnuu68C2wmncUxuefAdK/J0R/XvJvVk+lGtqc0Xi4bssFDvLxKBEv1IeegF2n6fzsQ5OoVTlY+dPBJPbyzOV4v7KOn4EV0Lj4gkc+eg3nsq+VtL8O82gBF76eeoMjuz3tJ9GFTstYygc/4QnIQSqm80hZtRzIbwmSUaa0qN9jZKO0mv4XXqTSurfvYhhzdwaidzU1d3FCwfkN/ZelAY6I2rt6kmZIkeN9VkiQrNvFoCL35fp/YvIimn+YqATQOt7mU60ZIeEt1V+4RRMB6OZlBuRATGs9ychXd5yzUha5xWojWMH85A+RVX3SvoJbBzH1K5lj60ImuyDAb/R+H1Ag5d0UomlosmXBH7puyJzpjfVM1ft2zoEc3X3viXKP0vGj4OcOKheCvQHr9JKOyLBJJXiA6s4KSbPJHNJmxP7PCK9G2aGNDSus52jC0kkHrgAzFliiAAiRHf2Inh4wgfeaIU+wHFBzeFcNWOst0mvb0OqmbS/4x4ZU4Ph2uQ4gyjD3mi6Z4/Xt2Q==
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3849.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(376005)(7416005)(366007)(921011);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?Krto3W5Rf/xWe+ysl1hDaR34+oixAHavmGDs5wLMd0ZMa4niOyJURnoAqahj?=
- =?us-ascii?Q?mJMSHarihLYcUwKaULISaCgS/iNTIoAhzAgNn6weeEeLX0ZizeibithMpXHX?=
- =?us-ascii?Q?DiwNykXWYeuCg1PzTPIZgdoD7xZ/Qamm5crxTE24FOlg8XOtL4tQoxFzIAYG?=
- =?us-ascii?Q?e9PT8JbmXeReVm0mRbtbTpUKEiLcMZ7CMP5/ffjf0JwsV/pXyOeBt74fP1EJ?=
- =?us-ascii?Q?8jzWPNmafggVRfXh8qc82jxl/okACa49tmFZsiir0ToQzTOAEcGdk02apxvu?=
- =?us-ascii?Q?wpdSQvNvKE46wNxwYb5rijbAtI/B8RvHCVAAcWKQtHBZ7rMhR4eGzXxUe3Re?=
- =?us-ascii?Q?b0Paoy635dX4zRtIAWk5rGDoL9kP7Da/1LGqAMAbjl3OORNxR0ErIj3XDuWP?=
- =?us-ascii?Q?E8VsGc6NgC9ZO459JtEOOlDb4Hlp7rGU/pnP+VVUDJXUh1Oz+Zvwq2g6J5gQ?=
- =?us-ascii?Q?tf9toQvTKQha0Jn2ixoUbNFbYsYtOsRR2OXrhKo6n+jURNHR1csXpqjVQVXS?=
- =?us-ascii?Q?MqPtUQ++BY/i713oZasIom6ORZiVuJunR5y20gEukUwIdxbW7eDJa/voSZg7?=
- =?us-ascii?Q?7NUjW1GAL5Hr0tMWkl1LeEY8JFrVv3gN3inqrSik2Pd8Onz1rUoPB/p8yHfb?=
- =?us-ascii?Q?1R0fJAvNJIpXgoSdMNB+uYzHujAiZEix39ZWrmIDRk4uE7f+7Ptr9/VELcvC?=
- =?us-ascii?Q?VDsYHX+4YCIuydBiVDUl5upv2HsxyaYEd3gBETxaaaNQn6y5B8sVP5GlgKfQ?=
- =?us-ascii?Q?8V+exsCkrvcKqp9P79tK40fawz2yT4OX/w1gOdU89GKyxTK2HHiQ3oyL//rK?=
- =?us-ascii?Q?tziMirnGgtxq+1k2vX6WZU3xzKA6edVrVjkgEnQrJNPS2BBFB1dhEeP0lpog?=
- =?us-ascii?Q?lxVY0PpAIZ9MDMxgQAwaUVRdNp6YlhK1cJLede5e0RGtZEP9zc/7XPZ/igsV?=
- =?us-ascii?Q?zQuhK54CfP5YdA5uiDXsv9qiY8nOdxlUDzzSCrZ2Z9uZCnKuRpCbZ6z/8t6T?=
- =?us-ascii?Q?G1IKCM45TAMKq7Qvz0ul6bA1G+A5V67wyO0Tw2WSUIGqZCjr8qvhxEn0b69s?=
- =?us-ascii?Q?Sp2lq/QOjRWWRgjsNeg2rpNbtl8O/CJKdeVkTBJKvQSIVYunfRgYcGUTYxsc?=
- =?us-ascii?Q?ejD2XundUAaAiFnY31XHweJs6yd1kKc+MqJqcHKAfdKJw8MuOZlC9Yh3I8Gz?=
- =?us-ascii?Q?aIaY6LhTTZBbv2O1jh4KSNs4+1UYcb9LMFG+MfodUAT4CRUe72OBTEUN9tlI?=
- =?us-ascii?Q?yeQEmWSXf263yy8Az4tDdAAacwHcPIZkgFRZsBX0kj8tCVDm5ybjToIyql3i?=
- =?us-ascii?Q?iBsgfZYeZFGupAmR6WyaS1O0MaJJUD85nrVKsleQKxjcuUVbS1ceUGcbTQD0?=
- =?us-ascii?Q?SL7DF7nAHN+wdlw6oBOu0VuUcP/jKiJPXgYnfkFF1Mu0pY+hbEPDMoZFeQ8Y?=
- =?us-ascii?Q?q77FtjsSWPxbPhSMxqxNCQl3z5hMLTr5EIyZ/uHXOHS681mct4UnhlTsLukp?=
- =?us-ascii?Q?LaAtYVbhVJ0Hoj8FGkXxGiaWbcnPHrzjDIEDSh3h2sBeWaCettXLRM9eDLKF?=
- =?us-ascii?Q?aDJPipo1XqeX9n706nZ+EolJux7tSvBNyNQND+vp?=
+	=?us-ascii?Q?X6SvtBQW9hfgnqqofhbe4drSqngbPmUuplwZIDmBET/aj3Tdq3L8tT0gafPb?=
+ =?us-ascii?Q?Dj91vcTOdzyFtdEonsJT9Q056tJWieVbV/JJOVWGKSSVlDvD+xliMeL7fhFa?=
+ =?us-ascii?Q?veEfiR0RjpBJ1Y3VxL8K+HqeejjsTEPgjOp2HtCIsnm2qbTiaaOxWqDfGaVI?=
+ =?us-ascii?Q?lnjwRMZlzVyGIRrgCDA5GhZccvjBUFimCKO72C4SuviLffJs2MIjAtsD749S?=
+ =?us-ascii?Q?4w0qT70vGqidR13rZ68rwi1ef90NRGAE10kD2SpsW/NIqx6tiQeGr1Li0GYQ?=
+ =?us-ascii?Q?90nPwxPFS4bAr724bt9v/e/4Q0rcxoSfR/HGb87f4Ap3Yly3SHPAqsHEYcX8?=
+ =?us-ascii?Q?jGFRFMzGug5VFs2JAMTpVYXPqSisq8rj62Vlvez/Mjnuop4WxnoGXDgneYtN?=
+ =?us-ascii?Q?buDj68s4kB8L4ZDf9vBaMLGGXqFzW0GjTLtlbFKdM7gxlHBLuxSLhNzRvEDx?=
+ =?us-ascii?Q?FeWm3qpWfArRm79GNGdMJIiPZFXnK/xCraATVbtpBWWYNn5zJzw6uUUBS5M4?=
+ =?us-ascii?Q?BSZIsHMcVr0CVDBHju+CgrCDesc4f/lGuLaDoUHwu+skR8hTMs8PXT2hvs+K?=
+ =?us-ascii?Q?xpIq0CLaFodyciYRfHRVUPBQh2S0iJsAaNxX7LN/rR6BmQL9uDzyiP6vq9bO?=
+ =?us-ascii?Q?CPjUYAiokyjsDt8riyaRdQbhe9l5uIyatWS9FmlyJw96y79uBIiZ4+STBxZv?=
+ =?us-ascii?Q?qARu5kjfBIuheIUS7Xp1fDLjYC/qdTdLZ252IPVZ7APwYp3342ZcYxUhTIaR?=
+ =?us-ascii?Q?wKODbE9MuYduzWjWrGgnseGi6wvkIPuNbI782LbSgBPrALbzUFvacuP6Hg0c?=
+ =?us-ascii?Q?On47qkusCFCob7dl3sSFC/+oCkPkyOH24ipj6JZrszG4id6r4y+jpneFN4rG?=
+ =?us-ascii?Q?5JOsOErapLclINz87WubDL4WjoQ6vkChlbDEdnMf5WrTCFrRlx4fT71ORB7f?=
+ =?us-ascii?Q?AXPZLyty4Qc0kWs6lGWtSKtvzu0FSc1+Jpsut65he+Hhw3OWEJENDGQQxWdZ?=
+ =?us-ascii?Q?pM+zu7FSjBWCb3uJ08FR0Viyt8OC605gXRkfzHv3tRaoKSNv6IV80LJAwc7S?=
+ =?us-ascii?Q?fYJxfNnA/P0cee8voVu/UUMZuhiAOjy0r4CEh0Q21AQuYDtTvSDncwLtGauD?=
+ =?us-ascii?Q?lLggBD9vL5vCdxibkQiRwcebSZFB77QMcQircK46RfUgyjKfY+mWRNHLymva?=
+ =?us-ascii?Q?/CrZLlOURV5rxKj7T1hgKi34ciEpNBVV2SDecUZUZMPhI1Qgn5w+LbB26TTS?=
+ =?us-ascii?Q?b6MBs/+4FhfUqbZ7NUX+HdeWlA7SSk22KwdzFt6IWRBMKN0UtmamDeyZ864u?=
+ =?us-ascii?Q?sH8qiLBLe3ZB/a5HvuXphWmMGE+CyJCkc82A7d4124yn7l1nrfc8fBkGUrZ1?=
+ =?us-ascii?Q?1WHv1f85gT0ITbVhhDdUSATNhkp8AabJkn0azJIsl7LAAJyF310Dz03Pgnx3?=
+ =?us-ascii?Q?9m4F1LoeV7sqKfmUCEXV4MwDYzcEcdiSiBOSBHeb6KE6d0WNIxxVew57KEmH?=
+ =?us-ascii?Q?UN4XIeGnhbKKPiSDlyEjcMd7rJMocHC3ZrLyG3c5EkjXTH4oevGHza3iKLvZ?=
+ =?us-ascii?Q?Fg3KQ8XkcNcNgJyvGq+QulfjojqsVbEUw63PSbaf?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c64ce94c-f38d-4ded-fb14-08dc5a46ea88
+X-MS-Exchange-CrossTenant-Network-Message-Id: 162f02e4-4c68-4f16-202b-08dc5a46eac6
 X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3849.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2024 16:46:21.0969
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2024 16:46:21.3880
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gi1ybZbh//lOL0sZX9HUsV/9B1EQ+Exz9d3YRFh0s+znvjJKJCAlW/IzA/7aT8wJ
+X-MS-Exchange-CrossTenant-UserPrincipalName: s4Vw9au7lLe47jv4H7gUn9+gsAiz82wDhVtCX7hsISQylfWL9cWHdbq4E0Y3Nkqa
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8064
 
-The kernel provides driver support for using write combining IO memory
-through the __iowriteXX_copy() API which is commonly used as an optional
-optimization to generate 16/32/64 byte MemWr TLPs in a PCIe environment.
+Now that the ARM64 arch implementation does the DGH as part of
+__iowrite64_copy() there is no reason to open code this in drivers.
 
-iomap_copy.c provides a generic implementation as a simple 4/8 byte at a
-time copy loop that has worked well with past ARM64 CPUs, giving a high
-frequency of large TLPs being successfully formed.
-
-However modern ARM64 CPUs are quite sensitive to how the write combining
-CPU HW is operated and a compiler generated loop with intermixed
-load/store is not sufficient to frequently generate a large TLP. The CPUs
-would like to see the entire TLP generated by consecutive store
-instructions from registers. Compilers like gcc tend to intermix loads and
-stores and have poor code generation, in part, due to the ARM64 situation
-that writeq() does not codegen anything other than "[xN]". However even
-with that resolved compilers like clang still do not have good code
-generation.
-
-This means on modern ARM64 CPUs the rate at which __iowriteXX_copy()
-successfully generates large TLPs is very small (less than 1 in 10,000)
-tries), to the point that the use of WC is pointless.
-
-Implement __iowrite32/64_copy() specifically for ARM64 and use inline
-assembly to build consecutive blocks of STR instructions. Provide direct
-support for 64/32/16 large TLP generation in this manner. Optimize for
-common constant lengths so that the compiler can directly inline the store
-blocks.
-
-This brings the frequency of large TLP generation up to a high level that
-is comparable with older CPU generations.
-
-As the __iowriteXX_copy() family of APIs is intended for use with WC
-incorporate the DGH hint directly into the function.
-
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: linux-arch@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+Reviewed-by: Jijie Shao<shaojijie@huawei.com>
 Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 ---
- arch/arm64/include/asm/io.h | 132 ++++++++++++++++++++++++++++++++++++
- arch/arm64/kernel/io.c      |  42 ++++++++++++
- 2 files changed, 174 insertions(+)
+ drivers/net/ethernet/hisilicon/hns3/hns3_enet.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/arch/arm64/include/asm/io.h b/arch/arm64/include/asm/io.h
-index 8d825522c55c84..4ff0ae3f6d6690 100644
---- a/arch/arm64/include/asm/io.h
-+++ b/arch/arm64/include/asm/io.h
-@@ -139,6 +139,138 @@ extern void __memset_io(volatile void __iomem *, int, size_t);
- #define memcpy_fromio(a,c,l)	__memcpy_fromio((a),(c),(l))
- #define memcpy_toio(c,a,l)	__memcpy_toio((c),(a),(l))
- 
-+/*
-+ * The ARM64 iowrite implementation is intended to support drivers that want to
-+ * use write combining. For instance PCI drivers using write combining with a 64
-+ * byte __iowrite64_copy() expect to get a 64 byte MemWr TLP on the PCIe bus.
-+ *
-+ * Newer ARM core have sensitive write combining buffers, it is important that
-+ * the stores be contiguous blocks of store instructions. Normal memcpy
-+ * approaches have a very low chance to generate write combining.
-+ *
-+ * Since this is the only API on ARM64 that should be used with write combining
-+ * it also integrates the DGH hint which is supposed to lower the latency to
-+ * emit the large TLP from the CPU.
-+ */
-+
-+static inline void __const_memcpy_toio_aligned32(volatile u32 __iomem *to,
-+						 const u32 *from, size_t count)
-+{
-+	switch (count) {
-+	case 8:
-+		asm volatile("str %w0, [%8, #4 * 0]\n"
-+			     "str %w1, [%8, #4 * 1]\n"
-+			     "str %w2, [%8, #4 * 2]\n"
-+			     "str %w3, [%8, #4 * 3]\n"
-+			     "str %w4, [%8, #4 * 4]\n"
-+			     "str %w5, [%8, #4 * 5]\n"
-+			     "str %w6, [%8, #4 * 6]\n"
-+			     "str %w7, [%8, #4 * 7]\n"
-+			     :
-+			     : "rZ"(from[0]), "rZ"(from[1]), "rZ"(from[2]),
-+			       "rZ"(from[3]), "rZ"(from[4]), "rZ"(from[5]),
-+			       "rZ"(from[6]), "rZ"(from[7]), "r"(to));
-+		break;
-+	case 4:
-+		asm volatile("str %w0, [%4, #4 * 0]\n"
-+			     "str %w1, [%4, #4 * 1]\n"
-+			     "str %w2, [%4, #4 * 2]\n"
-+			     "str %w3, [%4, #4 * 3]\n"
-+			     :
-+			     : "rZ"(from[0]), "rZ"(from[1]), "rZ"(from[2]),
-+			       "rZ"(from[3]), "r"(to));
-+		break;
-+	case 2:
-+		asm volatile("str %w0, [%2, #4 * 0]\n"
-+			     "str %w1, [%2, #4 * 1]\n"
-+			     :
-+			     : "rZ"(from[0]), "rZ"(from[1]), "r"(to));
-+		break;
-+	case 1:
-+		__raw_writel(*from, to);
-+		break;
-+	default:
-+		BUILD_BUG();
-+	}
-+}
-+
-+void __iowrite32_copy_full(void __iomem *to, const void *from, size_t count);
-+
-+static inline void __const_iowrite32_copy(void __iomem *to, const void *from,
-+					  size_t count)
-+{
-+	if (count == 8 || count == 4 || count == 2 || count == 1) {
-+		__const_memcpy_toio_aligned32(to, from, count);
-+		dgh();
-+	} else {
-+		__iowrite32_copy_full(to, from, count);
-+	}
-+}
-+
-+#define __iowrite32_copy(to, from, count)                  \
-+	(__builtin_constant_p(count) ?                     \
-+		 __const_iowrite32_copy(to, from, count) : \
-+		 __iowrite32_copy_full(to, from, count))
-+
-+static inline void __const_memcpy_toio_aligned64(volatile u64 __iomem *to,
-+						 const u64 *from, size_t count)
-+{
-+	switch (count) {
-+	case 8:
-+		asm volatile("str %x0, [%8, #8 * 0]\n"
-+			     "str %x1, [%8, #8 * 1]\n"
-+			     "str %x2, [%8, #8 * 2]\n"
-+			     "str %x3, [%8, #8 * 3]\n"
-+			     "str %x4, [%8, #8 * 4]\n"
-+			     "str %x5, [%8, #8 * 5]\n"
-+			     "str %x6, [%8, #8 * 6]\n"
-+			     "str %x7, [%8, #8 * 7]\n"
-+			     :
-+			     : "rZ"(from[0]), "rZ"(from[1]), "rZ"(from[2]),
-+			       "rZ"(from[3]), "rZ"(from[4]), "rZ"(from[5]),
-+			       "rZ"(from[6]), "rZ"(from[7]), "r"(to));
-+		break;
-+	case 4:
-+		asm volatile("str %x0, [%4, #8 * 0]\n"
-+			     "str %x1, [%4, #8 * 1]\n"
-+			     "str %x2, [%4, #8 * 2]\n"
-+			     "str %x3, [%4, #8 * 3]\n"
-+			     :
-+			     : "rZ"(from[0]), "rZ"(from[1]), "rZ"(from[2]),
-+			       "rZ"(from[3]), "r"(to));
-+		break;
-+	case 2:
-+		asm volatile("str %x0, [%2, #8 * 0]\n"
-+			     "str %x1, [%2, #8 * 1]\n"
-+			     :
-+			     : "rZ"(from[0]), "rZ"(from[1]), "r"(to));
-+		break;
-+	case 1:
-+		__raw_writeq(*from, to);
-+		break;
-+	default:
-+		BUILD_BUG();
-+	}
-+}
-+
-+void __iowrite64_copy_full(void __iomem *to, const void *from, size_t count);
-+
-+static inline void __const_iowrite64_copy(void __iomem *to, const void *from,
-+					  size_t count)
-+{
-+	if (count == 8 || count == 4 || count == 2 || count == 1) {
-+		__const_memcpy_toio_aligned64(to, from, count);
-+		dgh();
-+	} else {
-+		__iowrite64_copy_full(to, from, count);
-+	}
-+}
-+
-+#define __iowrite64_copy(to, from, count)                  \
-+	(__builtin_constant_p(count) ?                     \
-+		 __const_iowrite64_copy(to, from, count) : \
-+		 __iowrite64_copy_full(to, from, count))
-+
- /*
-  * I/O memory mapping functions.
-  */
-diff --git a/arch/arm64/kernel/io.c b/arch/arm64/kernel/io.c
-index aa7a4ec6a3ae6f..ef48089fbfe1a4 100644
---- a/arch/arm64/kernel/io.c
-+++ b/arch/arm64/kernel/io.c
-@@ -37,6 +37,48 @@ void __memcpy_fromio(void *to, const volatile void __iomem *from, size_t count)
+diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
+index 19668a8d22f76a..04b9e86363f8fc 100644
+--- a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
++++ b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
+@@ -2068,8 +2068,6 @@ static void hns3_tx_push_bd(struct hns3_enet_ring *ring, int num)
+ 	__iowrite64_copy(ring->tqp->mem_base, desc,
+ 			 (sizeof(struct hns3_desc) * HNS3_MAX_PUSH_BD_NUM) /
+ 			 HNS3_BYTES_PER_64BIT);
+-
+-	io_stop_wc();
  }
- EXPORT_SYMBOL(__memcpy_fromio);
  
-+/*
-+ * This generates a memcpy that works on a from/to address which is aligned to
-+ * bits. Count is in terms of the number of bits sized quantities to copy. It
-+ * optimizes to use the STR groupings when possible so that it is WC friendly.
-+ */
-+#define memcpy_toio_aligned(to, from, count, bits)                        \
-+	({                                                                \
-+		volatile u##bits __iomem *_to = to;                       \
-+		const u##bits *_from = from;                              \
-+		size_t _count = count;                                    \
-+		const u##bits *_end_from = _from + ALIGN_DOWN(_count, 8); \
-+                                                                          \
-+		for (; _from < _end_from; _from += 8, _to += 8)           \
-+			__const_memcpy_toio_aligned##bits(_to, _from, 8); \
-+		if ((_count % 8) >= 4) {                                  \
-+			__const_memcpy_toio_aligned##bits(_to, _from, 4); \
-+			_from += 4;                                       \
-+			_to += 4;                                         \
-+		}                                                         \
-+		if ((_count % 4) >= 2) {                                  \
-+			__const_memcpy_toio_aligned##bits(_to, _from, 2); \
-+			_from += 2;                                       \
-+			_to += 2;                                         \
-+		}                                                         \
-+		if (_count % 2)                                           \
-+			__const_memcpy_toio_aligned##bits(_to, _from, 1); \
-+	})
-+
-+void __iowrite64_copy_full(void __iomem *to, const void *from, size_t count)
-+{
-+	memcpy_toio_aligned(to, from, count, 64);
-+	dgh();
-+}
-+EXPORT_SYMBOL(__iowrite64_copy_full);
-+
-+void __iowrite32_copy_full(void __iomem *to, const void *from, size_t count)
-+{
-+	memcpy_toio_aligned(to, from, count, 32);
-+	dgh();
-+}
-+EXPORT_SYMBOL(__iowrite32_copy_full);
-+
- /*
-  * Copy data from "real" memory space to IO memory space.
-  */
+ static void hns3_tx_mem_doorbell(struct hns3_enet_ring *ring)
+@@ -2088,8 +2086,6 @@ static void hns3_tx_mem_doorbell(struct hns3_enet_ring *ring)
+ 	u64_stats_update_begin(&ring->syncp);
+ 	ring->stats.tx_mem_doorbell += ring->pending_buf;
+ 	u64_stats_update_end(&ring->syncp);
+-
+-	io_stop_wc();
+ }
+ 
+ static void hns3_tx_doorbell(struct hns3_enet_ring *ring, int num,
 -- 
 2.43.2
 
