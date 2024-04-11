@@ -1,233 +1,189 @@
-Return-Path: <linux-arch+bounces-3601-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3602-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4771B8A1E0E
-	for <lists+linux-arch@lfdr.de>; Thu, 11 Apr 2024 20:26:45 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B8148A1EFD
+	for <lists+linux-arch@lfdr.de>; Thu, 11 Apr 2024 20:57:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D4CD51C225B7
-	for <lists+linux-arch@lfdr.de>; Thu, 11 Apr 2024 18:26:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E1A61B22590
+	for <lists+linux-arch@lfdr.de>; Thu, 11 Apr 2024 18:30:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89822131E54;
-	Thu, 11 Apr 2024 17:46:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AB831401B;
+	Thu, 11 Apr 2024 18:00:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="cw926R2Z"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="F6A8Ql6Y"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D79F4131E2E;
-	Thu, 11 Apr 2024 17:46:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98E8244375;
+	Thu, 11 Apr 2024 18:00:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712857574; cv=none; b=jVZQte/qTSceA65LmGk45nCSdc+zq6Wxtr12WJyLtl1bV8UpEPhdyxg+he0ctRrELgGfPML2MIZLjpZOImpt4HA8t1jMK+Cm1llU0dOYJzfA2+fHlBwW1odeqIg2HEjc+/UGpd40mo2FBFNlCEEMo95usRa5azvnHyx9+Reuf38=
+	t=1712858434; cv=none; b=VpvWSrk4rnGCcEdUrcsjEkwvaWaAeip6fPFHZbpuXjDUmEcn78MvTGmVwojumEdLcZZqp5DVhMNZkLE8rzN0DfFlOH3Blq3mDASSxrQ8sN5Q9fLpiCC9iZazpbD8LQ4QHQP6z00mhO44gVTrWItRME7/IGeQK7PmBs+elohRVgg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712857574; c=relaxed/simple;
-	bh=OKxXIh/WXhatcgx1Ou+NvsrOJcDB3Ihf5QKnsGO8RQI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=OzHZVf0WNYrbVsGcW+xSi5IZ9fkgshsZtjlY5CjG5EPWpWtd3RXJddfq1tK3RhUV24fTyaSju+TPcO14X+zbEygo+6jm3uLABSCaSzLnGK++/YKr0wcKuabYCw7cDKCOmpqDxd8NEGlnFjizpDQIq9hvs/tfd6pNrV6WX7bs1PY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=cw926R2Z; arc=none smtp.client-ip=167.114.26.122
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-	s=smtpout1; t=1712857563;
-	bh=OKxXIh/WXhatcgx1Ou+NvsrOJcDB3Ihf5QKnsGO8RQI=;
-	h=From:To:Cc:Subject:Date:From;
-	b=cw926R2ZfZ1029Vbp53hck1uPrzSwQh8tRDZhRSYvJRpmGGx6eXEKOMBajPcXeAiM
-	 62lGtEXeEuE7Bh79gMY/YrQ7Ix11qWduAI5cuBM2MJ4HF8Bdm/pJJQQgI5zzAWOGl8
-	 g7v/GJekpVD2eEh4gTp5Hw5IkehtGrQZg4LsgB96VecOZWTPRevSsyrrudfmx+Rf7h
-	 EqugCQIzkPP17GYgRErQJh3FIntGNYOPODSjK5ZZ1SXX40e41jWtIxAk4zbNOA+bNj
-	 jbRhNSO0j8FJ1E8xg/thTSJbuVcEGgtjj9+BsqRGKJSpKpkOZvs4xCRDsS5JpF4viv
-	 dbGRGq6E0YUmA==
-Received: from localhost.localdomain (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4VFnDV4cYWzsHQ;
-	Thu, 11 Apr 2024 13:46:02 -0400 (EDT)
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To: Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-kernel@vger.kernel.org,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	"levi . yun" <yeoreum.yun@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	stable@vger.kernel.org,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Ben Segall <bsegall@google.com>,
-	Mel Gorman <mgorman@suse.de>,
-	Daniel Bristot de Oliveira <bristot@redhat.com>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Aaron Lu <aaron.lu@intel.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Borislav Petkov <bp@alien8.de>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	linux-arch@vger.kernel.org,
-	linux-mm@kvack.org,
-	x86@kernel.org
-Subject: [PATCH] sched: Add missing memory barrier in switch_mm_cid
-Date: Thu, 11 Apr 2024 13:43:02 -0400
-Message-Id: <20240411174302.353889-1-mathieu.desnoyers@efficios.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1712858434; c=relaxed/simple;
+	bh=yh/ixDQ5eg6OWrim9+bm1G6d/37CpJ1/QL+beESG4jw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AdfQoAvwlhY3RVuZSstzgOIl+pb/hf5PK/Rde7eS6IDjZF7ugzaMbsQWldq3yoZyKsXeX6aVnBG97E96SvKQVskaboSEdncnL142CIppr7OcA1NlFk3pEWdoxZpLiL3hD3nzNWoz8oQxjLjx+TpjCoqr4O6FMjAZvnsHH9a8cdM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=F6A8Ql6Y; arc=none smtp.client-ip=95.215.58.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Thu, 11 Apr 2024 14:00:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1712858430;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hugd8ugKeGXlWiLmTwUcSwxtoNqEbzFWRyiumV4I0QI=;
+	b=F6A8Ql6YjuHeVhFhvCjRCHtt6+j5Zmavb6rBRVS2UPMjaUzBr8Uy9YMXKrMLS6Bdu93QAe
+	+1JDwGCXhSmYXVX/GYkUtjra2ilUH2ndkI9p7bCt0GDxnXoAiXvPRveKB1Tl7czCP5mSyl
+	LwnxqSrFPBMBfyHHV7aQPCs6G/4zVIs=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kent Overstreet <kent.overstreet@linux.dev>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: linux-kernel@vger.kernel.org, Alexandre Ghiti <alexghiti@rivosinc.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	"David S. Miller" <davem@davemloft.net>, Dinh Nguyen <dinguyen@kernel.org>, 
+	Donald Dutile <ddutile@redhat.com>, Eric Chanudet <echanude@redhat.com>, 
+	Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>, 
+	Huacai Chen <chenhuacai@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nadav Amit <nadav.amit@gmail.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Puranjay Mohan <puranjay12@gmail.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Thomas Gleixner <tglx@linutronix.de>, 
+	Will Deacon <will@kernel.org>, bpf@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org, linux-mm@kvack.org, 
+	linux-modules@vger.kernel.org, linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, netdev@vger.kernel.org, 
+	sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v4 00/15] mm: jit/text allocator
+Message-ID: <v52bizaflxzrxqk2wtuek2m2juwbzr6jxnpzlvtswkarcaejow@kd7tygzbmijs>
+References: <20240411160051.2093261-1-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240411160051.2093261-1-rppt@kernel.org>
+X-Migadu-Flow: FLOW_OUT
 
-Many architectures' switch_mm() (e.g. arm64) do not have an smp_mb()
-which the core scheduler code has depended upon since commit:
+On Thu, Apr 11, 2024 at 07:00:36PM +0300, Mike Rapoport wrote:
+> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> 
+> Hi,
+> 
+> Since v3 I looked into making execmem more of an utility toolbox, as we
+> discussed at LPC with Mark Rutland, but it was getting more hairier than
+> having a struct describing architecture constraints and a type identifying
+> the consumer of execmem.
+> 
+> And I do think that having the description of architecture constraints for
+> allocations of executable memory in a single place is better that having it
+> spread all over the place.
+> 
+> The patches available via git:
+> https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/log/?h=execmem/v4
+> 
+> v4 changes:
+> * rebase on v6.9-rc2
+> * rename execmem_params to execmem_info and execmem_arch_params() to
+>   execmem_arch_setup()
+> * use single execmem_alloc() API instead of execmem_{text,data}_alloc() (Song)
+> * avoid extra copy of execmem parameters (Rick)
+> * run execmem_init() as core_initcall() except for the architectures that
+>   may allocated text really early (currently only x86) (Will)
+> * add acks for some of arm64 and riscv changes, thanks Will and Alexandre
+> * new commits:
+>   - drop call to kasan_alloc_module_shadow() on arm64 because it's not
+>     needed anymore
+>   - rename MODULE_START to MODULES_VADDR on MIPS
+>   - use CONFIG_EXECMEM instead of CONFIG_MODULES on powerpc as per Christophe:
+>     https://lore.kernel.org/all/79062fa3-3402-47b3-8920-9231ad05e964@csgroup.eu/
+> 
+> v3: https://lore.kernel.org/all/20230918072955.2507221-1-rppt@kernel.org
+> * add type parameter to execmem allocation APIs
+> * remove BPF dependency on modules
+> 
+> v2: https://lore.kernel.org/all/20230616085038.4121892-1-rppt@kernel.org
+> * Separate "module" and "others" allocations with execmem_text_alloc()
+> and jit_text_alloc()
+> * Drop ROX entailment on x86
+> * Add ack for nios2 changes, thanks Dinh Nguyen
+> 
+> v1: https://lore.kernel.org/all/20230601101257.530867-1-rppt@kernel.org
+> 
+> = Cover letter from v1 (sligtly updated) =
+> 
+> module_alloc() is used everywhere as a mean to allocate memory for code.
+> 
+> Beside being semantically wrong, this unnecessarily ties all subsystmes
+> that need to allocate code, such as ftrace, kprobes and BPF to modules and
+> puts the burden of code allocation to the modules code.
+> 
+> Several architectures override module_alloc() because of various
+> constraints where the executable memory can be located and this causes
+> additional obstacles for improvements of code allocation.
+> 
+> A centralized infrastructure for code allocation allows allocations of
+> executable memory as ROX, and future optimizations such as caching large
+> pages for better iTLB performance and providing sub-page allocations for
+> users that only need small jit code snippets.
+> 
+> Rick Edgecombe proposed perm_alloc extension to vmalloc [1] and Song Liu
+> proposed execmem_alloc [2], but both these approaches were targeting BPF
+> allocations and lacked the ground work to abstract executable allocations
+> and split them from the modules core.
+> 
+> Thomas Gleixner suggested to express module allocation restrictions and
+> requirements as struct mod_alloc_type_params [3] that would define ranges,
+> protections and other parameters for different types of allocations used by
+> modules and following that suggestion Song separated allocations of
+> different types in modules (commit ac3b43283923 ("module: replace
+> module_layout with module_memory")) and posted "Type aware module
+> allocator" set [4].
+> 
+> I liked the idea of parametrising code allocation requirements as a
+> structure, but I believe the original proposal and Song's module allocator
+> was too module centric, so I came up with these patches.
+> 
+> This set splits code allocation from modules by introducing execmem_alloc()
+> and and execmem_free(), APIs, replaces call sites of module_alloc() and
+> module_memfree() with the new APIs and implements core text and related
+> allocations in a central place.
+> 
+> Instead of architecture specific overrides for module_alloc(), the
+> architectures that require non-default behaviour for text allocation must
+> fill execmem_info structure and implement execmem_arch_setup() that returns
+> a pointer to that structure. If an architecture does not implement
+> execmem_arch_setup(), the defaults compatible with the current
+> modules::module_alloc() are used.
+> 
+> Since architectures define different restrictions on placement,
+> permissions, alignment and other parameters for memory that can be used by
+> different subsystems that allocate executable memory, execmem APIs
+> take a type argument, that will be used to identify the calling subsystem
+> and to allow architectures to define parameters for ranges suitable for that
+> subsystem.
+> 
+> The new infrastructure allows decoupling of BPF, kprobes and ftrace from
+> modules, and most importantly it paves the way for ROX allocations for
+> executable memory.
 
-    commit 223baf9d17f25 ("sched: Fix performance regression introduced by mm_cid")
+It looks like you're just doing API cleanup first, then improving the
+implementation later?
 
-If switch_mm() doesn't call smp_mb(), sched_mm_cid_remote_clear() can
-unset the actively used cid when it fails to observe active task after it
-sets lazy_put.
+Patch set looks nice and clean; previous versions did seem to leak too
+much arch/module details (or perhaps we were just bikeshedding too much
+;) - but the API first approach is nice.
 
-There *is* a memory barrier between storing to rq->curr and _return to
-userspace_ (as required by membarrier), but the rseq mm_cid has stricter
-requirements: the barrier needs to be issued between store to rq->curr
-and switch_mm_cid(), which happens earlier than:
-
-- spin_unlock(),
-- switch_to().
-
-So it's fine when the architecture switch_mm() happens to have that
-barrier already, but less so when the architecture only provides the
-full barrier in switch_to() or spin_unlock().
-
-It is a bug in the rseq switch_mm_cid() implementation. All architectures
-that don't have memory barriers in switch_mm(), but rather have the full
-barrier either in finish_lock_switch() or switch_to() have them too late
-for the needs of switch_mm_cid().
-
-Introduce a new smp_mb__after_switch_mm(), defined as smp_mb() in the
-generic barrier.h header, and use it in switch_mm_cid() for scheduler
-transitions where switch_mm() is expected to provide a memory barrier.
-
-Architectures can override smp_mb__after_switch_mm() if their
-switch_mm() implementation provides an implicit memory barrier.
-Override it with a no-op on x86 which implicitly provide this memory
-barrier by writing to CR3.
-
-Link: https://lore.kernel.org/lkml/20240305145335.2696125-1-yeoreum.yun@arm.com/
-Reported-by: levi.yun <yeoreum.yun@arm.com>
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com> # for arm64
-Acked-by: Dave Hansen <dave.hansen@linux.intel.com> # for x86
-Fixes: 223baf9d17f2 ("sched: Fix performance regression introduced by mm_cid")
-Cc: <stable@vger.kernel.org> # 6.4.x
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: Juri Lelli <juri.lelli@redhat.com>
-Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: Ben Segall <bsegall@google.com>
-Cc: Mel Gorman <mgorman@suse.de>
-Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-Cc: Valentin Schneider <vschneid@redhat.com>
-Cc: levi.yun <yeoreum.yun@arm.com>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Aaron Lu <aaron.lu@intel.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-arch@vger.kernel.org
-Cc: linux-mm@kvack.org
-Cc: x86@kernel.org
----
- arch/x86/include/asm/barrier.h |  3 +++
- include/asm-generic/barrier.h  |  8 ++++++++
- kernel/sched/sched.h           | 20 ++++++++++++++------
- 3 files changed, 25 insertions(+), 6 deletions(-)
-
-diff --git a/arch/x86/include/asm/barrier.h b/arch/x86/include/asm/barrier.h
-index 0216f63a366b..d0795b5fab46 100644
---- a/arch/x86/include/asm/barrier.h
-+++ b/arch/x86/include/asm/barrier.h
-@@ -79,6 +79,9 @@ do {									\
- #define __smp_mb__before_atomic()	do { } while (0)
- #define __smp_mb__after_atomic()	do { } while (0)
- 
-+/* Writing to CR3 provides a full memory barrier in switch_mm(). */
-+#define smp_mb__after_switch_mm()	do { } while (0)
-+
- #include <asm-generic/barrier.h>
- 
- #endif /* _ASM_X86_BARRIER_H */
-diff --git a/include/asm-generic/barrier.h b/include/asm-generic/barrier.h
-index 961f4d88f9ef..5a6c94d7a598 100644
---- a/include/asm-generic/barrier.h
-+++ b/include/asm-generic/barrier.h
-@@ -296,5 +296,13 @@ do {									\
- #define io_stop_wc() do { } while (0)
- #endif
- 
-+/*
-+ * Architectures that guarantee an implicit smp_mb() in switch_mm()
-+ * can override smp_mb__after_switch_mm.
-+ */
-+#ifndef smp_mb__after_switch_mm
-+#define smp_mb__after_switch_mm()	smp_mb()
-+#endif
-+
- #endif /* !__ASSEMBLY__ */
- #endif /* __ASM_GENERIC_BARRIER_H */
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 001fe047bd5d..35717359d3ca 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -79,6 +79,8 @@
- # include <asm/paravirt_api_clock.h>
- #endif
- 
-+#include <asm/barrier.h>
-+
- #include "cpupri.h"
- #include "cpudeadline.h"
- 
-@@ -3445,13 +3447,19 @@ static inline void switch_mm_cid(struct rq *rq,
- 		 * between rq->curr store and load of {prev,next}->mm->pcpu_cid[cpu].
- 		 * Provide it here.
- 		 */
--		if (!prev->mm)                          // from kernel
-+		if (!prev->mm) {                        // from kernel
- 			smp_mb();
--		/*
--		 * user -> user transition guarantees a memory barrier through
--		 * switch_mm() when current->mm changes. If current->mm is
--		 * unchanged, no barrier is needed.
--		 */
-+		} else {				// from user
-+			/*
-+			 * user -> user transition relies on an implicit
-+			 * memory barrier in switch_mm() when
-+			 * current->mm changes. If the architecture
-+			 * switch_mm() does not have an implicit memory
-+			 * barrier, it is emitted here.  If current->mm
-+			 * is unchanged, no barrier is needed.
-+			 */
-+			smp_mb__after_switch_mm();
-+		}
- 	}
- 	if (prev->mm_cid_active) {
- 		mm_cid_snapshot_time(rq, prev->mm);
--- 
-2.25.1
-
+Looking forward to seeing this merged.
 
