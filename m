@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-3587-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3588-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95C688A1BFC
-	for <lists+linux-arch@lfdr.de>; Thu, 11 Apr 2024 19:37:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E93F8A1C00
+	for <lists+linux-arch@lfdr.de>; Thu, 11 Apr 2024 19:37:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2325E1F213ED
-	for <lists+linux-arch@lfdr.de>; Thu, 11 Apr 2024 17:37:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A296B1F21FAD
+	for <lists+linux-arch@lfdr.de>; Thu, 11 Apr 2024 17:37:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7054914EC6F;
-	Thu, 11 Apr 2024 16:06:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB89214F9DD;
+	Thu, 11 Apr 2024 16:06:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FCiKYoZ6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jgfDWV+k"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40C6313AA47;
-	Thu, 11 Apr 2024 16:06:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69D7414F9CD;
+	Thu, 11 Apr 2024 16:06:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712851586; cv=none; b=UdIO9VA+KnVUrZrwl6/SkF+9Uvpqr2clFrpRMPgj2qS1mPwh6zPMTvjTSRzQV5Cv+6Hkmns4ormqK7TzN+ZY6EUycWp51f2jRuniLTPxgGO4l99EJYLKKNgkOWpWBzXStxL+z3YgZlA6HwLdAgNQiuWXvbXYLxTO+dFFsbvMrhU=
+	t=1712851594; cv=none; b=GA6sn2ZWH3hCh3B6H19TzEMJlWCXyluABU4w/3ukMu4y5ETC/P13NlcwvI8uV2W7VZ8TlDX3gO7CDH9bXqRpm7M4hl2VMwbd8nsJm30ubeqj03JyUJXuD+1KZpyuxinepC53cdJDquwbDZXHCMgTpVAv0+c8hHB2vKNrov6lSEQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712851586; c=relaxed/simple;
-	bh=aqEBZkTkaYczGp1AE5Ythw1GwnOgeya9k56OhW6zvCU=;
+	s=arc-20240116; t=1712851594; c=relaxed/simple;
+	bh=FzXFJSmb6FPYptE+tJEPsseMYyGfozQQhnGqwpvvWSs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kwfsKAfMyh9DwcwNW6RaWcZKqTOYcXDTY7CfvA70nAyhRlWFZzvey8oFKoXx3X4Unc4DzCuQo3c6QzJ8aDS/dVnjfV+XjN7um40UeOUUnSpSnZTzoVYni5nF9CDcuvvfouVGPopOYH2/uKzHi2PRgXtMLL/A4BAykHBmA1o/Iv0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FCiKYoZ6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ECE2C072AA;
-	Thu, 11 Apr 2024 16:06:17 +0000 (UTC)
+	 MIME-Version; b=gF26pFPLEU2+cNY8qLslIMhiaLl8Adyepbs6oEO6EtvHcgzoJQIq19w/OgtfJf+3HMmkIzM0zW0wAI2J9TL9O20vhHzrr991hGkjYaB9shAfm3HgkY0Ec89N6D68BGoxLFcJwGtmeyrUanngJFYt/h2Cnh6yDAyoDgzhwNewkiY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jgfDWV+k; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CEAFC113CD;
+	Thu, 11 Apr 2024 16:06:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712851585;
-	bh=aqEBZkTkaYczGp1AE5Ythw1GwnOgeya9k56OhW6zvCU=;
+	s=k20201202; t=1712851594;
+	bh=FzXFJSmb6FPYptE+tJEPsseMYyGfozQQhnGqwpvvWSs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=FCiKYoZ68sls+F3mv6Ez+CsUVYYsX7z9pwgLnoqIj7tyPAICa/XZVRpmFtd/bl+Tc
-	 qZlc7udJ4ZNm6hg+lIdRf/t4e0oXKNP+lcjs+/Wpfh4Xtqrr3EQDfJIUEkJ2lIokWe
-	 sTkmfvWoJNbC/k0m1M1sM4nLNAgHqf2JWsEelcY4ru/sqfCDrM/De2gJ/gz5e8Uv/i
-	 eULjLO4l90aQoexGiFBQMQodDD8FhmYIxLn8lcW3NhsMiXtcIlpC/HwDv2foKAXF0L
-	 ejuIF2T7Pa6d42uZkvnZ8/Eew5t0RTPo/ERtD6/7vqcol1STFbKpXTHBXTF4lXoQJG
-	 8xTZjAjJzpgbQ==
+	b=jgfDWV+kGnsVbXX4csXun1AXMBmRYtUhZyOYrmoXgqBXVZt0vYKNVnTNCAQEGOZf1
+	 63C3Y2YATnhkd3fsJ7ynR6ExQsaOg5XSxMIi42VqOYQdnHjG3O79uTgW4oXlf1R9Gt
+	 FHiNX9BiBg6uFHUNBZ8IfTJGYVZSeoquZk16BDVZjM5CwBNMoFy+7Wi9H150mRg9JS
+	 CDcPK65or1p/QJwGKWJuUbTDXNT+joIdWuAt4AiweUmYb0xSdD5p6o/4lWaCTk1PdA
+	 MNcxCn3pWEjarSozP7y/oxjgXvkg26U7ZofIVv33IMc4avvZLsf4M7hXrB0PgcsNpD
+	 F9tI/iyfZnPYQ==
 From: Mike Rapoport <rppt@kernel.org>
 To: linux-kernel@vger.kernel.org
 Cc: Andrew Morton <akpm@linux-foundation.org>,
@@ -74,9 +74,9 @@ Cc: Andrew Morton <akpm@linux-foundation.org>,
 	linux-trace-kernel@vger.kernel.org,
 	linuxppc-dev@lists.ozlabs.org,
 	x86@kernel.org
-Subject: [RFC PATCH 5/7] x86/module: perpare module loading for ROX allocations of text
-Date: Thu, 11 Apr 2024 19:05:24 +0300
-Message-ID: <20240411160526.2093408-6-rppt@kernel.org>
+Subject: [RFC PATCH 6/7] execmem: add support for cache of large ROX pages
+Date: Thu, 11 Apr 2024 19:05:25 +0300
+Message-ID: <20240411160526.2093408-7-rppt@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240411160526.2093408-1-rppt@kernel.org>
 References: <20240411160526.2093408-1-rppt@kernel.org>
@@ -90,782 +90,360 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 
-When module text memory will be allocated with ROX permissions, the
-memory at the actual address where the module will live will contain
-invalid instructions and there will be a writable copy that contains the
-actual module code.
+Using large pages to map text areas reduces iTLB pressure and improves
+performance.
 
-Update relocations and alternatives patching to deal with it.
+Extend execmem_alloc() with an ability to use PMD_SIZE'ed pages with ROX
+permissions as a cache for smaller allocations.
+
+To populate the cache, a writable large page is allocated from vmalloc with
+VM_ALLOW_HUGE_VMAP, filled with invalid instructions and then remapped as
+ROX.
+
+Portions of that large page are handed out to execmem_alloc() callers
+without any changes to the permissions.
+
+When the memory is freed with execmem_free() it is invalidated again so
+that it won't contain stale instructions.
+
+The cache is enabled when an architecture sets EXECMEM_ROX_CACHE flag in
+definition of an execmem_range.
 
 Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
 ---
- arch/um/kernel/um_arch.c           |  11 ++-
- arch/x86/entry/vdso/vma.c          |   3 +-
- arch/x86/include/asm/alternative.h |  14 +--
- arch/x86/kernel/alternative.c      | 152 +++++++++++++++++------------
- arch/x86/kernel/ftrace.c           |  41 +++++---
- arch/x86/kernel/module.c           |  17 ++--
- 6 files changed, 140 insertions(+), 98 deletions(-)
+ include/linux/execmem.h |   2 +
+ mm/execmem.c            | 267 ++++++++++++++++++++++++++++++++++++++--
+ 2 files changed, 262 insertions(+), 7 deletions(-)
 
-diff --git a/arch/um/kernel/um_arch.c b/arch/um/kernel/um_arch.c
-index c5ca89e62552..5183c955974e 100644
---- a/arch/um/kernel/um_arch.c
-+++ b/arch/um/kernel/um_arch.c
-@@ -437,24 +437,25 @@ void __init arch_cpu_finalize_init(void)
- 	os_check_bugs();
- }
+diff --git a/include/linux/execmem.h b/include/linux/execmem.h
+index 9d22999dbd7d..06f678e6fe55 100644
+--- a/include/linux/execmem.h
++++ b/include/linux/execmem.h
+@@ -77,12 +77,14 @@ struct execmem_range {
  
--void apply_seal_endbr(s32 *start, s32 *end)
-+void apply_seal_endbr(s32 *start, s32 *end, struct module *mod)
- {
- }
- 
--void apply_retpolines(s32 *start, s32 *end)
-+void apply_retpolines(s32 *start, s32 *end, struct module *mod)
- {
- }
- 
--void apply_returns(s32 *start, s32 *end)
-+void apply_returns(s32 *start, s32 *end, struct module *mod)
- {
- }
- 
- void apply_fineibt(s32 *start_retpoline, s32 *end_retpoline,
--		   s32 *start_cfi, s32 *end_cfi)
-+		   s32 *start_cfi, s32 *end_cfi, struct module *mod)
- {
- }
- 
--void apply_alternatives(struct alt_instr *start, struct alt_instr *end)
-+void apply_alternatives(struct alt_instr *start, struct alt_instr *end,
-+			struct module *mod)
- {
- }
- 
-diff --git a/arch/x86/entry/vdso/vma.c b/arch/x86/entry/vdso/vma.c
-index 6d83ceb7f1ba..31412adef5d2 100644
---- a/arch/x86/entry/vdso/vma.c
-+++ b/arch/x86/entry/vdso/vma.c
-@@ -51,7 +51,8 @@ int __init init_vdso_image(const struct vdso_image *image)
- 
- 	apply_alternatives((struct alt_instr *)(image->data + image->alt),
- 			   (struct alt_instr *)(image->data + image->alt +
--						image->alt_len));
-+						image->alt_len),
-+			   NULL);
- 
- 	return 0;
- }
-diff --git a/arch/x86/include/asm/alternative.h b/arch/x86/include/asm/alternative.h
-index fcd20c6dc7f9..6f4b0776fc89 100644
---- a/arch/x86/include/asm/alternative.h
-+++ b/arch/x86/include/asm/alternative.h
-@@ -96,16 +96,16 @@ extern struct alt_instr __alt_instructions[], __alt_instructions_end[];
-  * instructions were patched in already:
+ /**
+  * struct execmem_info - architecture parameters for code allocations
++ * @invalidate: set memory to contain invalid instructions
+  * @ranges: array of parameter sets defining architecture specific
+  * parameters for executable memory allocations. The ranges that are not
+  * explicitly initialized by an architecture use parameters defined for
+  * @EXECMEM_DEFAULT.
   */
- extern int alternatives_patched;
-+struct module;
+ struct execmem_info {
++	void (*invalidate)(void *ptr, size_t size, bool writable);
+ 	struct execmem_range	ranges[EXECMEM_TYPE_MAX];
+ };
  
- extern void alternative_instructions(void);
--extern void apply_alternatives(struct alt_instr *start, struct alt_instr *end);
--extern void apply_retpolines(s32 *start, s32 *end);
--extern void apply_returns(s32 *start, s32 *end);
--extern void apply_seal_endbr(s32 *start, s32 *end);
-+extern void apply_alternatives(struct alt_instr *start, struct alt_instr *end,
-+			       struct module *mod);
-+extern void apply_retpolines(s32 *start, s32 *end, struct module *mod);
-+extern void apply_returns(s32 *start, s32 *end, struct module *mod);
-+extern void apply_seal_endbr(s32 *start, s32 *end, struct module *mod);
- extern void apply_fineibt(s32 *start_retpoline, s32 *end_retpoine,
--			  s32 *start_cfi, s32 *end_cfi);
--
--struct module;
-+			  s32 *start_cfi, s32 *end_cfi, struct module *mod);
+diff --git a/mm/execmem.c b/mm/execmem.c
+index c920d2b5a721..716fba68ab0e 100644
+--- a/mm/execmem.c
++++ b/mm/execmem.c
+@@ -1,30 +1,88 @@
+ // SPDX-License-Identifier: GPL-2.0
  
- struct callthunk_sites {
- 	s32				*call_start, *call_end;
-diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-index 45a280f2161c..b4d6868df573 100644
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -462,7 +462,8 @@ static int alt_replace_call(u8 *instr, u8 *insn_buff, struct alt_instr *a)
-  * to refetch changed I$ lines.
-  */
- void __init_or_module noinline apply_alternatives(struct alt_instr *start,
--						  struct alt_instr *end)
-+						  struct alt_instr *end,
-+						  struct module *mod)
- {
- 	struct alt_instr *a;
- 	u8 *instr, *replacement;
-@@ -490,10 +491,18 @@ void __init_or_module noinline apply_alternatives(struct alt_instr *start,
- 	 * order.
- 	 */
- 	for (a = start; a < end; a++) {
-+		unsigned long ins_offs, repl_offs;
- 		int insn_buff_sz = 0;
-+		u8 *wr_instr, *wr_replacement;
+ #include <linux/mm.h>
++#include <linux/mutex.h>
+ #include <linux/vmalloc.h>
+ #include <linux/execmem.h>
++#include <linux/maple_tree.h>
+ #include <linux/moduleloader.h>
+ #include <linux/text-patching.h>
  
- 		instr = (u8 *)&a->instr_offset + a->instr_offset;
-+		ins_offs =  module_writable_offset(mod, instr);
-+		wr_instr = instr + ins_offs;
++#include <asm/tlbflush.h>
 +
- 		replacement = (u8 *)&a->repl_offset + a->repl_offset;
-+		repl_offs = module_writable_offset(mod, replacement);
-+		wr_replacement = replacement + repl_offs;
++#include "internal.h"
 +
- 		BUG_ON(a->instrlen > sizeof(insn_buff));
- 		BUG_ON(a->cpuid >= (NCAPINTS + NBUGINTS) * 32);
- 
-@@ -504,17 +513,17 @@ void __init_or_module noinline apply_alternatives(struct alt_instr *start,
- 		 *   patch if feature is *NOT* present.
- 		 */
- 		if (!boot_cpu_has(a->cpuid) == !(a->flags & ALT_FLAG_NOT)) {
--			optimize_nops_inplace(instr, a->instrlen);
-+			optimize_nops_inplace(wr_instr, a->instrlen);
- 			continue;
- 		}
- 
--		DPRINTK(ALT, "feat: %d*32+%d, old: (%pS (%px) len: %d), repl: (%px, len: %d) flags: 0x%x",
-+		DPRINTK(ALT, "feat: %d*32+%d, old: (%px (%px) len: %d), repl: (%px (%px), len: %d) flags: 0x%x",
- 			a->cpuid >> 5,
- 			a->cpuid & 0x1f,
--			instr, instr, a->instrlen,
--			replacement, a->replacementlen, a->flags);
-+			instr, wr_instr, a->instrlen,
-+			replacement, wr_replacement, a->replacementlen, a->flags);
- 
--		memcpy(insn_buff, replacement, a->replacementlen);
-+		memcpy(insn_buff, wr_replacement, a->replacementlen);
- 		insn_buff_sz = a->replacementlen;
- 
- 		if (a->flags & ALT_FLAG_DIRECT_CALL) {
-@@ -528,11 +537,11 @@ void __init_or_module noinline apply_alternatives(struct alt_instr *start,
- 
- 		apply_relocation(insn_buff, a->instrlen, instr, replacement, a->replacementlen);
- 
--		DUMP_BYTES(ALT, instr, a->instrlen, "%px:   old_insn: ", instr);
-+		DUMP_BYTES(ALT, wr_instr, a->instrlen, "%px:   old_insn: ", instr);
- 		DUMP_BYTES(ALT, replacement, a->replacementlen, "%px:   rpl_insn: ", replacement);
- 		DUMP_BYTES(ALT, insn_buff, insn_buff_sz, "%px: final_insn: ", instr);
- 
--		text_poke_early(instr, insn_buff, insn_buff_sz);
-+		text_poke_early(wr_instr, insn_buff, insn_buff_sz);
- 	}
- 
- 	kasan_enable_current();
-@@ -723,18 +732,20 @@ static int patch_retpoline(void *addr, struct insn *insn, u8 *bytes)
- /*
-  * Generated by 'objtool --retpoline'.
-  */
--void __init_or_module noinline apply_retpolines(s32 *start, s32 *end)
-+void __init_or_module noinline apply_retpolines(s32 *start, s32 *end,
-+						struct module *mod)
- {
- 	s32 *s;
- 
- 	for (s = start; s < end; s++) {
- 		void *addr = (void *)s + *s;
-+		void *wr_addr = addr + module_writable_offset(mod, addr);
- 		struct insn insn;
- 		int len, ret;
- 		u8 bytes[16];
- 		u8 op1, op2;
- 
--		ret = insn_decode_kernel(&insn, addr);
-+		ret = insn_decode_kernel(&insn, wr_addr);
- 		if (WARN_ON_ONCE(ret < 0))
- 			continue;
- 
-@@ -762,9 +773,9 @@ void __init_or_module noinline apply_retpolines(s32 *start, s32 *end)
- 		len = patch_retpoline(addr, &insn, bytes);
- 		if (len == insn.length) {
- 			optimize_nops(bytes, len);
--			DUMP_BYTES(RETPOLINE, ((u8*)addr),  len, "%px: orig: ", addr);
-+			DUMP_BYTES(RETPOLINE, ((u8*)wr_addr),  len, "%px: orig: ", addr);
- 			DUMP_BYTES(RETPOLINE, ((u8*)bytes), len, "%px: repl: ", addr);
--			text_poke_early(addr, bytes, len);
-+			text_poke_early(wr_addr, bytes, len);
- 		}
- 	}
- }
-@@ -800,7 +811,8 @@ static int patch_return(void *addr, struct insn *insn, u8 *bytes)
- 	return i;
- }
- 
--void __init_or_module noinline apply_returns(s32 *start, s32 *end)
-+void __init_or_module noinline apply_returns(s32 *start, s32 *end,
-+					     struct module *mod)
- {
- 	s32 *s;
- 
-@@ -809,12 +821,13 @@ void __init_or_module noinline apply_returns(s32 *start, s32 *end)
- 
- 	for (s = start; s < end; s++) {
- 		void *dest = NULL, *addr = (void *)s + *s;
-+		void *wr_addr = addr + module_writable_offset(mod, addr);
- 		struct insn insn;
- 		int len, ret;
- 		u8 bytes[16];
- 		u8 op;
- 
--		ret = insn_decode_kernel(&insn, addr);
-+		ret = insn_decode_kernel(&insn, wr_addr);
- 		if (WARN_ON_ONCE(ret < 0))
- 			continue;
- 
-@@ -834,28 +847,31 @@ void __init_or_module noinline apply_returns(s32 *start, s32 *end)
- 
- 		len = patch_return(addr, &insn, bytes);
- 		if (len == insn.length) {
--			DUMP_BYTES(RET, ((u8*)addr),  len, "%px: orig: ", addr);
-+			DUMP_BYTES(RET, ((u8*)wr_addr),  len, "%px: orig: ", addr);
- 			DUMP_BYTES(RET, ((u8*)bytes), len, "%px: repl: ", addr);
--			text_poke_early(addr, bytes, len);
-+			text_poke_early(wr_addr, bytes, len);
- 		}
- 	}
- }
- #else
--void __init_or_module noinline apply_returns(s32 *start, s32 *end) { }
-+void __init_or_module noinline apply_returns(s32 *start, s32 *end,
-+					     struct module *mod) { }
- #endif /* CONFIG_MITIGATION_RETHUNK */
- 
- #else /* !CONFIG_MITIGATION_RETPOLINE || !CONFIG_OBJTOOL */
- 
--void __init_or_module noinline apply_retpolines(s32 *start, s32 *end) { }
--void __init_or_module noinline apply_returns(s32 *start, s32 *end) { }
-+void __init_or_module noinline apply_retpolines(s32 *start, s32 *end,
-+						struct module *mod) { }
-+void __init_or_module noinline apply_returns(s32 *start, s32 *end,
-+					     struct module *mod) { }
- 
- #endif /* CONFIG_MITIGATION_RETPOLINE && CONFIG_OBJTOOL */
- 
- #ifdef CONFIG_X86_KERNEL_IBT
- 
--static void poison_cfi(void *addr);
-+static void poison_cfi(void *addr, void *wr_addr);
- 
--static void __init_or_module poison_endbr(void *addr, bool warn)
-+static void __init_or_module poison_endbr(void *addr, void *wr_addr, bool warn)
- {
- 	u32 endbr, poison = gen_endbr_poison();
- 
-@@ -874,7 +890,7 @@ static void __init_or_module poison_endbr(void *addr, bool warn)
- 	 */
- 	DUMP_BYTES(ENDBR, ((u8*)addr), 4, "%px: orig: ", addr);
- 	DUMP_BYTES(ENDBR, ((u8*)&poison), 4, "%px: repl: ", addr);
--	text_poke_early(addr, &poison, 4);
-+	text_poke_early(wr_addr, &poison, 4);
- }
- 
- /*
-@@ -883,22 +899,23 @@ static void __init_or_module poison_endbr(void *addr, bool warn)
-  * Seal the functions for indirect calls by clobbering the ENDBR instructions
-  * and the kCFI hash value.
-  */
--void __init_or_module noinline apply_seal_endbr(s32 *start, s32 *end)
-+void __init_or_module noinline apply_seal_endbr(s32 *start, s32 *end, struct module *mod)
- {
- 	s32 *s;
- 
- 	for (s = start; s < end; s++) {
- 		void *addr = (void *)s + *s;
-+		void *wr_addr = addr + module_writable_offset(mod, addr);
- 
--		poison_endbr(addr, true);
-+		poison_endbr(addr, wr_addr, true);
- 		if (IS_ENABLED(CONFIG_FINEIBT))
--			poison_cfi(addr - 16);
-+			poison_cfi(addr - 16, wr_addr - 16);
- 	}
- }
- 
- #else
- 
--void __init_or_module apply_seal_endbr(s32 *start, s32 *end) { }
-+void __init_or_module apply_seal_endbr(s32 *start, s32 *end, struct module *mod) { }
- 
- #endif /* CONFIG_X86_KERNEL_IBT */
- 
-@@ -1120,7 +1137,7 @@ static u32 decode_caller_hash(void *addr)
- }
- 
- /* .retpoline_sites */
--static int cfi_disable_callers(s32 *start, s32 *end)
-+static int cfi_disable_callers(s32 *start, s32 *end, struct module *mod)
- {
- 	/*
- 	 * Disable kCFI by patching in a JMP.d8, this leaves the hash immediate
-@@ -1132,6 +1149,7 @@ static int cfi_disable_callers(s32 *start, s32 *end)
- 
- 	for (s = start; s < end; s++) {
- 		void *addr = (void *)s + *s;
-+		void *wr_addr = addr + module_writable_offset(mod, addr);
- 		u32 hash;
- 
- 		addr -= fineibt_caller_size;
-@@ -1139,13 +1157,13 @@ static int cfi_disable_callers(s32 *start, s32 *end)
- 		if (!hash) /* nocfi callers */
- 			continue;
- 
--		text_poke_early(addr, jmp, 2);
-+		text_poke_early(wr_addr, jmp, 2);
- 	}
- 
- 	return 0;
- }
- 
--static int cfi_enable_callers(s32 *start, s32 *end)
-+static int cfi_enable_callers(s32 *start, s32 *end, struct module *mod)
- {
- 	/*
- 	 * Re-enable kCFI, undo what cfi_disable_callers() did.
-@@ -1155,6 +1173,7 @@ static int cfi_enable_callers(s32 *start, s32 *end)
- 
- 	for (s = start; s < end; s++) {
- 		void *addr = (void *)s + *s;
-+		void *wr_addr = addr + module_writable_offset(mod, addr);
- 		u32 hash;
- 
- 		addr -= fineibt_caller_size;
-@@ -1162,19 +1181,20 @@ static int cfi_enable_callers(s32 *start, s32 *end)
- 		if (!hash) /* nocfi callers */
- 			continue;
- 
--		text_poke_early(addr, mov, 2);
-+		text_poke_early(wr_addr, mov, 2);
- 	}
- 
- 	return 0;
- }
- 
- /* .cfi_sites */
--static int cfi_rand_preamble(s32 *start, s32 *end)
-+static int cfi_rand_preamble(s32 *start, s32 *end, struct module *mod)
- {
- 	s32 *s;
- 
- 	for (s = start; s < end; s++) {
- 		void *addr = (void *)s + *s;
-+		void *wr_addr = addr + module_writable_offset(mod, addr);
- 		u32 hash;
- 
- 		hash = decode_preamble_hash(addr);
-@@ -1183,18 +1203,19 @@ static int cfi_rand_preamble(s32 *start, s32 *end)
- 			return -EINVAL;
- 
- 		hash = cfi_rehash(hash);
--		text_poke_early(addr + 1, &hash, 4);
-+		text_poke_early(wr_addr + 1, &hash, 4);
- 	}
- 
- 	return 0;
- }
- 
--static int cfi_rewrite_preamble(s32 *start, s32 *end)
-+static int cfi_rewrite_preamble(s32 *start, s32 *end, struct module *mod)
- {
- 	s32 *s;
- 
- 	for (s = start; s < end; s++) {
- 		void *addr = (void *)s + *s;
-+		void *wr_addr = addr + module_writable_offset(mod, addr);
- 		u32 hash;
- 
- 		hash = decode_preamble_hash(addr);
-@@ -1202,59 +1223,62 @@ static int cfi_rewrite_preamble(s32 *start, s32 *end)
- 			 addr, addr, 5, addr))
- 			return -EINVAL;
- 
--		text_poke_early(addr, fineibt_preamble_start, fineibt_preamble_size);
-+		text_poke_early(wr_addr, fineibt_preamble_start, fineibt_preamble_size);
- 		WARN_ON(*(u32 *)(addr + fineibt_preamble_hash) != 0x12345678);
--		text_poke_early(addr + fineibt_preamble_hash, &hash, 4);
-+		text_poke_early(wr_addr + fineibt_preamble_hash, &hash, 4);
- 	}
- 
- 	return 0;
- }
- 
--static void cfi_rewrite_endbr(s32 *start, s32 *end)
-+static void cfi_rewrite_endbr(s32 *start, s32 *end, struct module *mod)
- {
- 	s32 *s;
- 
- 	for (s = start; s < end; s++) {
- 		void *addr = (void *)s + *s;
-+		void *wr_addr = addr + module_writable_offset(mod, addr);
- 
--		poison_endbr(addr+16, false);
-+		poison_endbr(addr+16, wr_addr, false);
- 	}
- }
- 
- /* .retpoline_sites */
--static int cfi_rand_callers(s32 *start, s32 *end)
-+static int cfi_rand_callers(s32 *start, s32 *end, struct module *mod)
- {
- 	s32 *s;
- 
- 	for (s = start; s < end; s++) {
- 		void *addr = (void *)s + *s;
-+		void *wr_addr = addr + module_writable_offset(mod, addr);
- 		u32 hash;
- 
- 		addr -= fineibt_caller_size;
- 		hash = decode_caller_hash(addr);
- 		if (hash) {
- 			hash = -cfi_rehash(hash);
--			text_poke_early(addr + 2, &hash, 4);
-+			text_poke_early(wr_addr + 2, &hash, 4);
- 		}
- 	}
- 
- 	return 0;
- }
- 
--static int cfi_rewrite_callers(s32 *start, s32 *end)
-+static int cfi_rewrite_callers(s32 *start, s32 *end, struct module *mod)
- {
- 	s32 *s;
- 
- 	for (s = start; s < end; s++) {
- 		void *addr = (void *)s + *s;
-+		void *wr_addr = addr + module_writable_offset(mod, addr);
- 		u32 hash;
- 
- 		addr -= fineibt_caller_size;
- 		hash = decode_caller_hash(addr);
- 		if (hash) {
--			text_poke_early(addr, fineibt_caller_start, fineibt_caller_size);
-+			text_poke_early(wr_addr, fineibt_caller_start, fineibt_caller_size);
- 			WARN_ON(*(u32 *)(addr + fineibt_caller_hash) != 0x12345678);
--			text_poke_early(addr + fineibt_caller_hash, &hash, 4);
-+			text_poke_early(wr_addr + fineibt_caller_hash, &hash, 4);
- 		}
- 		/* rely on apply_retpolines() */
- 	}
-@@ -1263,8 +1287,9 @@ static int cfi_rewrite_callers(s32 *start, s32 *end)
- }
- 
- static void __apply_fineibt(s32 *start_retpoline, s32 *end_retpoline,
--			    s32 *start_cfi, s32 *end_cfi, bool builtin)
-+			    s32 *start_cfi, s32 *end_cfi, struct module *mod)
- {
-+	bool builtin = mod ? false : true;
- 	int ret;
- 
- 	if (WARN_ONCE(fineibt_preamble_size != 16,
-@@ -1282,7 +1307,7 @@ static void __apply_fineibt(s32 *start_retpoline, s32 *end_retpoline,
- 	 * rewrite them. This disables all CFI. If this succeeds but any of the
- 	 * later stages fails, we're without CFI.
- 	 */
--	ret = cfi_disable_callers(start_retpoline, end_retpoline);
-+	ret = cfi_disable_callers(start_retpoline, end_retpoline, mod);
- 	if (ret)
- 		goto err;
- 
-@@ -1293,11 +1318,11 @@ static void __apply_fineibt(s32 *start_retpoline, s32 *end_retpoline,
- 			cfi_bpf_subprog_hash = cfi_rehash(cfi_bpf_subprog_hash);
- 		}
- 
--		ret = cfi_rand_preamble(start_cfi, end_cfi);
-+		ret = cfi_rand_preamble(start_cfi, end_cfi, mod);
- 		if (ret)
- 			goto err;
- 
--		ret = cfi_rand_callers(start_retpoline, end_retpoline);
-+		ret = cfi_rand_callers(start_retpoline, end_retpoline, mod);
- 		if (ret)
- 			goto err;
- 	}
-@@ -1309,7 +1334,7 @@ static void __apply_fineibt(s32 *start_retpoline, s32 *end_retpoline,
- 		return;
- 
- 	case CFI_KCFI:
--		ret = cfi_enable_callers(start_retpoline, end_retpoline);
-+		ret = cfi_enable_callers(start_retpoline, end_retpoline, mod);
- 		if (ret)
- 			goto err;
- 
-@@ -1319,17 +1344,17 @@ static void __apply_fineibt(s32 *start_retpoline, s32 *end_retpoline,
- 
- 	case CFI_FINEIBT:
- 		/* place the FineIBT preamble at func()-16 */
--		ret = cfi_rewrite_preamble(start_cfi, end_cfi);
-+		ret = cfi_rewrite_preamble(start_cfi, end_cfi, mod);
- 		if (ret)
- 			goto err;
- 
- 		/* rewrite the callers to target func()-16 */
--		ret = cfi_rewrite_callers(start_retpoline, end_retpoline);
-+		ret = cfi_rewrite_callers(start_retpoline, end_retpoline, mod);
- 		if (ret)
- 			goto err;
- 
- 		/* now that nobody targets func()+0, remove ENDBR there */
--		cfi_rewrite_endbr(start_cfi, end_cfi);
-+		cfi_rewrite_endbr(start_cfi, end_cfi, mod);
- 
- 		if (builtin)
- 			pr_info("Using FineIBT CFI\n");
-@@ -1348,7 +1373,7 @@ static inline void poison_hash(void *addr)
- 	*(u32 *)addr = 0;
- }
- 
--static void poison_cfi(void *addr)
-+static void poison_cfi(void *addr, void *wr_addr)
- {
- 	switch (cfi_mode) {
- 	case CFI_FINEIBT:
-@@ -1360,8 +1385,8 @@ static void poison_cfi(void *addr)
- 		 *	ud2
- 		 * 1:	nop
- 		 */
--		poison_endbr(addr, false);
--		poison_hash(addr + fineibt_preamble_hash);
-+		poison_endbr(addr, wr_addr, false);
-+		poison_hash(wr_addr + fineibt_preamble_hash);
- 		break;
- 
- 	case CFI_KCFI:
-@@ -1370,7 +1395,7 @@ static void poison_cfi(void *addr)
- 		 *	movl	$0, %eax
- 		 *	.skip	11, 0x90
- 		 */
--		poison_hash(addr + 1);
-+		poison_hash(wr_addr + 1);
- 		break;
- 
- 	default:
-@@ -1381,22 +1406,21 @@ static void poison_cfi(void *addr)
- #else
- 
- static void __apply_fineibt(s32 *start_retpoline, s32 *end_retpoline,
--			    s32 *start_cfi, s32 *end_cfi, bool builtin)
-+			    s32 *start_cfi, s32 *end_cfi, struct module *mod)
- {
- }
- 
- #ifdef CONFIG_X86_KERNEL_IBT
--static void poison_cfi(void *addr) { }
-+static void poison_cfi(void *addr, void *wr_addr) { }
- #endif
- 
- #endif
- 
- void apply_fineibt(s32 *start_retpoline, s32 *end_retpoline,
--		   s32 *start_cfi, s32 *end_cfi)
-+		   s32 *start_cfi, s32 *end_cfi, struct module *mod)
- {
- 	return __apply_fineibt(start_retpoline, end_retpoline,
--			       start_cfi, end_cfi,
--			       /* .builtin = */ false);
-+			       start_cfi, end_cfi, mod);
- }
- 
- #ifdef CONFIG_SMP
-@@ -1693,16 +1717,16 @@ void __init alternative_instructions(void)
- 	paravirt_set_cap();
- 
- 	__apply_fineibt(__retpoline_sites, __retpoline_sites_end,
--			__cfi_sites, __cfi_sites_end, true);
-+			__cfi_sites, __cfi_sites_end, NULL);
- 
- 	/*
- 	 * Rewrite the retpolines, must be done before alternatives since
- 	 * those can rewrite the retpoline thunks.
- 	 */
--	apply_retpolines(__retpoline_sites, __retpoline_sites_end);
--	apply_returns(__return_sites, __return_sites_end);
-+	apply_retpolines(__retpoline_sites, __retpoline_sites_end, NULL);
-+	apply_returns(__return_sites, __return_sites_end, NULL);
- 
--	apply_alternatives(__alt_instructions, __alt_instructions_end);
-+	apply_alternatives(__alt_instructions, __alt_instructions_end, NULL);
- 
- 	/*
- 	 * Now all calls are established. Apply the call thunks if
-@@ -1713,7 +1737,7 @@ void __init alternative_instructions(void)
- 	/*
- 	 * Seal all functions that do not have their address taken.
- 	 */
--	apply_seal_endbr(__ibt_endbr_seal, __ibt_endbr_seal_end);
-+	apply_seal_endbr(__ibt_endbr_seal, __ibt_endbr_seal_end, NULL);
- 
- #ifdef CONFIG_SMP
- 	/* Patch to UP if other cpus not imminent. */
-diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
-index 8da0e66ca22d..563d9a890ce2 100644
---- a/arch/x86/kernel/ftrace.c
-+++ b/arch/x86/kernel/ftrace.c
-@@ -118,10 +118,13 @@ ftrace_modify_code_direct(unsigned long ip, const char *old_code,
- 		return ret;
- 
- 	/* replace the text with the new text */
--	if (ftrace_poke_late)
-+	if (ftrace_poke_late) {
- 		text_poke_queue((void *)ip, new_code, MCOUNT_INSN_SIZE, NULL);
--	else
--		text_poke_early((void *)ip, new_code, MCOUNT_INSN_SIZE);
-+	} else {
-+		mutex_lock(&text_mutex);
-+		text_poke((void *)ip, new_code, MCOUNT_INSN_SIZE);
-+		mutex_unlock(&text_mutex);
-+	}
- 	return 0;
- }
- 
-@@ -318,7 +321,7 @@ create_trampoline(struct ftrace_ops *ops, unsigned int *tramp_size)
- 	unsigned const char op_ref[] = { 0x48, 0x8b, 0x15 };
- 	unsigned const char retq[] = { RET_INSN_OPCODE, INT3_INSN_OPCODE };
- 	union ftrace_op_code_union op_ptr;
--	int ret;
-+	void *ret;
- 
- 	if (ops->flags & FTRACE_OPS_FL_SAVE_REGS) {
- 		start_offset = (unsigned long)ftrace_regs_caller;
-@@ -349,15 +352,15 @@ create_trampoline(struct ftrace_ops *ops, unsigned int *tramp_size)
- 	npages = DIV_ROUND_UP(*tramp_size, PAGE_SIZE);
- 
- 	/* Copy ftrace_caller onto the trampoline memory */
--	ret = copy_from_kernel_nofault(trampoline, (void *)start_offset, size);
--	if (WARN_ON(ret < 0))
-+	ret = text_poke_copy(trampoline, (void *)start_offset, size);
-+	if (WARN_ON(!ret))
- 		goto fail;
- 
- 	ip = trampoline + size;
- 	if (cpu_feature_enabled(X86_FEATURE_RETHUNK))
- 		__text_gen_insn(ip, JMP32_INSN_OPCODE, ip, x86_return_thunk, JMP32_INSN_SIZE);
- 	else
--		memcpy(ip, retq, sizeof(retq));
-+		text_poke_copy(ip, retq, sizeof(retq));
- 
- 	/* No need to test direct calls on created trampolines */
- 	if (ops->flags & FTRACE_OPS_FL_SAVE_REGS) {
-@@ -365,8 +368,7 @@ create_trampoline(struct ftrace_ops *ops, unsigned int *tramp_size)
- 		ip = trampoline + (jmp_offset - start_offset);
- 		if (WARN_ON(*(char *)ip != 0x75))
- 			goto fail;
--		ret = copy_from_kernel_nofault(ip, x86_nops[2], 2);
--		if (ret < 0)
-+		if (!text_poke_copy(ip, x86_nops[2], 2))
- 			goto fail;
- 	}
- 
-@@ -379,7 +381,7 @@ create_trampoline(struct ftrace_ops *ops, unsigned int *tramp_size)
- 	 */
- 
- 	ptr = (unsigned long *)(trampoline + size + RET_SIZE);
--	*ptr = (unsigned long)ops;
-+	text_poke_copy(ptr, &ops, sizeof(unsigned long));
- 
- 	op_offset -= start_offset;
- 	memcpy(&op_ptr, trampoline + op_offset, OP_REF_SIZE);
-@@ -395,7 +397,7 @@ create_trampoline(struct ftrace_ops *ops, unsigned int *tramp_size)
- 	op_ptr.offset = offset;
- 
- 	/* put in the new offset to the ftrace_ops */
--	memcpy(trampoline + op_offset, &op_ptr, OP_REF_SIZE);
-+	text_poke_copy(trampoline + op_offset, &op_ptr, OP_REF_SIZE);
- 
- 	/* put in the call to the function */
- 	mutex_lock(&text_mutex);
-@@ -405,9 +407,9 @@ create_trampoline(struct ftrace_ops *ops, unsigned int *tramp_size)
- 	 * the depth accounting before the call already.
- 	 */
- 	dest = ftrace_ops_get_func(ops);
--	memcpy(trampoline + call_offset,
--	       text_gen_insn(CALL_INSN_OPCODE, trampoline + call_offset, dest),
--	       CALL_INSN_SIZE);
-+	text_poke_copy_locked(trampoline + call_offset,
-+	      text_gen_insn(CALL_INSN_OPCODE, trampoline + call_offset, dest),
-+	      CALL_INSN_SIZE, false);
- 	mutex_unlock(&text_mutex);
- 
- 	/* ALLOC_TRAMP flags lets us know we created it */
-@@ -654,4 +656,15 @@ void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
- }
- #endif
- 
-+void ftrace_swap_func(void *a, void *b, int n)
+ static struct execmem_info *execmem_info __ro_after_init;
+ static struct execmem_info default_execmem_info __ro_after_init;
+ 
+-static void *__execmem_alloc(struct execmem_range *range, size_t size)
++struct execmem_cache {
++	struct mutex mutex;
++	struct maple_tree busy_areas;
++	struct maple_tree free_areas;
++};
++
++static struct execmem_cache execmem_cache = {
++	.mutex = __MUTEX_INITIALIZER(execmem_cache.mutex),
++	.busy_areas = MTREE_INIT_EXT(busy_areas, MT_FLAGS_LOCK_EXTERN,
++				     execmem_cache.mutex),
++	.free_areas = MTREE_INIT_EXT(free_areas, MT_FLAGS_LOCK_EXTERN,
++				     execmem_cache.mutex),
++};
++
++static void execmem_cache_clean(struct work_struct *work)
 +{
-+	unsigned long t;
++	struct maple_tree *free_areas = &execmem_cache.free_areas;
++	struct mutex *mutex = &execmem_cache.mutex;
++	MA_STATE(mas, free_areas, 0, ULONG_MAX);
++	void *area;
 +
-+	WARN_ON_ONCE(n != sizeof(t));
++	mutex_lock(mutex);
++	mas_for_each(&mas, area, ULONG_MAX) {
++		size_t size;
 +
-+	t = *((unsigned long *)a);
-+	text_poke_copy(a, b, sizeof(t));
-+	text_poke_copy(b, &t, sizeof(t));
++		if (!xa_is_value(area))
++			continue;
++
++		size = xa_to_value(area);
++
++		if (IS_ALIGNED(size, PMD_SIZE) && IS_ALIGNED(mas.index, PMD_SIZE)) {
++			void *ptr = (void *)mas.index;
++
++			mas_erase(&mas);
++			vfree(ptr);
++		}
++	}
++	mutex_unlock(mutex);
 +}
 +
- #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
-diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
-index 837450b6e882..30eed5228f44 100644
---- a/arch/x86/kernel/module.c
-+++ b/arch/x86/kernel/module.c
-@@ -146,18 +146,21 @@ static int __write_relocate_add(Elf64_Shdr *sechdrs,
- 		}
- 
- 		if (apply) {
--			if (memcmp(loc, &zero, size)) {
-+			void *wr_loc = loc + module_writable_offset(me, loc);
++static DECLARE_WORK(execmem_cache_clean_work, execmem_cache_clean);
 +
-+			if (memcmp(wr_loc, &zero, size)) {
- 				pr_err("x86/modules: Invalid relocation target, existing value is nonzero for type %d, loc %p, val %Lx\n",
- 				       (int)ELF64_R_TYPE(rel[i].r_info), loc, val);
- 				return -ENOEXEC;
- 			}
--			write(loc, &val, size);
-+			write(wr_loc, &val, size);
- 		} else {
- 			if (memcmp(loc, &val, size)) {
- 				pr_warn("x86/modules: Invalid relocation target, existing value does not match expected value for type %d, loc %p, val %Lx\n",
- 					(int)ELF64_R_TYPE(rel[i].r_info), loc, val);
- 				return -ENOEXEC;
- 			}
-+			/* FIXME: needs care for ROX module allocations */
- 			write(loc, &zero, size);
- 		}
- 	}
-@@ -265,20 +268,20 @@ int module_finalize(const Elf_Ehdr *hdr,
- 			csize = cfi->sh_size;
- 		}
++static void execmem_invalidate(void *ptr, size_t size, bool writable)
++{
++	if (execmem_info->invalidate)
++		execmem_info->invalidate(ptr, size, writable);
++	else
++		memset(ptr, 0, size);
++}
++
++static void *execmem_vmalloc(struct execmem_range *range, size_t size,
++			     pgprot_t pgprot, unsigned long vm_flags)
+ {
+ 	bool kasan = range->flags & EXECMEM_KASAN_SHADOW;
+-	unsigned long vm_flags  = VM_FLUSH_RESET_PERMS;
+ 	gfp_t gfp_flags = GFP_KERNEL | __GFP_NOWARN;
++	unsigned int align = range->alignment;
+ 	unsigned long start = range->start;
+ 	unsigned long end = range->end;
+-	unsigned int align = range->alignment;
+-	pgprot_t pgprot = range->pgprot;
+ 	void *p;
  
--		apply_fineibt(rseg, rseg + rsize, cseg, cseg + csize);
-+		apply_fineibt(rseg, rseg + rsize, cseg, cseg + csize, me);
+ 	if (kasan)
+ 		vm_flags |= VM_DEFER_KMEMLEAK;
+ 
+-	p = __vmalloc_node_range(size, align, start, end, gfp_flags,
+-				 pgprot, vm_flags, NUMA_NO_NODE,
++	if (vm_flags & VM_ALLOW_HUGE_VMAP)
++		align = PMD_SIZE;
++
++	p = __vmalloc_node_range(size, align, start, end, gfp_flags, pgprot,
++				 vm_flags, NUMA_NO_NODE,
+ 				 __builtin_return_address(0));
+ 	if (!p && range->fallback_start) {
+ 		start = range->fallback_start;
+@@ -44,6 +102,199 @@ static void *__execmem_alloc(struct execmem_range *range, size_t size)
+ 		return NULL;
  	}
- 	if (retpolines) {
- 		void *rseg = (void *)retpolines->sh_addr;
--		apply_retpolines(rseg, rseg + retpolines->sh_size);
-+		apply_retpolines(rseg, rseg + retpolines->sh_size, me);
- 	}
- 	if (returns) {
- 		void *rseg = (void *)returns->sh_addr;
--		apply_returns(rseg, rseg + returns->sh_size);
-+		apply_returns(rseg, rseg + returns->sh_size, me);
- 	}
- 	if (alt) {
- 		/* patch .altinstructions */
- 		void *aseg = (void *)alt->sh_addr;
--		apply_alternatives(aseg, aseg + alt->sh_size);
-+		apply_alternatives(aseg, aseg + alt->sh_size, me);
- 	}
- 	if (calls || alt) {
- 		struct callthunk_sites cs = {};
-@@ -297,7 +300,7 @@ int module_finalize(const Elf_Ehdr *hdr,
- 	}
- 	if (ibt_endbr) {
- 		void *iseg = (void *)ibt_endbr->sh_addr;
--		apply_seal_endbr(iseg, iseg + ibt_endbr->sh_size);
-+		apply_seal_endbr(iseg, iseg + ibt_endbr->sh_size, me);
- 	}
- 	if (locks) {
- 		void *lseg = (void *)locks->sh_addr;
+ 
++	return p;
++}
++
++static int execmem_cache_add(void *ptr, size_t size)
++{
++	struct maple_tree *free_areas = &execmem_cache.free_areas;
++	struct mutex *mutex = &execmem_cache.mutex;
++	unsigned long addr = (unsigned long)ptr;
++	MA_STATE(mas, free_areas, addr - 1, addr + 1);
++	unsigned long lower, lower_size = 0;
++	unsigned long upper, upper_size = 0;
++	unsigned long area_size;
++	void *area = NULL;
++	int err;
++
++	lower = addr;
++	upper = addr + size - 1;
++
++	mutex_lock(mutex);
++	area = mas_walk(&mas);
++	if (area && xa_is_value(area) && mas.last == addr - 1) {
++		lower = mas.index;
++		lower_size = xa_to_value(area);
++	}
++
++	area = mas_next(&mas, ULONG_MAX);
++	if (area && xa_is_value(area) && mas.index == addr + size) {
++		upper = mas.last;
++		upper_size = xa_to_value(area);
++	}
++
++	mas_set_range(&mas, lower, upper);
++	area_size = lower_size + upper_size + size;
++	err = mas_store_gfp(&mas, xa_mk_value(area_size), GFP_KERNEL);
++	mutex_unlock(mutex);
++	if (err)
++		return -ENOMEM;
++
++	return 0;
++}
++
++static void *__execmem_cache_alloc(size_t size)
++{
++	struct maple_tree *free_areas = &execmem_cache.free_areas;
++	struct maple_tree *busy_areas = &execmem_cache.busy_areas;
++	MA_STATE(mas_free, free_areas, 0, ULONG_MAX);
++	MA_STATE(mas_busy, busy_areas, 0, ULONG_MAX);
++	struct mutex *mutex = &execmem_cache.mutex;
++	unsigned long addr, last, area_size = 0;
++	void *area, *ptr = NULL;
++	int err;
++
++	mutex_lock(mutex);
++	mas_for_each(&mas_free, area, ULONG_MAX) {
++		area_size = xa_to_value(area);
++		if (area_size >= size)
++			break;
++	}
++
++	if (area_size < size)
++		goto out_unlock;
++
++	addr = mas_free.index;
++	last = mas_free.last;
++
++	/* insert allocated size to busy_areas at range [addr, addr + size) */
++	mas_set_range(&mas_busy, addr, addr + size - 1);
++	err = mas_store_gfp(&mas_busy, xa_mk_value(size), GFP_KERNEL);
++	if (err)
++		goto out_unlock;
++
++	mas_erase(&mas_free);
++	if (area_size > size) {
++		/*
++		 * re-insert remaining free size to free_areas at range
++		 * [addr + size, last]
++		 */
++		mas_set_range(&mas_free, addr + size, last);
++		size = area_size - size;
++		err = mas_store_gfp(&mas_free, xa_mk_value(size), GFP_KERNEL);
++		if (err) {
++			mas_erase(&mas_busy);
++			goto out_unlock;
++		}
++	}
++	ptr = (void *)addr;
++
++out_unlock:
++	mutex_unlock(mutex);
++	return ptr;
++}
++
++static int execmem_cache_populate(struct execmem_range *range, size_t size)
++{
++	unsigned long vm_flags = VM_FLUSH_RESET_PERMS | VM_ALLOW_HUGE_VMAP;
++	unsigned long start, end;
++	struct vm_struct *vm;
++	size_t alloc_size;
++	int err = -ENOMEM;
++	void *p;
++
++	alloc_size = round_up(size, PMD_SIZE);
++	p = execmem_vmalloc(range, alloc_size, PAGE_KERNEL, vm_flags);
++	if (!p)
++		return err;
++
++	vm = find_vm_area(p);
++	if (!vm)
++		goto err_free_mem;
++
++	/* fill memory with invalid instructions */
++	execmem_invalidate(p, alloc_size, /* writable = */ true);
++
++	start = (unsigned long)p;
++	end = start + alloc_size;
++
++	vunmap_range_noflush(start, end);
++	flush_tlb_kernel_range(start, end);
++
++	/* FIXME: handle direct map alias */
++
++	err = vmap_pages_range_noflush(start, end, range->pgprot, vm->pages,
++				       PMD_SHIFT);
++	if (err)
++		goto err_free_mem;
++
++	err = execmem_cache_add(p, alloc_size);
++	if (err)
++		goto err_free_mem;
++
++	return 0;
++
++err_free_mem:
++	vfree(p);
++	return err;
++}
++
++static void *execmem_cache_alloc(struct execmem_range *range, size_t size)
++{
++	void *p;
++	int err;
++
++	p = __execmem_cache_alloc(size);
++	if (p)
++		return p;
++
++	err = execmem_cache_populate(range, size);
++	if (err)
++		return NULL;
++
++	return __execmem_cache_alloc(size);
++}
++
++static bool execmem_cache_free(void *ptr)
++{
++	struct maple_tree *busy_areas = &execmem_cache.busy_areas;
++	struct mutex *mutex = &execmem_cache.mutex;
++	unsigned long addr = (unsigned long)ptr;
++	MA_STATE(mas, busy_areas, addr, addr);
++	size_t size;
++	void *area;
++
++	mutex_lock(mutex);
++	area = mas_walk(&mas);
++	if (!area) {
++		mutex_unlock(mutex);
++		return false;
++	}
++	size = xa_to_value(area);
++	mas_erase(&mas);
++	mutex_unlock(mutex);
++
++	execmem_invalidate(ptr, size, /* writable = */ false);
++
++	execmem_cache_add(ptr, size);
++
++	schedule_work(&execmem_cache_clean_work);
++
++	return true;
++}
++
++static void *__execmem_alloc(struct execmem_range *range, size_t size)
++{
++	bool use_cache = range->flags & EXECMEM_ROX_CACHE;
++	unsigned long vm_flags = VM_FLUSH_RESET_PERMS;
++	pgprot_t pgprot = range->pgprot;
++	void *p;
++
++	if (use_cache)
++		p = execmem_cache_alloc(range, size);
++	else
++		p = execmem_vmalloc(range, size, pgprot, vm_flags);
++
+ 	return kasan_reset_tag(p);
+ }
+ 
+@@ -61,7 +312,9 @@ void execmem_free(void *ptr)
+ 	 * supported by vmalloc.
+ 	 */
+ 	WARN_ON(in_interrupt());
+-	vfree(ptr);
++
++	if (!execmem_cache_free(ptr))
++		vfree(ptr);
+ }
+ 
+ void *execmem_update_copy(void *dst, const void *src, size_t size)
 -- 
 2.43.0
 
