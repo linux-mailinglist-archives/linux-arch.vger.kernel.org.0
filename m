@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-3578-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3579-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CEC4D8A1BC2
-	for <lists+linux-arch@lfdr.de>; Thu, 11 Apr 2024 19:34:37 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1C718A1DA9
+	for <lists+linux-arch@lfdr.de>; Thu, 11 Apr 2024 20:16:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8BB06280792
-	for <lists+linux-arch@lfdr.de>; Thu, 11 Apr 2024 17:34:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A12CFB2693F
+	for <lists+linux-arch@lfdr.de>; Thu, 11 Apr 2024 17:34:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4462013790B;
-	Thu, 11 Apr 2024 16:03:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98BD2137C49;
+	Thu, 11 Apr 2024 16:04:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KWHNNAcI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e6ERizPZ"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01A5D13777C;
-	Thu, 11 Apr 2024 16:03:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A40B13777C;
+	Thu, 11 Apr 2024 16:04:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712851431; cv=none; b=qyMdM2CJ5ZVrdXkJo9WdSR4sgIx2Gc19ZGsiIwYfUWfxS+bfnvaRJ+ZRSN/S0rjalWMHov1A4f4v5lfGHvC7wmT3J+Mkhlvj7s0mzge/J8vJVb40AERxaH0pp7fzjJG8QcYNZGEVFFaLMbrpIt0Ku9hKce9EJ8OxQ/lD2thLcBE=
+	t=1712851441; cv=none; b=Cmq68cUM9CH1lk2iO/TvK2Y1imtfYOvphwVtD8Vu0X538bd1WHb8nL3ILKe/oLC2+yEwiCDC5Nc9XSMGiBddeXNCsUsv7dGBky3Jf8V3x6u/z9pMA58dr1qdYMluFbkS5GoAnDvY27dAvGEGJesAhHYhpNtG75cVeW8bNF2NzNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712851431; c=relaxed/simple;
-	bh=tleyEU1lUC0BC39QIzg11FQLbY7rS2GjqFF25yuhwvw=;
+	s=arc-20240116; t=1712851441; c=relaxed/simple;
+	bh=dj8Jeem56mTOW4r4fQ6hbW3YTYti2N5hSv58QgNFPjs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ed8c7Ykp/599FNUW+DeXoXfObA/dOXTqMkCArsD+JwC+j1flZ64zoMxAVdW5aLvNOOizf2veK7KgxwjL8aOTqcjJHOvq9R+afIa/uIjZEk+7r9MddILMYhmPQechUdV/qBNBsMmEOBw0+6x0Jrl8iEi0CLl0L+Finx3wlq+eEh4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KWHNNAcI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B264BC072AA;
-	Thu, 11 Apr 2024 16:03:40 +0000 (UTC)
+	 MIME-Version; b=Rd482ehdwhJwlyRjXoPjUg+jwHCGDpalyS+1W7pTl8dOoL3ACpLcIAPNlWyofBAa1oosFiySlIniYhLFZdqXefoVdsyrorn7vEP2EGSgg1EJAhiB7iikzaxab6LsdtVlIRDGXemvcNEjogrQVmnC94q/QlLsUatMNXE3IhGugYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e6ERizPZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1811DC113CE;
+	Thu, 11 Apr 2024 16:03:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712851430;
-	bh=tleyEU1lUC0BC39QIzg11FQLbY7rS2GjqFF25yuhwvw=;
+	s=k20201202; t=1712851440;
+	bh=dj8Jeem56mTOW4r4fQ6hbW3YTYti2N5hSv58QgNFPjs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=KWHNNAcIx/mLULvyCHWFsS1YLjSZIaezlJX+m72pGZE/RNEbdBx5UBl+FwhfwbSxC
-	 fdiUBt+vEpaP3R/bm42w8LxmAlAgfVm0TZBD86qoaEKsjkv1HZ/9uJh3DXf39hjl+Z
-	 S/10ZwZSzTC3Znq9H07mRCjK8broyIQBbWWLJf3tk8B+pnbnTfmsA14YuXJlRy7DTL
-	 I6xnz4e0u5vePgQqBHaVpuuAl5Img7qwFaNWAmNczEjvOPFISuS2S3W3ypFIfEcoS8
-	 gbo3+vyOWtGb9NM4v6WJPlqh5O74/8/XHwwwKYKPbAH9YXX8m9nHRw7GlWJhdO6RJ+
-	 v5BXTq7XKxO3A==
+	b=e6ERizPZR76qVXhsBWZGKyAA22R77VnIeczbENKkVs2ThkiNc2s4tsjRC6xm+CXxB
+	 jlcF0zveXe/fpGxsCUUGili9t/nI1QFTLlvaSxrnj2aY9IE1K3itlIW53TQGDAxcPH
+	 d55OpEkteiNE5H2ZOPbXgXaOw+Yt4EGv+8350H5u47HbBEYjptG2ECa9bqhQvptxMY
+	 i9fDA8JAkVwaWYd7dr082MDQYplP2RwcqdCLAnW8A01K9Xwv4bbd4TCMssphDLeqMj
+	 jIdvZcHYTNH1/Q7ir9e2JX9svcI/GYtAMORhoGI6ljN8+aBIhzk2YNVgIQ7nWjFkaH
+	 CW7NBFCjaYvIQ==
 From: Mike Rapoport <rppt@kernel.org>
 To: linux-kernel@vger.kernel.org
 Cc: Alexandre Ghiti <alexghiti@rivosinc.com>,
@@ -85,9 +85,9 @@ Cc: Alexandre Ghiti <alexghiti@rivosinc.com>,
 	netdev@vger.kernel.org,
 	sparclinux@vger.kernel.org,
 	x86@kernel.org
-Subject: [PATCH v4 12/15] x86/ftrace: enable dynamic ftrace without CONFIG_MODULES
-Date: Thu, 11 Apr 2024 19:00:48 +0300
-Message-ID: <20240411160051.2093261-13-rppt@kernel.org>
+Subject: [PATCH v4 13/15] powerpc: use CONFIG_EXECMEM instead of CONFIG_MODULES where appropiate
+Date: Thu, 11 Apr 2024 19:00:49 +0300
+Message-ID: <20240411160051.2093261-14-rppt@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240411160051.2093261-1-rppt@kernel.org>
 References: <20240411160051.2093261-1-rppt@kernel.org>
@@ -101,61 +101,122 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 
-Dynamic ftrace must allocate memory for code and this was impossible
-without CONFIG_MODULES.
+There are places where CONFIG_MODULES guards the code that depends on
+memory allocation being done with module_alloc().
 
-With execmem separated from the modules code, execmem_text_alloc() is
-available regardless of CONFIG_MODULES.
-
-Remove dependency of dynamic ftrace on CONFIG_MODULES and make
-CONFIG_DYNAMIC_FTRACE select CONFIG_EXECMEM in Kconfig.
+Replace CONFIG_MODULES with CONFIG_EXECMEM in such places.
 
 Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
 ---
- arch/x86/Kconfig         |  1 +
- arch/x86/kernel/ftrace.c | 10 ----------
- 2 files changed, 1 insertion(+), 10 deletions(-)
+ arch/powerpc/Kconfig                 | 2 +-
+ arch/powerpc/include/asm/kasan.h     | 2 +-
+ arch/powerpc/kernel/head_8xx.S       | 4 ++--
+ arch/powerpc/kernel/head_book3s_32.S | 6 +++---
+ arch/powerpc/lib/code-patching.c     | 2 +-
+ arch/powerpc/mm/book3s32/mmu.c       | 2 +-
+ 6 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index e87ddbdaaeb2..5100a769ffda 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -34,6 +34,7 @@ config X86_64
- 	select SWIOTLB
- 	select ARCH_HAS_ELFCORE_COMPAT
- 	select ZONE_DMA32
-+	select EXECMEM if DYNAMIC_FTRACE
+diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+index 1c4be3373686..2e586733a464 100644
+--- a/arch/powerpc/Kconfig
++++ b/arch/powerpc/Kconfig
+@@ -285,7 +285,7 @@ config PPC
+ 	select IOMMU_HELPER			if PPC64
+ 	select IRQ_DOMAIN
+ 	select IRQ_FORCED_THREADING
+-	select KASAN_VMALLOC			if KASAN && MODULES
++	select KASAN_VMALLOC			if KASAN && EXECMEM
+ 	select LOCK_MM_AND_FIND_VMA
+ 	select MMU_GATHER_PAGE_SIZE
+ 	select MMU_GATHER_RCU_TABLE_FREE
+diff --git a/arch/powerpc/include/asm/kasan.h b/arch/powerpc/include/asm/kasan.h
+index 365d2720097c..b5bbb94c51f6 100644
+--- a/arch/powerpc/include/asm/kasan.h
++++ b/arch/powerpc/include/asm/kasan.h
+@@ -19,7 +19,7 @@
  
- config FORCE_DYNAMIC_FTRACE
- 	def_bool y
-diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
-index c8ddb7abda7c..8da0e66ca22d 100644
---- a/arch/x86/kernel/ftrace.c
-+++ b/arch/x86/kernel/ftrace.c
-@@ -261,8 +261,6 @@ void arch_ftrace_update_code(int command)
- /* Currently only x86_64 supports dynamic trampolines */
- #ifdef CONFIG_X86_64
+ #define KASAN_SHADOW_SCALE_SHIFT	3
  
+-#if defined(CONFIG_MODULES) && defined(CONFIG_PPC32)
++#if defined(CONFIG_EXECMEM) && defined(CONFIG_PPC32)
+ #define KASAN_KERN_START	ALIGN_DOWN(PAGE_OFFSET - SZ_256M, SZ_256M)
+ #else
+ #define KASAN_KERN_START	PAGE_OFFSET
+diff --git a/arch/powerpc/kernel/head_8xx.S b/arch/powerpc/kernel/head_8xx.S
+index 647b0b445e89..edc479a7c2bc 100644
+--- a/arch/powerpc/kernel/head_8xx.S
++++ b/arch/powerpc/kernel/head_8xx.S
+@@ -199,12 +199,12 @@ instruction_counter:
+ 	mfspr	r10, SPRN_SRR0	/* Get effective address of fault */
+ 	INVALIDATE_ADJACENT_PAGES_CPU15(r10, r11)
+ 	mtspr	SPRN_MD_EPN, r10
 -#ifdef CONFIG_MODULES
--/* Module allocation simplifies allocating memory for code */
- static inline void *alloc_tramp(unsigned long size)
- {
- 	return execmem_alloc(EXECMEM_FTRACE, size);
-@@ -271,14 +269,6 @@ static inline void tramp_free(void *tramp)
- {
- 	execmem_free(tramp);
- }
--#else
--/* Trampolines can only be created if modules are supported */
--static inline void *alloc_tramp(unsigned long size)
--{
--	return NULL;
--}
--static inline void tramp_free(void *tramp) { }
--#endif
++#ifdef CONFIG_EXECMEM
+ 	mfcr	r11
+ 	compare_to_kernel_boundary r10, r10
+ #endif
+ 	mfspr	r10, SPRN_M_TWB	/* Get level 1 table */
+-#ifdef CONFIG_MODULES
++#ifdef CONFIG_EXECMEM
+ 	blt+	3f
+ 	rlwinm	r10, r10, 0, 20, 31
+ 	oris	r10, r10, (swapper_pg_dir - PAGE_OFFSET)@ha
+diff --git a/arch/powerpc/kernel/head_book3s_32.S b/arch/powerpc/kernel/head_book3s_32.S
+index c1d89764dd22..57196883a00e 100644
+--- a/arch/powerpc/kernel/head_book3s_32.S
++++ b/arch/powerpc/kernel/head_book3s_32.S
+@@ -419,14 +419,14 @@ InstructionTLBMiss:
+  */
+ 	/* Get PTE (linux-style) and check access */
+ 	mfspr	r3,SPRN_IMISS
+-#ifdef CONFIG_MODULES
++#ifdef CONFIG_EXECMEM
+ 	lis	r1, TASK_SIZE@h		/* check if kernel address */
+ 	cmplw	0,r1,r3
+ #endif
+ 	mfspr	r2, SPRN_SDR1
+ 	li	r1,_PAGE_PRESENT | _PAGE_ACCESSED | _PAGE_EXEC
+ 	rlwinm	r2, r2, 28, 0xfffff000
+-#ifdef CONFIG_MODULES
++#ifdef CONFIG_EXECMEM
+ 	li	r0, 3
+ 	bgt-	112f
+ 	lis	r2, (swapper_pg_dir - PAGE_OFFSET)@ha	/* if kernel address, use */
+@@ -442,7 +442,7 @@ InstructionTLBMiss:
+ 	andc.	r1,r1,r2		/* check access & ~permission */
+ 	bne-	InstructionAddressInvalid /* return if access not permitted */
+ 	/* Convert linux-style PTE to low word of PPC-style PTE */
+-#ifdef CONFIG_MODULES
++#ifdef CONFIG_EXECMEM
+ 	rlwimi	r2, r0, 0, 31, 31	/* userspace ? -> PP lsb */
+ #endif
+ 	ori	r1, r1, 0xe06		/* clear out reserved bits */
+diff --git a/arch/powerpc/lib/code-patching.c b/arch/powerpc/lib/code-patching.c
+index c6ab46156cda..7af791446ddf 100644
+--- a/arch/powerpc/lib/code-patching.c
++++ b/arch/powerpc/lib/code-patching.c
+@@ -225,7 +225,7 @@ void __init poking_init(void)
  
- /* Defined as markers to the end of the ftrace default trampolines */
- extern void ftrace_regs_caller_end(void);
+ static unsigned long get_patch_pfn(void *addr)
+ {
+-	if (IS_ENABLED(CONFIG_MODULES) && is_vmalloc_or_module_addr(addr))
++	if (IS_ENABLED(CONFIG_EXECMEM) && is_vmalloc_or_module_addr(addr))
+ 		return vmalloc_to_pfn(addr);
+ 	else
+ 		return __pa_symbol(addr) >> PAGE_SHIFT;
+diff --git a/arch/powerpc/mm/book3s32/mmu.c b/arch/powerpc/mm/book3s32/mmu.c
+index 100f999871bc..625fe7d08e06 100644
+--- a/arch/powerpc/mm/book3s32/mmu.c
++++ b/arch/powerpc/mm/book3s32/mmu.c
+@@ -184,7 +184,7 @@ unsigned long __init mmu_mapin_ram(unsigned long base, unsigned long top)
+ 
+ static bool is_module_segment(unsigned long addr)
+ {
+-	if (!IS_ENABLED(CONFIG_MODULES))
++	if (!IS_ENABLED(CONFIG_EXECMEM))
+ 		return false;
+ 	if (addr < ALIGN_DOWN(MODULES_VADDR, SZ_256M))
+ 		return false;
 -- 
 2.43.0
 
