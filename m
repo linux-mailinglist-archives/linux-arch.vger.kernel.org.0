@@ -1,134 +1,137 @@
-Return-Path: <linux-arch+bounces-3608-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3609-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F5838A2012
-	for <lists+linux-arch@lfdr.de>; Thu, 11 Apr 2024 22:24:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD4018A2021
+	for <lists+linux-arch@lfdr.de>; Thu, 11 Apr 2024 22:24:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B115B1C21F86
-	for <lists+linux-arch@lfdr.de>; Thu, 11 Apr 2024 20:24:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8978D28BF4B
+	for <lists+linux-arch@lfdr.de>; Thu, 11 Apr 2024 20:24:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61FF61863B;
-	Thu, 11 Apr 2024 20:24:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59F3F1947D;
+	Thu, 11 Apr 2024 20:24:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="QMCudDh1"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="cPj9/fmJ";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="qHqB2bof"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-27.smtpout.orange.fr [80.12.242.27])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wfhigh5-smtp.messagingengine.com (wfhigh5-smtp.messagingengine.com [64.147.123.156])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA0B817C6A;
-	Thu, 11 Apr 2024 20:24:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.27
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BA411863F;
+	Thu, 11 Apr 2024 20:24:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.156
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712867046; cv=none; b=IIMQHyOHU10964xjmyecUxwErI9ZpY/eI91Ixot2UDdSFdpv7jHg7H1EVzisTVU/dYlZ40M2o8xsbgGbKodzMmeTnLiqtJ82jfN9l8HVZfFgfjUEfZnGvQilGro0G5ufYaRytnNVDDzWRvtSeKYprFsYRKYgXVoIOreu3gtWaPQ=
+	t=1712867083; cv=none; b=kuYOd1zY0ZgA/1BQ86cLnPKRfjc+5emVdyQbYCwY+W3wfFtI/QAs8ENQYQzD7vZUGo79hngYoE3UjuMfTVldOSHWZz7xaJIyafn2OYIOW44cYvu4T+mJ9QAHxrNzyM0yf4B1BEB1VL3tVMkZmJ7hM1d9Kpc/36Iu4vmVfODY+S8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712867046; c=relaxed/simple;
-	bh=QhmZqca6i4GwVv1XAcc9IrrgLk4abiFm/4Wl1hb/8sw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=R+q9P76gGpRrO7rGHoG85kD3J5l/gsvHfEkVuueG62aNA6G1C4zDdkYK28ZIkguOhiKEKe/L2kRBWoXddGR7JsHx1jNhYT+6BVMJYCmuyDQLzw+N6Ezu3T5JAWXyM4XpHlGlQ6qQFE41Np724XIXvcodmv8Wzc+ZTMPSxT9ESbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=QMCudDh1; arc=none smtp.client-ip=80.12.242.27
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [192.168.1.18] ([86.243.17.157])
-	by smtp.orange.fr with ESMTPA
-	id v0xXr4JUAqkPUv0xYrdLi7; Thu, 11 Apr 2024 22:23:54 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1712867034;
-	bh=v4sYyES8feRyP/YNHQ4HOBPVocESBHJ4p6aCiQtSavI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=QMCudDh14uA+N4VCUkUhGD3njd4hP+Nm+dZR+AHIvomm17cl8lhe+OEOieTe2tfCd
-	 CSwaIP3rEU56ONRmKGTfz4ao9J8mzI9LnAVCKVmuUmS//1uy7UrVyFnucM+4esuv/T
-	 oo+W9WibJxCGBDkR1ETwHvYgNw2WqclnTcAwFFkQCDIl+7Og0xYMtfR6Ce6O1eg8Xj
-	 TprE9TDFAvWBbHv9DdeSW7gw0cL9SbIVgyxiFM+NCmvp8psAM0yRbsFF/z/qBtmvhS
-	 tk8PC6grRGcBt957JhfI8k8joswKv/XfbhH8qO5/V5krr5vlKn6DDKJ1S1Ygk95Ha3
-	 gYl5m7R2w2/OA==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Thu, 11 Apr 2024 22:23:54 +0200
-X-ME-IP: 86.243.17.157
-Message-ID: <da50e56a-cb59-4815-800d-81742e5294df@wanadoo.fr>
-Date: Thu, 11 Apr 2024 22:23:45 +0200
+	s=arc-20240116; t=1712867083; c=relaxed/simple;
+	bh=N+rD5QfdxBQ/+DoxhEwOJBWLJNrXs7YfVLacUCjziJg=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=g97wpLHAG/wxhdH93bCaU0DlxzMLVWdyWQZcTOJt7UDRJY62zwnMYiyZQt4Z96EEGyBogkcTa0pd0xIHDNy7g/jGi2hdWt6aZGkwvfSz/rdXcwBT9zZ+EsCHdQH9cJF1vZW93yLYtJhlzoCEF4BnvKGOd0abR3mNc0r2JByJglg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=cPj9/fmJ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=qHqB2bof; arc=none smtp.client-ip=64.147.123.156
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfhigh.west.internal (Postfix) with ESMTP id 51A3618000F3;
+	Thu, 11 Apr 2024 16:24:37 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Thu, 11 Apr 2024 16:24:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1712867076; x=1712953476; bh=ZXeIVotYWY
+	tiu1d2XO6gj9pTb41qrbKlByzdKKRm9q0=; b=cPj9/fmJ5ICh3OIX4HYXzZjM6n
+	cLQiW4Cz21H6OpfvtrZuajQKQhfVwrCtAKvhmNhLttcnVk+BNacSSrhvH2eoA4Jb
+	YA7ADp36lgYsoe8ZlE1IwK65U2ovNeC+NM3RZqmzX5KbJbVv+MbvmIJISIrncxpA
+	nP9LvVPza1DgjGMq5ufcQ5/epM3fh7JhGOooRe7YM/58PKTmJJHY8uIttlD7XHpF
+	n8L+VnT+Za2CYcrcZpmhXdqxVfqrRqJ9mffsEWZPmV7i7LTS2hhnaf7nEEz/gbGS
+	q2Z3cYd+YHriIMSPqNPm1krDVAqXXcfEs/RyTbq4YjbxVBfsZc7KhldP9Ozw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1712867076; x=1712953476; bh=ZXeIVotYWYtiu1d2XO6gj9pTb41q
+	rbKlByzdKKRm9q0=; b=qHqB2bofPTTin25e4aiJKGl5dqQAnld3Fg7cvAp/9+KS
+	ELfm4Jw1r+Jl+HFzb4gt0Wlc7p/jT2L7gzrhBYxITEFZs7upd0f5708VfsrfRgz4
+	X3aeO6DqbAQIwROGE2QSuJBfXkqFUhhN5Ltrn//VyJ2i/TPTltK4kw+grYkliWzg
+	78RmddP4ArbDecPpHgQ3dV1tOmnRqZKsTIX3dDCtkmoGxm0Rr9Uw6WLScZyF4nc4
+	kkuKC0gFQxbps7hOK4OpwiZGBFV9aPgl0ZALkLZrFjuOO9i4mA/YsIAMvL2u80mq
+	QrecgtpIZgCiMY0ZWunP7c9wWs5BflbhcVM7acshZA==
+X-ME-Sender: <xms:BEcYZpAZwpPAmBxOlYDASCzFc-JYQXMnIOxfElOpC1NGI-C06qCjlQ>
+    <xme:BEcYZnheUgW-Q35kxjTjNuqIJPO-Jm724Zb9c9BAyFKDmDa2MHbTElW_ezoNNv_nG
+    l_UNZdtj9ZsB8oyJx0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudehkedgudehtdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:BEcYZklh8mIT3WyAnL0CXsulvEanTdkreoWtmohNPyKbX67YUgk6vA>
+    <xmx:BEcYZjxuyibftC51S33hv9nL8jnnYrwxGqBL77KuCKZf_31PYxnkzg>
+    <xmx:BEcYZuSbzkYjtBSFYH50QqT-S_HXRIap8ighca1--qWVlOtrBca6xw>
+    <xmx:BEcYZmbUHbWP6gDWtrjpzxKF3oMnIrQ0BFKDzvFz1UOvZ4XgXiPy0w>
+    <xmx:BEcYZhYAjiqvMqacjd-jdPFz3yG5e4uH3_E8k3rwP_Z4ENK4taN6e-b7>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 0D8BAB6008F; Thu, 11 Apr 2024 16:24:35 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-379-gabd37849b7-fm-20240408.001-gabd37849
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] treewide: Fix common grammar mistake "the the"
-To: Thorsten Blum <thorsten.blum@toblux.com>, robin.murphy@arm.com
-Cc: cocci@inria.fr, dri-devel@lists.freedesktop.org,
- ecryptfs@vger.kernel.org, intel-gfx@lists.freedesktop.org,
- intel-xe@lists.freedesktop.org, io-uring@vger.kernel.org,
- kernel-janitors@vger.kernel.org, linux-afs@lists.infradead.org,
- linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
- linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-unionfs@vger.kernel.org,
- linux-wireless@vger.kernel.org, netfs@lists.linux.dev,
- speakup@linux-speakup.org, Randy Dunlap <rdunlap@infradead.org>,
- Tyler Hicks <code@tyhicks.com>
-References: <f2d1bb68-7ab7-4bbf-a1b1-88334ba52bab@arm.com>
- <20240411171145.535123-3-thorsten.blum@toblux.com>
-Content-Language: en-MW
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20240411171145.535123-3-thorsten.blum@toblux.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Message-Id: <d499b754-4b0a-4cde-9ca8-cfe0fc9bf2c9@app.fastmail.com>
+In-Reply-To: <1-v3-1893cd8b9369+1925-mlx5_arm_wc_jgg@nvidia.com>
+References: <1-v3-1893cd8b9369+1925-mlx5_arm_wc_jgg@nvidia.com>
+Date: Thu, 11 Apr 2024 22:24:15 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Jason Gunthorpe" <jgg@nvidia.com>,
+ "Alexander Gordeev" <agordeev@linux.ibm.com>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Christian Borntraeger" <borntraeger@linux.ibm.com>,
+ "Borislav Petkov" <bp@alien8.de>,
+ "Dave Hansen" <dave.hansen@linux.intel.com>,
+ "David S . Miller" <davem@davemloft.net>,
+ "Eric Dumazet" <edumazet@google.com>,
+ "Gerald Schaefer" <gerald.schaefer@linux.ibm.com>,
+ "Vasily Gorbik" <gor@linux.ibm.com>,
+ "Heiko Carstens" <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>,
+ "Justin Stitt" <justinstitt@google.com>,
+ "Jakub Kicinski" <kuba@kernel.org>, "Leon Romanovsky" <leon@kernel.org>,
+ linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
+ llvm@lists.linux.dev, "Ingo Molnar" <mingo@redhat.com>,
+ "Bill Wendling" <morbo@google.com>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ Netdev <netdev@vger.kernel.org>, "Paolo Abeni" <pabeni@redhat.com>,
+ "Salil Mehta" <salil.mehta@huawei.com>,
+ "Sven Schnelle" <svens@linux.ibm.com>,
+ "Thomas Gleixner" <tglx@linutronix.de>, x86@kernel.org,
+ "Yisen Zhuang" <yisen.zhuang@huawei.com>
+Cc: "Catalin Marinas" <catalin.marinas@arm.com>,
+ "Leon Romanovsky" <leonro@mellanox.com>,
+ Linux-Arch <linux-arch@vger.kernel.org>,
+ linux-arm-kernel@lists.infradead.org, "Mark Rutland" <mark.rutland@arm.com>,
+ "Michael Guralnik" <michaelgur@mellanox.com>, patches@lists.linux.dev,
+ "Niklas Schnelle" <schnelle@linux.ibm.com>,
+ "Jijie Shao" <shaojijie@huawei.com>, "Will Deacon" <will@kernel.org>
+Subject: Re: [PATCH v3 1/6] x86: Stop using weak symbols for __iowrite32_copy()
+Content-Type: text/plain
 
-Le 11/04/2024 à 19:11, Thorsten Blum a écrit :
-> Use `find . -type f -exec sed -i 's/\<the the\>/the/g' {} +` to find all
-> occurrences of "the the" and replace them with a single "the".
-> 
-> In arch/arm/include/asm/unwind.h replace "the the" with "to the".
-> 
-> Changes only comments and documentation - no code changes.
-> 
-> Signed-off-by: Thorsten Blum <thorsten.blum@toblux.com>
-> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-> Reviewed-by: Tyler Hicks <code@tyhicks.com>
+On Thu, Apr 11, 2024, at 18:46, Jason Gunthorpe wrote:
+>  arch/x86/include/asm/io.h    | 17 +++++++++++++++++
+>  arch/x86/lib/Makefile        |  1 -
+>  arch/x86/lib/iomap_copy_64.S | 15 ---------------
+>  include/linux/io.h           |  5 ++++-
+>  lib/iomap_copy.c             |  6 +++---
+>  5 files changed, 24 insertions(+), 20 deletions(-)
+>  delete mode 100644 arch/x86/lib/iomap_copy_64.S
 
-...
-
-> --- a/drivers/scsi/isci/host.h
-> +++ b/drivers/scsi/isci/host.h
-> @@ -244,7 +244,7 @@ enum sci_controller_states {
->   	SCIC_INITIALIZED,
->   
->   	/**
-> -	 * This state indicates the the controller is in the process of becoming
-
-maybe: that the?
-
-> +	 * This state indicates the controller is in the process of becoming
->   	 * ready (i.e. starting).  In this state no new IO operations are permitted.
->   	 * This state is entered from the INITIALIZED state.
->   	 */
-
-...
-
-> diff --git a/io_uring/kbuf.c b/io_uring/kbuf.c
-> index 3aa16e27f509..503244e8470a 100644
-> --- a/io_uring/kbuf.c
-> +++ b/io_uring/kbuf.c
-> @@ -731,7 +731,7 @@ struct io_buffer_list *io_pbuf_get_bl(struct io_ring_ctx *ctx,
->   	 * going away, if someone is trying to be sneaky. Look it up under rcu
->   	 * so we know it's not going away, and attempt to grab a reference to
->   	 * it. If the ref is already zero, then fail the mapping. If successful,
-> -	 * the caller will call io_put_bl() to drop the the reference at at the
-> +	 * the caller will call io_put_bl() to drop the reference at at the
-
-Not strictly related to your patch, but "at at".
-
->   	 * end. This may then safely free the buffer_list (and drop the pages)
->   	 * at that point, vm_insert_pages() would've already grabbed the
->   	 * necessary vma references.
-
-...
-
-CJ
-
+Acked-by: Arnd Bergmann <arnd@arndb.de>
 
