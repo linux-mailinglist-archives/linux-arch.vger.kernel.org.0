@@ -1,212 +1,154 @@
-Return-Path: <linux-arch+bounces-3696-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3697-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A0928A5676
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Apr 2024 17:32:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 598788A56C1
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Apr 2024 17:49:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B6E19B21B9C
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Apr 2024 15:32:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7CE301C21388
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Apr 2024 15:49:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC61B78C78;
-	Mon, 15 Apr 2024 15:32:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XTSWbLr1"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FF5A7C085;
+	Mon, 15 Apr 2024 15:49:02 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2C346BB4A;
-	Mon, 15 Apr 2024 15:32:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C509529414;
+	Mon, 15 Apr 2024 15:48:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713195143; cv=none; b=mY2dlrR56mvy0i6kWHXSXjEq8/9EAlR7FYSKCCLu8j/lzX7n0B031x1wLTOwz+BNsrWFmpd1WJP2M/s2oBesLPsYD1lC+IPU8oebXwbV3HWhCPRlsdCkDTmeYLc0y/SOYcvMkmdxWaI/cHREU88naiwhfCveeoA7Wzm2uV3iOGs=
+	t=1713196142; cv=none; b=l1fSsgS5rAX9GAlXXnwc0mSgijcTiiLMfbnrOYVxszzwt7UmaoDZjd2JsnGyx1M5eW1T9irl88sOrRiVzJtpJV43I9ou9PAVyK8nj1aGOtCg7uZyFE2B+yDxCjEhB+w4w2gP7gWyQMOoBu7QgSwarhEaZd0/bsE7yv+bYeGmLoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713195143; c=relaxed/simple;
-	bh=p/ox70M6LKphRZZs4AqoipOwGZh27SBhtG4itjdO9FQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Gp2CpOK4p+GhJGnBqNAtXF14cx38uYto3jhLRSeln017AyhFtSYk3SXymJQK50n7ThVpdXS60j5+Ol83jUbncGGPlvYkYnWpW2aIy1dpBCl85MDv10fFQifUdekDTCIZ130/99QRJ3OgGA3vmBGv4S80SKmi7DsaI3pyYwJcMTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XTSWbLr1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3ED6BC2BD10;
-	Mon, 15 Apr 2024 15:32:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713195143;
-	bh=p/ox70M6LKphRZZs4AqoipOwGZh27SBhtG4itjdO9FQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=XTSWbLr1bCJhGaGO24fMjhlCdk51Ka/FBhZ+NI7yc631nFKc7WcYOTOdF5uqwqNvN
-	 vAyrPe39IVydQvXFyJUL5giTv+IQ6WxCdZDsaYdS/Y7XEfj6sPNVdWi3rIHbsTQSLw
-	 nUsW3lV8AZBrLjQRF4dDf/cyjgom+68gQTcksJ91X0k/Zng7w8mw/dTMPaiJTkJ7BS
-	 Zg7pQefL3IZmZpKZQQIDfOQQk1+5m7QkAfaAW89HNRGw3NyPnf4B/ThXppJFD6f7o1
-	 bSXa1bW5ofPzVwx8xsUW75GvaGfBnqSCXSX4AYULLj0VCnSTSpPpbfhySGgDyGNN1J
-	 330mvGEbrqlSg==
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2d88a869ce6so40519071fa.3;
-        Mon, 15 Apr 2024 08:32:22 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWoqnIk9ghdQ+zTDVKj3Qem0LPbO+F2xT9VkB2t+mF3qkrZrCTIj9weNJkRvZuSJGYQ8SDt2WupPgoMGPJAJIq2kZbLSVJsHsafNNH1nqywSW0aSOvJ8mlfRnUPPQWHzBtX+mW7Gs+5246OW1i4qrJUr6Oc/AnDSCloAFCAB9tHyLCtFErRcktmuO6EucaKl4SYFfNpHYETAbMR4w==
-X-Gm-Message-State: AOJu0Ywcou6dg62Oee4kfUncYT1lzO30YG9NgSckzfrTv89O+Zig/i7e
-	PhnK14cfnj5X1NAwxbVOgErYMoTdrRWe2kD6tTJUmuRksk78OgrAehBsDtuYaAUJJAdq2GtfD8Q
-	R6+euw7utLhr6HEIQwPhqiW2COMQ=
-X-Google-Smtp-Source: AGHT+IGCtaC3TclrPZ0bu0nX3lwb+J3dkeFac2KQqVDOra3tYoW20ehJXk/HYM2Chp/+Gp0/8pJ0aQXHLyK7QQdQsbs=
-X-Received: by 2002:a2e:8758:0:b0:2d8:3bef:129 with SMTP id
- q24-20020a2e8758000000b002d83bef0129mr7509002ljj.10.1713195140919; Mon, 15
- Apr 2024 08:32:20 -0700 (PDT)
+	s=arc-20240116; t=1713196142; c=relaxed/simple;
+	bh=vckgdI60nnlCSg5BIZOilFflwMtdNqSLeCq6LHe17G4=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=GqiukTx+uV917eXhw9N1i0RErGxbTY2SzKuHuBncCu99aqJ0j79tocp1PRnmwgDpfcikD6pUG4wq1zbeZyLnYsOnurwBKxJso+CbyiZiq9Kr/nq4vFoZ321Q6Cg9Z8P1+9bXjOIMv7RCN41LHb3VbycMi8HoEIJpfkyULlKCKcc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VJBPK5lr5z6D8gk;
+	Mon, 15 Apr 2024 23:47:01 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 5D426140CF4;
+	Mon, 15 Apr 2024 23:48:56 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Mon, 15 Apr
+ 2024 16:48:55 +0100
+Date: Mon, 15 Apr 2024 16:48:54 +0100
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+CC: <linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
+	<linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<kvmarm@lists.linux.dev>, <x86@kernel.org>, Russell King
+	<linux@armlinux.org.uk>, Miguel Luis <miguel.luis@oracle.com>, James Morse
+	<james.morse@arm.com>, Salil Mehta <salil.mehta@huawei.com>, "Jean-Philippe
+ Brucker" <jean-philippe@linaro.org>, Catalin Marinas
+	<catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+	<linuxarm@huawei.com>, <justin.he@arm.com>, <jianyong.wu@arm.com>
+Subject: Re: [PATCH v5 02/18] ACPI: processor: Set the ACPI_COMPANION for
+ the struct cpu instance
+Message-ID: <20240415164854.0000264f@Huawei.com>
+In-Reply-To: <CAJZ5v0izN5naWY7sTi16whds9ubXkLpgqV2gePQs869BoJTCDA@mail.gmail.com>
+References: <20240412143719.11398-1-Jonathan.Cameron@huawei.com>
+	<20240412143719.11398-3-Jonathan.Cameron@huawei.com>
+	<CAJZ5v0izN5naWY7sTi16whds9ubXkLpgqV2gePQs869BoJTCDA@mail.gmail.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240415075837.2349766-5-ardb+git@google.com> <20240415075837.2349766-8-ardb+git@google.com>
- <CAK7LNARthBeTotjUzC97zO5uL=YF31Bu_pJafyb8spcUm9sAcQ@mail.gmail.com> <CAMj1kXFyRwfRFSK=acypXWAoFWwdcF9F+E9tsrHDycNyNdW0Og@mail.gmail.com>
-In-Reply-To: <CAMj1kXFyRwfRFSK=acypXWAoFWwdcF9F+E9tsrHDycNyNdW0Og@mail.gmail.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Tue, 16 Apr 2024 00:31:44 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARH45pmfdAYcJucsVPa_HJnQEh5=hcdO5u38yrhMX1wJw@mail.gmail.com>
-Message-ID: <CAK7LNARH45pmfdAYcJucsVPa_HJnQEh5=hcdO5u38yrhMX1wJw@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] btf: Avoid weak external references
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, 
-	Arnd Bergmann <arnd@arndb.de>, Martin KaFai Lau <martin.lau@linux.dev>, linux-arch@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, 
-	Andrii Nakryiko <andrii@kernel.org>, Jiri Olsa <olsajiri@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-On Mon, Apr 15, 2024 at 11:59=E2=80=AFPM Ard Biesheuvel <ardb@kernel.org> w=
-rote:
->
-> On Mon, 15 Apr 2024 at 16:55, Masahiro Yamada <masahiroy@kernel.org> wrot=
-e:
+On Fri, 12 Apr 2024 20:10:54 +0200
+"Rafael J. Wysocki" <rafael@kernel.org> wrote:
+
+> On Fri, Apr 12, 2024 at 4:38=E2=80=AFPM Jonathan Cameron
+> <Jonathan.Cameron@huawei.com> wrote:
 > >
-> > On Mon, Apr 15, 2024 at 4:58=E2=80=AFPM Ard Biesheuvel <ardb+git@google=
-.com> wrote:
-> > >
-> > > From: Ard Biesheuvel <ardb@kernel.org>
-> > >
-> > > If the BTF code is enabled in the build configuration, the start/stop
-> > > BTF markers are guaranteed to exist in the final link but not during =
-the
-> > > first linker pass.
-> > >
-> > > Avoid GOT based relocations to these markers in the final executable =
-by
-> > > providing preliminary definitions that will be used by the first link=
-er
-> > > pass, and superseded by the actual definitions in the subsequent ones=
-.
-> > >
-> > > Make the preliminary definitions dependent on CONFIG_DEBUG_INFO_BTF s=
-o
-> > > that inadvertent references to this section will trigger a link failu=
-re
-> > > if they occur in code that does not honour CONFIG_DEBUG_INFO_BTF.
-> > >
-> > > Note that Clang will notice that taking the address of__start_BTF can=
-not
-> > > yield NULL any longer, so testing for that condition is no longer
-> > > needed.
-> > >
-> > > Acked-by: Andrii Nakryiko <andrii@kernel.org>
-> > > Acked-by: Arnd Bergmann <arnd@arndb.de>
-> > > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> > > ---
-> > >  include/asm-generic/vmlinux.lds.h | 9 +++++++++
-> > >  kernel/bpf/btf.c                  | 7 +++++--
-> > >  kernel/bpf/sysfs_btf.c            | 6 +++---
-> > >  3 files changed, 17 insertions(+), 5 deletions(-)
-> > >
-> > > diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/=
-vmlinux.lds.h
-> > > index e8449be62058..4cb3d88449e5 100644
-> > > --- a/include/asm-generic/vmlinux.lds.h
-> > > +++ b/include/asm-generic/vmlinux.lds.h
-> > > @@ -456,6 +456,7 @@
-> > >   * independent code.
-> > >   */
-> > >  #define PRELIMINARY_SYMBOL_DEFINITIONS                              =
-   \
-> > > +       PRELIMINARY_BTF_DEFINITIONS                                  =
-   \
-> > >         PROVIDE(kallsyms_addresses =3D .);                           =
-     \
-> > >         PROVIDE(kallsyms_offsets =3D .);                             =
-     \
-> > >         PROVIDE(kallsyms_names =3D .);                               =
-     \
-> > > @@ -466,6 +467,14 @@
-> > >         PROVIDE(kallsyms_markers =3D .);                             =
-     \
-> > >         PROVIDE(kallsyms_seqs_of_names =3D .);
-> > >
-> > > +#ifdef CONFIG_DEBUG_INFO_BTF
-> > > +#define PRELIMINARY_BTF_DEFINITIONS                                 =
-   \
-> > > +       PROVIDE(__start_BTF =3D .);                                  =
-     \
-> > > +       PROVIDE(__stop_BTF =3D .);
-> > > +#else
-> > > +#define PRELIMINARY_BTF_DEFINITIONS
-> > > +#endif
-> > > +
+> > The arm64 specific arch_register_cpu() needs to access the _STA
+> > method of the DSDT object so make it available by assigning the
+> > appropriate handle to the struct cpu instance.
 > >
+> > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > ---
+> >  drivers/acpi/acpi_processor.c | 3 +++
+> >  1 file changed, 3 insertions(+)
 > >
+> > diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processo=
+r.c
+> > index 7a0dd35d62c9..93e029403d05 100644
+> > --- a/drivers/acpi/acpi_processor.c
+> > +++ b/drivers/acpi/acpi_processor.c
+> > @@ -235,6 +235,7 @@ static int acpi_processor_get_info(struct acpi_devi=
+ce *device)
+> >         union acpi_object object =3D { 0 };
+> >         struct acpi_buffer buffer =3D { sizeof(union acpi_object), &obj=
+ect };
+> >         struct acpi_processor *pr =3D acpi_driver_data(device);
+> > +       struct cpu *c;
+> >         int device_declaration =3D 0;
+> >         acpi_status status =3D AE_OK;
+> >         static int cpu0_initialized;
+> > @@ -314,6 +315,8 @@ static int acpi_processor_get_info(struct acpi_devi=
+ce *device)
+> >                         cpufreq_add_device("acpi-cpufreq");
+> >         }
 > >
-> > Is this necessary?
-> >
->
-> I think so.
->
-> This actually resulted in Jiri's build failure with v2, and the
-> realization that there was dead code in btf_parse_vmlinux() that
-> happily tried to load the contents of the BTF section if
-> CONFIG_DEBUG_INFO_BTF was not enabled to begin with.
->
-> So this is another pitfall with weak references: the symbol may
-> unexpectedly be missing altogether rather than only during the first
-> linker pass.
->
-> >
-> >
-> > The following code (BOUNDED_SECTION_BY)
-> > produces __start_BTF and __stop_BTF symbols
-> > under the same condition.
-> >
->
-> Indeed. So if CONFIG_DEBUG_INFO_BTF=3Dn, code can still link to
-> __start_BTF and __stop_BTF even though BTF is not enabled.
+> > +       c =3D &per_cpu(cpu_devices, pr->id);
+> > +       ACPI_COMPANION_SET(&c->dev, device); =20
+>=20
+> This is also set for per_cpu(cpu_sys_devices, pr->id) in
+> acpi_processor_add(), via acpi_bind_one().
 
+Hi Rafael,
 
+cpu_sys_devices gets filled with a pointer to this same structure.
+The contents gets set in register_cpu() so at this point
+it doesn't point anywhere.  As a side note register_cpu()
+memsets to zero the value I set it to in the code above which isn't
+great, particularly as I want to use this in post_eject for
+arm64.
 
-I am talking about the case for CONFIG_DEBUG_INFO_BTF=3Dy.
+We could make a copy of the handle and put it back after
+the memset in register_cpu() but that is also ugly.
+It's the best I've come up with to make sure this is still set
+come remove time but is rather odd.
 
-PROVIDE() is meaningless because __start_BTF and __stop_BTF
-are produced by the existing code.
+>=20
+> Moreover, there is some pr->id validation in acpi_processor_add(), so
+> it seems premature to use it here this way.
+>=20
+> I think that ACPI_COMPANION_SET() should be called from here on
+> per_cpu(cpu_sys_devices, pr->id) after validating pr->id (so the
+> pr->id validation should all be done here) and then NULL can be passed
+> as acpi_dev to acpi_bind_one() in acpi_processor_add().  Then, there
+> will be one physical device corresponding to the processor ACPI device
+> and no confusion.
 
-(The code was a bit clearer before commit
-9b351be25360c5cedfb98b88d6dfd89327849e52)
+I'm fairly sure this is pointing to the same device but agreed this
+is a tiny bit confusing. However we can't use cpu_sys_devices at this point
+so I'm not immediately seeing a cleaner solution :(
 
+Jonathan
 
+>=20
+> >         /*
+> >          *  Extra Processor objects may be enumerated on MP systems with
+> >          *  less than the max # of CPUs. They should be ignored _iff
+> > --
+> > 2.39.2
+> > =20
 
-So, v4 of this patch will look like 2/3, right?
-
-
-Just drop __weak attribute.
-
-You still need
-
-if (!IS_ENABLED(CONFIG_DEBUG_INFO_BTF))
-             return ERR_PTR(-ENOENT);
-
-But, you do not need to modify vmlinux.lds.h
-
-
-
-
-
-
-
---
-Best Regards
-Masahiro Yamada
 
