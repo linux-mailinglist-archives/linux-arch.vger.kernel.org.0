@@ -1,209 +1,216 @@
-Return-Path: <linux-arch+bounces-3665-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3666-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 595608A49B1
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Apr 2024 10:04:02 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15FAA8A4AB6
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Apr 2024 10:46:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 138C1281C2C
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Apr 2024 08:04:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4D21CB23CD4
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Apr 2024 08:46:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D5A22D054;
-	Mon, 15 Apr 2024 08:03:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="hKFfLh3Z"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C138E39FC9;
+	Mon, 15 Apr 2024 08:45:59 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C82052C868;
-	Mon, 15 Apr 2024 08:03:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C84F43839C;
+	Mon, 15 Apr 2024 08:45:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713168236; cv=none; b=HWF4GD2Lxmj906WHA4TLryPBM5gIvdUvuiItwD71mM4VcDQ83wv1Bl5lR7NGw8+RqugD1739KjaEOVObfqiQ52bEWok6yUlCSlWhHpiUH0QsCv7nS0kLb050/lDHRXrnWSbEHJC1KgpFIaYCYNvcEarSZfkBsAc8Sa7VDeStzIo=
+	t=1713170759; cv=none; b=gBaPdjHwuc3+zG2LBuzkrDd8dyrcrZ8qWMeHj40jrnFgy49uT4jZp3IPYnQ2l+Vvg2SX+HkEBATiD3G69frfZodsQQdCJOJxSskcZsvXJEn32+a80l3b25xUJDV6ZDeBSa1gYjzUFwQ8QDkykurxEHkjXuYADl3tP5YfDiWfdqU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713168236; c=relaxed/simple;
-	bh=uAA0xNw3uXQEeAj18M82ry2VhWPmemP8F66GIQVJJSo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rm+izJIVMHv2b3ER5HvDOyanVNOjJPEbRWmDw25wQYLRzjUVIhty5tPZDfEFNwdg7WAIW4XkyYwPmgQm1v2RQeRyaowT8067IkJ6Fz3Md4dWSuUpj4ds46VZ8tIywQoqCOsT1l6j+xmY+fSLxjcYxTOZx7GXLBZIzrcqfuxEjtM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=hKFfLh3Z; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=SnC5QhRh3mlXbiY7BQLXM/Gh385CPpYbuU5jeG1ji44=; b=hKFfLh3ZzFSzJGPDsRiopYa0ZT
-	efNxCJqPzVqpITxLJsqCQRDO/uvf69qkc9BXqmWr7IXteAQce+itGNJYH8NcZtrv9mowEIaYK6OnE
-	zu1E4zjHKlTRzhIC1ZV1QOADiXZdrVLff1qYNP1JR24KuBKOy5EmbA81XuxsDuKJyy+iJ89PdOUI/
-	efJhNT73J6k+ohWLAe+NOaJ0tLI7iHDK5KHmXtq9go12IpYLvh58Vu6qfltj09NU88Ez/5/ao6M2e
-	ksvVbHfa9e2PLeJq7LlMBgltQx/i+r0JGyYLxMjQF0iD8WvUaOibeLqFhJKeJcs34Gs9iz6tlyZPZ
-	lKITRWCQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rwHJC-0000000FFhi-3aDy;
-	Mon, 15 Apr 2024 08:03:22 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 12C5730040C; Mon, 15 Apr 2024 10:03:22 +0200 (CEST)
-Date: Mon, 15 Apr 2024 10:03:21 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Alexandre Ghiti <alexghiti@rivosinc.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	"David S. Miller" <davem@davemloft.net>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Donald Dutile <ddutile@redhat.com>,
-	Eric Chanudet <echanude@redhat.com>,
-	Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nadav Amit <nadav.amit@gmail.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Puranjay Mohan <puranjay12@gmail.com>,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
-	bpf@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-	linux-mm@kvack.org, linux-modules@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-	netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v4 06/15] mm/execmem, arch: convert simple overrides of
- module_alloc to execmem
-Message-ID: <20240415080321.GG40213@noisy.programming.kicks-ass.net>
-References: <20240411160051.2093261-1-rppt@kernel.org>
- <20240411160051.2093261-7-rppt@kernel.org>
+	s=arc-20240116; t=1713170759; c=relaxed/simple;
+	bh=OgrKO1lLfj0QwPpIfKi+OF6oT15+1u+32KvRkSoVxV8=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=egMj9IBPLe6HDI25x1d9k08CJljXiWYjre9TQbwxASgFTSj5jJSRrdARsJ78IP1zwcQaKEkrAeE7x+418fhzbJlt2WpskK2AFNr6KHRvwola2FS9ThMGdVEmjL3YBxuBAV0o5UuNB7XeOb8wcK/1bvzj2dFKqth/hgmoIUhcWKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VJ11F19yNz6K60r;
+	Mon, 15 Apr 2024 16:44:01 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 423101400E7;
+	Mon, 15 Apr 2024 16:45:54 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Mon, 15 Apr
+ 2024 09:45:53 +0100
+Date: Mon, 15 Apr 2024 09:45:52 +0100
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: Thomas Gleixner <tglx@linutronix.de>
+CC: "Russell King (Oracle)" <linux@armlinux.org.uk>, "Rafael J. Wysocki"
+	<rafael@kernel.org>, <linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
+	<linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<kvmarm@lists.linux.dev>, <x86@kernel.org>, Miguel Luis
+	<miguel.luis@oracle.com>, James Morse <james.morse@arm.com>, Salil Mehta
+	<salil.mehta@huawei.com>, Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+	<linuxarm@huawei.com>, <justin.he@arm.com>, <jianyong.wu@arm.com>
+Subject: Re: [PATCH v5 03/18] ACPI: processor: Register deferred CPUs from
+ acpi_processor_get_info()
+Message-ID: <20240415094552.000008d7@Huawei.com>
+In-Reply-To: <878r1iyxkr.ffs@tglx>
+References: <20240412143719.11398-1-Jonathan.Cameron@huawei.com>
+	<20240412143719.11398-4-Jonathan.Cameron@huawei.com>
+	<CAJZ5v0gNvy2e=hOGQQ2kLpnrDr8=QGBax-E5odEJ=7BA8qW-9A@mail.gmail.com>
+	<ZhmWkE+fCEG/WFoi@shell.armlinux.org.uk>
+	<87bk6ez4hj.ffs@tglx>
+	<ZhmtO6zBExkQGZLk@shell.armlinux.org.uk>
+	<878r1iyxkr.ffs@tglx>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240411160051.2093261-7-rppt@kernel.org>
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-On Thu, Apr 11, 2024 at 07:00:42PM +0300, Mike Rapoport wrote:
-> +static struct execmem_info execmem_info __ro_after_init = {
-> +	.ranges = {
-> +		[EXECMEM_DEFAULT] = {
-> +			.start = MODULES_VADDR,
-> +			.end = MODULES_END,
-> +			.alignment = 1,
-> +		},
-> +	},
-> +};
-> +
-> +struct execmem_info __init *execmem_arch_setup(void)
->  {
-> +	execmem_info.ranges[EXECMEM_DEFAULT].pgprot = PAGE_KERNEL;
-> +
-> +	return &execmem_info;
->  }
+On Sat, 13 Apr 2024 01:23:48 +0200
+Thomas Gleixner <tglx@linutronix.de> wrote:
 
-> +static struct execmem_info execmem_info __ro_after_init = {
-> +	.ranges = {
-> +		[EXECMEM_DEFAULT] = {
-> +			.start = MODULES_VADDR,
-> +			.end = MODULES_END,
-> +			.pgprot = PAGE_KERNEL_EXEC,
-> +			.alignment = 1,
-> +		},
-> +	},
-> +};
-> +
-> +struct execmem_info __init *execmem_arch_setup(void)
->  {
-> +	return &execmem_info;
->  }
+> Russell!
+> 
+> On Fri, Apr 12 2024 at 22:52, Russell King (Oracle) wrote:
+> > On Fri, Apr 12, 2024 at 10:54:32PM +0200, Thomas Gleixner wrote:  
+> >> > As for the cpu locking, I couldn't find anything in arch_register_cpu()
+> >> > that depends on the cpu_maps_update stuff nor needs the cpus_write_lock
+> >> > being taken - so I've no idea why the "make_present" case takes these
+> >> > locks.  
+> >> 
+> >> Anything which updates a CPU mask, e.g. cpu_present_mask, after early
+> >> boot must hold the appropriate write locks. Otherwise it would be
+> >> possible to online a CPU which just got marked present, but the
+> >> registration has not completed yet.  
+> >
+> > Yes. As far as I've been able to determine, arch_register_cpu()
+> > doesn't manipulate any of the CPU masks. All it seems to be doing
+> > is initialising the struct cpu, registering the embedded struct
+> > device, and setting up the sysfs links to its NUMA node.
+> >
+> > There is nothing obvious in there which manipulates any CPU masks, and
+> > this is rather my fundamental point when I said "I couldn't find
+> > anything in arch_register_cpu() that depends on ...".
+> >
+> > If there is something, then comments in the code would be a useful aid
+> > because it's highly non-obvious where such a manipulation is located,
+> > and hence why the locks are necessary.  
+> 
+> acpi_processor_hotadd_init()
+> ...
+>          acpi_map_cpu(pr->handle, pr->phys_id, pr->acpi_id, &pr->id);
+> 
+> That ends up in fiddling with cpu_present_mask.
+> 
+> I grant you that arch_register_cpu() is not, but it might rely on the
+> external locking too. I could not be bothered to figure that out.
+> 
+> >> Define "real hotplug" :)
+> >> 
+> >> Real physical hotplug does not really exist. That's at least true for
+> >> x86, where the physical hotplug support was chased for a while, but
+> >> never ended up in production.
+> >> 
+> >> Though virtualization happily jumped on it to hot add/remove CPUs
+> >> to/from a guest.
+> >> 
+> >> There are limitations to this and we learned it the hard way on X86. At
+> >> the end we came up with the following restrictions:
+> >> 
+> >>     1) All possible CPUs have to be advertised at boot time via firmware
+> >>        (ACPI/DT/whatever) independent of them being present at boot time
+> >>        or not.
+> >> 
+> >>        That guarantees proper sizing and ensures that associations
+> >>        between hardware entities and software representations and the
+> >>        resulting topology are stable for the lifetime of a system.
+> >> 
+> >>        It is really required to know the full topology of the system at
+> >>        boot time especially with hybrid CPUs where some of the cores
+> >>        have hyperthreading and the others do not.
+> >> 
+> >> 
+> >>     2) Hot add can only mark an already registered (possible) CPU
+> >>        present. Adding non-registered CPUs after boot is not possible.
+> >> 
+> >>        The CPU must have been registered in #1 already to ensure that
+> >>        the system topology does not suddenly change in an incompatible
+> >>        way at run-time.
+> >> 
+> >> The same restriction would apply to real physical hotplug. I don't think
+> >> that's any different for ARM64 or any other architecture.  
+> >
+> > This makes me wonder whether the Arm64 has been barking up the wrong
+> > tree then, and whether the whole "present" vs "enabled" thing comes
+> > from a misunderstanding as far as a CPU goes.
+> >
+> > However, there is a big difference between the two. On x86, a processor
+> > is just a processor. On Arm64, a "processor" is a slice of the system
+> > (includes the interrupt controller, PMUs etc) and we must enumerate
+> > those even when the processor itself is not enabled. This is the whole
+> > reason there's a difference between "present" and "enabled" and why
+> > there's a difference between x86 cpu hotplug and arm64 cpu hotplug.
+> > The processor never actually goes away in arm64, it's just prevented
+> > from being used.  
+> 
+> It's the same on X86 at least in the physical world.
 
-> +static struct execmem_info execmem_info __ro_after_init = {
-> +	.ranges = {
-> +		[EXECMEM_DEFAULT] = {
-> +			.pgprot = PAGE_KERNEL_RWX,
-> +			.alignment = 1,
-> +		},
-> +	},
-> +};
-> +
-> +struct execmem_info __init *execmem_arch_setup(void)
->  {
-> +	execmem_info.ranges[EXECMEM_DEFAULT].start = VMALLOC_START;
-> +	execmem_info.ranges[EXECMEM_DEFAULT].end = VMALLOC_END;
-> +
-> +	return &execmem_info;
->  }
+There were public calls on this via the Linaro Open Discussions group,
+so I can talk a little about how we ended up here.  Note that (in my
+opinion) there is zero chance of this changing - it took us well over
+a year to get to this conclusion.  So if we ever want ARM vCPU HP
+we need to work within these constraints. 
 
-> +static struct execmem_info execmem_info __ro_after_init = {
-> +	.ranges = {
-> +		[EXECMEM_DEFAULT] = {
-> +			.pgprot = PAGE_KERNEL,
-> +			.alignment = 1,
-> +		},
-> +	},
-> +};
-> +
-> +struct execmem_info __init *execmem_arch_setup(void)
->  {
-> +	execmem_info.ranges[EXECMEM_DEFAULT].start = MODULES_VADDR;
-> +	execmem_info.ranges[EXECMEM_DEFAULT].end = MODULES_END;
-> +
-> +	return &execmem_info;
->  }
+The ARM architecture folk (the ones defining the ARM ARM, relevant ACPI
+specs etc, not the kernel maintainers) are determined that they want
+to retain the option to do real physical CPU hotplug in the future
+with all the necessary work around dynamic interrupt controller
+initialization, debug and many other messy corners.
 
-> +static struct execmem_info execmem_info __ro_after_init = {
-> +	.ranges = {
-> +		[EXECMEM_DEFAULT] = {
->  #ifdef CONFIG_SPARC64
-> +			.start = MODULES_VADDR,
-> +			.end = MODULES_END,
->  #else
-> +			.start = VMALLOC_START,
-> +			.end = VMALLOC_END,
-> +#endif
-> +			.alignment = 1,
-> +		},
-> +	},
-> +};
-> +
-> +struct execmem_info __init *execmem_arch_setup(void)
->  {
-> +	execmem_info.ranges[EXECMEM_DEFAULT].pgprot = PAGE_KERNEL;
->  
-> +	return &execmem_info;
->  }
+Thus anything defined had to be structured in a way that was 'different'
+from that.
 
-I'm amazed by the weird and inconsistent breakup of initializations.
+I don't mind the proposed flattening of the 2 paths if the ARM kernel
+maintainers are fine with it but it will remove the distinctions and
+we will need to be very careful with the CPU masks - we can't handle
+them the same as x86 does.
 
-What exactly is wrong with something like:
+I'll get on with doing that, but do need input from Will / Catalin / James.
+There are some quirks that need calling out as it's not quite a simple
+as it appears from a high level.
 
-static struct execmem_info execmem_info __ro_after_init;
+Another part of that long discussion established that there is userspace
+(Android IIRC) in which the CPU present mask must include all CPUs
+at boot. To change that would be userspace ABI breakage so we can't
+do that.  Hence the dance around adding yet another mask to allow the
+OS to understand which CPUs are 'present' but not possible to online.
 
-struct execmem_info __init *execmem_arch_setup(void)
-{
-	execmem_info = (struct execmem_info){
-		.ranges = {
-			[EXECMEM_DEFAULT] = {
-				.start	= MODULES_VADDR,
-				.end	= MODULES_END,
-				.pgprot	= PAGE_KERNEL,
-				.alignment = 1,
-			},
-		},
-	};
-	return &execmem_info;
-}
+Flattening the two paths removes any distinction between calls that
+are for real hotplug and those that are for this online capable path.
+As a side note, the indicating bit for these flows is defined in ACPI
+for x86 from ACPI 6.3 as a flag in Processor Local APIC
+(the ARM64 definition is a cut and paste of that text).  So someone
+is interested in this distinction on x86. I can't say who but if
+you have a mantis account you can easily follow the history and it
+might be instructive to not everyone considering the current x86
+flow the right way to do it.
+
+Jonathan
+
+
+> 
+> Thanks,
+> 
+>         tglx
+> 
 
 
