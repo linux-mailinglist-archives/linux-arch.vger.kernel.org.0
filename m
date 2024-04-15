@@ -1,177 +1,147 @@
-Return-Path: <linux-arch+bounces-3700-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3701-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 837CD8A578A
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Apr 2024 18:19:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D64238A5790
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Apr 2024 18:21:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4046828A693
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Apr 2024 16:19:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 145271C21CA9
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Apr 2024 16:21:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAC09811F8;
-	Mon, 15 Apr 2024 16:19:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B5CB8174C;
+	Mon, 15 Apr 2024 16:20:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YZN7k995"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3ksiS3hF"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A66877F7FD;
-	Mon, 15 Apr 2024 16:19:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47B677FBA3
+	for <linux-arch@vger.kernel.org>; Mon, 15 Apr 2024 16:20:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713197969; cv=none; b=AD4ZwUfu3Wxm63ylOy0QaX1VOwRFbB9Du3loXVdwJ5/njMI7VkIKEhV0Y0ORMMWhJbUBkzrWCwo6LB5kTRFXA2qI5CA8vgG5K6Q4/q6aeZGffwR/emFjp1+WlvbGp31A4RWWGOoqRv6hVSP60W/+4ODTeurN+iz8wC7WxFk6lDc=
+	t=1713198052; cv=none; b=UcHTVuMpXMaaWrEgHnllZm0CVKl0bj7Ftrv84b/0f9ymnyNr/0PII8vbMXviSCQiwIvuW/OUS4O4ubzNZBUW70QPxeq2wmfsdY0zCJKDG2F0etmVFF3JfS9+dvf/iG770F0atHVYKo6p7iz5OK4sXyl9FFXQ2fly4UdSNCq6f0I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713197969; c=relaxed/simple;
-	bh=ceUpnS+eAL52LEzx3dIV9vtzMz89ZqI4TX/q8s7Nmhs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=co+/uMZpjd13WRIjhTfyK7l0+XVaXBjf9A0j6j0x6dcNUQhXy1/OE+vL+Y0JIEKJpKkMnLfnCcYPCspEhHGg7xlYph1iuHRZDV6BHA48Jy+U1BKTp1JQBRXckQPBahHordZaCESEeebtqVK0c8OgndV15yH/G6YWMQa5Ad3h1es=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YZN7k995; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35A45C32783;
-	Mon, 15 Apr 2024 16:19:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713197969;
-	bh=ceUpnS+eAL52LEzx3dIV9vtzMz89ZqI4TX/q8s7Nmhs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=YZN7k995Uxxea0cJLwZLFIVIoQ7wp4CsvNgcQEJv0/H4PEK0Rj6G6ExZxAU5C2HZ9
-	 oetjXZtceZ0YEAvUxjxRwLvZYaJPbdijx0hAxdZEqI/RmU2mkVjdkegWRU67E9DiVT
-	 7nt7RCMikPwEBCK2HXe1kb6XWUZoGtkxnZwBj4DrXQL7BEqP87amqLDJ3tjA5Etmsk
-	 vuXruQZFUlOY8T5lDQ0klKgSJEEzwHGOTueOQ+F49KRvkMlM8WOjqotu/EkKMUxBfN
-	 yS6Hp96ZLU0ez8Yb3Y7Qwmuy0/Qbh7vCV6fGTkkQ5lXMzWxQslMwxSU9nne9ShPxgT
-	 KFFnVCiW9bcmA==
-Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-5a9ef9ba998so909881eaf.1;
-        Mon, 15 Apr 2024 09:19:29 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWV44e5W19QNmWFEKDZAZ+gBg/Kr1J/Xx641P91JrFsbt+ACE1zMbTGRrP79sCxHLPBpTIdom8KXmgHcNCf9sIWr7r3gpJjTccaOHcMx3K+kWlkMv45ylRlGpyrtAUgp9p+5LA/U/IZEOKUim9iMVsvW6flDacYhLqNMFZ4FHLEh4VmdClQIVoePRT72YmJUs8LCpqWiudsINToV9rkkw==
-X-Gm-Message-State: AOJu0YzdAOaEhP8vf2Aa7csFQNGhMjQxT+jnPrPlUt8+1rUL4Qol34ws
-	UU9iUlkcdL3AYDkUaVYXmT5BpRGJJznbXRMaxoH8rji7Cu2/LD1wlDfrm5vGCZqnSAjdR54ELxt
-	fb0onMVgnbeDC79Jccf9Swz5ArRM=
-X-Google-Smtp-Source: AGHT+IEqVqP3R2NEru8EpAnjfDnRpGPI8UMTqjQFs9k8o4nbg9Pkjqx5SymZn5/1h9ERQuYB6gnaTH60Zk0fAGLxeMg=
-X-Received: by 2002:a05:6870:9a97:b0:22e:514f:cd11 with SMTP id
- hp23-20020a0568709a9700b0022e514fcd11mr11036260oab.1.1713197968510; Mon, 15
- Apr 2024 09:19:28 -0700 (PDT)
+	s=arc-20240116; t=1713198052; c=relaxed/simple;
+	bh=1zoC3bi6KaCU5EtJaBkjNbuqfFNt91Wb7VubIJIcaL4=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=GzESadYxYbjTWRW0092/48FQjFrSiSO+OBNkLxAr+z37uwReZxUTzW+fvfgaVBq+QQrUEycihaeNlTctEw5PQva6M2JBaqLlo4s8dOHMNBrcbC4dvEskYSnNvfHus1BMfh3G2YXzH6wyon0VUNXfe0HHHkAXlZePRcsEZB8Hap0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3ksiS3hF; arc=none smtp.client-ip=209.85.219.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-dc6b2682870so5490288276.0
+        for <linux-arch@vger.kernel.org>; Mon, 15 Apr 2024 09:20:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1713198048; x=1713802848; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=K1arzZzM3WsRaUONp1y4sZyDHfuKJUnHI7TXwDMLR4c=;
+        b=3ksiS3hFsRJ9BBIMV4+o6RVlKQIJ6NUbu0WMBxwffPlJkbzZ+Ks7hUwfFbtO+Q5bHf
+         5cwea4zJ/IMv4UMgyUkj9Px5fSZlgyJy9V9MbssZTPrDdvwg2SF9gqBjdhaNAPoHGKfU
+         0gKkNEyF11UiZL+yKd2sxxHmcvr2JnJZLo7jEzsIW8A6WcO6blY/B5mioHMSfzCrrkyZ
+         kQ8UDmwV7dRDJjxEH29PF1LosROWjmAZj2mXmRr/sh6obNifsW0+VMX5s8pTxC/FDKV6
+         v7ExDIJ9jZxQjSYYXmGDVdZJPACV4oXQmJAiws/goSvhPBWMCWwSUT5Ng4zXOZV7izAp
+         a5TA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713198048; x=1713802848;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=K1arzZzM3WsRaUONp1y4sZyDHfuKJUnHI7TXwDMLR4c=;
+        b=eVFAbsJLkX3ML7+voDp710dY7Kmto42ntsHli4BzgM+HVwDb884gWtqWuZh+vhmkc9
+         ZfGi2d070mgVeK+6kVWoQNo4eKvofKdCD3/7YXSe8VFmuAXT7jvnus7rKGnES2EuYQeB
+         wrpD6vgSsZ0dYCvqCYO/i8No0cicijG/j5bNIP4sSgFBPVdJlArQDfrgT78VmVc2tPI0
+         POw1D3AwTUTvZcqLgWDB749iUI5EcBvZ4tNZaHeGxvsuoO5BNec12kYyW8rT8rYRt7xy
+         1QZbDlL8kNUm/6VWIgSAfr87m5ff7D/3R4V0uMVtLec5RYa+/yxRlItvraVS8+RYBcx/
+         g5GA==
+X-Forwarded-Encrypted: i=1; AJvYcCVUNJewygcCUaB8XKRVJbnfdueq8pKr7i8yFgtQjCOCmRR9FrXqop3RndxIGcm347M7UsxOP1DSJyx4xy6OflFv1dj47FfkOovMiQ==
+X-Gm-Message-State: AOJu0Yw/pNsB3a3y31V0CzDxVujp78H/jUGtL5uVTQ6ZTHmQExMN+Gig
+	hzwpdjIWs55vJz/eH22ZxBePadcPmOQA0OR0vEqBJSCgytLqfYrbtGK93u4lKA+MjZb2uw==
+X-Google-Smtp-Source: AGHT+IG5K9apYfcWPZPtdIptSJfI/lmV9B4/LFJ2tYhX7R87dpX23NOUKwOmR1jcniTv1WDXWCZcH4k5
+X-Received: from palermo.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:118a])
+ (user=ardb job=sendgmr) by 2002:a05:6902:1009:b0:de0:ecc6:139c with SMTP id
+ w9-20020a056902100900b00de0ecc6139cmr3152952ybt.11.1713198048326; Mon, 15 Apr
+ 2024 09:20:48 -0700 (PDT)
+Date: Mon, 15 Apr 2024 18:20:42 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240412143719.11398-1-Jonathan.Cameron@huawei.com>
- <20240412143719.11398-3-Jonathan.Cameron@huawei.com> <CAJZ5v0izN5naWY7sTi16whds9ubXkLpgqV2gePQs869BoJTCDA@mail.gmail.com>
- <20240415164854.0000264f@Huawei.com> <CAJZ5v0hd+CNsnH9xY+UX0iy_AEaqUqJj4KdR=+yvtvy5FQEy5Q@mail.gmail.com>
-In-Reply-To: <CAJZ5v0hd+CNsnH9xY+UX0iy_AEaqUqJj4KdR=+yvtvy5FQEy5Q@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 15 Apr 2024 18:19:17 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0j6gMaHamrCvrF8s+SgC0QVtG+naXhA4Dwg0t1YJvh4Uw@mail.gmail.com>
-Message-ID: <CAJZ5v0j6gMaHamrCvrF8s+SgC0QVtG+naXhA4Dwg0t1YJvh4Uw@mail.gmail.com>
-Subject: Re: [PATCH v5 02/18] ACPI: processor: Set the ACPI_COMPANION for the
- struct cpu instance
-To: Jonathan Cameron <jonathan.cameron@huawei.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, loongarch@lists.linux.dev, 
-	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	kvmarm@lists.linux.dev, x86@kernel.org, Russell King <linux@armlinux.org.uk>, 
-	Miguel Luis <miguel.luis@oracle.com>, James Morse <james.morse@arm.com>, 
-	Salil Mehta <salil.mehta@huawei.com>, Jean-Philippe Brucker <jean-philippe@linaro.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, linuxarm@huawei.com, 
-	justin.he@arm.com, jianyong.wu@arm.com
+Mime-Version: 1.0
+X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2166; i=ardb@kernel.org;
+ h=from:subject; bh=X8zyn046NSpabQR5ICGmu6GxwA3wTXrOLB9VrAXNWLE=;
+ b=owGbwMvMwCFmkMcZplerG8N4Wi2JIU02+NbiXGuF+9VW9377aD66Imx21S5X4aDGWr1F1zf+X
+ nueJzu2o5SFQYyDQVZMkUVg9t93O09PlKp1niULM4eVCWQIAxenAEwk+y8jw0ZLI8Yrp1z3srH+
+ fZ+zdbHNnKg1Pv5TTqacPywsEPvedQ4jQ0tsQ8U+jnq2b0dLn2hb9btWLPseXlXAobb41OzUdtP vLAA=
+X-Mailer: git-send-email 2.44.0.683.g7961c838ac-goog
+Message-ID: <20240415162041.2491523-5-ardb+git@google.com>
+Subject: [PATCH v4 0/3] kbuild: Avoid weak external linkage where possible
+From: Ard Biesheuvel <ardb+git@google.com>
+To: linux-kernel@vger.kernel.org
+Cc: Ard Biesheuvel <ardb@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, linux-arch@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, 
+	Andrii Nakryiko <andrii@kernel.org>, Jiri Olsa <olsajiri@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 15, 2024 at 6:16=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.or=
-g> wrote:
->
-> On Mon, Apr 15, 2024 at 5:49=E2=80=AFPM Jonathan Cameron
-> <Jonathan.Cameron@huawei.com> wrote:
-> >
-> > On Fri, 12 Apr 2024 20:10:54 +0200
-> > "Rafael J. Wysocki" <rafael@kernel.org> wrote:
-> >
-> > > On Fri, Apr 12, 2024 at 4:38=E2=80=AFPM Jonathan Cameron
-> > > <Jonathan.Cameron@huawei.com> wrote:
-> > > >
-> > > > The arm64 specific arch_register_cpu() needs to access the _STA
-> > > > method of the DSDT object so make it available by assigning the
-> > > > appropriate handle to the struct cpu instance.
-> > > >
-> > > > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > > > ---
-> > > >  drivers/acpi/acpi_processor.c | 3 +++
-> > > >  1 file changed, 3 insertions(+)
-> > > >
-> > > > diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_proc=
-essor.c
-> > > > index 7a0dd35d62c9..93e029403d05 100644
-> > > > --- a/drivers/acpi/acpi_processor.c
-> > > > +++ b/drivers/acpi/acpi_processor.c
-> > > > @@ -235,6 +235,7 @@ static int acpi_processor_get_info(struct acpi_=
-device *device)
-> > > >         union acpi_object object =3D { 0 };
-> > > >         struct acpi_buffer buffer =3D { sizeof(union acpi_object), =
-&object };
-> > > >         struct acpi_processor *pr =3D acpi_driver_data(device);
-> > > > +       struct cpu *c;
-> > > >         int device_declaration =3D 0;
-> > > >         acpi_status status =3D AE_OK;
-> > > >         static int cpu0_initialized;
-> > > > @@ -314,6 +315,8 @@ static int acpi_processor_get_info(struct acpi_=
-device *device)
-> > > >                         cpufreq_add_device("acpi-cpufreq");
-> > > >         }
-> > > >
-> > > > +       c =3D &per_cpu(cpu_devices, pr->id);
-> > > > +       ACPI_COMPANION_SET(&c->dev, device);
-> > >
-> > > This is also set for per_cpu(cpu_sys_devices, pr->id) in
-> > > acpi_processor_add(), via acpi_bind_one().
-> >
-> > Hi Rafael,
-> >
-> > cpu_sys_devices gets filled with a pointer to this same structure.
-> > The contents gets set in register_cpu() so at this point
-> > it doesn't point anywhere.  As a side note register_cpu()
-> > memsets to zero the value I set it to in the code above which isn't
-> > great, particularly as I want to use this in post_eject for
-> > arm64.
-> >
-> > We could make a copy of the handle and put it back after
-> > the memset in register_cpu() but that is also ugly.
-> > It's the best I've come up with to make sure this is still set
-> > come remove time but is rather odd.
-> > >
-> > > Moreover, there is some pr->id validation in acpi_processor_add(), so
-> > > it seems premature to use it here this way.
-> > >
-> > > I think that ACPI_COMPANION_SET() should be called from here on
-> > > per_cpu(cpu_sys_devices, pr->id) after validating pr->id (so the
-> > > pr->id validation should all be done here) and then NULL can be passe=
-d
-> > > as acpi_dev to acpi_bind_one() in acpi_processor_add().  Then, there
-> > > will be one physical device corresponding to the processor ACPI devic=
-e
-> > > and no confusion.
-> >
-> > I'm fairly sure this is pointing to the same device but agreed this
-> > is a tiny bit confusing. However we can't use cpu_sys_devices at this p=
-oint
-> > so I'm not immediately seeing a cleaner solution :(
->
-> Well, OK.
->
-> Please at least consider doing the pr->id validation checks before
-> setting the ACPI companion for &per_cpu(cpu_devices, pr->id).
->
-> Also, acpi_bind_one() needs to be called on the "physical" devices
-> passed to ACPI_COMPANION_SET() (with NULL as the second argument) for
-> the reference counting and physical device lookup to work.
->
-> Please also note that acpi_primary_dev_companion() should return
-> per_cpu(cpu_sys_devices, pr->id) for the processor ACPI device, which
-> depends on the order of acpi_bind_one() calls involving the same ACPI
-> device.
+From: Ard Biesheuvel <ardb@kernel.org>
 
-Of course, if the value set by ACPI_COMPANION_SET() is cleared
-subsequently, the above is not needed, but then using
-ACPI_COMPANION_SET() is questionable overall.
+Weak external linkage is intended for cases where a symbol reference
+can remain unsatisfied in the final link. Taking the address of such a
+symbol should yield NULL if the reference was not satisfied.
+
+Given that ordinary RIP or PC relative references cannot produce NULL,
+some kind of indirection is always needed in such cases, and in position
+independent code, this results in a GOT entry. In ordinary code, it is
+arch specific but amounts to the same thing.
+
+While unavoidable in some cases, weak references are currently also used
+to declare symbols that are always defined in the final link, but not in
+the first linker pass. This means we end up with worse codegen for no
+good reason. So let's clean this up, by providing preliminary
+definitions that are only used as a fallback.
+
+Changes since v3:
+- drop unnecessary preliminary definitions for BTF start/stop
+- add Jiri's ack
+
+Changes since v2:
+- fix build issue in patch #3 reported by Jiri
+- add Arnd's acks
+
+Changes since v1:
+- update second occurrence of BTF start/end markers
+- drop NULL check of __start_BTF[] which is no longer meaningful
+- avoid the preliminary BTF symbols if CONFIG_DEBUG_INFO_BTF is not set
+- add Andrii's ack to patch #3
+- patches #1 and #2 unchanged
+
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: linux-arch@vger.kernel.org
+Cc: linux-kbuild@vger.kernel.org
+Cc: bpf@vger.kernel.org
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Jiri Olsa <olsajiri@gmail.com>
+
+Ard Biesheuvel (3):
+  kallsyms: Avoid weak references for kallsyms symbols
+  vmlinux: Avoid weak reference to notes section
+  btf: Avoid weak external references
+
+ include/asm-generic/vmlinux.lds.h | 19 +++++++++++++
+ kernel/bpf/btf.c                  |  7 +++--
+ kernel/bpf/sysfs_btf.c            |  6 ++--
+ kernel/kallsyms.c                 |  6 ----
+ kernel/kallsyms_internal.h        | 30 ++++++++------------
+ kernel/ksysfs.c                   |  4 +--
+ lib/buildid.c                     |  4 +--
+ 7 files changed, 43 insertions(+), 33 deletions(-)
+
+-- 
+2.44.0.683.g7961c838ac-goog
+
 
