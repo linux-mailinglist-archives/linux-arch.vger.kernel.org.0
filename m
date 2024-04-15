@@ -1,261 +1,149 @@
-Return-Path: <linux-arch+bounces-3674-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3675-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 509EE8A4D5F
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Apr 2024 13:11:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CFD68A4D76
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Apr 2024 13:17:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 846E2B20BBB
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Apr 2024 11:11:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 441001F22841
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Apr 2024 11:17:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C8FD5D734;
-	Mon, 15 Apr 2024 11:11:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E588B60ED0;
+	Mon, 15 Apr 2024 11:17:08 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2CFF487A5;
-	Mon, 15 Apr 2024 11:11:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C0BD5D497;
+	Mon, 15 Apr 2024 11:17:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713179507; cv=none; b=mRJ0VIwAG2+/G+0TzhUt2I1B7vc94Xr5R5mbZ5nkjhuqB1/fqOvsUsaByQjoipGnOsapFeoQzeVczu+zyHzpDjRB9A2oa8hlwmW9WLjWeKBCMf9Nno3V7TdpQm/OZ0kg29x6iOU9H2VfjsUiN8qbLqkwQV3oOYryMrNjW47Yiyo=
+	t=1713179828; cv=none; b=VEwgKeD/ympvA58rr+EEXk41x0ndSPGIC5sN2303wF1Od6uRE9BOwCYdn5N1PPcLyDY+1aC0T+oFBpH+9MESdfH5Yq5hacqihC1gjZjZ6dd5Q4MxCXXamfz/Zjd3Wmh6VWm0P0lSk86fWd1ByTzicTJJ2boGj3xIit8KcLnHet4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713179507; c=relaxed/simple;
-	bh=kS+1QAOTVoycQvIh0KEGN55kyIWIw1t53L8ZDJk/ubI=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=F/EJVuQjOX4ESPFCXZ8AiMP1ttH0aU1hkbDKjwPzHziLuAzMAyphdnuEaJy4zvHESWU3vYVpmhQQ/AeXJArTLO8pYLcqkQa5FNdkMXqW8wj4zrUTupyCDQlHuaJCMIPR+0OS9cE8udMkDhFEXljzFRPlzbQ1ZjcgflgNc80sSmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VJ4FS2BBfz6K68f;
-	Mon, 15 Apr 2024 19:09:48 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id BA5231400E7;
-	Mon, 15 Apr 2024 19:11:41 +0800 (CST)
-Received: from localhost (10.122.247.231) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Mon, 15 Apr
- 2024 12:11:41 +0100
-Date: Mon, 15 Apr 2024 12:11:40 +0100
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-CC: <linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
-	<linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<kvmarm@lists.linux.dev>, <x86@kernel.org>, Russell King
-	<linux@armlinux.org.uk>, Miguel Luis <miguel.luis@oracle.com>, James Morse
-	<james.morse@arm.com>, Salil Mehta <salil.mehta@huawei.com>, "Jean-Philippe
- Brucker" <jean-philippe@linaro.org>, Catalin Marinas
-	<catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
-	<linuxarm@huawei.com>, <justin.he@arm.com>, <jianyong.wu@arm.com>
-Subject: Re: [PATCH v5 03/18] ACPI: processor: Register deferred CPUs from
- acpi_processor_get_info()
-Message-ID: <20240415121140.00006bc7@huawei.com>
-In-Reply-To: <20240415115203.0000011b@Huawei.com>
-References: <20240412143719.11398-1-Jonathan.Cameron@huawei.com>
-	<20240412143719.11398-4-Jonathan.Cameron@huawei.com>
-	<CAJZ5v0gNvy2e=hOGQQ2kLpnrDr8=QGBax-E5odEJ=7BA8qW-9A@mail.gmail.com>
-	<20240415115203.0000011b@Huawei.com>
-Organization: Huawei Technologies R&D (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; x86_64-w64-mingw32)
+	s=arc-20240116; t=1713179828; c=relaxed/simple;
+	bh=OPrxxm549sdcK2roWgENrl0hX8PfxL3zKFt5RKh160M=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=H9F6GAW4mQAOBSou+7VEJFNZ+C0zDuSg0GO8bXJ5VB/+jLJJhqCFukfugYgeQTd+S7XhE/YOcq38GbrLruQSHFfZDfk8UMWQvQ/rapJJgbJ+43IasT7yi4OrczDgy2dgJ8zUxPDyhsD9vaQnqFjaqQjWh4LHNO+ld2FnGRREa1g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-61ad5f2c231so6564727b3.2;
+        Mon, 15 Apr 2024 04:17:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713179824; x=1713784624;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BDiun8fBl0neiQNLp2j8KsuRQma3u2I4LgI70HkeRT4=;
+        b=lxQcYuhPFq40+wpIrczNkGDcP839B3YLcaDlY4ffcC0UMm6S9yiy0WYv8B2Qb+hAo0
+         pLuEyOfrxCKbhRvXMw1dFCqt1vRgORAXZYRhz+v3uYP5qcMEi/eZo3bdbMpgvTJH+Bgg
+         gL7IO3VWYcQmRPPkVOf3TDJMR5ZfD3D8+DCC6ATUKwMSwNjZZVPVpkTO0+4oZ3H6O3Kh
+         BzU1MXa+wmlWU2YqdG2ZzqKMN9bKLGxUGJNb+lOKB0LuosEVHU0rZEZVtpl3U2eD0GFE
+         q8EW1IXHacy3IoKWk82bcrmOH4CNkusH3C7ZyxwcLkdW6jUvGQXMuLA8YyUeMK6rtUWA
+         yuVw==
+X-Forwarded-Encrypted: i=1; AJvYcCWMwc7xOpyG8AJrRDufcfUnYxXrzlWJSp+LLhM5njyUSjwAclcnfsN3gwbdoJvyjFXNCPmi9E0/Xof8YarKtbo42N4Zu1hVDKOzQLUm4psEhHw1ePmEL/FAyk7toHcgliWyJJdBVo0PcGM15wawUmMzxSzsqnCQU7ft/yIX1EGDWQLQXENmW0tSg9OGk3sTswal+niiYdM168BFiNxWoBr6ciHcy6rO
+X-Gm-Message-State: AOJu0YyXhG/giGLKTw49nc5DJOfUFiA/wIYbm+OIr6baGcaRLFQysttF
+	U+j4u7s8TRMT580uMd5uuUYgEIgDK/pxJp7V5IX7UWsEFNVG+73gnTDrQC+r
+X-Google-Smtp-Source: AGHT+IEy/EG30AHiiLyOIcVCuwjLV8jFb0Ff+EFNBNBwFjfWepPEWlyJ6uIw9f9UHCpoayc9YFIu0w==
+X-Received: by 2002:a05:690c:6011:b0:61a:cde6:6542 with SMTP id hf17-20020a05690c601100b0061acde66542mr2525701ywb.16.1713179824600;
+        Mon, 15 Apr 2024 04:17:04 -0700 (PDT)
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
+        by smtp.gmail.com with ESMTPSA id i76-20020a816d4f000000b006145f80d24dsm2019004ywc.29.2024.04.15.04.17.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 Apr 2024 04:17:03 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-dd02fb9a31cso2464294276.3;
+        Mon, 15 Apr 2024 04:17:03 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUC6XR22uK9PgXQPyLIF/k31Y60AHayN5zLs/sH+fdEUjbIDbGo2eV0njmfJVLkL3qO0uhacvhizIY0m7Z7Pb2e7FRoi2utqk3wabdU3xdLVdoOOM7bzniluyRUNysKH29+3TZAEo4qUMqOwz2TXB9RXphzRdZaOGaCWukQbGcbkgfSP2OIsMKTTJRJziAC1tCKjCky1h7F7qLOxO+ffgk/pZK+VsTO
+X-Received: by 2002:a25:4b82:0:b0:de0:f753:ad25 with SMTP id
+ y124-20020a254b82000000b00de0f753ad25mr8758272yba.1.1713179822967; Mon, 15
+ Apr 2024 04:17:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+References: <20240409175108.1512861-1-seanjc@google.com> <20240409175108.1512861-2-seanjc@google.com>
+ <20240413115324.53303a68@canb.auug.org.au> <87edb9d33r.fsf@mail.lhotse> <87bk6dd2l4.fsf@mail.lhotse>
+In-Reply-To: <87bk6dd2l4.fsf@mail.lhotse>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Mon, 15 Apr 2024 13:16:50 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWD+UKZAkiUQUJOeRkOoyT4cH1o8=Gu465=K-Ub7O4y9A@mail.gmail.com>
+Message-ID: <CAMuHMdWD+UKZAkiUQUJOeRkOoyT4cH1o8=Gu465=K-Ub7O4y9A@mail.gmail.com>
+Subject: Re: [PATCH 1/3] x86/cpu: Actually turn off mitigations by default for SPECULATION_MITIGATIONS=n
+To: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Sean Christopherson <seanjc@google.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@kernel.org>, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, 
+	Daniel Sneddon <daniel.sneddon@linux.intel.com>, linuxppc-dev@lists.ozlabs.org, 
+	linux-arch@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Heiko Carstens <hca@linux.ibm.com>, 
+	Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
 
-On Mon, 15 Apr 2024 11:52:03 +0100
-Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
+Hi Michael,
 
-> On Fri, 12 Apr 2024 20:30:40 +0200
-> "Rafael J. Wysocki" <rafael@kernel.org> wrote:
->=20
-> > On Fri, Apr 12, 2024 at 4:38=E2=80=AFPM Jonathan Cameron
-> > <Jonathan.Cameron@huawei.com> wrote: =20
-> > >
-> > > From: James Morse <james.morse@arm.com>
-> > >
-> > > The arm64 specific arch_register_cpu() call may defer CPU registration
-> > > until the ACPI interpreter is available and the _STA method can
-> > > be evaluated.
-> > >
-> > > If this occurs, then a second attempt is made in
-> > > acpi_processor_get_info(). Note that the arm64 specific call has
-> > > not yet been added so for now this will never be successfully
-> > > called.
-> > >
-> > > Systems can still be booted with 'acpi=3Doff', or not include an
-> > > ACPI description at all as in these cases arch_register_cpu()
-> > > will not have deferred registration when first called.
-> > >
-> > > This moves the CPU register logic back to a subsys_initcall(),
-> > > while the memory nodes will have been registered earlier.
-> > > Note this is where the call was prior to the cleanup series so
-> > > there should be no side effects of moving it back again for this
-> > > specific case.
-> > >
-> > > [PATCH 00/21] Initial cleanups for vCPU HP.
-> > > https://lore.kernel.org/all/ZVyz%2FVe5pPu8AWoA@shell.armlinux.org.uk/
-> > >
-> > > e.g. 5b95f94c3b9f ("x86/topology: Switch over to GENERIC_CPU_DEVICES")
-> > >
-> > > Signed-off-by: James Morse <james.morse@arm.com>
-> > > Reviewed-by: Gavin Shan <gshan@redhat.com>
-> > > Tested-by: Miguel Luis <miguel.luis@oracle.com>
-> > > Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
-> > > Tested-by: Jianyong Wu <jianyong.wu@arm.com>
-> > > Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> > > Co-developed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > > Signed-off-by: Joanthan Cameron <Jonathan.Cameron@huawei.com>
-> > > ---
-> > > v5: Update commit message to make it clear this is moving the
-> > >     init back to where it was until very recently.
-> > >
-> > >     No longer change the condition in the earlier registration point
-> > >     as that will be handled by the arm64 registration routine
-> > >     deferring until called again here.
-> > > ---
-> > >  drivers/acpi/acpi_processor.c | 12 ++++++++++++
-> > >  1 file changed, 12 insertions(+)
-> > >
-> > > diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_proces=
-sor.c
-> > > index 93e029403d05..c78398cdd060 100644
-> > > --- a/drivers/acpi/acpi_processor.c
-> > > +++ b/drivers/acpi/acpi_processor.c
-> > > @@ -317,6 +317,18 @@ static int acpi_processor_get_info(struct acpi_d=
-evice *device)
-> > >
-> > >         c =3D &per_cpu(cpu_devices, pr->id);
-> > >         ACPI_COMPANION_SET(&c->dev, device);
-> > > +       /*
-> > > +        * Register CPUs that are present. get_cpu_device() is used t=
-o skip
-> > > +        * duplicate CPU descriptions from firmware.
-> > > +        */
-> > > +       if (!invalid_logical_cpuid(pr->id) && cpu_present(pr->id) &&
-> > > +           !get_cpu_device(pr->id)) {
-> > > +               int ret =3D arch_register_cpu(pr->id);
-> > > +
-> > > +               if (ret)
-> > > +                       return ret;
-> > > +       }
-> > > +
-> > >         /*
-> > >          *  Extra Processor objects may be enumerated on MP systems w=
-ith
-> > >          *  less than the max # of CPUs. They should be ignored _iff
-> > > --   =20
-> >=20
-> > I am still unsure why there need to be two paths calling
-> > arch_register_cpu() in acpi_processor_get_info(). =20
->=20
-> I replied further down the thread, but the key point was to maintain
-> the strong distinction between 'what' was done in a real hotplug
-> path vs one where onlining was all.  We can relax that but it goes
-> contrary to the careful dance that was needed to get any agreement
-> to the ARM architecture aspects of this.
->=20
-> >=20
-> > Just below the comment partially pulled into the patch context above,
-> > there is this code:
-> >=20
-> > if (invalid_logical_cpuid(pr->id) || !cpu_present(pr->id)) {
-> >          int ret =3D acpi_processor_hotadd_init(pr);
-> >=20
-> >         if (ret)
-> >                 return ret;
-> > }
-> >=20
-> > For the sake of the argument, fold acpi_processor_hotadd_init() into
-> > it and drop the redundant _STA check from it: =20
->=20
-> If we combine these, the _STA check is necessary because we will call this
-> path for delayed onlining of ARM64 CPUs (if the earlier registration code
-> call or arch_register_cpu() returned -EPROBE defer). That's the only way
-> we know that a given CPU is online capable but firmware is saying we can't
-> bring it online yet (it may be be vHP later).
+On Sat, Apr 13, 2024 at 11:38=E2=80=AFAM Michael Ellerman <mpe@ellerman.id.=
+au> wrote:
+> Michael Ellerman <mpe@ellerman.id.au> writes:
+> > Stephen Rothwell <sfr@canb.auug.org.au> writes:
+> ...
+> >> On Tue,  9 Apr 2024 10:51:05 -0700 Sean Christopherson <seanjc@google.=
+com> wrote:
+> ...
+> >>> diff --git a/kernel/cpu.c b/kernel/cpu.c
+> >>> index 8f6affd051f7..07ad53b7f119 100644
+> >>> --- a/kernel/cpu.c
+> >>> +++ b/kernel/cpu.c
+> >>> @@ -3207,7 +3207,8 @@ enum cpu_mitigations {
+> >>>  };
+> >>>
+> >>>  static enum cpu_mitigations cpu_mitigations __ro_after_init =3D
+> >>> -   CPU_MITIGATIONS_AUTO;
+> >>> +   IS_ENABLED(CONFIG_SPECULATION_MITIGATIONS) ? CPU_MITIGATIONS_AUTO=
+ :
+> >>> +                                                CPU_MITIGATIONS_OFF;
+> >>>
+> >>>  static int __init mitigations_parse_cmdline(char *arg)
+> >>>  {
+>
+> I think a minimal workaround/fix would be:
+>
+> diff --git a/drivers/base/Kconfig b/drivers/base/Kconfig
+> index 2b8fd6bb7da0..290be2f9e909 100644
+> --- a/drivers/base/Kconfig
+> +++ b/drivers/base/Kconfig
+> @@ -191,6 +191,10 @@ config GENERIC_CPU_AUTOPROBE
+>  config GENERIC_CPU_VULNERABILITIES
+>         bool
+>
+> +config SPECULATION_MITIGATIONS
+> +       def_bool y
+> +       depends on !X86
+> +
+>  config SOC_BUS
+>         bool
+>         select GLOB
 
-For arm64 ignore this comment. I'd forgotten we moved it into the arch
-specific code last week.  May need similar on x86 I'm not 100% sure.
+Thanks, that works for me (on arm64), so
+Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
->=20
-> >=20
-> > if (invalid_logical_cpuid(pr->id) || !cpu_present(pr->id)) {
-> >         if (invalid_phys_cpuid(pr->phys_id))
-> >                 return -ENODEV;
-> >=20
-> >         cpu_maps_update_begin();
-> >         cpus_write_lock();
-> >=20
-> >        ret =3D acpi_map_cpu(pr->handle, pr->phys_id, pr->acpi_id, &pr->=
-id); =20
->=20
-> I read that call as
-> 	acpi_map_cpu_for_physical_cpu_hotplug()
-> but we could make it equivalent of.
-> 	acpi_map_cpu_for_whatever_cpu_hotplug()
-> (I'm not proposing those names though ;)
->=20
-> in which case it is fine to just stub it out on ARM64.
-> >        if (ret) {
-> >                 cpus_write_unlock();
-> >                 cpu_maps_update_done();
-> >                 return ret;
-> >        }
-> >        ret =3D arch_register_cpu(pr->id);
-> >        if (ret) {
-> >                 acpi_unmap_cpu(pr->id);
-> >=20
-> >                 cpus_write_unlock();
-> >                 cpu_maps_update_done();
-> >                 return ret;
-> >        }
-> >       pr_info("CPU%d has been hot-added\n", pr->id);
-> >       pr->flags.need_hotplug_init =3D 1; =20
-> This one needs more careful handling because we are calling this
-> for non hotplug cases on arm64 in which case we end up setting this
-> for initially online CPUs - thus if we offline and online them
-> again via sysfs /sys/bus/cpu/device/cpuX/online it goes through the
-> hotplug path and should not.
->=20
-> So I need a way to detect if we are hotplugging the cpu or not.
-> Is there a standard way to do this?  I haven't figured out how
-> to use flags in drivers to communicate this state.
->=20
-> >=20
-> >       cpus_write_unlock();
-> >       cpu_maps_update_done();
-> > }
-> >=20
-> > so I'm not sure why this cannot be combined with the new code.
-> >=20
-> > Say acpi_map_cpu) / acpi_unmap_cpu() are turned into arch calls.
-> > What's the difference then?  The locking, which should be fine if I'm
-> > not mistaken and need_hotplug_init that needs to be set if this code
-> > runs after the processor driver has loaded AFAICS. =20
->=20
-> That's the bit that I'm currently finding a challenge. Is there a clean
-> way to detect that?
->=20
-> Jonathan
->=20
->=20
->=20
->=20
->=20
->=20
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Gr{oetje,eeting}s,
 
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
