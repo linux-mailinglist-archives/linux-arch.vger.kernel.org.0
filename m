@@ -1,442 +1,209 @@
-Return-Path: <linux-arch+bounces-3734-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3735-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38AEF8A7286
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Apr 2024 19:41:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0692B8A72DF
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Apr 2024 20:12:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 586E21C20EBF
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Apr 2024 17:41:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 86BAD1F22564
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Apr 2024 18:12:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DE26133406;
-	Tue, 16 Apr 2024 17:41:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70967134CEF;
+	Tue, 16 Apr 2024 18:12:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="heJ3p54w"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7829131737;
-	Tue, 16 Apr 2024 17:41:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD378134CD4;
+	Tue, 16 Apr 2024 18:12:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713289282; cv=none; b=mBQOKTsNvUbnGDYPlgXSj8Ztb8EtgX1Rv4C8hG7mBcZN4r3wP1Hi9jRoyphQ3DpnK5YOMcLJnZodYa/cFd1w0IJvVo+UqtpY7KZvsP0I+7pgMG/aOjivLzOklIxbLJFzR1JY+Bd6czsrmF8PlX+0jxJ6a/QdBYiOSx04gTqeZcs=
+	t=1713291151; cv=none; b=gwAsldPZOciEMa6ihtz7MGCR6DN9bnk1RvqkFN6VPbBwSctV9N/Uk9wBXBrxzruM9cC7yKLjZoi+W3XTDOaSgedwGx+63ymyGF0TTNV1eWJmEBokK3FBI3AP/lg+T9Dv+q07lO4ltlRQXHNl4EdA3poeUcoMS2NnPrnxVOilr68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713289282; c=relaxed/simple;
-	bh=PL6dW1OmdZKSKrdUnzvGHxEVG+YXRu2Tvx5hFRoJ4Lk=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UW9O8D2tESp5eGwcMzIAW1AiKWJYKMP8T/HeKesXDHQllm6u0DFSkwblN73UIPZupWghVgr4g3uAhaF3mZAbt+ARTkWHav9UtYTB39p8x1EUcPAzkdKth8G6ka1vt0CWCPgW33jo3JdmFkAkKv+i4XToO66tLdhwRoeZJMzWgF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VJrrR6CLbz6J9Th;
-	Wed, 17 Apr 2024 01:39:19 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 6FBD71400D5;
-	Wed, 17 Apr 2024 01:41:17 +0800 (CST)
-Received: from localhost (10.122.247.231) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Tue, 16 Apr
- 2024 18:41:16 +0100
-Date: Tue, 16 Apr 2024 18:41:16 +0100
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-CC: Thomas Gleixner <tglx@linutronix.de>, "Russell King (Oracle)"
-	<linux@armlinux.org.uk>, <linux-pm@vger.kernel.org>,
-	<loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
-	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <kvmarm@lists.linux.dev>,
-	<x86@kernel.org>, Miguel Luis <miguel.luis@oracle.com>, James Morse
-	<james.morse@arm.com>, Salil Mehta <salil.mehta@huawei.com>, "Jean-Philippe
- Brucker" <jean-philippe@linaro.org>, Catalin Marinas
-	<catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
-	<linuxarm@huawei.com>, <justin.he@arm.com>, <jianyong.wu@arm.com>
-Subject: Re: [PATCH v5 03/18] ACPI: processor: Register deferred CPUs from
- acpi_processor_get_info()
-Message-ID: <20240416184116.0000513c@huawei.com>
-In-Reply-To: <20240415132351.00007439@huawei.com>
-References: <20240412143719.11398-1-Jonathan.Cameron@huawei.com>
-	<20240412143719.11398-4-Jonathan.Cameron@huawei.com>
-	<CAJZ5v0gNvy2e=hOGQQ2kLpnrDr8=QGBax-E5odEJ=7BA8qW-9A@mail.gmail.com>
-	<ZhmWkE+fCEG/WFoi@shell.armlinux.org.uk>
-	<87bk6ez4hj.ffs@tglx>
-	<ZhmtO6zBExkQGZLk@shell.armlinux.org.uk>
-	<878r1iyxkr.ffs@tglx>
-	<20240415094552.000008d7@Huawei.com>
-	<CAJZ5v0ireu4pOedLjMjK2NrLkq_2vySpdgEgGccQEiFC5=otWQ@mail.gmail.com>
-	<20240415125649.00001354@huawei.com>
-	<CAJZ5v0iNSmV6EsBOc5oYWSTR9UvFOeg8_mj8Ofhum4Tonb3kNQ@mail.gmail.com>
-	<20240415132351.00007439@huawei.com>
-Organization: Huawei Technologies R&D (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; x86_64-w64-mingw32)
+	s=arc-20240116; t=1713291151; c=relaxed/simple;
+	bh=o/Pz18+RKaep+hg8mtEP9kW2B/vTbdfUmQG+bVJKW20=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nfmRvLYL57p3HBjgfcfW7THHcpfvYtPFlAPtqx0u6W2CN2XnogLXMuZAqwB71HCRElvOetnMW8YUd1y1+nKeLIz0iQMGHgdOLDWEE63t1YbV9mLBmkRFEDP/Y5NE3X76SAJJrFq+Sh4v1krrgXUdTjsLDahZKOej658jPBi3Ckc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=heJ3p54w; arc=none smtp.client-ip=209.85.210.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-6eb8ae9b14eso1044890a34.0;
+        Tue, 16 Apr 2024 11:12:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713291149; x=1713895949; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iKA01nHZWWeCUMwezGVKQPv6dB8WRSswCOMzscXKYBI=;
+        b=heJ3p54wCh+Vu5wIz2uayiU9dyUbZxLrWAv1WTjzFOCjbiE79JFK3LDV8PipJALN/6
+         e568ozu5vwDOZPG4C3m7OgW1Hxs85oxEUaU8/GoZlfd629aqLNDnu79R2StPeI98ZpLF
+         DhHCjTdPVYLS5a1uc1//P8SGODC5AJ56KOCaFMinIR3aw+iYlxW0TUldIGQqXExDUkin
+         8A9BmDCxHvAWq8JekbzDW50Ddh/0AAVL5E/ExYURIdOebDKiSUHdPyJypbw0WBYplt7c
+         2MZPG0VE/xFTPAYoE+Pf88YB77TJp/Sr73rDYymTsIBkCvDEHbOrnZ04+slgMzJFpX5v
+         W59g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713291149; x=1713895949;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iKA01nHZWWeCUMwezGVKQPv6dB8WRSswCOMzscXKYBI=;
+        b=r7qq5R0bPw8EB3XuKBw13g6HPMmG0ZulezUlfQfTZD0bIHwfvq1DWd2PmRfzc+YXG7
+         edtDnSxUILsMVTe3RTQ7Szt5Ahy4UKl97Kkislmv9I2MNLZxfaBstsV+Q7y9YruISvPf
+         P4aquINR3hOWoy4raPX5kMFh5DS3q4nBXW1R9fFeXQqCVVPWaxfyJb6iZM4nYSWqWnjB
+         G8DfRS6cVdYSZV0orDyW7h5iXi227WyDRo6VEpJn95PZg4XL5rlZWfgwCGFxV8CEVQjs
+         KaG+LN0m7WWzyEfdUHhetlyiSsnx5nftduGNXLY+9roI6EJTdOlX4tkkIAqvaZ36KzFI
+         14oQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVbffWMoZDWX+piLgzm4VLzZNITVKNVIa2wvj4l1Yv7VVva6KiuYT241OeQrPmDrpM9kLFKy7nt4urxGTfNLO9gEah04Bzj/KDzTd30CBa08kNTF5Id1+GvsSVLSb3+a9P2R30iNzDB8uLL7RBmdq1hAwzT1yW7CbRTQLOxKt03sHG8fTF+d/Z+x4IiLuCQ1ObCmdK9loDgtJ9pv+JaUUlS9tbUPZunCA==
+X-Gm-Message-State: AOJu0YxSApu6IvetWOUq4FjnBRZL2004FGG8CoHEPXpCiIoJtVAYaYUf
+	QUYogQew185tUZr4TzYpxUNaus2WLH3Cz1o0jbszacnHV2bQ0wrS
+X-Google-Smtp-Source: AGHT+IEsvpJ9PHMdwG/Acyze2YUbjWscWF8ldU9oec4TpSg6OiR2NDXpJYNLstl4DLb3bNX7ulcKpA==
+X-Received: by 2002:a9d:4d95:0:b0:6eb:7bc3:12a5 with SMTP id u21-20020a9d4d95000000b006eb7bc312a5mr7305200otk.32.1713291148792;
+        Tue, 16 Apr 2024 11:12:28 -0700 (PDT)
+Received: from fauth2-smtp.messagingengine.com (fauth2-smtp.messagingengine.com. [103.168.172.201])
+        by smtp.gmail.com with ESMTPSA id c25-20020a05620a135900b0078edf6393edsm3676965qkl.73.2024.04.16.11.12.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Apr 2024 11:12:28 -0700 (PDT)
+Received: from compute7.internal (compute7.nyi.internal [10.202.2.48])
+	by mailfauth.nyi.internal (Postfix) with ESMTP id 028C71200077;
+	Tue, 16 Apr 2024 14:12:27 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute7.internal (MEProxy); Tue, 16 Apr 2024 14:12:27 -0400
+X-ME-Sender: <xms:ir8eZgbEqxjfyHkI9qB6eRHZtvYXA4CtzwbfjRa8Q9nQWC1N5sjDCg>
+    <xme:ir8eZrb2vQTeWI0X7Cgm8I1_h9eZ_azk6RYDQZwGdjAgFWUPWz2sMDBoBJpE1i8mN
+    _PnYtt-AwnaAXB2RA>
+X-ME-Received: <xmr:ir8eZq_nseswGJfnz61rVpvbjRq6ebg_nJ6t-u9aaEFSnOUchA8Tr1r6beQs5Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudejiedgiedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
+    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
+    htthgvrhhnpeethfejhfekjeffueegieejudegjeetveeuhfelhfevvdfgfeekkeevkeel
+    veekgfenucffohhmrghinhepghhithhhuhgsrdgtohhmpdhgnhhurdhorhhgnecuvehluh
+    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhunhdomhgv
+    shhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieegqddujeejkeehhe
+    ehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:ir8eZqpLHs0k5ul5Kl4J28dibHTNjP5Vh5cyp9QHQJQd6yPUbs_FNg>
+    <xmx:ir8eZrq33PYRO9PrGL2Yfs8a7lJGFjsKKbnSWmqOANo95-kfzbZrTQ>
+    <xmx:ir8eZoTyaZUzqZWAFPHRd6_-J5x-ZoqDEyCPR7Fw_thdspTrBtD85Q>
+    <xmx:ir8eZrprTEoLpgQxmH34yK7TRsic4zq1awIzCuzXq0KRGHL30-39mg>
+    <xmx:ir8eZg7He--6XEZRAbQoK6NRHu9hhc_fg22dV2jkYR8ZhJ7QNBonEKn4>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 16 Apr 2024 14:12:26 -0400 (EDT)
+Date: Tue, 16 Apr 2024 11:12:07 -0700
+From: Boqun Feng <boqun.feng@gmail.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Mark Rutland <mark.rutland@arm.com>, rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,	Gary Guo <gary@garyguo.net>,
+	"Bj\"orn Roy Baron" <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@samsung.com>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Andrea Parri <parri.andrea@gmail.com>,	Will Deacon <will@kernel.org>,
+ Nicholas Piggin <npiggin@gmail.com>,	David Howells <dhowells@redhat.com>,
+	Jade Alglave <j.alglave@ucl.ac.uk>,	Luc Maranget <luc.maranget@inria.fr>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Akira Yokosawa <akiyks@gmail.com>,	Daniel Lustig <dlustig@nvidia.com>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,	kent.overstreet@gmail.com,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com,
+	Thomas Gleixner <tglx@linutronix.de>,	Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,	torvalds@linux-foundation.org,
+ linux-arm-kernel@lists.infradead.org,	linux-fsdevel@vger.kernel.org
+Subject: Re: [WIP 0/3] Memory model and atomic API in Rust
+Message-ID: <Zh6_d1T48qpANoCk@boqun-archlinux>
+References: <20240322233838.868874-1-boqun.feng@gmail.com>
+ <ZgFVnar3nS4F8eIX@FVFF77S0Q05N>
+ <ZgHly_fioG7X4wGE@boqun-archlinux>
+ <20240409105015.GC21779@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240409105015.GC21779@noisy.programming.kicks-ass.net>
 
-On Mon, 15 Apr 2024 13:23:51 +0100
-Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
+On Tue, Apr 09, 2024 at 12:50:15PM +0200, Peter Zijlstra wrote:
+> On Mon, Mar 25, 2024 at 01:59:55PM -0700, Boqun Feng wrote:
+> > On Mon, Mar 25, 2024 at 10:44:45AM +0000, Mark Rutland wrote:
+> > [...]
+> > > > 
+> > > > * I choose to re-implement atomics in Rust `asm` because we are still
+> > > >   figuring out how we can make it easy and maintainable for Rust to call
+> > > >   a C function _inlinely_ (Gary makes some progress [2]). Otherwise,
+> > > >   atomic primitives would be function calls, and that can be performance
+> > > >   bottleneck in a few cases.
+> > > 
+> > > I don't think we want to maintain two copies of each architecture's atomics.
+> > > This gets painful very quickly (e.g. as arm64's atomics get patched between
+> > > LL/SC and LSE forms).
+> > > 
+> > 
+> > No argument here ;-)
+> 
+> Didn't we talk about bindgen being able to convert inline C functions
+> into equivalent inline Rust functions? ISTR that getting stuck on Rust
 
-> On Mon, 15 Apr 2024 14:04:26 +0200
-> "Rafael J. Wysocki" <rafael@kernel.org> wrote:
->=20
-> > On Mon, Apr 15, 2024 at 1:56=E2=80=AFPM Jonathan Cameron
-> > <Jonathan.Cameron@huawei.com> wrote: =20
-> > >
-> > > On Mon, 15 Apr 2024 13:37:08 +0200
-> > > "Rafael J. Wysocki" <rafael@kernel.org> wrote:
-> > >   =20
-> > > > On Mon, Apr 15, 2024 at 10:46=E2=80=AFAM Jonathan Cameron
-> > > > <Jonathan.Cameron@huawei.com> wrote:   =20
-> > > > >
-> > > > > On Sat, 13 Apr 2024 01:23:48 +0200
-> > > > > Thomas Gleixner <tglx@linutronix.de> wrote:
-> > > > >   =20
-> > > > > > Russell!
-> > > > > >
-> > > > > > On Fri, Apr 12 2024 at 22:52, Russell King (Oracle) wrote:   =20
-> > > > > > > On Fri, Apr 12, 2024 at 10:54:32PM +0200, Thomas Gleixner wro=
-te:   =20
-> > > > > > >> > As for the cpu locking, I couldn't find anything in arch_r=
-egister_cpu()
-> > > > > > >> > that depends on the cpu_maps_update stuff nor needs the cp=
-us_write_lock
-> > > > > > >> > being taken - so I've no idea why the "make_present" case =
-takes these
-> > > > > > >> > locks.   =20
-> > > > > > >>
-> > > > > > >> Anything which updates a CPU mask, e.g. cpu_present_mask, af=
-ter early
-> > > > > > >> boot must hold the appropriate write locks. Otherwise it wou=
-ld be
-> > > > > > >> possible to online a CPU which just got marked present, but =
-the
-> > > > > > >> registration has not completed yet.   =20
-> > > > > > >
-> > > > > > > Yes. As far as I've been able to determine, arch_register_cpu=
-()
-> > > > > > > doesn't manipulate any of the CPU masks. All it seems to be d=
-oing
-> > > > > > > is initialising the struct cpu, registering the embedded stru=
-ct
-> > > > > > > device, and setting up the sysfs links to its NUMA node.
-> > > > > > >
-> > > > > > > There is nothing obvious in there which manipulates any CPU m=
-asks, and
-> > > > > > > this is rather my fundamental point when I said "I couldn't f=
-ind
-> > > > > > > anything in arch_register_cpu() that depends on ...".
-> > > > > > >
-> > > > > > > If there is something, then comments in the code would be a u=
-seful aid
-> > > > > > > because it's highly non-obvious where such a manipulation is =
-located,
-> > > > > > > and hence why the locks are necessary.   =20
-> > > > > >
-> > > > > > acpi_processor_hotadd_init()
-> > > > > > ...
-> > > > > >          acpi_map_cpu(pr->handle, pr->phys_id, pr->acpi_id, &pr=
-->id);
-> > > > > >
-> > > > > > That ends up in fiddling with cpu_present_mask.
-> > > > > >
-> > > > > > I grant you that arch_register_cpu() is not, but it might rely =
-on the
-> > > > > > external locking too. I could not be bothered to figure that ou=
-t.
-> > > > > >   =20
-> > > > > > >> Define "real hotplug" :)
-> > > > > > >>
-> > > > > > >> Real physical hotplug does not really exist. That's at least=
- true for
-> > > > > > >> x86, where the physical hotplug support was chased for a whi=
-le, but
-> > > > > > >> never ended up in production.
-> > > > > > >>
-> > > > > > >> Though virtualization happily jumped on it to hot add/remove=
- CPUs
-> > > > > > >> to/from a guest.
-> > > > > > >>
-> > > > > > >> There are limitations to this and we learned it the hard way=
- on X86. At
-> > > > > > >> the end we came up with the following restrictions:
-> > > > > > >>
-> > > > > > >>     1) All possible CPUs have to be advertised at boot time =
-via firmware
-> > > > > > >>        (ACPI/DT/whatever) independent of them being present =
-at boot time
-> > > > > > >>        or not.
-> > > > > > >>
-> > > > > > >>        That guarantees proper sizing and ensures that associ=
-ations
-> > > > > > >>        between hardware entities and software representation=
-s and the
-> > > > > > >>        resulting topology are stable for the lifetime of a s=
-ystem.
-> > > > > > >>
-> > > > > > >>        It is really required to know the full topology of th=
-e system at
-> > > > > > >>        boot time especially with hybrid CPUs where some of t=
-he cores
-> > > > > > >>        have hyperthreading and the others do not.
-> > > > > > >>
-> > > > > > >>
-> > > > > > >>     2) Hot add can only mark an already registered (possible=
-) CPU
-> > > > > > >>        present. Adding non-registered CPUs after boot is not=
- possible.
-> > > > > > >>
-> > > > > > >>        The CPU must have been registered in #1 already to en=
-sure that
-> > > > > > >>        the system topology does not suddenly change in an in=
-compatible
-> > > > > > >>        way at run-time.
-> > > > > > >>
-> > > > > > >> The same restriction would apply to real physical hotplug. I=
- don't think
-> > > > > > >> that's any different for ARM64 or any other architecture.   =
-=20
-> > > > > > >
-> > > > > > > This makes me wonder whether the Arm64 has been barking up th=
-e wrong
-> > > > > > > tree then, and whether the whole "present" vs "enabled" thing=
- comes
-> > > > > > > from a misunderstanding as far as a CPU goes.
-> > > > > > >
-> > > > > > > However, there is a big difference between the two. On x86, a=
- processor
-> > > > > > > is just a processor. On Arm64, a "processor" is a slice of th=
-e system
-> > > > > > > (includes the interrupt controller, PMUs etc) and we must enu=
-merate
-> > > > > > > those even when the processor itself is not enabled. This is =
-the whole
-> > > > > > > reason there's a difference between "present" and "enabled" a=
-nd why
-> > > > > > > there's a difference between x86 cpu hotplug and arm64 cpu ho=
-tplug.
-> > > > > > > The processor never actually goes away in arm64, it's just pr=
-evented
-> > > > > > > from being used.   =20
-> > > > > >
-> > > > > > It's the same on X86 at least in the physical world.   =20
-> > > > >
-> > > > > There were public calls on this via the Linaro Open Discussions g=
-roup,
-> > > > > so I can talk a little about how we ended up here.  Note that (in=
- my
-> > > > > opinion) there is zero chance of this changing - it took us well =
-over
-> > > > > a year to get to this conclusion.  So if we ever want ARM vCPU HP
-> > > > > we need to work within these constraints.
-> > > > >
-> > > > > The ARM architecture folk (the ones defining the ARM ARM, relevan=
-t ACPI
-> > > > > specs etc, not the kernel maintainers) are determined that they w=
-ant
-> > > > > to retain the option to do real physical CPU hotplug in the future
-> > > > > with all the necessary work around dynamic interrupt controller
-> > > > > initialization, debug and many other messy corners.   =20
-> > > >
-> > > > That's OK, but the difference is not in the ACPi CPU enumeration/re=
-moval code.
-> > > >   =20
-> > > > > Thus anything defined had to be structured in a way that was 'dif=
-ferent'
-> > > > > from that.   =20
-> > > >
-> > > > Apparently, that's where things got confused.
-> > > >   =20
-> > > > > I don't mind the proposed flattening of the 2 paths if the ARM ke=
-rnel
-> > > > > maintainers are fine with it but it will remove the distinctions =
-and
-> > > > > we will need to be very careful with the CPU masks - we can't han=
-dle
-> > > > > them the same as x86 does.   =20
-> > > >
-> > > > At the ACPI code level, there is no distinction.
-> > > >
-> > > > A CPU that was not available before has just become available.  The
-> > > > platform firmware has notified the kernel about it and now
-> > > > acpi_processor_add() runs.  Why would it need to use different code
-> > > > paths depending on what _STA bits were clear before?   =20
-> > >
-> > > I think we will continue to disagree on this.  To my mind and from the
-> > > ACPI specification, they are two different state transitions with dif=
-ferent
-> > > required actions.   =20
-> >=20
-> > Well, please be specific: What exactly do you mean here and which
-> > parts of the spec are you talking about? =20
->=20
-> Given we are moving on with your suggestion, lets leave this for now - to=
-o many
-> other things to do! :)
->=20
-> >  =20
-> > > Those state transitions are an ACPI level thing not
-> > > an arch level one.  However, I want a solution that moves things forw=
-ards
-> > > so I'll give pushing that entirely into the arch code a try.   =20
-> >=20
-> > Thanks!
-> >=20
-> > Though I think that there is a disconnect between us that needs to be
-> > clarified first. =20
->=20
-> I'm fine with accepting your approach if it works and is acceptable
-> to the arm kernel folk. They are getting a non trivial arch_register_cpu()
-> with a bunch of ACPI specific handling in it that may come as a surprise.
->=20
-> >  =20
-> > > >
-> > > > Yes, there is some arch stuff to be called and that arch stuff shou=
-ld
-> > > > figure out what to do to make things actually work.
-> > > >   =20
-> > > > > I'll get on with doing that, but do need input from Will / Catali=
-n / James.
-> > > > > There are some quirks that need calling out as it's not quite a s=
-imple
-> > > > > as it appears from a high level.
-> > > > >
-> > > > > Another part of that long discussion established that there is us=
-erspace
-> > > > > (Android IIRC) in which the CPU present mask must include all CPUs
-> > > > > at boot. To change that would be userspace ABI breakage so we can=
-'t
-> > > > > do that.  Hence the dance around adding yet another mask to allow=
- the
-> > > > > OS to understand which CPUs are 'present' but not possible to onl=
-ine.
-> > > > >
-> > > > > Flattening the two paths removes any distinction between calls th=
-at
-> > > > > are for real hotplug and those that are for this online capable p=
-ath.   =20
-> > > >
-> > > > Which calls exactly do you mean?   =20
-> > >
-> > > At the moment he distinction does not exist (because x86 only supports
-> > > fake physical CPU HP and arm64 only vCPU HP / online capable), but if
-> > > the architecture is defined for arm64 physical hotplug in the future
-> > > we would need to do interrupt controller bring up + a lot of other st=
-uff.
-> > >
-> > > It may be possible to do that in the arch code - will be hard to veri=
-fy
-> > > that until that arch is defined  Today all I need to do is ensure that
-> > > any attempt to do present bit setting for ARM64 returns an error.
-> > > That looks to be straight forward.   =20
-> >=20
-> > OK
-> >  =20
-> > >   =20
-> > > >   =20
-> > > > > As a side note, the indicating bit for these flows is defined in =
-ACPI
-> > > > > for x86 from ACPI 6.3 as a flag in Processor Local APIC
-> > > > > (the ARM64 definition is a cut and paste of that text).  So someo=
-ne
-> > > > > is interested in this distinction on x86. I can't say who but if
-> > > > > you have a mantis account you can easily follow the history and it
-> > > > > might be instructive to not everyone considering the current x86
-> > > > > flow the right way to do it.   =20
-> > > >
-> > > > So a physically absent processor is different from a physically
-> > > > present processor that has not been disabled.  No doubt about this.
-> > > >
-> > > > That said, I'm still unsure why these two cases require two differe=
-nt
-> > > > code paths in acpi_processor_add().   =20
-> > >
-> > > It might be possible to push the checking down into arch_register_cpu=
-()
-> > > and have that for now reject any attempt to do physical CPU HP on arm=
-64.
-> > > It is that gate that is vital to getting this accepted by ARM.
-> > >
-> > > I'm still very much stuck on the hotadd_init flag however, so any sug=
-gestions
-> > > on that would be very welcome!   =20
-> >=20
-> > I need to do some investigation which will take some time I suppose. =20
->=20
-> I'll do so as well once I've gotten the rest sorted out.  That whole
-> structure seems overly complex and liable to race, though maybe sufficient
-> locking happens to be held that it's not a problem.
+Yes, we did.
 
-Back to this a (maybe) last outstanding problem.
+> not having a useful inline asm.
+> 
 
-Superficially I think we might be able to get around this by always
-doing the setup in the initial online. In brief that looks something the
-below code.  Relying on the cpu hotplug callback registration calling
-the acpi_soft_cpu_online for all instances that are already online.
+Mostly two features were missing: 1) asm goto and 2) memory operands,
+#1 gets implemented[1] by Gary, and should be available in Rust 1.78
+(plan to release at May 2, 2024); For #2, my understanding is that
+arch-specific effort is needed (since different architectures may have
+different contraints on memory operands), I haven't yet found anyone is
+working on this.
 
-Very lightly tested on arm64 and x86 with cold and hotplugged CPUs.
-However this is all in emulation and I don't have access to any significant
-x86 test farms :( So help will be needed if it's not immediately obvious why
-we can't do this.
+(background explanation for broader audience: in GCC's inline asm, you
+can specify an memory location, other than a register location, as an
+input or output of an asm block's operand[2], but current Rust inline
+asm doesn't provide this functionality, by default, without option
+"pure", "nomem", etc, every asm block in Rust can be thought as a C asm
+block with "memory" clobber)
 
-Of course, I'm open to other suggestions!
+That being said, if you look at the link I shared or this gist from
+Gary:
 
-For now I'll put a tidied version of this one is as an RFC with the rest of=
- v6.
+	https://gist.github.com/nbdd0121/d4bf7dd7f9b6d6b50fa18b1092f45a3c
 
-diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
-index 06e718b650e5..97ca53b516d0 100644
---- a/drivers/acpi/acpi_processor.c
-+++ b/drivers/acpi/acpi_processor.c
-@@ -340,7 +340,7 @@ static int acpi_processor_get_info(struct acpi_device *=
-device)
-         */
-        per_cpu(processor_device_array, pr->id) =3D device;
-        per_cpu(processors, pr->id) =3D pr;
--
-+       pr->flags.need_hotplug_init =3D 1;
-        /*
-         *  Extra Processor objects may be enumerated on MP systems with
-         *  less than the max # of CPUs. They should be ignored _iff
-diff --git a/drivers/acpi/processor_driver.c b/drivers/acpi/processor_drive=
-r.c
-index 67db60eda370..930f911fc435 100644
---- a/drivers/acpi/processor_driver.c
-+++ b/drivers/acpi/processor_driver.c
-@@ -206,7 +206,7 @@ static int acpi_processor_start(struct device *dev)
+there is another way (yeah, we probably also have discussed this
+previously), basically what it does is compiling the functions in a C
+file as LLVM IR, so that Rust can call these functions at LLVM IR level.
+This in theory is doing some local LTO, and I've tested that it works
+for asm blocks. We still need to tweak our build system to make this
+work, but should it work, it would mean that Rust can call a C function
+in a pretty efficient way.
 
-        /* Protect against concurrent CPU hotplug operations */
-        cpu_hotplug_disable();
--       ret =3D __acpi_processor_start(device);
-+       //      ret =3D __acpi_processor_start(device);
-        cpu_hotplug_enable();
-        return ret;
- }
-@@ -279,7 +279,7 @@ static int __init acpi_processor_driver_init(void)
-        if (result < 0)
-                return result;
+> But fixing all that in a hurry seems like the much saner path forward.
 
--       result =3D cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN,
-+       result =3D cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,
-                                           "acpi/cpu-drv:online",
-                                           acpi_soft_cpu_online, NULL);
-        if (result < 0)
->=20
-> Jonathan
->=20
->=20
->=20
->=20
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+So a sane plan to me is wiring our atomics into Rust functions via what
+Mark has (i.e. starting off as FFI calls), then we can switch to the
+"local LTO" approach when it's ready. In case that "local LTO" needs
+more work and we do have performance need, we can always either 1)
+manually implement some primitives in Rust asm, or 2) look into how
+bindgen or other tools can translate simple C functions (asm blocks)
+into Rust.
 
+Regards,
+Boqun
+
+[1]: https://github.com/rust-lang/rust/pull/119365
+[2]: https://gcc.gnu.org/onlinedocs/gcc/Simple-Constraints.html#index-m-in-constraint
 
