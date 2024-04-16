@@ -1,104 +1,153 @@
-Return-Path: <linux-arch+bounces-3721-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3722-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D5678A6857
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Apr 2024 12:28:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00A318A6960
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Apr 2024 13:06:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 09E94282F75
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Apr 2024 10:28:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1735C1C20D96
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Apr 2024 11:06:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 212AF127E04;
-	Tue, 16 Apr 2024 10:27:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F535128393;
+	Tue, 16 Apr 2024 11:06:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mj855mQD"
+	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="BshHmH48"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D06BE1272BA;
-	Tue, 16 Apr 2024 10:27:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAFAB127E3D;
+	Tue, 16 Apr 2024 11:06:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713263277; cv=none; b=qanfGdlgEriu5vBv3jaxLmGzGqehuYKm1r+Kpy63IMv5VG4Oqc25bFBTxbpjHcbrilcpoINf1uRRsuDDaIHfooKdJMYPwhXPB3OkNEWJyGveDCdRiiXO6bfUj8XUffDcg0x2lCrgLYWDe5l+apU1PlZ7vsgyGK/e6zjMR2MSWRg=
+	t=1713265607; cv=none; b=Sj/v5DhAjR3uH/xXxRphluEduFG8JwrI8kNcwUJSU+alErJmDZIOjgTr1ijbabeC7wc7s1MBAjd71H6umsnqlod+pesmV0gjhMTbUac1fmgevNapC20LBwRPD1f1D6GwmGavMvQWuGZlTy2kA6UM7i6mdIAYFMSxnnWi/00oLqU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713263277; c=relaxed/simple;
-	bh=MLsdr7kD3zzTJKBErjYyRBFMSvmh3TMK8QeAykYBK+I=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=q58BC4AlkQdUqwbJNAblpCud9U0MKroe96GsMlt0PUcbnp7e4PLtedw0XgMyLNCniFL6gs0TfIgU4V+0Ih/LUOeWSbQy1eXEY9sZfHjYRBmb3cjq9S+r73+yRykwuhE4fz5vFobyRs3QZmKMQqq7dCR7mI4fv0ByGucoEhPI49s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mj855mQD; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2a4df5d83c7so2737688a91.0;
-        Tue, 16 Apr 2024 03:27:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713263275; x=1713868075; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=/cIoa81DXO6MS6g+ZMtYagosHO4PwrAmNMYS0AM8V8c=;
-        b=Mj855mQDhIpyr9qzSrgfhcQkGUnW6G7u1do9KM1mJ9TXReLQ8pnq9tJHVU/RFnPz6N
-         n8MfOThWfabGg5lHUCV4OWiD1nvkPdQg1y55kUA/Z4RNNDEUDoVT9aX4Nr9Fns4lDSYL
-         I3ITJpkYyQate+8v/BvX0Ap7TVrgh1TGle5tB3vyiSLAwaZnaEfprXIUSbsA61UH8V2d
-         7aHmRUataD62M4jeGelBYPHtZzOBvnzYABi4gVEqiJcaJg5F+AlsEP0AuNBSKDyEmy3e
-         bBmj+4RSU22IkNSowC1BOlVmMNoh5w65NQkQ7KEPGccyq+SyrKuyt9SSvgtQTy2jwMgV
-         ASmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713263275; x=1713868075;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/cIoa81DXO6MS6g+ZMtYagosHO4PwrAmNMYS0AM8V8c=;
-        b=IddMiZInCKHC0fL0alL33xJa5utZZmCxO2qV1k5TQR6EMZNyMgfYzn8L9Ti3QRTArM
-         22Eee2mI3UnHcZsF8NI66Y8zg3L1qUP2OCauBtOQIfTXSM1fP78YnjoZmGudo4GFu2TW
-         PcjsE1a9L/C6bTIDsoNy8SBH5oG4mp/vEdtA+Ecn+/cCSWydcltbLj+4cKJHsA8BNkST
-         uWXQ7CrQi1KFm0L1iS6DlwfpDrnZx3hQ0SOOV9vFDHcmrGdW+JcjWEFpGdt/cYlH8ERf
-         4pBCDy0zjYBeJ84/Es3734/o6rouhEfVqpompfq1+YJgamSjFDF7NLS8Xvmeg3+I0i/6
-         /qlg==
-X-Forwarded-Encrypted: i=1; AJvYcCXIl6EatsmSNFo6AcokWKdw2KENzfDG6btxrbTtJ/CFtQtZ+ci85tckwi1GZQi2SYdtJ7J5TpZ8oKTM+7LFJ29stVKwMyGCffGZUqvckVhtig/A0SGbvycp/sejEm1UkRlFNlft8HXWoQ==
-X-Gm-Message-State: AOJu0YxFe0c8IzDQPwnSO8NF0zZrSLCFwne7G29nQzlbqYHBbMtK8t7j
-	kukmc4klreU4KKPZu5OCdcz6xdsj7Bgg9MBc/k70+LIJwzeDOaoJkRmEXJfSvzAy9dhCY2E8uLE
-	XcCUBEpEyi38RStQEAeDc6JtBHC0=
-X-Google-Smtp-Source: AGHT+IEQCW1Umn5/jxfj5DsIuaZ2+exXuJmvDw88NBcTFIdc6HQg6SZiheR6MqEF6Ri8xe0SbEpGiX0n8YxTyu0/8v4=
-X-Received: by 2002:a17:90a:8b05:b0:2a7:40ba:48bc with SMTP id
- y5-20020a17090a8b0500b002a740ba48bcmr10112056pjn.6.1713263275084; Tue, 16 Apr
- 2024 03:27:55 -0700 (PDT)
+	s=arc-20240116; t=1713265607; c=relaxed/simple;
+	bh=6YyzjOcrpjM2awxpuoWmwqK1BSbLE0TEGbSa1cisklg=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=CYmkGAAtpV7+7kMHW7hBRYVwzlEuaQ2Czwk3yR7fRENlGn3ylPLua2+zdKFP8VJUR8+bcCbdX/tQEtG3cQHxsnj7V28GsYYE3j54X4AJkYz1cLdm0X+uJdi74VLzpeYSpthHELj9e1cWTEngeP7eOVDfGBoyrAZ6zrSE5qD8NNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=BshHmH48; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+	s=201909; t=1713265594;
+	bh=m0OXBfeSJNV67OWiwlg58xXaL5nRVTZ9FFXZTv4YfRA=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=BshHmH48hI2RHWM/xhDdoBq6VpEtUFcBGkMSWHrzLiOiE0TheY5hTBRpG1wc20YxQ
+	 BNWaqxEG4uZt80If+ksNGJS3kWD4eIS/i7uhp5CnKdC6VueM7JF0JSaTYKwQwih2/z
+	 Og+6U+bnQE9axLAC5y41TOmdCAi/9aH/2kGYIIa1Cqau8hD8mXXo53SbLknPqyv1Te
+	 xFY2lD888iOGSAomxoaCTXleIdnXZPzN2H87wCv/bR1q4kda/McrUf/xadTOE6qM0y
+	 MexQLEXPwXDr/cndRUWqG6qGdtu8OZscIqJbK4uu/keTeOEbMRm1eDLApmARTY/toS
+	 9STWuWmVTv/xg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VJh7C3WSSz4x1H;
+	Tue, 16 Apr 2024 21:06:31 +1000 (AEST)
+From: Michael Ellerman <mpe@ellerman.id.au>
+To: Sean Christopherson <seanjc@google.com>, Geert Uytterhoeven
+ <geert@linux-m68k.org>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Jonathan Corbet
+ <corbet@lwn.net>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar
+ <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+ <dave.hansen@linux.intel.com>, x86@kernel.org, Peter Zijlstra
+ <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@kernel.org>,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, Pawan Gupta
+ <pawan.kumar.gupta@linux.intel.com>, Daniel Sneddon
+ <daniel.sneddon@linux.intel.com>, linuxppc-dev@lists.ozlabs.org,
+ linux-arch@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
+ Will Deacon <will@kernel.org>, Heiko Carstens <hca@linux.ibm.com>,
+ Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Subject: Re: [PATCH 1/3] x86/cpu: Actually turn off mitigations by default
+ for SPECULATION_MITIGATIONS=n
+In-Reply-To: <Zh06O35yKIF2vNdE@google.com>
+References: <20240409175108.1512861-1-seanjc@google.com>
+ <20240409175108.1512861-2-seanjc@google.com>
+ <20240413115324.53303a68@canb.auug.org.au> <87edb9d33r.fsf@mail.lhotse>
+ <87bk6dd2l4.fsf@mail.lhotse>
+ <CAMuHMdWD+UKZAkiUQUJOeRkOoyT4cH1o8=Gu465=K-Ub7O4y9A@mail.gmail.com>
+ <Zh06O35yKIF2vNdE@google.com>
+Date: Tue, 16 Apr 2024 21:06:31 +1000
+Message-ID: <87sezlbm88.fsf@mail.lhotse>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 16 Apr 2024 12:26:57 +0200
-Message-ID: <CANiq72mQh3O9S4umbvrKBgMMorty48UMwS01U22FR0mRyd3cyQ@mail.gmail.com>
-Subject: ./include/asm-generic/tlb.h:629:10: error: parameter 'ptep' set but
- not used
-To: david@redhat.com, Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>, 
-	WANG Xuerui <kernel@xen0n.name>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Ryan Roberts <ryan.roberts@arm.com>, 
-	linux-arch <linux-arch@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>, 
-	linux-kernel <linux-kernel@vger.kernel.org>, loongarch@lists.linux.dev, 
-	clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi David, Arnd, LoongArch,
+Sean Christopherson <seanjc@google.com> writes:
+> On Mon, Apr 15, 2024, Geert Uytterhoeven wrote:
+>> On Sat, Apr 13, 2024 at 11:38=E2=80=AFAM Michael Ellerman <mpe@ellerman.=
+id.au> wrote:
+>> > Michael Ellerman <mpe@ellerman.id.au> writes:
+>> > > Stephen Rothwell <sfr@canb.auug.org.au> writes:
+>> > ...
+>> > >> On Tue,  9 Apr 2024 10:51:05 -0700 Sean Christopherson <seanjc@goog=
+le.com> wrote:
+>> > ...
+>> > >>> diff --git a/kernel/cpu.c b/kernel/cpu.c
+>> > >>> index 8f6affd051f7..07ad53b7f119 100644
+>> > >>> --- a/kernel/cpu.c
+>> > >>> +++ b/kernel/cpu.c
+>> > >>> @@ -3207,7 +3207,8 @@ enum cpu_mitigations {
+>> > >>>  };
+>> > >>>
+>> > >>>  static enum cpu_mitigations cpu_mitigations __ro_after_init =3D
+>> > >>> -   CPU_MITIGATIONS_AUTO;
+>> > >>> +   IS_ENABLED(CONFIG_SPECULATION_MITIGATIONS) ? CPU_MITIGATIONS_A=
+UTO :
+>> > >>> +                                                CPU_MITIGATIONS_O=
+FF;
+>> > >>>
+>> > >>>  static int __init mitigations_parse_cmdline(char *arg)
+>> > >>>  {
+>> >
+>> > I think a minimal workaround/fix would be:
+>> >
+>> > diff --git a/drivers/base/Kconfig b/drivers/base/Kconfig
+>> > index 2b8fd6bb7da0..290be2f9e909 100644
+>> > --- a/drivers/base/Kconfig
+>> > +++ b/drivers/base/Kconfig
+>> > @@ -191,6 +191,10 @@ config GENERIC_CPU_AUTOPROBE
+>> >  config GENERIC_CPU_VULNERABILITIES
+>> >         bool
+>> >
+>> > +config SPECULATION_MITIGATIONS
+>> > +       def_bool y
+>> > +       depends on !X86
+>> > +
+>> >  config SOC_BUS
+>> >         bool
+>> >         select GLOB
+>>=20
+>> Thanks, that works for me (on arm64), so
+>> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>
+> Oof.  I completely missed that "cpu_mitigations" wasn't x86-only.  I can'=
+t think
+> of better solution than an on-by-default generic Kconfig, though can't th=
+at it
+> more simply be:
+>
+> diff --git a/drivers/base/Kconfig b/drivers/base/Kconfig
+> index 2b8fd6bb7da0..5930cb56ee29 100644
+> --- a/drivers/base/Kconfig
+> +++ b/drivers/base/Kconfig
+> @@ -191,6 +191,9 @@ config GENERIC_CPU_AUTOPROBE
+>  config GENERIC_CPU_VULNERABILITIES
+>         bool
+>=20=20
+> +config SPECULATION_MITIGATIONS
+> +       def_bool !X86
+> +
 
-In a linux-next defconfig LLVM=1 build today I got:
+Yeah that works too.
 
-    ./include/asm-generic/tlb.h:629:10: error: parameter 'ptep' set
-but not used [-Werror,-Wunused-but-set-parameter]
-      629 |                 pte_t *ptep, unsigned int nr, unsigned long address)
-          |                        ^
-
-Indeed, in loongarch, `__tlb_remove_tlb_entry` does not do anything.
-This seems the same that Arnd reported for arm64:
-
-    https://lore.kernel.org/all/20240221154549.2026073-1-arnd@kernel.org/
-
-So perhaps the loongarch's one should also be changed into an static inline?
-
-I hope that helps!
-
-Cheers,
-Miguel
+cheers
 
