@@ -1,209 +1,174 @@
-Return-Path: <linux-arch+bounces-3735-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3736-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0692B8A72DF
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Apr 2024 20:12:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4108F8A743A
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Apr 2024 21:03:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 86BAD1F22564
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Apr 2024 18:12:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5C5E31C2187E
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Apr 2024 19:03:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70967134CEF;
-	Tue, 16 Apr 2024 18:12:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF033138486;
+	Tue, 16 Apr 2024 19:02:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="heJ3p54w"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BsZ1iD5N"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD378134CD4;
-	Tue, 16 Apr 2024 18:12:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96926137748;
+	Tue, 16 Apr 2024 19:02:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713291151; cv=none; b=gwAsldPZOciEMa6ihtz7MGCR6DN9bnk1RvqkFN6VPbBwSctV9N/Uk9wBXBrxzruM9cC7yKLjZoi+W3XTDOaSgedwGx+63ymyGF0TTNV1eWJmEBokK3FBI3AP/lg+T9Dv+q07lO4ltlRQXHNl4EdA3poeUcoMS2NnPrnxVOilr68=
+	t=1713294135; cv=none; b=J8532YG/+dSFdyWs350DZ7mlGmO8IBjXm3D6FKT9d/mg4jFJ0dEC9qcSp1eMYExbX2WxAKDPWKk/o3hr8HuN3wrXNSbVRKiQ52E9jNRTdfcFa0ju5K03jmYf80ijmBf4YI5SfvnxO0rdJfh7rgAEsrzIWlGidpo8VDOjMK7fWoA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713291151; c=relaxed/simple;
-	bh=o/Pz18+RKaep+hg8mtEP9kW2B/vTbdfUmQG+bVJKW20=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nfmRvLYL57p3HBjgfcfW7THHcpfvYtPFlAPtqx0u6W2CN2XnogLXMuZAqwB71HCRElvOetnMW8YUd1y1+nKeLIz0iQMGHgdOLDWEE63t1YbV9mLBmkRFEDP/Y5NE3X76SAJJrFq+Sh4v1krrgXUdTjsLDahZKOej658jPBi3Ckc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=heJ3p54w; arc=none smtp.client-ip=209.85.210.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-6eb8ae9b14eso1044890a34.0;
-        Tue, 16 Apr 2024 11:12:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713291149; x=1713895949; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iKA01nHZWWeCUMwezGVKQPv6dB8WRSswCOMzscXKYBI=;
-        b=heJ3p54wCh+Vu5wIz2uayiU9dyUbZxLrWAv1WTjzFOCjbiE79JFK3LDV8PipJALN/6
-         e568ozu5vwDOZPG4C3m7OgW1Hxs85oxEUaU8/GoZlfd629aqLNDnu79R2StPeI98ZpLF
-         DhHCjTdPVYLS5a1uc1//P8SGODC5AJ56KOCaFMinIR3aw+iYlxW0TUldIGQqXExDUkin
-         8A9BmDCxHvAWq8JekbzDW50Ddh/0AAVL5E/ExYURIdOebDKiSUHdPyJypbw0WBYplt7c
-         2MZPG0VE/xFTPAYoE+Pf88YB77TJp/Sr73rDYymTsIBkCvDEHbOrnZ04+slgMzJFpX5v
-         W59g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713291149; x=1713895949;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iKA01nHZWWeCUMwezGVKQPv6dB8WRSswCOMzscXKYBI=;
-        b=r7qq5R0bPw8EB3XuKBw13g6HPMmG0ZulezUlfQfTZD0bIHwfvq1DWd2PmRfzc+YXG7
-         edtDnSxUILsMVTe3RTQ7Szt5Ahy4UKl97Kkislmv9I2MNLZxfaBstsV+Q7y9YruISvPf
-         P4aquINR3hOWoy4raPX5kMFh5DS3q4nBXW1R9fFeXQqCVVPWaxfyJb6iZM4nYSWqWnjB
-         G8DfRS6cVdYSZV0orDyW7h5iXi227WyDRo6VEpJn95PZg4XL5rlZWfgwCGFxV8CEVQjs
-         KaG+LN0m7WWzyEfdUHhetlyiSsnx5nftduGNXLY+9roI6EJTdOlX4tkkIAqvaZ36KzFI
-         14oQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVbffWMoZDWX+piLgzm4VLzZNITVKNVIa2wvj4l1Yv7VVva6KiuYT241OeQrPmDrpM9kLFKy7nt4urxGTfNLO9gEah04Bzj/KDzTd30CBa08kNTF5Id1+GvsSVLSb3+a9P2R30iNzDB8uLL7RBmdq1hAwzT1yW7CbRTQLOxKt03sHG8fTF+d/Z+x4IiLuCQ1ObCmdK9loDgtJ9pv+JaUUlS9tbUPZunCA==
-X-Gm-Message-State: AOJu0YxSApu6IvetWOUq4FjnBRZL2004FGG8CoHEPXpCiIoJtVAYaYUf
-	QUYogQew185tUZr4TzYpxUNaus2WLH3Cz1o0jbszacnHV2bQ0wrS
-X-Google-Smtp-Source: AGHT+IEsvpJ9PHMdwG/Acyze2YUbjWscWF8ldU9oec4TpSg6OiR2NDXpJYNLstl4DLb3bNX7ulcKpA==
-X-Received: by 2002:a9d:4d95:0:b0:6eb:7bc3:12a5 with SMTP id u21-20020a9d4d95000000b006eb7bc312a5mr7305200otk.32.1713291148792;
-        Tue, 16 Apr 2024 11:12:28 -0700 (PDT)
-Received: from fauth2-smtp.messagingengine.com (fauth2-smtp.messagingengine.com. [103.168.172.201])
-        by smtp.gmail.com with ESMTPSA id c25-20020a05620a135900b0078edf6393edsm3676965qkl.73.2024.04.16.11.12.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Apr 2024 11:12:28 -0700 (PDT)
-Received: from compute7.internal (compute7.nyi.internal [10.202.2.48])
-	by mailfauth.nyi.internal (Postfix) with ESMTP id 028C71200077;
-	Tue, 16 Apr 2024 14:12:27 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute7.internal (MEProxy); Tue, 16 Apr 2024 14:12:27 -0400
-X-ME-Sender: <xms:ir8eZgbEqxjfyHkI9qB6eRHZtvYXA4CtzwbfjRa8Q9nQWC1N5sjDCg>
-    <xme:ir8eZrb2vQTeWI0X7Cgm8I1_h9eZ_azk6RYDQZwGdjAgFWUPWz2sMDBoBJpE1i8mN
-    _PnYtt-AwnaAXB2RA>
-X-ME-Received: <xmr:ir8eZq_nseswGJfnz61rVpvbjRq6ebg_nJ6t-u9aaEFSnOUchA8Tr1r6beQs5Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudejiedgiedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
-    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
-    htthgvrhhnpeethfejhfekjeffueegieejudegjeetveeuhfelhfevvdfgfeekkeevkeel
-    veekgfenucffohhmrghinhepghhithhhuhgsrdgtohhmpdhgnhhurdhorhhgnecuvehluh
-    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhunhdomhgv
-    shhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieegqddujeejkeehhe
-    ehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:ir8eZqpLHs0k5ul5Kl4J28dibHTNjP5Vh5cyp9QHQJQd6yPUbs_FNg>
-    <xmx:ir8eZrq33PYRO9PrGL2Yfs8a7lJGFjsKKbnSWmqOANo95-kfzbZrTQ>
-    <xmx:ir8eZoTyaZUzqZWAFPHRd6_-J5x-ZoqDEyCPR7Fw_thdspTrBtD85Q>
-    <xmx:ir8eZrprTEoLpgQxmH34yK7TRsic4zq1awIzCuzXq0KRGHL30-39mg>
-    <xmx:ir8eZg7He--6XEZRAbQoK6NRHu9hhc_fg22dV2jkYR8ZhJ7QNBonEKn4>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 16 Apr 2024 14:12:26 -0400 (EDT)
-Date: Tue, 16 Apr 2024 11:12:07 -0700
-From: Boqun Feng <boqun.feng@gmail.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Mark Rutland <mark.rutland@arm.com>, rust-for-linux@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,	Gary Guo <gary@garyguo.net>,
-	"Bj\"orn Roy Baron" <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Andrea Parri <parri.andrea@gmail.com>,	Will Deacon <will@kernel.org>,
- Nicholas Piggin <npiggin@gmail.com>,	David Howells <dhowells@redhat.com>,
-	Jade Alglave <j.alglave@ucl.ac.uk>,	Luc Maranget <luc.maranget@inria.fr>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Akira Yokosawa <akiyks@gmail.com>,	Daniel Lustig <dlustig@nvidia.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,	kent.overstreet@gmail.com,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com,
-	Thomas Gleixner <tglx@linutronix.de>,	Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,	torvalds@linux-foundation.org,
- linux-arm-kernel@lists.infradead.org,	linux-fsdevel@vger.kernel.org
-Subject: Re: [WIP 0/3] Memory model and atomic API in Rust
-Message-ID: <Zh6_d1T48qpANoCk@boqun-archlinux>
-References: <20240322233838.868874-1-boqun.feng@gmail.com>
- <ZgFVnar3nS4F8eIX@FVFF77S0Q05N>
- <ZgHly_fioG7X4wGE@boqun-archlinux>
- <20240409105015.GC21779@noisy.programming.kicks-ass.net>
+	s=arc-20240116; t=1713294135; c=relaxed/simple;
+	bh=xbskRV8m/+XN6NH2m8afNoKnmWeG0OzTrmA+SGInC2k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tVse+Dfmmqt1tdelpXUrMImcUbRqJyAbR0TrJu8PFFeNncW4Klq30+eo9yXRnrUMH4bS1Ck59Xnhv9s8+DmoSElP+0s4TwXLKt1Zq2s2dqkg0h6V4SptWl9rLwh0VbyX/0zf0aDQOwKzh/WXuktWGeH/xH6IuMqJZwlnCBj+O/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BsZ1iD5N; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5478BC4AF0E;
+	Tue, 16 Apr 2024 19:02:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713294135;
+	bh=xbskRV8m/+XN6NH2m8afNoKnmWeG0OzTrmA+SGInC2k=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=BsZ1iD5Nd0d4B6HXNkBHNhwT4LiiWc88yZUQZOPWqCQret+uyX993UiVDEdXnTQpZ
+	 i+0iRxF78oS0mCLtwntmBow82cS81/MNHk/euznN+1VogyU2uvGQNlFiP3RAekV8ZZ
+	 JUyUoVCxOUgz5WA1BpUwqxv6orExQ6CEOkIl7Ln5jgg1FrwS1lxDBRn7+JLvJ5lDsn
+	 qfIZDWeWTFh5naNuIBI1NkF4/TaI7mxKxaobY5r/KUieAf/+pzCcjsTF4Wih403x9q
+	 s5GnRQ7NhXx3QnWrU9BEPwOT48kAMz7YncYjrHuetrhWT0p7Kwou0NeqRGFTJ7KbSp
+	 rFw6bdV4pLu+Q==
+Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-5acdbfa7a45so89186eaf.2;
+        Tue, 16 Apr 2024 12:02:15 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWpdebi6ZoqTkcKV2RNxmQnMTB4GKRTK8FXXM+4WkvGpD26OOpnf7tZyh20o/8y2g5BAt1WA1ig8oAu+N8WexL02SXP3Jf1jcWBsylmVnau1OsJE/Mygn144IbR6jEPICVdjKqaWJ4JSV0NXTg9Tf0pG0WrsHA8DUKGfxgr9E4LOEoINhmY1I0AvynvHrDWz9ENzQuBADn+adz8QOnreQ==
+X-Gm-Message-State: AOJu0YxWDSA63iSWjSmIhpoqKhX6//OKcRA2UmPem1LFr/3GzbPvo3vY
+	CGwbBeCWPqZXj2HKpc3IP8ZxQukAqgTiihHUjD6SVr3/NbVpnOKHSSMdDnNKqQtHrCBwshqdOKI
+	GI7ksXKuwVeKFeI0HXkP91QMDZY8=
+X-Google-Smtp-Source: AGHT+IGfLxmXEH+uUXC9TAUq3KwcPBawoHi+dzfu7++eeN3j3YN9GuWwKcm2PcJPtxo1jL4YEoWhIRWKjGy4htEVqRk=
+X-Received: by 2002:a05:6820:4008:b0:5aa:6b2e:36f0 with SMTP id
+ fh8-20020a056820400800b005aa6b2e36f0mr16275342oob.0.1713294134546; Tue, 16
+ Apr 2024 12:02:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240409105015.GC21779@noisy.programming.kicks-ass.net>
+References: <20240412143719.11398-1-Jonathan.Cameron@huawei.com>
+ <20240412143719.11398-4-Jonathan.Cameron@huawei.com> <CAJZ5v0gNvy2e=hOGQQ2kLpnrDr8=QGBax-E5odEJ=7BA8qW-9A@mail.gmail.com>
+ <ZhmWkE+fCEG/WFoi@shell.armlinux.org.uk> <87bk6ez4hj.ffs@tglx>
+ <ZhmtO6zBExkQGZLk@shell.armlinux.org.uk> <878r1iyxkr.ffs@tglx>
+ <20240415094552.000008d7@Huawei.com> <CAJZ5v0ireu4pOedLjMjK2NrLkq_2vySpdgEgGccQEiFC5=otWQ@mail.gmail.com>
+ <20240415125649.00001354@huawei.com> <CAJZ5v0iNSmV6EsBOc5oYWSTR9UvFOeg8_mj8Ofhum4Tonb3kNQ@mail.gmail.com>
+ <20240415132351.00007439@huawei.com> <20240416184116.0000513c@huawei.com>
+In-Reply-To: <20240416184116.0000513c@huawei.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 16 Apr 2024 21:02:02 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0iK61_ihUZX_tXoSGdhpYDWFhEBbEuFf6WFiiD0QSeTDg@mail.gmail.com>
+Message-ID: <CAJZ5v0iK61_ihUZX_tXoSGdhpYDWFhEBbEuFf6WFiiD0QSeTDg@mail.gmail.com>
+Subject: Re: [PATCH v5 03/18] ACPI: processor: Register deferred CPUs from acpi_processor_get_info()
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	"Russell King (Oracle)" <linux@armlinux.org.uk>, linux-pm@vger.kernel.org, loongarch@lists.linux.dev, 
+	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	kvmarm@lists.linux.dev, x86@kernel.org, Miguel Luis <miguel.luis@oracle.com>, 
+	James Morse <james.morse@arm.com>, Salil Mehta <salil.mehta@huawei.com>, 
+	Jean-Philippe Brucker <jean-philippe@linaro.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, linuxarm@huawei.com, justin.he@arm.com, 
+	jianyong.wu@arm.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 09, 2024 at 12:50:15PM +0200, Peter Zijlstra wrote:
-> On Mon, Mar 25, 2024 at 01:59:55PM -0700, Boqun Feng wrote:
-> > On Mon, Mar 25, 2024 at 10:44:45AM +0000, Mark Rutland wrote:
-> > [...]
-> > > > 
-> > > > * I choose to re-implement atomics in Rust `asm` because we are still
-> > > >   figuring out how we can make it easy and maintainable for Rust to call
-> > > >   a C function _inlinely_ (Gary makes some progress [2]). Otherwise,
-> > > >   atomic primitives would be function calls, and that can be performance
-> > > >   bottleneck in a few cases.
-> > > 
-> > > I don't think we want to maintain two copies of each architecture's atomics.
-> > > This gets painful very quickly (e.g. as arm64's atomics get patched between
-> > > LL/SC and LSE forms).
-> > > 
-> > 
-> > No argument here ;-)
-> 
-> Didn't we talk about bindgen being able to convert inline C functions
-> into equivalent inline Rust functions? ISTR that getting stuck on Rust
+On Tue, Apr 16, 2024 at 7:41=E2=80=AFPM Jonathan Cameron
+<Jonathan.Cameron@huawei.com> wrote:
+>
+> On Mon, 15 Apr 2024 13:23:51 +0100
+> Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
+>
+> > On Mon, 15 Apr 2024 14:04:26 +0200
+> > "Rafael J. Wysocki" <rafael@kernel.org> wrote:
 
-Yes, we did.
+[cut]
 
-> not having a useful inline asm.
-> 
+> > > > I'm still very much stuck on the hotadd_init flag however, so any s=
+uggestions
+> > > > on that would be very welcome!
+> > >
+> > > I need to do some investigation which will take some time I suppose.
+> >
+> > I'll do so as well once I've gotten the rest sorted out.  That whole
+> > structure seems overly complex and liable to race, though maybe suffici=
+ent
+> > locking happens to be held that it's not a problem.
+>
+> Back to this a (maybe) last outstanding problem.
+>
+> Superficially I think we might be able to get around this by always
+> doing the setup in the initial online. In brief that looks something the
+> below code.  Relying on the cpu hotplug callback registration calling
+> the acpi_soft_cpu_online for all instances that are already online.
+>
+> Very lightly tested on arm64 and x86 with cold and hotplugged CPUs.
+> However this is all in emulation and I don't have access to any significa=
+nt
+> x86 test farms :( So help will be needed if it's not immediately obvious =
+why
+> we can't do this.
 
-Mostly two features were missing: 1) asm goto and 2) memory operands,
-#1 gets implemented[1] by Gary, and should be available in Rust 1.78
-(plan to release at May 2, 2024); For #2, my understanding is that
-arch-specific effort is needed (since different architectures may have
-different contraints on memory operands), I haven't yet found anyone is
-working on this.
+AFAICS, this should work.  At least I don't see why it wouldn't.
 
-(background explanation for broader audience: in GCC's inline asm, you
-can specify an memory location, other than a register location, as an
-input or output of an asm block's operand[2], but current Rust inline
-asm doesn't provide this functionality, by default, without option
-"pure", "nomem", etc, every asm block in Rust can be thought as a C asm
-block with "memory" clobber)
+> Of course, I'm open to other suggestions!
+>
+> For now I'll put a tidied version of this one is as an RFC with the rest =
+of v6.
+>
+> diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.=
+c
+> index 06e718b650e5..97ca53b516d0 100644
+> --- a/drivers/acpi/acpi_processor.c
+> +++ b/drivers/acpi/acpi_processor.c
+> @@ -340,7 +340,7 @@ static int acpi_processor_get_info(struct acpi_device=
+ *device)
+>          */
+>         per_cpu(processor_device_array, pr->id) =3D device;
+>         per_cpu(processors, pr->id) =3D pr;
+> -
+> +       pr->flags.need_hotplug_init =3D 1;
+>         /*
+>          *  Extra Processor objects may be enumerated on MP systems with
+>          *  less than the max # of CPUs. They should be ignored _iff
+> diff --git a/drivers/acpi/processor_driver.c b/drivers/acpi/processor_dri=
+ver.c
+> index 67db60eda370..930f911fc435 100644
+> --- a/drivers/acpi/processor_driver.c
+> +++ b/drivers/acpi/processor_driver.c
+> @@ -206,7 +206,7 @@ static int acpi_processor_start(struct device *dev)
+>
+>         /* Protect against concurrent CPU hotplug operations */
+>         cpu_hotplug_disable();
+> -       ret =3D __acpi_processor_start(device);
+> +       //      ret =3D __acpi_processor_start(device);
+>         cpu_hotplug_enable();
+>         return ret;
+>  }
 
-That being said, if you look at the link I shared or this gist from
-Gary:
+So it looks like acpi_processor_start() is not necessary any more, is it?
 
-	https://gist.github.com/nbdd0121/d4bf7dd7f9b6d6b50fa18b1092f45a3c
+> @@ -279,7 +279,7 @@ static int __init acpi_processor_driver_init(void)
+>         if (result < 0)
+>                 return result;
+>
+> -       result =3D cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN,
+> +       result =3D cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,
+>                                            "acpi/cpu-drv:online",
+>                                            acpi_soft_cpu_online, NULL);
+>         if (result < 0)
+> >
+> > Jonathan
 
-there is another way (yeah, we probably also have discussed this
-previously), basically what it does is compiling the functions in a C
-file as LLVM IR, so that Rust can call these functions at LLVM IR level.
-This in theory is doing some local LTO, and I've tested that it works
-for asm blocks. We still need to tweak our build system to make this
-work, but should it work, it would mean that Rust can call a C function
-in a pretty efficient way.
-
-> But fixing all that in a hurry seems like the much saner path forward.
-
-So a sane plan to me is wiring our atomics into Rust functions via what
-Mark has (i.e. starting off as FFI calls), then we can switch to the
-"local LTO" approach when it's ready. In case that "local LTO" needs
-more work and we do have performance need, we can always either 1)
-manually implement some primitives in Rust asm, or 2) look into how
-bindgen or other tools can translate simple C functions (asm blocks)
-into Rust.
-
-Regards,
-Boqun
-
-[1]: https://github.com/rust-lang/rust/pull/119365
-[2]: https://gcc.gnu.org/onlinedocs/gcc/Simple-Constraints.html#index-m-in-constraint
+Thanks!
 
