@@ -1,158 +1,160 @@
-Return-Path: <linux-arch+bounces-3726-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3727-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D96BE8A6D30
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Apr 2024 16:00:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E98268A6DC4
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Apr 2024 16:17:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 66E88B22A1C
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Apr 2024 14:00:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4BC0EB25D0D
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Apr 2024 14:17:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9607212CD8B;
-	Tue, 16 Apr 2024 14:00:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6AF612D214;
+	Tue, 16 Apr 2024 14:14:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="PhuHidJG";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="DwJzTEWO"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from wfhigh4-smtp.messagingengine.com (wfhigh4-smtp.messagingengine.com [64.147.123.155])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C44F612BF3A;
-	Tue, 16 Apr 2024 14:00:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F07012D1EF;
+	Tue, 16 Apr 2024 14:14:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.155
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713276013; cv=none; b=eEGzyorkpWFp9lVq/7aGMnmW0kCOboyNd/zycKBQO5T91OUFHC1NzZ+lS4RlS4uXmKf+UPDPrfP/wcSSEqIwWSl42iLqYZZ68j9bH3Fj4Bt0fr8akb1uufrhZTQN6tXdVt8O43gxNJ6PS4K79QY0tAB1csbxldiRcUH3Z998dwA=
+	t=1713276896; cv=none; b=cMVzEpGD9BUSpx7Q46xQHb/sEfevZwtvtl3+hlfQOxfMs6tlUoWuvaPvI7Ud3aluzkHczy8ZLSGD8LutwyoiRQ4HcpEQk+8oUQW9hCFaTO9PB33P45/3KCr1Od6R90oGlv+3cIyyimU+VaZtHY7PH/RQkXnBXYV7sLvUBAU4tbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713276013; c=relaxed/simple;
-	bh=b1c9Idw5WwR1wow0ywz3fwqqsRx0+1L+gWDdhubKeBU=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mDTmf4a6nfiGhKVoHnZ8UMaMH6/dvigoOhlEVJx/0MXKd3ifvUJY9qytNv5RP0eD0EzRF2K4zjUtDvKzU48XJPILwqSaZ4nM0h7idcqmTTuU0HTbrmnlZe9HvKdBPjFhMaRX/ZL5lFOUSESFXw2BokpJxca7QcUsGxoC2psBAxM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VJlsk53Hnz6K8xT;
-	Tue, 16 Apr 2024 21:55:06 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id DCBEF140B3C;
-	Tue, 16 Apr 2024 22:00:02 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Tue, 16 Apr
- 2024 15:00:02 +0100
-Date: Tue, 16 Apr 2024 15:00:01 +0100
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: <linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
-	<linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<kvmarm@lists.linux.dev>, <x86@kernel.org>, Russell King
-	<linux@armlinux.org.uk>, "Rafael J . Wysocki" <rafael@kernel.org>, "Miguel
- Luis" <miguel.luis@oracle.com>, James Morse <james.morse@arm.com>, "Salil
- Mehta" <salil.mehta@huawei.com>, Jean-Philippe Brucker
-	<jean-philippe@linaro.org>, Catalin Marinas <catalin.marinas@arm.com>, "Will
- Deacon" <will@kernel.org>, <linuxarm@huawei.com>
-CC: <justin.he@arm.com>, <jianyong.wu@arm.com>
-Subject: Re: [PATCH v5 03/18] ACPI: processor: Register deferred CPUs from
- acpi_processor_get_info()
-Message-ID: <20240416145917.00004a7b@huawei.com>
-In-Reply-To: <20240412143719.11398-4-Jonathan.Cameron@huawei.com>
-References: <20240412143719.11398-1-Jonathan.Cameron@huawei.com>
-	<20240412143719.11398-4-Jonathan.Cameron@huawei.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1713276896; c=relaxed/simple;
+	bh=ykb7W4k1sAQJ+bAaSvIxWtB7tBpsRi36G1ivw8abnYc=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=giJA4Q/6iAn2uKSw7xdI624y4cfvJBeIQZ5lBILy3V+d5fpdVS3vNdh/lbwrhwcz1utKL7CCqgvgQizwgwHYsMUpgOaQpCaOoQmQFi3zCogFQUVpUAjdB7o8v7qYpWTbXAQN4t+lyFA38vNJvarGZ85OMZ4egfhRrY5WgP0GP84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=PhuHidJG; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=DwJzTEWO; arc=none smtp.client-ip=64.147.123.155
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfhigh.west.internal (Postfix) with ESMTP id CF4801800101;
+	Tue, 16 Apr 2024 10:14:50 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Tue, 16 Apr 2024 10:14:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1713276890; x=1713363290; bh=KPzLCaHC/p
+	j+3rFajrw0i7S4P/VVkta4Rje0fImd0yQ=; b=PhuHidJG8VxEaleWcSvfT8RrHw
+	TcYpy++V74uv3QKWGOlpgpgf+SyQ5ZMUDqJLv+ieUMsuc8Pmtiq++dNE663y9Uad
+	LvrAN0HOtT2qs+A/f4aq+nVonFlt/VwdOkU2nanJjNa82ewBH8oB5aLebg7I9L9Q
+	MQ35Lsqa1E3jBtPSDHEtJJYSzPk0kEH2oNsZ+DH7YzOAgG77pfREDjIKDZK0OlU1
+	ykJdeMBcVae2QG9+ALYmi6W5QL9dT2t1oSscxO7e/VEwRsVmEZ0C2f4Zbh9vjVw+
+	W7IpXT1f6uaR8m9elp7Eg6QbzlD/0IGMBHFJTDDTj/YgkNWa9g2+6a+UOAVg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1713276890; x=1713363290; bh=KPzLCaHC/pj+3rFajrw0i7S4P/VV
+	kta4Rje0fImd0yQ=; b=DwJzTEWOX2Hls51YomwtsnXC6I5vZWVj1oEjCmZqd/w4
+	/BM9dctAypC3VAh4Oz4mY5kcs6zSW8fe8cAZRgBLT55bjA2fqIDMNe6WGNO2KRuZ
+	Jjr3ZtAKKxCedEfxYPU1bazquw118noVHXdS6lyH410qPjgoLUJXE2hO07NqjAt5
+	8Hcs44ULBFzJak5+kCEL52Xk8RDeQY0GcG2jRLdtWqv3OJ6v8QIdpm0CMDrt/K9C
+	lY5NoW7RWgLaOzRd+eqlsZnc4LwI2mzdxNykJ4pUQ57VU7MJEG9gzAjvcCM/7O3x
+	+JWWrL+wX7/DQoBETaXJDPd5ndEqTBtJtmv+W+8xsA==
+X-ME-Sender: <xms:2YceZu_9FAGe-i--NPJBjTauDg4-xAMAVlOrBJWlSnTxBehLXUMBrw>
+    <xme:2YceZuv0XvSwYl4vAievAi7JTw5_AaEV7n6fXPf18ycEShQkYrYU6dPt2DAOsblIh
+    ToZh9ydfmQU-UcyyMw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudejiedgudefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepjefgfedvgeejvdefudeuhfdtkeekvdeutefhuedthfegheelhefgleegkeeg
+    fedvnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpledqrhgtuddrhhhofienucevlh
+    hushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghr
+    nhgusgdruggv
+X-ME-Proxy: <xmx:2YceZkDCfeab0TH3Rh4rtEyIiKkxkyFwGMeh0KhkrA8Z-8I_Zrv9Lg>
+    <xmx:2YceZmeh9PfcIdkLlyAu37QlSmb6WwmJGzajGP1ht8Sm6W1ISJE9JQ>
+    <xmx:2YceZjMHY7VsWd--NWcw8lykhNRgNv1dGhRV0DRqXmRT61crZRn5tw>
+    <xmx:2YceZgl_jJEJ48Yw1zTDgQy343q-1jmB_Ot2bgzrRZnmalhMKV2YPQ>
+    <xmx:2oceZkHMtcdYQbblFmKJRiK8IHeY1PlJ_So2eHwdnopd4LyDrH0TSmH7>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 4BA4BB6008D; Tue, 16 Apr 2024 10:14:49 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-379-gabd37849b7-fm-20240408.001-gabd37849
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+Message-Id: <53d194db-c7d4-4026-9fbb-3b41de545849@app.fastmail.com>
+In-Reply-To: <c82af143-b620-44d9-8647-f52096b851ab@redhat.com>
+References: 
+ <CANiq72mQh3O9S4umbvrKBgMMorty48UMwS01U22FR0mRyd3cyQ@mail.gmail.com>
+ <c82af143-b620-44d9-8647-f52096b851ab@redhat.com>
+Date: Tue, 16 Apr 2024 16:14:29 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "David Hildenbrand" <david@redhat.com>,
+ "Miguel Ojeda" <miguel.ojeda.sandonis@gmail.com>,
+ "Huacai Chen" <chenhuacai@kernel.org>, "WANG Xuerui" <kernel@xen0n.name>
+Cc: "Andrew Morton" <akpm@linux-foundation.org>,
+ "Ryan Roberts" <ryan.roberts@arm.com>,
+ Linux-Arch <linux-arch@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>,
+ linux-kernel <linux-kernel@vger.kernel.org>, loongarch@lists.linux.dev,
+ clang-built-linux <llvm@lists.linux.dev>
+Subject: Re: ./include/asm-generic/tlb.h:629:10: error: parameter 'ptep' set but not
+ used
+Content-Type: text/plain
 
-On Fri, 12 Apr 2024 15:37:04 +0100
-Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
+On Tue, Apr 16, 2024, at 15:51, David Hildenbrand wrote:
+> On 16.04.24 12:26, Miguel Ojeda wrote:
+>> Hi David, Arnd, LoongArch,
+>> 
+>> In a linux-next defconfig LLVM=1 build today I got:
+>> 
+>>      ./include/asm-generic/tlb.h:629:10: error: parameter 'ptep' set
+>> but not used [-Werror,-Wunused-but-set-parameter]
+>>        629 |                 pte_t *ptep, unsigned int nr, unsigned long address)
+>>            |                        ^
+>> 
+>> Indeed, in loongarch, `__tlb_remove_tlb_entry` does not do anything.
+>> This seems the same that Arnd reported for arm64:
+>> 
+>>      https://lore.kernel.org/all/20240221154549.2026073-1-arnd@kernel.org/
+>> 
+>> So perhaps the loongarch's one should also be changed into an static inline?
+>
+> 4d5bf0b6183f79ea361dd506365d2a471270735c is already part of v6.9-rc1. How come
+> we see that only now on linux-next?
 
-> From: James Morse <james.morse@arm.com>
-> 
-> The arm64 specific arch_register_cpu() call may defer CPU registration
-> until the ACPI interpreter is available and the _STA method can
-> be evaluated.
-> 
-> If this occurs, then a second attempt is made in
-> acpi_processor_get_info(). Note that the arm64 specific call has
-> not yet been added so for now this will never be successfully
-> called.
-> 
-> Systems can still be booted with 'acpi=off', or not include an
-> ACPI description at all as in these cases arch_register_cpu()
-> will not have deferred registration when first called.
-> 
-> This moves the CPU register logic back to a subsys_initcall(),
-> while the memory nodes will have been registered earlier.
-> Note this is where the call was prior to the cleanup series so
-> there should be no side effects of moving it back again for this
-> specific case.
-> 
-> [PATCH 00/21] Initial cleanups for vCPU HP.
-> https://lore.kernel.org/all/ZVyz%2FVe5pPu8AWoA@shell.armlinux.org.uk/
-> 
-> e.g. 5b95f94c3b9f ("x86/topology: Switch over to GENERIC_CPU_DEVICES")
-> 
-> Signed-off-by: James Morse <james.morse@arm.com>
-> Reviewed-by: Gavin Shan <gshan@redhat.com>
-> Tested-by: Miguel Luis <miguel.luis@oracle.com>
-> Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
-> Tested-by: Jianyong Wu <jianyong.wu@arm.com>
-> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> Co-developed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Signed-off-by: Joanthan Cameron <Jonathan.Cameron@huawei.com>
-> ---
-> v5: Update commit message to make it clear this is moving the
->     init back to where it was until very recently.
-> 
->     No longer change the condition in the earlier registration point
->     as that will be handled by the arm64 registration routine
->     deferring until called again here.
-> ---
->  drivers/acpi/acpi_processor.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
-> index 93e029403d05..c78398cdd060 100644
-> --- a/drivers/acpi/acpi_processor.c
-> +++ b/drivers/acpi/acpi_processor.c
-> @@ -317,6 +317,18 @@ static int acpi_processor_get_info(struct acpi_device *device)
+Andrew merged my patch to enable -Wextra yesterday, and it appears
+that this one fell through the cracks with my testing, either I
+missed the combination of loongarch with clang, or I last tested
+it before your patches got merged.
+
+> I assume we should see the same on upstream Linux with LLVM=1, correct?
+
+On upstream, it only shows up with 'make W=1'.
+
+> If so, we should likely just drop that completely and rely on the 
+> asm-generic one:
+>
+> diff --git a/arch/loongarch/include/asm/tlb.h 
+> b/arch/loongarch/include/asm/tlb.h
+> index da7a3b5b9374a..e071f5e9e8580 100644
+> --- a/arch/loongarch/include/asm/tlb.h
+> +++ b/arch/loongarch/include/asm/tlb.h
+> @@ -132,8 +132,6 @@ static __always_inline void invtlb_all(u32 op, u32 
+> info, u64 addr)
+>                  );
+>   }
 >  
->  	c = &per_cpu(cpu_devices, pr->id);
->  	ACPI_COMPANION_SET(&c->dev, device);
-> +	/*
-> +	 * Register CPUs that are present. get_cpu_device() is used to skip
-> +	 * duplicate CPU descriptions from firmware.
-> +	 */
-> +	if (!invalid_logical_cpuid(pr->id) && cpu_present(pr->id) &&
-> +	    !get_cpu_device(pr->id)) {
+> -#define __tlb_remove_tlb_entry(tlb, ptep, address) do { } while (0)
+> -
+>   static void tlb_flush(struct mmu_gather *tlb);
 
-Just a quick note to call out that this case of 'duplicate' firmware
-description needs an updated comment.  Now we are not deferring
-registration on x86 this is detecting that arch_register_cpu()
-has already been successfully called and we should not do it again.
+Yes, this looks like the best solution, and I can confirm that this
+addresses the warning on linux-next.
 
-I've added rather more detailed comments enumerating of the paths we
-can take to hit acpi_processor_hotadd_init() in the v6 series
-(tests ongoing)
-
-Jonathan
-
-
-> +		int ret = arch_register_cpu(pr->id);
-> +
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
->  	/*
->  	 *  Extra Processor objects may be enumerated on MP systems with
->  	 *  less than the max # of CPUs. They should be ignored _iff
-
+Tested-by: Arnd Bergmann <arnd@arndb.de>
 
