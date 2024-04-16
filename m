@@ -1,159 +1,104 @@
-Return-Path: <linux-arch+bounces-3720-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3721-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99F218A6739
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Apr 2024 11:36:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D5678A6857
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Apr 2024 12:28:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CB6941C21527
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Apr 2024 09:36:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 09E94282F75
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Apr 2024 10:28:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9078385948;
-	Tue, 16 Apr 2024 09:36:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 212AF127E04;
+	Tue, 16 Apr 2024 10:27:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lY0PfPTE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mj855mQD"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5E7D2745D;
-	Tue, 16 Apr 2024 09:36:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D06BE1272BA;
+	Tue, 16 Apr 2024 10:27:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713260186; cv=none; b=Nax/Ub7MFbR0l3URmcZs+m/NaMA7gLK21ELohNzgmvzn/8gRTlMCxFPU4Mi7wVLQ71SOCPkcXmURlQT9AGSMZB0Ytt1DySEJOiQe/cNN7hSuX0+tl2Qx7NT+823M1rLWuK4CXpykF/3914SDQhGUwr5MUi5J4KSzvyFdSqIgInU=
+	t=1713263277; cv=none; b=qanfGdlgEriu5vBv3jaxLmGzGqehuYKm1r+Kpy63IMv5VG4Oqc25bFBTxbpjHcbrilcpoINf1uRRsuDDaIHfooKdJMYPwhXPB3OkNEWJyGveDCdRiiXO6bfUj8XUffDcg0x2lCrgLYWDe5l+apU1PlZ7vsgyGK/e6zjMR2MSWRg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713260186; c=relaxed/simple;
-	bh=l9FdnEEzXGJIzRW8tkjLLu40rBvwdGZ+3HuMYVnHV0c=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=gi/2OuQYBCmV05ePn4cAIInDvNV+FWJzm43X/JfjHHSt/wl0wYZkWYfUPbpNNPCsfsR5RymN8YXKWfyYiphwj+YjObyNSRU5JJfCbr46GytXDlO4La/4lkn7TUr22PC+jISErc0cE4yJ/wXfsg1IQIq2V+rjB4fOO8yUIvs/Zl0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lY0PfPTE; arc=none smtp.client-ip=209.85.167.46
+	s=arc-20240116; t=1713263277; c=relaxed/simple;
+	bh=MLsdr7kD3zzTJKBErjYyRBFMSvmh3TMK8QeAykYBK+I=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=q58BC4AlkQdUqwbJNAblpCud9U0MKroe96GsMlt0PUcbnp7e4PLtedw0XgMyLNCniFL6gs0TfIgU4V+0Ih/LUOeWSbQy1eXEY9sZfHjYRBmb3cjq9S+r73+yRykwuhE4fz5vFobyRs3QZmKMQqq7dCR7mI4fv0ByGucoEhPI49s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mj855mQD; arc=none smtp.client-ip=209.85.216.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5176f217b7bso7188508e87.0;
-        Tue, 16 Apr 2024 02:36:24 -0700 (PDT)
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2a4df5d83c7so2737688a91.0;
+        Tue, 16 Apr 2024 03:27:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713260183; x=1713864983; darn=vger.kernel.org;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DOrASS+GeLuk5Z7lZoVL6cbT4rY+jK9WGpd682BgxR8=;
-        b=lY0PfPTEYWx3kcy2BvEf2g5YMEzaGgaTXXscB3duP5LLocYwbs/wRAqP1+deCYH9pR
-         +zL2SxHo3E6ldkUb14EQ62dYeTMeR/P5l69Gjn2zuyJqCIMMjNf8LPfVoFnNBVYpZO0d
-         MnJ523yzptpiM2/ZTkl2bScF+xf7FNF9ypC1GUaXqzGjV7kQJeglZAHB01M255jeXuAY
-         yYZRlGRKIuxGLL9QujbL9J0t2zVTYPcaUr2lSoonopqw7VUMfemUuP/gvhLOWbQdHEEZ
-         rLvws4WBTn5Z5p3tmgcUCc4KJsCF0mNS+COS885bkk3ZPYn0j0y3NoxSdyN1mmobqNAv
-         0ppA==
+        d=gmail.com; s=20230601; t=1713263275; x=1713868075; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=/cIoa81DXO6MS6g+ZMtYagosHO4PwrAmNMYS0AM8V8c=;
+        b=Mj855mQDhIpyr9qzSrgfhcQkGUnW6G7u1do9KM1mJ9TXReLQ8pnq9tJHVU/RFnPz6N
+         n8MfOThWfabGg5lHUCV4OWiD1nvkPdQg1y55kUA/Z4RNNDEUDoVT9aX4Nr9Fns4lDSYL
+         I3ITJpkYyQate+8v/BvX0Ap7TVrgh1TGle5tB3vyiSLAwaZnaEfprXIUSbsA61UH8V2d
+         7aHmRUataD62M4jeGelBYPHtZzOBvnzYABi4gVEqiJcaJg5F+AlsEP0AuNBSKDyEmy3e
+         bBmj+4RSU22IkNSowC1BOlVmMNoh5w65NQkQ7KEPGccyq+SyrKuyt9SSvgtQTy2jwMgV
+         ASmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713260183; x=1713864983;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DOrASS+GeLuk5Z7lZoVL6cbT4rY+jK9WGpd682BgxR8=;
-        b=GUK604r5I4/tA4CSSc4vKPk+L1QZ19ghDuz9zjMdR24Bp03H/pg6nQKv8ger6/phhE
-         7TDoD+BSzoOkX8NQ2GyG9T5mchLKb5yC9w1jGVsPFFifOx+UAYABXKbRmVcvzYfPUnMw
-         GMvA/5Zjr2PDkV1FDH2Cm/GZi8zCoV9BnJ5498wD96e060q02hKxucJVGr50rL8piZ6g
-         1oQttefWlUIjrz85GGt6jZFrp+BFYquy0z79pbPdJVlb3wCruNRQicpQqkCVGRp7aRmI
-         suJuV+fuRxczzlrb46ifpovXnhmZUTgF6G1fsQcMJVmDmOC61XGTnlSMiJCgLUbf2RET
-         RCXQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWNJR3QS16A+E0K8Og7D5PFU1MuE5YpVw7LVXgTX4cDPvfPo3MuM/X+Cp2OwhLHyQT1IORXfvslO7weWU8lzL6zxG6dvApMGiQMiLN1W+KsN+i2ShMrzxBdecXYgMlmpGAr+VHlSOZ+Nb2zV3sg0IjX1t2UJC16fUYDWeTa6MaFwBDOjc+gn/07mk2q3CE5e/KPdKp1+7E4j93WULIfvrsYKLdGhxvhZK7awVKwZvyL0ToidOKjHdRAgVE3AYzmk0U=
-X-Gm-Message-State: AOJu0YzJ/65ENuD+3nZxwQf/hFuV14ifrxVPvwnxG9NjZ/rqCi/0c6Dz
-	WR9sXYMJp85WcmX26ygXPZe2Hlu+91+oW6n3yUboaRO/QdxTQd3O
-X-Google-Smtp-Source: AGHT+IHJL+kGebuWf568L4j1/19JnbEd5orWvCbxsHgvPeVxrnDNkney9hr1xgtB5xtFbL8mR9qM0Q==
-X-Received: by 2002:ac2:5f87:0:b0:516:cdfa:1802 with SMTP id r7-20020ac25f87000000b00516cdfa1802mr9934425lfe.63.1713260182555;
-        Tue, 16 Apr 2024 02:36:22 -0700 (PDT)
-Received: from smtpclient.apple ([132.68.46.107])
-        by smtp.gmail.com with ESMTPSA id l1-20020a17090615c100b00a524e3f2f9esm4249223ejd.98.2024.04.16.02.36.19
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 16 Apr 2024 02:36:22 -0700 (PDT)
-Content-Type: text/plain;
-	charset=utf-8
+        d=1e100.net; s=20230601; t=1713263275; x=1713868075;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/cIoa81DXO6MS6g+ZMtYagosHO4PwrAmNMYS0AM8V8c=;
+        b=IddMiZInCKHC0fL0alL33xJa5utZZmCxO2qV1k5TQR6EMZNyMgfYzn8L9Ti3QRTArM
+         22Eee2mI3UnHcZsF8NI66Y8zg3L1qUP2OCauBtOQIfTXSM1fP78YnjoZmGudo4GFu2TW
+         PcjsE1a9L/C6bTIDsoNy8SBH5oG4mp/vEdtA+Ecn+/cCSWydcltbLj+4cKJHsA8BNkST
+         uWXQ7CrQi1KFm0L1iS6DlwfpDrnZx3hQ0SOOV9vFDHcmrGdW+JcjWEFpGdt/cYlH8ERf
+         4pBCDy0zjYBeJ84/Es3734/o6rouhEfVqpompfq1+YJgamSjFDF7NLS8Xvmeg3+I0i/6
+         /qlg==
+X-Forwarded-Encrypted: i=1; AJvYcCXIl6EatsmSNFo6AcokWKdw2KENzfDG6btxrbTtJ/CFtQtZ+ci85tckwi1GZQi2SYdtJ7J5TpZ8oKTM+7LFJ29stVKwMyGCffGZUqvckVhtig/A0SGbvycp/sejEm1UkRlFNlft8HXWoQ==
+X-Gm-Message-State: AOJu0YxFe0c8IzDQPwnSO8NF0zZrSLCFwne7G29nQzlbqYHBbMtK8t7j
+	kukmc4klreU4KKPZu5OCdcz6xdsj7Bgg9MBc/k70+LIJwzeDOaoJkRmEXJfSvzAy9dhCY2E8uLE
+	XcCUBEpEyi38RStQEAeDc6JtBHC0=
+X-Google-Smtp-Source: AGHT+IEQCW1Umn5/jxfj5DsIuaZ2+exXuJmvDw88NBcTFIdc6HQg6SZiheR6MqEF6Ri8xe0SbEpGiX0n8YxTyu0/8v4=
+X-Received: by 2002:a17:90a:8b05:b0:2a7:40ba:48bc with SMTP id
+ y5-20020a17090a8b0500b002a740ba48bcmr10112056pjn.6.1713263275084; Tue, 16 Apr
+ 2024 03:27:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3774.500.171.1.1\))
-Subject: Re: [RFC PATCH 3/7] module: prepare to handle ROX allocations for
- text
-From: Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <20240411160526.2093408-4-rppt@kernel.org>
-Date: Tue, 16 Apr 2024 12:36:08 +0300
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>,
- Andy Lutomirski <luto@kernel.org>,
- Arnd Bergmann <arnd@arndb.de>,
- Catalin Marinas <catalin.marinas@arm.com>,
- Christoph Hellwig <hch@infradead.org>,
- Helge Deller <deller@gmx.de>,
- Lorenzo Stoakes <lstoakes@gmail.com>,
- Luis Chamberlain <mcgrof@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Michael Ellerman <mpe@ellerman.id.au>,
- Palmer Dabbelt <palmer@dabbelt.com>,
- Peter Zijlstra <peterz@infradead.org>,
- Russell King <linux@armlinux.org.uk>,
- Song Liu <song@kernel.org>,
- Steven Rostedt <rostedt@goodmis.org>,
- Thomas Gleixner <tglx@linutronix.de>,
- Uladzislau Rezki <urezki@gmail.com>,
- Will Deacon <will@kernel.org>,
- bpf@vger.kernel.org,
- linux-arch@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org,
- "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
- linux-modules@vger.kernel.org,
- linux-parisc@vger.kernel.org,
- linux-riscv@lists.infradead.org,
- linux-trace-kernel@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org,
- the arch/x86 maintainers <x86@kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <0C4B9C1A-97DE-4798-8256-158369AF42A4@gmail.com>
-References: <20240411160526.2093408-1-rppt@kernel.org>
- <20240411160526.2093408-4-rppt@kernel.org>
-To: Mike Rapoport <rppt@kernel.org>
-X-Mailer: Apple Mail (2.3774.500.171.1.1)
+MIME-Version: 1.0
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Tue, 16 Apr 2024 12:26:57 +0200
+Message-ID: <CANiq72mQh3O9S4umbvrKBgMMorty48UMwS01U22FR0mRyd3cyQ@mail.gmail.com>
+Subject: ./include/asm-generic/tlb.h:629:10: error: parameter 'ptep' set but
+ not used
+To: david@redhat.com, Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>, 
+	WANG Xuerui <kernel@xen0n.name>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Ryan Roberts <ryan.roberts@arm.com>, 
+	linux-arch <linux-arch@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>, 
+	linux-kernel <linux-kernel@vger.kernel.org>, loongarch@lists.linux.dev, 
+	clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 
+Hi David, Arnd, LoongArch,
 
+In a linux-next defconfig LLVM=1 build today I got:
 
-> On 11 Apr 2024, at 19:05, Mike Rapoport <rppt@kernel.org> wrote:
->=20
-> @@ -2440,7 +2479,24 @@ static int post_relocation(struct module *mod, =
-const struct load_info *info)
-> 	add_kallsyms(mod, info);
->=20
-> 	/* Arch-specific module finalizing. */
-> -	return module_finalize(info->hdr, info->sechdrs, mod);
-> +	ret =3D module_finalize(info->hdr, info->sechdrs, mod);
-> +	if (ret)
-> +		return ret;
-> +
-> +	for_each_mod_mem_type(type) {
-> +		struct module_memory *mem =3D &mod->mem[type];
-> +
-> +		if (mem->is_rox) {
-> +			if (!execmem_update_copy(mem->base, =
-mem->rw_copy,
-> +						 mem->size))
-> +				return -ENOMEM;
-> +
-> +			vfree(mem->rw_copy);
-> +			mem->rw_copy =3D NULL;
-> +		}
-> +	}
-> +
-> +	return 0;
-> }
+    ./include/asm-generic/tlb.h:629:10: error: parameter 'ptep' set
+but not used [-Werror,-Wunused-but-set-parameter]
+      629 |                 pte_t *ptep, unsigned int nr, unsigned long address)
+          |                        ^
 
-I might be missing something, but it seems a bit racy.
+Indeed, in loongarch, `__tlb_remove_tlb_entry` does not do anything.
+This seems the same that Arnd reported for arm64:
 
-IIUC, module_finalize() calls alternatives_smp_module_add(). At this
-point, since you don=E2=80=99t hold the text_mutex, some might do =
-text_poke(),
-e.g., by enabling/disabling static-key, and the update would be
-overwritten. No?=
+    https://lore.kernel.org/all/20240221154549.2026073-1-arnd@kernel.org/
+
+So perhaps the loongarch's one should also be changed into an static inline?
+
+I hope that helps!
+
+Cheers,
+Miguel
 
