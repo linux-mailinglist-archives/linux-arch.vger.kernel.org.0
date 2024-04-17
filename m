@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-3763-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3764-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68B858A86E7
-	for <lists+linux-arch@lfdr.de>; Wed, 17 Apr 2024 17:04:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E65E8A870E
+	for <lists+linux-arch@lfdr.de>; Wed, 17 Apr 2024 17:08:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC4DD1F226A4
-	for <lists+linux-arch@lfdr.de>; Wed, 17 Apr 2024 15:04:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C8DF1F22997
+	for <lists+linux-arch@lfdr.de>; Wed, 17 Apr 2024 15:08:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D797F146A84;
-	Wed, 17 Apr 2024 15:03:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B4E2146D54;
+	Wed, 17 Apr 2024 15:08:26 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13B901465AF;
-	Wed, 17 Apr 2024 15:03:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEA201422B6;
+	Wed, 17 Apr 2024 15:08:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713366239; cv=none; b=hvVh/8I0WGvvBUYiegT3GSC0M15xm3oisVQt0hCkSuUEZbAmLcMGyaM9x28HvQCGqzofnWHOYAGY7Pa93E+4WYkQjN+11a5r3kfmrO007e68OBe6Yf8ixAQcvr1Nmsw/PyFf9LmmaMUtjT3lGxpdBu0257xTe40unbRssIvvyhc=
+	t=1713366506; cv=none; b=YWWpwSQqkykzVLArrWXlSu6wilGLm9NRIWrhY6oxFAJotaMUggSL3Z8kLG5U0SiYbRR9tz7PhVONgBueIYwekE/62flosUCEtmYIi1V5hLsBBvMNhH9n7MxkidxpM5xjPG8/m35Fx4c5uWHiXSoe74TTpgOtV9fvtexaVUnszPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713366239; c=relaxed/simple;
-	bh=pt7o95x34rcwc39W27zAEKxVJVWFD/jgEs0kzsvtBRM=;
+	s=arc-20240116; t=1713366506; c=relaxed/simple;
+	bh=HqB8OvnMPHquKHqjaWqykqAsPhGspLSoZS5hbWSpSPY=;
 	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=VgaTG9EL6j8iE2wMCLRzvqVtyZcY8lklE6FJlKTnXX5RUelRzB8JiJpkp22UsKgSAmwbhdZu+xsQhC+oHmt9Iwq7Unr+oZcMiEW1Vpu+gGO5R9icPUG8oKKDYHr0hs9fWsgcyG8zZEpKi0yIRM/c0WzeOTaX5ppV2ezbf38A0l0=
+	 Content-Type:MIME-Version; b=q3KfCWlThLk5M+wDR1MYUokqMWVqQbpPzj2oPv2zwPfSVE6+DsbYla6Bj0jouseuwgOWgclUO3W+bfg8r5nx2S/WVkvdNkCM7idhxUORB60iDKNKbLtZF/FxTxyizp6Q7sNza4W7MRfjAHH6C/iPTuBBNtk9Y8zcxO312t2pRDo=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VKPJH6PZbz6JBJf;
-	Wed, 17 Apr 2024 23:01:51 +0800 (CST)
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VKPL40LLgz6D93L;
+	Wed, 17 Apr 2024 23:03:24 +0800 (CST)
 Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 071AD140B54;
-	Wed, 17 Apr 2024 23:03:52 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id C1736140B63;
+	Wed, 17 Apr 2024 23:08:21 +0800 (CST)
 Received: from lhrpeml500001.china.huawei.com (7.191.163.213) by
  lhrpeml500005.china.huawei.com (7.191.163.240) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Wed, 17 Apr 2024 16:03:51 +0100
+ 15.1.2507.35; Wed, 17 Apr 2024 16:08:21 +0100
 Received: from lhrpeml500001.china.huawei.com ([7.191.163.213]) by
  lhrpeml500001.china.huawei.com ([7.191.163.213]) with mapi id 15.01.2507.035;
- Wed, 17 Apr 2024 16:03:51 +0100
+ Wed, 17 Apr 2024 16:08:21 +0100
 From: Salil Mehta <salil.mehta@huawei.com>
 To: Jonathan Cameron <jonathan.cameron@huawei.com>, Thomas Gleixner
 	<tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>,
@@ -61,16 +61,16 @@ CC: Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, "Dave
  Hansen" <dave.hansen@linux.intel.com>, Linuxarm <linuxarm@huawei.com>,
 	"justin.he@arm.com" <justin.he@arm.com>, "jianyong.wu@arm.com"
 	<jianyong.wu@arm.com>
-Subject: RE: [PATCH v6 06/16] ACPI: processor: Register deferred CPUs from
- acpi_processor_get_info()
-Thread-Topic: [PATCH v6 06/16] ACPI: processor: Register deferred CPUs from
- acpi_processor_get_info()
-Thread-Index: AQHakMpDOTAceXbil06hMEPbVPFoS7Fsjtaw
-Date: Wed, 17 Apr 2024 15:03:51 +0000
-Message-ID: <22ace9b108ee488eb017f5b3e8facb8d@huawei.com>
+Subject: RE: [PATCH v6 04/16] ACPI: processor: Move checks and availability of
+ acpi_processor earlier
+Thread-Topic: [PATCH v6 04/16] ACPI: processor: Move checks and availability
+ of acpi_processor earlier
+Thread-Index: AQHakMoeuXZIO/2VFU+Xa55KmvuTN7Fsj+bw
+Date: Wed, 17 Apr 2024 15:08:21 +0000
+Message-ID: <32aaee486f984859af713138e460075f@huawei.com>
 References: <20240417131909.7925-1-Jonathan.Cameron@huawei.com>
- <20240417131909.7925-7-Jonathan.Cameron@huawei.com>
-In-Reply-To: <20240417131909.7925-7-Jonathan.Cameron@huawei.com>
+ <20240417131909.7925-5-Jonathan.Cameron@huawei.com>
+In-Reply-To: <20240417131909.7925-5-Jonathan.Cameron@huawei.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach:
@@ -87,89 +87,203 @@ MIME-Version: 1.0
 >  From: Jonathan Cameron <jonathan.cameron@huawei.com>
 >  Sent: Wednesday, April 17, 2024 2:19 PM
 > =20
->  From: James Morse <james.morse@arm.com>
+>  Make the per_cpu(processors, cpu) entries available earlier so that they=
+ are
+>  available in arch_register_cpu() as ARM64 will need access to the
+>  acpi_handle to distinguish between acpi_processor_add() and earlier
+>  registration attempts (which will fail as _STA cannot be checked).
 > =20
->  The arm64 specific arch_register_cpu() call may defer CPU registration u=
-ntil
->  the ACPI interpreter is available and the _STA method can be evaluated.
+>  Reorder the remove flow to clear this per_cpu() after
+>  arch_unregister_cpu() has completed, allowing it to be used in there as
+>  well.
 > =20
->  If this occurs, then a second attempt is made in acpi_processor_get_info=
-().
->  Note that the arm64 specific call has not yet been added so for now this=
- will
->  be called for the original hotplug case.
+>  Note that on x86 for the CPU hotplug case, the pr->id prior to
+>  acpi_map_cpu() may be invalid. Thus the per_cpu() structures must be
+>  initialized after that call or after checking the ID is valid (not hotpl=
+ug path).
 > =20
->  For architectures that do not defer until the ACPI Processor driver load=
-s
->  (e.g. x86), for initially present CPUs there will already be a CPU devic=
-e. If
->  present do not try to register again.
-> =20
->  Systems can still be booted with 'acpi=3Doff', or not include an ACPI
->  description at all as in these cases arch_register_cpu() will not have
->  deferred registration when first called.
-> =20
->  This moves the CPU register logic back to a subsys_initcall(), while the
->  memory nodes will have been registered earlier.
->  Note this is where the call was prior to the cleanup series so there sho=
-uld be
->  no side effects of moving it back again for this specific case.
-> =20
->  [PATCH 00/21] Initial cleanups for vCPU HP.
->  https://lore.kernel.org/all/ZVyz%2FVe5pPu8AWoA@shell.armlinux.org.uk/
-> =20
->  e.g. 5b95f94c3b9f ("x86/topology: Switch over to GENERIC_CPU_DEVICES")
-> =20
->  Signed-off-by: James Morse <james.morse@arm.com>
->  Reviewed-by: Gavin Shan <gshan@redhat.com>
->  Tested-by: Miguel Luis <miguel.luis@oracle.com>
->  Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
->  Tested-by: Jianyong Wu <jianyong.wu@arm.com>
->  Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
->  Co-developed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
->  Signed-off-by: Joanthan Cameron <Jonathan.Cameron@huawei.com>
+>  Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 >  ---
->  v6: Squash the two paths for conventional CPU Hotplug and arm64
->      vCPU HP.
->  v5: Update commit message to make it clear this is moving the
->      init back to where it was until very recently.
-> =20
->      No longer change the condition in the earlier registration point
->      as that will be handled by the arm64 registration routine
->      deferring until called again here.
+>  v6: As per discussion in v5 thread, don't use the cpu->dev and
+>      make this data available earlier by moving the assignment checks
+>      int acpi_processor_get_info().
 >  ---
->   drivers/acpi/acpi_processor.c | 12 +++++++++++-
->   1 file changed, 11 insertions(+), 1 deletion(-)
+>   drivers/acpi/acpi_processor.c | 79 +++++++++++++++++++++--------------
+>   1 file changed, 47 insertions(+), 32 deletions(-)
 > =20
 >  diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor=
 .c
->  index 7ecb13775d7f..0cac77961020 100644
+>  index ba0a6f0ac841..2c164451ab53 100644
 >  --- a/drivers/acpi/acpi_processor.c
 >  +++ b/drivers/acpi/acpi_processor.c
->  @@ -356,8 +356,18 @@ static int acpi_processor_get_info(struct
+>  @@ -184,7 +184,35 @@ static void __init acpi_pcc_cpufreq_init(void) {}
+> =20
+>   /* Initialization */
+>   #ifdef CONFIG_ACPI_HOTPLUG_CPU
+>  -static int acpi_processor_hotadd_init(struct acpi_processor *pr)
+>  +static DEFINE_PER_CPU(void *, processor_device_array);
+>  +
+>  +static void acpi_processor_set_per_cpu(struct acpi_processor *pr,
+>  +				       struct acpi_device *device)
+>  +{
+>  +	BUG_ON(pr->id >=3D nr_cpu_ids);
+>  +	/*
+>  +	 * Buggy BIOS check.
+>  +	 * ACPI id of processors can be reported wrongly by the BIOS.
+>  +	 * Don't trust it blindly
+>  +	 */
+>  +	if (per_cpu(processor_device_array, pr->id) !=3D NULL &&
+>  +	    per_cpu(processor_device_array, pr->id) !=3D device) {
+>  +		dev_warn(&device->dev,
+>  +			 "BIOS reported wrong ACPI id %d for the  processor\n",
+>  +			 pr->id);
+>  +		/* Give up, but do not abort the namespace scan. */
+>  +		return;
+>  +	}
+>  +	/*
+>  +	 * processor_device_array is not cleared on errors to allow buggy  BIO=
+S
+>  +	 * checks.
+>  +	 */
+>  +	per_cpu(processor_device_array, pr->id) =3D device;
+>  +	per_cpu(processors, pr->id) =3D pr;
+>  +}
+>  +
+>  +static int acpi_processor_hotadd_init(struct acpi_processor *pr,
+>  +				      struct acpi_device *device)
+>   {
+>   	int ret;
+> =20
+>  @@ -198,6 +226,8 @@ static int acpi_processor_hotadd_init(struct
+>  acpi_processor *pr)
+>   	if (ret)
+>   		goto out;
+> =20
+>  +	acpi_processor_set_per_cpu(pr, device);
+>  +
+>   	ret =3D arch_register_cpu(pr->id);
+>   	if (ret) {
+>   		acpi_unmap_cpu(pr->id);
+>  @@ -217,7 +247,8 @@ static int acpi_processor_hotadd_init(struct
+>  acpi_processor *pr)
+>   	return ret;
+>   }
+>   #else
+>  -static inline int acpi_processor_hotadd_init(struct acpi_processor *pr)
+>  +static inline int acpi_processor_hotadd_init(struct acpi_processor *pr,
+>  +					     struct acpi_device *device)
+>   {
+>   	return -ENODEV;
+>   }
+>  @@ -232,6 +263,7 @@ static int acpi_processor_get_info(struct acpi_devic=
+e
+>  *device)
+>   	acpi_status status =3D AE_OK;
+>   	static int cpu0_initialized;
+>   	unsigned long long value;
+>  +	int ret;
+> =20
+>   	acpi_processor_errata();
+> =20
+>  @@ -316,10 +348,12 @@ static int acpi_processor_get_info(struct
 >  acpi_device *device)
->   	 *
->   	 *  NOTE: Even if the processor has a cpuid, it may not be present
 >   	 *  because cpuid <-> apicid mapping is persistent now.
->  +	 *
->  +	 *  Note this allows 3 flows, it is up to the arch_register_cpu()
->  +	 *  call to reject any that are not supported on a given architecture.
->  +	 *  A) CPU becomes present.
->  +	 *  B) Previously invalid logical CPU ID (Same as becoming present)
->  +	 *  C) CPU already present and now being enabled (and wasn't
->  registered
->  +	 *     early on an arch that doesn't defer to here)
 >   	 */
->  -	if (invalid_logical_cpuid(pr->id) || !cpu_present(pr->id)) {
->  +	if ((!invalid_logical_cpuid(pr->id) && cpu_present(pr->id) &&
->  +	     !get_cpu_device(pr->id)) ||
->  +	    invalid_logical_cpuid(pr->id) ||
->  +	    !cpu_present(pr->id)) {
+>   	if (invalid_logical_cpuid(pr->id) || !cpu_present(pr->id)) {
+>  -		int ret =3D acpi_processor_hotadd_init(pr);
+>  +		ret =3D acpi_processor_hotadd_init(pr, device);
+> =20
+>   		if (ret)
+>  -			return ret;
+>  +			goto err;
+>  +	} else {
+>  +		acpi_processor_set_per_cpu(pr, device);
+>   	}
+> =20
+>   	/*
+>  @@ -357,6 +391,10 @@ static int acpi_processor_get_info(struct
+>  acpi_device *device)
+>   		arch_fix_phys_package_id(pr->id, value);
+> =20
+>   	return 0;
+>  +
+>  +err:
+>  +	per_cpu(processors, pr->id) =3D NULL;
+>  +	return ret;
+>   }
+> =20
+>   /*
+>  @@ -365,8 +403,6 @@ static int acpi_processor_get_info(struct acpi_devic=
+e
+>  *device)
+>    * (cpu_data(cpu)) values, like CPU feature flags, family, model, etc.
+>    * Such things have to be put in and set up by the processor driver's
+>  .probe().
+>    */
+>  -static DEFINE_PER_CPU(void *, processor_device_array);
+>  -
+>   static int acpi_processor_add(struct acpi_device *device,
+>   					const struct acpi_device_id *id)
+>   {
+>  @@ -395,28 +431,6 @@ static int acpi_processor_add(struct acpi_device
+>  *device,
+>   	if (result) /* Processor is not physically present or unavailable */
+>   		return 0;
+> =20
+>  -	BUG_ON(pr->id >=3D nr_cpu_ids);
+>  -
+>  -	/*
+>  -	 * Buggy BIOS check.
+>  -	 * ACPI id of processors can be reported wrongly by the BIOS.
+>  -	 * Don't trust it blindly
+>  -	 */
+>  -	if (per_cpu(processor_device_array, pr->id) !=3D NULL &&
+>  -	    per_cpu(processor_device_array, pr->id) !=3D device) {
+>  -		dev_warn(&device->dev,
+>  -			"BIOS reported wrong ACPI id %d for the  processor\n",
+>  -			pr->id);
+>  -		/* Give up, but do not abort the namespace scan. */
+>  -		goto err;
+>  -	}
+>  -	/*
+>  -	 * processor_device_array is not cleared on errors to allow buggy  BIO=
+S
+>  -	 * checks.
+>  -	 */
+>  -	per_cpu(processor_device_array, pr->id) =3D device;
+>  -	per_cpu(processors, pr->id) =3D pr;
+>  -
+>   	dev =3D get_cpu_device(pr->id);
+>   	if (!dev) {
+>   		result =3D -ENODEV;
+>  @@ -469,15 +483,16 @@ static void acpi_processor_remove(struct
+>  acpi_device *device)
+>   	device_release_driver(pr->dev);
+>   	acpi_unbind_one(pr->dev);
+> =20
+>  -	/* Clean up. */
+>  -	per_cpu(processor_device_array, pr->id) =3D NULL;
+>  -	per_cpu(processors, pr->id) =3D NULL;
+>  -
+>   	cpu_maps_update_begin();
+>   	cpus_write_lock();
+> =20
+>   	/* Remove the CPU. */
+>   	arch_unregister_cpu(pr->id);
+>  +
+>  +	/* Clean up. */
+>  +	per_cpu(processor_device_array, pr->id) =3D NULL;
+>  +	per_cpu(processors, pr->id) =3D NULL;
+>  +
 
 
-Logic is clear but it is ugly. We should turn them into macro or inline.
+Shouldn't above change come after acpi_unmap_cpu() i.e. after next line?
 
 
-Thanks
-Salil.
+>   	acpi_unmap_cpu(pr->id);
+> =20
+>   	cpus_write_unlock();
+>  --
+>  2.39.2
+
 
