@@ -1,197 +1,137 @@
-Return-Path: <linux-arch+bounces-3786-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3787-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D8A28A94C2
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Apr 2024 10:16:58 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D09AF8A972F
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Apr 2024 12:21:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C9CA31F22960
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Apr 2024 08:16:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5F9E3B20EFE
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Apr 2024 10:21:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2ABB13E404;
-	Thu, 18 Apr 2024 08:16:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D612315B971;
+	Thu, 18 Apr 2024 10:21:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SELAoNeX"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BA2513A86D;
-	Thu, 18 Apr 2024 08:16:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C86D15AAD9;
+	Thu, 18 Apr 2024 10:21:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713428199; cv=none; b=KCgngxxqePKnhpLLT3/VgVEhqEgSfiDuErulacpcu+dFj9wDBJ5YvtvPCHitjZu4AM0Y5TfvZEh1v/C++oN520EzQVBzAYBRef8jFHqzpSQIYr3js3Z7Ti53J4Do8uy1XQkaPB1rm2+iYpFBvnmyDMcyEAXnd0CMK6ZNekEtC9Q=
+	t=1713435694; cv=none; b=bd7/6N5LhhhYbfab3j82Zk/0Cg/PMjHbOC+Fwb1U4CI4wf4P4Ljjyx+4zS8eOYhtJyHU5iSm1oegfZJgTQHgRp21m1dIc5L5ldKYgW6imos+OynGcy7GWLrpuzqv0J4ZklTp7E2OSB4HNjuv7miARB0nJVeIJDAdXHcXfYocrSA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713428199; c=relaxed/simple;
-	bh=+sCIQ6w4afRiSlqasIZfv0b05YQ2xgJ9KieX+ucnx74=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XLtsxpPVTJjMz06wLKrcUebsOP/1hh7v4961F2+XSCN1clSpfSMg/UAhDwJkWkatABYJjOKmLSmFYqXMmCbaAT52b9Tgi4KwxCZVcApdj0k+/k+rgTuYtkT48jwAb01AZKL3PZdrW38XSsbcknG1YvDejmWeJdsAjMvCHqaeFxM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VKr8L2MwSz6D9BV;
-	Thu, 18 Apr 2024 16:11:30 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 256E5140519;
-	Thu, 18 Apr 2024 16:16:29 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Thu, 18 Apr
- 2024 09:16:28 +0100
-Date: Thu, 18 Apr 2024 09:16:27 +0100
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra
-	<peterz@infradead.org>, <linux-pm@vger.kernel.org>,
-	<loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
-	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <kvmarm@lists.linux.dev>,
-	<x86@kernel.org>, Russell King <linux@armlinux.org.uk>, "Rafael J . Wysocki"
-	<rafael@kernel.org>, Miguel Luis <miguel.luis@oracle.com>, "James Morse"
-	<james.morse@arm.com>, Salil Mehta <salil.mehta@huawei.com>, Jean-Philippe
- Brucker <jean-philippe@linaro.org>, Catalin Marinas
-	<catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
-	<linuxarm@huawei.com>
-CC: Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, "Dave
- Hansen" <dave.hansen@linux.intel.com>, <justin.he@arm.com>,
-	<jianyong.wu@arm.com>
-Subject: Re: [PATCH v6 04/16] ACPI: processor: Move checks and availability
- of acpi_processor earlier
-Message-ID: <20240417174707.00002e86@huawei.com>
-In-Reply-To: <20240417131909.7925-5-Jonathan.Cameron@huawei.com>
-References: <20240417131909.7925-1-Jonathan.Cameron@huawei.com>
- <20240417131909.7925-5-Jonathan.Cameron@huawei.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1713435694; c=relaxed/simple;
+	bh=GIF39x+DoxCddvDNRomXCworfiQAca8ygUjDy3+kOkw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EgpGF4OF2T51IvROcPFCNlgkLQPpqYIMOyAm+tqk2ViNJUx0g4QjNfjeYKbVtuR3IJ9Tz0JMB9OkrYoxdBSrM8NuPf6FOq3Bgb70tS0mjlLVD3QUv9rPabXmP1+57eQhs8/ESsl9O8A0dyfT5ecgorpjUBnq8GjtUJOxoK0QYtc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SELAoNeX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDE78C113CC;
+	Thu, 18 Apr 2024 10:21:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713435694;
+	bh=GIF39x+DoxCddvDNRomXCworfiQAca8ygUjDy3+kOkw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=SELAoNeXc3Beu0HbaRnXjo5QYZwKVoBtQiv3DGWKIGD1ByoQxYtKIRMmvzmqWXRIs
+	 l28WXlrgf45drPhQ9fcY+C862qqlcZ84I3lISaD2oLaKCzcGbAykPBulJ9k6bwvlRz
+	 LV8NaKjnWubu4ei2CwJbivkB4YEQEKSRsSyVzaW8Mxs5W6YReOjEi+EuEAD86bBnwS
+	 qFPhIxsVlHHsOebyI08OR68Lghu75Srbh8a5UrbpGFwRlRYkMIVyzmMjHu+Dqlrqq9
+	 fLqc6ctyg9Ep6vn3VgTN09QBUzcZ5AVisQI/jdvTkZRhUWxPwNNaW0QWW5GqKdhOFZ
+	 JlWziN6p3qThQ==
+Date: Thu, 18 Apr 2024 13:20:17 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Nadav Amit <nadav.amit@gmail.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christoph Hellwig <hch@infradead.org>, Helge Deller <deller@gmx.de>,
+	Lorenzo Stoakes <lstoakes@gmail.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	"open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+	linux-modules@vger.kernel.org, linux-parisc@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-trace-kernel@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	the arch/x86 maintainers <x86@kernel.org>
+Subject: Re: [RFC PATCH 3/7] module: prepare to handle ROX allocations for
+ text
+Message-ID: <ZiDz4YbIHEOAnpwF@kernel.org>
+References: <20240411160526.2093408-1-rppt@kernel.org>
+ <20240411160526.2093408-4-rppt@kernel.org>
+ <0C4B9C1A-97DE-4798-8256-158369AF42A4@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0C4B9C1A-97DE-4798-8256-158369AF42A4@gmail.com>
 
-On Wed, 17 Apr 2024 14:18:57 +0100
-Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
-
-> Make the per_cpu(processors, cpu) entries available earlier so that
-> they are available in arch_register_cpu() as ARM64 will need access
-> to the acpi_handle to distinguish between acpi_processor_add()
-> and earlier registration attempts (which will fail as _STA cannot
-> be checked).
+On Tue, Apr 16, 2024 at 12:36:08PM +0300, Nadav Amit wrote:
 > 
-> Reorder the remove flow to clear this per_cpu() after
-> arch_unregister_cpu() has completed, allowing it to be used in
-> there as well.
 > 
-> Note that on x86 for the CPU hotplug case, the pr->id prior to
-> acpi_map_cpu() may be invalid. Thus the per_cpu() structures
-> must be initialized after that call or after checking the ID
-> is valid (not hotplug path).
+> > On 11 Apr 2024, at 19:05, Mike Rapoport <rppt@kernel.org> wrote:
+> > 
+> > @@ -2440,7 +2479,24 @@ static int post_relocation(struct module *mod, const struct load_info *info)
+> > 	add_kallsyms(mod, info);
+> > 
+> > 	/* Arch-specific module finalizing. */
+> > -	return module_finalize(info->hdr, info->sechdrs, mod);
+> > +	ret = module_finalize(info->hdr, info->sechdrs, mod);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	for_each_mod_mem_type(type) {
+> > +		struct module_memory *mem = &mod->mem[type];
+> > +
+> > +		if (mem->is_rox) {
+> > +			if (!execmem_update_copy(mem->base, mem->rw_copy,
+> > +						 mem->size))
+> > +				return -ENOMEM;
+> > +
+> > +			vfree(mem->rw_copy);
+> > +			mem->rw_copy = NULL;
+> > +		}
+> > +	}
+> > +
+> > +	return 0;
+> > }
 > 
-> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> ---
-> v6: As per discussion in v5 thread, don't use the cpu->dev and
->     make this data available earlier by moving the assignment checks
->     int acpi_processor_get_info().
-> ---
->  drivers/acpi/acpi_processor.c | 79 +++++++++++++++++++++--------------
->  1 file changed, 47 insertions(+), 32 deletions(-)
+> I might be missing something, but it seems a bit racy.
 > 
-> diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
-> index ba0a6f0ac841..2c164451ab53 100644
-> --- a/drivers/acpi/acpi_processor.c
-> +++ b/drivers/acpi/acpi_processor.c
-> @@ -184,7 +184,35 @@ static void __init acpi_pcc_cpufreq_init(void) {}
->  
->  /* Initialization */
->  #ifdef CONFIG_ACPI_HOTPLUG_CPU
-Note I messed up a rebase here.  This ifdef should come after the new function
-(see later)
+> IIUC, module_finalize() calls alternatives_smp_module_add(). At this
+> point, since you don’t hold the text_mutex, some might do text_poke(),
+> e.g., by enabling/disabling static-key, and the update would be
+> overwritten. No?
 
-Will fix for v7.
-> -static int acpi_processor_hotadd_init(struct acpi_processor *pr)
-> +static DEFINE_PER_CPU(void *, processor_device_array);
-> +
-> +static void acpi_processor_set_per_cpu(struct acpi_processor *pr,
-> +				       struct acpi_device *device)
-> +{
-> +	BUG_ON(pr->id >= nr_cpu_ids);
-> +	/*
-> +	 * Buggy BIOS check.
-> +	 * ACPI id of processors can be reported wrongly by the BIOS.
-> +	 * Don't trust it blindly
-> +	 */
-> +	if (per_cpu(processor_device_array, pr->id) != NULL &&
-> +	    per_cpu(processor_device_array, pr->id) != device) {
-> +		dev_warn(&device->dev,
-> +			 "BIOS reported wrong ACPI id %d for the processor\n",
-> +			 pr->id);
-> +		/* Give up, but do not abort the namespace scan. */
-> +		return;
-> +	}
-> +	/*
-> +	 * processor_device_array is not cleared on errors to allow buggy BIOS
-> +	 * checks.
-> +	 */
-> +	per_cpu(processor_device_array, pr->id) = device;
-> +	per_cpu(processors, pr->id) = pr;
-> +}
-> +
+Right :(
+Even worse, for UP case alternatives_smp_unlock() will "patch" still empty
+area.
 
-The ifdef should be here as...
+So I'm thinking about calling alternatives_smp_module_add() from an
+additional callback after the execmem_update_copy().
 
-> +static int acpi_processor_hotadd_init(struct acpi_processor *pr,
-> +				      struct acpi_device *device)
->  {
->  	int ret;
->  
-> @@ -198,6 +226,8 @@ static int acpi_processor_hotadd_init(struct acpi_processor *pr)
->  	if (ret)
->  		goto out;
->  
-> +	acpi_processor_set_per_cpu(pr, device);
-> +
->  	ret = arch_register_cpu(pr->id);
->  	if (ret) {
->  		acpi_unmap_cpu(pr->id);
-> @@ -217,7 +247,8 @@ static int acpi_processor_hotadd_init(struct acpi_processor *pr)
->  	return ret;
->  }
->  #else
-> -static inline int acpi_processor_hotadd_init(struct acpi_processor *pr)
-> +static inline int acpi_processor_hotadd_init(struct acpi_processor *pr,
-> +					     struct acpi_device *device)
->  {
->  	return -ENODEV;
->  }
-> @@ -232,6 +263,7 @@ static int acpi_processor_get_info(struct acpi_device *device)
->  	acpi_status status = AE_OK;
->  	static int cpu0_initialized;
->  	unsigned long long value;
-> +	int ret;
->  
->  	acpi_processor_errata();
->  
-> @@ -316,10 +348,12 @@ static int acpi_processor_get_info(struct acpi_device *device)
->  	 *  because cpuid <-> apicid mapping is persistent now.
->  	 */
->  	if (invalid_logical_cpuid(pr->id) || !cpu_present(pr->id)) {
-> -		int ret = acpi_processor_hotadd_init(pr);
-> +		ret = acpi_processor_hotadd_init(pr, device);
->  
->  		if (ret)
-> -			return ret;
-> +			goto err;
-> +	} else {
-> +		acpi_processor_set_per_cpu(pr, device);
+Does it make sense to you?
 
-This is not covered by CONFIG_ACPI_HOTPLUG_CPU
-
->  	}
-
-
+-- 
+Sincerely yours,
+Mike.
 
