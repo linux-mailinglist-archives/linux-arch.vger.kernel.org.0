@@ -1,127 +1,125 @@
-Return-Path: <linux-arch+bounces-3783-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3784-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E94D8A9165
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Apr 2024 05:03:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A39488A9497
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Apr 2024 10:05:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 11D3D1F21906
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Apr 2024 03:03:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 43F3D1F22AF8
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Apr 2024 08:05:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B1384F218;
-	Thu, 18 Apr 2024 03:03:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DyuRU+nb"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B2257C6E3;
+	Thu, 18 Apr 2024 08:05:15 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 265C16138;
-	Thu, 18 Apr 2024 03:03:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9BF976050;
+	Thu, 18 Apr 2024 08:05:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713409407; cv=none; b=dLQaXfdzMlZDGhEWrQIgNOuAJPzIMKlJmzir68nb/BC0QhcTaHUZcSeQrVfhOt9iMpSetsLpfFh9dLZtXngpJQOFeLvTJLkVmHQIFJQO230Xoe0GmUDXtzKHmKf56NuQNTJ2ylSYGjZaZoQhsuf8nP8+wdGWCii2NtE/L5W8Wyw=
+	t=1713427515; cv=none; b=m76jVjqXeT0GoO/rpxlZ17VcrQVO90wVO7FGwAWTaxNG4+sgUB53zdyEwElo3px4jGES3LC3qnivsTojt2z9CXiKV/YkhVZmigR8Gi0yft8p4ZPu2I3KuDndEF3V9IX1EsqgVJmgwU2QnL9o+F+FdYZaISV+mNyq+EdaPcFLg5c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713409407; c=relaxed/simple;
-	bh=kfEJQjTwgGJh4Zkx43Z0VD1r+pL2rJMimsZzyjREVEM=;
+	s=arc-20240116; t=1713427515; c=relaxed/simple;
+	bh=UOFVBPczXHCcz1zMmMSNpm25XldDzmqdDVCBSLjFSp0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=idbxgrIsfyS/1CyxhANwP59PhrAA7nkhxu0xyZQ2ermbCrKljh5KOAhva0SIVVADTWhU5jurGaLCbweT0OL7tZl4p1dNZjqOYxfQQZibJneayX6xGCxa5qsE2JGRF9JfAsPXF0ubJ2VOJ2aUNIn0FFqHw6cG+5sELUrsM6/CU58=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DyuRU+nb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4761C3277B;
-	Thu, 18 Apr 2024 03:03:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713409406;
-	bh=kfEJQjTwgGJh4Zkx43Z0VD1r+pL2rJMimsZzyjREVEM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=DyuRU+nbBlfEefDgkjYMaeHuZxrD+lMlRPMalkQi5IC69YYTWZ6zEdir/RupkAap0
-	 17RzMJVBVaskBzoD8lhK/LtZy2kUP7k21+CDiY0gBXnPmT64owTkQbxHdf0JyAPAYx
-	 tx0a4zLTnGo0CFjFFObQkeT4Qn82jY+d6vAZT/fd9qDpC/vddsmWPQ9f5r1pkH+Cb2
-	 yh2V+NoEvWckhqYS09yUlUYUkVb0oMebHG0BQarTzSCq4o2/7SwOGQyDEXewhte9Sg
-	 Lhmm69YwKDOmE0MM0CShULZ5v9DJpyzWisMvETTr/zB7h29YiU62z1Gam5322XaIMS
-	 pcQhx3sXD225A==
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a557044f2ddso14279466b.2;
-        Wed, 17 Apr 2024 20:03:26 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVYKBvBKXRyEWqu+7BMTN77g23vYSb9E9bArH7hfvTIghiag/MV+qvk4XmR5INFtomffqPPFlh+s8vQWKAi4RnQo85AkDORjSw451cYRAndTDWtxewb3sSYp29xO9zLAfnOrmE8IJ2ABj7V18PlQRY8973N2Y2YKNz8hiBgxA==
-X-Gm-Message-State: AOJu0YwTmdPOq6cIBzMY6EttEpJ6P48l+q/jzt9p7qRSflkzKL6A2qnN
-	gQZx6cmmVQKpw+SE3FrN3Ru5bXY0cEu9Q4J08AmXVKoTNaxtZD8726TNrmwXp5NKClwqWG+BxVX
-	aFcE24gn1dYoTXmH3RufPXhh1N0M=
-X-Google-Smtp-Source: AGHT+IEGnzxcLzKogVMafWt/io2wledXtCG2nYVIAR7Lu4aQp3Gm16la5nxK3JKrgyWlsMhlzCjZG627hEMlqWAR0dk=
-X-Received: by 2002:a17:906:f8da:b0:a55:596b:c9ca with SMTP id
- lh26-20020a170906f8da00b00a55596bc9camr830982ejb.39.1713409405224; Wed, 17
- Apr 2024 20:03:25 -0700 (PDT)
+	 To:Cc:Content-Type; b=lyGXgP8IXLWy1US4o1BlmZzgtGNhdwUDM0BVa4G9qqge0WJVXI8A6aJjbawLync/OTzo32LROF+VDJr6/NcR8fV8cTxNhN3iZGJUSc06Gq67CQjXps5q7MOexQL9dXG0pKC5eFOXXKVA2cZVi/j6F3EqLCW5hbnSbuoKbn1PE34=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-6181237230dso5496157b3.2;
+        Thu, 18 Apr 2024 01:05:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713427507; x=1714032307;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bLR4mBggObO8r2nSCZJdXRmeilUQBfk6WVycNxbYaLg=;
+        b=gayppHqw+V3f6+Q/JsOoC0TuQitRMgPUsLya7iRAOU0IWgKlu8RpiIzwhwoWNq3GKI
+         hXZPzP9kWur6W7+z9gzmUa0X2EosVqcXaaYlPvevZBlQJE4qn+8sPRfodcJegJ8h8R0I
+         oJkpcInCwNEQbSzy3pDYSghW+rg5LuYatmIj7/Zrx2yjZ49DGwSXLu8GWBLVGi/wIIBE
+         OpRypDCpzv3z867KeYwjAqWCFehlHXZW2idvtJqLbg+lWmsqkV3F6/wM8HTYH71mBiD4
+         NaESoaeMqD4kIgwBjspJ1oECvY3Y7hCHe2mZ0X84POvPK9qZ/V2t8jQkdKnSaVfD4ywd
+         sxrg==
+X-Forwarded-Encrypted: i=1; AJvYcCUiAvDvP6mvxmHMA7u3IN8/CoyYIUb8liksS8bgUmfOXf5lMZv3dg6tSZLAeDUcOtv33b0Dts4KwOasSfPMfgMehf9MwtHgP2K2ED/XUPrEn9cUTjZWktEXDJeqSgWs6NYunw9OG6U=
+X-Gm-Message-State: AOJu0YxhazPAZVNW2YgueGxBbr440FxibiXgrebDfA1X9jkgHxAVEGlB
+	K+AiU4rfJWZ86QrYK2QOizU6tGNrJOjG7Ijn/sCgc48ZmpaO4Jr3QwpThyPtmvo=
+X-Google-Smtp-Source: AGHT+IEBesv3zCiqVap2Rlfgf7RH249ZOi2RworH0dUT7AJaQnUi7dvADJmE2TdxgnVInSJviZ1aWQ==
+X-Received: by 2002:a05:690c:74c6:b0:61a:db67:b84f with SMTP id jw6-20020a05690c74c600b0061adb67b84fmr2529880ywb.27.1713427507587;
+        Thu, 18 Apr 2024 01:05:07 -0700 (PDT)
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
+        by smtp.gmail.com with ESMTPSA id l189-20020a0de2c6000000b006180137ccf6sm117566ywe.4.2024.04.18.01.05.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Apr 2024 01:05:06 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-dcbef31a9dbso435638276.1;
+        Thu, 18 Apr 2024 01:05:06 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWQBItiBexU8b92YNvivwIPM1acmpk1EfqqRpaS3sGWewpbg7iDvGZ4/TXmgxToD6u7rLqs1GE6Hom3TB8lgcbnosUa/XvxUxfF+pyzP2EwZLbU4B2pOasRsxOyYkWebPfHSBCPp6k=
+X-Received: by 2002:a05:6902:342:b0:dc6:b779:7887 with SMTP id
+ e2-20020a056902034200b00dc6b7797887mr2234306ybs.20.1713427506764; Thu, 18 Apr
+ 2024 01:05:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240416144926.599101-1-david@redhat.com> <CANiq72kACt+FfeYXJxfQpmGH=uPqkDA0oprfnebw52VSKyn7kQ@mail.gmail.com>
- <CAAhV-H5mt0GaaZ3s44CYb4aKqYeDYm+Q16hY__FdQ6xYJh+bgg@mail.gmail.com> <20240417135834.ddaa9c038a8a8af2bd9e39aa@linux-foundation.org>
-In-Reply-To: <20240417135834.ddaa9c038a8a8af2bd9e39aa@linux-foundation.org>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Thu, 18 Apr 2024 11:03:18 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4O6_9Ukgz-GrPcWTq3cAN2c1OkXQWRbUgMR2ZwUuQQHA@mail.gmail.com>
-Message-ID: <CAAhV-H4O6_9Ukgz-GrPcWTq3cAN2c1OkXQWRbUgMR2ZwUuQQHA@mail.gmail.com>
-Subject: Re: [PATCH v1] LoongArch/tlb: fix "error: parameter 'ptep' set but
- not used" due to __tlb_remove_tlb_entry()
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, David Hildenbrand <david@redhat.com>, 
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-arch@vger.kernel.org, 
-	loongarch@lists.linux.dev, llvm@lists.linux.dev, 
-	Arnd Bergmann <arnd@arndb.de>, WANG Xuerui <kernel@xen0n.name>, Nathan Chancellor <nathan@kernel.org>
+References: <7b3646e0-667c-48e2-8f09-e493c43c30cb@paulmck-laptop> <20240408174944.907695-12-paulmck@kernel.org>
+In-Reply-To: <20240408174944.907695-12-paulmck@kernel.org>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Thu, 18 Apr 2024 10:04:55 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdW6zi+ZO_xC7jvi_cy5u2mydui1sCDE2pdpCoFmfBLWug@mail.gmail.com>
+Message-ID: <CAMuHMdW6zi+ZO_xC7jvi_cy5u2mydui1sCDE2pdpCoFmfBLWug@mail.gmail.com>
+Subject: Re: [PATCH cmpxchg 12/14] sh: Emulate one-byte cmpxchg
+To: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, elver@google.com, 
+	akpm@linux-foundation.org, tglx@linutronix.de, peterz@infradead.org, 
+	dianders@chromium.org, pmladek@suse.com, torvalds@linux-foundation.org, 
+	Arnd Bergmann <arnd@arndb.de>, Andi Shyti <andi.shyti@linux.intel.com>, 
+	Palmer Dabbelt <palmer@rivosinc.com>, Masami Hiramatsu <mhiramat@kernel.org>, linux-sh@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi, Andrew,
+Hi Paul,
 
-On Thu, Apr 18, 2024 at 4:58=E2=80=AFAM Andrew Morton <akpm@linux-foundatio=
-n.org> wrote:
+On Mon, Apr 8, 2024 at 7:50=E2=80=AFPM Paul E. McKenney <paulmck@kernel.org=
+> wrote:
+> Use the new cmpxchg_emu_u8() to emulate one-byte cmpxchg() on sh.
 >
-> On Wed, 17 Apr 2024 11:18:27 +0800 Huacai Chen <chenhuacai@kernel.org> wr=
-ote:
+> [ paulmck: Drop two-byte support per Arnd Bergmann feedback. ]
 >
-> > On Wed, Apr 17, 2024 at 3:25=E2=80=AFAM Miguel Ojeda
-> > <miguel.ojeda.sandonis@gmail.com> wrote:
-> > >
-> > > On Tue, Apr 16, 2024 at 4:49=E2=80=AFPM David Hildenbrand <david@redh=
-at.com> wrote:
-> > > >
-> > > > With LLVM=3D1 and W=3D1 we get:
-> > >
-> > > Hmm... I didn't need W=3D1 to trigger it (LLVM 18.1.2).
-> > >
-> > > > Reported-by: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-> > >
-> > > Thanks, looks good to me -- built-tested:
-> > >
-> > > Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
-> > > Tested-by: Miguel Ojeda <ojeda@kernel.org>
-> > >
-> >
-> > Queued for loongarch-fixes, thanks.
-> >
->
-> (top-posting repaired so I can sensibly reply to this.  Please avoid
-> top-posting!)
-Sorry, I only top-posting with "Queued ...", "Applied ..." because I
-saw others do like this. If this is also unacceptable, I will not do
-it again.
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 
->
-> I'd rather carry this in mm.git with your ack please.  Otherwise mm.git
-> won't compile without it and if I retain this patch we'll get
-> duplicate-patch emails from Stephen and I won't be able to merge
-> mm.git's mm-nonmm-stable tree into Linus until loongarch-fixes has
-> merged.
-loongarch-next always merges loongarch-fixes, so when I apply a patch
-it will be in linux-next. Now this patch I have already applied to
-loongarch-fixes and loongarch-next. In future, I will give an Acked-by
-for you if needed.
+Thanks for your patch!
 
-Huacai
+> --- a/arch/sh/include/asm/cmpxchg.h
+> +++ b/arch/sh/include/asm/cmpxchg.h
+> @@ -56,6 +56,8 @@ static inline unsigned long __cmpxchg(volatile void * p=
+tr, unsigned long old,
+>                 unsigned long new, int size)
+>  {
+>         switch (size) {
+> +       case 1:
+> +               return cmpxchg_emu_u8((volatile u8 *)ptr, old, new);
 
->
->
+The cast is not needed.
+
+>         case 4:
+>                 return __cmpxchg_u32(ptr, old, new);
+>         }
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
