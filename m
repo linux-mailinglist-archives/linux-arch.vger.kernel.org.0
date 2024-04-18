@@ -1,51 +1,50 @@
-Return-Path: <linux-arch+bounces-3787-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3788-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D09AF8A972F
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Apr 2024 12:21:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 403178A974F
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Apr 2024 12:25:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5F9E3B20EFE
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Apr 2024 10:21:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 71F711C21B96
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Apr 2024 10:25:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D612315B971;
-	Thu, 18 Apr 2024 10:21:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD8E515B980;
+	Thu, 18 Apr 2024 10:25:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SELAoNeX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r7r3HpYQ"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C86D15AAD9;
-	Thu, 18 Apr 2024 10:21:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 750CC15AAAD;
+	Thu, 18 Apr 2024 10:25:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713435694; cv=none; b=bd7/6N5LhhhYbfab3j82Zk/0Cg/PMjHbOC+Fwb1U4CI4wf4P4Ljjyx+4zS8eOYhtJyHU5iSm1oegfZJgTQHgRp21m1dIc5L5ldKYgW6imos+OynGcy7GWLrpuzqv0J4ZklTp7E2OSB4HNjuv7miARB0nJVeIJDAdXHcXfYocrSA=
+	t=1713435912; cv=none; b=av9OfEJ9navaKSI2hVUghjNwxROt4Y3dUBgvCz+xmpvWpG3NfdKUvgVLvVI6YUE6itpRPVyGkeMGGc8pARJemt4A4nmor0OyJKWjjS1xQP5yQM5/E2+os4oBURqf+8spjGR2NHoOUtb9yXhbiSHe75j1S23tSikDkXw6Sxh5YTc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713435694; c=relaxed/simple;
-	bh=GIF39x+DoxCddvDNRomXCworfiQAca8ygUjDy3+kOkw=;
+	s=arc-20240116; t=1713435912; c=relaxed/simple;
+	bh=YYR+dNmhH5n7QU2mxc3zizI6arTy/RTvZImlW/XQhPY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EgpGF4OF2T51IvROcPFCNlgkLQPpqYIMOyAm+tqk2ViNJUx0g4QjNfjeYKbVtuR3IJ9Tz0JMB9OkrYoxdBSrM8NuPf6FOq3Bgb70tS0mjlLVD3QUv9rPabXmP1+57eQhs8/ESsl9O8A0dyfT5ecgorpjUBnq8GjtUJOxoK0QYtc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SELAoNeX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDE78C113CC;
-	Thu, 18 Apr 2024 10:21:24 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=sOxBs69phnGBVh/0JjdNmSVJTMJq0hfaZ9+ln5E9W/tS/lTkIu2k4BJCpwQdUn4vcoKVGfgCaOHq8nAMp3trHPPX0o/B7FumymXS7Ou7iDZeKwjoP48ONkEl9egCmQLpm5yACWPXCyZuB7HMwBez/m5GJsM1ZBKx9hFGGCEOiiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r7r3HpYQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36123C113CC;
+	Thu, 18 Apr 2024 10:25:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713435694;
-	bh=GIF39x+DoxCddvDNRomXCworfiQAca8ygUjDy3+kOkw=;
+	s=k20201202; t=1713435912;
+	bh=YYR+dNmhH5n7QU2mxc3zizI6arTy/RTvZImlW/XQhPY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SELAoNeXc3Beu0HbaRnXjo5QYZwKVoBtQiv3DGWKIGD1ByoQxYtKIRMmvzmqWXRIs
-	 l28WXlrgf45drPhQ9fcY+C862qqlcZ84I3lISaD2oLaKCzcGbAykPBulJ9k6bwvlRz
-	 LV8NaKjnWubu4ei2CwJbivkB4YEQEKSRsSyVzaW8Mxs5W6YReOjEi+EuEAD86bBnwS
-	 qFPhIxsVlHHsOebyI08OR68Lghu75Srbh8a5UrbpGFwRlRYkMIVyzmMjHu+Dqlrqq9
-	 fLqc6ctyg9Ep6vn3VgTN09QBUzcZ5AVisQI/jdvTkZRhUWxPwNNaW0QWW5GqKdhOFZ
-	 JlWziN6p3qThQ==
-Date: Thu, 18 Apr 2024 13:20:17 +0300
+	b=r7r3HpYQ6nFiS0E8RoFspK8YNTCn1wvgAKmlggqCij/FXkbh7szpgdlp50MnvnkyP
+	 lk96Jv8sQ1JdQGAURqqmqgYkF3mGapE5gySL9ZwhZHyzkL0O/RbIQf5t1nWm3gYpbq
+	 uEpL9PSB2RTnOFLn1B9HaIE/diUnPoc6ZmU/M8wQ2SoiNmWWCQToS5x4OihQModqbL
+	 wQp9NYpGP/8mk1FlFPEVNiGZQBNpmOaQ1CBof6I+gHZEt/zViTgmR/oZTmy5m+cXoj
+	 Tt5QDTjkEbUg1MEvU+IXwpfYnYqHcejQQSHvHq4OyuZGU6Xkki5E+LhnslG0zaaCc7
+	 s1wPnD7FtE6tA==
+Date: Thu, 18 Apr 2024 13:23:55 +0300
 From: Mike Rapoport <rppt@kernel.org>
-To: Nadav Amit <nadav.amit@gmail.com>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
 	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
 	Catalin Marinas <catalin.marinas@arm.com>,
 	Christoph Hellwig <hch@infradead.org>, Helge Deller <deller@gmx.de>,
@@ -56,80 +55,71 @@ Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
 	Michael Ellerman <mpe@ellerman.id.au>,
 	Palmer Dabbelt <palmer@dabbelt.com>,
-	Peter Zijlstra <peterz@infradead.org>,
 	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
 	Steven Rostedt <rostedt@goodmis.org>,
 	Thomas Gleixner <tglx@linutronix.de>,
 	Uladzislau Rezki <urezki@gmail.com>, Will Deacon <will@kernel.org>,
 	bpf@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	"open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+	linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
 	linux-modules@vger.kernel.org, linux-parisc@vger.kernel.org,
 	linux-riscv@lists.infradead.org, linux-trace-kernel@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	the arch/x86 maintainers <x86@kernel.org>
-Subject: Re: [RFC PATCH 3/7] module: prepare to handle ROX allocations for
- text
-Message-ID: <ZiDz4YbIHEOAnpwF@kernel.org>
+	linuxppc-dev@lists.ozlabs.org, x86@kernel.org
+Subject: Re: [RFC PATCH 6/7] execmem: add support for cache of large ROX pages
+Message-ID: <ZiD0u3uz97ltnXJS@kernel.org>
 References: <20240411160526.2093408-1-rppt@kernel.org>
- <20240411160526.2093408-4-rppt@kernel.org>
- <0C4B9C1A-97DE-4798-8256-158369AF42A4@gmail.com>
+ <20240411160526.2093408-7-rppt@kernel.org>
+ <20240415104750.GJ40213@noisy.programming.kicks-ass.net>
+ <Zh1dKkFr6zdBh2Kz@kernel.org>
+ <20240416075234.GA31647@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0C4B9C1A-97DE-4798-8256-158369AF42A4@gmail.com>
+In-Reply-To: <20240416075234.GA31647@noisy.programming.kicks-ass.net>
 
-On Tue, Apr 16, 2024 at 12:36:08PM +0300, Nadav Amit wrote:
-> 
-> 
-> > On 11 Apr 2024, at 19:05, Mike Rapoport <rppt@kernel.org> wrote:
+On Tue, Apr 16, 2024 at 09:52:34AM +0200, Peter Zijlstra wrote:
+> On Mon, Apr 15, 2024 at 08:00:26PM +0300, Mike Rapoport wrote:
+> > On Mon, Apr 15, 2024 at 12:47:50PM +0200, Peter Zijlstra wrote:
+> > > On Thu, Apr 11, 2024 at 07:05:25PM +0300, Mike Rapoport wrote:
+> > > 
+> > > > To populate the cache, a writable large page is allocated from vmalloc with
+> > > > VM_ALLOW_HUGE_VMAP, filled with invalid instructions and then remapped as
+> > > > ROX.
+> > > 
+> > > > +static void execmem_invalidate(void *ptr, size_t size, bool writable)
+> > > > +{
+> > > > +	if (execmem_info->invalidate)
+> > > > +		execmem_info->invalidate(ptr, size, writable);
+> > > > +	else
+> > > > +		memset(ptr, 0, size);
+> > > > +}
+> > > 
+> > > +static void execmem_invalidate(void *ptr, size_t size, bool writeable)
+> > > +{
+> > > +       /* fill memory with INT3 instructions */
+> > > +       if (writeable)
+> > > +               memset(ptr, 0xcc, size);
+> > > +       else
+> > > +               text_poke_set(ptr, 0xcc, size);
+> > > +}
+> > > 
+> > > Thing is, 0xcc (aka INT3_INSN_OPCODE) is not an invalid instruction.
+> > > It raises #BP not #UD.
 > > 
-> > @@ -2440,7 +2479,24 @@ static int post_relocation(struct module *mod, const struct load_info *info)
-> > 	add_kallsyms(mod, info);
-> > 
-> > 	/* Arch-specific module finalizing. */
-> > -	return module_finalize(info->hdr, info->sechdrs, mod);
-> > +	ret = module_finalize(info->hdr, info->sechdrs, mod);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	for_each_mod_mem_type(type) {
-> > +		struct module_memory *mem = &mod->mem[type];
-> > +
-> > +		if (mem->is_rox) {
-> > +			if (!execmem_update_copy(mem->base, mem->rw_copy,
-> > +						 mem->size))
-> > +				return -ENOMEM;
-> > +
-> > +			vfree(mem->rw_copy);
-> > +			mem->rw_copy = NULL;
-> > +		}
-> > +	}
-> > +
-> > +	return 0;
-> > }
+> > Do you mean that _invalidate is a poor name choice or that it's necessary
+> > to use an instruction that raises #UD?
 > 
-> I might be missing something, but it seems a bit racy.
+> Poor naming, mostly. #BP handler will still scream bloody murder if the
+> site is otherwise unclaimed.
 > 
-> IIUC, module_finalize() calls alternatives_smp_module_add(). At this
-> point, since you don’t hold the text_mutex, some might do text_poke(),
-> e.g., by enabling/disabling static-key, and the update would be
-> overwritten. No?
+> It just isn't an invalid instruction.
 
-Right :(
-Even worse, for UP case alternatives_smp_unlock() will "patch" still empty
-area.
-
-So I'm thinking about calling alternatives_smp_module_add() from an
-additional callback after the execmem_update_copy().
-
-Does it make sense to you?
+Well, execmem_fill_with_insns_screaming_bloody_murder seems too long, how
+about execmem_fill_trapping_insns?
 
 -- 
 Sincerely yours,
