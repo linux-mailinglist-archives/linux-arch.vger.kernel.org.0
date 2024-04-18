@@ -1,44 +1,44 @@
-Return-Path: <linux-arch+bounces-3802-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3803-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA9008A9C11
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Apr 2024 16:01:41 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D54C98A9C17
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Apr 2024 16:02:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5CA571F2161A
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Apr 2024 14:01:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 55D16B25AD4
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Apr 2024 14:02:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98399165FA9;
-	Thu, 18 Apr 2024 14:01:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D1BD165FC9;
+	Thu, 18 Apr 2024 14:01:32 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE3B71649DE;
-	Thu, 18 Apr 2024 14:00:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35245165FC2;
+	Thu, 18 Apr 2024 14:01:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713448862; cv=none; b=G0+xlb3A8tF6nT5Wkx+aG6CdDAqyQpFTibJsRrYuoj6OuKCP3V3gpZaFZzXwnSijjojQJaTVxRGQONfHm7haSf6v+gFQxOM/rvE+xoeO/N8H9IZtJIZiozXVOoIDD/wbMlO13aMtNfUXNppzYV+RXFfvf99gkwx0yWidFuL+Z8w=
+	t=1713448892; cv=none; b=r9EbWALZKR6Ft51TTlt9GjledAMjm8J9OHQDKyzOk6arEmsbSKVYUYDtRXezZeVedSYn40/srMQt73n6tZlRFe2eHBl5QaZfCbiQv3pmQi/5F1czlGMoK+WOpVz3/56Q6NQ5aZh+QHpJ9hmsLdQI3L8eF5OMegPtFWrpWWp7rqo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713448862; c=relaxed/simple;
-	bh=/ZnEJWnVjdAFNyug63GYeRolkDuCDosA3A9pYTnZbXI=;
+	s=arc-20240116; t=1713448892; c=relaxed/simple;
+	bh=SbGXeSLK8beeZDzTBZrZDvu/cJJOz8jYwN3LyQLDBxY=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tfv/8CCArFf3+yQ5/kPxbKCx4O8HuSdRuohoZBqy1At5S6e6TJpzI/ZtXfnNhsZhhgLrjR5549TGbxzz/Jl4TtzKUqluT9QIHBEpHDesAYqx5Qe+zzcq5GZsXtgYn5ZKctjay1+nUToiOYsZTiZnnr71XyI4gAORO6t40lf+X3U=
+	 MIME-Version:Content-Type; b=DxgcewgN5IXMMwYGWjEUTQcNr/nLE6OrFv2lW+TjXJukPPwivQCcM+7S7enzsyrhvIosQeeUHr/CK6pOgceMWugEaCOfydP6nKRz+HGooEtjSu0e7BVjL8EbW7vY3jbGIdV9x7toxXceuvDJhMC5RgAfpPbVGu3PSOiiQrDvLyo=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VKzs72BgZz6K6DF;
-	Thu, 18 Apr 2024 21:58:51 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VKzsj6lgQz6K5r4;
+	Thu, 18 Apr 2024 21:59:21 +0800 (CST)
 Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id A577F140517;
-	Thu, 18 Apr 2024 22:00:54 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 4E3DF14038F;
+	Thu, 18 Apr 2024 22:01:25 +0800 (CST)
 Received: from SecurePC-101-06.china.huawei.com (10.122.247.231) by
  lhrpeml500005.china.huawei.com (7.191.163.240) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Thu, 18 Apr 2024 15:00:53 +0100
+ 15.1.2507.35; Thu, 18 Apr 2024 15:01:24 +0100
 From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 To: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra
 	<peterz@infradead.org>, <linux-pm@vger.kernel.org>,
@@ -53,9 +53,9 @@ To: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra
 CC: Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave
  Hansen <dave.hansen@linux.intel.com>, <linuxarm@huawei.com>,
 	<justin.he@arm.com>, <jianyong.wu@arm.com>
-Subject: [PATCH v7 13/16] arm64: arch_register_cpu() variant to check if an ACPI handle is now available.
-Date: Thu, 18 Apr 2024 14:54:09 +0100
-Message-ID: <20240418135412.14730-14-Jonathan.Cameron@huawei.com>
+Subject: [PATCH v7 14/16] arm64: Kconfig: Enable hotplug CPU on arm64 if ACPI_PROCESSOR is enabled.
+Date: Thu, 18 Apr 2024 14:54:10 +0100
+Message-ID: <20240418135412.14730-15-Jonathan.Cameron@huawei.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240418135412.14730-1-Jonathan.Cameron@huawei.com>
 References: <20240418135412.14730-1-Jonathan.Cameron@huawei.com>
@@ -70,113 +70,64 @@ Content-Type: text/plain
 X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
  lhrpeml500005.china.huawei.com (7.191.163.240)
 
-The ARM64 architecture does not support physical CPU HP today.
-To avoid any possibility of a bug against such an architecture if defined
-in future, check for the physical CPU HP case (not present) and
-return an error on any such attempt.
+In order to move arch_register_cpu() to be called via the same path
+for initially present CPUs described by ACPI and hotplugged CPUs
+ACPI_HOTPLUG_CPU needs to be enabled.
 
-On ARM64 virtual CPU Hotplug relies on the status value that can be
-queried via the AML method _STA for the CPU object.
-
-There are two conditions in which the CPU can be registered.
-1) ACPI disabled.
-2) ACPI enabled and the acpi_handle is available.
-   _STA evaluates to the CPU is both enabled and present.
-   (Note that in absence of the _STA method they are always in this
-    state).
-
-If neither of these conditions is met the CPU is not 'yet' ready
-to be used and -EPROBE_DEFER is returned.
-
-Success occurs in the early attempt to register the CPUs if we
-are booting with DT (no concept yet of vCPU HP) if not it succeeds
-for already enabled CPUs when the ACPI Processor driver attaches to
-them.  Finally it may succeed via the CPU Hotplug code indicating that
-the CPU is now enabled.
-
-For ACPI if CONFIG_ACPI_PROCESSOR the only path to get to
-arch_register_cpu() with that handle set is via
-acpi_processor_hot_add_init() which is only called from an ACPI bus
-scan in which _STA has already been queried there is no need to
-repeat it here. Add a comment to remind us of this in the future.
-
-Suggested-by: Rafael J. Wysocki <rafael@kernel.org>
 Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 ---
 v7: No change.
-v6: Add protection again Physical CPU HP to the arch specific code
-    and don't actually check _STA
-
-Tested on arm64 with ACPI + DT build and DT only builds, booting
-with ACPI and DT as appropriate.
 ---
- arch/arm64/kernel/smp.c | 53 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
+ arch/arm64/Kconfig       |  1 +
+ arch/arm64/kernel/acpi.c | 16 ++++++++++++++++
+ 2 files changed, 17 insertions(+)
 
-diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
-index dc0e0b3ec2d4..ccb6ad347df9 100644
---- a/arch/arm64/kernel/smp.c
-+++ b/arch/arm64/kernel/smp.c
-@@ -504,6 +504,59 @@ static int __init smp_cpu_setup(int cpu)
- static bool bootcpu_valid __initdata;
- static unsigned int cpu_count = 1;
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 7b11c98b3e84..fed7d0d54179 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -5,6 +5,7 @@ config ARM64
+ 	select ACPI_CCA_REQUIRED if ACPI
+ 	select ACPI_GENERIC_GSI if ACPI
+ 	select ACPI_GTDT if ACPI
++	select ACPI_HOTPLUG_CPU if ACPI_PROCESSOR
+ 	select ACPI_IORT if ACPI
+ 	select ACPI_REDUCED_HARDWARE_ONLY if ACPI
+ 	select ACPI_MCFG if (ACPI && PCI)
+diff --git a/arch/arm64/kernel/acpi.c b/arch/arm64/kernel/acpi.c
+index dba8fcec7f33..a74e80d58df3 100644
+--- a/arch/arm64/kernel/acpi.c
++++ b/arch/arm64/kernel/acpi.c
+@@ -29,6 +29,7 @@
+ #include <linux/pgtable.h>
  
-+int arch_register_cpu(int cpu)
-+{
-+	acpi_handle acpi_handle = acpi_get_processor_handle(cpu);
-+	struct cpu *c = &per_cpu(cpu_devices, cpu);
-+
-+	if (!acpi_disabled && !acpi_handle &&
-+	    IS_ENABLED(CONFIG_ACPI_HOTPLUG_CPU))
-+		return -EPROBE_DEFER;
-+
+ #include <acpi/ghes.h>
++#include <acpi/processor.h>
+ #include <asm/cputype.h>
+ #include <asm/cpu_ops.h>
+ #include <asm/daifflags.h>
+@@ -413,6 +414,21 @@ void arch_reserve_mem_area(acpi_physical_address addr, size_t size)
+ 	memblock_mark_nomap(addr, size);
+ }
+ 
 +#ifdef CONFIG_ACPI_HOTPLUG_CPU
-+	/* For now block anything that looks like physical CPU Hotplug */
-+	if (invalid_logical_cpuid(cpu) || !cpu_present(cpu)) {
-+		pr_err_once("Changing CPU present bit is not supported\n");
-+		return -ENODEV;
-+	}
-+#endif
-+
-+	/*
-+	 * Availability of the acpi handle is sufficient to establish
-+	 * that _STA has aleady been checked. No need to recheck here.
-+	 */
-+	c->hotpluggable = arch_cpu_is_hotpluggable(cpu);
-+
-+	return register_cpu(c, cpu);
-+}
-+
-+#ifdef CONFIG_ACPI_HOTPLUG_CPU
-+void arch_unregister_cpu(int cpu)
++int acpi_map_cpu(acpi_handle handle, phys_cpuid_t physid, u32 apci_id,
++		 int *pcpu)
 +{
-+	acpi_handle acpi_handle = acpi_get_processor_handle(cpu);
-+	struct cpu *c = &per_cpu(cpu_devices, cpu);
-+	acpi_status status;
-+	unsigned long long sta;
-+
-+	if (!acpi_handle) {
-+		pr_err_once("Removing a CPU without associated ACPI handle\n");
-+		return;
-+	}
-+
-+	status = acpi_evaluate_integer(acpi_handle, "_STA", NULL, &sta);
-+	if (ACPI_FAILURE(status))
-+		return;
-+
-+	/* For now do not allow anything that looks like physical CPU HP */
-+	if (cpu_present(cpu) && !(sta & ACPI_STA_DEVICE_PRESENT)) {
-+		pr_err_once("Changing CPU present bit is not supported\n");
-+		return;
-+	}
-+
-+	unregister_cpu(c);
++	return 0;
 +}
++EXPORT_SYMBOL(acpi_map_cpu); /* check why */
++
++int acpi_unmap_cpu(int cpu)
++{
++	return 0;
++}
++EXPORT_SYMBOL(acpi_unmap_cpu);
 +#endif /* CONFIG_ACPI_HOTPLUG_CPU */
 +
- #ifdef CONFIG_ACPI
- static struct acpi_madt_generic_interrupt cpu_madt_gicc[NR_CPUS];
- 
+ #ifdef CONFIG_ACPI_FFH
+ /*
+  * Implements ARM64 specific callbacks to support ACPI FFH Operation Region as
 -- 
 2.39.2
 
