@@ -1,44 +1,44 @@
-Return-Path: <linux-arch+bounces-3795-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3796-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 216238A9BD8
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Apr 2024 15:57:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83CB38A9BDD
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Apr 2024 15:57:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ADDC91F2158C
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Apr 2024 13:57:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 40B3F2817EB
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Apr 2024 13:57:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FE761635D6;
-	Thu, 18 Apr 2024 13:57:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9580C1635D1;
+	Thu, 18 Apr 2024 13:57:52 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64A29161912;
-	Thu, 18 Apr 2024 13:57:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03DCE160796;
+	Thu, 18 Apr 2024 13:57:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713448642; cv=none; b=PasjirGXbhlUNFdA/Q112z14HIFMYYExQTqQsjwz4teFhtvFPn0429KQ0j4YYVj5SOndN6votJep8kkZ5l+ADuSXiT18EYDXbSKLTFKM5c+731CAVwdj5wdDwpmWw/wmVC6rx+C4o2VA/0z7rlq6Hm8EUjvo5t+VWRFOm5YNLEU=
+	t=1713448672; cv=none; b=rsfTsC5FUcskQhOiqUPdXt1YraFxyfm7i/vqCsAyIjzpVIRSjsDJ10ZW+JRQfieK83HPtFiLZ+39m3sbw8G49k0k5IV3Zb5C+11J1PfQPb5z4ZBDqSUtT7hZ9xelQIUNosktqNDK96qsbpWoaip1tOKOgR+UYK2wo5A23vJegvQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713448642; c=relaxed/simple;
-	bh=Q6ssnwcTXLz7vydOFWMRL9zC7krNWctKO0oi2m7nVi8=;
+	s=arc-20240116; t=1713448672; c=relaxed/simple;
+	bh=Fg1Uw/EE5fB2oyPrQhHIjgnrktVY0yIzZa7BULUrzRw=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KY5bzLML0ErYTQ6hKoWEby/SqBjbIQxZTQv4Wud+RDh4rq3/jr8muCZNmWvPk3TlXaXAzmaFQEZwSmuMTReZguUn8NloL1tQMaYeCFJPXFn5t00mj0yQuP1jhQS8q4MjMKFXYN0QPdxe1EdRs+xKXpIWLw7sKJQqV66XNU9I02U=
+	 MIME-Version:Content-Type; b=WZL9nhYHlswaIJUVI5zMqZ3vbCnkL4pG5Hp9Yr0DuCitZ16eR/MzTHfAfzemKYK7ZiHHiDqFMt5CeT6EqztMAjci2ApVuQ/aXaD9Tv2gZHimmf2PzTX9cS79VoQx54HCcHTCv/ryZJ2oT/X9KeAADH+OEmFH2c8U6UNUHIkyWfw=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VKzmz3f55z6D94Q;
-	Thu, 18 Apr 2024 21:55:15 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VKznZ1rkyz6D955;
+	Thu, 18 Apr 2024 21:55:46 +0800 (CST)
 Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 5C173140C98;
-	Thu, 18 Apr 2024 21:57:18 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 147261406AC;
+	Thu, 18 Apr 2024 21:57:49 +0800 (CST)
 Received: from SecurePC-101-06.china.huawei.com (10.122.247.231) by
  lhrpeml500005.china.huawei.com (7.191.163.240) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Thu, 18 Apr 2024 14:57:17 +0100
+ 15.1.2507.35; Thu, 18 Apr 2024 14:57:48 +0100
 From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 To: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra
 	<peterz@infradead.org>, <linux-pm@vger.kernel.org>,
@@ -53,9 +53,9 @@ To: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra
 CC: Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave
  Hansen <dave.hansen@linux.intel.com>, <linuxarm@huawei.com>,
 	<justin.he@arm.com>, <jianyong.wu@arm.com>
-Subject: [PATCH v7 06/16] ACPI: processor: Register deferred CPUs from acpi_processor_get_info()
-Date: Thu, 18 Apr 2024 14:54:02 +0100
-Message-ID: <20240418135412.14730-7-Jonathan.Cameron@huawei.com>
+Subject: [PATCH v7 07/16] ACPI: scan: switch to flags for acpi_scan_check_and_detach()
+Date: Thu, 18 Apr 2024 14:54:03 +0100
+Message-ID: <20240418135412.14730-8-Jonathan.Cameron@huawei.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240418135412.14730-1-Jonathan.Cameron@huawei.com>
 References: <20240418135412.14730-1-Jonathan.Cameron@huawei.com>
@@ -70,84 +70,67 @@ Content-Type: text/plain
 X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
  lhrpeml500005.china.huawei.com (7.191.163.240)
 
-From: James Morse <james.morse@arm.com>
+Precursor patch adds the ability to pass a uintptr_t of flags into
+acpi_scan_check_and detach() so that additional flags can be
+added to indicate whether to defer portions of the eject flow.
+The new flag follows in the next patch.
 
-The arm64 specific arch_register_cpu() call may defer CPU registration
-until the ACPI interpreter is available and the _STA method can
-be evaluated.
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-If this occurs, then a second attempt is made in
-acpi_processor_get_info(). Note that the arm64 specific call has
-not yet been added so for now this will be called for the original
-hotplug case.
-
-For architectures that do not defer until the ACPI Processor
-driver loads (e.g. x86), for initially present CPUs there will
-already be a CPU device. If present do not try to register again.
-
-Systems can still be booted with 'acpi=off', or not include an
-ACPI description at all as in these cases arch_register_cpu()
-will not have deferred registration when first called.
-
-This moves the CPU register logic back to a subsys_initcall(),
-while the memory nodes will have been registered earlier.
-Note this is where the call was prior to the cleanup series so
-there should be no side effects of moving it back again for this
-specific case.
-
-[PATCH 00/21] Initial cleanups for vCPU HP.
-https://lore.kernel.org/all/ZVyz%2FVe5pPu8AWoA@shell.armlinux.org.uk/
-commit 5b95f94c3b9f ("x86/topology: Switch over to GENERIC_CPU_DEVICES")
-
-Signed-off-by: James Morse <james.morse@arm.com>
-Reviewed-by: Gavin Shan <gshan@redhat.com>
-Tested-by: Miguel Luis <miguel.luis@oracle.com>
-Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
-Tested-by: Jianyong Wu <jianyong.wu@arm.com>
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Co-developed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Signed-off-by: Joanthan Cameron <Jonathan.Cameron@huawei.com>
 ---
-v7: Simplify the logic on whether to hotadd the CPU.
-    This path can only be reached either for coldplug in which
-    case all we care about is has register_cpu() already been
-    called (identifying deferred), or hotplug in which case
-    whether register_cpu() has been called is also sufficient.
-    Checks on _STA related elements or the validity of the ID
-    are no longer necessary here due to similar checks having
-    moved elsewhere in the path.
-v6: Squash the two paths for conventional CPU Hotplug and arm64
-    vCPU HP.
+v7: No change
+v6: Based on internal feedback switch to less invasive change
+    to using flags rather than a struct.
 ---
- drivers/acpi/acpi_processor.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ drivers/acpi/scan.c | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
-index 127ae8dcb787..4e65011e706c 100644
---- a/drivers/acpi/acpi_processor.c
-+++ b/drivers/acpi/acpi_processor.c
-@@ -350,14 +350,14 @@ static int acpi_processor_get_info(struct acpi_device *device)
- 	}
+diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
+index d1464324de95..1ec9677e6c2d 100644
+--- a/drivers/acpi/scan.c
++++ b/drivers/acpi/scan.c
+@@ -244,13 +244,16 @@ static int acpi_scan_try_to_offline(struct acpi_device *device)
+ 	return 0;
+ }
  
- 	/*
--	 *  Extra Processor objects may be enumerated on MP systems with
--	 *  less than the max # of CPUs. They should be ignored _iff
--	 *  they are physically not present.
--	 *
--	 *  NOTE: Even if the processor has a cpuid, it may not be present
--	 *  because cpuid <-> apicid mapping is persistent now.
-+	 *  This code is not called unless we know the CPU is present and
-+	 *  enabled. The two paths are:
-+	 *  a) Initially present CPUs on architectures that do not defer
-+	 *     their arch_register_cpu() calls until this point.
-+	 *  b) Hotplugged CPUs (enabled bit in _STA has transitioned from not
-+	 *     enabled to enabled)
- 	 */
--	if (invalid_logical_cpuid(pr->id) || !cpu_present(pr->id)) {
-+	if (!get_cpu_device(pr->id)) {
- 		ret = acpi_processor_hotadd_init(pr, device);
+-static int acpi_scan_check_and_detach(struct acpi_device *adev, void *check)
++#define ACPI_SCAN_CHECK_FLAG_STATUS	BIT(0)
++
++static int acpi_scan_check_and_detach(struct acpi_device *adev, void *p)
+ {
+ 	struct acpi_scan_handler *handler = adev->handler;
++	uintptr_t flags = (uintptr_t)p;
  
- 		if (ret)
+-	acpi_dev_for_each_child_reverse(adev, acpi_scan_check_and_detach, check);
++	acpi_dev_for_each_child_reverse(adev, acpi_scan_check_and_detach, p);
+ 
+-	if (check) {
++	if (flags & ACPI_SCAN_CHECK_FLAG_STATUS) {
+ 		acpi_bus_get_status(adev);
+ 		/*
+ 		 * Skip devices that are still there and take the enabled
+@@ -288,7 +291,9 @@ static int acpi_scan_check_and_detach(struct acpi_device *adev, void *check)
+ 
+ static void acpi_scan_check_subtree(struct acpi_device *adev)
+ {
+-	acpi_scan_check_and_detach(adev, (void *)true);
++	uintptr_t flags = ACPI_SCAN_CHECK_FLAG_STATUS;
++
++	acpi_scan_check_and_detach(adev, (void *)flags);
+ }
+ 
+ static int acpi_scan_hot_remove(struct acpi_device *device)
+@@ -2601,7 +2606,9 @@ EXPORT_SYMBOL(acpi_bus_scan);
+  */
+ void acpi_bus_trim(struct acpi_device *adev)
+ {
+-	acpi_scan_check_and_detach(adev, NULL);
++	uintptr_t flags = 0;
++
++	acpi_scan_check_and_detach(adev, (void *)flags);
+ }
+ EXPORT_SYMBOL_GPL(acpi_bus_trim);
+ 
 -- 
 2.39.2
 
