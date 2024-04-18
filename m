@@ -1,104 +1,127 @@
-Return-Path: <linux-arch+bounces-3782-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3783-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D01158A903E
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Apr 2024 03:00:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E94D8A9165
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Apr 2024 05:03:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8C367282FA3
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Apr 2024 01:00:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 11D3D1F21906
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Apr 2024 03:03:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09B6A5CB0;
-	Thu, 18 Apr 2024 01:00:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B1384F218;
+	Thu, 18 Apr 2024 03:03:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="SDAV5RYY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DyuRU+nb"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94288376;
-	Thu, 18 Apr 2024 01:00:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 265C16138;
+	Thu, 18 Apr 2024 03:03:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713402048; cv=none; b=OZP4E0efDSNfelfX16/yzDukmlNHXb7cD/HvxGOTgAi0jW8wlkrz2FEGicHDHypupFLPoR/gIPlxGRBiC06I2D95u8yDg+MTql47HEKGH1I4BTp+1kyoyLHI78Yt3zBquVmWRyrAMiWJ2lU4B0z5fmW45hfPF7lY1NchFUTG5VY=
+	t=1713409407; cv=none; b=dLQaXfdzMlZDGhEWrQIgNOuAJPzIMKlJmzir68nb/BC0QhcTaHUZcSeQrVfhOt9iMpSetsLpfFh9dLZtXngpJQOFeLvTJLkVmHQIFJQO230Xoe0GmUDXtzKHmKf56NuQNTJ2ylSYGjZaZoQhsuf8nP8+wdGWCii2NtE/L5W8Wyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713402048; c=relaxed/simple;
-	bh=vTanqau4t/U+Uyls6+AXjIbwm8dSM1/9KWNhqrmGuGY=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=otEjDYYAxJzUPU8dIoTzzJUQEzhpYqWb6RLecslo7r8ZwZ4efbl+X2Xji6PiyeyqT3kZvZuAkxLYYsLderBNpJKlnbS2zU9pXdS6mwkTQgfvoerdhVoOsp4UpWKKUxfGge14+y0YkmXKzNfz8ZmVkPGKU1fVKaZjuRpAjm3xSYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=SDAV5RYY; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-	s=201909; t=1713402045;
-	bh=vTanqau4t/U+Uyls6+AXjIbwm8dSM1/9KWNhqrmGuGY=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=SDAV5RYYCtv9/IfXyhzcOOOTEmUMqPzfiEGS4GgSjQnGQUV7yADPMa14Nd0rmUE/K
-	 aquXYXEUaYGpBv5GCsf8zH15kInnF/2Xi9xZigUB1VFYkbS3IWcata7UA7dTgHg+rs
-	 7Fd+yV9yJBuUoLZkiMLrspqMbOl6FKqPUQ87rykTej4IKlGrkD83YiCNOwliRNm4yR
-	 osPxlSCN9oSgSQNXy9fbIMcKfAXI08A3mrZCyZ3alA/xpYUJRjClRlIDtlLJqY56IV
-	 SHmyD7lVNtHX7SS+8Q95mEw1DDSmFAz18MUgX1C0dHSN0cUPgvKKr58M4Yvj5nc+fc
-	 4UEOJKGC3p1iA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4VKfbJ1h6Hz4wc8;
-	Thu, 18 Apr 2024 11:00:44 +1000 (AEST)
-From: Michael Ellerman <mpe@ellerman.id.au>
-To: Frederic Weisbecker <frederic@kernel.org>, Alexander Gordeev
- <agordeev@linux.ibm.com>, Ingo Molnar <mingo@kernel.org>
-Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
- Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot
- <vincent.guittot@linaro.org>, Arnd Bergmann <arnd@arndb.de>,
- linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org, Nicholas Piggin
- <npiggin@gmail.com>, Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik
- <gor@linux.ibm.com>
-Subject: Re: [PATCH v2 RESEND 0/5] sched/vtime: vtime.h headers cleanup
-In-Reply-To: <Zh-kEvJbNR2krwmx@localhost.localdomain>
-References: <cover.1712760275.git.agordeev@linux.ibm.com>
- <Zh-kEvJbNR2krwmx@localhost.localdomain>
-Date: Thu, 18 Apr 2024 11:00:43 +1000
-Message-ID: <87h6fzbi2s.fsf@mail.lhotse>
+	s=arc-20240116; t=1713409407; c=relaxed/simple;
+	bh=kfEJQjTwgGJh4Zkx43Z0VD1r+pL2rJMimsZzyjREVEM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=idbxgrIsfyS/1CyxhANwP59PhrAA7nkhxu0xyZQ2ermbCrKljh5KOAhva0SIVVADTWhU5jurGaLCbweT0OL7tZl4p1dNZjqOYxfQQZibJneayX6xGCxa5qsE2JGRF9JfAsPXF0ubJ2VOJ2aUNIn0FFqHw6cG+5sELUrsM6/CU58=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DyuRU+nb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4761C3277B;
+	Thu, 18 Apr 2024 03:03:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713409406;
+	bh=kfEJQjTwgGJh4Zkx43Z0VD1r+pL2rJMimsZzyjREVEM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=DyuRU+nbBlfEefDgkjYMaeHuZxrD+lMlRPMalkQi5IC69YYTWZ6zEdir/RupkAap0
+	 17RzMJVBVaskBzoD8lhK/LtZy2kUP7k21+CDiY0gBXnPmT64owTkQbxHdf0JyAPAYx
+	 tx0a4zLTnGo0CFjFFObQkeT4Qn82jY+d6vAZT/fd9qDpC/vddsmWPQ9f5r1pkH+Cb2
+	 yh2V+NoEvWckhqYS09yUlUYUkVb0oMebHG0BQarTzSCq4o2/7SwOGQyDEXewhte9Sg
+	 Lhmm69YwKDOmE0MM0CShULZ5v9DJpyzWisMvETTr/zB7h29YiU62z1Gam5322XaIMS
+	 pcQhx3sXD225A==
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a557044f2ddso14279466b.2;
+        Wed, 17 Apr 2024 20:03:26 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVYKBvBKXRyEWqu+7BMTN77g23vYSb9E9bArH7hfvTIghiag/MV+qvk4XmR5INFtomffqPPFlh+s8vQWKAi4RnQo85AkDORjSw451cYRAndTDWtxewb3sSYp29xO9zLAfnOrmE8IJ2ABj7V18PlQRY8973N2Y2YKNz8hiBgxA==
+X-Gm-Message-State: AOJu0YwTmdPOq6cIBzMY6EttEpJ6P48l+q/jzt9p7qRSflkzKL6A2qnN
+	gQZx6cmmVQKpw+SE3FrN3Ru5bXY0cEu9Q4J08AmXVKoTNaxtZD8726TNrmwXp5NKClwqWG+BxVX
+	aFcE24gn1dYoTXmH3RufPXhh1N0M=
+X-Google-Smtp-Source: AGHT+IEGnzxcLzKogVMafWt/io2wledXtCG2nYVIAR7Lu4aQp3Gm16la5nxK3JKrgyWlsMhlzCjZG627hEMlqWAR0dk=
+X-Received: by 2002:a17:906:f8da:b0:a55:596b:c9ca with SMTP id
+ lh26-20020a170906f8da00b00a55596bc9camr830982ejb.39.1713409405224; Wed, 17
+ Apr 2024 20:03:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+References: <20240416144926.599101-1-david@redhat.com> <CANiq72kACt+FfeYXJxfQpmGH=uPqkDA0oprfnebw52VSKyn7kQ@mail.gmail.com>
+ <CAAhV-H5mt0GaaZ3s44CYb4aKqYeDYm+Q16hY__FdQ6xYJh+bgg@mail.gmail.com> <20240417135834.ddaa9c038a8a8af2bd9e39aa@linux-foundation.org>
+In-Reply-To: <20240417135834.ddaa9c038a8a8af2bd9e39aa@linux-foundation.org>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Thu, 18 Apr 2024 11:03:18 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4O6_9Ukgz-GrPcWTq3cAN2c1OkXQWRbUgMR2ZwUuQQHA@mail.gmail.com>
+Message-ID: <CAAhV-H4O6_9Ukgz-GrPcWTq3cAN2c1OkXQWRbUgMR2ZwUuQQHA@mail.gmail.com>
+Subject: Re: [PATCH v1] LoongArch/tlb: fix "error: parameter 'ptep' set but
+ not used" due to __tlb_remove_tlb_entry()
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, David Hildenbrand <david@redhat.com>, 
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-arch@vger.kernel.org, 
+	loongarch@lists.linux.dev, llvm@lists.linux.dev, 
+	Arnd Bergmann <arnd@arndb.de>, WANG Xuerui <kernel@xen0n.name>, Nathan Chancellor <nathan@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Frederic Weisbecker <frederic@kernel.org> writes:
-> Le Wed, Apr 10, 2024 at 05:09:43PM +0200, Alexander Gordeev a =C3=A9crit :
->> Hi All,
->>=20
->> There are no changes since the last post, just a re-send.
->>=20
->> v2:
->> - patch 4: commit message reworded (Heiko)
->> - patch 5: vtime.h is removed from Kbuild scripts (PowerPC only) (Heiko)
->>=20
->> v1:
->> Please find a small cleanup to vtime_task_switch() wiring.
->> I split it into smaller patches to allow separate PowerPC
->> vs s390 reviews. Otherwise patches 2+3 and 4+5 could have
->> been merged.
->>=20
->> I tested it on s390 and compile-tested it on 32- and 64-bit
->> PowerPC and few other major architectures only, but it is
->> only of concern for CONFIG_VIRT_CPU_ACCOUNTING_NATIVE-capable
->> ones (AFAICT).
->>=20
->> Thanks!
+Hi, Andrew,
+
+On Thu, Apr 18, 2024 at 4:58=E2=80=AFAM Andrew Morton <akpm@linux-foundatio=
+n.org> wrote:
 >
-> It probably makes sense to apply the whole series to the scheduler tree.
-> Does any powerpc or s390 maintainer oppose to that?
+> On Wed, 17 Apr 2024 11:18:27 +0800 Huacai Chen <chenhuacai@kernel.org> wr=
+ote:
+>
+> > On Wed, Apr 17, 2024 at 3:25=E2=80=AFAM Miguel Ojeda
+> > <miguel.ojeda.sandonis@gmail.com> wrote:
+> > >
+> > > On Tue, Apr 16, 2024 at 4:49=E2=80=AFPM David Hildenbrand <david@redh=
+at.com> wrote:
+> > > >
+> > > > With LLVM=3D1 and W=3D1 we get:
+> > >
+> > > Hmm... I didn't need W=3D1 to trigger it (LLVM 18.1.2).
+> > >
+> > > > Reported-by: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+> > >
+> > > Thanks, looks good to me -- built-tested:
+> > >
+> > > Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
+> > > Tested-by: Miguel Ojeda <ojeda@kernel.org>
+> > >
+> >
+> > Queued for loongarch-fixes, thanks.
+> >
+>
+> (top-posting repaired so I can sensibly reply to this.  Please avoid
+> top-posting!)
+Sorry, I only top-posting with "Queued ...", "Applied ..." because I
+saw others do like this. If this is also unacceptable, I will not do
+it again.
 
-No objection. It has acks and reviews from powerpc.
+>
+> I'd rather carry this in mm.git with your ack please.  Otherwise mm.git
+> won't compile without it and if I retain this patch we'll get
+> duplicate-patch emails from Stephen and I won't be able to merge
+> mm.git's mm-nonmm-stable tree into Linus until loongarch-fixes has
+> merged.
+loongarch-next always merges loongarch-fixes, so when I apply a patch
+it will be in linux-next. Now this patch I have already applied to
+loongarch-fixes and loongarch-next. In future, I will give an Acked-by
+for you if needed.
 
-cheers
+Huacai
+
+>
+>
 
