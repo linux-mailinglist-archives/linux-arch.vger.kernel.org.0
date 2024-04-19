@@ -1,108 +1,164 @@
-Return-Path: <linux-arch+bounces-3818-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3819-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4ADF88AA995
-	for <lists+linux-arch@lfdr.de>; Fri, 19 Apr 2024 09:57:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 606698AA9B1
+	for <lists+linux-arch@lfdr.de>; Fri, 19 Apr 2024 10:03:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C1D39B218F5
-	for <lists+linux-arch@lfdr.de>; Fri, 19 Apr 2024 07:57:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 16090281D5E
+	for <lists+linux-arch@lfdr.de>; Fri, 19 Apr 2024 08:03:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 092C047F5F;
-	Fri, 19 Apr 2024 07:57:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FcCA9M5S"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC2DC4CB45;
+	Fri, 19 Apr 2024 08:03:05 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C807EC15D;
-	Fri, 19 Apr 2024 07:57:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BBCF4F214;
+	Fri, 19 Apr 2024 08:03:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713513438; cv=none; b=SmCbPNh5BGCQ2gXTJLg8iYRSVdwhNw03POfDoAzeBk9dbIDpmOUUCDy8u9NMSzT+SSMgjEADIer47lnZNkTuU78Jj/BCl5ypFE23Xd4hoOqC94HvtiFgfyBqdGp1neMFC8cm+ncF8zzjLklXG7qFhsky2RMyfnxJ3BeTvzTi1v4=
+	t=1713513785; cv=none; b=EhhkNrLlVvmlqalar+hkSZhA5SjSqIhi8L1t6iITGrwTNVHjXp878X2LOH15dHVvVGDlGKq+5vZLbgDIVEC/VCTTge4uk05o/H8ALUpfuMySeW5mGZtMtDLKiYCmlNNCng0C7dBkuqFbZBwI5JBjXeCByvVdrbzyZ5WLw7QU1DQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713513438; c=relaxed/simple;
-	bh=1TZ8nYeFpnXiIoNsNPAlgLqamNWJVrnDVh0XwyAvwzo=;
+	s=arc-20240116; t=1713513785; c=relaxed/simple;
+	bh=n+2UavZoWcsMp93Asn21Hjf0+Jmf3KsEWYo3YxN6e70=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=V/pz1j1VUNCBq84dDLsFtatzHqLkbZskiU/vSvf/Nal9LihCNv3C/cRLv4zMPVeXchT/6pUm59qWVJg2+Bt52qaZdcpx8UEvF94eQp5K4Al8LgOHVtoeRzjfsB/13aWJavr2fSDXqUZeDsD2WEI8C2IaxWmUgrttNKwO4bkv60k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FcCA9M5S; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 593BAC2BD10;
-	Fri, 19 Apr 2024 07:57:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713513438;
-	bh=1TZ8nYeFpnXiIoNsNPAlgLqamNWJVrnDVh0XwyAvwzo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=FcCA9M5SXyan3VbSbTysHYhgiqWpiiiiUIbLTKQOchML+tqiy0o0TOXQAdauqzJZj
-	 QDHfDECqC8teTsw8Z2lkigcSQoIVLSQKkA+4jpjfnkJrrsbeBLm48RRwsVSqhz59ie
-	 I9wtwjnZmJJh3CiR0Qp+zWdd/snZid+y8bqTDibsMiRuNSS5gP6ZdExGrKhAhGgo1O
-	 2svJfDkem5U0s7ICLV4ZWb+M6JIYxnrBwkUtEOt/I2QOmDgQgItHswrjylGZPRQK9J
-	 0h6c2dKJVNwG5+pu+zjyYRb3D/Y0ZrK1LSMmt2T8gXQ91Q0mwIf73uOgpYd6/HfZ4Z
-	 i0sSrulhJg63A==
-Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2dcc8d10d39so5607681fa.3;
-        Fri, 19 Apr 2024 00:57:18 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU/ZIu+GsHBvgKmaS5LlVWRTOzUg4+v9OtZ28izWuq9otIC+BDydoyXjXVEkLIIrNcUOfM6/8bQV2E/1zBlxEmdcsUgChB3lwgrvRx3o1T2GoWT8G0icVPLRBZyYkOTx0VGAisfY1OB4+0gUhS06KWktPgTwVeMC6j3nuDOsSDp82apNpzm4KGRhyNY01pM/C6p4Cbq3GNzPYWSBA==
-X-Gm-Message-State: AOJu0YytF6LxqyglF3zuWRhE+B9V88ZqMDZhC9evtymWIS6dIY5m7i/f
-	YhjBaVDhOQcCX7Noqt7XNV29/32fW3q3lS7ppON65HpqwZsxfm+YDa5ndZC4G/le81gMW6k7yVQ
-	lviTeGL2NftBFA2r39dzmicXBYLs=
-X-Google-Smtp-Source: AGHT+IGe0BXzWMTZhMt+wFll+Z29hCabZkKHmFp7RLlW1/LlIWEz4pzHm0vIJmiGDimQtO6B9WSAzRlWCg30klKUvqI=
-X-Received: by 2002:a05:651c:4d4:b0:2d8:34ad:7f4e with SMTP id
- e20-20020a05651c04d400b002d834ad7f4emr930276lji.4.1713513436740; Fri, 19 Apr
- 2024 00:57:16 -0700 (PDT)
+	 To:Cc:Content-Type; b=bs3zEoDK2ESMTSGO81MltCecrSgy20sxSzTrZdtZCIzPzyfdhClK7rft0x5DAQYc7p9pN3h06QOlDfElIKveJGoSSaSlyhgiUyhnWRjqNmuaUOaiFSIUX8UzxMN3N9oO71qYZKaKFU173KYUOsOjt4MeU60mep7+aNM0QXxI1v0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-6164d7a02d2so20523557b3.3;
+        Fri, 19 Apr 2024 01:03:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713513780; x=1714118580;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QgeGXet2e4SNWNIf1k+Rx9MxbJvkfUif/WiEiHZ/LzI=;
+        b=w6pICn16tvg++licOjeznZrliftF1oRRN1ME0PhaO6epQ0715nBOtAMUY3ZLzi9QIo
+         uuS8lO3OZzaa3eUFAausAfBnPiPQguuAzrWgjxTDI2Se4aa6xanF3uAm/y5aWAsUPOWc
+         t7AXQLY/UB7StdAtS5FrV7a8xWpzzSGb7OqxrFL4hy0LLAFqNqjQBlerhvUncJmlXpJP
+         mF3GBqPwFWxzz4PFw3FmpLEgz8bsQ7IGesHNix30J7hg/RAhEWHTI9KUstXnwk4Z/oCb
+         UZcyN2vKwx0NKCjV4VgQx8+nXMpVenTfvOmMGXmYOXpeHnZ91K277kwx5OaXXPddMuGg
+         PBdA==
+X-Forwarded-Encrypted: i=1; AJvYcCUIfDuI5qrwWULHVd2UGWcehwwV473DLnY2hhALkZ6mZ5Z/zYibcDeSFuGICPZsyZBsLxADWyll9MwUmOiWE/XOM9OE9jyUSjQvui4/ubXHqinXRPX5OHW9uh1ICR3U4PWEp9U909LpDA==
+X-Gm-Message-State: AOJu0YxHqoGT9EPTFOpPsZprPh+ZzMxe+iZAkx6+PzROAdWyelvxAAoc
+	tZhJ6ZeYmIZzNBJGJLNf+x5pcQRHekn76Ywxfq2OV388kOww20ax0R2CMCYM
+X-Google-Smtp-Source: AGHT+IH6ond2r24lWkM+sInsfHWcCCKgD48YYyOQfdjWxpLhUFVXZVM2Wb1XZOAlBa0d084W6K3K8Q==
+X-Received: by 2002:a05:690c:c81:b0:61a:cc3c:ae69 with SMTP id cm1-20020a05690c0c8100b0061acc3cae69mr1330246ywb.18.1713513779641;
+        Fri, 19 Apr 2024 01:02:59 -0700 (PDT)
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
+        by smtp.gmail.com with ESMTPSA id t20-20020a81b514000000b0061ad6e89bdesm673551ywh.108.2024.04.19.01.02.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 Apr 2024 01:02:59 -0700 (PDT)
+Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-dc23bf7e5aaso1979109276.0;
+        Fri, 19 Apr 2024 01:02:59 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXQWPnecDAXcy4lhTEEKePowM4qp8ARS+Uzydd1t/j7Pkw68HQA1AB2V+vyIEQVWG5H2TZnY/DY2dlE0v/1zIk+SZ4sgrh0kiAMHvTRwcmu4nWgy1Zqm9e/8g68J5/xficf4mPwRaiiHg==
+X-Received: by 2002:a25:5f45:0:b0:de0:ea71:9ec9 with SMTP id
+ h5-20020a255f45000000b00de0ea719ec9mr1121064ybm.1.1713513778941; Fri, 19 Apr
+ 2024 01:02:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240415162041.2491523-5-ardb+git@google.com> <171327842741.29461.3030265084386428643.git-patchwork-notify@kernel.org>
-In-Reply-To: <171327842741.29461.3030265084386428643.git-patchwork-notify@kernel.org>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Fri, 19 Apr 2024 09:57:05 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXGVRGcJGS1xuqHPeJfM797RB2UiJQfSHK+oj1JQG4YECg@mail.gmail.com>
-Message-ID: <CAMj1kXGVRGcJGS1xuqHPeJfM797RB2UiJQfSHK+oj1JQG4YECg@mail.gmail.com>
-Subject: Re: [PATCH v4 0/3] kbuild: Avoid weak external linkage where possible
-To: patchwork-bot+netdevbpf@kernel.org
-Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, masahiroy@kernel.org, 
-	arnd@arndb.de, martin.lau@linux.dev, linux-arch@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, andrii@kernel.org, 
-	olsajiri@gmail.com
+References: <7b3646e0-667c-48e2-8f09-e493c43c30cb@paulmck-laptop>
+ <20240408174944.907695-13-paulmck@kernel.org> <CAMuHMdXAB-9GPqNBJKF=JtWNfhBv168N6eko-9VcLmLSeQaS4Q@mail.gmail.com>
+ <620a10e8-f5c0-4e23-8403-492ab1c7f110@paulmck-laptop> <ZiH8IBiLkYw7M281@yujie-X299>
+In-Reply-To: <ZiH8IBiLkYw7M281@yujie-X299>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Fri, 19 Apr 2024 10:02:47 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUWF=O4fEA8aQfhmRhuH88zB3aK1Mi3UCXx8=EaONRRkg@mail.gmail.com>
+Message-ID: <CAMuHMdUWF=O4fEA8aQfhmRhuH88zB3aK1Mi3UCXx8=EaONRRkg@mail.gmail.com>
+Subject: Re: [PATCH cmpxchg 13/14] xtensa: Emulate one-byte cmpxchg
+To: Yujie Liu <yujie.liu@intel.com>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>, linux-arch@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, elver@google.com, akpm@linux-foundation.org, 
+	tglx@linutronix.de, peterz@infradead.org, dianders@chromium.org, 
+	pmladek@suse.com, torvalds@linux-foundation.org, 
+	Arnd Bergmann <arnd@arndb.de>, Andi Shyti <andi.shyti@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 16 Apr 2024 at 16:40, <patchwork-bot+netdevbpf@kernel.org> wrote:
->
-> Hello:
->
-> This series was applied to bpf/bpf-next.git (master)
-> by Daniel Borkmann <daniel@iogearbox.net>:
->
-> On Mon, 15 Apr 2024 18:20:42 +0200 you wrote:
-> > From: Ard Biesheuvel <ardb@kernel.org>
+On Fri, Apr 19, 2024 at 7:14=E2=80=AFAM Yujie Liu <yujie.liu@intel.com> wro=
+te:
+> On Thu, Apr 18, 2024 at 04:21:46PM -0700, Paul E. McKenney wrote:
+> > On Thu, Apr 18, 2024 at 10:06:21AM +0200, Geert Uytterhoeven wrote:
+> > > On Mon, Apr 8, 2024 at 7:49=E2=80=AFPM Paul E. McKenney <paulmck@kern=
+el.org> wrote:
+> > > > Use the new cmpxchg_emu_u8() to emulate one-byte cmpxchg() on xtens=
+a.
+> > > >
+> > > > [ paulmck: Apply kernel test robot feedback. ]
+> > > > [ paulmck: Drop two-byte support per Arnd Bergmann feedback. ]
+> > > >
+> > > > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > >
+> > > Thanks for your patch!
+> > >
+> > > > --- a/arch/xtensa/include/asm/cmpxchg.h
+> > > > +++ b/arch/xtensa/include/asm/cmpxchg.h
+> > > > @@ -74,6 +75,7 @@ static __inline__ unsigned long
+> > > >  __cmpxchg(volatile void *ptr, unsigned long old, unsigned long new=
+, int size)
+> > > >  {
+> > > >         switch (size) {
+> > > > +       case 1:  return cmpxchg_emu_u8((volatile u8 *)ptr, old, new=
+);
+> > >
+> > > The cast is not needed.
 > >
-> > Weak external linkage is intended for cases where a symbol reference
-> > can remain unsatisfied in the final link. Taking the address of such a
-> > symbol should yield NULL if the reference was not satisfied.
+> > In both cases, kernel test robot yelled at me when it was not present.
 > >
-> > Given that ordinary RIP or PC relative references cannot produce NULL,
-> > some kind of indirection is always needed in such cases, and in position
-> > independent code, this results in a GOT entry. In ordinary code, it is
-> > arch specific but amounts to the same thing.
-> >
-> > [...]
+> > Happy to resubmit without it, though, if that is a yell that I should
+> > have ignored.
 >
-> Here is the summary with links:
->   - [v4,1/3] kallsyms: Avoid weak references for kallsyms symbols
->     (no matching commit)
->   - [v4,2/3] vmlinux: Avoid weak reference to notes section
->     (no matching commit)
->   - [v4,3/3] btf: Avoid weak external references
->     https://git.kernel.org/bpf/bpf-next/c/fc5eb4a84e4c
+> FYI, kernel test robot did yell some reports on various architectures suc=
+h as:
 >
+> [1] https://lore.kernel.org/oe-kbuild-all/202403292321.T55etywH-lkp@intel=
+.com/
+> [2] https://lore.kernel.org/oe-kbuild-all/202404040526.GVzaL2io-lkp@intel=
+.com/
+> [3] https://lore.kernel.org/oe-kbuild-all/202404022106.mYwpypit-lkp@intel=
+.com/
+>
+> In brief, there were mainly three types of issues:
+>
+> * The cmpxchg-emu.h header is missing
+> * The parameters of cmpxchg_emu_u8 need to be cast to corresponding types
+> * The return value of cmpxchg_emu_u8 needs to be cast to the "ret" type
+>
+> As for this specific case of xtensa arch, the compiler doesn't warn
+> regardless of whether there is an explicit cast for "ptr" or not.
+> The "ptr" being passed in is "void *", and it seems that a "void *"
+> pointer can be automatically cast to any other type of pointer, so it
+> is not necessary to have an explicit cast of "u8 *".
+>
+> As for the implementations of other architectures that don't pass the
+> "ptr" as "void *" (such as a macro implementation), the explicit cast to
+> "u8 *" may still be required.
 
+Exactly.  On sh and xtensa, the original pointer is of type
+"volatile void *", so no cast is needed.
+On E.g. arc, the original pointer is of type "volatile __typeof__(ptr) _p_"=
+,
+which is not always compatible with "volatile u8 *".
 
-Thanks.
+Gr{oetje,eeting}s,
 
-Masahiro, could you pick up patches #1 and #2 please?
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
