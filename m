@@ -1,144 +1,108 @@
-Return-Path: <linux-arch+bounces-3817-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3818-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4E9A8AA8B7
-	for <lists+linux-arch@lfdr.de>; Fri, 19 Apr 2024 08:56:43 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4ADF88AA995
+	for <lists+linux-arch@lfdr.de>; Fri, 19 Apr 2024 09:57:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C38F1F21186
-	for <lists+linux-arch@lfdr.de>; Fri, 19 Apr 2024 06:56:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C1D39B218F5
+	for <lists+linux-arch@lfdr.de>; Fri, 19 Apr 2024 07:57:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36CF03A1A8;
-	Fri, 19 Apr 2024 06:56:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 092C047F5F;
+	Fri, 19 Apr 2024 07:57:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GGPxC8PC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FcCA9M5S"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D77DA63E;
-	Fri, 19 Apr 2024 06:56:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C807EC15D;
+	Fri, 19 Apr 2024 07:57:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713509798; cv=none; b=uSluC9zo28vHSoNgnpCTH08/ccnBLEO8gH6TK5xWBiFM5Mj2WodUMDcTCP+DgAZvoSe/JFTO7t0wTfWMQxTdeY+XuOSCRP+QGzcwAi1XwGisjgI+chvmpjnSOeV7+zLindn5TMjqfqYWoRFBugF/QePjG3f07+1kKDwNSJ20dLU=
+	t=1713513438; cv=none; b=SmCbPNh5BGCQ2gXTJLg8iYRSVdwhNw03POfDoAzeBk9dbIDpmOUUCDy8u9NMSzT+SSMgjEADIer47lnZNkTuU78Jj/BCl5ypFE23Xd4hoOqC94HvtiFgfyBqdGp1neMFC8cm+ncF8zzjLklXG7qFhsky2RMyfnxJ3BeTvzTi1v4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713509798; c=relaxed/simple;
-	bh=QyMnC6yNCYeGf0vrwo+bvOEGlhU1enTkpEMS1UdTz3o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nfeXrSOHRfzoP83QFoYBbmVcyWej2sBnyV6u8bkYQKL4THyJKWx3Lf+tKiXXLWm+KPl3tx31E9mwK1BP+kQCHb38y9WM8sYfUi+nPCaL24bUDc5/YYAghrAP3yqhqoIAzAMprsIP3bJUFivCquJ9mBFkvBGfLUPa1kXva/J6dFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GGPxC8PC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5881C072AA;
-	Fri, 19 Apr 2024 06:56:24 +0000 (UTC)
+	s=arc-20240116; t=1713513438; c=relaxed/simple;
+	bh=1TZ8nYeFpnXiIoNsNPAlgLqamNWJVrnDVh0XwyAvwzo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=V/pz1j1VUNCBq84dDLsFtatzHqLkbZskiU/vSvf/Nal9LihCNv3C/cRLv4zMPVeXchT/6pUm59qWVJg2+Bt52qaZdcpx8UEvF94eQp5K4Al8LgOHVtoeRzjfsB/13aWJavr2fSDXqUZeDsD2WEI8C2IaxWmUgrttNKwO4bkv60k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FcCA9M5S; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 593BAC2BD10;
+	Fri, 19 Apr 2024 07:57:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713509797;
-	bh=QyMnC6yNCYeGf0vrwo+bvOEGlhU1enTkpEMS1UdTz3o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GGPxC8PCY8SnZrF0RCOMbIgSLrKy8hMUcTwQhGg04AArCCIqcrHmv5Ozj+/15Mxmb
-	 Z5tAH7Vdwb4CwNtAt3c/UrCpMIZJPngEV7ak2csa/7FlHToGNqqaiOtjXXYFiXJWt3
-	 6ObsP+646nnF8SnH5skC5WEdWELGtHSHzBDWXZqXYwBofamn2QdDvdgy5CTKGNpPOO
-	 1v84dtOt7AKF4KxvZWU3TOdBN2g9tkVxrJyakFg/qwL0NKQfGsXLfFOWV0O05jtLTZ
-	 wM29U64qOuZV772RLQ5j7ljjoO+qx0/azdfHFMH7xioH9AhimXQ/fqnfmBiI3Sy0+P
-	 8Za6g/P3pUaVg==
-Date: Fri, 19 Apr 2024 09:55:16 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Song Liu <song@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>,
-	Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org,
-	Alexandre Ghiti <alexghiti@rivosinc.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Bjorn Topel <bjorn@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	"David S. Miller" <davem@davemloft.net>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Donald Dutile <ddutile@redhat.com>,
-	Eric Chanudet <echanude@redhat.com>,
-	Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nadav Amit <nadav.amit@gmail.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Puranjay Mohan <puranjay12@gmail.com>,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
-	bpf@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-	linux-mm@kvack.org, linux-modules@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-	netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v4 05/15] mm: introduce execmem_alloc() and execmem_free()
-Message-ID: <ZiIVVBgaDN4RsroT@kernel.org>
-References: <20240411160051.2093261-1-rppt@kernel.org>
- <20240411160051.2093261-6-rppt@kernel.org>
- <20240415075241.GF40213@noisy.programming.kicks-ass.net>
- <Zh1lnIdgFeM1o8S5@FVFF77S0Q05N.cambridge.arm.com>
- <Zh4nJp8rv1qRBs8m@kernel.org>
- <CAPhsuW6Pbg2k_Gu4dsBx+H8H5XCHvNdtEZJBPiG_eT0qqr9D1w@mail.gmail.com>
- <ZiE91CJcNw7gBj9g@kernel.org>
- <CAPhsuW4au6v8k8Ab7Ff6Yj64rGvZ7wkz=Xrgh8ZZtLyscpChqQ@mail.gmail.com>
- <ZiFd567L4Zzm2okO@kernel.org>
- <CAPhsuW5SL4_=ZXdHZV8o0KS+5Vf25UMvEKhRgFQLioFtf2pgoQ@mail.gmail.com>
+	s=k20201202; t=1713513438;
+	bh=1TZ8nYeFpnXiIoNsNPAlgLqamNWJVrnDVh0XwyAvwzo=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=FcCA9M5SXyan3VbSbTysHYhgiqWpiiiiUIbLTKQOchML+tqiy0o0TOXQAdauqzJZj
+	 QDHfDECqC8teTsw8Z2lkigcSQoIVLSQKkA+4jpjfnkJrrsbeBLm48RRwsVSqhz59ie
+	 I9wtwjnZmJJh3CiR0Qp+zWdd/snZid+y8bqTDibsMiRuNSS5gP6ZdExGrKhAhGgo1O
+	 2svJfDkem5U0s7ICLV4ZWb+M6JIYxnrBwkUtEOt/I2QOmDgQgItHswrjylGZPRQK9J
+	 0h6c2dKJVNwG5+pu+zjyYRb3D/Y0ZrK1LSMmt2T8gXQ91Q0mwIf73uOgpYd6/HfZ4Z
+	 i0sSrulhJg63A==
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2dcc8d10d39so5607681fa.3;
+        Fri, 19 Apr 2024 00:57:18 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU/ZIu+GsHBvgKmaS5LlVWRTOzUg4+v9OtZ28izWuq9otIC+BDydoyXjXVEkLIIrNcUOfM6/8bQV2E/1zBlxEmdcsUgChB3lwgrvRx3o1T2GoWT8G0icVPLRBZyYkOTx0VGAisfY1OB4+0gUhS06KWktPgTwVeMC6j3nuDOsSDp82apNpzm4KGRhyNY01pM/C6p4Cbq3GNzPYWSBA==
+X-Gm-Message-State: AOJu0YytF6LxqyglF3zuWRhE+B9V88ZqMDZhC9evtymWIS6dIY5m7i/f
+	YhjBaVDhOQcCX7Noqt7XNV29/32fW3q3lS7ppON65HpqwZsxfm+YDa5ndZC4G/le81gMW6k7yVQ
+	lviTeGL2NftBFA2r39dzmicXBYLs=
+X-Google-Smtp-Source: AGHT+IGe0BXzWMTZhMt+wFll+Z29hCabZkKHmFp7RLlW1/LlIWEz4pzHm0vIJmiGDimQtO6B9WSAzRlWCg30klKUvqI=
+X-Received: by 2002:a05:651c:4d4:b0:2d8:34ad:7f4e with SMTP id
+ e20-20020a05651c04d400b002d834ad7f4emr930276lji.4.1713513436740; Fri, 19 Apr
+ 2024 00:57:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPhsuW5SL4_=ZXdHZV8o0KS+5Vf25UMvEKhRgFQLioFtf2pgoQ@mail.gmail.com>
+References: <20240415162041.2491523-5-ardb+git@google.com> <171327842741.29461.3030265084386428643.git-patchwork-notify@kernel.org>
+In-Reply-To: <171327842741.29461.3030265084386428643.git-patchwork-notify@kernel.org>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Fri, 19 Apr 2024 09:57:05 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXGVRGcJGS1xuqHPeJfM797RB2UiJQfSHK+oj1JQG4YECg@mail.gmail.com>
+Message-ID: <CAMj1kXGVRGcJGS1xuqHPeJfM797RB2UiJQfSHK+oj1JQG4YECg@mail.gmail.com>
+Subject: Re: [PATCH v4 0/3] kbuild: Avoid weak external linkage where possible
+To: patchwork-bot+netdevbpf@kernel.org
+Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, masahiroy@kernel.org, 
+	arnd@arndb.de, martin.lau@linux.dev, linux-arch@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, andrii@kernel.org, 
+	olsajiri@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Apr 18, 2024 at 02:01:22PM -0700, Song Liu wrote:
-> On Thu, Apr 18, 2024 at 10:54 AM Mike Rapoport <rppt@kernel.org> wrote:
+On Tue, 16 Apr 2024 at 16:40, <patchwork-bot+netdevbpf@kernel.org> wrote:
+>
+> Hello:
+>
+> This series was applied to bpf/bpf-next.git (master)
+> by Daniel Borkmann <daniel@iogearbox.net>:
+>
+> On Mon, 15 Apr 2024 18:20:42 +0200 you wrote:
+> > From: Ard Biesheuvel <ardb@kernel.org>
 > >
-> > On Thu, Apr 18, 2024 at 09:13:27AM -0700, Song Liu wrote:
-> > > On Thu, Apr 18, 2024 at 8:37 AM Mike Rapoport <rppt@kernel.org> wrote:
-> > > > > >
-> > > > > > I'm looking at execmem_types more as definition of the consumers, maybe I
-> > > > > > should have named the enum execmem_consumer at the first place.
-> > > > >
-> > > > > I think looking at execmem_type from consumers' point of view adds
-> > > > > unnecessary complexity. IIUC, for most (if not all) archs, ftrace, kprobe,
-> > > > > and bpf (and maybe also module text) all have the same requirements.
-> > > > > Did I miss something?
-> > > >
-> > > > It's enough to have one architecture with different constrains for kprobes
-> > > > and bpf to warrant a type for each.
-> > >
-> > > AFAICT, some of these constraints can be changed without too much work.
+> > Weak external linkage is intended for cases where a symbol reference
+> > can remain unsatisfied in the final link. Taking the address of such a
+> > symbol should yield NULL if the reference was not satisfied.
 > >
-> > But why?
-> > I honestly don't understand what are you trying to optimize here. A few
-> > lines of initialization in execmem_info?
-> 
-> IIUC, having separate EXECMEM_BPF and EXECMEM_KPROBE makes it
-> harder for bpf and kprobe to share the same ROX page. In many use cases,
-> a 2MiB page (assuming x86_64) is enough for all BPF, kprobe, ftrace, and
-> module text. It is not efficient if we have to allocate separate pages for each
-> of these use cases. If this is not a problem, the current approach works.
+> > Given that ordinary RIP or PC relative references cannot produce NULL,
+> > some kind of indirection is always needed in such cases, and in position
+> > independent code, this results in a GOT entry. In ordinary code, it is
+> > arch specific but amounts to the same thing.
+> >
+> > [...]
+>
+> Here is the summary with links:
+>   - [v4,1/3] kallsyms: Avoid weak references for kallsyms symbols
+>     (no matching commit)
+>   - [v4,2/3] vmlinux: Avoid weak reference to notes section
+>     (no matching commit)
+>   - [v4,3/3] btf: Avoid weak external references
+>     https://git.kernel.org/bpf/bpf-next/c/fc5eb4a84e4c
+>
 
-The caching of large ROX pages does not need to be per type. 
 
-In the POC I've posted for caching of large ROX pages on x86 [1], the cache is
-global and to make kprobes and bpf use it it's enough to set a flag in
-execmem_info.
+Thanks.
 
-[1] https://lore.kernel.org/all/20240411160526.2093408-1-rppt@kernel.org
-
-> Thanks,
-> Song
-
--- 
-Sincerely yours,
-Mike.
+Masahiro, could you pick up patches #1 and #2 please?
 
