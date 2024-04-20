@@ -1,169 +1,146 @@
-Return-Path: <linux-arch+bounces-3843-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3844-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E9228ABBE3
-	for <lists+linux-arch@lfdr.de>; Sat, 20 Apr 2024 16:00:15 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE74E8ABBE9
+	for <lists+linux-arch@lfdr.de>; Sat, 20 Apr 2024 16:03:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9036BB20E36
-	for <lists+linux-arch@lfdr.de>; Sat, 20 Apr 2024 14:00:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 32178B20E60
+	for <lists+linux-arch@lfdr.de>; Sat, 20 Apr 2024 14:03:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0135120309;
-	Sat, 20 Apr 2024 14:00:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45FB91F954;
+	Sat, 20 Apr 2024 14:03:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nMDrGq/6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XA6tLWNR"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C25188C10;
-	Sat, 20 Apr 2024 14:00:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E2A417C72;
+	Sat, 20 Apr 2024 14:03:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713621606; cv=none; b=tuy/3YtWG1SjtaUryijC5mlv3APYbX87Am+t0m84vWHY4vLEV6/nV+geDEmFch5EKDUNonw9Tcpws+px0bFBKAT/Fgm5VxbWLsrslXb02VIwCBeVJ2lswZBaLNs5Wi+mT3WuaZxI+FCb0hBolosoEjeHb9/WMa5BsfSe42pdhjI=
+	t=1713621794; cv=none; b=aIEjWqrh9wtdgRtmTUx/FOEOaVmpfdnhDt47WoxT45hB0PJR1j5PmkYL8fHHxFyvj0RYCwCN/C94LAta9dWrwEpl5gRE7yCc6a3Yim9YdQPG2nFx0840zNx4K8lBiFzWSqcBp3VxA1K1b/94ryw0vD+GawcDpCt0lGG4Yvk+Wl8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713621606; c=relaxed/simple;
-	bh=I1uFRtCpAdP89GlBp0SKPyxnIE1dUetKGusI1yawPIQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Bf0RRRYA9V2NI4+vqOy6pZPgJMQz/QxYvmEYLlUmw38N/OowhrRf4BpcqRIwmY8VYTnkVXbXx83McYRFuC2TkFqxJnO1CqUkpne7IiIIerYeEU5DtjM0XiaMlFAIROy+MjrWsTFNyNUAuQs5iYmalrxTqEMK008Q/wPxd6Xgg1Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nMDrGq/6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41AE4C32781;
-	Sat, 20 Apr 2024 14:00:06 +0000 (UTC)
+	s=arc-20240116; t=1713621794; c=relaxed/simple;
+	bh=j6lkOrCtd+gNLxThy1+PuV3iXM5UNYHHzFBGzGmoBFE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=U9iX5YGgFDWSIlvpqqnplG+kGt/8BKDbSzlvpJdGIN1F5IiJvODTHDz/n0/WfXRmhHVyXnwgIT45VucSXMyxdVpx0pkVZw/A2LPM8wBc0FmvTUrv2lACrcRsX3sYb+E1d+n3HSEwbkn0n2tE8WoPDhVB0IOQzhz/B7g5s063lIE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XA6tLWNR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A16E1C072AA;
+	Sat, 20 Apr 2024 14:03:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713621606;
-	bh=I1uFRtCpAdP89GlBp0SKPyxnIE1dUetKGusI1yawPIQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=nMDrGq/6M51rjOCiEpj55E7i+RveJcNNtD+Y8iFhDr6Bq9l5dlhgqRR8SCF6YB+1+
-	 +Kbnx8rwCqSGVNGOHL4ab2esmgc9mYo/Ru0/yyTWYB4Rix40ZEuU33qIpc7CIYzfYl
-	 kK8dJfKc+GzfwMoH2I8UzrYRpM43hvXgCc05XDmHiC0tCQgQ57SWPtVlRYk++x5peD
-	 PP6LytfyPsafj7kNPMJPq4WWO6OE82aO/wlMbTHe9/iywRYqnSTgpel+sLH3Lq27JQ
-	 f/B3QEDyqduJk7GPEnMoyhCZ020vaEbO0Ef4culet+oYyCgbzTMTNBveUi69uS/sMf
-	 g2RVc9zEGpzWw==
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-51acc258075so1657852e87.2;
-        Sat, 20 Apr 2024 07:00:06 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXmCC5zYqgX1THqslzCf01vTV+VdxzEFDdGDsaIzhSkxVDV1mzI+jmWP2jGD/iiHmEtrxE84DkEocmWRfLEglzF0oamTi7AZ8bZFEXVdp7s4vxI/2ePRNiYNqU1+AAev5oiRCLZjwsQ/9V5sFqobAQynsLYxlDrT+kQKnwTfwqFyP2rcAv/v4f93B0MTtJ2jXOnBmbea2dmu4T+QQ==
-X-Gm-Message-State: AOJu0YxauiYuAqkytjPFwQwXa9hsd1zKldHZJyDq2nseI3NiHIUDfTwg
-	lbsQCfNdICDigN33THNHr61mBOSnnv8DiDBKdhnFiPRZxCFkjcyjYymbmWcZAk8g6UtpR0mWS9a
-	Hd93uxjjTxAjpt1VaQW62omjdT8k=
-X-Google-Smtp-Source: AGHT+IHABa0yu9HMV2LPG/NmawBH4QcSzR0YT6ue4aOLVj4XNerloJ0JT21G10X7KyN2R4QP570VqrYZrfO71HUVbqg=
-X-Received: by 2002:ac2:528b:0:b0:519:33a5:973e with SMTP id
- q11-20020ac2528b000000b0051933a5973emr3155934lfm.6.1713621604620; Sat, 20 Apr
- 2024 07:00:04 -0700 (PDT)
+	s=k20201202; t=1713621793;
+	bh=j6lkOrCtd+gNLxThy1+PuV3iXM5UNYHHzFBGzGmoBFE=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=XA6tLWNRApa5LwuFmgU3vSb/vcXhA3ZwE3CRuA+qT77kbtRf7mhJodIFnmnX5XipO
+	 3JtjQU/ULnzDsxtLQICmRnvN+Ch1fGYnSMyXRIbzVI8hXRwxZJUt7ADVU5seZQsIoH
+	 +jmloeHtFGJnaGbuBRMCOfudDXfbkenpFSDtZdFJ2sXFdN+jIo25rB/T0Zu85L61XZ
+	 2KQtjeyMBFLOnozMwnQijxZweMWMOv9dtzJ5YxHhVUJ8Idg2FVlNThY/x8zy3bH6oB
+	 vf0wW0v/KFl7mIgcKfNkvwyPA1V8a5h7lNej++hNO6+Cc7m/J05reotMpZ7wrnKb5I
+	 81MuEjKglcbxA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id D6186CE0AD3; Sat, 20 Apr 2024 07:03:11 -0700 (PDT)
+Date: Sat, 20 Apr 2024 07:03:11 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Yujie Liu <yujie.liu@intel.com>, linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org, elver@google.com,
+	akpm@linux-foundation.org, tglx@linutronix.de, peterz@infradead.org,
+	dianders@chromium.org, pmladek@suse.com,
+	torvalds@linux-foundation.org, Arnd Bergmann <arnd@arndb.de>,
+	Andi Shyti <andi.shyti@linux.intel.com>
+Subject: Re: [PATCH cmpxchg 13/14] xtensa: Emulate one-byte cmpxchg
+Message-ID: <307dc632-b34a-4297-8341-2bf7d27bf6d9@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <7b3646e0-667c-48e2-8f09-e493c43c30cb@paulmck-laptop>
+ <20240408174944.907695-13-paulmck@kernel.org>
+ <CAMuHMdXAB-9GPqNBJKF=JtWNfhBv168N6eko-9VcLmLSeQaS4Q@mail.gmail.com>
+ <620a10e8-f5c0-4e23-8403-492ab1c7f110@paulmck-laptop>
+ <ZiH8IBiLkYw7M281@yujie-X299>
+ <CAMuHMdUWF=O4fEA8aQfhmRhuH88zB3aK1Mi3UCXx8=EaONRRkg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240415162041.2491523-5-ardb+git@google.com> <171327842741.29461.3030265084386428643.git-patchwork-notify@kernel.org>
- <CAMj1kXGVRGcJGS1xuqHPeJfM797RB2UiJQfSHK+oj1JQG4YECg@mail.gmail.com>
- <CAK7LNAQ8fhKUwK_m8uGfvBUBrAdXdMYM3_AA5zo2cQzhW3jE1A@mail.gmail.com>
- <CAMj1kXGYdjQz5n0uuiLHu8uc-YNE8eqUQWtGjg5pANo+0speQA@mail.gmail.com>
- <CAK7LNAT9Y5C+Shr1Pq=xrL2tcBK6rpBn05iovdZ2=kMHW5UCkw@mail.gmail.com> <CAMj1kXEbXfsNarFMbDC-Dzk6H9X9C4Ax2pWPSZhmt93mV4_Q2w@mail.gmail.com>
-In-Reply-To: <CAMj1kXEbXfsNarFMbDC-Dzk6H9X9C4Ax2pWPSZhmt93mV4_Q2w@mail.gmail.com>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Sat, 20 Apr 2024 15:59:53 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXFt5kbZ8yFgO-jU5ZP3-WZi5ZZJKKTCpEYRdUYFRj9CYQ@mail.gmail.com>
-Message-ID: <CAMj1kXFt5kbZ8yFgO-jU5ZP3-WZi5ZZJKKTCpEYRdUYFRj9CYQ@mail.gmail.com>
-Subject: Re: [PATCH v4 0/3] kbuild: Avoid weak external linkage where possible
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: patchwork-bot+netdevbpf@kernel.org, Ard Biesheuvel <ardb+git@google.com>, 
-	linux-kernel@vger.kernel.org, arnd@arndb.de, martin.lau@linux.dev, 
-	linux-arch@vger.kernel.org, linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, 
-	andrii@kernel.org, olsajiri@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMuHMdUWF=O4fEA8aQfhmRhuH88zB3aK1Mi3UCXx8=EaONRRkg@mail.gmail.com>
 
-On Sat, 20 Apr 2024 at 15:56, Ard Biesheuvel <ardb@kernel.org> wrote:
->
-> On Sat, 20 Apr 2024 at 15:42, Masahiro Yamada <masahiroy@kernel.org> wrot=
-e:
-> >
-> > On Sat, Apr 20, 2024 at 9:35=E2=80=AFPM Ard Biesheuvel <ardb@kernel.org=
-> wrote:
+On Fri, Apr 19, 2024 at 10:02:47AM +0200, Geert Uytterhoeven wrote:
+> On Fri, Apr 19, 2024 at 7:14 AM Yujie Liu <yujie.liu@intel.com> wrote:
+> > On Thu, Apr 18, 2024 at 04:21:46PM -0700, Paul E. McKenney wrote:
+> > > On Thu, Apr 18, 2024 at 10:06:21AM +0200, Geert Uytterhoeven wrote:
+> > > > On Mon, Apr 8, 2024 at 7:49 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> > > > > Use the new cmpxchg_emu_u8() to emulate one-byte cmpxchg() on xtensa.
+> > > > >
+> > > > > [ paulmck: Apply kernel test robot feedback. ]
+> > > > > [ paulmck: Drop two-byte support per Arnd Bergmann feedback. ]
+> > > > >
+> > > > > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > > >
+> > > > Thanks for your patch!
+> > > >
+> > > > > --- a/arch/xtensa/include/asm/cmpxchg.h
+> > > > > +++ b/arch/xtensa/include/asm/cmpxchg.h
+> > > > > @@ -74,6 +75,7 @@ static __inline__ unsigned long
+> > > > >  __cmpxchg(volatile void *ptr, unsigned long old, unsigned long new, int size)
+> > > > >  {
+> > > > >         switch (size) {
+> > > > > +       case 1:  return cmpxchg_emu_u8((volatile u8 *)ptr, old, new);
+> > > >
+> > > > The cast is not needed.
 > > >
-> > > On Sat, 20 Apr 2024 at 14:32, Masahiro Yamada <masahiroy@kernel.org> =
-wrote:
-> > > >
-> > > > On Fri, Apr 19, 2024 at 4:57=E2=80=AFPM Ard Biesheuvel <ardb@kernel=
-.org> wrote:
-> > > > >
-> > > > > On Tue, 16 Apr 2024 at 16:40, <patchwork-bot+netdevbpf@kernel.org=
-> wrote:
-> > > > > >
-> > > > > > Hello:
-> > > > > >
-> > > > > > This series was applied to bpf/bpf-next.git (master)
-> > > > > > by Daniel Borkmann <daniel@iogearbox.net>:
-> > > > > >
-> > > > > > On Mon, 15 Apr 2024 18:20:42 +0200 you wrote:
-> > > > > > > From: Ard Biesheuvel <ardb@kernel.org>
-> > > > > > >
-> > > > > > > Weak external linkage is intended for cases where a symbol re=
-ference
-> > > > > > > can remain unsatisfied in the final link. Taking the address =
-of such a
-> > > > > > > symbol should yield NULL if the reference was not satisfied.
-> > > > > > >
-> > > > > > > Given that ordinary RIP or PC relative references cannot prod=
-uce NULL,
-> > > > > > > some kind of indirection is always needed in such cases, and =
-in position
-> > > > > > > independent code, this results in a GOT entry. In ordinary co=
-de, it is
-> > > > > > > arch specific but amounts to the same thing.
-> > > > > > >
-> > > > > > > [...]
-> > > > > >
-> > > > > > Here is the summary with links:
-> > > > > >   - [v4,1/3] kallsyms: Avoid weak references for kallsyms symbo=
-ls
-> > > > > >     (no matching commit)
-> > > > > >   - [v4,2/3] vmlinux: Avoid weak reference to notes section
-> > > > > >     (no matching commit)
-> > > > > >   - [v4,3/3] btf: Avoid weak external references
-> > > > > >     https://git.kernel.org/bpf/bpf-next/c/fc5eb4a84e4c
-> > > > > >
-> > > > >
-> > > > >
-> > > > > Thanks.
-> > > > >
-> > > > > Masahiro, could you pick up patches #1 and #2 please?
-> > > > >
-> > > >
-> > > >
-> > > > I do not like PROVIDE() because it potentially shifts
-> > > > a build error (i.e. link error) into
-> > > > a run-time error, which is usually more difficult to debug
-> > > > than build error.
-> > > >
-> > > > If someone references the kallsyms_* symbols
-> > > > when CONFIG_KALLSYMS=3Dn, it is likely a mistake.
-> > > > In general, it should be reported as a link error.
-> > > >
+> > > In both cases, kernel test robot yelled at me when it was not present.
 > > >
-> > > OK, so the PROVIDE() should be conditional on CONFIG_KALLSYM=3Dy. I c=
-an fix that.
+> > > Happy to resubmit without it, though, if that is a yell that I should
+> > > have ignored.
 > >
+> > FYI, kernel test robot did yell some reports on various architectures such as:
 > >
-> > You may need to take care of the dependency
-> > between CONFIG_KALLSYMS and CONFIG_VMCORE_INFO
-> > because kernel/vmcore_info.c has references
-> > to the kallsyms_* symbols.
+> > [1] https://lore.kernel.org/oe-kbuild-all/202403292321.T55etywH-lkp@intel.com/
+> > [2] https://lore.kernel.org/oe-kbuild-all/202404040526.GVzaL2io-lkp@intel.com/
+> > [3] https://lore.kernel.org/oe-kbuild-all/202404022106.mYwpypit-lkp@intel.com/
 > >
-> > (I am still not a big fan of PROVIDE() though)
+> > In brief, there were mainly three types of issues:
 > >
->
->
-> OK, how about we use weak definitions (as opposed to weak references)
-> in kernel/kallsyms.c, which will get superseded by the actual ones in
-> the second linker pass.
->
-> The only difference is that we will use some space in the binary for
-> the weak definitions that are never used in the final build.
+> > * The cmpxchg-emu.h header is missing
+> > * The parameters of cmpxchg_emu_u8 need to be cast to corresponding types
+> > * The return value of cmpxchg_emu_u8 needs to be cast to the "ret" type
+> >
+> > As for this specific case of xtensa arch, the compiler doesn't warn
+> > regardless of whether there is an explicit cast for "ptr" or not.
+> > The "ptr" being passed in is "void *", and it seems that a "void *"
+> > pointer can be automatically cast to any other type of pointer, so it
+> > is not necessary to have an explicit cast of "u8 *".
+> >
+> > As for the implementations of other architectures that don't pass the
+> > "ptr" as "void *" (such as a macro implementation), the explicit cast to
+> > "u8 *" may still be required.
+> 
+> Exactly.  On sh and xtensa, the original pointer is of type
+> "volatile void *", so no cast is needed.
+> On E.g. arc, the original pointer is of type "volatile __typeof__(ptr) _p_",
+> which is not always compatible with "volatile u8 *".
 
-Btw those references in kernel/vmcore_info.c are guarded by #ifdef
-CONFIG_KALLSYMS=3Dy too.
+Very good, and thank you both!  I will spin updated patches and send
+them out early this coming week.
+
+							Thanx, Paul
+
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
+> -- 
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
 
