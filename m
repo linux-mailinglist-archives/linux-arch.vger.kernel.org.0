@@ -1,70 +1,70 @@
-Return-Path: <linux-arch+bounces-3893-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3894-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F5AB8AD452
-	for <lists+linux-arch@lfdr.de>; Mon, 22 Apr 2024 20:50:21 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C45A8AD45D
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Apr 2024 20:51:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 782A42872B8
-	for <lists+linux-arch@lfdr.de>; Mon, 22 Apr 2024 18:50:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AEA86B22C45
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Apr 2024 18:51:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDEBB157A57;
-	Mon, 22 Apr 2024 18:46:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27AAC155336;
+	Mon, 22 Apr 2024 18:48:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ULN97FhV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pzVBCQSx"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96E52155334;
-	Mon, 22 Apr 2024 18:46:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9579154C16;
+	Mon, 22 Apr 2024 18:48:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713811603; cv=none; b=N0eMWHuGiKWIDzoVycrQX2wCUxeZuKUWbQOR3O8hh9eocJegKd02P7QNVZpB+daZ0HSuyVBrHlHxy2nCmCWwLDjSz10W04DXw3zKPyDRun+B/qBFhSljReEhmMc33/7IgnAp/DIS9RW18HMqxM4H66dN90w/BnCbtVr0ct+1X0w=
+	t=1713811693; cv=none; b=PPBZWWz4lIhPyAuWb4oVI/ysOZx9zcCBafCB9t2aSXwYddFVUQUNWWhVuhMRb+ob9IyF1CLuryZ4xfB1BKQ7k5lWaXV8LhVf/2RYKZN3EVEO+Ik7x3CnmC+7WZvMgsJQBCM36yoEnInBVf/Ylz3E5q/N/w01jWYRPSm6gCxsBl8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713811603; c=relaxed/simple;
-	bh=N900p0AA4Gj2ka7kPwyA1nPYs1lshTu/dBwgZ7ZyDfU=;
+	s=arc-20240116; t=1713811693; c=relaxed/simple;
+	bh=rpA6N07dzG+TJH3XYFQyU87OVzoWXjM0LCk9vtM3N3Y=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DH5GvgQI8Y4YfJVA2Gs0Nbsj1VeFqX2Io74FJ9CsysqRblvFe3Vs9ZFXKSoZLg7ocuFYybtwjIT1It22Teiq9WYSOCD86FyI5egOOQUYO/oRJZGskEzM5tQxzS1Zp6+KQbkccj3pO7Jc+IsliorOCfR9u8zpfbbK9w/rn03yj0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ULN97FhV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A3ADC4AF08;
-	Mon, 22 Apr 2024 18:46:43 +0000 (UTC)
+	 To:Cc:Content-Type; b=j6UsD61ggpjKgC0P6pKW9NGoWZc5LB18zyCxAZZHD+Add1Q2YOFCiQOAh5YdZ+66NxrZ+YrGzxjLlNT+/dmeoWHHsfFgn3b/H4HvnM0XpBi7M/P5ItxBWJmB8ngMAlMYdDjdskWVrA9w1onQ1ioPASns1NC9Zlg8DKzJ9FhSA4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pzVBCQSx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8024C4AF0F;
+	Mon, 22 Apr 2024 18:48:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713811603;
-	bh=N900p0AA4Gj2ka7kPwyA1nPYs1lshTu/dBwgZ7ZyDfU=;
+	s=k20201202; t=1713811692;
+	bh=rpA6N07dzG+TJH3XYFQyU87OVzoWXjM0LCk9vtM3N3Y=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ULN97FhVdNfET8mkchoUJo7WdV66EI7mzFEF1lsRkSlqDG+gpAQABpRslrsJfCDBL
-	 y7oMVKEBzRwd0d6NQSI2LGavm/zJMYvb5WQfzbGSxV55zqqL9c8Hd0pKPmRZFdmInI
-	 vUUhV1FB4PEylph35IkhP2ogWn1D9fboh28UECFCYVvDVw8g2YvfwX5Y8k0ifOPNQb
-	 EXdckpeIMOCUCOMpQ7kuIAIBzQFrKtsHIfIATwGhvpwN8JzoQhqq6EIWKZhyCdOQgZ
-	 2r81mCmcIfBw4cPitlEySlY039SRZNgFlyg2C9bH8tB6bGjP6tJpAjFIUIHJO3+YZp
-	 gppskfjTrMuvg==
-Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-3c751391320so68735b6e.3;
-        Mon, 22 Apr 2024 11:46:43 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXoVzp9qqhDp2vIzGqEs7kvXWmClMzvJEoHUVzeLaEkh03WYhoWgWroTJ7OlSOm6sEINAy/Iw3vIXJ1lrIxMUA9dEtArKeK5LucKRwe1kWs45+rAlAwsbOEDv+p9Yddt5yIAs31BYgV2KEhPXyAPbfwA1v7B+UAlbZsB4YTV0TnJkBgc20hfbUFXVNl/AuqGywTMtP6Hnclbd2QqWmRsg==
-X-Gm-Message-State: AOJu0Yw8w93NB+Nq3uQWDARD4mOiAhu0JAlQcIGpJ5kMlzfgDdy15uSG
-	FAtDMeX5YzpZblli0yP9g6EXwrfad+RTJzAvWiJ4P+x5ZXGR/xE99V2UMCtA/MzMdsFQivJNh9c
-	57m/YJG1benyIr8rKYCyrqeDvkyc=
-X-Google-Smtp-Source: AGHT+IFPgOe8ULWuvYcbF8vz2a93mVviOXf9qv95GFOeoCEFC8u/XjGJwHUKi+S9n2GACxOH6R+xy6O8qM2nNJJ8ELU=
-X-Received: by 2002:a05:6820:e07:b0:5aa:14ff:4128 with SMTP id
- el7-20020a0568200e0700b005aa14ff4128mr11063972oob.1.1713811602518; Mon, 22
- Apr 2024 11:46:42 -0700 (PDT)
+	b=pzVBCQSxqnWh4x3MbkKicc4qA/nAbOE4JvvaoaeC+gJbzKr+ktYIyDQ3uXHJWvEr6
+	 pWdbfWZDMnNIlq+UmU4CyvxIml1OXPHnHfKca0OKLH8APjPJUWQBvPYts84peEjUWK
+	 qSUq+eRgJNMTFL3X7cF+ewXLP7ozXO2VNYVBPjVUHrLJpNOCvG3rDTwcNtmAtPCI7B
+	 roCCL51+T9+fAp/A4jkX8IlqYFr7uF34oE2O/EatP32GpuOF5yT1f6HbMSBJpb/LSH
+	 eJ5L0t3HaLJ7/Ik5iCLUxKMnFVkOvlSioYxvOHTkfdOAaY0iyvXv9n4RVNZYabHFCN
+	 rmHxZ9SI8GusQ==
+Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-5acdbfa7a45so1536090eaf.2;
+        Mon, 22 Apr 2024 11:48:12 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUOY4qZ+EySN7WC/vyNeHGHJOiRCea/oy1t/SAmrd5d+VIOoD03cQTI8TF3QMgV6LfMwDGMRb6rbbd72XQpkcAQffQTG9eVb+TLWAmz2sYU6H++pbuV5a2wlmTK6Eblc6KEQ2HkbcB8l9G9vUHIAYYEM0jkDKlAx8joapTlxHk8XGv2z/DAe2SrtHi/cfixCeTxxK1q4UfoeJvfQaKu4g==
+X-Gm-Message-State: AOJu0YzksLusupozqrOO9H/CrOj3QyLwvpwt1OqnIAbWptNLZoqjJ1Dl
+	9DqZ34if4xEq8jn4sl2+BHKMVe4f1VM5eJJHJxKCPjtJpkgRiCJbjMLB682YQANsMlraegr+TfE
+	BTHP7co+Cv8YJl7a/UFnZ6CPQ61w=
+X-Google-Smtp-Source: AGHT+IHflqOEbu6JjhL9GA+4qsoaorYsVOPeB39pe/rPdTVl/TbW3rxr3EWdsbghxWdA3n1aLCbh5F2f8GOdraC2c/I=
+X-Received: by 2002:a05:6820:2c83:b0:5aa:6b2e:36f0 with SMTP id
+ dx3-20020a0568202c8300b005aa6b2e36f0mr10951143oob.0.1713811692094; Mon, 22
+ Apr 2024 11:48:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240418135412.14730-1-Jonathan.Cameron@huawei.com> <20240418135412.14730-2-Jonathan.Cameron@huawei.com>
-In-Reply-To: <20240418135412.14730-2-Jonathan.Cameron@huawei.com>
+References: <20240418135412.14730-1-Jonathan.Cameron@huawei.com> <20240418135412.14730-4-Jonathan.Cameron@huawei.com>
+In-Reply-To: <20240418135412.14730-4-Jonathan.Cameron@huawei.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 22 Apr 2024 20:46:30 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hrXHbv8JGydxwD1PP_M1GOm040=+OTDFLcpy3bmzf24A@mail.gmail.com>
-Message-ID: <CAJZ5v0hrXHbv8JGydxwD1PP_M1GOm040=+OTDFLcpy3bmzf24A@mail.gmail.com>
-Subject: Re: [PATCH v7 01/16] ACPI: processor: Simplify initial onlining to
- use same path for cold and hotplug
+Date: Mon, 22 Apr 2024 20:48:01 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0g9g=W9o8=BNDP+3TEUEN4ByjQU9SJPJepE6eFrcRv2+A@mail.gmail.com>
+Message-ID: <CAJZ5v0g9g=W9o8=BNDP+3TEUEN4ByjQU9SJPJepE6eFrcRv2+A@mail.gmail.com>
+Subject: Re: [PATCH v7 03/16] ACPI: processor: Drop duplicated check on _STA
+ (enabled + present)
 To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Cc: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>, linux-pm@vger.kernel.org, 
 	loongarch@lists.linux.dev, linux-acpi@vger.kernel.org, 
@@ -80,24 +80,14 @@ Cc: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 18, 2024 at 3:54=E2=80=AFPM Jonathan Cameron
+On Thu, Apr 18, 2024 at 3:55=E2=80=AFPM Jonathan Cameron
 <Jonathan.Cameron@huawei.com> wrote:
 >
-> Separate code paths, combined with a flag set in acpi_processor.c to
-> indicate a struct acpi_processor was for a hotplugged CPU ensured that
-> per CPU data was only set up the first time that a CPU was initialized.
-> This appears to be unnecessary as the paths can be combined by letting
-> the online logic also handle any CPUs online at the time of driver load.
+> The ACPI bus scan will only result in acpi_processor_add() being called
+> if _STA has already been checked and the result is that the
+> processor is enabled and present.  Hence drop this additional check.
 >
-> Motivation for this change, beyond simplification, is that ARM64
-> virtual CPU HP uses the same code paths for hotplug and cold path in
-> acpi_processor.c so had no easy way to set the flag for hotplug only.
-> Removing this necessity will enable ARM64 vCPU HP to reuse the existing
-> code paths.
->
-> Leave noisy pr_info() in place but update it to not state the CPU
-> was hotplugged.
->
+> Suggested-by: Rafael J. Wysocki <rafael@kernel.org>
 > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
 LGTM, so
@@ -105,147 +95,37 @@ LGTM, so
 Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
 > ---
-> v7: No change.
-> v6: New patch.
-> RFT: I have very limited test resources for x86 and other
-> architectures that may be affected by this change.
+> v7: No change
+> v6: New patch to drop this unnecessary code. Now I think we only
+>     need to explicitly read STA to print a warning in the ARM64
+>     arch_unregister_cpu() path where we want to know if the
+>     present bit has been unset as well.
 > ---
->  drivers/acpi/acpi_processor.c   |  1 -
->  drivers/acpi/processor_driver.c | 44 ++++++++++-----------------------
->  include/acpi/processor.h        |  2 +-
->  3 files changed, 14 insertions(+), 33 deletions(-)
+>  drivers/acpi/acpi_processor.c | 6 ------
+>  1 file changed, 6 deletions(-)
 >
 > diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.=
 c
-> index 7a0dd35d62c9..7fc924aeeed0 100644
+> index 7fc924aeeed0..ba0a6f0ac841 100644
 > --- a/drivers/acpi/acpi_processor.c
 > +++ b/drivers/acpi/acpi_processor.c
-> @@ -216,7 +216,6 @@ static int acpi_processor_hotadd_init(struct acpi_pro=
-cessor *pr)
->          * gets online for the first time.
->          */
->         pr_info("CPU%d has been hot-added\n", pr->id);
-> -       pr->flags.need_hotplug_init =3D 1;
+> @@ -186,17 +186,11 @@ static void __init acpi_pcc_cpufreq_init(void) {}
+>  #ifdef CONFIG_ACPI_HOTPLUG_CPU
+>  static int acpi_processor_hotadd_init(struct acpi_processor *pr)
+>  {
+> -       unsigned long long sta;
+> -       acpi_status status;
+>         int ret;
 >
->  out:
->         cpus_write_unlock();
-> diff --git a/drivers/acpi/processor_driver.c b/drivers/acpi/processor_dri=
-ver.c
-> index 67db60eda370..55782eac3ff1 100644
-> --- a/drivers/acpi/processor_driver.c
-> +++ b/drivers/acpi/processor_driver.c
-> @@ -33,7 +33,6 @@ MODULE_AUTHOR("Paul Diefenbaugh");
->  MODULE_DESCRIPTION("ACPI Processor Driver");
->  MODULE_LICENSE("GPL");
->
-> -static int acpi_processor_start(struct device *dev);
->  static int acpi_processor_stop(struct device *dev);
->
->  static const struct acpi_device_id processor_device_ids[] =3D {
-> @@ -47,7 +46,6 @@ static struct device_driver acpi_processor_driver =3D {
->         .name =3D "processor",
->         .bus =3D &cpu_subsys,
->         .acpi_match_table =3D processor_device_ids,
-> -       .probe =3D acpi_processor_start,
->         .remove =3D acpi_processor_stop,
->  };
->
-> @@ -115,12 +113,10 @@ static int acpi_soft_cpu_online(unsigned int cpu)
->          * CPU got physically hotplugged and onlined for the first time:
->          * Initialize missing things.
->          */
-> -       if (pr->flags.need_hotplug_init) {
-> +       if (!pr->flags.previously_online) {
->                 int ret;
->
-> -               pr_info("Will online and init hotplugged CPU: %d\n",
-> -                       pr->id);
-> -               pr->flags.need_hotplug_init =3D 0;
-> +               pr_info("Will online and init CPU: %d\n", pr->id);
->                 ret =3D __acpi_processor_start(device);
->                 WARN(ret, "Failed to start CPU: %d\n", pr->id);
->         } else {
-> @@ -167,9 +163,6 @@ static int __acpi_processor_start(struct acpi_device =
-*device)
->         if (!pr)
+>         if (invalid_phys_cpuid(pr->phys_id))
 >                 return -ENODEV;
 >
-> -       if (pr->flags.need_hotplug_init)
-> -               return 0;
-> -
->         result =3D acpi_cppc_processor_probe(pr);
->         if (result && !IS_ENABLED(CONFIG_ACPI_CPU_FREQ_PSS))
->                 dev_dbg(&device->dev, "CPPC data invalid or not present\n=
-");
-> @@ -185,32 +178,21 @@ static int __acpi_processor_start(struct acpi_devic=
-e *device)
->
->         status =3D acpi_install_notify_handler(device->handle, ACPI_DEVIC=
-E_NOTIFY,
->                                              acpi_processor_notify, devic=
-e);
-> -       if (ACPI_SUCCESS(status))
-> -               return 0;
-> +       if (!ACPI_SUCCESS(status)) {
-> +               result =3D -ENODEV;
-> +               goto err_thermal_exit;
-> +       }
-> +       pr->flags.previously_online =3D 1;
->
-> -       result =3D -ENODEV;
-> -       acpi_processor_thermal_exit(pr, device);
-> +       return 0;
->
-> +err_thermal_exit:
-> +       acpi_processor_thermal_exit(pr, device);
->  err_power_exit:
->         acpi_processor_power_exit(pr);
->         return result;
->  }
->
-> -static int acpi_processor_start(struct device *dev)
-> -{
-> -       struct acpi_device *device =3D ACPI_COMPANION(dev);
-> -       int ret;
-> -
-> -       if (!device)
+> -       status =3D acpi_evaluate_integer(pr->handle, "_STA", NULL, &sta);
+> -       if (ACPI_FAILURE(status) || !(sta & ACPI_STA_DEVICE_PRESENT))
 > -               return -ENODEV;
 > -
-> -       /* Protect against concurrent CPU hotplug operations */
-> -       cpu_hotplug_disable();
-> -       ret =3D __acpi_processor_start(device);
-> -       cpu_hotplug_enable();
-> -       return ret;
-> -}
-> -
->  static int acpi_processor_stop(struct device *dev)
->  {
->         struct acpi_device *device =3D ACPI_COMPANION(dev);
-> @@ -279,9 +261,9 @@ static int __init acpi_processor_driver_init(void)
->         if (result < 0)
->                 return result;
+>         cpu_maps_update_begin();
+>         cpus_write_lock();
 >
-> -       result =3D cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN,
-> -                                          "acpi/cpu-drv:online",
-> -                                          acpi_soft_cpu_online, NULL);
-> +       result =3D cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,
-> +                                  "acpi/cpu-drv:online",
-> +                                  acpi_soft_cpu_online, NULL);
->         if (result < 0)
->                 goto err;
->         hp_online =3D result;
-> diff --git a/include/acpi/processor.h b/include/acpi/processor.h
-> index 3f34ebb27525..e6f6074eadbf 100644
-> --- a/include/acpi/processor.h
-> +++ b/include/acpi/processor.h
-> @@ -217,7 +217,7 @@ struct acpi_processor_flags {
->         u8 has_lpi:1;
->         u8 power_setup_done:1;
->         u8 bm_rld_set:1;
-> -       u8 need_hotplug_init:1;
-> +       u8 previously_online:1;
->  };
->
->  struct acpi_processor {
 > --
 
