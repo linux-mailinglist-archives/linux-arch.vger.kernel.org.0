@@ -1,259 +1,131 @@
-Return-Path: <linux-arch+bounces-3846-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3847-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id F01628ABD92
-	for <lists+linux-arch@lfdr.de>; Sun, 21 Apr 2024 00:39:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEEED8AC33C
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Apr 2024 05:53:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4AC42B20BFF
-	for <lists+linux-arch@lfdr.de>; Sat, 20 Apr 2024 22:39:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F0F8B1C20883
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Apr 2024 03:53:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C487F47A6B;
-	Sat, 20 Apr 2024 22:39:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 274611078B;
+	Mon, 22 Apr 2024 03:53:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=toblux-com.20230601.gappssmtp.com header.i=@toblux-com.20230601.gappssmtp.com header.b="nF0xEFiL"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="d70w0kk1"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BFE646B9A
-	for <linux-arch@vger.kernel.org>; Sat, 20 Apr 2024 22:39:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A753FC0E
+	for <linux-arch@vger.kernel.org>; Mon, 22 Apr 2024 03:53:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713652759; cv=none; b=n5dHAo4vjPuW5MUdg23ToNstAkYvHsOUffJHzJjB+nI7VBfjdJC4CMsC2tpxqf8ner7iVXSx6PyHtPwKSngYpIGDb7ZtIp/aZnIPudnizyAmaxpSO48ZB6IQ171lFzqq6f9ss79ecnQGvqyRatQiHEbnOkE5xmFNFEN186vWP/c=
+	t=1713758013; cv=none; b=huPOX1njNXI1HF0LPVEZKqYlyyouw/EEC2ba/K7x4PQ+tvHI/PoqOoY8PzVmCGSxhFDrlvNZzs0TDWdvRnCZOPo8lM0/OAMFc9VVKxcqaZ2oY4Y1/sOW+9i9NHqWzjqc25jE3pdii77Ng6zVOToWJly9Akr+bTRV9LmmR0Ks7Ac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713652759; c=relaxed/simple;
-	bh=4MNiMTzDJScnkrBt3q5ppnoFyu5SPLMZSky3nmASO6k=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=aRCPUJM8b0+N+9fnbVd/OQN0pm1LrAcQBzQqCu+bohk9trDoEJtWp55Aexd5VPrbrVQ4Npx8V4kjxXfaSmCy8Yw4KmgHFz8UOZQiRnzNmUEVH51UU/IBqJ9dCCdonjRrlA2v7G2KJvWOaO97UTcP/9Hrtg/LKEPmAntW5pwzi6M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toblux.com; spf=none smtp.mailfrom=toblux.com; dkim=pass (2048-bit key) header.d=toblux-com.20230601.gappssmtp.com header.i=@toblux-com.20230601.gappssmtp.com header.b=nF0xEFiL; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toblux.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=toblux.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4196c62bb4eso12021665e9.2
-        for <linux-arch@vger.kernel.org>; Sat, 20 Apr 2024 15:39:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=toblux-com.20230601.gappssmtp.com; s=20230601; t=1713652756; x=1714257556; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=c3NHnxjtFu5JpYjacER3Aw2OwLNVGjO/bJseAjeHqiU=;
-        b=nF0xEFiLoZIGpuFnTfMWKhUTIgk8dxTZiGfmnBheLHzJi8CI+OpckSq031qJM+nhgb
-         kLHGZ9S5ckD8Ff7X31PSHaH489TqHFW0pU8+4v73WKYp9zppARoimpkmChyi0erfT2LK
-         ZGR0wQVEIK6ZeBRnCCoSOSuEwfD5s+xSvt6x3XpThJPiKWBjO0BJn3DTPHLcQopwkXok
-         8J3GJw7TeU8QQCZxHL6i4pxknrBZjlSHCTte7Ho2Md3Jq3iw4A++Oi7K2opnoipM0GEp
-         7aHzUOnZqj+t/llfXuGozbSWG7wBmKfutNbEVeDAA5LKttq1vfFSTvDFzCdLcKU0yD2B
-         svjw==
+	s=arc-20240116; t=1713758013; c=relaxed/simple;
+	bh=tD6kiqMKmO+1my/aa9P9n8z6J8qrVBho+qlOdcCPRLg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Y66cdyNMNP+/6Vi0ln8TFN+FPcZe5Fi0EPqo/cql306vpeB7glPDyqYxEi8+hfi7QeXHk8961UIjZPdkd5txSANCZW/b0e4CEvYAhARKCSpI5F3/IeraZndzPQ1/fm5drb7+VwfjMoR+uC516eE11ptlpOs7crQcK88pnbAKrvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=d70w0kk1; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1713758010;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=m0XyZSlHJbiwL8Fk8e6Ao9ghbhjrrj0okROdeEG3PeA=;
+	b=d70w0kk19VpTPCBkAaFUGai+6OlJ3t/h4Ad8vX9O3a6ullyACRzb6iU0N+wnHhXZ+SJUcm
+	PQkxDtp1A2nOu1NtjQMorTXEDYjVnWbJvwWFWHL1YNHyDsdIQbOrtzFl6ecnjqQa3hQdkB
+	DDYh+XdLKWHPkUIlMUcjfaC8nw8aTro=
+Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com
+ [209.85.167.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-107-399l-L1POcShVj4EacS_GQ-1; Sun, 21 Apr 2024 23:53:28 -0400
+X-MC-Unique: 399l-L1POcShVj4EacS_GQ-1
+Received: by mail-oi1-f198.google.com with SMTP id 5614622812f47-3c704de25f1so6015974b6e.0
+        for <linux-arch@vger.kernel.org>; Sun, 21 Apr 2024 20:53:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713652756; x=1714257556;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=c3NHnxjtFu5JpYjacER3Aw2OwLNVGjO/bJseAjeHqiU=;
-        b=xKMnpd722bioS4djly13RPQ9OWpDvNnUxlo0oUI5FTww8WMzI22PlShXLhje5BOnqC
-         z0S8So22XKzPenEV9fu4hfLvETOvkvMSjMSqSotLFxd3gsKUNdyhsuKMsg1sHzO+MO2F
-         zqghF73bq9qCEghAB9Fx4RmytkFaeDu9OW+OMcrO/Lz3iY7oPWBIL2pNl+wLK6RsuTud
-         vFNBW606syef1idG72IDXaz1zkFUI8ZK7rY5YJJ94Ibto8WhYsFwmGBlPzhgv8P7CACj
-         aO+ga6HSOu65l1KKuHeRD/C/QF+9kuom6BLGnW1XRmVNVXxAc0nmjeBF/JW35YLvEwy/
-         1urA==
-X-Forwarded-Encrypted: i=1; AJvYcCWuXnQZ3bxPhKYwQI4D6aD1beCSDlVX4tdNj3vhmKEgF2d3Nn2W4KULxZ3rOzVPVGc7XHKDqCgv6/5mUtLMBnZLEGWJTOmvy65ABw==
-X-Gm-Message-State: AOJu0YxKa8bSHElpEGs1qs3mR666rTSdMUd7nCPVQHlb+ukCZSPXd/3u
-	bmThUPrveGe4sZcPtqv7+I1lzV31pPWU+7nKdxwcIG/UDnV6ca7lmm42aNql+iU=
-X-Google-Smtp-Source: AGHT+IFvsUuVZ9mU8nFpRzKvyidPlf6VYEG71XzkImijGEkwFIMPgi4xMJD4/sLW/2FjK2c4CzfdsA==
-X-Received: by 2002:a05:600c:348a:b0:418:a7a7:98f8 with SMTP id a10-20020a05600c348a00b00418a7a798f8mr3912393wmq.29.1713652756058;
-        Sat, 20 Apr 2024 15:39:16 -0700 (PDT)
-Received: from debian.fritz.box. (aftr-82-135-80-212.dynamic.mnet-online.de. [82.135.80.212])
-        by smtp.gmail.com with ESMTPSA id g18-20020adfa492000000b0033e9d9f891csm7937550wrb.58.2024.04.20.15.39.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Apr 2024 15:39:15 -0700 (PDT)
-From: Thorsten Blum <thorsten.blum@toblux.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Xiao Wang <xiao.w.wang@intel.com>,
-	Palmer Dabbelt <palmer@rivosinc.com>,
-	Charlie Jenkins <charlie@rivosinc.com>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Youling Tang <tangyouling@loongson.cn>,
-	Tiezhu Yang <yangtiezhu@loongson.cn>,
-	Jinyang He <hejinyang@loongson.cn>,
-	linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Thorsten Blum <thorsten.blum@toblux.com>
-Subject: [PATCH] bitops: Change function return types from long to int
-Date: Sun, 21 Apr 2024 00:38:37 +0200
-Message-Id: <20240420223836.241472-1-thorsten.blum@toblux.com>
-X-Mailer: git-send-email 2.39.2
+        d=1e100.net; s=20230601; t=1713758007; x=1714362807;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=m0XyZSlHJbiwL8Fk8e6Ao9ghbhjrrj0okROdeEG3PeA=;
+        b=pIOyl+E4wczhq5WDDrWwPSIRyLCQY4pqZdQ8D6pvrZm6C8g+z++0S2S8EPXSoIui5l
+         EPX44+3+wTlCi/Ti+LCimoZWhFVC352mUgtr2Eq57vx2Ex74XtnURLtvZZTYG+ukALg7
+         Y5L54sGS7I9AddRxqbL8PVJEp1DzYuhTEt6pw8J6wgkjH2YjU4CWQt52qaA8Ll8bQnhz
+         hNuwWVLVHWWmeyUuZXbQBcEH2MscDxfdeLc8JJZQJ3q0Tm+bOFNHZPd6BLvoYLDznVQS
+         Z4iLyFWL5WfGQvOF4w6F2+lOnIL2/gO8J93sYmN5cfmhHwyUFyuWf2EbefFaUf6Dgj9f
+         TP5A==
+X-Forwarded-Encrypted: i=1; AJvYcCXbA77P2MJS9jaR6ptqgSTzECfvs2+RN/l2EGqiipNuQ1bvo4djna2bCGqDefBSm30EDztGEoRy8RsE7UzzOzsv+VMz0+Aqd32YKA==
+X-Gm-Message-State: AOJu0Yw7E9FfzfUt5weKMMGX1XICJ/gGVAPoFrUvEGqTiCs5341lRTKu
+	+5vEuSPDmjX3NuE3J9GvpcsrBAL2Je6Fu4C1HFEdf2tvPgL1TLTAbt3rebnXZ5e6jbHiJwFmCNN
+	iZ7/yqtQlDxOhBpCnoo/vhKFMedl14K+2aHReK1miglt29Y/E5av1hb2fPSM=
+X-Received: by 2002:a05:6808:124a:b0:3c7:51f:156c with SMTP id o10-20020a056808124a00b003c7051f156cmr12703888oiv.29.1713758007402;
+        Sun, 21 Apr 2024 20:53:27 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFkZ3BNLKQwXsjKmL+OZ/4pqOa0EAKdoGoRtaqIZBDJxdFy4L8f2LFmwwMaKdJQp7E0m+dRqg==
+X-Received: by 2002:a05:6808:124a:b0:3c7:51f:156c with SMTP id o10-20020a056808124a00b003c7051f156cmr12703871oiv.29.1713758007141;
+        Sun, 21 Apr 2024 20:53:27 -0700 (PDT)
+Received: from [192.168.68.51] ([43.252.115.31])
+        by smtp.gmail.com with ESMTPSA id lo8-20020a056a003d0800b006ed4823671csm7078329pfb.15.2024.04.21.20.53.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 21 Apr 2024 20:53:26 -0700 (PDT)
+Message-ID: <8c3efa79-53ef-40d1-a701-5c88447c95cb@redhat.com>
+Date: Mon, 22 Apr 2024 13:53:16 +1000
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 01/18] cpu: Do not warn on arch_register_cpu()
+ returning -EPROBE_DEFER
+Content-Language: en-US
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>, linux-pm@vger.kernel.org,
+ loongarch@lists.linux.dev, linux-acpi@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+ x86@kernel.org, Russell King <linux@armlinux.org.uk>,
+ "Rafael J . Wysocki" <rafael@kernel.org>,
+ Miguel Luis <miguel.luis@oracle.com>, James Morse <james.morse@arm.com>,
+ Salil Mehta <salil.mehta@huawei.com>,
+ Jean-Philippe Brucker <jean-philippe@linaro.org>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
+Cc: linuxarm@huawei.com, justin.he@arm.com, jianyong.wu@arm.com
+References: <20240412143719.11398-1-Jonathan.Cameron@huawei.com>
+ <20240412143719.11398-2-Jonathan.Cameron@huawei.com>
+From: Gavin Shan <gshan@redhat.com>
+In-Reply-To: <20240412143719.11398-2-Jonathan.Cameron@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Change the return types of bitops functions (ffs, fls, and fns) from
-long to int. The expected return values are in the range [0, 64], for
-which int is sufficient.
 
-Additionally, int aligns well with the return types of the corresponding
-__builtin_* functions, potentially reducing overall type conversions.
+On 4/13/24 00:37, Jonathan Cameron wrote:
+> For arm64 the CPU registration cannot complete until the ACPI intepretter
+> us up and running so in those cases the arch specific
+   ^^
 
-Many of the existing bitops functions already return an int and don't
-need to be changed. The bitops functions in arch/ should be considered
-separately.
+typo: s/us/is
 
-Adjust some return variables to match the function return types.
+> arch_register_cpu() will return -EPROBE_DEFER at this stage and the
+> registration will be attempted later.
+> 
+> Suggested-by: Rafael J. Wysocki <rafael@kernel.org>
+> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> 
+> ---
+> v5: New patch.
+>      Note that for now no arch_register_cpu() calls return -EPROBE_DEFER
+>      so it has no impact until the arm64 one is added later in this series.
+> ---
+>   drivers/base/cpu.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-With GCC 13 and defconfig, these changes reduced the size of a test
-kernel image by 5,432 bytes on arm64 and by 248 bytes on riscv; there
-were no changes in size on x86_64, powerpc, or m68k.
-
-Signed-off-by: Thorsten Blum <thorsten.blum@toblux.com>
----
- include/asm-generic/bitops/__ffs.h         | 4 ++--
- include/asm-generic/bitops/__fls.h         | 4 ++--
- include/asm-generic/bitops/builtin-__ffs.h | 2 +-
- include/asm-generic/bitops/builtin-__fls.h | 2 +-
- include/linux/bitops.h                     | 6 +++---
- tools/include/asm-generic/bitops/__ffs.h   | 4 ++--
- tools/include/asm-generic/bitops/__fls.h   | 4 ++--
- tools/include/linux/bitops.h               | 2 +-
- 8 files changed, 14 insertions(+), 14 deletions(-)
-
-diff --git a/include/asm-generic/bitops/__ffs.h b/include/asm-generic/bitops/__ffs.h
-index 446fea6dda78..2d08c750c8a7 100644
---- a/include/asm-generic/bitops/__ffs.h
-+++ b/include/asm-generic/bitops/__ffs.h
-@@ -10,9 +10,9 @@
-  *
-  * Undefined if no bit exists, so code should check against 0 first.
-  */
--static __always_inline unsigned long generic___ffs(unsigned long word)
-+static __always_inline unsigned int generic___ffs(unsigned long word)
- {
--	int num = 0;
-+	unsigned int num = 0;
- 
- #if BITS_PER_LONG == 64
- 	if ((word & 0xffffffff) == 0) {
-diff --git a/include/asm-generic/bitops/__fls.h b/include/asm-generic/bitops/__fls.h
-index 54ccccf96e21..e974ec932ec1 100644
---- a/include/asm-generic/bitops/__fls.h
-+++ b/include/asm-generic/bitops/__fls.h
-@@ -10,9 +10,9 @@
-  *
-  * Undefined if no set bit exists, so code should check against 0 first.
-  */
--static __always_inline unsigned long generic___fls(unsigned long word)
-+static __always_inline unsigned int generic___fls(unsigned long word)
- {
--	int num = BITS_PER_LONG - 1;
-+	unsigned int num = BITS_PER_LONG - 1;
- 
- #if BITS_PER_LONG == 64
- 	if (!(word & (~0ul << 32))) {
-diff --git a/include/asm-generic/bitops/builtin-__ffs.h b/include/asm-generic/bitops/builtin-__ffs.h
-index 87024da44d10..cf4b3d33bf96 100644
---- a/include/asm-generic/bitops/builtin-__ffs.h
-+++ b/include/asm-generic/bitops/builtin-__ffs.h
-@@ -8,7 +8,7 @@
-  *
-  * Undefined if no bit exists, so code should check against 0 first.
-  */
--static __always_inline unsigned long __ffs(unsigned long word)
-+static __always_inline unsigned int __ffs(unsigned long word)
- {
- 	return __builtin_ctzl(word);
- }
-diff --git a/include/asm-generic/bitops/builtin-__fls.h b/include/asm-generic/bitops/builtin-__fls.h
-index 43a5aa9afbdb..6d72fc8a5259 100644
---- a/include/asm-generic/bitops/builtin-__fls.h
-+++ b/include/asm-generic/bitops/builtin-__fls.h
-@@ -8,7 +8,7 @@
-  *
-  * Undefined if no set bit exists, so code should check against 0 first.
-  */
--static __always_inline unsigned long __fls(unsigned long word)
-+static __always_inline unsigned int __fls(unsigned long word)
- {
- 	return (sizeof(word) * 8) - 1 - __builtin_clzl(word);
- }
-diff --git a/include/linux/bitops.h b/include/linux/bitops.h
-index 2ba557e067fe..f60220f119e2 100644
---- a/include/linux/bitops.h
-+++ b/include/linux/bitops.h
-@@ -200,7 +200,7 @@ static __always_inline __s64 sign_extend64(__u64 value, int index)
- 	return (__s64)(value << shift) >> shift;
- }
- 
--static inline unsigned fls_long(unsigned long l)
-+static inline unsigned int fls_long(unsigned long l)
- {
- 	if (sizeof(l) == 4)
- 		return fls(l);
-@@ -236,7 +236,7 @@ static inline int get_count_order_long(unsigned long l)
-  * The result is not defined if no bits are set, so check that @word
-  * is non-zero before calling this.
-  */
--static inline unsigned long __ffs64(u64 word)
-+static inline unsigned int __ffs64(u64 word)
- {
- #if BITS_PER_LONG == 32
- 	if (((u32)word) == 0UL)
-@@ -252,7 +252,7 @@ static inline unsigned long __ffs64(u64 word)
-  * @word: The word to search
-  * @n: Bit to find
-  */
--static inline unsigned long fns(unsigned long word, unsigned int n)
-+static inline unsigned int fns(unsigned long word, unsigned int n)
- {
- 	unsigned int bit;
- 
-diff --git a/tools/include/asm-generic/bitops/__ffs.h b/tools/include/asm-generic/bitops/__ffs.h
-index 9d1310519497..2d94c1e9b2f3 100644
---- a/tools/include/asm-generic/bitops/__ffs.h
-+++ b/tools/include/asm-generic/bitops/__ffs.h
-@@ -11,9 +11,9 @@
-  *
-  * Undefined if no bit exists, so code should check against 0 first.
-  */
--static __always_inline unsigned long __ffs(unsigned long word)
-+static __always_inline unsigned int __ffs(unsigned long word)
- {
--	int num = 0;
-+	unsigned int num = 0;
- 
- #if __BITS_PER_LONG == 64
- 	if ((word & 0xffffffff) == 0) {
-diff --git a/tools/include/asm-generic/bitops/__fls.h b/tools/include/asm-generic/bitops/__fls.h
-index 54ccccf96e21..e974ec932ec1 100644
---- a/tools/include/asm-generic/bitops/__fls.h
-+++ b/tools/include/asm-generic/bitops/__fls.h
-@@ -10,9 +10,9 @@
-  *
-  * Undefined if no set bit exists, so code should check against 0 first.
-  */
--static __always_inline unsigned long generic___fls(unsigned long word)
-+static __always_inline unsigned int generic___fls(unsigned long word)
- {
--	int num = BITS_PER_LONG - 1;
-+	unsigned int num = BITS_PER_LONG - 1;
- 
- #if BITS_PER_LONG == 64
- 	if (!(word & (~0ul << 32))) {
-diff --git a/tools/include/linux/bitops.h b/tools/include/linux/bitops.h
-index 7319f6ced108..8e073a111d2a 100644
---- a/tools/include/linux/bitops.h
-+++ b/tools/include/linux/bitops.h
-@@ -70,7 +70,7 @@ static inline unsigned long hweight_long(unsigned long w)
- 	return sizeof(w) == 4 ? hweight32(w) : hweight64(w);
- }
- 
--static inline unsigned fls_long(unsigned long l)
-+static inline unsigned int fls_long(unsigned long l)
- {
- 	if (sizeof(l) == 4)
- 		return fls(l);
--- 
-2.39.2
+Reviewed-by: Gavin Shan <gshan@redhat.com>
 
 
