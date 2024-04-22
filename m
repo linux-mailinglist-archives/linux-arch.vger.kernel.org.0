@@ -1,135 +1,119 @@
-Return-Path: <linux-arch+bounces-3865-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3866-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E92D8AC810
-	for <lists+linux-arch@lfdr.de>; Mon, 22 Apr 2024 10:55:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 797908AC8A6
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Apr 2024 11:15:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CCD30B2117E
-	for <lists+linux-arch@lfdr.de>; Mon, 22 Apr 2024 08:55:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E58BB1F247B1
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Apr 2024 09:15:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2485D5FB94;
-	Mon, 22 Apr 2024 08:51:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B767852F96;
+	Mon, 22 Apr 2024 09:15:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eVoUrqTz"
+	dkim=pass (2048-bit key) header.d=toblux-com.20230601.gappssmtp.com header.i=@toblux-com.20230601.gappssmtp.com header.b="RDqBOJtW"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE8887E567;
-	Mon, 22 Apr 2024 08:51:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FDA022611
+	for <linux-arch@vger.kernel.org>; Mon, 22 Apr 2024 09:15:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713775909; cv=none; b=j2YajQveaubYaNLPKrGDBEHIYatytdCzbQnNTXDUI1n8Cv3Ck6Kei1yzZ+nAuZ+dz0Co2zurlW/Eu2nxNNZUYP61TXblwcLFde3v4tStW12I5yUlSyEXoDAyTsnXASdSOg3jyYQLaaIAlP1VAvJVuI2G0UPeGfzv6Zze3lztDG0=
+	t=1713777333; cv=none; b=XSsNK98m2a36TLx0aipDZayeqMZyahvHv3eovRJhaVCzn0y3++jYGWtvLRCyMxnOHatLNNMScTqpvSYDwDG681g1pxCI3U8vN1TH4kL4ADfkzF5ko+s+TUEZwEKnWJ4FpZnr+rqMnIZ29meOhnsDP9lgQVGRtC9XgcAdd/ZsWug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713775909; c=relaxed/simple;
-	bh=+AOj3OMDSB3feHYUPdQfVhUVtDWDdcImqVlO1v4xpng=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YEDwt0l9v8lB35XKRroRbPbCxgcWjoqJ2meU6t6ltBAJpAoaKVriI3UqdUfpGgbt73TFKrVkc/B5Ignb/Oq69/ZBjDyqVl30PqectyZWpoV4NDtfIeaMHJR25801S7w1Vx+wvGk88EzgDENcF9XVdx/5kmWr0YP7nAylLd9XCgc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eVoUrqTz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38C17C2BD11;
-	Mon, 22 Apr 2024 08:51:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713775908;
-	bh=+AOj3OMDSB3feHYUPdQfVhUVtDWDdcImqVlO1v4xpng=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=eVoUrqTzKvKDMlRbSWxMwMfDr77F/fKfaXZo2D+M3jvbmz9/9rPDY11wr5uJd9WHR
-	 73qR6p9MsEwspl1mw67ZTeyYCQ1FdiUxyXu6GbwzDfstwCeP1NpczqvSY3Ba3Z0ExF
-	 qBMPc7gnPplQ3FSNK9aAmG5M0zlt/ivtRKIDO9W7wAAOdsxTPJAPWUmM+W1fP4IdGd
-	 KAT9/hPs4sBh1ZzDW2QkE9pzzbAWiIcuTpjmeUWW8EYfxXBJk1pSD+eFGRvkHE7PRe
-	 d4xcLwN7QI4MoUdGlr27hLmYCSgh98aXj/Vzt/0ZDsn1XD4giLiMchiuCvfBPl67Xb
-	 qXJvsrGnAVEqQ==
-From: Mike Rapoport <rppt@kernel.org>
-To: linux-kernel@vger.kernel.org
-Cc: Alexandre Ghiti <alexghiti@rivosinc.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	"David S. Miller" <davem@davemloft.net>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Donald Dutile <ddutile@redhat.com>,
-	Eric Chanudet <echanude@redhat.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Helge Deller <deller@gmx.de>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Mike Rapoport <rppt@kernel.org>,
-	Nadav Amit <nadav.amit@gmail.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Sam Ravnborg <sam@ravnborg.org>,
-	Song Liu <song@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Will Deacon <will@kernel.org>,
-	bpf@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mips@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-modules@vger.kernel.org,
-	linux-parisc@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	loongarch@lists.linux.dev,
-	netdev@vger.kernel.org,
-	sparclinux@vger.kernel.org,
-	x86@kernel.org
-Subject: [PATCH v5 15/15] bpf: remove CONFIG_BPF_JIT dependency on CONFIG_MODULES of
-Date: Mon, 22 Apr 2024 11:50:28 +0300
-Message-ID: <20240422085028.3602777-6-rppt@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240422085028.3602777-1-rppt@kernel.org>
-References: <20240422085028.3602777-1-rppt@kernel.org>
+	s=arc-20240116; t=1713777333; c=relaxed/simple;
+	bh=b/wu88jA9YdxZN0vncf57S6bbFuU12MW/xuCRw6CPIc=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=BF9CrdF8KJTESys/qwIacht9GBGadeL2h8VY0PANT2/atldIviMRPhdKuAaVbxdvv838looIa2/0jWK1yJyMtpNxj746j0HjnUhylboPK8mgIarxPAned6X73ZLJ+GhYS8FNsVNLZ8kJTCVYr1t5JRaBY7Sj28rTwiw7yBz7gBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toblux.com; spf=none smtp.mailfrom=toblux.com; dkim=pass (2048-bit key) header.d=toblux-com.20230601.gappssmtp.com header.i=@toblux-com.20230601.gappssmtp.com header.b=RDqBOJtW; arc=none smtp.client-ip=209.85.208.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toblux.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=toblux.com
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-56e6a1edecfso6314702a12.1
+        for <linux-arch@vger.kernel.org>; Mon, 22 Apr 2024 02:15:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=toblux-com.20230601.gappssmtp.com; s=20230601; t=1713777330; x=1714382130; darn=vger.kernel.org;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=b/wu88jA9YdxZN0vncf57S6bbFuU12MW/xuCRw6CPIc=;
+        b=RDqBOJtWr2Pk57ZFfNBWbGabCvsULDnIVFKz8TBjvCza5XhRAhTKRPgVYfDKuVmw7+
+         d8GIePLCp8VIUmk52U2gCUf6BP8Po0KkEPogiy9+0AreI3r0DE7dJjtMFvEjD1tAZsZQ
+         5fYkjW8XR2sLJNCRj6glJJ3Crut7rGUc4FefaHVCqME2uSnraPVGUjdkwm+66il7UZL8
+         U7DmsyU1dl2lY9jpYuDux9eC88IcIOzGmZ0+ViVuOfk+wKbQE0Owbc6V1Oa2uFW4EqDB
+         Ldz8p1VMyXb2b7pnDsnq7dCY88JOfe+wsSGxz8B0EYBy1X+zj13XiTNHdHud1pYT2XDR
+         e4Zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713777330; x=1714382130;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=b/wu88jA9YdxZN0vncf57S6bbFuU12MW/xuCRw6CPIc=;
+        b=WwHCeWZKW/TX3iVp0gK6S8epcxzQI0s0aYddhl2xtMRU99JXT476sbn4/XsbUOUpLO
+         o1+eD5RbPHSr/4aGWeAieBUxdKFAubnkJjz9s4x+9t6u4L13thoWlkL/kQx9FVtj1bez
+         fwMRofm4oi6Rblpchdvb2W9LocVuqqy9nPkeoxJnAYfTvMt2A4ELGev0gsi6O7NIADha
+         ltJayuXewLX6PiavjoNQtve94lBvlyNND1k2nlxhwSTcsaaYklsbMlf1IrhNGjYiAxQT
+         gmwi+07qntry8/8sxbnovjFNddOVskOextd9AjTQzvzqOJWAdiA6skxNyWnUzzlDD2JM
+         mI3Q==
+X-Forwarded-Encrypted: i=1; AJvYcCW889SPOwgFFhxHRtdPKf47l2Ik6qE6FWvCOtAsa83P3TQeNYQG2XP5m3EDBDDshehRRUtk0GqDX5f1TK87fJjwyL0aFFnvH/X49A==
+X-Gm-Message-State: AOJu0YzF9SuriPkpZea1FBy14BhZHi/ZMM/evtFHoxFL78Bl5dfCCpRb
+	/i34tW4NsUxnSX7JNrER0/MsUPP/GnyCf3Bb70ASYNDlR9TO2tu1JGHRcMusXKuJR2y7kI9a5eJ
+	DwdA=
+X-Google-Smtp-Source: AGHT+IFdfwf81v1W+wySpJ76jOG5eIUy0V2oEYWpmvSKm4+/wZYK5usVUsAOja/4SZhQfVLrh1xfHA==
+X-Received: by 2002:a50:cd12:0:b0:56e:2c1d:1174 with SMTP id z18-20020a50cd12000000b0056e2c1d1174mr6653782edi.4.1713777330577;
+        Mon, 22 Apr 2024 02:15:30 -0700 (PDT)
+Received: from smtpclient.apple ([2001:a61:10c6:ce01:7d:af2:ac50:1252])
+        by smtp.gmail.com with ESMTPSA id f11-20020a056402194b00b005720cefe0d2sm931590edz.52.2024.04.22.02.15.29
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 22 Apr 2024 02:15:30 -0700 (PDT)
+Content-Type: text/plain;
+	charset=us-ascii
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3774.500.171.1.1\))
+Subject: Re: [PATCH] bitops: Change function return types from long to int
+From: Thorsten Blum <thorsten.blum@toblux.com>
+In-Reply-To: <DM8PR11MB5751439B2053D1AD07BB8AD9B8122@DM8PR11MB5751.namprd11.prod.outlook.com>
+Date: Mon, 22 Apr 2024 11:15:18 +0200
+Cc: Arnd Bergmann <arnd@arndb.de>,
+ Palmer Dabbelt <palmer@rivosinc.com>,
+ Charlie Jenkins <charlie@rivosinc.com>,
+ Namhyung Kim <namhyung@kernel.org>,
+ Huacai Chen <chenhuacai@kernel.org>,
+ Youling Tang <tangyouling@loongson.cn>,
+ Tiezhu Yang <yangtiezhu@loongson.cn>,
+ Jinyang He <hejinyang@loongson.cn>,
+ "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <4BD934DC-5657-41E1-A9D6-226886D2AA8B@toblux.com>
+References: <20240420223836.241472-1-thorsten.blum@toblux.com>
+ <DM8PR11MB5751439B2053D1AD07BB8AD9B8122@DM8PR11MB5751.namprd11.prod.outlook.com>
+To: "Wang, Xiao W" <xiao.w.wang@intel.com>
+X-Mailer: Apple Mail (2.3774.500.171.1.1)
 
-From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+On 22. Apr 2024, at 07:24, Wang, Xiao W <xiao.w.wang@intel.com> wrote:
+>=20
+> Could we change the return types to "int", instead of "unsigned int"?
+> https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html says that these =
+__builtin_*
+> functions return "int".
 
-BPF just-in-time compiler depended on CONFIG_MODULES because it used
-module_alloc() to allocate memory for the generated code.
+We could, but changing the signedness breaks assertions in other modules =
+and=20
+drivers (e.g., where min() and max() are used) and has quite a few side =
+effects.
 
-Since code allocations are now implemented with execmem, drop dependency of
-CONFIG_BPF_JIT on CONFIG_MODULES and make it select CONFIG_EXECMEM.
+>> With GCC 13 and defconfig, these changes reduced the size of a test
+>> kernel image by 5,432 bytes on arm64 and by 248 bytes on riscv; there
+>> were no changes in size on x86_64, powerpc, or m68k.
+>=20
+> I guess your test is based on 64bit arch, right?
 
-Suggested-by: Björn Töpel <bjorn@kernel.org>
-Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
----
- kernel/bpf/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/kernel/bpf/Kconfig b/kernel/bpf/Kconfig
-index bc25f5098a25..f999e4e0b344 100644
---- a/kernel/bpf/Kconfig
-+++ b/kernel/bpf/Kconfig
-@@ -43,7 +43,7 @@ config BPF_JIT
- 	bool "Enable BPF Just In Time compiler"
- 	depends on BPF
- 	depends on HAVE_CBPF_JIT || HAVE_EBPF_JIT
--	depends on MODULES
-+	select EXECMEM
- 	help
- 	  BPF programs are normally handled by a BPF interpreter. This option
- 	  allows the kernel to generate native code when a program is loaded
--- 
-2.43.0
-
+Yes, except for m68k.=
 
