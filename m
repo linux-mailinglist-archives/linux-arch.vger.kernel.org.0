@@ -1,161 +1,251 @@
-Return-Path: <linux-arch+bounces-3892-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3893-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DACC8AD3FD
-	for <lists+linux-arch@lfdr.de>; Mon, 22 Apr 2024 20:32:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F5AB8AD452
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Apr 2024 20:50:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 02FC9281ED7
-	for <lists+linux-arch@lfdr.de>; Mon, 22 Apr 2024 18:32:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 782A42872B8
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Apr 2024 18:50:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0181154453;
-	Mon, 22 Apr 2024 18:32:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDEBB157A57;
+	Mon, 22 Apr 2024 18:46:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WFjAm3nG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ULN97FhV"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A85A41847;
-	Mon, 22 Apr 2024 18:32:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96E52155334;
+	Mon, 22 Apr 2024 18:46:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713810736; cv=none; b=QznZ5pBJl0AHmDy48WduUBUcGmD1B5IijLy07IEf5r/lnv88qxYRvA5oQaYlwdAlpqc1GVY1w1jWVl0QJqGwczxeeYfnZSSyAcfepfHnjKaKOF2nbfqgLPQaF761qomi9Pp7CLQeTv3/4Q6nT+jkRFMRRAHrU+7khNTTDfbwIaI=
+	t=1713811603; cv=none; b=N0eMWHuGiKWIDzoVycrQX2wCUxeZuKUWbQOR3O8hh9eocJegKd02P7QNVZpB+daZ0HSuyVBrHlHxy2nCmCWwLDjSz10W04DXw3zKPyDRun+B/qBFhSljReEhmMc33/7IgnAp/DIS9RW18HMqxM4H66dN90w/BnCbtVr0ct+1X0w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713810736; c=relaxed/simple;
-	bh=41bQmayZLa9F2TS6BjEFSDm7V8S6LLEq/o95h7wxG6E=;
+	s=arc-20240116; t=1713811603; c=relaxed/simple;
+	bh=N900p0AA4Gj2ka7kPwyA1nPYs1lshTu/dBwgZ7ZyDfU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=l28eZyiFEZGZ1i/VsciXHLakue8jpER4MkOl+eJHmzT4EU9NaymBI9aKgNE9lZM/8yoE6WRNH4NyIldiPpWKYf1t9kvuTHhyts5SEsj2/ZLFCkaNrcxQpiqy6FhTHbHod+xQPd+97s1/vPOsXJ5KKbqXRqeBgtbDl/8gOtm5gBA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WFjAm3nG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AA94C4AF0B;
-	Mon, 22 Apr 2024 18:32:16 +0000 (UTC)
+	 To:Cc:Content-Type; b=DH5GvgQI8Y4YfJVA2Gs0Nbsj1VeFqX2Io74FJ9CsysqRblvFe3Vs9ZFXKSoZLg7ocuFYybtwjIT1It22Teiq9WYSOCD86FyI5egOOQUYO/oRJZGskEzM5tQxzS1Zp6+KQbkccj3pO7Jc+IsliorOCfR9u8zpfbbK9w/rn03yj0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ULN97FhV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A3ADC4AF08;
+	Mon, 22 Apr 2024 18:46:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713810736;
-	bh=41bQmayZLa9F2TS6BjEFSDm7V8S6LLEq/o95h7wxG6E=;
+	s=k20201202; t=1713811603;
+	bh=N900p0AA4Gj2ka7kPwyA1nPYs1lshTu/dBwgZ7ZyDfU=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=WFjAm3nG7XUTrBnb9o2ks89OQgjxiSe5eWX8YxXd1sW0hbIxt8VjaFgdNY7jwwl/k
-	 AfWjBBQkR55Va8AnJ9aZ9HNo3aWGj92Hg8yQfe6AZc/sgCyr09/ddJev56eXLxhUbk
-	 bYRNUKDXSWSv0PHnlWydUHx0kp/IGq0ZRSR0xO71ow/Lfv7EI3MTbMaLFw4v7bXSFJ
-	 3STUYz/yJHlp6VqKWBeoWQO13+U5j6+pSZw+u4eCUWHpkY832oOPrwYV84rmuYW4C/
-	 bOCj02N41ZbDl+Gdwcz6EkWfYsWwZ5MhWh4lcO8wHP44/mjOjwNi1xfPxSrEJkKHPw
-	 nRWV7XhBkaFPQ==
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2da08b06e0dso56752861fa.2;
-        Mon, 22 Apr 2024 11:32:16 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVAiL4f0XpoTnbX2tsCYaeKCYRiAi5LlPsAXRg2XqaLnBfw0mAuWdG/n2s/rm1fN67yq2GFli/x7nix6Ci20zGBFF2tfTCPkpcU/cIUBXZfkl7bWOQ674srKDnADgriyGJjKil0QaqrFI6dYTBROAkgPQKjtNQoJOgjlaRxPYZtdGQ1xcGmfmo0LD51lKKVhfV+73d6mxcL3emy2Up/snWYvkBkSLoI6l8HPx139+GJVqJqGWEqCwbslJXVJ+i8E6ipAnU54pLeSVwJhoM1dTOLgvLRzXWjcDvU2C4oMB/Tgx3uj0qCNRGpKIrpvjSk81tsEbxLki9rk8infjoGwWTgUgZ/U+KECMhad5na35inrctV6TP7qU+I+9l7U++LRZ9ZsqeiFMXTp8B2pjo9iEXyJe6o+/8L3LQDsvbol2gD9M6TJmM+Tb/uvUQ=
-X-Gm-Message-State: AOJu0YzIVj4kudDkOfIdSzPU7qWk5hi4ACyrTbrFxV2xQk0sd40r9cdc
-	G+YEaqz2iHHiLezycD0rMYEcmoO8FS2eYfkJpBR1rkwmo709PQ8NsIDTsIZrqnsyZnn0247incU
-	B6rCbtRT3RUAl8E2ws3o7ouKDoIs=
-X-Google-Smtp-Source: AGHT+IEL0FWUHmCKYIOk93aax6U4BdFHP3q3Bogcq6+CoScwmomqpj0/rB2eiX3SYQzXlZuuQSNAuqDXXtIwEOxd65Y=
-X-Received: by 2002:a2e:9496:0:b0:2d8:1d29:23a8 with SMTP id
- c22-20020a2e9496000000b002d81d2923a8mr6582027ljh.29.1713810734431; Mon, 22
- Apr 2024 11:32:14 -0700 (PDT)
+	b=ULN97FhVdNfET8mkchoUJo7WdV66EI7mzFEF1lsRkSlqDG+gpAQABpRslrsJfCDBL
+	 y7oMVKEBzRwd0d6NQSI2LGavm/zJMYvb5WQfzbGSxV55zqqL9c8Hd0pKPmRZFdmInI
+	 vUUhV1FB4PEylph35IkhP2ogWn1D9fboh28UECFCYVvDVw8g2YvfwX5Y8k0ifOPNQb
+	 EXdckpeIMOCUCOMpQ7kuIAIBzQFrKtsHIfIATwGhvpwN8JzoQhqq6EIWKZhyCdOQgZ
+	 2r81mCmcIfBw4cPitlEySlY039SRZNgFlyg2C9bH8tB6bGjP6tJpAjFIUIHJO3+YZp
+	 gppskfjTrMuvg==
+Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-3c751391320so68735b6e.3;
+        Mon, 22 Apr 2024 11:46:43 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXoVzp9qqhDp2vIzGqEs7kvXWmClMzvJEoHUVzeLaEkh03WYhoWgWroTJ7OlSOm6sEINAy/Iw3vIXJ1lrIxMUA9dEtArKeK5LucKRwe1kWs45+rAlAwsbOEDv+p9Yddt5yIAs31BYgV2KEhPXyAPbfwA1v7B+UAlbZsB4YTV0TnJkBgc20hfbUFXVNl/AuqGywTMtP6Hnclbd2QqWmRsg==
+X-Gm-Message-State: AOJu0Yw8w93NB+Nq3uQWDARD4mOiAhu0JAlQcIGpJ5kMlzfgDdy15uSG
+	FAtDMeX5YzpZblli0yP9g6EXwrfad+RTJzAvWiJ4P+x5ZXGR/xE99V2UMCtA/MzMdsFQivJNh9c
+	57m/YJG1benyIr8rKYCyrqeDvkyc=
+X-Google-Smtp-Source: AGHT+IFPgOe8ULWuvYcbF8vz2a93mVviOXf9qv95GFOeoCEFC8u/XjGJwHUKi+S9n2GACxOH6R+xy6O8qM2nNJJ8ELU=
+X-Received: by 2002:a05:6820:e07:b0:5aa:14ff:4128 with SMTP id
+ el7-20020a0568200e0700b005aa14ff4128mr11063972oob.1.1713811602518; Mon, 22
+ Apr 2024 11:46:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <ZiE91CJcNw7gBj9g@kernel.org> <CAPhsuW4au6v8k8Ab7Ff6Yj64rGvZ7wkz=Xrgh8ZZtLyscpChqQ@mail.gmail.com>
- <ZiFd567L4Zzm2okO@kernel.org> <CAPhsuW5SL4_=ZXdHZV8o0KS+5Vf25UMvEKhRgFQLioFtf2pgoQ@mail.gmail.com>
- <ZiIVVBgaDN4RsroT@kernel.org> <CAPhsuW7WoU+a46FhqqH8f-3=ehxeD4wSgKDWegMin1pT49OSWw@mail.gmail.com>
- <ZiKjmaDgz_56ovbv@kernel.org> <CAPhsuW7Nj1Sa_9xQtTgHz9AmX39zdh2x2COqA-qmkfpfX9hNWw@mail.gmail.com>
- <ZiLNGgVSQ7_cg58y@kernel.org> <CAPhsuW4KRM4O4RFbYQrt=Coqyh9w29WiF2YF=8soDfauLFsKBA@mail.gmail.com>
- <ZiNDGjkcqEPqruza@kernel.org> <20240420181121.d6c7be11a6f98dc2462f8b41@kernel.org>
-In-Reply-To: <20240420181121.d6c7be11a6f98dc2462f8b41@kernel.org>
-From: Song Liu <song@kernel.org>
-Date: Mon, 22 Apr 2024 11:32:02 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW5RYfq8FOtMkO69cdQ3Bc1p2kQPWE2crts1UMhqJr+7sQ@mail.gmail.com>
-Message-ID: <CAPhsuW5RYfq8FOtMkO69cdQ3Bc1p2kQPWE2crts1UMhqJr+7sQ@mail.gmail.com>
-Subject: Re: [PATCH v4 05/15] mm: introduce execmem_alloc() and execmem_free()
-To: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Mike Rapoport <rppt@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org, 
-	Alexandre Ghiti <alexghiti@rivosinc.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Bjorn Topel <bjorn@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, "David S. Miller" <davem@davemloft.net>, 
-	Dinh Nguyen <dinguyen@kernel.org>, Donald Dutile <ddutile@redhat.com>, 
-	Eric Chanudet <echanude@redhat.com>, Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>, 
-	Huacai Chen <chenhuacai@kernel.org>, Kent Overstreet <kent.overstreet@linux.dev>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nadav Amit <nadav.amit@gmail.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Puranjay Mohan <puranjay12@gmail.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
-	Russell King <linux@armlinux.org.uk>, Steven Rostedt <rostedt@goodmis.org>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Thomas Gleixner <tglx@linutronix.de>, 
-	Will Deacon <will@kernel.org>, bpf@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org, 
-	linux-mm@kvack.org, linux-modules@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, 
-	netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
+References: <20240418135412.14730-1-Jonathan.Cameron@huawei.com> <20240418135412.14730-2-Jonathan.Cameron@huawei.com>
+In-Reply-To: <20240418135412.14730-2-Jonathan.Cameron@huawei.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 22 Apr 2024 20:46:30 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hrXHbv8JGydxwD1PP_M1GOm040=+OTDFLcpy3bmzf24A@mail.gmail.com>
+Message-ID: <CAJZ5v0hrXHbv8JGydxwD1PP_M1GOm040=+OTDFLcpy3bmzf24A@mail.gmail.com>
+Subject: Re: [PATCH v7 01/16] ACPI: processor: Simplify initial onlining to
+ use same path for cold and hotplug
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>, linux-pm@vger.kernel.org, 
+	loongarch@lists.linux.dev, linux-acpi@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, x86@kernel.org, 
+	Russell King <linux@armlinux.org.uk>, "Rafael J . Wysocki" <rafael@kernel.org>, 
+	Miguel Luis <miguel.luis@oracle.com>, James Morse <james.morse@arm.com>, 
+	Salil Mehta <salil.mehta@huawei.com>, Jean-Philippe Brucker <jean-philippe@linaro.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, linuxarm@huawei.com, justin.he@arm.com, 
+	jianyong.wu@arm.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Masami and Mike,
+On Thu, Apr 18, 2024 at 3:54=E2=80=AFPM Jonathan Cameron
+<Jonathan.Cameron@huawei.com> wrote:
+>
+> Separate code paths, combined with a flag set in acpi_processor.c to
+> indicate a struct acpi_processor was for a hotplugged CPU ensured that
+> per CPU data was only set up the first time that a CPU was initialized.
+> This appears to be unnecessary as the paths can be combined by letting
+> the online logic also handle any CPUs online at the time of driver load.
+>
+> Motivation for this change, beyond simplification, is that ARM64
+> virtual CPU HP uses the same code paths for hotplug and cold path in
+> acpi_processor.c so had no easy way to set the flag for hotplug only.
+> Removing this necessity will enable ARM64 vCPU HP to reuse the existing
+> code paths.
+>
+> Leave noisy pr_info() in place but update it to not state the CPU
+> was hotplugged.
+>
+> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-On Sat, Apr 20, 2024 at 2:11=E2=80=AFAM Masami Hiramatsu <mhiramat@kernel.o=
-rg> wrote:
-[...]
-> > >
-> > > IIUC, we need to update __execmem_cache_alloc() to take a range point=
-er as
-> > > input. module text will use "range" for EXECMEM_MODULE_TEXT, while kp=
-robe
-> > > will use "range" for EXECMEM_KPROBE. Without "map to" concept or shar=
-ing
-> > > the "range" object, we will have to compare different range parameter=
-s to check
-> > > we can share cached pages between module text and kprobe, which is no=
-t
-> > > efficient. Did I miss something?
->
-> Song, thanks for trying to eplain. I think I need to explain why I used
-> module_alloc() originally.
->
-> This depends on how kprobe features are implemented on the architecture, =
-and
-> how much features are supported on kprobes.
->
-> Because kprobe jump optimization and kprobe jump-back optimization need t=
-o
-> use a jump instruction to jump into the trampoline and jump back from the
-> trampoline directly, if the architecuture jmp instruction supports +-2GB =
-range
-> like x86, it needs to allocate the trampoline buffer inside such address =
-space.
-> This requirement is similar to the modules (because module function needs=
- to
-> call other functions in the kernel etc.), at least kprobes on x86 used
-> module_alloc().
->
-> However, if an architecture only supports breakpoint/trap based kprobe,
-> it does not need to consider whether the execmem is allocated.
->
-> >
-> > We can always share large ROX pages as long as they are within the corr=
-ect
-> > address space. The permissions for them are ROX and the alignment
-> > differences are due to KASAN and this is handled during allocation of t=
-he
-> > large page to refill the cache. __execmem_cache_alloc() only needs to l=
-imit
-> > the search for the address space of the range.
->
-> So I don't think EXECMEM_KPROBE always same as EXECMEM_MODULE_TEXT, it
-> should be configured for each arch. Especially, if it is only used for
-> searching parameter, it looks OK to me.
+LGTM, so
 
-Thanks for the explanation!
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-I was thinking "we can have EXECMEM_KPROBE share the same parameters as
-EXECMEM_MODULE_TEXT for all architectures". But this thought is built on to=
-p
-of assumptions on future changes/improvements within multiple sub systems.
-At this moment, I have no objections moving forward with current execmem AP=
-Is.
-
-Thanks,
-Song
+> ---
+> v7: No change.
+> v6: New patch.
+> RFT: I have very limited test resources for x86 and other
+> architectures that may be affected by this change.
+> ---
+>  drivers/acpi/acpi_processor.c   |  1 -
+>  drivers/acpi/processor_driver.c | 44 ++++++++++-----------------------
+>  include/acpi/processor.h        |  2 +-
+>  3 files changed, 14 insertions(+), 33 deletions(-)
+>
+> diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.=
+c
+> index 7a0dd35d62c9..7fc924aeeed0 100644
+> --- a/drivers/acpi/acpi_processor.c
+> +++ b/drivers/acpi/acpi_processor.c
+> @@ -216,7 +216,6 @@ static int acpi_processor_hotadd_init(struct acpi_pro=
+cessor *pr)
+>          * gets online for the first time.
+>          */
+>         pr_info("CPU%d has been hot-added\n", pr->id);
+> -       pr->flags.need_hotplug_init =3D 1;
+>
+>  out:
+>         cpus_write_unlock();
+> diff --git a/drivers/acpi/processor_driver.c b/drivers/acpi/processor_dri=
+ver.c
+> index 67db60eda370..55782eac3ff1 100644
+> --- a/drivers/acpi/processor_driver.c
+> +++ b/drivers/acpi/processor_driver.c
+> @@ -33,7 +33,6 @@ MODULE_AUTHOR("Paul Diefenbaugh");
+>  MODULE_DESCRIPTION("ACPI Processor Driver");
+>  MODULE_LICENSE("GPL");
+>
+> -static int acpi_processor_start(struct device *dev);
+>  static int acpi_processor_stop(struct device *dev);
+>
+>  static const struct acpi_device_id processor_device_ids[] =3D {
+> @@ -47,7 +46,6 @@ static struct device_driver acpi_processor_driver =3D {
+>         .name =3D "processor",
+>         .bus =3D &cpu_subsys,
+>         .acpi_match_table =3D processor_device_ids,
+> -       .probe =3D acpi_processor_start,
+>         .remove =3D acpi_processor_stop,
+>  };
+>
+> @@ -115,12 +113,10 @@ static int acpi_soft_cpu_online(unsigned int cpu)
+>          * CPU got physically hotplugged and onlined for the first time:
+>          * Initialize missing things.
+>          */
+> -       if (pr->flags.need_hotplug_init) {
+> +       if (!pr->flags.previously_online) {
+>                 int ret;
+>
+> -               pr_info("Will online and init hotplugged CPU: %d\n",
+> -                       pr->id);
+> -               pr->flags.need_hotplug_init =3D 0;
+> +               pr_info("Will online and init CPU: %d\n", pr->id);
+>                 ret =3D __acpi_processor_start(device);
+>                 WARN(ret, "Failed to start CPU: %d\n", pr->id);
+>         } else {
+> @@ -167,9 +163,6 @@ static int __acpi_processor_start(struct acpi_device =
+*device)
+>         if (!pr)
+>                 return -ENODEV;
+>
+> -       if (pr->flags.need_hotplug_init)
+> -               return 0;
+> -
+>         result =3D acpi_cppc_processor_probe(pr);
+>         if (result && !IS_ENABLED(CONFIG_ACPI_CPU_FREQ_PSS))
+>                 dev_dbg(&device->dev, "CPPC data invalid or not present\n=
+");
+> @@ -185,32 +178,21 @@ static int __acpi_processor_start(struct acpi_devic=
+e *device)
+>
+>         status =3D acpi_install_notify_handler(device->handle, ACPI_DEVIC=
+E_NOTIFY,
+>                                              acpi_processor_notify, devic=
+e);
+> -       if (ACPI_SUCCESS(status))
+> -               return 0;
+> +       if (!ACPI_SUCCESS(status)) {
+> +               result =3D -ENODEV;
+> +               goto err_thermal_exit;
+> +       }
+> +       pr->flags.previously_online =3D 1;
+>
+> -       result =3D -ENODEV;
+> -       acpi_processor_thermal_exit(pr, device);
+> +       return 0;
+>
+> +err_thermal_exit:
+> +       acpi_processor_thermal_exit(pr, device);
+>  err_power_exit:
+>         acpi_processor_power_exit(pr);
+>         return result;
+>  }
+>
+> -static int acpi_processor_start(struct device *dev)
+> -{
+> -       struct acpi_device *device =3D ACPI_COMPANION(dev);
+> -       int ret;
+> -
+> -       if (!device)
+> -               return -ENODEV;
+> -
+> -       /* Protect against concurrent CPU hotplug operations */
+> -       cpu_hotplug_disable();
+> -       ret =3D __acpi_processor_start(device);
+> -       cpu_hotplug_enable();
+> -       return ret;
+> -}
+> -
+>  static int acpi_processor_stop(struct device *dev)
+>  {
+>         struct acpi_device *device =3D ACPI_COMPANION(dev);
+> @@ -279,9 +261,9 @@ static int __init acpi_processor_driver_init(void)
+>         if (result < 0)
+>                 return result;
+>
+> -       result =3D cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN,
+> -                                          "acpi/cpu-drv:online",
+> -                                          acpi_soft_cpu_online, NULL);
+> +       result =3D cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,
+> +                                  "acpi/cpu-drv:online",
+> +                                  acpi_soft_cpu_online, NULL);
+>         if (result < 0)
+>                 goto err;
+>         hp_online =3D result;
+> diff --git a/include/acpi/processor.h b/include/acpi/processor.h
+> index 3f34ebb27525..e6f6074eadbf 100644
+> --- a/include/acpi/processor.h
+> +++ b/include/acpi/processor.h
+> @@ -217,7 +217,7 @@ struct acpi_processor_flags {
+>         u8 has_lpi:1;
+>         u8 power_setup_done:1;
+>         u8 bm_rld_set:1;
+> -       u8 need_hotplug_init:1;
+> +       u8 previously_online:1;
+>  };
+>
+>  struct acpi_processor {
+> --
 
