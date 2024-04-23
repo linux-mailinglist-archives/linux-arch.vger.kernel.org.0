@@ -1,157 +1,134 @@
-Return-Path: <linux-arch+bounces-3907-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3908-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 384D58ADE70
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Apr 2024 09:43:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A7F38AE106
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Apr 2024 11:31:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 69F531C21722
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Apr 2024 07:43:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 269CD28274C
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Apr 2024 09:31:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D240647F45;
-	Tue, 23 Apr 2024 07:43:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE5F258AA1;
+	Tue, 23 Apr 2024 09:31:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LBqEG+4V"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0A1347A5D;
-	Tue, 23 Apr 2024 07:43:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCCB151016;
+	Tue, 23 Apr 2024 09:31:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713858218; cv=none; b=crupKciJ2tLehGcOcKUEhPkdbWVjvOTmwaikcPFUcH6GBYoj4NvPzQ5CE6/yqcfKcroj4j3USjXUUk5BOQZIemsoLZd0GW4W6A8wtD8SN8mn9giUcJnIFdmQk1h9KOH0DVLfoEdbwPiG9vu3Np6S73JvLrEc6rdvHXQJYT5VKAI=
+	t=1713864687; cv=none; b=uELwyPpvpQ+Z+nmgosR5Y2rdyG7z4LjnIvq7E2InAbh8FPeIjKCu8PqJIhOeK2voCrGChX86MOqk7T+Wsb1bKGVeFxKDgg8Uw73aZZ295ockl9KCL5eANMNjo/ukhUsrbi4BHu9mV/2HSSpqYtJ8jyt/tYggQBxlNvKrgGKZMj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713858218; c=relaxed/simple;
-	bh=zpqXzeN1h9+yujdqercMpcnT15Uwq0O3FUcKIyg2OOs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=f0cwPgC/aZhjYjDSe+x2IeWRuwgnIDPcIY/XcBtDSF7HQJrmbe5jmOJ/bJaPYhW/gV+dwjkIsLYxaBolHXz3RmZBH8CZX3gdWluOfC25CdifWzSJjdZ1Y6xCMxTURT969jlCeWsZNEfEX7YMjhXKHXGA566QYpeRbcxlki+WwbY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 896E0C116B1;
-	Tue, 23 Apr 2024 07:43:35 +0000 (UTC)
-From: Huacai Chen <chenhuacai@loongson.cn>
-To: Arnd Bergmann <arnd@arndb.de>,
-	Huacai Chen <chenhuacai@kernel.org>
-Cc: loongarch@lists.linux.dev,
-	linux-arch@vger.kernel.org,
-	Xuefeng Li <lixuefeng@loongson.cn>,
-	Guo Ren <guoren@kernel.org>,
-	Xuerui Wang <kernel@xen0n.name>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	linux-kernel@vger.kernel.org,
-	loongson-kernel@lists.loongnix.cn,
-	Huacai Chen <chenhuacai@loongson.cn>,
-	Youling Tang <tangyouling@kylinos.cn>
-Subject: [PATCH] LoongArch: Fix callchain parse error with kernel tracepoint events
-Date: Tue, 23 Apr 2024 15:43:22 +0800
-Message-ID: <20240423074322.2480319-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1713864687; c=relaxed/simple;
+	bh=mCfFITSMnCflHebZWGZOERjPx9rq/bpE5SXgFwiJHz8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hNjfUV7Rb26yDi6gQDmnhc1lsxs0giivxl6sKYxuMngzHKfNkpNwiZ1+a8Iep7NJ/Go04mqKrexhSCe6PlHokaAnMcOsZ260DSeWk0Fu9pgjXHcJuo9dkRqc2KrtNYje0KTcrkoiZAxDhsbvgf3ou60sZ7Z0Biouoy4hteF4lPI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LBqEG+4V; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BE49C4AF0B;
+	Tue, 23 Apr 2024 09:31:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713864687;
+	bh=mCfFITSMnCflHebZWGZOERjPx9rq/bpE5SXgFwiJHz8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=LBqEG+4VDH76Wzj3j/0ieKNlwWtnLoLwDo9wtFs4I19rtyemYkNNiQy4RqnBHyChx
+	 RR0fJjUL7C/bNvPLRLhBJKhs5MbowPS72vAoU1iHj6M2rYygNsh1nPK4Llt+Flsq4g
+	 RvgARe4pRKfaSCsmwB0nWtIv9W4+Uakle2S7TLmoo9DIzqy0QpOU7I3ha2wXygqe8q
+	 ssPoPWXf6+XL3YV7hnVlgVeLLJUpaUdBx2k8wDtuu+XHyBX9T69k+tEbG+Ct/q64FA
+	 +YWnSfjz7+6hYZ9bZfKMsIEYwXg2o15zuxJw9bnMXgcMTtPx5Niozg1vCNJmJj60B1
+	 fQV5eu3Hr/sew==
+Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-5af12f48b72so213066eaf.3;
+        Tue, 23 Apr 2024 02:31:27 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVVBxHV2PYsi+wvnh6oua8yZR6JmcJjisXi51Ng5fLYKTsoFBITm8yzOsBxAzD7k0ATjl1aIPIO6S8zasGGr3rvAcAMX1OW9rpgc287tGjNAoymSkqX759rJPJr5CgH1JkJjYyg05Wdi2LQQejJB50X41sWlgF9YnqiHIOai+iRflTg2TGISt7Y6gGduX6cxzavmEhCLoWdbLU2gwrLJw==
+X-Gm-Message-State: AOJu0YwYdNgyxmrqvC9Shvd6kzB/N1GkrmjIgtkMG0zrGlQBpY2koHTU
+	i9yrg28qlg4PAhOlN1B6dNz/XSt0PsCTgVMD11CiI3AjTcvvEPp7jC68x/0NmzsnoBwqXAlcvXN
+	0SfwXbkqNUtaXbWtdE4v/Ht1g/fo=
+X-Google-Smtp-Source: AGHT+IHjVLpX2cYW6/cy3xUrXl+khsjki6+LuDCfZn16luHLntfkxzCHaR4p6xIi9+3OexMVeuKhREaD/0OB+bvFSRo=
+X-Received: by 2002:a05:6870:d68c:b0:22e:77b6:4f9d with SMTP id
+ z12-20020a056870d68c00b0022e77b64f9dmr15761595oap.3.1713864686690; Tue, 23
+ Apr 2024 02:31:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240418135412.14730-1-Jonathan.Cameron@huawei.com>
+ <20240418135412.14730-4-Jonathan.Cameron@huawei.com> <c13f7424-3a7f-4c3e-3e8d-81e9fcf0caf7@huawei.com>
+In-Reply-To: <c13f7424-3a7f-4c3e-3e8d-81e9fcf0caf7@huawei.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 23 Apr 2024 11:31:14 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0gDJzCTkUP3i8H3pivrCHdU4-qVf3SVCvTF9hQyKJHtBQ@mail.gmail.com>
+Message-ID: <CAJZ5v0gDJzCTkUP3i8H3pivrCHdU4-qVf3SVCvTF9hQyKJHtBQ@mail.gmail.com>
+Subject: Re: [PATCH v7 03/16] ACPI: processor: Drop duplicated check on _STA
+ (enabled + present)
+To: Hanjun Guo <guohanjun@huawei.com>
+Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Peter Zijlstra <peterz@infradead.org>, linux-pm@vger.kernel.org, loongarch@lists.linux.dev, 
+	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	kvmarm@lists.linux.dev, x86@kernel.org, Russell King <linux@armlinux.org.uk>, 
+	"Rafael J . Wysocki" <rafael@kernel.org>, Miguel Luis <miguel.luis@oracle.com>, 
+	James Morse <james.morse@arm.com>, Salil Mehta <salil.mehta@huawei.com>, 
+	Jean-Philippe Brucker <jean-philippe@linaro.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, linuxarm@huawei.com, justin.he@arm.com, 
+	jianyong.wu@arm.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-In order to fix perf's callchain parse error for LoongArch, we implement
-perf_arch_fetch_caller_regs() which fills several necessary registers
-used for callchain unwinding, including sp, fp, and era. This is similar
-to the following commits.
+On Tue, Apr 23, 2024 at 8:49=E2=80=AFAM Hanjun Guo <guohanjun@huawei.com> w=
+rote:
+>
+> On 2024/4/18 21:53, Jonathan Cameron wrote:
+> > The ACPI bus scan will only result in acpi_processor_add() being called
+> > if _STA has already been checked and the result is that the
+> > processor is enabled and present.  Hence drop this additional check.
+> >
+> > Suggested-by: Rafael J. Wysocki <rafael@kernel.org>
+> > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> >
+> > ---
+> > v7: No change
+> > v6: New patch to drop this unnecessary code. Now I think we only
+> >      need to explicitly read STA to print a warning in the ARM64
+> >      arch_unregister_cpu() path where we want to know if the
+> >      present bit has been unset as well.
+> > ---
+> >   drivers/acpi/acpi_processor.c | 6 ------
+> >   1 file changed, 6 deletions(-)
+> >
+> > diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processo=
+r.c
+> > index 7fc924aeeed0..ba0a6f0ac841 100644
+> > --- a/drivers/acpi/acpi_processor.c
+> > +++ b/drivers/acpi/acpi_processor.c
+> > @@ -186,17 +186,11 @@ static void __init acpi_pcc_cpufreq_init(void) {}
+> >   #ifdef CONFIG_ACPI_HOTPLUG_CPU
+> >   static int acpi_processor_hotadd_init(struct acpi_processor *pr)
+> >   {
+> > -     unsigned long long sta;
+> > -     acpi_status status;
+> >       int ret;
+> >
+> >       if (invalid_phys_cpuid(pr->phys_id))
+> >               return -ENODEV;
+> >
+> > -     status =3D acpi_evaluate_integer(pr->handle, "_STA", NULL, &sta);
+> > -     if (ACPI_FAILURE(status) || !(sta & ACPI_STA_DEVICE_PRESENT))
+> > -             return -ENODEV;
+> > -
+> >       cpu_maps_update_begin();
+> >       cpus_write_lock();
+>
+> Since the status bits were checked before acpi_processor_add() being
+> called, do we need to remove the if (!acpi_device_is_enabled(device))
+> check in acpi_processor_add() as well?
 
-commit b3eac0265bf6:
-("arm: perf: Fix callchain parse error with kernel tracepoint events")
-
-commit 5b09a094f2fb:
-("arm64: perf: Fix callchain parse error with kernel tracepoint events")
-
-commit 9a7e8ec0d4cc:
-("riscv: perf: Fix callchain parse error with kernel tracepoint events")
-
-Test with commands:
-
- perf record -e sched:sched_switch -g --call-graph dwarf
- perf report
-
-Without this patch:
-
- Children      Self  Command        Shared Object      Symbol
- ........  ........  .............  .................  ....................
-
- 43.41%    43.41%  swapper          [unknown]          [k] 0000000000000000
-
- 10.94%    10.94%  loong-container  [unknown]          [k] 0000000000000000
-         |
-         |--5.98%--0x12006ba38
-         |
-         |--2.56%--0x12006bb84
-         |
-          --2.40%--0x12006b6b8
-
-With this patch, callchain can be parsed correctly:
-
- Children      Self  Command        Shared Object      Symbol
- ........  ........  .............  .................  ....................
-
- 47.57%    47.57%  swapper          [kernel.vmlinux]   [k] __schedule
-         |
-         ---__schedule
-
- 26.76%    26.76%  loong-container  [kernel.vmlinux]   [k] __schedule
-         |
-         |--13.78%--0x12006ba38
-         |          |
-         |          |--9.19%--__schedule
-         |          |
-         |           --4.59%--handle_syscall
-         |                     do_syscall
-         |                     sys_futex
-         |                     do_futex
-         |                     futex_wait
-         |                     futex_wait_queue_me
-         |                     hrtimer_start_range_ns
-         |                     __schedule
-         |
-         |--8.38%--0x12006bb84
-         |          handle_syscall
-         |          do_syscall
-         |          sys_epoll_pwait
-         |          do_epoll_wait
-         |          schedule_hrtimeout_range_clock
-         |          hrtimer_start_range_ns
-         |          __schedule
-         |
-          --4.59%--0x12006b6b8
-                    handle_syscall
-                    do_syscall
-                    sys_nanosleep
-                    hrtimer_nanosleep
-                    do_nanosleep
-                    hrtimer_start_range_ns
-                    __schedule
-
-Reported-by: Youling Tang <tangyouling@kylinos.cn>
-Suggested-by: Youling Tang <tangyouling@kylinos.cn>
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
- arch/loongarch/include/asm/perf_event.h | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/arch/loongarch/include/asm/perf_event.h b/arch/loongarch/include/asm/perf_event.h
-index 2a35a0bc2aaa..157c4ace69d0 100644
---- a/arch/loongarch/include/asm/perf_event.h
-+++ b/arch/loongarch/include/asm/perf_event.h
-@@ -9,4 +9,10 @@
- 
- #define perf_arch_bpf_user_pt_regs(regs) (struct user_pt_regs *)regs
- 
-+#define perf_arch_fetch_caller_regs(regs, __ip) { \
-+	(regs)->csr_era = (__ip); \
-+	(regs)->regs[3] = current_stack_pointer; \
-+	(regs)->regs[22] = (unsigned long) __builtin_frame_address(0); \
-+}
-+
- #endif /* __LOONGARCH_PERF_EVENT_H__ */
--- 
-2.43.0
-
+No, because its caller only checks the present bit.  The function
+itself checks the enabled bit.
 
