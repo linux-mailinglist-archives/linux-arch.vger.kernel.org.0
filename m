@@ -1,53 +1,53 @@
-Return-Path: <linux-arch+bounces-3940-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3941-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D958E8B1679
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Apr 2024 00:51:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 325808B1695
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Apr 2024 00:55:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 16F331C23E67
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Apr 2024 22:51:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 641801C24383
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Apr 2024 22:55:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20B2616E88D;
-	Wed, 24 Apr 2024 22:51:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86F4616EBE7;
+	Wed, 24 Apr 2024 22:55:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="IILmx88m"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="V23yVE2f"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A30D716E885;
-	Wed, 24 Apr 2024 22:51:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 981D316192C;
+	Wed, 24 Apr 2024 22:54:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713999096; cv=none; b=eWKc2W+gcoStE0SRov9o29++CFxnCfo8reTOvT4BVb9xm7oQ7pBKxUrnevwrAjLKEe7DZ8KRt/DLbdsbVZIxjTE/qwf5jEjuBZ3hdcmy2pBXfesmRdfl7wjStOEIc/yxDZqG2m0u1yyO2FPasZUj5TLJCL3i8DHvycfzyCwO6Po=
+	t=1713999301; cv=none; b=Woh9lmbPQ78BZw6FEFfKiUKRNKnItZZ1PmyQfsS1OZ6g7SBLHzTsNtzJfTS5u8SPRp89ptiSq/mhpoVm2yhZv1ZzwuEkxksGbHQzKdWhWMcSrpOiCuDH/oJlWDdUsmZAdW27Wxg86ece9TzveMwuT9HkzZliDRQCKFhIHd0ISzU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713999096; c=relaxed/simple;
-	bh=0RsNjdeYSfUc0k8oq/Nv37S+nYzUNW+CoiEKuah2oCQ=;
+	s=arc-20240116; t=1713999301; c=relaxed/simple;
+	bh=z9pMGRLrLzKVrELAWdWdsuiieAGr6M7d01DM3NJ5UWM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P8ki4G3h1GwgLTAphsfSuIdQ303yBzkk9Ft0LvZaKEF3KaJP9qss4tVU0B9OI8+XefzoTfE85KzKRi8Jm7Ug8AQqVihhtfZONDRKpvv+oTVleylnVNpG1UStiulg6a7/JErYViwyMoxODFE3LLr/dAyzM4IjcMNu0svMdOmwmNw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=IILmx88m; arc=none smtp.client-ip=90.155.50.34
+	 Content-Type:Content-Disposition:In-Reply-To; b=ClzlV5GM1w+vhVT2jQFHE6jsr/HPxEL8GO/28yCDBay//sZ45Td0LrIBj0Fpt5Khp9uSe1XwN3HPBRbEA7NJF2cyjtpxt/ndD8CuOoEc2NsAlexziQ9V8JlyxUAJBMRX+O1pPWlxj/Bi0SeTDb28uQGsN24a22VePiL5QK059JQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=V23yVE2f; arc=none smtp.client-ip=90.155.92.199
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
 	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=uDrKK9MVu5GzHed4YiXOORHenuiRjCroUzkRtpq7Xr8=; b=IILmx88mD8vjiMwqrMmrre+9AR
-	zlcY2kqPjYZncZiBJFj6pnDAU0ZhhuV4rlxSZ7HcxKqBCjBa6OOs5ocvCCax/S8NxxWj84EAxqbEL
-	MFaNqZ2luw6imVBZuIGe/aG75GB7MYXZ5lbY0rcrAoNUxUNRBMpXuO1Am0ZJdsHYjENsjxw6Ycf9d
-	99F8TBD+1jTtbHGf1q71XtM4hbBSu5Sgx4e9bcidXHlwPBNvG5kZMloqH84s7AtrC9VybE9Mi1Ref
-	bJ1tegqi+pDWrgGvKx5eWVrDjQV3HCkjx2HtVZHUWlmRO6p1QgZOtIk+xYyIuM3ifm9ITathoorRw
-	g3AhKNoQ==;
+	bh=0/eQjSTv8D6eZQAQWbqT2LJmg+Blfc0mgxAHCYd1hAM=; b=V23yVE2fnmFqMNMneHrFe2nxSM
+	zIWX162MuXqByjLfKBbVwbcp0AzY6fOr+0zfvw3ceFos1ccHbkuaHaEJFbPDycFIj7r7MKcF3AoF9
+	Ud6OrWWxfWsmc/D/+WPeVi1hgsxDm+xxuEvPjvu6V9rqYd4gytTsn/nUr0lGOIgRmdOThR/yErVzY
+	Mp0SW0j3wOVIs5oVCS2IWT6ty3aWNKwgTx+o7gyzjjIXeUcvMSvHWtx/LYxCM2uEFyk5JbJnKhQqI
+	ksWgC3vKtJidBTEq1tb37xRzuRV/Cv8knq5a8vixM6EfUhAnYGC4lr+jvFKN79uqdv+0symsrN1UX
+	sZ19Qvcw==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rzlSU-00000001qPk-444P;
-	Wed, 24 Apr 2024 22:51:23 +0000
+	by desiato.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rzlVc-0000000EdKy-3Czb;
+	Wed, 24 Apr 2024 22:54:37 +0000
 Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 8F02930040C; Thu, 25 Apr 2024 00:51:22 +0200 (CEST)
-Date: Thu, 25 Apr 2024 00:51:22 +0200
+	id 6ACAD30043E; Thu, 25 Apr 2024 00:54:36 +0200 (CEST)
+Date: Thu, 25 Apr 2024 00:54:36 +0200
 From: Peter Zijlstra <peterz@infradead.org>
 To: Kees Cook <keescook@chromium.org>
 Cc: Mark Rutland <mark.rutland@arm.com>, Will Deacon <will@kernel.org>,
@@ -68,10 +68,11 @@ Cc: Mark Rutland <mark.rutland@arm.com>, Will Deacon <will@kernel.org>,
 	netdev@vger.kernel.org, linux-hardening@vger.kernel.org
 Subject: Re: [PATCH 1/4] locking/atomic/x86: Silence intentional wrapping
  addition
-Message-ID: <20240424225122.GF12673@noisy.programming.kicks-ass.net>
+Message-ID: <20240424225436.GY40213@noisy.programming.kicks-ass.net>
 References: <20240424191225.work.780-kees@kernel.org>
  <20240424191740.3088894-1-keescook@chromium.org>
  <20240424224141.GX40213@noisy.programming.kicks-ass.net>
+ <202404241542.6AFC3042C1@keescook>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -80,34 +81,41 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240424224141.GX40213@noisy.programming.kicks-ass.net>
+In-Reply-To: <202404241542.6AFC3042C1@keescook>
 
-On Thu, Apr 25, 2024 at 12:41:41AM +0200, Peter Zijlstra wrote:
-> On Wed, Apr 24, 2024 at 12:17:34PM -0700, Kees Cook wrote:
+On Wed, Apr 24, 2024 at 03:45:07PM -0700, Kees Cook wrote:
+> On Thu, Apr 25, 2024 at 12:41:41AM +0200, Peter Zijlstra wrote:
+> > On Wed, Apr 24, 2024 at 12:17:34PM -0700, Kees Cook wrote:
+> > 
+> > > @@ -82,7 +83,7 @@ static __always_inline bool arch_atomic_add_negative(int i, atomic_t *v)
+> > >  
+> > >  static __always_inline int arch_atomic_add_return(int i, atomic_t *v)
+> > >  {
+> > > -	return i + xadd(&v->counter, i);
+> > > +	return wrapping_add(int, i, xadd(&v->counter, i));
+> > >  }
+> > >  #define arch_atomic_add_return arch_atomic_add_return
+> > 
+> > this is going to get old *real* quick :-/
+> > 
+> > This must be the ugliest possible way to annotate all this, and then
+> > litter the kernel with all this... urgh.
 > 
-> > @@ -82,7 +83,7 @@ static __always_inline bool arch_atomic_add_negative(int i, atomic_t *v)
-> >  
-> >  static __always_inline int arch_atomic_add_return(int i, atomic_t *v)
-> >  {
-> > -	return i + xadd(&v->counter, i);
-> > +	return wrapping_add(int, i, xadd(&v->counter, i));
-> >  }
-> >  #define arch_atomic_add_return arch_atomic_add_return
+> I'm expecting to have explicit wrapping type annotations soon[1], but for
+> the atomics, it's kind of a wash on how intrusive the annotations get. I
+> had originally wanted to mark the function (as I did in other cases)
+> rather than using the helper, but Mark preferred it this way. I'm happy
+> to do whatever! :)
 > 
-> this is going to get old *real* quick :-/
+> -Kees
 > 
-> This must be the ugliest possible way to annotate all this, and then
-> litter the kernel with all this... urgh.
+> [1] https://github.com/llvm/llvm-project/pull/86618
 
-Also, what drugs is involved with __builtin_add_overflow() ? Per
--fno-strict-overflow everything is 2s complement and you can just do the
-unsigned add.
+This is arse-about-face. Signed stuff wraps per -fno-strict-overflow.
+We've been writing code for years under that assumption.
 
-Over the years we've been writing code with the express knowledge that
-everything wraps properly, this annotation is going to be utter pain.
+You want to mark the non-wrapping case.
 
-As I've said before, add an explicit non-wrapping type and use that for
-the cases you care about actually not wrapping.
 
-NAK
+
 
