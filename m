@@ -1,207 +1,150 @@
-Return-Path: <linux-arch+bounces-3932-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3937-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 855B78B135D
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Apr 2024 21:18:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77AD28B15DF
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Apr 2024 00:11:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9E1C9B22325
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Apr 2024 19:17:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A66B1C22514
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Apr 2024 22:11:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B77CE762D0;
-	Wed, 24 Apr 2024 19:17:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9F7215ECF0;
+	Wed, 24 Apr 2024 22:11:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="WdzHKOnR"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bgLn94E/"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E0D55CDF0
-	for <linux-arch@vger.kernel.org>; Wed, 24 Apr 2024 19:17:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBE8615ECC7
+	for <linux-arch@vger.kernel.org>; Wed, 24 Apr 2024 22:11:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713986263; cv=none; b=l3gT69MwTd+2QRD0zv/4u5CmHQ2h60mclSRbcCJFSmwPVe/nkmH8tqKkyuTeLqgg1tfVuGzHvjCE3twPOd7aqCUDUr0pZXNobernvaNL0ikLtA4ndhnS048KB+0xjCjQHVaRmvc4vujOdrgSTCBN5U9H8LCMtyn5AcLlRjwSpx8=
+	t=1713996680; cv=none; b=pHHqBt9mZT7v3Jy3+AY+mtIOyPrSvaVWDOVXKj027QsrnXITKN1+k9CahBc+rzt3Q8mCyhFEWw+hksKGveIJBYlIE1psHYY5BfuLtcBssu8Wm18Wxv0kb5BNNCJlgdNRMcV7KgyOZOXGi1sIVV374nKZ69LYzAcaa3R80vviCqw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713986263; c=relaxed/simple;
-	bh=WfTBGnBFkRU20qhctvMnIHaixmJ1m8yq7qOHp+mKQX8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=M4mtIEoAipSey0lvR/Kk7+hDLQ2aYGquD0SoRG5pdbHFPj1yzN+ahzX9YG0Cb77OT5wxDG+wO4Q4tYsHFJHsgADsZZFMbWMyO8BidcPTTUlokY+hlH8JGC3D+qJ1lLNA2FBbolpX/oFiIolL8z9bSVa7FDqvhx3EJ/aVOKhiEpc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=WdzHKOnR; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1e5c7d087e1so1843755ad.0
-        for <linux-arch@vger.kernel.org>; Wed, 24 Apr 2024 12:17:41 -0700 (PDT)
+	s=arc-20240116; t=1713996680; c=relaxed/simple;
+	bh=pxhvcjOGdzqPJKU0g6cyW3p8OljKVeVIwlTbmM5Usw4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=sYOVlDDXSrd7fvsP0NhHEYf7M8LpZto2mZ0ffFxQ7AkAOovB6JNfCLhlj5VzM9ADxEr8m2lPcqm8pwqvtYwNSoUPYbRgpjtY81ogXa/F6uJmv2nprgqYLfI/PlZl3oPTEcEZk7LymSKHkwSzh1nhyMkp4ydaaWlZB1nk2Nojlpw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bgLn94E/; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-516d2b9cd69so365201e87.2
+        for <linux-arch@vger.kernel.org>; Wed, 24 Apr 2024 15:11:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1713986261; x=1714591061; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1713996677; x=1714601477; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=E5yDcYDvu79ikloFjmN2ArtCsis9cNcuVqbWpK2seK4=;
-        b=WdzHKOnR2NZYbZjMSuOUnxhgbN6UtJedTL0ijhz4M2j4e52gVe+Pt6iZfR0Rfl0JJs
-         Lc4RQfwHcLmpOSzbRRQQXlj3pwkgaks6ElhyvlSGtFuKE9sBFzhzHNrBQxcF0wj3WujX
-         SzmfZB1348TAfGvXZOEY8x6Aqk5/gTvCZHufU=
+        bh=Nrt9xX8+bezTu6PJtCUFo83NI4xccREO2afrxNR68uc=;
+        b=bgLn94E/CBQ884LE+ijvvnf0wc5fCnOBsuVQwf0kdx5Tvu1MsMwCy/ZgLXEf+zLMzy
+         Y507Bu7nMKmO0V1fYKsC7auy9IwFF0mRCuD0CtU2NdBuVX/7ke4VZCpXuPnu2jcqigmW
+         1lNkpky8mr6qNJ76t2uOjHa+MK9zHbnfuXkn63hLgVaEqnd5IDrHwq7hgNSRMWrf9Dr3
+         /ZBYM0OTowmJzbPzN0r9KMiLLRL06LRVo9PhZ47ZWi0o1ozpbHsShOnIxucAQ2z4p4wp
+         GjMIJC99e7lgk0nAB7lCGi6BfmMDlIC9A+L8KwGYMM6cZT8U6+3B5TAvSabm+oC/eT+s
+         Yf8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713986261; x=1714591061;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1713996677; x=1714601477;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=E5yDcYDvu79ikloFjmN2ArtCsis9cNcuVqbWpK2seK4=;
-        b=XeAZyiSu1eYzfErb/WCdmHcOni1VAzEEZK4+xqkaqAut/7D0lAapybslxU3wjkeOy3
-         JxSQO2QkwoDVAz5qTg1FD7DBFfIBZs3gMYPtmUH3DpvA/tZqzJCPBddKiEM2sIdrz5Lb
-         gXNKt0Ur6KHysQ0GSvrpxUSYSHuzT6I1f0T13hQZbOURb4gakvSgSe/JKdn1NRDZKlmw
-         fCTS6ftRw5xSTOJq262ufvixvt4NOXqiQ6ZfvD6GUnhmW1kxC+Ulg7SGS8vy3o263pwO
-         agtT+qYkQ/q87rewBCUoN/hMPJEL3LPz73PixwWIhExrm5hAJDd8/jXPIizFpQEscWy8
-         Vtnw==
-X-Forwarded-Encrypted: i=1; AJvYcCXJH0SPHfekbA3U21DN8fHa0pEX/oM7gBAmvuzSwEIEFukCqmN1wxAUrnp1/KvM+r63kfqYc6hXlZrwTe0x61t69BaN9wPD2KR7eg==
-X-Gm-Message-State: AOJu0YxTzFrTtGdbSSKqmH/PwapLQhpEgPqeEcKiaDFhPEFf6bYAStzj
-	BtoOfzlz5hkm68iIXSmIXOr4p/z/yu0IsFaT8a1R1J5Axxv0LsNSPQ3sLGX+mw==
-X-Google-Smtp-Source: AGHT+IEJ7QE65ebG0qqOnn+xdnnZ+q5pZtXGv5jZGzp9dsg2qcg4PCBbrB2p5kleElQysLvEwEP7kg==
-X-Received: by 2002:a17:903:22c8:b0:1ea:9596:9218 with SMTP id y8-20020a17090322c800b001ea95969218mr1597370plg.45.1713986261347;
-        Wed, 24 Apr 2024 12:17:41 -0700 (PDT)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id f12-20020a170902ce8c00b001e1071cf0bbsm12295846plg.302.2024.04.24.12.17.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Apr 2024 12:17:40 -0700 (PDT)
-From: Kees Cook <keescook@chromium.org>
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: Kees Cook <keescook@chromium.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	netdev@vger.kernel.org,
-	Will Deacon <will@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Uros Bizjak <ubizjak@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	x86@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-arch@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH 4/4] ipv4: Silence intentional wrapping addition
-Date: Wed, 24 Apr 2024 12:17:37 -0700
-Message-Id: <20240424191740.3088894-4-keescook@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240424191225.work.780-kees@kernel.org>
-References: <20240424191225.work.780-kees@kernel.org>
+        bh=Nrt9xX8+bezTu6PJtCUFo83NI4xccREO2afrxNR68uc=;
+        b=U5T6uSjFUfy/MVavCYqRlbsNHSSipsf+gzm6D93wPrJDC7M90M28x2kU2WX4AGZsmp
+         oWSbM42A/nwEpLAiv6M0OfEeEORlTC8XcndVfYMh6IHOvk5YUJ+AKCNMUixo43JVO5rM
+         Qkbw6mgoET6QQw+aPYc3X3WJP03i8tlqfvG/XBJ3ZFZ7T7JeIj2pszfmBeA9CA/G86fe
+         UPr3+hpUU3/zovAzoe0MF8QfsC33CQUkj7aUEn6ZN0oPQF4OA+1v3fz5GzGLIbpszc2r
+         b7X9g2jzlnE1KKci1i6A9hKoHZCyx2H6+tYeDKPLM9JuO3lPaEwhzhFuQUWf758wm33A
+         qMkw==
+X-Forwarded-Encrypted: i=1; AJvYcCUPaCauaIkEDrXvWYi4U7DQ9x/QKKl9zuglulH4SDZVtSnmsZlqHEah4n0mH6iWWQqDa3CwdWivnH6bUd2VIZ9B6yMrlGjGTlVrUA==
+X-Gm-Message-State: AOJu0YxBlfCoRMo1Bg2ifHyxzQ+z8fRGtakMNITqsBvdXgMEz8Q3Q3ZY
+	OwDCYmCem2In4Yv8AperVShEMBmZFHWj3KT5stixYTf5+2743zhCZbdukpOEMfcRODLf4YsHqm3
+	ijsLfAFtpYI4DQI3mLHWGBt0HvkBsl3Z0WWGn
+X-Google-Smtp-Source: AGHT+IED2HbFEA0ewLNL7QH6VWfyVpE66498USZfd4zxtqZP/+CZ2KiwNYrpEZU2PM0GAlsCBDXy7oQT2HUG8Bnws0w=
+X-Received: by 2002:a05:6512:1315:b0:51c:15fa:985 with SMTP id
+ x21-20020a056512131500b0051c15fa0985mr1591764lfu.15.1713996676557; Wed, 24
+ Apr 2024 15:11:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3326; i=keescook@chromium.org;
- h=from:subject; bh=WfTBGnBFkRU20qhctvMnIHaixmJ1m8yq7qOHp+mKQX8=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBmKVrRYEsvdcnHI4MuZvwNOd4oD1dteUrKWikwo
- S1OiHOayDWJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZila0QAKCRCJcvTf3G3A
- JkkcD/401uVxwndvI6fIAQZvmMpVPjLvFTgxS4IRuBU7Pqf0z0a5RSlHhEAeKEg4DA1/5Qn/Nk4
- 7VXgUWo66jWzFRmlmmipMniWFPzLt29JLEXmEIi/HV0UsKdhNmPyzFXJRXOKetIyH8MmkvA0nAQ
- PDrehyaM/tAewU/mTA9oiLtlT3Pg1bfNwDz5pvHwwJ+ON0Y6wxXaEqePkQt3WfBRCtTqIGaGl1e
- ow4LBS1klep8nsTmXBxq+ACfXBFNBrZebSFAuwGdlBJGy7EAo9NmKw4zZjqGze1GxLRsImdA8EI
- UxYMHW372KXbTpFeK0tNXvnb4mrDNqQ6a8FhdTEWDKMo5d4V2DHssDDI9Ol4XN/WioLS4gJ+wtm
- 1Os3DVpUl2LAzSNYLSEE1TokL+uJEMfnHPZLep2xANF25i11AnPPluIaEpGaMJrTKe0r2JjJw3Q
- jl0+qHCiCYcwTnajqt5uItmDrlePlJSVkhWTGJJK0TAh/aA28ei9NkULfuqGBG/QjMoB+a9EZyQ
- HXOifu761IGfEi9g62Q3Smz8Ha3KKrhBtCzTaGRrkW0/IFeGrE/iqa9cpRZm/hPl5dbuFKmFuPY
- zWTLOe3+l8OTPy5xS07j+aMrOmS+PihzCAw+ZJn7ax6TlLG1LcomfeZoMEIjNpHm1d4OPWK1BEw jpwKjUXXLLcV1Kw==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+References: <20240403002053.2376017-1-almasrymina@google.com>
+ <20240403002053.2376017-5-almasrymina@google.com> <b30cb265-26ee-40f9-a25b-6c909e63fc79@davidwei.uk>
+In-Reply-To: <b30cb265-26ee-40f9-a25b-6c909e63fc79@davidwei.uk>
+From: Mina Almasry <almasrymina@google.com>
+Date: Wed, 24 Apr 2024 15:11:04 -0700
+Message-ID: <CAHS8izPf5ZnpUw9o6Oo-iTdoKkOEzerobP0Vkq7KZQOab2+_LQ@mail.gmail.com>
+Subject: Re: [RFC PATCH net-next v8 04/14] netdev: support binding dma-buf to netdevice
+To: David Wei <dw@davidwei.uk>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Amritha Nambiar <amritha.nambiar@intel.com>, 
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
+	Alexander Mikhalitsyn <alexander@mihalicyn.com>, Kaiyuan Zhang <kaiyuanz@google.com>, 
+	Christian Brauner <brauner@kernel.org>, Simon Horman <horms@kernel.org>, 
+	David Howells <dhowells@redhat.com>, Florian Westphal <fw@strlen.de>, 
+	Yunsheng Lin <linyunsheng@huawei.com>, Kuniyuki Iwashima <kuniyu@amazon.com>, Jens Axboe <axboe@kernel.dk>, 
+	Arseniy Krasnov <avkrasnov@salutedevices.com>, 
+	Aleksander Lobakin <aleksander.lobakin@intel.com>, Michael Lass <bevan@bi-co.net>, 
+	Jiri Pirko <jiri@resnulli.us>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
+	Lorenzo Bianconi <lorenzo@kernel.org>, Richard Gobert <richardbgobert@gmail.com>, 
+	Sridhar Samudrala <sridhar.samudrala@intel.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
+	Johannes Berg <johannes.berg@intel.com>, Abel Wu <wuyun.abel@bytedance.com>, 
+	Breno Leitao <leitao@debian.org>, Pavel Begunkov <asml.silence@gmail.com>, 
+	Jason Gunthorpe <jgg@ziepe.ca>, Shailend Chand <shailend@google.com>, 
+	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, 
+	Willem de Bruijn <willemb@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The overflow sanitizer quickly noticed what appears to have been an old
-sore spot involving intended wrap around:
+On Wed, Apr 24, 2024 at 10:36=E2=80=AFAM David Wei <dw@davidwei.uk> wrote:
+>
+> On 2024-04-02 5:20 pm, Mina Almasry wrote:
+> > +     /* We hold the rtnl_lock while binding/unbinding dma-buf, so we c=
+an't
+> > +      * race with another thread that is also modifying this value. Ho=
+wever,
+> > +      * the driver may read this config while it's creating its * rx-q=
+ueues.
+> > +      * WRITE_ONCE() here to match the READ_ONCE() in the driver.
+> > +      */
+> > +     WRITE_ONCE(rxq->mp_params.mp_priv, binding);
+>
+> Is the mp_ops update missing here?
+>
 
-[   22.192362] ------------[ cut here ]------------
-[   22.193329] UBSAN: signed-integer-overflow in ../arch/x86/include/asm/atomic.h:85:11
-[   22.194844] 1469769800 + 1671667352 cannot be represented in type 'int'
-[   22.195975] CPU: 2 PID: 2260 Comm: nmbd Not tainted 6.7.0 #1
-[   22.196927] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 0.0.0 02/06/2015
-[   22.198231] Call Trace:
-[   22.198641]  <TASK>
-[   22.198641]  dump_stack_lvl+0x64/0x80
-[   22.199533]  handle_overflow+0x152/0x1a0
-[   22.200382]  __ip_select_ident+0xe3/0x100
+I  do it in this patch, because it's the one that introduces mp_ops:
+https://patchwork.kernel.org/project/netdevbpf/patch/20240403002053.2376017=
+-9-almasrymina@google.com/
 
-Explicitly mark ip_select_ident() as performing wrapping signed
-arithmetic. Update the passed type as a u32 since that is how it is used
-(it is either u16 or a literal "1" in callers, but used with a wrapping
-int, so it's actually a u32). Update the comment to mention annotation
-instead of -fno-strict-overflow, which is no longer the issue.
 
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: David Ahern <dsahern@kernel.org>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org
----
- include/net/ip.h |  4 ++--
- net/ipv4/route.c | 10 +++++-----
- 2 files changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/include/net/ip.h b/include/net/ip.h
-index 25cb688bdc62..09d502a0ae30 100644
---- a/include/net/ip.h
-+++ b/include/net/ip.h
-@@ -537,10 +537,10 @@ void ip_dst_metrics_put(struct dst_entry *dst)
- 		kfree(p);
- }
- 
--void __ip_select_ident(struct net *net, struct iphdr *iph, int segs);
-+void __ip_select_ident(struct net *net, struct iphdr *iph, u32 segs);
- 
- static inline void ip_select_ident_segs(struct net *net, struct sk_buff *skb,
--					struct sock *sk, int segs)
-+					struct sock *sk, u32 segs)
- {
- 	struct iphdr *iph = ip_hdr(skb);
- 
-diff --git a/net/ipv4/route.c b/net/ipv4/route.c
-index c8f76f56dc16..400e7a16fdba 100644
---- a/net/ipv4/route.c
-+++ b/net/ipv4/route.c
-@@ -458,7 +458,7 @@ static u32 *ip_tstamps __read_mostly;
-  * if one generator is seldom used. This makes hard for an attacker
-  * to infer how many packets were sent between two points in time.
-  */
--static u32 ip_idents_reserve(u32 hash, int segs)
-+static __signed_wrap u32 ip_idents_reserve(u32 hash, u32 segs)
- {
- 	u32 bucket, old, now = (u32)jiffies;
- 	atomic_t *p_id;
-@@ -473,14 +473,14 @@ static u32 ip_idents_reserve(u32 hash, int segs)
- 	if (old != now && cmpxchg(p_tstamp, old, now) == old)
- 		delta = get_random_u32_below(now - old);
- 
--	/* If UBSAN reports an error there, please make sure your compiler
--	 * supports -fno-strict-overflow before reporting it that was a bug
--	 * in UBSAN, and it has been fixed in GCC-8.
-+	/* If UBSAN reports an error here, please make sure your arch's
-+	 * atomic_add_return() implementation has been annotated with
-+	 * __signed_wrap or uses wrapping_add() internally.
- 	 */
- 	return atomic_add_return(segs + delta, p_id) - segs;
- }
- 
--void __ip_select_ident(struct net *net, struct iphdr *iph, int segs)
-+void __ip_select_ident(struct net *net, struct iphdr *iph, u32 segs)
- {
- 	u32 hash, id;
- 
--- 
-2.34.1
-
+--=20
+Thanks,
+Mina
 
