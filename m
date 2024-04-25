@@ -1,115 +1,171 @@
-Return-Path: <linux-arch+bounces-3955-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3956-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDAB28B1F01
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Apr 2024 12:19:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98A798B1F15
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Apr 2024 12:24:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3F045B2A85C
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Apr 2024 10:19:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 260211F24446
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Apr 2024 10:24:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 860938614D;
-	Thu, 25 Apr 2024 10:19:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 261B786636;
+	Thu, 25 Apr 2024 10:24:02 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B8515D477;
-	Thu, 25 Apr 2024 10:19:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 155FB85277;
+	Thu, 25 Apr 2024 10:23:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714040364; cv=none; b=U9en/363kDOcA31yCesWJJU/10bZttUTdw3kk0lgb4iP9mVU/9LT76toAddPqMx57o324gvQ5yBZ4ufQnt32AwQMgrXyHaVt37YW5xomgbui5y2KonIJrK3V45Yuvz8fMaLNd8I2F77zkyzHfjSrXNg7+zy3kEM7adS7TfvLjbU=
+	t=1714040642; cv=none; b=Gga+avrUyHu7GW/Yfo+ZbA/GDulY/k5EFRAAlQY8nc3/nINAVQfrMMnRpKV4AsOL5hzDU09vb1dBVaTLKzgE02NABS0/3PxK/p9R2xzTzVwHFHP3CXYtnFqAj8T8u48MkJp+1bV/Ka03qnPBIns8OTi/KYC7E1YrLjxrWP0vYiE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714040364; c=relaxed/simple;
-	bh=CO0oG3tcPoAXzns4+gVCxaDMq9og+CQjT5fProCOaYw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K1PhFs5Omqf+39P6V+RRp+e68aLle5ILFkZNrKy/ZxIB31XjtZgEHNEKJHsv1HHaBeGg8a5ElOIDqce5Xuj6x9RRaCvaRFEnftKANYbkDL7BphXnPa39sQhybfsB31KIRQNk46ofe6R8ND4IRGorx7aLsfuxhXS+WjHHsasIQTY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A7F6F2F;
-	Thu, 25 Apr 2024 03:19:50 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.21.118])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 98E2B3F64C;
-	Thu, 25 Apr 2024 03:19:18 -0700 (PDT)
-Date: Thu, 25 Apr 2024 11:19:15 +0100
-From: Mark Rutland <mark.rutland@arm.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Kees Cook <keescook@chromium.org>, Will Deacon <will@kernel.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Jakub Kicinski <kuba@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Uros Bizjak <ubizjak@gmail.com>, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-	netdev@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 1/4] locking/atomic/x86: Silence intentional wrapping
- addition
-Message-ID: <ZiouI6rM8x83nXUF@FVFF77S0Q05N>
-References: <20240424191225.work.780-kees@kernel.org>
- <20240424191740.3088894-1-keescook@chromium.org>
- <20240424224141.GX40213@noisy.programming.kicks-ass.net>
- <202404241542.6AFC3042C1@keescook>
- <20240424225436.GY40213@noisy.programming.kicks-ass.net>
- <20240424230500.GG12673@noisy.programming.kicks-ass.net>
- <202404241621.8286B8A@keescook>
- <20240425092812.GB21980@noisy.programming.kicks-ass.net>
+	s=arc-20240116; t=1714040642; c=relaxed/simple;
+	bh=wmKTX0hf311FdAlA97nBVl4pjiE0U/L+0ndYEl0pI3U=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=YZl3lzLOCZSudKg1Gjk8dtvV/9B0Sjg+ZTUxrRVeGItLMzSxk7cy5edXoiVBlev90LANWkQTWC6C5PDvMrZ1N5pY8sM6ziejP+Tacmq2LN1w77LJtvIxTCe6vvAjcoC4jAYZEzWtOjMaDL7Dw07f49V8uRGUZOx8yh1fTlk+rqQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VQBlk33SFz6D9Ct;
+	Thu, 25 Apr 2024 18:23:46 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 65841140736;
+	Thu, 25 Apr 2024 18:23:56 +0800 (CST)
+Received: from localhost (10.122.247.231) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Thu, 25 Apr
+ 2024 11:23:55 +0100
+Date: Thu, 25 Apr 2024 11:23:54 +0100
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To: Salil Mehta <salil.mehta@huawei.com>
+CC: Marc Zyngier <maz@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Peter
+ Zijlstra <peterz@infradead.org>, "linux-pm@vger.kernel.org"
+	<linux-pm@vger.kernel.org>, "loongarch@lists.linux.dev"
+	<loongarch@lists.linux.dev>, "linux-acpi@vger.kernel.org"
+	<linux-acpi@vger.kernel.org>, "linux-arch@vger.kernel.org"
+	<linux-arch@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "kvmarm@lists.linux.dev"
+	<kvmarm@lists.linux.dev>, "x86@kernel.org" <x86@kernel.org>, Russell King
+	<linux@armlinux.org.uk>, "Rafael J . Wysocki" <rafael@kernel.org>, "Miguel
+ Luis" <miguel.luis@oracle.com>, James Morse <james.morse@arm.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>, Catalin Marinas
+	<catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Linuxarm
+	<linuxarm@huawei.com>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
+	<bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+	"justin.he@arm.com" <justin.he@arm.com>, "jianyong.wu@arm.com"
+	<jianyong.wu@arm.com>
+Subject: Re: [PATCH v7 11/16] irqchip/gic-v3: Add support for ACPI's
+ disabled but 'online capable' CPUs
+Message-ID: <20240425112354.00000f26@huawei.com>
+In-Reply-To: <20240424180830.00002a36@Huawei.com>
+References: <20240418135412.14730-1-Jonathan.Cameron@huawei.com>
+	<20240418135412.14730-12-Jonathan.Cameron@huawei.com>
+	<20240422114020.0000294f@Huawei.com>
+	<87plugthim.wl-maz@kernel.org>
+	<20240424135438.00001ffc@huawei.com>
+	<86il06rd19.wl-maz@kernel.org>
+	<e149e79446be4ed99178eedda3e8a674@huawei.com>
+	<20240424180830.00002a36@Huawei.com>
+Organization: Huawei Technologies R&D (UK) Ltd.
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240425092812.GB21980@noisy.programming.kicks-ass.net>
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-On Thu, Apr 25, 2024 at 11:28:12AM +0200, Peter Zijlstra wrote:
-> On Wed, Apr 24, 2024 at 04:30:50PM -0700, Kees Cook wrote:
+On Wed, 24 Apr 2024 18:08:30 +0100
+Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
+
+> On Wed, 24 Apr 2024 17:35:54 +0100
+> Salil Mehta <salil.mehta@huawei.com> wrote:
 > 
-> > > That is, anything that actively warns about signed overflow when build
-> > > with -fno-strict-overflow is a bug. If you want this warning you have to
-> > > explicitly mark things.
+> > >  From: Marc Zyngier <maz@kernel.org>
+> > >  Sent: Wednesday, April 24, 2024 4:33 PM
+> > >  To: Jonathan Cameron <jonathan.cameron@huawei.com>
+> > >  Cc: Thomas Gleixner <tglx@linutronix.de>; Peter Zijlstra
+> > >  <peterz@infradead.org>; linux-pm@vger.kernel.org;
+> > >  loongarch@lists.linux.dev; linux-acpi@vger.kernel.org; linux-
+> > >  arch@vger.kernel.org; linux-kernel@vger.kernel.org; linux-arm-
+> > >  kernel@lists.infradead.org; kvmarm@lists.linux.dev; x86@kernel.org;
+> > >  Russell King <linux@armlinux.org.uk>; Rafael J . Wysocki
+> > >  <rafael@kernel.org>; Miguel Luis <miguel.luis@oracle.com>; James Morse
+> > >  <james.morse@arm.com>; Salil Mehta <salil.mehta@huawei.com>; Jean-
+> > >  Philippe Brucker <jean-philippe@linaro.org>; Catalin Marinas
+> > >  <catalin.marinas@arm.com>; Will Deacon <will@kernel.org>; Linuxarm
+> > >  <linuxarm@huawei.com>; Ingo Molnar <mingo@redhat.com>; Borislav
+> > >  Petkov <bp@alien8.de>; Dave Hansen <dave.hansen@linux.intel.com>;
+> > >  justin.he@arm.com; jianyong.wu@arm.com
+> > >  Subject: Re: [PATCH v7 11/16] irqchip/gic-v3: Add support for ACPI's
+> > >  disabled but 'online capable' CPUs
+> > >  
+> > >  On Wed, 24 Apr 2024 13:54:38 +0100,
+> > >  Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:    
+> > >  >
+> > >  > On Tue, 23 Apr 2024 13:01:21 +0100
+> > >  > Marc Zyngier <maz@kernel.org> wrote:
+> > >  >    
+> > >  > > On Mon, 22 Apr 2024 11:40:20 +0100,
+> > >  > > Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:    
+> > >  > > >
+> > >  > > > On Thu, 18 Apr 2024 14:54:07 +0100 Jonathan Cameron
+> > >  > > > <Jonathan.Cameron@huawei.com> wrote:    
+> > >  
+> > >  [...]
+> > >      
+> > >  > > >    
+> > >  > > > > +	/*
+> > >  > > > > +	 * Capable but disabled CPUs can be brought online later.  What about
+> > >  > > > > +	 * the redistributor? ACPI doesn't want to say!
+> > >  > > > > +	 * Virtual hotplug systems can use the MADT's "always-on"  GICR entries.
+> > >  > > > > +	 * Otherwise, prevent such CPUs from being brought online.
+> > >  > > > > +	 */
+> > >  > > > > +	if (!(gicc->flags & ACPI_MADT_ENABLED)) {
+> > >  > > > > +		pr_warn_once("CPU %u's redistributor is  inaccessible: this CPU can't be brought online\n", cpu);
+> > >  > > > > +		set_cpu_present(cpu, false);
+> > >  > > > > +		set_cpu_possible(cpu, false);    
 > > 
-> > This is confusing UB with "overflow detection". We're doing the latter.
-> 
-> Well, all of this is confusing to me because it is not presented
-> coherently.
-> 
-> The traditional 'must not let signed overflow' is because of the UB
-> nonsense, which we fixed.
-> 
-> > > Signed overflow is not UB, is not a bug.
-> > > 
-> > > Now, it might be unexpected in some places, but fundamentally we run on
-> > > 2s complement and expect 2s complement. If you want more, mark it so.
+> > (a digression) shouldn't we be clearing the enabled mask as well?
 > > 
-> > Regular C never provided us with enough choice in types to be able to
-> > select the overflow resolution strategy. :( So we're stuck mixing
-> > expectations into our types.
+> >                                           set_cpu_enabled(cpu, false);  
 > 
-> Traditionally C has explicit wrapping for unsigned and UB on signed. We
-> fixed the UB, so now expect wrapping for everything.
+> FWIW I think not necessary. enabled is only set in register_cpu() and aim here is to
+> never call that for CPUs in this state.
 > 
-> You want to add overflow, so you should make that a special and preserve
-> semantics for existing code.
-> 
-> Also I would very strongly suggest you add an overflow qualifier to the
-> type system and please provide sane means of qualifier manipulation --
-> stripping qualifiers is painful :/
+> Anyhow, I got distracted by the firmware bug I found whilst trying to test this but
+> now have a test setup that hits this path (once deliberately broken), so will
+> see what we can do about that doesn't have affect those masks.
 
-I agree that having an overflow/nooverflow qualifier that's separate from
-signed/unsigned would make more sense than inferring that from signed vs
-unsigned.
+This may be relevant with the context of Marc's email.  Don't crop so much!
+However I think we probably don't care. This is bios bug, if we miss report it such
+that userspace thinks it can online something that work work, it probably doesn't
+matter.
 
-Mark.
+Jonathan
+
+> 
+> Jonathan
+> 
+> 
+> > 
+> > 
+> > Best regards
+> > Salil  
+> 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+
 
