@@ -1,161 +1,313 @@
-Return-Path: <linux-arch+bounces-3959-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3960-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82AFC8B2555
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Apr 2024 17:40:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D4B0F8B26E3
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Apr 2024 18:55:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B74728313C
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Apr 2024 15:40:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8748E285342
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Apr 2024 16:55:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EEAF14BF89;
-	Thu, 25 Apr 2024 15:39:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Lu6K1LeB"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 134DC14D6E5;
+	Thu, 25 Apr 2024 16:55:36 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 819E614B093
-	for <linux-arch@vger.kernel.org>; Thu, 25 Apr 2024 15:39:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3982D131746;
+	Thu, 25 Apr 2024 16:55:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714059592; cv=none; b=cRtDhEZ0qbOprs24hsLYF8gnwszTgtwBzO2OJamGV+A70EjJSTiu5sgFrboa2kJd0CcIfkURRS/IVjX1YZhEFjuATKGgwlPyI14Dseq34CFg0i3aFguSwGHc+aQR2TeceByCafK+jqDVZwtnaigtIFLJG1ASUpvxbf16DUduayg=
+	t=1714064136; cv=none; b=sKFNPQ+NmhcjdkuP62mq76Lcfd39SM8+3PtDdAp42/JFGKkdFgiRvi7jQYbeLel3My7I8e1xRN9rVbi570T9Xuu3V8uRk1YulL9RjEnw0bCwfPsbB9SxetSlQ40SYQ8ljlrb33RCiUFSYKsaURHtABZ/8WoTtsjgfO7C0Q7CVIY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714059592; c=relaxed/simple;
-	bh=WF+dlvX2I/JhfKIJrRxXQkXnpq+LBXuSxxxOJYIm9Ew=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nUWmx1EWIG6riEXoKOMdJNfSjFyPPUL0wE5d9RNPRW7kUck+e8BHcY75VvkXTI96mPt0HqghZgQaxNAQp5bhxF8OqOTUldYCkFIqHOH6n30+mJmJCT79v3hBgdPcU+NNstmHoXhXs4hHKPhSuh8KbRNaEHzVeXrCT2jQoMlqXb0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Lu6K1LeB; arc=none smtp.client-ip=209.85.219.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-de45dba15feso1385023276.3
-        for <linux-arch@vger.kernel.org>; Thu, 25 Apr 2024 08:39:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1714059590; x=1714664390; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e0BChCss6w1nIzeILAtQLE3LhBpW3YXUB4HhPqTq7zU=;
-        b=Lu6K1LeBSNBNuTVNCNhOq9CVfWCgWKfOOjLOuPvMlbZ4TbQX9Y6s3T3Dfquhqvq1gF
-         mSGKoXEglg6vdgTDr5v9G47Ub46LTi7qUsk9DMx4zz8NmC2nBp58STboK2hpJPK6D8vG
-         o+k4gfJ4LMFLggYdCwnnrRUKnZBBA4vmXiIPPSCwSNsbpdnV+ZvkvC1X8/O9rc+7Ft5w
-         BDqipbhrArlE1vJtRM3CYBzMarSxplWxzeMnYt3vsxsEkfrb0jSHO8Nssq7cY4Ni3EIp
-         ivIsN7Lhc03KWHjEh+harc3wwEVQW9cNDWot+8WGoPk7E/RremVKM910I6z8wswDBghp
-         OxJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714059590; x=1714664390;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=e0BChCss6w1nIzeILAtQLE3LhBpW3YXUB4HhPqTq7zU=;
-        b=of+wCyckXegWxZLwW6XiHtTIoH694Kq9jcilvDBIrjIObxzQLwXZ31LHJT8Gd20nH9
-         8sKAygtOzAcIk+XmFYb3UFn84qGSbF6MmUCE1V/tjCJVEZgqKvHvRzXF9NpNDh5AK9IP
-         OyhhqtLiflZGL/HCgG1LomAaglSVbVf+MpCX34lKDGzhKgzXU/JYuWa7id67vNWHYk0R
-         9sEeLNYEbsEFVaJvt8cibxYLS8a8nIOuRAySaw46PvfbwhJAKr73Dz507ryuQmeGaLOd
-         AZZGL4TK1LOpIECq6HlBr0J73dd7vv1mS5QQOIWI6aoV2BPYilCdt36agGZ/9wRe8jiI
-         OAWg==
-X-Forwarded-Encrypted: i=1; AJvYcCWw9/OLYDqXciP0WnkSS64Yj0grQtjUq8oY2O162VF3FTepx8ZYpX/7GBJ6J4dsWstidFajiUA5mO+ewnvZ2tLvv/iX+trBC7zFyQ==
-X-Gm-Message-State: AOJu0Yxdf9CkGOjQNGEn5i2VEeGj6h1WR3mwGmCwbYxMMzKUpDh4upe2
-	N/EPZ/vr7d2DDifHb//6qLxR9UlvMreg367lXXJ3/Yl3OcIb7Xfwgh/EjOumNIKAUpQFyEItCIF
-	/RKs9blrjnQ0Ys/EX71P4ZSo/WBmxhYq1AP0s
-X-Google-Smtp-Source: AGHT+IHMmrQCod73kiqRAvCkDsnHTcOLVG7U0Dhn6OWsLE5Eza4GBBk8ZEiq+Ddus8vlXjyfwMqyLLjmcyn5VeI1piA=
-X-Received: by 2002:a05:6902:54b:b0:de1:849:a6f3 with SMTP id
- z11-20020a056902054b00b00de10849a6f3mr5525501ybs.7.1714059589879; Thu, 25 Apr
- 2024 08:39:49 -0700 (PDT)
+	s=arc-20240116; t=1714064136; c=relaxed/simple;
+	bh=Wv+cmZ5IUPEpcmXXIlZlfrK9jeGJtrDRrdh31P+6h9U=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=sbziDiixjNWlesBeRuWW7oAr23yqeTlkDTnd60KIQ/kL8nwTHccRazXVatCRaPrM3bFHKPn+XbmghDemofpYzNk+8iub3dDC/ZFP8O3kK3dn86S5nVBogUgztTWq7JrnuaRNttRRE/gr3em984Ec/eIhiikOLFM3XZHymyLVfkE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VQMNv1Wtbz6K6H3;
+	Fri, 26 Apr 2024 00:53:03 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 274411400DB;
+	Fri, 26 Apr 2024 00:55:29 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Thu, 25 Apr
+ 2024 17:55:28 +0100
+Date: Thu, 25 Apr 2024 17:55:27 +0100
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: Marc Zyngier <maz@kernel.org>, <linuxarm@huawei.com>,
+	<linuxarm@huawei.com>
+CC: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra
+	<peterz@infradead.org>, <linux-pm@vger.kernel.org>,
+	<loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <kvmarm@lists.linux.dev>,
+	<x86@kernel.org>, Russell King <linux@armlinux.org.uk>, "Rafael J . Wysocki"
+	<rafael@kernel.org>, Miguel Luis <miguel.luis@oracle.com>, "James Morse"
+	<james.morse@arm.com>, Salil Mehta <salil.mehta@huawei.com>, Jean-Philippe
+ Brucker <jean-philippe@linaro.org>, Catalin Marinas
+	<catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Ingo Molnar
+	<mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+	<dave.hansen@linux.intel.com>, <justin.he@arm.com>, <jianyong.wu@arm.com>
+Subject: Re: [PATCH v7 11/16] irqchip/gic-v3: Add support for ACPI's
+ disabled but 'online capable' CPUs
+Message-ID: <20240425175502.00007def@huawei.com>
+In-Reply-To: <20240425155726.000063f7@huawei.com>
+References: <20240418135412.14730-1-Jonathan.Cameron@huawei.com>
+	<20240418135412.14730-12-Jonathan.Cameron@huawei.com>
+	<20240422114020.0000294f@Huawei.com>
+	<87plugthim.wl-maz@kernel.org>
+	<20240424135438.00001ffc@huawei.com>
+	<86il06rd19.wl-maz@kernel.org>
+	<20240425133150.000009fa@Huawei.com>
+	<20240425155726.000063f7@huawei.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240321163705.3067592-1-surenb@google.com> <202404241852.DC4067B7@keescook>
- <3eyvxqihylh4st6baagn6o6scw3qhcb6lapgli4wsic2fvbyzu@h66mqxcikmcp>
-In-Reply-To: <3eyvxqihylh4st6baagn6o6scw3qhcb6lapgli4wsic2fvbyzu@h66mqxcikmcp>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Thu, 25 Apr 2024 08:39:37 -0700
-Message-ID: <CAJuCfpFtj7MVY+9FaKfq0w7N1qw8=jYifC0sBUAySk=AWBhK6Q@mail.gmail.com>
-Subject: Re: [PATCH v6 00/37] Memory allocation profiling
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: Kees Cook <keescook@chromium.org>, akpm@linux-foundation.org, mhocko@suse.com, 
-	vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, 
-	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com, 
-	penguin-kernel@i-love.sakura.ne.jp, corbet@lwn.net, void@manifault.com, 
-	peterz@infradead.org, juri.lelli@redhat.com, catalin.marinas@arm.com, 
-	will@kernel.org, arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com, 
-	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com, 
-	david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org, 
-	nathan@kernel.org, dennis@kernel.org, jhubbard@nvidia.com, tj@kernel.org, 
-	muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org, 
-	pasha.tatashin@soleen.com, yosryahmed@google.com, yuzhao@google.com, 
-	dhowells@redhat.com, hughd@google.com, andreyknvl@gmail.com, 
-	ndesaulniers@google.com, vvvvvv@google.com, gregkh@linuxfoundation.org, 
-	ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org, 
-	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com, 
-	bristot@redhat.com, vschneid@redhat.com, cl@linux.com, penberg@kernel.org, 
-	iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com, 
-	elver@google.com, dvyukov@google.com, songmuchun@bytedance.com, 
-	jbaron@akamai.com, aliceryhl@google.com, rientjes@google.com, 
-	minchan@google.com, kaleshsingh@google.com, kernel-team@android.com, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	iommu@lists.linux.dev, linux-arch@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, 
-	cgroups@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml100005.china.huawei.com (7.191.160.25) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-On Wed, Apr 24, 2024 at 8:26=E2=80=AFPM Kent Overstreet
-<kent.overstreet@linux.dev> wrote:
->
-> On Wed, Apr 24, 2024 at 06:59:01PM -0700, Kees Cook wrote:
-> > On Thu, Mar 21, 2024 at 09:36:22AM -0700, Suren Baghdasaryan wrote:
-> > > Low overhead [1] per-callsite memory allocation profiling. Not just f=
-or
-> > > debug kernels, overhead low enough to be deployed in production.
-> >
-> > Okay, I think I'm holding it wrong. With next-20240424 if I set:
-> >
-> > CONFIG_CODE_TAGGING=3Dy
-> > CONFIG_MEM_ALLOC_PROFILING=3Dy
-> > CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT=3Dy
-> >
-> > My test system totally freaks out:
-> >
-> > ...
-> > SLUB: HWalign=3D64, Order=3D0-3, MinObjects=3D0, CPUs=3D4, Nodes=3D1
-> > Oops: general protection fault, probably for non-canonical address 0xc3=
-88d881e4808550: 0000 [#1] PREEMPT SMP NOPTI
-> > CPU: 0 PID: 0 Comm: swapper Not tainted 6.9.0-rc5-next-20240424 #1
-> > Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 0.0.0 02/06=
-/2015
-> > RIP: 0010:__kmalloc_node_noprof+0xcd/0x560
-> >
-> > Which is:
-> >
-> > __kmalloc_node_noprof+0xcd/0x560:
-> > __slab_alloc_node at mm/slub.c:3780 (discriminator 2)
-> > (inlined by) slab_alloc_node at mm/slub.c:3982 (discriminator 2)
-> > (inlined by) __do_kmalloc_node at mm/slub.c:4114 (discriminator 2)
-> > (inlined by) __kmalloc_node_noprof at mm/slub.c:4122 (discriminator 2)
-> >
-> > Which is:
-> >
-> >         tid =3D READ_ONCE(c->tid);
-> >
-> > I haven't gotten any further than that; I'm EOD. Anyone seen anything
-> > like this with this series?
->
-> I certainly haven't. That looks like some real corruption, we're in slub
-> internal data structures and derefing a garbage address. Check kasan and
-> all that?
+On Thu, 25 Apr 2024 16:00:17 +0100
+Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
 
-Hi Kees,
-I tested next-20240424 yesterday with defconfig and
-CONFIG_MEM_ALLOC_PROFILING enabled but didn't see any issue like that.
-Could you share your config file please?
-Thanks,
-Suren.
+> On Thu, 25 Apr 2024 13:31:50 +0100
+> Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
+> 
+> > On Wed, 24 Apr 2024 16:33:22 +0100
+> > Marc Zyngier <maz@kernel.org> wrote:
+> >   
+> > > On Wed, 24 Apr 2024 13:54:38 +0100,
+> > > Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:    
+> > > > 
+> > > > On Tue, 23 Apr 2024 13:01:21 +0100
+> > > > Marc Zyngier <maz@kernel.org> wrote:
+> > > >       
+> > > > > On Mon, 22 Apr 2024 11:40:20 +0100,
+> > > > > Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:      
+> > > > > > 
+> > > > > > On Thu, 18 Apr 2024 14:54:07 +0100
+> > > > > > Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:      
+> > > 
+> > > [...]
+> > >     
+> > > > > >         
+> > > > > > > +	/*
+> > > > > > > +	 * Capable but disabled CPUs can be brought online later. What about
+> > > > > > > +	 * the redistributor? ACPI doesn't want to say!
+> > > > > > > +	 * Virtual hotplug systems can use the MADT's "always-on" GICR entries.
+> > > > > > > +	 * Otherwise, prevent such CPUs from being brought online.
+> > > > > > > +	 */
+> > > > > > > +	if (!(gicc->flags & ACPI_MADT_ENABLED)) {
+> > > > > > > +		pr_warn_once("CPU %u's redistributor is inaccessible: this CPU can't be brought online\n", cpu);
+> > > > > > > +		set_cpu_present(cpu, false);
+> > > > > > > +		set_cpu_possible(cpu, false);
+> > > > > > > +		return 0;
+> > > > > > > +	}        
+> > > > > 
+> > > > > It seems dangerous to clear those this late in the game, given how
+> > > > > disconnected from the architecture code this is. Are we sure that
+> > > > > nothing has sampled these cpumasks beforehand?      
+> > > > 
+> > > > Hi Marc,
+> > > > 
+> > > > Any firmware that does this is being considered as buggy already
+> > > > but given it is firmware and the spec doesn't say much about this,
+> > > > there is always the possibility.      
+> > > 
+> > > There is no shortage of broken firmware out there, and I expect this
+> > > trend to progress.
+> > >     
+> > > > Not much happens between the point where these are setup and
+> > > > the point where the the gic inits and this code runs, but even if careful
+> > > > review showed it was fine today, it will be fragile to future changes.
+> > > > 
+> > > > I'm not sure there is a huge disadvantage for such broken firmware in
+> > > > clearing these masks from the point of view of what is used throughout
+> > > > the rest of the kernel. Here I think we are just looking to prevent the CPU
+> > > > being onlined later.      
+> > > 
+> > > I totally agree on the goal, I simply question the way you get to it.
+> > >     
+> > > > 
+> > > > We could add a set_cpu_broken() with appropriate mask.
+> > > > Given this is very arm64 specific I'm not sure Rafael will be keen on
+> > > > us checking such a mask in the generic ACPI code, but we could check it in
+> > > > arch_register_cpu() and just not register the cpu if it matches.
+> > > > That will cover the vCPU hotplug case.
+> > > >
+> > > > Does that sounds sensible, or would you prefer something else?      
+> > > 
+> > > 
+> > > Such a 'broken_rdists' mask is exactly what I have in mind, just
+> > > keeping it private to the GIC driver, and not expose it anywhere else.
+> > > You can then fail the hotplug event early, and avoid changing the
+> > > global masks from within the GIC driver. At least, we don't mess with
+> > > the internals of the kernel, and the CPU is properly marked as dead
+> > > (that mechanism should already work).
+> > > 
+> > > I'd expect the handling side to look like this (will not compile, but
+> > > you'll get the idea):    
+> > Hi Marc,
+> > 
+> > In general this looks good - but...
+> > 
+> > I haven't gotten to the bottom of why yet (and it might be a side
+> > effect of how I hacked the test by lying in minimal fashion and
+> > just frigging the MADT read functions) but the hotplug flow is only getting
+> > as far as calling __cpu_up() before it seems to enter an infinite loop.
+> > That is it never gets far enough to fail this test.
+> > 
+> > Getting stuck in a psci cpu_on call.  I'm guessing something that
+> > we didn't get to in the earlier gicv3 calls before bailing out is blocking that?
+> > Looks like it gets to
+> > SMCCC smc
+> > and is never seen again.
+> > 
+> > Any ideas on where to look?  The one advantage so far of the higher level
+> > approach is we never tried the hotplug callbacks at all so avoided hitting
+> > that call.  One (little bit horrible) solution that might avoid this would 
+> > be to add another cpuhp state very early on and fail at that stage.
+> > I'm not keen on doing that without a better explanation than I have so far!  
+> 
+> Whilst it still doesn't work I suspect I'm loosing ability to print to the console
+> between that point and somewhat later and real problem is elsewhere.
+
+Hi again,
+
+Found it I think.  cpuhp calls between cpu:bringup and ap:online 
+arm made from notify_cpu_starting() are clearly marked as nofail with a comment.
+STARTING must not fail!
+
+https://elixir.bootlin.com/linux/latest/source/kernel/cpu.c#L1642
+
+Whilst I have no immediate idea why that comment is there it is pretty strong
+argument against trying to have the CPUHP_AP_IRQ_GIC_STARTING callback fail
+and expecting it to carry on working :( 
+There would have been a nice print message, but given I don't appear to have
+a working console after that stage I never see it.
+
+So the best I have yet come up with for this is the option of a new callback registered
+in gic_smp_init()
+
+cpuhp_setup_state_nocalls(CPUHP_BP_PREPARE_DYN,
+			  "irqchip/arm/gicv3:checkrdist",
+			  gic_broken_rdist, NULL);
+
+with callback being simply 
+
+static int gic_broken_rdist(unsigned int cpu)
+{
+	if (cpumask_test_cpu(cpu, &broken_rdists))
+		return -EINVAL;
+
+	return 0;
+}
+
+That gets called cpuhp_up_callbacks() and is allows to fail and roll back the steps.
+
+Not particularly satisfying but keeps the logic confined to the gicv3 driver.
+
+What do you think?
+
+Jonathan
+
+> 
+> Jonathan
+> 
+> > 
+> > Thanks,
+> > 
+> > J
+> > 
+> >    
+> > > diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+> > > index 6fb276504bcc..e8f02bfd0e21 100644
+> > > --- a/drivers/irqchip/irq-gic-v3.c
+> > > +++ b/drivers/irqchip/irq-gic-v3.c
+> > > @@ -1009,6 +1009,9 @@ static int __gic_populate_rdist(struct redist_region *region, void __iomem *ptr)
+> > >  	u64 typer;
+> > >  	u32 aff;
+> > >  
+> > > +	if (cpumask_test_cpu(smp_processor_id(), &broken_rdists))
+> > > +		return 1;
+> > > +
+> > >  	/*
+> > >  	 * Convert affinity to a 32bit value that can be matched to
+> > >  	 * GICR_TYPER bits [63:32].
+> > > @@ -1260,14 +1263,15 @@ static int gic_dist_supports_lpis(void)
+> > >  		!gicv3_nolpi);
+> > >  }
+> > >  
+> > > -static void gic_cpu_init(void)
+> > > +static int gic_cpu_init(void)
+> > >  {
+> > >  	void __iomem *rbase;
+> > > -	int i;
+> > > +	int ret, i;
+> > >  
+> > >  	/* Register ourselves with the rest of the world */
+> > > -	if (gic_populate_rdist())
+> > > -		return;
+> > > +	ret = gic_populate_rdist();
+> > > +	if (ret)
+> > > +		return ret;
+> > >  
+> > >  	gic_enable_redist(true);
+> > >  
+> > > @@ -1286,6 +1290,8 @@ static void gic_cpu_init(void)
+> > >  
+> > >  	/* initialise system registers */
+> > >  	gic_cpu_sys_reg_init();
+> > > +
+> > > +	return 0;
+> > >  }
+> > >  
+> > >  #ifdef CONFIG_SMP
+> > > @@ -1295,7 +1301,11 @@ static void gic_cpu_init(void)
+> > >  
+> > >  static int gic_starting_cpu(unsigned int cpu)
+> > >  {
+> > > -	gic_cpu_init();
+> > > +	int ret;
+> > > +
+> > > +	ret = gic_cpu_init();
+> > > +	if (ret)
+> > > +		return ret;
+> > >  
+> > >  	if (gic_dist_supports_lpis())
+> > >  		its_cpu_init();
+> > > 
+> > > But the question is: do you rely on these masks having been
+> > > "corrected" anywhere else?
+> > > 
+> > > Thanks,
+> > > 
+> > > 	M.
+> > >     
+> > 
+> > 
+> > _______________________________________________
+> > linux-arm-kernel mailing list
+> > linux-arm-kernel@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel  
+> 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+
 
