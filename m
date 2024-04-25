@@ -1,136 +1,242 @@
-Return-Path: <linux-arch+bounces-3949-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3950-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B10EF8B1DB1
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Apr 2024 11:20:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78B488B1DFF
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Apr 2024 11:28:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F2117B23B3E
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Apr 2024 09:20:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C36C1C20DF9
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Apr 2024 09:28:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4423783CBE;
-	Thu, 25 Apr 2024 09:18:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="cUfaqNiQ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8801B84DE7;
+	Thu, 25 Apr 2024 09:28:20 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F89B839E5;
-	Thu, 25 Apr 2024 09:18:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA40E2E413;
+	Thu, 25 Apr 2024 09:28:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714036712; cv=none; b=GMJVU3AzpUVH/WZPbyC91g6WvoTcaGOmWLXU1yHy03mlCZSUez9EG++vKg18CP+N+nAL9R4CIzSg3gjIEj0YNAUJH1egpww8t58JO50oFFYmiWtSTG8ZmRxDOURsUcPVQPgrhuP3Dv/sh9ZXm2pz81JMO5gEU3hWHAzi07pVz7A=
+	t=1714037300; cv=none; b=tKPiT+tC2zGPMHws7+ltrS+r4x2Qpnz7u4XtOWTiEDTvgAHQcyyQyGK7Jy0QMjpWwk/fyIJLx5s8zs0gdxEShZuGohxvGJxQRrqSy8EPbcRwdLwDMQBim7rgCwWpi6A4ZXnOIc+uhyprFF+GQy13Mk/qC9aOUkwlN8aw/uyUpa4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714036712; c=relaxed/simple;
-	bh=WJcbJq6LPOWVruhsjLEhcR+OLsCXSYTfrE6Km6Lfsek=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iKRpwcyPCcB/VqnttHK9kKbVaaAQ0iQp2PaAlPgtnM5FnAOwtEC86eBTPMYRWBO6FDPjiP+AVtdu7I6RQjmCEaFxvz29azQIEo9J8ywj3imD4UUyaZW6oxmkXIfWglf+LgZuruFZQMmSvZsePjys+szr3TMtnNdrGFw816jnW4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=cUfaqNiQ; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=jlPcJXkfaMmGAq8OZN68om84KUfyIjul/ITuXAN1MVw=; b=cUfaqNiQ1wHARDkNj7QYMhforS
-	oUBl99r29hGkUAx0ATQXOmidPsrbimAcpWld3NxErjYM+LG1bGal2QMllDh8Qo+YJh/byUx73lQcx
-	T9U064kALKGeNkvlWmHEYXJpp0/TnSoJiZl0lE6JLfitzsmNHVmkedxIJEUCzwBI+K0Wyc1mc/xAn
-	NkmIaqNeXf1zjcqNHbHl5q1iGmBz96CD9vvn0D3Pekz7DQtrKCIpBuDOYUfGyRfIstn3+qHMPdGDQ
-	wCLTiSQMnlvCroykbX41A+4lHANWK6RwM43Itb3tjEngRxTVWe47uz4Y6AlwWgnrjM92HpeWPK6Dc
-	TiTAk90Q==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rzvEn-0000000EoTr-1G9l;
-	Thu, 25 Apr 2024 09:17:59 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 623D4300439; Thu, 25 Apr 2024 11:17:52 +0200 (CEST)
-Date: Thu, 25 Apr 2024 11:17:52 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Kees Cook <keescook@chromium.org>
-Cc: Mark Rutland <mark.rutland@arm.com>, Will Deacon <will@kernel.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Jakub Kicinski <kuba@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Uros Bizjak <ubizjak@gmail.com>, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-	netdev@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 1/4] locking/atomic/x86: Silence intentional wrapping
- addition
-Message-ID: <20240425091752.GA21980@noisy.programming.kicks-ass.net>
-References: <20240424191225.work.780-kees@kernel.org>
- <20240424191740.3088894-1-keescook@chromium.org>
- <20240424224141.GX40213@noisy.programming.kicks-ass.net>
- <202404241542.6AFC3042C1@keescook>
- <20240424225436.GY40213@noisy.programming.kicks-ass.net>
- <202404241602.276D4ADA@keescook>
+	s=arc-20240116; t=1714037300; c=relaxed/simple;
+	bh=X53gXm9/tqmyC1UcjhNK/jdNzr4IdK5+5LIjav6v2OE=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=fRbM/VUDAx7BrG/vu2IsGguX9qsk8yAL4k0PgEdg162Yis3Y564ghuRkPCpih823DDXfzrQI3cUN6E0RLypz7xE56VHZ1+lJ0N5ZtOUvd3tdjWx98GqBIt91UW37yDpmvv+IOtv3Qpf0dKg1bE+jF23ETfaWGgbC5mOZ4NCkn7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VQ9Sl5smhz6K5yT;
+	Thu, 25 Apr 2024 17:25:43 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 39E0F140736;
+	Thu, 25 Apr 2024 17:28:09 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Thu, 25 Apr
+ 2024 10:28:08 +0100
+Date: Thu, 25 Apr 2024 10:28:06 +0100
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: Marc Zyngier <maz@kernel.org>, <linuxarm@huawei.com>
+CC: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra
+	<peterz@infradead.org>, <linux-pm@vger.kernel.org>,
+	<loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <kvmarm@lists.linux.dev>,
+	<x86@kernel.org>, Russell King <linux@armlinux.org.uk>, "Rafael J . Wysocki"
+	<rafael@kernel.org>, Miguel Luis <miguel.luis@oracle.com>, "James Morse"
+	<james.morse@arm.com>, Salil Mehta <salil.mehta@huawei.com>, Jean-Philippe
+ Brucker <jean-philippe@linaro.org>, Catalin Marinas
+	<catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Ingo Molnar
+	<mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+	<dave.hansen@linux.intel.com>, <justin.he@arm.com>, <jianyong.wu@arm.com>
+Subject: Re: [PATCH v7 11/16] irqchip/gic-v3: Add support for ACPI's
+ disabled but 'online capable' CPUs
+Message-ID: <20240425102806.00003683@Huawei.com>
+In-Reply-To: <20240424135438.00001ffc@huawei.com>
+References: <20240418135412.14730-1-Jonathan.Cameron@huawei.com>
+	<20240418135412.14730-12-Jonathan.Cameron@huawei.com>
+	<20240422114020.0000294f@Huawei.com>
+	<87plugthim.wl-maz@kernel.org>
+	<20240424135438.00001ffc@huawei.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202404241602.276D4ADA@keescook>
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-On Wed, Apr 24, 2024 at 04:20:20PM -0700, Kees Cook wrote:
+On Wed, 24 Apr 2024 13:54:38 +0100
+Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
 
-> > This is arse-about-face. Signed stuff wraps per -fno-strict-overflow.
-> > We've been writing code for years under that assumption.
+> On Tue, 23 Apr 2024 13:01:21 +0100
+> Marc Zyngier <maz@kernel.org> wrote:
 > 
-> Right, which is why this is going to take time to roll out. :) What we
-> were really doing with -fno-strict-overflow was getting rid of undefined
-> behavior. That was really really horrible; we don't need the compiler
-> hallucinating.
-
-Right, but that then got us well defined semantics for signed overflow.
-
-> > You want to mark the non-wrapping case.
+> > On Mon, 22 Apr 2024 11:40:20 +0100,
+> > Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:  
+> > > 
+> > > On Thu, 18 Apr 2024 14:54:07 +0100
+> > > Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
+> > >     
+> > > > From: James Morse <james.morse@arm.com>
+> > > > 
+> > > > To support virtual CPU hotplug, ACPI has added an 'online capable' bit
+> > > > to the MADT GICC entries. This indicates a disabled CPU entry may not
+> > > > be possible to online via PSCI until firmware has set enabled bit in
+> > > > _STA.
+> > > > 
+> > > > This means that a "usable" GIC is one that is marked as either enabled,
+> > > > or online capable. Therefore, change acpi_gicc_is_usable() to check both
+> > > > bits. However, we need to change the test in gic_acpi_match_gicc() back
+> > > > to testing just the enabled bit so the count of enabled distributors is
+> > > > correct.
+> > > > 
+> > > > What about the redistributor in the GICC entry? ACPI doesn't want to say.
+> > > > Assume the worst: When a redistributor is described in the GICC entry,
+> > > > but the entry is marked as disabled at boot, assume the redistributor
+> > > > is inaccessible.
+> > > > 
+> > > > The GICv3 driver doesn't support late online of redistributors, so this
+> > > > means the corresponding CPU can't be brought online either. Clear the
+> > > > possible and present bits.
+> > > > 
+> > > > Systems that want CPU hotplug in a VM can ensure their redistributors
+> > > > are always-on, and describe them that way with a GICR entry in the MADT.
+> > > > 
+> > > > When mapping redistributors found via GICC entries, handle the case
+> > > > where the arch code believes the CPU is present and possible, but it
+> > > > does not have an accessible redistributor. Print a warning and clear
+> > > > the present and possible bits.
+> > > > 
+> > > > Signed-off-by: James Morse <james.morse@arm.com>
+> > > > Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> > > > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>    
+> > > 
+> > > +CC Marc,
+> > > 
+> > > Whilst this has been unchanged for a long time, I'm not 100% sure
+> > > we've specifically drawn your attention to it before now.
+> > > 
+> > > Jonathan
+> > >     
+> > > > 
+> > > > ---
+> > > > v7: No Change.
+> > > > ---
+> > > >  drivers/irqchip/irq-gic-v3.c | 21 +++++++++++++++++++--
+> > > >  include/linux/acpi.h         |  3 ++-
+> > > >  2 files changed, 21 insertions(+), 3 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+> > > > index 10af15f93d4d..66132251c1bb 100644
+> > > > --- a/drivers/irqchip/irq-gic-v3.c
+> > > > +++ b/drivers/irqchip/irq-gic-v3.c
+> > > > @@ -2363,11 +2363,25 @@ gic_acpi_parse_madt_gicc(union acpi_subtable_headers *header,
+> > > >  				(struct acpi_madt_generic_interrupt *)header;
+> > > >  	u32 reg = readl_relaxed(acpi_data.dist_base + GICD_PIDR2) & GIC_PIDR2_ARCH_MASK;
+> > > >  	u32 size = reg == GIC_PIDR2_ARCH_GICv4 ? SZ_64K * 4 : SZ_64K * 2;
+> > > > +	int cpu = get_cpu_for_acpi_id(gicc->uid);
+> > > >  	void __iomem *redist_base;
+> > > >  
+> > > >  	if (!acpi_gicc_is_usable(gicc))
+> > > >  		return 0;
+> > > >  
+> > > > +	/*
+> > > > +	 * Capable but disabled CPUs can be brought online later. What about
+> > > > +	 * the redistributor? ACPI doesn't want to say!
+> > > > +	 * Virtual hotplug systems can use the MADT's "always-on" GICR entries.
+> > > > +	 * Otherwise, prevent such CPUs from being brought online.
+> > > > +	 */
+> > > > +	if (!(gicc->flags & ACPI_MADT_ENABLED)) {
+> > > > +		pr_warn_once("CPU %u's redistributor is inaccessible: this CPU can't be brought online\n", cpu);
+> > > > +		set_cpu_present(cpu, false);
+> > > > +		set_cpu_possible(cpu, false);
+> > > > +		return 0;
+> > > > +	}    
+> > 
+> > It seems dangerous to clear those this late in the game, given how
+> > disconnected from the architecture code this is. Are we sure that
+> > nothing has sampled these cpumasks beforehand?  
 > 
-> What we want is lack of ambiguity. Having done these kinds of things in
-> the kernel for a while now, I have strong evidence that we get much better
-> results with the "fail safe" approach, but start by making it non-fatal.
-> That way we get full coverage, but we don't melt the world for anyone
-> that doesn't want it, and we can shake things out over a few years. For
-> example, it has worked well for CONFIG_FORTIFY, CONFIG_UBSAN_BOUNDS,
-> KCFI, etc.
+> Hi Marc,
+> 
+> Any firmware that does this is being considered as buggy already
+> but given it is firmware and the spec doesn't say much about this,
+> there is always the possibility.
+> 
+> Not much happens between the point where these are setup and
+> the point where the the gic inits and this code runs, but even if careful
+> review showed it was fine today, it will be fragile to future changes.
+> 
+> I'm not sure there is a huge disadvantage for such broken firmware in
+> clearing these masks from the point of view of what is used throughout
+> the rest of the kernel. Here I think we are just looking to prevent the CPU
+> being onlined later.
+> 
+> We could add a set_cpu_broken() with appropriate mask.
+> Given this is very arm64 specific I'm not sure Rafael will be keen on
+> us checking such a mask in the generic ACPI code, but we could check it in
+> arch_register_cpu() and just not register the cpu if it matches.
+> That will cover the vCPU hotplug case.
+> 
+> Does that sounds sensible, or would you prefer something else?
 
-The non-fatal argument doesn't have bearing on the mark warp or mark
-non-wrap argument though.
+Hi Marc
 
-> The riskier condition is having something wrap when it wasn't expected
-> (e.g. allocations, pointer offsets, etc), so we start by defining our
-> regular types as non-wrapping, and annotate the wrapping types (or
-> specific calculations or functions).
+Some experiments later (faking this on a physical board - I never liked
+CPU 120 anyway!) and using a different mask brings it's own minor pain.
 
-But but most of those you mention are unsigned. Are you saying you're
-making all unsigned variables non-wrap by default too? That's bloody
-insane.
+When all the rest of the CPUs are brought up cpuhp_bringup_mask() is called
+on cpu_present_mask so we need to do a dance in there to use a temporary
+mask with broken cpus removed.  I think it makes sense to cut that out
+at the top of the cpuhp_bringup_mask() pile of actions rather than trying
+to paper over each actual thing that is dying... (looks like an infinite loop
+somewhere but I haven't tracked down where yet).
 
-> For signed types in particular, wrapping is overwhelmingly the
-> uncommon case, so from a purely "how much annotations is needed"
-> perspective, marking wrapping is also easiest. Yes, there are cases of
-> expected wrapping, but we'll track them all down and get them marked
-> unambiguously. 
+I'll spin a patch so you can see what it looks like, but my concern is
+we are just moving the risk from early users of these masks to later cases
+where code assumes cpu_present_mask definitely means they are present.
+That is probably a small set of cases but not nice either.
 
-But I am confused now, because above you seem to imply you're making
-unsigned non-wrap too, and there wrapping is *far* more common, and I
-must say I hate this wrapping_add() thing with a passion.
+Looks like one of those cases where we need to pick the lesser of two evils
+which is probably still the cpu_broken_mask approach.
 
-> One thing on the short list is atomics, so here we are. :)
+On plus side if we decide to go back to the original approach having seen
+that I already have the code :)
 
-Well, there are wrapping and non-wrapping users of atomic. If only C had
-generics etc.. (and yeah, _Generic doesn't really count).
+Jonathan
+
+
+
+> 
+> Jonathan
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> > 
+> > Thanks,
+> > 
+> > 	M.
+> >   
+> 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+
 
