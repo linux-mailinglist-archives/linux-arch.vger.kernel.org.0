@@ -1,69 +1,69 @@
-Return-Path: <linux-arch+bounces-4026-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4027-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C398F8B3FBD
-	for <lists+linux-arch@lfdr.de>; Fri, 26 Apr 2024 20:54:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A49698B3FD1
+	for <lists+linux-arch@lfdr.de>; Fri, 26 Apr 2024 21:01:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7EF8728372B
-	for <lists+linux-arch@lfdr.de>; Fri, 26 Apr 2024 18:54:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 515A71F224CE
+	for <lists+linux-arch@lfdr.de>; Fri, 26 Apr 2024 19:01:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91728B67F;
-	Fri, 26 Apr 2024 18:54:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EC2DBE48;
+	Fri, 26 Apr 2024 19:01:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PtIGLkVI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u1J8gS6e"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 370C4BE47;
-	Fri, 26 Apr 2024 18:54:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3F231C06;
+	Fri, 26 Apr 2024 19:01:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714157659; cv=none; b=iIsS1ltRFP+46ejY/wX+KloXu086hcV88c+P2ejt/NeisOsUlfsblotq/T7it4PWhc98ymhfYpWkbSOueoLQZLGkTd/pkpMk8a/udmxr6nIy7OprHuvf8uFDUsNBggJ6zFJKQThopnIzNmh4WnnQGJFbUNGz8Qgfa1HHqztv+dA=
+	t=1714158108; cv=none; b=W6HD41fQz19sweJgwEJ7EYqIaTLo9/32ZjmbPalPqYI4rRBRpWWipZDtA3AmAtb0KjhboJrcLpzp1i2kA7bcOcLKdIerYONNNzOz/m3i9R8OCsTc8NeO9hoOUGY2To7hf/8Hb/0NPp46hywRGydNPK+KNu4u2b1qSNFlnVZwRdo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714157659; c=relaxed/simple;
-	bh=Erw8uuVUeGio0PshYx2zkVsumWpV4GynBPxpYdsctHY=;
+	s=arc-20240116; t=1714158108; c=relaxed/simple;
+	bh=spHwlcTCpaNA543nwyK0H2eAD2T0c3htMv4UjyBqffA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hjaTFsMKPJsd6ECpK5eJQMtHHBBrcQy2bNWholG/aQpWcw5tyLpA0MlqtYWKsy2PKxCaduDlhtwlvHtsEkm2ua6onJ0QLT9zCsP8Xny/LkJyJ+eW98yy2bXfdwQHF10gtW9C1MzTifLqPQozN/DFe85Nx99iJLFUlga+IFlYGHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PtIGLkVI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9CD5C2BD10;
-	Fri, 26 Apr 2024 18:54:18 +0000 (UTC)
+	 To:Cc:Content-Type; b=RhdvC1F4R4e3uvxGNnkx3a5KQr3e8bp8ki0aLHO7xtNRl4F3FBkh3MRRYzDgD+oUgMeSL2sVjQ93FK3x9FvSdCu2JIzqn9xv3aZ4l74MXhCVFwgCNRn3ed4mfMPi4n5wx0Vs/wd6c/rncLGmsB99ky4cqNSkQ0uz8pc4DRD1BWU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u1J8gS6e; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D934C4AF0B;
+	Fri, 26 Apr 2024 19:01:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714157658;
-	bh=Erw8uuVUeGio0PshYx2zkVsumWpV4GynBPxpYdsctHY=;
+	s=k20201202; t=1714158107;
+	bh=spHwlcTCpaNA543nwyK0H2eAD2T0c3htMv4UjyBqffA=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=PtIGLkVIeqBKR9XEnfi6oa2ABiJCHDWkMcxnQH6NsAziRnrm6MjyOXSpNcpzr5Bpj
-	 E/+DTDMfi551f7rzH24rHY27M/wW2GL5thq60UidmW3gekcOw/Lw7WAfRzWyd8GkUc
-	 AMCRC/bEKdhEkcE8BUKVSsq3i6jRXE/rRiDch/q2swRdO1P0u026aiMTpNhht44wJL
-	 UIPWzKzyFzPlmxNLqcd/AT/DShSQyLxRDyOuWXTPLByxMvQzpvRUI5+5WtOVbnGLoN
-	 udeSsSYdjr9fYuzLauYRgGtv2ybIbSepMhbtSmBkkZI6dcFW/TNhf3zMRdYQbw+V8+
-	 QrxzekJFRuwhA==
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-516d3a470d5so3047934e87.3;
-        Fri, 26 Apr 2024 11:54:18 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVM8ZypdlDMPCN05MdpxMV/6rLXZtcthQG9/QpcKsMGYUW2eevOcSli1y6SfRPpMwlSeJ5Ttu7Q9+dNZhAyBiR4QkZUkqmOumo7kUtTyFxqylnBV8403zaKDMwrz9d+0rzOJ7EeoPir879K7bAePY0UV1X3Kxlt53BrN7nKffn6fBhw5G9GaTPXHR89gjaJnSViXXQK/Z9e9pQHQ8Jt8rSgZR1X6robljV/3F4iOHMlCgBxtP8PhAJFmxUu8Ut/sE1zZ6ZSxabtH2pDjyUvZUbF6bGI5xWFEnY4kJGn4UgnJjaXxnuQz2GIyHVYtA1Dj6npO2OIQvhrvq8Ld93BZeeC6GqDt9Kk3KPka02dfbHrV3kmRYmKQLTzAh8GWguMVXabpy9ArdcBgbOt4RU=
-X-Gm-Message-State: AOJu0YyvMBvKSJznNwb3zf29G4NMrsHTe0pHsgQ0tK6coE0MNUuAnslp
-	82BY0/S5+qI3Zb/qoPqVT2tbiMpbK5Me0kJTbRkyDFC6Z2n9yugCCqm0i+zlRbcVvmtb7ETHP3d
-	5qgcUSYU+VsKePNbi2/nxlYntOHQ=
-X-Google-Smtp-Source: AGHT+IHR8dCzuYaMcfUu9DJ1W7DJuyt98T5r37UenPfdlzP0RlXEYGrXPEenPo3iSsrLDDgw6B5I00dbfOalDiVdMh8=
-X-Received: by 2002:ac2:5202:0:b0:51c:1fb4:2327 with SMTP id
- a2-20020ac25202000000b0051c1fb42327mr2189866lfl.24.1714157657105; Fri, 26 Apr
- 2024 11:54:17 -0700 (PDT)
+	b=u1J8gS6el0nAxFSbvhUmiteeeXNoJZJN5MPZ60QK8xy+IuJlkTXsHsNrzkbPy5TqD
+	 de39M5yXbq+ntNG1c/6nbsdwkYXeDFX1MSl+Fi0o2O9vI1Qd0a43krhnD8x6h+FV0m
+	 wlO6PXD2h3aPbk1x/4BZ7QoDsjaeDob+jGsSj+rmBEO15awWX82WHpVByDcK/7srXO
+	 ZSQDUE3BCOcr85i/+vlQyfSOR0XhzCaCfEOgUJDjSgUS6O0kiXb7ZAZne92g7psDMZ
+	 DVcXQzkfK3TKHln6vD5/6f1ZlTR1cK6SRZi9YHQAfiSfJAxBcBY+UqW5ezGHDQjaaF
+	 pbTgvfRBhCTeA==
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-51ac5923ef6so2266102e87.0;
+        Fri, 26 Apr 2024 12:01:47 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXv8pxNSWqRXzdQ9G76oELuSMmA5ZFIlKT4vxK5ksqnk6ZYTE2tcW0E/2KmtMBHb0bg5+DgxJCjjVAc0AYY0KuJOIMjrn1f/POQ2t3w1u8h0+v2bJS6LJgRf13SVvbnvJb0RqzVHlQUoOf+2R231l1BJpSJXOSEM/iGAcYOZWYlv710cZYY2EmUAAUZKBJQYESduiBpOqICtdkQx80HUwyGl9nncqu6SlK/LwugCoab+5CEkwAON6Crp5j/Qpu4sx5HqLfh71Iqhvsqn/wBf91CZMhVsUN38HzsPS3M23OBN9pJw21DKsQP1tg9EO+12j0gtaZsUO0Bty0pVxtlp2XSu5gIWAw2Drkx2eLS0ALFz7EMSv976hGLtmS0yLo5y1AVZ0RQywRwpexkIo4=
+X-Gm-Message-State: AOJu0YzeamOqJfgHaiNFAFTc75ZvDN7CvcR1I9Tcr0KrQOg6ZMWUUo8t
+	4cLLMKqy9j8L3V/5vBpRNP4O+BHS0Q8nNtyhwthsncMEeR95E+mQeWS6j01P48Hinoh+APKwzot
+	ZwcMX9BesBaQDLTzIu/xvWnE0R6E=
+X-Google-Smtp-Source: AGHT+IF/3UI9Cwbb8z8OI8jFmskqzepU4aeg2+YglDD7FKhfHPiRdUcmMxLF73Ba/yVMMyprkxylEY00eIaasdUhAvE=
+X-Received: by 2002:a05:6512:151:b0:513:c1a2:d380 with SMTP id
+ m17-20020a056512015100b00513c1a2d380mr1420572lfo.31.1714158105499; Fri, 26
+ Apr 2024 12:01:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240426082854.7355-1-rppt@kernel.org> <20240426082854.7355-8-rppt@kernel.org>
-In-Reply-To: <20240426082854.7355-8-rppt@kernel.org>
+References: <20240426082854.7355-1-rppt@kernel.org> <20240426082854.7355-9-rppt@kernel.org>
+In-Reply-To: <20240426082854.7355-9-rppt@kernel.org>
 From: Song Liu <song@kernel.org>
-Date: Fri, 26 Apr 2024 11:54:06 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW7+wmDA_aaZKhNLfEZ-F1aLpUKssXqu5tUs6s=P9yvB-Q@mail.gmail.com>
-Message-ID: <CAPhsuW7+wmDA_aaZKhNLfEZ-F1aLpUKssXqu5tUs6s=P9yvB-Q@mail.gmail.com>
-Subject: Re: [PATCH v6 07/16] mm/execmem, arch: convert simple overrides of
+Date: Fri, 26 Apr 2024 12:01:34 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW52MYy4Md5O=7XVGvkw395-LB+BiSadxoDdw8CrLw5t7A@mail.gmail.com>
+Message-ID: <CAPhsuW52MYy4Md5O=7XVGvkw395-LB+BiSadxoDdw8CrLw5t7A@mail.gmail.com>
+Subject: Re: [PATCH v6 08/16] mm/execmem, arch: convert remaining overrides of
  module_alloc to execmem
 To: Mike Rapoport <rppt@kernel.org>
 Cc: linux-kernel@vger.kernel.org, Alexandre Ghiti <alexghiti@rivosinc.com>, 
@@ -94,28 +94,25 @@ te:
 >
 > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 >
-> Several architectures override module_alloc() only to define address
-> range for code allocations different than VMALLOC address space.
+> Extend execmem parameters to accommodate more complex overrides of
+> module_alloc() by architectures.
 >
-> Provide a generic implementation in execmem that uses the parameters for
-> address space ranges, required alignment and page protections provided
-> by architectures.
+> This includes specification of a fallback range required by arm, arm64
+> and powerpc, EXECMEM_MODULE_DATA type required by powerpc, support for
+> allocation of KASAN shadow required by s390 and x86 and support for
+> late initialization of execmem required by arm64.
 >
-> The architectures must fill execmem_info structure and implement
-> execmem_arch_setup() that returns a pointer to that structure. This way t=
-he
-> execmem initialization won't be called from every architecture, but rathe=
-r
-> from a central place, namely a core_initcall() in execmem.
->
-> The execmem provides execmem_alloc() API that wraps __vmalloc_node_range(=
-)
-> with the parameters defined by the architectures.  If an architecture doe=
-s
-> not implement execmem_arch_setup(), execmem_alloc() will fall back to
-> module_alloc().
+> The core implementation of execmem_alloc() takes care of suppressing
+> warnings when the initial allocation fails but there is a fallback range
+> defined.
 >
 > Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> Acked-by: Will Deacon <will@kernel.org>
+
+nit: We should probably move the logic for ARCH_WANTS_EXECMEM_LATE
+to a separate patch.
+
+Otherwise,
 
 Acked-by: Song Liu <song@kernel.org>
 
