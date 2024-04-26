@@ -1,775 +1,285 @@
-Return-Path: <linux-arch+bounces-4016-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4015-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEF948B3CD6
-	for <lists+linux-arch@lfdr.de>; Fri, 26 Apr 2024 18:32:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DCA08B3CBF
+	for <lists+linux-arch@lfdr.de>; Fri, 26 Apr 2024 18:26:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 17B791C22117
-	for <lists+linux-arch@lfdr.de>; Fri, 26 Apr 2024 16:32:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 03EA71F23B17
+	for <lists+linux-arch@lfdr.de>; Fri, 26 Apr 2024 16:26:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B221615887D;
-	Fri, 26 Apr 2024 16:32:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B9EF156644;
+	Fri, 26 Apr 2024 16:26:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=seltendoof.de header.i=@seltendoof.de header.b="NNLzwoGz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RFWqxDGL"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from server02.seltendoof.de (server02.seltendoof.de [168.119.48.163])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 553A244377;
-	Fri, 26 Apr 2024 16:32:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.48.163
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7CEE75810;
+	Fri, 26 Apr 2024 16:26:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714149131; cv=none; b=cUuzck/VTg0rfEeoLZB3TkspI5t0ive9+o9d/ScsswgusBcNSfE5tyHylHDsMcWaaOi88L7TEHPEUomeWDQyyYrscNjWFdvjXLZhcWqiUtIJ7YtTV/p5WC24uo/7oCNWjpdtgQcg4xrP7a4cirP6xxCuyDVEDX7aqf3S9SydYJQ=
+	t=1714148794; cv=none; b=HYYk911SZxi2waIp536U8Tzo4JoG64jRmVPeTNMhY+DZt326QwQWRFzWb4cN+fqQlkmpmX/j7oQxO57ZSp4QfY452ZdkEJBBzxnKDIsQPfzLxAKTmZCFN33Rzvwv7zZHLnHuNx7466IOnmBVq8/7B0k1XVovk8rhqy/aiTvYpSo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714149131; c=relaxed/simple;
-	bh=pwUbf0CJzfzTif6FLawW1Ntu8PXv55PrXwYHbALlKBY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=oeekLRsEUuMb7WoZOZc+LdaaDF4xHIhDw0wxggYmqL98wmLioVmSIa8rr6MnA49kU2RzyDZhHpDGJZUyZ3vqBJiOu1XWnyBMnKpFYKrkvtwcrybmlAWaVV00iavaDR344T7oDlYv3KbQTQZ0ul+di5wHW82j6BMhw5OeKGiQI3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=seltendoof.de; spf=pass smtp.mailfrom=seltendoof.de; dkim=pass (2048-bit key) header.d=seltendoof.de header.i=@seltendoof.de header.b=NNLzwoGz; arc=none smtp.client-ip=168.119.48.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=seltendoof.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=seltendoof.de
-From: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgoettsche@seltendoof.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seltendoof.de;
-	s=2023072701; t=1714148461;
-	h=from:from:reply-to:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-	bh=z5JmHtkLiQ57ZBKXVrmaKQ/XqCOuY5zjpycUDX8wsGM=;
-	b=NNLzwoGzbnLH2jZw966e6jSsnimzqSiNByTgO/pFKf0ZK61KJa0cuDMUYUEuU8US4QgmN1
-	ybO2yMl69Hwe51SIfxWCrbXu60CN2cfiBzGtAva23gNgdHEi2vRz00QY3rtH5c3VzczrL6
-	lG8hFYIHVmeYNCtTQKvguCpepTLU/cS8krVayViHJao1raPqNEXp6e4WUtWi+SS2oq9fL/
-	+kgF2MbSrJahOa0C+8gmy0je2nALPVdg1tKH4kx0Ud44+qG32mdg2p3nEd6QaiOxcBeYNJ
-	4GYAHh4NZbzeGImOZL0DWJJTIuVlGAuN+utdWTECAZwe/yvoTgA49SXphmXdcg==
-To: cgzones@googlemail.com
-Cc: x86@kernel.org,
-	linux-alpha@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-ia64@vger.kernel.org,
-	linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org,
-	linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	audit@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	linux-api@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	selinux@vger.kernel.org,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>,
+	s=arc-20240116; t=1714148794; c=relaxed/simple;
+	bh=dK6kEHqnBd/0mkKOcrKzgBRZZ55RfC+Bv0ytAehgbpQ=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Nu1fN5bUgrUY51qC+z22N2j51o2Q3uqVRU8nCOBP+WkWEA39+Mq00S8G6c9QOEjs73Al/PaPrpqj7KuBJDoMHkyKsMKbKrf0UM3BxPnd8voOMS8Kw833+A4YgGEPKJxdwT0MzZ8//c3QJjuTM2lXJJZbbqZAkW3T3AO9yJh921M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RFWqxDGL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48525C113CD;
+	Fri, 26 Apr 2024 16:26:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714148793;
+	bh=dK6kEHqnBd/0mkKOcrKzgBRZZ55RfC+Bv0ytAehgbpQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=RFWqxDGLi/VS44XkgsO8nJ4SjSsgIVT+nSCTdvvYV+c/uNoE1S7/bMD+gqpEIwfzs
+	 0vGS7otQIC39++kYefton6z0I3b0nSxw7HAvPqHeovM1mGzjnxLcdTCD5zGSYHMdZH
+	 tkGlin47truNdtQtfGs2NMBL42RNwuX0tGH+vAneUNoX1HcivhunCWqpG/kYxRF+V3
+	 6tweplRPMFq09qp8l7rEP+c4SQiLcjBmrx+gW14OmOawkl0AOOhbXIp2a3Byd8X6FV
+	 DXmLgfE+JguM7KBvAfnhZckwvJASHsGV6Xv/nGupblRdNuwTuwCvrKw+KI+uzBOYOS
+	 UnGR0S8515+5g==
+Received: from [185.201.63.253] (helo=wait-a-minute.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1s0OP6-008Hsg-Vi;
+	Fri, 26 Apr 2024 17:26:30 +0100
+Date: Fri, 26 Apr 2024 17:26:09 +0100
+Message-ID: <87il04t7j2.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>,
+	Peter Zijlstra
+	<peterz@infradead.org>,
+	<linux-pm@vger.kernel.org>,
+	<loongarch@lists.linux.dev>,
+	<linux-acpi@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>,
+	<kvmarm@lists.linux.dev>,
+	<x86@kernel.org>,
 	Russell King <linux@armlinux.org.uk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
+	"Rafael J . Wysocki"
+	<rafael@kernel.org>,
+	Miguel Luis <miguel.luis@oracle.com>,
+	James Morse
+	<james.morse@arm.com>,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Jean-Philippe
+ Brucker <jean-philippe@linaro.org>,
+	Catalin Marinas
+	<catalin.marinas@arm.com>,
 	Will Deacon <will@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Michal Simek <monstr@monstr.eu>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	Helge Deller <deller@gmx.de>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
-	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
+	Hanjun Guo <guohanjun@huawei.com>,
 	Ingo Molnar <mingo@redhat.com>,
 	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Chris Zankel <chris@zankel.net>,
-	Max Filippov <jcmvbkbc@gmail.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	Jan Kara <jack@suse.cz>,
-	Paul Moore <paul@paul-moore.com>,
-	Eric Paris <eparis@redhat.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Jens Axboe <axboe@kernel.dk>,
-	Pavel Begunkov <asml.silence@gmail.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Sohil Mehta <sohil.mehta@intel.com>,
-	Palmer Dabbelt <palmer@sifive.com>,
-	Miklos Szeredi <mszeredi@redhat.com>,
-	Nhat Pham <nphamcs@gmail.com>,
-	Casey Schaufler <casey@schaufler-ca.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Kees Cook <keescook@chromium.org>,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	io-uring@vger.kernel.org
-Subject: [PATCH v3 2/2] fs/xattr: add *at family syscalls
-Date: Fri, 26 Apr 2024 18:20:14 +0200
-Message-ID: <20240426162042.191916-1-cgoettsche@seltendoof.de>
-Reply-To: cgzones@googlemail.com
+	Dave
+ Hansen <dave.hansen@linux.intel.com>,
+	<linuxarm@huawei.com>,
+	<justin.he@arm.com>,
+	<jianyong.wu@arm.com>,
+	Lorenzo Pieralisi
+	<lpieralisi@kernel.org>,
+	Sudeep Holla <sudeep.holla@arm.com>
+Subject: Re: [PATCH v8 11/16] irqchip/gic-v3: Add support for ACPI's disabled but 'online capable' CPUs
+In-Reply-To: <20240426135126.12802-12-Jonathan.Cameron@huawei.com>
+References: <20240426135126.12802-1-Jonathan.Cameron@huawei.com>
+	<20240426135126.12802-12-Jonathan.Cameron@huawei.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.201.63.253
+X-SA-Exim-Rcpt-To: Jonathan.Cameron@huawei.com, tglx@linutronix.de, peterz@infradead.org, linux-pm@vger.kernel.org, loongarch@lists.linux.dev, linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, x86@kernel.org, linux@armlinux.org.uk, rafael@kernel.org, miguel.luis@oracle.com, james.morse@arm.com, salil.mehta@huawei.com, jean-philippe@linaro.org, catalin.marinas@arm.com, will@kernel.org, guohanjun@huawei.com, mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, linuxarm@huawei.com, justin.he@arm.com, jianyong.wu@arm.com, lpieralisi@kernel.org, sudeep.holla@arm.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-From: Christian Göttsche <cgzones@googlemail.com>
+On Fri, 26 Apr 2024 14:51:21 +0100,
+Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
+> 
+> From: James Morse <james.morse@arm.com>
+> 
+> To support virtual CPU hotplug, ACPI has added an 'online capable' bit
+> to the MADT GICC entries. This indicates a disabled CPU entry may not
+> be possible to online via PSCI until firmware has set enabled bit in
+> _STA.
+> 
+> This means that a "usable" GIC is one that is marked as either enabled,
 
-Add the four syscalls setxattrat(), getxattrat(), listxattrat() and
-removexattrat().  Those can be used to operate on extended attributes,
-especially security related ones, either relative to a pinned directory
-or on a file descriptor without read access, avoiding a
-/proc/<pid>/fd/<fd> detour, requiring a mounted procfs.
+nit: "GIC" usually designs the whole HW infrastructure (distributor,
+redistributors, and ITSs). My understanding is that you are only
+referring to the redistributors.
 
-One use case will be setfiles(8) setting SELinux file contexts
-("security.selinux") without race conditions and without a file
-descriptor opened with read access requiring SELinux read permission.
+> or online capable. Therefore, change acpi_gicc_is_usable() to check both
+> bits. However, we need to change the test in gic_acpi_match_gicc() back
+> to testing just the enabled bit so the count of enabled distributors is
+> correct.
+> 
+> What about the redistributor in the GICC entry? ACPI doesn't want to say.
+> Assume the worst: When a redistributor is described in the GICC entry,
+> but the entry is marked as disabled at boot, assume the redistributor
+> is inaccessible.
+> 
+> The GICv3 driver doesn't support late online of redistributors, so this
+> means the corresponding CPU can't be brought online either.
+> Rather than modifying cpu masks that may already have been used,
+> register a new cpuhp callback to fail this case. This must run earlier
+> than the main gic_starting_cpu() so that this case can be rejected
+> before the section of cpuhp that runs on the CPU that is coming up as
+> that is not allowed to fail. This solution keeps the handling of this
+> broken firmware corner case local to the GIC driver. As precise ordering
+> of this callback doesn't need to be controlled as long as it is
+> in that initial prepare phase, use CPUHP_BP_PREPARE_DYN.
+> 
+> Systems that want CPU hotplug in a VM can ensure their redistributors
+> are always-on, and describe them that way with a GICR entry in the MADT.
+> 
+> Suggested-by: Marc Zyngier <maz@kernel.org>
+> Signed-off-by: James Morse <james.morse@arm.com>
+> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> Tested-by: Miguel Luis <miguel.luis@oracle.com>
+> Co-developed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> 
+> ---
+> Thanks to Marc for review and suggestions!
+> v8: Change the handling of broken rdists to fail cpuhp rather than
+>     modifying the cpu_present and cpu_possible masks.
+>     Updated commit text to reflect that.
+>     Added a sb tag for Marc given this is more or less what he put
+>     in his review comment.
+> ---
+>  drivers/irqchip/irq-gic-v3.c | 38 ++++++++++++++++++++++++++++++++++--
+>  include/linux/acpi.h         |  3 ++-
+>  2 files changed, 38 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+> index 10af15f93d4d..b4685991953e 100644
+> --- a/drivers/irqchip/irq-gic-v3.c
+> +++ b/drivers/irqchip/irq-gic-v3.c
+> @@ -44,6 +44,8 @@
+>  
+>  #define GIC_IRQ_TYPE_PARTITION	(GIC_IRQ_TYPE_LPI + 1)
+>  
+> +static struct cpumask broken_rdists __read_mostly;
+> +
+>  struct redist_region {
+>  	void __iomem		*redist_base;
+>  	phys_addr_t		phys_base;
+> @@ -1293,6 +1295,18 @@ static void gic_cpu_init(void)
+>  #define MPIDR_TO_SGI_RS(mpidr)	(MPIDR_RS(mpidr) << ICC_SGI1R_RS_SHIFT)
+>  #define MPIDR_TO_SGI_CLUSTER_ID(mpidr)	((mpidr) & ~0xFUL)
+>  
+> +/*
+> + * gic_starting_cpu() is called after the last point where cpuhp is allowed
+> + * to fail. So pre check for problems earlier.
+> + */
+> +static int gic_check_rdist(unsigned int cpu)
+> +{
+> +	if (cpumask_test_cpu(cpu, &broken_rdists))
+> +		return -EINVAL;
+> +
+> +	return 0;
+> +}
+> +
+>  static int gic_starting_cpu(unsigned int cpu)
+>  {
+>  	gic_cpu_init();
+> @@ -1384,6 +1398,10 @@ static void __init gic_smp_init(void)
+>  	};
+>  	int base_sgi;
+>  
+> +	cpuhp_setup_state_nocalls(CPUHP_BP_PREPARE_DYN,
+> +				  "irqchip/arm/gicv3:checkrdist",
+> +				  gic_check_rdist, NULL);
+> +
+>  	cpuhp_setup_state_nocalls(CPUHP_AP_IRQ_GIC_STARTING,
+>  				  "irqchip/arm/gicv3:starting",
+>  				  gic_starting_cpu, NULL);
+> @@ -2363,11 +2381,24 @@ gic_acpi_parse_madt_gicc(union acpi_subtable_headers *header,
+>  				(struct acpi_madt_generic_interrupt *)header;
+>  	u32 reg = readl_relaxed(acpi_data.dist_base + GICD_PIDR2) & GIC_PIDR2_ARCH_MASK;
+>  	u32 size = reg == GIC_PIDR2_ARCH_GICv4 ? SZ_64K * 4 : SZ_64K * 2;
+> +	int cpu = get_cpu_for_acpi_id(gicc->uid);
+>  	void __iomem *redist_base;
+>  
+>  	if (!acpi_gicc_is_usable(gicc))
+>  		return 0;
+>  
+> +	/*
+> +	 * Capable but disabled CPUs can be brought online later. What about
+> +	 * the redistributor? ACPI doesn't want to say!
+> +	 * Virtual hotplug systems can use the MADT's "always-on" GICR entries.
+> +	 * Otherwise, prevent such CPUs from being brought online.
+> +	 */
+> +	if (!(gicc->flags & ACPI_MADT_ENABLED)) {
 
-Use the do_{name}at() pattern from fs/open.c.
+Now this makes the above acpi_gicc_is_usable() very odd. It checks for
+MADT_ENABLED *or* GICC_ONLINE_CAPABLE. But we definitely don't want to
+deal with the lack of MADT_ENABLED.
 
-Pass the value of the extended attribute, its length, and for
-setxattrat(2) the command (XATTR_CREATE or XATTR_REPLACE) via an added
-struct xattr_args to not exceed six syscall arguments and not
-merging the AT_* and XATTR_* flags.
+So why don't we explicitly check for individual flags and get rid of
+acpi_gicc_is_usable(), as its new definition doesn't tell you anything
+useful?
 
-Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
-CC: x86@kernel.org
-CC: linux-alpha@vger.kernel.org
-CC: linux-kernel@vger.kernel.org
-CC: linux-arm-kernel@lists.infradead.org
-CC: linux-ia64@vger.kernel.org
-CC: linux-m68k@lists.linux-m68k.org
-CC: linux-mips@vger.kernel.org
-CC: linux-parisc@vger.kernel.org
-CC: linuxppc-dev@lists.ozlabs.org
-CC: linux-s390@vger.kernel.org
-CC: linux-sh@vger.kernel.org
-CC: sparclinux@vger.kernel.org
-CC: linux-fsdevel@vger.kernel.org
-CC: audit@vger.kernel.org
-CC: linux-arch@vger.kernel.org
-CC: linux-api@vger.kernel.org
-CC: linux-security-module@vger.kernel.org
-CC: selinux@vger.kernel.org
----
-v3:
-  - pass value, size and xattr_flags via new struct xattr_args to
-    split AT_* and XATTR_* flags
+> +		pr_warn_once("CPU %u's redistributor is inaccessible: this CPU can't be brought online\n", cpu);
+> +		cpumask_set_cpu(cpu, &broken_rdists);
 
-v2: https://lore.kernel.org/lkml/20230511150802.737477-1-cgzones@googlemail.com/
-  - squash syscall introduction and wire up commits
-  - add AT_XATTR_CREATE and AT_XATTR_REPLACE constants
+Given that get_cpu_for_acpi_id() can return -EINVAL, you'd want to
+check that. Also, I'd like to drop the _once on the warning.
+Indicating all the broken CPUs is useful information, and only happens
+once per boot.
 
-v1 discussion: https://lore.kernel.org/all/20220830152858.14866-2-cgzones@googlemail.com/
+> +		return 0;
+> +	}
+> +
+>  	redist_base = ioremap(gicc->gicr_base_address, size);
+>  	if (!redist_base)
+>  		return -ENOMEM;
+> @@ -2413,9 +2444,12 @@ static int __init gic_acpi_match_gicc(union acpi_subtable_headers *header,
+>  
+>  	/*
+>  	 * If GICC is enabled and has valid gicr base address, then it means
+> -	 * GICR base is presented via GICC
+> +	 * GICR base is presented via GICC. The redistributor is only known to
+> +	 * be accessible if the GICC is marked as enabled. If this bit is not
+> +	 * set, we'd need to add the redistributor at runtime, which isn't
+> +	 * supported.
+>  	 */
+> -	if (acpi_gicc_is_usable(gicc) && gicc->gicr_base_address)
+> +	if (gicc->flags & ACPI_MADT_ENABLED && gicc->gicr_base_address)
+>  		acpi_data.enabled_rdists++;
+>  
+>  	return 0;
+> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+> index 9844a3f9c4e5..fcfb7bb6789e 100644
+> --- a/include/linux/acpi.h
+> +++ b/include/linux/acpi.h
+> @@ -239,7 +239,8 @@ void acpi_table_print_madt_entry (struct acpi_subtable_header *madt);
+>  
+>  static inline bool acpi_gicc_is_usable(struct acpi_madt_generic_interrupt *gicc)
+>  {
+> -	return gicc->flags & ACPI_MADT_ENABLED;
+> +	return gicc->flags & (ACPI_MADT_ENABLED |
+> +			      ACPI_MADT_GICC_ONLINE_CAPABLE);
+>  }
+>  
+>  /* the following numa functions are architecture-dependent */
 
-Previous approach ("f*xattr: allow O_PATH descriptors"): https://lore.kernel.org/all/20220607153139.35588-1-cgzones@googlemail.com/
----
- arch/alpha/kernel/syscalls/syscall.tbl      |   4 +
- arch/arm/tools/syscall.tbl                  |   4 +
- arch/arm64/include/asm/unistd.h             |   2 +-
- arch/arm64/include/asm/unistd32.h           |   8 ++
- arch/m68k/kernel/syscalls/syscall.tbl       |   4 +
- arch/microblaze/kernel/syscalls/syscall.tbl |   4 +
- arch/mips/kernel/syscalls/syscall_n32.tbl   |   4 +
- arch/mips/kernel/syscalls/syscall_n64.tbl   |   4 +
- arch/mips/kernel/syscalls/syscall_o32.tbl   |   4 +
- arch/parisc/kernel/syscalls/syscall.tbl     |   4 +
- arch/powerpc/kernel/syscalls/syscall.tbl    |   4 +
- arch/s390/kernel/syscalls/syscall.tbl       |   4 +
- arch/sh/kernel/syscalls/syscall.tbl         |   4 +
- arch/sparc/kernel/syscalls/syscall.tbl      |   4 +
- arch/x86/entry/syscalls/syscall_32.tbl      |   4 +
- arch/x86/entry/syscalls/syscall_64.tbl      |   4 +
- arch/xtensa/kernel/syscalls/syscall.tbl     |   4 +
- fs/xattr.c                                  | 128 ++++++++++++++++----
- include/asm-generic/audit_change_attr.h     |   6 +
- include/linux/syscalls.h                    |  10 ++
- include/uapi/asm-generic/unistd.h           |  12 +-
- include/uapi/linux/xattr.h                  |   6 +
- 22 files changed, 208 insertions(+), 24 deletions(-)
+Thanks,
 
-diff --git a/arch/alpha/kernel/syscalls/syscall.tbl b/arch/alpha/kernel/syscalls/syscall.tbl
-index 8ff110826ce2..fdc11249f1b8 100644
---- a/arch/alpha/kernel/syscalls/syscall.tbl
-+++ b/arch/alpha/kernel/syscalls/syscall.tbl
-@@ -501,3 +501,7 @@
- 569	common	lsm_get_self_attr		sys_lsm_get_self_attr
- 570	common	lsm_set_self_attr		sys_lsm_set_self_attr
- 571	common	lsm_list_modules		sys_lsm_list_modules
-+572	common	setxattrat			sys_setxattrat
-+573	common	getxattrat			sys_getxattrat
-+574	common	listxattrat			sys_listxattrat
-+575	common	removexattrat			sys_removexattrat
-diff --git a/arch/arm/tools/syscall.tbl b/arch/arm/tools/syscall.tbl
-index b6c9e01e14f5..22fbbcd8e2b5 100644
---- a/arch/arm/tools/syscall.tbl
-+++ b/arch/arm/tools/syscall.tbl
-@@ -475,3 +475,7 @@
- 459	common	lsm_get_self_attr		sys_lsm_get_self_attr
- 460	common	lsm_set_self_attr		sys_lsm_set_self_attr
- 461	common	lsm_list_modules		sys_lsm_list_modules
-+462	common	setxattrat			sys_setxattrat
-+463	common	getxattrat			sys_getxattrat
-+464	common	listxattrat			sys_listxattrat
-+465	common	removexattrat			sys_removexattrat
-diff --git a/arch/arm64/include/asm/unistd.h b/arch/arm64/include/asm/unistd.h
-index 491b2b9bd553..f3a77719eb05 100644
---- a/arch/arm64/include/asm/unistd.h
-+++ b/arch/arm64/include/asm/unistd.h
-@@ -39,7 +39,7 @@
- #define __ARM_NR_compat_set_tls		(__ARM_NR_COMPAT_BASE + 5)
- #define __ARM_NR_COMPAT_END		(__ARM_NR_COMPAT_BASE + 0x800)
- 
--#define __NR_compat_syscalls		462
-+#define __NR_compat_syscalls		466
- #endif
- 
- #define __ARCH_WANT_SYS_CLONE
-diff --git a/arch/arm64/include/asm/unistd32.h b/arch/arm64/include/asm/unistd32.h
-index 7118282d1c79..963c999b8d2e 100644
---- a/arch/arm64/include/asm/unistd32.h
-+++ b/arch/arm64/include/asm/unistd32.h
-@@ -929,6 +929,14 @@ __SYSCALL(__NR_lsm_get_self_attr, sys_lsm_get_self_attr)
- __SYSCALL(__NR_lsm_set_self_attr, sys_lsm_set_self_attr)
- #define __NR_lsm_list_modules 461
- __SYSCALL(__NR_lsm_list_modules, sys_lsm_list_modules)
-+#define __NR_setxattrat 462
-+__SYSCALL(__NR_setxattrat, sys_setxattrat)
-+#define __NR_getxattrat 463
-+__SYSCALL(__NR_getxattrat, sys_getxattrat)
-+#define __NR_listxattrat 464
-+__SYSCALL(__NR_listxattrat, sys_listxattrat)
-+#define __NR_removexattrat 465
-+__SYSCALL(__NR_removexattrat, sys_removexattrat)
- 
- /*
-  * Please add new compat syscalls above this comment and update
-diff --git a/arch/m68k/kernel/syscalls/syscall.tbl b/arch/m68k/kernel/syscalls/syscall.tbl
-index 7fd43fd4c9f2..7e8e2d9c3b81 100644
---- a/arch/m68k/kernel/syscalls/syscall.tbl
-+++ b/arch/m68k/kernel/syscalls/syscall.tbl
-@@ -461,3 +461,7 @@
- 459	common	lsm_get_self_attr		sys_lsm_get_self_attr
- 460	common	lsm_set_self_attr		sys_lsm_set_self_attr
- 461	common	lsm_list_modules		sys_lsm_list_modules
-+462	common	setxattrat			sys_setxattrat
-+463	common	getxattrat			sys_getxattrat
-+464	common	listxattrat			sys_listxattrat
-+465	common	removexattrat			sys_removexattrat
-diff --git a/arch/microblaze/kernel/syscalls/syscall.tbl b/arch/microblaze/kernel/syscalls/syscall.tbl
-index b00ab2cabab9..7df7fc7c0528 100644
---- a/arch/microblaze/kernel/syscalls/syscall.tbl
-+++ b/arch/microblaze/kernel/syscalls/syscall.tbl
-@@ -467,3 +467,7 @@
- 459	common	lsm_get_self_attr		sys_lsm_get_self_attr
- 460	common	lsm_set_self_attr		sys_lsm_set_self_attr
- 461	common	lsm_list_modules		sys_lsm_list_modules
-+462	common	setxattrat			sys_setxattrat
-+463	common	getxattrat			sys_getxattrat
-+464	common	listxattrat			sys_listxattrat
-+465	common	removexattrat			sys_removexattrat
-diff --git a/arch/mips/kernel/syscalls/syscall_n32.tbl b/arch/mips/kernel/syscalls/syscall_n32.tbl
-index 83cfc9eb6b88..07141274f9ff 100644
---- a/arch/mips/kernel/syscalls/syscall_n32.tbl
-+++ b/arch/mips/kernel/syscalls/syscall_n32.tbl
-@@ -400,3 +400,7 @@
- 459	n32	lsm_get_self_attr		sys_lsm_get_self_attr
- 460	n32	lsm_set_self_attr		sys_lsm_set_self_attr
- 461	n32	lsm_list_modules		sys_lsm_list_modules
-+462	n32	setxattrat			sys_setxattrat
-+463	n32	getxattrat			sys_getxattrat
-+464	n32	listxattrat			sys_listxattrat
-+465	n32	removexattrat			sys_removexattrat
-diff --git a/arch/mips/kernel/syscalls/syscall_n64.tbl b/arch/mips/kernel/syscalls/syscall_n64.tbl
-index 532b855df589..9773412f2812 100644
---- a/arch/mips/kernel/syscalls/syscall_n64.tbl
-+++ b/arch/mips/kernel/syscalls/syscall_n64.tbl
-@@ -376,3 +376,7 @@
- 459	n64	lsm_get_self_attr		sys_lsm_get_self_attr
- 460	n64	lsm_set_self_attr		sys_lsm_set_self_attr
- 461	n64	lsm_list_modules		sys_lsm_list_modules
-+462	n64	setxattrat			sys_setxattrat
-+463	n64	getxattrat			sys_getxattrat
-+464	n64	listxattrat			sys_listxattrat
-+465	n64	removexattrat			sys_removexattrat
-diff --git a/arch/mips/kernel/syscalls/syscall_o32.tbl b/arch/mips/kernel/syscalls/syscall_o32.tbl
-index f45c9530ea93..8b5fec66ec18 100644
---- a/arch/mips/kernel/syscalls/syscall_o32.tbl
-+++ b/arch/mips/kernel/syscalls/syscall_o32.tbl
-@@ -449,3 +449,7 @@
- 459	o32	lsm_get_self_attr		sys_lsm_get_self_attr
- 460	o32	lsm_set_self_attr		sys_lsm_set_self_attr
- 461	o32	lsm_list_modules		sys_lsm_list_modules
-+462	o32	setxattrat			sys_setxattrat
-+463	o32	getxattrat			sys_getxattrat
-+464	o32	listxattrat			sys_listxattrat
-+465	o32	removexattrat			sys_removexattrat
-diff --git a/arch/parisc/kernel/syscalls/syscall.tbl b/arch/parisc/kernel/syscalls/syscall.tbl
-index b236a84c4e12..b6ebcaadd460 100644
---- a/arch/parisc/kernel/syscalls/syscall.tbl
-+++ b/arch/parisc/kernel/syscalls/syscall.tbl
-@@ -460,3 +460,7 @@
- 459	common	lsm_get_self_attr		sys_lsm_get_self_attr
- 460	common	lsm_set_self_attr		sys_lsm_set_self_attr
- 461	common	lsm_list_modules		sys_lsm_list_modules
-+462	common	setxattrat			sys_setxattrat
-+463	common	getxattrat			sys_getxattrat
-+464	common	listxattrat			sys_listxattrat
-+465	common	removexattrat			sys_removexattrat
-diff --git a/arch/powerpc/kernel/syscalls/syscall.tbl b/arch/powerpc/kernel/syscalls/syscall.tbl
-index 17173b82ca21..7e522a720e1a 100644
---- a/arch/powerpc/kernel/syscalls/syscall.tbl
-+++ b/arch/powerpc/kernel/syscalls/syscall.tbl
-@@ -548,3 +548,7 @@
- 459	common	lsm_get_self_attr		sys_lsm_get_self_attr
- 460	common	lsm_set_self_attr		sys_lsm_set_self_attr
- 461	common	lsm_list_modules		sys_lsm_list_modules
-+462	common	setxattrat			sys_setxattrat
-+463	common	getxattrat			sys_getxattrat
-+464	common	listxattrat			sys_listxattrat
-+465	common	removexattrat			sys_removexattrat
-diff --git a/arch/s390/kernel/syscalls/syscall.tbl b/arch/s390/kernel/syscalls/syscall.tbl
-index 095bb86339a7..71afa1eb35fb 100644
---- a/arch/s390/kernel/syscalls/syscall.tbl
-+++ b/arch/s390/kernel/syscalls/syscall.tbl
-@@ -464,3 +464,7 @@
- 459  common	lsm_get_self_attr	sys_lsm_get_self_attr		sys_lsm_get_self_attr
- 460  common	lsm_set_self_attr	sys_lsm_set_self_attr		sys_lsm_set_self_attr
- 461  common	lsm_list_modules	sys_lsm_list_modules		sys_lsm_list_modules
-+462  common	setxattrat		sys_setxattrat			sys_setxattrat
-+463  common	getxattrat		sys_getxattrat			sys_getxattrat
-+464  common	listxattrat		sys_listxattrat			sys_listxattrat
-+465  common	removexattrat		sys_removexattrat		sys_removexattrat
-diff --git a/arch/sh/kernel/syscalls/syscall.tbl b/arch/sh/kernel/syscalls/syscall.tbl
-index 86fe269f0220..1fb0ac9f6c58 100644
---- a/arch/sh/kernel/syscalls/syscall.tbl
-+++ b/arch/sh/kernel/syscalls/syscall.tbl
-@@ -464,3 +464,7 @@
- 459	common	lsm_get_self_attr		sys_lsm_get_self_attr
- 460	common	lsm_set_self_attr		sys_lsm_set_self_attr
- 461	common	lsm_list_modules		sys_lsm_list_modules
-+462	common	setxattrat			sys_setxattrat
-+463	common	getxattrat			sys_getxattrat
-+464	common	listxattrat			sys_listxattrat
-+465	common	removexattrat			sys_removexattrat
-diff --git a/arch/sparc/kernel/syscalls/syscall.tbl b/arch/sparc/kernel/syscalls/syscall.tbl
-index b23d59313589..bdd90010c8d1 100644
---- a/arch/sparc/kernel/syscalls/syscall.tbl
-+++ b/arch/sparc/kernel/syscalls/syscall.tbl
-@@ -507,3 +507,7 @@
- 459	common	lsm_get_self_attr		sys_lsm_get_self_attr
- 460	common	lsm_set_self_attr		sys_lsm_set_self_attr
- 461	common	lsm_list_modules		sys_lsm_list_modules
-+462	common	setxattrat			sys_setxattrat
-+463	common	getxattrat			sys_getxattrat
-+464	common	listxattrat			sys_listxattrat
-+465	common	removexattrat			sys_removexattrat
-diff --git a/arch/x86/entry/syscalls/syscall_32.tbl b/arch/x86/entry/syscalls/syscall_32.tbl
-index 5f8591ce7f25..779dd1a9835d 100644
---- a/arch/x86/entry/syscalls/syscall_32.tbl
-+++ b/arch/x86/entry/syscalls/syscall_32.tbl
-@@ -466,3 +466,7 @@
- 459	i386	lsm_get_self_attr	sys_lsm_get_self_attr
- 460	i386	lsm_set_self_attr	sys_lsm_set_self_attr
- 461	i386	lsm_list_modules	sys_lsm_list_modules
-+462	i386	setxattrat		sys_setxattrat
-+463	i386	getxattrat		sys_getxattrat
-+464	i386	listxattrat		sys_listxattrat
-+465	i386	removexattrat		sys_removexattrat
-diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
-index 7e8d46f4147f..819c90564f82 100644
---- a/arch/x86/entry/syscalls/syscall_64.tbl
-+++ b/arch/x86/entry/syscalls/syscall_64.tbl
-@@ -383,6 +383,10 @@
- 459	common	lsm_get_self_attr	sys_lsm_get_self_attr
- 460	common	lsm_set_self_attr	sys_lsm_set_self_attr
- 461	common	lsm_list_modules	sys_lsm_list_modules
-+462	common	setxattrat		sys_setxattrat
-+463	common	getxattrat		sys_getxattrat
-+464	common	listxattrat		sys_listxattrat
-+465	common	removexattrat		sys_removexattrat
- 
- #
- # Due to a historical design error, certain syscalls are numbered differently
-diff --git a/arch/xtensa/kernel/syscalls/syscall.tbl b/arch/xtensa/kernel/syscalls/syscall.tbl
-index dd116598fb25..36bdfe759878 100644
---- a/arch/xtensa/kernel/syscalls/syscall.tbl
-+++ b/arch/xtensa/kernel/syscalls/syscall.tbl
-@@ -432,3 +432,7 @@
- 459	common	lsm_get_self_attr		sys_lsm_get_self_attr
- 460	common	lsm_set_self_attr		sys_lsm_set_self_attr
- 461	common	lsm_list_modules		sys_lsm_list_modules
-+462	common	setxattrat			sys_setxattrat
-+463	common	getxattrat			sys_getxattrat
-+464	common	listxattrat			sys_listxattrat
-+465	common	removexattrat			sys_removexattrat
-diff --git a/fs/xattr.c b/fs/xattr.c
-index 941aab719da0..d45e83224a7c 100644
---- a/fs/xattr.c
-+++ b/fs/xattr.c
-@@ -655,21 +655,28 @@ setxattr(struct mnt_idmap *idmap, struct dentry *d,
- 	return error;
- }
- 
--static int path_setxattr(const char __user *pathname,
-+static int do_setxattrat(int dfd, const char __user *pathname, unsigned int at_flags,
- 			 const char __user *name, const void __user *value,
--			 size_t size, int flags, unsigned int lookup_flags)
-+			 size_t size, int xattr_flags)
- {
- 	struct path path;
- 	int error;
-+	int lookup_flags;
- 
-+	if ((at_flags & ~(AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH)) != 0)
-+		return -EINVAL;
-+
-+	lookup_flags = (at_flags & AT_SYMLINK_NOFOLLOW) ? 0 : LOOKUP_FOLLOW;
-+	if (at_flags & AT_EMPTY_PATH)
-+		lookup_flags |= LOOKUP_EMPTY;
- retry:
--	error = user_path_at(AT_FDCWD, pathname, lookup_flags, &path);
-+	error = user_path_at(dfd, pathname, lookup_flags, &path);
- 	if (error)
- 		return error;
- 	error = mnt_want_write(path.mnt);
- 	if (!error) {
- 		error = setxattr(mnt_idmap(path.mnt), path.dentry, name,
--				 value, size, flags);
-+				 value, size, xattr_flags);
- 		mnt_drop_write(path.mnt);
- 	}
- 	path_put(&path);
-@@ -680,18 +687,38 @@ static int path_setxattr(const char __user *pathname,
- 	return error;
- }
- 
-+SYSCALL_DEFINE6(setxattrat, int, dfd, const char __user *, pathname, unsigned int, at_flags,
-+		const char __user *, name, const struct xattr_args __user *, uargs,
-+		size_t, usize)
-+{
-+	struct xattr_args args = {};
-+	int error;
-+
-+	if (usize > PAGE_SIZE)
-+		return -E2BIG;
-+	if (usize < sizeof(args))
-+		return -EINVAL;
-+
-+	error = copy_struct_from_user(&args, sizeof(args), uargs, usize);
-+	if (error)
-+		return error;
-+
-+	return do_setxattrat(dfd, pathname, at_flags, name, (const void __user *)args.value,
-+			     args.size, args.flags);
-+}
-+
- SYSCALL_DEFINE5(setxattr, const char __user *, pathname,
- 		const char __user *, name, const void __user *, value,
- 		size_t, size, int, flags)
- {
--	return path_setxattr(pathname, name, value, size, flags, LOOKUP_FOLLOW);
-+	return do_setxattrat(AT_FDCWD, pathname, 0, name, value, size, flags);
- }
- 
- SYSCALL_DEFINE5(lsetxattr, const char __user *, pathname,
- 		const char __user *, name, const void __user *, value,
- 		size_t, size, int, flags)
- {
--	return path_setxattr(pathname, name, value, size, flags, 0);
-+	return do_setxattrat(AT_FDCWD, pathname, AT_SYMLINK_NOFOLLOW, name, value, size, flags);
- }
- 
- SYSCALL_DEFINE5(fsetxattr, int, fd, const char __user *, name,
-@@ -774,14 +801,22 @@ getxattr(struct mnt_idmap *idmap, struct dentry *d,
- 	return error;
- }
- 
--static ssize_t path_getxattr(const char __user *pathname,
-+static ssize_t do_getxattrat(int dfd, const char __user *pathname, unsigned int at_flags,
- 			     const char __user *name, void __user *value,
--			     size_t size, unsigned int lookup_flags)
-+			     size_t size)
- {
- 	struct path path;
- 	ssize_t error;
-+	int lookup_flags;
-+
-+	if ((at_flags & ~(AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH)) != 0)
-+		return -EINVAL;
-+
-+	lookup_flags = (at_flags & AT_SYMLINK_NOFOLLOW) ? 0 : LOOKUP_FOLLOW;
-+	if (at_flags & AT_EMPTY_PATH)
-+		lookup_flags |= LOOKUP_EMPTY;
- retry:
--	error = user_path_at(AT_FDCWD, pathname, lookup_flags, &path);
-+	error = user_path_at(dfd, pathname, lookup_flags, &path);
- 	if (error)
- 		return error;
- 	error = getxattr(mnt_idmap(path.mnt), path.dentry, name, value, size);
-@@ -793,16 +828,37 @@ static ssize_t path_getxattr(const char __user *pathname,
- 	return error;
- }
- 
-+SYSCALL_DEFINE6(getxattrat, int, dfd, const char __user *, pathname, unsigned int, at_flags,
-+		const char __user *, name, struct xattr_args __user *, uargs, size_t, usize)
-+{
-+	struct xattr_args args = {};
-+	int error;
-+
-+	if (usize > PAGE_SIZE)
-+		return -E2BIG;
-+	if (usize < sizeof(args))
-+		return -EINVAL;
-+
-+	error = copy_struct_from_user(&args, sizeof(args), uargs, usize);
-+	if (error)
-+		return error;
-+
-+	if (args.flags != 0)
-+		return -EINVAL;
-+
-+	return do_getxattrat(dfd, pathname, at_flags, name, (void __user *)args.value, args.size);
-+}
-+
- SYSCALL_DEFINE4(getxattr, const char __user *, pathname,
- 		const char __user *, name, void __user *, value, size_t, size)
- {
--	return path_getxattr(pathname, name, value, size, LOOKUP_FOLLOW);
-+	return do_getxattrat(AT_FDCWD, pathname, 0, name, value, size);
- }
- 
- SYSCALL_DEFINE4(lgetxattr, const char __user *, pathname,
- 		const char __user *, name, void __user *, value, size_t, size)
- {
--	return path_getxattr(pathname, name, value, size, 0);
-+	return do_getxattrat(AT_FDCWD, pathname, AT_SYMLINK_NOFOLLOW, name, value, size);
- }
- 
- SYSCALL_DEFINE4(fgetxattr, int, fd, const char __user *, name,
-@@ -852,13 +908,21 @@ listxattr(struct dentry *d, char __user *list, size_t size)
- 	return error;
- }
- 
--static ssize_t path_listxattr(const char __user *pathname, char __user *list,
--			      size_t size, unsigned int lookup_flags)
-+static ssize_t do_listxattrat(int dfd, const char __user *pathname, char __user *list,
-+			      size_t size, int flags)
- {
- 	struct path path;
- 	ssize_t error;
-+	int lookup_flags;
-+
-+	if ((flags & ~(AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH)) != 0)
-+		return -EINVAL;
-+
-+	lookup_flags = (flags & AT_SYMLINK_NOFOLLOW) ? 0 : LOOKUP_FOLLOW;
-+	if (flags & AT_EMPTY_PATH)
-+		lookup_flags |= LOOKUP_EMPTY;
- retry:
--	error = user_path_at(AT_FDCWD, pathname, lookup_flags, &path);
-+	error = user_path_at(dfd, pathname, lookup_flags, &path);
- 	if (error)
- 		return error;
- 	error = listxattr(path.dentry, list, size);
-@@ -870,16 +934,22 @@ static ssize_t path_listxattr(const char __user *pathname, char __user *list,
- 	return error;
- }
- 
-+SYSCALL_DEFINE5(listxattrat, int, dfd, const char __user *, pathname, char __user *, list,
-+		size_t, size, int, flags)
-+{
-+	return do_listxattrat(dfd, pathname, list, size, flags);
-+}
-+
- SYSCALL_DEFINE3(listxattr, const char __user *, pathname, char __user *, list,
- 		size_t, size)
- {
--	return path_listxattr(pathname, list, size, LOOKUP_FOLLOW);
-+	return do_listxattrat(AT_FDCWD, pathname, list, size, 0);
- }
- 
- SYSCALL_DEFINE3(llistxattr, const char __user *, pathname, char __user *, list,
- 		size_t, size)
- {
--	return path_listxattr(pathname, list, size, 0);
-+	return do_listxattrat(AT_FDCWD, pathname, list, size, AT_SYMLINK_NOFOLLOW);
- }
- 
- SYSCALL_DEFINE3(flistxattr, int, fd, char __user *, list, size_t, size)
-@@ -898,7 +968,7 @@ SYSCALL_DEFINE3(flistxattr, int, fd, char __user *, list, size_t, size)
- /*
-  * Extended attribute REMOVE operations
-  */
--static long
-+static int
- removexattr(struct mnt_idmap *idmap, struct dentry *d,
- 	    const char __user *name)
- {
-@@ -917,13 +987,21 @@ removexattr(struct mnt_idmap *idmap, struct dentry *d,
- 	return vfs_removexattr(idmap, d, kname);
- }
- 
--static int path_removexattr(const char __user *pathname,
--			    const char __user *name, unsigned int lookup_flags)
-+static int do_removexattrat(int dfd, const char __user *pathname,
-+			    const char __user *name, int flags)
- {
- 	struct path path;
- 	int error;
-+	int lookup_flags;
-+
-+	if ((flags & ~(AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH)) != 0)
-+		return -EINVAL;
-+
-+	lookup_flags = (flags & AT_SYMLINK_NOFOLLOW) ? 0 : LOOKUP_FOLLOW;
-+	if (flags & AT_EMPTY_PATH)
-+		lookup_flags |= LOOKUP_EMPTY;
- retry:
--	error = user_path_at(AT_FDCWD, pathname, lookup_flags, &path);
-+	error = user_path_at(dfd, pathname, lookup_flags, &path);
- 	if (error)
- 		return error;
- 	error = mnt_want_write(path.mnt);
-@@ -939,16 +1017,22 @@ static int path_removexattr(const char __user *pathname,
- 	return error;
- }
- 
-+SYSCALL_DEFINE4(removexattrat, int, dfd, const char __user *, pathname,
-+		const char __user *, name, int, flags)
-+{
-+	return do_removexattrat(dfd, pathname, name, flags);
-+}
-+
- SYSCALL_DEFINE2(removexattr, const char __user *, pathname,
- 		const char __user *, name)
- {
--	return path_removexattr(pathname, name, LOOKUP_FOLLOW);
-+	return do_removexattrat(AT_FDCWD, pathname, name, 0);
- }
- 
- SYSCALL_DEFINE2(lremovexattr, const char __user *, pathname,
- 		const char __user *, name)
- {
--	return path_removexattr(pathname, name, 0);
-+	return do_removexattrat(AT_FDCWD, pathname, name, AT_SYMLINK_NOFOLLOW);
- }
- 
- SYSCALL_DEFINE2(fremovexattr, int, fd, const char __user *, name)
-diff --git a/include/asm-generic/audit_change_attr.h b/include/asm-generic/audit_change_attr.h
-index 331670807cf0..cc840537885f 100644
---- a/include/asm-generic/audit_change_attr.h
-+++ b/include/asm-generic/audit_change_attr.h
-@@ -11,9 +11,15 @@ __NR_lchown,
- __NR_fchown,
- #endif
- __NR_setxattr,
-+#ifdef __NR_setxattrat
-+__NR_setxattrat,
-+#endif
- __NR_lsetxattr,
- __NR_fsetxattr,
- __NR_removexattr,
-+#ifdef __NR_removexattrat
-+__NR_removexattrat,
-+#endif
- __NR_lremovexattr,
- __NR_fremovexattr,
- #ifdef __NR_fchownat
-diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-index e619ac10cd23..e06fffc48535 100644
---- a/include/linux/syscalls.h
-+++ b/include/linux/syscalls.h
-@@ -338,23 +338,33 @@ asmlinkage long sys_io_uring_register(unsigned int fd, unsigned int op,
- 				void __user *arg, unsigned int nr_args);
- asmlinkage long sys_setxattr(const char __user *path, const char __user *name,
- 			     const void __user *value, size_t size, int flags);
-+asmlinkage long sys_setxattrat(int dfd, const char __user *path, unsigned int at_flags,
-+			       const char __user *name,
-+			       const struct xattr_args __user *args, size_t size);
- asmlinkage long sys_lsetxattr(const char __user *path, const char __user *name,
- 			      const void __user *value, size_t size, int flags);
- asmlinkage long sys_fsetxattr(int fd, const char __user *name,
- 			      const void __user *value, size_t size, int flags);
- asmlinkage long sys_getxattr(const char __user *path, const char __user *name,
- 			     void __user *value, size_t size);
-+asmlinkage long sys_getxattrat(int dfd, const char __user *path, unsigned int at_flags,
-+			       const char __user *name,
-+			       struct xattr_args __user *args, size_t size);
- asmlinkage long sys_lgetxattr(const char __user *path, const char __user *name,
- 			      void __user *value, size_t size);
- asmlinkage long sys_fgetxattr(int fd, const char __user *name,
- 			      void __user *value, size_t size);
- asmlinkage long sys_listxattr(const char __user *path, char __user *list,
- 			      size_t size);
-+asmlinkage long sys_listxattrat(int dfd, const char __user *path, char __user *list,
-+			      size_t size, int flags);
- asmlinkage long sys_llistxattr(const char __user *path, char __user *list,
- 			       size_t size);
- asmlinkage long sys_flistxattr(int fd, char __user *list, size_t size);
- asmlinkage long sys_removexattr(const char __user *path,
- 				const char __user *name);
-+asmlinkage long sys_removexattrat(int dfd, const char __user *path,
-+				const char __user *name, int flags);
- asmlinkage long sys_lremovexattr(const char __user *path,
- 				 const char __user *name);
- asmlinkage long sys_fremovexattr(int fd, const char __user *name);
-diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
-index 75f00965ab15..21b275a8dcd6 100644
---- a/include/uapi/asm-generic/unistd.h
-+++ b/include/uapi/asm-generic/unistd.h
-@@ -842,8 +842,18 @@ __SYSCALL(__NR_lsm_set_self_attr, sys_lsm_set_self_attr)
- #define __NR_lsm_list_modules 461
- __SYSCALL(__NR_lsm_list_modules, sys_lsm_list_modules)
- 
-+/* fs/xattr.c */
-+#define __NR_setxattrat 462
-+__SYSCALL(__NR_setxattrat, sys_setxattrat)
-+#define __NR_getxattrat 463
-+__SYSCALL(__NR_getxattrat, sys_getxattrat)
-+#define __NR_listxattrat 464
-+__SYSCALL(__NR_listxattrat, sys_listxattrat)
-+#define __NR_removexattrat 465
-+__SYSCALL(__NR_removexattrat, sys_removexattrat)
-+
- #undef __NR_syscalls
--#define __NR_syscalls 462
-+#define __NR_syscalls 466
- 
- /*
-  * 32 bit systems traditionally used different
-diff --git a/include/uapi/linux/xattr.h b/include/uapi/linux/xattr.h
-index 9463db2dfa9d..e9ac2acc40c3 100644
---- a/include/uapi/linux/xattr.h
-+++ b/include/uapi/linux/xattr.h
-@@ -20,6 +20,12 @@
- 
- #define XATTR_CREATE	0x1	/* set value, fail if attr already exists */
- #define XATTR_REPLACE	0x2	/* set value, fail if attr does not exist */
-+
-+struct xattr_args {
-+	__aligned_u64 __user value;
-+	__u32 size;
-+	__u32 flags;
-+};
- #endif
- 
- /* Namespaces */
+	M.
+
 -- 
-2.43.0
-
+Without deviation from the norm, progress is not possible.
 
