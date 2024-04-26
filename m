@@ -1,80 +1,80 @@
-Return-Path: <linux-arch+bounces-3989-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3988-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B77658B33E8
-	for <lists+linux-arch@lfdr.de>; Fri, 26 Apr 2024 11:26:21 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0AA4A8B33E3
+	for <lists+linux-arch@lfdr.de>; Fri, 26 Apr 2024 11:26:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7429D2849E9
-	for <lists+linux-arch@lfdr.de>; Fri, 26 Apr 2024 09:26:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5C08EB222AA
+	for <lists+linux-arch@lfdr.de>; Fri, 26 Apr 2024 09:25:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F01A313F444;
-	Fri, 26 Apr 2024 09:26:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27DA613E8AE;
+	Fri, 26 Apr 2024 09:25:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XO3rE7TC"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EIU6F4Rf"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E2A213EFEC
-	for <linux-arch@vger.kernel.org>; Fri, 26 Apr 2024 09:26:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7B2113D53C
+	for <linux-arch@vger.kernel.org>; Fri, 26 Apr 2024 09:25:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714123563; cv=none; b=jRvi0ptF7grBhRDRetypZ9SXkTmnibIjMu8piC4myIiS703PQKsMSZuR+WYguMhhbcff5IarDtYSo0enIE4aHe51ZBOXXqv5qfddHsLaGSp4eMf5qOjz2AIwqLGuAleyBbvnDiPngyG1VtRKL4sdOItEvt841mcnDhc3XddiONI=
+	t=1714123552; cv=none; b=sEybPcLTXg0epySqrLaVoDJ+bAmEBd61nuguoRVqOLYTHK7MXK5Z1x86AgnA9bIC1yn+MS1aONuN77WWCNGB5Bywq30PJMzM7e6wr5JXSMC/3gh3FyVVGk5ibpCWHODiaNtj705YQMZrerphnLsv40ir5SP5TinqiTIYX660nJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714123563; c=relaxed/simple;
-	bh=3prmVvb4CSFrMQtGQGohzxkB5EGRjQF5LNfCJibjaRE=;
+	s=arc-20240116; t=1714123552; c=relaxed/simple;
+	bh=v/8fP7ljlfNYu8p9ZmxbNzZV08oGzX9HMMT08K/tl/8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ohm+2uSJI1ITrC1zkRmAoT4GN6zmTOuKk1jAQhbeHARcIxrW+dW1ccLO7YJ+xMhgP1Gy6BmBn3V+8Bdlkf309bStwAEYZRxswKJi0ZCZHUOjcdBUKIenXAV1U9TAO1uwDH7NOfr7G79lp9jDRHDVYaJsjkqZzhN3Yc2mfQApQps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XO3rE7TC; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:Content-Type; b=n1e0D7Hk+VvbAAx9yKx4Bh5PGan2lgAh9yrLatArcT6q7k2A9B4pnQVsH6ZhDRmyUb9laLEDfoe0Kf147Cxt4QySCWwn+YohaM92DFzKpSFSPGg+yW5gREPB2OevcneZ3658iLol7EYZW7fzrFM48O117Ar1euDyeFLuCInIxnk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=EIU6F4Rf; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1714123561;
+	s=mimecast20190719; t=1714123549;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=wDf1iJ0rcFw5r9tjCYtJ1fcG4v1z0nEnImYLXEpzCjM=;
-	b=XO3rE7TCfy/jarJbKMwZY6fUi1rd9qMXJTUlF3U5BN+w3px91CGnS+cEOrpyK7PjVzOYEr
-	JEFRm86GCHtkkk3hwmS8V63JTPhm5pIIysxx+GDdGEHD4RTnS26VaMnURjDmhJ687EYE8c
-	jx+BYn/wwJehRLEHCcEBKVY5Cj2PJKw=
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
- [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=aI+0tk0N0rfZ0+RaTapxWMbQJR8XZdeH/fzJ04k7BlA=;
+	b=EIU6F4Rfhg9Jg4lpAv/aUgrpZcYkEisw/QVybvAClUuBCydNMr+xuISt3Nx/TMO8lARn20
+	R07r+yZBL19tSIoRBBKObjWZMaLw2AeP/GX12P/YOo7j1eY+JMS+h51RhUkZ1cw8DqkGpF
+	+yuIHe1cTLDW2IjtTLFYGcuk2d0zxXk=
+Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com
+ [209.85.215.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-649-UebYkD-mPrSmKUQy8ULAaw-1; Fri, 26 Apr 2024 05:24:17 -0400
-X-MC-Unique: UebYkD-mPrSmKUQy8ULAaw-1
-Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-5fff61c9444so2114095a12.2
-        for <linux-arch@vger.kernel.org>; Fri, 26 Apr 2024 02:24:17 -0700 (PDT)
+ us-mta-411-FSIKofS6NAq6FInf6n75uw-1; Fri, 26 Apr 2024 05:25:46 -0400
+X-MC-Unique: FSIKofS6NAq6FInf6n75uw-1
+Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-5dbddee3694so1440781a12.1
+        for <linux-arch@vger.kernel.org>; Fri, 26 Apr 2024 02:25:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714123456; x=1714728256;
+        d=1e100.net; s=20230601; t=1714123545; x=1714728345;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wDf1iJ0rcFw5r9tjCYtJ1fcG4v1z0nEnImYLXEpzCjM=;
-        b=weXoFn7IQMyUYSkXiiWsuDUvk4P9x7oFC88nkiRXJ1PnMC8atev/Kg4JZvzrHwyGDz
-         33MqH9riJK7NjsFFfO3wfC62+Qp4Bip+GTBf74DmRe84RegH5OMdXABDLBtq6CKEShip
-         72kGOXYLWQhyK5kOj313nYXdLW/hbmtX1GD5qlAOEfN7Do0ZYlVkCACMwmGBBaN+MZkQ
-         ei5fSF3hnGV5dyj6eclB1VWsQ9UXsfm7QXJ9K3qSL4AfieTf0+fTv9rllqW+Tb9zdidS
-         ye9jekxqOydHhXm3TDjhYrWY1pBtLzb4AHMgGrxll/0Y5Mh6KpReLtLC621ogb34c3Qc
-         8qtg==
-X-Forwarded-Encrypted: i=1; AJvYcCX/7owRTbdq4uvBZdDoN3oyYLWThoTZoZK8MTX7riKBqSKbO30dZT5sZJh5PNfnIuJEiuEad5GaYfOu8kYwoe83CCvIDcdsgVgL6g==
-X-Gm-Message-State: AOJu0YxX7Q4A1bSKk1k1llNBsJZAoSpyzQUdoGM52wCMUYNuy4ZmxGl7
-	IPsDTUopPUwEulCxM89ApMunmgz4yxvg1Z5fl5hBirsUuEL+2WlusMqlQ45PbzM0TamsqyBHzCe
-	K/D+5/cYm3eYMKmgv/5r9ZSLk+04CkrYD4ZjVxEYSWN2KV+1+2wYbIcNNyrY=
-X-Received: by 2002:a05:6a21:3a44:b0:1a7:7b92:e0ed with SMTP id zu4-20020a056a213a4400b001a77b92e0edmr2325180pzb.51.1714123456721;
-        Fri, 26 Apr 2024 02:24:16 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFxVT+GN5mxbf+mMtYjbokc8FhufYwX7eAOxYXMmkBU6lBE5Xi1LluATczohJhaBcs7ECSJrQ==
-X-Received: by 2002:a05:6a21:3a44:b0:1a7:7b92:e0ed with SMTP id zu4-20020a056a213a4400b001a77b92e0edmr2325150pzb.51.1714123456389;
-        Fri, 26 Apr 2024 02:24:16 -0700 (PDT)
+        bh=aI+0tk0N0rfZ0+RaTapxWMbQJR8XZdeH/fzJ04k7BlA=;
+        b=gvrEr89FRz7HzmXtP62bW+SeIryn8cuRX+KCYj9MJfw4IzfyfHynBqxgJ+3utHjpyc
+         C8TwMPFZ1BG19czcT08N3cI9ac8oigepGwRpfxKXf8x59uiDKmj/vUY1yvMUq/cPoott
+         COZwE8Lr2H8eR03kVWEk9z9zeknAJkq9Berdre5wSBvXpl7epTYG8y4FQKTmixiw1gM5
+         ef7rdI4TFi1H1yGdFsURafgeF26iwgi6GM+0Pc2zG0dKFDQTNTjVmOi9bPuJd5vn9T4v
+         eVpUcvTvZPwi/QPF+OLPD2eM5jWupwjgE2TIW/6rUC0x21NfxOAkAGZ2cEEumSOQ2lXZ
+         ySGg==
+X-Forwarded-Encrypted: i=1; AJvYcCUJBxjgrBg7vsNPHmzSLF8aE0SEyj4isDAuhN+XCxCnJ/1XqSY2rs6Q2NVwHHUyajXa1MEBtFj3MKkvkRFlQIHAEFKJCLdryOF42g==
+X-Gm-Message-State: AOJu0Yyomc8dUM1Mi47Su9NJ9MLZcCFTntJJvXhOwmvokr7vPqOQtLCQ
+	mvlHnK5zFV+CHyyNsznHlend9RHn1rtyD9AS4ppOITfKDqhv49H/jn6Xuw29iT+gfNzL+Ks+OvU
+	9h/ozg5pQRR/ucoirgVFrUT4/8hYjCrPGLKz88U4Lo7tFIAfZkDOeaqNQvf0=
+X-Received: by 2002:a17:902:cec3:b0:1ea:482f:f41e with SMTP id d3-20020a170902cec300b001ea482ff41emr9963258plg.15.1714123545328;
+        Fri, 26 Apr 2024 02:25:45 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEvlGXSv/tKHY50Dw7+RKb6bmu/jV2eWJbng5XCKDvWXp8D8BnGzOt+jBjaEMTVQZ+CP26+DQ==
+X-Received: by 2002:a17:902:cec3:b0:1ea:482f:f41e with SMTP id d3-20020a170902cec300b001ea482ff41emr9963218plg.15.1714123545006;
+        Fri, 26 Apr 2024 02:25:45 -0700 (PDT)
 Received: from [192.168.68.50] ([43.252.112.88])
-        by smtp.gmail.com with ESMTPSA id r3-20020a170902be0300b001e27462b988sm15054500pls.61.2024.04.26.02.24.07
+        by smtp.gmail.com with ESMTPSA id r3-20020a170902be0300b001e27462b988sm15054500pls.61.2024.04.26.02.25.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Apr 2024 02:24:15 -0700 (PDT)
-Message-ID: <e3fb151e-8d79-439d-9eea-131a23f1d48c@redhat.com>
-Date: Fri, 26 Apr 2024 19:24:07 +1000
+        Fri, 26 Apr 2024 02:25:44 -0700 (PDT)
+Message-ID: <0a96abc4-8205-447d-9e7d-03397de5ada8@redhat.com>
+Date: Fri, 26 Apr 2024 19:25:36 +1000
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -82,8 +82,8 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 03/16] ACPI: processor: Drop duplicated check on _STA
- (enabled + present)
+Subject: Re: [PATCH v7 07/16] ACPI: scan: switch to flags for
+ acpi_scan_check_and_detach()
 Content-Language: en-US
 To: Jonathan Cameron <Jonathan.Cameron@huawei.com>,
  Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>,
@@ -100,29 +100,27 @@ Cc: Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
  Dave Hansen <dave.hansen@linux.intel.com>, linuxarm@huawei.com,
  justin.he@arm.com, jianyong.wu@arm.com
 References: <20240418135412.14730-1-Jonathan.Cameron@huawei.com>
- <20240418135412.14730-4-Jonathan.Cameron@huawei.com>
+ <20240418135412.14730-8-Jonathan.Cameron@huawei.com>
 From: Gavin Shan <gshan@redhat.com>
-In-Reply-To: <20240418135412.14730-4-Jonathan.Cameron@huawei.com>
+In-Reply-To: <20240418135412.14730-8-Jonathan.Cameron@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 4/18/24 23:53, Jonathan Cameron wrote:
-> The ACPI bus scan will only result in acpi_processor_add() being called
-> if _STA has already been checked and the result is that the
-> processor is enabled and present.  Hence drop this additional check.
+On 4/18/24 23:54, Jonathan Cameron wrote:
+> Precursor patch adds the ability to pass a uintptr_t of flags into
+> acpi_scan_check_and detach() so that additional flags can be
+> added to indicate whether to defer portions of the eject flow.
+> The new flag follows in the next patch.
 > 
-> Suggested-by: Rafael J. Wysocki <rafael@kernel.org>
 > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 > 
 > ---
 > v7: No change
-> v6: New patch to drop this unnecessary code. Now I think we only
->      need to explicitly read STA to print a warning in the ARM64
->      arch_unregister_cpu() path where we want to know if the
->      present bit has been unset as well.
+> v6: Based on internal feedback switch to less invasive change
+>      to using flags rather than a struct.
 > ---
->   drivers/acpi/acpi_processor.c | 6 ------
->   1 file changed, 6 deletions(-)
+>   drivers/acpi/scan.c | 17 ++++++++++++-----
+>   1 file changed, 12 insertions(+), 5 deletions(-)
 > 
 
 Reviewed-by: Gavin Shan <gshan@redhat.com>
