@@ -1,44 +1,44 @@
-Return-Path: <linux-arch+bounces-4009-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4010-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 538AD8B394E
-	for <lists+linux-arch@lfdr.de>; Fri, 26 Apr 2024 15:59:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC1008B3956
+	for <lists+linux-arch@lfdr.de>; Fri, 26 Apr 2024 16:00:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D2CE91F21F74
-	for <lists+linux-arch@lfdr.de>; Fri, 26 Apr 2024 13:59:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 43F9E1F23ED7
+	for <lists+linux-arch@lfdr.de>; Fri, 26 Apr 2024 14:00:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 688A51487F8;
-	Fri, 26 Apr 2024 13:58:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 673B1148821;
+	Fri, 26 Apr 2024 13:59:14 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFA58148317;
-	Fri, 26 Apr 2024 13:58:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE3A9148317;
+	Fri, 26 Apr 2024 13:59:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714139923; cv=none; b=Ax+MU30b7+Pn1kqzsP5hP1w2mOW6SB7yPJ13mJ41C7ERjEFgkfDB03YofChufmm/0c95eJf8zLPGVeND0dyK5P1MUXyAxCXZCznFl6b4qY4Q+bPBKiqPctvxPdQDd7KncPM+rMKNHLsi/yvRbRoRuJgkMDb4RLDR78UFUEZKYwc=
+	t=1714139954; cv=none; b=EgzYSxOkuR9ewLV465G2vVIYOzSW1mGHycojR1Gvvj5Ska2OotszrI4VOrwKNhAAwSEc3at6JBgO0X9vK6WwxY+pub/8VjnYh+GXFa7oOJMwyRAUQMbXRvIRNQWwGKVUyPlVu2ttmykF45vM9f1A/hJ00vJYTraBlwrBEYZRXHI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714139923; c=relaxed/simple;
-	bh=kdlYUCV3Md6Cg91FTWPIeZpb+G6UbOiI5GcDos6hRHc=;
+	s=arc-20240116; t=1714139954; c=relaxed/simple;
+	bh=6NXwPHxk3D6KF25H3DXcQaX27WN7qNDBDIfY5ii9Z5M=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=i1VAw6bIaaMyPQk4xOAhK4HgyrjftIENTEIxyN/XwYoBT8u20h86EJnKRXHbpjNK4vZTG037VA7WabsFjbS0AFQEiJCbksLaR1hRhuMDPyQxWImD5Z/2+DFnba87Fq2ZILcwU2CS2vHzdv3jRLpOE08nTSHy/oXmsBJOJ8hIIh4=
+	 MIME-Version:Content-Type; b=BAPRamQVXifu92fgNLZ8iL45Iy924NICRMDJ/RYJJOlloMz090t13Tv/3ZhgiEgt048p83fN73pv7DKrctD5mGRhZt9eAwlDW/FfjE+UBntNDRrKitTEbG/NrmGkI7zuz/Qbc4uzBX8kl3U147pTlQC1dTtSMZsUUvoELKygBbQ=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VQvQM0KKWz67Q7R;
-	Fri, 26 Apr 2024 21:56:11 +0800 (CST)
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VQvR13BKmz6JBCq;
+	Fri, 26 Apr 2024 21:56:45 +0800 (CST)
 Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id C08B2140A70;
-	Fri, 26 Apr 2024 21:58:39 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id B1E2A140A70;
+	Fri, 26 Apr 2024 21:59:10 +0800 (CST)
 Received: from SecurePC-101-06.china.huawei.com (10.122.247.231) by
  lhrpeml500005.china.huawei.com (7.191.163.240) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Fri, 26 Apr 2024 14:58:39 +0100
+ 15.1.2507.35; Fri, 26 Apr 2024 14:59:10 +0100
 From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 To: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra
 	<peterz@infradead.org>, <linux-pm@vger.kernel.org>,
@@ -55,9 +55,9 @@ CC: Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave
  Hansen <dave.hansen@linux.intel.com>, <linuxarm@huawei.com>,
 	<justin.he@arm.com>, <jianyong.wu@arm.com>, Lorenzo Pieralisi
 	<lpieralisi@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>
-Subject: [PATCH v8 14/16] arm64: Kconfig: Enable hotplug CPU on arm64 if ACPI_PROCESSOR is enabled.
-Date: Fri, 26 Apr 2024 14:51:24 +0100
-Message-ID: <20240426135126.12802-15-Jonathan.Cameron@huawei.com>
+Subject: [PATCH v8 15/16] arm64: document virtual CPU hotplug's expectations
+Date: Fri, 26 Apr 2024 14:51:25 +0100
+Message-ID: <20240426135126.12802-16-Jonathan.Cameron@huawei.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240426135126.12802-1-Jonathan.Cameron@huawei.com>
 References: <20240426135126.12802-1-Jonathan.Cameron@huawei.com>
@@ -72,81 +72,119 @@ Content-Type: text/plain
 X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
  lhrpeml500005.china.huawei.com (7.191.163.240)
 
-In order to move arch_register_cpu() to be called via the same path
-for initially present CPUs described by ACPI and hotplugged CPUs
-ACPI_HOTPLUG_CPU needs to be enabled.
+From: James Morse <james.morse@arm.com>
 
-The protection against invalid IDs in acpi_map_cpu() is needed as
-at least one production BIOS is in the wild which reports entries
-in DSDT (with no _STA method, so assumed enabled and present)
-that don't match MADT.
+Add a description of physical and virtual CPU hotplug, explain the
+differences and elaborate on what is required in ACPI for a working
+virtual hotplug system.
 
+Signed-off-by: James Morse <james.morse@arm.com>
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 Tested-by: Miguel Luis <miguel.luis@oracle.com>
 Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
 ---
-v8: If acpi_map_cpu() stub is passed an error code as pcpu, don't
-    pretend it worked.
-    Note that x86 relies on passing an invalid error code in here
-    to indicate a CPU ID needs to be allocated, on ARM64 if we
-    don't get something valid there is nothing we can do about it.
----
- arch/arm64/Kconfig       |  1 +
- arch/arm64/kernel/acpi.c | 22 ++++++++++++++++++++++
- 2 files changed, 23 insertions(+)
+ Documentation/arch/arm64/cpu-hotplug.rst | 79 ++++++++++++++++++++++++
+ Documentation/arch/arm64/index.rst       |  1 +
+ 2 files changed, 80 insertions(+)
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 7b11c98b3e84..fed7d0d54179 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -5,6 +5,7 @@ config ARM64
- 	select ACPI_CCA_REQUIRED if ACPI
- 	select ACPI_GENERIC_GSI if ACPI
- 	select ACPI_GTDT if ACPI
-+	select ACPI_HOTPLUG_CPU if ACPI_PROCESSOR
- 	select ACPI_IORT if ACPI
- 	select ACPI_REDUCED_HARDWARE_ONLY if ACPI
- 	select ACPI_MCFG if (ACPI && PCI)
-diff --git a/arch/arm64/kernel/acpi.c b/arch/arm64/kernel/acpi.c
-index dba8fcec7f33..fb9368197c74 100644
---- a/arch/arm64/kernel/acpi.c
-+++ b/arch/arm64/kernel/acpi.c
-@@ -29,6 +29,7 @@
- #include <linux/pgtable.h>
- 
- #include <acpi/ghes.h>
-+#include <acpi/processor.h>
- #include <asm/cputype.h>
- #include <asm/cpu_ops.h>
- #include <asm/daifflags.h>
-@@ -413,6 +414,27 @@ void arch_reserve_mem_area(acpi_physical_address addr, size_t size)
- 	memblock_mark_nomap(addr, size);
- }
- 
-+#ifdef CONFIG_ACPI_HOTPLUG_CPU
-+int acpi_map_cpu(acpi_handle handle, phys_cpuid_t physid, u32 apci_id,
-+		 int *pcpu)
-+{
-+	/* If an error code is passed in this stub can't fix it */
-+	if (*pcpu < 0) {
-+		pr_warn_once("Unable to map CPU to valid ID\n");
-+		return *pcpu;
-+	}
+diff --git a/Documentation/arch/arm64/cpu-hotplug.rst b/Documentation/arch/arm64/cpu-hotplug.rst
+new file mode 100644
+index 000000000000..76ba8d932c72
+--- /dev/null
++++ b/Documentation/arch/arm64/cpu-hotplug.rst
+@@ -0,0 +1,79 @@
++.. SPDX-License-Identifier: GPL-2.0
++.. _cpuhp_index:
 +
-+	return 0;
-+}
-+EXPORT_SYMBOL(acpi_map_cpu);
++====================
++CPU Hotplug and ACPI
++====================
 +
-+int acpi_unmap_cpu(int cpu)
-+{
-+	return 0;
-+}
-+EXPORT_SYMBOL(acpi_unmap_cpu);
-+#endif /* CONFIG_ACPI_HOTPLUG_CPU */
++CPU hotplug in the arm64 world is commonly used to describe the kernel taking
++CPUs online/offline using PSCI. This document is about ACPI firmware allowing
++CPUs that were not available during boot to be added to the system later.
 +
- #ifdef CONFIG_ACPI_FFH
- /*
-  * Implements ARM64 specific callbacks to support ACPI FFH Operation Region as
++``possible`` and ``present`` refer to the state of the CPU as seen by linux.
++
++
++CPU Hotplug on physical systems - CPUs not present at boot
++----------------------------------------------------------
++
++Physical systems need to mark a CPU that is ``possible`` but not ``present`` as
++being ``present``. An example would be a dual socket machine, where the package
++in one of the sockets can be replaced while the system is running.
++
++This is not supported.
++
++In the arm64 world CPUs are not a single device but a slice of the system.
++There are no systems that support the physical addition (or removal) of CPUs
++while the system is running, and ACPI is not able to sufficiently describe
++them.
++
++e.g. New CPUs come with new caches, but the platform's cache toplogy is
++described in a static table, the PPTT. How caches are shared between CPUs is
++not discoverable, and must be described by firmware.
++
++e.g. The GIC redistributor for each CPU must be accessed by the driver during
++boot to discover the system wide supported features. ACPI's MADT GICC
++structures can describe a redistributor associated with a disabled CPU, but
++can't describe whether the redistributor is accessible, only that it is not
++'always on'.
++
++arm64's ACPI tables assume that everything described is ``present``.
++
++
++CPU Hotplug on virtual systems - CPUs not enabled at boot
++---------------------------------------------------------
++
++Virtual systems have the advantage that all the properties the system will
++ever have can be described at boot. There are no power-domain considerations
++as such devices are emulated.
++
++CPU Hotplug on virtual systems is supported. It is distinct from physical
++CPU Hotplug as all resources are described as ``present``, but CPUs may be
++marked as disabled by firmware. Only the CPU's online/offline behaviour is
++influenced by firmware. An example is where a virtual machine boots with a
++single CPU, and additional CPUs are added once a cloud orchestrator deploys
++the workload.
++
++For a virtual machine, the VMM (e.g. Qemu) plays the part of firmware.
++
++Virtual hotplug is implemented as a firmware policy affecting which CPUs can be
++brought online. Firmware can enforce its policy via PSCI's return codes. e.g.
++``DENIED``.
++
++The ACPI tables must describe all the resources of the virtual machine. CPUs
++that firmware wishes to disable either from boot (or later) should not be
++``enabled`` in the MADT GICC structures, but should have the ``online capable``
++bit set, to indicate they can be enabled later. The boot CPU must be marked as
++``enabled``.  The 'always on' GICR structure must be used to describe the
++redistributors.
++
++CPUs described as ``online capable`` but not ``enabled`` can be set to enabled
++by the DSDT's Processor object's _STA method. On virtual systems the _STA method
++must always report the CPU as ``present``. Changes to the firmware policy can
++be notified to the OS via device-check or eject-request.
++
++CPUs described as ``enabled`` in the static table, should not have their _STA
++modified dynamically by firmware. Soft-restart features such as kexec will
++re-read the static properties of the system from these static tables, and
++may malfunction if these no longer describe the running system. Linux will
++re-discover the dynamic properties of the system from the _STA method later
++during boot.
+diff --git a/Documentation/arch/arm64/index.rst b/Documentation/arch/arm64/index.rst
+index d08e924204bf..78544de0a8a9 100644
+--- a/Documentation/arch/arm64/index.rst
++++ b/Documentation/arch/arm64/index.rst
+@@ -13,6 +13,7 @@ ARM64 Architecture
+     asymmetric-32bit
+     booting
+     cpu-feature-registers
++    cpu-hotplug
+     elf_hwcaps
+     hugetlbpage
+     kdump
 -- 
 2.39.2
 
