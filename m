@@ -1,203 +1,282 @@
-Return-Path: <linux-arch+bounces-4018-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4019-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F18AC8B3E64
-	for <lists+linux-arch@lfdr.de>; Fri, 26 Apr 2024 19:39:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 056A38B3E8C
+	for <lists+linux-arch@lfdr.de>; Fri, 26 Apr 2024 19:50:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7EC8C1F26B27
-	for <lists+linux-arch@lfdr.de>; Fri, 26 Apr 2024 17:39:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B02202838DB
+	for <lists+linux-arch@lfdr.de>; Fri, 26 Apr 2024 17:50:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0776168AEA;
-	Fri, 26 Apr 2024 17:38:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="pE1T08Fu";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="aqFcdXIb"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5148015FA7C;
+	Fri, 26 Apr 2024 17:49:58 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from flow3-smtp.messagingengine.com (flow3-smtp.messagingengine.com [103.168.172.138])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE42D145B0F;
-	Fri, 26 Apr 2024 17:38:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6542214EC4C;
+	Fri, 26 Apr 2024 17:49:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714153127; cv=none; b=X7a+K6UN4mK0LsKHo0IzL9llPspgTIUJZ8Fe1AjXmUnlu1sn0/Tk/3jqR/oncj07+KBsLX1FIdN56fHw/cLhcvUr4bl9ydfXxUWcBwhht1ZCBJnIV6kbTD08P9a9jiVF1xVV1jy8u3jIAtoya66iSxNSXTFXoNUg6KVzioJ/lvU=
+	t=1714153798; cv=none; b=awyRfxCOWdxsMXHv/T/mHje/T5/5snki4q0e9Sb9Tk01h8n+B4Vb6FKzZhWUoCvQmjKaXfKH9uR2imUP+LGp2xBxYeHYj6Mje2ifpkH3Wr27VgYoZrDM5BiZlRuZhXf+IZ0W4ZOJ8LjIVL5qS9MgUDJVppe8oq8LUUZateoBw8Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714153127; c=relaxed/simple;
-	bh=wl2WeNXK9401gewnNEkP62crFh93PXjbpWk6KFoepOg=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=Y8SGQ32kfI8Kwf0xVrYeacufgyssYCHjxU+kKAQBk4O4/QvJlD8VtfHb2AJUZ2py1HDAxRBaykGIPwuP7dSTM2LxdxIy4pBG3OsLoyhD+DzAklo7ThJQvmGICvw0XbXkF0s4x4+4raW4th9GGKZO9ZPvoNvzYyqoMJTHSMh+FRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=pE1T08Fu; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=aqFcdXIb; arc=none smtp.client-ip=103.168.172.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailflow.nyi.internal (Postfix) with ESMTP id BDA42200567;
-	Fri, 26 Apr 2024 13:38:43 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Fri, 26 Apr 2024 13:38:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1714153123;
-	 x=1714160323; bh=LvCKd10h8SxIpHH2VnKSem369EuCERsZx0vTF5ejpQk=; b=
-	pE1T08FuMVdjjQLWiDkQO7xl56PeI7A1H3IWG3+rFD9emD//4B5RuAiqikq3csH2
-	HcrEwfg47R7YMmaz8Ciyl2cvIz4VVX096uNe1CYFtwsais2/erVg/FW25ZTMJvXr
-	zpR/9AJQ+kMYwmkwNH/UDIyDG/M/RiXZfW1Gpp3WoGzKEMmORD8LrQExf4Uw72vT
-	cf90JKVFYzecW30Y+7oynhwhYveQbKpD0A+7InyVTw6kiDVyu6WAufjR97YB+AAf
-	0ZE2OG1WQzxkmWcmeCmxI8V9AL9FQ/NFoFlVnxKbEzgyPDaqo7Ijv+GlzReYpZG8
-	UpsdbHxgZ38tWGTiNz9nEw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1714153123; x=
-	1714160323; bh=LvCKd10h8SxIpHH2VnKSem369EuCERsZx0vTF5ejpQk=; b=a
-	qFcdXIb7SbWdXzU54WGeWh/iceHLfbpvJPUdGWHPNnK5IEK/9AtOR5J2UG7I0kdd
-	gA+bX/lBwFYGTyhrH0iOL1YwgOqj4CO02fhLgSpzb0errJKY1KqMkKtdiEMGW0IU
-	avALV8VE2nPoBWWc5kPZjknu85rpxsTco30NFcpJL3ouXip8e9tY6t5C0m3yG4DV
-	i9SMC7BAXFVXlTkQ12jergSGdPKhcHmwu/rclcCs4OnoitPkDQ5s/pDGcdD2HxtV
-	6evA3UfMGPMVusCn1+pAQOhpgJIj12adXuHnNCAk7/cjvkYwvImsSZiLSUZbVdMm
-	WuinBDiPHs317sdol2J0w==
-X-ME-Sender: <xms:ouYrZlQDaCE-0s0WHFCeHepar9j_x9KR9n-h0TbsH_sTOOeSUGEhag>
-    <xme:ouYrZuz-rN1jLTr59v2lbblMmuUk9xavewvaecIEfqOvR0end1N-WP7C8qOmizXin
-    NZnEkLDPhLks8tH0J0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudelledgudduhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
-    tehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrf
-    grthhtvghrnhepgeefjeehvdelvdffieejieejiedvvdfhleeivdelveehjeelteegudek
-    tdfgjeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    eprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:ouYrZq3qoHAOs6UtEYzZ6Kv2th-k72ltAmHA5-EvubaY_DFzTZHiZA>
-    <xmx:ouYrZtDFuilIk3W0hJ0M4DWNRr0ldDoQ2Q3XrafF-t-T9hsqUZG79w>
-    <xmx:ouYrZujdQoqwaHSJ1S_IBnSUNzyXxkERFFQZf5-Uajue3KXw-499-Q>
-    <xmx:ouYrZhqInTTtQzq1IvTwSb8HCKj4UX1i6i_KpDS_TtRK6OBmlMiQ4w>
-    <xmx:o-YrZpX13ubRldSgrPH3yzrzP3OzJ7dh3_1MWs-FrW6tvLtURlDPgFda>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 324F9B60099; Fri, 26 Apr 2024 13:38:42 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-386-g4cb8e397f9-fm-20240415.001-g4cb8e397
+	s=arc-20240116; t=1714153798; c=relaxed/simple;
+	bh=erZZi9wDZX0ZOYNS/RLIvpcm6ff+QRDxGu84IpUs1F4=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=mpLKZGcSd5BEVQ+clX5o+JPwEgpxef6iJTlVkBWvcbXK5soj12sGzfJbXnDVEBxjsmqVb2lAKqOqamNnINt2zGI3pUzTqBGj3xCy4Ab3qZ6WIP8YTG09LR8anUC3FGJpIJQbS+aesoDmWPEXv1QZWUuqwAsmue/w+DY8ezRwTy8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VR0Y95yrxz6JBFj;
+	Sat, 27 Apr 2024 01:47:25 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 8E2B51408F9;
+	Sat, 27 Apr 2024 01:49:51 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Fri, 26 Apr
+ 2024 18:49:50 +0100
+Date: Fri, 26 Apr 2024 18:49:49 +0100
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: Miguel Luis <miguel.luis@oracle.com>
+CC: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra
+	<peterz@infradead.org>, "linux-pm@vger.kernel.org"
+	<linux-pm@vger.kernel.org>, "loongarch@lists.linux.dev"
+	<loongarch@lists.linux.dev>, "linux-acpi@vger.kernel.org"
+	<linux-acpi@vger.kernel.org>, "linux-arch@vger.kernel.org"
+	<linux-arch@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "kvmarm@lists.linux.dev"
+	<kvmarm@lists.linux.dev>, "x86@kernel.org" <x86@kernel.org>, Russell King
+	<linux@armlinux.org.uk>, "Rafael J . Wysocki" <rafael@kernel.org>, "James
+ Morse" <james.morse@arm.com>, Salil Mehta <salil.mehta@huawei.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>, Catalin Marinas
+	<catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Marc Zyngier
+	<maz@kernel.org>, Hanjun Guo <guohanjun@huawei.com>, Ingo Molnar
+	<mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+	<dave.hansen@linux.intel.com>, "linuxarm@huawei.com" <linuxarm@huawei.com>,
+	"justin.he@arm.com" <justin.he@arm.com>, "jianyong.wu@arm.com"
+	<jianyong.wu@arm.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, "Sudeep
+ Holla" <sudeep.holla@arm.com>
+Subject: Re: [PATCH v8 01/16] ACPI: processor: Simplify initial onlining to
+ use same path for cold and hotplug
+Message-ID: <20240426184949.0000506d@Huawei.com>
+In-Reply-To: <2E688E98-F57F-444F-B326-5206FB6F5C1E@oracle.com>
+References: <20240426135126.12802-1-Jonathan.Cameron@huawei.com>
+	<20240426135126.12802-2-Jonathan.Cameron@huawei.com>
+	<6347020E-CB49-44ED-87B2-3BB2AA2F59E0@oracle.com>
+	<2E688E98-F57F-444F-B326-5206FB6F5C1E@oracle.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <63ae53af-023d-444c-9571-8aef9e87ebc0@app.fastmail.com>
-In-Reply-To: <20240426162042.191916-1-cgoettsche@seltendoof.de>
-References: <20240426162042.191916-1-cgoettsche@seltendoof.de>
-Date: Fri, 26 Apr 2024 19:38:18 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: cgzones@googlemail.com
-Cc: x86@kernel.org, linux-alpha@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
- linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, audit@vger.kernel.org,
- Linux-Arch <linux-arch@vger.kernel.org>, linux-api@vger.kernel.org,
- linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
- "Richard Henderson" <richard.henderson@linaro.org>,
- "Ivan Kokshaysky" <ink@jurassic.park.msu.ru>,
- "Matt Turner" <mattst88@gmail.com>,
- "Russell King" <linux@armlinux.org.uk>,
- "Catalin Marinas" <catalin.marinas@arm.com>,
- "Will Deacon" <will@kernel.org>,
- "Geert Uytterhoeven" <geert@linux-m68k.org>,
- "Michal Simek" <monstr@monstr.eu>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
- "Helge Deller" <deller@gmx.de>, "Michael Ellerman" <mpe@ellerman.id.au>,
- "Nicholas Piggin" <npiggin@gmail.com>,
- "Christophe Leroy" <christophe.leroy@csgroup.eu>,
- "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
- "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
- "Heiko Carstens" <hca@linux.ibm.com>,
- "Vasily Gorbik" <gor@linux.ibm.com>,
- "Alexander Gordeev" <agordeev@linux.ibm.com>,
- "Christian Borntraeger" <borntraeger@linux.ibm.com>,
- "Sven Schnelle" <svens@linux.ibm.com>,
- "Yoshinori Sato" <ysato@users.sourceforge.jp>,
- "Rich Felker" <dalias@libc.org>,
- "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
- "David S . Miller" <davem@davemloft.net>,
- "Andreas Larsson" <andreas@gaisler.com>,
- "Andy Lutomirski" <luto@kernel.org>,
- "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar" <mingo@redhat.com>,
- "Borislav Petkov" <bp@alien8.de>,
- "Dave Hansen" <dave.hansen@linux.intel.com>,
- "H. Peter Anvin" <hpa@zytor.com>, "Chris Zankel" <chris@zankel.net>,
- "Max Filippov" <jcmvbkbc@gmail.com>,
- "Alexander Viro" <viro@zeniv.linux.org.uk>,
- "Christian Brauner" <brauner@kernel.org>, "Jan Kara" <jack@suse.cz>,
- "Paul Moore" <paul@paul-moore.com>, "Eric Paris" <eparis@redhat.com>,
- "Jens Axboe" <axboe@kernel.dk>,
- "Pavel Begunkov" <asml.silence@gmail.com>,
- "Peter Zijlstra" <peterz@infradead.org>,
- "Sohil Mehta" <sohil.mehta@intel.com>,
- "Palmer Dabbelt" <palmer@sifive.com>,
- "Miklos Szeredi" <mszeredi@redhat.com>, "Nhat Pham" <nphamcs@gmail.com>,
- "Casey Schaufler" <casey@schaufler-ca.com>,
- "Florian Fainelli" <florian.fainelli@broadcom.com>,
- "Kees Cook" <keescook@chromium.org>,
- "Rick Edgecombe" <rick.p.edgecombe@intel.com>,
- "Mark Rutland" <mark.rutland@arm.com>, io-uring@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] fs/xattr: add *at family syscalls
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-On Fri, Apr 26, 2024, at 18:20, Christian G=C3=B6ttsche wrote:
-> From: Christian G=C3=B6ttsche <cgzones@googlemail.com>
->
-> Add the four syscalls setxattrat(), getxattrat(), listxattrat() and
-> removexattrat().  Those can be used to operate on extended attributes,
-> especially security related ones, either relative to a pinned directory
-> or on a file descriptor without read access, avoiding a
-> /proc/<pid>/fd/<fd> detour, requiring a mounted procfs.
->
-> One use case will be setfiles(8) setting SELinux file contexts
-> ("security.selinux") without race conditions and without a file
-> descriptor opened with read access requiring SELinux read permission.
->
-> Use the do_{name}at() pattern from fs/open.c.
->
-> Pass the value of the extended attribute, its length, and for
-> setxattrat(2) the command (XATTR_CREATE or XATTR_REPLACE) via an added
-> struct xattr_args to not exceed six syscall arguments and not
-> merging the AT_* and XATTR_* flags.
->
-> Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
-> CC: x86@kernel.org
-> CC: linux-alpha@vger.kernel.org
-> CC: linux-kernel@vger.kernel.org
-> CC: linux-arm-kernel@lists.infradead.org
-> CC: linux-ia64@vger.kernel.org
-> CC: linux-m68k@lists.linux-m68k.org
-> CC: linux-mips@vger.kernel.org
-> CC: linux-parisc@vger.kernel.org
-> CC: linuxppc-dev@lists.ozlabs.org
-> CC: linux-s390@vger.kernel.org
-> CC: linux-sh@vger.kernel.org
-> CC: sparclinux@vger.kernel.org
-> CC: linux-fsdevel@vger.kernel.org
-> CC: audit@vger.kernel.org
-> CC: linux-arch@vger.kernel.org
-> CC: linux-api@vger.kernel.org
-> CC: linux-security-module@vger.kernel.org
-> CC: selinux@vger.kernel.org
+On Fri, 26 Apr 2024 17:21:41 +0000
+Miguel Luis <miguel.luis@oracle.com> wrote:
 
-I checked that the syscalls are all well-formed regarding
-argument types, number of arguments and (absence of)
-compat handling, and that they are wired up correctly
-across architectures
+> Hi Jonathan, 
+> 
+> > On 26 Apr 2024, at 16:05, Miguel Luis <miguel.luis@oracle.com> wrote:
+> > 
+> > 
+> >   
+> >> On 26 Apr 2024, at 13:51, Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
+> >> 
+> >> Separate code paths, combined with a flag set in acpi_processor.c to
+> >> indicate a struct acpi_processor was for a hotplugged CPU ensured that
+> >> per CPU data was only set up the first time that a CPU was initialized.
+> >> This appears to be unnecessary as the paths can be combined by letting
+> >> the online logic also handle any CPUs online at the time of driver load.
+> >> 
+> >> Motivation for this change, beyond simplification, is that ARM64
+> >> virtual CPU HP uses the same code paths for hotplug and cold path in
+> >> acpi_processor.c so had no easy way to set the flag for hotplug only.
+> >> Removing this necessity will enable ARM64 vCPU HP to reuse the existing
+> >> code paths.
+> >> 
+> >> Leave noisy pr_info() in place but update it to not state the CPU
+> >> was hotplugged.  
+> 
+> On a second thought, do we want to keep it? Can't we just assume that no 
+> news is good news while keeping the warn right after __acpi_processor_start ?
 
-I did not look at the actual implementation in detail.
+Good question - my inclination was to keep this in place for now as removing
+it would remove a source of information people may expect on x86 hotplug.
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Then maybe propose dropping it as overly noisy kernel as a follow up
+patch after this series is merged.  Felt like a potential rat hole I didn't
+want to go down if I could avoid it.
+
+If any x86 experts want to shout that no one cares then I'll happily drop
+the print.  We've carefully made it so that on arm64 we have no way to tell
+if this is hotplug or normal cpu bring up so we can't just print it on
+hotplug.
+
+Jonathan
+
+
+> 
+> Miguel
+> 
+> >> 
+> >> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >> Reviewed-by: Hanjun Guo <guohanjun@huawei.com>
+> >> Tested-by: Miguel Luis <miguel.luis@oracle.com>
+> >> Reviewed-by: Gavin Shan <gshan@redhat.com>
+> >> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> >> 
+> >> ---
+> >> v8: No change
+> >> ---
+> >> drivers/acpi/acpi_processor.c   |  1 -
+> >> drivers/acpi/processor_driver.c | 44 ++++++++++-----------------------
+> >> include/acpi/processor.h        |  2 +-
+> >> 3 files changed, 14 insertions(+), 33 deletions(-)
+> >> 
+> >> diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
+> >> index 7a0dd35d62c9..7fc924aeeed0 100644
+> >> --- a/drivers/acpi/acpi_processor.c
+> >> +++ b/drivers/acpi/acpi_processor.c
+> >> @@ -216,7 +216,6 @@ static int acpi_processor_hotadd_init(struct acpi_processor *pr)
+> >> * gets online for the first time.
+> >> */
+> >> pr_info("CPU%d has been hot-added\n", pr->id);
+> >> - pr->flags.need_hotplug_init = 1;
+> >> 
+> >> out:
+> >> cpus_write_unlock();
+> >> diff --git a/drivers/acpi/processor_driver.c b/drivers/acpi/processor_driver.c
+> >> index 67db60eda370..55782eac3ff1 100644
+> >> --- a/drivers/acpi/processor_driver.c
+> >> +++ b/drivers/acpi/processor_driver.c
+> >> @@ -33,7 +33,6 @@ MODULE_AUTHOR("Paul Diefenbaugh");
+> >> MODULE_DESCRIPTION("ACPI Processor Driver");
+> >> MODULE_LICENSE("GPL");
+> >> 
+> >> -static int acpi_processor_start(struct device *dev);
+> >> static int acpi_processor_stop(struct device *dev);
+> >> 
+> >> static const struct acpi_device_id processor_device_ids[] = {
+> >> @@ -47,7 +46,6 @@ static struct device_driver acpi_processor_driver = {
+> >> .name = "processor",
+> >> .bus = &cpu_subsys,
+> >> .acpi_match_table = processor_device_ids,
+> >> - .probe = acpi_processor_start,
+> >> .remove = acpi_processor_stop,
+> >> };
+> >> 
+> >> @@ -115,12 +113,10 @@ static int acpi_soft_cpu_online(unsigned int cpu)
+> >> * CPU got physically hotplugged and onlined for the first time:
+> >> * Initialize missing things.
+> >> */
+> >> - if (pr->flags.need_hotplug_init) {
+> >> + if (!pr->flags.previously_online) {
+> >> int ret;
+> >> 
+> >> - pr_info("Will online and init hotplugged CPU: %d\n",
+> >> - pr->id);
+> >> - pr->flags.need_hotplug_init = 0;
+> >> + pr_info("Will online and init CPU: %d\n", pr->id);
+> >> ret = __acpi_processor_start(device);
+> >> WARN(ret, "Failed to start CPU: %d\n", pr->id);
+> >> } else {
+> >> @@ -167,9 +163,6 @@ static int __acpi_processor_start(struct acpi_device *device)
+> >> if (!pr)
+> >> return -ENODEV;
+> >> 
+> >> - if (pr->flags.need_hotplug_init)
+> >> - return 0;
+> >> -
+> >> result = acpi_cppc_processor_probe(pr);
+> >> if (result && !IS_ENABLED(CONFIG_ACPI_CPU_FREQ_PSS))
+> >> dev_dbg(&device->dev, "CPPC data invalid or not present\n");
+> >> @@ -185,32 +178,21 @@ static int __acpi_processor_start(struct acpi_device *device)
+> >> 
+> >> status = acpi_install_notify_handler(device->handle, ACPI_DEVICE_NOTIFY,
+> >>    acpi_processor_notify, device);
+> >> - if (ACPI_SUCCESS(status))
+> >> - return 0;
+> >> + if (!ACPI_SUCCESS(status)) {
+> >> + result = -ENODEV;
+> >> + goto err_thermal_exit;
+> >> + }
+> >> + pr->flags.previously_online = 1;
+> >> 
+> >> - result = -ENODEV;
+> >> - acpi_processor_thermal_exit(pr, device);
+> >> + return 0;
+> >> 
+> >> +err_thermal_exit:
+> >> + acpi_processor_thermal_exit(pr, device);
+> >> err_power_exit:
+> >> acpi_processor_power_exit(pr);
+> >> return result;
+> >> }
+> >> 
+> >> -static int acpi_processor_start(struct device *dev)
+> >> -{
+> >> - struct acpi_device *device = ACPI_COMPANION(dev);
+> >> - int ret;
+> >> -
+> >> - if (!device)
+> >> - return -ENODEV;
+> >> -
+> >> - /* Protect against concurrent CPU hotplug operations */
+> >> - cpu_hotplug_disable();
+> >> - ret = __acpi_processor_start(device);
+> >> - cpu_hotplug_enable();
+> >> - return ret;
+> >> -}
+> >> -
+> >> static int acpi_processor_stop(struct device *dev)
+> >> {
+> >> struct acpi_device *device = ACPI_COMPANION(dev);
+> >> @@ -279,9 +261,9 @@ static int __init acpi_processor_driver_init(void)
+> >> if (result < 0)
+> >> return result;
+> >> 
+> >> - result = cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN,
+> >> -   "acpi/cpu-drv:online",
+> >> -   acpi_soft_cpu_online, NULL);
+> >> + result = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,
+> >> +   "acpi/cpu-drv:online",
+> >> +   acpi_soft_cpu_online, NULL);
+> >> if (result < 0)
+> >> goto err;
+> >> hp_online = result;
+> >> diff --git a/include/acpi/processor.h b/include/acpi/processor.h
+> >> index 3f34ebb27525..e6f6074eadbf 100644
+> >> --- a/include/acpi/processor.h
+> >> +++ b/include/acpi/processor.h
+> >> @@ -217,7 +217,7 @@ struct acpi_processor_flags {
+> >> u8 has_lpi:1;
+> >> u8 power_setup_done:1;
+> >> u8 bm_rld_set:1;
+> >> - u8 need_hotplug_init:1;
+> >> + u8 previously_online:1;  
+> > 
+> > Reviewed-by: Miguel Luis <miguel.luis@oracle.com>
+> > 
+> > Miguel
+> >   
+> >> };
+> >> 
+> >> struct acpi_processor {
+> >> -- 
+> >> 2.39.2
+> >>   
+> >   
+> 
+
 
