@@ -1,85 +1,63 @@
-Return-Path: <linux-arch+bounces-3994-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-3995-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B430C8B3886
-	for <lists+linux-arch@lfdr.de>; Fri, 26 Apr 2024 15:34:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8524B8B38EB
+	for <lists+linux-arch@lfdr.de>; Fri, 26 Apr 2024 15:51:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 448771F2369B
-	for <lists+linux-arch@lfdr.de>; Fri, 26 Apr 2024 13:34:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 121071F23B81
+	for <lists+linux-arch@lfdr.de>; Fri, 26 Apr 2024 13:51:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 728DC147C73;
-	Fri, 26 Apr 2024 13:34:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b="ECoAuMMR"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 237AF1482E4;
+	Fri, 26 Apr 2024 13:51:33 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from forward200a.mail.yandex.net (forward200a.mail.yandex.net [178.154.239.93])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4FC614831F;
-	Fri, 26 Apr 2024 13:34:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.93
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4DA8147C81;
+	Fri, 26 Apr 2024 13:51:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714138466; cv=none; b=VOR1CgjutMlaMsZt3zP+cc/FpmkRxK0StUNbCHDmYw5fJiigcjnXHHjdlSCPanecE1bnaHLdSYoHy95f8optQXoFxrhyVLvR0riGjsdh7PZLptRJUXVtxBby3r/3UJiWIzykWW08+2/HFIg4M+/OX2GYpzmwWiKtq5CTV8/rogQ=
+	t=1714139493; cv=none; b=anq7JwScso9iLRtvwdnYStS7ErGwauzzAiyGZNFrTfjBvKYQTYpt+0FuCvPHsZWPIRB7K6sXJAAIocx/Zj75XtG+6NkrCXOjRqC5jw1BbZND8A7lvA5rcVv6URTFS1ZkKzextqylweCmzrN3ZjMdzYh5nclRoBLoT0MsIyyOpd8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714138466; c=relaxed/simple;
-	bh=NJLlv+BYrw+C+sbV2KvdymITp5TUT7pACIgIb4CZHl4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=N8vX3J58cHidIA2bcge4QkZchzZJ+AbZUrcs+yYg3HyP9uR2itenZJrLuNIrK1BUoEfEWvnq77X9uZF8sBZ0hwodYZW2EEMKH+lOgve91Ovf+rrjmUHcvyoZoYwD0t/bSQrM6yrvKN/O604S6rEQM5qkTpcWrUNct8A2zpFnwhc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.ru; spf=pass smtp.mailfrom=yandex.ru; dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b=ECoAuMMR; arc=none smtp.client-ip=178.154.239.93
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yandex.ru
-Received: from forward101a.mail.yandex.net (forward101a.mail.yandex.net [IPv6:2a02:6b8:c0e:500:1:45:d181:d101])
-	by forward200a.mail.yandex.net (Yandex) with ESMTPS id 7AF1C66A43;
-	Fri, 26 Apr 2024 16:34:16 +0300 (MSK)
-Received: from mail-nwsmtp-smtp-production-main-55.vla.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-55.vla.yp-c.yandex.net [IPv6:2a02:6b8:c0d:230c:0:640:f8e:0])
-	by forward101a.mail.yandex.net (Yandex) with ESMTPS id 8EFA360B53;
-	Fri, 26 Apr 2024 16:34:08 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-55.vla.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id 2YN3P0DXnmI0-XlfhjaY2;
-	Fri, 26 Apr 2024 16:34:06 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail;
-	t=1714138446; bh=oe8bbNwOy9Cey4DMgLCWnxFN4lQ1FLTo4XG3E1C4v8Q=;
-	h=Message-ID:Date:In-Reply-To:Cc:Subject:References:To:From;
-	b=ECoAuMMRjRsRnHs1YWDcIiI84Zgj6ZrBSrBEhwjmClSLd/H74Kj3f9iLL0MLpNdOX
-	 069WuQs8GyqfI7yU+T2IfDdn1aYqLeMAg/Ffxq2+hq8zN1sBe0GhbYlyMLV7qjA8CD
-	 Xl0IpvfqDbE9Fnsay/URNI7VmN5Z4rJsgcHLons0=
-Authentication-Results: mail-nwsmtp-smtp-production-main-55.vla.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
-From: Stas Sergeev <stsp2@yandex.ru>
-To: linux-kernel@vger.kernel.org
-Cc: Stas Sergeev <stsp2@yandex.ru>,
-	Stefan Metzmacher <metze@samba.org>,
-	Eric Biederman <ebiederm@xmission.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Andy Lutomirski <luto@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Jan Kara <jack@suse.cz>,
-	Jeff Layton <jlayton@kernel.org>,
-	Chuck Lever <chuck.lever@oracle.com>,
-	Alexander Aring <alex.aring@gmail.com>,
-	David Laight <David.Laight@ACULAB.COM>,
-	linux-fsdevel@vger.kernel.org,
-	linux-api@vger.kernel.org,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	=?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Jens Axboe <axboe@kernel.dk>,
-	Kuniyuki Iwashima <kuniyu@amazon.com>,
-	Pavel Begunkov <asml.silence@gmail.com>,
-	linux-arch@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: [PATCH v5 2/3] open: add O_CRED_ALLOW flag
-Date: Fri, 26 Apr 2024 16:33:09 +0300
-Message-ID: <20240426133310.1159976-3-stsp2@yandex.ru>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240426133310.1159976-1-stsp2@yandex.ru>
-References: <20240426133310.1159976-1-stsp2@yandex.ru>
+	s=arc-20240116; t=1714139493; c=relaxed/simple;
+	bh=QHkwzm7yGBz1ZP6RZARRpVjRm5TBFngEPCESKKI1c/Y=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=FRq0chu8CUCf/FTAFDg+BEXV9xnodWMDkbOqxgvm3nes3sg1aTseHJPbz06qOfWet8VTL+UBR5peORVdrloHXt/c7lLve8hYlBjLOOozBOUsZcaLXzzsV3Mwof1ua+zFMa2jm8P5xcnTKUpx/UjkXwlmfkftqGrYE4rGn1vdEGU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VQvG10Yj3z6K6Nj;
+	Fri, 26 Apr 2024 21:48:57 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id C5D0C140A34;
+	Fri, 26 Apr 2024 21:51:25 +0800 (CST)
+Received: from SecurePC-101-06.china.huawei.com (10.122.247.231) by
+ lhrpeml500005.china.huawei.com (7.191.163.240) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Fri, 26 Apr 2024 14:51:25 +0100
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra
+	<peterz@infradead.org>, <linux-pm@vger.kernel.org>,
+	<loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <kvmarm@lists.linux.dev>,
+	<x86@kernel.org>, Russell King <linux@armlinux.org.uk>, "Rafael J . Wysocki"
+	<rafael@kernel.org>, Miguel Luis <miguel.luis@oracle.com>, James Morse
+	<james.morse@arm.com>, Salil Mehta <salil.mehta@huawei.com>, Jean-Philippe
+ Brucker <jean-philippe@linaro.org>, Catalin Marinas
+	<catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Marc Zyngier
+	<maz@kernel.org>, Hanjun Guo <guohanjun@huawei.com>
+CC: Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave
+ Hansen <dave.hansen@linux.intel.com>, <linuxarm@huawei.com>,
+	<justin.he@arm.com>, <jianyong.wu@arm.com>, Lorenzo Pieralisi
+	<lpieralisi@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>
+Subject: [PATCH v8 00/16] ACPI/arm64: add support for virtual cpu hotplug
+Date: Fri, 26 Apr 2024 14:51:10 +0100
+Message-ID: <20240426135126.12802-1-Jonathan.Cameron@huawei.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -87,136 +65,151 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-This flag prevents an fd from being passed via unix socket, and
-makes it to be always closed on exec().
-It is needed for the subsequent OA2_CRED_INHERIT addition, to work
-as an "opt-in" for the new cred-inherit functionality. Without using
-O_CRED_ALLOW when opening dir fd, it won't be possible to use
-OA2_CRED_INHERIT on that dir fd.
+Thanks to Rafael, Marc, Hanjun and Gavin for reviews of v8 and tags.
 
-Signed-off-by: Stas Sergeev <stsp2@yandex.ru>
+v8: Details and more minor stuff in individual patch descriptions
+  - Rewrite the handling of not enabled redistributors in the gicv3 driver
+    to keep impacts local. Note this needs a dance with a new cpuhp
+    callback that runs before CPU bring up reaches the section that
+    cannot fail. This avoids clearing bits in cpu_present_mask and
+    cpu_possible_mask making the solution much less fragile.
+  - Do not carry on for that CPU if acpi_processor_set_per_cpu() detects
+    a problem, but continue to leave enough in place to perform buggy bios
+    checks.
+  - Protect against a buggy BIOS that has apparently enabled CPUs in DSDT
+    that are not in MADT. The check makes sense anyway as on arm64 we have
+    not way to 'generate' an ID if one isn't present at acpi_map_cpu().
 
-CC: Eric Biederman <ebiederm@xmission.com>
-CC: Alexander Viro <viro@zeniv.linux.org.uk>
-CC: Christian Brauner <brauner@kernel.org>
-CC: Jan Kara <jack@suse.cz>
-CC: Andy Lutomirski <luto@kernel.org>
-CC: David Laight <David.Laight@ACULAB.COM>
-CC: Arnd Bergmann <arnd@arndb.de>
-CC: "David S. Miller" <davem@davemloft.net>
-CC: Eric Dumazet <edumazet@google.com>
-CC: Jakub Kicinski <kuba@kernel.org>
-CC: Paolo Abeni <pabeni@redhat.com>
-CC: Jens Axboe <axboe@kernel.dk>
-CC: Kuniyuki Iwashima <kuniyu@amazon.com>
-CC: Pavel Begunkov <asml.silence@gmail.com>
-CC: linux-arch@vger.kernel.org
-CC: netdev@vger.kernel.org
-CC: linux-fsdevel@vger.kernel.org
-CC: linux-kernel@vger.kernel.org
-CC: linux-api@vger.kernel.org
----
- fs/fcntl.c                       |  2 +-
- fs/file.c                        | 15 ++++++++-------
- include/linux/fcntl.h            |  2 +-
- include/uapi/asm-generic/fcntl.h |  4 ++++
- net/core/scm.c                   |  5 +++++
- 5 files changed, 19 insertions(+), 9 deletions(-)
+Updated version of James' original introduction.
 
-diff --git a/fs/fcntl.c b/fs/fcntl.c
-index 54cc85d3338e..78c96b1293c2 100644
---- a/fs/fcntl.c
-+++ b/fs/fcntl.c
-@@ -1039,7 +1039,7 @@ static int __init fcntl_init(void)
- 	 * Exceptions: O_NONBLOCK is a two bit define on parisc; O_NDELAY
- 	 * is defined as O_NONBLOCK on some platforms and not on others.
- 	 */
--	BUILD_BUG_ON(21 - 1 /* for O_RDONLY being 0 */ !=
-+	BUILD_BUG_ON(22 - 1 /* for O_RDONLY being 0 */ !=
- 		HWEIGHT32(
- 			(VALID_OPEN_FLAGS & ~(O_NONBLOCK | O_NDELAY)) |
- 			__FMODE_EXEC | __FMODE_NONOTIFY));
-diff --git a/fs/file.c b/fs/file.c
-index 3b683b9101d8..2a09d5276676 100644
---- a/fs/file.c
-+++ b/fs/file.c
-@@ -827,22 +827,23 @@ void do_close_on_exec(struct files_struct *files)
- 	/* exec unshares first */
- 	spin_lock(&files->file_lock);
- 	for (i = 0; ; i++) {
-+		int j;
- 		unsigned long set;
- 		unsigned fd = i * BITS_PER_LONG;
- 		fdt = files_fdtable(files);
- 		if (fd >= fdt->max_fds)
- 			break;
- 		set = fdt->close_on_exec[i];
--		if (!set)
--			continue;
- 		fdt->close_on_exec[i] = 0;
--		for ( ; set ; fd++, set >>= 1) {
--			struct file *file;
--			if (!(set & 1))
--				continue;
--			file = fdt->fd[fd];
-+		for (j = 0; j < BITS_PER_LONG; j++, fd++, set >>= 1) {
-+			struct file *file = fdt->fd[fd];
- 			if (!file)
- 				continue;
-+			/* Close all cred-allow files. */
-+			if (file->f_flags & O_CRED_ALLOW)
-+				set |= 1;
-+			if (!(set & 1))
-+				continue;
- 			rcu_assign_pointer(fdt->fd[fd], NULL);
- 			__put_unused_fd(files, fd);
- 			spin_unlock(&files->file_lock);
-diff --git a/include/linux/fcntl.h b/include/linux/fcntl.h
-index a332e79b3207..e074ee9c1e36 100644
---- a/include/linux/fcntl.h
-+++ b/include/linux/fcntl.h
-@@ -10,7 +10,7 @@
- 	(O_RDONLY | O_WRONLY | O_RDWR | O_CREAT | O_EXCL | O_NOCTTY | O_TRUNC | \
- 	 O_APPEND | O_NDELAY | O_NONBLOCK | __O_SYNC | O_DSYNC | \
- 	 FASYNC	| O_DIRECT | O_LARGEFILE | O_DIRECTORY | O_NOFOLLOW | \
--	 O_NOATIME | O_CLOEXEC | O_PATH | __O_TMPFILE)
-+	 O_NOATIME | O_CLOEXEC | O_PATH | __O_TMPFILE | O_CRED_ALLOW)
+This series adds what looks like cpuhotplug support to arm64 for use in
+virtual machines. It does this by moving the cpu_register() calls for
+architectures that support ACPI into an arch specific call made from
+the ACPI processor driver.
  
- /* List of all valid flags for the how->resolve argument: */
- #define VALID_RESOLVE_FLAGS \
-diff --git a/include/uapi/asm-generic/fcntl.h b/include/uapi/asm-generic/fcntl.h
-index 80f37a0d40d7..ee8c2267c516 100644
---- a/include/uapi/asm-generic/fcntl.h
-+++ b/include/uapi/asm-generic/fcntl.h
-@@ -89,6 +89,10 @@
- #define __O_TMPFILE	020000000
- #endif
+The kubernetes folk really want to be able to add CPUs to an existing VM,
+in exactly the same way they do on x86. The use-case is pre-booting guests
+with one CPU, then adding the number that were actually needed when the
+workload is provisioned.
+
+Wait? Doesn't arm64 support cpuhotplug already!?
+In the arm world, cpuhotplug gets used to mean removing the power from a CPU.
+The CPU is offline, and remains present. For x86, and ACPI, cpuhotplug
+has the additional step of physically removing the CPU, so that it isn't
+present anymore.
  
-+#ifndef O_CRED_ALLOW
-+#define O_CRED_ALLOW		040000000
-+#endif
-+
- /* a horrid kludge trying to make sure that this will fail on old kernels */
- #define O_TMPFILE (__O_TMPFILE | O_DIRECTORY)
+Arm64 doesn't support this, and can't support it: CPUs are really a slice
+of the SoC, and there is not enough information in the existing ACPI tables
+to describe which bits of the slice also got removed. Without a reference
+machine: adding this support to the spec is a wild goose chase.
  
-diff --git a/net/core/scm.c b/net/core/scm.c
-index 9cd4b0a01cd6..f54fb0ee9727 100644
---- a/net/core/scm.c
-+++ b/net/core/scm.c
-@@ -111,6 +111,11 @@ static int scm_fp_copy(struct cmsghdr *cmsg, struct scm_fp_list **fplp)
- 			fput(file);
- 			return -EINVAL;
- 		}
-+		/* don't allow files with creds */
-+		if (file->f_flags & O_CRED_ALLOW) {
-+			fput(file);
-+			return -EPERM;
-+		}
- 		if (unix_get_socket(file))
- 			fpl->count_unix++;
+Critically: everything described in the firmware tables must remain present.
  
+For a virtual machine this is easy as all the other bits of 'virtual SoC'
+are emulated, so they can (and do) remain present when a vCPU is 'removed'.
+
+On a system that supports cpuhotplug the MADT has to describe every possible
+CPU at boot. Under KVM, the vGIC needs to know about every possible vCPU before
+the guest is started.
+With these constraints, virtual-cpuhotplug is really just a hypervisor/firmware
+policy about which CPUs can be brought online.
+ 
+This series adds support for virtual-cpuhotplug as exactly that: firmware
+policy. This may even work on a physical machine too; for a guest the part of
+firmware is played by the VMM. (typically Qemu).
+ 
+PSCI support is modified to return 'DENIED' if the CPU can't be brought
+online/enabled yet. The CPU object's _STA method's enabled bit is used to
+indicate firmware's current disposition. If the CPU has its enabled bit clear,
+it will not be registered with sysfs, and attempts to bring it online will
+fail. The notifications that _STA has changed its value then work in the same
+way as physical hotplug, and firmware can cause the CPU to be registered some
+time later, allowing it to be brought online.
+ 
+This creates something that looks like cpuhotplug to user-space and the
+kernel beyond arm64 architecture specific code, as the sysfs
+files appear and disappear, and the udev notifications look the same.
+ 
+One notable difference is the CPU present mask, which is exposed via sysfs.
+Because the CPUs remain present throughout, they can still be seen in that mask.
+This value does get used by webbrowsers to estimate the number of CPUs
+as the CPU online mask is constantly changed on mobile phones.
+ 
+Linux is tolerant of PSCI returning errors, as its always been allowed to do
+that. To avoid confusing OS that can't tolerate this, we needed an additional
+bit in the MADT GICC flags. This series copies ACPI_MADT_ONLINE_CAPABLE, which
+appears to be for this purpose, but calls it ACPI_MADT_GICC_CPU_CAPABLE as it
+has a different bit position in the GICC.
+ 
+This code is unconditionally enabled for all ACPI architectures, though for
+now only arm64 will have deferred the cpu_register() calls.
+
+If folk want to play along at home, you'll need a copy of Qemu that supports this.
+https://github.com/salil-mehta/qemu.git virt-cpuhp-armv8/rfc-v2
+
+Replace your '-smp' argument with something like:
+ | -smp cpus=1,maxcpus=3,cores=3,threads=1,sockets=1
+ 
+ then feed the following to the Qemu montior;
+ | (qemu) device_add driver=host-arm-cpu,core-id=1,id=cpu1
+ | (qemu) device_del cpu1
+ 
+
+James Morse (7):
+  ACPI: processor: Register deferred CPUs from acpi_processor_get_info()
+  ACPI: Add post_eject to struct acpi_scan_handler for cpu hotplug
+  arm64: acpi: Move get_cpu_for_acpi_id() to a header
+  irqchip/gic-v3: Don't return errors from gic_acpi_match_gicc()
+  irqchip/gic-v3: Add support for ACPI's disabled but 'online capable'
+    CPUs
+  arm64: document virtual CPU hotplug's expectations
+  cpumask: Add enabled cpumask for present CPUs that can be brought
+    online
+
+Jean-Philippe Brucker (1):
+  arm64: psci: Ignore DENIED CPUs
+
+Jonathan Cameron (8):
+  ACPI: processor: Simplify initial onlining to use same path for cold
+    and hotplug
+  cpu: Do not warn on arch_register_cpu() returning -EPROBE_DEFER
+  ACPI: processor: Drop duplicated check on _STA (enabled + present)
+  ACPI: processor: Move checks and availability of acpi_processor
+    earlier
+  ACPI: processor: Add acpi_get_processor_handle() helper
+  ACPI: scan: switch to flags for acpi_scan_check_and_detach()
+  arm64: arch_register_cpu() variant to check if an ACPI handle is now
+    available.
+  arm64: Kconfig: Enable hotplug CPU on arm64 if ACPI_PROCESSOR is
+    enabled.
+
+ .../ABI/testing/sysfs-devices-system-cpu      |   6 +
+ Documentation/arch/arm64/cpu-hotplug.rst      |  79 ++++++++++++
+ Documentation/arch/arm64/index.rst            |   1 +
+ arch/arm64/Kconfig                            |   1 +
+ arch/arm64/include/asm/acpi.h                 |  11 ++
+ arch/arm64/kernel/acpi.c                      |  22 ++++
+ arch/arm64/kernel/acpi_numa.c                 |  11 --
+ arch/arm64/kernel/psci.c                      |   2 +-
+ arch/arm64/kernel/smp.c                       |  56 ++++++++-
+ drivers/acpi/acpi_processor.c                 | 115 +++++++++++-------
+ drivers/acpi/processor_driver.c               |  44 ++-----
+ drivers/acpi/scan.c                           |  47 +++++--
+ drivers/base/cpu.c                            |  12 +-
+ drivers/irqchip/irq-gic-v3.c                  |  49 ++++++--
+ include/acpi/acpi_bus.h                       |   1 +
+ include/acpi/processor.h                      |   2 +-
+ include/linux/acpi.h                          |  10 +-
+ include/linux/cpumask.h                       |  25 ++++
+ kernel/cpu.c                                  |   3 +
+ 19 files changed, 383 insertions(+), 114 deletions(-)
+ create mode 100644 Documentation/arch/arm64/cpu-hotplug.rst
+
 -- 
-2.44.0
+2.39.2
 
 
