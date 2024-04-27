@@ -1,166 +1,169 @@
-Return-Path: <linux-arch+bounces-4030-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4031-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E29438B43C8
-	for <lists+linux-arch@lfdr.de>; Sat, 27 Apr 2024 04:11:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 547AC8B43CA
+	for <lists+linux-arch@lfdr.de>; Sat, 27 Apr 2024 04:13:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CD340B22910
-	for <lists+linux-arch@lfdr.de>; Sat, 27 Apr 2024 02:11:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0772C2839AE
+	for <lists+linux-arch@lfdr.de>; Sat, 27 Apr 2024 02:13:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 781DE3B79F;
-	Sat, 27 Apr 2024 02:11:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFA8938F9A;
+	Sat, 27 Apr 2024 02:13:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mRu4S3Xu"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Iu7eeWHu"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C726383BF
-	for <linux-arch@vger.kernel.org>; Sat, 27 Apr 2024 02:11:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3796B38DD3;
+	Sat, 27 Apr 2024 02:13:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714183885; cv=none; b=MPZONz0iuZn0RQUi6L0zMbG7ebDDxPa9Q6gAK4tGVmMKqwOwH6ujH/CLe/XBytQnPRNV7lQ2drdhUpebFzfQjxrVamrGIfLe6lviZbBADncPTmMSjVwiWDY5SpWwpLQC0TJJ9ybn42Zy3508X4th2J37EceNWxbPkfNgnlw6vFE=
+	t=1714184008; cv=none; b=lo0oHMiCGayxhiye/ZAH72vk66y3QkX6D3E390CQdBSzVrl2TsMlzRwHpLZR2psd/1LKIj16rYT7m6cRSR3HemuC51RJgLVRKMzNBeU6TxdbtRw/z6Vq86txWvewEP0RoSDm1aPmSBYutg4ZplvYWjXflmwcFAlr4ytOfzHx3vM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714183885; c=relaxed/simple;
-	bh=3TH1qKN/8kDOE9KfhYRZV82BLgZZskB3YkO2+4vu+tY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dvpFEJh17V7Yqn7wJu2//AI8SS7c/ln1Ao7yoeF69QTSnOkA2DSf/ihFguedLEAWbqJb8wcOH9YBXg+R3HxE7QaWW1YrfP2mHW+3o6fZzn3l8XwMjj+e9Ofh9Ei/imxbR02XFlqWY7rBSmILMKFn8pWqBs+due2K/cj/IV//tFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mRu4S3Xu; arc=none smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a58e2740cd7so59043366b.1
-        for <linux-arch@vger.kernel.org>; Fri, 26 Apr 2024 19:11:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1714183880; x=1714788680; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VCqXmA+0tJPmuPol3Ypy0jPmfZ3hkXnnk0DE4uLAUwU=;
-        b=mRu4S3XuUIqgZ4Zuu0XgismEQ5/XUBilPfFw+Xm1y6jIuBkNYDGqtJpVPfr3+pUbZf
-         sAyOLb5LdfBvQbmhLVih+PhEODGod32DbRItT4xo6P4xZydC8tce2YXd8+WGUheKnvMl
-         0gsDcMKy6EBMpWyVbsMo1ZYgFLSjchUULUluFbRjoQMZtHnCgGtdyMdP/eTFH75BbT8K
-         FVX5+bOMpdzkiS5xZzDrCWaSldC5RZPNVAUarByQRaAUL3UsGpPK9BwIUf856PWynKMz
-         yJGJKrx4/S1+RH9spj8VX4cHz3UyMAPh/HkI2nBx0BpnQc3OmMiXbW/kS0kmdQqOktCD
-         Fhzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714183880; x=1714788680;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VCqXmA+0tJPmuPol3Ypy0jPmfZ3hkXnnk0DE4uLAUwU=;
-        b=wPox0v9UwteHzYSaUVXyp/vGtOOttA0usns70BEUdPmJlwjMX0GFcnmXAW6fJF5jjn
-         MVSi0yw5aU5/bSY7XH1eB/5qgkdYrWOJsa05bcDhsft+uUyJogbsXa3tFoMLfnJsuake
-         q0X9iOvhN7hQjZWm0zTAyIhN+W9y4fwhInFgEzM72NRCdv1cpkdpUgHw+2/iV82pbCdl
-         EpY4q49WY0iBtecEbQ/fZekLWKr+wh5b+T6vQFfBPGTjmyb4OH47+jnrblseIpp1T9pM
-         quUmsd9Ug2YtpQYJLw3Ir9TLkWYrvf1u+E25kOJ4SezUSuWiTWmFh79yGcb7fG7sCMw3
-         q5tg==
-X-Forwarded-Encrypted: i=1; AJvYcCXr+uYmUpf42MrY5Mn5qkXVxE1dw2yWq1RLj17jixf59y44aIuRZI2Wt+ZLCagMGCaTOZpnm/EqdCEY6AAASsCjveSKvv9adbnJsA==
-X-Gm-Message-State: AOJu0YyeD2pdJhoeAzq2KQ4qSjtYHmnSM2u+kDuhl8DDD2892A2MRJxe
-	L3RjcYMLwyDvcLN0pc4XfhH2EJB/hG67WijPr8bjQ3qJ/z4ofOvZuWDXhqRdPJZl3zDvZH3f1NC
-	1fLgS1BxTOe7UcS4adhUQ460hmXQRPUoR8bpM
-X-Google-Smtp-Source: AGHT+IGYpMq0S7NMYmgbheltdqICqswpFYbRt1nWr9f34ViEhM+DD9iOxk080j42Jd8vuPQgs8NIkJRSPoJ58AydrBw=
-X-Received: by 2002:a17:907:a49:b0:a58:c550:a102 with SMTP id
- be9-20020a1709070a4900b00a58c550a102mr4510853ejc.29.1714183880204; Fri, 26
- Apr 2024 19:11:20 -0700 (PDT)
+	s=arc-20240116; t=1714184008; c=relaxed/simple;
+	bh=mUMUrbQLiUpX9NYt2dA5/tf55Sg+3Kcz3fQlfMcnBZc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WCjQKJ138w1RUPpKAJU8tnAO0hJP9hUedcjh+bz8npnCMt1yFrB/IvId3Y5GXFlHlASxxhGfmr4WDrcRFJwzGIkobXW+UklO1Oj4Kq0f4z+fIVLMBLEtpwZfCOFIvuNBK2pJJpfJld07fK1UimWuX8AuWhtP6RyWnZaBav0KYZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Iu7eeWHu; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714184007; x=1745720007;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mUMUrbQLiUpX9NYt2dA5/tf55Sg+3Kcz3fQlfMcnBZc=;
+  b=Iu7eeWHuRCx0cAlUwMw+Z/IA75Qh64rw+x2aaQrtNOkfFtUvFfIni3th
+   QOHYrw7PMy1KkefpuFitBSQp2jQLNSfyiuz6Qhm3jNVIJRp7fSRe3B8bg
+   VcJO8pNrVi2jf2BK14RMZD2jDZPbm06fWSf/p9rjplGvyqmHH/SZS/H68
+   vt+xI1M5xNFYaAIUMwBvb/Nj5LocboQ+LsebdQtapIIKqahaXnn6ZomOo
+   XuQ3DsiOI0FqeHc7QNUPQzAPfR9+K6sYx77ta4vPAMl0JWfuzws3Wwv1y
+   by+2AFs3QOmts0W80xgwP8azuWmE32DPisjW9pa5PKj5v4qrlyQ5JJcHC
+   A==;
+X-CSE-ConnectionGUID: t2MQr63tSvy+4NQFLLcaBg==
+X-CSE-MsgGUID: LioEa0Y1TyWit1hvYBa/UQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11056"; a="9807451"
+X-IronPort-AV: E=Sophos;i="6.07,234,1708416000"; 
+   d="scan'208";a="9807451"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2024 19:13:26 -0700
+X-CSE-ConnectionGUID: wFzIK+9URxC4/DWnIoBvmQ==
+X-CSE-MsgGUID: 8TidxXTOQ6KewX51Jb2KBg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,234,1708416000"; 
+   d="scan'208";a="30228341"
+Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 26 Apr 2024 19:13:21 -0700
+Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1s0XZ0-0004ZK-1O;
+	Sat, 27 Apr 2024 02:13:18 +0000
+Date: Sat, 27 Apr 2024 10:12:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Stas Sergeev <stsp2@yandex.ru>, linux-kernel@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, Stas Sergeev <stsp2@yandex.ru>,
+	Stefan Metzmacher <metze@samba.org>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Andy Lutomirski <luto@kernel.org>,
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	Jeff Layton <jlayton@kernel.org>,
+	Chuck Lever <chuck.lever@oracle.com>,
+	Alexander Aring <alex.aring@gmail.com>,
+	David Laight <David.Laight@aculab.com>,
+	linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Christian =?iso-8859-1?Q?G=F6ttsche?= <cgzones@googlemail.com>,
+	Arnd Bergmann <arnd@arndb.de>, Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jens Axboe <axboe@kernel.dk>, Kuniyuki Iwashima <kuniyu@amazon.com>,
+	Pavel Begunkov <asml.silence@gmail.com>, linux-arch@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: Re: [PATCH v5 2/3] open: add O_CRED_ALLOW flag
+Message-ID: <202404270923.bAeBIJt1-lkp@intel.com>
+References: <20240426133310.1159976-3-stsp2@yandex.ru>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240403002053.2376017-1-almasrymina@google.com>
- <20240403002053.2376017-8-almasrymina@google.com> <8357256a-f0e9-4640-8fec-23341fc607db@davidwei.uk>
-In-Reply-To: <8357256a-f0e9-4640-8fec-23341fc607db@davidwei.uk>
-From: Mina Almasry <almasrymina@google.com>
-Date: Fri, 26 Apr 2024 19:11:07 -0700
-Message-ID: <CAHS8izPeYryoLdCAQdGQU-wn7YVdtuofVKNvRFjFjhqTDsT7zA@mail.gmail.com>
-Subject: Re: [RFC PATCH net-next v8 07/14] page_pool: devmem support
-To: David Wei <dw@davidwei.uk>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Amritha Nambiar <amritha.nambiar@intel.com>, 
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
-	Alexander Mikhalitsyn <alexander@mihalicyn.com>, Kaiyuan Zhang <kaiyuanz@google.com>, 
-	Christian Brauner <brauner@kernel.org>, Simon Horman <horms@kernel.org>, 
-	David Howells <dhowells@redhat.com>, Florian Westphal <fw@strlen.de>, 
-	Yunsheng Lin <linyunsheng@huawei.com>, Kuniyuki Iwashima <kuniyu@amazon.com>, Jens Axboe <axboe@kernel.dk>, 
-	Arseniy Krasnov <avkrasnov@salutedevices.com>, 
-	Aleksander Lobakin <aleksander.lobakin@intel.com>, Michael Lass <bevan@bi-co.net>, 
-	Jiri Pirko <jiri@resnulli.us>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
-	Lorenzo Bianconi <lorenzo@kernel.org>, Richard Gobert <richardbgobert@gmail.com>, 
-	Sridhar Samudrala <sridhar.samudrala@intel.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
-	Johannes Berg <johannes.berg@intel.com>, Abel Wu <wuyun.abel@bytedance.com>, 
-	Breno Leitao <leitao@debian.org>, Pavel Begunkov <asml.silence@gmail.com>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, Shailend Chand <shailend@google.com>, 
-	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, linux-mm@kvack.org, 
-	Matthew Wilcox <willy@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240426133310.1159976-3-stsp2@yandex.ru>
 
-On Fri, Apr 26, 2024 at 5:18=E2=80=AFPM David Wei <dw@davidwei.uk> wrote:
->
-> On 2024-04-02 5:20 pm, Mina Almasry wrote:
-> > @@ -69,20 +106,26 @@ net_iov_binding(const struct net_iov *niov)
-> >   */
-> >  typedef unsigned long __bitwise netmem_ref;
-> >
-> > +static inline bool netmem_is_net_iov(const netmem_ref netmem)
-> > +{
-> > +#if defined(CONFIG_PAGE_POOL) && defined(CONFIG_DMA_SHARED_BUFFER)
->
-> I am guessing you added this to try and speed up the fast path? It's
-> overly restrictive for us since we do not need dmabuf necessarily. I
-> spent a bit too much time wondering why things aren't working only to
-> find this :(
+Hi Stas,
 
-My apologies, I'll try to put the changelog somewhere prominent, or
-notify you when I do something that I think breaks you.
+kernel test robot noticed the following build errors:
 
-Yes, this is a by-product of a discussion with regards to the
-page_pool benchmark regressions due to adding devmem. There is some
-background on why this was added and the impact on the
-bench_page_pool_simple tests in the cover letter.
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.9-rc5 next-20240426]
+[cannot apply to arnd-asm-generic/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-For you, I imagine you want to change this to something like:
+url:    https://github.com/intel-lab-lkp/linux/commits/Stas-Sergeev/fs-reorganize-path_openat/20240426-214030
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20240426133310.1159976-3-stsp2%40yandex.ru
+patch subject: [PATCH v5 2/3] open: add O_CRED_ALLOW flag
+config: parisc-allnoconfig (https://download.01.org/0day-ci/archive/20240427/202404270923.bAeBIJt1-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240427/202404270923.bAeBIJt1-lkp@intel.com/reproduce)
 
-#if defined(CONFIG_PAGE_POOL)
-#if defined(CONFIG_DMA_SHARED_BUFFER) || defined(CONFIG_IOURING)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404270923.bAeBIJt1-lkp@intel.com/
 
-or something like that, right? Not sure if this is something I should
-do here or if something more appropriate to be in the patches you
-apply on top.
+All errors (new ones prefixed by >>):
 
-I additionally think you may also need to run the
-page_pool_benchmark_simple tests like I do in the cover letter to see
-if you're affecting those.
+   In file included from <command-line>:
+   fs/fcntl.c: In function 'fcntl_init':
+>> include/linux/compiler_types.h:449:45: error: call to '__compiletime_assert_297' declared with attribute error: BUILD_BUG_ON failed: 22 - 1 != HWEIGHT32( (VALID_OPEN_FLAGS & ~(O_NONBLOCK | O_NDELAY)) | __FMODE_EXEC | __FMODE_NONOTIFY)
+     449 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                                             ^
+   include/linux/compiler_types.h:430:25: note: in definition of macro '__compiletime_assert'
+     430 |                         prefix ## suffix();                             \
+         |                         ^~~~~~
+   include/linux/compiler_types.h:449:9: note: in expansion of macro '_compiletime_assert'
+     449 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^~~~~~~~~~~~~~~~
+   fs/fcntl.c:1042:9: note: in expansion of macro 'BUILD_BUG_ON'
+    1042 |         BUILD_BUG_ON(22 - 1 /* for O_RDONLY being 0 */ !=
+         |         ^~~~~~~~~~~~
 
---
-Thanks,
-Mina
+
+vim +/__compiletime_assert_297 +449 include/linux/compiler_types.h
+
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  435  
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  436  #define _compiletime_assert(condition, msg, prefix, suffix) \
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  437  	__compiletime_assert(condition, msg, prefix, suffix)
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  438  
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  439  /**
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  440   * compiletime_assert - break build and emit msg if condition is false
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  441   * @condition: a compile-time constant condition to check
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  442   * @msg:       a message to emit if condition is false
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  443   *
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  444   * In tradition of POSIX assert, this macro will break the build if the
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  445   * supplied condition is *false*, emitting the supplied error message if the
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  446   * compiler has support to do so.
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  447   */
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  448  #define compiletime_assert(condition, msg) \
+eb5c2d4b45e3d2 Will Deacon 2020-07-21 @449  	_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  450  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
