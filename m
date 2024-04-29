@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-4037-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4038-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE6828B57BE
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Apr 2024 14:17:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46FB58B57C7
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Apr 2024 14:17:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2D07FB26752
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Apr 2024 12:17:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F1C041F2494D
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Apr 2024 12:17:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 457FB535C8;
-	Mon, 29 Apr 2024 12:16:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 679A35467E;
+	Mon, 29 Apr 2024 12:17:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rrtaQ6ZR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KsxKC6Yz"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDB085338F;
-	Mon, 29 Apr 2024 12:16:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20F635338F;
+	Mon, 29 Apr 2024 12:17:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714393012; cv=none; b=DJ5RBOqrD5ujbD/0P7RklIPxXeQWFmEef6VxC2cdO/u779uBghA0yQci/rIoPLsmoidOUKVWY+rmDzcmBdnGdEwoQZQ1XuzDBprT7hRLtITHlIUXvPojS5QBdTrB/A8eqE7ohX6mo7meAYDxaVNLtg1/PqMuCrIF2o+T2KFOa7w=
+	t=1714393023; cv=none; b=IN97aFbSsfnFWshUNGD3MhGsRMV6Gb1SIMe6TS/wvkTGzjlFwCyBcQBlDPHx9/7ldpy/a3pvVyJ3EzcuM+nWlJRCUA2mOtY0Mtq3SjCPkQW2Ig6+rR3rINMLkoQqqkGMyw7NQUlUDtSas1vehnLoJi6vGlXEe8bAf+ldxez7iZ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714393012; c=relaxed/simple;
-	bh=M6QQiy27Yx7cZTOC0617KB9Ln6pKKwikPWIcgenY/bM=;
+	s=arc-20240116; t=1714393023; c=relaxed/simple;
+	bh=DCxnhfiOCuZ1vbHkz6N1kzg5vD2Mqvj8bCN8VHj/6O4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bQ6ePHFX1XGzNRyYYy44TLVTQEgIHp/1s1RtUf9OpmFvbwZKwW+O0JEY7sUynG1sMC9/9m7eLA2qG3fsrSK9ChxEzwscIxhKvU+mgMymyafu0HPq7LdyJbxWp0GOyOs14NFVTqaOVQ5njSWtrhT2HsHjRq31Hje/GCjyQtJkGWo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rrtaQ6ZR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCD6AC116B1;
-	Mon, 29 Apr 2024 12:16:40 +0000 (UTC)
+	 MIME-Version; b=VBcaSb4D19vKz2llayIBkHbWhR7rXqn1LRXx3HWikllNyXEhuQFTVMlprddv/XPb6Qm45gxjqHCiLPRVFcX991DJNU1tDjin3KTINwEKBBMNf6DzSLS85cLRs27sVl26HyFQI3WPNE48A6cOQwql+DRINS7MmRXQbhtjyflAMC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KsxKC6Yz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09ACBC113CD;
+	Mon, 29 Apr 2024 12:16:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714393011;
-	bh=M6QQiy27Yx7cZTOC0617KB9Ln6pKKwikPWIcgenY/bM=;
+	s=k20201202; t=1714393022;
+	bh=DCxnhfiOCuZ1vbHkz6N1kzg5vD2Mqvj8bCN8VHj/6O4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=rrtaQ6ZRauqLf/QhMFAemIwxty5h8uPgHqNHcQHMySQ0MVzSPRXhHPa70sYRHy560
-	 R3ypGaNGmpK25kfwoaLY75bO6SL3PrS5QdWsCTpF3c0uNb2RjHmIMtQehjComNV4PA
-	 7rTOG9sf9Y4cRg2FKyjlc2ZMSHW9W888iUWXrOzZF7gBQ3O6SNysHzMRswOtXovsDJ
-	 CSL1YJvy+o21e6T+s2OL2KTljE4I5btQP46OkO1QxwfyupslVupTFPTNAfbQDRv3R/
-	 ArsqZQxMTG8N9Bok5TZcctWTKYXAa/ipZzVziPkgCkS09miRTrC6AopDRPXdDfwsbN
-	 pkCNlBgseaK3Q==
+	b=KsxKC6YzbNaUXXiQDkoRm6JVpQnTPy6OTSZ67gw3RpkdBYu0swWt90uhhReS5hNcI
+	 5Gg7D9WmrGrSpRdmpsnq+ijT+6Ktxi7QS5IwBMoCAo3CKxsTtZ/Cmp4aOqFtVKO6fM
+	 ojNfli12LUzd1JTLTrZ7bN+Pw1JALIAYYNbJM+e54De0/vtbyFB1gc1KE3jn/wReLE
+	 rUbXxw3HEVv+kgj7t3GtWsejAYlg8C2+EQ4/HxAoGFZl+5EgWo5OPio6QyMOhi+3Hy
+	 Jv3itmAPjuIm4KwRA3Id50NT77E5aKQcXu+m13EfaXR/n5ebTE4sK+CTNdXzyGmTuB
+	 jVFvQUHjG/Y9g==
 From: Mike Rapoport <rppt@kernel.org>
 To: linux-kernel@vger.kernel.org
 Cc: Alexandre Ghiti <alexghiti@rivosinc.com>,
@@ -88,9 +88,9 @@ Cc: Alexandre Ghiti <alexghiti@rivosinc.com>,
 	netdev@vger.kernel.org,
 	sparclinux@vger.kernel.org,
 	x86@kernel.org
-Subject: [PATCH v7 01/16] arm64: module: remove unneeded call to kasan_alloc_module_shadow()
-Date: Mon, 29 Apr 2024 15:16:05 +0300
-Message-ID: <20240429121620.1186447-2-rppt@kernel.org>
+Subject: [PATCH v7 02/16] mips: module: rename MODULE_START to MODULES_VADDR
+Date: Mon, 29 Apr 2024 15:16:06 +0300
+Message-ID: <20240429121620.1186447-3-rppt@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240429121620.1186447-1-rppt@kernel.org>
 References: <20240429121620.1186447-1-rppt@kernel.org>
@@ -104,36 +104,63 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 
-Since commit f6f37d9320a1 ("arm64: select KASAN_VMALLOC for SW/HW_TAGS
-modes") KASAN_VMALLOC is always enabled when KASAN is on. This means
-that allocations in module_alloc() will be tracked by KASAN protection
-for vmalloc() and that kasan_alloc_module_shadow() will be always an
-empty inline and there is no point in calling it.
-
-Drop meaningless call to kasan_alloc_module_shadow() from
-module_alloc().
+and MODULE_END to MODULES_END to match other architectures that define
+custom address space for modules.
 
 Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
 ---
- arch/arm64/kernel/module.c | 5 -----
- 1 file changed, 5 deletions(-)
+ arch/mips/include/asm/pgtable-64.h | 4 ++--
+ arch/mips/kernel/module.c          | 4 ++--
+ arch/mips/mm/fault.c               | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm64/kernel/module.c b/arch/arm64/kernel/module.c
-index 47e0be610bb6..e92da4da1b2a 100644
---- a/arch/arm64/kernel/module.c
-+++ b/arch/arm64/kernel/module.c
-@@ -141,11 +141,6 @@ void *module_alloc(unsigned long size)
- 				    __func__);
- 	}
+diff --git a/arch/mips/include/asm/pgtable-64.h b/arch/mips/include/asm/pgtable-64.h
+index 20ca48c1b606..c0109aff223b 100644
+--- a/arch/mips/include/asm/pgtable-64.h
++++ b/arch/mips/include/asm/pgtable-64.h
+@@ -147,8 +147,8 @@
+ #if defined(CONFIG_MODULES) && defined(KBUILD_64BIT_SYM32) && \
+ 	VMALLOC_START != CKSSEG
+ /* Load modules into 32bit-compatible segment. */
+-#define MODULE_START	CKSSEG
+-#define MODULE_END	(FIXADDR_START-2*PAGE_SIZE)
++#define MODULES_VADDR	CKSSEG
++#define MODULES_END	(FIXADDR_START-2*PAGE_SIZE)
+ #endif
  
--	if (p && (kasan_alloc_module_shadow(p, size, GFP_KERNEL) < 0)) {
--		vfree(p);
--		return NULL;
--	}
--
- 	/* Memory is intended to be executable, reset the pointer tag. */
- 	return kasan_reset_tag(p);
+ #define pte_ERROR(e) \
+diff --git a/arch/mips/kernel/module.c b/arch/mips/kernel/module.c
+index 7b2fbaa9cac5..9a6c96014904 100644
+--- a/arch/mips/kernel/module.c
++++ b/arch/mips/kernel/module.c
+@@ -31,10 +31,10 @@ struct mips_hi16 {
+ static LIST_HEAD(dbe_list);
+ static DEFINE_SPINLOCK(dbe_lock);
+ 
+-#ifdef MODULE_START
++#ifdef MODULES_VADDR
+ void *module_alloc(unsigned long size)
+ {
+-	return __vmalloc_node_range(size, 1, MODULE_START, MODULE_END,
++	return __vmalloc_node_range(size, 1, MODULES_VADDR, MODULES_END,
+ 				GFP_KERNEL, PAGE_KERNEL, 0, NUMA_NO_NODE,
+ 				__builtin_return_address(0));
  }
+diff --git a/arch/mips/mm/fault.c b/arch/mips/mm/fault.c
+index aaa9a242ebba..37fedeaca2e9 100644
+--- a/arch/mips/mm/fault.c
++++ b/arch/mips/mm/fault.c
+@@ -83,8 +83,8 @@ static void __do_page_fault(struct pt_regs *regs, unsigned long write,
+ 
+ 	if (unlikely(address >= VMALLOC_START && address <= VMALLOC_END))
+ 		goto VMALLOC_FAULT_TARGET;
+-#ifdef MODULE_START
+-	if (unlikely(address >= MODULE_START && address < MODULE_END))
++#ifdef MODULES_VADDR
++	if (unlikely(address >= MODULES_VADDR && address < MODULES_END))
+ 		goto VMALLOC_FAULT_TARGET;
+ #endif
+ 
 -- 
 2.43.0
 
