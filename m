@@ -1,317 +1,276 @@
-Return-Path: <linux-arch+bounces-4059-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4060-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 644108B6E5C
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Apr 2024 11:30:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8417F8B6F22
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Apr 2024 12:09:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 882491C22D50
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Apr 2024 09:30:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3AFF5282595
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Apr 2024 10:09:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD67012C534;
-	Tue, 30 Apr 2024 09:28:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB209129A6B;
+	Tue, 30 Apr 2024 10:09:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="vqeIBGjX";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="Y4Kk2Nxd";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="vqeIBGjX";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="Y4Kk2Nxd"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 998E8129A7B;
-	Tue, 30 Apr 2024 09:28:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EAF41292D2;
+	Tue, 30 Apr 2024 10:09:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714469331; cv=none; b=MgfK2jqfD+EwjMTc1dT4t4yzzpE22g5vridG94eMOcMbiQ7GJJNUFiPowqkLcKkLPrUmKJUfoO15wRn62JsQQEupger4aQ/m6EDcgmebrM7CyBIwXOm0Ng2HL/3dN6W/UQFqq9DpV3Y2s/wqd0nhGlM4lFKEUlr684z9u3VAm1o=
+	t=1714471746; cv=none; b=KaNj+aypUkEfNo2NrHq261CP3NJiWi5N2mYkHWXQ6PHJujb6Od8sLmT3NJ3HtBWZssBTi3tHWJ9w1uGLWCNHK0vBFzBBPERR7+cQdgXF2o6nsDXkfiCS1uqr371ZyA74st6r6Wq1tO0leNn0x0cdxyepAYRyRvlAoTuwlEMkm+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714469331; c=relaxed/simple;
-	bh=9RpxAqlQFxPUKKUroGsIiChbOC4stBfRR+06MpzUCLw=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=s9OeQUhITCTn8P2yv0h5O65Za5NGijOa3L9BcxAszF0o/bwXn3F3eVUhUlqkWenDBpb0o7T0lYz47aQ+HaZLr4sgJ17+1OHXTNQj8JWvpld99QpZNhq6wiIFxIuisdVOhSeXcfoDLhDwTIRkrWOYYMtLd7DCK4msKIXptOx1OMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VTFHV4Q0cz6D9dD;
-	Tue, 30 Apr 2024 17:28:22 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 5AF32140A08;
-	Tue, 30 Apr 2024 17:28:40 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Tue, 30 Apr
- 2024 10:28:39 +0100
-Date: Tue, 30 Apr 2024 10:28:38 +0100
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: Gavin Shan <gshan@redhat.com>
-CC: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra
-	<peterz@infradead.org>, <linux-pm@vger.kernel.org>,
-	<loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
-	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <kvmarm@lists.linux.dev>,
-	<x86@kernel.org>, Russell King <linux@armlinux.org.uk>, "Rafael J . Wysocki"
-	<rafael@kernel.org>, Miguel Luis <miguel.luis@oracle.com>, James Morse
-	<james.morse@arm.com>, Salil Mehta <salil.mehta@huawei.com>, "Jean-Philippe
- Brucker" <jean-philippe@linaro.org>, Catalin Marinas
-	<catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Marc Zyngier
-	<maz@kernel.org>, Hanjun Guo <guohanjun@huawei.com>, Ingo Molnar
-	<mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
-	<dave.hansen@linux.intel.com>, <linuxarm@huawei.com>, <justin.he@arm.com>,
-	<jianyong.wu@arm.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, "Sudeep
- Holla" <sudeep.holla@arm.com>
-Subject: Re: [PATCH v8 04/16] ACPI: processor: Move checks and availability
- of acpi_processor earlier
-Message-ID: <20240430102838.00006e04@Huawei.com>
-In-Reply-To: <80a2e07f-ecb2-48af-b2be-646f17e0e63e@redhat.com>
-References: <20240426135126.12802-1-Jonathan.Cameron@huawei.com>
-	<20240426135126.12802-5-Jonathan.Cameron@huawei.com>
-	<80a2e07f-ecb2-48af-b2be-646f17e0e63e@redhat.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1714471746; c=relaxed/simple;
+	bh=Y2+hS4qRZuLrKbWWMcpktJxJo5s+UAVeM+RZTE4OeK0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LNNUvR1Uqle1LdnqILH4BFZJ4W5Hnak1XB6YDa8YHh3xyoQdLAq2Y5jlERygrE6yEGDBEFBxseqoMAaBL7+YFuR/Pte8jzpvJd7tnFBOwdg59FYq36DWeWBkTeuhYy8Dk+w9r0vA+ANSp4kAJ5ExchF0vZj37jOC1EZJqzpbH90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=vqeIBGjX; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=Y4Kk2Nxd; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=vqeIBGjX; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=Y4Kk2Nxd; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 94A5233F55;
+	Tue, 30 Apr 2024 10:09:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1714471742; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=PTUPyaWcpZDKUukiVIneGRzBea/lmcCk8kXRR619DJk=;
+	b=vqeIBGjXPKb0XycMvacAW428uolNoqtaN+EBo2mJHjf74TxTIQVlt1MpATsa4IuUZcKLzy
+	UJEys7GFBXXE5vubiBV2DPs1hUa/STmWvTjbv7yEWIAwLpxqDSUen9/F+c160SQUX7J9ZM
+	gWZoQjDIPJgvZSToK75KO55SPRn2Kws=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1714471742;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=PTUPyaWcpZDKUukiVIneGRzBea/lmcCk8kXRR619DJk=;
+	b=Y4Kk2NxdcsJrpGpYXQLpbXlde7mZBRQhy/lhK6wfFaRvxYGJW/MWwnAVpk3q6wgGY68wCh
+	8DrbHfPc84XlzxAg==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1714471742; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=PTUPyaWcpZDKUukiVIneGRzBea/lmcCk8kXRR619DJk=;
+	b=vqeIBGjXPKb0XycMvacAW428uolNoqtaN+EBo2mJHjf74TxTIQVlt1MpATsa4IuUZcKLzy
+	UJEys7GFBXXE5vubiBV2DPs1hUa/STmWvTjbv7yEWIAwLpxqDSUen9/F+c160SQUX7J9ZM
+	gWZoQjDIPJgvZSToK75KO55SPRn2Kws=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1714471742;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=PTUPyaWcpZDKUukiVIneGRzBea/lmcCk8kXRR619DJk=;
+	b=Y4Kk2NxdcsJrpGpYXQLpbXlde7mZBRQhy/lhK6wfFaRvxYGJW/MWwnAVpk3q6wgGY68wCh
+	8DrbHfPc84XlzxAg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 86112137BA;
+	Tue, 30 Apr 2024 10:09:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id CkR2ID7DMGa6bAAAD6G6ig
+	(envelope-from <jack@suse.cz>); Tue, 30 Apr 2024 10:09:02 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+	id 32814A06D4; Tue, 30 Apr 2024 12:09:02 +0200 (CEST)
+Date: Tue, 30 Apr 2024 12:09:02 +0200
+From: Jan Kara <jack@suse.cz>
+To: cgzones@googlemail.com
+Cc: x86@kernel.org, linux-alpha@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, audit@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+	linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+	Matt Turner <mattst88@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Michal Simek <monstr@monstr.eu>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
+	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	Rich Felker <dalias@libc.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+	Max Filippov <jcmvbkbc@gmail.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@redhat.com>,
+	Arnd Bergmann <arnd@arndb.de>, Jens Axboe <axboe@kernel.dk>,
+	Pavel Begunkov <asml.silence@gmail.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Sohil Mehta <sohil.mehta@intel.com>,
+	Palmer Dabbelt <palmer@sifive.com>,
+	Miklos Szeredi <mszeredi@redhat.com>, Nhat Pham <nphamcs@gmail.com>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Kees Cook <keescook@chromium.org>,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	Mark Rutland <mark.rutland@arm.com>, io-uring@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] fs/xattr: add *at family syscalls
+Message-ID: <20240430100902.iwmeszr2jzv4wyo7@quack3>
+References: <20240426162042.191916-1-cgoettsche@seltendoof.de>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240426162042.191916-1-cgoettsche@seltendoof.de>
+X-Spam-Level: 
+X-Spamd-Result: default: False [-2.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	FREEMAIL_CC(0.00)[kernel.org,vger.kernel.org,lists.infradead.org,lists.linux-m68k.org,lists.ozlabs.org,linaro.org,jurassic.park.msu.ru,gmail.com,armlinux.org.uk,arm.com,linux-m68k.org,monstr.eu,alpha.franken.de,HansenPartnership.com,gmx.de,ellerman.id.au,csgroup.eu,linux.ibm.com,users.sourceforge.jp,libc.org,physik.fu-berlin.de,davemloft.net,gaisler.com,linutronix.de,redhat.com,alien8.de,linux.intel.com,zytor.com,zankel.net,zeniv.linux.org.uk,suse.cz,paul-moore.com,arndb.de,kernel.dk,infradead.org,intel.com,sifive.com,schaufler-ca.com,broadcom.com,chromium.org];
+	TAGGED_RCPT(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FREEMAIL_TO(0.00)[googlemail.com];
+	RCVD_COUNT_THREE(0.00)[3];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	TO_MATCH_ENVRCPT_SOME(0.00)[];
+	RCPT_COUNT_GT_50(0.00)[72];
+	RCVD_TLS_LAST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
+X-Spam-Score: -2.30
+X-Spam-Flag: NO
 
-On Tue, 30 Apr 2024 14:17:24 +1000
-Gavin Shan <gshan@redhat.com> wrote:
-
-> On 4/26/24 23:51, Jonathan Cameron wrote:
-> > Make the per_cpu(processors, cpu) entries available earlier so that
-> > they are available in arch_register_cpu() as ARM64 will need access
-> > to the acpi_handle to distinguish between acpi_processor_add()
-> > and earlier registration attempts (which will fail as _STA cannot
-> > be checked).
-> > 
-> > Reorder the remove flow to clear this per_cpu() after
-> > arch_unregister_cpu() has completed, allowing it to be used in
-> > there as well.
-> > 
-> > Note that on x86 for the CPU hotplug case, the pr->id prior to
-> > acpi_map_cpu() may be invalid. Thus the per_cpu() structures
-> > must be initialized after that call or after checking the ID
-> > is valid (not hotplug path).
-> > 
-> > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > 
-> > ---
-> > v8: On buggy bios detection when setting per_cpu structures
-> >      do not carry on.
-> >      Fix up the clearing of per cpu structures to remove unwanted
-> >      side effects and ensure an error code isn't use to reference them.
-> > ---
-> >   drivers/acpi/acpi_processor.c | 79 +++++++++++++++++++++--------------
-> >   1 file changed, 48 insertions(+), 31 deletions(-)
-> > 
-> > diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
-> > index ba0a6f0ac841..3b180e21f325 100644
-> > --- a/drivers/acpi/acpi_processor.c
-> > +++ b/drivers/acpi/acpi_processor.c
-> > @@ -183,8 +183,38 @@ static void __init acpi_pcc_cpufreq_init(void) {}
-> >   #endif /* CONFIG_X86 */
-> >   
-> >   /* Initialization */
-> > +static DEFINE_PER_CPU(void *, processor_device_array);
-> > +
-> > +static bool acpi_processor_set_per_cpu(struct acpi_processor *pr,
-> > +				       struct acpi_device *device)
-> > +{
-> > +	BUG_ON(pr->id >= nr_cpu_ids);  
+On Fri 26-04-24 18:20:14, Christian Göttsche wrote:
+> From: Christian Göttsche <cgzones@googlemail.com>
 > 
-> One blank line after BUG_ON() if we need to follow original implementation.
-
-Sure unintentional - I'll put that back.
-
+> Add the four syscalls setxattrat(), getxattrat(), listxattrat() and
+> removexattrat().  Those can be used to operate on extended attributes,
+> especially security related ones, either relative to a pinned directory
+> or on a file descriptor without read access, avoiding a
+> /proc/<pid>/fd/<fd> detour, requiring a mounted procfs.
 > 
-> > +	/*
-> > +	 * Buggy BIOS check.
-> > +	 * ACPI id of processors can be reported wrongly by the BIOS.
-> > +	 * Don't trust it blindly
-> > +	 */
-> > +	if (per_cpu(processor_device_array, pr->id) != NULL &&
-> > +	    per_cpu(processor_device_array, pr->id) != device) {
-> > +		dev_warn(&device->dev,
-> > +			 "BIOS reported wrong ACPI id %d for the processor\n",
-> > +			 pr->id);
-> > +		/* Give up, but do not abort the namespace scan. */  
+> One use case will be setfiles(8) setting SELinux file contexts
+> ("security.selinux") without race conditions and without a file
+> descriptor opened with read access requiring SELinux read permission.
 > 
-> It depends on how the return value is handled by the caller if the namespace
-> is continued to be scanned. The caller can be acpi_processor_hotadd_init()
-> and acpi_processor_get_info() after this patch is applied. So I think this
-> specific comment need to be moved to the caller.
-
-Good point. This gets messy and was an unintended change.
-
-Previously the options were:
-1) acpi_processor_get_info() failed for other reasons - this code was never called.
-2) acpi_processor_get_info() succeeded without acpi_processor_hotadd_init (non hotplug)
-   this code then ran and would paper over the problem doing a bunch of cleanup under err.
-3) acpi_processor_get_info() succeeded with acpi_processor_hotadd_init called.
-   This code then ran and would paper over the problem doing a bunch of cleanup under err.
-
-We should maintain that or argue cleanly against it.
-
-This isn't helped the the fact I have no idea which cases we care about for that bios
-bug handling.  Do any of those bios's ever do hotplug?  Guess we have to try and maintain
-whatever protection this was offering.
-
-Also, the original code leaks data in some paths and I have limited idea
-of whether it is intentional or not. So to tidy the issue up that you've identified
-I'll need to try and make that code consistent first.
-
-I suspect the only way to do that is going to be to duplicate the allocations we
-'want' to leak to deal with the bios bug detection.
-
-For example acpi_processor_get_info() failing leaks pr and pr->throttling.shared_cpu_map
-before this series. After this series we need pr to leak because it's used for the detection
-via processor_device_array.
-
-I'll work through this but it's going to be tricky to tell if we get right.
-Step 1 will be closing the existing leaks and then we will have something
-consistent to build on.
-
+> Use the do_{name}at() pattern from fs/open.c.
 > 
-> Besides, it seems acpi_processor_set_per_cpu() isn't properly called and
-> memory leakage can happen. More details are given below.
+> Pass the value of the extended attribute, its length, and for
+> setxattrat(2) the command (XATTR_CREATE or XATTR_REPLACE) via an added
+> struct xattr_args to not exceed six syscall arguments and not
+> merging the AT_* and XATTR_* flags.
 > 
-> > +		return false;
-> > +	}
-> > +	/*
-> > +	 * processor_device_array is not cleared on errors to allow buggy BIOS
-> > +	 * checks.
-> > +	 */
-> > +	per_cpu(processor_device_array, pr->id) = device;
-> > +	per_cpu(processors, pr->id) = pr;
-> > +
-> > +	return true;
-> > +}
-> > +
-> >   #ifdef CONFIG_ACPI_HOTPLUG_CPU
-> > -static int acpi_processor_hotadd_init(struct acpi_processor *pr)
-> > +static int acpi_processor_hotadd_init(struct acpi_processor *pr,
-> > +				      struct acpi_device *device)
-> >   {
-> >   	int ret;
-> >   
-> > @@ -198,8 +228,15 @@ static int acpi_processor_hotadd_init(struct acpi_processor *pr)
-> >   	if (ret)
-> >   		goto out;
-> >   
-> > +	if (!acpi_processor_set_per_cpu(pr, device)) {
-> > +		acpi_unmap_cpu(pr->id);
-> > +		goto out;
-> > +	}
-> > +  
-> 
-> With the 'goto out', zero is returned from acpi_processor_hotadd_init() to acpi_processor_get_info().
-> The zero return value is carried from acpi_map_cpu() in acpi_processor_hotadd_init(). If I'm correct,
-> we need return errno from acpi_processor_get_info() to acpi_processor_add() so that cleanup can be
-> done. For example, the cleanup corresponding to the 'err' tag can be done in acpi_processor_add().
-> Otherwise, we will have memory leakage.
-> 
-> >   	ret = arch_register_cpu(pr->id);
-> >   	if (ret) {
-> > +		/* Leave the processor device array in place to detect buggy bios */
-> > +		per_cpu(processors, pr->id) = NULL;
-> >   		acpi_unmap_cpu(pr->id);
-> >   		goto out;
-> >   	}
-> > @@ -217,7 +254,8 @@ static int acpi_processor_hotadd_init(struct acpi_processor *pr)
-> >   	return ret;
-> >   }
-> >   #else
-> > -static inline int acpi_processor_hotadd_init(struct acpi_processor *pr)
-> > +static inline int acpi_processor_hotadd_init(struct acpi_processor *pr,
-> > +					     struct acpi_device *device)
-> >   {
-> >   	return -ENODEV;
-> >   }
-> > @@ -316,10 +354,13 @@ static int acpi_processor_get_info(struct acpi_device *device)
-> >   	 *  because cpuid <-> apicid mapping is persistent now.
-> >   	 */
-> >   	if (invalid_logical_cpuid(pr->id) || !cpu_present(pr->id)) {
-> > -		int ret = acpi_processor_hotadd_init(pr);
-> > +		int ret = acpi_processor_hotadd_init(pr, device);
-> >   
-> >   		if (ret)
-> >   			return ret;
-> > +	} else {
-> > +		if (!acpi_processor_set_per_cpu(pr, device))
-> > +			return 0;
-> >   	}
-> >     
-> 
-> For non-hotplug case, we still need pass the error to acpi_processor_add() so that
-> cleanup corresponding 'err' tag can be done. Otherwise, we will have memory leakage.
-> 
-> >   	/*
-> > @@ -365,8 +406,6 @@ static int acpi_processor_get_info(struct acpi_device *device)
-> >    * (cpu_data(cpu)) values, like CPU feature flags, family, model, etc.
-> >    * Such things have to be put in and set up by the processor driver's .probe().
-> >    */
-> > -static DEFINE_PER_CPU(void *, processor_device_array);
-> > -
-> >   static int acpi_processor_add(struct acpi_device *device,
-> >   					const struct acpi_device_id *id)
-> >   {
-> > @@ -395,28 +434,6 @@ static int acpi_processor_add(struct acpi_device *device,
-> >   	if (result) /* Processor is not physically present or unavailable */
-> >   		return 0;
-> >   
-> > -	BUG_ON(pr->id >= nr_cpu_ids);
-> > -
-> > -	/*
-> > -	 * Buggy BIOS check.
-> > -	 * ACPI id of processors can be reported wrongly by the BIOS.
-> > -	 * Don't trust it blindly
-> > -	 */
-> > -	if (per_cpu(processor_device_array, pr->id) != NULL &&
-> > -	    per_cpu(processor_device_array, pr->id) != device) {
-> > -		dev_warn(&device->dev,
-> > -			"BIOS reported wrong ACPI id %d for the processor\n",
-> > -			pr->id);
-> > -		/* Give up, but do not abort the namespace scan. */
-> > -		goto err;
-> > -	}
-> > -	/*
-> > -	 * processor_device_array is not cleared on errors to allow buggy BIOS
-> > -	 * checks.
-> > -	 */
-> > -	per_cpu(processor_device_array, pr->id) = device;
-> > -	per_cpu(processors, pr->id) = pr;
-> > -
-> >   	dev = get_cpu_device(pr->id);
-> >   	if (!dev) {
-> >   		result = -ENODEV;
-> > @@ -469,10 +486,6 @@ static void acpi_processor_remove(struct acpi_device *device)
-> >   	device_release_driver(pr->dev);
-> >   	acpi_unbind_one(pr->dev);
-> >   
-> > -	/* Clean up. */
-> > -	per_cpu(processor_device_array, pr->id) = NULL;
-> > -	per_cpu(processors, pr->id) = NULL;
-> > -
-> >   	cpu_maps_update_begin();
-> >   	cpus_write_lock();
-> >   
-> > @@ -480,6 +493,10 @@ static void acpi_processor_remove(struct acpi_device *device)
-> >   	arch_unregister_cpu(pr->id);
-> >   	acpi_unmap_cpu(pr->id);
-> >   
-> > +	/* Clean up. */
-> > +	per_cpu(processor_device_array, pr->id) = NULL;
-> > +	per_cpu(processors, pr->id) = NULL;
-> > +
-> >   	cpus_write_unlock();
-> >   	cpu_maps_update_done();
-> >     
-> 
-> Thanks,
-> Gavin
-> 
+> Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
 
+The patch looks good to me. Just a few nits below:
+
+> -static int path_setxattr(const char __user *pathname,
+> +static int do_setxattrat(int dfd, const char __user *pathname, unsigned int at_flags,
+
+Can we please stay within 80 columns (happens in multiple places in the
+patch)? I don't insist but it makes things easier to read in some setups so
+I prefer it.
+
+> @@ -852,13 +908,21 @@ listxattr(struct dentry *d, char __user *list, size_t size)
+>  	return error;
+>  }
+>  
+> -static ssize_t path_listxattr(const char __user *pathname, char __user *list,
+> -			      size_t size, unsigned int lookup_flags)
+> +static ssize_t do_listxattrat(int dfd, const char __user *pathname, char __user *list,
+> +			      size_t size, int flags)
+
+So I like how in previous syscalls you have 'at_flags', 'lookup_flags', and
+'xattr_flags'. That makes things much easier to digest. Can you please stay
+with that convention here as well and call this argument 'at_flags'? Also I
+think the argument ordering like "dfd, pathname, at_flags, list, size" is
+more consistent with other syscalls you define.
+
+> @@ -870,16 +934,22 @@ static ssize_t path_listxattr(const char __user *pathname, char __user *list,
+>  	return error;
+>  }
+>  
+> +SYSCALL_DEFINE5(listxattrat, int, dfd, const char __user *, pathname, char __user *, list,
+> +		size_t, size, int, flags)
+> +{
+> +	return do_listxattrat(dfd, pathname, list, size, flags);
+> +}
+> +
+
+Same comment as above - "flags" -> "at_flags" and reorder args please.
+
+> @@ -917,13 +987,21 @@ removexattr(struct mnt_idmap *idmap, struct dentry *d,
+>  	return vfs_removexattr(idmap, d, kname);
+>  }
+>  
+> -static int path_removexattr(const char __user *pathname,
+> -			    const char __user *name, unsigned int lookup_flags)
+> +static int do_removexattrat(int dfd, const char __user *pathname,
+> +			    const char __user *name, int flags)
+>  {
+
+Same comment as above - "flags" -> "at_flags" and reorder args please.
+
+> @@ -939,16 +1017,22 @@ static int path_removexattr(const char __user *pathname,
+>  	return error;
+>  }
+>  
+> +SYSCALL_DEFINE4(removexattrat, int, dfd, const char __user *, pathname,
+> +		const char __user *, name, int, flags)
+> +{
+
+Same comment as above - "flags" -> "at_flags" and reorder args please.
+
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
 
