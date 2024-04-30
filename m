@@ -1,44 +1,44 @@
-Return-Path: <linux-arch+bounces-4090-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4091-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2734D8B7A2E
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Apr 2024 16:41:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDF148B7A34
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Apr 2024 16:42:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CFE3E2829FC
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Apr 2024 14:41:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 85B10285876
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Apr 2024 14:42:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98BDB7710A;
-	Tue, 30 Apr 2024 14:33:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7B4F14372F;
+	Tue, 30 Apr 2024 14:34:26 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF53977103;
-	Tue, 30 Apr 2024 14:33:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01246770FD;
+	Tue, 30 Apr 2024 14:34:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714487635; cv=none; b=tNGIVl5LsDhxRjGSuxP3DY2u9aPZf5y8DSAMXSoJPeip+Z5D3O1QwgLzwBn56Kay1FcAMQavC58CO0thMdqCv3mqxwHTVfBw6MnYE/eorGBUXahGF0/Nhvl1zFf+aifQzv5lbxpfRnAmi/m0p3OxZrCNoutXQAnOkZlErZZ80Sc=
+	t=1714487666; cv=none; b=rodQV6CkZJUAxtKgL0ku9qUaGlGuWsNnnku0W+i9NlzWKJwgqwh2npmP4DSCHbWyICZWzgIJZQu3TYT8vc/Bsc8/0fMdws2P05M3futbdQplJKAkdlEdXWmOBH6mInVhdjMf0E0hAAwvznUdAltiELz//CiwisyqWiIt8T7PBLY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714487635; c=relaxed/simple;
-	bh=JZ2gdHjxTZSDkioddp8aZRGRa23qJkly0JMwTmDP9Zc=;
+	s=arc-20240116; t=1714487666; c=relaxed/simple;
+	bh=Xb2KtypOmSmAWsf5ZVqNnSzLwY055t5v8OqjuBbnZjo=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pkIA4B17qo4FyPXn5lHG6r9F3yaJTHN54zzJbCdJZrhvTg/C0w3GmRzFOJ5Lf04ooiHOYQqprvsKkqZf9E8zMo3HDXcOSAiXsvq875VUe3AZQ4F+4FVyTVkYtneZSgvR4Yo6Qo8QpgZwvltJ9TmQqduros/5MNHL0/rGf+IOgPA=
+	 MIME-Version:Content-Type; b=KHTUK2Uo1nC2w9cV2uXWUmdnoGzOK+8EdnqRo2G+vFUNi7bbZvxIZ4I7eyBb+dyspn3rUWxzSj39AW+rdYMd9R46qlyMRHWT26Iadf6qSTSGlMr69zkwkVxvnXhbdxoMmQlFaS26R9xbRG8aKpDrQiU26HZeiIayY29P27TCDwk=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VTN0y3c9Xz6GD6x;
-	Tue, 30 Apr 2024 22:31:14 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VTN1T736sz6J7Mw;
+	Tue, 30 Apr 2024 22:31:41 +0800 (CST)
 Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id C111A1400DC;
-	Tue, 30 Apr 2024 22:33:51 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id C86F1140A08;
+	Tue, 30 Apr 2024 22:34:22 +0800 (CST)
 Received: from SecurePC-101-06.china.huawei.com (10.122.247.231) by
  lhrpeml500005.china.huawei.com (7.191.163.240) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Tue, 30 Apr 2024 15:33:50 +0100
+ 15.1.2507.35; Tue, 30 Apr 2024 15:34:22 +0100
 From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 To: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra
 	<peterz@infradead.org>, <linux-pm@vger.kernel.org>,
@@ -55,9 +55,9 @@ To: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra
 CC: Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave
  Hansen <dave.hansen@linux.intel.com>, <linuxarm@huawei.com>,
 	<justin.he@arm.com>, <jianyong.wu@arm.com>
-Subject: [PATCH v9 18/19] arm64: document virtual CPU hotplug's expectations
-Date: Tue, 30 Apr 2024 15:24:33 +0100
-Message-ID: <20240430142434.10471-19-Jonathan.Cameron@huawei.com>
+Subject: [PATCH v9 19/19] cpumask: Add enabled cpumask for present CPUs that can be brought online
+Date: Tue, 30 Apr 2024 15:24:34 +0100
+Message-ID: <20240430142434.10471-20-Jonathan.Cameron@huawei.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240430142434.10471-1-Jonathan.Cameron@huawei.com>
 References: <20240430142434.10471-1-Jonathan.Cameron@huawei.com>
@@ -74,120 +74,195 @@ X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
 
 From: James Morse <james.morse@arm.com>
 
-Add a description of physical and virtual CPU hotplug, explain the
-differences and elaborate on what is required in ACPI for a working
-virtual hotplug system.
+The 'offline' file in sysfs shows all offline CPUs, including those
+that aren't present. User-space is expected to remove not-present CPUs
+from this list to learn which CPUs could be brought online.
+
+CPUs can be present but not-enabled. These CPUs can't be brought online
+until the firmware policy changes, which comes with an ACPI notification
+that will register the CPUs.
+
+With only the offline and present files, user-space is unable to
+determine which CPUs it can try to bring online. Add a new CPU mask
+that shows this based on all the registered CPUs.
 
 Signed-off-by: James Morse <james.morse@arm.com>
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 Tested-by: Miguel Luis <miguel.luis@oracle.com>
+Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
+Tested-by: Jianyong Wu <jianyong.wu@arm.com>
+Acked-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
 ---
 v9: No change
 ---
- Documentation/arch/arm64/cpu-hotplug.rst | 79 ++++++++++++++++++++++++
- Documentation/arch/arm64/index.rst       |  1 +
- 2 files changed, 80 insertions(+)
+ .../ABI/testing/sysfs-devices-system-cpu      |  6 +++++
+ drivers/base/cpu.c                            | 10 ++++++++
+ include/linux/cpumask.h                       | 25 +++++++++++++++++++
+ kernel/cpu.c                                  |  3 +++
+ 4 files changed, 44 insertions(+)
 
-diff --git a/Documentation/arch/arm64/cpu-hotplug.rst b/Documentation/arch/arm64/cpu-hotplug.rst
-new file mode 100644
-index 000000000000..76ba8d932c72
---- /dev/null
-+++ b/Documentation/arch/arm64/cpu-hotplug.rst
-@@ -0,0 +1,79 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+.. _cpuhp_index:
+diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
+index 710d47be11e0..808efb5b860a 100644
+--- a/Documentation/ABI/testing/sysfs-devices-system-cpu
++++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
+@@ -694,3 +694,9 @@ Description:
+ 		(RO) indicates whether or not the kernel directly supports
+ 		modifying the crash elfcorehdr for CPU hot un/plug and/or
+ 		on/offline changes.
 +
-+====================
-+CPU Hotplug and ACPI
-+====================
++What:		/sys/devices/system/cpu/enabled
++Date:		Nov 2022
++Contact:	Linux kernel mailing list <linux-kernel@vger.kernel.org>
++Description:
++		(RO) the list of CPUs that can be brought online.
+diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
+index 7b83e9c87d7c..353ee39a5cbe 100644
+--- a/drivers/base/cpu.c
++++ b/drivers/base/cpu.c
+@@ -95,6 +95,7 @@ void unregister_cpu(struct cpu *cpu)
+ {
+ 	int logical_cpu = cpu->dev.id;
+ 
++	set_cpu_enabled(logical_cpu, false);
+ 	unregister_cpu_under_node(logical_cpu, cpu_to_node(logical_cpu));
+ 
+ 	device_unregister(&cpu->dev);
+@@ -273,6 +274,13 @@ static ssize_t print_cpus_offline(struct device *dev,
+ }
+ static DEVICE_ATTR(offline, 0444, print_cpus_offline, NULL);
+ 
++static ssize_t print_cpus_enabled(struct device *dev,
++				  struct device_attribute *attr, char *buf)
++{
++	return sysfs_emit(buf, "%*pbl\n", cpumask_pr_args(cpu_enabled_mask));
++}
++static DEVICE_ATTR(enabled, 0444, print_cpus_enabled, NULL);
 +
-+CPU hotplug in the arm64 world is commonly used to describe the kernel taking
-+CPUs online/offline using PSCI. This document is about ACPI firmware allowing
-+CPUs that were not available during boot to be added to the system later.
+ static ssize_t print_cpus_isolated(struct device *dev,
+ 				  struct device_attribute *attr, char *buf)
+ {
+@@ -413,6 +421,7 @@ int register_cpu(struct cpu *cpu, int num)
+ 	register_cpu_under_node(num, cpu_to_node(num));
+ 	dev_pm_qos_expose_latency_limit(&cpu->dev,
+ 					PM_QOS_RESUME_LATENCY_NO_CONSTRAINT);
++	set_cpu_enabled(num, true);
+ 
+ 	return 0;
+ }
+@@ -494,6 +503,7 @@ static struct attribute *cpu_root_attrs[] = {
+ 	&cpu_attrs[2].attr.attr,
+ 	&dev_attr_kernel_max.attr,
+ 	&dev_attr_offline.attr,
++	&dev_attr_enabled.attr,
+ 	&dev_attr_isolated.attr,
+ #ifdef CONFIG_NO_HZ_FULL
+ 	&dev_attr_nohz_full.attr,
+diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
+index 1c29947db848..4b202b94c97a 100644
+--- a/include/linux/cpumask.h
++++ b/include/linux/cpumask.h
+@@ -93,6 +93,7 @@ static inline void set_nr_cpu_ids(unsigned int nr)
+  *
+  *     cpu_possible_mask- has bit 'cpu' set iff cpu is populatable
+  *     cpu_present_mask - has bit 'cpu' set iff cpu is populated
++ *     cpu_enabled_mask  - has bit 'cpu' set iff cpu can be brought online
+  *     cpu_online_mask  - has bit 'cpu' set iff cpu available to scheduler
+  *     cpu_active_mask  - has bit 'cpu' set iff cpu available to migration
+  *
+@@ -125,11 +126,13 @@ static inline void set_nr_cpu_ids(unsigned int nr)
+ 
+ extern struct cpumask __cpu_possible_mask;
+ extern struct cpumask __cpu_online_mask;
++extern struct cpumask __cpu_enabled_mask;
+ extern struct cpumask __cpu_present_mask;
+ extern struct cpumask __cpu_active_mask;
+ extern struct cpumask __cpu_dying_mask;
+ #define cpu_possible_mask ((const struct cpumask *)&__cpu_possible_mask)
+ #define cpu_online_mask   ((const struct cpumask *)&__cpu_online_mask)
++#define cpu_enabled_mask   ((const struct cpumask *)&__cpu_enabled_mask)
+ #define cpu_present_mask  ((const struct cpumask *)&__cpu_present_mask)
+ #define cpu_active_mask   ((const struct cpumask *)&__cpu_active_mask)
+ #define cpu_dying_mask    ((const struct cpumask *)&__cpu_dying_mask)
+@@ -1009,6 +1012,7 @@ extern const DECLARE_BITMAP(cpu_all_bits, NR_CPUS);
+ #else
+ #define for_each_possible_cpu(cpu) for_each_cpu((cpu), cpu_possible_mask)
+ #define for_each_online_cpu(cpu)   for_each_cpu((cpu), cpu_online_mask)
++#define for_each_enabled_cpu(cpu)   for_each_cpu((cpu), cpu_enabled_mask)
+ #define for_each_present_cpu(cpu)  for_each_cpu((cpu), cpu_present_mask)
+ #endif
+ 
+@@ -1031,6 +1035,15 @@ set_cpu_possible(unsigned int cpu, bool possible)
+ 		cpumask_clear_cpu(cpu, &__cpu_possible_mask);
+ }
+ 
++static inline void
++set_cpu_enabled(unsigned int cpu, bool can_be_onlined)
++{
++	if (can_be_onlined)
++		cpumask_set_cpu(cpu, &__cpu_enabled_mask);
++	else
++		cpumask_clear_cpu(cpu, &__cpu_enabled_mask);
++}
 +
-+``possible`` and ``present`` refer to the state of the CPU as seen by linux.
+ static inline void
+ set_cpu_present(unsigned int cpu, bool present)
+ {
+@@ -1112,6 +1125,7 @@ static __always_inline unsigned int num_online_cpus(void)
+ 	return raw_atomic_read(&__num_online_cpus);
+ }
+ #define num_possible_cpus()	cpumask_weight(cpu_possible_mask)
++#define num_enabled_cpus()	cpumask_weight(cpu_enabled_mask)
+ #define num_present_cpus()	cpumask_weight(cpu_present_mask)
+ #define num_active_cpus()	cpumask_weight(cpu_active_mask)
+ 
+@@ -1120,6 +1134,11 @@ static inline bool cpu_online(unsigned int cpu)
+ 	return cpumask_test_cpu(cpu, cpu_online_mask);
+ }
+ 
++static inline bool cpu_enabled(unsigned int cpu)
++{
++	return cpumask_test_cpu(cpu, cpu_enabled_mask);
++}
 +
+ static inline bool cpu_possible(unsigned int cpu)
+ {
+ 	return cpumask_test_cpu(cpu, cpu_possible_mask);
+@@ -1144,6 +1163,7 @@ static inline bool cpu_dying(unsigned int cpu)
+ 
+ #define num_online_cpus()	1U
+ #define num_possible_cpus()	1U
++#define num_enabled_cpus()	1U
+ #define num_present_cpus()	1U
+ #define num_active_cpus()	1U
+ 
+@@ -1157,6 +1177,11 @@ static inline bool cpu_possible(unsigned int cpu)
+ 	return cpu == 0;
+ }
+ 
++static inline bool cpu_enabled(unsigned int cpu)
++{
++	return cpu == 0;
++}
 +
-+CPU Hotplug on physical systems - CPUs not present at boot
-+----------------------------------------------------------
+ static inline bool cpu_present(unsigned int cpu)
+ {
+ 	return cpu == 0;
+diff --git a/kernel/cpu.c b/kernel/cpu.c
+index 8f6affd051f7..537099bf5d02 100644
+--- a/kernel/cpu.c
++++ b/kernel/cpu.c
+@@ -3117,6 +3117,9 @@ EXPORT_SYMBOL(__cpu_possible_mask);
+ struct cpumask __cpu_online_mask __read_mostly;
+ EXPORT_SYMBOL(__cpu_online_mask);
+ 
++struct cpumask __cpu_enabled_mask __read_mostly;
++EXPORT_SYMBOL(__cpu_enabled_mask);
 +
-+Physical systems need to mark a CPU that is ``possible`` but not ``present`` as
-+being ``present``. An example would be a dual socket machine, where the package
-+in one of the sockets can be replaced while the system is running.
-+
-+This is not supported.
-+
-+In the arm64 world CPUs are not a single device but a slice of the system.
-+There are no systems that support the physical addition (or removal) of CPUs
-+while the system is running, and ACPI is not able to sufficiently describe
-+them.
-+
-+e.g. New CPUs come with new caches, but the platform's cache toplogy is
-+described in a static table, the PPTT. How caches are shared between CPUs is
-+not discoverable, and must be described by firmware.
-+
-+e.g. The GIC redistributor for each CPU must be accessed by the driver during
-+boot to discover the system wide supported features. ACPI's MADT GICC
-+structures can describe a redistributor associated with a disabled CPU, but
-+can't describe whether the redistributor is accessible, only that it is not
-+'always on'.
-+
-+arm64's ACPI tables assume that everything described is ``present``.
-+
-+
-+CPU Hotplug on virtual systems - CPUs not enabled at boot
-+---------------------------------------------------------
-+
-+Virtual systems have the advantage that all the properties the system will
-+ever have can be described at boot. There are no power-domain considerations
-+as such devices are emulated.
-+
-+CPU Hotplug on virtual systems is supported. It is distinct from physical
-+CPU Hotplug as all resources are described as ``present``, but CPUs may be
-+marked as disabled by firmware. Only the CPU's online/offline behaviour is
-+influenced by firmware. An example is where a virtual machine boots with a
-+single CPU, and additional CPUs are added once a cloud orchestrator deploys
-+the workload.
-+
-+For a virtual machine, the VMM (e.g. Qemu) plays the part of firmware.
-+
-+Virtual hotplug is implemented as a firmware policy affecting which CPUs can be
-+brought online. Firmware can enforce its policy via PSCI's return codes. e.g.
-+``DENIED``.
-+
-+The ACPI tables must describe all the resources of the virtual machine. CPUs
-+that firmware wishes to disable either from boot (or later) should not be
-+``enabled`` in the MADT GICC structures, but should have the ``online capable``
-+bit set, to indicate they can be enabled later. The boot CPU must be marked as
-+``enabled``.  The 'always on' GICR structure must be used to describe the
-+redistributors.
-+
-+CPUs described as ``online capable`` but not ``enabled`` can be set to enabled
-+by the DSDT's Processor object's _STA method. On virtual systems the _STA method
-+must always report the CPU as ``present``. Changes to the firmware policy can
-+be notified to the OS via device-check or eject-request.
-+
-+CPUs described as ``enabled`` in the static table, should not have their _STA
-+modified dynamically by firmware. Soft-restart features such as kexec will
-+re-read the static properties of the system from these static tables, and
-+may malfunction if these no longer describe the running system. Linux will
-+re-discover the dynamic properties of the system from the _STA method later
-+during boot.
-diff --git a/Documentation/arch/arm64/index.rst b/Documentation/arch/arm64/index.rst
-index d08e924204bf..78544de0a8a9 100644
---- a/Documentation/arch/arm64/index.rst
-+++ b/Documentation/arch/arm64/index.rst
-@@ -13,6 +13,7 @@ ARM64 Architecture
-     asymmetric-32bit
-     booting
-     cpu-feature-registers
-+    cpu-hotplug
-     elf_hwcaps
-     hugetlbpage
-     kdump
+ struct cpumask __cpu_present_mask __read_mostly;
+ EXPORT_SYMBOL(__cpu_present_mask);
+ 
 -- 
 2.39.2
 
