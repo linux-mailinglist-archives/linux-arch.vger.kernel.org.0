@@ -1,210 +1,130 @@
-Return-Path: <linux-arch+bounces-4067-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4068-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F08FA8B758C
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Apr 2024 14:16:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94EE98B75F3
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Apr 2024 14:41:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E8221F24F1E
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Apr 2024 12:16:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C74111C2258F
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Apr 2024 12:41:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2069F13DB90;
-	Tue, 30 Apr 2024 12:16:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77A7B171668;
+	Tue, 30 Apr 2024 12:41:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rCUkLJkh"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38E1A168A9;
-	Tue, 30 Apr 2024 12:16:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1182E171093
+	for <linux-arch@vger.kernel.org>; Tue, 30 Apr 2024 12:41:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714479366; cv=none; b=adqrGyIN1D54owhvTp+TJKIrsCe7kGKiCyNN336z61Z2l8BWCCtVkV2Ex6sSG7NoZkEgwMVW2n7l0EB+DcFwHgfdZ6bggsEJqKQb2gXE2hKxV5it0VLxIEUPjaXn5UNGPK3x1cwl3YOYOgb23WGBPM/fU3a2kz6sNfRBCDxPI40=
+	t=1714480892; cv=none; b=D9PlM3bb0EltYt+kUSJIEi+d36ntUC9sykt7yLg0TwJe6ezka/6jlmaTnIiMzLGfbCpLdNidN9l6xh+dKdpQ0CtmC0VFz+35EWo/XIqOQVCMMqeQYobOJE4vMF3qOOcT38xdTfw2+E84rW9Mj956lVJkxktR3DnEJOlcxJOYt1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714479366; c=relaxed/simple;
-	bh=gBZiN4Mf0s2xCDPpRXTW0QpBKbKBVv/CmKr2e8bRBss=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=uNOCrawEdJodA1xwmATxPOqxOP0+BGekqzexft7dW5Lxps0bI9mtXCjDDv89TWQvhY9zwddEGUjlxcVJ8q3o6ZvpnLWdRjic5OzCH/DN7DmOqUn5bJWuofg1n1c/GD5kgbIfgv5Mb+Ql38jtFh9Z+wJJX0DeC0VnC8Sl0o/WSIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VTJxs1TQYz6J73T;
-	Tue, 30 Apr 2024 20:13:21 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id B3F04140B54;
-	Tue, 30 Apr 2024 20:16:01 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.35; Tue, 30 Apr
- 2024 13:16:00 +0100
-Date: Tue, 30 Apr 2024 13:15:59 +0100
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: Marc Zyngier <maz@kernel.org>, <linuxarm@huawei.com>,
-	<linuxarm@huawei.com>
-CC: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra
-	<peterz@infradead.org>, <linux-pm@vger.kernel.org>,
-	<loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
-	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <kvmarm@lists.linux.dev>,
-	<x86@kernel.org>, Russell King <linux@armlinux.org.uk>, "Rafael J . Wysocki"
-	<rafael@kernel.org>, Miguel Luis <miguel.luis@oracle.com>, "James Morse"
-	<james.morse@arm.com>, Salil Mehta <salil.mehta@huawei.com>, Jean-Philippe
- Brucker <jean-philippe@linaro.org>, Catalin Marinas
-	<catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Hanjun Guo
-	<guohanjun@huawei.com>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
-	<bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
-	<justin.he@arm.com>, <jianyong.wu@arm.com>, Lorenzo Pieralisi
-	<lpieralisi@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>
-Subject: Re: [PATCH v8 11/16] irqchip/gic-v3: Add support for ACPI's
- disabled but 'online capable' CPUs
-Message-ID: <20240430131540.00000930@huawei.com>
-In-Reply-To: <20240429101938.000027b2@huawei.com>
-References: <20240426135126.12802-1-Jonathan.Cameron@huawei.com>
-	<20240426135126.12802-12-Jonathan.Cameron@huawei.com>
-	<87il04t7j2.wl-maz@kernel.org>
-	<20240426192858.000033d9@huawei.com>
-	<87frv5u3p8.wl-maz@kernel.org>
-	<20240429101938.000027b2@huawei.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1714480892; c=relaxed/simple;
+	bh=EAkzlUPf87vK95pHRAftB3pj+wg3xtsMqv6zZ2xItvQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SalIWjZOJDqhMmTqOAhuM9+LCSz4H2rUT9N0ijpI6deHp/jg+61YzW2ENHPXqVYnWjD3s3rv/7CcIJ+GEVO5JptfkP54hUWpeMDU7HEhG8Z63xtdtS9bjq7+8JsWDJbNBTgygnHTJqfQj4dZJejOgne6LPGbb9X9SvP4k6Z9A/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rCUkLJkh; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5176f217b7bso9887267e87.0
+        for <linux-arch@vger.kernel.org>; Tue, 30 Apr 2024 05:41:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1714480887; x=1715085687; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Z1zoRl9JNX91wxTFZ95WC2aOVdcvQqQ9ebO1YgbX9Wg=;
+        b=rCUkLJkhLTkgj0vZihEKMMlayMlyQ0cFd5TjQa4r0Jddy9PM8aCO1E3l7kk3Jz+SUF
+         GTxeTJy6Av4km5bpOTg+yOSdPvXLSxOOjQOnHQ2TvI4NWTmDRXUzyCtCI6w4n7BCRqGX
+         v4+oj/UExjkdmINHO5kKztJkDTG3sBR9dELu5NYmlYuEYKnM0rCgpyyvYeDrL9ZYplzq
+         iS3G0yI2yJVRGCkMXuuwWC4nn+VzEi5zzi8/pE6CeziV9EPrz4BvedgrUJ9mrXQ5Csgr
+         13a2BhyUlVwR/HKh44guz0Y+9aQRhc91cb/h1t+FvIAqWHgb/xjcLN8z5V0kus9g72LW
+         4QRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714480887; x=1715085687;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z1zoRl9JNX91wxTFZ95WC2aOVdcvQqQ9ebO1YgbX9Wg=;
+        b=Oi7+PzVQBZUR3+z+dxKPRnVzguHP5b8XdQO4jP3fqemPVcoVoA5ywjHwySLjj14esF
+         YrAqdb6/6NKgCX3i09ScPuudipRGnG5xSEmpqGXOhGF5WoggIJRVZ+Tan7XD2XQei2av
+         5Y+sx0KhQRGiw9zEzzShXuVa+Sc3KxausZ1d4U5tRsnOLrg3B6h5F98WrPZ0D42rNJRo
+         nN1E0OHzW4Ool1h/IJMu0raCJ1EaWD3KjFXD2eW1RmYlspj+eTMNVrxrFOSJbZqQnuRy
+         2h6uFbYu7l73q3MnBFru+a5pnY0mZ52nLD+hy3bnr8AmomEZLAaGqxJhggthX+4p4Mis
+         /nhg==
+X-Forwarded-Encrypted: i=1; AJvYcCWBRPTPvGwCT89uUJPXE7o4bhtlHaKdmu/ZYVwCm+Yt+nZZS1/SEsPmpHeo5YrneMUgaVqhdxrE5bgrmOyM9Z+tyMa00ePiEsysPw==
+X-Gm-Message-State: AOJu0YyW/0mv++c7D1Iby+CB87GJ9g8p9epVPfhsH3jwLvJgdX2R6JXe
+	lxYOxNbLoGARqOpIiX3X852797RMIU+2Se0YEeLnqmJQUQnhCXgSRlaO4SCgmvo=
+X-Google-Smtp-Source: AGHT+IE/W9/dkxBso0irV5VrVX3LkNO5o5h+kLfYM+38G90SJ9h02blz/dj31DJFXSXcVMXms6NQew==
+X-Received: by 2002:a05:6512:45c:b0:51c:2c7e:ac92 with SMTP id y28-20020a056512045c00b0051c2c7eac92mr11527071lfk.23.1714480887229;
+        Tue, 30 Apr 2024 05:41:27 -0700 (PDT)
+Received: from [192.168.69.100] (mab78-h01-176-184-55-179.dsl.sta.abo.bbox.fr. [176.184.55.179])
+        by smtp.gmail.com with ESMTPSA id i27-20020a17090639db00b00a58eab2bf0fsm3928326eje.179.2024.04.30.05.41.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Apr 2024 05:41:26 -0700 (PDT)
+Message-ID: <c5248d22-672d-4acc-9b12-86815d6e22dc@linaro.org>
+Date: Tue, 30 Apr 2024 14:41:22 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml500006.china.huawei.com (7.191.161.198) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 05/16] module: make module_memory_{alloc,free} more
+ self-contained
+To: Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org
+Cc: Alexandre Ghiti <alexghiti@rivosinc.com>,
+ Andrew Morton <akpm@linux-foundation.org>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
+ <bjorn@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>,
+ Christophe Leroy <christophe.leroy@csgroup.eu>,
+ "David S. Miller" <davem@davemloft.net>, Dinh Nguyen <dinguyen@kernel.org>,
+ Donald Dutile <ddutile@redhat.com>, Eric Chanudet <echanude@redhat.com>,
+ Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>,
+ Huacai Chen <chenhuacai@kernel.org>,
+ Kent Overstreet <kent.overstreet@linux.dev>,
+ Luis Chamberlain <mcgrof@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Masami Hiramatsu <mhiramat@kernel.org>, Michael Ellerman
+ <mpe@ellerman.id.au>, Nadav Amit <nadav.amit@gmail.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Peter Zijlstra <peterz@infradead.org>,
+ Rick Edgecombe <rick.p.edgecombe@intel.com>,
+ Russell King <linux@armlinux.org.uk>, Sam Ravnborg <sam@ravnborg.org>,
+ Song Liu <song@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
+ bpf@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+ linux-mm@kvack.org, linux-modules@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+ linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+ netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
+References: <20240429121620.1186447-1-rppt@kernel.org>
+ <20240429121620.1186447-6-rppt@kernel.org>
+Content-Language: en-US
+From: =?UTF-8?Q?Philippe_Mathieu-Daud=C3=A9?= <philmd@linaro.org>
+In-Reply-To: <20240429121620.1186447-6-rppt@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, 29 Apr 2024 10:21:31 +0100
-Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
+On 29/4/24 14:16, Mike Rapoport wrote:
+> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> 
+> Move the logic related to the memory allocation and freeing into
+> module_memory_alloc() and module_memory_free().
+> 
+> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> ---
+>   kernel/module/main.c | 64 +++++++++++++++++++++++++++-----------------
+>   1 file changed, 39 insertions(+), 25 deletions(-)
 
-> On Sun, 28 Apr 2024 12:28:03 +0100
-> Marc Zyngier <maz@kernel.org> wrote:
-> 
-> > On Fri, 26 Apr 2024 19:28:58 +0100,
-> > Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:  
-> > > 
-> > > 
-> > > I'll not send a formal v9 until early next week, so here is the current state
-> > > if you have time to take another look before then.    
-> > 
-> > Don't bother resending this on my account -- you only sent it on
-> > Friday and there hasn't been much response to it yet. There is still a
-> > problem (see below), but looks otherwise OK.
-> > 
-> > [...]
-> >   
-> > > @@ -2363,11 +2381,25 @@ gic_acpi_parse_madt_gicc(union acpi_subtable_headers *header,
-> > >  				(struct acpi_madt_generic_interrupt *)header;
-> > >  	u32 reg = readl_relaxed(acpi_data.dist_base + GICD_PIDR2) & GIC_PIDR2_ARCH_MASK;
-> > >  	u32 size = reg == GIC_PIDR2_ARCH_GICv4 ? SZ_64K * 4 : SZ_64K * 2;
-> > > +	int cpu = get_cpu_for_acpi_id(gicc->uid);    
-> > 
-> > I already commented that get_cpu_for_acpi_id() can...  
-> 
-> Indeed sorry - I blame Friday syndrome for me failing to address that.
-> 
-> >   
-> > >  	void __iomem *redist_base;
-> > >  
-> > > -	if (!acpi_gicc_is_usable(gicc))
-> > > +	/* Neither enabled or online capable means it doesn't exist, skip it */
-> > > +	if (!(gicc->flags & (ACPI_MADT_ENABLED | ACPI_MADT_GICC_ONLINE_CAPABLE)))
-> > >  		return 0;
-> > >  
-> > > +	/*
-> > > +	 * Capable but disabled CPUs can be brought online later. What about
-> > > +	 * the redistributor? ACPI doesn't want to say!
-> > > +	 * Virtual hotplug systems can use the MADT's "always-on" GICR entries.
-> > > +	 * Otherwise, prevent such CPUs from being brought online.
-> > > +	 */
-> > > +	if (!(gicc->flags & ACPI_MADT_ENABLED)) {
-> > > +		pr_warn("CPU %u's redistributor is inaccessible: this CPU can't be brought online\n", cpu);
-> > > +		cpumask_set_cpu(cpu, &broken_rdists);    
-> > 
-> > ... return -EINVAL, and then be passed to cpumask_set_cpu(), with
-> > interesting effects. It shouldn't happen, but I trust anything that
-> > comes from firmware tables as much as I trust a campaigning
-> > politician's promises. This should really result in the RD being
-> > considered unusable, but without affecting any CPU (there is no valid
-> > CPU the first place).
-> > 
-> > Another question is what get_cpu_for acpi_id() returns for a disabled
-> > CPU. A valid CPU number? Or -EINVAL?  
-> It's a match function that works by iterating over 0 to nr_cpu_ids and
-> 
-> if (uid == get_acpi_id_for_cpu(cpu))
-> 
-> So the question become does get_acpi_id_for_cpu() return a valid CPU
-> number for a disabled CPU.
-> 
-> That uses acpi_cpu_get_madt_gicc(cpu)->uid so this all gets a bit circular.
-> That looks it up via cpu_madt_gicc[cpu] which after the proposed updated
-> patch is set if enabled or online capable.  There are however a few other
-> error checks in acpi_map_gic_cpu_interface() that could lead to it
-> not being set (MPIDR validity checks). I suspect all of these end up being
-> fatal elsewhere which is why this hasn't blown up before.
-> 
-> If any of those cases are possible we could get a null pointer
-> dereference.
-> 
-> Easy to harden this case via the following (which will leave us with
-> -EINVAL.  There are other call sites that might trip over this.
-> I'm inclined to harden them as a separate issue though so as not
-> to get in the way of this patch set.
-> 
-> 
-> diff --git a/arch/arm64/include/asm/acpi.h b/arch/arm64/include/asm/acpi.h
-> index bc9a6656fc0c..a407f9cd549e 100644
-> --- a/arch/arm64/include/asm/acpi.h
-> +++ b/arch/arm64/include/asm/acpi.h
-> @@ -124,7 +124,8 @@ static inline int get_cpu_for_acpi_id(u32 uid)
->         int cpu;
-> 
->         for (cpu = 0; cpu < nr_cpu_ids; cpu++)
-> -               if (uid == get_acpi_id_for_cpu(cpu))
-> +               if (acpi_cpu_get_madt_gicc(cpu) &&
-> +                   uid == get_acpi_id_for_cpu(cpu))
->                         return cpu;
-> 
->         return -EINVAL;
-> 
-> I'll spin an additional patch to make that change after testing I haven't
-> messed it up.
-> 
-> At the call site in gic_acpi_parse_madt_gicc() I'm not sure we can do better
-> than just skipping setting broken_rdists. I'll also pull the declaration of
-> that cpu variable down into this condition so it's more obvious we only
-> care about it in this error path.
+Nice code simplification.
 
-Just for the record, for my deliberately broken test case it seems that it returns
-a valid CPU ID anyway. That's what I'd expect given acpi_parse_and_init_cpus()
-doesn't check if the gicc entrees are enabled or not.
-
-Jonathan
-
-> 
-> Jonathan
-> 
-> 
-> 
-> 
-> 
-> > 
-> > Thanks,
-> > 
-> > 	M.
-> >   
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
 
