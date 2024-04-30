@@ -1,44 +1,44 @@
-Return-Path: <linux-arch+bounces-4082-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4083-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75CD08B79C7
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Apr 2024 16:33:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2598B8B79CC
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Apr 2024 16:34:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2B3F0288061
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Apr 2024 14:33:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CFDDE1F23B21
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Apr 2024 14:34:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C005A172BD6;
-	Tue, 30 Apr 2024 14:29:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78674143732;
+	Tue, 30 Apr 2024 14:30:20 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9773172BD2;
-	Tue, 30 Apr 2024 14:29:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D844413D275;
+	Tue, 30 Apr 2024 14:30:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714487388; cv=none; b=uURwYUVcuV9Rd6WPZQxIKjz+6icpR9KCmnuyGpEDzoVhud5/KeBsjunwtpouTZ7SkZXyqM6YeJly0lz1JrEL4tVVN2a43/n3kPiKo45yBFqQ3AD6PzO2H4LXly33tGPfwEhk7r1iPN80MhzHLZGBuhfvQmyP929h7XN5/+1vrLI=
+	t=1714487420; cv=none; b=XzeB6Jrt8b9uXJU6OY4J71SAisdYWbeoHIY16waz272LN/yZZqXtm7p/XYG6Q3AvdNXyCmODGkCNyYmKPLyN4tlP8uPXz3dZfNSyuJ+tifaf6/AHXTKbUhc5a2eGZy27fY0zhNqWZSRh7PByxvRLMoHk3lWrmrbrXSP4nghI51U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714487388; c=relaxed/simple;
-	bh=Q135WQPnta5OAdzf6+fjfjKF4vyOS/2KgRfGgLkyuBE=;
+	s=arc-20240116; t=1714487420; c=relaxed/simple;
+	bh=8SaJFDYv/vpzKtyInkQ8vXt4vZPfQ7uO1UwH3mS+YQ8=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lDMpInizsBxQ2vKdtbLc8weqaH+uRbndRLc8COxGh0PoeRCQpajpjRDMwL23t4E1Il6G69j/HT6Dt9bpLCE4+GVjf2phkYj0Or7wwXeqvXeWiBQ3mtZYbg3j71pUG6gQqysf0ilL/f7GpD9Y4mTx5kGSs0+0ez8yubhOoeUIa2A=
+	 MIME-Version:Content-Type; b=W7HRQcEheNP8htMjUDg1PUf/83O37iS3ROcqCSufsmcOpKPm/T01FSCLpuGbWLvA1dNVLJ2LalOvuS9Tm+QIh9kC1JanBooGxJdZlNJ505M3YeU/l9+9YzpvzSlU9hiutccRoaHvv5uTCwcHAIisVjJxR8PSraLe/bEaXxixWxM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VTMw70Mp4z6J7Qn;
-	Tue, 30 Apr 2024 22:27:03 +0800 (CST)
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VTMzS4wT0z6D9dD;
+	Tue, 30 Apr 2024 22:29:56 +0800 (CST)
 Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id D84231400DC;
-	Tue, 30 Apr 2024 22:29:43 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id B93E31400DC;
+	Tue, 30 Apr 2024 22:30:14 +0800 (CST)
 Received: from SecurePC-101-06.china.huawei.com (10.122.247.231) by
  lhrpeml500005.china.huawei.com (7.191.163.240) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Tue, 30 Apr 2024 15:29:43 +0100
+ 15.1.2507.35; Tue, 30 Apr 2024 15:30:13 +0100
 From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 To: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra
 	<peterz@infradead.org>, <linux-pm@vger.kernel.org>,
@@ -55,9 +55,9 @@ To: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra
 CC: Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave
  Hansen <dave.hansen@linux.intel.com>, <linuxarm@huawei.com>,
 	<justin.he@arm.com>, <jianyong.wu@arm.com>
-Subject: [PATCH v9 10/19] ACPI: Add post_eject to struct acpi_scan_handler for cpu hotplug
-Date: Tue, 30 Apr 2024 15:24:25 +0100
-Message-ID: <20240430142434.10471-11-Jonathan.Cameron@huawei.com>
+Subject: [PATCH v9 11/19] arm64: acpi: Move get_cpu_for_acpi_id() to a header
+Date: Tue, 30 Apr 2024 15:24:26 +0100
+Message-ID: <20240430142434.10471-12-Jonathan.Cameron@huawei.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240430142434.10471-1-Jonathan.Cameron@huawei.com>
 References: <20240430142434.10471-1-Jonathan.Cameron@huawei.com>
@@ -74,151 +74,75 @@ X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
 
 From: James Morse <james.morse@arm.com>
 
-struct acpi_scan_handler has a detach callback that is used to remove
-a driver when a bus is changed. When interacting with an eject-request,
-the detach callback is called before _EJ0.
+ACPI identifies CPUs by UID. get_cpu_for_acpi_id() maps the ACPI UID
+to the Linux CPU number.
 
-This means the ACPI processor driver can't use _STA to determine if a
-CPU has been made not-present, or some of the other _STA bits have been
-changed. acpi_processor_remove() needs to know the value of _STA after
-_EJ0 has been called.
+The helper to retrieve this mapping is only available in arm64's NUMA
+code.
 
-Add a post_eject callback to struct acpi_scan_handler. This is called
-after acpi_scan_hot_remove() has successfully called _EJ0. Because
-acpi_scan_check_and_detach() also clears the handler pointer,
-it needs to be told if the caller will go on to call
-acpi_bus_post_eject(), so that acpi_device_clear_enumerated()
-and clearing the handler pointer can be deferred.
-An extra flag is added to flags field introduced in the previous
-patch to achieve this.
+Move it to live next to get_acpi_id_for_cpu().
 
 Signed-off-by: James Morse <james.morse@arm.com>
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Reviewed-by: Gavin Shan <gshan@redhat.com>
 Tested-by: Miguel Luis <miguel.luis@oracle.com>
 Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
 Tested-by: Jianyong Wu <jianyong.wu@arm.com>
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Reviewed-by: Hanjun Guo <guohanjun@huawei.com>
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Acked-by: Hanjun Guo <guohanjun@huawei.com>
 Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
 ---
-v9: No change.
+v9: No change
 ---
- drivers/acpi/acpi_processor.c |  4 ++--
- drivers/acpi/scan.c           | 30 +++++++++++++++++++++++++++---
- include/acpi/acpi_bus.h       |  1 +
- 3 files changed, 30 insertions(+), 5 deletions(-)
+ arch/arm64/include/asm/acpi.h | 11 +++++++++++
+ arch/arm64/kernel/acpi_numa.c | 11 -----------
+ 2 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
-index 7f2eb8ef8523..69571a3ceb73 100644
---- a/drivers/acpi/acpi_processor.c
-+++ b/drivers/acpi/acpi_processor.c
-@@ -477,7 +477,7 @@ static int acpi_processor_add(struct acpi_device *device,
- 
- #ifdef CONFIG_ACPI_HOTPLUG_CPU
- /* Removal */
--static void acpi_processor_remove(struct acpi_device *device)
-+static void acpi_processor_post_eject(struct acpi_device *device)
- {
- 	struct acpi_processor *pr;
- 
-@@ -645,7 +645,7 @@ static struct acpi_scan_handler processor_handler = {
- 	.ids = processor_device_ids,
- 	.attach = acpi_processor_add,
- #ifdef CONFIG_ACPI_HOTPLUG_CPU
--	.detach = acpi_processor_remove,
-+	.post_eject = acpi_processor_post_eject,
- #endif
- 	.hotplug = {
- 		.enabled = true,
-diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
-index fb5427caf0f4..7ebb3f9cea42 100644
---- a/drivers/acpi/scan.c
-+++ b/drivers/acpi/scan.c
-@@ -245,6 +245,7 @@ static int acpi_scan_try_to_offline(struct acpi_device *device)
+diff --git a/arch/arm64/include/asm/acpi.h b/arch/arm64/include/asm/acpi.h
+index 6792a1f83f2a..bc9a6656fc0c 100644
+--- a/arch/arm64/include/asm/acpi.h
++++ b/arch/arm64/include/asm/acpi.h
+@@ -119,6 +119,17 @@ static inline u32 get_acpi_id_for_cpu(unsigned int cpu)
+ 	return	acpi_cpu_get_madt_gicc(cpu)->uid;
  }
  
- #define ACPI_SCAN_CHECK_FLAG_STATUS	BIT(0)
-+#define ACPI_SCAN_CHECK_FLAG_EJECT	BIT(1)
- 
- static int acpi_scan_check_and_detach(struct acpi_device *adev, void *p)
- {
-@@ -273,8 +274,6 @@ static int acpi_scan_check_and_detach(struct acpi_device *adev, void *p)
- 	if (handler) {
- 		if (handler->detach)
- 			handler->detach(adev);
--
--		adev->handler = NULL;
- 	} else {
- 		device_release_driver(&adev->dev);
- 	}
-@@ -284,6 +283,28 @@ static int acpi_scan_check_and_detach(struct acpi_device *adev, void *p)
- 	 */
- 	acpi_device_set_power(adev, ACPI_STATE_D3_COLD);
- 	adev->flags.initialized = false;
++static inline int get_cpu_for_acpi_id(u32 uid)
++{
++	int cpu;
 +
-+	/* For eject this is deferred to acpi_bus_post_eject() */
-+	if (!(flags & ACPI_SCAN_CHECK_FLAG_EJECT)) {
-+		adev->handler = NULL;
-+		acpi_device_clear_enumerated(adev);
-+	}
-+	return 0;
++	for (cpu = 0; cpu < nr_cpu_ids; cpu++)
++		if (uid == get_acpi_id_for_cpu(cpu))
++			return cpu;
++
++	return -EINVAL;
 +}
 +
-+static int acpi_bus_post_eject(struct acpi_device *adev, void *not_used)
-+{
-+	struct acpi_scan_handler *handler = adev->handler;
-+
-+	acpi_dev_for_each_child_reverse(adev, acpi_bus_post_eject, NULL);
-+
-+	if (handler) {
-+		if (handler->post_eject)
-+			handler->post_eject(adev);
-+
-+		adev->handler = NULL;
-+	}
-+
- 	acpi_device_clear_enumerated(adev);
+ static inline void arch_fix_phys_package_id(int num, u32 slot) { }
+ void __init acpi_init_cpus(void);
+ int apei_claim_sea(struct pt_regs *regs);
+diff --git a/arch/arm64/kernel/acpi_numa.c b/arch/arm64/kernel/acpi_numa.c
+index e51535a5f939..0c036a9a3c33 100644
+--- a/arch/arm64/kernel/acpi_numa.c
++++ b/arch/arm64/kernel/acpi_numa.c
+@@ -34,17 +34,6 @@ int __init acpi_numa_get_nid(unsigned int cpu)
+ 	return acpi_early_node_map[cpu];
+ }
  
- 	return 0;
-@@ -301,6 +322,7 @@ static int acpi_scan_hot_remove(struct acpi_device *device)
- 	acpi_handle handle = device->handle;
- 	unsigned long long sta;
- 	acpi_status status;
-+	uintptr_t flags = ACPI_SCAN_CHECK_FLAG_EJECT;
- 
- 	if (device->handler && device->handler->hotplug.demand_offline) {
- 		if (!acpi_scan_is_offline(device, true))
-@@ -313,7 +335,7 @@ static int acpi_scan_hot_remove(struct acpi_device *device)
- 
- 	acpi_handle_debug(handle, "Ejecting\n");
- 
--	acpi_bus_trim(device);
-+	acpi_scan_check_and_detach(device, (void *)flags);
- 
- 	acpi_evaluate_lck(handle, 0);
- 	/*
-@@ -336,6 +358,8 @@ static int acpi_scan_hot_remove(struct acpi_device *device)
- 	} else if (sta & ACPI_STA_DEVICE_ENABLED) {
- 		acpi_handle_warn(handle,
- 			"Eject incomplete - status 0x%llx\n", sta);
-+	} else {
-+		acpi_bus_post_eject(device, NULL);
- 	}
- 
- 	return 0;
-diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
-index 5de954e2b18a..d5c0fb413697 100644
---- a/include/acpi/acpi_bus.h
-+++ b/include/acpi/acpi_bus.h
-@@ -129,6 +129,7 @@ struct acpi_scan_handler {
- 	bool (*match)(const char *idstr, const struct acpi_device_id **matchid);
- 	int (*attach)(struct acpi_device *dev, const struct acpi_device_id *id);
- 	void (*detach)(struct acpi_device *dev);
-+	void (*post_eject)(struct acpi_device *dev);
- 	void (*bind)(struct device *phys_dev);
- 	void (*unbind)(struct device *phys_dev);
- 	struct acpi_hotplug_profile hotplug;
+-static inline int get_cpu_for_acpi_id(u32 uid)
+-{
+-	int cpu;
+-
+-	for (cpu = 0; cpu < nr_cpu_ids; cpu++)
+-		if (uid == get_acpi_id_for_cpu(cpu))
+-			return cpu;
+-
+-	return -EINVAL;
+-}
+-
+ static int __init acpi_parse_gicc_pxm(union acpi_subtable_headers *header,
+ 				      const unsigned long end)
+ {
 -- 
 2.39.2
 
