@@ -1,80 +1,80 @@
-Return-Path: <linux-arch+bounces-4056-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4057-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 254268B696E
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Apr 2024 06:26:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1BE88B6973
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Apr 2024 06:29:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 02A0DB209AF
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Apr 2024 04:26:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 77F711F2280C
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Apr 2024 04:29:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FE6812E4E;
-	Tue, 30 Apr 2024 04:26:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 477BD134BE;
+	Tue, 30 Apr 2024 04:29:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bHVcsMBw"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LsBRgvgJ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEFBA101C5
-	for <linux-arch@vger.kernel.org>; Tue, 30 Apr 2024 04:26:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3C9B12B79
+	for <linux-arch@vger.kernel.org>; Tue, 30 Apr 2024 04:29:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714451184; cv=none; b=g8P0uAGTtx2V0DzdciqitGYLOvu2UWEj3x2lFVu1kBQ8cNicNoW9gs0YBMmhoCtY6ibyVfWeDLq4Y0KGeJCUT89CUISTcORTGwxN6nHTCBUuZZnwGffK6OJMGIEOHkcxreB8SExP39zPCkBpYbzZYEswCA/1TyRydtopoTtBsB8=
+	t=1714451368; cv=none; b=BoY5SLGDlIAx+gmh1obX+VF7qk/MJQISPLUW6hwLUdHXIqw8rUpO4gIH2WygVSuRKbyfVJF0DDv4KqVLir3eoVAYXw1m5nfQeHCzkv9bxztFlKgCT/GDr6VmKZZHrhgJOF3zjfZnPKcuniP5iBqth+osaVZm02Zo3izNomLQYaI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714451184; c=relaxed/simple;
-	bh=7/LvDV66mDIzCX8Ki3ehENh2BWy+/8sMXmXZYQ9n3Gw=;
+	s=arc-20240116; t=1714451368; c=relaxed/simple;
+	bh=FEm1/PB329Jyi/kHvt9MX59QyNkI8IQyV5tTODOIcw4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=S9mPmr/7PT9Z9bxL9Zh0X2HU4uNbKdTIs/JQjWC5bCiO8oOY83ISbMGSb0QS1k5xfZ+iHp2nV/q+8WArM9uXX2FmZcA4ydFo6dQixiuB7FypbB99prScWFF8ARYUTmgd7bvbL0PsVoiAeJRxVmiqRjfLefKDkTpPDxHRauKgVV4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bHVcsMBw; arc=none smtp.client-ip=170.10.129.124
+	 In-Reply-To:Content-Type; b=nFqjbm1VXh7Vg/0Rk0GijDoXzaVry+69DLjqxeZDSMSTT7EyTicRdql2cPhsZvx8HyNah2R9oHs/SJZ4lWFApXVJSByZQ6dGQqQlCX+MCKhj+VSvkJOlph1lzqu8TwUxtyUHYq6dsZV9KTGlgW7lTEDvbShm4PcJtnC5EQURtXI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LsBRgvgJ; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1714451181;
+	s=mimecast20190719; t=1714451365;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=/j3/XOns0oFgwfO5bxhGBltITHmRiIbor4kORGQYrjA=;
-	b=bHVcsMBwWDPrziJ35+BUYvrsjCrxlHMhqasXxXqmhjkbk2505zndFORDX3WKHQAPC1nM8w
-	fZvo4qplTqSe9LdRca6pvxBuawjAOBRi9zUAe0zDwZFgmA3bDs1cn3KwALrGe8Y++iS/4h
-	HfxNRytjbZT3y98s4wEomUrNDwxNCRU=
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
- [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=D1/gI69YXA+wRBrAlMSJILQJim8W89y0vmUYfYeJ+kM=;
+	b=LsBRgvgJg0DJY9hLiSKX3mvTo/b104JH3f1iJlOX1uHWgDdrtMwHIzQeZ+T2qFy/Agbbh2
+	TxnJg+My2fVPPSh5M4MVqXMGeK15gkg973HL1K6bsPY/2yQgO8YfQWb7Z/k1Vf09+FsauN
+	z9z6I5nqua/z+eatWEGYxG+Ifpch6j8=
+Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com
+ [209.85.167.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-83-yOqOzI7VNiytio_orYq5Rw-1; Tue, 30 Apr 2024 00:26:19 -0400
-X-MC-Unique: yOqOzI7VNiytio_orYq5Rw-1
-Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-613dbdf5c1bso1755781a12.0
-        for <linux-arch@vger.kernel.org>; Mon, 29 Apr 2024 21:26:19 -0700 (PDT)
+ us-mta-224-NQDXmfS9O9CkJrwg_Px6xg-1; Tue, 30 Apr 2024 00:29:24 -0400
+X-MC-Unique: NQDXmfS9O9CkJrwg_Px6xg-1
+Received: by mail-oi1-f199.google.com with SMTP id 5614622812f47-3c5ed191fe3so7622726b6e.3
+        for <linux-arch@vger.kernel.org>; Mon, 29 Apr 2024 21:29:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714451178; x=1715055978;
+        d=1e100.net; s=20230601; t=1714451363; x=1715056163;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/j3/XOns0oFgwfO5bxhGBltITHmRiIbor4kORGQYrjA=;
-        b=N+YWf+6IkScJMPCSGOFt5oSJHyKSq/j4UOokrJhuk+cmjHWy5pCnKtFfyY6uKWf/Xy
-         YhdjtPhCEvbfsjndUOFGrZchwbjIkujiRDffo0vm5ywsvCPCjpkw9MLU63jLjOu+52zJ
-         b5LGxS7V7T5XoHjk3wDN6pxCls8WDJgf1aS1k70hTa2z9CnnQYlbuXanRkJHuqPP/Med
-         6Lhhk00rG3+kTpzaUT8Urbka79Cg8zC0M2g+v8cETlibu5dCiovy7PU3+clCFB0BOGiz
-         oGwRc+Mrw49CClpEUen47L+9BhNukxokjlrKnojzkzgTjQi9/0yTuub+XFUyxwUMMvwo
-         e1+g==
-X-Forwarded-Encrypted: i=1; AJvYcCUlyfK6lLk5F6J2aURUjaJoEO7NwgF88ohcKONXy3UOymYJuuO1KKSSWXrPimEm0eA133lT7eyo17m9IV4EVwa9DPeZu2mzwWPocw==
-X-Gm-Message-State: AOJu0YzKXGnx5aHUdMx+dr5TzSkBSIjcoMHeSfxj8dbheD2AOBxcFl5F
-	NicZrEGoWtB/8z5bbVxKiQ9SXKOvM8yowVahQLJRLROxYGF/6xgWQQ+meExxCs9E81Yq+yAXU4m
-	omodZogHtPdcRyqIuni6SH7Gz67SoCyHqMdZa9mf/VrjHe+aoeYAJ7Wd/EMQ=
-X-Received: by 2002:a05:6a20:43ab:b0:1af:597f:ffa4 with SMTP id i43-20020a056a2043ab00b001af597fffa4mr1773940pzl.14.1714451178654;
-        Mon, 29 Apr 2024 21:26:18 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IH07U3E59OEv3uasYAdnnN9/WYRlSaTmrz5sCzeoOlurs0CWJYXB3V+LTa+nYaZB59wKOeCng==
-X-Received: by 2002:a05:6a20:43ab:b0:1af:597f:ffa4 with SMTP id i43-20020a056a2043ab00b001af597fffa4mr1773917pzl.14.1714451178308;
-        Mon, 29 Apr 2024 21:26:18 -0700 (PDT)
+        bh=D1/gI69YXA+wRBrAlMSJILQJim8W89y0vmUYfYeJ+kM=;
+        b=M3J08kj/v+gOw5cEYyYnidJTGvpwAHo7UczuCC3eYMNgAKN0HWQeu5jqqJSLEcX/KL
+         jnJRAzNbZsNEJ+vVerU8n1DBSX5pVw+7KM6h4bticG5CDYVrzBtWW9HNZtFgTGTrFZ8N
+         v00y6nW8pyZjkQBeFQ/TICJEbBxGyEGsd16PybqyiEV+4JvIDluMR+RN/TVVVphRegDw
+         /tbhmZq+i6JE6wiCdmfFe749m+WR42X6SqSbG7DasP+nvaIITCzFNvI1tac/7GjhciFK
+         h8J1UoD7kanZSURjUY+qWG9Ggo8cZsghaS/sF8DTg7VYDnRAFvYXjiGe9mFX9Gi82mXv
+         ApuA==
+X-Forwarded-Encrypted: i=1; AJvYcCUxDoRW3wxeCLDowwx3Jcgfd+9zrvvY2mOR9uDQ1Pf3uH5N4bBSRErDgSSoQkEi3zcNBKvwN/0JxR8RZNu7Hl3bSRMQFmvSQN0S4A==
+X-Gm-Message-State: AOJu0YyMJ7eAtp/4uxhYy9XYiEO/Mx2vQ/gYZfFO5OaFlyj9Qpz8VUft
+	EZXeK8jKs0PexYX03aIMQbNwob3dGjBW/idTB0tNTdFzYLRMioCjdUmFQzLR2Xmw4viTXrOAry6
+	HYHEvY1Y5seDOJU5hTSBybi7Snw58NWcmn6+vqne6nItF3WFB2ha42uSvWaI=
+X-Received: by 2002:a05:6808:1b21:b0:3c8:42f1:40b2 with SMTP id bx33-20020a0568081b2100b003c842f140b2mr14918965oib.9.1714451363444;
+        Mon, 29 Apr 2024 21:29:23 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEma/8noQWxcMSK7hzaRRVetUMUXvHfjFYfu5UCMsY0GiHyeLt76asSKvhJFyxiVUNt5H/EkA==
+X-Received: by 2002:a05:6808:1b21:b0:3c8:42f1:40b2 with SMTP id bx33-20020a0568081b2100b003c842f140b2mr14918939oib.9.1714451363109;
+        Mon, 29 Apr 2024 21:29:23 -0700 (PDT)
 Received: from [192.168.68.50] ([43.252.112.88])
-        by smtp.gmail.com with ESMTPSA id p2-20020a170902e74200b001e223b9eb25sm21272994plf.153.2024.04.29.21.26.08
+        by smtp.gmail.com with ESMTPSA id b16-20020a63d810000000b005e438fe702dsm19772604pgh.65.2024.04.29.21.29.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Apr 2024 21:26:17 -0700 (PDT)
-Message-ID: <63f7c71a-fa01-4604-8fc6-9f52b5b31d6b@redhat.com>
-Date: Tue, 30 Apr 2024 14:26:06 +1000
+        Mon, 29 Apr 2024 21:29:22 -0700 (PDT)
+Message-ID: <eaac4ff8-4e88-4f66-b4ab-975a5b77c3a9@redhat.com>
+Date: Tue, 30 Apr 2024 14:29:11 +1000
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -82,8 +82,7 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 05/16] ACPI: processor: Add acpi_get_processor_handle()
- helper
+Subject: Re: [PATCH v8 12/16] arm64: psci: Ignore DENIED CPUs
 Content-Language: en-US
 To: Jonathan Cameron <Jonathan.Cameron@huawei.com>,
  Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>,
@@ -103,85 +102,52 @@ Cc: Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
  Lorenzo Pieralisi <lpieralisi@kernel.org>,
  Sudeep Holla <sudeep.holla@arm.com>
 References: <20240426135126.12802-1-Jonathan.Cameron@huawei.com>
- <20240426135126.12802-6-Jonathan.Cameron@huawei.com>
+ <20240426135126.12802-13-Jonathan.Cameron@huawei.com>
 From: Gavin Shan <gshan@redhat.com>
-In-Reply-To: <20240426135126.12802-6-Jonathan.Cameron@huawei.com>
+In-Reply-To: <20240426135126.12802-13-Jonathan.Cameron@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 4/26/24 23:51, Jonathan Cameron wrote:
-> If CONFIG_ACPI_PROCESSOR provide a helper to retrieve the
-> acpi_handle for a given CPU allowing access to methods
-> in DSDT.
+> From: Jean-Philippe Brucker <jean-philippe@linaro.org>
 > 
+> When a CPU is marked as disabled, but online capable in the MADT, PSCI
+> applies some firmware policy to control when it can be brought online.
+> PSCI returns DENIED to a CPU_ON request if this is not currently
+> permitted. The OS can learn the current policy from the _STA enabled bit.
+> 
+> Handle the PSCI DENIED return code gracefully instead of printing an
+> error.
+> 
+> Note the alternatives to the PSCI cpu_boot() callback do not
+> return -EPERM so the change in smp.c has no affect.
+> 
+> See https://developer.arm.com/documentation/den0022/f/?lang=en page 58.
+> 
+> Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+> [ morse: Rewrote commit message ]
+> Signed-off-by: James Morse <james.morse@arm.com>
 > Tested-by: Miguel Luis <miguel.luis@oracle.com>
+> Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
+> Tested-by: Jianyong Wu <jianyong.wu@arm.com>
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> 
 > ---
-> v8: Code simplification suggested by Rafael.
->      Fixup ;; spotted by Gavin
+> v8: Note in commit message that the -EPERM guard on the error print
+>      only affects PSCI as other options never use this error code.
+>      Should they do so in future, that may well indicate that they
+>      now support similar refusal to boot.
 > ---
->   drivers/acpi/acpi_processor.c | 11 +++++++++++
->   include/linux/acpi.h          |  7 +++++++
->   2 files changed, 18 insertions(+)
+>   arch/arm64/kernel/psci.c | 2 +-
+>   arch/arm64/kernel/smp.c  | 3 ++-
+>   2 files changed, 3 insertions(+), 2 deletions(-)
 > 
+
+Thanks for the check and clarification that -EPERM is only sensible
+to PSCI. With the clarification:
 
 Reviewed-by: Gavin Shan <gshan@redhat.com>
-
-> diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
-> index 3b180e21f325..ecc2721fecae 100644
-> --- a/drivers/acpi/acpi_processor.c
-> +++ b/drivers/acpi/acpi_processor.c
-> @@ -35,6 +35,17 @@ EXPORT_PER_CPU_SYMBOL(processors);
->   struct acpi_processor_errata errata __read_mostly;
->   EXPORT_SYMBOL_GPL(errata);
->   
-> +acpi_handle acpi_get_processor_handle(int cpu)
-> +{
-> +	struct acpi_processor *pr;
-> +
-> +	pr = per_cpu(processors, cpu);
-> +	if (pr)
-> +		return pr->handle;
-> +
-> +	return NULL;
-> +}
-> +
-
-Maybe it's worthy to have more check here, something like below.
-However, it's also fine without the extra check.
-
-	if (cpu >= nr_cpu_ids || !cpu_possible(cpu))
-		return NULL;
-
->   static int acpi_processor_errata_piix4(struct pci_dev *dev)
->   {
->   	u8 value1 = 0;
-> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-> index 34829f2c517a..9844a3f9c4e5 100644
-> --- a/include/linux/acpi.h
-> +++ b/include/linux/acpi.h
-> @@ -309,6 +309,8 @@ int acpi_map_cpu(acpi_handle handle, phys_cpuid_t physid, u32 acpi_id,
->   int acpi_unmap_cpu(int cpu);
->   #endif /* CONFIG_ACPI_HOTPLUG_CPU */
->   
-> +acpi_handle acpi_get_processor_handle(int cpu);
-> +
->   #ifdef CONFIG_ACPI_HOTPLUG_IOAPIC
->   int acpi_get_ioapic_id(acpi_handle handle, u32 gsi_base, u64 *phys_addr);
->   #endif
-> @@ -1077,6 +1079,11 @@ static inline bool acpi_sleep_state_supported(u8 sleep_state)
->   	return false;
->   }
->   
-> +static inline acpi_handle acpi_get_processor_handle(int cpu)
-> +{
-> +	return NULL;
-> +}
-> +
->   #endif	/* !CONFIG_ACPI */
->   
->   extern void arch_post_acpi_subsys_init(void);
 
 Thanks,
 Gavin
