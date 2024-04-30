@@ -1,44 +1,44 @@
-Return-Path: <linux-arch+bounces-4074-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4075-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DA3D8B798C
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Apr 2024 16:31:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C561A8B7999
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Apr 2024 16:31:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3D4901C20D93
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Apr 2024 14:31:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7D5BF285EC7
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Apr 2024 14:31:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02DC014374F;
-	Tue, 30 Apr 2024 14:25:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3CD417966C;
+	Tue, 30 Apr 2024 14:26:11 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0A021527A2;
-	Tue, 30 Apr 2024 14:25:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 687CB1527A2;
+	Tue, 30 Apr 2024 14:26:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714487141; cv=none; b=a6rxV2ZQaJ0Az4t+MqT9xuWlp0d/3qUBlmhei9ejlLzE846KirodYwv5P/h4Lva0zK4HTM4jdz/FoSm/wFL6MCrslJTVQDrSvNIapF6mEAvb184w+q/U53QhsQSQo7F4bVp2VVvwWg1KR7OgEsdy32K4qQUmtTyOfDEkn0y69Ok=
+	t=1714487171; cv=none; b=HChPwYitJi80zuakRGoZQtXjfQam0jQuwRgqa6A/Cm+lUhqFvgyPMSzt7R1K8wfihjflpg8V421NjjKJqac7B5zONV/uzq8cavTOJjmp0xmojtlNqwL8LpnSt8/j+Pg+ddI2l9UwLKz48jHzEDv5h80i8HtMDG/jHeWcFG/IWwE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714487141; c=relaxed/simple;
-	bh=DqQTQYSPmoExeqUbhFPPbh+DWRqR1YwovAZ2ku05NCM=;
+	s=arc-20240116; t=1714487171; c=relaxed/simple;
+	bh=V+CNc1FAdW4nKsZzbBKux8NdY7HWNHaXzUQO2l60D1g=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hiyR+ZKhvyBa6lIZ8YCQFRv4KylPpWq07swViqOJxeOu3AFu52e5+f/jpI788ReTpKe04Vk8TF8pCVnyDNKe9AGvIC5SaNtQBm+O7srRxsyHA1QnbtUNw3J1+D2ZhFDWrdmNeFZtHuVqNwOSk+79nv95NORDZEunwIf/fROP65c=
+	 MIME-Version:Content-Type; b=mu5mw2YPjZHD5Tx2kR4UZ6vvrGytJYLhx6GBxxl8p7JtLOPRnC0QBYTqbDaV7CQr1swercT3lIkMyf/6iF+QXSRKLAoUd7E2RGEUZxaqyxefCUD78hbm12at15IVDkj9JP8dO9a73muCWE5wDzqwtjHKplGbF6LaFzuSokLj8iY=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VTMt74nhpz6DB58;
-	Tue, 30 Apr 2024 22:25:19 +0800 (CST)
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VTMtk2zNHz6DB6r;
+	Tue, 30 Apr 2024 22:25:50 +0800 (CST)
 Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id B67701400DC;
-	Tue, 30 Apr 2024 22:25:37 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 76AEF1400DC;
+	Tue, 30 Apr 2024 22:26:08 +0800 (CST)
 Received: from SecurePC-101-06.china.huawei.com (10.122.247.231) by
  lhrpeml500005.china.huawei.com (7.191.163.240) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Tue, 30 Apr 2024 15:25:37 +0100
+ 15.1.2507.35; Tue, 30 Apr 2024 15:26:07 +0100
 From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 To: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra
 	<peterz@infradead.org>, <linux-pm@vger.kernel.org>,
@@ -55,9 +55,9 @@ To: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra
 CC: Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave
  Hansen <dave.hansen@linux.intel.com>, <linuxarm@huawei.com>,
 	<justin.he@arm.com>, <jianyong.wu@arm.com>
-Subject: [PATCH v9 02/19] cpu: Do not warn on arch_register_cpu() returning -EPROBE_DEFER
-Date: Tue, 30 Apr 2024 15:24:17 +0100
-Message-ID: <20240430142434.10471-3-Jonathan.Cameron@huawei.com>
+Subject: [PATCH v9 03/19] ACPI: processor: Drop duplicated check on _STA (enabled + present)
+Date: Tue, 30 Apr 2024 15:24:18 +0100
+Message-ID: <20240430142434.10471-4-Jonathan.Cameron@huawei.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240430142434.10471-1-Jonathan.Cameron@huawei.com>
 References: <20240430142434.10471-1-Jonathan.Cameron@huawei.com>
@@ -72,37 +72,45 @@ Content-Type: text/plain
 X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
  lhrpeml500005.china.huawei.com (7.191.163.240)
 
-For arm64 the CPU registration cannot complete until the ACPI
-interpreter us up and running so in those cases the arch specific
-arch_register_cpu() will return -EPROBE_DEFER at this stage and the
-registration will be attempted later.
+The ACPI bus scan will only result in acpi_processor_add() being called
+if _STA has already been checked and the result is that the
+processor is enabled and present.  Hence drop this additional check.
 
 Suggested-by: Rafael J. Wysocki <rafael@kernel.org>
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Reviewed-by: Hanjun Guo <guohanjun@huawei.com>
 Reviewed-by: Gavin Shan <gshan@redhat.com>
 Tested-by: Miguel Luis <miguel.luis@oracle.com>
 Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
 ---
-v9: No change
+V9: No change
 ---
- drivers/base/cpu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/acpi/acpi_processor.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
-index 56fba44ba391..7b83e9c87d7c 100644
---- a/drivers/base/cpu.c
-+++ b/drivers/base/cpu.c
-@@ -558,7 +558,7 @@ static void __init cpu_dev_register_generic(void)
+diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
+index b2f0b6c19482..161c95c9d60a 100644
+--- a/drivers/acpi/acpi_processor.c
++++ b/drivers/acpi/acpi_processor.c
+@@ -186,17 +186,11 @@ static void __init acpi_pcc_cpufreq_init(void) {}
+ #ifdef CONFIG_ACPI_HOTPLUG_CPU
+ static int acpi_processor_hotadd_init(struct acpi_processor *pr)
+ {
+-	unsigned long long sta;
+-	acpi_status status;
+ 	int ret;
  
- 	for_each_present_cpu(i) {
- 		ret = arch_register_cpu(i);
--		if (ret)
-+		if (ret && ret != -EPROBE_DEFER)
- 			pr_warn("register_cpu %d failed (%d)\n", i, ret);
- 	}
- }
+ 	if (invalid_phys_cpuid(pr->phys_id))
+ 		return -ENODEV;
+ 
+-	status = acpi_evaluate_integer(pr->handle, "_STA", NULL, &sta);
+-	if (ACPI_FAILURE(status) || !(sta & ACPI_STA_DEVICE_PRESENT))
+-		return -ENODEV;
+-
+ 	cpu_maps_update_begin();
+ 	cpus_write_lock();
+ 
 -- 
 2.39.2
 
