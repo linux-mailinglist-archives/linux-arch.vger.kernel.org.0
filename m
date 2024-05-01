@@ -1,48 +1,48 @@
-Return-Path: <linux-arch+bounces-4124-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4127-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 375288B9237
-	for <lists+linux-arch@lfdr.de>; Thu,  2 May 2024 01:21:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8B308B923B
+	for <lists+linux-arch@lfdr.de>; Thu,  2 May 2024 01:21:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5AEFC1C21277
-	for <lists+linux-arch@lfdr.de>; Wed,  1 May 2024 23:21:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 478F31F2225A
+	for <lists+linux-arch@lfdr.de>; Wed,  1 May 2024 23:21:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50AD4168AF9;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5504A168B01;
 	Wed,  1 May 2024 23:21:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SAD4W3nm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AS96LH93"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24122168AE2;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2420E168AEC;
 	Wed,  1 May 2024 23:21:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714605695; cv=none; b=MXE8Nv7vfxIyegR5ZHusBQY4j0vgoaIDtWcnv+LPkdWgbALWwyMbty/vpTisnZ1j/+qUW0t9XCYYsxR9935tkIJWWixWhqsMOdZIU4GHs6vvWU55UNuxLhf6qvKaRLxSL+Ndo0waVUgWKz2lSXwKzpCPYwpx659GLQh+OPeVHWc=
+	t=1714605695; cv=none; b=aOEp/5GZ9VZMzAluGnLbh4w6yKo3ji+ktEf/qK7vN5/GPYru6ZEFB/f1YEH8xHjGRJqGBVxYVUhTS96R1CuaoIYfXWFDjIw4c52QFsM7yVeY01BgUg+EmfvakGXl+MKIIgO0Ti/Orj6gj1caN5S8y0+3AzUctNytFkKxFWD2qT0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1714605695; c=relaxed/simple;
-	bh=PjIIBgLr+DWstHxKJAAho0J12+hAPDhHwNbpvgl5zCA=;
+	bh=tN99QeAtJ9rSCHUuXKIZr5kPNcQaT1UKModjibckfc0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=QjDIyEcmVF6RuQPpkSWzskZu89SdNOa3+lf0kKVEoU/TcEWNR9LX0gs2i55EB1I2e5FErYXdO1KHrZWBEl3CctPGCyZpHLyU7bqbMlXk2OEtirAtDLfTYOvfeyAHn3BRNKKm3/HfVtmIFmctSIhIWhqvvw4E7bEERLN3POh+SSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SAD4W3nm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCEB1C113CC;
+	 MIME-Version; b=HDyBrj9pKijnCeS6FPM1hXl565JnqZtoKQL2R2lK+opNc10yF2oSSUKDwebPNIVFNoiKSC/4TKK00quOzLq5dyx8lnZOpuC94gjV8DZ7RWvi5z6BxwYuJYWf8yGOM57lVVAswzdj3fAtsCgB/Zgs0S0YV3N1Ne8jP/RjM4insc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AS96LH93; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6B9EC4AF1A;
 	Wed,  1 May 2024 23:21:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1714605694;
-	bh=PjIIBgLr+DWstHxKJAAho0J12+hAPDhHwNbpvgl5zCA=;
+	bh=tN99QeAtJ9rSCHUuXKIZr5kPNcQaT1UKModjibckfc0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=SAD4W3nmymLlQ101Ufjj+TJsSyo//tQXuHtAPRSXD79p+3bQip6eWH5pV5fOQCRsr
-	 8OUisyyw6+oraEt33gcn80SGacU/H+CzZUXe5PvHQLtTwBLa4Yb3hF1R2+7oPAAnmT
-	 m/KvKpe2FjkeZfNn83zirKlEJFk0wRHcrg/VB4VshlmHD7dmg9Vg9lpWcFRa9nRlJf
-	 HsjTuCmgDSWBqQ8UrkHSK5U+gJ7jNvOiLfWz3Ye8hBm4bzGGXRujhNakHeQPOy/vML
-	 /2sfqun0/G98sv9wBCVtqcx13pZxtThyjnhROMAPORxWrqeSMEH5d/MLDaXwd8T95m
-	 DPHpfej2Inl/A==
+	b=AS96LH93+Xv7uqyFVwP7Ifz/QqcBdBaP5BGxQ4L0EAKdW6laZio2vPkeRSX6XRuKE
+	 xZJvNqkbdAOtJLv6R/FSAflXrHWOP5kQS4UFIE6lCBffZuLWzagw0pvF3rHTIysJ62
+	 hBcLQcvkVn8NWM+SoK5K0vkJATmyO7aVfGwvAKRJrBSxWANKtyE2slV8h30k98amrx
+	 +rCjY+9VY+m9Vlc7LOAmKOZqhCK3H5xnkh5SzAE3LRfmaN+xlVItrgESbIVnMLO41l
+	 ATk9IXV/NjDDBos5BU++QwnyulVUIwu9SOHINzQBhyP65F6c+UdwggBy02KOwdq3iM
+	 G3bcO0UI+DoXg==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 671A6CE12E9; Wed,  1 May 2024 16:21:34 -0700 (PDT)
+	id 6A93DCE1415; Wed,  1 May 2024 16:21:34 -0700 (PDT)
 From: "Paul E. McKenney" <paulmck@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	linux-arch@vger.kernel.org,
@@ -59,15 +59,15 @@ Cc: stern@rowland.harvard.edu,
 	luc.maranget@inria.fr,
 	akiyks@gmail.com,
 	"Paul E. McKenney" <paulmck@kernel.org>,
-	Frederic Weisbecker <frederic@kernel.org>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
 	Daniel Lustig <dlustig@nvidia.com>,
 	Joel Fernandes <joel@joelfernandes.org>,
 	Mark Rutland <mark.rutland@arm.com>,
 	Jonathan Corbet <corbet@lwn.net>,
 	linux-doc@vger.kernel.org
-Subject: [PATCH memory-model 2/4] Documentation/litmus-tests: Demonstrate unordered failing cmpxchg
-Date: Wed,  1 May 2024 16:21:30 -0700
-Message-Id: <20240501232132.1785861-2-paulmck@kernel.org>
+Subject: [PATCH memory-model 3/4] Documentation/atomic_t: Emphasize that failed atomic operations give no ordering
+Date: Wed,  1 May 2024 16:21:31 -0700
+Message-Id: <20240501232132.1785861-3-paulmck@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <42a43181-a431-44bd-8aff-6b305f8111ba@paulmck-laptop>
 References: <42a43181-a431-44bd-8aff-6b305f8111ba@paulmck-laptop>
@@ -79,11 +79,13 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This commit adds four litmus tests showing that a failing cmpxchg()
-operation is unordered unless followed by an smp_mb__after_atomic()
-operation.
+The ORDERING section of Documentation/atomic_t.txt can easily be read as
+saying that conditional atomic RMW operations that fail are ordered when
+those operations have the _acquire() or _release() suffixes.  This is
+not the case, therefore update this section to make it clear that failed
+conditional atomic RMW operations provide no ordering.
 
-Suggested-by: Frederic Weisbecker <frederic@kernel.org>
+Reported-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Cc: Alan Stern <stern@rowland.harvard.edu>
 Cc: Will Deacon <will@kernel.org>
@@ -101,196 +103,33 @@ Cc: Mark Rutland <mark.rutland@arm.com>
 Cc: Jonathan Corbet <corbet@lwn.net>
 Cc: <linux-arch@vger.kernel.org>
 Cc: <linux-doc@vger.kernel.org>
+Acked-by: Andrea Parri <parri.andrea@gmail.com>
+Acked-by: Mark Rutland <mark.rutland@arm.com>
 ---
- Documentation/litmus-tests/README             | 16 +++++++++
- .../atomic/cmpxchg-fail-ordered-1.litmus      | 34 +++++++++++++++++++
- .../atomic/cmpxchg-fail-ordered-2.litmus      | 30 ++++++++++++++++
- .../atomic/cmpxchg-fail-unordered-1.litmus    | 33 ++++++++++++++++++
- .../atomic/cmpxchg-fail-unordered-2.litmus    | 30 ++++++++++++++++
- 5 files changed, 143 insertions(+)
- create mode 100644 Documentation/litmus-tests/atomic/cmpxchg-fail-ordered-1.litmus
- create mode 100644 Documentation/litmus-tests/atomic/cmpxchg-fail-ordered-2.litmus
- create mode 100644 Documentation/litmus-tests/atomic/cmpxchg-fail-unordered-1.litmus
- create mode 100644 Documentation/litmus-tests/atomic/cmpxchg-fail-unordered-2.litmus
+ Documentation/atomic_t.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/litmus-tests/README b/Documentation/litmus-tests/README
-index 26ca56df02125..6c666f3422ea3 100644
---- a/Documentation/litmus-tests/README
-+++ b/Documentation/litmus-tests/README
-@@ -21,6 +21,22 @@ Atomic-RMW-ops-are-atomic-WRT-atomic_set.litmus
-     Test that atomic_set() cannot break the atomicity of atomic RMWs.
-     NOTE: Require herd7 7.56 or later which supports "(void)expr".
+diff --git a/Documentation/atomic_t.txt b/Documentation/atomic_t.txt
+index d7adc6d543db4..bee3b1bca9a7b 100644
+--- a/Documentation/atomic_t.txt
++++ b/Documentation/atomic_t.txt
+@@ -171,14 +171,14 @@ The rule of thumb:
+  - RMW operations that are conditional are unordered on FAILURE,
+    otherwise the above rules apply.
  
-+cmpxchg-fail-ordered-1.litmus
-+    Demonstrate that a failing cmpxchg() operation acts as a full barrier
-+    when followed by smp_mb__after_atomic().
-+
-+cmpxchg-fail-ordered-2.litmus
-+    Demonstrate that a failing cmpxchg() operation acts as an acquire
-+    operation when followed by smp_mb__after_atomic().
-+
-+cmpxchg-fail-unordered-1.litmus
-+    Demonstrate that a failing cmpxchg() operation does not act as a
-+    full barrier.
-+
-+cmpxchg-fail-unordered-2.litmus
-+    Demonstrate that a failing cmpxchg() operation does not act as an
-+    acquire operation.
-+
+-Except of course when an operation has an explicit ordering like:
++Except of course when a successful operation has an explicit ordering like:
  
- locking (/locking directory)
- ----------------------------
-diff --git a/Documentation/litmus-tests/atomic/cmpxchg-fail-ordered-1.litmus b/Documentation/litmus-tests/atomic/cmpxchg-fail-ordered-1.litmus
-new file mode 100644
-index 0000000000000..3df1d140b189b
---- /dev/null
-+++ b/Documentation/litmus-tests/atomic/cmpxchg-fail-ordered-1.litmus
-@@ -0,0 +1,34 @@
-+C cmpxchg-fail-ordered-1
-+
-+(*
-+ * Result: Never
-+ *
-+ * Demonstrate that a failing cmpxchg() operation will act as a full
-+ * barrier when followed by smp_mb__after_atomic().
-+ *)
-+
-+{}
-+
-+P0(int *x, int *y, int *z)
-+{
-+	int r0;
-+	int r1;
-+
-+	WRITE_ONCE(*x, 1);
-+	r1 = cmpxchg(z, 1, 0);
-+	smp_mb__after_atomic();
-+	r0 = READ_ONCE(*y);
-+}
-+
-+P1(int *x, int *y, int *z)
-+{
-+	int r0;
-+
-+	WRITE_ONCE(*y, 1);
-+	r1 = cmpxchg(z, 1, 0);
-+	smp_mb__after_atomic();
-+	r0 = READ_ONCE(*x);
-+}
-+
-+locations[0:r1;1:r1]
-+exists (0:r0=0 /\ 1:r0=0)
-diff --git a/Documentation/litmus-tests/atomic/cmpxchg-fail-ordered-2.litmus b/Documentation/litmus-tests/atomic/cmpxchg-fail-ordered-2.litmus
-new file mode 100644
-index 0000000000000..54146044a16f6
---- /dev/null
-+++ b/Documentation/litmus-tests/atomic/cmpxchg-fail-ordered-2.litmus
-@@ -0,0 +1,30 @@
-+C cmpxchg-fail-ordered-2
-+
-+(*
-+ * Result: Never
-+ *
-+ * Demonstrate use of smp_mb__after_atomic() to make a failing cmpxchg
-+ * operation have acquire ordering.
-+ *)
-+
-+{}
-+
-+P0(int *x, int *y)
-+{
-+	int r0;
-+	int r1;
-+
-+	WRITE_ONCE(*x, 1);
-+	r1 = cmpxchg(y, 0, 1);
-+}
-+
-+P1(int *x, int *y)
-+{
-+	int r0;
-+
-+	r1 = cmpxchg(y, 0, 1);
-+	smp_mb__after_atomic();
-+	r2 = READ_ONCE(*x);
-+}
-+
-+exists (0:r1=0 /\ 1:r1=1 /\ 1:r2=0)
-diff --git a/Documentation/litmus-tests/atomic/cmpxchg-fail-unordered-1.litmus b/Documentation/litmus-tests/atomic/cmpxchg-fail-unordered-1.litmus
-new file mode 100644
-index 0000000000000..a727ce23b1a6e
---- /dev/null
-+++ b/Documentation/litmus-tests/atomic/cmpxchg-fail-unordered-1.litmus
-@@ -0,0 +1,33 @@
-+C cmpxchg-fail-unordered-1
-+
-+(*
-+ * Result: Sometimes
-+ *
-+ * Demonstrate that a failing cmpxchg() operation does not act as a
-+ * full barrier.  (In contrast, a successful cmpxchg() does act as a
-+ * full barrier.)
-+ *)
-+
-+{}
-+
-+P0(int *x, int *y, int *z)
-+{
-+	int r0;
-+	int r1;
-+
-+	WRITE_ONCE(*x, 1);
-+	r1 = cmpxchg(z, 1, 0);
-+	r0 = READ_ONCE(*y);
-+}
-+
-+P1(int *x, int *y, int *z)
-+{
-+	int r0;
-+
-+	WRITE_ONCE(*y, 1);
-+	r1 = cmpxchg(z, 1, 0);
-+	r0 = READ_ONCE(*x);
-+}
-+
-+locations[0:r1;1:r1]
-+exists (0:r0=0 /\ 1:r0=0)
-diff --git a/Documentation/litmus-tests/atomic/cmpxchg-fail-unordered-2.litmus b/Documentation/litmus-tests/atomic/cmpxchg-fail-unordered-2.litmus
-new file mode 100644
-index 0000000000000..a245bac55b578
---- /dev/null
-+++ b/Documentation/litmus-tests/atomic/cmpxchg-fail-unordered-2.litmus
-@@ -0,0 +1,30 @@
-+C cmpxchg-fail-unordered-2
-+
-+(*
-+ * Result: Sometimes
-+ *
-+ * Demonstrate that a failing cmpxchg() operation does not act as either
-+ * an acquire release operation.  (In contrast, a successful cmpxchg()
-+ * does act as both an acquire and a release operation.)
-+ *)
-+
-+{}
-+
-+P0(int *x, int *y)
-+{
-+	int r0;
-+	int r1;
-+
-+	WRITE_ONCE(*x, 1);
-+	r1 = cmpxchg(y, 0, 1);
-+}
-+
-+P1(int *x, int *y)
-+{
-+	int r0;
-+
-+	r1 = cmpxchg(y, 0, 1);
-+	r2 = READ_ONCE(*x);
-+}
-+
-+exists (0:r1=0 /\ 1:r1=1 /\ 1:r2=0)
+  {}_relaxed: unordered
+  {}_acquire: the R of the RMW (or atomic_read) is an ACQUIRE
+  {}_release: the W of the RMW (or atomic_set)  is a  RELEASE
+ 
+ Where 'unordered' is against other memory locations. Address dependencies are
+-not defeated.
++not defeated.  Conditional operations are still unordered on FAILURE.
+ 
+ Fully ordered primitives are ordered against everything prior and everything
+ subsequent. Therefore a fully ordered primitive is like having an smp_mb()
 -- 
 2.40.1
 
