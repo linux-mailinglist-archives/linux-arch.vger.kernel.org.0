@@ -1,59 +1,59 @@
-Return-Path: <linux-arch+bounces-4099-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4100-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2AC78B867B
-	for <lists+linux-arch@lfdr.de>; Wed,  1 May 2024 09:55:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F6D18B8697
+	for <lists+linux-arch@lfdr.de>; Wed,  1 May 2024 09:56:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A9BA1F22E46
-	for <lists+linux-arch@lfdr.de>; Wed,  1 May 2024 07:55:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5BF2228543D
+	for <lists+linux-arch@lfdr.de>; Wed,  1 May 2024 07:56:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A9D84DA16;
-	Wed,  1 May 2024 07:54:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1334350A65;
+	Wed,  1 May 2024 07:55:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="bfGhnYDC"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="J/y3JC+u"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DF564F5FA;
-	Wed,  1 May 2024 07:54:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0222502B4;
+	Wed,  1 May 2024 07:55:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714550099; cv=none; b=rjdCquukknCfDz29ADYnVcV8mc1T3W8O/EvXQ0bz8iwSx6nh3jxHBmIn/qlZKdTD3Pb/14dNsB1UCbXYa/asjAiHhk92IQQ51SrkqbAqW49hVY7kk2pb3fwTo+YVBgr2VCaAmWbxGJvNgrchFsFb/u4aFRIARGpwAXMc8rccYXY=
+	t=1714550151; cv=none; b=UbheRwvt8tVXNQJbHs5HInW8lSQkHDLufXglXyKbI7DXh3VRygnNtzr8IdvqO6/EEg01+YbunuCM+QZtpbn0GQ/dS+w8Fh/Kw0MjrnrNHLgkcTgh2Di11IvX83elIUchyCBi+fD3Sps8APAJzUrqbdbRo/PwDWuDmcubTsDGQgQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714550099; c=relaxed/simple;
-	bh=8sTLmBe4e6NEzE5W91OaWrAkBkkpZr1qotPYVHDkhKw=;
+	s=arc-20240116; t=1714550151; c=relaxed/simple;
+	bh=e/pkE3FjWcaHTM823/pyHa4coY6SVZupuk5XJFX7HP0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BGujQ0JVbADiNrPSQQToPEbzRCzw93yUbGEhHmIbbMObrys3ZKFpnF8YmLZ/2rmNwGAoBzN9S+l6ih5IW+yiCBsMtLkotiU5iA0bKZNHDi1Z7XC7WF4Prr2CVpsiksd6oAuQsbkBBFKErb0YMHBura9cD+Xp9ez3zbGI5WsprQk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=bfGhnYDC; arc=none smtp.client-ip=198.137.202.133
+	 Content-Type:Content-Disposition:In-Reply-To; b=lvl0USUyxkI8OTt8LobySiDYQDRaKmCl1dQPOTelR/BIXAY/cdPSoObCyla1G+ENdmCqWGKhb4CLBQiUeJC6Df0jGzPLSc4uGP29U7p+QKIIEkoPVpSHwTBpxXc+nxsjPSCZ6dSmh5281TjT7tA50XeW+SpwrakGrIZ7SEEQ/FE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=J/y3JC+u; arc=none smtp.client-ip=198.137.202.133
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Transfer-Encoding
-	:Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=aBV+1nnc4nEQPCYOtpvvVf+o4bvFOap0m5gmh/nCYCg=; b=bfGhnYDCggaTx9oehvzxFbXZrH
-	ZqN7cmIAB1BbFtRc1wHMmVusw6cJUlB1NhMP5Dv9X2RjN2QTpx0PK4oFkz9ZGdl187+6ZNQoywux3
-	YaswCMA448yCQjeTjqLvziQtoTm2XxogyzKlXiOR33bwaVqdb+dUgagWMMtAGzbvM5VW2eYbMPBp5
-	UZmgpSzzglnokVtmBzlR/PGhMgzd2ozpXwfaB65HARTyYzFd0mcijD9gKhI++AXS/jl1oL1qBWOYh
-	FhcojGxJt4eoAXXvprPABlnDQp25Z3AMOSchEbU7ghrBQivczGlag9TchdpTxarWXXcZG0Z6+9nxL
-	nvVbtMrg==;
+	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=kI1xPooe0vRm8yuP/wEpOQOaMdpVY3Q57qzI2ng2xDE=; b=J/y3JC+uNHN7m7SMPgVdFJKt/c
+	57BHimAAIRpRkne6SQfk+jKcX4mPvyu+LfsDNQBTgUkqHf2SQqQhIEZZSwdHTbdpMWkgT/11ht9hB
+	d9m9qhH1gfB1Rjya9ovhLAxOneF5XWWvwMe1JtsmLEOLrNv62FaC8jPwn5YX1WihIy3V1Lgbzon06
+	idEKewzYL9XzxDeJg9V3m6Z2X5FxOy2xFLfj804/dqlmiDn70cjG0jOEAbGHd2zAV2O6w6R1Y2gFI
+	qP2xH3szsl1g/rZd8JiWnJwrdS0TQeZNLg7D6Cv94PpdlQts339B/PpAS/WrgzZi4eSwWsXKkloBt
+	e9AXXIDQ==;
 Received: from hch by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1s24nZ-00000008nfR-35ld;
-	Wed, 01 May 2024 07:54:41 +0000
-Date: Wed, 1 May 2024 00:54:41 -0700
+	id 1s24oe-00000008nyg-0IBv;
+	Wed, 01 May 2024 07:55:48 +0000
+Date: Wed, 1 May 2024 00:55:48 -0700
 From: Christoph Hellwig <hch@infradead.org>
-To: Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
+To: David Wei <dw@davidwei.uk>
+Cc: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
@@ -106,32 +106,49 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
 	Johannes Berg <johannes.berg@intel.com>,
 	Abel Wu <wuyun.abel@bytedance.com>,
 	Breno Leitao <leitao@debian.org>,
-	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>,
+	Pavel Begunkov <asml.silence@gmail.com>,
 	Jason Gunthorpe <jgg@ziepe.ca>,
 	Shailend Chand <shailend@google.com>,
 	Harshitha Ramamurthy <hramamurthy@google.com>,
 	Shakeel Butt <shakeel.butt@linux.dev>,
 	Jeroen de Borst <jeroendb@google.com>,
-	Praveen Kaligineedi <pkaligineedi@google.com>
-Subject: Re: [RFC PATCH net-next v8 02/14] net: page_pool: create hooks for
- custom page providers
-Message-ID: <ZjH1QaSSQ98mw158@infradead.org>
+	Praveen Kaligineedi <pkaligineedi@google.com>, linux-mm@kvack.org,
+	Matthew Wilcox <willy@infradead.org>
+Subject: Re: [RFC PATCH net-next v8 07/14] page_pool: devmem support
+Message-ID: <ZjH1hO8qJgOqNKub@infradead.org>
 References: <20240403002053.2376017-1-almasrymina@google.com>
- <20240403002053.2376017-3-almasrymina@google.com>
+ <20240403002053.2376017-8-almasrymina@google.com>
+ <8357256a-f0e9-4640-8fec-23341fc607db@davidwei.uk>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240403002053.2376017-3-almasrymina@google.com>
+In-Reply-To: <8357256a-f0e9-4640-8fec-23341fc607db@davidwei.uk>
 X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-Still NAK to creating aⅺbitrary hooks here.  This should be a page or
-dmabuf pool and not an indirect call abstraction allowing random
-crap to hook into it.
+On Fri, Apr 26, 2024 at 05:17:52PM -0700, David Wei wrote:
+> On 2024-04-02 5:20 pm, Mina Almasry wrote:
+> > @@ -69,20 +106,26 @@ net_iov_binding(const struct net_iov *niov)
+> >   */
+> >  typedef unsigned long __bitwise netmem_ref;
+> >  
+> > +static inline bool netmem_is_net_iov(const netmem_ref netmem)
+> > +{
+> > +#if defined(CONFIG_PAGE_POOL) && defined(CONFIG_DMA_SHARED_BUFFER)
+> 
+> I am guessing you added this to try and speed up the fast path? It's
+> overly restrictive for us since we do not need dmabuf necessarily. I
+> spent a bit too much time wondering why things aren't working only to
+> find this :(
 
+So what else do you need?  I was assured last round that nothing but
+dmabuf and potentially the huge page case (that really just is the page
+provider) would get added.
+
+> 
+---end quoted text---
 
