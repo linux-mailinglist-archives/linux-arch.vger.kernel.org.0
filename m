@@ -1,80 +1,80 @@
-Return-Path: <linux-arch+bounces-4101-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4102-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 815D98B8876
-	for <lists+linux-arch@lfdr.de>; Wed,  1 May 2024 12:19:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 629948B8878
+	for <lists+linux-arch@lfdr.de>; Wed,  1 May 2024 12:19:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B31591C22B68
-	for <lists+linux-arch@lfdr.de>; Wed,  1 May 2024 10:19:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1F5E7282CE0
+	for <lists+linux-arch@lfdr.de>; Wed,  1 May 2024 10:19:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB0C3537E8;
-	Wed,  1 May 2024 10:18:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 491AE52F62;
+	Wed,  1 May 2024 10:19:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HqppKfNX"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AdmfrsHl"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2235B51C4C
-	for <linux-arch@vger.kernel.org>; Wed,  1 May 2024 10:18:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC642524BE
+	for <linux-arch@vger.kernel.org>; Wed,  1 May 2024 10:19:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714558737; cv=none; b=Z9D/d5oi63vvOKuLpN0xBKgjZe6Flot2KwLJ8YWJUaL4X+xQumyYJn8u6BwSEEPdgDMkvxj2mNqIPoTSmgm0vifA22iRbcQHjEJQVqkh2icBKJjk+btxTCEV+AauL1QkIpTFPiIBsqSdEx+s+nazA0IH6/soInWLE+/0xgXHq1k=
+	t=1714558777; cv=none; b=qElCRzV9YYxDZ1+5k4fXtWthef9NDs38U2mzmZyh4ZWCYRmSJpa3nZ6SAyA1KIB8KZo+d41FDDh9wOHkUlx89phT1Opqo02KjuPefioH0hxnwqIm8W/Ah3xoHbZiXnd1cN+H66k3gVr4gZ8Uww9O8qEY/hNIbsuOblsYURc1Q74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714558737; c=relaxed/simple;
-	bh=Ev3McdlDAs4BYS6y+XNElwdCdUSfrG/SuHrK3FK3B+Y=;
+	s=arc-20240116; t=1714558777; c=relaxed/simple;
+	bh=DXhxznU9JjmpSNzg1wHRqUCO05ryVh2E1hgdKVJ0r/0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pGYPVomb6Rl0WuWEy3u9CfANPldtmsGyuNZJkwZ6CRA7RPEpEWdyqG2t/W8r1IbsvQgtT4zodggRYRypiJwBp9/Lo8kUYaK6H47AjkJdH+Cw5ErLmnccJNNmIlEJt2N0XEFP2jAQ4Izx/iTljCQJ4aMjaS5Mm8NQGMstQlawCts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HqppKfNX; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:Content-Type; b=iLBsaZtnUknS35gLAdfEq3JEIU7H4/B1oHiMkWvxzVTlIBD6sLJMueYIqPNgPA+Rkwb1NwiPTFAFCeCnGTT9S6o5cRn859uglqCLk05fTLFPR0MXiWiS898cr/FTaIrwQUaLxJPpz5QkLYjrDnsK7KFnKCphajNeBPHgaSO9a9k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AdmfrsHl; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1714558734;
+	s=mimecast20190719; t=1714558775;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=DxKl3udzzGpg1eT3+MxaYs7RsOyw5KvkU4S7GKrDV/g=;
-	b=HqppKfNXGTfgv0SYVLu6TlG/eqZ4d3IpPdCIufevQdNB1SgjdWJ4rR6VZJuaBhb1lte94D
-	Pk/yQ/9NhxNQ68P7GgRmtCcTx1VoT76tJFQSBgXjKR59/INjQ52yTTgM3wCTc5Z9YAAmO/
-	hJOg12kAaux9BJ5UlzU9Ob2Iy/N0Loc=
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
- [209.85.166.198]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=mmEGz0tj7kIblBaqJ9h8gJzxXs1BObonWK5NXhTXy2g=;
+	b=AdmfrsHlXaTnQk1wpxyiZrYV4pCG1hKqgnBgc0yCbmDKFwZhy21nZo0BcyE5+JOspYWgOB
+	pdosOxTTznrRW1kK/lwNLPdWjXpnJhDRYM/F5F28ncJ0F5a/zjzLJOVQF3Lab34DtPY3zR
+	M1XWBsZBaNXI0sIA315CMWcNLXP9KI4=
+Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
+ [209.85.161.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-422-gkZYH1cOMe6YMYWn4pBBXA-1; Wed, 01 May 2024 06:18:53 -0400
-X-MC-Unique: gkZYH1cOMe6YMYWn4pBBXA-1
-Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-36c1af8f2f3so70854025ab.3
-        for <linux-arch@vger.kernel.org>; Wed, 01 May 2024 03:18:52 -0700 (PDT)
+ us-mta-13-FrZ-1tnAMtWi8lZzlh2CVw-1; Wed, 01 May 2024 06:19:33 -0400
+X-MC-Unique: FrZ-1tnAMtWi8lZzlh2CVw-1
+Received: by mail-oo1-f72.google.com with SMTP id 006d021491bc7-5b1a8c36932so526827eaf.3
+        for <linux-arch@vger.kernel.org>; Wed, 01 May 2024 03:19:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714558732; x=1715163532;
+        d=1e100.net; s=20230601; t=1714558773; x=1715163573;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DxKl3udzzGpg1eT3+MxaYs7RsOyw5KvkU4S7GKrDV/g=;
-        b=gJixuVRBrG9tjkHdG7z2WIktW3T4S+98FyM6Hh2QOhJ1osgAsjF7J26KKITMFbAkFj
-         nW6wDZdL3uJxezPMv/2cgDztbYatmRfwqSGrFkwYkCCamPsFZRG96MWHcgtz9qw2sXUN
-         1b1j55wTqgepB8g54zRF/hEJD2z9xmSsG6hUfxr9OfLw8BI26VFKK0UB6cVFO2UDf7kl
-         SgNsQPtvOWch5vGBrZhrwHYNyK8DnFRyGFFrodBjGIt7I8dhlSoyFh55vK5WbwMUkZHh
-         QOev0c9pyohszebcx5bAQhqWHjnIy+h3TigquwoqBC2VgKv08YWn9XRDIZ5PTA5l6Z4n
-         y6eQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWMW1Dm9DyqpNUIYRSk9Jl/p2lVbkZ9ZiMTNRe1JNFeXAvPWqIkyF+WytW/GtyMJimtoZk6Sh+CQzkbxzBLk/uWASMqSM58I8w0Eg==
-X-Gm-Message-State: AOJu0Yy4/vVNNElG9Dmd164ah380xKNNqN00tYLSg9USJ414j4PwMul+
-	N5NiHv1ntFOjc9guE14JTCEQpBVpJCLeNmu1rytWvMpaNnoow7OlnSNrHpgTBV/EzK9j3GL2tQW
-	7vs/1TuOzyOZJnUox+PSJmXWz4JyD+aqcYCdKSzqEnmPWaL6tYVuNYFTb9eA=
-X-Received: by 2002:a92:cda8:0:b0:36c:5092:e6a1 with SMTP id g8-20020a92cda8000000b0036c5092e6a1mr2567013ild.29.1714558732197;
-        Wed, 01 May 2024 03:18:52 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGXwbnm2St0QGkNYvo0Kzya2DtdxpDRe1dq5klNVqI1ZMi8KwgV+DlV3hJf4iiekAiT2koB1Q==
-X-Received: by 2002:a92:cda8:0:b0:36c:5092:e6a1 with SMTP id g8-20020a92cda8000000b0036c5092e6a1mr2566984ild.29.1714558731861;
-        Wed, 01 May 2024 03:18:51 -0700 (PDT)
+        bh=mmEGz0tj7kIblBaqJ9h8gJzxXs1BObonWK5NXhTXy2g=;
+        b=r3eijYldCFMp5yLvJ4Q0YyDgF/h+KFaJfL/WFnJX/o4fqBO5SUdPexB0hAeIFmzxz1
+         hA1Cd6x+65b+UDlg0FDtaPPpm7m1K0JwfeCQlvefd1Wau6wYeLjdJX4egukm/UI8tTIx
+         mDCaAyoFUlG93JNOzyv/TBlXyQaUu/EJpQEyyxY2kYZ4asV32Esin6I9SyJ/f2esgp/I
+         PUQzN5eqpT/jqHSR5rUpwSn+BCQ9fwCglmTWao2MrXjOSRMzWC+QR823naBSyR/q+922
+         mXeQvH7sp1pj2QyfRuKLi5tKjcMnfjdOYF/vXuqhvk54P3lIdpAFiQaKleUJWfMvSrdH
+         doyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVs1WxbHdXdtc2g7zAgXmAiOECpsnqQXkY2It/DsoJQBas1rU6i6yWEu6oMD9NLZxjIeOL3CT7/GkyElW32uTM7swJrrFW/CqF6vQ==
+X-Gm-Message-State: AOJu0Yye3hGiDzMctgMg1GuzJIezTmQb/xHcYOVCukxSBUqoHlHSQNA0
+	PDvPSjfIWy1+pB9G0Kq5BEKzZSZZEFVD7KiQVMIbtLAvxOhyf8a60vrhkigAyyZTn0bfJ1ZxklO
+	UluWCqEAArZDUVcR4vkuHVxibyhXWwxqRKNVwxNNYTKyA33iXQ74UU+tgTGU=
+X-Received: by 2002:a05:6358:b3c2:b0:186:d3c9:fc0b with SMTP id pb2-20020a056358b3c200b00186d3c9fc0bmr2565155rwc.30.1714558772874;
+        Wed, 01 May 2024 03:19:32 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IH109ZEmrs8b6zIYcwGCPZVYbwoFohFQfuWKsDp3G4uwsHjXJPYYLUDItsMWRt9l+MVNm+LjQ==
+X-Received: by 2002:a05:6358:b3c2:b0:186:d3c9:fc0b with SMTP id pb2-20020a056358b3c200b00186d3c9fc0bmr2565125rwc.30.1714558772433;
+        Wed, 01 May 2024 03:19:32 -0700 (PDT)
 Received: from [192.168.68.50] ([43.252.112.88])
-        by smtp.gmail.com with ESMTPSA id x71-20020a63864a000000b00606dd49d3b8sm12183225pgd.57.2024.05.01.03.18.42
+        by smtp.gmail.com with ESMTPSA id x71-20020a63864a000000b00606dd49d3b8sm12183225pgd.57.2024.05.01.03.19.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 May 2024 03:18:51 -0700 (PDT)
-Message-ID: <08c6ff11-ab3d-4a4f-95ea-735134fca8cb@redhat.com>
-Date: Wed, 1 May 2024 20:18:40 +1000
+        Wed, 01 May 2024 03:19:31 -0700 (PDT)
+Message-ID: <02922d47-6bb9-4865-b13f-b3a6972853a6@redhat.com>
+Date: Wed, 1 May 2024 20:19:23 +1000
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -82,8 +82,8 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 04/19] ACPI: processor: Return an error if
- acpi_processor_get_info() fails in processor_add()
+Subject: Re: [PATCH v9 05/19] ACPI: processor: Fix memory leaks in error paths
+ of processor_add()
 Content-Language: en-US
 To: Jonathan Cameron <Jonathan.Cameron@huawei.com>,
  Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>,
@@ -101,29 +101,30 @@ Cc: Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
  Dave Hansen <dave.hansen@linux.intel.com>, linuxarm@huawei.com,
  justin.he@arm.com, jianyong.wu@arm.com
 References: <20240430142434.10471-1-Jonathan.Cameron@huawei.com>
- <20240430142434.10471-5-Jonathan.Cameron@huawei.com>
+ <20240430142434.10471-6-Jonathan.Cameron@huawei.com>
 From: Gavin Shan <gshan@redhat.com>
-In-Reply-To: <20240430142434.10471-5-Jonathan.Cameron@huawei.com>
+In-Reply-To: <20240430142434.10471-6-Jonathan.Cameron@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 5/1/24 00:24, Jonathan Cameron wrote:
-> Rafael observed [1] that returning 0 from processor_add() will result in
-> acpi_default_enumeration() being called which will attempt to create a
-> platform device, but that makes little sense when the processor is known
-> to be not available.  So just return the error code from acpi_processor_get_info()
-> instead.
+> If acpi_processor_get_info() returned an error, pr and the associated
+> pr->throttling.shared_cpu_map were leaked.
 > 
-> Link: https://lore.kernel.org/all/CAJZ5v0iKU8ra9jR+EmgxbuNm=Uwx2m1-8vn_RAZ+aCiUVLe3Pw@mail.gmail.com/ [1]
-> Suggested-by: Rafael J. Wysocki <rafael@kernel.org>
+> The unwind code was in the wrong order wrt to setup, relying on
+> some unwind actions having no affect (clearing variables that were
+> never set etc).  That makes it harder to reason about so reorder
+> and add appropriate labels to only undo what was actually set up
+> in the first place.
+> 
 > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 > 
 > ---
-> v9: New patch following through from Gavin pointing out a memory leak later
->      in the series.
+> v9: New patch in response to Gavin noticing a memory leak later in the
+>      series.
 > ---
->   drivers/acpi/acpi_processor.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>   drivers/acpi/acpi_processor.c | 15 ++++++++-------
+>   1 file changed, 8 insertions(+), 7 deletions(-)
 > 
 
 Reviewed-by: Gavin Shan <gshan@redhat.com>
