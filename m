@@ -1,134 +1,414 @@
-Return-Path: <linux-arch+bounces-4134-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4135-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD5138B9A12
-	for <lists+linux-arch@lfdr.de>; Thu,  2 May 2024 13:31:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D96638B9A77
+	for <lists+linux-arch@lfdr.de>; Thu,  2 May 2024 14:11:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 198631C21685
-	for <lists+linux-arch@lfdr.de>; Thu,  2 May 2024 11:31:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 512BB1F21F3D
+	for <lists+linux-arch@lfdr.de>; Thu,  2 May 2024 12:11:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0F5A5644E;
-	Thu,  2 May 2024 11:31:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7003768F0;
+	Thu,  2 May 2024 12:11:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="WfHmcFXG";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="IksWbokK"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="R3k0aI6R";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="Vvubaa2u"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from wfhigh2-smtp.messagingengine.com (wfhigh2-smtp.messagingengine.com [64.147.123.153])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5423224DD;
-	Thu,  2 May 2024 11:31:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.153
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714649483; cv=none; b=MjZsPVcYCnndi+RqtB4NNyGPPjontSNWjOY2aJ+hFY5QuM3T+OKTLwBGcn7otXQqdpv+j81wz70+Ow9/v3aQ4IwUPz6UEzpKnPXO5q+GSsZUDQP4wYiFUfRJvE9tS5WI1MDDqp5wiymi4N+xiF8hMUhWrXH7hFZEA+TXGimaX7o=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714649483; c=relaxed/simple;
-	bh=YcXal5CY5KaXmO3QDfbafOfHBwhNBEGSaCfs7JI9MhI=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=FCQfDj/WNVvPRJT7i3X8/0s46FN8kMy2FClS6syAdjpNhwLxJ588q8P5gGX9e1WzqSMeaTO/PtdxZ2PaQEEVfYEowOaPrbAXhsG2BlaHCVYUkBATEUAu2F2/9Hl48RIdgHnbweaivSzetCFr4eKkhuS/HqRKJ8o0hExRAxLbxY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=WfHmcFXG; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=IksWbokK; arc=none smtp.client-ip=64.147.123.153
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfhigh.west.internal (Postfix) with ESMTP id BB0C01800185;
-	Thu,  2 May 2024 07:31:19 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Thu, 02 May 2024 07:31:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1714649479; x=1714735879; bh=NLsj9iUxTH
-	Tn2bffJD6DDAckEglOChxRWMTdItwVvmc=; b=WfHmcFXGX6eHVZdNs/XURoFADQ
-	kiXo+a8biVfeD0vKUsizUf8Kb5HpItSI53IkOl1+LwBJIPwB22Np4Bg4eZOh2eKd
-	XyOmpHOk3zoPY6ZoEsCtdvVTTKyS7miR67sHdPVdHjJL81ri5LpZVB+zJyQQgceJ
-	t/41zEs5ARYWaW3zY+MQFwWLcaNW5W/aj8W0NQ8QDxu2FR0F5EmfLO3JTa+7Tlbw
-	aTlYyvvbsFXRbWsn4ifDVi58zdRF9gK8DVucjFtGj7B0mbNV0+p4JauDCORq6hsV
-	v1IxYeuia8pz56Qm46IlawplHLiwCYbtUEOp1wC7Eh3vF6eUY0BuOk1n4crg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1714649479; x=1714735879; bh=NLsj9iUxTHTn2bffJD6DDAckEglO
-	ChxRWMTdItwVvmc=; b=IksWbokKoG8VRvqcXu23DETEzhVELEDsPKBdKBRGItaO
-	QIbsNhUrODK87vXDm0oKIuBJHZPiCJf84/s0lIuzL/O0ECUEU3KMZNfXpDtrNrNb
-	v6DVPmOMVaja2878HmxS/sviCeJID0hHFlsI3Vuto8GCahdQQqw4G4ZCrAuOim7L
-	BcGihvFuf3CtG9JPfeTGwpW1ts2VHGhfGJqWRCKVK/z/pmthZgLYzmSBqaGa2Q9g
-	Hz+Sf72u1wTWqLJBPEN0O8MmJy7iJe1pk+1tN973qgKYknHgStz/Y1d7gZVGzQnb
-	723oL1SA4EDB9bDEdbaC2ZnjDF2vmUOyzp6+Rilb5Q==
-X-ME-Sender: <xms:hnkzZiE0ifyeczcq3m6NAgCiDzqOzUmcC93sTsBcTnftKNIXX-F_sQ>
-    <xme:hnkzZjX0or-ZWOAHk5Wue3RgzY-PqLdp5XBainuXEWAZLMQCC08QZfMhcAAdJahUD
-    MNDaTzcLzZfYjB6Om0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvddukedggedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:hnkzZsLwBQ7SOz3HXJH80HlN6N1TtaQSmyqRxKAGZi7YWwQ-RuJPPw>
-    <xmx:hnkzZsE6kcIwTYuYTVLIdfB0Y-O1dB5_MmChbcipOaLEBWb5qMOBdg>
-    <xmx:hnkzZoUuzxaQzZOv6Mp5Yxk8eo9Oux494-Z__lUyKl7JGG3P78zcnQ>
-    <xmx:hnkzZvPohJOaNxgMc8WSyBeAvvi8pHO-jF9Dw4kEA7tEy0EcPbYATw>
-    <xmx:h3kzZkknNf43aCnbvVYISmq-FSQ44yvSsggFsFpv8_gfve6hzQZHSj6A>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id A15DCB6008D; Thu,  2 May 2024 07:31:18 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-416-g2c1796742e-fm-20240424.001-g2c179674
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0729B7580A;
+	Thu,  2 May 2024 12:11:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1714651893; cv=fail; b=CtEMkFH1VcJZtV4t8ClKL3R+dIpODKjrl9WvHaPNx59Mbd5XiXm9LR9MPmN8YoN60LuVbTW/SmdgCxla/WIU+d7sI8cX0gPYak6lc0z6MrL6R6BAT3c89CpK4rGRKRoFYjwBLiEzVD7GIQK689GQHWuBhHNUeo84aoYwrfqPa2E=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1714651893; c=relaxed/simple;
+	bh=HNHKcIOksXR8DVO4cNSW7KCEDFd5yKetZiEZcAjPuic=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=LDIK+t7/yJHeA8LGEslidFE1djVmxIZ69GWxi1aYwfHXH66wq5L3RGbR8tYx+MDd4aU95acGsZ4AXsnctH0PrYmq32k1TkLix+GF7lM2FNkGgAm/rEGwg+ihaYt7yx0NXe/hm5OhMSRO/rrgRRwI+dzkjjiGx26LPpJLq23rurw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=R3k0aI6R; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=Vvubaa2u; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 442842Ds013315;
+	Thu, 2 May 2024 12:10:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=corp-2023-11-20;
+ bh=WRz4cWlWZMzCJfh9iwrYT0akta/XfKd8uu9t/hYTDj8=;
+ b=R3k0aI6R15uIyNcSGXLlc5r+Br5d/RB3/yFdIcEgTYSx8xAi/k/dJGe4HNpr1xIDZltP
+ MpCg9M/95p640a4oqxai54wbjUfGAUn2sOByFa5LbE33XbNmgWDR49qAx1TI+HErjbVs
+ rRFG5fs153BF2mfkpnDJNgiMbqstC/6fZtyDEMz8juAWlX/XchF3qbrAK/4MBeiwH7p4
+ bhAjG4WbmEqAOJcBpPwdJjaRyslltGiHXAmlF3J9qXYT2jGmp3MKpgyxsJ28BTO95mTC
+ DBQFxlRFusOc/MBunMVceoVALpxo1fhTaz6rKs/vxTlqvRGV55HW69vDqmyneJ8IOApm /A== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3xrryveajn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 02 May 2024 12:10:43 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 442AU8FD039976;
+	Thu, 2 May 2024 12:10:42 GMT
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2168.outbound.protection.outlook.com [104.47.57.168])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3xrqtay8pk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 02 May 2024 12:10:42 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IUYNoEHQ7YhMnnAIyXcLAOKSzOr3c3Xa3md5TkFi5+yscrt6LAqRb6X3SRNBzBIMUBO8PnfNolN7lHB9vACML0dqBdZBpxkGFafuzZe0eziWSILQPmbgaKAPPkXqYmXoHJxZVSNx0xSn0WxW2x7Gye+/Tm+wVXM1JZmfIWrGtSsSUeLt57DRlcHk098ppKKOYrXiLPlVAXfEACTeqJx2UaoYQE8ae4xR2sEVthgfvmik+MAHPir5d8KZd0KS243IDjGsIKm8mSbutv4V46IdLjeXG1UWQYQ8tnlr4KKCYMh55MF9M5sn+Sx6mfdDNLtHeSer8EabKNBekLVOh1kk8g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WRz4cWlWZMzCJfh9iwrYT0akta/XfKd8uu9t/hYTDj8=;
+ b=TeAh/5kWBqXSH1TL0kwmP8+iJGw7YH9o2/+mOcWvW4nQj1nSgA10tIV10UNl8JZF6mGWDLQ2T0nNBr8eR0vWJPGpn8dWNIClApcU0fisoB+PRxnoKpdZVWk09FiKTqEvaGgvdJm9wUquSjZ/zgvO4NCanbllNxkzwYJ+PAuNIyYUy1AXW2aADC5SzRAy8JH9kTEw3ssCNVtPZK+MuaJZzHkNrWgdB303Qdhh4BNcTGTOXk787y0StiDhjX/QdM9SOzzg9RjiBY/lujEgHNrNuEw5wz3kvRDGGeD4B/ECUOKecByUC4Ruf23g+Aue0vvl+zIu2H3auOOnjtfQicMKEQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WRz4cWlWZMzCJfh9iwrYT0akta/XfKd8uu9t/hYTDj8=;
+ b=Vvubaa2uvzVg+pqqWQDBS1hXFRbLjkFDYvF5PeDv9Ti7ac2dFCLYD3uWjr6t9XN+QrlgUc0rlLAra5uIyz4cJbZs8r0MMQMOie8g7hwkRHoLbSuAq2was3m82dV9u4G+yfqpS0+HwH9Y/TCpHWrJZLXfl+dWs66HkTCL9zxauMU=
+Received: from CO6PR10MB5426.namprd10.prod.outlook.com (2603:10b6:5:35e::22)
+ by SA2PR10MB4507.namprd10.prod.outlook.com (2603:10b6:806:119::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.24; Thu, 2 May
+ 2024 12:10:39 +0000
+Received: from CO6PR10MB5426.namprd10.prod.outlook.com
+ ([fe80::250a:29d3:cece:abf4]) by CO6PR10MB5426.namprd10.prod.outlook.com
+ ([fe80::250a:29d3:cece:abf4%4]) with mapi id 15.20.7519.041; Thu, 2 May 2024
+ 12:10:39 +0000
+From: Miguel Luis <miguel.luis@oracle.com>
+To: Jonathan Cameron <jonathan.cameron@huawei.com>
+CC: Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra
+	<peterz@infradead.org>,
+        "linux-pm@vger.kernel.org"
+	<linux-pm@vger.kernel.org>,
+        "loongarch@lists.linux.dev"
+	<loongarch@lists.linux.dev>,
+        "linux-acpi@vger.kernel.org"
+	<linux-acpi@vger.kernel.org>,
+        "linux-arch@vger.kernel.org"
+	<linux-arch@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>,
+        "kvmarm@lists.linux.dev"
+	<kvmarm@lists.linux.dev>,
+        "x86@kernel.org" <x86@kernel.org>,
+        Russell King
+	<linux@armlinux.org.uk>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        James
+ Morse <james.morse@arm.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Catalin Marinas
+	<catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier
+	<maz@kernel.org>,
+        Hanjun Guo <guohanjun@huawei.com>, Gavin Shan
+	<gshan@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov
+	<bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "linuxarm@huawei.com" <linuxarm@huawei.com>,
+        "justin.he@arm.com"
+	<justin.he@arm.com>,
+        "jianyong.wu@arm.com" <jianyong.wu@arm.com>
+Subject: Re: [PATCH v9 01/19] ACPI: processor: Simplify initial onlining to
+ use same path for cold and hotplug
+Thread-Topic: [PATCH v9 01/19] ACPI: processor: Simplify initial onlining to
+ use same path for cold and hotplug
+Thread-Index: AQHamwo7mwmZSVtyVE2+jzCcW0ULWrGD3V2A
+Date: Thu, 2 May 2024 12:10:39 +0000
+Message-ID: <7EC7B1F4-46D2-45D7-97EF-F75E83D44F7E@oracle.com>
+References: <20240430142434.10471-1-Jonathan.Cameron@huawei.com>
+ <20240430142434.10471-2-Jonathan.Cameron@huawei.com>
+In-Reply-To: <20240430142434.10471-2-Jonathan.Cameron@huawei.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CO6PR10MB5426:EE_|SA2PR10MB4507:EE_
+x-ms-office365-filtering-correlation-id: 709f8270-2e3f-4ae1-fac9-08dc6aa0e1cf
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: 
+ BCL:0;ARA:13230031|376005|7416005|1800799015|366007|38070700009;
+x-microsoft-antispam-message-info: 
+ =?us-ascii?Q?NV5sVVz1np9sJCsA8niKa5yazQkjZbaHXRPndzr/UU/dp9094ZkZd5LWqVWr?=
+ =?us-ascii?Q?Byi1Bkxa4cnO/W+KT7Ijxh9fB6YBzdyqY/HTbQoyV9abivv6hl8+KjZUBsPk?=
+ =?us-ascii?Q?VQ8EF0kTHMEwR6FA+7ysy2vTnBug7Oi3fBvoFfOtM5mFLHx0mWPnVSkmFQEt?=
+ =?us-ascii?Q?9xVfnUMEsZpT+SX/a0oReSMjJm4PoKE55oPZLfdvcrl+WdWm9ZfL59SsyBNj?=
+ =?us-ascii?Q?CETMbJBaUllSQy9rxeMD7wIpI8sP6YHJ77QYX8sNtClzygTrPmM5x22mtqym?=
+ =?us-ascii?Q?KGUtI0yiw9ckvSXm95k2WIBRwTsonqmclqSeE4tUrC8wetr6Ajf7tOL8FH0M?=
+ =?us-ascii?Q?DouEHZAPMFhn5oh6q/yy599xSyt3hSZhqUfVr5eUDU+j6Uyp5RdQsjfoTOMb?=
+ =?us-ascii?Q?JYLEVDba7PZV4GL2j9fu5eHEWw9rRvPm29lLuflb7Rha68zAR533VE4jtH5H?=
+ =?us-ascii?Q?GYPSJNuX6GlZloI8x8rpsFnf44+9cMOZZEGYdqXeQdlWmnxB6IvXtmmzgcEM?=
+ =?us-ascii?Q?LXhLsq7vH5CFThQL6OodqzUR2nV8YphjFmLeQaQOV4bj+BcDdQhKVQFbSHJJ?=
+ =?us-ascii?Q?X6O5EBUcBKO/oRJNZKSezi0aRd/swkGXPokGZRgNxl7/6H5sAIRjnbBlXFk5?=
+ =?us-ascii?Q?MD8FzfsmpZo1knXuZINeKOt4X0/OCNUzo62b3AcOFdD7vu3u8Pk0dxqP3Snj?=
+ =?us-ascii?Q?d+Ifvd+MTUkxpc+/ibXcnnlYh5O2FQV5IiRp9pBzZ4GsoBzpMSDa0fLInDkM?=
+ =?us-ascii?Q?PAz/7FRggg7WaCu+0NsdBZcNg2AC42aLZQHclkirXwjTyul3i7X7yLlHPTrN?=
+ =?us-ascii?Q?J/ujU4741q2S8aowcwuJpuG51qth5asZUIx+gbcxmtGA2+cH1XF9W2P+HPr4?=
+ =?us-ascii?Q?4DeBK5UJheoiWgFHw7x42nt8VbKXzJRy9TVEsNnUNf7ysNWnEig+iMk3H5mD?=
+ =?us-ascii?Q?B0hEXrr/F8T+GsVVGlnVnnh/GIhgy1cScBuwO4kQ2RT+9M8F09CsFK34kkWG?=
+ =?us-ascii?Q?pqU6t6OvkuWiRzseKz7ZVQhG9soomV6C4x9C+Rp7ZUfeLNjsBzuh2pRoLpZw?=
+ =?us-ascii?Q?qsMRHK9BmobREIVKYquhZ2KmCf7DnHawEoFem2BOnAo7FTk0ujcf7lNJaEcJ?=
+ =?us-ascii?Q?bJJa2zsw6TDnSK4BKr4mzlQrKy4QgNbq35N4Ka6SdwFI2xog1PYdyV+NTEt0?=
+ =?us-ascii?Q?M7TZc/moenoLBW+BQR7yY3uaKe8eKyNpdUJn8traaV5dVexUnGU7TCkcW/TR?=
+ =?us-ascii?Q?21WA1OgrTGzSvMxza9n04SnIFtJthcBoamTe5asoghhGdiASZKhdGhjYWtN6?=
+ =?us-ascii?Q?4vtBCM36A8c5hZmUW7B/jLsBE/8FKygFyGEvdNiigaDVlQ=3D=3D?=
+x-forefront-antispam-report: 
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR10MB5426.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(7416005)(1800799015)(366007)(38070700009);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: 
+ =?us-ascii?Q?uMJekXTxVKvP4sLbAyxDRVJ7SmzjkxlQipDvqolr49DDLITDh1FLDkAdaWwx?=
+ =?us-ascii?Q?5suklX3IbfL4QmhoNfnB8TGvIPl4fLFyz/zmmq1AjOOmE1RKq/ZNSo7ZlUq4?=
+ =?us-ascii?Q?M/4iIj6xvMJanjRu/wEZPNd/5GKVPbFFZniN+lvkekesZWATF7xx3twmrEqP?=
+ =?us-ascii?Q?ey4bepukyya8+J10xCblf7VuUrhSl4DrbFVeo7ROwZmmnibZBmfaGuJLur3M?=
+ =?us-ascii?Q?rFPfyfQeJZjEMXVXs4fb9gr/pjBJ2dMOi6eu/BWvxZ1jYoWpV4iOQqrh1Uu9?=
+ =?us-ascii?Q?4dBluSuHxEjK2ScJsAcmkRfq4uY/banqcZlzKUDFtONbghZsy95rjgSp+2Kd?=
+ =?us-ascii?Q?4FO7nWEnW+w13wIYieSdmF2v3oN6icOqZ2DBYejJxIg3rVcDQMNzPoeOO0li?=
+ =?us-ascii?Q?H9h8vqF4MNdDzgd6ry2lansn8FoyJKk50NrMSWxPRRKzK/lKadrb2DhS+GL0?=
+ =?us-ascii?Q?jwzKVxz7IULrhFE3C0H2+Rb8cgQPXZ7rkr17fTN4podCfRUQerq+pPP2V/VL?=
+ =?us-ascii?Q?sSUT23oZMrLOAPL9wxoc6e3auZiRTaCfmHTSUwt4LnErbebI1XbGbgyWQx4z?=
+ =?us-ascii?Q?KpbRFPPQ2zohd+MlDl+Aa5sUQjk8i0AowplIa2rdUUbSR2tnWnpDq1+setKo?=
+ =?us-ascii?Q?Fg1XeNVhaOxCsffgYACBu3FO03C7KUmdq6ETKuBVixQLOkOAS0hUiv+OwzXT?=
+ =?us-ascii?Q?YhWCqijqrtJqWoB6qhatEUkaWB4W8ynlzIkPEeVLhCV3b9thTzfna6eZfGkL?=
+ =?us-ascii?Q?oJUD113Ri+oZKD3S6iXWY3UTFyQ3pq3RF7x1UZx9mACkbGGiAqD0nVIzaK15?=
+ =?us-ascii?Q?ZTacfiSZwpW1OuDoHZ1qLugfpg9U1B6idXZLpY/x9JBx5bp5aPN0jiMPSV3j?=
+ =?us-ascii?Q?Em1PfzUps8pGPPzorBKk2hed/Yvv4eaN2FgypH4XGfqxMfMFhxiMsaVAF7bJ?=
+ =?us-ascii?Q?n9ZwMi4W4LT+4nG7V4vjwNC02QUi9AEg+xGaUf0WdT0f0Q6iBB/l2OBlXW2V?=
+ =?us-ascii?Q?jS+sHPya7LnR5y8b+NZi59nFu0JbRMzpfEG6E6ZssP1y8oKIVQQKCy21Zc1S?=
+ =?us-ascii?Q?UX03PcPfswBvsBCxHPgGG1Dxrp2rla8SOLfFcUes+s+/Lo6vHlS5drtmGrqo?=
+ =?us-ascii?Q?i9uPqAYlzuVDTpK+Q2T0uBkRkvOFHpWDSBZ8CcD/Bsh4PZryWjnRuLl/n5ZS?=
+ =?us-ascii?Q?nhqFq7bEXIbXiNle4Hyr06JEkmyY0k7DEc89+bPqEv+LHBMO7KH45ZSMVBil?=
+ =?us-ascii?Q?zSzdW+EBCzX+1wppDPvHc+Wcx9Wr8LGavJa4kysfF6kf0sIw1szXNaq5gxTY?=
+ =?us-ascii?Q?uLUcnSipgbfxrTXWILDxsFYJI/SOkFknKKN0qxH/JGk703ZCY3RyaiE09FX3?=
+ =?us-ascii?Q?Y9muRR+e2vlJBn6S2HCF5LNBTUlxR+4qaHC6widF1D2NXqclg6NASxA3YgWi?=
+ =?us-ascii?Q?fO3StO2iZ2sCbGBqgcx33a6ix1q6BhepQWPHtMRZ0aeFEfaskG2K//GF1nKu?=
+ =?us-ascii?Q?jjjluOgZdupT2Vp6SzkbqC8G17nwZj9adKk7qvqYWUGNsT8pn9AQ17bf3DvS?=
+ =?us-ascii?Q?7aoIzcpbhiTtLnf1vKO5cCVO8oXND5gDRzVF3LbP8fB7h6grkyWbsvfCQLAF?=
+ =?us-ascii?Q?Pg=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <BBB6D482D5B1094DA810A47DCED7AE57@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <31ed4654-094a-4e1e-9182-973b43ae3464@app.fastmail.com>
-In-Reply-To: <23A87C03-EB55-49A1-BB55-B6136117F0B6@gmail.com>
-References: <b7ae0feb-d401-43ee-8d5f-ce62ca224638@paulmck-laptop>
- <23A87C03-EB55-49A1-BB55-B6136117F0B6@gmail.com>
-Date: Thu, 02 May 2024 13:30:58 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "D. Jeff Dionne" <djeffdionne@gmail.com>,
- "Paul E. McKenney" <paulmck@kernel.org>
-Cc: "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
- Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org,
- "Marco Elver" <elver@google.com>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Thomas Gleixner" <tglx@linutronix.de>,
- "Peter Zijlstra" <peterz@infradead.org>,
- "Doug Anderson" <dianders@chromium.org>, "Petr Mladek" <pmladek@suse.com>,
- "Linus Torvalds" <torvalds@linux-foundation.org>, kernel-team@meta.com,
- "Andi Shyti" <andi.shyti@linux.intel.com>,
- "Palmer Dabbelt" <palmer@rivosinc.com>,
- "Masami Hiramatsu" <mhiramat@kernel.org>, linux-sh@vger.kernel.org
-Subject: Re: [PATCH v2 cmpxchg 12/13] sh: Emulate one-byte cmpxchg
-Content-Type: text/plain
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
+	KxZj4wjJhricEidGn712q093NOEPkgYPUatD1nps4ouv0dG9NK+SoaO5MTIfJBZabWwt0DccSlJAHzfTvQuN/LDpsDggwHBLqpzI2Tp/3ev/X90b0qpmcrDUbAftgCHhUKgV/Li/ZdDnOedhI7BpWIfXTcVPo1lm6xlMLb/Uj6tYsBYeI7lROdkHjRNLE3i2SyqWJk/wm5gkLsM7/5QtmZvTD4spbymtnS4vFKIK7hvns/pWTAJza8eq6idKRWh9GIujyFU9YdYbFTTvwAKI/A5ftinOJlubI77FXAQNiBRLGdaxMDXNmZt35ta3Z3LJnzTQx/Y9OqBejt25FX8cDAC22+n3F8AooC71OvanKBcTSSwpgji1rr74TW6Y2Y+0eKJGp/oQ1QjuTTODHzbgxVg5Lhy581EW03jaHYBaeAyBr7jqZRWlnPg5tQZ649S1lUrxoeJ/oOPgM77gh2jNzGTQS/3Ppc2E6SbeosCyuGMn32eNH7R0Zu4YI5CfDcuc3q4JAyH36/1a/ATP9p0iClZFiaYwNwkOlKdvEohI7F4ppzChfFQKvtt6Cpzia+qMEyD5ckWjcCjLdobGKrSGqmMu1Z/vkoivqGQRxXRq3Yo=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR10MB5426.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 709f8270-2e3f-4ae1-fac9-08dc6aa0e1cf
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 May 2024 12:10:39.5504
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: TRslErDO5rcF30yu9qWRpPFOClggy0p/0LewWD6m8hJCW/icZMbIwUZ09IfXkojkxszExgsi2rK82qTQk3/UVQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR10MB4507
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-05-02_01,2024-05-02_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0
+ mlxlogscore=999 bulkscore=0 suspectscore=0 adultscore=0 phishscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2404010000 definitions=main-2405020076
+X-Proofpoint-GUID: Y7lsyReFxk4QDTevaVNm9R31nV29vFre
+X-Proofpoint-ORIG-GUID: Y7lsyReFxk4QDTevaVNm9R31nV29vFre
 
-On Thu, May 2, 2024, at 07:42, D. Jeff Dionne wrote:
-> On May 2, 2024, at 14:07, Paul E. McKenney <paulmck@kernel.org> wrote:
->
->> That would be 8-bit xchg() rather than 8-byte cmpxchg(), correct?
->> 
->> Or am I missing something subtle here that makes sh also support one-byte
->> (8-bit) cmpxchg()?
->
-> The native SH atomic operation is test and set TAS.B.  J2 adds a 
-> compare and swap CAS.L instruction, carefully chosen for patent free 
-> prior art (s360, IIRC).
->
-> The (relatively expensive) encoding space we allocated for CAS.L does 
-> not contain size bits.
->
-> Not all SH4 patents had expired when J2 was under development, but now 
-> have (watch this space).  Not sure (me myself) if there are more atomic 
-> operations in sh4.
 
-SH4A supports MIPS R4000 style LL/SC instructions, but it looks like
-the older SH4 does not.
 
-      Arnd
+> On 30 Apr 2024, at 14:24, Jonathan Cameron <jonathan.cameron@huawei.com> =
+wrote:
+>=20
+> Separate code paths, combined with a flag set in acpi_processor.c to
+> indicate a struct acpi_processor was for a hotplugged CPU ensured that
+> per CPU data was only set up the first time that a CPU was initialized.
+> This appears to be unnecessary as the paths can be combined by letting
+> the online logic also handle any CPUs online at the time of driver load.
+>=20
+> Motivation for this change, beyond simplification, is that ARM64
+> virtual CPU HP uses the same code paths for hotplug and cold path in
+> acpi_processor.c so had no easy way to set the flag for hotplug only.
+> Removing this necessity will enable ARM64 vCPU HP to reuse the existing
+> code paths.
+>=20
+> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Reviewed-by: Hanjun Guo <guohanjun@huawei.com>
+> Tested-by: Miguel Luis <miguel.luis@oracle.com>
+> Reviewed-by: Gavin Shan <gshan@redhat.com>
+> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+>=20
+> ---
+> v9: Drop overly noisy pr_info() print and tidy up a stale comment about
+>    the flag that no longer exists. Leave in place the note about delayed
+>    init.
+> ---
+> drivers/acpi/acpi_processor.c   |  7 +++---
+> drivers/acpi/processor_driver.c | 43 +++++++++------------------------
+> include/acpi/processor.h        |  2 +-
+> 3 files changed, 16 insertions(+), 36 deletions(-)
+>=20
+
+Looks good to me.
+
+Reviewed-by: Miguel Luis <miguel.luis@oracle.com>
+
+Thank you,
+Miguel
+
+> diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.=
+c
+> index 7a0dd35d62c9..b2f0b6c19482 100644
+> --- a/drivers/acpi/acpi_processor.c
+> +++ b/drivers/acpi/acpi_processor.c
+> @@ -211,12 +211,11 @@ static int acpi_processor_hotadd_init(struct acpi_p=
+rocessor *pr)
+> }
+>=20
+> /*
+> - * CPU got hot-added, but cpu_data is not initialized yet.  Set a flag
+> - * to delay cpu_idle/throttling initialization and do it when the CPU
+> - * gets online for the first time.
+> + * CPU got hot-added, but cpu_data is not initialized yet. Do
+> + * cpu_idle/throttling initialization when the CPU gets online for
+> + * the first time.
+> */
+> pr_info("CPU%d has been hot-added\n", pr->id);
+> - pr->flags.need_hotplug_init =3D 1;
+>=20
+> out:
+> cpus_write_unlock();
+> diff --git a/drivers/acpi/processor_driver.c b/drivers/acpi/processor_dri=
+ver.c
+> index 67db60eda370..cb52dd000b95 100644
+> --- a/drivers/acpi/processor_driver.c
+> +++ b/drivers/acpi/processor_driver.c
+> @@ -33,7 +33,6 @@ MODULE_AUTHOR("Paul Diefenbaugh");
+> MODULE_DESCRIPTION("ACPI Processor Driver");
+> MODULE_LICENSE("GPL");
+>=20
+> -static int acpi_processor_start(struct device *dev);
+> static int acpi_processor_stop(struct device *dev);
+>=20
+> static const struct acpi_device_id processor_device_ids[] =3D {
+> @@ -47,7 +46,6 @@ static struct device_driver acpi_processor_driver =3D {
+> .name =3D "processor",
+> .bus =3D &cpu_subsys,
+> .acpi_match_table =3D processor_device_ids,
+> - .probe =3D acpi_processor_start,
+> .remove =3D acpi_processor_stop,
+> };
+>=20
+> @@ -115,12 +113,9 @@ static int acpi_soft_cpu_online(unsigned int cpu)
+> * CPU got physically hotplugged and onlined for the first time:
+> * Initialize missing things.
+> */
+> - if (pr->flags.need_hotplug_init) {
+> + if (!pr->flags.previously_online) {
+> int ret;
+>=20
+> - pr_info("Will online and init hotplugged CPU: %d\n",
+> - pr->id);
+> - pr->flags.need_hotplug_init =3D 0;
+> ret =3D __acpi_processor_start(device);
+> WARN(ret, "Failed to start CPU: %d\n", pr->id);
+> } else {
+> @@ -167,9 +162,6 @@ static int __acpi_processor_start(struct acpi_device =
+*device)
+> if (!pr)
+> return -ENODEV;
+>=20
+> - if (pr->flags.need_hotplug_init)
+> - return 0;
+> -
+> result =3D acpi_cppc_processor_probe(pr);
+> if (result && !IS_ENABLED(CONFIG_ACPI_CPU_FREQ_PSS))
+> dev_dbg(&device->dev, "CPPC data invalid or not present\n");
+> @@ -185,32 +177,21 @@ static int __acpi_processor_start(struct acpi_devic=
+e *device)
+>=20
+> status =3D acpi_install_notify_handler(device->handle, ACPI_DEVICE_NOTIFY=
+,
+>     acpi_processor_notify, device);
+> - if (ACPI_SUCCESS(status))
+> - return 0;
+> + if (!ACPI_SUCCESS(status)) {
+> + result =3D -ENODEV;
+> + goto err_thermal_exit;
+> + }
+> + pr->flags.previously_online =3D 1;
+>=20
+> - result =3D -ENODEV;
+> - acpi_processor_thermal_exit(pr, device);
+> + return 0;
+>=20
+> +err_thermal_exit:
+> + acpi_processor_thermal_exit(pr, device);
+> err_power_exit:
+> acpi_processor_power_exit(pr);
+> return result;
+> }
+>=20
+> -static int acpi_processor_start(struct device *dev)
+> -{
+> - struct acpi_device *device =3D ACPI_COMPANION(dev);
+> - int ret;
+> -
+> - if (!device)
+> - return -ENODEV;
+> -
+> - /* Protect against concurrent CPU hotplug operations */
+> - cpu_hotplug_disable();
+> - ret =3D __acpi_processor_start(device);
+> - cpu_hotplug_enable();
+> - return ret;
+> -}
+> -
+> static int acpi_processor_stop(struct device *dev)
+> {
+> struct acpi_device *device =3D ACPI_COMPANION(dev);
+> @@ -279,9 +260,9 @@ static int __init acpi_processor_driver_init(void)
+> if (result < 0)
+> return result;
+>=20
+> - result =3D cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN,
+> -   "acpi/cpu-drv:online",
+> -   acpi_soft_cpu_online, NULL);
+> + result =3D cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,
+> +   "acpi/cpu-drv:online",
+> +   acpi_soft_cpu_online, NULL);
+> if (result < 0)
+> goto err;
+> hp_online =3D result;
+> diff --git a/include/acpi/processor.h b/include/acpi/processor.h
+> index 3f34ebb27525..e6f6074eadbf 100644
+> --- a/include/acpi/processor.h
+> +++ b/include/acpi/processor.h
+> @@ -217,7 +217,7 @@ struct acpi_processor_flags {
+> u8 has_lpi:1;
+> u8 power_setup_done:1;
+> u8 bm_rld_set:1;
+> - u8 need_hotplug_init:1;
+> + u8 previously_online:1;
+> };
+>=20
+> struct acpi_processor {
+> --=20
+> 2.39.2
+>=20
+
 
