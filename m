@@ -1,83 +1,72 @@
-Return-Path: <linux-arch+bounces-4132-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4133-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47A548B97DE
-	for <lists+linux-arch@lfdr.de>; Thu,  2 May 2024 11:37:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1EB68B99ED
+	for <lists+linux-arch@lfdr.de>; Thu,  2 May 2024 13:21:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E408280C7E
-	for <lists+linux-arch@lfdr.de>; Thu,  2 May 2024 09:37:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 988911F21D30
+	for <lists+linux-arch@lfdr.de>; Thu,  2 May 2024 11:21:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4153F537E7;
-	Thu,  2 May 2024 09:37:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABD74626DF;
+	Thu,  2 May 2024 11:21:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mfRbClCN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oEKEViO8"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAE793399F;
-	Thu,  2 May 2024 09:36:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71A14605CE;
+	Thu,  2 May 2024 11:21:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714642620; cv=none; b=NgCTwoU1o2iHd3p2pf2LTIgPCT3YR9whh1XSbL7yipxYTH7XoTXu1SsEXp3qLOvfeDD+L4heHwZTN8QWfGc4oTGaBDuUEveqnHLp9v9R1zkgoDTJGtt6GKatNl20jhh82zRBlgNZ4Q7FQW9/tY9BFeJCoEgn+eUxlW8EDa7MHsI=
+	t=1714648897; cv=none; b=XZqnYYs7K7c79g1FjMzyhuhLWLBwFAT4CsP84mbbr8ffifYBGDwdUogyUNXzF44secsfRWLQcbv08BmNVQH6Hgsp2bu9z1v9Wb4tegXZ0QmdNwxO+Xf9aKOJgwm+Gro8nvqjTU/ON4TWHVduiguMkqpjbx0VA92pasgd956FFbs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714642620; c=relaxed/simple;
-	bh=FIzeZJYnZscgqBQf6sx7BpTt08i8y139B79afV1c+Dc=;
+	s=arc-20240116; t=1714648897; c=relaxed/simple;
+	bh=0ln9TXID18gsJMnDENXiItJGRtQ3Til5tzw9qOWE/sc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QXwe9Uqd2ds/XIB+HmOzLSH0HWPpMnnOrwx9kMWYLqXz9KirU+LHChidUJH2jmIDjlvVp7Ae2yi/eyTVuJC+4XRsXo7pezX+O94PBD6zAccfFLh36G7bFv1X67K51qgFeGBMTc0Cjo8BNVG7a6Hhl12wU07OHe7bm51ywcf51es=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mfRbClCN; arc=none smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-347e635b1fcso5807900f8f.1;
-        Thu, 02 May 2024 02:36:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714642617; x=1715247417; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/c84BgCk6s/7DORneUPqXXNJ43ZSe5m+K4sWZwg6XVk=;
-        b=mfRbClCNPE9NQCecoF20TkUyIbiVlK+rl2L2pLlQlMTDWIAhP5r+8dtLMbC2DIN5ty
-         KqqD6ltn4wz460ayM4MP2T1cztXvj1bcvz2OckEACluWo4SGuFAxI7EXWG4sx5X4ME0J
-         oRwoPCZdqgkui8yjXAsWiB10zlIdukwc9i0taIIvYZFkuAx3L1UUXl1OegmI2ueW+ZMz
-         DxoScAfcxC+Azbe3MPBy96ubdizlfFo7GfkUjrgPA0VvWfGiKjDeQcSPc5khpdEzcMnL
-         XdUtAOK1K4RX68yMK3S70ntMGmWlBEWS8bje6xkHG66+VieDH9+DpJffQAIq24E+7nYV
-         tpxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714642617; x=1715247417;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/c84BgCk6s/7DORneUPqXXNJ43ZSe5m+K4sWZwg6XVk=;
-        b=MTblwTTy/79vmWha/fcSer/7R5VMvLlpIAMd3ftC3uROX6BLYdnfX0HzBZDOS3FMeS
-         NBvJ3cTtAu5JyS5OGTKLKduEVzGdkELgtOgIAdE1tgkrZL8Zpx2Zc1j2j1ckJcuPN+46
-         O769q/22d7EP5RGsqNcnCk4yF0f/odjb0abmhk9qKN9XECY02PT4v6k3bUUsY/PJbXA6
-         tkyYL/YpGiZxWhla3ly7REFaLYFfoJx41NhSH+gntqg3fQKj+g35fDdidEkX6l3rrO7N
-         86ObKw09tYuXJK8sKtfaSS2z4eWReySuKdJWXbcVXLowr35d6y/HlW43VzI8WyKKRgIS
-         T/0g==
-X-Forwarded-Encrypted: i=1; AJvYcCXRmDTA05u420zZoWxb+2MgPq0iAtI4nWvVEf+3hc+3Ij4ILmdoQ8tvIr9dQHu8ZxaqRbW8ra1M+aUx4a5n/l2om4yHWCGHpTC14Q==
-X-Gm-Message-State: AOJu0YxSY0KAO10c2C2H300FTGObT66IXVINLn7uS40RC5Iz8zk08cSQ
-	Twgx3/B84DAqniI5HC7ivtIZv7Jyf8/aWLauRfMD/6CvA8xkRkvU
-X-Google-Smtp-Source: AGHT+IG3Ex/f5wt3guow043GN7wXhJQVBgWdDO9AFUKjm3q9KqLPK3WtKbd+9lCoMI+hqXXms70XiQ==
-X-Received: by 2002:a5d:4686:0:b0:347:d352:d5c2 with SMTP id u6-20020a5d4686000000b00347d352d5c2mr3584683wrq.13.1714642616367;
-        Thu, 02 May 2024 02:36:56 -0700 (PDT)
-Received: from andrea ([31.189.114.81])
-        by smtp.gmail.com with ESMTPSA id p13-20020a5d638d000000b0034de69bb4bcsm814990wru.85.2024.05.02.02.36.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 May 2024 02:36:56 -0700 (PDT)
-Date: Thu, 2 May 2024 11:36:51 +0200
-From: Andrea Parri <parri.andrea@gmail.com>
-To: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	kernel-team@meta.com, mingo@kernel.org, stern@rowland.harvard.edu,
-	will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
-	npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-	luc.maranget@inria.fr, akiyks@gmail.com
-Subject: Re: [PATCH v2 memory-model 0/3] LKMM updates for v6.10
-Message-ID: <ZjNes3y88guG2vZc@andrea>
-References: <8550daf1-4bfd-4607-8325-bfb7c1e2d8c7@paulmck-laptop>
- <42a43181-a431-44bd-8aff-6b305f8111ba@paulmck-laptop>
+	 Content-Type:Content-Disposition:In-Reply-To; b=ri+CVDNOo1jI28yXf34FJsPTKbqHucNCdUMUiLDmKTHJDkNL5PPBTBecK6+U7+gX33oBiHUSCTSikj047KAEaKvykKOrXHuYHx1xlyTIZ9POiA8dY9zNWZYPfrRdAkthpZJJUGMFD2NhQPQXGLcMyVUMqLIKzRVnC41+Yft4tPk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oEKEViO8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 307A2C4AF18;
+	Thu,  2 May 2024 11:21:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714648897;
+	bh=0ln9TXID18gsJMnDENXiItJGRtQ3Til5tzw9qOWE/sc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=oEKEViO8AxOjXR6iIdgwCu7M9Gy8KOg7xF4nyGPC+Q6kiqWHLioCWc+TKN1O1xGFU
+	 R5r916favQUmXsHYwF3hhP1H4QIqQhlQ5wBll2sEvQCjHIUs30q9p6EEUJISyRnuoX
+	 PHUjcgdQN9lWXGwzx/xhDdXqpWVdoLEkQ1youg+dV29CHaL49sDwtdB0b1hRj6Eg69
+	 lcXC8doU0yUE99/DKUCyscpgTShpcBrE9CN7lHget3Yx3haAYwZdFxiJdtAF84yIlo
+	 C6EgORkHpFEimOrGiEho7ncdyeWM6rlP3wOVXAEfpup/tHM7MZKMUzUJzKk2OPSgFw
+	 Ug3evdCl5UR1w==
+Date: Thu, 2 May 2024 12:21:28 +0100
+From: Will Deacon <will@kernel.org>
+To: Kees Cook <keescook@chromium.org>
+Cc: Mark Rutland <mark.rutland@arm.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	linux-arm-kernel@lists.infradead.org,
+	Jakub Kicinski <kuba@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	David Ahern <dsahern@kernel.org>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Uros Bizjak <ubizjak@gmail.com>, linux-kernel@vger.kernel.org,
+	x86@kernel.org, linux-arch@vger.kernel.org, netdev@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 2/4] arm64: atomics: lse: Silence intentional wrapping
+ addition
+Message-ID: <20240502112127.GA17013@willie-the-truck>
+References: <20240424191225.work.780-kees@kernel.org>
+ <20240424191740.3088894-2-keescook@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -86,22 +75,28 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <42a43181-a431-44bd-8aff-6b305f8111ba@paulmck-laptop>
+In-Reply-To: <20240424191740.3088894-2-keescook@chromium.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-> This series contains LKMM documentation updates:
+On Wed, Apr 24, 2024 at 12:17:35PM -0700, Kees Cook wrote:
+> Annotate atomic_add_return() and atomic_sub_return() to avoid signed
+> overflow instrumentation. They are expected to wrap around.
 > 
-> 1.	Documentation/litmus-tests: Add locking tests to README.
-> 
-> 2.	Documentation/litmus-tests: Demonstrate unordered failing cmpxchg.
-> 
-> 3.	Documentation/atomic_t: Emphasize that failed atomic operations
-> 	give no ordering.
-> 
-> 4.	Documentation/litmus-tests: Make cmpxchg() tests safe for klitmus.
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Boqun Feng <boqun.feng@gmail.com>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: linux-arm-kernel@lists.infradead.org
+> ---
+>  arch/arm64/include/asm/atomic_lse.h | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
 
-For the series,
+How come the ll/sc routines (in atomic_ll_sc.h) don't need the same
+treatment? If that's just an oversight, then maybe it's better to
+instrument the higher-level wrappers in asm/atomic.h?
 
-Acked-by: Andrea Parri <parri.andrea@gmail.com>
-
-  Andrea
+Will
 
