@@ -1,90 +1,71 @@
-Return-Path: <linux-arch+bounces-4152-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4153-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80B158BA3B0
-	for <lists+linux-arch@lfdr.de>; Fri,  3 May 2024 01:07:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D31D88BA3D9
+	for <lists+linux-arch@lfdr.de>; Fri,  3 May 2024 01:12:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1FA2F1F22193
-	for <lists+linux-arch@lfdr.de>; Thu,  2 May 2024 23:07:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 73EEC1F24E58
+	for <lists+linux-arch@lfdr.de>; Thu,  2 May 2024 23:12:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 215841CA8A;
-	Thu,  2 May 2024 23:07:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9DFC42077;
+	Thu,  2 May 2024 23:12:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Lb7IPdzU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ETNdkf05"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7563B57C84;
-	Thu,  2 May 2024 23:07:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83ADF42056;
+	Thu,  2 May 2024 23:12:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714691234; cv=none; b=SDlZ8eH1Z2o/9RIugDIilyxHmNXwtkb0ZVALBGd2L48Yvumrn3eJnXf2u69lndrgRLuBqyRYduledB0R6RPDlvN1vq8/fnkIgWPebZwIipOFLtvEXq2/IlkUi9DwZjDDlEjm+o/uz5uA3nWINvtkPV4nTcNFG8Zww/NAbP3rGQs=
+	t=1714691565; cv=none; b=rNmjdacY1BDMfANrBxG35sPprSnVlCK6aBTO9b4AAvy2ug3vbfCFeM5OHt4yUpuETI2jtP00tuNZwKV292RvYG4R9CQpIe2WU3sgYMV8LP0MLF6mBrGMZ6dPxaubl+JXmDq24p9nZ3l0HirMyVwfsdBy5O4htgKAgMw2ZMvK3kU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714691234; c=relaxed/simple;
-	bh=Hwv7feoOXYxWl+2p0rOmp4K2sjI+B0d+XTLeu1NjFTA=;
+	s=arc-20240116; t=1714691565; c=relaxed/simple;
+	bh=TtQvW0/ZSCONrgzyA1qdsSq+lg8LR2BWPI/SrrOPqTA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FxREbvzVt3rEqp9oJya7pMBVT1wlgNFfWZxcSUHSvuHmEzHnSznpsAueOPGHUpoIf3s7j6+xioOCWLi6wYVTLpqzzJYTFTYk+ycY9QADi8aNQKbTRnwbUIPIEJLJ+1wKklfQyfXtWSCLgrmVsl1syxdFNI/ODobhSNRQA6fbAUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Lb7IPdzU; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=Ggldfb+SnGyHf9Y0PSAxHLGif2nJQj+Ec7fEJVGb75o=; b=Lb7IPdzUBf5fxuHKvzI9o6uLSf
-	RnddZfhFt7Wuoo+yO08qYqKgdD9hHqwCFkcXYKBIB+4X+0JdnnJtpsqFaMT0wnnv6M9IkA/gRz3dO
-	CfH7Qf8EWypK6L/TUeZ0Du7foM4ykeRc3vnVXR/Q8UVZHuQgHqu0NqfWmBjcCr8SvcyvuW4Mkqc28
-	xofGGkYwiKsmCUnJHJzx95tE5MA+DQjtoUN9fqejczoSwHyZ+Ikhq12KowJl3pBhgYGyiVQ4bqUvD
-	yp2jYj6J2Re5TMWfN03xgZqm/nkb4xW8EoAJALaAt82gNWBFuA9GWVogzaVAH0hDHMU3YDgdcYW0+
-	OkmsCkaw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1s2fW5-0000000ECkp-3WzA;
-	Thu, 02 May 2024 23:07:05 +0000
-Date: Thu, 2 May 2024 16:07:05 -0700
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: Liviu Dudau <liviu@dudau.co.uk>
-Cc: Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
-	Alexandre Ghiti <alexghiti@rivosinc.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	"David S. Miller" <davem@davemloft.net>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Donald Dutile <ddutile@redhat.com>,
-	Eric Chanudet <echanude@redhat.com>,
-	Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nadav Amit <nadav.amit@gmail.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Sam Ravnborg <sam@ravnborg.org>, Song Liu <song@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
-	bpf@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-	linux-mm@kvack.org, linux-modules@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-	netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v7 00/16] mm: jit/text allocator
-Message-ID: <ZjQcmcA0sNH7jfD7@bombadil.infradead.org>
-References: <20240429121620.1186447-1-rppt@kernel.org>
- <Zi_K4K-j-VB_WI4i@bombadil.infradead.org>
- <ZjQYvOYgURx9/+d0@bart.dudau.co.uk>
+	 Content-Type:Content-Disposition:In-Reply-To; b=IacIV/QifQf9cVV0qYZm7LvwvxikM2bQ0xx03TU/kgShrSiLvsI6hIlqPonxh0dy1iSNUhCXb8LfgOS8EwFXNYLEBRW2bf+Gg835mznMaNgy/ytkrZHeF/VnDoIS+/6Gv2YlodJp5qvR6rp6ubpf6ITZzmS7WkRtpryOVTbJdDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ETNdkf05; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 236F0C113CC;
+	Thu,  2 May 2024 23:12:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714691565;
+	bh=TtQvW0/ZSCONrgzyA1qdsSq+lg8LR2BWPI/SrrOPqTA=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=ETNdkf05c90wLRFtuo3itrE3t33QU2QVWuu5jYT48FmyzfrkNcO7kOVGonsQUSCbY
+	 f2sOBPJBmFuj0D/OtHLAc2WxtGhAWObLauu9sV+0Ahx8kTqrcjtCiVFfhouj1aww5c
+	 3A8K5ZXOn+ukFgZ7lu46UXPV1wUKaeEmSZn/rXCqK8DFMVDUVhlS7zG4T5UOLYWEcN
+	 xKiO0eZ51H6Tc/DW8tM1BeY07nxAuLbqI0ZuiQ8kMMassJwXQzQgAHyqjQy9HMpjAY
+	 UEJ+GeqML7Wn7ZLrYQf7yicsOooQgJbRWAFkVIIvpqerR6uRcAMo7y7XCb32lmQ49V
+	 Yan4bS1qgAFaQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id C644DCE0991; Thu,  2 May 2024 16:12:44 -0700 (PDT)
+Date: Thu, 2 May 2024 16:12:44 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Al Viro <viro@zeniv.linux.org.uk>
+Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+	elver@google.com, akpm@linux-foundation.org, tglx@linutronix.de,
+	peterz@infradead.org, dianders@chromium.org, pmladek@suse.com,
+	arnd@arndb.de, torvalds@linux-foundation.org, kernel-team@meta.com,
+	Andi Shyti <andi.shyti@linux.intel.com>,
+	Palmer Dabbelt <palmer@rivosinc.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>, linux-sh@vger.kernel.org
+Subject: Re: [PATCH v2 cmpxchg 12/13] sh: Emulate one-byte cmpxchg
+Message-ID: <3dac400c-d18f-4f4e-b598-cad6948362d6@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <b67e79d4-06cb-4a45-a906-b9e0fbae22c5@paulmck-laptop>
+ <20240501230130.1111603-12-paulmck@kernel.org>
+ <1376850f47279e3a3f4f40e3de2784ae3ac30414.camel@physik.fu-berlin.de>
+ <b7ae0feb-d401-43ee-8d5f-ce62ca224638@paulmck-laptop>
+ <6f7743601fe7bd50c2855a8fd1ed8f766ef03cac.camel@physik.fu-berlin.de>
+ <9a4e1928-961d-43af-9951-71786b97062a@paulmck-laptop>
+ <20240502205345.GK2118490@ZenIV>
+ <0a429959-935d-4800-8d0c-4e010951996d@paulmck-laptop>
+ <20240502220757.GL2118490@ZenIV>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -93,65 +74,46 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZjQYvOYgURx9/+d0@bart.dudau.co.uk>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+In-Reply-To: <20240502220757.GL2118490@ZenIV>
 
-On Thu, May 02, 2024 at 11:50:36PM +0100, Liviu Dudau wrote:
-> On Mon, Apr 29, 2024 at 09:29:20AM -0700, Luis Chamberlain wrote:
-> > On Mon, Apr 29, 2024 at 03:16:04PM +0300, Mike Rapoport wrote:
-> > > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> > > 
-> > > Hi,
-> > > 
-> > > The patches are also available in git:
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/log/?h=execmem/v7
-> > > 
-> > > v7 changes:
-> > > * define MODULE_{VADDR,END} for riscv32 to fix the build and avoid
-> > >   #ifdefs in a function body
-> > > * add Acks, thanks everybody
+On Thu, May 02, 2024 at 11:07:57PM +0100, Al Viro wrote:
+> On Thu, May 02, 2024 at 02:18:48PM -0700, Paul E. McKenney wrote:
+> 
+> > If you are only ever doing atomic read-modify-write operations on the
+> > byte in question, then agreed, you don't care about byte loads and stores.
 > > 
-> > Thanks, I've pushed this to modules-next for further exposure / testing.
-> > Given the status of testing so far with prior revisions, in that only a
-> > few issues were found and that those were fixed, and the status of
-> > reviews, this just might be ripe for v6.10.
+> > But there are use cases that do mix smp_store_release() with cmpxchg(),
+> > and those use cases won't work unless at least byte store is implemented.
+> > Or I suppose that we could use cmpxchg() instead of smp_store_release(),
+> > but that is wasteful for architectures that do support byte stores.
+> > 
+> > So EV56 adds the byte loads and stores needed for those use cases.
+> > 
+> > Or am I missing your point?
 > 
-> Looks like there is still some work needed. I've picked up next-20240501
-> and on arch/mips with CONFIG_MODULE_COMPRESS_XZ=y and CONFIG_MODULE_DECOMPRESS=y
-> I fail to load any module:
+> arch/alpha/include/cmpxchg.h:
+> #define arch_cmpxchg(ptr, o, n)                                         \
+> ({                                                                      \
+>         __typeof__(*(ptr)) __ret;                                       \
+>         __typeof__(*(ptr)) _o_ = (o);                                   \
+>         __typeof__(*(ptr)) _n_ = (n);                                   \
+>         smp_mb();                                                       \
+>         __ret = (__typeof__(*(ptr))) __cmpxchg((ptr),                   \
+>                 (unsigned long)_o_, (unsigned long)_n_, sizeof(*(ptr)));\
+>         smp_mb();                                                       \
+>         __ret;                                                          \
+> })
 > 
-> # modprobe rfkill
-> [11746.539090] Invalid ELF header magic: != ELF
-> [11746.587149] execmem: unable to allocate memory
-> modprobe: can't load module rfkill (kernel/net/rfkill/rfkill.ko.xz): Out of memory
+> Are those smp_mb() in there enough?
 > 
-> The (hopefully) relevant parts of my .config:
+> I'm probably missing your point, though - what mix of cmpxchg and
+> smp_store_release on 8bit values?
 
-Thanks for the report! Any chance we can get you to try a bisection? I
-think it should take 2-3 test boots. To help reduce scope you try modules-next:
+One of RCU's state machines uses smp_store_release() to start the
+state machine (only one task gets to do this) and cmpxchg() to update
+state beyond that point.  And the state is 8 bits so that it and other
+state fits into 32 bits to allow a single check for multiple conditions
+elsewhere.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=modules-next
-
-Then can you check by resetting your tree to commmit 3fbe6c2f820a76 (mm:
-introduce execmem_alloc() and execmem_free()"). I suspect that should
-boot, so your bad commit would be the tip 3c2c250cb3a5fbb ("bpf: remove
-CONFIG_BPF_JIT dependency on CONFIG_MODULES of").
-
-That gives us only a few commits to bisect:
-
-git log --oneline 3fbe6c2f820a76bc36d5546bda85832f57c8fce2..
-3c2c250cb3a5 (HEAD -> modules-next, korg/modules-next) bpf: remove CONFIG_BPF_JIT dependency on CONFIG_MODULES of
-11e8e65cce5c kprobes: remove dependency on CONFIG_MODULES
-e10cbc38697b powerpc: use CONFIG_EXECMEM instead of CONFIG_MODULES where appropriate
-4da3d38f24c5 x86/ftrace: enable dynamic ftrace without CONFIG_MODULES
-13ae3d74ee70 arch: make execmem setup available regardless of CONFIG_MODULES
-460bbbc70a47 powerpc: extend execmem_params for kprobes allocations
-e1a14069b5b4 arm64: extend execmem_info for generated code allocations
-971e181c6585 riscv: extend execmem_params for generated code allocations
-0fa276f26721 mm/execmem, arch: convert remaining overrides of module_alloc to execmem
-022cef244287 mm/execmem, arch: convert simple overrides of module_alloc to execmem
-
-With 2-3 boots we should be to tell which is the bad commit.
-
-  Luis
+							Thanx, Paul
 
