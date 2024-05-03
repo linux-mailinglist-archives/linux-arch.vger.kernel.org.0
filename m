@@ -1,140 +1,173 @@
-Return-Path: <linux-arch+bounces-4157-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4158-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C8658BA471
-	for <lists+linux-arch@lfdr.de>; Fri,  3 May 2024 02:16:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE7218BA47F
+	for <lists+linux-arch@lfdr.de>; Fri,  3 May 2024 02:23:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B19BA1F2465E
-	for <lists+linux-arch@lfdr.de>; Fri,  3 May 2024 00:16:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 63B6E1F22466
+	for <lists+linux-arch@lfdr.de>; Fri,  3 May 2024 00:23:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93FB136B;
-	Fri,  3 May 2024 00:16:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jE9MBYW0"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7878F639;
+	Fri,  3 May 2024 00:23:37 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp.dudau.co.uk (dliviu.plus.com [80.229.23.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66BCD193;
-	Fri,  3 May 2024 00:16:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E6E4360;
+	Fri,  3 May 2024 00:23:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.229.23.120
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714695404; cv=none; b=UbLAFCsnFXc46wxr+4VN8PoeW5/GCvrmDiTvNCJJLK9oYeWdy5M8gs09SWJOviQA88tpCNsKm699g9s1qpuagg1yMaQP8sruOfCLlsZpcPoZTJB1woSAT6TIjUtvhQzVSN1cBHnPBD2T3YSWeaGwkwWO34+A2/EtJZD5yhtZG7Y=
+	t=1714695817; cv=none; b=nx8Pv0en90vJz6ruNNSqPjun4k4S82bLCxN3fIX/bLk/SQruCrLL7WND5xo1CvnXP/ULUUqxiOnvq0mr9DQP4pO9Av/JEdyDr+TRdEEg+njg7G7FjMrdXcHHOJ/8Let8Q61GIM1k+U3qkphCo7b0kDdKcNvPU5KEfPJrKFzOkNA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714695404; c=relaxed/simple;
-	bh=rF9pMJbFN+/L4ZoAlKzy29Ti9M/pRpKGV6oAQsWdR1U=;
+	s=arc-20240116; t=1714695817; c=relaxed/simple;
+	bh=zXsI9Vt8xojfZb8+rMlItNS5EVhzZ+FhYOA1HEqzzu4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TldA1HSUdQY98zpPCdVb247szETIQhxneaBONMiLDdJyiIm5vBHDLgU28Gvm7RfxilEB+YRQnYkRSfrHcsCfZqyI7jXDhq6fN3qcjAZxtlqP7xxMc5dWeV0mXbyXkXxwUxY9cIWixvjjxAS6s++BiCxazYHRHZqppcnrf5bF3+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jE9MBYW0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB5AEC113CC;
-	Fri,  3 May 2024 00:16:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714695403;
-	bh=rF9pMJbFN+/L4ZoAlKzy29Ti9M/pRpKGV6oAQsWdR1U=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=jE9MBYW0/uaiCob3sBSXc2FxZEpI/ydtwE3pxzz5xa2XMBRbKxWJQqBuHx4GxhoMG
-	 UV2PnD7x/vzSR1Q4Pg6hyuWqDlr0iBM9NO/Tr/d9ILgFtJlvvLVEcVKhljk0NYlG89
-	 t5xNgfMtE3mw4AIOahzMQ65c8Ca8uiDA0+1ym/EhJA1I53mR1aOuSwJlHpnSsHZmYW
-	 mpqtznkmFzkVVioPIyVBgmeWuDpb4V4P4hV9w6qEfCMXjtSWUho4OVhG+Igqr60ov7
-	 dyFgeqK/1gwvKD0bgzMkyXMrV2OsA8+S8Xf/VmSjeXwsOHm43y5OwM1Vf/3NoFO6mu
-	 cpcW2JKaHJVqQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 754DCCE0991; Thu,  2 May 2024 17:16:43 -0700 (PDT)
-Date: Thu, 2 May 2024 17:16:43 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Al Viro <viro@zeniv.linux.org.uk>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-	elver@google.com, akpm@linux-foundation.org, tglx@linutronix.de,
-	peterz@infradead.org, dianders@chromium.org, pmladek@suse.com,
-	arnd@arndb.de, kernel-team@meta.com,
-	Andi Shyti <andi.shyti@linux.intel.com>,
-	Palmer Dabbelt <palmer@rivosinc.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>, linux-sh@vger.kernel.org
-Subject: Re: [PATCH v2 cmpxchg 12/13] sh: Emulate one-byte cmpxchg
-Message-ID: <628950f5-b220-48cb-a3a6-818be9e46f40@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20240501230130.1111603-12-paulmck@kernel.org>
- <1376850f47279e3a3f4f40e3de2784ae3ac30414.camel@physik.fu-berlin.de>
- <b7ae0feb-d401-43ee-8d5f-ce62ca224638@paulmck-laptop>
- <6f7743601fe7bd50c2855a8fd1ed8f766ef03cac.camel@physik.fu-berlin.de>
- <9a4e1928-961d-43af-9951-71786b97062a@paulmck-laptop>
- <20240502205345.GK2118490@ZenIV>
- <0a429959-935d-4800-8d0c-4e010951996d@paulmck-laptop>
- <20240502220757.GL2118490@ZenIV>
- <3dac400c-d18f-4f4e-b598-cad6948362d6@paulmck-laptop>
- <CAHk-=whaCSxengJHP82WUwrjKjYsVeD_zEN_We+gmyHpJJayoQ@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=JMaUrENzdSruJ0S5WJAym5QSzwNRfGFkoNs5F+G7890rjlR3Dyf6VEduGNA1b+c5hBcPitNyu4sktiF9h9OzAGr8emQjgy/9URkeZr0l+h4NU838xYrJd+9SiT1ax0zzhfTbuVi35yV/KdoQsTLWEyz/6oSVqxBLNhIY/jJ1nDI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dudau.co.uk; spf=pass smtp.mailfrom=dudau.co.uk; arc=none smtp.client-ip=80.229.23.120
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dudau.co.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dudau.co.uk
+Received: from mail.dudau.co.uk (bart.dudau.co.uk [192.168.14.2])
+	by smtp.dudau.co.uk (Postfix) with SMTP id 2D79141D12F0;
+	Fri, 03 May 2024 01:23:31 +0100 (BST)
+Received: by mail.dudau.co.uk (sSMTP sendmail emulation); Fri, 03 May 2024 01:23:31 +0100
+Date: Fri, 3 May 2024 01:23:30 +0100
+From: Liviu Dudau <liviu@dudau.co.uk>
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
+	Alexandre Ghiti <alexghiti@rivosinc.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	=?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	"David S. Miller" <davem@davemloft.net>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Donald Dutile <ddutile@redhat.com>,
+	Eric Chanudet <echanude@redhat.com>,
+	Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nadav Amit <nadav.amit@gmail.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Sam Ravnborg <sam@ravnborg.org>, Song Liu <song@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+	linux-mm@kvack.org, linux-modules@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v7 00/16] mm: jit/text allocator
+Message-ID: <ZjQuggSFcO8FXSd2@bart.dudau.co.uk>
+References: <20240429121620.1186447-1-rppt@kernel.org>
+ <Zi_K4K-j-VB_WI4i@bombadil.infradead.org>
+ <ZjQYvOYgURx9/+d0@bart.dudau.co.uk>
+ <ZjQcmcA0sNH7jfD7@bombadil.infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAHk-=whaCSxengJHP82WUwrjKjYsVeD_zEN_We+gmyHpJJayoQ@mail.gmail.com>
+In-Reply-To: <ZjQcmcA0sNH7jfD7@bombadil.infradead.org>
 
-On Thu, May 02, 2024 at 04:32:35PM -0700, Linus Torvalds wrote:
-> On Thu, 2 May 2024 at 16:12, Paul E. McKenney <paulmck@kernel.org> wrote:
-> >
-> > One of RCU's state machines uses smp_store_release() to start the
-> > state machine (only one task gets to do this) and cmpxchg() to update
-> > state beyond that point.  And the state is 8 bits so that it and other
-> > state fits into 32 bits to allow a single check for multiple conditions
-> > elsewhere.
+On Thu, May 02, 2024 at 04:07:05PM -0700, Luis Chamberlain wrote:
+> On Thu, May 02, 2024 at 11:50:36PM +0100, Liviu Dudau wrote:
+> > On Mon, Apr 29, 2024 at 09:29:20AM -0700, Luis Chamberlain wrote:
+> > > On Mon, Apr 29, 2024 at 03:16:04PM +0300, Mike Rapoport wrote:
+> > > > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> > > > 
+> > > > Hi,
+> > > > 
+> > > > The patches are also available in git:
+> > > > https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/log/?h=execmem/v7
+> > > > 
+> > > > v7 changes:
+> > > > * define MODULE_{VADDR,END} for riscv32 to fix the build and avoid
+> > > >   #ifdefs in a function body
+> > > > * add Acks, thanks everybody
+> > > 
+> > > Thanks, I've pushed this to modules-next for further exposure / testing.
+> > > Given the status of testing so far with prior revisions, in that only a
+> > > few issues were found and that those were fixed, and the status of
+> > > reviews, this just might be ripe for v6.10.
+> > 
+> > Looks like there is still some work needed. I've picked up next-20240501
+> > and on arch/mips with CONFIG_MODULE_COMPRESS_XZ=y and CONFIG_MODULE_DECOMPRESS=y
+> > I fail to load any module:
+> > 
+> > # modprobe rfkill
+> > [11746.539090] Invalid ELF header magic: != ELF
+> > [11746.587149] execmem: unable to allocate memory
+> > modprobe: can't load module rfkill (kernel/net/rfkill/rfkill.ko.xz): Out of memory
+> > 
+> > The (hopefully) relevant parts of my .config:
 > 
-> Note that since alpha lacks the release-acquire model, it's always
-> going to be a full memory barrier before the store.
+> Thanks for the report! Any chance we can get you to try a bisection? I
+> think it should take 2-3 test boots. To help reduce scope you try modules-next:
 > 
-> And then the store turns into a load-mask-store for older alphas.
+> https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=modules-next
 > 
-> So it's going to be a complete mess from a performance standpoint regardless.
-
-And on those older machines, a mess functionally because the other
-three bytes in that same 32-bit word can be concurrently updated.
-Hence Arnd's patch being necessary here.
-
-EV56 and later all have single-byte stores, so they are OK.  They were
-introduced in the mid-1990s, so even they are antiques.  ;-)
-
-> Happily, I doubt anybody really cares.
-
-Here is hoping!
-
-> I've occasionally wondered if we have situations where the
-> "smp_store_release()" only cares about previous *writes* being ordered
-> (ie a "smp_wmb()+WRITE_ONCE" would be sufficient).
-
-Back in the day, rcu_assign_pointer() worked this way.  But later there
-were a few use cases where ordering prior reads was needed.
-
-And in this case, we just barely need that full store-release
-functionality.  There is a preceding mutex lock-unlock pair that provides
-a full barrier post-boot on almost all systems.
-
-> It makes no difference on x86 (all stores are relases), power64 (wmb
-> and store_release are both LWSYNC) or arm64 (str is documentated to be
-> cheaper than DMB).
+> Then can you check by resetting your tree to commmit 3fbe6c2f820a76 (mm:
+> introduce execmem_alloc() and execmem_free()"). I suspect that should
+> boot, so your bad commit would be the tip 3c2c250cb3a5fbb ("bpf: remove
+> CONFIG_BPF_JIT dependency on CONFIG_MODULES of").
 > 
-> On alpha, smp_wmb()+WRITE_ONCE() is cheaper than smp_store_release(),
-> but nobody sane cares.
+> That gives us only a few commits to bisect:
 > 
-> But *if* we have a situation where the "smp_store_release()" might be
-> just a "previous writes need to be visible" rather than ordering
-> previous reads too, we could maybe introduce that kind of op. I
-> _think_ the RCU writes tend to be of that kind?
+> git log --oneline 3fbe6c2f820a76bc36d5546bda85832f57c8fce2..
+> 3c2c250cb3a5 (HEAD -> modules-next, korg/modules-next) bpf: remove CONFIG_BPF_JIT dependency on CONFIG_MODULES of
+> 11e8e65cce5c kprobes: remove dependency on CONFIG_MODULES
+> e10cbc38697b powerpc: use CONFIG_EXECMEM instead of CONFIG_MODULES where appropriate
+> 4da3d38f24c5 x86/ftrace: enable dynamic ftrace without CONFIG_MODULES
+> 13ae3d74ee70 arch: make execmem setup available regardless of CONFIG_MODULES
+> 460bbbc70a47 powerpc: extend execmem_params for kprobes allocations
+> e1a14069b5b4 arm64: extend execmem_info for generated code allocations
+> 971e181c6585 riscv: extend execmem_params for generated code allocations
+> 0fa276f26721 mm/execmem, arch: convert remaining overrides of module_alloc to execmem
+> 022cef244287 mm/execmem, arch: convert simple overrides of module_alloc to execmem
+> 
+> With 2-3 boots we should be to tell which is the bad commit.
 
-Most of the time, rcu_assign_pointer() only needs to order prior writes,
-not both reads and writes.  In theory, we could make an something like
-an rcu_assign_pointer_reads_too(), though hopefully with a shorter name,
-and go back to smp_wmb() for rcu_assign_pointer().
+Looks like 0fa276f26721 is the first bad commit.
 
-But in practice, I am having a really hard time convincing myself that
-it would be worth it.
+$ git bisect log
+# bad: [3c2c250cb3a5fbbccc4a4ff4c9354c54af91f02c] bpf: remove CONFIG_BPF_JIT dependency on CONFIG_MODULES of
+# good: [3fbe6c2f820a76bc36d5546bda85832f57c8fce2] mm: introduce execmem_alloc() and execmem_free()
+git bisect start '3c2c250cb3a5' '3fbe6c2f820a76'
+# bad: [460bbbc70a47e929b1936ca68979f3b79f168fc6] powerpc: extend execmem_params for kprobes allocations
+git bisect bad 460bbbc70a47e929b1936ca68979f3b79f168fc6
+# bad: [0fa276f26721e0ffc2ae9c7cf67dcc005b43c67e] mm/execmem, arch: convert remaining overrides of module_alloc to execmem
+git bisect bad 0fa276f26721e0ffc2ae9c7cf67dcc005b43c67e
+# good: [022cef2442870db738a366d3b7a636040c081859] mm/execmem, arch: convert simple overrides of module_alloc to execmem
+git bisect good 022cef2442870db738a366d3b7a636040c081859
+# first bad commit: [0fa276f26721e0ffc2ae9c7cf67dcc005b43c67e] mm/execmem, arch: convert remaining overrides of module_alloc to execmem
 
-							Thanx, Paul
+Maybe MIPS also needs a ARCH_WANTS_EXECMEM_LATE?
+
+Best regards,
+Liviu
+
+> 
+>   Luis
+> 
+
+-- 
+Everyone who uses computers frequently has had, from time to time,
+a mad desire to attack the precocious abacus with an axe.
+       	   	      	     	  -- John D. Clark, Ignition!
 
