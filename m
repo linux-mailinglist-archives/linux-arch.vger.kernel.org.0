@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-4180-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4181-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62D008BC0E8
-	for <lists+linux-arch@lfdr.de>; Sun,  5 May 2024 16:28:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B2F28BC0F4
+	for <lists+linux-arch@lfdr.de>; Sun,  5 May 2024 16:28:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 049FC1F2165C
-	for <lists+linux-arch@lfdr.de>; Sun,  5 May 2024 14:28:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5DA991C20E23
+	for <lists+linux-arch@lfdr.de>; Sun,  5 May 2024 14:28:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EB0A2D051;
-	Sun,  5 May 2024 14:27:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96AE22C1A7;
+	Sun,  5 May 2024 14:27:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z9J6N0yZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xl5iD4lu"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C7781CA92;
-	Sun,  5 May 2024 14:27:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5482D2B9BE;
+	Sun,  5 May 2024 14:27:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714919230; cv=none; b=Yr3WmIpn0Zat/mN7D9EY/rlfm4T767CVO2/EQU2FcvmKoFlQ2gnC6P/LSAYmU47zguXGTYjBeCdWA6FSChHsfnPspAj5qj8nSZ1WqfV3pcGOT3sc/rxlPxqibfS0n918tH42A2vwI/eh4ebNDqsm2dcUbahvRia71/50O1kLMyo=
+	t=1714919242; cv=none; b=bxmndyHTrf3mxQB3fcgCn1ieCPLwSfl+3zEJuaHs1/vUJ5e0Z75NV8WKBo3ujiA3n1tHMdCsNeffaRUxpetJSkhQAfaSGcfS5DZt++lmPrm+ckdcBxGzKTbifzOC020jrUiMYbn3x3CoddFId5mADXHdFC/Flc+0760+C0T7XUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714919230; c=relaxed/simple;
-	bh=S2WO9rrdnIu5PceUjVXVwYLrUCttkXy1oVefr4+OvH4=;
+	s=arc-20240116; t=1714919242; c=relaxed/simple;
+	bh=vbQmVIViLlnHnV/HmsoDNHPWB+6N7x9rENWps4lsXos=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=f435r7jLx6zagAQsvscX2r55tIuFUV2J/jq0WOjfjRaBEMCCYnTsDqsUhbZ5JOArcY6SXRt5KD1FNLx2h9QyzMNZC8OcewNi3yJr2tae8kOwr6yxnKqFMFZfa4eVJFVEGIT3Rlx6SrGyIUScRdWaa13H3lm/7VHUFQG0mSd1FwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z9J6N0yZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AFF0C4AF18;
-	Sun,  5 May 2024 14:26:58 +0000 (UTC)
+	 MIME-Version:Content-Type; b=q2NJ53JSlLFptUgFr7UcRYFOHBd+sLXSZToN0sekbPiKA3lgcGo63FZqTf4++J7dVelLttkvJ7zQUNlsdvzo2hcZTD0HyEYf7OLJGUWC+rGfPw73oDeziFLWg1GWCH8TF6nmOyvtSMqtsUimURMddkO4FkLQJP6DfN0eNqucp6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xl5iD4lu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D95EC4AF67;
+	Sun,  5 May 2024 14:27:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714919229;
-	bh=S2WO9rrdnIu5PceUjVXVwYLrUCttkXy1oVefr4+OvH4=;
+	s=k20201202; t=1714919241;
+	bh=vbQmVIViLlnHnV/HmsoDNHPWB+6N7x9rENWps4lsXos=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Z9J6N0yZo/WUWpqhiJ/VyRoz69PO3DWhKmxX4w/INOl9LHYWHgQFa9/OwlRwWcTnT
-	 9U0e2wSypq0tIwNxA98Zo0poMoKrSMYSxWK8XwyvukXM8PePB1nHZoNsiCakJePlAp
-	 e4+4+nyN4nTWsi6slAh+/wYcojeSzZsESNPdzXG4AKCWhIBdxvZfv+BQsMNWBtlJi1
-	 bmj/+kEB8uLuitBKHKy0PNR/PODXSzhhHz3l62d9vL9nUt/6xnKh8KQ6/qDpsblRUc
-	 ZzSKpK8jNbiMYadUMJGe6vv80DbiKnzlWwOwB2ATSsuVJVRI4xUHgEKguamYUfA+/U
-	 NBfZ3QPtHC0Mw==
+	b=Xl5iD4lueG8tIPXrO/gEXU39XDfM3YC/JMMh3852CFxF2oYh+paX9vBtiDNHobolr
+	 fT4G8IF9fkbLUdGv2ikdeuc6+J2xDFH0KR/VTbUG+Hv/QdKrBr+pSDv9DFzfUPP2I3
+	 bP2It0ZiWqKrpaFsBerSAvvYt92y2em8jZ93u0QN8uW5A3MxYvy1JsUox9JZRQ11j8
+	 hWmui1dlwkA0uUH0DLGz65sT+kLHQX0p9W2t3k9zMl14nQC7TMegAfhWBFTdDhkJMw
+	 rp4g/OdSjIa699sH+T7Z+caC4c3erFuVC8VvAkXFGQHM++7hzBOqRdtcFRKejSaFcx
+	 8h5mYj3Qiu98Q==
 From: Mike Rapoport <rppt@kernel.org>
 To: linux-kernel@vger.kernel.org
 Cc: Alexandre Ghiti <alexghiti@rivosinc.com>,
@@ -89,9 +89,9 @@ Cc: Alexandre Ghiti <alexghiti@rivosinc.com>,
 	netdev@vger.kernel.org,
 	sparclinux@vger.kernel.org,
 	x86@kernel.org
-Subject: [PATCH v8 04/17] sparc: simplify module_alloc()
-Date: Sun,  5 May 2024 17:25:47 +0300
-Message-ID: <20240505142600.2322517-5-rppt@kernel.org>
+Subject: [PATCH v8 05/17] module: make module_memory_{alloc,free} more self-contained
+Date: Sun,  5 May 2024 17:25:48 +0300
+Message-ID: <20240505142600.2322517-6-rppt@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240505142600.2322517-1-rppt@kernel.org>
 References: <20240505142600.2322517-1-rppt@kernel.org>
@@ -101,82 +101,135 @@ List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 
-Define MODULES_VADDR and MODULES_END as VMALLOC_START and VMALLOC_END
-for 32-bit and reduce module_alloc() to
+Move the logic related to the memory allocation and freeing into
+module_memory_alloc() and module_memory_free().
 
-	__vmalloc_node_range(size, 1, MODULES_VADDR, MODULES_END, ...)
-
-as with the new defines the allocations becomes identical for both 32
-and 64 bits.
-
-While on it, drop unused include of <linux/jump_label.h>
-
-Suggested-by: Sam Ravnborg <sam@ravnborg.org>
 Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
-Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 ---
- arch/sparc/include/asm/pgtable_32.h |  2 ++
- arch/sparc/kernel/module.c          | 25 +------------------------
- 2 files changed, 3 insertions(+), 24 deletions(-)
+ kernel/module/main.c | 64 +++++++++++++++++++++++++++-----------------
+ 1 file changed, 39 insertions(+), 25 deletions(-)
 
-diff --git a/arch/sparc/include/asm/pgtable_32.h b/arch/sparc/include/asm/pgtable_32.h
-index 9e85d57ac3f2..62bcafe38b1f 100644
---- a/arch/sparc/include/asm/pgtable_32.h
-+++ b/arch/sparc/include/asm/pgtable_32.h
-@@ -432,6 +432,8 @@ static inline int io_remap_pfn_range(struct vm_area_struct *vma,
- 
- #define VMALLOC_START           _AC(0xfe600000,UL)
- #define VMALLOC_END             _AC(0xffc00000,UL)
-+#define MODULES_VADDR           VMALLOC_START
-+#define MODULES_END             VMALLOC_END
- 
- /* We provide our own get_unmapped_area to cope with VA holes for userland */
- #define HAVE_ARCH_UNMAPPED_AREA
-diff --git a/arch/sparc/kernel/module.c b/arch/sparc/kernel/module.c
-index 66c45a2764bc..d37adb2a0b54 100644
---- a/arch/sparc/kernel/module.c
-+++ b/arch/sparc/kernel/module.c
-@@ -21,35 +21,12 @@
- 
- #include "entry.h"
- 
--#ifdef CONFIG_SPARC64
--
--#include <linux/jump_label.h>
--
--static void *module_map(unsigned long size)
-+void *module_alloc(unsigned long size)
- {
--	if (PAGE_ALIGN(size) > MODULES_LEN)
--		return NULL;
- 	return __vmalloc_node_range(size, 1, MODULES_VADDR, MODULES_END,
- 				GFP_KERNEL, PAGE_KERNEL, 0, NUMA_NO_NODE,
- 				__builtin_return_address(0));
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index e1e8a7a9d6c1..5b82b069e0d3 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -1203,15 +1203,44 @@ static bool mod_mem_use_vmalloc(enum mod_mem_type type)
+ 		mod_mem_type_is_core_data(type);
  }
--#else
--static void *module_map(unsigned long size)
--{
--	return vmalloc(size);
--}
--#endif /* CONFIG_SPARC64 */
--
--void *module_alloc(unsigned long size)
--{
--	void *ret;
--
--	ret = module_map(size);
--	if (ret)
--		memset(ret, 0, size);
--
--	return ret;
--}
  
- /* Make generic code ignore STT_REGISTER dummy undefined symbols.  */
- int module_frob_arch_sections(Elf_Ehdr *hdr,
+-static void *module_memory_alloc(unsigned int size, enum mod_mem_type type)
++static int module_memory_alloc(struct module *mod, enum mod_mem_type type)
+ {
++	unsigned int size = PAGE_ALIGN(mod->mem[type].size);
++	void *ptr;
++
++	mod->mem[type].size = size;
++
+ 	if (mod_mem_use_vmalloc(type))
+-		return vzalloc(size);
+-	return module_alloc(size);
++		ptr = vmalloc(size);
++	else
++		ptr = module_alloc(size);
++
++	if (!ptr)
++		return -ENOMEM;
++
++	/*
++	 * The pointer to these blocks of memory are stored on the module
++	 * structure and we keep that around so long as the module is
++	 * around. We only free that memory when we unload the module.
++	 * Just mark them as not being a leak then. The .init* ELF
++	 * sections *do* get freed after boot so we *could* treat them
++	 * slightly differently with kmemleak_ignore() and only grey
++	 * them out as they work as typical memory allocations which
++	 * *do* eventually get freed, but let's just keep things simple
++	 * and avoid *any* false positives.
++	 */
++	kmemleak_not_leak(ptr);
++
++	memset(ptr, 0, size);
++	mod->mem[type].base = ptr;
++
++	return 0;
+ }
+ 
+-static void module_memory_free(void *ptr, enum mod_mem_type type)
++static void module_memory_free(struct module *mod, enum mod_mem_type type)
+ {
++	void *ptr = mod->mem[type].base;
++
+ 	if (mod_mem_use_vmalloc(type))
+ 		vfree(ptr);
+ 	else
+@@ -1229,12 +1258,12 @@ static void free_mod_mem(struct module *mod)
+ 		/* Free lock-classes; relies on the preceding sync_rcu(). */
+ 		lockdep_free_key_range(mod_mem->base, mod_mem->size);
+ 		if (mod_mem->size)
+-			module_memory_free(mod_mem->base, type);
++			module_memory_free(mod, type);
+ 	}
+ 
+ 	/* MOD_DATA hosts mod, so free it at last */
+ 	lockdep_free_key_range(mod->mem[MOD_DATA].base, mod->mem[MOD_DATA].size);
+-	module_memory_free(mod->mem[MOD_DATA].base, MOD_DATA);
++	module_memory_free(mod, MOD_DATA);
+ }
+ 
+ /* Free a module, remove from lists, etc. */
+@@ -2225,7 +2254,6 @@ static int find_module_sections(struct module *mod, struct load_info *info)
+ static int move_module(struct module *mod, struct load_info *info)
+ {
+ 	int i;
+-	void *ptr;
+ 	enum mod_mem_type t = 0;
+ 	int ret = -ENOMEM;
+ 
+@@ -2234,26 +2262,12 @@ static int move_module(struct module *mod, struct load_info *info)
+ 			mod->mem[type].base = NULL;
+ 			continue;
+ 		}
+-		mod->mem[type].size = PAGE_ALIGN(mod->mem[type].size);
+-		ptr = module_memory_alloc(mod->mem[type].size, type);
+-		/*
+-                 * The pointer to these blocks of memory are stored on the module
+-                 * structure and we keep that around so long as the module is
+-                 * around. We only free that memory when we unload the module.
+-                 * Just mark them as not being a leak then. The .init* ELF
+-                 * sections *do* get freed after boot so we *could* treat them
+-                 * slightly differently with kmemleak_ignore() and only grey
+-                 * them out as they work as typical memory allocations which
+-                 * *do* eventually get freed, but let's just keep things simple
+-                 * and avoid *any* false positives.
+-		 */
+-		kmemleak_not_leak(ptr);
+-		if (!ptr) {
++
++		ret = module_memory_alloc(mod, type);
++		if (ret) {
+ 			t = type;
+ 			goto out_enomem;
+ 		}
+-		memset(ptr, 0, mod->mem[type].size);
+-		mod->mem[type].base = ptr;
+ 	}
+ 
+ 	/* Transfer each section which specifies SHF_ALLOC */
+@@ -2296,7 +2310,7 @@ static int move_module(struct module *mod, struct load_info *info)
+ 	return 0;
+ out_enomem:
+ 	for (t--; t >= 0; t--)
+-		module_memory_free(mod->mem[t].base, t);
++		module_memory_free(mod, t);
+ 	return ret;
+ }
+ 
 -- 
 2.43.0
 
