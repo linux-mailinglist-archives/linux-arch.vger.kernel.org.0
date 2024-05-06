@@ -1,98 +1,88 @@
-Return-Path: <linux-arch+bounces-4225-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4226-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF9EA8BD47F
-	for <lists+linux-arch@lfdr.de>; Mon,  6 May 2024 20:22:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8EF778BD553
+	for <lists+linux-arch@lfdr.de>; Mon,  6 May 2024 21:22:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E02471C21857
-	for <lists+linux-arch@lfdr.de>; Mon,  6 May 2024 18:22:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A765282F18
+	for <lists+linux-arch@lfdr.de>; Mon,  6 May 2024 19:22:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8256E158856;
-	Mon,  6 May 2024 18:22:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22DA6158DC7;
+	Mon,  6 May 2024 19:21:57 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FB1613D50E;
-	Mon,  6 May 2024 18:22:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 99E8D158A2B
+	for <linux-arch@vger.kernel.org>; Mon,  6 May 2024 19:21:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715019760; cv=none; b=lnOXLXNMbCkNmDhBwT7Qq/SUCQo2xvSZMy4dy58w3rVDNQPP/6pmPogf3vI0+LddIQyHohiQum9PUwqYC+HkpAuSXYJ90eP8w9dvOZDU8zYyqdqgz8an08pOy2HMnswAn00mqpol5HfFEBRSBeJJWSpNsh9VJ+aKBHnZeDaTLgI=
+	t=1715023317; cv=none; b=bYsgwMk6Uptf+J/1ceMoXXpM4zoToVrf/bCb7OLycxMBDRs4k2Kd2ayY0FDWZePmza6h8OhqekeO562od/egXkXBQO055M+A9+SFy6oVp9eQRQZ4kH5UJoGW5Fk3qeWntjvfd7ncmhn5ZFnnIg6K7Ixw/+7Ad2DhM6VGGdLGwsw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715019760; c=relaxed/simple;
-	bh=WsHe/FafqFnwnZcWZSxrr9+9n6uZZXGez9G447n+Nfo=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qbj5XPjy7er31WWFCVTWzkj56yZ7AoJS5Zr7rZtWHRps/CBeeWoP5VPx16w/HT8l3z9OJvWflWL/tIP5+GXD22uoh6FV4KWhWl6SNpDessMFmlXEQVQXXaPJeux/RsnvscasOWx1TpT0RSDJrtERQyW8OPF9P27lvPY6nK9gOlE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B99BC116B1;
-	Mon,  6 May 2024 18:22:35 +0000 (UTC)
-Date: Mon, 6 May 2024 14:22:40 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Alexandre Ghiti <alexghiti@rivosinc.com>,
- Andrew Morton <akpm@linux-foundation.org>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
- <bjorn@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, Christophe
- Leroy <christophe.leroy@csgroup.eu>, "David S. Miller"
- <davem@davemloft.net>, Dinh Nguyen <dinguyen@kernel.org>, Donald Dutile
- <ddutile@redhat.com>, Eric Chanudet <echanude@redhat.com>, Heiko Carstens
- <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>, Huacai Chen
- <chenhuacai@kernel.org>, Kent Overstreet <kent.overstreet@linux.dev>, Liviu
- Dudau <liviu@dudau.co.uk>, Luis Chamberlain <mcgrof@kernel.org>, Mark
- Rutland <mark.rutland@arm.com>, Masami Hiramatsu <mhiramat@kernel.org>,
- Michael Ellerman <mpe@ellerman.id.au>, Nadav Amit <nadav.amit@gmail.com>,
- Palmer Dabbelt <palmer@dabbelt.com>, Peter Zijlstra <peterz@infradead.org>,
- Philippe =?UTF-8?B?TWF0aGlldS1EYXVkw6k=?= <philmd@linaro.org>, Rick
- Edgecombe <rick.p.edgecombe@intel.com>, Russell King
- <linux@armlinux.org.uk>, Sam Ravnborg <sam@ravnborg.org>, Song Liu
- <song@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Thomas
- Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
- bpf@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
- linux-mm@kvack.org, linux-modules@vger.kernel.org,
- linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
- netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v8 13/17] x86/ftrace: enable dynamic ftrace without
- CONFIG_MODULES
-Message-ID: <20240506142240.36c38d7f@gandalf.local.home>
-In-Reply-To: <20240505142600.2322517-14-rppt@kernel.org>
-References: <20240505142600.2322517-1-rppt@kernel.org>
-	<20240505142600.2322517-14-rppt@kernel.org>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1715023317; c=relaxed/simple;
+	bh=ecidPVblaFiHPOmvdtsNH/P/QiwhpZL5C6FM8X3FzSQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ijbn7Oqlz5FGa6dOCJwL5FMu1PxcUl0pEonDHwwnkqaGkxpZnAMJY5oY/ymKtiqdMh3YZb6dHNEfXvKttxkbrkw/siKGBj3oPA09+F7Xqi8ngpsePp6dSnCNASGqU+XAee46Dlhn7KupHsW1ZjHurV7/Xu/DBoWudIvKrj4/fLo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 888983 invoked by uid 1000); 6 May 2024 15:21:54 -0400
+Date: Mon, 6 May 2024 15:21:54 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
+  linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+  kernel-team@meta.com, mingo@kernel.org, parri.andrea@gmail.com,
+  will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
+  npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+  luc.maranget@inria.fr, akiyks@gmail.com,
+  Frederic Weisbecker <frederic@kernel.org>,
+  Daniel Lustig <dlustig@nvidia.com>, Joel Fernandes <joel@joelfernandes.org>,
+  Mark Rutland <mark.rutland@arm.com>, Jonathan Corbet <corbet@lwn.net>,
+  linux-doc@vger.kernel.org
+Subject: Re: [PATCH memory-model 2/4] Documentation/litmus-tests: Demonstrate
+ unordered failing cmpxchg
+Message-ID: <c168f56f-dfae-4cac-bc61-fc5a93ee3aed@rowland.harvard.edu>
+References: <42a43181-a431-44bd-8aff-6b305f8111ba@paulmck-laptop>
+ <20240501232132.1785861-2-paulmck@kernel.org>
+ <c97f0529-5a8f-4a82-8e14-0078d4372bdc@huaweicloud.com>
+ <16381d02-cb70-4ae5-b24e-aa73afad9aed@huaweicloud.com>
+ <2a695f63-6c9a-4837-ac03-f0a5c63daaaf@paulmck-laptop>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2a695f63-6c9a-4837-ac03-f0a5c63daaaf@paulmck-laptop>
 
-On Sun,  5 May 2024 17:25:56 +0300
-Mike Rapoport <rppt@kernel.org> wrote:
+On Mon, May 06, 2024 at 11:00:42AM -0700, Paul E. McKenney wrote:
+> On Mon, May 06, 2024 at 06:30:45PM +0200, Jonas Oberhauser wrote:
+> > Am 5/6/2024 um 12:05 PM schrieb Jonas Oberhauser:
+> > > Am 5/2/2024 um 1:21 AM schrieb Paul E. McKenney:
+> > > > This commit adds four litmus tests showing that a failing cmpxchg()
+> > > > operation is unordered unless followed by an smp_mb__after_atomic()
+> > > > operation.
+> > > 
+> > > So far, my understanding was that all RMW operations without suffix
+> > > (xchg(), cmpxchg(), ...) will be interpreted as F[Mb];...;F[Mb].
 
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> 
-> Dynamic ftrace must allocate memory for code and this was impossible
-> without CONFIG_MODULES.
-> 
-> With execmem separated from the modules code, execmem_text_alloc() is
-> available regardless of CONFIG_MODULES.
-> 
-> Remove dependency of dynamic ftrace on CONFIG_MODULES and make
-> CONFIG_DYNAMIC_FTRACE select CONFIG_EXECMEM in Kconfig.
-> 
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> ---
->  arch/x86/Kconfig         |  1 +
->  arch/x86/kernel/ftrace.c | 10 ----------
->  2 files changed, 1 insertion(+), 10 deletions(-)
+It's more accurate to say that RMW operations without a suffix that 
+return a value will be interpreted that way.  So for example, 
+atomic_inc() doesn't imply any ordering, because it doesn't return a 
+value.
 
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> > > barriers explicitly inside the cat model, instead of relying on implicit
+> > > conversions internal to herd.
 
--- Steve
+Don't the annotations in linux-kernel.def and linux-kernel.bell (like 
+"noreturn") already make this explicit?  
+
+I guess the part that is still implicit is that herd7 doesn't regard 
+failed RMW operations as actual RMWs (they don't have a store part).
+
+Alan
 
