@@ -1,171 +1,176 @@
-Return-Path: <linux-arch+bounces-4213-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4214-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33E408BC4D7
-	for <lists+linux-arch@lfdr.de>; Mon,  6 May 2024 02:29:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E4F78BC567
+	for <lists+linux-arch@lfdr.de>; Mon,  6 May 2024 03:22:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3C2A9B20D64
-	for <lists+linux-arch@lfdr.de>; Mon,  6 May 2024 00:29:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4D1851C210B1
+	for <lists+linux-arch@lfdr.de>; Mon,  6 May 2024 01:22:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5B39522F;
-	Mon,  6 May 2024 00:29:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D8C43BBFF;
+	Mon,  6 May 2024 01:22:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="YJtQ3EPk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SFi4+NjK"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 288B31366
-	for <linux-arch@vger.kernel.org>; Mon,  6 May 2024 00:29:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BF032FB6;
+	Mon,  6 May 2024 01:22:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714955363; cv=none; b=FPm97Wnj8X2/H6hUoLwwFacaJJGQwIKQZpCCp5/spIx0qK+obYOxYfeEw8mlGGyHrFwogiPpitEY/sRshFW5jH/71oylvPuVglQzg1sGCfa0HnXsReOJZxeo2pD4Q8NMV+Aq6vbqGfrfXmEyc4z+jnaWcrXcBLS3rdDZn2nBTic=
+	t=1714958548; cv=none; b=I3S5/LGCh9F1lKm4Ma2qNCFNb4yhnbdirE8ui1Or4RSQGwdQAMgx7SI9ubTVERSkylhvIqn1Z9rRJIC0wCGaKEs/XReEXRJAEtyUGlVrrGkLy5/APG6t6PJzC6/+36Z7g+7PACChUn2hw25nU4G7McPZfEX5s4YD0+6800ZFS7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714955363; c=relaxed/simple;
-	bh=7p83fI6SjhbSz9whdN8AjeYm5Iaq6UXmW/wjThWyv6k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AAWjX8293zTbaAmEyft0kizg66fM9t2PYfgBojhot8AeYJu5rnPMVdXiJ25kOIMOc9lnV/Y2Kj9J+A/w4kUc/db6GW5oO+X0b+hzEU/LUbFku2KuhsqLo1Ht6YWtz1pUXhNFPzU7I8EfvZMqTByqdzeIUDu/7LYKQhq6vY/hofI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b=YJtQ3EPk; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2b432be5cc9so966944a91.3
-        for <linux-arch@vger.kernel.org>; Sun, 05 May 2024 17:29:22 -0700 (PDT)
+	s=arc-20240116; t=1714958548; c=relaxed/simple;
+	bh=JJjxgGZxm6C2oeTjFvqBWbAWhXD8o2kgHv5Kc419p6A=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=POtKkh1YgeVe3sz+KA8nd594hYuTtGIeWOWmmBUSMn3ar4tq99jUaiYromxpSYnpwwzGPr06RwuJZn3NFy3Du07ZO8qydtEN26TQYcMCDEKyPxRCREbELBTDxEMI1dFfP6m+hzE33rwdyNDU75VcNmjRyAKPg9/JVqnalPsUONk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SFi4+NjK; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a59c5c9c6aeso143974666b.2;
+        Sun, 05 May 2024 18:22:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1714955361; x=1715560161; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sTixdwfAlIVssw/yTwe1uZ1trqj6K9Ho7zGTIsCsG3k=;
-        b=YJtQ3EPk7IxrNvgo8weclRLgIUIWkSOI2Uep1o1M/rk9e0dB+mVfcDL2Ra/RKgbRaV
-         4yD0nNAz17zHnC1JbqzasjATt3Y4kUqFfBfl4uDx/zyyAwmCgdWBqfnXG64JOZ3VVasD
-         TpWrwpoJPMZ1aCGn4xBszZrjTzvv5gHLPW4FLW7M2xKyeRN3dmeqwv7P7Qzj6PulULEp
-         iKKq9LW6PdJR11ebmc1NoRMdfQ6vYQYYHA7xQiZMqlhAGok5r3mf8gMd5KZKadxtoFqx
-         EMNG1nXwcBwffehAbXoAJ9b4BN0JZNUl2iEcpz1iMRyOz+EEFNblqZD7QukB/0M0HXcx
-         nJhA==
+        d=gmail.com; s=20230601; t=1714958545; x=1715563345; darn=vger.kernel.org;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PXql6pq6gP6PZPKKZA9sUcOpkbTs5kG7qkItMNhcUBg=;
+        b=SFi4+NjKGZ/6DopFdBTtNABksF9E1HjAxsYz8ZG25eqz3nJKl0S+l33ZzTCxGOWf4Q
+         5ACsLqGXSodYAW0qVu6/6alw8KTS2JhuXu6S0gM0ULy6A0CQBLZROGAWfTqEZF0hneBd
+         7wgHC4cDR3JUFQLWc2PDvgUa83C8FAyqD67f5MF4r/TKXy08WOwVwThsqAvjXHojNNhZ
+         rkaaGp6hh7H9yAvj2SfWkS94dhjhaajzA67ZSuBlqyZTlgeqGFNMWtwCOwFK5Fpr6UDE
+         4X3AnoQA455WY3kl2mWg8SCTpBizxLwiqpzNiXobfP6A0ibCglxB+5uoFhLT3TS+mvQv
+         RuQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714955361; x=1715560161;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sTixdwfAlIVssw/yTwe1uZ1trqj6K9Ho7zGTIsCsG3k=;
-        b=rLXSJLL7z11ksWd2E4QUs9NuR8mVUt7szDJEpeGcH6sKB301mzUKtoMoG/NF/48zg7
-         OYpsUCd3jnCVTAKzoRUSOrYMEBxfXtFDMp92/e4wzyVFSY34r2BSIsf8tlNWQNe9zLP+
-         cPGHU02XOeUoOMIfuahA/lsA0OaUbAcb/bUIE2bHYN6u1qlneK8TxMNK50OM40ezjYdn
-         UdIxE5t1ZbP3wWiobPAGZlKnbBP7Tc5+/LMWKc/XsTI3nftdhiPU+Vu3yqfbD5/DbIu7
-         uAds4ujJ6qWywgwDODBVN8sfRCCCiv3FDDXC7jHecM4mM3p91jng2KESfoliejmz5UCJ
-         xA1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXZtzaYJWwyAMFOrdWgCWkUT1P7EJzLg/XDk95agswu9ikgwv7t9nvJJdJrwhwTDn1nyF9F1we/ab8mWQctFmTKxtBksRlzMlwd6w==
-X-Gm-Message-State: AOJu0Yy9xG9/0epBJ4CU4Af9AaasRx5RdEoRDUncbPfjM83QX9IYSP7E
-	RDpzikpUf74X0lwdvmqObJimTZzqogJXt5aQFEtxagcZnZNjI7Y2Z2sy01/Gtsw=
-X-Google-Smtp-Source: AGHT+IFapiyynwMzWBFC3qoHSlJe6Vp0gcSIQLTrnjL4T2m4HyoHAt77UaMOEYoyby7VMZX56YX6rQ==
-X-Received: by 2002:a17:90a:d30a:b0:2aa:c2ba:3758 with SMTP id p10-20020a17090ad30a00b002aac2ba3758mr8212757pju.42.1714955361360;
-        Sun, 05 May 2024 17:29:21 -0700 (PDT)
-Received: from [192.168.1.15] (174-21-160-85.tukw.qwest.net. [174.21.160.85])
-        by smtp.gmail.com with ESMTPSA id h4-20020a17090a710400b002b1314ba8c0sm8708252pjk.57.2024.05.05.17.29.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 May 2024 17:29:20 -0700 (PDT)
-Message-ID: <306cf793-6f96-4a22-aca0-53c0ccefc0a1@davidwei.uk>
-Date: Sun, 5 May 2024 17:29:18 -0700
+        d=1e100.net; s=20230601; t=1714958545; x=1715563345;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PXql6pq6gP6PZPKKZA9sUcOpkbTs5kG7qkItMNhcUBg=;
+        b=NywN/J7089A1QHiB4gTA3cLjnWOjXNIAbc/vDb7EnxqniHWgdWV91dROy7nuQtEr3R
+         QRHYe2CgTuFBwG690kxMuibd2Hu/IPFHfPeJIKa1yiIhUYIHvJlGHMGRCy+oM0/17rWn
+         NO4sv8M3ofZpX7934L+EFNUXU5frr/LBb6N82OcAEV4jEeLisf5NNiVWUqKNG+laGqR3
+         Me4QaO4qFkR0KalxNHIOTS3YESytDaireeeX0y/cATkO4VSBBXgkEOgzzYjwWMP6wOHS
+         W/1mi7pGe+iFZedmrFZ/7pRfWenWVbuFbUzS72lYj6KXtj8n4jDmWGsr2gGpUroZiN55
+         zx8w==
+X-Forwarded-Encrypted: i=1; AJvYcCWiONT8mpqiH6DMxrHrfD3cep1oq5Stt3phFICKfvnzuKjETS5Oc+FDzeKRGZx9Os9+5n/vXvC+ogWhdINX8A8c7K5Yu7JewQZLQwoy
+X-Gm-Message-State: AOJu0YxqaUPrSd3iJqk3liRm8DGyFQZE8etk3LAadK7xYonUOD0xfj7f
+	lZkjlWaojdDY3lniEjYBPF2EPzY3l1s6knLjzOLyM1dGgK5zaDk/
+X-Google-Smtp-Source: AGHT+IHX4Q1M1J2QS0feiS/vKJoi8VrwTs5GnXeLGv3vgyeFQks/RZrzr3b3YspBZ68H/t1pBhZMAQ==
+X-Received: by 2002:a17:907:728a:b0:a59:bbd6:bb3b with SMTP id dt10-20020a170907728a00b00a59bbd6bb3bmr2228018ejc.55.1714958545444;
+        Sun, 05 May 2024 18:22:25 -0700 (PDT)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id l12-20020a1709066b8c00b00a59c0ecd559sm1427116ejr.112.2024.05.05.18.22.24
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sun, 05 May 2024 18:22:24 -0700 (PDT)
+From: Wei Yang <richard.weiyang@gmail.com>
+To: arnd@arndb.de,
+	rppt@kernel.org
+Cc: linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	Wei Yang <richard.weiyang@gmail.com>
+Subject: [PATCH] mm/memblock: discard .text/.data if CONFIG_ARCH_KEEP_MEMBLOCK not set
+Date: Mon,  6 May 2024 01:21:04 +0000
+Message-Id: <20240506012104.10864-1-richard.weiyang@gmail.com>
+X-Mailer: git-send-email 2.11.0
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH net-next v8 07/14] page_pool: devmem support
-Content-Language: en-GB
-To: Christoph Hellwig <hch@infradead.org>
-Cc: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Jonathan Corbet <corbet@lwn.net>,
- Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
- Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
- <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
- David Ahern <dsahern@kernel.org>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Amritha Nambiar <amritha.nambiar@intel.com>,
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
- Alexander Mikhalitsyn <alexander@mihalicyn.com>,
- Kaiyuan Zhang <kaiyuanz@google.com>, Christian Brauner <brauner@kernel.org>,
- Simon Horman <horms@kernel.org>, David Howells <dhowells@redhat.com>,
- Florian Westphal <fw@strlen.de>, Yunsheng Lin <linyunsheng@huawei.com>,
- Kuniyuki Iwashima <kuniyu@amazon.com>, Jens Axboe <axboe@kernel.dk>,
- Arseniy Krasnov <avkrasnov@salutedevices.com>,
- Aleksander Lobakin <aleksander.lobakin@intel.com>,
- Michael Lass <bevan@bi-co.net>, Jiri Pirko <jiri@resnulli.us>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Lorenzo Bianconi <lorenzo@kernel.org>,
- Richard Gobert <richardbgobert@gmail.com>,
- Sridhar Samudrala <sridhar.samudrala@intel.com>,
- Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
- Johannes Berg <johannes.berg@intel.com>, Abel Wu <wuyun.abel@bytedance.com>,
- Breno Leitao <leitao@debian.org>, Pavel Begunkov <asml.silence@gmail.com>,
- Jason Gunthorpe <jgg@ziepe.ca>, Shailend Chand <shailend@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>,
- Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
- <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
- linux-mm@kvack.org, Matthew Wilcox <willy@infradead.org>
-References: <20240403002053.2376017-1-almasrymina@google.com>
- <20240403002053.2376017-8-almasrymina@google.com>
- <8357256a-f0e9-4640-8fec-23341fc607db@davidwei.uk>
- <ZjH1hO8qJgOqNKub@infradead.org>
-From: David Wei <dw@davidwei.uk>
-In-Reply-To: <ZjH1hO8qJgOqNKub@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 2024-05-01 00:55, Christoph Hellwig wrote:
-> On Fri, Apr 26, 2024 at 05:17:52PM -0700, David Wei wrote:
->> On 2024-04-02 5:20 pm, Mina Almasry wrote:
->>> @@ -69,20 +106,26 @@ net_iov_binding(const struct net_iov *niov)
->>>   */
->>>  typedef unsigned long __bitwise netmem_ref;
->>>  
->>> +static inline bool netmem_is_net_iov(const netmem_ref netmem)
->>> +{
->>> +#if defined(CONFIG_PAGE_POOL) && defined(CONFIG_DMA_SHARED_BUFFER)
->>
->> I am guessing you added this to try and speed up the fast path? It's
->> overly restrictive for us since we do not need dmabuf necessarily. I
->> spent a bit too much time wondering why things aren't working only to
->> find this :(
-> 
-> So what else do you need?  I was assured last round that nothing but
-> dmabuf and potentially the huge page case (that really just is the page
-> provider) would get added.
+When CONFIG_ARCH_KEEP_MEMBLOCK not set, we expect to discard related
+code and data. But it doesn't until CONFIG_MEMORY_HOTPLUG not set
+neither.
 
-I'm using userspace memory so having this gated behind
-CONFIG_DMA_SHARED_BUFFER doesn't make sense for us.
+This patch puts memblock's .text/.data into its own section, so that it
+only depends on CONFIG_ARCH_KEEP_MEMBLOCK to discard related code and
+data. After this, init size increase from 2420K to 2432K.
 
-> 
->>
-> ---end quoted text---
+Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
+---
+ include/asm-generic/vmlinux.lds.h | 14 +++++++++++++-
+ include/linux/memblock.h          |  8 ++++----
+ 2 files changed, 17 insertions(+), 5 deletions(-)
+
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index f7749d0f2562..775c5eedb9e6 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -147,6 +147,14 @@
+ #define MEM_DISCARD(sec) *(.mem##sec)
+ #endif
+ 
++#if defined(CONFIG_ARCH_KEEP_MEMBLOCK)
++#define MEMBLOCK_KEEP(sec)    *(.mb##sec)
++#define MEMBLOCK_DISCARD(sec)
++#else
++#define MEMBLOCK_KEEP(sec)
++#define MEMBLOCK_DISCARD(sec) *(.mb##sec)
++#endif
++
+ #ifndef CONFIG_HAVE_DYNAMIC_FTRACE_NO_PATCHABLE
+ #define KEEP_PATCHABLE		KEEP(*(__patchable_function_entries))
+ #define PATCHABLE_DISCARDS
+@@ -356,6 +364,7 @@
+ 	*(.ref.data)							\
+ 	*(.data..shared_aligned) /* percpu related */			\
+ 	MEM_KEEP(init.data*)						\
++	MEMBLOCK_KEEP(init.data*)					\
+ 	*(.data.unlikely)						\
+ 	__start_once = .;						\
+ 	*(.data.once)							\
+@@ -573,6 +582,7 @@
+ 		*(.ref.text)						\
+ 		*(.text.asan.* .text.tsan.*)				\
+ 	MEM_KEEP(init.text*)						\
++	MEMBLOCK_KEEP(init.text*)					\
+ 
+ 
+ /* sched.text is aling to function alignment to secure we have same
+@@ -680,6 +690,7 @@
+ 	KEEP(*(SORT(___kentry+*)))					\
+ 	*(.init.data .init.data.*)					\
+ 	MEM_DISCARD(init.data*)						\
++	MEMBLOCK_DISCARD(init.data*)					\
+ 	KERNEL_CTORS()							\
+ 	MCOUNT_REC()							\
+ 	*(.init.rodata .init.rodata.*)					\
+@@ -706,7 +717,8 @@
+ #define INIT_TEXT							\
+ 	*(.init.text .init.text.*)					\
+ 	*(.text.startup)						\
+-	MEM_DISCARD(init.text*)
++	MEM_DISCARD(init.text*)						\
++	MEMBLOCK_DISCARD(init.text*)
+ 
+ #define EXIT_DATA							\
+ 	*(.exit.data .exit.data.*)					\
+diff --git a/include/linux/memblock.h b/include/linux/memblock.h
+index e2082240586d..3e1f1d42dde7 100644
+--- a/include/linux/memblock.h
++++ b/include/linux/memblock.h
+@@ -100,13 +100,13 @@ struct memblock {
+ 
+ extern struct memblock memblock;
+ 
++#define __init_memblock        __section(".mbinit.text") __cold notrace \
++						  __latent_entropy
++#define __initdata_memblock    __section(".mbinit.data")
++
+ #ifndef CONFIG_ARCH_KEEP_MEMBLOCK
+-#define __init_memblock __meminit
+-#define __initdata_memblock __meminitdata
+ void memblock_discard(void);
+ #else
+-#define __init_memblock
+-#define __initdata_memblock
+ static inline void memblock_discard(void) {}
+ #endif
+ 
+-- 
+2.34.1
+
 
