@@ -1,35 +1,35 @@
-Return-Path: <linux-arch+bounces-4224-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4225-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 524368BD46A
-	for <lists+linux-arch@lfdr.de>; Mon,  6 May 2024 20:15:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF9EA8BD47F
+	for <lists+linux-arch@lfdr.de>; Mon,  6 May 2024 20:22:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E4DC282ECF
-	for <lists+linux-arch@lfdr.de>; Mon,  6 May 2024 18:15:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E02471C21857
+	for <lists+linux-arch@lfdr.de>; Mon,  6 May 2024 18:22:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 707E2158855;
-	Mon,  6 May 2024 18:15:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8256E158856;
+	Mon,  6 May 2024 18:22:40 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ED85156641;
-	Mon,  6 May 2024 18:15:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FB1613D50E;
+	Mon,  6 May 2024 18:22:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715019315; cv=none; b=h3+ymjmW45lCp+GvN6GKcyrsNL5QsCBLiSeilSszSMDyvqIghA8HEoJ9GOLiN8K2EvjtvQQ+lHNjvOfEQfs+oLXpgOUvWQDHRBiGyUponEeg/ZkJwMPydJU8K5dd2BX+eYzb9ifvl5jERSbTlbh/myPpuYG+Si37qXkVv+IWKfA=
+	t=1715019760; cv=none; b=lnOXLXNMbCkNmDhBwT7Qq/SUCQo2xvSZMy4dy58w3rVDNQPP/6pmPogf3vI0+LddIQyHohiQum9PUwqYC+HkpAuSXYJ90eP8w9dvOZDU8zYyqdqgz8an08pOy2HMnswAn00mqpol5HfFEBRSBeJJWSpNsh9VJ+aKBHnZeDaTLgI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715019315; c=relaxed/simple;
-	bh=ZhH5iWadclZ9+WfXofPKpyaOZHjgm7/VzbgUngE0oP8=;
+	s=arc-20240116; t=1715019760; c=relaxed/simple;
+	bh=WsHe/FafqFnwnZcWZSxrr9+9n6uZZXGez9G447n+Nfo=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FanQkZg96UguXoIjJosomOTl3sHWhTjfV+Vg5/uElN9flOe52yatyN7YRdjzVCx/X6V51ZD/OWxeAoeLgbMJBBBkcqJxYGfcWGMMrYP9oLl5nrF7Wxhp7HCeClcibsg72o4+mj+DmAXslWlI3vrp/vi/0C1SLgy99q6lliPLErw=
+	 MIME-Version:Content-Type; b=qbj5XPjy7er31WWFCVTWzkj56yZ7AoJS5Zr7rZtWHRps/CBeeWoP5VPx16w/HT8l3z9OJvWflWL/tIP5+GXD22uoh6FV4KWhWl6SNpDessMFmlXEQVQXXaPJeux/RsnvscasOWx1TpT0RSDJrtERQyW8OPF9P27lvPY6nK9gOlE=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4789AC116B1;
-	Mon,  6 May 2024 18:15:10 +0000 (UTC)
-Date: Mon, 6 May 2024 14:15:15 -0400
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B99BC116B1;
+	Mon,  6 May 2024 18:22:35 +0000 (UTC)
+Date: Mon, 6 May 2024 14:22:40 -0400
 From: Steven Rostedt <rostedt@goodmis.org>
 To: Mike Rapoport <rppt@kernel.org>
 Cc: linux-kernel@vger.kernel.org, Alexandre Ghiti <alexghiti@rivosinc.com>,
@@ -56,12 +56,12 @@ Cc: linux-kernel@vger.kernel.org, Alexandre Ghiti <alexghiti@rivosinc.com>,
  linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
  linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
  netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v8 06/17] mm: introduce execmem_alloc() and
- execmem_free()
-Message-ID: <20240506141515.10fb2a69@gandalf.local.home>
-In-Reply-To: <20240505142600.2322517-7-rppt@kernel.org>
+Subject: Re: [PATCH v8 13/17] x86/ftrace: enable dynamic ftrace without
+ CONFIG_MODULES
+Message-ID: <20240506142240.36c38d7f@gandalf.local.home>
+In-Reply-To: <20240505142600.2322517-14-rppt@kernel.org>
 References: <20240505142600.2322517-1-rppt@kernel.org>
-	<20240505142600.2322517-7-rppt@kernel.org>
+	<20240505142600.2322517-14-rppt@kernel.org>
 X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -72,42 +72,27 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Sun,  5 May 2024 17:25:49 +0300
+On Sun,  5 May 2024 17:25:56 +0300
 Mike Rapoport <rppt@kernel.org> wrote:
 
-> diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
-> index 70139d9d2e01..c8ddb7abda7c 100644
-> --- a/arch/x86/kernel/ftrace.c
-> +++ b/arch/x86/kernel/ftrace.c
-> @@ -25,6 +25,7 @@
->  #include <linux/memory.h>
->  #include <linux/vmalloc.h>
->  #include <linux/set_memory.h>
-> +#include <linux/execmem.h>
->  
->  #include <trace/syscall.h>
->  
-> @@ -261,15 +262,14 @@ void arch_ftrace_update_code(int command)
->  #ifdef CONFIG_X86_64
->  
->  #ifdef CONFIG_MODULES
-> -#include <linux/moduleloader.h>
->  /* Module allocation simplifies allocating memory for code */
->  static inline void *alloc_tramp(unsigned long size)
->  {
-> -	return module_alloc(size);
-> +	return execmem_alloc(EXECMEM_FTRACE, size);
->  }
->  static inline void tramp_free(void *tramp)
->  {
-> -	module_memfree(tramp);
-> +	execmem_free(tramp);
->  }
->  #else
->  /* Trampolines can only be created if modules are supported */
-> diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
+> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> 
+> Dynamic ftrace must allocate memory for code and this was impossible
+> without CONFIG_MODULES.
+> 
+> With execmem separated from the modules code, execmem_text_alloc() is
+> available regardless of CONFIG_MODULES.
+> 
+> Remove dependency of dynamic ftrace on CONFIG_MODULES and make
+> CONFIG_DYNAMIC_FTRACE select CONFIG_EXECMEM in Kconfig.
+> 
+> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> ---
+>  arch/x86/Kconfig         |  1 +
+>  arch/x86/kernel/ftrace.c | 10 ----------
+>  2 files changed, 1 insertion(+), 10 deletions(-)
 
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
 -- Steve
 
