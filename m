@@ -1,40 +1,45 @@
-Return-Path: <linux-arch+bounces-4215-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4216-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E48428BCB81
-	for <lists+linux-arch@lfdr.de>; Mon,  6 May 2024 12:01:03 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B963E8BCB9F
+	for <lists+linux-arch@lfdr.de>; Mon,  6 May 2024 12:06:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C06D41C216B1
-	for <lists+linux-arch@lfdr.de>; Mon,  6 May 2024 10:01:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E3605B22473
+	for <lists+linux-arch@lfdr.de>; Mon,  6 May 2024 10:06:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC46B14262C;
-	Mon,  6 May 2024 10:00:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 670691428F1;
+	Mon,  6 May 2024 10:06:11 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A87531422DD;
-	Mon,  6 May 2024 10:00:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4A16140366;
+	Mon,  6 May 2024 10:06:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714989658; cv=none; b=Re8YYeotRZcuad3gjB56/4TxZsUnIbspFzbOUMuZSyJOjgybxJDIocwL44g2HeuDKh2/XbZxNmV9nk4hcWoXJEC/xhYhXUPWF1+RcSZZ3/R+KSbOEyYkRe5Zxqr+bSEY4gnbLb/CNfhc8dmtP/S6yteA4vC8OQ2NWBSNvEx9CGY=
+	t=1714989971; cv=none; b=oSc2SL65hgtGAgJywtl/0ZwYyQRPFJHQag/+O089fchNx0b1pZ/gDuIe7CwGWAuL86bTscziK4g1QrazzkK8yQKMgti5SKWIrCwQx7d7ukJZLOqnE0jZF/9DzaJWPCmO+JSUDx/GF7mbQrE2KEu/zbosXz8u2PjalTlWorgD0Rg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714989658; c=relaxed/simple;
-	bh=P5tko6/lyTWQ/u9uOI9iYPSwPgP63qpNA47f1bWVdG4=;
+	s=arc-20240116; t=1714989971; c=relaxed/simple;
+	bh=3bKywxWdwXQJn9t7WE5tCeMMFA6vA0dUvFi3njX5doo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ghdxZgBG8WIiHx9PdVzKduf25vv+d9nqrvEUCJ1LQVHQXURBE9anSPFMrFG1trnh2liv+BEZy4Jf5XZB3l48GhtMU1K3nKTxXZ1MxxYAHPXrPFiSVC1vHmdPdvUA0VbBCtg5cb9sRh88F2bbxrZuWRmhejb3XylV6vxLPMglBWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 086AE106F;
-	Mon,  6 May 2024 03:01:22 -0700 (PDT)
-Received: from [10.163.35.238] (unknown [10.163.35.238])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9D8243F793;
-	Mon,  6 May 2024 03:00:53 -0700 (PDT)
-Message-ID: <5f9e5d19-8a38-4e98-8cbb-e5501c76f740@arm.com>
-Date: Mon, 6 May 2024 15:30:54 +0530
+	 In-Reply-To:Content-Type; b=Yx99Cws+Mn02v9a28WeNX/Uw9MyZfPlp4znWlE7U9Q+QQb6cFhLf8Yu7G+Pw0x03Kh5rTtPs3sAlHkepPF8y1NA2ejgYbVwU1OagdFpU/gJspPA/3P91YfYKyTu+RPOOQwzWP0wFCObGhIViGNyejBLhfDOXCcW7XSSEwPw1wFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.51])
+	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4VXxMR3twyz9xGXN;
+	Mon,  6 May 2024 17:44:35 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.47])
+	by mail.maildlp.com (Postfix) with ESMTP id 6DCB91404D9;
+	Mon,  6 May 2024 18:05:58 +0800 (CST)
+Received: from [10.81.216.243] (unknown [10.81.216.243])
+	by APP1 (Coremail) with SMTP id LxC2BwCHexR2qzhmIrWjBw--.20188S2;
+	Mon, 06 May 2024 11:05:57 +0100 (CET)
+Message-ID: <c97f0529-5a8f-4a82-8e14-0078d4372bdc@huaweicloud.com>
+Date: Mon, 6 May 2024 12:05:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -42,122 +47,99 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] mm/memblock: discard .text/.data if
- CONFIG_ARCH_KEEP_MEMBLOCK not set
-Content-Language: en-US
-To: Wei Yang <richard.weiyang@gmail.com>, arnd@arndb.de, rppt@kernel.org
-Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-mm@kvack.org
-References: <20240506012104.10864-1-richard.weiyang@gmail.com>
-From: Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <20240506012104.10864-1-richard.weiyang@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH memory-model 2/4] Documentation/litmus-tests: Demonstrate
+ unordered failing cmpxchg
+To: "Paul E. McKenney" <paulmck@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, kernel-team@meta.com, mingo@kernel.org
+Cc: stern@rowland.harvard.edu, parri.andrea@gmail.com, will@kernel.org,
+ peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
+ dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+ akiyks@gmail.com, Frederic Weisbecker <frederic@kernel.org>,
+ Daniel Lustig <dlustig@nvidia.com>, Joel Fernandes <joel@joelfernandes.org>,
+ Mark Rutland <mark.rutland@arm.com>, Jonathan Corbet <corbet@lwn.net>,
+ linux-doc@vger.kernel.org
+References: <42a43181-a431-44bd-8aff-6b305f8111ba@paulmck-laptop>
+ <20240501232132.1785861-2-paulmck@kernel.org>
+From: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+In-Reply-To: <20240501232132.1785861-2-paulmck@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:LxC2BwCHexR2qzhmIrWjBw--.20188S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Kr45urWDKw47Ary5Kw1Dtrb_yoW8Gw17pF
+	WUKF43Kry7J39Ykwn5Za43X348uayftan5Gry3GrWqv3Z8CFyjvFyrtFWSgFy3Jrsaka1j
+	vr1a934xZrWUAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+	64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+	2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+	xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+	6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFDGOUUUUU
+X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
 
 
-On 5/6/24 06:51, Wei Yang wrote:
-> When CONFIG_ARCH_KEEP_MEMBLOCK not set, we expect to discard related
-> code and data. But it doesn't until CONFIG_MEMORY_HOTPLUG not set
-> neither.
 
-When CONFIG_ARCH_KEEP_MEMBLOCK is not set memblock information both for
-normal and reserved memory get freed up but should the memblock related
-code and data also be freed up as well ? Then I would also believe such
-memory saving will be very minimal given CONFIG_ARCH_KEEP_MEMBLOCK code
-is too limited scoped in the tree.
+Am 5/2/2024 um 1:21 AM schrieb Paul E. McKenney:
+> This commit adds four litmus tests showing that a failing cmpxchg()
+> operation is unordered unless followed by an smp_mb__after_atomic()
+> operation.
 
-Also could you please explain how it is related to CONFIG_MEMORY_HOTPLUG
-config being set or not.
+So far, my understanding was that all RMW operations without suffix 
+(xchg(), cmpxchg(), ...) will be interpreted as F[Mb];...;F[Mb].
 
-> 
-> This patch puts memblock's .text/.data into its own section, so that it
-> only depends on CONFIG_ARCH_KEEP_MEMBLOCK to discard related code and
-> data. After this, init size increase from 2420K to 2432K.
+I guess this shows again how important it is to model these full 
+barriers explicitly inside the cat model, instead of relying on implicit 
+conversions internal to herd.
 
-Is not this memory size saving some what insignificant to warrant a code
-change ? Also is this problem applicable only to CONFIG_ARCH_KEEP_MEMBLOCK
-config. Could you also provide details on how did you measure these numbers ?
+I'd like to propose a patch to this effect.
 
-> 
-> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
-> ---
->  include/asm-generic/vmlinux.lds.h | 14 +++++++++++++-
->  include/linux/memblock.h          |  8 ++++----
->  2 files changed, 17 insertions(+), 5 deletions(-)
-> 
-> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-> index f7749d0f2562..775c5eedb9e6 100644
-> --- a/include/asm-generic/vmlinux.lds.h
-> +++ b/include/asm-generic/vmlinux.lds.h
-> @@ -147,6 +147,14 @@
->  #define MEM_DISCARD(sec) *(.mem##sec)
->  #endif
->  
-> +#if defined(CONFIG_ARCH_KEEP_MEMBLOCK)
-> +#define MEMBLOCK_KEEP(sec)    *(.mb##sec)
-> +#define MEMBLOCK_DISCARD(sec)
-> +#else
-> +#define MEMBLOCK_KEEP(sec)
-> +#define MEMBLOCK_DISCARD(sec) *(.mb##sec)
-> +#endif
-> +
->  #ifndef CONFIG_HAVE_DYNAMIC_FTRACE_NO_PATCHABLE
->  #define KEEP_PATCHABLE		KEEP(*(__patchable_function_entries))
->  #define PATCHABLE_DISCARDS
-> @@ -356,6 +364,7 @@
->  	*(.ref.data)							\
->  	*(.data..shared_aligned) /* percpu related */			\
->  	MEM_KEEP(init.data*)						\
-> +	MEMBLOCK_KEEP(init.data*)					\
->  	*(.data.unlikely)						\
->  	__start_once = .;						\
->  	*(.data.once)							\
-> @@ -573,6 +582,7 @@
->  		*(.ref.text)						\
->  		*(.text.asan.* .text.tsan.*)				\
->  	MEM_KEEP(init.text*)						\
-> +	MEMBLOCK_KEEP(init.text*)					\
->  
->  
->  /* sched.text is aling to function alignment to secure we have same
-> @@ -680,6 +690,7 @@
->  	KEEP(*(SORT(___kentry+*)))					\
->  	*(.init.data .init.data.*)					\
->  	MEM_DISCARD(init.data*)						\
-> +	MEMBLOCK_DISCARD(init.data*)					\
->  	KERNEL_CTORS()							\
->  	MCOUNT_REC()							\
->  	*(.init.rodata .init.rodata.*)					\
-> @@ -706,7 +717,8 @@
->  #define INIT_TEXT							\
->  	*(.init.text .init.text.*)					\
->  	*(.text.startup)						\
-> -	MEM_DISCARD(init.text*)
-> +	MEM_DISCARD(init.text*)						\
-> +	MEMBLOCK_DISCARD(init.text*)
->  
->  #define EXIT_DATA							\
->  	*(.exit.data .exit.data.*)					\
-> diff --git a/include/linux/memblock.h b/include/linux/memblock.h
-> index e2082240586d..3e1f1d42dde7 100644
-> --- a/include/linux/memblock.h
-> +++ b/include/linux/memblock.h
-> @@ -100,13 +100,13 @@ struct memblock {
->  
->  extern struct memblock memblock;
->  
-> +#define __init_memblock        __section(".mbinit.text") __cold notrace \
-> +						  __latent_entropy
-> +#define __initdata_memblock    __section(".mbinit.data")
-> +
->  #ifndef CONFIG_ARCH_KEEP_MEMBLOCK
-> -#define __init_memblock __meminit
-> -#define __initdata_memblock __meminitdata
->  void memblock_discard(void);
->  #else
-> -#define __init_memblock
-> -#define __initdata_memblock
->  static inline void memblock_discard(void) {}
->  #endif
->  
+What is the intended behavior of a failed cmpxchg()? Is it the same as a 
+relaxed one?
+
+My suggestion would be in the direction of marking read and write events 
+of these operations as Mb, and then defining
+
+(* full barrier events that appear in non-failing RMW *)
+let RMW_MB = Mb & (dom(rmw) | range(rmw))
+
+
+let mb =
+     [M] ; fencerel(Mb) ; [M]
+   | [M] ; (po \ si ; rmw) ; [RMW_MB] ; po^? ; [M]
+   | [M] ; po^? ; [RMW_MB] ; (po \ rmw ; si) ; [M]
+   | ...
+
+The po \ si;rmw is because ordering is not provided internally of the 
+rmw, although I suspect that after we added release sequences it could 
+perhaps be simplified to
+
+
+let mb =
+     [M] ; fencerel(Mb) ; [M]
+   | [M] ; po ; [RMW_MB] ; po^? ; [M]
+   | [M] ; po^? ; [RMW_MB] ; po ; [M]
+   | ...
+
+or
+
+let mb =
+     [M] ; fencerel(Mb) ; [M]
+   | [M] ; po & (po^? ; [RMW_MB] ; po^?) ; [M]
+   | ...
+
+(the po & is necessary to avoid trivial hb cycles of an RMW event 
+happening before itself)
+
+
+Any interest?
+
+Have fun,
+jonas
+
+
 
