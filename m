@@ -1,139 +1,141 @@
-Return-Path: <linux-arch+bounces-4233-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4234-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F42308BDD5C
-	for <lists+linux-arch@lfdr.de>; Tue,  7 May 2024 10:44:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D230F8BDDB7
+	for <lists+linux-arch@lfdr.de>; Tue,  7 May 2024 11:04:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B044D284809
-	for <lists+linux-arch@lfdr.de>; Tue,  7 May 2024 08:44:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8E154284188
+	for <lists+linux-arch@lfdr.de>; Tue,  7 May 2024 09:04:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3881014D2BA;
-	Tue,  7 May 2024 08:43:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Dx9ZEMBC"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36A1A14D458;
+	Tue,  7 May 2024 09:03:56 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F40E13C9A2;
-	Tue,  7 May 2024 08:43:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE22714D447;
+	Tue,  7 May 2024 09:03:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715071435; cv=none; b=EAb/8nF3EmCEN000w+tk8sBwTIx5hJAuduJ0Yt2XTbc0kBtf/S/Y//URiN9UCI+aHzdli55+1KJgxRC+1hNjXYjqlZnCNhizm0i+4WOV3adkfjnKgS644T7FwCh82ajAZrlHwtUxb3/sL6s5tam51cY3ASZLICg5rxQUN5jkz0A=
+	t=1715072636; cv=none; b=kRnO+236K0MjvXPimNqhJ16a1eIaqGsR5gW513235PxZu1TWny8JJUxAduXJ7ZrFEnTdbvMJjWH9ofYABKd/V2ZH4SYEkXOWeYAKaTwk934jPqKzupKoeiCIuM4StoKH/rTHgbvO4bJbYumNBdolCLD3KJZuMnSZxKoA/4v51H4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715071435; c=relaxed/simple;
-	bh=jG+THjCeGW3zi8tCrAye5vr5GHkdWZme1tB+kqii8dg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aqoNGaiRH+itxXlW++QC4vlpT5sgpoyslOxTESMbqR/rN+6fbsGWYMJuAsmLxcj91OxLnTbV04vGHzvSLkX/N15QCX9XOaDg7FVoOF5Dk5p1qTVW0MhsQqHXMdIYnllb0w/yVzkD/BGoBFviT/Q2k5glcIKpxqmhZ2egs5PX22g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Dx9ZEMBC; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a59a64db066so702275666b.3;
-        Tue, 07 May 2024 01:43:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715071432; x=1715676232; darn=vger.kernel.org;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=X5grxZOrhBPyt4V3AJI3sb+Y61ObnxWKs5SwjjhtWck=;
-        b=Dx9ZEMBCf8QPc4iY/9P5wtN3Qb/4d5YFuKLOwhsbFSn9Ou27xeXaw9kkaKNvepWNRx
-         AgW97QcXUghdqp+Q7RC7vhZnzVXDBHsMJWR+qnYmIo0RFKLNSqlmISmCVHajP2mzutB5
-         Fwd5W4qmM6dGEG2tANy7PEqbQS+qdhP+oq0porxuy+tMhz6LHHV9EH5uy8YHr6muOrp5
-         UpnsX5ZV6nboh/VAEXOmXBNU2qRAIy6W58Z21CpE/CKy30QOClJuqbR07VPyiH8r36JD
-         OON7UCfRdo5wm8gyKjvX4cBrQyeEJx7E3M5E24JFvPZKHnbMIee5dgHi3gxA1T9Iaww2
-         Qf2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715071432; x=1715676232;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :reply-to:message-id:subject:cc:to:from:date:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=X5grxZOrhBPyt4V3AJI3sb+Y61ObnxWKs5SwjjhtWck=;
-        b=kqYY8etL9gnDCETaRF8xLf5jttFvJQNxpH7pcbJIt0mkp/PM1vWeqVnSP5vSK4nOH3
-         GknMwbr8YSC+zwjUl+fn27dS7P78krU2BFFhtaJxvGMzqe6EO9L+2fZBLvlOLZuAePXd
-         jGsKsBq66x2yAGJ05THvgFjqg959NAXNNaei/vGuclbsRu3MV7Zypz5WuFqRuVCKUSAj
-         GeVzwslYAxGhuIkuMNNkodwOtnmsuD13OBHm+pzShyD6Vkr84hxYUWP1PQdokqnAtiZc
-         sHQhAldUW5Uyx8jimZJz8l9WfQE7u006EZE9IjxQDBOgjz8uUEsmqXPueVQpF2W3r2nJ
-         T1Mw==
-X-Forwarded-Encrypted: i=1; AJvYcCVSBrUlrmGf6LFHJ/YqH32ZWUbFYJ5N4HIx5npzi9PfIbCVhspmPcabOzaOnIG+dAUaRVwGEXNPSLTmjehpqYJYjjsa9tfC8tmwljadE6U97BwBUcULzssAPGlhnX+Y8pLXh6FpgQxPxw==
-X-Gm-Message-State: AOJu0YzCZVkjAEp5gsntNUzE8WBz5d+gn7Ft5fqumVOdXX+NKjF5Ml7m
-	XOBm0FNMQ6fg9D/iQYUFzLpAs67Lt4zPi7VXjgd2j9lu9RR9adMQ
-X-Google-Smtp-Source: AGHT+IGLgCI7he3kJp9TCd8g/C08i2amvg2QPJVDnTHoYk8pb2Bt8vfiWtniWWbfFNp2eQjqmWrExQ==
-X-Received: by 2002:a50:aad1:0:b0:572:a76e:645a with SMTP id r17-20020a50aad1000000b00572a76e645amr7816340edc.12.1715071431748;
-        Tue, 07 May 2024 01:43:51 -0700 (PDT)
-Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id d25-20020aa7ce19000000b00572a7127cb0sm6120455edv.50.2024.05.07.01.43.51
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 07 May 2024 01:43:51 -0700 (PDT)
-Date: Tue, 7 May 2024 08:43:50 +0000
-From: Wei Yang <richard.weiyang@gmail.com>
-To: kernel test robot <lkp@intel.com>
-Cc: Wei Yang <richard.weiyang@gmail.com>, arnd@arndb.de, rppt@kernel.org,
-	oe-kbuild-all@lists.linux.dev, linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH] mm/memblock: discard .text/.data if
- CONFIG_ARCH_KEEP_MEMBLOCK not set
-Message-ID: <20240507084350.mc6e46gecyzaqnhb@master>
-Reply-To: Wei Yang <richard.weiyang@gmail.com>
-References: <20240506012104.10864-1-richard.weiyang@gmail.com>
- <202405071200.YgYuuCBu-lkp@intel.com>
+	s=arc-20240116; t=1715072636; c=relaxed/simple;
+	bh=2xnallKHSfS3jGvqNeNimXCB0bIdex0YoRsg8+jbQVg=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=cymAvXR65S8Xmbi3rh0S/7vjvV4e/QxSc7/TNUlZEiQIbgOBVtH5BK02lICbKo5tQ99v3xvXA+TO4n0i1vkxCjkJhbNVxExN/zm8xiwvp2aNSOzphvHGTIYofuUV8/Mko1m1NKtvYOrRTjQKSZZrZ3Je98Z29R01EEFkgepj+UU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.29])
+	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4VYWx16Pqrz9xFmK;
+	Tue,  7 May 2024 16:42:13 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id A417E14010C;
+	Tue,  7 May 2024 17:03:44 +0800 (CST)
+Received: from [10.45.158.162] (unknown [10.45.158.162])
+	by APP2 (Coremail) with SMTP id GxC2BwB3sSVh7jlm51OtBw--.22983S2;
+	Tue, 07 May 2024 10:03:43 +0100 (CET)
+Message-ID: <fd2369ed-1e84-4e44-ac80-cd316f8e7051@huaweicloud.com>
+Date: Tue, 7 May 2024 11:03:27 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202405071200.YgYuuCBu-lkp@intel.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+User-Agent: Mozilla Thunderbird
+From: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Subject: Re: [PATCH memory-model 2/4] Documentation/litmus-tests: Demonstrate
+ unordered failing cmpxchg
+To: Alan Stern <stern@rowland.harvard.edu>,
+ "Paul E. McKenney" <paulmck@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ kernel-team@meta.com, mingo@kernel.org, parri.andrea@gmail.com,
+ will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
+ npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+ luc.maranget@inria.fr, akiyks@gmail.com,
+ Frederic Weisbecker <frederic@kernel.org>, Daniel Lustig
+ <dlustig@nvidia.com>, Joel Fernandes <joel@joelfernandes.org>,
+ Mark Rutland <mark.rutland@arm.com>, Jonathan Corbet <corbet@lwn.net>,
+ linux-doc@vger.kernel.org
+References: <42a43181-a431-44bd-8aff-6b305f8111ba@paulmck-laptop>
+ <20240501232132.1785861-2-paulmck@kernel.org>
+ <c97f0529-5a8f-4a82-8e14-0078d4372bdc@huaweicloud.com>
+ <16381d02-cb70-4ae5-b24e-aa73afad9aed@huaweicloud.com>
+ <2a695f63-6c9a-4837-ac03-f0a5c63daaaf@paulmck-laptop>
+ <c168f56f-dfae-4cac-bc61-fc5a93ee3aed@rowland.harvard.edu>
+In-Reply-To: <c168f56f-dfae-4cac-bc61-fc5a93ee3aed@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:GxC2BwB3sSVh7jlm51OtBw--.22983S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7KryrCrW7tFy5Ww4DKw1rZwb_yoW8CrWfpa
+	9rKa10kr1UXr4Sk34qqw43JrWFvwsrJay5WFyrXFWqyayqkF4SyF4Yvry5Kr93Jws7Jw42
+	yrWYga92vayDZFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUkmb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+	64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYY7kG6xAYrwCIc40Y0x0E
+	wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JV
+	WxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+	42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUgEksDUUUU
+X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
 
-On Tue, May 07, 2024 at 01:13:05PM +0800, kernel test robot wrote:
->Hi Wei,
->
->kernel test robot noticed the following build warnings:
->
->[auto build test WARNING on akpm-mm/mm-everything]
->
->url:    https://github.com/intel-lab-lkp/linux/commits/Wei-Yang/mm-memblock-discard-text-data-if-CONFIG_ARCH_KEEP_MEMBLOCK-not-set/20240506-092345
->base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
->patch link:    https://lore.kernel.org/r/20240506012104.10864-1-richard.weiyang%40gmail.com
->patch subject: [PATCH] mm/memblock: discard .text/.data if CONFIG_ARCH_KEEP_MEMBLOCK not set
->config: powerpc-allnoconfig
->compiler: powerpc-linux-gcc (GCC) 13.2.0
->reproduce (this is a W=1 build):
->
->If you fix the issue in a separate patch/commit (i.e. not just a new version of
->the same patch/commit), kindly add following tags
->| Reported-by: kernel test robot <lkp@intel.com>
->| Closes: https://lore.kernel.org/oe-kbuild-all/202405071200.YgYuuCBu-lkp@intel.com/
->
->All warnings (new ones prefixed by >>):
->
->>> powerpc-linux-ld: warning: orphan section `.mbinit.text' from `mm/memblock.o' being placed in section `.mbinit.text'
->>> powerpc-linux-ld: warning: orphan section `.mbinit.text' from `mm/memblock.o' being placed in section `.mbinit.text'
->>> powerpc-linux-ld: warning: orphan section `.mbinit.text' from `mm/memblock.o' being placed in section `.mbinit.text'
->
->-- 
->0-DAY CI Kernel Test Service
->https://github.com/intel/lkp-tests/wiki
 
->reproduce (this is a W=1 build):
->        git clone https://github.com/intel/lkp-tests.git ~/lkp-tests
->        git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
->        git fetch akpm-mm mm-everything
->        git checkout akpm-mm/mm-everything
->        b4 shazam https://lore.kernel.org/r/20240506012104.10864-1-richard.weiyang@gmail.com
->        # save the config file
->        mkdir build_dir && cp config build_dir/.config
->        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-13.2.0 ~/lkp-tests/kbuild/make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
->        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-13.2.0 ~/lkp-tests/kbuild/make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
 
-Can I reproduce this on x86? I don't have a powerpc machine.
+Am 5/6/2024 um 9:21 PM schrieb Alan Stern:
+> On Mon, May 06, 2024 at 11:00:42AM -0700, Paul E. McKenney wrote:
+>> On Mon, May 06, 2024 at 06:30:45PM +0200, Jonas Oberhauser wrote:
+>>> Am 5/6/2024 um 12:05 PM schrieb Jonas Oberhauser:
+>>>> Am 5/2/2024 um 1:21 AM schrieb Paul E. McKenney:
+>>>>> This commit adds four litmus tests showing that a failing cmpxchg()
+>>>>> operation is unordered unless followed by an smp_mb__after_atomic()
+>>>>> operation.
+>>>>
+>>>> So far, my understanding was that all RMW operations without suffix
+>>>> (xchg(), cmpxchg(), ...) will be interpreted as F[Mb];...;F[Mb].
+> 
+> It's more accurate to say that RMW operations without a suffix that
+> return a value will be interpreted that way.  So for example,
+> atomic_inc() doesn't imply any ordering, because it doesn't return a
+> value.
+> 
 
--- 
-Wei Yang
-Help you, Help me
+I see, thanks.
+
+>>>> barriers explicitlyinside the cat model, instead of relying on implicit
+>>>> conversions internal to herd.
+> 
+> Don't the annotations in linux-kernel.def and linux-kernel.bell (like
+> "noreturn") already make this explicit?
+
+Not that I'm aware. All I can see there is that according to .bell RMW 
+don't have an mb mode, but according to .def they do.
+
+How this mb disappears between parsing the code (.def) and interpreting 
+it (.bell) is totally implicit. Including how noreturn affects this 
+disappeareance.
+
+In fact most tool developers that support LKMM (Viktor, Hernan, and Luc) 
+were at least once confused about it. And I think they read those files 
+more carefully than I.
+
+https://github.com/herd/herdtools7/issues/384#issuecomment-1132859904
+
+Note that while there's no explicit annotation of noreturn in the .def 
+file, at least I can guess based on context that it should be annotated 
+on all the functions that don't have _return and for which also a 
+version with _return exists.
+
+
+have fun,
+   jonas
+
 
