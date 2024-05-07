@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-4256-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4257-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 124C58BF317
-	for <lists+linux-arch@lfdr.de>; Wed,  8 May 2024 02:05:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C0158BF339
+	for <lists+linux-arch@lfdr.de>; Wed,  8 May 2024 02:08:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 353E81C22868
-	for <lists+linux-arch@lfdr.de>; Wed,  8 May 2024 00:05:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0FF232894FF
+	for <lists+linux-arch@lfdr.de>; Wed,  8 May 2024 00:08:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BC3813340E;
-	Tue,  7 May 2024 23:41:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 136DA1384AB;
+	Tue,  7 May 2024 23:52:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WH1d1Zrd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n49JT54k"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C242B13329C;
-	Tue,  7 May 2024 23:41:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7DFF137C57;
+	Tue,  7 May 2024 23:52:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715125274; cv=none; b=OkB35gfkdzPhtxtDSZ4xgBJaX+HxhZRSo/vGhdQEEV5SQ3ksd4gKg110XV6oqNBBnWG8KIrg6i0gwC28u81zkEaeCKv2aG1aTHFRZ4SGQJc6xiwi22vHHkA0ro4iKNjdg8lGoLJOKgqC9G9mHqwnUFwN3gpTLAqnx0RSIXLU52w=
+	t=1715125951; cv=none; b=IqUp6RYALiTY7UDWFMtjMbg7fvIQRqyYquujrAq88IL5LHav6nFPtEOd8DS7mFqBP0INngNR5NBGZ+RisHpb83cH89kFyEzTGo06rWMJQlLvcI9E+RuArAiq/K71W1pB1wTPj4z1RQtvrnDAX+6S+LIUqvHiI4I0PdqpCWhXfCY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715125274; c=relaxed/simple;
-	bh=ODKOUMcSjW/vZC3ltI6tPmb1ZIxhx2e2qI8/N+kVOFM=;
+	s=arc-20240116; t=1715125951; c=relaxed/simple;
+	bh=ZHKOk+aeXx1OFnnMAh08n+UXZTSNbduqOwmQlHrtQsw=;
 	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=t6CwqmleLwgGY8hf61vJqTDLDLKUtwOl7IzBSRD290G2mMXBMDMCx2LipMBcNV+MIlJJGXlHmZeFSZuCnSIP01uaA+ypqj6ovQ9E8BObn5JsrlczQyJPZMNFW+hJSgwjhYqdHmj6d7yuiJRfiFhF3lDHotmh5ouLRqgfEu8Km9Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WH1d1Zrd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D7C2C2BBFC;
-	Tue,  7 May 2024 23:41:04 +0000 (UTC)
+	 Mime-Version:Content-Type; b=C/VGgno5YeiGN4vK6jgYPIK47GusZBjFoPoOefQ38tkhhPscuBsGlDYwTVO9gOHi7sAhJaiGBnuG1657NrODBfAji8iTrfcr9wPg9PIuCN7Cwg1pi711k9lXl7+4n1/+QjxaClMz/9VZctS3oAgPs2suCCr8b1/E7lSf5SRJnDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n49JT54k; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93207C3277B;
+	Tue,  7 May 2024 23:52:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715125273;
-	bh=ODKOUMcSjW/vZC3ltI6tPmb1ZIxhx2e2qI8/N+kVOFM=;
+	s=k20201202; t=1715125949;
+	bh=ZHKOk+aeXx1OFnnMAh08n+UXZTSNbduqOwmQlHrtQsw=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=WH1d1ZrdOijFn1cT49Jm2ZUSrhswkNac03IVHqq7Eohwb66eyC/upbIRg5OmSQrS5
-	 590jVcfK2eY7mGIT+Mu2vfZ+2kgvT+bvvG+nO0mpjkaiB/hzuVoCqKdsgEfcB6GUI1
-	 tZHVMdm8HMaoJWCDDdSEsUeSS2shrn9LwS64jApcEtp551mG5S0J2RXLfrbG59V5J/
-	 HlHuUhoLZsEzbSOo52SetyHK+GisTyafXt2qQ3WQN6uI/FPqAL3Mvb4Ag0onvgsMRn
-	 PVoqChvTS3nyekeTg4nrB1W8PoOH/gLtrOXEqRETwcHpFeC7NS6eZgZtaW77r3KgQl
-	 SXWjnlSGSut3Q==
-Date: Wed, 8 May 2024 08:41:02 +0900
+	b=n49JT54krC0rkVMGEUcRxjmIKOzywZu4KZ1Tujkpyvl4C6qAX/Fyvb5kUew7r1y3J
+	 iJKirIM4rRYXziALuKZESP9lRRBBNOeWqa2gey0bE+RHAVpvVLE2i6clHL0no1SDt6
+	 IvbvG9MpKjHq6SC2sdoVnTqZVNAKMRyaZXVZ9Vq9SX1CepGF6MjNDYU7JqzArlWPy9
+	 YWa5EvxqkO+vL7fgmwG4uzsXjq1BjWj0lsQYRUIaIy7vdFOOE2alXVMFrNtUTwIfhD
+	 HWxz0q06EcWyYSSTFcR48BusPIclUw4je6bVGEO/lJSPPY9VyYf+H1cLluUGLRqchQ
+	 TsjNaMdCn7qjw==
+Date: Wed, 8 May 2024 08:52:17 +0900
 From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 To: Mike Rapoport <rppt@kernel.org>
 Cc: linux-kernel@vger.kernel.org, Alexandre Ghiti <alexghiti@rivosinc.com>,
@@ -69,12 +69,12 @@ Cc: linux-kernel@vger.kernel.org, Alexandre Ghiti <alexghiti@rivosinc.com>,
  linux-trace-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
  loongarch@lists.linux.dev, netdev@vger.kernel.org,
  sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH RESEND v8 05/16] module: make module_memory_{alloc,free}
- more self-contained
-Message-Id: <20240508084102.9e9b18a9b111d427e7cc9c94@kernel.org>
-In-Reply-To: <20240505160628.2323363-6-rppt@kernel.org>
+Subject: Re: [PATCH RESEND v8 07/16] mm/execmem, arch: convert simple
+ overrides of module_alloc to execmem
+Message-Id: <20240508085217.5094c121f0d8cc1593cb1b75@kernel.org>
+In-Reply-To: <20240505160628.2323363-8-rppt@kernel.org>
 References: <20240505160628.2323363-1-rppt@kernel.org>
-	<20240505160628.2323363-6-rppt@kernel.org>
+	<20240505160628.2323363-8-rppt@kernel.org>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -82,16 +82,30 @@ List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Sun,  5 May 2024 19:06:17 +0300
+On Sun,  5 May 2024 19:06:19 +0300
 Mike Rapoport <rppt@kernel.org> wrote:
 
 > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 > 
-> Move the logic related to the memory allocation and freeing into
-> module_memory_alloc() and module_memory_free().
+> Several architectures override module_alloc() only to define address
+> range for code allocations different than VMALLOC address space.
+> 
+> Provide a generic implementation in execmem that uses the parameters for
+> address space ranges, required alignment and page protections provided
+> by architectures.
+> 
+> The architectures must fill execmem_info structure and implement
+> execmem_arch_setup() that returns a pointer to that structure. This way the
+> execmem initialization won't be called from every architecture, but rather
+> from a central place, namely a core_initcall() in execmem.
+> 
+> The execmem provides execmem_alloc() API that wraps __vmalloc_node_range()
+> with the parameters defined by the architectures.  If an architecture does
+> not implement execmem_arch_setup(), execmem_alloc() will fall back to
+> module_alloc().
 > 
 
 Looks good to me.
@@ -101,126 +115,424 @@ Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 Thanks,
 
 > Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+> Acked-by: Song Liu <song@kernel.org>
 > ---
->  kernel/module/main.c | 64 +++++++++++++++++++++++++++-----------------
->  1 file changed, 39 insertions(+), 25 deletions(-)
+>  arch/loongarch/kernel/module.c | 19 ++++++++--
+>  arch/mips/kernel/module.c      | 20 ++++++++--
+>  arch/nios2/kernel/module.c     | 21 ++++++++---
+>  arch/parisc/kernel/module.c    | 24 ++++++++----
+>  arch/riscv/kernel/module.c     | 24 ++++++++----
+>  arch/sparc/kernel/module.c     | 20 ++++++++--
+>  include/linux/execmem.h        | 47 ++++++++++++++++++++++++
+>  mm/execmem.c                   | 67 ++++++++++++++++++++++++++++++++--
+>  mm/mm_init.c                   |  2 +
+>  9 files changed, 210 insertions(+), 34 deletions(-)
 > 
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index e1e8a7a9d6c1..5b82b069e0d3 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -1203,15 +1203,44 @@ static bool mod_mem_use_vmalloc(enum mod_mem_type type)
->  		mod_mem_type_is_core_data(type);
->  }
->  
-> -static void *module_memory_alloc(unsigned int size, enum mod_mem_type type)
-> +static int module_memory_alloc(struct module *mod, enum mod_mem_type type)
->  {
-> +	unsigned int size = PAGE_ALIGN(mod->mem[type].size);
-> +	void *ptr;
-> +
-> +	mod->mem[type].size = size;
-> +
->  	if (mod_mem_use_vmalloc(type))
-> -		return vzalloc(size);
-> -	return module_alloc(size);
-> +		ptr = vmalloc(size);
-> +	else
-> +		ptr = module_alloc(size);
-> +
-> +	if (!ptr)
-> +		return -ENOMEM;
-> +
-> +	/*
-> +	 * The pointer to these blocks of memory are stored on the module
-> +	 * structure and we keep that around so long as the module is
-> +	 * around. We only free that memory when we unload the module.
-> +	 * Just mark them as not being a leak then. The .init* ELF
-> +	 * sections *do* get freed after boot so we *could* treat them
-> +	 * slightly differently with kmemleak_ignore() and only grey
-> +	 * them out as they work as typical memory allocations which
-> +	 * *do* eventually get freed, but let's just keep things simple
-> +	 * and avoid *any* false positives.
-> +	 */
-> +	kmemleak_not_leak(ptr);
-> +
-> +	memset(ptr, 0, size);
-> +	mod->mem[type].base = ptr;
-> +
-> +	return 0;
->  }
->  
-> -static void module_memory_free(void *ptr, enum mod_mem_type type)
-> +static void module_memory_free(struct module *mod, enum mod_mem_type type)
->  {
-> +	void *ptr = mod->mem[type].base;
-> +
->  	if (mod_mem_use_vmalloc(type))
->  		vfree(ptr);
->  	else
-> @@ -1229,12 +1258,12 @@ static void free_mod_mem(struct module *mod)
->  		/* Free lock-classes; relies on the preceding sync_rcu(). */
->  		lockdep_free_key_range(mod_mem->base, mod_mem->size);
->  		if (mod_mem->size)
-> -			module_memory_free(mod_mem->base, type);
-> +			module_memory_free(mod, type);
->  	}
->  
->  	/* MOD_DATA hosts mod, so free it at last */
->  	lockdep_free_key_range(mod->mem[MOD_DATA].base, mod->mem[MOD_DATA].size);
-> -	module_memory_free(mod->mem[MOD_DATA].base, MOD_DATA);
-> +	module_memory_free(mod, MOD_DATA);
->  }
->  
->  /* Free a module, remove from lists, etc. */
-> @@ -2225,7 +2254,6 @@ static int find_module_sections(struct module *mod, struct load_info *info)
->  static int move_module(struct module *mod, struct load_info *info)
->  {
->  	int i;
-> -	void *ptr;
->  	enum mod_mem_type t = 0;
->  	int ret = -ENOMEM;
->  
-> @@ -2234,26 +2262,12 @@ static int move_module(struct module *mod, struct load_info *info)
->  			mod->mem[type].base = NULL;
->  			continue;
->  		}
-> -		mod->mem[type].size = PAGE_ALIGN(mod->mem[type].size);
-> -		ptr = module_memory_alloc(mod->mem[type].size, type);
-> -		/*
-> -                 * The pointer to these blocks of memory are stored on the module
-> -                 * structure and we keep that around so long as the module is
-> -                 * around. We only free that memory when we unload the module.
-> -                 * Just mark them as not being a leak then. The .init* ELF
-> -                 * sections *do* get freed after boot so we *could* treat them
-> -                 * slightly differently with kmemleak_ignore() and only grey
-> -                 * them out as they work as typical memory allocations which
-> -                 * *do* eventually get freed, but let's just keep things simple
-> -                 * and avoid *any* false positives.
-> -		 */
-> -		kmemleak_not_leak(ptr);
-> -		if (!ptr) {
-> +
-> +		ret = module_memory_alloc(mod, type);
-> +		if (ret) {
->  			t = type;
->  			goto out_enomem;
->  		}
-> -		memset(ptr, 0, mod->mem[type].size);
-> -		mod->mem[type].base = ptr;
->  	}
->  
->  	/* Transfer each section which specifies SHF_ALLOC */
-> @@ -2296,7 +2310,7 @@ static int move_module(struct module *mod, struct load_info *info)
+> diff --git a/arch/loongarch/kernel/module.c b/arch/loongarch/kernel/module.c
+> index c7d0338d12c1..ca6dd7ea1610 100644
+> --- a/arch/loongarch/kernel/module.c
+> +++ b/arch/loongarch/kernel/module.c
+> @@ -18,6 +18,7 @@
+>  #include <linux/ftrace.h>
+>  #include <linux/string.h>
+>  #include <linux/kernel.h>
+> +#include <linux/execmem.h>
+>  #include <asm/alternative.h>
+>  #include <asm/inst.h>
+>  #include <asm/unwind.h>
+> @@ -490,10 +491,22 @@ int apply_relocate_add(Elf_Shdr *sechdrs, const char *strtab,
 >  	return 0;
->  out_enomem:
->  	for (t--; t >= 0; t--)
-> -		module_memory_free(mod->mem[t].base, t);
-> +		module_memory_free(mod, t);
->  	return ret;
 >  }
 >  
+> -void *module_alloc(unsigned long size)
+> +static struct execmem_info execmem_info __ro_after_init;
+> +
+> +struct execmem_info __init *execmem_arch_setup(void)
+>  {
+> -	return __vmalloc_node_range(size, 1, MODULES_VADDR, MODULES_END,
+> -			GFP_KERNEL, PAGE_KERNEL, 0, NUMA_NO_NODE, __builtin_return_address(0));
+> +	execmem_info = (struct execmem_info){
+> +		.ranges = {
+> +			[EXECMEM_DEFAULT] = {
+> +				.start	= MODULES_VADDR,
+> +				.end	= MODULES_END,
+> +				.pgprot	= PAGE_KERNEL,
+> +				.alignment = 1,
+> +			},
+> +		},
+> +	};
+> +
+> +	return &execmem_info;
+>  }
+>  
+>  static void module_init_ftrace_plt(const Elf_Ehdr *hdr,
+> diff --git a/arch/mips/kernel/module.c b/arch/mips/kernel/module.c
+> index 9a6c96014904..59225a3cf918 100644
+> --- a/arch/mips/kernel/module.c
+> +++ b/arch/mips/kernel/module.c
+> @@ -20,6 +20,7 @@
+>  #include <linux/kernel.h>
+>  #include <linux/spinlock.h>
+>  #include <linux/jump_label.h>
+> +#include <linux/execmem.h>
+>  #include <asm/jump_label.h>
+>  
+>  struct mips_hi16 {
+> @@ -32,11 +33,22 @@ static LIST_HEAD(dbe_list);
+>  static DEFINE_SPINLOCK(dbe_lock);
+>  
+>  #ifdef MODULES_VADDR
+> -void *module_alloc(unsigned long size)
+> +static struct execmem_info execmem_info __ro_after_init;
+> +
+> +struct execmem_info __init *execmem_arch_setup(void)
+>  {
+> -	return __vmalloc_node_range(size, 1, MODULES_VADDR, MODULES_END,
+> -				GFP_KERNEL, PAGE_KERNEL, 0, NUMA_NO_NODE,
+> -				__builtin_return_address(0));
+> +	execmem_info = (struct execmem_info){
+> +		.ranges = {
+> +			[EXECMEM_DEFAULT] = {
+> +				.start	= MODULES_VADDR,
+> +				.end	= MODULES_END,
+> +				.pgprot	= PAGE_KERNEL,
+> +				.alignment = 1,
+> +			},
+> +		},
+> +	};
+> +
+> +	return &execmem_info;
+>  }
+>  #endif
+>  
+> diff --git a/arch/nios2/kernel/module.c b/arch/nios2/kernel/module.c
+> index 9c97b7513853..0d1ee86631fc 100644
+> --- a/arch/nios2/kernel/module.c
+> +++ b/arch/nios2/kernel/module.c
+> @@ -18,15 +18,26 @@
+>  #include <linux/fs.h>
+>  #include <linux/string.h>
+>  #include <linux/kernel.h>
+> +#include <linux/execmem.h>
+>  
+>  #include <asm/cacheflush.h>
+>  
+> -void *module_alloc(unsigned long size)
+> +static struct execmem_info execmem_info __ro_after_init;
+> +
+> +struct execmem_info __init *execmem_arch_setup(void)
+>  {
+> -	return __vmalloc_node_range(size, 1, MODULES_VADDR, MODULES_END,
+> -				    GFP_KERNEL, PAGE_KERNEL_EXEC,
+> -				    VM_FLUSH_RESET_PERMS, NUMA_NO_NODE,
+> -				    __builtin_return_address(0));
+> +	execmem_info = (struct execmem_info){
+> +		.ranges = {
+> +			[EXECMEM_DEFAULT] = {
+> +				.start	= MODULES_VADDR,
+> +				.end	= MODULES_END,
+> +				.pgprot	= PAGE_KERNEL_EXEC,
+> +				.alignment = 1,
+> +			},
+> +		},
+> +	};
+> +
+> +	return &execmem_info;
+>  }
+>  
+>  int apply_relocate_add(Elf32_Shdr *sechdrs, const char *strtab,
+> diff --git a/arch/parisc/kernel/module.c b/arch/parisc/kernel/module.c
+> index d214bbe3c2af..bdfa85e10c1b 100644
+> --- a/arch/parisc/kernel/module.c
+> +++ b/arch/parisc/kernel/module.c
+> @@ -49,6 +49,7 @@
+>  #include <linux/bug.h>
+>  #include <linux/mm.h>
+>  #include <linux/slab.h>
+> +#include <linux/execmem.h>
+>  
+>  #include <asm/unwind.h>
+>  #include <asm/sections.h>
+> @@ -173,15 +174,22 @@ static inline int reassemble_22(int as22)
+>  		((as22 & 0x0003ff) << 3));
+>  }
+>  
+> -void *module_alloc(unsigned long size)
+> +static struct execmem_info execmem_info __ro_after_init;
+> +
+> +struct execmem_info __init *execmem_arch_setup(void)
+>  {
+> -	/* using RWX means less protection for modules, but it's
+> -	 * easier than trying to map the text, data, init_text and
+> -	 * init_data correctly */
+> -	return __vmalloc_node_range(size, 1, VMALLOC_START, VMALLOC_END,
+> -				    GFP_KERNEL,
+> -				    PAGE_KERNEL_RWX, 0, NUMA_NO_NODE,
+> -				    __builtin_return_address(0));
+> +	execmem_info = (struct execmem_info){
+> +		.ranges = {
+> +			[EXECMEM_DEFAULT] = {
+> +				.start	= VMALLOC_START,
+> +				.end	= VMALLOC_END,
+> +				.pgprot	= PAGE_KERNEL_RWX,
+> +				.alignment = 1,
+> +			},
+> +		},
+> +	};
+> +
+> +	return &execmem_info;
+>  }
+>  
+>  #ifndef CONFIG_64BIT
+> diff --git a/arch/riscv/kernel/module.c b/arch/riscv/kernel/module.c
+> index 5e5a82644451..182904127ba0 100644
+> --- a/arch/riscv/kernel/module.c
+> +++ b/arch/riscv/kernel/module.c
+> @@ -14,6 +14,7 @@
+>  #include <linux/vmalloc.h>
+>  #include <linux/sizes.h>
+>  #include <linux/pgtable.h>
+> +#include <linux/execmem.h>
+>  #include <asm/alternative.h>
+>  #include <asm/sections.h>
+>  
+> @@ -906,13 +907,22 @@ int apply_relocate_add(Elf_Shdr *sechdrs, const char *strtab,
+>  }
+>  
+>  #if defined(CONFIG_MMU) && defined(CONFIG_64BIT)
+> -void *module_alloc(unsigned long size)
+> -{
+> -	return __vmalloc_node_range(size, 1, MODULES_VADDR,
+> -				    MODULES_END, GFP_KERNEL,
+> -				    PAGE_KERNEL, VM_FLUSH_RESET_PERMS,
+> -				    NUMA_NO_NODE,
+> -				    __builtin_return_address(0));
+> +static struct execmem_info execmem_info __ro_after_init;
+> +
+> +struct execmem_info __init *execmem_arch_setup(void)
+> +{
+> +	execmem_info = (struct execmem_info){
+> +		.ranges = {
+> +			[EXECMEM_DEFAULT] = {
+> +				.start	= MODULES_VADDR,
+> +				.end	= MODULES_END,
+> +				.pgprot	= PAGE_KERNEL,
+> +				.alignment = 1,
+> +			},
+> +		},
+> +	};
+> +
+> +	return &execmem_info;
+>  }
+>  #endif
+>  
+> diff --git a/arch/sparc/kernel/module.c b/arch/sparc/kernel/module.c
+> index d37adb2a0b54..8b7ee45defc3 100644
+> --- a/arch/sparc/kernel/module.c
+> +++ b/arch/sparc/kernel/module.c
+> @@ -14,6 +14,7 @@
+>  #include <linux/string.h>
+>  #include <linux/ctype.h>
+>  #include <linux/mm.h>
+> +#include <linux/execmem.h>
+>  
+>  #include <asm/processor.h>
+>  #include <asm/spitfire.h>
+> @@ -21,11 +22,22 @@
+>  
+>  #include "entry.h"
+>  
+> -void *module_alloc(unsigned long size)
+> +static struct execmem_info execmem_info __ro_after_init;
+> +
+> +struct execmem_info __init *execmem_arch_setup(void)
+>  {
+> -	return __vmalloc_node_range(size, 1, MODULES_VADDR, MODULES_END,
+> -				GFP_KERNEL, PAGE_KERNEL, 0, NUMA_NO_NODE,
+> -				__builtin_return_address(0));
+> +	execmem_info = (struct execmem_info){
+> +		.ranges = {
+> +			[EXECMEM_DEFAULT] = {
+> +				.start	= MODULES_VADDR,
+> +				.end	= MODULES_END,
+> +				.pgprot	= PAGE_KERNEL,
+> +				.alignment = 1,
+> +			},
+> +		},
+> +	};
+> +
+> +	return &execmem_info;
+>  }
+>  
+>  /* Make generic code ignore STT_REGISTER dummy undefined symbols.  */
+> diff --git a/include/linux/execmem.h b/include/linux/execmem.h
+> index 8eebc8ef66e7..96fc59258467 100644
+> --- a/include/linux/execmem.h
+> +++ b/include/linux/execmem.h
+> @@ -33,6 +33,47 @@ enum execmem_type {
+>  	EXECMEM_TYPE_MAX,
+>  };
+>  
+> +/**
+> + * struct execmem_range - definition of an address space suitable for code and
+> + *			  related data allocations
+> + * @start:	address space start
+> + * @end:	address space end (inclusive)
+> + * @pgprot:	permissions for memory in this address space
+> + * @alignment:	alignment required for text allocations
+> + */
+> +struct execmem_range {
+> +	unsigned long   start;
+> +	unsigned long   end;
+> +	pgprot_t        pgprot;
+> +	unsigned int	alignment;
+> +};
+> +
+> +/**
+> + * struct execmem_info - architecture parameters for code allocations
+> + * @ranges: array of parameter sets defining architecture specific
+> + * parameters for executable memory allocations. The ranges that are not
+> + * explicitly initialized by an architecture use parameters defined for
+> + * @EXECMEM_DEFAULT.
+> + */
+> +struct execmem_info {
+> +	struct execmem_range	ranges[EXECMEM_TYPE_MAX];
+> +};
+> +
+> +/**
+> + * execmem_arch_setup - define parameters for allocations of executable memory
+> + *
+> + * A hook for architectures to define parameters for allocations of
+> + * executable memory. These parameters should be filled into the
+> + * @execmem_info structure.
+> + *
+> + * For architectures that do not implement this method a default set of
+> + * parameters will be used
+> + *
+> + * Return: a structure defining architecture parameters and restrictions
+> + * for allocations of executable memory
+> + */
+> +struct execmem_info *execmem_arch_setup(void);
+> +
+>  /**
+>   * execmem_alloc - allocate executable memory
+>   * @type: type of the allocation
+> @@ -54,4 +95,10 @@ void *execmem_alloc(enum execmem_type type, size_t size);
+>   */
+>  void execmem_free(void *ptr);
+>  
+> +#ifdef CONFIG_EXECMEM
+> +void execmem_init(void);
+> +#else
+> +static inline void execmem_init(void) {}
+> +#endif
+> +
+>  #endif /* _LINUX_EXECMEM_ALLOC_H */
+> diff --git a/mm/execmem.c b/mm/execmem.c
+> index 480adc69b20d..80e61c1e7319 100644
+> --- a/mm/execmem.c
+> +++ b/mm/execmem.c
+> @@ -11,14 +11,30 @@
+>  #include <linux/execmem.h>
+>  #include <linux/moduleloader.h>
+>  
+> -static void *__execmem_alloc(size_t size)
+> +static struct execmem_info *execmem_info __ro_after_init;
+> +
+> +static void *__execmem_alloc(struct execmem_range *range, size_t size)
+>  {
+> -	return module_alloc(size);
+> +	unsigned long start = range->start;
+> +	unsigned long end = range->end;
+> +	unsigned int align = range->alignment;
+> +	pgprot_t pgprot = range->pgprot;
+> +
+> +	return __vmalloc_node_range(size, align, start, end,
+> +				    GFP_KERNEL, pgprot, VM_FLUSH_RESET_PERMS,
+> +				    NUMA_NO_NODE, __builtin_return_address(0));
+>  }
+>  
+>  void *execmem_alloc(enum execmem_type type, size_t size)
+>  {
+> -	return __execmem_alloc(size);
+> +	struct execmem_range *range;
+> +
+> +	if (!execmem_info)
+> +		return module_alloc(size);
+> +
+> +	range = &execmem_info->ranges[type];
+> +
+> +	return __execmem_alloc(range, size);
+>  }
+>  
+>  void execmem_free(void *ptr)
+> @@ -30,3 +46,48 @@ void execmem_free(void *ptr)
+>  	WARN_ON(in_interrupt());
+>  	vfree(ptr);
+>  }
+> +
+> +static bool execmem_validate(struct execmem_info *info)
+> +{
+> +	struct execmem_range *r = &info->ranges[EXECMEM_DEFAULT];
+> +
+> +	if (!r->alignment || !r->start || !r->end || !pgprot_val(r->pgprot)) {
+> +		pr_crit("Invalid parameters for execmem allocator, module loading will fail");
+> +		return false;
+> +	}
+> +
+> +	return true;
+> +}
+> +
+> +static void execmem_init_missing(struct execmem_info *info)
+> +{
+> +	struct execmem_range *default_range = &info->ranges[EXECMEM_DEFAULT];
+> +
+> +	for (int i = EXECMEM_DEFAULT + 1; i < EXECMEM_TYPE_MAX; i++) {
+> +		struct execmem_range *r = &info->ranges[i];
+> +
+> +		if (!r->start) {
+> +			r->pgprot = default_range->pgprot;
+> +			r->alignment = default_range->alignment;
+> +			r->start = default_range->start;
+> +			r->end = default_range->end;
+> +		}
+> +	}
+> +}
+> +
+> +struct execmem_info * __weak execmem_arch_setup(void)
+> +{
+> +	return NULL;
+> +}
+> +
+> +void __init execmem_init(void)
+> +{
+> +	struct execmem_info *info = execmem_arch_setup();
+> +
+> +	if (!info || !execmem_validate(info))
+> +		return;
+> +
+> +	execmem_init_missing(info);
+> +
+> +	execmem_info = info;
+> +}
+> diff --git a/mm/mm_init.c b/mm/mm_init.c
+> index 549e76af8f82..b6a1fcf6e13a 100644
+> --- a/mm/mm_init.c
+> +++ b/mm/mm_init.c
+> @@ -27,6 +27,7 @@
+>  #include <linux/swap.h>
+>  #include <linux/cma.h>
+>  #include <linux/crash_dump.h>
+> +#include <linux/execmem.h>
+>  #include "internal.h"
+>  #include "slab.h"
+>  #include "shuffle.h"
+> @@ -2793,4 +2794,5 @@ void __init mm_core_init(void)
+>  	pti_init();
+>  	kmsan_init_runtime();
+>  	mm_cache_init();
+> +	execmem_init();
+>  }
 > -- 
 > 2.43.0
 > 
