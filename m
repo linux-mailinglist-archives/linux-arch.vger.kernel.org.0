@@ -1,283 +1,306 @@
-Return-Path: <linux-arch+bounces-4261-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4262-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E6E58BF6D9
-	for <lists+linux-arch@lfdr.de>; Wed,  8 May 2024 09:17:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0BE78BF8F8
+	for <lists+linux-arch@lfdr.de>; Wed,  8 May 2024 10:44:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BABF9B222C5
-	for <lists+linux-arch@lfdr.de>; Wed,  8 May 2024 07:17:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ADDDA1C20DE8
+	for <lists+linux-arch@lfdr.de>; Wed,  8 May 2024 08:44:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 194C22561F;
-	Wed,  8 May 2024 07:16:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="MroJbJ8q"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A41C4524AF;
+	Wed,  8 May 2024 08:44:24 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E905F24B33
-	for <linux-arch@vger.kernel.org>; Wed,  8 May 2024 07:16:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 695FC9476;
+	Wed,  8 May 2024 08:44:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715152614; cv=none; b=a2P74uPgSR5kuUKfA4idmJRVhYX7oSN3e2UMLk0ackJdgeYCyex2sAW+UKwL9tS98b2syIZGeRivVE1lYeZGTtubDARbYmtIUy0EKFXFINnow/v5IVEStPAgAbehNEU4e11icwLNqVZyJ+gDesorEHWJBT7RJpcs239OBpkyMB0=
+	t=1715157864; cv=none; b=eWsJrTOETcxfyvZBZRLzfDJ+S8/Qp2nD2zcWPvwXIY029nR7SnfbM2oYpFuQ8io5XqB+OfDXNNLFjGk4Sczi7O4sMVhnWfPVO3Lrc2+jmkx27svcn0rA11g1mwFi6oRrRh8idJr6xUmdRqcWEfxD8g0QU1HydoBygf0DDxoMbck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715152614; c=relaxed/simple;
-	bh=f0m34QhDPAosJyYZmjdMVXrVYo1qtPAsG7RWUe2/wXY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WZTyjjOjDsHH4kS7PPHzIxIEUc6zP4OoDE6eHoStilGPnNOBwNbyVrw++Nera5AKil3yQa2DAy717bBHFrPcnwvo4s2xnn33IyhmYP/9X7+8LnPSVxlDHe+pBQO6ShBtmJXFtpm9KykNw/VhE73o0ZzIc4+9RxAyxEU3KbBghEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ffwll.ch; spf=none smtp.mailfrom=ffwll.ch; dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b=MroJbJ8q; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ffwll.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ffwll.ch
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a5971c4211bso111955366b.2
-        for <linux-arch@vger.kernel.org>; Wed, 08 May 2024 00:16:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google; t=1715152610; x=1715757410; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CeBqT9Zed0z1jUGrfvGp1XN4J6QgdBnyIkuy1n0h3cY=;
-        b=MroJbJ8qrt1lWtQl9CkIOA2S2/0/Rhz+N8DSshEjcDJkwLiOBB10BYEH8HBRVgEogf
-         aproeU1tIF8tqQahdssZIDdOG5v17aE1qXU1Efu55FGbbP739+/7KY5q49fLqgFTZdy9
-         E3mqH2mJI76tWpPg8ek0CnV201zdpFmeUQeyQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715152610; x=1715757410;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CeBqT9Zed0z1jUGrfvGp1XN4J6QgdBnyIkuy1n0h3cY=;
-        b=GDsfEa3rvapnnaU8T83f5ZQafpgA7/uKQ+i3+rHpDv7NdHJZBCo3O7AJLmEQ9Unomp
-         3TXjXg6oFx6A1wCnula2OFghBsDOGcf5AwYhFISbAevGd9pm1H1ytEN9KCE+aLIPEt9x
-         nPNSM3MGgjh1X31jMd18/7jtsT+DvnfXmGcJIzkgp4fFNyWubrLsSwaHm8KUV50XuHf5
-         FDG5GlZNEQ/svPGk0lLXCXz8qYaZj862VXO/13OciI2/zKhLwgzxvO9IwknD2mEvOKLy
-         7dk57/hB8wwTGpu4NVlvWdmQVrjXYCWIuVz+/NYffVUv+ZV0vRtGLg+ilWxU9vQJkMSw
-         P3IQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVgs6XvTzY4RGqGpllTXEvvXYhr323lVQAcSF49XVkfSVSId0Jmyzu9DoyT8jRq2oGQacKPkDHRPMjeSZnM2HdPtdqySrUqKxEmDQ==
-X-Gm-Message-State: AOJu0YzFSsvVL77X03/vSaDBWQEwd1qZKN7RCxRrwzvfXsaZpVtcPs+f
-	JKtxYouxRL3Cdy1z61gadNpqIaInSQQU7IFogiARRDygrIlL91gREiPWk7unpN0=
-X-Google-Smtp-Source: AGHT+IHGhXCUeVIYLmH7Uo4M9BmI6iPWf/Ls31PQQRWTBdNBS6P3e6HNMCsyKMnZNizlrV6npyfCDA==
-X-Received: by 2002:a05:6402:378a:b0:572:d841:1189 with SMTP id 4fb4d7f45d1cf-5731da624efmr899529a12.3.1715152610093;
-        Wed, 08 May 2024 00:16:50 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id n18-20020a05640205d200b00572f0438b02sm4124571edx.6.2024.05.08.00.16.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 May 2024 00:16:49 -0700 (PDT)
-Date: Wed, 8 May 2024 09:16:46 +0200
-From: Daniel Vetter <daniel@ffwll.ch>
-To: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Pavel Begunkov <asml.silence@gmail.com>,
-	Mina Almasry <almasrymina@google.com>,
-	Christoph Hellwig <hch@infradead.org>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	David Ahern <dsahern@kernel.org>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Amritha Nambiar <amritha.nambiar@intel.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Alexander Mikhalitsyn <alexander@mihalicyn.com>,
-	Kaiyuan Zhang <kaiyuanz@google.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Simon Horman <horms@kernel.org>,
-	David Howells <dhowells@redhat.com>,
-	Florian Westphal <fw@strlen.de>,
-	Yunsheng Lin <linyunsheng@huawei.com>,
-	Kuniyuki Iwashima <kuniyu@amazon.com>, Jens Axboe <axboe@kernel.dk>,
-	Arseniy Krasnov <avkrasnov@salutedevices.com>,
-	Aleksander Lobakin <aleksander.lobakin@intel.com>,
-	Michael Lass <bevan@bi-co.net>, Jiri Pirko <jiri@resnulli.us>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	Richard Gobert <richardbgobert@gmail.com>,
-	Sridhar Samudrala <sridhar.samudrala@intel.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Johannes Berg <johannes.berg@intel.com>,
-	Abel Wu <wuyun.abel@bytedance.com>,
-	Breno Leitao <leitao@debian.org>, David Wei <dw@davidwei.uk>,
-	Shailend Chand <shailend@google.com>,
-	Harshitha Ramamurthy <hramamurthy@google.com>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Jeroen de Borst <jeroendb@google.com>,
-	Praveen Kaligineedi <pkaligineedi@google.com>
-Subject: Re: [RFC PATCH net-next v8 02/14] net: page_pool: create hooks for
- custom page providers
-Message-ID: <Zjsm3vO6rIY_sw5A@phenom.ffwll.local>
-Mail-Followup-To: Jason Gunthorpe <jgg@ziepe.ca>,
-	Pavel Begunkov <asml.silence@gmail.com>,
-	Mina Almasry <almasrymina@google.com>,
-	Christoph Hellwig <hch@infradead.org>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	David Ahern <dsahern@kernel.org>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Amritha Nambiar <amritha.nambiar@intel.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Alexander Mikhalitsyn <alexander@mihalicyn.com>,
-	Kaiyuan Zhang <kaiyuanz@google.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Simon Horman <horms@kernel.org>,
-	David Howells <dhowells@redhat.com>,
-	Florian Westphal <fw@strlen.de>,
-	Yunsheng Lin <linyunsheng@huawei.com>,
-	Kuniyuki Iwashima <kuniyu@amazon.com>, Jens Axboe <axboe@kernel.dk>,
-	Arseniy Krasnov <avkrasnov@salutedevices.com>,
-	Aleksander Lobakin <aleksander.lobakin@intel.com>,
-	Michael Lass <bevan@bi-co.net>, Jiri Pirko <jiri@resnulli.us>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	Richard Gobert <richardbgobert@gmail.com>,
-	Sridhar Samudrala <sridhar.samudrala@intel.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Johannes Berg <johannes.berg@intel.com>,
-	Abel Wu <wuyun.abel@bytedance.com>,
-	Breno Leitao <leitao@debian.org>, David Wei <dw@davidwei.uk>,
-	Shailend Chand <shailend@google.com>,
-	Harshitha Ramamurthy <hramamurthy@google.com>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Jeroen de Borst <jeroendb@google.com>,
-	Praveen Kaligineedi <pkaligineedi@google.com>
-References: <ZjjHUh1eINPg1wkn@infradead.org>
- <20b1c2d9-0b37-414c-b348-89684c0c0998@gmail.com>
- <20240507161857.GA4718@ziepe.ca>
- <ZjpVfPqGNfE5N4bl@infradead.org>
- <CAHS8izPH+sRLSiZ7vbrNtRdHrFEf8XQ61XAyHuxRSL9Jjy8YbQ@mail.gmail.com>
- <20240507164838.GG4718@ziepe.ca>
- <0d5da361-cc7b-46e9-a635-9a7a4c208444@gmail.com>
- <20240507175644.GJ4718@ziepe.ca>
- <6a50d01a-b5b9-4699-9d58-94e5f8f81c13@gmail.com>
- <20240507233247.GK4718@ziepe.ca>
+	s=arc-20240116; t=1715157864; c=relaxed/simple;
+	bh=T5zecpj4li0OuIWBMVUt5WCfBkgXJbSbJgxIbR51vqs=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=SRswTxxyLC8rm9PIKjNZp+4cp1VyJ6qoFVNYchE1oZIF5QCfKiXwcpwl1PyLAexLWSFVud7jiqq8OsKCeg4HZji0EmJ5Ughbcj9x1K2hpiZpNUuICauGyl129Q6kxIxuZBMBGeKALhVGBK+C7qKT/y6MOKMQ5w5/wu/oR5Knrb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4VZ7sK1b83z6K6Kl;
+	Wed,  8 May 2024 16:41:09 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 44CD0140B54;
+	Wed,  8 May 2024 16:44:14 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Wed, 8 May
+ 2024 09:44:13 +0100
+Date: Wed, 8 May 2024 09:44:11 +0100
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+CC: Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra
+	<peterz@infradead.org>, <linux-pm@vger.kernel.org>,
+	<loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <kvmarm@lists.linux.dev>,
+	<x86@kernel.org>, Russell King <linux@armlinux.org.uk>, Miguel Luis
+	<miguel.luis@oracle.com>, James Morse <james.morse@arm.com>, Salil Mehta
+	<salil.mehta@huawei.com>, Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+	Marc Zyngier <maz@kernel.org>, Hanjun Guo <guohanjun@huawei.com>, "Gavin
+ Shan" <gshan@redhat.com>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
+	<bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+	<linuxarm@huawei.com>, <justin.he@arm.com>, <jianyong.wu@arm.com>
+Subject: Re: [PATCH v9 06/19] ACPI: processor: Move checks and availability
+ of acpi_processor earlier
+Message-ID: <20240508094411.00001b92@Huawei.com>
+In-Reply-To: <CAJZ5v0g-Aenoj5H+pNPtoqTgV5U7K5RGNjdOnqobqxkyL5NMVQ@mail.gmail.com>
+References: <20240430142434.10471-1-Jonathan.Cameron@huawei.com>
+	<20240430142434.10471-7-Jonathan.Cameron@huawei.com>
+	<CAJZ5v0g-Aenoj5H+pNPtoqTgV5U7K5RGNjdOnqobqxkyL5NMVQ@mail.gmail.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240507233247.GK4718@ziepe.ca>
-X-Operating-System: Linux phenom 6.6.15-amd64 
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-On Tue, May 07, 2024 at 08:32:47PM -0300, Jason Gunthorpe wrote:
-> On Tue, May 07, 2024 at 08:35:37PM +0100, Pavel Begunkov wrote:
-> > On 5/7/24 18:56, Jason Gunthorpe wrote:
-> > > On Tue, May 07, 2024 at 06:25:52PM +0100, Pavel Begunkov wrote:
-> > > > On 5/7/24 17:48, Jason Gunthorpe wrote:
-> > > > > On Tue, May 07, 2024 at 09:42:05AM -0700, Mina Almasry wrote:
-> > > > > 
-> > > > > > 1. Align with devmem TCP to use udmabuf for your io_uring memory. I
-> > > > > > think in the past you said it's a uapi you don't link but in the face
-> > > > > > of this pushback you may want to reconsider.
-> > > > > 
-> > > > > dmabuf does not force a uapi, you can acquire your pages however you
-> > > > > want and wrap them up in a dmabuf. No uapi at all.
-> > > > > 
-> > > > > The point is that dmabuf already provides ops that do basically what
-> > > > > is needed here. We don't need ops calling ops just because dmabuf's
-> > > > > ops are not understsood or not perfect. Fixup dmabuf.
-> > > > 
-> > > > Those ops, for example, are used to efficiently return used buffers
-> > > > back to the kernel, which is uapi, I don't see how dmabuf can be
-> > > > fixed up to cover it.
-> > > 
-> > > Sure, but that doesn't mean you can't use dma buf for the other parts
-> > > of the flow. The per-page lifetime is a different topic than the
-> > > refcounting and access of the entire bulk of memory.
-> > 
-> > Ok, so if we're leaving uapi (and ops) and keep per page/sub-buffer as
-> > is, the rest is resolving uptr -> pages, and passing it to page pool in
-> > a convenient to page pool format (net_iov).
-> 
-> I'm not going to pretend to know about page pool details, but dmabuf
-> is the way to get the bulk of pages into a pool within the net stack's
-> allocator and keep that bulk properly refcounted while.
-> 
-> An object like dmabuf is needed for the general case because there are
-> not going to be per-page references or otherwise available.
-> 
-> What you seem to want is to alter how the actual allocation flow works
-> from that bulk of memory and delay the free. It seems like a different
-> topic to me, and honestly hacking into the allocator free function
-> seems a bit weird..
+On Tue, 7 May 2024 21:04:26 +0200
+"Rafael J. Wysocki" <rafael@kernel.org> wrote:
 
-Also I don't see how it's an argument against dma-buf as the interface for
-all these, because e.g. ttm internally does have a page pool because
-depending upon allocator, that's indeed beneficial. Other drm drivers have
-more buffer-based concepts for opportunistically memory around, usually
-by marking buffers that are just kept as cache as purgeable (which is a
-concept that goes all the way to opengl/vulkan).
+> On Tue, Apr 30, 2024 at 4:27=E2=80=AFPM Jonathan Cameron
+> <Jonathan.Cameron@huawei.com> wrote:
+> >
+> > Make the per_cpu(processors, cpu) entries available earlier so that
+> > they are available in arch_register_cpu() as ARM64 will need access
+> > to the acpi_handle to distinguish between acpi_processor_add()
+> > and earlier registration attempts (which will fail as _STA cannot
+> > be checked).
+> >
+> > Reorder the remove flow to clear this per_cpu() after
+> > arch_unregister_cpu() has completed, allowing it to be used in
+> > there as well.
+> >
+> > Note that on x86 for the CPU hotplug case, the pr->id prior to
+> > acpi_map_cpu() may be invalid. Thus the per_cpu() structures
+> > must be initialized after that call or after checking the ID
+> > is valid (not hotplug path).
+> >
+> > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com> =20
+>=20
+> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>=20
+> One nit below.
 
-But these are all internals of the dma-buf exporter, the dma-buf api users
-don't ever need to care.
--Sima
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Thanks.  Given timing, this is looking like 6.11 material.
+I'll tidy this up and post a v10 in a couple of weeks (so around
+rc1 time). Maybe we'll pick up some more tags for the ARM
+specific bits in the meantime.
+
+Thanks for all your help!
+
+Jonathan
+
+>=20
+> > ---
+> > v9: Add back a blank line accidentally removed in code move.
+> >     Fix up error returns so that the new cleanup in processor_add()
+> >     is triggered on detection of the bios bug.
+> >     Combined with the previous 2 patches, should solve the leak
+> >     that Gavin identified.
+> > ---
+> >  drivers/acpi/acpi_processor.c | 80 +++++++++++++++++++++--------------
+> >  1 file changed, 49 insertions(+), 31 deletions(-)
+> >
+> > diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processo=
+r.c
+> > index 16e36e55a560..4a79b42d649e 100644
+> > --- a/drivers/acpi/acpi_processor.c
+> > +++ b/drivers/acpi/acpi_processor.c
+> > @@ -183,8 +183,38 @@ static void __init acpi_pcc_cpufreq_init(void) {}
+> >  #endif /* CONFIG_X86 */
+> >
+> >  /* Initialization */
+> > +static DEFINE_PER_CPU(void *, processor_device_array);
+> > +
+> > +static bool acpi_processor_set_per_cpu(struct acpi_processor *pr,
+> > +                                      struct acpi_device *device)
+> > +{
+> > +       BUG_ON(pr->id >=3D nr_cpu_ids);
+> > +
+> > +       /*
+> > +        * Buggy BIOS check.
+> > +        * ACPI id of processors can be reported wrongly by the BIOS.
+> > +        * Don't trust it blindly
+> > +        */
+> > +       if (per_cpu(processor_device_array, pr->id) !=3D NULL &&
+> > +           per_cpu(processor_device_array, pr->id) !=3D device) {
+> > +               dev_warn(&device->dev,
+> > +                        "BIOS reported wrong ACPI id %d for the proces=
+sor\n",
+> > +                        pr->id);
+> > +               return false;
+> > +       }
+> > +       /*
+> > +        * processor_device_array is not cleared on errors to allow bug=
+gy BIOS
+> > +        * checks.
+> > +        */
+> > +       per_cpu(processor_device_array, pr->id) =3D device;
+> > +       per_cpu(processors, pr->id) =3D pr;
+> > +
+> > +       return true;
+> > +}
+> > +
+> >  #ifdef CONFIG_ACPI_HOTPLUG_CPU
+> > -static int acpi_processor_hotadd_init(struct acpi_processor *pr)
+> > +static int acpi_processor_hotadd_init(struct acpi_processor *pr,
+> > +                                     struct acpi_device *device)
+> >  {
+> >         int ret;
+> >
+> > @@ -198,8 +228,16 @@ static int acpi_processor_hotadd_init(struct acpi_=
+processor *pr)
+> >         if (ret)
+> >                 goto out;
+> >
+> > +       if (!acpi_processor_set_per_cpu(pr, device)) {
+> > +               ret =3D -EINVAL;
+> > +               acpi_unmap_cpu(pr->id);
+> > +               goto out;
+> > +       }
+> > +
+> >         ret =3D arch_register_cpu(pr->id);
+> >         if (ret) {
+> > +               /* Leave the processor device array in place to detect =
+buggy bios */
+> > +               per_cpu(processors, pr->id) =3D NULL;
+> >                 acpi_unmap_cpu(pr->id);
+> >                 goto out;
+> >         }
+> > @@ -217,7 +255,8 @@ static int acpi_processor_hotadd_init(struct acpi_p=
+rocessor *pr)
+> >         return ret;
+> >  }
+> >  #else
+> > -static inline int acpi_processor_hotadd_init(struct acpi_processor *pr)
+> > +static inline int acpi_processor_hotadd_init(struct acpi_processor *pr,
+> > +                                            struct acpi_device *device)
+> >  {
+> >         return -ENODEV;
+> >  }
+> > @@ -316,10 +355,13 @@ static int acpi_processor_get_info(struct acpi_de=
+vice *device)
+> >          *  because cpuid <-> apicid mapping is persistent now.
+> >          */
+> >         if (invalid_logical_cpuid(pr->id) || !cpu_present(pr->id)) {
+> > -               int ret =3D acpi_processor_hotadd_init(pr);
+> > +               int ret =3D acpi_processor_hotadd_init(pr, device);
+> >
+> >                 if (ret)
+> >                         return ret;
+> > +       } else {
+> > +               if (!acpi_processor_set_per_cpu(pr, device))
+> > +                       return -EINVAL;
+> >         } =20
+>=20
+> This looks a bit odd.
+>=20
+> I would make acpi_processor_set_per_cpu() return 0 on success and
+> -EINVAL on failure and the above would become
+>=20
+> if (invalid_logical_cpuid(pr->id) || !cpu_present(pr->id))
+>          ret =3D acpi_processor_hotadd_init(pr, device);
+> else
+>         ret =3D acpi_processor_set_per_cpu(pr, device);
+>=20
+> if (ret)
+>         return ret;
+>=20
+> (and of course ret needs to be defined at the beginning of the function).
+>=20
+> >
+> >         /*
+> > @@ -365,8 +407,6 @@ static int acpi_processor_get_info(struct acpi_devi=
+ce *device)
+> >   * (cpu_data(cpu)) values, like CPU feature flags, family, model, etc.
+> >   * Such things have to be put in and set up by the processor driver's =
+.probe().
+> >   */
+> > -static DEFINE_PER_CPU(void *, processor_device_array);
+> > -
+> >  static int acpi_processor_add(struct acpi_device *device,
+> >                                         const struct acpi_device_id *id)
+> >  {
+> > @@ -395,28 +435,6 @@ static int acpi_processor_add(struct acpi_device *=
+device,
+> >         if (result) /* Processor is not physically present or unavailab=
+le */
+> >                 goto err_clear_driver_data;
+> >
+> > -       BUG_ON(pr->id >=3D nr_cpu_ids);
+> > -
+> > -       /*
+> > -        * Buggy BIOS check.
+> > -        * ACPI id of processors can be reported wrongly by the BIOS.
+> > -        * Don't trust it blindly
+> > -        */
+> > -       if (per_cpu(processor_device_array, pr->id) !=3D NULL &&
+> > -           per_cpu(processor_device_array, pr->id) !=3D device) {
+> > -               dev_warn(&device->dev,
+> > -                       "BIOS reported wrong ACPI id %d for the process=
+or\n",
+> > -                       pr->id);
+> > -               /* Give up, but do not abort the namespace scan. */
+> > -               goto err_clear_driver_data;
+> > -       }
+> > -       /*
+> > -        * processor_device_array is not cleared on errors to allow bug=
+gy BIOS
+> > -        * checks.
+> > -        */
+> > -       per_cpu(processor_device_array, pr->id) =3D device;
+> > -       per_cpu(processors, pr->id) =3D pr;
+> > -
+> >         dev =3D get_cpu_device(pr->id);
+> >         if (!dev) {
+> >                 result =3D -ENODEV;
+> > @@ -470,10 +488,6 @@ static void acpi_processor_remove(struct acpi_devi=
+ce *device)
+> >         device_release_driver(pr->dev);
+> >         acpi_unbind_one(pr->dev);
+> >
+> > -       /* Clean up. */
+> > -       per_cpu(processor_device_array, pr->id) =3D NULL;
+> > -       per_cpu(processors, pr->id) =3D NULL;
+> > -
+> >         cpu_maps_update_begin();
+> >         cpus_write_lock();
+> >
+> > @@ -481,6 +495,10 @@ static void acpi_processor_remove(struct acpi_devi=
+ce *device)
+> >         arch_unregister_cpu(pr->id);
+> >         acpi_unmap_cpu(pr->id);
+> >
+> > +       /* Clean up. */
+> > +       per_cpu(processor_device_array, pr->id) =3D NULL;
+> > +       per_cpu(processors, pr->id) =3D NULL;
+> > +
+> >         cpus_write_unlock();
+> >         cpu_maps_update_done();
+> >
+> > --
+> > 2.39.2
+> > =20
+
 
