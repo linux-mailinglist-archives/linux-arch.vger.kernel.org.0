@@ -1,74 +1,74 @@
-Return-Path: <linux-arch+bounces-4273-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4274-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35D828C01B8
-	for <lists+linux-arch@lfdr.de>; Wed,  8 May 2024 18:13:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id ECA408C027A
+	for <lists+linux-arch@lfdr.de>; Wed,  8 May 2024 19:02:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A241D1F23EE2
-	for <lists+linux-arch@lfdr.de>; Wed,  8 May 2024 16:13:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 63E571F22B7E
+	for <lists+linux-arch@lfdr.de>; Wed,  8 May 2024 17:02:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C799129E7B;
-	Wed,  8 May 2024 16:13:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5892E8828;
+	Wed,  8 May 2024 17:02:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TAvZlWEK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OnynkGDj"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A348184A38;
-	Wed,  8 May 2024 16:13:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A327D3D6D;
+	Wed,  8 May 2024 17:02:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715184820; cv=none; b=iOBI6jT+0x7qgRqlefPWItZGAzdQMoDV5wHts1Jhq/CM32ChJpVNnr9FAlYci4NgHtPOJ3Huuguf+sy6UzN7zjz+vzpsIaKe9n99nsm1m98F9mj8yHW/EPtNORcExh81+18U7PCJONb3fCFyycxEif606OR//2zg8i0Oq/7d9f8=
+	t=1715187731; cv=none; b=UxH8eXHBHkuj34qgT9p99MVGWvI9rFKZIQSpHRWj2u5yGaKNOE9ALmtlXSBVUGvFHl+slDS2KsaSxQ1Pxav6CmQAfGTeMiEvnEg6oWQz67APrU6zUEqaECrcK8A9VROX+QD/V5IMkl9sC7Z6cmAQnIPWvM0arrFxqTS7I+TqFto=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715184820; c=relaxed/simple;
-	bh=KTTPfU3G93nUaSQQ03SoA08BLzmCwzGHhrMxQMHXbrw=;
+	s=arc-20240116; t=1715187731; c=relaxed/simple;
+	bh=RJTd0DFSkwcgQXADy0NPRv8wgTOjMh4ljQ8AnIpUJ68=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LgKElpLYBQhs0SGUE+TA72SzgMC+9b3QdVzi/LdMjdf1kRmrQ0nvRlCQcLDXgEJpYyKrnUio0uwmOrD+CUUxdSG/2Tujg4uunpXZET60e93ipH7ttL6DXYIrCm1qkIeiNGaO03FhJAm9YU5YafEwOIbrvuAh4go7KU315zLmkyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TAvZlWEK; arc=none smtp.client-ip=209.85.167.49
+	 In-Reply-To:Content-Type; b=l2oy45pIPoxI6s7jE2GHb4Fw9dOipddjkUxShixpx5G0Yt5PhU0P3Odnpvc/w2rhN/bTnjouPGPa1ePzx27ZaEf7BbMKTsiXd0iFIxYyH7pXPjFZts52pQ2qIg6swO+0Pnan+sqU0eI0Bjz2AJ3Kc7q6AMwUMT2q7d8FP96Q7ic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OnynkGDj; arc=none smtp.client-ip=209.85.218.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-520f9d559f6so3322217e87.3;
-        Wed, 08 May 2024 09:13:38 -0700 (PDT)
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a599af16934so1168471766b.1;
+        Wed, 08 May 2024 10:02:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715184817; x=1715789617; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1715187728; x=1715792528; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=8f/oNkLNRVDgyHz7SZX/CbDK9NIee4eeJWH9FsmJVO4=;
-        b=TAvZlWEKkXb77emTrSTwOzBRHL8ug8NMAuDKE6BOic+fg2A7sA90de4JHF7Wau2xW5
-         fecK+x6qcOchdMWceLOVCNtBN29n9EbLiF/VWB34UYv6uvvLtKjIh1rqTFNtKJ7/krIS
-         OySf2q0HOyl5vWpjxzO1Kl3kfiRxEC+TBDnnaTDgiasl3rQkCCWzVb6KbtNa+U1XbbCL
-         HEw0epDxohvWiPfAsCRtRxMpzgdkyLs+2OwCfwAO9dtE/FZKYU98hKP2pbxk4nCoRm1e
-         QbNM36jsnDINHtE5tHuYRuBaLZQic0qSEvHy7zReKTHmNjOI03FvxeOJM0XHjvoTGZC6
-         Us/w==
+        bh=w63SX1W8IWtKWaRdVmF8DRJBTDth/aiRDPCWeP/m/u8=;
+        b=OnynkGDjg0vGkDGdSEon5d0xDjiqrzpioqZiHuL0Nag9NOdtNmLL3NPjDyUSxO/8Zh
+         Sl+gc5S7CVBd88KtjhJXiNeDchtVDDGKv6H/SAE6+GLdMr1ysapTuwr7Pr4/78062sv7
+         U1lM4WybzDoSe5R2r24p9NH3yIBvBq9+pDtp0CzFHUBmR/pJCTQiP0KU5gSlQeVFN4rX
+         IZgnJ+Sil5bIFR5pjfTpMuErMJKV2AJwbjhVuPdWn6lEcT1GnlbKS3hG7EdRBqH91WIf
+         QZNhxXRNenOywRA9FMky14JAU1+sR83V/REHv91nu+Q82sjYZhD1WE/rxIzMUY0c6uZX
+         cirQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715184817; x=1715789617;
+        d=1e100.net; s=20230601; t=1715187728; x=1715792528;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8f/oNkLNRVDgyHz7SZX/CbDK9NIee4eeJWH9FsmJVO4=;
-        b=aoKtCQ1fZ40sBjZa/Tldul+O4hQjk9kqh76dKiHfAdvc0m/f73cEcMpIUnaLMRieOL
-         vgwJKV8vLou8Xy3RKLXOUXgm9y1hKbtLJDaQiH/6RYZXs+B2EAgIesaIzeQXBdIIyXV7
-         bgCcZ97KLpUOLBXYlQYSH0GywipVxD0StrUWqu+d90RUKzLDpKSW5kQuBkW5hzGqLAHA
-         BUPvSAY+zY9nkW8HJ5mAFvMkH0x4PSVmdinpMSNKZLrAYtCohxXnsD66wBN/Hod5i5/I
-         gVi2+H78MyVTHkomrYwufOaVtezIh/99zBAER8eQKoanCfEm7ntbYocYrIiO4IPP0m6B
-         WFxA==
-X-Forwarded-Encrypted: i=1; AJvYcCWib0r6e0Dq+xKF4iG8tjOM3ZoRl+qq4gosrqYCe6sarAjMbxGO7kDsTu13VRqaFxQBjsqR2INTArIjEKC/ferF9JfLX5ykGmfYtEfc2oEPBgY/FMG+DKPxEF4+mrEFkzm5lbP6li7VpMY3f+xEb9vwaZlMfrOccBYBPe8R8BLQpEfSL/ODPomo4ZemdQTwzXdpER4g5icdcrh+GrIMbiKRatm1vUXfC/BA+xLO6sD1AxS0TuXj0uUmi/k4Yhx0jNmqewFlTKWrS4l9bzzqWJ7CC2T/yzXpzfYSz7JWoNb9vvWNucV3YNgwMqgFkbOJSAIGi8nzATxwXXdozLXW1xGTlWMoAcONLGoJi9Ws1co7lmPBTh37DbQQ/YXdlfQ/E8U0/k9HatLt323fcx024x0ggRMghnNp/cKi25AY6t+eeieaqpAOVBmYRoJo3MNQI4Eo+C+Cg+1osmHiOLQfTm/fCaaLQzgwplxfIyQFst4xoHGXglC+byKSvoNQIAISHMw4WLrdlA==
-X-Gm-Message-State: AOJu0YxeYZoGNExeJ5GWhVwEPF8RcOKIHyh0kb4oynuO3PQ+1iBopLv7
-	f5FPJwETVM65Q/ruWjfHV8Yu/kAfrdWcGPs76i+FoyKHmQgop5LDe3ikSxVK
-X-Google-Smtp-Source: AGHT+IGOsGKTobWTIXaEhASc0QNiWa87Ncv1n8+a1K7thxeRTWIrU67BwG7R0FIWXrNbhbARcUS18g==
-X-Received: by 2002:a05:6512:3da6:b0:51b:f78d:c189 with SMTP id 2adb3069b0e04-5217c3707fdmr2707077e87.14.1715184816352;
-        Wed, 08 May 2024 09:13:36 -0700 (PDT)
+        bh=w63SX1W8IWtKWaRdVmF8DRJBTDth/aiRDPCWeP/m/u8=;
+        b=bmsFr1k1KAJQ7Q3VUl8EgsqIvJ4zlhHOTlJAFPNLqOfUOXUaUNjsa4FJ1cck1yIQ/E
+         qgmHYmaTf3bnH7E8vdW1sX2XKBWzJwT6Vg9cgxlyaHkrDKKvC0WKN8ncxsvQz9cdkJDk
+         DrragEDQ550BH3PcG5acaNQoJjjC8/zRHXiko+XZXNecX8+XWK5MOYMAqrCMjk7DxLdg
+         2GCWkLgDr274wq25oI/vkS1fmr1ikW6ZzDULYq0htd5k1lSi9uQP3PDDHOAbZh1XJmzK
+         KCVC7AwCLecgS/Gz+ocUG8uGMav5V7rYwdMSi4eKqqtKIpyXLTi6KsDmUWEYwIY2ZHnP
+         BeZA==
+X-Forwarded-Encrypted: i=1; AJvYcCVpZDVMJVxmnosHfPGBUJMOY92ouCL7Dc7PEjsoGbREL1ZbBeSsordAD3mlP+0KGUAYo+xo+Z9CsdgRakUKWjkHXcs71G8S5O568Ki8JmyxizvHh2iqX+jmRSaQzHEiORYPR1UfuO8sfXG2unlshuu/BJvLBJ8yIhZukc3/RxrWKs2sUGBjENu0x9D+3+drv9jU6aty54HCvgwcyDXEEBOqIcuvylKvAPKGT9S8upE+KcSriQ6rjbTOpn86kI3OOQEK88UemXG2lsRnLMoKd3u9+Bep3b16RXRt/hiCNxLLvG9xfuN1rAAax2y8pbjCS+inxRjmwjJUNArkS3Guza5x69y5Rm3ApBxxizEcjyOLZ1gy0ZeT8E8Xv6/4ARSX3IKjjs0Gy5vfZossSp54rsDPqP3ZMSc+rNPULtkfQ3PIg/Us2jH7h1bPsZzDGqB9brrPJ/237rk0AKogMHh80g3k+ugvK9gOGVMWetnLavzm68pQBEPoP6iaq4QQAVmu1aEpk9QdQg==
+X-Gm-Message-State: AOJu0Yyj11/IJlgWqJLmmpp73awguVVf+GMiNUelEDHixyVS4C+4Of5W
+	MZeZKY7W70ZMHk5kmHJiaRKhShh5qBSlDiuepajjS5JyNVNG+1JV
+X-Google-Smtp-Source: AGHT+IGnIbHLe2S57apepPi+KOdstUOemuaNblSGc79A9OnsYp187XWHNbGjxYPqzEX3412l6BXKTQ==
+X-Received: by 2002:a17:907:7286:b0:a59:bacc:b07f with SMTP id a640c23a62f3a-a59fb9d6452mr265356266b.52.1715187727754;
+        Wed, 08 May 2024 10:02:07 -0700 (PDT)
 Received: from [192.168.42.40] ([163.114.131.193])
-        by smtp.gmail.com with ESMTPSA id my37-20020a1709065a6500b00a59ae892a68sm5208655ejc.167.2024.05.08.09.13.34
+        by smtp.gmail.com with ESMTPSA id n18-20020a170906841200b00a59a8a5dd15sm5634228ejx.206.2024.05.08.10.02.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 May 2024 09:13:35 -0700 (PDT)
-Message-ID: <710dfcb5-8489-446d-a230-0e01828dfc58@gmail.com>
-Date: Wed, 8 May 2024 17:13:43 +0100
+        Wed, 08 May 2024 10:02:07 -0700 (PDT)
+Message-ID: <8ced4c49-d153-40fb-9e62-0a5784cfa864@gmail.com>
+Date: Wed, 8 May 2024 18:02:14 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -78,18 +78,17 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [RFC PATCH net-next v8 02/14] net: page_pool: create hooks for
  custom page providers
-To: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Mina Almasry <almasrymina@google.com>,
- Christoph Hellwig <hch@infradead.org>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Jonathan Corbet <corbet@lwn.net>,
+To: Christoph Hellwig <hch@infradead.org>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>, Mina Almasry <almasrymina@google.com>,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
  Richard Henderson <richard.henderson@linaro.org>,
  Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
  <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -133,55 +132,58 @@ Cc: Mina Almasry <almasrymina@google.com>,
  Harshitha Ramamurthy <hramamurthy@google.com>,
  Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
  <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
-References: <ZjpVfPqGNfE5N4bl@infradead.org>
+References: <20240507161857.GA4718@ziepe.ca> <ZjpVfPqGNfE5N4bl@infradead.org>
  <CAHS8izPH+sRLSiZ7vbrNtRdHrFEf8XQ61XAyHuxRSL9Jjy8YbQ@mail.gmail.com>
  <20240507164838.GG4718@ziepe.ca>
  <0d5da361-cc7b-46e9-a635-9a7a4c208444@gmail.com>
  <20240507175644.GJ4718@ziepe.ca>
  <6a50d01a-b5b9-4699-9d58-94e5f8f81c13@gmail.com>
- <20240507233247.GK4718@ziepe.ca>
- <54830914-1ec9-4312-96ad-423ac0aeb233@gmail.com>
- <20240508142530.GR4718@ziepe.ca>
- <6f69694b-4281-45a6-92aa-d9d72b918df2@gmail.com>
- <20240508155813.GS4718@ziepe.ca>
+ <20240507233247.GK4718@ziepe.ca> <Zjsm3vO6rIY_sw5A@phenom.ffwll.local>
+ <1e2823db-504b-4829-856f-3f45a45ccada@gmail.com>
+ <ZjufddNVJs5Csaix@infradead.org>
 Content-Language: en-US
 From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20240508155813.GS4718@ziepe.ca>
+In-Reply-To: <ZjufddNVJs5Csaix@infradead.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 5/8/24 16:58, Jason Gunthorpe wrote:
-> On Wed, May 08, 2024 at 04:44:32PM +0100, Pavel Begunkov wrote:
-> 
->>> like a weird and indirect way to get there. Why can't io_uring just be
->>> the entity that does the final free and not mess with the logic
->>> allocator?
+On 5/8/24 16:51, Christoph Hellwig wrote:
+> On Wed, May 08, 2024 at 12:35:52PM +0100, Pavel Begunkov wrote:
+>>> all these, because e.g. ttm internally does have a page pool because
+>>> depending upon allocator, that's indeed beneficial. Other drm drivers have
+>>> more buffer-based concepts for opportunistically memory around, usually
+>>> by marking buffers that are just kept as cache as purgeable (which is a
+>>> concept that goes all the way to opengl/vulkan).
 >>
->> Then the user has to do a syscall (e.g. via io_uring) to return pages,
->> and there we'd need to care how to put the pages efficiently, i.e.
->> hitting the page pool's fast path, e.g. by hoping napi is scheduled and
->> scheduled for the CPU we're running on, or maybe transferring the pages
->> to the right CPU first.
->>
->> Compare it with userspace putting pages into a ring, and the allocator
->> taking from there when needed without any extra synchronisation and
->> hassle just because it's a sole consumer.
+>> Because in this case it solves nothing and helps with nothing, quite
+>> the opposite. Just as well we can ask why NVMe doesn't wrap user pages
+>> into a dmabuf while doing IO.
 > 
-> Wow, that sounds a bit terrifying for security, but I guess I can see
-> your point.
+> You seem to confused totally unrelated things.
+>
+> For short-term pins, that is pin_user_pages without FOLL_LONGTERM there
+> would never be any point in using a dmabuf as the pin is transient.  For
+> long-term pin dmabufs in the block layer absolutely make sense, and I
 
-Mind elaborating about security? "No synchronisation" is for grabbing
-from the ring, it's napi exclusive, but it does refcounting to make sure
-there are no previous net users left and the userspace doesn't try
-anything funny like returning a page twice. And it's not even a page
-but rather a separately refcounted buffer represented by an offset
-from the userspace POV. It doesn't even have to be page sized, hw
-benefits from smaller chunks.
+Well, the example fell flat, but you don't use dmabuf when there are
+no upsides from using it. For instance, when you already have pinned
+pages, you're going to use pages, and there are no other refcounting
+concerns. Unless there is an advantage of dmabufs over FOLL_LONGTERM
+that I don't know about when used with normal user pages.
 
-> You are replacing the whole allocator logic if you are effectively
-> putting the free list in userspace memory.
-> 
-> Jason
+> wish io_uring would have just implemented them from the start instead of
+> the current fixed buffers that are not quite as useful by not
+> pre-mapping DMA and not supporting P2P.
+
+fdget(dmabuf) would be horrible, I assume that's not the suggestion.
+But then it's really about kernel internals, and theoretically can
+be patched to wrap user pages into a dmabuf and pass it in. The tricky
+part is how that "pass it in" should looks like. Keith tried to cover
+both pre-mapping and p2p by registering dmabuf and passing the mapped
+addresses in an iter IIRC.
+
+Anyway, this discussion should better move from to block/fs lists,
+if there is any interest.
 
 -- 
 Pavel Begunkov
