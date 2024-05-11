@@ -1,156 +1,132 @@
-Return-Path: <linux-arch+bounces-4328-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4329-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BF698C31ED
-	for <lists+linux-arch@lfdr.de>; Sat, 11 May 2024 16:50:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6B428C322D
+	for <lists+linux-arch@lfdr.de>; Sat, 11 May 2024 17:39:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3FE0F281D4B
-	for <lists+linux-arch@lfdr.de>; Sat, 11 May 2024 14:50:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A80C1F2188C
+	for <lists+linux-arch@lfdr.de>; Sat, 11 May 2024 15:39:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A50553373;
-	Sat, 11 May 2024 14:49:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FA8356472;
+	Sat, 11 May 2024 15:39:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G/lQUeb4"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="W3xYMTQ8";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="L9s0hzG7"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from wfhigh3-smtp.messagingengine.com (wfhigh3-smtp.messagingengine.com [64.147.123.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B8D651034;
-	Sat, 11 May 2024 14:49:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A2985645E;
+	Sat, 11 May 2024 15:38:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715438998; cv=none; b=b64zNpQWSYZ9l0f+2R/aq24A2tDMpBoxIuvZP7llBRNChn71vsuUpuFXO8da2eJrzhnW0+3E4xRMfE22QMwLlBxXCkFEnWiBMztJnI1RNaDRfck/MGabD4tL20QKvKqADZnpOG1bNKxuxcXVegfI1mXLaH4tTkTTM0+qNlFeiVg=
+	t=1715441941; cv=none; b=kt5IyfwGvscpDR8TWevSPBA3DK0Bw3a2QmnS9zk1t7uDguK+UPn0NDAycCT0fjW7R6BlQzdWFuUaSOLFJLxNIyadPD42W/jBGXCVQ+XFUdCQ7fOAivXiF4GfVwWTMucujzpPGHICYvJD79ZaowniynLhhhWoz6eeK4iybjx3JcQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715438998; c=relaxed/simple;
-	bh=QbbdrQveR5xbMbt67/DpPuiLYhLi955nnL7HY0R44nE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aGRxFnPVpE3LiKevZlw76k0NQK7hSBk6Dmb0cyZu8ZlaM2AhmbrVf1d6piY3O9gXSmRKp5cgs9oJ/WOHQUsLOHhmHgC741V3KCGzYjYywXrns22D0OKCnc8VjXROVoBPqF6SDFMnPlOxQ4AMIFGKoN0m1/3kllIHszgUu89ReaU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G/lQUeb4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71EE8C2BBFC;
-	Sat, 11 May 2024 14:49:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715438997;
-	bh=QbbdrQveR5xbMbt67/DpPuiLYhLi955nnL7HY0R44nE=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=G/lQUeb48/utL53AUg3ouEfD29EcUaDkgrTde+SsHUCbtSirckCkGGSRqUqHbPyVs
-	 ca23txNLpT0+LvuQRtKlGYzne7+NWVFr/FYbIl7yUkli72wWparmtnSSrg9WjnzcKr
-	 2NcbFWd7mg5rY+gE0jGJiWvqvITCQgnsEXzk1YC6k+Xam42tGBzqdeFjxKjduCNDqi
-	 BnpA/dBi/6jrRnxuD400ApXRQQqlygZip5qmyccRRe4xo+XHfPkq21tLI7PT2PR4fQ
-	 TJV3UDwMUtokAjJ7Q13uWmINJevbdSAwfngcY7r7bEfdGNAu/B6rFa1/zegJQQHP/I
-	 locwagLJkcd/g==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 1A564CE0F8E; Sat, 11 May 2024 07:49:57 -0700 (PDT)
-Date: Sat, 11 May 2024 07:49:57 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Guo Ren <guoren@kernel.org>
-Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-	elver@google.com, akpm@linux-foundation.org, tglx@linutronix.de,
-	peterz@infradead.org, dianders@chromium.org, pmladek@suse.com,
-	arnd@arndb.de, torvalds@linux-foundation.org, kernel-team@meta.com,
-	Yujie Liu <yujie.liu@intel.com>, linux-csky@vger.kernel.org
-Subject: Re: [PATCH v2 cmpxchg 11/13] csky: Emulate one-byte cmpxchg
-Message-ID: <e04e1fec-1e05-4ec7-baf9-63c5ad4061dd@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <b67e79d4-06cb-4a45-a906-b9e0fbae22c5@paulmck-laptop>
- <20240501230130.1111603-11-paulmck@kernel.org>
- <CAJF2gTQb1qW_GUiQBWiogBLX2geNGMFhOJK55ZKWJYyFqu-SSQ@mail.gmail.com>
+	s=arc-20240116; t=1715441941; c=relaxed/simple;
+	bh=VjHyt4PxjoG0E9okA2UFHhBH4xk5VAMX/pgWQymeuBA=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=dBLMc/E8Qs4EFGmwxQER6z//PZAJ9Gj5r1bJaH0LF8rfW1ZfYaQmGC0XuC6fs18c84EHmqWVfI/gCuw/0LoWBo/h6AUlFPh07yJrLpQOKIyDco9hHShlb3gYVHEc1tgBNQpAtoiqnXYzwmXNRW3lyZ9/8idFZaus5uWn32/hx5I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=W3xYMTQ8; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=L9s0hzG7; arc=none smtp.client-ip=64.147.123.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfhigh.west.internal (Postfix) with ESMTP id 8A7821800132;
+	Sat, 11 May 2024 11:38:57 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Sat, 11 May 2024 11:38:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1715441937;
+	 x=1715528337; bh=8b8AVLMPdkUb+D8MVCXQcH/74dxje6vo4/P3A1sCtUY=; b=
+	W3xYMTQ8Cu6R/MGafIQnLV63habC+ESIvbsmHH2yv1D921mzlAQcWjsCfrRrBTz4
+	Iwz1pG6MZ5xF+/00K25sblSah+NR7xgHcoKIjjwyVR7JnqffYXG/LdSdbARppVcy
+	YcPs+lu8D3937lyK+P+Skhy9m8EaZH+oszDqMZz7eye82ks51kKhX3CK/tAa7lT2
+	HlPYhWL7kg6gSMg35L4XvfNaMi3wb6BbrHmTudMBRLuUyiCLhpJmMQfNDKk4YQAa
+	grSXPyGl6nIW1HSZDFfKX1kUNaHch1GrOTIKiOmMurzUWVLGuE1m7X37I7srjOv6
+	Ve1Vju6g6vjU0B2QMklCDw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1715441937; x=
+	1715528337; bh=8b8AVLMPdkUb+D8MVCXQcH/74dxje6vo4/P3A1sCtUY=; b=L
+	9s0hzG7qX7xl6mtn/ErqXc2WlD9Tw1tOe5z+ih5mad3pUPpu2KqCEG0dNQOkLjJI
+	AFSIOzg0xM5Zv0ktX6NcFoSpogUcvolpdwZbBCZ7HRB51cezuiIbbcqYiSqoyXyM
+	fFJsxd3nSK/okbyuEEHQ/WGcUGuy7llvZwIP30T19J9xCyuWxSrEWRAJOr41lGwu
+	AOoUEge1eHP+PYxZLm1G6d8nWAnMxYG/scJbHdCx7SdV/4EJzrEGzFSNsYF1A9J/
+	5DRDNkKJWhVEMWWSxFihS0k6pskANMEsd1AMfd7XUfcxQtzLq4AaSpUtxu9lxH5O
+	JK0VOOPIJu0TKGkPd51Pg==
+X-ME-Sender: <xms:D5E_ZkW5aNg6cbgExq6yeXV-nz6s_gF3nYkDE3cC2ByOrn3EXayklw>
+    <xme:D5E_Zon8nCSUsrV47b89x1rqiO5zUIKvMMQMH1B3xtupdw5bytoVbve8jPj2N2WXQ
+    lHA-B-1a04Z_8YdpCA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvdegtddgledtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
+    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:D5E_Zob0ZjV8-6kjefM-s2_--mSstfXe0jNLdYD7asSr-F7EclvBsA>
+    <xmx:D5E_ZjXt8SBJiO8SGgszIQu-26WYAofPGMycAbf6wLl6JNtcdaKFTQ>
+    <xmx:D5E_ZulhP0E0e2d9kwwYkMr7wj1PBKdtrtXsZBBJ0bh-HHy8345IGg>
+    <xmx:D5E_ZoeipotAVfkg_RP02iG_yw-cFZXqrVjXuP16bWKTE2sJLSL8Tw>
+    <xmx:EZE_ZndA1l2C30DLVL-c_8_tv19OHNYF-xbwQ0TsD_RfQq0KYNyKIUbN>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id CE5DEB6008D; Sat, 11 May 2024 11:38:55 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-443-g0dc955c2a-fm-20240507.001-g0dc955c2
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJF2gTQb1qW_GUiQBWiogBLX2geNGMFhOJK55ZKWJYyFqu-SSQ@mail.gmail.com>
+Message-Id: <fcdeb993-37d6-42e0-8737-3be41413f03d@app.fastmail.com>
+In-Reply-To: 
+ <CAAhV-H5kn2xPLqgop0iOyg-tc5kAYcuNo3cd+f3yCdkN=cJDug@mail.gmail.com>
+References: <20240511100157.2334539-1-chenhuacai@loongson.cn>
+ <f92e23be-3f3f-4bc6-8711-3bcf6beb7fa2@app.fastmail.com>
+ <CAAhV-H5kn2xPLqgop0iOyg-tc5kAYcuNo3cd+f3yCdkN=cJDug@mail.gmail.com>
+Date: Sat, 11 May 2024 17:38:35 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Huacai Chen" <chenhuacai@kernel.org>
+Cc: "Huacai Chen" <chenhuacai@loongson.cn>, loongarch@lists.linux.dev,
+ Linux-Arch <linux-arch@vger.kernel.org>,
+ "Xuefeng Li" <lixuefeng@loongson.cn>, guoren <guoren@kernel.org>,
+ "WANG Xuerui" <kernel@xen0n.name>, "Jiaxun Yang" <jiaxun.yang@flygoat.com>,
+ linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
+ stable@vger.kernel.org
+Subject: Re: [PATCH] LoongArch: Define __ARCH_WANT_NEW_STAT in unistd.h
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, May 11, 2024 at 02:42:17PM +0800, Guo Ren wrote:
-> On Thu, May 2, 2024 at 7:01 AM Paul E. McKenney <paulmck@kernel.org> wrote:
-> >
-> > Use the new cmpxchg_emu_u8() to emulate one-byte cmpxchg() on csky.
-> >
-> > [ paulmck: Apply kernel test robot feedback. ]
-> > [ paulmck: Drop two-byte support per Arnd Bergmann feedback. ]
-> >
-> > Co-developed-by: Yujie Liu <yujie.liu@intel.com>
-> > Signed-off-by: Yujie Liu <yujie.liu@intel.com>
-> > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > Tested-by: Yujie Liu <yujie.liu@intel.com>
-> > Cc: Guo Ren <guoren@kernel.org>
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> > Cc: <linux-csky@vger.kernel.org>
-> > ---
-> >  arch/csky/Kconfig               |  1 +
-> >  arch/csky/include/asm/cmpxchg.h | 10 ++++++++++
-> >  2 files changed, 11 insertions(+)
-> >
-> > diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-> > index d3ac36751ad1f..5479707eb5d10 100644
-> > --- a/arch/csky/Kconfig
-> > +++ b/arch/csky/Kconfig
-> > @@ -37,6 +37,7 @@ config CSKY
-> >         select ARCH_INLINE_SPIN_UNLOCK_BH if !PREEMPTION
-> >         select ARCH_INLINE_SPIN_UNLOCK_IRQ if !PREEMPTION
-> >         select ARCH_INLINE_SPIN_UNLOCK_IRQRESTORE if !PREEMPTION
-> > +       select ARCH_NEED_CMPXCHG_1_EMU
-> >         select ARCH_WANT_FRAME_POINTERS if !CPU_CK610 && $(cc-option,-mbacktrace)
-> >         select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
-> >         select COMMON_CLK
-> > diff --git a/arch/csky/include/asm/cmpxchg.h b/arch/csky/include/asm/cmpxchg.h
-> > index 916043b845f14..db6dda47184e4 100644
-> > --- a/arch/csky/include/asm/cmpxchg.h
-> > +++ b/arch/csky/include/asm/cmpxchg.h
-> > @@ -6,6 +6,7 @@
-> >  #ifdef CONFIG_SMP
-> >  #include <linux/bug.h>
-> >  #include <asm/barrier.h>
-> > +#include <linux/cmpxchg-emu.h>
-> >
-> >  #define __xchg_relaxed(new, ptr, size)                         \
-> >  ({                                                             \
-> > @@ -61,6 +62,9 @@
-> >         __typeof__(old) __old = (old);                          \
-> >         __typeof__(*(ptr)) __ret;                               \
-> >         switch (size) {                                         \
-> > +       case 1:                                                 \
-> > +               __ret = (__typeof__(*(ptr)))cmpxchg_emu_u8((volatile u8 *)__ptr, (uintptr_t)__old, (uintptr_t)__new); \
-> > +               break;                                          \
-> >         case 4:                                                 \
-> >                 asm volatile (                                  \
-> >                 "1:     ldex.w          %0, (%3) \n"            \
-> > @@ -91,6 +95,9 @@
-> >         __typeof__(old) __old = (old);                          \
-> >         __typeof__(*(ptr)) __ret;                               \
-> >         switch (size) {                                         \
-> > +       case 1:                                                 \
-> > +               __ret = (__typeof__(*(ptr)))cmpxchg_emu_u8((volatile u8 *)__ptr, (uintptr_t)__old, (uintptr_t)__new); \
-> > +               break;                                          \
-> >         case 4:                                                 \
-> >                 asm volatile (                                  \
-> >                 "1:     ldex.w          %0, (%3) \n"            \
-> > @@ -122,6 +129,9 @@
-> >         __typeof__(old) __old = (old);                          \
-> >         __typeof__(*(ptr)) __ret;                               \
-> >         switch (size) {                                         \
-> > +       case 1:                                                 \
-> > +               __ret = (__typeof__(*(ptr)))cmpxchg_emu_u8((volatile u8 *)__ptr, (uintptr_t)__old, (uintptr_t)__new); \
-> > +               break;                                          \
-> >         case 4:                                                 \
-> >                 asm volatile (                                  \
-> >                 RELEASE_FENCE                                   \
-> > --
-> > 2.40.1
-> >
-> Reviewed-by: Guo Ren <guoren@kernel.org>
-> 
-> I will optimize it after ARCH_NEED_CMPXCHG_1_EMU is merged.
+On Sat, May 11, 2024, at 16:28, Huacai Chen wrote:
+> On Sat, May 11, 2024 at 8:17=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> =
+wrote:
 
-Thank you very much!  I have applied this and added it to my pull
-request for the upcoming merge window.
+>> Importantly, we can't just add fstatat64() on riscv32 because
+>> there is no time64 version for it other than statx(), and I don't
+>> want the architectures to diverge more than necessary.
+>> I would not mind adding a variant of statx() that works for
+>> both riscv32 and loongarch64 though, if it gets added to all
+>> architectures.
+>
+> As far as I know, Ren Guo is trying to implement riscv64 kernel +
+> riscv32 userspace, so I think riscv32 kernel won't be widely used?
 
-							Thanx, Paul
+I was talking about the ABI, so it doesn't actually matter
+what the kernel is: any userspace ABI without
+CONFIG_COMPAT_32BIT_TIME is equally affected here. On riscv32
+this is the only allowed configuration, while on others (arm32
+or x86-32 userland) you can turn off COMPAT_32BIT_TIME on
+both 32-bit kernel and on 64-bit kernels with compat mode.
+
+     Arnd
 
