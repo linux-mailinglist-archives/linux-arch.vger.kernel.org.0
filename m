@@ -1,59 +1,59 @@
-Return-Path: <linux-arch+bounces-4346-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4347-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66A728C37C6
-	for <lists+linux-arch@lfdr.de>; Sun, 12 May 2024 19:28:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09F308C37CD
+	for <lists+linux-arch@lfdr.de>; Sun, 12 May 2024 19:41:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 09CED2813F7
-	for <lists+linux-arch@lfdr.de>; Sun, 12 May 2024 17:28:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2AAD21C20308
+	for <lists+linux-arch@lfdr.de>; Sun, 12 May 2024 17:41:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2877D4CB2E;
-	Sun, 12 May 2024 17:28:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05BA42940F;
+	Sun, 12 May 2024 17:41:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P0KyCyDK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TpJ/Yjye"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE71C46430;
-	Sun, 12 May 2024 17:28:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFFF51E492;
+	Sun, 12 May 2024 17:41:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715534915; cv=none; b=giX0ih8IjUnLkktoPmj09lizOhGrpJL6sc1EZbsUmeqqcOrC0UdvMn1GjX6zhCI6FA5z8rd2Krsvvkjw0z5G8My9Inh25eZ18fYWyAMNMldjoNWKmrUeVHZLZfxdDyYNdzCKkZsswOoQev0/rTzgO1P5V9jNvWIbKdZWy5bgwj0=
+	t=1715535705; cv=none; b=Nxz++L6KJX5lHF2nYo53h/OmUEqjYdoeXRr1e1g/bF5KQ6CimmiEJRFgIMRkPEIfd+gwOtGLKdWsGUMTOSmnF93wB+gjdD1N787fvsII1aYAsZQLjNgoi/9tRyvTa2NpLKXsc9Uv/6Zu7PLlQR5XzgXV6E7jG2DZ0DTHqUhIbJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715534915; c=relaxed/simple;
-	bh=yoD3v95RGwummZEVUok+lA5erasx7wbDTMozE5Oaj3Y=;
+	s=arc-20240116; t=1715535705; c=relaxed/simple;
+	bh=fuKPbrNnpH9TtVLRuzB0G82KzbZ36uIiDLDfs/B8R6c=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=DAK8Htapvqn7zdIgNwDxjPVzm0dKwSmH55BhmnO/phsXw7Holhi+MwmyQKA9lO5r9b1mZ9nJnODw4vShY0p4J0bKzMZNaCns6Zh8Xq3EXBzg2Xwly45/w1f43Uq/zS2/klhDl22wMtOh1dQ7E7W+nmBar5aoVjiYpiCdGK1lNWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P0KyCyDK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55A47C116B1;
-	Sun, 12 May 2024 17:28:34 +0000 (UTC)
+	 Content-Disposition; b=IjXdKxyOYclFhKkmkDjNwz/oH8zqcVeK5oLi30tsDMNTeDOfY6fAD4kYEd3o0+xw78aFalxqbseCzP7KvuUevlZioftJfrda+cyv0Q8PfQOwYX20M8NcIND76QzFDNLkzmKt9tQF4KeW6y53ZR0nYaZS5CJb+PUIPK2JMcqRiNg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TpJ/Yjye; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 590C1C116B1;
+	Sun, 12 May 2024 17:41:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715534914;
-	bh=yoD3v95RGwummZEVUok+lA5erasx7wbDTMozE5Oaj3Y=;
+	s=k20201202; t=1715535705;
+	bh=fuKPbrNnpH9TtVLRuzB0G82KzbZ36uIiDLDfs/B8R6c=;
 	h=Date:From:To:Cc:Subject:Reply-To:From;
-	b=P0KyCyDKaU8O9AlnA1PLjeK92G0I4K0q1u/Uj08VU2XQSGnNQ1GT7g4fIcd3n0Kai
-	 D0eIJg/O3XOXWD2MR4zs8+0T+GaVul08+B5NsJgIKgh4djYrb+l0r2eZ+Ac9kNbI/e
-	 +sMlKnGgWtgZ5X4wVX8Y5jGQL9Xt3xsI4Gc3soxdIGUtxjaAKo9yPLKxqntjdYM0B8
-	 x/Vtx0n5sd5oIQIzkuv8trjn+w+o5XaoX00L9vYS6smr7hXXPuqYZTJIsQAZ8tYRaH
-	 K3E/+hVSy8cRxaUubCWeuWiSw9LvyjWX3w4Pwzt+ok+8PpPLKd8jasTjxNCfmXC4zj
-	 43xHDByEu6lcA==
+	b=TpJ/YjyemRoG0w6Id6VbCtSoE+HSpOthL9yjTeo7D1kYm4u+Iaub7sQv8NnQMJVkb
+	 DxFEjGyZ+7jOdFACbiqH0B/3H4fqDbkxKkfo/1qpjksSo8rnFwyVusDjCUdtrjovKe
+	 nWbHyRGJVwqL65e5Uu7kPnuuvdVhUv6FctGR8IpN2jKVfhi0DY7ddK8mxDWLOm562R
+	 RUA9rcqQW2kSgm+7bkp0aZp9X5kMIv64ASFFZchVDJ+O1m4X7Tc77O+1YwARwX2ckF
+	 dDTCSBfS582I3GDV0FXjqysjTOceww9V1x0xfdUmoHpEreTHsNaSbt8I7WkyH1y58B
+	 w8Togiy2p6vgg==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id A10ADCE105C; Sun, 12 May 2024 10:28:33 -0700 (PDT)
-Date: Sun, 12 May 2024 10:28:33 -0700
+	id B30FFCE105C; Sun, 12 May 2024 10:41:44 -0700 (PDT)
+Date: Sun, 12 May 2024 10:41:44 -0700
 From: "Paul E. McKenney" <paulmck@kernel.org>
 To: torvalds@linux-foundation.org
 Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-csky@vger.kernel.org, kernel-team@meta.com,
-	viro@zeniv.linux.org.uk, elver@google.com,
-	akpm@linux-foundation.org, tglx@linutronix.de, peterz@infradead.org,
-	dianders@chromium.org, pmladek@suse.com, arnd@arndb.de,
-	yujie.liu@intel.com, guoren@kernel.org
-Subject: [GIT PULL] Native and emulated one-byte cmpxcha()g for v6.10
-Message-ID: <a03cbcce-ac01-46e7-9fd5-c4f0b782c8df@paulmck-laptop>
+	stern@rowland.harvard.edu, parri.andrea@gmail.com, will@kernel.org,
+	peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
+	dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+	akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
+	mark.rutland@arm.com
+Subject: [GIT PULL] LKMM changes for v6.10
+Message-ID: <9a2178f8-a33a-4b0e-a867-30ea44761e8a@paulmck-laptop>
 Reply-To: paulmck@kernel.org
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -64,64 +64,36 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hello, Linus,
+Hello, Linux,
 
-Please pull the following cmpxchg()-related changes:
+When the merge window opens, please pull this LKMM update from:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/cmpxchg.2024.05.11a
-  # HEAD: 5800e77d88c0cd98bc10460df148631afa7b5e4d: csky: Emulate one-byte cmpxchg (2024-05-11 07:07:07 -0700)
-
-Please note that the commit and tag are quite recent.  However, the
-only change was to add the architecture maintainer'a ack.  The exact
-same change (other than the ack) has been in -next for quite some time.
-
-Of course, if you would prefer that this exact commit be in -next for a
-decent interval, please let me know and I will be happy to re-send this
-pull request after a few days in -next.
+  git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/lkmm.2024.05.10a
+  HEAD: 2ba5b4130e3d5d05c95981e1d2e660d57e613fda: Documentation/litmus-tests: Make cmpxchg() tests safe for klitmus (2024-05-06 14:29:21 -0700)
 
 ----------------------------------------------------------------
-sparc32,parisc,csky: Provide one-byte and two-byte cmpxchg() support
+lkmm: Upgrade LKMM documentation
 
-This series provides native one-byte and two-byte cmpxchg() support
-for sparc32 and parisc, courtesy of Al Viro.  This support is provided
-by the same hashed-array-of-locks technique used for the other atomic
-operations provided for these two platforms.
-
-This series also provides emulated one-byte cmpxchg() support for csky
-using a new cmpxchg_emu_u8() function that uses a four-byte cmpxchg()
-to emulate the one-byte variant.
-
-Similar patches for emulation of one-byte cmpxchg() for arc, sh, and
-xtensa have not yet received maintainer acks, so they are slated for
-the v6.11 merge window.
+This commit upgrades LKMM documentation, perhaps most notably adding
+a number of litmus tests illustrating cmpxchg() ordering properties.
+TL;DR: Failing cmpxchg() operations provide no ordering.
 
 ----------------------------------------------------------------
-Al Viro (8):
-      sparc32: make __cmpxchg_u32() return u32
-      sparc32: make the first argument of __cmpxchg_u64() volatile u64 *
-      sparc32: unify __cmpxchg_u{32,64}
-      sparc32: add __cmpxchg_u{8,16}() and teach __cmpxchg() to handle those sizes
-      parisc: __cmpxchg_u32(): lift conversion into the callers
-      parisc: unify implementations of __cmpxchg_u{8,32,64}
-      parisc: add missing export of __cmpxchg_u8()
-      parisc: add u16 support to cmpxchg()
+Paul E. McKenney (4):
+      Documentation/litmus-tests: Add locking tests to README
+      Documentation/litmus-tests: Demonstrate unordered failing cmpxchg
+      Documentation/atomic_t: Emphasize that failed atomic operations give no ordering
+      Documentation/litmus-tests: Make cmpxchg() tests safe for klitmus
 
-Paul E. McKenney (2):
-      lib: Add one-byte emulation function
-      csky: Emulate one-byte cmpxchg
-
- arch/Kconfig                        |  3 +++
- arch/csky/Kconfig                   |  1 +
- arch/csky/include/asm/cmpxchg.h     | 10 +++++++
- arch/parisc/include/asm/cmpxchg.h   | 22 +++++++---------
- arch/parisc/kernel/parisc_ksyms.c   |  2 ++
- arch/parisc/lib/bitops.c            | 52 ++++++++++++-------------------------
- arch/sparc/include/asm/cmpxchg_32.h | 20 +++++++-------
- arch/sparc/lib/atomic32.c           | 45 ++++++++++++++------------------
- include/linux/cmpxchg-emu.h         | 15 +++++++++++
- lib/Makefile                        |  1 +
- lib/cmpxchg-emu.c                   | 45 ++++++++++++++++++++++++++++++++
- 11 files changed, 133 insertions(+), 83 deletions(-)
- create mode 100644 include/linux/cmpxchg-emu.h
- create mode 100644 lib/cmpxchg-emu.c
+ Documentation/atomic_t.txt                         |  4 +-
+ Documentation/litmus-tests/README                  | 45 ++++++++++++++++++++++
+ .../atomic/cmpxchg-fail-ordered-1.litmus           | 35 +++++++++++++++++
+ .../atomic/cmpxchg-fail-ordered-2.litmus           | 30 +++++++++++++++
+ .../atomic/cmpxchg-fail-unordered-1.litmus         | 34 ++++++++++++++++
+ .../atomic/cmpxchg-fail-unordered-2.litmus         | 30 +++++++++++++++
+ 6 files changed, 176 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/litmus-tests/atomic/cmpxchg-fail-ordered-1.litmus
+ create mode 100644 Documentation/litmus-tests/atomic/cmpxchg-fail-ordered-2.litmus
+ create mode 100644 Documentation/litmus-tests/atomic/cmpxchg-fail-unordered-1.litmus
+ create mode 100644 Documentation/litmus-tests/atomic/cmpxchg-fail-unordered-2.litmus
 
