@@ -1,38 +1,38 @@
-Return-Path: <linux-arch+bounces-4339-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4340-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 347B18C3772
-	for <lists+linux-arch@lfdr.de>; Sun, 12 May 2024 18:26:20 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC4EC8C3778
+	for <lists+linux-arch@lfdr.de>; Sun, 12 May 2024 18:28:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 580C71C203E5
-	for <lists+linux-arch@lfdr.de>; Sun, 12 May 2024 16:26:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F3E5DB20A6C
+	for <lists+linux-arch@lfdr.de>; Sun, 12 May 2024 16:28:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5234D46435;
-	Sun, 12 May 2024 16:26:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CDA64776A;
+	Sun, 12 May 2024 16:28:06 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5018617C95;
-	Sun, 12 May 2024 16:26:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0921F17C95;
+	Sun, 12 May 2024 16:28:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715531175; cv=none; b=EQoQ+DpU9YWUiQQtuzRBDy1TgOi/aho7urfP58v30z97+sV2lYKCCB0d2S7yX3eI4p/16Tr6v3olDxos0/WJQSZPViXy2eVl62sCOl8C3ayhcsc4J1lZzNXyI9IZTr6QckASyhaagW4ZCMy/4ENeZp2c5SDj0nEWsoCwJeBhbXY=
+	t=1715531286; cv=none; b=OLwf353fCFYTYs+1JaVLsJZV4J8lVmEC7BdAg2xYHfVCobis4yTf7iDZ4OTZxmXJkGNQOgTVaN6VX5jLXBCKRDS42SVtUwXP3scxfvoDxguNsGJlrwmLQ+cn1JjqjxAYeFh+XRTG6GAsZG6HaFFbMI+CZluoZ1oUyoWni/gHvms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715531175; c=relaxed/simple;
-	bh=PNUnaQvR9cUuMNwBk43kkwU9M5fFExsF302zGnmg9x0=;
+	s=arc-20240116; t=1715531286; c=relaxed/simple;
+	bh=UzQr1TNXnTNDAEn5uLA+4XARweS6x1GTyqCrZYGwiWI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KQWygsx60k4LUKVUx2y7lQ6kUrNKAKczIt99v1rVw4VXZpPlMFctO01RP1D7DFamtfnwbYnvc0uUijwlfwGRSyp+76FtpKClfiNnHP2OGTmwD1ADYkaoDWd4As/Vsvg4GYJwdXbZj0roQlsFDSNiJEsRB4b8dIhnKLU1/FebWUk=
+	 In-Reply-To:Content-Type; b=SHR/8grwISW188rlvTDUGrCjdZgcOpLkxmHEu/mcF21qkJfCr13wpik3YAbI78z+BOhp+RAPnKbWQfIfsRubJNfuvu+OQRztIQl4nvS5lZF/h11S3DfHEzo8pn59L3qzhgnB2uz7j0F8Vlu8KxfW49EwzSf2cRb+zGbldz/+QD8=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr; spf=pass smtp.mailfrom=ghiti.fr; arc=none smtp.client-ip=217.70.183.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ghiti.fr
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C222060002;
-	Sun, 12 May 2024 16:24:50 +0000 (UTC)
-Message-ID: <c759444d-fe84-4a61-8448-80fb692c7904@ghiti.fr>
-Date: Sun, 12 May 2024 18:24:45 +0200
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3B45E60004;
+	Sun, 12 May 2024 16:26:52 +0000 (UTC)
+Message-ID: <0ea4aff6-980f-4fc6-9ab7-9ca4c9d15d1e@ghiti.fr>
+Date: Sun, 12 May 2024 18:26:51 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -40,8 +40,7 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 10/29] riscv/mm : ensure PROT_WRITE leads to VM_READ |
- VM_WRITE
+Subject: Re: [PATCH v3 11/29] riscv mm: manufacture shadow stack pte
 Content-Language: en-US
 To: Deepak Gupta <debug@rivosinc.com>, paul.walmsley@sifive.com,
  rick.p.edgecombe@intel.com, broonie@kernel.org, Szabolcs.Nagy@arm.com,
@@ -72,138 +71,64 @@ Cc: linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
  shr@devkernel.io, deller@gmx.de, omosnace@redhat.com, ojeda@kernel.org,
  jhubbard@nvidia.com
 References: <20240403234054.2020347-1-debug@rivosinc.com>
- <20240403234054.2020347-11-debug@rivosinc.com>
+ <20240403234054.2020347-12-debug@rivosinc.com>
 From: Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <20240403234054.2020347-11-debug@rivosinc.com>
+In-Reply-To: <20240403234054.2020347-12-debug@rivosinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-GND-Sasl: alex@ghiti.fr
 
-Hi Deepak,
-
 On 04/04/2024 01:34, Deepak Gupta wrote:
-> `arch_calc_vm_prot_bits` is implemented on risc-v to return VM_READ |
-> VM_WRITE if PROT_WRITE is specified. Similarly `riscv_sys_mmap` is
-> updated to convert all incoming PROT_WRITE to (PROT_WRITE | PROT_READ).
-> This is to make sure that any existing apps using PROT_WRITE still work.
->
-> Earlier `protection_map[VM_WRITE]` used to pick read-write PTE encodings.
-> Now `protection_map[VM_WRITE]` will always pick PAGE_SHADOWSTACK PTE
-> encodings for shadow stack. Above changes ensure that existing apps
-> continue to work because underneath kernel will be picking
-> `protection_map[VM_WRITE|VM_READ]` PTE encodings.
+> This patch implements creating shadow stack pte (on riscv). Creating
+> shadow stack PTE on riscv means that clearing RWX and then setting W=1.
 >
 > Signed-off-by: Deepak Gupta <debug@rivosinc.com>
 > ---
->   arch/riscv/include/asm/mman.h    | 24 ++++++++++++++++++++++++
->   arch/riscv/include/asm/pgtable.h |  1 +
->   arch/riscv/kernel/sys_riscv.c    | 11 +++++++++++
->   arch/riscv/mm/init.c             |  2 +-
->   mm/mmap.c                        |  1 +
->   5 files changed, 38 insertions(+), 1 deletion(-)
->   create mode 100644 arch/riscv/include/asm/mman.h
+>   arch/riscv/include/asm/pgtable.h | 12 ++++++++++++
+>   1 file changed, 12 insertions(+)
 >
-> diff --git a/arch/riscv/include/asm/mman.h b/arch/riscv/include/asm/mman.h
-> new file mode 100644
-> index 000000000000..ef9fedf32546
-> --- /dev/null
-> +++ b/arch/riscv/include/asm/mman.h
-> @@ -0,0 +1,24 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef __ASM_MMAN_H__
-> +#define __ASM_MMAN_H__
-> +
-> +#include <linux/compiler.h>
-> +#include <linux/types.h>
-> +#include <uapi/asm/mman.h>
-> +
-> +static inline unsigned long arch_calc_vm_prot_bits(unsigned long prot,
-> +	unsigned long pkey __always_unused)
-> +{
-> +	unsigned long ret = 0;
-> +
-> +	/*
-> +	 * If PROT_WRITE was specified, force it to VM_READ | VM_WRITE.
-> +	 * Only VM_WRITE means shadow stack.
-> +	 */
-> +	if (prot & PROT_WRITE)
-> +		ret = (VM_READ | VM_WRITE);
-> +	return ret;
-> +}
-> +#define arch_calc_vm_prot_bits(prot, pkey) arch_calc_vm_prot_bits(prot, pkey)
-> +
-> +#endif /* ! __ASM_MMAN_H__ */
 > diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-> index 6066822e7396..4d5983bc6766 100644
+> index 4d5983bc6766..6362407f1e83 100644
 > --- a/arch/riscv/include/asm/pgtable.h
 > +++ b/arch/riscv/include/asm/pgtable.h
-> @@ -184,6 +184,7 @@ extern struct pt_alloc_ops pt_ops __initdata;
->   #define PAGE_READ_EXEC		__pgprot(_PAGE_BASE | _PAGE_READ | _PAGE_EXEC)
->   #define PAGE_WRITE_EXEC		__pgprot(_PAGE_BASE | _PAGE_READ |	\
->   					 _PAGE_EXEC | _PAGE_WRITE)
-> +#define PAGE_SHADOWSTACK       __pgprot(_PAGE_BASE | _PAGE_WRITE)
->   
->   #define PAGE_COPY		PAGE_READ
->   #define PAGE_COPY_EXEC		PAGE_READ_EXEC
-> diff --git a/arch/riscv/kernel/sys_riscv.c b/arch/riscv/kernel/sys_riscv.c
-> index f1c1416a9f1e..846c36b1b3d5 100644
-> --- a/arch/riscv/kernel/sys_riscv.c
-> +++ b/arch/riscv/kernel/sys_riscv.c
-> @@ -8,6 +8,8 @@
->   #include <linux/syscalls.h>
->   #include <asm/cacheflush.h>
->   #include <asm-generic/mman-common.h>
-> +#include <vdso/vsyscall.h>
-> +#include <asm/mman.h>
->   
->   static long riscv_sys_mmap(unsigned long addr, unsigned long len,
->   			   unsigned long prot, unsigned long flags,
-> @@ -17,6 +19,15 @@ static long riscv_sys_mmap(unsigned long addr, unsigned long len,
->   	if (unlikely(offset & (~PAGE_MASK >> page_shift_offset)))
->   		return -EINVAL;
->   
-> +	/*
-> +	 * If only PROT_WRITE is specified then extend that to PROT_READ
-> +	 * protection_map[VM_WRITE] is now going to select shadow stack encodings.
-> +	 * So specifying PROT_WRITE actually should select protection_map [VM_WRITE | VM_READ]
-> +	 * If user wants to create shadow stack then they should use `map_shadow_stack` syscall.
-> +	 */
-> +	if (unlikely((prot & PROT_WRITE) && !(prot & PROT_READ)))
-> +		prot |= PROT_READ;
-> +
->   	return ksys_mmap_pgoff(addr, len, prot, flags, fd,
->   			       offset >> (PAGE_SHIFT - page_shift_offset));
+> @@ -408,6 +408,12 @@ static inline pte_t pte_mkwrite_novma(pte_t pte)
+>   	return __pte(pte_val(pte) | _PAGE_WRITE);
 >   }
-> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-> index fa34cf55037b..98e5ece4052a 100644
-> --- a/arch/riscv/mm/init.c
-> +++ b/arch/riscv/mm/init.c
-> @@ -299,7 +299,7 @@ pgd_t early_pg_dir[PTRS_PER_PGD] __initdata __aligned(PAGE_SIZE);
->   static const pgprot_t protection_map[16] = {
->   	[VM_NONE]					= PAGE_NONE,
->   	[VM_READ]					= PAGE_READ,
-> -	[VM_WRITE]					= PAGE_COPY,
-> +	[VM_WRITE]					= PAGE_SHADOWSTACK,
->   	[VM_WRITE | VM_READ]				= PAGE_COPY,
->   	[VM_EXEC]					= PAGE_EXEC,
->   	[VM_EXEC | VM_READ]				= PAGE_READ_EXEC,
-> diff --git a/mm/mmap.c b/mm/mmap.c
-> index d89770eaab6b..57a974f49b00 100644
-> --- a/mm/mmap.c
-> +++ b/mm/mmap.c
-> @@ -47,6 +47,7 @@
->   #include <linux/oom.h>
->   #include <linux/sched/mm.h>
->   #include <linux/ksm.h>
-> +#include <linux/processor.h>
 >   
->   #include <linux/uaccess.h>
->   #include <asm/cacheflush.h>
+> +static inline pte_t pte_mkwrite_shstk(pte_t pte)
+> +{
+> +	/* shadow stack on risc-v is XWR = 010. Clear everything and only set _PAGE_WRITE */
 
 
-What happens if someone restricts the permission to PROT_WRITE using 
-mprotect()? I would say this is an issue since it would turn the pages 
-into shadow stack pages.
+Nit: Not sure the comment is necessary
 
+
+> +	return __pte((pte_val(pte) & ~(_PAGE_LEAF)) | _PAGE_WRITE);
+> +}
+> +
+>   /* static inline pte_t pte_mkexec(pte_t pte) */
+>   
+>   static inline pte_t pte_mkdirty(pte_t pte)
+> @@ -693,6 +699,12 @@ static inline pmd_t pmd_mkwrite_novma(pmd_t pmd)
+>   	return pte_pmd(pte_mkwrite_novma(pmd_pte(pmd)));
+>   }
+>   
+> +static inline pmd_t pmd_mkwrite_shstk(pmd_t pte)
+> +{
+> +	/* shadow stack on risc-v is XWR = 010. Clear everything and only set _PAGE_WRITE */
+> +	return __pmd((pmd_val(pte) & ~(_PAGE_LEAF)) | _PAGE_WRITE);
+> +}
+> +
+>   static inline pmd_t pmd_wrprotect(pmd_t pmd)
+>   {
+>   	return pte_pmd(pte_wrprotect(pmd_pte(pmd)));
+
+Otherwise:
+
+Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+
+Thanks,
+
+Alex
 
 
