@@ -1,136 +1,79 @@
-Return-Path: <linux-arch+bounces-4371-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4363-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9334D8C4625
-	for <lists+linux-arch@lfdr.de>; Mon, 13 May 2024 19:34:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 549738C45A3
+	for <lists+linux-arch@lfdr.de>; Mon, 13 May 2024 19:06:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4609B280C7D
-	for <lists+linux-arch@lfdr.de>; Mon, 13 May 2024 17:34:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 85F051C21C93
+	for <lists+linux-arch@lfdr.de>; Mon, 13 May 2024 17:06:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D50AA1C687;
-	Mon, 13 May 2024 17:34:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C2FD1CAAE;
+	Mon, 13 May 2024 17:05:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ulrich-teichert.org header.i=@ulrich-teichert.org header.b="mOlOjyy9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lIDVf8tu"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from wp441.webpack.hosteurope.de (wp441.webpack.hosteurope.de [80.237.133.210])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D91532C190;
-	Mon, 13 May 2024 17:34:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.133.210
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F0D0224CE;
+	Mon, 13 May 2024 17:05:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715621684; cv=none; b=hKcYx+Q6ItgkVqHOpuhsURyAPdR3S7txUCK/j1Yy/zBwS30ZUmE0xYrqkK+al1ekOtdVTeMi32Dv3qKnQ7a9yljyS1NXtQRQouQTAgePOCVh8IVPvpWbP17VklOMow75FT8PgF6grdCNWa9PvZpZ+vDwCDSnDzKhUkgXwKVui4Q=
+	t=1715619957; cv=none; b=tdwWRw1in916Q15UepDtYq+kb5WwS3FH1qnDU53rj1WM6OTc0erphs4RUzHxiP/FlpwsAJ5eT8qI41FUmTNH1uxLOknP4r8dplFygfRBedJ9n1zgRoY51v01GChjAhZQ3uIVmgg44PPp50FzeHaRGOoY0K2hAkDw+nGqIlVexCk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715621684; c=relaxed/simple;
-	bh=RjuB/bZTODZJ0KhRm7Wf7eYTPm6izVl1WgnIq448cKw=;
-	h=Message-Id:Subject:To:Date:Cc:In-Reply-To:From:MIME-Version:
-	 Content-Type; b=mQ1aeSHU8YjEQjWd3GQk1137fFHOso+WFBNExS+bPmyL/FGGpM7e+PPRlZDkXiXhrlPShkl9LjEbzX5GLOTvnrPtY6jr+aY/Gt0RxEFi8fcWQRpglCmBxAadoipkyJgQo61xhDhZB+OaCDbb5xm8xHh5G2mI/Edttccuy9CObe8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ulrich-teichert.org; spf=pass smtp.mailfrom=ulrich-teichert.org; dkim=pass (2048-bit key) header.d=ulrich-teichert.org header.i=@ulrich-teichert.org header.b=mOlOjyy9; arc=none smtp.client-ip=80.237.133.210
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ulrich-teichert.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ulrich-teichert.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=ulrich-teichert.org; s=he219537; h=Content-Transfer-Encoding:Content-Type:
-	MIME-Version:From:In-Reply-To:Cc:Date:To:Subject:Message-Id:From:Sender:
-	Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
-	References; bh=HTaf2Q1Js0w1JEG7adnW654h8ouqk/EoSw1gVBmO+yU=; t=1715621683;
-	x=1716053683; b=mOlOjyy95u9CBBZm+rH+6W3dbYAsyHGwOHDas++2n9K8JX3Nfx1gXH5MJk/Go
-	R5Cpat9HplezFVRnvybxkhA0QEmQBpWy6/FlhXhHeOXnxaLPmY9U4rYOpqBvD7LvkY2MCoTDKsFw7
-	ecj0aOI+agl7XPkfo8WB6cWXkQusz5ke0rLXmM0if6DrMsojJyZeh9LOGznmnPF/5WUvaLxJuMT3f
-	JIL2Mdgf9SpZt46mfMepPjk1DBuMY8w89q2X0lAC8bFpfQV3uvbo8awamNQgVlsDt8znV9QMlZUdf
-	/NT+fnL0OuBJp3OTHd+V0WjkwnAjrKA72Ts3ed6W2zMVdxk9iA==;
-Received: from [2a03:7846:b79f:101:21c:c4ff:fe1f:fd93] (helo=valdese.nms-ulrich-teichert.org); authenticated
-	by wp441.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	id 1s6YuY-0005eL-4Z; Mon, 13 May 2024 18:52:26 +0200
-Received: from valdese.nms-ulrich-teichert.org (localhost [127.0.0.1])
-	by valdese.nms-ulrich-teichert.org (8.15.2/8.15.2/Debian-14~deb10u1) with ESMTPS id 44DGqNBm007654
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Mon, 13 May 2024 18:52:23 +0200
-Received: (from ut@localhost)
-	by valdese.nms-ulrich-teichert.org (8.15.2/8.15.2/Submit) id 44DGqMjs007653;
-	Mon, 13 May 2024 18:52:22 +0200
-Message-Id: <202405131652.44DGqMjs007653@valdese.nms-ulrich-teichert.org>
+	s=arc-20240116; t=1715619957; c=relaxed/simple;
+	bh=8bb7Cxrgw9uF7S2/7MJAxwk3N+w8Yw+IlliZbcd7F3Q=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=oX3lBHwwmoaamhiB1gVlKfL4ZxfFhJuGfZLiYWUWxe7WnwhnuyW30dzrDG/49hl1sSeXHsJ6+s3zPZduE/L7EZ1Q+xOUzZv285rIFz68uTnyVUa8PGCoHYpoMj0OzP8EYz+RQsZOM/vXNESq/srKO6Jqf7J/dMLRKTXWyggYJUw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lIDVf8tu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 180B5C113CC;
+	Mon, 13 May 2024 17:05:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715619957;
+	bh=8bb7Cxrgw9uF7S2/7MJAxwk3N+w8Yw+IlliZbcd7F3Q=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=lIDVf8tuj5KYTZskU7fpeTDE6DD70KDLYKIBV2Iq/0r5sQxLVqTs6V9heR49i3ca+
+	 39gAfvBuhgg0lacUxOpch/jP0mHbGmwOz7xyeJzX5dmF9gdNxV9HDtfRqEE8UocB7O
+	 eUUqCcBnRqY6ALAJP0d99UaxB9UyRKRhIN/+Z40u12ayUBGcm21F9Tbp2G/ktd+3QO
+	 4iOcZwXglCuGV49PbAj5TghLhpsLP+iZ9Ro3gdieEnQ9nhXMzDQfFETbc4QmApchiA
+	 jNJkTSRN+pMyhKiJAnLn4O1VczNrtxz+OkaOZ0JPu+rGPOa9v/8oqfYdGMBuJHBfzx
+	 w5kiX3EI9JFhg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 107F9C433E9;
+	Mon, 13 May 2024 17:05:57 +0000 (UTC)
 Subject: Re: [GIT PULL] alpha: cleanups and build fixes for 6.10
-To: akiyks@gmail.com (Akira Yokosawa)
-Date: Mon, 13 May 2024 18:52:22 +0200 (CEST)
-Cc: paulmck@kernel.org, arnd@arndb.de, glaubitz@physik.fu-berlin.de,
-        ink@jurassic.park.msu.ru, linux-alpha@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mattst88@gmail.com, richard.henderson@linaro.org,
-        torvalds@linux-foundation.org, viro@zeniv.linux.org.uk,
-        krypton@ulrich-teichert.org (Ulrich Teichert),
-        akiyks@gmail.com (Akira Yokosawa)
-In-Reply-To: <99765904-3f35-4c78-998e-b444a6ab90e4@gmail.com>
-From: Ulrich Teichert <krypton@ulrich-teichert.org>
-X-Mailer: ELM [version 2.5 PL8]
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <e383dfe5-814a-4a87-befc-4831a7788f42@app.fastmail.com>
+References: <71feb004-82ef-4c7b-9e21-0264607e4b20@app.fastmail.com> <e383dfe5-814a-4a87-befc-4831a7788f42@app.fastmail.com>
+X-PR-Tracked-List-Id: <linux-alpha.vger.kernel.org>
+X-PR-Tracked-Message-Id: <e383dfe5-814a-4a87-befc-4831a7788f42@app.fastmail.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/asm-generic-alpha
+X-PR-Tracked-Commit-Id: a4184174be36369c3af8d937e165f28a43ef1e02
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 736676f5c3abd1fc01c41813a95246e892937f6d
+Message-Id: <171561995705.9638.8286642138765117973.pr-tracker-bot@kernel.org>
+Date: Mon, 13 May 2024 17:05:57 +0000
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-kernel@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>, linux-alpha@vger.kernel.org, Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, Alexander Viro <viro@zeniv.linux.org.uk>, "Paul E. McKenney" <paulmck@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;ut@ulrich-teichert.org;1715621683;92f8b63b;
-X-HE-SMSGID: 1s6YuY-0005eL-4Z
 
-Hi,
+The pull request you sent on Fri, 10 May 2024 23:19:56 +0200:
 
-> On Sun, 12 May 2024 07:44:25 -0700, Paul E. McKenney wrote:
-> > On Sun, May 12, 2024 at 08:02:59AM +0200, John Paul Adrian Glaubitz wrote:
-> >> On Sat, 2024-05-11 at 18:26 -0700, Paul E. McKenney wrote:
-> >> > And that breaks things because it can clobber concurrent stores to
-> >> > other bytes in that enclosing machine word.
-> >> 
-> >> But pre-EV56 Alpha has always been like this. What makes it broken
-> >> all of a sudden?
-> > 
-> > I doubt if it was sudden.   Putting concurrently (but rarely) accessed
-> > small-value quantities into single bytes is a very natural thing to do,
-> > and I bet that there are quite a few places in the kernel where exactly
-> > this happens.  I happen to know of a specific instance that went into
-> > mainline about two years ago.
-> > 
-> > So why didn't the people running current mainline on pre-EV56 Alpha
-> > systems notice?  One possibility is that they are upgrading their
-> > kernels only occasionally.  Another possibility is that they are seeing
-> > the failures, but are not tracing the obtuse failure modes back to the
-> > change(s) in question.  Yet another possibility is that the resulting
-> > failures are very low probability, with mean times to failure that are
-> > so long that you won't notice anything on a single system.
-> 
-> Another possibility is that the Jensen system was booted into uni processer
-> mode.  Looking at the early boot log [1] provided by Ulrich (+CCed) back in
-> Sept. 2021, I see the following by running "grep -i cpu":
-> 
-> >> > [1] https://marc.info/?l=linux-alpha&m=163265555616841&w=2
-> 
-> [    0.000000] Memory: 90256K/131072K available (8897K kernel code, 9499K rwdata, \
-> 2704K rodata, 312K init, 437K bss, 40816K reserved, 0K cma-reserved) [    0.000000] \
-> random: get_random_u64 called from __kmem_cache_create+0x54/0x600 with crng_init=0 [  \
-> 0.000000] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=1, Nodes=1 [    0.000000]
->                                                      ^^^^^^
-> 
-> Without any concurrent atomic updates, the "broken" atomic accesses won't
-> matter, I guess.
+> https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/asm-generic-alpha
 
-I've probably disabled SMP in my test kernel, the jensen is a single CPU
-system. I never had the pleasure of owning an AlphaServer 2000 or 2100,
-which (according to https://en.wikipedia.org/wiki/AlphaServer and
-https://en.wikipedia.org/wiki/AlphaStation) are the only systems
-with EV4/EV45/EV5 multi-CPU setups (apart from the Cray T3{DE}), so
-the possibility of ever seeing an error concerning atomic concurrent
-updates is quite low.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/736676f5c3abd1fc01c41813a95246e892937f6d
 
-Anybody out there with an AlphaServer 2000/2100 willing to try ?-)
+Thank you!
 
-CU,
-Uli
 -- 
-Dipl. Inf. Ulrich Teichert|e-mail: Ulrich.Teichert@gmx.de | Listening to:
-Stormweg 24               |The Hives: Two Kinds Of Trouble, The Chats: 6L GTR,
-24539 Neumuenster, Germany|La Fraction: Les Démons, Nightwatchers: On a Mission
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
