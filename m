@@ -1,107 +1,186 @@
-Return-Path: <linux-arch+bounces-4384-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4385-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 657078C48FA
-	for <lists+linux-arch@lfdr.de>; Mon, 13 May 2024 23:44:21 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB1A98C49AD
+	for <lists+linux-arch@lfdr.de>; Tue, 14 May 2024 00:40:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 925071C20D42
-	for <lists+linux-arch@lfdr.de>; Mon, 13 May 2024 21:44:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 38F92B22FFE
+	for <lists+linux-arch@lfdr.de>; Mon, 13 May 2024 22:40:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4ABC83CD7;
-	Mon, 13 May 2024 21:44:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E295584D07;
+	Mon, 13 May 2024 22:40:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b="Dec8QA/9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eROTGHQI"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FD0383CD6;
-	Mon, 13 May 2024 21:44:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.133.4.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B498053E30;
+	Mon, 13 May 2024 22:40:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715636657; cv=none; b=aM5A1S10ry9YJYnNUzJh0sotFaLb9/cZVbP0p+r3EsTdgxLVH1UpyfpoXYxvj1yfWRZpdkES4PHYqfsmn6I460dgP0UuhXcbR14HVwPd4GN18qNWDHfCkcgzJ46TXqLBz0HPC+4ihFeG/e7MnC0ib9Unupts1JbLkl17durGXeg=
+	t=1715640008; cv=none; b=Nu8+mucn9dqBq37FKKfLlMQMo943Bu2xolDmow9wtZeyjpQJkTmfuuQBZYz27KIfUAGUs7IprO0bewoVUY5uBGeVfQVGRtinFheLOk62iVWPgk2+pxSXtCU/m7aK1/+mupjC+9UkVmRpaumrHb6EoZ2MVWm3AB69ykSZUcRpwtw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715636657; c=relaxed/simple;
-	bh=DGcWynaS9JPH0MqSK4y/sgRZ71IgxrFrCdnCDClKYjg=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=UTsOajnBeLQTAvgGjV9aWp9JQv/0fE5HF315lwhABT1/d0cJEIKY9A7XPwJw7roS994EV/yRXYy79a+5hVq71yWBWR9blD+vrEGbJDks+OT2vXkdnVbsTmbsMLlJ1eX0gUVtAI8eUAwZiiKH8eC+bdKSDuBgTjWGtzbsfLwlI10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de; spf=pass smtp.mailfrom=zedat.fu-berlin.de; dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b=Dec8QA/9; arc=none smtp.client-ip=130.133.4.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zedat.fu-berlin.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=fu-berlin.de; s=fub01; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=+5KSMEQtWmpPZyU+Ee+dJui77AOOrsi0CRn5i+HekaY=; t=1715636655; x=1716241455; 
-	b=Dec8QA/9U5uPoyY/fpdH6aIAajxCEHk7jAGnwu//K6rgmBGJ0hUiw8sRfV85ogrz2N3/8AFehfe
-	eFNSNnMom2W2LJgVU+rZfdLIAnE0WUjQt/FumbXDrVzg8Rnyqfmqpik3qJzfqZLDgBHi5BWJHZ3e7
-	+J+ql7YpWTlCfbGRtofSInlTb02WI1M7ZZvqJ5Jb980Je5KXHQFrXC8wVVCsbz3EULWGQ1R+J6lYM
-	KvK/PPK7jAua5Xx9D1GsP9YTFhk7brBduGOV0x6RDRiI1SzWlPS675gIzwwmqH16aI7kOAc+S0HIq
-	WJhf1R5IvGNYO5pqZhQGBQiJ2jUBq5pcaDSA==;
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.97)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1s6dSu-00000002UMq-0AXM; Mon, 13 May 2024 23:44:12 +0200
-Received: from p5b13a15c.dip0.t-ipconnect.de ([91.19.161.92] helo=suse-laptop.fritz.box)
-          by inpost2.zedat.fu-berlin.de (Exim 4.97)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1s6dSt-00000003xh4-3NQ9; Mon, 13 May 2024 23:44:11 +0200
-Message-ID: <744fcf05a45a0863536c09c3fd3bf3057bbc8733.camel@physik.fu-berlin.de>
-Subject: Re: [GIT PULL] alpha: cleanups and build fixes for 6.10
-From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To: Ulrich Teichert <krypton@ulrich-teichert.org>, Akira Yokosawa
-	 <akiyks@gmail.com>
-Cc: paulmck@kernel.org, arnd@arndb.de, ink@jurassic.park.msu.ru, 
- linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org, 
- linux-kernel@vger.kernel.org, mattst88@gmail.com,
- richard.henderson@linaro.org,  torvalds@linux-foundation.org,
- viro@zeniv.linux.org.uk
-Date: Mon, 13 May 2024 23:44:11 +0200
-In-Reply-To: <202405131652.44DGqMjs007653@valdese.nms-ulrich-teichert.org>
-References: <202405131652.44DGqMjs007653@valdese.nms-ulrich-teichert.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.1 
+	s=arc-20240116; t=1715640008; c=relaxed/simple;
+	bh=x/Nx1D89T1lHlU5B5CqZ/p8dOgkTvhf1i6pKCzFa02k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=m0XVc1la8nwsBJUyFnR/M6790IQsjjbjKETfAQYFWclzXQ/3tNPy9pmkqBYCHJy7kqrK3/PXrrXuxsNaIk3pZNV+W5abTfUuSLDNavBIJRcZ+FPW6O0wvBPD212LUZrapdCCEK35zg/A0m4jjBgT6AbKJCiMj50Zn+edFdH15B8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eROTGHQI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AC92C4AF09;
+	Mon, 13 May 2024 22:40:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715640008;
+	bh=x/Nx1D89T1lHlU5B5CqZ/p8dOgkTvhf1i6pKCzFa02k=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=eROTGHQIRn/ruz3M/3Z51w7eviTp1FSvYe3lW2x9/oR/a3Z5Isxj1Z9guaGMWAp2+
+	 zfDLKe9ysI4+bY/XJHjj0YK9k6wEEAa7QUh8BtQrfTvxGYFOCiCUUY+vHbDHLTQjWH
+	 ASOG4RUDXnuwmBYEW0aErhsPf4zrqDIjqgK/NdceGDsCJiEuemskHrRTmb1i+U/AYB
+	 WToNfHl4haQcCjwGrnF4Q2PRIH1D+80qVAbjRENSrvyRR4K+HGhAXMj3mkLoYDd4p3
+	 cT+sN1+5vp9nSXPSQ1CE9SH0LaotGQr6ZIlXFVteQIwbTEfE8X8aBe+zjIdafIiGgz
+	 HxQ4ChTteGBxg==
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-51f1bf83f06so6113414e87.1;
+        Mon, 13 May 2024 15:40:08 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU6Toda41xdG9KxX9gROtvXXcQb24I/KplU/XYp1CmbejPafHqMod+VYNAX51baxpdVjMnZ3OI0qxggM/3BHPVrzUPiUaHfjJ/j/nvVSGwQSxTASZWc2JT6aFQO3+xQktN0mTG9f0B5Luvg5Xy3X7VKrurT2hgNT3YkKKgV3mJzs33oDBTRhBJpMw==
+X-Gm-Message-State: AOJu0YzGsHVmFO4Xm+Noa1KwWZDZm1J5Xm1JTEMKm0dxjfnKZwlADysf
+	K5MqMEBVZnIrr/7QTnBx9cJWfu06lDKbn6+R2sR1NDNEKdU9kS796d6Axm844CUl+jn6onFpVVQ
+	bICKtQd9R8hEh4Ne6qBSXdc5QX6o=
+X-Google-Smtp-Source: AGHT+IHbHNx5gwjCrmuc7c1K5c3QgIyJyryN7uuHy1ZDptb5sJxd7YMZEqQk+hD1Ap+n2OC5zmc0Q0L5IFdcn6mTIQY=
+X-Received: by 2002:a05:6512:6c7:b0:522:2dd4:bb30 with SMTP id
+ 2adb3069b0e04-5222dd4bba8mr6686133e87.54.1715640007187; Mon, 13 May 2024
+ 15:40:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-ZEDAT-Hint: PO
+References: <20240506133544.2861555-1-masahiroy@kernel.org> <202405131136.73E766AA8@keescook>
+In-Reply-To: <202405131136.73E766AA8@keescook>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Tue, 14 May 2024 07:39:31 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARZuqxWyxn2peMCCt0gbsRdWjri=Pd9-HvpK7bcOB-9dA@mail.gmail.com>
+Message-ID: <CAK7LNARZuqxWyxn2peMCCt0gbsRdWjri=Pd9-HvpK7bcOB-9dA@mail.gmail.com>
+Subject: Re: [PATCH 0/3] kbuild: remove many tool coverage variables
+To: Kees Cook <keescook@chromium.org>
+Cc: linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
+	Alexander Potapenko <glider@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
+	Dmitry Vyukov <dvyukov@google.com>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+	Marco Elver <elver@google.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Peter Oberparleiter <oberpar@linux.ibm.com>, 
+	Roberto Sassu <roberto.sassu@huaweicloud.com>, Johannes Berg <johannes@sipsolutions.net>, 
+	kasan-dev@googlegroups.com, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Ulrich,
+On Tue, May 14, 2024 at 3:48=E2=80=AFAM Kees Cook <keescook@chromium.org> w=
+rote:
+>
+> In the future can you CC the various maintainers of the affected
+> tooling? :)
 
-On Mon, 2024-05-13 at 18:52 +0200, Ulrich Teichert wrote:
-> I've probably disabled SMP in my test kernel, the jensen is a single CPU
-> system. I never had the pleasure of owning an AlphaServer 2000 or 2100,
-> which (according to https://en.wikipedia.org/wiki/AlphaServer and
-> https://en.wikipedia.org/wiki/AlphaStation) are the only systems
-> with EV4/EV45/EV5 multi-CPU setups (apart from the Cray T3{DE}), so
-> the possibility of ever seeing an error concerning atomic concurrent
-> updates is quite low.
->=20
-> Anybody out there with an AlphaServer 2000/2100 willing to try ?-)
 
-It has unfortunately been decided that further discussion is not wanted
-and support for older Alpha hardware has now been removed. So there is
-nothing more to try, unfortunately.
+Sorry, I was too lazy to add CC for treewide changes like this.
+Anyway, thanks for adding CC.
 
-Adrian
+
+
+
+> On Mon, May 06, 2024 at 10:35:41PM +0900, Masahiro Yamada wrote:
+> >
+> > This patch set removes many instances of the following variables:
+> >
+> >   - OBJECT_FILES_NON_STANDARD
+> >   - KASAN_SANITIZE
+> >   - UBSAN_SANITIZE
+> >   - KCSAN_SANITIZE
+> >   - KMSAN_SANITIZE
+> >   - GCOV_PROFILE
+> >   - KCOV_INSTRUMENT
+> >
+> > Such tools are intended only for kernel space objects, most of which
+> > are listed in obj-y, lib-y, or obj-m.
+>
+> This is a reasonable assertion, and the changes really simplify things
+> now and into the future. Thanks for finding such a clean solution! I
+> note that it also immediately fixes the issue noticed and fixed here:
+> https://lore.kernel.org/all/20240513122754.1282833-1-roberto.sassu@huawei=
+cloud.com/
+>
+> > The best guess is, objects in $(obj-y), $(lib-y), $(obj-m) can opt in
+> > such tools. Otherwise, not.
+> >
+> > This works in most places.
+>
+> I am worried about the use of "guess" and "most", though. :) Before, we
+> had some clear opt-out situations, and now it's more of a side-effect. I
+> think this is okay, but I'd really like to know more about your testing.
+
+
+- defconfig for arc, hexagon, loongarch, microblaze, sh, xtensa
+- allmodconfig for the other architectures
+
+
+(IIRC, allmodconfig failed for the first case, for reasons unrelated
+to this patch set, so I used defconfig instead.
+I do not remember what errors I observed)
+
+
+I checked the diff of .*.cmd files.
+
+
+
+
+
+>
+> It seems like you did build testing comparing build flags, since you
+> call out some of the explicit changes in patch 2, quoting:
+>
+> >  - include arch/mips/vdso/vdso-image.o into UBSAN, GCOV, KCOV
+> >  - include arch/sparc/vdso/vdso-image-*.o into UBSAN
+> >  - include arch/sparc/vdso/vma.o into UBSAN
+> >  - include arch/x86/entry/vdso/extable.o into KASAN, KCSAN, UBSAN, GCOV=
+, KCOV
+> >  - include arch/x86/entry/vdso/vdso-image-*.o into KASAN, KCSAN, UBSAN,=
+ GCOV, KCOV
+> >  - include arch/x86/entry/vdso/vdso32-setup.o into KASAN, KCSAN, UBSAN,=
+ GCOV, KCOV
+> >  - include arch/x86/entry/vdso/vma.o into GCOV, KCOV
+> >  - include arch/x86/um/vdso/vma.o into KASAN, GCOV, KCOV
+>
+> I would agree that these cases are all likely desirable.
+>
+> Did you find any cases where you found that instrumentation was _removed_
+> where not expected?
+
+
+
+
+See the commit log of 1/3.
+
+
+> Note:
+>
+> The coverage for some objects will be changed:
+>
+>   - exclude .vmlinux.export.o from UBSAN, KCOV
+>   - exclude arch/csky/kernel/vdso/vgettimeofday.o from UBSAN
+>   - exclude arch/parisc/kernel/vdso32/vdso32.so from UBSAN
+>   - exclude arch/parisc/kernel/vdso64/vdso64.so from UBSAN
+>   - exclude arch/x86/um/vdso/um_vdso.o from UBSAN
+>   - exclude drivers/misc/lkdtm/rodata.o from UBSAN, KCOV
+>   - exclude init/version-timestamp.o from UBSAN, KCOV
+>   - exclude lib/test_fortify/*.o from all santizers and profilers
+>
+> I believe these are positive effects.
+
+
+
 
 --=20
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+Best Regards
+Masahiro Yamada
 
