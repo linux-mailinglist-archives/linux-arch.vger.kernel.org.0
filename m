@@ -1,114 +1,113 @@
-Return-Path: <linux-arch+bounces-4381-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4382-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57AEC8C48BD
-	for <lists+linux-arch@lfdr.de>; Mon, 13 May 2024 23:19:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAE488C48D7
+	for <lists+linux-arch@lfdr.de>; Mon, 13 May 2024 23:26:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7B7391C21668
-	for <lists+linux-arch@lfdr.de>; Mon, 13 May 2024 21:19:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9D82B2810DD
+	for <lists+linux-arch@lfdr.de>; Mon, 13 May 2024 21:26:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82607824AA;
-	Mon, 13 May 2024 21:19:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D44C183A0E;
+	Mon, 13 May 2024 21:26:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M+EA9s+8"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="cxzeRZLH"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFE5F824AB;
-	Mon, 13 May 2024 21:19:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 982C68286D
+	for <linux-arch@vger.kernel.org>; Mon, 13 May 2024 21:26:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715635191; cv=none; b=ORHXL6ilw9bdP/y7n4ln7NvMFqy4OY3hctJILUxEzW8rzipEiXrbIpZaDwu5d6zD63waCdY21mq2I9g68Kk6Qpl6NezXViY9nITGe/L21u2FiNzNvXkUp0174jxwFP4kOyOQjUlaNXsU7P2IoatcyyXMTLmrhn4Wu+zOns+K3MM=
+	t=1715635602; cv=none; b=OZfnuptS6v1/HVyHVn+6/u90FUbgmQjAGtLNZfLGF1t98eXpE6t2nZUFJlrNkIGm3r665d/6utCxyq/Bx2ybTWIso97pLsy4GsiiajjwHEIVPsVcNBMZqtC+x6cNCxQBWGer2kLCEbxCqUtdRnxQMt28YGRMncX3XGiJOeb19fM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715635191; c=relaxed/simple;
-	bh=tVByUd58fPx6uO1hxNe/cW2dS8fCULR6krJb8DT00W0=;
+	s=arc-20240116; t=1715635602; c=relaxed/simple;
+	bh=LL2yga6BJDDS1lQbTpoY1aPGh2IjnTTQmfv5jkqA1s8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oe8OrJlv3vkqxc5mytocOhe+HBXVAF+hWfNgSrJ05kCBU8Ib8VtEUJQ2lHOjqb11ZjYOsZ49100UdwmXEFdeWDeoOcFBIpvEhztDtp2l3uBaHs26WY+epVMNDyd3a1BL2frbP68GyiRNtYSTidwV7vEpNun8zJXf10zOJ6dmSkQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M+EA9s+8; arc=none smtp.client-ip=209.85.167.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f172.google.com with SMTP id 5614622812f47-3c99e6b8b1fso1529044b6e.1;
-        Mon, 13 May 2024 14:19:49 -0700 (PDT)
+	 Content-Type:Content-Disposition:In-Reply-To; b=takoTMiud+xc8lVuSLadqgNahbDWCDtn9j6/NmqWInWU8EAyNJxiA4raID8Tzyh2TwsFn8YhzdlI37kqerWnlAO2w1RrD7gBUNkWTs26MhNsYH59wtmZy/yYo7TWP0SR0rWqEYxjHjU9SUCZ3eVNbg3gdc6eT4cvB6PbZgrOBbk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=cxzeRZLH; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1edf506b216so33011405ad.2
+        for <linux-arch@vger.kernel.org>; Mon, 13 May 2024 14:26:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715635189; x=1716239989; darn=vger.kernel.org;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1715635599; x=1716240399; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6QCxU+ICp2lsNCg+/s+slhR/vQQiDwQB/Vsc8SKbykM=;
-        b=M+EA9s+8pf8my7Md1baiG9uzH8buPyCLgFQJD/VtfTb06ri8w12jzBrE4nRAmT+Y9W
-         pOvtjnSi3OZfOuUomqCiG68uZact1YMETkpTuUF7gCecvvOrI4m3fPDEXA/wnfnuad3X
-         ELc4R1R8Uafu4wla9SHCFsk4PsT4OQnzVZPjQ1M+pSGPPP4O05ZHBn6Aoc/ZoXfZjmkv
-         KFZTTagRdBrBd0gBeVFZMjGUKFqw7ixagnfhdOW6Ho0m/A1hu0u10x1g67teY3aNzSON
-         021Q1+G+yIf92eLmtdaw2zwrjHiSNB43NsOrUjAoPd3M2L6LbDk+V6Rjz+/LvtnXEzB+
-         /SrA==
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1Av9RgaPQsUZwKrihewqWhIa6dx8V7kURy0F4c3tXz8=;
+        b=cxzeRZLHNBmK/8Lc1wnLOUzjDMM3GQZd/VqYlrvJ2obmSRyj/KTBzKPzaxHveSOxF1
+         mattY3ofeUvwYcKE4mVln0uMGfNInWX7Tgv3TWA9OdrHC7MUwCaJGZLp92sC9i5EVchy
+         zt/zwjloqe8jQ4r0n7Tk9ktj2tyVD+LgeEK5HPsGfYgj87YmQgiX1G5Ykd2CkRuCa41w
+         VSw93P36BkT0w5UTkyiVZz5MnSo3osOR84xOHYTRJRO1afLhibTzzwt4cpL5++wYb8qZ
+         RUZfQ8SawGgVX85CsDl7zn0iN4or6SI+JUgJ+hX9twlAnpcFVwZo0SxNDeGvtZEaBFyC
+         urRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715635189; x=1716239989;
+        d=1e100.net; s=20230601; t=1715635599; x=1716240399;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6QCxU+ICp2lsNCg+/s+slhR/vQQiDwQB/Vsc8SKbykM=;
-        b=JBjdg8YPq/lX1dpga3o+kOoF/o4l26ec0dkmL/YIcJh+BNgAqS6U0fiyFVT4PR+56V
-         mkxmfsXlUhGEczhnY+InlLSZpazkbBLt4+fg7IyKFvM8DYwXpd+6s7NV/fdeHwDarBd9
-         WZ2IEkJGmjOvlm9ii1ohdReXURxve8qoow+THXnJDoB4tF4AhZjc4gsd3flx3Og5v5XN
-         NY2cSTrPEA5dcvHiMBHjm+IAa7JJkz8m0Ttc4G7v7PyzhCTuW/x8yVp70zEOINjkNoPV
-         jZSabq38BhsVoNi8xhbj3s7j9imjti2J+M7yKSWzy+t9EXgtIScHaLQvPdq7WbFqHOPH
-         VfEQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXdBn2RW6IuN2TfJH6aPMgII7eWyi88G/MRpXd+IIh6NqkU7LIZSFpbwqkAK9LQeUm1DFDvxjZ3g0g4bHEpoKnymy0PrE+P48V2Bv2H
-X-Gm-Message-State: AOJu0Yw3XzaQX+ohAqYwsEHz1RL9JFG4oEmmM6I6FcXJAvmBkjXvPtUn
-	T8YDgIvY1/rDCDZT4kX1QDcNyjtkq+8TlBXh/W8Lrf7Q/h3CEZEv
-X-Google-Smtp-Source: AGHT+IH5/WVIyFCC3ZgTdeYH4qdayzBiFOKkZiwU8t2ZdQFwxw5g1+On2oSBxxkdvO17sMTQU049jg==
-X-Received: by 2002:a05:6870:46a1:b0:221:8b50:f1a0 with SMTP id 586e51a60fabf-24172a9d460mr16745517fac.19.1715635188934;
-        Mon, 13 May 2024 14:19:48 -0700 (PDT)
-Received: from fauth1-smtp.messagingengine.com (fauth1-smtp.messagingengine.com. [103.168.172.200])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-792bf2fc609sm493889285a.94.2024.05.13.14.19.48
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1Av9RgaPQsUZwKrihewqWhIa6dx8V7kURy0F4c3tXz8=;
+        b=T2s6XnACgjTnw21gtJu+Qs+yCMRO00jwyULNyA4AzFyDYTbLMDhpXjIrTI4if5Rtiy
+         yNmtfGgk8FEc7qY50hADgMz6FHMT+SdVsAXdJrwkpnvETRT+D61TqybTAXy1vlhvkelV
+         d7fyjQZyQEaJm975rNYKBkm4tph5cflGQopfPdn7yWvbIF/U8e17eFSAl0h7Iwfp5HS6
+         m6Mj1PXq29if53E/oxzHt+4i5CFY+UOjVjtjD3WDSMDwRsE5nFY1dP64bp898Q6bZCyj
+         nLxg0ktcAVKVI6F3V8Kdy13byZ8iFNU9qKb23GN/kJyfkE2M+/q3JwJXVmC9NynP+8PR
+         JFtw==
+X-Forwarded-Encrypted: i=1; AJvYcCWwKhVXLGozr+ZvZ+FdhYGIYSQyAtrVOsNSBFa73IeVzYF/OuffrSOeEsUWjepkgf/vgHaAK4BkHM06UBxRng5glp/vKc6MxPOfjg==
+X-Gm-Message-State: AOJu0Yw5ALk/pKSkKC3r7fi7OTQwTJ1Ljj5dnQ0nLPD2eNUo9zxYONyr
+	K9oz1JdYPiNhNBtkwDm5XUNJIvchZLp3wqUSEnPKsoHo2umU0lF2geWLXeCL4kA=
+X-Google-Smtp-Source: AGHT+IF+SpgNET3nuWJL5IGg9s5FZ86fG3Sc9l5DoORtZhuAz8MnSfbhg/ec9V32N2UyWUAOUoMzhg==
+X-Received: by 2002:a17:902:b70b:b0:1ec:76a6:ea9 with SMTP id d9443c01a7336-1ef43e338fcmr103173085ad.26.1715635598847;
+        Mon, 13 May 2024 14:26:38 -0700 (PDT)
+Received: from ghost ([50.145.13.30])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ef0b9d16cfsm84105425ad.18.2024.05.13.14.26.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 May 2024 14:19:48 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfauth.nyi.internal (Postfix) with ESMTP id EE90B1200077;
-	Mon, 13 May 2024 17:19:47 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 13 May 2024 17:19:47 -0400
-X-ME-Sender: <xms:84NCZqqtq0cVMPsdrHocNJENnQV1zbXkDIKaZRAEo-R3TGgdoUQ2KQ>
-    <xme:84NCZorJzY4vumMQ1o7mypbf4ZE3u5BawZvVn53Lr_n6HNd5I_nhHCIE0Yvr7KxCl
-    y6u5TUEiJiZs4igVg>
-X-ME-Received: <xmr:84NCZvMjSR8ebCux6obqFnxCLtfGwb8fb1UnArEcbL-2o377jOrIgWw7fupgyw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvdeggedgudehkecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
-    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
-    grthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveei
-    udffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
-    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
-    higihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:84NCZp4MWCsXuPPc50OIAw7wzhzl3zNryuXuQ9Jt-5SzX7QFZmldDA>
-    <xmx:84NCZp4Xv3HLmj_qVzxvtXfyRATTqVl7X8syYDo0LbNbi0ZlQ4TtDg>
-    <xmx:84NCZpieI2jv-kXywBj1nDu8H1P5YY0WPqObE9VSyXaDhX9Fmn90NA>
-    <xmx:84NCZj6oZM7rliPEYgee078QKmZFZmjROg-vd3nSxEtzpNOMK4Mc4w>
-    <xmx:84NCZkIj3DUbYjxnNhi9DJVbnWeBbGycf2MN9p9UD1usUFd6a_J4Nikc>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 13 May 2024 17:19:47 -0400 (EDT)
-Date: Mon, 13 May 2024 14:19:37 -0700
-From: Boqun Feng <boqun.feng@gmail.com>
-To: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-	elver@google.com, akpm@linux-foundation.org, tglx@linutronix.de,
-	peterz@infradead.org, dianders@chromium.org, pmladek@suse.com,
-	arnd@arndb.de, torvalds@linux-foundation.org, kernel-team@meta.com,
-	Mark Rutland <mark.rutland@arm.com>
-Subject: Re: [PATCH v2 cmpxchg 09/13] lib: Add one-byte emulation function
-Message-ID: <ZkKD6UqXZozp1p-W@boqun-archlinux>
-References: <b67e79d4-06cb-4a45-a906-b9e0fbae22c5@paulmck-laptop>
- <20240501230130.1111603-9-paulmck@kernel.org>
- <ZkInMNOsLO5XbDj5@boqun-archlinux>
- <9f0ff126-2806-488e-97cc-7258eff0c574@paulmck-laptop>
- <ZkI4XPJLeCtabfGh@boqun-archlinux>
+        Mon, 13 May 2024 14:26:38 -0700 (PDT)
+Date: Mon, 13 May 2024 14:26:31 -0700
+From: Charlie Jenkins <charlie@rivosinc.com>
+To: Deepak Gupta <debug@rivosinc.com>
+Cc: paul.walmsley@sifive.com, rick.p.edgecombe@intel.com,
+	broonie@kernel.org, Szabolcs.Nagy@arm.com, kito.cheng@sifive.com,
+	keescook@chromium.org, ajones@ventanamicro.com,
+	conor.dooley@microchip.com, cleger@rivosinc.com,
+	atishp@atishpatra.org, alex@ghiti.fr, bjorn@rivosinc.com,
+	alexghiti@rivosinc.com, samuel.holland@sifive.com, conor@kernel.org,
+	linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-mm@kvack.org, linux-arch@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, corbet@lwn.net, palmer@dabbelt.com,
+	aou@eecs.berkeley.edu, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, oleg@redhat.com,
+	akpm@linux-foundation.org, arnd@arndb.de, ebiederm@xmission.com,
+	Liam.Howlett@oracle.com, vbabka@suse.cz, lstoakes@gmail.com,
+	shuah@kernel.org, brauner@kernel.org, andy.chiu@sifive.com,
+	jerry.shih@sifive.com, hankuan.chen@sifive.com,
+	greentime.hu@sifive.com, evan@rivosinc.com, xiao.w.wang@intel.com,
+	apatel@ventanamicro.com, mchitale@ventanamicro.com,
+	dbarboza@ventanamicro.com, sameo@rivosinc.com,
+	shikemeng@huaweicloud.com, willy@infradead.org,
+	vincent.chen@sifive.com, guoren@kernel.org, samitolvanen@google.com,
+	songshuaishuai@tinylab.org, gerg@kernel.org, heiko@sntech.de,
+	bhe@redhat.com, jeeheng.sia@starfivetech.com, cyy@cyyself.name,
+	maskray@google.com, ancientmodern4@gmail.com,
+	mathis.salmen@matsal.de, cuiyunhui@bytedance.com,
+	bgray@linux.ibm.com, mpe@ellerman.id.au, baruch@tkos.co.il,
+	alx@kernel.org, david@redhat.com, catalin.marinas@arm.com,
+	revest@chromium.org, josh@joshtriplett.org, shr@devkernel.io,
+	deller@gmx.de, omosnace@redhat.com, ojeda@kernel.org,
+	jhubbard@nvidia.com
+Subject: Re: [PATCH v3 10/29] riscv/mm : ensure PROT_WRITE leads to VM_READ |
+ VM_WRITE
+Message-ID: <ZkKFh2YJh3AcUTfN@ghost>
+References: <20240403234054.2020347-1-debug@rivosinc.com>
+ <20240403234054.2020347-11-debug@rivosinc.com>
+ <Zj6LfpQhOjTLEx2O@ghost>
+ <ZkJSLTk1iWFGJZCQ@debug.ba.rivosinc.com>
+ <ZkJdYvkUqHkX7yPf@ghost>
+ <ZkJe3ivq7m4NptHd@debug.ba.rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -117,165 +116,191 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZkI4XPJLeCtabfGh@boqun-archlinux>
+In-Reply-To: <ZkJe3ivq7m4NptHd@debug.ba.rivosinc.com>
 
-On Mon, May 13, 2024 at 08:57:16AM -0700, Boqun Feng wrote:
-> On Mon, May 13, 2024 at 08:41:27AM -0700, Paul E. McKenney wrote:
-> [...]
-> > > > +#include <linux/types.h>
-> > > > +#include <linux/export.h>
-> > > > +#include <linux/instrumented.h>
-> > > > +#include <linux/atomic.h>
-> > > > +#include <linux/panic.h>
-> > > > +#include <linux/bug.h>
-> > > > +#include <asm-generic/rwonce.h>
-> > > > +#include <linux/cmpxchg-emu.h>
-> > > > +
-> > > > +union u8_32 {
-> > > > +	u8 b[4];
-> > > > +	u32 w;
-> > > > +};
-> > > > +
-> > > > +/* Emulate one-byte cmpxchg() in terms of 4-byte cmpxchg. */
-> > > > +uintptr_t cmpxchg_emu_u8(volatile u8 *p, uintptr_t old, uintptr_t new)
-> > > > +{
-> > > > +	u32 *p32 = (u32 *)(((uintptr_t)p) & ~0x3);
-> > > > +	int i = ((uintptr_t)p) & 0x3;
-> > > > +	union u8_32 old32;
-> > > > +	union u8_32 new32;
-> > > > +	u32 ret;
-> > > > +
-> > > > +	ret = READ_ONCE(*p32);
-> > > > +	do {
-> > > > +		old32.w = ret;
-> > > > +		if (old32.b[i] != old)
-> > > > +			return old32.b[i];
-> > > > +		new32.w = old32.w;
-> > > > +		new32.b[i] = new;
-> > > > +		instrument_atomic_read_write(p, 1);
-> > > > +		ret = data_race(cmpxchg(p32, old32.w, new32.w)); // Overridden above.
+On Mon, May 13, 2024 at 11:41:34AM -0700, Deepak Gupta wrote:
+> On Mon, May 13, 2024 at 11:36:49AM -0700, Charlie Jenkins wrote:
+> > On Mon, May 13, 2024 at 10:47:25AM -0700, Deepak Gupta wrote:
+> > > On Fri, May 10, 2024 at 02:02:54PM -0700, Charlie Jenkins wrote:
+> > > > On Wed, Apr 03, 2024 at 04:34:58PM -0700, Deepak Gupta wrote:
+> > > > > `arch_calc_vm_prot_bits` is implemented on risc-v to return VM_READ |
+> > > > > VM_WRITE if PROT_WRITE is specified. Similarly `riscv_sys_mmap` is
+> > > > > updated to convert all incoming PROT_WRITE to (PROT_WRITE | PROT_READ).
+> > > > > This is to make sure that any existing apps using PROT_WRITE still work.
+> > > > >
+> > > > > Earlier `protection_map[VM_WRITE]` used to pick read-write PTE encodings.
+> > > > > Now `protection_map[VM_WRITE]` will always pick PAGE_SHADOWSTACK PTE
+> > > > > encodings for shadow stack. Above changes ensure that existing apps
+> > > > > continue to work because underneath kernel will be picking
+> > > > > `protection_map[VM_WRITE|VM_READ]` PTE encodings.
+> > > > >
+> > > > > Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+> > > > > ---
+> > > > >  arch/riscv/include/asm/mman.h    | 24 ++++++++++++++++++++++++
+> > > > >  arch/riscv/include/asm/pgtable.h |  1 +
+> > > > >  arch/riscv/kernel/sys_riscv.c    | 11 +++++++++++
+> > > > >  arch/riscv/mm/init.c             |  2 +-
+> > > > >  mm/mmap.c                        |  1 +
+> > > > >  5 files changed, 38 insertions(+), 1 deletion(-)
+> > > > >  create mode 100644 arch/riscv/include/asm/mman.h
+> > > > >
+> > > > > diff --git a/arch/riscv/include/asm/mman.h b/arch/riscv/include/asm/mman.h
+> > > > > new file mode 100644
+> > > > > index 000000000000..ef9fedf32546
+> > > > > --- /dev/null
+> > > > > +++ b/arch/riscv/include/asm/mman.h
+> > > > > @@ -0,0 +1,24 @@
+> > > > > +/* SPDX-License-Identifier: GPL-2.0 */
+> > > > > +#ifndef __ASM_MMAN_H__
+> > > > > +#define __ASM_MMAN_H__
+> > > > > +
+> > > > > +#include <linux/compiler.h>
+> > > > > +#include <linux/types.h>
+> > > > > +#include <uapi/asm/mman.h>
+> > > > > +
+> > > > > +static inline unsigned long arch_calc_vm_prot_bits(unsigned long prot,
+> > > > > +	unsigned long pkey __always_unused)
+> > > > > +{
+> > > > > +	unsigned long ret = 0;
+> > > > > +
+> > > > > +	/*
+> > > > > +	 * If PROT_WRITE was specified, force it to VM_READ | VM_WRITE.
+> > > > > +	 * Only VM_WRITE means shadow stack.
+> > > > > +	 */
+> > > > > +	if (prot & PROT_WRITE)
+> > > > > +		ret = (VM_READ | VM_WRITE);
+> > > > > +	return ret;
+> > > > > +}
+> > > > > +#define arch_calc_vm_prot_bits(prot, pkey) arch_calc_vm_prot_bits(prot, pkey)
+> > > > > +
+> > > > > +#endif /* ! __ASM_MMAN_H__ */
+> > > > > diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
+> > > > > index 6066822e7396..4d5983bc6766 100644
+> > > > > --- a/arch/riscv/include/asm/pgtable.h
+> > > > > +++ b/arch/riscv/include/asm/pgtable.h
+> > > > > @@ -184,6 +184,7 @@ extern struct pt_alloc_ops pt_ops __initdata;
+> > > > >  #define PAGE_READ_EXEC		__pgprot(_PAGE_BASE | _PAGE_READ | _PAGE_EXEC)
+> > > > >  #define PAGE_WRITE_EXEC		__pgprot(_PAGE_BASE | _PAGE_READ |	\
+> > > > >  					 _PAGE_EXEC | _PAGE_WRITE)
+> > > > > +#define PAGE_SHADOWSTACK       __pgprot(_PAGE_BASE | _PAGE_WRITE)
+> > > > >
+> > > > >  #define PAGE_COPY		PAGE_READ
+> > > > >  #define PAGE_COPY_EXEC		PAGE_READ_EXEC
+> > > > > diff --git a/arch/riscv/kernel/sys_riscv.c b/arch/riscv/kernel/sys_riscv.c
+> > > > > index f1c1416a9f1e..846c36b1b3d5 100644
+> > > > > --- a/arch/riscv/kernel/sys_riscv.c
+> > > > > +++ b/arch/riscv/kernel/sys_riscv.c
+> > > > > @@ -8,6 +8,8 @@
+> > > > >  #include <linux/syscalls.h>
+> > > > >  #include <asm/cacheflush.h>
+> > > > >  #include <asm-generic/mman-common.h>
+> > > > > +#include <vdso/vsyscall.h>
+> > > > > +#include <asm/mman.h>
+> > > > >
+> > > > >  static long riscv_sys_mmap(unsigned long addr, unsigned long len,
+> > > > >  			   unsigned long prot, unsigned long flags,
+> > > > > @@ -17,6 +19,15 @@ static long riscv_sys_mmap(unsigned long addr, unsigned long len,
+> > > > >  	if (unlikely(offset & (~PAGE_MASK >> page_shift_offset)))
+> > > > >  		return -EINVAL;
+> > > > >
+> > > > > +	/*
+> > > > > +	 * If only PROT_WRITE is specified then extend that to PROT_READ
+> > > > > +	 * protection_map[VM_WRITE] is now going to select shadow stack encodings.
+> > > > > +	 * So specifying PROT_WRITE actually should select protection_map [VM_WRITE | VM_READ]
+> > > > > +	 * If user wants to create shadow stack then they should use `map_shadow_stack` syscall.
+> > > > > +	 */
+> > > > > +	if (unlikely((prot & PROT_WRITE) && !(prot & PROT_READ)))
+> > > >
+> > > > The comments says that this should extend to PROT_READ if only
+> > > > PROT_WRITE is specified. This condition instead is checking if
+> > > > PROT_WRITE is selected but PROT_READ is not. If prot is (VM_EXEC |
+> > > > VM_WRITE) then it would be extended to (VM_EXEC | VM_WRITE | VM_READ).
+> > > > This will not currently cause any issues because these both map to the
+> > > > same value in the protection_map PAGE_COPY_EXEC, however this seems to
+> > > > be not the intention of this change.
+> > > >
+> > > > prot == PROT_WRITE better suits the condition explained in the comment.
 > > > 
-> > > Just out of curiosity, why is this `data_race` needed? cmpxchg is atomic
-> > > so there should be no chance for a data race?
+> > > If someone specifies this (PROT_EXEC | PROT_WRITE) today, it works because
+> > > of the way permissions are setup in `protection_map`. On risc-v there is no
+> > > way to have a page which is execute and write only. So expectation is that
+> > > if some apps were using `PROT_EXEC | PROT_WRITE` today, they were working
+> > > because internally it was translating to read, write and execute on page
+> > > permissions level. This patch make sure that, it stays same from page
+> > > permissions perspective.
+> > > 
+> > > If someone was using PROT_EXEC, it may translate to execute only and this change
+> > > doesn't impact that.
+> > > 
+> > > Patch simply looks for presence of `PROT_WRITE` and absence of `PROT_READ` in
+> > > protection flags and if that condition is satisfied, it assumes that caller assumed
+> > > page is going to be read allowed as well.
 > > 
-> > That is what I thought, too.  ;-)
-> > 
-> > The problem is that the cmpxchg() covers 32 bits, and so without that
-> > data_race(), KCSAN would complain about data races with perfectly
-> > legitimate concurrent accesses to the other three bytes.
-> > 
-> > The instrument_atomic_read_write(p, 1) beforehand tells KCSAN to complain
-> > about concurrent accesses, but only to that one byte.
-> > 
+> > The purpose of this change is for compatibility with shadow stack pages
+> > but this affects flags for pages that are not shadow stack pages.
+> > Adding PROT_READ to the other cases is redundant as protection_map
+> > already handles that mapping. Permissions being strictly PROT_WRITE is
+> > the only case that needs to be handled, and is the only case that is
+> > called out in the commit message and in the comment.
 > 
-> Oh, I see. For that purpose, maybe we can just use raw_cmpxchg() here,
-> i.e. a cmpxchg() without any instrument in it. Cc Mark in case I'm
-> missing something.
+> Yeah that's fine.
+> I can change the commit message or just strictly check for PROT_WRITE.
+> It doesn't change bottomline, I am fine with either option.
 > 
+> Let me know your preference.
 
-I just realized that the KCSAN instrumentation is already done in
-cmpxchg() layer:
+I would prefer the strict check. This is not critical though so I will
+support whatever you decide!
 
-	#define cmpxchg(ptr, ...) \
-	({ \
-		typeof(ptr) __ai_ptr = (ptr); \
-		kcsan_mb(); \
-		instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
-		raw_cmpxchg(__ai_ptr, __VA_ARGS__); \
-	})
+- Charlie
 
-and, this function is lower in the layer, so it shouldn't have the
-instrumentation itself. How about the following (based on today's RCU
-dev branch)?
-
-Regards,
-Boqun
-
--------------------------------------------->8
-Subject: [PATCH] lib: cmpxchg-emu: Make cmpxchg_emu_u8() noinstr
-
-Currently, cmpxchg_emu_u8() is called via cmpxchg() or raw_cmpxchg()
-which already makes the instrumentation decision:
-
-* cmpxchg() case:
-
-	cmpxchg():
-	  kcsan_mb();
-	  instrument_atomic_read_write(...);
-	  raw_cmpxchg():
-	    arch_cmpxchg():
-	      cmpxchg_emu_u8();
-
-... should have KCSAN instrumentation.
-
-* raw_cmpxchg() case:
-
-	raw_cmpxchg():
-	  arch_cmpxchg():
-	    cmpxchg_emu_u8();
-
-... shouldn't have KCSAN instrumentation.
-
-Therefore it's redundant to put KCSAN instrumentation in
-cmpxchg_emu_u8() (along with the data_race() to get away the
-instrumentation).
-
-So make cmpxchg_emu_u8() a noinstr function, and remove the KCSAN
-instrumentation inside it.
-
-Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
----
- include/linux/cmpxchg-emu.h |  4 +++-
- lib/cmpxchg-emu.c           | 14 ++++++++++----
- 2 files changed, 13 insertions(+), 5 deletions(-)
-
-diff --git a/include/linux/cmpxchg-emu.h b/include/linux/cmpxchg-emu.h
-index 998deec67740..c4c85f41d9f4 100644
---- a/include/linux/cmpxchg-emu.h
-+++ b/include/linux/cmpxchg-emu.h
-@@ -10,6 +10,8 @@
- #ifndef __LINUX_CMPXCHG_EMU_H
- #define __LINUX_CMPXCHG_EMU_H
- 
--uintptr_t cmpxchg_emu_u8(volatile u8 *p, uintptr_t old, uintptr_t new);
-+#include <linux/compiler.h>
-+
-+noinstr uintptr_t cmpxchg_emu_u8(volatile u8 *p, uintptr_t old, uintptr_t new);
- 
- #endif /* __LINUX_CMPXCHG_EMU_H */
-diff --git a/lib/cmpxchg-emu.c b/lib/cmpxchg-emu.c
-index 27f6f97cb60d..788c22cd4462 100644
---- a/lib/cmpxchg-emu.c
-+++ b/lib/cmpxchg-emu.c
-@@ -21,8 +21,13 @@ union u8_32 {
- 	u32 w;
- };
- 
--/* Emulate one-byte cmpxchg() in terms of 4-byte cmpxchg. */
--uintptr_t cmpxchg_emu_u8(volatile u8 *p, uintptr_t old, uintptr_t new)
-+/*
-+ * Emulate one-byte cmpxchg() in terms of 4-byte cmpxchg.
-+ *
-+ * This function is marked as 'noinstr' as the instrumentation should be done at
-+ * outer layer.
-+ */
-+noinstr uintptr_t cmpxchg_emu_u8(volatile u8 *p, uintptr_t old, uintptr_t new)
- {
- 	u32 *p32 = (u32 *)(((uintptr_t)p) & ~0x3);
- 	int i = ((uintptr_t)p) & 0x3;
-@@ -37,8 +42,9 @@ uintptr_t cmpxchg_emu_u8(volatile u8 *p, uintptr_t old, uintptr_t new)
- 			return old32.b[i];
- 		new32.w = old32.w;
- 		new32.b[i] = new;
--		instrument_atomic_read_write(p, 1);
--		ret = data_race(cmpxchg(p32, old32.w, new32.w)); // Overridden above.
-+
-+		// raw_cmpxchg() is used here to avoid instrumentation.
-+		ret = raw_cmpxchg(p32, old32.w, new32.w); // Overridden above.
- 	} while (ret != old32.w);
- 	return old;
- }
--- 
-2.44.0
-
+> 
+> > 
+> > - Charlie
+> > 
+> > > 
+> > > 
+> > > >
+> > > > > +		prot |= PROT_READ;
+> > > > > +
+> > > > >  	return ksys_mmap_pgoff(addr, len, prot, flags, fd,
+> > > > >  			       offset >> (PAGE_SHIFT - page_shift_offset));
+> > > > >  }
+> > > > > diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+> > > > > index fa34cf55037b..98e5ece4052a 100644
+> > > > > --- a/arch/riscv/mm/init.c
+> > > > > +++ b/arch/riscv/mm/init.c
+> > > > > @@ -299,7 +299,7 @@ pgd_t early_pg_dir[PTRS_PER_PGD] __initdata __aligned(PAGE_SIZE);
+> > > > >  static const pgprot_t protection_map[16] = {
+> > > > >  	[VM_NONE]					= PAGE_NONE,
+> > > > >  	[VM_READ]					= PAGE_READ,
+> > > > > -	[VM_WRITE]					= PAGE_COPY,
+> > > > > +	[VM_WRITE]					= PAGE_SHADOWSTACK,
+> > > > >  	[VM_WRITE | VM_READ]				= PAGE_COPY,
+> > > > >  	[VM_EXEC]					= PAGE_EXEC,
+> > > > >  	[VM_EXEC | VM_READ]				= PAGE_READ_EXEC,
+> > > > > diff --git a/mm/mmap.c b/mm/mmap.c
+> > > > > index d89770eaab6b..57a974f49b00 100644
+> > > > > --- a/mm/mmap.c
+> > > > > +++ b/mm/mmap.c
+> > > > > @@ -47,6 +47,7 @@
+> > > > >  #include <linux/oom.h>
+> > > > >  #include <linux/sched/mm.h>
+> > > > >  #include <linux/ksm.h>
+> > > > > +#include <linux/processor.h>
+> > > >
+> > > > It doesn't seem like this is necessary for this patch.
+> > > 
+> > > Thanks. Yeah it looks like I forgot to remove this over the churn.
+> > > Will fix it.
+> > > 
+> > > >
+> > > > - Charlie
+> > > >
+> > > > >
+> > > > >  #include <linux/uaccess.h>
+> > > > >  #include <asm/cacheflush.h>
+> > > > > --
+> > > > > 2.43.2
+> > > > >
 
