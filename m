@@ -1,194 +1,148 @@
-Return-Path: <linux-arch+bounces-4391-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4392-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD8C78C4DA2
-	for <lists+linux-arch@lfdr.de>; Tue, 14 May 2024 10:22:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51C968C4F00
+	for <lists+linux-arch@lfdr.de>; Tue, 14 May 2024 12:28:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7DE3D2827BA
-	for <lists+linux-arch@lfdr.de>; Tue, 14 May 2024 08:22:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8311A1C2048C
+	for <lists+linux-arch@lfdr.de>; Tue, 14 May 2024 10:28:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0FBB18E20;
-	Tue, 14 May 2024 08:22:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9705B13440F;
+	Tue, 14 May 2024 09:46:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Vv991aFK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L4HGvJ05"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 417AD17BD2;
-	Tue, 14 May 2024 08:22:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DDE753E15;
+	Tue, 14 May 2024 09:46:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715674959; cv=none; b=TKVKofs61X6D2WlbnKKo8KquqrDqjOg+IY1w7V4tzQT8XZcs7WWe/a8rFakOA6x7M+10U24Ngs8pfGXvJyvrcAc6ywdE7R0OFgsrLbMtNi4Lt1W+05wdF6f5qmzH2zAbC+3Ev0v83zjeDAKmA2mwxK1MGOL4XP03O38VbeQNVc0=
+	t=1715680017; cv=none; b=Dg2k+NFUch2BS/ZnAAgyHMRo4Uotdir/PGMgk87I4VPo8wwFI4v8hTe8oL6BLFAoAFRWgtlpfE8UFBB/mvfSb/cTdv4bXWT01EUVsFAgzuKwp/d6IhEJP8UJCfnan6UD2hHmjXZml5Gjy5FhLsXFqX2RMxYpljSJtRcoc7G/Hnk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715674959; c=relaxed/simple;
-	bh=pp1cHNisj+tKz9XnjQgXLHVPUh8pqcGAdMvNqdaZNQQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=BKQ7YuHtsZkDPPOQgT4fFeOMJ9bD818R7hoCDmDzosT0SAwGMrcEaDoszbfOaAvsL9PPUb9jCliNpP3R6X8mU4VEnjKVygnO/RGYfY2Cuxl1zdLBZ7oNxnPga/w+fYU6uODYmDeTP/9ecmguC021u4wCPoXTWvfBVI+G0mmn3nc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Vv991aFK; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Sender:Content-Type:MIME-Version:
-	Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
-	Content-ID:Content-Description:In-Reply-To:References;
-	bh=i2r1tYPEIFq5ICtSDsTyOodWu9HoIuruvn+TZUTQ0y8=; b=Vv991aFKT1XN/drhhQgMf2jEtZ
-	v068ortgpU6RLM/jvJZXbhNziqOEckfDgR1S23T1VX2gDkEPDKOOtfW7fMpNoziJeNxKuhZ+9NQ6g
-	offVVLb04CTmfWs0HLStyA2EIkLsYD1eR2tesQdOLJCHuGytm7ahMhIgdxIbUf8oFIUR6qmSjn08d
-	xEv3OX9Mm3QQMq1mH3Fce6811Py/bG/h3ikPzyEEfKLNQPJXeR76u6aaI+NxU2U82Sj3JRuLF8lBo
-	wXcxJaZIEGi+PCXJDHPjtzC1rH2SyOfmrMctQuPMVr0yJ72j3h1mTC6fIH6nXLDIgJ0jD51uW8D9n
-	C/HEtH4A==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1s6nQh-0000000FLBc-2A8j;
-	Tue, 14 May 2024 08:22:35 +0000
-Date: Tue, 14 May 2024 01:22:35 -0700
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-modules@vger.kernel.org, mcgrof@kernel.org
-Cc: patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, rppt@kernel.org, song@kernel.org,
-	tglx@linutronix.de, bjorn@kernel.org, mhiramat@kernel.org,
-	rostedt@goodmis.org, philmd@linaro.org, will@kernel.org,
-	sam@ravnborg.org, alexghiti@rivosinc.com, liviu@dudau.co.uk,
-	justinstitt@google.com, elsk@google.com
-Subject: [GIT PULL] Modules changes for v6.10-rc1
-Message-ID: <ZkMfS727s_1MQWzQ@bombadil.infradead.org>
+	s=arc-20240116; t=1715680017; c=relaxed/simple;
+	bh=dfYJ4UEi4cz7TvFXBGiFzXx4XErQQccYti1P3UdmCOU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ntA8nqIQ284HVuUlgd8vETHqoK+Qa+nxAIisB52jWUfH3qTSsIzu1/+M0kdp0LLk7lgvy47rAnC0OQ7eBvg0l2mGU7v7IlvlrUyuHvH6Vm2vUrB2BNorcrLXNjB2iHYTa4fvE5eEHsMbzBChvQU2MheSdhyOAO3wEYn2DSF1a2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L4HGvJ05; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 921E4C32786;
+	Tue, 14 May 2024 09:46:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715680016;
+	bh=dfYJ4UEi4cz7TvFXBGiFzXx4XErQQccYti1P3UdmCOU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=L4HGvJ05P1kdy7JsAeGZzTWy5UC5yCDkt7J4izjjNlV+W1yVKpSVB3AtSEcgQn/dm
+	 dOpsRZfjdp3lMmQzu5bajEURt5cuBIFXiyE/2Gi7E5myVtrp3WG2pcvJrAcIAfYOMk
+	 uCvh68F2oD1Oeot5H0m3JzViCCsqxBMn3rXPkmDSTtFzH4JTu8oH7FmlOutWCqEbL4
+	 xMd2Z6jvh6U9uqYYcma+yR5QPY8qCu8ze5eaubLROkaibqDDwpev+M8tfnIcGm/fUd
+	 oIdSDo/05EN2KwpW4RqaFcl0Xam4bNAfNT+GTfv5aWlfX8VJDVMwmXIHTwdphmpoQd
+	 TzvCQAAUS2CmQ==
+From: Puranjay Mohan <puranjay@kernel.org>
+To: Alan Stern <stern@rowland.harvard.edu>,
+	Andrea Parri <parri.andrea@gmail.com>,
+	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	David Howells <dhowells@redhat.com>,
+	Jade Alglave <j.alglave@ucl.ac.uk>,
+	Luc Maranget <luc.maranget@inria.fr>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Akira Yokosawa <akiyks@gmail.com>,
+	Daniel Lustig <dlustig@nvidia.com>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org
+Cc: puranjay12@gmail.com
+Subject: [PATCH] tools/memory-model: Add atomic_andnot() with its variants
+Date: Tue, 14 May 2024 09:46:33 +0000
+Message-Id: <20240514094633.48067-1-puranjay@kernel.org>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+Content-Transfer-Encoding: 8bit
 
-The following changes since commit a5131c3fdf2608f1c15f3809e201cf540eb28489:
+Pull-855[1] added the support of atomic_andnot() to the herd tool. Use
+this to add the implementation in the LKMM. All of the ordering variants
+are also added.
 
-  Merge tag 'x86-shstk-2024-05-13' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip (2024-05-13 19:33:23 -0700)
+Here is a small litmus-test that uses this operation:
 
-are available in the Git repository at:
+C andnot
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.10-rc1
+{
+atomic_t u = ATOMIC_INIT(7);
+}
 
-for you to fetch changes up to 2c9e5d4a008293407836d29d35dfd4353615bd2f:
+P0(atomic_t *u)
+{
 
-  bpf: remove CONFIG_BPF_JIT dependency on CONFIG_MODULES of (2024-05-14 00:36:29 -0700)
+        r0 = atomic_fetch_andnot(3, u);
+        r1 = READ_ONCE(*u);
+}
 
-----------------------------------------------------------------
-Modules changes for v6.10-rc1
+exists (0:r0=7 /\ 0:r1=4)
 
-Finally something fun. Mike Rapoport does some cleanup to allow us to
-take out module_alloc() out of modules into a new paint shedded execmem_alloc()
-and execmem_free() so to make emphasis these helpers are actually used outside
-of modules. It starts with a no-functional changes API rename / placeholders
-to then allow architectures to define their requirements into a new shiny
-struct execmem_info with ranges, and requirements for those ranges. Archs
-now can intitialize this execmem_info as the last part of mm_core_init() if
-they have to diverge from the norm. Each range is a known type clearly
-articulated and spelled out in enum execmem_type.
+Test andnot Allowed
+States 1
+0:r0=7; 0:r1=4;
+Ok
+Witnesses
+Positive: 1 Negative: 0
+Condition exists (0:r0=7 /\ 0:r1=4)
+Observation andnot Always 1 0
+Time andnot 0.00
+Hash=78f011a0b5a0c65fa1cf106fcd62c845
 
-Although a lot of this is major cleanup and prep work for future enhancements an
-immediate clear gain is we get to enable KPROBES without MODULES now. That is
-ultimately what motiviated to pick this work up again, now with smaller goal as
-concrete stepping stone.
+[1] https://github.com/herd/herdtools7/pull/855
 
-This has been sitting on linux-next for a little less than a month, a few issues
-were found already and fixed, in particular an odd mips boot issue. Arch folks
-reviewed the code too. This is ready for wider exposure and testing.
+Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+---
 
-----------------------------------------------------------------
-Justin Stitt (1):
-      kallsyms: replace deprecated strncpy with strscpy
+This commit is based on the commit[1] that is adding `&`, `|`, and `^`.
 
-Mike Rapoport (IBM) (16):
-      arm64: module: remove unneeded call to kasan_alloc_module_shadow()
-      mips: module: rename MODULE_START to MODULES_VADDR
-      nios2: define virtual address space for modules
-      sparc: simplify module_alloc()
-      module: make module_memory_{alloc,free} more self-contained
-      mm: introduce execmem_alloc() and execmem_free()
-      mm/execmem, arch: convert simple overrides of module_alloc to execmem
-      mm/execmem, arch: convert remaining overrides of module_alloc to execmem
-      riscv: extend execmem_params for generated code allocations
-      arm64: extend execmem_info for generated code allocations
-      powerpc: extend execmem_params for kprobes allocations
-      arch: make execmem setup available regardless of CONFIG_MODULES
-      x86/ftrace: enable dynamic ftrace without CONFIG_MODULES
-      powerpc: use CONFIG_EXECMEM instead of CONFIG_MODULES where appropriate
-      kprobes: remove dependency on CONFIG_MODULES
-      bpf: remove CONFIG_BPF_JIT dependency on CONFIG_MODULES of
+Both of these patches should go together when the next version of herd7 is
+released. I will update the "REQUIREMENTS" section when the new version is
+released.
 
-Yifan Hong (1):
-      module: allow UNUSED_KSYMS_WHITELIST to be relative against objtree.
+Later on, I will add some example litmus tests to showcase the usage of
+these new operations.
 
- arch/Kconfig                         |  10 ++-
- arch/arm/kernel/module.c             |  34 ---------
- arch/arm/mm/init.c                   |  45 +++++++++++
- arch/arm64/Kconfig                   |   1 +
- arch/arm64/kernel/module.c           | 126 ------------------------------
- arch/arm64/kernel/probes/kprobes.c   |   7 --
- arch/arm64/mm/init.c                 | 140 ++++++++++++++++++++++++++++++++++
- arch/arm64/net/bpf_jit_comp.c        |  11 ---
- arch/loongarch/kernel/module.c       |   6 --
- arch/loongarch/mm/init.c             |  21 +++++
- arch/mips/include/asm/pgtable-64.h   |   4 +-
- arch/mips/kernel/module.c            |  10 ---
- arch/mips/mm/fault.c                 |   4 +-
- arch/mips/mm/init.c                  |  23 ++++++
- arch/nios2/include/asm/pgtable.h     |   5 +-
- arch/nios2/kernel/module.c           |  20 -----
- arch/nios2/mm/init.c                 |  21 +++++
- arch/parisc/kernel/module.c          |  12 ---
- arch/parisc/mm/init.c                |  23 +++++-
- arch/powerpc/Kconfig                 |   2 +-
- arch/powerpc/include/asm/kasan.h     |   2 +-
- arch/powerpc/kernel/head_8xx.S       |   4 +-
- arch/powerpc/kernel/head_book3s_32.S |   6 +-
- arch/powerpc/kernel/kprobes.c        |  22 +-----
- arch/powerpc/kernel/module.c         |  38 ----------
- arch/powerpc/lib/code-patching.c     |   2 +-
- arch/powerpc/mm/book3s32/mmu.c       |   2 +-
- arch/powerpc/mm/mem.c                |  64 ++++++++++++++++
- arch/riscv/include/asm/pgtable.h     |   3 +
- arch/riscv/kernel/module.c           |  12 ---
- arch/riscv/kernel/probes/kprobes.c   |  10 ---
- arch/riscv/mm/init.c                 |  35 +++++++++
- arch/riscv/net/bpf_jit_core.c        |  13 ----
- arch/s390/kernel/ftrace.c            |   4 +-
- arch/s390/kernel/kprobes.c           |   4 +-
- arch/s390/kernel/module.c            |  42 +---------
- arch/s390/mm/init.c                  |  30 ++++++++
- arch/sparc/include/asm/pgtable_32.h  |   2 +
- arch/sparc/kernel/module.c           |  30 --------
- arch/sparc/mm/Makefile               |   2 +
- arch/sparc/mm/execmem.c              |  21 +++++
- arch/sparc/net/bpf_jit_comp_32.c     |   8 +-
- arch/x86/Kconfig                     |   1 +
- arch/x86/kernel/ftrace.c             |  16 +---
- arch/x86/kernel/kprobes/core.c       |   4 +-
- arch/x86/kernel/module.c             |  51 -------------
- arch/x86/mm/init.c                   |  29 +++++++
- include/linux/execmem.h              | 132 ++++++++++++++++++++++++++++++++
- include/linux/module.h               |   9 +++
- include/linux/moduleloader.h         |  15 ----
- kernel/bpf/Kconfig                   |   2 +-
- kernel/bpf/core.c                    |   6 +-
- kernel/kprobes.c                     |  63 +++++++++------
- kernel/module/Kconfig                |   3 +-
- kernel/module/kallsyms.c             |   2 +-
- kernel/module/main.c                 | 105 ++++++++++++-------------
- kernel/trace/trace_kprobe.c          |  20 ++++-
- mm/Kconfig                           |   3 +
- mm/Makefile                          |   1 +
- mm/execmem.c                         | 143 +++++++++++++++++++++++++++++++++++
- mm/mm_init.c                         |   2 +
- scripts/Makefile.modpost             |   2 +-
- 62 files changed, 906 insertions(+), 584 deletions(-)
- create mode 100644 arch/sparc/mm/execmem.c
- create mode 100644 include/linux/execmem.h
- create mode 100644 mm/execmem.c
+[1] https://lore.kernel.org/all/20240508143400.36256-1-puranjay@kernel.org/
+
+---
+ tools/memory-model/linux-kernel.def | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/tools/memory-model/linux-kernel.def b/tools/memory-model/linux-kernel.def
+index d1f11930ec51..a12b96c547b7 100644
+--- a/tools/memory-model/linux-kernel.def
++++ b/tools/memory-model/linux-kernel.def
+@@ -70,6 +70,7 @@ atomic_or(V,X)  { __atomic_op(X,|,V); }
+ atomic_xor(V,X) { __atomic_op(X,^,V); }
+ atomic_inc(X)   { __atomic_op(X,+,1); }
+ atomic_dec(X)   { __atomic_op(X,-,1); }
++atomic_andnot(V,X) { __atomic_op(X,&~,V); }
+ 
+ atomic_add_return(V,X) __atomic_op_return{mb}(X,+,V)
+ atomic_add_return_relaxed(V,X) __atomic_op_return{once}(X,+,V)
+@@ -138,3 +139,8 @@ atomic_add_negative(V,X) __atomic_op_return{mb}(X,+,V) < 0
+ atomic_add_negative_relaxed(V,X) __atomic_op_return{once}(X,+,V) < 0
+ atomic_add_negative_acquire(V,X) __atomic_op_return{acquire}(X,+,V) < 0
+ atomic_add_negative_release(V,X) __atomic_op_return{release}(X,+,V) < 0
++
++atomic_fetch_andnot(V,X) __atomic_fetch_op{mb}(X,&~,V)
++atomic_fetch_andnot_acquire(V,X) __atomic_fetch_op{acquire}(X,&~,V)
++atomic_fetch_andnot_release(V,X) __atomic_fetch_op{release}(X,&~,V)
++atomic_fetch_andnot_relaxed(V,X) __atomic_fetch_op{once}(X,&~,V)
+-- 
+2.40.1
+
 
