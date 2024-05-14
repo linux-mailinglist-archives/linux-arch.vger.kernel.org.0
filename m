@@ -1,162 +1,196 @@
-Return-Path: <linux-arch+bounces-4389-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4390-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 068308C4D0F
-	for <lists+linux-arch@lfdr.de>; Tue, 14 May 2024 09:32:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A1AA8C4D15
+	for <lists+linux-arch@lfdr.de>; Tue, 14 May 2024 09:32:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 389131C209F4
-	for <lists+linux-arch@lfdr.de>; Tue, 14 May 2024 07:32:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 196DC1F21D2A
+	for <lists+linux-arch@lfdr.de>; Tue, 14 May 2024 07:32:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3562B11723;
-	Tue, 14 May 2024 07:32:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B24E12E75;
+	Tue, 14 May 2024 07:32:54 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E6C0101E2;
-	Tue, 14 May 2024 07:32:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B5FA12E48;
+	Tue, 14 May 2024 07:32:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715671939; cv=none; b=RGxIwEt/gd7Wt71XEWpQ1tiOcOcLi29Jwgm9opDzn2/Ev6aT7yhDg0kduPtuNgpea38V5x4SU+PkUjrnO/eSGyhKif6Na1MMnAp7Qx7dGh+lmStmLw7NCkxjmPvhgW773hDh0NVtBYpe5GT9OB4y7FeVvO1P84y3fVmQCxxzd2E=
+	t=1715671974; cv=none; b=cHVYIRm6UTl6rHLvA6dAwSyNPZFu2i3DeJzhB7HxTNrM17LExxzV7+WWRfeITGwP0i/7E9acIBkLqDimWdEiiH4efSI0XxOXK8zMPIDfdslVJbv4PzTmV7bMSP9Ocm8upc7AlMZnkYGtJsvwxXUKc3W5LjAW1Gz5SJ+pDo7Go2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715671939; c=relaxed/simple;
-	bh=FPn+wnAGRWQktpQrV94x0y/Pcc2VTrrAFwhpsP2KZFA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=pOdxjoOM5CIGrfUgJSFFU5FxCCjI2/DO2mdEQPt+WIoLcnjLCHwj6qO7ehLAIDiu9XVal0OogTp1scp8zOwmiSJhl1T4p/zDOAJ8ZzbdSnc4YYKsXszZ0qX5GOZP3oPYxivn+leTGgzbG58rlczjWr489iqoD9U999EK1Wu9EVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4VdnYw6gCSz9v7JW;
-	Tue, 14 May 2024 15:10:28 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id AF418140419;
-	Tue, 14 May 2024 15:32:06 +0800 (CST)
-Received: from [127.0.0.1] (unknown [10.204.63.22])
-	by APP2 (Coremail) with SMTP id GxC2BwAXUCRnE0NmIbQfCA--.1339S2;
-	Tue, 14 May 2024 08:32:05 +0100 (CET)
-Message-ID: <0fbd907e411a10386bdef679864dd3d84f0fa3ad.camel@huaweicloud.com>
-Subject: Re: [PATCH 0/3] kbuild: remove many tool coverage variables
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: Kees Cook <keescook@chromium.org>, Masahiro Yamada <masahiroy@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
- Alexander Potapenko <glider@google.com>, Andrey Konovalov
- <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, Vincenzo
- Frascino <vincenzo.frascino@arm.com>, Marco Elver <elver@google.com>, Josh
- Poimboeuf <jpoimboe@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Peter Oberparleiter <oberpar@linux.ibm.com>,  Johannes Berg
- <johannes@sipsolutions.net>, kasan-dev@googlegroups.com,
- linux-hardening@vger.kernel.org
-Date: Tue, 14 May 2024 09:31:47 +0200
-In-Reply-To: <202405131136.73E766AA8@keescook>
-References: <20240506133544.2861555-1-masahiroy@kernel.org>
-	 <202405131136.73E766AA8@keescook>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	s=arc-20240116; t=1715671974; c=relaxed/simple;
+	bh=nEwTX0iq0hxDEaH0PHgIzKUAcr2jYaPliEDdZ2C90bs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FUDLz7CloVwHWtTAEWPu6C+DFXwtkKMafQVZQ9Ys7g8T2NxCG+YHRmHa1neD5TdeFejK5EfO9lcrQaSV8TbuXobIe+myjmJl8EQG7Eu4RTZctjBMCjwF4bgMiyd04noXyQ9AvAIjy46paCp6ZKBM9ECl9Uom5zhfsW6zdU8EBbY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33C89C2BD10;
+	Tue, 14 May 2024 07:32:51 +0000 (UTC)
+From: Huacai Chen <chenhuacai@loongson.cn>
+To: Arnd Bergmann <arnd@arndb.de>,
+	Huacai Chen <chenhuacai@kernel.org>
+Cc: loongarch@lists.linux.dev,
+	linux-arch@vger.kernel.org,
+	Xuefeng Li <lixuefeng@loongson.cn>,
+	Guo Ren <guoren@kernel.org>,
+	Xuerui Wang <kernel@xen0n.name>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	linux-kernel@vger.kernel.org,
+	loongson-kernel@lists.loongnix.cn,
+	Huacai Chen <chenhuacai@loongson.cn>
+Subject: [PATCH] LoongArch: Add irq_work support via self IPIs
+Date: Tue, 14 May 2024 15:32:32 +0800
+Message-ID: <20240514073232.3694867-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:GxC2BwAXUCRnE0NmIbQfCA--.1339S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxCw18Kw1fCF15ur4UGw45ZFb_yoW5GFWfpr
-	WrJ3WqkFWY9r10yF9Ikw1IqF1Sk397uF1Ygr909rW5AF1j9r1vvrs5trs8Z34DCws2y3W0
-	yrW7XFZavr4jvaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-	64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-	2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-	xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-	c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQADBF1jj51HGAAAs1
+Content-Transfer-Encoding: 8bit
 
-On Mon, 2024-05-13 at 11:48 -0700, Kees Cook wrote:
-> In the future can you CC the various maintainers of the affected
-> tooling? :)
->=20
-> On Mon, May 06, 2024 at 10:35:41PM +0900, Masahiro Yamada wrote:
-> >=20
-> > This patch set removes many instances of the following variables:
-> >=20
-> >   - OBJECT_FILES_NON_STANDARD
-> >   - KASAN_SANITIZE
-> >   - UBSAN_SANITIZE
-> >   - KCSAN_SANITIZE
-> >   - KMSAN_SANITIZE
-> >   - GCOV_PROFILE
-> >   - KCOV_INSTRUMENT
-> >=20
-> > Such tools are intended only for kernel space objects, most of which
-> > are listed in obj-y, lib-y, or obj-m.
->=20
-> This is a reasonable assertion, and the changes really simplify things
-> now and into the future. Thanks for finding such a clean solution! I
-> note that it also immediately fixes the issue noticed and fixed here:
-> https://lore.kernel.org/all/20240513122754.1282833-1-roberto.sassu@huawei=
-cloud.com/
+Add irq_work support for LoongArch via self IPIs. This make it possible
+to run works in hardware interrupt context, which is a prerequisite for
+NOHZ_FULL.
 
-Yes, this patch set fixes the issue too.
+Implement:
+ - arch_irq_work_raise()
+ - arch_irq_work_has_interrupt()
 
-Tested-by: Roberto Sassu <roberto.sassu@huawei.com>
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+ arch/loongarch/include/asm/hardirq.h  |  3 ++-
+ arch/loongarch/include/asm/irq_work.h | 10 ++++++++++
+ arch/loongarch/include/asm/smp.h      |  2 ++
+ arch/loongarch/kernel/paravirt.c      |  6 ++++++
+ arch/loongarch/kernel/smp.c           | 14 ++++++++++++++
+ 5 files changed, 34 insertions(+), 1 deletion(-)
+ create mode 100644 arch/loongarch/include/asm/irq_work.h
 
-Now UBSAN complains about misaligned address, such as:
-
-[    0.150000][    T1] UBSAN: misaligned-access in kernel/workqueue.c:5514:=
-3
-[    0.150000][    T1] member access within misaligned address 0000000064c3=
-6f78 for type 'struct pool_workqueue'
-[    0.150000][    T1] which requires 512 byte alignment
-[    0.150000][    T1] CPU: 0 PID: 1 Comm: swapper Not tainted 6.9.0-dont-u=
-se-00003-g3b621c71dc5e #2244
-
-But I guess this is for a separate thread.
-
-Thanks
-
-Roberto
-
-> > The best guess is, objects in $(obj-y), $(lib-y), $(obj-m) can opt in
-> > such tools. Otherwise, not.
-> >=20
-> > This works in most places.
->=20
-> I am worried about the use of "guess" and "most", though. :) Before, we
-> had some clear opt-out situations, and now it's more of a side-effect. I
-> think this is okay, but I'd really like to know more about your testing.
->=20
-> It seems like you did build testing comparing build flags, since you
-> call out some of the explicit changes in patch 2, quoting:
->=20
-> >  - include arch/mips/vdso/vdso-image.o into UBSAN, GCOV, KCOV
-> >  - include arch/sparc/vdso/vdso-image-*.o into UBSAN
-> >  - include arch/sparc/vdso/vma.o into UBSAN
-> >  - include arch/x86/entry/vdso/extable.o into KASAN, KCSAN, UBSAN, GCOV=
-, KCOV
-> >  - include arch/x86/entry/vdso/vdso-image-*.o into KASAN, KCSAN, UBSAN,=
- GCOV, KCOV
-> >  - include arch/x86/entry/vdso/vdso32-setup.o into KASAN, KCSAN, UBSAN,=
- GCOV, KCOV
-> >  - include arch/x86/entry/vdso/vma.o into GCOV, KCOV
-> >  - include arch/x86/um/vdso/vma.o into KASAN, GCOV, KCOV
->=20
-> I would agree that these cases are all likely desirable.
->=20
-> Did you find any cases where you found that instrumentation was _removed_
-> where not expected?
->=20
-> -Kees
->=20
+diff --git a/arch/loongarch/include/asm/hardirq.h b/arch/loongarch/include/asm/hardirq.h
+index d41138abcf26..1d7feb719515 100644
+--- a/arch/loongarch/include/asm/hardirq.h
++++ b/arch/loongarch/include/asm/hardirq.h
+@@ -12,11 +12,12 @@
+ extern void ack_bad_irq(unsigned int irq);
+ #define ack_bad_irq ack_bad_irq
+ 
+-#define NR_IPI	2
++#define NR_IPI	3
+ 
+ enum ipi_msg_type {
+ 	IPI_RESCHEDULE,
+ 	IPI_CALL_FUNCTION,
++	IPI_IRQ_WORK,
+ };
+ 
+ typedef struct {
+diff --git a/arch/loongarch/include/asm/irq_work.h b/arch/loongarch/include/asm/irq_work.h
+new file mode 100644
+index 000000000000..d63076e9160d
+--- /dev/null
++++ b/arch/loongarch/include/asm/irq_work.h
+@@ -0,0 +1,10 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _ASM_LOONGARCH_IRQ_WORK_H
++#define _ASM_LOONGARCH_IRQ_WORK_H
++
++static inline bool arch_irq_work_has_interrupt(void)
++{
++	return IS_ENABLED(CONFIG_SMP);
++}
++
++#endif /* _ASM_LOONGARCH_IRQ_WORK_H */
+diff --git a/arch/loongarch/include/asm/smp.h b/arch/loongarch/include/asm/smp.h
+index 278700cfee88..50db503f44e3 100644
+--- a/arch/loongarch/include/asm/smp.h
++++ b/arch/loongarch/include/asm/smp.h
+@@ -69,9 +69,11 @@ extern int __cpu_logical_map[NR_CPUS];
+ #define ACTION_BOOT_CPU	0
+ #define ACTION_RESCHEDULE	1
+ #define ACTION_CALL_FUNCTION	2
++#define ACTION_IRQ_WORK		3
+ #define SMP_BOOT_CPU		BIT(ACTION_BOOT_CPU)
+ #define SMP_RESCHEDULE		BIT(ACTION_RESCHEDULE)
+ #define SMP_CALL_FUNCTION	BIT(ACTION_CALL_FUNCTION)
++#define SMP_IRQ_WORK		BIT(ACTION_IRQ_WORK)
+ 
+ struct secondary_data {
+ 	unsigned long stack;
+diff --git a/arch/loongarch/kernel/paravirt.c b/arch/loongarch/kernel/paravirt.c
+index 1633ed4f692f..4272d2447445 100644
+--- a/arch/loongarch/kernel/paravirt.c
++++ b/arch/loongarch/kernel/paravirt.c
+@@ -2,6 +2,7 @@
+ #include <linux/export.h>
+ #include <linux/types.h>
+ #include <linux/interrupt.h>
++#include <linux/irq_work.h>
+ #include <linux/jump_label.h>
+ #include <linux/kvm_para.h>
+ #include <linux/static_call.h>
+@@ -97,6 +98,11 @@ static irqreturn_t pv_ipi_interrupt(int irq, void *dev)
+ 		info->ipi_irqs[IPI_CALL_FUNCTION]++;
+ 	}
+ 
++	if (action & SMP_IRQ_WORK) {
++		irq_work_run();
++		info->ipi_irqs[IPI_IRQ_WORK]++;
++	}
++
+ 	return IRQ_HANDLED;
+ }
+ 
+diff --git a/arch/loongarch/kernel/smp.c b/arch/loongarch/kernel/smp.c
+index 0dfe2388ef41..7366de776f6e 100644
+--- a/arch/loongarch/kernel/smp.c
++++ b/arch/loongarch/kernel/smp.c
+@@ -13,6 +13,7 @@
+ #include <linux/cpumask.h>
+ #include <linux/init.h>
+ #include <linux/interrupt.h>
++#include <linux/irq_work.h>
+ #include <linux/profile.h>
+ #include <linux/seq_file.h>
+ #include <linux/smp.h>
+@@ -70,6 +71,7 @@ static DEFINE_PER_CPU(int, cpu_state);
+ static const char *ipi_types[NR_IPI] __tracepoint_string = {
+ 	[IPI_RESCHEDULE] = "Rescheduling interrupts",
+ 	[IPI_CALL_FUNCTION] = "Function call interrupts",
++	[IPI_IRQ_WORK] = "IRQ work interrupts",
+ };
+ 
+ void show_ipi_list(struct seq_file *p, int prec)
+@@ -217,6 +219,13 @@ void arch_smp_send_reschedule(int cpu)
+ }
+ EXPORT_SYMBOL_GPL(arch_smp_send_reschedule);
+ 
++#ifdef CONFIG_IRQ_WORK
++void arch_irq_work_raise(void)
++{
++	mp_ops.send_ipi_single(smp_processor_id(), ACTION_IRQ_WORK);
++}
++#endif
++
+ static irqreturn_t loongson_ipi_interrupt(int irq, void *dev)
+ {
+ 	unsigned int action;
+@@ -234,6 +243,11 @@ static irqreturn_t loongson_ipi_interrupt(int irq, void *dev)
+ 		per_cpu(irq_stat, cpu).ipi_irqs[IPI_CALL_FUNCTION]++;
+ 	}
+ 
++	if (action & SMP_IRQ_WORK) {
++		irq_work_run();
++		per_cpu(irq_stat, cpu).ipi_irqs[IPI_IRQ_WORK]++;
++	}
++
+ 	return IRQ_HANDLED;
+ }
+ 
+-- 
+2.43.0
 
 
