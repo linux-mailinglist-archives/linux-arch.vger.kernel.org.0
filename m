@@ -1,45 +1,45 @@
-Return-Path: <linux-arch+bounces-4415-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4416-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC55F8C63EF
-	for <lists+linux-arch@lfdr.de>; Wed, 15 May 2024 11:42:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A1498C641F
+	for <lists+linux-arch@lfdr.de>; Wed, 15 May 2024 11:48:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6E92B1F22430
-	for <lists+linux-arch@lfdr.de>; Wed, 15 May 2024 09:42:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F61E1F21395
+	for <lists+linux-arch@lfdr.de>; Wed, 15 May 2024 09:48:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BB9058AC4;
-	Wed, 15 May 2024 09:42:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 012835916B;
+	Wed, 15 May 2024 09:48:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="mxXRd0hH"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="sbsC2YkB"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D02713B78D;
-	Wed, 15 May 2024 09:42:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 856331DFFD;
+	Wed, 15 May 2024 09:48:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715766147; cv=none; b=j9sPk4I68YvAERAYm4V6PSj+wa1v9pY1EgoXTWhETmreG4bxgsHmV2jjNPG6waObqKl9C9MqsLuibwzQDco8nmYxDjqU33oW+ppjjqcqTOaVN21TfteQcPsrytltWjT5jvsywmy011o1obx2Zmc55duMT4Px26CcP+g0DYq1UO8=
+	t=1715766501; cv=none; b=LGDa+XMBs2ZNoY51t1yKqJZH02JCW9OBgtc9QR4UX03+KPKoSzjOW582jj8xGF6RLR9cKk3oN9DM65oYbubS32HCkZEva5L8XO3f8XdqmyVzWI/RfJzujwbjdjiAk6Meew7yDoPSD+X/ajAGfK4/bPkPceY9zf5zJMws9pStJZc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715766147; c=relaxed/simple;
-	bh=eYFw1/d2wkFMa7JV2SqZUML5FcvjZnP3FCuN6/Gp9Ws=;
+	s=arc-20240116; t=1715766501; c=relaxed/simple;
+	bh=DWMXLBoPPceddodR+n4Z64JB4Nh2VGdGGIpJtZw0Vks=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GTI1YMhGgqmBwQdj6zmiCK2gcgcojzbH4EcGeBXmRtJieOi0+eYJhMrqDp7eyOJ4eRMOu6s9TpbIAwqsDbLF0qI1jngCHjH3l1LvheclTPIJvNCyNt6kghaoy1I9TqnRN8NgEBJIDRAFdPkIbqNj/oQLouRrLntGd+RgBR/cfXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=mxXRd0hH; arc=none smtp.client-ip=13.77.154.182
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZEWB+RRS03Eck9wUGbJxa9gmpVRootmyoekgi0wUudAFLAY37onHzxWijnN4m5dHg6de3qnJOb/a7hPzHxFVIWbOwNN+IW6wRSfrlQyWax51uzycll9l1+P/wfpjgRbVDaC23hk2L3r+pf/vBgYGKeO7XNRpW++RUM3HivjpvN8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=sbsC2YkB; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: by linux.microsoft.com (Postfix, from userid 1127)
-	id 309862095D11; Wed, 15 May 2024 02:42:25 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 309862095D11
+	id 1FB0C20B2C82; Wed, 15 May 2024 02:48:20 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1FB0C20B2C82
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1715766145;
-	bh=NQ7AiDgfRxffpIQXwgdL3C6EzLSXQTS/o7ht91gAqS0=;
+	s=default; t=1715766500;
+	bh=RP6KAOAdizMehQEBvNjNqD2oKi1HizOL3blKYGvIfEU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mxXRd0hH9WpA5F+++DvU+YDLKT/qRzCbB7/CEcBhH6yQR0P+6uyw/m3EE20ZWREzl
-	 rCrnuGPmOjKWOitkjESFnkEWZYZnu6iM9fubJvWGBkrBXI0IJadDG+88Y6k+bfaE5g
-	 JpFV0R6OlRaSMzgP8PRwSxojROb+/tvnVRd9eriI=
-Date: Wed, 15 May 2024 02:42:25 -0700
+	b=sbsC2YkBDl7aC0npjPyjeCm95s6BBpPfjSk3E8X2TeZQwS5J2/1yIFjgCGxnuSsQU
+	 ujq0fSAdTMPJl9hvAwZKYr7KhdPGT5h9ZJ2fjwT1quUd4+zKqBhr4WqcGAXGW+8ssf
+	 V+qbxOCk4LCO5W6A63L+E2x2aTAL6PjVkGTAiqDw=
+Date: Wed, 15 May 2024 02:48:20 -0700
 From: Saurabh Singh Sengar <ssengar@linux.microsoft.com>
 To: Roman Kisel <romank@linux.microsoft.com>
 Cc: arnd@arndb.de, bhelgaas@google.com, bp@alien8.de,
@@ -53,11 +53,11 @@ Cc: arnd@arndb.de, bhelgaas@google.com, bp@alien8.de,
 	linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-pci@vger.kernel.org, x86@kernel.org, ssengar@microsoft.com,
 	sunilmut@microsoft.com, vdso@hexbites.dev
-Subject: Re: [PATCH v2 5/6] drivers/hv/vmbus: Get the irq number from
- DeviceTree
-Message-ID: <20240515094225.GA22844@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+Subject: Re: [PATCH v2 6/6] drivers/pci/hyperv/arm64: vPCI MSI IRQ domain
+ from DT
+Message-ID: <20240515094820.GB22844@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
 References: <20240514224508.212318-1-romank@linux.microsoft.com>
- <20240514224508.212318-6-romank@linux.microsoft.com>
+ <20240514224508.212318-7-romank@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -66,95 +66,74 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240514224508.212318-6-romank@linux.microsoft.com>
+In-Reply-To: <20240514224508.212318-7-romank@linux.microsoft.com>
 User-Agent: Mutt/1.5.21 (2010-09-15)
 
-On Tue, May 14, 2024 at 03:43:52PM -0700, Roman Kisel wrote:
-> The vmbus driver uses ACPI for interrupt assignment on
-
-In subject use the prefix "Drivers: hv: vmbus:".
-It is preferred to us "VMbus/VMBus" instead of "vmbus" for all the
-commit message and comments.
-
-> arm64 hence it won't function in the VTL mode where only
-> DeviceTree can be used.
+On Tue, May 14, 2024 at 03:43:53PM -0700, Roman Kisel wrote:
+> The hyperv-pci driver uses ACPI for MSI IRQ domain configuration
+> on arm64 thereby it won't be able to do that in the VTL mode where
+> only DeviceTree can be used.
 > 
-> Update the vmbus driver to discover interrupt configuration
+> Update the hyperv-pci driver to discover interrupt configuration
 > via DeviceTree.
+
+Subject prefix should be "PCI: hv:"
+
 > 
 > Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
 > ---
->  drivers/hv/vmbus_drv.c | 37 +++++++++++++++++++++++++++++++++++++
->  1 file changed, 37 insertions(+)
+>  drivers/pci/controller/pci-hyperv.c | 13 ++++++++++---
+>  include/linux/acpi.h                |  9 +++++++++
+>  2 files changed, 19 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
-> index e25223cee3ab..52f01bd1c947 100644
-> --- a/drivers/hv/vmbus_drv.c
-> +++ b/drivers/hv/vmbus_drv.c
-> @@ -36,6 +36,7 @@
->  #include <linux/syscore_ops.h>
->  #include <linux/dma-map-ops.h>
->  #include <linux/pci.h>
-> +#include <linux/of_irq.h>
->  #include <clocksource/hyperv_timer.h>
->  #include <asm/mshyperv.h>
->  #include "hyperv_vmbus.h"
-> @@ -2316,6 +2317,34 @@ static int vmbus_acpi_add(struct platform_device *pdev)
->  }
->  #endif
+> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
+> index 1eaffff40b8d..ccc2b54206f4 100644
+> --- a/drivers/pci/controller/pci-hyperv.c
+> +++ b/drivers/pci/controller/pci-hyperv.c
+> @@ -906,9 +906,16 @@ static int hv_pci_irqchip_init(void)
+>  	 * way to ensure that all the corresponding devices are also gone and
+>  	 * no interrupts will be generated.
+>  	 */
+> -	hv_msi_gic_irq_domain = acpi_irq_create_hierarchy(0, HV_PCI_MSI_SPI_NR,
+> -							  fn, &hv_pci_domain_ops,
+> -							  chip_data);
+> +	if (acpi_disabled)
+> +		hv_msi_gic_irq_domain = irq_domain_create_hierarchy(
+> +			irq_find_matching_fwnode(fn, DOMAIN_BUS_ANY),
+> +			0, HV_PCI_MSI_SPI_NR,
+> +			fn, &hv_pci_domain_ops,
+> +			chip_data);
+> +	else
+> +		hv_msi_gic_irq_domain = acpi_irq_create_hierarchy(0, HV_PCI_MSI_SPI_NR,
+> +			fn, &hv_pci_domain_ops,
+> +			chip_data);
+
+Upto 100 characters per line are supported now, we can have less
+line breaks.
+
 >  
-> +static int __maybe_unused vmbus_of_set_irq(struct device_node *np)
+>  	if (!hv_msi_gic_irq_domain) {
+>  		pr_err("Failed to create Hyper-V arm64 vPCI MSI IRQ domain\n");
+> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+> index b7165e52b3c6..498cbb2c40a1 100644
+> --- a/include/linux/acpi.h
+> +++ b/include/linux/acpi.h
+> @@ -1077,6 +1077,15 @@ static inline bool acpi_sleep_state_supported(u8 sleep_state)
+>  	return false;
+>  }
+>  
+> +static inline struct irq_domain *acpi_irq_create_hierarchy(unsigned int flags,
+> +					     unsigned int size,
+> +					     struct fwnode_handle *fwnode,
+> +					     const struct irq_domain_ops *ops,
+> +					     void *host_data)
 > +{
-> +	struct irq_desc *desc;
-> +	int irq;
-> +
-> +	irq = of_irq_get(np, 0);
-> +	if (irq == 0) {
-> +		pr_err("VMBus interrupt mapping failure\n");
-> +		return -EINVAL;
-> +	}
-> +	if (irq < 0) {
-> +		pr_err("VMBus interrupt data can't be read from DeviceTree, error %d\n", irq);
-> +		return irq;
-> +	}
-> +
-> +	desc = irq_to_desc(irq);
-> +	if (!desc) {
-> +		pr_err("VMBus interrupt description can't be found for virq %d\n", irq);
-> +		return -ENODEV;
-> +	}
-> +
-> +	vmbus_irq = irq;
-> +	vmbus_interrupt = desc->irq_data.hwirq;
-> +	pr_debug("VMBus virq %d, hwirq %d\n", vmbus_irq, vmbus_interrupt);
-> +
-> +	return 0;
+> +	return NULL;
 > +}
 > +
->  static int vmbus_device_add(struct platform_device *pdev)
->  {
->  	struct resource **cur_res = &hyperv_mmio;
-> @@ -2324,12 +2353,20 @@ static int vmbus_device_add(struct platform_device *pdev)
->  	struct device_node *np = pdev->dev.of_node;
->  	int ret;
+>  #endif	/* !CONFIG_ACPI */
 >  
-> +	pr_debug("VMBus is present in DeviceTree\n");
-> +
->  	hv_dev = &pdev->dev;
->  
->  	ret = of_range_parser_init(&parser, np);
->  	if (ret)
->  		return ret;
->  
-> +#ifndef HYPERVISOR_CALLBACK_VECTOR
-> +	ret = vmbus_of_set_irq(np);
-> +	if (ret)
-> +		return ret;
-> +#endif
-> +
->  	for_each_of_range(&parser, &range) {
->  		struct resource *res;
->  
+>  extern void arch_post_acpi_subsys_init(void);
 > -- 
 > 2.45.0
 > 
