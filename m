@@ -1,59 +1,59 @@
-Return-Path: <linux-arch+bounces-4421-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4422-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC0538C677E
-	for <lists+linux-arch@lfdr.de>; Wed, 15 May 2024 15:38:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5A188C6786
+	for <lists+linux-arch@lfdr.de>; Wed, 15 May 2024 15:39:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 15CB91C2191B
-	for <lists+linux-arch@lfdr.de>; Wed, 15 May 2024 13:38:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 03FE51C218C4
+	for <lists+linux-arch@lfdr.de>; Wed, 15 May 2024 13:39:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 786C5126F33;
-	Wed, 15 May 2024 13:38:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 418DD126F33;
+	Wed, 15 May 2024 13:39:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="QpkjijuZ"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="FcmLRaxD"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12olkn2041.outbound.protection.outlook.com [40.92.23.41])
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12olkn2062.outbound.protection.outlook.com [40.92.23.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7842074407;
-	Wed, 15 May 2024 13:38:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.23.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85BE374407;
+	Wed, 15 May 2024 13:39:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.23.62
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715780330; cv=fail; b=f9UhKAOp4ql9SUza/JomXD3THXTiBG+9yyHDoFDCSfSNDw3ellN5KnDSNvf4NBFb8asNhhBETWKIv/3wO7antNS4VU8uTOivt0FmLaq/+otIi/4jX8KW3J0DtB2FvJSLMCKNx02FF90Ra4ok+0vhCA0Uxfi0j/z8pigLQMvgAKQ=
+	t=1715780375; cv=fail; b=MES7EFNcTmHzOWvDPMFFR3uiSvHcjk7GQU07ku8cnhWIrLuwboTxzauFRtx8g7+r/pDlaSD2plcaNYAYnfHkjxxSN0irJKlpS/XqDDf4YVHfJyJ5LBzSEBPE+FrIKvYK7E6URHuELYSA94AAcRw8uHDPNjqbqu5Y1DVchR5ciS8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715780330; c=relaxed/simple;
-	bh=rBkJTRL4QdmxVP0fLaLTKAhWC2SA7whROaTemRRJP0g=;
+	s=arc-20240116; t=1715780375; c=relaxed/simple;
+	bh=/y0wDufxejP41cALddHP+/QYQI8G09SD/cz4PbFbHqs=;
 	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=twR8gXo7QfE7EqYnNP2WEEMDK/NUWUHVgRUH6GOhp9LvJ3mBEnIl6WkBPM5ZPc08oog4kllh39yY6gfrsAOW3TcRgfdmh/3U9muIINkCG9EyJRpf43PuftfsaS1miqGaZOcQ4kTLlKRxUIv3lSuEbEQXt6tfiZzeIe5+g6aWj/g=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=QpkjijuZ; arc=fail smtp.client-ip=40.92.23.41
+	 Content-Type:MIME-Version; b=b1J1qDwO30yKLI+hHE2bxWoRlYzfMo/6KRFA9AeRksYC1XssUj82VcgxwlOs5DuhQiLBvYVhnMcucD9oDjTZMUPBSuq1AzoqFy5l4WGpEH0E6+BlQEEPnnXi6E2Zt3rbBaOAH5/+TRAF7JKQrhLquiKr6JehtdZ5wftvgbvVFnQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=FcmLRaxD; arc=fail smtp.client-ip=40.92.23.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Nm+gOozSMPCfGjJf9/W3+BUeLjLpybaR2VuSweqSJUWeE+7WO/3MjFlQAxPl38WV1UXVmQlUqoWLMfHoHVqXqgQR2o/zS8pqI6WtFy15EM1V9XKbQbqnISSUfEYDJAysO2u3LN8xY4gNvcTDEtKxXjGUPBOZpmm96dO5qC1j0iizHD4yMFdSiIm/v4FTELlMwt4RelMpacmMC6rXHUPQsXrzpxW8LdktMMva13PrqNENir0t8EKZAcy0Hq9pAFuBKZ5j1+tsSKXUK/8rK1LHavbHtxABAG+e003li8h1/uUnFXRW9ovAQcmLsu/ikc2XHWzQ9kQzEkSuVoZLkOtpng==
+ b=jqwjmZwi7ovC2MII451yT6PhppqSQJ7Wl/ZNoGcBMY5AZNv+TkCxUo5zT13IgO0TFkaTiKIXFXI8pkEDBVxn18QiacKfGTt1HaiQ2+S4aYvtr4momdMHOr1owuuNHnQ1NzJ0i4NqlEbj1+Ss9U0EXoTipWgzhAF3SOFHeletAryeTmhSIbq0OjatyPERjtyBsj28uNwlm+sTyNd1EKWGFm/7Vuhw4c7YTBDFTxuZOexra5AWzgwTClt2jupHQg0mikaBwpoLbc38ANy7uoX1e4sYBb8LRW2y/z/Z+9G9KpizdG7I8ssTYXsZrvgsn5IqEjG6bQ+AbMdhrlI1qvGPig==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=E4RQk5EpFyhy7qRg1paTHBKPFgjqlTl77zQGlJ0P30o=;
- b=gpoygTagptwVbEgEDcPEsrCda6IzLxixUuO761F0piXX+3hahi+YNWzQLbdtj3GfB0XdYrlUSDTJCzBdBDRS4NSGVyO++6VDisHlXzvGsW+0x8VqqVJdfG2RTsp8dRCs45ZBokysaSodesxDALI1mXfDPkdVtdQbsyw0iX1A71yHOj2LsuBCZxlm0VvrnoLlWfMA4U4Aufaf6LFGS1sD1N3SCzRu3Xty8P/5Zc3WEkxuqhLkF7/srqkr85ZG9EkgxPv8iYwPHK6kLzXf/EgmpKBIsyskn1li/6L2vLPhxIdglhIheAvCYm4lZUXKHpKVJdo2BBYs9WXnwZe9HGwBXw==
+ bh=YjkEUe8g+NJLsMfyRLshCucuVNiW8qsppnabSjxK1f0=;
+ b=eXAQf+aVH079Ks1U3bMljwl2/PIMOAIsSw3hM2s7bX1oX816DpsrL40goQ9N2HMapODgMVAXnVEZeGTy0zm8k8UTibq2c6L3D+bnvEYhPU8icu773CZepMFm9tOXj16+Dfzbph7YlhfWPDHbgrqozpqvuqjM/nNikTsR/RyKDog0yhYcPx82Ps3XgURNrDmRX68/JKGUSgyBGsxDGFk89YRq2JJadApBemo7k5o9gC+F+bUod44R1OOBcaxhWqMp3n9A/7KTnWqqKI/44lAu6bTySnWHfr5jORm4uBWwwhr9NUPhPZIF9hOuPScwfseih46g29AQyoebexL7Uwdyuw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=E4RQk5EpFyhy7qRg1paTHBKPFgjqlTl77zQGlJ0P30o=;
- b=QpkjijuZepLuS+Y69TRH2NBQfN+bl98HHDNjDe7/18CzBLw7GX8E6lkRZvHlPup/gj9jfokzZ9ZE+ihtQiYYuygeCHcrICpf5vQcO2/pvZga/6w+RvxbJa35WbA45YbAQtdOcowneN4DAUpi16K7kbQET3ttHvqgFiyKuwcuwUfDXFo/tHJp5Yt2pZO5OTku/V11x5geaokADdVLTwOqBQry3z3PFNS7bhT2jzwFtssysuGUlu10lBitlyC+xfqvFuwEjv+/heqBjnbUH0eBuQOlEj166HUm5gRS4OcDMJK39/GRqX0LZZoFVK8bN7yfqSzYso5lFf0EudQkmEmmOg==
+ bh=YjkEUe8g+NJLsMfyRLshCucuVNiW8qsppnabSjxK1f0=;
+ b=FcmLRaxDfMXo8RAwg5+scHPX4bpUlvt4uVrt0c+iN0kwIsY5/GjkFitqosNOiL1GVLaf2OoLMVSicrQWjlgotyIGWiRcf+remEyogC1n+5pt5rCALmhVSDi+Paze2H/vedjz7TxP0+csIVOARJ3ZC2GyxDTcdyfA1NMPh4rn8Moj8kIS69QQfI7H1wzr82UkqryBzCI/2yhhMRUp+Q2Ntc6Gj2RLQlUeLkise94tIADWKp2zFhFvP80U0XQ4/49hxpALKCNtzHNUsptDDeKtqnSs7o4rXadwPnl42Ah4TddFVbwodwci822VdJdLIP8oFHYzbnm9kFth7+XHFXvsjg==
 Received: from SN6PR02MB4157.namprd02.prod.outlook.com (2603:10b6:805:33::23)
  by SJ0PR02MB8465.namprd02.prod.outlook.com (2603:10b6:a03:3f5::18) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7587.28; Wed, 15 May
- 2024 13:38:42 +0000
+ 2024 13:39:27 +0000
 Received: from SN6PR02MB4157.namprd02.prod.outlook.com
  ([fe80::cedd:1e64:8f61:b9df]) by SN6PR02MB4157.namprd02.prod.outlook.com
  ([fe80::cedd:1e64:8f61:b9df%2]) with mapi id 15.20.7544.052; Wed, 15 May 2024
- 13:38:42 +0000
+ 13:39:27 +0000
 From: Michael Kelley <mhklinux@outlook.com>
 To: Roman Kisel <romank@linux.microsoft.com>, "arnd@arndb.de" <arnd@arndb.de>,
 	"bhelgaas@google.com" <bhelgaas@google.com>, "bp@alien8.de" <bp@alien8.de>,
@@ -76,52 +76,50 @@ To: Roman Kisel <romank@linux.microsoft.com>, "arnd@arndb.de" <arnd@arndb.de>,
 	<linux-pci@vger.kernel.org>, "x86@kernel.org" <x86@kernel.org>
 CC: "ssengar@microsoft.com" <ssengar@microsoft.com>, "sunilmut@microsoft.com"
 	<sunilmut@microsoft.com>, "vdso@hexbites.dev" <vdso@hexbites.dev>
-Subject: RE: [PATCH v2 3/6] drivers/hv: arch-neutral implementation of
- get_vtl()
-Thread-Topic: [PATCH v2 3/6] drivers/hv: arch-neutral implementation of
- get_vtl()
-Thread-Index: AQHaplCOjZgqPcpOiE6DmO9TB53GeLGXjYsw
-Date: Wed, 15 May 2024 13:38:42 +0000
+Subject: RE: [PATCH v2 4/6] arm64/hyperv: Boot in a Virtual Trust Level
+Thread-Topic: [PATCH v2 4/6] arm64/hyperv: Boot in a Virtual Trust Level
+Thread-Index: AQHaplCUXamnIjdmx0+xkzDtTqaEOLGXkUyw
+Date: Wed, 15 May 2024 13:39:27 +0000
 Message-ID:
- <SN6PR02MB4157A676809A7A97313C909DD4EC2@SN6PR02MB4157.namprd02.prod.outlook.com>
+ <SN6PR02MB415778D73832B587A2758BD0D4EC2@SN6PR02MB4157.namprd02.prod.outlook.com>
 References: <20240514224508.212318-1-romank@linux.microsoft.com>
- <20240514224508.212318-4-romank@linux.microsoft.com>
-In-Reply-To: <20240514224508.212318-4-romank@linux.microsoft.com>
+ <20240514224508.212318-5-romank@linux.microsoft.com>
+In-Reply-To: <20240514224508.212318-5-romank@linux.microsoft.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach:
 X-MS-TNEF-Correlator:
-x-tmn: [i5/FsO3zQuZxlBLBePsy9H3I5Sug05QH]
+x-tmn: [5/owsNJv55iyx2TkjaEv2zQE53GhxZTM]
 x-ms-publictraffictype: Email
 x-ms-traffictypediagnostic: SN6PR02MB4157:EE_|SJ0PR02MB8465:EE_
-x-ms-office365-filtering-correlation-id: 2822421f-118d-4ac2-5406-08dc74e455cc
+x-ms-office365-filtering-correlation-id: 326f3352-0ca5-4672-1f9f-08dc74e47119
 x-microsoft-antispam:
  BCL:0;ARA:14566002|461199019|102099023|3412199016|440099019;
 x-microsoft-antispam-message-info:
- vcIpMpFEjmdDZXB4gLDzDJVvpNtMmwr4+n69vJoLQxVIFNMTjj1Hl9jW5LSu9h6IOt3wzm3ney1X2EiiLkYoDjigJnkNgSMnT4PUzifO+w8P60cquZ6bnUaKEC0U4teB6Q6jCoRqsXckLe7ioq8ADvW7tkAGUHOBORPYCA8xGSZciPq19zeZDl6BtZ2IZIQwso9jt6B+w0ipLbMvi+4MDO2l1A+czkLrAvZ/xB2NNEqR4UdcJUt9SqjkUoAZr4UMAs8UngTelW9W6OzLQFBvtIF3hXZPPurf/Xlcja3sgfk1cqOcK6m8UoFziiIal7U6ZzW9PJvPQPIgdQY12VrjhiJ9LAml+EK5+RTNsIuo9Ww1oJUho7/FESi/HCDttryBgdAM9HDe4RgoU34HbdLWtOSqyLMLaPggF6d6teZ5m9aNHrKyuzg7tIlwBpp3utREanYcZCDxT0f8ILi3qKy2gzoRJVx7LS+OAQOfeG1M3mWxEy/fNDUCrzXxJ7yFey1zNjMhqqIWUAHLe3gYZaYFxjbgns+yNfH/0yOViyv2EGE5xdFHxS6Liw+n9VHUGBwU
+ 8ArvXz5fz+ZigIhBNRcFPYKfLBs9cb/5zw07FU+KhuVPT4f7nLC2bVXoBMd9qVj/DnCTI/uKuXiMMzDFCo3DyBo0AZZxUz4xYPRbKwHGn609ifmxn/jrYBge4H0Q/Exr5iWvZAz60Mhxv1SNnjaQ/AhGF5qWl94riWlqMiD8tfLMnFKQjpN26IXBJGxM1QZ52/cLhLsP6EVsoRN48XKQUbw1doSplyvCOAoWSBUcl9ZTRI7Np8A3n/CdMtSdkGQ9/dv+JYhcWTs5XtGZUmmF7IH1AT5y/am8VW/cgC/YTOu9HRw/+pGQNCpPsZiKVafAkLwaL8orLt267f7I2gWX6T/VYJ7s4+hczazl0PwS1lmGZMX7D0Z9JhIi6qHIaFRx/elIYntqymKrQZvyrSuQmdhlPkmR+GRccYanKh19OqveKU5qTa6PpWKmEv4uR5FtO3O7vZ0omW19ASbPiq40igx2hTkrkTzUYXtL+9uq2G4t1hQUASBeF2AKo3AXaSoGI/63iqN4gI8PmKym58D2A79nsj7IY/7K/+dEyVpstfb3eQiF9m9nQUUy0uTiZCJV
 x-ms-exchange-antispam-messagedata-chunkcount: 1
 x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?Q7j1mInd2aUWGaY2VDbLjPZoGuBmxBAaTaN0ClhDHSU+oHqGn324aUswrNz1?=
- =?us-ascii?Q?nTuGUZkd7hluQYAQ6fF4Mc3nF/4JkZaI8vDDoKs5hjS1Gf7Ba8fdCRfITOSn?=
- =?us-ascii?Q?bvjp0HxvkB6kSDZtHscjMoAVg1TMlkQHazX3SfWdGf9CiQm/ssFr6UsrWvd6?=
- =?us-ascii?Q?T3T3q/acnk8AVhHgNAkxRiCEtYF9No02rGxLd/Wi+MtYX3E7TD1WfHa4M/JX?=
- =?us-ascii?Q?fvFqg9CeWjVGHbZjvuNjZ0UYht7D+WjtASkLBiaBPwLiKgm1vjHcYD7EmR4i?=
- =?us-ascii?Q?DlJU7OfQ9JKU7XsryhNoi7BhMd6Ai5DuVBjAEYxliRH8WdwgVTAEteMDxrIc?=
- =?us-ascii?Q?GbXavwjBfwMNy6sSLSVtLhdIRidQjoWRQkIFpIfRrGZctKPU96ZWP6Lj8uVB?=
- =?us-ascii?Q?YqLsjtIeTt3SOHB7ugYoaG6N8g5GgANJMQYIRmf4RXzA3cgsM8MNiLzB6QAp?=
- =?us-ascii?Q?P9OisH/Z/zZ9ZUumvcgP/XDeCr4bAWLg8YFzvixNM+G3uH9zR3keu7EPBGZH?=
- =?us-ascii?Q?GBryYesGfDi8rL1j5qx0nU37PPWyBd0cLeSZvL7TzV+LMQvUWah5AIx/ZyXZ?=
- =?us-ascii?Q?XFHkSNwjjFHEJNosbSHm6GMwxAZrAo1KhCXPhbwmruSrSHRYx5jp+krSgisd?=
- =?us-ascii?Q?5BIFqtpOKKzSTGw7tVQpLJYVRWPX0hVM9fkHYcVK93q0hyKthWLFSxFiz/aQ?=
- =?us-ascii?Q?hzGljpbQi4PFBI46Q1m5GRMWt2tEVHbb36X6zkya6qGyxOcw+K8dOTZLln2C?=
- =?us-ascii?Q?Di287UqZF/kzK2yRVO7uBKsAe8ho2K8Hu2SjzdRhwi6/6uZLhlPeZhG4+G1r?=
- =?us-ascii?Q?LFaYg4jHiMv6thEP1Y4bwNCbweeCko5+hNjKaQeYZvr2a/txpraQrg/gmhzq?=
- =?us-ascii?Q?9jg2l+PyzGqLfImfx2x3vGJaRsYs7ePvq15ejJ+eGCGlxutKr2YrcNIB+MrI?=
- =?us-ascii?Q?saDZPrz4Rt8sfmVDsGcQi6vQonCeaXtP7O41qP8u1eYEiY0o/iUEfiLEPHx5?=
- =?us-ascii?Q?HsTpwgryFeCmuUlxmvguBp9mFaEQ9oIl30XvFQKGmWoT/JIyyFwpvyYExVOI?=
- =?us-ascii?Q?KExU7vz+4ZPTHYJt0HwL+qNjibpYDR9if1yYE1LkKs8otyiPY9AhT+TGBCkk?=
- =?us-ascii?Q?mU4fe8bo8hG8201YL3SXyYlmPtn1bGRzypyBUq9JwkERm6ZWwH2fn1Um3NiS?=
- =?us-ascii?Q?FWIdrMhf/9qtWwEfR4tUP1LBiaWZWV3KFewbbu01QdPqSV9Wbsk7zothN3o?=
+ =?us-ascii?Q?j4gCvWCN4n9cMAPJviCmnML3OCS2Jwimk1szV9CzGAjKSf3zEoJK2+Rqlsxf?=
+ =?us-ascii?Q?7+DxkEo6jAlIWqT21YNaKklitzp7E6gNDot7JUonkkyPEumnNLqfMnPyEjZp?=
+ =?us-ascii?Q?PFo9qdBCOQTumPHJVoSTzuYEpisfKagOSi9liSV6nsyLBgYT1UWAVbUIWSEZ?=
+ =?us-ascii?Q?XkuW4SxgOIjxV1+wJl+95upUeABSGRP4sI5RwvaZGZvgHRzYW8xdFCVDVKzx?=
+ =?us-ascii?Q?TjjdibtCLzNVXmZJNnOUaDtIEuSErYvSuzYrTdGYyWZzjSviRKaauJl6DFli?=
+ =?us-ascii?Q?3QxxRBWeKJQsIxSghtv4umeV05vAeolTFOUBqyHP94HixG+RFtN9B4aMPhaY?=
+ =?us-ascii?Q?n9KiVaFre/UY/iQD1Sq18moDFW7Sr7pokdEgCp2AR0Usa3hlyfbWxzSfSaLj?=
+ =?us-ascii?Q?ZRwN+iRFEJg58DEm40/NVhPh4kOzu4gr8PT/y4yrcf0wmJxUB6zjzOySK3gy?=
+ =?us-ascii?Q?X/3b0j3K2FEcJ1LxHGJM7G6PwAODqsjO10Q5m7/UzpKbzMRLRl2mTs6hPv+C?=
+ =?us-ascii?Q?DF9j4fkxuvm/BtuhUS9kfdFKbiM50/05SqJdAWYeLWGLeQ8jM4zHkWjQuhdB?=
+ =?us-ascii?Q?EeLr+zAAEaAV0avFaTyZf6gkbQTTfms7g4bIQpLk/R/+T8mlqPPD7+RPj5hk?=
+ =?us-ascii?Q?BvvioE4XsqVqGv9rg/mK33LzkxuomkSMWqq5ZC+9F1tWy0oNzXWF72uX79SS?=
+ =?us-ascii?Q?dAHxpEVLAt3KmTjpM4hLju8M/W+k1tmYoySMc26Yvx1TOQ3a3qIMpni5AwXs?=
+ =?us-ascii?Q?ItmG4dO9dXlHd3k6TEvMIJIPAPEzRl9G2e1TEUXkihw28rigeXakxcJ8i12d?=
+ =?us-ascii?Q?6CYivzvGgZ4Yvjz7iy6g26+AvbI0LrPruDKMJ2l2Vm4U0tBoZQ6wX9SfPQbF?=
+ =?us-ascii?Q?COcvYCLCGFW3kRyB2Y0fZNV/OLoADjNJHhx9C+T7iSIZpvef3fi9re6BX8PS?=
+ =?us-ascii?Q?EZJ2u6F+oYHQ7orYGi/7AvrOCdG/Efs2eJ8QZsvR4n+qnUYeQldE6Qmzhra3?=
+ =?us-ascii?Q?5ozytF1nlds/41Zki9ezi/NnHtORkPxFyaa4IdJF2plWffWVtvZzwnlR4klC?=
+ =?us-ascii?Q?rkYZlFAebajN69X2XrK4nJbuVSY4so3JvMUA5G2t3y3IJmi2Ov20aBbX+P+Q?=
+ =?us-ascii?Q?/kF5VlNiBJbZfRbmV95ErP8Oxnnpt9qEgCn7eGqNk7kvTYZnAyyt17BIwqxb?=
+ =?us-ascii?Q?w+BYloYp7SUakuleLfdZ0qI+xfU7idfWtxltjpkp7/w+jJT/Q8rdQuX6EJc?=
  =?us-ascii?Q?=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
@@ -135,9 +133,9 @@ X-OriginatorOrg: outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: SN6PR02MB4157.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2822421f-118d-4ac2-5406-08dc74e455cc
+X-MS-Exchange-CrossTenant-Network-Message-Id: 326f3352-0ca5-4672-1f9f-08dc74e47119
 X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 May 2024 13:38:42.0186
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 May 2024 13:39:27.8526
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
@@ -148,207 +146,129 @@ From: Roman Kisel <romank@linux.microsoft.com> Sent: Tuesday, May 14, 2024 =
 >=20
 > To run in the VTL mode, Hyper-V drivers have to know what
 > VTL the system boots in, and the arm64/hyperv code does not
-> have the means to compute that.
+> update the variable that stores the value.
 >=20
-> Refactor the code to hoist the function that detects VTL,
-> make it arch-neutral to be able to employ it to get the VTL
-> on arm64.
-
-Nit:  In patches that just refactor and move some code around,
-patch authors will often include a statement like "No functional
-changes" (or the slightly more doubtful "No functional changes
-intended") as a separate line at the end of the commit message.
-It's just something the reader/reviewer can cross-check against.
-
+> Update the variable to enable the Hyper-V drivers to boot
+> in the VTL mode and print the VTL the code runs in.
 >=20
 > Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
 > ---
->  arch/x86/hyperv/hv_init.c          | 34 -----------------------
->  arch/x86/include/asm/hyperv-tlfs.h |  7 -----
->  drivers/hv/hv_common.c             | 43 ++++++++++++++++++++++++++++++
->  include/asm-generic/hyperv-tlfs.h  |  7 +++++
->  include/asm-generic/mshyperv.h     |  6 +++++
->  5 files changed, 56 insertions(+), 41 deletions(-)
+>  arch/arm64/hyperv/Makefile        |  1 +
+>  arch/arm64/hyperv/hv_vtl.c        | 19 +++++++++++++++++++
+>  arch/arm64/hyperv/mshyperv.c      |  6 ++++++
+>  arch/arm64/include/asm/mshyperv.h |  8 ++++++++
+>  arch/x86/hyperv/hv_vtl.c          |  2 +-
+>  5 files changed, 35 insertions(+), 1 deletion(-)
+>  create mode 100644 arch/arm64/hyperv/hv_vtl.c
 >=20
-> diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
-> index 17a71e92a343..c350fa05ee59 100644
-> --- a/arch/x86/hyperv/hv_init.c
-> +++ b/arch/x86/hyperv/hv_init.c
-> @@ -413,40 +413,6 @@ static void __init hv_get_partition_id(void)
->  	local_irq_restore(flags);
->  }
->=20
-> -#if IS_ENABLED(CONFIG_HYPERV_VTL_MODE)
-> -static u8 __init get_vtl(void)
-> -{
-> -	u64 control =3D HV_HYPERCALL_REP_COMP_1 | HVCALL_GET_VP_REGISTERS;
-> -	struct hv_get_vp_registers_input *input;
-> -	struct hv_get_vp_registers_output *output;
-> -	unsigned long flags;
-> -	u64 ret;
-> -
-> -	local_irq_save(flags);
-> -	input =3D *this_cpu_ptr(hyperv_pcpu_input_arg);
-> -	output =3D (struct hv_get_vp_registers_output *)input;
-> -
-> -	memset(input, 0, struct_size(input, element, 1));
-> -	input->header.partitionid =3D HV_PARTITION_ID_SELF;
-> -	input->header.vpindex =3D HV_VP_INDEX_SELF;
-> -	input->header.inputvtl =3D 0;
-> -	input->element[0].name0 =3D HV_X64_REGISTER_VSM_VP_STATUS;
-> -
-> -	ret =3D hv_do_hypercall(control, input, output);
-> -	if (hv_result_success(ret)) {
-> -		ret =3D output->as64.low & HV_X64_VTL_MASK;
-> -	} else {
-> -		pr_err("Failed to get VTL(error: %lld) exiting...\n", ret);
-> -		BUG();
-> -	}
-> -
-> -	local_irq_restore(flags);
-> -	return ret;
-> -}
-> -#else
-> -static inline u8 get_vtl(void) { return 0; }
-> -#endif
-> -
->  /*
->   * This function is to be invoked early in the boot sequence after the
->   * hypervisor has been detected.
-> diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hy=
-perv-tlfs.h
-> index 3787d26810c1..9ee68eb8e6ff 100644
-> --- a/arch/x86/include/asm/hyperv-tlfs.h
-> +++ b/arch/x86/include/asm/hyperv-tlfs.h
-> @@ -309,13 +309,6 @@ enum hv_isolation_type {
->  #define HV_MSR_STIMER0_CONFIG	(HV_X64_MSR_STIMER0_CONFIG)
->  #define HV_MSR_STIMER0_COUNT	(HV_X64_MSR_STIMER0_COUNT)
->=20
-> -/*
-> - * Registers are only accessible via HVCALL_GET_VP_REGISTERS hvcall and
-> - * there is not associated MSR address.
-> - */
-> -#define	HV_X64_REGISTER_VSM_VP_STATUS	0x000D0003
-> -#define	HV_X64_VTL_MASK			GENMASK(3, 0)
-> -
->  /* Hyper-V memory host visibility */
->  enum hv_mem_host_visibility {
->  	VMBUS_PAGE_NOT_VISIBLE		=3D 0,
-> diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
-> index dde3f9b6871a..d4cf477a4d0c 100644
-> --- a/drivers/hv/hv_common.c
-> +++ b/drivers/hv/hv_common.c
-> @@ -660,3 +660,46 @@ u64 __weak hv_tdx_hypercall(u64 control, u64 param1,=
- u64
-> param2)
->  	return HV_STATUS_INVALID_PARAMETER;
->  }
->  EXPORT_SYMBOL_GPL(hv_tdx_hypercall);
+> diff --git a/arch/arm64/hyperv/Makefile b/arch/arm64/hyperv/Makefile
+> index 87c31c001da9..9701a837a6e1 100644
+> --- a/arch/arm64/hyperv/Makefile
+> +++ b/arch/arm64/hyperv/Makefile
+> @@ -1,2 +1,3 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  obj-y		:=3D hv_core.o mshyperv.o
+> +obj-$(CONFIG_HYPERV_VTL_MODE)	+=3D hv_vtl.o
+> diff --git a/arch/arm64/hyperv/hv_vtl.c b/arch/arm64/hyperv/hv_vtl.c
+> new file mode 100644
+> index 000000000000..9b44cc49594c
+> --- /dev/null
+> +++ b/arch/arm64/hyperv/hv_vtl.c
+> @@ -0,0 +1,19 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2023, Microsoft, Inc.
+> + *
+> + * Author : Roman Kisel <romank@linux.microsoft.com>
+> + */
 > +
-> +#if IS_ENABLED(CONFIG_HYPERV_VTL_MODE)
-> +u8 __init get_vtl(void)
+> +#include <asm/mshyperv.h>
+> +
+> +void __init hv_vtl_init_platform(void)
 > +{
-> +	u64 control =3D HV_HYPERCALL_REP_COMP_1 | HVCALL_GET_VP_REGISTERS;
-> +	struct hv_get_vp_registers_input *input;
-> +	struct hv_get_vp_registers_output *output;
-> +	unsigned long flags;
-> +	u64 ret;
+> +	pr_info("Linux runs in Hyper-V Virtual Trust Level %d\n", ms_hyperv.vtl=
+);
+> +}
 > +
-> +	local_irq_save(flags);
-> +	input =3D *this_cpu_ptr(hyperv_pcpu_input_arg);
-> +	output =3D (struct hv_get_vp_registers_output *)input;
+> +int __init hv_vtl_early_init(void)
+> +{
+> +	return 0;
+> +}
+> +early_initcall(hv_vtl_early_init);
+> diff --git a/arch/arm64/hyperv/mshyperv.c b/arch/arm64/hyperv/mshyperv.c
+> index 208a3bcb9686..cbde483b167a 100644
+> --- a/arch/arm64/hyperv/mshyperv.c
+> +++ b/arch/arm64/hyperv/mshyperv.c
+> @@ -96,6 +96,12 @@ static int __init hyperv_init(void)
+>  		return ret;
+>  	}
+>=20
+> +	/* Find the VTL */
+> +	ms_hyperv.vtl =3D get_vtl();
+> +	if (ms_hyperv.vtl > 0) /* non default VTL */
+> +		hv_vtl_early_init();
 
-I gave some bad advice on the original version of the above code.  Rather
-than allocating a separate hypercall output area, I had suggested just sett=
-ing
-the hypercall output to be the same as the input area, which is done
-above.  While the overlap doesn't cause any problems for a hypercall return=
-ing
-the value of single register, the TLFS says to never set up such an overlap=
-.
+Since hv_vtl_early_init() doesn't do anything on arm64, is the above
+and the empty implementation of hv_vtl_early_init() really needed?
+I thought maybe a subsequent patch in this series would populate
+hv_vtl_early_init() to do something, but I didn't see such.  I realize
+the functions hv_vtl_init_platform() and hv_vtl_early_init() parallel
+equivalent functions on x86, but I'd say drop hv_vtl_early_init() on
+arm64 if it isn't needed.
 
-Since this code is being moved anyway, there's an opportunity to fix
-this by setting output to "input" + "struct_size(input, element, 1)".  Or
-put the output at the start of the second half of the page (note that the
-size is HY_HYP_PAGE_SIZE, not PAGE_SIZE).  The input and output for 1
-register are relatively small and both easily fit with either approach. The=
-y
-just shouldn't overlap.
-
-Some might argue this tweak should be made in a separate patch, but
-in my judgment, it's OK to do it here if you note it in the commit
-message.  Your call.  Of course, if you make this change, my previous
-comment about "No functional changes" no longer applies. :-)
+Note too that the naming on the x86 side is arguably a bit messed
+up. hv_vtl_init_platform() runs *before* hv_vtl_early_init().  But
+typically in the Linux kernel, functions with "early init" in the name
+run very early in boot, and that's not the case here.  hv_vtl_init_platform=
+()
+is actually the function that runs very early in boot, but its name is
+set up to parallel ms_hyperv_init_platform(), which calls it.  On the
+x86 side, I'd would argue for renaming hv_vtl_init_platform() to
+hv_vtl_early_init(), and then hv_vtl_early_init() becomes hv_vtl_init().
+But that's probably a separate patch.  Here on arm64, perhaps all
+you need is hv_vtl_init().
 
 Michael
 
 > +
-> +	memset(input, 0, struct_size(input, element, 1));
-> +	input->header.partitionid =3D HV_PARTITION_ID_SELF;
-> +	input->header.vpindex =3D HV_VP_INDEX_SELF;
-> +	input->header.inputvtl =3D 0;
-> +	input->element[0].name0 =3D HV_REGISTER_VSM_VP_STATUS;
-> +
-> +	ret =3D hv_do_hypercall(control, input, output);
-> +	if (hv_result_success(ret)) {
-> +		ret =3D output->as64.low & HV_VTL_MASK;
-> +	} else {
-> +		pr_err("Failed to get VTL(error: %lld) exiting...\n", ret);
-> +
-> +		/*
-> +		 * This is a dead end, something fundamental is broken.
-> +		 *
-> +		 * There is no sensible way of continuing as the Hyper-V drivers
-> +		 * transitively depend via the vmbus driver on knowing which VTL
-> +		 * they run in to establish communication with the host. The kernel
-> +		 * is going to be worse off if continued booting than a panicked one,
-> +		 * just hung and stuck, producing second-order failures, with neither
-> +		 * a way to recover nor to provide expected services.
-> +		 */
-> +		BUG();
-> +	}
-> +
-> +	local_irq_restore(flags);
-> +	return ret;
-> +}
-> +#endif
-> diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hype=
-rv-tlfs.h
-> index 87e3d49a4e29..682bcda3124f 100644
-> --- a/include/asm-generic/hyperv-tlfs.h
-> +++ b/include/asm-generic/hyperv-tlfs.h
-> @@ -75,6 +75,13 @@
->  /* AccessTscInvariantControls privilege */
->  #define HV_ACCESS_TSC_INVARIANT			BIT(15)
+> +	hv_vtl_init_platform();
+>  	ms_hyperv_late_init();
 >=20
-> +/*
-> + * This synthetic register is only accessible via the HVCALL_GET_VP_REGI=
-STERS
-> + * hvcall, and there is no an associated MSR on x86.
-> + */
-> +#define	HV_REGISTER_VSM_VP_STATUS	0x000D0003
-> +#define	HV_VTL_MASK			GENMASK(3, 0)
-> +
->  /*
->   * Group B features.
->   */
-> diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyper=
-v.h
-> index 99935779682d..ea434186d765 100644
-> --- a/include/asm-generic/mshyperv.h
-> +++ b/include/asm-generic/mshyperv.h
-> @@ -301,4 +301,10 @@ static inline enum hv_isolation_type
-> hv_get_isolation_type(void)
->  }
->  #endif /* CONFIG_HYPERV */
+>  	hyperv_initialized =3D true;
+> diff --git a/arch/arm64/include/asm/mshyperv.h
+> b/arch/arm64/include/asm/mshyperv.h
+> index a975e1a689dd..4a8ff6be389c 100644
+> --- a/arch/arm64/include/asm/mshyperv.h
+> +++ b/arch/arm64/include/asm/mshyperv.h
+> @@ -49,6 +49,14 @@ static inline u64 hv_get_msr(unsigned int reg)
+>  				ARM_SMCCC_OWNER_VENDOR_HYP,	\
+>  				HV_SMCCC_FUNC_NUMBER)
 >=20
-> +#if IS_ENABLED(CONFIG_HYPERV_VTL_MODE)
-> +u8 __init get_vtl(void);
+> +#ifdef CONFIG_HYPERV_VTL_MODE
+> +void __init hv_vtl_init_platform(void);
+> +int __init hv_vtl_early_init(void);
 > +#else
-> +static inline u8 get_vtl(void) { return 0; }
+> +static inline void __init hv_vtl_init_platform(void) {}
+> +static inline int __init hv_vtl_early_init(void) { return 0; }
 > +#endif
 > +
+>  #include <asm-generic/mshyperv.h>
+>=20
 >  #endif
+> diff --git a/arch/x86/hyperv/hv_vtl.c b/arch/x86/hyperv/hv_vtl.c
+> index 92bd5a55f093..ae3105375a12 100644
+> --- a/arch/x86/hyperv/hv_vtl.c
+> +++ b/arch/x86/hyperv/hv_vtl.c
+> @@ -19,7 +19,7 @@ static struct real_mode_header hv_vtl_real_mode_header;
+>=20
+>  void __init hv_vtl_init_platform(void)
+>  {
+> -	pr_info("Linux runs in Hyper-V Virtual Trust Level\n");
+> +	pr_info("Linux runs in Hyper-V Virtual Trust Level %d\n", ms_hyperv.vtl=
+);
+>=20
+>  	x86_platform.realmode_reserve =3D x86_init_noop;
+>  	x86_platform.realmode_init =3D x86_init_noop;
 > --
 > 2.45.0
 >=20
