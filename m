@@ -1,319 +1,187 @@
-Return-Path: <linux-arch+bounces-4410-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4411-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3F588C5F90
-	for <lists+linux-arch@lfdr.de>; Wed, 15 May 2024 06:02:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E7B28C60FB
+	for <lists+linux-arch@lfdr.de>; Wed, 15 May 2024 08:45:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C4F81F21DB4
-	for <lists+linux-arch@lfdr.de>; Wed, 15 May 2024 04:02:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E4E592819BE
+	for <lists+linux-arch@lfdr.de>; Wed, 15 May 2024 06:45:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70FCE381DF;
-	Wed, 15 May 2024 04:02:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ITF2Lvvg"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C09613EA95;
+	Wed, 15 May 2024 06:45:09 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41115381B9;
-	Wed, 15 May 2024 04:02:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 243ACEA4;
+	Wed, 15 May 2024 06:45:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715745742; cv=none; b=oNkri9QXp4S0qIHkZG7gHPinUIk3OObIEN9Xh9dJewf3jCR9iQDInRbaFdawU3ktQjs65yhFAcVbaN/saniSrGcA1Kq/hzMeT6Soh5wD/6Upid6rThvrQaZVU+CEYeTC63BJXbeEL16VpbUB8iE2J0hvsrNJSgGpCs14qGXNgf8=
+	t=1715755509; cv=none; b=jPlJMzVVseD3xH5KvpVHIvQWxVM7y/0rq9YvtgdM/vFDLCfjx3RG+Vc6e8MnvDz02s2NYZZxVcRuRwWDtBnm4ehnPD0PjkWBS7nkVFwxiLQorP6zd2Y/CkHpR17grwMoEofI5l6RjOVexqBMkk6nYpEZGjVhrss3mHQKI0g6P/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715745742; c=relaxed/simple;
-	bh=lT5q3mXPrun9LHTO8RE2O2wpJSl3sK3pCQrgTm+Oq1o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=o5tOJx13YWpObAOVa7IizH+xD4woH7tkurRbH3kY7ZGkBx1V/zaxnlRsY0tz+2f5E2Du6v7AzY4hqfmoWvPK3emeydpTLZ4cDITdoJBEEECpBJ+BzC3iRFXMt23Mq5xhZNHS94oPyAaQLIyl23Is+pCQhXtW1Z3Yp0YaZQC2R+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ITF2Lvvg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8BEFC2BD11;
-	Wed, 15 May 2024 04:02:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715745741;
-	bh=lT5q3mXPrun9LHTO8RE2O2wpJSl3sK3pCQrgTm+Oq1o=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ITF2LvvgH9XNwTQSy8f7O1XroJLfTGlGBL8NQ6g/ORIbTxgfAFJcti4EmDVqzA22s
-	 wMxsS7kKTRsYkaSGcjGK7f2OBl2SmiXXRHLJMI3tkj1oLUYJWNi6tjgCZPq13IAxuq
-	 TBIQ6yzdC8rzm8q56LP8OeZGK7+B57u+nHsefJeB2z/QH0+uWA4ApXg11E3EK44K4t
-	 IL2L9svtUSAHqsZagaWX8dSp1vWQzZMECn2i/L99TruFEKS2z2mra6Qc7MyeTQ83Ni
-	 TYbR81NgUIg6zNfti0YUK10VYeYsG/xVSiWsiDTjpQOs9uF1bgJygTgLXIzL0yIVrx
-	 ZNx9xtJe2Qw2w==
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-a59c0a6415fso117172466b.1;
-        Tue, 14 May 2024 21:02:21 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUXJyLXchY864SZZPO5iTEvxuNMJf6kyROMkvh4AKGuJW8rqHZYN40okl0H/kMHlmQlTxLR6+KBak/CaD/RULgwCb5CvsWdblQ0ejTm0KYenJToEqi+ps7tgFFTjnzA6PtIE2sN1HBXKA==
-X-Gm-Message-State: AOJu0YwhDvn56lG7Kc9m23+tRhzLAyXRbgrtFvh3/x4KKuINHnPWVBqg
-	F+XwmnWH+1301N4sPJQbSWm2OvEnKidm3BqcfImAddkoch3TERQj/ZZZew10CkCl31nEs64e9PW
-	wkARaQeRW6pmJNbrP8oOFKP15gC4=
-X-Google-Smtp-Source: AGHT+IEx4oHvQwWFrIB1BWq6dR8pw2BNnCNln3c2zUX1RE7casnYGER5I5yWQ5M/BPFrJA67Huk4s2V7VQXi0D/Kyk0=
-X-Received: by 2002:a17:906:852:b0:a59:aa0d:6d with SMTP id
- a640c23a62f3a-a5a2d6287b5mr889245266b.62.1715745740285; Tue, 14 May 2024
- 21:02:20 -0700 (PDT)
+	s=arc-20240116; t=1715755509; c=relaxed/simple;
+	bh=rr/1kVdootVVGU7hj5fWVS2fCteWe7tsqWLCJvLLKkU=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=U0fARLmRDdCvyf3/a3yc8ZKP1U1orMmpCZXFrvi08wnGlD88Vu0f24ee2o9f7KuJvaSd3PiHcfYa0C/q63yd8udhvi6lmjVU+oEmHRcmxR/0Qy/eD69Be8b+kw8TSh354KmhShExDXlN9SR1iQdJHgGJnz7Lg1AyzZTLuV3Jwuw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.51])
+	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4VfNZN0Twxz9v7Hl;
+	Wed, 15 May 2024 14:27:56 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id F0B4A1404D9;
+	Wed, 15 May 2024 14:44:48 +0800 (CST)
+Received: from [10.221.98.131] (unknown [10.221.98.131])
+	by APP2 (Coremail) with SMTP id GxC2BwBnoCTQWURm3bwvCA--.4342S2;
+	Wed, 15 May 2024 07:44:48 +0100 (CET)
+Message-ID: <143273e9-1243-60bc-4fb0-eea6fb3de355@huaweicloud.com>
+Date: Wed, 15 May 2024 08:44:30 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240514073232.3694867-1-chenhuacai@loongson.cn>
- <CAJF2gTTUmpm+aTQL7gNyLEe57X=v-it3MT5TOCViCOEiEyraBA@mail.gmail.com>
- <CAAhV-H6_KuRhqja=NKcGWQeJfaJfEZZ9pEy+4+_Vov690agrZA@mail.gmail.com> <CAJF2gTRC9-sabTWOyFL+fw8+tFYfyHJo-4ZHS=byB-wzmJM8jQ@mail.gmail.com>
-In-Reply-To: <CAJF2gTRC9-sabTWOyFL+fw8+tFYfyHJo-4ZHS=byB-wzmJM8jQ@mail.gmail.com>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Wed, 15 May 2024 12:02:09 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4icr=9cgD_doqeh2h9+2s3e5V1OeOy-j1oxaZiTW5jBw@mail.gmail.com>
-Message-ID: <CAAhV-H4icr=9cgD_doqeh2h9+2s3e5V1OeOy-j1oxaZiTW5jBw@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: Add irq_work support via self IPIs
-To: Guo Ren <guoren@kernel.org>
-Cc: Huacai Chen <chenhuacai@loongson.cn>, Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev, 
-	linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>, 
-	Xuerui Wang <kernel@xen0n.name>, Jiaxun Yang <jiaxun.yang@flygoat.com>, 
-	linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+From: Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>
+Subject: Re: [PATCH memory-model 2/4] Documentation/litmus-tests: Demonstrate
+ unordered failing cmpxchg
+To: paulmck@kernel.org, Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ kernel-team@meta.com, mingo@kernel.org, stern@rowland.harvard.edu,
+ parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
+ boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
+ j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
+ Frederic Weisbecker <frederic@kernel.org>, Daniel Lustig
+ <dlustig@nvidia.com>, Joel Fernandes <joel@joelfernandes.org>,
+ Mark Rutland <mark.rutland@arm.com>, Jonathan Corbet <corbet@lwn.net>,
+ linux-doc@vger.kernel.org
+References: <42a43181-a431-44bd-8aff-6b305f8111ba@paulmck-laptop>
+ <20240501232132.1785861-2-paulmck@kernel.org>
+ <c97f0529-5a8f-4a82-8e14-0078d4372bdc@huaweicloud.com>
+ <16381d02-cb70-4ae5-b24e-aa73afad9aed@huaweicloud.com>
+ <2a695f63-6c9a-4837-ac03-f0a5c63daaaf@paulmck-laptop>
+Content-Language: en-US
+In-Reply-To: <2a695f63-6c9a-4837-ac03-f0a5c63daaaf@paulmck-laptop>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:GxC2BwBnoCTQWURm3bwvCA--.4342S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxAryDXF4kKFy3Wr1fAFW3Awb_yoW5uw4kpF
+	yrKayUKrs7JrWUAw4Iva1jqF10vrZ3JFW5Xw15tryUAan8GF1FvFyYqrW5ury2yrsaka1j
+	vr1Y9347Zry5AaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvKb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
+	07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
+	02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
+	WrylIxkvb40E47kJMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
+	C0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF
+	0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxh
+	VjvjDU0xZFpf9x07boZ2-UUUUU=
+X-CM-SenderInfo: xkhu0tnqos00pfhgvzhhrqqx5xdzvxpfor3voofrz/
 
-On Wed, May 15, 2024 at 11:21=E2=80=AFAM Guo Ren <guoren@kernel.org> wrote:
->
-> On Tue, May 14, 2024 at 7:14=E2=80=AFPM Huacai Chen <chenhuacai@kernel.or=
-g> wrote:
-> >
-> > Hi, Ren,
-> >
-> > On Tue, May 14, 2024 at 6:11=E2=80=AFPM Guo Ren <guoren@kernel.org> wro=
-te:
-> > >
-> > > On Tue, May 14, 2024 at 3:32=E2=80=AFPM Huacai Chen <chenhuacai@loong=
-son.cn> wrote:
-> > > >
-> > > > Add irq_work support for LoongArch via self IPIs. This make it poss=
-ible
-> > > > to run works in hardware interrupt context, which is a prerequisite=
- for
-> > > > NOHZ_FULL.
-> > > >
-> > > > Implement:
-> > > >  - arch_irq_work_raise()
-> > > >  - arch_irq_work_has_interrupt()
-> > > >
-> > > > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> > > > ---
-> > > >  arch/loongarch/include/asm/hardirq.h  |  3 ++-
-> > > >  arch/loongarch/include/asm/irq_work.h | 10 ++++++++++
-> > > >  arch/loongarch/include/asm/smp.h      |  2 ++
-> > > >  arch/loongarch/kernel/paravirt.c      |  6 ++++++
-> > > >  arch/loongarch/kernel/smp.c           | 14 ++++++++++++++
-> > > >  5 files changed, 34 insertions(+), 1 deletion(-)
-> > > >  create mode 100644 arch/loongarch/include/asm/irq_work.h
-> > > >
-> > > > diff --git a/arch/loongarch/include/asm/hardirq.h b/arch/loongarch/=
-include/asm/hardirq.h
-> > > > index d41138abcf26..1d7feb719515 100644
-> > > > --- a/arch/loongarch/include/asm/hardirq.h
-> > > > +++ b/arch/loongarch/include/asm/hardirq.h
-> > > > @@ -12,11 +12,12 @@
-> > > >  extern void ack_bad_irq(unsigned int irq);
-> > > >  #define ack_bad_irq ack_bad_irq
-> > > >
-> > > > -#define NR_IPI 2
-> > > > +#define NR_IPI 3
-> > > >
-> > > >  enum ipi_msg_type {
-> > > >         IPI_RESCHEDULE,
-> > > >         IPI_CALL_FUNCTION,
-> > > > +       IPI_IRQ_WORK,
-> > > >  };
-> > > >
-> > > >  typedef struct {
-> > > > diff --git a/arch/loongarch/include/asm/irq_work.h b/arch/loongarch=
-/include/asm/irq_work.h
-> > > > new file mode 100644
-> > > > index 000000000000..d63076e9160d
-> > > > --- /dev/null
-> > > > +++ b/arch/loongarch/include/asm/irq_work.h
-> > > > @@ -0,0 +1,10 @@
-> > > > +/* SPDX-License-Identifier: GPL-2.0 */
-> > > > +#ifndef _ASM_LOONGARCH_IRQ_WORK_H
-> > > > +#define _ASM_LOONGARCH_IRQ_WORK_H
-> > > > +
-> > > > +static inline bool arch_irq_work_has_interrupt(void)
-> > > > +{
-> > > > +       return IS_ENABLED(CONFIG_SMP);
-> > > I think it is "return true," or it will cause the warning.
-> > No, HZ_FULL depends on SMP, if you force to enable it on UP, the
-> > timekeeping will boom.
-> > On the other hand, let the function return true will cause build
-> > errors, see commit d2f3acde3d52b3b351db09e2e2a5e581 ("riscv: Fix
-> > irq_work when SMP is disabled").
-> Sorry, I misunderstood.
->
-> But it is not a build error. Quote:
-Sorry, I misunderstood, too.
+On 5/6/2024 8:00 PM, Paul E. McKenney wrote:
+> On Mon, May 06, 2024 at 06:30:45PM +0200, Jonas Oberhauser wrote:
+>> Am 5/6/2024 um 12:05 PM schrieb Jonas Oberhauser:
+>>> Am 5/2/2024 um 1:21 AM schrieb Paul E. McKenney:
+>>>> This commit adds four litmus tests showing that a failing cmpxchg()
+>>>> operation is unordered unless followed by an smp_mb__after_atomic()
+>>>> operation.
+>>>
+>>> So far, my understanding was that all RMW operations without suffix
+>>> (xchg(), cmpxchg(), ...) will be interpreted as F[Mb];...;F[Mb].
+>>>
+>>> I guess this shows again how important it is to model these full
+>>> barriers explicitly inside the cat model, instead of relying on implicit
+>>> conversions internal to herd.
+>>>
+>>> I'd like to propose a patch to this effect.
+>>>
+>>> What is the intended behavior of a failed cmpxchg()? Is it the same as a
+>>> relaxed one?
+> 
+> Yes, and unless I am too confused, LKMM currently does implement this.
+> Please let me know if I am missing something.
+> 
+>>> My suggestion would be in the direction of marking read and write events
+>>> of these operations as Mb, and then defining
+>>>
+>>> (* full barrier events that appear in non-failing RMW *)
+>>> let RMW_MB = Mb & (dom(rmw) | range(rmw))
+>>>
+>>>
+>>> let mb =
+>>>       [M] ; fencerel(Mb) ; [M]
+>>>     | [M] ; (po \ rmw) ; [RMW_MB] ; po^? ; [M]
+>>>     | [M] ; po^? ; [RMW_MB] ; (po \ rmw) ; [M]
+>>>     | ...
+>>>
+>>> The po \ rmw is because ordering is not provided internally of the rmw
+>>
+>> (removed the unnecessary si since LKMM is still non-mixed-accesses)
+> 
+> Addition of mixed-access support would be quite welcome!
+> 
+>> This could also be written with a single rule:
+>>
+>>       | [M] ; (po \ rmw) & (po^?; [RMW_MB] ; po^?) ; [M]
+>>
+>>> I suspect that after we added [rmw] sequences it could perhaps be
+>>> simplified [...]
+>>
+>> No, my suspicion is wrong - this would incorrectly let full-barrier RMWs
+>> act like strong fences when they appear in an rmw sequence.
+>>
+>>   if (z==1)  ||  x = 2;     ||  xchg(&y,2)  || if (y==2)
+>>     x = 1;   ||  y =_rel 1; ||              ||    z=1;
+>>
+>>
+>> right now, we allow x=2 overwriting x=1 (in case the last thread does not
+>> propagate x=2 along with z=1) because on power, the xchg might be
+>> implemented with a sync that doesn't get executed until the very end
+>> of the program run.
+>>
+>>
+>> Instead of its negative form (everything other than inside the rmw),
+>> it could also be rewritten positively. Here's a somewhat short form:
+>>
+>> let mb =
+>>       [M] ; fencerel(Mb) ; [M]
+>>     (* everything across a full barrier RMW is ordered. This includes up to
+>> one event inside the RMW. *)
+>>     | [M] ; po ; [RMW_MB] ; po ; [M]
+>>     (* full barrier RMW writes are ordered with everything behind the RMW *)
+>>     | [W & RMW_MB] ; po ; [M]
+>>     (* full barrier RMW reads are ordered with everything before the RMW *)
+>>     | [M] ; po ; [R & RMW_MB]
+>>     | ...
+> 
+> Does this produce the results expected by the litmus tests in the Linux
+> kernel source tree and also those at https://github.com/paulmckrcu/litmus?
+> 
+> 							Thanx, Paul
 
-Huacai
->
-> This was found while bringing up cpufreq on D1. Switching cpufreq
-> governors was hanging on irq_work_sync().
->
-> /*
->  * Synchronize against the irq_work @entry, ensures the entry is not
->  * currently in use.
->  */
-> void irq_work_sync(struct irq_work *work)
-> {
->         lockdep_assert_irqs_enabled();
->         might_sleep();
->
->         if ((IS_ENABLED(CONFIG_PREEMPT_RT) && !irq_work_is_hard(work)) ||
->             !arch_irq_work_has_interrupt()) {
->              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->                 rcuwait_wait_event(&work->irqwait, !irq_work_is_busy(work=
-),
->                                    TASK_UNINTERRUPTIBLE);
->                 return;
->         }
->
->
-> >
-> > Huacai
-> >
-> > >
-> > > void __init tick_nohz_init(void)
-> > > {
-> > >         int cpu, ret;
-> > >
-> > >         if (!tick_nohz_full_running)
-> > >                 return;
-> > >
-> > >         /*
-> > >          * Full dynticks uses IRQ work to drive the tick rescheduling=
- on safe
-> > >          * locking contexts. But then we need IRQ work to raise its o=
-wn
-> > >          * interrupts to avoid circular dependency on the tick.
-> > >          */
-> > >         if (!arch_irq_work_has_interrupt()) {
-> > >                 pr_warn("NO_HZ: Can't run full dynticks because arch
-> > > doesn't support IRQ work self-IPIs\n");
-> > >                 cpumask_clear(tick_nohz_full_mask);
-> > >                 tick_nohz_full_running =3D false;
-> > >                 return;
-> > >         }
-> > >
-> > > Others LGTM!
-> > >
-> > > Reviewed-by: Guo Ren <guoren@kernel.org>
-> > >
-> > > > +}
-> > > > +
-> > > > +#endif /* _ASM_LOONGARCH_IRQ_WORK_H */
-> > > > diff --git a/arch/loongarch/include/asm/smp.h b/arch/loongarch/incl=
-ude/asm/smp.h
-> > > > index 278700cfee88..50db503f44e3 100644
-> > > > --- a/arch/loongarch/include/asm/smp.h
-> > > > +++ b/arch/loongarch/include/asm/smp.h
-> > > > @@ -69,9 +69,11 @@ extern int __cpu_logical_map[NR_CPUS];
-> > > >  #define ACTION_BOOT_CPU        0
-> > > >  #define ACTION_RESCHEDULE      1
-> > > >  #define ACTION_CALL_FUNCTION   2
-> > > > +#define ACTION_IRQ_WORK                3
-> > > >  #define SMP_BOOT_CPU           BIT(ACTION_BOOT_CPU)
-> > > >  #define SMP_RESCHEDULE         BIT(ACTION_RESCHEDULE)
-> > > >  #define SMP_CALL_FUNCTION      BIT(ACTION_CALL_FUNCTION)
-> > > > +#define SMP_IRQ_WORK           BIT(ACTION_IRQ_WORK)
-> > > >
-> > > >  struct secondary_data {
-> > > >         unsigned long stack;
-> > > > diff --git a/arch/loongarch/kernel/paravirt.c b/arch/loongarch/kern=
-el/paravirt.c
-> > > > index 1633ed4f692f..4272d2447445 100644
-> > > > --- a/arch/loongarch/kernel/paravirt.c
-> > > > +++ b/arch/loongarch/kernel/paravirt.c
-> > > > @@ -2,6 +2,7 @@
-> > > >  #include <linux/export.h>
-> > > >  #include <linux/types.h>
-> > > >  #include <linux/interrupt.h>
-> > > > +#include <linux/irq_work.h>
-> > > >  #include <linux/jump_label.h>
-> > > >  #include <linux/kvm_para.h>
-> > > >  #include <linux/static_call.h>
-> > > > @@ -97,6 +98,11 @@ static irqreturn_t pv_ipi_interrupt(int irq, voi=
-d *dev)
-> > > >                 info->ipi_irqs[IPI_CALL_FUNCTION]++;
-> > > >         }
-> > > >
-> > > > +       if (action & SMP_IRQ_WORK) {
-> > > > +               irq_work_run();
-> > > > +               info->ipi_irqs[IPI_IRQ_WORK]++;
-> > > > +       }
-> > > > +
-> > > >         return IRQ_HANDLED;
-> > > >  }
-> > > >
-> > > > diff --git a/arch/loongarch/kernel/smp.c b/arch/loongarch/kernel/sm=
-p.c
-> > > > index 0dfe2388ef41..7366de776f6e 100644
-> > > > --- a/arch/loongarch/kernel/smp.c
-> > > > +++ b/arch/loongarch/kernel/smp.c
-> > > > @@ -13,6 +13,7 @@
-> > > >  #include <linux/cpumask.h>
-> > > >  #include <linux/init.h>
-> > > >  #include <linux/interrupt.h>
-> > > > +#include <linux/irq_work.h>
-> > > >  #include <linux/profile.h>
-> > > >  #include <linux/seq_file.h>
-> > > >  #include <linux/smp.h>
-> > > > @@ -70,6 +71,7 @@ static DEFINE_PER_CPU(int, cpu_state);
-> > > >  static const char *ipi_types[NR_IPI] __tracepoint_string =3D {
-> > > >         [IPI_RESCHEDULE] =3D "Rescheduling interrupts",
-> > > >         [IPI_CALL_FUNCTION] =3D "Function call interrupts",
-> > > > +       [IPI_IRQ_WORK] =3D "IRQ work interrupts",
-> > > >  };
-> > > >
-> > > >  void show_ipi_list(struct seq_file *p, int prec)
-> > > > @@ -217,6 +219,13 @@ void arch_smp_send_reschedule(int cpu)
-> > > >  }
-> > > >  EXPORT_SYMBOL_GPL(arch_smp_send_reschedule);
-> > > >
-> > > > +#ifdef CONFIG_IRQ_WORK
-> > > > +void arch_irq_work_raise(void)
-> > > > +{
-> > > > +       mp_ops.send_ipi_single(smp_processor_id(), ACTION_IRQ_WORK)=
-;
-> > > > +}
-> > > > +#endif
-> > > > +
-> > > >  static irqreturn_t loongson_ipi_interrupt(int irq, void *dev)
-> > > >  {
-> > > >         unsigned int action;
-> > > > @@ -234,6 +243,11 @@ static irqreturn_t loongson_ipi_interrupt(int =
-irq, void *dev)
-> > > >                 per_cpu(irq_stat, cpu).ipi_irqs[IPI_CALL_FUNCTION]+=
-+;
-> > > >         }
-> > > >
-> > > > +       if (action & SMP_IRQ_WORK) {
-> > > > +               irq_work_run();
-> > > > +               per_cpu(irq_stat, cpu).ipi_irqs[IPI_IRQ_WORK]++;
-> > > > +       }
-> > > > +
-> > > >         return IRQ_HANDLED;
-> > > >  }
-> > > >
-> > > > --
-> > > > 2.43.0
-> > > >
-> > >
-> > >
-> > > --
-> > > Best Regards
-> > >  Guo Ren
->
->
->
-> --
-> Best Regards
->  Guo Ren
->
+I implemented in the dartagnan tool the changes proposed by Jonas (i.e. 
+changing the mb definition in the cat model and removing the fences that 
+were added programmatically).
+
+I run this using the ~5K litmus test I have (it should include 
+everything from the source tree + the non-LISA ones from your repo). I 
+also checked with the version of qspinlock discussed in [1].
+
+I do get the expected results.
+
+Hernan
+
+[1] https://lkml.org/lkml/2022/8/26/597
+
 
