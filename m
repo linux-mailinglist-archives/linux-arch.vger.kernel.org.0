@@ -1,187 +1,186 @@
-Return-Path: <linux-arch+bounces-4411-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4412-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E7B28C60FB
-	for <lists+linux-arch@lfdr.de>; Wed, 15 May 2024 08:45:35 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CC4B8C61FF
+	for <lists+linux-arch@lfdr.de>; Wed, 15 May 2024 09:46:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E4E592819BE
-	for <lists+linux-arch@lfdr.de>; Wed, 15 May 2024 06:45:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7C970B20E3E
+	for <lists+linux-arch@lfdr.de>; Wed, 15 May 2024 07:46:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C09613EA95;
-	Wed, 15 May 2024 06:45:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A376C481D3;
+	Wed, 15 May 2024 07:45:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="H3rjvHly"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 243ACEA4;
-	Wed, 15 May 2024 06:45:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A98FF47A79
+	for <linux-arch@vger.kernel.org>; Wed, 15 May 2024 07:45:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715755509; cv=none; b=jPlJMzVVseD3xH5KvpVHIvQWxVM7y/0rq9YvtgdM/vFDLCfjx3RG+Vc6e8MnvDz02s2NYZZxVcRuRwWDtBnm4ehnPD0PjkWBS7nkVFwxiLQorP6zd2Y/CkHpR17grwMoEofI5l6RjOVexqBMkk6nYpEZGjVhrss3mHQKI0g6P/E=
+	t=1715759156; cv=none; b=QX8P3VM8+/hWMErd47hAXce3h2Kmmmwxq4qtuGPOGrMZq79XqX37AKy4p+MTldKYyQKFvnIkjty9LZU5EcUQWxS6jleb3+UXooPxKBdZ2G07XBFRGh0GQPpl0f0CC+buzqirq4xhDvsXbzoT4V4nETbHERXuk5s3pN2SlrYGQq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715755509; c=relaxed/simple;
-	bh=rr/1kVdootVVGU7hj5fWVS2fCteWe7tsqWLCJvLLKkU=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=U0fARLmRDdCvyf3/a3yc8ZKP1U1orMmpCZXFrvi08wnGlD88Vu0f24ee2o9f7KuJvaSd3PiHcfYa0C/q63yd8udhvi6lmjVU+oEmHRcmxR/0Qy/eD69Be8b+kw8TSh354KmhShExDXlN9SR1iQdJHgGJnz7Lg1AyzZTLuV3Jwuw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.51])
-	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4VfNZN0Twxz9v7Hl;
-	Wed, 15 May 2024 14:27:56 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id F0B4A1404D9;
-	Wed, 15 May 2024 14:44:48 +0800 (CST)
-Received: from [10.221.98.131] (unknown [10.221.98.131])
-	by APP2 (Coremail) with SMTP id GxC2BwBnoCTQWURm3bwvCA--.4342S2;
-	Wed, 15 May 2024 07:44:48 +0100 (CET)
-Message-ID: <143273e9-1243-60bc-4fb0-eea6fb3de355@huaweicloud.com>
-Date: Wed, 15 May 2024 08:44:30 +0200
+	s=arc-20240116; t=1715759156; c=relaxed/simple;
+	bh=0YrnAwgsUMb4k9BI0AKc8V+PhChBiSKTgm7sM05EbDY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QDPj6Twie6+nxp4XwdRM48mHNCHUKfcle8BdB0DTZbBB+APip7QI60PkhKZmyWc+x8xyeyLjQRtKcuuf8+TZ8k1aG5tNeay4/fCIlfXvLM1sDo9b6c8mlhhj4wN7BApfxz1L+q+G6ELrN4X1vRD65Nhp79TzGEZrgSjnDEGVVjc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=H3rjvHly; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-41fd5dc03easo40135315e9.1
+        for <linux-arch@vger.kernel.org>; Wed, 15 May 2024 00:45:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1715759152; x=1716363952; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=gJc1oIlpeSOnv91+spz2NNBOOiNI4JHd9FLN4xXD2l8=;
+        b=H3rjvHlyOILHA+RYp2nugKKR0HimOYsOAhUMbbMRU7ftvjAszCDsFw9H7Jd/bIrTaL
+         fvtEZXrXBDo3Kj5PHHH1nw4jMPrOrHnFyhLYT8qpOWk5IsXDm2QdDT/UtDXtwFqW78Pn
+         lMnFvzEw3xtonQGOWscz2ckd7Su7ZqlTjHfhk4vKKN9kATcfIWT5mVYwdVcqMyjTdh7e
+         J4vrXt8PsSM+R9/NXIdJeot5iy3J6Opy/OMTtrJ/DuHAfryPCWVVxQ4Hg952aEDdyUjU
+         pBxTrMa4VGmJegmQp+ipDdcXzngSoPhGtFmVMCcEsWIhySXVoYISplsXLrkbsEC74Y10
+         Z97g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715759152; x=1716363952;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gJc1oIlpeSOnv91+spz2NNBOOiNI4JHd9FLN4xXD2l8=;
+        b=B39elNouC3rssZJUjKdqMHX4f2Iju86lp2j3JnK7ZpKkIPqu3z4tlV1wi+JW3QJ89v
+         gB+UCLF9woonESOxTmG9ifdGbyn0rkPFWPOv16gEI0/gMzpcpbZ7zbfFSIRCMRYKGoDU
+         zGGmfddkN8DxYfSw1XVTcURPLLKD9IFZok4F2ZXGbgRB0ihK7ytKrkr7nhRRdkVMjjxt
+         E6Rhqr7SICkQtFGXqFvNqoAoKy7qt8e1BkITcqFT3rOO6GbOPI3nftaiHUzO+Uqi0GOL
+         ZC9JjkZ/MnuJJVfY2yK0mJGXkiW/sk+Xz/z851suNFs/QAYy8KvsxmnzjKmZw6lcPB+j
+         NWYA==
+X-Forwarded-Encrypted: i=1; AJvYcCVdjFlizJn9psl8HJxJF+9hZuRoWqCqmNcTFiny5fEwIWSUcU8vVTpMPMBr81Wf8xzRBxGJZRih2C3i4eCWj5za6DSPWGWe1vWYPQ==
+X-Gm-Message-State: AOJu0YxGKx4bvz3lhibp0op4RgHWKOIIMyrx03D+BtyTLHqGOAFDg6Gt
+	RfODPEE5/0XfB+0SA/x7DlhbTKuVY0ygVIaJpEDnrtsy3YFU69l04KiRqInmNuI=
+X-Google-Smtp-Source: AGHT+IE6IZTHpEuAB1euBtrOUTd06+4sZKXXDDpr4cYpl5F6QegKREkgEZ+vSJGT7IuE23K41PjIJQ==
+X-Received: by 2002:a05:600c:1f93:b0:420:1fd2:e611 with SMTP id 5b1f17b1804b1-4201fd2e636mr29111825e9.27.1715759151983;
+        Wed, 15 May 2024 00:45:51 -0700 (PDT)
+Received: from [10.91.0.75] ([149.14.240.163])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3502bbbc334sm15620151f8f.103.2024.05.15.00.45.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 May 2024 00:45:51 -0700 (PDT)
+Message-ID: <1766fc9a-1d10-4c93-a9db-a7e0db8b01e7@linaro.org>
+Date: Wed, 15 May 2024 09:45:49 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-From: Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>
-Subject: Re: [PATCH memory-model 2/4] Documentation/litmus-tests: Demonstrate
- unordered failing cmpxchg
-To: paulmck@kernel.org, Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- kernel-team@meta.com, mingo@kernel.org, stern@rowland.harvard.edu,
- parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
- boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
- j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
- Frederic Weisbecker <frederic@kernel.org>, Daniel Lustig
- <dlustig@nvidia.com>, Joel Fernandes <joel@joelfernandes.org>,
- Mark Rutland <mark.rutland@arm.com>, Jonathan Corbet <corbet@lwn.net>,
- linux-doc@vger.kernel.org
-References: <42a43181-a431-44bd-8aff-6b305f8111ba@paulmck-laptop>
- <20240501232132.1785861-2-paulmck@kernel.org>
- <c97f0529-5a8f-4a82-8e14-0078d4372bdc@huaweicloud.com>
- <16381d02-cb70-4ae5-b24e-aa73afad9aed@huaweicloud.com>
- <2a695f63-6c9a-4837-ac03-f0a5c63daaaf@paulmck-laptop>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/6] arm64/hyperv: Support DeviceTree
+To: Roman Kisel <romank@linux.microsoft.com>, arnd@arndb.de,
+ bhelgaas@google.com, bp@alien8.de, catalin.marinas@arm.com,
+ dave.hansen@linux.intel.com, decui@microsoft.com, haiyangz@microsoft.com,
+ hpa@zytor.com, kw@linux.com, kys@microsoft.com, lenb@kernel.org,
+ lpieralisi@kernel.org, mingo@redhat.com, mhklinux@outlook.com,
+ rafael@kernel.org, robh@kernel.org, tglx@linutronix.de, wei.liu@kernel.org,
+ will@kernel.org, linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, x86@kernel.org
+Cc: ssengar@microsoft.com, sunilmut@microsoft.com, vdso@hexbites.dev
+References: <20240514224508.212318-1-romank@linux.microsoft.com>
+ <20240514224508.212318-2-romank@linux.microsoft.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Content-Language: en-US
-In-Reply-To: <2a695f63-6c9a-4837-ac03-f0a5c63daaaf@paulmck-laptop>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:GxC2BwBnoCTQWURm3bwvCA--.4342S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxAryDXF4kKFy3Wr1fAFW3Awb_yoW5uw4kpF
-	yrKayUKrs7JrWUAw4Iva1jqF10vrZ3JFW5Xw15tryUAan8GF1FvFyYqrW5ury2yrsaka1j
-	vr1Y9347Zry5AaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvKb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
-	07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-	02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
-	WrylIxkvb40E47kJMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
-	C0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF
-	0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxh
-	VjvjDU0xZFpf9x07boZ2-UUUUU=
-X-CM-SenderInfo: xkhu0tnqos00pfhgvzhhrqqx5xdzvxpfor3voofrz/
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20240514224508.212318-2-romank@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 5/6/2024 8:00 PM, Paul E. McKenney wrote:
-> On Mon, May 06, 2024 at 06:30:45PM +0200, Jonas Oberhauser wrote:
->> Am 5/6/2024 um 12:05 PM schrieb Jonas Oberhauser:
->>> Am 5/2/2024 um 1:21 AM schrieb Paul E. McKenney:
->>>> This commit adds four litmus tests showing that a failing cmpxchg()
->>>> operation is unordered unless followed by an smp_mb__after_atomic()
->>>> operation.
->>>
->>> So far, my understanding was that all RMW operations without suffix
->>> (xchg(), cmpxchg(), ...) will be interpreted as F[Mb];...;F[Mb].
->>>
->>> I guess this shows again how important it is to model these full
->>> barriers explicitly inside the cat model, instead of relying on implicit
->>> conversions internal to herd.
->>>
->>> I'd like to propose a patch to this effect.
->>>
->>> What is the intended behavior of a failed cmpxchg()? Is it the same as a
->>> relaxed one?
+On 15/05/2024 00:43, Roman Kisel wrote:
+> The Virtual Trust Level platforms rely on DeviceTree, and the
+> arm64/hyperv code supports ACPI only. Update the logic to
+> support DeviceTree on boot as well as ACPI.
 > 
-> Yes, and unless I am too confused, LKMM currently does implement this.
-> Please let me know if I am missing something.
+> Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
+> ---
+>  arch/arm64/hyperv/mshyperv.c | 34 +++++++++++++++++++++++++++++-----
+>  1 file changed, 29 insertions(+), 5 deletions(-)
 > 
->>> My suggestion would be in the direction of marking read and write events
->>> of these operations as Mb, and then defining
->>>
->>> (* full barrier events that appear in non-failing RMW *)
->>> let RMW_MB = Mb & (dom(rmw) | range(rmw))
->>>
->>>
->>> let mb =
->>>       [M] ; fencerel(Mb) ; [M]
->>>     | [M] ; (po \ rmw) ; [RMW_MB] ; po^? ; [M]
->>>     | [M] ; po^? ; [RMW_MB] ; (po \ rmw) ; [M]
->>>     | ...
->>>
->>> The po \ rmw is because ordering is not provided internally of the rmw
->>
->> (removed the unnecessary si since LKMM is still non-mixed-accesses)
-> 
-> Addition of mixed-access support would be quite welcome!
-> 
->> This could also be written with a single rule:
->>
->>       | [M] ; (po \ rmw) & (po^?; [RMW_MB] ; po^?) ; [M]
->>
->>> I suspect that after we added [rmw] sequences it could perhaps be
->>> simplified [...]
->>
->> No, my suspicion is wrong - this would incorrectly let full-barrier RMWs
->> act like strong fences when they appear in an rmw sequence.
->>
->>   if (z==1)  ||  x = 2;     ||  xchg(&y,2)  || if (y==2)
->>     x = 1;   ||  y =_rel 1; ||              ||    z=1;
->>
->>
->> right now, we allow x=2 overwriting x=1 (in case the last thread does not
->> propagate x=2 along with z=1) because on power, the xchg might be
->> implemented with a sync that doesn't get executed until the very end
->> of the program run.
->>
->>
->> Instead of its negative form (everything other than inside the rmw),
->> it could also be rewritten positively. Here's a somewhat short form:
->>
->> let mb =
->>       [M] ; fencerel(Mb) ; [M]
->>     (* everything across a full barrier RMW is ordered. This includes up to
->> one event inside the RMW. *)
->>     | [M] ; po ; [RMW_MB] ; po ; [M]
->>     (* full barrier RMW writes are ordered with everything behind the RMW *)
->>     | [W & RMW_MB] ; po ; [M]
->>     (* full barrier RMW reads are ordered with everything before the RMW *)
->>     | [M] ; po ; [R & RMW_MB]
->>     | ...
-> 
-> Does this produce the results expected by the litmus tests in the Linux
-> kernel source tree and also those at https://github.com/paulmckrcu/litmus?
-> 
-> 							Thanx, Paul
+> diff --git a/arch/arm64/hyperv/mshyperv.c b/arch/arm64/hyperv/mshyperv.c
+> index b1a4de4eee29..208a3bcb9686 100644
+> --- a/arch/arm64/hyperv/mshyperv.c
+> +++ b/arch/arm64/hyperv/mshyperv.c
+> @@ -15,6 +15,9 @@
+>  #include <linux/errno.h>
+>  #include <linux/version.h>
+>  #include <linux/cpuhotplug.h>
+> +#include <linux/libfdt.h>
+> +#include <linux/of.h>
+> +#include <linux/of_fdt.h>
+>  #include <asm/mshyperv.h>
+>  
+>  static bool hyperv_initialized;
+> @@ -27,6 +30,29 @@ int hv_get_hypervisor_version(union hv_hypervisor_version_info *info)
+>  	return 0;
+>  }
+>  
+> +static bool hyperv_detect_fdt(void)
+> +{
+> +#ifdef CONFIG_OF
+> +	const unsigned long hyp_node = of_get_flat_dt_subnode_by_name(
+> +			of_get_flat_dt_root(), "hypervisor");
 
-I implemented in the dartagnan tool the changes proposed by Jonas (i.e. 
-changing the mb definition in the cat model and removing the fences that 
-were added programmatically).
+Why do you add an ABI for node name? Although name looks OK, but is it
+really described in the spec that you depend on it? I really do not like
+name dependencies...
 
-I run this using the ~5K litmus test I have (it should include 
-everything from the source tree + the non-LISA ones from your repo). I 
-also checked with the version of qspinlock discussed in [1].
+Where is the binding for this?
 
-I do get the expected results.
-
-Hernan
-
-[1] https://lkml.org/lkml/2022/8/26/597
+Best regards,
+Krzysztof
 
 
