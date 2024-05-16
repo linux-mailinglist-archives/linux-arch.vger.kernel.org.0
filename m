@@ -1,126 +1,135 @@
-Return-Path: <linux-arch+bounces-4444-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4445-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50D668C706B
-	for <lists+linux-arch@lfdr.de>; Thu, 16 May 2024 04:52:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 77C438C72DF
+	for <lists+linux-arch@lfdr.de>; Thu, 16 May 2024 10:32:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 79F351C21115
-	for <lists+linux-arch@lfdr.de>; Thu, 16 May 2024 02:52:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A531B1C225DD
+	for <lists+linux-arch@lfdr.de>; Thu, 16 May 2024 08:32:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EBD61862;
-	Thu, 16 May 2024 02:52:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFF1D13D63A;
+	Thu, 16 May 2024 08:32:00 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E324215C3;
-	Thu, 16 May 2024 02:52:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A75A213D604;
+	Thu, 16 May 2024 08:31:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715827938; cv=none; b=DdA6df0S5bGV8qxewib7aM/YllrD1BO+/KJ5gBApcF6RE8CZAVmjNslWc4Atrq2Z3Q3ryu9L1dT2vOVPLWbE357cZQFLDIGyVcyIg8SCdnQmkTQJFpQ/eVnrgGfz7rXvLNzCZnr98OtWDevHu+IJ76U/IYZod1hFeH0eCrioXFU=
+	t=1715848320; cv=none; b=Jmw8E34qAkkWPvQDorQ1aEno3rq/ThJkm97OMeaCQUYKYfIn8Zy/Tl+zD4eGxK7VnQrRHAGDuNiOwTajnQ0XKI7GK+da7d9tmcEUmrPYtKmJjtBPlhheSq/CszVfKsSmjYcrWtHZ5gkerqxKXTFp9X+RNsPaC+f9m2ZD3thcbKk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715827938; c=relaxed/simple;
-	bh=Bpp2sS8JAC34w//706OVYxm4uK643Velk4anITvY9sQ=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=eORwFTLk7DsKVxPOYN4iWIdUuB7/o6biBHz55wy61sf/1U6TEdQQlXV4T/7WrWhMAwLP55AakApJVSr0pwNCC5sKQ4oSkm9JvgTxe1pr+LZT69x9ih9Bf6gzhpchvPVNJ+7Fil9Ye4r166bPyzutabUR0L0cLpsBlQ7ouEEz3hc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [10.20.42.173])
-	by gateway (Coremail) with SMTP id _____8BxeOnbdEVm+lsNAA--.19759S3;
-	Thu, 16 May 2024 10:52:11 +0800 (CST)
-Received: from [10.20.42.173] (unknown [10.20.42.173])
-	by localhost.localdomain (Coremail) with SMTP id AQAAf8Dxb1XWdEVmdXkiAA--.2393S3;
-	Thu, 16 May 2024 10:52:08 +0800 (CST)
-Subject: Re: [PATCH] LoongArch: Define __ARCH_WANT_NEW_STAT in unistd.h
-To: Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@loongson.cn>,
- Huacai Chen <chenhuacai@kernel.org>
-Cc: loongarch@lists.linux.dev, Linux-Arch <linux-arch@vger.kernel.org>,
- Xuefeng Li <lixuefeng@loongson.cn>, guoren <guoren@kernel.org>,
- WANG Xuerui <kernel@xen0n.name>, Jiaxun Yang <jiaxun.yang@flygoat.com>,
- linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
- stable@vger.kernel.org
-References: <20240511100157.2334539-1-chenhuacai@loongson.cn>
- <f92e23be-3f3f-4bc6-8711-3bcf6beb7fa2@app.fastmail.com>
- <3937d6b1-119b-195e-8b9b-314a0bfbeaeb@loongson.cn>
- <ebf493ee-1e8b-426d-bcf4-d8e17d10844a@app.fastmail.com>
-From: maobibo <maobibo@loongson.cn>
-Message-ID: <14d52b91-58b2-6079-b66a-f01d1bac583f@loongson.cn>
-Date: Thu, 16 May 2024 10:52:06 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1715848320; c=relaxed/simple;
+	bh=iY6FIn6/CSyk7BNN3Z4qn1YatE46WXMjgrOZzM/0EQs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LlUnLBUEN+tCk2YTf/DnCWS8ECMPghdzy2OX3RQSziTd4oWFYNMkslvFJ3+MtvbBCXoyS4h5UrUb52H4pSHNHTTJow5umBERa5YyExdDmcNOi/YisOE8DL9QU07BwSXuAlx6yAfxM7DnV4IcGE8FKiYx7azjc1s7XvkB7+y9KBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.51])
+	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4Vg2v76fVlz9v7Nd;
+	Thu, 16 May 2024 16:14:43 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id C3781140665;
+	Thu, 16 May 2024 16:31:40 +0800 (CST)
+Received: from [10.45.154.179] (unknown [10.45.154.179])
+	by APP2 (Coremail) with SMTP id GxC2BwAHQCRixEVmHIZBCA--.6320S2;
+	Thu, 16 May 2024 09:31:40 +0100 (CET)
+Message-ID: <e030f7a4-97e7-4e91-bbae-230ee5c97763@huaweicloud.com>
+Date: Thu, 16 May 2024 10:31:26 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <ebf493ee-1e8b-426d-bcf4-d8e17d10844a@app.fastmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:AQAAf8Dxb1XWdEVmdXkiAA--.2393S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7tF1kGrW5Cw1UtryrWr47KFX_yoW8XF17pF
-	WSgF1a9FWqyr1Syw4Ikw1DtFnYkryrJr45Z34FqryxAay5Xr13tr1FqrWUCFyaqFyxCFyj
-	va93Wa4fuFZ8ZagCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUP2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6r4UJVWxJr1ln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
-	xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r12
-	6r1DMcIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr4
-	1lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxG
-	rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14
+User-Agent: Mozilla Thunderbird
+Subject: Re: LKMM: Making RMW barriers explicit
+To: Alan Stern <stern@rowland.harvard.edu>,
+ Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, kernel-team@meta.com, parri.andrea@gmail.com,
+ boqun.feng@gmail.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+ Joel Fernandes <joel@joelfernandes.org>
+References: <72c804c8-2511-4349-a823-bc1de8bb729e@rowland.harvard.edu>
+From: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+In-Reply-To: <72c804c8-2511-4349-a823-bc1de8bb729e@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:GxC2BwAHQCRixEVmHIZBCA--.6320S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7ur4xtFWxKrWUtFyDXF1kZrb_yoW8ZrWkpF
+	sxG34kKrykJwsxuw1DA39rJr1ava1rGrWUJF15Wwsay3Z0gF1IqF15tayYvay7Wrs7WF1j
+	vF42vas8Z3WDZFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUkK14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
+	4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+	I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+	4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
+	c2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
 	v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
-	c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI
-	0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4U
-	MIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8Dl1DUUUU
-	U==
+	c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_
+	Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbU
+	UUUUU==
+X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
 
 
 
-On 2024/5/15 下午10:25, Arnd Bergmann wrote:
-> On Wed, May 15, 2024, at 09:30, maobibo wrote:
->> On 2024/5/11 下午8:17, Arnd Bergmann wrote:
->>> On Sat, May 11, 2024, at 12:01, Huacai Chen wrote:
->>>
->>> Importantly, we can't just add fstatat64() on riscv32 because
->>> there is no time64 version for it other than statx(), and I don't
->>> want the architectures to diverge more than necessary.
->> yes, I agree. Normally there is newfstatat() on 64-bit architectures but
->> fstatat64() on 32-bit ones.
->>
->> I do not understand why fstatat64() can be added for riscv32 still.
->> 32bit timestamp seems works well for the present, it is valid until
->> (0x1UL << 32) / 365 / 24 / 3600 + 1970 == 2106 year. Year 2106 should
->> be enough for 32bit system.
+Am 5/16/2024 um 3:43 AM schrieb Alan Stern:
+> Hernan and Jonas:
 > 
-> There is a very small number of interfaces for which we ended up
-> not using a 64-bit time_t replacement, but those are only for
-> relative times, not epoch based offsets. The main problems
-> here are:
+> Can you explain more fully the changes you want to make to herd7 and/or
+> the LKMM?  The goal is to make the memory barriers currently implicit in
+> RMW operations explicit, but I couldn't understand how you propose to do
+> this.
 > 
-> - time_t is defined to be a signed value in posix, and we need
->    to handle file timestamps before 1970 in stat(), so changing
->    this one to be unsigned is not an option.
+> Are you going to change herd7 somehow, and if so, how?  It seems like
+> you should want to provide sufficient information so that the .bell
+> and .cat files can implement the appropriate memory barriers associated
+> with each RMW operation.  What additional information is needed?  And
+> how (explained in English, not by quoting source code) will the .bell
+> and .cat files make use of this information?
 > 
-> - A lot of products have already shipped that will have to
->    be supported past 2038 on existing 32-bit hardware. We
->    cannot regress on architectures that have already been
->    fixed to support this.
-> 
-> - file timestamps can also be set into the future, so applications
->    relying on this are broken before 2038.
-I see. And thanks for detailed explanation.
+> Alan
 
-Regards
-Bibo Mao
-> 
->        Arnd
-> 
+
+I don't know whether herd7 needs to be changed. Probably, herd7 does the 
+following:
+- if a tag called Mb appears on an rmw instruction (by instruction I 
+mean things like xchg(), atomic_inc_return_relaxed()), replace it with 
+one of those things:
+   * full mb ; once (the rmw) ; full mb, if a value returning 
+(successful) rmw
+   * once (the rmw)   otherwise
+- everything else gets translated 1:1 into some internal representation
+
+What I'm proposing is:
+1. remove this transpilation step,
+2. and instead allow the Mb tag to actually appear on RMW instructions
+3. change the cat file to explicitly define the behavior of the Mb tag 
+on RMW instructions
+
+There are probably two ways to achieve this:
+a) change herd7 to remove the special behavior for Mb, after that we 
+should be able to do everything else in the .cat/.bell/.def files.
+b) sidestep herd7's behavior by renaming Mb to _Mb in the .def file,
+  and then defining Mb=_Mb in the .bell file, and define the semantics 
+of the Mb tag in the .cat files.
+
+
+The latter would not include modification to herd7, but it's a bit hacky.
+
+I'm not sure if the second way really works since I don't know exactly 
+how the herd7 tool does the transpilation,  e.g., if it really looks for 
+an Mb tag or rather for the names of the instructions.
+
+Does it make sense?
+
+jonas
 
 
