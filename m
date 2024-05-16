@@ -1,134 +1,249 @@
-Return-Path: <linux-arch+bounces-4446-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4447-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6142B8C7345
-	for <lists+linux-arch@lfdr.de>; Thu, 16 May 2024 10:52:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A6828C7649
+	for <lists+linux-arch@lfdr.de>; Thu, 16 May 2024 14:28:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1A6B9284036
-	for <lists+linux-arch@lfdr.de>; Thu, 16 May 2024 08:52:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BE3831F2162B
+	for <lists+linux-arch@lfdr.de>; Thu, 16 May 2024 12:28:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC323142912;
-	Thu, 16 May 2024 08:52:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DED814D43B;
+	Thu, 16 May 2024 12:23:33 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC8A42D054;
-	Thu, 16 May 2024 08:52:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BE2514D435;
+	Thu, 16 May 2024 12:23:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715849537; cv=none; b=qsLhu7XDXfKpV4d3tnEzSE8OcgTFN/NG4iz4Ex26DH0yrCN3s8yUsFyshRIpQ7PQaDp++viW1SYDtMeNZKkBs2DKllT1uJN3Gt/4q11EBEXS2xVJxb1YXZXV6p1dPoo1Wd+U5P+7gxsv1wS146Tm3j7DkhFnTA5TiCHpG70y4nk=
+	t=1715862213; cv=none; b=gss4uUk8UGbrlhzyVODsLqBl8u+69bJ7JdWEINv5YT85D28BTPsontLo+eI7nQCtoyI2PSwEHKr0D+kRwjwIuwrYbdBcs65gSN27EKMW/Szv84LHG9i79JHG9NcHQz5nIwK2rZ0n/0PTdUPgvGVOdarMiAJFMs4emzqlSu8dwOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715849537; c=relaxed/simple;
-	bh=EPyGLyG+K4E+o1cu+2hycPZHn68duC90xuBVoJXjJzY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fLxgNd+XMo0ElFr2SV8gcvrYDP8UHNVrfQWy+mHFT2xe1XWVaTXX5Zaq6OpRO2EmBrGAuKpDSO33d76NRfIRlS6SphqwcnyJw4DT7Ovus6+Nh/4m3sc9gYQqySfJX4fgA6alDHj5BBDeqEs7Q6KERgd5ADsO29+sS1pBIhH6u9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Vg3LZ40zSz9v7Hm;
-	Thu, 16 May 2024 16:35:02 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id 37875140628;
-	Thu, 16 May 2024 16:52:04 +0800 (CST)
-Received: from [10.221.98.131] (unknown [10.221.98.131])
-	by APP1 (Coremail) with SMTP id LxC2BwCnmhMqyUVmGfBGCA--.55916S2;
-	Thu, 16 May 2024 09:52:03 +0100 (CET)
-Message-ID: <a9bf972c-b5ee-f1c2-36bf-30ba62f419d7@huaweicloud.com>
-Date: Thu, 16 May 2024 10:44:05 +0200
+	s=arc-20240116; t=1715862213; c=relaxed/simple;
+	bh=U4lHo32+qCSB+1PtJ3H6mTSywrpLmZt9GYu1MdcsGdc=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=Azeag+B2AxGqGgxe5Ka5P1CdHMNQIl+oIICchJno3pVikwQW1asXoLqzB9Wi0KpiV3Y9l9nzta4EpquMDHEHoWW5ARnqH/cIREAG5pEWkawGlMoQ6JEG5dtYi+gQ5OwkVT76VfUkyPHjgJHkaJ1cZgjY9Mk8pMP0oBBPPsXBfj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.20.42.173])
+	by gateway (Coremail) with SMTP id _____8AxpOq6+kVmA4YNAA--.20008S3;
+	Thu, 16 May 2024 20:23:22 +0800 (CST)
+Received: from [10.20.42.173] (unknown [10.20.42.173])
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8CxLLu2+kVmGQEjAA--.2835S3;
+	Thu, 16 May 2024 20:23:20 +0800 (CST)
+Subject: Re: [PATCH] LoongArch: Add irq_work support via self IPIs
+To: Huacai Chen <chenhuacai@loongson.cn>, Arnd Bergmann <arnd@arndb.de>,
+ Huacai Chen <chenhuacai@kernel.org>
+Cc: loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+ Xuefeng Li <lixuefeng@loongson.cn>, Guo Ren <guoren@kernel.org>,
+ Xuerui Wang <kernel@xen0n.name>, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+ linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+References: <20240514073232.3694867-1-chenhuacai@loongson.cn>
+From: maobibo <maobibo@loongson.cn>
+Message-ID: <b1182755-ec71-2add-ad69-72da85cdbb19@loongson.cn>
+Date: Thu, 16 May 2024 20:23:18 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: LKMM: Making RMW barriers explicit
-To: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
- Alan Stern <stern@rowland.harvard.edu>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>, linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, kernel-team@meta.com, parri.andrea@gmail.com,
- boqun.feng@gmail.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
- Joel Fernandes <joel@joelfernandes.org>
-References: <72c804c8-2511-4349-a823-bc1de8bb729e@rowland.harvard.edu>
- <e030f7a4-97e7-4e91-bbae-230ee5c97763@huaweicloud.com>
+In-Reply-To: <20240514073232.3694867-1-chenhuacai@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-From: Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>
-In-Reply-To: <e030f7a4-97e7-4e91-bbae-230ee5c97763@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:LxC2BwCnmhMqyUVmGfBGCA--.55916S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7WF4kZw1rJry5JFW3tw17Awb_yoW8ArWfpF
-	sxC3yvkr4DJ393uwnrZr47XryFqan3JrW8Jr93Wws3Aas8KF1xKFs8tayj9FZxXrs7uF42
-	qr1aqas8u3WDZFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-	6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
-	4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-	I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-	4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
-	c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
-	AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
-	17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
-	IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq
-	3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
-	nIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
-X-CM-SenderInfo: xkhu0tnqos00pfhgvzhhrqqx5xdzvxpfor3voofrz/
+X-CM-TRANSID:AQAAf8CxLLu2+kVmGQEjAA--.2835S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBj93XoW3XF4Utr45Cw4xCF1UGrWxAFc_yoW7WrW8pF
+	Z0kF4kGr4rGr93AwnIk3W3urn0yrnrWr129F9FkrWxAF12qw1Yvw1vgFyDtF1kGaykW3W0
+	9a9akw4FqFW5ZwcCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUPab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+	AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+	AVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
+	8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vI
+	r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67
+	AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIY
+	rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14
+	v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWx
+	JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU4R6wDU
+	UUU
 
-On 5/16/2024 10:31 AM, Jonas Oberhauser wrote:
+
+
+On 2024/5/14 下午3:32, Huacai Chen wrote:
+> Add irq_work support for LoongArch via self IPIs. This make it possible
+> to run works in hardware interrupt context, which is a prerequisite for
+> NOHZ_FULL.
 > 
+> Implement:
+>   - arch_irq_work_raise()
+>   - arch_irq_work_has_interrupt()
 > 
-> Am 5/16/2024 um 3:43 AM schrieb Alan Stern:
->> Hernan and Jonas:
->>
->> Can you explain more fully the changes you want to make to herd7 and/or
->> the LKMM?  The goal is to make the memory barriers currently implicit in
->> RMW operations explicit, but I couldn't understand how you propose to do
->> this.
->>
->> Are you going to change herd7 somehow, and if so, how?  It seems like
->> you should want to provide sufficient information so that the .bell
->> and .cat files can implement the appropriate memory barriers associated
->> with each RMW operation.  What additional information is needed?  And
->> how (explained in English, not by quoting source code) will the .bell
->> and .cat files make use of this information?
->>
->> Alan
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
+>   arch/loongarch/include/asm/hardirq.h  |  3 ++-
+>   arch/loongarch/include/asm/irq_work.h | 10 ++++++++++
+>   arch/loongarch/include/asm/smp.h      |  2 ++
+>   arch/loongarch/kernel/paravirt.c      |  6 ++++++
+>   arch/loongarch/kernel/smp.c           | 14 ++++++++++++++
+>   5 files changed, 34 insertions(+), 1 deletion(-)
+>   create mode 100644 arch/loongarch/include/asm/irq_work.h
 > 
+> diff --git a/arch/loongarch/include/asm/hardirq.h b/arch/loongarch/include/asm/hardirq.h
+> index d41138abcf26..1d7feb719515 100644
+> --- a/arch/loongarch/include/asm/hardirq.h
+> +++ b/arch/loongarch/include/asm/hardirq.h
+> @@ -12,11 +12,12 @@
+>   extern void ack_bad_irq(unsigned int irq);
+>   #define ack_bad_irq ack_bad_irq
+>   
+> -#define NR_IPI	2
+> +#define NR_IPI	3
+>   
+>   enum ipi_msg_type {
+>   	IPI_RESCHEDULE,
+>   	IPI_CALL_FUNCTION,
+> +	IPI_IRQ_WORK,
+>   };
+>   
+>   typedef struct {
+> diff --git a/arch/loongarch/include/asm/irq_work.h b/arch/loongarch/include/asm/irq_work.h
+> new file mode 100644
+> index 000000000000..d63076e9160d
+> --- /dev/null
+> +++ b/arch/loongarch/include/asm/irq_work.h
+> @@ -0,0 +1,10 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _ASM_LOONGARCH_IRQ_WORK_H
+> +#define _ASM_LOONGARCH_IRQ_WORK_H
+> +
+> +static inline bool arch_irq_work_has_interrupt(void)
+> +{
+> +	return IS_ENABLED(CONFIG_SMP);
+> +}
+> +
+> +#endif /* _ASM_LOONGARCH_IRQ_WORK_H */
+> diff --git a/arch/loongarch/include/asm/smp.h b/arch/loongarch/include/asm/smp.h
+> index 278700cfee88..50db503f44e3 100644
+> --- a/arch/loongarch/include/asm/smp.h
+> +++ b/arch/loongarch/include/asm/smp.h
+> @@ -69,9 +69,11 @@ extern int __cpu_logical_map[NR_CPUS];
+>   #define ACTION_BOOT_CPU	0
+>   #define ACTION_RESCHEDULE	1
+>   #define ACTION_CALL_FUNCTION	2
+> +#define ACTION_IRQ_WORK		3
+>   #define SMP_BOOT_CPU		BIT(ACTION_BOOT_CPU)
+>   #define SMP_RESCHEDULE		BIT(ACTION_RESCHEDULE)
+>   #define SMP_CALL_FUNCTION	BIT(ACTION_CALL_FUNCTION)
+> +#define SMP_IRQ_WORK		BIT(ACTION_IRQ_WORK)
+>   
+>   struct secondary_data {
+>   	unsigned long stack;
+> diff --git a/arch/loongarch/kernel/paravirt.c b/arch/loongarch/kernel/paravirt.c
+> index 1633ed4f692f..4272d2447445 100644
+> --- a/arch/loongarch/kernel/paravirt.c
+> +++ b/arch/loongarch/kernel/paravirt.c
+> @@ -2,6 +2,7 @@
+>   #include <linux/export.h>
+>   #include <linux/types.h>
+>   #include <linux/interrupt.h>
+> +#include <linux/irq_work.h>
+>   #include <linux/jump_label.h>
+>   #include <linux/kvm_para.h>
+>   #include <linux/static_call.h>
+> @@ -97,6 +98,11 @@ static irqreturn_t pv_ipi_interrupt(int irq, void *dev)
+>   		info->ipi_irqs[IPI_CALL_FUNCTION]++;
+>   	}
+>   
+> +	if (action & SMP_IRQ_WORK) {
+> +		irq_work_run();
+> +		info->ipi_irqs[IPI_IRQ_WORK]++;
+> +	}
+> +
+Would you mind adding common api so that pv ipi handler and hw ipi 
+handler can call it both? The coming avec MSI interrupt driver has the 
+same requirement for ipi.
+
+void do_ipi_demux(unsigned int action)
+{
+         irq_cpustat_t *info;
+
+         info = this_cpu_ptr(&irq_stat);
+         if (action & SMP_RESCHEDULE) {
+                 scheduler_ipi();
+                 info->ipi_irqs[IPI_RESCHEDULE]++;
+         }
+
+         if (action & SMP_CALL_FUNCTION) {
+                 generic_smp_call_function_interrupt();
+                 info->ipi_irqs[IPI_CALL_FUNCTION]++;
+         }
+
+  	if (action & SMP_IRQ_WORK) {
+  		irq_work_run();
+  		info->ipi_irqs[IPI_IRQ_WORK]++;
+}
+
+Regards
+Bibo Mao
+>   	return IRQ_HANDLED;
+>   }
+>   
+> diff --git a/arch/loongarch/kernel/smp.c b/arch/loongarch/kernel/smp.c
+> index 0dfe2388ef41..7366de776f6e 100644
+> --- a/arch/loongarch/kernel/smp.c
+> +++ b/arch/loongarch/kernel/smp.c
+> @@ -13,6 +13,7 @@
+>   #include <linux/cpumask.h>
+>   #include <linux/init.h>
+>   #include <linux/interrupt.h>
+> +#include <linux/irq_work.h>
+>   #include <linux/profile.h>
+>   #include <linux/seq_file.h>
+>   #include <linux/smp.h>
+> @@ -70,6 +71,7 @@ static DEFINE_PER_CPU(int, cpu_state);
+>   static const char *ipi_types[NR_IPI] __tracepoint_string = {
+>   	[IPI_RESCHEDULE] = "Rescheduling interrupts",
+>   	[IPI_CALL_FUNCTION] = "Function call interrupts",
+> +	[IPI_IRQ_WORK] = "IRQ work interrupts",
+>   };
+>   
+>   void show_ipi_list(struct seq_file *p, int prec)
+> @@ -217,6 +219,13 @@ void arch_smp_send_reschedule(int cpu)
+>   }
+>   EXPORT_SYMBOL_GPL(arch_smp_send_reschedule);
+>   
+> +#ifdef CONFIG_IRQ_WORK
+> +void arch_irq_work_raise(void)
+> +{
+> +	mp_ops.send_ipi_single(smp_processor_id(), ACTION_IRQ_WORK);
+> +}
+> +#endif
+> +
+>   static irqreturn_t loongson_ipi_interrupt(int irq, void *dev)
+>   {
+>   	unsigned int action;
+> @@ -234,6 +243,11 @@ static irqreturn_t loongson_ipi_interrupt(int irq, void *dev)
+>   		per_cpu(irq_stat, cpu).ipi_irqs[IPI_CALL_FUNCTION]++;
+>   	}
+>   
+> +	if (action & SMP_IRQ_WORK) {
+> +		irq_work_run();
+> +		per_cpu(irq_stat, cpu).ipi_irqs[IPI_IRQ_WORK]++;
+> +	}
+> +
+>   	return IRQ_HANDLED;
+>   }
+>   
 > 
-> I don't know whether herd7 needs to be changed. Probably, herd7 does the 
-> following:
-> - if a tag called Mb appears on an rmw instruction (by instruction I 
-> mean things like xchg(), atomic_inc_return_relaxed()), replace it with 
-> one of those things:
->    * full mb ; once (the rmw) ; full mb, if a value returning 
-> (successful) rmw
->    * once (the rmw)   otherwise
-> - everything else gets translated 1:1 into some internal representation
-
-This is my understanding from reading the source code of CSem.ml in 
-herd7's repo.
-
-Also, this is exactly what dartagnan is currently doing.
-
-> 
-> What I'm proposing is:
-> 1. remove this transpilation step,
-> 2. and instead allow the Mb tag to actually appear on RMW instructions
-> 3. change the cat file to explicitly define the behavior of the Mb tag 
-> on RMW instructions
-
-These are the exact 3 things I changed in dartagnan for testing what 
-Jonas proposed.
-
-I am not sure if further changes are needed for herd7.
-
-Hernan
 
 
