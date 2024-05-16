@@ -1,220 +1,126 @@
-Return-Path: <linux-arch+bounces-4443-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4444-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93B4E8C705D
-	for <lists+linux-arch@lfdr.de>; Thu, 16 May 2024 04:41:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50D668C706B
+	for <lists+linux-arch@lfdr.de>; Thu, 16 May 2024 04:52:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 099511F2327E
-	for <lists+linux-arch@lfdr.de>; Thu, 16 May 2024 02:41:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 79F351C21115
+	for <lists+linux-arch@lfdr.de>; Thu, 16 May 2024 02:52:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F1E5184E;
-	Thu, 16 May 2024 02:41:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AdtpgE6f"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EBD61862;
+	Thu, 16 May 2024 02:52:18 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50A39138E;
-	Thu, 16 May 2024 02:41:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E324215C3;
+	Thu, 16 May 2024 02:52:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715827295; cv=none; b=mNpo1+lKn7E+8H0HtmEYCxV+FENET7b9mjD3EavFDPjOOPJZP1r52q8rzf8VfC7Vw4/3tC/aUa3aLIgemsej5tsllcjDMpqatUlyC/oCSskqaqorXoGN683DkYqQcSkvEHZf5KZ2/iDEh11A6sJT7d5Ypr3oqtY3a3fI7vz9pK0=
+	t=1715827938; cv=none; b=DdA6df0S5bGV8qxewib7aM/YllrD1BO+/KJ5gBApcF6RE8CZAVmjNslWc4Atrq2Z3Q3ryu9L1dT2vOVPLWbE357cZQFLDIGyVcyIg8SCdnQmkTQJFpQ/eVnrgGfz7rXvLNzCZnr98OtWDevHu+IJ76U/IYZod1hFeH0eCrioXFU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715827295; c=relaxed/simple;
-	bh=mXdch1UBCDPV/pTWNG0+XNlFw7TAWjTMQFw4h3/dUo8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DkBSMSeaKlLOPknMOetKXWTG/sLJ3a+QPo3XEWM72tO1BQJ2LqkVXTJEyTbRKlQBZX+6bK86fbETTAI/D/ChbdhLJkrKg3nUCnZFp94Q+Q1rVI8U6p++kCnhMXkxE+iAbja0vEjilCYPEdfpqigYM+TjeDGreTRQOel1pwlwoFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AdtpgE6f; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715827293; x=1747363293;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mXdch1UBCDPV/pTWNG0+XNlFw7TAWjTMQFw4h3/dUo8=;
-  b=AdtpgE6fyYdIkXzz/SNoqzzOEfanSlZP4TRM9SXvp9m+xTFrol1S6QQC
-   n1ru0i7tkPZQtWQRZAMGsifXFC0IWafV8+AQFgiNtaXv94MSHJveRwJUg
-   X/7mX93jzLIAwF2hLOH0pTznTSTAMyiHbHM6sAcA14vELc9qwRWYquDej
-   zrIHP8Jhb8MPYZJ0vc6RewyE1ZHCypoaL1D4HCdGXG1SR1Yxhbnm9BmpW
-   JEllYFvdLsQauGu10lWUg+eQWSE6DJXu1Uqb/Jk6wXLjGTmfjHJDulSz6
-   W6LXIcg9cUOr9qt55UzOgJoK2Tm0mtP9ZKbe5Sag/k6Yp6shmgjo2FVn4
-   g==;
-X-CSE-ConnectionGUID: rViN6xjjQbKi/EiV3D4xhw==
-X-CSE-MsgGUID: Ps9oPjZoRkmad6lOA5vpgQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11074"; a="34426398"
-X-IronPort-AV: E=Sophos;i="6.08,163,1712646000"; 
-   d="scan'208";a="34426398"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2024 19:41:32 -0700
-X-CSE-ConnectionGUID: PylPfyqSTxWAlB0PRaGvmw==
-X-CSE-MsgGUID: FjmMsRktQDaDNpFHXLYLNw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,163,1712646000"; 
-   d="scan'208";a="31198142"
-Received: from lkp-server01.sh.intel.com (HELO f8b243fe6e68) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 15 May 2024 19:41:25 -0700
-Received: from kbuild by f8b243fe6e68 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1s7R3a-000DWV-2v;
-	Thu, 16 May 2024 02:41:22 +0000
-Date: Thu, 16 May 2024 10:40:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: Roman Kisel <romank@linux.microsoft.com>, arnd@arndb.de,
-	bhelgaas@google.com, bp@alien8.de, catalin.marinas@arm.com,
-	dave.hansen@linux.intel.com, decui@microsoft.com,
-	haiyangz@microsoft.com, hpa@zytor.com, kw@linux.com,
-	kys@microsoft.com, lenb@kernel.org, lpieralisi@kernel.org,
-	mingo@redhat.com, mhklinux@outlook.com, rafael@kernel.org,
-	robh@kernel.org, tglx@linutronix.de, wei.liu@kernel.org,
-	will@kernel.org, linux-acpi@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org, x86@kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, ssengar@microsoft.com,
-	sunilmut@microsoft.com, vdso@hexbites.dev
-Subject: Re: [PATCH v2 5/6] drivers/hv/vmbus: Get the irq number from
- DeviceTree
-Message-ID: <202405161034.f4v8i4eI-lkp@intel.com>
-References: <20240514224508.212318-6-romank@linux.microsoft.com>
+	s=arc-20240116; t=1715827938; c=relaxed/simple;
+	bh=Bpp2sS8JAC34w//706OVYxm4uK643Velk4anITvY9sQ=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=eORwFTLk7DsKVxPOYN4iWIdUuB7/o6biBHz55wy61sf/1U6TEdQQlXV4T/7WrWhMAwLP55AakApJVSr0pwNCC5sKQ4oSkm9JvgTxe1pr+LZT69x9ih9Bf6gzhpchvPVNJ+7Fil9Ye4r166bPyzutabUR0L0cLpsBlQ7ouEEz3hc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.20.42.173])
+	by gateway (Coremail) with SMTP id _____8BxeOnbdEVm+lsNAA--.19759S3;
+	Thu, 16 May 2024 10:52:11 +0800 (CST)
+Received: from [10.20.42.173] (unknown [10.20.42.173])
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8Dxb1XWdEVmdXkiAA--.2393S3;
+	Thu, 16 May 2024 10:52:08 +0800 (CST)
+Subject: Re: [PATCH] LoongArch: Define __ARCH_WANT_NEW_STAT in unistd.h
+To: Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@loongson.cn>,
+ Huacai Chen <chenhuacai@kernel.org>
+Cc: loongarch@lists.linux.dev, Linux-Arch <linux-arch@vger.kernel.org>,
+ Xuefeng Li <lixuefeng@loongson.cn>, guoren <guoren@kernel.org>,
+ WANG Xuerui <kernel@xen0n.name>, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+ linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
+ stable@vger.kernel.org
+References: <20240511100157.2334539-1-chenhuacai@loongson.cn>
+ <f92e23be-3f3f-4bc6-8711-3bcf6beb7fa2@app.fastmail.com>
+ <3937d6b1-119b-195e-8b9b-314a0bfbeaeb@loongson.cn>
+ <ebf493ee-1e8b-426d-bcf4-d8e17d10844a@app.fastmail.com>
+From: maobibo <maobibo@loongson.cn>
+Message-ID: <14d52b91-58b2-6079-b66a-f01d1bac583f@loongson.cn>
+Date: Thu, 16 May 2024 10:52:06 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240514224508.212318-6-romank@linux.microsoft.com>
+In-Reply-To: <ebf493ee-1e8b-426d-bcf4-d8e17d10844a@app.fastmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:AQAAf8Dxb1XWdEVmdXkiAA--.2393S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7tF1kGrW5Cw1UtryrWr47KFX_yoW8XF17pF
+	WSgF1a9FWqyr1Syw4Ikw1DtFnYkryrJr45Z34FqryxAay5Xr13tr1FqrWUCFyaqFyxCFyj
+	va93Wa4fuFZ8ZagCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUP2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6r4UJVWxJr1ln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
+	xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r12
+	6r1DMcIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr4
+	1lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxG
+	rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14
+	v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
+	c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4U
+	MIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8Dl1DUUUU
+	U==
 
-Hi Roman,
 
-kernel test robot noticed the following build errors:
 
-[auto build test ERROR on f2580a907e5c0e8fc9354fd095b011301c64f949]
+On 2024/5/15 下午10:25, Arnd Bergmann wrote:
+> On Wed, May 15, 2024, at 09:30, maobibo wrote:
+>> On 2024/5/11 下午8:17, Arnd Bergmann wrote:
+>>> On Sat, May 11, 2024, at 12:01, Huacai Chen wrote:
+>>>
+>>> Importantly, we can't just add fstatat64() on riscv32 because
+>>> there is no time64 version for it other than statx(), and I don't
+>>> want the architectures to diverge more than necessary.
+>> yes, I agree. Normally there is newfstatat() on 64-bit architectures but
+>> fstatat64() on 32-bit ones.
+>>
+>> I do not understand why fstatat64() can be added for riscv32 still.
+>> 32bit timestamp seems works well for the present, it is valid until
+>> (0x1UL << 32) / 365 / 24 / 3600 + 1970 == 2106 year. Year 2106 should
+>> be enough for 32bit system.
+> 
+> There is a very small number of interfaces for which we ended up
+> not using a 64-bit time_t replacement, but those are only for
+> relative times, not epoch based offsets. The main problems
+> here are:
+> 
+> - time_t is defined to be a signed value in posix, and we need
+>    to handle file timestamps before 1970 in stat(), so changing
+>    this one to be unsigned is not an option.
+> 
+> - A lot of products have already shipped that will have to
+>    be supported past 2038 on existing 32-bit hardware. We
+>    cannot regress on architectures that have already been
+>    fixed to support this.
+> 
+> - file timestamps can also be set into the future, so applications
+>    relying on this are broken before 2038.
+I see. And thanks for detailed explanation.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Roman-Kisel/arm64-hyperv-Support-DeviceTree/20240515-064749
-base:   f2580a907e5c0e8fc9354fd095b011301c64f949
-patch link:    https://lore.kernel.org/r/20240514224508.212318-6-romank%40linux.microsoft.com
-patch subject: [PATCH v2 5/6] drivers/hv/vmbus: Get the irq number from DeviceTree
-config: arm64-randconfig-r053-20240515 (https://download.01.org/0day-ci/archive/20240516/202405161034.f4v8i4eI-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project d3455f4ddd16811401fa153298fadd2f59f6914e)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240516/202405161034.f4v8i4eI-lkp@intel.com/reproduce)
+Regards
+Bibo Mao
+> 
+>        Arnd
+> 
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202405161034.f4v8i4eI-lkp@intel.com/
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt7622-hif.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt7622-aud.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8186-img.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8186-ipe.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8186-mdp.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8186-vdec.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-img.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-ipe.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-vdec.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-vdo0.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-vdo1.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-venc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-vpp0.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-vpp1.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8195-apusys_pll.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8195-cam.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8195-ccu.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8195-img.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8195-imp_iic_wrap.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8195-ipe.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8195-scp_adsp.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8195-vdec.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8195-vdo0.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8195-vdo1.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8195-vpp0.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8195-vpp1.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8195-wpe.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/meson/meson-clkc-utils.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/meson/meson-aoclk.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/meson/meson-eeclk.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/meson/a1-pll.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/meson/gxbb.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/meson/gxbb-aoclk.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/meson/s4-peripherals.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/qcom/lpass-gfm-sm8250.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/qcom/videocc-sdm845.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/versatile/clk-vexpress-osc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/clk-gate_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/soc/amlogic/meson-clk-measure.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/hw_random/omap-rng.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/hw_random/omap3-rom-rng.o
-WARNING: modpost: drivers/char/hw_random/mxc-rnga: section mismatch in reference: mxc_rnga_driver+0x10 (section: .data) -> mxc_rnga_remove (section: .exit.text)
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/hw_random/cavium-rng.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/hw_random/cavium-rng-vf.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/panel/panel-abt-y030xx067a.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/bridge/lontium-lt9611uxc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/bridge/sii9234.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tiny/bochs.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-ram.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-raw-ram.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-spmi.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mfd/arizona.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mfd/vexpress-sysreg.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/dax/dax.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cxl/core/cxl_core.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cxl/cxl_acpi.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cxl/cxl_port.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spi/spi-fsl-lib.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/firewire/firewire-uapi-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio_aec.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/auxdisplay/hd44780_common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pcmcia/i82092.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/input/misc/soc_button_array.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/input/tests/input_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/rtc/lib_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/i2c/busses/i2c-ccgx-ucsi.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/dvb-frontends/au8522_decoder.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/v4l2-core/v4l2-async.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/v4l2-core/v4l2-fwnode.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwmon/corsair-cpro.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/core/pwrseq_emmc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/host/tmio_mmc_core.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/leds/flash/leds-rt4505.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-belkin.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-evision.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-google-stadiaff.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-gyration.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-ite.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-kensington.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-kye.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-microsoft.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-saitek.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-sjoy.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-speedlink.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-topseed.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-twinhan.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-xinmo.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-zpff.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-zydacron.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_powersave.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_userspace.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/perf/arm-ccn.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/perf/fsl_imx8_ddr_perf.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/perf/marvell_cn10k_ddr_pmu.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-master-aspeed.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spmi/spmi-pmic-arb.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/adc/xilinx-ams.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/buffer/kfifo_buf.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/siox/siox-bus-gpio.o
->> ERROR: modpost: "irq_to_desc" [drivers/hv/hv_vmbus.ko] undefined!
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
