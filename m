@@ -1,79 +1,65 @@
-Return-Path: <linux-arch+bounces-4441-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4442-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0827C8C6FB7
-	for <lists+linux-arch@lfdr.de>; Thu, 16 May 2024 02:57:09 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51A818C7017
+	for <lists+linux-arch@lfdr.de>; Thu, 16 May 2024 03:43:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F4ED1F21F10
-	for <lists+linux-arch@lfdr.de>; Thu, 16 May 2024 00:57:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EF4E0B2282D
+	for <lists+linux-arch@lfdr.de>; Thu, 16 May 2024 01:43:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4938A522F;
-	Thu, 16 May 2024 00:56:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OaNX86Q9"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95C49137E;
+	Thu, 16 May 2024 01:43:26 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20DD54A3F;
-	Thu, 16 May 2024 00:56:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id EEAD3110A
+	for <linux-arch@vger.kernel.org>; Thu, 16 May 2024 01:43:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715821001; cv=none; b=MvYihZ26MdYOS6lSokX/tdOczV5LYhlPKq7KZ5Nr38MF609XbME6e7rLvuCPyxehw6fsO4AOT4CJxlptcELoEvs6U26jht1EJqCrCq3NKN9HPTBgY0Lqe5lHKw5jMv1+XKFHw8fqrJ9y18XKCyxmkQ510m8Jv5UBz6N1UVOAdAA=
+	t=1715823806; cv=none; b=LQiHCRD6OkdSwaXMFBVpbbnlyia6xKUeVXXXRWJ/yuz+wIKKcruX3nO+ClyQM76xps6laQ5cfQD9jmdJ3p9taLW/b+Fj9JIrS5rsUHQF9XMesDfW/mKqw+9Hm8DphYLigCncZP6r4IBMJ+Kc2ZApfv+5l9z5yv6sficrXIdbVtA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715821001; c=relaxed/simple;
-	bh=RZqXihDKwwl6roptdsNe65gDMPagfXaqrff9GjtkDN0=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=fOHQsowQy78XEgjenPcJBnJgZEjNtisqpKo9wMNUTz6caXcru6x2Ov0g+hN1GjxoUmOP7xpE00BNGKz9S2yNE6An2GcmnbziKqO90H+1yO6cqL93ss/pTT8qY0QBWxJPU0lYv3+BW7FVaeXwVJ3UGdIhn55likbkH5SLAFKKzao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OaNX86Q9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F1F38C32782;
-	Thu, 16 May 2024 00:56:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715821001;
-	bh=RZqXihDKwwl6roptdsNe65gDMPagfXaqrff9GjtkDN0=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=OaNX86Q90Xh1cwLFVq3NbGVTvoWYQF4CcpdTyUGihBtH9+MObm1iNSDmaDmiahyWt
-	 8ijVsLiyCxk7xD15g8Ym6rRefh+mP+2wnYKRs0Glu2vABop894KhBwePA98ymqkjPa
-	 o1o21CGZQhSOfdp4v+6F82xeFxFr3NF7ICk6ME2UaF9XSamXBlz6S65HaKHp3Z+wKH
-	 LwUuUAJ1y2shHAwGhMfll7PknpvVnrOThV6VSVMqNlxWm1z9EDo0bI+lxhGkP3lOMy
-	 kLSLN87EBeTl7xiGlMm6PASu1WYf9Uys1Gh4ygFMqmP3/2TjUUfuM8/o077tswMeBX
-	 +ofYlTS6aeYaw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E76C4C43332;
-	Thu, 16 May 2024 00:56:40 +0000 (UTC)
-Subject: Re: [GIT PULL] Modules changes for v6.10-rc1
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <ZkMfS727s_1MQWzQ@bombadil.infradead.org>
-References: <ZkMfS727s_1MQWzQ@bombadil.infradead.org>
-X-PR-Tracked-List-Id: <linux-arch.vger.kernel.org>
-X-PR-Tracked-Message-Id: <ZkMfS727s_1MQWzQ@bombadil.infradead.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.10-rc1
-X-PR-Tracked-Commit-Id: 2c9e5d4a008293407836d29d35dfd4353615bd2f
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: a49468240e89628236b738b5ab9416eae8f90c15
-Message-Id: <171582100094.27993.18157939993173010013.pr-tracker-bot@kernel.org>
-Date: Thu, 16 May 2024 00:56:40 +0000
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-modules@vger.kernel.org, mcgrof@kernel.org, patches@lists.linux.dev, linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, rppt@kernel.org, song@kernel.org, tglx@linutronix.de, bjorn@kernel.org, mhiramat@kernel.org, rostedt@goodmis.org, philmd@linaro.org, will@kernel.org, sam@ravnborg.org, alexghiti@rivosinc.com, liviu@dudau.co.uk, justinstitt@google.com, elsk@google.com
+	s=arc-20240116; t=1715823806; c=relaxed/simple;
+	bh=aJ1HYO2k1NY8pFcW+T62qja/tqE9SP8PlX9DwyFk8VU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=VO4ARn4V/JhWBeYQoBTFUVECYoYRrBJONmWkjeGNmafSt4MqdyaNrT/nB1timIT+kAXn3eiSDE193GkGd2SUWOplc7a1tpCrGJS0D0h9UVqqd/jKudVComTwuO5qBEBKEqGA9JzK56F5EJoadNZbN8iRXWskI0dr+FcMrIr8rIc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 246864 invoked by uid 1000); 15 May 2024 21:43:17 -0400
+Date: Wed, 15 May 2024 21:43:17 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>,
+  Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>, linux-kernel@vger.kernel.org,
+  linux-arch@vger.kernel.org, kernel-team@meta.com, parri.andrea@gmail.com,
+  boqun.feng@gmail.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+  Joel Fernandes <joel@joelfernandes.org>
+Subject: LKMM: Making RMW barriers explicit
+Message-ID: <72c804c8-2511-4349-a823-bc1de8bb729e@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The pull request you sent on Tue, 14 May 2024 01:22:35 -0700:
+Hernan and Jonas:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.10-rc1
+Can you explain more fully the changes you want to make to herd7 and/or 
+the LKMM?  The goal is to make the memory barriers currently implicit in 
+RMW operations explicit, but I couldn't understand how you propose to do 
+this.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/a49468240e89628236b738b5ab9416eae8f90c15
+Are you going to change herd7 somehow, and if so, how?  It seems like 
+you should want to provide sufficient information so that the .bell 
+and .cat files can implement the appropriate memory barriers associated 
+with each RMW operation.  What additional information is needed?  And 
+how (explained in English, not by quoting source code) will the .bell 
+and .cat files make use of this information?
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Alan
 
