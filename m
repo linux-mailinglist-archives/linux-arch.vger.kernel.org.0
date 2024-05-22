@@ -1,266 +1,121 @@
-Return-Path: <linux-arch+bounces-4484-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4485-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 563698CBDAA
-	for <lists+linux-arch@lfdr.de>; Wed, 22 May 2024 11:21:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 499538CBF1E
+	for <lists+linux-arch@lfdr.de>; Wed, 22 May 2024 12:16:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C6E541F230A4
-	for <lists+linux-arch@lfdr.de>; Wed, 22 May 2024 09:21:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D59FC1F233ED
+	for <lists+linux-arch@lfdr.de>; Wed, 22 May 2024 10:16:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 593D4770FB;
-	Wed, 22 May 2024 09:21:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B41F823DD;
+	Wed, 22 May 2024 10:16:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lm5KIxXj"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C64A80604;
-	Wed, 22 May 2024 09:21:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF0DA823BC;
+	Wed, 22 May 2024 10:16:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716369678; cv=none; b=CmNra+VkF+AYsaiJZItgPimp2MLqqbmcU7CKLy8SVsZRQCFoRCMhoI7MivaW0HJC2lAbvXb0dtfbZgij6mcf1/BLye7Wc4b28IcD1+Xx4ZfG3AEV6klRpXyFgbsNZxLyAAJWQOSmhFK0yMMaNcnLkLJnT+1hB6s/VpHbX1qmQTU=
+	t=1716372982; cv=none; b=Avboe+edLPZpcLAwdPL98XnpKB8gh3XRDYAp7H3s8IbHl9rqfjTtfoPfIh23WF9uANxplZwRvZIFdFROtUZlv+ohp97M8fGlHdZ7eLkD5GrIpn293IZqgqX0eklZAZpBNLlCtRLitI39SPAtrILPBNTnZ5cw4rDfA9SH6ntSAt8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716369678; c=relaxed/simple;
-	bh=avY3j+hx+C3D9VSEKbqn2dyFRioXHZb36lV3ombKQd4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iwKCBVrCTelhBTP5csV6e8u3EzkMbTaNYjD6KUx4oSNgh7RJbjt31NHW5Z20zeEbKdtWlxRFmyYKDjA79oo2aQNbHb+RxuQ8wgTMOv+aqoz3cCg5/o/Shk3ycsXq18ofUVWMBWNtAd5vX1MNYgZt3iY1p42aRnCabNyo+vacK+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.51])
-	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4VkljB5GCcz9v7Hk;
-	Wed, 22 May 2024 17:03:58 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id CBAA5140485;
-	Wed, 22 May 2024 17:21:06 +0800 (CST)
-Received: from [10.81.207.231] (unknown [10.81.207.231])
-	by APP2 (Coremail) with SMTP id GxC2BwCn4SX0uE1mtQ+sCA--.15533S2;
-	Wed, 22 May 2024 10:21:06 +0100 (CET)
-Message-ID: <58042cf3-e515-4e5f-ab48-1d0d6123c9e9@huaweicloud.com>
-Date: Wed, 22 May 2024 11:20:47 +0200
+	s=arc-20240116; t=1716372982; c=relaxed/simple;
+	bh=PuiENNcIxoAJNh/6feyvzTKMvSktpJ7bAqS7xzAUPRk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=o601Fp4cN86rK1KRasiAUZGqYZm64dLwq9lDVUItYxhdxhpoArrUiMmPvk3HxPgjtV6FTAN94R1IN3cZ+pzOUvJNoRiG9spuowKNlZ3BkL4FpmfSZTGMOzcGbwFrn/+zlMnX0yBfL2UbChaOGKy84ukr4vC+w94546BliW9Gm6A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lm5KIxXj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95213C32781;
+	Wed, 22 May 2024 10:16:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716372981;
+	bh=PuiENNcIxoAJNh/6feyvzTKMvSktpJ7bAqS7xzAUPRk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Lm5KIxXjdHC7FeqU6m1CSLL2Gv7eOvVSuPP5fau1+0X/X7J72UGZhOcmo5Np9wzrj
+	 dDGDl3UZrlq27nJgutJ81+nXUyYXwg/cgGlukkI+lK5hxi+GRL2EoHsnhXsCbgSIWT
+	 z5iMOrQMx0LXWOmVfy6dq+DUcRs7ExZKNl25w5pXVB718sVWbf4tJoVHXOMJKO/UkP
+	 2brMh0RMr6zDpgHIkyrdn6zVD4M84531lSwGjBPi0FF4zkECJLN4do8TOrdvSM3l88
+	 RmzLCnqzEa6XIxNrsxfmQJ5tYKYMks02q+NFKbtJIPA1UBk0A/K50BX8LJqf8UmRO8
+	 HfqA7zH2CS4AA==
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-51fdc9af005so9255959e87.3;
+        Wed, 22 May 2024 03:16:21 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXSnZ0XyprHHsfZuQxiI9gI53mhEBje6YnTaePbseYDeEK5SM91y6Wb/VCId+kRNHr4WrUe1IiN05P9/YUhL2U2I60un6nx+1O0Ywna6tIhTaIB1Qn6bFizqVG1wJtPrva+WY1x2+AlEA==
+X-Gm-Message-State: AOJu0Ywj+vGCjEvw/XOJwHbRRboRgm+31Xw1E7efiE+gD1hBCRR4br8H
+	KQ90liO3Gfw/Z0Q2s/bbk+78K0MaGvxikszNPz1D/rGDGfbcN3hV2qde6Khn79Og18oDnQ7F46t
+	Ay9KFFQv6F+yv4ScwqhlMeG7TPNo=
+X-Google-Smtp-Source: AGHT+IEzRmY7x0F5b5z9o88qkPTe9jNI0CmLsrsI7PVvHFgbw5Ry0ao2qe4WsX9BgjRXAgujQNADKSqyiLvG+6SomMc=
+X-Received: by 2002:a19:5512:0:b0:520:676a:7322 with SMTP id
+ 2adb3069b0e04-526c0b5db7bmr1253546e87.46.1716372980327; Wed, 22 May 2024
+ 03:16:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: LKMM: Making RMW barriers explicit
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>,
- "Paul E. McKenney" <paulmck@kernel.org>, linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, kernel-team@meta.com, parri.andrea@gmail.com,
- boqun.feng@gmail.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
- Joel Fernandes <joel@joelfernandes.org>
-References: <72c804c8-2511-4349-a823-bc1de8bb729e@rowland.harvard.edu>
- <e030f7a4-97e7-4e91-bbae-230ee5c97763@huaweicloud.com>
- <a9bf972c-b5ee-f1c2-36bf-30ba62f419d7@huaweicloud.com>
- <2f20e7cf-7c67-4ad3-8a0c-3c1d01257ae4@rowland.harvard.edu>
- <0c309dd3-f8c1-4945-b8f1-154b2a775216@huaweicloud.com>
- <4286e5b2-5954-4c77-a815-c1c2735d9509@rowland.harvard.edu>
-From: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-In-Reply-To: <4286e5b2-5954-4c77-a815-c1c2735d9509@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:GxC2BwCn4SX0uE1mtQ+sCA--.15533S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxKw4fJr4UXFyrJFyUuF4kJFb_yoW7Kw1fpF
-	W3Ka4UKF1DJws29w1IvwsrXryYkr45JFWUXr93Jw4Iyas09r1xtF15tw45uF9rXrZ7A3Wj
-	vr43ta47ua4DAFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUkK14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-	6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
-	4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-	I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-	4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
-	c2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
-	v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
-	c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_
-	Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbU
-	UUUUU==
-X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
+References: <20240520124212.2351033-5-masahiroy@kernel.org> <202405211448.fglQOQ9W-lkp@intel.com>
+In-Reply-To: <202405211448.fglQOQ9W-lkp@intel.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Wed, 22 May 2024 19:15:44 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQYG_BYttk+YS_Y5AepVb_gM5T8FtEJSmhuS-y2j1gRgg@mail.gmail.com>
+Message-ID: <CAK7LNAQYG_BYttk+YS_Y5AepVb_gM5T8FtEJSmhuS-y2j1gRgg@mail.gmail.com>
+Subject: Re: [PATCH 4/4] kbuild: remove PROVIDE() for kallsyms symbols
+To: kernel test robot <lkp@intel.com>
+Cc: linux-kbuild@vger.kernel.org, oe-kbuild-all@lists.linux.dev, 
+	Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org, 
+	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
+	linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, May 21, 2024 at 4:13=E2=80=AFPM kernel test robot <lkp@intel.com> w=
+rote:
+>
+> Hi Masahiro,
+>
+> kernel test robot noticed the following build errors:
+>
+> [auto build test ERROR on masahiroy-kbuild/for-next]
+> [also build test ERROR on linus/master masahiroy-kbuild/fixes next-202405=
+21]
+> [cannot apply to v6.9]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Masahiro-Yamada/kb=
+uild-avoid-unneeded-kallsyms-step-3/20240520-204508
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-k=
+build.git for-next
+> patch link:    https://lore.kernel.org/r/20240520124212.2351033-5-masahir=
+oy%40kernel.org
+> patch subject: [PATCH 4/4] kbuild: remove PROVIDE() for kallsyms symbols
+> config: x86_64-rhel-8.3-bpf (https://download.01.org/0day-ci/archive/2024=
+0521/202405211448.fglQOQ9W-lkp@intel.com/config)
+> compiler: gcc-13 (Ubuntu 13.2.0-4ubuntu3) 13.2.0
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
+ve/20240521/202405211448.fglQOQ9W-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202405211448.fglQOQ9W-lkp=
+@intel.com/
+>
+> All errors (new ones prefixed by >>):
+
+
+Thanks, I will move kallsyms step 0 before btf creation.
 
 
 
-Am 5/21/2024 um 5:36 PM schrieb Alan Stern:
-> On Tue, May 21, 2024 at 11:57:29AM +0200, Jonas Oberhauser wrote:
->>
->>
->> Am 5/18/2024 um 2:31 AM schrieb Alan Stern:
->>> On Thu, May 16, 2024 at 10:44:05AM +0200, Hernan Ponce de Leon wrote:
->>>> On 5/16/2024 10:31 AM, Jonas Oberhauser wrote:
->>>>>
->>>>>
->>>>> Am 5/16/2024 um 3:43 AM schrieb Alan Stern:
->>>>>> Hernan and Jonas:
->>>>>>
->>>>>> Can you explain more fully the changes you want to make to herd7 and/or
->>>>>> the LKMM?  The goal is to make the memory barriers currently implicit in
->>>>>> RMW operations explicit, but I couldn't understand how you propose to do
->>>>>> this.
->>>>>>
->>>>>> Are you going to change herd7 somehow, and if so, how?  It seems like
->>>>>> you should want to provide sufficient information so that the .bell
->>>>>> and .cat files can implement the appropriate memory barriers associated
->>>>>> with each RMW operation.  What additional information is needed?  And
->>>>>> how (explained in English, not by quoting source code) will the .bell
->>>>>> and .cat files make use of this information?
->>>>>>
->>>>>> Alan
->>>>>
->>>>>
->>>>> I don't know whether herd7 needs to be changed. Probably, herd7 does the
->>>>> following:
->>>>> - if a tag called Mb appears on an rmw instruction (by instruction I
->>>>> mean things like xchg(), atomic_inc_return_relaxed()), replace it with
->>>>> one of those things:
->>>>>      * full mb ; once (the rmw) ; full mb, if a value returning
->>>>> (successful) rmw
->>>>>      * once (the rmw)   otherwise
->>>>> - everything else gets translated 1:1 into some internal representation
->>>>
->>>> This is my understanding from reading the source code of CSem.ml in herd7's
->>>> repo.
->>>>
->>>> Also, this is exactly what dartagnan is currently doing.
->>>>
->>>>>
->>>>> What I'm proposing is:
->>>>> 1. remove this transpilation step,
->>>>> 2. and instead allow the Mb tag to actually appear on RMW instructions
->>>>> 3. change the cat file to explicitly define the behavior of the Mb tag
->>>>> on RMW instructions
->>>>
->>>> These are the exact 3 things I changed in dartagnan for testing what Jonas
->>>> proposed.
->>>>
->>>> I am not sure if further changes are needed for herd7.
-> 
-> What about failed RMW instructions?  IIRC, herd7 generates just an R for
-> these, not both R and W, but won't it still be annotated with an mb tag?
-> And wasn't this matter of failed RMWs one of the issues that the two of
-> you specifically wanted to make explicit in the memory model, rather
-> than implicit in the operation of herd7?
 
-That's why we use the RMW_MB tag. I should have copied that definition too:
-
-
-(* full barrier events that appear in non-failing RMW *)
-let RMW_MB = Mb & (dom(rmw) | range(rmw))
-
-
-This ensures that the only successful rmw instructions have an RMW_MB tag.
-
-
-> 
-> And wasn't another one of these issues the difference between
-> value-returning and non-value-returning RMWs?  As far as I can, nothing
-> in the .def file specifically mentions this.  There's the noreturn tag
-> in the .bell file, but nothing in the .def file says which instructions
-> it applies to.  Or are we supposed to know that it automatically applies
-> to all __atomic_op() instances?
-
-Ah, now you're already forestalling my next suggestion :))
-
-I would say let's fix one issue at a time (learned this from Andrea).
-
-For the other issue, do noreturn rmws always have the same ordering as once?
-
-I suspect we need to extend herd slightly more to support the second 
-one, I don't know if there's syntax for passing tags to __atomic_op.
-
-
-> 
->>> Okay, good.  This answers the first part of what I asked.  What about
->>> the second part?  That is, how will the changes to the .def, .bell, and
->>> .cat files achieve your goals?
->>>
->>> Alan
->>
->>
->> Firstly, we'd allow 'mb as a barrier mode in events, e.g.
-> 
-> You mean as a mode in RMW events.  'mb already is a mode for F events.
-
-Thanks, you're right.
-
-> 
->> instructions RMW[{'once,'acquire,'release,'mb}]
->>
->> then the Mb tags would appear in the graph. And then I'd define the ordering
->> explicitly. One way is to say that an Mb tag orders all memory accesses
->> before(or at) the tag with all memory accesses after(or at) the tag, except
->> the accesses of the rmw with each other.
-> 
-> I don't think you need to add very much.  The .cat file already defines
-> the mb relation as including the term:
-> 
-> 	([M] ; fencerel(Mb) ; [M])
-> 
-> All that's needed is to replace the fencerel(Mb) with something more
-> general...
-> 
->> This is the same as the full fence before the read, which orders all memory
->> accesses before the read with every access after(or at) the read,
->> plus the full fence after the write, which orders all memory accesses
->> before(or at) the write with all accesses after the write.
->>
->> That would be done by adding
->>
->>       [M] ; (po \ rmw) & (po^?; [RMW_MB] ; po^?) ; [M]
-> 
-> .. like this.
-> 
->> to ppo.
-> 
-> You need to update the definition of mb, not ppo.
-
-Yes, I meant to update the definition of mb, but I momentarily thought 
-the effect of that is just that
-
-ppo_new = ppo_old |  [M] ; (po \ rmw) & (po^?; [RMW_MB] ; po^?) ; [M]
-
-I forgot that extending mb has another effect, in pb.
-
-
->  And the RMW_MB above
-> looks wrong; shouldn't it be just Mb?
-
-As discussed above, no, since the Mb will also be on the failed RMW.
-
-> 
-> Also, is the "\ rmw" part really necessary?  I don't think it makes any
-> difference; the memory model already knows that the read part of an RMW
-> has to happen before the write part.
-
-It unfortunately does make a difference, because mb is a strong fence.
-This means that an Mb in an rmw sequence would create additional pb edges.
-
-   prop;(rfe ; [Mb];rmw;[Mb])
-
-I believe this is might give wrong results on powerpc, but I'd need to 
-double check.
-
-
-> 
->> One could also split it into two rules to keep with the "two full fences"
->> analogy. Maybe a good way would be like this:
->>
->>       [M] ; po; [RMW_MB & R] ; po^? ; [M]
->>
->>       [M] ; po^?; [RMW_MB & W] ; po ; [M]
-> 
-> My preference is for the first approach.
-
-That was also my early preference, but to be honest I expected that 
-you'd prefer the second approach.
-Actually, I also started warming up to it.
-
-
-Have fun,
-  jonas
-
+--=20
+Best Regards
+Masahiro Yamada
 
