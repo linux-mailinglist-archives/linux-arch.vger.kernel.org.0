@@ -1,79 +1,135 @@
-Return-Path: <linux-arch+bounces-4492-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4493-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35F058CC600
-	for <lists+linux-arch@lfdr.de>; Wed, 22 May 2024 20:05:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C517A8CC636
+	for <lists+linux-arch@lfdr.de>; Wed, 22 May 2024 20:20:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 592771C212FE
-	for <lists+linux-arch@lfdr.de>; Wed, 22 May 2024 18:05:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F18271C20E0E
+	for <lists+linux-arch@lfdr.de>; Wed, 22 May 2024 18:20:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37B86145B02;
-	Wed, 22 May 2024 18:05:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dpjtqO6x"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AD85762FF;
+	Wed, 22 May 2024 18:20:51 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CCCF8003B;
-	Wed, 22 May 2024 18:05:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 86C4F339A8
+	for <linux-arch@vger.kernel.org>; Wed, 22 May 2024 18:20:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716401113; cv=none; b=ZA629MMJrKsfdI/cAPjykl+URUjZwS66RVYSQRuCCK/X8hVaqpVkg7UJ7Q+uTolTUOKm+vt3zrZvP3yFdoDQVznRk4+yG+c6kwTqxIVCw95ZSHfeXwXiMEPau/ErGnZVirj4bgvSjL0w/OYjGA2TbCnUw2zvk4WPsBeWyvezpMM=
+	t=1716402051; cv=none; b=pt51zA3NEfYs/Xr8cuhk+a5CHB4n71PSYHkKJC47FRNVsjplOCMpkeQoAyZ4bjOoqrRtLlbw13Vkkg0jzAjnC2lAb9qWelpc+jrxDOMOfHkLdR59bG1Im7BNcAJaPTqpb5MByu7Yk4sbTle38Ko4kdcDck9zHClCo36zCiq1rBk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716401113; c=relaxed/simple;
-	bh=CeI2EzAoofDaKVhhYpNbdJogVjReiPBySX4uY/BCtN8=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=oUCFQtyF/tNcOJa0poHcJO+MQa76x/Ehez3DbXBpot5I5zaQCaiuQwHdAYEe7Of6MOUmUCt2xfYkTHyeJ2yNvGuL2iui9nseZyWaQ09rSx2NrV2wwu10ZUDLzV7EJJJ+gHTnnHSxOrRTGSpxxk0CnIGW2EEaJIxLSGrqa9n1/FM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dpjtqO6x; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DA179C2BBFC;
-	Wed, 22 May 2024 18:05:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716401112;
-	bh=CeI2EzAoofDaKVhhYpNbdJogVjReiPBySX4uY/BCtN8=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=dpjtqO6x6XYXFWJvUnrmxuXu+AANuWcCt10senHjUYhZ5CLS7NHXI9KViGXJCy66i
-	 SeBj5PHys5BTwP7k3isqPwPCur9TpMgUuYphI/pl0O0/9JbbamJPH2AqLCyv0Oa81o
-	 Pd2VsYyF5YAPI3LTnWSho8UQDDiJQtOP6a3tRNkvji7U6XFo16FdSFXimmEj/IgnYC
-	 ynG/lG9npfodMEzusLPKXqhsHBTvriKq77J8pf6PJoTqSGtyzZ2cs6k2HUlvcrOcoU
-	 +t2chzxRsNLaK/h13eN8mW7fM0tlpfr/D4Z2oY0ZRVcFH9sp99ZRXWwdUQFcrGVXbs
-	 zbtl9k0UI15iQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D0FE1C43619;
-	Wed, 22 May 2024 18:05:12 +0000 (UTC)
-Subject: Re: [GIT PULL] LoongArch changes for v6.10
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <20240522140504.4071402-1-chenhuacai@loongson.cn>
-References: <20240522140504.4071402-1-chenhuacai@loongson.cn>
-X-PR-Tracked-List-Id: <loongarch.lists.linux.dev>
-X-PR-Tracked-Message-Id: <20240522140504.4071402-1-chenhuacai@loongson.cn>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-6.10
-X-PR-Tracked-Commit-Id: 9cc1df421f00453afdcaf78b105d8e7fd03cce78
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 4f05e82003d1c20da29fa593420b8d92e2c8d4e6
-Message-Id: <171640111284.25247.7584430807190924004.pr-tracker-bot@kernel.org>
-Date: Wed, 22 May 2024 18:05:12 +0000
-To: Huacai Chen <chenhuacai@loongson.cn>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev, linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>, Jiaxun Yang <jiaxun.yang@flygoat.com>, Huacai Chen <chenhuacai@loongson.cn>
+	s=arc-20240116; t=1716402051; c=relaxed/simple;
+	bh=uxu8FI2vtIphGSI3l0Rvcfu2ul4LYPisCRq5cmLblag=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=akJuHr1d6RCNSLaI1cLTsSXmU499D0YpSYNiEOOf9/zENswYTEgFaOxPTu0uqf6d5XDLqNcplEBFw5aNua37c3VMSo8Cu3m1cZJEIKBkj8yHm8VsCkwulD4INnM4wBl3mRgMjEyDq8wEG4MRD4rxRTr/GhhXL0G9r18Bk4YjnOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 508150 invoked by uid 1000); 22 May 2024 14:20:42 -0400
+Date: Wed, 22 May 2024 14:20:42 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Andrea Parri <parri.andrea@gmail.com>
+Cc: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
+  Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>,
+  "Paul E. McKenney" <paulmck@kernel.org>, linux-kernel@vger.kernel.org,
+  linux-arch@vger.kernel.org, kernel-team@meta.com, boqun.feng@gmail.com,
+  j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+  Joel Fernandes <joel@joelfernandes.org>
+Subject: Re: LKMM: Making RMW barriers explicit
+Message-ID: <ba7120a5-9208-4506-bf99-2bfa165180c5@rowland.harvard.edu>
+References: <72c804c8-2511-4349-a823-bc1de8bb729e@rowland.harvard.edu>
+ <e030f7a4-97e7-4e91-bbae-230ee5c97763@huaweicloud.com>
+ <a9bf972c-b5ee-f1c2-36bf-30ba62f419d7@huaweicloud.com>
+ <2f20e7cf-7c67-4ad3-8a0c-3c1d01257ae4@rowland.harvard.edu>
+ <0c309dd3-f8c1-4945-b8f1-154b2a775216@huaweicloud.com>
+ <4286e5b2-5954-4c77-a815-c1c2735d9509@rowland.harvard.edu>
+ <58042cf3-e515-4e5f-ab48-1d0d6123c9e9@huaweicloud.com>
+ <6174fd09-b287-49ae-b117-c3a36ef3800a@rowland.harvard.edu>
+ <Zk4jQe7Vq3N2Vip0@andrea>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Zk4jQe7Vq3N2Vip0@andrea>
 
-The pull request you sent on Wed, 22 May 2024 22:05:04 +0800:
+On Wed, May 22, 2024 at 06:54:25PM +0200, Andrea Parri wrote:
+> Alan, all,
+> 
+> ("randomly" picking a recent post in the thread, after having observed
+> this discussion for a while...)
+> 
+> > It would be better if there was a way to tell herd7 not to add the 'mb 
+> > tag to failed instructions in the first place.  This approach is 
+> > brittle; see below.
+> 
+> AFAIU, changing the herd representation to generate mb-accesses in place
+> of certain mb-fences...
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-6.10
+I believe herd7 already generates mb accesses (not fences) for certain 
+RMW operations.  But then it does some post-processing on them, and that 
+post-processing is what we are thinking of changing.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/4f05e82003d1c20da29fa593420b8d92e2c8d4e6
+> > If you do want to use this approach, it should be simplified.  All you 
+> > need is:
+> > 
+> > 	[M] ; po ; [RMW_MB]
+> > 
+> > 	[RMW_MB] ; po ; [M]
+> > 
+> > This is because events tagged with RMW_MB always are memory accesses, 
+> > and accesses that aren't part of the RMW are already covered by the 
+> > fencerel(Mb) thing above.
+> 
+> ... and updating the .cat file to the effects of something like
+> 
+>   -let mb = ([M] ; fencerel(Mb) ; [M]) |
+>   +let mb = (([M] ; po? ; [Mb] ; po? ; [M]) \ id) |
+> 
+> ... can hardly be called "making RMW barriers explicit".  (So much so
+> that the first commit in PR #865 was titled "Remove explicit barriers
+> from RMWs".  :-))
 
-Thank you!
+There is another point, something we didn't spell out explicitly in the 
+email discussion.  Namely, in linux-kernel.def there is a long list of 
+instructions along with corresponding herd7 implementation instructions, 
+and those instructions explicitly contain either {once}, {acquire}, 
+{release}, or {mb} tags.  So to a large extent, these barriers already 
+are explicit in the memory model.  Not in the .cat file, but in the .def 
+file.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+What is not so explicit is how the {mb} tag works.  Its operation isn't 
+as simple as the operation of the {acquire} and {release} tags; those 
+just modify the R or W access in the RMW pair as you would expect.  
+Instead, an {mb} tag says to insert strong memory barriers before the R 
+access and after the W access.  This is more or less what the 
+post-processing mentioned earlier does, and Jonas and Hernan want to 
+move this out of herd7 and into the memory model.
+
+> Overall, this discussion rather seems to confirm the close link between
+> tools/memory-model/ and herdtools7.  (After all, to what extent could
+> any putative RMW_MB be considered "explicit" without _knowing the under-
+> lying representation of the RMW operations...)  My understanding is that
+> this discussion was at least in part motivated by a desire to experiment
+> and familiarize with the current herd representation (that does indeed
+> require some getting-used-to...); this suggests, as some of you already
+> mentioned, to add some comments or a .txt in tools/memory-model/ in order
+> to document such representation and ameliorate that experience.  OTOH, I
+> must admit, I'm unable to see here sufficient motivation(tm) for changing
+> the current representation (and model): not the how, but the why...
+
+Well, it's not a big change.  And in my opinion, if something can be 
+moved out of herd7's innards and into the memory model files, then doing 
+so is generally a good idea.
+
+However, I do agree that there will still be a close link between 
+tools/memory-model/ and herdtools7.  This may be unavoidable, at least 
+to some extent, but any way to reduce it is worth considering.
+
+Alan
 
