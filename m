@@ -1,178 +1,223 @@
-Return-Path: <linux-arch+bounces-4494-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4495-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6158D8CC77A
-	for <lists+linux-arch@lfdr.de>; Wed, 22 May 2024 21:48:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76B298CCC00
+	for <lists+linux-arch@lfdr.de>; Thu, 23 May 2024 08:03:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CEF5EB20A1B
-	for <lists+linux-arch@lfdr.de>; Wed, 22 May 2024 19:48:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EE4ED1F213AD
+	for <lists+linux-arch@lfdr.de>; Thu, 23 May 2024 06:03:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B36C146004;
-	Wed, 22 May 2024 19:48:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34FC113B299;
+	Thu, 23 May 2024 06:02:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="Uz2AHfik"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31ACEA3F;
-	Wed, 22 May 2024 19:48:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F99C13B583
+	for <linux-arch@vger.kernel.org>; Thu, 23 May 2024 06:02:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716407326; cv=none; b=MzhnDi2ha54S1asBfIn3y7swdYVnhVsrX+JQU+A7ytWiIlkX1ze1ncwmp6E45TnltykUTqefc6I584NTtxWDJrPj7SuSPcGkR8TozBKFB+n+/8Drd5y+5gHrpkGSoggsYBqEmgUH+MOSMkslGCoa8Id5yZhNvBQBkbqiHIpn4Tk=
+	t=1716444179; cv=none; b=K8qaMAdINaEGQAQ/UzHFL7TdxL3sIyyOn7u5g8lCncOEgKETc4iyG6IusVKualHCzCRhQqWQMv91jh/8nd19+x1tki7Tk/ezCYqNTQIICTSfG3MXUH2tSU0oU/3bbIs7Txt9VtdZ8/VQ3RBxre7cVLkI7fqI2tN279ArPal6xXY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716407326; c=relaxed/simple;
-	bh=HdAT56sJXNa4TBXRL+PSM8UK/YONNo0f7tIuiu+4yYs=;
+	s=arc-20240116; t=1716444179; c=relaxed/simple;
+	bh=B9lGrOwbzZ9cwWP1ohGSBcMGMvcXioUh06F1RRqtc5A=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IFQLGWOwH2VBqLcqW0q0PBKRFeDj0pEJpA3RhNR8K8hgwlz5MS+Zek1h3kU5CZ2ieus21M3GawkM3hFyldQZuXfS7u2ZDEUVtwYmOtz0ZE4tztf+20R7/ARS9RrXMXFDFsXdQSz/0VbLzFMSj6e7I6IRPF3qYpSCwpwfSq48GYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.51])
-	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Vl1d65fL0z9v7Hl;
-	Thu, 23 May 2024 03:31:22 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id 24B10140489;
-	Thu, 23 May 2024 03:48:34 +0800 (CST)
-Received: from [10.48.210.253] (unknown [10.48.210.253])
-	by APP2 (Coremail) with SMTP id GxC2BwDHASYHTE5mbkOzCA--.18061S2;
-	Wed, 22 May 2024 20:48:33 +0100 (CET)
-Message-ID: <22b9837b-16c2-5413-3cd7-4d3a47252a6a@huaweicloud.com>
-Date: Wed, 22 May 2024 21:48:18 +0200
+	 In-Reply-To:Content-Type; b=jM0HTGJFuHxLDILqG6vxnYpLrWKxizAHXINGJr06vMZAONVcUOV8F75egbUz1212nCG9tzBMvf+K+lLsCRmL4JvCHAvaJ58nATnjdTKXMNbiGSi/92Voht2KcqyZH0O0WuzEJflwsKVC1m2nb70QaE9njkm04FQ9DgJZ4vV0g7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b=Uz2AHfik; arc=none smtp.client-ip=209.85.166.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
+Received: by mail-il1-f176.google.com with SMTP id e9e14a558f8ab-36c5d9d8fd5so22353125ab.2
+        for <linux-arch@vger.kernel.org>; Wed, 22 May 2024 23:02:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1716444176; x=1717048976; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=txOSv1K2CA1USg0Ze10vD1qMyJxbEs9Mfk9GiCoI090=;
+        b=Uz2AHfikahhuUowwWHZ/rUV3mnPgvxCUBUVLy75Ni4QVr3Zm8DMJc7X+YPT/ZlueFf
+         fM09t2fSBt5pPpQRo2M2zZC0pkRmdXI9FCcScF4/EKN/cySBOR/qDzA5ekE4ILkpPwpy
+         5mKNJ6bHDg+TEheZbQ3IkCrHP/NZCEn3hQOxoKAsaSNFqq1PjKOo0dSQD72z4WdrL11T
+         SDuOkvOaGOZFmfxRTdXg/vfbkBY5oBXpiOFGPI2dN03MwRCRVp7zTktF7l5JeFQL9kbh
+         gj4aNjvikrd9qQBAiO+5XOkySFNkgVh2QVR/GkOax5g1Q2KM/PsKBO5u3BVjXDevfa5r
+         Zpcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716444176; x=1717048976;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=txOSv1K2CA1USg0Ze10vD1qMyJxbEs9Mfk9GiCoI090=;
+        b=nS/6GGMCkCeJjAx4y4D/t8BHJ1BPAwi8JFHnWWJ6eeZC2SF9NvoV2+fE2ST1LcYwaM
+         f4OJM5KgtY+UqBCfPAcjfT9xA2defOMmwOHN6NlwhbOjAtGDsTLOsgrqLdmjwInXEEjw
+         WQ1JknPSVhRpaNbAfpC6+YgUlf99LHx67cwTUv9/UymQ2xzMxTb9VH45UueWQamn4byD
+         b+GT+Mw50rRrWtzc/CJYT9S5cnJx10ONgv97iLmYYOahQ/Uscq18bDF9JfCL04xwrvD4
+         nTIuGU2/vB3O8REPZKDW6RFpCsUWNqJaQTIB7b8Au3h5WwEJtUKoxGWGOdNtmab7MhNS
+         yifw==
+X-Forwarded-Encrypted: i=1; AJvYcCWMFd8UrChgCsp5+Nh0tpa/hcsxK70xytn/WOX0O3Nb4T7iEk5s0pxXtgHBg8TFrWYAgAkt4g7mCk8bLRqg7OzWSAygZsvMjB3ZrQ==
+X-Gm-Message-State: AOJu0YxLK8C/PT2X+CthjQ5CRm4m00FPmebHNIUNl+o24ldR6cWbMwxm
+	3j1ELP1hkQH55WKbFLeOEqI2ycqRPlM2Po6DenyBEYrx4XdCsO98+gAsVickFUM=
+X-Google-Smtp-Source: AGHT+IEHlOqXvdbfYiugVF0TXgIiftVk0fEr87owHTsVUKSpnXRyU8iozPM5JlvqTh0LUpuxvOHGhg==
+X-Received: by 2002:a05:6e02:1447:b0:36c:7f3d:59a with SMTP id e9e14a558f8ab-371f7c80fe6mr48056835ab.4.1716444176327;
+        Wed, 22 May 2024 23:02:56 -0700 (PDT)
+Received: from [192.168.1.16] (174-21-188-197.tukw.qwest.net. [174.21.188.197])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-634117190absm23448503a12.87.2024.05.22.23.02.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 May 2024 23:02:55 -0700 (PDT)
+Message-ID: <9097e78d-0e7d-43bd-bafd-e53a4872a4d1@davidwei.uk>
+Date: Wed, 22 May 2024 23:02:54 -0700
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: LKMM: Making RMW barriers explicit
-Content-Language: en-US
-To: Alan Stern <stern@rowland.harvard.edu>,
- Andrea Parri <parri.andrea@gmail.com>
-Cc: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
- "Paul E. McKenney" <paulmck@kernel.org>, linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, kernel-team@meta.com, boqun.feng@gmail.com,
- j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
- Joel Fernandes <joel@joelfernandes.org>
-References: <72c804c8-2511-4349-a823-bc1de8bb729e@rowland.harvard.edu>
- <e030f7a4-97e7-4e91-bbae-230ee5c97763@huaweicloud.com>
- <a9bf972c-b5ee-f1c2-36bf-30ba62f419d7@huaweicloud.com>
- <2f20e7cf-7c67-4ad3-8a0c-3c1d01257ae4@rowland.harvard.edu>
- <0c309dd3-f8c1-4945-b8f1-154b2a775216@huaweicloud.com>
- <4286e5b2-5954-4c77-a815-c1c2735d9509@rowland.harvard.edu>
- <58042cf3-e515-4e5f-ab48-1d0d6123c9e9@huaweicloud.com>
- <6174fd09-b287-49ae-b117-c3a36ef3800a@rowland.harvard.edu>
- <Zk4jQe7Vq3N2Vip0@andrea>
- <ba7120a5-9208-4506-bf99-2bfa165180c5@rowland.harvard.edu>
-From: Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>
-In-Reply-To: <ba7120a5-9208-4506-bf99-2bfa165180c5@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v9 11/14] tcp: RX path for devmem TCP
+Content-Language: en-GB
+To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc: Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski
+ <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Jonathan Corbet <corbet@lwn.net>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
+ <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
+ <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
+ David Ahern <dsahern@kernel.org>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Pavel Begunkov <asml.silence@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+ Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
+ <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
+ Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
+References: <20240510232128.1105145-1-almasrymina@google.com>
+ <20240510232128.1105145-12-almasrymina@google.com>
+From: David Wei <dw@davidwei.uk>
+In-Reply-To: <20240510232128.1105145-12-almasrymina@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:GxC2BwDHASYHTE5mbkOzCA--.18061S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxXFWDWF18JFyxGr4fJFy8Grg_yoWrGrW3pF
-	WxAa4Ska1kt3s29w4xZ392qFyF9a1rGr48Jr95t3sYy34Y9r1FyF9xKa1YkFyDCr4rXw12
-	vw4YqFy8Z3Z8AFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-	6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
-	4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-	I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-	4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
-	c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
-	AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
-	17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
-	IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq
-	3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
-	nIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
-X-CM-SenderInfo: xkhu0tnqos00pfhgvzhhrqqx5xdzvxpfor3voofrz/
 
-On 5/22/2024 8:20 PM, Alan Stern wrote:
-> On Wed, May 22, 2024 at 06:54:25PM +0200, Andrea Parri wrote:
->> Alan, all,
->>
->> ("randomly" picking a recent post in the thread, after having observed
->> this discussion for a while...)
->>
->>> It would be better if there was a way to tell herd7 not to add the 'mb
->>> tag to failed instructions in the first place.  This approach is
->>> brittle; see below.
->>
->> AFAIU, changing the herd representation to generate mb-accesses in place
->> of certain mb-fences...
-> 
-> I believe herd7 already generates mb accesses (not fences) for certain
-> RMW operations.  But then it does some post-processing on them, and that
-> post-processing is what we are thinking of changing.
-> 
->>> If you do want to use this approach, it should be simplified.  All you
->>> need is:
->>>
->>> 	[M] ; po ; [RMW_MB]
->>>
->>> 	[RMW_MB] ; po ; [M]
->>>
->>> This is because events tagged with RMW_MB always are memory accesses,
->>> and accesses that aren't part of the RMW are already covered by the
->>> fencerel(Mb) thing above.
->>
->> ... and updating the .cat file to the effects of something like
->>
->>    -let mb = ([M] ; fencerel(Mb) ; [M]) |
->>    +let mb = (([M] ; po? ; [Mb] ; po? ; [M]) \ id) |
->>
->> ... can hardly be called "making RMW barriers explicit".  (So much so
->> that the first commit in PR #865 was titled "Remove explicit barriers
->> from RMWs".  :-))
-> 
-> There is another point, something we didn't spell out explicitly in the
-> email discussion.  Namely, in linux-kernel.def there is a long list of
-> instructions along with corresponding herd7 implementation instructions,
-> and those instructions explicitly contain either {once}, {acquire},
-> {release}, or {mb} tags.  So to a large extent, these barriers already
-> are explicit in the memory model.  Not in the .cat file, but in the .def
-> file.
-> 
-> What is not so explicit is how the {mb} tag works.  Its operation isn't
-> as simple as the operation of the {acquire} and {release} tags; those
-> just modify the R or W access in the RMW pair as you would expect.
-> Instead, an {mb} tag says to insert strong memory barriers before the R
-> access and after the W access.  This is more or less what the
-> post-processing mentioned earlier does, and Jonas and Hernan want to
-> move this out of herd7 and into the memory model.
-> 
->> Overall, this discussion rather seems to confirm the close link between
->> tools/memory-model/ and herdtools7.  (After all, to what extent could
->> any putative RMW_MB be considered "explicit" without _knowing the under-
->> lying representation of the RMW operations...)  My understanding is that
->> this discussion was at least in part motivated by a desire to experiment
->> and familiarize with the current herd representation (that does indeed
->> require some getting-used-to...); this suggests, as some of you already
->> mentioned, to add some comments or a .txt in tools/memory-model/ in order
->> to document such representation and ameliorate that experience.  OTOH, I
->> must admit, I'm unable to see here sufficient motivation(tm) for changing
->> the current representation (and model): not the how, but the why...
-> 
-> Well, it's not a big change.  And in my opinion, if something can be
-> moved out of herd7's innards and into the memory model files, then doing
-> so is generally a good idea.
-> 
-> However, I do agree that there will still be a close link between
-> tools/memory-model/ and herdtools7.  This may be unavoidable, at least
-> to some extent, but any way to reduce it is worth considering.
+On 2024-05-10 16:21, Mina Almasry wrote:
+> +/* On error, returns the -errno. On success, returns number of bytes sent to the
+> + * user. May not consume all of @remaining_len.
+> + */
+> +static int tcp_recvmsg_dmabuf(struct sock *sk, const struct sk_buff *skb,
+> +			      unsigned int offset, struct msghdr *msg,
+> +			      int remaining_len)
+> +{
+> +	struct dmabuf_cmsg dmabuf_cmsg = { 0 };
+> +	struct tcp_xa_pool tcp_xa_pool;
+> +	unsigned int start;
+> +	int i, copy, n;
+> +	int sent = 0;
+> +	int err = 0;
+> +
+> +	tcp_xa_pool.max = 0;
+> +	tcp_xa_pool.idx = 0;
+> +	do {
+> +		start = skb_headlen(skb);
+> +
+> +		if (skb_frags_readable(skb)) {
+> +			err = -ENODEV;
+> +			goto out;
+> +		}
+> +
+> +		/* Copy header. */
+> +		copy = start - offset;
+> +		if (copy > 0) {
+> +			copy = min(copy, remaining_len);
+> +
+> +			n = copy_to_iter(skb->data + offset, copy,
+> +					 &msg->msg_iter);
+> +			if (n != copy) {
+> +				err = -EFAULT;
+> +				goto out;
+> +			}
+> +
+> +			offset += copy;
+> +			remaining_len -= copy;
+> +
+> +			/* First a dmabuf_cmsg for # bytes copied to user
+> +			 * buffer.
+> +			 */
+> +			memset(&dmabuf_cmsg, 0, sizeof(dmabuf_cmsg));
+> +			dmabuf_cmsg.frag_size = copy;
+> +			err = put_cmsg(msg, SOL_SOCKET, SO_DEVMEM_LINEAR,
+> +				       sizeof(dmabuf_cmsg), &dmabuf_cmsg);
+> +			if (err || msg->msg_flags & MSG_CTRUNC) {
+> +				msg->msg_flags &= ~MSG_CTRUNC;
+> +				if (!err)
+> +					err = -ETOOSMALL;
+> +				goto out;
+> +			}
+> +
+> +			sent += copy;
+> +
+> +			if (remaining_len == 0)
+> +				goto out;
+> +		}
+> +
+> +		/* after that, send information of dmabuf pages through a
+> +		 * sequence of cmsg
+> +		 */
+> +		for (i = 0; i < skb_shinfo(skb)->nr_frags; i++) {
+> +			skb_frag_t *frag = &skb_shinfo(skb)->frags[i];
+> +			struct net_iov *niov;
+> +			u64 frag_offset;
+> +			int end;
+> +
+> +			/* !skb_frags_readable() should indicate that ALL the
+> +			 * frags in this skb are dmabuf net_iovs. We're checking
+> +			 * for that flag above, but also check individual frags
+> +			 * here. If the tcp stack is not setting
+> +			 * skb_frags_readable() correctly, we still don't want
+> +			 * to crash here.
+> +			 */
+> +			if (!skb_frag_net_iov(frag)) {
+> +				net_err_ratelimited("Found non-dmabuf skb with net_iov");
+> +				err = -ENODEV;
+> +				goto out;
+> +			}
+> +
+> +			niov = skb_frag_net_iov(frag);
 
-I can give my motivation as a tool developer. It would be much simpler 
-if one could find all the information to support lkmm in 
-tools/memory-model/ (in the form of the model + some comments or a .txt 
-to cover those things we cannot move out of the tool implementation), 
-rather than having to dive into herd7 code.
+Sorry if we've already discussed this.
 
-Hernan
+We have this additional hunk:
 
-> 
-> Alan
++ if (niov->pp->mp_ops != &dmabuf_devmem_ops) {
++ 	err = -ENODEV;
++ 	goto out;
++ }
 
+In case one of our skbs end up here, skb_frag_is_net_iov() and
+!skb_frags_readable(). Does this even matter? And if so then is there a
+better way to distinguish between our two types of net_iovs?
 
