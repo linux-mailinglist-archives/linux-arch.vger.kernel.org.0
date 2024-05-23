@@ -1,164 +1,223 @@
-Return-Path: <linux-arch+bounces-4504-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4505-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4DE78CD5EF
-	for <lists+linux-arch@lfdr.de>; Thu, 23 May 2024 16:37:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F0028CD666
+	for <lists+linux-arch@lfdr.de>; Thu, 23 May 2024 17:00:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4B46BB22571
-	for <lists+linux-arch@lfdr.de>; Thu, 23 May 2024 14:37:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 41E531C21910
+	for <lists+linux-arch@lfdr.de>; Thu, 23 May 2024 14:59:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF11F13C3C9;
-	Thu, 23 May 2024 14:37:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3659AD27;
+	Thu, 23 May 2024 14:59:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="xQoQE/L0"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6891412B171;
-	Thu, 23 May 2024 14:37:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF287B64B
+	for <linux-arch@vger.kernel.org>; Thu, 23 May 2024 14:59:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716475035; cv=none; b=ueMwAO+4XPGQqVoBRTZ0q6xse/Klhqi4kLTzkQbBjAb26JuvpGEQ7ijU9XDFFzxp5MIWk7qnrIydJOKg5tl344V0KnId1d2YG3thUYwYuuDbP8uIpi9FoJoz4/l710hKJcpngbb38N5e0PvaDL/vADv71EdIKHcSYlJ4CHkpOyk=
+	t=1716476384; cv=none; b=c7c1p6qOymPrRrQApXx1xo84mZwp/0fmRDq/ARc7xYtr1HysCFKAOEe27v/3EcdX80/AqkDAXymhCn92kGbR2wHseYlapCx0cJE/MPaQv2Hnyn0RREj2LHPfBFYfHzXz3JTPJYEfx/J8uEgO26fccmh2BUmuqi8h12rHRTz0St0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716475035; c=relaxed/simple;
-	bh=gbTUHrtXsQLEAfxPpyRzN9dLmybrI0g1EIZJvIeWbS4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OboPz89fREzqJr9FePsjhS9+spB0x+SqpQ/nLoK5ItKa8BfQu47iFk65GngdnYkRJXDFnZyTArH7xYX6X9jQFPYcJNnXe4Fii8lE7aHx7yz+WX/fTBASq11YBS1vKB2W1qsnjKnv1RfmxtwwAYNh1EwsAe5PnkKSjl7Ee9gA/Ic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.51])
-	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4VlVYq34Lbz9v7Js;
-	Thu, 23 May 2024 22:15:11 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id 19CF8140665;
-	Thu, 23 May 2024 22:37:01 +0800 (CST)
-Received: from [10.206.134.102] (unknown [10.206.134.102])
-	by APP2 (Coremail) with SMTP id GxC2BwCn4CSDVE9mLzXACA--.32576S2;
-	Thu, 23 May 2024 15:37:00 +0100 (CET)
-Message-ID: <edc0665a-6301-428b-9611-f53d5f05eb69@huaweicloud.com>
-Date: Thu, 23 May 2024 16:36:48 +0200
+	s=arc-20240116; t=1716476384; c=relaxed/simple;
+	bh=2Dr0p6+Vq88UVDiwU5c+6Vvwt3ZIg69MAge1qiiRneo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pOVPKYeqhn1Oc5Mtt+NKj6i2FkEe3NeOUWN+lgfj/iep4zMp9iDNKOX/2vRzRefAtJLjO8QeAR2idHLhkYY61RlEZgDUkrSWAoU/xzy8BL4CIMinGB1HTSE2tvkwMsa0t3WtF4wyBtamPcJPjHa1L7yylBOur99yaK+reVSyzn0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=xQoQE/L0; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a5a2d0d8644so1039134166b.1
+        for <linux-arch@vger.kernel.org>; Thu, 23 May 2024 07:59:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1716476381; x=1717081181; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fJf8nECqEBzmEqcVWslv5AXViIlFFnTcWLmUE5Gi6ig=;
+        b=xQoQE/L0Ez07vhPcph3w2XDmhCXg9FR9r/yBEEx01f7bvRE6pNFesxXXnDrdLmFamj
+         XesPRyxF3OHasOAK/iaqcdv5zoFZiomaPpVt/7E4fOjuNVbIcP+IVNR1aRNCWOg2s/CV
+         wNIPFgPrvBs//5V83fAGcIfl1s9HG428CpnOlP1KUV/EgsHYy7nXz2byAAfjZoVzqIJ/
+         4xxfq8TBcEeS5aPfLZHDavEDlvF6DaPfCmBNddYxvyQNtpg9nRenN5LTqVvay59CM9k8
+         kqKo9wAvaLz/hqLfSOkB1qrMIrQ9HhsrCVBnZC+NVoiOwUKDm8szA65B8x5NQ7W1NwI6
+         PY8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716476381; x=1717081181;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fJf8nECqEBzmEqcVWslv5AXViIlFFnTcWLmUE5Gi6ig=;
+        b=dUNaRdqhpeCuZD2Df0eLUm7EF19FTZuFr8soJAHakco6G5nghw+aEZ6/yAc6VgQUZf
+         N8uvA+P+lLjHsV+5pJcQuDWZvWCgitvsu6qcdzPfphb2IkG4ofbH3xwIF6asSxRaGBLJ
+         tlxCb7BQpNGJ9Wo+S5QEQ0Ej8Iv94qfgfa8IeYHJ7tONkOw+fXb73FYmGPTr3pPVo1wE
+         VyTgmKPHfLJJn594RMG1Pa744PyBGVzgy0k8etCQhUb8l53wjoZUjPzZl17qQHTTCaR0
+         TICroO0Y9Aj32Ib/QaXOomq14AD+KfmfDLhtahA6TLMTNl+bFjlV2C1Ggtsk2+Dryn4V
+         /LzQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVAC2OWtVgDuxKzrH3kMv9Zo4spwFFYncF14x7lhMx0BfJxggFB144BqMFF1yrpps0oEKr2P1Xf3GunNZIdcSl91I2JBEfvN6YSkw==
+X-Gm-Message-State: AOJu0YzDQmM3EQkUCb9XXu/sQhqWqA2a3bhuVFcserlkz2QgECOS1q6j
+	aMxiF+n/HbC3BZAsRqsTSCJMrQRlm+1b4EcX6nTU3uapNzH+Ur9waSFw7W5yi7+Y8sqhZVnCSy3
+	/V1HSm0xUYpbdrMljw08gQn09IjEXuXKlR0t+iw==
+X-Google-Smtp-Source: AGHT+IH96ZBYqe4cc+1wFeLH7NX/PsHsWO2WigAasUwgg3Elfr20rtzmvQZZHOI45ry8NHHXFtdf/BIf5ZeuawftPVg=
+X-Received: by 2002:a17:906:5296:b0:a5a:5c0b:ff77 with SMTP id
+ a640c23a62f3a-a622806c0camr321589066b.19.1716476381026; Thu, 23 May 2024
+ 07:59:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: LKMM: Making RMW barriers explicit
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>,
- "Paul E. McKenney" <paulmck@kernel.org>, linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, kernel-team@meta.com, parri.andrea@gmail.com,
- boqun.feng@gmail.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
- Joel Fernandes <joel@joelfernandes.org>
-References: <72c804c8-2511-4349-a823-bc1de8bb729e@rowland.harvard.edu>
- <e030f7a4-97e7-4e91-bbae-230ee5c97763@huaweicloud.com>
- <a9bf972c-b5ee-f1c2-36bf-30ba62f419d7@huaweicloud.com>
- <2f20e7cf-7c67-4ad3-8a0c-3c1d01257ae4@rowland.harvard.edu>
- <0c309dd3-f8c1-4945-b8f1-154b2a775216@huaweicloud.com>
- <4286e5b2-5954-4c77-a815-c1c2735d9509@rowland.harvard.edu>
- <58042cf3-e515-4e5f-ab48-1d0d6123c9e9@huaweicloud.com>
- <6174fd09-b287-49ae-b117-c3a36ef3800a@rowland.harvard.edu>
- <7bd31eca-3cf3-4377-a747-ec224262bd2e@huaweicloud.com>
- <35b3fd07-fa85-4244-b9cb-50ea54d9de6a@rowland.harvard.edu>
-From: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-In-Reply-To: <35b3fd07-fa85-4244-b9cb-50ea54d9de6a@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:GxC2BwCn4CSDVE9mLzXACA--.32576S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7CFy5Cr4DWw4kCw1UGw1DGFg_yoW8uF48p3
-	yfK3WrKF1ktFWI9ryUZw42ya4S93W0qFWUJrn5J3yayFs093WxtF48Jw4rCFy3Zrs3X3Wj
-	vFW0v34xAa98AFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUkE14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-	6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
-	4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-	I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-	4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
-	c2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
-	v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
-	c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j
-	6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUZa9
-	-UUUUU=
-X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
+References: <20240403234054.2020347-1-debug@rivosinc.com> <20240403234054.2020347-14-debug@rivosinc.com>
+ <276fa17b-cd62-433d-b0ec-fa98c65a46ca@ghiti.fr> <ZkJOs6ENmDHFsq/U@debug.ba.rivosinc.com>
+In-Reply-To: <ZkJOs6ENmDHFsq/U@debug.ba.rivosinc.com>
+From: Alexandre Ghiti <alexghiti@rivosinc.com>
+Date: Thu, 23 May 2024 16:59:30 +0200
+Message-ID: <CAHVXubhS3CJ87DxC+9+8z6CiWDV1bQ8nK+iOZUDvMiT7vszFLA@mail.gmail.com>
+Subject: Re: [PATCH v3 13/29] riscv mmu: write protect and shadow stack
+To: Deepak Gupta <debug@rivosinc.com>
+Cc: Alexandre Ghiti <alex@ghiti.fr>, paul.walmsley@sifive.com, rick.p.edgecombe@intel.com, 
+	broonie@kernel.org, Szabolcs.Nagy@arm.com, kito.cheng@sifive.com, 
+	keescook@chromium.org, ajones@ventanamicro.com, conor.dooley@microchip.com, 
+	cleger@rivosinc.com, atishp@atishpatra.org, bjorn@rivosinc.com, 
+	samuel.holland@sifive.com, conor@kernel.org, linux-doc@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-mm@kvack.org, linux-arch@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, corbet@lwn.net, palmer@dabbelt.com, 
+	aou@eecs.berkeley.edu, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
+	oleg@redhat.com, akpm@linux-foundation.org, arnd@arndb.de, 
+	ebiederm@xmission.com, Liam.Howlett@oracle.com, vbabka@suse.cz, 
+	lstoakes@gmail.com, shuah@kernel.org, brauner@kernel.org, 
+	andy.chiu@sifive.com, jerry.shih@sifive.com, hankuan.chen@sifive.com, 
+	greentime.hu@sifive.com, evan@rivosinc.com, xiao.w.wang@intel.com, 
+	charlie@rivosinc.com, apatel@ventanamicro.com, mchitale@ventanamicro.com, 
+	dbarboza@ventanamicro.com, sameo@rivosinc.com, shikemeng@huaweicloud.com, 
+	willy@infradead.org, vincent.chen@sifive.com, guoren@kernel.org, 
+	samitolvanen@google.com, songshuaishuai@tinylab.org, gerg@kernel.org, 
+	heiko@sntech.de, bhe@redhat.com, jeeheng.sia@starfivetech.com, 
+	cyy@cyyself.name, maskray@google.com, ancientmodern4@gmail.com, 
+	mathis.salmen@matsal.de, cuiyunhui@bytedance.com, bgray@linux.ibm.com, 
+	mpe@ellerman.id.au, baruch@tkos.co.il, alx@kernel.org, david@redhat.com, 
+	catalin.marinas@arm.com, revest@chromium.org, josh@joshtriplett.org, 
+	shr@devkernel.io, deller@gmx.de, omosnace@redhat.com, ojeda@kernel.org, 
+	jhubbard@nvidia.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+Hi Deepak,
 
+On Mon, May 13, 2024 at 7:32=E2=80=AFPM Deepak Gupta <debug@rivosinc.com> w=
+rote:
+>
+> On Sun, May 12, 2024 at 06:31:24PM +0200, Alexandre Ghiti wrote:
+> >On 04/04/2024 01:35, Deepak Gupta wrote:
+> >>`fork` implements copy on write (COW) by making pages readonly in child
+> >>and parent both.
+> >>
+> >>ptep_set_wrprotect and pte_wrprotect clears _PAGE_WRITE in PTE.
+> >>Assumption is that page is readable and on fault copy on write happens.
+> >>
+> >>To implement COW on such pages,
+> >
+> >
+> >I guess you mean "shadow stack pages" here.
+>
+> Yes I meant shadow stack pages. Will fix the message.
+>
+> >
+> >
+> >>  clearing up W bit makes them XWR =3D 000.
+> >>This will result in wrong PTE setting which says no perms but V=3D1 and=
+ PFN
+> >>field pointing to final page. Instead desired behavior is to turn it in=
+to
+> >>a readable page, take an access (load/store) fault on sspush/sspop
+> >>(shadow stack) and then perform COW on such pages.
+> >>This way regular reads
+> >>would still be allowed and not lead to COW maintaining current behavior
+> >>of COW on non-shadow stack but writeable memory.
+> >>
+> >>On the other hand it doesn't interfere with existing COW for read-write
+> >>memory. Assumption is always that _PAGE_READ must have been set and thu=
+s
+> >>setting _PAGE_READ is harmless.
+> >>
+> >>Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+> >>---
+> >>  arch/riscv/include/asm/pgtable.h | 12 ++++++++++--
+> >>  1 file changed, 10 insertions(+), 2 deletions(-)
+> >>
+> >>diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/=
+pgtable.h
+> >>index 9b837239d3e8..7a1c2a98d272 100644
+> >>--- a/arch/riscv/include/asm/pgtable.h
+> >>+++ b/arch/riscv/include/asm/pgtable.h
+> >>@@ -398,7 +398,7 @@ static inline int pte_special(pte_t pte)
+> >>  static inline pte_t pte_wrprotect(pte_t pte)
+> >>  {
+> >>-     return __pte(pte_val(pte) & ~(_PAGE_WRITE));
+> >>+     return __pte((pte_val(pte) & ~(_PAGE_WRITE)) | (_PAGE_READ));
+> >>  }
+> >>  /* static inline pte_t pte_mkread(pte_t pte) */
+> >>@@ -581,7 +581,15 @@ static inline pte_t ptep_get_and_clear(struct mm_s=
+truct *mm,
+> >>  static inline void ptep_set_wrprotect(struct mm_struct *mm,
+> >>                                    unsigned long address, pte_t *ptep)
+> >>  {
+> >>-     atomic_long_and(~(unsigned long)_PAGE_WRITE, (atomic_long_t *)pte=
+p);
+> >>+     volatile pte_t read_pte =3D *ptep;
 
-Am 5/23/2024 um 4:05 PM schrieb Alan Stern:
-> On Thu, May 23, 2024 at 02:54:05PM +0200, Jonas Oberhauser wrote:
->>
->>
->> Am 5/22/2024 um 4:20 PM schrieb Alan Stern:
->>> It would be better if there was a way to tell herd7 not to add the 'mb
->>> tag to failed instructions in the first place.  This approach is
->>> brittle; see below.
->>
->> Hernan told me that in fact that is actually currently the case in herd7.
->> Failing RMW get assigned the Once tag implicitly.
->> Another thing that I'd suggest to change.
-> 
-> Indeed.
-> 
->>> An alternative would be to have a way for the .cat file to remove the
->>> 'mb tag from a failed RMW instruction.  But I don't know if this is
->>> feasible.
->>
->> For Mb it's feasible, as there is no Mb read or Mb store.
->>
->> Mb = Mb & (~M | dom(rmw) | range(rmw))
->>
->> However one would want to do the same for Acq and Rel.
->>
->> For that one would need to distinguish e.g. between a read that comes from a
->> failed rmw instruction, and where the tag would disappear, or a normal
->> standalone read.
->>
->> For example, by using two different acquire tags, 'acquire and 'rmw-acquire,
->> and defining
->>
->> Acquire = Acquire | Rmw-acquire & (dom(rmw) | range(rmw))
->>
->> Anyways we can do this change independently. So for now, we don't need
->> RMW_MB.
-> 
-> Overall, it seems better to have herd7 assign the right tag, but change
-> the way the .def file works so that it can tell herd7 which tag to use
-> in each of the success and failure cases.
+Sorry I missed this ^. You need to use ptep_get() to get the value of
+a pte. And why do you need the volatile here?
 
-Yes, that would be good.
-In principle herd should already support this kind of logic for e.g. C11 
-which also has distinct success and failure modes.
-But of course I don't know if there's syntax to make this change in 
-.def, let alone what it would look like.
+> >>+     /*
+> >>+      * ptep_set_wrprotect can be called for shadow stack ranges too.
+> >>+      * shadow stack memory is XWR =3D 010 and thus clearing _PAGE_WRI=
+TE will lead to
+> >>+      * encoding 000b which is wrong encoding with V =3D 1. This shoul=
+d lead to page fault
+> >>+      * but we dont want this wrong configuration to be set in page ta=
+bles.
+> >>+      */
+> >>+     atomic_long_set((atomic_long_t *)ptep,
+> >>+                     ((pte_val(read_pte) & ~(unsigned long)_PAGE_WRITE=
+) | _PAGE_READ));
+> >>  }
+> >>  #define __HAVE_ARCH_PTEP_CLEAR_YOUNG_FLUSH
+> >
+> >
+> >Doesn't making the shadow stack page readable allow "normal" loads to
+> >access the page? If it does, isn't that an issue (security-wise)?
+>
+> When shadow stack permissions are there (i.e. R=3D0, W=3D1, X=3D0), then =
+also shadow stack is
+> readable through "normal" loads. So nothing changes when it converts into=
+ a readonly page
+> from page permissions perspective.
+>
+> Security-wise it's not a concern because from threat modeling perspective=
+, if attacker had
+> read-write primitives (via some bug in program) available to read and wri=
+te address space
+> of process/task; then they would have availiblity of return addresses on =
+normal stack. It's
+> the write primitive that is concerning and to be protected against. And t=
+hat's why shadow stack
+> is not writeable using "normal" stores.
+>
+> >
 
+Thanks for the explanation!
 
-> But at least you
-> understood what I meant.
+With the use of ptep_get(), you can add:
 
-I do try :) (: :)
+Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
 
-> 
->> We could do (with the assumption that Mb applies only to successful rmw):
->>
->>   	[M] ; po ; [Mb & R]
->>   	[Mb & W] ; po ; [M]
-> 
-> That works.
+Thanks,
 
-Ok, I'll prepare a patch for this and Andrea or anyone else can still 
-interject.
-I suppose the patch would not change the semantics at all with the 
-current herd7, since Mb does not appear on any reads and writes for the 
-time being.
-
-best wishes,
-   jonas
-
-
-
+Alex
 
