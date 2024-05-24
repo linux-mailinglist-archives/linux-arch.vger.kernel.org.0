@@ -1,173 +1,130 @@
-Return-Path: <linux-arch+bounces-4519-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4520-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 318258CE3B6
-	for <lists+linux-arch@lfdr.de>; Fri, 24 May 2024 11:46:35 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26DDA8CE5E1
+	for <lists+linux-arch@lfdr.de>; Fri, 24 May 2024 15:18:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 53DB51C21088
-	for <lists+linux-arch@lfdr.de>; Fri, 24 May 2024 09:46:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 998F0B217E9
+	for <lists+linux-arch@lfdr.de>; Fri, 24 May 2024 13:17:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49C788529D;
-	Fri, 24 May 2024 09:46:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A29388625B;
+	Fri, 24 May 2024 13:17:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="Qvv+rTHr"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iRN/KYpo"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D22A84FB7
-	for <linux-arch@vger.kernel.org>; Fri, 24 May 2024 09:46:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F90285959;
+	Fri, 24 May 2024 13:17:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716543990; cv=none; b=MG4Caku6VByzBGET0/BtHfKSsoq3H+CZk+ayX/ZoPGuOmFAt10b1sLdk/x3LlHPb6C5y14m8UMp3LUmk6MlYpE+1wypbnek9PFM7KfXS6ruIXgl0PS1K71FhPJW3Cvo8ulT5dTBgvS5xxROsRVMATW2OgapIU/+9nV+ynVaUwoU=
+	t=1716556673; cv=none; b=i0Xb/gvSupOonhGRG2w92makdDt9BXBDe0wi8JuIO6HOJpFN2GgxAwQV34blvxpCFSYChkzfb9m/zOgZqF2+d8bdlS9VYAGOBOwRxQWTqvWQp3v3Wxmo1/UvNydRv5TxlPHV/rLU/jXsJ/KaL2h3khkNdjGjEVk8S1lrrIrNLmI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716543990; c=relaxed/simple;
-	bh=HDU6Ikis2reepBp7XonSWdeQ98AVdDz0nuzQ+64KYp8=;
+	s=arc-20240116; t=1716556673; c=relaxed/simple;
+	bh=SlXCQc3o/MB52ttkYbUWNblq+v3TZ5Rf15VGTVZLLpk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iWDEu9X0to1tFZQSWzuS6dW2AAZ2zR/80QeaLzvypINIf8xs55WnvpBY/rqJY84kULwcdgSeq5PcpKvCUm5IOROTi404EaRUptlcCcZiEarr0EH6UqU6rbHsCjCfmECAN6Me+N+NVk5Oo3UwkaffJfwFUNGvFFrp8n0gizYlg3Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=Qvv+rTHr; arc=none smtp.client-ip=209.85.219.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
-Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-df771983aedso668563276.1
-        for <linux-arch@vger.kernel.org>; Fri, 24 May 2024 02:46:28 -0700 (PDT)
+	 To:Cc:Content-Type; b=R1gMXfimHbMWeLHOYM4jBkEvKaESgF50b7U/snP1Jhax+CmsBK0ARc1cvPfZuoV1gfd/7KWw0b23ZnO7WLKWWF1sOMgM5B4Mz2u5scY6QQOxWG3rbAgns9qEliCP1lwpaQtDSSpHPLx6p+3jCi1d28eZaNCfpQSYMJECYrnDewY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iRN/KYpo; arc=none smtp.client-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-6f8ec7e054dso611790b3a.2;
+        Fri, 24 May 2024 06:17:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1716543987; x=1717148787; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1716556671; x=1717161471; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WjgMHPkdKke/sFW+wP3x/OWfAW3icjljhDceGb+T51c=;
-        b=Qvv+rTHrHM5G+L52LeF/Ukc57xiGL2/T+SEBVpyDFh0YPcFG22QFWnTay7BdzrZ3JP
-         hUQESM8tnI7oSt7hVKSGhj9+wW9szYPoHmD2M9QAApWzUHwgOWfaWPVbZ1VTYQq+fDJZ
-         Z5r0118dPBrruHGC83QnOfMaHkNBCEvPh2gJ8KpOXIllsXa2YTOxiIBl2J4Nv85Ccd4Y
-         IWjs40RXK78QI4z3tAFTn8diN+7XuYR/pxMgmzJJT3/jzKk++3dgxEaU1S+PBmbYngGA
-         RRBipfTPQbP7nPrqaMOPdkb3feB8K+rO7FA1QBUlY9nYY2FnYz9vcF5xArFebdzgv4cG
-         lx7w==
+        bh=SlXCQc3o/MB52ttkYbUWNblq+v3TZ5Rf15VGTVZLLpk=;
+        b=iRN/KYpovpFye/RhwC4ixASJxRtJdGlzjp4JJHi/TL5i5nzflZ/+jrTBlzImqeeqFA
+         Nf2sYF8ErsLhqpccWb87sII1eDidDBObuLtI4V0MJkL3BlWlE3Uk962IQaqFmsCgEpWc
+         Ir6uRiKZfYAFg2U2bz/grOHSkBi80Q+Gck/mOi1puJCjnt7KiMYjjksIGdNsrRgA0xTp
+         WXkkNcTqXazrLCtGPecXgQRy2Fblr6QcACWJDhTF/71yD/Y+2779VG1Qzse1l1/DmURZ
+         XKODVkswaXbzbU+lpZQ+vLFJcVuSH9F5K4QHdYeV4K1JdPc0SUVnOE8PX2yLop2wDeml
+         poSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716543987; x=1717148787;
+        d=1e100.net; s=20230601; t=1716556671; x=1717161471;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WjgMHPkdKke/sFW+wP3x/OWfAW3icjljhDceGb+T51c=;
-        b=RfdCHiyTs59qGo3UQPo2lVEde8n25547TAhG/S64Q1BDKDOOK9dR33LfVKaediieHy
-         bF/PjasUGZs2PnrGaBXmaKcR+WKjjfFMCT2JgyfNpM0tOnVLntJwRdT5/9TwdB8traMR
-         TMrQ46eFJGkYgMTp9Sa5mIymn3Wj3b6nYbBhPxIDOdu+ySOjCNNZPrHxrPlKQosGjWhj
-         14nyClG2j1UHnwo23tCUh7vGsX37ogqOybg1BHKSqh9X+9imbQNz92ynchQRMdUlx7Z5
-         3VsW2+Gnjl7o/aQ2jW+RC2Y02uKKg/bNo56RjnIpX6TdsnKH6J1WMtZd/NPUeuldj1dz
-         3i1w==
-X-Forwarded-Encrypted: i=1; AJvYcCUuw7YXl6sfGe1XKjzIb1qltfa5vCGdN9cHZk5JSE26ff77e3wAdVvzG7BNeHRkbT7VFPU/fONcAUYZiIINxLF+o9o5d0J1CFBRRg==
-X-Gm-Message-State: AOJu0Yzw7ufPzUmCAcML6S8cj66j9MdnDgVVmZIvIn4Vly8Kngbhj9nG
-	T+i1axPN+K7MOl7VKzcx11dRLxxl3OJyO4X2SHK5wX/r14hLCF5vtDS3scW4iMhSVsTvYtLTjbh
-	9KW2/QyPuXb+koXm26panaYpNKvTxBGTwEY+8fQ==
-X-Google-Smtp-Source: AGHT+IElLw9ldbzBvHZ3/TQt52rrJpYv9UPwEZAezgFRSlhX7EDpAmWQFaSOD80MnXamfMqxd179zHrTOZ6XZB7bNkc=
-X-Received: by 2002:a25:ae1e:0:b0:df4:df14:61bc with SMTP id
- 3f1490d57ef6-df7721b7236mr1844605276.29.1716543987537; Fri, 24 May 2024
- 02:46:27 -0700 (PDT)
+        bh=SlXCQc3o/MB52ttkYbUWNblq+v3TZ5Rf15VGTVZLLpk=;
+        b=qpe3xle8uUjZakCyoGv6hxTNXP33TjUBYPzytEp7uC7z4qoqvl3NauQkBC3Ls9JzeG
+         PUoR0FF6hrh2W3MJNOsnw4z+hQfwGK/mccnZCN3wZOFPYMEYS6/F/ritLeVXRYNk8NXi
+         CIqJ9LGiXOCEXp4eR9kvLFLdHa4VtyMJ52FVorS+Bdgdbzcbo5cMLTDoBIKdccOn/4Wk
+         R59VxPplHmAKeRhFk00j6JyDAQi3WHjRejNxgbA5bTlzLMrdub5gN8FVlKTjPwbtvVQi
+         /Mk6CQ3OBnIup6CctOPlBb+Nm19z/eRqmxigvA/2HsO4Ea4WnF/QKq6L8yklcIMgTObC
+         pB6A==
+X-Forwarded-Encrypted: i=1; AJvYcCVnXlhPYn8CDpx6175Utcz01m/x/FNKQEIdXmsDZh1UHeyjQiBQ9CNojauSqTPyrhKaUeFLDHQuOfxQ3HAPQGTkK8wCJ1x90GpQPDYx+TpuOwEdBskVAck6drguvd/gebAi8gwDB6afXw==
+X-Gm-Message-State: AOJu0Yxm/1I4HEsuFrzC/3KjTIfEzsfMuMMlkJtC5dwO/SN8G/r8cmAS
+	9/YzCNcAauSuXuKNapMpaiDBiDXowSbH/OyhjH56Rv0zPjF+YwMxDuzdUrAZV54F5/p7+RfW129
+	UhJwKE8onkuOkUb9Q6plcrVN3wWUuyiYi
+X-Google-Smtp-Source: AGHT+IEwoe8jd0oZgn4cZUVcBCDA8tK4CYreDWY9kJHQp57IWOrilIahqDCBhTgwJSyB8G7rI/D9MAOMBfFiB7nWxpM=
+X-Received: by 2002:a17:90b:1888:b0:2ac:5d2d:12ac with SMTP id
+ 98e67ed59e1d1-2bf5e84abfdmr2678646a91.5.1716556671509; Fri, 24 May 2024
+ 06:17:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240403234054.2020347-1-debug@rivosinc.com> <20240403234054.2020347-23-debug@rivosinc.com>
-In-Reply-To: <20240403234054.2020347-23-debug@rivosinc.com>
-From: Andy Chiu <andy.chiu@sifive.com>
-Date: Fri, 24 May 2024 17:46:16 +0800
-Message-ID: <CABgGipW4ZTFLh1dkiRuWD0WP4RRkfhyFCc+RsUjCD2EkA5GhSQ@mail.gmail.com>
-Subject: Re: [PATCH v3 22/29] riscv sigcontext: adding cfi state field in sigcontext
-To: Deepak Gupta <debug@rivosinc.com>
-Cc: paul.walmsley@sifive.com, rick.p.edgecombe@intel.com, broonie@kernel.org, 
-	Szabolcs.Nagy@arm.com, kito.cheng@sifive.com, keescook@chromium.org, 
-	ajones@ventanamicro.com, conor.dooley@microchip.com, cleger@rivosinc.com, 
-	atishp@atishpatra.org, alex@ghiti.fr, bjorn@rivosinc.com, 
-	alexghiti@rivosinc.com, samuel.holland@sifive.com, conor@kernel.org, 
-	linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, linux-mm@kvack.org, 
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, corbet@lwn.net, 
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, robh+dt@kernel.org, 
-	krzysztof.kozlowski+dt@linaro.org, oleg@redhat.com, akpm@linux-foundation.org, 
-	arnd@arndb.de, ebiederm@xmission.com, Liam.Howlett@oracle.com, vbabka@suse.cz, 
-	lstoakes@gmail.com, shuah@kernel.org, brauner@kernel.org, 
-	jerry.shih@sifive.com, hankuan.chen@sifive.com, greentime.hu@sifive.com, 
-	evan@rivosinc.com, xiao.w.wang@intel.com, charlie@rivosinc.com, 
-	apatel@ventanamicro.com, mchitale@ventanamicro.com, dbarboza@ventanamicro.com, 
-	sameo@rivosinc.com, shikemeng@huaweicloud.com, willy@infradead.org, 
-	vincent.chen@sifive.com, guoren@kernel.org, samitolvanen@google.com, 
-	songshuaishuai@tinylab.org, gerg@kernel.org, heiko@sntech.de, bhe@redhat.com, 
-	jeeheng.sia@starfivetech.com, cyy@cyyself.name, maskray@google.com, 
-	ancientmodern4@gmail.com, mathis.salmen@matsal.de, cuiyunhui@bytedance.com, 
-	bgray@linux.ibm.com, mpe@ellerman.id.au, baruch@tkos.co.il, alx@kernel.org, 
-	david@redhat.com, catalin.marinas@arm.com, revest@chromium.org, 
-	josh@joshtriplett.org, shr@devkernel.io, deller@gmx.de, omosnace@redhat.com, 
-	ojeda@kernel.org, jhubbard@nvidia.com
+References: <20240329072441.591471-1-samuel.holland@sifive.com>
+ <20240329072441.591471-14-samuel.holland@sifive.com> <eeffaec3-df63-4e55-ab7a-064a65c00efa@roeck-us.net>
+In-Reply-To: <eeffaec3-df63-4e55-ab7a-064a65c00efa@roeck-us.net>
+From: Alex Deucher <alexdeucher@gmail.com>
+Date: Fri, 24 May 2024 09:17:40 -0400
+Message-ID: <CADnq5_NmKyTBbE6=V+XdEKStnjcyYSHyHqdkgBen4UhPnVKimQ@mail.gmail.com>
+Subject: Re: [PATCH v4 13/15] drm/amd/display: Use ARCH_HAS_KERNEL_FPU_SUPPORT
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Samuel Holland <samuel.holland@sifive.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	linux-arm-kernel@lists.infradead.org, x86@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, 
+	Christoph Hellwig <hch@lst.de>, loongarch@lists.linux.dev, amd-gfx@lists.freedesktop.org, 
+	Alex Deucher <alexander.deucher@amd.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Deepak,
-
-On Thu, Apr 4, 2024 at 7:42=E2=80=AFAM Deepak Gupta <debug@rivosinc.com> wr=
-ote:
+On Fri, May 24, 2024 at 5:16=E2=80=AFAM Guenter Roeck <linux@roeck-us.net> =
+wrote:
 >
-> Shadow stack needs to be saved and restored on signal delivery and signal
-> return.
+> Hi,
 >
-> sigcontext embedded in ucontext is extendible. Adding cfi state in there
-> which can be used to save cfi state before signal delivery and restore
-> cfi state on sigreturn
+> On Fri, Mar 29, 2024 at 12:18:28AM -0700, Samuel Holland wrote:
+> > Now that all previously-supported architectures select
+> > ARCH_HAS_KERNEL_FPU_SUPPORT, this code can depend on that symbol instea=
+d
+> > of the existing list of architectures. It can also take advantage of th=
+e
+> > common kernel-mode FPU API and method of adjusting CFLAGS.
+> >
+> > Acked-by: Alex Deucher <alexander.deucher@amd.com>
+> > Reviewed-by: Christoph Hellwig <hch@lst.de>
+> > Signed-off-by: Samuel Holland <samuel.holland@sifive.com>
 >
-> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
-> ---
->  arch/riscv/include/uapi/asm/sigcontext.h | 5 +++++
->  1 file changed, 5 insertions(+)
+> With this patch in the mainline kernel, I get the following build error
+> when trying to build powerpc:ppc32_allmodconfig.
 >
-> diff --git a/arch/riscv/include/uapi/asm/sigcontext.h b/arch/riscv/includ=
-e/uapi/asm/sigcontext.h
-> index cd4f175dc837..5ccdd94a0855 100644
-> --- a/arch/riscv/include/uapi/asm/sigcontext.h
-> +++ b/arch/riscv/include/uapi/asm/sigcontext.h
-> @@ -21,6 +21,10 @@ struct __sc_riscv_v_state {
->         struct __riscv_v_ext_state v_state;
->  } __attribute__((aligned(16)));
+> powerpc64-linux-ld: drivers/gpu/drm/amd/amdgpu/../display/dc/dml/display_=
+mode_lib.o uses hard float, drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm=
+/amdgpu_dm_helpers.o uses soft float
+> powerpc64-linux-ld: failed to merge target specific data of file drivers/=
+gpu/drm/amd/amdgpu/../display/dc/dml/display_mode_lib.o
 >
-> +struct __sc_riscv_cfi_state {
-> +       unsigned long ss_ptr;   /* shadow stack pointer */
-> +       unsigned long rsvd;             /* keeping another word reserved =
-in case we need it */
-> +};
->  /*
->   * Signal context structure
->   *
-> @@ -29,6 +33,7 @@ struct __sc_riscv_v_state {
->   */
->  struct sigcontext {
->         struct user_regs_struct sc_regs;
-> +       struct __sc_riscv_cfi_state sc_cfi_state;
-
-I am concerned about this change as this could potentially break uabi.
-Let's say there is a pre-CFI program running on this kernel. It
-receives a signal so the kernel lays out the sig-stack as presented in
-this structure. If the program accesses sc_fpregs, it would now get
-sc_cfi_state. As the offset has changed, and the pre-CFI program has
-not been re-compiled.
-
->         union {
->                 union __riscv_fp_state sc_fpregs;
->                 struct __riscv_extra_ext_header sc_extdesc;
-> --
-> 2.43.2
+> [ repeated many times ]
 >
+> The problem is no longer seen after reverting this patch.
 
-There may be two ways to deal with this. One is to use a different
-signal ABI for CFI-enabled programs. This may complicate the user
-space because new programs will have to determine whether it should
-use the CFI-ABI at run time. Another way is to follow what Vector does
-for signal stack. It adds a way to introduce new extensions on signal
-stack without impacting ABI.
+Should be fixed with this patch:
+https://gitlab.freedesktop.org/agd5f/linux/-/commit/5f56be33f33dd1d50b9433f=
+842c879a20dc00f5b
+Will pull it into my -fixes branch.
 
-Please let me know if I misunderstand anything, thanks.
+Alex
 
-Cheers,
-Andy
+>
+> Guenter
 
