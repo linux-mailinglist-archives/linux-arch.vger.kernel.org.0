@@ -1,228 +1,174 @@
-Return-Path: <linux-arch+bounces-4516-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4517-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16A188CE16E
-	for <lists+linux-arch@lfdr.de>; Fri, 24 May 2024 09:16:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D8678CE205
+	for <lists+linux-arch@lfdr.de>; Fri, 24 May 2024 10:10:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 849CF1F220EF
-	for <lists+linux-arch@lfdr.de>; Fri, 24 May 2024 07:16:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E21EE1F2263F
+	for <lists+linux-arch@lfdr.de>; Fri, 24 May 2024 08:10:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02C2C6EB4C;
-	Fri, 24 May 2024 07:16:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD33885C69;
+	Fri, 24 May 2024 08:10:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="y2ijOrSi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gTSmyPEV"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13C2618E1E
-	for <linux-arch@vger.kernel.org>; Fri, 24 May 2024 07:16:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A46FA82872;
+	Fri, 24 May 2024 08:10:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716534995; cv=none; b=Hq0UZnMG0uht7HSiHIU+cgjOyOqN2ev8g7toRK2KvmYYanYPmLHxnBMZgqoPIHip+IBRD6F8DVhQx5VnN7GCeLVRaICNpRp5B2yV4fkOyhTsAaqzvjOfNmIOL8F/uDFEoFHKhDfZKZSsi5xLFAV6QvfgBYlT0qRpd15Pknj70gw=
+	t=1716538222; cv=none; b=tfqCgNAaf/LsG3lAte9phgkdmQzpk+x317guJD24F/F0BR6C+qbq3nhAdYiklGa9eYrJjIdtT8ckDCpGGZQKHMYjyk/m6JAO6NI6dXlrzfQAPHmm963yE6ZT2UurXwuxiQAcfk8ywpE44lqaNKTfON7YO4GxJSfy6ThEQCAmgTU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716534995; c=relaxed/simple;
-	bh=L5dtxTCrzKCyV3a12hQ+4vBbPtIXGLsw+Pi3J3zri8U=;
+	s=arc-20240116; t=1716538222; c=relaxed/simple;
+	bh=KzZifyFunKdMl7mZy15PbBQXyBPtR28fDlzXAEBwRZE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LkcEoX2VcrnTTDseEELjJ2gzPeL8xDd2lYiOOwuMLsiaj881xvX02G2mCGe3NbpZ0gIcUKhrFlmXKjdSiL+lAMGPt2qjqmyzfB9QV5A/glMy/0nj/oalXiQmCHZkDJG6+rvuV02A8hWDYe7uhQdRHve3Gh6PB7HkR78sVeFr/iA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=y2ijOrSi; arc=none smtp.client-ip=209.85.215.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-68195b58daeso469220a12.2
-        for <linux-arch@vger.kernel.org>; Fri, 24 May 2024 00:16:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1716534992; x=1717139792; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=G5b7QgiVlAzfw1l+FA1jhqowDIFfn6XCF4+Yt8iGQO0=;
-        b=y2ijOrSiwn8kujMA0869ALapDPpI42dWw9fvOBWqX8Y8XIpcqYXkUkkubl7IuDmmgr
-         UXgs/FYwWQ6cMuIo093RxaHWEmjtTlpcPKupttpXoO4fgnH95uo/yaxP5aiTe2K0XTK6
-         OB8Hf49CztFRHosI56opMlAGwTeRKeLa7jDUtXNV3n1p1lK8CwTzFsc2CcTBhW2OQl9c
-         y5qGjjAYEsJqZqRGr4HQu2IUQ11hKqzITyzCBxl3gLhHVB9p4BNs9O6j/HB/qLxm07aS
-         +zTKlMC5xlJAWs8LHA+/ivB1Cb7gpZt6kBbkLyaNpACXt8lTMYOy0j5JSg5MfxhV1IOJ
-         uvgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716534992; x=1717139792;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=G5b7QgiVlAzfw1l+FA1jhqowDIFfn6XCF4+Yt8iGQO0=;
-        b=K9Ut0O3hNlivIORqiCgBRmhuM2nhU38pZRYQvYgmiAqRGAH/dsYCyCRCvPfvU6Txvz
-         ox5XbiOgS2NTYhTYhyifrNWJ6epEA/yH7dVLDY6AF+WByRhw+HiHpgoaazvEqpPzpWlu
-         KwnE/GPcKqbaluF6i0NbNY+xZdlFREuW6XzvZO0dFIIFMdfZ+q/mOeNAEkLQZBcanEH7
-         g4pr44Y+CsWjyOfM3B99o8GpL7OIM/1R0j5L7w7SK8MRp5afjXNdFqtAML1MmIvxcz3Q
-         xly2nUqcrUK5Jq9W/envIoaOmDSVI4PFiz6/nP8bp5OjObYLyNnyy3+TkWC2Dkom84B/
-         RVGg==
-X-Forwarded-Encrypted: i=1; AJvYcCU1DeWn0X3F4uqirsKN7LihZt0wjmPX4SQH1p+gpbJIqB2+R5xdwj27+y8aYz21Q8XWJ9f9tV6M2Smd9o3CJXSkLggGjcJRYpP1Rg==
-X-Gm-Message-State: AOJu0YwoIpInMiO09IAHbXPNxOu+3/tVXLDc8zGgYSKUquxhj5R0P5Qm
-	gCHHj8quJLW612l/qMfI19Oq17wZlpAwiqeMsq2prkYSU5HlxNXROJgbViGpJdA=
-X-Google-Smtp-Source: AGHT+IEDTqTA76mWXJ68mdGF74fNSFi0v4c+GSsV/TK7Kq0h+0BnWlexLZoWy2cb8clnmvmHxGdpVw==
-X-Received: by 2002:a17:90a:ec12:b0:2bf:5992:31ae with SMTP id 98e67ed59e1d1-2bf5ee1cb71mr1385379a91.20.1716534992281;
-        Fri, 24 May 2024 00:16:32 -0700 (PDT)
-Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2bf5f9b28dcsm742083a91.52.2024.05.24.00.16.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 May 2024 00:16:31 -0700 (PDT)
-Date: Fri, 24 May 2024 00:16:27 -0700
-From: Deepak Gupta <debug@rivosinc.com>
-To: Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc: Alexandre Ghiti <alex@ghiti.fr>, paul.walmsley@sifive.com,
-	rick.p.edgecombe@intel.com, broonie@kernel.org,
-	Szabolcs.Nagy@arm.com, kito.cheng@sifive.com, keescook@chromium.org,
-	ajones@ventanamicro.com, conor.dooley@microchip.com,
-	cleger@rivosinc.com, atishp@atishpatra.org, bjorn@rivosinc.com,
-	samuel.holland@sifive.com, conor@kernel.org,
-	linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-mm@kvack.org, linux-arch@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, corbet@lwn.net, palmer@dabbelt.com,
-	aou@eecs.berkeley.edu, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, oleg@redhat.com,
-	akpm@linux-foundation.org, arnd@arndb.de, ebiederm@xmission.com,
-	Liam.Howlett@oracle.com, vbabka@suse.cz, lstoakes@gmail.com,
-	shuah@kernel.org, brauner@kernel.org, andy.chiu@sifive.com,
-	jerry.shih@sifive.com, hankuan.chen@sifive.com,
-	greentime.hu@sifive.com, evan@rivosinc.com, xiao.w.wang@intel.com,
-	charlie@rivosinc.com, apatel@ventanamicro.com,
-	mchitale@ventanamicro.com, dbarboza@ventanamicro.com,
-	sameo@rivosinc.com, shikemeng@huaweicloud.com, willy@infradead.org,
-	vincent.chen@sifive.com, guoren@kernel.org, samitolvanen@google.com,
-	songshuaishuai@tinylab.org, gerg@kernel.org, heiko@sntech.de,
-	bhe@redhat.com, jeeheng.sia@starfivetech.com, cyy@cyyself.name,
-	maskray@google.com, ancientmodern4@gmail.com,
-	mathis.salmen@matsal.de, cuiyunhui@bytedance.com,
-	bgray@linux.ibm.com, mpe@ellerman.id.au, baruch@tkos.co.il,
-	alx@kernel.org, david@redhat.com, catalin.marinas@arm.com,
-	revest@chromium.org, josh@joshtriplett.org, shr@devkernel.io,
-	deller@gmx.de, omosnace@redhat.com, ojeda@kernel.org,
-	jhubbard@nvidia.com
-Subject: Re: [PATCH v3 13/29] riscv mmu: write protect and shadow stack
-Message-ID: <ZlA+yxsiHtyUJ/5/@debug.ba.rivosinc.com>
-References: <20240403234054.2020347-1-debug@rivosinc.com>
- <20240403234054.2020347-14-debug@rivosinc.com>
- <276fa17b-cd62-433d-b0ec-fa98c65a46ca@ghiti.fr>
- <ZkJOs6ENmDHFsq/U@debug.ba.rivosinc.com>
- <CAHVXubhS3CJ87DxC+9+8z6CiWDV1bQ8nK+iOZUDvMiT7vszFLA@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=drSyg7VUEAFCKNkaY4Lhr3KL4cf5xFk5/RpTfpKdliupFJZr5wGJqOjpUCM12Jnk+t+ZP3ThQ7vlas83//B9O/iU59YWyYGq9ZjdWR2NIVp/mIYN3TXTzhelSn2SIoBMYyOVfNyJSDPBE+5Y4Sh7P5cF/LNKf4n07uy0jrpPH4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gTSmyPEV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EC38C2BBFC;
+	Fri, 24 May 2024 08:10:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716538222;
+	bh=KzZifyFunKdMl7mZy15PbBQXyBPtR28fDlzXAEBwRZE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gTSmyPEVPbnVYsbqpii0XYle0nGrfAI9KJYQ9QQtMO99GDFwrEnqvqqW0CTH4UlBj
+	 tQBgvLjOBwnUJuGZxOGDTsX4L6RMbys6psDv8PUNuOdm/25RCKhlFkIYOfTrfRizEL
+	 zrfZAyySbpZgi58QD2ndnKtlklKpcj+BMsW0AxWTTYZlCxENaRkfJYFJS6v1kNMR14
+	 ga0qGrTXnaPwfBus+NEwyvGZfqJydhu3K7zoinPVPT9eMD//g3rIYeb7wY9RoPP5Ms
+	 FDn/3P7s7/hz1wCZKv6/dHdxX1x3mYjBNAZq5sA38FYcjenIX4A18VMWI60BLNmiRp
+	 OSh2FV9ePUR3g==
+Date: Fri, 24 May 2024 11:08:28 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Wei Yang <richard.weiyang@gmail.com>
+Cc: mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+	aneesh.kumar@kernel.org, naveen.n.rao@linux.ibm.com, arnd@arndb.de,
+	anshuman.khandual@arm.com, linuxppc-dev@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: Re: [Patch v2] mm/memblock: discard .text/.data if
+ CONFIG_ARCH_KEEP_MEMBLOCK not set
+Message-ID: <ZlBK_PZ2ZivCFXCv@kernel.org>
+References: <20240510020422.8038-1-richard.weiyang@gmail.com>
+ <ZkxLkK7vgzzaEvyw@kernel.org>
+ <20240524014656.odw4yuvhgbu4dgf7@master>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHVXubhS3CJ87DxC+9+8z6CiWDV1bQ8nK+iOZUDvMiT7vszFLA@mail.gmail.com>
+In-Reply-To: <20240524014656.odw4yuvhgbu4dgf7@master>
 
-On Thu, May 23, 2024 at 04:59:30PM +0200, Alexandre Ghiti wrote:
->Hi Deepak,
->
->On Mon, May 13, 2024 at 7:32 PM Deepak Gupta <debug@rivosinc.com> wrote:
->>
->> On Sun, May 12, 2024 at 06:31:24PM +0200, Alexandre Ghiti wrote:
->> >On 04/04/2024 01:35, Deepak Gupta wrote:
->> >>`fork` implements copy on write (COW) by making pages readonly in child
->> >>and parent both.
->> >>
->> >>ptep_set_wrprotect and pte_wrprotect clears _PAGE_WRITE in PTE.
->> >>Assumption is that page is readable and on fault copy on write happens.
->> >>
->> >>To implement COW on such pages,
->> >
->> >
->> >I guess you mean "shadow stack pages" here.
->>
->> Yes I meant shadow stack pages. Will fix the message.
->>
->> >
->> >
->> >>  clearing up W bit makes them XWR = 000.
->> >>This will result in wrong PTE setting which says no perms but V=1 and PFN
->> >>field pointing to final page. Instead desired behavior is to turn it into
->> >>a readable page, take an access (load/store) fault on sspush/sspop
->> >>(shadow stack) and then perform COW on such pages.
->> >>This way regular reads
->> >>would still be allowed and not lead to COW maintaining current behavior
->> >>of COW on non-shadow stack but writeable memory.
->> >>
->> >>On the other hand it doesn't interfere with existing COW for read-write
->> >>memory. Assumption is always that _PAGE_READ must have been set and thus
->> >>setting _PAGE_READ is harmless.
->> >>
->> >>Signed-off-by: Deepak Gupta <debug@rivosinc.com>
->> >>---
->> >>  arch/riscv/include/asm/pgtable.h | 12 ++++++++++--
->> >>  1 file changed, 10 insertions(+), 2 deletions(-)
->> >>
->> >>diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
->> >>index 9b837239d3e8..7a1c2a98d272 100644
->> >>--- a/arch/riscv/include/asm/pgtable.h
->> >>+++ b/arch/riscv/include/asm/pgtable.h
->> >>@@ -398,7 +398,7 @@ static inline int pte_special(pte_t pte)
->> >>  static inline pte_t pte_wrprotect(pte_t pte)
->> >>  {
->> >>-     return __pte(pte_val(pte) & ~(_PAGE_WRITE));
->> >>+     return __pte((pte_val(pte) & ~(_PAGE_WRITE)) | (_PAGE_READ));
->> >>  }
->> >>  /* static inline pte_t pte_mkread(pte_t pte) */
->> >>@@ -581,7 +581,15 @@ static inline pte_t ptep_get_and_clear(struct mm_struct *mm,
->> >>  static inline void ptep_set_wrprotect(struct mm_struct *mm,
->> >>                                    unsigned long address, pte_t *ptep)
->> >>  {
->> >>-     atomic_long_and(~(unsigned long)_PAGE_WRITE, (atomic_long_t *)ptep);
->> >>+     volatile pte_t read_pte = *ptep;
->
->Sorry I missed this ^. You need to use ptep_get() to get the value of
->a pte. 
+On Fri, May 24, 2024 at 01:46:56AM +0000, Wei Yang wrote:
+> On Tue, May 21, 2024 at 10:21:52AM +0300, Mike Rapoport wrote:
+> >Hi,
+> >
+> >On Fri, May 10, 2024 at 02:04:22AM +0000, Wei Yang wrote:
+> >> When CONFIG_ARCH_KEEP_MEMBLOCK not set, we expect to discard related
+> >> code and data. But it doesn't until CONFIG_MEMORY_HOTPLUG not set
+> >> neither.
+> >> 
+> >> This patch puts memblock's .text/.data into its own section, so that it
+> >> only depends on CONFIG_ARCH_KEEP_MEMBLOCK to discard related code and
+> >> data.
+> >> 
+> >> After this, from the log message in mem_init_print_info(), init size
+> >> increase from 2420K to 2432K on arch x86.
+> >> 
+> >> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
+> >> 
+> >> ---
+> >> v2: fix orphan section for powerpc
+> >> ---
+> >>  arch/powerpc/kernel/vmlinux.lds.S |  1 +
+> >>  include/asm-generic/vmlinux.lds.h | 14 +++++++++++++-
+> >>  include/linux/memblock.h          |  8 ++++----
+> >>  3 files changed, 18 insertions(+), 5 deletions(-)
+> >>  
+> >> +#define __init_memblock        __section(".mbinit.text") __cold notrace \
+> >> +						  __latent_entropy
+> >> +#define __initdata_memblock    __section(".mbinit.data")
+> >> +
+> >
+> >The new .mbinit.* sections should be added to scripts/mod/modpost.c
+> >alongside .meminit.* sections and then I expect modpost to report a bunch
+> >of section mismatches because many memblock functions are called on memory
+> >hotplug even on architectures that don't select ARCH_KEEP_MEMBLOCK.
+> >
+> 
+> I tried to add some code in modpost.c, "make all" looks good.
+> 
+> May I ask how can I trigger the "mismatch" warning?
+> 
+> BTW, if ARCH_KEEP_MEMBLOCK unset, we would discard memblock meta-data. If
+> hotplug would call memblock function, it would be dangerous?
+> 
+> The additional code I used is like below.
+> 
+> ---
+>  scripts/mod/modpost.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index 937294ff164f..c837e2882904 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -777,14 +777,14 @@ static void check_section(const char *modname, struct elf_info *elf,
+>  
+>  #define ALL_INIT_DATA_SECTIONS \
+>  	".init.setup", ".init.rodata", ".meminit.rodata", \
+> -	".init.data", ".meminit.data"
+> +	".init.data", ".meminit.data", "mbinit.data"
 
-Noted. will fix it.
+should be ".mbinit.data"
+>  
+>  #define ALL_PCI_INIT_SECTIONS	\
+>  	".pci_fixup_early", ".pci_fixup_header", ".pci_fixup_final", \
+>  	".pci_fixup_enable", ".pci_fixup_resume", \
+>  	".pci_fixup_resume_early", ".pci_fixup_suspend"
+>  
+> -#define ALL_XXXINIT_SECTIONS ".meminit.*"
+> +#define ALL_XXXINIT_SECTIONS ".meminit.*", "mbinit.*"
 
->And why do you need the volatile here?
+and ".mbinit.*"
 
-I don't remember the reason. It's probably not needed here.
-But I am sure I was debugging something and trying everything.
-And this probably slipped sanitization before sending patches.
+But regardless of typos, when ARCH_KEEP_MEMBLOCK=n the .mbinit is equivalent
+to .init and it should not be referenced from .meminit, so I don't think
+adding it here is correct.
 
-Will fix it.
->
->> >>+     /*
->> >>+      * ptep_set_wrprotect can be called for shadow stack ranges too.
->> >>+      * shadow stack memory is XWR = 010 and thus clearing _PAGE_WRITE will lead to
->> >>+      * encoding 000b which is wrong encoding with V = 1. This should lead to page fault
->> >>+      * but we dont want this wrong configuration to be set in page tables.
->> >>+      */
->> >>+     atomic_long_set((atomic_long_t *)ptep,
->> >>+                     ((pte_val(read_pte) & ~(unsigned long)_PAGE_WRITE) | _PAGE_READ));
->> >>  }
->> >>  #define __HAVE_ARCH_PTEP_CLEAR_YOUNG_FLUSH
->> >
->> >
->> >Doesn't making the shadow stack page readable allow "normal" loads to
->> >access the page? If it does, isn't that an issue (security-wise)?
->>
->> When shadow stack permissions are there (i.e. R=0, W=1, X=0), then also shadow stack is
->> readable through "normal" loads. So nothing changes when it converts into a readonly page
->> from page permissions perspective.
->>
->> Security-wise it's not a concern because from threat modeling perspective, if attacker had
->> read-write primitives (via some bug in program) available to read and write address space
->> of process/task; then they would have availiblity of return addresses on normal stack. It's
->> the write primitive that is concerning and to be protected against. And that's why shadow stack
->> is not writeable using "normal" stores.
->>
->> >
->
->Thanks for the explanation!
->
->With the use of ptep_get(), you can add:
->
->Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
->
->Thanks,
->
->Alex
+If I simply alias __init_memblock to __init then with
+CONFIG_MEMORY_HOTPLUG=y I get
+
+WARNING: modpost: vmlinux: section mismatch in reference: early_pfn_to_nid+0x42 (section: .meminit.text) -> memblock_search_pfn_nid (section: .init.text)
+WARNING: modpost: vmlinux: section mismatch in reference: memmap_init_range+0x142 (section: .meminit.text) -> mirrored_kernelcore (section: .init.data)
+WARNING: modpost: vmlinux: section mismatch in reference: memmap_init_range+0x1e1 (section: .meminit.text) -> memblock (section: .init.data)
+WARNING: modpost: vmlinux: section mismatch in reference: memmap_init_range+0x1e8 (section: .meminit.text) -> memblock (section: .init.data)
+WARNING: modpost: vmlinux: section mismatch in reference: sparse_buffer_alloc+0x3b (section: .meminit.text) -> memblock_free (section: .init.text)
+
+>  #define ALL_INIT_SECTIONS INIT_SECTIONS, ALL_XXXINIT_SECTIONS
+>  #define ALL_EXIT_SECTIONS ".exit.*"
+> @@ -799,7 +799,7 @@ static void check_section(const char *modname, struct elf_info *elf,
+>  
+>  #define INIT_SECTIONS      ".init.*"
+>  
+> -#define ALL_TEXT_SECTIONS  ".init.text", ".meminit.text", ".exit.text", \
+> +#define ALL_TEXT_SECTIONS  ".init.text", ".meminit.text", ".mbinit.text", ".exit.text", \
+>  		TEXT_SECTIONS, OTHER_TEXT_SECTIONS
+>  
+>  enum mismatch {
+> 
+> -- 
+> Wei Yang
+> Help you, Help me
+> 
+
+-- 
+Sincerely yours,
+Mike.
 
