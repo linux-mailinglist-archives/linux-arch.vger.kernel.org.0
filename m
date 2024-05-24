@@ -1,191 +1,99 @@
-Return-Path: <linux-arch+bounces-4537-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4538-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC7C38CEA2E
-	for <lists+linux-arch@lfdr.de>; Fri, 24 May 2024 21:11:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3913F8CEAAE
+	for <lists+linux-arch@lfdr.de>; Fri, 24 May 2024 22:04:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 41291B20BFA
-	for <lists+linux-arch@lfdr.de>; Fri, 24 May 2024 19:11:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E46B11F220BA
+	for <lists+linux-arch@lfdr.de>; Fri, 24 May 2024 20:04:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECEFE40849;
-	Fri, 24 May 2024 19:11:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="cvl34NI5"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F09C33F9D2;
+	Fri, 24 May 2024 20:04:13 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DD02381C6
-	for <linux-arch@vger.kernel.org>; Fri, 24 May 2024 19:11:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 595FD3C47C
+	for <linux-arch@vger.kernel.org>; Fri, 24 May 2024 20:04:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716577889; cv=none; b=WQaulmS5z/kLK1yfEn3uV5M5BcWeZzK0y+IaJ8ChRTo/GqzYaXIRhyQlEiWAXVbZJHX9aewrtnIVsRbJng5/ZbwuybgkGEFfwMDDKPrzGyaAmdi3bS9FWmH2RtkHICg/L/3ng2w6nh0e06MKwZSRUATjEPFqWfiESh5TcsRNVBw=
+	t=1716581053; cv=none; b=u4CxeK72OdGpBqVfFyPsIQ69M/tvOOnGOqjtaEBjft5RZX1Q9WNdC+p6HYtj+avhkiDb7JX9LC/c4QJSbQ/ZY0Pebh+w2fdp9XZMw5CAuHJFcgYwwnxAeDjgiFP0VsSoOMPoMjYyjolVAf5AiDCmzoH0rvP4uitv7i8UnQvfVcw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716577889; c=relaxed/simple;
-	bh=ekJ4PIWteF0STOLt8GEwvTZKcTBrMpP/XnMQSDaKdFE=;
+	s=arc-20240116; t=1716581053; c=relaxed/simple;
+	bh=BuCYfK/p22E1t/CTAd3Dvp5JyIR5mqEHmLiTTS+jrtE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RobTeaD4TqQmKYuA18Gfokg+2RjxGkqJ7U6dTWVWkqlLZTYwPhpIrskW5kLYdYJfh4vhR2otyvONzz8jd9bClnnJiHb0OuC29P8dIPgwdoDTdrdh5p3kOec7jpwbneHL/G9mJvhPYAgq4f6Cqy4f+Ux7Evr8IHdc358qj0062BA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=cvl34NI5; arc=none smtp.client-ip=209.85.210.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-6f693fb0ad4so4150504b3a.1
-        for <linux-arch@vger.kernel.org>; Fri, 24 May 2024 12:11:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1716577887; x=1717182687; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=NHWDoWZZfWuUu/P0x+kbvgCTb8gOtuuYHKkIDhOcYik=;
-        b=cvl34NI5VpJxkDOSy7KYVz/xK3ENQGCrkfRLgQ4/IO8GkFp1fUFXllN1DETVJl1aoB
-         F71hMlbxt64dut/e7wQyxc02fWBbI/wEMjW4bYitcIs2XIkLlxrsCHLBcPEmRhN9GtPQ
-         doeACI5uJUIXrVR4AMrrNkpz0KFyV4iTui3z/il+6kBHJ0vjW9XlRrScJDr/hzIi+GqF
-         14rgtxrXUN1124OkrFiRuHysCB9XYa82gBmQjA2Wg3GbHhww85RBvGZC2EkywHNdQvGc
-         LiphDU8ybvD0bpkJs504lph7tZuiXrGzmVYxfcixqboZVnVfSeoreuGgMT2+I4lnXgWB
-         GXbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716577887; x=1717182687;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NHWDoWZZfWuUu/P0x+kbvgCTb8gOtuuYHKkIDhOcYik=;
-        b=NwO9fWwwNeExvcsp1JrcozZTYJwmEEP7EAhyABgyiKmeevlwHIOsmsmKztnxs8TLQD
-         hgGoEn0nRMqaXenKrciZvwZV/2424MKDGQsZAt1ANCgT5NOJ4BNClpVdxiUad44swUGs
-         +8/sMzuSbcOeDxHAmh7WYdNs2xYviI6rC2HSm1sWRBGG3s1Y427DRIdc1ZYozLdcoV2P
-         orhRLYQXa3gMVu9P6gm9Z+Mk/JH8cKj0WvbpXEmWjVSko4V9cDI9UpX2CzTRDgFurH4g
-         NiZpg7aAxi19d9qaSkv94OSAJiP2FlBcri3QziHlmEmfoW+JP9ZM8QJmP0aBN4PYbw+o
-         JX6w==
-X-Forwarded-Encrypted: i=1; AJvYcCXLAHK3yxrawz2vjIk6EOpPSkrm/BFgpZczWbCZGI0z3n2iz0pXQ7LnPUxXF7mHz+aV5jVen8TYRW4krix8nmMkCWtsPt/Hf1GE8A==
-X-Gm-Message-State: AOJu0Yxkk0UW4EHNvoJgbJ6bg/raG3FJpYkFInEC+29+UvQM3w9Ec10D
-	D5o0YXdpozG4M9dhZxWM2oeyyj/6IORQ2E5OyX7P+MAJfGRRf60UCeVFLWkHwwY=
-X-Google-Smtp-Source: AGHT+IEwWQZpFilaYbUUGlopJo1f2TdPyB2rRnSl7U/MDmzei8hNgpy175SX2dTVTzyB8unJyM8ICQ==
-X-Received: by 2002:a05:6a20:12ca:b0:1af:93b0:f007 with SMTP id adf61e73a8af0-1b212cc4fd5mr4361727637.1.1716577887327;
-        Fri, 24 May 2024 12:11:27 -0700 (PDT)
-Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-6f8fcfe5961sm1424089b3a.164.2024.05.24.12.11.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 May 2024 12:11:26 -0700 (PDT)
-Date: Fri, 24 May 2024 12:11:22 -0700
-From: Deepak Gupta <debug@rivosinc.com>
-To: Andy Chiu <andy.chiu@sifive.com>
-Cc: paul.walmsley@sifive.com, rick.p.edgecombe@intel.com,
-	broonie@kernel.org, Szabolcs.Nagy@arm.com, kito.cheng@sifive.com,
-	keescook@chromium.org, ajones@ventanamicro.com,
-	conor.dooley@microchip.com, cleger@rivosinc.com,
-	atishp@atishpatra.org, alex@ghiti.fr, bjorn@rivosinc.com,
-	alexghiti@rivosinc.com, samuel.holland@sifive.com, conor@kernel.org,
-	linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-mm@kvack.org, linux-arch@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, corbet@lwn.net, palmer@dabbelt.com,
-	aou@eecs.berkeley.edu, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, oleg@redhat.com,
-	akpm@linux-foundation.org, arnd@arndb.de, ebiederm@xmission.com,
-	Liam.Howlett@oracle.com, vbabka@suse.cz, lstoakes@gmail.com,
-	shuah@kernel.org, brauner@kernel.org, jerry.shih@sifive.com,
-	hankuan.chen@sifive.com, greentime.hu@sifive.com, evan@rivosinc.com,
-	xiao.w.wang@intel.com, charlie@rivosinc.com,
-	apatel@ventanamicro.com, mchitale@ventanamicro.com,
-	dbarboza@ventanamicro.com, sameo@rivosinc.com,
-	shikemeng@huaweicloud.com, willy@infradead.org,
-	vincent.chen@sifive.com, guoren@kernel.org, samitolvanen@google.com,
-	songshuaishuai@tinylab.org, gerg@kernel.org, heiko@sntech.de,
-	bhe@redhat.com, jeeheng.sia@starfivetech.com, cyy@cyyself.name,
-	maskray@google.com, ancientmodern4@gmail.com,
-	mathis.salmen@matsal.de, cuiyunhui@bytedance.com,
-	bgray@linux.ibm.com, mpe@ellerman.id.au, baruch@tkos.co.il,
-	alx@kernel.org, david@redhat.com, catalin.marinas@arm.com,
-	revest@chromium.org, josh@joshtriplett.org, shr@devkernel.io,
-	deller@gmx.de, omosnace@redhat.com, ojeda@kernel.org,
-	jhubbard@nvidia.com
-Subject: Re: [PATCH v3 22/29] riscv sigcontext: adding cfi state field in
- sigcontext
-Message-ID: <ZlDmWoo6EVZ1MKbN@debug.ba.rivosinc.com>
-References: <20240403234054.2020347-1-debug@rivosinc.com>
- <20240403234054.2020347-23-debug@rivosinc.com>
- <CABgGipW4ZTFLh1dkiRuWD0WP4RRkfhyFCc+RsUjCD2EkA5GhSQ@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=E7rYIvEG7CyupfeGwhG0p96y42ZKF+q1O2XR8Pzz39uC9kQctOaiv6pOr53xkt0MMGU9+WxXCojEsm1ZXwUWQntybgHz9/1f5iveQS8O1Z3JCaaJI2Po7tIC9kIGouAvuW0p/zKD3wxM+9QNq96gsL+FryFwfuQsThrcsy3NSJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 585212 invoked by uid 1000); 24 May 2024 16:04:09 -0400
+Date: Fri, 24 May 2024 16:04:09 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Andrea Parri <parri.andrea@gmail.com>
+Cc: will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
+  npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+  luc.maranget@inria.fr, paulmck@kernel.org, akiyks@gmail.com,
+  dlustig@nvidia.com, joel@joelfernandes.org, linux-kernel@vger.kernel.org,
+  linux-arch@vger.kernel.org, hernan.poncedeleon@huaweicloud.com,
+  jonas.oberhauser@huaweicloud.com
+Subject: Re: [PATCH] tools/memory-model: Document herd7 (internal)
+ representation
+Message-ID: <37bbf3c3-8951-41f8-b900-e81a885b949e@rowland.harvard.edu>
+References: <20240524151356.236071-1-parri.andrea@gmail.com>
+ <ZlC0IkzpQdeGj+a3@andrea>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABgGipW4ZTFLh1dkiRuWD0WP4RRkfhyFCc+RsUjCD2EkA5GhSQ@mail.gmail.com>
+In-Reply-To: <ZlC0IkzpQdeGj+a3@andrea>
 
-On Fri, May 24, 2024 at 05:46:16PM +0800, Andy Chiu wrote:
->Hi Deepak,
->
->On Thu, Apr 4, 2024 at 7:42 AM Deepak Gupta <debug@rivosinc.com> wrote:
->>
->> Shadow stack needs to be saved and restored on signal delivery and signal
->> return.
->>
->> sigcontext embedded in ucontext is extendible. Adding cfi state in there
->> which can be used to save cfi state before signal delivery and restore
->> cfi state on sigreturn
->>
->> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
->> ---
->>  arch/riscv/include/uapi/asm/sigcontext.h | 5 +++++
->>  1 file changed, 5 insertions(+)
->>
->> diff --git a/arch/riscv/include/uapi/asm/sigcontext.h b/arch/riscv/include/uapi/asm/sigcontext.h
->> index cd4f175dc837..5ccdd94a0855 100644
->> --- a/arch/riscv/include/uapi/asm/sigcontext.h
->> +++ b/arch/riscv/include/uapi/asm/sigcontext.h
->> @@ -21,6 +21,10 @@ struct __sc_riscv_v_state {
->>         struct __riscv_v_ext_state v_state;
->>  } __attribute__((aligned(16)));
->>
->> +struct __sc_riscv_cfi_state {
->> +       unsigned long ss_ptr;   /* shadow stack pointer */
->> +       unsigned long rsvd;             /* keeping another word reserved in case we need it */
->> +};
->>  /*
->>   * Signal context structure
->>   *
->> @@ -29,6 +33,7 @@ struct __sc_riscv_v_state {
->>   */
->>  struct sigcontext {
->>         struct user_regs_struct sc_regs;
->> +       struct __sc_riscv_cfi_state sc_cfi_state;
->
->I am concerned about this change as this could potentially break uabi.
->Let's say there is a pre-CFI program running on this kernel. It
->receives a signal so the kernel lays out the sig-stack as presented in
->this structure. If the program accesses sc_fpregs, it would now get
->sc_cfi_state. As the offset has changed, and the pre-CFI program has
->not been re-compiled.
+On Fri, May 24, 2024 at 05:37:06PM +0200, Andrea Parri wrote:
+> > - While checking the information below using herd7, I've observed some
+> >   "strange" behavior with spin_is_locked() (perhaps, unsurprisingly...);
+> >   IAC, that's also excluded from this table/submission.
+> 
+> For completeness, the behavior in question:
+> 
+> $ cat T.litmus 
+> C T
+> 
+> {}
+> 
+> P0(spinlock_t *x)
+> {
+> 	int r0;
+> 
+> 	spin_lock(x);
+> 	spin_unlock(x);
+> 	r0 = spin_is_locked(x);
+> }
+> 
+> $ herd7 -conf linux-kernel.cfg T.litmus
+> Test T Required
+> States 0
+> Ok
+> Witnesses
+> Positive: 0 Negative: 0
+> Condition forall (true)
+> Observation T Never 0 0
+> Time T 0.00
+> Hash=6fa204e139ddddf2cb6fa963bad117c0
+> 
+> Haven't been using spin_is_locked for a while...  perhaps I'm doing
+> something wrong?  (IAC, will have a closer look next week...)
 
-Yeah this is a problem if program was built with older kernel/old toolchain
-(or cfi unaware toolchain). Thanks.
+I get the same empty result.  There's definitely something going wrong 
+in the "with ... from cross(...)" lines in lock.cat.  I need to do some 
+checking and testing.
 
->
->>         union {
->>                 union __riscv_fp_state sc_fpregs;
->>                 struct __riscv_extra_ext_header sc_extdesc;
->> --
->> 2.43.2
->>
->
->There may be two ways to deal with this. One is to use a different
->signal ABI for CFI-enabled programs. This may complicate the user
->space because new programs will have to determine whether it should
->use the CFI-ABI at run time. Another way is to follow what Vector does
->for signal stack. It adds a way to introduce new extensions on signal
->stack without impacting ABI.
->
->Please let me know if I misunderstand anything, thanks.
+Also, lock.cat doesn't check for R events that don't actually read from 
+anything (which will happen when the spin_is_locked() call above 
+generates an RL event).  This is a separate bug, easily fixed.
 
-I think following how vector does would be cleaner.
-Let me munch on this a little bit.
-
->
->Cheers,
->Andy
+Alan
 
