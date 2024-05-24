@@ -1,72 +1,72 @@
-Return-Path: <linux-arch+bounces-4531-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4532-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F8748CE84E
-	for <lists+linux-arch@lfdr.de>; Fri, 24 May 2024 17:55:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F9938CE867
+	for <lists+linux-arch@lfdr.de>; Fri, 24 May 2024 18:01:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AA52AB20BDF
-	for <lists+linux-arch@lfdr.de>; Fri, 24 May 2024 15:55:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 26B911C210B7
+	for <lists+linux-arch@lfdr.de>; Fri, 24 May 2024 16:01:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34CCB12E1CA;
-	Fri, 24 May 2024 15:55:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99D6912C7FA;
+	Fri, 24 May 2024 16:00:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iSo9KmLY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aZwHdI6f"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A01B126F04;
-	Fri, 24 May 2024 15:55:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00A3F12D75D;
+	Fri, 24 May 2024 16:00:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716566129; cv=none; b=tqSsbXmpht9oEZOW5MVkygQTdleh+03rhj+b9xvQP1uv/c81G/AFMgA3J9kFrBn0HWLYeJe202JUzsDRWNZ8q1P1dQ8PuWWfzfUuC7dB5TMtode+gYTm3uTg8CanUSvcfxTg7DU4cagwLQih1rSOvAyN4TWvb0ehPny65fkw9iY=
+	t=1716566450; cv=none; b=BXryNhHRgJZLSN4pJvrQ6j0GOXuH7Vaov5OQj7x57sd05tjLBSkjUXXcZix6j+5o7YuvRiIQ2/gx8B+1lQPWE3Vj2o/SimHwlQAcNze8KO2BgbqxX43C/25DPuGeQopYWRvxlAk9TjPo1LL9F4653VR3/eSmTAP7JKR4YdQ97BM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716566129; c=relaxed/simple;
-	bh=xS5Cb4oU68zPCtUxfTuRzeBZiDu8VHCvZRRao9Wn4OM=;
+	s=arc-20240116; t=1716566450; c=relaxed/simple;
+	bh=FnAaiCmQC7YRKlzCDKAI0OXamAuUxY3zUlnua8fn3oU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Wr4+hd0T0nA+ugHRHlfo0j2pJBMAD6xsG3xBF27yumDy8IbaqUv/K2VKuSdUtymEnJiW1A9cPP2/gVCS/T/2ZVa1nV1wkM3lgGVMwhf/AfxN1BgIbCnhmJ1xQpuGzZJwtvypnQBWzZPj8CEL9Dad41bznR0iWl0mh/MeSLt1BSk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iSo9KmLY; arc=none smtp.client-ip=209.85.221.43
+	 Content-Type:Content-Disposition:In-Reply-To; b=ibLECZA1SQbMO/y9D+8fnoYwFEk4lUAyzNdLsm8bv4YyxYhL2qEN6JhDWBJrDhh6OYUF3v5c+WjehNe2NAjI1/ABNvVL3bQPYrsnrSBON2yRBs+L6lOnZSu6Zvm6fymnF3nkxkRzDru7NE4JIszNs9d0sV8aLcqbGjuZorgi6u0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aZwHdI6f; arc=none smtp.client-ip=209.85.128.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-35507de9853so587079f8f.0;
-        Fri, 24 May 2024 08:55:27 -0700 (PDT)
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4210c9d1df6so2340765e9.2;
+        Fri, 24 May 2024 09:00:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1716566126; x=1717170926; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1716566447; x=1717171247; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=//KD1Ad6RRaTW94yeORLrlBuaIevXtri2sWaywu2r1w=;
-        b=iSo9KmLYdnM9CdcRxSy6fKoYsfFCnJrBgqA184WuoxjNiE+edVoZXC9mwI/G/4VQiH
-         f3iBI2hGsAcU/5ShRyxv8qkko4gRe+hDVCu936f6H65zoZ7nv3Tv10zFDPJiMirNVdOO
-         iSlEjJBd3HLqJYtk5oeKRZU2bS6C0/qkT1oAHGjzVO6Pr3KoBCret//dWvt8fTgmJtmb
-         Y1Sm804XsdSvtjzTqZVo+9L0gffaQQn3njRYCsTC7BoI1goGElUoP1UXaw6UfIYGNwGI
-         WRkaaWY8vcpWZMqcfCkhHZ0mQOjgIi1SqBaRAshP5fdRVPPoB24yO48PSDyyU4hteRZo
-         Wbhg==
+        bh=EeGxIN2NLzfkcvB5SwbOf6TisZFQzjCd2Zm13eyZV2Y=;
+        b=aZwHdI6fHD6FVqiwULtAjRG8q/+Xwgce+MLh0saIIQZuaze81i7+ndbL38ugVY7xKh
+         FFR2YI+HauS/y9O512e6JtMLlic8Y67G1lMF1FQVuWn7o0CeonrXerxH30hLs7CBh5Yf
+         tSoEUarxJIAc6Rs6l56FYf+P4pVDiaTmbli2mUaXN0Jx9rPUT2EXjwIry2/NHNDiHb+k
+         FxjGAw9WniZae8mg6/usDCs5pu2JV0Vaa58qqLSSdZt2mKr4/44IIOoASwyPcickK2Zh
+         Gj06JSfqAYLv2Uqjw0acPskIKOMOlIG5SF2l/bdzUFzr//TVT2jQKrkVq1P+3bZJqpy6
+         9EOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716566126; x=1717170926;
+        d=1e100.net; s=20230601; t=1716566447; x=1717171247;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=//KD1Ad6RRaTW94yeORLrlBuaIevXtri2sWaywu2r1w=;
-        b=uUGSMffX80YSw1Ph8sx9CCBRTYPYl1edsRdZ+ij44dZSk7wvh1ErvH+k6HEv+EEyDD
-         9GZSzi3cldFsL2Jzc85CVS50f6M/PmgE0qLqmwxqJyXOz1OYmPtFQPa5QzQu4APTV0CU
-         s0rJWFgHGnHVIAZxTtGZFsBMucfe6Ui2nFcyoL+LRkZ+Wk+pZgpgO1pfGw0WmIduFHL/
-         xFdAd4i7uv776D9TsqH5xinECjzXOc0toTjz3n4XnY1xC8MKPHXd/RvwPN8YyIow6PI4
-         N/fd04UcDJ2HccnKzdGhga6C91SavfGQcmTKVbG6C0F0G2GBJf67bkQEHot0XW8X8QeU
-         n6vg==
-X-Forwarded-Encrypted: i=1; AJvYcCVT6BxZD5Wnal4vHsqQA7ZY2rirLF4N2hkNs1EysIKLXzmvlE+oM051TE2oJ052EJuy+uLvJNQCce5jHeCz2b/QmEWogaxxg56H+Nbwo6iUtr100wIidcgCPMRiX0M7NMDFN98nDXyS8w==
-X-Gm-Message-State: AOJu0YzObSTXFpYUJnl5y8XKwo3IzpF+oi7fHVzupSHvBF8AFNA3hcMt
-	atRBC2xpqzmzMelQF0/pedRONNOxYXc6uKVa1aKvDP6cmNGJZJPc
-X-Google-Smtp-Source: AGHT+IGvjRiaA8GlfSDW7h+Ok/W23XLgkVoUl4OzjYq5we7GcVfeiytWRtbZHIoF1/0S4q9ZqlUhig==
-X-Received: by 2002:a5d:5242:0:b0:34c:77bd:2508 with SMTP id ffacd0b85a97d-35506d48543mr2704271f8f.11.1716566125620;
-        Fri, 24 May 2024 08:55:25 -0700 (PDT)
+        bh=EeGxIN2NLzfkcvB5SwbOf6TisZFQzjCd2Zm13eyZV2Y=;
+        b=XQRR6vhpRiuHM7nBvs/3Ital/4GObdH9hGucyOrGvnMBB45Xhz2hRW9a/kIrutTMDt
+         Aj2UIaxEibCqQeSuL5War6QTzZC7IE0AWjpc7LAM3BWUW8E/iq+YMsFASWNOjMap0Mhz
+         agqVt8lfPywReH96bkHSFl+yOqWVUl+r2e4ScPT11+7DGj7wo0qniQeKOmIZgS5+igwU
+         mH8USq/+UhDP8qvkqmrBe9HARD+Dd6PNKdP9xsw4WZy8Z9R/G2hnHhYMzHhIirC8WKBB
+         +8ZrPzRqxgV2bvbQUlxSy9HmcGITmm8lmAIO0IC6sumQsd4KbL/4e8pNbIUz2jeR20Cj
+         5Xkw==
+X-Forwarded-Encrypted: i=1; AJvYcCUHnx9LzGuzvMZoYcXohJ1wCu5lJbCHYHYHjWt24+ZhzQF4WIxTeBucheYgW6kqyFmTy7dViGhRj70fg44Y1RloKI14Xr3AMoprGDuCsGzDWx2cLgZw1OvaS3GS/UYIybrh6DSDVgI4Mg==
+X-Gm-Message-State: AOJu0YyokkXCc4Nngge+1MPv8agTQkCtBw4EKUH57nHddhMMhfcQBezZ
+	3xP93tSJaq0RlPetA0oVn96oLS4J6KZkza+8wyX3MHd4JE2hoCF9
+X-Google-Smtp-Source: AGHT+IF1nzlmWcJjKLmWsVsX2Q/bz3pbEstFXA5fX3vj4NYfHb6SpOA1kbfUC2hwKB/oVXMdf4RHSw==
+X-Received: by 2002:a05:600c:581a:b0:41f:f957:96ac with SMTP id 5b1f17b1804b1-421089d9dc3mr22424605e9.13.1716566447029;
+        Fri, 24 May 2024 09:00:47 -0700 (PDT)
 Received: from andrea ([151.76.32.59])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3557dcf06dcsm1901645f8f.106.2024.05.24.08.55.24
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-421089667fbsm24207395e9.9.2024.05.24.09.00.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 May 2024 08:55:25 -0700 (PDT)
-Date: Fri, 24 May 2024 17:55:20 +0200
+        Fri, 24 May 2024 09:00:45 -0700 (PDT)
+Date: Fri, 24 May 2024 18:00:43 +0200
 From: Andrea Parri <parri.andrea@gmail.com>
 To: Alan Stern <stern@rowland.harvard.edu>
 Cc: will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
@@ -78,10 +78,9 @@ Cc: will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
 	jonas.oberhauser@huaweicloud.com
 Subject: Re: [PATCH] tools/memory-model: Document herd7 (internal)
  representation
-Message-ID: <ZlC4aFfAx4u8cjDb@andrea>
+Message-ID: <ZlC5q7bcdCAe7xPp@andrea>
 References: <20240524151356.236071-1-parri.andrea@gmail.com>
- <ZlC0IkzpQdeGj+a3@andrea>
- <bd6426c0-f439-4b15-9ab4-12768aa8557a@rowland.harvard.edu>
+ <1c6d4146-86f8-4fd5-a23e-a95ba2464c9e@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -90,25 +89,12 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <bd6426c0-f439-4b15-9ab4-12768aa8557a@rowland.harvard.edu>
+In-Reply-To: <1c6d4146-86f8-4fd5-a23e-a95ba2464c9e@rowland.harvard.edu>
 
-> > $ cat T.litmus 
-> > C T
-> > 
-> > {}
-> > 
-> > P0(spinlock_t *x)
-> > {
-> > 	int r0;
-> > 
-> > 	spin_lock(x);
-> > 	spin_unlock(x);
-> > 	r0 = spin_is_locked(x);
-> > }
-> 
-> No "exists" clause?  Maybe that's your problem.
+> What's the difference between R and R*, or between W and W*?
 
-Nope, that doesn't seem to be it.  (Same result after adding one.)
+AFAIU, herd7 uses such notation, "*", to denote a load or a store which
+is also in RMW.
 
   Andrea
 
