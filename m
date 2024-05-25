@@ -1,157 +1,199 @@
-Return-Path: <linux-arch+bounces-4539-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4540-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9A018CF027
-	for <lists+linux-arch@lfdr.de>; Sat, 25 May 2024 18:43:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6147B8CF11C
+	for <lists+linux-arch@lfdr.de>; Sat, 25 May 2024 21:37:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 167491C20D56
-	for <lists+linux-arch@lfdr.de>; Sat, 25 May 2024 16:43:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F28801C2099E
+	for <lists+linux-arch@lfdr.de>; Sat, 25 May 2024 19:37:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAD1A85C48;
-	Sat, 25 May 2024 16:43:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VQqtpjF9"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29C06127B4D;
+	Sat, 25 May 2024 19:37:23 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8F37487A5;
-	Sat, 25 May 2024 16:43:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 0C27854BE7
+	for <linux-arch@vger.kernel.org>; Sat, 25 May 2024 19:37:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716655423; cv=none; b=c118QrdgyCSlZZlJnLdBDX7fiRLEquiUEm0LeVsb8LrSHs4GYduz2hgHKsSFbn2RQ4ohtnB2VllrxL/9y1F07Pde3aF0Y5DaH7wifqneblD195a6jm4UKibZFKhWeyD1P7yry5/quMm7dDtNj7RQprj5k4m4cX/TQR3153UuuxE=
+	t=1716665843; cv=none; b=TYOcn1vixsVqIKQGcewzLlRNPls06RAwd2s0Nzmev0/ZmNpmbzogeMSlZ7tek14pz2LbO0sq+18xWUtmPiRiWMo2EkDO35sX7z/PmRPdEy7n/K5nZhHCx2rvueWp0NUPrQBJEWF7xq3d6+pGqN7MXoW+ryH1/ifJu9V7/+LCT78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716655423; c=relaxed/simple;
-	bh=BYvRVlfnOcEYCohSU9+i09Mb94lZWB25nxoPHqEd0Lo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=I2O1ILAelfdsVYL3Js5DIXexgzRzDwGE/mpoWZVOb7KBJTFoHPn317XKWDT96ho7mNz8auqD2zAsMi764+sOcc+jGSumgxTpMrtJhp00EQrgQbuQ2xWguyHLakIHqPOT2zBgs/LpVZA0a81vlDU9ULp8hkScxGSueihonK8XmmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VQqtpjF9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48C50C32782;
-	Sat, 25 May 2024 16:43:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716655423;
-	bh=BYvRVlfnOcEYCohSU9+i09Mb94lZWB25nxoPHqEd0Lo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=VQqtpjF9ci4TPs43sML4DRO6vWzmik2gcCGgE+GkYfnYvRG/M+vOkmXt+6stMhwLt
-	 VTNDWHqvhai/cNU8SVheBNeFZLQZQKKQ6eUsnjdXbGEnDgOqpCxX27+SmipVMXryKz
-	 EH7epCNj8esHUS2vIuo94Dz7LJrk8QKQ5SKjer8RnLDZzbQPxbP7ex0PSCGLVvtXLp
-	 oLK7Lj3G0rPSrcBo1UWKqNTSX8DDrMliwuD7cPivwdenX4u8vQQ2M0jHZgho9/3DQS
-	 HuoTNoL4W941MxLn9HjS8SlINoIOsulBKr3rF7DqEGHAbIYzKIWUtkEN/zV78liRi4
-	 pDb65u3yAlOdw==
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2e6f2534e41so85398291fa.0;
-        Sat, 25 May 2024 09:43:43 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVb4q7tbW0A0+UPZEO/cPjyY0sk69EgM1tDnUrOFDe1J/Mcb9txjLX31CD6Vk8W+eWjfSDIq9LpXk343dFQxonpQgcKbG4N25Koz6YhyuDBGb9VoQTVziunPn/W9rkF5IRAHirDAJriWV/uF+FfaFO0nWzUGl8OnwUSHcFnhg==
-X-Gm-Message-State: AOJu0YwvLOm7idn3Ql73J0Wx2yNwn77pj/o3D72YlT/IldUD4H2avBBN
-	x1D0f5WJrqCvXMreW6VfUYHX4dWvSBCpR00EzzxVgDjQzF+PTIQpT3QiUuF0v8etm0G9uhe7+ye
-	QP6n1jpQhErmYwU4nH0Jo31F8wsA=
-X-Google-Smtp-Source: AGHT+IGho3f8KKeAWOOGieu1BeXrWfXkamAMqAEvp1bl5gSAUC88VYD3wLf3Li0DW8C4rCu3GIr+nmE3+gU7YXcmSu0=
-X-Received: by 2002:ac2:4e10:0:b0:51b:e0f0:e4f8 with SMTP id
- 2adb3069b0e04-52964bb0ea4mr4203773e87.31.1716655422028; Sat, 25 May 2024
- 09:43:42 -0700 (PDT)
+	s=arc-20240116; t=1716665843; c=relaxed/simple;
+	bh=RiQOK8BJS10Xc4xLKZaufd84Et5CSNC4fnnN9TgwzZA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HM/DbGGNnGoiSlo2+tNH8NfRhqVp3U98cyHWDZyNU9F8CHtBpfHTd//4dd1ESHbQVnOeKZ2u2oXCpprTElTqSdOVmIvkFAESXGalob1CIx0kXwV0gB0QNXHPQSGCs5n9wQtNkz7IfxQiEV25puEaZKtmtaSIZUkOXU+iB/OiStI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 613412 invoked by uid 1000); 25 May 2024 15:37:19 -0400
+Date: Sat, 25 May 2024 15:37:19 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Andrea Parri <parri.andrea@gmail.com>
+Cc: will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
+  npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+  luc.maranget@inria.fr, paulmck@kernel.org, akiyks@gmail.com,
+  dlustig@nvidia.com, joel@joelfernandes.org, linux-kernel@vger.kernel.org,
+  linux-arch@vger.kernel.org, hernan.poncedeleon@huaweicloud.com,
+  jonas.oberhauser@huaweicloud.com
+Subject: Re: [PATCH] tools/memory-model: Document herd7 (internal)
+ representation
+Message-ID: <cf81a3c2-9754-4130-a67e-67d475678829@rowland.harvard.edu>
+References: <20240524151356.236071-1-parri.andrea@gmail.com>
+ <ZlC0IkzpQdeGj+a3@andrea>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240522114755.318238-1-masahiroy@kernel.org> <20240522114755.318238-3-masahiroy@kernel.org>
- <CAMj1kXHwEMxAhj=zCBRCAxE8MXhzT95CTtAin+fPQr3DSJ46fA@mail.gmail.com>
-In-Reply-To: <CAMj1kXHwEMxAhj=zCBRCAxE8MXhzT95CTtAin+fPQr3DSJ46fA@mail.gmail.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sun, 26 May 2024 01:43:05 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQCq+hGm2CJz149fiCs5sOAZ15HmeYbmWK0h70KF5sFxw@mail.gmail.com>
-Message-ID: <CAK7LNAQCq+hGm2CJz149fiCs5sOAZ15HmeYbmWK0h70KF5sFxw@mail.gmail.com>
-Subject: Re: [PATCH 2/3] kbuild: remove PROVIDE() for kallsyms symbols
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nicolas@fjasle.eu>, linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZlC0IkzpQdeGj+a3@andrea>
 
-On Thu, May 23, 2024 at 6:32=E2=80=AFPM Ard Biesheuvel <ardb@kernel.org> wr=
-ote:
->
-> On Wed, 22 May 2024 at 13:48, Masahiro Yamada <masahiroy@kernel.org> wrot=
-e:
-> >
-> > This reimplements commit 951bcae6c5a0 ("kallsyms: Avoid weak references
-> > for kallsyms symbols").
-> >
-> > I am not a big fan of PROVIDE() because it always satisfies the linker
-> > even in situations that should result in a link error. In other words,
-> > it can potentially shift a compile-time error into a run-time error.
-> >
->
-> I don't disagree. However, I did realize that, in this particular
-> case, we could at least make the preliminary symbol definitions
-> conditional on CONFIG_KALLSYMS rather than always providing them.
+On Fri, May 24, 2024 at 05:37:06PM +0200, Andrea Parri wrote:
+> > - While checking the information below using herd7, I've observed some
+> >   "strange" behavior with spin_is_locked() (perhaps, unsurprisingly...);
+> >   IAC, that's also excluded from this table/submission.
+> 
+> For completeness, the behavior in question:
+> 
+> $ cat T.litmus 
+> C T
+> 
+> {}
+> 
+> P0(spinlock_t *x)
+> {
+> 	int r0;
+> 
+> 	spin_lock(x);
+> 	spin_unlock(x);
+> 	r0 = spin_is_locked(x);
+> }
+> 
+> $ herd7 -conf linux-kernel.cfg T.litmus
+> Test T Required
+> States 0
+> Ok
+> Witnesses
+> Positive: 0 Negative: 0
+> Condition forall (true)
+> Observation T Never 0 0
+> Time T 0.00
+> Hash=6fa204e139ddddf2cb6fa963bad117c0
+> 
+> Haven't been using spin_is_locked for a while...  perhaps I'm doing
+> something wrong?  (IAC, will have a closer look next week...)
 
+It turns out the problem lies in the way lock.cat tries to calculate the 
+rf relation for RU events (a spin_is_locked() that returns False).  The 
+method it uses amounts to requiring that such events must read from the 
+lock's initial value or an LU event (a spin_unlock()) in a different 
+thread.  This clearly is wrong, and glaringly so in this litmus test 
+since there are no other threads!
 
-Fair enough. I am fine with dropping this statement.
+A patch to fix the problem and reorganize the code a bit for greater 
+readability is below.  I'd appreciate it if people could try it out on 
+various locking litmus tests in our archives.
 
-
-
-
->
-> This approach is also fine with me, though.
->
->
-> > Duplicating kallsyms_* in vmlinux.lds.h also reduces maintainability.
-> >
-> > As an alternative solution, this commit prepends one more kallsyms step=
-.
-> >
-> >     KSYMS   .tmp_vmlinux.kallsyms0.S          # added
-> >     AS      .tmp_vmlinux.kallsyms0.o          # added
-> >     LD      .tmp_vmlinux.btf
-> >     BTF     .btf.vmlinux.bin.o
-> >     LD      .tmp_vmlinux.kallsyms1
-> >     NM      .tmp_vmlinux.kallsyms1.syms
-> >     KSYMS   .tmp_vmlinux.kallsyms1.S
-> >     AS      .tmp_vmlinux.kallsyms1.o
-> >     LD      .tmp_vmlinux.kallsyms2
-> >     NM      .tmp_vmlinux.kallsyms2.syms
-> >     KSYMS   .tmp_vmlinux.kallsyms2.S
-> >     AS      .tmp_vmlinux.kallsyms2.o
-> >     LD      vmlinux
-> >
-> > Step 0 takes /dev/null as input, and generates .tmp_vmlinux.kallsyms0.o=
-,
-> > which has a valid kallsyms format with the empty symbol list, and can b=
-e
-> > linked to vmlinux. Since it is really small, the added compile-time cos=
-t
-> > is negligible.
-> >
->
-> OK, so the number of linker invocations is the same, right? The
-> difference is that the kallsyms symbol references are satisfied by a
-> dummy object?
+Alan
 
 
-Correct.
+---
+ tools/memory-model/lock.cat |   61 +++++++++++++++++++++++++-------------------
+ 1 file changed, 36 insertions(+), 25 deletions(-)
 
-In 3/3, I even reduce the number of link steps
-when both CONFIG_DEBUG_INFO_BTF and CONFIG_KALLSYMS are enabled.
+Index: usb-devel/tools/memory-model/lock.cat
+===================================================================
+--- usb-devel.orig/tools/memory-model/lock.cat
++++ usb-devel/tools/memory-model/lock.cat
+@@ -54,6 +54,12 @@ flag ~empty LKR \ domain(lk-rmw) as unpa
+  *)
+ empty ([LKW] ; po-loc ; [LKR]) \ (po-loc ; [UL] ; po-loc) as lock-nest
+ 
++(*
++ * In the same way, spin_is_locked() inside a critical section must always
++ * return True (no RU events can be in a critical section for the same lock).
++ *)
++empty ([LKW] ; po-loc ; [RU]) \ (po-loc ; [UL] ; po-loc) as nested-is-locked
++
+ (* The final value of a spinlock should not be tested *)
+ flag ~empty [FW] ; loc ; [ALL-LOCKS] as lock-final
+ 
+@@ -79,42 +85,47 @@ empty ([UNMATCHED-LKW] ; loc ; [UNMATCHE
+ (* rfi for LF events: link each LKW to the LF events in its critical section *)
+ let rfi-lf = ([LKW] ; po-loc ; [LF]) \ ([LKW] ; po-loc ; [UL] ; po-loc)
+ 
+-(* rfe for LF events *)
++(* Utility macro to convert a single pair to a single-edge relation *)
++let pair-to-relation p = p ++ 0
++
++(*
++ * Given an LF event r outside a critical section, r cannot read
++ * internally but it may read from an LKW event in another thread.
++ * Compute the relation containing these possible edges.
++ *)
++let possible-rfe-noncrit-lf r = (LKW * {r}) & loc & ext
++
++(* Compute set of sets of possible rfe edges for LF events *)
+ let all-possible-rfe-lf =
+-	(*
+-	 * Given an LF event r, compute the possible rfe edges for that event
+-	 * (all those starting from LKW events in other threads),
+-	 * and then convert that relation to a set of single-edge relations.
+-	 *)
+-	let possible-rfe-lf r =
+-		let pair-to-relation p = p ++ 0
+-		in map pair-to-relation ((LKW * {r}) & loc & ext)
++	(* Convert the possible-rfe relation for r to a set of single edges *)
++	let set-of-singleton-rfe-lf r =
++		map pair-to-relation (possible-rfe-noncrit-lf r)
+ 	(* Do this for each LF event r that isn't in rfi-lf *)
+-	in map possible-rfe-lf (LF \ range(rfi-lf))
++	in map set-of-singleton-rfe-lf (LF \ range(rfi-lf))
+ 
+ (* Generate all rf relations for LF events *)
+ with rfe-lf from cross(all-possible-rfe-lf)
+ let rf-lf = rfe-lf | rfi-lf
+ 
+ (*
+- * RU, i.e., spin_is_locked() returning False, is slightly different.
+- * We rely on the memory model to rule out cases where spin_is_locked()
+- * within one of the lock's critical sections returns False.
++ * Given an RU event r, r may read internally from the last po-previous UL,
++ * or it may read from a UL event in another thread or the initial write.
++ * Compute the relation containing these possible edges.
+  *)
+-
+-(* rfi for RU events: an RU may read from the last po-previous UL *)
+-let rfi-ru = ([UL] ; po-loc ; [RU]) \ ([UL] ; po-loc ; [LKW] ; po-loc)
+-
+-(* rfe for RU events: an RU may read from an external UL or the initial write *)
+-let all-possible-rfe-ru =
+-	let possible-rfe-ru r =
+-		let pair-to-relation p = p ++ 0
+-		in map pair-to-relation (((UL | IW) * {r}) & loc & ext)
+-	in map possible-rfe-ru RU
++let possible-rf-ru r = (((UL * {r}) & po-loc) \
++			([UL] ; po-loc ; [UL] ; po-loc)) |
++		(((UL | IW) * {r}) & loc & ext)
++
++(* Compute set of sets of possible rf edges for RU events *)
++let all-possible-rf-ru =
++	(* Convert the possible-rf relation for r to a set of single edges *)
++	let set-of-singleton-rf-ru r =
++		map pair-to-relation (possible-rf-ru r)
++	(* Do this for each RU event r *)
++	in map set-of-singleton-rf-ru RU
+ 
+ (* Generate all rf relations for RU events *)
+-with rfe-ru from cross(all-possible-rfe-ru)
+-let rf-ru = rfe-ru | rfi-ru
++with rf-ru from cross(all-possible-rf-ru)
+ 
+ (* Final rf relation *)
+ let rf = rf | rf-lf | rf-ru
 
-
-
-
-
->
-> That seems reasonable to me.
->
-> For the series,
->
-> Acked-by: Ard Biesheuvel <ardb@kernel.org>
->
-
-
---=20
-Best Regards
-Masahiro Yamada
 
