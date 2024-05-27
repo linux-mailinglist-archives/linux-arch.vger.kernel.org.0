@@ -1,110 +1,218 @@
-Return-Path: <linux-arch+bounces-4541-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4542-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 519858CFAF4
-	for <lists+linux-arch@lfdr.de>; Mon, 27 May 2024 10:07:24 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB9058CFFEE
+	for <lists+linux-arch@lfdr.de>; Mon, 27 May 2024 14:23:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D42B31F21D31
-	for <lists+linux-arch@lfdr.de>; Mon, 27 May 2024 08:07:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 60B6DB23E9D
+	for <lists+linux-arch@lfdr.de>; Mon, 27 May 2024 12:23:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE1B73C463;
-	Mon, 27 May 2024 08:07:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b6t26XGW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3848C15D5DF;
+	Mon, 27 May 2024 12:23:14 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B2223B79F;
-	Mon, 27 May 2024 08:07:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FFC43C463;
+	Mon, 27 May 2024 12:23:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716797234; cv=none; b=sXN4pYYGswqp1PQaCHhqJrKrU0Ph627cri5bwXcu5bgsLIpfiSRGUL6b2KC7kGLEsFsCPuZN1LhY23rkmzo7c+W+kZjue53jM3PI6ThE7Sml6jKxcscQT1MRJ8HnwCs23JfKQwd85VqkJdPJ10BUHzhgyqK0jd9E963EKg4ZfOs=
+	t=1716812594; cv=none; b=crvWafTi045foNSzNHAiYGWDEzSFUGx+sO3X36zfVnFnR1VADXNz+BqMzQ0vV8i88CL2rQ5fkqDKQGEKsZ+u3cSl+7ix0AUqJ8hQnd/KUeBXPWZ/f+dVo6YwurPm40x+eYe/DGr2HzDUZyDHUSxoy+qUvSrzju69Z184sqecELA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716797234; c=relaxed/simple;
-	bh=JW2Yz0SvJ2VIth2EGq/w8wxKWAupzo/M2exOJJXrJxA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=q+bVmc6NqJhjLoy/719XCtfFhAkSg7gOzVM1CxK/ITPl/UEIVY4Kxyxw0zwDVE0c/GpvWb5UOIosScPOuEv8EB/QXJM9gUQ1qfcWTgnDO15fvu5h4celUXzvudJfkY/o9dF1VzOW58WiXvPLCr0uGHOBAKHUDYhP0vbfF3QY8c4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b6t26XGW; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4210aa0154eso13147875e9.0;
-        Mon, 27 May 2024 01:07:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1716797231; x=1717402031; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8zwupHlw5JOC4so0inXfl+e3LXwl4GExIuXIh8Z0Dqo=;
-        b=b6t26XGWIJpc+B4i5wPG/2kiCXJcsio1o0mHS7JVestikQZh88zBL2U3U9TeGRmUzx
-         T5fnWoCYVCSM0ODS2F2uNh+fnSzH25M12RLCBl2TBtB74LlFF4bZUZx7E4CnYRnqpKw6
-         a4S83L+ooH7v+uZ+1X56FT7B/PAwY+00B9eAeOEYH84RT1tRm6/EZvAQO0n/Oybll70p
-         M9X1osvnOMJ3+u7rioCX5SNwCOfW0m+SVcLytVRwmEXe3F+uYy14BQkZ75MyfvOH8g0n
-         gjUJ0HRFhhK7I+N3vo6mgJ2qwQ8XoW9q5Z+kNi8kWajB1JItVVhM8t9tmLBD6ZlJ+v08
-         pVtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716797231; x=1717402031;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8zwupHlw5JOC4so0inXfl+e3LXwl4GExIuXIh8Z0Dqo=;
-        b=DoEYDp006sLCGS6ZfjGsInlw981MKN7SFrBAzZHF3cUXyZKtS3QmDVD+rlTizqBiaf
-         OB4xiK2QFpjQKxC7pClruaIH4frtmwFlirebCtsAdqIqiOYiKkWYAzGPlihaYKVvGdrY
-         3BXdhD4Pss8EezO2Tpbwn+FVMFQxwinryvswizPFuTbUzWasYRanVD0ZZRe1SIQRkxCK
-         EUCzr60juKtle0XFfoukpQ4X84vA7MUfQI5U//m7vqABURnhxwtTd00YqExOZjRz20nY
-         /8VgYxDabByBg5E0apbWsdk3QwCeiBsFBvcY5iSgeFS8IYHlEopUPolN+tnYcttofd3K
-         y0tA==
-X-Forwarded-Encrypted: i=1; AJvYcCXJBZwEHEFUVtfx4yS1IiqNAs3N8YtJkWX3aLQzB/ie6u0PY13gM7FkFKzhdYrj8SLwugt7iBpgYikEB7XZqJPX2xGUF3wP+YZre8jejoPypGaQqgrKaf/LV80CrzoHFaFHToHRrT4Agg==
-X-Gm-Message-State: AOJu0Yx/tRfI+EdNLMWNPIIZEx+9CsNvmWHq9uYYyTHdB6QSN3qyk7XK
-	fFUYMx9MiwXemxHstzpbni/T/erEhwIP4J3kulpjR+e4hyic2R/t
-X-Google-Smtp-Source: AGHT+IGIELjzxKWqwNZfqhftsWzI+FUaf4J+jvqPrTm2kiBoxI1AE7hf94DLuh/xG9TKCi/eE6NDWQ==
-X-Received: by 2002:a5d:598a:0:b0:356:4cd8:8501 with SMTP id ffacd0b85a97d-3564cd8874cmr8310849f8f.37.1716797231306;
-        Mon, 27 May 2024 01:07:11 -0700 (PDT)
-Received: from andrea ([151.76.32.59])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3557a1c9363sm8295932f8f.72.2024.05.27.01.07.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 May 2024 01:07:10 -0700 (PDT)
-Date: Mon, 27 May 2024 10:07:06 +0200
-From: Andrea Parri <parri.andrea@gmail.com>
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
-	npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-	luc.maranget@inria.fr, paulmck@kernel.org, akiyks@gmail.com,
-	dlustig@nvidia.com, joel@joelfernandes.org,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	hernan.poncedeleon@huaweicloud.com,
-	jonas.oberhauser@huaweicloud.com
-Subject: Re: [PATCH] tools/memory-model: Document herd7 (internal)
- representation
-Message-ID: <ZlQ/Ks3I2BYybykD@andrea>
-References: <20240524151356.236071-1-parri.andrea@gmail.com>
- <ZlC0IkzpQdeGj+a3@andrea>
- <cf81a3c2-9754-4130-a67e-67d475678829@rowland.harvard.edu>
+	s=arc-20240116; t=1716812594; c=relaxed/simple;
+	bh=g+274Zd16a/afuTgix5rR0iNpzqwOmfPQ4ggj7SGsRQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IV/96fbmme+SfgESMdzIFc0hEycWg+D2Eg2X3TUpTtdBuPDnHlDGvENeaIg5nBSPnnDk4bwu4a2zm7a+b5pDO9IyFzIlHkyw201dDxPqs9aE0S8NUBPN5VmUjSJyXHjPpPNhHS0dRxgDkQhb/Q6bPaj/DegWXNs+QgPuM0dbirg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.51])
+	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4VnvVd0hshz9v7J2;
+	Mon, 27 May 2024 20:05:45 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id 1AABA1400D5;
+	Mon, 27 May 2024 20:23:02 +0800 (CST)
+Received: from [10.221.98.131] (unknown [10.221.98.131])
+	by APP2 (Coremail) with SMTP id GxC2BwBHgCQZe1RmtJIACQ--.46068S2;
+	Mon, 27 May 2024 13:23:01 +0100 (CET)
+Message-ID: <1a3c892c-903e-8fd3-24a6-2454c2a55302@huaweicloud.com>
+Date: Mon, 27 May 2024 14:22:47 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cf81a3c2-9754-4130-a67e-67d475678829@rowland.harvard.edu>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] tools/memory-model: Document herd7 (internal)
+ representation
+To: Andrea Parri <parri.andrea@gmail.com>, stern@rowland.harvard.edu,
+ will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
+ npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+ luc.maranget@inria.fr, paulmck@kernel.org, akiyks@gmail.com,
+ dlustig@nvidia.com, joel@joelfernandes.org
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ jonas.oberhauser@huaweicloud.com
+References: <20240524151356.236071-1-parri.andrea@gmail.com>
+Content-Language: en-US
+From: Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>
+In-Reply-To: <20240524151356.236071-1-parri.andrea@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:GxC2BwBHgCQZe1RmtJIACQ--.46068S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxtr1ftw1kJF4xKFyUZFWxtFb_yoW7CFWxpr
+	43Gr47Jr4Utw1UGw1DXr4UJF18Ar1FkrW8Xr18Gr18ZF1jkr98Ww1UJr18XryUJryUta17
+	Xw1UKr18Gr4UArDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
+	4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+	I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+	4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
+	c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
+	AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
+	17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
+	IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq
+	3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
+	nIWIevJa73UjIFyTuYvjfUOmhFUUUUU
+X-CM-SenderInfo: xkhu0tnqos00pfhgvzhhrqqx5xdzvxpfor3voofrz/
 
-> It turns out the problem lies in the way lock.cat tries to calculate the 
-> rf relation for RU events (a spin_is_locked() that returns False).  The 
-> method it uses amounts to requiring that such events must read from the 
-> lock's initial value or an LU event (a spin_unlock()) in a different 
-> thread.  This clearly is wrong, and glaringly so in this litmus test 
-> since there are no other threads!
+On 5/24/2024 5:13 PM, Andrea Parri wrote:
+> tools/memory-model/ and herdtool7 are closely linked: the latter is
+> responsible for (pre)processing each C-like macro of a litmus test,
+> and for providing the LKMM with a set of events, or "representation",
+> corresponding to the given macro.  Provide herd-representation.txt
+> to document the representation of synchronization macros, following
+> their "classification" in Documentation/atomic_t.txt.
 > 
-> A patch to fix the problem and reorganize the code a bit for greater 
-> readability is below.  I'd appreciate it if people could try it out on 
-> various locking litmus tests in our archives.
+> Suggested-by: Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>
+> Signed-off-by: Andrea Parri <parri.andrea@gmail.com>
+> ---
+> - Leaving srcu_{up,down}_read() and smp_mb__after_srcu_read_unlock() for
+>    the next version.
+> 
+> - Limiting to "add" and "and" ops (skipping similar/same representations
+>    for "sub", "inc", "dec", "or", "xor", "andnot").
+> 
+> - While preparing this submission, I recalled that atomic_add_unless()
+>    is not listed in the .def file.  I can't remember the reason for this
+>    omission though.
+> 
+> - While checking the information below using herd7, I've observed some
+>    "strange" behavior with spin_is_locked() (perhaps, unsurprisingly...);
+>    IAC, that's also excluded from this table/submission.
+> 
+> 
+>   .../Documentation/herd-representation.txt     | 81 +++++++++++++++++++
+>   1 file changed, 81 insertions(+)
+>   create mode 100644 tools/memory-model/Documentation/herd-representation.txt
+> 
+> diff --git a/tools/memory-model/Documentation/herd-representation.txt b/tools/memory-model/Documentation/herd-representation.txt
+> new file mode 100644
+> index 0000000000000..94d0d0a9eee50
+> --- /dev/null
+> +++ b/tools/memory-model/Documentation/herd-representation.txt
+> @@ -0,0 +1,81 @@
+> +    ---------------------------------------------------------------------------
+> +    |                     C macro | Events                                    |
+> +    ---------------------------------------------------------------------------
+> +    |                 Non-RMW ops |                                           |
+> +    ---------------------------------------------------------------------------
+> +    |                   READ_ONCE | R[once]                                   |
+> +    |                 atomic_read | (as in the previous row)                  |
+> +    |                  WRITE_ONCE | W[once]                                   |
+> +    |                  atomic_set |                                           |
+> +    |            smp_load_acquire | R[acquire]                                |
+> +    |         atomic_read_acquire |                                           |
+> +    |           smp_store_release | W[release]                                |
+> +    |          atomic_set_release |                                           |
+> +    |                smp_store_mb | W[once] ->po F[mb]                        |
 
-Thanks for the quick solution, Alan.  The results from our archives look
-good.
+I expect this one to be hard-coded in herd7 source code, but I cannot 
+find it. Can you give me a pointer?
 
-  Andrea
+In fact, dartagnan uses W[Mb] ... another clear example of the need for 
+documentation as this one.
+
+> +    |                      smp_mb | F[mb]                                     |
+> +    |                     smp_rmb | F[rmb]                                    |
+> +    |                     smp_wmb | F[wmb]                                    |
+> +    |       smp_mb__before_atomic | F[before-atomic]                          |
+> +    |        smp_mb__after_atomic | F[after-atomic]                           |
+> +    |                 spin_unlock | UL                                        |
+> +    |      smp_mb__after_spinlock | F[after-spinlock]                         |
+> +    |   smp_mb__after_unlock_lock | F[after-unlock-lock]                      |
+> +    |               rcu_read_lock | F[rcu-lock]                               |
+> +    |             rcu_read_unlock | F[rcu-unlock]                             |
+> +    |             synchronize_rcu | F[sync-rcu]                               |
+> +    |             rcu_dereference | R[once]                                   |
+> +    |          rcu_assign_pointer | W[release]                                |
+> +    |              srcu_read_lock | R[srcu-lock]                              |
+> +    |            srcu_read_unlock | W[srcu-unlock]                            |
+> +    |            synchronize_srcu | SRCU[sync-srcu]                           |
+> +    ---------------------------------------------------------------------------
+> +    |    RMW ops w/o return value |                                           |
+> +    ---------------------------------------------------------------------------
+> +    |                  atomic_add | R*[noreturn] ->rmw W*[once]               |
+> +    |                  atomic_and |                                           |
+> +    |                   spin_lock | LKR ->lk-rmw LKW                          |
+
+What about spin_unlock?
+
+> +    ---------------------------------------------------------------------------
+> +    |     RMW ops w/ return value |                                           |
+> +    ---------------------------------------------------------------------------
+> +    |           atomic_add_return | F[mb] ->po R*[once]                       |
+> +    |                             |     ->rmw W*[once] ->po F[mb]             |
+> +    |            atomic_fetch_add |                                           |
+> +    |            atomic_fetch_and |                                           |
+> +    |                 atomic_xchg |                                           |
+> +    |                        xchg |                                           |
+> +    |         atomic_add_negative |                                           |
+> +    |   atomic_add_return_relaxed | R*[once] ->rmw W*[once]                   |
+> +    |    atomic_fetch_add_relaxed |                                           |
+> +    |    atomic_fetch_and_relaxed |                                           |
+> +    |         atomic_xchg_relaxed |                                           |
+> +    |                xchg_relaxed |                                           |
+> +    | atomic_add_negative_relaxed |                                           |
+> +    |   atomic_add_return_acquire | R*[acquire] ->rmw W*[once]                |
+> +    |    atomic_fetch_add_acquire |                                           |
+> +    |    atomic_fetch_and_acquire |                                           |
+> +    |         atomic_xchg_acquire |                                           |
+> +    |                xchg_acquire |                                           |
+> +    | atomic_add_negative_acquire |                                           |
+> +    |   atomic_add_return_release | R*[once] ->rmw W*[release]                |
+> +    |    atomic_fetch_add_release |                                           |
+> +    |    atomic_fetch_and_release |                                           |
+> +    |         atomic_xchg_release |                                           |
+> +    |                xchg_release |                                           |
+> +    | atomic_add_negative_release |                                           |
+> +    ---------------------------------------------------------------------------
+> +    |         Conditional RMW ops |                                           |
+> +    ---------------------------------------------------------------------------
+> +    |              atomic_cmpxchg | On success: F[mb] ->po R*[once]           |
+> +    |                             |                 ->rmw W*[once] ->po F[mb] |
+> +    |                             |     On failure: R*[once]                  |
+> +    |                     cmpxchg |                                           |
+> +    |           atomic_add_unless |                                           |
+> +    |      atomic_cmpxchg_relaxed | On success: R*[once] ->rmw W*[once]       |
+> +    |                             |     On failure: R*[once]                  |
+> +    |      atomic_cmpxchg_acquire | On success: R*[acquire] ->rmw W*[once]    |
+> +    |                             |     On failure: R*[once]                  |
+> +    |      atomic_cmpxchg_release | On success: R*[once] ->rmw W*[release]    |
+> +    |                             |     On failure: R*[once]                  |
+> +    |                spin_trylock | On success: LKR ->lk-rmw LKW              |
+> +    |                             |     On failure: LF                        |
+> +    ---------------------------------------------------------------------------
+
+I found the extra spaces in the failure case very hard to read. Any 
+particular reason why you went with this format?
+
+Hernan
+
 
