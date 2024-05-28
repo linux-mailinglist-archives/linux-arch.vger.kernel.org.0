@@ -1,72 +1,72 @@
-Return-Path: <linux-arch+bounces-4567-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4568-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 260218D22E6
-	for <lists+linux-arch@lfdr.de>; Tue, 28 May 2024 20:00:40 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1378C8D232F
+	for <lists+linux-arch@lfdr.de>; Tue, 28 May 2024 20:16:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 560A31C22D73
-	for <lists+linux-arch@lfdr.de>; Tue, 28 May 2024 18:00:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 43784B21C85
+	for <lists+linux-arch@lfdr.de>; Tue, 28 May 2024 18:16:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AACD431A89;
-	Tue, 28 May 2024 18:00:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13C123A1B5;
+	Tue, 28 May 2024 18:16:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GDnSQ7ay"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PDGn4m4r"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CA2E3D393;
-	Tue, 28 May 2024 18:00:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 790002E64C;
+	Tue, 28 May 2024 18:16:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716919235; cv=none; b=RaE1sJYP3HQ4iBIpt+EEGEYlenrLtIXq/liryVjXoMDOCrervH9A3zcmKfR6FNxfRuvcVlPQgGObMiQKsgq09LzcObVmti/GSEPYOS6IhAzuYrjvwM6cpVmDqE366ft1zjXebjlMZAYO8gUIxPjltYxeAjzDcvPjYNm6oezieks=
+	t=1716920200; cv=none; b=frrFtK7uylhpCpY7l+3TP6eWGimBdrZEMO0uAWadIOxEHtopmjvSUFZsUoCSn2b7WOGmU+H73l6lV1ogDVtrVxAsr4xkckzxfszlRSQqjC9vvAHVPaIFfkuKQLzYadZO40pXnilrJq8m73WAyRS7qOPISCeVcSLvhjGv0Zhy6V0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716919235; c=relaxed/simple;
-	bh=HTi4edYcJ+nU8knFjd7zyAuvpyUOEoajt4ywPw8se+E=;
+	s=arc-20240116; t=1716920200; c=relaxed/simple;
+	bh=1uRESX6KymYG8m8CUzqHk9mV+NXOdIDmZXgfbN7q8Us=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kDAWsJTHLlUZT5NaJOObhtbH5fVYP27cP5XlvWej58kMFPSZV8zIKMcYkA6fkkvfRXJXn1C6xcddbMgR62RI/l4ic9QHDVNVif17NlYnHIPEi2f6JLLHcv01c+dZMPRyOsAo5o1V1xdml9+6i5ezFD30wM7BcaJcmdWXFTjCcL0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GDnSQ7ay; arc=none smtp.client-ip=209.85.208.53
+	 Content-Type:Content-Disposition:In-Reply-To; b=lUqQi4O2eVPY4gxMj/cV0BgW02FBP8RWNoaMduAjmRU/xdi/hK5akF4BXusvtO21ldrBMyY0NYu6iErfRZazsT7x3WvTI+SlQ8gQ8L24hpBRSgVN/WJYg6iDDQbGvc4UoOsy6/+U+VUQ1Nou1dtGFHfALi/UsPI3F9cXHQjXkCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PDGn4m4r; arc=none smtp.client-ip=209.85.208.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5788eaf5366so1364947a12.2;
-        Tue, 28 May 2024 11:00:33 -0700 (PDT)
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-5789733769dso109894a12.1;
+        Tue, 28 May 2024 11:16:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1716919232; x=1717524032; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1716920197; x=1717524997; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/eecjvGqvQVC6ZWS6Qar373HjapbDvtdOZ42+zPeWi0=;
-        b=GDnSQ7ay5ngiQN5tO02t8xbXxZVnqIdUYb4D5qyKXpV8vVos/FKFaTXHst31gTCeuS
-         FI3e/EjTPzjluSG7hzqYzscYBm2RKwWZHUGYPZtCZ4yYNAmhG2XBSdSmaa24VgXq/N6S
-         +l5aWba5y58wxonwMqzHMjQUk7QGBK8nY3sN016R1ZtKJb0WgLBzguNNMP4F+IJB3iCk
-         dmSxApVFlWQOxmBRCenpc5J7RjrI65tt6/iq5WkcbNdCNDf7S0EvHHrZDwpy7cDZ3oN+
-         uJQ3HnWRZZ3RAPGRxQVVl8dZxir/nADmr23N8q39uBHAOERcAp49gzBP3YCVrwqwuZN8
-         6vBQ==
+        bh=R++hvr7nzebtIxTs2CU6HsOf5klg6lcgJyuQ+SjZMnE=;
+        b=PDGn4m4rH47SYgQrlVmr0x8XIT8fWWW9pcBx7GeBzFcsXxto6Ar70xaKIizDiCU8bD
+         sJ3O2UvzdFFB/KWWCaBRUWpePZl4aUMFR48bMfL8v/o0t4SPYHoeX77p2Rp8rS3tiQdw
+         anMFBcEjCQPvMLDOcIzC71YsASgLs+ZuiAAWAtOsWeytGEvXw5flKroABTVuWaVNgC4J
+         Nb47LSjFFnP++9c+se693yuFimoji5p/7c+YdbIAxLUFiD85KjvpyhAxuahDl+D+CtjW
+         9E8N3DDyH+A+APK8NOPDL1U9mpUrfTMmSb/1sqCBfgNwRNDTS2Prvr8yP/K1pLn0IQox
+         SWWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716919232; x=1717524032;
+        d=1e100.net; s=20230601; t=1716920197; x=1717524997;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/eecjvGqvQVC6ZWS6Qar373HjapbDvtdOZ42+zPeWi0=;
-        b=V5t8OCnno+PO529DkFHiziZQSVHwhYUA6DS/YuYw0W+tnItZ9ax7j8hfA9ZidjNiUb
-         sclgZ0PNfqBbU+wiL0qDvI6zSDNrrb7VDDIX842xUxuaWKVpDMMaXIR2WrxYDmKEr4md
-         f7wph4ZXM4c8Tf4Otis5PJZxcpe7nsWWG4sj+2kidMOKpPP3IVQxr0bEw7e395NIooMm
-         weLb8NvqAX0oO0/LfO3+Yw26JPf3V8CZte8U2I3z0ulvrHu8ZYJHKN2iJfvVVw0xNrQi
-         I0JODbqT3lamKjHOAU4Aq3x+zRVtJHJxd5tMTLC1OBY2ekWoxBTVQbNs7fOM5TcyFPeQ
-         BccQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVxhJn5KK4ZDU9ceKtaovdSa1bvZFV2s1iosmxpCLDwFX7gqhF6ktQQG0GC1ODLkMtECyxyAGjVl3wdeCPPbn5/PyMAVT53w537eTGFIBC2qhq7Hf3GZFwZLxFHpmSF02W+k8mn6u6HEeGhM7PPt/s18Kxpa66IEDQDWFKoOUfGqJfF9g==
-X-Gm-Message-State: AOJu0Yxk00/tzX47dD026y8dMiR25VjpnR2Ro8BUz7gMZ9lkUik5QIw+
-	6yinlY0+v89g0rLflbTJvcjaTY/TqvyDGdiVefEnmF2cgHac/p2I
-X-Google-Smtp-Source: AGHT+IEO4l+HTjYGVCjXbbD0O8/ek58vjia6UWCUjps9g02FYVlxFnqF5M3Q6IdqFSApclX99EyMUA==
-X-Received: by 2002:a17:906:c20e:b0:a5a:1871:e2a1 with SMTP id a640c23a62f3a-a62649bcfebmr930552566b.33.1716919232133;
-        Tue, 28 May 2024 11:00:32 -0700 (PDT)
+        bh=R++hvr7nzebtIxTs2CU6HsOf5klg6lcgJyuQ+SjZMnE=;
+        b=YjGvZf1hjuODKLYaOQ/skc7ZmG1ntqJFy0BAXDMHB5MDisB3W6yArSOV2t9CIlXtHh
+         8jOMAaIj91pFi8vODt1jy5zke3hXNZ221HuICl2eOvw5V6VM1UihxhtId1SgKSUSqObF
+         YxzlA5GjKF4eqosTZZWyi0hJ0eE46xyG97hJL6qdFXN9CmYsawpYrUwYWDT8Y5xZaYJA
+         JGUDVd4pGkOCJIvAa3TFFjkPv1sm8e8wRGxnX+gqp8xLtXKvkkvxqdBgaV99Yw3NHjgu
+         2Iuuob5nMgYKvyp4WyNHXpWezuTf5Ir1AYT/2lnNDEHTPh203nr93q4mS1xgcEBX1FUk
+         g24Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVgG9qOV5hYTt5occb2JeOYnmpEOqAMjk3ZB0nZGig2cClmmhzParJVZWdViPS5CRiWjLsQfVI9EXJjmzt6hQpKsFVCFWkk83WdSZomdGJOIn6NTMhl2bNwSBGOxnPuiEJnAQdbK/s/qLY7mE495zlhPuqANj/WQ0bsGV8SFp2LWZXSSw==
+X-Gm-Message-State: AOJu0YwINaMlUR4g8o/jYwE4Obd7MPB+X6I1v0FQOx0y8nXjkD631WCN
+	cPjl0kPGFpP1vlFLdIiQS3gLgFlRW6RTauGeOSVr+flnfQjxJjsD
+X-Google-Smtp-Source: AGHT+IHHlxn9HQL0alkg34k8cLrkz+dMOEar28FIIBD1BfkeQ51ARQuTKg6QUl77or34Ks1j6M/LsA==
+X-Received: by 2002:a17:906:d799:b0:a62:196e:ef45 with SMTP id a640c23a62f3a-a623e8f6f57mr1424154366b.19.1716920196587;
+        Tue, 28 May 2024 11:16:36 -0700 (PDT)
 Received: from andrea ([151.76.32.59])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a639ef1da1csm13068566b.147.2024.05.28.11.00.30
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a62c501e85dsm394788766b.117.2024.05.28.11.16.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 May 2024 11:00:31 -0700 (PDT)
-Date: Tue, 28 May 2024 20:00:26 +0200
+        Tue, 28 May 2024 11:16:36 -0700 (PDT)
+Date: Tue, 28 May 2024 20:16:31 +0200
 From: Andrea Parri <parri.andrea@gmail.com>
 To: Alexandre Ghiti <alexghiti@rivosinc.com>
 Cc: Jonathan Corbet <corbet@lwn.net>,
@@ -80,10 +80,10 @@ Cc: Jonathan Corbet <corbet@lwn.net>,
 	Guo Ren <guoren@kernel.org>, linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
 	linux-arch@vger.kernel.org
-Subject: Re: [PATCH 4/7] riscv: Implement xchg8/16() using Zabha
-Message-ID: <ZlYbupL5XgzgA0MX@andrea>
+Subject: Re: [PATCH 1/7] riscv: Implement cmpxchg32/64() using Zacas
+Message-ID: <ZlYff9x12FICHoP0@andrea>
 References: <20240528151052.313031-1-alexghiti@rivosinc.com>
- <20240528151052.313031-5-alexghiti@rivosinc.com>
+ <20240528151052.313031-2-alexghiti@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -92,31 +92,47 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240528151052.313031-5-alexghiti@rivosinc.com>
+In-Reply-To: <20240528151052.313031-2-alexghiti@rivosinc.com>
 
-> -#define __arch_xchg_masked(prepend, append, r, p, n)			\
-> +#define __arch_xchg_masked(swap_sfx, prepend, append, r, p, n)		\
+> +	asm goto(ALTERNATIVE("nop", "j %[zacas]", 0,			\
+> +			     RISCV_ISA_EXT_ZACAS, 1)			\
+> +			: : : : zacas);					\
+> +									\
+>  	__asm__ __volatile__ (						\
+>  		prepend							\
+>  		"0:	lr" lr_sfx " %0, %2\n"				\
+>  		"	bne  %0, %z3, 1f\n"				\
+> -		"	sc" sc_sfx " %1, %z4, %2\n"			\
+> +		"	sc" sc_cas_sfx " %1, %z4, %2\n"			\
+>  		"	bnez %1, 0b\n"					\
+>  		append							\
+>  		"1:\n"							\
+>  		: "=&r" (r), "=&r" (__rc), "+A" (*(p))			\
+>  		: "rJ" (co o), "rJ" (n)					\
+>  		: "memory");						\
+> +	goto end;							\
+> +									\
+> +zacas:									\
+> +	__asm__ __volatile__ (						\
+> +		prepend							\
+> +		"	amocas" sc_cas_sfx " %0, %z2, %1\n"		\
+> +		append							\
+> +		: "+&r" (r), "+A" (*(p))				\
+> +		: "rJ" (n)						\
+> +		: "memory");						\
 
-This actually indicates a problem in the current (aka, no Zabha)
-implementation: without your series, xchg16() gets mapped to
+With this, a cmpxchg32() will result in something like
 
-  lr.w     a2,(a3)
-  and      a1,a2,a5
-  or       a1,a1,a4
-  sc.w     a1,a1,(a3)
-  bnez     a1,43c <.L0^B1>
+  amocas.w.rl     a5,a4,(s1)
+  fence           rw,rw
 
-which is clearly wrong... (other "fully-ordered LR/SC sequences"
-instead follow the mapping
+(cf. my remarks in patch #4); this will/should provide enough sync,
+but you might want to try the alternative and currently more common
+mapping for "fully-ordered AMO sequences", aka
 
-  lr.w     a2,(a3)
-  and      a1,a2,a5
-  or       a1,a1,a4
-  sc.w.rl  a1,a1,(a3)
-  bnez     a1,43c <.L0^B1>
-  fence    rw,rw  )
+  amocas.w.aqrl   a5,a4,(s1)
 
-A similar consideration for xchg8().
+Similarly for cmpxchg64 and other sizes.
 
   Andrea
 
