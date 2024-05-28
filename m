@@ -1,175 +1,136 @@
-Return-Path: <linux-arch+bounces-4554-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4555-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 480898D19B6
-	for <lists+linux-arch@lfdr.de>; Tue, 28 May 2024 13:36:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 523B58D1FE1
+	for <lists+linux-arch@lfdr.de>; Tue, 28 May 2024 17:12:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F17182866E0
-	for <lists+linux-arch@lfdr.de>; Tue, 28 May 2024 11:36:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 74E3A1C22F82
+	for <lists+linux-arch@lfdr.de>; Tue, 28 May 2024 15:12:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 726A816C6A5;
-	Tue, 28 May 2024 11:36:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D84F1171652;
+	Tue, 28 May 2024 15:10:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="hZ78wS4o";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="LKdIValk"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="m7/NlM3S"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from wfout4-smtp.messagingengine.com (wfout4-smtp.messagingengine.com [64.147.123.147])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE21016C840;
-	Tue, 28 May 2024 11:35:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.147
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8FC9171083
+	for <linux-arch@vger.kernel.org>; Tue, 28 May 2024 15:10:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716896161; cv=none; b=sBV+DNm89c5CsMu/UZBvOk9kwbueFO3HRm7rV817xu0BkNzCnCBBVu55btY1Rgq9cati+9Ooq3gPkkNxAt0Z3vRYOiKPWZFeqFIb1DGy2QSdN/LpcvlmvBe7JZiYiCHNnReF9s7ksdW1nWpAs9tPDWxsTuX+slO0kMtQytvJuaw=
+	t=1716909059; cv=none; b=Cx3ecuH8GgJTx73zg5N4AFbMl+sH7B+/AIrElFtIopjJRw4K3dNVgVYEwHDB82xfuwDWyAbWXRi8IeotmwZ5PPHTCDoHM1FyXvooPRenZCwIabWN+mqb+eNmlv7p6xie9rAuMSfyM5SFTUvCCDQfWCkdKNqDCY4cFlx9/rTRq2E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716896161; c=relaxed/simple;
-	bh=jFZXicEE6r2ZgbR45j79punfT8HXTNnMc7smmAivjRA=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=T96+OB4h9FrfN4m67zFff3hCiqI9+aI2eruBtOGAXnl4330WtAMfUamubHsvfLesI1e2iaBW0wOqwn5UZHzGjUFKBnRTFUouuyWPhPQGj6lIT7cNZWawLTOxbo/QO1zyBt5B5pEPjknjid9ugDxIB4rb82c3oWYzD9huxYdvPtA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=hZ78wS4o; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=LKdIValk; arc=none smtp.client-ip=64.147.123.147
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfout.west.internal (Postfix) with ESMTP id B54BD1C00179;
-	Tue, 28 May 2024 07:35:57 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Tue, 28 May 2024 07:35:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1716896157; x=1716982557; bh=Ol7jO+/V1Y
-	fPpFVSV5jUah0yPkjfrGrX9WAAgHtbTLo=; b=hZ78wS4owIYvRnqNcJ9zGfh2iV
-	29FeERqf3tpc8bFg+119EFqupV4BcHaAixDPQ47HIBf8Va8r8u53824y7iiTbej1
-	MQ3Ke5XbklsNLFtST6f7l9RTYPqbHEMJDAnZMzX+kGBk2MB4d0k1z23r2WDbgVrg
-	UBwkOCAHYD6SFAULTM/yWP6U78j89HNt7iI/+Y7q2Ql1c161o27u5Yxhmp2v7ARr
-	sDFdO+96dQ225yu/Ii5e1lTtKoyOYwfIHiI0XWKmHqgqj+YGIYByqaYCNfpJ93lc
-	6ArP5tRztJw096mbCSMpnzOeYGRcjCLM7nqvtXrhnSd9twjdWIjJsh2HIgPg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1716896157; x=1716982557; bh=Ol7jO+/V1YfPpFVSV5jUah0yPkjf
-	rGrX9WAAgHtbTLo=; b=LKdIValkUX29uWFgX5KgpSQVm0yXzqOkReHvvYMzUm+9
-	ExhSup/6OzeBkUR5DXy+puro6xhfaLxUZNx5kvtYDBYfZpzZohrP2PCuNxR4ajSj
-	Yn8uN3xZrTiaHZTTbtcarB8EATSdnFlQDCsoDm9F4Q6C+GmHBQBddku2wu+j9mMz
-	80l4SOr4R47zcy1jIrfdPP5IZ0Nv7r+gELqY+vT8cpZr9xUny9sw+a4Kw2Lna5hZ
-	0u2zN6Hi/VqUTAC2yQ/YYLXNxm4kwQfPFOjMAtvV27r6StED/Snt/kUe/ZjuK49B
-	B6DnjNG/4ycIwMX+mgoY6uhuCE+OaoncVm8mviv19w==
-X-ME-Sender: <xms:ncFVZusps8MWQSH-dHY1h1l4dzkxCQLLuGf_MNovm0bEnohNg2dIew>
-    <xme:ncFVZjcXjAHp9BIQ7PIuZNTVMSHLHXqyTmQFaQ13zDAW4-2Xw4yw0zoKX84WoEr6p
-    YfNFIG9wDZPl0dlRwI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvdejkedgudehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:ncFVZpyklZXOsQhzaV6ANYCsXeccqVs3Qr8cqaVu5DBISxWaL73cTg>
-    <xmx:ncFVZpOqTm-o2yGPweFMDRnQKihWkkr1yN13tbT-4E629rk7U107-g>
-    <xmx:ncFVZu92hgdGZ9Sd9pAnhRvscY6gMI_tRQAJXJpzKTU8NEIxHi0cYA>
-    <xmx:ncFVZhX6VWqtl6iOxPyjzhjQtS9-6ohJJZC8wITAuShIC0Pfs6PZow>
-    <xmx:ncFVZiaxhTGGmMouGpEhLsmQCUxA_yjYOeP91tCDt2Dcj3G1zmLeKALI>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 116C4B6008D; Tue, 28 May 2024 07:35:56 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-491-g033e30d24-fm-20240520.001-g033e30d2
+	s=arc-20240116; t=1716909059; c=relaxed/simple;
+	bh=CJR5ijuAPP0OxGC2o3LndPnStx7BgQTf9sVBO3oNvzo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=k353SMlv6IRZciz+ENqWMuYeKXpedzvtx3RdF5hubjzS1bOTS/6nY4CxmshbOS73uLv6FW87SPpoLGXvhwsTZNZErSZwB/LiOXGVwDvszoDmbeBBDcpx88WFORXZG/YPVOuGne+1sr1sBtlNsIFwzPTGXJjg80gqn7wSwhLxgZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=m7/NlM3S; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4202ca70289so7684955e9.1
+        for <linux-arch@vger.kernel.org>; Tue, 28 May 2024 08:10:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1716909055; x=1717513855; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=k0AGpQFir7bYkY6Hm/qOL+w8L3+MGNDSpFH+GMgURdQ=;
+        b=m7/NlM3SphncbkbnwVkDjnP9JpIRjqVX89ff5dRcH0RkRw7lXcjxigQcCZa7prbWje
+         almcX48vDmdlcWGaA1L6APIwY6fXRs+p/oUpW6MHwRz2N8v52uAh7e1zwAHu8LnjaLWE
+         F5j13D/UKuVIeTnPYGG370f78BrGISkWKjQ31ZF26YvN88IkIIoMiJ+I35JOL8zJbIPh
+         z07WreENbZHzt3Vd8KEkKhYKO3h5TTfQ0woJyalKc7+di4j/JYUh/9gY5v7nqsug+UNa
+         zvAXPjwqBoxac8zpbuD0oKvhoLa9BD8Hf79FmfgvIaBA+1hObTptoaAOsVR6JGSZD++f
+         RPiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716909055; x=1717513855;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=k0AGpQFir7bYkY6Hm/qOL+w8L3+MGNDSpFH+GMgURdQ=;
+        b=J4f6m5g1TiCR9Z0BoL+SVZPOr7BCEGGoViO01AVapplKqSWN7NgLPi2stTboSGNKSP
+         fRTTwSK2UXssaZOObmg7BmIeZ+2ElaGW6c49Xw8fi/YMDZwe3nrvFqux7r1duTqqu9In
+         pV2Y2Sq28VKMCJvBGa53b4xzCUXnKgSAgkUCALRYJYec2F6ZzmgHOCBgwl65nB9V3UeM
+         OKSuzyfzCuyvumKHxp1ex5l5YgcKrzgTwnfFDvS/7mLLpCgHVFsmVSsBVf0TuDc5FhyU
+         xqdQT/hLfNR9cuDrheZBMZIHOgHBd+BO/snXQo4YdKF0Vz4/7VNMXOfazymkYUt4MFXM
+         Ln/g==
+X-Forwarded-Encrypted: i=1; AJvYcCXO7RuXJ7wxUZdOa4oKruKNr5fmq1FvB56Z3yrZmGIrLvixI6LvvCOddcsNV5ak06K1Q5NCLA7E0M2GjUmj76ATaM5rLmEWuwlHBA==
+X-Gm-Message-State: AOJu0YxWMcoF/dar29PmkBVh3pLtr4CTC/z1vJKUuoV9U5BtIDxH/oc0
+	VK3/WqVtb4KQHzRmgHFV/P3xqVH6g0oc/jEzTbqDZDSWBZhXWNbPAn+2olJW0so=
+X-Google-Smtp-Source: AGHT+IHwEZnGvgBLJ+odBijV5gGLQhEjsnEBuwZ3zDPr0k4TFSH0yVpvuN/r5/6VstbLixDjb6DW3w==
+X-Received: by 2002:a05:600c:4703:b0:420:1fab:1798 with SMTP id 5b1f17b1804b1-421089fe2c2mr95474985e9.29.1716909054785;
+        Tue, 28 May 2024 08:10:54 -0700 (PDT)
+Received: from alex-rivos.home (amontpellier-656-1-456-62.w92-145.abo.wanadoo.fr. [92.145.124.62])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-35579d7da64sm12293475f8f.4.2024.05.28.08.10.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 May 2024 08:10:54 -0700 (PDT)
+From: Alexandre Ghiti <alexghiti@rivosinc.com>
+To: Jonathan Corbet <corbet@lwn.net>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Will Deacon <will@kernel.org>,
+	Waiman Long <longman@redhat.com>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Leonardo Bras <leobras@redhat.com>,
+	Guo Ren <guoren@kernel.org>,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-arch@vger.kernel.org
+Cc: Alexandre Ghiti <alexghiti@rivosinc.com>
+Subject: [PATCH 0/7] Zacas/Zabha support and qspinlocks
+Date: Tue, 28 May 2024 17:10:45 +0200
+Message-Id: <20240528151052.313031-1-alexghiti@rivosinc.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <0e8dee26-41cc-41ae-9493-10cd1a8e3268@app.fastmail.com>
-In-Reply-To: <20240506133544.2861555-2-masahiroy@kernel.org>
-References: <20240506133544.2861555-1-masahiroy@kernel.org>
- <20240506133544.2861555-2-masahiroy@kernel.org>
-Date: Tue, 28 May 2024 13:35:10 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Masahiro Yamada" <masahiroy@kernel.org>, linux-kbuild@vger.kernel.org
-Cc: Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org,
- "Kees Cook" <keescook@chromium.org>
-Subject: Re: [PATCH 1/3] kbuild: provide reasonable defaults for tool coverage
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 
-On Mon, May 6, 2024, at 15:35, Masahiro Yamada wrote:
-> The objtool, sanitizers (KASAN, UBSAN, etc.), and profilers (GCOV, etc.)
-> are intended for kernel space objects. To exclude objects from their
-> coverage, you need to set variables such as OBJECT_FILES_NON_STNDARD=y,
-> KASAN_SANITIZE=n, etc.
->
-> For instance, the following are not kernel objects, and therefore should
-> opt out of coverage:
->
->   - vDSO
->   - purgatory
->   - bootloader (arch/*/boot/)
->
-> Kbuild can detect these cases without relying on such variables because
-> objects not directly linked to vmlinux or modules are considered
-> "non-standard objects".
->
-> Detecting objects linked to vmlinux or modules is straightforward:
->
->   - objects added to obj-y are linked to vmlinux
->   - objects added to lib-y are linked to vmlinux
->   - objects added to obj-m are linked to modules
->
+This implements [cmp]xchgXX() macros using Zacas and Zabha extensions
+and finally uses those newly introduced macros to add support for
+qspinlocks: note that this implementation of qspinlocks satisfies the
+forward progress guarantee.
 
-I noticed new randconfig build warnings and bisected them
-down to this patch:
+Thanks to Guo and Leonardo for their work!
 
-warning: unsafe memchr_inv() usage lacked '__read_overflow' symbol in lib/test_fortify/read_overflow-memchr_inv.c
-warning: unsafe memchr() usage lacked '__read_overflow' warning in lib/test_fortify/read_overflow-memchr.c
-warning: unsafe memscan() usage lacked '__read_overflow' symbol in lib/test_fortify/read_overflow-memscan.c
-warning: unsafe memcmp() usage lacked '__read_overflow' warning in lib/test_fortify/read_overflow-memcmp.c
-warning: unsafe memcpy() usage lacked '__read_overflow2' symbol in lib/test_fortify/read_overflow2-memcpy.c
-warning: unsafe memcmp() usage lacked '__read_overflow2' warning in lib/test_fortify/read_overflow2-memcmp.c
-warning: unsafe memmove() usage lacked '__read_overflow2' symbol in lib/test_fortify/read_overflow2-memmove.c
-warning: unsafe memcpy() usage lacked '__read_overflow2_field' symbol in lib/test_fortify/read_overflow2_field-memcpy.c
-warning: unsafe memmove() usage lacked '__read_overflow2_field' symbol in lib/test_fortify/read_overflow2_field-memmove.c
-warning: unsafe memcpy() usage lacked '__write_overflow' symbol in lib/test_fortify/write_overflow-memcpy.c
-warning: unsafe memmove() usage lacked '__write_overflow' symbol in lib/test_fortify/write_overflow-memmove.c
-warning: unsafe memset() usage lacked '__write_overflow' symbol in lib/test_fortify/write_overflow-memset.c
-warning: unsafe strcpy() usage lacked '__write_overflow' symbol in lib/test_fortify/write_overflow-strcpy-lit.c
-warning: unsafe strcpy() usage lacked '__write_overflow' symbol in lib/test_fortify/write_overflow-strcpy.c
-warning: unsafe strncpy() usage lacked '__write_overflow' symbol in lib/test_fortify/write_overflow-strncpy-src.c
-warning: unsafe strncpy() usage lacked '__write_overflow' symbol in lib/test_fortify/write_overflow-strncpy.c
-warning: unsafe strscpy() usage lacked '__write_overflow' symbol in lib/test_fortify/write_overflow-strscpy.c
-warning: unsafe memcpy() usage lacked '__write_overflow_field' symbol in lib/test_fortify/write_overflow_field-memcpy.c
-warning: unsafe memmove() usage lacked '__write_overflow_field' symbol in lib/test_fortify/write_overflow_field-memmove.c
-warning: unsafe memset() usage lacked '__write_overflow_field' symbol in lib/test_fortify/write_overflow_field-memset.c
+Alexandre Ghiti (5):
+  riscv: Implement cmpxchg32/64() using Zacas
+  riscv: Implement cmpxchg8/16() using Zabha
+  riscv: Implement arch_cmpxchg128() using Zacas
+  riscv: Implement xchg8/16() using Zabha
+  riscv: Add qspinlock support based on Zabha extension
 
-I don't understand the nature of this warning, but I see
-that your patch ended up dropping -fsanitize=kernel-address
-from the compiler flags because the lib/test_fortify/*.c files
-don't match the $(is-kernel-object) rule. Adding back
--fsanitize=kernel-address shuts up these warnings.
+Guo Ren (2):
+  asm-generic: ticket-lock: Reuse arch_spinlock_t of qspinlock
+  asm-generic: ticket-lock: Add separate ticket-lock.h
 
-I've applied a local workaround in my randconfig tree
+ .../locking/queued-spinlocks/arch-support.txt |   2 +-
+ arch/riscv/Kconfig                            |  35 ++++++
+ arch/riscv/Makefile                           |  21 ++++
+ arch/riscv/include/asm/Kbuild                 |   4 +-
+ arch/riscv/include/asm/cmpxchg.h              | 114 ++++++++++++++++--
+ arch/riscv/include/asm/hwcap.h                |   1 +
+ arch/riscv/include/asm/spinlock.h             |  39 ++++++
+ arch/riscv/kernel/cpufeature.c                |   1 +
+ arch/riscv/kernel/setup.c                     |  18 +++
+ include/asm-generic/qspinlock.h               |   2 +
+ include/asm-generic/spinlock.h                |  87 +------------
+ include/asm-generic/spinlock_types.h          |  12 +-
+ include/asm-generic/ticket_spinlock.h         | 105 ++++++++++++++++
+ 13 files changed, 336 insertions(+), 105 deletions(-)
+ create mode 100644 arch/riscv/include/asm/spinlock.h
+ create mode 100644 include/asm-generic/ticket_spinlock.h
 
-diff --git a/lib/Makefile b/lib/Makefile
-index ddcb76b294b5..d7b8fab64068 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -425,5 +425,7 @@ $(obj)/$(TEST_FORTIFY_LOG): $(addprefix $(obj)/, $(TEST_FORTIFY_LOGS)) FORCE
- 
- # Fake dependency to trigger the fortify tests.
- ifeq ($(CONFIG_FORTIFY_SOURCE),y)
-+ifndef CONFIG_KASAN
- $(obj)/string.o: $(obj)/$(TEST_FORTIFY_LOG)
-+endif
- endif
+-- 
+2.39.2
 
-
-which I don't think we want upstream. Can you and Kees come
-up with a proper fix instead?
-
-     Arnd
 
