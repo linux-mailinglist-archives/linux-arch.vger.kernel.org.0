@@ -1,126 +1,122 @@
-Return-Path: <linux-arch+bounces-4552-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4553-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE7D28D09A2
-	for <lists+linux-arch@lfdr.de>; Mon, 27 May 2024 19:58:18 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C3428D176D
+	for <lists+linux-arch@lfdr.de>; Tue, 28 May 2024 11:42:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E03EA1C20F33
-	for <lists+linux-arch@lfdr.de>; Mon, 27 May 2024 17:58:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C2921B22ECA
+	for <lists+linux-arch@lfdr.de>; Tue, 28 May 2024 09:42:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2748E15F326;
-	Mon, 27 May 2024 17:58:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB0B416A39D;
+	Tue, 28 May 2024 09:42:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PlSLy4w8"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CB6515F321;
-	Mon, 27 May 2024 17:58:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B14F169AC9;
+	Tue, 28 May 2024 09:42:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716832693; cv=none; b=OKWn0SI3a5GH/nLIQzyedOYnagvr/FJSX5TQTm/tlEaGiLVgBEJ/S/FibRh5R6SHB7N2Drq+9GLGkTcnNkNCbh84CJns4uCh7zBcSHZzAkW92CjQatMcZZzmjNupn1g+wZj1OQdHcKstQbptK+Z8pGrKpOOyrmjkfpNak+rIIbI=
+	t=1716889363; cv=none; b=Nk9du9jvWARmp9D1JDOVO9J/5cCOsb0mGtZq/9+9WCpmi6A/WRM+KNApyOLGxpX+20Uo4vnHbg61iINew3YUkEpiAFcTHh87y8dklJHxbDSTLN2xpzls2lTJsL0HADsa6nYTsKpl+D8hPVgMJ2NYTFvJoF3EDVYfsndtOkIoaKg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716832693; c=relaxed/simple;
-	bh=jDAFrzgHrHC254nXAC5kmkv2OBSuJlA9e/44Od3NNqo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=n2xBRP+GQ5VvDAeDo6T6u3afPOD912nx1x0JojUa2F2GbUajrSCY9atazhcXckwu+om7vU9v8SqvCgk5dOtwPstK+RmWr01PE1PT9J1X0wL957PWCmUETa0lNGpBxEB/y58LdrWdmb9EhXkZLN1vLwvzlPyuUHdESMTS3iAIicw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.51])
-	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Vp2xD5kw9z9v7Hm;
-	Tue, 28 May 2024 01:40:48 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id 8F059140485;
-	Tue, 28 May 2024 01:57:56 +0800 (CST)
-Received: from [10.81.209.100] (unknown [10.81.209.100])
-	by APP2 (Coremail) with SMTP id GxC2BwDXDySXyVRm8m8ECQ--.35226S2;
-	Mon, 27 May 2024 18:57:56 +0100 (CET)
-Message-ID: <5a9bc579-01ad-0b0f-bcba-c8f0bd932331@huaweicloud.com>
-Date: Mon, 27 May 2024 19:57:41 +0200
+	s=arc-20240116; t=1716889363; c=relaxed/simple;
+	bh=qfLyJtmax/jZ+eAaCvC7e67XX9TGTXKhgERpUQNkjH8=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DsS8w4vl4LH5+fODbiMNUZj5rg5OWMUFzuu3YgtGW6rhvQrSohruM55E0H5QFmR4sMKXZ0F+IAJh5X3x5p42qsZptj5Q/cUiRiWI20gf0kEnkmY7ipSyWiaKLUWcVknR0olOdUNQw1wD8TTIWw7PaNKzY2+EMj5XtclgQZpxa3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PlSLy4w8; arc=none smtp.client-ip=209.85.167.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-52389c1308dso785920e87.3;
+        Tue, 28 May 2024 02:42:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1716889359; x=1717494159; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JGOI2J3FbR+ob+LmVGOsGjzCJpew9van2Zh3gScMtnI=;
+        b=PlSLy4w8caOEn8GkGAMk9ozPxv4rZ/aqpyRuFpOW1tGLO2gwptft0fWg/FY/io3fmL
+         sxb5lDOss3SGQSZNKe9MtgfojgSfZBsEbeusMCr3FNxR6S57Aw7fjX74yosxPK9UceRk
+         lS80zblMNqHISaRd1UHocxZfPn49JS07AcjMxtR4Ehn2Xqtu+ZF12cTJNJy4aa+7uc8d
+         qaoPLXXKgkXQC3Ef/o6Qau7GXuTBeDIiOn6LN5UgDfmuUrmy9MPTvzY3KrFrk5mlWCZr
+         lWFFOvt1bh37zlOdyfN3yfDVi7KDaK583eunL1BjyLhoo1D17sK7sOalrM1O1Fr/KsAG
+         7BTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716889359; x=1717494159;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JGOI2J3FbR+ob+LmVGOsGjzCJpew9van2Zh3gScMtnI=;
+        b=nxq38ZWTJTRqGf6xUXe7CQNf8VXG55VlIqzx7UqPI6XvGsffNqx2UIebqM61fxXjhz
+         qYjwpVsJw0MeQxJ6ECHy24a7pAAlhIdh3PaUlgKLVaHrta/MLf8SpvzmLGNSAUNEkjZL
+         iM3QEIp4Na8mFuRXw80/KUrrVlkx4HPwkT2xzus8rl1QCZtzbGb2sPC/n06/U8RXuRUr
+         Gx50yPmyh/k2nWc81SFJd6y0MQ6xO5bwrDDkMPzanosf4rmluAU1XP3AeEmAtfLYtycV
+         isOS7Hw44ex+fWDJU9dJjm617wF+Cp8zx1zeQ/1wMPrIVKiNfstm49Z1ImXVRZtg4fXi
+         Wcgw==
+X-Forwarded-Encrypted: i=1; AJvYcCV2rbpDeAYwynGDrNKLShGLQ91q7h4Ostw/rd47VTIJpG4MrvaLo/q0AuKhjbwXvOCEOA+51oQYFPS0Xq6CptTyK2gGEimnLEFryGn7997Sdd7G0r1cTKjlNY1x2gHlda04wRKpAIHis/8qXnps5aJeRQQ0H6qAS/2kc/qfaw==
+X-Gm-Message-State: AOJu0Yxzn7EprNu/qe4Q1tV1k9mngf7Pk7dkWbp/CSZ6Pkgvyr4Wxhxz
+	NFxNLN/y+XGiZpwUrhqJnTsQYDkQKs9EKbItS703lnNdQiyzRpgM
+X-Google-Smtp-Source: AGHT+IFlYhYgNNNQ1wITN1+9f9HdlVJxGanJiZQ7t7o1+FR679Fx/NlkuEWMH/d5GYnhY4Rz+401iA==
+X-Received: by 2002:a05:6512:2396:b0:51a:f596:9d53 with SMTP id 2adb3069b0e04-529664dad37mr9975256e87.42.1716889359003;
+        Tue, 28 May 2024 02:42:39 -0700 (PDT)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-420fd37f19fsm130468165e9.1.2024.05.28.02.42.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 May 2024 02:42:38 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Tue, 28 May 2024 11:42:37 +0200
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>, linux-arch@vger.kernel.org
+Subject: Re: [PATCH 0/3] kbuild: remove PROVIDE() and refactor vmlinux_link
+ steps
+Message-ID: <ZlWnDT1S7n4XrAb5@krava>
+References: <20240522114755.318238-1-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH] tools/memory-model: Document herd7 (internal)
- representation
-Content-Language: en-US
-To: Andrea Parri <parri.andrea@gmail.com>
-Cc: stern@rowland.harvard.edu, will@kernel.org, peterz@infradead.org,
- boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
- j.alglave@ucl.ac.uk, luc.maranget@inria.fr, paulmck@kernel.org,
- akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
- linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- jonas.oberhauser@huaweicloud.com
-References: <20240524151356.236071-1-parri.andrea@gmail.com>
- <1a3c892c-903e-8fd3-24a6-2454c2a55302@huaweicloud.com>
- <ZlSKYA/Y/daiXzfy@andrea>
-From: Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>
-In-Reply-To: <ZlSKYA/Y/daiXzfy@andrea>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:GxC2BwDXDySXyVRm8m8ECQ--.35226S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7trWUZFykuF48uryfAF4ktFb_yoW8Jw4kpa
-	47GFZ8t3WDXayUZw1kGay3ZF1Iy395tFyUXF9Ygr13Cr45K34fJr4fKrZ0kFyDuw4Iya4U
-	A3y5trZxAa9aya7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9214x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-	6F4UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr
-	0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-	6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-	0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxa
-	n2IY04v7Mxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x
-	0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2
-	zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF
-	4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j
-	6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYx
-	BIdaVFxhVjvjDU0xZFpf9x0JUQvtAUUUUU=
-X-CM-SenderInfo: xkhu0tnqos00pfhgvzhhrqqx5xdzvxpfor3voofrz/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240522114755.318238-1-masahiroy@kernel.org>
 
-On 5/27/2024 3:28 PM, Andrea Parri wrote:
->>> +    |                smp_store_mb | W[once] ->po F[mb]                        |
->>
->> I expect this one to be hard-coded in herd7 source code, but I cannot find
->> it. Can you give me a pointer?
+On Wed, May 22, 2024 at 08:47:52PM +0900, Masahiro Yamada wrote:
 > 
-> smp_store_mb() is currently mapped to { __store{once}(X,V); __fence{mb}; } in
-> the .def file, so it's semantically equivalent to "WRITE_ONCE(); smp_mb();".
-
-Ok, so some fences where added in the .def file (this) while other 
-programmatically (e.g., xchg). We should at least be consistent about 
-how this is done. Based on previous comments, it seems most of us agree 
-this should go the the .def file.
-
+>  - Remove PROVIDE() in the linker script
+>  - Merge temporary vmlinux link steps for BTF and kallsyms
 > 
 > 
->> What about spin_unlock?
 > 
-> spin_unlock() is listed among the non-RMW ops/macros in the current table: it
-> is represented by a single UL or "Unlock" event (a special type of Store event
-> with (some special) Release semantics).
+> Masahiro Yamada (3):
+>   kbuild: refactor variables in scripts/link-vmlinux.sh
+>   kbuild: remove PROVIDE() for kallsyms symbols
+>   kbuild: merge temp vmlinux for CONFIG_DEBUG_INFO_BTF and
+>     CONFIG_KALLSYMS
 
-I was blind. Sorry for the noise.
+lgtm, fyi I ran bpf CI on top of this change and passed
 
-> 
-> 
->> I found the extra spaces in the failure case very hard to read. Any
->> particular reason why you went with this format?
-> 
-> The extra spaces were simply to convey something like "belong to the previous
-> row/entry", but I'm open to remove them or other suggestions if preferred.
+https://github.com/kernel-patches/bpf/pull/7104
 
-I find it easier to read without the extra spaces. The empty column on 
-the left already tells me this is a continuation of the previous row.
-But I don't see this as a blocker.
+jirka
 
 > 
->    Andrea
-
+>  include/asm-generic/vmlinux.lds.h | 19 -------
+>  kernel/kallsyms_internal.h        |  5 --
+>  scripts/kallsyms.c                |  6 ---
+>  scripts/link-vmlinux.sh           | 87 ++++++++++++++++---------------
+>  4 files changed, 45 insertions(+), 72 deletions(-)
+> 
+> -- 
+> 2.40.1
+> 
+> 
 
