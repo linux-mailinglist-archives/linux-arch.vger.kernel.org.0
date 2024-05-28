@@ -1,249 +1,167 @@
-Return-Path: <linux-arch+bounces-4565-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4566-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A00358D2291
-	for <lists+linux-arch@lfdr.de>; Tue, 28 May 2024 19:37:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CDFE8D22E4
+	for <lists+linux-arch@lfdr.de>; Tue, 28 May 2024 20:00:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 578DA28858A
-	for <lists+linux-arch@lfdr.de>; Tue, 28 May 2024 17:37:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4FDD51C22EC7
+	for <lists+linux-arch@lfdr.de>; Tue, 28 May 2024 18:00:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3DEC38F87;
-	Tue, 28 May 2024 17:36:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DC4E4596E;
+	Tue, 28 May 2024 18:00:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="F4p6t/tW"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VJpxeOwJ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C77EE2E822
-	for <linux-arch@vger.kernel.org>; Tue, 28 May 2024 17:36:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D58644C7E;
+	Tue, 28 May 2024 18:00:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716917817; cv=none; b=sGuqa9alVvb4wLgGsOfm4ENgmIcPEjXk4Ru2g8Za1ZjLNulVIr0PopWT//F+GQIRbqnOiz950HUjqMXGgiBp9JCjU3lgli4jdunVTohOHQwgqomsBRkFecuFnDmY+y2p+IBDP47nrxCgEXGghOvIvkRvgYoWtbYKjqx7gj8Z6fU=
+	t=1716919215; cv=none; b=AZRnTU0Rv6JoHo2aMHEfonGmBhCjLnEBk5y29vafojJFBoBaFCHpjMuZL4zA4uzk/GHqOus40lIn5bulLmYqYb67yLWlrpzbAIvCkpx7RdQSkpPBHFnMg2D0TkNgxkD5l+uWbsiEfJwVYgcrs2jLrZch+WqGL6iR3A83Mzm6IKI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716917817; c=relaxed/simple;
-	bh=5jqpjWDjCYeF0iZMmfNh1F02B5hbFSGCHFwvks87kGw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FglDXgoMx3y3R6J5vUduslz/HcYI2eLe1rY675fEQSfGQrbXy9O/qlzHeNFl/RQv1Vm1GL62d2V9AfM7JZbK2VNvlW6sTQkWX16vOETBCUb9Dm8ikKp43JhKqkDIOqNg2SCelmpEEHTLNA3t8KPl+iGm2DwrFP+e7D5fOYXWuTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=F4p6t/tW; arc=none smtp.client-ip=209.85.218.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-a6265d47c61so121249166b.0
-        for <linux-arch@vger.kernel.org>; Tue, 28 May 2024 10:36:54 -0700 (PDT)
+	s=arc-20240116; t=1716919215; c=relaxed/simple;
+	bh=+SMLwVcqLRSmG8T75XqR3w6eFstMjRzAAFgHYK+96eE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cHtYRtFQKYhbPHo8cscMC844T0olwsyQmVLbGhghWW/juKE+bj01ZdRApBd0cc9SSDhzm3qECwXczLzJ8f1TyXVwmMvEpSfvIs/0ZHTNpae634ET+qKvQNRQ64wnjgFsmYsyzZ+mxRK0TFbejrqItBwp0kEHzb/pdYwHgLXt9X0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VJpxeOwJ; arc=none smtp.client-ip=209.85.210.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-6f8cd25ebd5so498948a34.1;
+        Tue, 28 May 2024 11:00:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1716917813; x=1717522613; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1716919213; x=1717524013; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=h1nTYMe9Sz2kd146CNINlSxaoddIUqGPBCQrAMYzjnQ=;
-        b=F4p6t/tWtjSOVYylJbwcLVV6UTyM4sNrgf29x/I2qiaXmlzGuSs/libx4uluVN+nqU
-         Q1wu6ZyJ+t/J5G4TTactfmH72bg+9gQMI6XUV/JPUvIcgZPTSklK6xODqYbVvKUruZsd
-         qGcZJqKk9SLen5tkhgx7pjnVQN79mjH/J3XY5cJYmSYfwEdHgeAgZgJLCWfItyd1aUlo
-         m8SST44+ucTlAuYiprzs7++Q4aRuTHjVObQuxYwumcTSK42endimDnDiRHgNYuUyIKni
-         X0y60pnKnN3oBLyeEGWlqJk5sfZxG3gqEzLBOt9HDhyBsgJwOczZkJZdgWzCHvs7ja5e
-         tsGw==
+        bh=T9CcbgCubAJ73RNKrfh6CLd9MLYV3LALBDGHRnXyNZ4=;
+        b=VJpxeOwJlcZGL2zDUNi/6MPcL7e2Dc6QbTQjV1vp51FqbJDvEx0PgERyGFzl+KI17z
+         zCCY8oiumNd672vT6dSZtzBdtu/aLXrL7Py3oRJDU4oh9by440EwUs0PaRhZJ85N/fyk
+         LlJKEDlPV40/wFxUqx0On4zivZUJzKI3e5DrgKrQq9Cm67c0WrSNClXRz/tRipdlR8Io
+         bSlKjz02iF5S8lGt8XOHDBl4x1YpASoMRBk+F3E7CmKi8yi4o6vFUN85pawvxalUm9a/
+         srIb0BGISS1DSZcPi6tILjLh0hpp5CJMa8i2DMwaa4HQipEUS7YakYihLlJvWJupTPMq
+         hBYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716917813; x=1717522613;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1716919213; x=1717524013;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=h1nTYMe9Sz2kd146CNINlSxaoddIUqGPBCQrAMYzjnQ=;
-        b=JR/7+gJdiye9sC6uTzkYtSWpPjui+MVFe8xXkEd2FxRXzyVa/SIvRM2zAr5CiO5gqR
-         GYwnzuID58r9EnQLiTEsCRMku8yG/0u7/EbZBAErv+9HbNW7ot1Ba45ERphJHCT+2zAe
-         G3BAGnIbhMhaZluliaeH9iugQ3SZqq1Tvi+7qnCFWbICZtvQROrzqjvNOhaTzmJk9HP5
-         ZnsNt7yr6U6rvlug0dohz+Ks58U3A1PjcOnQ9ZthsQ2fvGkaAKVi9Tmd/AOwoCVDUYL0
-         ASSl+6qAMmZRaWafqZwjx3vanY7bqLdy3IFVp+O8q1mn1uUeTpbzXz+/ShHWKa2NKuq9
-         j6Ew==
-X-Forwarded-Encrypted: i=1; AJvYcCW9ijg6bC+xH1CBATqVTB3VeU/JCuvGEzoeWU5T7puwPLiEVC/5mT8tiTJodBhXnczJiWHjikJf2sIo1s489lET+lHLW7jr9GwySA==
-X-Gm-Message-State: AOJu0YyDTFuFgfLDyex6mU5Dv0w/YK2hiGnGYOcCRcwlUe5nv+EsD7Z6
-	83CYGR7wK8J/692jJbN5ZjsT2ofPi1t+Yf79IHzSOQRVLk199niqC4Byxzxee2rRbDSAyzxHeyL
-	Kwv7Z5l9uq7Obk1AIShgI/RepbXNp3W9R8gko
-X-Google-Smtp-Source: AGHT+IFf32eXkuapluEvlBEyoJKJxifsmiVKQ0AvF4ow+8ygeGf1col+Xo1abUwIXzRnUJhSc+Yk6CUkl0RPaD3UYic=
-X-Received: by 2002:a17:906:3c1a:b0:a63:42b6:1976 with SMTP id
- a640c23a62f3a-a6342b619f5mr156681366b.68.1716917812713; Tue, 28 May 2024
- 10:36:52 -0700 (PDT)
+        bh=T9CcbgCubAJ73RNKrfh6CLd9MLYV3LALBDGHRnXyNZ4=;
+        b=j8DQYFL1xhYJDD3q1VHF+G2feGXFweEgT5mumw96B8F77W8Ri2TZmEoRIzyqV4z67i
+         r0DHYSDDAKiYLSsYCfcpcMESsFEkwo93zhxoQcjeMSCYyYlzfZB+a2zX54C/XHrNaTK2
+         fVWgwpSAnbuQVf67r+AGx1IMOJGM7fP8tFEkIyOC9tNEsO6jgvyEAfDVHFCy0T2fc71e
+         NFY3XTzWREhGT06oWzscFlWtw+nGZjyIz5ZjDA8UCLo5GTJWEyZSWS42kaQ8Bx+QImqB
+         JJu9TxkQUj/5nns9UHs32VFAurOQJ17TBCUceFPzgBRzQVD67uCNdlLjZ5Wu2eWIbC7v
+         EirQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUAJ1jsMzJllmOLKc366dIiDAxAO+glP6NFk9x+mbQlC2357rBbF4JwEzSPQ1CHq0dZgB0q89ouVN5QqSU2He6d15pOd0Ku0Pew22dyJE3kVSZzuAzzR2Os/pcXEUUv9M2X1xIP/CZsew==
+X-Gm-Message-State: AOJu0YyAjkeRI5QUo1KKeiCX8m3Tj5kxbSEC2syIYA8uSE8euSFjH/3+
+	loBtcCbHolgqOS2jADSYtbRIfvDCLlmnlsp8rV4lN/AP8Tyak/1s
+X-Google-Smtp-Source: AGHT+IElcgIpXkhyT9tgu74eBbiQ1jW3vTOU3j/+QTY2x6SznREkmM8cyy1VNsmpwJvsuHcEn1WGsA==
+X-Received: by 2002:a05:6870:218d:b0:24e:6d33:9e1a with SMTP id 586e51a60fabf-24e6d33a0c5mr11547793fac.12.1716919212597;
+        Tue, 28 May 2024 11:00:12 -0700 (PDT)
+Received: from fauth1-smtp.messagingengine.com (fauth1-smtp.messagingengine.com. [103.168.172.200])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-794abca7f80sm402204585a.21.2024.05.28.10.59.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 May 2024 10:59:49 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfauth.nyi.internal (Postfix) with ESMTP id 7C4721200032;
+	Tue, 28 May 2024 13:59:33 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Tue, 28 May 2024 13:59:33 -0400
+X-ME-Sender: <xms:hRtWZldR5lnMpqIwidbYtObOpcMDPFGLEhscKUPKEpZP0e15khsT3A>
+    <xme:hRtWZjPoTuqtPJi8jGN-OJfJbG6kwg1djyq3h-KHcu_KAop94w6NqAp1v6eCDZQLy
+    WX08o-DEEc_6kmBkw>
+X-ME-Received: <xmr:hRtWZugHm-gyAHOGoJpPgVVfasIDSwjAqq5d6tbX89uXBypc3eJaSWTY-nI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrvdejkedgledvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtrodttddtvdenucfhrhhomhepuehoqhhu
+    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
+    htthgvrhhnpeeitdefvefhteeklefgtefhgeelkeefffelvdevhfehueektdevhfettddv
+    teevvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
+    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
+    igmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:hRtWZu854BEC9bqPofNG1gLeTo_MKcOJGPIggOURrmrLwjaZdCD-fA>
+    <xmx:hRtWZhspHfdDsB-YzWEE_-130Y46nNWnRtG85it3vasVdIK-uoiQkA>
+    <xmx:hRtWZtFeIzqp4QnNEZCjSuEQ68GPzdHeSfXHQlpVOvd7_JKQiQOJ5A>
+    <xmx:hRtWZoO2iKHK3slOhWt9C_bley7S6ba8UofqDtvzk0LbsmhcmpwUeA>
+    <xmx:hRtWZqM0pH6XfoRohovq0N0Bb1uHByrDxd1WAst9iOTjyLmZD8Z5bZIz>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 28 May 2024 13:59:32 -0400 (EDT)
+Date: Tue, 28 May 2024 10:58:53 -0700
+From: Boqun Feng <boqun.feng@gmail.com>
+To: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Cc: Andrea Parri <parri.andrea@gmail.com>,
+	Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>,
+	stern@rowland.harvard.edu, will@kernel.org, peterz@infradead.org,
+	npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+	luc.maranget@inria.fr, paulmck@kernel.org, akiyks@gmail.com,
+	dlustig@nvidia.com, joel@joelfernandes.org,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH] tools/memory-model: Document herd7 (internal)
+ representation
+Message-ID: <ZlYbXZSLPmjTKtaE@boqun-archlinux>
+References: <20240524151356.236071-1-parri.andrea@gmail.com>
+ <1a3c892c-903e-8fd3-24a6-2454c2a55302@huaweicloud.com>
+ <ZlSKYA/Y/daiXzfy@andrea>
+ <41bc01fa-ce02-4005-a3c2-abfabe1c6927@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240510232128.1105145-1-almasrymina@google.com>
- <20240510232128.1105145-12-almasrymina@google.com> <9097e78d-0e7d-43bd-bafd-e53a4872a4d1@davidwei.uk>
-In-Reply-To: <9097e78d-0e7d-43bd-bafd-e53a4872a4d1@davidwei.uk>
-From: Mina Almasry <almasrymina@google.com>
-Date: Tue, 28 May 2024 10:36:40 -0700
-Message-ID: <CAHS8izOe-uYjm0ttQgHOFpvp_Tj4_oRHV6d1Y1sWJAZJdCdCBA@mail.gmail.com>
-Subject: Re: [PATCH net-next v9 11/14] tcp: RX path for devmem TCP
-To: David Wei <dw@davidwei.uk>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, Donald Hunter <donald.hunter@gmail.com>, 
-	Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Pavel Begunkov <asml.silence@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
-	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, 
-	Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <41bc01fa-ce02-4005-a3c2-abfabe1c6927@huaweicloud.com>
 
-On Wed, May 22, 2024 at 11:02=E2=80=AFPM David Wei <dw@davidwei.uk> wrote:
->
-> On 2024-05-10 16:21, Mina Almasry wrote:
-> > +/* On error, returns the -errno. On success, returns number of bytes s=
-ent to the
-> > + * user. May not consume all of @remaining_len.
-> > + */
-> > +static int tcp_recvmsg_dmabuf(struct sock *sk, const struct sk_buff *s=
-kb,
-> > +                           unsigned int offset, struct msghdr *msg,
-> > +                           int remaining_len)
-> > +{
-> > +     struct dmabuf_cmsg dmabuf_cmsg =3D { 0 };
-> > +     struct tcp_xa_pool tcp_xa_pool;
-> > +     unsigned int start;
-> > +     int i, copy, n;
-> > +     int sent =3D 0;
-> > +     int err =3D 0;
-> > +
-> > +     tcp_xa_pool.max =3D 0;
-> > +     tcp_xa_pool.idx =3D 0;
-> > +     do {
-> > +             start =3D skb_headlen(skb);
-> > +
-> > +             if (skb_frags_readable(skb)) {
-> > +                     err =3D -ENODEV;
-> > +                     goto out;
-> > +             }
-> > +
-> > +             /* Copy header. */
-> > +             copy =3D start - offset;
-> > +             if (copy > 0) {
-> > +                     copy =3D min(copy, remaining_len);
-> > +
-> > +                     n =3D copy_to_iter(skb->data + offset, copy,
-> > +                                      &msg->msg_iter);
-> > +                     if (n !=3D copy) {
-> > +                             err =3D -EFAULT;
-> > +                             goto out;
-> > +                     }
-> > +
-> > +                     offset +=3D copy;
-> > +                     remaining_len -=3D copy;
-> > +
-> > +                     /* First a dmabuf_cmsg for # bytes copied to user
-> > +                      * buffer.
-> > +                      */
-> > +                     memset(&dmabuf_cmsg, 0, sizeof(dmabuf_cmsg));
-> > +                     dmabuf_cmsg.frag_size =3D copy;
-> > +                     err =3D put_cmsg(msg, SOL_SOCKET, SO_DEVMEM_LINEA=
-R,
-> > +                                    sizeof(dmabuf_cmsg), &dmabuf_cmsg)=
-;
-> > +                     if (err || msg->msg_flags & MSG_CTRUNC) {
-> > +                             msg->msg_flags &=3D ~MSG_CTRUNC;
-> > +                             if (!err)
-> > +                                     err =3D -ETOOSMALL;
-> > +                             goto out;
-> > +                     }
-> > +
-> > +                     sent +=3D copy;
-> > +
-> > +                     if (remaining_len =3D=3D 0)
-> > +                             goto out;
-> > +             }
-> > +
-> > +             /* after that, send information of dmabuf pages through a
-> > +              * sequence of cmsg
-> > +              */
-> > +             for (i =3D 0; i < skb_shinfo(skb)->nr_frags; i++) {
-> > +                     skb_frag_t *frag =3D &skb_shinfo(skb)->frags[i];
-> > +                     struct net_iov *niov;
-> > +                     u64 frag_offset;
-> > +                     int end;
-> > +
-> > +                     /* !skb_frags_readable() should indicate that ALL=
- the
-> > +                      * frags in this skb are dmabuf net_iovs. We're c=
-hecking
-> > +                      * for that flag above, but also check individual=
- frags
-> > +                      * here. If the tcp stack is not setting
-> > +                      * skb_frags_readable() correctly, we still don't=
- want
-> > +                      * to crash here.
-> > +                      */
-> > +                     if (!skb_frag_net_iov(frag)) {
-> > +                             net_err_ratelimited("Found non-dmabuf skb=
- with net_iov");
-> > +                             err =3D -ENODEV;
-> > +                             goto out;
-> > +                     }
-> > +
-> > +                     niov =3D skb_frag_net_iov(frag);
->
-> Sorry if we've already discussed this.
->
-> We have this additional hunk:
->
-> + if (niov->pp->mp_ops !=3D &dmabuf_devmem_ops) {
-> +       err =3D -ENODEV;
-> +       goto out;
-> + }
->
-> In case one of our skbs end up here, skb_frag_is_net_iov() and
-> !skb_frags_readable(). Does this even matter? And if so then is there a
-> better way to distinguish between our two types of net_iovs?
+On Mon, May 27, 2024 at 03:40:13PM +0200, Jonas Oberhauser wrote:
+> 
+> 
+> Am 5/27/2024 um 3:28 PM schrieb Andrea Parri:
+> > > > +    |                smp_store_mb | W[once] ->po F[mb]                        |
+> > > 
+> > > I expect this one to be hard-coded in herd7 source code, but I cannot find
+> > > it. Can you give me a pointer?
+> > 
+> > smp_store_mb() is currently mapped to { __store{once}(X,V); __fence{mb}; } in
+> > the .def file, so it's semantically equivalent to "WRITE_ONCE(); smp_mb();".
+> 
+> By the way, I experimented a little with these kind of mappings to see if we
+> can just explicitly encode the mapping there. E.g., I had an idea to use
+>     { __fence{mb-successful-rmw}; __cmpxchg{once}...;
+> __fence{mb-successful-rmw}; }
+> 
+> for defining (almost) the current mapping of cmpxchg explicitly.
+> 
+> But none of the changes I made were accepted by herd7.
+> 
+> Do you know how the syntax works?
+> 
 
-Thanks for bringing this up, yes, maybe we do need a way to
-distinguish, but it's not 100% critical, no? It's mostly for debug
-checking?
+This may not be trivial. Note that cmpxchg() is an expression (it has a
+value), so in .def, we want to define it as an expression. However, the
+C-like multiple-statement expression is not supported by herd parser, in
+other words we want:
 
-I would say add a helper, like net_iov_is_dmabuf() or net_iov_is_io_uring()=
-.
+	{
+		__fence{mb-successful-rmw};
+		int tmp = __cmpxchg{once}(...);
+		__fence{mb-successful-rmw};
+		tmp;
+	}
 
-Checking for niov->pp->mp_ops seems a bit hacky to me, and may be
-outright broken. IIRC niov's can be disconnected from the page_pool
-via page_pool_clear_pp_info(), and niov->pp may be null. Abstractly
-speaking the niov type maybe should be a property of the niov itself,
-and not the pp the niov is attached to.
+but herd parser doesn't support this as a valid expression.
 
-It is not immediately obvious to me what the best thing to do here is,
-maybe it's best to add a flag to niov or to use niov->pp_magic for
-this.
+Regards,
+Boqun
 
-I would humbly ask that your follow up patchset takes care of this
-bit, if possible. I think mine is doing quite a bit of heavy lifting
-as is (and I think may be close to ready?), when it comes to concerns
-of devmem + io_uring coexisting if you're able to take care, awesome,
-if not, I can look into squashing some fix.
-
---=20
-Thanks,
-Mina
+>     jonas
+> 
 
