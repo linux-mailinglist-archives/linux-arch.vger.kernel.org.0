@@ -1,211 +1,134 @@
-Return-Path: <linux-arch+bounces-4572-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4573-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9623D8D2B20
-	for <lists+linux-arch@lfdr.de>; Wed, 29 May 2024 04:43:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B3E68D2D03
+	for <lists+linux-arch@lfdr.de>; Wed, 29 May 2024 08:16:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B9C011C22EB7
-	for <lists+linux-arch@lfdr.de>; Wed, 29 May 2024 02:43:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CC1E01C254A8
+	for <lists+linux-arch@lfdr.de>; Wed, 29 May 2024 06:16:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A71D915B14B;
-	Wed, 29 May 2024 02:42:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB42715FCFE;
+	Wed, 29 May 2024 06:15:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ETKXRptG"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="EGPOj2ZR"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1CD315B102;
-	Wed, 29 May 2024 02:42:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2625E15CD73
+	for <linux-arch@vger.kernel.org>; Wed, 29 May 2024 06:15:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716950568; cv=none; b=JbRPAQBjOhGTIxe57fOBnx+xXYboRh8yNJaQlJ9a4M5zRUCF+yeM5GpWBKjZlMvHosaeT8M9Fnc0uNnTm55zCXWbfRkKu1n7TQlTh3MSU+K6D4HU0xAMC0TfgpDI9UzOHhgzO81cQWQmNNglHPowHfH2z9/i5n/goPt/TF9icv0=
+	t=1716963356; cv=none; b=NhB8iJLv9Cxq0YYXQK50CgSGF3VRcWIzzJCLqv5xeRBr/DFeDgOKXbc2EqGZzm0yEXCpfwCFPMFTY++QFms+p0/sLgM/a/cIDMRcXjKLOxyc5XmSpWupkXY8v41NoOCR5sCMAU3lgSRH+QTgG2+H6+cOyBqVjNIo1lrKzU00kNI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716950568; c=relaxed/simple;
-	bh=Jdw6MVrlDfRwAQ4Dvlaenq+UtdPYZrI/GgT7O1G/w1I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ttxs8XeA4GFa4EEarJMKTAggkpU7mTtZMT+iCbGExkeEABOtDAPp3GcfaCG2LXudUwNQMUxbmO9QUIZFrLNawWKRLb7C1V1ORYrVaouSPUPmGpQFDHbnwuMYpuhLvqmro3rERO0EgUN+MpaI/4QqDpNvZbbQlZKZIsse7POL7J8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ETKXRptG; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-354b722fe81so1229634f8f.3;
-        Tue, 28 May 2024 19:42:46 -0700 (PDT)
+	s=arc-20240116; t=1716963356; c=relaxed/simple;
+	bh=J+6g85MacrkhD1shRZPgIPHazStFB7uwlbQPh89YIGk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ePrZr+4B2lYH3d4FPpgRdDMiFWoqDpW2CvdTlkqh5sdfrmR0Wlv5xMmcKLGpHnmIY3JAwqi+PzSHCywopFIPB8UcjY30qXdJtCQuQfjBp708wmv2PRLDMoNPV1s3JxnlubFQBSWLkz4aDja5P60X9Bs7dKvPQvkeNdJbt2SS69g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=EGPOj2ZR; arc=none smtp.client-ip=209.85.208.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2e9819a630fso24923101fa.1
+        for <linux-arch@vger.kernel.org>; Tue, 28 May 2024 23:15:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1716950565; x=1717555365; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WaUSmZ7PBffPeOQ7gcFKeRJS00p2asbGxa8dHTdLep4=;
-        b=ETKXRptGUP3WRzXGWJruTx4VieKCMCMbbQflyXyagF+8I3xrMhNH8yC+ycGZbob2ho
-         KBm8I8KOuo0z+ndzqqlETXDizzycjvFtL5dVIV9t+pem9DeZykIqViQxT+eVSA3/ewrg
-         R6m9pc7c4LWKiR7lwJjWIlIo04t5jdBSrjfIqG0xv0UeSOlLPK+EJcDBaEJDX+GDbLW4
-         FbEJMdUL2ENe1iJgMZfY5317AQdUY2rUoWkOPVIDMbs8NhivC6cHjujmM8OSsvVe5ac+
-         cSyLJN+RNnW7/1fAHtl7hpGk2KVzADz8X5zcIcyTOg4wYNi1d0ucbeDZ1i+YlL9VQKby
-         hKxA==
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1716963352; x=1717568152; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Bh0ieLiOPTlnWO1kYS9M0GlqV4zOVJ6IiYKninn4+tc=;
+        b=EGPOj2ZRwNYZVsmt/xgNAaN9Qh5qC4/ahKgdB3FqJjCONzi86G8l+ARNLbKC9Del6D
+         48MX40fWduWhtP1Hb1LU2oIexalqNfhTR+kkMptf22G5vL2sqPdFTEJ8eu4fuQGyjPfP
+         kaSG/5a2e41Pbe6Lbe0Yqa1S9AWjdPaD3FPQHN/oh3/zTx8AbRPCyjS3otOI0XLIrZPE
+         ApfiZzQ27DYv0Cc3enDA4yLwPaAvPsSk80YarMdxUkdLD6aT641w2sYMhpLIFtZTcE/Z
+         AhNID7YbXTc8dn1q7O0MnOKGgHhWAfnxfKbQT6MBGwB5TjDlUpXTI4+6u0NeWVb+Rf+Q
+         PIqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716950565; x=1717555365;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WaUSmZ7PBffPeOQ7gcFKeRJS00p2asbGxa8dHTdLep4=;
-        b=DsgYxP4TrLwNJuC37uaHBHU56LdDDIcCE/k7qZUmHuS+2CcOC/oB6JUhBSLkrWAVE8
-         POubmHZws1uB+kDshLOOzZhJbdRbqP1Hd+Hq1JwZPykuWfM3UA69KEhqmSHxnb+6vrUh
-         3J+oIwqfGJDsRqpn32yWXQpducdT80z19czsBjoZHVtUSN5DdyKT99ddvYalLKSzTji7
-         PmbywfYjaSTCPqxLBvxnd34J3IZXSgBfpYONlsqDWVCqh6ewEqn86XyL0KeROw+MNdX7
-         BLbE+8foVeXtb0VVfFR9X5t0+YfvZL6odufrF5rE2yKlxKfqv02HxGqpyuKMvajM2ZhD
-         zu4w==
-X-Forwarded-Encrypted: i=1; AJvYcCU+xFNTt3yU2m5zHnRtwEABYtR9y5pMx2IkgB560lICrBMPoyq5IQOGmxfExGB6MxxidESn6Vto9dkaJEbPSR4TRCmWeI23ryocsF/Mdsfi67dXF9uDOSAulqIwp+zbYtHkAztn6Vp9JY7fO4tgbWZaFRQjHikFvD0gsGgRkwLOR4+pixgEMmTYFDD9eOKuKmO2TDwAT+jNgcsrTaNsL5Iw4Po9Z+dj8kNTlpuZcUwxMG7vCbU77fFY6qRxAvh3xFi3CkVpOuJHDjrczJsTCRt9SX7x6CJw32P4ZVlQ9mLNGd/3ofjc36EH22iHvZUT6lwgzvxdjZBME2IvHxVfjB3OTvinFpRNFJ4v2BMKZ7rU7Dci9Fyf40PpB8bL98Qwh0+V0/B+/KXVrKRiMTObJzoL0k61zTQ9NKfl/HJZQGZQAY3+162oTKws2w98r145NpprPcmP1PWanc1RUw8wBR0WGWu1juMwWMfdhOWkHw==
-X-Gm-Message-State: AOJu0YwiAWxCGmd0ajxweAkaVndJZKQHhjyPkvemz8iQw2HoJmDaZYaB
-	FXY2tTBmJyj7DR3aZw6etCz22nSa0hDujF5u/hskmOTxhSDpoOB2
-X-Google-Smtp-Source: AGHT+IHY3mIPt+8r+bWSLhyahH3HSb2DqvQP0sw5Fzxjvwkj4ZywRulvtF7xu0QbCHkAVDUw9UJ96A==
-X-Received: by 2002:a05:6000:1841:b0:354:c0a6:2815 with SMTP id ffacd0b85a97d-355245e30f8mr11028033f8f.4.1716950565027;
-        Tue, 28 May 2024 19:42:45 -0700 (PDT)
-Received: from [192.168.42.154] ([185.69.144.120])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-35579d7d963sm13608610f8f.21.2024.05.28.19.42.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 May 2024 19:42:44 -0700 (PDT)
-Message-ID: <29464e46-e196-47aa-9ff5-23173099c95e@gmail.com>
-Date: Wed, 29 May 2024 03:42:44 +0100
+        d=1e100.net; s=20230601; t=1716963352; x=1717568152;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Bh0ieLiOPTlnWO1kYS9M0GlqV4zOVJ6IiYKninn4+tc=;
+        b=KHEAzNYUGxPGmlo/alsQrnOsf6uQttQdryZH2U1laqWTmn0L4YnIIA7VZx3BwH8eNA
+         g0/pxNduPeAP9d8f1d9LqtL3kP8qMgjrxK8ChA+fk/Zlg+Xxa4Jc73KAD8BBtO9roeRV
+         5LV/kk8giK2zOLNS9Juq68OvyDLkTHGCvuA/33EFnqFS5hbbbxi2M748O3kqxE4XTS3/
+         d8Pe51k9EtPUaNxJjbxhcWnRcE1u7qH8GfOSitQCdNtf1vjzgje7xE98DTYdGErrzqZ2
+         nJh2HxBOzXVIf02jmppsIQ8uHPQ6teXrNDH2aYFtgLDB3Wo2UdZgYAfm5gg04CPaF2W2
+         ziSg==
+X-Forwarded-Encrypted: i=1; AJvYcCUNSCYp+kqWlBvVsZhyWK+e406B6UjwbmI4f2gHhmqiOQSKTx9P3dwoHJswf+vRAc2H7rIflmrLPHLztgCERMwnvaDwXsN2OOA7bA==
+X-Gm-Message-State: AOJu0YytIrbj5J9u5rSs8O7k63zxMiFL0p3DTe3+/4NvHZG+xSx7BypP
+	P81Gn3GBX85DIkDNAbxTPk5SPCPYR3WwVbLM92BrbqtqxbpJwHbB6gx5FnvCbBYMfHcISnhD5qQ
+	gfZck3n5VHB8OBS9cuInHoyLTR3Z0bY/7ngZ2Sw==
+X-Google-Smtp-Source: AGHT+IEm6bYc2ftZFt2uXoqzzY7bu2Oy5wbaxhF7xACheYlMcKXX+Saw39KXwd1j/qas7p5N+0C1MMzLyv9RtXFbmuc=
+X-Received: by 2002:a2e:968a:0:b0:2e1:c448:d61e with SMTP id
+ 38308e7fff4ca-2e95b096f52mr108173371fa.15.1716963352171; Tue, 28 May 2024
+ 23:15:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v9 11/14] tcp: RX path for devmem TCP
-To: Mina Almasry <almasrymina@google.com>, David Wei <dw@davidwei.uk>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, Donald Hunter <donald.hunter@gmail.com>,
- Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Jonathan Corbet <corbet@lwn.net>,
- Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
- Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
- <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
- David Ahern <dsahern@kernel.org>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>,
- Shailend Chand <shailend@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>,
- Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
- <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
- Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
-References: <20240510232128.1105145-1-almasrymina@google.com>
- <20240510232128.1105145-12-almasrymina@google.com>
- <9097e78d-0e7d-43bd-bafd-e53a4872a4d1@davidwei.uk>
- <CAHS8izOe-uYjm0ttQgHOFpvp_Tj4_oRHV6d1Y1sWJAZJdCdCBA@mail.gmail.com>
-Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <CAHS8izOe-uYjm0ttQgHOFpvp_Tj4_oRHV6d1Y1sWJAZJdCdCBA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20240528151052.313031-1-alexghiti@rivosinc.com>
+ <20240528151052.313031-5-alexghiti@rivosinc.com> <20240528-prenatal-grating-2b6096cc2a1b@spud>
+In-Reply-To: <20240528-prenatal-grating-2b6096cc2a1b@spud>
+From: Alexandre Ghiti <alexghiti@rivosinc.com>
+Date: Wed, 29 May 2024 08:15:40 +0200
+Message-ID: <CAHVXubhsqOp2hSxVg7eGjjLN2-iTUFz1AMDTeEvyJh01iypzrw@mail.gmail.com>
+Subject: Re: [PATCH 4/7] riscv: Implement xchg8/16() using Zabha
+To: Conor Dooley <conor@kernel.org>
+Cc: Jonathan Corbet <corbet@lwn.net>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, 
+	Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Leonardo Bras <leobras@redhat.com>, Guo Ren <guoren@kernel.org>, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 5/28/24 18:36, Mina Almasry wrote:
-> On Wed, May 22, 2024 at 11:02 PM David Wei <dw@davidwei.uk> wrote:
-...
->>> +                      */
->>> +                     if (!skb_frag_net_iov(frag)) {
->>> +                             net_err_ratelimited("Found non-dmabuf skb with net_iov");
->>> +                             err = -ENODEV;
->>> +                             goto out;
->>> +                     }
->>> +
->>> +                     niov = skb_frag_net_iov(frag);
->>
->> Sorry if we've already discussed this.
->>
->> We have this additional hunk:
->>
->> + if (niov->pp->mp_ops != &dmabuf_devmem_ops) {
->> +       err = -ENODEV;
->> +       goto out;
->> + }
->>
->> In case one of our skbs end up here, skb_frag_is_net_iov() and
->> !skb_frags_readable(). Does this even matter? And if so then is there a
->> better way to distinguish between our two types of net_iovs?
-> 
-> Thanks for bringing this up, yes, maybe we do need a way to
-> distinguish, but it's not 100% critical, no? It's mostly for debug
-> checking?
+Hi Conor,
 
-Not really. io_uring definitely wouldn't want the devmem completion path
-taking an iov and basically stashing it into a socket (via refcount),
-that's a lifetime problem. Nor we'd have all the binding/chunk_owner
-parts you have and probably use there.
+On Tue, May 28, 2024 at 5:22=E2=80=AFPM Conor Dooley <conor@kernel.org> wro=
+te:
+>
+> On Tue, May 28, 2024 at 05:10:49PM +0200, Alexandre Ghiti wrote:
+>         \
+> > diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hw=
+cap.h
+> > index e17d0078a651..f71ddd2ca163 100644
+> > --- a/arch/riscv/include/asm/hwcap.h
+> > +++ b/arch/riscv/include/asm/hwcap.h
+> > @@ -81,6 +81,7 @@
+> >  #define RISCV_ISA_EXT_ZTSO           72
+> >  #define RISCV_ISA_EXT_ZACAS          73
+> >  #define RISCV_ISA_EXT_XANDESPMU              74
+> > +#define RISCV_ISA_EXT_ZABHA          75
+> >
+> >  #define RISCV_ISA_EXT_XLINUXENVCFG   127
+> >
+> > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeat=
+ure.c
+> > index 3ed2359eae35..8d0f56dd2f53 100644
+> > --- a/arch/riscv/kernel/cpufeature.c
+> > +++ b/arch/riscv/kernel/cpufeature.c
+> > @@ -257,6 +257,7 @@ const struct riscv_isa_ext_data riscv_isa_ext[] =3D=
+ {
+> >       __RISCV_ISA_EXT_DATA(zihintpause, RISCV_ISA_EXT_ZIHINTPAUSE),
+> >       __RISCV_ISA_EXT_DATA(zihpm, RISCV_ISA_EXT_ZIHPM),
+> >       __RISCV_ISA_EXT_DATA(zacas, RISCV_ISA_EXT_ZACAS),
+> > +     __RISCV_ISA_EXT_DATA(zabha, RISCV_ISA_EXT_ZABHA),
+> >       __RISCV_ISA_EXT_DATA(zfa, RISCV_ISA_EXT_ZFA),
+> >       __RISCV_ISA_EXT_DATA(zfh, RISCV_ISA_EXT_ZFH),
+> >       __RISCV_ISA_EXT_DATA(zfhmin, RISCV_ISA_EXT_ZFHMIN),
+>
+> You're missing a dt-binding patch in this series adding zabha.
 
-Same the other way around, you don't want io_uring grabbing your iov
-and locking it up, it won't even be possible to return it back. We
-also may want to have access to backing pages for different fallback
-purposes, for which we need to know the iov came from this particular
-ring.
+Thanks, I will add that to the v2.
 
-It shouldn't happen for a behaving user, but most of it would likely
-be exploitable one way or another.
-
-> I would say add a helper, like net_iov_is_dmabuf() or net_iov_is_io_uring().
-
-We're verifying that the context the iov bound to is the current
-context (e.g. io_uring instance) we're executing from. If we can
-agree that mp_priv should be a valid pointer, the check would look
-like:
-
-if (pp->mp_priv == io_uring_ifq)
-
-> Checking for niov->pp->mp_ops seems a bit hacky to me, and may be
-> outright broken. IIRC niov's can be disconnected from the page_pool
-> via page_pool_clear_pp_info(), and niov->pp may be null. Abstractly
-
-It's called in the release path like page_pool_return_page(),
-I can't imagine someone can sanely clear it while inflight ...
-
-> speaking the niov type maybe should be a property of the niov itself,
-> and not the pp the niov is attached to.
-
-... but I can just stash all that in niov->owner,
-struct dmabuf_genpool_chunk_owner you have. That might be even
-cleaner. And regardless of it I'll be making some minor changes
-to the structure to make it generic.
-
-> It is not immediately obvious to me what the best thing to do here is,
-> maybe it's best to add a flag to niov or to use niov->pp_magic for
-> this.
-> 
-> I would humbly ask that your follow up patchset takes care of this
-> bit, if possible. I think mine is doing quite a bit of heavy lifting
-> as is (and I think may be close to ready?), when it comes to concerns
-> of devmem + io_uring coexisting if you're able to take care, awesome,
-> if not, I can look into squashing some fix.
-
-Let it be this way then. It's not a problem while there is
-only one such a provider.
-
--- 
-Pavel Begunkov
+>
+> Thanks,
+> Conor.
 
