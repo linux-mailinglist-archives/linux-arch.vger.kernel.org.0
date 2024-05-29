@@ -1,70 +1,70 @@
-Return-Path: <linux-arch+bounces-4573-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4574-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B3E68D2D03
-	for <lists+linux-arch@lfdr.de>; Wed, 29 May 2024 08:16:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6AF88D3067
+	for <lists+linux-arch@lfdr.de>; Wed, 29 May 2024 10:12:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CC1E01C254A8
-	for <lists+linux-arch@lfdr.de>; Wed, 29 May 2024 06:16:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 68EC828E1C0
+	for <lists+linux-arch@lfdr.de>; Wed, 29 May 2024 08:12:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB42715FCFE;
-	Wed, 29 May 2024 06:15:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 724C7168C24;
+	Wed, 29 May 2024 08:04:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="EGPOj2ZR"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="gDaCxHnY"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2625E15CD73
-	for <linux-arch@vger.kernel.org>; Wed, 29 May 2024 06:15:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABFE6168C18
+	for <linux-arch@vger.kernel.org>; Wed, 29 May 2024 08:04:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716963356; cv=none; b=NhB8iJLv9Cxq0YYXQK50CgSGF3VRcWIzzJCLqv5xeRBr/DFeDgOKXbc2EqGZzm0yEXCpfwCFPMFTY++QFms+p0/sLgM/a/cIDMRcXjKLOxyc5XmSpWupkXY8v41NoOCR5sCMAU3lgSRH+QTgG2+H6+cOyBqVjNIo1lrKzU00kNI=
+	t=1716969869; cv=none; b=ZF/I6QusAfjb4MpZsqU1HvfIWz+GSU/gB70z7Q3m5btEXoDgngcOL6H+1u/5XVPnM9ojDEzK4CIYnWkNDvXasj3i3pDv5EzmHweQjdmPgEh+BNX/caJU3HT3tchHEsQHzSh7AsORxBGD9/WD+mdvFv+7PUw9gijqLimRLHW7/Uo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716963356; c=relaxed/simple;
-	bh=J+6g85MacrkhD1shRZPgIPHazStFB7uwlbQPh89YIGk=;
+	s=arc-20240116; t=1716969869; c=relaxed/simple;
+	bh=pft0aWV0nsM4NfbvHg75f+OMYeiKUeGHKGBBrvtxlgU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ePrZr+4B2lYH3d4FPpgRdDMiFWoqDpW2CvdTlkqh5sdfrmR0Wlv5xMmcKLGpHnmIY3JAwqi+PzSHCywopFIPB8UcjY30qXdJtCQuQfjBp708wmv2PRLDMoNPV1s3JxnlubFQBSWLkz4aDja5P60X9Bs7dKvPQvkeNdJbt2SS69g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=EGPOj2ZR; arc=none smtp.client-ip=209.85.208.181
+	 To:Cc:Content-Type; b=SjLp0JWUZfF59ng5gF3JqgNyZZjvwQqX97HsKoAfu+JxJUNidy/dIJSaiFz/xfJjGYXXUX2rFfZg8HC2YMFy2oBg0iIk77AMwvdY5pTszooSHTjJL0LwDUP3N27hIGc1X5uHCowCu+8PFbnU8+ukVGQoybqZpk4j8jHmiR0k6k8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=gDaCxHnY; arc=none smtp.client-ip=209.85.218.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2e9819a630fso24923101fa.1
-        for <linux-arch@vger.kernel.org>; Tue, 28 May 2024 23:15:53 -0700 (PDT)
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a59a609dd3fso114936866b.0
+        for <linux-arch@vger.kernel.org>; Wed, 29 May 2024 01:04:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1716963352; x=1717568152; darn=vger.kernel.org;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1716969866; x=1717574666; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Bh0ieLiOPTlnWO1kYS9M0GlqV4zOVJ6IiYKninn4+tc=;
-        b=EGPOj2ZRwNYZVsmt/xgNAaN9Qh5qC4/ahKgdB3FqJjCONzi86G8l+ARNLbKC9Del6D
-         48MX40fWduWhtP1Hb1LU2oIexalqNfhTR+kkMptf22G5vL2sqPdFTEJ8eu4fuQGyjPfP
-         kaSG/5a2e41Pbe6Lbe0Yqa1S9AWjdPaD3FPQHN/oh3/zTx8AbRPCyjS3otOI0XLIrZPE
-         ApfiZzQ27DYv0Cc3enDA4yLwPaAvPsSk80YarMdxUkdLD6aT641w2sYMhpLIFtZTcE/Z
-         AhNID7YbXTc8dn1q7O0MnOKGgHhWAfnxfKbQT6MBGwB5TjDlUpXTI4+6u0NeWVb+Rf+Q
-         PIqw==
+        bh=iugICvJDzmJo7xGBPHogMYo6Gg3CJ7ooLOOivaduvyI=;
+        b=gDaCxHnYmZS0tm8Ol8dqXsV9KxY5zbTD/Y2jCSfQ7lMLjC94uBPmMMa6rVKfwn53iD
+         Cgs4wuotuXpq6DfuEljDV94CsuMBHsmP76PXqu+iPnHhN/Nbw6yEsfeLCt+ibrouGb/0
+         pbRFNeTTD+gJ6NpChHHUhYX5JlTkOKKOe/p83Dl9xlKBYTTf2/BVZY1q8ZTRBSBDeXUP
+         EOtUHt3o8uyiWWuX3cYv+DCKOK6dxZFidarv1f9RNa5HsUJXKPxlbyX/nR140bkcOhgm
+         XArzyOY7YFwN67BfjMo+kXzwmzmZzsIID8PVhWug278JWScwQn0IhjuqWWNKdQTPhfIe
+         9HbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716963352; x=1717568152;
+        d=1e100.net; s=20230601; t=1716969866; x=1717574666;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Bh0ieLiOPTlnWO1kYS9M0GlqV4zOVJ6IiYKninn4+tc=;
-        b=KHEAzNYUGxPGmlo/alsQrnOsf6uQttQdryZH2U1laqWTmn0L4YnIIA7VZx3BwH8eNA
-         g0/pxNduPeAP9d8f1d9LqtL3kP8qMgjrxK8ChA+fk/Zlg+Xxa4Jc73KAD8BBtO9roeRV
-         5LV/kk8giK2zOLNS9Juq68OvyDLkTHGCvuA/33EFnqFS5hbbbxi2M748O3kqxE4XTS3/
-         d8Pe51k9EtPUaNxJjbxhcWnRcE1u7qH8GfOSitQCdNtf1vjzgje7xE98DTYdGErrzqZ2
-         nJh2HxBOzXVIf02jmppsIQ8uHPQ6teXrNDH2aYFtgLDB3Wo2UdZgYAfm5gg04CPaF2W2
-         ziSg==
-X-Forwarded-Encrypted: i=1; AJvYcCUNSCYp+kqWlBvVsZhyWK+e406B6UjwbmI4f2gHhmqiOQSKTx9P3dwoHJswf+vRAc2H7rIflmrLPHLztgCERMwnvaDwXsN2OOA7bA==
-X-Gm-Message-State: AOJu0YytIrbj5J9u5rSs8O7k63zxMiFL0p3DTe3+/4NvHZG+xSx7BypP
-	P81Gn3GBX85DIkDNAbxTPk5SPCPYR3WwVbLM92BrbqtqxbpJwHbB6gx5FnvCbBYMfHcISnhD5qQ
-	gfZck3n5VHB8OBS9cuInHoyLTR3Z0bY/7ngZ2Sw==
-X-Google-Smtp-Source: AGHT+IEm6bYc2ftZFt2uXoqzzY7bu2Oy5wbaxhF7xACheYlMcKXX+Saw39KXwd1j/qas7p5N+0C1MMzLyv9RtXFbmuc=
-X-Received: by 2002:a2e:968a:0:b0:2e1:c448:d61e with SMTP id
- 38308e7fff4ca-2e95b096f52mr108173371fa.15.1716963352171; Tue, 28 May 2024
- 23:15:52 -0700 (PDT)
+        bh=iugICvJDzmJo7xGBPHogMYo6Gg3CJ7ooLOOivaduvyI=;
+        b=AOhKWs7qprQmrp2Q0XK99s4HB8CJL/MEUMWRqGzcCCPw0iXrHaXeWl5hirRYf5Riz2
+         haBiQ2hmKIDBpy9uyau7iB+PRyDseGT5OlfNmwRHXx7N3trp16I0h6DuyAt2pPcPyClD
+         kAhB1xEsab46eEuQLRSkhnP5L/sL5a+WPT8tzytgYPyIhCBqHOzpjfkqLrpt9ExY9lb6
+         e27OP1G3n/Ojgk4eNAWBvyn3hloIK5leAsMLulg0ot/j4Edu/2T3M4GS9g3bplQ8uHHb
+         fHbrK/uVdyJNAQmZRpMXt/gFCcm1M2CZqhFVoNLyUosvTP0E2iLTZ0B5tZds1vg3HjVQ
+         qxKQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUDC0bINpVNTkN/Ph3DgK5EBD/lv6HC7ivgBtcainO/mkB7BBFwsHjXK0vC7foPBnEUrvD3HhMMZlRw2Z+x7FfxVwszyQ7nSr2v2Q==
+X-Gm-Message-State: AOJu0YwswW+FaHJue6ztEDR/7RwJrfimx37wyQq/HE5ZJg6UvFpAqxmO
+	u1riyOOOEB8utVQiTdAvuLuizNDsZM7MSxfuz0YHOdYuvBWCgcFIOceht/05JmbUw1mcKoac3P8
+	gF4o+wjKJXrcR57GwXvI6GY9VhqYblCOKVuse9w==
+X-Google-Smtp-Source: AGHT+IG6iwinAXXk+z85s+DZ7rCxbual1zF0BnW9/urFx8Jq0vjUfxC8W1lP9e0VTumF0FrEVCZkoP1D8o+mWg7nLg0=
+X-Received: by 2002:a17:906:3e4f:b0:a5c:d4b2:6a44 with SMTP id
+ a640c23a62f3a-a642d3846f7mr95336266b.16.1716969865779; Wed, 29 May 2024
+ 01:04:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -72,13 +72,13 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20240528151052.313031-1-alexghiti@rivosinc.com>
- <20240528151052.313031-5-alexghiti@rivosinc.com> <20240528-prenatal-grating-2b6096cc2a1b@spud>
-In-Reply-To: <20240528-prenatal-grating-2b6096cc2a1b@spud>
+ <20240528151052.313031-5-alexghiti@rivosinc.com> <ZlYbupL5XgzgA0MX@andrea>
+In-Reply-To: <ZlYbupL5XgzgA0MX@andrea>
 From: Alexandre Ghiti <alexghiti@rivosinc.com>
-Date: Wed, 29 May 2024 08:15:40 +0200
-Message-ID: <CAHVXubhsqOp2hSxVg7eGjjLN2-iTUFz1AMDTeEvyJh01iypzrw@mail.gmail.com>
+Date: Wed, 29 May 2024 10:04:14 +0200
+Message-ID: <CAHVXubgBDxyow3-CFwBrkJ7xoAXCv8Tq7nNTAcvbzbA=TAaf5A@mail.gmail.com>
 Subject: Re: [PATCH 4/7] riscv: Implement xchg8/16() using Zabha
-To: Conor Dooley <conor@kernel.org>
+To: Andrea Parri <parri.andrea@gmail.com>
 Cc: Jonathan Corbet <corbet@lwn.net>, Paul Walmsley <paul.walmsley@sifive.com>, 
 	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
 	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, 
@@ -89,46 +89,42 @@ Cc: Jonathan Corbet <corbet@lwn.net>, Paul Walmsley <paul.walmsley@sifive.com>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Conor,
+Hi Andrea,
 
-On Tue, May 28, 2024 at 5:22=E2=80=AFPM Conor Dooley <conor@kernel.org> wro=
-te:
+On Tue, May 28, 2024 at 8:00=E2=80=AFPM Andrea Parri <parri.andrea@gmail.co=
+m> wrote:
 >
-> On Tue, May 28, 2024 at 05:10:49PM +0200, Alexandre Ghiti wrote:
->         \
-> > diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hw=
-cap.h
-> > index e17d0078a651..f71ddd2ca163 100644
-> > --- a/arch/riscv/include/asm/hwcap.h
-> > +++ b/arch/riscv/include/asm/hwcap.h
-> > @@ -81,6 +81,7 @@
-> >  #define RISCV_ISA_EXT_ZTSO           72
-> >  #define RISCV_ISA_EXT_ZACAS          73
-> >  #define RISCV_ISA_EXT_XANDESPMU              74
-> > +#define RISCV_ISA_EXT_ZABHA          75
-> >
-> >  #define RISCV_ISA_EXT_XLINUXENVCFG   127
-> >
-> > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeat=
-ure.c
-> > index 3ed2359eae35..8d0f56dd2f53 100644
-> > --- a/arch/riscv/kernel/cpufeature.c
-> > +++ b/arch/riscv/kernel/cpufeature.c
-> > @@ -257,6 +257,7 @@ const struct riscv_isa_ext_data riscv_isa_ext[] =3D=
- {
-> >       __RISCV_ISA_EXT_DATA(zihintpause, RISCV_ISA_EXT_ZIHINTPAUSE),
-> >       __RISCV_ISA_EXT_DATA(zihpm, RISCV_ISA_EXT_ZIHPM),
-> >       __RISCV_ISA_EXT_DATA(zacas, RISCV_ISA_EXT_ZACAS),
-> > +     __RISCV_ISA_EXT_DATA(zabha, RISCV_ISA_EXT_ZABHA),
-> >       __RISCV_ISA_EXT_DATA(zfa, RISCV_ISA_EXT_ZFA),
-> >       __RISCV_ISA_EXT_DATA(zfh, RISCV_ISA_EXT_ZFH),
-> >       __RISCV_ISA_EXT_DATA(zfhmin, RISCV_ISA_EXT_ZFHMIN),
+> > -#define __arch_xchg_masked(prepend, append, r, p, n)                 \
+> > +#define __arch_xchg_masked(swap_sfx, prepend, append, r, p, n)        =
+       \
 >
-> You're missing a dt-binding patch in this series adding zabha.
+> This actually indicates a problem in the current (aka, no Zabha)
+> implementation: without your series, xchg16() gets mapped to
+>
+>   lr.w     a2,(a3)
+>   and      a1,a2,a5
+>   or       a1,a1,a4
+>   sc.w     a1,a1,(a3)
+>   bnez     a1,43c <.L0^B1>
+>
+> which is clearly wrong... (other "fully-ordered LR/SC sequences"
+> instead follow the mapping
+>
+>   lr.w     a2,(a3)
+>   and      a1,a2,a5
+>   or       a1,a1,a4
+>   sc.w.rl  a1,a1,(a3)
+>   bnez     a1,43c <.L0^B1>
+>   fence    rw,rw  )
+>
+> A similar consideration for xchg8().
 
-Thanks, I will add that to the v2.
+Ok, I will fix that separately and make it merged in -rc2.
+
+Thanks,
+
+Akex
 
 >
-> Thanks,
-> Conor.
+>   Andrea
 
