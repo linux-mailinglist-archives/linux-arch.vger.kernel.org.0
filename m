@@ -1,44 +1,44 @@
-Return-Path: <linux-arch+bounces-4594-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4595-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7AD248D3802
-	for <lists+linux-arch@lfdr.de>; Wed, 29 May 2024 15:41:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E86708D3806
+	for <lists+linux-arch@lfdr.de>; Wed, 29 May 2024 15:41:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC2931C24006
-	for <lists+linux-arch@lfdr.de>; Wed, 29 May 2024 13:41:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A5826283A37
+	for <lists+linux-arch@lfdr.de>; Wed, 29 May 2024 13:41:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEB7517BBA;
-	Wed, 29 May 2024 13:41:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F8FB17C73;
+	Wed, 29 May 2024 13:41:33 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C38F617BAF;
-	Wed, 29 May 2024 13:41:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88B6C17BB4;
+	Wed, 29 May 2024 13:41:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716990062; cv=none; b=oTOqrdivD/vtxkLsQDpCK90jRl19OfvQqPf5hnaEbJouMP3TQ6+ccly+LNcxcqjJxmckKsHpXQAFSt1s0Vw48YVVjBm+7n17X/Tlb+06mY+6JC99TlihlPS9FNcWyHz7oUNOWMhTCiFaRMMRFkunZfHrz7ukRj7k3yJdbF23rMI=
+	t=1716990093; cv=none; b=LNHrV9lOsDS171QzcWqFEftfmxNDbnaTazP+g13up6RthMT2t0y9z1Jgd1JikSUTcQ1XSragIsT71eEePhJHyH1rEzAmERhozvb1GWydmEl3M+8CUXEhL2PS1U/utV6iwgR3a1T9Z/UkYzgTW2W+eKjoQcysPck6KnqpEhmFE9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716990062; c=relaxed/simple;
-	bh=HRhhejitLik28OgzlcVBvJkb8ZtOvIVvfPv96DprgD8=;
+	s=arc-20240116; t=1716990093; c=relaxed/simple;
+	bh=XC2AfV3+IRVuErlXfReS96M7ywl4RO+B/FCDerWOMg0=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=byAze06mzPoeX46ov2Ktjssjmw5AoFv0W+VXj4Q6XOTDOBTIC+Vyr76GmwKTZ99w80uNBj3SBEUYLyHi+dcqNSxpCPsiJaL3ncMFcS5byLcBi0KtgoVI9OQ1T/k7irGP7l7phxir5XSzdC+DC2kOmj8LpluxqKWmkUpDPRRLkQk=
+	 MIME-Version:Content-Type; b=iEIIc3OK7VVfERGd7uBod0IF/goxt7YsCDE8OSKRioaTY9oWdnfrXXEBh0L1dz7zenF+8Qxo6TMLFBDqLBkaIhQK9Xwsp69itZqIlyTC+YWIKpaHz8O58TOzFHqfXYqv4Bm28FCD1XprFpvP5fYicZsKFrk3fXNh6uQzeJJ77WY=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Vq9Qh6LRGz6J6m1;
-	Wed, 29 May 2024 21:36:44 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Vq9RZ1H1Bz6JBHQ;
+	Wed, 29 May 2024 21:37:30 +0800 (CST)
 Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 0F0C5140DDB;
-	Wed, 29 May 2024 21:40:59 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id BEA3C140B2A;
+	Wed, 29 May 2024 21:41:29 +0800 (CST)
 Received: from SecurePC-101-06.china.huawei.com (10.122.247.231) by
  lhrpeml500005.china.huawei.com (7.191.163.240) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Wed, 29 May 2024 14:40:58 +0100
+ 15.1.2507.39; Wed, 29 May 2024 14:41:29 +0100
 From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 To: Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>, Catalin
  Marinas <catalin.marinas@arm.com>, <linux-acpi@vger.kernel.org>,
@@ -53,9 +53,9 @@ CC: Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>,
  Shan <gshan@redhat.com>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
 	<bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
 	<linuxarm@huawei.com>, <justin.he@arm.com>, <jianyong.wu@arm.com>
-Subject: [PATCH v10 12/19] arm64: acpi: Harden get_cpu_for_acpi_id() against missing CPU entry
-Date: Wed, 29 May 2024 14:34:39 +0100
-Message-ID: <20240529133446.28446-13-Jonathan.Cameron@huawei.com>
+Subject: [PATCH v10 13/19] irqchip/gic-v3: Don't return errors from gic_acpi_match_gicc()
+Date: Wed, 29 May 2024 14:34:40 +0100
+Message-ID: <20240529133446.28446-14-Jonathan.Cameron@huawei.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240529133446.28446-1-Jonathan.Cameron@huawei.com>
 References: <20240529133446.28446-1-Jonathan.Cameron@huawei.com>
@@ -70,41 +70,64 @@ Content-Type: text/plain
 X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
  lhrpeml500005.china.huawei.com (7.191.163.240)
 
-In a review discussion of the changes to support vCPU hotplug where
-a check was added on the GICC being enabled if was online, it was
-noted that there is need to map back to the cpu and use that to index
-into a cpumask. As such, a valid ID is needed.
+From: James Morse <james.morse@arm.com>
 
-If an MPIDR check fails in acpi_map_gic_cpu_interface() it is possible
-for the entry in cpu_madt_gicc[cpu] == NULL.  This function would
-then cause a NULL pointer dereference.   Whilst a path to trigger
-this has not been established, harden this caller against the
-possibility.
+gic_acpi_match_gicc() is only called via gic_acpi_count_gicr_regions().
+It should only count the number of enabled redistributors, but it
+also tries to sanity check the GICC entry, currently returning an
+error if the Enabled bit is set, but the gicr_base_address is zero.
 
+Adding support for the online-capable bit to the sanity check will
+complicate it, for no benefit. The existing check implicitly depends on
+gic_acpi_count_gicr_regions() previous failing to find any GICR regions
+(as it is valid to have gicr_base_address of zero if the redistributors
+are described via a GICR entry).
+
+Instead of complicating the check, remove it. Failures that happen at
+this point cause the irqchip not to register, meaning no irqs can be
+requested. The kernel grinds to a panic() pretty quickly.
+
+Without the check, MADT tables that exhibit this problem are still
+caught by gic_populate_rdist(), which helpfully also prints what went
+wrong:
+| CPU4: mpidr 100 has no re-distributor!
+
+Signed-off-by: James Morse <james.morse@arm.com>
 Reviewed-by: Gavin Shan <gshan@redhat.com>
+Tested-by: Miguel Luis <miguel.luis@oracle.com>
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
 ---
-V10: Fix description above (duplicated word).
-     Picked up Gavin's tag.
----
- arch/arm64/include/asm/acpi.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/irqchip/irq-gic-v3.c | 13 ++-----------
+ 1 file changed, 2 insertions(+), 11 deletions(-)
 
-diff --git a/arch/arm64/include/asm/acpi.h b/arch/arm64/include/asm/acpi.h
-index bc9a6656fc0c..a407f9cd549e 100644
---- a/arch/arm64/include/asm/acpi.h
-+++ b/arch/arm64/include/asm/acpi.h
-@@ -124,7 +124,8 @@ static inline int get_cpu_for_acpi_id(u32 uid)
- 	int cpu;
+diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+index 6fb276504bcc..10af15f93d4d 100644
+--- a/drivers/irqchip/irq-gic-v3.c
++++ b/drivers/irqchip/irq-gic-v3.c
+@@ -2415,19 +2415,10 @@ static int __init gic_acpi_match_gicc(union acpi_subtable_headers *header,
+ 	 * If GICC is enabled and has valid gicr base address, then it means
+ 	 * GICR base is presented via GICC
+ 	 */
+-	if (acpi_gicc_is_usable(gicc) && gicc->gicr_base_address) {
++	if (acpi_gicc_is_usable(gicc) && gicc->gicr_base_address)
+ 		acpi_data.enabled_rdists++;
+-		return 0;
+-	}
  
- 	for (cpu = 0; cpu < nr_cpu_ids; cpu++)
--		if (uid == get_acpi_id_for_cpu(cpu))
-+		if (acpi_cpu_get_madt_gicc(cpu) &&
-+		    uid == get_acpi_id_for_cpu(cpu))
- 			return cpu;
+-	/*
+-	 * It's perfectly valid firmware can pass disabled GICC entry, driver
+-	 * should not treat as errors, skip the entry instead of probe fail.
+-	 */
+-	if (!acpi_gicc_is_usable(gicc))
+-		return 0;
+-
+-	return -ENODEV;
++	return 0;
+ }
  
- 	return -EINVAL;
+ static int __init gic_acpi_count_gicr_regions(void)
 -- 
 2.39.2
 
