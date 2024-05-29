@@ -1,166 +1,136 @@
-Return-Path: <linux-arch+bounces-4605-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4606-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 525D58D395A
-	for <lists+linux-arch@lfdr.de>; Wed, 29 May 2024 16:34:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C32B08D3B8A
+	for <lists+linux-arch@lfdr.de>; Wed, 29 May 2024 17:57:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0DE47288278
-	for <lists+linux-arch@lfdr.de>; Wed, 29 May 2024 14:34:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F3B221C2372F
+	for <lists+linux-arch@lfdr.de>; Wed, 29 May 2024 15:57:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 497B015921B;
-	Wed, 29 May 2024 14:33:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADF2C181BB3;
+	Wed, 29 May 2024 15:57:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gSkDCEhl"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08AFA1E878;
-	Wed, 29 May 2024 14:33:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CE9D180A92;
+	Wed, 29 May 2024 15:57:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716993234; cv=none; b=gRCiSgMjD0FfQMKVS1wYA+dQ9vmY2keU5g/JwsMxvmhM7yvxoq+bgdZUOFZ9BBg+sEWp9ZkWkC3fW53AX8lxOtNO1EzXqnVuYhDl7PCHtljh4u7qtPfsi2+E0Jhe77bODixzkAi8arsw6s4ESg6/lrbk0rI4nXWF1VHIDa2M1zw=
+	t=1716998272; cv=none; b=lb3nT1rB32hvcXskbA30Tea/7ieYoQ5tRqQA2aoO+9s3IaM1GpiVCPz0c4FFp4dXqfkkYC+OrMDZ9OKD+mVX+ImodoGOdjpPtX3YLY98+BiTz5B+V6iitdUArLuXtvha8fTUzNXIyd33AesrqsijLz0j/55m/kNUuAGhpPWGA+4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716993234; c=relaxed/simple;
-	bh=d7VeRVAQUDCQC8USLPoco6V7FBVHhARO3gOl1CFGDR4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Jl24PfegZ22oEVhi0NjZPG0Q5IQ/aX9pYRBLd2exdrQtGknKDcrhxMEfIVx1Wysv/drFRQtqlllfUqOFPMteG+pfsk/i1FmpdR+nbpXaHpcY4i6czBBIX+ONtJr42KDkdIqYjGqzkjuAkRwz5hNqLjq3Y5Xgc/XY/rnfFcI8Fd4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4VqBJR2YSzz9v7Hn;
-	Wed, 29 May 2024 22:16:23 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id D1BB5140415;
-	Wed, 29 May 2024 22:33:37 +0800 (CST)
-Received: from [10.206.134.102] (unknown [10.206.134.102])
-	by APP1 (Coremail) with SMTP id LxC2BwAn0Rm0PFdmJv0mCQ--.51539S2;
-	Wed, 29 May 2024 15:33:37 +0100 (CET)
-Message-ID: <118eb48a-cc4a-4708-a826-455f888552b1@huaweicloud.com>
-Date: Wed, 29 May 2024 16:33:21 +0200
+	s=arc-20240116; t=1716998272; c=relaxed/simple;
+	bh=OYSSBejeV+h0PVcSSif4AfjAaQ8JCT/Hva0H2R4ia90=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Wrc0FlSU3ULbK8a7Vzm5JdiR8fHN3Qck0ANh95CPypT7uP8vd3c2A7vj1EiMonCBhewQQ/36RUPXPPYP37SGXq8jTsJsI3cQTJVu0/rMD0FmBuVP/dEOkZZqIeEkH08n7/NVuFAIusgH8IPOBRjYMBFMkdGtgIzstCvmeAw6yjM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gSkDCEhl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12D28C113CC;
+	Wed, 29 May 2024 15:57:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716998272;
+	bh=OYSSBejeV+h0PVcSSif4AfjAaQ8JCT/Hva0H2R4ia90=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gSkDCEhlOxLXGm6lJ/xoOCrEOygETBWQSbf75n62dS1s2Znq+1O1leoHDMz2n2aZk
+	 agVKmRJJ+TdsUTHtlgUe8urgEhUmDs6OE3FwnBJViKwQOVA6VRXdXqYVBVDd+aoRiR
+	 ie2zuSz4gC2mFjUrRRir6eXQlSJlDv1CPcD0yB3FbF8bKgGbc/JrSLzyNwvyYL6al9
+	 FGXEPjua7QhBRIwnCkWXHvAfxZs6hnORKrEEk87UtZP+a/Jr90ZSkmsmMrCYIiAJok
+	 TxLpSBzzFbrm0nDz6dPk4rj6tG/y7kf+Gr/uEVJHKj37mtRjYpShMY1t02dDLGCcwJ
+	 x0v3CQgkSBqjA==
+Date: Wed, 29 May 2024 08:57:49 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc: Jonathan Corbet <corbet@lwn.net>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+	Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>,
+	Arnd Bergmann <arnd@arndb.de>, Leonardo Bras <leobras@redhat.com>,
+	Guo Ren <guoren@kernel.org>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-arch@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 2/7] riscv: Implement cmpxchg8/16() using Zabha
+Message-ID: <20240529155749.GA1339768@thelio-3990X>
+References: <20240528151052.313031-1-alexghiti@rivosinc.com>
+ <20240528151052.313031-3-alexghiti@rivosinc.com>
+ <20240528193110.GA2196855@thelio-3990X>
+ <CAHVXubjYVjOH8RKaF1h=iogO3xBM6k+xrGwkPnc-md2oRxbxrQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] tools/memory-model: Document herd7 (internal)
- representation
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Boqun Feng <boqun.feng@gmail.com>, Andrea Parri <parri.andrea@gmail.com>,
- Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>, will@kernel.org,
- peterz@infradead.org, npiggin@gmail.com, dhowells@redhat.com,
- j.alglave@ucl.ac.uk, luc.maranget@inria.fr, paulmck@kernel.org,
- akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
- linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-References: <20240524151356.236071-1-parri.andrea@gmail.com>
- <1a3c892c-903e-8fd3-24a6-2454c2a55302@huaweicloud.com>
- <ZlSKYA/Y/daiXzfy@andrea>
- <41bc01fa-ce02-4005-a3c2-abfabe1c6927@huaweicloud.com>
- <ZlYbXZSLPmjTKtaE@boqun-archlinux>
- <7e2963a3-d471-4593-9170-7f59aa1ce038@huaweicloud.com>
- <b54575b9-ab29-4bcd-ae7a-6132d1e36195@rowland.harvard.edu>
- <8c6174c7-a26c-416e-b9b1-2aff2d43dea1@huaweicloud.com>
- <2e34674c-2443-4345-8bc7-8c950a47f621@rowland.harvard.edu>
-From: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-In-Reply-To: <2e34674c-2443-4345-8bc7-8c950a47f621@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:LxC2BwAn0Rm0PFdmJv0mCQ--.51539S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7ArW3ury8uFyfJw4DKw4xXrb_yoW8uFWDpr
-	ySgayUKrs8Jr40qrWaqr10ga4a9ry7ZF1Fq3sYyrsIqwnI9ry8JrW7urZrW3ZrXrn7Ar15
-	XF12y34xX34UJFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUkE14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-	6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
-	4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-	I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-	4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
-	c2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
-	v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkG
-	c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j
-	6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUAxh
-	LUUUUU=
-X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHVXubjYVjOH8RKaF1h=iogO3xBM6k+xrGwkPnc-md2oRxbxrQ@mail.gmail.com>
 
+On Wed, May 29, 2024 at 02:49:58PM +0200, Alexandre Ghiti wrote:
+> Then I missed that, I should have checked the generated code. Is the
+> extension version "1p0" in '-march=' only required for experimental
+> extensions?
 
+I think so, if my understanding of the message is correct.
 
-Am 5/29/2024 um 4:24 PM schrieb Alan Stern:
-> On Wed, May 29, 2024 at 04:17:36PM +0200, Jonas Oberhauser wrote:
->>
->>
->> Am 5/29/2024 um 4:07 PM schrieb Alan Stern:
->>> On Wed, May 29, 2024 at 02:37:30PM +0200, Jonas Oberhauser wrote:
->>>> Given herd's other syntactic limitations, perhaps the best way would be to
->>>> introduce these macros as
->>>>
->>>> 	x = cmpxchg(...) {
->>>> 		__fence{mb-successful-rmw};
->>>>    		x = __cmpxchg{once}(...);
->>>>    		__fence{mb-successful-rmw};
->>>> 	}
->>>>
->>>> since I think x = M(...) is the only way we are allowed to use these macros
->>>> anyways.
->>>
->>> If we did this, how would the .cat file know to ignore the fence events
->>> when the cmpxchg() fails?  It doesn't look like there's anything to
->>> connect the two of them.
->>>
->>> Adding the MB tag to the cmpxchg itself seems like the only way forward.
->>>
->>> Alan
->>
->> Something along these lines:
->>
->>    Mb = Mb | Mb-successful-rmw & (domain((po\(po;po));rmw) |
->> range(rmw;(po\(po;po)))
->>
->> i.e., using the fact that these mb-successful-rmw fences must appear
->> directly next to a possibly failing rmw, and looking for successful rmw
->> directly around them.
->>
->> I suppose we have to distinguish between the before- and after- fences
->> though to make it work for cases like
->>
->> xchg_release();
->> cmpxchg(); // fails
->>
->>
->>                  __xchg_release(...); // is an rmw
->>   		__fence{mb-successful-rmw}; // wrong takes mb semantics
->>     		x = __cmpxchg{once}(...); // fails
->>     		__fence{mb-successful-rmw};
->>
->>
->> So that would leave us with
->>
->>   	x = cmpxchg(...) {
->>   		__fence{mb-before-successful-rmw};
->>     		x = __cmpxchg{once}(...);
->>     		__fence{mb-after-successful-rmw};
->>   	}
->>
->> and in .cat/.bell:
->>
->>    Mb = Mb | Mb-before-successful-rmw & domain((po\(po;po));rmw) |
->> Mb-after-successful-rmw & range(rmw;(po\(po;po)))
+> But from Conor comment here [1], we should not enable extensions that
+> are only experimental. In that case, we should be good with this.
 > 
-> It's messy.  Associating the fences directly with the RMW event(s) by
-> adding the MB tags is much cleaner, IMO.
+> [1] https://lore.kernel.org/linux-riscv/20240528151052.313031-1-alexghiti@rivosinc.com/T/#mefb283477bce852f3713cbbb4ff002252281c9d5
 
-I agree.
+Yeah, I tend to agree with Conor on that front. I had not noticed that
+part of the message when I was looking at other parts of this thread. I
+could see an argument for allowing experimental extensions for
+qualification purposes but I think it does create a bit of a support
+nightmare, especially when there are breaking changes across revisions.
 
-> Also, does the syntax you are proposing require changes to herd7?  I'm
-> not aware that it is currently able to parse that kind of definition.
+> > config EXPERIMENTAL_EXTENSIONS
+> >     bool
+> >
+> > config TOOLCHAIN_HAS_ZABHA
+> >     def_bool y
+> >     select EXPERIMENTAL_EXETNSIONS if CC_IS_CLANG
+> >     ...
+> >
+> > config TOOLCHAIN_HAS_ZACAS
+> >     def_bool_y
+> >     # ZACAS was experimental until Clang 19: https://github.com/llvm/llvm-project/commit/95aab69c109adf29e183090c25dc95c773215746
+> >     select EXPERIMENTAL_EXETNSIONS if CC_IS_CLANG && CLANG_VERSION < 190000
+> >     ...
+> >
+> > Then in the Makefile:
+> >
+> > ifdef CONFIG_EXPERIMENTAL_EXTENSIONS
+> > KBUILD_AFLAGS += -menable-experimental-extensions
+> > KBUILD_CFLAGS += -menable-experimental-extensions
+> > endif
 
-Indeed, herd7 can't deal with this syntax right now.
+Perhaps with that in mind, maybe EXPERIMENTAL_EXTENSIONS (or whatever)
+should be a user selectable option and the TOOLCHAIN values depend on it
+when the user has a clang version that does not support the ratified
+version.
 
-    jonas
+> That's a good idea to me, let's see what Conor thinks [2]
+> 
+> [2] https://lore.kernel.org/linux-riscv/20240528151052.313031-1-alexghiti@rivosinc.com/T/#m1d798dfc4c27e5b6d9e14117d81b577ace123322
 
+FWIW, I think your plan of removing support for the experimental version
+of the extension and pushing to remove the experimental status in LLVM
+(especially since it seems like it is ratified like zacas?
+https://jira.riscv.org/browse/RVS-1685) is probably the best thing going
+forward. If the LLVM folks are made aware soon, it should be easy to get
+that change into clang-19, which is branching at the end of July I
+believe.
+
+> Thanks for your thorough review!
+
+Thanks for taking LLVM support into consideration :)
+
+Cheers,
+Nathan
 
