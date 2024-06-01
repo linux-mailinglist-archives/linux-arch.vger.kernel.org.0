@@ -1,160 +1,171 @@
-Return-Path: <linux-arch+bounces-4640-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4641-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1F018D6E68
-	for <lists+linux-arch@lfdr.de>; Sat,  1 Jun 2024 08:18:52 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 043178D6FEC
+	for <lists+linux-arch@lfdr.de>; Sat,  1 Jun 2024 15:09:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E2F4EB26B29
-	for <lists+linux-arch@lfdr.de>; Sat,  1 Jun 2024 06:18:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C3393B220E1
+	for <lists+linux-arch@lfdr.de>; Sat,  1 Jun 2024 13:09:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7964113ACC;
-	Sat,  1 Jun 2024 06:18:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 761B21509AC;
+	Sat,  1 Jun 2024 13:09:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T3l21jx6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XK+toAIN"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B569134BC;
-	Sat,  1 Jun 2024 06:18:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA99412FB34;
+	Sat,  1 Jun 2024 13:09:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717222724; cv=none; b=Yqngz9KLYlkvjr7uZCWW/rPegnwEnSQ050CezQ7oH4toToP1nR1e16Tnd8ZbI3cci51ht0x4bn13trDA5j+ZN4DrCqwTWwX62tCkOlv49/1P5W2lN39MUlgM0ijVACTn/Ft+Fql3YLk6NN7kc4Pv1wabVEPEReOPm67q1Jrkofo=
+	t=1717247351; cv=none; b=R3Q51BL6JEI6Omgp8nwceETtxU83cO/5UMRjnXP5ad0GqG93Zwluz/NgOZKPGJ6Vn1+O8Hhdu/ei8n2nNvJIa5OlGiN6YTFFd+6mWFJWcASHiHTy/56xA9O4o8xaG2z4pYMQrk6bcN2PpIL6Rm+TvgkvqHHBShHpeWAcv+jRGKk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717222724; c=relaxed/simple;
-	bh=qv/TpTCLIjAt2eWLAMdx+nkTx3R9H3xNd5p/PM0KR/Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=d0vohHBlIUnbimfzeCKVv+lJfd0xavFKPQPuwCm+ivb5T/xoo8IJsZ6UlN8/gHmaX5dcQXGxy3QXwWhQf6ne/+rIlTpejm4INb03MoTDcPTfGkVuhJaHHgahzFgqJv1yOrDy0a0fzwhNm0mERhse4S0ZaFXIa8izneQ/hvyLxA8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T3l21jx6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC514C4AF11;
-	Sat,  1 Jun 2024 06:18:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717222723;
-	bh=qv/TpTCLIjAt2eWLAMdx+nkTx3R9H3xNd5p/PM0KR/Y=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=T3l21jx6DRIWYURgryuGOT3ad9rDOO3VpyZ+i7KLuV3CcXvTubeGccG9yaHbBfJpY
-	 LsrboZ2sQWcX9Ec/3B69HuI2DM9AN2sbX2oU2rv+UPKctEENjsZN3ASah5wZia7ZK3
-	 RNc651eTlMdCQiTtGD9ElY2qefzF2jz335808HGpaAPQZDz9k6TXGPKefYGoTbxyvg
-	 l0IAo0pij8zWp3qwUG62akh6IMydtrt0QifAulzwqW5jbbYmLZfoENjqQ7JyCHmInL
-	 jznE2vMfiu0ThzP5s4rWrOEo4GqI3tS5wfe6DIgNbuelsCyxK0vo7pd/AyLGoiISdF
-	 o0D+603L2oJlw==
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a653972487fso228595366b.1;
-        Fri, 31 May 2024 23:18:43 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXmfREBp6USUf3OnTP63Gx95HISStyRzVj8AY6KotvZpuXgFZf3nW7yWNR5aBIMWDb8RVmih7ArtGxC8cS06GAifyQZpkwr6LA0nixNJw6KGX/9bruaYwfYwulkLSzQf/q97ZgCXErIUKWh2EkGHcPiSPoojRFy6qu+472yM4892xupPw==
-X-Gm-Message-State: AOJu0YytL21p8ZuEH/VB0HE6rMYkLcaMNzgIIWzeWwxSCfdEJox1hcp+
-	2l2tzEehhLZ4kGUrcSDpzne8jpN7qy9rV7NbXCUa6LFVJCaF0i/x3KfeRZFCjRj9t82ZsdRKmLt
-	egIlezFRPXcvy9+MtzyW5zzRIor4=
-X-Google-Smtp-Source: AGHT+IEA4/ILSczbK0xOrDgN8sjL32cYwfghwWG8IasCH/Si+Iwy3qd1z6J8H3j9DILXwkN3hkhqqm3H1a7TEeNrKmU=
-X-Received: by 2002:a17:906:4114:b0:a68:b6c7:516b with SMTP id
- a640c23a62f3a-a68b6c75209mr37608866b.73.1717222722373; Fri, 31 May 2024
- 23:18:42 -0700 (PDT)
+	s=arc-20240116; t=1717247351; c=relaxed/simple;
+	bh=JeCV8WyWwZWgsRBoBsXvODv76tCrqrpoTPjcXqyhaow=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=M4JE/cPlbdfXEZc7eWNN3ckQSVLOig2VDk4AFk8gaz9q/hj8vLloWO3bTMxvoPR9xx+Q9wW3ffdjgSClrcG6MTScG6PXztxsrJU5ARNj3yqCRq4Dtxl4iaYFAuTJTLtA44gkvYDbYWsmfeyDVljzvmDVDH4qeLdOzDd0OVwNbVQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XK+toAIN; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1f480624d10so23883935ad.1;
+        Sat, 01 Jun 2024 06:09:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1717247349; x=1717852149; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JeCV8WyWwZWgsRBoBsXvODv76tCrqrpoTPjcXqyhaow=;
+        b=XK+toAINfJVGtTmUD3Soy0vZsJyLB8cubuJe/oohosJE2IaO7hXTeDKjcG9hNos62f
+         GJyptL3LNYxldQS3PWjxKnVoONl/DcgWoivTLhiCf8MJwquaGfIx1+g28tsf5TnrcAXt
+         fcNA1NdeyxXUHba0NrCYx5W3sUMwNejEysDA/iTRVdVLisVjYmp30WtRwT4k8NipW/ME
+         0drREBCxR0emIhka6DiTUPv5kg6pe/qxH+AqefRsu7GY79OKUwy40EaqFaVsapp5AiaI
+         V70SSn/KVtxFC8XCcqvioQacmZMftg3asl7k1QEBNqT4rv/DN3rNTxPvYLvAD+tM5+/z
+         SXlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717247349; x=1717852149;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JeCV8WyWwZWgsRBoBsXvODv76tCrqrpoTPjcXqyhaow=;
+        b=mupf7dbpkqcr2BPc2+heTZBijVidN6ng2Quj0GtUTQZrHwszyit75IbOlH+VFWgmki
+         mnqqMvSL5gqqLrl5rOxjNZyPprSryhxaAiCRAiTDSVU3nuGP6gmrmZNr0LOpaoyaQ9nk
+         y/Fg+Xoo2R6rVom+Oe5V4zt3lODm23VoPJWDObB1INKnWj+dVJIK85Y7N5mpeIZjs7ph
+         ra3jmOcFMeErpagEdOUycLhsgITfVKS9jyCee/GyuEzT89xVQLl7B0Xi/ZhTr+FgB/8u
+         ESXlyLnlhKptDbvHfyukGCFdEs+QHAJqUBgMRpvc0P9BqoNdSg4rHH4xFAXUGqZJtt4s
+         G3XA==
+X-Forwarded-Encrypted: i=1; AJvYcCXsDpo+RVKG33/tJ8B2nSqKJjAo1fE5UyixihAQfJyfstahQQdZ98IgGaSXh/WOPmQfBsG+wUsAE60iAffF1iuw+YNNab4chkoaQwj6KVjshlUVCboxjDqvA/sZAbSNCo42nBsgotRNb1KIqq/Nkwh4e/G32hi6ZSExVMFNJ73SmwzOXyid+ed47S2T0SPJvN8ocQpopjAk7ujPGD44PHD4jF6G9z0Y0GPtZNkglZ8nnBaVtX6UTlDMeo6pgMqBcc26xgeqv9OuVdNxuNNSK3dkvV331S5HTQHByrX4NKwXiRExtdw2O6y6U8nCTXzWVQBnCdhN9xsr8/s66bg+QgpKeEioCh8caFlyCG7XTj2quynZe/1LQ1l5TrwvR9VBK4EJViRtZ68adA1HbkoR9VfCPo8+cr+CQ5WT4I3ycUzaa/RKtakCVdFDV4CSnzWC4RRRsmZSHwLgMKqRB0PwnYK+uYQNFCHPcsK4mcyt6BFgG/GDhNmJngp/kSehLtlKSk2GGmK/Fg==
+X-Gm-Message-State: AOJu0YxlpxYMMmDiIQZDSJutOxeVxlxT7Tzqckmx691LsIRcQIFd0xGf
+	au+Un04HmZjznlSwpaTdoUJ0bMe/vuOnUpOvOF6lpLCoNjtzTEgl
+X-Google-Smtp-Source: AGHT+IFMrqly2po5FAbpY8Ll75+7jqZGxykv2GKZgaeba5l+UFazICmi5KDmbbiaIzRe6tWODUDHbA==
+X-Received: by 2002:a17:902:c412:b0:1f6:310b:a3cd with SMTP id d9443c01a7336-1f637018d0dmr55346295ad.20.1717247349084;
+        Sat, 01 Jun 2024 06:09:09 -0700 (PDT)
+Received: from archie.me ([103.124.138.155])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f632338afbsm33014155ad.47.2024.06.01.06.09.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 01 Jun 2024 06:09:08 -0700 (PDT)
+Received: by archie.me (Postfix, from userid 1000)
+	id B7AAC186E1EBA; Sat, 01 Jun 2024 20:09:03 +0700 (WIB)
+Date: Sat, 1 Jun 2024 20:09:03 +0700
+From: Bagas Sanjaya <bagasdotme@gmail.com>
+To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+	Matt Turner <mattst88@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Steffen Klassert <steffen.klassert@secunet.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	David Ahern <dsahern@kernel.org>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Yunsheng Lin <linyunsheng@huawei.com>,
+	Shailend Chand <shailend@google.com>,
+	Harshitha Ramamurthy <hramamurthy@google.com>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Jeroen de Borst <jeroendb@google.com>,
+	Praveen Kaligineedi <pkaligineedi@google.com>,
+	Mao Zhu <zhumao001@208suo.com>, Ran Sun <sunran001@208suo.com>,
+	Xiang wangx <wangxiang@cdjrlc.com>,
+	Shaomin Deng <dengshaomin@cdjrlc.com>,
+	Charles Han <hanchunchao@inspur.com>,
+	Attreyee M <tintinm2017@gmail.com>, LihaSika <lihasika@gmail.com>
+Subject: Re: [PATCH net-next v10 13/14] net: add devmem TCP documentation
+Message-ID: <Zlsdb05xe4EnIXmq@archie.me>
+References: <20240530201616.1316526-1-almasrymina@google.com>
+ <20240530201616.1316526-14-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240528151052.313031-1-alexghiti@rivosinc.com>
- <20240528151052.313031-8-alexghiti@rivosinc.com> <ZlZ8/Nv3QS99AgY9@andrea>
- <39a9b28c-2792-45ce-a8c6-1703cab0f2de@ghiti.fr> <ZlnyKclZOQdrJTtU@andrea>
-In-Reply-To: <ZlnyKclZOQdrJTtU@andrea>
-From: Guo Ren <guoren@kernel.org>
-Date: Sat, 1 Jun 2024 14:18:30 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTz2H5McxgsrEcMeCNMnchS6sr3vRn53J=FWk_6HPoP6A@mail.gmail.com>
-Message-ID: <CAJF2gTTz2H5McxgsrEcMeCNMnchS6sr3vRn53J=FWk_6HPoP6A@mail.gmail.com>
-Subject: Re: [PATCH 7/7] riscv: Add qspinlock support based on Zabha extension
-To: Andrea Parri <parri.andrea@gmail.com>
-Cc: Alexandre Ghiti <alex@ghiti.fr>, Alexandre Ghiti <alexghiti@rivosinc.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, 
-	Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Leonardo Bras <leobras@redhat.com>, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="aC8Ai/5tbLCsiak5"
+Content-Disposition: inline
+In-Reply-To: <20240530201616.1316526-14-almasrymina@google.com>
+
+
+--aC8Ai/5tbLCsiak5
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 31, 2024 at 11:52=E2=80=AFPM Andrea Parri <parri.andrea@gmail.c=
-om> wrote:
->
-> > > > + select ARCH_USE_QUEUED_SPINLOCKS if TOOLCHAIN_HAS_ZABHA
-> > > IIUC, we should make sure qspinlocks run with ARCH_WEAK_RELEASE_ACQUI=
-RE,
-> > > perhaps a similar select for the latter?  (not a kconfig expert)
-> >
-> >
-> > Where did you see this dependency? And if that is really a dependency o=
-f
-> > qspinlocks, shouldn't this be under CONFIG_QUEUED_SPINLOCKS? (not a Kco=
-nfig
-> > expert too).
->
-> The comment on smp_mb__after_unlock_lock() in include/linux/rcupdate.h
-> (the barrier is currently only used by the RCU subsystem) recalls:
->
->   /*
->    * Place this after a lock-acquisition primitive to guarantee that
->    * an UNLOCK+LOCK pair acts as a full barrier.  This guarantee applies
->    * if the UNLOCK and LOCK are executed by the same CPU or if the
->    * UNLOCK and LOCK operate on the same lock variable.
->    */
->   #ifdef CONFIG_ARCH_WEAK_RELEASE_ACQUIRE
->   #define smp_mb__after_unlock_lock()   smp_mb()  /* Full ordering for lo=
-ck. */
->   #else /* #ifdef CONFIG_ARCH_WEAK_RELEASE_ACQUIRE */
->   #define smp_mb__after_unlock_lock()   do { } while (0)
->   #endif /* #else #ifdef CONFIG_ARCH_WEAK_RELEASE_ACQUIRE */
->
-> Architectures whose UNLOCK+LOCK implementation does not (already) meet
-> the required "full barrier" ordering property (currently, only powerpc)
-> can overwrite the "default"/common #define for this barrier (NOP) and
-> meet the ordering by opting in for ARCH_WEAK_RELEASE_ACQUIRE.
->
-> The (current) "generic" ticket lock implementation provides "the full
-> barrier" in its LOCK operations (hence in part. in UNLOCK+LOCK), cf.
->
->   arch_spin_trylock() -> atomic_try_cmpxchg()
->   arch_spin_lock() -> atomic_fetch_add()
->                    -> atomic_cond_read_acquire(); smp_mb()
->
-> but the "UNLOCK+LOCK pairs act as a full barrier" property doesn't hold
-> true for riscv (and powerpc) when switching over to queued spinlock.
-Yes.
+On Thu, May 30, 2024 at 08:16:12PM +0000, Mina Almasry wrote:
+> Add documentation outlining the usage and details of devmem TCP.
+>=20
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
+>=20
 
-> OTOH, I see no particular reason for other "users" of queued spinlocks
-> (notably, x86 and arm64) for selecting ARCH_WEAK_RELEASE_ACQUIRE.
-I looked at the riscv-unprivileged ppo section, seems RISC-V .rl ->
-.aq has RCsc annotations.
-ref:
-Explicit Synchronization
- 5. has an acquire annotation
- 6. has a release annotation
- 7. a and b both have RCsc annotations
+The doc LGTM, thanks!
 
-And for qspinlock:
-unlock:
-        smp_store_release(&lock->locked, 0);
-
-lock:
-        if (likely(atomic_try_cmpxchg_acquire(&lock->val, &val, _Q_LOCKED_V=
-AL)))
-
-If the hardware has Store-Release and CAS instructions, they all obey
-Explicit Synchronization rules. Then RISC-V "UNLOCK+LOCK" pairs act as
-a full barrier, right?
-
->
-> But does this address your concern?  Let me know if I misunderstood it.
->
->   Andrea
-
-
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
 --=20
-Best Regards
- Guo Ren
+An old man doll... just what I always wanted! - Clara
+
+--aC8Ai/5tbLCsiak5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZlsdaQAKCRD2uYlJVVFO
+o0YSAP9oUIejut2Xeqpj9kDBtkMcGA4Nf4zKVIgKdapDIWoSMAEA/6GrjlpUnXa2
+aFvYS6BFsRnMWpsP7c/bQ/LplabX6wM=
+=YUa0
+-----END PGP SIGNATURE-----
+
+--aC8Ai/5tbLCsiak5--
 
