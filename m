@@ -1,74 +1,38 @@
-Return-Path: <linux-arch+bounces-4654-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4655-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A87988D8579
-	for <lists+linux-arch@lfdr.de>; Mon,  3 Jun 2024 16:52:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BC148D8613
+	for <lists+linux-arch@lfdr.de>; Mon,  3 Jun 2024 17:31:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5ECD4289BE6
-	for <lists+linux-arch@lfdr.de>; Mon,  3 Jun 2024 14:52:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4CA9F1C21DD0
+	for <lists+linux-arch@lfdr.de>; Mon,  3 Jun 2024 15:31:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AED3812F5A5;
-	Mon,  3 Jun 2024 14:52:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bSOJ0OvT"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65EA412FF73;
+	Mon,  3 Jun 2024 15:31:49 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDD2112D1F1;
-	Mon,  3 Jun 2024 14:52:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 442B0126F1F;
+	Mon,  3 Jun 2024 15:31:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717426353; cv=none; b=DJbMyFL2arg6hGGFdAcpSVfz4j7/npFDdEA6Toa4p+w0kuLqVIjlUxtKzMOLleRk5zbLLSh1ac986ZmVoNcc/q1EKoaWEuQKOS7AzU67BF74c3IjEqSYuiIIqHNukscmGTImHPHEj4JH1d2NRQP3f41zTFXBHywIWctx+yTLttc=
+	t=1717428709; cv=none; b=lbv85T0kl/zN0T30xH3rJehz9mgzHQtE1fGefB0JhEn5L6DAQOTilccUu5AVV4U2DZMYHWDEshHO7WA6AjQCjr7aA1SVdjntuR+yAz89KZIlE1ZoteX7geBj1yEE8U/YLOmQe4ty3hiiYCRkJnvbWCJc8AhZlXaCgMDkBN1t2vA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717426353; c=relaxed/simple;
-	bh=wUNte8raa3GqYXUgFYODM68puHDovUgTvfDgiRlKYMc=;
+	s=arc-20240116; t=1717428709; c=relaxed/simple;
+	bh=FGEu0jOGMounLvsZRMkDX/bZRfd7rOh4F+HLFoCmdYs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=neP7fDPI0dSpGsPQnfLvEiNjOdkO14vRz7R9q0I4rddZrcptOYk4TMss/a6lxezKa8lIyZZ8U7FoVipRtHtYB9M+lLnoZhw+nrcW6hlyMbSA0JdohO6eM0NTDrxkrg1+dmCgg4QzMxwwx0UTpQdrWFbwZwdIMrr+Cgs/88js3q0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bSOJ0OvT; arc=none smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-57a196134d1so5146942a12.2;
-        Mon, 03 Jun 2024 07:52:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717426350; x=1718031150; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DFaFTQnu+hpbSIZgsrwPb2+pTUe1zvaznlAq9n5uYoY=;
-        b=bSOJ0OvTjP8vrjy05Bk9TWU5rOdYIKgAA3ig7VgB2lctXYofvXD9c1bxyVPoIV+3ex
-         CmniemwQa56LWyjGYKKxqEev8/i2KI4X6Epd3QwOaAqiyElsCM/3ttuAiSA6xkTDvlm7
-         sFyrIPjMN1CKPsh3cCdqaa62i+qh+DuwZ6BoCFdFZBMsV7rRNl2s9D8epXjNXp+EFWum
-         RuYDfeLJoza8KhNi2VumW9YWTOwJzDOSo853rr1tNGfGVbZwm29UWpBe/CVm5vutGWpT
-         WWKzUixAtCru5hOmdWcq4PxNkis5/9lWkL1CNt+A1tG13gC7ZF55v8xOxPUqLiKOoJ/Z
-         HroQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717426350; x=1718031150;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DFaFTQnu+hpbSIZgsrwPb2+pTUe1zvaznlAq9n5uYoY=;
-        b=hFr5msJuZkCJXM97flLvUFYlR/dzCligi5eNTXqwH8BZdz8IvIx8FXJ1IUx/dP9zHf
-         dqo/I3CI3GPU0rZbPo3sq3vQ4y1QmGtdgY0W62AortJA/1PFlTcREDlNj+1Enkz3VXMt
-         ngFpmO403m+QN8HSKxVNx9d5wpXpSr5og2LuZ3kdn9oue9Bm6LM6MknTCwU2/7UEYIOh
-         VQPOMgy3f722aFIP60uU+G5651KPwLJ8b9p698i+b4aZUXEtj4yGnj8uw0Vet37FRANI
-         rzQVWHtpQhsMOLSB8zAhjjo82AN08KOWKKAQoyDmINyxG2TRaGGfnXfak0Ak8qxkBmRT
-         TFxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWwFZs367fR/S68blWftiFku6Zgz/ldtFYIvA9dhqX7bdQLllfbQBjOHbeY87BfuiDg3IZX0h4ovuTfd2K2hHUtog2KVj09t0H43wYqByYLrtnhwp3RNNn258M8I12SLbk4Y7TY3Njw58f+fFweONMaZrpunRA9elSR2FDidxHJ1h3fq7VsQZFHAtncbEC4vtnbcwqNXZpT/tdZMyp3o6vS62r7rXJY2XG5pVw0mk6wOG346r5lhNKULI4uwM+uEynViK6Rsxta4aFpGAcHNaF7ytBbf1q94L7ccByU/LvsOrb5FzLloI5PrjST3CdXZmxW6K70QoqeyoliZdwf/DdOdEpUbJMM1paZi4NX5Bpn7pqXl6MG4fVN6Lec3vY+be+lN+0eQsj43/yFNlt2guzAQGm5AbeLV7y8FaTLERtaTtDfe2BSOjjp8QFHbmdJR5qnANihc6vfxY4xG8qL1cvwJqBLJGMIvl4KB4FCRw==
-X-Gm-Message-State: AOJu0Yzu0MPNg6OpnKNa2z6pcQM7v570VTIv8eWfNrgV44NyuIffGEjz
-	77QUCnFYUoZOEhCCEx/bzC9XIPeHJtdVJA0Ki67ByetDkLIsFogQ
-X-Google-Smtp-Source: AGHT+IFgHeYMPC1F2CzjSrGxnlZt3dlTY/4mpUD7bv8LIwoX5HsdsamER8RdMH7fBsEWw3jyn6a+HQ==
-X-Received: by 2002:a50:8d4f:0:b0:572:a731:dd14 with SMTP id 4fb4d7f45d1cf-57a36450a67mr5894483a12.28.1717426349978;
-        Mon, 03 Jun 2024 07:52:29 -0700 (PDT)
-Received: from [192.168.42.244] ([163.114.131.193])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57a31be4df2sm5365768a12.47.2024.06.03.07.52.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Jun 2024 07:52:29 -0700 (PDT)
-Message-ID: <5aee4bba-ca65-443c-bd78-e5599b814a13@gmail.com>
-Date: Mon, 3 Jun 2024 15:52:32 +0100
+	 In-Reply-To:Content-Type; b=LQb0t66GQu5HANbs85IncgokFtwH4OvCk0RU2mWznz0rrGw9BiohBE3aVbi/ztyy/SXO8sfYNPdpT4RKc4J4+RNmAo3rTWRGUuH+se0OUtkr1Bg3IoXgT91ES7blvqEtMORvwp4YxuiZxNFGS1tu3JXW5dfOca/omGSy1mR6/a0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr; spf=pass smtp.mailfrom=ghiti.fr; arc=none smtp.client-ip=217.70.183.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ghiti.fr
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9EA2820008;
+	Mon,  3 Jun 2024 15:31:41 +0000 (UTC)
+Message-ID: <f00b1928-3d91-4900-a588-c12c4933c870@ghiti.fr>
+Date: Mon, 3 Jun 2024 17:31:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -76,118 +40,103 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v10 02/14] net: page_pool: create hooks for
- custom page providers
-To: Mina Almasry <almasrymina@google.com>,
- Christoph Hellwig <hch@infradead.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
- Jonathan Corbet <corbet@lwn.net>,
- Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
- Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
- <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
- David Ahern <dsahern@kernel.org>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>,
- Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>,
- Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
- <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
-References: <20240530201616.1316526-1-almasrymina@google.com>
- <20240530201616.1316526-3-almasrymina@google.com>
- <ZlqzER_ufrhlB28v@infradead.org>
- <CAHS8izMU_nMEr04J9kXiX6rJqK4nQKA+W-enKLhNxvK7=H2pgA@mail.gmail.com>
+Subject: Re: [PATCH 2/7] riscv: Implement cmpxchg8/16() using Zabha
 Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <CAHS8izMU_nMEr04J9kXiX6rJqK4nQKA+W-enKLhNxvK7=H2pgA@mail.gmail.com>
+To: Nathan Chancellor <nathan@kernel.org>,
+ Alexandre Ghiti <alexghiti@rivosinc.com>,
+ Conor Dooley <conor.dooley@microchip.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Paul Walmsley
+ <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Albert Ou <aou@eecs.berkeley.edu>, Peter Zijlstra <peterz@infradead.org>,
+ Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+ Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>,
+ Arnd Bergmann <arnd@arndb.de>, Leonardo Bras <leobras@redhat.com>,
+ Guo Ren <guoren@kernel.org>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+ linux-arch@vger.kernel.org, llvm@lists.linux.dev
+References: <20240528151052.313031-1-alexghiti@rivosinc.com>
+ <20240528151052.313031-3-alexghiti@rivosinc.com>
+ <20240528193110.GA2196855@thelio-3990X>
+ <CAHVXubjYVjOH8RKaF1h=iogO3xBM6k+xrGwkPnc-md2oRxbxrQ@mail.gmail.com>
+ <20240529155749.GA1339768@thelio-3990X>
+From: Alexandre Ghiti <alex@ghiti.fr>
+In-Reply-To: <20240529155749.GA1339768@thelio-3990X>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-GND-Sasl: alex@ghiti.fr
 
-On 6/3/24 15:17, Mina Almasry wrote:
-> On Fri, May 31, 2024 at 10:35 PM Christoph Hellwig <hch@infradead.org> wrote:
+Hi Conor, Nathan,
+
+On 29/05/2024 17:57, Nathan Chancellor wrote:
+> On Wed, May 29, 2024 at 02:49:58PM +0200, Alexandre Ghiti wrote:
+>> Then I missed that, I should have checked the generated code. Is the
+>> extension version "1p0" in '-march=' only required for experimental
+>> extensions?
+> I think so, if my understanding of the message is correct.
+>
+>> But from Conor comment here [1], we should not enable extensions that
+>> are only experimental. In that case, we should be good with this.
 >>
->> On Thu, May 30, 2024 at 08:16:01PM +0000, Mina Almasry wrote:
->>> I'm unsure if the discussion has been resolved yet. Sending the series
->>> anyway to get reviews/feedback on the (unrelated) rest of the series.
+>> [1] https://lore.kernel.org/linux-riscv/20240528151052.313031-1-alexghiti@rivosinc.com/T/#mefb283477bce852f3713cbbb4ff002252281c9d5
+> Yeah, I tend to agree with Conor on that front. I had not noticed that
+> part of the message when I was looking at other parts of this thread. I
+> could see an argument for allowing experimental extensions for
+> qualification purposes but I think it does create a bit of a support
+> nightmare, especially when there are breaking changes across revisions.
+>
+>>> config EXPERIMENTAL_EXTENSIONS
+>>>      bool
+>>>
+>>> config TOOLCHAIN_HAS_ZABHA
+>>>      def_bool y
+>>>      select EXPERIMENTAL_EXETNSIONS if CC_IS_CLANG
+>>>      ...
+>>>
+>>> config TOOLCHAIN_HAS_ZACAS
+>>>      def_bool_y
+>>>      # ZACAS was experimental until Clang 19: https://github.com/llvm/llvm-project/commit/95aab69c109adf29e183090c25dc95c773215746
+>>>      select EXPERIMENTAL_EXETNSIONS if CC_IS_CLANG && CLANG_VERSION < 190000
+>>>      ...
+>>>
+>>> Then in the Makefile:
+>>>
+>>> ifdef CONFIG_EXPERIMENTAL_EXTENSIONS
+>>> KBUILD_AFLAGS += -menable-experimental-extensions
+>>> KBUILD_CFLAGS += -menable-experimental-extensions
+>>> endif
+> Perhaps with that in mind, maybe EXPERIMENTAL_EXTENSIONS (or whatever)
+> should be a user selectable option and the TOOLCHAIN values depend on it
+> when the user has a clang version that does not support the ratified
+> version.
+>
+>> That's a good idea to me, let's see what Conor thinks [2]
 >>
->> As far as I'm concerned it is not.  I've not seen any convincing
->> argument for more than page/folio allocator including larger order /
->> huge page and dmabuf.
->>
-> 
-> Thanks Christoph, this particular patch series adds dmabuf, so I
-> assume no objection there. I assume the objection is that you want the
-> generic, extensible hooks removed.
-> 
-> To be honest, I don't think the hooks are an integral part of the
-> design, and at this point I think we've argued for them enough. I
-> think we can easily achieve the same thing with just raw if statements
-> in a couple of places. We can always add the hooks if and only if we
-> actually justify many memory providers.
-> 
-> Any objections to me removing the hooks and directing to memory
-> allocations via simple if statements? Something like (very rough
-> draft, doesn't compile):
-
-The question for Christoph is what exactly is the objection here? Why we
-would not be using well defined ops when we know there will be more
-users? Repeating what I said in the last thread, for io_uring it's used
-to implement the flow of buffers from userspace to the kernel, the ABI,
-which is orthogonal to the issue of what memory type it is and how it
-came there. And even if you mandate unnecessary dmabuf condoms for user
-memory in one form or another IMHO for no clear reason, the callbacks
-(or yet another if-else) would still be needed.
-
-Sure, Mina can drop and hard code devmem path to easy the pain for
-him and delay the discussion, but then shortly after I will be
-re-sending same shit. So, what's the convincing argument _not_ to have
-it?
+>> [2] https://lore.kernel.org/linux-riscv/20240528151052.313031-1-alexghiti@rivosinc.com/T/#m1d798dfc4c27e5b6d9e14117d81b577ace123322
+> FWIW, I think your plan of removing support for the experimental version
+> of the extension and pushing to remove the experimental status in LLVM
+> (especially since it seems like it is ratified like zacas?
+> https://jira.riscv.org/browse/RVS-1685) is probably the best thing going
+> forward. If the LLVM folks are made aware soon, it should be easy to get
+> that change into clang-19, which is branching at the end of July I
+> believe.
 
 
-> 
-> diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-> index 92be1aaf18ccc..2cc986455bce6 100644
-> --- a/net/core/page_pool.c
-> +++ b/net/core/page_pool.c
-> @@ -557,8 +557,8 @@ netmem_ref page_pool_alloc_netmem(struct page_pool
-> *pool, gfp_t gfp)
->                  return netmem;
-> 
->          /* Slow-path: cache empty, do real allocation */
-> -       if (static_branch_unlikely(&page_pool_mem_providers) && pool->mp_ops)
-> -               netmem = pool->mp_ops->alloc_pages(pool, gfp);
-> +       if (unlikely(page_pool_is_dmabuf(pool)))
-> +               netmem = mp_dmabuf_devmem_alloc_pages():
->          else
->                  netmem = __page_pool_alloc_pages_slow(pool, gfp);
->          return netmem;
-> 
-> 
+FYI, it was just merged https://github.com/llvm/llvm-project/pull/93831
 
--- 
-Pavel Begunkov
+Thanks again,
+
+Alex
+
+
+>
+>> Thanks for your thorough review!
+> Thanks for taking LLVM support into consideration :)
+>
+> Cheers,
+> Nathan
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
