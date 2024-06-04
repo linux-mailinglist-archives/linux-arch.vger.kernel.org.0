@@ -1,72 +1,72 @@
-Return-Path: <linux-arch+bounces-4664-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4665-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCAEF8FA9A3
-	for <lists+linux-arch@lfdr.de>; Tue,  4 Jun 2024 07:12:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CC6A8FA9A7
+	for <lists+linux-arch@lfdr.de>; Tue,  4 Jun 2024 07:12:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E07BE1C22D1E
-	for <lists+linux-arch@lfdr.de>; Tue,  4 Jun 2024 05:12:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 980B628E2DE
+	for <lists+linux-arch@lfdr.de>; Tue,  4 Jun 2024 05:12:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E12913FD92;
-	Tue,  4 Jun 2024 05:10:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD55A1422B0;
+	Tue,  4 Jun 2024 05:10:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ps3vhxnn"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XYYwQnoN"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCB791411D3;
-	Tue,  4 Jun 2024 05:10:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06AAB1419B1;
+	Tue,  4 Jun 2024 05:10:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717477846; cv=none; b=KVPCJk01vyZ/v+XERGbc/S3nIwSESzfbr1KLfn8D2K30xMultZPXf5ggDR0m6k+N9Ff7vMN79w7bHjdehoTARCSXd6HvL0OlfjXGvY7nRzHpNaW/gVMj4sVV6nPD6yJqMvMm6CwScxTpsDxXGhuy3unk2m4VoME6p7LC8zgUbKE=
+	t=1717477847; cv=none; b=uxX2k1GjZmD1i37HzEJU1qFC14Zc4wYTYrGkJQRbmsnvofAglfnsN9t9U1gPOgsgmmmVEpwABtyPxknSZSzcD4d1F36IBvRGfeDe5F5hLvaH8nqnLfyLKy/B4ta/rUcYiIw+n2wnXbpUQeVTjw7mZ1haTsrSSF8RZL8EPKFJaco=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717477846; c=relaxed/simple;
-	bh=8vTFceAsLpgln0QaJDr9UyqQci5nGMvow5UnG1jar74=;
+	s=arc-20240116; t=1717477847; c=relaxed/simple;
+	bh=vVRI2TfY68wado4CSOgxUZSaUZKTk/D7LMeKecnuSBk=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=VvzWN10bIqWwEbtQkGeC4RIbngO4SEdmCwfBLAIeHTLOHZHThxgxHb+fWB9V4Oy9zJR/ECI2xiVMAzvKUMhb6+l+vkjNh1/4WbZvDsfThWH9bW6PTEcMWJbrFWFPLSXT9Qg+V6NfI/WMSZLFPqhKM85MU7xAu4cQ5iGNlFYSdWw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ps3vhxnn; arc=none smtp.client-ip=209.85.160.53
+	 MIME-Version; b=G5y1bdCkGoNWGM9E/z3nirrKsZ0gpns4xKj7wU8gvj0w+6FFUDQQbtDCgrwspeaw9VDLFh0ga2U2wBO0IUtLReG+ilPGVhCKPq6GMzfETb2tWar5Bs87HvY63CweuJEWSXnN7YI20/3y76o6WbM7N+5I4BM13hNKxB+A3CCmlpw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XYYwQnoN; arc=none smtp.client-ip=209.85.210.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-250928a8580so1789045fac.3;
-        Mon, 03 Jun 2024 22:10:44 -0700 (PDT)
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-70245b22365so2957212b3a.1;
+        Mon, 03 Jun 2024 22:10:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717477844; x=1718082644; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1717477845; x=1718082645; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:reply-to:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=4rqdND7i4OjEglrNB2gz2qk2VRnqZQkQh3OgdrDACL0=;
-        b=Ps3vhxnnB6Mzkc6z5PlgzSzjc8xrBBm30l8Krf6cM6CMGWUwGQ7KsSAZHSIgjusci8
-         II2B5+jWoSmMr/NTEdtBlBmymUMWa0Khg+HEnR3mWzKdUEF5RE01OvnRNoo4LFTvUZvV
-         ZrldILl2/IKN4uxmYGACUmTNMQOli4yF9ngsH6wFJyMUlwnFTW6aiEvPfRoolGKFOBmK
-         7R+4tI5fwdtXTCrKECOjqgisnaM8sQPGPzcJtTKgEuwEadzhT+mnRx3gjZj9XjNzMLXi
-         RBeUz8GD3nlqQT+dvsvtzgjQ5K3ptZHBjveUiG0uwxoKOAHJ7uXQIUIEGaWDTJVOvZbC
-         Yytw==
+        bh=uI7hPio5EOSCOqhNP+fmg82P5jjcL6y/nOk7OMudZ2w=;
+        b=XYYwQnoN+NFssVXY7qDW7r1aRkkg25tQnfiARNrXfqKp6Zsvk5sobOSsPPFYcE8mpM
+         v8mCplCymvf4hlJt4C01bt2gLCWIABmUsbKXd24drl2NAB6d6kcbb12xcCn8cTpYVtoR
+         zaRRxz9XeT3eINwS9t5gOT2Gw08qOjXD1WmPRKrg+YYQqG624rI4Lp9eLRUukspNMyiL
+         9QYmI5js6ys1N4D4an/f5lQUqh0K4FzvUcC7C3nM2cKSZcutTZwsfSTk4uKAU/MMqOnm
+         08hvToLUcHWAvF6LSDcr6XSGEyeeG3OCiBYlno+sFpOvt2p06E6BYexboMKNIKd2Ua/b
+         YaWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717477844; x=1718082644;
+        d=1e100.net; s=20230601; t=1717477845; x=1718082645;
         h=content-transfer-encoding:mime-version:reply-to:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=4rqdND7i4OjEglrNB2gz2qk2VRnqZQkQh3OgdrDACL0=;
-        b=IcJZ10gut1WIAzxC6UgNKi7L8GW6w8yHxJZL6ldqyi1pf0yNn4m+0MG7kc7M7aZPfV
-         BpymUMizf+40hsd0BJgdgFlAmblEIo9oblrsxwFCK+wtuNEAbqJqRteCJIFoCEvqAhP1
-         +Rli56umprjOFy78ip9ISYCN67ORCwEhkSDNYSx8VqTcUsZZPr1SK3+uMONcR9PDIcNR
-         V1odRfk21Xg8ommS2Z27HWkwfanXU7jCQDvy0aN+evs7p0AuzY7lbXL5w54kyY1DPAbb
-         MCVaA8fxo7MudthfW3aubxJuUxUjJwMb+QH9Lg07bMwFn9c6ZbrQhq3w5GwDHlPJNTW8
-         vWrA==
-X-Forwarded-Encrypted: i=1; AJvYcCVd1qWSZC/cuQmFORrMRJ4+olxyRxGjqbl0Rsp1E48sUgxCD6hngVLgnp5z0tuJDGr1W7wf/+++eroYHZC4ZNrdwhWXYAg9XbPvmOPRddjIMmXxWMZn7fAJnYpo0qk6n4+ou3J+9/1NNu0mjk8a0apDqteu1ezwA2K7BOP6NSnWYP0BJ9HEFphdA3Ar+sr49iqNe2+d4wIC188AabQCw8HBjRzsgBajXpoVMD1y6gIgV2jJxRNPKpAZsZHLvUg=
-X-Gm-Message-State: AOJu0YwUfB176z1En4w/tCC6/QTeZk37+VJQEvS98viyHtsfqKMwvPOH
-	uSuf3nNNxHe1Ouj0eSnOGcq/UTMD/uyEATP4eSsyBlawZuFIU0gh
-X-Google-Smtp-Source: AGHT+IEyK5gUfY9/lSLdd30TiSbxTGT5bgkCQfCQCTSfZcQeNghhepHgsH5TsmMYS1KZXrNP4YZsNQ==
-X-Received: by 2002:a05:6870:1702:b0:24f:e3a3:4431 with SMTP id 586e51a60fabf-2508b9efb87mr10561586fac.13.1717477843743;
-        Mon, 03 Jun 2024 22:10:43 -0700 (PDT)
+        bh=uI7hPio5EOSCOqhNP+fmg82P5jjcL6y/nOk7OMudZ2w=;
+        b=Mf156JGjEHOWPPbXaryMgVD3HzkIa8iKf33umrJxo+bzmNJsLIdLqgTKW5l/8OCJ7W
+         LJLwSuSkXHlqmEqCjyTI8L9lrMOE+BKI/q53aw3ptMrOByUGIv/xhAkE2SLnKx3gneNK
+         nb0mGAKnZjmAPWhFjDAiXlqdoCM7vEFNUbJxY64Ox7TvFJu7M17bYBiU52JNVhoHVO4m
+         l9eYFenOqaCejSmE/Q7bWQFMsFxa6Elu6e/YJVUm1Gt1AoQu5aMU7kmxYMWkHzBzQr4e
+         Ecid4sBOTI1E3d/if9MCzxD6Tbup9BxqNws30YXq77B3JF/4Xz0AudPNVobu6ISjI4x8
+         Eypg==
+X-Forwarded-Encrypted: i=1; AJvYcCXeDUJyACJ7fPm0hDHWH9B7FN80vY2Bdwd2sIOxDwzFqVtkI7hZdFQW+BeoDtQNJ3OF/f+X5fIGR0UUYeAONT9FM409sRmFh+ZD4vKozPOaN8X1L1G3/u27gyGkbEMRhKiNSTeRpjc75JS1G3eFHYfWRXKIVgzXF9s6WfECnJXp9IWYOhgNZ/ZtV6NMHFAQ1IiZywKFFtNr0o4rwKAecWLF95mKbR6Sm0ZwHmoMCnc1yn0G8PwbuTU6eH2MBiE=
+X-Gm-Message-State: AOJu0YxK9/EaoG2BQKloxegYdzGlXPzeX6fAqe5osPTsyV4/8fOKRJ8M
+	Fj8ulnRvo8VPiEVTJJJjeOrE3nOQRxSEnT10fPOs5Ir1J5T9+qcd
+X-Google-Smtp-Source: AGHT+IEmnCRnuRNZeIpORES3MssYPt/+L5A69/3IuhurrqBWUQ1ji+4Umw+ygAq+nk7kFKVPAk9Pog==
+X-Received: by 2002:a05:6a20:8415:b0:1af:7646:fc14 with SMTP id adf61e73a8af0-1b26ef54e19mr11855148637.0.1717477845049;
+        Mon, 03 Jun 2024 22:10:45 -0700 (PDT)
 Received: from localhost.localdomain (c-67-161-114-176.hsd1.wa.comcast.net. [67.161.114.176])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70242c270c7sm6298153b3a.220.2024.06.03.22.10.42
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70242c270c7sm6298153b3a.220.2024.06.03.22.10.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jun 2024 22:10:43 -0700 (PDT)
+        Mon, 03 Jun 2024 22:10:44 -0700 (PDT)
 From: mhkelley58@gmail.com
 X-Google-Original-From: mhklinux@outlook.com
 To: kys@microsoft.com,
@@ -95,9 +95,9 @@ Cc: maz@kernel.org,
 	den@valinux.co.jp,
 	jgowans@amazon.com,
 	dawei.li@shingroup.cn
-Subject: [RFC 06/12] genirq: Add per-cpu flow handler with conditional IRQ stats
-Date: Mon,  3 Jun 2024 22:09:34 -0700
-Message-Id: <20240604050940.859909-7-mhklinux@outlook.com>
+Subject: [RFC 07/12] Drivers: hv: vmbus: Set up irqdomain and irqchip for the VMBus connection
+Date: Mon,  3 Jun 2024 22:09:35 -0700
+Message-Id: <20240604050940.859909-8-mhklinux@outlook.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20240604050940.859909-1-mhklinux@outlook.com>
 References: <20240604050940.859909-1-mhklinux@outlook.com>
@@ -112,88 +112,232 @@ Content-Transfer-Encoding: 8bit
 
 From: Michael Kelley <mhklinux@outlook.com>
 
-Hyper-V VMBus devices generate interrupts that are multiplexed
-onto a single per-CPU architectural interrupt. The top-level VMBus
-driver ISR demultiplexes these interrupts and invokes per-device
-handlers. Currently, these per-device handlers are not modeled as
-Linux IRQs, so /proc/interrupts shows all VMBus interrupts as accounted
-to the top level architectural interrupt. Visibility into per-device
-interrupt stats requires accessing VMBus-specific entries in sysfs.
-The top-level VMBus driver ISR also handles management-related
-interrupts that are not attributable to a particular VMBus device.
+In preparation for assigning Linux IRQs to VMBus channels, set up an
+irqdomain and irqchip for the VMBus connection. The irqdomain is linear,
+with the VMBus relid used as the "hwirq" value. A relid is a unique
+index assigned by Hyper-V to each VMBus channel, with values ranging
+from 1 to 2047. Because these hwirqs don't map to anything in the
+architectural hardware, the domain is not part of the domain hierarchy.
 
-As part of changing VMBus to model VMBus per-device handlers as
-normal Linux IRQs, the top-level VMBus driver needs to conditionally
-account for interrupts. If it passes the interrupt off to a
-device-specific IRQ, the interrupt stats are done by that IRQ
-handler, and accounting for the interrupt at the top level
-is duplicative. But if it handles a management-related interrupt
-itself, then it should account for the interrupt itself.
-
-Introduce a new flow handler that provides this functionality.
-The new handler parallels handle_percpu_irq(), but does stats
-only if the ISR returns other than IRQ_NONE. The existing
-handle_untracked_irq() can't be used because it doesn't work for
-per-cpu IRQs, and it doesn't provide conditional stats.
+VMBus channel interrupts provide minimal management functionality, so
+provide only a minimal set of irqchip functions. The set_affinity function
+is a place-holder that is populated in a subsequent patch.
 
 Signed-off-by: Michael Kelley <mhklinux@outlook.com>
 ---
- include/linux/irq.h |  1 +
- kernel/irq/chip.c   | 29 +++++++++++++++++++++++++++++
- 2 files changed, 30 insertions(+)
+ drivers/hv/connection.c        | 24 +++++++++-----
+ drivers/hv/hyperv_vmbus.h      |  9 +++++
+ drivers/hv/vmbus_drv.c         | 60 +++++++++++++++++++++++++++++++++-
+ include/asm-generic/mshyperv.h |  6 ++++
+ 4 files changed, 90 insertions(+), 9 deletions(-)
 
-diff --git a/include/linux/irq.h b/include/linux/irq.h
-index a217e1029c1d..8825b95cefe5 100644
---- a/include/linux/irq.h
-+++ b/include/linux/irq.h
-@@ -656,6 +656,7 @@ extern void handle_edge_eoi_irq(struct irq_desc *desc);
- extern void handle_simple_irq(struct irq_desc *desc);
- extern void handle_untracked_irq(struct irq_desc *desc);
- extern void handle_percpu_irq(struct irq_desc *desc);
-+extern void handle_percpu_demux_irq(struct irq_desc *desc);
- extern void handle_percpu_devid_irq(struct irq_desc *desc);
- extern void handle_bad_irq(struct irq_desc *desc);
- extern void handle_nested_irq(unsigned int irq);
-diff --git a/kernel/irq/chip.c b/kernel/irq/chip.c
-index dc94e0bf2c94..1f37a9db4a4d 100644
---- a/kernel/irq/chip.c
-+++ b/kernel/irq/chip.c
-@@ -910,6 +910,35 @@ void handle_percpu_irq(struct irq_desc *desc)
- 		chip->irq_eoi(&desc->irq_data);
+diff --git a/drivers/hv/connection.c b/drivers/hv/connection.c
+index f001ae880e1d..cb01784e5c3b 100644
+--- a/drivers/hv/connection.c
++++ b/drivers/hv/connection.c
+@@ -21,21 +21,29 @@
+ #include <linux/export.h>
+ #include <linux/io.h>
+ #include <linux/set_memory.h>
++#include <linux/irq.h>
++#include <linux/irqdesc.h>
++#include <linux/irqdomain.h>
+ #include <asm/mshyperv.h>
+ 
+ #include "hyperv_vmbus.h"
+ 
+ 
+ struct vmbus_connection vmbus_connection = {
+-	.conn_state		= DISCONNECTED,
+-	.unload_event		= COMPLETION_INITIALIZER(
+-				  vmbus_connection.unload_event),
+-	.next_gpadl_handle	= ATOMIC_INIT(0xE1E10),
+-
+-	.ready_for_suspend_event = COMPLETION_INITIALIZER(
+-				  vmbus_connection.ready_for_suspend_event),
++	.conn_state			= DISCONNECTED,
++	.unload_event			= COMPLETION_INITIALIZER(
++						vmbus_connection.unload_event),
++	.next_gpadl_handle		= ATOMIC_INIT(0xE1E10),
++
++	.vmbus_irq_chip.name		= "VMBus",
++	.vmbus_irq_chip.irq_set_affinity = vmbus_irq_set_affinity,
++	.vmbus_irq_chip.irq_mask	= vmbus_irq_mask,
++	.vmbus_irq_chip.irq_unmask	= vmbus_irq_unmask,
++
++	.ready_for_suspend_event	= COMPLETION_INITIALIZER(
++					vmbus_connection.ready_for_suspend_event),
+ 	.ready_for_resume_event	= COMPLETION_INITIALIZER(
+-				  vmbus_connection.ready_for_resume_event),
++					vmbus_connection.ready_for_resume_event),
+ };
+ EXPORT_SYMBOL_GPL(vmbus_connection);
+ 
+diff --git a/drivers/hv/hyperv_vmbus.h b/drivers/hv/hyperv_vmbus.h
+index 76ac5185a01a..95d4d47d34f7 100644
+--- a/drivers/hv/hyperv_vmbus.h
++++ b/drivers/hv/hyperv_vmbus.h
+@@ -18,7 +18,11 @@
+ #include <asm/hyperv-tlfs.h>
+ #include <linux/atomic.h>
+ #include <linux/hyperv.h>
++#include <linux/fwnode.h>
+ #include <linux/interrupt.h>
++#include <linux/irq.h>
++#include <linux/irqdesc.h>
++#include <linux/irqdomain.h>
+ 
+ #include "hv_trace.h"
+ 
+@@ -258,6 +262,11 @@ struct vmbus_connection {
+ 	/* Array of channels */
+ 	struct vmbus_channel **channels;
+ 
++	/* IRQ domain data */
++	struct fwnode_handle *vmbus_fwnode;
++	struct irq_domain *vmbus_irq_domain;
++	struct irq_chip	vmbus_irq_chip;
++
+ 	/*
+ 	 * An offer message is handled first on the work_queue, and then
+ 	 * is further handled on handle_primary_chan_wq or
+diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+index 291a8358370b..cbccdfad49a2 100644
+--- a/drivers/hv/vmbus_drv.c
++++ b/drivers/hv/vmbus_drv.c
+@@ -36,6 +36,9 @@
+ #include <linux/syscore_ops.h>
+ #include <linux/dma-map-ops.h>
+ #include <linux/pci.h>
++#include <linux/irq.h>
++#include <linux/irqdomain.h>
++#include <linux/hardirq.h>
+ #include <clocksource/hyperv_timer.h>
+ #include <asm/mshyperv.h>
+ #include "hyperv_vmbus.h"
+@@ -1306,6 +1309,40 @@ static irqreturn_t vmbus_percpu_isr(int irq, void *dev_id)
+ 	return IRQ_HANDLED;
  }
  
-+/**
-+ *	handle_percpu_demux_irq - Per CPU local irq handler for IRQs
-+ *	that may demultiplex to other IRQs
-+ *	@desc:	the interrupt description structure for this irq
-+ *
-+ *	For per CPU interrupts on SMP machines without locking requirements.
-+ *	Used for IRQs that may demultiplex to other IRQs that will do the
-+ *     stats tracking and randomness. If the handler result indicates no
-+ *	demultiplexing is done, account for the interrupt on this IRQ.
-+ */
-+void handle_percpu_demux_irq(struct irq_desc *desc)
++int vmbus_irq_set_affinity(struct irq_data *data,
++				  const struct cpumask *dest, bool force)
 +{
-+	struct irq_chip *chip = irq_desc_get_chip(desc);
-+
-+	if (chip->irq_ack)
-+		chip->irq_ack(&desc->irq_data);
-+
-+	if (__handle_irq_event_percpu(desc))
-+		/*
-+		 * PER CPU interrupts are not serialized.  Do not touch
-+		 * desc->tot_count.
-+		 */
-+		__kstat_incr_irqs_this_cpu(desc);
-+
-+	if (chip->irq_eoi)
-+		chip->irq_eoi(&desc->irq_data);
++	return 0;
 +}
-+EXPORT_SYMBOL_GPL(handle_percpu_demux_irq);
 +
- /**
-  * handle_percpu_devid_irq - Per CPU local irq handler with per cpu dev ids
-  * @desc:	the interrupt description structure for this irq
++/*
++ * VMBus channel interrupts do not need to be masked or unmasked, and the
++ * Hyper-V synic doesn't provide any masking functionality anyway. But in the
++ * absence of these irqchip functions, the IRQ subsystem keeps the IRQ marked
++ * as "masked". To prevent any problems associated with staying the "masked"
++ * state, and so that IRQ status shown in debugfs doesn't indicate "masked",
++ * provide null implementations.
++ */
++void vmbus_irq_unmask(struct irq_data *data)
++{
++}
++
++void vmbus_irq_mask(struct irq_data *data)
++{
++}
++
++static int vmbus_irq_map(struct irq_domain *d, unsigned int irq,
++			 irq_hw_number_t hw)
++{
++	irq_set_chip_and_handler(irq,
++			&vmbus_connection.vmbus_irq_chip, handle_simple_irq);
++	return 0;
++}
++
++static const struct irq_domain_ops vmbus_domain_ops = {
++	.map = vmbus_irq_map,
++};
++
+ /*
+  * vmbus_bus_init -Main vmbus driver initialization routine.
+  *
+@@ -1340,6 +1377,7 @@ static int vmbus_bus_init(void)
+ 	if (vmbus_irq == -1) {
+ 		hv_setup_vmbus_handler(vmbus_isr);
+ 	} else {
++		irq_set_handler(vmbus_irq, handle_percpu_demux_irq);
+ 		vmbus_evt = alloc_percpu(long);
+ 		ret = request_percpu_irq(vmbus_irq, vmbus_percpu_isr,
+ 				"Hyper-V VMbus", vmbus_evt);
+@@ -1355,6 +1393,20 @@ static int vmbus_bus_init(void)
+ 	if (ret)
+ 		goto err_alloc;
+ 
++	/* Create IRQ domain for VMBus devices */
++	vmbus_connection.vmbus_fwnode = irq_domain_alloc_named_fwnode("hv-vmbus");
++	if (!vmbus_connection.vmbus_fwnode) {
++		ret = -ENOMEM;
++		goto err_alloc;
++	}
++	vmbus_connection.vmbus_irq_domain = irq_domain_create_linear(
++			vmbus_connection.vmbus_fwnode, MAX_CHANNEL_RELIDS,
++			&vmbus_domain_ops, NULL);
++	if (!vmbus_connection.vmbus_irq_domain) {
++		ret = -ENOMEM;
++		goto err_fwnode;
++	}
++
+ 	/*
+ 	 * Initialize the per-cpu interrupt state and stimer state.
+ 	 * Then connect to the host.
+@@ -1362,7 +1414,7 @@ static int vmbus_bus_init(void)
+ 	ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "hyperv/vmbus:online",
+ 				hv_synic_init, hv_synic_cleanup);
+ 	if (ret < 0)
+-		goto err_alloc;
++		goto err_domain;
+ 	hyperv_cpuhp_online = ret;
+ 
+ 	ret = vmbus_connect();
+@@ -1382,6 +1434,10 @@ static int vmbus_bus_init(void)
+ 
+ err_connect:
+ 	cpuhp_remove_state(hyperv_cpuhp_online);
++err_domain:
++	irq_domain_remove(vmbus_connection.vmbus_irq_domain);
++err_fwnode:
++	irq_domain_free_fwnode(vmbus_connection.vmbus_fwnode);
+ err_alloc:
+ 	hv_synic_free();
+ 	if (vmbus_irq == -1) {
+@@ -2690,6 +2746,8 @@ static void __exit vmbus_exit(void)
+ 	hv_debug_rm_all_dir();
+ 
+ 	vmbus_free_channels();
++	irq_domain_remove(vmbus_connection.vmbus_irq_domain);
++	irq_domain_free_fwnode(vmbus_connection.vmbus_fwnode);
+ 	kfree(vmbus_connection.channels);
+ 
+ 	/*
+diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
+index 8fe7aaab2599..0488ff8b511f 100644
+--- a/include/asm-generic/mshyperv.h
++++ b/include/asm-generic/mshyperv.h
+@@ -24,6 +24,7 @@
+ #include <acpi/acpi_numa.h>
+ #include <linux/cpumask.h>
+ #include <linux/nmi.h>
++#include <linux/irq.h>
+ #include <asm/ptrace.h>
+ #include <asm/hyperv-tlfs.h>
+ 
+@@ -187,6 +188,11 @@ void hv_remove_kexec_handler(void);
+ void hv_setup_crash_handler(void (*handler)(struct pt_regs *regs));
+ void hv_remove_crash_handler(void);
+ 
++extern void vmbus_irq_mask(struct irq_data *data);
++extern void vmbus_irq_unmask(struct irq_data *data);
++extern int vmbus_irq_set_affinity(struct irq_data *data,
++				const struct cpumask *dest, bool force);
++
+ extern int vmbus_interrupt;
+ extern int vmbus_irq;
+ 
 -- 
 2.25.1
 
