@@ -1,72 +1,72 @@
-Return-Path: <linux-arch+bounces-4659-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4660-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3EF7A8FA989
-	for <lists+linux-arch@lfdr.de>; Tue,  4 Jun 2024 07:10:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8AE378FA98D
+	for <lists+linux-arch@lfdr.de>; Tue,  4 Jun 2024 07:11:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B5941B2376B
-	for <lists+linux-arch@lfdr.de>; Tue,  4 Jun 2024 05:10:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BC6A61C233C7
+	for <lists+linux-arch@lfdr.de>; Tue,  4 Jun 2024 05:11:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A22513DBBD;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF16713E027;
 	Tue,  4 Jun 2024 05:10:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d1EaCc/x"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U01oW3qS"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F0D977A1E;
-	Tue,  4 Jun 2024 05:10:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65F3B13D28B;
+	Tue,  4 Jun 2024 05:10:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717477840; cv=none; b=VyvdtlMHdYbmbKG49SicS5Uh9BLTF/B6AoUMDQnwAGNW6UukQQli+AXvEqW+fwCm7klTd5YXTsX7q1qsIuSLymWU6a7GyqP41pxitDxV+7phiO66kYTVEljykmZRzMXb+LbgQnHmyYH6kVaqGVNeg7+O3UKCXSlpzV7gvAmKWII=
+	t=1717477840; cv=none; b=oZzszEqsUvGHhPemDDthC7hmX/2TP8TrHnIG/f3bVu60oj70ORBC/4uCcs7CZtIRBixMyd5tZsvc+/Q2TPuy6RysSggRwwZn71+VFtsbTzewyzp7uSsjXa59CVk6w0T7F489XOL8pV/pQw1EmHbEWhEGiPcPPIqspMdXsi4VIS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1717477840; c=relaxed/simple;
-	bh=VBR98JGVknh0QIXU1LbDkiwLPZeprLJur5lg0RvecfE=;
+	bh=4Bvo+apk2N2nn6cjDyl5CQhxEltWUBZFYmNRgBJhxgI=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=dXzi8chAOHKg5RPzMD14fmsjxbYOtYi3aYp9aWvZdC1I6IQ+fUWbfb0utLbYR0NcTZaWgq0JCk/59qXI77860zOSs/s0f6R8LT1Cqo4jIEgGfgFTL6wgYHN54pefALlLCp9QY7DDkkvplgxIwYbBxd4AGbEqxA1mqjb7jef6da0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d1EaCc/x; arc=none smtp.client-ip=209.85.167.180
+	 MIME-Version; b=fOs1qTJGLHigeADaGDOTFCfcXa/u48g4+jpD0dG5XX2hnJsP4/+X4Ze832lMT75YxNOp+A7IEI6mLolPk0qcu48uwWBrYMzJVJMykQ9ri3s3x0+T+7uu6N/cno7AVX9k+uaAZ+q/tqN5aQa+TOlLN37K1Y0xhFUjGZh0MU5ioeI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U01oW3qS; arc=none smtp.client-ip=209.85.215.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-3d1facdf12bso224547b6e.0;
-        Mon, 03 Jun 2024 22:10:38 -0700 (PDT)
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-6c7bf648207so2258002a12.0;
+        Mon, 03 Jun 2024 22:10:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717477837; x=1718082637; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1717477839; x=1718082639; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:reply-to:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=gOw8AgrUJDkpfPA0Lzrm6o/e4yMy7flaTek+BD0V1x4=;
-        b=d1EaCc/xzVsuRc/jIMk93NC6Rd6JYq4x6wAQ/2xKJGnTESMLLInq/rxVQauFaUmav/
-         3xZdm+/uIBg8su5/+0O8Z62p8N4MlMnzB/e8SA5xo/kffL0WHwKSt7WWjA/2bftmECUg
-         yb880VnAD4J8fVqa6qK+RmHbtrRBJC/kdtyCP8WO8VdsOXlsIdB+5K/q4WxxbDX/lJY/
-         9DkFqjY8NOQ2vMOZZ07DgJCdBdUrLxj2rbU1TdDNWIyG/zRDAwUFk7p2Zq7EO+wUXoLn
-         mgZn7rBGJhm31ouvZWoGXFFJk4uES6TR8/ObRocQVcZ72W8ol+T3GLgDWUqv1OwgaeAS
-         VuMA==
+        bh=5YKAeu5Z5tm9aQZs9F3XxaISr/2oY38/ITUqBxWif4w=;
+        b=U01oW3qSe827FcEeFRmM9nlmpBduxt7BIH7qq+7CH+XDFDJz23Xc0/Lm9RqSherobX
+         IEoaPgOTQ2V5ZBJFFln5H74MazOv/LB1kYpueZpkiUu5vsZertJpS6wE8UHiABbsm3RR
+         PzDNrZKMJhGohS9d5C4Clg//Em1mhcQIqVTVqSMe7CwvTV5OlAgNTU2sJem7NNwUbabF
+         K0oWt12jR2AvSnqfsk7NfB8CjJVX/JZGjYJLQSycGzE7ANwL1EM4BUZdmyBMlrP7fTXD
+         k9r7cXBV+XlFTcxtejfQ6hP3aoJzRVrhOsHFd1fpA57GWoLZlcv3/dFurzX4ZG7I8035
+         a+sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717477837; x=1718082637;
+        d=1e100.net; s=20230601; t=1717477839; x=1718082639;
         h=content-transfer-encoding:mime-version:reply-to:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=gOw8AgrUJDkpfPA0Lzrm6o/e4yMy7flaTek+BD0V1x4=;
-        b=SqeXS0MK57/bEj9MsENLYM7Ju+k+/LfEtWSFQqjBziSw376gktb7jPT/PF3y9MuHUr
-         x+jyM5DrkG3A1RaHrCW2Xz+BJSxFKd6la3PSbTFnK10uo0VC3mYFP1ZEDWHg/3fecJ1Q
-         6kayjbY3CvbipB1xGkDPZXnTL0gK8eRI4r7Xd+dyX9rV/eLPSggVtb5jZ615JIpUywki
-         dZI1HzVbvZs8E8cQ6oXxwcR5dYow1AdEcVCWH4rU7lphUON3ZxOJCudLPm7nh5zqgI3a
-         kezgyrLrSGusOqUTn3ZmAS4eYt2sb2wOtpPt89HwQ5RvB26OzJySY6hTpzbj67IIO1dN
-         H6HA==
-X-Forwarded-Encrypted: i=1; AJvYcCVcQo7+yDJzz5X0FPrSDUUUSnsP3KB/cN/MCebfzUJysqCYcYKsYEL37EEpB3guQb+xK2UMhGjEoz+Iur7/QshjE4n23ltDbP3R+hxwo7WBIhjbW/jcroqQ9c+4w7opxDaQ+naGKT4p2ClPY2Z1MhdtLF2kQKilugW637nUupQtoo8q81KDG/80we+rt3cenSKtaC+HMmAqIVhaCYuwnKOuTApxF+Z1jkKXVLJYyFKRMUA7PcJWHRFiE7CSYBM=
-X-Gm-Message-State: AOJu0Yyw4csjZmAHEZvO/SxyOgLbWF38UGqIbPp0WDvkl3SD3z+s9UaC
-	1THVUQqjIHAfJ/LyhHPij2QjyWlVah1+ljJHukeE5EkqEnod9Evv
-X-Google-Smtp-Source: AGHT+IEyA+H/NUVYyadV6QS+sJdPE+MGaP8srmU6cCY3RydFGapT11Ew5xGOL60RZNIYPFbiiOl3Sw==
-X-Received: by 2002:a05:6808:602:b0:3d2:5b:df2d with SMTP id 5614622812f47-3d2005be0acmr41704b6e.35.1717477837405;
-        Mon, 03 Jun 2024 22:10:37 -0700 (PDT)
+        bh=5YKAeu5Z5tm9aQZs9F3XxaISr/2oY38/ITUqBxWif4w=;
+        b=m/04jISTOAy3AAf3LLsbCpD7MfL7toh1fIxp8cSAlqVR6Hb+YemdQNgc8i5O8FmngF
+         A3ez8Y3Kwc5t2RIXJ5jhj0IBdHW7g9yx+ebF3fQOlzMqyzYXkgUYRaO7/OduJrFdno5N
+         7LABe8RJH9RV5iDtwbaJYFDh4sUW7ocMdxfEaVgVX5bRe0LoQJuxSOtQLp0fsLTRY6VQ
+         5s67tdOuJq8lBJOy1+yUhxKEMkL9us6WmVt12BXNHnG7xKO4hby3uwXjWdYkglgVgZZd
+         Qgr4/x9d4x5XflRlfy7f3ebvywZlNQV0M/0Tcks4iGMi1Ey0MPbWZPnizFjmyl8AChdd
+         e66w==
+X-Forwarded-Encrypted: i=1; AJvYcCXu6eubyj3b19jh/XfmYGuO6MIifWSvyiTcNEc/PnMUwk1RCEJiuf+7aljI/xj3Mk4Pm3aQ/KVR+89LoIZ05NpFzdPC2SghmOpSsanbBA5os535I2rkWrRI8NZnvBUkfvfFW6YV1ngATIpec1siMolI6lu57iqJFgtkTyr+cMMkucVEJ/r/FPL7d6JWpD18zuSS+g3mFxy+13BmO53YCzkfihoRJhkNcxrOfAoKT7UjhU7ZFjTSoCkSUTdpaPY=
+X-Gm-Message-State: AOJu0YzohobAEKnfBJh6uZFJIdmRI36ikaGvdwYwhAAWuUNoblaHDHTV
+	OjF3Gwfws3LSJ37xnLslhN1juCueL4KD1DRPZkFgaZ04eVIk+3FD
+X-Google-Smtp-Source: AGHT+IHKnRboB5tCmxwmDAJRCzrZ1L4NYqoQuhFMq5JMjnWnuknQC44+KcCK4lbhV5B4umVkIn2zaQ==
+X-Received: by 2002:a05:6a20:9184:b0:1a3:b642:5fc3 with SMTP id adf61e73a8af0-1b26f253adamr14486371637.41.1717477838675;
+        Mon, 03 Jun 2024 22:10:38 -0700 (PDT)
 Received: from localhost.localdomain (c-67-161-114-176.hsd1.wa.comcast.net. [67.161.114.176])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70242c270c7sm6298153b3a.220.2024.06.03.22.10.36
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70242c270c7sm6298153b3a.220.2024.06.03.22.10.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jun 2024 22:10:37 -0700 (PDT)
+        Mon, 03 Jun 2024 22:10:38 -0700 (PDT)
 From: mhkelley58@gmail.com
 X-Google-Original-From: mhklinux@outlook.com
 To: kys@microsoft.com,
@@ -95,9 +95,9 @@ Cc: maz@kernel.org,
 	den@valinux.co.jp,
 	jgowans@amazon.com,
 	dawei.li@shingroup.cn
-Subject: [RFC 01/12] Drivers: hv: vmbus: Drop unsupported VMBus devices earlier
-Date: Mon,  3 Jun 2024 22:09:29 -0700
-Message-Id: <20240604050940.859909-2-mhklinux@outlook.com>
+Subject: [RFC 02/12] Drivers: hv: vmbus: Fix error path that deletes non-existent sysfs group
+Date: Mon,  3 Jun 2024 22:09:30 -0700
+Message-Id: <20240604050940.859909-3-mhklinux@outlook.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20240604050940.859909-1-mhklinux@outlook.com>
 References: <20240604050940.859909-1-mhklinux@outlook.com>
@@ -112,57 +112,57 @@ Content-Transfer-Encoding: 8bit
 
 From: Michael Kelley <mhklinux@outlook.com>
 
-Because Hyper-V doesn't know ahead-of-time what operating system will be
-running in a guest VM, it may offer to Linux guests VMBus devices that are
-intended for use only in Windows guests. Currently in Linux, VMBus
-channels are created for these devices, and they are processed by
-vmbus_device_register(). While nothing further happens because no matching
-driver is found, the channel continues to exist.
+If vmbus_device_create() returns an error to vmbus_add_channel_work(),
+the cleanup path calls free_channel(), which in turn calls
+vmbus_remove_channel_attr_group(). But the channel attr group hasn't
+been created yet, causing sysfs_remove_group() to generate multiple
+WARNs about non-existent entries.
 
-To avoid having the spurious channel, drop such devices immediately in
-vmbus_onoffer(), based on identifying the device in the
-vmbus_unsupported_devs table. If Hyper-V should issue a rescind request
-for the device, no matching channel will be found and the rescind will
-also be ignored.
-
-Since unsupported devices are dropped early, the check for unsupported
-devices in hv_get_dev_type() is redundant. Remove it.
+Fix the WARNs by adding a flag to struct vmbus_channel to indicate
+whether the sysfs group for the channel has been created. Use the
+flag to determine if the sysfs group should be removed.
 
 Signed-off-by: Michael Kelley <mhklinux@outlook.com>
 ---
- drivers/hv/channel_mgmt.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ drivers/hv/vmbus_drv.c | 5 ++++-
+ include/linux/hyperv.h | 1 +
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/hv/channel_mgmt.c b/drivers/hv/channel_mgmt.c
-index 3c6011a48dab..a216a0aede73 100644
---- a/drivers/hv/channel_mgmt.c
-+++ b/drivers/hv/channel_mgmt.c
-@@ -203,7 +203,7 @@ static u16 hv_get_dev_type(const struct vmbus_channel *channel)
- 	const guid_t *guid = &channel->offermsg.offer.if_type;
- 	u16 i;
+diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+index 12a707ab73f8..291a8358370b 100644
+--- a/drivers/hv/vmbus_drv.c
++++ b/drivers/hv/vmbus_drv.c
+@@ -1842,6 +1842,7 @@ int vmbus_add_channel_kobj(struct hv_device *dev, struct vmbus_channel *channel)
+ 		dev_err(device, "Unable to set up channel sysfs files\n");
+ 		return ret;
+ 	}
++	channel->channel_attr_set = true;
  
--	if (is_hvsock_channel(channel) || is_unsupported_vmbus_devs(guid))
-+	if (is_hvsock_channel(channel))
- 		return HV_UNKNOWN;
+ 	kobject_uevent(kobj, KOBJ_ADD);
  
- 	for (i = HV_IDE; i < HV_UNKNOWN; i++) {
-@@ -1036,6 +1036,16 @@ static void vmbus_onoffer(struct vmbus_channel_message_header *hdr)
+@@ -1853,7 +1854,9 @@ int vmbus_add_channel_kobj(struct hv_device *dev, struct vmbus_channel *channel)
+  */
+ void vmbus_remove_channel_attr_group(struct vmbus_channel *channel)
+ {
+-	sysfs_remove_group(&channel->kobj, &vmbus_chan_group);
++	if (channel->channel_attr_set)
++		sysfs_remove_group(&channel->kobj, &vmbus_chan_group);
++	channel->channel_attr_set = false;
+ }
  
- 	trace_vmbus_onoffer(offer);
+ /*
+diff --git a/include/linux/hyperv.h b/include/linux/hyperv.h
+index 5e39baa7f6cb..d52c916cc492 100644
+--- a/include/linux/hyperv.h
++++ b/include/linux/hyperv.h
+@@ -980,6 +980,7 @@ struct vmbus_channel {
+ 	 * For sysfs per-channel properties.
+ 	 */
+ 	struct kobject			kobj;
++	bool channel_attr_set;
  
-+	/*
-+	 * Hyper-V may offer pseudo-devices with functionality intended for
-+	 * Windows guests. Silently ignore them. There's no value in
-+	 * cluttering dmesg with error messages.
-+	 */
-+	if (is_unsupported_vmbus_devs(&offer->offer.if_type)) {
-+		atomic_dec(&vmbus_connection.offer_in_progress);
-+		return;
-+	}
-+
- 	if (!vmbus_is_valid_offer(offer)) {
- 		pr_err_ratelimited("Invalid offer %d from the host supporting isolation\n",
- 				   offer->child_relid);
+ 	/*
+ 	 * For performance critical channels (storage, networking
 -- 
 2.25.1
 
