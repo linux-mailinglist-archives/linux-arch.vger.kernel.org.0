@@ -1,48 +1,48 @@
-Return-Path: <linux-arch+bounces-4680-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4681-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 164C18FB9CF
-	for <lists+linux-arch@lfdr.de>; Tue,  4 Jun 2024 19:04:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F24B08FB9CE
+	for <lists+linux-arch@lfdr.de>; Tue,  4 Jun 2024 19:04:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C4AC82824A6
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5ED5B282753
 	for <lists+linux-arch@lfdr.de>; Tue,  4 Jun 2024 17:04:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9007149C79;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8DF6149C77;
 	Tue,  4 Jun 2024 17:04:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mfKUufhi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VdcZuACD"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF56C149C69;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF4F3149C65;
 	Tue,  4 Jun 2024 17:04:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717520681; cv=none; b=BrprILRbzBW/+QeYczu/TzIGvXWAndGvTTsO3xHli2AhcpmjDp6v0EonDURRdv4nwj+5hOvxXtaC/HdyCKe7lnfMkNh4d1nSMWeyVGfKOz/JUzyPi6DE5l+IQyyRIDO5ox/XtC02iIe7jyx8YDrxG2Hq1oCk8NNeU7PPOzowSuI=
+	t=1717520681; cv=none; b=HKcfgItt/pYiOu2OvgWzmr8lETuFX6zBDop+CEgg9dvJ3nGt+KSUxaqNaeBS0LV9QHEVA/pCg4XAa1w1/iU2OST9TyUn8yxXaR/OfHROOmXzb8JBHAZC4OnpedzKTH1zUBSfl2SzQdrsh4nSEtolBtBHJ3ix3S0dGOcsoKLNwYM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1717520681; c=relaxed/simple;
-	bh=SsfSYlvMJfbrFJhxWSLRoEWcjcncMnxVxwE9E1US2+0=;
+	bh=rrXhYcuvAzSeNxJsE5K8KoOIiHuhtq2k88GjikEXdAw=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=pNSmkvqog4i2ETofYD4mQTixpRjx+GqCfYZ6U3tRGAsQDA0ri04bNYyMubjwf17a2VFC01BjIX28tQdmKCl8btPFQuKVPd2E/jdh4KZUeezc/jItmWXWZ08TFRaOlfcfVQuvGKZUUhUG+v4b6ox1M1KQGgybIiHhRiR8/0zTaTQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mfKUufhi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69273C4AF0D;
+	 MIME-Version; b=GtL2SIIBCXYQdSe2lzeoKbfh/OJQu+hnjajlgEbjXgygP7ClFDL5G3yKZttNIJzaycdHEZSHaRKqEovXMmQvV4Ue/bUu83Uk/3Kjv7lOlfEv3k2H8x4zqsOnvkL7w27/QQ3+x7aCkLdkdiwYrQcrDlkxq5JocqcNDZgMQAhtjVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VdcZuACD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 700D4C4AF10;
 	Tue,  4 Jun 2024 17:04:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1717520681;
-	bh=SsfSYlvMJfbrFJhxWSLRoEWcjcncMnxVxwE9E1US2+0=;
+	bh=rrXhYcuvAzSeNxJsE5K8KoOIiHuhtq2k88GjikEXdAw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=mfKUufhihelxky1Xwi2kwpbTuct2AOpwGA45g3lf3ZkFteqZwyHM80zBFEtCjHLVu
-	 F8arywo58nGGrzvjXi5LmYsJSgGky84+emU3ZWWeOtd5CAfan355yNTGVTj+MZp9CH
-	 +zJbtfcKjCPWB7wkmhNanJGMBy0TMMCiWIecVwdMQ9NKMHPvssPiWEWc1tmq80UGB8
-	 oBLttlxdYLIkAK9T06/wJaevO1tCyWfKh2atjudmX6j+XWlRHStXeq2HbcPDnr4qRy
-	 c4rx9SqCfJEfXV+oiKbK0tM6oh2xK4WF3nl4wrmReBZnDnio088/fW0urCs3nf7Bq3
-	 CmDcv19v4Wpww==
+	b=VdcZuACD7jFzew8Y495MNxaKHldbX2iP8xvNHsI8eKkW0G2YxjlzAgxLkPd7oKKM1
+	 FtjqK+2bGHncEj0v81ifGJ0r1L7ZaeN3jgpnYbPsQtUaR2olHVTXo6GYHoyQlp7GNg
+	 lrr00++8r7myhmm/i00hZZpUcCfL4Ownla+JxAO/Q4d0olbXWR0MP4nHS0YB9gJvE3
+	 XePnoEf9Z/MPRz+i2o9/b5sLuE2MhaK9dkUcTM6fzv4abfZ5I+ocQY7i8OBhKvyNKK
+	 5FnRl9DLBNMAlJLeTa/Bb+tRy8NAPr0DOV2trLtmxlMSAmfDNMo4z+dhOpLwS8qpzq
+	 d6nFjU1Iobj6w==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 05254CE3F26; Tue,  4 Jun 2024 10:04:41 -0700 (PDT)
+	id 08360CE3F27; Tue,  4 Jun 2024 10:04:41 -0700 (PDT)
 From: "Paul E. McKenney" <paulmck@kernel.org>
 To: linux-arch@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -56,12 +56,18 @@ Cc: linux-kernel@vger.kernel.org,
 	torvalds@linux-foundation.org,
 	arnd@arndb.de,
 	"Paul E. McKenney" <paulmck@kernel.org>,
-	Yujie Liu <yujie.liu@intel.com>,
-	Andi Shyti <andi.shyti@linux.intel.com>,
-	Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [PATCH v3 cmpxchg 3/4] xtensa: Emulate one-byte cmpxchg
-Date: Tue,  4 Jun 2024 10:04:36 -0700
-Message-Id: <20240604170437.2362545-3-paulmck@kernel.org>
+	Mark Brown <broonie@kernel.org>,
+	Naresh Kamboju <naresh.kamboju@linaro.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+	Andrew Davis <afd@ti.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Eric DeVolder <eric.devolder@oracle.com>,
+	Rob Herring <robh@kernel.org>,
+	linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v3 cmpxchg 4/4] ARM: Emulate one-byte cmpxchg
+Date: Tue,  4 Jun 2024 10:04:37 -0700
+Message-Id: <20240604170437.2362545-4-paulmck@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <1dee481f-d584-41d6-a5f1-d84375be5fe8@paulmck-laptop>
 References: <1dee481f-d584-41d6-a5f1-d84375be5fe8@paulmck-laptop>
@@ -73,55 +79,67 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Use the new cmpxchg_emu_u8() to emulate one-byte cmpxchg() on xtensa.
+Use the new cmpxchg_emu_u8() to emulate one-byte cmpxchg() on ARM systems
+with ARCH < ARMv6K.
 
-[ paulmck: Apply kernel test robot feedback. ]
-[ paulmck: Drop two-byte support per Arnd Bergmann feedback. ]
-[ Apply Geert Uytterhoeven feedback. ]
+[ paulmck: Apply Arnd Bergmann and Nathan Chancellor feedback. ]
 
+Reported-by: Mark Brown <broonie@kernel.org>
+Closes: https://lore.kernel.org/all/54798f68-48f7-4c65-9cba-47c0bf175143@sirena.org.uk/
+Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+Closes: https://lore.kernel.org/all/CA+G9fYuZ+pf6p8AXMZWtdFtX-gbG8HMaBKp=XbxcdzA_QeLkxQ@mail.gmail.com/
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Tested-by: Yujie Liu <yujie.liu@intel.com>
-Cc: Andi Shyti <andi.shyti@linux.intel.com>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Tested-by: Nathan Chancellor <nathan@kernel.org>
+Cc: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
 Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: "Peter Zijlstra (Intel)" <peterz@infradead.org>
+Cc: Andrew Davis <afd@ti.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Eric DeVolder <eric.devolder@oracle.com>
+Cc: Rob Herring <robh@kernel.org>
+Cc: <linux-arm-kernel@lists.infradead.org>
 ---
- arch/xtensa/Kconfig               | 1 +
- arch/xtensa/include/asm/cmpxchg.h | 2 ++
- 2 files changed, 3 insertions(+)
+ arch/arm/Kconfig               | 1 +
+ arch/arm/include/asm/cmpxchg.h | 7 ++++++-
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/arch/xtensa/Kconfig b/arch/xtensa/Kconfig
-index f200a4ec044e6..d3db28f2f8110 100644
---- a/arch/xtensa/Kconfig
-+++ b/arch/xtensa/Kconfig
-@@ -14,6 +14,7 @@ config XTENSA
- 	select ARCH_HAS_DMA_SET_UNCACHED if MMU
- 	select ARCH_HAS_STRNCPY_FROM_USER if !KASAN
- 	select ARCH_HAS_STRNLEN_USER
-+	select ARCH_NEED_CMPXCHG_1_EMU
- 	select ARCH_USE_MEMTEST
- 	select ARCH_USE_QUEUED_RWLOCKS
- 	select ARCH_USE_QUEUED_SPINLOCKS
-diff --git a/arch/xtensa/include/asm/cmpxchg.h b/arch/xtensa/include/asm/cmpxchg.h
-index 675a11ea8de76..95e33a913962d 100644
---- a/arch/xtensa/include/asm/cmpxchg.h
-+++ b/arch/xtensa/include/asm/cmpxchg.h
-@@ -15,6 +15,7 @@
- 
- #include <linux/bits.h>
- #include <linux/stringify.h>
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index ee5115252aac4..a867a7d967aa5 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -34,6 +34,7 @@ config ARM
+ 	select ARCH_MIGHT_HAVE_PC_PARPORT
+ 	select ARCH_OPTIONAL_KERNEL_RWX if ARCH_HAS_STRICT_KERNEL_RWX
+ 	select ARCH_OPTIONAL_KERNEL_RWX_DEFAULT if CPU_V7
++	select ARCH_NEED_CMPXCHG_1_EMU if CPU_V6
+ 	select ARCH_SUPPORTS_ATOMIC_RMW
+ 	select ARCH_SUPPORTS_CFI_CLANG
+ 	select ARCH_SUPPORTS_HUGETLBFS if ARM_LPAE
+diff --git a/arch/arm/include/asm/cmpxchg.h b/arch/arm/include/asm/cmpxchg.h
+index 44667bdb4707a..a428e06fe94ee 100644
+--- a/arch/arm/include/asm/cmpxchg.h
++++ b/arch/arm/include/asm/cmpxchg.h
+@@ -5,6 +5,7 @@
+ #include <linux/irqflags.h>
+ #include <linux/prefetch.h>
+ #include <asm/barrier.h>
 +#include <linux/cmpxchg-emu.h>
  
+ #if defined(CONFIG_CPU_SA1100) || defined(CONFIG_CPU_SA110)
  /*
-  * cmpxchg
-@@ -74,6 +75,7 @@ static __inline__ unsigned long
- __cmpxchg(volatile void *ptr, unsigned long old, unsigned long new, int size)
- {
+@@ -162,7 +163,11 @@ static inline unsigned long __cmpxchg(volatile void *ptr, unsigned long old,
+ 	prefetchw((const void *)ptr);
+ 
  	switch (size) {
-+	case 1:  return cmpxchg_emu_u8(ptr, old, new);
- 	case 4:  return __cmpxchg_u32(ptr, old, new);
- 	default: __cmpxchg_called_with_bad_pointer();
- 		 return old;
+-#ifndef CONFIG_CPU_V6	/* min ARCH >= ARMv6K */
++#ifdef CONFIG_CPU_V6	/* min ARCH < ARMv6K */
++	case 1:
++		oldval = cmpxchg_emu_u8((volatile u8 *)ptr, old, new);
++		break;
++#else /* min ARCH >= ARMv6K */
+ 	case 1:
+ 		do {
+ 			asm volatile("@ __cmpxchg1\n"
 -- 
 2.40.1
 
