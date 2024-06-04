@@ -1,86 +1,106 @@
-Return-Path: <linux-arch+bounces-4695-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4696-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9FC08FBFAB
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Jun 2024 01:11:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 634A38FC01A
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Jun 2024 01:44:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 557A7288F3D
-	for <lists+linux-arch@lfdr.de>; Tue,  4 Jun 2024 23:11:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 960031C2267E
+	for <lists+linux-arch@lfdr.de>; Tue,  4 Jun 2024 23:44:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5A2914B077;
-	Tue,  4 Jun 2024 23:11:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C389A14D446;
+	Tue,  4 Jun 2024 23:44:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GKBe8Mqb"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="4DYnlGoH"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E38482D98;
-	Tue,  4 Jun 2024 23:11:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31DC714D6E1;
+	Tue,  4 Jun 2024 23:44:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717542713; cv=none; b=aa82dXM3T4Zgjg2NUX9t9DQAVyBTiFfKnpFDK44boE8C2BIXEJp4yVnKts8DXx6SqhpW1UD9bI6NM3Dy3kGkkZJeSrndK/GXcI3cIIPJVBnEmHc4l3YojlzynirmGVxsBrZ1l3JS6bP4TVCwryEy5jA+UpCwLiCoDJ+cLSt7Kng=
+	t=1717544694; cv=none; b=jhKIw31WhFvYnKXyu0H5IsHZo7f77H+UuN1+R4PLDribxd3dsikuF2rcxsSBc7yGxeJK4X0F/qFCjvTvZF2ZlHC+1OUynEycIJCgMT76JP4yfWYALzl+cp+leMnnhzvl0dtEDxWpL3L8w3YMpEf2Ngf1YvXasrOjv4JVaEvWVC4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717542713; c=relaxed/simple;
-	bh=4FuPX6BuZt4dQvMbIXSBlmgsmIGMVwsF9WNh0YACBZ0=;
+	s=arc-20240116; t=1717544694; c=relaxed/simple;
+	bh=5vLaTMhC/f80cHfutQVA8NT+YBHXfBWGgHaK2vOxNpQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KS3kaLPzMWbYmaYEB0YAW8HzRgrk83GucHXWv6LakDsiIm22M00oEyZ3+73PQ10KCHEpGK3d/jzIv81ODLBHf7dZW3VSi+Tep7oSf3VnPONJYag+nuylhTMpp/CXgibzMLMxVfMUKAMGg7AsCqhK8Q7NHxQWld7D0coQAPwkR1Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GKBe8Mqb; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4214053918aso15854435e9.2;
-        Tue, 04 Jun 2024 16:11:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717542710; x=1718147510; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sX/6mmC8XZEQDMuHxkMrvCE97OCxQjuaydG2h3AIVKE=;
-        b=GKBe8MqbHYDNi2m9f2jPe+v8gDGFxD0CFMroimKKpvAUlPlJ7fbjZI1Wr7/d0e7BKv
-         xZtJi08ImUNmwPt2T7NJ6ciNzFqVJWFK5dTujnReWoQrc+e5zC/nbFIXQjh0AyfWbNvQ
-         aKkc6stklbdnNYdeRPsXcCc5N5jR3D9dE7j86bnLVw1vgDxplYJm9qQtVzQ/336P7haW
-         BWQGWiXiQzpPXCqb9OxwzFLdUyypJmUgRv6Ro5rBCHUDy6YwCc4A4Nd1oaENp51vGj8C
-         E+DGn6v2jsPaohUMv1GvXjRCYhZvdThClCy7RC8DtkAgj2sqUx2QoS+uIZxke0HD5euI
-         9OTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717542710; x=1718147510;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sX/6mmC8XZEQDMuHxkMrvCE97OCxQjuaydG2h3AIVKE=;
-        b=rtgGIFeghl1C8KNAwcUDoaHLt2gIaF//PDi5rwqFjegpx4L4Jonxd+AeCL++KfJ+UR
-         8ztA00ZZBDdOrw0MMO3rQQekBWbLfstGkti8SPrBCoptbrYt1bfTb3iOAl3q4m9LYeZy
-         gVb905+SnxwSpK3VjNvbQ67yKRkKHlnXK6jAyLtSseiV275gJaq/JuI+Wk1pJYSJ974h
-         C8kC5HYc9V56Za3jWVij9D0ijNJOhJWaLYYlcBdDl8NlzlPREk3Krnqp6z/5jkT9evDN
-         bwl2ffjeHr4FRx6T+MzeiW4Z/2A8oBMZvX9QbLoqGpSwOFI3lVZ5C7GpJmpVW5c3wNpn
-         xiAQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWoLplUyVMyFptusO7sIVpGd6hm2xHK4tg/8HlEZRAfQyfZv07uYpxQ3OQ+bsDk6rygOkIll2MSuyZISweRVW5ONXKywjVy1Kho/A==
-X-Gm-Message-State: AOJu0Yw8uBl+KBI2dC9N9bvjhL0XOCm1PLKF90lOefPpPW1bgHcLaebY
-	phQQ9tG8cXuPNQlscpB/yMF+v3OHId2vuZQiXDvchZ1vK/bFaWxM
-X-Google-Smtp-Source: AGHT+IEHjrRL1cylLduq+CkvBeCKQ7MWSOYgB3YuHQ5rTi3i8sHMU/lxwECcL+AYyh7dF4CNkt/jZQ==
-X-Received: by 2002:a05:600c:524d:b0:41a:3868:d222 with SMTP id 5b1f17b1804b1-4215625804amr7276975e9.0.1717542710207;
-        Tue, 04 Jun 2024 16:11:50 -0700 (PDT)
-Received: from andrea ([151.76.32.59])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4215812969fsm1181195e9.23.2024.06.04.16.11.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jun 2024 16:11:49 -0700 (PDT)
-Date: Wed, 5 Jun 2024 01:11:45 +0200
-From: Andrea Parri <parri.andrea@gmail.com>
-To: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	kernel-team@meta.com, mingo@kernel.org, stern@rowland.harvard.edu,
-	will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
-	npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-	luc.maranget@inria.fr, akiyks@gmail.com,
-	Marco Elver <elver@google.com>, Daniel Lustig <dlustig@nvidia.com>,
-	Joel Fernandes <joel@joelfernandes.org>
-Subject: Re: [PATCH memory-model 3/3] tools/memory-model: Add KCSAN LF
- mentorship session citation
-Message-ID: <Zl+fMRgK7q47PrVy@andrea>
-References: <b290acd5-074f-4e17-a8bf-b444e553d986@paulmck-laptop>
- <20240604221419.2370127-3-paulmck@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=fpDFON7lauewfG4hkWenVziJ1Kgl/ErIQFvYq4Oo7OjpNCysu5PTlAQGzS+/HlBl2OaFfl499s6FmqDfDvPDem2n+JKy59+AlAxmiDYY4LzFX/SMaOj2TQT/RTWHR8lG+TYxcKkdHsBl4c/3V9EiX9UtfM8V+YV1sJfQdnZQvEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=4DYnlGoH; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=PhT9KFFOExWQF20U3AwXuDAmtkcJMJ2i2CdJFaJH1tU=; b=4DYnlGoH09CVVe9B8D6eWoe6IX
+	DObz3+SkqGCNdjLs+aUSWP4imauIabFyOz0tYAXBGAaspL4LEEykxzsBt1MplXhQMcu03p7QOuQAx
+	8TnzwFCM/jMxcD752sO5+qJexRWAe9BvXi/lZ0eAt2OWIDNwwpRUDYNeI+HKaBzM6AbI=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1sEdpV-00GqyR-E0; Wed, 05 Jun 2024 01:44:37 +0200
+Date: Wed, 5 Jun 2024 01:44:37 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>, Paolo Abeni <pabeni@redhat.com>,
+	Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+	Matt Turner <mattst88@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Steffen Klassert <steffen.klassert@secunet.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	David Ahern <dsahern@kernel.org>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>,
+	Yunsheng Lin <linyunsheng@huawei.com>,
+	Shailend Chand <shailend@google.com>,
+	Harshitha Ramamurthy <hramamurthy@google.com>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Jeroen de Borst <jeroendb@google.com>,
+	Praveen Kaligineedi <pkaligineedi@google.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Kaiyuan Zhang <kaiyuanz@google.com>
+Subject: Re: [PATCH net-next v10 05/14] netdev: netdevice devmem allocator
+Message-ID: <3be107ce-3d9f-4528-b9f7-1c9e38da0688@lunn.ch>
+References: <20240530201616.1316526-1-almasrymina@google.com>
+ <20240530201616.1316526-6-almasrymina@google.com>
+ <bea8b8bf1630309bb004f614e4a3c7f684a6acb6.camel@redhat.com>
+ <20240604121551.07192993@gandalf.local.home>
+ <20240604163158.GB21513@ziepe.ca>
+ <20240604124243.66203a46@gandalf.local.home>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -89,18 +109,23 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240604221419.2370127-3-paulmck@kernel.org>
+In-Reply-To: <20240604124243.66203a46@gandalf.local.home>
 
-On Tue, Jun 04, 2024 at 03:14:19PM -0700, Paul E. McKenney wrote:
-> Add a citation to Marco's LF mentorship session presentation entitled
-> "The Kernel Concurrency Sanitizer"
-> 
-> [ paulmck: Apply Marco Elver feedback. ]
-> 
-> Reported-by: Marco Elver <elver@google.com>
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> Interesting, as I sped up the ftrace ring buffer by a substantial amount by
+> adding strategic __always_inline, noinline, likely() and unlikely()
+> throughout the code. It had to do with what was considered the fast path
+> and slow path, and not actually the size of the function. gcc got it
+> horribly wrong.
 
-Acked-by: Andrea Parri <parri.andrea@gmail.com>
+And what did the compiler people say when you reported gcc was getting
+it wrong?
 
-  Andrea
+Our assumption is, the compiler is better than a human at deciding
+this. Or at least, a human who does not spend a long time profiling
+and tuning. If this assumption is not true, we probably should be
+trying to figure out why, and improving the compiler when
+possible. That will benefit everybody.
+
+       Andrew
+
 
