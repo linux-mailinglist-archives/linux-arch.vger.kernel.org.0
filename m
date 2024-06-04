@@ -1,121 +1,129 @@
-Return-Path: <linux-arch+bounces-4687-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4688-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E05FC8FBD8B
-	for <lists+linux-arch@lfdr.de>; Tue,  4 Jun 2024 22:52:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E2958FBDE6
+	for <lists+linux-arch@lfdr.de>; Tue,  4 Jun 2024 23:14:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A0214282E39
-	for <lists+linux-arch@lfdr.de>; Tue,  4 Jun 2024 20:52:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D1C85286270
+	for <lists+linux-arch@lfdr.de>; Tue,  4 Jun 2024 21:14:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1B2C14BF99;
-	Tue,  4 Jun 2024 20:52:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F13E14BF8F;
+	Tue,  4 Jun 2024 21:14:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cByaJ4hu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YWHcPG8z"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13ACE14BF85
-	for <linux-arch@vger.kernel.org>; Tue,  4 Jun 2024 20:52:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3681E14B95F;
+	Tue,  4 Jun 2024 21:14:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717534358; cv=none; b=JHXECmTrKtKtW8+mNVeXIGrhxz7t7MXIDrpqFXvJOd1GHKyxn4yPhqfxFX0qVl9jocGQrEZI+STcCicSLnHCRGz457CUNCow9hj7Id0jnsN1SE8uFJuohdcbJE1yrsTFUDoWa5PZTjNnSUJCw2sEFimGwHS1GnhylPUkexCGu6M=
+	t=1717535647; cv=none; b=ACMwHeehhaE/vvUYfLgGovWyqz57SpGxLIuS+Wy1Kum1TLXpb5Ymakf+UuHb/34y/It4wi0Ds21g6uEU37L9N3q5qMJu+xU2lA4PzepzMB86s8f2/YGboBgIveCzctdhuaRh+0DuJoF+XU9ezzARfbkSJmDOJJIiPfkgZV8fQSg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717534358; c=relaxed/simple;
-	bh=lTzurSuy+sTB/+xYz5UJ7uXansp4aRLe290h4X7ZcIo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ePiSj/QCEeu2MVEw4EVxpSB5JMLUKtX0VIceVpgxwcjlKi4lU+TdQyQg75WFpkiYF/+BHQytpga1cZ4ORM76B6Vt/OHUZMhOdAEneQeVr/gEDnlD/uggr8sac3tGrMDXxtPTwmQgQobJEmkfX2XnIL0kNKC397g9moIX+s+xhGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=cByaJ4hu; arc=none smtp.client-ip=209.85.208.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2e72b8931caso66578321fa.0
-        for <linux-arch@vger.kernel.org>; Tue, 04 Jun 2024 13:52:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1717534355; x=1718139155; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2jC9d73OOtgTNGntmuaDsfT65a7uzZs0IHtC3nuFuas=;
-        b=cByaJ4huHfZnXZr0pxTONQs0aU/8ApI19YUWHZnXjOeblsqQ0OK5Ck6Ks29xk1PWsh
-         M98Dk3+Uv6Bk+jOoa8RpqpsZZVbyEwieIrVJOEDA0zgLe6VS+yNzpAp6Ix6hMKZMNzCK
-         FKtOxTRXn+Bi7ZoUYuuc2wtfWrVTbrakwWM84TTmgmyd5RVWByktYeM0a6ovtp2xI9Gl
-         2Cz67ijDKIAPWfhtDMCGmO73/hScSAMSyPLNasPJSRKI7a0wDM8ul/I0kmVelc+tX3AK
-         pDMRssoHoitvaCXG4wIL7kEFiO8e7Ilf2Cen+++JXTjZ+Trk1qKhhAfAZj0JxE9nDBv4
-         GuFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717534355; x=1718139155;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2jC9d73OOtgTNGntmuaDsfT65a7uzZs0IHtC3nuFuas=;
-        b=RZ+NYxXs9re9Y3uZDHHanzDbSq5MkePLmQ6DURiF83o1SVFkxFwY5aVM1cPR25sZ6z
-         FUPPbev8nQViis7a/1TauFObf/aZXTv+AlCJGFRDqGxieP1AVa5qdIBXyZ2SXzCntEXQ
-         0OAb1iJAW0LsYXcYAd5KQu9yx7TeyXRHWHEkyyP1UGrz4nwp0gYs6Sz7g5MgkSkOAK+q
-         hjukO4UJsDCP+4tGjDsJAua8Z5YQB3O9opauhmob6eUY3UvGuoV7k4aHvRaQIr0ZSjYu
-         +2yhNOojnGfsCuivXxFKRX/TSGz0Om5wtjzyKUAy/ROl0IN6Yo/KKGkIbF7SfPXqJyXJ
-         vudA==
-X-Gm-Message-State: AOJu0YyKQ/HR0AE2ZKJ8y26WGM5GbAhPsukNVDB53djHY5aEygJde1qG
-	bmyNPxl2HhuvQ+upDwU/+5BCvKni7E5KevWwRHn2xgLAjscByZy/RT5XCZu6NGYjRuyxZu0FL0T
-	I7fhzjE1hD1aG7VUecwSSXeMgNXmsMNW6Y4yiZw==
-X-Google-Smtp-Source: AGHT+IHSz9LQMaMYtdTksGpHEiQ16vlUmwhr1VfZwYoH47CN3ui+RiawoFFHfOTDLYSN7yRc3iPG2mXCt1rFNOU/H3Y=
-X-Received: by 2002:a05:651c:210a:b0:2e6:be3c:9d37 with SMTP id
- 38308e7fff4ca-2eac79c2ea9mr2458351fa.14.1717534355187; Tue, 04 Jun 2024
- 13:52:35 -0700 (PDT)
+	s=arc-20240116; t=1717535647; c=relaxed/simple;
+	bh=CAp13sZ7M4MgUyj523wMYv5f7s1+3dQaiYzmf+CALUE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=d65bwOazvFLDA+RJPtTBlvijNnhIgBZ52INTmQ5z54XQUBIpWOEcNEk+kUrf+I8pi1D4jEb9RMU44uPLMYQREKIZceFwTGWp8+0Z1xZDhUV/X3g78TW0JIClwMLZknbpZkKaTn3ufHyRAcgKen+LmUTqjk+4K25ExonByCFvPuo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YWHcPG8z; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC8BFC2BBFC;
+	Tue,  4 Jun 2024 21:14:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717535646;
+	bh=CAp13sZ7M4MgUyj523wMYv5f7s1+3dQaiYzmf+CALUE=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=YWHcPG8zSzkxbQ2gjOWPg9XOi7yjjgQ7TQGjcnThDcySzE7e/8ZtQBWrO0oaOwGbI
+	 5dSTQVZ1aR+4VB286yYr3o6B2oyNTuAXw8fVDjDLGRJ1mbVgVUcsbzNucAI74Rnw6I
+	 gu/zz1xhOazlSg3yNOcBNSxMOiMzusPUL9eRzXESVC/X3Z8ZPy3p0ww5k01vpSSx1I
+	 sfWb4M1kc8T58kJMPNVoj4xogRQAv/dmEc/3BLy0CodAOcQMAJisxQBqTXsjYFkI2l
+	 YKsnMZaIPuXS0Yy82yEGrm7eG087oIlbjvsx8Mxx2Us6A4/czu0rwYgY0iTX0pp8BR
+	 tCBQG9EroRJJw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 3F68CCE3ED6; Tue,  4 Jun 2024 14:14:06 -0700 (PDT)
+Date: Tue, 4 Jun 2024 14:14:06 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kernel-team@meta.com, elver@google.com, akpm@linux-foundation.org,
+	tglx@linutronix.de, peterz@infradead.org, dianders@chromium.org,
+	pmladek@suse.com, torvalds@linux-foundation.org, arnd@arndb.de,
+	Mark Brown <broonie@kernel.org>,
+	Naresh Kamboju <naresh.kamboju@linaro.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+	Andrew Davis <afd@ti.com>, Eric DeVolder <eric.devolder@oracle.com>,
+	Rob Herring <robh@kernel.org>, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3 cmpxchg 4/4] ARM: Emulate one-byte cmpxchg
+Message-ID: <2fbe86b7-70f0-46cd-b7b7-9d67e78d72f3@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <1dee481f-d584-41d6-a5f1-d84375be5fe8@paulmck-laptop>
+ <20240604170437.2362545-4-paulmck@kernel.org>
+ <CACRpkdaYQWGsjtDPzbJS4C9Y9z8JGv=3ihQrVKvegJf8ujqSmA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <1dee481f-d584-41d6-a5f1-d84375be5fe8@paulmck-laptop> <20240604170437.2362545-4-paulmck@kernel.org>
-In-Reply-To: <20240604170437.2362545-4-paulmck@kernel.org>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Tue, 4 Jun 2024 22:52:23 +0200
-Message-ID: <CACRpkdaYQWGsjtDPzbJS4C9Y9z8JGv=3ihQrVKvegJf8ujqSmA@mail.gmail.com>
-Subject: Re: [PATCH v3 cmpxchg 4/4] ARM: Emulate one-byte cmpxchg
-To: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	kernel-team@meta.com, elver@google.com, akpm@linux-foundation.org, 
-	tglx@linutronix.de, peterz@infradead.org, dianders@chromium.org, 
-	pmladek@suse.com, torvalds@linux-foundation.org, arnd@arndb.de, 
-	Mark Brown <broonie@kernel.org>, Naresh Kamboju <naresh.kamboju@linaro.org>, 
-	Nathan Chancellor <nathan@kernel.org>, "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>, 
-	Andrew Davis <afd@ti.com>, Eric DeVolder <eric.devolder@oracle.com>, Rob Herring <robh@kernel.org>, 
-	linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACRpkdaYQWGsjtDPzbJS4C9Y9z8JGv=3ihQrVKvegJf8ujqSmA@mail.gmail.com>
 
-Hi Paul,
+On Tue, Jun 04, 2024 at 10:52:23PM +0200, Linus Walleij wrote:
+> Hi Paul,
+> 
+> thanks for your patch! This caught my eye:
+> 
+> On Tue, Jun 4, 2024 at 7:04 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> 
+> > Use the new cmpxchg_emu_u8() to emulate one-byte cmpxchg() on ARM systems
+> > with ARCH < ARMv6K.
+> 
+> ARCH == ARMv6.
+> 
+> This ARCH < ARMv6K comes from inversion of the the a bit terse
+> comment for ifndef CONFIG_CPU_V6, which means "out of the
+> post-v6 CPUs, the following applies to those > V6".
+> 
+> The code in the patch, IIUC make use of cmpxchg_emu_u8()
+> if and only if the CPU is V6.
+> 
+> > -#ifndef CONFIG_CPU_V6  /* min ARCH >= ARMv6K */
+> > +#ifdef CONFIG_CPU_V6   /* min ARCH < ARMv6K */
+> 
+> This is now a set with one member so this comment should say:
+> 
+> /* ARCH == ARMv6 */
+> 
+> After this change.
 
-thanks for your patch! This caught my eye:
+Thank you for looking this over!  Does the following patch (to be merged
+into the original) capture it properly?
 
-On Tue, Jun 4, 2024 at 7:04=E2=80=AFPM Paul E. McKenney <paulmck@kernel.org=
-> wrote:
+							Thanx, Paul
 
-> Use the new cmpxchg_emu_u8() to emulate one-byte cmpxchg() on ARM systems
-> with ARCH < ARMv6K.
+------------------------------------------------------------------------
 
-ARCH =3D=3D ARMv6.
-
-This ARCH < ARMv6K comes from inversion of the the a bit terse
-comment for ifndef CONFIG_CPU_V6, which means "out of the
-post-v6 CPUs, the following applies to those > V6".
-
-The code in the patch, IIUC make use of cmpxchg_emu_u8()
-if and only if the CPU is V6.
-
-> -#ifndef CONFIG_CPU_V6  /* min ARCH >=3D ARMv6K */
-> +#ifdef CONFIG_CPU_V6   /* min ARCH < ARMv6K */
-
-This is now a set with one member so this comment should say:
-
-/* ARCH =3D=3D ARMv6 */
-
-After this change.
-
-Yours,
-Linus Walleij
+diff --git a/arch/arm/include/asm/cmpxchg.h b/arch/arm/include/asm/cmpxchg.h
+index a428e06fe94ee..9beb64d305866 100644
+--- a/arch/arm/include/asm/cmpxchg.h
++++ b/arch/arm/include/asm/cmpxchg.h
+@@ -163,11 +163,11 @@ static inline unsigned long __cmpxchg(volatile void *ptr, unsigned long old,
+ 	prefetchw((const void *)ptr);
+ 
+ 	switch (size) {
+-#ifdef CONFIG_CPU_V6	/* min ARCH < ARMv6K */
++#ifdef CONFIG_CPU_V6	/* ARCH == ARMv6 */
+ 	case 1:
+ 		oldval = cmpxchg_emu_u8((volatile u8 *)ptr, old, new);
+ 		break;
+-#else /* min ARCH >= ARMv6K */
++#else /* min ARCH > ARMv6 */
+ 	case 1:
+ 		do {
+ 			asm volatile("@ __cmpxchg1\n"
 
