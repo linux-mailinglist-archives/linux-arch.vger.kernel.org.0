@@ -1,94 +1,108 @@
-Return-Path: <linux-arch+bounces-4718-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4719-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 044028FD571
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Jun 2024 20:12:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FDEE8FD66D
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Jun 2024 21:26:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9272F1F2A8DD
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Jun 2024 18:12:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B52F283A92
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Jun 2024 19:26:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E5BC155C9F;
-	Wed,  5 Jun 2024 18:05:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5D3714E2F6;
+	Wed,  5 Jun 2024 19:26:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JQ6XkXN+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZPcoGoHE"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 540EF155C98;
-	Wed,  5 Jun 2024 18:05:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EBDE14D713;
+	Wed,  5 Jun 2024 19:26:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717610723; cv=none; b=IarnCvEzPIlE6v+nPQsJudxgNKKZseft8bTgQRFgwhelH1uZttoW2lKSxJvao7kqP3l+nLAZA/nywqDbs+lnwRIUuWkT5V51e88CN3r53aJx0IGYSRNg7WjD/xCwn24ddwOuKqd/d4eBduzF00vWY5ZbC52UC3mtvrCKfmttFTY=
+	t=1717615596; cv=none; b=jlkB7xSoERHcG08iN3T+YkuQO11imK26tGPpMfiv9UaSZcSfs5kcxB09hpzEwxpbbYl0mmDUSKMpwSSD2asJ08mdwgIyaX4pj4osxldIKQmXYSzROu6SZbPel4OtoXGl3MNj72h77Q/1njaLWf/Psg7mqlwW4ER0oyTuSLhdTY4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717610723; c=relaxed/simple;
-	bh=UUt/b2AZAbP2bHw0Kt5bQRKY/gANQoV5gU6Fp4AYwpg=;
+	s=arc-20240116; t=1717615596; c=relaxed/simple;
+	bh=TGeMPpyCZO5b/q1Rebq1IqjfCpKuEFM8wD8tUBsBoKw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tN/8fgoV3QLCXIx8dw8fSt3sVMZdXnBGq079i0APtnv6IffwDi2IeQb3DGw2V6+Aukzqg3jw3deb6XWr+JwUHaDS3J6Edve2guu7chxAuwsw7+iQ7ANNydq4kB1FJPZIcjRc5/cF39jkSB5Nn1YLXInhzoGjj/yXGRq0XVxvOPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JQ6XkXN+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1981C2BD11;
-	Wed,  5 Jun 2024 18:05:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717610722;
-	bh=UUt/b2AZAbP2bHw0Kt5bQRKY/gANQoV5gU6Fp4AYwpg=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=JQ6XkXN+sLx/LPKeHP7XRefg2ZOk/egCkFe9Zr9MZw/JRGYpC0932zOyDZJxQ1Xby
-	 mKBv1Phn1REeUURvL4MRZI4H/P8EMsf+jNfFgPArkMYOsLm4JdVJvN6lTKWgMn0Htl
-	 zO9/tvQeR5h+lV9c6VqHnJ0HY4JrdQZO3NdPb2n+KvN9cKAMuKzStOnDcphhGq7CT2
-	 CJtW/ZpuvBPZBsvPQEp5WMzyO561FijopJUIILric3JBip0u9pzx4VjmUExahhGrGs
-	 4tWUSxSpEOhkpNGYLOOgFeEp+COZyZuCFfrAvSzUamnifiaoP28COpvjImnbjRXnvh
-	 pnqObZFbvt3fg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 8152FCE0A73; Wed,  5 Jun 2024 11:05:22 -0700 (PDT)
-Date: Wed, 5 Jun 2024 11:05:22 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kernel-team@meta.com, elver@google.com, akpm@linux-foundation.org,
-	tglx@linutronix.de, peterz@infradead.org, dianders@chromium.org,
-	pmladek@suse.com, torvalds@linux-foundation.org, arnd@arndb.de,
-	Mark Brown <broonie@kernel.org>,
-	Naresh Kamboju <naresh.kamboju@linaro.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-	Andrew Davis <afd@ti.com>, Eric DeVolder <eric.devolder@oracle.com>,
-	Rob Herring <robh@kernel.org>, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 cmpxchg 4/4] ARM: Emulate one-byte cmpxchg
-Message-ID: <6526c3fb-f4d9-458f-ae8b-6555dcb3b807@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <1dee481f-d584-41d6-a5f1-d84375be5fe8@paulmck-laptop>
- <20240604170437.2362545-4-paulmck@kernel.org>
- <CACRpkdaYQWGsjtDPzbJS4C9Y9z8JGv=3ihQrVKvegJf8ujqSmA@mail.gmail.com>
- <2fbe86b7-70f0-46cd-b7b7-9d67e78d72f3@paulmck-laptop>
- <CACRpkdYMiaMFmUoXyHdR9kLyAZma-24-m7cofztxd=n_Fr+GYQ@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=XBOO1lksZ9tvMeosSUbN+f0P3NhQXfL4WESJFWqVzt1ERWVQgT6DJNMhuWLVdSBkyc4ORVBGkKzYyiT2Zb+3pnzxIxNiuydkqUYZP7uZUA/mwVAGppe6YWvR+1I1kMQO2uEY4oCvr0YzQzVlSQClKilOJ78PuatJThZ4U6kIDNo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZPcoGoHE; arc=none smtp.client-ip=209.85.221.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-35e0f4e1821so89926f8f.0;
+        Wed, 05 Jun 2024 12:26:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1717615593; x=1718220393; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=W05x3+sVU6bILbLlHv781110WtHbNpnp+gY6dsPenOg=;
+        b=ZPcoGoHEXu/Lymd4PxA95BAMjcv3UW7VBcnDx5iTnmIkJV6pq1VuBHRMPh8+IObhn5
+         vSEflwcP5oWvufwr4r10PtYbB5feZT143rbgD4OoNl7dK2ylWrx4jMBHdF5S+OZ4GJSK
+         C0ttPzm4TU5bBoDBXYGjRytNA/46k2ckFsaoJdxtKoS6Rpp8pcf6yMoJFhW+FVKCIu+y
+         W1dp/7id9rSHslCmqv98RfcEfFqDavb4ytz453tKtwMJylXDpo+ah7xJoH5BbT+fa4ry
+         m71h3DTPUIFa12HCNPIedM9E5o9lAe7Gc6YXIahY+2YTcjB+f/ZYqltNBqewkSa2XrVj
+         Zndw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717615593; x=1718220393;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=W05x3+sVU6bILbLlHv781110WtHbNpnp+gY6dsPenOg=;
+        b=FdK4lPGLrO+QikO1tHcTcHpQqUJOxZj6U2KtWeagA4giUjs6xlItrXrWATp9s4eock
+         GCA90V/TUINxaNabCFNzZljorfsgGib/wxqCa4oBK1FLm/noEtKQiJyLuFJSL6vUzWlq
+         E1FhrwKBIZ8pBhDD/w3I9brp0CQlsZ6ky+SVD3adVi4T/5l6lMc3hdN9Qo5P9zuZPdW0
+         QWrCF+EbXWFwQFnIdtOCPxenoPapAqogHxnFOzkWap93vERrsrALVkFvPmNhr8w7+mN7
+         WOKWcnydvw5vcrEdRf5iSloOAMmw5kpfc/19Wmpl6QVzgiASYwPgpbDC00jDH0JqQpcP
+         4E5w==
+X-Forwarded-Encrypted: i=1; AJvYcCUJQjiP9zbcw4uQ5OuWuKY0seR5k0rb/mvQD6Dn0r9lv323LMCNocfwhYUmiOPU5hg12ONHxkV6VPFH1ug81Xovo9t1A1uEQURj2PqrLadsQAu8sJK+wRd3j19+RmW8bmglTIeE2kKjYg==
+X-Gm-Message-State: AOJu0YzkqrnNDc2atHE952onXofPQmqOb+FXmo2UgxSm7ghbSJpcY+eU
+	gKwfiGtYi4ceK9hvGLiY1XWgHrpds5/78XVLMOeIs4lkLghXlU80
+X-Google-Smtp-Source: AGHT+IFO+3N6m7Ih2WOHZ+qasLJwJz7+352/CE7D8ks0I/d1TPQFnypvsJZV+AjEPEiEXjlZWAPN0A==
+X-Received: by 2002:a05:6000:114a:b0:357:393d:5006 with SMTP id ffacd0b85a97d-35e8406866emr2729154f8f.7.1717615593349;
+        Wed, 05 Jun 2024 12:26:33 -0700 (PDT)
+Received: from andrea ([151.76.32.59])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-35dd064bbb1sm15440454f8f.101.2024.06.05.12.26.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jun 2024 12:26:33 -0700 (PDT)
+Date: Wed, 5 Jun 2024 21:26:27 +0200
+From: Andrea Parri <parri.andrea@gmail.com>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
+	npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+	luc.maranget@inria.fr, paulmck@kernel.org, akiyks@gmail.com,
+	dlustig@nvidia.com, joel@joelfernandes.org,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	hernan.poncedeleon@huaweicloud.com,
+	jonas.oberhauser@huaweicloud.com
+Subject: Re: [PATCH] tools/memory-model: Document herd7 (internal)
+ representation
+Message-ID: <ZmC7z26DmZ5xP8k4@andrea>
+References: <20240524151356.236071-1-parri.andrea@gmail.com>
+ <ZlC0IkzpQdeGj+a3@andrea>
+ <cf81a3c2-9754-4130-a67e-67d475678829@rowland.harvard.edu>
+ <ZlQ/Ks3I2BYybykD@andrea>
+ <28bdcf4c-6903-4555-8cbc-a93704ec05f9@rowland.harvard.edu>
+ <ZmCa6UXON7bBDLwA@andrea>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACRpkdYMiaMFmUoXyHdR9kLyAZma-24-m7cofztxd=n_Fr+GYQ@mail.gmail.com>
+In-Reply-To: <ZmCa6UXON7bBDLwA@andrea>
 
-On Wed, Jun 05, 2024 at 10:38:07AM +0200, Linus Walleij wrote:
-> On Tue, Jun 4, 2024 at 11:14 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> > Here's a much smaller patch, suitable for the -stable kernels.  It fixes 
+> > the bug without doing the larger code reorganization (which will go into 
+> > a separate patch).  Can you test this one?
 > 
-> > Thank you for looking this over!  Does the following patch (to be merged
-> > into the original) capture it properly?
-> 
-> Yup, also fix the commit message to be == CPU_V6,
-> with that:
+> Testing in progress..., first results are good.
 
-Good catch, and will fix.
+Completed and good on the various locking litmus tests in the github
+archive and in-tree.
 
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-
-Thank you!  I will apply these on my next rebase.
-
-							Thanx, Paul
+  Andrea
 
