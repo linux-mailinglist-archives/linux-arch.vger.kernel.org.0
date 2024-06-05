@@ -1,217 +1,262 @@
-Return-Path: <linux-arch+bounces-4709-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4710-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 441EA8FD052
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Jun 2024 16:01:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90A1B8FD020
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Jun 2024 15:54:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ECDFFB2E1D4
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Jun 2024 13:53:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1999D1F22205
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Jun 2024 13:54:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDC0A19D8BC;
-	Wed,  5 Jun 2024 13:45:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 943B339AC3;
+	Wed,  5 Jun 2024 13:49:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="Lo6vyq89"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bKBP8ozb"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from CY4PR05CU001.outbound.protection.outlook.com (mail-westcentralusazolkn19010000.outbound.protection.outlook.com [52.103.7.0])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DBFDBA50;
-	Wed,  5 Jun 2024 13:45:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.7.0
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717595131; cv=fail; b=mmoQ06ZCF1jEzM3ULkOgzt9lKfrtGsxOIjto3NoZP/pY3856kvt4yMBALHKHZUhCFuxlWRUtnlso5l3OQPJhL+8OWNfpy9u8ZEyEGBqdCtsXVQvP3u9NfvcwWz2rwRQ+rtTniXBfXKKYlgPo8i3HmRTm2ZQWtE5s0gomdeWmH9w=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717595131; c=relaxed/simple;
-	bh=CuMftBLQU0veawmQuLErEVNvWynYsRwOu5VEzteF+hA=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=QN/jl4AfJXJrkAzq8rnHIgOrY0Qi5bV1JHdr0T0UvvQJZ8jLH3qA8RhIsfVpJug8++6rX6cfI+qCH8CY6pQGWe9acXRcO2SqKKmOY0/KBx/MJF/D7BOWtzhH0KlDpcMqDOUc1w21z9yPVvUqrtq+I+GF6cXf+qI0S47OuATZqrA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=Lo6vyq89; arc=fail smtp.client-ip=52.103.7.0
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LIza9N49tnvQTEauQEhRrOQnfqDVRch+O7R6K+sTSFBoA2nd6fC22y/8M8YY1Ue/Y5tlAXb4yU3f48PFWCyLksKwafU3EFOQn5J6/MInhH+YB71ajM87KYuWQdWA/z38f+9mXlrez5wFInWWSD3btrE3E0+R1AYtxgeSIjdZxJYB/n4YRbUfcKe2bDVVzWPGPhaMBpoknwGjtJFEcKytStCVQP8ycuVQZP+i/rArXWv6iSSn7f7nyupXGWC2/2iMx2Gopl/SaISuFSE5CqYuAe7ZsSrOg3Hwsm1fsjHiUtwhh885H291UXNnb7y0QqRqJCywx8okT8ZO0w4BCIMMow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zI70KYG5p+EdEKvDZJ8ndKozPcxDKCmEl4aOzuDd5Vs=;
- b=MBAu8AqM1fhRpihBxrodxnWagdlFQU/QUVmYUktRHp8bMzfcCWg+T8B7MGGIpgMKrqboxRkEycy/4tWTaZ9+YXWLE/tzX0RBjyBF67XP0TcAA2Hv+Uqxzm6LyPjn+sg49z+XXq/q4aXizZIIyPFL5p8n2OqzZDi7uxtmmVDaO3RRMQq1r7cO+NkmVRsPv0ytZWa5oE/ndqEIq7jf8vxPYXKe11cX+uej1HFW83nlO+q+rICjkhVFeIr9h5Bhael0VYzOPSX6/t6gosteVugvyCBIV387BIPAm+3NroFz06TUwySiRPTE6wamZP2JhW2e2by2mGcDSEuUptQw7B2GeA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zI70KYG5p+EdEKvDZJ8ndKozPcxDKCmEl4aOzuDd5Vs=;
- b=Lo6vyq89+Fy0BXz7N/GFYt8LQj1MIdVvhIxbVpYUFUrwVIag5rqmWp5ygNJ4inuPAHnombIw3twC8jhNXe3JjBCk3sCyaWpXLt5fWwVJKp/SwwaEnSZnmMV+j3keYXvkuHNuHl1qCqHYP1YWLPBMyRTfr/vOrDD+ket98GqxOR8o3g8q2G6f1M7/DCzwVc9KL4Lhj0BWO3RbDRV2pGbkE2bNPhFP7NyndiSg/jFyD1SfEfX/JBeQN1M4G/afM0jIuF7D3OgN8B1RIHwkoLLClQI51buMZTzUwsRIDR823+P15BH+CJ4x1okjdoJQqt2Zz8Mnn7Ot7swoCx5iDHNCDw==
-Received: from SN6PR02MB4157.namprd02.prod.outlook.com (2603:10b6:805:33::23)
- by CO6PR02MB7778.namprd02.prod.outlook.com (2603:10b6:303:a7::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.31; Wed, 5 Jun
- 2024 13:45:26 +0000
-Received: from SN6PR02MB4157.namprd02.prod.outlook.com
- ([fe80::cedd:1e64:8f61:b9df]) by SN6PR02MB4157.namprd02.prod.outlook.com
- ([fe80::cedd:1e64:8f61:b9df%2]) with mapi id 15.20.7633.033; Wed, 5 Jun 2024
- 13:45:26 +0000
-From: Michael Kelley <mhklinux@outlook.com>
-To: Thomas Gleixner <tglx@linutronix.de>, "kys@microsoft.com"
-	<kys@microsoft.com>, "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
-	"wei.liu@kernel.org" <wei.liu@kernel.org>, "decui@microsoft.com"
-	<decui@microsoft.com>, "mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de"
-	<bp@alien8.de>, "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-	"lpieralisi@kernel.org" <lpieralisi@kernel.org>, "kw@linux.com"
-	<kw@linux.com>, "robh@kernel.org" <robh@kernel.org>, "bhelgaas@google.com"
-	<bhelgaas@google.com>, "James.Bottomley@HansenPartnership.com"
-	<James.Bottomley@HansenPartnership.com>, "martin.petersen@oracle.com"
-	<martin.petersen@oracle.com>, "arnd@arndb.de" <arnd@arndb.de>,
-	"linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-	"linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-CC: "maz@kernel.org" <maz@kernel.org>, "den@valinux.co.jp"
-	<den@valinux.co.jp>, "jgowans@amazon.com" <jgowans@amazon.com>,
-	"dawei.li@shingroup.cn" <dawei.li@shingroup.cn>
-Subject: RE: [RFC 06/12] genirq: Add per-cpu flow handler with conditional IRQ
- stats
-Thread-Topic: [RFC 06/12] genirq: Add per-cpu flow handler with conditional
- IRQ stats
-Thread-Index: AQHatj3dxfDAEhKlmk6xJJhdAubqnrG36WaAgAAakqCAASXCgIAAA1YQ
-Date: Wed, 5 Jun 2024 13:45:26 +0000
-Message-ID:
- <SN6PR02MB415706390CB0E8FD599B6494D4F92@SN6PR02MB4157.namprd02.prod.outlook.com>
-References: <20240604050940.859909-1-mhklinux@outlook.com>
- <20240604050940.859909-7-mhklinux@outlook.com> <87h6e860f8.ffs@tglx>
- <SN6PR02MB415737FF6F7B40A1CD20C4A9D4F82@SN6PR02MB4157.namprd02.prod.outlook.com>
- <87zfrz4jce.ffs@tglx>
-In-Reply-To: <87zfrz4jce.ffs@tglx>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-tmn: [c5RCyg10DGYj8/LCV2V0ehx+fX4AEBm5]
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SN6PR02MB4157:EE_|CO6PR02MB7778:EE_
-x-ms-office365-filtering-correlation-id: 7b239599-1894-457a-fddd-08dc8565c167
-x-microsoft-antispam:
- BCL:0;ARA:14566002|461199019|440099019|3412199016|102099023;
-x-microsoft-antispam-message-info:
- oO7k70hU1YyZ931NE0N0rccAKGPQcwBxIkI8bIbdln+e2chlJXMCWg/TLkFnx5Ya3CDkklVnItKlpms72LZeQGSPX5DbyHPChboXsJFAP2HI0jtMj4+FFtyIyMbzC7qYWtYTlcBJT5+AMji+WBMhqJ33RWxQ0EFbjdJJJYc8CU378FgQEO9fJTevIIOemzLeyFi7wWRRjkkOQVrvAxsW2GOjO1yG5KEygECdWm4VFK4d7F7c/8uPTA+hvZqNQ8oPo1O38LMmsyuKf0O9BKHp++I/QUUUEiUlmzWR4N3IzMukpmz72Cqa/lW+tm14IJZDdXQ/diyE6QTQmqxuKJALB16jLqM8uXm908I/djw6wJATS5zeVlKT9kPCXOJ3PxTMLRHbj/2Z4yduP3E9oihSKB9qSgPcJ9r9803pwBhM1yYVgvWfcSVMjNDB85a5Y+GCyGlbIP1L+oIAe9TgMRVHra6Z0A6N2jTKIkAxtdMvPPlXM/byAm7fZCNJwYH/tbONiJtBL0zqaaPPNUWjetKajBjK/Z6B7+k6ziGkQWe/THqEILYAeLV2TZhl4hE9zZ8G
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?katvRQVerasrzsGDz5nbYaZpD0OLhUMZ1EDzoT6ak6G2q0wd12OHW5QazrYH?=
- =?us-ascii?Q?DJn686n4LzIBSyoQqaut4MQNwUV083rJsmXEHfHARow1O8uvNF84WUL8aB9z?=
- =?us-ascii?Q?JQcJr7HNi67wiJ4x5jjoRwdUoi69YhgnceMMyJeozFK0Tk1p30L2SdHIN+bJ?=
- =?us-ascii?Q?XOgIt+432VEdMOIH4tFX96UNExBg2MszOrJubznmo8DhigT5+zgoUQqEgljU?=
- =?us-ascii?Q?AUDr+kYZ+22Hwwo1Bf9rVB+fXN79WU9hnSSnfOaneHAe44K4JsXpESmbX6yX?=
- =?us-ascii?Q?raYSJK7cPhpIhLzbuoGE7RaPYLwT9jBGTVPQz0GKRgn03OKUT4cl8gyS+qNK?=
- =?us-ascii?Q?bnq/PSwUV8lUpJaW9cycQQeJUx046A4XVNBdZOgktxCK+wXKc2EfmWQZxL0Z?=
- =?us-ascii?Q?KgAFyKCLO50DDGFy3cF73M4s2SBtTn0RjJhN4yKaZhYzwqGaTVF/DLuoUS85?=
- =?us-ascii?Q?oMzuumz4WoXVe3a+VSmSQjUEwypDu/AcdsxFrhnd4Etir3zDz0sXmybgcd1L?=
- =?us-ascii?Q?/cRvcmsRK5YIltTdOZJ2qm8ys5vqSX9eHI7ynSVTRisQ9z8RlpxOYSG0d3s4?=
- =?us-ascii?Q?vceTSLkQKZbCd4gxFYmjJ7X72XYwKogQF4gjJfDHnNIwlFthSXTC2C7ni1zd?=
- =?us-ascii?Q?b2fWdMA2J7me8kml6lc8Uizdk8UNf3qjdbgLa814l3HplSSu7L2budM+62bq?=
- =?us-ascii?Q?W5ErUG1g1FWV2IFu2JI1SRw1WVq+d4dKtWit50lR41UL4v3comT8MT222JrB?=
- =?us-ascii?Q?HoZPz1wXd3nrFhFkSkm258sROJ2T6b7+tFJKsiw0U365AceWrCvHBzQtOiVS?=
- =?us-ascii?Q?K7gq+0PCUykrvKIQpkH1tDagHzk92hIW9an5oNAt3FhNzvXJM48fPLEDVtJZ?=
- =?us-ascii?Q?cG1R+Sm0qSj4KlJOSYGzMuvrugH7Y/y1xmoYuKi/T4Gs4HdC24Ef3rerQfJm?=
- =?us-ascii?Q?LctWhxDYxATvzoVS1kYZcFSJW1y0208GatFwNVTUDhd7o16CtmfPxelfIjUi?=
- =?us-ascii?Q?/VtmwOfqNacE1fWU+KfONPe8rER/apnqQ6mMY9QMsP2Mcgq9x3MDuCVS0EtY?=
- =?us-ascii?Q?PsysZsWNEcrjTZjvLot4/ahS+b/nOPotXSEMLZaIUlaXCW6VMJEzciz5D2kf?=
- =?us-ascii?Q?uW/Re55ycLCh6LQnRj/saj8JKzLVSOz6V4x+p5cx3tVymzGn3MEdlnGGG3Fx?=
- =?us-ascii?Q?Qf+9V9/kvNPycLDkqdRLcBSv+Yf1TlEcuQHW8a/7l6lR9NmO+IYP4CvhC8Y?=
- =?us-ascii?Q?=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4136249FF;
+	Wed,  5 Jun 2024 13:49:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717595373; cv=none; b=NIHsQuPMR8q1IAmqD2+Ul7bQs4nZBt1QQDAwVo1iR8LEQCuNr4jgZopZgdZK+bONTxVv3Cpdn5XJB128atTa2Tkc3GR7FzF8xeMPcnh91WXz0AU+Y9MfmPWOW7n5hLCos4QPHgkRbCn1TjlpoTN6weA/0LsjySN8rFp44GfGLRg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717595373; c=relaxed/simple;
+	bh=AsDFqKY6j1IUFcQ5abR5Se2CR4lHkYcVFPogT9g5F/8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=pqu3XKMwnJlrnwV4pggWduvuTDTXIovH228iLem1kpUaDuGTov4crQ3nZbqRZ//4V4hK0chD5X2+7litffoX/mqSR6tLxEkDM/t5lclYrpCF9KVFDF6Ga18131EHGKyL3Pbqta5nqtV13WD5bGkTnusykO51NORgPpLi++ca9qM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bKBP8ozb; arc=none smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-354be94c874so5839663f8f.3;
+        Wed, 05 Jun 2024 06:49:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1717595369; x=1718200169; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hGjCGSATkxFOWmlKkLsqqwxsslX0Utr8SiqRZMgElAY=;
+        b=bKBP8ozbwraRgSUVvqnXxRYipHGyiuZWcgAmb6eZgXgrS7XIyTZbuRgHrohkiTu7xY
+         jzer5cRxKFNs0bjeFJhFJwMzQPK+62M1Cabh8z3yXssBHkPkxb/TIlMq5QDQGihFDTEE
+         JOdoQhAF7KL3MxF+IBm7LuBpkQe5u6rjElWpA6Sr0jdghq+cjp/yoGHaKyeCXv5Yj/Qp
+         g/SYYeDLtyjBPy17XQ24WRRHhfvikOn9ckNADX/+JbMofELgFaG/CST43b+IK/e2FTOo
+         z8fvxDXwkdmPu55TzI/3PhuIF6GMBSmngBSpiV66zN6LZltqysmNLcw3Rg8mOq58azIN
+         Xqog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717595369; x=1718200169;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hGjCGSATkxFOWmlKkLsqqwxsslX0Utr8SiqRZMgElAY=;
+        b=b93c2SFw0PHUYe8rDUEfvSA7SIvzYXPlSDGYVFdf3vycikXvNayXIVOYiiPN/hXM0u
+         KEjlHYztj1L+0lw4c+DAalBr1ECzoX3Hut3jgd1kIfb+EsPDugbLs3NeQoLLGIO1DUUt
+         HTnHE5d9H+mecEwoh1eCAc9ZSAqJLCaK48zUTPr+a3dZC6O+koejcaSe58cjWyEhd3E0
+         2xiD+SQ8isR1jlB1n57mIBUi7t0gurGcxVdRkcqda3g6SnKneYzuBT7vzWspfTsdCqkV
+         Fgy/GA9U9M3SwPLgYmbnGMG0I7w87J7uje5MmI+0L/qUmt50Oy+7eJCT7okN/MMHPAXI
+         u9rg==
+X-Forwarded-Encrypted: i=1; AJvYcCX6O6yJO8QONDq+n4ZStPlhTN/Kjxyi+6srO20OAtmYZ7PHLovVTFA0dG1tPuZcTSzNGXXtq9iJbpQfvQ1xhz068P181qZCIO+dLw==
+X-Gm-Message-State: AOJu0YwqBZ7SDDCNemp01VBFzmCe8r4PgniPIS/kdtB2rukfbQB3+arA
+	6NTMeVgTb6c6pOKeNamPiuVbgAxktYfciWx2c3juYkI/1Je2y4V/
+X-Google-Smtp-Source: AGHT+IGdCxTgPrw5WUTGx19uKTtqj4he0UOPapPewY4cNxCdW+DGt6wGld6OTvEeGG0xx8mrZorzeA==
+X-Received: by 2002:a05:6000:400f:b0:35e:ec9c:f78f with SMTP id ffacd0b85a97d-35eec9cf8cdmr1477033f8f.19.1717595368913;
+        Wed, 05 Jun 2024 06:49:28 -0700 (PDT)
+Received: from andrea.wind3.hub ([151.76.32.59])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-35dd066ff17sm14539284f8f.116.2024.06.05.06.49.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jun 2024 06:49:28 -0700 (PDT)
+From: Andrea Parri <parri.andrea@gmail.com>
+To: stern@rowland.harvard.edu,
+	will@kernel.org,
+	peterz@infradead.org,
+	boqun.feng@gmail.com,
+	npiggin@gmail.com,
+	dhowells@redhat.com,
+	j.alglave@ucl.ac.uk,
+	luc.maranget@inria.fr,
+	paulmck@kernel.org,
+	akiyks@gmail.com,
+	dlustig@nvidia.com,
+	joel@joelfernandes.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	hernan.poncedeleon@huaweicloud.com,
+	jonas.oberhauser@huaweicloud.com,
+	Andrea Parri <parri.andrea@gmail.com>
+Subject: [PATCH v2] tools/memory-model: Document herd7 (abstract) representation
+Date: Wed,  5 Jun 2024 15:49:18 +0200
+Message-Id: <20240605134918.365579-1-parri.andrea@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR02MB4157.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7b239599-1894-457a-fddd-08dc8565c167
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Jun 2024 13:45:26.2729
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR02MB7778
+Content-Transfer-Encoding: 8bit
 
-From: Thomas Gleixner <tglx@linutronix.de> Sent: Wednesday, June 5, 2024 6:=
-20 AM
->=20
-> On Tue, Jun 04 2024 at 23:03, Michael Kelley wrote:
-> > From: Thomas Gleixner <tglx@linutronix.de> Sent: Tuesday, June 4, 2024 =
-11:14 AM
-> >>    1) Move the inner workings of handle_percpu_irq() out into
-> >>       a static function which returns the 'handled' value and
-> >>       share it between the two handler functions.
-> >
-> > The "inner workings" aren't quite the same in the two cases.
-> > handle_percpu_irq() uses handle_irq_event_percpu() while
-> > handle_percpu_demux_irq() uses __handle_irq_event_percpu().
-> > The latter doesn't do add_interrupt_randomness() because the
-> > demultiplexed IRQ handler will do it.  Doing add_interrupt_randomness()
-> > twice doesn't break anything, but it's more overhead in the hard irq
-> > path, which I'm trying to avoid.  The extra functionality in the
-> > non-double-underscore version could be hoisted up to
-> > handle_percpu_irq(), but that offsets gains from sharing the
-> > inner workings.
->=20
-> That's not rocket science to solve:
->=20
-> static irqreturn_t helper(desc, func)
-> {
-> 	boiler_plate..
->         ret =3D func(desc)
-> 	boiler_plate..
->         return ret;
-> }
->=20
-> No?
->=20
-> TBH, I still hate that conditional accounting :)
->=20
-> >>    2) Allocate a proper interrupt for the management mode and invoke i=
-t
-> >>       via generic_handle_irq() just as any other demultiplex interrupt=
-.
-> >>       That spares all the special casing in the core code and just
-> >>       works.
-> >
-> > Yes, this would work on x86, as the top-level interrupt isn't a Linux I=
-RQ,
-> > and the interrupt counting is done in Hyper-V specific code that could =
-be
-> > removed.  The demux'ed interrupt does the counting.
-> >
-> > But on arm64 the top-level interrupt *is* a Linux IRQ, so each
-> > interrupt will get double-counted, which is a problem.
->=20
-> What is the problem?
->=20
-> You have: toplevel, mgmt, device[], right?
->=20
-> They are all accounted for seperately and each toplevel interrupt might
-> result in demultiplexing one or more interrupts (mgmt, device[]), no?
->=20
-> IMO accounting the toplevel interrupt seperately is informative because
-> it allows you to figure out whether demultiplexing is clustered or not,
-> but I lost that argument long ago. That's why most demultiplex muck
-> installs a chained handler, which is a design fail on it's own.
+tools/memory-model/ and herdtool7 are closely linked: the latter is
+responsible for (pre)processing each C-like macro of a litmus test,
+and for providing the LKMM with a set of events, or "representation",
+corresponding to the given macro.  Provide herd-representation.txt
+to document the representations of the concurrency macros, following
+their "classification" in Documentation/atomic_t.txt.
 
-In /proc/interrupts, the double-counting isn't a problem, and is
-potentially helpful as you say. But /proc/stat, for example, shows a total
-interrupt count, which will be roughly double what it was before. That
-/proc/stat value then shows up in user space in vmstat, for example.
-That's what I was concerned about, though it's not a huge problem in
-the grand scheme of things.
+Suggested-by: Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>
+Signed-off-by: Andrea Parri <parri.andrea@gmail.com>
+---
+Changes since v1[1]:
+  - add legenda/notations
+  - add some SRCU, locking macros
+  - update formatting of failure cases
+  - update README file
 
-Michael
+[1] https://lore.kernel.org/lkml/20240524151356.236071-1-parri.andrea@gmail.com/
+
+ tools/memory-model/Documentation/README       |   7 +-
+ .../Documentation/herd-representation.txt     | 107 ++++++++++++++++++
+ 2 files changed, 113 insertions(+), 1 deletion(-)
+ create mode 100644 tools/memory-model/Documentation/herd-representation.txt
+
+diff --git a/tools/memory-model/Documentation/README b/tools/memory-model/Documentation/README
+index db90a26dbdf40..1f73014cc48a3 100644
+--- a/tools/memory-model/Documentation/README
++++ b/tools/memory-model/Documentation/README
+@@ -33,7 +33,8 @@ o	You are familiar with Linux-kernel concurrency and the use of
+ 
+ o	You are familiar with Linux-kernel concurrency and the use
+ 	of LKMM, and would like to learn about LKMM's requirements,
+-	rationale, and implementation:	explanation.txt
++	rationale, and implementation:	explanation.txt and
++	herd-representation.txt
+ 
+ o	You are interested in the publications related to LKMM, including
+ 	hardware manuals, academic literature, standards-committee
+@@ -57,6 +58,10 @@ control-dependencies.txt
+ explanation.txt
+ 	Detailed description of the memory model.
+ 
++herd-representation.txt
++	The (abstract) representation of the Linux-kernel concurrency
++	primitives in terms of events.
++
+ litmus-tests.txt
+ 	The format, features, capabilities, and limitations of the litmus
+ 	tests that LKMM can evaluate.
+diff --git a/tools/memory-model/Documentation/herd-representation.txt b/tools/memory-model/Documentation/herd-representation.txt
+new file mode 100644
+index 0000000000000..1860995a3d5a5
+--- /dev/null
++++ b/tools/memory-model/Documentation/herd-representation.txt
+@@ -0,0 +1,107 @@
++#
++# Legenda:
++#	R,	a Load event
++#	W,	a Store event
++#	F,	a Fence event
++#	LKR,	a Lock-Read event
++#	LKW,	a Lock-Write event
++#	UL,	an Unlock event
++#	LF,	a Lock-Fail event
++#	RL,	a Read-Locked event
++#	RU,	a Read-Unlocked event
++#	R*,	a Load event included in RMW
++#	W*,	a Store event included in RMW
++#	SRCU,	a Sleepable-Read-Copy-Update event
++#
++#	po,	a Program-Order link
++#	rmw,	a Read-Modify-Write link
++#	lk-rmw,	a Lock-Read-Modify-Write link
++#
++# By convention, a blank entry/representation means "same as the preceding entry".
++#
++    ------------------------------------------------------------------------------
++    |                        C macro | Events                                    |
++    ------------------------------------------------------------------------------
++    |                    Non-RMW ops |                                           |
++    ------------------------------------------------------------------------------
++    |                      READ_ONCE | R[once]                                   |
++    |                    atomic_read |                                           |
++    |                     WRITE_ONCE | W[once]                                   |
++    |                     atomic_set |                                           |
++    |               smp_load_acquire | R[acquire]                                |
++    |            atomic_read_acquire |                                           |
++    |              smp_store_release | W[release]                                |
++    |             atomic_set_release |                                           |
++    |                   smp_store_mb | W[once] ->po F[mb]                        |
++    |                         smp_mb | F[mb]                                     |
++    |                        smp_rmb | F[rmb]                                    |
++    |                        smp_wmb | F[wmb]                                    |
++    |          smp_mb__before_atomic | F[before-atomic]                          |
++    |           smp_mb__after_atomic | F[after-atomic]                           |
++    |                    spin_unlock | UL                                        |
++    |                 spin_is_locked | On success: RL                            |
++    |                                | On failure: RU                            |
++    |         smp_mb__after_spinlock | F[after-spinlock]                         |
++    |      smp_mb__after_unlock_lock | F[after-unlock-lock]                      |
++    |                  rcu_read_lock | F[rcu-lock]                               |
++    |                rcu_read_unlock | F[rcu-unlock]                             |
++    |                synchronize_rcu | F[sync-rcu]                               |
++    |                rcu_dereference | R[once]                                   |
++    |             rcu_assign_pointer | W[release]                                |
++    |                 srcu_read_lock | R[srcu-lock]                              |
++    |                 srcu_down_read |                                           |
++    |               srcu_read_unlock | W[srcu-unlock]                            |
++    |                   srcu_up_read |                                           |
++    |               synchronize_srcu | SRCU[sync-srcu]                           |
++    | smp_mb__after_srcu_read_unlock | F[after-srcu-read-unlock]                 |
++    ------------------------------------------------------------------------------
++    |       RMW ops w/o return value |                                           |
++    ------------------------------------------------------------------------------
++    |                     atomic_add | R*[noreturn] ->rmw W*[once]               |
++    |                     atomic_and |                                           |
++    |                      spin_lock | LKR ->lk-rmw LKW                          |
++    ------------------------------------------------------------------------------
++    |        RMW ops w/ return value |                                           |
++    ------------------------------------------------------------------------------
++    |              atomic_add_return | F[mb] ->po R*[once]                       |
++    |                                |     ->rmw W*[once] ->po F[mb]             |
++    |               atomic_fetch_add |                                           |
++    |               atomic_fetch_and |                                           |
++    |                    atomic_xchg |                                           |
++    |                           xchg |                                           |
++    |            atomic_add_negative |                                           |
++    |      atomic_add_return_relaxed | R*[once] ->rmw W*[once]                   |
++    |       atomic_fetch_add_relaxed |                                           |
++    |       atomic_fetch_and_relaxed |                                           |
++    |            atomic_xchg_relaxed |                                           |
++    |                   xchg_relaxed |                                           |
++    |    atomic_add_negative_relaxed |                                           |
++    |      atomic_add_return_acquire | R*[acquire] ->rmw W*[once]                |
++    |       atomic_fetch_add_acquire |                                           |
++    |       atomic_fetch_and_acquire |                                           |
++    |            atomic_xchg_acquire |                                           |
++    |                   xchg_acquire |                                           |
++    |    atomic_add_negative_acquire |                                           |
++    |      atomic_add_return_release | R*[once] ->rmw W*[release]                |
++    |       atomic_fetch_add_release |                                           |
++    |       atomic_fetch_and_release |                                           |
++    |            atomic_xchg_release |                                           |
++    |                   xchg_release |                                           |
++    |    atomic_add_negative_release |                                           |
++    ------------------------------------------------------------------------------
++    |            Conditional RMW ops |                                           |
++    ------------------------------------------------------------------------------
++    |                 atomic_cmpxchg | On success: F[mb] ->po R*[once]           |
++    |                                |                 ->rmw W*[once] ->po F[mb] |
++    |                                | On failure: R*[once]                      |
++    |                        cmpxchg |                                           |
++    |              atomic_add_unless |                                           |
++    |         atomic_cmpxchg_relaxed | On success: R*[once] ->rmw W*[once]       |
++    |                                | On failure: R*[once]                      |
++    |         atomic_cmpxchg_acquire | On success: R*[acquire] ->rmw W*[once]    |
++    |                                | On failure: R*[once]                      |
++    |         atomic_cmpxchg_release | On success: R*[once] ->rmw W*[release]    |
++    |                                | On failure: R*[once]                      |
++    |                   spin_trylock | On success: LKR ->lk-rmw LKW              |
++    |                                | On failure: LF                            |
++    ------------------------------------------------------------------------------
+-- 
+2.34.1
+
 
