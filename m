@@ -1,109 +1,115 @@
-Return-Path: <linux-arch+bounces-4711-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4712-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 909258FD0AC
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Jun 2024 16:19:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F95B8FD1B1
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Jun 2024 17:31:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F503287623
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Jun 2024 14:19:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B40D81C22A29
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Jun 2024 15:31:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0347910A36;
-	Wed,  5 Jun 2024 14:19:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="2inVvOWu";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="1hc7ph2l"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C18F27450;
+	Wed,  5 Jun 2024 15:31:54 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 504EC17BCD;
-	Wed,  5 Jun 2024 14:19:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 4F74239AC3
+	for <linux-arch@vger.kernel.org>; Wed,  5 Jun 2024 15:31:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.131.102.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717597178; cv=none; b=Bdex5Ceng0E8YD5ZsrKGEAiPSkB6MQi6nXKCHisVgdTQhx2O24FVptlPM7vGy1qD6iah3BnpTr411okE/lXQUnyc05Xye/mna8ECruF8G42+7pvvIbJZiQ7I9hXggpgB1CWs41s1+cP7cmchrHBhoGV75QIQLMqxBqHgkB11td0=
+	t=1717601514; cv=none; b=DrYCTHCtRJSq9jOGmzXGUO4Fvux/tYzDaroBBeF6ZqWEljtJrtC5RDmw8QEyyiocAZ1uoUhFbBflsL1Ed/am52TG2ynu53a4ENC7iDGHok6zI7/VzAv0I4/1q84KMlHehtxk1WtSfuH4H97m7IP9oGuY43rVLwny6R547N1oNDY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717597178; c=relaxed/simple;
-	bh=6URTEerfkdzLvqFcLf0HfIhwY4ccOG/H9zSR0R5rh18=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=dPEy1dPagDxBJFAHkpfS7Q0Go1WecIkwpL5Xxi7ULTto2SXNJEyTd0EJ5expvW1KtBR2/eACgkMcVQT07q0b6PPhzUfjhYqB470j09PXjmxJu9GyhN71e8kZFKc5/lnJbiS7MPE1lqV5ZLvG3wBtgE2dhPH9BLmr/SncEpzmOXw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=2inVvOWu; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=1hc7ph2l; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1717597173;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=t0o5pyoMUAS+Hj4ypHyiKCTLmAk7b8HOBNFgUfxaG+0=;
-	b=2inVvOWu3HafMPDKsb+qpF7AzcwPeqf+JH+8bF9kRSdqDzzaaku3ordzvLSUIWDvdfcEoj
-	SPaeek8iNZF8xz/3ZfaME/ZUVxpuqcaypIs1CzrRizlEU/i02qTJYH0S8XcDTLiu+JbCHq
-	ZrrPyEn1xY3N0QsZJxMPeIPTySHdC1M/7eiTpZIBCNM92mz3kqIs6ZcPqQP4ep6XPDEG/9
-	RykbrOlFQtdrI+tl3ju5PWpdJW8JQ8psPivXVdTF6lsxdYKKTTTt6FUk0Ahr4oxW1ySkSI
-	ocetbrzCRqfAO0gHv1rWrvd4iwKcyiFCMTZn6ZjbXbcDz5BvnGT6IE77Ej4S/Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1717597173;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=t0o5pyoMUAS+Hj4ypHyiKCTLmAk7b8HOBNFgUfxaG+0=;
-	b=1hc7ph2lzRvvkR/40ZQ5c0U6Xp36HKvb3qaHbKRSkMdKXAKUOWynQr6Xh4YfQxYICLEVyg
-	nsrwj93w2GG5ZmCQ==
-To: Michael Kelley <mhklinux@outlook.com>, "kys@microsoft.com"
- <kys@microsoft.com>, "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
- "wei.liu@kernel.org" <wei.liu@kernel.org>, "decui@microsoft.com"
- <decui@microsoft.com>, "mingo@redhat.com" <mingo@redhat.com>,
- "bp@alien8.de" <bp@alien8.de>, "dave.hansen@linux.intel.com"
- <dave.hansen@linux.intel.com>, "x86@kernel.org" <x86@kernel.org>,
- "hpa@zytor.com" <hpa@zytor.com>, "lpieralisi@kernel.org"
- <lpieralisi@kernel.org>, "kw@linux.com" <kw@linux.com>, "robh@kernel.org"
- <robh@kernel.org>, "bhelgaas@google.com" <bhelgaas@google.com>,
- "James.Bottomley@HansenPartnership.com"
- <James.Bottomley@HansenPartnership.com>, "martin.petersen@oracle.com"
- <martin.petersen@oracle.com>, "arnd@arndb.de" <arnd@arndb.de>,
- "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
- "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
- "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Cc: "maz@kernel.org" <maz@kernel.org>, "den@valinux.co.jp"
- <den@valinux.co.jp>, "jgowans@amazon.com" <jgowans@amazon.com>,
- "dawei.li@shingroup.cn" <dawei.li@shingroup.cn>
-Subject: RE: [RFC 06/12] genirq: Add per-cpu flow handler with conditional
- IRQ stats
-In-Reply-To: <SN6PR02MB415706390CB0E8FD599B6494D4F92@SN6PR02MB4157.namprd02.prod.outlook.com>
-References: <20240604050940.859909-1-mhklinux@outlook.com>
- <20240604050940.859909-7-mhklinux@outlook.com> <87h6e860f8.ffs@tglx>
- <SN6PR02MB415737FF6F7B40A1CD20C4A9D4F82@SN6PR02MB4157.namprd02.prod.outlook.com>
- <87zfrz4jce.ffs@tglx>
- <SN6PR02MB415706390CB0E8FD599B6494D4F92@SN6PR02MB4157.namprd02.prod.outlook.com>
-Date: Wed, 05 Jun 2024 16:19:33 +0200
-Message-ID: <87cyov4glm.ffs@tglx>
+	s=arc-20240116; t=1717601514; c=relaxed/simple;
+	bh=iRlfwxeaSfwteupu42k4XO0pgXSHyGiyHXTbklvGMgc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=q4joUcwQgAXUh7mVglqT5K0DAWn2SdysejYpsyhEWoE3XtZvt9akR/y1jTUqtAOEj8LLI7McfdbkbBrgiB1m0MJhxDeUbxlnXCANVph/jab0NQ2IB/EmiqwnEbJ4tySj1ccyo9aBSgi0HHURxdzAE9uH5MS6fnXmWDPW2lF+E0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu; spf=pass smtp.mailfrom=netrider.rowland.org; arc=none smtp.client-ip=192.131.102.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 200282 invoked by uid 1000); 5 Jun 2024 11:31:51 -0400
+Date: Wed, 5 Jun 2024 11:31:51 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Andrea Parri <parri.andrea@gmail.com>
+Cc: will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
+  npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+  luc.maranget@inria.fr, paulmck@kernel.org, akiyks@gmail.com,
+  dlustig@nvidia.com, joel@joelfernandes.org, linux-kernel@vger.kernel.org,
+  linux-arch@vger.kernel.org, hernan.poncedeleon@huaweicloud.com,
+  jonas.oberhauser@huaweicloud.com
+Subject: Re: [PATCH] tools/memory-model: Document herd7 (internal)
+ representation
+Message-ID: <28bdcf4c-6903-4555-8cbc-a93704ec05f9@rowland.harvard.edu>
+References: <20240524151356.236071-1-parri.andrea@gmail.com>
+ <ZlC0IkzpQdeGj+a3@andrea>
+ <cf81a3c2-9754-4130-a67e-67d475678829@rowland.harvard.edu>
+ <ZlQ/Ks3I2BYybykD@andrea>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZlQ/Ks3I2BYybykD@andrea>
 
-On Wed, Jun 05 2024 at 13:45, Michael Kelley wrote:
-> From: Thomas Gleixner <tglx@linutronix.de> Sent: Wednesday, June 5, 2024 6:20 AM
->
-> In /proc/interrupts, the double-counting isn't a problem, and is
-> potentially helpful as you say. But /proc/stat, for example, shows a total
-> interrupt count, which will be roughly double what it was before. That
-> /proc/stat value then shows up in user space in vmstat, for example.
-> That's what I was concerned about, though it's not a huge problem in
-> the grand scheme of things.
+On Mon, May 27, 2024 at 10:07:06AM +0200, Andrea Parri wrote:
+> > It turns out the problem lies in the way lock.cat tries to calculate the 
+> > rf relation for RU events (a spin_is_locked() that returns False).  The 
+> > method it uses amounts to requiring that such events must read from the 
+> > lock's initial value or an LU event (a spin_unlock()) in a different 
+> > thread.  This clearly is wrong, and glaringly so in this litmus test 
+> > since there are no other threads!
+> > 
+> > A patch to fix the problem and reorganize the code a bit for greater 
+> > readability is below.  I'd appreciate it if people could try it out on 
+> > various locking litmus tests in our archives.
+> 
+> Thanks for the quick solution, Alan.  The results from our archives look
+> good.
 
-That's trivial to solve. We can mark interrupts to be excluded from
-/proc/stat accounting.
+Here's a much smaller patch, suitable for the -stable kernels.  It fixes 
+the bug without doing the larger code reorganization (which will go into 
+a separate patch).  Can you test this one?
 
-Thanks,
+Alan
 
-        tglx
+
+
+Index: usb-devel/tools/memory-model/lock.cat
+===================================================================
+--- usb-devel.orig/tools/memory-model/lock.cat
++++ usb-devel/tools/memory-model/lock.cat
+@@ -102,19 +102,19 @@ let rf-lf = rfe-lf | rfi-lf
+  * within one of the lock's critical sections returns False.
+  *)
+ 
+-(* rfi for RU events: an RU may read from the last po-previous UL *)
+-let rfi-ru = ([UL] ; po-loc ; [RU]) \ ([UL] ; po-loc ; [LKW] ; po-loc)
+-
+-(* rfe for RU events: an RU may read from an external UL or the initial write *)
+-let all-possible-rfe-ru =
+-	let possible-rfe-ru r =
++(*
++ * rf for RU events: an RU may read from an external UL or the initial write,
++ * or from the last po-previous UL
++ *)
++let all-possible-rf-ru =
++	let possible-rf-ru r =
+ 		let pair-to-relation p = p ++ 0
+-		in map pair-to-relation (((UL | IW) * {r}) & loc & ext)
+-	in map possible-rfe-ru RU
++		in map pair-to-relation ((((UL | IW) * {r}) & loc & ext) |
++			(((UL * {r}) & po-loc) \ ([UL] ; po-loc ; [LKW] ; po-loc)))
++	in map possible-rf-ru RU
+ 
+ (* Generate all rf relations for RU events *)
+-with rfe-ru from cross(all-possible-rfe-ru)
+-let rf-ru = rfe-ru | rfi-ru
++with rf-ru from cross(all-possible-rf-ru)
+ 
+ (* Final rf relation *)
+ let rf = rf | rf-lf | rf-ru
+
 
