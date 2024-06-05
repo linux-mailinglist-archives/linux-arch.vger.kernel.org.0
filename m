@@ -1,143 +1,137 @@
-Return-Path: <linux-arch+bounces-4699-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4700-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 806BF8FC0F8
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Jun 2024 02:52:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 435568FC176
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Jun 2024 03:57:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D9058B2481F
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Jun 2024 00:52:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC22E2841F5
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Jun 2024 01:57:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BED74409;
-	Wed,  5 Jun 2024 00:52:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39A095577E;
+	Wed,  5 Jun 2024 01:57:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="JcdyiTW3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UtVd8Tce"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DBC13D6D;
-	Wed,  5 Jun 2024 00:52:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B955E5812F;
+	Wed,  5 Jun 2024 01:57:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717548767; cv=none; b=rueklj6qToe6W7NN4XzHxknqq1NjbIA/kl+lCods/CbBErJMpTWSqFNoFTBagnJdlaUhriVNAxq4bdlmdWzehJYhyqy8eD5MsFWuPpRbszRNanFFXurIqb53znroVLjUO/Ija6swEHISv2RqLcEk1QRNxfWNq+KH58HnxEgzKgQ=
+	t=1717552654; cv=none; b=HRGoQyyx7VSFHGLcalMlX6qqNVoGjhl3dGSPSIvdbzXnfAwWEuWi/Poal6XhUQyLxeh1jXcrw3fPBdipvaBBAJ80IiVm5VXNe7QLzoUBp9yb+yurav8R4AIj6+KbEDnAQcJGjQGDyYaXyjfxuXBAN3lq5VNU6Kafc1DXQUL5Rkc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717548767; c=relaxed/simple;
-	bh=oazLP4EwnwtllawJhyAlk4/fZjyXr7WsdQvrcbP4gqk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mOTQCxpf2mWufjo70ZYgqol645/0Mc4vdj6/v3Lh/SuPFiaGQpl3D2DFx5C3O88Xf51kZlkL67+NrCmGqOk2cEZZyX4meeLmbQCP1SQMUoimO8sjm1vP7CsvtEiMbaguWKp8p0RL/AuxtpvWJzB3BWqaGsJ1B9YppVnqB3prreQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=JcdyiTW3; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=9gO28Na5Or7X4vcdl0zpmmA5fJQ1WvuUB+1qpfVVnOc=; b=JcdyiTW3Sf1oOPzPXSGG4A/aQI
-	WrKOAaIDGvv2yPHWxIHG9bpXlhSF04aVlo28aSx7pfIGBJe07oTz1j5n3BMr9xwV6BenDveB1ZG+I
-	lvQQG0JnvATnP7QejGGclwEinZqkyj419Id1bNa88gtcy7vPcHzBA8yiRWYFrUGsp/m8=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1sEetB-00GrAt-5E; Wed, 05 Jun 2024 02:52:29 +0200
-Date: Wed, 5 Jun 2024 02:52:29 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>, Paolo Abeni <pabeni@redhat.com>,
-	Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	David Ahern <dsahern@kernel.org>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>,
-	Yunsheng Lin <linyunsheng@huawei.com>,
-	Shailend Chand <shailend@google.com>,
-	Harshitha Ramamurthy <hramamurthy@google.com>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Jeroen de Borst <jeroendb@google.com>,
-	Praveen Kaligineedi <pkaligineedi@google.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Kaiyuan Zhang <kaiyuanz@google.com>
-Subject: Re: [PATCH net-next v10 05/14] netdev: netdevice devmem allocator
-Message-ID: <cbf3e752-8f7e-4e74-a709-8b812bdc36c0@lunn.ch>
-References: <20240530201616.1316526-1-almasrymina@google.com>
- <20240530201616.1316526-6-almasrymina@google.com>
- <bea8b8bf1630309bb004f614e4a3c7f684a6acb6.camel@redhat.com>
- <20240604121551.07192993@gandalf.local.home>
- <20240604163158.GB21513@ziepe.ca>
- <20240604124243.66203a46@gandalf.local.home>
- <3be107ce-3d9f-4528-b9f7-1c9e38da0688@lunn.ch>
- <20240604202738.3aab6308@gandalf.local.home>
+	s=arc-20240116; t=1717552654; c=relaxed/simple;
+	bh=QzovVf4qci3kvW1vMQctM+uKUriJAOx+Xy4xQsQUqnM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qvB1/Gwd8GPBV+peQzfQ3mrGXNWGs3VRigH914KHoBIU+UGfZtRcI0nN/xhy4h4g6PyI2RgH3pCuo9Govyo4GzQz5qLWhc8Yl9e1TA9vFbM3BnoNx0o+2bRWblkmmb4/U9LuvKt13BgeIundVgcJbWKyCmYp5pZVIyvJVs486V4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UtVd8Tce; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1f68834bfdfso14161895ad.3;
+        Tue, 04 Jun 2024 18:57:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1717552652; x=1718157452; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LRQ2L84kKv0/0p53jg/iCgVwJYBRNYpHVrPukVuThKs=;
+        b=UtVd8TceTxHx9nzKQGOvgPN6P3uRQZMN8vd1s9oxfP/k465XBSPLKfzHTeb2BoAJOu
+         VoE8oTxiTVEV2vESZXRiv1d/iGWPrHDIqVktBSwfDA7Ee0RpB5SwhXFoshHV57PK0ChE
+         2usdg/ZNrHDUDVTpIXhCnzwJDpereYd3IyLY9weijXoac5iGWkutGSxNGLmiqjaGMCjK
+         uOxFzwYUA2ZBcsziuOFyCJopVgwReRkcCAoM5S+tpIxTcDgVhuAeiGsVXtv6KEPKK74I
+         iJROAfwLO9/jiNU3fApWjID5OkfW7lXfGaACeTymjNc74W6tAhxGeoMiZfOpq7WWwvGk
+         Ya9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717552652; x=1718157452;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LRQ2L84kKv0/0p53jg/iCgVwJYBRNYpHVrPukVuThKs=;
+        b=dyFeqFGbsj7XLMlKLyGyRXsOikPCoXr1o2pIBq8uTRW8D+AoteKTcUxNDgGG3ABUmA
+         AWWt31Ac5hZvjI4UUUP/WoKxtZdorYAqO3uFVgWxbV51N+Xxau751/HRpSGDeVhIfTFm
+         2r31SF+JWrTcOUcvrl9dcyPRDokR/dQq6o+wt1xQAghSLDSipjsPOeVZlJcHTGC5f73y
+         k10p7NfSwwD16F73QVlZLSLjTS0Go8mj6cLijsldSjobwrRyqJW9RUbueb0G900CgaRA
+         qr0RQMYN9laenQnvHXQOYaUz1oq2m6be+ye33tSmfOOyxAqJBIVqfnQGsU986TP56UjT
+         iYFw==
+X-Forwarded-Encrypted: i=1; AJvYcCUw4uwc8Z4V+EyWZ6kXRuNAwwecGixLBClZ4w9VEj02ylfVPzKkojn7sdEA3Gjucxplj2uLB5r2w5LlHWol7Nsw66v39rwzl0z+WQdBhDulmqy3eKO2npEdDSNhxRVZ8c7Y2ny1wYhUAw==
+X-Gm-Message-State: AOJu0YxCFzQan+kBOxZXqKcqknH2U9dV6NUbxqsoXgNYp1TQkYQQHvm0
+	/rpyeYoOhOl75XnRSPqyf+mHLds12HxX6WsTvLnvPKMAJLGIfFZ+
+X-Google-Smtp-Source: AGHT+IGhY8NWxmXyY5cm9IbPZfn9UpfnpG1B1H5+o1ZxPw3zhwQGAkJsS7G9NEocR/bhIoUpYKzKjA==
+X-Received: by 2002:a17:902:d508:b0:1f4:8a64:707e with SMTP id d9443c01a7336-1f6a5a041f6mr15710965ad.14.1717552651897;
+        Tue, 04 Jun 2024 18:57:31 -0700 (PDT)
+Received: from [10.0.2.15] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f63241c39dsm89848075ad.297.2024.06.04.18.57.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Jun 2024 18:57:31 -0700 (PDT)
+Message-ID: <42fa4660-b3bf-4d09-bbad-064f9d4cc727@gmail.com>
+Date: Wed, 5 Jun 2024 10:57:27 +0900
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240604202738.3aab6308@gandalf.local.home>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH memory-model 3/3] tools/memory-model: Add KCSAN LF
+ mentorship session citation
+To: "Paul E. McKenney" <paulmck@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, kernel-team@meta.com, mingo@kernel.org
+Cc: stern@rowland.harvard.edu, parri.andrea@gmail.com, will@kernel.org,
+ peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
+ dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+ Marco Elver <elver@google.com>, Daniel Lustig <dlustig@nvidia.com>,
+ Joel Fernandes <joel@joelfernandes.org>, Akira Yokosawa <akiyks@gmail.com>
+References: <b290acd5-074f-4e17-a8bf-b444e553d986@paulmck-laptop>
+ <20240604221419.2370127-3-paulmck@kernel.org>
+Content-Language: en-US
+From: Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <20240604221419.2370127-3-paulmck@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-> How is the compiler going to know which path is going to be taken the most?
-> There's two main paths in the ring buffer logic. One when an event stays on
-> the sub-buffer, the other when the event crosses over to a new sub buffer.
-> As there's 100s of events that happen on the same sub-buffer for every one
-> time there's a cross over, I optimized the paths that stayed on the
-> sub-buffer, which caused the time for those events to go from 250ns down to
-> 150 ns!. That's a 40% speed up.
+On Tue,  4 Jun 2024 15:14:19 -0700, Paul E. McKenney wrote:
+> Add a citation to Marco's LF mentorship session presentation entitled
+> "The Kernel Concurrency Sanitizer"
 > 
-> I added the unlikely/likely and 'always_inline' and 'noinline' paths to
-> make sure the "staying on the buffer" path was always the hot path, and
-> keeping it tight in cache.
+> [ paulmck: Apply Marco Elver feedback. ]
 > 
-> How is a compiler going to know that?
+> Reported-by: Marco Elver <elver@google.com>
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> Cc: Alan Stern <stern@rowland.harvard.edu>
+> Cc: Andrea Parri <parri.andrea@gmail.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Boqun Feng <boqun.feng@gmail.com>
+> Cc: Nicholas Piggin <npiggin@gmail.com>
+> Cc: David Howells <dhowells@redhat.com>
+> Cc: Jade Alglave <j.alglave@ucl.ac.uk>
+> Cc: Luc Maranget <luc.maranget@inria.fr>
+> Cc: Akira Yokosawa <akiyks@gmail.com>
 
-It might have some heuristics to try to guess unlikely/likely, but
-that is not what we are talking about here.
+Paul,
 
-How much difference did 'always_inline' and 'noinline' make? Hopefully
-the likely is enough of a clue it should prefer to inline whatever is
-in that branch, where as for the unlikely case it can do a function
-call.
+While reviewing this, I noticed that
+tools/memory-model/Documentation/README has no mention of
+access-marking.txt.
 
-But compilers is not my thing, which is why i would reach out to the
-compiler people and ask them, is it expected to get this wrong, could
-it be made better?
+It has no mention of glossary.txt or locking.txt, either.
 
-   Andrew
+I'm not sure where are the right places in README for them.
+Can you update it in a follow-up change?
+
+Anyway, for this change,
+
+Reviewed-by: Akira Yokosawa <akiyks@gmail.com>
+
+        Thanks, Akira
+
+> Cc: Daniel Lustig <dlustig@nvidia.com>
+> Cc: Joel Fernandes <joel@joelfernandes.org>
+> Cc: <linux-arch@vger.kernel.org>
+> ---
+
 
