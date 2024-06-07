@@ -1,74 +1,74 @@
-Return-Path: <linux-arch+bounces-4751-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4752-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07E86900966
-	for <lists+linux-arch@lfdr.de>; Fri,  7 Jun 2024 17:42:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91ED2900983
+	for <lists+linux-arch@lfdr.de>; Fri,  7 Jun 2024 17:47:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 72A1D1F238A2
-	for <lists+linux-arch@lfdr.de>; Fri,  7 Jun 2024 15:42:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 853DE1C21F23
+	for <lists+linux-arch@lfdr.de>; Fri,  7 Jun 2024 15:47:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C50D1991B9;
-	Fri,  7 Jun 2024 15:42:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A83C198E86;
+	Fri,  7 Jun 2024 15:46:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LDW5t2NT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bV2l9gTf"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 756A0188CBB;
-	Fri,  7 Jun 2024 15:42:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD9B842069;
+	Fri,  7 Jun 2024 15:46:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717774965; cv=none; b=CFYy8whEeQqn7+HRmz5hx8QzRiAzecWs0zuQ51DgN+HFEA6VZbcGJ9MBVthtzZX42bBzgOrHeSZ8lnbsAlyqXU2ZBFBxVkWRyy1AoDcpyBSZ+DR+edXDU1qV/O8jHXs+WxWmiqLAJrA9nCm+DDqzP8kLwjB7t+e4QY6IJQaJHnE=
+	t=1717775219; cv=none; b=n1zCCoJMFhb2IzzDdKl1WIWubf2DLr8lx1E8RYRBYhTHJM2p7YHBoBoymAoxnovgiL+cLo1XF4FY9WBBZIMmHiTDm7WYd/kzEEqwgW6n3k3ad92s/4bRlRH2CRRqWKM4k+4A1LoO3qq/k6C/hdt5O1l5pewwYEPloNgX0hKtPOc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717774965; c=relaxed/simple;
-	bh=nHdWzRShRyplBXJ8eNVdSqljR8XbFZd5wgfSajt2/ik=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Dwz5vYEOogT0RM63BcRZauqL4wdiRYm4F4X6dq+/AQ93GFITh+QmguneTlDrT7CyBKqTcrzFuF7E53m3Y9xo5TN0tqtuWvlvSd/ScroP2diODZtpLS2smR8GZatAtcWpmOiKZEPr3ueunkV8kijsNDqAvnkH8ouXIkE/LiFxHfY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LDW5t2NT; arc=none smtp.client-ip=209.85.167.51
+	s=arc-20240116; t=1717775219; c=relaxed/simple;
+	bh=pUi1jj8tXmg0xRXcCvgfXTh7VkciCJG7Z7ish9eOnAo=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=a15CKSxesoL3OBmU2xR4I+2TZCTthl7cGDXecyI7vUI5AhqzjbJtVl0vFg8ha1QQh69rxtzpkh8NuyqRsD33KQdWCdGdiIPKoXo9uIzzn4ZToPCLL3dmiK/QaqHHUyZ4RXB7h76O/+YED+H4FOXAoAWFQ5iAqwMy1wjrUvPPMHU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bV2l9gTf; arc=none smtp.client-ip=209.85.218.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-52b93370ad0so3193137e87.2;
-        Fri, 07 Jun 2024 08:42:43 -0700 (PDT)
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-a6ef64b092cso46989966b.1;
+        Fri, 07 Jun 2024 08:46:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717774962; x=1718379762; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6ztEfaA9QN5DY5F1t7l1AL7LIdxxv5aD3SKdILYYcZ0=;
-        b=LDW5t2NT6lZWWZFs7NaHC/D1tOuBpsruVxqATiGUwYRjMd+tyHgux7Y+2pgYBkveS0
-         3iCyviEZlUAb73D7mndF7dH4VQ5auJdu6dV7nAQRbvvTAP3De5azx07r/97wTWUEwSmd
-         nvlzyHhP6WutWGBG7U8KgCKiY/UtvUwLD3JqCt24FIPgriZaShcHZmXwS/Jkrbof4x6C
-         UcUeUqCRq6NT/9oo3XT3VBVycFpWWLS77ZBQSNEgxe9QYnS/bbbrUKgl/UCpsoaT1r5C
-         eKrnxSOks9RDIF8plixzCDe6MYDnzbqYdPeBoXKnG2+hBXIyp6qieOo6jA5Pf5KtglXS
-         EnfA==
+        d=gmail.com; s=20230601; t=1717775216; x=1718380016; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=lbfQPuUVQZ6LzSSvTAQFunm5UA6lBQ6TlzjmJiAR6E0=;
+        b=bV2l9gTfTRJLJ8xpY1NfA0XIAY+8EAV8XU6woD1sSp+nB+vJ0X0M0VBKU0Klc0AY9f
+         bj9Ir9abN/mmbsQBOEtnpYJi48TwW11uQhPWjEohDOl3uNTeFhKHydpcJVlmvl6Tx/+S
+         BrIRdXFywHnRGRUgM4fi5QThOORoq+PZDeR007peFY4kklToZdovyDy8JHiWu3baSimO
+         gNDZfUsZrCup0mswgrZZKqLlSVlmOLA6ohcEIF2N7TDmYIJat923az4bm9LTk7XPaAXV
+         xc/cVnItzWarC5edv8KMkMIYdNNoa3OXviqStOfntpuH/wCH4mUTEj6Azzq1HKWEeq1U
+         dc9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717774962; x=1718379762;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1717775216; x=1718380016;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6ztEfaA9QN5DY5F1t7l1AL7LIdxxv5aD3SKdILYYcZ0=;
-        b=Dw03Pq2I+L7ttOHKNRquuVLzFZEcU1/LXt8v642D3RfW4yTrzXe+k7dFs0mxO3JvKP
-         dCXobR9JweYPvP5kPl3uC1P/FiKwzg+inHHxMMZZzwK+ztMD4aUZhcJD2oSHPzgJf+zn
-         xfQpcU+4ClkMlTslc1aBJzj35yB9ycph7oDeKm3uuwqUypXZXF2Be0bcU/FLntepbZ+b
-         hHC7qMppudXWwhdMQpl1DIDIC8I2CFmqqX2+FZnCW3+BwRS3qWi7+TPFQHMnZ6IEOp81
-         rM1T6G6A7ZBP6SlAk9FZdNCgD3luKnZYDmx0LX8rcUhWCygijyWgS/C8QWuMTdlTX3uO
-         DmlA==
-X-Forwarded-Encrypted: i=1; AJvYcCVZfWqMqGXXHaKAanuau6p2QHPLI2vngrMR48bYJ2nJg/XBKAjZYPu601QSNYnr9GME8VHYpD4R1RIVbOP27b9qYhjiFCG9uVsvTByfJp10a2B7A5EYoFhanEhYYAD648xCMtgVtJ1zsGKLkjSRuEA3blcYuhWZXRoEzPbDNq4g+CNmBQ9wxYpc519BXdj+8Bk1fVLBozU/2Ry0Qhz8/FsNQXlasN9B1l1HVykuW4aHCibKfkys79y4WMMEBHWo0Wxygdr2QdIAL2Q7bNeTTuqORIxQjKCiNYFYVEA+XnI3reNiOuX0ADCOlg4vU3bxivlHyTDwcOtpKQGq2QxHj2iH76QTcTMeue2rSLsVKcMc/W3qbYGOw7LFH+pK2pd89Mw3MkX4BV7++6W1hKNTBqRapQLgT1JjpfOMH1kijHz7ICtpnFUTCR5koajq8zvpNmuEBwdNOBWpkinln/aL5m2M6ygt1OMJQJ9BLl1wamvgJQwbIRwdQoi07Yd3G009smFIF1MGfw==
-X-Gm-Message-State: AOJu0YzK+V0aec0vd9NXLHEF+71QcMqsWyQT3IbZFWYh+DF3pvEa9VTq
-	qYoLFaxhX5/Vz0OlsUlxN16yy1wl4+f1H33xHnk2IOJ5x/WmQfJF
-X-Google-Smtp-Source: AGHT+IEFn+6+A9/ic4XpRfGuUMADB8GJccpGu+nMUZFNqtplHU80DwYmmylA2YOXqYyEGugmrIA8hA==
-X-Received: by 2002:a19:430f:0:b0:52b:7b8a:2d2f with SMTP id 2adb3069b0e04-52bb9f62745mr2133552e87.2.1717774961414;
-        Fri, 07 Jun 2024 08:42:41 -0700 (PDT)
+        bh=lbfQPuUVQZ6LzSSvTAQFunm5UA6lBQ6TlzjmJiAR6E0=;
+        b=JydQ4DNmt7X0dq3R1AtPDRjEVRTKHm5ku4kBphloBAuqOOjqdtzmLhhc9xnKTQv0pi
+         jlJSQ52OPHvdDFOaEQxegu8Ob1rOcEwCdWtyJ7UEdGh2b+OQP/vJHjZCOLyxcEJ3WRpS
+         x8Jon9u8zdd/5onBxvZdddHQlvy2o72wEfO0BHbqn/VOszVFfXxQVNLIZcn+rHKxUEX/
+         K3wYZ0B+/JSEVsukndrAbXL4XhF2Asm3SIxaKOqs6aAk0KXa4b/1i21jqiRCBr/vSIAQ
+         HqrNFq89lqYcJxLRjDsCHCovJShlJ0fiqnpSsRx/NGvPd4c3mnox1MaR4ybD8k1Ua57m
+         QLeg==
+X-Forwarded-Encrypted: i=1; AJvYcCWGorgzCKdgSgRIcZ2EG7gZl5moGn36PrkjloHuYqyCxte2voXP5LWrwuPwxY8nMbVsU47HM52DTJAU5Mxea1RBcPjEVJX3V9nDNcyB+bTxySWOuJIYJw7uir5nC97eIYQerpzEfx0m3cjXoQrp+gvavTMWuBGuoHI3IMO8N+U4kUHgG2h78cffUtxcuAOVQ9D9RwGz2OatLZ0XMWzMpiLTBDcgQq9sGU3HHntUtr+lpXbFoDIH15KkLXi+f+cVLvQGsAP5MLb/kweCFYzGY87ZX2/hTQpUxcM9bVhCc29GZjBBVHwtEypfOUmLlJ23Qch7OiFHYhuDEyGTEtZIyLY7Wqg0YE494sOc9B1hOV1u2Hh8km1Tx8btMu7aflzhgVRbryYadtvnjaEM2KRBW3YD/Z0fSfm5bda1mKbztTCCF7MddWa0a2yFY6TC80zuJtSecTjqag6hBNXhKdPFFKX7/Ia4npXBYGcWKHPgzJU1pzyepJh8JuVYfbC2iOl+84z+i/BySg==
+X-Gm-Message-State: AOJu0YzJZxEXgcZ+2Jn/jkW/HEcbDsfYPa4mw7LxZ5fhkrIVdPSXSS/E
+	JzVWn7HGO5208uIFFki1B3beEZE7GB92C2qmr/Vav4MyIHyKz+ex
+X-Google-Smtp-Source: AGHT+IHNLBWp/XVpBOD9TpyXIo6UVwaGICDFe79d2rsv63T1VIQg3s8h/O/cdVr7crD9nPvkteKRtg==
+X-Received: by 2002:a17:906:398:b0:a66:414c:2abf with SMTP id a640c23a62f3a-a6cd60a189emr204889166b.26.1717775215622;
+        Fri, 07 Jun 2024 08:46:55 -0700 (PDT)
 Received: from [192.168.42.206] ([163.114.131.193])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6c80582335sm264164166b.39.2024.06.07.08.42.39
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6c806eb099sm263561666b.102.2024.06.07.08.46.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jun 2024 08:42:40 -0700 (PDT)
-Message-ID: <8f44ca2a-8910-418f-b4a6-ca1e051484ba@gmail.com>
-Date: Fri, 7 Jun 2024 16:42:43 +0100
+        Fri, 07 Jun 2024 08:46:55 -0700 (PDT)
+Message-ID: <a8df4459-30bf-4414-aeca-2f67c461adc4@gmail.com>
+Date: Fri, 7 Jun 2024 16:46:57 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -78,6 +78,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH net-next v10 02/14] net: page_pool: create hooks for
  custom page providers
+From: Pavel Begunkov <asml.silence@gmail.com>
 To: David Ahern <dsahern@kernel.org>, Mina Almasry <almasrymina@google.com>
 Cc: Christoph Hellwig <hch@infradead.org>, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
@@ -123,46 +124,52 @@ References: <20240530201616.1316526-1-almasrymina@google.com>
  <CAHS8izNmT_NzgCu1pY1RKgJh+kP2rCL_90Gqau2Pkd3-48Q1_w@mail.gmail.com>
  <eb237e6e-3626-4435-8af5-11ed3931b0ac@gmail.com>
  <be2d140f-db0f-4d15-967c-972ea6586b5c@kernel.org>
+ <8f44ca2a-8910-418f-b4a6-ca1e051484ba@gmail.com>
 Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <be2d140f-db0f-4d15-967c-972ea6586b5c@kernel.org>
+In-Reply-To: <8f44ca2a-8910-418f-b4a6-ca1e051484ba@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 6/7/24 15:27, David Ahern wrote:
-> On 6/7/24 7:42 AM, Pavel Begunkov wrote:
->> I haven't seen any arguments against from the (net) maintainers so
->> far. Nor I see any objection against callbacks from them (considering
->> that either option adds an if).
+On 6/7/24 16:42, Pavel Begunkov wrote:
+> On 6/7/24 15:27, David Ahern wrote:
+>> On 6/7/24 7:42 AM, Pavel Begunkov wrote:
+>>> I haven't seen any arguments against from the (net) maintainers so
+>>> far. Nor I see any objection against callbacks from them (considering
+>>> that either option adds an if).
+>>
+>> I have said before I do not understand why the dmabuf paradigm is not
+>> sufficient for both device memory and host memory. A less than ideal
+>> control path to put hostmem in a dmabuf wrapper vs extra checks and
+>> changes in the datapath. The former should always be preferred.
 > 
-> I have said before I do not understand why the dmabuf paradigm is not
-> sufficient for both device memory and host memory. A less than ideal
-> control path to put hostmem in a dmabuf wrapper vs extra checks and
-> changes in the datapath. The former should always be preferred.
+> If we're talking about types of memory specifically, I'm not strictly
+> against wrapping into dmabuf in kernel, but that just doesn't give
+> anything.
 
-If we're talking about types of memory specifically, I'm not strictly
-against wrapping into dmabuf in kernel, but that just doesn't give
-anything.
-But the main reason for allocations there is the difference in
-approaches to the api. With io_uring the allocation callback is
-responsible for getting buffers back from the user (via a shared
-ring). No locking for the ring, and buffers are already in the
-context (napi) where they would be consumed from. Removes some
-headaches for the user (like batching before returning buffers),
-and should go better with smaller buffers and such.
+And the reason I don't have too strong of an opinion on that is
+mainly because it's just setup/cleanup path.
 
-> I also do not understand why the ifq cache 
-
-I'm not sure what you mean by ifq cache. Can you elaborate?
-
-> and overloading xdp functions
-
-Assuming it's about setup via xdp, it was marked for remaking in
-RFCs for longer than desired but it's gone now in our tree (but
-maybe not in the latest series).
-
-> have stuck around; I always thought both were added by Jonathan to
-> simplify kernel ports during early POC days.
+> But the main reason for allocations there is the difference in
+> approaches to the api. With io_uring the allocation callback is
+> responsible for getting buffers back from the user (via a shared
+> ring). No locking for the ring, and buffers are already in the
+> context (napi) where they would be consumed from. Removes some
+> headaches for the user (like batching before returning buffers),
+> and should go better with smaller buffers and such.
+> 
+>> I also do not understand why the ifq cache 
+> 
+> I'm not sure what you mean by ifq cache. Can you elaborate?
+> 
+>> and overloading xdp functions
+> 
+> Assuming it's about setup via xdp, it was marked for remaking in
+> RFCs for longer than desired but it's gone now in our tree (but
+> maybe not in the latest series).
+> 
+>> have stuck around; I always thought both were added by Jonathan to
+>> simplify kernel ports during early POC days.
+> 
 
 -- 
 Pavel Begunkov
