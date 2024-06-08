@@ -1,340 +1,208 @@
-Return-Path: <linux-arch+bounces-4757-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4758-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE37390135E
-	for <lists+linux-arch@lfdr.de>; Sat,  8 Jun 2024 21:43:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A226901378
+	for <lists+linux-arch@lfdr.de>; Sat,  8 Jun 2024 22:55:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DAF0B2826D9
-	for <lists+linux-arch@lfdr.de>; Sat,  8 Jun 2024 19:43:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 84E921C20C78
+	for <lists+linux-arch@lfdr.de>; Sat,  8 Jun 2024 20:55:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CE72134D1;
-	Sat,  8 Jun 2024 19:43:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D15C31D554;
+	Sat,  8 Jun 2024 20:55:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="izEYON8i"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="YQ5fiA/i"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02528134B1;
-	Sat,  8 Jun 2024 19:43:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0F111C6BE
+	for <linux-arch@vger.kernel.org>; Sat,  8 Jun 2024 20:55:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717875829; cv=none; b=FPyRkihIPidH6jSyTNt+2CJ/D02P9BFf06WnXsDnfa/iosmwD5TeBWqvaLRFrdtkzNpFWn6BwXwxJ7lv5KdygBDU+i8mSuQug/5PAt2aUa7+TcPRwdYZZcZq3hFE9MFgbVp5e1pjF+xCFbgHVUklceETF0VKnViZQOdwDNqnvgA=
+	t=1717880128; cv=none; b=P+7JCnBX46gU96cu/qceWSt46hoMqbBLwo6Mq8iAqdRco02hEXNQXzxEwadA4/N3ATY4JA+jwgB7WCEGXtcpQI9kZl/BlYnlFtL/UolM7EUgeiOvxsesNxass26YcsG0yVVzXuVeOwGcJIh1xZMiTmQEssY8SbYQdhCJmsRE1yY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717875829; c=relaxed/simple;
-	bh=ASFabXtRa1wFAO6TA1/5iLXPo5NYMXTtx1bqem/hIBo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=E4itQ3OEmqfqkXAJyRHtzhGL7KH+dD3yorGtsYz58fnbkAPkoymmSKk8IZ6eJ3W6HQn43KXGrdeQPZkvVAzR5gCoGfq3dnNHROYOcXSL4WWwOB1jooOUjbMOf7L3mrkD5OvsQdnSAyVSjJhnxjcbccSBLHRwDMAvRPNZY1E/S00=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=izEYON8i; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29F61C2BD11;
-	Sat,  8 Jun 2024 19:43:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1717875828;
-	bh=ASFabXtRa1wFAO6TA1/5iLXPo5NYMXTtx1bqem/hIBo=;
-	h=From:To:Cc:Subject:Date:From;
-	b=izEYON8irr9+sSFBaMZGvQzmPI7gOpxIrihxApW07s0vI2HhDUUE7icramuCaZoxQ
-	 0BrKHNlLandyhpIcVekjg+rwF01WqCTXZRMHLO1hMM9Jq6sHdXN9ucC5rXuCFoP1IF
-	 VxKvRRSGGhOcadqzzXeQgVepZU229xvse3W282/w=
-From: Linus Torvalds <torvalds@linux-foundation.org>
-To: Peter Anvin <hpa@zytor.com>,
-	Ingo Molnar <mingo@kernel.org>,
-	Borislav Petkov <bp@alien8.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	the arch/x86 maintainers <x86@kernel.org>,
-	linux-arch <linux-arch@vger.kernel.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH] x86: add 'runtime constant' infrastructure
-Date: Sat,  8 Jun 2024 12:35:05 -0700
-Message-ID: <20240608193504.429644-2-torvalds@linux-foundation.org>
-X-Mailer: git-send-email 2.45.1.209.gc6f12300df
+	s=arc-20240116; t=1717880128; c=relaxed/simple;
+	bh=85qXbyqX6RxIt4uYLrSaAWXRZLFbmQAyyxDKG3decKw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RreMcslfyPUoltGH+D1IMI0Fu3IlpTgLPzsbSWlKlZjA4mkq9LuAjuD2YVRHmxCT2WB3dQbS4rw5QZcVEfcPDzYCqNlgxBjlZQRuKRa3DwgT84C5ixISVpSmV7d/mpgEyR2Bo/aSuFv6PrHioeZ56hKlXjQXwNww6/7m9Eq2NKk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=YQ5fiA/i; arc=none smtp.client-ip=209.85.167.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-52c32d934c2so862335e87.2
+        for <linux-arch@vger.kernel.org>; Sat, 08 Jun 2024 13:55:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1717880124; x=1718484924; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8fZXZV0kR4ym1XRcBTj6zdWLTsFZy0CZQ2wcW79A4Pg=;
+        b=YQ5fiA/i9irEZv950RSdF+rt1Q/nv0owxU5c2taFyR9SX5KN64c+AN0WKrr2ViIJv+
+         ZRGAVMLeYhfyDW9E1zmpcir+XT+EIy2/jKRwVZqm3eYUyX2zeoyijsUwyj+izMS/+v3m
+         PtmzSG44bHWQU/+fk4scIfw1KPRf2uIdpLLfc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717880124; x=1718484924;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8fZXZV0kR4ym1XRcBTj6zdWLTsFZy0CZQ2wcW79A4Pg=;
+        b=Ugcl4SyvrtI8nvditXzvCnAfLWodgnt/X+glk+tC5+mlxhFXPsxUemk6EqoNdbNyJq
+         SGXddW5xNZNBxc1Z6lnyZFiH98wwtK4Mt1EU5OH43zau3sdGn6Q1KLAyHUWeHWh0bx2G
+         oFk3qBPnH2q1Js+cGL7cewz9H+3MOD13CbloL0NPNMmETVbM2yHCi6RsQcS5Hd8jGUJ4
+         X9sBFNeCGPkompkVP+BkyLJX3Ch1i0dg1nCS8cNgT3m5MfoO7ltXBdtytFpBbChaLEmj
+         FOrVq7w6YV2pmwMt9we/RS5J0mLYOBrhZ8K/mwFBYImOtKAGzbE5GS3XLnBZJ5NZNRbA
+         rhCA==
+X-Forwarded-Encrypted: i=1; AJvYcCVfW0bqbPl3aUkqjmkWr07N2Rcj4ubKWtuuO3AuNUOeBBxacUCNQHZIuLvQbO7xoOGCsbKsfTJWvaHcESwQjrjzQdo75MUC0K9G2g==
+X-Gm-Message-State: AOJu0YyuARxjc7EXfGk5HM6g+JeYwtDpidlAjizhrQNGa9Jv1XS/igJ6
+	wgfs0KYvWtohF7I+newKh1T+DQS50v+CEsdsGCFl15psGzUGEgD+19YKqhgvRwF1mu/ykPqdQY1
+	R/D8=
+X-Google-Smtp-Source: AGHT+IGWDKSui7Eo8z9tU5W7Sazu92zXVHP4c5/i+vUdvhbtoiPjUCwI0eUHKpVmsQC8T3A6NP74zQ==
+X-Received: by 2002:a05:6512:b1f:b0:52c:845e:3194 with SMTP id 2adb3069b0e04-52c845e322dmr603231e87.29.1717880123611;
+        Sat, 08 Jun 2024 13:55:23 -0700 (PDT)
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com. [209.85.218.51])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6f0d8b280esm99661366b.149.2024.06.08.13.55.22
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 08 Jun 2024 13:55:22 -0700 (PDT)
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a6efae34c83so103304066b.0
+        for <linux-arch@vger.kernel.org>; Sat, 08 Jun 2024 13:55:22 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUJdg8+W8qxSFIMQ+yBBLuJkWzTN/p0hv6HcvVCxR1G0ej/HU6NmSG93Ncg7rT/ROHYSOxsKgBF0sKDftnZiTEyYJ8CVz6sHAOW4A==
+X-Received: by 2002:a17:906:585:b0:a6f:1235:d82 with SMTP id
+ a640c23a62f3a-a6f12350ed3mr42380466b.13.1717880121989; Sat, 08 Jun 2024
+ 13:55:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240608193504.429644-2-torvalds@linux-foundation.org>
+In-Reply-To: <20240608193504.429644-2-torvalds@linux-foundation.org>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Sat, 8 Jun 2024 13:55:04 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjiJvGW70_A93oN_f48J0pn4MeVbWVmBPBiTh2XiSpwpg@mail.gmail.com>
+Message-ID: <CAHk-=wjiJvGW70_A93oN_f48J0pn4MeVbWVmBPBiTh2XiSpwpg@mail.gmail.com>
+Subject: Re: [PATCH] x86: add 'runtime constant' infrastructure
+To: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-arch <linux-arch@vger.kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: multipart/mixed; boundary="0000000000007054e4061a6722a6"
 
-Needs more comments and testing, but it works, and has a generic
-fallback for architectures that don't support it.
+--0000000000007054e4061a6722a6
+Content-Type: text/plain; charset="UTF-8"
 
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
----
+On Sat, 8 Jun 2024 at 12:43, Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> Needs more comments and testing, but it works, and has a generic
+> fallback for architectures that don't support it.
 
-Notes from the first hack: I renamed the infrastructure from "static
-const" to "runtime const".  We end up having a number of uses of "static
-const" that are related to the C language notion of "static const"
-variables or functions, and "runtime constant" is a bit more descriptive
-anyway. 
+.. and here is the TOTALLY UNTESTED patch to implement the arm64
+version of runtime constants.
 
-And this now is properly abstracted out, so that any architecture can
-choose to implement their own version, but it all falls back on "just
-use the variable".
+It almost certainly does not work. I'm too scared to test it.  I may
+start to recognize arm64 instructions, but rewriting them on the fly
+is another thing entirely, and I'm fairly sure this needs an  I$ sync
+and probably modifying the instructions using another address even
+during early boot.
 
-Josh - sorry for wasting your time on the objtool patch, I ended up
-using the linker functionality that Rasmus pointed out as existing
-instead. 
+So this is a "throw it over the fence to the actually competent arm64
+people" patch.
 
-Rasmus - I've cleaned up my patch a lot, and it now compiles fine on
-other architectures too, although obviously with the fallback of "no
-constant fixup".  As a result, my patch is actually smaller and much
-cleaner, and I ended up liking my approach more than your RAI thing
-after all. 
+Catalin, Will? This depends on the infrastructure that I added in
 
-Ingo / Peter / Borislav - I enabled this for 32-bit x86 too, because it
-was literally trivial (had to remove a "q" from "movq").  I did a
-test-build and it looks find, but I didn't actually try to boot it. 
+   https://lore.kernel.org/all/20240608193504.429644-2-torvalds@linux-foundation.org/
 
-The x86-64 code is actually tested.  It's not like it has a _lot_ of
-testing, but the patch ends up being pretty small in the end.  Yes, the
-"shift u32 value right by a constant" is a pretty special case, but the
-__d_lookup_rcu() function really is pretty hot.
+which is actually tested on the x86-64 side.
 
-Or rather it *was* pretty hot.  It's actually looking very good with
-this, imho. 
+I did test that the code generation looks superficially sane, and this generates
 
-Build tested with allmodconfig and on arm64, but I'm not claiming that I
-have necessarily found all special case corners.  That said, it's small
-and pretty straightforward. 
+        mov     x1, #0xcdef
+        movk    x1, #0x89ab, lsl #16
+        movk    x1, #0x4567, lsl #32
+        movk    x1, #0x123, lsl #48
+        ...
+        lsr     w0, w25, #12
+        ldr     x0, [x1, x0, lsl #3]
 
-Comments?
+for the dcache hash lookup (those constants are obviously the ones
+that get rewritten after the hash table has been allocated and the
+size becomes fixed).
 
- arch/x86/include/asm/runtime-const.h | 61 ++++++++++++++++++++++++++++
- arch/x86/kernel/vmlinux.lds.S        |  3 ++
- fs/dcache.c                          | 24 +++++++----
- include/asm-generic/Kbuild           |  1 +
- include/asm-generic/runtime-const.h  | 15 +++++++
- include/asm-generic/vmlinux.lds.h    |  8 ++++
- 6 files changed, 104 insertions(+), 8 deletions(-)
- create mode 100644 arch/x86/include/asm/runtime-const.h
- create mode 100644 include/asm-generic/runtime-const.h
+And honestly, I may have gotten even the simple part of instruction
+rewriting wrong (ie maybe I'm filling in the wrong bit locations - I'm
+reading the architecture manual, not actually *testing* anything).
 
-diff --git a/arch/x86/include/asm/runtime-const.h b/arch/x86/include/asm/runtime-const.h
-new file mode 100644
-index 000000000000..b4f7efc0a554
---- /dev/null
-+++ b/arch/x86/include/asm/runtime-const.h
-@@ -0,0 +1,61 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_RUNTIME_CONST_H
-+#define _ASM_RUNTIME_CONST_H
-+
-+#define runtime_const_ptr(sym) ({				\
-+	typeof(sym) __ret;					\
-+	asm("mov %1,%0\n1:\n"					\
-+		".pushsection runtime_ptr_" #sym ",\"a\"\n\t"	\
-+		".long 1b - %c2 - .\n\t"			\
-+		".popsection"					\
-+		:"=r" (__ret)					\
-+		:"i" ((unsigned long)0x0123456789abcdefull),	\
-+		 "i" (sizeof(long)));				\
-+	__ret; })
-+
-+// The 'typeof' will create at _least_ a 32-bit type, but
-+// will happily also take a bigger type and the 'shrl' will
-+// clear the upper bits
-+#define runtime_const_shift_right_32(val, sym) ({		\
-+	typeof(0u+(val)) __ret = (val);				\
-+	asm("shrl $12,%k0\n1:\n"				\
-+		".pushsection runtime_shift_" #sym ",\"a\"\n\t"	\
-+		".long 1b - 1 - .\n\t"				\
-+		".popsection"					\
-+		:"+r" (__ret));					\
-+	__ret; })
-+
-+#define runtime_const_init(type, sym, value) do {	\
-+	extern s32 __start_runtime_##type##_##sym[];	\
-+	extern s32 __stop_runtime_##type##_##sym[];	\
-+	runtime_const_fixup(__runtime_fixup_##type,	\
-+		(unsigned long)(value), 		\
-+		__start_runtime_##type##_##sym,		\
-+		__stop_runtime_##type##_##sym);		\
-+} while (0)
-+
-+/*
-+ * The text patching is trivial - you can only do this at init time,
-+ * when the text section hasn't been marked RO, and before the text
-+ * has ever been executed.
-+ */
-+static inline void __runtime_fixup_ptr(void *where, unsigned long val)
-+{
-+	*(unsigned long *)where = val;
-+}
-+
-+static inline void __runtime_fixup_shift(void *where, unsigned long val)
-+{
-+	*(unsigned char *)where = val;
-+}
-+
-+static inline void runtime_const_fixup(void (*fn)(void *, unsigned long),
-+	unsigned long val, s32 *start, s32 *end)
-+{
-+	while (start < end) {
-+		fn(*start + (void *)start, val);
-+		start++;
-+	}
-+}
-+
-+#endif
-diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
-index 3509afc6a672..6e73403e874f 100644
---- a/arch/x86/kernel/vmlinux.lds.S
-+++ b/arch/x86/kernel/vmlinux.lds.S
-@@ -357,6 +357,9 @@ SECTIONS
- 	PERCPU_SECTION(INTERNODE_CACHE_BYTES)
- #endif
- 
-+	RUNTIME_CONST(shift, d_hash_shift)
-+	RUNTIME_CONST(ptr, dentry_hashtable)
-+
- 	. = ALIGN(PAGE_SIZE);
- 
- 	/* freed after init ends here */
-diff --git a/fs/dcache.c b/fs/dcache.c
-index 407095188f83..4511e557bf84 100644
---- a/fs/dcache.c
-+++ b/fs/dcache.c
-@@ -97,12 +97,14 @@ EXPORT_SYMBOL(dotdot_name);
-  */
- 
- static unsigned int d_hash_shift __ro_after_init;
--
- static struct hlist_bl_head *dentry_hashtable __ro_after_init;
- 
--static inline struct hlist_bl_head *d_hash(unsigned int hash)
-+#include <asm/runtime-const.h>
-+
-+static inline struct hlist_bl_head *d_hash(unsigned long hashlen)
- {
--	return dentry_hashtable + (hash >> d_hash_shift);
-+	return runtime_const_ptr(dentry_hashtable) +
-+		runtime_const_shift_right_32(hashlen, d_hash_shift);
- }
- 
- #define IN_LOOKUP_SHIFT 10
-@@ -495,7 +497,7 @@ static void ___d_drop(struct dentry *dentry)
- 	if (unlikely(IS_ROOT(dentry)))
- 		b = &dentry->d_sb->s_roots;
- 	else
--		b = d_hash(dentry->d_name.hash);
-+		b = d_hash(dentry->d_name.hash_len);
- 
- 	hlist_bl_lock(b);
- 	__hlist_bl_del(&dentry->d_hash);
-@@ -2104,7 +2106,7 @@ static noinline struct dentry *__d_lookup_rcu_op_compare(
- 	unsigned *seqp)
- {
- 	u64 hashlen = name->hash_len;
--	struct hlist_bl_head *b = d_hash(hashlen_hash(hashlen));
-+	struct hlist_bl_head *b = d_hash(hashlen);
- 	struct hlist_bl_node *node;
- 	struct dentry *dentry;
- 
-@@ -2171,7 +2173,7 @@ struct dentry *__d_lookup_rcu(const struct dentry *parent,
- {
- 	u64 hashlen = name->hash_len;
- 	const unsigned char *str = name->name;
--	struct hlist_bl_head *b = d_hash(hashlen_hash(hashlen));
-+	struct hlist_bl_head *b = d_hash(hashlen);
- 	struct hlist_bl_node *node;
- 	struct dentry *dentry;
- 
-@@ -2277,7 +2279,7 @@ EXPORT_SYMBOL(d_lookup);
- struct dentry *__d_lookup(const struct dentry *parent, const struct qstr *name)
- {
- 	unsigned int hash = name->hash;
--	struct hlist_bl_head *b = d_hash(hash);
-+	struct hlist_bl_head *b = d_hash(name->hash_len);
- 	struct hlist_bl_node *node;
- 	struct dentry *found = NULL;
- 	struct dentry *dentry;
-@@ -2397,7 +2399,7 @@ EXPORT_SYMBOL(d_delete);
- 
- static void __d_rehash(struct dentry *entry)
- {
--	struct hlist_bl_head *b = d_hash(entry->d_name.hash);
-+	struct hlist_bl_head *b = d_hash(entry->d_name.hash_len);
- 
- 	hlist_bl_lock(b);
- 	hlist_bl_add_head_rcu(&entry->d_hash, b);
-@@ -3129,6 +3131,9 @@ static void __init dcache_init_early(void)
- 					0,
- 					0);
- 	d_hash_shift = 32 - d_hash_shift;
-+
-+	runtime_const_init(shift, d_hash_shift, d_hash_shift);
-+	runtime_const_init(ptr, dentry_hashtable, dentry_hashtable);
- }
- 
- static void __init dcache_init(void)
-@@ -3157,6 +3162,9 @@ static void __init dcache_init(void)
- 					0,
- 					0);
- 	d_hash_shift = 32 - d_hash_shift;
-+
-+	runtime_const_init(shift, d_hash_shift, d_hash_shift);
-+	runtime_const_init(ptr, dentry_hashtable, dentry_hashtable);
- }
- 
- /* SLAB cache for __getname() consumers */
-diff --git a/include/asm-generic/Kbuild b/include/asm-generic/Kbuild
-index b20fa25a7e8d..052e5c98c105 100644
---- a/include/asm-generic/Kbuild
-+++ b/include/asm-generic/Kbuild
-@@ -46,6 +46,7 @@ mandatory-y += pci.h
- mandatory-y += percpu.h
- mandatory-y += pgalloc.h
- mandatory-y += preempt.h
-+mandatory-y += runtime-const.h
- mandatory-y += rwonce.h
- mandatory-y += sections.h
- mandatory-y += serial.h
-diff --git a/include/asm-generic/runtime-const.h b/include/asm-generic/runtime-const.h
-new file mode 100644
-index 000000000000..b54824bd616e
---- /dev/null
-+++ b/include/asm-generic/runtime-const.h
-@@ -0,0 +1,15 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_RUNTIME_CONST_H
-+#define _ASM_RUNTIME_CONST_H
-+
-+/*
-+ * This is the fallback for when the architecture doesn't
-+ * support the runtime const operations.
-+ *
-+ * We just use the actual symbols as-is.
-+ */
-+#define runtime_const_ptr(sym) (sym)
-+#define runtime_const_shift_right_32(val, sym) ((u32)(val)>>(sym))
-+#define runtime_const_init(type,sym,value) do { } while (0)
-+
-+#endif
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index 5703526d6ebf..389a78415b9b 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -944,6 +944,14 @@
- #define CON_INITCALL							\
- 	BOUNDED_SECTION_POST_LABEL(.con_initcall.init, __con_initcall, _start, _end)
- 
-+#define RUNTIME_NAME(t,x) runtime_##t##_##x
-+
-+#define RUNTIME_CONST(t,x)						\
-+	. = ALIGN(8);							\
-+	RUNTIME_NAME(t,x) : AT(ADDR(RUNTIME_NAME(t,x)) - LOAD_OFFSET) {	\
-+		*(RUNTIME_NAME(t,x));					\
-+	}
-+
- /* Alignment must be consistent with (kunit_suite *) in include/kunit/test.h */
- #define KUNIT_TABLE()							\
- 		. = ALIGN(8);						\
--- 
-2.45.1.209.gc6f12300df
+Think of this patch mostly as a "look, adding another architecture
+isn't *that* hard - even if the constant value is spread out in the
+instructions".
 
+                Linus
+
+--0000000000007054e4061a6722a6
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="0001-arm64-add-runtime-const-support.patch"
+Content-Disposition: attachment; 
+	filename="0001-arm64-add-runtime-const-support.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_lx6lemy50>
+X-Attachment-Id: f_lx6lemy50
+
+RnJvbSBiZWZjM2Q0OTM2NmZiMDQ5YjY1Njc5ZmIzN2ZhNzAzZmU0MTlhN2U4IE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBMaW51cyBUb3J2YWxkcyA8dG9ydmFsZHNAbGludXgtZm91bmRh
+dGlvbi5vcmc+CkRhdGU6IFNhdCwgOCBKdW4gMjAyNCAxMzoyMjozMSAtMDcwMApTdWJqZWN0OiBb
+UEFUQ0hdIGFybTY0OiBhZGQgJ3J1bnRpbWUgY29uc3QnIHN1cHBvcnQKCk1vbW15IG1vbW15IEkn
+bSBzY2FyZWQKLS0tCiBhcmNoL2FybTY0L2luY2x1ZGUvYXNtL3J1bnRpbWUtY29uc3QuaCB8IDcz
+ICsrKysrKysrKysrKysrKysrKysrKysrKysrCiBhcmNoL2FybTY0L2tlcm5lbC92bWxpbnV4Lmxk
+cy5TICAgICAgICB8ICAzICsrCiAyIGZpbGVzIGNoYW5nZWQsIDc2IGluc2VydGlvbnMoKykKIGNy
+ZWF0ZSBtb2RlIDEwMDY0NCBhcmNoL2FybTY0L2luY2x1ZGUvYXNtL3J1bnRpbWUtY29uc3QuaAoK
+ZGlmZiAtLWdpdCBhL2FyY2gvYXJtNjQvaW5jbHVkZS9hc20vcnVudGltZS1jb25zdC5oIGIvYXJj
+aC9hcm02NC9pbmNsdWRlL2FzbS9ydW50aW1lLWNvbnN0LmgKbmV3IGZpbGUgbW9kZSAxMDA2NDQK
+aW5kZXggMDAwMDAwMDAwMDAwLi43ZDQwMmFlNmQzYzIKLS0tIC9kZXYvbnVsbAorKysgYi9hcmNo
+L2FybTY0L2luY2x1ZGUvYXNtL3J1bnRpbWUtY29uc3QuaApAQCAtMCwwICsxLDczIEBACisvKiBT
+UERYLUxpY2Vuc2UtSWRlbnRpZmllcjogR1BMLTIuMCAqLworI2lmbmRlZiBfQVNNX1JVTlRJTUVf
+Q09OU1RfSAorI2RlZmluZSBfQVNNX1JVTlRJTUVfQ09OU1RfSAorCisjZGVmaW5lIHJ1bnRpbWVf
+Y29uc3RfcHRyKHN5bSkgKHsJCQkJXAorCXR5cGVvZihzeW0pIF9fcmV0OwkJCQkJXAorCWFzbSgi
+MTpcdCIJCQkJCQlcCisJCSJtb3Z6ICUwLCAjMHhjZGVmXG5cdCIJCQkJXAorCQkibW92ayAlMCwg
+IzB4ODlhYiwgbHNsICMxNlxuXHQiCQkJXAorCQkibW92ayAlMCwgIzB4NDU2NywgbHNsICMzMlxu
+XHQiCQkJXAorCQkibW92ayAlMCwgIzB4MDEyMywgbHNsICM0OFxuXHQiCQkJXAorCQkiLnB1c2hz
+ZWN0aW9uIHJ1bnRpbWVfcHRyXyIgI3N5bSAiLFwiYVwiXG5cdCIJXAorCQkiLmxvbmcgMWIgLSAu
+XG5cdCIJCQkJXAorCQkiLnBvcHNlY3Rpb24iCQkJCQlcCisJCToiPXIiIChfX3JldCkpOwkJCQkJ
+XAorCV9fcmV0OyB9KQorCisjZGVmaW5lIHJ1bnRpbWVfY29uc3Rfc2hpZnRfcmlnaHRfMzIodmFs
+LCBzeW0pICh7CQlcCisJdW5zaWduZWQgbG9uZyBfX3JldDsJCQkJCVwKKwlhc20oIjE6XHQiCQkJ
+CQkJXAorCQkibHNyICV3MCwldzEsIzEyXG5cdCIJCQkJXAorCQkiLnB1c2hzZWN0aW9uIHJ1bnRp
+bWVfc2hpZnRfIiAjc3ltICIsXCJhXCJcblx0IglcCisJCSIubG9uZyAxYiAtIC5cblx0IgkJCQlc
+CisJCSIucG9wc2VjdGlvbiIJCQkJCVwKKwkJOiI9ciIgKF9fcmV0KQkJCQkJXAorCQk6InIiICgw
+dSsodmFsKSkpOwkJCQlcCisJX19yZXQ7IH0pCisKKyNkZWZpbmUgcnVudGltZV9jb25zdF9pbml0
+KHR5cGUsIHN5bSwgdmFsdWUpIGRvIHsJXAorCWV4dGVybiBzMzIgX19zdGFydF9ydW50aW1lXyMj
+dHlwZSMjXyMjc3ltW107CVwKKwlleHRlcm4gczMyIF9fc3RvcF9ydW50aW1lXyMjdHlwZSMjXyMj
+c3ltW107CVwKKwlydW50aW1lX2NvbnN0X2ZpeHVwKF9fcnVudGltZV9maXh1cF8jI3R5cGUsCVwK
+KwkJKHVuc2lnbmVkIGxvbmcpKHZhbHVlKSwgCQlcCisJCV9fc3RhcnRfcnVudGltZV8jI3R5cGUj
+I18jI3N5bSwJCVwKKwkJX19zdG9wX3J1bnRpbWVfIyN0eXBlIyNfIyNzeW0pOwkJXAorfSB3aGls
+ZSAoMCkKKworLy8gMTYtYml0IGltbWVkaWF0ZSBmb3Igd2lkZSBtb3ZlIChtb3Z6IGFuZCBtb3Zr
+KSBpbiBiaXRzIDUuLjIwCitzdGF0aWMgaW5saW5lIHZvaWQgX19ydW50aW1lX2ZpeHVwXzE2KHVu
+c2lnbmVkIGludCAqcCwgdW5zaWduZWQgaW50IHZhbCkKK3sKKwl1bnNpZ25lZCBpbnQgaW5zbiA9
+ICpwOworCWluc24gJj0gMHhmZmUwMDAxZjsKKwlpbnNuIHw9ICh2YWwgJiAweGZmZmYpIDw8IDU7
+CisJKnAgPSBpbnNuOworfQorCitzdGF0aWMgaW5saW5lIHZvaWQgX19ydW50aW1lX2ZpeHVwX3B0
+cih2b2lkICp3aGVyZSwgdW5zaWduZWQgbG9uZyB2YWwpCit7CisJX19ydW50aW1lX2ZpeHVwXzE2
+KHdoZXJlLCB2YWwpOworCV9fcnVudGltZV9maXh1cF8xNih3aGVyZSs0LCB2YWwgPj4gMTYpOwor
+CV9fcnVudGltZV9maXh1cF8xNih3aGVyZSs4LCB2YWwgPj4gMzIpOworCV9fcnVudGltZV9maXh1
+cF8xNih3aGVyZSsxMiwgdmFsID4+IDQ4KTsKK30KKworLy8gSW1tZWRpYXRlIHZhbHVlIGlzIDUg
+Yml0cyBzdGFydGluZyBhdCBiaXQgIzE2CitzdGF0aWMgaW5saW5lIHZvaWQgX19ydW50aW1lX2Zp
+eHVwX3NoaWZ0KHZvaWQgKndoZXJlLCB1bnNpZ25lZCBsb25nIHZhbCkKK3sKKwl1bnNpZ25lZCBp
+bnQgaW5zbiA9ICoodW5zaWduZWQgaW50ICopd2hlcmU7CisJaW5zbiAmPSAweGZmYzBmZmZmOwor
+CWluc24gfD0gKHZhbCAmIDYzKSA8PCAxNjsKKwkqKHVuc2lnbmVkIGludCAqKXdoZXJlID0gaW5z
+bjsKK30KKworc3RhdGljIGlubGluZSB2b2lkIHJ1bnRpbWVfY29uc3RfZml4dXAodm9pZCAoKmZu
+KSh2b2lkICosIHVuc2lnbmVkIGxvbmcpLAorCXVuc2lnbmVkIGxvbmcgdmFsLCBzMzIgKnN0YXJ0
+LCBzMzIgKmVuZCkKK3sKKwl3aGlsZSAoc3RhcnQgPCBlbmQpIHsKKwkJZm4oKnN0YXJ0ICsgKHZv
+aWQgKilzdGFydCwgdmFsKTsKKwkJc3RhcnQrKzsKKwl9Cit9CisKKyNlbmRpZgpkaWZmIC0tZ2l0
+IGEvYXJjaC9hcm02NC9rZXJuZWwvdm1saW51eC5sZHMuUyBiL2FyY2gvYXJtNjQva2VybmVsL3Zt
+bGludXgubGRzLlMKaW5kZXggNzU1YTIyZDRmODQwLi41NWE4ZTMxMGVhMTIgMTAwNjQ0Ci0tLSBh
+L2FyY2gvYXJtNjQva2VybmVsL3ZtbGludXgubGRzLlMKKysrIGIvYXJjaC9hcm02NC9rZXJuZWwv
+dm1saW51eC5sZHMuUwpAQCAtMjY0LDYgKzI2NCw5IEBAIFNFQ1RJT05TCiAJCUVYSVRfREFUQQog
+CX0KIAorCVJVTlRJTUVfQ09OU1Qoc2hpZnQsIGRfaGFzaF9zaGlmdCkKKwlSVU5USU1FX0NPTlNU
+KHB0ciwgZGVudHJ5X2hhc2h0YWJsZSkKKwogCVBFUkNQVV9TRUNUSU9OKEwxX0NBQ0hFX0JZVEVT
+KQogCUhZUEVSVklTT1JfUEVSQ1BVX1NFQ1RJT04KIAotLSAKMi40NS4xCgo=
+--0000000000007054e4061a6722a6--
 
