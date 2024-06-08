@@ -1,180 +1,340 @@
-Return-Path: <linux-arch+bounces-4756-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4757-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59623901269
-	for <lists+linux-arch@lfdr.de>; Sat,  8 Jun 2024 17:49:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE37390135E
+	for <lists+linux-arch@lfdr.de>; Sat,  8 Jun 2024 21:43:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C75CDB21A0B
-	for <lists+linux-arch@lfdr.de>; Sat,  8 Jun 2024 15:49:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DAF0B2826D9
+	for <lists+linux-arch@lfdr.de>; Sat,  8 Jun 2024 19:43:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5173517B4FE;
-	Sat,  8 Jun 2024 15:48:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CE72134D1;
+	Sat,  8 Jun 2024 19:43:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i9iTnJW1"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="izEYON8i"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2966B1E888;
-	Sat,  8 Jun 2024 15:48:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02528134B1;
+	Sat,  8 Jun 2024 19:43:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717861727; cv=none; b=jBP8Q0kO7mHehfoiikzSdIdrFOFUExJeE9n71tA2Nqon2chawCfdChfVqi14bRC2ylvgz9O3nQTlgTDhZKFzWjjxxdJ/CrwnPdchc+qcrNEqO5sF40XkrQNZhiwu9tUxWglTkGk3/J3yfcM5A5JEyzmVgZzC3i3H7R7GRIkrANk=
+	t=1717875829; cv=none; b=FPyRkihIPidH6jSyTNt+2CJ/D02P9BFf06WnXsDnfa/iosmwD5TeBWqvaLRFrdtkzNpFWn6BwXwxJ7lv5KdygBDU+i8mSuQug/5PAt2aUa7+TcPRwdYZZcZq3hFE9MFgbVp5e1pjF+xCFbgHVUklceETF0VKnViZQOdwDNqnvgA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717861727; c=relaxed/simple;
-	bh=3p3kxCe/yhGV0q146IRm30LBrdx5GWV65OqRWxDa644=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BmC69hgRHqBOmrbA5+qsC6/CjjHJ3J4rsO0kEpnbDWP9rM6oMFKjQIvwgGdlarwWvLU8CrJ4a0HxjXxmeLa29eOVuAkmtu3YEsLgGk9Ov5TY3RYIEWlI6CxtvTI+bG/0altAH3L9ZDQxw18XCOQ4mSMTPrB17PsNdIaErx/57G4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i9iTnJW1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFEBCC32781;
-	Sat,  8 Jun 2024 15:48:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717861726;
-	bh=3p3kxCe/yhGV0q146IRm30LBrdx5GWV65OqRWxDa644=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=i9iTnJW1vgPwDQx57ApoXYc9y4CZkj12TYUblreb2RUJQjmkEK4ThrX2dfODGjUcK
-	 jZeTQo+ztRwSue2+nuMM/pul0jQRVLy8ryhfUPZmV924bHQOeayMw6Y/G6eLPPmlzP
-	 yE+u1liBfLzXRpOGD+eqMKRZoHJ/1iB4Y2r4QjZqhDfdpdcj1lSFjO3XDGWks5LiIa
-	 aH5BB7QloSrhf2Z4Thv7lxUg9o3hPuDEdYHQAE3xxW+bPTsiyXN+Sb5MK8dyllUPps
-	 0anRM9maFxEhmetGjQ4FEGaGh2VN/WP04ueKz4ajwZSWjOHLn5qSyZnxiZqbJU9JY+
-	 qcO94RFcuAxUQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 46920CE0C16; Sat,  8 Jun 2024 08:48:46 -0700 (PDT)
-Date: Sat, 8 Jun 2024 08:48:46 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Akira Yokosawa <akiyks@gmail.com>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	kernel-team@meta.com, mingo@kernel.org, stern@rowland.harvard.edu,
-	parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
-	boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
-	j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
-	Marco Elver <elver@google.com>, Daniel Lustig <dlustig@nvidia.com>,
-	Joel Fernandes <joel@joelfernandes.org>
-Subject: Re: [PATCH memory-model 3/3] tools/memory-model: Add KCSAN LF
- mentorship session citation
-Message-ID: <6bb5f789-f143-493c-a804-62b7c81dabb0@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <b290acd5-074f-4e17-a8bf-b444e553d986@paulmck-laptop>
- <20240604221419.2370127-3-paulmck@kernel.org>
- <42fa4660-b3bf-4d09-bbad-064f9d4cc727@gmail.com>
- <f11f7230-7c16-45a3-83be-9aba32e10a3b@paulmck-laptop>
- <3c5a53e2-b5a9-4197-97a3-247abb7f3061@gmail.com>
+	s=arc-20240116; t=1717875829; c=relaxed/simple;
+	bh=ASFabXtRa1wFAO6TA1/5iLXPo5NYMXTtx1bqem/hIBo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=E4itQ3OEmqfqkXAJyRHtzhGL7KH+dD3yorGtsYz58fnbkAPkoymmSKk8IZ6eJ3W6HQn43KXGrdeQPZkvVAzR5gCoGfq3dnNHROYOcXSL4WWwOB1jooOUjbMOf7L3mrkD5OvsQdnSAyVSjJhnxjcbccSBLHRwDMAvRPNZY1E/S00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=izEYON8i; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29F61C2BD11;
+	Sat,  8 Jun 2024 19:43:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1717875828;
+	bh=ASFabXtRa1wFAO6TA1/5iLXPo5NYMXTtx1bqem/hIBo=;
+	h=From:To:Cc:Subject:Date:From;
+	b=izEYON8irr9+sSFBaMZGvQzmPI7gOpxIrihxApW07s0vI2HhDUUE7icramuCaZoxQ
+	 0BrKHNlLandyhpIcVekjg+rwF01WqCTXZRMHLO1hMM9Jq6sHdXN9ucC5rXuCFoP1IF
+	 VxKvRRSGGhOcadqzzXeQgVepZU229xvse3W282/w=
+From: Linus Torvalds <torvalds@linux-foundation.org>
+To: Peter Anvin <hpa@zytor.com>,
+	Ingo Molnar <mingo@kernel.org>,
+	Borislav Petkov <bp@alien8.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	the arch/x86 maintainers <x86@kernel.org>,
+	linux-arch <linux-arch@vger.kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH] x86: add 'runtime constant' infrastructure
+Date: Sat,  8 Jun 2024 12:35:05 -0700
+Message-ID: <20240608193504.429644-2-torvalds@linux-foundation.org>
+X-Mailer: git-send-email 2.45.1.209.gc6f12300df
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3c5a53e2-b5a9-4197-97a3-247abb7f3061@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Sat, Jun 08, 2024 at 08:38:12AM +0900, Akira Yokosawa wrote:
-> On 2024/06/05 13:02, Paul E. McKenney wrote:
-> > On Wed, Jun 05, 2024 at 10:57:27AM +0900, Akira Yokosawa wrote:
-> >> On Tue,  4 Jun 2024 15:14:19 -0700, Paul E. McKenney wrote:
-> >>> Add a citation to Marco's LF mentorship session presentation entitled
-> >>> "The Kernel Concurrency Sanitizer"
-> >>>
-> >>> [ paulmck: Apply Marco Elver feedback. ]
-> >>>
-> >>> Reported-by: Marco Elver <elver@google.com>
-> >>> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> >>> Cc: Alan Stern <stern@rowland.harvard.edu>
-> >>> Cc: Andrea Parri <parri.andrea@gmail.com>
-> >>> Cc: Will Deacon <will@kernel.org>
-> >>> Cc: Peter Zijlstra <peterz@infradead.org>
-> >>> Cc: Boqun Feng <boqun.feng@gmail.com>
-> >>> Cc: Nicholas Piggin <npiggin@gmail.com>
-> >>> Cc: David Howells <dhowells@redhat.com>
-> >>> Cc: Jade Alglave <j.alglave@ucl.ac.uk>
-> >>> Cc: Luc Maranget <luc.maranget@inria.fr>
-> >>> Cc: Akira Yokosawa <akiyks@gmail.com>
-> >>
-> >> Paul,
-> >>
-> >> While reviewing this, I noticed that
-> >> tools/memory-model/Documentation/README has no mention of
-> >> access-marking.txt.
-> >>
-> >> It has no mention of glossary.txt or locking.txt, either.
-> >>
-> >> I'm not sure where are the right places in README for them.
-> >> Can you update it in a follow-up change?
-> >>
-> >> Anyway, for this change,
-> >>
-> >> Reviewed-by: Akira Yokosawa <akiyks@gmail.com>
-> > 
-> > Thank you, and good catch!  Does the patch below look appropriate?
-> 
-> Well, I must say this is not what I expected.
-> Please see below.
+Needs more comments and testing, but it works, and has a generic
+fallback for architectures that don't support it.
 
-OK, I was clearly in way too much of a hurry when doing this, and please
-accept my apologies for my inattention.  I am therefore going to do
-what I should have done in the first place, which is to ask you if you
-would like to send a patch fixing this.  If so, I would be quite happy
-to replace mine with yours.
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+---
 
-							Thanx, Paul
+Notes from the first hack: I renamed the infrastructure from "static
+const" to "runtime const".  We end up having a number of uses of "static
+const" that are related to the C language notion of "static const"
+variables or functions, and "runtime constant" is a bit more descriptive
+anyway. 
 
-> > ------------------------------------------------------------------------
-> > 
-> > commit 834b22ba762fb59024843a64554d38409aaa82ec
-> > Author: Paul E. McKenney <paulmck@kernel.org>
-> > Date:   Tue Jun 4 20:59:35 2024 -0700
-> > 
-> >     tools/memory-model: Add access-marking.txt to README
-> >     
-> >     Given that access-marking.txt exists, this commit makes it easier to find.
-> >     
-> >     Reported-by: Akira Yokosawa <akiyks@gmail.com>
-> >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > 
-> > diff --git a/tools/memory-model/Documentation/README b/tools/memory-model/Documentation/README
-> > index db90a26dbdf40..304162743a5b8 100644
-> > --- a/tools/memory-model/Documentation/README
-> > +++ b/tools/memory-model/Documentation/README
-> > @@ -47,6 +47,10 @@ DESCRIPTION OF FILES
-> >  README
-> >  	This file.
-> >  
-> > +access-marking.txt
-> > +	Guidelines for marking intentionally concurrent accesses to
-> > +	shared memory.
-> > +
-> >  cheatsheet.txt
-> >  	Quick-reference guide to the Linux-kernel memory model.
-> >
-> 
-> What I expected was an entry in the bullet list in the upper half
-> of README which mentions access-marking.txt along with the update of
-> alphabetical list of files.
-> 
-> Updating the latter wouldn't worth bothering you.
-> 
-> And you are missing another comment WRT glossary.txt and locking.txt. ;-)
-> 
-> Let me suggest an idea of their positions in the bullet list where the
-> ordering is important.  Looks reasonable to you ?
-> 
->   o   simple.txt
->   o   ordering.txt
->   o   locking.txt               <--new
->   o   litmus-test.txt
->   o   recipes.txt
->   o   control-dependencies.txt
->   o   access-marking.txt        <--new
->   o   cheatsheet.txt
->   o   explanation.txt
->   o   references.txt
->   o   glossary.txt              <--new
-> 
-> Have I made my point clear enough?
-> 
->         Thanks, Akira
+And this now is properly abstracted out, so that any architecture can
+choose to implement their own version, but it all falls back on "just
+use the variable".
+
+Josh - sorry for wasting your time on the objtool patch, I ended up
+using the linker functionality that Rasmus pointed out as existing
+instead. 
+
+Rasmus - I've cleaned up my patch a lot, and it now compiles fine on
+other architectures too, although obviously with the fallback of "no
+constant fixup".  As a result, my patch is actually smaller and much
+cleaner, and I ended up liking my approach more than your RAI thing
+after all. 
+
+Ingo / Peter / Borislav - I enabled this for 32-bit x86 too, because it
+was literally trivial (had to remove a "q" from "movq").  I did a
+test-build and it looks find, but I didn't actually try to boot it. 
+
+The x86-64 code is actually tested.  It's not like it has a _lot_ of
+testing, but the patch ends up being pretty small in the end.  Yes, the
+"shift u32 value right by a constant" is a pretty special case, but the
+__d_lookup_rcu() function really is pretty hot.
+
+Or rather it *was* pretty hot.  It's actually looking very good with
+this, imho. 
+
+Build tested with allmodconfig and on arm64, but I'm not claiming that I
+have necessarily found all special case corners.  That said, it's small
+and pretty straightforward. 
+
+Comments?
+
+ arch/x86/include/asm/runtime-const.h | 61 ++++++++++++++++++++++++++++
+ arch/x86/kernel/vmlinux.lds.S        |  3 ++
+ fs/dcache.c                          | 24 +++++++----
+ include/asm-generic/Kbuild           |  1 +
+ include/asm-generic/runtime-const.h  | 15 +++++++
+ include/asm-generic/vmlinux.lds.h    |  8 ++++
+ 6 files changed, 104 insertions(+), 8 deletions(-)
+ create mode 100644 arch/x86/include/asm/runtime-const.h
+ create mode 100644 include/asm-generic/runtime-const.h
+
+diff --git a/arch/x86/include/asm/runtime-const.h b/arch/x86/include/asm/runtime-const.h
+new file mode 100644
+index 000000000000..b4f7efc0a554
+--- /dev/null
++++ b/arch/x86/include/asm/runtime-const.h
+@@ -0,0 +1,61 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _ASM_RUNTIME_CONST_H
++#define _ASM_RUNTIME_CONST_H
++
++#define runtime_const_ptr(sym) ({				\
++	typeof(sym) __ret;					\
++	asm("mov %1,%0\n1:\n"					\
++		".pushsection runtime_ptr_" #sym ",\"a\"\n\t"	\
++		".long 1b - %c2 - .\n\t"			\
++		".popsection"					\
++		:"=r" (__ret)					\
++		:"i" ((unsigned long)0x0123456789abcdefull),	\
++		 "i" (sizeof(long)));				\
++	__ret; })
++
++// The 'typeof' will create at _least_ a 32-bit type, but
++// will happily also take a bigger type and the 'shrl' will
++// clear the upper bits
++#define runtime_const_shift_right_32(val, sym) ({		\
++	typeof(0u+(val)) __ret = (val);				\
++	asm("shrl $12,%k0\n1:\n"				\
++		".pushsection runtime_shift_" #sym ",\"a\"\n\t"	\
++		".long 1b - 1 - .\n\t"				\
++		".popsection"					\
++		:"+r" (__ret));					\
++	__ret; })
++
++#define runtime_const_init(type, sym, value) do {	\
++	extern s32 __start_runtime_##type##_##sym[];	\
++	extern s32 __stop_runtime_##type##_##sym[];	\
++	runtime_const_fixup(__runtime_fixup_##type,	\
++		(unsigned long)(value), 		\
++		__start_runtime_##type##_##sym,		\
++		__stop_runtime_##type##_##sym);		\
++} while (0)
++
++/*
++ * The text patching is trivial - you can only do this at init time,
++ * when the text section hasn't been marked RO, and before the text
++ * has ever been executed.
++ */
++static inline void __runtime_fixup_ptr(void *where, unsigned long val)
++{
++	*(unsigned long *)where = val;
++}
++
++static inline void __runtime_fixup_shift(void *where, unsigned long val)
++{
++	*(unsigned char *)where = val;
++}
++
++static inline void runtime_const_fixup(void (*fn)(void *, unsigned long),
++	unsigned long val, s32 *start, s32 *end)
++{
++	while (start < end) {
++		fn(*start + (void *)start, val);
++		start++;
++	}
++}
++
++#endif
+diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
+index 3509afc6a672..6e73403e874f 100644
+--- a/arch/x86/kernel/vmlinux.lds.S
++++ b/arch/x86/kernel/vmlinux.lds.S
+@@ -357,6 +357,9 @@ SECTIONS
+ 	PERCPU_SECTION(INTERNODE_CACHE_BYTES)
+ #endif
+ 
++	RUNTIME_CONST(shift, d_hash_shift)
++	RUNTIME_CONST(ptr, dentry_hashtable)
++
+ 	. = ALIGN(PAGE_SIZE);
+ 
+ 	/* freed after init ends here */
+diff --git a/fs/dcache.c b/fs/dcache.c
+index 407095188f83..4511e557bf84 100644
+--- a/fs/dcache.c
++++ b/fs/dcache.c
+@@ -97,12 +97,14 @@ EXPORT_SYMBOL(dotdot_name);
+  */
+ 
+ static unsigned int d_hash_shift __ro_after_init;
+-
+ static struct hlist_bl_head *dentry_hashtable __ro_after_init;
+ 
+-static inline struct hlist_bl_head *d_hash(unsigned int hash)
++#include <asm/runtime-const.h>
++
++static inline struct hlist_bl_head *d_hash(unsigned long hashlen)
+ {
+-	return dentry_hashtable + (hash >> d_hash_shift);
++	return runtime_const_ptr(dentry_hashtable) +
++		runtime_const_shift_right_32(hashlen, d_hash_shift);
+ }
+ 
+ #define IN_LOOKUP_SHIFT 10
+@@ -495,7 +497,7 @@ static void ___d_drop(struct dentry *dentry)
+ 	if (unlikely(IS_ROOT(dentry)))
+ 		b = &dentry->d_sb->s_roots;
+ 	else
+-		b = d_hash(dentry->d_name.hash);
++		b = d_hash(dentry->d_name.hash_len);
+ 
+ 	hlist_bl_lock(b);
+ 	__hlist_bl_del(&dentry->d_hash);
+@@ -2104,7 +2106,7 @@ static noinline struct dentry *__d_lookup_rcu_op_compare(
+ 	unsigned *seqp)
+ {
+ 	u64 hashlen = name->hash_len;
+-	struct hlist_bl_head *b = d_hash(hashlen_hash(hashlen));
++	struct hlist_bl_head *b = d_hash(hashlen);
+ 	struct hlist_bl_node *node;
+ 	struct dentry *dentry;
+ 
+@@ -2171,7 +2173,7 @@ struct dentry *__d_lookup_rcu(const struct dentry *parent,
+ {
+ 	u64 hashlen = name->hash_len;
+ 	const unsigned char *str = name->name;
+-	struct hlist_bl_head *b = d_hash(hashlen_hash(hashlen));
++	struct hlist_bl_head *b = d_hash(hashlen);
+ 	struct hlist_bl_node *node;
+ 	struct dentry *dentry;
+ 
+@@ -2277,7 +2279,7 @@ EXPORT_SYMBOL(d_lookup);
+ struct dentry *__d_lookup(const struct dentry *parent, const struct qstr *name)
+ {
+ 	unsigned int hash = name->hash;
+-	struct hlist_bl_head *b = d_hash(hash);
++	struct hlist_bl_head *b = d_hash(name->hash_len);
+ 	struct hlist_bl_node *node;
+ 	struct dentry *found = NULL;
+ 	struct dentry *dentry;
+@@ -2397,7 +2399,7 @@ EXPORT_SYMBOL(d_delete);
+ 
+ static void __d_rehash(struct dentry *entry)
+ {
+-	struct hlist_bl_head *b = d_hash(entry->d_name.hash);
++	struct hlist_bl_head *b = d_hash(entry->d_name.hash_len);
+ 
+ 	hlist_bl_lock(b);
+ 	hlist_bl_add_head_rcu(&entry->d_hash, b);
+@@ -3129,6 +3131,9 @@ static void __init dcache_init_early(void)
+ 					0,
+ 					0);
+ 	d_hash_shift = 32 - d_hash_shift;
++
++	runtime_const_init(shift, d_hash_shift, d_hash_shift);
++	runtime_const_init(ptr, dentry_hashtable, dentry_hashtable);
+ }
+ 
+ static void __init dcache_init(void)
+@@ -3157,6 +3162,9 @@ static void __init dcache_init(void)
+ 					0,
+ 					0);
+ 	d_hash_shift = 32 - d_hash_shift;
++
++	runtime_const_init(shift, d_hash_shift, d_hash_shift);
++	runtime_const_init(ptr, dentry_hashtable, dentry_hashtable);
+ }
+ 
+ /* SLAB cache for __getname() consumers */
+diff --git a/include/asm-generic/Kbuild b/include/asm-generic/Kbuild
+index b20fa25a7e8d..052e5c98c105 100644
+--- a/include/asm-generic/Kbuild
++++ b/include/asm-generic/Kbuild
+@@ -46,6 +46,7 @@ mandatory-y += pci.h
+ mandatory-y += percpu.h
+ mandatory-y += pgalloc.h
+ mandatory-y += preempt.h
++mandatory-y += runtime-const.h
+ mandatory-y += rwonce.h
+ mandatory-y += sections.h
+ mandatory-y += serial.h
+diff --git a/include/asm-generic/runtime-const.h b/include/asm-generic/runtime-const.h
+new file mode 100644
+index 000000000000..b54824bd616e
+--- /dev/null
++++ b/include/asm-generic/runtime-const.h
+@@ -0,0 +1,15 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _ASM_RUNTIME_CONST_H
++#define _ASM_RUNTIME_CONST_H
++
++/*
++ * This is the fallback for when the architecture doesn't
++ * support the runtime const operations.
++ *
++ * We just use the actual symbols as-is.
++ */
++#define runtime_const_ptr(sym) (sym)
++#define runtime_const_shift_right_32(val, sym) ((u32)(val)>>(sym))
++#define runtime_const_init(type,sym,value) do { } while (0)
++
++#endif
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index 5703526d6ebf..389a78415b9b 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -944,6 +944,14 @@
+ #define CON_INITCALL							\
+ 	BOUNDED_SECTION_POST_LABEL(.con_initcall.init, __con_initcall, _start, _end)
+ 
++#define RUNTIME_NAME(t,x) runtime_##t##_##x
++
++#define RUNTIME_CONST(t,x)						\
++	. = ALIGN(8);							\
++	RUNTIME_NAME(t,x) : AT(ADDR(RUNTIME_NAME(t,x)) - LOAD_OFFSET) {	\
++		*(RUNTIME_NAME(t,x));					\
++	}
++
+ /* Alignment must be consistent with (kunit_suite *) in include/kunit/test.h */
+ #define KUNIT_TABLE()							\
+ 		. = ALIGN(8);						\
+-- 
+2.45.1.209.gc6f12300df
+
 
