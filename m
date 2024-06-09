@@ -1,62 +1,62 @@
-Return-Path: <linux-arch+bounces-4777-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4778-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7363F9016CC
-	for <lists+linux-arch@lfdr.de>; Sun,  9 Jun 2024 17:57:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B861D9016D1
+	for <lists+linux-arch@lfdr.de>; Sun,  9 Jun 2024 17:57:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 747491C20FAD
-	for <lists+linux-arch@lfdr.de>; Sun,  9 Jun 2024 15:57:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C6CA1F22AD3
+	for <lists+linux-arch@lfdr.de>; Sun,  9 Jun 2024 15:57:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E70C4655F;
-	Sun,  9 Jun 2024 15:57:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7F8646BA0;
+	Sun,  9 Jun 2024 15:57:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="PjaEdDgN"
+	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="LpPRGVnQ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp-fw-52004.amazon.com (smtp-fw-52004.amazon.com [52.119.213.154])
+Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F1F446522;
-	Sun,  9 Jun 2024 15:57:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.119.213.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D4FC46441;
+	Sun,  9 Jun 2024 15:57:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=99.78.197.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717948626; cv=none; b=nZ4Ytuylu36DXu5zO9Mt1W5ygDqcLfJ+YC5CtlpPKzFn3UW0xLNG4k1yX9l8P+9Mlu0ugK6uPzm0jKJ7ipGMFa8nnkPJkDAPtNi35xDPO/1LcwgTv7DfDZ1EOTx6GHXBm/4HVwWhM9w1W+RhVCAPUZID3S2WBTxla88tHKqameI=
+	t=1717948651; cv=none; b=NBs2D2hNs6ppF17y4WzwTtIZ6Gr5DHGJlilK6Gcx/n4FQ4BChacN0rvxZEXG07P9HlZ0ma+s7HsoSrGxyq3H5MXysjKn421NPgp1z69MXLeELLryhxRF8KJ2EfwvF/4AwNHNOPLKxieGs8MoOmO4QRxUhl7KmIT5pLBchXqTX+k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717948626; c=relaxed/simple;
-	bh=vepqPlzQj204UkjPtHtl8uZ7TaVJFhx2ifbXgltVjjs=;
+	s=arc-20240116; t=1717948651; c=relaxed/simple;
+	bh=+Tv5yHEFjqh1Rpgd3wuBbZaDYV3FvrXaVRj6ufcU9Qk=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Lej2X/2BRphypIs0jRwW/CF31DWip9SXV7/GG6mNkqlxkUpdY4HzRs55S2Tuo6N1/jpkdhwsNZbc0qUwK9xTdqcKcHveFpFo+mQPnMer5BrHxW1du8d+rvb8RnOxQGWJrDDpDsjqX5r2l9ESfJnNtdY4IDn6Lih0gNbKcT9psnc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.es; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=PjaEdDgN; arc=none smtp.client-ip=52.119.213.154
+	 MIME-Version:Content-Type; b=AU60hHQWwN56PeTovA3IWZZLrcSNT+BLYm6JCAGKtLPXJex1ZUUmI79h1T2VEoDECSnEe71PIbtpJCxxoHY/Y16kSWSHl9uDdFEp+Uv8O37zNICJHELHe3KqjLx5HhFkfz0UlT+8zCzHB/3gewoXLkq0e+oRX+UFQJzGBdWejCA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.es; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=LpPRGVnQ; arc=none smtp.client-ip=99.78.197.218
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.es
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1717948624; x=1749484624;
+  t=1717948650; x=1749484650;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=svtivqIKM5jIa+6jjwD2ez7xIbQu16Sv0pYWZNeRRHo=;
-  b=PjaEdDgNKuqf5rNQMeyLRI7Afb9Gf0lzKIz90wexHKjU/e6ygJ5ckoG4
-   4YHj6HKnCoovT9DXHMp0+z6+Q/QAvlt7j55sVO+h+d7jd1ZEHFzbAuWXi
-   buDDPp4s7CsZMemTImKLEeLuiPNT8J+Y/ZC/1bydizgYhWphBpVoGM0qh
-   k=;
+  bh=KQwnm28YLoi/23yqXhNNFcKbD35vEjDl1rOMbl5bsvk=;
+  b=LpPRGVnQf5PyIoUwweMi1F3GKECPH3BVKc/ouZsCNg5Rdv+PcSa4ZBbR
+   kCvzxCTf2HvVSImJjGS2hjCeXfmlubzE6ILQkV8QpurnvF1uO7/jdjnFa
+   UmkM0OkK4LpDWrJWiomo6H++0JtWr4NW9lKiyNsLXxd9WS9hwE1pZ0Qkp
+   g=;
 X-IronPort-AV: E=Sophos;i="6.08,225,1712620800"; 
-   d="scan'208";a="210678007"
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO smtpout.prod.us-east-1.prod.farcaster.email.amazon.dev) ([10.43.8.2])
-  by smtp-border-fw-52004.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2024 15:57:03 +0000
-Received: from EX19MTAEUB001.ant.amazon.com [10.0.17.79:62225]
- by smtpin.naws.eu-west-1.prod.farcaster.email.amazon.dev [10.0.14.23:2525] with esmtp (Farcaster)
- id dfe34c22-171a-4682-9b85-d6989c6f0cab; Sun, 9 Jun 2024 15:57:02 +0000 (UTC)
-X-Farcaster-Flow-ID: dfe34c22-171a-4682-9b85-d6989c6f0cab
+   d="scan'208";a="302170451"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.25.36.210])
+  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2024 15:57:28 +0000
+Received: from EX19MTAEUB002.ant.amazon.com [10.0.17.79:16374]
+ by smtpin.naws.eu-west-1.prod.farcaster.email.amazon.dev [10.0.31.105:2525] with esmtp (Farcaster)
+ id aaf56908-2e02-4c60-8d3f-48c034269da9; Sun, 9 Jun 2024 15:57:27 +0000 (UTC)
+X-Farcaster-Flow-ID: aaf56908-2e02-4c60-8d3f-48c034269da9
 Received: from EX19D004EUC001.ant.amazon.com (10.252.51.190) by
- EX19MTAEUB001.ant.amazon.com (10.252.51.28) with Microsoft SMTP Server
+ EX19MTAEUB002.ant.amazon.com (10.252.51.59) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.34; Sun, 9 Jun 2024 15:57:02 +0000
+ 15.2.1258.34; Sun, 9 Jun 2024 15:57:27 +0000
 Received: from dev-dsk-nsaenz-1b-189b39ae.eu-west-1.amazon.com (10.13.235.138)
  by EX19D004EUC001.ant.amazon.com (10.252.51.190) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.34; Sun, 9 Jun 2024 15:56:55 +0000
+ 15.2.1258.34; Sun, 9 Jun 2024 15:57:21 +0000
 From: Nicolas Saenz Julienne <nsaenz@amazon.com>
 To: <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>
 CC: <pbonzini@redhat.com>, <seanjc@google.com>, <vkuznets@redhat.com>,
@@ -67,9 +67,9 @@ CC: <pbonzini@redhat.com>, <seanjc@google.com>, <vkuznets@redhat.com>,
 	<corbet@lwn.net>, <decui@microsoft.com>, <tglx@linutronix.de>,
 	<mingo@redhat.com>, <bp@alien8.de>, <dave.hansen@linux.intel.com>,
 	<x86@kernel.org>, <amoorthy@google.com>
-Subject: [PATCH 12/18] KVM: x86/mmu: Introduce infrastructure to handle non-executable mappings
-Date: Sun, 9 Jun 2024 15:49:41 +0000
-Message-ID: <20240609154945.55332-13-nsaenz@amazon.com>
+Subject: [PATCH 13/18] KVM: x86/mmu: Avoid warning when installing non-private memory attributes
+Date: Sun, 9 Jun 2024 15:49:42 +0000
+Message-ID: <20240609154945.55332-14-nsaenz@amazon.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20240609154945.55332-1-nsaenz@amazon.com>
 References: <20240609154945.55332-1-nsaenz@amazon.com>
@@ -81,96 +81,72 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: EX19D035UWA004.ant.amazon.com (10.13.139.109) To
+X-ClientProxiedBy: EX19D041UWB001.ant.amazon.com (10.13.139.132) To
  EX19D004EUC001.ant.amazon.com (10.252.51.190)
 
-The upcoming access restriction KVM memory attributes open the door to
-installing non-executable mappings. Introduce a new attribute in struct
-kvm_page_fault, map_executable, to control whether the gfn range should
-be mapped as executable and make sure it's taken into account when
-generating new sptes.
-
-No functional change intended.
+In preparation to introducing RWX memory attributes, make sure
+user-space is attempting to install a memory attribute with
+KVM_MEMORY_ATTRIBUTE_PRIVATE before throwing a warning on systems with
+no private memory support.
 
 Signed-off-by: Nicolas Saenz Julienne <nsaenz@amazon.com>
 ---
- arch/x86/kvm/mmu/mmu.c          | 6 +++++-
- arch/x86/kvm/mmu/mmu_internal.h | 2 ++
- arch/x86/kvm/mmu/tdp_mmu.c      | 8 ++++++--
- 3 files changed, 13 insertions(+), 3 deletions(-)
+ arch/x86/kvm/mmu/mmu.c | 8 ++++++--
+ virt/kvm/kvm_main.c    | 1 +
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
 diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 39b113afefdfc..b0c210b96419f 100644
+index b0c210b96419f..d56c04fbdc66b 100644
 --- a/arch/x86/kvm/mmu/mmu.c
 +++ b/arch/x86/kvm/mmu/mmu.c
-@@ -3197,6 +3197,7 @@ void disallowed_hugepage_adjust(struct kvm_page_fault *fault, u64 spte, int cur_
- static int direct_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+@@ -7359,6 +7359,9 @@ void kvm_mmu_pre_destroy_vm(struct kvm *kvm)
+ bool kvm_arch_pre_set_memory_attributes(struct kvm *kvm,
+ 					struct kvm_gfn_range *range)
  {
- 	struct kvm_shadow_walk_iterator it;
-+	unsigned int access = ACC_ALL;
- 	struct kvm_mmu_page *sp;
- 	int ret;
- 	gfn_t base_gfn = fault->gfn;
-@@ -3229,7 +3230,10 @@ static int direct_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
- 	if (WARN_ON_ONCE(it.level != fault->goal_level))
- 		return -EFAULT;
- 
--	ret = mmu_set_spte(vcpu, fault->slot, it.sptep, ACC_ALL,
-+	if (!fault->map_executable)
-+		access &= ~ACC_EXEC_MASK;
++	unsigned long attrs = range->arg.attributes;
++	bool priv_attr = attrs & KVM_MEMORY_ATTRIBUTE_PRIVATE;
 +
-+	ret = mmu_set_spte(vcpu, fault->slot, it.sptep, access,
- 			   base_gfn, fault->pfn, fault);
- 	if (ret == RET_PF_SPURIOUS)
- 		return ret;
-diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
-index 4f5c4c8af9941..af0c3a154ed89 100644
---- a/arch/x86/kvm/mmu/mmu_internal.h
-+++ b/arch/x86/kvm/mmu/mmu_internal.h
-@@ -241,6 +241,7 @@ struct kvm_page_fault {
- 	kvm_pfn_t pfn;
- 	hva_t hva;
- 	bool map_writable;
-+	bool map_executable;
+ 	/*
+ 	 * Zap SPTEs even if the slot can't be mapped PRIVATE.  KVM x86 only
+ 	 * supports KVM_MEMORY_ATTRIBUTE_PRIVATE, and so it *seems* like KVM
+@@ -7370,7 +7373,7 @@ bool kvm_arch_pre_set_memory_attributes(struct kvm *kvm,
+ 	 * Zapping SPTEs in this case ensures KVM will reassess whether or not
+ 	 * a hugepage can be used for affected ranges.
+ 	 */
+-	if (WARN_ON_ONCE(!kvm_arch_has_private_mem(kvm)))
++	if (WARN_ON_ONCE(priv_attr && !kvm_arch_has_private_mem(kvm)))
+ 		return false;
+ 
+ 	return kvm_unmap_gfn_range(kvm, range);
+@@ -7415,6 +7418,7 @@ bool kvm_arch_post_set_memory_attributes(struct kvm *kvm,
+ 					 struct kvm_gfn_range *range)
+ {
+ 	unsigned long attrs = range->arg.attributes;
++	bool priv_attr = attrs & KVM_MEMORY_ATTRIBUTE_PRIVATE;
+ 	struct kvm_memory_slot *slot = range->slot;
+ 	int level;
+ 
+@@ -7427,7 +7431,7 @@ bool kvm_arch_post_set_memory_attributes(struct kvm *kvm,
+ 	 * a range that has PRIVATE GFNs, and conversely converting a range to
+ 	 * SHARED may now allow hugepages.
+ 	 */
+-	if (WARN_ON_ONCE(!kvm_arch_has_private_mem(kvm)))
++	if (WARN_ON_ONCE(priv_attr && !kvm_arch_has_private_mem(kvm)))
+ 		return false;
  
  	/*
- 	 * Indicates the guest is trying to write a gfn that contains one or
-@@ -313,6 +314,7 @@ static inline int kvm_mmu_do_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
- 
- 		.pfn = KVM_PFN_ERR_FAULT,
- 		.hva = KVM_HVA_ERR_BAD,
-+		.map_executable = true,
- 	};
- 	int r;
- 
-diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-index 36539c1b36cd6..344781981999a 100644
---- a/arch/x86/kvm/mmu/tdp_mmu.c
-+++ b/arch/x86/kvm/mmu/tdp_mmu.c
-@@ -1018,6 +1018,7 @@ static int tdp_mmu_map_handle_target_level(struct kvm_vcpu *vcpu,
- 					  struct tdp_iter *iter)
- {
- 	struct kvm_mmu_page *sp = sptep_to_sp(rcu_dereference(iter->sptep));
-+	unsigned int access = ACC_ALL;
- 	u64 new_spte;
- 	int ret = RET_PF_FIXED;
- 	bool wrprot = false;
-@@ -1025,10 +1026,13 @@ static int tdp_mmu_map_handle_target_level(struct kvm_vcpu *vcpu,
- 	if (WARN_ON_ONCE(sp->role.level != fault->goal_level))
- 		return RET_PF_RETRY;
- 
-+	if (!fault->map_executable)
-+		access &= ~ACC_EXEC_MASK;
-+
- 	if (unlikely(!fault->slot))
--		new_spte = make_mmio_spte(vcpu, iter->gfn, ACC_ALL);
-+		new_spte = make_mmio_spte(vcpu, iter->gfn, access);
- 	else
--		wrprot = make_spte(vcpu, sp, fault->slot, ACC_ALL, iter->gfn,
-+		wrprot = make_spte(vcpu, sp, fault->slot, access, iter->gfn,
- 					 fault->pfn, iter->old_spte, fault->prefetch, true,
- 					 fault->map_writable, &new_spte);
- 
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 14841acb8b959..63c4b6739edee 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -2506,6 +2506,7 @@ static int kvm_vm_set_mem_attributes(struct kvm *kvm, gfn_t start, gfn_t end,
+ 	struct kvm_mmu_notifier_range pre_set_range = {
+ 		.start = start,
+ 		.end = end,
++		.arg.attributes = attributes,
+ 		.handler = kvm_pre_set_memory_attributes,
+ 		.on_lock = kvm_mmu_invalidate_begin,
+ 		.flush_on_ret = true,
 -- 
 2.40.1
 
