@@ -1,208 +1,157 @@
-Return-Path: <linux-arch+bounces-4758-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4759-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A226901378
-	for <lists+linux-arch@lfdr.de>; Sat,  8 Jun 2024 22:55:33 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C0AA90140A
+	for <lists+linux-arch@lfdr.de>; Sun,  9 Jun 2024 02:04:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 84E921C20C78
-	for <lists+linux-arch@lfdr.de>; Sat,  8 Jun 2024 20:55:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EA804B215D2
+	for <lists+linux-arch@lfdr.de>; Sun,  9 Jun 2024 00:04:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D15C31D554;
-	Sat,  8 Jun 2024 20:55:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCB6C368;
+	Sun,  9 Jun 2024 00:04:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="YQ5fiA/i"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b7nsZ2S0"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0F111C6BE
-	for <linux-arch@vger.kernel.org>; Sat,  8 Jun 2024 20:55:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42D351367;
+	Sun,  9 Jun 2024 00:04:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717880128; cv=none; b=P+7JCnBX46gU96cu/qceWSt46hoMqbBLwo6Mq8iAqdRco02hEXNQXzxEwadA4/N3ATY4JA+jwgB7WCEGXtcpQI9kZl/BlYnlFtL/UolM7EUgeiOvxsesNxass26YcsG0yVVzXuVeOwGcJIh1xZMiTmQEssY8SbYQdhCJmsRE1yY=
+	t=1717891461; cv=none; b=amRF6XforGR1chsfFa6rvZakqHj+BWg1rI/DREY4LfKTugjKVoojqF5GrleYdxk4gZo/ly7yiMclNa+9zH/B9Bu19nK6gxm7MyKBgoQiHEDd+Er5zK2nbRdH7eC0bj3GPlukqWqMeC3iN6DOkKqJaKKT4hOG6jqBr0UzkunYARk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717880128; c=relaxed/simple;
-	bh=85qXbyqX6RxIt4uYLrSaAWXRZLFbmQAyyxDKG3decKw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RreMcslfyPUoltGH+D1IMI0Fu3IlpTgLPzsbSWlKlZjA4mkq9LuAjuD2YVRHmxCT2WB3dQbS4rw5QZcVEfcPDzYCqNlgxBjlZQRuKRa3DwgT84C5ixISVpSmV7d/mpgEyR2Bo/aSuFv6PrHioeZ56hKlXjQXwNww6/7m9Eq2NKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=YQ5fiA/i; arc=none smtp.client-ip=209.85.167.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-52c32d934c2so862335e87.2
-        for <linux-arch@vger.kernel.org>; Sat, 08 Jun 2024 13:55:25 -0700 (PDT)
+	s=arc-20240116; t=1717891461; c=relaxed/simple;
+	bh=E87V4JfAoOPrdLIRnIrrMEZJYH4ni/PVxRCNolBbXUk=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=LKJxLVfouHxJUg0gVB5F++Rf5t73IL/xhl/+FH8PHBEC8UZ/xNNiheHRLbtVqykCQMU6LzJJNHxoHmZPjf1A/umkao9OvJhYT9sG7idW/m2f76EAn87/teTjQYlalQ4KSFlJuE9EFGuj/cEg/p7VOCYI2khxTw3/J+y3ACsINTQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b7nsZ2S0; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1f6f031549bso7591945ad.3;
+        Sat, 08 Jun 2024 17:04:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1717880124; x=1718484924; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8fZXZV0kR4ym1XRcBTj6zdWLTsFZy0CZQ2wcW79A4Pg=;
-        b=YQ5fiA/i9irEZv950RSdF+rt1Q/nv0owxU5c2taFyR9SX5KN64c+AN0WKrr2ViIJv+
-         ZRGAVMLeYhfyDW9E1zmpcir+XT+EIy2/jKRwVZqm3eYUyX2zeoyijsUwyj+izMS/+v3m
-         PtmzSG44bHWQU/+fk4scIfw1KPRf2uIdpLLfc=
+        d=gmail.com; s=20230601; t=1717891459; x=1718496259; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=R4DiYmrDM9WuiqCUk6d8962w9mDc3uxUQIRfmiIP+g4=;
+        b=b7nsZ2S0Kpf7aBLTEEIpsCkcCiAuQrCce7PngnFEJ0J2O47KHBdFBFKmyIf4puXxXB
+         LV/jyrchos0gAKJ8C09DrOZ5BXs8l+C0JWO56RLWuUDObeHzR4O17XT6pPAq64Svrwsx
+         ejVNuEx4QgyGe+lcJLvptFNNERSA/yrRaCsP2gpBcJBr8DtSa34IWCztw8xQypbQBMzY
+         pk/dJZlUaOgcxVApsBa9GYdMXmDiU6Q1hSlcI+HQpE8fMChXlVvgYUaNr5+3BqzssKeq
+         VveT0bxcFlYvOXHE+cTVZxxlR0iWYVsZv06FCBnvLc1/ZKvhOW7ae2USxwo8uJcka9Ru
+         UAfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717880124; x=1718484924;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8fZXZV0kR4ym1XRcBTj6zdWLTsFZy0CZQ2wcW79A4Pg=;
-        b=Ugcl4SyvrtI8nvditXzvCnAfLWodgnt/X+glk+tC5+mlxhFXPsxUemk6EqoNdbNyJq
-         SGXddW5xNZNBxc1Z6lnyZFiH98wwtK4Mt1EU5OH43zau3sdGn6Q1KLAyHUWeHWh0bx2G
-         oFk3qBPnH2q1Js+cGL7cewz9H+3MOD13CbloL0NPNMmETVbM2yHCi6RsQcS5Hd8jGUJ4
-         X9sBFNeCGPkompkVP+BkyLJX3Ch1i0dg1nCS8cNgT3m5MfoO7ltXBdtytFpBbChaLEmj
-         FOrVq7w6YV2pmwMt9we/RS5J0mLYOBrhZ8K/mwFBYImOtKAGzbE5GS3XLnBZJ5NZNRbA
-         rhCA==
-X-Forwarded-Encrypted: i=1; AJvYcCVfW0bqbPl3aUkqjmkWr07N2Rcj4ubKWtuuO3AuNUOeBBxacUCNQHZIuLvQbO7xoOGCsbKsfTJWvaHcESwQjrjzQdo75MUC0K9G2g==
-X-Gm-Message-State: AOJu0YyuARxjc7EXfGk5HM6g+JeYwtDpidlAjizhrQNGa9Jv1XS/igJ6
-	wgfs0KYvWtohF7I+newKh1T+DQS50v+CEsdsGCFl15psGzUGEgD+19YKqhgvRwF1mu/ykPqdQY1
-	R/D8=
-X-Google-Smtp-Source: AGHT+IGWDKSui7Eo8z9tU5W7Sazu92zXVHP4c5/i+vUdvhbtoiPjUCwI0eUHKpVmsQC8T3A6NP74zQ==
-X-Received: by 2002:a05:6512:b1f:b0:52c:845e:3194 with SMTP id 2adb3069b0e04-52c845e322dmr603231e87.29.1717880123611;
-        Sat, 08 Jun 2024 13:55:23 -0700 (PDT)
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com. [209.85.218.51])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6f0d8b280esm99661366b.149.2024.06.08.13.55.22
-        for <linux-arch@vger.kernel.org>
+        d=1e100.net; s=20230601; t=1717891459; x=1718496259;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=R4DiYmrDM9WuiqCUk6d8962w9mDc3uxUQIRfmiIP+g4=;
+        b=jW3nmqRm7AiTnCY8Qzr32yAclZXEGsMVtgZRMcU/otXW/6PGQOiwfhw7c17RxchOaD
+         juP3av3V6zhYeiLpOjLml6vObVHx78keadW1zR2ZdZQAD33L3eAOdUQA6iE+tBBt7idd
+         5rMDQBe/BSEzqvZvo4Lw0IzqGEvphNmbpbtBHrp/K6tG0yC4nvUH0fkmqzNkyAAm9IMG
+         QOm/vJlDHcSs3in8vD6crX4ZfpbmefH0iNkwRYyHX7JURYJr/iL9kudgQ8FAZV8pnvYT
+         IYS7R2US9sx5MbPnWNe0mEub52pe61rEV/OIF98PjEOpNlGpLTmqTzyQKRiqSVohy7lw
+         kx9w==
+X-Forwarded-Encrypted: i=1; AJvYcCW5XZdRzMYWGH1GJrOEOqKCvFt/QUpngvSnaFTqRybi+rhX+kOFaUI4XLpv5vBbIWMvbRUxZ1Ty+9poNxBm45yyVp8CeENc4Glcbw==
+X-Gm-Message-State: AOJu0Ywoevj8ppZqdH5f738pI8CQrErnt3FBoVeYVq+0CrTMp3v/yU7d
+	Or/S6cDeLiWJjoBuFDRQEkTtokW78OQQVzyTI4CBgERcOCtcDpbX
+X-Google-Smtp-Source: AGHT+IE+CFBySHJU8B2QPWQ4xCh6axAZY3QaBrbCrRKRI5T+2Fyo/3wpSzjxHDtTe723K/sKx0iaIg==
+X-Received: by 2002:a17:902:6506:b0:1f6:ee9e:f60c with SMTP id d9443c01a7336-1f6ee9efdbemr24024875ad.58.1717891459496;
+        Sat, 08 Jun 2024 17:04:19 -0700 (PDT)
+Received: from [10.0.2.15] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f6f96f18e8sm13029685ad.230.2024.06.08.17.04.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 08 Jun 2024 13:55:22 -0700 (PDT)
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a6efae34c83so103304066b.0
-        for <linux-arch@vger.kernel.org>; Sat, 08 Jun 2024 13:55:22 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUJdg8+W8qxSFIMQ+yBBLuJkWzTN/p0hv6HcvVCxR1G0ej/HU6NmSG93Ncg7rT/ROHYSOxsKgBF0sKDftnZiTEyYJ8CVz6sHAOW4A==
-X-Received: by 2002:a17:906:585:b0:a6f:1235:d82 with SMTP id
- a640c23a62f3a-a6f12350ed3mr42380466b.13.1717880121989; Sat, 08 Jun 2024
- 13:55:21 -0700 (PDT)
+        Sat, 08 Jun 2024 17:04:19 -0700 (PDT)
+Message-ID: <a3ff0522-fd2d-4c87-9c7b-00cbdd5f3c68@gmail.com>
+Date: Sun, 9 Jun 2024 09:04:14 +0900
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240608193504.429644-2-torvalds@linux-foundation.org>
-In-Reply-To: <20240608193504.429644-2-torvalds@linux-foundation.org>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Sat, 8 Jun 2024 13:55:04 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjiJvGW70_A93oN_f48J0pn4MeVbWVmBPBiTh2XiSpwpg@mail.gmail.com>
-Message-ID: <CAHk-=wjiJvGW70_A93oN_f48J0pn4MeVbWVmBPBiTh2XiSpwpg@mail.gmail.com>
-Subject: Re: [PATCH] x86: add 'runtime constant' infrastructure
-To: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-arch <linux-arch@vger.kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: multipart/mixed; boundary="0000000000007054e4061a6722a6"
+User-Agent: Mozilla Thunderbird
+From: Akira Yokosawa <akiyks@gmail.com>
+Subject: Re: [PATCH memory-model 3/3] tools/memory-model: Add KCSAN LF
+ mentorship session citation
+To: paulmck@kernel.org
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ kernel-team@meta.com, mingo@kernel.org, stern@rowland.harvard.edu,
+ parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
+ boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
+ j.alglave@ucl.ac.uk, luc.maranget@inria.fr, Marco Elver <elver@google.com>,
+ Daniel Lustig <dlustig@nvidia.com>, Joel Fernandes <joel@joelfernandes.org>,
+ Akira Yokosawa <akiyks@gmail.com>
+References: <b290acd5-074f-4e17-a8bf-b444e553d986@paulmck-laptop>
+ <20240604221419.2370127-3-paulmck@kernel.org>
+ <42fa4660-b3bf-4d09-bbad-064f9d4cc727@gmail.com>
+ <f11f7230-7c16-45a3-83be-9aba32e10a3b@paulmck-laptop>
+ <3c5a53e2-b5a9-4197-97a3-247abb7f3061@gmail.com>
+ <6bb5f789-f143-493c-a804-62b7c81dabb0@paulmck-laptop>
+Content-Language: en-US
+In-Reply-To: <6bb5f789-f143-493c-a804-62b7c81dabb0@paulmck-laptop>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
---0000000000007054e4061a6722a6
-Content-Type: text/plain; charset="UTF-8"
+On 2024/06/09 0:48, Paul E. McKenney wrote:
+> On Sat, Jun 08, 2024 at 08:38:12AM +0900, Akira Yokosawa wrote:
+>> On 2024/06/05 13:02, Paul E. McKenney wrote:
+>>> On Wed, Jun 05, 2024 at 10:57:27AM +0900, Akira Yokosawa wrote:
+>>>> On Tue,  4 Jun 2024 15:14:19 -0700, Paul E. McKenney wrote:
+>>>>> Add a citation to Marco's LF mentorship session presentation entitled
+>>>>> "The Kernel Concurrency Sanitizer"
+>>>>>
+>>>>> [ paulmck: Apply Marco Elver feedback. ]
+>>>>>
+>>>>> Reported-by: Marco Elver <elver@google.com>
+>>>>> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+>>>>> Cc: Alan Stern <stern@rowland.harvard.edu>
+>>>>> Cc: Andrea Parri <parri.andrea@gmail.com>
+>>>>> Cc: Will Deacon <will@kernel.org>
+>>>>> Cc: Peter Zijlstra <peterz@infradead.org>
+>>>>> Cc: Boqun Feng <boqun.feng@gmail.com>
+>>>>> Cc: Nicholas Piggin <npiggin@gmail.com>
+>>>>> Cc: David Howells <dhowells@redhat.com>
+>>>>> Cc: Jade Alglave <j.alglave@ucl.ac.uk>
+>>>>> Cc: Luc Maranget <luc.maranget@inria.fr>
+>>>>> Cc: Akira Yokosawa <akiyks@gmail.com>
+>>>>
+>>>> Paul,
+>>>>
+>>>> While reviewing this, I noticed that
+>>>> tools/memory-model/Documentation/README has no mention of
+>>>> access-marking.txt.
+>>>>
+>>>> It has no mention of glossary.txt or locking.txt, either.
+>>>>
+>>>> I'm not sure where are the right places in README for them.
+>>>> Can you update it in a follow-up change?
+>>>>
+>>>> Anyway, for this change,
+>>>>
+>>>> Reviewed-by: Akira Yokosawa <akiyks@gmail.com>
+>>>
+>>> Thank you, and good catch!  Does the patch below look appropriate?
+>>
+>> Well, I must say this is not what I expected.
+>> Please see below.
+> 
+> OK, I was clearly in way too much of a hurry when doing this, and please
+> accept my apologies for my inattention.  I am therefore going to do
+> what I should have done in the first place, which is to ask you if you
+> would like to send a patch fixing this.  If so, I would be quite happy
+> to replace mine with yours.
 
-On Sat, 8 Jun 2024 at 12:43, Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> Needs more comments and testing, but it works, and has a generic
-> fallback for architectures that don't support it.
+OK.
+I think I can submit a draft patch after fixing perfbook's build error
+caused by changes in core LaTeX packages released last week.
 
-.. and here is the TOTALLY UNTESTED patch to implement the arm64
-version of runtime constants.
+Can you wait for a while ?
 
-It almost certainly does not work. I'm too scared to test it.  I may
-start to recognize arm64 instructions, but rewriting them on the fly
-is another thing entirely, and I'm fairly sure this needs an  I$ sync
-and probably modifying the instructions using another address even
-during early boot.
-
-So this is a "throw it over the fence to the actually competent arm64
-people" patch.
-
-Catalin, Will? This depends on the infrastructure that I added in
-
-   https://lore.kernel.org/all/20240608193504.429644-2-torvalds@linux-foundation.org/
-
-which is actually tested on the x86-64 side.
-
-I did test that the code generation looks superficially sane, and this generates
-
-        mov     x1, #0xcdef
-        movk    x1, #0x89ab, lsl #16
-        movk    x1, #0x4567, lsl #32
-        movk    x1, #0x123, lsl #48
-        ...
-        lsr     w0, w25, #12
-        ldr     x0, [x1, x0, lsl #3]
-
-for the dcache hash lookup (those constants are obviously the ones
-that get rewritten after the hash table has been allocated and the
-size becomes fixed).
-
-And honestly, I may have gotten even the simple part of instruction
-rewriting wrong (ie maybe I'm filling in the wrong bit locations - I'm
-reading the architecture manual, not actually *testing* anything).
-
-Think of this patch mostly as a "look, adding another architecture
-isn't *that* hard - even if the constant value is spread out in the
-instructions".
-
-                Linus
-
---0000000000007054e4061a6722a6
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="0001-arm64-add-runtime-const-support.patch"
-Content-Disposition: attachment; 
-	filename="0001-arm64-add-runtime-const-support.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_lx6lemy50>
-X-Attachment-Id: f_lx6lemy50
-
-RnJvbSBiZWZjM2Q0OTM2NmZiMDQ5YjY1Njc5ZmIzN2ZhNzAzZmU0MTlhN2U4IE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBMaW51cyBUb3J2YWxkcyA8dG9ydmFsZHNAbGludXgtZm91bmRh
-dGlvbi5vcmc+CkRhdGU6IFNhdCwgOCBKdW4gMjAyNCAxMzoyMjozMSAtMDcwMApTdWJqZWN0OiBb
-UEFUQ0hdIGFybTY0OiBhZGQgJ3J1bnRpbWUgY29uc3QnIHN1cHBvcnQKCk1vbW15IG1vbW15IEkn
-bSBzY2FyZWQKLS0tCiBhcmNoL2FybTY0L2luY2x1ZGUvYXNtL3J1bnRpbWUtY29uc3QuaCB8IDcz
-ICsrKysrKysrKysrKysrKysrKysrKysrKysrCiBhcmNoL2FybTY0L2tlcm5lbC92bWxpbnV4Lmxk
-cy5TICAgICAgICB8ICAzICsrCiAyIGZpbGVzIGNoYW5nZWQsIDc2IGluc2VydGlvbnMoKykKIGNy
-ZWF0ZSBtb2RlIDEwMDY0NCBhcmNoL2FybTY0L2luY2x1ZGUvYXNtL3J1bnRpbWUtY29uc3QuaAoK
-ZGlmZiAtLWdpdCBhL2FyY2gvYXJtNjQvaW5jbHVkZS9hc20vcnVudGltZS1jb25zdC5oIGIvYXJj
-aC9hcm02NC9pbmNsdWRlL2FzbS9ydW50aW1lLWNvbnN0LmgKbmV3IGZpbGUgbW9kZSAxMDA2NDQK
-aW5kZXggMDAwMDAwMDAwMDAwLi43ZDQwMmFlNmQzYzIKLS0tIC9kZXYvbnVsbAorKysgYi9hcmNo
-L2FybTY0L2luY2x1ZGUvYXNtL3J1bnRpbWUtY29uc3QuaApAQCAtMCwwICsxLDczIEBACisvKiBT
-UERYLUxpY2Vuc2UtSWRlbnRpZmllcjogR1BMLTIuMCAqLworI2lmbmRlZiBfQVNNX1JVTlRJTUVf
-Q09OU1RfSAorI2RlZmluZSBfQVNNX1JVTlRJTUVfQ09OU1RfSAorCisjZGVmaW5lIHJ1bnRpbWVf
-Y29uc3RfcHRyKHN5bSkgKHsJCQkJXAorCXR5cGVvZihzeW0pIF9fcmV0OwkJCQkJXAorCWFzbSgi
-MTpcdCIJCQkJCQlcCisJCSJtb3Z6ICUwLCAjMHhjZGVmXG5cdCIJCQkJXAorCQkibW92ayAlMCwg
-IzB4ODlhYiwgbHNsICMxNlxuXHQiCQkJXAorCQkibW92ayAlMCwgIzB4NDU2NywgbHNsICMzMlxu
-XHQiCQkJXAorCQkibW92ayAlMCwgIzB4MDEyMywgbHNsICM0OFxuXHQiCQkJXAorCQkiLnB1c2hz
-ZWN0aW9uIHJ1bnRpbWVfcHRyXyIgI3N5bSAiLFwiYVwiXG5cdCIJXAorCQkiLmxvbmcgMWIgLSAu
-XG5cdCIJCQkJXAorCQkiLnBvcHNlY3Rpb24iCQkJCQlcCisJCToiPXIiIChfX3JldCkpOwkJCQkJ
-XAorCV9fcmV0OyB9KQorCisjZGVmaW5lIHJ1bnRpbWVfY29uc3Rfc2hpZnRfcmlnaHRfMzIodmFs
-LCBzeW0pICh7CQlcCisJdW5zaWduZWQgbG9uZyBfX3JldDsJCQkJCVwKKwlhc20oIjE6XHQiCQkJ
-CQkJXAorCQkibHNyICV3MCwldzEsIzEyXG5cdCIJCQkJXAorCQkiLnB1c2hzZWN0aW9uIHJ1bnRp
-bWVfc2hpZnRfIiAjc3ltICIsXCJhXCJcblx0IglcCisJCSIubG9uZyAxYiAtIC5cblx0IgkJCQlc
-CisJCSIucG9wc2VjdGlvbiIJCQkJCVwKKwkJOiI9ciIgKF9fcmV0KQkJCQkJXAorCQk6InIiICgw
-dSsodmFsKSkpOwkJCQlcCisJX19yZXQ7IH0pCisKKyNkZWZpbmUgcnVudGltZV9jb25zdF9pbml0
-KHR5cGUsIHN5bSwgdmFsdWUpIGRvIHsJXAorCWV4dGVybiBzMzIgX19zdGFydF9ydW50aW1lXyMj
-dHlwZSMjXyMjc3ltW107CVwKKwlleHRlcm4gczMyIF9fc3RvcF9ydW50aW1lXyMjdHlwZSMjXyMj
-c3ltW107CVwKKwlydW50aW1lX2NvbnN0X2ZpeHVwKF9fcnVudGltZV9maXh1cF8jI3R5cGUsCVwK
-KwkJKHVuc2lnbmVkIGxvbmcpKHZhbHVlKSwgCQlcCisJCV9fc3RhcnRfcnVudGltZV8jI3R5cGUj
-I18jI3N5bSwJCVwKKwkJX19zdG9wX3J1bnRpbWVfIyN0eXBlIyNfIyNzeW0pOwkJXAorfSB3aGls
-ZSAoMCkKKworLy8gMTYtYml0IGltbWVkaWF0ZSBmb3Igd2lkZSBtb3ZlIChtb3Z6IGFuZCBtb3Zr
-KSBpbiBiaXRzIDUuLjIwCitzdGF0aWMgaW5saW5lIHZvaWQgX19ydW50aW1lX2ZpeHVwXzE2KHVu
-c2lnbmVkIGludCAqcCwgdW5zaWduZWQgaW50IHZhbCkKK3sKKwl1bnNpZ25lZCBpbnQgaW5zbiA9
-ICpwOworCWluc24gJj0gMHhmZmUwMDAxZjsKKwlpbnNuIHw9ICh2YWwgJiAweGZmZmYpIDw8IDU7
-CisJKnAgPSBpbnNuOworfQorCitzdGF0aWMgaW5saW5lIHZvaWQgX19ydW50aW1lX2ZpeHVwX3B0
-cih2b2lkICp3aGVyZSwgdW5zaWduZWQgbG9uZyB2YWwpCit7CisJX19ydW50aW1lX2ZpeHVwXzE2
-KHdoZXJlLCB2YWwpOworCV9fcnVudGltZV9maXh1cF8xNih3aGVyZSs0LCB2YWwgPj4gMTYpOwor
-CV9fcnVudGltZV9maXh1cF8xNih3aGVyZSs4LCB2YWwgPj4gMzIpOworCV9fcnVudGltZV9maXh1
-cF8xNih3aGVyZSsxMiwgdmFsID4+IDQ4KTsKK30KKworLy8gSW1tZWRpYXRlIHZhbHVlIGlzIDUg
-Yml0cyBzdGFydGluZyBhdCBiaXQgIzE2CitzdGF0aWMgaW5saW5lIHZvaWQgX19ydW50aW1lX2Zp
-eHVwX3NoaWZ0KHZvaWQgKndoZXJlLCB1bnNpZ25lZCBsb25nIHZhbCkKK3sKKwl1bnNpZ25lZCBp
-bnQgaW5zbiA9ICoodW5zaWduZWQgaW50ICopd2hlcmU7CisJaW5zbiAmPSAweGZmYzBmZmZmOwor
-CWluc24gfD0gKHZhbCAmIDYzKSA8PCAxNjsKKwkqKHVuc2lnbmVkIGludCAqKXdoZXJlID0gaW5z
-bjsKK30KKworc3RhdGljIGlubGluZSB2b2lkIHJ1bnRpbWVfY29uc3RfZml4dXAodm9pZCAoKmZu
-KSh2b2lkICosIHVuc2lnbmVkIGxvbmcpLAorCXVuc2lnbmVkIGxvbmcgdmFsLCBzMzIgKnN0YXJ0
-LCBzMzIgKmVuZCkKK3sKKwl3aGlsZSAoc3RhcnQgPCBlbmQpIHsKKwkJZm4oKnN0YXJ0ICsgKHZv
-aWQgKilzdGFydCwgdmFsKTsKKwkJc3RhcnQrKzsKKwl9Cit9CisKKyNlbmRpZgpkaWZmIC0tZ2l0
-IGEvYXJjaC9hcm02NC9rZXJuZWwvdm1saW51eC5sZHMuUyBiL2FyY2gvYXJtNjQva2VybmVsL3Zt
-bGludXgubGRzLlMKaW5kZXggNzU1YTIyZDRmODQwLi41NWE4ZTMxMGVhMTIgMTAwNjQ0Ci0tLSBh
-L2FyY2gvYXJtNjQva2VybmVsL3ZtbGludXgubGRzLlMKKysrIGIvYXJjaC9hcm02NC9rZXJuZWwv
-dm1saW51eC5sZHMuUwpAQCAtMjY0LDYgKzI2NCw5IEBAIFNFQ1RJT05TCiAJCUVYSVRfREFUQQog
-CX0KIAorCVJVTlRJTUVfQ09OU1Qoc2hpZnQsIGRfaGFzaF9zaGlmdCkKKwlSVU5USU1FX0NPTlNU
-KHB0ciwgZGVudHJ5X2hhc2h0YWJsZSkKKwogCVBFUkNQVV9TRUNUSU9OKEwxX0NBQ0hFX0JZVEVT
-KQogCUhZUEVSVklTT1JfUEVSQ1BVX1NFQ1RJT04KIAotLSAKMi40NS4xCgo=
---0000000000007054e4061a6722a6--
+        Thanks, Akira
 
