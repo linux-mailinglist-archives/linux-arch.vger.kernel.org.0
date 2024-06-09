@@ -1,62 +1,62 @@
-Return-Path: <linux-arch+bounces-4778-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4779-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B861D9016D1
-	for <lists+linux-arch@lfdr.de>; Sun,  9 Jun 2024 17:57:37 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C711B9016D7
+	for <lists+linux-arch@lfdr.de>; Sun,  9 Jun 2024 17:58:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C6CA1F22AD3
-	for <lists+linux-arch@lfdr.de>; Sun,  9 Jun 2024 15:57:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 731DDB2192E
+	for <lists+linux-arch@lfdr.de>; Sun,  9 Jun 2024 15:57:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7F8646BA0;
-	Sun,  9 Jun 2024 15:57:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F127946BA6;
+	Sun,  9 Jun 2024 15:57:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="LpPRGVnQ"
+	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="K91LMLvD"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
+Received: from smtp-fw-9106.amazon.com (smtp-fw-9106.amazon.com [207.171.188.206])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D4FC46441;
-	Sun,  9 Jun 2024 15:57:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=99.78.197.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6041146441;
+	Sun,  9 Jun 2024 15:57:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.171.188.206
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717948651; cv=none; b=NBs2D2hNs6ppF17y4WzwTtIZ6Gr5DHGJlilK6Gcx/n4FQ4BChacN0rvxZEXG07P9HlZ0ma+s7HsoSrGxyq3H5MXysjKn421NPgp1z69MXLeELLryhxRF8KJ2EfwvF/4AwNHNOPLKxieGs8MoOmO4QRxUhl7KmIT5pLBchXqTX+k=
+	t=1717948675; cv=none; b=cmFIj93LbslBgSx14jZAhqNZBv+cg2tM/g01zCcvoH3P9cqa5RFppPAPmRJe/areIrZv/9+4fyT4SUIpVJFTef8gOaCMI0PJpbtsgPYIjvpJXWBZS+sWjn1ZEdliAOqTprlGAgAWdaZFfWBkFZYdkvaFCoeQybNhxBr2uz8FUS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717948651; c=relaxed/simple;
-	bh=+Tv5yHEFjqh1Rpgd3wuBbZaDYV3FvrXaVRj6ufcU9Qk=;
+	s=arc-20240116; t=1717948675; c=relaxed/simple;
+	bh=2ka8MvuD84iyFrsjou2EVsTvKhmpRdlc0YE7y7R91Ik=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=AU60hHQWwN56PeTovA3IWZZLrcSNT+BLYm6JCAGKtLPXJex1ZUUmI79h1T2VEoDECSnEe71PIbtpJCxxoHY/Y16kSWSHl9uDdFEp+Uv8O37zNICJHELHe3KqjLx5HhFkfz0UlT+8zCzHB/3gewoXLkq0e+oRX+UFQJzGBdWejCA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.es; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=LpPRGVnQ; arc=none smtp.client-ip=99.78.197.218
+	 MIME-Version:Content-Type; b=N3rhEKfA2d2YdqD6had42/3G0f0I3kYRSVkjZv/LiqDv4cYiuI6u93jZwD6KOG5I8o+0Ws+EHJR/r56l+XLNk+v75qaQ3htsFXUuaPbhXG3R4fNOEF9crnvuoDO28ajZF8n9V8bjAcbN/wOSOVZpT7zNUKv49TuULTK+MIf1L18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.es; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=K91LMLvD; arc=none smtp.client-ip=207.171.188.206
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.es
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1717948650; x=1749484650;
+  t=1717948674; x=1749484674;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=KQwnm28YLoi/23yqXhNNFcKbD35vEjDl1rOMbl5bsvk=;
-  b=LpPRGVnQf5PyIoUwweMi1F3GKECPH3BVKc/ouZsCNg5Rdv+PcSa4ZBbR
-   kCvzxCTf2HvVSImJjGS2hjCeXfmlubzE6ILQkV8QpurnvF1uO7/jdjnFa
-   UmkM0OkK4LpDWrJWiomo6H++0JtWr4NW9lKiyNsLXxd9WS9hwE1pZ0Qkp
-   g=;
+  bh=yt+3Dcy20QMTHGnCk6/y0RPLFoY3XYTwlSVc1Aecjnc=;
+  b=K91LMLvD9fdwoe1RpwtS7sFV8FxNIR8XfetmhKmdwwRqWCJk+nK8uI17
+   ezJtUC/+Edba+7dk1WqKwv63f9r/CBt4rPVtEdEiaD9d5n6be9XLSSWN1
+   tNc9nqWe95HGUBJH+K93jWx+9qyAmsLzyp4wUvOBSMKf4Z/5912vDHLRf
+   c=;
 X-IronPort-AV: E=Sophos;i="6.08,225,1712620800"; 
-   d="scan'208";a="302170451"
+   d="scan'208";a="731692654"
 Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.25.36.210])
-  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2024 15:57:28 +0000
-Received: from EX19MTAEUB002.ant.amazon.com [10.0.17.79:16374]
- by smtpin.naws.eu-west-1.prod.farcaster.email.amazon.dev [10.0.31.105:2525] with esmtp (Farcaster)
- id aaf56908-2e02-4c60-8d3f-48c034269da9; Sun, 9 Jun 2024 15:57:27 +0000 (UTC)
-X-Farcaster-Flow-ID: aaf56908-2e02-4c60-8d3f-48c034269da9
+  by smtp-border-fw-9106.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2024 15:57:54 +0000
+Received: from EX19MTAEUC002.ant.amazon.com [10.0.10.100:32201]
+ by smtpin.naws.eu-west-1.prod.farcaster.email.amazon.dev [10.0.27.80:2525] with esmtp (Farcaster)
+ id f4d45b61-398d-4935-98f2-085165cb7ee5; Sun, 9 Jun 2024 15:57:52 +0000 (UTC)
+X-Farcaster-Flow-ID: f4d45b61-398d-4935-98f2-085165cb7ee5
 Received: from EX19D004EUC001.ant.amazon.com (10.252.51.190) by
- EX19MTAEUB002.ant.amazon.com (10.252.51.59) with Microsoft SMTP Server
+ EX19MTAEUC002.ant.amazon.com (10.252.51.245) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.34; Sun, 9 Jun 2024 15:57:27 +0000
+ 15.2.1258.34; Sun, 9 Jun 2024 15:57:52 +0000
 Received: from dev-dsk-nsaenz-1b-189b39ae.eu-west-1.amazon.com (10.13.235.138)
  by EX19D004EUC001.ant.amazon.com (10.252.51.190) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.34; Sun, 9 Jun 2024 15:57:21 +0000
+ 15.2.1258.34; Sun, 9 Jun 2024 15:57:46 +0000
 From: Nicolas Saenz Julienne <nsaenz@amazon.com>
 To: <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>
 CC: <pbonzini@redhat.com>, <seanjc@google.com>, <vkuznets@redhat.com>,
@@ -67,9 +67,9 @@ CC: <pbonzini@redhat.com>, <seanjc@google.com>, <vkuznets@redhat.com>,
 	<corbet@lwn.net>, <decui@microsoft.com>, <tglx@linutronix.de>,
 	<mingo@redhat.com>, <bp@alien8.de>, <dave.hansen@linux.intel.com>,
 	<x86@kernel.org>, <amoorthy@google.com>
-Subject: [PATCH 13/18] KVM: x86/mmu: Avoid warning when installing non-private memory attributes
-Date: Sun, 9 Jun 2024 15:49:42 +0000
-Message-ID: <20240609154945.55332-14-nsaenz@amazon.com>
+Subject: [PATCH 14/18] KVM: x86/mmu: Init memslot if memory attributes available
+Date: Sun, 9 Jun 2024 15:49:43 +0000
+Message-ID: <20240609154945.55332-15-nsaenz@amazon.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20240609154945.55332-1-nsaenz@amazon.com>
 References: <20240609154945.55332-1-nsaenz@amazon.com>
@@ -81,72 +81,59 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: EX19D041UWB001.ant.amazon.com (10.13.139.132) To
+X-ClientProxiedBy: EX19D042UWB003.ant.amazon.com (10.13.139.135) To
  EX19D004EUC001.ant.amazon.com (10.252.51.190)
 
-In preparation to introducing RWX memory attributes, make sure
-user-space is attempting to install a memory attribute with
-KVM_MEMORY_ATTRIBUTE_PRIVATE before throwing a warning on systems with
-no private memory support.
+Systems that lack private memory support are about to start using memory
+attributes. So query if the memory attributes xarray is empty in order
+to decide whether it's necessary to init the hugepage information when
+installing a new memslot.
 
 Signed-off-by: Nicolas Saenz Julienne <nsaenz@amazon.com>
 ---
- arch/x86/kvm/mmu/mmu.c | 8 ++++++--
- virt/kvm/kvm_main.c    | 1 +
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ arch/x86/kvm/mmu/mmu.c   | 2 +-
+ include/linux/kvm_host.h | 9 +++++++++
+ 2 files changed, 10 insertions(+), 1 deletion(-)
 
 diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index b0c210b96419f..d56c04fbdc66b 100644
+index d56c04fbdc66b..91edd873dcdbc 100644
 --- a/arch/x86/kvm/mmu/mmu.c
 +++ b/arch/x86/kvm/mmu/mmu.c
-@@ -7359,6 +7359,9 @@ void kvm_mmu_pre_destroy_vm(struct kvm *kvm)
- bool kvm_arch_pre_set_memory_attributes(struct kvm *kvm,
- 					struct kvm_gfn_range *range)
+@@ -7487,7 +7487,7 @@ void kvm_mmu_init_memslot_memory_attributes(struct kvm *kvm,
  {
-+	unsigned long attrs = range->arg.attributes;
-+	bool priv_attr = attrs & KVM_MEMORY_ATTRIBUTE_PRIVATE;
-+
- 	/*
- 	 * Zap SPTEs even if the slot can't be mapped PRIVATE.  KVM x86 only
- 	 * supports KVM_MEMORY_ATTRIBUTE_PRIVATE, and so it *seems* like KVM
-@@ -7370,7 +7373,7 @@ bool kvm_arch_pre_set_memory_attributes(struct kvm *kvm,
- 	 * Zapping SPTEs in this case ensures KVM will reassess whether or not
- 	 * a hugepage can be used for affected ranges.
- 	 */
--	if (WARN_ON_ONCE(!kvm_arch_has_private_mem(kvm)))
-+	if (WARN_ON_ONCE(priv_attr && !kvm_arch_has_private_mem(kvm)))
- 		return false;
- 
- 	return kvm_unmap_gfn_range(kvm, range);
-@@ -7415,6 +7418,7 @@ bool kvm_arch_post_set_memory_attributes(struct kvm *kvm,
- 					 struct kvm_gfn_range *range)
- {
- 	unsigned long attrs = range->arg.attributes;
-+	bool priv_attr = attrs & KVM_MEMORY_ATTRIBUTE_PRIVATE;
- 	struct kvm_memory_slot *slot = range->slot;
  	int level;
  
-@@ -7427,7 +7431,7 @@ bool kvm_arch_post_set_memory_attributes(struct kvm *kvm,
- 	 * a range that has PRIVATE GFNs, and conversely converting a range to
- 	 * SHARED may now allow hugepages.
- 	 */
--	if (WARN_ON_ONCE(!kvm_arch_has_private_mem(kvm)))
-+	if (WARN_ON_ONCE(priv_attr && !kvm_arch_has_private_mem(kvm)))
- 		return false;
+-	if (!kvm_arch_has_private_mem(kvm))
++	if (!kvm_memory_attributes_in_use(kvm))
+ 		return;
  
- 	/*
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 14841acb8b959..63c4b6739edee 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -2506,6 +2506,7 @@ static int kvm_vm_set_mem_attributes(struct kvm *kvm, gfn_t start, gfn_t end,
- 	struct kvm_mmu_notifier_range pre_set_range = {
- 		.start = start,
- 		.end = end,
-+		.arg.attributes = attributes,
- 		.handler = kvm_pre_set_memory_attributes,
- 		.on_lock = kvm_mmu_invalidate_begin,
- 		.flush_on_ret = true,
+ 	for (level = PG_LEVEL_2M; level <= KVM_MAX_HUGEPAGE_LEVEL; level++) {
+diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+index 4fa16c4772269..9250bf1c4db15 100644
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -2424,12 +2424,21 @@ bool kvm_arch_pre_set_memory_attributes(struct kvm *kvm,
+ bool kvm_arch_post_set_memory_attributes(struct kvm *kvm,
+ 					 struct kvm_gfn_range *range);
+ 
++static inline bool kvm_memory_attributes_in_use(struct kvm *kvm)
++{
++	return !xa_empty(&kvm->mem_attr_array);
++}
++
+ static inline bool kvm_mem_is_private(struct kvm *kvm, gfn_t gfn)
+ {
+ 	return IS_ENABLED(CONFIG_KVM_PRIVATE_MEM) &&
+ 	       kvm_get_memory_attributes(kvm, gfn) & KVM_MEMORY_ATTRIBUTE_PRIVATE;
+ }
+ #else
++static inline bool kvm_memory_attributes_in_use(struct kvm *kvm)
++{
++	return false;
++}
+ static inline bool kvm_mem_is_private(struct kvm *kvm, gfn_t gfn)
+ {
+ 	return false;
 -- 
 2.40.1
 
