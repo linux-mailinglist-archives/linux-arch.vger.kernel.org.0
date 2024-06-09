@@ -1,184 +1,140 @@
-Return-Path: <linux-arch+bounces-4761-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4762-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42591901450
-	for <lists+linux-arch@lfdr.de>; Sun,  9 Jun 2024 05:12:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00BCA9015F0
+	for <lists+linux-arch@lfdr.de>; Sun,  9 Jun 2024 13:23:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 29EBB1C20B47
-	for <lists+linux-arch@lfdr.de>; Sun,  9 Jun 2024 03:12:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9112228119B
+	for <lists+linux-arch@lfdr.de>; Sun,  9 Jun 2024 11:23:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C305AD23;
-	Sun,  9 Jun 2024 03:11:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2470023749;
+	Sun,  9 Jun 2024 11:23:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="SIHebmCA"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="YRHmiY2l"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46BB74C79
-	for <linux-arch@vger.kernel.org>; Sun,  9 Jun 2024 03:11:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DA581865C;
+	Sun,  9 Jun 2024 11:23:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717902716; cv=none; b=W5AhiR67fhGiDBt5o604Ay8LP2/W5WIw2Iw+fC9woEm1T8OgJxkkCwRuiTdQaPUdiCEy+GT04JMiFIosr09Yak1Ue9dMbNTljtSiuo/G1KlPfwBMBJ0YgmSdwSnCuwktbjPcKdAWrOV2WTmZGKlTTtaCR6SNrRQD0xe52QIb7cc=
+	t=1717932184; cv=none; b=HSrGIcJSlZzuSnv4kMCvHKRBtXKBRQivk2zRumtRpjbTmZ7imC9DLZBOKTX86tO9jkiIG9IVg7l+7g+5+qsgjQkZhvwdx9whr3gC/fI4xjcCEmS+4/jN40dJ8qBw2VuVOmm55vzmjfWuBkPL6LoaS5dylUnKG598DjBLraUVnXc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717902716; c=relaxed/simple;
-	bh=Ro+ub4ifFKSZnb+ejWJ/xsVvSkhd//wMcVYHKFO+dzM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ScE9Sb83qXthf02qcV2bVnixzn2FCJUR85sqb6z6sDZNrXgnKyggw4mAsV67SuiN+Ssruvaf+NB3+LN0HLrdQZ1mERddxqj+k3te4A97402uOP20yXpROOmQ8PWtQKvxW4O+qX/HyvrlbhII5OE/FvmBS499euTuBMNIwEVTcoI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=SIHebmCA; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-57a4d7ba501so4183966a12.2
-        for <linux-arch@vger.kernel.org>; Sat, 08 Jun 2024 20:11:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1717902711; x=1718507511; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=A7dUoCR65nMgbX7LmvgfZWZMvg21MHj7Khg3DNyY50c=;
-        b=SIHebmCAAjHeKOmVHFnO0nUH0PHiJuJyZbym03QbwX5JYwryUZEVAuxrmfaD2w6SUH
-         wDi3ocoR0RGcVCFiLPeSwC/7CjS2fdnEEpDwVffhACpIEYL2/EiRAdgrtKeSYwDwWUHo
-         NPSUtvvt7rNzOXCkKNrQQsP1gZFqinTiKVQk8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717902711; x=1718507511;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=A7dUoCR65nMgbX7LmvgfZWZMvg21MHj7Khg3DNyY50c=;
-        b=gSdozEzjSMWqNiW8VAqTwrsMxXSlN5r/jWBcxPP5fI2BUXYwGHMi2NM3QSqbfhDyn/
-         OwM1AxQ0NitJTKM3wIWiy8LJlMojfaBdy2LH+TuWO55/9akH1FOWbCAIUsTrNPj9k5sW
-         ldGseQlAK3QjoA2jU8mkOn9+CNn/oxxTL1Bw94Cj+s+9WLihHmb99W9gz7bsrC2SB0sU
-         U5bF+KddMdP6JIYn0+Z/IeZUT+Bu1bu2h7G9iS3MAWojvl7bhwAWwCWJjuWLlSUf52KT
-         OZlgMA5AGMlGn45A9PKXy640YS26PB93wFpdP+h6S0eUK0vlhE1N+mjiYiygaSr5kIUQ
-         Lh0g==
-X-Forwarded-Encrypted: i=1; AJvYcCXQygWDNuob4rGbV5sWkxMVbuFxtZKjTwPnXFX/I6919l5XXudEgzLVemGzSGeN4YXx2aKMSlJeuejOH0dj/gjnpDhD0RUCMOHE/w==
-X-Gm-Message-State: AOJu0Yz65NSskCohwLZAVaJaD09JPPNlQVWO9qcyLxyNiOeXxkDDxDod
-	/BTv9LRKtZU74OlH/2NsXjAqePfjuAx0ZK1m95ICozZi61ugWib/OnhDsGYDfVtybIxuar0pgtT
-	Mg6w=
-X-Google-Smtp-Source: AGHT+IGHR6yRcouDZvgJfkMX1eE4Hm7MfB8woQcG69DPpNFgiWH2JmN2IcgqRL+ZV21X1xTQPZBQOQ==
-X-Received: by 2002:a17:907:1ca3:b0:a68:ed2e:ebfc with SMTP id a640c23a62f3a-a6cdc1de0acmr516510466b.67.1717902711562;
-        Sat, 08 Jun 2024 20:11:51 -0700 (PDT)
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com. [209.85.208.45])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6c8072ac1fsm465879666b.222.2024.06.08.20.11.50
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 08 Jun 2024 20:11:50 -0700 (PDT)
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-57a4d7ba501so4183944a12.2
-        for <linux-arch@vger.kernel.org>; Sat, 08 Jun 2024 20:11:50 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXHNqZ+w3LlhG6ED34LPH0U2nAkZHwyk9WuRW9NCSav8R5lOY3PelsxLA4dt3g3/DIF8Sw4UH6nHdNLFyHk7nFHxuWQi5tSmoIYEA==
-X-Received: by 2002:a17:906:f858:b0:a6e:f869:dfcd with SMTP id
- a640c23a62f3a-a6ef869e146mr209955566b.6.1717902709744; Sat, 08 Jun 2024
- 20:11:49 -0700 (PDT)
+	s=arc-20240116; t=1717932184; c=relaxed/simple;
+	bh=VE6QwhzHXGGsL6EN23G7rodAUHJBH/uKxOmJM1ROGLs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qGT3DAkq5FAZR++GDED/hd0qrQ7A093itAFGhM91NIMnZTffiTHjQtBv+7v2Ejbz8t/G2waS0pphlSO0xXuUELu100IdDKzJtnle4h3WHkDtUuvaUYTYF4Sy2NOsYAxbd6tWp0MbDvXXCOIq8lyD6P8uXiyxNc/hTui0Xe6hHIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=YRHmiY2l; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 192A340E016E;
+	Sun,  9 Jun 2024 11:22:59 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id 1fvZKEsG9R5s; Sun,  9 Jun 2024 11:22:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1717932175; bh=Wvqqzt8mRbBVpIrsNZaWXP6FfYaMmAg35B1wSRhrLn0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YRHmiY2lq5i9UbRqPmzL5EHzi+yjVKQEqYQ6+jkT/MPUKhEJ37/IkH26uRyV+zotS
+	 vCnF2wJKPy8bDiGMwMTWntUn8504NQkZkhXzUB1VZtO+OIKxu99LHXbqO6r4RhyJ2j
+	 N01Lg8tsVCtnh4QK8eQsK1dSii6HwWR0Ep2XJRD1gp+dy+UJolT6PrkwU68jpUA76C
+	 e40CPRJz5RpwQynC+YSJBgAFcEI6ahIBCcxUsUmNywbX14g8j5B9MzwEhuPPqG5WtO
+	 VEutse9TFvEUOaYI3b/wXvSU15acCtPM+2u+1rZr0Jz+ihzK4YhCz9zDaVwMSDhgYw
+	 uXHMOBmeQDtQ+N8sJT5ZnL1kRS7pbE2nl9XxH6olFh91yPMwlykGlQkhCEj/iSshcI
+	 PeXp4m29nF/FqAD+L1MtAfMes3EITQKxRRro+R6h/IxbOuryhsxa5NCd11nY/G/QDJ
+	 l6XsHBTXt65NNSpu2BG44Z8O6encs1VxNP0GS5Y6LHVjcOiTCbIE4SORJmIu1qnu/Z
+	 rvD6IOrwZSJFsF5zKfu09DhVyGtjs/lPmT3QtKIvvmIoFqMy1WcKKP7OCZKWgIt5yL
+	 e8EGRMjF2/X0FdQyoL97AacrUSpWTzEPgsHX9bruxu71nxlxqgLuYmuY0B2BiMVA7S
+	 +5KcQGE6/YiUW4HXgnFRC3oc=
+Received: from zn.tnic (p5de8ee85.dip0.t-ipconnect.de [93.232.238.133])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DD72F40E016A;
+	Sun,  9 Jun 2024 11:22:45 +0000 (UTC)
+Date: Sun, 9 Jun 2024 13:22:40 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Peter Anvin <hpa@zytor.com>, Ingo Molnar <mingo@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	the arch/x86 maintainers <x86@kernel.org>,
+	linux-arch <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH] x86: add 'runtime constant' infrastructure
+Message-ID: <20240609112240.GBZmWQgNQXguD_8Nc8@fat_crate.local>
+References: <20240608193504.429644-2-torvalds@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240608193504.429644-2-torvalds@linux-foundation.org> <CAHk-=wjiJvGW70_A93oN_f48J0pn4MeVbWVmBPBiTh2XiSpwpg@mail.gmail.com>
-In-Reply-To: <CAHk-=wjiJvGW70_A93oN_f48J0pn4MeVbWVmBPBiTh2XiSpwpg@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Sat, 8 Jun 2024 20:11:32 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiPSnaCczHp3Jy=kFjfqJa7MTQg6jht_FwZCxOnpsi4Vw@mail.gmail.com>
-Message-ID: <CAHk-=wiPSnaCczHp3Jy=kFjfqJa7MTQg6jht_FwZCxOnpsi4Vw@mail.gmail.com>
-Subject: Re: [PATCH] x86: add 'runtime constant' infrastructure
-To: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, linux-arch <linux-arch@vger.kernel.org>, 
-	Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: multipart/mixed; boundary="000000000000c61ba5061a6c64c4"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240608193504.429644-2-torvalds@linux-foundation.org>
 
---000000000000c61ba5061a6c64c4
-Content-Type: text/plain; charset="UTF-8"
+On Sat, Jun 08, 2024 at 12:35:05PM -0700, Linus Torvalds wrote:
+> Ingo / Peter / Borislav - I enabled this for 32-bit x86 too, because it
+> was literally trivial (had to remove a "q" from "movq").  I did a
+> test-build and it looks find, but I didn't actually try to boot it. 
 
-On Sat, 8 Jun 2024 at 13:55, Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> Think of this patch mostly as a "look, adding another architecture
-> isn't *that* hard - even if the constant value is spread out in the
-> instructions".
+Will do once you have your final version. I still have an Atom, 32-bit
+only laptop lying around here.
 
-.. and here's a version that actually works. It wasn't that bad.
+> +#define runtime_const_ptr(sym) ({				\
+> +	typeof(sym) __ret;					\
+> +	asm("mov %1,%0\n1:\n"					\
+> +		".pushsection runtime_ptr_" #sym ",\"a\"\n\t"	\
+> +		".long 1b - %c2 - .\n\t"			\
+> +		".popsection"					\
+> +		:"=r" (__ret)					\
+> +		:"i" ((unsigned long)0x0123456789abcdefull),	\
+> +		 "i" (sizeof(long)));				\
+> +	__ret; })
 
-Or rather, it wouldn't have been that bad had I not spent *ages*
-debugging a stupid cut-and-paste error where I instead of writing
-words 0..3 of the 64-bit large constant generation, wrote words 0..2
-and then overwrote word 2 (again) with the data that should have gone
-into word 3. Causing the top 32 bits to be all wonky. Oops. Literally.
+You might wanna use asm symbolic names for the operands so that it is
+more readable:
 
-That stupid typo caused like two hours of wasted time.
+#define runtime_const_ptr(sym) ({                                               \
+        typeof(sym) __ret;                                                      \
+        asm("mov %[constant] ,%[__ret]\n1:\n"                                   \
+                ".pushsection runtime_ptr_" #sym ",\"a\"\n\t"                   \
+                ".long 1b - %c[sizeoflong] - .\n\t"                             \
+                ".popsection"                                                   \
+                : [__ret] "=r" (__ret)                                          \
+                : [constant] "i" ((unsigned long)0x0123456789abcdefull),        \
+                  [sizeoflong] "i" (sizeof(long)));                             \
+        __ret; })
 
-But anyway, this patch actually works for me. It still doesn't do any
-I$/D$ flushing, because it's not needed in practice, but it *should*
-probably do that.
+For example.
 
-             Linus
+> +// The 'typeof' will create at _least_ a 32-bit type, but
+> +// will happily also take a bigger type and the 'shrl' will
+> +// clear the upper bits
 
---000000000000c61ba5061a6c64c4
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="0001-arm64-add-runtime-const-support.patch"
-Content-Disposition: attachment; 
-	filename="0001-arm64-add-runtime-const-support.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_lx6yvkv70>
-X-Attachment-Id: f_lx6yvkv70
+Can we pls use the multiline comments, like you do below in the same
+file.
 
-RnJvbSA4ODc4MjFlMWNmMzJjNTA1ZDJiYzlmYjlkY2VlNDVjZjFlMmY2NWU1IE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBMaW51cyBUb3J2YWxkcyA8dG9ydmFsZHNAbGludXgtZm91bmRh
-dGlvbi5vcmc+CkRhdGU6IFNhdCwgOCBKdW4gMjAyNCAxMzoyMjozMSAtMDcwMApTdWJqZWN0OiBb
-UEFUQ0hdIGFybTY0OiBhZGQgJ3J1bnRpbWUgY29uc3QnIHN1cHBvcnQKClNpZ25lZC1vZmYtYnk6
-IExpbnVzIFRvcnZhbGRzIDx0b3J2YWxkc0BsaW51eC1mb3VuZGF0aW9uLm9yZz4KLS0tCiBhcmNo
-L2FybTY0L2luY2x1ZGUvYXNtL3J1bnRpbWUtY29uc3QuaCB8IDc1ICsrKysrKysrKysrKysrKysr
-KysrKysrKysrCiBhcmNoL2FybTY0L2tlcm5lbC92bWxpbnV4Lmxkcy5TICAgICAgICB8ICAzICsr
-CiAyIGZpbGVzIGNoYW5nZWQsIDc4IGluc2VydGlvbnMoKykKIGNyZWF0ZSBtb2RlIDEwMDY0NCBh
-cmNoL2FybTY0L2luY2x1ZGUvYXNtL3J1bnRpbWUtY29uc3QuaAoKZGlmZiAtLWdpdCBhL2FyY2gv
-YXJtNjQvaW5jbHVkZS9hc20vcnVudGltZS1jb25zdC5oIGIvYXJjaC9hcm02NC9pbmNsdWRlL2Fz
-bS9ydW50aW1lLWNvbnN0LmgKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMDAw
-Li5hYjVmOThiYzk0MmUKLS0tIC9kZXYvbnVsbAorKysgYi9hcmNoL2FybTY0L2luY2x1ZGUvYXNt
-L3J1bnRpbWUtY29uc3QuaApAQCAtMCwwICsxLDc1IEBACisvKiBTUERYLUxpY2Vuc2UtSWRlbnRp
-ZmllcjogR1BMLTIuMCAqLworI2lmbmRlZiBfQVNNX1JVTlRJTUVfQ09OU1RfSAorI2RlZmluZSBf
-QVNNX1JVTlRJTUVfQ09OU1RfSAorCisjZGVmaW5lIHJ1bnRpbWVfY29uc3RfcHRyKHN5bSkgKHsJ
-CQkJXAorCXR5cGVvZihzeW0pIF9fcmV0OwkJCQkJXAorCWFzbSgiMTpcdCIJCQkJCQlcCisJCSJt
-b3Z6ICUwLCAjMHhjZGVmXG5cdCIJCQkJXAorCQkibW92ayAlMCwgIzB4ODlhYiwgbHNsICMxNlxu
-XHQiCQkJXAorCQkibW92ayAlMCwgIzB4NDU2NywgbHNsICMzMlxuXHQiCQkJXAorCQkibW92ayAl
-MCwgIzB4MDEyMywgbHNsICM0OFxuXHQiCQkJXAorCQkiLnB1c2hzZWN0aW9uIHJ1bnRpbWVfcHRy
-XyIgI3N5bSAiLFwiYVwiXG5cdCIJXAorCQkiLmxvbmcgMWIgLSAuXG5cdCIJCQkJXAorCQkiLnBv
-cHNlY3Rpb24iCQkJCQlcCisJCToiPXIiIChfX3JldCkpOwkJCQkJXAorCV9fcmV0OyB9KQorCisj
-ZGVmaW5lIHJ1bnRpbWVfY29uc3Rfc2hpZnRfcmlnaHRfMzIodmFsLCBzeW0pICh7CQlcCisJdW5z
-aWduZWQgbG9uZyBfX3JldDsJCQkJCVwKKwlhc20oIjE6XHQiCQkJCQkJXAorCQkibHNyICV3MCwl
-dzEsIzEyXG5cdCIJCQkJXAorCQkiLnB1c2hzZWN0aW9uIHJ1bnRpbWVfc2hpZnRfIiAjc3ltICIs
-XCJhXCJcblx0IglcCisJCSIubG9uZyAxYiAtIC5cblx0IgkJCQlcCisJCSIucG9wc2VjdGlvbiIJ
-CQkJCVwKKwkJOiI9ciIgKF9fcmV0KQkJCQkJXAorCQk6InIiICgwdSsodmFsKSkpOwkJCQlcCisJ
-X19yZXQ7IH0pCisKKyNkZWZpbmUgcnVudGltZV9jb25zdF9pbml0KHR5cGUsIHN5bSwgdmFsdWUp
-IGRvIHsJXAorCWV4dGVybiBzMzIgX19zdGFydF9ydW50aW1lXyMjdHlwZSMjXyMjc3ltW107CVwK
-KwlleHRlcm4gczMyIF9fc3RvcF9ydW50aW1lXyMjdHlwZSMjXyMjc3ltW107CVwKKwlydW50aW1l
-X2NvbnN0X2ZpeHVwKF9fcnVudGltZV9maXh1cF8jI3R5cGUsCVwKKwkJKHVuc2lnbmVkIGxvbmcp
-KHZhbHVlKSwgCQlcCisJCV9fc3RhcnRfcnVudGltZV8jI3R5cGUjI18jI3N5bSwJCVwKKwkJX19z
-dG9wX3J1bnRpbWVfIyN0eXBlIyNfIyNzeW0pOwkJXAorfSB3aGlsZSAoMCkKKworLy8gMTYtYml0
-IGltbWVkaWF0ZSBmb3Igd2lkZSBtb3ZlIChtb3Z6IGFuZCBtb3ZrKSBpbiBiaXRzIDUuLjIwCitz
-dGF0aWMgaW5saW5lIHZvaWQgX19ydW50aW1lX2ZpeHVwXzE2KHVuc2lnbmVkIGludCAqcCwgdW5z
-aWduZWQgaW50IHZhbCkKK3sKKwl1bnNpZ25lZCBpbnQgaW5zbiA9ICpwOworCWluc24gJj0gMHhm
-ZmUwMDAxZjsKKwlpbnNuIHw9ICh2YWwgJiAweGZmZmYpIDw8IDU7CisJKnAgPSBpbnNuOworfQor
-CitzdGF0aWMgaW5saW5lIHZvaWQgX19ydW50aW1lX2ZpeHVwX3B0cih2b2lkICp3aGVyZSwgdW5z
-aWduZWQgbG9uZyB2YWwpCit7CisJdW5zaWduZWQgaW50ICpwID0gbG1fYWxpYXMod2hlcmUpOwor
-CV9fcnVudGltZV9maXh1cF8xNihwLCB2YWwpOworCV9fcnVudGltZV9maXh1cF8xNihwKzEsIHZh
-bCA+PiAxNik7CisJX19ydW50aW1lX2ZpeHVwXzE2KHArMiwgdmFsID4+IDMyKTsKKwlfX3J1bnRp
-bWVfZml4dXBfMTYocCszLCB2YWwgPj4gNDgpOworfQorCisvLyBJbW1lZGlhdGUgdmFsdWUgaXMg
-NSBiaXRzIHN0YXJ0aW5nIGF0IGJpdCAjMTYKK3N0YXRpYyBpbmxpbmUgdm9pZCBfX3J1bnRpbWVf
-Zml4dXBfc2hpZnQodm9pZCAqd2hlcmUsIHVuc2lnbmVkIGxvbmcgdmFsKQoreworCXVuc2lnbmVk
-IGludCAqcCA9IGxtX2FsaWFzKHdoZXJlKTsKKwl1bnNpZ25lZCBpbnQgaW5zbiA9ICpwOworCWlu
-c24gJj0gMHhmZmMwZmZmZjsKKwlpbnNuIHw9ICh2YWwgJiA2MykgPDwgMTY7CisJKnAgPSBpbnNu
-OworfQorCitzdGF0aWMgaW5saW5lIHZvaWQgcnVudGltZV9jb25zdF9maXh1cCh2b2lkICgqZm4p
-KHZvaWQgKiwgdW5zaWduZWQgbG9uZyksCisJdW5zaWduZWQgbG9uZyB2YWwsIHMzMiAqc3RhcnQs
-IHMzMiAqZW5kKQoreworCXdoaWxlIChzdGFydCA8IGVuZCkgeworCQlmbigqc3RhcnQgKyAodm9p
-ZCAqKXN0YXJ0LCB2YWwpOworCQlzdGFydCsrOworCX0KK30KKworI2VuZGlmCmRpZmYgLS1naXQg
-YS9hcmNoL2FybTY0L2tlcm5lbC92bWxpbnV4Lmxkcy5TIGIvYXJjaC9hcm02NC9rZXJuZWwvdm1s
-aW51eC5sZHMuUwppbmRleCA3NTVhMjJkNGY4NDAuLjU1YThlMzEwZWExMiAxMDA2NDQKLS0tIGEv
-YXJjaC9hcm02NC9rZXJuZWwvdm1saW51eC5sZHMuUworKysgYi9hcmNoL2FybTY0L2tlcm5lbC92
-bWxpbnV4Lmxkcy5TCkBAIC0yNjQsNiArMjY0LDkgQEAgU0VDVElPTlMKIAkJRVhJVF9EQVRBCiAJ
-fQogCisJUlVOVElNRV9DT05TVChzaGlmdCwgZF9oYXNoX3NoaWZ0KQorCVJVTlRJTUVfQ09OU1Qo
-cHRyLCBkZW50cnlfaGFzaHRhYmxlKQorCiAJUEVSQ1BVX1NFQ1RJT04oTDFfQ0FDSEVfQllURVMp
-CiAJSFlQRVJWSVNPUl9QRVJDUFVfU0VDVElPTgogCi0tIAoyLjQ1LjEKCg==
---000000000000c61ba5061a6c64c4--
+Otherwise, it looks ok to me and it boots in a guest.
+
+I'll take the final version for a spin on real hw in a couple of days,
+once the review dust settles.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
