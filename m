@@ -1,43 +1,43 @@
-Return-Path: <linux-arch+bounces-4810-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4811-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87779902A2F
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Jun 2024 22:49:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 80EDF902A31
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Jun 2024 22:49:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 68E311C21774
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Jun 2024 20:49:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 282491F207C4
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Jun 2024 20:49:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2DAA14D719;
-	Mon, 10 Jun 2024 20:48:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 725DC14F9F5;
+	Mon, 10 Jun 2024 20:48:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="JiH6A5U0"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="YPwqi78X"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79A2014D6E4;
-	Mon, 10 Jun 2024 20:48:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B6B514F9F2;
+	Mon, 10 Jun 2024 20:48:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718052531; cv=none; b=h5RdNCTI32Nhqa34XakL4twgKnQOFtQZnDI4jgUXs3hntuhlBXJaZvgKQQAuGojJa0boH0odxO1xek9/KGrkfkWyYDK9/Ia3kJ9AA8bwbkjMG81xBkTco7p+Mnz04P+hdkuxFMh2FTioysKfRffVzkZ6olIvx1rXl14on/VIsJ8=
+	t=1718052533; cv=none; b=DeFpLY5L9onn6Ir9NHroMmidT9nW3oXCXzoB1aSYSAXsWlTfPIRJYN/p/PJZVm55E37fysZT+EjGgE2qQXhXAblDXhpZUVGp+tCvif43w4WL4vUpKhQfWW0ygSFUR1tRscwLA1d7EY3HH9/xoHT/dXlhRb/nVAXFmLPz0UTsHIk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718052531; c=relaxed/simple;
-	bh=qEWhUwOtY4dP2oKEOdCg3gFZW6ZZXNIFIaLC2/7lZ38=;
+	s=arc-20240116; t=1718052533; c=relaxed/simple;
+	bh=7f3f228SGMKS0WITa2x2BowrmDUER/1fLEQ+DyBwzuw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FaLzT9OIYcy0PZDWpA+ASm5FZd+CseCksekHT7fux31YZlvngmVKkFqdNdtmPrQXqS4a7eJ+pQUBRBlWmTYMtVuWGhsELXj+f91dUtW5AQaCPcpl4XgnPu1XXXba+zCEq89m/kInVrO4VzMAd05iB7pZ5MF23Nszenkt2G6eIpk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=JiH6A5U0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0984C2BBFC;
-	Mon, 10 Jun 2024 20:48:50 +0000 (UTC)
+	 MIME-Version; b=eoatNG239RQrNuchl8PPJMvFgDzA85vOw3cwNdMGNNwQqGGc9Noe9iWxCrruvqmgs3XJqvWjq3k0v3tFnChhjMgUghfqbRcg1unCZAKQYG+t9mWXF2UQ5PyP4uo4P1QLt0O0nYDgnLnPrbAvGYKHrgDd8wS0rihFFKtGxuaPsDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=YPwqi78X; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F8FAC4AF1C;
+	Mon, 10 Jun 2024 20:48:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1718052531;
-	bh=qEWhUwOtY4dP2oKEOdCg3gFZW6ZZXNIFIaLC2/7lZ38=;
+	s=korg; t=1718052532;
+	bh=7f3f228SGMKS0WITa2x2BowrmDUER/1fLEQ+DyBwzuw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=JiH6A5U0arD1NhlbdfpjK8+SD3NECg/OLaKv9RnBd5T4AY15CPLPBn42T6GSAQYe0
-	 huRV6nMOULL9ce93ox3iDF9DgMHNhwPGXHnXzZuoAnF9gMVEKsa6esEKLrVWVk74Q7
-	 1anFZ5tXKEpPNvsXPKCh2bUP4fB3HkiBWds2d1Io=
+	b=YPwqi78XF8g+oefGjk6SWIu9gETbsXAcfc1xuXxesUVODbHxG6F+Ihl/hQS8A6wHG
+	 h+h5f5IcE9LJ94AoyVcNT9TRaIM1jZTVmlB+cNNR9Ws/oUpeqTbhAiEgblNqzvHmGB
+	 V1scnDa858xxUlqxCoLdiKtjB+7xyFKKBoIeCoB0=
 From: Linus Torvalds <torvalds@linux-foundation.org>
 To: Peter Anvin <hpa@zytor.com>,
 	Ingo Molnar <mingo@kernel.org>,
@@ -52,9 +52,9 @@ Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-arch <linux-arch@vger.kernel.org>,
 	Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 3/7] x86: add 'runtime constant' support
-Date: Mon, 10 Jun 2024 13:48:17 -0700
-Message-ID: <20240610204821.230388-4-torvalds@linux-foundation.org>
+Subject: [PATCH 4/7] arm64: add 'runtime constant' support
+Date: Mon, 10 Jun 2024 13:48:18 -0700
+Message-ID: <20240610204821.230388-5-torvalds@linux-foundation.org>
 X-Mailer: git-send-email 2.45.1.209.gc6f12300df
 In-Reply-To: <20240610204821.230388-1-torvalds@linux-foundation.org>
 References: <20240610204821.230388-1-torvalds@linux-foundation.org>
@@ -66,48 +66,49 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This implements the runtime constant infrastructure for x86, allowing
+This implements the runtime constant infrastructure for arm64, allowing
 the dcache d_hash() function to be generated using as a constant for
 hash table address followed by shift by a constant of the hash index.
 
 Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 ---
- arch/x86/include/asm/runtime-const.h | 61 ++++++++++++++++++++++++++++
- arch/x86/kernel/vmlinux.lds.S        |  3 ++
- 2 files changed, 64 insertions(+)
- create mode 100644 arch/x86/include/asm/runtime-const.h
+ arch/arm64/include/asm/runtime-const.h | 75 ++++++++++++++++++++++++++
+ arch/arm64/kernel/vmlinux.lds.S        |  3 ++
+ 2 files changed, 78 insertions(+)
+ create mode 100644 arch/arm64/include/asm/runtime-const.h
 
-diff --git a/arch/x86/include/asm/runtime-const.h b/arch/x86/include/asm/runtime-const.h
+diff --git a/arch/arm64/include/asm/runtime-const.h b/arch/arm64/include/asm/runtime-const.h
 new file mode 100644
-index 000000000000..24e3a53ca255
+index 000000000000..02462b2cb6f9
 --- /dev/null
-+++ b/arch/x86/include/asm/runtime-const.h
-@@ -0,0 +1,61 @@
++++ b/arch/arm64/include/asm/runtime-const.h
+@@ -0,0 +1,75 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +#ifndef _ASM_RUNTIME_CONST_H
 +#define _ASM_RUNTIME_CONST_H
 +
 +#define runtime_const_ptr(sym) ({				\
 +	typeof(sym) __ret;					\
-+	asm_inline("mov %1,%0\n1:\n"				\
++	asm_inline("1:\t"					\
++		"movz %0, #0xcdef\n\t"				\
++		"movk %0, #0x89ab, lsl #16\n\t"			\
++		"movk %0, #0x4567, lsl #32\n\t"			\
++		"movk %0, #0x0123, lsl #48\n\t"			\
 +		".pushsection runtime_ptr_" #sym ",\"a\"\n\t"	\
-+		".long 1b - %c2 - .\n\t"			\
++		".long 1b - .\n\t"				\
 +		".popsection"					\
-+		:"=r" (__ret)					\
-+		:"i" ((unsigned long)0x0123456789abcdefull),	\
-+		 "i" (sizeof(long)));				\
++		:"=r" (__ret));					\
 +	__ret; })
 +
-+// The 'typeof' will create at _least_ a 32-bit type, but
-+// will happily also take a bigger type and the 'shrl' will
-+// clear the upper bits
 +#define runtime_const_shift_right_32(val, sym) ({		\
-+	typeof(0u+(val)) __ret = (val);				\
-+	asm_inline("shrl $12,%k0\n1:\n"				\
++	unsigned long __ret;					\
++	asm_inline("1:\t"					\
++		"lsr %w0,%w1,#12\n\t"				\
 +		".pushsection runtime_shift_" #sym ",\"a\"\n\t"	\
-+		".long 1b - 1 - .\n\t"				\
++		".long 1b - .\n\t"				\
 +		".popsection"					\
-+		:"+r" (__ret));					\
++		:"=r" (__ret)					\
++		:"r" (0u+(val)));				\
 +	__ret; })
 +
 +#define runtime_const_init(type, sym) do {		\
@@ -119,19 +120,32 @@ index 000000000000..24e3a53ca255
 +		__stop_runtime_##type##_##sym);		\
 +} while (0)
 +
-+/*
-+ * The text patching is trivial - you can only do this at init time,
-+ * when the text section hasn't been marked RO, and before the text
-+ * has ever been executed.
-+ */
-+static inline void __runtime_fixup_ptr(void *where, unsigned long val)
++// 16-bit immediate for wide move (movz and movk) in bits 5..20
++static inline void __runtime_fixup_16(unsigned int *p, unsigned int val)
 +{
-+	*(unsigned long *)where = val;
++	unsigned int insn = *p;
++	insn &= 0xffe0001f;
++	insn |= (val & 0xffff) << 5;
++	*p = insn;
 +}
 +
++static inline void __runtime_fixup_ptr(void *where, unsigned long val)
++{
++	unsigned int *p = lm_alias(where);
++	__runtime_fixup_16(p, val);
++	__runtime_fixup_16(p+1, val >> 16);
++	__runtime_fixup_16(p+2, val >> 32);
++	__runtime_fixup_16(p+3, val >> 48);
++}
++
++// Immediate value is 5 bits starting at bit #16
 +static inline void __runtime_fixup_shift(void *where, unsigned long val)
 +{
-+	*(unsigned char *)where = val;
++	unsigned int *p = lm_alias(where);
++	unsigned int insn = *p;
++	insn &= 0xffc0ffff;
++	insn |= (val & 63) << 16;
++	*p = insn;
 +}
 +
 +static inline void runtime_const_fixup(void (*fn)(void *, unsigned long),
@@ -144,20 +158,20 @@ index 000000000000..24e3a53ca255
 +}
 +
 +#endif
-diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
-index 3509afc6a672..6e73403e874f 100644
---- a/arch/x86/kernel/vmlinux.lds.S
-+++ b/arch/x86/kernel/vmlinux.lds.S
-@@ -357,6 +357,9 @@ SECTIONS
- 	PERCPU_SECTION(INTERNODE_CACHE_BYTES)
- #endif
+diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.lds.S
+index 755a22d4f840..55a8e310ea12 100644
+--- a/arch/arm64/kernel/vmlinux.lds.S
++++ b/arch/arm64/kernel/vmlinux.lds.S
+@@ -264,6 +264,9 @@ SECTIONS
+ 		EXIT_DATA
+ 	}
  
 +	RUNTIME_CONST(shift, d_hash_shift)
 +	RUNTIME_CONST(ptr, dentry_hashtable)
 +
- 	. = ALIGN(PAGE_SIZE);
+ 	PERCPU_SECTION(L1_CACHE_BYTES)
+ 	HYPERVISOR_PERCPU_SECTION
  
- 	/* freed after init ends here */
 -- 
 2.45.1.209.gc6f12300df
 
