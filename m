@@ -1,42 +1,43 @@
-Return-Path: <linux-arch+bounces-4807-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4808-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A371B902A29
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Jun 2024 22:49:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 761B8902A2B
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Jun 2024 22:49:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A78151C237BA
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Jun 2024 20:49:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1FF761F20F0F
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Jun 2024 20:49:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A24354DA09;
-	Mon, 10 Jun 2024 20:48:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DE714D9EA;
+	Mon, 10 Jun 2024 20:48:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="JbjctN5u"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="ijnhJX3k"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AF8E4D8B6;
-	Mon, 10 Jun 2024 20:48:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E05854784;
+	Mon, 10 Jun 2024 20:48:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718052526; cv=none; b=ZGgV2zVjVIKnmp+MMTo6b89Fv237vz2YT6dNp6hLV2dUJmhc5Ofm3FYH3Os+TU8DG2bWf4Qlao6CfskpUx5j4AGi9ElKKkQkDe0Aye7VTPexEybmc8Jonhucaif9SSPvohmUSFnGlvdmp7NZSdvfI4/YPT9e4K7lTXB9/An5oS8=
+	t=1718052528; cv=none; b=T2D53MYQL+w7aofLoYeU8ie6jmNDKntlPyQ5qH3tLf/rZXeqDGL0FlGaWlyXqPgnUnoAh5sshybp8WwbAb808YXSblZ8ijAM8HRfYTSL/0tWwZ1wwEExTKoV7XsTagK/pZw5NsFCT4qRLmS9LvAQh4HiwfXMtu3py76NfFerBwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718052526; c=relaxed/simple;
-	bh=FOi86UUldJ0DWqgv3J6xhcGdiAK6DXsRyDRsaDmLflk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UqEh5NgkDJqJI7T6eg0Lqs40u4O+jES4KJ3eBMS8cLmWpcMEdc377x/uphAZEUotRpBF9EeGxRs5tsovtufzehu8gsrR5nKukiHV6nQ8CsyczjVP9YiuHWQd6ubTB9uV0f9N3RLIZcUjvmi7ovKX+5fCC5lKHc0xGbfFtWh0a1s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=JbjctN5u; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86479C32789;
-	Mon, 10 Jun 2024 20:48:45 +0000 (UTC)
+	s=arc-20240116; t=1718052528; c=relaxed/simple;
+	bh=AxeTD70Xdnmf73ygmURvb2qqMwfuW1qpYQt8rNtFhzM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=cdXhq2xdxoTmrGhvt2F34V/u4XF4TobJNAHzsGSrIaoZYHR0yhzvUOYM58Cwyqa0eenASR/QNMOMS1iRdsmGzyu7AbOiyJEdb38ebQPtwipoF4/U6Ix5Dj/FCarEptZepSqwu0qU04/kYuqsYOYYYzEtMNU77DaMWVcJi8DHtZo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=ijnhJX3k; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48743C32789;
+	Mon, 10 Jun 2024 20:48:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1718052525;
-	bh=FOi86UUldJ0DWqgv3J6xhcGdiAK6DXsRyDRsaDmLflk=;
-	h=From:To:Cc:Subject:Date:From;
-	b=JbjctN5ukgqDo74t/mtIe3qdJp7NLV6bNy0d+r9Tl9X8W2pffb0HzTbX9bcA2WglY
-	 u3t5dDKfR3wnUKv9jy5lrQ7feHQUisP+6OvaVf+J0CmAu+oZQQoF9dp3n+rGQNrnT9
-	 lhBQcb81GuKAGvcYAlquAO2mDYX4s1hUdkY5t/M8=
+	s=korg; t=1718052527;
+	bh=AxeTD70Xdnmf73ygmURvb2qqMwfuW1qpYQt8rNtFhzM=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=ijnhJX3k6ykhDoLXMHH3gTvuCLj8D856jE/hjb4+4CVZsd077UMEAHeeBYoxA7MNu
+	 6gVgX6tWfYfvQ4iuKpUERomSR+MkULWmDebnRvSAWDrDIuf0QBvJmtQShosHJJipgt
+	 gYo/n7fprCYiVs/jtM6i1XJrxG14F3QwJ56XOj8Y=
 From: Linus Torvalds <torvalds@linux-foundation.org>
 To: Peter Anvin <hpa@zytor.com>,
 	Ingo Molnar <mingo@kernel.org>,
@@ -51,10 +52,12 @@ Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-arch <linux-arch@vger.kernel.org>,
 	Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 0/7] arm64 / x86-64: low-level code generation issues
-Date: Mon, 10 Jun 2024 13:48:14 -0700
-Message-ID: <20240610204821.230388-1-torvalds@linux-foundation.org>
+Subject: [PATCH 1/7] vfs: dcache: move hashlen_hash() from callers into d_hash()
+Date: Mon, 10 Jun 2024 13:48:15 -0700
+Message-ID: <20240610204821.230388-2-torvalds@linux-foundation.org>
 X-Mailer: git-send-email 2.45.1.209.gc6f12300df
+In-Reply-To: <20240610204821.230388-1-torvalds@linux-foundation.org>
+References: <20240610204821.230388-1-torvalds@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -63,68 +66,69 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-So this is the result of me doing some profiling on my 128-core Altra
-box.  I've sent out versions of this before, but they've all been fairly
-ugly partial series.
+Both __d_lookup_rcu() and __d_lookup_rcu_op_compare() have the full
+'name_hash' value of the qstr that they want to look up, and mask it off
+to just the low 32-bit hash before calling down to d_hash().
 
-This is the full cleaned-up series with patches split up to be logical,
-and with fixes from some of the commentary from previous patches.
+Other callers just load the 32-bit hash and pass it as the argument.
 
-The first four patches are for the 'runtime constant' code, where I did
-the initial implementation on x86-64 just because I was more comfy with
-that, and the arm64 version of it came once I had the x86-64 side
-working.
+If we move the masking into d_hash() itself, it simplifies the two
+callers that currently do the masking, and is a no-op for the other
+cases.  It doesn't actually change the generated code since the compiler
+will inline d_hash() and see that the end result is the same.
 
-The horror that is __d_lookup_rcu() shows up a lot more on my Altra box
-because of the relatively pitiful caches, but it's something that I've
-wanted on x86-64 before.  The arm64 numbers just made me bite the
-bullet on the whole runtime constant thing.
+[ Technically, since the parse tree changes, the code generation may not
+  be 100% the same, and for me on x86-64, this does result in gcc
+  switching the operands around for one 'cmpl' instruction. So not
+  necessarily the exact same code generation, but equivalent ]
 
-The last three patches are purely arm64-specific, and just fix up some
-nasty code generation in the user access functions.  I just noticed that
-I will need to implement 'user_access_save()' for KCSAN now that I do
-the unsafe user access functions. 
+However, this does encapsulate the 'd_hash()' operation more, and makes
+the shift operation in particular be a "shift 32 bits right, return full
+word".  Which matches the instruction semantics on both x86-64 and arm64
+better, since a 32-bit shift will clear the upper bits.
 
-Anyway, that 'user_access_save/restore()' issue only shows up with
-KCSAN.  And it would be a no-op thanks to arm64 doing SMAP the right way
-(pet peeve: arm64 did what I told the x86 designers to do originally,
-but they claimed was too hard, so we ended up with that CLAC/STAC
-instead)... 
+That makes the next step of introducing a "shift by runtime constant"
+more obvious and generates the shift with no extraneous type masking.
 
-Sadly that "no-op for KCSAN" would is except for the horrid
-CONFIG_ARM64_SW_TTBR0_PAN case, which is why I'm not touching it.  I'm
-hoping some hapless^Whelpful arm64 person is willing to tackle this (or
-maybe make KCSAN and ARM64_SW_TTBR0_PAN incompatible in the Kconfig). 
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+---
+ fs/dcache.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Note: the final access_ok() change in 7/7 is a API relaxation and
-cleanup, and as such much more worrisome than the other patches.  It's
-_simpler_ than the other patches, but the others aren't intended to
-really change behavior.  That one does. 
-
-Linus Torvalds (7):
-  vfs: dcache: move hashlen_hash() from callers into d_hash()
-  add default dummy 'runtime constant' infrastructure
-  x86: add 'runtime constant' support
-  arm64: add 'runtime constant' support
-  arm64: start using 'asm goto' for get_user() when available
-  arm64: start using 'asm goto' for put_user() when available
-  arm64: access_ok() optimization
-
- arch/arm64/include/asm/runtime-const.h |  75 ++++++++++
- arch/arm64/include/asm/uaccess.h       | 191 +++++++++++++++++--------
- arch/arm64/kernel/mte.c                |  12 +-
- arch/arm64/kernel/vmlinux.lds.S        |   3 +
- arch/x86/include/asm/runtime-const.h   |  61 ++++++++
- arch/x86/kernel/vmlinux.lds.S          |   3 +
- fs/dcache.c                            |  17 ++-
- include/asm-generic/Kbuild             |   1 +
- include/asm-generic/runtime-const.h    |  15 ++
- include/asm-generic/vmlinux.lds.h      |   8 ++
- 10 files changed, 319 insertions(+), 67 deletions(-)
- create mode 100644 arch/arm64/include/asm/runtime-const.h
- create mode 100644 arch/x86/include/asm/runtime-const.h
- create mode 100644 include/asm-generic/runtime-const.h
-
+diff --git a/fs/dcache.c b/fs/dcache.c
+index 407095188f83..8b4382f5c99d 100644
+--- a/fs/dcache.c
++++ b/fs/dcache.c
+@@ -100,9 +100,9 @@ static unsigned int d_hash_shift __ro_after_init;
+ 
+ static struct hlist_bl_head *dentry_hashtable __ro_after_init;
+ 
+-static inline struct hlist_bl_head *d_hash(unsigned int hash)
++static inline struct hlist_bl_head *d_hash(unsigned long hashlen)
+ {
+-	return dentry_hashtable + (hash >> d_hash_shift);
++	return dentry_hashtable + ((u32)hashlen >> d_hash_shift);
+ }
+ 
+ #define IN_LOOKUP_SHIFT 10
+@@ -2104,7 +2104,7 @@ static noinline struct dentry *__d_lookup_rcu_op_compare(
+ 	unsigned *seqp)
+ {
+ 	u64 hashlen = name->hash_len;
+-	struct hlist_bl_head *b = d_hash(hashlen_hash(hashlen));
++	struct hlist_bl_head *b = d_hash(hashlen);
+ 	struct hlist_bl_node *node;
+ 	struct dentry *dentry;
+ 
+@@ -2171,7 +2171,7 @@ struct dentry *__d_lookup_rcu(const struct dentry *parent,
+ {
+ 	u64 hashlen = name->hash_len;
+ 	const unsigned char *str = name->name;
+-	struct hlist_bl_head *b = d_hash(hashlen_hash(hashlen));
++	struct hlist_bl_head *b = d_hash(hashlen);
+ 	struct hlist_bl_node *node;
+ 	struct dentry *dentry;
+ 
 -- 
 2.45.1.209.gc6f12300df
 
