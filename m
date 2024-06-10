@@ -1,196 +1,175 @@
-Return-Path: <linux-arch+bounces-4816-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4815-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 762F2902C83
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Jun 2024 01:35:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 869DC902B73
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Jun 2024 00:15:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EA1301F21F59
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Jun 2024 23:35:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2D63F1F22822
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Jun 2024 22:15:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9131C6F2FD;
-	Mon, 10 Jun 2024 23:35:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B093152161;
+	Mon, 10 Jun 2024 22:15:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="f8aCIaXn"
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="DV1B8yAB"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DFAD3C0C;
-	Mon, 10 Jun 2024 23:35:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A0B214F9F4
+	for <linux-arch@vger.kernel.org>; Mon, 10 Jun 2024 22:15:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718062537; cv=none; b=Mr5TyoqVyRt5mwJqxTVrgVpH9PqsBvroJgDF/pbyjP9BbLoxLQ+RAAGyysX+yzBhFRSDqT5kKsYWMbSPxhwnb7ha82rrgJtb+SylS08Ss7S0WCD6T3ZFXTFYQo6p4ovL0gNAWviI4EhgHOuIu6cCELPrrTyGt4dXdJP03q+ASvU=
+	t=1718057709; cv=none; b=lbOSaXSwhFi2LMhhivjkuOTrQx/cW1YxmMbE/AH2SVyOJ8ytxNzO5++Wh0cadEHOOWLFSgZ/8o9HFrHuaTLps+xD7uDfqE9R9ENfDXCx4tIvTQ+GJJGP6rA/j6nLdzkc2LY8Q7JLJSveqNPSFoiozjv6LjcV93L7njRkQQfaJ/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718062537; c=relaxed/simple;
-	bh=wSWL/70ZBsPTYeRbz7dH6zGPqpxIt4663shY+CMkz7I=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=i3FO0fA61Esmjd39fkYkCcyj7ofAvtDrN+Po+AahGqBR9ZDh+5n3xMalWeuDh7Ue8d1oqQ5zAwJYlCgJgbMelYgaNlqfv9VqQ569zl0yBkomIFd+pTR8CTSobFt71BPGIgrnDFSOjvPODECSbpBFkqnAdCJNpIO7K2LxuyBSoFc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=f8aCIaXn; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
-Received: from [127.0.0.1] ([76.133.66.138])
-	(authenticated bits=0)
-	by mail.zytor.com (8.17.2/8.17.1) with ESMTPSA id 45AKdkPF1303131
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Mon, 10 Jun 2024 13:39:47 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 45AKdkPF1303131
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2024051501; t=1718051988;
-	bh=jcCI8SDBfOzo+prfPYX0FGiNeJM3cOjzgscH9q+Yza8=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=f8aCIaXn7i5aYCWXgNqkBWwZ6gB5uqiPqD5lyOHUkAsjHY9w/OKIIlJ9rbJQiJhoc
-	 tj9YJpLVgztdmZpzbHO+oucSp6qkci/vvRdEaVZDE1b6Ico7xkYC8T4JGV2GscIqib
-	 n/XViD0dYfTykiUswTNRyZS51ONXDXIwq5z8uVW4CR9QMzKLxvtEP3sgp4Y7HPcZvE
-	 l4xA7FE5AZOmExO6ywbm6vAKaaoXvW3mFxOoOzSoX36MaKH9ikjLH6LilwXG6lJX/q
-	 dP15+HBmqlM9tXp7qrneYz6ZZOOcyfFMWUzr4RjgiOphDTITBDGaOPzyNL/dgDa38N
-	 5TM0kkEib8tQg==
-Date: Mon, 10 Jun 2024 13:39:40 -0700
-From: "H. Peter Anvin" <hpa@zytor.com>
-To: Linus Torvalds <torvalds@linux-foundation.org>,
-        Borislav Petkov <bp@alien8.de>
-CC: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH] x86: add 'runtime constant' infrastructure
-User-Agent: K-9 Mail for Android
-In-Reply-To: <CAHk-=wgb98nSCvJ-gL42mt+jt6Eyp-0QSMJLovmAoJOkQ_G3gQ@mail.gmail.com>
-References: <20240608193504.429644-2-torvalds@linux-foundation.org> <20240610104352.GT8774@noisy.programming.kicks-ass.net> <20240610120201.GAZmbrOYmcA21kD8NB@fat_crate.local> <CAHk-=wgb98nSCvJ-gL42mt+jt6Eyp-0QSMJLovmAoJOkQ_G3gQ@mail.gmail.com>
-Message-ID: <71FE7A14-62F6-45D3-9BC4-BE09E06F7863@zytor.com>
+	s=arc-20240116; t=1718057709; c=relaxed/simple;
+	bh=z+wd9sAGfEDNr43zUFts3rXiT7ShOZVNnrA/+9o7y3k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=g0v0KcUBPKZyt+DdHP+yNpYtVpMC8jzkp75Y/1TQwZeQxUdnAufYXyX3zriIISp5WkvCsxP+WXKZJYtkQeD7fwbApwFoSybIqMKqWe5F+gkXCJ697aYVMTIqh/m05HQF7i7WNF7DRST5+GPZYTFGz4sswqFec2elFac+XoeZQK0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=DV1B8yAB; arc=none smtp.client-ip=209.85.160.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-43fecdecd32so26994161cf.1
+        for <linux-arch@vger.kernel.org>; Mon, 10 Jun 2024 15:15:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1718057705; x=1718662505; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fYxIeKtLL3lQwNiFRr25O1e9GIX4G5slG5d4Uc4G46M=;
+        b=DV1B8yABKh8zcLUmgBZlPAFY0iTcPLR8YOx7LLCpFjMnV7rXNkaRxAYuvwk3C7PPOH
+         jZB05ZxEeozQlYPvsSKrdHH9XRsHaWMfRgA07nc67PzNRXJVUcgHaMaIwTLkn/0NBaej
+         Y+DkdkBwr03IdCK/sG3d/54s8BvaqhWBnl/jBki+4FuzFDk5MC/R7srQTW0MtfyTEffw
+         S/cazkXqzTrhTNLq77EhsuipjQDoKG+ONrmQBCCYr/YTuVzQ2K1qnCx+gVlmf+ptUByB
+         YHBold4jl4t0CXl3DWfVhfY0nGwvEmmEftLaTtJM4KO8eLCbZeisPO65pggAcwOIB0GE
+         jnmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718057705; x=1718662505;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fYxIeKtLL3lQwNiFRr25O1e9GIX4G5slG5d4Uc4G46M=;
+        b=gXHNbMp+Xt1s2lVn69qDC6I61agwQVSHFp+uk/TqdSG0oynSpU0zKO3VGtV9FydmaF
+         Usa7OrAJKopd6IO2nw1J19E6ZxAATux5Jx1+jpW44LzPIREnDL9VY8uxX0tL0FPZhTIS
+         /Gt8EmTZedOdauIS2zZKckX4pWmTLNrNq4F+31gv0dqv9tHWZZdYUUUus2xm3Bhx7ANF
+         qXIbdrVWcnkqd8uqXin5XdGfCWxvb9Ami9aXnhAYMAcUCCUcprE65sHARo6AA7q6E+yS
+         PZke+7mku9Iq7/HnoN3lQG1JdDmaLzQc+upMaZCCvmE/fHuL2GpDigimD45ebpLyVo44
+         9KEQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXA35n+ywMPWyA9uoRHNgls/Uv9U2OztGcZd4HVDxzmkCYenrripjTCn0X4AcZdgKm3yau2l73KfeCrGZUL9mDg9q+5+QR0uoSiaQ==
+X-Gm-Message-State: AOJu0YxdBstytwNVl9kLRKIpcq0egolF8qHNAXCSRyJVdjjYZC2MRgCp
+	jKFvWCb6OxVujItmea7W0XA/FCksJzTBSiesVzaYyv0GW7uZS5F7XMubjpNTYUI=
+X-Google-Smtp-Source: AGHT+IGNwK7dorh82QSLW5MV/WzZAixZNPt6ZilaFo6ceP30TQ1KYPRJL2ImTAjvrOrdYOBtAU+f5Q==
+X-Received: by 2002:a05:6214:4a06:b0:6b0:72ef:2877 with SMTP id 6a1803df08f44-6b072ef2a2bmr79573716d6.40.1718057705068;
+        Mon, 10 Jun 2024 15:15:05 -0700 (PDT)
+Received: from ziepe.ca ([128.77.69.89])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6b076a42242sm20947266d6.59.2024.06.10.15.15.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jun 2024 15:15:03 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1sGnI4-00FsKs-9Z;
+	Mon, 10 Jun 2024 19:15:00 -0300
+Date: Mon, 10 Jun 2024 19:15:00 -0300
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Pavel Begunkov <asml.silence@gmail.com>
+Cc: David Ahern <dsahern@kernel.org>, David Wei <dw@davidwei.uk>,
+	Mina Almasry <almasrymina@google.com>,
+	Christoph Hellwig <hch@infradead.org>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+	Matt Turner <mattst88@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Steffen Klassert <steffen.klassert@secunet.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+	Yunsheng Lin <linyunsheng@huawei.com>,
+	Shailend Chand <shailend@google.com>,
+	Harshitha Ramamurthy <hramamurthy@google.com>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Jeroen de Borst <jeroendb@google.com>,
+	Praveen Kaligineedi <pkaligineedi@google.com>
+Subject: Re: [PATCH net-next v10 02/14] net: page_pool: create hooks for
+ custom page providers
+Message-ID: <20240610221500.GN791043@ziepe.ca>
+References: <5aee4bba-ca65-443c-bd78-e5599b814a13@gmail.com>
+ <CAHS8izNmT_NzgCu1pY1RKgJh+kP2rCL_90Gqau2Pkd3-48Q1_w@mail.gmail.com>
+ <eb237e6e-3626-4435-8af5-11ed3931b0ac@gmail.com>
+ <be2d140f-db0f-4d15-967c-972ea6586b5c@kernel.org>
+ <20240607145247.GG791043@ziepe.ca>
+ <45803740-442c-4298-b47e-2d87ae5a6012@davidwei.uk>
+ <54975459-7a5a-46ff-a9ae-dc16ceffbab4@gmail.com>
+ <20240610121625.GI791043@ziepe.ca>
+ <59443d14-1f1d-42bb-8be3-73e6e4a0b683@kernel.org>
+ <00c67cf0-2bf3-4eaf-b200-ffe00d91593b@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <00c67cf0-2bf3-4eaf-b200-ffe00d91593b@gmail.com>
 
-On June 10, 2024 11:20:21 AM PDT, Linus Torvalds <torvalds@linux-foundation=
-=2Eorg> wrote:
->On Mon, 10 Jun 2024 at 05:02, Borislav Petkov <bp@alien8=2Ede> wrote:
->>
->> I think we should accept patches using this only when there really is
->> a good, perf reason for doing so=2E Not "I wanna use this fance shite i=
-n
->> my new driver just because=2E=2E=2E"=2E
->
->Absolutely=2E
->
->So for example, if the code could possibly be a module, it's never
->going to be able to use runtime constants=2E
->
->If the code doesn't show up as "noticeable percentage of kernel time
->on real loads", it will not be a valid use for runtime constants=2E
->
->The reason I did __d_lookup_rcu() is that I have optimized that
->function to hell and back before, and it *still* showed up at 14% of
->kernel time on my "empty kernel build" benchmark=2E And the constant
->load was a noticeable - but not dominant - part of that=2E
->
->And yes, it shows up that high because it's all D$ misses, and the
->machine I tested on has more CPU cores than cache, so it's all kinds
->of broken=2E But the point ends up being that __d_lookup_rcu() is just
->very very hot on loads that just do a lot of 'stat()' calls (and such
->loads exist and aren't just microbenchmarks)=2E
->
->I have other functions I see in the 5%+ range of kernel overhead on
->real machines, but they tend to be things like clear_page(), which is
->another kind of issue entirely=2E
->
->And yes, the benchmarks I run are odd ("why would anybody care about
->an empty kernel build?") but somewhat real to me (since I do builds
->between every pull even when they just change a couple of files)=2E
->
->And yes, to actually even see anything else than the CPU security
->issues on x86, you need to build without debug support, and without
->retpolines etc=2E So my profiles are "fake" in that sense, because they
->are the best case profiles without a lot of the horror that people
->enable=2E
->
->Others will have other real benchmarks, which is why I do think we'd
->end up with more uses of this=2E But I would expect a handful, not
->"hundreds"=2E
->
->I could imagine some runtime constant in the core networking socket
->code, for example=2E Or in some scheduler thing=2E Or kernel entry code=
-=2E
->
->But not ever in a driver or a filesystem, for example=2E Once you've
->gotten that far off the core code path, the "load a variable" overhead
->just isn't relevant any more=2E
->
->                Linus
+On Mon, Jun 10, 2024 at 08:20:08PM +0100, Pavel Begunkov wrote:
+> On 6/10/24 16:16, David Ahern wrote:
 
-So I would also strongly suggest that we make the code fault if it is exec=
-uted unpatched if there is no fallback=2E
+> > > There is no reason you shouldn't be able to use your fast io_uring
+> > > completion and lifecycle flow with DMABUF backed memory. Those are not
+> > > widly different things and there is good reason they should work
+> > > together.
+> 
+> Let's not mix up devmem TCP and dmabuf specifically, as I see it
+> your question was concerning the latter: "... DMABUF memory registered
+> through Mina's mechanism". io_uring's zcrx can trivially get dmabuf
+> support in future, as mentioned it's mostly the setup side. ABI,
+> buffer workflow and some details is a separate issue, and I don't
+> see how further integration aside from what we're already sharing
+> is beneficial, on opposite it'll complicate things.
 
-My original motivation for making the code as complex as I did was to hand=
-le both the init and noninit cases, and to handle things other than mov (fo=
-r the mov case, it is quite trivial to allow for either a memory reference =
-or an immediate, of course, but I was trying to optimize all kinds of opera=
-tions, of which shifts were by far the worst=2E Almost certainly a mistake =
-on my part=2E)
+Again, I am talking about composability here, duplicating the DMABUF
+stuff into io_uring is not composable, it is just duplicating things.
 
-For that case it also works just fine in modules, since alternatives does =
-the patching there already=2E
+It does not match the view that there should be two distinct layers
+here, one that provides the pages and one that manages the
+lifecycle. As HCH pushes for pages either come from the allocator and
+get to use the struct folio or the come from a dmabuf and they
+don't. That is it, the only two choices.
 
-The way I did it was to introduce a new alternative patching type (a conce=
-pt that didn't exist yet, and again I made the mistake of not simply doing =
-that part separately first) using the address of the variable in question (=
-in the ro_after_init segment) as the alternatives source buffer=2E=20
+The iouring stuff is trying to confuse the source of the pages with
+the lifecycle - which is surely convenient, but is why Christoph is
+opposing it.
 
-Much has changed since I hacked on this, a lot of which makes this whole c=
-oncept *much* easier to implement=2E We could even make it completely trans=
-parent at the programmer level by using objtool or a linker plugin to detec=
-t loads from a certain segment and tag them for alternatives patching (whic=
-h would, however, require adding padding to some kinds of instructions, not=
-ably arbitrary 64-bit immediates=2E)
-
-The one case that gets really nasty for automatic conversation is the case=
- of an arbitrary 64-bit value used in a computation,  like:
-
-    __patchable long b;
-    long a;
-    /* =2E=2E=2E */
-    a +=3D b;
-
-The compiler can generate:=20
-
-     addq b(%rip),%rax
-
-=2E=2E=2E which would require a temporary register to convert to an immedi=
-ate=2E On the other hand:=20
-
-    __patchable int b;
-    long a;
-    /* =2E=2E=2E */
-    a +=3D b;
-
-=2E=2E=2E would generate =2E=2E=2E
-
-    movslq b(%rip),%rbx
-    addq %rbx,%rax
-   =20
-=2E=2E=2E which can be compacted down to a single instruction:=20
-
-    addq $bimm,%rax
-
-=2E=2E=2E so *really* optimizing this could be rather tricky without some =
-kind of compiler support (native or via plug-in) even=2E The most likely op=
-tion would be to generate object code as if immediate instructions are used=
-, but with relocations that indicate "value of" rather than "address of" th=
-e variable being referenced=2E Postprocessing either at the assembly level =
-or object code level (i=2Ee=2E objtool) can then substitute the prepatch se=
-quence and alternatives metadata=2E
-
-(If it is a custom plug-in then postprocessing is presumably not necessary=
-, of course=2E)
+Jason
 
