@@ -1,43 +1,43 @@
-Return-Path: <linux-arch+bounces-4808-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4809-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 761B8902A2B
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Jun 2024 22:49:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C273902A2D
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Jun 2024 22:49:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1FF761F20F0F
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Jun 2024 20:49:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4DC7D1F2360A
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Jun 2024 20:49:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DE714D9EA;
-	Mon, 10 Jun 2024 20:48:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 208011422A8;
+	Mon, 10 Jun 2024 20:48:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="ijnhJX3k"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="oNUVm+WZ"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E05854784;
-	Mon, 10 Jun 2024 20:48:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF1A8132117;
+	Mon, 10 Jun 2024 20:48:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718052528; cv=none; b=T2D53MYQL+w7aofLoYeU8ie6jmNDKntlPyQ5qH3tLf/rZXeqDGL0FlGaWlyXqPgnUnoAh5sshybp8WwbAb808YXSblZ8ijAM8HRfYTSL/0tWwZ1wwEExTKoV7XsTagK/pZw5NsFCT4qRLmS9LvAQh4HiwfXMtu3py76NfFerBwU=
+	t=1718052530; cv=none; b=nxBhLC37elo6eICj5KF9dpMQq10IwBwJigx+HHPvuZdqirDX94WdLK8uYJTzT0iZL3phR+4Ho5H/dS2VJexYRwqXsn+ROah6giK0u1qbdvk8/2kb5csxpnUwgxMZHcU0fQn0L/DqkYirtnOkuh6EOiaJI4TmtvkCt0Za42vGut0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718052528; c=relaxed/simple;
-	bh=AxeTD70Xdnmf73ygmURvb2qqMwfuW1qpYQt8rNtFhzM=;
+	s=arc-20240116; t=1718052530; c=relaxed/simple;
+	bh=MfMv4iuvVtYp4fD/Tz2vUcjF5O+YDb2bOLk4u2a4UXw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cdXhq2xdxoTmrGhvt2F34V/u4XF4TobJNAHzsGSrIaoZYHR0yhzvUOYM58Cwyqa0eenASR/QNMOMS1iRdsmGzyu7AbOiyJEdb38ebQPtwipoF4/U6Ix5Dj/FCarEptZepSqwu0qU04/kYuqsYOYYYzEtMNU77DaMWVcJi8DHtZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=ijnhJX3k; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48743C32789;
-	Mon, 10 Jun 2024 20:48:47 +0000 (UTC)
+	 MIME-Version; b=HSEYMow6p0P3hW5SY60u5eogdurcoXqg4GSv2ef+329AERUcM9cLjlNQGRP2X5Tf5zX4aoq7QLHy+f/fY4A2qspOT8m7ad+3EiGpxnWchMhfRv53DPx3lE6HDr0617mwr+fywslgP7t8rANmAnG2ooJotzmycr2e5rwz0EcLwvk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=oNUVm+WZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12469C2BBFC;
+	Mon, 10 Jun 2024 20:48:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1718052527;
-	bh=AxeTD70Xdnmf73ygmURvb2qqMwfuW1qpYQt8rNtFhzM=;
+	s=korg; t=1718052529;
+	bh=MfMv4iuvVtYp4fD/Tz2vUcjF5O+YDb2bOLk4u2a4UXw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ijnhJX3k6ykhDoLXMHH3gTvuCLj8D856jE/hjb4+4CVZsd077UMEAHeeBYoxA7MNu
-	 6gVgX6tWfYfvQ4iuKpUERomSR+MkULWmDebnRvSAWDrDIuf0QBvJmtQShosHJJipgt
-	 gYo/n7fprCYiVs/jtM6i1XJrxG14F3QwJ56XOj8Y=
+	b=oNUVm+WZChQbUcGuxj0iePgzWN/STCk1UDe6eSft6fNqLQzRWj+cEg6N7Iub4DgQT
+	 gFmRbO2VfLFjfkDGuPpTzofcmjldor6JMmMVNRboHNJ+QDhCRD1vXvPcqriY2jlZwk
+	 nb0xo8U5Gn6m4lnOBGwcfoDV9Lp536H4cH2d1m6E=
 From: Linus Torvalds <torvalds@linux-foundation.org>
 To: Peter Anvin <hpa@zytor.com>,
 	Ingo Molnar <mingo@kernel.org>,
@@ -52,9 +52,9 @@ Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-arch <linux-arch@vger.kernel.org>,
 	Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 1/7] vfs: dcache: move hashlen_hash() from callers into d_hash()
-Date: Mon, 10 Jun 2024 13:48:15 -0700
-Message-ID: <20240610204821.230388-2-torvalds@linux-foundation.org>
+Subject: [PATCH 2/7] add default dummy 'runtime constant' infrastructure
+Date: Mon, 10 Jun 2024 13:48:16 -0700
+Message-ID: <20240610204821.230388-3-torvalds@linux-foundation.org>
 X-Mailer: git-send-email 2.45.1.209.gc6f12300df
 In-Reply-To: <20240610204821.230388-1-torvalds@linux-foundation.org>
 References: <20240610204821.230388-1-torvalds@linux-foundation.org>
@@ -66,69 +66,118 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Both __d_lookup_rcu() and __d_lookup_rcu_op_compare() have the full
-'name_hash' value of the qstr that they want to look up, and mask it off
-to just the low 32-bit hash before calling down to d_hash().
+This adds the initial dummy support for 'runtime constants' for when
+an architecture doesn't actually support an implementation of fixing up
+said runtime constants.
 
-Other callers just load the 32-bit hash and pass it as the argument.
-
-If we move the masking into d_hash() itself, it simplifies the two
-callers that currently do the masking, and is a no-op for the other
-cases.  It doesn't actually change the generated code since the compiler
-will inline d_hash() and see that the end result is the same.
-
-[ Technically, since the parse tree changes, the code generation may not
-  be 100% the same, and for me on x86-64, this does result in gcc
-  switching the operands around for one 'cmpl' instruction. So not
-  necessarily the exact same code generation, but equivalent ]
-
-However, this does encapsulate the 'd_hash()' operation more, and makes
-the shift operation in particular be a "shift 32 bits right, return full
-word".  Which matches the instruction semantics on both x86-64 and arm64
-better, since a 32-bit shift will clear the upper bits.
-
-That makes the next step of introducing a "shift by runtime constant"
-more obvious and generates the shift with no extraneous type masking.
+This ends up being the fallback to just using the variables as regular
+__ro_after_init variables, and changes the dcache d_hash() function to
+use this model.
 
 Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 ---
- fs/dcache.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ fs/dcache.c                         | 11 ++++++++++-
+ include/asm-generic/Kbuild          |  1 +
+ include/asm-generic/runtime-const.h | 15 +++++++++++++++
+ include/asm-generic/vmlinux.lds.h   |  8 ++++++++
+ 4 files changed, 34 insertions(+), 1 deletion(-)
+ create mode 100644 include/asm-generic/runtime-const.h
 
 diff --git a/fs/dcache.c b/fs/dcache.c
-index 407095188f83..8b4382f5c99d 100644
+index 8b4382f5c99d..5d3a5b315692 100644
 --- a/fs/dcache.c
 +++ b/fs/dcache.c
-@@ -100,9 +100,9 @@ static unsigned int d_hash_shift __ro_after_init;
+@@ -35,6 +35,8 @@
+ #include "internal.h"
+ #include "mount.h"
  
- static struct hlist_bl_head *dentry_hashtable __ro_after_init;
++#include <asm/runtime-const.h>
++
+ /*
+  * Usage:
+  * dcache->d_inode->i_lock protects:
+@@ -102,7 +104,8 @@ static struct hlist_bl_head *dentry_hashtable __ro_after_init;
  
--static inline struct hlist_bl_head *d_hash(unsigned int hash)
-+static inline struct hlist_bl_head *d_hash(unsigned long hashlen)
+ static inline struct hlist_bl_head *d_hash(unsigned long hashlen)
  {
--	return dentry_hashtable + (hash >> d_hash_shift);
-+	return dentry_hashtable + ((u32)hashlen >> d_hash_shift);
+-	return dentry_hashtable + ((u32)hashlen >> d_hash_shift);
++	return runtime_const_ptr(dentry_hashtable) +
++		runtime_const_shift_right_32(hashlen, d_hash_shift);
  }
  
  #define IN_LOOKUP_SHIFT 10
-@@ -2104,7 +2104,7 @@ static noinline struct dentry *__d_lookup_rcu_op_compare(
- 	unsigned *seqp)
- {
- 	u64 hashlen = name->hash_len;
--	struct hlist_bl_head *b = d_hash(hashlen_hash(hashlen));
-+	struct hlist_bl_head *b = d_hash(hashlen);
- 	struct hlist_bl_node *node;
- 	struct dentry *dentry;
+@@ -3129,6 +3132,9 @@ static void __init dcache_init_early(void)
+ 					0,
+ 					0);
+ 	d_hash_shift = 32 - d_hash_shift;
++
++	runtime_const_init(shift, d_hash_shift);
++	runtime_const_init(ptr, dentry_hashtable);
+ }
  
-@@ -2171,7 +2171,7 @@ struct dentry *__d_lookup_rcu(const struct dentry *parent,
- {
- 	u64 hashlen = name->hash_len;
- 	const unsigned char *str = name->name;
--	struct hlist_bl_head *b = d_hash(hashlen_hash(hashlen));
-+	struct hlist_bl_head *b = d_hash(hashlen);
- 	struct hlist_bl_node *node;
- 	struct dentry *dentry;
+ static void __init dcache_init(void)
+@@ -3157,6 +3163,9 @@ static void __init dcache_init(void)
+ 					0,
+ 					0);
+ 	d_hash_shift = 32 - d_hash_shift;
++
++	runtime_const_init(shift, d_hash_shift);
++	runtime_const_init(ptr, dentry_hashtable);
+ }
  
+ /* SLAB cache for __getname() consumers */
+diff --git a/include/asm-generic/Kbuild b/include/asm-generic/Kbuild
+index b20fa25a7e8d..052e5c98c105 100644
+--- a/include/asm-generic/Kbuild
++++ b/include/asm-generic/Kbuild
+@@ -46,6 +46,7 @@ mandatory-y += pci.h
+ mandatory-y += percpu.h
+ mandatory-y += pgalloc.h
+ mandatory-y += preempt.h
++mandatory-y += runtime-const.h
+ mandatory-y += rwonce.h
+ mandatory-y += sections.h
+ mandatory-y += serial.h
+diff --git a/include/asm-generic/runtime-const.h b/include/asm-generic/runtime-const.h
+new file mode 100644
+index 000000000000..670499459514
+--- /dev/null
++++ b/include/asm-generic/runtime-const.h
+@@ -0,0 +1,15 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _ASM_RUNTIME_CONST_H
++#define _ASM_RUNTIME_CONST_H
++
++/*
++ * This is the fallback for when the architecture doesn't
++ * support the runtime const operations.
++ *
++ * We just use the actual symbols as-is.
++ */
++#define runtime_const_ptr(sym) (sym)
++#define runtime_const_shift_right_32(val, sym) ((u32)(val)>>(sym))
++#define runtime_const_init(type,sym) do { } while (0)
++
++#endif
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index 5703526d6ebf..389a78415b9b 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -944,6 +944,14 @@
+ #define CON_INITCALL							\
+ 	BOUNDED_SECTION_POST_LABEL(.con_initcall.init, __con_initcall, _start, _end)
+ 
++#define RUNTIME_NAME(t,x) runtime_##t##_##x
++
++#define RUNTIME_CONST(t,x)						\
++	. = ALIGN(8);							\
++	RUNTIME_NAME(t,x) : AT(ADDR(RUNTIME_NAME(t,x)) - LOAD_OFFSET) {	\
++		*(RUNTIME_NAME(t,x));					\
++	}
++
+ /* Alignment must be consistent with (kunit_suite *) in include/kunit/test.h */
+ #define KUNIT_TABLE()							\
+ 		. = ALIGN(8);						\
 -- 
 2.45.1.209.gc6f12300df
 
