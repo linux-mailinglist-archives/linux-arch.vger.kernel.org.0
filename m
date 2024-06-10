@@ -1,134 +1,196 @@
-Return-Path: <linux-arch+bounces-4814-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4816-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 310F4902A37
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Jun 2024 22:50:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 762F2902C83
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Jun 2024 01:35:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BF1ED286553
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Jun 2024 20:50:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EA1301F21F59
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Jun 2024 23:35:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AE41152188;
-	Mon, 10 Jun 2024 20:48:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9131C6F2FD;
+	Mon, 10 Jun 2024 23:35:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="oW6YdVQZ"
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="f8aCIaXn"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6DCE15217E;
-	Mon, 10 Jun 2024 20:48:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DFAD3C0C;
+	Mon, 10 Jun 2024 23:35:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718052538; cv=none; b=U3/hrJA7DIZC9cMEE7g8m1Xa0vGs8yfAe6BcaXEg/HPKikS4gVWPwyR1hXPtHlzaxNQZclkYRj/UMKwofF47Y5smVVxXRcDU07fDMAEXLEVE+koewfV5vBd50ATjjqHp2PvtfRnBABhNnLLBeTbaDsIFMWgd8xbot1yiBCJfZGM=
+	t=1718062537; cv=none; b=Mr5TyoqVyRt5mwJqxTVrgVpH9PqsBvroJgDF/pbyjP9BbLoxLQ+RAAGyysX+yzBhFRSDqT5kKsYWMbSPxhwnb7ha82rrgJtb+SylS08Ss7S0WCD6T3ZFXTFYQo6p4ovL0gNAWviI4EhgHOuIu6cCELPrrTyGt4dXdJP03q+ASvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718052538; c=relaxed/simple;
-	bh=ZLKP+8SlFBbrksEeWgQE5JXZVIKp4sUqZEnPm1wWp08=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DmQmGWsbsFaV0WwYhbBAvHQMrK4eKeGFueAFv+n0znOjbrvD0cihqYEcZBv1WGR4TKFn4TaEiINUrlU9vqY8nR5/3JZ7Ern4v8gK6M98ai0VqlFfrOGV+P2PXWrKxX7RHuyixIzmQKnH4eietw0jSkYy6GVlAkVPk4Egsz5a1sE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=oW6YdVQZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A8B8C2BBFC;
-	Mon, 10 Jun 2024 20:48:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1718052537;
-	bh=ZLKP+8SlFBbrksEeWgQE5JXZVIKp4sUqZEnPm1wWp08=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=oW6YdVQZvb7pT3RZFzWwOH0DwmEzdPSEz6ug0yrQT5f7eFcIFPll+TIRF/JYMqYAN
-	 IPuGjDiAiCBVYcvtkSVVlzyLqnVfjT59DCr4d/zHaCDWs3pNa9EDzgXhxWifioijEi
-	 SB0wd1qaiCK27TsS/Cb+VMdqMj9GjYqEaSE5JufY=
-From: Linus Torvalds <torvalds@linux-foundation.org>
-To: Peter Anvin <hpa@zytor.com>,
-	Ingo Molnar <mingo@kernel.org>,
-	Borislav Petkov <bp@alien8.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	the arch/x86 maintainers <x86@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-arch <linux-arch@vger.kernel.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 7/7] arm64: access_ok() optimization
-Date: Mon, 10 Jun 2024 13:48:21 -0700
-Message-ID: <20240610204821.230388-8-torvalds@linux-foundation.org>
-X-Mailer: git-send-email 2.45.1.209.gc6f12300df
-In-Reply-To: <20240610204821.230388-1-torvalds@linux-foundation.org>
-References: <20240610204821.230388-1-torvalds@linux-foundation.org>
+	s=arc-20240116; t=1718062537; c=relaxed/simple;
+	bh=wSWL/70ZBsPTYeRbz7dH6zGPqpxIt4663shY+CMkz7I=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=i3FO0fA61Esmjd39fkYkCcyj7ofAvtDrN+Po+AahGqBR9ZDh+5n3xMalWeuDh7Ue8d1oqQ5zAwJYlCgJgbMelYgaNlqfv9VqQ569zl0yBkomIFd+pTR8CTSobFt71BPGIgrnDFSOjvPODECSbpBFkqnAdCJNpIO7K2LxuyBSoFc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=f8aCIaXn; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+Received: from [127.0.0.1] ([76.133.66.138])
+	(authenticated bits=0)
+	by mail.zytor.com (8.17.2/8.17.1) with ESMTPSA id 45AKdkPF1303131
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Mon, 10 Jun 2024 13:39:47 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 45AKdkPF1303131
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2024051501; t=1718051988;
+	bh=jcCI8SDBfOzo+prfPYX0FGiNeJM3cOjzgscH9q+Yza8=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=f8aCIaXn7i5aYCWXgNqkBWwZ6gB5uqiPqD5lyOHUkAsjHY9w/OKIIlJ9rbJQiJhoc
+	 tj9YJpLVgztdmZpzbHO+oucSp6qkci/vvRdEaVZDE1b6Ico7xkYC8T4JGV2GscIqib
+	 n/XViD0dYfTykiUswTNRyZS51ONXDXIwq5z8uVW4CR9QMzKLxvtEP3sgp4Y7HPcZvE
+	 l4xA7FE5AZOmExO6ywbm6vAKaaoXvW3mFxOoOzSoX36MaKH9ikjLH6LilwXG6lJX/q
+	 dP15+HBmqlM9tXp7qrneYz6ZZOOcyfFMWUzr4RjgiOphDTITBDGaOPzyNL/dgDa38N
+	 5TM0kkEib8tQg==
+Date: Mon, 10 Jun 2024 13:39:40 -0700
+From: "H. Peter Anvin" <hpa@zytor.com>
+To: Linus Torvalds <torvalds@linux-foundation.org>,
+        Borislav Petkov <bp@alien8.de>
+CC: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH] x86: add 'runtime constant' infrastructure
+User-Agent: K-9 Mail for Android
+In-Reply-To: <CAHk-=wgb98nSCvJ-gL42mt+jt6Eyp-0QSMJLovmAoJOkQ_G3gQ@mail.gmail.com>
+References: <20240608193504.429644-2-torvalds@linux-foundation.org> <20240610104352.GT8774@noisy.programming.kicks-ass.net> <20240610120201.GAZmbrOYmcA21kD8NB@fat_crate.local> <CAHk-=wgb98nSCvJ-gL42mt+jt6Eyp-0QSMJLovmAoJOkQ_G3gQ@mail.gmail.com>
+Message-ID: <71FE7A14-62F6-45D3-9BC4-BE09E06F7863@zytor.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-The TBI setup on arm64 is very strange: HW is set up to always do TBI,
-but the kernel enforcement for system calls is purely a software
-contract, and user space is supposed to mask off the top bits before the
-system call.
+On June 10, 2024 11:20:21 AM PDT, Linus Torvalds <torvalds@linux-foundation=
+=2Eorg> wrote:
+>On Mon, 10 Jun 2024 at 05:02, Borislav Petkov <bp@alien8=2Ede> wrote:
+>>
+>> I think we should accept patches using this only when there really is
+>> a good, perf reason for doing so=2E Not "I wanna use this fance shite i=
+n
+>> my new driver just because=2E=2E=2E"=2E
+>
+>Absolutely=2E
+>
+>So for example, if the code could possibly be a module, it's never
+>going to be able to use runtime constants=2E
+>
+>If the code doesn't show up as "noticeable percentage of kernel time
+>on real loads", it will not be a valid use for runtime constants=2E
+>
+>The reason I did __d_lookup_rcu() is that I have optimized that
+>function to hell and back before, and it *still* showed up at 14% of
+>kernel time on my "empty kernel build" benchmark=2E And the constant
+>load was a noticeable - but not dominant - part of that=2E
+>
+>And yes, it shows up that high because it's all D$ misses, and the
+>machine I tested on has more CPU cores than cache, so it's all kinds
+>of broken=2E But the point ends up being that __d_lookup_rcu() is just
+>very very hot on loads that just do a lot of 'stat()' calls (and such
+>loads exist and aren't just microbenchmarks)=2E
+>
+>I have other functions I see in the 5%+ range of kernel overhead on
+>real machines, but they tend to be things like clear_page(), which is
+>another kind of issue entirely=2E
+>
+>And yes, the benchmarks I run are odd ("why would anybody care about
+>an empty kernel build?") but somewhat real to me (since I do builds
+>between every pull even when they just change a couple of files)=2E
+>
+>And yes, to actually even see anything else than the CPU security
+>issues on x86, you need to build without debug support, and without
+>retpolines etc=2E So my profiles are "fake" in that sense, because they
+>are the best case profiles without a lot of the horror that people
+>enable=2E
+>
+>Others will have other real benchmarks, which is why I do think we'd
+>end up with more uses of this=2E But I would expect a handful, not
+>"hundreds"=2E
+>
+>I could imagine some runtime constant in the core networking socket
+>code, for example=2E Or in some scheduler thing=2E Or kernel entry code=
+=2E
+>
+>But not ever in a driver or a filesystem, for example=2E Once you've
+>gotten that far off the core code path, the "load a variable" overhead
+>just isn't relevant any more=2E
+>
+>                Linus
 
-Except all the actual brk/mmap/etc() system calls then mask it in kernel
-space anyway, and accept any TBI address.
+So I would also strongly suggest that we make the code fault if it is exec=
+uted unpatched if there is no fallback=2E
 
-This basically unifies things and makes access_ok() also ignore it.
+My original motivation for making the code as complex as I did was to hand=
+le both the init and noninit cases, and to handle things other than mov (fo=
+r the mov case, it is quite trivial to allow for either a memory reference =
+or an immediate, of course, but I was trying to optimize all kinds of opera=
+tions, of which shifts were by far the worst=2E Almost certainly a mistake =
+on my part=2E)
 
-This is an ABI change, but the current situation is very odd, and this
-change avoids the current mess and makes the kernel more permissive, and
-as such is unlikely to break anything.
+For that case it also works just fine in modules, since alternatives does =
+the patching there already=2E
 
-The way forward - for some possible future situation when people want to
-use more bits - is probably to introduce a new "I actually want the full
-64-bit address space" prctl.  But we should make sure that the software
-and hardware rules actually match at that point.
+The way I did it was to introduce a new alternative patching type (a conce=
+pt that didn't exist yet, and again I made the mistake of not simply doing =
+that part separately first) using the address of the variable in question (=
+in the ro_after_init segment) as the alternatives source buffer=2E=20
 
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
----
- arch/arm64/include/asm/uaccess.h | 23 ++++++++++-------------
- 1 file changed, 10 insertions(+), 13 deletions(-)
+Much has changed since I hacked on this, a lot of which makes this whole c=
+oncept *much* easier to implement=2E We could even make it completely trans=
+parent at the programmer level by using objtool or a linker plugin to detec=
+t loads from a certain segment and tag them for alternatives patching (whic=
+h would, however, require adding padding to some kinds of instructions, not=
+ably arbitrary 64-bit immediates=2E)
 
-diff --git a/arch/arm64/include/asm/uaccess.h b/arch/arm64/include/asm/uaccess.h
-index 4ab3938290ab..a435eff4ee93 100644
---- a/arch/arm64/include/asm/uaccess.h
-+++ b/arch/arm64/include/asm/uaccess.h
-@@ -30,23 +30,20 @@ static inline int __access_ok(const void __user *ptr, unsigned long size);
- 
- /*
-  * Test whether a block of memory is a valid user space address.
-- * Returns 1 if the range is valid, 0 otherwise.
-  *
-- * This is equivalent to the following test:
-- * (u65)addr + (u65)size <= (u65)TASK_SIZE_MAX
-+ * We only care that the address cannot reach the kernel mapping, and
-+ * that an invalid address will fault.
-  */
--static inline int access_ok(const void __user *addr, unsigned long size)
-+static inline int access_ok(const void __user *p, unsigned long size)
- {
--	/*
--	 * Asynchronous I/O running in a kernel thread does not have the
--	 * TIF_TAGGED_ADDR flag of the process owning the mm, so always untag
--	 * the user address before checking.
--	 */
--	if (IS_ENABLED(CONFIG_ARM64_TAGGED_ADDR_ABI) &&
--	    (current->flags & PF_KTHREAD || test_thread_flag(TIF_TAGGED_ADDR)))
--		addr = untagged_addr(addr);
-+	unsigned long addr = (unsigned long)p;
- 
--	return likely(__access_ok(addr, size));
-+	/* Only bit 55 of the address matters */
-+	addr |= addr+size;
-+	addr = (addr >> 55) & 1;
-+	size >>= 55;
-+
-+	return !(addr | size);
- }
- #define access_ok access_ok
- 
--- 
-2.45.1.209.gc6f12300df
+The one case that gets really nasty for automatic conversation is the case=
+ of an arbitrary 64-bit value used in a computation,  like:
 
+    __patchable long b;
+    long a;
+    /* =2E=2E=2E */
+    a +=3D b;
+
+The compiler can generate:=20
+
+     addq b(%rip),%rax
+
+=2E=2E=2E which would require a temporary register to convert to an immedi=
+ate=2E On the other hand:=20
+
+    __patchable int b;
+    long a;
+    /* =2E=2E=2E */
+    a +=3D b;
+
+=2E=2E=2E would generate =2E=2E=2E
+
+    movslq b(%rip),%rbx
+    addq %rbx,%rax
+   =20
+=2E=2E=2E which can be compacted down to a single instruction:=20
+
+    addq $bimm,%rax
+
+=2E=2E=2E so *really* optimizing this could be rather tricky without some =
+kind of compiler support (native or via plug-in) even=2E The most likely op=
+tion would be to generate object code as if immediate instructions are used=
+, but with relocations that indicate "value of" rather than "address of" th=
+e variable being referenced=2E Postprocessing either at the assembly level =
+or object code level (i=2Ee=2E objtool) can then substitute the prepatch se=
+quence and alternatives metadata=2E
+
+(If it is a custom plug-in then postprocessing is presumably not necessary=
+, of course=2E)
 
