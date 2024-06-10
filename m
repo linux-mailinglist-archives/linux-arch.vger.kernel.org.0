@@ -1,178 +1,147 @@
-Return-Path: <linux-arch+bounces-4803-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4804-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51D64902858
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Jun 2024 20:09:14 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E035902884
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Jun 2024 20:20:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E277728749C
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Jun 2024 18:09:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CE085B22014
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Jun 2024 18:20:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F93214B973;
-	Mon, 10 Jun 2024 18:07:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1415F137747;
+	Mon, 10 Jun 2024 18:20:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="J6Q9caiY"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="AbOR1fBL"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B94DE152DF5
-	for <linux-arch@vger.kernel.org>; Mon, 10 Jun 2024 18:07:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20FA518E20
+	for <linux-arch@vger.kernel.org>; Mon, 10 Jun 2024 18:20:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718042826; cv=none; b=dQcz+ajCTKFUuQmyoD6/hWabUpEX5a0WEdMCdFlCMyH45ChKMx9Rwa8ZZtAehsTqptiFqVUVeBtnbOMFxHDjylTxTQUcscQhtowwHfwCNDSHRTM8kfy5iQ8RUGJTxc6Wc5faI/6eYOKWCF0Kgrq5cY2yCzkr9v8Y05lnCP47OEQ=
+	t=1718043644; cv=none; b=H2s3zgate+BhUZ8rVNdN5ap2MrN1pSynpKmlOT+yxrgAcBR6bsRtL9plKjf/jBce/kGB2E7hdZZRBdQNkGbb94Jf04Vz72acXOKJHNEUTJfNtjMOrwup9lu8Rep59wdzR5ubzb1My63fKbUoKcjoOrc13ShKeTk4udoh/KsjIkQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718042826; c=relaxed/simple;
-	bh=IEMruENEL3ierTK2Q7GOjtcBtiocQYEg6s5U0b0zRD8=;
+	s=arc-20240116; t=1718043644; c=relaxed/simple;
+	bh=YdPpztgDQSSz/ui84/o+Jq7wpxjYCYfXyvlmA14OBXs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pxX27Ki90BHUoFym3ys3wTXUckjI4EzgS+yqYs2YqJXxyVZ9071UsXvyXUh6OtUEs8X27q0g3gqG2m9KtUJoI0Ya4DBMMat1F0rTW1v8HqbHGHV8qrt5YWStWmt23ZFk4aB/i00et7uMFwY9O9VimSjg9FEiEUZ3axn9klfLhMk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=J6Q9caiY; arc=none smtp.client-ip=209.85.218.45
+	 To:Cc:Content-Type; b=NcYluE8drbVafJR4rmrHUOfiY2CLP/Pv8aT0wZJlpe3clytm2QtraffOel/26eiPwlcwDChQphlYGB8YcrGpSFwVDg5s0lfBuFj+aIKDqGhGdaRy79KxLzElR2SWGDMp+k1Bmp294ptjjQhOXreduzzlZ0EQR954QKkOsOstw2k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=AbOR1fBL; arc=none smtp.client-ip=209.85.218.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-a6ef8bf500dso24277866b.0
-        for <linux-arch@vger.kernel.org>; Mon, 10 Jun 2024 11:07:04 -0700 (PDT)
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a6f1f33486eso80536066b.3
+        for <linux-arch@vger.kernel.org>; Mon, 10 Jun 2024 11:20:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1718042823; x=1718647623; darn=vger.kernel.org;
+        d=linux-foundation.org; s=google; t=1718043640; x=1718648440; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=uYkLMdQHI9XJCb3iOQ1AqKkfh0e7ysMUAFGnmxGuJNM=;
-        b=J6Q9caiYNLtrhbEYWTXK9tQEzxcLiCtpdXVpqblrhQwD+wrllMl3SP2Or669HomvOh
-         RDW61b0bx4AQp4H5nd2Kstt+Nxc76dbIlKn/+70csLHoqWLY6YBKg47rCCHh9pExZ+gP
-         xsmK7Rq/JHFb1nydiebAfmt4Gn6C4Q1mX2Ais=
+        bh=aYJqDCT/kt+Lupsq+l10eN+h11oxsZOu7xdU28kZFKE=;
+        b=AbOR1fBLkcltJ8xXLPJvh/K4pdJWAy+W0eqvPVnXe/CFhRnpDQxpg/i0oX8XuxPIQS
+         0029h2RTYILDjqAgfp140YevEmouo+3K+vRlVM/D2u5bK0C227j5mjQwETFp3aX4E7mE
+         9+QWP2Xiklc7Z9ICYFBej0Y2L/vManj4owiPU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718042823; x=1718647623;
+        d=1e100.net; s=20230601; t=1718043640; x=1718648440;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=uYkLMdQHI9XJCb3iOQ1AqKkfh0e7ysMUAFGnmxGuJNM=;
-        b=o45Xy9Tgah6iiU3mH5uqVcaZOwl2FwZ6o2BWcBPqFVOoVmAUhPXo2HdMAWQTjhPNsN
-         7sromYEnOMQPi3M6aAyrHo7ThDteUpGnnQ00+QjoageYmihmBZyplYhAZOwgWWaUWSM+
-         keuoQwn9IvkWCwEUnl009/pTZjuzt5EbaviRv8M2hfy/ENYjW8EFt5PIp1SVfaDuXczk
-         AZ5+8MWHFlBa9KDZDj2PYIjVMS+K06T8hQFKVCseB9INXtlGjAVxKqo2pW0JYGNZH6C2
-         RB1cu/NahHkrriYS8o+FymuOzrfviVK5dQCgjs2qpt2HmJEBsSvWguJ511gwo9fJnLnp
-         ALlQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVi7zAcJpRhMJKca5HZbBWALK7/uejbDb7rpmEijnz+ojQRDkDxINvtCtBuT1nj32R6AwMIy8zEywHh2XFGGrLDs4aNmEnUUzeMrw==
-X-Gm-Message-State: AOJu0YykT4XuOjjvQNlrO9Hb5p9WcmumMF8slrQ0hw2oomv13gp7frZr
-	2joHzeC9KQrjaHdqmDB/sD+qrsLgm8qv/Jrmx/XLADJnHUMoeChyOkxdeDRu0NAoNww3bSY87uQ
-	Mp08=
-X-Google-Smtp-Source: AGHT+IF12pL5J6QdDyV81J1Ng6abuJMA7ZQGQXWz3/lFWEJuONIsBnkfNv+ahHcnB50ZuKoq+b2DOg==
-X-Received: by 2002:a17:906:22cf:b0:a6f:df9:6da4 with SMTP id a640c23a62f3a-a6f0df96e7amr389187866b.44.1718042822965;
-        Mon, 10 Jun 2024 11:07:02 -0700 (PDT)
+        bh=aYJqDCT/kt+Lupsq+l10eN+h11oxsZOu7xdU28kZFKE=;
+        b=v7Mtg8/LN3JycGCdF/03YldKuCjlivmImTHBlch2j1XWRFQy1t7UY9eHnDApRPioTM
+         Gk71uTfX9zTSbtIGfoOmmwk87qmNUwVkdCR6IP9UQa5lYQnOjWZEwv4ARZPnEl54WzT0
+         KZGquo/OMp2M/8+l0NaqebyuncvHDWNc9SzxWloHodtwQoH33dxog/i2m7T2uxONFs9x
+         bcGoosTYFhwluU0jCWrc06CHTrTShCp+DePF7gZAuAiXXs4n3XMKWLPYPTjD5gGC7khb
+         qNG49nHwnzqqRG3w3xffCVXB3dd5CAwbHucJ0YEKCapX1ueW5gjotVG+ycLJwO5t9hrF
+         j4iQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX+7ATQwNkOPwBbOJncErJMUXVozNtCZf/OkW34BlxDtipqCp9u70N5q29Y52JktpMbpEE4u072TePOLpwAv5QS+sg/jjbe3+hrgg==
+X-Gm-Message-State: AOJu0YxChWGVe+gKIocZp6rX59LLhmFlTkT6IXR8UJcdw4LttugO3r/t
+	dbT7E/sljWKx7fjho9orEyMDreJ1AiH/pytn/vF2BRsFmzz+v0xDGAt8dxq0FaCzAadJRkmtv29
+	1srw=
+X-Google-Smtp-Source: AGHT+IFNrgUISWG4dD6o0aMEyv2N4PC+gwVBIYflidQnZADjQc1NdTrlV0/L1ASL2OOoS7AlgEAJdw==
+X-Received: by 2002:a50:f695:0:b0:57c:71ca:f651 with SMTP id 4fb4d7f45d1cf-57c71caf6d2mr4853414a12.20.1718043640136;
+        Mon, 10 Jun 2024 11:20:40 -0700 (PDT)
 Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com. [209.85.208.44])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6f20563a26sm139729666b.129.2024.06.10.11.07.01
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57aae0ca9c9sm7818742a12.22.2024.06.10.11.20.39
         for <linux-arch@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jun 2024 11:07:01 -0700 (PDT)
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-57c75464e77so212870a12.0
-        for <linux-arch@vger.kernel.org>; Mon, 10 Jun 2024 11:07:01 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVMCtGG6zXh1ABohnYAeeG+Jog4zZ49S9RTpc+D/QlZZtbBGoQpwJfUFC+7ZpTN2jzmnEL8AV7Jqq/VzTqwDe4RgdraJ1b6UWq/+w==
-X-Received: by 2002:a50:8d54:0:b0:574:ec8a:5267 with SMTP id
- 4fb4d7f45d1cf-57c50990bc5mr6829442a12.31.1718042821079; Mon, 10 Jun 2024
- 11:07:01 -0700 (PDT)
+        Mon, 10 Jun 2024 11:20:39 -0700 (PDT)
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-57c831b6085so843144a12.1
+        for <linux-arch@vger.kernel.org>; Mon, 10 Jun 2024 11:20:39 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCW70+iG1Q+Ac04Xi5R2ILQXdhbed3gsBlzq2HDdiPRfFtvLs/RBESRPdvlTumsPFeOypc1Egri3YyzgJssnqkTlKDvvCVO15ZH0QA==
+X-Received: by 2002:a50:ab59:0:b0:57c:5f77:1136 with SMTP id
+ 4fb4d7f45d1cf-57c5f7711f5mr6877211a12.24.1718043638768; Mon, 10 Jun 2024
+ 11:20:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240608193504.429644-2-torvalds@linux-foundation.org> <20240610104352.GT8774@noisy.programming.kicks-ass.net>
-In-Reply-To: <20240610104352.GT8774@noisy.programming.kicks-ass.net>
+References: <20240608193504.429644-2-torvalds@linux-foundation.org>
+ <20240610104352.GT8774@noisy.programming.kicks-ass.net> <20240610120201.GAZmbrOYmcA21kD8NB@fat_crate.local>
+In-Reply-To: <20240610120201.GAZmbrOYmcA21kD8NB@fat_crate.local>
 From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Mon, 10 Jun 2024 11:06:44 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wh5DAR=a12cbKbxDy875hTOtPmNUDEn+dU2VS47h9MgcQ@mail.gmail.com>
-Message-ID: <CAHk-=wh5DAR=a12cbKbxDy875hTOtPmNUDEn+dU2VS47h9MgcQ@mail.gmail.com>
+Date: Mon, 10 Jun 2024 11:20:21 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgb98nSCvJ-gL42mt+jt6Eyp-0QSMJLovmAoJOkQ_G3gQ@mail.gmail.com>
+Message-ID: <CAHk-=wgb98nSCvJ-gL42mt+jt6Eyp-0QSMJLovmAoJOkQ_G3gQ@mail.gmail.com>
 Subject: Re: [PATCH] x86: add 'runtime constant' infrastructure
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Peter Anvin <hpa@zytor.com>, Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@alien8.de>, 
+To: Borislav Petkov <bp@alien8.de>
+Cc: Peter Zijlstra <peterz@infradead.org>, Peter Anvin <hpa@zytor.com>, Ingo Molnar <mingo@kernel.org>, 
 	Thomas Gleixner <tglx@linutronix.de>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
 	Josh Poimboeuf <jpoimboe@kernel.org>, 
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, "the arch/x86 maintainers" <x86@kernel.org>, 
 	linux-arch <linux-arch@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 
-On Mon, 10 Jun 2024 at 03:43, Peter Zijlstra <peterz@infradead.org> wrote:
+On Mon, 10 Jun 2024 at 05:02, Borislav Petkov <bp@alien8.de> wrote:
 >
-> --- linux-2.6.orig/arch/Kconfig
-> +++ linux-2.6/arch/Kconfig
-> @@ -1492,6 +1492,9 @@ config HAVE_SPARSE_SYSCALL_NR
->  config ARCH_HAS_VDSO_DATA
->         bool
->
-> +config HAVE_RUNTIME_CONST
-> +       bool
+> I think we should accept patches using this only when there really is
+> a good, perf reason for doing so. Not "I wanna use this fance shite in
+> my new driver just because...".
 
-No. We're not adding a stupid config variable, when nothing actually wants it.
+Absolutely.
 
-> +#define __runtime_const(sym, op, type)                 \
-> +({                                                     \
-> +       typeof(sym) __ret;                              \
-> +       asm(op " %1, %0\n1:\n"                          \
-> +           ".pushsection __runtime_const, \"aw\"\n\t"  \
-> +           ".long %c3 - .      # sym \n\t"             \
-> +           ".long %c2          # size \n\t"            \
-> +           ".long 1b - %c2 - . # addr \n\t"            \
-> +           ".popsection\n\t"                           \
-> +           : "=r" (__ret)                              \
-> +           : "i" ((type)0x0123456789abcdefull),        \
-> +             "i" (sizeof(type)),                       \
-> +             "i" ((void *)&sym));                      \
-> +       __ret;                                          \
-> +})
-> +
-> +#define runtime_const(sym)                                             \
-> +({                                                                     \
-> +       typeof(sym) __ret;                                              \
-> +       switch(sizeof(sym)) {                                           \
-> +       case 1: __ret = __runtime_const(sym, "movb", u8); break;        \
-> +       case 2: __ret = __runtime_const(sym, "movs", u16); break;       \
-> +       case 4: __ret = __runtime_const(sym, "movl", u32); break;       \
-> +       case 8: __ret = __runtime_const(sym, "movq", u64); break;       \
-> +       default: BUG();                                                 \
-> +       }                                                               \
-> +       __ret;                                                          \
-> +})
+So for example, if the code could possibly be a module, it's never
+going to be able to use runtime constants.
 
-And no. We're not adding magic "generic" helpers that have zero use
-and just make the code harder to read, and don't even work on 32-bit
-x86 anyway.
+If the code doesn't show up as "noticeable percentage of kernel time
+on real loads", it will not be a valid use for runtime constants.
 
-Because I didn't test, but I am pretty sure that clang will not
-compile the above on x86-32, because clang verifies the inline asm,
-and "movq" isn't a valid instruction.
+The reason I did __d_lookup_rcu() is that I have optimized that
+function to hell and back before, and it *still* showed up at 14% of
+kernel time on my "empty kernel build" benchmark. And the constant
+load was a noticeable - but not dominant - part of that.
 
-We had exactly that for the uaccess macros, and needed to special-case
-the 64-bit case for that reason.
+And yes, it shows up that high because it's all D$ misses, and the
+machine I tested on has more CPU cores than cache, so it's all kinds
+of broken. But the point ends up being that __d_lookup_rcu() is just
+very very hot on loads that just do a lot of 'stat()' calls (and such
+loads exist and aren't just microbenchmarks).
 
-And we don't *need* to. All of the above is garbage waiting for a use
-that shouldn't exist.
+I have other functions I see in the 5%+ range of kernel overhead on
+real machines, but they tend to be things like clear_page(), which is
+another kind of issue entirely.
 
-> +++ linux-2.6/kernel/runtime_const.c
-> @@ -0,0 +1,119 @@
+And yes, the benchmarks I run are odd ("why would anybody care about
+an empty kernel build?") but somewhat real to me (since I do builds
+between every pull even when they just change a couple of files).
 
-And here you basically tripled the size of the patch in order to have
-just one section, when I had per-symbol sections.
+And yes, to actually even see anything else than the CPU security
+issues on x86, you need to build without debug support, and without
+retpolines etc. So my profiles are "fake" in that sense, because they
+are the best case profiles without a lot of the horror that people
+enable.
 
-So no.
+Others will have other real benchmarks, which is why I do think we'd
+end up with more uses of this. But I would expect a handful, not
+"hundreds".
 
-I envision a *couple* of runtime constants. The absolutely only reason
-to use a runtime constant is that it is *so* hot that the difference
-between "load a variable" and "write code with a constant" is
-noticeable.
+I could imagine some runtime constant in the core networking socket
+code, for example. Or in some scheduler thing. Or kernel entry code.
 
-I can point to exactly one such case in the kernel right now.
+But not ever in a driver or a filesystem, for example. Once you've
+gotten that far off the core code path, the "load a variable" overhead
+just isn't relevant any more.
 
-I'm sure there are others, but I'd expect that "others" to be mainly a handful.
-
-This needs to be simple, obvious, and literally designed for very targeted use.
-
-This is a *very* special case for a *very* special code. Not for generic use.
-
-I do not ever expect to see this used by modules, for example. There
-is no way in hell I will expose the instruction rewriting to a module.
-The *use* of a constant is a _maybe_, but it's questionable too. By
-definition, module code cannot be all that core.
-
-             Linus
+                Linus
 
