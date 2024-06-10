@@ -1,43 +1,43 @@
-Return-Path: <linux-arch+bounces-4813-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4814-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B01C902A35
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Jun 2024 22:50:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 310F4902A37
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Jun 2024 22:50:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 703981C211C4
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Jun 2024 20:50:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BF1ED286553
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Jun 2024 20:50:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B07271514F0;
-	Mon, 10 Jun 2024 20:48:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AE41152188;
+	Mon, 10 Jun 2024 20:48:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="tsQpcNeB"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="oW6YdVQZ"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 877151514E3;
-	Mon, 10 Jun 2024 20:48:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6DCE15217E;
+	Mon, 10 Jun 2024 20:48:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718052536; cv=none; b=C4L0qbYzRvMY4AxmStQnYUjdGmOc0mt/BV4RyAhFYkBwO8bBZBgECTf5xRZkZivFUA2ud6y/vD/oslZASu3DywVo6ipphX2Ed+PUE0tJweJIWb/WjZ23LahwcemQ3qWRJxPCkiGy4iQfpTJkUmNhZvprcLfUkSwf1KVEihB2UCk=
+	t=1718052538; cv=none; b=U3/hrJA7DIZC9cMEE7g8m1Xa0vGs8yfAe6BcaXEg/HPKikS4gVWPwyR1hXPtHlzaxNQZclkYRj/UMKwofF47Y5smVVxXRcDU07fDMAEXLEVE+koewfV5vBd50ATjjqHp2PvtfRnBABhNnLLBeTbaDsIFMWgd8xbot1yiBCJfZGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718052536; c=relaxed/simple;
-	bh=HEom2f9nqPDH+BblCEPQfasllgGSfBKQH1eKuClsvcM=;
+	s=arc-20240116; t=1718052538; c=relaxed/simple;
+	bh=ZLKP+8SlFBbrksEeWgQE5JXZVIKp4sUqZEnPm1wWp08=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=n7/zuPPzcRtWhIT0TTc4F10vWihK9YB6ZkSSjaCiu/fiBtoJDuj12GPndkMn2dpiZcwqXoiwocmTEjpT7AJvZfQJqyhEv/qTmKX0vLjTpMuHDqIETNUAjnpTihFtvDqoIdi60uMd+8aW37Y8W54VoaXd8Le0i80Pe7UMG9XY/VA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=tsQpcNeB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D708EC4AF48;
-	Mon, 10 Jun 2024 20:48:55 +0000 (UTC)
+	 MIME-Version; b=DmQmGWsbsFaV0WwYhbBAvHQMrK4eKeGFueAFv+n0znOjbrvD0cihqYEcZBv1WGR4TKFn4TaEiINUrlU9vqY8nR5/3JZ7Ern4v8gK6M98ai0VqlFfrOGV+P2PXWrKxX7RHuyixIzmQKnH4eietw0jSkYy6GVlAkVPk4Egsz5a1sE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=oW6YdVQZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A8B8C2BBFC;
+	Mon, 10 Jun 2024 20:48:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1718052536;
-	bh=HEom2f9nqPDH+BblCEPQfasllgGSfBKQH1eKuClsvcM=;
+	s=korg; t=1718052537;
+	bh=ZLKP+8SlFBbrksEeWgQE5JXZVIKp4sUqZEnPm1wWp08=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=tsQpcNeB57uThZqtmJz2uP7dIDIbOiuBLKtYN1S0h9KofsPY+LiMsarc3KDWA800n
-	 vZ87ZsrW9o+P/HKUD3jAGoNbkk6gC8IvyFp9EifHDY3/X+cXSqpq8GA3ooI0lHiMLB
-	 lFocJn6d0REtPkDmMazP7SwwKsNdR8Ami0VhulN4=
+	b=oW6YdVQZvb7pT3RZFzWwOH0DwmEzdPSEz6ug0yrQT5f7eFcIFPll+TIRF/JYMqYAN
+	 IPuGjDiAiCBVYcvtkSVVlzyLqnVfjT59DCr4d/zHaCDWs3pNa9EDzgXhxWifioijEi
+	 SB0wd1qaiCK27TsS/Cb+VMdqMj9GjYqEaSE5JufY=
 From: Linus Torvalds <torvalds@linux-foundation.org>
 To: Peter Anvin <hpa@zytor.com>,
 	Ingo Molnar <mingo@kernel.org>,
@@ -52,9 +52,9 @@ Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-arch <linux-arch@vger.kernel.org>,
 	Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 6/7] arm64: start using 'asm goto' for put_user() when available
-Date: Mon, 10 Jun 2024 13:48:20 -0700
-Message-ID: <20240610204821.230388-7-torvalds@linux-foundation.org>
+Subject: [PATCH 7/7] arm64: access_ok() optimization
+Date: Mon, 10 Jun 2024 13:48:21 -0700
+Message-ID: <20240610204821.230388-8-torvalds@linux-foundation.org>
 X-Mailer: git-send-email 2.45.1.209.gc6f12300df
 In-Reply-To: <20240610204821.230388-1-torvalds@linux-foundation.org>
 References: <20240610204821.230388-1-torvalds@linux-foundation.org>
@@ -66,154 +66,67 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This generates noticeably better code with compilers that support it,
-since we don't need to test the error register etc, the exception just
-jumps to the error handling directly.
+The TBI setup on arm64 is very strange: HW is set up to always do TBI,
+but the kernel enforcement for system calls is purely a software
+contract, and user space is supposed to mask off the top bits before the
+system call.
+
+Except all the actual brk/mmap/etc() system calls then mask it in kernel
+space anyway, and accept any TBI address.
+
+This basically unifies things and makes access_ok() also ignore it.
+
+This is an ABI change, but the current situation is very odd, and this
+change avoids the current mess and makes the kernel more permissive, and
+as such is unlikely to break anything.
+
+The way forward - for some possible future situation when people want to
+use more bits - is probably to introduce a new "I actually want the full
+64-bit address space" prctl.  But we should make sure that the software
+and hardware rules actually match at that point.
 
 Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 ---
- arch/arm64/include/asm/uaccess.h | 77 +++++++++++++++++++-------------
- 1 file changed, 46 insertions(+), 31 deletions(-)
+ arch/arm64/include/asm/uaccess.h | 23 ++++++++++-------------
+ 1 file changed, 10 insertions(+), 13 deletions(-)
 
 diff --git a/arch/arm64/include/asm/uaccess.h b/arch/arm64/include/asm/uaccess.h
-index 23c2edf517ed..4ab3938290ab 100644
+index 4ab3938290ab..a435eff4ee93 100644
 --- a/arch/arm64/include/asm/uaccess.h
 +++ b/arch/arm64/include/asm/uaccess.h
-@@ -294,29 +294,41 @@ do {									\
- 	} while (0);							\
- } while (0)
+@@ -30,23 +30,20 @@ static inline int __access_ok(const void __user *ptr, unsigned long size);
  
--#define __put_mem_asm(store, reg, x, addr, err, type)			\
-+#ifdef CONFIG_CC_HAS_ASM_GOTO
-+#define __put_mem_asm(store, reg, x, addr, label, type)			\
-+	asm goto(							\
-+	"1:	" store "	" reg "0, [%1]\n"			\
-+	"2:\n"								\
-+	_ASM_EXTABLE_##type##ACCESS_ZERO(1b, %l2)			\
-+	: : "rZ" (x), "r" (addr) : : label)
-+#else
-+#define __put_mem_asm(store, reg, x, addr, label, type) do {		\
-+	int __pma_err = 0;						\
- 	asm volatile(							\
- 	"1:	" store "	" reg "1, [%2]\n"			\
- 	"2:\n"								\
- 	_ASM_EXTABLE_##type##ACCESS_ERR(1b, 2b, %w0)			\
--	: "+r" (err)							\
--	: "rZ" (x), "r" (addr))
-+	: "+r" (__pma_err)						\
-+	: "rZ" (x), "r" (addr));					\
-+	if (__pma_err) goto label;					\
-+} while (0)
-+#endif
- 
--#define __raw_put_mem(str, x, ptr, err, type)					\
-+#define __raw_put_mem(str, x, ptr, label, type)					\
- do {										\
- 	__typeof__(*(ptr)) __pu_val = (x);					\
- 	switch (sizeof(*(ptr))) {						\
- 	case 1:									\
--		__put_mem_asm(str "b", "%w", __pu_val, (ptr), (err), type);	\
-+		__put_mem_asm(str "b", "%w", __pu_val, (ptr), label, type);	\
- 		break;								\
- 	case 2:									\
--		__put_mem_asm(str "h", "%w", __pu_val, (ptr), (err), type);	\
-+		__put_mem_asm(str "h", "%w", __pu_val, (ptr), label, type);	\
- 		break;								\
- 	case 4:									\
--		__put_mem_asm(str, "%w", __pu_val, (ptr), (err), type);		\
-+		__put_mem_asm(str, "%w", __pu_val, (ptr), label, type);		\
- 		break;								\
- 	case 8:									\
--		__put_mem_asm(str, "%x", __pu_val, (ptr), (err), type);		\
-+		__put_mem_asm(str, "%x", __pu_val, (ptr), label, type);		\
- 		break;								\
- 	default:								\
- 		BUILD_BUG();							\
-@@ -328,25 +340,34 @@ do {										\
-  * uaccess_ttbr0_disable(). As `x` and `ptr` could contain blocking functions,
-  * we must evaluate these outside of the critical section.
+ /*
+  * Test whether a block of memory is a valid user space address.
+- * Returns 1 if the range is valid, 0 otherwise.
+  *
+- * This is equivalent to the following test:
+- * (u65)addr + (u65)size <= (u65)TASK_SIZE_MAX
++ * We only care that the address cannot reach the kernel mapping, and
++ * that an invalid address will fault.
   */
--#define __raw_put_user(x, ptr, err)					\
-+#define __raw_put_user(x, ptr, label)					\
- do {									\
-+	__label__ __rpu_failed;						\
- 	__typeof__(*(ptr)) __user *__rpu_ptr = (ptr);			\
- 	__typeof__(*(ptr)) __rpu_val = (x);				\
- 	__chk_user_ptr(__rpu_ptr);					\
- 									\
--	uaccess_ttbr0_enable();						\
--	__raw_put_mem("sttr", __rpu_val, __rpu_ptr, err, U);		\
--	uaccess_ttbr0_disable();					\
-+	do {								\
-+		uaccess_ttbr0_enable();					\
-+		__raw_put_mem("sttr", __rpu_val, __rpu_ptr, __rpu_failed, U);	\
-+		uaccess_ttbr0_disable();				\
-+		break;							\
-+	__rpu_failed:							\
-+		uaccess_ttbr0_disable();				\
-+		goto label;						\
-+	} while (0);							\
- } while (0)
+-static inline int access_ok(const void __user *addr, unsigned long size)
++static inline int access_ok(const void __user *p, unsigned long size)
+ {
+-	/*
+-	 * Asynchronous I/O running in a kernel thread does not have the
+-	 * TIF_TAGGED_ADDR flag of the process owning the mm, so always untag
+-	 * the user address before checking.
+-	 */
+-	if (IS_ENABLED(CONFIG_ARM64_TAGGED_ADDR_ABI) &&
+-	    (current->flags & PF_KTHREAD || test_thread_flag(TIF_TAGGED_ADDR)))
+-		addr = untagged_addr(addr);
++	unsigned long addr = (unsigned long)p;
  
- #define __put_user_error(x, ptr, err)					\
- do {									\
-+	__label__ __pu_failed;						\
- 	__typeof__(*(ptr)) __user *__p = (ptr);				\
- 	might_fault();							\
- 	if (access_ok(__p, sizeof(*__p))) {				\
- 		__p = uaccess_mask_ptr(__p);				\
--		__raw_put_user((x), __p, (err));			\
-+		__raw_put_user((x), __p, __pu_failed);			\
- 	} else	{							\
-+	__pu_failed:							\
- 		(err) = -EFAULT;					\
- 	}								\
- } while (0)
-@@ -369,15 +390,18 @@ do {									\
- do {									\
- 	__typeof__(dst) __pkn_dst = (dst);				\
- 	__typeof__(src) __pkn_src = (src);				\
--	int __pkn_err = 0;						\
- 									\
--	__mte_enable_tco_async();					\
--	__raw_put_mem("str", *((type *)(__pkn_src)),			\
--		      (__force type *)(__pkn_dst), __pkn_err, K);	\
--	__mte_disable_tco_async();					\
--									\
--	if (unlikely(__pkn_err))					\
-+	do {								\
-+		__label__ __pkn_err;					\
-+		__mte_enable_tco_async();				\
-+		__raw_put_mem("str", *((type *)(__pkn_src)),		\
-+			      (__force type *)(__pkn_dst), __pkn_err, K);	\
-+		__mte_disable_tco_async();				\
-+		break;							\
-+	__pkn_err:							\
-+		__mte_disable_tco_async();				\
- 		goto err_label;						\
-+	} while (0);							\
- } while(0)
- 
- extern unsigned long __must_check __arch_copy_from_user(void *to, const void __user *from, unsigned long n);
-@@ -411,17 +435,8 @@ static __must_check __always_inline bool user_access_begin(const void __user *pt
+-	return likely(__access_ok(addr, size));
++	/* Only bit 55 of the address matters */
++	addr |= addr+size;
++	addr = (addr >> 55) & 1;
++	size >>= 55;
++
++	return !(addr | size);
  }
- #define user_access_begin(a,b)	user_access_begin(a,b)
- #define user_access_end()	uaccess_ttbr0_disable()
--
--/*
-- * The arm64 inline asms should learn abut asm goto, and we should
-- * teach user_access_begin() about address masking.
-- */
--#define unsafe_put_user(x, ptr, label)	do {				\
--	int __upu_err = 0;						\
--	__raw_put_mem("sttr", x, uaccess_mask_ptr(ptr), __upu_err, U);	\
--	if (__upu_err) goto label;				\
--} while (0)
--
-+#define unsafe_put_user(x, ptr, label) \
-+	__raw_put_mem("sttr", x, uaccess_mask_ptr(ptr), label, U)
- #define unsafe_get_user(x, ptr, label) \
- 	__raw_get_mem("ldtr", x, uaccess_mask_ptr(ptr), label, U)
+ #define access_ok access_ok
  
 -- 
 2.45.1.209.gc6f12300df
