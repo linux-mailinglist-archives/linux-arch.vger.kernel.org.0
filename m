@@ -1,175 +1,118 @@
-Return-Path: <linux-arch+bounces-4815-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4817-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 869DC902B73
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Jun 2024 00:15:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56F18902DC1
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Jun 2024 02:51:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2D63F1F22822
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Jun 2024 22:15:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F3E7228427A
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Jun 2024 00:50:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B093152161;
-	Mon, 10 Jun 2024 22:15:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94EB2AD2D;
+	Tue, 11 Jun 2024 00:50:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="DV1B8yAB"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="YObn1hNP"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A0B214F9F4
-	for <linux-arch@vger.kernel.org>; Mon, 10 Jun 2024 22:15:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C9B7AD21
+	for <linux-arch@vger.kernel.org>; Tue, 11 Jun 2024 00:50:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718057709; cv=none; b=lbOSaXSwhFi2LMhhivjkuOTrQx/cW1YxmMbE/AH2SVyOJ8ytxNzO5++Wh0cadEHOOWLFSgZ/8o9HFrHuaTLps+xD7uDfqE9R9ENfDXCx4tIvTQ+GJJGP6rA/j6nLdzkc2LY8Q7JLJSveqNPSFoiozjv6LjcV93L7njRkQQfaJ/E=
+	t=1718067055; cv=none; b=QD81zqM0gHGCCcHW/R0nKDBIwAZ8sgly24KtepSoPCWFvbxR2datzWwWNiJ//g2bA4XMFzL+fn9t2lh2aiz3IS+EN3d2HMsidjK9qKbMHuRwTZ72aPHU6py5Y1QTqTV73E4yHxfLiYqu6ij5iQuYAzmxQoawyDPDSGfgGFwa7KM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718057709; c=relaxed/simple;
-	bh=z+wd9sAGfEDNr43zUFts3rXiT7ShOZVNnrA/+9o7y3k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=g0v0KcUBPKZyt+DdHP+yNpYtVpMC8jzkp75Y/1TQwZeQxUdnAufYXyX3zriIISp5WkvCsxP+WXKZJYtkQeD7fwbApwFoSybIqMKqWe5F+gkXCJ697aYVMTIqh/m05HQF7i7WNF7DRST5+GPZYTFGz4sswqFec2elFac+XoeZQK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=DV1B8yAB; arc=none smtp.client-ip=209.85.160.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
-Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-43fecdecd32so26994161cf.1
-        for <linux-arch@vger.kernel.org>; Mon, 10 Jun 2024 15:15:06 -0700 (PDT)
+	s=arc-20240116; t=1718067055; c=relaxed/simple;
+	bh=xW/JsFrvvdxfv6EVqr7rZU4s6vm7IMnNTV0x4eaBiKA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DfnJvbau/SgCYLrq6gBIyNJb5XKRTYqmCPLE/rWHnMcM2wglN01F3Tcv8SY8wjbfnUqJNw/OEmQ0clDV5dfl+ztwds1Ax6Xr3vhNG5IwUXvQTrK0JyJpFwNauImVO/iY+InT7xTZnClO0XN/2jdhjqroVsaEXIY9oidIHhxSJos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=YObn1hNP; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4217d451f69so5237285e9.0
+        for <linux-arch@vger.kernel.org>; Mon, 10 Jun 2024 17:50:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1718057705; x=1718662505; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fYxIeKtLL3lQwNiFRr25O1e9GIX4G5slG5d4Uc4G46M=;
-        b=DV1B8yABKh8zcLUmgBZlPAFY0iTcPLR8YOx7LLCpFjMnV7rXNkaRxAYuvwk3C7PPOH
-         jZB05ZxEeozQlYPvsSKrdHH9XRsHaWMfRgA07nc67PzNRXJVUcgHaMaIwTLkn/0NBaej
-         Y+DkdkBwr03IdCK/sG3d/54s8BvaqhWBnl/jBki+4FuzFDk5MC/R7srQTW0MtfyTEffw
-         S/cazkXqzTrhTNLq77EhsuipjQDoKG+ONrmQBCCYr/YTuVzQ2K1qnCx+gVlmf+ptUByB
-         YHBold4jl4t0CXl3DWfVhfY0nGwvEmmEftLaTtJM4KO8eLCbZeisPO65pggAcwOIB0GE
-         jnmQ==
+        d=linux-foundation.org; s=google; t=1718067051; x=1718671851; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=WEyzkTSmfTg9rMLE5THHkOuiUGT58uE3ZSUkLeaSyYQ=;
+        b=YObn1hNPAtZxYJlFwS8SZwElvg8IaIJnCV1QqW+gCIbLhxwI9W+pFieGKSizUTgkym
+         r2WP7pILYrTsekvgpxSweRp9g6uWzyv1UPIS5hJyuv/IDqZxqqqkAP7as+4G7O+IDhb0
+         4/5PM1GjTlel2epSK+ZVBE3+g2s4dMGu8ZqpI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718057705; x=1718662505;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fYxIeKtLL3lQwNiFRr25O1e9GIX4G5slG5d4Uc4G46M=;
-        b=gXHNbMp+Xt1s2lVn69qDC6I61agwQVSHFp+uk/TqdSG0oynSpU0zKO3VGtV9FydmaF
-         Usa7OrAJKopd6IO2nw1J19E6ZxAATux5Jx1+jpW44LzPIREnDL9VY8uxX0tL0FPZhTIS
-         /Gt8EmTZedOdauIS2zZKckX4pWmTLNrNq4F+31gv0dqv9tHWZZdYUUUus2xm3Bhx7ANF
-         qXIbdrVWcnkqd8uqXin5XdGfCWxvb9Ami9aXnhAYMAcUCCUcprE65sHARo6AA7q6E+yS
-         PZke+7mku9Iq7/HnoN3lQG1JdDmaLzQc+upMaZCCvmE/fHuL2GpDigimD45ebpLyVo44
-         9KEQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXA35n+ywMPWyA9uoRHNgls/Uv9U2OztGcZd4HVDxzmkCYenrripjTCn0X4AcZdgKm3yau2l73KfeCrGZUL9mDg9q+5+QR0uoSiaQ==
-X-Gm-Message-State: AOJu0YxdBstytwNVl9kLRKIpcq0egolF8qHNAXCSRyJVdjjYZC2MRgCp
-	jKFvWCb6OxVujItmea7W0XA/FCksJzTBSiesVzaYyv0GW7uZS5F7XMubjpNTYUI=
-X-Google-Smtp-Source: AGHT+IGNwK7dorh82QSLW5MV/WzZAixZNPt6ZilaFo6ceP30TQ1KYPRJL2ImTAjvrOrdYOBtAU+f5Q==
-X-Received: by 2002:a05:6214:4a06:b0:6b0:72ef:2877 with SMTP id 6a1803df08f44-6b072ef2a2bmr79573716d6.40.1718057705068;
-        Mon, 10 Jun 2024 15:15:05 -0700 (PDT)
-Received: from ziepe.ca ([128.77.69.89])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6b076a42242sm20947266d6.59.2024.06.10.15.15.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jun 2024 15:15:03 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1sGnI4-00FsKs-9Z;
-	Mon, 10 Jun 2024 19:15:00 -0300
-Date: Mon, 10 Jun 2024 19:15:00 -0300
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: David Ahern <dsahern@kernel.org>, David Wei <dw@davidwei.uk>,
-	Mina Almasry <almasrymina@google.com>,
-	Christoph Hellwig <hch@infradead.org>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-	Yunsheng Lin <linyunsheng@huawei.com>,
-	Shailend Chand <shailend@google.com>,
-	Harshitha Ramamurthy <hramamurthy@google.com>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Jeroen de Borst <jeroendb@google.com>,
-	Praveen Kaligineedi <pkaligineedi@google.com>
-Subject: Re: [PATCH net-next v10 02/14] net: page_pool: create hooks for
- custom page providers
-Message-ID: <20240610221500.GN791043@ziepe.ca>
-References: <5aee4bba-ca65-443c-bd78-e5599b814a13@gmail.com>
- <CAHS8izNmT_NzgCu1pY1RKgJh+kP2rCL_90Gqau2Pkd3-48Q1_w@mail.gmail.com>
- <eb237e6e-3626-4435-8af5-11ed3931b0ac@gmail.com>
- <be2d140f-db0f-4d15-967c-972ea6586b5c@kernel.org>
- <20240607145247.GG791043@ziepe.ca>
- <45803740-442c-4298-b47e-2d87ae5a6012@davidwei.uk>
- <54975459-7a5a-46ff-a9ae-dc16ceffbab4@gmail.com>
- <20240610121625.GI791043@ziepe.ca>
- <59443d14-1f1d-42bb-8be3-73e6e4a0b683@kernel.org>
- <00c67cf0-2bf3-4eaf-b200-ffe00d91593b@gmail.com>
+        d=1e100.net; s=20230601; t=1718067051; x=1718671851;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WEyzkTSmfTg9rMLE5THHkOuiUGT58uE3ZSUkLeaSyYQ=;
+        b=rOA18mMOi+SC3cM3BHx2iONhYhHuErC2QM8sYMspvUKDzQMwyRIYvRufFjuUEET4M1
+         Y1qGJ5Hz7R2n8XhBEUpBWUd90QLR2X30q2I8cbqrvCDjM8rOM3Dsc/D2LsvZzSAvDJIz
+         Z81QtUklOBMuVwMH3kzN/E8JnVE29KIUxVOYwPvSTmA0YwutfU6d33PuY/TuDF0RiN41
+         FBdUT6coO/rbWjBdmR8RP+w4ogPLzv8U5SSuCQ4/dIoUhDkqh+vQA9IMQJS23DwjDyfC
+         wuvPc2g80nJGQ6KWlL2zhh29jfr2dgo8Uwy5eJ6fc4why/XbzQAVXrUfKGzdWvm81nHi
+         zleQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXJE5E69VO3J0bqFIPaCbFGj8qwOkbJgdTtVP3QUwmzSXJdzO/cx5qYFBkU60gtOd/fnnpVs3pl7m9LqJiOW/PWZn3xZf+MJ4f9uA==
+X-Gm-Message-State: AOJu0YxPUvgUQpb2J/Tn+Cap/uRAkExM4zdsQkz3XEbaBy1TJhCqWbrx
+	SgFE8Wj5MChi/qnxFY1THhbmJzrpxK8fbDvm1PZ8cZ8xFdUXmGiiXdxmGyH8ejjke75vrqQ/rm5
+	LVjA=
+X-Google-Smtp-Source: AGHT+IGAEn+dCIpBuGXdKHfXfAeGq77DbkwPeLzouhra4Tkv2dgVD3TZ/hOrjzv6GNyFOkyb3juu1Q==
+X-Received: by 2002:a05:600c:350f:b0:422:1163:44b2 with SMTP id 5b1f17b1804b1-422116354d0mr20960965e9.7.1718067051464;
+        Mon, 10 Jun 2024 17:50:51 -0700 (PDT)
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com. [209.85.218.41])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57c92901b05sm501126a12.73.2024.06.10.17.50.48
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jun 2024 17:50:48 -0700 (PDT)
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a6f0dc80ab9so56844866b.2
+        for <linux-arch@vger.kernel.org>; Mon, 10 Jun 2024 17:50:48 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUPn7fhJsXHqGr2HLDJgq+XCZUEIEZxvTz2sesSVt7jb++L4iyXwBoeSmuE++Nxub/VbKynZamKGgY+mQVk9mmLWsej4g2QNIPP6Q==
+X-Received: by 2002:a17:906:17c3:b0:a6f:2b19:e82f with SMTP id
+ a640c23a62f3a-a6f2b19e99dmr137168366b.28.1718067047933; Mon, 10 Jun 2024
+ 17:50:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <00c67cf0-2bf3-4eaf-b200-ffe00d91593b@gmail.com>
+References: <20240608193504.429644-2-torvalds@linux-foundation.org>
+ <20240610104352.GT8774@noisy.programming.kicks-ass.net> <20240610120201.GAZmbrOYmcA21kD8NB@fat_crate.local>
+ <CAHk-=wgb98nSCvJ-gL42mt+jt6Eyp-0QSMJLovmAoJOkQ_G3gQ@mail.gmail.com> <71FE7A14-62F6-45D3-9BC4-BE09E06F7863@zytor.com>
+In-Reply-To: <71FE7A14-62F6-45D3-9BC4-BE09E06F7863@zytor.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Mon, 10 Jun 2024 17:50:31 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjLytEj0Ccs1CsVPxmbLavf8Wk4ciDskhwy47rgyq7Oig@mail.gmail.com>
+Message-ID: <CAHk-=wjLytEj0Ccs1CsVPxmbLavf8Wk4ciDskhwy47rgyq7Oig@mail.gmail.com>
+Subject: Re: [PATCH] x86: add 'runtime constant' infrastructure
+To: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Borislav Petkov <bp@alien8.de>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, "the arch/x86 maintainers" <x86@kernel.org>, 
+	linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Jun 10, 2024 at 08:20:08PM +0100, Pavel Begunkov wrote:
-> On 6/10/24 16:16, David Ahern wrote:
+On Mon, 10 Jun 2024 at 16:35, H. Peter Anvin <hpa@zytor.com> wrote:
+>
+> ... which can be compacted down to a single instruction:
+>
+>     addq $bimm,%rax
 
-> > > There is no reason you shouldn't be able to use your fast io_uring
-> > > completion and lifecycle flow with DMABUF backed memory. Those are not
-> > > widly different things and there is good reason they should work
-> > > together.
-> 
-> Let's not mix up devmem TCP and dmabuf specifically, as I see it
-> your question was concerning the latter: "... DMABUF memory registered
-> through Mina's mechanism". io_uring's zcrx can trivially get dmabuf
-> support in future, as mentioned it's mostly the setup side. ABI,
-> buffer workflow and some details is a separate issue, and I don't
-> see how further integration aside from what we're already sharing
-> is beneficial, on opposite it'll complicate things.
+We'll burn that bridge when  we get to it. I'm not actually seeing any
+obvious for 32-bit immediates, except as part of some actual operation
+sequence (ie you might have a similar hash lookup to the d_hash() one,
+except using a mask rather than a shift).
 
-Again, I am talking about composability here, duplicating the DMABUF
-stuff into io_uring is not composable, it is just duplicating things.
+When would you ever add a constant, except when that constant is an
+address?  And those kinds of runtime constant addresses would always
+be the full 64-bit - I don't think 32-bit is interesting enough to
+spend any effort on.
 
-It does not match the view that there should be two distinct layers
-here, one that provides the pages and one that manages the
-lifecycle. As HCH pushes for pages either come from the allocator and
-get to use the struct folio or the come from a dmabuf and they
-don't. That is it, the only two choices.
+(Yes, you can get 32-bit rip-address constants if you start doing
+things like conditional link addresses, but that's what things like
+static_call() is for - not this runtime constant code)
 
-The iouring stuff is trying to confuse the source of the pages with
-the lifecycle - which is surely convenient, but is why Christoph is
-opposing it.
-
-Jason
+                Linus
 
