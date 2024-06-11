@@ -1,118 +1,127 @@
-Return-Path: <linux-arch+bounces-4819-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4820-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B308902DF3
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Jun 2024 03:24:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 831FF903274
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Jun 2024 08:25:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C62381F2257F
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Jun 2024 01:24:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 95A3F1C21D04
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Jun 2024 06:25:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34359EEAA;
-	Tue, 11 Jun 2024 01:24:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A63317109A;
+	Tue, 11 Jun 2024 06:25:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="J0tcoW/K"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="vsk5TKRp"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 480ACDDC7
-	for <linux-arch@vger.kernel.org>; Tue, 11 Jun 2024 01:24:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D42ED16F8E1;
+	Tue, 11 Jun 2024 06:25:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718069081; cv=none; b=SsZ3K6/1HO7M7H6JKPPeW8SFUFNE9d/LvOV1PLiSOGxQ9S9/r3tHVdFkkV4rR9BCU9gnsqjNBGO1xP7h8n+RLQGD7BW3TWRDa136QauYHixYPVvW+UgCuJmFfuL/9UDNTvVyNWGWGo/5O5YnBhwnGettJD9KzpAu8aefTz6iQNc=
+	t=1718087119; cv=none; b=DY5Zt5i9h9EJJmYTtrySH6AfLwmlZU269g28ibyDVwEXcCUE5fWR0j5pXG1echEGAV8VA48FezGYZgsaicSQe5uCm27JvhRD05txtGAYzVkGl4nF7klfbQ0eV+K0K92rBzhUPm26euLNCWiXAWvZVCoC+NV1532UAXIztfzuNA4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718069081; c=relaxed/simple;
-	bh=D2mY0PxworDetejFBvMMJPM3s8A1YQGEEiK9nq7hZKM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nSSbSLBt5GZVz3AvLcTxVV8X0Ljomh+/secsR34n8ZB8VnrKk2QvtztdN+WL0x64cY2ku0fYC5oE5ZPTR529zQtVJqqW6OvGJsNrdMNQHtKJoZLMIsSZxz7TyxoQHFmjkYuhHBmZQU75I51ana7bz8bFr2v3Ecmm9GAqjQoZFNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=J0tcoW/K; arc=none smtp.client-ip=209.85.218.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a6f0dc80ab9so58692366b.2
-        for <linux-arch@vger.kernel.org>; Mon, 10 Jun 2024 18:24:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1718069077; x=1718673877; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=c7ZYubABZSpYrLP7RVmTG2Pj59U8OWIrsQrqs7DlbNY=;
-        b=J0tcoW/KBgdMPuLf7Gk4WmnYQAOFKXVunxkAsMJYjh2x36jYBITHxO7+7gOFPqY+l0
-         hZ8AClvwKoXmhAmPaLHHcwElxx4ZTnaMN5c89+iapkjfTUwL5EmDlYiIZx9s1G/Doek8
-         VUB5QDxbGAEzvn/CXrEXaqBo3El431zCe/3Wo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718069077; x=1718673877;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=c7ZYubABZSpYrLP7RVmTG2Pj59U8OWIrsQrqs7DlbNY=;
-        b=lpgCubCseav77m41/7oVdCEuVHFQaQg6vE3e/XMq9Ucj3LDE+8LG9GAIe8KuNhjVqQ
-         RMAcHrc/H3hh3X3OgaDi+WeintSqEt4D4HlgzK6FkjM21E5W4j0eKdbbBVKZix7pCEO5
-         +Em8EInQcR0lIQ++diQ/phgyHRv2tOxBXMipmm0aNXyvAPbBZubaT/s4ZylDGsXHoWwY
-         CGoH9U1R9R5Egwwt9I3k5NkEWaNoT6iHAls9b4Cjg/QEUM5ybbChLuoudncCLIZN7MjV
-         hDMBlBk3xcaYY8usGBwI/rg+Xnxzu+t7ZcJjc37eS3abHd2p4rhooTL5DRkmjvwM2/5j
-         8icg==
-X-Forwarded-Encrypted: i=1; AJvYcCU8FA4K9KZ7ILag4Vj/566UpWVyzP2XPlLYFM16QC2HnkHwdwKLGqqY8YsEr8je81WF/avjl+ST25pF1qyof+tr1KQM4KMTWxxVSg==
-X-Gm-Message-State: AOJu0Yy3r+Nl3Fgqymk2Jiuf/wQk8G7iUfoW31wGAud5qoUJNNltbCl8
-	zMpBRN0VGZwaHy9NlqrvUPEUYhqfHEnmQHvjedKo5bC9lJ2E5/brTotLX3qvvgzIs0/m5ZL+uGi
-	vs7Q=
-X-Google-Smtp-Source: AGHT+IGDx1Gby2wKXLknAaYsH3UF7JqvyHSOLvScXu+XtneX5hKyilLydvmU5az92Sk1ICjaLMzpZA==
-X-Received: by 2002:a17:907:72d3:b0:a6f:1f4a:dfba with SMTP id a640c23a62f3a-a6f1f4ae1eamr277033766b.43.1718069077272;
-        Mon, 10 Jun 2024 18:24:37 -0700 (PDT)
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com. [209.85.208.51])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6f1ad792e8sm245819766b.152.2024.06.10.18.24.36
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jun 2024 18:24:36 -0700 (PDT)
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-57c83100c5fso482845a12.3
-        for <linux-arch@vger.kernel.org>; Mon, 10 Jun 2024 18:24:36 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWmT2X9+3BrtY6xGkP3rm7Dn9Fku2ND1YexFhK7pJyX7dYY+rg1We9bCks+LjR+eL2/vKM4nTqxQsojyrQdHOv8fay5TwN4mgGrFg==
-X-Received: by 2002:a50:d648:0:b0:57c:8c45:74ff with SMTP id
- 4fb4d7f45d1cf-57c8c45751cmr1347189a12.41.1718069076241; Mon, 10 Jun 2024
- 18:24:36 -0700 (PDT)
+	s=arc-20240116; t=1718087119; c=relaxed/simple;
+	bh=NwZHYp51blvYYi6voSW7p7zTGyG43lBc53N0AUPKbMY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dkEIG5xtw2LACJjAUMWizasFat5lf7Ud6+LVUR3sl7OBCXtYEOuao77CqjWgUprTduG/vebobnP8sPHp+wIEjaLdhwnAI8NvLJpYWp7RQEtRH61WfNG+4LiRfV41eS3662spa22+u8EyUpV40v9h/gbbMPVqfNFcufabpsoh46g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=vsk5TKRp; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Transfer-Encoding
+	:Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=NwZHYp51blvYYi6voSW7p7zTGyG43lBc53N0AUPKbMY=; b=vsk5TKRpCpoLMJwN4+N0Xoce51
+	gKqcmhrI8PGJLqTcZutaWEzny49LEjldaSM6NmvaVDtRZNxFhkUaHoZs8k2IkAw/fSYqS/NpbNJ99
+	4I1IhUkLjfFTWmZJ3fkPDjAWZE7YIc6yjaI/bvKrOEGOLnvFOolePciBdRXEhFkeX+a4rf2V8LQ24
+	ASrGu9QSNlIbshOV8VyBqP04jK0Pm23TNGVHvX3jw2bIFWfbbynmxLhqIPBKJvJYn5jeTr0NJd/fJ
+	FcXmdLCQg3rcquFvDdfQ+TZfRZEf5PeJN+Qpvz3aTjMUEDbZyWXSccEEf+6LaxquvbvSltTCUEM4G
+	+1WPY34w==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1sGuwL-00000007gBF-0Jyi;
+	Tue, 11 Jun 2024 06:25:05 +0000
+Date: Mon, 10 Jun 2024 23:25:05 -0700
+From: Christoph Hellwig <hch@infradead.org>
+To: Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>, Pavel Begunkov <asml.silence@gmail.com>,
+	David Wei <dw@davidwei.uk>, David Ahern <dsahern@kernel.org>,
+	Mina Almasry <almasrymina@google.com>,
+	Christoph Hellwig <hch@infradead.org>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+	Matt Turner <mattst88@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Steffen Klassert <steffen.klassert@secunet.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Yunsheng Lin <linyunsheng@huawei.com>,
+	Shailend Chand <shailend@google.com>,
+	Harshitha Ramamurthy <hramamurthy@google.com>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Jeroen de Borst <jeroendb@google.com>,
+	Praveen Kaligineedi <pkaligineedi@google.com>
+Subject: Re: [PATCH net-next v10 02/14] net: page_pool: create hooks for
+ custom page providers
+Message-ID: <ZmftwZDXYk53fKzm@infradead.org>
+References: <CAHS8izMU_nMEr04J9kXiX6rJqK4nQKA+W-enKLhNxvK7=H2pgA@mail.gmail.com>
+ <5aee4bba-ca65-443c-bd78-e5599b814a13@gmail.com>
+ <CAHS8izNmT_NzgCu1pY1RKgJh+kP2rCL_90Gqau2Pkd3-48Q1_w@mail.gmail.com>
+ <eb237e6e-3626-4435-8af5-11ed3931b0ac@gmail.com>
+ <be2d140f-db0f-4d15-967c-972ea6586b5c@kernel.org>
+ <20240607145247.GG791043@ziepe.ca>
+ <45803740-442c-4298-b47e-2d87ae5a6012@davidwei.uk>
+ <54975459-7a5a-46ff-a9ae-dc16ceffbab4@gmail.com>
+ <20240610121625.GI791043@ziepe.ca>
+ <cdbc0d5f-bfbc-4f58-a6dd-c13b0bb5ff1c@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240608193504.429644-2-torvalds@linux-foundation.org>
- <20240610104352.GT8774@noisy.programming.kicks-ass.net> <20240610120201.GAZmbrOYmcA21kD8NB@fat_crate.local>
- <CAHk-=wgb98nSCvJ-gL42mt+jt6Eyp-0QSMJLovmAoJOkQ_G3gQ@mail.gmail.com>
- <71FE7A14-62F6-45D3-9BC4-BE09E06F7863@zytor.com> <CAHk-=wjTzFYo2+eQJpb56Df8sNDW7JEV=_6Di2v-M5x2kv06_g@mail.gmail.com>
-In-Reply-To: <CAHk-=wjTzFYo2+eQJpb56Df8sNDW7JEV=_6Di2v-M5x2kv06_g@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Mon, 10 Jun 2024 18:24:19 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjdsN=dH41MO+gASWZkexCgrwK6CGT=NvpA3xsVXEhxBw@mail.gmail.com>
-Message-ID: <CAHk-=wjdsN=dH41MO+gASWZkexCgrwK6CGT=NvpA3xsVXEhxBw@mail.gmail.com>
-Subject: Re: [PATCH] x86: add 'runtime constant' infrastructure
-To: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Borislav Petkov <bp@alien8.de>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, "the arch/x86 maintainers" <x86@kernel.org>, 
-	linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <cdbc0d5f-bfbc-4f58-a6dd-c13b0bb5ff1c@amd.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-On Mon, 10 Jun 2024 at 18:09, Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> Doing it in general is actually very very painful. Feel free to try -
-> but I can almost guarantee that you will throw out the "Keep It Simple
-> Stupid" approach and your patch will be twice the size if you do some
-> "rewrite the whole instruction" stuff.
->
-> I really think there's a fundamental advantage to keeping things simple.
+On Mon, Jun 10, 2024 at 02:38:18PM +0200, Christian König wrote:
+> Well there is the fundamental problem that you can't use io_uring to
+> implement the semantics necessary for a dma_fence.
 
-I guess the KISS approach would be to have a debug mode that just adds
-an 'int3' instruction *after* the constant. And then the constant
-rewriting rewrites the constant and just changes the 'int3' into the
-standard single-byte 'nop' instruction.
+What is the exact problem there?
 
-That wouldn't be complicated, and the cost would be minimal. But I
-don't see it being worth it, at least not for the current use where
-the unrewritten constant will just cause an oops on use.
-
-                Linus
 
