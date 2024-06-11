@@ -1,179 +1,139 @@
-Return-Path: <linux-arch+bounces-4831-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4833-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC4B19042B4
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Jun 2024 19:49:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06FF2904305
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Jun 2024 20:00:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6ADF2289C52
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Jun 2024 17:49:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D01811C2099A
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Jun 2024 18:00:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B7342B9DD;
-	Tue, 11 Jun 2024 17:48:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE63F60BBE;
+	Tue, 11 Jun 2024 18:00:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="XkcZDhng"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4873B5CDE9;
-	Tue, 11 Jun 2024 17:48:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 041AE54F8C
+	for <linux-arch@vger.kernel.org>; Tue, 11 Jun 2024 18:00:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718128138; cv=none; b=GRiHMaBHDKJd1KypLmoT3mCk/dxzv7EwlqdRptBLuzBiuPbrPK5z/+4pl+xPDtZpALTsaxoBYXMPS2ENavLTnOk9KAkRdvbQSIKHQ3FonLNz4y5711sS4kFeId6edqIa+AQEn3ia//EMXTLl88PV3t7XU+qCE+z4mPyL1Xo+BiI=
+	t=1718128819; cv=none; b=RyzIFVHSN/S2es8PRi4KBPDO7AxAUvCL8SjvPE0EqdjyIpmvWx4UIe72ljsfUklv1eFhV0Tn7bF4UVWoaETrkpwJmrAgGQEewjKOtzXTjJ4AP66EjHvZt8r3htmmpVD71H5IfdONjex4UvCDfpAuKFepJLJFw4Ziop5gYB1lkK8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718128138; c=relaxed/simple;
-	bh=6PB6r+2ivy1DqOODJ6xPwma2D1oQ5gkONrmouW8ygT4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OwuYjuWzh9U5S6SHNPe6oQ0Q0x+0OZoADLOZMLuHQtQTXQBGnYBjmbgBANfNvLCp6gmVrkXhs6hu7bduE1CJ+HaFl1lhjk8ibw6oAI5HqjoYKiIphlgcRrjyVPht+R1PMxWvypx/4EZ3nkYyDve3HKx6v/t8wVu5wVuJeCoAxrA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BD344152B;
-	Tue, 11 Jun 2024 10:49:19 -0700 (PDT)
-Received: from J2N7QTR9R3 (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 06D643F73B;
-	Tue, 11 Jun 2024 10:48:52 -0700 (PDT)
-Date: Tue, 11 Jun 2024 18:48:47 +0100
-From: Mark Rutland <mark.rutland@arm.com>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Peter Anvin <hpa@zytor.com>, Ingo Molnar <mingo@kernel.org>,
-	Borislav Petkov <bp@alien8.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	the arch/x86 maintainers <x86@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-arch <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH 4/7] arm64: add 'runtime constant' support
-Message-ID: <ZmiN_7LMp2fbKhIw@J2N7QTR9R3>
-References: <20240610204821.230388-1-torvalds@linux-foundation.org>
- <20240610204821.230388-5-torvalds@linux-foundation.org>
- <ZmhfNRViOhyn-Dxi@J2N7QTR9R3>
- <CAHk-=wiHp60JjTs=qZDboGnQxKSzv=hLyjEp+8StqvtjOKY64w@mail.gmail.com>
+	s=arc-20240116; t=1718128819; c=relaxed/simple;
+	bh=nwpZTn8pFzGOwf4ZB/VvlBs8EE7Mx/yz85WdIMLghPQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HGyPP50KKkYKB3sgRRilzuEEK6OE2naZZBOpvEL4m4XD8acLngprXO31BqS2Zb/4zGvS/aL9yLq9/oF4QPAG2THrBib2wIHDfE7qo+W92zdTlNz9P2FdqKZ97S9IKP1EwaENwhllpVWezyTw36PY5vgl1+md8iOFdUBVwuANnZ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=XkcZDhng; arc=none smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-57c5c51cb89so1954550a12.2
+        for <linux-arch@vger.kernel.org>; Tue, 11 Jun 2024 11:00:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1718128816; x=1718733616; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=dfppZ4J9iItfp/zeqA6eCwjM7fUz1YkqRKfl9RCRvzw=;
+        b=XkcZDhngnOCcQcYNv7/qF5g/TwEVHzOTAuAr2M+LRJNBaJMjWfRiBsSxwNsO/wLwBo
+         SzxzZJR5noXovpBaD/MNO9Zs/iJsgf3EvnIV2GD70jisAojP1P2vVem5LAEmv6IbQKKc
+         Fvu7lztCOOVh7iTZo4Pvsma5tXVfPubF6MgpA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718128816; x=1718733616;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dfppZ4J9iItfp/zeqA6eCwjM7fUz1YkqRKfl9RCRvzw=;
+        b=SHFTPh0Ht/r8y49trXJTYDAtRWvl8L5uJoTmGurHkQXv0XFGUGjvPE9GCjGSMiKedu
+         8CDs3P/JdrXs5TQUXfuHuSw5KT40egkLOV2sz2haFMkIhWWD+QbUfTe5ANX1qmBq20AZ
+         tY4yVRVJ0GRmns0ezhg/x/rXnwAAwRS/P3u25poAL3JcFI3QXAsYUulV/SnaE5vYnw6S
+         MROtXijsVV0NvtnwBwMqtrxZ7TlPa/g2iryEJI4m3D0EPWO5I+eBVFCkF0+ptfiga8b5
+         cgMxva6vz+a2b9D2/MeCOssUDMNNzjgqMWKPHPLdMVSmZB/4lyGyQ6AzWIzOZ7JX8TIv
+         8Hgw==
+X-Forwarded-Encrypted: i=1; AJvYcCX1kTVMpbbbG13XgNQ+5HgtgdF8Hy2/tOzrCe5UP4X1xuVXH8EsVDSBLnl7T9xzINIdlKVOOoFQErxvV47Fi9y3Zv1ozt1m+8R+Vw==
+X-Gm-Message-State: AOJu0YxhGBIBV4X/j9Hp/+S/suP55i2Ud+1KRgX99vRbMLPICb5IN3qD
+	0vY8wOtiC+8P+7m46KVA3A4QFEoxCrUbZe4tMczQvc9q9DztC3ra1riPAT00NWLPlyywjRdA6EI
+	3YMM=
+X-Google-Smtp-Source: AGHT+IE69LruOxGFoFo/jAxBZO98ROA6O0fIiZcXOWEcn3/oxPTqcRrNTjjPpDLqWX1roceu678hHg==
+X-Received: by 2002:a50:bb03:0:b0:57a:72fc:c515 with SMTP id 4fb4d7f45d1cf-57c50972f4emr10960436a12.29.1718128816179;
+        Tue, 11 Jun 2024 11:00:16 -0700 (PDT)
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com. [209.85.208.47])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57aadf9cf05sm9659812a12.3.2024.06.11.11.00.13
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jun 2024 11:00:13 -0700 (PDT)
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-579fa270e53so2218955a12.3
+        for <linux-arch@vger.kernel.org>; Tue, 11 Jun 2024 11:00:13 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUXo/qTMHzPz9L2lQsLWIBcqzET4r6pWGg2vqHQXnsDI0eMf2PuoB4wdNiOo7J/MfKZflxdzXDrKq2KJLo18UeVO15bLpkB8ySgQQ==
+X-Received: by 2002:a50:d69c:0:b0:57c:5f7e:d0f1 with SMTP id
+ 4fb4d7f45d1cf-57c5f7ed498mr8641041a12.38.1718128812554; Tue, 11 Jun 2024
+ 11:00:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wiHp60JjTs=qZDboGnQxKSzv=hLyjEp+8StqvtjOKY64w@mail.gmail.com>
+References: <20240610204821.230388-1-torvalds@linux-foundation.org>
+ <20240610204821.230388-5-torvalds@linux-foundation.org> <ZmhfNRViOhyn-Dxi@J2N7QTR9R3>
+ <CAHk-=wiHp60JjTs=qZDboGnQxKSzv=hLyjEp+8StqvtjOKY64w@mail.gmail.com> <ZmiN_7LMp2fbKhIw@J2N7QTR9R3>
+In-Reply-To: <ZmiN_7LMp2fbKhIw@J2N7QTR9R3>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Tue, 11 Jun 2024 10:59:56 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wipw+_LKyXpuq9X7suf1VDUX4wD6iCuxFJKm9g2+ntFkQ@mail.gmail.com>
+Message-ID: <CAHk-=wipw+_LKyXpuq9X7suf1VDUX4wD6iCuxFJKm9g2+ntFkQ@mail.gmail.com>
+Subject: Re: [PATCH 4/7] arm64: add 'runtime constant' support
+To: Mark Rutland <mark.rutland@arm.com>
+Cc: Peter Anvin <hpa@zytor.com>, Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@alien8.de>, 
+	Thomas Gleixner <tglx@linutronix.de>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	"the arch/x86 maintainers" <x86@kernel.org>, linux-arm-kernel@lists.infradead.org, 
+	linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Jun 11, 2024 at 09:56:17AM -0700, Linus Torvalds wrote:
-> On Tue, 11 Jun 2024 at 07:29, Mark Rutland <mark.rutland@arm.com> wrote:
-> >
-> > Do we expect to use this more widely? If this only really matters for
-> > d_hash() it might be better to handle this via the alternatives
-> > framework with callbacks and avoid the need for new infrastructure.
-> 
-> Hmm. The notion of a callback for alternatives is intriguing and would
-> be very generic, but we don't have anything like that right now.
-> 
-> Is anybody willing to implement something like that? Because while I
-> like the idea, it sounds like a much bigger change.
-
-Fair enough if that's a pain on x86, but we already have them on arm64, and
-hence using them is a smaller change there. We already have a couple of cases
-which uses MOVZ;MOVK;MOVK;MOVK sequence, e.g.
-
-	// in __invalidate_icache_max_range()
-        asm volatile(ALTERNATIVE_CB("movz %0, #0\n"
-                                    "movk %0, #0, lsl #16\n"
-                                    "movk %0, #0, lsl #32\n"
-                                    "movk %0, #0, lsl #48\n",
-                                    ARM64_ALWAYS_SYSTEM,
-                                    kvm_compute_final_ctr_el0)
-                     : "=r" (ctr));
-
-... which is patched via the callback:
-
-	void kvm_compute_final_ctr_el0(struct alt_instr *alt,
-				       __le32 *origptr, __le32 *updptr, int nr_inst)
-	{
-		generate_mov_q(read_sanitised_ftr_reg(SYS_CTR_EL0),
-			       origptr, updptr, nr_inst);
-	}       
-
-... where the generate_mov_q() helper does the actual instruction generation.
-
-So if we only care about a few specific constants, we could give them their own
-callbacks, like kvm_compute_final_ctr_el0() above.
-
-[...]
-
-> > We have some helpers for instruction manipulation, and we can use
-> > aarch64_insn_encode_immediate() here, e.g.
-> >
-> > #include <asm/insn.h>
-> >
-> > static inline void __runtime_fixup_16(__le32 *p, unsigned int val)
-> > {
-> >         u32 insn = le32_to_cpu(*p);
-> >         insn = aarch64_insn_encode_immediate(AARCH64_INSN_IMM_16, insn, val);
-> >         *p = cpu_to_le32(insn);
-> > }
-> 
-> Ugh. I did that, and then noticed that it makes the generated code
-> about ten times bigger.
-> 
-> That interface looks positively broken.
-> 
-> There is absolutely nobody who actually wants a dynamic argument, so
-> it would have made both the callers and the implementation *much*
-> simpler had the "AARCH64_INSN_IMM_16" been encoded in the function
-> name the way I did it for my instruction rewriting.
+On Tue, 11 Jun 2024 at 10:48, Mark Rutland <mark.rutland@arm.com> wrote:
 >
-> It would have made the use of it simpler, it would have avoided all
-> the "switch (type)" garbage, and it would have made it all generate
-> much better code.
+> Fair enough if that's a pain on x86, but we already have them on arm64, and
+> hence using them is a smaller change there. We already have a couple of cases
+> which uses MOVZ;MOVK;MOVK;MOVK sequence, e.g.
+>
+>         // in __invalidate_icache_max_range()
+>         asm volatile(ALTERNATIVE_CB("movz %0, #0\n"
+>                                     "movk %0, #0, lsl #16\n"
+>                                     "movk %0, #0, lsl #32\n"
+>                                     "movk %0, #0, lsl #48\n",
+>                                     ARM64_ALWAYS_SYSTEM,
+>                                     kvm_compute_final_ctr_el0)
+>                      : "=r" (ctr));
+>
+> ... which is patched via the callback:
+>
+>         void kvm_compute_final_ctr_el0(struct alt_instr *alt,
+>                                        __le32 *origptr, __le32 *updptr, int nr_inst)
+>         {
+>                 generate_mov_q(read_sanitised_ftr_reg(SYS_CTR_EL0),
+>                                origptr, updptr, nr_inst);
+>         }
+>
+> ... where the generate_mov_q() helper does the actual instruction generation.
+>
+> So if we only care about a few specific constants, we could give them their own
+> callbacks, like kvm_compute_final_ctr_el0() above.
 
-Oh, completely agreed. FWIW, I have better versions sat in my
-arm64/insn/rework branch, but I haven't had the time to get all the rest
-of the insn framework cleanup sorted:
+I'll probably only have another day until my mailbox starts getting
+more pull requests (Mon-Tue outside the merge window is typically my
+quiet time when I have time to go through old emails and have time for
+private projects).
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?h=arm64/insn/rework&id=9cf0ec088c9d5324c60933bf3924176fea0a4d0b
+So I'll look at doing this for x86 and see how it works.
 
-I can go prioritise getting that bit out if it'd help, or I can clean
-this up later.
+I do suspect that even then it's possibly more code with a
+site-specific callback for each case, but maybe it would be worth it
+just for the flexibility.
 
-Those allow the compiler to do much better, including compile-time (or
-runtime) checks that immediates fit. For example:
-
-	void encode_imm16(__le32 *p, u16 imm)
-	{
-		u32 insn = le32_to_cpu(*p);
-
-		// Would warn if 'imm' were u32.
-		// As u16 always fits, no warning
-		BUILD_BUG_ON(!aarch64_insn_try_encode_unsigned_imm16(&insn, imm));
-
-		*p = cpu_to_le32(insn);
-	}
-
-... compiles to:
-
-	<encode_imm16>:
-	       ldr     w2, [x0]
-	       bfi     w2, w1, #5, #16
-	       str     w2, [x0]
-	       ret
-
-... which I think is what you want?
-
-> So I did that change you suggested, and then undid it again.
-> 
-> Because that whole aarch64_insn_encode_immediate() thing is an
-> abomination, and should be burned at the stake.  It's misdesigned in
-> the *worst* possible way.
-> 
-> And no, this code isn't performance-critical, but I have some taste,
-> and the code I write will not be using that garbage.
-
-Fair enough.
-
-Mark.
+                   Linus
 
