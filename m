@@ -1,122 +1,118 @@
-Return-Path: <linux-arch+bounces-4854-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4855-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89DD2905C7A
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Jun 2024 22:03:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00883905C7C
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Jun 2024 22:03:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3207D1F23C6F
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Jun 2024 20:03:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A74A61F237EB
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Jun 2024 20:03:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 342CF25762;
-	Wed, 12 Jun 2024 20:03:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE5EF25762;
+	Wed, 12 Jun 2024 20:03:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="SHemm3eN"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="bdracif+";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="eX9bv4hL"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout4-smtp.messagingengine.com (fout4-smtp.messagingengine.com [103.168.172.147])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54FE452F62
-	for <linux-arch@vger.kernel.org>; Wed, 12 Jun 2024 20:03:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 514165025E;
+	Wed, 12 Jun 2024 20:03:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.147
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718222588; cv=none; b=nyzPcygSrPZDS2W8axsobmzWMfqfF+9UaCENjxuSVhFfzkkS5LxVvvszvg55mbL+NZqQetYm7zfdG/stacyZFQox/WiOWnnei5NpdWqqOOeLtHkHrPWQGqxSCMtU5IMNj8k3XB87nAGimIDGaebph7suPvZHKCMzgq3bSGWWjoc=
+	t=1718222594; cv=none; b=atuftryeIQw2ySi5KM0CCZZt27mWvtkB1Ke2/4foas5e/4ICea8j5c2FHswGrMMeaHT6Us/GbP/+TDFgMuUuhR3XAt4eEkNAqHvwaGaVdlBTkSdcQrcx065e9Bc8GE0kiE4HGysC9Y2POh5UIzfyuU1mpeqdEp72uxnfUVvlDwA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718222588; c=relaxed/simple;
-	bh=w/o2R21tISON7AeW7xqO04EQQBhuvCqb/XqvhfIneTQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ndpiKF1boMUTTrdXeZtn7VC+DQH0WqH4uUBQHyabHD0C6dTcjqfW8iVJRfe3Qj2yAhMo23Vc2Uz7tCBqa+E5sJS90XH8+dHbt4k5ppVnSMRAm60IA/hh0+6V2hA1zHFgsgOQ5Vikzv2dMgZ+Z49r4q3Q8zp/OZEH18J5y9fV6rs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=SHemm3eN; arc=none smtp.client-ip=209.85.167.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-52bc27cfb14so443472e87.0
-        for <linux-arch@vger.kernel.org>; Wed, 12 Jun 2024 13:03:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1718222584; x=1718827384; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=jI1wFJ2/rQkEuEG+RRwVArfSwVy/ehph3H3jTP2hkeg=;
-        b=SHemm3eN+IlgZtN20vEsTB4EoqcU0mh7ATBf52hshyVHBtPA9XpkEHlxb0AYAKdq56
-         AwuimggQMRsXPY/OgIR1NvJKuYsWm5pWx9Ex/VzWJU+y4g4ZGPpDIzDlGpkF4vXOB8Mv
-         o2wpIa+scj3mwFKwQ+85tjTpKPFB4j2p8R9+s=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718222584; x=1718827384;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jI1wFJ2/rQkEuEG+RRwVArfSwVy/ehph3H3jTP2hkeg=;
-        b=eRikgcmPQZp8Qx7tqUt0K4N3SQ8xEM3sLveL4smI3JJsoUhJtz4dJjItCHClCiFVJT
-         1ib7qLJKt4e1xjoVYSNKKhq6YJBv2rrHdDWxmuRU6ZTgf5ao+JZhoKb/JT0t4Znyg8EH
-         kzh3woPqORA+oc0xFsjojk16x2Z1KHnOXUHEbfFCNM/Hs05rnLnW4UQvqUjTp/FyVY7O
-         YGXW1RHXBIHGJkwo7uz9Vo0EfdLQ0nYs96A8FjC18AQr8mjlu4volIIUMlWozO8ruhsH
-         pcomWFWwTBCTnbPGCd3DeXLq6MQ9BLgvvRsGF5sycRFWXEA6nH4zcTqxhXihHuBfRHG6
-         FNXA==
-X-Forwarded-Encrypted: i=1; AJvYcCUuXIdPbP6R9sSEdAueokkOgtjIu9zbzDrqZMl8d8u6kCHVbhZufRk5gf4Ho9oau4acIQ4wu9MRXKeR1u3fcTp3lwgT9aXv6f/fMg==
-X-Gm-Message-State: AOJu0Yxo0BBSbfblTe86z2e24SJybrxwofZ2/rHITP+zmFXwRMWhzTQ5
-	39TD3oTYxxXgglGTTZxWi/uaEhmGHAoEAmB25iKM9bRPLH7fZyJgQt1j63VYXPBbW+9fPlrAmi7
-	jeeyfcw==
-X-Google-Smtp-Source: AGHT+IHSmPBeZosS+2J66GIOJGPCb/RI/dW8cAXWWKLJC2WfEpJ+zhFkskvkKNWP+WTCMWMtgHIvWQ==
-X-Received: by 2002:a05:6512:31c7:b0:52c:8342:6699 with SMTP id 2adb3069b0e04-52c9a403655mr2695154e87.55.1718222584389;
-        Wed, 12 Jun 2024 13:03:04 -0700 (PDT)
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com. [209.85.167.50])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52c7fbc21bcsm1961722e87.143.2024.06.12.13.03.02
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jun 2024 13:03:02 -0700 (PDT)
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-52c82101407so529333e87.3
-        for <linux-arch@vger.kernel.org>; Wed, 12 Jun 2024 13:03:02 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVxhEWMO+7linHP+2OAIZo+nTSuOerDsOB+mPmUFuysKkortZoDko3pJjEjb9fzgHSbL0BbM2ppCDLKMn8oLHP8tkcjdNVO0lsUsw==
-X-Received: by 2002:a05:6512:3f10:b0:52c:8a11:cb4a with SMTP id
- 2adb3069b0e04-52c9a4033b1mr2648787e87.46.1718222582015; Wed, 12 Jun 2024
- 13:03:02 -0700 (PDT)
+	s=arc-20240116; t=1718222594; c=relaxed/simple;
+	bh=eDHqA85Z2rvfYj1BKRq7EcTMlaC7d4L2JpS6byQL4tc=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=qjecl2vXS5q4ESfyygwuHBK2JhwIx9kqnx0i9FKTS8quX6OMjFtE1POQ2jjAfa/bZPXYdVrtC0egEz6o+8w0o0v5PXmzgn6RG+RixRRO36FR/PgjiUzYMsQTn+teB1L9sTZ6AO58fsw8H/Ws7lk77nutzSs85MSFruzXRJ9bJr8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=bdracif+; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=eX9bv4hL; arc=none smtp.client-ip=103.168.172.147
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfout.nyi.internal (Postfix) with ESMTP id 635B41380094;
+	Wed, 12 Jun 2024 16:03:11 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Wed, 12 Jun 2024 16:03:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm1; t=1718222591; x=1718308991; bh=eDHqA85Z2r
+	vfYj1BKRq7EcTMlaC7d4L2JpS6byQL4tc=; b=bdracif+6Oclj0KIBUZFAt+CB7
+	exErJOai5mjL4Neqf4q7OsiFw0WAUDksfzHhHkU70285bw5zVvhpCWmozIydRXvg
+	FlUc1zXQMOhmAi3A8KpBYGFLkAUqGOQ+jBko3PJvMYWb8Yk8gP0nhY50JJe3ue/Y
+	0fAgVxSACjHC6jpgRMSJcgiIP2vmoseDiNLgg9OwagisvvURaTIj/XsODLBopOfH
+	zBq+EsMa1XTA8vX0jWywkVud6IQMqL48NDlb2kZTaTcYMUfCFueXnwuv92IvG2z+
+	k3G4y8I6TphHNizAGCIUpdvoOYsMmutZLMCh9SfFSaSTWmDPs+1kajPqGTzg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm1; t=1718222591; x=1718308991; bh=eDHqA85Z2rvfYj1BKRq7EcTMlaC7
+	d4L2JpS6byQL4tc=; b=eX9bv4hL3MFv4oTDfL4B6wWacg87KjSHyV9TxOs9sdiv
+	3K+oYZ2uej7uqvaW/GWqeh39F52u7a1JhBnugU405vl9KAFaYOCS1VhcprXdZYc9
+	TRQFPzz+xBR6JwrRm27SHvnynATqjjICgI/u1kKfYFk1sGeTALG5k+t62EtxPljv
+	eYeJ2KZtGWeAWZ481ZBVdYUES9+oCvZU7l9JimAxflMkQ5+AXeo2gyNdY9sd2cIP
+	54r3d2gq7n6oy0SIJiOoG+9OUXiAi/y2QJRLr14QnTyM6ToYhWgktHsjVeXaD8gB
+	otiaNf9DI0q/K3VR5O9z1Y99qc6htdsYrI27gE/VgQ==
+X-ME-Sender: <xms:__5pZmtm4UKP1S7K5zU1GcPPMfh1vVxUzJGkCMM7OVmWYSrU10_Lwg>
+    <xme:__5pZrfZlnhhxbQKiU3UyXq5R5xe03_96QJUdNQyeeVMs_PytX14ph6rstVOXD8aA
+    3Kd7cQ5C35wL3xU2G8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedugedgudegvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeu
+    feehudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:__5pZhx16T38Gc-lKXSw9kn_Gkl6b_7ukmKQsXtCe_6KilD-Td86OA>
+    <xmx:__5pZhNxUZ5gq7XmaXgqPlsjEPwxF5lKeGJd6i6LWVG0y_rBLtHGhQ>
+    <xmx:__5pZm_7C4jicZUyKxkEXJTdHnrCsKNeC43nRUCffqf2MMIBjr-lYQ>
+    <xmx:__5pZpVkOj4MiFlzdTNFdKj3a9pWTlyGJRXbLBdengBOj1-1de9Rgg>
+    <xmx:__5pZoJni_9sYcxUGm86Ruo2h_BcS8XQ26p3Ud_v-2Q1FGu-66gZKHrZ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 08BD7B6008D; Wed, 12 Jun 2024 16:03:10 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-515-g87b2bad5a-fm-20240604.001-g87b2bad5
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240610204821.230388-1-torvalds@linux-foundation.org> <Zmnr3BjBkV4JxsIj@J2N7QTR9R3.cambridge.arm.com>
-In-Reply-To: <Zmnr3BjBkV4JxsIj@J2N7QTR9R3.cambridge.arm.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Wed, 12 Jun 2024 13:02:45 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wg1AffeA6HLwZG9gbnFUACuzT-pyzao6BfQeZiCFt752Q@mail.gmail.com>
-Message-ID: <CAHk-=wg1AffeA6HLwZG9gbnFUACuzT-pyzao6BfQeZiCFt752Q@mail.gmail.com>
-Subject: Re: [PATCH 0/7] arm64 / x86-64: low-level code generation issues
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: Peter Anvin <hpa@zytor.com>, Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@alien8.de>, 
-	Thomas Gleixner <tglx@linutronix.de>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	"the arch/x86 maintainers" <x86@kernel.org>, linux-arm-kernel@lists.infradead.org, 
-	linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Message-Id: <7f258a4c-6048-4718-851d-4768789bc5e1@app.fastmail.com>
+In-Reply-To: <20240612160038.522924-1-steven.price@arm.com>
+References: <20240612160038.522924-1-steven.price@arm.com>
+Date: Wed, 12 Jun 2024 22:02:50 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Steven Price" <steven.price@arm.com>
+Cc: Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fixmap: Remove unused set_fixmap_offset_io()
+Content-Type: text/plain
 
-On Wed, 12 Jun 2024 at 11:41, Mark Rutland <mark.rutland@arm.com> wrote:
+On Wed, Jun 12, 2024, at 18:00, Steven Price wrote:
+> The macro set_fixmap_offset_io() was added in commit f774b7d10e21
+> ("arm64: fixmap: fix missing sub-page offset for earlyprintk") but then
+> commit 8ef0ed95ee04 ("arm64: remove arch specific earlyprintk") removed
+> the file causing the only user to be removed when the two commits were
+> merged. Since this has never been used again since the v3.15 release
+> remove it.
 >
-> Given how badly things go when we get this wrong (e.g. TLB corruption), I'd
-> like to say "just mark it incompatible", applying to all instrumentation, not
-> just KCSAN.
+> Signed-off-by: Steven Price <steven.price@arm.com>
+> ---
+> This came up because for Arm CCA there is a need to override
+> set_fixmap_io() [1] and rather than also update set_fixmap_offset_io() I
+> thought it would be better to just drop the unused macro.
+>
+> [1] https://lore.kernel.org/lkml/20240605093006.145492-6-steven.price@arm.com/
 
-Ack. I'll start out with just KCSAN (since that's the actual technical
-issue right now). But since the SW PAN support is hopefully not
-something that we should worry about going forward, I wouldn't mind it
-being de-emphasized.
+I assume you want to keep this with your other patch, so
 
-It's not like PAN is something that should necessarily be everywhere.
-The real advantage of SMAP on x86 (and then PAN on arm) is that it
-catches wild kernel pointers. As long as the HW support is common
-enough, people will find bugs on those platforms.
-
-So I think the advantage of SW PAN was "it will find issues early
-before HW PAN is widely available". It might be time to lay SW PAN
-entirely to rest now.
-
-I'll send out a new version of the arm64 patches with the KCSAN build
-failure fixed (with the simple no-op save/restore functions by making
-KCSAN and SW PAN mutually incompatible), and with the virtual address
-fix you pointed out in the other email.
-
-              Linus
+Acked-by: Arnd Bergmann <arnd@arndb.de>
 
