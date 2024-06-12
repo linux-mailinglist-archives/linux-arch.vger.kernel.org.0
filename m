@@ -1,62 +1,52 @@
-Return-Path: <linux-arch+bounces-4849-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4850-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B272290599B
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Jun 2024 19:09:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A5F19059C8
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Jun 2024 19:23:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B59C1F236DC
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Jun 2024 17:09:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 35A451F219B7
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Jun 2024 17:23:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDD5D183082;
-	Wed, 12 Jun 2024 17:07:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b="lcQdRquv"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E3D5181D06;
+	Wed, 12 Jun 2024 17:23:03 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from gentwo.org (gentwo.org [62.72.0.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2635B28DB3;
-	Wed, 12 Jun 2024 17:07:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 400F83209;
+	Wed, 12 Jun 2024 17:23:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.72.0.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718212066; cv=none; b=A7BiQBrqmG0GhcFtuy7lqROZCys1/aOiPLnaBcTDgdh0JXNnitnAow7LUN5u8sibPs+OFAIOZi/9lOvnxVxRR5qeFuWPcyPD/KZX/sMwesMY4Q4FE16s7w6jO8WYpCLH70bql0J/v7/uPBZ8Crge70ApsAL+9WxdMlt25vVDnwY=
+	t=1718212983; cv=none; b=USKDveBxESZ3CmzrG5kxett0z16OTx5+g7N79sWP7MjDV8/rtyqYqPJssJH9Ic0e1dJdMEx2/ZuH3vJNGBUyfK/fphuOFiEfaTT6XIVZ41KYVjj68bP45errx1uwX2MiPf9CUqfpTd23JTVDh4ANCmxWAZjAzsADJQtlHwTJ4pk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718212066; c=relaxed/simple;
-	bh=xsj24dHhKoMLJ7CzV3x/NjfHEv7T3k5WjG1vf1Kod+U=;
+	s=arc-20240116; t=1718212983; c=relaxed/simple;
+	bh=mk1V5wN1cC5VI0L1QKEMWa2idEvq9NGRGwsz5h88drU=;
 	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=GIwJvhtftBkgX05eRGS7gz9L9k3/BeRPRWXzrOi8fLDB5QzM13Zp9HJuIKBXDfiXbih0q0DLzJOkACFgXQii3kpKqOJmbD0cEy88IFaYziOAArwj6Uy1yxB38pvNCA6RL7KgZnX1VxNL9tLsXeI2PP92jOnY4/Cb+CN7WdpwrPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org; spf=pass smtp.mailfrom=gentwo.org; dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b=lcQdRquv; arc=none smtp.client-ip=62.72.0.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentwo.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.org;
-	s=default; t=1718212064;
-	bh=xsj24dHhKoMLJ7CzV3x/NjfHEv7T3k5WjG1vf1Kod+U=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-	b=lcQdRquv/VYTh7djrfsx3XHM9g3Q1riiDTNzxQvdc64gRHzWWR1VbnkIsFXv0/CeW
-	 maKz1jRS77F8dMoqTWf8BjkCuCaGcBU3ZOoZyvxE+pNlZ56ZnKP/k18tx9hmh6wZiQ
-	 Vr73nyGYFVk9u39Pko5AQhBRUNAt7BHrD1wzllb0=
+	 MIME-Version:Content-Type; b=YMh8Jvk6xE60ijP8pVH95KPhhQIvltt/kwroezveZPlq2VperrS0LIPcDuCkVYUZ/G4F6CpQ5GCmZ+bz6qZa1CMAOP7XQUkbGvAEt7c6d0tA6CxizM9jhRyY2Vf6f0njsH9OOrgrlsaLigHdEoFoB19rVOUYWaO5+w8Wb1UdDcc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.com; spf=fail smtp.mailfrom=linux.com; arc=none smtp.client-ip=62.72.0.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.com
 Received: by gentwo.org (Postfix, from userid 1003)
-	id 087F040A8F; Wed, 12 Jun 2024 10:07:44 -0700 (PDT)
+	id 80E4040B11; Wed, 12 Jun 2024 10:23:00 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-	by gentwo.org (Postfix) with ESMTP id 06FBF40A8C;
-	Wed, 12 Jun 2024 10:07:44 -0700 (PDT)
-Date: Wed, 12 Jun 2024 10:07:44 -0700 (PDT)
-From: "Christoph Lameter (Ampere)" <cl@gentwo.org>
+	by gentwo.org (Postfix) with ESMTP id 7FB9440A8C;
+	Wed, 12 Jun 2024 10:23:00 -0700 (PDT)
+Date: Wed, 12 Jun 2024 10:23:00 -0700 (PDT)
+From: "Christoph Lameter (Ampere)" <cl@linux.com>
 To: Peter Zijlstra <peterz@infradead.org>
-cc: Thomas Gleixner <tglx@linutronix.de>, axboe@kernel.dk, 
-    linux-kernel@vger.kernel.org, mingo@redhat.com, dvhart@infradead.org, 
-    dave@stgolabs.net, andrealmeid@igalia.com, 
-    Andrew Morton <akpm@linux-foundation.org>, urezki@gmail.com, 
-    hch@infradead.org, lstoakes@gmail.com, Arnd Bergmann <arnd@arndb.de>, 
-    linux-api@vger.kernel.org, linux-mm@kvack.org, linux-arch@vger.kernel.org, 
-    malteskarupke@web.de
+cc: tglx@linutronix.de, axboe@kernel.dk, linux-kernel@vger.kernel.org, 
+    mingo@redhat.com, dvhart@infradead.org, dave@stgolabs.net, 
+    andrealmeid@igalia.com, Andrew Morton <akpm@linux-foundation.org>, 
+    urezki@gmail.com, hch@infradead.org, lstoakes@gmail.com, 
+    Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org, 
+    linux-mm@kvack.org, linux-arch@vger.kernel.org, malteskarupke@web.de
 Subject: Re: [PATCH v1 11/14] futex: Implement FUTEX2_NUMA
-In-Reply-To: <20230731180320.GR29590@hirez.programming.kicks-ass.net>
-Message-ID: <2eb23678-e1c7-816d-4807-f324c771e6ed@gentwo.org>
-References: <20230721102237.268073801@infradead.org> <20230721105744.434742902@infradead.org> <87pm48m19m.ffs@tglx> <20230731180320.GR29590@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230721105744.434742902@infradead.org>
+Message-ID: <9dc04e4c-2adc-5084-4ea1-b200d82be29f@linux.com>
+References: <20230721102237.268073801@infradead.org> <20230721105744.434742902@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -65,18 +55,53 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII; format=flowed
 
-On Mon, 31 Jul 2023, Peter Zijlstra wrote:
+On Fri, 21 Jul 2023, Peter Zijlstra wrote:
 
->> Is nr_node_ids guaranteed to be stable after init? It's marked
->> __read_mostly, but not __ro_after_init.
->
-> AFAICT it is only ever written to in setup_nr_node_ids() and that is all
-> __init code. So I'm thinking this could/should indeed be
-> __ro_after_init. Esp. so since it is an exported variable.
->
-> Mike?
+> Extend the futex2 interface to be numa aware.
 
-Its stable and lots of other components depend on it like f.e. the size of 
-cpumasks.
+Sorry to be chiming in that late but it seems that this is useful to 
+mitigate NUMA issues also for our platform.
+
+> When FUTEX2_NUMA is not set, the node is simply an extention of the
+> hash, such that traditional futexes are still interleaved over the
+> nodes.
+
+
+Could we follow NUMA policies like with other metadata allocations during 
+systen call processing? If there is no NUMA task policy then the futex
+should be placed on the local NUMA node.
+
+That way the placement of the futex can be controlled by the tasks memory 
+policy. We could skip the FUTEX2_NUMA option.
+
+> @@ -114,10 +137,29 @@ late_initcall(fail_futex_debugfs);
+>  */
+> struct futex_hash_bucket *futex_hash(union futex_key *key)
+> {
+> -	u32 hash = jhash2((u32 *)key, offsetof(typeof(*key), both.offset) / 4,
+> +	u32 hash = jhash2((u32 *)key,
+> +			  offsetof(typeof(*key), both.offset) / sizeof(u32),
+> 			  key->both.offset);
+> +	int node = key->both.node;
+>
+> -	return &futex_queues[hash & (futex_hashsize - 1)];
+> +	if (node == -1) {
+
+> +		/*
+> +		 * In case of !FLAGS_NUMA, use some unused hash bits to pick a
+> +		 * node -- this ensures regular futexes are interleaved across
+> +		 * the nodes and avoids having to allocate multiple
+> +		 * hash-tables.
+> +		 *
+> +		 * NOTE: this isn't perfectly uniform, but it is fast and
+> +		 * handles sparse node masks.
+> +		 */
+> +		node = (hash >> futex_hashshift) % nr_node_ids;
+> +		if (!node_possible(node)) {
+> +			node = find_next_bit_wrap(node_possible_map.bits,
+> +						  nr_node_ids, node);
+> +		}
+
+Use memory allocation policies here instead?
 
 
