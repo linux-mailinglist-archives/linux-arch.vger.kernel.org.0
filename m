@@ -1,67 +1,55 @@
-Return-Path: <linux-arch+bounces-4851-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4852-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A602905A1A
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Jun 2024 19:44:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA2C4905B3D
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Jun 2024 20:41:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 18DB6285BBF
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Jun 2024 17:44:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F14711C2081D
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Jun 2024 18:41:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B28731802DF;
-	Wed, 12 Jun 2024 17:44:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="kUDtZivw"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06D6947F6B;
+	Wed, 12 Jun 2024 18:41:43 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 101323770D;
-	Wed, 12 Jun 2024 17:44:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25CD84F1F8;
+	Wed, 12 Jun 2024 18:41:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718214289; cv=none; b=ICd8RBWLVjjIAxEScxGMeXOZQZlVzNuL1AMOYomKtXmOvaDCfIiiATQSv9TDUOqpveNfxd6UUjRk87xc0cga0UPllm6s3AvjCjmPzxPJqlxOg90ThNb/Gucs86GadK1JcHhoprKCS9sTZkaDN5PZ05dDc6zg5gSS33AjFQ9Cv0k=
+	t=1718217702; cv=none; b=lFIhXsKVvQCzTinFXpF4IXRR94mia9Q19LbktKsYg/BmPLISAfTSp04oixkeCRvaawTuZU4fUXiIF2iBx7QUVvF9cSWrofTo7pH4+ZAv6UHU6LZwP4uubu7cjWxA/fOHyxgCdaohon4UXZi0AAZRYUXygSmCZ3HkVQSFjdNSsDA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718214289; c=relaxed/simple;
-	bh=s4Zazba734GMhVxkazRxi8YEUVdskrv4pbtTckLjIEA=;
+	s=arc-20240116; t=1718217702; c=relaxed/simple;
+	bh=Si0NRG+Ce+hMN4fzIgccyq5264dCl0c7kRaWJDnjgZ0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r81boegmJ4j6bGah2IF0BENC9VoEP3jhE/l6RNqGDoffXEmK/y3bGe3mpnH3qOQjSJyhqZ2ptiq9IWvhj6LUx2H2Yi7Av9pUBgC+V8ENZz8NzRfWMG7GHBVshhzGrkHIEI/Ylh9pmSYHEOsFR7itf0JiqW7UkMvR4kyb4v55NQk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=kUDtZivw; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=UGHS7yRmHTQpcdPpllQog/ALtBWxo3EIKdMQ5erIzOU=; b=kUDtZivwJ6fU4JobBOJXCgIcfp
-	MxDdCt88t41S+TmjpkWbEhQVg9IdxQmPPp11JQShMs85zMW41FR0ejfKS6suWd2ooR7vIWH/qYtmA
-	TSkiPHuHMnHLw+KV+75FHOkZo5bWBzMVPlnew4TO0EDgyoyivAzY/jwUS7H7tn93nLH1NbJlGBn2I
-	qSk+IDZo552fFzVORQWxiskdqfa7ImeU5H4UcU5LD6ulwZg6m2AarIKQhrn+jC7gkIRR2IiNyUCcE
-	evrkXlpXn4mC1i9zqGUpZjkMAHokFreTUKcprwvm3QHv/IWJ7v2wvaxBqNpVqZVD8ObXqSUve4c4B
-	FuHtjFXw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sHS1R-0000000EvpK-2Nhu;
-	Wed, 12 Jun 2024 17:44:33 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id E5781300592; Wed, 12 Jun 2024 19:44:32 +0200 (CEST)
-Date: Wed, 12 Jun 2024 19:44:32 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: "Christoph Lameter (Ampere)" <cl@linux.com>
-Cc: tglx@linutronix.de, axboe@kernel.dk, linux-kernel@vger.kernel.org,
-	mingo@redhat.com, dvhart@infradead.org, dave@stgolabs.net,
-	andrealmeid@igalia.com, Andrew Morton <akpm@linux-foundation.org>,
-	urezki@gmail.com, hch@infradead.org, lstoakes@gmail.com,
-	Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org,
-	linux-mm@kvack.org, linux-arch@vger.kernel.org,
-	malteskarupke@web.de
-Subject: Re: [PATCH v1 11/14] futex: Implement FUTEX2_NUMA
-Message-ID: <20240612174432.GK8774@noisy.programming.kicks-ass.net>
-References: <20230721102237.268073801@infradead.org>
- <20230721105744.434742902@infradead.org>
- <9dc04e4c-2adc-5084-4ea1-b200d82be29f@linux.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=jSzngqgxUdfeQy8mf3SR+RJ60p2kuLwEi/olJwgbubb7+4GdgK3ysm6ybYK2pAHR5rmlrBPMpqZ9nxxjorFnEcWcu6gO9LsvGnoesWPKMDs1957i0VWBuXNAykykEQuhak+98Yo/wZ1dW5hPcym2KE4DPygQ11QYG3CGd/8tUJg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A1DF31042;
+	Wed, 12 Jun 2024 11:42:03 -0700 (PDT)
+Received: from J2N7QTR9R3.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6240E3F64C;
+	Wed, 12 Jun 2024 11:41:37 -0700 (PDT)
+Date: Wed, 12 Jun 2024 19:41:32 +0100
+From: Mark Rutland <mark.rutland@arm.com>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Peter Anvin <hpa@zytor.com>, Ingo Molnar <mingo@kernel.org>,
+	Borislav Petkov <bp@alien8.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	the arch/x86 maintainers <x86@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-arch <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH 0/7] arm64 / x86-64: low-level code generation issues
+Message-ID: <Zmnr3BjBkV4JxsIj@J2N7QTR9R3.cambridge.arm.com>
+References: <20240610204821.230388-1-torvalds@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -70,21 +58,102 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9dc04e4c-2adc-5084-4ea1-b200d82be29f@linux.com>
+In-Reply-To: <20240610204821.230388-1-torvalds@linux-foundation.org>
 
-On Wed, Jun 12, 2024 at 10:23:00AM -0700, Christoph Lameter (Ampere) wrote:
-> On Fri, 21 Jul 2023, Peter Zijlstra wrote:
+On Mon, Jun 10, 2024 at 01:48:14PM -0700, Linus Torvalds wrote:
+> The last three patches are purely arm64-specific, and just fix up some
+> nasty code generation in the user access functions.  I just noticed that
+> I will need to implement 'user_access_save()' for KCSAN now that I do
+> the unsafe user access functions. 
 > 
-> > Extend the futex2 interface to be numa aware.
+> Anyway, that 'user_access_save/restore()' issue only shows up with
+> KCSAN.  And it would be a no-op thanks to arm64 doing SMAP the right way
+> (pet peeve: arm64 did what I told the x86 designers to do originally,
+> but they claimed was too hard, so we ended up with that CLAC/STAC
+> instead)... 
 > 
-> Sorry to be chiming in that late but it seems that this is useful to
-> mitigate NUMA issues also for our platform.
+> Sadly that "no-op for KCSAN" would is except for the horrid
+> CONFIG_ARM64_SW_TTBR0_PAN case, which is why I'm not touching it.  I'm
+> hoping some hapless^Whelpful arm64 person is willing to tackle this (or
+> maybe make KCSAN and ARM64_SW_TTBR0_PAN incompatible in the Kconfig). 
 
-I read this like: I tested it and it works for me. Is that a correct
-reading of your statement?
+Given how badly things go when we get this wrong (e.g. TLB corruption), I'd
+like to say "just mark it incompatible", applying to all instrumentation, not
+just KCSAN.
 
-If so, I'll look at bumping this on the priority list and I'll look at
-the placement suggestion you had when I respin the patches.
+Any new microarchitecture since ~2014 has real HW PAN, and IIUC it's really
+only Cortex-{A53,A57,A72} that don't have it, so I think it'd be fair to say
+don't use sanitizers with SW PAN on those CPUs.
 
-Thanks!
+Otherwise, I came up with the below (untested). It's a bit horrid because we
+could have instrumentation in the middle of __uaccess_ttbr0_{enable,disable}(),
+and so we aways need the ISB just in case, and TBH I'm not sure that we use
+user_access_{save,restore}() in all the places we should.
+
+Mark.
+
+diff --git a/arch/arm64/include/asm/uaccess.h b/arch/arm64/include/asm/uaccess.h
+index 30e2f8fa87a4..83301400ec4c 100644
+--- a/arch/arm64/include/asm/uaccess.h
++++ b/arch/arm64/include/asm/uaccess.h
+@@ -92,6 +92,38 @@ static inline void __uaccess_ttbr0_enable(void)
+        local_irq_restore(flags);
+ }
+ 
++static inline unsigned long user_access_ttbr0_save(void)
++{
++       if (!system_uses_ttbr0_pan())
++               return 0;
++
++       /*
++        * If TTBR1 has an ASID other than the reserved ASID, then we have an
++        * active user TTBR0 or are part-way through enabling/disabling TTBR0
++        * access.
++        */
++       if (read_sysreg(ttbr1_el1) & TTBR_ASID_MASK) {
++               __uaccess_ttbr0_disable();
++               return 1;
++       }
++
++       /*
++        * Instrumentation could fire during __uaccess_ttbr0_disable() between
++        * the final write to TTBR1 and before the trailing ISB. We need an ISB
++        * to ensure that we don't continue to use the old ASID.
++        */
++       isb();
++       return 0;
++}
++
++static inline void user_access_ttbr0_restore(unsigned long enabled)
++{
++       if (!system_uses_ttbr0_pan() || !enabled)
++               return;
++
++       __uaccess_ttbr0_enable();
++}
++
+ static inline bool uaccess_ttbr0_disable(void)
+ {
+        if (!system_uses_ttbr0_pan())
+@@ -117,8 +149,20 @@ static inline bool uaccess_ttbr0_enable(void)
+ {
+        return false;
+ }
++
++static inline unsigned long user_access_ttbr0_save(void)
++{
++       return 0;
++}
++
++static inline void user_access_ttbr0_restore(unsigned long)
++{
++}
+ #endif
+ 
++#define user_access_save       user_access_ttbr0_save
++#define user_access_restore    user_access_ttbr0_restore
++
+ static inline void __uaccess_disable_hw_pan(void)
+ {
+        asm(ALTERNATIVE("nop", SET_PSTATE_PAN(0), ARM64_HAS_PAN,
 
