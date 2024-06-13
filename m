@@ -1,55 +1,46 @@
-Return-Path: <linux-arch+bounces-4879-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4880-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D66DB906862
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Jun 2024 11:18:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9AC5D90698F
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Jun 2024 12:03:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6E50FB26680
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Jun 2024 09:18:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A8BF61C23215
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Jun 2024 10:03:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4426013FD62;
-	Thu, 13 Jun 2024 09:18:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 522FD1411C7;
+	Thu, 13 Jun 2024 10:03:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="A0TLT7/3"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="NqNPZhTJ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6531513E8A7;
-	Thu, 13 Jun 2024 09:18:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20BCF134409;
+	Thu, 13 Jun 2024 10:03:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718270294; cv=none; b=OKfdBTLOYaoM6ETT12uRUlEz0LvhVleSfWrUh75/EGq2p/w4tpji+1hS9bBwBPFzf9nofVZoS8enbIzEC59iWoTdl+Fdg+DDR9FHHgRXsioHRFdUiVYuYQm8qwAwt23kPK2TB/rReBJrDhOjFaObGAJkwMvR8AmQvjL2yJpnMVc=
+	t=1718272987; cv=none; b=tC7jmHQ9xKhItrBQXQmYz3FNHLKDQNA0/x0CHLf9TVenGVNn4eNR4TcU+00DL7Sm9HaKSjipj1LZizmpsgkEwqggt6xygjDcKKX0z4PFYt5QVB0Y+b0ixzCXi2vkzdT11MbzgukLnXhFWUqry13PeW52lraB/drG9bw09kCCeHI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718270294; c=relaxed/simple;
-	bh=j57AjH7vWOzLYS8GEi6N0Sm4lqhf9PnfiNNs+BWRZvc=;
+	s=arc-20240116; t=1718272987; c=relaxed/simple;
+	bh=CqHO2/KK7eIKe3EFoA4TtHPEMTMPdLClBxAJ4UmrvLg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ub9Sul6WhfiOSoZL6TupcoJSA6XFzYzfR9cPjZrtZ6TQmCVJEQeYm8tdR8QfzIui21jcwfDOqK0/dJGkfyjdzjZuxFuWtcZmv47TKSob4R0Bnt9NEVGB7Y3b7sbZEDHBfzWrmXnkS9HbstOpLSq1R58Li/BRmjQ2Or+TLt9EZP8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=A0TLT7/3; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=p0dnDPDEIYuJ2y75CbrgMsy67e1FESlmVsvTOPepdeA=; b=A0TLT7/3PW8jq4FG22ssotSS0g
-	zPEMM2uzluilJ2tNOjM9f5NZ6KZM2OQshkLdPgKv+9qmi+fIk9ccNkgp82a7JoC9sCGKPOG1eN6ZK
-	fLtadKbtssSZyz+uAin1jf6o+EDnhCxsprUnKhbmaxCAdSCtSINGkMzMb9Sa8yQr+d8UJrIW4e37c
-	Z7NIv6OC2+S2ZHiBSzwmuYy9biFMMC+KNad4ogL57b1BoNyAUNeuFmNTetACp01Gh8YYGucXUvY1w
-	8ZL4IUDpKPtuypRva/qqBvfWB1zmtJIqc6lwu58UdEw3eYOIvsTlkddi7wZMC0I1YWt8D1tkXCRk/
-	fWpzxxjQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sHgaW-00000003Uvs-2WWA;
-	Thu, 13 Jun 2024 09:17:48 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 4C42E300B40; Thu, 13 Jun 2024 11:17:47 +0200 (CEST)
-Date: Thu, 13 Jun 2024 11:17:47 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=KXEbRwvpUv0yDre/bda07f9U93V5poLFzW8WRCqXVi3juaBI/RjmH5CmvqwrsdZwxAgvZ1OnCZMwtzsoVbOQotE8mnl7Vg5APzQQAAT21ifCZBx9XtcMwA58yBnjXizWxf/jHl6pVkA6HIdkNwFI2GvoXODN9gU1Ylu4Ss34FHY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=NqNPZhTJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18679C2BBFC;
+	Thu, 13 Jun 2024 10:03:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1718272986;
+	bh=CqHO2/KK7eIKe3EFoA4TtHPEMTMPdLClBxAJ4UmrvLg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NqNPZhTJEpyCvzXfGU5AnNh2gavLMwsYzQ5eTYx5mLDPdSSIqSRAKZLJPIpCHaYJR
+	 ZbGmNlNWp/ql5XfAGCsjaIZewR5YWdNBQPF/JbE+b4CeU2YsQUlvxT4PItgpgWF4TL
+	 CUhzvnxOEk/9SvVUdnWqARHGMUiC0hjz2Vn2kezE=
+Date: Thu, 13 Jun 2024 12:03:03 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Peter Zijlstra <peterz@infradead.org>
 Cc: Boqun Feng <boqun.feng@gmail.com>, rust-for-linux@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
 	llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>,
@@ -83,10 +74,11 @@ Cc: Boqun Feng <boqun.feng@gmail.com>, rust-for-linux@vger.kernel.org,
 	linux-fsdevel@vger.kernel.org, Trevor Gross <tmgross@umich.edu>,
 	dakr@redhat.com
 Subject: Re: [RFC 1/2] rust: Introduce atomic API helpers
-Message-ID: <20240613091747.GB17707@noisy.programming.kicks-ass.net>
+Message-ID: <2024061353-stillness-unearned-dc4f@gregkh>
 References: <20240612223025.1158537-1-boqun.feng@gmail.com>
  <20240612223025.1158537-2-boqun.feng@gmail.com>
  <2024061341-whole-snowfall-89a6@gregkh>
+ <20240613091747.GB17707@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -95,22 +87,25 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2024061341-whole-snowfall-89a6@gregkh>
+In-Reply-To: <20240613091747.GB17707@noisy.programming.kicks-ass.net>
 
-On Thu, Jun 13, 2024 at 07:38:51AM +0200, Greg Kroah-Hartman wrote:
-> On Wed, Jun 12, 2024 at 03:30:24PM -0700, Boqun Feng wrote:
-> > +// Generated by scripts/atomic/gen-rust-atomic-helpers.sh
-> > +// DO NOT MODIFY THIS FILE DIRECTLY
+On Thu, Jun 13, 2024 at 11:17:47AM +0200, Peter Zijlstra wrote:
+> On Thu, Jun 13, 2024 at 07:38:51AM +0200, Greg Kroah-Hartman wrote:
+> > On Wed, Jun 12, 2024 at 03:30:24PM -0700, Boqun Feng wrote:
+> > > +// Generated by scripts/atomic/gen-rust-atomic-helpers.sh
+> > > +// DO NOT MODIFY THIS FILE DIRECTLY
+> > 
+> > Why not just build this at build time and not check the file into the
+> > tree if it is always automatically generated?  That way it never gets
+> > out of sync.  We do this for other types of auto-generated files in the
+> > kernel today already.
 > 
-> Why not just build this at build time and not check the file into the
-> tree if it is always automatically generated?  That way it never gets
-> out of sync.  We do this for other types of auto-generated files in the
-> kernel today already.
+> Part of the problem is, is that a *TON* of files depend on the atomic.h
+> headers. If we'd generate it on every build, you'd basically get to
+> rebuild the whole kernel every single time.
+> 
+> Also, these files don't change too often. And if you look, there's a
+> hash in those files which is used to check if things somehow got stale.
 
-Part of the problem is, is that a *TON* of files depend on the atomic.h
-headers. If we'd generate it on every build, you'd basically get to
-rebuild the whole kernel every single time.
-
-Also, these files don't change too often. And if you look, there's a
-hash in those files which is used to check if things somehow got stale.
+Ok, fair enough, if you all don't think this will change often...
 
