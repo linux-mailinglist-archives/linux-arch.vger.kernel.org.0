@@ -1,236 +1,95 @@
-Return-Path: <linux-arch+bounces-4900-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4901-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD486909350
-	for <lists+linux-arch@lfdr.de>; Fri, 14 Jun 2024 22:20:20 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 196719093AA
+	for <lists+linux-arch@lfdr.de>; Fri, 14 Jun 2024 23:22:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DC9291C22F62
-	for <lists+linux-arch@lfdr.de>; Fri, 14 Jun 2024 20:20:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1F03BB22CC2
+	for <lists+linux-arch@lfdr.de>; Fri, 14 Jun 2024 21:22:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15D421487F4;
-	Fri, 14 Jun 2024 20:20:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 518151836C7;
+	Fri, 14 Jun 2024 21:22:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gIg8yIK1"
+	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="GGbMHccH"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com [209.85.217.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-40133.protonmail.ch (mail-40133.protonmail.ch [185.70.40.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 806D8145B34;
-	Fri, 14 Jun 2024 20:20:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5843F13A24B;
+	Fri, 14 Jun 2024 21:22:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718396416; cv=none; b=dxXch9Tjg+/ViMl0nzKB87/csECfGmnlgE6AnUplrzQj1N9NSZK/a7fAGdL+np8nAxlpugev7UHOboL0rnscMMYrZln4LuHtLQevT+kpiZRk0jOVDiGZiaKshD5FDWOoFQwYA+oU5JdlmjTZ6vQbNJyt97NrkykxbfZ78v2Ny+Y=
+	t=1718400163; cv=none; b=WZx+ewLtxT3GZETcRxljiCmxmcPc0mdZfjUOh4XUWyqfYcBt8OQJuEd9CrEudT1q4n4P0dhVE/AZNwD+NZLORFI9u/jrPyV2Lrr+J25PStiig36edQ+V3uY0mpzYxQZA+sFIF3V87/tiXRZAUA8TgwgWusag6rqeP8Xx5MVi0dE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718396416; c=relaxed/simple;
-	bh=SL3LXdGpVn93N29tSyCl+OiuXnNiv14zHiXAfmhinnc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N7ozrrxYX1nWRQzVpASTNLR04Ikmrd/zbI80/8z6sFsvI/+yjpQ5hSDTxGgGpfr1ghslzueLOyb4g7y5iVrM94wVcnkE2tAPNQ80/C25c277YiPkxhmn+uon/NhHLmAqX30XpURhOUXmvjU9gXCT8XdrMKkFGUef0K/tskg2kEE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gIg8yIK1; arc=none smtp.client-ip=209.85.217.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f43.google.com with SMTP id ada2fe7eead31-48c390a1054so998931137.0;
-        Fri, 14 Jun 2024 13:20:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718396413; x=1719001213; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5CUAuynBVyz1fHYaZykoo5xpEFYTJwiFVf5avH/YD40=;
-        b=gIg8yIK115uTTUk6Knl8X4yYT3ORsqGyRqxJzfuSilSPvo2KFCKHg0cqx34R/X99Kg
-         wpGPpT5oOhUBGRY1UP5yOuLIRIU+p2JEgBjXaZO9oIBTVazF7Mv6K3jrWxINr5rCDBJH
-         85lmarozL1wlH6Nr1fRsoZwXZrGcGq/fYjk8Zl4OWdz/Ai1+rhlQGeLxeQ/kizMTbGB7
-         ZnNN94slUpGhzjRjxXLpJvAOds6lAI1C6M8iQXz8b0Ji57vEePKGDB+qsUSSAoiCSyqs
-         dHESC9NVI7zlFqf20TvTWCcT8OhUPm3uip+iTTQvfhu+8xWjSUVoV45/wKF6ATyUZ8u+
-         25fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718396413; x=1719001213;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5CUAuynBVyz1fHYaZykoo5xpEFYTJwiFVf5avH/YD40=;
-        b=L62D5aZ7KBIZFiiNGTilcy+dAvkXNrX/DvMCX7vSJEyoyj7ZvkyCzRE47zTB0Rv5Ph
-         ujMtN6lAPGBIm84RUx1AlVBSfKD9GNpeZy5xKaFlM9tmc6BfGVmnvJBVFnzlHi66yvhO
-         bYi6aUwYQj6DqgK1Sh87jPqVT53LmU34vu8MOEJc6xnmbx+PMGX0Eay11cXnceNOPDb8
-         RvI2MOKaU+NVok+l0X+53D7C6Jp9fa6vQOYav6C5wuqxZJ3H02utkPHLuPysaZ57OwxZ
-         IRBbL+1Avm02JGVX9XLhy/1OrDbFK+IPPMXJRQYVa44MrODWIvYb/tIeFt8DSYLjZBKD
-         hKag==
-X-Forwarded-Encrypted: i=1; AJvYcCU4SbKGQdm1XXFpDz92bpqjINc4uAaqlZf5Teb3V7JKEZU3sao0GTSUcS262vv5eqVGr6N76tlZ9fLRwYGzTfuATix9rgeH7DeJvgAetXwiSaKjQwlcaMEUg7CxYmBTBCq9e0PpLVC4iSsRqaBM/czTtKa9WFlx06Yx6bZ8dTrDl8a4aUVxAzw=
-X-Gm-Message-State: AOJu0Yz8p6PS2s6I4owtyaP6fdhpODAl3tSbwHPbIdI390ZEsulgoTGk
-	nU/P4e5wCCkkmnaIR1HYQ7LFoJp76LkKH2RnZc7Q20yTXd1Xp+bT
-X-Google-Smtp-Source: AGHT+IHeZPt+coJs0UUjzvIRyH7KLBAHbOKzSy3UT6stagMTqVFlSqoIJw6X4dKYtBRry1sNMWpzuw==
-X-Received: by 2002:a67:e249:0:b0:48d:9792:5bfe with SMTP id ada2fe7eead31-48dae34a5b9mr4308573137.16.1718396413309;
-        Fri, 14 Jun 2024 13:20:13 -0700 (PDT)
-Received: from fauth2-smtp.messagingengine.com (fauth2-smtp.messagingengine.com. [103.168.172.201])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-798abe69dffsm176912385a.126.2024.06.14.13.20.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jun 2024 13:20:12 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-	by mailfauth.nyi.internal (Postfix) with ESMTP id D8BE1120006C;
-	Fri, 14 Jun 2024 16:20:10 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Fri, 14 Jun 2024 16:20:10 -0400
-X-ME-Sender: <xms:-qVsZn4233Bg4h8CYciH-FYwf6Gd12xjqfEGsTdjl6QA5jiAcw4ReQ>
-    <xme:-qVsZs6DHWLHgvPwKH4wyGRTfgSw01mIhxwTBlTIOJkXTp3HWoLZV6KFbALJxxSMK
-    t1BbeXfZ5y4dvV26Q>
-X-ME-Received: <xmr:-qVsZueKRGiocyoZPU9yTmkb-TzOXfOx9x7K3UtbwfYZTdsWmddqC-r9yBoD9g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfeduledgudegkecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
-    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
-    grthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveei
-    udffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
-    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
-    higihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:-qVsZoIa0p0SKpKTSsAdGKByO2AuK-qzOcW7xWgZLMx3YekiPfSWaA>
-    <xmx:-qVsZrLZYV6LKYERiZtQkYoB6vb1NFvDsznJ78aIyxbfmnzIfp1Juw>
-    <xmx:-qVsZhw5PqYPcfLuoSIZmOxvOfNIIe3xQJU3vf0n6hkYt2nxA0ftpg>
-    <xmx:-qVsZnIKOxAH2U6xyQmhe7kWJruyFTswUX4up4tIPdDPv0C96gCLOQ>
-    <xmx:-qVsZmarTnrWkXSGtpILPx652VtRHGbOAmhFWRu-w1s9q7OeOT1evxcf>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 14 Jun 2024 16:20:08 -0400 (EDT)
-Date: Fri, 14 Jun 2024 13:20:04 -0700
-From: Boqun Feng <boqun.feng@gmail.com>
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev,
-	Miguel Ojeda <ojeda@kernel.org>,	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,	Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Andrea Parri <parri.andrea@gmail.com>,	Will Deacon <will@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Nicholas Piggin <npiggin@gmail.com>,	David Howells <dhowells@redhat.com>,
-	Jade Alglave <j.alglave@ucl.ac.uk>,	Luc Maranget <luc.maranget@inria.fr>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Akira Yokosawa <akiyks@gmail.com>,	Daniel Lustig <dlustig@nvidia.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,	kent.overstreet@gmail.com,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com,
-	Thomas Gleixner <tglx@linutronix.de>,	Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,	torvalds@linux-foundation.org,
- linux-arm-kernel@lists.infradead.org,	linux-fsdevel@vger.kernel.org,
- Trevor Gross <tmgross@umich.edu>,	dakr@redhat.com
+	s=arc-20240116; t=1718400163; c=relaxed/simple;
+	bh=mI0xdPiIrvwp6EccuD83bzOdj0amVBKo2auwQXYt8uE=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Q61tnWaCXIGZQYHYEHlOtSsjB8DrW02zqtDGn9zT2s9hfk8d6jo29gcFiSpwED268xntkWbRo3S43EEGyMQ60/VldFzFngj4ni4WdWk+Om8y4LsJUYDd95ptW3OlTtOVPiQCrWzDEC1W7cpdxyQXee8/QDczuJfAlrCzCLo+nwg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=GGbMHccH; arc=none smtp.client-ip=185.70.40.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+	s=masz3u7cozgmbioxpjqwm7i5ae.protonmail; t=1718400152; x=1718659352;
+	bh=mI0xdPiIrvwp6EccuD83bzOdj0amVBKo2auwQXYt8uE=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=GGbMHccHMMsGnA/ccfGbUrR5Ou/GaweRk7E0oAtlGGyBcg52NBBjlrI00Y/agaBDJ
+	 CEufLLgMBzlcAvbGboVOpXkQluxsmGSAzGhdhYEtoFmexZg5DmttSiVAvUGT51qbBe
+	 V33dUaziIsAWC4qndI9dLduaBwSF+BZdcDikAIXaIm1bjM3RIJ/ARE05k6WRxH38GZ
+	 K+dNjGtj7D7LksWZAk+iuEDyO+dWA7bDW9f44Eqxpwld1dTVHkP0nHv0L3ES4lwzdS
+	 7/dA6hIHPXoLvQ25Yht47pYU0Cav3JsEJrb3po6zYvO07E+iCD1RN5VagbqatQnhMM
+	 mb3QBQhupzr1A==
+Date: Fri, 14 Jun 2024 21:22:24 +0000
+To: Boqun Feng <boqun.feng@gmail.com>, Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+From: Benno Lossin <benno.lossin@proton.me>
+Cc: Gary Guo <gary@garyguo.net>, rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@samsung.com>, Alice Ryhl <aliceryhl@google.com>, Alan Stern <stern@rowland.harvard.edu>, Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Nicholas Piggin <npiggin@gmail.com>, David Howells <dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>, Luc Maranget <luc.maranget@inria.fr>, "Paul E. McKenney" <paulmck@kernel.org>, Akira Yokosawa <akiyks@gmail.com>, Daniel Lustig <dlustig@nvidia.com>, Joel Fernandes <joel@joelfernandes.org>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, kent.overstreet@gmail.com, Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>, elver@google.com, Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, Catalin Marinas <catalin.marinas@arm.com>, torvalds@linux-foundation.org, linux-arm-kernel@lists.infradead.org, linux-fsdevel@vger.kernel.org, Trevor Gross <tmgross@umich.edu>, dakr@redhat.com
 Subject: Re: [RFC 2/2] rust: sync: Add atomic support
-Message-ID: <Zmyl9OHjIarJIIYi@boqun-archlinux>
-References: <20240612223025.1158537-1-boqun.feng@gmail.com>
- <20240612223025.1158537-3-boqun.feng@gmail.com>
- <ZmweL12SL7Unlfpe@J2N7QTR9R3.cambridge.arm.com>
+Message-ID: <c1c45a2e-afdf-40a6-9f44-142752368d5e@proton.me>
+In-Reply-To: <ZmxUxaIwHWnB42h-@Boquns-Mac-mini.home>
+References: <20240612223025.1158537-1-boqun.feng@gmail.com> <20240612223025.1158537-3-boqun.feng@gmail.com> <20240613144432.77711a3a@eugeo> <ZmseosxVQXdsQjNB@boqun-archlinux> <CANiq72myhoCCWs7j0eZuxfoYMbTez7cPa795T57+gz2Dpd+xAw@mail.gmail.com> <ZmtC7h7v1t6XJ6EI@boqun-archlinux> <CANiq72=JdqTRPiUfT=-YMTTN+bHeAe2Pba8nERxU3cN8Q-BEOw@mail.gmail.com> <ZmxUxaIwHWnB42h-@Boquns-Mac-mini.home>
+Feedback-ID: 71780778:user:proton
+X-Pm-Message-ID: 53ca9493f4ed178b60e9c57bdabd3b5e208fb377
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZmweL12SL7Unlfpe@J2N7QTR9R3.cambridge.arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 14, 2024 at 11:40:47AM +0100, Mark Rutland wrote:
-[...]
-> > +#gen_proto_order_variant(meta, pfx, name, sfx, order, atomic, ty, int, raw, arg...)
-> > +gen_proto_order_variant()
-> > +{
-> > +	local meta="$1"; shift
-> > +	local pfx="$1"; shift
-> > +	local name="$1"; shift
-> > +	local sfx="$1"; shift
-> > +	local order="$1"; shift
-> > +	local atomic="$1"; shift
-> > +	local ty="$1"; shift
-> > +	local int="$1"; shift
-> > +	local raw="$1"; shift
-> > +
-> > +	local fn_name="${raw}${pfx}${name}${sfx}${order}"
-> > +	local atomicname="${raw}${atomic}_${pfx}${name}${sfx}${order}"
-> > +
-> > +	local ret="$(gen_ret_type "${meta}" "${int}")"
-> > +	local params="$(gen_params "${int}" $@)"
-> > +	local args="$(gen_args "$@")"
-> > +	local retstmt="$(gen_ret_stmt "${meta}")"
-> > +
-> > +cat <<EOF
-> > +    /// See \`${atomicname}\`.
-> > +    #[inline(always)]
-> > +    pub fn ${fn_name}(&self${params}) ${ret}{
-> > +        // SAFETY:\`self.0.get()\` is a valid pointer.
-> > +        unsafe {
-> > +            ${retstmt}${atomicname}(${args});
-> > +        }
-> > +    }
-> > +EOF
-> > +}
-> 
-> AFAICT the 'ty' argument (AtomicI32/AtomicI64) isn't used and can be
-> removed.
-> 
+On 14.06.24 16:33, Boqun Feng wrote:
+> On Fri, Jun 14, 2024 at 11:59:58AM +0200, Miguel Ojeda wrote:
+>> On Thu, Jun 13, 2024 at 9:05=E2=80=AFPM Boqun Feng <boqun.feng@gmail.com=
+> wrote:
+>>>
+>>> Does this make sense?
+>>
+>> Implementation-wise, if you think it is simpler or more clear/elegant
+>> to have the extra lower level layer, then that sounds fine.
+>>
+>> However, I was mainly talking about what we would eventually expose to
+>> users, i.e. do we want to provide `Atomic<T>` to begin with? If yes,
+>=20
+> The truth is I don't know ;-) I don't have much data on which one is
+> better. Personally, I think AtomicI32 and AtomicI64 make the users have
+> to think about size, alignment, etc, and I think that's important for
+> atomic users and people who review their code, because before one uses
+> atomics, one should ask themselves: why don't I use a lock? Atomics
+> provide the ablities to do low level stuffs and when doing low level
+> stuffs, you want to be more explicit than ergonomic.
 
-Good catch.
+How would this be different with `Atomic<i32>` and `Atomic<i64>`? Just
+because the underlying `Atomic<I>` type is generic shouldn't change
+this, right?
 
-> Likewise for 'raw'.
-> 
-> > +
-> > +cat << EOF
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +
-> > +//! Generated by $0
-> > +//! DO NOT MODIFY THIS FILE DIRECTLY
-> > +
-> > +use super::*;
-> > +use crate::bindings::*;
-> > +
-> > +impl AtomicI32 {
-> > +EOF
-> > +
-> > +grep '^[a-z]' "$1" | while read name meta args; do
-> > +	gen_proto "${meta}" "${name}" "atomic" "AtomicI32" "i32" "" ${args}
-> 
-> With 'ty' and 'raw' gone, this'd be:
-> 
-> 	gen_proto "${meta}" "${name}" "atomic" "i32" ${args}
-> 
-> > +done
-> > +
-> > +cat << EOF
-> > +}
-> > +
-> > +impl AtomicI64 {
-> > +EOF
-> > +
-> > +grep '^[a-z]' "$1" | while read name meta args; do
-> > +	gen_proto "${meta}" "${name}" "atomic64" "AtomicI64" "i64" "" ${args}
-> 
-> With 'ty' and 'raw' gone, this'd be:
-> 
-> 	gen_proto "${meta}" "${name}" "atomic64" "i64" ${args}
-> 
+---
+Cheers,
+Benno
 
-All fixed locally, thanks!
-
-Regards,
-Boqun
-
-> Mark.
-> 
-> > +done
-> > +
-> > +cat << EOF
-> > +}
-> > +
-> > +EOF
-> > -- 
-> > 2.45.2
-> > 
 
