@@ -1,162 +1,117 @@
-Return-Path: <linux-arch+bounces-4889-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4890-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4C7F907D6D
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Jun 2024 22:26:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FF8A9080AB
+	for <lists+linux-arch@lfdr.de>; Fri, 14 Jun 2024 03:35:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 30C0A1F25592
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Jun 2024 20:26:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9BD5628439F
+	for <lists+linux-arch@lfdr.de>; Fri, 14 Jun 2024 01:35:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FA5E139D04;
-	Thu, 13 Jun 2024 20:25:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0C445FEED;
+	Fri, 14 Jun 2024 01:34:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XTte/A1u"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sg9ZtS8y"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B47A983A12;
-	Thu, 13 Jun 2024 20:25:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 872431773D;
+	Fri, 14 Jun 2024 01:34:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718310337; cv=none; b=Nra0SlQRLm1e2JUncEVMW4wPtSjv3hos5mGWgw2oOlsOv+tq6QNxIC9UJrRfCDUTLIa9omgLzPbphPE0m2iNS+3CXYyVYbuVbi2GdpTuhD3ro4wW7rbH91Z5moBP1Jj32nZeW7ecP3WhFIiSnqefiB4ADmHndcmSwb9LAmNSWsw=
+	t=1718328897; cv=none; b=VsHrwmH5eYxeiKZFTbnBcWzlULoydE+R7s6cx1jJa8c0Ccth2DsEIxMIH9nHk4a9IH9RD01S/Pk4IPQ+WD/KR570Xa5XYQGDp6oxp9G/KjvqL9QdJdHM3Vszn1XrX8cMTaGXhxOAstp5A/rWavqEs63mJk4VS1VevaXQNjp4rSA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718310337; c=relaxed/simple;
-	bh=XZMnBPtlkifS5Fdca+gG4KAFlQ4eMVf6o5s14uxWoGY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nMIz51rIJsW1wc842ilQC2XWhtzODoMVdemf9+96S9VzGFxz3jBTF+/U5t/sNNuWjQi+U5zd4C6onGsQ5Kw3Vc1euuh3ZvRD9BjTWBluopRw+IAbX33oVbYlvtcxx4HDpSu0PGpu07wbviLFmuwT5wK8zw91NhOdkLZUejd78EY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XTte/A1u; arc=none smtp.client-ip=209.85.222.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-7955c585af0so101523585a.2;
-        Thu, 13 Jun 2024 13:25:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718310335; x=1718915135; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EMz0ZFRHVHUChYlldLB+9O1uGefbqiAdPKIID9/kO3c=;
-        b=XTte/A1ur7U4yPV8CpLWuoJfbuWjv0eH6hAe0zuYkJjv+CQXcsMliBV+kzJFAjm4eO
-         6VdP6RjtHe1R2k80KPxR5xr3+9tXGDIxq/+IzSlyI7tWt/tLDJgDUT7Gb763ITIauxdn
-         7kt0lyklucCd4jq5MV9JH7hiaepKdTGihH25qxPHmbU8XKsU3CvAJNV/cJcyJKPUbvLo
-         DieUdtL1qet2oPhA/qG+KxCwBf4INgVKkG/Ar9FqAIgpiQVbCkQGDyXK9kS18fkIzIui
-         ZJT0X8+I/tE30PCWdtHseqd6ikbtamxzWWdIX2BpcHjHKVYxTxcMvo/KOchmEY2BgBgQ
-         ePMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718310335; x=1718915135;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EMz0ZFRHVHUChYlldLB+9O1uGefbqiAdPKIID9/kO3c=;
-        b=u7M+8EIVt+lxWSA6xdopu1lkKdXVE4eMXrUpvRu6oCYtRCr17GSPhecI8CiGRqLv42
-         JdiNioVuUNgSXqa5Yf1hhLkxtJNs/xf6SmjL9mbaP3s5pG3ZqJbwWmaXCCHPcsVKB4N5
-         n66jWjZfDjAF2rWL12hpFFa5mxUKOC+/mBzwS2V1DPK8AdTonPvCNVKFTQqHVdYeXziM
-         qwg67QbrW4YMM4/Jum4juJ43BnyJT7e+kRSOmbi5+Ko1rwsN+UOU4gJ7k9qxcqb4vc39
-         k76LMa6zAoIfOA7eFTk1DI5frfo2V0Z3O33W3+UP4JevKkACfrv4sLCrlYLdjKBXeG7/
-         1rpA==
-X-Forwarded-Encrypted: i=1; AJvYcCWhnf80OBNqZ/7DpRPleaLAVxJr5IDeIYgldyzxKwV1/rJap1Dc+RWHLGczKmG6MO5nxLSdsqXGA+WgQrtxq/mSgSJnXWDPKu3HlbSw1acyBH52u27Co1nTCix4p42s1Q5uy45cuCaluJ4p/OmqWlqrE0im8NxxJ539CHlO5skPYfyhH7mIFrg=
-X-Gm-Message-State: AOJu0YwTH0Io9hr5Ir4dOnURrL777JdJzoMVc4heUjKgXkhVp0qmYLj8
-	fLpiWz5z43Rr5Nxog3OuJXd0X07u2laGrgQja7UrXEd5GkJOchCf
-X-Google-Smtp-Source: AGHT+IGpSoIULcvWez99JK7JK+Up8HU1l/s1FINDWZs8LC9tBJeQ3hxxZVJWnFEHKbk+02gDLzMs0Q==
-X-Received: by 2002:a05:620a:4007:b0:797:e9f7:e924 with SMTP id af79cd13be357-798d26af852mr68059885a.65.1718310334648;
-        Thu, 13 Jun 2024 13:25:34 -0700 (PDT)
-Received: from fauth2-smtp.messagingengine.com (fauth2-smtp.messagingengine.com. [103.168.172.201])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-441f2fcc468sm9379261cf.70.2024.06.13.13.25.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Jun 2024 13:25:34 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfauth.nyi.internal (Postfix) with ESMTP id 283391200069;
-	Thu, 13 Jun 2024 16:25:33 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Thu, 13 Jun 2024 16:25:33 -0400
-X-ME-Sender: <xms:vFVrZgtyFF8uQGfrwFobOorS3vOPl_--u_9m9T3AhsbuxVq2xi72zw>
-    <xme:vFVrZteMRM4PasZI_VHT9e2_LY__Y8z3ZnNYO3RfHb23AFY2Z913Tln8h8msbAnfB
-    eYMqpyIJIRn0-XRBg>
-X-ME-Received: <xmr:vFVrZrx5Tan5t4KnPFuuL5T2vPasCz-gKubfZx0xAmf_NUnPbp19npTIFsk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedujedgudegiecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
-    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
-    grthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveei
-    udffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
-    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
-    higihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:vVVrZjMpjzd4Kew3lRZR2cVcvzPaSrroXMn4v74PLBzfBsascPkW1Q>
-    <xmx:vVVrZg8hQLget4rip9IgUQthGkKPjBxRow_6r2bsiNtYh8W7qBADYQ>
-    <xmx:vVVrZrUpvA1qg1wcNJfzvK9OScd1f1tINnwbxniD6g1bzVvlFGZ-_w>
-    <xmx:vVVrZpfxD8JRupYWW-fTnuQwYYUeIqAPuEbyfo7uRA5cNm_a5wxaeg>
-    <xmx:vVVrZidUvKWatd8WUPO9_xQZFbBUTxfkOpnCNTkVq6SSFMg-qIW2TX_D>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 13 Jun 2024 16:25:32 -0400 (EDT)
-Date: Thu, 13 Jun 2024 13:25:02 -0700
-From: Boqun Feng <boqun.feng@gmail.com>
-To: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,	Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Andrea Parri <parri.andrea@gmail.com>,	Will Deacon <will@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Nicholas Piggin <npiggin@gmail.com>,	David Howells <dhowells@redhat.com>,
-	Jade Alglave <j.alglave@ucl.ac.uk>,	Luc Maranget <luc.maranget@inria.fr>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Akira Yokosawa <akiyks@gmail.com>,	Daniel Lustig <dlustig@nvidia.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,	kent.overstreet@gmail.com,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com,
-	Mark Rutland <mark.rutland@arm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,	Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,	torvalds@linux-foundation.org,
- linux-arm-kernel@lists.infradead.org,	linux-fsdevel@vger.kernel.org,
- Trevor Gross <tmgross@umich.edu>,	dakr@redhat.com
-Subject: Re: [RFC 2/2] rust: sync: Add atomic support
-Message-ID: <ZmtVngqKZ0arLzL-@boqun-archlinux>
-References: <20240612223025.1158537-1-boqun.feng@gmail.com>
- <20240612223025.1158537-3-boqun.feng@gmail.com>
+	s=arc-20240116; t=1718328897; c=relaxed/simple;
+	bh=CYOxmE4ntQW4bNMvxq9UIlsEBzTRL4qLB1FV48Xatv4=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=USAUY/NF7f9lomUFU0/3qPvQFhIc5mrecPjwbnTHMK6Ruj5KN6zhnD0kQWa7XUT8H7DTvXi24TGeT5fFQ/5ScIs7yqdZcsE0rumG+c9rCTUfme+LP9Q6HJ0SIHzXqIqsEIOosy1u+qd6OimLeN+3c5iD+j7F/h9+2UI6gYg0ovU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sg9ZtS8y; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61242C2BBFC;
+	Fri, 14 Jun 2024 01:34:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718328897;
+	bh=CYOxmE4ntQW4bNMvxq9UIlsEBzTRL4qLB1FV48Xatv4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=sg9ZtS8yEezxbjTVPI568a2KvEHqvKq8ud8+uPe6dGMbTueQSEMPMAgj2PCgXuIB9
+	 Il047nqeXnP6P/oSYmAKQCAxosjwrgYOaHdSYN8DpizcnGRlWkldLzTTe90OSa9FGv
+	 MBAW9iL444FGaNr9FcdswWY3pHc51pXPD6UDrHaFRQu/JWFwS+m0CctYfvcTP+Y/us
+	 3tPXqBkvjF/1WlqhH8l2wOQHXRcCWEIeW4JHfm3b/MLKWXXuS8tFi+ZMZi3LlOasMl
+	 Pv1svqR65L1eeiVLZrRKEQMiPGyOnYtk2TTlgDn5OVb4lEV9805bZIfH/6hgbdu1Gs
+	 S7zj/D1FRPg8w==
+Date: Thu, 13 Jun 2024 18:34:53 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, "David S.
+ Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
+ Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
+ Jonathan Corbet <corbet@lwn.net>, Richard Henderson
+ <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+ Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer
+ <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
+ <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>,
+ Andreas Larsson <andreas@gaisler.com>, Sergey Shtylyov <s.shtylyov@omp.ru>,
+ Jesper Dangaard Brouer <hawk@kernel.org>, Ilias Apalodimas
+ <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, Masami
+ Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Arnd Bergmann <arnd@arndb.de>, Alexei
+ Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
+ <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
+ Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>,
+ Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan
+ <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>, "Christian
+ =?UTF-8?B?S8O2bmln?=" <christian.koenig@amd.com>, Bagas Sanjaya
+ <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, Nikolay
+ Aleksandrov <razor@blackwall.org>, Pavel Begunkov <asml.silence@gmail.com>,
+ David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin
+ <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, Harshitha
+ Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
+ <pkaligineedi@google.com>
+Subject: Re: [PATCH net-next v12 00/13] Device Memory TCP
+Message-ID: <20240613183453.2423e23b@kernel.org>
+In-Reply-To: <20240613013557.1169171-1-almasrymina@google.com>
+References: <20240613013557.1169171-1-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240612223025.1158537-3-boqun.feng@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jun 12, 2024 at 03:30:25PM -0700, Boqun Feng wrote:
-[...]
-> diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
-> index 48e7029f1054..99e6e2b2867f 100644
-> --- a/arch/arm64/kernel/cpufeature.c
-> +++ b/arch/arm64/kernel/cpufeature.c
-> @@ -1601,6 +1601,8 @@ static bool
->  has_cpuid_feature(const struct arm64_cpu_capabilities *entry, int scope)
->  {
->  	u64 val = read_scoped_sysreg(entry, scope);
-> +	if (entry->capability == ARM64_HAS_LSE_ATOMICS)
-> +		return false;
->  	return feature_matches(val, entry);
->  }
->  
+On Thu, 13 Jun 2024 01:35:37 +0000 Mina Almasry wrote:
+> v12: https://patchwork.kernel.org/project/netdevbpf/list/?series=859747&state=*
 
-Yeah, this part was mis-committed, will remove it in the next version.
+patches 5 and 6 transiently break the build
 
-Regards,
-Boqun
+../include/trace/events/page_pool.h:65:23: error: use of undeclared identifier 'NET_IOV'
+   65 |                   __entry->netmem & NET_IOV, __entry->pfn, __entry->release)
+      |                                     ^
+../include/trace/events/page_pool.h:91:23: error: use of undeclared identifier 'NET_IOV'
+   91 |                   __entry->netmem & NET_IOV, __entry->pfn, __entry->hold)
+      |                                     ^
 
-[...]
+Looking at NIPA status the builders are 12h behind, so please don't
+repost immediately. This series takes a lot of compute cycles to build.
+
+FWIW there is a docker version of NIPA checks in the nipa repo.
+
+https://github.com/linux-netdev/nipa/tree/main/docker
+
+IDK if it still works, but could help avoid mistakes..
 
