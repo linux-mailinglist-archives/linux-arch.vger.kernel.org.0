@@ -1,211 +1,262 @@
-Return-Path: <linux-arch+bounces-4914-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4915-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F18C909874
-	for <lists+linux-arch@lfdr.de>; Sat, 15 Jun 2024 15:13:02 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8AD2909A33
+	for <lists+linux-arch@lfdr.de>; Sun, 16 Jun 2024 00:12:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7EE7C1C211EA
-	for <lists+linux-arch@lfdr.de>; Sat, 15 Jun 2024 13:13:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9B5A1B21893
+	for <lists+linux-arch@lfdr.de>; Sat, 15 Jun 2024 22:12:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2083E482EB;
-	Sat, 15 Jun 2024 13:12:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 603134F881;
+	Sat, 15 Jun 2024 22:12:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b="a6Ry6rT2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Eux/TtLv"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from xry111.site (xry111.site [89.208.246.23])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E622B482DD;
-	Sat, 15 Jun 2024 13:12:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.208.246.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B91961773A;
+	Sat, 15 Jun 2024 22:12:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718457177; cv=none; b=MC/mE3TlMAfB4G0CoePKl8ttK7BpvYdcHa44rARXH7T1T8Nlt/XEmI233fu3RpkLL7MDQRAG3l7aiav8SxuSykZzXh67h3x7AB3VmuBTOkh+UVeKAWB3eYl6F7YAnrfliw1Pg4JcJbThWDlhI3YskAyDmop6WjQJeNhPyE2jTns=
+	t=1718489560; cv=none; b=Hnqy6Ce2wFBMAtTnZULFqf39PRUS8ZRnrVIr1YhlKKhDJ9D6GZhxj5wKVJ4aRvmPiam9QISyucH40V0p5i0X4iQaT+0YAZvX1K1v8fR3faqf+aKb0EkceheT7ee0CChJ6dRxrg2waKqmc/bGWTK/YYZ4axxV+vMLbXu2gr54ggo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718457177; c=relaxed/simple;
-	bh=B+byxdDHxjrZUhpBVbkIuJhaf9FOb7tIpn08cQRB8iM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=NmuVaFlBqGFUPgcBmBJc63JIp0PxQvMk+E8qsN+LwKKqz90G48xwxRS/beKkraaCRXMlXSrGFrhN2SvnwWJzTXROY1YyFDqygxxmZDvsGmUtmCiju2OqwN7DmuwccSw+JOxNaTIci1CpSpm8VtbTRMLWK6cIJckgjBi43uYbm4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site; spf=pass smtp.mailfrom=xry111.site; dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b=a6Ry6rT2; arc=none smtp.client-ip=89.208.246.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xry111.site
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-	s=default; t=1718457173;
-	bh=B+byxdDHxjrZUhpBVbkIuJhaf9FOb7tIpn08cQRB8iM=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=a6Ry6rT2Apvt4esGBXHHCYGl+lmnmJFUzPirbfSunfg+oXAcQs8xwTW9f5eLcBgms
-	 iYUxGB2K/y9ItZAU8fK7CrrAqYXa99c1090+H8h/Ne56B4zOPCxlQ3oEgYBTKmXpo4
-	 UcvDb5qu7Rl1A9v9ohnGe9O3lzo+fvyM6ylpIcm4=
-Received: from [IPv6:240e:457:1130:3532:fcd1:d9f4:2ad1:565c] (unknown [IPv6:240e:457:1130:3532:fcd1:d9f4:2ad1:565c])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
-	(Client did not present a certificate)
-	(Authenticated sender: xry111@xry111.site)
-	by xry111.site (Postfix) with ESMTPSA id 4550066EDB;
-	Sat, 15 Jun 2024 09:12:41 -0400 (EDT)
-Message-ID: <a70e8b062fc422e351fe2369b9979a623fa05dfa.camel@xry111.site>
-Subject: Re: [PATCH] LoongArch: Define __ARCH_WANT_NEW_STAT in unistd.h
-From: Xi Ruoyao <xry111@xry111.site>
-To: Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>
-Cc: Huacai Chen <chenhuacai@loongson.cn>, loongarch@lists.linux.dev,
- Linux-Arch <linux-arch@vger.kernel.org>, Xuefeng Li
- <lixuefeng@loongson.cn>, guoren <guoren@kernel.org>, WANG Xuerui
- <kernel@xen0n.name>, Jiaxun Yang <jiaxun.yang@flygoat.com>,
- linux-kernel@vger.kernel.org,  loongson-kernel@lists.loongnix.cn,
- stable@vger.kernel.org
-Date: Sat, 15 Jun 2024 21:12:26 +0800
-In-Reply-To: <08ff168afc09fd108ec489a3c9360d4e704fa7dc.camel@xry111.site>
-References: <20240511100157.2334539-1-chenhuacai@loongson.cn>
-	 <f92e23be-3f3f-4bc6-8711-3bcf6beb7fa2@app.fastmail.com>
-	 <CAAhV-H5kn2xPLqgop0iOyg-tc5kAYcuNo3cd+f3yCdkN=cJDug@mail.gmail.com>
-	 <fcdeb993-37d6-42e0-8737-3be41413f03d@app.fastmail.com>
-	 <CAAhV-H4s_utEOtFDwjPTqxnMWTVjWhmS7bEVRX+t8HK5QDA8Vg@mail.gmail.com>
-	 <a21a0878-021e-4990-a59d-b10f204a018b@app.fastmail.com>
-	 <CAAhV-H7OR5tkbjj-BPLStneXFr=1DUaFvvh8+a5Bk_jhCAP25Q@mail.gmail.com>
-	 <cdef45d36d0e71da5f0534b3783b81c82405bda3.camel@xry111.site>
-	 <CAAhV-H4R_HJAB0baqUgA8ucbwWNVN4sc9EV91zAk9Ch302_7zg@mail.gmail.com>
-	 <56ace686-d4b4-4b4c-a8a6-af06ec0d48f2@app.fastmail.com>
-	 <08ff168afc09fd108ec489a3c9360d4e704fa7dc.camel@xry111.site>
-Content-Type: multipart/mixed; boundary="=-YxhasIhtdyR/P3cgOt/8"
-User-Agent: Evolution 3.52.2 
+	s=arc-20240116; t=1718489560; c=relaxed/simple;
+	bh=lHxr0MwsemA2ZMnqJsxiMmV5XulPnNeOMTCLuiEYGpo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=l41UMoK4APSA13FYJGYjlFu0TNq6/7/sK5Jbs2zh4ou/Vw3veK/grHgE4O5sS6Q9aEBpqQX0Gr7yLMULUGmeGqIUWyupipDSMEOMul5nY0ZA10i/GRSb1UGueSMjsnFMRboInNfCdsk1MT27jlsTyzQSkGDBOFDJ/6P42AJWRlQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Eux/TtLv; arc=none smtp.client-ip=209.85.219.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-6ae259b1c87so36347206d6.1;
+        Sat, 15 Jun 2024 15:12:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718489558; x=1719094358; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :feedback-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=VQbZ8odua1hQgPb+pK/nZMpMy6s0hU++zOMWAbph2Ak=;
+        b=Eux/TtLvuTusRZoxAFHYLpBs35dyCC8YSls+jMkP7QQwd1yQhU3u4RT+l+NjUgYqYi
+         nF3p/Iw5KYi4ch9YRhx8F5O1ppWIyZym3+x9xTFa7dpgbtJT+Xzi3NJSDO2O/LVNF7tB
+         d/b/6s3Nd6KN0pD1Pqwf5KLd4d0oupIxJH2g22vECnKRlt0McP18nh39PPtHGWSPkIF0
+         25FlbbW+YwWqky7FGZy+GpUZjkySk/UZGpkaHB/myTimima29cCKc7AxE7jNYGYJ4UIx
+         0w2EqeFp/HgTkqJPQP3n/1WXkK183ApHhln1kGLif5uODEA/5l8vcKH28Kgs6OiwQC1R
+         V1Dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718489558; x=1719094358;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :feedback-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VQbZ8odua1hQgPb+pK/nZMpMy6s0hU++zOMWAbph2Ak=;
+        b=t0U4lkC0E+gn8bn/wqxA48oqM22JVcwVQVH+d5ZS4op/TjVq7cnkemdwDBQU6LFXRj
+         Yj8BlLwPuRL+/XUPQbJn1SYDKw+gN5Iu/IPfgpMbRVIDyMrYS7wGAZj77XSGEkB9n1qR
+         AifQJ3VXXGXxQsek3NOgoPynyVH8P0X4LHRCQETgLSHUeM8PlTEnRs0VKq5pSovVNT0t
+         EM7WRaxBOKASNaWOSXBoq32A/vFUYgNwWauXMyEcdLKp9DI8QLRt2CuIQyi0/6ysMqtp
+         weLG4cTiT7pcxpmhR2F9/O7r676kM+lED856VqexhOl3CwCjdJavtqaMQwRIZWbN//Pi
+         HOrw==
+X-Forwarded-Encrypted: i=1; AJvYcCXR4369Dw27eFJwqdcNzuH6jlSouVZz+mn6p5olpMNW1h4nDO09OmpiczJjTEwDeteHVuKnrkJE01cMrNVSCvR5M/Jsjh/8mtcCtlLNlCToJTvMcJreOb1h+u6XCGGgZCBWdfa/ow3Ne+VzByPRh9NVMHMkmXDVM1yyVnkxGHe+OxnrGyALTN8Dji6VZ8zMY5xgQVe2QB5ThxmU0TJwnm1pQjWWMgLohQ==
+X-Gm-Message-State: AOJu0YwD0mtqcEhllUz5u34AX/EEFYmt49gbvPlDYu4QV1Zqx8kskRL2
+	gGq9HoSk8nSkfm7cA5n7dhnkb7PeTPpXq2/KB3yihVz+pPT3Uxnn
+X-Google-Smtp-Source: AGHT+IG4HmvNaRjIhMLhZmWvrLBxGBdGzpx8lIGc5erMmHO1rw2wmIF90qlwEKwxcvp0aYOUU1vmBA==
+X-Received: by 2002:a0c:c486:0:b0:6af:33ed:87de with SMTP id 6a1803df08f44-6b2af2eef89mr96166876d6.20.1718489557589;
+        Sat, 15 Jun 2024 15:12:37 -0700 (PDT)
+Received: from fauth2-smtp.messagingengine.com (fauth2-smtp.messagingengine.com. [103.168.172.201])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6b2a5ee01d9sm36048266d6.111.2024.06.15.15.12.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 15 Jun 2024 15:12:36 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfauth.nyi.internal (Postfix) with ESMTP id BB4DA120006D;
+	Sat, 15 Jun 2024 18:12:35 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Sat, 15 Jun 2024 18:12:35 -0400
+X-ME-Sender: <xms:0xFuZlrY_bE0nKnF8etf9N11hrXBGTSZUsqajV7vSx_NMcCiVHBxWA>
+    <xme:0xFuZnoWZKABHQym_Al27-R6FbyuPJoHjXkImVwCQoKNHNYPV12cPXCh74-QPxjV_
+    uP26wfRs8Syfm4Y4A>
+X-ME-Received: <xmr:0xFuZiOGp7JlumhoS4vNAISpZyxHz9paxafo9_oM3Q3HNZ-HrbFMwNYdRw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedvvddgtdejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddttdejnecuhfhrohhmpeeuohhq
+    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
+    grthhtvghrnhepvefghfeuveekudetgfevudeuudejfeeltdfhgfehgeekkeeigfdukefh
+    gfegleefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
+    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
+    higihmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:0xFuZg77_tq59ml7HlC_Z5h69QygySdhdEM0vBwuiOHNNd6XPNeTBw>
+    <xmx:0xFuZk49SyUhxrXrXcs19xpi75s5rJM0mbiY4SfqTWFVFONMGKODWA>
+    <xmx:0xFuZojK6yKmo-LzjJ8_UBHNkd4DUJUUGkL1C4hN7ct-SpajKsTZ2g>
+    <xmx:0xFuZm79WM7Y1DZ3Gur-JaVOLAvHAiLK2HHqVh31qOKaLNauBRm6Nw>
+    <xmx:0xFuZrKIrd0e9826BTvfWSIKsKcRvW-fQZ4wYyZNqlSrPnFgBSdCr7By>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 15 Jun 2024 18:12:34 -0400 (EDT)
+Date: Sat, 15 Jun 2024 15:12:33 -0700
+From: Boqun Feng <boqun.feng@gmail.com>
+To: Benno Lossin <benno.lossin@proton.me>
+Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	Gary Guo <gary@garyguo.net>, rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Andreas Hindborg <a.hindborg@samsung.com>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Andrea Parri <parri.andrea@gmail.com>,	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Nicholas Piggin <npiggin@gmail.com>,	David Howells <dhowells@redhat.com>,
+	Jade Alglave <j.alglave@ucl.ac.uk>,	Luc Maranget <luc.maranget@inria.fr>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Akira Yokosawa <akiyks@gmail.com>,	Daniel Lustig <dlustig@nvidia.com>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,	kent.overstreet@gmail.com,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com,
+	Mark Rutland <mark.rutland@arm.com>,
+	Thomas Gleixner <tglx@linutronix.de>,	Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,	torvalds@linux-foundation.org,
+ linux-arm-kernel@lists.infradead.org,	linux-fsdevel@vger.kernel.org,
+ Trevor Gross <tmgross@umich.edu>,	dakr@redhat.com
+Subject: Re: [RFC 2/2] rust: sync: Add atomic support
+Message-ID: <Zm4R0XwTpsASpBhx@Boquns-Mac-mini.home>
+References: <20240612223025.1158537-3-boqun.feng@gmail.com>
+ <20240613144432.77711a3a@eugeo>
+ <ZmseosxVQXdsQjNB@boqun-archlinux>
+ <CANiq72myhoCCWs7j0eZuxfoYMbTez7cPa795T57+gz2Dpd+xAw@mail.gmail.com>
+ <ZmtC7h7v1t6XJ6EI@boqun-archlinux>
+ <CANiq72=JdqTRPiUfT=-YMTTN+bHeAe2Pba8nERxU3cN8Q-BEOw@mail.gmail.com>
+ <ZmxUxaIwHWnB42h-@Boquns-Mac-mini.home>
+ <c1c45a2e-afdf-40a6-9f44-142752368d5e@proton.me>
+ <ZmzvVr7lYfR6Dpca@Boquns-Mac-mini.home>
+ <b692945b-8fa4-4918-93f6-783fbcde375c@proton.me>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b692945b-8fa4-4918-93f6-783fbcde375c@proton.me>
 
---=-YxhasIhtdyR/P3cgOt/8
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+On Sat, Jun 15, 2024 at 07:09:30AM +0000, Benno Lossin wrote:
+> On 15.06.24 03:33, Boqun Feng wrote:
+> > On Fri, Jun 14, 2024 at 09:22:24PM +0000, Benno Lossin wrote:
+> >> On 14.06.24 16:33, Boqun Feng wrote:
+> >>> On Fri, Jun 14, 2024 at 11:59:58AM +0200, Miguel Ojeda wrote:
+> >>>> On Thu, Jun 13, 2024 at 9:05 PM Boqun Feng <boqun.feng@gmail.com> wrote:
+> >>>>>
+> >>>>> Does this make sense?
+> >>>>
+> >>>> Implementation-wise, if you think it is simpler or more clear/elegant
+> >>>> to have the extra lower level layer, then that sounds fine.
+> >>>>
+> >>>> However, I was mainly talking about what we would eventually expose to
+> >>>> users, i.e. do we want to provide `Atomic<T>` to begin with? If yes,
+> >>>
+> >>> The truth is I don't know ;-) I don't have much data on which one is
+> >>> better. Personally, I think AtomicI32 and AtomicI64 make the users have
+> >>> to think about size, alignment, etc, and I think that's important for
+> >>> atomic users and people who review their code, because before one uses
+> >>> atomics, one should ask themselves: why don't I use a lock? Atomics
+> >>> provide the ablities to do low level stuffs and when doing low level
+> >>> stuffs, you want to be more explicit than ergonomic.
+> >>
+> >> How would this be different with `Atomic<i32>` and `Atomic<i64>`? Just
+> > 
+> > The difference is that with Atomic{I32,I64} APIs, one has to choose (and
+> > think about) the size when using atomics, and cannot leave that option
+> > open. It's somewhere unconvenient, but as I said, atomics variables are
+> > different. For example, if someone is going to implement a reference
+> > counter struct, they can define as follow:
+> > 
+> > 	struct Refcount<T> {
+> > 	    refcount: AtomicI32,
+> > 	    data: UnsafeCell<T>
+> > 	}
+> > 
+> > but with atomic generic, people can leave that option open and do:
+> > 
+> > 	struct Refcount<R, T> {
+> > 	    refcount: Atomic<R>,
+> > 	    data: UnsafeCell<T>
+> > 	}
+> > 
+> > while it provides configurable options for experienced users, but it
+> > also provides opportunities for sub-optimal types, e.g. Refcount<u8, T>:
+> > on ll/sc architectures, because `data` and `refcount` can be in the same
+> > machine-word, the accesses of `refcount` are affected by the accesses of
+> > `data`.
+> 
+> I think this is a non-issue. We have two options of counteracting this:
+> 1. We can just point this out in reviews and force people to use
+>    `Atomic<T>` with a concrete type. In cases where there really is the
+>    need to be generic, we can have it.
+> 2. We can add a private trait in the bounds for the generic, nobody
+>    outside of the module can access it and thus they need to use a
+>    concrete type:
+> 
+>         // needs a better name
+>         trait Integer {}
+>         impl Integer for i32 {}
+>         impl Integer for i64 {}
+> 
+>         pub struct Atomic<T: Integer> {
+>             /* ... */
+>         }
+> 
+> And then in the other module, you can't do this (with compiler error):
+> 
+>         pub struct Refcount<R: Integer, T> {
+>                             // ^^^^^^^ not found in this scope
+>                             // note: trait `crate::atomic::Integer` exists but is inaccessible
+>             refcount: Atomic<R>,
+>             data: UnsafeCell<T>,
+>         }
+> 
+> I think that we can start with approach 2 and if we find a use-case
+> where generics are really unavoidable, we can either put it in the same
+> module as `Atomic<T>`, or change the access of `Integer`.
+> 
 
-On Sat, 2024-06-15 at 20:12 +0800, Xi Ruoyao wrote:
-> On Sat, 2024-06-15 at 13:47 +0200, Arnd Bergmann wrote:
->=20
-> /* snip */
->=20
-> > > > > We can only wait for the seccomp side to be fixed now? Or we can =
-get
-> > > > > this patch upstream for LoongArch64 at the moment, and wait for
-> > > > > seccomp to fix RISCV32 (and LoongArch32) in future?
-> > > >=20
-> > > > I'm wondering why not just introduce a new syscall or extend statx =
-with
-> > > > a new flag, as we've discussed many times.=C2=A0 They have their ow=
-n
-> > > > disadvantages but better than this, IMO.
-> > > We should move things forward, in any way. :)
-> >=20
-> > Wouldn't it be sufficient to move the AT_EMPTY_PATH hack
-> > from vfs_fstatat() to vfs_statx() so we can make them
-> > behave the same way?
-> >=20
-> > As far as I can tell, the only difference between the two is
-> > that fstatat64() and similar already has added the check for
-> > zero-length strings in order to make using vfs_fstatat()
-> > fast and safe when called from glibc stat().
->=20
-> Do you mean https://git.kernel.org/torvalds/c/9013c51c630a?=C2=A0 It (onl=
-y
-> partially) fix the performance issue but it won't help seccomp.=C2=A0 The
-> problem is you cannot check if the string is zero-length with seccomp.
-> Thus seccomp cannot audit fstatat properly as well.
->=20
-> In [Firefox] *all* fstatat (and statx) calls are trapped and *the signal
-> handler* audit this fstatat call.=C2=A0 If flags & AT_EMPTY_PATH and path=
- is
-> zero-length, it calls fstat to do the job.=C2=A0 But on LoongArch there i=
-s no
-> way to "do the job" as the only stat-family call is statx.
->=20
-> [Firefox]:https://searchfox.org/mozilla-central/source/security/sandbox/l=
-inux/SandboxFilter.cpp#364
+What's the issue of having AtomicI32 and AtomicI64 first then? We don't
+need to do 1 or 2 until the real users show up.
 
-Just spent some brain cycles to make a quick hack adding a new statx
-flag.  Patch attached.
+And I'd like also to point out that there are a few more trait bound
+designs needed for Atomic<T>, for example, Atomic<u32> and Atomic<i32>
+have different sets of API (no inc_unless_negative() for u32).
 
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
+Don't make me wrong, I have no doubt we can handle this in the type
+system, but given the design work need, won't it make sense that we take
+baby steps on this? We can first introduce AtomicI32 and AtomicI64 which
+already have real users, and then if there are some values of generic
+atomics, we introduce them and have proper discussion on design.
 
---=-YxhasIhtdyR/P3cgOt/8
-Content-Disposition: attachment; filename="0001-RFC-vfs-Add-AT_FORCE_EMPTY_PATH.patch"
-Content-Transfer-Encoding: base64
-Content-Type: text/x-patch; name="0001-RFC-vfs-Add-AT_FORCE_EMPTY_PATH.patch";
-	charset="UTF-8"
-
-RnJvbSAxNmQwMmExYzQ0ZTVlZWQyZWYyYTJjYzMyMjBkMGE3NGIzNWRmODIyIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBYaSBSdW95YW8gPHhyeTExMUB4cnkxMTEuc2l0ZT4KRGF0ZTog
-U2F0LCAxNSBKdW4gMjAyNCAyMDo0NDowNCArMDgwMApTdWJqZWN0OiBbUEFUQ0hdIFJGQzogdmZz
-OiBBZGQgQVRfRk9SQ0VfRU1QVFlfUEFUSAoKSXQgYmVoYXZlcyBhcyBpZiBBVF9FTVBUWV9QQVRI
-IHdpdGggYW4gZW1wdHkgcGF0aCAodGhlIGlucHV0IHBhdGggd2lsbApiZSBpZ25vcmVkKS4KCkl0
-J3MgYmV0dGVyIHRoYW4gQVRfRU1QVFlfUEFUSCBmb3IgaW1wbGVtZW50aW5nIGZzdGF0IHdpdGgg
-c3RhdHggKGl0J3MKbmVlZGVkIGFmdGVyIDIwMzcgZm9yIDMyLWJpdCBzeXN0ZW1zKSBiZWNhdXNl
-IHRoZXJlJ3Mgbm8gbmVlZCB0byBjb3B5CmZyb20gdXNlciwgYW5kIGl0J3MgYXVkaXRhYmxlIGJ5
-IHNlY2NvbXAgKHRob3VnaCBwZXJzb25hbGx5IEknbSByZWFsbHkKbm90IGEgZmFuIGlmIHNlY2Nv
-bXApLgoKU2lnbmVkLW9mZi1ieTogWGkgUnVveWFvIDx4cnkxMTFAeHJ5MTExLnNpdGU+Ci0tLQog
-ZnMvbmFtZWkuYyAgICAgICAgICAgICAgICAgfCA4ICsrKysrKystCiBmcy9zdGF0LmMgICAgICAg
-ICAgICAgICAgICB8IDQgKysrLQogaW5jbHVkZS9saW51eC9uYW1laS5oICAgICAgfCA0ICsrKysK
-IGluY2x1ZGUvdHJhY2UvbWlzYy9mcy5oICAgIHwgMSArCiBpbmNsdWRlL3VhcGkvbGludXgvZmNu
-dGwuaCB8IDMgKysrCiA1IGZpbGVzIGNoYW5nZWQsIDE4IGluc2VydGlvbnMoKyksIDIgZGVsZXRp
-b25zKC0pCgpkaWZmIC0tZ2l0IGEvZnMvbmFtZWkuYyBiL2ZzL25hbWVpLmMKaW5kZXggMzdmYjBh
-OGFhMDlhLi4yZjAxMmVjOGYwNzIgMTAwNjQ0Ci0tLSBhL2ZzL25hbWVpLmMKKysrIGIvZnMvbmFt
-ZWkuYwpAQCAtMTQ3LDcgKzE0NywxMyBAQCBnZXRuYW1lX2ZsYWdzKGNvbnN0IGNoYXIgX191c2Vy
-ICpmaWxlbmFtZSwgaW50IGZsYWdzLCBpbnQgKmVtcHR5KQogCWtuYW1lID0gKGNoYXIgKilyZXN1
-bHQtPmluYW1lOwogCXJlc3VsdC0+bmFtZSA9IGtuYW1lOwogCi0JbGVuID0gc3RybmNweV9mcm9t
-X3VzZXIoa25hbWUsIGZpbGVuYW1lLCBFTUJFRERFRF9OQU1FX01BWCk7CisJaWYgKCEoZmxhZ3Mg
-JiBMT09LVVBfRk9SQ0VfRU1QVFkpKQorCQlsZW4gPSBzdHJuY3B5X2Zyb21fdXNlcihrbmFtZSwg
-ZmlsZW5hbWUsIEVNQkVEREVEX05BTUVfTUFYKTsKKwllbHNlIHsKKwkJbGVuID0gMDsKKwkJa25h
-bWVbMF0gPSAnXDAnOworCX0KKwogCWlmICh1bmxpa2VseShsZW4gPCAwKSkgewogCQlfX3B1dG5h
-bWUocmVzdWx0KTsKIAkJcmV0dXJuIEVSUl9QVFIobGVuKTsKZGlmZiAtLWdpdCBhL2ZzL3N0YXQu
-YyBiL2ZzL3N0YXQuYwppbmRleCA3MGJkM2U4ODhjZmEuLmJlODFmYzEyYmQzYSAxMDA2NDQKLS0t
-IGEvZnMvc3RhdC5jCisrKyBiL2ZzL3N0YXQuYwpAQCAtMjEwLDYgKzIxMCw4IEBAIGludCBnZXRu
-YW1lX3N0YXR4X2xvb2t1cF9mbGFncyhpbnQgZmxhZ3MpCiAJCWxvb2t1cF9mbGFncyB8PSBMT09L
-VVBfQVVUT01PVU5UOwogCWlmIChmbGFncyAmIEFUX0VNUFRZX1BBVEgpCiAJCWxvb2t1cF9mbGFn
-cyB8PSBMT09LVVBfRU1QVFk7CisJaWYgKGZsYWdzICYgQVRfRk9SQ0VfRU1QVFlfUEFUSCkKKwkJ
-bG9va3VwX2ZsYWdzIHw9IExPT0tVUF9FTVBUWSB8IExPT0tVUF9GT1JDRV9FTVBUWTsKIAogCXJl
-dHVybiBsb29rdXBfZmxhZ3M7CiB9CkBAIC0yMzcsNyArMjM5LDcgQEAgc3RhdGljIGludCB2ZnNf
-c3RhdHgoaW50IGRmZCwgc3RydWN0IGZpbGVuYW1lICpmaWxlbmFtZSwgaW50IGZsYWdzLAogCWlu
-dCBlcnJvcjsKIAogCWlmIChmbGFncyAmIH4oQVRfU1lNTElOS19OT0ZPTExPVyB8IEFUX05PX0FV
-VE9NT1VOVCB8IEFUX0VNUFRZX1BBVEggfAotCQkgICAgICBBVF9TVEFUWF9TWU5DX1RZUEUpKQor
-CQkgICAgICBBVF9TVEFUWF9TWU5DX1RZUEUgfCBBVF9GT1JDRV9FTVBUWV9QQVRIKSkKIAkJcmV0
-dXJuIC1FSU5WQUw7CiAKIHJldHJ5OgpkaWZmIC0tZ2l0IGEvaW5jbHVkZS9saW51eC9uYW1laS5o
-IGIvaW5jbHVkZS9saW51eC9uYW1laS5oCmluZGV4IDk2N2FhOWVhOWY5Ni4uZDE5ZTUxNjYxMDFi
-IDEwMDY0NAotLS0gYS9pbmNsdWRlL2xpbnV4L25hbWVpLmgKKysrIGIvaW5jbHVkZS9saW51eC9u
-YW1laS5oCkBAIC00NSw5ICs0NSwxMyBAQCBlbnVtIHtMQVNUX05PUk0sIExBU1RfUk9PVCwgTEFT
-VF9ET1QsIExBU1RfRE9URE9UfTsKICNkZWZpbmUgTE9PS1VQX0lOX1JPT1QJCTB4MTAwMDAwIC8q
-IFRyZWF0IGRpcmZkIGFzIGZzIHJvb3QuICovCiAjZGVmaW5lIExPT0tVUF9DQUNIRUQJCTB4MjAw
-MDAwIC8qIE9ubHkgZG8gY2FjaGVkIGxvb2t1cCAqLwogI2RlZmluZSBMT09LVVBfTElOS0FUX0VN
-UFRZCTB4NDAwMDAwIC8qIExpbmthdCByZXF1ZXN0IHdpdGggZW1wdHkgcGF0aC4gKi8KKwogLyog
-TE9PS1VQXyogZmxhZ3Mgd2hpY2ggZG8gc2NvcGUtcmVsYXRlZCBjaGVja3MgYmFzZWQgb24gdGhl
-IGRpcmZkLiAqLwogI2RlZmluZSBMT09LVVBfSVNfU0NPUEVEIChMT09LVVBfQkVORUFUSCB8IExP
-T0tVUF9JTl9ST09UKQogCisvKiBJZiB0aGlzIGlzIHNldCwgTE9PS1VQX0VNUFRZIG11c3QgYmUg
-c2V0IGFzIHdlbGwuICovCisjZGVmaW5lIExPT0tVUF9GT1JDRV9FTVBUWQkweDgwMDAwMCAvKiBD
-b25zaWRlciBwYXRoIGVtcHR5LiAqLworCiBleHRlcm4gaW50IHBhdGhfcHRzKHN0cnVjdCBwYXRo
-ICpwYXRoKTsKIAogZXh0ZXJuIGludCB1c2VyX3BhdGhfYXRfZW1wdHkoaW50LCBjb25zdCBjaGFy
-IF9fdXNlciAqLCB1bnNpZ25lZCwgc3RydWN0IHBhdGggKiwgaW50ICplbXB0eSk7CmRpZmYgLS1n
-aXQgYS9pbmNsdWRlL3RyYWNlL21pc2MvZnMuaCBiL2luY2x1ZGUvdHJhY2UvbWlzYy9mcy5oCmlu
-ZGV4IDczOGI5N2YyMmYzNi4uNDY0ODk0MjZmMThhIDEwMDY0NAotLS0gYS9pbmNsdWRlL3RyYWNl
-L21pc2MvZnMuaAorKysgYi9pbmNsdWRlL3RyYWNlL21pc2MvZnMuaApAQCAtMTE5LDQgKzExOSw1
-IEBACiAJCXsgTE9PS1VQX05PX1hERVYsCSJOT19YREVWIiB9LCBcCiAJCXsgTE9PS1VQX0JFTkVB
-VEgsCSJCRU5FQVRIIiB9LCBcCiAJCXsgTE9PS1VQX0lOX1JPT1QsCSJJTl9ST09UIiB9LCBcCisJ
-CXsgTE9PS1VQX0ZPUkNFX0VNUFRZLAkiRk9SQ0VfRU1QVFkiIH0sIFwKIAkJeyBMT09LVVBfQ0FD
-SEVELAkiQ0FDSEVEIiB9KQpkaWZmIC0tZ2l0IGEvaW5jbHVkZS91YXBpL2xpbnV4L2ZjbnRsLmgg
-Yi9pbmNsdWRlL3VhcGkvbGludXgvZmNudGwuaAppbmRleCBjMGJjYzE4NWZhNDguLjcxZDNkYzky
-Yzg2ZSAxMDA2NDQKLS0tIGEvaW5jbHVkZS91YXBpL2xpbnV4L2ZjbnRsLmgKKysrIGIvaW5jbHVk
-ZS91YXBpL2xpbnV4L2ZjbnRsLmgKQEAgLTExMyw2ICsxMTMsOSBAQAogI2RlZmluZSBBVF9TVEFU
-WF9ET05UX1NZTkMJMHg0MDAwCS8qIC0gRG9uJ3Qgc3luYyBhdHRyaWJ1dGVzIHdpdGggdGhlIHNl
-cnZlciAqLwogCiAjZGVmaW5lIEFUX1JFQ1VSU0lWRQkJMHg4MDAwCS8qIEFwcGx5IHRvIHRoZSBl
-bnRpcmUgc3VidHJlZSAqLworI2RlZmluZSBBVF9GT1JDRV9FTVBUWV9QQVRICTB4MTAwMDAJLyog
-SWdub3JlIHBhdGggYW5kIGJlaGF2ZSBhcyBpZgorICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgIEFUX0VNUFRZX1BBVEggaXMgc2V0IGFuZCBwYXRoCisgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgaXMgZW1wdHkgKi8KIAogLyogRmxhZ3Mg
-Zm9yIG5hbWVfdG9faGFuZGxlX2F0KDIpLiBXZSByZXVzZSBBVF8gZmxhZyBzcGFjZSB0byBzYXZl
-IGJpdHMuLi4gKi8KICNkZWZpbmUgQVRfSEFORExFX0ZJRAkJQVRfUkVNT1ZFRElSCS8qIGZpbGUg
-aGFuZGxlIGlzIG5lZWRlZCB0bwotLSAKMi40NS4yCgo=
+To me, it's perfectly fine that Atomic{I32,I64} co-exist with Atomic<T>.
+What's the downside? A bit specific example would help me understand
+the real concern here.
 
 
---=-YxhasIhtdyR/P3cgOt/8--
+Regards,
+Boqun
+
+> ---
+> Cheers,
+> Benno
+> 
+> > The point I'm trying to make here is: when you are using atomics, you
+> > care about performance a lot (otherwise, why don't you use a lock?), and
+> > because of that, you should care about the size of the atomics, because
+> > it may affect the performance significantly.
+> 
 
