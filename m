@@ -1,155 +1,115 @@
-Return-Path: <linux-arch+bounces-4908-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4909-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2131890967B
-	for <lists+linux-arch@lfdr.de>; Sat, 15 Jun 2024 09:09:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C1B990971B
+	for <lists+linux-arch@lfdr.de>; Sat, 15 Jun 2024 10:52:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 775971F220D7
-	for <lists+linux-arch@lfdr.de>; Sat, 15 Jun 2024 07:09:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4B01D1C21701
+	for <lists+linux-arch@lfdr.de>; Sat, 15 Jun 2024 08:52:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 166D417BA7;
-	Sat, 15 Jun 2024 07:09:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86B8E17BC9;
+	Sat, 15 Jun 2024 08:52:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="al09To6l"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rm7bGyvC"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DF47175AB;
-	Sat, 15 Jun 2024 07:09:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 574D01BDE6;
+	Sat, 15 Jun 2024 08:52:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718435388; cv=none; b=uZMO8KeSb9AO1MA8GmARL5oZ7pj/EisJkuiX17qHihUkcJj12UUzInVgNOQBXq2UlEnjYm++KtRa1OcPDDDn7EJ3JdDJUJxCiqZbmJW05/DUE1fVsuMQ4EFEiDQx41sICFuMe1OTna7Hary2vc+Km+lA+yb+61k5Xc1BrMQ+7u4=
+	t=1718441546; cv=none; b=FBCXOwN2CY9bbyB/8o4lYg/q3bM85UbItJvMT+tOp0LAbtGk8A/Tvpo1czkTfPiqnSet7lmLRNDx2fuEFuXUPGrabA0FFM4JM81oq0TwMjr3GesMhWONECV5c5CYjE2KfXPwSxwNxkhQFcUt4A2QFowJHGeXI8Mw6MmchCwqOyA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718435388; c=relaxed/simple;
-	bh=InMc+8IWJ3kDnz0Ha0kfcXNeCtlY2AtkImdW3XBWYi0=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YJ6vnTdR2GJ9cTygzdjDeK8Fm8ZQ4K99+TVf06tNxesAUR7ZAdez0Qap/o6MtfxneyV2sS3EvA/GVDAbvA++EzvUlnLDkTtBD7bn+OJIOfrR/a1P0KVcjupKVerhQw9k7BPvUk4oCHh0cpxwweZkQdXzjjweZNI76dYWiLTLRz4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=al09To6l; arc=none smtp.client-ip=185.70.43.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-	s=protonmail; t=1718435377; x=1718694577;
-	bh=VZAtgC22c+KKhYQxrDN1MaUsBpanAgCvr8LCqwklF+A=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=al09To6lFGef0pLt+lAgVXExOeTE7RV2cHxyTFfnDiKPM6HH0JIcwLretKPKvEDkB
-	 Ix5L9JkKTfEIK/ZiCrif3IzTEpvAcFVkwOusL1PGEWCsRjs5OgZw5uwSSV8AHjS2gS
-	 8BelcQduzkOZafPBwRjgQpWTmpW1VAeHoLwsail/AbQQ88Dig1tIsWm54EGO/Y2RBb
-	 EIcJR5Ko7JSuwBCJdqXbfz+OV2AqT4C/OypMsZWUPvIy++By/GMQj0b2jKMiaBCwwz
-	 wmwF3X0uK2onzKhp8BdJZZlkZGlY0gIM2nsS1K0i7NkxaIQWOpwPxeqrvrJWbpXgPA
-	 IZu3dEYfErRTg==
-Date: Sat, 15 Jun 2024 07:09:30 +0000
-To: Boqun Feng <boqun.feng@gmail.com>
-From: Benno Lossin <benno.lossin@proton.me>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Gary Guo <gary@garyguo.net>, rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@samsung.com>, Alice Ryhl <aliceryhl@google.com>, Alan Stern <stern@rowland.harvard.edu>, Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Nicholas Piggin <npiggin@gmail.com>, David Howells <dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>, Luc Maranget <luc.maranget@inria.fr>, "Paul E. McKenney" <paulmck@kernel.org>, Akira Yokosawa <akiyks@gmail.com>, Daniel Lustig <dlustig@nvidia.com>, Joel Fernandes <joel@joelfernandes.org>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
-	kent.overstreet@gmail.com, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com, Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, Catalin Marinas <catalin.marinas@arm.com>, torvalds@linux-foundation.org, linux-arm-kernel@lists.infradead.org, linux-fsdevel@vger.kernel.org, Trevor Gross <tmgross@umich.edu>, dakr@redhat.com
-Subject: Re: [RFC 2/2] rust: sync: Add atomic support
-Message-ID: <b692945b-8fa4-4918-93f6-783fbcde375c@proton.me>
-In-Reply-To: <ZmzvVr7lYfR6Dpca@Boquns-Mac-mini.home>
-References: <20240612223025.1158537-1-boqun.feng@gmail.com> <20240612223025.1158537-3-boqun.feng@gmail.com> <20240613144432.77711a3a@eugeo> <ZmseosxVQXdsQjNB@boqun-archlinux> <CANiq72myhoCCWs7j0eZuxfoYMbTez7cPa795T57+gz2Dpd+xAw@mail.gmail.com> <ZmtC7h7v1t6XJ6EI@boqun-archlinux> <CANiq72=JdqTRPiUfT=-YMTTN+bHeAe2Pba8nERxU3cN8Q-BEOw@mail.gmail.com> <ZmxUxaIwHWnB42h-@Boquns-Mac-mini.home> <c1c45a2e-afdf-40a6-9f44-142752368d5e@proton.me> <ZmzvVr7lYfR6Dpca@Boquns-Mac-mini.home>
-Feedback-ID: 71780778:user:proton
-X-Pm-Message-ID: 0fe548fbc11fa01208724021192655e59f7fc5d2
+	s=arc-20240116; t=1718441546; c=relaxed/simple;
+	bh=lYNgS4EOKxJx9qsKYp8TMD8ZnON5/nuFd2Lwtc4Bs38=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GU15e6KRHYL/ut1T0Jhk+Txy5xHQUVZmaFAG7MVGm6/6o6S/TUi+hS3AZvgk0zM9R5egi0qF5SZLUFJ1sym0d8f49+omqQAZsMPkTTx9nkjv6VqaS90cX3qsjGUH5mjCFg6IqECwm443A6MTU7uh53aifcmPRTbpVfLbmE/vOWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rm7bGyvC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8D9CC4AF1D;
+	Sat, 15 Jun 2024 08:52:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718441545;
+	bh=lYNgS4EOKxJx9qsKYp8TMD8ZnON5/nuFd2Lwtc4Bs38=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=rm7bGyvCSP4wYWPPHXCJ5jJKdH0VKN96qUprBjDz88UYC8PVqtfg3962oYgA02/1h
+	 GMundvk1CDIq9j+WEsU9gKzSpuW9JO+HuRNnsZGOOAiBedcF+Oq0FZhfow5wmSzR6X
+	 MOLOTy52fW+m7InDGT4CUHBi1xd2xCAfhy5hdb6/cJgN4FojqoVrH84Zj5KHPNVrg8
+	 2q00b8yGw1TgMyEkeqlKgfg2bRd/GD0T1G8CrhXg6IFH0nFVSSOC0t0QCgj8YfdfZp
+	 Utxo1pjGktK0MeuOq5Upym+0kJxwymDNePsqsnxT5Y55lFJREc4PjARJH5Sar6N7j1
+	 sIgibC89Sjk4Q==
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-57c5c51cb89so3255844a12.2;
+        Sat, 15 Jun 2024 01:52:25 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUJkVjlHYvBhhg3HL43Stk23qv4CvOPtrX+ieyvJU/fVMQ1JuaBNcI4gL1/Q+0xtrBE1x6HUhpng46QG91Ez5V1Yp2RHDnxmqNBAYb64bN9fMzOKDsKLUE4TBTxhvakSezJiwHIKeeFDEEllxzIEFdqGNvqQIPrbmWXEg8CTVSfvw==
+X-Gm-Message-State: AOJu0Yzolf2jMlpFim4KB07guJX/G2eQY3Xb3gseId6pudnRdVAqtxLU
+	tVwZuM9yU+69K1loMR6xJiSUt+7jtmtNQScM1CI1/DrHdyCxBTMyQR5AAC8dkziuM/n3/c9wI/z
+	5dtSkT8USboezwoNLkbZ2k7iZ7MU=
+X-Google-Smtp-Source: AGHT+IFyPBQJTylosSuf5+MVqWLqEy0/yJ8gB4g4PxtoBOX/oelfetnVysEN8hXKg3y38a5M6OArZggzJ1FoS45HttI=
+X-Received: by 2002:a17:906:756:b0:a6f:1df1:1ef2 with SMTP id
+ a640c23a62f3a-a6f60dc517fmr376288066b.47.1718441544432; Sat, 15 Jun 2024
+ 01:52:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+References: <20240511100157.2334539-1-chenhuacai@loongson.cn>
+ <f92e23be-3f3f-4bc6-8711-3bcf6beb7fa2@app.fastmail.com> <CAAhV-H5kn2xPLqgop0iOyg-tc5kAYcuNo3cd+f3yCdkN=cJDug@mail.gmail.com>
+ <fcdeb993-37d6-42e0-8737-3be41413f03d@app.fastmail.com> <CAAhV-H4s_utEOtFDwjPTqxnMWTVjWhmS7bEVRX+t8HK5QDA8Vg@mail.gmail.com>
+ <a21a0878-021e-4990-a59d-b10f204a018b@app.fastmail.com>
+In-Reply-To: <a21a0878-021e-4990-a59d-b10f204a018b@app.fastmail.com>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Sat, 15 Jun 2024 16:52:13 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7OR5tkbjj-BPLStneXFr=1DUaFvvh8+a5Bk_jhCAP25Q@mail.gmail.com>
+Message-ID: <CAAhV-H7OR5tkbjj-BPLStneXFr=1DUaFvvh8+a5Bk_jhCAP25Q@mail.gmail.com>
+Subject: Re: [PATCH] LoongArch: Define __ARCH_WANT_NEW_STAT in unistd.h
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Huacai Chen <chenhuacai@loongson.cn>, loongarch@lists.linux.dev, 
+	Linux-Arch <linux-arch@vger.kernel.org>, Xuefeng Li <lixuefeng@loongson.cn>, 
+	guoren <guoren@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
+	Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-kernel@vger.kernel.org, 
+	loongson-kernel@lists.loongnix.cn, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On 15.06.24 03:33, Boqun Feng wrote:
-> On Fri, Jun 14, 2024 at 09:22:24PM +0000, Benno Lossin wrote:
->> On 14.06.24 16:33, Boqun Feng wrote:
->>> On Fri, Jun 14, 2024 at 11:59:58AM +0200, Miguel Ojeda wrote:
->>>> On Thu, Jun 13, 2024 at 9:05=E2=80=AFPM Boqun Feng <boqun.feng@gmail.c=
-om> wrote:
->>>>>
->>>>> Does this make sense?
->>>>
->>>> Implementation-wise, if you think it is simpler or more clear/elegant
->>>> to have the extra lower level layer, then that sounds fine.
->>>>
->>>> However, I was mainly talking about what we would eventually expose to
->>>> users, i.e. do we want to provide `Atomic<T>` to begin with? If yes,
->>>
->>> The truth is I don't know ;-) I don't have much data on which one is
->>> better. Personally, I think AtomicI32 and AtomicI64 make the users have
->>> to think about size, alignment, etc, and I think that's important for
->>> atomic users and people who review their code, because before one uses
->>> atomics, one should ask themselves: why don't I use a lock? Atomics
->>> provide the ablities to do low level stuffs and when doing low level
->>> stuffs, you want to be more explicit than ergonomic.
->>
->> How would this be different with `Atomic<i32>` and `Atomic<i64>`? Just
->=20
-> The difference is that with Atomic{I32,I64} APIs, one has to choose (and
-> think about) the size when using atomics, and cannot leave that option
-> open. It's somewhere unconvenient, but as I said, atomics variables are
-> different. For example, if someone is going to implement a reference
-> counter struct, they can define as follow:
->=20
-> =09struct Refcount<T> {
-> =09    refcount: AtomicI32,
-> =09    data: UnsafeCell<T>
-> =09}
->=20
-> but with atomic generic, people can leave that option open and do:
->=20
-> =09struct Refcount<R, T> {
-> =09    refcount: Atomic<R>,
-> =09    data: UnsafeCell<T>
-> =09}
->=20
-> while it provides configurable options for experienced users, but it
-> also provides opportunities for sub-optimal types, e.g. Refcount<u8, T>:
-> on ll/sc architectures, because `data` and `refcount` can be in the same
-> machine-word, the accesses of `refcount` are affected by the accesses of
-> `data`.
+Hi, Arnd,
 
-I think this is a non-issue. We have two options of counteracting this:
-1. We can just point this out in reviews and force people to use
-   `Atomic<T>` with a concrete type. In cases where there really is the
-   need to be generic, we can have it.
-2. We can add a private trait in the bounds for the generic, nobody
-   outside of the module can access it and thus they need to use a
-   concrete type:
+On Sun, May 12, 2024 at 3:53=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote=
+:
+>
+> On Sun, May 12, 2024, at 05:11, Huacai Chen wrote:
+> > On Sat, May 11, 2024 at 11:39=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> =
+wrote:
+> >> On Sat, May 11, 2024, at 16:28, Huacai Chen wrote:
+> >> > On Sat, May 11, 2024 at 8:17=E2=80=AFPM Arnd Bergmann <arnd@arndb.de=
+> wrote:
+> >> CONFIG_COMPAT_32BIT_TIME is equally affected here. On riscv32
+> >> this is the only allowed configuration, while on others (arm32
+> >> or x86-32 userland) you can turn off COMPAT_32BIT_TIME on
+> >> both 32-bit kernel and on 64-bit kernels with compat mode.
+> > I don't know too much detail, but I think riscv32 can do something
+> > similar to arm32 and x86-32, or we can wait for Xuerui to improve
+> > seccomp. But there is no much time for loongarch because the Debian
+> > loong64 port is coming soon.
+>
+> What I meant is that the other architectures only work by
+> accident if COMPAT_32BIT_TIME is enabled and statx() gets
+> blocked, but then they truncate the timestamps to the tim32
+> range, which is not acceptable behavior. Actually mips64 is
+> in the same situation because it also only supports 32-bit
+> timestamps in newstatat(), despite being a 64-bit
+> architecture with a 64-bit time_t in all other syscalls.
+We can only wait for the seccomp side to be fixed now? Or we can get
+this patch upstream for LoongArch64 at the moment, and wait for
+seccomp to fix RISCV32 (and LoongArch32) in future?
 
-        // needs a better name
-        trait Integer {}
-        impl Integer for i32 {}
-        impl Integer for i64 {}
+Huacai
 
-        pub struct Atomic<T: Integer> {
-            /* ... */
-        }
-
-And then in the other module, you can't do this (with compiler error):
-
-        pub struct Refcount<R: Integer, T> {
-                            // ^^^^^^^ not found in this scope
-                            // note: trait `crate::atomic::Integer` exists =
-but is inaccessible
-            refcount: Atomic<R>,
-            data: UnsafeCell<T>,
-        }
-
-I think that we can start with approach 2 and if we find a use-case
-where generics are really unavoidable, we can either put it in the same
-module as `Atomic<T>`, or change the access of `Integer`.
-
----
-Cheers,
-Benno
-
-> The point I'm trying to make here is: when you are using atomics, you
-> care about performance a lot (otherwise, why don't you use a lock?), and
-> because of that, you should care about the size of the atomics, because
-> it may affect the performance significantly.
-
+>
+>       Arnd
+>
 
