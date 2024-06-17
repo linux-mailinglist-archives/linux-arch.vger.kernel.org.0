@@ -1,74 +1,74 @@
-Return-Path: <linux-arch+bounces-4943-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4944-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 781B890B3C8
-	for <lists+linux-arch@lfdr.de>; Mon, 17 Jun 2024 17:17:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC80090B34A
+	for <lists+linux-arch@lfdr.de>; Mon, 17 Jun 2024 17:04:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 83D9CB29B5C
-	for <lists+linux-arch@lfdr.de>; Mon, 17 Jun 2024 14:27:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A18E61C23831
+	for <lists+linux-arch@lfdr.de>; Mon, 17 Jun 2024 15:04:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEFBC19B3C9;
-	Mon, 17 Jun 2024 13:42:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AD67140E37;
+	Mon, 17 Jun 2024 14:16:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PH+kglPm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jurD3cZV"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC90A1AC247;
-	Mon, 17 Jun 2024 13:42:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81C4514038E;
+	Mon, 17 Jun 2024 14:16:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718631744; cv=none; b=RfjjhFZVOtOd6voTF6HIlEs0tVuNu4DNF263aL68mXp9NKoP7Naw5sTtnazLgh5myfC7nCcq0g/Yp/phKGPKsl+EdYaq1iGmg5wM9ENf1TgVapBGzadofGhGqrvfNYZWKhIyGXd484VmGBTduSCyjHDvV5JwIJi4cWHVLL47azM=
+	t=1718633819; cv=none; b=Bm6pyB+DZgSqwdYASmRPWlwKqvI03d6PquEUw9w/d7tSlW//8s3z+/nbYnP8nRXKOYvaKDe/nI+imZBPH9ShTu9SxzN0nBFVW0OgbDLCn9hTE//qjzqwML7biusLLF6M5sIP28e1EVQgy9q0n9m7DMS7zHDEp6KbH4kBHgLz/9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718631744; c=relaxed/simple;
-	bh=XybUM66pzGC133M0KdH1g4ly7r8A7aRbNbucQeFTvoc=;
+	s=arc-20240116; t=1718633819; c=relaxed/simple;
+	bh=EKHULvpqNZT7k8Un31/LE5FzemNbHyJHUksXDrB0rig=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XVJwPXDpo4cruv2WUbf9woXr/J8/1u/8dgFy6hrZt1Y9wwGd7cNwT1mWjBlDpBWR2WvV/8eD9j0NPtlY9DhaiganXQoK8tDZWv5zDRgkoc7bVt1z7L0+EiYW67N/0QQsrvkokFZt+Qi9GPMCFgBUvbvFN0ydL5fPrTejK9tKfic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PH+kglPm; arc=none smtp.client-ip=209.85.208.177
+	 In-Reply-To:Content-Type; b=ha0IV6U+r4X1IUmXXZzcEHSN7kG8FbEnDRdmlzjMkF0XnDcZhLjtkQx02Xej/HdeIfnAU93+yU9hM6FRaAK9MGAn6CmmZUvNO427C/f2wfZ7gqVe+hKBkFQr0/LHzqWD5nwXh4q7z0zzgnc+6EaN9xT5BoJmnPGrk5xsRPVLCPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jurD3cZV; arc=none smtp.client-ip=209.85.218.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2ec0f3b9bb8so28211021fa.1;
-        Mon, 17 Jun 2024 06:42:22 -0700 (PDT)
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a6f11a2d18aso582622066b.2;
+        Mon, 17 Jun 2024 07:16:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718631741; x=1719236541; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1718633816; x=1719238616; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=lLq64Jy1y7qzLgBK9Is0sT9q7OKvIVCzHqdhb6LFXBE=;
-        b=PH+kglPmYmPRJdM1VACdOF/ZtV91wTm/HR5WjlXGN+4UsLQtOg4S2Im+ZXgjyWRQZE
-         QoG7gLHQIIHNi5FWP+EY24AL8ahgatYlEONYAKtuvl2Z01qpdx5l6MP1xUPfLj/iaw+z
-         T3EYF8ftty5zuLTidXsaF5GwhKd/VUR6YBnkF6Ent/YjnXuLKqkagOlw7vDTPRLb/CD/
-         4+2DXuxstxEdeeK/R6K5JKD+se3wlqeGa5Ks3VElvpe5UHxM+ngKEM7hlfuuZYygTf6V
-         gPCCFo/SVYdwuKsxs1jqFWZMX4DReWbWIUPyFKjaENy/Im89+xvCtNE4F3wjY6zDEHVZ
-         9GNQ==
+        bh=Drz0c1Oa4e/cLUt8BmnU83fUjCzoD8CgDqb9N07B3fI=;
+        b=jurD3cZVbyeVSUSW0vE0zigkqAldLoJaWsm4EEm1IUoET8bixTZ3KpialR/4nH+fMw
+         lGRtc6WIZB4Z0DfOuBIVwyvWABC++D1yM4CdX42ATFJOK0tkos/OpKSv8SNMHgTEVgnh
+         qZ67k37pLSsbi+oWHV1ll6EXGlXoehxpnLAfbhOwq+splzedn/UkVcj99iAoXujg9xLa
+         pirYVcdtk4h9vx8xOqJd5Efvb7/WdpOa5H/ypgt/0W9bsejcYR5UmrTpUZSxfvA8tGjE
+         m42+xLADEW/TNiiU2gE4BRIIX50JkD5ZyQA9r736hgw3wdbNXczaV+3e95HF5O0TeDlr
+         fEcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718631741; x=1719236541;
+        d=1e100.net; s=20230601; t=1718633816; x=1719238616;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lLq64Jy1y7qzLgBK9Is0sT9q7OKvIVCzHqdhb6LFXBE=;
-        b=Smpn7pPN5JUEqj+nrQOwX9jiy7meyfYrj0uzOBtrxgDcB70BWDeMRmt0yVqQ5+UQaN
-         IKwxhdk6KEyWYZc+h4h9SOUrpvSPgggiz6Yj7NX2Xma+i98qBG2nbHI/6Fs6lMbjUoTA
-         xLSisZI57YqNgQLgkLbcPgEdfkHU4SDSXWoiwmMh7ehKb86aH3aJb6RgInaqyURxTjSo
-         Dw0oszm4AYY2RbjNMVZPqnQ8HSJY/CgH3rn3uawpk5j5oHik/k6yL1K8aCq5KFRqggvc
-         FunVP51Hxtv1c6mvjUJzS0brZuaptd4qLtF1/+2SWSC8xkSdb7gIwPx1S/5pFTzJ4Rbl
-         5DWg==
-X-Forwarded-Encrypted: i=1; AJvYcCUwCtEAUQP/OpgC5DwAG6tWlpZCOaeGZ5rA9rUn8Dag39pdmnt1T7mBOFeS3gPiTzBOSlZY56P9lbWqANISI6lqnD77CGlKYJyhIsSKXM84gsrQAVMpS7qLtBGfrrsoUwYoqDQYpdqaNBl6zRxeGbwabDC11NEnRv3YgJ72Wqsb9trBKqJhaqurpLwd5NbS5tBhxJ1/+8rd94aaZB/SfIsMBuxlFK+XosCaTdi3wNU0Ioml7RG+jY814LPCsmFm6/AXsORCOUU7pW9BqgRFUpD8MqvAm69GN6snTxG2tc56ydJY3Rt+ZOxlr5P3GadvWHO86Fji0e3CLBVeRXdm3rCD4fFRMuATOf1qnTJW14kJSnCxO3ldAwP4rVkKXFl1/GciJB7NjbdtInRbuWaaEDmamkuz7eXv3Sf0bSxehGIrJ1MqXpowkvrdtu2dPKfzRofePgiR4v6Qx3dQAsvUPC5W2+u7wynkpu4W5GrOPSamSt3u9yxar/JPHdT+9mMWBR/VMxyUQnCE21XaDb53Lm9EeFrRHpxF3OcQXLIxZYiYnavVL6skXDZg
-X-Gm-Message-State: AOJu0Yx17SlP6Qcm2/FmZNNXpbJQr5CSMMZqvLHRZE3bHLAe4iDj3j6Q
-	U4GRM9cLX2+SlbyS6ytnWLVU9fqwaLjh0Dwg+JjDio2rI7k9E8lC
-X-Google-Smtp-Source: AGHT+IGqHzJEUi1a7luh9jW8SHVbZk8TdcfnJo2RG3dm48EiRHLhDHgyG2l2mawW7oSV97i58gBdzA==
-X-Received: by 2002:a2e:a443:0:b0:2ec:1a8b:c380 with SMTP id 38308e7fff4ca-2ec1a8bc478mr51361181fa.45.1718631740813;
-        Mon, 17 Jun 2024 06:42:20 -0700 (PDT)
+        bh=Drz0c1Oa4e/cLUt8BmnU83fUjCzoD8CgDqb9N07B3fI=;
+        b=HspPGse7fPPKiybvhm6spN9qoindqD0/GibrFXCOfGJcsqtCLn43LRtjv2YZFMZT8T
+         PjSlRUpjvmK6bGHVmThW6xOqSM3Agy2zkBXxbHrAaxlisRqx43wv3rZhHB0K71kB8pup
+         iJpuKtCiRrbUWvbfas4TySvj52iBegOte7fhNE5skEd0nNwutBX30DaNU46mi3hxxPxF
+         cTZGQjbDcLK7rJcs4fDCrkIFo+S5muKKtM4IdUhPjoQnqIGlCsGdwgjeRidkFKCFl4fr
+         KwCBKVK4/DH3iZtVRx1DMlXeB9NEnxzgMvRGAfwT4zpySYA1ARIDNQBWjghVH/yZTGRC
+         73Gw==
+X-Forwarded-Encrypted: i=1; AJvYcCV1f46RY4Bni/WI51yixEXGyh/a9r5Czw11jSwmKfK7p/6GJawsoSA02/IGHqoKankdPbmbYTKWM+M5fkKt181H04+uccIYj8oAvfKlyqBXmufowEIzxJ0BM3LsW0xGHhxNcWsSsvX6iA7/vYZURbSzkSEqqELkPWmu2k4MvU6wSavoC+PweXZ15AgV+2/7FCYJ+IN/s/GrC5oaZ/Fk3QlpVp/pGD+sE4eqmhuDZ5yBaylN5+dPemTUQcL9+3+L5htxGvDNUjABTXAlQcUjrAims4Fx0B0k26ox0IExCektVqTrLYpP263aa0Fv3OMNjkWk0tTG3nOgCDCvP+lryCiPaMvPK+IL5QZoRpmn21uoLr+Ktd3OijqGOnvVXdKklZe85VPHe4YOPkOZvw98kyav5lSYHQNVf4Q5VZAYdkCfgi8GbWdeC337O8SZ8k/6n1SRLFntC74BYCuKxA74Jbzkw5xcIuIGV+XJ09rUJMM/l4/c2eBzLJtOIZd9wbhYHVMeZnmCSVHLfdyy8/pUTPLxub4O/niz27yHZgKiLQVztmf8xcXTehTG
+X-Gm-Message-State: AOJu0YxA7a7eB670T9JrOQo6BcYWAM7bo6MtQlGxQ0yQUOnFsU4XTyp4
+	1RI8ndUEAJJ0oHydOhPK5/zx208/9I/JarKKUltYJxzhAGahUX4H
+X-Google-Smtp-Source: AGHT+IFokiO39Qki+IyFQ+TRRzsTCRMTNhTNMlfnFWf73BlGYeWH1z0yP3M3M0hW8ADbaYfa4+g3mQ==
+X-Received: by 2002:a17:906:4555:b0:a6f:523a:8e93 with SMTP id a640c23a62f3a-a6f60de2129mr643249766b.71.1718633815552;
+        Mon, 17 Jun 2024 07:16:55 -0700 (PDT)
 Received: from [192.168.42.82] ([163.114.131.193])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57cb72ce12fsm6461432a12.7.2024.06.17.06.42.18
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6f56db67e5sm518501066b.66.2024.06.17.07.16.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jun 2024 06:42:20 -0700 (PDT)
-Message-ID: <8bc8c6db-e25e-42ce-8cd2-be50b4a735e2@gmail.com>
-Date: Mon, 17 Jun 2024 14:42:21 +0100
+        Mon, 17 Jun 2024 07:16:55 -0700 (PDT)
+Message-ID: <439590d4-0f05-4f5e-80ec-e7fdf214e307@gmail.com>
+Date: Mon, 17 Jun 2024 15:16:56 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -76,7 +76,7 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v12 04/13] netdev: netdevice devmem allocator
+Subject: Re: [PATCH net-next v12 06/13] page_pool: devmem support
 To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
@@ -118,32 +118,137 @@ Cc: "David S. Miller" <davem@davemloft.net>,
  Harshitha Ramamurthy <hramamurthy@google.com>,
  Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
  <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
- Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
+ linux-mm@kvack.org, Matthew Wilcox <willy@infradead.org>
 References: <20240613013557.1169171-1-almasrymina@google.com>
- <20240613013557.1169171-5-almasrymina@google.com>
+ <20240613013557.1169171-7-almasrymina@google.com>
 Content-Language: en-US
 From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20240613013557.1169171-5-almasrymina@google.com>
+In-Reply-To: <20240613013557.1169171-7-almasrymina@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 6/13/24 02:35, Mina Almasry wrote:
-> Implement netdev devmem allocator. The allocator takes a given struct
-> netdev_dmabuf_binding as input and allocates net_iov from that
-> binding.
+> Convert netmem to be a union of struct page and struct netmem. Overload
+> the LSB of struct netmem* to indicate that it's a net_iov, otherwise
+> it's a page.
 > 
-> The allocation simply delegates to the binding's genpool for the
-> allocation logic and wraps the returned memory region in a net_iov
-> struct.
+> Currently these entries in struct page are rented by the page_pool and
+> used exclusively by the net stack:
+> 
+> struct {
+> 	unsigned long pp_magic;
+> 	struct page_pool *pp;
+> 	unsigned long _pp_mapping_pad;
+> 	unsigned long dma_addr;
+> 	atomic_long_t pp_ref_count;
+> };
+> 
+> Mirror these (and only these) entries into struct net_iov and implement
+> netmem helpers that can access these common fields regardless of
+> whether the underlying type is page or net_iov.
+> 
+> Implement checks for net_iov in netmem helpers which delegate to mm
+> APIs, to ensure net_iov are never passed to the mm stack.
+> 
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
+
+Apart from small comments below
 
 Reviewed-by: Pavel Begunkov <asml.silence@gmail.com>
 
-> 
-> Signed-off-by: Willem de Bruijn <willemb@google.com>
-> Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
-> Signed-off-by: Mina Almasry <almasrymina@google.com>
-> 
+
 > ---
+>   include/net/netmem.h            | 137 ++++++++++++++++++++++++++++++--
+>   include/net/page_pool/helpers.h |  25 +++---
+>   net/core/devmem.c               |   3 +
+>   net/core/page_pool.c            |  26 +++---
+>   net/core/skbuff.c               |  22 +++--
+>   5 files changed, 168 insertions(+), 45 deletions(-)
+> 
+> diff --git a/include/net/netmem.h b/include/net/netmem.h
+> index 664df8325ece5..35ad237fdf29e 100644
+> --- a/include/net/netmem.h
+> +++ b/include/net/netmem.h
+...
+> -/* Converting from page to netmem is always safe, because a page can always be
+> - * a netmem.
+> - */
+>   static inline netmem_ref page_to_netmem(struct page *page)
+>   {
+>   	return (__force netmem_ref)page;
+> @@ -68,17 +107,103 @@ static inline netmem_ref page_to_netmem(struct page *page)
+>   
+>   static inline int netmem_ref_count(netmem_ref netmem)
+>   {
+> +	/* The non-pp refcount of net_iov is always 1. On net_iov, we only
+> +	 * support pp refcounting which uses the pp_ref_count field.
+> +	 */
+> +	if (netmem_is_net_iov(netmem))
+> +		return 1;
+> +
+>   	return page_ref_count(netmem_to_page(netmem));
+>   }
+>   
+>   static inline unsigned long netmem_to_pfn(netmem_ref netmem)
+>   {
+> +	if (netmem_is_net_iov(netmem))
+> +		return 0;
+
+IIRC 0 is a valid pfn. Not much of a concern since it's
+used only for tracing, but might make sense to pass some
+invalid pfn if there is one
+
+> +
+>   	return page_to_pfn(netmem_to_page(netmem));
+>   }
+>   
+...
+>   static inline netmem_ref netmem_compound_head(netmem_ref netmem)
+>   {
+> +	/* niov are never compounded */
+> +	if (netmem_is_net_iov(netmem))
+> +		return netmem;
+> +
+>   	return page_to_netmem(compound_head(netmem_to_page(netmem)));
+>   }
+>   
+> +static inline void *netmem_address(netmem_ref netmem)
+
+I don't think it's used anywhere, do I miss it?
+
+> +{
+> +	if (netmem_is_net_iov(netmem))
+> +		return NULL;
+> +
+> +	return page_address(netmem_to_page(netmem));
+> +}
+> +
+...
+> diff --git a/net/core/page_pool.c b/net/core/page_pool.c
+> index a5957d3359762..1152e3547795a 100644
+> --- a/net/core/page_pool.c
+> +++ b/net/core/page_pool.c
+> @@ -26,6 +26,8 @@
+...
+>   
+>   /* If the page refcnt == 1, this will try to recycle the page.
+> @@ -714,7 +713,7 @@ __page_pool_put_page(struct page_pool *pool, netmem_ref netmem,
+>   	 * refcnt == 1 means page_pool owns page, and can recycle it.
+>   	 *
+>   	 * page is NOT reusable when allocated when system is under
+> -	 * some pressure. (page_is_pfmemalloc)
+> +	 * some pressure. (page_pool_page_is_pfmemalloc)
+
+There is no page_pool_page_is_pfmemalloc()
+
+>   	 */
+>   	if (likely(__page_pool_page_can_be_recycled(netmem))) {
+>   		/* Read barrier done in page_ref_count / READ_ONCE */
+> @@ -727,6 +726,7 @@ __page_pool_put_page(struct page_pool *pool, netmem_ref netmem,
+>   		/* Page found as candidate for recycling */
+>   		return netmem;
+>   	}
+
 -- 
 Pavel Begunkov
 
