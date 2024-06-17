@@ -1,74 +1,74 @@
-Return-Path: <linux-arch+bounces-4942-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4943-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0445590AF9E
-	for <lists+linux-arch@lfdr.de>; Mon, 17 Jun 2024 15:40:14 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 781B890B3C8
+	for <lists+linux-arch@lfdr.de>; Mon, 17 Jun 2024 17:17:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7690829423C
-	for <lists+linux-arch@lfdr.de>; Mon, 17 Jun 2024 13:40:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 83D9CB29B5C
+	for <lists+linux-arch@lfdr.de>; Mon, 17 Jun 2024 14:27:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35C591B5817;
-	Mon, 17 Jun 2024 13:22:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEFBC19B3C9;
+	Mon, 17 Jun 2024 13:42:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gXgMU4Xp"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PH+kglPm"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54763198E98;
-	Mon, 17 Jun 2024 13:22:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC90A1AC247;
+	Mon, 17 Jun 2024 13:42:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718630568; cv=none; b=lSuGGUdOWzBaslCD7gt3bFMFUWs2hE/zlv60i7Nrvw+SJCVW1+K4knuYDs5y0rSl3kFbTMw6BNZynCkIKLxHxPnQovpfOa9UrZswlPJaeirl0yhgj5XSFkcEp3zxN6DIOc6nQj8P59wQrG67hy2Uq5URbLWrfqPNy9dPCKJS7xQ=
+	t=1718631744; cv=none; b=RfjjhFZVOtOd6voTF6HIlEs0tVuNu4DNF263aL68mXp9NKoP7Naw5sTtnazLgh5myfC7nCcq0g/Yp/phKGPKsl+EdYaq1iGmg5wM9ENf1TgVapBGzadofGhGqrvfNYZWKhIyGXd484VmGBTduSCyjHDvV5JwIJi4cWHVLL47azM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718630568; c=relaxed/simple;
-	bh=PdMIx7ts4oz1uQk5eiNfGe66l/dzc3Wnxf+2+lDmu1I=;
+	s=arc-20240116; t=1718631744; c=relaxed/simple;
+	bh=XybUM66pzGC133M0KdH1g4ly7r8A7aRbNbucQeFTvoc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oTjzl9/UtvXU/oUGYO7zO8qHbM/k1g+N4VgcMkKUjOya1zNSxouc5y8oULO31W47IziNFCEYQO/MuB/whgJ7tLLqlqop28xWRMPWfurRM3E1zNoEdQXprmZe4JggsPCJ+WABgA15t2safeoex1KeEvAQ4Na++cSIsZazs0k98eM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gXgMU4Xp; arc=none smtp.client-ip=209.85.218.41
+	 In-Reply-To:Content-Type; b=XVJwPXDpo4cruv2WUbf9woXr/J8/1u/8dgFy6hrZt1Y9wwGd7cNwT1mWjBlDpBWR2WvV/8eD9j0NPtlY9DhaiganXQoK8tDZWv5zDRgkoc7bVt1z7L0+EiYW67N/0QQsrvkokFZt+Qi9GPMCFgBUvbvFN0ydL5fPrTejK9tKfic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PH+kglPm; arc=none smtp.client-ip=209.85.208.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a6f8ebbd268so73877366b.0;
-        Mon, 17 Jun 2024 06:22:46 -0700 (PDT)
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2ec0f3b9bb8so28211021fa.1;
+        Mon, 17 Jun 2024 06:42:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718630564; x=1719235364; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1718631741; x=1719236541; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=pwj3Fw5B61alhB5+Nki7VXPagt0jdp377yGvLMhtmxI=;
-        b=gXgMU4XpUMCQCIqHF9UK2HX1ZanWkgCER2aLmo6Dt1/EWYxFau/yN5wzHW5zHodjGl
-         gsTxSl07zBxU/nxM8PqPdU1MK0ekJfdS06AH6VfokE95B/2i+bn0JrVFSXAAlodHC8xg
-         zUPNKIMGeidE4wqy/BUGVdQW2s2/eo2Dvp4ZtlBmQSZwH/wy1rQuSuJIS6p3asM7Z8ui
-         H35+m00AJyzuReGWpI2PyhnHroMg0GkKpw7XC9HeFjGS9xmNf8XBSfyElaGD9F6WHJ42
-         6e0Jpp8KAKKYreA6TD3qz0igI5AkJTTUe3JMy1aANYiUMYFzrZWZTKxojQBZmhuJjknb
-         EP4A==
+        bh=lLq64Jy1y7qzLgBK9Is0sT9q7OKvIVCzHqdhb6LFXBE=;
+        b=PH+kglPmYmPRJdM1VACdOF/ZtV91wTm/HR5WjlXGN+4UsLQtOg4S2Im+ZXgjyWRQZE
+         QoG7gLHQIIHNi5FWP+EY24AL8ahgatYlEONYAKtuvl2Z01qpdx5l6MP1xUPfLj/iaw+z
+         T3EYF8ftty5zuLTidXsaF5GwhKd/VUR6YBnkF6Ent/YjnXuLKqkagOlw7vDTPRLb/CD/
+         4+2DXuxstxEdeeK/R6K5JKD+se3wlqeGa5Ks3VElvpe5UHxM+ngKEM7hlfuuZYygTf6V
+         gPCCFo/SVYdwuKsxs1jqFWZMX4DReWbWIUPyFKjaENy/Im89+xvCtNE4F3wjY6zDEHVZ
+         9GNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718630564; x=1719235364;
+        d=1e100.net; s=20230601; t=1718631741; x=1719236541;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pwj3Fw5B61alhB5+Nki7VXPagt0jdp377yGvLMhtmxI=;
-        b=YrIayEOk8gNqF+4L/3lb2BGRDnv+yexjNihn1Vtjrp0YKfRGKpAeY51/Y+N+IgAY7C
-         msYGt5mJoInflOdr8c7McSfHkKOURLUkD+MZuIYJY9czlIxZwfIBQishxiLRNnHVfUnw
-         KWOvyUHTIGAWCFe+wCjuBW9bA/7/RXai/IlcS9amF9KrutIAqzx3li+TilMEmzHeDdSc
-         akkinTdkbdKF6bFpzrvmhD5aeKHRO4HhkavzHyFR0xxXyy5sxRn5BZAdxjBsKAizJUIT
-         DbPUhXu5fqGf+FFSwXImdYzz66weBI9W2J4U+RDSWZSYHZm6kQFJVdK2eIpOcVI5vv4/
-         1YnQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWlLSlUeL1S+Z4sW93KjDIHoVg3T8YV8/iwW0XuBoLw4G0SS8gMNFIXUt9yJ48PfWOJ9aVkirv/mkqr2/wHXKCrkoWCPu/rDvfyR+OFU1gSz0CAgiMk8xbTsLusAw64koUk4/gh8Y/Tv4FjKbEH1Z4+qyJGEpopqWjJj6ncfe1OXP1G5NUzewzOL7YFDIHul/gG6kR5dWDxxjR3O23TqPJ8thhBETmxSmE+6RcHgTMUh++YT5YhMYV+H9SluoEy3h0WShi4rVAIx3L+PxH3OdwJpkDUMGcvMcQYhXLP4yF4uknAd9ubKz62KHMpNnDc3TTDvGgYRucgPISZNvhQAR2ZQdKH9W5/bGozd+JQiaDqMK7lUlHG7h6l/lJGXccfIPXL84lIba+0jCwdeEJg7AgUxAP17qofj/M3avCA3xkOFzqMT4amxKWV5zBnlIkRHJfLhYvqwL6D6sr9Xm1f9AKBQWu6qdPgYzChKw4a+pdiMFPBAsmBrVxs5i/k4pXs68byCeDz6l1haaXiHgb4DFT5a/04ZiV6NwVpBRVctNHYVaQOmgQyUwf5
-X-Gm-Message-State: AOJu0YzHrTaU0H70gAqCadzr+frcm0M9HaieD6ELITSxIu2n7Rvl2Mg/
-	xtClpJ9gmvpA5H37gP1fGJ7CAa8J3vJecPgZ32L94iZmEYkbVQu3
-X-Google-Smtp-Source: AGHT+IEU7bSdU44tFLpRT61VrE4rRir5BezTbPl/p80FyKx5ycfOabVN7gLSnIoqzOZDAYrOc9lyjA==
-X-Received: by 2002:a17:906:f851:b0:a6f:b5a:f5b9 with SMTP id a640c23a62f3a-a6f608b9addmr640674266b.32.1718630564415;
-        Mon, 17 Jun 2024 06:22:44 -0700 (PDT)
+        bh=lLq64Jy1y7qzLgBK9Is0sT9q7OKvIVCzHqdhb6LFXBE=;
+        b=Smpn7pPN5JUEqj+nrQOwX9jiy7meyfYrj0uzOBtrxgDcB70BWDeMRmt0yVqQ5+UQaN
+         IKwxhdk6KEyWYZc+h4h9SOUrpvSPgggiz6Yj7NX2Xma+i98qBG2nbHI/6Fs6lMbjUoTA
+         xLSisZI57YqNgQLgkLbcPgEdfkHU4SDSXWoiwmMh7ehKb86aH3aJb6RgInaqyURxTjSo
+         Dw0oszm4AYY2RbjNMVZPqnQ8HSJY/CgH3rn3uawpk5j5oHik/k6yL1K8aCq5KFRqggvc
+         FunVP51Hxtv1c6mvjUJzS0brZuaptd4qLtF1/+2SWSC8xkSdb7gIwPx1S/5pFTzJ4Rbl
+         5DWg==
+X-Forwarded-Encrypted: i=1; AJvYcCUwCtEAUQP/OpgC5DwAG6tWlpZCOaeGZ5rA9rUn8Dag39pdmnt1T7mBOFeS3gPiTzBOSlZY56P9lbWqANISI6lqnD77CGlKYJyhIsSKXM84gsrQAVMpS7qLtBGfrrsoUwYoqDQYpdqaNBl6zRxeGbwabDC11NEnRv3YgJ72Wqsb9trBKqJhaqurpLwd5NbS5tBhxJ1/+8rd94aaZB/SfIsMBuxlFK+XosCaTdi3wNU0Ioml7RG+jY814LPCsmFm6/AXsORCOUU7pW9BqgRFUpD8MqvAm69GN6snTxG2tc56ydJY3Rt+ZOxlr5P3GadvWHO86Fji0e3CLBVeRXdm3rCD4fFRMuATOf1qnTJW14kJSnCxO3ldAwP4rVkKXFl1/GciJB7NjbdtInRbuWaaEDmamkuz7eXv3Sf0bSxehGIrJ1MqXpowkvrdtu2dPKfzRofePgiR4v6Qx3dQAsvUPC5W2+u7wynkpu4W5GrOPSamSt3u9yxar/JPHdT+9mMWBR/VMxyUQnCE21XaDb53Lm9EeFrRHpxF3OcQXLIxZYiYnavVL6skXDZg
+X-Gm-Message-State: AOJu0Yx17SlP6Qcm2/FmZNNXpbJQr5CSMMZqvLHRZE3bHLAe4iDj3j6Q
+	U4GRM9cLX2+SlbyS6ytnWLVU9fqwaLjh0Dwg+JjDio2rI7k9E8lC
+X-Google-Smtp-Source: AGHT+IGqHzJEUi1a7luh9jW8SHVbZk8TdcfnJo2RG3dm48EiRHLhDHgyG2l2mawW7oSV97i58gBdzA==
+X-Received: by 2002:a2e:a443:0:b0:2ec:1a8b:c380 with SMTP id 38308e7fff4ca-2ec1a8bc478mr51361181fa.45.1718631740813;
+        Mon, 17 Jun 2024 06:42:20 -0700 (PDT)
 Received: from [192.168.42.82] ([163.114.131.193])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6f6a1f2cb9sm383873066b.17.2024.06.17.06.22.42
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57cb72ce12fsm6461432a12.7.2024.06.17.06.42.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jun 2024 06:22:44 -0700 (PDT)
-Message-ID: <c45c5888-497b-4e95-a139-43a05279af65@gmail.com>
-Date: Mon, 17 Jun 2024 14:22:45 +0100
+        Mon, 17 Jun 2024 06:42:20 -0700 (PDT)
+Message-ID: <8bc8c6db-e25e-42ce-8cd2-be50b4a735e2@gmail.com>
+Date: Mon, 17 Jun 2024 14:42:21 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -76,8 +76,7 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v12 03/13] netdev: support binding dma-buf to
- netdevice
+Subject: Re: [PATCH net-next v12 04/13] netdev: netdevice devmem allocator
 To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
@@ -121,141 +120,30 @@ Cc: "David S. Miller" <davem@davemloft.net>,
  <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
  Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
 References: <20240613013557.1169171-1-almasrymina@google.com>
- <20240613013557.1169171-4-almasrymina@google.com>
+ <20240613013557.1169171-5-almasrymina@google.com>
 Content-Language: en-US
 From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20240613013557.1169171-4-almasrymina@google.com>
+In-Reply-To: <20240613013557.1169171-5-almasrymina@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 6/13/24 02:35, Mina Almasry wrote:
-> Add a netdev_dmabuf_binding struct which represents the
-> dma-buf-to-netdevice binding. The netlink API will bind the dma-buf to
-> rx queues on the netdevice. On the binding, the dma_buf_attach
-> & dma_buf_map_attachment will occur. The entries in the sg_table from
-> mapping will be inserted into a genpool to make it ready
-> for allocation.
+> Implement netdev devmem allocator. The allocator takes a given struct
+> netdev_dmabuf_binding as input and allocates net_iov from that
+> binding.
 > 
-> The chunks in the genpool are owned by a dmabuf_chunk_owner struct which
-> holds the dma-buf offset of the base of the chunk and the dma_addr of
-> the chunk. Both are needed to use allocations that come from this chunk.
-> 
-> We create a new type that represents an allocation from the genpool:
-> net_iov. We setup the net_iov allocation size in the
-> genpool to PAGE_SIZE for simplicity: to match the PAGE_SIZE normally
-> allocated by the page pool and given to the drivers.
-> 
-> The user can unbind the dmabuf from the netdevice by closing the netlink
-> socket that established the binding. We do this so that the binding is
-> automatically unbound even if the userspace process crashes.
-> 
-> The binding and unbinding leaves an indicator in struct netdev_rx_queue
-> that the given queue is bound, but the binding doesn't take effect until
-> the driver actually reconfigures its queues, and re-initializes its page
-> pool.
-> 
-> The netdev_dmabuf_binding struct is refcounted, and releases its
-> resources only when all the refs are released.
+> The allocation simply delegates to the binding's genpool for the
+> allocation logic and wraps the returned memory region in a net_iov
+> struct.
+
+Reviewed-by: Pavel Begunkov <asml.silence@gmail.com>
+
 > 
 > Signed-off-by: Willem de Bruijn <willemb@google.com>
 > Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
 > Signed-off-by: Mina Almasry <almasrymina@google.com>
-
-Apart from the comment below
-
-Reviewed-by: Pavel Begunkov <asml.silence@gmail.com> # excluding netlink
-
-
-> diff --git a/include/net/devmem.h b/include/net/devmem.h
-> new file mode 100644
-> index 0000000000000..eaf3fd965d7a8
-...
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index c361a7b69da86..84c9f96a6c9bf 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -158,6 +158,9 @@
->   #include <net/page_pool/types.h>
->   #include <net/page_pool/helpers.h>
->   #include <net/rps.h>
-> +#include <linux/genalloc.h>
-> +#include <linux/dma-buf.h>
-> +#include <net/devmem.h>
->   
->   #include "dev.h"
->   #include "net-sysfs.h"
-> diff --git a/net/core/devmem.c b/net/core/devmem.c
-> new file mode 100644
-> index 0000000000000..951a06004c430
-> --- /dev/null
-> +++ b/net/core/devmem.c
-> @@ -0,0 +1,252 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + *      Devmem TCP
-> + *
-> + *      Authors:	Mina Almasry <almasrymina@google.com>
-> + *			Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-> + *			Kaiyuan Zhang <kaiyuanz@google.com
-> + */
-> +
-> +#include <linux/types.h>
-> +#include <linux/mm.h>
-> +#include <linux/netdevice.h>
-> +#include <trace/events/page_pool.h>
-> +#include <net/netdev_rx_queue.h>
-> +#include <net/page_pool/types.h>
-> +#include <net/page_pool/helpers.h>
-> +#include <linux/genalloc.h>
-> +#include <linux/dma-buf.h>
-> +#include <net/devmem.h>
-> +#include <net/netdev_queues.h>
-> +
-> +/* Device memory support */
-> +
-> +#if defined(CONFIG_DMA_SHARED_BUFFER) && defined(CONFIG_GENERIC_ALLOCATOR)
-> +static void net_devmem_dmabuf_free_chunk_owner(struct gen_pool *genpool,
-> +					       struct gen_pool_chunk *chunk,
-> +					       void *not_used)
-> +{
-> +	struct dmabuf_genpool_chunk_owner *owner = chunk->owner;
-> +
-> +	kvfree(owner->niovs);
-> +	kfree(owner);
-> +}
-> +
-> +void __net_devmem_dmabuf_binding_free(struct net_devmem_dmabuf_binding *binding)
-> +{
-> +	size_t size, avail;
-> +
-> +	gen_pool_for_each_chunk(binding->chunk_pool,
-> +				net_devmem_dmabuf_free_chunk_owner, NULL);
-> +
-> +	size = gen_pool_size(binding->chunk_pool);
-> +	avail = gen_pool_avail(binding->chunk_pool);
-> +
-> +	if (!WARN(size != avail, "can't destroy genpool. size=%zu, avail=%zu",
-> +		  size, avail))
-> +		gen_pool_destroy(binding->chunk_pool);
-> +
-> +	dma_buf_unmap_attachment(binding->attachment, binding->sgt,
-> +				 DMA_FROM_DEVICE);
-
-It's unmapped here as DMA_FROM_DEVICE, a fail path does DMA_BIDIRECTIONAL,
-dma_buf_map_attachment() passes BIDIRECTIONAL.
-
-
-> +	dma_buf_detach(binding->dmabuf, binding->attachment);
-> +	dma_buf_put(binding->dmabuf);
-> +	xa_destroy(&binding->bound_rxq_list);
-> +	kfree(binding);
-> +}
-> +
-> +/* Protected by rtnl_lock() */
-> +static DEFINE_XARRAY_FLAGS(net_devmem_dmabuf_bindings, XA_FLAGS_ALLOC1);
-> +
-...
-
+> 
+> ---
 -- 
 Pavel Begunkov
 
