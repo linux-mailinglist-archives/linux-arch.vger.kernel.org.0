@@ -1,74 +1,74 @@
-Return-Path: <linux-arch+bounces-4948-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4949-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 959F690B87D
-	for <lists+linux-arch@lfdr.de>; Mon, 17 Jun 2024 19:53:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA89490B907
+	for <lists+linux-arch@lfdr.de>; Mon, 17 Jun 2024 20:07:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2400B1F238D5
-	for <lists+linux-arch@lfdr.de>; Mon, 17 Jun 2024 17:53:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 942581C23C71
+	for <lists+linux-arch@lfdr.de>; Mon, 17 Jun 2024 18:07:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00BE618EFFC;
-	Mon, 17 Jun 2024 17:52:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44D0518FC96;
+	Mon, 17 Jun 2024 18:04:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OJvI+Jbl"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZJneLveE"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34D8343165;
-	Mon, 17 Jun 2024 17:52:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C754225AE;
+	Mon, 17 Jun 2024 18:04:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718646777; cv=none; b=FUrOZCmUNjwSlHb13tz7fZ+djJc5O99SH78kfJ6q70FQCAYfnP8Ll+lwAK0yJKBajjp6ugg7KbV8WEhNMlznvl1Gj98A8HqdJE1dilr44rv+3YbIkkDA7WN+aOTGkQPMDpNPkghyrTw9FxF27YkrilcOlyVa7pAyvkP/eI2QiTs=
+	t=1718647487; cv=none; b=GfGSawuAgcXqM2kiRpEhKoOethkJNie0cJwYg30L8v4/3SfOdAnFnR56kdsijuRZOkMkgEJe5rzc/GFIXy9dwKKZEmea4qzrFpJmJh9us0OMkb1gzaO1MLq/FTD75tTxDUH64hvCwohjqHoh15Ev0CLC+0+xsvBEXJsPSQxwg+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718646777; c=relaxed/simple;
-	bh=4gsJQl6qIuVWg7RhN46VmapVAsYSwUdCY7u3dkVR+gE=;
+	s=arc-20240116; t=1718647487; c=relaxed/simple;
+	bh=pfdi2NaOk46tIntpMOstyS8y6kiXRZ34C/9ZfCXdwYU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tqYtZ/zRxVmlUjtsDeLgqJfU/ZE9OrN6nRW296lYXdplr72SO1kLbEW6sxTDcJfjef2V0Vf9o61vmvkfMOK36sjRwnqMOpM//8nA26sx8aTwPRhOuY8nX8ZsL4svMwWNbEd//i+XzHDc8p4g50pqceomdpkebEK+scYpr4oLS9s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OJvI+Jbl; arc=none smtp.client-ip=209.85.221.49
+	 In-Reply-To:Content-Type; b=AmgkhWpsT5jPR8CPj80cQjEvbwZnnOvIZqQmE0QUbHJlkXjNKiwK1gEBllH6x5VbiHXV1iqOu3Tuw8lx+sREJCke7wS9w3P4XAIZuT7AB6F4EEUeu6eukkAwPKZsqN7SjpMqyO5z/+Nf4bQHkJ0v5KBsYoDTApON3UizkrMIT7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZJneLveE; arc=none smtp.client-ip=209.85.218.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-35f22d3abf1so4200228f8f.1;
-        Mon, 17 Jun 2024 10:52:55 -0700 (PDT)
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a6f04afcce1so588969366b.2;
+        Mon, 17 Jun 2024 11:04:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718646774; x=1719251574; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1718647484; x=1719252284; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=TpAELCdjsBD+JrbERWD7mTd4OMlGherBa7u+JgUwCuU=;
-        b=OJvI+JblguvKGVK+cKS5/Y1J+iPdmCU6EpTZkh1BJcQvrf4hencWnze+98rj0W+5EE
-         qGX4gcd8av+qUlxqfVvmzsNb0XSWNEycXVYsVAY4M6LuViV0jK1EYRaaYmEm7GwlYxLd
-         a1EGKm9hqQ+pZ6Vit4jwiDVdbkCbmsK8EmMXCsY1WiFBAAFp8273ciC7TCogfcwKghVS
-         y/mpn6AkrEi/sJuPtXfkAkI8vvO2MBWq61H/JgfJv2x52bZymVhg7DwGZAIowjKIIVjy
-         LkxDpB2WDlFl6SjGTTrylP/X8O/HTE4h0vrF3cS5rNwTh/HAjkjwGr51BBnpLvWQoZ/F
-         diYg==
+        bh=HQyicpxwAULydNdPul5CanbOSkDhlTf845qwPFgw1wc=;
+        b=ZJneLveEuZAntB50UxrO3xXDDYTiLHharmnpuhHX5ntC4Ya2oabuFbYCiG7UOL84mM
+         FZbVBR0nTPKtP4ft1NUTPmG/smNJfxVt9nl2rrLUvnancZJVBp+gocnSSMl3KfmAW0QI
+         whhXqByXjMLbzh8DvBmilGQdSZKPNEV9TpLWpv9JvA+KkSZGTc5yWkfPMWqyzea0nnhJ
+         TKND7lvp0wmRlNzS4YTEtCNPRvva7o8/1CCofpFZBheTl4Uiy3JYLE7sTFPVGs0mSVfS
+         brcZl6e7jtIOf1R4EjRKIUaTV0Pf+dV6FddPaHQ6oRnFTaqLKHChMTUa22ot2rSCWRHN
+         dZ0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718646774; x=1719251574;
+        d=1e100.net; s=20230601; t=1718647484; x=1719252284;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TpAELCdjsBD+JrbERWD7mTd4OMlGherBa7u+JgUwCuU=;
-        b=F6ih09aXGXTy7yoMigH3gvPEBfTp3yqOj+F1D4PKIL3JLpo81n2YdG62xnEx+c9Ncm
-         tp7N82jf95NmoJtFVqfn6wRtUr603E2+L90Bdh1kcaSdcJfbRmLClwZvWBJqgiZTRXCo
-         6UFqqVGddzKbzrH7qGOQz+fFf6Znki26drKBXLMLSThmhILMDBWytkke3W5YKO74qd65
-         APCwF5mTRTXjdEEGsExScVAqG83lmXUPhMsdiA/6BPqFG3O+3VM4Bof5+3LCVHkNS47X
-         5lw/TH1VIHJNi9Wi4MyfzwTPF6uV9hVzCT4YWJ6kiCE4oTd19W+vy/JBRmwxmk1cMhy+
-         QUMQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW8yw/wfKSJRj4jH9Ifto4+AA5apFJgxD7BANjXfKGfH57fCUy1Dm0aU+L0mchmVGn/hCX5uVSS30NSygzzmLoggDJ99T7QCUklYWOXxR6GavhmmHnSpnIBWOaVnhAqQ4RBOh0yLIp/QN6TBLWBGrsDwqX4bX+eEBxT9hFaxHJqwy0zGPYEdXqYD0a3Y8TeTAuEIhEBk0ou98Hw//2g5Ky6Z3qqfL0eMpHQwt5VMwUIwvkhoaS07xFGrBNoixIoy9YnqQ8xil0SHSb253Q+O5H5cgohsT/pxqpxFYDI8Ks2VOAm0g9CXsQyPiwh+81eg276FiBiMLqHZ3z/9n/HtAnyclUjt712Zq8fnFNvLviGQ0TjbohHNkNGoCYdIyrQh7p8/CUXGYptegbLI8SiHYeKGrjbyVyer7oa77HVGttP6cZOuAOvvHn2TR4c6y5a7sfZUUMVbfFu3+0kAoCKGyM2B9AOAUP7LyHVw+wvrwzgc5UzQ6DR9KDJtUDkCBG56vYnA2R7uOFwiHYibatwIRE5cej2kSp+h9KKvitnQlAbToLyDbU2iWjf
-X-Gm-Message-State: AOJu0YyKeXhR7A9hqsPVjUq989Kx9dNfyHtCYgr67TOAlaOoqnNpOoi6
-	Dejxd+7677Vhm3vnqBQIqie1pfBRs1SRjR4aWgAv9Lw64y3RwIMR
-X-Google-Smtp-Source: AGHT+IGl45hl8z5GTV7cP0mMya2j77Ernk+fngMh6lTe4ik8n3cM/4R8lGNxKRhI8iXovlNIXIeAXQ==
-X-Received: by 2002:adf:efc9:0:b0:35f:219d:e529 with SMTP id ffacd0b85a97d-3607a78338cmr10492439f8f.47.1718646774132;
-        Mon, 17 Jun 2024 10:52:54 -0700 (PDT)
+        bh=HQyicpxwAULydNdPul5CanbOSkDhlTf845qwPFgw1wc=;
+        b=wity4DcxgGGAa8A+5jnsO7M3I2HCz7FhzXZHMjh9mx7Sw2DOEKYNBBHj8sBzkbwvTF
+         tafVVWPUW/R/bUNejnNHyNHW6AoGSUH/beD+x8Y3TCyYcTH8S7YnZno0yNxQzDeur80O
+         YThNAzukF9y4x93vw9BnSKC1YsAMgfVW60B1xn70ojDWPV57E3T6a65fE+XentI8ZFrQ
+         EdTIGxdVBVQOvcQMeelKz64ZRpv3qOjS0R51kN2Qq+jSDSEwEO0AXO8IJL1o9DuvwSLw
+         tKNsB732G3gdLY6Sr+uR1lXPdJtmc+r20rCumQ/Ms+/R5ID8qwCzmeiUAGWy2+EUrIs8
+         ANFg==
+X-Forwarded-Encrypted: i=1; AJvYcCVrcKuHSmqpBsw4YbRj5StLkU8O1QRKxTQroyMU1dXGz81QO6rFhPfsqdnsXf5FFFrAhj9Frdax+UCuveAUhNipZjTxEyhnGMl7hkY68Q/HjteZ+rHopPQQVNBzNDbKyv2P8gGDZOhhZBus+SdosHcJmREBv7hWL1vl4QaXoDE1JPGtf63l9TsUGydXOIKERXCcaiaNPLy202YOqkyb0OsiIHI8pwJb4MK8vFNE31kep3o1IzfiLuOl3e1eGn9h46U+YnUYjh8luwBWqk4Ncq8lsu6lkrsy+HKA0dbjqhKwe0HJG1IRoKBEs+vx++EKrXd7WxQldsthv0XqbaW+M9yfPIK0wzEYaRD5qPBoI7idWq4+jzYBNHhY1BNPHE22bos+lMNHFYS3q6Ozv1v5Qg1CszNBXT5owufDpG6DHKBUXz44ad3bUZQDELYjscwE0FByWQBRaLzYAX71A6E68sfMZWQ17jfCoMwEzEQ2EDZL1tKZfG279xeIqt72lE0Hh+F7otqj0w==
+X-Gm-Message-State: AOJu0YwQncgJluHU1bGHuHtf5Sx8mfqorOEFamfhhpsUI9RAUVbf+Ick
+	1doxufvYO5inq78F0NQxxr007SfYqG3s7YISDlqy9KrP5BuZe52I
+X-Google-Smtp-Source: AGHT+IEQqAbEKNSe2wLoBHNV8O+lFcqmwSNfGoItySBVqd4bPLItaNT2RIOOF/IoJpNrae6EG5ULKQ==
+X-Received: by 2002:a17:907:d30c:b0:a6f:7c2d:475d with SMTP id a640c23a62f3a-a6f7c2d49d6mr537069166b.58.1718647483541;
+        Mon, 17 Jun 2024 11:04:43 -0700 (PDT)
 Received: from [192.168.42.223] ([163.114.131.193])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6f56ecdce5sm531595666b.108.2024.06.17.10.52.52
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6f63f7e9d8sm429037566b.182.2024.06.17.11.04.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jun 2024 10:52:53 -0700 (PDT)
-Message-ID: <fa9f8d25-9f68-4f63-a070-639e23917827@gmail.com>
-Date: Mon, 17 Jun 2024 18:52:54 +0100
+        Mon, 17 Jun 2024 11:04:43 -0700 (PDT)
+Message-ID: <8ca3e144-75f3-4e57-9ae0-cc88f245094e@gmail.com>
+Date: Mon, 17 Jun 2024 19:04:43 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -76,26 +76,26 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v12 05/13] page_pool: convert to use netmem
-To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+Subject: Re: [PATCH net-next v10 02/14] net: page_pool: create hooks for
+ custom page providers
+To: Christoph Hellwig <hch@infradead.org>
+Cc: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
  linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-renesas-soc@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org
-Cc: "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
- Jonathan Corbet <corbet@lwn.net>,
+ linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
  Richard Henderson <richard.henderson@linaro.org>,
  Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
  <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
  Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
- Sergey Shtylyov <s.shtylyov@omp.ru>, Jesper Dangaard Brouer
- <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>,
  Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
  <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
  Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
@@ -111,109 +111,46 @@ Cc: "David S. Miller" <davem@davemloft.net>,
  Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
  Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
  =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>,
- Nikolay Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>,
- Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>,
- Shailend Chand <shailend@google.com>,
+ David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>,
+ Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>,
  Harshitha Ramamurthy <hramamurthy@google.com>,
  Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
- <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
- linux-mm@kvack.org, Matthew Wilcox <willy@infradead.org>
-References: <20240613013557.1169171-1-almasrymina@google.com>
- <20240613013557.1169171-6-almasrymina@google.com>
+ <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
+References: <20240530201616.1316526-1-almasrymina@google.com>
+ <20240530201616.1316526-3-almasrymina@google.com>
+ <ZlqzER_ufrhlB28v@infradead.org>
+ <CAHS8izMU_nMEr04J9kXiX6rJqK4nQKA+W-enKLhNxvK7=H2pgA@mail.gmail.com>
+ <5aee4bba-ca65-443c-bd78-e5599b814a13@gmail.com>
+ <ZmAgszZpSrcdHtyl@infradead.org>
+ <ee9a55cd-7541-4865-ab2a-9e860b88c9e4@gmail.com>
+ <Zmfv6_uWAVavYJNj@infradead.org>
 Content-Language: en-US
 From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20240613013557.1169171-6-almasrymina@google.com>
+In-Reply-To: <Zmfv6_uWAVavYJNj@infradead.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 6/13/24 02:35, Mina Almasry wrote:
-> Abstrace the memory type from the page_pool so we can later add support
-> for new memory types. Convert the page_pool to use the new netmem type
-> abstraction, rather than use struct page directly.
+On 6/11/24 07:34, Christoph Hellwig wrote:
+> On Fri, Jun 07, 2024 at 02:45:55PM +0100, Pavel Begunkov wrote:
+>> On 6/5/24 09:24, Christoph Hellwig wrote:
+>>> On Mon, Jun 03, 2024 at 03:52:32PM +0100, Pavel Begunkov wrote:
+>>>> The question for Christoph is what exactly is the objection here? Why we
+>>>> would not be using well defined ops when we know there will be more
+>>>> users?
+>>>
+>>> The point is that there should be no more users.  If you need another
+>>
+>> Does that "No more" stops after devmem tcp?
 > 
-> As of this patch the netmem type is a no-op abstraction: it's always a
-> struct page underneath. All the page pool internals are converted to
-> use struct netmem instead of struct page, and the page pool now exports
-> 2 APIs:
-> 
-> 1. The existing struct page API.
-> 2. The new struct netmem API.
+> There should be no other memory source other than the page allocator
+> and dmabuf.  If you need different life time control for your
+> zero copy proposal don't mix that up with the contol of the memory
+> source.
 
-nits below,
-
-Reviewed-by: Pavel Begunkov <asml.silence@gmail.com>
-
-
-> Keeping the existing API is transitional; we do not want to refactor all
-> the current drivers using the page pool at once.
-> 
-> The netmem abstraction is currently a no-op. The page_pool uses
-> page_to_netmem() to convert allocated pages to netmem, and uses
-> netmem_to_page() to convert the netmem back to pages to pass to mm APIs,
-> 
-> Follow up patches to this series add non-paged netmem support to the
-> page_pool. This change is factored out on its own to limit the code
-> churn to this 1 patch, for ease of code review.
-> 
-> Signed-off-by: Mina Almasry <almasrymina@google.com>
->   #endif /* _NET_NETMEM_H */
-> diff --git a/include/net/page_pool/helpers.h b/include/net/page_pool/helpers.h
-> index 873631c79ab16..5e129d5304f53 100644
-> --- a/include/net/page_pool/helpers.h
-> +++ b/include/net/page_pool/helpers.h
-> @@ -55,6 +55,8 @@
->   #include <linux/dma-mapping.h>
->   
->   #include <net/page_pool/types.h>
-> +#include <net/net_debug.h>
-> +#include <net/netmem.h>
->   
->   #ifdef CONFIG_PAGE_POOL_STATS
->   /* Deprecated driver-facing API, use netlink instead */
-> @@ -103,7 +105,7 @@ static inline struct page *page_pool_dev_alloc_pages(struct page_pool *pool)
->    * Get a page fragment from the page allocator or page_pool caches.
->    *
->    * Return:
-> - * Return allocated page fragment, otherwise return NULL.
-> + * Return allocated page fragment, otherwise return 0.
-
-It's a page_pool_dev_alloc_frag()'s comment, and the function
-still returns a pointer.
-
-...
->   static inline void *page_pool_alloc_va(struct page_pool *pool,
-> @@ -172,7 +174,8 @@ static inline void *page_pool_alloc_va(struct page_pool *pool,
->   	struct page *page;
->   
->   	/* Mask off __GFP_HIGHMEM to ensure we can use page_address() */
-> -	page = page_pool_alloc(pool, &offset, size, gfp & ~__GFP_HIGHMEM);
-> +	page = netmem_to_page(
-> +		page_pool_alloc(pool, &offset, size, gfp & ~__GFP_HIGHMEM));
->   	if (unlikely(!page))
->   		return NULL;
->   
-> @@ -189,7 +192,7 @@ static inline void *page_pool_alloc_va(struct page_pool *pool,
->    * it returns va of the allocated page or page fragment.
->    *
->    * Return:
-> - * Return the va for the allocated page or page fragment, otherwise return NULL.
-> + * Return the va for the allocated page or page fragment, otherwise return 0.
-
-ditto
-
->    */
->   static inline void *page_pool_dev_alloc_va(struct page_pool *pool,
->   					   unsigned int *size)
-> @@ -212,6 +215,11 @@ page_pool_get_dma_dir(const struct page_pool *pool)
->   	return pool->p.dma_dir;
->   }
->   
-> +static inline void page_pool_fragment_netmem(netmem_ref netmem, long nr)
-> +{
-> +	atomic_long_set(&netmem_to_page(netmem)->pp_ref_count, nr);
-> +}
-...
+No idea how I'm mixing it up when I was explaining exactly this
+all along as well as that the callback (and presumably the call
+site in general) you was so eager to nack is used exactly to
+implement the life time control.
 
 -- 
 Pavel Begunkov
