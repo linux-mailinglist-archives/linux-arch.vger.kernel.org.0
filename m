@@ -1,74 +1,74 @@
-Return-Path: <linux-arch+bounces-4944-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4945-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC80090B34A
-	for <lists+linux-arch@lfdr.de>; Mon, 17 Jun 2024 17:04:16 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0193E90B509
+	for <lists+linux-arch@lfdr.de>; Mon, 17 Jun 2024 17:48:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A18E61C23831
-	for <lists+linux-arch@lfdr.de>; Mon, 17 Jun 2024 15:04:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1FC7EB31318
+	for <lists+linux-arch@lfdr.de>; Mon, 17 Jun 2024 15:23:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AD67140E37;
-	Mon, 17 Jun 2024 14:16:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 903CA15FA86;
+	Mon, 17 Jun 2024 14:45:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jurD3cZV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jJEj4efi"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81C4514038E;
-	Mon, 17 Jun 2024 14:16:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B981415FA77;
+	Mon, 17 Jun 2024 14:45:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718633819; cv=none; b=Bm6pyB+DZgSqwdYASmRPWlwKqvI03d6PquEUw9w/d7tSlW//8s3z+/nbYnP8nRXKOYvaKDe/nI+imZBPH9ShTu9SxzN0nBFVW0OgbDLCn9hTE//qjzqwML7biusLLF6M5sIP28e1EVQgy9q0n9m7DMS7zHDEp6KbH4kBHgLz/9w=
+	t=1718635545; cv=none; b=jkJOWrPrBzepku6NixjfW69+c5bMUXchY7knpRZDAPJCiyOEWnjtUmE/eDn/afq6lEhIULtdyS1HFBCLGvDgjsDSnDMmop/iI7cxUudRVQeTEIGWseCUAY3NAPDJSeDjM66zWAgalgZW7zhemEwxTe5MN3nwK2FkU6avvIlai1I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718633819; c=relaxed/simple;
-	bh=EKHULvpqNZT7k8Un31/LE5FzemNbHyJHUksXDrB0rig=;
+	s=arc-20240116; t=1718635545; c=relaxed/simple;
+	bh=rFVsoK865UN32ZC+/dEHN/mQE5ZBn9kkvYV25JTrEHM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ha0IV6U+r4X1IUmXXZzcEHSN7kG8FbEnDRdmlzjMkF0XnDcZhLjtkQx02Xej/HdeIfnAU93+yU9hM6FRaAK9MGAn6CmmZUvNO427C/f2wfZ7gqVe+hKBkFQr0/LHzqWD5nwXh4q7z0zzgnc+6EaN9xT5BoJmnPGrk5xsRPVLCPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jurD3cZV; arc=none smtp.client-ip=209.85.218.50
+	 In-Reply-To:Content-Type; b=oLuQUsJM0TXVxgkoXehzcFpvK+Q7I6Oi93o1Lmivxz5+6yb+YkvJuQGXjlQ4v3XCHQyPt34yj7w4fAClKWjdzEt5xeMe15RKivI1Z9GRpDW3scbsdADU3zvrAff0XPk54QKlZ3NEHv+KyU8aOxpm+fdy8FEcJhnOLsG0EqQW+Mo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jJEj4efi; arc=none smtp.client-ip=209.85.218.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a6f11a2d18aso582622066b.2;
-        Mon, 17 Jun 2024 07:16:57 -0700 (PDT)
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a6f09eaf420so519264266b.3;
+        Mon, 17 Jun 2024 07:45:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718633816; x=1719238616; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1718635542; x=1719240342; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Drz0c1Oa4e/cLUt8BmnU83fUjCzoD8CgDqb9N07B3fI=;
-        b=jurD3cZVbyeVSUSW0vE0zigkqAldLoJaWsm4EEm1IUoET8bixTZ3KpialR/4nH+fMw
-         lGRtc6WIZB4Z0DfOuBIVwyvWABC++D1yM4CdX42ATFJOK0tkos/OpKSv8SNMHgTEVgnh
-         qZ67k37pLSsbi+oWHV1ll6EXGlXoehxpnLAfbhOwq+splzedn/UkVcj99iAoXujg9xLa
-         pirYVcdtk4h9vx8xOqJd5Efvb7/WdpOa5H/ypgt/0W9bsejcYR5UmrTpUZSxfvA8tGjE
-         m42+xLADEW/TNiiU2gE4BRIIX50JkD5ZyQA9r736hgw3wdbNXczaV+3e95HF5O0TeDlr
-         fEcg==
+        bh=ah3rcgKtsiLLs9s7Ep0iHOREj7mRgLBYmdEE8sYGz64=;
+        b=jJEj4efijRqlYzaiwfpV62eIpDfDx9+5ZsV9vDy7gteF6E2KsKun5uGC5Rbaqb4iOo
+         nnRzGttnsVzlwJv7UeAgPaqFaFreqMV5+Rx2VZ9gQmHS2nR5/7jVfcjDQx0REz82YrPd
+         W9JmaY3hM2TVjwduqN+PTnXWQVXnv766EQpAYyU1vkhES1iVZauDFUvL2ftMDGd9ip5k
+         MMP6NTad1SEYIebq9+hBMt2I+4eaD+YqV3iaNagwCsKnWP4AUAKI9rEgywii1oS1SxQQ
+         2bTknUjBsGJtXlq0W8ye/1Kl6DV4s4nUa7Dbfla8hy36NB8uuQiVnezjjgKRdwckdMUi
+         qV1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718633816; x=1719238616;
+        d=1e100.net; s=20230601; t=1718635542; x=1719240342;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Drz0c1Oa4e/cLUt8BmnU83fUjCzoD8CgDqb9N07B3fI=;
-        b=HspPGse7fPPKiybvhm6spN9qoindqD0/GibrFXCOfGJcsqtCLn43LRtjv2YZFMZT8T
-         PjSlRUpjvmK6bGHVmThW6xOqSM3Agy2zkBXxbHrAaxlisRqx43wv3rZhHB0K71kB8pup
-         iJpuKtCiRrbUWvbfas4TySvj52iBegOte7fhNE5skEd0nNwutBX30DaNU46mi3hxxPxF
-         cTZGQjbDcLK7rJcs4fDCrkIFo+S5muKKtM4IdUhPjoQnqIGlCsGdwgjeRidkFKCFl4fr
-         KwCBKVK4/DH3iZtVRx1DMlXeB9NEnxzgMvRGAfwT4zpySYA1ARIDNQBWjghVH/yZTGRC
-         73Gw==
-X-Forwarded-Encrypted: i=1; AJvYcCV1f46RY4Bni/WI51yixEXGyh/a9r5Czw11jSwmKfK7p/6GJawsoSA02/IGHqoKankdPbmbYTKWM+M5fkKt181H04+uccIYj8oAvfKlyqBXmufowEIzxJ0BM3LsW0xGHhxNcWsSsvX6iA7/vYZURbSzkSEqqELkPWmu2k4MvU6wSavoC+PweXZ15AgV+2/7FCYJ+IN/s/GrC5oaZ/Fk3QlpVp/pGD+sE4eqmhuDZ5yBaylN5+dPemTUQcL9+3+L5htxGvDNUjABTXAlQcUjrAims4Fx0B0k26ox0IExCektVqTrLYpP263aa0Fv3OMNjkWk0tTG3nOgCDCvP+lryCiPaMvPK+IL5QZoRpmn21uoLr+Ktd3OijqGOnvVXdKklZe85VPHe4YOPkOZvw98kyav5lSYHQNVf4Q5VZAYdkCfgi8GbWdeC337O8SZ8k/6n1SRLFntC74BYCuKxA74Jbzkw5xcIuIGV+XJ09rUJMM/l4/c2eBzLJtOIZd9wbhYHVMeZnmCSVHLfdyy8/pUTPLxub4O/niz27yHZgKiLQVztmf8xcXTehTG
-X-Gm-Message-State: AOJu0YxA7a7eB670T9JrOQo6BcYWAM7bo6MtQlGxQ0yQUOnFsU4XTyp4
-	1RI8ndUEAJJ0oHydOhPK5/zx208/9I/JarKKUltYJxzhAGahUX4H
-X-Google-Smtp-Source: AGHT+IFokiO39Qki+IyFQ+TRRzsTCRMTNhTNMlfnFWf73BlGYeWH1z0yP3M3M0hW8ADbaYfa4+g3mQ==
-X-Received: by 2002:a17:906:4555:b0:a6f:523a:8e93 with SMTP id a640c23a62f3a-a6f60de2129mr643249766b.71.1718633815552;
-        Mon, 17 Jun 2024 07:16:55 -0700 (PDT)
+        bh=ah3rcgKtsiLLs9s7Ep0iHOREj7mRgLBYmdEE8sYGz64=;
+        b=PEfqkyX+UAA2ipiTczPNSmADI4cHJYUO+8MMeDfHFX9EfqXk5CFrRvYMPd5q5LBPvk
+         b/zLmfB4Re1dQuKm1hpL+2bvdM2PiAP/j6g2fFnhM2u3ZIplTANuVziBW7GImLFcEBhB
+         ZdbPfQUN5UJ2md2yXKJMYTAmYwoBu2nglQxqSjabKyqDQcA0PcEyDZRe93PnpGiOIW0s
+         FjO2c+lt/Jgip+0nFdVLzOgm0dniIWgaTdOQGhP8iYgTS6WNDyF/Vps5dMe691gPEW+R
+         5aYiXACZQbCwvmuecD7csMpZJD5/wEzwTvKSnyobI9h+ZzX2yx+Sg82+8md3PNMlJMgJ
+         vaxw==
+X-Forwarded-Encrypted: i=1; AJvYcCV6Qu1hNTIXDGWBjaLOdKPabPsn5blNBf22rLfwGHedUQNV7elp4hSubn5+B97gR6ie9QIR5mWSiOL3y7LayFVllJNJArOY9mdldK4rPndYOvN+P/SKzXSuHcJWlxh6teRoymxCGTrrjGaVRqDC57Fn/Iv0YuXWNc8SubWJ5K6sd6k8UjtfLaQXPKy2GnoDKzQ9W89FS4aI2REdIclq9Eli9xDywKt2g6UN1ZBhmN9geXUvek9lm4JTya41rMoA6X01p7Tg8xFJEnIB+6uOWpNpJEseHwENoejH/EgS2HSl8hGoAE/vt/3SBMGhNSMjDfcstn76Cu2RcMf5ZCktByTW9yLbeNGUi7xoSeqJrWtAiLF7nwMwz4e0vqCzHSCcZt0c4iJZEHJQU1125DwkZQhICVYIfRso3eZ6+/NdJJSNn049GlXzRC9H/GY6ypTsZhmO6QByuWh7fVCL7TQ5b+Re5Hfmx/IdvZls9bWf9LUxn5PR1yv72J1JfvEk9qhxfRNQCMsDlfCwjze4sNKZQNqY2RQcLet+X/+6Jk8KvwMCuQqOy7V81doa
+X-Gm-Message-State: AOJu0YwL+fsaQIYP3BYBAKUsYYbEpvj8VW+jZpvFqPf8kjyzZkuVOwnU
+	31ck+TZz+IeM0Z4DMHEs67LUmByaAQBQkQgotvglOIwNqRZ1Xcxq
+X-Google-Smtp-Source: AGHT+IGy29Bog/6x0frVCqVR0gtIWSVZ7NmfaBwvNVXbu4bGaKBQqObsvBBOakN7w58CXi9kwdrLlg==
+X-Received: by 2002:a17:906:aacb:b0:a5a:6bde:c3fb with SMTP id a640c23a62f3a-a6f60d29568mr573906666b.28.1718635541341;
+        Mon, 17 Jun 2024 07:45:41 -0700 (PDT)
 Received: from [192.168.42.82] ([163.114.131.193])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6f56db67e5sm518501066b.66.2024.06.17.07.16.53
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6f56fa41cbsm522762466b.225.2024.06.17.07.45.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jun 2024 07:16:55 -0700 (PDT)
-Message-ID: <439590d4-0f05-4f5e-80ec-e7fdf214e307@gmail.com>
-Date: Mon, 17 Jun 2024 15:16:56 +0100
+        Mon, 17 Jun 2024 07:45:40 -0700 (PDT)
+Message-ID: <14b7af66-04fe-4b49-94d6-bea5d554252e@gmail.com>
+Date: Mon, 17 Jun 2024 15:45:42 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -76,7 +76,8 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v12 06/13] page_pool: devmem support
+Subject: Re: [PATCH net-next v12 07/13] memory-provider: dmabuf devmem memory
+ provider
 To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
@@ -118,136 +119,91 @@ Cc: "David S. Miller" <davem@davemloft.net>,
  Harshitha Ramamurthy <hramamurthy@google.com>,
  Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
  <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
- linux-mm@kvack.org, Matthew Wilcox <willy@infradead.org>
+ Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
 References: <20240613013557.1169171-1-almasrymina@google.com>
- <20240613013557.1169171-7-almasrymina@google.com>
+ <20240613013557.1169171-8-almasrymina@google.com>
 Content-Language: en-US
 From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20240613013557.1169171-7-almasrymina@google.com>
+In-Reply-To: <20240613013557.1169171-8-almasrymina@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 6/13/24 02:35, Mina Almasry wrote:
-> Convert netmem to be a union of struct page and struct netmem. Overload
-> the LSB of struct netmem* to indicate that it's a net_iov, otherwise
-> it's a page.
+> Implement a memory provider that allocates dmabuf devmem in the form of
+> net_iov.
 > 
-> Currently these entries in struct page are rented by the page_pool and
-> used exclusively by the net stack:
+> The provider receives a reference to the struct netdev_dmabuf_binding
+> via the pool->mp_priv pointer. The driver needs to set this pointer for
+> the provider in the net_iov.
 > 
-> struct {
-> 	unsigned long pp_magic;
-> 	struct page_pool *pp;
-> 	unsigned long _pp_mapping_pad;
-> 	unsigned long dma_addr;
-> 	atomic_long_t pp_ref_count;
-> };
+> The provider obtains a reference on the netdev_dmabuf_binding which
+> guarantees the binding and the underlying mapping remains alive until
+> the provider is destroyed.
 > 
-> Mirror these (and only these) entries into struct net_iov and implement
-> netmem helpers that can access these common fields regardless of
-> whether the underlying type is page or net_iov.
+> Usage of PP_FLAG_DMA_MAP is required for this memory provide such that
+> the page_pool can provide the driver with the dma-addrs of the devmem.
 > 
-> Implement checks for net_iov in netmem helpers which delegate to mm
-> APIs, to ensure net_iov are never passed to the mm stack.
+> Support for PP_FLAG_DMA_SYNC_DEV is omitted for simplicity & p.order !=
+> 0.
 > 
+> Signed-off-by: Willem de Bruijn <willemb@google.com>
+> Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
 > Signed-off-by: Mina Almasry <almasrymina@google.com>
 
-Apart from small comments below
+Comments below, apart from them
 
 Reviewed-by: Pavel Begunkov <asml.silence@gmail.com>
 
 
-> ---
->   include/net/netmem.h            | 137 ++++++++++++++++++++++++++++++--
->   include/net/page_pool/helpers.h |  25 +++---
->   net/core/devmem.c               |   3 +
->   net/core/page_pool.c            |  26 +++---
->   net/core/skbuff.c               |  22 +++--
->   5 files changed, 168 insertions(+), 45 deletions(-)
-> 
-> diff --git a/include/net/netmem.h b/include/net/netmem.h
-> index 664df8325ece5..35ad237fdf29e 100644
-> --- a/include/net/netmem.h
-> +++ b/include/net/netmem.h
+> diff --git a/net/core/devmem.c b/net/core/devmem.c
+> index f4fd9b9dbb675..d3843eade5fc2 100644
+> --- a/net/core/devmem.c
+> +++ b/net/core/devmem.c
+> @@ -17,6 +17,7 @@
 ...
-> -/* Converting from page to netmem is always safe, because a page can always be
-> - * a netmem.
-> - */
->   static inline netmem_ref page_to_netmem(struct page *page)
->   {
->   	return (__force netmem_ref)page;
-> @@ -68,17 +107,103 @@ static inline netmem_ref page_to_netmem(struct page *page)
->   
->   static inline int netmem_ref_count(netmem_ref netmem)
->   {
-> +	/* The non-pp refcount of net_iov is always 1. On net_iov, we only
-> +	 * support pp refcounting which uses the pp_ref_count field.
-> +	 */
-> +	if (netmem_is_net_iov(netmem))
-> +		return 1;
 > +
->   	return page_ref_count(netmem_to_page(netmem));
->   }
->   
->   static inline unsigned long netmem_to_pfn(netmem_ref netmem)
->   {
-> +	if (netmem_is_net_iov(netmem))
-> +		return 0;
-
-IIRC 0 is a valid pfn. Not much of a concern since it's
-used only for tracing, but might make sense to pass some
-invalid pfn if there is one
-
-> +
->   	return page_to_pfn(netmem_to_page(netmem));
->   }
->   
-...
->   static inline netmem_ref netmem_compound_head(netmem_ref netmem)
->   {
-> +	/* niov are never compounded */
-> +	if (netmem_is_net_iov(netmem))
-> +		return netmem;
-> +
->   	return page_to_netmem(compound_head(netmem_to_page(netmem)));
->   }
->   
-> +static inline void *netmem_address(netmem_ref netmem)
-
-I don't think it's used anywhere, do I miss it?
-
+> +bool mp_dmabuf_devmem_release_page(struct page_pool *pool, netmem_ref netmem)
 > +{
-> +	if (netmem_is_net_iov(netmem))
-> +		return NULL;
+> +	WARN_ON_ONCE(!netmem_is_net_iov(netmem));
+> +	WARN_ON_ONCE(atomic_long_read(netmem_get_pp_ref_count_ref(netmem)) !=
+> +		     1);
+
+If you're adding it anyway, maybe
+"if (warn) return" ?
+
 > +
-> +	return page_address(netmem_to_page(netmem));
+> +	page_pool_clear_pp_info(netmem);
+> +
+> +	net_devmem_free_dmabuf(netmem_to_net_iov(netmem));
+> +
+> +	/* We don't want the page pool put_page()ing our net_iovs. */
+> +	return false;
 > +}
 > +
-...
+>   #endif
 > diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-> index a5957d3359762..1152e3547795a 100644
+> index 1152e3547795a..22e3c58648d42 100644
 > --- a/net/core/page_pool.c
 > +++ b/net/core/page_pool.c
-> @@ -26,6 +26,8 @@
+> @@ -13,6 +13,7 @@
 ...
+> @@ -269,7 +275,25 @@ static int page_pool_init(struct page_pool *pool,
+>   	if (pool->dma_map)
+>   		get_device(pool->p.dev);
 >   
->   /* If the page refcnt == 1, this will try to recycle the page.
-> @@ -714,7 +713,7 @@ __page_pool_put_page(struct page_pool *pool, netmem_ref netmem,
->   	 * refcnt == 1 means page_pool owns page, and can recycle it.
->   	 *
->   	 * page is NOT reusable when allocated when system is under
-> -	 * some pressure. (page_is_pfmemalloc)
-> +	 * some pressure. (page_pool_page_is_pfmemalloc)
+> +	if (pool->p.queue)
+> +		pool->mp_priv = READ_ONCE(pool->p.queue->mp_params.mp_priv);
+> +
+> +	if (pool->mp_priv) {
+> +		err = mp_dmabuf_devmem_init(pool);
+> +		if (err) {
+> +			pr_warn("%s() mem-provider init failed %d\n", __func__,
+> +				err);
+> +			goto free_ptr_ring;
 
-There is no page_pool_page_is_pfmemalloc()
+Should also free stats, look up
 
->   	 */
->   	if (likely(__page_pool_page_can_be_recycled(netmem))) {
->   		/* Read barrier done in page_ref_count / READ_ONCE */
-> @@ -727,6 +726,7 @@ __page_pool_put_page(struct page_pool *pool, netmem_ref netmem,
->   		/* Page found as candidate for recycling */
->   		return netmem;
->   	}
+free_percpu(pool->recycle_stats);
 
 -- 
 Pavel Begunkov
