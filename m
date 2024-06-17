@@ -1,243 +1,129 @@
-Return-Path: <linux-arch+bounces-4937-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4938-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E22DD90A367
-	for <lists+linux-arch@lfdr.de>; Mon, 17 Jun 2024 07:42:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 196BF90A5FF
+	for <lists+linux-arch@lfdr.de>; Mon, 17 Jun 2024 08:36:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8B9B3281BB9
-	for <lists+linux-arch@lfdr.de>; Mon, 17 Jun 2024 05:42:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C21311F239D1
+	for <lists+linux-arch@lfdr.de>; Mon, 17 Jun 2024 06:36:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E32307344E;
-	Mon, 17 Jun 2024 05:42:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B40AB18413E;
+	Mon, 17 Jun 2024 06:36:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N9A+uv/C"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Z0GKrHEL";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="mE9L4mGc"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wfhigh4-smtp.messagingengine.com (wfhigh4-smtp.messagingengine.com [64.147.123.155])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40B9717F5;
-	Mon, 17 Jun 2024 05:42:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E462179D3;
+	Mon, 17 Jun 2024 06:36:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.155
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718602949; cv=none; b=uht/APVkUXztUw270x3ho7NN6zhYjXxDzjnbCb7evqVgiWnUghh8lc0hgiP/a2ccz2uvg5qeHlpS4WvfWCjk4lq3N6jEboWi93C0mW3xZrYKszbDOHZ4BUft3xYzWW8IWPheWvKT2I7vxx0Ixq4C8mKD8a31WC5FLEPo10uy/HQ=
+	t=1718606185; cv=none; b=Qja91+46j8NDekBbf9AmWUnrc60ddWf8ovzaSqkV+QzO0SAUBw00dMu3q8qUuyJdhTBeIxKCv4U3q3R/3XRgIzxs7UT09AkY8KGz1V6XESUyMYjfqE+GAUDa+gK3V/FtCcnyPPPPU+nFySHZJIdxtk4wfUa9EmWY9XyDG9wsTYM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718602949; c=relaxed/simple;
-	bh=fe1CDe4TWdB/mkMo+Ij8B6m8DzwSgqUdshEjV3EiiHI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ezr5QXTUZOjh/V/ume5TC8YvhBk+8ZgZDaQQRBZhg7EQAeV/PPPjzTgIGxQzTxieEGXQ0vPbkoRjsR6SH4S05/3ZX0h6HNkPzb+GXBpzU7ka/vCIHp1LKFRy0AX/OuVPtLAI4M1fFc18F7XobApLftAHxZzaXfWpYU4u6hRFcFA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N9A+uv/C; arc=none smtp.client-ip=209.85.160.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-44054a2c153so21057571cf.2;
-        Sun, 16 Jun 2024 22:42:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718602946; x=1719207746; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=djPwZuKbvrmoSptmQGftbxnFBiXhu4eAY3uKLEqMxtQ=;
-        b=N9A+uv/CJW7I/7mp8qlPKB5qibKyNL3J0m5CTuid9je8SuJUHw877G5MTJ+bc3dxt0
-         WXg+YYmACnlsyNdmo6vEBc2LklpQlzGqxmA3/RIZ0nNFVsEFa5AlsZIxhPwnRVc+cQKc
-         G8biaBEEom1m3u0wsIfH4O6PW59ltpJw1Y1wPO/TfUgkB5bHUWDvMWpnzM3eQQxMSAEa
-         v8fbiFvStkN8u8bd9H1CIq5mwc8PeIcBZs2vatDQiljJxTIuxYT0kDXRIIKFTxG3Rj//
-         PWyAhXNIJac7ctmyFORxMINB6my3Y4PNIVrgPjNBVpWDaEpZJ58ASWEMGDT9uqYNGqxU
-         ylTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718602946; x=1719207746;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=djPwZuKbvrmoSptmQGftbxnFBiXhu4eAY3uKLEqMxtQ=;
-        b=rkw/IvQcmW/wTxp6KOHwQTGOEf5BJNUOxpNtcxoksTA7B2JExZV4GOzzWSTc4IvwCT
-         lpEM1V0Z/8LPcVFA9bE/KutcCxgmXNgA2yQbWxdpoWJFo9gHYyMQHKm2IhLnoBqdo+6d
-         fsDVfgoHDyMUwXDg93PGHp6B6i7v/ho9HIgJ3rT02nGHpQTyibQ0R5j7QGWTxYVZ1tCU
-         qqFDRDBjwvx9Ij8uChhHB9o8TJq91kZQC+BHtd10Flvpuu58R8Ta5lofQeun4JTyoONa
-         tAZhov/sox9UrVrhC+0DFXL5Shq0a4okoZR7n3VcmadArZhGt22mfNS9TxMPVyzcx9WZ
-         wgUg==
-X-Forwarded-Encrypted: i=1; AJvYcCXawzg8Yo1wGkHjCfvTvde2mXcMDD+6Cbyf9ua0SCby5qrS3trBUkqEYHPKJ8AIATmznITaaH5IKZ7N07i305uILkN+jkPjw3MdRhMx4xLPiMFtiOOpLA5Di6mp5XOw2o5Nm3EqSsdenvnlHoqXaLYvCjLAMoaztoghcBOEb9t72iu1XcueMz+xVp9IwoZJ2uVd2ee7f1nCFuvHYcN+MvE3LIGzkXyA7w==
-X-Gm-Message-State: AOJu0YyNGKdEg5DHGc0p9DZXYcFnytJ4a7G5Blc0pVYQVvfEYt7HRi31
-	qbCMhQW73p3/1dEYPWniwKfRAkbEkvD4+Pn2LG3X3rOZ5R9vfJ9o
-X-Google-Smtp-Source: AGHT+IFs1jHgkUIF6bJM9amNqYLJX4wu5fNNYuW2fgfw3dZuTeC2J1Hh8+avNa0MuwtF0uJIpye+nw==
-X-Received: by 2002:a05:622a:5b0a:b0:444:8e78:6d25 with SMTP id d75a77b69052e-4448e786de1mr26277721cf.65.1718602946046;
-        Sun, 16 Jun 2024 22:42:26 -0700 (PDT)
-Received: from fauth2-smtp.messagingengine.com (fauth2-smtp.messagingengine.com. [103.168.172.201])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-441f30f1d2esm43347471cf.81.2024.06.16.22.42.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Jun 2024 22:42:25 -0700 (PDT)
+	s=arc-20240116; t=1718606185; c=relaxed/simple;
+	bh=LesqrcRAV/4/c3Sfk1y7gMK+fZWVSQ8qF9tdeEoHRLs=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=RB8GTFawpa2gwfP8EapdrGBM+a9ixsECTq7nX9P8LlRqze5FySRunQnA0z7OIynGHXUYxHdVWVk+4Lky4QcTM//Bt1RC6Uhwr4CNsmJ294jV5f/+tJ0WfIRDws9a8RvfB07iPKLndD/2YFkyB+onPMZzrl5KqUdwsV0Jm0a6phE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Z0GKrHEL; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=mE9L4mGc; arc=none smtp.client-ip=64.147.123.155
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfauth.nyi.internal (Postfix) with ESMTP id A58321200043;
-	Mon, 17 Jun 2024 01:42:24 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Mon, 17 Jun 2024 01:42:24 -0400
-X-ME-Sender: <xms:wMxvZo0x9rYvWqnmGzVfHtqzQ5UJdt3TQ9Y6Q36Ed4hJqAi7c9zlew>
-    <xme:wMxvZjHjSVMPeJV9Fh2t8F8OIYvHuNFa4SMst9xAKDgu62fciHn6ROTTzOXsZ23rB
-    mTq2Sgg257x3qwurg>
-X-ME-Received: <xmr:wMxvZg4aIL80NG_trWxZvtFnfjdGvo6GULztCf7a9BROKbU-6Iv_-tOSzEn3>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedvgedgkedvucetufdoteggodetrfdotf
+	by mailfhigh.west.internal (Postfix) with ESMTP id 590DA18000B3;
+	Mon, 17 Jun 2024 02:36:22 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Mon, 17 Jun 2024 02:36:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm1; t=1718606181; x=1718692581; bh=8+FywWapc3
+	z4ZbGE7d/673rjs096swl6YfrxaP7mzMc=; b=Z0GKrHELQJBzl93uTlwRbxQur9
+	tNZlaKmhS0oBHMNg5jNdGgkV2cZLgu1Dgut6ziKvcuOmdkfNn9VImM9ml55MneDV
+	eEBCZT8sOR49O8yg9GLhbnAwi0qoupl+u2dVHqE+D75wxoDlr+YHf6iEK4WgO/1q
+	spnT98TYmukMlJ2wxD1oBqOHDp+SNIkpPWwhXSWqrryEPXQ4Lw7oU9R3sCqcpChC
+	o9pGjMtExv5+rSbF6/HuKIlf5xinaESFjgKcnO8p2cWqLdOskPCErNFDDeA1wcJq
+	OXYoDV7K9jcike1nFyDUvcrWM6sLEJ7T5pEYaBxNFt8uVid7fH9gMDT0/Yrg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm1; t=1718606181; x=1718692581; bh=8+FywWapc3z4ZbGE7d/673rjs096
+	swl6YfrxaP7mzMc=; b=mE9L4mGcDVEUg3ZRcSiw+7y7pLyme0TuzkiISoulnI65
+	/JDTzc2O9//N84f1ttuPM83wJH/FyHu2fLeopMc/ginbY+BjvqqjOtFeR4u5Km9c
+	v7S2gO3Rno64hJl/XAQUEw+Gq2REdGrEDWdB9yALo983On4v4wZ5Pkbfz2MujksZ
+	ScxKuZONcsGrRuS8AbOVHvpHSPhFU66/lOPSDBpjY1paZmA0ULc3gQX0xMPk369O
+	HybcO2G9hPaw6WkRw5waunLYbQtNCTSsya0SmECdMaXS6uHguQmDdq1DVthU5Cmi
+	0xv8zZUAYovgckvG76HMH3WEB7WQg6YqiwHMrdc5EA==
+X-ME-Sender: <xms:ZNlvZtl71_jzBOLRI3DtvJ6ehUCA7cc43psm14Dw7qjid20ICBSGxA>
+    <xme:ZNlvZo3NBi_RlSNEfSCfStikyH6DgaSYuM4EIScPynUXqSGk3kQQgVn6B-DD2Dy1W
+    pQQyijutlYkCYIf_p8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedvgedgkeekucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
-    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
-    htthgvrhhnpedtteeuudejhfekffeiudeuvddvheduteejudeiieffhedvhffhffevtefg
-    tdevtdenucffohhmrghinheptghrrghtvghsrdhiohdpghhithhhuhgsrdgtohhmnecuve
-    hluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhunhdo
-    mhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieegqddujeejke
-    ehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvgdrnhgr
-    mhgv
-X-ME-Proxy: <xmx:wMxvZh0Y36WgBdy_3vUXxW_l0cXSwC1qF7IBDpgQfJkjnCOqU7xDaQ>
-    <xmx:wMxvZrEWp6ygxMKl21Fr-OMTe3dZWwRrs1qvpZt6TjP_OHURD8YKaA>
-    <xmx:wMxvZq9LmovzWkIscKjSOB3ZTFYsJvt-Yt9jLnOMu-azWM-iZOy1Cg>
-    <xmx:wMxvZgkFowrjk3ULXLAerMXFmoV45SamdfPtX1UG5t5xgnhgwXH1uQ>
-    <xmx:wMxvZrEH7HjeHWtZkpYbjttEVdIcmELQiMGL8pyCsJPmXC2K5Y_O5ORA>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 17 Jun 2024 01:42:23 -0400 (EDT)
-Date: Sun, 16 Jun 2024 22:42:19 -0700
-From: Boqun Feng <boqun.feng@gmail.com>
-To: Gary Guo <gary@garyguo.net>
-Cc: John Hubbard <jhubbard@nvidia.com>,
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev,
-	Miguel Ojeda <ojeda@kernel.org>,	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Andrea Parri <parri.andrea@gmail.com>,	Will Deacon <will@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Nicholas Piggin <npiggin@gmail.com>,	David Howells <dhowells@redhat.com>,
-	Jade Alglave <j.alglave@ucl.ac.uk>,	Luc Maranget <luc.maranget@inria.fr>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Akira Yokosawa <akiyks@gmail.com>,	Daniel Lustig <dlustig@nvidia.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,	kent.overstreet@gmail.com,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com,
-	Mark Rutland <mark.rutland@arm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,	Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,	torvalds@linux-foundation.org,
- linux-arm-kernel@lists.infradead.org,	linux-fsdevel@vger.kernel.org,
- Trevor Gross <tmgross@umich.edu>,	dakr@redhat.com
-Subject: Re: [RFC 2/2] rust: sync: Add atomic support
-Message-ID: <Zm_Mu7C76jpMyRy6@Boquns-Mac-mini.home>
-References: <CANiq72myhoCCWs7j0eZuxfoYMbTez7cPa795T57+gz2Dpd+xAw@mail.gmail.com>
- <ZmtC7h7v1t6XJ6EI@boqun-archlinux>
- <CANiq72=JdqTRPiUfT=-YMTTN+bHeAe2Pba8nERxU3cN8Q-BEOw@mail.gmail.com>
- <79239550-dd6e-4738-acea-e7df50176487@nvidia.com>
- <ZmztZd9OJdLnBZs5@Boquns-Mac-mini.home>
- <c243bef3-e152-462f-be68-91dbf876092b@nvidia.com>
- <Zmz-338Ad6r4vzM-@Boquns-Mac-mini.home>
- <20240616155145.54371240.gary@garyguo.net>
- <Zm7_XWe6ciy1yN-h@Boquns-Mac-mini.home>
- <Zm_LTXm3wJhcQIwI@Boquns-Mac-mini.home>
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepleffueeiiedufeffteetleeuueefveefgfffteegvdekfeetkedtudffhefh
+    hfeunecuffhomhgrihhnpehsvggrrhgthhhfohigrdhorhhgnecuvehluhhsthgvrhfuih
+    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:ZNlvZjqL7t1Lp4CVZ2Ud_3K_smNSEQVh6qlv-luThoaGRqVJzAnEWQ>
+    <xmx:ZNlvZtnPArqX_0Q10eJYe3WxAccV4vB02diFiB1C2ZwUrPUEaJQnjA>
+    <xmx:ZNlvZr05P8D5-AUhcnSeUmGUrQ0IMvmqiyHwsSHqmpk7GonaHbvSAA>
+    <xmx:ZNlvZsv_7UmebJapBehxilcaPS2i-wwGRR-pWuhxjBWl4Dtqogfdiw>
+    <xmx:ZdlvZkub_-d2jnVgKc3l9Jqir5uFZNjez8sYaZVepsC9qV_6PKQdUiU2>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 207AAB6008D; Mon, 17 Jun 2024 02:36:20 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-515-g87b2bad5a-fm-20240604.001-g87b2bad5
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Zm_LTXm3wJhcQIwI@Boquns-Mac-mini.home>
+Message-Id: <4fd0531d-e8f8-4a4c-9136-50fcc31ba5f2@app.fastmail.com>
+In-Reply-To: <a70e8b062fc422e351fe2369b9979a623fa05dfa.camel@xry111.site>
+References: <20240511100157.2334539-1-chenhuacai@loongson.cn>
+ <f92e23be-3f3f-4bc6-8711-3bcf6beb7fa2@app.fastmail.com>
+ <CAAhV-H5kn2xPLqgop0iOyg-tc5kAYcuNo3cd+f3yCdkN=cJDug@mail.gmail.com>
+ <fcdeb993-37d6-42e0-8737-3be41413f03d@app.fastmail.com>
+ <CAAhV-H4s_utEOtFDwjPTqxnMWTVjWhmS7bEVRX+t8HK5QDA8Vg@mail.gmail.com>
+ <a21a0878-021e-4990-a59d-b10f204a018b@app.fastmail.com>
+ <CAAhV-H7OR5tkbjj-BPLStneXFr=1DUaFvvh8+a5Bk_jhCAP25Q@mail.gmail.com>
+ <cdef45d36d0e71da5f0534b3783b81c82405bda3.camel@xry111.site>
+ <CAAhV-H4R_HJAB0baqUgA8ucbwWNVN4sc9EV91zAk9Ch302_7zg@mail.gmail.com>
+ <56ace686-d4b4-4b4c-a8a6-af06ec0d48f2@app.fastmail.com>
+ <08ff168afc09fd108ec489a3c9360d4e704fa7dc.camel@xry111.site>
+ <a70e8b062fc422e351fe2369b9979a623fa05dfa.camel@xry111.site>
+Date: Mon, 17 Jun 2024 08:35:58 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Xi Ruoyao" <xry111@xry111.site>, "Huacai Chen" <chenhuacai@kernel.org>
+Cc: "Huacai Chen" <chenhuacai@loongson.cn>, loongarch@lists.linux.dev,
+ Linux-Arch <linux-arch@vger.kernel.org>,
+ "Xuefeng Li" <lixuefeng@loongson.cn>, guoren <guoren@kernel.org>,
+ "WANG Xuerui" <kernel@xen0n.name>, "Jiaxun Yang" <jiaxun.yang@flygoat.com>,
+ linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
+ stable@vger.kernel.org
+Subject: Re: [PATCH] LoongArch: Define __ARCH_WANT_NEW_STAT in unistd.h
+Content-Type: text/plain
 
-On Sun, Jun 16, 2024 at 10:36:13PM -0700, Boqun Feng wrote:
-> On Sun, Jun 16, 2024 at 08:06:05AM -0700, Boqun Feng wrote:
-> [...]
-> > > 
-> > > Note that crossbeam's AtomicCell is also generic, and crossbeam is used
-> > > by tons of crates. As Miguel mentioned, I think it's very likely that in
-> > > the future we want be able to do atomics on new types (e.g. for
-> > > seqlocks perhaps). We probably don't need the non-lock-free fallback of
-> > 
-> > Good, another design bit, thank you!
-> > 
-> > What's our overall idea on sub-word types, like Atomic<u8> and
-> > Atomic<u16>, do we plan to say no to them, or they could have a limited
-> > APIs? IIUC, some operations on them are relatively sub-optimal on some
-> > architectures, supporting the same set of API as i32 and i64 is probably
-> > a bad idea.
-> > 
-> > Another thing in my mind is making `Atomic<T>`
-> > 
-> > 	pub struct Atomic<T: Send + ...> { ... }
-> > 
-> > so that `Atomic<T>` will always be `Sync`, because quite frankly, an
-> > atomic type that cannot `Sync` is pointless.
-> > 
-> 
-> Also, how do we avoid this issue [1] in kernel?
-> 
-> `atomic_load()` in C is implemented as READ_ONCE() and it's, at most
-> time, a volatile read, so the eventual code is:
-> 
->     let a: (u8, u16) = (1, 2);
->     let b = unsafe { core::ptr::read_volatile::<i32>(&a as *const _ as *const i32) };
-> 
+On Sat, Jun 15, 2024, at 15:12, Xi Ruoyao wrote:
+> On Sat, 2024-06-15 at 20:12 +0800, Xi Ruoyao wrote:
+>> 
+>> [Firefox]:https://searchfox.org/mozilla-central/source/security/sandbox/linux/SandboxFilter.cpp#364
+>
+> Just spent some brain cycles to make a quick hack adding a new statx
+> flag.  Patch attached.
+>
 
-^^^^ this line should really be:
+Thanks for the prototype. I agree that this is not a good API
+but that it would address the issue and I am fine with merging
+something like this if you can convince the VFS maintainers.
 
-	let b: (u8, u16) = unsafe { transmute_copy(&read_volatile::<i32>(&a as *const _ as *const i32)) };
-
-but you get the idea.
-
-Regards,
-Boqun
-
-> I know we probably ignore data race here and treat `read_volatile` as a
-> dependency read per LKMM [2]. But this is an using of uninitialized
-> data, so it's a bit different.
-> 
-> We can do what https://crates.io/crates/atomic does:
-> 
-> 	pub struct Atomic<T: NoUninit + ..> { ... }
-> 
-> , where `NoUinit` means no internal padding bytes, but it loses the
-> ability to put a 
-> 
-> 	#[repr(u32)]
-> 	pub enum Foo { .. }
-> 
-> into `Atomic<T>`, right? Which is probably a case you want to support?
-> 
-> Regards,
-> Boqun
-> 
-> [1]: https://github.com/crossbeam-rs/crossbeam/issues/748#issuecomment-1133926617
-> [2]: tools/memory-model/Documentation/access-marking.txt
-> 
-> > Regards,
-> > Boqun
-> > 
-> > > crossbeam's AtomicCell, but the lock-free subset with newtype support
-> > > is desirable.
-> > > 
-> > > People in general don't use the `atomic` crate because it provides no
-> > > additional feature compared to the standard library. But it doesn't
-> > > really mean that the standard library's atomic design is good.
-> > > 
-> > > People decided to use AtomicT and NonZeroT instead of Atomic<T> or
-> > > NonZero<T> long time ago, but many now thinks the decision was bad.
-> > > Introduction of NonZero<T> is a good example of it. NonZeroT are now
-> > > all type aliases of NonZero<T>.
-> > > 
-> > > I also don't see any downside in using generics. We can provide type
-> > > aliases so people can use `AtomicI32` and `AtomicI64` when they want
-> > > their code to be compatible with userspace Rust can still do so.
-> > > 
-> > > `Atomic<i32>` is also just aesthetically better than `AtomicI32` IMO.
-> > > When all other types look like `NonZero<i32>`, `Wrapping<i32>`, I don't
-> > > think we should have `AtomicI32` just because "it's done this way in
-> > > Rust std". Our alloc already deviates a lot from Rust std.
-> > > 
-> > > Best,
-> > > Gary
+      Arnd
 
