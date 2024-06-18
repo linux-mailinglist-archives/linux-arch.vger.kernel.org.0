@@ -1,159 +1,256 @@
-Return-Path: <linux-arch+bounces-4961-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4962-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7024F90CA89
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Jun 2024 13:55:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DDA290D5B4
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Jun 2024 16:43:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A9BEF281E5F
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Jun 2024 11:55:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 081711F21CAF
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Jun 2024 14:43:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F26901553BD;
-	Tue, 18 Jun 2024 11:40:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 489D316DC20;
+	Tue, 18 Jun 2024 14:29:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zd6H5iZd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NN3juXFQ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47CD4155395;
-	Tue, 18 Jun 2024 11:40:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F7C516DC13;
+	Tue, 18 Jun 2024 14:29:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718710813; cv=none; b=uQ0rJ0wKVL85mgx+TmU5WKhCxrQ3Ca07md+Ki3wfxWta6cWLOg3WoqjHWPPkL5UbK1Upf0iHeb9vC/5slQnaBYuauxtmY+POSN4m0VxlgLhRdhb+bpcHNgHJKulgtJhWgYKblk8aTK/WAZAYlUZyg5LxWg+0ZnBg598L+ExSgTM=
+	t=1718720954; cv=none; b=dQpgfl9LuBuH+jIgevn4CuqPA+oV2vZ2F77klKBc6ZmAfJ9a1SYrJrjeyde51PtfQ39RqXBfQyLje+8ODsxYqdb2A9QcDdCMSYBE14ycD23hRD8JaK+iyasKnDjwnMwbt90MVwEaXv4RWdXuXvi2YIB0Wc3rCVpDgin6XnOncLc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718710813; c=relaxed/simple;
-	bh=3lZSziatHbH2qXjBGEliNz48M5CThCwzTut2GQxW/ww=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bvcAhQ6KrYtT+/HjjdV+oKBqxgUonSMjclSzpXDJfs0pMiVmZKJiOpBQYvmhBpqmwQI2MPeeO8OIcz/W3cWJX9/xCRpc1zrEG6ohYIoCa5BRhg2KMuPIKebQAZ6T6c8fUDX5LaJPkrSFr7uM+mNYZ1YqAAFI0Q1U9Z/dIB4Drlg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zd6H5iZd; arc=none smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-57d046f4afdso122887a12.1;
-        Tue, 18 Jun 2024 04:40:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718710810; x=1719315610; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wkL4gZeTFn58PzKiilUj2Jvl065qOPmkOqhQzjfXBnk=;
-        b=Zd6H5iZdbt8XYrfM2c+f7fRN7pCzYXBksdwvBb0rdNXRBxONFTQDLayIHoZ+1CEXKx
-         z5SllyqlzVGi80jVh73AHKRsH63GWMac+aeveM04pcuDmZP3mQhIq+kDiQSgqsl+PGet
-         n2lFAa/p//6cKg4gLSasMyAPxS++8j9SsE6skJXnJr+4caGKSQZK52PxFMaAgFSHyBw2
-         xxwmtUNapB+zvvO5B40i627zWXlyDuTyJ+NYd7XmRE4N0k2mCuc16vfgnmgTKWCEAw5Q
-         nqNxF+LnbjDvaUmE6l26Wc1Nv0okGS/vz197nZPs/bg5jUAu462HfoQ5ybiXZ6ERwqPd
-         u82Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718710810; x=1719315610;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wkL4gZeTFn58PzKiilUj2Jvl065qOPmkOqhQzjfXBnk=;
-        b=GBIGOqzZq2XAW3KCDfN1EmVQyLepGq+cuu03oMyOBwF62P2ge1xhW6DCCHwXAR/V6z
-         qK3NcRTvKYGKqDIBYWBR5lx+3RHk/ioWyoQMi8kU12n6OQjF+cYeAa5bEkF7kVNLgLkM
-         leIZvWTsbppJ6qxN7oscPR0OQAjouGf9zlBuErWadQrWQ7BbwiieGxBjAJkUVWtH/pnK
-         wTDAJbLWM4ZSPx52JkuQN7lfqDp+uDqs9OXomhA8z1OAJxVms54czAoJZGj/OMYQP7Xd
-         yoabcgPQykIpbg7bou3mtvhH1ukLohtoh0qtJk54nHMwy0g58wNjkUybgU3QYROu7cTW
-         j4xw==
-X-Forwarded-Encrypted: i=1; AJvYcCXgN38X9zN+uyEV7T0gxN+LeuE8FuV37KNXm+hxNG32EirvvuIINK58S9tJ6MGhDQHTeoyB8dgB+SH44W7RqRvvOeMI3b2KgDWB7+KVAvEsxNqiAqAdkn3osk6hXf1WT64Emb1jDRvlmGDNvqlkdiys2kTTpEv9nZcny5GdsiXu3DhpTozBEFTBZXR/ezLo8TOevHbDnTNAIJug4t4f3opiNBBcZ1P68bgiMAVVSOZoe63pddRSQfQuUR1xvEWVnHB4ZXBub6vQq3B7KaVR2POFLbIAceNCpvN95jFyDLfmV9KLezQhzvFueSxSgPkK5jCf/RJAb/lSoza+Np3Ve7NLEuceYu2e/OEyfMTUgmQqu5ZzMg2EOC7wtjxLecLd30jOSKyQKWBRGpEUaDk/bpGxdMUBTQKfj/HxM2i3ZfCPt5kRtSiaZYcfqsW2s9wAS9ABejpYn0QGCv67XGdS72p2RjhgwnodsyCcFtOmIFpdILL08SCCdcBX2PE9pnXKjoiFrqQThQ==
-X-Gm-Message-State: AOJu0Yyu+0jmklM2ZhBMzxVNr2twcG2AiZG115jlFy82HSOI/NAL6onb
-	luNa5JP8WtLN487yuqGa7DYBUPTaas/6TBVPyMLdm/nSfLyaZ2KX
-X-Google-Smtp-Source: AGHT+IHTXs6888aBCQaVqx3Ld2cescOW04wu9+DX8hnGCFhgSs6AKtIOVIvQW1zhvtYJcvE1BCkIfg==
-X-Received: by 2002:a50:c30b:0:b0:579:d673:4e67 with SMTP id 4fb4d7f45d1cf-57cbd6c7495mr9752771a12.26.1718710810253;
-        Tue, 18 Jun 2024 04:40:10 -0700 (PDT)
-Received: from [192.168.42.11] ([163.114.131.193])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57cb72e9515sm7685752a12.41.2024.06.18.04.40.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jun 2024 04:40:09 -0700 (PDT)
-Message-ID: <204af618-03f7-4f2e-bbcb-7111011f78bf@gmail.com>
-Date: Tue, 18 Jun 2024 12:40:09 +0100
+	s=arc-20240116; t=1718720954; c=relaxed/simple;
+	bh=arD01RFmjVuX2d7MMTwsJJG8uCSWu9fkHeBWtc/BlM0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=E69GoQVgVqDmBXpdYgB/wMkgGbb5atpC+HqtQDialf2A4Lh6SuqxF+DSDZ5Q8LK+/z2gzUxfXQugUphjP4o9sDgYr6nyuZ5DeJ/rddHgyOlnfnzDVEe1QnUMOVCQAlxSwMr69x/FSlN065d/Fx6k/9Ngo2N8ZCGsN2inQJTR2eM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NN3juXFQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FF4CC4AF1D;
+	Tue, 18 Jun 2024 14:29:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718720953;
+	bh=arD01RFmjVuX2d7MMTwsJJG8uCSWu9fkHeBWtc/BlM0=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=NN3juXFQ5WL4OcCKjvnQlfUYcn5ctYFJynDTvFiDW2MN2dDsyPFw826tROSXhN24N
+	 FHki7lQx/sWw3dG9rfZf/n7xJ/RSqNip6r+M2LrOIO2LMOCuq2IFVmHJcCh2lgiMG6
+	 5wvEB6odz7DVW2CD37jQF1WJe56PgSwrbNe2vybQLv1+KtNhP84gz/voRrK9arVBPW
+	 wdWabDGVxNdmmzM404nnMtx9Zp3ju/J16Mh2gR+zsqikHmdCmXf+bN1YHwVCvItFgU
+	 R5LV8NbtzJAokdmcdmWkeZWQ7xwevlk1c41o0NqnX8VngjYyW0XJtIDhJ8XiPtyV/m
+	 O0D+ijHqyuTxA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 33938CE04AF; Tue, 18 Jun 2024 07:29:13 -0700 (PDT)
+Date: Tue, 18 Jun 2024 07:29:13 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Andrea Parri <parri.andrea@gmail.com>
+Cc: stern@rowland.harvard.edu, will@kernel.org, peterz@infradead.org,
+	boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
+	j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
+	dlustig@nvidia.com, joel@joelfernandes.org,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	hernan.poncedeleon@huaweicloud.com,
+	jonas.oberhauser@huaweicloud.com
+Subject: Re: [PATCH v3] tools/memory-model: Document herd7 (abstract)
+ representation
+Message-ID: <6a7235ae-047d-484f-9180-1bd90e935468@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20240617201759.1670994-1-parri.andrea@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v10 02/14] net: page_pool: create hooks for
- custom page providers
-To: Christoph Hellwig <hch@infradead.org>
-Cc: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
- Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
- Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
- <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
- David Ahern <dsahern@kernel.org>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>,
- Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>,
- Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
- <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
-References: <20240530201616.1316526-1-almasrymina@google.com>
- <20240530201616.1316526-3-almasrymina@google.com>
- <ZlqzER_ufrhlB28v@infradead.org>
- <CAHS8izMU_nMEr04J9kXiX6rJqK4nQKA+W-enKLhNxvK7=H2pgA@mail.gmail.com>
- <5aee4bba-ca65-443c-bd78-e5599b814a13@gmail.com>
- <ZmAgszZpSrcdHtyl@infradead.org>
- <ee9a55cd-7541-4865-ab2a-9e860b88c9e4@gmail.com>
- <Zmfv6_uWAVavYJNj@infradead.org>
- <8ca3e144-75f3-4e57-9ae0-cc88f245094e@gmail.com>
- <ZnEshp0VICflc6Bg@infradead.org>
-Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <ZnEshp0VICflc6Bg@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240617201759.1670994-1-parri.andrea@gmail.com>
 
-On 6/18/24 07:43, Christoph Hellwig wrote:
-> On Mon, Jun 17, 2024 at 07:04:43PM +0100, Pavel Begunkov wrote:
->>> There should be no other memory source other than the page allocator
->>> and dmabuf.  If you need different life time control for your
->>> zero copy proposal don't mix that up with the contol of the memory
->>> source.
->>
->> No idea how I'm mixing it up when I was explaining exactly this
->> all along as well as that the callback (and presumably the call
->> site in general) you was so eager to nack is used exactly to
->> implement the life time control.
+On Mon, Jun 17, 2024 at 10:17:59PM +0200, Andrea Parri wrote:
+> tools/memory-model/ and herdtool7 are closely linked: the latter is
+> responsible for (pre)processing each C-like macro of a litmus test,
+> and for providing the LKMM with a set of events, or "representation",
+> corresponding to the given macro.  Provide herd-representation.txt
+> to document the representations of the concurrency macros, following
+> their "classification" in Documentation/atomic_t.txt.
 > 
-> And that's exactly my point.  You want to use one callback to mix
-> allocation source and life time control.  
+> Suggested-by: Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>
+> Signed-off-by: Andrea Parri <parri.andrea@gmail.com>
 
-No, it only takes the role of life time control and doesn't
-care about the source. The allocation source step with
-corresponding initialisation happens separately and
-priorly, at initialisation time.
+Queued, thank you!
 
-> That's the perfect recipe
-> to create an un-extensible un-composable mess
--- 
-Pavel Begunkov
+I added Boqun's and Hernan's Reviewed-by tags and did the usual
+wordsmithing.  Please check below to make sure that I did not mess
+anything up.
+
+Also, Puranjay added atomic_and()/or()/xor() and add_negative, which
+is slated to go in to the next merge window:
+
+be98107ab8a5 ("tools/memory-model: Add atomic_and()/or()/xor() and add_negative")
+
+Would you like to add the corresponding lines to this table?
+
+							Thanx, Paul
+
+------------------------------------------------------------------------
+
+commit 0e72657b7cb518ef8d996e2bf9bf14676da9af3f
+Author: Andrea Parri <parri.andrea@gmail.com>
+Date:   Mon Jun 17 22:17:59 2024 +0200
+
+    tools/memory-model: Document herd7 (abstract) representation
+    
+    The Linux-kernel memory model (LKMM) source code and the herd7 tool are
+    closely linked in that the latter is responsible for (pre)processing
+    each C-like macro of a litmus test, and for providing the LKMM with a
+    set of events, or "representation", corresponding to the given macro.
+    This commit therefore provides herd-representation.txt to document
+    the representations of the concurrency macros, following their
+    "classification" in Documentation/atomic_t.txt.
+    
+    Suggested-by: Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>
+    Signed-off-by: Andrea Parri <parri.andrea@gmail.com>
+    Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
+    Reviewed-by: Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+
+diff --git a/tools/memory-model/Documentation/README b/tools/memory-model/Documentation/README
+index 304162743a5b8..44e7dae73b296 100644
+--- a/tools/memory-model/Documentation/README
++++ b/tools/memory-model/Documentation/README
+@@ -33,7 +33,8 @@ o	You are familiar with Linux-kernel concurrency and the use of
+ 
+ o	You are familiar with Linux-kernel concurrency and the use
+ 	of LKMM, and would like to learn about LKMM's requirements,
+-	rationale, and implementation:	explanation.txt
++	rationale, and implementation:	explanation.txt and
++	herd-representation.txt
+ 
+ o	You are interested in the publications related to LKMM, including
+ 	hardware manuals, academic literature, standards-committee
+@@ -61,6 +62,10 @@ control-dependencies.txt
+ explanation.txt
+ 	Detailed description of the memory model.
+ 
++herd-representation.txt
++	The (abstract) representation of the Linux-kernel concurrency
++	primitives in terms of events.
++
+ litmus-tests.txt
+ 	The format, features, capabilities, and limitations of the litmus
+ 	tests that LKMM can evaluate.
+diff --git a/tools/memory-model/Documentation/herd-representation.txt b/tools/memory-model/Documentation/herd-representation.txt
+new file mode 100644
+index 0000000000000..6f09df2372d2f
+--- /dev/null
++++ b/tools/memory-model/Documentation/herd-representation.txt
+@@ -0,0 +1,106 @@
++#
++# Legend:
++#	R,	a Load event
++#	W,	a Store event
++#	F,	a Fence event
++#	LKR,	a Lock-Read event
++#	LKW,	a Lock-Write event
++#	UL,	an Unlock event
++#	LF,	a Lock-Fail event
++#	RL,	a Read-Locked event
++#	RU,	a Read-Unlocked event
++#	R*,	a Load event included in RMW
++#	W*,	a Store event included in RMW
++#	SRCU,	a Sleepable-Read-Copy-Update event
++#
++#	po,	a Program-Order link
++#	rmw,	a Read-Modify-Write link
++#
++# By convention, a blank line in a cell means "same as the preceding line".
++#
++    ------------------------------------------------------------------------------
++    |                        C macro | Events                                    |
++    ------------------------------------------------------------------------------
++    |                    Non-RMW ops |                                           |
++    ------------------------------------------------------------------------------
++    |                      READ_ONCE | R[once]                                   |
++    |                    atomic_read |                                           |
++    |                     WRITE_ONCE | W[once]                                   |
++    |                     atomic_set |                                           |
++    |               smp_load_acquire | R[acquire]                                |
++    |            atomic_read_acquire |                                           |
++    |              smp_store_release | W[release]                                |
++    |             atomic_set_release |                                           |
++    |                   smp_store_mb | W[once] ->po F[mb]                        |
++    |                         smp_mb | F[mb]                                     |
++    |                        smp_rmb | F[rmb]                                    |
++    |                        smp_wmb | F[wmb]                                    |
++    |          smp_mb__before_atomic | F[before-atomic]                          |
++    |           smp_mb__after_atomic | F[after-atomic]                           |
++    |                    spin_unlock | UL                                        |
++    |                 spin_is_locked | On success: RL                            |
++    |                                | On failure: RU                            |
++    |         smp_mb__after_spinlock | F[after-spinlock]                         |
++    |      smp_mb__after_unlock_lock | F[after-unlock-lock]                      |
++    |                  rcu_read_lock | F[rcu-lock]                               |
++    |                rcu_read_unlock | F[rcu-unlock]                             |
++    |                synchronize_rcu | F[sync-rcu]                               |
++    |                rcu_dereference | R[once]                                   |
++    |             rcu_assign_pointer | W[release]                                |
++    |                 srcu_read_lock | R[srcu-lock]                              |
++    |                 srcu_down_read |                                           |
++    |               srcu_read_unlock | W[srcu-unlock]                            |
++    |                   srcu_up_read |                                           |
++    |               synchronize_srcu | SRCU[sync-srcu]                           |
++    | smp_mb__after_srcu_read_unlock | F[after-srcu-read-unlock]                 |
++    ------------------------------------------------------------------------------
++    |       RMW ops w/o return value |                                           |
++    ------------------------------------------------------------------------------
++    |                     atomic_add | R*[noreturn] ->rmw W*[once]               |
++    |                     atomic_and |                                           |
++    |                      spin_lock | LKR ->po LKW                              |
++    ------------------------------------------------------------------------------
++    |        RMW ops w/ return value |                                           |
++    ------------------------------------------------------------------------------
++    |              atomic_add_return | F[mb] ->po R*[once]                       |
++    |                                |     ->rmw W*[once] ->po F[mb]             |
++    |               atomic_fetch_add |                                           |
++    |               atomic_fetch_and |                                           |
++    |                    atomic_xchg |                                           |
++    |                           xchg |                                           |
++    |            atomic_add_negative |                                           |
++    |      atomic_add_return_relaxed | R*[once] ->rmw W*[once]                   |
++    |       atomic_fetch_add_relaxed |                                           |
++    |       atomic_fetch_and_relaxed |                                           |
++    |            atomic_xchg_relaxed |                                           |
++    |                   xchg_relaxed |                                           |
++    |    atomic_add_negative_relaxed |                                           |
++    |      atomic_add_return_acquire | R*[acquire] ->rmw W*[once]                |
++    |       atomic_fetch_add_acquire |                                           |
++    |       atomic_fetch_and_acquire |                                           |
++    |            atomic_xchg_acquire |                                           |
++    |                   xchg_acquire |                                           |
++    |    atomic_add_negative_acquire |                                           |
++    |      atomic_add_return_release | R*[once] ->rmw W*[release]                |
++    |       atomic_fetch_add_release |                                           |
++    |       atomic_fetch_and_release |                                           |
++    |            atomic_xchg_release |                                           |
++    |                   xchg_release |                                           |
++    |    atomic_add_negative_release |                                           |
++    ------------------------------------------------------------------------------
++    |            Conditional RMW ops |                                           |
++    ------------------------------------------------------------------------------
++    |                 atomic_cmpxchg | On success: F[mb] ->po R*[once]           |
++    |                                |                 ->rmw W*[once] ->po F[mb] |
++    |                                | On failure: R*[once]                      |
++    |                        cmpxchg |                                           |
++    |              atomic_add_unless |                                           |
++    |         atomic_cmpxchg_relaxed | On success: R*[once] ->rmw W*[once]       |
++    |                                | On failure: R*[once]                      |
++    |         atomic_cmpxchg_acquire | On success: R*[acquire] ->rmw W*[once]    |
++    |                                | On failure: R*[once]                      |
++    |         atomic_cmpxchg_release | On success: R*[once] ->rmw W*[release]    |
++    |                                | On failure: R*[once]                      |
++    |                   spin_trylock | On success: LKR ->po LKW                  |
++    |                                | On failure: LF                            |
++    ------------------------------------------------------------------------------
 
