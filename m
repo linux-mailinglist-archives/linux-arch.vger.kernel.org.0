@@ -1,64 +1,65 @@
-Return-Path: <linux-arch+bounces-4970-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4971-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BF5C90EA85
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Jun 2024 14:11:17 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7ADB890EA8F
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Jun 2024 14:12:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2C5171C23E89
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Jun 2024 12:11:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1726DB212D6
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Jun 2024 12:12:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84CF01422CE;
-	Wed, 19 Jun 2024 12:10:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 312C6140E47;
+	Wed, 19 Jun 2024 12:11:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BhWiNJ0+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sc38HwOX"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 509981419A6;
-	Wed, 19 Jun 2024 12:10:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3A82140395;
+	Wed, 19 Jun 2024 12:11:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718799040; cv=none; b=c6p9Cxknv23kI1T9+V/MZtjNcqdjoqzyab3n7E9yADJ6ezhmg3oO+VPqKsnSL3CJnGzoJYClYOfUrlTpBHrRd2TUBZmPe2cD6D6yqfyVuXfBM4sqkPGCP48kMzcyRtprehw9pRbKLfs8QGxkv6jr1s38SHZ+QwL8QeZCdfDC4/o=
+	t=1718799111; cv=none; b=ZUqxiUsE96JXGymCuQJgMao4B1V8UXMfsYrZUcffuy9pbn0Bu3FVL3oxRdjcgE4bMaJ44kWU3Wu5t+Eco+TcIJF+aJbYraw3YB00LOWXOvCIZd8gW/pVXMKcp8d4dXML61YbyUgDXkS/w1XGhlCHR8JvaQwYaqHQYFVylZD39X0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718799040; c=relaxed/simple;
-	bh=ALeYzxeS3iOY2rx4/Kx+ydsSavqKfiI2lPUx7xtO4Lo=;
+	s=arc-20240116; t=1718799111; c=relaxed/simple;
+	bh=8UC3dd/xs1eHvnpkbzMHjvpFYyuJFdFAOtxj21nX+eg=;
 	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GfmPJG9SfFm7y9Os0iryauSWRjR7y3QFM9CcBHPVAehmMHX2gohYEKRYZtMjvIRV9VcJEFTNRoLzfBp8ekjMwXZjyeH3DoCy3D9J5jFvW/4YpzRVT3I+AbkWt4tV53gdfnxRor3hC8yff2nSgt1VwRtQCp1h/OIe+/I31q81qeE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BhWiNJ0+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F498C2BBFC;
-	Wed, 19 Jun 2024 12:10:40 +0000 (UTC)
+	 MIME-Version:Content-Type; b=qM27il8YBG3mV9MFQfqE8WilpmDWbuE1FfdchPlmcXOtpkfmBE2Le7+CgX1bESUddxdbUn/2R3tgqv2uStoeWApGvPldIzLxn13LLJNMTm0NcF8q9ioipaeiT0VtjY16U1q8ZHLXGDEK+Xx8QgUoU86HahA/0aqWFnA4scSZ6k4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sc38HwOX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 778F7C4AF1D;
+	Wed, 19 Jun 2024 12:11:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718799040;
-	bh=ALeYzxeS3iOY2rx4/Kx+ydsSavqKfiI2lPUx7xtO4Lo=;
+	s=k20201202; t=1718799110;
+	bh=8UC3dd/xs1eHvnpkbzMHjvpFYyuJFdFAOtxj21nX+eg=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=BhWiNJ0+B3Q4eHQ1K7y8i+X17whuMCJeFlKi9b8MGlUccFDRcokvvQb6YrbkjfgTa
-	 cHVPfzP+fAWgVmJOujiYoRkbS5WAMR8WfGthqljGJsAP8CtGBeqKc0XZKG00yQLstP
-	 qbO5Wn5qV47nujprFxnzPCSMS4r546QuEP6PdYfDbWMX/BVe9X6QnwIskwq8R5cphm
-	 GzgQU60LmN52ts2ygjfjDKheMcc5LN95Tjj1vfumM80dJaqtrPovkDTOky1V+DwU2+
-	 SyveyxTMRowvWN3OMX1KUNfx/cluUsknBPyuiWq/ML8tHU7RO56XhRTTkmhfVF/o1C
-	 dGTsLLBemPaZg==
+	b=sc38HwOXXA8zwNu1EdxnZfwAfuSgOQAgHP98hrVE8/M1bYDhPzGiO2utokmcGPh1O
+	 tUL7KmeG5lBnM5WSk8yS/X47u3Dd3UmY2teYTP7QE3Vb8AptBUIXiCRPVRJ7AjS6Zr
+	 LNs4+n7wK0e8Id0QAB6MiwNXdtY0v7B/ymqcOPu6+hrsUidSmxxRKPEpwQB/vcNMr8
+	 Yb9jHJs98KH+8M5/8tRuph9lP666N3CpqYfCuiejh8sdyMsx5eQyh5hnnuVRaQHMOd
+	 JpcDIKnRshkSsCf6s4mO7+BYH6mXPLaKKeY3HVgG37cdfWuK0Yz4VLu2NXh2TS5d9F
+	 MKgqmi0zKCfdg==
 Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
 	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.95)
 	(envelope-from <maz@kernel.org>)
-	id 1sJu97-005RVc-6I;
-	Wed, 19 Jun 2024 13:10:37 +0100
-Date: Wed, 19 Jun 2024 13:10:36 +0100
-Message-ID: <868qz1jfpf.wl-maz@kernel.org>
+	id 1sJuAG-005RXt-4M;
+	Wed, 19 Jun 2024 13:11:48 +0100
+Date: Wed, 19 Jun 2024 13:11:47 +0100
+Message-ID: <867celjfng.wl-maz@kernel.org>
 From: Marc Zyngier <maz@kernel.org>
-To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
 Cc: Will Deacon <will@kernel.org>,
-	Catalin
- Marinas <catalin.marinas@arm.com>,
+	"Catalin\
+ Marinas" <catalin.marinas@arm.com>,
 	<linux-acpi@vger.kernel.org>,
 	<linux-arch@vger.kernel.org>,
 	<linux-kernel@vger.kernel.org>,
 	<linux-arm-kernel@lists.infradead.org>,
 	<linux-pm@vger.kernel.org>,
+	<linuxarm@huawei.com>,
 	Mark Rutland <mark.rutland@arm.com>,
 	Thomas Gleixner <tglx@linutronix.de>,
 	Peter Zijlstra <peterz@infradead.org>,
@@ -67,10 +68,10 @@ Cc: Will Deacon <will@kernel.org>,
 	Russell King <linux@armlinux.org.uk>,
 	"Rafael J . Wysocki"
 	<rafael@kernel.org>,
-	Miguel Luis <miguel.luis@oracle.com>,
+	"Miguel Luis" <miguel.luis@oracle.com>,
 	James Morse
 	<james.morse@arm.com>,
-	Salil Mehta <salil.mehta@huawei.com>,
+	"Salil Mehta" <salil.mehta@huawei.com>,
 	Jean-Philippe
  Brucker <jean-philippe@linaro.org>,
 	Hanjun Guo <guohanjun@huawei.com>,
@@ -80,13 +81,14 @@ Cc: Will Deacon <will@kernel.org>,
 	Borislav Petkov
 	<bp@alien8.de>,
 	Dave Hansen <dave.hansen@linux.intel.com>,
-	<linuxarm@huawei.com>,
 	<justin.he@arm.com>,
-	<jianyong.wu@arm.com>
-Subject: Re: [PATCH v10 14/19] irqchip/gic-v3: Add support for ACPI's disabled but 'online capable' CPUs
-In-Reply-To: <20240529133446.28446-15-Jonathan.Cameron@huawei.com>
+	<jianyong.wu@arm.com>,
+	Karl Heubaum
+	<karl.heubaum@oracle.com>
+Subject: Re: [PATCH v10 00/19] ACPI/arm64: add support for virtual cpu hotplug
+In-Reply-To: <20240613112511.00006331@huawei.com>
 References: <20240529133446.28446-1-Jonathan.Cameron@huawei.com>
-	<20240529133446.28446-15-Jonathan.Cameron@huawei.com>
+	<20240613112511.00006331@huawei.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.2
  (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -98,54 +100,45 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
 X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: Jonathan.Cameron@huawei.com, will@kernel.org, catalin.marinas@arm.com, linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org, mark.rutland@arm.com, tglx@linutronix.de, peterz@infradead.org, loongarch@lists.linux.dev, x86@kernel.org, linux@armlinux.org.uk, rafael@kernel.org, miguel.luis@oracle.com, james.morse@arm.com, salil.mehta@huawei.com, jean-philippe@linaro.org, guohanjun@huawei.com, gshan@redhat.com, mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, linuxarm@huawei.com, justin.he@arm.com, jianyong.wu@arm.com
+X-SA-Exim-Rcpt-To: Jonathan.Cameron@Huawei.com, will@kernel.org, catalin.marinas@arm.com, linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org, linuxarm@huawei.com, mark.rutland@arm.com, tglx@linutronix.de, peterz@infradead.org, loongarch@lists.linux.dev, x86@kernel.org, linux@armlinux.org.uk, rafael@kernel.org, miguel.luis@oracle.com, james.morse@arm.com, salil.mehta@huawei.com, jean-philippe@linaro.org, guohanjun@huawei.com, gshan@redhat.com, mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, justin.he@arm.com, jianyong.wu@arm.com, karl.heubaum@oracle.com
 X-SA-Exim-Mail-From: maz@kernel.org
 X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Wed, 29 May 2024 14:34:41 +0100,
-Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
+On Thu, 13 Jun 2024 11:25:27 +0100,
+Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
 > 
-> From: James Morse <james.morse@arm.com>
+> On Wed, 29 May 2024 14:34:27 +0100
+> Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
 > 
-> To support virtual CPU hotplug, ACPI has added an 'online capable' bit
-> to the MADT GICC entries. This indicates a disabled CPU entry may not
-> be possible to online via PSCI until firmware has set enabled bit in
-> _STA.
+> > v10:
+> > - Make acpi_processor_set_per_cpu() return 0 / error rather than bool
+> >   to simplify error handling at the call sites.
+> >   (Thanks to both Rafael and Gavin who commented on this)
+> > - Gather tags.
+> > - Rebase on v6.10-rc1
+> > 
+> > The approach to the GICv3 changes stablized very late in the 6.10 cycle.
+> > Subject to Marc taking a final look at those, I think we are now
+> > in a good state wrt to those and the ACPI parts. The remaining code
+> > that hasn't received review tags from the relevant maintainers
+> > is the arm64 specific arch_register_cpu().  Given I think this will go
+> > through the arm64 tree, hopefully they have just been waiting for
+> > everything else to be ready.
 > 
-> This means that a "usable" GIC redistributor is one that is marked as
-> either enabled, or online capable. The meaning of the
-> acpi_gicc_is_usable() would become less clear than just checking the
-> pair of flags at call sites. As such, drop that helper function.
-> The test in gic_acpi_match_gicc() remains as testing just the
-> enabled bit so the count of enabled distributors is correct.
+> Marc, Will, Catalin,
 > 
-> What about the redistributor in the GICC entry? ACPI doesn't want to say.
-> Assume the worst: When a redistributor is described in the GICC entry,
-> but the entry is marked as disabled at boot, assume the redistributor
-> is inaccessible.
+> Any comments on this series?  We definitely want to finally land this
+> in 6.11!
 > 
-> The GICv3 driver doesn't support late online of redistributors, so this
-> means the corresponding CPU can't be brought online either.
-> Rather than modifying cpu masks that may already have been used,
-> register a new cpuhp callback to fail this case. This must run earlier
-> than the main gic_starting_cpu() so that this case can be rejected
-> before the section of cpuhp that runs on the CPU that is coming up as
-> that is not allowed to fail. This solution keeps the handling of this
-> broken firmware corner case local to the GIC driver. As precise ordering
-> of this callback doesn't need to be controlled as long as it is
-> in that initial prepare phase, use CPUHP_BP_PREPARE_DYN.
-> 
-> Systems that want CPU hotplug in a VM can ensure their redistributors
-> are always-on, and describe them that way with a GICR entry in the MADT.
-> 
-> Suggested-by: Marc Zyngier <maz@kernel.org>
-> Signed-off-by: James Morse <james.morse@arm.com>
-> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> Tested-by: Miguel Luis <miguel.luis@oracle.com>
-> Co-developed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Marc, in practice I think you already gave feedback on the the GICv3
+> changes in here as part of the discussions in the earlier version threads,
+> but if you have time for a final glance through it would be much appreciated.
+> Thanks for all your earlier help on this btw.
 
-Acked-by: Marc Zyngier <maz@kernel.org>
+I've had a quick look and the GICv3 parts look OK to me (you should
+now have by tags for both patches).
+
+Thanks,
 
 	M.
 
