@@ -1,158 +1,154 @@
-Return-Path: <linux-arch+bounces-4969-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4970-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB6D890E717
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Jun 2024 11:30:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BF5C90EA85
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Jun 2024 14:11:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C67B1F21D73
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Jun 2024 09:30:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2C5171C23E89
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Jun 2024 12:11:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4C03811E2;
-	Wed, 19 Jun 2024 09:30:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84CF01422CE;
+	Wed, 19 Jun 2024 12:10:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="cSbHonGn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BhWiNJ0+"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D0F47A715;
-	Wed, 19 Jun 2024 09:30:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 509981419A6;
+	Wed, 19 Jun 2024 12:10:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718789425; cv=none; b=DZEByS6vcgfq6EkmvJTjHhdmSGG50jHHjJRvaLKk8G9ES8Q35T5T8Di08sgaM8Q872F6wqooYJl98vMe/pfjirUfITDJLegkm0630NmsGoduMWy+MsLB3WVseBNHvzA24Y9VD73hs6AQmsJ2htmQZUIobz3l2kY82eDFuqBtYzI=
+	t=1718799040; cv=none; b=c6p9Cxknv23kI1T9+V/MZtjNcqdjoqzyab3n7E9yADJ6ezhmg3oO+VPqKsnSL3CJnGzoJYClYOfUrlTpBHrRd2TUBZmPe2cD6D6yqfyVuXfBM4sqkPGCP48kMzcyRtprehw9pRbKLfs8QGxkv6jr1s38SHZ+QwL8QeZCdfDC4/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718789425; c=relaxed/simple;
-	bh=7ne4ekeJPSiu9Wa/xWvMdy+2iJetKy2FB72LpR8ncLY=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YBK3A/xHARiogUJ1Cv+fiFSpnX6YGa2WtEVTGTMVb7ZNJHgH7+ZiR6dI2PebGoS7IgDRQXPIwrFWphW4bTY3fqvEXelj09LCotFB2dBz/+HI2Y3LJr3jRp2NoNksYKnzbA4QofP873GxHlpDHOWw5fWtC/gkxe0w9Qc2RohrUmM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=cSbHonGn; arc=none smtp.client-ip=185.70.43.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-	s=protonmail; t=1718789420; x=1719048620;
-	bh=zV1Qzzj1i+vpiKHlTH9zT9EGlrl+KcXNNmM1imA2OVs=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=cSbHonGnWaJH37f1v+pSaKUQwYqlPPs+VtxX+8Sx2EZa4gfkG6EbZpEFL1ac6AJSJ
-	 +zm/edwto6ej3rtZoDCxktTyvEy3KwzMLuGps4gixWJId4+eIiKjM/YMAhuD6RbdTa
-	 j2RiXtPvBlCrR2Ag+uGa4Vgwq0/I7AWttYOmTjke/x5q7y7xM99zlCRi47Or+OqD4B
-	 BNKE8/RAyZk2+tGreTkAu5UwsC5NQJ1h9HMGsX3AIPaP33fOeRgCQa+6byjK08Ys5d
-	 EoE5c2uLBWYZcaqYKWiyoYziz+AMut+hOdm0vJt8NWQ+16u6mtF0WYN3hqgQ6OQor7
-	 e5Z3mWOu+o96A==
-Date: Wed, 19 Jun 2024 09:30:15 +0000
-To: Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>
-From: Benno Lossin <benno.lossin@proton.me>
-Cc: John Hubbard <jhubbard@nvidia.com>, Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@samsung.com>, Alice Ryhl <aliceryhl@google.com>, Alan Stern <stern@rowland.harvard.edu>, Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Nicholas Piggin <npiggin@gmail.com>, David Howells <dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>, Luc Maranget <luc.maranget@inria.fr>, "Paul E. McKenney" <paulmck@kernel.org>, Akira Yokosawa <akiyks@gmail.com>, Daniel Lustig <dlustig@nvidia.com>, Joel Fernandes <joel@joelfernandes.org>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
-	kent.overstreet@gmail.com, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com, Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, Catalin Marinas <catalin.marinas@arm.com>, torvalds@linux-foundation.org, linux-arm-kernel@lists.infradead.org, linux-fsdevel@vger.kernel.org, Trevor Gross <tmgross@umich.edu>, dakr@redhat.com
-Subject: Re: [RFC 2/2] rust: sync: Add atomic support
-Message-ID: <8f23cb56-91a9-4515-a14f-4b7de70f6852@proton.me>
-In-Reply-To: <Zm_LTXm3wJhcQIwI@Boquns-Mac-mini.home>
-References: <ZmseosxVQXdsQjNB@boqun-archlinux> <CANiq72=JdqTRPiUfT=-YMTTN+bHeAe2Pba8nERxU3cN8Q-BEOw@mail.gmail.com> <79239550-dd6e-4738-acea-e7df50176487@nvidia.com> <ZmztZd9OJdLnBZs5@Boquns-Mac-mini.home> <c243bef3-e152-462f-be68-91dbf876092b@nvidia.com> <Zmz-338Ad6r4vzM-@Boquns-Mac-mini.home> <20240616155145.54371240.gary@garyguo.net> <Zm7_XWe6ciy1yN-h@Boquns-Mac-mini.home> <Zm_LTXm3wJhcQIwI@Boquns-Mac-mini.home>
-Feedback-ID: 71780778:user:proton
-X-Pm-Message-ID: 11698e3de8f944b2217c782e5cf4abe605702990
+	s=arc-20240116; t=1718799040; c=relaxed/simple;
+	bh=ALeYzxeS3iOY2rx4/Kx+ydsSavqKfiI2lPUx7xtO4Lo=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=GfmPJG9SfFm7y9Os0iryauSWRjR7y3QFM9CcBHPVAehmMHX2gohYEKRYZtMjvIRV9VcJEFTNRoLzfBp8ekjMwXZjyeH3DoCy3D9J5jFvW/4YpzRVT3I+AbkWt4tV53gdfnxRor3hC8yff2nSgt1VwRtQCp1h/OIe+/I31q81qeE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BhWiNJ0+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F498C2BBFC;
+	Wed, 19 Jun 2024 12:10:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718799040;
+	bh=ALeYzxeS3iOY2rx4/Kx+ydsSavqKfiI2lPUx7xtO4Lo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=BhWiNJ0+B3Q4eHQ1K7y8i+X17whuMCJeFlKi9b8MGlUccFDRcokvvQb6YrbkjfgTa
+	 cHVPfzP+fAWgVmJOujiYoRkbS5WAMR8WfGthqljGJsAP8CtGBeqKc0XZKG00yQLstP
+	 qbO5Wn5qV47nujprFxnzPCSMS4r546QuEP6PdYfDbWMX/BVe9X6QnwIskwq8R5cphm
+	 GzgQU60LmN52ts2ygjfjDKheMcc5LN95Tjj1vfumM80dJaqtrPovkDTOky1V+DwU2+
+	 SyveyxTMRowvWN3OMX1KUNfx/cluUsknBPyuiWq/ML8tHU7RO56XhRTTkmhfVF/o1C
+	 dGTsLLBemPaZg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1sJu97-005RVc-6I;
+	Wed, 19 Jun 2024 13:10:37 +0100
+Date: Wed, 19 Jun 2024 13:10:36 +0100
+Message-ID: <868qz1jfpf.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: Will Deacon <will@kernel.org>,
+	Catalin
+ Marinas <catalin.marinas@arm.com>,
+	<linux-acpi@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>,
+	<linux-pm@vger.kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Peter Zijlstra <peterz@infradead.org>,
+	<loongarch@lists.linux.dev>,
+	<x86@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	"Rafael J . Wysocki"
+	<rafael@kernel.org>,
+	Miguel Luis <miguel.luis@oracle.com>,
+	James Morse
+	<james.morse@arm.com>,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Jean-Philippe
+ Brucker <jean-philippe@linaro.org>,
+	Hanjun Guo <guohanjun@huawei.com>,
+	Gavin
+ Shan <gshan@redhat.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov
+	<bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	<linuxarm@huawei.com>,
+	<justin.he@arm.com>,
+	<jianyong.wu@arm.com>
+Subject: Re: [PATCH v10 14/19] irqchip/gic-v3: Add support for ACPI's disabled but 'online capable' CPUs
+In-Reply-To: <20240529133446.28446-15-Jonathan.Cameron@huawei.com>
+References: <20240529133446.28446-1-Jonathan.Cameron@huawei.com>
+	<20240529133446.28446-15-Jonathan.Cameron@huawei.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: Jonathan.Cameron@huawei.com, will@kernel.org, catalin.marinas@arm.com, linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org, mark.rutland@arm.com, tglx@linutronix.de, peterz@infradead.org, loongarch@lists.linux.dev, x86@kernel.org, linux@armlinux.org.uk, rafael@kernel.org, miguel.luis@oracle.com, james.morse@arm.com, salil.mehta@huawei.com, jean-philippe@linaro.org, guohanjun@huawei.com, gshan@redhat.com, mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, linuxarm@huawei.com, justin.he@arm.com, jianyong.wu@arm.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On 17.06.24 07:36, Boqun Feng wrote:
-> On Sun, Jun 16, 2024 at 08:06:05AM -0700, Boqun Feng wrote:
-> [...]
->>>
->>> Note that crossbeam's AtomicCell is also generic, and crossbeam is used
->>> by tons of crates. As Miguel mentioned, I think it's very likely that i=
-n
->>> the future we want be able to do atomics on new types (e.g. for
->>> seqlocks perhaps). We probably don't need the non-lock-free fallback of
->>
->> Good, another design bit, thank you!
->>
->> What's our overall idea on sub-word types, like Atomic<u8> and
->> Atomic<u16>, do we plan to say no to them, or they could have a limited
->> APIs? IIUC, some operations on them are relatively sub-optimal on some
->> architectures, supporting the same set of API as i32 and i64 is probably
->> a bad idea.
->>
->> Another thing in my mind is making `Atomic<T>`
->>
->> =09pub struct Atomic<T: Send + ...> { ... }
->>
->> so that `Atomic<T>` will always be `Sync`, because quite frankly, an
->> atomic type that cannot `Sync` is pointless.
+On Wed, 29 May 2024 14:34:41 +0100,
+Jonathan Cameron <Jonathan.Cameron@huawei.com> wrote:
+> 
+> From: James Morse <james.morse@arm.com>
+> 
+> To support virtual CPU hotplug, ACPI has added an 'online capable' bit
+> to the MADT GICC entries. This indicates a disabled CPU entry may not
+> be possible to online via PSCI until firmware has set enabled bit in
+> _STA.
+> 
+> This means that a "usable" GIC redistributor is one that is marked as
+> either enabled, or online capable. The meaning of the
+> acpi_gicc_is_usable() would become less clear than just checking the
+> pair of flags at call sites. As such, drop that helper function.
+> The test in gic_acpi_match_gicc() remains as testing just the
+> enabled bit so the count of enabled distributors is correct.
+> 
+> What about the redistributor in the GICC entry? ACPI doesn't want to say.
+> Assume the worst: When a redistributor is described in the GICC entry,
+> but the entry is marked as disabled at boot, assume the redistributor
+> is inaccessible.
+> 
+> The GICv3 driver doesn't support late online of redistributors, so this
+> means the corresponding CPU can't be brought online either.
+> Rather than modifying cpu masks that may already have been used,
+> register a new cpuhp callback to fail this case. This must run earlier
+> than the main gic_starting_cpu() so that this case can be rejected
+> before the section of cpuhp that runs on the CPU that is coming up as
+> that is not allowed to fail. This solution keeps the handling of this
+> broken firmware corner case local to the GIC driver. As precise ordering
+> of this callback doesn't need to be controlled as long as it is
+> in that initial prepare phase, use CPUHP_BP_PREPARE_DYN.
+> 
+> Systems that want CPU hotplug in a VM can ensure their redistributors
+> are always-on, and describe them that way with a GICR entry in the MADT.
+> 
+> Suggested-by: Marc Zyngier <maz@kernel.org>
+> Signed-off-by: James Morse <james.morse@arm.com>
+> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> Tested-by: Miguel Luis <miguel.luis@oracle.com>
+> Co-developed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-That is true, but adding semantically "unnecessary" bounds can be bad.
-This is because they infect everything that wants to use `Atomic<T>`,
-since they also need to add that bound.
+Acked-by: Marc Zyngier <maz@kernel.org>
 
-> Also, how do we avoid this issue [1] in kernel?
+	M.
 
-I think that we can first go the way of my second approach (ie adding a
-private trait as a bound on `Atomic<T>` to prevent generic usage). And
-only allow primitives.
-If we then see that people would like to put their own (u8, u16) tuple
-structs into `Atomic<T>`, we have multiple options:
-
-1. Field projection:
-   Only primitives can be `load`ed and `store`ed, to access the values
-   of the tuple, one would need to project to each field and read them.
-
-2. Disallow padding:
-   We add an `unsafe` trait that asserts there are no padding bytes in
-   there (like `NoUinit` from below) and also add a macro that
-   implements the trait safely.
-
-3. Use `MaybeUninit` under the hood:
-   I don't know if this would fix the issue entirely, since that is what
-   crossbeam currently uses (but the issue remains open).
-
-But I don't think that we should encourage large structs to be put into
-`Atomic<T>`, since that would be bad for perf, right? So I think that
-going the way of 1 would be great (if we had FP, otherwise 2 seems fine).
-
-> `atomic_load()` in C is implemented as READ_ONCE() and it's, at most
-> time, a volatile read, so the eventual code is:
->=20
->     let a: (u8, u16) =3D (1, 2);
->     let b =3D unsafe { core::ptr::read_volatile::<i32>(&a as *const _ as =
-*const i32) };
->=20
-> I know we probably ignore data race here and treat `read_volatile` as a
-> dependency read per LKMM [2]. But this is an using of uninitialized
-> data, so it's a bit different.
-
-But would we implement it this way? Or would it go through a C function?
-If we entirely do it in Rust, then yes this is bad.
-
----
-Cheers,
-Benno
-
-> We can do what https://crates.io/crates/atomic does:
->=20
-> =09pub struct Atomic<T: NoUninit + ..> { ... }
->=20
-> , where `NoUinit` means no internal padding bytes, but it loses the
-> ability to put a
->=20
-> =09#[repr(u32)]
-> =09pub enum Foo { .. }
->=20
-> into `Atomic<T>`, right? Which is probably a case you want to support?
->=20
-> Regards,
-> Boqun
->=20
-> [1]: https://github.com/crossbeam-rs/crossbeam/issues/748#issuecomment-11=
-33926617
-> [2]: tools/memory-model/Documentation/access-marking.txt
-
-
+-- 
+Without deviation from the norm, progress is not possible.
 
