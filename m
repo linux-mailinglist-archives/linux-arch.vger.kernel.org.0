@@ -1,55 +1,81 @@
-Return-Path: <linux-arch+bounces-4973-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4974-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CEF1890FFB2
-	for <lists+linux-arch@lfdr.de>; Thu, 20 Jun 2024 10:58:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 065AE910C21
+	for <lists+linux-arch@lfdr.de>; Thu, 20 Jun 2024 18:24:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 82AAD1F23065
-	for <lists+linux-arch@lfdr.de>; Thu, 20 Jun 2024 08:58:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 375AA1C208C6
+	for <lists+linux-arch@lfdr.de>; Thu, 20 Jun 2024 16:24:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71BFE22611;
-	Thu, 20 Jun 2024 08:57:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 330A81B29D7;
+	Thu, 20 Jun 2024 16:23:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XC1XYPkS"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FF2D3D994;
-	Thu, 20 Jun 2024 08:57:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E325E1B29C6;
+	Thu, 20 Jun 2024 16:23:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718873875; cv=none; b=QQDOJb7PygJ4BaziaIGOmC4AJ5M+AcQ/WK61xdMpdhfJPBBNcm1MGyf3bn7I7PHOIp6A7ZFtnJMXIqazezYuLJ7a4hXJJ4nCv+2u7GPENwv2QXEGAayDCYWThPunH4Q3m1DNa3o4FEZ959AKTRDmo2A6TPzJbIgvxHia6HIuRtQ=
+	t=1718900616; cv=none; b=DYwCH91wjXbamxsHHFuFiBwLRNsfSm2+kyVQU+brawzwa7WlKlJwoTTsdtdB3kXXB97OTlEOlXski419akZYZAnLRTFP+k8j0rfXWb8aquBu1RfxRDY+ZvehKtLUwd/lZ8RySDIKVZnYokr+Kn3FZt77n/fR4Fim+jOZIFcZVlU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718873875; c=relaxed/simple;
-	bh=XgzNzZ8L8ltW19SqsoIuK9JjrbcbCq/OTmEX3INyHVo=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=oM+A5JG8cbx1AZD2Rzks09/T6jBpJ8HlRbDAslmYGRVKa+qDddH3jHiBEA3Nb1HI8HwinCrC9RgWNSqxmEPRSGskSyig5/olKYa8m9Lgmv8sA2lhpT814U/Fw5Jg2N/2OxW3AaGTsxiGzjHtF/HH2/GkfcEzg5uA48/EEjwO9c8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.48])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4W4Z4z5c2vznWPy;
-	Thu, 20 Jun 2024 16:52:51 +0800 (CST)
-Received: from kwepemi100008.china.huawei.com (unknown [7.221.188.57])
-	by mail.maildlp.com (Postfix) with ESMTPS id A0D82180064;
-	Thu, 20 Jun 2024 16:57:47 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by kwepemi100008.china.huawei.com
- (7.221.188.57) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Thu, 20 Jun
- 2024 16:57:46 +0800
-From: Jinjie Ruan <ruanjinjie@huawei.com>
-To: <linux@armlinux.org.uk>, <arnd@arndb.de>, <afd@ti.com>,
-	<akpm@linux-foundation.org>, <rmk+kernel@armlinux.org.uk>,
-	<linus.walleij@linaro.org>, <eric.devolder@oracle.com>, <robh@kernel.org>,
-	<vincent.whitchurch@axis.com>, <bhe@redhat.com>, <nico@fluxnic.net>,
-	<ardb@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>
-CC: <ruanjinjie@huawei.com>
-Subject: [PATCH] ARM: support PREEMPT_DYNAMIC
-Date: Thu, 20 Jun 2024 17:00:28 +0800
-Message-ID: <20240620090028.729373-1-ruanjinjie@huawei.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1718900616; c=relaxed/simple;
+	bh=c2+3nT3Fz2YE3y2yTCQ/lqf84edhGpnQvBt5hH6hrrc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=qQK2KQiOcxxrzCEsfKQ2qhAMidttfu7IDYwEZyvOAyX79regfuRag7GMcryofO737LpJ7lL3MVEJxe55xm3HO2X+DIJyymeA6r1pXdfKR3c3uZHrfvN6yckdFh8yq2+0N8BZr/Hjy8vkkteTD6fkdfHeKJFPBJb2TWl5isMYtHQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XC1XYPkS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C294C32786;
+	Thu, 20 Jun 2024 16:23:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718900615;
+	bh=c2+3nT3Fz2YE3y2yTCQ/lqf84edhGpnQvBt5hH6hrrc=;
+	h=From:To:Cc:Subject:Date:From;
+	b=XC1XYPkSMkLHnz9abDPwB+ZF9PlO95SQ+oHvZ5uCctS66b+uYGD9F2IRJX7pEtMkc
+	 tv1ySBBzxr5W7wpTOSPmwFLPSaG8DZ+VHBfx2P4XohH/2B5Ig5ZAdTDxK0UXwPOa9f
+	 kgG01VSndf2XvLA6qgkIX+rPcLDIj4cedf9ebxSx7WytcpCCbPGct3kqyatbZdmobi
+	 VeFKF+urVmNd2v+/KXJBz8itdjWMHDfq1hlwgrSDbn0Mq69GGfKJxQF+5Zd1+MyiaZ
+	 tJ0Pd6jm0rAgBQhogByTNSzjJmQ0Xpzjvie1YBoPoSwU/RqtdxmBuhM5TomoNaluGz
+	 sj55VopFCAeAw==
+From: Arnd Bergmann <arnd@kernel.org>
+To: linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-mips@vger.kernel.org,
+	Helge Deller <deller@gmx.de>,
+	linux-parisc@vger.kernel.org,
+	"David S. Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	sparclinux@vger.kernel.org,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	"Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+	linuxppc-dev@lists.ozlabs.org,
+	Brian Cain <bcain@quicinc.com>,
+	linux-hexagon@vger.kernel.org,
+	Guo Ren <guoren@kernel.org>,
+	linux-csky@vger.kernel.org,
+	Heiko Carstens <hca@linux.ibm.com>,
+	linux-s390@vger.kernel.org,
+	Rich Felker <dalias@libc.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	linux-sh@vger.kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	linux-fsdevel@vger.kernel.org,
+	libc-alpha@sourceware.org,
+	musl@lists.openwall.com,
+	ltp@lists.linux.it
+Subject: [PATCH 00/15] linux system call fixes
+Date: Thu, 20 Jun 2024 18:23:01 +0200
+Message-Id: <20240620162316.3674955-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -57,149 +83,106 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi100008.china.huawei.com (7.221.188.57)
 
-Enable support for PREEMPT_DYNAMIC on arm32, allowing the preemption model
-to be chosen at boot time.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Similar to arm64, arm32 does not yet use the generic entry code, we must
-define our own `sk_dynamic_irqentry_exit_cond_resched`, which will be
-enabled/disabled by the common code in kernel/sched/core.c.
+I'm working on cleanup series for Linux system call handling, trying to
+unify some of the architecture specific code there among other things.
 
-And arm32 use generic preempt.h, so declare
-`sk_dynamic_irqentry_exit_cond_resched` if the arch do not use generic
-entry. Other architectures which use generic preempt.h but not use generic
-entry can benefit from it.
+In the process, I came across a number of bugs that are ABI relevant,
+so I'm trying to merge these first. I found all of these by inspection,
+not by running the code, so any extra review would help. I assume some
+of the issues were already caught by existing LTP tests, while for others
+we could add a test. Again, I did not check what is already there.
 
-Test ok with the below cmdline parameters on Qemu versatilepb board:
-	`preempt=none`
-	`preempt=voluntary`
-	`preempt=full`
+The sync_file_range and fadvise64_64 changes on sh, csky and hexagon
+are likely to also require changes in the libc implementation.
 
-Update preempt mode with debugfs interface on above Qemu board is also
-tested ok:
-	# cd /sys/kernel/debug/sched
-	# echo none > preempt
-	# echo voluntary > preempt
-	# echo full > preempt
+Once the patches are reviewed, I plan to merge my changes as bugfixes
+through the asm-generic tree, but architecture maintainers can also
+pick them up directly to speed up the bugfix.
 
-Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
----
- arch/arm/Kconfig                 |  1 +
- arch/arm/include/asm/exception.h |  2 ++
- arch/arm/kernel/Makefile         |  2 +-
- arch/arm/kernel/common.c         | 13 +++++++++++++
- arch/arm/kernel/entry-armv.S     |  7 ++++++-
- include/asm-generic/preempt.h    |  5 +++++
- 6 files changed, 28 insertions(+), 2 deletions(-)
- create mode 100644 arch/arm/kernel/common.c
+     Arnd
 
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 036381c5d42f..843f320dde7f 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -124,6 +124,7 @@ config ARM
- 	select HAVE_PERF_EVENTS
- 	select HAVE_PERF_REGS
- 	select HAVE_PERF_USER_STACK_DUMP
-+	select HAVE_PREEMPT_DYNAMIC_KEY
- 	select MMU_GATHER_RCU_TABLE_FREE if SMP && ARM_LPAE
- 	select HAVE_REGS_AND_STACK_ACCESS_API
- 	select HAVE_RSEQ
-diff --git a/arch/arm/include/asm/exception.h b/arch/arm/include/asm/exception.h
-index 3c82975d46db..ac96b76b394e 100644
---- a/arch/arm/include/asm/exception.h
-+++ b/arch/arm/include/asm/exception.h
-@@ -12,4 +12,6 @@
- 
- #define __exception_irq_entry	__irq_entry
- 
-+bool need_irq_preemption(void);
-+
- #endif /* __ASM_ARM_EXCEPTION_H */
-diff --git a/arch/arm/kernel/Makefile b/arch/arm/kernel/Makefile
-index 89a77e3f51d2..58acd62dc5e9 100644
---- a/arch/arm/kernel/Makefile
-+++ b/arch/arm/kernel/Makefile
-@@ -17,7 +17,7 @@ CFLAGS_REMOVE_return_address.o = -pg
- 
- # Object file lists.
- 
--obj-y		:= elf.o entry-common.o irq.o opcodes.o \
-+obj-y		:= common.o elf.o entry-common.o irq.o opcodes.o \
- 		   process.o ptrace.o reboot.o io.o \
- 		   setup.o signal.o sigreturn_codes.o \
- 		   stacktrace.o sys_arm.o time.o traps.o
-diff --git a/arch/arm/kernel/common.c b/arch/arm/kernel/common.c
-new file mode 100644
-index 000000000000..52b0abcae07e
---- /dev/null
-+++ b/arch/arm/kernel/common.c
-@@ -0,0 +1,13 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/jump_label.h>
-+#include <asm/exception.h>
-+
-+#ifdef CONFIG_PREEMPT_DYNAMIC
-+DEFINE_STATIC_KEY_TRUE(sk_dynamic_irqentry_exit_cond_resched);
-+
-+bool need_irq_preemption(void)
-+{
-+	return static_branch_unlikely(&sk_dynamic_irqentry_exit_cond_resched);
-+}
-+#endif
-diff --git a/arch/arm/kernel/entry-armv.S b/arch/arm/kernel/entry-armv.S
-index 6150a716828c..571e86433833 100644
---- a/arch/arm/kernel/entry-armv.S
-+++ b/arch/arm/kernel/entry-armv.S
-@@ -221,6 +221,11 @@ __irq_svc:
- 	irq_handler from_user=0
- 
- #ifdef CONFIG_PREEMPTION
-+#ifdef CONFIG_PREEMPT_DYNAMIC
-+	bl	need_irq_preemption
-+	cmp	r0, #0
-+	beq	2f
-+#endif
- 	ldr	r8, [tsk, #TI_PREEMPT]		@ get preempt count
- 	ldr	r0, [tsk, #TI_FLAGS]		@ get flags
- 	teq	r8, #0				@ if preempt count != 0
-@@ -228,7 +233,7 @@ __irq_svc:
- 	tst	r0, #_TIF_NEED_RESCHED
- 	blne	svc_preempt
- #endif
--
-+2:
- 	svc_exit r5, irq = 1			@ return from exception
-  UNWIND(.fnend		)
- ENDPROC(__irq_svc)
-diff --git a/include/asm-generic/preempt.h b/include/asm-generic/preempt.h
-index 51f8f3881523..2db7a3e86303 100644
---- a/include/asm-generic/preempt.h
-+++ b/include/asm-generic/preempt.h
-@@ -2,6 +2,7 @@
- #ifndef __ASM_PREEMPT_H
- #define __ASM_PREEMPT_H
- 
-+#include <linux/jump_label.h>
- #include <linux/thread_info.h>
- 
- #define PREEMPT_ENABLED	(0)
-@@ -89,6 +90,10 @@ void dynamic_preempt_schedule_notrace(void);
- #define __preempt_schedule()		dynamic_preempt_schedule()
- #define __preempt_schedule_notrace()	dynamic_preempt_schedule_notrace()
- 
-+#ifndef CONFIG_GENERIC_ENTRY
-+DECLARE_STATIC_KEY_TRUE(sk_dynamic_irqentry_exit_cond_resched);
-+#endif
-+
- #else /* !CONFIG_PREEMPT_DYNAMIC || !CONFIG_HAVE_PREEMPT_DYNAMIC_KEY*/
- 
- #define __preempt_schedule() preempt_schedule()
+Cc: linux-arch@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org
+Cc: Helge Deller <deller@gmx.de>
+Cc: linux-parisc@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Andreas Larsson <andreas@gaisler.com>
+Cc: sparclinux@vger.kernel.org
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Nicholas Piggin <npiggin@gmail.com>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Naveen N. Rao <naveen.n.rao@linux.ibm.com>
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: Brian Cain <bcain@quicinc.com>
+Cc: linux-hexagon@vger.kernel.org
+Cc: Guo Ren <guoren@kernel.org>
+Cc: linux-csky@vger.kernel.org
+Cc: Heiko Carstens <hca@linux.ibm.com>
+Cc: linux-s390@vger.kernel.org
+Cc: Rich Felker <dalias@libc.org>
+Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc: linux-sh@vger.kernel.org
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org
+Cc: libc-alpha@sourceware.org
+Cc: musl@lists.openwall.com
+Cc: ltp@lists.linux.it
+
+Arnd Bergmann (15):
+  ftruncate: pass a signed offset
+  syscalls: fix compat_sys_io_pgetevents_time64 usage
+  mips: fix compat_sys_lseek syscall
+  sparc: fix old compat_sys_select()
+  sparc: fix compat recv/recvfrom syscalls
+  parisc: use correct compat recv/recvfrom syscalls
+  parisc: use generic sys_fanotify_mark implementation
+  powerpc: restore some missing spu syscalls
+  sh: rework sync_file_range ABI
+  csky, hexagon: fix broken sys_sync_file_range
+  hexagon: fix fadvise64_64 calling conventions
+  s390: remove native mmap2() syscall
+  syscalls: mmap(): use unsigned offset type consistently
+  asm-generic: unistd: fix time32 compat syscall handling
+  linux/syscalls.h: add missing __user annotations
+
+ arch/arm64/include/asm/unistd32.h         |   2 +-
+ arch/csky/include/uapi/asm/unistd.h       |   1 +
+ arch/csky/kernel/syscall.c                |   2 +-
+ arch/hexagon/include/asm/syscalls.h       |   6 +
+ arch/hexagon/include/uapi/asm/unistd.h    |   1 +
+ arch/hexagon/kernel/syscalltab.c          |   7 +
+ arch/loongarch/kernel/syscall.c           |   2 +-
+ arch/microblaze/kernel/sys_microblaze.c   |   2 +-
+ arch/mips/kernel/syscalls/syscall_n32.tbl |   2 +-
+ arch/mips/kernel/syscalls/syscall_o32.tbl |   4 +-
+ arch/parisc/Kconfig                       |   1 +
+ arch/parisc/kernel/sys_parisc32.c         |   9 -
+ arch/parisc/kernel/syscalls/syscall.tbl   |   6 +-
+ arch/powerpc/kernel/syscalls/syscall.tbl  |   6 +-
+ arch/riscv/kernel/sys_riscv.c             |   4 +-
+ arch/s390/kernel/syscall.c                |  27 ---
+ arch/s390/kernel/syscalls/syscall.tbl     |   2 +-
+ arch/sh/kernel/sys_sh32.c                 |  11 ++
+ arch/sh/kernel/syscalls/syscall.tbl       |   3 +-
+ arch/sparc/kernel/sys32.S                 | 221 ----------------------
+ arch/sparc/kernel/syscalls/syscall.tbl    |   8 +-
+ arch/x86/entry/syscalls/syscall_32.tbl    |   2 +-
+ fs/open.c                                 |   4 +-
+ include/asm-generic/syscalls.h            |   2 +-
+ include/linux/compat.h                    |   2 +-
+ include/linux/syscalls.h                  |  20 +-
+ include/uapi/asm-generic/unistd.h         | 146 +++++++++-----
+ 27 files changed, 160 insertions(+), 343 deletions(-)
+ create mode 100644 arch/hexagon/include/asm/syscalls.h
+
 -- 
-2.34.1
+2.39.2
 
 
