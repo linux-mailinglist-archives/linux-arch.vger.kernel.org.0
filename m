@@ -1,56 +1,56 @@
-Return-Path: <linux-arch+bounces-4991-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4992-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CFD5691135C
-	for <lists+linux-arch@lfdr.de>; Thu, 20 Jun 2024 22:37:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CD59911474
+	for <lists+linux-arch@lfdr.de>; Thu, 20 Jun 2024 23:24:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A0B52845FF
-	for <lists+linux-arch@lfdr.de>; Thu, 20 Jun 2024 20:37:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B6F71282028
+	for <lists+linux-arch@lfdr.de>; Thu, 20 Jun 2024 21:24:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF7BC57C9C;
-	Thu, 20 Jun 2024 20:36:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5867F823C8;
+	Thu, 20 Jun 2024 21:23:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=deller@gmx.de header.b="gfNgQQkE"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=deller@gmx.de header.b="KnHLzNaE"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E5A455882;
-	Thu, 20 Jun 2024 20:36:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CC6E80C03;
+	Thu, 20 Jun 2024 21:23:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718915812; cv=none; b=IpJ6nyKNilkUNiWr8C3nNOb5Q/MNBVaxVtSE0MLNLpkWPcb2VIdGywZ+/4usNliCay8AFe2tX4Yw6B7uQQE5A+6v2SXO2mKytvpV1ucud8K6ExSKHW8PRyhrSX+wuSpL+IZXEKnSM3B5gUWSm9ijIYnikBgIty//ZZrTz+7auBg=
+	t=1718918601; cv=none; b=NKVHwKVI+9AZ4tH3I1eDWY5LwjpG2TkKi6c7ObQml3S/JM4V4W/O+WQnDnTe4G0jx/7KBtuA1IH2dmQ6ARmy3atoEWkttU8cgJy2gKSikhp6uLSvJ2jwxEqtR3kuDfBcdC5FBkORcCnQfpI1RcaD9+YWyqyeprIWRwZYepMoil4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718915812; c=relaxed/simple;
-	bh=ZCX2mbIB71xdIzJY2fRAFR66NO/Z3FXrbqoEYilYEUE=;
+	s=arc-20240116; t=1718918601; c=relaxed/simple;
+	bh=+Uo7sonqUh5Rfxt7PuAB78dQaC+jLKNfw3Y25y2aTz8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CLHfCFQwCyQ2yR/l0D6BFz3Azswg0xnaK2lB7C94USyawjNc8L2N02zy3upX/VzbKmg79hp7nO6SriSCB61xF49cfsrksRauI2GR6PJq+pzzScwuaMv2WRj1b0iCn3ew8ZFUvSaMGLYWSnTLOw/Nk+z+1SZ3o2sTIe8YuLvxD8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=deller@gmx.de header.b=gfNgQQkE; arc=none smtp.client-ip=212.227.15.18
+	 In-Reply-To:Content-Type; b=a48ah7fk7jU3S4JXenQukTXW7SYDHIwiqA44VkbXTIPKPLJOQQuG+gUxIoU0eWRONAkQPJB8mFuI2pWcPTksXeF2u8J2Uir7Q0mo101cJgCf+yC8WauuQEubhvfJiL1/xCKPo/fCgZr8IgqtISYYzK0m/fGrI+for73bkAuM4zA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=deller@gmx.de header.b=KnHLzNaE; arc=none smtp.client-ip=212.227.15.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1718915800; x=1719520600; i=deller@gmx.de;
-	bh=+3/2uR/NPfJJSa+zW4iJ2yK8CBAEPxF6iAuEf1hYCPM=;
+	s=s31663417; t=1718918524; x=1719523324; i=deller@gmx.de;
+	bh=6VCd1TqwAbp3zAEcjaKM6L/q747d5LQnckUw8HW0fKQ=;
 	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
 	 References:From:In-Reply-To:Content-Type:
 	 Content-Transfer-Encoding:cc:content-transfer-encoding:
 	 content-type:date:from:message-id:mime-version:reply-to:subject:
 	 to;
-	b=gfNgQQkEvsFW6GV5/9p3j+5eCmk+LXCBO3hU/s9srN6YctV3Vu7gPPa7lnYly/Nf
-	 AU8UBhrMPH3QleYe0QAgk0KKQ63L0riIO/5S3110Wz8Ls6aGKEuboXJ2pFCHQEB9C
-	 7nY4q60T1sHK6FJLz0fiVAodLPc4VdAPcGnAhiok69jgdGx4UlZd3O0QSuK2kZOOL
-	 lUl7scyuxRDfNoxXnc9q5lo+umOBOvtHhPdWvvD9TR0UJYWPx/L71H4NEFZHEdxSv
-	 Ut9cGCzWWJEO1KO2JY6uyHh4aqLswjKBCJkM87wcOF3hfblai1JWHEmAiK2FHZtxM
-	 kSKQBtzs5NhNs2bZSg==
+	b=KnHLzNaETegScDXA4KLTbpOouNlDC5HK80KPxpnpc40DX4T77w59Ss3e/HCAWSye
+	 B5FFpnXjd36IThbLSgp9AsD1FIjyapMoaXduiedhffga9f8izZAcQieP/arXioZr1
+	 JKTwkwKglRCGFTD34YyX5mgixXE+4SieRCr0oc2R4CDSn++J7hULKoKmY/5cX3jPf
+	 Uotwdjhj0gZS3ylvnDgxiDkmmDvNJtaAk2YPeg837491xS6QrhgubQkxJhTUMX/O8
+	 vU+csoxYJ8FEp1YyPi6pumi5ketDs80L0fdIZ88ioSMXKu5/pWdh1iQEghPUO2QQU
+	 E6PtQWx0ll+p+Yvz5g==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from [192.168.20.55] ([109.250.63.133]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MvbBk-1sbNNO0rnK-00qpKT; Thu, 20
- Jun 2024 22:36:40 +0200
-Message-ID: <a53789ee-9de1-49f9-93c2-58ba3fd47cae@gmx.de>
-Date: Thu, 20 Jun 2024 22:36:39 +0200
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MJmKh-1s5LBS43M9-00LsXl; Thu, 20
+ Jun 2024 23:22:04 +0200
+Message-ID: <e80809ba-ee81-47a5-9b08-54b11f118a78@gmx.de>
+Date: Thu, 20 Jun 2024 23:21:58 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -58,12 +58,29 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 06/15] parisc: use correct compat recv/recvfrom syscalls
+Subject: Re: [PATCH 07/15] parisc: use generic sys_fanotify_mark
+ implementation
 To: Arnd Bergmann <arnd@kernel.org>, linux-arch@vger.kernel.org,
  linux-kernel@vger.kernel.org
-Cc: linux-parisc@vger.kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+ Andreas Larsson <andreas@gaisler.com>, sparclinux@vger.kernel.org,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Christophe Leroy <christophe.leroy@csgroup.eu>,
+ "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+ linuxppc-dev@lists.ozlabs.org, Brian Cain <bcain@quicinc.com>,
+ linux-hexagon@vger.kernel.org, Guo Ren <guoren@kernel.org>,
+ linux-csky@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
+ linux-s390@vger.kernel.org, Rich Felker <dalias@libc.org>,
+ John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+ linux-sh@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, linux-fsdevel@vger.kernel.org,
+ libc-alpha@sourceware.org, musl@lists.openwall.com, ltp@lists.linux.it,
+ Adhemerval Zanella <adhemerval.zanella@linaro.org>
 References: <20240620162316.3674955-1-arnd@kernel.org>
- <20240620162316.3674955-7-arnd@kernel.org>
+ <20240620162316.3674955-8-arnd@kernel.org>
 Content-Language: en-US
 From: Helge Deller <deller@gmx.de>
 Autocrypt: addr=deller@gmx.de; keydata=
@@ -109,75 +126,141 @@ Autocrypt: addr=deller@gmx.de; keydata=
  FwRDcGV6nxanxZGKEkSHHOm8jHwvQWvPP73pvuPBEPtKGLzbgd7OOcGZWtq2hNC6cRtsRdDx
  4TAGMCz4j238m+2mdbdhRh3iBnWT5yPFfnv/2IjFAk+sdix1Mrr+LIDF++kiekeq0yUpDdc4
  ExBy2xf6dd+tuFFBp3/VDN4U0UfG4QJ2fg19zE5Z8dS4jGIbLg==
-In-Reply-To: <20240620162316.3674955-7-arnd@kernel.org>
+In-Reply-To: <20240620162316.3674955-8-arnd@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:6AIiO4kRM6M//N3+rso49VJZ41HsQNJrFkilT5ktQcd+UnnTBre
- LW9BEE5j7hL0D3Ira70Y81QTI27j+qi7JGIuDQNSlAg+dhMDoBT9bSuABxWjLJrXO5zAtUL
- OzEyCBXP6mNxJVckt/14seluFr2TEw67DOgQ4CfU+p9eZzVe/4hHQDmqZkG3KBgqFYYcZmv
- bJ5qYEuS2FlaWuCcSumTQ==
+X-Provags-ID: V03:K1:cTOmKaZgB4+8zdTJJh1n5TDacfeJ38i7AgNBdwGwc4CoHa/X8U4
+ bE+1vJy0vhvQ2uWD+vixAMUbThDwHKmI1c65UoVWRiM/nQoMEdjbqq1otbBNx+OGkFQx4fn
+ mgJ5rTZYpK+2fKlwVnN5rHKZd/pen/VHbL9pcK3jqJcyR3UYVt4o8k+0GGaMmIGz+hI3M7M
+ mxH58vLwhXQKSSi6vLPJg==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:e0CNm+9+x/A=;UQLvHQ7ZPLua1Gb8YR2cW/KtgvU
- Piy+L7N6r4Mdhy7RIzXSuLsI7e4el3pSnWAyqdlQOrnfkIZd8fsfHBHTU7lHNzrS163vsVLM+
- BGJofPvo1EYlr9g2ItxBLLcMznTmk+eOYe+K5Kz2ASvlOA1faEoxgzTB9uYjsNKmxntGVSuLo
- Wrd26UdEKJWjJobtwbVBcKZ6OUnftQTG1rsmcIa7kfinq7GDGrtW70PUwt21YOiH0wAjJ9PqI
- eOix1fc1dv6yH0DUZqWa/Jjx5ANJTS/ORXxbbU5ZuaYrukrJyZTCX8ysIMwK0i6CSxaiIAI+H
- lZSwxr6svA7ys1j2XN7SkI4KIDjTuK25/tIESYcBTw9oo+rqH+wAFrRGcRn/zscq3AY4wNLQo
- 9WEon4u7zXQnjkQcq0bH+0cO6Lw6BdZ85xp75bfN/P0IX3FmVNBgVEvn0/OIEy4aytN5041kY
- GR1l8MaTGehbEmsKLv/+3Z7sxDk3MvMbQlw+s+sGbGsrdS34aHvnwWRFgt+e3D11ZPxbdlnUG
- Ff1aL//lPAgTp/+UtavUvP+SFbiH55exrORy+0CAlTvikrkNtErA1RSRfptVuYJtFWxuE9UXI
- gCk7jTKpPCG4KMQe8Ivp3zHrFLjxwRbGeFzAsIGVO/CFl/pu4Gj3T5aozgHE2s1usEl/7e/68
- fEHCmyZlBDuxm2zvZqxWj59VWjUEEQELBFm+QxbAIxwVwV0j3aQ0wrhHEadZpSCc7+ufHfG/S
- 8JYiKP/hdLu5qv6bNo8o2bTpLe38HYHID3tQqXKVCkdvz1tyXg+ygQk3neSwSDmx1ocQ87dPf
- NMtaTrZ/wVfE85G5z1HNeLysq0UzVB4BZy3ke31i3rkow=
+UI-OutboundReport: notjunk:1;M01:P0:x5UQlMD/2YU=;CsNl/nTOJkYUZhki9fDs6q9vDdf
+ oM+hcHUSHc2ExRaAv7sWxiFIV8RJgpM+0H30e2S+d0xjY5m5CFKsoiphUxhHCh4nDQzy9j4f/
+ CAskEQ1LAWY63KLspKWj1iGcZmCy15ITifFhVoSXQpQDvhWolZHd+sZ/FWzC9Jskhw58xC3St
+ zCb4lTQHRcOW3K1ff+yoDOzakZ+eIJFBCtjWod6xoF7MIYAl1aLPFkYJTwRNB2/I9SmW27sg4
+ lO6OtLdS7MW2LW5Z51kQkGtA8pg1iScpKIwu9GRxCU4nEvo+WsH0N+ANLqOcuQUexTYTNBMVo
+ grsDY67nIhqyh2iE5ily0sSTCby/JVN9stnKQW+s0gbtMpxa2VT6zy4UvXaTolnHPmzaX1z9+
+ E/8tW6ZOsyl9AFn0H+Uh1HmbcHDxK0yVbK8WU3bVEcpJ63PUlFdD70l1k7BrQ57p6yNrWKR+e
+ w0mlz7jE2kn5yoCFlcZjPKc3Wy5/aGfcXSBOT92fvinOiFkULNI76JsjwtbKefoj8xeEj1Ife
+ EI9MfxKRMepPXxJ5+zkDukmniYaJihem8WojdMAe1HdqPseztXPpwCEhMVIB6vTlJGNuofmIQ
+ yLv4eyDDE2Y2CIdo2MYGlDlXh0hvgYVjJSDwEDyBEZmo37kVFpruNTpwigw3f8pTFtIj3GS3J
+ WRTi/Qd3p8WceIYbj3c2sSF4dSzle72ZmdOqSRxapMn5CasyJmt8R9AW5ygWmr+mivL1X4F/1
+ fBo8Go3QBJop+BznMDn+WSuee6eImhKYr1ixjpi5z4KOmxDsWMfflgHzm21WPAGAqegbt8keP
+ y6o3DzmUma2nfAV/lB6gdbPyBEkpAuZoY91r3fqj87H6I=
 
 On 6/20/24 18:23, Arnd Bergmann wrote:
 > From: Arnd Bergmann <arnd@arndb.de>
 >
-> Johannes missed parisc back when he introduced the compat version
-> of these syscalls, so receiving cmsg messages that require a compat
-> conversion is still broken.
+> The sys_fanotify_mark() syscall on parisc uses the reverse word order
+> for the two halves of the 64-bit argument compared to all syscalls on
+> all 32-bit architectures. As far as I can tell, the problem is that
+> the function arguments on parisc are sorted backwards (26, 25, 24, 23,
+> ...) compared to everyone else,
+
+r26 is arg0, r25 is arg1, and so on.
+I'm not sure I would call this "sorted backwards".
+I think the reason is simply that hppa is the only 32-bit big-endian
+arch left...
+
+> so the calling conventions of using an
+> even/odd register pair in native word order result in the lower word
+> coming first in function arguments, matching the expected behavior
+> on little-endian architectures. The system call conventions however
+> ended up matching what the other 32-bit architectures do.
 >
-> Use the correct calls like the other architectures do.
+> A glibc cleanup in 2020 changed the userspace behavior in a way that
+> handles all architectures consistently, but this inadvertently broke
+> parisc32 by changing to the same method as everyone else.
+
+I appreciate such cleanups to make arches consistent.
+But it's bad if breakages aren't noticed or reported then...
+
+> The change made it into glibc-2.35 and subsequently into debian 12
+> (bookworm), which is the latest stable release. This means we
+> need to choose between reverting the glibc change or changing the
+> kernel to match it again, but either hange will leave some systems
+> broken.
 >
-> Fixes: 1dacc76d0014 ("net/compat/wext: send different messages to compat=
- tasks")
+> Pick the option that is more likely to help current and future
+> users and change the kernel to match current glibc.
+
+Agreed (assuming we have really a problem on parisc).
+
+> This also
+> means the behavior is now consistent across architectures, but
+> it breaks running new kernels with old glibc builds before 2.35.
+>
+> Link: https://sourceware.org/git/?p=3Dglibc.git;a=3Dcommitdiff;h=3Dd1501=
+81d73d9
+> Link: https://git.kernel.org/pub/scm/linux/kernel/git/history/history.gi=
+t/commit/arch/parisc/kernel/sys_parisc.c?h=3D57b1dfbd5b4a39d
+> Cc: Adhemerval Zanella <adhemerval.zanella@linaro.org>
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+> I found this through code inspection, please double-check to make
+> sure I got the bug and the fix right.
 
-Acked-by: Helge Deller <deller@gmx.de>
+The patch looks good at first sight.
+I'll pick it up in my parisc git tree and will do some testing the
+next few days and then push forward for 6.11 when it opens....
 
-Nice catch, Arnd!
-I'll add a backport tag and take this patch through the parisc git tree.
+Thank you!!
 
-Thank you!
 Helge
 
+> The alternative is to fix this by reverting glibc back to the
+> unusual behavior.
 > ---
->   arch/parisc/kernel/syscalls/syscall.tbl | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+>   arch/parisc/Kconfig                     | 1 +
+>   arch/parisc/kernel/sys_parisc32.c       | 9 ---------
+>   arch/parisc/kernel/syscalls/syscall.tbl | 2 +-
+>   3 files changed, 2 insertions(+), 10 deletions(-)
 >
+> diff --git a/arch/parisc/Kconfig b/arch/parisc/Kconfig
+> index daafeb20f993..dc9b902de8ea 100644
+> --- a/arch/parisc/Kconfig
+> +++ b/arch/parisc/Kconfig
+> @@ -16,6 +16,7 @@ config PARISC
+>   	select ARCH_HAS_UBSAN
+>   	select ARCH_HAS_PTE_SPECIAL
+>   	select ARCH_NO_SG_CHAIN
+> +	select ARCH_SPLIT_ARG64 if !64BIT
+>   	select ARCH_SUPPORTS_HUGETLBFS if PA20
+>   	select ARCH_SUPPORTS_MEMORY_FAILURE
+>   	select ARCH_STACKWALK
+> diff --git a/arch/parisc/kernel/sys_parisc32.c b/arch/parisc/kernel/sys_=
+parisc32.c
+> index 2a12a547b447..826c8e51b585 100644
+> --- a/arch/parisc/kernel/sys_parisc32.c
+> +++ b/arch/parisc/kernel/sys_parisc32.c
+> @@ -23,12 +23,3 @@ asmlinkage long sys32_unimplemented(int r26, int r25,=
+ int r24, int r23,
+>       	current->comm, current->pid, r20);
+>       return -ENOSYS;
+>   }
+> -
+> -asmlinkage long sys32_fanotify_mark(compat_int_t fanotify_fd, compat_ui=
+nt_t flags,
+> -	compat_uint_t mask0, compat_uint_t mask1, compat_int_t dfd,
+> -	const char  __user * pathname)
+> -{
+> -	return sys_fanotify_mark(fanotify_fd, flags,
+> -			((__u64)mask1 << 32) | mask0,
+> -			 dfd, pathname);
+> -}
 > diff --git a/arch/parisc/kernel/syscalls/syscall.tbl b/arch/parisc/kerne=
 l/syscalls/syscall.tbl
-> index b13c21373974..39e67fab7515 100644
+> index 39e67fab7515..66dc406b12e4 100644
 > --- a/arch/parisc/kernel/syscalls/syscall.tbl
 > +++ b/arch/parisc/kernel/syscalls/syscall.tbl
-> @@ -108,7 +108,7 @@
->   95	common	fchown			sys_fchown
->   96	common	getpriority		sys_getpriority
->   97	common	setpriority		sys_setpriority
-> -98	common	recv			sys_recv
-> +98	common	recv			sys_recv			compat_sys_recv
->   99	common	statfs			sys_statfs			compat_sys_statfs
->   100	common	fstatfs			sys_fstatfs			compat_sys_fstatfs
->   101	common	stat64			sys_stat64
-> @@ -135,7 +135,7 @@
->   120	common	clone			sys_clone_wrapper
->   121	common	setdomainname		sys_setdomainname
->   122	common	sendfile		sys_sendfile			compat_sys_sendfile
-> -123	common	recvfrom		sys_recvfrom
-> +123	common	recvfrom		sys_recvfrom			compat_sys_recvfrom
->   124	32	adjtimex		sys_adjtimex_time32
->   124	64	adjtimex		sys_adjtimex
->   125	common	mprotect		sys_mprotect
+> @@ -364,7 +364,7 @@
+>   320	common	accept4			sys_accept4
+>   321	common	prlimit64		sys_prlimit64
+>   322	common	fanotify_init		sys_fanotify_init
+> -323	common	fanotify_mark		sys_fanotify_mark		sys32_fanotify_mark
+> +323	common	fanotify_mark		sys_fanotify_mark		compat_sys_fanotify_mark
+>   324	32	clock_adjtime		sys_clock_adjtime32
+>   324	64	clock_adjtime		sys_clock_adjtime
+>   325	common	name_to_handle_at	sys_name_to_handle_at
 
 
