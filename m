@@ -1,258 +1,183 @@
-Return-Path: <linux-arch+bounces-4990-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4991-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58A88910E23
-	for <lists+linux-arch@lfdr.de>; Thu, 20 Jun 2024 19:12:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CFD5691135C
+	for <lists+linux-arch@lfdr.de>; Thu, 20 Jun 2024 22:37:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D165D1F2242C
-	for <lists+linux-arch@lfdr.de>; Thu, 20 Jun 2024 17:12:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A0B52845FF
+	for <lists+linux-arch@lfdr.de>; Thu, 20 Jun 2024 20:37:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15C3D1B3737;
-	Thu, 20 Jun 2024 17:12:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF7BC57C9C;
+	Thu, 20 Jun 2024 20:36:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mXj4h4it"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=deller@gmx.de header.b="gfNgQQkE"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0BF817545;
-	Thu, 20 Jun 2024 17:12:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E5A455882;
+	Thu, 20 Jun 2024 20:36:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718903566; cv=none; b=vD/IaMWLMBuTD98oFvjFi1lEeWmrknrs3BSX7AW92Nhqi6n03GUELusGvvBMKC6PmH6b08/ISp2Odx6eRiVkaBPtMMtM9qp72hPWYus2UYo8sbzfX800CiT+x6wXV29Ynq51Tmuef5A9otn20IlTcR3QKVVisuLrztucV8aMHCo=
+	t=1718915812; cv=none; b=IpJ6nyKNilkUNiWr8C3nNOb5Q/MNBVaxVtSE0MLNLpkWPcb2VIdGywZ+/4usNliCay8AFe2tX4Yw6B7uQQE5A+6v2SXO2mKytvpV1ucud8K6ExSKHW8PRyhrSX+wuSpL+IZXEKnSM3B5gUWSm9ijIYnikBgIty//ZZrTz+7auBg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718903566; c=relaxed/simple;
-	bh=qk4456sBCjxKLWnBWCOTbUHhiEe7iSUI6k3KR/4USmc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Sow4yarm8Xt4dz6Tj4gQX8A3jkFXTzLpIXx6uKSYvT2C7ytgjhIor9yYAQFWaa0BIo8/4Zlnl+etNrbqSW9sqWFeZXyo4KxmDnTE6MhnGNwG85gmrVuMfoIihdLBSlJAAvZQp2XTHJEADSFF5FeQsDrDf/OsGLxaR1WdJlJ8nTQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mXj4h4it; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E00EC2BD10;
-	Thu, 20 Jun 2024 17:12:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718903565;
-	bh=qk4456sBCjxKLWnBWCOTbUHhiEe7iSUI6k3KR/4USmc=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=mXj4h4itjF5zRyeLlSxB5R/uZ5WDMKXaDIc2JuJTWyKvvoUm5XHvUICICtsbnD1wU
-	 e61eJec9iEKPe4C+EzpRBB6uM256/7hz4LvGF18eUpoyc3Bq28wnLV/qS0Ki0BZfbL
-	 PhZ4UVw51tkH9ajQJVDhcq5fffh6rig+GMwHOfrAN2OWosrnS6YWCqdwkwBFqmKUH+
-	 Nz1fualtbf+zxFdR4XHYPMvT18dhhA4AFQW2pwkBiBnzRY951pGevSAf8BdEyjFJ/F
-	 kBn0Sxq5WZNtH3TkcilfJlpfVB3Pi3MXqQXJrMXlopEdfZucm4JPS+YduV3qehUpDt
-	 zdUwwzjYAmhyQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 27D7ECE0B67; Thu, 20 Jun 2024 10:12:45 -0700 (PDT)
-Date: Thu, 20 Jun 2024 10:12:45 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Andrea Parri <parri.andrea@gmail.com>
-Cc: stern@rowland.harvard.edu, will@kernel.org, peterz@infradead.org,
-	boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
-	j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
-	dlustig@nvidia.com, joel@joelfernandes.org,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	hernan.poncedeleon@huaweicloud.com,
-	jonas.oberhauser@huaweicloud.com
-Subject: Re: [PATCH v4] tools/memory-model: Document herd7 (abstract)
- representation
-Message-ID: <b0691ab4-a61d-45ab-ad35-a6bbab987bfe@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20240619010604.1789103-1-parri.andrea@gmail.com>
+	s=arc-20240116; t=1718915812; c=relaxed/simple;
+	bh=ZCX2mbIB71xdIzJY2fRAFR66NO/Z3FXrbqoEYilYEUE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CLHfCFQwCyQ2yR/l0D6BFz3Azswg0xnaK2lB7C94USyawjNc8L2N02zy3upX/VzbKmg79hp7nO6SriSCB61xF49cfsrksRauI2GR6PJq+pzzScwuaMv2WRj1b0iCn3ew8ZFUvSaMGLYWSnTLOw/Nk+z+1SZ3o2sTIe8YuLvxD8w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=deller@gmx.de header.b=gfNgQQkE; arc=none smtp.client-ip=212.227.15.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1718915800; x=1719520600; i=deller@gmx.de;
+	bh=+3/2uR/NPfJJSa+zW4iJ2yK8CBAEPxF6iAuEf1hYCPM=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=gfNgQQkEvsFW6GV5/9p3j+5eCmk+LXCBO3hU/s9srN6YctV3Vu7gPPa7lnYly/Nf
+	 AU8UBhrMPH3QleYe0QAgk0KKQ63L0riIO/5S3110Wz8Ls6aGKEuboXJ2pFCHQEB9C
+	 7nY4q60T1sHK6FJLz0fiVAodLPc4VdAPcGnAhiok69jgdGx4UlZd3O0QSuK2kZOOL
+	 lUl7scyuxRDfNoxXnc9q5lo+umOBOvtHhPdWvvD9TR0UJYWPx/L71H4NEFZHEdxSv
+	 Ut9cGCzWWJEO1KO2JY6uyHh4aqLswjKBCJkM87wcOF3hfblai1JWHEmAiK2FHZtxM
+	 kSKQBtzs5NhNs2bZSg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.55] ([109.250.63.133]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MvbBk-1sbNNO0rnK-00qpKT; Thu, 20
+ Jun 2024 22:36:40 +0200
+Message-ID: <a53789ee-9de1-49f9-93c2-58ba3fd47cae@gmx.de>
+Date: Thu, 20 Jun 2024 22:36:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240619010604.1789103-1-parri.andrea@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 06/15] parisc: use correct compat recv/recvfrom syscalls
+To: Arnd Bergmann <arnd@kernel.org>, linux-arch@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: linux-parisc@vger.kernel.org
+References: <20240620162316.3674955-1-arnd@kernel.org>
+ <20240620162316.3674955-7-arnd@kernel.org>
+Content-Language: en-US
+From: Helge Deller <deller@gmx.de>
+Autocrypt: addr=deller@gmx.de; keydata=
+ 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
+In-Reply-To: <20240620162316.3674955-7-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:6AIiO4kRM6M//N3+rso49VJZ41HsQNJrFkilT5ktQcd+UnnTBre
+ LW9BEE5j7hL0D3Ira70Y81QTI27j+qi7JGIuDQNSlAg+dhMDoBT9bSuABxWjLJrXO5zAtUL
+ OzEyCBXP6mNxJVckt/14seluFr2TEw67DOgQ4CfU+p9eZzVe/4hHQDmqZkG3KBgqFYYcZmv
+ bJ5qYEuS2FlaWuCcSumTQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:e0CNm+9+x/A=;UQLvHQ7ZPLua1Gb8YR2cW/KtgvU
+ Piy+L7N6r4Mdhy7RIzXSuLsI7e4el3pSnWAyqdlQOrnfkIZd8fsfHBHTU7lHNzrS163vsVLM+
+ BGJofPvo1EYlr9g2ItxBLLcMznTmk+eOYe+K5Kz2ASvlOA1faEoxgzTB9uYjsNKmxntGVSuLo
+ Wrd26UdEKJWjJobtwbVBcKZ6OUnftQTG1rsmcIa7kfinq7GDGrtW70PUwt21YOiH0wAjJ9PqI
+ eOix1fc1dv6yH0DUZqWa/Jjx5ANJTS/ORXxbbU5ZuaYrukrJyZTCX8ysIMwK0i6CSxaiIAI+H
+ lZSwxr6svA7ys1j2XN7SkI4KIDjTuK25/tIESYcBTw9oo+rqH+wAFrRGcRn/zscq3AY4wNLQo
+ 9WEon4u7zXQnjkQcq0bH+0cO6Lw6BdZ85xp75bfN/P0IX3FmVNBgVEvn0/OIEy4aytN5041kY
+ GR1l8MaTGehbEmsKLv/+3Z7sxDk3MvMbQlw+s+sGbGsrdS34aHvnwWRFgt+e3D11ZPxbdlnUG
+ Ff1aL//lPAgTp/+UtavUvP+SFbiH55exrORy+0CAlTvikrkNtErA1RSRfptVuYJtFWxuE9UXI
+ gCk7jTKpPCG4KMQe8Ivp3zHrFLjxwRbGeFzAsIGVO/CFl/pu4Gj3T5aozgHE2s1usEl/7e/68
+ fEHCmyZlBDuxm2zvZqxWj59VWjUEEQELBFm+QxbAIxwVwV0j3aQ0wrhHEadZpSCc7+ufHfG/S
+ 8JYiKP/hdLu5qv6bNo8o2bTpLe38HYHID3tQqXKVCkdvz1tyXg+ygQk3neSwSDmx1ocQ87dPf
+ NMtaTrZ/wVfE85G5z1HNeLysq0UzVB4BZy3ke31i3rkow=
 
-On Wed, Jun 19, 2024 at 03:06:04AM +0200, Andrea Parri wrote:
-> The Linux-kernel memory model (LKMM) source code and the herd7 tool are
-> closely linked in that the latter is responsible for (pre)processing
-> each C-like macro of a litmus test, and for providing the LKMM with a
-> set of events, or "representation", corresponding to the given macro.
-> This commit therefore provides herd-representation.txt to document
-> the representations of the concurrency macros, following their
-> "classification" in Documentation/atomic_t.txt.
-> 
-> Suggested-by: Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>
-> Signed-off-by: Andrea Parri <parri.andrea@gmail.com>
-> Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
-> Reviewed-by: Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>
+On 6/20/24 18:23, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> Johannes missed parisc back when he introduced the compat version
+> of these syscalls, so receiving cmsg messages that require a compat
+> conversion is still broken.
+>
+> Use the correct calls like the other architectures do.
+>
+> Fixes: 1dacc76d0014 ("net/compat/wext: send different messages to compat=
+ tasks")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-I have reverted the previous version and queued this one, thank you!!!
+Acked-by: Helge Deller <deller@gmx.de>
 
-							Thanx, Paul
+Nice catch, Arnd!
+I'll add a backport tag and take this patch through the parisc git tree.
+
+Thank you!
+Helge
 
 > ---
-> Changes since v3 [1]:
->   - note that rmw is a subset of po
->   - include paulmck's wordsmithing
->   - add limitations, aka stress that certain ops have been intentionally omitted
->   - add collected Reviewed-by: tags
-> 
-> Changes since v2 [2]:
->   - drop lk-rmw links
-> 
-> Changes since v1 [3]:
->   - add legenda/notations
->   - add some SRCU, locking macros
->   - update formatting of failure cases
->   - update README file
-> 
-> [1] https://lore.kernel.org/lkml/20240617201759.1670994-1-parri.andrea@gmail.com/
-> [2] https://lore.kernel.org/lkml/20240605134918.365579-1-parri.andrea@gmail.com/
-> [3] https://lore.kernel.org/lkml/20240524151356.236071-1-parri.andrea@gmail.com/
-> 
->  tools/memory-model/Documentation/README       |   7 +-
->  .../Documentation/herd-representation.txt     | 110 ++++++++++++++++++
->  2 files changed, 116 insertions(+), 1 deletion(-)
->  create mode 100644 tools/memory-model/Documentation/herd-representation.txt
-> 
-> diff --git a/tools/memory-model/Documentation/README b/tools/memory-model/Documentation/README
-> index db90a26dbdf40..1f73014cc48a3 100644
-> --- a/tools/memory-model/Documentation/README
-> +++ b/tools/memory-model/Documentation/README
-> @@ -33,7 +33,8 @@ o	You are familiar with Linux-kernel concurrency and the use of
->  
->  o	You are familiar with Linux-kernel concurrency and the use
->  	of LKMM, and would like to learn about LKMM's requirements,
-> -	rationale, and implementation:	explanation.txt
-> +	rationale, and implementation:	explanation.txt and
-> +	herd-representation.txt
->  
->  o	You are interested in the publications related to LKMM, including
->  	hardware manuals, academic literature, standards-committee
-> @@ -57,6 +58,10 @@ control-dependencies.txt
->  explanation.txt
->  	Detailed description of the memory model.
->  
-> +herd-representation.txt
-> +	The (abstract) representation of the Linux-kernel concurrency
-> +	primitives in terms of events.
-> +
->  litmus-tests.txt
->  	The format, features, capabilities, and limitations of the litmus
->  	tests that LKMM can evaluate.
-> diff --git a/tools/memory-model/Documentation/herd-representation.txt b/tools/memory-model/Documentation/herd-representation.txt
-> new file mode 100644
-> index 0000000000000..ed988906f2b71
-> --- /dev/null
-> +++ b/tools/memory-model/Documentation/herd-representation.txt
-> @@ -0,0 +1,110 @@
-> +#
-> +# Legend:
-> +#	R,	a Load event
-> +#	W,	a Store event
-> +#	F,	a Fence event
-> +#	LKR,	a Lock-Read event
-> +#	LKW,	a Lock-Write event
-> +#	UL,	an Unlock event
-> +#	LF,	a Lock-Fail event
-> +#	RL,	a Read-Locked event
-> +#	RU,	a Read-Unlocked event
-> +#	R*,	a Load event included in RMW
-> +#	W*,	a Store event included in RMW
-> +#	SRCU,	a Sleepable-Read-Copy-Update event
-> +#
-> +#	po,	a Program-Order link
-> +#	rmw,	a Read-Modify-Write link - every rmw link is a po link
-> +#
-> +# By convention, a blank line in a cell means "same as the preceding line".
-> +#
-> +# Disclaimer.  The table includes representations of "add" and "and" operations;
-> +# corresponding/identical representations of "sub", "inc", "dec" and "or", "xor",
-> +# "andnot" operations are omitted.
-> +#
-> +    ------------------------------------------------------------------------------
-> +    |                        C macro | Events                                    |
-> +    ------------------------------------------------------------------------------
-> +    |                    Non-RMW ops |                                           |
-> +    ------------------------------------------------------------------------------
-> +    |                      READ_ONCE | R[once]                                   |
-> +    |                    atomic_read |                                           |
-> +    |                     WRITE_ONCE | W[once]                                   |
-> +    |                     atomic_set |                                           |
-> +    |               smp_load_acquire | R[acquire]                                |
-> +    |            atomic_read_acquire |                                           |
-> +    |              smp_store_release | W[release]                                |
-> +    |             atomic_set_release |                                           |
-> +    |                   smp_store_mb | W[once] ->po F[mb]                        |
-> +    |                         smp_mb | F[mb]                                     |
-> +    |                        smp_rmb | F[rmb]                                    |
-> +    |                        smp_wmb | F[wmb]                                    |
-> +    |          smp_mb__before_atomic | F[before-atomic]                          |
-> +    |           smp_mb__after_atomic | F[after-atomic]                           |
-> +    |                    spin_unlock | UL                                        |
-> +    |                 spin_is_locked | On success: RL                            |
-> +    |                                | On failure: RU                            |
-> +    |         smp_mb__after_spinlock | F[after-spinlock]                         |
-> +    |      smp_mb__after_unlock_lock | F[after-unlock-lock]                      |
-> +    |                  rcu_read_lock | F[rcu-lock]                               |
-> +    |                rcu_read_unlock | F[rcu-unlock]                             |
-> +    |                synchronize_rcu | F[sync-rcu]                               |
-> +    |                rcu_dereference | R[once]                                   |
-> +    |             rcu_assign_pointer | W[release]                                |
-> +    |                 srcu_read_lock | R[srcu-lock]                              |
-> +    |                 srcu_down_read |                                           |
-> +    |               srcu_read_unlock | W[srcu-unlock]                            |
-> +    |                   srcu_up_read |                                           |
-> +    |               synchronize_srcu | SRCU[sync-srcu]                           |
-> +    | smp_mb__after_srcu_read_unlock | F[after-srcu-read-unlock]                 |
-> +    ------------------------------------------------------------------------------
-> +    |       RMW ops w/o return value |                                           |
-> +    ------------------------------------------------------------------------------
-> +    |                     atomic_add | R*[noreturn] ->rmw W*[once]               |
-> +    |                     atomic_and |                                           |
-> +    |                      spin_lock | LKR ->po LKW                              |
-> +    ------------------------------------------------------------------------------
-> +    |        RMW ops w/ return value |                                           |
-> +    ------------------------------------------------------------------------------
-> +    |              atomic_add_return | F[mb] ->po R*[once]                       |
-> +    |                                |     ->rmw W*[once] ->po F[mb]             |
-> +    |               atomic_fetch_add |                                           |
-> +    |               atomic_fetch_and |                                           |
-> +    |                    atomic_xchg |                                           |
-> +    |                           xchg |                                           |
-> +    |            atomic_add_negative |                                           |
-> +    |      atomic_add_return_relaxed | R*[once] ->rmw W*[once]                   |
-> +    |       atomic_fetch_add_relaxed |                                           |
-> +    |       atomic_fetch_and_relaxed |                                           |
-> +    |            atomic_xchg_relaxed |                                           |
-> +    |                   xchg_relaxed |                                           |
-> +    |    atomic_add_negative_relaxed |                                           |
-> +    |      atomic_add_return_acquire | R*[acquire] ->rmw W*[once]                |
-> +    |       atomic_fetch_add_acquire |                                           |
-> +    |       atomic_fetch_and_acquire |                                           |
-> +    |            atomic_xchg_acquire |                                           |
-> +    |                   xchg_acquire |                                           |
-> +    |    atomic_add_negative_acquire |                                           |
-> +    |      atomic_add_return_release | R*[once] ->rmw W*[release]                |
-> +    |       atomic_fetch_add_release |                                           |
-> +    |       atomic_fetch_and_release |                                           |
-> +    |            atomic_xchg_release |                                           |
-> +    |                   xchg_release |                                           |
-> +    |    atomic_add_negative_release |                                           |
-> +    ------------------------------------------------------------------------------
-> +    |            Conditional RMW ops |                                           |
-> +    ------------------------------------------------------------------------------
-> +    |                 atomic_cmpxchg | On success: F[mb] ->po R*[once]           |
-> +    |                                |                 ->rmw W*[once] ->po F[mb] |
-> +    |                                | On failure: R*[once]                      |
-> +    |                        cmpxchg |                                           |
-> +    |              atomic_add_unless |                                           |
-> +    |         atomic_cmpxchg_relaxed | On success: R*[once] ->rmw W*[once]       |
-> +    |                                | On failure: R*[once]                      |
-> +    |         atomic_cmpxchg_acquire | On success: R*[acquire] ->rmw W*[once]    |
-> +    |                                | On failure: R*[once]                      |
-> +    |         atomic_cmpxchg_release | On success: R*[once] ->rmw W*[release]    |
-> +    |                                | On failure: R*[once]                      |
-> +    |                   spin_trylock | On success: LKR ->po LKW                  |
-> +    |                                | On failure: LF                            |
-> +    ------------------------------------------------------------------------------
-> -- 
-> 2.34.1
-> 
+>   arch/parisc/kernel/syscalls/syscall.tbl | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/parisc/kernel/syscalls/syscall.tbl b/arch/parisc/kerne=
+l/syscalls/syscall.tbl
+> index b13c21373974..39e67fab7515 100644
+> --- a/arch/parisc/kernel/syscalls/syscall.tbl
+> +++ b/arch/parisc/kernel/syscalls/syscall.tbl
+> @@ -108,7 +108,7 @@
+>   95	common	fchown			sys_fchown
+>   96	common	getpriority		sys_getpriority
+>   97	common	setpriority		sys_setpriority
+> -98	common	recv			sys_recv
+> +98	common	recv			sys_recv			compat_sys_recv
+>   99	common	statfs			sys_statfs			compat_sys_statfs
+>   100	common	fstatfs			sys_fstatfs			compat_sys_fstatfs
+>   101	common	stat64			sys_stat64
+> @@ -135,7 +135,7 @@
+>   120	common	clone			sys_clone_wrapper
+>   121	common	setdomainname		sys_setdomainname
+>   122	common	sendfile		sys_sendfile			compat_sys_sendfile
+> -123	common	recvfrom		sys_recvfrom
+> +123	common	recvfrom		sys_recvfrom			compat_sys_recvfrom
+>   124	32	adjtimex		sys_adjtimex_time32
+>   124	64	adjtimex		sys_adjtimex
+>   125	common	mprotect		sys_mprotect
+
 
