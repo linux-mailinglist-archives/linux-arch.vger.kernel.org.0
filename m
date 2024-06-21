@@ -1,90 +1,62 @@
-Return-Path: <linux-arch+bounces-4999-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5000-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5DC02911E95
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Jun 2024 10:23:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C19E8911EBD
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Jun 2024 10:28:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0C4521F21650
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Jun 2024 08:23:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F21651C228EB
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Jun 2024 08:28:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 353A0155C82;
-	Fri, 21 Jun 2024 08:23:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iVekqMff"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F302D16D335;
+	Fri, 21 Jun 2024 08:28:27 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FCF1127B5A;
-	Fri, 21 Jun 2024 08:23:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B16AD3AC1F;
+	Fri, 21 Jun 2024 08:28:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718958219; cv=none; b=F7bei61yQRtubjyqnHhntyClIUDjPdarHIk2aj+8cJDeCUA7tpUiE+3ZhrBwNvjPTftcjj6uXEm8XnNfWD2BQH1hwNYsMFrxl1aYsf96xIGDOxLUTEDGJMl4CbN7/o4+vxFcQYsaHqVeK/s2NnTidOh4n8qCXtZ0cCX69pfIVyM=
+	t=1718958507; cv=none; b=JnIKjN/t7QEcIsETyA9asE/RVx2suYBo61YhZd3ZVFR+LFrTghMUkXvR0b8l6PUcd+uGmohyFYnm6Mpq9xoCazlEznUGXrM+zxx0V3dwev/1uHWKUedJ1UMRYJFzewDh7qIT+ckvAqp9XnaS3TK93mfK08ioolP2mZMPAJg2oIg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718958219; c=relaxed/simple;
-	bh=ePrxxgryd/7FzegnkgHpqwceMtBAXBZvcz3wII1dPSE=;
+	s=arc-20240116; t=1718958507; c=relaxed/simple;
+	bh=qcVbwN+dhj8TYggsWmgVtWaoNotrBJlRv0mGP9WVNwo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J3+pCn+eGff2k/p26MKOElADsTi9jFsWlXi/rGqA+8//RgwbIE9gLmHnWhS9MPf2iWPkL7az6csh1OLDRN+epkq6E4AQMkl6qqVbSLivvYSf8+v18R0H+exLbAjNPmkDIP1gr+k2GGtGbn6+SoXjC7xyl1sCKlmEf1kyrm/FrcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iVekqMff; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a63359aaaa6so243183766b.2;
-        Fri, 21 Jun 2024 01:23:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718958216; x=1719563016; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nbBOwJgSwHet5zGetbp8psP9VLRM440EvYC4FeqP2lk=;
-        b=iVekqMffl1bf9Sd6q0hIorJZfSCDw2PPUYs2t20w/5ifQG5E6EMIAtAM+lh2UbduQR
-         TzK2KJOnXYf0qziHB/ZuTAV26xXeqkx+rIN0Jxb9u4RMYa7p7RxSq1VtRm1IfdhT/X+h
-         APP4eRC/TgPaVvqRYPNypFOM1FbYmeFyzKUaKbd0AbMwBzrwhowgrW9oUsHKQ6+upfmG
-         iGeQbvaYuZzgUuh3FrEEzVs5TpO6fQb3ONo/hX3axH0OpRZXR7UeTyUa/LUCySB1uIcH
-         0VC9fqOcRZiWj0OYGlXaDGhLH0hRsHFYokDtCPocQB3KUn6GLhBdiaqkzoOg6sw6Kok5
-         leSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718958216; x=1719563016;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nbBOwJgSwHet5zGetbp8psP9VLRM440EvYC4FeqP2lk=;
-        b=u8i+6D06Z0Wd/qFmp1eNbcdooTopjJIuDD4AAPF9vgWQMwNW09HkIgCmVzVTw236yG
-         U2/daiWOqSHkm3gxI4clHX9dGjf/7J/tmaNaGzBGydhg7YG98SxyEkcTfjfp8U8STrG+
-         UmGtgCMBq7UwtFp8OSa4XtOlGoX390ItQ4QcMOFkSyIFH4JuKArgMV5hMcNPi6fBsf6I
-         P3EAOisgaAb4f5BWQwsFMyLZuJ4x/YIuMwGeLxFCuZioIl6S3Jtw6L0lZ25rEfC67LeY
-         TxL39IhhiQaOiM4U2ZIf+scRHQBi49M0r5YESSG3PDIDTO80DByMvLcScXFlme0zFgAD
-         OVTQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUw8CfKRA8dqoh90awkIn2++Mud4veXsNUoZorMpk5yfmjZZa07VLydF9IMbKzGKtkQlbET2+0XgEHC8kRCXfuFusJaOv3e5jpNxPqg2aC1EBOgySwVsaM/NjQNR3scGQFW2EgrDBEWOw==
-X-Gm-Message-State: AOJu0YwKEqeXXmi+p4/jeGiTGaICfV0kNAucvzFdC8onwP2axnf8cutG
-	0P1ky1MFmbInGCVMwnrTcGhmwSwroLqZOW/4LhZhilS2UvqpydnO
-X-Google-Smtp-Source: AGHT+IHD5G0x+UDvvWQKLy0OgQRXOfYYf+1EbCyu7B+fCvtM9QvTCKDqyhEyTIoEjpyQiNOL1W55yQ==
-X-Received: by 2002:a17:906:6a15:b0:a66:c338:65cc with SMTP id a640c23a62f3a-a6fab62bbe3mr533490166b.19.1718958215296;
-        Fri, 21 Jun 2024 01:23:35 -0700 (PDT)
-Received: from andrea (host-82-50-195-19.retail.telecomitalia.it. [82.50.195.19])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6fcf56efcfsm56550066b.200.2024.06.21.01.23.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jun 2024 01:23:34 -0700 (PDT)
-Date: Fri, 21 Jun 2024 10:23:28 +0200
-From: Andrea Parri <parri.andrea@gmail.com>
-To: Akira Yokosawa <akiyks@gmail.com>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>, Marco Elver <elver@google.com>,
-	Will Deacon <will@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=VkenvMdvwbf4CWx6uD05BNiWOtNaxguuf+wvm0b1Ux9cszUHMftOdjdcNuLoeFD/5jH0A5R+DZMvQ0CHGKVJRiVwmq/9PXJlbCblFXTBDTY+Aqs/Og4bpt7b+Os4aeb9V0YF4nftCL9wFbGHdfHBRk4ulkfq6re+RHLa/K/+GP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1sKZbl-0001Si-00; Fri, 21 Jun 2024 10:26:57 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id 2189CC0120; Fri, 21 Jun 2024 10:25:23 +0200 (CEST)
+Date: Fri, 21 Jun 2024 10:25:23 +0200
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Arnd Bergmann <arnd@arndb.de>, linux-mips@vger.kernel.org,
+	Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+	"David S. Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>, sparclinux@vger.kernel.org,
+	Michael Ellerman <mpe@ellerman.id.au>,
 	Nicholas Piggin <npiggin@gmail.com>,
-	David Howells <dhowells@redhat.com>,
-	Jade Alglave <j.alglave@ucl.ac.uk>,
-	Luc Maranget <luc.maranget@inria.fr>,
-	Daniel Lustig <dlustig@nvidia.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	Alan Stern <stern@rowland.harvard.edu>
-Subject: Re: [PATCH lkmm 0/2] tools/memory-model: Add locking.txt and
- glossary.txt to README
-Message-ID: <ZnU4gE+OB+xvvW+I@andrea>
-References: <ae2b0f62-a593-4e7c-ab51-06d4e8a21005@gmail.com>
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	"Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+	linuxppc-dev@lists.ozlabs.org, Brian Cain <bcain@quicinc.com>,
+	linux-hexagon@vger.kernel.org, Guo Ren <guoren@kernel.org>,
+	linux-csky@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
+	linux-s390@vger.kernel.org, Rich Felker <dalias@libc.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	linux-sh@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+	Alexander Viro <viro@zenIV.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	linux-fsdevel@vger.kernel.org, libc-alpha@sourceware.org,
+	musl@lists.openwall.com, ltp@lists.linux.it
+Subject: Re: [PATCH 03/15] mips: fix compat_sys_lseek syscall
+Message-ID: <ZnU480Ypb3f3nOek@alpha.franken.de>
+References: <20240620162316.3674955-1-arnd@kernel.org>
+ <20240620162316.3674955-4-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -93,32 +65,43 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ae2b0f62-a593-4e7c-ab51-06d4e8a21005@gmail.com>
+In-Reply-To: <20240620162316.3674955-4-arnd@kernel.org>
 
-On Fri, Jun 21, 2024 at 01:08:24PM +0900, Akira Yokosawa wrote:
-> Hi all,
+On Thu, Jun 20, 2024 at 06:23:04PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> [+CC: Marco, as Patch 1/2 includes update related to access-marking.txt.]
+> This is almost compatible, but passing a negative offset should result
+> in a EINVAL error, but on mips o32 compat mode would seek to a large
+> 32-bit byte offset.
 > 
-> Looks to me like Andrea's herd-representation.txt has stabilized.
-> Patch 1/2 fills missing pieces in docs/README.
+> Use compat_sys_lseek() to correctly sign-extend the argument.
 > 
-> While skimming through documents, I noticed a typo in simple.txt.
-> Patch 2/2 fixes it.
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/mips/kernel/syscalls/syscall_o32.tbl | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
->         Thanks, Akira
-> --
-> Akira Yokosawa (2):
->   tools/memory-model: Add locking.txt and glossary.txt to README
->   tools/memory-model: simple.txt: Fix dangling reference to
->     recipes-pairs.txt
+> diff --git a/arch/mips/kernel/syscalls/syscall_o32.tbl b/arch/mips/kernel/syscalls/syscall_o32.tbl
+> index 85751c9b9cdb..2439a2491cff 100644
+> --- a/arch/mips/kernel/syscalls/syscall_o32.tbl
+> +++ b/arch/mips/kernel/syscalls/syscall_o32.tbl
+> @@ -27,7 +27,7 @@
+>  17	o32	break				sys_ni_syscall
+>  # 18 was sys_stat
+>  18	o32	unused18			sys_ni_syscall
+> -19	o32	lseek				sys_lseek
+> +19	o32	lseek				sys_lseek			compat_sys_lseek
+>  20	o32	getpid				sys_getpid
+>  21	o32	mount				sys_mount
+>  22	o32	umount				sys_oldumount
+> -- 
+> 2.39.2
 
-For the series,
+applied to mips-fixes.
 
-Acked-by: Andrea Parri <parri.andrea@gmail.com>
+Thomas.
 
-I do get some "trailing whitespace" warning, for patch #1, you might
-want to clean up when applying/reposting the series.
-
-  Andrea
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
