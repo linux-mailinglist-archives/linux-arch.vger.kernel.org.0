@@ -1,73 +1,74 @@
-Return-Path: <linux-arch+bounces-4993-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-4994-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DED2591193A
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Jun 2024 06:08:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF79991193C
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Jun 2024 06:10:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8915E1F223D3
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Jun 2024 04:08:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7C53C284586
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Jun 2024 04:10:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F324612B176;
-	Fri, 21 Jun 2024 04:08:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F136712B176;
+	Fri, 21 Jun 2024 04:10:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SHs09JN8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WasrXOsh"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84CA3AD4E;
-	Fri, 21 Jun 2024 04:08:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83E5AAD4E;
+	Fri, 21 Jun 2024 04:10:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718942912; cv=none; b=suJKh9vAA+Ro4TaV65VtkZ5Y/hHdHR7SWdcw91JHsgc1YA4HlUDxVsvCx5tgvkuyRPrqElLDNytXLGX8cFukXXc8fqJnsGzmb0mioYP4wFSfkJXEp1CQ76xHdycv9DW5hDuPKuxZefCO0gXj95SiFKVHCe8Do1EI0tV8LOsIuzA=
+	t=1718943023; cv=none; b=vArwPCCY089+9YkpBtzgNem5SbCrVVAS+PrvyhITt2Iz/dQ8QCrGc7oaEwiWP+FzJHJSn7urZkwkuJzxhhuqQBF2rsg/VG30Q5DVOJ7IIWwXedcn/dlzlcJVHz5pa5PXBPH95mj2RaOfEio4PXhM6lPxYA3vU+R6To2yz6rqGVc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718942912; c=relaxed/simple;
-	bh=39LsjG0DpJPRXGYhLaqgtuvsnN9hyT74a9AnSQco3uQ=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=nnhP0fKfAbep2nzOdpsvgAXasYU3Nhz9c61s1Taf089ul6cHrai7Zy565rWvt3rH65sZnG1YRdc80PmTdrkU0skcnfEg2q6tvXQt4Hr6JdwXgBQF38BRCq81AcuizNZY4qzfAZzZ5Wwrz6akklyiAAWHvowq8clinUcSs7VFAn4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SHs09JN8; arc=none smtp.client-ip=209.85.160.54
+	s=arc-20240116; t=1718943023; c=relaxed/simple;
+	bh=1f4MI1DI2o7vqspkvfFqDdA2EaZwjWclhVSDKHUnVAM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZHeTzXHTU3xF4AnpB8nc05rLPy3ptnKyrDa5usGh8Tx2QbPv12HQNveKG0Gj1uXbqpVS91AbPFGwDgNx+6mamUbR20C2g7pb22NqPB14aC5jYXjOJt0I2+YTzlKYZWf5k9aJCcAJNYb1oAav/xfDW6EbZGwqSmkpCKqRz2Bl/us=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WasrXOsh; arc=none smtp.client-ip=209.85.210.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-24c9f892aeaso862095fac.2;
-        Thu, 20 Jun 2024 21:08:30 -0700 (PDT)
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-7041ed475acso1496244b3a.2;
+        Thu, 20 Jun 2024 21:10:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718942909; x=1719547709; darn=vger.kernel.org;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Cc5GushuZJgdTDzjiZ5n8iT2qYkKchcdwujamhM5wSQ=;
-        b=SHs09JN87juaswR9eI9gEJ4N5IezGxw7oNoDSfY3lrLwkBL+m7ROODFHU6/jy5poPY
-         Hw0CTLiBoVUSI1zcOa4uggaMebkgEA8VKG78nG5ASPpviv2DG3FyCoLMcHX0K9NFpoFx
-         v53oZjQ59GYac6RrBeLjX25iQigeEma/BocYS6SiHInhgyx2Lqh/rGUPP9tXR63xHqCK
-         SXh4qWAfMohsXUU6OWJayaI5uiR1HbLpsSEtFKTEp1DRQlfqzmlXT3pKtMRnOsDPf7is
-         ohSoRL6wOQoo8rUYM3zPqhPAbezuYKlwxxh+m4eL7yTea69Z8B3ZdZcnu3IlYObog/El
-         C5FA==
+        d=gmail.com; s=20230601; t=1718943022; x=1719547822; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=shEiJV8IO8E1rXYoedpXjaqgM9pXQUHq+ze/O/2ukGM=;
+        b=WasrXOsh+6OIiX9KyUUjwYCJuAZijI7cE3LQ9aCecIKe61KsWPcMs7hUzLjWmhy47K
+         oIsXAyUF8Zjy3J2E63vB6lMliV7t7sVzXd7QVbhtaFsVx01rqx4hiRcDRUqQGfNxAqXM
+         /5/vjMr6Lj59FlIbwmXI2+GPhdOCrR4DqNtOlkw7ha+uwienUvJrjaosHgYUzp49tUxe
+         gK7pjfE4pETgPyjI2H5gn3Ea6H3yoZrfK88fjHrwf6Ow870wxXZvxNSsx+wmnpjNDHT6
+         JM0KKzKsUHP4vvsk7zPt9RtB1+yhrTQ+H57o40HjwegZ+5aNXSp3Vz7lP5lmgxKF2YhU
+         L/ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718942909; x=1719547709;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Cc5GushuZJgdTDzjiZ5n8iT2qYkKchcdwujamhM5wSQ=;
-        b=PorzVGgDe5qoVf5cL2JRG+X3H8xklgF5i/Oimh2qgQZdRzd/kn331hhnA31v5XcYi6
-         X/gFgwtP6PBUWs/D9Y8CVDCHkXgiOImkWAekswTC/o/BEYCG9kgTec80DIE0vz6+To/E
-         9+4S95WnRuV9QvA5dU+GjgESlMKnQbKwymjN1uUOIA4GGT1CPPFckS/lzWOUYTdqPMur
-         PjRA4JiopW9HbUTfNy6tUw/G5l1KsaSb7jzloEfsZg+chqqsHa+fA6NjcNoj3vApdmHc
-         SeTpb2qumL0T2FXCyHiPkycDmt8MfLhsPDKvPCTzrgWMWGgHPCFAPx+dSmTtZtlahE9g
-         mfGg==
-X-Forwarded-Encrypted: i=1; AJvYcCUno1m76Eyl8rnkhrHAW0wrRARfceejXk30EM2HmrNgCH/Xm5ClXxs0ZG4+bGWIrg5GNH8u1D8ArN/uThPeKjfDoOjQYC5pgPmlPc2YnlBOoQpD81SA55ptGSlTTuMVsj+p0DM8oB4xaw==
-X-Gm-Message-State: AOJu0Yxc7+ZFtEEmeFDsYIM1TXA+Q9qstjK77pq9zhoVcChbYd5S0BHY
-	EWUmZ1wb/q1of/9BUcELWp0/Ed0+IPyrPPtVY05QT/nJKkMKi1k0
-X-Google-Smtp-Source: AGHT+IEhvShsaphhL4jfuKmBDDHlXXlBKAlmU3dehNd9B9FJGS5KxhxnLvjf5oDXj2ZmEt8gPDcEvQ==
-X-Received: by 2002:a05:6870:8a14:b0:24f:f7e4:9f0a with SMTP id 586e51a60fabf-25c94b5a65amr8228191fac.34.1718942909437;
-        Thu, 20 Jun 2024 21:08:29 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1718943022; x=1719547822;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=shEiJV8IO8E1rXYoedpXjaqgM9pXQUHq+ze/O/2ukGM=;
+        b=FiI5mraYlBMmXpP+4aPlooNaTMbea0K7JH5kXac/K55wo6DDpfpQh5xiYko/bPbA3a
+         dY1f0DtcyPRfBd5wNVM5aJSKOn5xan4h7rMByOav75S7JqZlitPoNWjWYSNcFeZ0Et6O
+         +j0TB6lNlDdesKcAFOrf77K5o/QjsIcX4ZNIBd5j6pXVECkhbQlg+Rn+Uyp/w2PiAOob
+         KNxbHLvpKNaRxSilH9I6hjVjD1IRHQk5NAdda4qnc1fU4JpZi0HQJeqA19fDKlLVBE/a
+         zKL4bh22cZJLtbc9WPamNCnSl8xMb4y7/SsEUpSi81KyWrUK4ojDHszAk7CSxtuOytDQ
+         Nbnw==
+X-Forwarded-Encrypted: i=1; AJvYcCUezE+X2b+0djet8lH8YzlHj8CWUGqZzU8LBHioAZ+0Fh4ZBUh9Xko0IzEsZDZL/p1TWn0gSFAJk11T6sxzXu2hHIDI4F/olToOPoMKyKSuM8lCUgf3UpL/75BAQjSpkEzUE9APO+phSg==
+X-Gm-Message-State: AOJu0YwvkTtE4Z8aKNOiQ0VxdzdkhS86jN1/R8zvnT4WsYeOQbu6yudT
+	y8cofokvf51wCShq82hs8TWAjrT3lFT9c0KJFWrpUCinXEV5kIj0+53JNw==
+X-Google-Smtp-Source: AGHT+IE2ljdGI2dXAlwLCHpYTPQjQrh6ZykdzcKSciKBymJSC5KG+IVJyQ5OX6HP22vx2NMXKNJFPA==
+X-Received: by 2002:a62:e507:0:b0:705:a18a:6870 with SMTP id d2e1a72fcca58-70629c1e9b7mr6220786b3a.5.1718943021697;
+        Thu, 20 Jun 2024 21:10:21 -0700 (PDT)
 Received: from [10.0.2.15] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70651085a75sm430060b3a.28.2024.06.20.21.08.26
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7065124dd03sm431032b3a.113.2024.06.20.21.10.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jun 2024 21:08:29 -0700 (PDT)
-Message-ID: <ae2b0f62-a593-4e7c-ab51-06d4e8a21005@gmail.com>
-Date: Fri, 21 Jun 2024 13:08:24 +0900
+        Thu, 20 Jun 2024 21:10:21 -0700 (PDT)
+Message-ID: <acea86e9-757e-482d-a693-e6c4e85a38af@gmail.com>
+Date: Fri, 21 Jun 2024 13:10:17 +0900
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -75,7 +76,8 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Content-Language: en-US
+Subject: [PATCH lkmm 1/2] tools/memory-model: Add locking.txt and glossary.txt
+ to README
 To: "Paul E. McKenney" <paulmck@kernel.org>, Marco Elver <elver@google.com>
 Cc: Will Deacon <will@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
  Boqun Feng <boqun.feng@gmail.com>, Nicholas Piggin <npiggin@gmail.com>,
@@ -84,36 +86,83 @@ Cc: Will Deacon <will@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
  Joel Fernandes <joel@joelfernandes.org>, linux-kernel@vger.kernel.org,
  linux-arch@vger.kernel.org, Andrea Parri <parri.andrea@gmail.com>,
  Alan Stern <stern@rowland.harvard.edu>, Akira Yokosawa <akiyks@gmail.com>
+References: <ae2b0f62-a593-4e7c-ab51-06d4e8a21005@gmail.com>
+Content-Language: en-US
 From: Akira Yokosawa <akiyks@gmail.com>
-Subject: [PATCH lkmm 0/2] tools/memory-model: Add locking.txt and glossary.txt
- to README
+In-Reply-To: <ae2b0f62-a593-4e7c-ab51-06d4e8a21005@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Hi all,
+locking.txt and glossary.txt have been in LKMM's documentation for
+quite a while.
 
-[+CC: Marco, as Patch 1/2 includes update related to access-marking.txt.]
+Add them in README's introduction of docs and the list of docs at the
+bottom.  Add access-marking.txt in the former as well.
 
-Looks to me like Andrea's herd-representation.txt has stabilized.
-Patch 1/2 fills missing pieces in docs/README.
+Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+Cc: Marco Elver <elver@google.com>
+---
+ tools/memory-model/Documentation/README | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-While skimming through documents, I noticed a typo in simple.txt.
-Patch 2/2 fixes it.
-
-        Thanks, Akira
---
-Akira Yokosawa (2):
-  tools/memory-model: Add locking.txt and glossary.txt to README
-  tools/memory-model: simple.txt: Fix dangling reference to
-    recipes-pairs.txt
-
- tools/memory-model/Documentation/README     | 17 +++++++++++++++++
- tools/memory-model/Documentation/simple.txt |  2 +-
- 2 files changed, 18 insertions(+), 1 deletion(-)
-
-
-base-commit: 662b960d12d280476c4b09070ed6c4b808ee91da
+diff --git a/tools/memory-model/Documentation/README b/tools/memory-model/Documentation/README
+index 44e7dae73b29..08be2140a0fa 100644
+--- a/tools/memory-model/Documentation/README
++++ b/tools/memory-model/Documentation/README
+@@ -9,6 +9,8 @@ depending on what you know and what you would like to learn.  Please note
+ that the documents later in this list assume that the reader understands
+ the material provided by documents earlier in this list.
+ 
++If LKMM-specific terms lost you, glossary.txt might help you.
++
+ o	You are new to Linux-kernel concurrency: simple.txt
+ 
+ o	You have some background in Linux-kernel concurrency, and would
+@@ -21,6 +23,9 @@ o	You are familiar with the Linux-kernel concurrency primitives
+ 	that you need, and just want to get started with LKMM litmus
+ 	tests:  litmus-tests.txt
+ 
++o	You would like to access lock-protected shared variables without
++	having their corresponding locks held:  locking.txt
++
+ o	You are familiar with Linux-kernel concurrency, and would
+ 	like a detailed intuitive understanding of LKMM, including
+ 	situations involving more than two threads:  recipes.txt
+@@ -28,6 +33,11 @@ o	You are familiar with Linux-kernel concurrency, and would
+ o	You would like a detailed understanding of what your compiler can
+ 	and cannot do to control dependencies:  control-dependencies.txt
+ 
++o	You would like to mark concurrent normal accesses to shared
++	variables so that intentional "racy" accesses can be properly
++	documented, especially when you are responding to complaints
++	from KCSAN:  access-marking.txt
++
+ o	You are familiar with Linux-kernel concurrency and the use of
+ 	LKMM, and would like a quick reference:  cheatsheet.txt
+ 
+@@ -62,6 +72,9 @@ control-dependencies.txt
+ explanation.txt
+ 	Detailed description of the memory model.
+ 
++glossary.txt
++	Brief definitions of LKMM-related terms.	
++
+ herd-representation.txt
+ 	The (abstract) representation of the Linux-kernel concurrency
+ 	primitives in terms of events.
+@@ -70,6 +83,10 @@ litmus-tests.txt
+ 	The format, features, capabilities, and limitations of the litmus
+ 	tests that LKMM can evaluate.
+ 
++locking.txt
++	Rules for accessing lock-protected shared variables outside of
++	their corresponding critical sections.
++
+ ordering.txt
+ 	Overview of the Linux kernel's low-level memory-ordering
+ 	primitives by category.
 -- 
 2.34.1
+
 
 
