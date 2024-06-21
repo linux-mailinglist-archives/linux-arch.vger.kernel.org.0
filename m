@@ -1,120 +1,136 @@
-Return-Path: <linux-arch+bounces-5005-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5006-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2C71911FF8
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Jun 2024 11:03:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD8149120B9
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Jun 2024 11:34:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9E0CB282508
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Jun 2024 09:03:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 784ED28193C
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Jun 2024 09:34:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59A4D16D325;
-	Fri, 21 Jun 2024 09:03:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9B9416E885;
+	Fri, 21 Jun 2024 09:34:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b="TMbHACwH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IjIEVOqY"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63CCB1C02;
-	Fri, 21 Jun 2024 09:03:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.133.4.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68C1316E87B;
+	Fri, 21 Jun 2024 09:34:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718960632; cv=none; b=Sj8zLRBszASgs3HHxWdl99pxo4D4j5cYkzOrV//XnQLLEniMF10TQ6g39SGpcY1nWzvQrBMXLPHHkHJ1ZTO6WRVSjOm4V+BZciedjdvOqxaAw2UVnSiTLIpo/956ml9kK3sDEqPHZAM37LcH2jTbG56C/b3RhDTetpIrUSl7jaY=
+	t=1718962483; cv=none; b=g068VrHf4QdsHfOgIT9pPFopPI/uR6szNQZY555kjLGczJZaJfnwaVNPYB1RTKt3Btld54xYWB8Af7mWrr0OBOAUBXVk14Gj/OMsfzfjj/3HGjsVJibtPnmbXgCM3aYG4K0m2b+iAC/VWVtcfz6Yw9KnQw5sbGSLnPlozLyrrLg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718960632; c=relaxed/simple;
-	bh=I0zfmPIPdWucFGUWqrrjV/VMbgOjve+/Bk4AJ4J0PIA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=qL6n7cZUPFrIdQQRv+/A+la1SWBkixx3F+R1156Nt1RMTE/dLHxRivB9Bd19teKoKQv73kC8ZXDCx/ETxGE9iFU9ZCtli/CZ+/M42lfHEGvRX5NZe/DTuagCl8t1x6/ZBcnlAHdM5JlW25wWZovTsBN71yCmmVMCWUK18Yfc+eI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de; spf=pass smtp.mailfrom=zedat.fu-berlin.de; dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b=TMbHACwH; arc=none smtp.client-ip=130.133.4.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zedat.fu-berlin.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=fu-berlin.de; s=fub01; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=e2hpe1iGw8BtPBrOiCtpgk5Mrgh2fKvph5/Cmhjmvig=; t=1718960630; x=1719565430; 
-	b=TMbHACwHIJlMy5bVVyPGLK4lWdtzwiTWfCk8RFgN2YzSaGHitaoH/bOL1FcNXVAPQ1XbaW3Es6u
-	1BKKqcxMICd0ddqNjf9oMH9aJNNSt2WYTK7xEPycYgxYX/8SOE5D3kBJrHWokNeialE/5AwYq5wIC
-	SN5s/GDG0B6HCMpUBlr9TLWZcWlHy4ujWPOaJRWBk5M7W5tTY/T86XSJTa5ajD25T99WSGz9g4qxR
-	OHvwOIbWc74+aFBPktD9n4zF+/fdfe18wsEk7X0x66OJg3B7knH6ElT1fxJVIDJK0adRQCiRS1tM8
-	uFBPqFWYQXH7KiVFBQfzKVnENsETUwO7mnZA==;
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.97)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1sKaBO-00000002A8I-1bJM; Fri, 21 Jun 2024 11:03:46 +0200
-Received: from p5b13a475.dip0.t-ipconnect.de ([91.19.164.117] helo=[192.168.178.20])
-          by inpost2.zedat.fu-berlin.de (Exim 4.97)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1sKaBO-00000001fU8-2TCt; Fri, 21 Jun 2024 11:03:46 +0200
-Message-ID: <a623c1979ac494d01977abe6dfc22e8381dc6e4f.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH 07/15] parisc: use generic sys_fanotify_mark
- implementation
-From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To: Arnd Bergmann <arnd@arndb.de>, Helge Deller <deller@gmx.de>, Arnd
- Bergmann <arnd@kernel.org>, Linux-Arch <linux-arch@vger.kernel.org>, 
- linux-kernel@vger.kernel.org
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, "David S .
- Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
- sparclinux@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>, Nicholas
- Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>,
- "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
- linuxppc-dev@lists.ozlabs.org, Brian Cain <bcain@quicinc.com>,
- linux-hexagon@vger.kernel.org, guoren <guoren@kernel.org>, 
- "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>, Heiko Carstens
- <hca@linux.ibm.com>,  linux-s390@vger.kernel.org, Rich Felker
- <dalias@libc.org>,  linux-sh@vger.kernel.org, "H. Peter Anvin"
- <hpa@zytor.com>, Alexander Viro <viro@zeniv.linux.org.uk>, Christian
- Brauner <brauner@kernel.org>,  linux-fsdevel@vger.kernel.org, Xi Ruoyao
- <libc-alpha@sourceware.org>,  "musl@lists.openwall.com"
- <musl@lists.openwall.com>, LTP List <ltp@lists.linux.it>, Adhemerval
- Zanella Netto <adhemerval.zanella@linaro.org>
-Date: Fri, 21 Jun 2024 11:03:45 +0200
-In-Reply-To: <ba14c4fb-e6a7-46b3-a030-081482264a99@app.fastmail.com>
-References: <20240620162316.3674955-1-arnd@kernel.org>
-	 <20240620162316.3674955-8-arnd@kernel.org>
-	 <e80809ba-ee81-47a5-9b08-54b11f118a78@gmx.de>
-	 <1537113c4396cd043a08a72bdca80cccfa2d54d9.camel@physik.fu-berlin.de>
-	 <ba14c4fb-e6a7-46b3-a030-081482264a99@app.fastmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.2 
+	s=arc-20240116; t=1718962483; c=relaxed/simple;
+	bh=jE51PnV5EwBj2vUe72KXHFR0KLjv+PHhidQiOR7Tnrc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dvLo7V0/K6uLequZkIoHcT3JBbPkarCGwe7r0OV8VnuDS4AnFP/mXhIc4xu75nFGOxtDktTTIHkCgUDPDWfbykYUiM+AxiMBIDydd75LvthB0sn7FTj9ny6wHLT/rL2p3x8rNsvCiqmfwMv3onuGEfROFPwE9Wj0MCrw1dazT3A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IjIEVOqY; arc=none smtp.client-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-7062c11d0d1so1650502b3a.1;
+        Fri, 21 Jun 2024 02:34:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718962481; x=1719567281; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dOfOHGWM85MYwLzr4mYDa2Z5BOkt2sOF/968G/m/mOk=;
+        b=IjIEVOqYOmV0lYcNd2teDTYRCSM/Y1dj7EvnJ9BUm+6zUpgtS+A5GbfB848ZghllpQ
+         XwUkpcDMHdil5ugFacDBSFr2lR4UIAgbevafYklg5pS5YYX9FYx5T9tAI9FJIYW+kxuc
+         T4tpZs/OUwUcHAptZWB3Qb36haLfIdvb8DlSGeek94SJJtAFJccxPmvnjBm/3NKuYul/
+         s5HTik9mc6a6o97twqtJdC8oQBxE06zXC/iu09H5UlSWQP3/7h6CBVnd9tJ9TqaUXpfF
+         f4pIZzjOdEYOjnqAHvJjSGhpn+yClybriVVj+6MCg6ZVtptfepV5S8sNIGbxprinIXRV
+         5s2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718962481; x=1719567281;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dOfOHGWM85MYwLzr4mYDa2Z5BOkt2sOF/968G/m/mOk=;
+        b=DAZhpBW3/kznz2zygAG8PVDpFg+2ChAG4/5Q94+rLAxSj1gbr7eUtusmfbWicHk6jI
+         +7IqPNOvbVSir5k3a1/PleOLiurt25sgoyoaiaUOi/DZcaN8HDm5ND/VoroVzuoegcdN
+         rvzydTxpKUEeoaqMhn6EFOhMrgEEI8rrOo88aOGzATa8C4plV9tgorQIYdZF/++EQtus
+         4G9EmAg/+xfC/3mshmPpf/RvTCQHRTW6M1dfpA5nf9oCv1QYDxeEqFgya3bXpERPbh4g
+         3f8THgtd1/2EXWkGfoqJIpHotrAKdajfwx9e8E/5ZwF/a4gDqsdTRpo+lJA+VIyQNBqc
+         Ap+w==
+X-Forwarded-Encrypted: i=1; AJvYcCU3xJbsUlwUGwxm5jCIE6k/ZCW17Xd7z9Ab2jHCu6xN/aYvDZ01I8zfePf5mqS1XoD3wdHondoyUqq/l5f2NS6LZ8CdplTjBfOEq3a2JL3iXLv031u62WEPntNsO5LVvLBo1b9rtCetIA==
+X-Gm-Message-State: AOJu0YxtlUWjezLituTNe5PMpbuEbjdLuhcyUgGj4Mz0/jsZ/rsHWK4Z
+	kTB3aV9VvPuCypedq78d4i+TT8fRVb8/O/ZyUvcNeni5k0ZlU2Ut
+X-Google-Smtp-Source: AGHT+IEeUxGDTwGB8VosTpIA20i9Q6XpmX/CnHOXS1fPPKScq1Qt8Sxnlk8mQiGfdUjlvHa1IOVBRg==
+X-Received: by 2002:a05:6a20:c412:b0:1b6:63b6:ea6d with SMTP id adf61e73a8af0-1bcbb39ff23mr7701203637.11.1718962481510;
+        Fri, 21 Jun 2024 02:34:41 -0700 (PDT)
+Received: from [10.0.2.15] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-706512e64afsm973769b3a.189.2024.06.21.02.34.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Jun 2024 02:34:41 -0700 (PDT)
+Message-ID: <64f00fbc-5bcd-439e-a0f4-94f35e84e5ec@gmail.com>
+Date: Fri, 21 Jun 2024 18:34:32 +0900
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-ZEDAT-Hint: PO
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH lkmm 0/2] tools/memory-model: Add locking.txt and
+ glossary.txt to README
+To: Andrea Parri <parri.andrea@gmail.com>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>, Marco Elver <elver@google.com>,
+ Will Deacon <will@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Boqun Feng <boqun.feng@gmail.com>, Nicholas Piggin <npiggin@gmail.com>,
+ David Howells <dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>,
+ Luc Maranget <luc.maranget@inria.fr>, Daniel Lustig <dlustig@nvidia.com>,
+ Joel Fernandes <joel@joelfernandes.org>, linux-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+ Akira Yokosawa <akiyks@gmail.com>
+References: <ae2b0f62-a593-4e7c-ab51-06d4e8a21005@gmail.com>
+ <ZnU4gE+OB+xvvW+I@andrea>
+Content-Language: en-US
+From: Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <ZnU4gE+OB+xvvW+I@andrea>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, 2024-06-21 at 10:56 +0200, Arnd Bergmann wrote:
-> The patches are all independent of one another, except for a couple
-> of context changes where multiple patches touch the same lines.
+On Fri, 21 Jun 2024 10:23:28 +0200, Andrea Parri wrote:
+> On Fri, Jun 21, 2024 at 01:08:24PM +0900, Akira Yokosawa wrote:
+>> Hi all,
+>>
+>> [+CC: Marco, as Patch 1/2 includes update related to access-marking.txt.]
+>>
+>> Looks to me like Andrea's herd-representation.txt has stabilized.
+>> Patch 1/2 fills missing pieces in docs/README.
+>>
+>> While skimming through documents, I noticed a typo in simple.txt.
+>> Patch 2/2 fixes it.
+>>
+>>         Thanks, Akira
+>> --
+>> Akira Yokosawa (2):
+>>   tools/memory-model: Add locking.txt and glossary.txt to README
+>>   tools/memory-model: simple.txt: Fix dangling reference to
+>>     recipes-pairs.txt
+> 
+> For the series,
+> 
+> Acked-by: Andrea Parri <parri.andrea@gmail.com>
 
-OK.
+Thank you!
 
-> Feel free to pick up the sh patch directly, I'll just merge whatever
-> is left in the end. I mainly want to ensure we can get all the bugfixes
-> done for v6.10 so I can build my longer cleanup series on top of it
-> for 6.11.
+> 
+> I do get some "trailing whitespace" warning, for patch #1, you might
+> want to clean up when applying/reposting the series.
 
-This series is still for 6.10?
+Ugh, I failed to setup a pre-commit hook for this repo.  :-/
 
-Adrian
+Will send a v2 in a couple of days.
 
---=20
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+        Thanks, Akira
+
+> 
+>   Andrea
+
 
