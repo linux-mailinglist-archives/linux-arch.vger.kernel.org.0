@@ -1,106 +1,338 @@
-Return-Path: <linux-arch+bounces-5033-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5034-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA83F914338
-	for <lists+linux-arch@lfdr.de>; Mon, 24 Jun 2024 09:11:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 64543914554
+	for <lists+linux-arch@lfdr.de>; Mon, 24 Jun 2024 10:51:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 907D11F23D6E
-	for <lists+linux-arch@lfdr.de>; Mon, 24 Jun 2024 07:11:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E31851F23DDF
+	for <lists+linux-arch@lfdr.de>; Mon, 24 Jun 2024 08:51:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 792443A27E;
-	Mon, 24 Jun 2024 07:11:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C866061FEB;
+	Mon, 24 Jun 2024 08:51:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b="Akb8+ceI"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from xry111.site (xry111.site [89.208.246.23])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F118E10A1F;
-	Mon, 24 Jun 2024 07:11:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBC645A4D5;
+	Mon, 24 Jun 2024 08:51:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.208.246.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719213072; cv=none; b=t9GPksa7plcrdTcde/LGzZpRGo1jU9XowfXr7EGduwIAxYmgy5HiH3UuLH2GMbTqcWFTpAzINorhKiHqNvy8FTJKaHV0of5fF6OemCFJv6NV2aeEVAs98LUq6ZXTKfK80x788BuqFsNwKvg1Sl5C8EGxNvDYH8Y4PaeSW0+ZMNE=
+	t=1719219084; cv=none; b=gKWOgz28y646bIx1jRn4W0hZOdKpzniZYio9uBRiEhdVJmmhDdTZxxn20AwvlUbesF6epOn2rNSNd8qcFAfI5utsbajQLf5RF6F2DHuxTR2CB9nlQgcH8I5DBa2TdUU3vbDbunmQqUoVPLN0eAXfez9dlMdhoNE0u3eMAtSPbyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719213072; c=relaxed/simple;
-	bh=da3yW6IGcQdP/JdAObJo6wD31YwvBnEWMZ/rCsEf4aM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sr5nDGtkfnSboJsuWzzfprcNIDBAslxU3HpXyIS85fL1gMg5m5d6KafrH6Te7HQTMwbNlm2aME4tKwqvDqwqZFK3j69PpNtc4L7RlfmOfQVAF7XX6QoGpFJQhpEps2Jpl8yiVuLG/cRWh4BXnDpkaW5drBl3G2pgitxfqeHKiCs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-5b970a97e8eso2188494eaf.1;
-        Mon, 24 Jun 2024 00:11:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719213070; x=1719817870;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+m1qAHHe+u/l9Nh8Xj3tn5sz48OYqrvi4KHgsVzEBeY=;
-        b=GJvi4b3BU79gETdtssaFCrBzeMhAUHeF0/16JC0+f41Jt8vmJAATDUSLrK7gBEOfsn
-         l8hNcUS2klsusBCTh2NmXvG1SW52AWBen5ckB8F+Q4xQlFbY42yMhh9HSMfzSZ2cMnG6
-         EqsQqRiNZu6mbAbAZjnoX1aTz8uUVkMpwMWZCt8MNryDcndYarctOntnDluqw9L27CR8
-         6zZ3PDn1IkEBoxapwHPZjdhLxUtBicMj80VrjyL39uOq5DppOdNRVFGKS2glcObYfZuy
-         X+H00ce3thEyZhy3uoB4IPfIggEnWfcfPWuaQN+noSFqGsxODqfu3EwMb1wVaB9flCuy
-         DnHQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVslUogk2I6bsl9VWVNoOcGIMC1guijeJ0vsrPg610GlvFtMMEK0Vr52ctVYfAuyBTtfGHx6pRG3svtvwYEprXuDZ9Cd6WVNBgfJKnL7iqLmEzSViNiJaL/Fe9zcZlbIMX5sPSkBZbmsFxLq21FuiuOGp5t1aLMGafhC+EzefZd5TkV8hBvvblefK4eGMZ2GWUNIveuJ3CZlZCfHBMoFGlWGrVeVOnj+3/CBrArRM+Psh3nZ1tEyiOruE2yqqk=
-X-Gm-Message-State: AOJu0YxPRC/0kaz/1pyyYjfNhQdxb3QHhHgKmO9nIKNobtYqHJNEsq1e
-	OqS2maINKwpL9+F3ukKVs8p8BHCS3jfEuOdRYZmRotpFP4Nv9FOX
-X-Google-Smtp-Source: AGHT+IGp6uemBxlBEej/6H4CeVewwQxfQEG8wLfSX9/mkoKTbXgiHx9LATxLWNYemiAMrCpQQPUaBA==
-X-Received: by 2002:a05:6358:599b:b0:19f:4476:3cc0 with SMTP id e5c5f4694b2df-1a23c055a1amr572517955d.12.1719213069944;
-        Mon, 24 Jun 2024 00:11:09 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([20.69.120.36])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-716bb22e148sm4865999a12.85.2024.06.24.00.11.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jun 2024 00:11:09 -0700 (PDT)
-Date: Mon, 24 Jun 2024 07:11:02 +0000
-From: Wei Liu <wei.liu@kernel.org>
-To: mhklinux@outlook.com
-Cc: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-	decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
-	bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-	hpa@zytor.com, lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
-	bhelgaas@google.com, James.Bottomley@hansenpartnership.com,
-	martin.petersen@oracle.com, arnd@arndb.de,
-	linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-scsi@vger.kernel.org,
-	linux-arch@vger.kernel.org, maz@kernel.org, den@valinux.co.jp,
-	jgowans@amazon.com, dawei.li@shingroup.cn
-Subject: Re: [RFC 01/12] Drivers: hv: vmbus: Drop unsupported VMBus devices
- earlier
-Message-ID: <ZnkcBivQwrCEmcK_@liuwe-devbox-debian-v2>
-References: <20240604050940.859909-1-mhklinux@outlook.com>
- <20240604050940.859909-2-mhklinux@outlook.com>
+	s=arc-20240116; t=1719219084; c=relaxed/simple;
+	bh=bR/D0cZcNZxtUGrIbt3MJF86EwDDVoIYS//ABn9SvEw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aDL+rUcQuMgn/CT2OTZ56ARrWL6CVh643CSRlkHPC/k+5nl5iJ3/U5oLDXgwl6doltlWJXh3sUyPBNFGCwUtbnEeTpyDtcPr725ChH1Sa+Ma46sfEmy8UhvYNZSUWbMRBC6PyoAy/r/8i35V0NPKxhqL97j3HpfA1udxhNqUolg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site; spf=pass smtp.mailfrom=xry111.site; dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b=Akb8+ceI; arc=none smtp.client-ip=89.208.246.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xry111.site
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+	s=default; t=1719219079;
+	bh=bR/D0cZcNZxtUGrIbt3MJF86EwDDVoIYS//ABn9SvEw=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Akb8+ceIjRPVLHXpOLTM5LSCrQTmXTpw0nD49ABxNEauFXmwyzS4SkmRwYHyFiIdb
+	 Uu0qNuhH/DOtGHnmTWO+xa8IO0XG/Aa7c4uIm9P/V2ODNJKgX7ottPvOxR6yvm7ZWS
+	 hOChv+on3LwOFg/7P8cVm5kdFTnXdgT1aulVqxsw=
+Received: from stargazer.. (unknown [113.200.174.117])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (P-384) server-digest SHA384)
+	(Client did not present a certificate)
+	(Authenticated sender: xry111@xry111.site)
+	by xry111.site (Postfix) with ESMTPSA id 8FC5666BF9;
+	Mon, 24 Jun 2024 04:51:13 -0400 (EDT)
+From: Xi Ruoyao <xry111@xry111.site>
+To: Christian Brauner <brauner@kernel.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Jan Kara <jack@suse.cz>,
+	Mateusz Guzik <mjguzik@gmail.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Xi Ruoyao <xry111@xry111.site>,
+	Alejandro Colomar <alx@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Huacai Chen <chenhuacai@loongson.cn>,
+	Xuerui Wang <kernel@xen0n.name>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Icenowy Zheng <uwu@icenowy.me>,
+	linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] vfs: Shortcut AT_EMPTY_PATH early for statx, and add AT_NO_PATH for statx and fstatat
+Date: Mon, 24 Jun 2024 16:50:26 +0800
+Message-ID: <20240624085037.33442-2-xry111@xry111.site>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240604050940.859909-2-mhklinux@outlook.com>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jun 03, 2024 at 10:09:29PM -0700, mhkelley58@gmail.com wrote:
-> From: Michael Kelley <mhklinux@outlook.com>
-> 
-> Because Hyper-V doesn't know ahead-of-time what operating system will be
-> running in a guest VM, it may offer to Linux guests VMBus devices that are
-> intended for use only in Windows guests. Currently in Linux, VMBus
-> channels are created for these devices, and they are processed by
-> vmbus_device_register(). While nothing further happens because no matching
-> driver is found, the channel continues to exist.
-> 
-> To avoid having the spurious channel, drop such devices immediately in
-> vmbus_onoffer(), based on identifying the device in the
-> vmbus_unsupported_devs table. If Hyper-V should issue a rescind request
-> for the device, no matching channel will be found and the rescind will
-> also be ignored.
-> 
-> Since unsupported devices are dropped early, the check for unsupported
-> devices in hv_get_dev_type() is redundant. Remove it.
-> 
-> Signed-off-by: Michael Kelley <mhklinux@outlook.com>
+It's cheap to check if the path is empty in the userspace, but expensive
+to check if a userspace string is empty from the kernel.  So it seems a
+waste to delay the check into the kernel, and using statx(AT_EMPTY_PATH)
+to implement fstat is slower than a "native" fstat call.
 
-Acked-by: Wei Liu <wei.liu@kernel.org>
+In the past there was a similar performance issue with several Glibc
+releases using fstatat(AT_EMPTY_PATH) for fstat.  That issue was fixed
+by Glibc with reverting back to plain fstat, and worked around by the
+kernel with a special fast code path for fstatat(AT_EMPTY_PATH) at
+commit 9013c51c630a ("vfs: mostly undo glibc turning 'fstat()' into
+'fstatat(AT_EMPTY_PATH)'").
+
+But for arch/loongarch fstat does not exist, so we have to use statx.
+And on all 32-bit architectures we must use statx for fstat after 2037
+since the plain fstat call uses 32-bit timestamp.  Thus Glibc uses statx
+for fstat on LoongArch and all 32-bit platforms, and these platforms
+still suffer the performance issue.
+
+So port the fstatat(AT_EMPTY_PATH) fast path to statx(AT_EMPTY_PATH) as
+well, and add AT_NO_PATH (the name is suggested by Mateusz) which makes
+statx and fstatat completely skip the path check and assume the path is
+empty.
+
+Benchmark on LoongArch Loongson 3A6000:
+
+1. Unpatched kernel, Glibc fstat, actually statx(AT_EMPTY_PATH):
+   2575328 ops/s
+2. Patched kernel, Glibc fstat, actually statx(AT_EMPTY_PATH):
+   5434782 ops/s, +111% from 1
+3. Patched kernel, statx(AT_NO_PATH): 5773672 ops/s, +124% from 1,
+   +6.2% from 2.
+
+Seccomp sandboxes can also green light fstatat/statx(AT_NO_PATH) easier
+than fstatat/statx(AT_EMPTY_PATH) for which the audition needs to check
+5434782543478254347825434782the path but seccomp BPF program cannot do that now.
+
+Link: https://sourceware.org/pipermail/libc-alpha/2023-September/151364.html
+Link: https://sourceware.org/git/?p=glibc.git;a=commit;h=e6547d635b99
+Link: https://sourceware.org/git/?p=glibc.git;a=commit;h=551101e8240b
+Link: https://lore.kernel.org/loongarch/599df4a3-47a4-49be-9c81-8e21ea1f988a@xen0n.name/
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+Cc: Jan Kara <jack@suse.cz>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Mateusz Guzik <mjguzik@gmail.com>
+Cc: Alejandro Colomar <alx@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Huacai Chen <chenhuacai@loongson.cn>
+Cc: Xuerui Wang <kernel@xen0n.name>
+Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: Icenowy Zheng <uwu@icenowy.me>
+Cc: linux-fsdevel@vger.kernel.org
+Cc: linux-arch@vger.kernel.org
+Cc: loongarch@lists.linux.dev
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Xi Ruoyao <xry111@xry111.site>
+---
+
+Superseds
+https://lore.kernel.org/all/20240622105621.7922-1-xry111@xry111.site/.
+
+ fs/stat.c                  | 103 +++++++++++++++++++++++++------------
+ include/uapi/linux/fcntl.h |   3 ++
+ 2 files changed, 74 insertions(+), 32 deletions(-)
+
+diff --git a/fs/stat.c b/fs/stat.c
+index 70bd3e888cfa..2b7d4a22f971 100644
+--- a/fs/stat.c
++++ b/fs/stat.c
+@@ -208,7 +208,7 @@ int getname_statx_lookup_flags(int flags)
+ 		lookup_flags |= LOOKUP_FOLLOW;
+ 	if (!(flags & AT_NO_AUTOMOUNT))
+ 		lookup_flags |= LOOKUP_AUTOMOUNT;
+-	if (flags & AT_EMPTY_PATH)
++	if (flags & (AT_EMPTY_PATH | AT_NO_PATH))
+ 		lookup_flags |= LOOKUP_EMPTY;
+ 
+ 	return lookup_flags;
+@@ -217,7 +217,8 @@ int getname_statx_lookup_flags(int flags)
+ /**
+  * vfs_statx - Get basic and extra attributes by filename
+  * @dfd: A file descriptor representing the base dir for a relative filename
+- * @filename: The name of the file of interest
++ * @filename: The name of the file of interest, or NULL if the file of
++	      interest is dfd itself and dfd isn't AT_FDCWD
+  * @flags: Flags to control the query
+  * @stat: The result structure to fill in.
+  * @request_mask: STATX_xxx flags indicating what the caller wants
+@@ -232,42 +233,56 @@ int getname_statx_lookup_flags(int flags)
+ static int vfs_statx(int dfd, struct filename *filename, int flags,
+ 	      struct kstat *stat, u32 request_mask)
+ {
+-	struct path path;
++	struct path path, *p;
++	struct fd f;
+ 	unsigned int lookup_flags = getname_statx_lookup_flags(flags);
+ 	int error;
+ 
+ 	if (flags & ~(AT_SYMLINK_NOFOLLOW | AT_NO_AUTOMOUNT | AT_EMPTY_PATH |
+-		      AT_STATX_SYNC_TYPE))
++		      AT_STATX_SYNC_TYPE | AT_NO_PATH))
+ 		return -EINVAL;
+ 
+ retry:
+-	error = filename_lookup(dfd, filename, lookup_flags, &path, NULL);
+-	if (error)
+-		goto out;
++	if (filename) {
++		p = &path;
++		error = filename_lookup(dfd, filename, lookup_flags, p,
++					NULL);
++		if (error)
++			goto out;
++	} else {
++		f = fdget_raw(dfd);
++		if (!f.file)
++			return -EBADF;
++		p = &f.file->f_path;
++	}
+ 
+-	error = vfs_getattr(&path, stat, request_mask, flags);
++	error = vfs_getattr(p, stat, request_mask, flags);
+ 
+ 	if (request_mask & STATX_MNT_ID_UNIQUE) {
+-		stat->mnt_id = real_mount(path.mnt)->mnt_id_unique;
++		stat->mnt_id = real_mount(p->mnt)->mnt_id_unique;
+ 		stat->result_mask |= STATX_MNT_ID_UNIQUE;
+ 	} else {
+-		stat->mnt_id = real_mount(path.mnt)->mnt_id;
++		stat->mnt_id = real_mount(p->mnt)->mnt_id;
+ 		stat->result_mask |= STATX_MNT_ID;
+ 	}
+ 
+-	if (path.mnt->mnt_root == path.dentry)
++	if (p->mnt->mnt_root == p->dentry)
+ 		stat->attributes |= STATX_ATTR_MOUNT_ROOT;
+ 	stat->attributes_mask |= STATX_ATTR_MOUNT_ROOT;
+ 
+ 	/* Handle STATX_DIOALIGN for block devices. */
+ 	if (request_mask & STATX_DIOALIGN) {
+-		struct inode *inode = d_backing_inode(path.dentry);
++		struct inode *inode = d_backing_inode(p->dentry);
+ 
+ 		if (S_ISBLK(inode->i_mode))
+ 			bdev_statx_dioalign(inode, stat);
+ 	}
+ 
+-	path_put(&path);
++	if (filename)
++		path_put(p);
++	else
++		fdput(f);
++
+ 	if (retry_estale(error, lookup_flags)) {
+ 		lookup_flags |= LOOKUP_REVAL;
+ 		goto retry;
+@@ -276,33 +291,53 @@ static int vfs_statx(int dfd, struct filename *filename, int flags,
+ 	return error;
+ }
+ 
+-int vfs_fstatat(int dfd, const char __user *filename,
+-			      struct kstat *stat, int flags)
++static struct filename *getname_statx(int dfd, const char __user *filename,
++				      int flags)
+ {
+-	int ret;
+-	int statx_flags = flags | AT_NO_AUTOMOUNT;
+-	struct filename *name;
++	int r;
++	char c;
++	bool no_path = false;
++
++	if (dfd < 0 && dfd != AT_FDCWD)
++		return ERR_PTR(-EBADF);
+ 
+ 	/*
+-	 * Work around glibc turning fstat() into fstatat(AT_EMPTY_PATH)
++	 * Work around glibc turning fstat() into fstatat(AT_EMPTY_PATH) or
++	 * statx(AT_EMPTY_PATH)
+ 	 *
+ 	 * If AT_EMPTY_PATH is set, we expect the common case to be that
+ 	 * empty path, and avoid doing all the extra pathname work.
+ 	 */
+-	if (dfd >= 0 && flags == AT_EMPTY_PATH) {
+-		char c;
++	if (flags & AT_NO_PATH)
++		no_path = true;
++	else if (flags & AT_EMPTY_PATH) {
++		r = get_user(c, filename);
++		if (unlikely(r))
++			return ERR_PTR(r);
++		no_path = likely(!c);
++	}
+ 
+-		ret = get_user(c, filename);
+-		if (unlikely(ret))
+-			return ret;
++	if (no_path)
++		return dfd == AT_FDCWD ? getname_kernel("") : NULL;
+ 
+-		if (likely(!c))
+-			return vfs_fstat(dfd, stat);
+-	}
++	return getname_flags(filename, getname_statx_lookup_flags(flags),
++			     NULL);
++}
++
++int vfs_fstatat(int dfd, const char __user *filename,
++			      struct kstat *stat, int flags)
++{
++	int ret;
++	int statx_flags = flags | AT_NO_AUTOMOUNT;
++	struct filename *name = getname_statx(dfd, filename, flags);
++
++	if (IS_ERR(name))
++		return PTR_ERR(name);
+ 
+-	name = getname_flags(filename, getname_statx_lookup_flags(statx_flags), NULL);
+ 	ret = vfs_statx(dfd, name, statx_flags, stat, STATX_BASIC_STATS);
+-	putname(name);
++
++	if (name)
++		putname(name);
+ 
+ 	return ret;
+ }
+@@ -703,11 +738,15 @@ SYSCALL_DEFINE5(statx,
+ 		struct statx __user *, buffer)
+ {
+ 	int ret;
+-	struct filename *name;
++	struct filename *name = getname_statx(dfd, filename, flags);
++
++	if (IS_ERR(name))
++		return PTR_ERR(name);
+ 
+-	name = getname_flags(filename, getname_statx_lookup_flags(flags), NULL);
+ 	ret = do_statx(dfd, name, flags, mask, buffer);
+-	putname(name);
++
++	if (name)
++		putname(name);
+ 
+ 	return ret;
+ }
+diff --git a/include/uapi/linux/fcntl.h b/include/uapi/linux/fcntl.h
+index c0bcc185fa48..470b5c77000c 100644
+--- a/include/uapi/linux/fcntl.h
++++ b/include/uapi/linux/fcntl.h
+@@ -113,6 +113,9 @@
+ #define AT_STATX_DONT_SYNC	0x4000	/* - Don't sync attributes with the server */
+ 
+ #define AT_RECURSIVE		0x8000	/* Apply to the entire subtree */
++#define AT_NO_PATH		0x10000	/* Ignore relative pathname,
++					   behave as if AT_EMPTY_PATH and
++					   the relative pathname is empty */
+ 
+ /* Flags for name_to_handle_at(2). We reuse AT_ flag space to save bits... */
+ #define AT_HANDLE_FID		AT_REMOVEDIR	/* file handle is needed to
+-- 
+2.45.2
+
 
