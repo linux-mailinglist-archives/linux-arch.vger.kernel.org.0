@@ -1,105 +1,107 @@
-Return-Path: <linux-arch+bounces-5079-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5120-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 862E7916B50
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Jun 2024 16:59:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10850916D7C
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Jun 2024 17:50:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A94B61C21DF5
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Jun 2024 14:59:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C117328EEBA
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Jun 2024 15:50:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28AAB16F0FD;
-	Tue, 25 Jun 2024 14:59:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57F8116F91B;
+	Tue, 25 Jun 2024 15:50:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h7NAS6q/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mXgl0tgF"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF8D61BC57;
-	Tue, 25 Jun 2024 14:59:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30D9B16EC10;
+	Tue, 25 Jun 2024 15:50:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719327572; cv=none; b=f5XEEPdgcvQn4JMomJkS6dgZY6PiiumwDUoP41stimO2bN0BCxQWLGVmsb7fuKpRjp04ugoIkwehALYWzsJsZnieSMIvaAegdcYfXYjtkyiFpG6esN65jKrI/Xyex6hD7gkkjajRyOyEtuQGusW+ESH5h22a2lexGc4iF6N/hMc=
+	t=1719330651; cv=none; b=MIKfHyYLBwfIBnk6fxPSmrh1fmPctiuGWnsPqDkf7uuqAlpjGBQdYgzFfvlLx/lO8BCla9hZ8xtew0g+tz3FttPOk8XcJfzMEObmoz9sf5YlN4yuT2Lq0+Hh+wBOZiYNfqfHxLy4MNhjfnSrFp62xP0A8JRDPS4D/ST3UeDZIAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719327572; c=relaxed/simple;
-	bh=4wYjB3JY0AnTw9nAvS+x7fjoQVoS9QzpjpY/mNtLggw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=O1C4q1C9iNAOUTWx9/emcEHSap2TPW/SFp/PQ4mgGEJgfw1k4yZL56uP29swrDjkPg+82F5QIoQuMhL0nIUhMYRQg0nPTi0Fv41PLr4yR9CDviJEzUOqGIeKBPOE+NwzAOaYWxdK/G1HSNldeIkcVHBWEUuHzcjp8onPHXPftJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h7NAS6q/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7AA9C4AF0B;
-	Tue, 25 Jun 2024 14:59:27 +0000 (UTC)
+	s=arc-20240116; t=1719330651; c=relaxed/simple;
+	bh=ZaDeCopv0PJ1QwF2b0WCd5Id1ccH0b00NTXA6Ny1H0Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=F4I7AH+0tvmYOMxe+9C32iWDJbudf4uPEBovQS5rEeZgfc9gPY59bWtucMkxPT1FVpN6PMgOq56VET0ElkS+GdZTz86DBsRtBwGZFfHoI5vFEQs4ttajLI5MRGsqIa5Q9+QguMAbhbkbp8oM934LudEwrfZ4gx/dtQHtK5jtFWQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mXgl0tgF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B4F7C32781;
+	Tue, 25 Jun 2024 15:50:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719327570;
-	bh=4wYjB3JY0AnTw9nAvS+x7fjoQVoS9QzpjpY/mNtLggw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=h7NAS6q/C2ZzBIAYKai5whZiBum489XS/J7zffMQOVU0xDBrGbji0HlKyZbV0brVY
-	 jwHILNhtgojEmdiUQ3GnAfMPUSaUya0+D0cFcjQ9dhbvTuMsGJh4W2x+J7X/9HXZ9V
-	 srBl3VFTN1Ly99vlBTFzJFJzSgq138zPAzzOL2os8e1W4DzrZI1H0QEVZ5ZJR09krK
-	 /Bmyi4o96W3ViZ6cus20bYwYlLEzMNrqNFN4DiYRoFZwN6N3pBDHKz/uOmL4YFYFQX
-	 m3FOmbQnP7K8OC0mOv3dwo1NOo8qb7etGTDcG2HlC0EOZ1X1ih7qXwRSXhT5bSXbyY
-	 CFeH6MEdGgYfg==
-Date: Tue, 25 Jun 2024 07:59:26 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Donald
- Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, Richard
- Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky
- <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, Thomas
- Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
- <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>,
- Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
- <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
- Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
- <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai
- Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
- <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
- <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
- Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>,
- Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan
- <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>, Christian
- =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>, Bagas Sanjaya
- <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, Nikolay
- Aleksandrov <razor@blackwall.org>, Pavel Begunkov <asml.silence@gmail.com>,
- David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin
- <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, Harshitha
- Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
- Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
- <pkaligineedi@google.com>
-Subject: Re: [PATCH net-next v13 00/13] Device Memory TCP
-Message-ID: <20240625075926.146d769d@kernel.org>
-In-Reply-To: <CAHS8izO1g5vZodyvKBNyE-Fx7A4EoD70RuDLwXtzE3yvfRw_2g@mail.gmail.com>
-References: <20240625024721.2140656-1-almasrymina@google.com>
-	<CAHS8izO1g5vZodyvKBNyE-Fx7A4EoD70RuDLwXtzE3yvfRw_2g@mail.gmail.com>
+	s=k20201202; t=1719330650;
+	bh=ZaDeCopv0PJ1QwF2b0WCd5Id1ccH0b00NTXA6Ny1H0Q=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=mXgl0tgF674ieLxrHGX9nw9jrSsq8mEVLOQBhUA69O1Oir11f0AiqcNg+PtLLiCkR
+	 hIJkoY3nhi/1JXPgcoCoOO+p7O28KjUbSpizAu78UDIePT95th/DJgvEEKLX5wgo67
+	 PNjAXOUJS9Qy3d9VzY75+nPbe+FbD4mox9lN+MtNMBoI57k+Ezhv1iTxeECfGDV8ku
+	 ZjXabwx/hLSXwgIas452xONwVYd7z6FPpvGeI5Kdev5Bl/IW+UmiQt5w/xOkjJxvTH
+	 22Gr0UZHcvx+ZSXc+SidA10pmrPz3KmZqIZmvM48w4nLRB0e8ArHaQ7dBA0u7VzF13
+	 Ce3eo9gO54T2w==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 7C774CE0760; Tue, 25 Jun 2024 08:50:49 -0700 (PDT)
+Date: Tue, 25 Jun 2024 08:50:49 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Akira Yokosawa <akiyks@gmail.com>
+Cc: Marco Elver <elver@google.com>, Andrea Parri <parri.andrea@gmail.com>,
+	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	David Howells <dhowells@redhat.com>,
+	Jade Alglave <j.alglave@ucl.ac.uk>,
+	Luc Maranget <luc.maranget@inria.fr>,
+	Daniel Lustig <dlustig@nvidia.com>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH lkmm v2 0/2] tools/memory-model: Add locking.txt and
+ glossary.txt to README
+Message-ID: <ab561ed0-51c9-4f17-a71a-5743735a2efa@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <a07d41c9-5236-44ad-8e89-f3be5da90e98@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a07d41c9-5236-44ad-8e89-f3be5da90e98@gmail.com>
 
-On Tue, 25 Jun 2024 07:16:00 -0700 Mina Almasry wrote:
-> What happened here is that I sync'd to net-next, ran all the tests
-> including the allmodconfig build which took a few hours, then posted
-> the series. In the meantime 34 patches got merged to net-next, and one
-> of those patches seems to generate a git am failure when I try to use
-> b4 to apply:
+On Tue, Jun 25, 2024 at 05:56:49PM +0900, Akira Yokosawa wrote:
+> Hi all,
+> 
+> Here is a v2 series with the trailing white space fixed and Acked-by's
+> from Andrea applied.
+> 
+> Please find v1 at [1] if you need to.
+> 
+> [1]: https://lore.kernel.org/ae2b0f62-a593-4e7c-ab51-06d4e8a21005@gmail.com/
+> 
+>         Thanks, Akira
 
-Got it, feel free to repost as soon as you can build test the rebased
-version.
+Queued for further review, thank you all!
+
+							Thanx, Paul
+
+> --
+> Akira Yokosawa (2):
+>   tools/memory-model: Add locking.txt and glossary.txt to README
+>   tools/memory-model: simple.txt: Fix stale reference to
+>     recipes-pairs.txt
+> 
+>  tools/memory-model/Documentation/README     | 17 +++++++++++++++++
+>  tools/memory-model/Documentation/simple.txt |  2 +-
+>  2 files changed, 18 insertions(+), 1 deletion(-)
+> 
+> 
+> base-commit: 5bdd17ab5a7259d2da562eab63abab3a6d95adcd
+> -- 
+> 2.34.1
+> 
 
