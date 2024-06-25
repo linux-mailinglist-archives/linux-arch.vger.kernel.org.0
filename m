@@ -1,74 +1,74 @@
-Return-Path: <linux-arch+bounces-5074-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5075-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 308C59161CA
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Jun 2024 10:58:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53D829161CF
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Jun 2024 10:59:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB923286F87
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Jun 2024 08:58:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 00F241F219D5
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Jun 2024 08:59:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AAD7149003;
-	Tue, 25 Jun 2024 08:58:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 119A9148836;
+	Tue, 25 Jun 2024 08:59:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OxtayqUD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nBgs6JCa"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEF57148FE5;
-	Tue, 25 Jun 2024 08:58:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACD1813A252;
+	Tue, 25 Jun 2024 08:59:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719305906; cv=none; b=Vsp71e6KdakE+WrzCmtNqNoEt2YMAzfml1S5ksMrkH7CNvoNk7emVN0REf2r79shimi1td1/ro1D58fSc0842/suPo4yl4SJjFhNra5GuavIG0Rd93dbqnM7xOyW0I6S8at9zviSIcB8IrHssomsy3KB1DcK9MvydK2OOumc/7Y=
+	t=1719305984; cv=none; b=KXVHe5n8VdlpP7BVnBttfyvyRhuBug0L5FaCqzwVl5VswZjucCqeUA884tjvMA+t+BAGgLYIKSfAmRR89S/5LF/C9UYYE7wjfT69Bg2xnae6de8NlxrnvKAVMQgEe7TCXxxcQmyReQXavqCACW+SGER09kuAcDPl8ibJg533XFo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719305906; c=relaxed/simple;
-	bh=D6eaihrBuRXlBbFlKmoRvuO//cNJrecy//x09Y7t1L4=;
+	s=arc-20240116; t=1719305984; c=relaxed/simple;
+	bh=CoOIXNxDYC35xzbOrHuwRn6hRG4X1EKHermPGHnANY8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sxzeaElbqiVXcFb/9/dZdIYWwl7qKhWbzprUCbMj+06uBZFX46Ig3dtN4FPGEMl2Ii+mdTxruU5FOoYQXawu88t58+RgTbdBHgu+6KM2r5ccRXmzC5CYW2IsfL2yU5hLByELlUw4TpH0h/bcpJV8lxrHkc1VQWEP4PuarDFr7gM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OxtayqUD; arc=none smtp.client-ip=209.85.214.170
+	 In-Reply-To:Content-Type; b=rz/K0I0bgKuTCQVDcQQuoqiOPz9XlSgvlhI1VtdenakBTXCXUB3oEZFGUGjoP4qdooxxxh2/7vUmfd5f1rjHUOwYgGonmDZGgWpK03hpoqzbKBhAltlAh6oOkReeAOk300Hy73PxEQGcuYjh36ppktXOJG0cvSv9Emke4xc9wes=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nBgs6JCa; arc=none smtp.client-ip=209.85.214.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1f9b523a15cso37593745ad.0;
-        Tue, 25 Jun 2024 01:58:24 -0700 (PDT)
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1f47f07aceaso41179805ad.0;
+        Tue, 25 Jun 2024 01:59:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719305904; x=1719910704; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1719305981; x=1719910781; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=l9GuOsLR671aW57nNhKzROWH1Hjh5iQv0zp32oCvBD0=;
-        b=OxtayqUDeqVNJI94P6Oxzkn4iFkbvjak99kF/yX1gaIFt0Iafq/uM+fGcr9snq5/P1
-         xjZhgA0A+sP+vafj4TjP5QRJO2tx2FzQPIaM2e+PHvpgEGUMr6NguynH/NXmH5KL8Ype
-         EpcqtNY4XIIGvl/yDZkzyRdVqtwTfcZVrzLflsVDkt3oUgr6pvqR8S1MiT/m8TpIH95V
-         byXW4rCeNeKnjV4A55ZGSFxKo7NBzIjiEBPcrR4j5Lj4UnpKD1+LKUZpXnWx+6aPiT7X
-         39Edk9YkVdNoRmeSTZjhB5yxG7gDmcBvmFndYuNVz6ZRLSVCVHdxobUxqlQ9K34zoy3B
-         dFGw==
+        bh=oPBlRVdLjhqhXvqWA2atexQ/GKxdhaGgyqgobdeqIO4=;
+        b=nBgs6JCabiFXLzQ1TgaVxZOn8Kuv5gSq+7nZVdU8Aiimh+MM6aVBIW0uJipJkuoyrx
+         gMqNC0em1Ouw+l7SqjaGkgxZRwTt0YHUrTsW3v/ChZkAsUeAnChnAI9SA8ydTtxjmAwm
+         iviNH3IKH1t1UUUUFBDN22yZIz0/2O41TPKiMiMKcuE+wyWe6FsFPzMhERHq/02zgMhs
+         oairJkLgs9/RjFTb1lxZuDUPF3i0C/R0PCErTnbayUJDSLnj/hs75oVcZjASwsGvbqlf
+         QdwjZgqEYCm0zwouX1dHrtLQOx0Cm2XhpZndoDQZAkhzaV2rydwEC9eX/Oud0GW6rRRP
+         sKaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719305904; x=1719910704;
+        d=1e100.net; s=20230601; t=1719305981; x=1719910781;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=l9GuOsLR671aW57nNhKzROWH1Hjh5iQv0zp32oCvBD0=;
-        b=TAJUXXCv52H4s216JtaZBwHmNZfCkZfVKuwUqdFmwZ0RLnvGOmZL4TlMp3528BbMVR
-         BrD5lPDS6J/oNQyZntW95Ajprc3oVkJ0YYYPye6WL35MG7g27dTDFTOzOvYoN89fENqL
-         Uu/p8t/eXqbMfGJ/FK1yXJIlW+LhythFFcQSPDUZp+JdNEjwHIFt+sLE9p0CTwglmig2
-         twqYe38dz4PZ+ovHGenkD0RDKpFimH9MAsbdvZ3/o1RWNpVXGCfhot6r/qfpG3NZBAnr
-         y9YTcxlAvJHHirrYwBe9p13LEibhxcNmV6nXB3qufC+T2aIPaUOZgsGs1bIVYTZPku/b
-         Kiqw==
-X-Forwarded-Encrypted: i=1; AJvYcCVJNorFQZw8JEqCRjh7ppoUGcfErude3MF2wN9IfFgAdkgABxvpwmJDv7eIVXImPotlMuY5/X5zmosZDf9Hj5r5TvGMf8qbjaOtVO3+oEAfkHtblXl+NKCd+M9EXQkBgCuZozI7i5SW+w==
-X-Gm-Message-State: AOJu0YyRQaijVnA/fQaSFhvxVe3XrLAZLsHqBdQBFEFU5UrwNnheF8YK
-	IpjUzlM6n0IcCPMyNmEe3VW4tYCnu9zay+GJVQSKQx2ysEwoIv7L
-X-Google-Smtp-Source: AGHT+IE9x9dH6IKjN4+unaAQ4toER0+WbCcuiHV3FDy+d3Ech66p/oZQL/TWIuMx8S3W3AbNkeYZ2w==
-X-Received: by 2002:a17:903:228a:b0:1f4:8bb9:924f with SMTP id d9443c01a7336-1fa5e640661mr39332155ad.1.1719305904072;
-        Tue, 25 Jun 2024 01:58:24 -0700 (PDT)
+        bh=oPBlRVdLjhqhXvqWA2atexQ/GKxdhaGgyqgobdeqIO4=;
+        b=RFwiyylSuW+YqONkbzUL4jIpJcKcPAm1G4Vop7Jp2yjjlzrN/rfXQSZOFeta1BgsOq
+         UEBDkCRAk6BuuIbRPrnG9oI+zHrMWgDnnBJh79p/bV2tBgRXJpjkDgvTK85ojkxpzKGO
+         B8nMhMyKceMt+DBPsDA64X9RdVYlrzgRTwfzWiyz1S0wCfGNuskVEWZoByqsFPFUsa6x
+         8xCPQWkBZHgZiuRYVkRxgDqv3UrFc71pT9jhL1QbRCjZJ+qeEunenTkZU0SCe7RBqicx
+         kZNu255/LKD/tjPeWrAFZaLu8UieLDoI0J9aSh6tVOFHf0DMHgNewl9sZ4hv7DeS9XOK
+         ZsZg==
+X-Forwarded-Encrypted: i=1; AJvYcCV5Fd54v8VnTE1lhaW5gtzwb/GRquc9NYlYbYKX/NOmi+jBGiEu4WlDlbXgQ4UuVRcne7hdB7IQlSs0emmnfUu+Da+68mf7DtuFHzV9TYuJNkPIMeIWBHlZwPThF/n7kuzAsWbeCEfhHA==
+X-Gm-Message-State: AOJu0YydG0Sy6b+FoqRubWR5qZ8WKAr+x46us/gThbhpmwmKkkFVtE4u
+	qxUCp+yqiim6isyjWQO00slDRTj/OSGcJd9GQtNYaeOotcoUcNow
+X-Google-Smtp-Source: AGHT+IE9g9uiT1061smMhHji0lQ/KnnxmzA1cPclNXAuM4LTMvAH9msbvLFmER6NkBel7IFARZoS9g==
+X-Received: by 2002:a17:902:ea08:b0:1f7:2479:a50b with SMTP id d9443c01a7336-1fa15937ad1mr92432295ad.54.1719305981044;
+        Tue, 25 Jun 2024 01:59:41 -0700 (PDT)
 Received: from [10.0.2.15] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f9eb5debc3sm76332845ad.216.2024.06.25.01.58.20
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f9eb7cf962sm76042955ad.231.2024.06.25.01.59.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jun 2024 01:58:23 -0700 (PDT)
-Message-ID: <1765f4ca-e5eb-4dfd-b986-10e7228cdc33@gmail.com>
-Date: Tue, 25 Jun 2024 17:58:21 +0900
+        Tue, 25 Jun 2024 01:59:40 -0700 (PDT)
+Message-ID: <892a47a2-ed78-48fe-882e-da9dd14050c8@gmail.com>
+Date: Tue, 25 Jun 2024 17:59:37 +0900
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -76,9 +76,9 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: [PATCH lkmm v2 1/2] tools/memory-model: Add locking.txt and
- glossary.txt to README
-To: "Paul E. McKenney" <paulmck@kernel.org>, Marco Elver <elver@google.com>,
+Subject: [PATCH lkmm v2 2/2] tools/memory-model: simple.txt: Fix stale
+ reference to recipes-pairs.txt
+To: "Paul E. McKenney" <paulmck@kernel.org>,
  Andrea Parri <parri.andrea@gmail.com>
 Cc: Will Deacon <will@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
  Boqun Feng <boqun.feng@gmail.com>, Nicholas Piggin <npiggin@gmail.com>,
@@ -86,7 +86,8 @@ Cc: Will Deacon <will@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
  Luc Maranget <luc.maranget@inria.fr>, Daniel Lustig <dlustig@nvidia.com>,
  Joel Fernandes <joel@joelfernandes.org>,
  Alan Stern <stern@rowland.harvard.edu>, linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>
+ linux-arch@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>,
+ Marco Elver <elver@google.com>
 References: <a07d41c9-5236-44ad-8e89-f3be5da90e98@gmail.com>
 Content-Language: en-US
 From: Akira Yokosawa <akiyks@gmail.com>
@@ -94,79 +95,30 @@ In-Reply-To: <a07d41c9-5236-44ad-8e89-f3be5da90e98@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-locking.txt and glossary.txt have been in LKMM's documentation for
-quite a while.
-
-Add them in README's introduction of docs and the list of docs at the
-bottom.  Add access-marking.txt in the former as well.
+There has never been recipes-paris.txt at least since v5.11.
+Fix the typo.
 
 Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
 Acked-by: Andrea Parri <parri.andrea@gmail.com>
-Cc: Marco Elver <elver@google.com>
 ---
 v2:
-  Removed trailing white space (Andrea).
+  No change.
 
 --
- tools/memory-model/Documentation/README | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ tools/memory-model/Documentation/simple.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/memory-model/Documentation/README b/tools/memory-model/Documentation/README
-index 44e7dae73b29..9999c1effdb6 100644
---- a/tools/memory-model/Documentation/README
-+++ b/tools/memory-model/Documentation/README
-@@ -9,6 +9,8 @@ depending on what you know and what you would like to learn.  Please note
- that the documents later in this list assume that the reader understands
- the material provided by documents earlier in this list.
+diff --git a/tools/memory-model/Documentation/simple.txt b/tools/memory-model/Documentation/simple.txt
+index 4c789ec8334f..21f06c1d1b70 100644
+--- a/tools/memory-model/Documentation/simple.txt
++++ b/tools/memory-model/Documentation/simple.txt
+@@ -266,5 +266,5 @@ More complex use cases
+ ======================
  
-+If LKMM-specific terms lost you, glossary.txt might help you.
-+
- o	You are new to Linux-kernel concurrency: simple.txt
- 
- o	You have some background in Linux-kernel concurrency, and would
-@@ -21,6 +23,9 @@ o	You are familiar with the Linux-kernel concurrency primitives
- 	that you need, and just want to get started with LKMM litmus
- 	tests:  litmus-tests.txt
- 
-+o	You would like to access lock-protected shared variables without
-+	having their corresponding locks held:  locking.txt
-+
- o	You are familiar with Linux-kernel concurrency, and would
- 	like a detailed intuitive understanding of LKMM, including
- 	situations involving more than two threads:  recipes.txt
-@@ -28,6 +33,11 @@ o	You are familiar with Linux-kernel concurrency, and would
- o	You would like a detailed understanding of what your compiler can
- 	and cannot do to control dependencies:  control-dependencies.txt
- 
-+o	You would like to mark concurrent normal accesses to shared
-+	variables so that intentional "racy" accesses can be properly
-+	documented, especially when you are responding to complaints
-+	from KCSAN:  access-marking.txt
-+
- o	You are familiar with Linux-kernel concurrency and the use of
- 	LKMM, and would like a quick reference:  cheatsheet.txt
- 
-@@ -62,6 +72,9 @@ control-dependencies.txt
- explanation.txt
- 	Detailed description of the memory model.
- 
-+glossary.txt
-+	Brief definitions of LKMM-related terms.
-+
- herd-representation.txt
- 	The (abstract) representation of the Linux-kernel concurrency
- 	primitives in terms of events.
-@@ -70,6 +83,10 @@ litmus-tests.txt
- 	The format, features, capabilities, and limitations of the litmus
- 	tests that LKMM can evaluate.
- 
-+locking.txt
-+	Rules for accessing lock-protected shared variables outside of
-+	their corresponding critical sections.
-+
- ordering.txt
- 	Overview of the Linux kernel's low-level memory-ordering
- 	primitives by category.
+ If the alternatives above do not do what you need, please look at the
+-recipes-pairs.txt file to peel off the next layer of the memory-ordering
++recipes.txt file to peel off the next layer of the memory-ordering
+ onion.
 -- 
 2.34.1
 
