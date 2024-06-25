@@ -1,148 +1,90 @@
-Return-Path: <linux-arch+bounces-5070-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5071-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04478915FE6
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Jun 2024 09:22:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 80BBF91609F
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Jun 2024 10:06:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A59C328128A
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Jun 2024 07:22:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 32937283FE0
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Jun 2024 08:06:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC5DD1465BE;
-	Tue, 25 Jun 2024 07:22:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 641021474C0;
+	Tue, 25 Jun 2024 08:05:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="JI2NnhbD";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="nii1oWgI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nPc63nWp"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fout6-smtp.messagingengine.com (fout6-smtp.messagingengine.com [103.168.172.149])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3C9273463;
-	Tue, 25 Jun 2024 07:22:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 311161474AF;
+	Tue, 25 Jun 2024 08:05:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719300140; cv=none; b=D0QFeLo1woMP8D+s5IH/CHYFyB17pqZ+vfgzDzL/TycGVVXlFVimxVHhYJFKJgMxMF8L9xZUrcBeBd5EchzvO8Siaiz7fm19Awv8zsjjBe12h2E/VrgfJqFIMcPFAvjOhtUl4tiOEUNcd7EhyQnU1JoLJJvGGTdFr4RteLsfrCY=
+	t=1719302755; cv=none; b=OP9e4YXu4rAmPBsJXg34Nj4/cV+aeDDYN5WtpE6iYivoOtZGnbnt2DvK/eGv1yjR+6yWOAFNePodTX7vs4ZeO4/ePlC+3dldNUD84TaV9lkQnei6A11RCn/hQMocsX6WU4Ou6kPhy3Bcd57quO+fxrmBovbfST8bkq2dlgvJiG8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719300140; c=relaxed/simple;
-	bh=ZtgKERiIsUNX97rsswWKHrxmyaCsSAXuWBBDrtHwtnA=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=pwTZiGycCp529NS/m9Or1h85LLJhwiCjOvHL9AoAeDgrM65ONgs6t2JluKXoXk9UBUSbkMvAR3I6lcAmL6CzBB09+/LUHrLgqwlJY60Psn9dTSpyc21AfMQ70XMD+qLb37TQISrGUvySGzoLlR3bk2BvmWDQeJbgJZs0QZnVRA0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=JI2NnhbD; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=nii1oWgI; arc=none smtp.client-ip=103.168.172.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfout.nyi.internal (Postfix) with ESMTP id B2AAC1380260;
-	Tue, 25 Jun 2024 03:22:17 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Tue, 25 Jun 2024 03:22:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm1; t=1719300137; x=1719386537; bh=kqD1JVVmb6
-	5kM+8TRypaMtMSw95vRHKsvANGjybyrPs=; b=JI2NnhbDiRz+XtaZOE/bmBmcC9
-	y0EyY2llyKi6gdvjKx1r1hA/Sp+YxYTsh5R4n17kBIqknSQAROV1too416xz/ax7
-	DnnBJG1hO25/CV60G8SSL08IsslBBeMnfT9net4th4Zh9mhvhU/DJsMRuhBNgS3E
-	0VPlxU/h2WIqd5/h+xqpcLNb3FylkO5VgnBAm9vqbLiTkbPF6CfJ5etKz1Kdlz6g
-	XsaFDZtzr86kr8O4geYi5FetIADdYnaQpvDBu55+vHHcrV8TKcnZhnAv95+sSFqZ
-	lVTTKSD6ezB96+es6B2qbjQ1P3PHFwXreqGZJng2oKC/W4s7uWUK5KrDjiQw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1719300137; x=1719386537; bh=kqD1JVVmb65kM+8TRypaMtMSw95v
-	RHKsvANGjybyrPs=; b=nii1oWgI7WMslQkPVOju+ij36Es5RtXqNHA9yKqnjG8A
-	/6sHxHue9WXJ+9DOxwSzTPko23n5KXsoa6MuswLmoNWzrkp/0wwWs+HckTmyWvnS
-	vFd+qTvwAua8fFc1olEPYCCyGr7lvmWs7tgKITHfwgjPqGBDu3kq+6GaGAcfil+N
-	LRpbttIg9XP1FXvMTRN2LfjT0zLxGzwXnUv8OSFvGh//b/sWkrmRAPEmhfciYZHu
-	OISRx6Ws2r+o/pMUq1MEsjtRh0KiuVyyZCKVUE51CtS/Shyj+r2yibWJVJFKZA/0
-	2X2NzkLianjEFBwYul+W+025Fgof0A5Fm0c5c6mwnQ==
-X-ME-Sender: <xms:KHB6ZgBifU8qyh7Hen9xqhrQWMmo0RsmL9eotuAMGFs1onD0HXFfEA>
-    <xme:KHB6ZijWZB5iEGbnIvaynzSW5-TMdpen-UsUCXR4BLvZG7I2RjTuG-0dTnY3Vz_wd
-    ErlBUsr4Fx9T_EaFcE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfeegvddguddvudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:KXB6Zjl3l50wSTwqFG8ioukc-g61PgCzgX01VcseaGpdWq4vmYO7FA>
-    <xmx:KXB6ZmxlCsqMlCZDJLqUVWfn8MZ7ECDbrhSeaDpY3p-VHvVyycCVaw>
-    <xmx:KXB6ZlT7X8HJgRHGH0q78K3BWOn3L8jDW0VFQpTffwcl_djQXWLfew>
-    <xmx:KXB6ZhYXApxt0XgYZhF8A9lmJpDbOUWPdh0naveFocTcpqd6K7sm1Q>
-    <xmx:KXB6ZmQ60H2urzdeAAEbeBLfc362BpSQsmD9KzkcaS9n3A-vmDQqIAh3>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id DADC6B60092; Tue, 25 Jun 2024 03:22:16 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-538-g1508afaa2-fm-20240616.001-g1508afaa
+	s=arc-20240116; t=1719302755; c=relaxed/simple;
+	bh=Q4WtZPZO+0HqJ5fmovYwNXKFafB6NT2p7ExDBSJIJSI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tKGb/YoYfdHd57wcO2hNaECEAH9/R5wSpEbrBIGFhDZ92nsyzL7ejSJAEL4nncdJT2hyPYRtMjk7JVw8Dq7hNfuSs7FlFVM8uVevGK76Ul2CHrT2q5lY3fi3drEwv+PaCOzWQKK2MMd9Gn56Oa/pamyb4vhGKJqgbN07qf28ESE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nPc63nWp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61967C32782;
+	Tue, 25 Jun 2024 08:05:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719302754;
+	bh=Q4WtZPZO+0HqJ5fmovYwNXKFafB6NT2p7ExDBSJIJSI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=nPc63nWpmKiLtoW7MgVTXoRiuLzNR5BhlpG3EWldlmu5Z35Jt8YgnWiYPhMJZxS/V
+	 wXuSx456qm6whH9Y/XdD2OpR5JXhB0hluKIaVofwyv523TPCOGz9+M88G50jjfxQQB
+	 ubBGIjcYNAKMvGgtE4YCD87NBxH2WxBGBRs4QHqgRo2VC18NwgEHqSs2jPsAgEw9vb
+	 9grxi3FrguCzS1ftVw/qa9apuihenOTqGCFJZ61MYxf8jjRlEXRGMPraV05q1wyGa+
+	 Dxsn2El0KYM3Da6iRvTX50nOnYPB2ZThMzMKswage/+6RKYd4DxGUt//XOM5PIVMKM
+	 TiaCRzU4jfnrw==
+Date: Tue, 25 Jun 2024 10:05:47 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: Xi Ruoyao <xry111@xry111.site>
+Cc: Mateusz Guzik <mjguzik@gmail.com>, 
+	Linus Torvalds <torvalds@linux-foundation.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Jan Kara <jack@suse.cz>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Alejandro Colomar <alx@kernel.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@loongson.cn>, 
+	Xuerui Wang <kernel@xen0n.name>, Jiaxun Yang <jiaxun.yang@flygoat.com>, 
+	Icenowy Zheng <uwu@icenowy.me>, linux-fsdevel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org, loongarch@lists.linux.dev, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] vfs: Add AT_EMPTY_PATH_NOCHECK as unchecked AT_EMPTY_PATH
+Message-ID: <20240625-dinosaurier-keramik-f04310167065@brauner>
+References: <20240622105621.7922-1-xry111@xry111.site>
+ <kslf3yc7wnwhxzv5cejaqf52bdr6yxqaqphtjl7d4iaph23y6v@ssyq7vrdwx56>
+ <CAHk-=wgj6h97Ro6oQcOq5YTG0JcKRLN0CtXgYCW_Ci6OSzL5NA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <4d8e0883-6a8c-4eb5-bf61-604e2b98356a@app.fastmail.com>
-In-Reply-To: <20240625040500.1788-1-jszhang@kernel.org>
-References: <20240625040500.1788-1-jszhang@kernel.org>
-Date: Tue, 25 Jun 2024 09:21:50 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Jisheng Zhang" <jszhang@kernel.org>,
- "Paul Walmsley" <paul.walmsley@sifive.com>,
- "Palmer Dabbelt" <palmer@dabbelt.com>, "Albert Ou" <aou@eecs.berkeley.edu>,
- Linux-Arch <linux-arch@vger.kernel.org>,
- "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/4] riscv: uaccess: optimizations
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wgj6h97Ro6oQcOq5YTG0JcKRLN0CtXgYCW_Ci6OSzL5NA@mail.gmail.com>
 
-On Tue, Jun 25, 2024, at 06:04, Jisheng Zhang wrote:
-> This series tries to optimize riscv uaccess in the following way:
->
-> patch1 implement the user_access_begin and families, I.E the unsafe
-> accessors. when a function like strncpy_from_user() is called,
-> the userspace access protection is disabled and enabled for every
-> word read. After patch1, the protection is disabled at the beginning
-> of the copy and enabled at the end.
->
-> patch2 is a simple clean up
->
-> patch3 uses 'asm goto' for put_user()
-> patch4 uses 'asm goto output' for get_user()
->
-> Both patch3 and patch4 are based on the fact -- 'asm goto' and
-> 'asm goto output'generates noticeably better code since we don't need
-> to test the error etc, the exception just jumps to the error handling
-> directly.
+On Sat, Jun 22, 2024 at 03:41:19PM GMT, Linus Torvalds wrote:
+> On Sat, 22 Jun 2024 at 14:25, Mateusz Guzik <mjguzik@gmail.com> wrote:
+> >
+> > +cc Linus
+> 
+> Thanks.
+> 
+> > To sum up the problem: stat and statx met with "" + AT_EMPTY_PATH have
+> > more work to do than fstat and its hypotethical statx counterpart:
+> > - buf alloc/free for the path
+> > - userspace access (very painful on x86_64 + SMAP)
+> > - lockref acquire/release
+> 
+> Yes. That LOOKUP_EMPTY_NOCHECK is *not* the fix.
 
-Nice!
+I have explicitly NAKed an approach like this months ago in [1]. So I'm
+not sure why we're getting that patch in the first place tbh.
 
-I hope that we can one day make this more straightforward
-and share more of the implementation across architectures,
-in particular the bits that are just wrappers around
-the low-level asm.
-
-We have something like this already on powerpc and x86,
-and Linus just did the version for arm64, which I assume
-you are using as a template for this. Four architectures
-is probably the point at which we should try to consolidate
-the code again and move as much as we can into asm-generic.
-
-I think the only bets we really need from an architecture
-here are:
-
-- __enable_user_access()/__disable_user_access() in
-   the label version
-- __raw_get_mem_{1,2,4,8}() and __raw_put_mem_{1,2,4,8}()
-
-and then we can build all the normal interface functions
-on those in a way that assumes we have as goto available,
-with the appropriate fallback in __raw_get_mem_*() as
-long as we need to support gcc-10 and older.
-
-      Arnd
+[1]: https://lore.kernel.org/lkml/599df4a3-47a4-49be-9c81-8e21ea1f988a@xen0n.name
 
