@@ -1,72 +1,72 @@
-Return-Path: <linux-arch+bounces-5147-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5148-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DC4291820C
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Jun 2024 15:16:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 48147918212
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Jun 2024 15:17:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8F10DB28D4E
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Jun 2024 13:16:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BA3131F24F9F
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Jun 2024 13:17:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8B4F184105;
-	Wed, 26 Jun 2024 13:11:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C171818C329;
+	Wed, 26 Jun 2024 13:12:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="IEtghVvX"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="XxTu5ndA"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 062E2184109
-	for <linux-arch@vger.kernel.org>; Wed, 26 Jun 2024 13:11:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03BD0184123
+	for <linux-arch@vger.kernel.org>; Wed, 26 Jun 2024 13:12:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719407463; cv=none; b=XuRT+JR/PjAbKRw5YqPNYowwYsIb7YDwIsSblG+hpNZkxqtKyoTtUl5Qm8DByO0KY+IcALrqYayrXXkYR6IunHZO+otqo4KdB2kDxEjY8ciIXBk7MbVU7AELkkKYsomfuwXzD/GQ4BuIs0baDc1TtLG8CjrO7XFaVVEhiRjvd/0=
+	t=1719407524; cv=none; b=lek0pnW/zUg9F4rtRBpFtkYY8ixFqgOG3TKBSM7VeHPTzaBMDHj7Ty+moV9Q+MVsLUqIiAkS0mvDYuverG+BboFjUwAEdbTo1SEw2Uf9NBEuLCYR0f6tDMADeN3UiqrcV06sNzetemUffxMjzjVPSFRSjjlzRYikp3Mc2whwUhw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719407463; c=relaxed/simple;
-	bh=D53uFKdbu0rUSjZO/RVlECC1r3Mb1FnxEodoilYhPC0=;
+	s=arc-20240116; t=1719407524; c=relaxed/simple;
+	bh=zIctHSF8s4ycH2M1Xuee5DajFIDyCPEPGL7Vxs9tOR4=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=PVTXSKlno8t6P4HgR7scjcJQgsBtr8AlY8htqmcEPLTxGqg5SPTJlcnp8oqFTU78/KZoycTT7fpoJgg9/DBpK/YwBUAu/opmBmybij69ZhfSfO7x4O98uaaHvhlt99xWpeEXiT7JtkCNAVndfGwQ9pxt8xbfBzxzBjCHOXXOr0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=IEtghVvX; arc=none smtp.client-ip=209.85.167.48
+	 MIME-Version; b=eExN26/cqCZyEM3K/EA8ho7hOo0qg40FhPs3moaesyl7EjYCGH+s/bkt/jOfn+wp8F/Akqvlcrb+EuXhYRmeDfBxcaA7zLKhUKS1SRj7nXDoXi3RlFdoAqP3rwnIxdHAJtYrNEr4xj2HAqgL5XDOTopOoDPtvdZt7rU7Cew5kGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=XxTu5ndA; arc=none smtp.client-ip=209.85.208.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-52cdc4d221eso5177105e87.3
-        for <linux-arch@vger.kernel.org>; Wed, 26 Jun 2024 06:11:01 -0700 (PDT)
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2ebe6495aedso71739421fa.0
+        for <linux-arch@vger.kernel.org>; Wed, 26 Jun 2024 06:12:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1719407460; x=1720012260; darn=vger.kernel.org;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1719407521; x=1720012321; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=p6cx0+kPy/mr4m8koR629ifIafAeU6/dHlLYYLSwNIk=;
-        b=IEtghVvXiJf7ehJl2QugBxx8rwqTEU/FoFwTu+EgEkg5IA8ns6Le5fKDbQPapjTG/L
-         r2MQTVXcpCJgmTLTqWK2icY++f32/F6/Zrcha9Q24EJzkuAvS2KhgzxgFBsfjWmTV8Qn
-         bMI/rXJTtRW2Li+XFCVYWx/QRCHvMG1BypF3l7SYTyNV1AP4AJZfeCrQT7A24lqlIO5M
-         Zmig65N6w/50aqfXmpH/m3nSoWsGm7SqvIR+M/2l1JKHLX2vEQxDDyI0FI89/XO20faL
-         dDQVRd+5Mcv78XSAzhPZlBbEUZHr2ZoUCa0ZWpX7ndtqwaGdfNx6w4eLE5UOyFLFx5wf
-         Wk2Q==
+        bh=heAbIXv1oMx4SoDoWG1mJ8ALiEwmwn+mI3czPDKQjFY=;
+        b=XxTu5ndATa6Xd7KDMzMbcjwzLlUcv5e1vz1fccd8ybxAjQW/OZXv83sRVPaHwY4ryW
+         QG37Q+wqDnMl8AWBJujs0ufHBBTpAT2DBATfzl1+xz57G4XzjIBMdfUhECPur3HN7P9n
+         Egp6RRiVGGEQmxe78OAnCI5SPvtv6TZ1Z/KrBV7IU5JT1MjUnfppHpuMSQeSCJw2/brj
+         ngGo09GZBrLnvM8XrZ2ZS81Ft02WNtBI2DrkQ+nId1Hg3Lw74iMsy/K5VldOoNMC3bds
+         DCTc4y6tC6FuNpKES62IZSo6gWFHvR/sKQuPQBiZUhvQKvEppbFiml2+CY3vucfi54CQ
+         ZiPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719407460; x=1720012260;
+        d=1e100.net; s=20230601; t=1719407521; x=1720012321;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=p6cx0+kPy/mr4m8koR629ifIafAeU6/dHlLYYLSwNIk=;
-        b=gw3xezELFCiT0l0PddsgRGlAvz2g/vpdaOoiGuEj/U4gRL16WFwM4iFga7ufWVWKUG
-         P3gQ35RGSEFTC5YWqteEDJMP1jOlRU8bbn5deqkJ7WJw+Obb12xtf9iJTA4ueu+t93Ap
-         OswigatH38uCHR1y8Jwmer3PrHkMiKOBWB86HM5gScpnvByWcgV0dCNFgAtds+OloPDq
-         0t90xmJ8+mKJpIkoHyBGzJ6Kag9FmDzZkO9AN5VyXkzVShtzZq47a64slAfNR9Z5Xg2n
-         yWVfsu770YyQvZ+xt1uItqrrevuX4dJM+xU2txBnqdjgK4BDpy7AshiUu95OLoPKTRMe
-         A7Og==
-X-Forwarded-Encrypted: i=1; AJvYcCVZ9xzlMrFsrOGA28YRQsO6Tq5YJCoP5117E1DS0RjE4UQ5JKeUvELGh5+sW4N+PUOhg0lFdkwCXGjjeNAlGETlX0tg8N43jN6Sfw==
-X-Gm-Message-State: AOJu0YzwG9JgeNtwgmZskp0kUiceOYu9MRPpNH2euLgY9yyC4aHAc5J5
-	mEfPhdVBU3Lmu4MKTrlHX0FGRFD8BgYGaXybDdlUaxDRRqgTwFkUAULdahcelsA=
-X-Google-Smtp-Source: AGHT+IEtNRZjWCdEzOhHydNYZbdtsSBOyhgctkoqWdBmAHXNA7jMkTIIYGJ6ebJAtMiVgYJ66wbTgg==
-X-Received: by 2002:a05:6512:1cd:b0:52c:dc57:868b with SMTP id 2adb3069b0e04-52ce18324ebmr7017333e87.13.1719407460052;
-        Wed, 26 Jun 2024 06:11:00 -0700 (PDT)
+        bh=heAbIXv1oMx4SoDoWG1mJ8ALiEwmwn+mI3czPDKQjFY=;
+        b=eA42o/S32CBRy0sly1Q7paENIJK1//ESvzxI30tjOMVGwJ0GnR+pmt1+iethHfdic3
+         Z/u04EM2cm7FbdFNg1PM21nyM/y5cfEL5HJUiFLJeBnZtlZAIazCG6sg3QgLMiY0rz7z
+         J8VS/noc82TbXd5FeQ7roGmSiEs7Qn8nGjIZ2Bq+0/GaczJy2IOdFvp1wrHivO89gzCH
+         Z6265AgeX6Ol+/0Bj5i6seGITw62PBGOKL0wzjuVF98O009cwsdHAkfUOmixrTQTCz3I
+         0Ap8r8lh/jN3nyaLymLWuMUIOfW/w5d0j3k5bqwQn5bYHWxtC0jd08sq7flcZIAuwyP8
+         B4GA==
+X-Forwarded-Encrypted: i=1; AJvYcCUMIsjvQjG98T0nQXr8fAeso51EL2Bwb30F6hbmK8WOtI5yCZPuW5mLRTmgfF58gEckoCe7btpuMai8Na+zawmKTUucSMM1uO6WJg==
+X-Gm-Message-State: AOJu0YzHwo3/O+cVWZfZGI9WV6/f99vvscVJWVGvzC5i6nI0qDuyDln2
+	wNsESxejBH6R8PbY0R2tB/AudoJjaqUl8aOus1Y6cyii0de52iV7Kq3t4YGbHzw=
+X-Google-Smtp-Source: AGHT+IGnfuN9yldtMSaVACEfklvq5QMnwW2TuArhVHZwcMBHnbeoMlc6OQU0v0zbHCs2zie7YJcaew==
+X-Received: by 2002:a2e:890d:0:b0:2eb:e258:717f with SMTP id 38308e7fff4ca-2ec5b2f0400mr62412471fa.42.1719407521185;
+        Wed, 26 Jun 2024 06:12:01 -0700 (PDT)
 Received: from localhost.localdomain (amontpellier-656-1-456-62.w92-145.abo.wanadoo.fr. [92.145.124.62])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-424c824eef1sm24890125e9.14.2024.06.26.06.10.59
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-424c84248afsm25143335e9.31.2024.06.26.06.12.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jun 2024 06:10:59 -0700 (PDT)
+        Wed, 26 Jun 2024 06:12:00 -0700 (PDT)
 From: Alexandre Ghiti <alexghiti@rivosinc.com>
 To: Jonathan Corbet <corbet@lwn.net>,
 	Paul Walmsley <paul.walmsley@sifive.com>,
@@ -86,11 +86,10 @@ To: Jonathan Corbet <corbet@lwn.net>,
 	linux-kernel@vger.kernel.org,
 	linux-riscv@lists.infradead.org,
 	linux-arch@vger.kernel.org
-Cc: Alexandre Ghiti <alexghiti@rivosinc.com>,
-	Andrea Parri <andrea@rivosinc.com>
-Subject: [PATCH v2 07/10] riscv: Improve amoswap.X use in xchg()
-Date: Wed, 26 Jun 2024 15:03:44 +0200
-Message-Id: <20240626130347.520750-8-alexghiti@rivosinc.com>
+Cc: Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH v2 08/10] asm-generic: ticket-lock: Reuse arch_spinlock_t of qspinlock
+Date: Wed, 26 Jun 2024 15:03:45 +0200
+Message-Id: <20240626130347.520750-9-alexghiti@rivosinc.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240626130347.520750-1-alexghiti@rivosinc.com>
 References: <20240626130347.520750-1-alexghiti@rivosinc.com>
@@ -102,123 +101,104 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-xchg() uses amoswap.X instructions from Zabha but still uses
-the LR/SC acquire/release semantics which require barriers.
+From: Guo Ren <guoren@linux.alibaba.com>
 
-Let's improve that by using proper amoswap acquire/release semantics in
-order to avoid any of those barriers.
+The arch_spinlock_t of qspinlock has contained the atomic_t val, which
+satisfies the ticket-lock requirement. Thus, unify the arch_spinlock_t
+into qspinlock_types.h. This is the preparation for the next combo
+spinlock.
 
-Suggested-by: Andrea Parri <andrea@rivosinc.com>
-Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+Reviewed-by: Leonardo Bras <leobras@redhat.com>
+Suggested-by: Arnd Bergmann <arnd@arndb.de>
+Link: https://lore.kernel.org/linux-riscv/CAK8P3a2rnz9mQqhN6-e0CGUUv9rntRELFdxt_weiD7FxH7fkfQ@mail.gmail.com/
+Signed-off-by: Guo Ren <guoren@kernel.org>
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 ---
- arch/riscv/include/asm/cmpxchg.h | 35 +++++++++++++-------------------
- 1 file changed, 14 insertions(+), 21 deletions(-)
+ include/asm-generic/spinlock.h       | 14 +++++++-------
+ include/asm-generic/spinlock_types.h | 12 ++----------
+ 2 files changed, 9 insertions(+), 17 deletions(-)
 
-diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
-index eb35e2d30a97..0e57d5fbf227 100644
---- a/arch/riscv/include/asm/cmpxchg.h
-+++ b/arch/riscv/include/asm/cmpxchg.h
-@@ -11,8 +11,8 @@
- #include <asm/fence.h>
- #include <asm/alternative.h>
+diff --git a/include/asm-generic/spinlock.h b/include/asm-generic/spinlock.h
+index 90803a826ba0..4773334ee638 100644
+--- a/include/asm-generic/spinlock.h
++++ b/include/asm-generic/spinlock.h
+@@ -32,7 +32,7 @@
  
--#define __arch_xchg_masked(sc_sfx, swap_sfx, prepend, sc_append,	\
--			   swap_append, r, p, n)			\
-+#define __arch_xchg_masked(sc_sfx, swap_sfx, sc_prepend, sc_append,	\
-+			   r, p, n)					\
- ({									\
- 	__label__ zabha, end;						\
- 									\
-@@ -31,7 +31,7 @@
- 	ulong __rc;							\
- 									\
- 	__asm__ __volatile__ (						\
--	       prepend							\
-+	       sc_prepend							\
- 	       "0:	lr.w %0, %2\n"					\
- 	       "	and  %1, %0, %z4\n"				\
- 	       "	or   %1, %1, %z3\n"				\
-@@ -48,9 +48,7 @@
- zabha:									\
- 	if (IS_ENABLED(CONFIG_RISCV_ISA_ZABHA)) {			\
- 		__asm__ __volatile__ (					\
--			prepend						\
- 			"	amoswap" swap_sfx " %0, %z2, %1\n"	\
--			swap_append						\
- 			: "=&r" (r), "+A" (*(p))			\
- 			: "rJ" (n)					\
- 			: "memory");					\
-@@ -58,19 +56,17 @@ zabha:									\
- end:;									\
- })
+ static __always_inline void arch_spin_lock(arch_spinlock_t *lock)
+ {
+-	u32 val = atomic_fetch_add(1<<16, lock);
++	u32 val = atomic_fetch_add(1<<16, &lock->val);
+ 	u16 ticket = val >> 16;
  
--#define __arch_xchg(sfx, prepend, append, r, p, n)			\
-+#define __arch_xchg(sfx, r, p, n)					\
- ({									\
- 	__asm__ __volatile__ (						\
--		prepend							\
- 		"	amoswap" sfx " %0, %2, %1\n"			\
--		append							\
- 		: "=r" (r), "+A" (*(p))					\
- 		: "r" (n)						\
- 		: "memory");						\
- })
+ 	if (ticket == (u16)val)
+@@ -46,31 +46,31 @@ static __always_inline void arch_spin_lock(arch_spinlock_t *lock)
+ 	 * have no outstanding writes due to the atomic_fetch_add() the extra
+ 	 * orderings are free.
+ 	 */
+-	atomic_cond_read_acquire(lock, ticket == (u16)VAL);
++	atomic_cond_read_acquire(&lock->val, ticket == (u16)VAL);
+ 	smp_mb();
+ }
  
--#define _arch_xchg(ptr, new, sc_sfx, swap_sfx, prepend,			\
--		   sc_append, swap_append)				\
-+#define _arch_xchg(ptr, new, sc_sfx, swap_sfx,				\
-+		   sc_prepend, sc_append)				\
- ({									\
- 	__typeof__(ptr) __ptr = (ptr);					\
- 	__typeof__(*(__ptr)) __new = (new);				\
-@@ -79,21 +75,19 @@ end:;									\
- 	switch (sizeof(*__ptr)) {					\
- 	case 1:								\
- 		__arch_xchg_masked(sc_sfx, ".b" swap_sfx,		\
--				   prepend, sc_append, swap_append,	\
-+				   sc_prepend, sc_append,		\
- 				   __ret, __ptr, __new);		\
- 		break;							\
- 	case 2:								\
- 		__arch_xchg_masked(sc_sfx, ".h" swap_sfx,		\
--				   prepend, sc_append, swap_append,	\
-+				   sc_prepend, sc_append,		\
- 				   __ret, __ptr, __new);		\
- 		break;							\
- 	case 4:								\
--		__arch_xchg(".w" swap_sfx, prepend, swap_append,	\
--			      __ret, __ptr, __new);			\
-+		__arch_xchg(".w" swap_sfx,  __ret, __ptr, __new);	\
- 		break;							\
- 	case 8:								\
--		__arch_xchg(".d" swap_sfx, prepend, swap_append,	\
--			      __ret, __ptr, __new);			\
-+		__arch_xchg(".d" swap_sfx,  __ret, __ptr, __new);	\
- 		break;							\
- 	default:							\
- 		BUILD_BUG();						\
-@@ -102,17 +96,16 @@ end:;									\
- })
+ static __always_inline bool arch_spin_trylock(arch_spinlock_t *lock)
+ {
+-	u32 old = atomic_read(lock);
++	u32 old = atomic_read(&lock->val);
  
- #define arch_xchg_relaxed(ptr, x)					\
--	_arch_xchg(ptr, x, "", "", "", "", "")
-+	_arch_xchg(ptr, x, "", "", "", "")
+ 	if ((old >> 16) != (old & 0xffff))
+ 		return false;
  
- #define arch_xchg_acquire(ptr, x)					\
--	_arch_xchg(ptr, x, "", "", "",					\
--		   RISCV_ACQUIRE_BARRIER, RISCV_ACQUIRE_BARRIER)
-+	_arch_xchg(ptr, x, "", ".aq", "", RISCV_ACQUIRE_BARRIER)
+-	return atomic_try_cmpxchg(lock, &old, old + (1<<16)); /* SC, for RCsc */
++	return atomic_try_cmpxchg(&lock->val, &old, old + (1<<16)); /* SC, for RCsc */
+ }
  
- #define arch_xchg_release(ptr, x)					\
--	_arch_xchg(ptr, x, "", "", RISCV_RELEASE_BARRIER, "", "")
-+	_arch_xchg(ptr, x, "", ".rl", RISCV_RELEASE_BARRIER, "")
+ static __always_inline void arch_spin_unlock(arch_spinlock_t *lock)
+ {
+ 	u16 *ptr = (u16 *)lock + IS_ENABLED(CONFIG_CPU_BIG_ENDIAN);
+-	u32 val = atomic_read(lock);
++	u32 val = atomic_read(&lock->val);
  
- #define arch_xchg(ptr, x)						\
--	_arch_xchg(ptr, x, ".rl", ".aqrl", "", RISCV_FULL_BARRIER, "")
-+	_arch_xchg(ptr, x, ".rl", ".aqrl", "", RISCV_FULL_BARRIER)
+ 	smp_store_release(ptr, (u16)val + 1);
+ }
  
- #define xchg32(ptr, x)							\
- ({									\
+ static __always_inline int arch_spin_value_unlocked(arch_spinlock_t lock)
+ {
+-	u32 val = lock.counter;
++	u32 val = lock.val.counter;
+ 
+ 	return ((val >> 16) == (val & 0xffff));
+ }
+@@ -84,7 +84,7 @@ static __always_inline int arch_spin_is_locked(arch_spinlock_t *lock)
+ 
+ static __always_inline int arch_spin_is_contended(arch_spinlock_t *lock)
+ {
+-	u32 val = atomic_read(lock);
++	u32 val = atomic_read(&lock->val);
+ 
+ 	return (s16)((val >> 16) - (val & 0xffff)) > 1;
+ }
+diff --git a/include/asm-generic/spinlock_types.h b/include/asm-generic/spinlock_types.h
+index 8962bb730945..f534aa5de394 100644
+--- a/include/asm-generic/spinlock_types.h
++++ b/include/asm-generic/spinlock_types.h
+@@ -3,15 +3,7 @@
+ #ifndef __ASM_GENERIC_SPINLOCK_TYPES_H
+ #define __ASM_GENERIC_SPINLOCK_TYPES_H
+ 
+-#include <linux/types.h>
+-typedef atomic_t arch_spinlock_t;
+-
+-/*
+- * qrwlock_types depends on arch_spinlock_t, so we must typedef that before the
+- * include.
+- */
+-#include <asm/qrwlock_types.h>
+-
+-#define __ARCH_SPIN_LOCK_UNLOCKED	ATOMIC_INIT(0)
++#include <asm-generic/qspinlock_types.h>
++#include <asm-generic/qrwlock_types.h>
+ 
+ #endif /* __ASM_GENERIC_SPINLOCK_TYPES_H */
 -- 
 2.39.2
 
