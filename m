@@ -1,155 +1,161 @@
-Return-Path: <linux-arch+bounces-5163-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5164-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02E9191A194
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Jun 2024 10:35:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34B5191A492
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Jun 2024 13:07:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 81A401F25539
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Jun 2024 08:35:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E43AE281E92
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Jun 2024 11:06:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B9108174E;
-	Thu, 27 Jun 2024 08:34:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7704A1459F1;
+	Thu, 27 Jun 2024 11:06:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sBKHC1G3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j/EofhX+"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C76C7EF04
-	for <linux-arch@vger.kernel.org>; Thu, 27 Jun 2024 08:34:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBB4713E40C;
+	Thu, 27 Jun 2024 11:06:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719477295; cv=none; b=pxK2ecacEWN3bs+X2iRlZL3DSGAjnx4RAw3SBvOsmPq8GB9ldvl659Bl4lkxIf5sSN+RvY/zGnP8yEVM9vAx8CRUwEua1XfRHtDQCBs99yQa480EY7sHM9I+KgnmeUjFIdDIr3N8xg9oU0AUDh1WB/G6ZKA/xlk+oCL8kooCYJg=
+	t=1719486413; cv=none; b=ujnUrln77HDlgkO+kByXBlD89P/zR6NKVB+Mzh1YoHKSD5QNXiquUJacwGsKUGEaGqApiRxWVbd+YHhtYy4FiibZsxNRUUWJXhHVIbCkbvg6qpUkt5R6F+qXBBZQ9hWRb0ERz1NWl2DqukfHme1oxvKK+DwvW1V2ROZ+rJNTDIg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719477295; c=relaxed/simple;
-	bh=jaHYq9qHI0Bww45jO0JOW2KKMuvYkD8u1X20gL+6tFY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Y8pBsxn0O+Naq/4Wg57rmfB2iVUb7rqKyr2KkVckWs6sakaTaVJp/BkGTEF3GeDSDgeKJfXRivo94kZ56AEWQRJrLvgJc/Z89bjGDbNrgeOiAbIzk4PrnpC2/6PepPfyIX5jnfXWG5MEP55VCQu/eNgKvg5jtnUlXhqKOeMaO2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sBKHC1G3; arc=none smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-52cdcd26d61so5894197e87.2
-        for <linux-arch@vger.kernel.org>; Thu, 27 Jun 2024 01:34:53 -0700 (PDT)
+	s=arc-20240116; t=1719486413; c=relaxed/simple;
+	bh=tZakNtC4I+vYJWJ6QdGkWTcq89B73krB//aJoneJSBk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oi7ElwHBool1ycOu81lNxXf+7a5E9XOTKu+0rP5hOAJbcidRiF1FemqA+g2fbijYGW2MyMSarhw8OvRPFFVyCkoydisDsG7BsIeBEGDV6w0p8bR/u/RIRP27Etj+4Kg5Fw6Y5vV82EesYLnmLqpga53ndXkjpXiQ00pPJm0vHVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j/EofhX+; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-57d0eca877cso1700162a12.2;
+        Thu, 27 Jun 2024 04:06:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1719477292; x=1720082092; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jaHYq9qHI0Bww45jO0JOW2KKMuvYkD8u1X20gL+6tFY=;
-        b=sBKHC1G38EbA059ElZrKTQeMlO191hpU47ANsgBmKqq9qONr1eB0gqDDW2vRQP5pJk
-         Guzj6LYgeKtMUSnlV4Y+gELko9XiyVOSLtxRgTCXrqKkfJIT8Pj6LJz3lrdxygHx5f3A
-         luJtMdb/JxG3gJ0zxILNjbjvmy0MSDJQoDKH30unsHJn+Dy2XoVCCThmTNWcsdiYeXfr
-         4EDiW1CSdHW41iCApoWEv/75giSjRty763c2q4sG9/xuMctqkeiGnLNvVJm7puAB0SoT
-         OqnOLnBd+Oe0B5uzz+jjmzzuYgm/QJG5iK4Wwg71XanGZttaRqc+STbeBI+ao1myOVhV
-         SHUA==
+        d=gmail.com; s=20230601; t=1719486410; x=1720091210; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=uZobcV7LUgT3AtmVz+YLZMFY8b9IQxrzUyiNj5oBAUM=;
+        b=j/EofhX+dIzjeLqLDeOKDApspC/JC5+3pVcv4gu/WPdlE3wJJTtKcl8DG8qSCZCWcf
+         v5uWiJ4MQ3ADWip6Cx8bIXWbULQdVnwUMcJtz5+p3ZodMHTkOwERfnQHBvjwmSW8Zb2v
+         Z7pue3UrnF4lJHJ0C78aPlfvxPKHia/eXd6vB8XKHaZwDL2l8+sGhB/Yj7c4YFozZkMx
+         KDGhNbNzVKoq9QJxahwzKcbbAp+pd93Nm8cYeykno2hvsFBUBuqjfaYZd9B8nFOKhKk6
+         o2r7biBEU8m3tGnWhzb72MBFoPVNyu7geNihsf2Ul9eN/sz7jHd2jkJMJGt+9GUUq+LE
+         vDng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719477292; x=1720082092;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jaHYq9qHI0Bww45jO0JOW2KKMuvYkD8u1X20gL+6tFY=;
-        b=gCGbMJ62BQBx23thr66Icecwsj4V5kUfrx5qLjjeRo3RePmyswRQrmAZoBj4GNtW7I
-         pGI4ZDHCEM+CoEWWJdiw0PJstn82jniFdeQv0ALmNSngo0KQvhR3rDY8is4+veb7F1zC
-         PDrhtkpDeVei3mNJqy7mwyJt9qeZm/4mlt6u/yUj63WVoYOa7k0qHr4tyHj5XeNLHxU0
-         DoFs2pdR7mr1+hQBVIBSxWetKbWWxMlR7y5KX/yY+qdO1nBobDIxLJF3t89PtumlAh9U
-         RXVyHulVmJQzHfyx0beBBYdHlafaq6WsQQnZgZ9wh1V3nbJTa3XN1K24Nig2pqLw7dL0
-         cRKg==
-X-Forwarded-Encrypted: i=1; AJvYcCUid4LiCrGMyw7XXBlk0oFmFN9a21VZ7brpsaKWdUOCD348Cl8IDPWCTLVEDl67IB0EnDuGg0vEpi/7myLnhR6bbZEd7210fE5p6g==
-X-Gm-Message-State: AOJu0YyhdzxyY40hBpizUQ1pA+xedtXylvyF0b+MK4V6ZbBbYRO2hwT4
-	ebAvyF1hfNMIHo47ZRaQEXREXWIZFhnmzTOjoxUF12gb4xHQ4OGvgZzleife6DQVCOkvcuSMVx9
-	Bw1XOmDSHDFVRJEp4wiUInc1H0dg9XSRcu2BA
-X-Google-Smtp-Source: AGHT+IHlfk5WkDZhxtSr6xoYbVkipq/AGMIGI9Dxm9ats0II6c5lJlSMjq4hKwrgepsNKkozKV3mIVOymMLBYvUkPo4=
-X-Received: by 2002:a05:6512:203b:b0:52c:df55:e112 with SMTP id
- 2adb3069b0e04-52ce1832119mr6963173e87.6.1719477291466; Thu, 27 Jun 2024
- 01:34:51 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1719486410; x=1720091210;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uZobcV7LUgT3AtmVz+YLZMFY8b9IQxrzUyiNj5oBAUM=;
+        b=rYOUo/aOjudmHmtQxScE7xqigCDStp8be0uCHW8+nuYS28gboe8DM1f/37iDzIKryU
+         qPKqgftnBtpQI7rg+O8RI02ibYs2i0R7O2VaQROKJ+OJXJXRFhWaxSUJ/KeIE5Hv7ApZ
+         PeCZd9BM2qOxUZ4b7PvfPIZjHLl0P14TnwGEhHoSOZL7ncYbkJ/VsAGt793JMUH7cECz
+         xoPMEm6VnxpgYQwOXn/U2THJ6avr3zcrYtuIviDLOM1RSq0EXxvuyUX3li2QsWVfMvCy
+         f6jgp28kJKazgzmJPGyXNqhV6ehTq9w8O5rhqf76LU4YDEYqRkd6kqptP6ucQ8C58nLj
+         562w==
+X-Forwarded-Encrypted: i=1; AJvYcCV/fuXcbgP7VsZHM7YLPjRUhNDcuz3DApVUBqn3RM4Zms4cSC2xDsvWBY6knX2+4H8QNYLSTKC+s3ju7te7P4qjac5h88v1sx9YvRDwgGtTZcOBdADSkoHy0D7jsu6lYlTISIvA96v7wV5pLBqbUZ2nvlbsl8vqYfaDR8A0WVNxgmfcdg==
+X-Gm-Message-State: AOJu0YwJq+v2e1iYk7jJ29tX3uljlsJ2TJpgbDgcVWcumuUfBnO0AlJz
+	/t1TRoxvHaHs5F4Ij3qcTrm+Evp7jXCfI0xTL/JKMJaXXkVjOQbk
+X-Google-Smtp-Source: AGHT+IF9IGb+EAqcYH0xHZ8HF47kVV4+X97fRL+JfZxNkC2UpJv60e/BcSk/SP3WOORT9Eilh3uoUQ==
+X-Received: by 2002:a50:c081:0:b0:57d:519:ba3c with SMTP id 4fb4d7f45d1cf-57d7004c60emr7710603a12.24.1719486409637;
+        Thu, 27 Jun 2024 04:06:49 -0700 (PDT)
+Received: from andrea ([217.201.220.159])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-584d1280e71sm718305a12.37.2024.06.27.04.06.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Jun 2024 04:06:49 -0700 (PDT)
+Date: Thu, 27 Jun 2024 13:06:42 +0200
+From: Andrea Parri <parri.andrea@gmail.com>
+To: Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc: Jonathan Corbet <corbet@lwn.net>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+	Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>,
+	Arnd Bergmann <arnd@arndb.de>, Leonardo Bras <leobras@redhat.com>,
+	Guo Ren <guoren@kernel.org>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-arch@vger.kernel.org
+Subject: Re: [PATCH v2 01/10] riscv: Implement cmpxchg32/64() using Zacas
+Message-ID: <Zn1Hwpcamaz1YaEM@andrea>
+References: <20240626130347.520750-1-alexghiti@rivosinc.com>
+ <20240626130347.520750-2-alexghiti@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240621-tracepoint-v3-0-9e44eeea2b85@google.com>
- <20240621-tracepoint-v3-1-9e44eeea2b85@google.com> <ZnrtuaUByT70tJY5@boqun-archlinux>
-In-Reply-To: <ZnrtuaUByT70tJY5@boqun-archlinux>
-From: Alice Ryhl <aliceryhl@google.com>
-Date: Thu, 27 Jun 2024 10:34:39 +0200
-Message-ID: <CAH5fLgjCAbz39-8EzBxxrWFXFg6VK=ts98BBvpEk8=RZoMuBSA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] rust: add static_key_false
-To: Boqun Feng <boqun.feng@gmail.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Jason Baron <jbaron@akamai.com>, 
-	Ard Biesheuvel <ardb@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
-	linux-trace-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-	Arnd Bergmann <arnd@arndb.de>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, "Peter Zijlstra (Intel)" <peterz@infradaed.org>, 
-	Sean Christopherson <seanjc@google.com>, Uros Bizjak <ubizjak@gmail.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, 
-	Oliver Upton <oliver.upton@linux.dev>, Mark Rutland <mark.rutland@arm.com>, 
-	Ryan Roberts <ryan.roberts@arm.com>, Fuad Tabba <tabba@google.com>, 
-	linux-arm-kernel@lists.infradead.org, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Anup Patel <apatel@ventanamicro.com>, 
-	Andrew Jones <ajones@ventanamicro.com>, Alexandre Ghiti <alexghiti@rivosinc.com>, 
-	Conor Dooley <conor.dooley@microchip.com>, Samuel Holland <samuel.holland@sifive.com>, 
-	linux-riscv@lists.infradead.org, Huacai Chen <chenhuacai@kernel.org>, 
-	WANG Xuerui <kernel@xen0n.name>, Bibo Mao <maobibo@loongson.cn>, 
-	Tiezhu Yang <yangtiezhu@loongson.cn>, Andrew Morton <akpm@linux-foundation.org>, 
-	Tianrui Zhao <zhaotianrui@loongson.cn>, loongarch@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240626130347.520750-2-alexghiti@rivosinc.com>
 
-On Tue, Jun 25, 2024 at 6:18=E2=80=AFPM Boqun Feng <boqun.feng@gmail.com> w=
-rote:
->
-> Hi Alice,
->
-> On Fri, Jun 21, 2024 at 10:35:26AM +0000, Alice Ryhl wrote:
-> > Add just enough support for static key so that we can use it from
-> > tracepoints. Tracepoints rely on `static_key_false` even though it is
-> > deprecated, so we add the same functionality to Rust.
-> >
-> > It is not possible to use the existing C implementation of
-> > arch_static_branch because it passes the argument `key` to inline
-> > assembly as an 'i' parameter, so any attempt to add a C helper for this
-> > function will fail to compile because the value of `key` must be known
-> > at compile-time.
-> >
-> > Signed-off-by: Alice Ryhl <aliceryhl@google.com>
->
-> [Add linux-arch, and related arch maintainers Cced]
->
-> Since inline asms are touched here, please consider copying linux-arch
-> and arch maintainers next time ;-)
+> -#define __arch_cmpxchg(lr_sfx, sc_sfx, prepend, append, r, p, co, o, n)	\
+> +#define __arch_cmpxchg(lr_sfx, sc_cas_sfx, prepend, append, r, p, co, o, n)	\
+>  ({									\
+> +	__label__ zacas, end;						\
+>  	register unsigned int __rc;					\
+>  									\
+> +	if (IS_ENABLED(CONFIG_RISCV_ISA_ZACAS)) {			\
+> +		asm goto(ALTERNATIVE("nop", "j %[zacas]", 0,		\
+> +				     RISCV_ISA_EXT_ZACAS, 1)		\
+> +			 : : : : zacas);				\
+> +	}								\
+> +									\
+>  	__asm__ __volatile__ (						\
+>  		prepend							\
+>  		"0:	lr" lr_sfx " %0, %2\n"				\
+>  		"	bne  %0, %z3, 1f\n"				\
+> -		"	sc" sc_sfx " %1, %z4, %2\n"			\
+> +		"	sc" sc_cas_sfx " %1, %z4, %2\n"			\
+>  		"	bnez %1, 0b\n"					\
+>  		append							\
+>  		"1:\n"							\
+>  		: "=&r" (r), "=&r" (__rc), "+A" (*(p))			\
+>  		: "rJ" (co o), "rJ" (n)					\
+>  		: "memory");						\
+> +	goto end;							\
+> +									\
+> +zacas:									\
+> +	if (IS_ENABLED(CONFIG_RISCV_ISA_ZACAS)) {			\
+> +		__asm__ __volatile__ (					\
+> +			prepend						\
+> +			"	amocas" sc_cas_sfx " %0, %z2, %1\n"	\
+> +			append						\
+> +			: "+&r" (r), "+A" (*(p))			\
+> +			: "rJ" (n)					\
+> +			: "memory");					\
+> +	}								\
 
-Will do.
+Is this second IS_ENABLED(CONFIG_RISCV_ISA_ZACAS) check actually needed?
+(just wondering - no real objection)
 
-> For x86_64 and arm64 bits:
->
-> Acked-by: Boqun Feng <boqun.feng@gmail.com>
->
-> One thing though, we should split the arch-specific impls into different
-> files, for example: rust/kernel/arch/arm64.rs or rust/arch/arm64.rs.
-> That'll be easier for arch maintainers to watch the Rust changes related
-> to a particular architecture.
 
-Is that how you would prefer to name these files? You don't want
-static_key somewhere in the filename?
+> +end:;									\
 
-> Another thought is that, could you implement an arch_static_branch!()
-> (instead of _static_key_false!()) and use it for static_key_false!()
-> similar to what we have in C? The benefit is that at least for myself
-> it'll be easier to compare the implementation between C and Rust.
+Why the semicolon?
 
-I can try to include that.
 
-Alice
+>  })
+>  
+>  #define _arch_cmpxchg(ptr, old, new, sc_sfx, prepend, append)		\
+> @@ -156,7 +177,7 @@
+>  	__typeof__(ptr) __ptr = (ptr);					\
+>  	__typeof__(*(__ptr)) __old = (old);				\
+>  	__typeof__(*(__ptr)) __new = (new);				\
+> -	__typeof__(*(__ptr)) __ret;					\
+> +	__typeof__(*(__ptr)) __ret = (old);				\
+
+This is because the compiler doesn't realize __ret is actually
+initialized, right?  IAC, seems a bit unexpected to initialize
+with (old) (which indicates SUCCESS of the CMPXCHG operation);
+how about using (new) for the initialization of __ret instead?
+would (new) still work for you?
+
+  Andrea
 
