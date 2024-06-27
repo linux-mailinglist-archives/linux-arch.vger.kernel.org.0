@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-5176-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5177-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DCEBF91B08B
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Jun 2024 22:38:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D05A91B0D3
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Jun 2024 22:49:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 19D351C21998
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Jun 2024 20:38:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BDCDA1C24C9E
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Jun 2024 20:49:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E52A19EEA9;
-	Thu, 27 Jun 2024 20:38:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9726D7406F;
+	Thu, 27 Jun 2024 20:47:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aq2RCfGz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fm14q7G0"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E89897406F;
-	Thu, 27 Jun 2024 20:38:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4948219F49C;
+	Thu, 27 Jun 2024 20:47:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719520693; cv=none; b=oY6O0LnrlI2UXOI5dGXYscIUptKRo0ALZlHdRNgyVQJiQR+VzDizV1AULq2e2kBGj0wcNOs3XugwHNLpTW9wXgmxtBV5Fi2Q3HxGHIJFjiLIXafyb9B670nDpJwMju3VI2U7ku1mzgoN2ZJfaU4jWiqlYfuJLRtGV5UxWqD/YN8=
+	t=1719521263; cv=none; b=F6KYTp9qln4e2C9yZ7+Htv2tNwe9hdGzxMo7aMM0wlTAgOkhlp0XfTr/R7mfLUkhfYMZApKDeM9F4E/CHLkGYQGw59bEFH7mUfsQlHP0PWuND1xGupX3m6Iec0UjYkEYBK7B+ZP1DRdqqMrGKqVHYFqWdaw6EDTW8WSZnnuMIAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719520693; c=relaxed/simple;
-	bh=BVd54t8V4yKL8SKq4Rb7omF+EHGftWCggGNhkkhUTrU=;
+	s=arc-20240116; t=1719521263; c=relaxed/simple;
+	bh=A5AMW+ZLMpX4csf8vnGmP52U32Ex4ZiXhPpAfEuGJIM=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MbYucVRPU3dOMTLhbDtk1WyWeSTspc90HohGizwGnfM7ODl/oBx3Vvjnwln6As2CAWGNC+J2Gpy+qhJnU1Ae677r6f3s8gSK05oGRxGbNL9aAkhvuVS2LXIMwXjU5O6w5Ds59lWqmh4uFIwjjS2EQbapbOt6ouie+MvC3t3kWBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aq2RCfGz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3370FC2BBFC;
-	Thu, 27 Jun 2024 20:38:10 +0000 (UTC)
+	 MIME-Version:Content-Type; b=ChNBTvjtJNeBD8/HgEQmU3kwoU/Jwu2TbQMoMIdL594Dpgz+E1Ov4gCElmWBbL/uD1i55IgkwXrq6viT+dYbvWuCbmNGVo+vYKYYLCJ+mPoZ3Is/in5kFwtRRgnXdcuce4BlfWkThbz0W0sxNYR4kjUsnhyPYk+1wtCnXeF1Bwk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fm14q7G0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8520C2BBFC;
+	Thu, 27 Jun 2024 20:47:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719520692;
-	bh=BVd54t8V4yKL8SKq4Rb7omF+EHGftWCggGNhkkhUTrU=;
+	s=k20201202; t=1719521262;
+	bh=A5AMW+ZLMpX4csf8vnGmP52U32Ex4ZiXhPpAfEuGJIM=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=aq2RCfGz4duksXUC/Ro09d4mdUrL2HO3rip3byDd+QuyDD8cNPr1eCL+3dY1DtY8e
-	 uXjxU3NBu2WfTEiWoGyW+QTBc4FA0EHq1t0SW3573ctREq0SWP0yN7A+oA4EDP5X4x
-	 XxtIIlpuOldYd/c4p2A30+1BW7YH6bCdXhsu4/kKCVxOJohr8TwYW9PDpbN+rY6u0r
-	 g2qx1g8xEuf85sy1eN2YRz93lNEWUNUUFUd1/sbENqAK6gSKw88I//hM9sjDmh1C99
-	 Mba2sR93tzi4TgGidxaGQrPcwZduqxOZDQ9TILxLEsgZNlbOpCM3nQ4D6VedAsGLBC
-	 FRNkwQU0t/iBw==
-Date: Thu, 27 Jun 2024 13:38:09 -0700
+	b=fm14q7G0XfP2HRyb1ZONJ+pqWBWPdhH2d6IjA0ofu+ehRYg/250v2wrmD+hEAIzhy
+	 5caUG+fhduRYCsICV5ZrbBJAXKlcmtzxiOCz6jFU00UwMVMtD6dbVR0LU5kxOr3Vzi
+	 0cAbW2JKPpLqSba16PMnQX/dcfAOoGDpmPAXuSdllZi6nWn1C7I2SU1ch36qi0pxGU
+	 IihY3N5vgcgKBWatl6HEJmjhiMyCz8n3KjAwTl+PBG+9aUmYsI19ix1s++aG1UBGv+
+	 aAFQxni9Alv0KyIBRf2yCiEWUthS2Fyw4DdcUmhxlFEm6zWfMYW2ck/kevCRcJ1ha3
+	 waS1l0dqJcZJQ==
+Date: Thu, 27 Jun 2024 13:47:38 -0700
 From: Jakub Kicinski <kuba@kernel.org>
 To: Mina Almasry <almasrymina@google.com>
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -81,13 +81,14 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  <pkaligineedi@google.com>, Stanislav Fomichev <sdf@google.com>
 Subject: Re: [PATCH net-next v14 13/13] selftests: add ncdevmem, netcat for
  devmem TCP
-Message-ID: <20240627133809.0700722f@kernel.org>
-In-Reply-To: <CAHS8izOd_yYNJ6+xv35XoCvF7MzqachPVrkQJbic8-h=T1Vg_A@mail.gmail.com>
+Message-ID: <20240627134738.163f97e3@kernel.org>
+In-Reply-To: <CAHS8izNBB3+axWFR6cQChAawu194UqzVZ+oZp=c+H5TD4Nd8Zw@mail.gmail.com>
 References: <20240625195407.1922912-1-almasrymina@google.com>
 	<20240625195407.1922912-14-almasrymina@google.com>
 	<20240626150822.742eaf6a@kernel.org>
 	<20240626174634.2adec19d@kernel.org>
 	<CAHS8izOd_yYNJ6+xv35XoCvF7MzqachPVrkQJbic8-h=T1Vg_A@mail.gmail.com>
+	<CAHS8izNBB3+axWFR6cQChAawu194UqzVZ+oZp=c+H5TD4Nd8Zw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -97,50 +98,13 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Thu, 27 Jun 2024 12:55:38 -0700 Mina Almasry wrote:
-> `git clean -fdx && make  headers_install && make -C
-> ./tools/testing/selftests/net` works
-> 
-> `git clean -fdx && make  headers_install && make -C
-> ./tools/testing/selftests/net ncdevmem` doesn't work with this error:
+On Thu, 27 Jun 2024 13:36:57 -0700 Mina Almasry wrote:
+> `make -C ./tools/testing/selftests/net TARGETS=ncdevmem`, which works.
 
-Hm, I haven't tested this exact combination. Makefiles are fun!
+AFAIU the most supported incantation would have to be something rather
+insane, like:
 
-I think in this case you're just hitting the built-in make rule,
-you're not exercising our Makefile logic much. This should make 
-it work:
+make -C tools/testing/selftests TARGETS=net TEST_GEN_PROGS="$(pwd)/tools/testing/selftests/net/tls" TEST_GEN_FILES=""
 
-diff --git a/tools/testing/selftests/lib.mk
-b/tools/testing/selftests/lib.mk index 429535816dbd..a274ae8cd72b 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -45,7 +45,7 @@ endif # LLVM
- 
- ifeq (0,$(MAKELEVEL))
-     ifeq ($(OUTPUT),)
--       OUTPUT := $(shell pwd)
-+       OUTPUT := .
-        DEFAULT_INSTALL_HDR_PATH := 1
-     endif
- endif
-
-But it will probably break the makefile for others?
-
-All our targets are defined (or magically redefined) as $(OUTPUT)/name
-if you call make directly OUTPUT is not defined, so our rules would
-mathc on /name, which obviously doesn't exist. Adding OUTPUT=. on
-command line would also work (I think):
-
-make -C ./tools/testing/selftests/net OUTPUT=. ncdevmem
-
-Another option would be for OUTPUT to contain the trailing /, always,
-to avoid the /name problem, but:
-
-$ git grep '$(OUTPUT)/' -- tools/testing/selftests/ | wc -l 
-414
-
-so good luck changing that :(
-
-Long story short what you're trying doesn't really appear to be
-supported by kselftest makefile infra, so don't worry about it.
+but yes, don't worry.
 
