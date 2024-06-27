@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-5161-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5162-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89B49919A5F
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Jun 2024 00:08:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DB4C919C06
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Jun 2024 02:46:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 44244285557
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Jun 2024 22:08:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 70C1C1C20927
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Jun 2024 00:46:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 230E819309C;
-	Wed, 26 Jun 2024 22:08:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A01717E9;
+	Thu, 27 Jun 2024 00:46:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Azand2s9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mBlNUmVM"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7E9B18FC9D;
-	Wed, 26 Jun 2024 22:08:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E69A5A50;
+	Thu, 27 Jun 2024 00:46:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719439706; cv=none; b=on0tWNEyBQtEtz+DaP8sfJaqaDDuXUzSQatzn8eA+1DBZkVc2Qq+ateQd9Azv43SjM/OMlyBUVf2fgMJM7rnVbU8fl5xGrSOCp+T0bMS7hbwzeLot6kvqprEimfB3dtegpR+YUDVoHpu4PQCLBtCF8pSPM1qf5pAYueFcRXX1XA=
+	t=1719449198; cv=none; b=dffrzsLCroNS9h1WB8+Yu55SaT96NPALW5h/2VQC3peqhoUQ0TsJRAHHteGw+rESE3dbN9LNOUtCSajqxo84xnNnj7h/OWBurqNALw12isCUzqpyMzNNHzZVpRfqdxvfqRxdXnYMWpDCpvlsXI6hmw3f3OV3o8A24o3xoMk9+bA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719439706; c=relaxed/simple;
-	bh=5d7H9/borh2oqA2du5mHYiDRGDELCSRd3Xk3e6IKGpk=;
+	s=arc-20240116; t=1719449198; c=relaxed/simple;
+	bh=0SG3laByZlaFUISZCHp29XT3JkoNZdaHE8iSnv9r4Ww=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RY8dfRrQK/38MpWf+P58rr1ijKJISkpc0xIzVZ2iMZGiWFQH6FJ1qvQshMJmH0jhKpblSEXphGzvsywsj9oSCw0CyunSxwIU1Ep9puVywXw8z79inzN1bsj91LuvG80M6IzIaCWq80fIKIqAvHhbktwEbmvi59V9c+v2KkndlXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Azand2s9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EFCDC116B1;
-	Wed, 26 Jun 2024 22:08:23 +0000 (UTC)
+	 MIME-Version:Content-Type; b=e29aBtSG5yk6cFLdUcnnEn6RFj9wDNBzdPp4zP4Jeksm16qg7avahlVDm3hjcfYB1tuokJ7m8F0h5j8sHtVSHbcpiJavSUIB+oANT8FQcdSqYLj8khQpxh5DFfPrNxtkiohAGM319MfYbv0dYgDPImW5PuOPgaAsYTCHYpKL3b0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mBlNUmVM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B63CC116B1;
+	Thu, 27 Jun 2024 00:46:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719439705;
-	bh=5d7H9/borh2oqA2du5mHYiDRGDELCSRd3Xk3e6IKGpk=;
+	s=k20201202; t=1719449197;
+	bh=0SG3laByZlaFUISZCHp29XT3JkoNZdaHE8iSnv9r4Ww=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Azand2s9PJ5hpj1pJhfR2k36lgYX4q5EVbYEyRHHreykGtMrk+xW0MQHsApc0A76v
-	 R1ziYuRsJSA+U/KWvr5SnBpOp8/FKkRiM6PI0nOu1ho2WTtUmR6G5sIpL6x7taOS74
-	 BKU7UERaSnhVXfErVlfARVzsOmJFhRxiu5ZNmdcpweU0PcrGPzi9VXvWtjUYhKPfz4
-	 PU9tdlZOctUnOe/hbtETyla9PYMBK4jPfl5YaFALjxIDPqvgUbpKhQGLjYAm+LNu/A
-	 FcxJ5FSoDrgKEIR6AfIX7N+H0c4Zxj7PfzVnZeblZVvSM942WHMP2TU9Mpm39Qb57l
-	 1EyKxF3wvDs6w==
-Date: Wed, 26 Jun 2024 15:08:22 -0700
+	b=mBlNUmVMzPFiiYZI8a8E65frgk5k1lxp0RkrYfN3Nlf/2A5ch4UMQN/KRSpXjJb2O
+	 djBU41eFDkc5BhBiVK+bvijq7reE+WvVLOjI6abwchbipLi50MqkLBcE9HAZXML2ZB
+	 vcXNkl0oVc41ZWhheArOwYfFHV0uN/gdJSrWAvNZjaO4ES7wR4BNnUbOfdxD7g2qby
+	 10el+2M74ZCpdaxOCG4dY/gaD016jFvumOcdSt4+KsTBMcEqxEPu2v7WSj29kUUMx0
+	 pwpxnw8AxBcF47BxCRsv11U6w9kvZBBbsJL9xFpmJWoMiS8guNVpQsYJOkzW+Fd5BG
+	 bUJejdYs3QDaw==
+Date: Wed, 26 Jun 2024 17:46:34 -0700
 From: Jakub Kicinski <kuba@kernel.org>
 To: Mina Almasry <almasrymina@google.com>
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -81,10 +81,11 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  <pkaligineedi@google.com>, Stanislav Fomichev <sdf@google.com>
 Subject: Re: [PATCH net-next v14 13/13] selftests: add ncdevmem, netcat for
  devmem TCP
-Message-ID: <20240626150822.742eaf6a@kernel.org>
-In-Reply-To: <20240625195407.1922912-14-almasrymina@google.com>
+Message-ID: <20240626174634.2adec19d@kernel.org>
+In-Reply-To: <20240626150822.742eaf6a@kernel.org>
 References: <20240625195407.1922912-1-almasrymina@google.com>
 	<20240625195407.1922912-14-almasrymina@google.com>
+	<20240626150822.742eaf6a@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -94,21 +95,48 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Tue, 25 Jun 2024 19:54:01 +0000 Mina Almasry wrote:
-> +CFLAGS += -I../../../net/ynl/generated/
-> +CFLAGS += -I../../../net/ynl/lib/
-> +
-> +LDLIBS += ../../../net/ynl/lib/ynl.a ../../../net/ynl/generated/protos.a
+On Wed, 26 Jun 2024 15:08:22 -0700 Jakub Kicinski wrote:
+> On Tue, 25 Jun 2024 19:54:01 +0000 Mina Almasry wrote:
+> > +CFLAGS += -I../../../net/ynl/generated/
+> > +CFLAGS += -I../../../net/ynl/lib/
+> > +
+> > +LDLIBS += ../../../net/ynl/lib/ynl.a ../../../net/ynl/generated/protos.a  
+> 
+> Not as easy as this.. Please add this commit to your series:
+> https://github.com/kuba-moo/linux/commit/c130e8cc7208be544ec4f6f3627f1d36875d8c47
+> 
+> And here's an example of how you then use ynl.mk to code gen and build
+> for desired families (note the ordering of variables vs includes,
+> I remember that part was quite inflexible..):
+> https://github.com/kuba-moo/linux/commit/5d357f97ccd0248ca6136c5e11ca3eadf5091bb3
 
-Not as easy as this.. Please add this commit to your series:
-https://github.com/kuba-moo/linux/commit/c130e8cc7208be544ec4f6f3627f1d36875d8c47
+Investigating this further my patches will not work for O=xyz builds
+either. Please squash this into the relevant changes:
 
-And here's an example of how you then use ynl.mk to code gen and build
-for desired families (note the ordering of variables vs includes,
-I remember that part was quite inflexible..):
-https://github.com/kuba-moo/linux/commit/5d357f97ccd0248ca6136c5e11ca3eadf5091bb3
-
-Feel free to repost as soon as you got it fixed.
--- 
-pw-bot: cr
+diff --git a/tools/testing/selftests/drivers/net/Makefile b/tools/testing/selftests/drivers/net/Makefile
+index db60d2718b35..9966e5b7139b 100644
+--- a/tools/testing/selftests/drivers/net/Makefile
++++ b/tools/testing/selftests/drivers/net/Makefile
+@@ -9,7 +9,8 @@ TEST_PROGS := \
+ 	stats.py \
+ # end of TEST_PROGS
+ 
+-# YNL files
++# YNL files, must be before "include ..lib.mk"
++EXTRA_CLEAN += $(OUTPUT)/libynl.a
+ YNL_GEN_FILES := psp_responder
+ TEST_GEN_FILES += $(YNL_GEN_FILES)
+ 
+diff --git a/tools/testing/selftests/net/ynl.mk b/tools/testing/selftests/net/ynl.mk
+index 0e01ad12b30e..59cb26cf3f73 100644
+--- a/tools/testing/selftests/net/ynl.mk
++++ b/tools/testing/selftests/net/ynl.mk
+@@ -18,6 +18,4 @@ $(YNL_OUTPUTS): CFLAGS += \
+ 
+ $(OUTPUT)/libynl.a:
+ 	$(Q)$(MAKE) -C $(top_srcdir)/tools/net/ynl GENS="$(YNL_GENS)" libynl.a
+-	$(Q)cp $(top_srcdir)/tools/net/ynl/libynl.a ./
+-
+-EXTRA_CLEAN += libynl.a
++	$(Q)cp $(top_srcdir)/tools/net/ynl/libynl.a $(OUTPUT)/libynl.a
 
