@@ -1,219 +1,184 @@
-Return-Path: <linux-arch+bounces-5211-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5212-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DAD9C91D456
-	for <lists+linux-arch@lfdr.de>; Mon,  1 Jul 2024 00:06:39 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D198691D57C
+	for <lists+linux-arch@lfdr.de>; Mon,  1 Jul 2024 02:25:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4E698B20B31
-	for <lists+linux-arch@lfdr.de>; Sun, 30 Jun 2024 22:06:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 47BF9B21182
+	for <lists+linux-arch@lfdr.de>; Mon,  1 Jul 2024 00:25:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 182C24AEF4;
-	Sun, 30 Jun 2024 22:06:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4AB22CA5;
+	Mon,  1 Jul 2024 00:17:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SCsrXw3x"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PUf+DTTS"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68E5446542
-	for <linux-arch@vger.kernel.org>; Sun, 30 Jun 2024 22:06:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61CEB10FF
+	for <linux-arch@vger.kernel.org>; Mon,  1 Jul 2024 00:17:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719785193; cv=none; b=JWClWGU8FgzwIpn/nc6aQEnurLpB4wtvjwj2Yh0m9OcwaYuU8AVLcfSqvKyGEG2L7wicr6XGc4E2b895ln25D6LT3R7zclJwdAOIfuuAdTOJLbUdaYWTaxPJL0/93xGnJ7CzxEXuWHFUwKXvlE12fbEhDkaHw+VX/SXvW6xQHEc=
+	t=1719793058; cv=none; b=A8CesFpBb+k7gdTLvvQlNHLb7B9gqHsuKwythGX4LwifzSPP1JpyGldjHipTYozy4SyQQy9YYPhYemO9Z+IHYvagON7DiQfDrkWqdYyguhdEiYqH+RI9iChWYHaRjhBMEafvNR01dCXghnscb8K/MRdKw+MUqPnvo79dX46zSXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719785193; c=relaxed/simple;
-	bh=XQjR7OO4XGXDict8xHIa9g8B6CGmAOwZkPWn2/Ql1SY=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=kuszdM77KJtXqtBSv725orDcMe4us9sWWMNgU6++p4seoQ//eboFrmxrXi+2WANEQD+RqUpEqkxG9O6z7N+URrXhm/yFbtZkMdT/hVWWf+ANyPHT9QfBO3Z9ZrWagASboP6g7RVqBIM9JrwhNJwfGuzB4hVTj4H9rdCwVan/2zc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SCsrXw3x; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1719785191; x=1751321191;
-  h=date:from:to:cc:subject:message-id;
-  bh=XQjR7OO4XGXDict8xHIa9g8B6CGmAOwZkPWn2/Ql1SY=;
-  b=SCsrXw3xNSNQhwk0wobq5+XorAmylnEnmi+XicWH07NrCM9qllPMaQTJ
-   6H4uNLXPS8qrsmZYL9TGAY12nj7d8llryPMghuEdSZxcfhorchnmJo8N6
-   jWMCGLznAzIIaaAUOrXQPsJt2rU6Vd3HJ+PCu4TmXJfpB1gu1ND5sBjqK
-   jD7bfGwmk/Vu9VSpz4qPccpvxjdwwuFk7zKgAZfcRvGINk17CzJJ8P87q
-   DBj1kRcSjLLFH1bZRqbVdDwP9WKdq/QfCL2kzPDElc9eda4VPBIcZ1Omq
-   bapJAZXZJy3Y4lAC1qRPZQWe1vRC+FnZb6WLtPlv/DKCtsE88Y0BUYeNM
-   g==;
-X-CSE-ConnectionGUID: u3mqJ2x2SLGJBY4IqdWy9w==
-X-CSE-MsgGUID: SST3kFgrRr2OmNunMn8zjA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11119"; a="27513174"
-X-IronPort-AV: E=Sophos;i="6.09,174,1716274800"; 
-   d="scan'208";a="27513174"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2024 15:06:31 -0700
-X-CSE-ConnectionGUID: rWfoufVORyC4Iu0aK0kymQ==
-X-CSE-MsgGUID: EnekC9XHTvuiIAF/Y9o/pQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,174,1716274800"; 
-   d="scan'208";a="76020210"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 30 Jun 2024 15:06:30 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sO2gl-000M3a-0G;
-	Sun, 30 Jun 2024 22:06:27 +0000
-Date: Mon, 01 Jul 2024 06:06:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: linux-arch@vger.kernel.org
-Subject: [arnd-asm-generic:asm-generic] BUILD SUCCESS
- 01b6ed5fcd5a95f93f9991b005ded2eacf067187
-Message-ID: <202407010607.nkxysTGI-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1719793058; c=relaxed/simple;
+	bh=QaN9gni6DBgvdeYW+GJEmKIW3k11vr5L6sk+8si7MuE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RPVsEU4Z1/sPSn362DHPcwzCYfuHuajdgcZ1MkxNSv6PiBoIoVD4a4zSwzRszgGDe5ElIWC5XS9XT62JbkjtBxTZ9RA3ehbGX4RUQ+HnBbDsAKHsl67pxVkZNgElMvYVadNc2Ovd70wyRkFYHvJBnd9uPJfam0kaw7R3Oj3MgJc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PUf+DTTS; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1719793055;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=yM4N7GR2BG5LIn+6MSOyJKM/XymBQm17tFxWvcJSyZA=;
+	b=PUf+DTTSuhEukNVg/uGxmAsM+0DzXCCuWsSyAIFNtq/BiJ3V4Gxin/w7eQjEsZVqIof/Di
+	iQD2AbfNTOMBx6trcvuzP+ZzaqnK3fNIBV+Z6rcJaUnYBavw47/bPFtQPSKz05c3jULBei
+	CCICSIcqhvJP9iy1+13zRWwhMOfwsRs=
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com
+ [209.85.215.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-83-c5NmjpKmPaq07KUxYjgFNw-1; Sun, 30 Jun 2024 20:17:33 -0400
+X-MC-Unique: c5NmjpKmPaq07KUxYjgFNw-1
+Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-6e73d656bd0so1331139a12.1
+        for <linux-arch@vger.kernel.org>; Sun, 30 Jun 2024 17:17:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719793053; x=1720397853;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yM4N7GR2BG5LIn+6MSOyJKM/XymBQm17tFxWvcJSyZA=;
+        b=bdljfkUydT6vG4o7zNGwd+C9w5qSujJQ9gqKhqtgZL2CyuU4er7a2fXcT/S2PvcEA5
+         PAL/yJxuyjfh720c5RawbHIHIfseeZkp+1t/4meD9Old3xnpgUR+Vo4DXwnQuLMslZcd
+         zjvMu+1IF4JPmaR2oJVnSwRCPWxzQwiG2pzF3eoGG9xo/hIhNuJDQozXCLa4Q8WaGXHz
+         74omBsxWtaWlLlr8jfHSn3k0XZRD+t9RgyzmjzwkFIoxWMiLpCALq1cI1NYIunO+UvS5
+         eCXBpWGao6bCgoLKr0p/dYfSOO4e9i/Nq+30drzfDZcZgsv8Oi2osnXLT/GZpLY7xEsC
+         jrDQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUomoa9Gs7V9WtghUDLJ3gdEGI4Y1Ty4rMgpZ/ERFQw/E/lRF3+Nk2SoCmHcfFKrgI7TZazrlfPvIGsf2gJUIg58giCo3bTISADmg==
+X-Gm-Message-State: AOJu0YzQ3i0EC3Zp/5y75AEqMpzmL4AMQJBg1pa4urVas/0RYD5IXlEu
+	diEoCJQoE6Gd5PdkWmgqOsA+DBV9pdF8G2HYTy+6lmpcU3tSBGlpZK29pHf7cHY0kmwgzrvFjuo
+	Z1erd6BIPoMlf6dI7Y284qKuvnouhXXy02ljKmTQ4pmgKSb8bCJr1m6P/3zo=
+X-Received: by 2002:a05:6a20:8422:b0:1b5:fd58:30e8 with SMTP id adf61e73a8af0-1bef6140771mr3102507637.18.1719793052832;
+        Sun, 30 Jun 2024 17:17:32 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEV87JbqD0DsihOx5ZuGLa4+/4zwRBogo0J72ZOMm/cMfn9jliB3oM03TcsWl+71BSax9Qkzw==
+X-Received: by 2002:a05:6a20:8422:b0:1b5:fd58:30e8 with SMTP id adf61e73a8af0-1bef6140771mr3102480637.18.1719793052446;
+        Sun, 30 Jun 2024 17:17:32 -0700 (PDT)
+Received: from [192.168.68.51] ([103.210.27.92])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fac1535d1fsm51606915ad.144.2024.06.30.17.17.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 30 Jun 2024 17:17:31 -0700 (PDT)
+Message-ID: <fb6ec18c-143f-4fb2-8ca6-c3e425864e63@redhat.com>
+Date: Mon, 1 Jul 2024 10:17:20 +1000
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v10 17/19] arm64: Kconfig: Enable hotplug CPU on arm64 if
+ ACPI_PROCESSOR is enabled.
+To: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+ Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
+ linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-pm@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>,
+ loongarch@lists.linux.dev, x86@kernel.org,
+ Russell King <linux@armlinux.org.uk>, "Rafael J . Wysocki"
+ <rafael@kernel.org>, Miguel Luis <miguel.luis@oracle.com>,
+ James Morse <james.morse@arm.com>, Salil Mehta <salil.mehta@huawei.com>,
+ Jean-Philippe Brucker <jean-philippe@linaro.org>,
+ Hanjun Guo <guohanjun@huawei.com>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ linuxarm@huawei.com, justin.he@arm.com, jianyong.wu@arm.com
+References: <20240529133446.28446-1-Jonathan.Cameron@huawei.com>
+ <20240529133446.28446-18-Jonathan.Cameron@huawei.com>
+ <47a261e0-006d-4c64-9c9b-bc73797b8d6b@redhat.com> <ZoEk2mfQkIhLuh-8@arm.com>
+Content-Language: en-US
+From: Gavin Shan <gshan@redhat.com>
+In-Reply-To: <ZoEk2mfQkIhLuh-8@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic
-branch HEAD: 01b6ed5fcd5a95f93f9991b005ded2eacf067187  syscalls: fix sys_fanotify_mark prototype
+Hi Catalin,
 
-elapsed time: 1466m
+On 6/30/24 7:26 PM, Catalin Marinas wrote:
+> On Sun, Jun 30, 2024 at 10:39:04AM +1000, Gavin Shan wrote:
+>> On 5/29/24 11:34 PM, Jonathan Cameron wrote:
+>>> In order to move arch_register_cpu() to be called via the same path
+>>> for initially present CPUs described by ACPI and hotplugged CPUs
+>>> ACPI_HOTPLUG_CPU needs to be enabled.
+>>>
+>>> The protection against invalid IDs in acpi_map_cpu() is needed as
+>>> at least one production BIOS is in the wild which reports entries
+>>> in DSDT (with no _STA method, so assumed enabled and present)
+>>> that don't match MADT.
+>>>
+>>> Tested-by: Miguel Luis <miguel.luis@oracle.com>
+>>> Reviewed-by: Gavin Shan <gshan@redhat.com>
+>>> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+>>> ---
+>>>    arch/arm64/Kconfig       |  1 +
+>>>    arch/arm64/kernel/acpi.c | 22 ++++++++++++++++++++++
+>>>    2 files changed, 23 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+>>> index 5d91259ee7b5..e8f2ef2312db 100644
+>>> --- a/arch/arm64/Kconfig
+>>> +++ b/arch/arm64/Kconfig
+>>> @@ -5,6 +5,7 @@ config ARM64
+>>>    	select ACPI_CCA_REQUIRED if ACPI
+>>>    	select ACPI_GENERIC_GSI if ACPI
+>>>    	select ACPI_GTDT if ACPI
+>>> +	select ACPI_HOTPLUG_CPU if ACPI_PROCESSOR
+>>
+>> ACPI_HOTPLUG_CPU depends on (ACPI_PROCESSOR && HOTPLUG_CPU). It needs to be:
+>>
+>> 	select ACPI_HOTPLUG_CPU if ACPI_PROCESSOR && HOTPLUG_CPU
+>>
+>> Otherwise, we can have compiling error with the following configurations.
+>>
+>> CONFIG_ACPI_PROCESSOR=y
+>> CONFIG_HOTPLUG_CPU=n
+>> CONFIG_ACPI_HOTPLUG_CPU=y
+>>
+>> arch/arm64/kernel/smp.c: In function ‘arch_unregister_cpu’:
+>> arch/arm64/kernel/smp.c:563:9: error: implicit declaration of function ‘unregister_cpu’; did you mean ‘register_cpu’? [-Werror=implicit-function-declaration]
+>>    563 |         unregister_cpu(c);
+>>        |         ^~~~~~~~~~~~~~
+>>        |         register_cpu
+> 
+> Ah, I thought that in addition to the warning for unmet dependencies,
+> kbuild would also leave the option off. I need to add SUSPEND=n and
+> HIBERNATE=n to my build scripts.
+> 
+> The fix matches what x86 does, so I'm ok with it.
+> 
 
-configs tested: 126
-configs skipped: 3
+Ok, thanks for your confirm.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+>> Since the series has been queued to Catalin's "for-next/vcpu-hotplug" branch, I
+>> guess the easiest way would be to fix it in place with Catalin's help.
+> 
+> I wasn't planning to rebase the branch unless there's something major.
+> Since the doesn't happen with defconfig, it's doesn't affect bisection
+> that much, so my preference would be for a fix on top of this branch
+> (and with a Fixes: tag since the branch is stable).
+> 
 
-tested configs:
-alpha                             allnoconfig   gcc-13.2.0
-alpha                               defconfig   gcc-13.2.0
-arc                              allmodconfig   gcc-13.2.0
-arc                               allnoconfig   gcc-13.2.0
-arc                              allyesconfig   gcc-13.2.0
-arc                                 defconfig   gcc-13.2.0
-arm                              allmodconfig   gcc-13.2.0
-arm                               allnoconfig   gcc-13.2.0
-arm                              allyesconfig   gcc-13.2.0
-arm                                 defconfig   gcc-13.2.0
-arm                            dove_defconfig   gcc-13.2.0
-arm                          exynos_defconfig   gcc-13.2.0
-arm                          pxa168_defconfig   gcc-13.2.0
-arm64                            allmodconfig   gcc-13.2.0
-arm64                             allnoconfig   gcc-13.2.0
-arm64                               defconfig   gcc-13.2.0
-csky                              allnoconfig   gcc-13.2.0
-csky                                defconfig   gcc-13.2.0
-i386                             allmodconfig   clang-18
-i386                              allnoconfig   clang-18
-i386                             allyesconfig   clang-18
-i386         buildonly-randconfig-001-20240630   clang-18
-i386         buildonly-randconfig-002-20240630   clang-18
-i386         buildonly-randconfig-003-20240630   clang-18
-i386         buildonly-randconfig-004-20240630   clang-18
-i386         buildonly-randconfig-004-20240630   gcc-7
-i386         buildonly-randconfig-005-20240630   clang-18
-i386         buildonly-randconfig-006-20240630   clang-18
-i386         buildonly-randconfig-006-20240630   gcc-13
-i386                                defconfig   clang-18
-i386                  randconfig-001-20240630   clang-18
-i386                  randconfig-001-20240630   gcc-13
-i386                  randconfig-002-20240630   clang-18
-i386                  randconfig-002-20240630   gcc-13
-i386                  randconfig-003-20240630   clang-18
-i386                  randconfig-004-20240630   clang-18
-i386                  randconfig-004-20240630   gcc-13
-i386                  randconfig-005-20240630   clang-18
-i386                  randconfig-006-20240630   clang-18
-i386                  randconfig-011-20240630   clang-18
-i386                  randconfig-011-20240630   gcc-13
-i386                  randconfig-012-20240630   clang-18
-i386                  randconfig-013-20240630   clang-18
-i386                  randconfig-013-20240630   gcc-8
-i386                  randconfig-014-20240630   clang-18
-i386                  randconfig-014-20240630   gcc-8
-i386                  randconfig-015-20240630   clang-18
-i386                  randconfig-015-20240630   gcc-10
-i386                  randconfig-016-20240630   clang-18
-i386                  randconfig-016-20240630   gcc-13
-loongarch                        allmodconfig   gcc-13.2.0
-loongarch                         allnoconfig   gcc-13.2.0
-loongarch                           defconfig   gcc-13.2.0
-m68k                             allmodconfig   gcc-13.2.0
-m68k                              allnoconfig   gcc-13.2.0
-m68k                             allyesconfig   gcc-13.2.0
-m68k                                defconfig   gcc-13.2.0
-m68k                          hp300_defconfig   gcc-13.2.0
-m68k                       m5275evb_defconfig   gcc-13.2.0
-microblaze                       allmodconfig   gcc-13.2.0
-microblaze                        allnoconfig   gcc-13.2.0
-microblaze                       allyesconfig   gcc-13.2.0
-microblaze                          defconfig   gcc-13.2.0
-mips                              allnoconfig   gcc-13.2.0
-mips                     cu1830-neo_defconfig   gcc-13.2.0
-mips                            gpr_defconfig   gcc-13.2.0
-mips                malta_qemu_32r6_defconfig   gcc-13.2.0
-nios2                             allnoconfig   gcc-13.2.0
-nios2                               defconfig   gcc-13.2.0
-openrisc                          allnoconfig   gcc-13.2.0
-openrisc                            defconfig   gcc-13.2.0
-parisc                            allnoconfig   gcc-13.2.0
-parisc                              defconfig   gcc-13.2.0
-parisc64                            defconfig   gcc-13.2.0
-powerpc                           allnoconfig   gcc-13.2.0
-powerpc                    ge_imp3a_defconfig   gcc-13.2.0
-powerpc                        icon_defconfig   gcc-13.2.0
-powerpc                     ppa8548_defconfig   gcc-13.2.0
-powerpc                    sam440ep_defconfig   gcc-13.2.0
-powerpc                     stx_gp3_defconfig   gcc-13.2.0
-powerpc                     tqm8541_defconfig   gcc-13.2.0
-riscv                             allnoconfig   gcc-13.2.0
-riscv                               defconfig   gcc-13.2.0
-riscv             nommu_k210_sdcard_defconfig   gcc-13.2.0
-s390                              allnoconfig   gcc-13.2.0
-s390                                defconfig   gcc-13.2.0
-sh                                allnoconfig   gcc-13.2.0
-sh                                  defconfig   gcc-13.2.0
-sh                             sh03_defconfig   gcc-13.2.0
-sparc64                             defconfig   gcc-13.2.0
-um                                allnoconfig   gcc-13.2.0
-um                                  defconfig   gcc-13.2.0
-um                             i386_defconfig   gcc-13.2.0
-um                           x86_64_defconfig   gcc-13.2.0
-x86_64                            allnoconfig   clang-18
-x86_64                           allyesconfig   clang-18
-x86_64       buildonly-randconfig-001-20240630   gcc-13
-x86_64       buildonly-randconfig-002-20240630   gcc-13
-x86_64       buildonly-randconfig-003-20240630   gcc-13
-x86_64       buildonly-randconfig-004-20240630   gcc-13
-x86_64       buildonly-randconfig-005-20240630   gcc-13
-x86_64       buildonly-randconfig-006-20240630   gcc-13
-x86_64                              defconfig   clang-18
-x86_64                                  kexec   clang-18
-x86_64                randconfig-001-20240630   gcc-13
-x86_64                randconfig-002-20240630   gcc-13
-x86_64                randconfig-003-20240630   gcc-13
-x86_64                randconfig-004-20240630   gcc-13
-x86_64                randconfig-005-20240630   gcc-13
-x86_64                randconfig-006-20240630   gcc-13
-x86_64                randconfig-011-20240630   gcc-13
-x86_64                randconfig-012-20240630   gcc-13
-x86_64                randconfig-013-20240630   gcc-13
-x86_64                randconfig-014-20240630   gcc-13
-x86_64                randconfig-015-20240630   gcc-13
-x86_64                randconfig-016-20240630   gcc-13
-x86_64                randconfig-071-20240630   gcc-13
-x86_64                randconfig-072-20240630   gcc-13
-x86_64                randconfig-073-20240630   gcc-13
-x86_64                randconfig-074-20240630   gcc-13
-x86_64                randconfig-075-20240630   gcc-13
-x86_64                randconfig-076-20240630   gcc-13
-x86_64                          rhel-8.3-func   clang-18
-x86_64                          rhel-8.3-rust   clang-18
-x86_64                               rhel-8.3   clang-18
-xtensa                            allnoconfig   gcc-13.2.0
+Sure, I've posted a fix, applicable to branch 'for-next/vcpu-hotplug'.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+https://lists.infradead.org/pipermail/linux-arm-kernel/2024-June/939690.html
+
+Thanks,
+Gavin
+
 
