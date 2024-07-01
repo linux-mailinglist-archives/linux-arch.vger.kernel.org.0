@@ -1,184 +1,159 @@
-Return-Path: <linux-arch+bounces-5212-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5213-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D198691D57C
-	for <lists+linux-arch@lfdr.de>; Mon,  1 Jul 2024 02:25:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C72891E81A
+	for <lists+linux-arch@lfdr.de>; Mon,  1 Jul 2024 21:01:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 47BF9B21182
-	for <lists+linux-arch@lfdr.de>; Mon,  1 Jul 2024 00:25:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 373471F22C61
+	for <lists+linux-arch@lfdr.de>; Mon,  1 Jul 2024 19:01:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4AB22CA5;
-	Mon,  1 Jul 2024 00:17:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C64316F292;
+	Mon,  1 Jul 2024 19:01:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PUf+DTTS"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VUj8CS78"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61CEB10FF
-	for <linux-arch@vger.kernel.org>; Mon,  1 Jul 2024 00:17:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C9F916EC1C
+	for <linux-arch@vger.kernel.org>; Mon,  1 Jul 2024 19:01:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719793058; cv=none; b=A8CesFpBb+k7gdTLvvQlNHLb7B9gqHsuKwythGX4LwifzSPP1JpyGldjHipTYozy4SyQQy9YYPhYemO9Z+IHYvagON7DiQfDrkWqdYyguhdEiYqH+RI9iChWYHaRjhBMEafvNR01dCXghnscb8K/MRdKw+MUqPnvo79dX46zSXs=
+	t=1719860462; cv=none; b=oMOWuKINmgXFeeJa3QrQFv/6U0txIXjzlDQ3tTenNJue4GXLej1t2goMBjFG7DxeOKv/pAOiqEvR+qibsTcQlqAdJHplCyDOECrElFvsTDKvREMQZG8VJFESIcw2zuiYhiA6nggmwJXyOu1b7N+giNEr7Cbq6zvUFiWXJm774to=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719793058; c=relaxed/simple;
-	bh=QaN9gni6DBgvdeYW+GJEmKIW3k11vr5L6sk+8si7MuE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RPVsEU4Z1/sPSn362DHPcwzCYfuHuajdgcZ1MkxNSv6PiBoIoVD4a4zSwzRszgGDe5ElIWC5XS9XT62JbkjtBxTZ9RA3ehbGX4RUQ+HnBbDsAKHsl67pxVkZNgElMvYVadNc2Ovd70wyRkFYHvJBnd9uPJfam0kaw7R3Oj3MgJc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PUf+DTTS; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1719793055;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=yM4N7GR2BG5LIn+6MSOyJKM/XymBQm17tFxWvcJSyZA=;
-	b=PUf+DTTSuhEukNVg/uGxmAsM+0DzXCCuWsSyAIFNtq/BiJ3V4Gxin/w7eQjEsZVqIof/Di
-	iQD2AbfNTOMBx6trcvuzP+ZzaqnK3fNIBV+Z6rcJaUnYBavw47/bPFtQPSKz05c3jULBei
-	CCICSIcqhvJP9iy1+13zRWwhMOfwsRs=
-Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com
- [209.85.215.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-83-c5NmjpKmPaq07KUxYjgFNw-1; Sun, 30 Jun 2024 20:17:33 -0400
-X-MC-Unique: c5NmjpKmPaq07KUxYjgFNw-1
-Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-6e73d656bd0so1331139a12.1
-        for <linux-arch@vger.kernel.org>; Sun, 30 Jun 2024 17:17:33 -0700 (PDT)
+	s=arc-20240116; t=1719860462; c=relaxed/simple;
+	bh=nBEjUU1jP0cTXpDAibWGkU5XKOL/L/nsa6YcOdFrVXQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RmggdHue7V4wJg9vbvaEg5iCusBq7v/IRy9ctcqrotXuGcNOqVlNOLNcxTzMoQMekQ0ep7+yuOD4CfSu9p3nvWgfJQwzHf6rGBubfi4fe8GrqtUpdqWgjXWwzUWuVoN7oBDKj+E1I9iD20pmw1soi01ytPHKH7j5/T5xEh1VYaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VUj8CS78; arc=none smtp.client-ip=209.85.222.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-79c0b1eb94dso224014785a.1
+        for <linux-arch@vger.kernel.org>; Mon, 01 Jul 2024 12:01:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1719860459; x=1720465259; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R4LpFR6VRPZBJqkm7iRXIp87VCy5+OyuBQMHBVpgrKc=;
+        b=VUj8CS785cnwFWXu49a2yynTw9v5uBv7xV7sGzsKtbIvoTNL6XebeeShoCz1c7N9c6
+         QOGHor2VqLzp0K1m3SZv/SBZFaz2CHuoZ8oXsw9KXCDQBvxqwRikiIBLCAwCxlrGz2/X
+         hc5nYlLBRPdmRh7yHptNjyDMOkgHY7SjCvJS28YqP94iKO8zw4Mki7+1k4fCVqn2nprb
+         AiEC6vWgc/hFEkSr2d8vF6MUm+f6Rooj1daMQNmskdu5fEMYG+P6YjIjLh3es+Yqqrz7
+         2lha05Ab6XzuOpNcXnRqBElcdyOWL4r79CX5gf3ok4YE8CL5mfO8kfLJtqzYR8j0qAh1
+         t3Lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719793053; x=1720397853;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yM4N7GR2BG5LIn+6MSOyJKM/XymBQm17tFxWvcJSyZA=;
-        b=bdljfkUydT6vG4o7zNGwd+C9w5qSujJQ9gqKhqtgZL2CyuU4er7a2fXcT/S2PvcEA5
-         PAL/yJxuyjfh720c5RawbHIHIfseeZkp+1t/4meD9Old3xnpgUR+Vo4DXwnQuLMslZcd
-         zjvMu+1IF4JPmaR2oJVnSwRCPWxzQwiG2pzF3eoGG9xo/hIhNuJDQozXCLa4Q8WaGXHz
-         74omBsxWtaWlLlr8jfHSn3k0XZRD+t9RgyzmjzwkFIoxWMiLpCALq1cI1NYIunO+UvS5
-         eCXBpWGao6bCgoLKr0p/dYfSOO4e9i/Nq+30drzfDZcZgsv8Oi2osnXLT/GZpLY7xEsC
-         jrDQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUomoa9Gs7V9WtghUDLJ3gdEGI4Y1Ty4rMgpZ/ERFQw/E/lRF3+Nk2SoCmHcfFKrgI7TZazrlfPvIGsf2gJUIg58giCo3bTISADmg==
-X-Gm-Message-State: AOJu0YzQ3i0EC3Zp/5y75AEqMpzmL4AMQJBg1pa4urVas/0RYD5IXlEu
-	diEoCJQoE6Gd5PdkWmgqOsA+DBV9pdF8G2HYTy+6lmpcU3tSBGlpZK29pHf7cHY0kmwgzrvFjuo
-	Z1erd6BIPoMlf6dI7Y284qKuvnouhXXy02ljKmTQ4pmgKSb8bCJr1m6P/3zo=
-X-Received: by 2002:a05:6a20:8422:b0:1b5:fd58:30e8 with SMTP id adf61e73a8af0-1bef6140771mr3102507637.18.1719793052832;
-        Sun, 30 Jun 2024 17:17:32 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEV87JbqD0DsihOx5ZuGLa4+/4zwRBogo0J72ZOMm/cMfn9jliB3oM03TcsWl+71BSax9Qkzw==
-X-Received: by 2002:a05:6a20:8422:b0:1b5:fd58:30e8 with SMTP id adf61e73a8af0-1bef6140771mr3102480637.18.1719793052446;
-        Sun, 30 Jun 2024 17:17:32 -0700 (PDT)
-Received: from [192.168.68.51] ([103.210.27.92])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fac1535d1fsm51606915ad.144.2024.06.30.17.17.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 30 Jun 2024 17:17:31 -0700 (PDT)
-Message-ID: <fb6ec18c-143f-4fb2-8ca6-c3e425864e63@redhat.com>
-Date: Mon, 1 Jul 2024 10:17:20 +1000
+        d=1e100.net; s=20230601; t=1719860459; x=1720465259;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=R4LpFR6VRPZBJqkm7iRXIp87VCy5+OyuBQMHBVpgrKc=;
+        b=TdZwbDOvoRb11XqknjRvLBz73qM/A06nSZYpipxcv9kWKEacINxTyVfmYgZl1SAvLs
+         0sbmgg/hwMu27JPe7OkVyM1FFJhJCGCneMzBT+gAn1ZwVZFlNybhsK5JUQgfW2DqK4sR
+         tD21ozGKqV3pudkVxj7t3tl/W+jxIfDQLk+WSv0ZsW+nJwI5d46LP5LsC0ON06cpmtVU
+         8DCzvw0n4TaKZn+WLtgg7Ifbk+b8ZYHnlFnZW82gnBn+EnaeWU4FBXs0Mq7I1Iuphq8u
+         ab1WKQBlbVLotJwmSwTat+uWgOS4NaXC91N4tSUuHaSNoTItHL+yY2MWHGSdrc3MQ3PT
+         uShA==
+X-Forwarded-Encrypted: i=1; AJvYcCV7W9yj5T2PDyjwPob130JzEihtpvEJPgK9WZKYV7U4Zmsf3zaOHj61rYCGQXUL6nq9F12WqMhRJYhS18vA7HBbEhNTSXs8HbVikQ==
+X-Gm-Message-State: AOJu0Yz/B+NZxUWtE0FdJ+Hwe8h6YtB68a8NJH3ybkZ89bdXDDMsA/6A
+	EdoBc0YhYGV0W1A7kfhTQwZ40eNIUthfeVwGW00nvzXTZypR5wAdQFwiBDMB0MildST59YnyPik
+	8xjcCNVGAsNxIcoxf+25Nv5DoU3yi9NNQAplf
+X-Google-Smtp-Source: AGHT+IHqGzU9tZFX9QqaBsD++nA7soWtr02PwwhDHubls3yJUOnaqW81EaDVu4zWNv2Iw9IsPTEVGjOAs2RkVILAwGg=
+X-Received: by 2002:ad4:5c68:0:b0:6b5:4249:7c4 with SMTP id
+ 6a1803df08f44-6b5b7057b8emr78735846d6.2.1719860458778; Mon, 01 Jul 2024
+ 12:00:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 17/19] arm64: Kconfig: Enable hotplug CPU on arm64 if
- ACPI_PROCESSOR is enabled.
-To: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>,
- Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
- linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-pm@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
- Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>,
- loongarch@lists.linux.dev, x86@kernel.org,
- Russell King <linux@armlinux.org.uk>, "Rafael J . Wysocki"
- <rafael@kernel.org>, Miguel Luis <miguel.luis@oracle.com>,
- James Morse <james.morse@arm.com>, Salil Mehta <salil.mehta@huawei.com>,
- Jean-Philippe Brucker <jean-philippe@linaro.org>,
- Hanjun Guo <guohanjun@huawei.com>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- linuxarm@huawei.com, justin.he@arm.com, jianyong.wu@arm.com
-References: <20240529133446.28446-1-Jonathan.Cameron@huawei.com>
- <20240529133446.28446-18-Jonathan.Cameron@huawei.com>
- <47a261e0-006d-4c64-9c9b-bc73797b8d6b@redhat.com> <ZoEk2mfQkIhLuh-8@arm.com>
-Content-Language: en-US
-From: Gavin Shan <gshan@redhat.com>
-In-Reply-To: <ZoEk2mfQkIhLuh-8@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20240628003253.1694510-1-almasrymina@google.com>
+ <20240628003253.1694510-13-almasrymina@google.com> <m234oxcraf.fsf@gmail.com>
+In-Reply-To: <m234oxcraf.fsf@gmail.com>
+From: Mina Almasry <almasrymina@google.com>
+Date: Mon, 1 Jul 2024 12:00:44 -0700
+Message-ID: <CAHS8izOUJMnCxK0ZfOOOZH0auNF_Kk+WVA=oTEzJe8mYHdonfA@mail.gmail.com>
+Subject: Re: [PATCH net-next v15 12/14] net: add devmem TCP documentation
+To: Donald Hunter <donald.hunter@gmail.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, 
+	Nikolay Aleksandrov <razor@blackwall.org>, Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, 
+	Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, 
+	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst <jeroendb@google.com>, 
+	Praveen Kaligineedi <pkaligineedi@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Catalin,
+On Fri, Jun 28, 2024 at 3:10=E2=80=AFAM Donald Hunter <donald.hunter@gmail.=
+com> wrote:
+>
+> Mina Almasry <almasrymina@google.com> writes:
+> > +
+> > +The user must bind a dmabuf to any number of RX queues on a given NIC =
+using
+> > +the netlink API::
+> > +
+> > +     /* Bind dmabuf to NIC RX queue 15 */
+> > +     struct netdev_queue *queues;
+> > +     queues =3D malloc(sizeof(*queues) * 1);
+> > +
+> > +     queues[0]._present.type =3D 1;
+> > +     queues[0]._present.idx =3D 1;
+> > +     queues[0].type =3D NETDEV_RX_QUEUE_TYPE_RX;
+> > +     queues[0].idx =3D 15;
+> > +
+> > +     *ys =3D ynl_sock_create(&ynl_netdev_family, &yerr);
+> > +
+> > +     req =3D netdev_bind_rx_req_alloc();
+> > +     netdev_bind_rx_req_set_ifindex(req, 1 /* ifindex */);
+> > +     netdev_bind_rx_req_set_dmabuf_fd(req, dmabuf_fd);
+> > +     __netdev_bind_rx_req_set_queues(req, queues, n_queue_index);
+> > +
+> > +     rsp =3D netdev_bind_rx(*ys, req);
+> > +
+> > +     dmabuf_id =3D rsp->dmabuf_id;
+> > +
+> > +
+> > +The netlink API returns a dmabuf_id: a unique ID that refers to this d=
+mabuf
+> > +that has been bound.
+>
+> The docs don't mention the unbinding behaviour. Can you add the text
+> from the commit message for patch 3 ?
 
-On 6/30/24 7:26 PM, Catalin Marinas wrote:
-> On Sun, Jun 30, 2024 at 10:39:04AM +1000, Gavin Shan wrote:
->> On 5/29/24 11:34 PM, Jonathan Cameron wrote:
->>> In order to move arch_register_cpu() to be called via the same path
->>> for initially present CPUs described by ACPI and hotplugged CPUs
->>> ACPI_HOTPLUG_CPU needs to be enabled.
->>>
->>> The protection against invalid IDs in acpi_map_cpu() is needed as
->>> at least one production BIOS is in the wild which reports entries
->>> in DSDT (with no _STA method, so assumed enabled and present)
->>> that don't match MADT.
->>>
->>> Tested-by: Miguel Luis <miguel.luis@oracle.com>
->>> Reviewed-by: Gavin Shan <gshan@redhat.com>
->>> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
->>> ---
->>>    arch/arm64/Kconfig       |  1 +
->>>    arch/arm64/kernel/acpi.c | 22 ++++++++++++++++++++++
->>>    2 files changed, 23 insertions(+)
->>>
->>> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
->>> index 5d91259ee7b5..e8f2ef2312db 100644
->>> --- a/arch/arm64/Kconfig
->>> +++ b/arch/arm64/Kconfig
->>> @@ -5,6 +5,7 @@ config ARM64
->>>    	select ACPI_CCA_REQUIRED if ACPI
->>>    	select ACPI_GENERIC_GSI if ACPI
->>>    	select ACPI_GTDT if ACPI
->>> +	select ACPI_HOTPLUG_CPU if ACPI_PROCESSOR
->>
->> ACPI_HOTPLUG_CPU depends on (ACPI_PROCESSOR && HOTPLUG_CPU). It needs to be:
->>
->> 	select ACPI_HOTPLUG_CPU if ACPI_PROCESSOR && HOTPLUG_CPU
->>
->> Otherwise, we can have compiling error with the following configurations.
->>
->> CONFIG_ACPI_PROCESSOR=y
->> CONFIG_HOTPLUG_CPU=n
->> CONFIG_ACPI_HOTPLUG_CPU=y
->>
->> arch/arm64/kernel/smp.c: In function ‘arch_unregister_cpu’:
->> arch/arm64/kernel/smp.c:563:9: error: implicit declaration of function ‘unregister_cpu’; did you mean ‘register_cpu’? [-Werror=implicit-function-declaration]
->>    563 |         unregister_cpu(c);
->>        |         ^~~~~~~~~~~~~~
->>        |         register_cpu
-> 
-> Ah, I thought that in addition to the warning for unmet dependencies,
-> kbuild would also leave the option off. I need to add SUSPEND=n and
-> HIBERNATE=n to my build scripts.
-> 
-> The fix matches what x86 does, so I'm ok with it.
-> 
+Thanks, will do, if I end up sending another version of this with more
+feedback. If this gets merged I'll follow up with a patch updating the
+docs (there seems to be no other feedback at the moment).
 
-Ok, thanks for your confirm.
-
->> Since the series has been queued to Catalin's "for-next/vcpu-hotplug" branch, I
->> guess the easiest way would be to fix it in place with Catalin's help.
-> 
-> I wasn't planning to rebase the branch unless there's something major.
-> Since the doesn't happen with defconfig, it's doesn't affect bisection
-> that much, so my preference would be for a fix on top of this branch
-> (and with a Fixes: tag since the branch is stable).
-> 
-
-Sure, I've posted a fix, applicable to branch 'for-next/vcpu-hotplug'.
-
-https://lists.infradead.org/pipermail/linux-arm-kernel/2024-June/939690.html
-
+--=20
 Thanks,
-Gavin
-
+Mina
 
