@@ -1,132 +1,124 @@
-Return-Path: <linux-arch+bounces-5217-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5218-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E9AE923CB0
-	for <lists+linux-arch@lfdr.de>; Tue,  2 Jul 2024 13:43:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF97E923E8F
+	for <lists+linux-arch@lfdr.de>; Tue,  2 Jul 2024 15:14:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8E6B6B24707
-	for <lists+linux-arch@lfdr.de>; Tue,  2 Jul 2024 11:43:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 402691F250D2
+	for <lists+linux-arch@lfdr.de>; Tue,  2 Jul 2024 13:14:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E04615B551;
-	Tue,  2 Jul 2024 11:42:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4503D19DFA5;
+	Tue,  2 Jul 2024 13:14:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WOduV29B"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="P2e3SWN+"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E12D715B57B;
-	Tue,  2 Jul 2024 11:42:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AD4C19DF60
+	for <linux-arch@vger.kernel.org>; Tue,  2 Jul 2024 13:14:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719920572; cv=none; b=nAmfbq3B6Q6QiTpRGOi8RsZt28+Ya8AwRK5ygOcIxGYtnmpI4N70Qh3UFko13PEo0gRuzDJrrb8kad0Sm6o5p60EyYjFs0j3+1jdTrlRZlF35mg4fhzaypVy4Z073hwj5RMuOEDIoQWZtoNaXAGLG3yaKorCZ4Scj6pOhoAW+Dk=
+	t=1719926081; cv=none; b=YypQLbxdWuLLng6XhJ+oj+YFdsgEbMF5E1TsJhiJUocSylkQLxoZL0h+2L+hcDoZyktp1z47JVoXcwpxKslR7Y/UEM2al2d54m3ZEE8iny/RskvfPN/xu6CW3FyfYVS0f7AhwRs0y9E9nG1+GSzzTtSeA+ZLybn3BnCAv633K7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719920572; c=relaxed/simple;
-	bh=F3c82IvqkobVQ+cEL944LWTOKeY//8FJeGn9VOXvKeY=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=ZQSgaUxVDt9KuMB6BRQlXheXoz8Hw5V+0bx9+to6w6JS8iNWIcDGPHbro9HrhY0gLUdrWYhUcrJPR5yFtpkMDLNIaj10ecdu65XPKgXgSfsFZJCPaslfy3SdX/tkTfheiNWCjtP4PhlHBC3ibTy+1thGzWTFr1qo23tis1SV9go=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WOduV29B; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1f4a5344ec7so29138915ad.1;
-        Tue, 02 Jul 2024 04:42:50 -0700 (PDT)
+	s=arc-20240116; t=1719926081; c=relaxed/simple;
+	bh=qcbSk1txeKGjtUgrI5TEa2OFa9eUbMFBvTxpismD3E0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jQPRikielt0qeu4OBhlCnIp7QQLdd4/YXnFAXzRxNRqbfLHHu1Pq+LKCFL1FW9IU7QeZX1Ooh242+uR1HWZoDq4rtxe6z2iwBqSfgUkfrYI2IySFOCyrRBEspwa86XS7XemRScigLR5J1rPwyJl+nmLdPmOsGAtG+K9bLoh4c84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=P2e3SWN+; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-57d119fddd9so21827a12.1
+        for <linux-arch@vger.kernel.org>; Tue, 02 Jul 2024 06:14:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719920570; x=1720525370; darn=vger.kernel.org;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1719926078; x=1720530878; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+5O9QJHV6HJ3iFkZ9r/sweFUWbG/UePP1lmvYv1+YTU=;
-        b=WOduV29B8coD7YGCZbzPEKNZN6eaycPUZl3qizhCY0c45ZBZ0RNf8DT+4JSKeXk9+6
-         u3PQ5dw+rDWG8RZJAtt9mhe7kRaV+83jyQgs2dBHmYhVG8l+3x/LllniZhAKhFJv/f6X
-         JtABgLysw8dnUwQVB6WUYKVNUUfdab5fFen+zzrMngzAaNMob2ItRj650iURHblcNSUm
-         SL/GbCtRWYAVPJ/zs/WOrsI6gpHAZvGm1lz7mObS7/R5vo6DMzh1Eo/uS51YSOxmelwr
-         9GxJiQFLZxRIcTUmkZGSNw9JSW9pu3Xzl9XZOv+dEbH3PiuHWCb5yfR/TvjuaPpZhp1P
-         Ldvw==
+        bh=qcbSk1txeKGjtUgrI5TEa2OFa9eUbMFBvTxpismD3E0=;
+        b=P2e3SWN+yseDMp90p9VEzZHdkGUJX9Ld0Lj6dP8ekUsLe8WFMUvAkLLe78MDS5i4EN
+         tR404H/0eeBkXwqz6cEs0wa8kKW0z3UTY4UZ/Z2VHDf9iA94POb9ISGx+gxT15YkEzv/
+         WmZ3qHVASbx8qKTwDFYpM8WY0IUd7M0XZYIHHxmOLGp3HsBz1gJM+bvXXvIKLLEq51UY
+         UK2jscCD6GaFo29bpNziVw68wgEtOjjhlNCcjACm1kB3mVAzPq17QH7ewZq15jN4VR3Q
+         SxTV1baqz7uqrV15hW4+z0toLL/X1R4jw8Cgsc0bmvj2xTdgtrRgIRz5fH/9T2GwHcum
+         MWFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719920570; x=1720525370;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=+5O9QJHV6HJ3iFkZ9r/sweFUWbG/UePP1lmvYv1+YTU=;
-        b=YTa/c+amPvY0RD1ib+HK2UUru3+DM124uqMoDzB4E8jbtHmEKYjf/onGBJAGrNDddq
-         ewkxa6DIZL2SKbu69PM0sBrYPCyfs/cHMVOkaM1KqpKgIrRumTJ39gfnjcoI2jTge2pt
-         asLVG7G6iWfZy4Dy29AgJsUTEP9cJ/whc4p5V1kA0emqKYNNUVuKHzCpFQEfpH2ECOxU
-         DayfYhk2y12Vub4L9zZEY+rQxB9ITG04ZDLBdWQb5qBbYr27vJPGe/wb74Ju9Ij9vG70
-         JlcN956rCgwHlMbC/U1KXRhhNi9PIoW4a7IZN7jcklTXtpQuBBv1DaAq2DEmU9rxVPzR
-         7s6A==
-X-Forwarded-Encrypted: i=1; AJvYcCWaISpZevUzj+GRgfcBV545AMOwA32AKifFnLiSytqhfoIKV8kUJDWXg9vMtRNgLs3fyrNVq8lOciUkLPAsUEI+0FVNgiqE2LiPIm1vZI/UuS9A247sBtUmyBlAVomEovlF0CM9iJsclw==
-X-Gm-Message-State: AOJu0YzUd/W67t1gM6hcWeVmo+Rp1d//VL3tLTzJY/WJAjO0jIu91wo/
-	xcK0Pimxi8aKxDy09pqCyf7icRaegkFhUmtSQdHAOK3aCGsrF1RR
-X-Google-Smtp-Source: AGHT+IHbd96Fl/zaLJfz/U+3GNERR5Bvjwmw+1PyosVep26jKEoIa97jasJAI8d0Oe3YSe7eMNjctA==
-X-Received: by 2002:a17:903:188:b0:1fa:9ea1:bc7a with SMTP id d9443c01a7336-1fadb4d9067mr110159615ad.34.1719920570111;
-        Tue, 02 Jul 2024 04:42:50 -0700 (PDT)
-Received: from [10.0.2.15] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fac11d8cbbsm81914625ad.106.2024.07.02.04.42.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Jul 2024 04:42:49 -0700 (PDT)
-Message-ID: <5866a20e-4b36-4eb9-b589-8135f86ceb6a@gmail.com>
-Date: Tue, 2 Jul 2024 20:42:44 +0900
+        d=1e100.net; s=20230601; t=1719926078; x=1720530878;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qcbSk1txeKGjtUgrI5TEa2OFa9eUbMFBvTxpismD3E0=;
+        b=ESJvXpAWvSDw4G+XD6FYsQABieVGrk2Wuc8+G1pGFrv/dTv/QNarpfpxVHGdefenpI
+         serDcydCUu3b+5V58qcMISWUbMy4m7StL8uW9Wf6p33Lo48orJwi+0Ae+2p6KsGJ7Sq+
+         c88LR+IIDyCEPuGkgarQtF2zkVQQH6kK+UvFuANkInnlOQqMnatk4wlLkgiiWJhZNN6E
+         drggDZn/GWKI9w7lInpBT4ghT2wcDY5SAqPelNE+dp1C9bmLRDc0ZgZ3vK7GFTR+VI6T
+         CEcNzf6N6lV6IPoceNnzk13vJvFoWiGTuFuGg5JTxmlArPUSe7faCtciQnuzDuRL82Pw
+         Aejg==
+X-Forwarded-Encrypted: i=1; AJvYcCWQca8z3YnUe3rWfM7CsXu/3ZE/r5dxMF2NB/3lPJRD812F6rnZDd4FUedWGxKJ4n/gnzXG39Qj5OIGAvzHUFSksVqA3QXwWWcApw==
+X-Gm-Message-State: AOJu0YxZ0yFC2yY38wQeHsk64w7sAJxlQSX2/mbYoAtAViguSamOxLDT
+	54C3alom2O/Xry7Rq52BaKHANVHowBqdC3N0rsleIdy4tb0cdb5P8huXBCQlPhPyCf/P4rzqtFh
+	TY4c1ydqlRcRtiRIoSH/q6pWv7vfhCjDi056e
+X-Google-Smtp-Source: AGHT+IERKkCVpVomNRYr8KNFI5e5JCBWRQ7HMLMgDv1aOW++vU+Fu31VZ6RrRqWEtIXBu1Sq7l+LYKSRxYEU9Pq/83U=
+X-Received: by 2002:a50:9308:0:b0:57d:32ff:73ef with SMTP id
+ 4fb4d7f45d1cf-5872f79a720mr634350a12.6.1719926077342; Tue, 02 Jul 2024
+ 06:14:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: "Paul E. McKenney" <paulmck@kernel.org>, Will Deacon <will@kernel.org>
-Cc: Alan Stern <stern@rowland.harvard.edu>,
- Andrea Parri <parri.andrea@gmail.com>, Peter Zijlstra
- <peterz@infradead.org>, Boqun Feng <boqun.feng@gmail.com>,
- Nicholas Piggin <npiggin@gmail.com>, David Howells <dhowells@redhat.com>,
- Jade Alglave <j.alglave@ucl.ac.uk>, Luc Maranget <luc.maranget@inria.fr>,
- Daniel Lustig <dlustig@nvidia.com>, Joel Fernandes <joel@joelfernandes.org>,
- linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- Akira Yokosawa <akiyks@gmail.com>
-From: Akira Yokosawa <akiyks@gmail.com>
-Subject: [PATCH lkmm] docs/memory-barriers.txt: Remove left-over references to
- "CACHE COHERENCY"
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20240628003253.1694510-1-almasrymina@google.com> <20240628003253.1694510-9-almasrymina@google.com>
+In-Reply-To: <20240628003253.1694510-9-almasrymina@google.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Tue, 2 Jul 2024 15:14:22 +0200
+Message-ID: <CANn89iJ1ys-eNyM3BGQ1PuLKsbo+Kcj78wfoAtaFPygQdYawkg@mail.gmail.com>
+Subject: Re: [PATCH net-next v15 08/14] net: support non paged skb frags
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
+	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, 
+	Nikolay Aleksandrov <razor@blackwall.org>, Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, 
+	Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, 
+	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst <jeroendb@google.com>, 
+	Praveen Kaligineedi <pkaligineedi@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Commit 8ca924aeb4f2 ("Documentation/barriers: Remove references to
-[smp_]read_barrier_depends()") removed the entire section of "CACHE
-COHERENCY", without getting rid of its traces.
+On Fri, Jun 28, 2024 at 2:33=E2=80=AFAM Mina Almasry <almasrymina@google.co=
+m> wrote:
+>
+> Make skb_frag_page() fail in the case where the frag is not backed
+> by a page, and fix its relevant callers to handle this case.
+>
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
+>
 
-Remove them.
-
-Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
-Cc: Will Deacon <will@kernel.org>
----
- Documentation/memory-barriers.txt | 3 ---
- 1 file changed, 3 deletions(-)
-
-diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
-index 4202174a6262..93d58d9a428b 100644
---- a/Documentation/memory-barriers.txt
-+++ b/Documentation/memory-barriers.txt
-@@ -88,7 +88,6 @@ CONTENTS
- 
-  (*) The effects of the cpu cache.
- 
--     - Cache coherency.
-      - Cache coherency vs DMA.
-      - Cache coherency vs MMIO.
- 
-@@ -677,8 +676,6 @@ include/linux/rcupdate.h.  This permits the current target of an RCU'd
- pointer to be replaced with a new modified target, without the replacement
- target appearing to be incompletely initialised.
- 
--See also the subsection on "Cache Coherency" for a more thorough example.
--
- 
- CONTROL DEPENDENCIES
- --------------------
-
-base-commit: 7579cedf8efed9a05b2537f4c276571e4753a907
--- 
-2.34.1
-
+Reviewed-by: Eric Dumazet <edumazet@google.com>
 
