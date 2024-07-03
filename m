@@ -1,109 +1,153 @@
-Return-Path: <linux-arch+bounces-5237-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5238-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6056A9261A5
-	for <lists+linux-arch@lfdr.de>; Wed,  3 Jul 2024 15:19:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC1B9926619
+	for <lists+linux-arch@lfdr.de>; Wed,  3 Jul 2024 18:26:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1BF57283DCD
-	for <lists+linux-arch@lfdr.de>; Wed,  3 Jul 2024 13:19:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2987B1C203E2
+	for <lists+linux-arch@lfdr.de>; Wed,  3 Jul 2024 16:26:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1E8417838B;
-	Wed,  3 Jul 2024 13:19:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B21A1822D0;
+	Wed,  3 Jul 2024 16:26:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="h10xqMoj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ugox9121"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64007175555;
-	Wed,  3 Jul 2024 13:19:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.95.49.90
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA24B2BD19;
+	Wed,  3 Jul 2024 16:26:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720012743; cv=none; b=uPE/ZdaI9lBRQRRa1KxKjVqF8n03p5a+DlplQ9P8q/c7TmJCafs+5hZK6CdXCrGG+h91Jli+rI9mqBnAZwOk7A1XppRB3+aXj2BfuT1AaPHokX56ZNgDSYpKBwSH4vLrcZ4TER2BPvhXQvsbA1UNpcJJ9HGwmEuYcoTnW5d46Z8=
+	t=1720023989; cv=none; b=MEGOkkUoqJmQNnTvgj++Y0afX6DrA8Cd2rR/l8XE/XSYH12BVKD0H5GQT8yWyzPVZu4PkCwAdJ8j5AYF5m6Ql0ftnBFr//vjkVMjxzz3wC0zzm0yPfaRePhgTOSrLwR9pTP1i1EnK6bVQlEJkOjdHoudA7Pqm1TOpKOkXtLU7Dg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720012743; c=relaxed/simple;
-	bh=zUu2F1hV+miT5I8Gkjrxe7EVSNhBDwp44fj2E7hlYsg=;
-	h=Subject:MIME-Version:Content-Type:Date:Message-ID:From:To:CC:
-	 References:In-Reply-To; b=KTj/oKm/gJBi3UXE1D37oPapzdIYILnXosbFLyGgUnhx2a26JSYWFABRvOVQm3N9svGU3WQeve3NWz6+guGbTpcyCOVZs0KaRkmaXMJhikCaDyybylUapou2QN8NBlmvjoeUlGW1CuBZiFxzSsvnucAWxfQbfPp3SbAiDHtBs14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.es; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=h10xqMoj; arc=none smtp.client-ip=52.95.49.90
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.es
+	s=arc-20240116; t=1720023989; c=relaxed/simple;
+	bh=Uk8SKD6gxWX0gT+33jY2Nt6NqxCDIB3Pn7INT3sy8k4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=f+CBnR8Xm3/00UKW3/lNKNXJC4PD99MpI6EWrpe3Q+eyC94dBUapgO3zlrRTh+BsMXpLhs8fM5ps46uw4Lv2rbsHB7+oNR+AXV9UAOlUV28cbxmx0T89TXyzzqzjj8bM+Zg07Zussg/Ufk5KpKadz5tuoyWXRlHSyPJky/teMVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ugox9121; arc=none smtp.client-ip=209.85.167.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-3d853305abfso585154b6e.2;
+        Wed, 03 Jul 2024 09:26:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1720012742; x=1751548742;
-  h=mime-version:content-transfer-encoding:date:message-id:
-   from:to:cc:references:in-reply-to:subject;
-  bh=zUu2F1hV+miT5I8Gkjrxe7EVSNhBDwp44fj2E7hlYsg=;
-  b=h10xqMojGvcnQ9vfl7ywtrgPImF73FdjFAK9o4Xgkl5eMqIDKEeupLrt
-   9dGOok6wCF8fVcjiL7Ep6bQ0hEN9RijbSI8V4z7CQJ5DQjOClb3gVxXj6
-   fO32zvVMbsehWh4krmsxZ/9qIPOvqdrpz7qx3R7zmJARcShegY9NAdpUU
-   w=;
-X-IronPort-AV: E=Sophos;i="6.09,182,1716249600"; 
-   d="scan'208";a="417489642"
-Subject: Re: [PATCH 00/18] Introducing Core Building Blocks for Hyper-V VSM Emulation
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO smtpout.prod.us-east-1.prod.farcaster.email.amazon.dev) ([10.43.8.6])
-  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2024 13:18:59 +0000
-Received: from EX19MTAEUC002.ant.amazon.com [10.0.43.254:59500]
- by smtpin.naws.eu-west-1.prod.farcaster.email.amazon.dev [10.0.20.30:2525] with esmtp (Farcaster)
- id 4b69d89c-843b-442a-9219-fefd3322b1f3; Wed, 3 Jul 2024 13:18:58 +0000 (UTC)
-X-Farcaster-Flow-ID: 4b69d89c-843b-442a-9219-fefd3322b1f3
-Received: from EX19D004EUC001.ant.amazon.com (10.252.51.190) by
- EX19MTAEUC002.ant.amazon.com (10.252.51.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
- Wed, 3 Jul 2024 13:18:57 +0000
-Received: from localhost (10.13.235.138) by EX19D004EUC001.ant.amazon.com
- (10.252.51.190) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34; Wed, 3 Jul 2024
- 13:18:51 +0000
+        d=gmail.com; s=20230601; t=1720023987; x=1720628787; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:feedback-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=f3L4z7hSroOuwsuipXwj/IN76KXKnPgl4yK5C8eJ7Ok=;
+        b=Ugox9121ITGG06AZ5J8ejhKmFJAGcWs8TNsKBMW/e7rjcb498Por6bHvSdLs9crNhp
+         /oJdhIYm8LcljfpBio5hBqHbjdcPCX4LOCIRfmfgW0b3NKEisbt0G3kA/HYjKu1C3D30
+         ef79+AKkgUFtkRY+SA7Eu5BE3hA8+um5mrgBT+Tnmijkz0apj3mif1m+WrOcw8SNhWsX
+         4a6KdRoHBezjtu8W1WThHR14HHFTKyCdo7VG6+06FpvdLfN13OqjaWUDVkY847dujSGe
+         taDeAOz116asm9pcQM/5DwFKWbuSMrPy9+uU5VB8UPFfT0UqdIFBLqYikXcqBsjYAr4N
+         Wujg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720023987; x=1720628787;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:feedback-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=f3L4z7hSroOuwsuipXwj/IN76KXKnPgl4yK5C8eJ7Ok=;
+        b=RFnoZgdODKnv5G2xxLYMXUCKi4ZIQOXbCk1CIj6oBrrTyC3eH1i5HUJQmFQwLSMo2D
+         dzGLyDfyRhisWwYADFhdHpdhtOthg/Cq5hzFPBAcvdr2AH2zbDyV8UPKzD+LtZkUezHg
+         rzJn21rU3jdsQZBBoHCImFr7yU0TRQd0kqVNbR/EWcqB4VbeNZWAljZ0Khq/35fWmam+
+         Qh2Ahv+0Mpr+CqF7NaDio9Y+FYucHVl2X8hdQFti01kOuXu/dl7hiqMfBlMS78DTUxxj
+         ifyRJJsVuvdute1/5FWGaCxZpt8RraaaeH9IK/hira+fNgRshLZjUknuX7Io/SaQt/+p
+         BTyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXF/1MthfG9W82ulHKWhwEHG4tWhfS0NgNDqp6YP5NCO8dtB/SFw2pxkiNzrvvX3Ztfh32xozI3RWL2gTbl70z0XBL9Aj3rghRs3ZAf8oFVT4NA4+gklGb8GShQ5/p+5RN2b748G0MdCrWJ
+X-Gm-Message-State: AOJu0YwRxfNYVph4nmM4umtlnLcBm+lEtXiVa4H8Y69O72tu/BuiTyF9
+	d6iLCiH+1yYTVhSHF9Zatrk5S5mfrbOemFGQ81VkO2sYA92RUNml
+X-Google-Smtp-Source: AGHT+IEyVyUiYLLSoPl2liXg/YKC21xisWvxAX/7YL0rN+iIfSsx5LzU/hQHjBPpSvLWLIFXEE4mEQ==
+X-Received: by 2002:a05:6808:bd5:b0:3d5:6413:2138 with SMTP id 5614622812f47-3d6b2d189afmr15501833b6e.12.1720023986849;
+        Wed, 03 Jul 2024 09:26:26 -0700 (PDT)
+Received: from fauth2-smtp.messagingengine.com (fauth2-smtp.messagingengine.com. [103.168.172.201])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6b5df21b3cdsm9456786d6.113.2024.07.03.09.26.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Jul 2024 09:26:26 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+	by mailfauth.nyi.internal (Postfix) with ESMTP id 9674F1200068;
+	Wed,  3 Jul 2024 12:26:25 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Wed, 03 Jul 2024 12:26:25 -0400
+X-ME-Sender: <xms:sXuFZl2oKkz-zL6Ff7EvTfz2YDiqa29wEVmyslPRc_caHM_uqWGdpQ>
+    <xme:sXuFZsFZH-Xhlfgt17QEYCsTEub_LCrSKNxzKqSFZVwVd6FhxSn_khEY-h7KIoYIU
+    9HyNjvSTadnrUuzAA>
+X-ME-Received: <xmr:sXuFZl71SMwi_Q_mo39A6gFtUXidUC1RFzFx1E5JIKp7dIttb-4DPIIl_g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudejgdellecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeeuohhquhhnucfh
+    vghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrthhtvg
+    hrnhepgeegueekgefhvedukedtveejhefhkeffveeufeduiedvleetledtkeehjefgieev
+    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhpvghr
+    shhonhgrlhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquhhnrdhfvg
+    hngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:sXuFZi1ZDoNFjIUOhyABWuvJsFbPxrDLJAeUw9dx_c3dQ3cCvTH0Eg>
+    <xmx:sXuFZoEq-ih8SkLyfJWOWivzU7-hDlU4REhE2mxbjGdcEMscrV5Keg>
+    <xmx:sXuFZj-bhsLF9QFw537JwzotNRaLSjb62ObxpjLfX25fz7hzHX7AvA>
+    <xmx:sXuFZllFfPXhIip0CG5K1qEr2E0SCqj2YsE6z6u6UYFnwXh0LVOPaA>
+    <xmx:sXuFZsFJ9FAZ152dnxITOtxpnhoqE0G5i3HlzeLHGkw0uaTWa1D0Qgu_>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 3 Jul 2024 12:26:25 -0400 (EDT)
+From: Boqun Feng <boqun.feng@gmail.com>
+To: linux-kernel@vger.kernel.org,
+	lkmm@lists.linux.dev
+Cc: Alan Stern <stern@rowland.harvard.edu>,
+	Andrea Parri <parri.andrea@gmail.com>,	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,	Boqun Feng <boqun.feng@gmail.com>,
+	Nicholas Piggin <npiggin@gmail.com>,	David Howells <dhowells@redhat.com>,
+	Jade Alglave <j.alglave@ucl.ac.uk>,	Luc Maranget <luc.maranget@inria.fr>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Akira Yokosawa <akiyks@gmail.com>,	Daniel Lustig <dlustig@nvidia.com>,
+	Joel Fernandes <joel@joelfernandes.org>,	linux-arch@vger.kernel.org,
+	Miguel Ojeda <ojeda@kernel.org>,	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@samsung.com>,
+	Alice Ryhl <aliceryhl@google.com>,	rust-for-linux@vger.kernel.org,
+	Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
+	Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>,
+	Puranjay Mohan <puranjay@kernel.org>
+Subject: [PATCH] MAINTAINERS: Add the dedicated maillist info for LKMM
+Date: Wed,  3 Jul 2024 09:26:16 -0700
+Message-Id: <20240703162616.78278-1-boqun.feng@gmail.com>
+X-Mailer: git-send-email 2.39.3 (Apple Git-146)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-Date: Wed, 3 Jul 2024 13:18:48 +0000
-Message-ID: <D2FXMJ39HOWV.MEBKDIO1F1TM@amazon.com>
-From: Nicolas Saenz Julienne <nsaenz@amazon.com>
-To: Vitaly Kuznetsov <vkuznets@redhat.com>, <seanjc@google.com>
-CC: <pbonzini@redhat.com>, <linux-kernel@vger.kernel.org>,
-	<kvm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-hyperv@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-	<linux-trace-kernel@vger.kernel.org>, <graf@amazon.de>,
-	<dwmw2@infradead.org>, <pdurrant@amazon.co.uk>, <mlevitsk@redhat.com>,
-	<jgowans@amazon.com>, <corbet@lwn.net>, <decui@microsoft.com>,
-	<tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-	<dave.hansen@linux.intel.com>, <x86@kernel.org>, <amoorthy@google.com>
-X-Mailer: aerc 0.17.0-152-g73bcb4661460-dirty
-References: <20240609154945.55332-1-nsaenz@amazon.com>
- <D2FTASL4CXLN.32GYJ8QZH4OCR@amazon.com> <87ikxm63px.fsf@redhat.com>
-In-Reply-To: <87ikxm63px.fsf@redhat.com>
-X-ClientProxiedBy: EX19D040UWB001.ant.amazon.com (10.13.138.82) To
- EX19D004EUC001.ant.amazon.com (10.252.51.190)
+Content-Transfer-Encoding: 8bit
 
-Hi Vitaly,
+A dedicated mail list is created for Linux kernel memory model
+discussion, and this could help more people to track down memory model
+related discussion, since oftentimes memory model discussions would
+involve a broader audience. Hence add the list information into the
+maintainers entry of LKMM.
 
-On Wed Jul 3, 2024 at 12:48 PM UTC, Vitaly Kuznetsov wrote:
-> Nicolas Saenz Julienne <nsaenz@amazon.com> writes:
->
-> > Hi Sean,
-> >
-> > On Sun Jun 9, 2024 at 3:49 PM UTC, Nicolas Saenz Julienne wrote:
-> >> This series introduces core KVM functionality necessary to emulate Hyp=
-er-V's
-> >> Virtual Secure Mode in a Virtual Machine Monitor (VMM).
-> >
-> > Just wanted to make sure the series is in your radar.
-> >
->
-> Not Sean here but I was planning to take a look at least at Hyper-V
-> parts of it next week.
+Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+---
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks for the update.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 3f2047082073..a77bd8a49cd9 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12796,6 +12796,7 @@ R:	Daniel Lustig <dlustig@nvidia.com>
+ R:	Joel Fernandes <joel@joelfernandes.org>
+ L:	linux-kernel@vger.kernel.org
+ L:	linux-arch@vger.kernel.org
++L:	lkmm@lists.linux.dev
+ S:	Supported
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev
+ F:	Documentation/atomic_bitops.txt
+-- 
+2.39.3 (Apple Git-146)
 
-Nicolas
 
