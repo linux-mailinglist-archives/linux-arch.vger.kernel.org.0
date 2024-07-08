@@ -1,142 +1,121 @@
-Return-Path: <linux-arch+bounces-5312-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5313-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 741B6929B84
-	for <lists+linux-arch@lfdr.de>; Mon,  8 Jul 2024 07:21:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82187929EDD
+	for <lists+linux-arch@lfdr.de>; Mon,  8 Jul 2024 11:18:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A46C41C20D5D
-	for <lists+linux-arch@lfdr.de>; Mon,  8 Jul 2024 05:21:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 386ED1F22CFE
+	for <lists+linux-arch@lfdr.de>; Mon,  8 Jul 2024 09:18:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19EAD12E75;
-	Mon,  8 Jul 2024 05:21:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C45177F2C;
+	Mon,  8 Jul 2024 09:17:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="bgsJegKJ";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Rg6wh3yg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sfncwpyq"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fout5-smtp.messagingengine.com (fout5-smtp.messagingengine.com [103.168.172.148])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C03C12E48;
-	Mon,  8 Jul 2024 05:21:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.148
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 653E67711F;
+	Mon,  8 Jul 2024 09:17:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720416089; cv=none; b=FVbvcX5NHNr1ohjDXVxycj/lRXzlIGx7G48kyD8asHKb3WKL9xpIPlYPFVQ2BfDb+jjAbCv+JzT4EP4EzO6oXKxebXxgMVsPRen8JxseqKzgzILEpn20WcAT0BfIrYtGqtwN0YOnqFhRFM86qKsAL590cLo8XDJxxvU+UIzYOr0=
+	t=1720430252; cv=none; b=SrfzvSeFEQwhQ/3epp0RiCIwJ/ScOToybvPmUycI3xb6iDyR2j0wsR9Zs8VUxqigOe7f5PWc4mm+oCL5r/ppmVT4RWWChsljRXRLSBgh6sKVZp+1326sct4u5d86+gDsq2Y08Kf0c6LZ6J/TwpL8Ws3FTs7ssTLqPj2v1LIXX2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720416089; c=relaxed/simple;
-	bh=D+YA0EdV8mwqi8DbHhgLkiqZ4m1XY/+zf+eyz01wBAI=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=Jz46zYgDuyrRCxPu6zy66QDggLuj8d2v2SXKj7+O3oEbDaHOzZRVVTqaFUW5wnDjFpyRoVxEe3v+MjPbTuRyP4/69mJD+cEKhbSvY5Q7CtH+RyVZbb8F/z8/4bvYTQo5zJDabh0/QSUVIOnnsTpJDTMMrDJfqstP1nGS7e/5qRo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=bgsJegKJ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Rg6wh3yg; arc=none smtp.client-ip=103.168.172.148
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfout.nyi.internal (Postfix) with ESMTP id 39BFA1380630;
-	Mon,  8 Jul 2024 01:21:25 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Mon, 08 Jul 2024 01:21:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm1; t=1720416085; x=1720502485; bh=9cw3liCa6J
-	OsDHRRWnPpBkVEUBgrmVrocIAJhOArXc0=; b=bgsJegKJQtUX4O+YwZBoocDCZ6
-	V2F49kfn1XQjFQxutRlp/HdyI7jCRhLB2PniU9qy4gg6Y5bCFeEAXL8SGTW18Azw
-	JYvDa6snBN6rAwMsWbxdGdt+oX5hxOxR3hEaQjxBr6k2NqV5mEf0vsDDHtI6eYrO
-	g8MXfcHXJzixAac5zVknYJ3w0v2Vj3XW03OVKRPLhh4SH1g2hbelI3dps+aSDot5
-	hAelZzi/l/+WwWKfbtcHwrcUmuyPVHM9hzzlyC18yJ6dIdmLboRKVP03YZI/VxRH
-	VdSziY1n0gEQzkwLWzuGeso8XLeKR15WBlP0P6QodTxEe3jllZdKEpz3Vd0w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1720416085; x=1720502485; bh=9cw3liCa6JOsDHRRWnPpBkVEUBgr
-	mVrocIAJhOArXc0=; b=Rg6wh3ygiXlKw5cMykah+BB3buiJXWN1/bxJjbSUtkvH
-	F2FLx7jgPssSfcyB+tdshnjq7GKrvnONTyE/cgM5fVYzJM+Py2eKs0+OLDYd6wtq
-	FDduAyQoZHvnBANL3EQSPYzenEzAZmsOgAIfMjaFiLD0Xp/yN8DdsUWBdTQbFjmJ
-	knD1YymeorefaZfh5dpGNtO3TOD4aa0Pi/W0f68DtMgoIRjx8qYYstHcbrxXBtkl
-	11WmJaFQVdVKFXvNrcY+AAi+frts2sti9rAmZuoj+AQxC6eni+3i9Vb1TyWEyQcU
-	rtGb8HN3JuGLoEkxbj1YqXzBK1MkavOwHYYSZez9wA==
-X-ME-Sender: <xms:U3eLZjS2HvC3YeYtZ2CyihkvG-USKvHruVlnDzpcQyyWG8-9xcfKCQ>
-    <xme:U3eLZkxorCyx9VjGvFWwr5bcWE89A2yizFM8gEEci5lfuU-hgBeu2-XkFK0fL7OQA
-    VSsHdne_N6xpPHBeHQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdeigdeliecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:VHeLZo0IjfBFyeOSniCX5pKiV9LCw6pEGP88OsCKSJo5N8mO7qGmCw>
-    <xmx:VHeLZjC-mo7oKSmwuoPLw3hzhZbKBYp2iqj-c1cgaC89OP2BrwGfAQ>
-    <xmx:VHeLZsjeRe8wWEhEb8Bna0xFYutsCOzo4_8lUTaueiIX9XFqyu8pgA>
-    <xmx:VHeLZnonLvj0tp2X132j89X6g0xiEtKJSp-Gpni4pLUwB1WUNVUILQ>
-    <xmx:VXeLZltCwghKpDk280Q6cEc8zxM4b8M3yRyHDX8UtsP9hRIEwPj6n4Mq>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id DEA44B6008F; Mon,  8 Jul 2024 01:21:23 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-566-g3812ddbbc-fm-20240627.001-g3812ddbb
+	s=arc-20240116; t=1720430252; c=relaxed/simple;
+	bh=fRzukiwiGXpfJgT9MIn/+BOBLSM4o3zDVVIuAEKJfMk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Du6xbXp4LrVh9/G+Rq2j3fasTYa9hT1VsddIl3tI7Z44zvIdu9ERvyqY1AogfCEPg6vEkBmGNCOwqv0fhjtVCOKMfGoovXCqDHyGOZpBsB4eDKCxpgXpGrx/T9YM7BAueThUNIMQBNzZspLZ6O1nezvnVqxRnqCNKNX2KVv/YgA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sfncwpyq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E811EC116B1;
+	Mon,  8 Jul 2024 09:17:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720430252;
+	bh=fRzukiwiGXpfJgT9MIn/+BOBLSM4o3zDVVIuAEKJfMk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=SfncwpyqaAUcxk4HGvdMNaOlFxT3eL7rjEhJDUvNG62fa9KaXZR/Oz+v8yMCn3ta+
+	 /tccNzu3bQ8q8BfZ5+buUyzDUGywn+y/MY4doi6tGvKR8YdH0AkUVy7qj/f3dh1U8t
+	 3DmwyBV90mFNFHNrVkwT08fRI5lZYSocV/GxUbec27l1frJyIPaJ5MEo2xcS5A41wo
+	 OQcUVsetb6J2S4ud3iH8oqwrz1HWlD9qkxxYl7ODAK2zWmLEWuWboI9Eg77g85aBm0
+	 feGo25bpoB3Q4dHOJ/iwYN0eRuz5gReTmHsiTE3NUWs38X5woOobCbYbObh8AQ4sCW
+	 h2dVIyDDpLCwg==
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-58ef19aa69dso3774336a12.3;
+        Mon, 08 Jul 2024 02:17:31 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUAEbS7gHtFHzMY1PCZmtc7rA7hAXvVPSKEQW/D6Jksf9efFKSsVjoof2e40m2Nz/WFP9bV1dNlOo+LVzGcN0JrBTLr2VL+K21prFpYTQpI9w3Xut8Ge4wvm1Uk65LwyHUuHxxogA1hCDrE02odigHOWNcveSuEyZWZ3Lm5TkV7jQLiOpplfGpfX6Kod/TcrC5qoSQZPlu0y/0bqm2uD1koo+mIM1WMF+2VD7HaMmjub9PpXmlfcuek27Z/Q6Web0SRoWQKdw==
+X-Gm-Message-State: AOJu0YxSRPCHOaY1PuxDf2HNH1QCv9ciPRwYA44xVxXLPwTKIe7+85nZ
+	0E/1kpvqgb7GMbzMCv552de4J92tNhnSZIB2jzswmWH8ypdVfhG27FmF1D+eW4K0oS1L8GMA7fm
+	d0or1YRVAmTMEfWn182OUmYSZm2w=
+X-Google-Smtp-Source: AGHT+IEItbzjZ1A8AjoY2UEBrBnwgSWQEm3t7mr2+tl/5g9pMSmICjy6tz2b5gKMEgXcn3oWVBAMV2zDOPQcnE6qDs4=
+X-Received: by 2002:a05:6402:50c7:b0:57c:47c3:dc62 with SMTP id
+ 4fb4d7f45d1cf-58e590724ecmr7993184a12.5.1720430250552; Mon, 08 Jul 2024
+ 02:17:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <6fa4d8af-0f9e-4525-adf6-8c3c3d059b2f@app.fastmail.com>
-In-Reply-To: <57srp3ps-n7p8-orqq-86rq-p04o2246pn7s@syhkavp.arg>
-References: <20240707171919.1951895-1-nico@fluxnic.net>
- <20240707171919.1951895-5-nico@fluxnic.net>
- <55a8cff0-1d73-4743-9c56-2792616426c7@app.fastmail.com>
- <8251045r-26sn-4674-p820-4qp6s5o322qq@syhkavp.arg>
- <3dc8f89e-4525-4084-9d4a-facb6105239c@app.fastmail.com>
- <57srp3ps-n7p8-orqq-86rq-p04o2246pn7s@syhkavp.arg>
-Date: Mon, 08 Jul 2024 07:21:02 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Nicolas Pitre" <nico@fluxnic.net>
-Cc: "Russell King" <linux@armlinux.org.uk>,
- Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/4] __arch_xprod64(): make __always_inline when optimizing for
- performance
-Content-Type: text/plain
+References: <20240704143611.2979589-1-arnd@kernel.org> <20240704143611.2979589-3-arnd@kernel.org>
+In-Reply-To: <20240704143611.2979589-3-arnd@kernel.org>
+From: Guo Ren <guoren@kernel.org>
+Date: Mon, 8 Jul 2024 17:17:17 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQ4oDh2yEFpTBRpXauVa1zZAZBMsVvwbx3OUZnKaCLH0w@mail.gmail.com>
+Message-ID: <CAJF2gTQ4oDh2yEFpTBRpXauVa1zZAZBMsVvwbx3OUZnKaCLH0w@mail.gmail.com>
+Subject: Re: [PATCH 02/17] csky: drop asm/gpio.h wrapper
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Vineet Gupta <vgupta@kernel.org>, 
+	Russell King <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Brian Cain <bcain@quicinc.com>, Huacai Chen <chenhuacai@kernel.org>, 
+	WANG Xuerui <kernel@xen0n.name>, Dinh Nguyen <dinguyen@kernel.org>, Jonas Bonn <jonas@southpole.se>, 
+	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>, Stafford Horne <shorne@gmail.com>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Rich Felker <dalias@libc.org>, 
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, "David S. Miller" <davem@davemloft.net>, 
+	Andreas Larsson <andreas@gaisler.com>, Christian Brauner <brauner@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-snps-arc@lists.infradead.org, 
+	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org, 
+	linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev, 
+	linux-openrisc@vger.kernel.org, linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jul 8, 2024, at 03:21, Nicolas Pitre wrote:
-> On Sun, 7 Jul 2024, Arnd Bergmann wrote:
->> On Sun, Jul 7, 2024, at 21:14, Nicolas Pitre wrote:
+On Thu, Jul 4, 2024 at 10:36=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wro=
+te:
 >
-> Oh, most likely yes. The non-constant base has to go through the whole 
-> one-bit-at-a-time division loop whereas the constant base with 
-> __div64_const32 results in 4 64-bits multiply and add. Moving 
-> __arch_xprod_64() out of line adds the argument shuffling overhead and 
-> it can't skip overflow handling, but still.
+> From: Arnd Bergmann <arnd@arndb.de>
 >
-> Here's some numbers. With latest patches using __always_inline:
+> The asm/gpio.h header is gone now that all architectures just use
+> gpiolib, and so the redirect is no longer valid.
 >
-> test_div64: Starting 64bit/32bit division and modulo test
-> test_div64: Completed 64bit/32bit division and modulo test, 0.048285584s elapsed
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/csky/include/asm/Kbuild | 1 -
+>  1 file changed, 1 deletion(-)
 >
-> Latest patches but __always_inline left out:
+> diff --git a/arch/csky/include/asm/Kbuild b/arch/csky/include/asm/Kbuild
+> index 1117c28cb7e8..13ebc5e34360 100644
+> --- a/arch/csky/include/asm/Kbuild
+> +++ b/arch/csky/include/asm/Kbuild
+> @@ -1,7 +1,6 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  generic-y +=3D asm-offsets.h
+>  generic-y +=3D extable.h
+> -generic-y +=3D gpio.h
+>  generic-y +=3D kvm_para.h
+>  generic-y +=3D mcs_spinlock.h
+>  generic-y +=3D qrwlock.h
+> --
+> 2.39.2
 >
-> test_div64: Starting 64bit/32bit division and modulo test
-> test_div64: Completed 64bit/32bit division and modulo test, 0.053023584s elapsed
->
-> Forcing both constant and non-constant base through the same path:
->
-> test_div64: Starting 64bit/32bit division and modulo test
-> test_div64: Completed 64bit/32bit division and modulo test, 0.103263776s elapsed
->
-> It is worth noting that test_div64 does half the test with non constant 
-> divisors already so the impact is greater than what those numbers show.
->
-> And for what it is worth, those numbers were obtained using QEMU. The 
-> gcc version is 14.1.0.
+LGTM!
+Acked-by: Guo Ren <guoren@kernel.org>
 
-Right, so with the numbers in qemu matching your explanation,
-that seems reasonable to assume it will behave the same way
-across a wide range of physical CPUs.
-
-    Arnd
+--=20
+Best Regards
+ Guo Ren
 
