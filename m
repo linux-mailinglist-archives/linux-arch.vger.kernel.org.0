@@ -1,138 +1,142 @@
-Return-Path: <linux-arch+bounces-5310-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5312-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7948F929A87
-	for <lists+linux-arch@lfdr.de>; Mon,  8 Jul 2024 03:28:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 741B6929B84
+	for <lists+linux-arch@lfdr.de>; Mon,  8 Jul 2024 07:21:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 217081F20EC3
-	for <lists+linux-arch@lfdr.de>; Mon,  8 Jul 2024 01:28:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A46C41C20D5D
+	for <lists+linux-arch@lfdr.de>; Mon,  8 Jul 2024 05:21:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 345EB8C06;
-	Mon,  8 Jul 2024 01:28:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19EAD12E75;
+	Mon,  8 Jul 2024 05:21:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=pobox.com header.i=@pobox.com header.b="gvj0owoX";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b="x0OiMEcH"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="bgsJegKJ";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Rg6wh3yg"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from pb-smtp20.pobox.com (pb-smtp20.pobox.com [173.228.157.52])
+Received: from fout5-smtp.messagingengine.com (fout5-smtp.messagingengine.com [103.168.172.148])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A89D86FB6;
-	Mon,  8 Jul 2024 01:27:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=173.228.157.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C03C12E48;
+	Mon,  8 Jul 2024 05:21:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.148
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720402080; cv=none; b=AIFPza1FFNX40shsalWVCw63IuSBBeMSAEl0saXHhlC4HJjiwQI84FWIR6pV5LFzhdycH6iqqvtyg3wGDmfvInED+NW8yGL2bJOLfFqZxZgzLG+osO8apDbfYnwufrQkJVdtCavuFA6msf5gYe4gLGHp1+uVXI+90GgdYyM3cJM=
+	t=1720416089; cv=none; b=FVbvcX5NHNr1ohjDXVxycj/lRXzlIGx7G48kyD8asHKb3WKL9xpIPlYPFVQ2BfDb+jjAbCv+JzT4EP4EzO6oXKxebXxgMVsPRen8JxseqKzgzILEpn20WcAT0BfIrYtGqtwN0YOnqFhRFM86qKsAL590cLo8XDJxxvU+UIzYOr0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720402080; c=relaxed/simple;
-	bh=Iyvob8m8hAMZg2VcQl4+cqFXaOixCxGCDjPNS+xXtA0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qwDmnpMwxMZx0dFO0fyBtMCMnxQ/ixKOU5SYAzRrmE2lXlLvN0G5c8wtG+8eqUkjVP3zkojKlnLS6Rqt5SxiU8q2SpVaS0pJ2c/Gk+7VYAa4lafY3NMehvcj5EiivjjsJYeAuM9VNjLRHcYiXQKL9W8HeLLHuLaaPP432rp8/Ak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fluxnic.net; spf=pass smtp.mailfrom=fluxnic.net; dkim=pass (1024-bit key) header.d=pobox.com header.i=@pobox.com header.b=gvj0owoX; dkim=fail (1024-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b=x0OiMEcH reason="signature verification failed"; arc=none smtp.client-ip=173.228.157.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fluxnic.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fluxnic.net
-Received: from pb-smtp20.pobox.com (unknown [127.0.0.1])
-	by pb-smtp20.pobox.com (Postfix) with ESMTP id 2E428305DB;
-	Sun,  7 Jul 2024 21:27:58 -0400 (EDT)
-	(envelope-from nico@fluxnic.net)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=pobox.com; h=from:to:cc
-	:subject:date:message-id:in-reply-to:references:mime-version
-	:content-transfer-encoding; s=sasl; bh=Iyvob8m8hAMZg2VcQl4+cqFXa
-	OixCxGCDjPNS+xXtA0=; b=gvj0owoXvgJ/AWD9YLb5O6zh/aP34x2boQEKEr0fr
-	e7fShveWOlCMLQXXd9XXRMNcZEQuaQdCAfv7Wnvd1ppEZ8/OV9KIXoRy743d8QBC
-	a0+2ZE7n1ndxyYabI+sDzuHfPHw9YWMPiCuaxdrqxq3meFZgmBi9QpenYr8G+YWI
-	Kc=
-Received: from pb-smtp20.sea.icgroup.com (unknown [127.0.0.1])
-	by pb-smtp20.pobox.com (Postfix) with ESMTP id 26B77305DA;
-	Sun,  7 Jul 2024 21:27:58 -0400 (EDT)
-	(envelope-from nico@fluxnic.net)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=fluxnic.net;
- h=from:to:cc:subject:date:message-id:in-reply-to:references:mime-version:content-transfer-encoding; s=2016-12.pbsmtp; bh=KdayDt3ACE2onXUdriUt4N9A11pw6subhbTj7vBnMBM=; b=x0OiMEcHoWb9lyqZmA/bg8DZTtvYY11LUkLJRq8dvK2HV0+3zbSF0AyhFRc4HHT59qDN/gd2JNki+E0uBXszwVUU4ZVIecv5CBbQPVZdL/4nmANuDiubFQYkd8bCSKW4cnn/xLsiExCBhd1p9p/uTAuy2/n3uiU7ZHqvznCWp34=
-Received: from yoda.fluxnic.net (unknown [184.162.15.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by pb-smtp20.pobox.com (Postfix) with ESMTPSA id 1FA54305D7;
-	Sun,  7 Jul 2024 21:27:54 -0400 (EDT)
-	(envelope-from nico@fluxnic.net)
-Received: from xanadu.lan (OpenWrt.lan [192.168.1.1])
-	by yoda.fluxnic.net (Postfix) with ESMTPSA id CF290D3BD02;
-	Sun,  7 Jul 2024 21:27:51 -0400 (EDT)
-From: Nicolas Pitre <nico@fluxnic.net>
-To: Arnd Bergmann <arnd@arndb.de>,
-	Russell King <linux@armlinux.org.uk>
-Cc: Nicolas Pitre <npitre@baylibre.com>,
-	linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 4/4] __arch_xprod64(): make __always_inline when optimizing for performance
-Date: Sun,  7 Jul 2024 21:27:17 -0400
-Message-ID: <20240708012749.2098373-5-nico@fluxnic.net>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240708012749.2098373-1-nico@fluxnic.net>
-References: <20240708012749.2098373-1-nico@fluxnic.net>
+	s=arc-20240116; t=1720416089; c=relaxed/simple;
+	bh=D+YA0EdV8mwqi8DbHhgLkiqZ4m1XY/+zf+eyz01wBAI=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=Jz46zYgDuyrRCxPu6zy66QDggLuj8d2v2SXKj7+O3oEbDaHOzZRVVTqaFUW5wnDjFpyRoVxEe3v+MjPbTuRyP4/69mJD+cEKhbSvY5Q7CtH+RyVZbb8F/z8/4bvYTQo5zJDabh0/QSUVIOnnsTpJDTMMrDJfqstP1nGS7e/5qRo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=bgsJegKJ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Rg6wh3yg; arc=none smtp.client-ip=103.168.172.148
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfout.nyi.internal (Postfix) with ESMTP id 39BFA1380630;
+	Mon,  8 Jul 2024 01:21:25 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Mon, 08 Jul 2024 01:21:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm1; t=1720416085; x=1720502485; bh=9cw3liCa6J
+	OsDHRRWnPpBkVEUBgrmVrocIAJhOArXc0=; b=bgsJegKJQtUX4O+YwZBoocDCZ6
+	V2F49kfn1XQjFQxutRlp/HdyI7jCRhLB2PniU9qy4gg6Y5bCFeEAXL8SGTW18Azw
+	JYvDa6snBN6rAwMsWbxdGdt+oX5hxOxR3hEaQjxBr6k2NqV5mEf0vsDDHtI6eYrO
+	g8MXfcHXJzixAac5zVknYJ3w0v2Vj3XW03OVKRPLhh4SH1g2hbelI3dps+aSDot5
+	hAelZzi/l/+WwWKfbtcHwrcUmuyPVHM9hzzlyC18yJ6dIdmLboRKVP03YZI/VxRH
+	VdSziY1n0gEQzkwLWzuGeso8XLeKR15WBlP0P6QodTxEe3jllZdKEpz3Vd0w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1720416085; x=1720502485; bh=9cw3liCa6JOsDHRRWnPpBkVEUBgr
+	mVrocIAJhOArXc0=; b=Rg6wh3ygiXlKw5cMykah+BB3buiJXWN1/bxJjbSUtkvH
+	F2FLx7jgPssSfcyB+tdshnjq7GKrvnONTyE/cgM5fVYzJM+Py2eKs0+OLDYd6wtq
+	FDduAyQoZHvnBANL3EQSPYzenEzAZmsOgAIfMjaFiLD0Xp/yN8DdsUWBdTQbFjmJ
+	knD1YymeorefaZfh5dpGNtO3TOD4aa0Pi/W0f68DtMgoIRjx8qYYstHcbrxXBtkl
+	11WmJaFQVdVKFXvNrcY+AAi+frts2sti9rAmZuoj+AQxC6eni+3i9Vb1TyWEyQcU
+	rtGb8HN3JuGLoEkxbj1YqXzBK1MkavOwHYYSZez9wA==
+X-ME-Sender: <xms:U3eLZjS2HvC3YeYtZ2CyihkvG-USKvHruVlnDzpcQyyWG8-9xcfKCQ>
+    <xme:U3eLZkxorCyx9VjGvFWwr5bcWE89A2yizFM8gEEci5lfuU-hgBeu2-XkFK0fL7OQA
+    VSsHdne_N6xpPHBeHQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdeigdeliecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:VHeLZo0IjfBFyeOSniCX5pKiV9LCw6pEGP88OsCKSJo5N8mO7qGmCw>
+    <xmx:VHeLZjC-mo7oKSmwuoPLw3hzhZbKBYp2iqj-c1cgaC89OP2BrwGfAQ>
+    <xmx:VHeLZsjeRe8wWEhEb8Bna0xFYutsCOzo4_8lUTaueiIX9XFqyu8pgA>
+    <xmx:VHeLZnonLvj0tp2X132j89X6g0xiEtKJSp-Gpni4pLUwB1WUNVUILQ>
+    <xmx:VXeLZltCwghKpDk280Q6cEc8zxM4b8M3yRyHDX8UtsP9hRIEwPj6n4Mq>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id DEA44B6008F; Mon,  8 Jul 2024 01:21:23 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-566-g3812ddbbc-fm-20240627.001-g3812ddbb
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Pobox-Relay-ID:
- 4C81F428-3CC9-11EF-B11A-C38742FD603B-78420484!pb-smtp20.pobox.com
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <6fa4d8af-0f9e-4525-adf6-8c3c3d059b2f@app.fastmail.com>
+In-Reply-To: <57srp3ps-n7p8-orqq-86rq-p04o2246pn7s@syhkavp.arg>
+References: <20240707171919.1951895-1-nico@fluxnic.net>
+ <20240707171919.1951895-5-nico@fluxnic.net>
+ <55a8cff0-1d73-4743-9c56-2792616426c7@app.fastmail.com>
+ <8251045r-26sn-4674-p820-4qp6s5o322qq@syhkavp.arg>
+ <3dc8f89e-4525-4084-9d4a-facb6105239c@app.fastmail.com>
+ <57srp3ps-n7p8-orqq-86rq-p04o2246pn7s@syhkavp.arg>
+Date: Mon, 08 Jul 2024 07:21:02 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Nicolas Pitre" <nico@fluxnic.net>
+Cc: "Russell King" <linux@armlinux.org.uk>,
+ Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/4] __arch_xprod64(): make __always_inline when optimizing for
+ performance
+Content-Type: text/plain
 
-From: Nicolas Pitre <npitre@baylibre.com>
+On Mon, Jul 8, 2024, at 03:21, Nicolas Pitre wrote:
+> On Sun, 7 Jul 2024, Arnd Bergmann wrote:
+>> On Sun, Jul 7, 2024, at 21:14, Nicolas Pitre wrote:
+>
+> Oh, most likely yes. The non-constant base has to go through the whole 
+> one-bit-at-a-time division loop whereas the constant base with 
+> __div64_const32 results in 4 64-bits multiply and add. Moving 
+> __arch_xprod_64() out of line adds the argument shuffling overhead and 
+> it can't skip overflow handling, but still.
+>
+> Here's some numbers. With latest patches using __always_inline:
+>
+> test_div64: Starting 64bit/32bit division and modulo test
+> test_div64: Completed 64bit/32bit division and modulo test, 0.048285584s elapsed
+>
+> Latest patches but __always_inline left out:
+>
+> test_div64: Starting 64bit/32bit division and modulo test
+> test_div64: Completed 64bit/32bit division and modulo test, 0.053023584s elapsed
+>
+> Forcing both constant and non-constant base through the same path:
+>
+> test_div64: Starting 64bit/32bit division and modulo test
+> test_div64: Completed 64bit/32bit division and modulo test, 0.103263776s elapsed
+>
+> It is worth noting that test_div64 does half the test with non constant 
+> divisors already so the impact is greater than what those numbers show.
+>
+> And for what it is worth, those numbers were obtained using QEMU. The 
+> gcc version is 14.1.0.
 
-Recent gcc versions started not systematically inline __arch_xprod64()
-and that has performance implications. Give the compiler the freedom to
-decide only when optimizing for size.
+Right, so with the numbers in qemu matching your explanation,
+that seems reasonable to assume it will behave the same way
+across a wide range of physical CPUs.
 
-Signed-off-by: Nicolas Pitre <npitre@baylibre.com>
----
- arch/arm/include/asm/div64.h | 7 ++++++-
- include/asm-generic/div64.h  | 7 ++++++-
- 2 files changed, 12 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm/include/asm/div64.h b/arch/arm/include/asm/div64.h
-index 562d5376ae..d3ef8e416b 100644
---- a/arch/arm/include/asm/div64.h
-+++ b/arch/arm/include/asm/div64.h
-@@ -52,7 +52,12 @@ static inline uint32_t __div64_32(uint64_t *n, uint32_=
-t base)
-=20
- #else
-=20
--static inline uint64_t __arch_xprod_64(uint64_t m, uint64_t n, bool bias=
-)
-+#ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE
-+static __always_inline
-+#else
-+static inline
-+#endif
-+uint64_t __arch_xprod_64(uint64_t m, uint64_t n, bool bias)
- {
- 	unsigned long long res;
- 	register unsigned int tmp asm("ip") =3D 0;
-diff --git a/include/asm-generic/div64.h b/include/asm-generic/div64.h
-index 5d59cf7e73..25e7b4b58d 100644
---- a/include/asm-generic/div64.h
-+++ b/include/asm-generic/div64.h
-@@ -134,7 +134,12 @@
-  * Hoping for compile-time optimization of  conditional code.
-  * Architectures may provide their own optimized assembly implementation=
-.
-  */
--static inline uint64_t __arch_xprod_64(const uint64_t m, uint64_t n, boo=
-l bias)
-+#ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE
-+static __always_inline
-+#else
-+static inline
-+#endif
-+uint64_t __arch_xprod_64(const uint64_t m, uint64_t n, bool bias)
- {
- 	uint32_t m_lo =3D m;
- 	uint32_t m_hi =3D m >> 32;
---=20
-2.45.2
-
+    Arnd
 
