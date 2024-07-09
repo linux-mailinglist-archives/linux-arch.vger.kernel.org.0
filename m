@@ -1,196 +1,159 @@
-Return-Path: <linux-arch+bounces-5321-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5322-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BD3192C24D
-	for <lists+linux-arch@lfdr.de>; Tue,  9 Jul 2024 19:23:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A77B92C2B7
+	for <lists+linux-arch@lfdr.de>; Tue,  9 Jul 2024 19:44:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9E7891C22F9C
-	for <lists+linux-arch@lfdr.de>; Tue,  9 Jul 2024 17:23:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7E03D1C21300
+	for <lists+linux-arch@lfdr.de>; Tue,  9 Jul 2024 17:44:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6715A34;
-	Tue,  9 Jul 2024 17:23:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E2AE1B86F4;
+	Tue,  9 Jul 2024 17:44:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AwPgrXPW"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ewCWYayD"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 693DD15886B;
-	Tue,  9 Jul 2024 17:23:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F58C17B023
+	for <linux-arch@vger.kernel.org>; Tue,  9 Jul 2024 17:44:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720545833; cv=none; b=JpJEbAieb4WUe/sHbm0cM9pj9yuhbLDmB8QxZYoLfbRyQ6t1OU6JfleiTrKi37mgf7rWx9gfAmUp41yJuK9vZnUhXEqLcjHHwCAeZL1ctTsGdj3f6w9q+6xoBN3M+BidczbsRis42yKhvUal85+J+7+vzpgzPeMc6sQY4FWQL0k=
+	t=1720547074; cv=none; b=f5cjlwUASn6SSh9WHR0PrucngR/xXF/BplIOkf/kVML5EmGOL7zfU7uiH/8+T3IewSqhq1ShSHjLQKQ4n3AEJFROrJOiYMv1TPoZfjIAV1RYGaIYESorC7yks+JHVkwzGa/BcPiY4llOW0dEZV5wPsIGDTDOU+s5HVzLzFj22M4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720545833; c=relaxed/simple;
-	bh=6JR7YL5dHcTXqmUfNm6ulP4+0whK4Ux4ulJpM4dDEes=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s3hRGI+CI1m2r6LbbtBUWWLOTCD4CuJ1UcY+PtykKp7oRPtYtr5GtJMl3f4ASGTuhbZmTimuDqw9i3chCjF5fhNmCUFLmcx71pp3YZsw1wrt6NUkoZMMBMQmEqhmx1sB+Pog/BzQdFqVKPe2mCMH0wo6x+Z6w1uxNHo0vXyyBFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AwPgrXPW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B73D9C3277B;
-	Tue,  9 Jul 2024 17:23:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720545832;
-	bh=6JR7YL5dHcTXqmUfNm6ulP4+0whK4Ux4ulJpM4dDEes=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AwPgrXPW3JfSlpe46zAqPpRmk67PjUPgvKmiUQjJg6uvcyMPVWuu5e5QNiuViEwTY
-	 umK0995F6a5PS1q171iZzBn7MkFAbMR1M49fRNmmou84XeBTnLTh7hjQxPCMhNugP0
-	 VbWdKqpGAMDyQn0ta/D/sfOmUqKMGKYNLbk3Z5s2olmuPoFKKEMbXb0G/0xHKg7MjA
-	 SlOvh+HlJkvcRSSYEnGJDIeXCK6ZAL4UTk/eUKUIPXZT1L5reo8onxjdpCvcVwXHSs
-	 qIn1Z9HZ6XXUHbOYbnpCKH5HWbVMfRyEEKGUip6ynNrB/i17jwY0/ougN9eXr4Vgun
-	 sPm1+k6XgCKXg==
-Date: Tue, 9 Jul 2024 18:23:42 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Vineet Gupta <vgupta@kernel.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-	Brian Cain <bcain@quicinc.com>, Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>, Dinh Nguyen <dinguyen@kernel.org>,
-	Jonas Bonn <jonas@southpole.se>,
-	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-	Stafford Horne <shorne@gmail.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-	linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
-	linux-openrisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-	Aishwarya.TCV@arm.com, Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 10/17] arm64: generate 64-bit syscall.tbl
-Message-ID: <c8c882ad-d508-40b7-9af5-b2a2ddf777c1@sirena.org.uk>
-References: <20240704143611.2979589-1-arnd@kernel.org>
- <20240704143611.2979589-11-arnd@kernel.org>
+	s=arc-20240116; t=1720547074; c=relaxed/simple;
+	bh=aAZTQ+YpAmM8VeJ2gdCT0fdALP/HckVt+0zF9zwIYKM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CnwOrvgQqLbbxYsdzIrTra5HiDvW0vXxej22c4P+o/5zE2ku+TyceuoS7ErCeB1WZNQgtaHt7mH88EFTqrAEKbxyHld0+iHdCVicBweqBvTYSVabaePTW9n87zB2fgwK/gLQO3FAjNsPtXfp/ypRx34QJNaNn8slvbfGKbTQJYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ewCWYayD; arc=none smtp.client-ip=209.85.219.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-6b5f2ac0fb9so23990596d6.2
+        for <linux-arch@vger.kernel.org>; Tue, 09 Jul 2024 10:44:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1720547071; x=1721151871; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aAZTQ+YpAmM8VeJ2gdCT0fdALP/HckVt+0zF9zwIYKM=;
+        b=ewCWYayDHVUQdeU7eo2bk/WEAaCcmScYF5VGMzYJUNAEQIDrbdFRnBatWQWtFxwVeN
+         dbU9TtoCuHjCskHM7K6E3cikXg840iI3fIc1GdPIjyEmdqsOorJb9au7N62m6+cL1V06
+         das8EpWHOh5cWQCzX2BzZRLDb+qFqumYiZWj2rJLiIx39U5/FJoyBQ0Fsv2tMon6l9r8
+         e9tDwkMGjXGga07LvbQGEIK5lDW6EU8IX8I2ma5niR0188M3D0Y0hswlzKoW6OF0C+Jg
+         qVUOuYrfQbb5lsxNwOG1C3loL+HLND7P+o+dAPoWt9cq6+QcyHCN40Wsb8AQdRbdKnQp
+         Uztw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720547071; x=1721151871;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aAZTQ+YpAmM8VeJ2gdCT0fdALP/HckVt+0zF9zwIYKM=;
+        b=SPK4Zp0EU/QG1gaJXXooFZ6kNjGKOW2eV+RdwintoUZvxzs3ORXLtLerSSXuj/U+Sx
+         ksxp2LRjfqhGs0SHOk7udgizP3qaIVeibve5yhwaBGsk+Vein5jLoqLc0bgx+5ukeC+H
+         1QoSzQw0s4W5Z4EwvkxNcCIoRS7vF6p5gdqRIMwkPQASMv42BoG+XzgWdKREYXB4haIK
+         NDld0D2jHVwBX0UpGUNZh4l+JyAWTBwd2pf6BY5+X6mdnJFTmMgV9xcPF9S2xDPxlXOp
+         XvRlwE1BuQmbDR3NfQZP/M27cpMQbJ7GyNKr+fpXEkS6CGVcwqJKKmGSkrFTC4sri+4O
+         6GWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVfqZR63GoAULkwmYf1BFazLpeGgmTaLVc0j2zr5juq2ZZvAqZjk41CeIlSR66BUqhd20PidJCQ1NlKwt7ponmTMh8o0Ehl68SHAg==
+X-Gm-Message-State: AOJu0Yyn0KPoOU2HVIdiqt50kBZ7mp9Bgv/HNBkS0XtxeasYmo8U8Jm3
+	UmKtJiQqFMrJYeSGRgAZXf0nxhtW11FEcL8DIqeqVN1dnutBSv3k2W5V47PalyIX19BKEeu1+FG
+	yWMHB6NTs98YLzTVMOSRL02zoF24gvBpg83ge
+X-Google-Smtp-Source: AGHT+IH16U57va8G1AYAXy2voaQ3uaav9TjEwbgydjk5ADdt1gmfzeqqJI7aDLdE+wjZ6VeQ0SWzZOZUCWRm4uKL9HM=
+X-Received: by 2002:a05:6214:c23:b0:6b5:752e:a33a with SMTP id
+ 6a1803df08f44-6b61c212bf8mr38578236d6.57.1720547071067; Tue, 09 Jul 2024
+ 10:44:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Qf0YYqoW3KQMZ1o1"
-Content-Disposition: inline
-In-Reply-To: <20240704143611.2979589-11-arnd@kernel.org>
-X-Cookie: Your step will soil many countries.
-
-
---Qf0YYqoW3KQMZ1o1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240628003253.1694510-1-almasrymina@google.com>
+ <20240628003253.1694510-4-almasrymina@google.com> <CAMArcTUqqxam+BPwGExOFOLVi3t=dwA-5sSagKC5dndv07GDLQ@mail.gmail.com>
+ <CAHS8izNS5jZjPfc-sARbHV7mzqzH+UhHfAtCTKRRTfSAdhY4Cw@mail.gmail.com> <CAMArcTUdCxOBYGF3vpbq=eBvqZfnc44KBaQTN7H-wqdUxZdziw@mail.gmail.com>
+In-Reply-To: <CAMArcTUdCxOBYGF3vpbq=eBvqZfnc44KBaQTN7H-wqdUxZdziw@mail.gmail.com>
+From: Mina Almasry <almasrymina@google.com>
+Date: Tue, 9 Jul 2024 10:44:16 -0700
+Message-ID: <CAHS8izNgaqC--GGE2xd85QB=utUnOHmioCsDd1TNxJWKemaD_g@mail.gmail.com>
+Subject: Re: [PATCH net-next v15 03/14] netdev: support binding dma-buf to netdevice
+To: Taehee Yoo <ap420073@gmail.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
+	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, 
+	Nikolay Aleksandrov <razor@blackwall.org>, Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, 
+	Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, 
+	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst <jeroendb@google.com>, 
+	Praveen Kaligineedi <pkaligineedi@google.com>, Willem de Bruijn <willemb@google.com>, 
+	Kaiyuan Zhang <kaiyuanz@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 04, 2024 at 04:36:04PM +0200, Arnd Bergmann wrote:
+On Tue, Jul 9, 2024 at 8:37=E2=80=AFAM Taehee Yoo <ap420073@gmail.com> wrot=
+e:
+>
+...
+> And I found another bug.
+>
+> [ 236.625141] BUG: KASAN: slab-use-after-free in
+> net_devmem_unbind_dmabuf+0x364/0x440
+...
+> Reproducer:
+> ./ncdevmem -f <interface name> -l -p 5201 -v 7 -t 0 -q 2 &
+> sleep 10
+> modprobe -rv bnxt_en
+> killall ncdevmem
+>
+> I think it's a devmemTCP core bug so this issue would be reproduced
+> with other drivers.
+>
 
->  #define __ARCH_WANT_SYS_CLONE
-> +#define __ARCH_WANT_NEW_STAT
-> =20
-> -#ifndef __COMPAT_SYSCALL_NR
-> -#include <uapi/asm/unistd.h>
-> -#endif
-> +#include <asm/unistd_64.h>
+Thanks again for testing Taehee. I haven't looked into reproducing yet
+but the issue seems obvious from the repro and the trace. What happens
+is that when we bind an rxq we add it to bound_rxq_list, and then when
+we unbind we access the rxq in the list, without checking if it's
+still alive. With your sequence, the rxq is freed before the unbind
+happens, I think, so we hit a use-after-free.
 
-It looks like this is causing widespread build breakage in kselftest in
--next for arm64, there are *many* errors in the form:
+The fix, I think, should be simple, we need to remember to remove the
+rxq from bound_rxq_list as it is deallocated so there is no access
+after free.
 
-In file included from test_signals_utils.c:14:
-/build/stage/build-work/usr/include/asm/unistd.h:2:10: fatal error: unistd_=
-64.h: No such file or directory
-    2 | #include <unistd_64.h>
-      |          ^~~~~~~~~~~~~
+Btw, I have all the rest of the feedback addressed (including netlink
+introspection) and I was in the process of rebasing and build-testing
+a new version, to try to get in before net-next closes if at all
+possible. I don't think I'll be able to fix this particular issue in
+time, but I should be able to submit a fix targeting the net tree
+during the merged window, if that's OK. If folks feel this issue is
+blocking, please let me know so I don't send another version before
+net-next reopens.
 
-which obviously looks like it's tied to the above but I've not fully
-understood the patch/series yet.  Build log at:
-
-   https://builds.sirena.org.uk/82d01fe6ee52086035b201cfa1410a3b04384257/ar=
-m64/defconfig/build.log
-
-A bisect appears to confirm that it's this commit, which is in -next as
-6e4a077c0b607c674536908c5b68f1c31e4e26ec.
-
-git bisect start
-# status: waiting for both good and bad commits
-# bad: [82d01fe6ee52086035b201cfa1410a3b04384257] Add linux-next specific f=
-iles for 20240709
-git bisect bad 82d01fe6ee52086035b201cfa1410a3b04384257
-# status: waiting for good commit(s), bad commit known
-# good: [037206cd4cb43d535453723140fde1bcde0b296e] Merge branch 'for-linux-=
-next-fixes' of https://gitlab.freedesktop.org/drm/misc/kernel.git
-git bisect good 037206cd4cb43d535453723140fde1bcde0b296e
-# bad: [2ae3e655fc40f1b6620194b90dcf9a4515257918] Merge branch 'master' of =
-git://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git
-git bisect bad 2ae3e655fc40f1b6620194b90dcf9a4515257918
-# bad: [4f2a367612d46dff2068582feadfbdd8e1c0443f] Merge branch 'fs-next' of=
- linux-next
-git bisect bad 4f2a367612d46dff2068582feadfbdd8e1c0443f
-# bad: [d3da7ed72840f3660f90966490adfd499d96ea8f] Merge branch 'for-next' o=
-f git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git
-git bisect bad d3da7ed72840f3660f90966490adfd499d96ea8f
-# good: [6355edbb3dfe322f0748b1eb3987973a568bbb42] Merge tag 'v6.11-rockchi=
-p-dts64-2' of https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-r=
-ockchip into soc/dt
-git bisect good 6355edbb3dfe322f0748b1eb3987973a568bbb42
-# good: [2073cda629a47f2ebe2afcd3cb8b3000d5cd13d1] mm: optimization on page=
- allocation when CMA enabled
-git bisect good 2073cda629a47f2ebe2afcd3cb8b3000d5cd13d1
-# good: [91a2b5b12867f77dc68d2d15ec7381e6e43820cb] Merge branch 'perf-tools=
--next' of git://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-nex=
-t.git
-git bisect good 91a2b5b12867f77dc68d2d15ec7381e6e43820cb
-# bad: [b8c38a39b6ee44b02ee563b60439f417fec441ad] Merge branch 'for-next/pe=
-rf' of git://git.kernel.org/pub/scm/linux/kernel/git/will/linux.git
-git bisect bad b8c38a39b6ee44b02ee563b60439f417fec441ad
-# good: [c100216635e922f43d9e783da918a749995350ca] Merge branch 'for-next/v=
-cpu-hotplug' into for-next/core
-git bisect good c100216635e922f43d9e783da918a749995350ca
-# bad: [fafb823fc82dfb746cc9043b1573c4b29ef1d52a] Merge branch 'for-next' o=
-f git://git.kernel.org/pub/scm/linux/kernel/git/rmk/linux.git
-git bisect bad fafb823fc82dfb746cc9043b1573c4b29ef1d52a
-# bad: [8d46f9dd06378e346a562c75bc2a260a03abe807] csky: convert to generic =
-syscall table
-git bisect bad 8d46f9dd06378e346a562c75bc2a260a03abe807
-# good: [57029ba74296a4dafe35f147e88d56d8ae7b69da] kbuild: add syscall tabl=
-e generation to scripts/Makefile.asm-headers
-git bisect good 57029ba74296a4dafe35f147e88d56d8ae7b69da
-# good: [ea0130bf3c45f276b1f9e005eeb255a80a10358b] arm64: convert unistd_32=
-=2Eh to syscall.tbl format
-git bisect good ea0130bf3c45f276b1f9e005eeb255a80a10358b
-# bad: [b2595bdb3eb3fe24137d0bd07a51bc622f068a81] arm64: rework compat sysc=
-all macros
-git bisect bad b2595bdb3eb3fe24137d0bd07a51bc622f068a81
-# bad: [6e4a077c0b607c674536908c5b68f1c31e4e26ec] arm64: generate 64-bit sy=
-scall.tbl
-git bisect bad 6e4a077c0b607c674536908c5b68f1c31e4e26ec
-# first bad commit: [6e4a077c0b607c674536908c5b68f1c31e4e26ec] arm64: gener=
-ate 64-bit syscall.tbl
-
---Qf0YYqoW3KQMZ1o1
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmaNch4ACgkQJNaLcl1U
-h9D3rQf8CZ9gPfX054uMomNs1xS6dBXwr9es5isGNpgMC9ccGAhNPLutJvRWDgKW
-pl3YBDyLIoQHGQtB/r9DIQuPQg0xF5ZI80itka6yRvmgnCcTovgdRGgBc9Z549Dl
-epxlzSquqEILa8rpTPxywHpu8pFGCNaQhZ/e5shUH1gOWDaOE8WU7jI2MDRD9sLa
-I5OD24mUtFHH1kpgNBJRESf4bYcVgM7EYm9spMdd0lb8zjIIUqTJiUKyInyKTNIt
-qEAIsEdOMoMTi/9FPetku+lxZQgd78juowTgoODixlanZuEnMqVPQYpeX2UZegOe
-cpcjrctAmtncTMv6mtWg5YwE3OQSNA==
-=WV1l
------END PGP SIGNATURE-----
-
---Qf0YYqoW3KQMZ1o1--
+--=20
+Thanks,
+Mina
 
