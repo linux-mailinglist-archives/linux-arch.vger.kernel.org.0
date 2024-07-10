@@ -1,140 +1,110 @@
-Return-Path: <linux-arch+bounces-5344-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5347-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D22992CF89
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Jul 2024 12:45:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7852692D1DE
+	for <lists+linux-arch@lfdr.de>; Wed, 10 Jul 2024 14:46:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9E9E71C2173E
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Jul 2024 10:45:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 20FEB1F24C92
+	for <lists+linux-arch@lfdr.de>; Wed, 10 Jul 2024 12:46:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E35561922F9;
-	Wed, 10 Jul 2024 10:36:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29CA218FDA7;
+	Wed, 10 Jul 2024 12:46:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ioCbpULW"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="W/YNqMl+";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="crGDQrNc"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from fout7-smtp.messagingengine.com (fout7-smtp.messagingengine.com [103.168.172.150])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20DAE19004E
-	for <linux-arch@vger.kernel.org>; Wed, 10 Jul 2024 10:36:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BE5681723;
+	Wed, 10 Jul 2024 12:46:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720607807; cv=none; b=TyOxEazAUbPFXNplEHi41xCEVXWxOahAd3tAFxcN2+Npm7hhr/IsvN25N+nySpsJ2Ygpu7B4HPjY6fENsr+kIn13Q++dBHuWbtZi1O3XDXJI1vMY5gyo4qbRpAtvHZ53WfZrYfsCSnscT8UduI77mi48Vo9ZR/ddz9bbsIVjIVw=
+	t=1720615568; cv=none; b=OLH03W0nmuAvrnDkBN5rxY6qAdo7HAgAUrWZl4bQF7fPW1dByZzC+U6fqmhban4gpqFTdgZH215/VA/DQVYtK0+VaGlc7t3Z+GH43n2vmzzW0PlOkwrp+723BuhfFDbQSLdjRRYeWVb6V92bfDd4/C6HtqRf+M0xrM+RizN2zUY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720607807; c=relaxed/simple;
-	bh=kqLm5P45NxwgK+tmNpa+OcNHo84diEsXJjayzggqo7c=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=PJm8JK/UVGjyYl/W6bpSDW6xJ73Wnpb1tzPBZXZQMo+0T/b/vTR9HEGRmge6iKY3qV/3zOzb09cM3b9sAG5KP7AMQDiO1Is+2rbubIPWDkeB2/m/EiCNgemgABEn8zoF+m3X5uhJGqzDFXozQx+uGXtW13KXp2oVJ9MYFg6EKQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ioCbpULW; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1720607805;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=TbJg6z7j+ZQBtm21UhpDM4r/48rTnLX4yDmOeuhoEeA=;
-	b=ioCbpULWxtfoe8brH+B0h725MLz9J3f1YwRnkeg55GktTbmjIAMkLe+Oiv6ZWaanrUeUOs
-	+w/kV6qs2agoAiO+t52GqJW1pI7Amct2wLz4uXZoT2y2zXrJDAkes/01V7m+gehj0gpJ9t
-	8fy7lvwbxN8TBdeTnw29gqXskfxfA2Y=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-186-a07wZjSjMfOCkc_bgrfTiQ-1; Wed,
- 10 Jul 2024 06:36:41 -0400
-X-MC-Unique: a07wZjSjMfOCkc_bgrfTiQ-1
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 07722196CE01;
-	Wed, 10 Jul 2024 10:36:36 +0000 (UTC)
-Received: from oldenburg.str.redhat.com (unknown [10.45.224.154])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A378D19560AE;
-	Wed, 10 Jul 2024 10:36:24 +0000 (UTC)
-From: Florian Weimer <fweimer@redhat.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,  Will Deacon
- <will@kernel.org>,  Jonathan Corbet <corbet@lwn.net>,  Andrew Morton
- <akpm@linux-foundation.org>,  Marc Zyngier <maz@kernel.org>,  Oliver Upton
- <oliver.upton@linux.dev>,  James Morse <james.morse@arm.com>,  Suzuki K
- Poulose <suzuki.poulose@arm.com>,  Arnd Bergmann <arnd@arndb.de>,  Oleg
- Nesterov <oleg@redhat.com>,  Eric Biederman <ebiederm@xmission.com>,
-  Shuah Khan <shuah@kernel.org>,  "Rick P. Edgecombe"
- <rick.p.edgecombe@intel.com>,  Deepak Gupta <debug@rivosinc.com>,  Ard
- Biesheuvel <ardb@kernel.org>,  Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-  Kees Cook <kees@kernel.org>,  "H.J. Lu" <hjl.tools@gmail.com>,  Paul
- Walmsley <paul.walmsley@sifive.com>,  Palmer Dabbelt <palmer@dabbelt.com>,
-  Albert Ou <aou@eecs.berkeley.edu>,  Christian Brauner
- <brauner@kernel.org>,  Thiago Jung Bauermann
- <thiago.bauermann@linaro.org>,  Ross Burton <ross.burton@arm.com>,
-  linux-arm-kernel@lists.infradead.org,  linux-doc@vger.kernel.org,
-  kvmarm@lists.linux.dev,  linux-fsdevel@vger.kernel.org,
-  linux-arch@vger.kernel.org,  linux-mm@kvack.org,
-  linux-kselftest@vger.kernel.org,  linux-kernel@vger.kernel.org,
-  linux-riscv@lists.infradead.org, "Schimpe, Christina"
- <christina.schimpe@intel.com>, "Pandey, Sunil K"
- <sunil.k.pandey@intel.com>
-Subject: Re: [PATCH v9 05/39] arm64/gcs: Document the ABI for Guarded
- Control Stacks
-In-Reply-To: <20240625-arm64-gcs-v9-5-0f634469b8f0@kernel.org> (Mark Brown's
-	message of "Tue, 25 Jun 2024 15:57:33 +0100")
-References: <20240625-arm64-gcs-v9-0-0f634469b8f0@kernel.org>
-	<20240625-arm64-gcs-v9-5-0f634469b8f0@kernel.org>
-Date: Wed, 10 Jul 2024 12:36:21 +0200
-Message-ID: <87a5iph6u2.fsf@oldenburg.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	s=arc-20240116; t=1720615568; c=relaxed/simple;
+	bh=ENCye+tN6ZTv1qBEWwY9zTaG+Gvl9QpdG298D8ehGvs=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=WEsQnOOYHCMMj9lN4AuzjCcRAQgnzl9ttP/f3jhgNjM1DCZ+IfYbPpA+NsVchiioJKwrYCylCpdEmzXuI00jabRRcLyr73mjV1iuNjBuu6ACrf4edOX//lzrejLeTsRDdzI4WmfbMSlw5FTl6UhecdmZKrRtIhfXqfibgsCUNuI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=W/YNqMl+; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=crGDQrNc; arc=none smtp.client-ip=103.168.172.150
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfout.nyi.internal (Postfix) with ESMTP id 326441381D67;
+	Wed, 10 Jul 2024 08:46:01 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Wed, 10 Jul 2024 08:46:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1720615561; x=1720701961; bh=iHV40EwQ89
+	jWy0gmmC2olWSBS48TkU1OBQ1jmtxb560=; b=W/YNqMl+VwtHXRTXRaIaTOqRcu
+	mDP8QLj6Y/2fx3oKUqBRqm+/EvlkDGK6INDctqhYqZ3P0KT7vl/+ONvvpDWHtav/
+	INrtSGgAZfvTy2FfPZ9e5U/ctGW3UJ0bG2lUD2zECL27IMknS02KkO4xYtFqLPBj
+	L2f/0q2NsPYTnRD+eEcgUbmSqhyTxFukCCVcNLQJmYEKrojVaRMMcet0mseQivoc
+	o7zT9j6+vj6iRy4t3eL0G13u5IlzeRdY/5n5BJkOi+qzJS8IfesV2TO0CO28SgZd
+	FbG20NrFr2uvqVaRPkcxe+3M8kDz2yTGMUkIvfFov1HyYDVOaUnyF26xK+sw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1720615561; x=1720701961; bh=iHV40EwQ89jWy0gmmC2olWSBS48T
+	kU1OBQ1jmtxb560=; b=crGDQrNcTJb5MTItzXl+jd9CXkgr1tJQYNoL1x3el+K9
+	/M/IZo69NXq64HMZcDPOkuB+uJRF93MnUp9dD5hscD5u4VIFCqFsOhRkmjQm3ZAQ
+	2puyHiKtAn15LB0ldiIjH75pikyvlrLSOO72dQM9RQiLsXqHCKfm9CiykJ66sOpC
+	WAOmASa4SsEoMLBvP05Rk1dBUX4o8y8XSZ4hmZEchCGS9IirIHo68LpiVHkS/zWC
+	ZcDUm8RW2r696ghojf8F6LWcW07ZlGqrh9efhJEe3palyNaWXzgIOgwk/VguCm0o
+	WJaG/ijrOVzrKDAntP9FIW1kOdvTCK/q6FDTlxZLBg==
+X-ME-Sender: <xms:iIKOZuwRgj1GBkAB4crhdq046iBrTrYf_VQFUqmQo92yzGACZaFmYw>
+    <xme:iIKOZqTFAYKPr3m7m3IjGxxTUEes8tCXK0qurabiwEZG_6DwxZXwYu-xhCBUGffGX
+    t_UcNSWA38BHsgdlh4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrfedugdehiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:iIKOZgXX4lS7AhfaBALO2NgUi_Q_hqGvfqsThQRcdzSW8AxNOcU2UQ>
+    <xmx:iIKOZkh3Q8Uv568BncsOYYwSy5NZqYdQ5vsYnP2OEyZUWVUErABkvQ>
+    <xmx:iIKOZgA-iD0SinnbnWicFgosiMfgcgfGqE6pQCD26vQq1I_TbrpU3w>
+    <xmx:iIKOZlICnUNdS2ZWXCfC8mojYGl6A5g57_lKFS3g1u2HUiNpWXxoZA>
+    <xmx:iYKOZjML3T9OUaj4EJch1lH_wzFpD2tpbfalNhCZaWdmfLSSIwJp8wc9>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id EB4A7B6008D; Wed, 10 Jul 2024 08:45:59 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-568-g843fbadbe-fm-20240701.003-g843fbadb
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Message-Id: <461243b3-4f80-4745-8169-c5dcee32ed63@app.fastmail.com>
+In-Reply-To: <5fc31a39-2068-4fff-b9bf-27feb4ca3bbe@arm.com>
+References: <20240612160038.522924-1-steven.price@arm.com>
+ <7f258a4c-6048-4718-851d-4768789bc5e1@app.fastmail.com>
+ <5fc31a39-2068-4fff-b9bf-27feb4ca3bbe@arm.com>
+Date: Wed, 10 Jul 2024 14:45:38 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Steven Price" <steven.price@arm.com>
+Cc: Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fixmap: Remove unused set_fixmap_offset_io()
 Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-* Mark Brown:
+On Thu, Jun 27, 2024, at 15:58, Steven Price wrote:
+> On 12/06/2024 21:02, Arnd Bergmann wrote:
+> Actually for now it looks[1] like we're going to drop the overriding of 
+> set_fixmap_io() so if you want to apply this change separately please 
+> do!
 
+Applied now.
 
-> +4.  Signal handling
-> +--------------------
-> +
-> +* A new signal frame record gcs_context encodes the current GCS mode and
-> +  pointer for the interrupted context on signal delivery.  This will always
-> +  be present on systems that support GCS.
-> +
-> +* The record contains a flag field which reports the current GCS configuration
-> +  for the interrupted context as PR_GET_SHADOW_STACK_STATUS would.
-> +
-> +* The signal handler is run with the same GCS configuration as the interrupted
-> +  context.
-> +
-> +* When GCS is enabled for the interrupted thread a signal handling specific
-> +  GCS cap token will be written to the GCS, this is an architectural GCS cap
-> +  token with bit 63 set and the token type (bits 0..11) all clear.  The
-> +  GCSPR_EL0 reported in the signal frame will point to this cap token.
-
-How does this marker interfere with Top Byte Ignore (TBI; I hope I got
-the name right)?  The specification currently does not say that only
-addresses pushed to the shadow stack with the top byte cleared, which
-potentially makes the markup ambiguous.  On x86-64, the same issue may
-exist with LAM.  I have not tested yet what happens there.  On AArch64
-and RISC-V, it may be more natural to use the LSB instead of the LSB for
-the mark bit because of its instruction alignment.
-
-We also have a gap on x86-64 for backtrace generation because the
-interrupted instruction address does not end up on the shadow stack.
-This address is potentially quite interesting for backtrace generation.
-I assume it's currently missing because the kernel does not resume
-execution using a regular return instruction.  It would be really useful
-if it could be pushed to the shadow stack, or recoverable from the
-shadow stack in some other way (e.g., the address of the signal context
-could be pushed instead).  That would need some form of marker as well.
-
-Thanks,
-Florian
-
+    Arnd
 
