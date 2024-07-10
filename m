@@ -1,270 +1,174 @@
-Return-Path: <linux-arch+bounces-5341-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5342-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95AEB92CCDB
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Jul 2024 10:24:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DB6F92CDBF
+	for <lists+linux-arch@lfdr.de>; Wed, 10 Jul 2024 11:00:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EF637B2470E
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Jul 2024 08:23:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 02AD31F25D8E
+	for <lists+linux-arch@lfdr.de>; Wed, 10 Jul 2024 09:00:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6609686250;
-	Wed, 10 Jul 2024 08:23:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F22A17623C;
+	Wed, 10 Jul 2024 08:57:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="vElaDc5Z";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="IHNtdTc2"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from fout4-smtp.messagingengine.com (fout4-smtp.messagingengine.com [103.168.172.147])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39A7B1EB40;
-	Wed, 10 Jul 2024 08:23:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C4E217B43E;
+	Wed, 10 Jul 2024 08:57:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.147
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720599834; cv=none; b=r4rVgq6SLNasR8O6olVi3lM/o+ku4RZXnLsPxnKn1urTuZJxvYabG4K232D/SUrdblgIaCORjnOCEgCt5ka2X/dzjDfDNdnZpzitq2R6/FpRh3JbRKFGOf1a+0hiMEmdByAJ/AkF++7vqCpUVgPFd8auJjsDr2fVpHYVocAL1uw=
+	t=1720601871; cv=none; b=ka4Y2sfTAu6Zo2QTVNdFy8SknkgBP52FEKfBI/jIjEvlMitTN2Q/vxFYykYK2cbXNScuCr0oqe6RiaSLGuKFNzP6SwrwMimhwfBzYbx/8PEH5tYIBcjsUjCyOH2+OpxPfOo8QmP3WL2P2cdep7lUyGevzIFphBmRshXZj6l+Nxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720599834; c=relaxed/simple;
-	bh=lLbZWWhD2Kc0m9i1WyKM0bivY2hDTrq14bOoB/ilx0Q=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=IIkSLV9qg2R+y2UKkBamQx0vLB+9pjY2ec+lNQL8BG7Q3DSKYT+29ajlKr2ksRErRWdyceCUE/CII/JzWo4BBicl9AAKw581nyHQtv54Ywi/nNbo5x3W7aoS0CmklLeEgFSz2yETwNAuCfPLHi2HI2zrk9snVtWOnNIl0TpyNd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4WJrRs4clwz6K91l;
-	Wed, 10 Jul 2024 16:21:45 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 40FB01401DC;
-	Wed, 10 Jul 2024 16:23:49 +0800 (CST)
-Received: from localhost (10.203.174.77) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Wed, 10 Jul
- 2024 09:23:48 +0100
-Date: Wed, 10 Jul 2024 09:23:47 +0100
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: Huacai Chen <chenhuacai@kernel.org>
-CC: Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>, "Catalin
- Marinas" <catalin.marinas@arm.com>, <linux-acpi@vger.kernel.org>,
-	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>, "Mark
- Rutland" <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>, "Peter
- Zijlstra" <peterz@infradead.org>, <loongarch@lists.linux.dev>,
-	<x86@kernel.org>, Russell King <linux@armlinux.org.uk>, "Rafael J . Wysocki"
-	<rafael@kernel.org>, Miguel Luis <miguel.luis@oracle.com>, James Morse
-	<james.morse@arm.com>, Salil Mehta <salil.mehta@huawei.com>, "Jean-Philippe
- Brucker" <jean-philippe@linaro.org>, Hanjun Guo <guohanjun@huawei.com>, Gavin
- Shan <gshan@redhat.com>, Ingo Molnar <mingo@redhat.com>, "Borislav Petkov"
-	<bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
-	<linuxarm@huawei.com>, <justin.he@arm.com>, <jianyong.wu@arm.com>
-Subject: Re: [PATCH v10 18/19] arm64: document virtual CPU hotplug's
- expectations
-Message-ID: <20240710092347.00005b99@Huawei.com>
-In-Reply-To: <CAAhV-H6Ghfj74hcOQCn6yz4t-_p=WkYdmWRrw=v8FK6t+f_EkA@mail.gmail.com>
-References: <20240529133446.28446-1-Jonathan.Cameron@huawei.com>
-	<20240529133446.28446-19-Jonathan.Cameron@huawei.com>
-	<CAAhV-H6Ghfj74hcOQCn6yz4t-_p=WkYdmWRrw=v8FK6t+f_EkA@mail.gmail.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1720601871; c=relaxed/simple;
+	bh=mJvQPv8fXiG9w1+1+ALK0b1J7FKFQY0Ni4C3WfFzukA=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=iuLxjpWKgF5+oqz8ZDcGzUrk30szzraXfTENtWGTCwYGwDZ30TA1Rdc2Ksk9nxGAJuE86rRiwyKDxnh+RS3HkLSMBjHDBslhfY1CaCPs6oVzOCddnSVhGlaHVd7ycBYT+xNpErp6rYQlMOn59uBwKOs7gBfKhbNvlxZP1ZBekHg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=vElaDc5Z; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=IHNtdTc2; arc=none smtp.client-ip=103.168.172.147
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfout.nyi.internal (Postfix) with ESMTP id BC0751381C26;
+	Wed, 10 Jul 2024 04:57:48 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Wed, 10 Jul 2024 04:57:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1720601868; x=1720688268; bh=lt/fTYVo1r
+	XzmeyPprLYJqd44kchp17M6qZOeedxiX0=; b=vElaDc5Zc4T0Bucn0BpOSB6GZ0
+	hjNAgO3T5KaLmjz60FKHB4Cc7LinLJmzsc6RD4gS509+0qqW9TiguqDbOe6n1QH7
+	J11fG0VOjxBsEX+UDwCBaxZNZSsL/Eidk7IDp3EE5NZPbOaPPStHgOvzD3LeqXmu
+	7UfdC+foZq6/5knFTUYNrVxWJ0JcPXPfpbRsMV1zT0nr8OmrhD6etqIYPSXdaSdk
+	k7LEdU/zq8ZmkW7LIxAR0GRe4RievqOm3RsDQmiMGUN8u3f3HjBqcgWRKLhflT07
+	jy8vU5NNqiCi6a1shhok0mcPRLwSNBoa2c71l99xz4WSW9z0xwuBina45+Nw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1720601868; x=1720688268; bh=lt/fTYVo1rXzmeyPprLYJqd44kch
+	p17M6qZOeedxiX0=; b=IHNtdTc2MwgAHu+xsleVLRgFnL8zU2pqZI8wFXBO4G+z
+	w7duvlyY1ZInZUOFYw/zHAMZZ1iz6uKfGYfjjmAG+balX3StBpo5ycfaUxigvTR+
+	Vq8azfJ9B+A44C1vVXZ0vhtvPpka7EeglroUGLl8yIiV+HwPbZGN8XrIkqmyFQEa
+	a9PWgOU3o8GqsJiMNTX7qHWBAQuO/ZnZdVWpQLeP/bNxu3JE1i5jCfxsHMbsiMd9
+	XdiMVReUHd9OXaUru1txg9lHxpikSz+1xtseAoEmdsHFcWwjBZUKfnd1bh2/F8bp
+	uuLuJRjKjr6zR6IFvoCBkHzCkxkEdxYrx3c45QFaaA==
+X-ME-Sender: <xms:CU2OZtUZS9duTLybtLEjKFdaMSRkCFbANioPF2RVtxMDgWW0WqVXbQ>
+    <xme:CU2OZtl5gfIoLfrZ9z6Mba3YM7-UiIYfgWhjPEMQcbEzgWOyXG9AyqtMiPLqLUZ1m
+    R0cNRxcl5Cbgdp3Hc8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrfedugddutdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:CU2OZpYvBg6NeqezJ_1Y3OV0VK_2AKn1UDwnzoDmmbITnlsj8aypPw>
+    <xmx:CU2OZgVzjr4HBNlxUYnWoLnXwaV1g5GGCjgT9vsyzXWpdgEUXXap_A>
+    <xmx:CU2OZnk73biMVuO72udsYhhDDSs9kRL0Ezf3bcNHGzrqQnwnT2sK2w>
+    <xmx:CU2OZtekE7zuLdid4cWFK96thjCQjauEHD6khKqmzgiMDMNOQudQtQ>
+    <xmx:DE2OZhvCsORzsRusPbb4ghNUKhzWWPHTcU6ETVqu8SjoqHNiXfuHvRLB>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id AB154B6008D; Wed, 10 Jul 2024 04:57:45 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-568-g843fbadbe-fm-20240701.003-g843fbadb
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: lhrpeml100005.china.huawei.com (7.191.160.25) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+Message-Id: <93c84e97-b307-4486-8dfb-e966c96751a1@app.fastmail.com>
+In-Reply-To: <c8c882ad-d508-40b7-9af5-b2a2ddf777c1@sirena.org.uk>
+References: <20240704143611.2979589-1-arnd@kernel.org>
+ <20240704143611.2979589-11-arnd@kernel.org>
+ <c8c882ad-d508-40b7-9af5-b2a2ddf777c1@sirena.org.uk>
+Date: Wed, 10 Jul 2024 10:57:25 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Mark Brown" <broonie@kernel.org>, "Arnd Bergmann" <arnd@kernel.org>
+Cc: Linux-Arch <linux-arch@vger.kernel.org>,
+ "Masahiro Yamada" <masahiroy@kernel.org>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Nicolas Schier" <nicolas@fjasle.eu>, "Vineet Gupta" <vgupta@kernel.org>,
+ "Russell King" <linux@armlinux.org.uk>,
+ "Catalin Marinas" <catalin.marinas@arm.com>,
+ "Will Deacon" <will@kernel.org>, guoren <guoren@kernel.org>,
+ "Brian Cain" <bcain@quicinc.com>, "Huacai Chen" <chenhuacai@kernel.org>,
+ "WANG Xuerui" <kernel@xen0n.name>, "Dinh Nguyen" <dinguyen@kernel.org>,
+ "Jonas Bonn" <jonas@southpole.se>,
+ "Stefan Kristiansson" <stefan.kristiansson@saunalahti.fi>,
+ "Stafford Horne" <shorne@gmail.com>,
+ "Paul Walmsley" <paul.walmsley@sifive.com>,
+ "Palmer Dabbelt" <palmer@dabbelt.com>,
+ "Albert Ou" <aou@eecs.berkeley.edu>, "Rich Felker" <dalias@libc.org>,
+ "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
+ "David S . Miller" <davem@davemloft.net>,
+ "Andreas Larsson" <andreas@gaisler.com>,
+ "Christian Brauner" <brauner@kernel.org>,
+ "Mark Rutland" <mark.rutland@arm.com>, linux-kbuild@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org,
+ "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+ linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
+ "linux-openrisc@vger.kernel.org" <linux-openrisc@vger.kernel.org>,
+ linux-riscv@lists.infradead.org, "Aishwarya TCV" <Aishwarya.TCV@arm.com>,
+ shuah <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 10/17] arm64: generate 64-bit syscall.tbl
+Content-Type: text/plain
 
-On Sun, 30 Jun 2024 20:53:51 +0800
-Huacai Chen <chenhuacai@kernel.org> wrote:
+On Tue, Jul 9, 2024, at 19:23, Mark Brown wrote:
+> On Thu, Jul 04, 2024 at 04:36:04PM +0200, Arnd Bergmann wrote:
+>
+>>  #define __ARCH_WANT_SYS_CLONE
+>> +#define __ARCH_WANT_NEW_STAT
+>>  
+>> -#ifndef __COMPAT_SYSCALL_NR
+>> -#include <uapi/asm/unistd.h>
+>> -#endif
+>> +#include <asm/unistd_64.h>
+>
+> It looks like this is causing widespread build breakage in kselftest in
+> -next for arm64, there are *many* errors in the form:
+>
+> In file included from test_signals_utils.c:14:
+> /build/stage/build-work/usr/include/asm/unistd.h:2:10: fatal error: 
+> unistd_64.h: No such file or directory
+>     2 | #include <unistd_64.h>
+>       |          ^~~~~~~~~~~~~
+>
+> which obviously looks like it's tied to the above but I've not fully
+> understood the patch/series yet.  Build log at:
+>
 
-> Hi, Jonathan,
->=20
-> On Wed, May 29, 2024 at 9:44=E2=80=AFPM Jonathan Cameron
-> <Jonathan.Cameron@huawei.com> wrote:
-> >
-> > From: James Morse <james.morse@arm.com>
-> >
-> > Add a description of physical and virtual CPU hotplug, explain the
-> > differences and elaborate on what is required in ACPI for a working
-> > virtual hotplug system.
-> >
-> > Signed-off-by: James Morse <james.morse@arm.com>
-> > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> > Tested-by: Miguel Luis <miguel.luis@oracle.com>
-> > Reviewed-by: Gavin Shan <gshan@redhat.com>
-> > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > ---
-> >  Documentation/arch/arm64/cpu-hotplug.rst | 79 ++++++++++++++++++++++++
-> >  Documentation/arch/arm64/index.rst       |  1 +
-> >  2 files changed, 80 insertions(+)
-> >
-> > diff --git a/Documentation/arch/arm64/cpu-hotplug.rst b/Documentation/a=
-rch/arm64/cpu-hotplug.rst
-> > new file mode 100644
-> > index 000000000000..76ba8d932c72
-> > --- /dev/null
-> > +++ b/Documentation/arch/arm64/cpu-hotplug.rst
-> > @@ -0,0 +1,79 @@
-> > +.. SPDX-License-Identifier: GPL-2.0
-> > +.. _cpuhp_index:
-> > +
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > +CPU Hotplug and ACPI
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > +
-> > +CPU hotplug in the arm64 world is commonly used to describe the kernel=
- taking
-> > +CPUs online/offline using PSCI. This document is about ACPI firmware a=
-llowing
-> > +CPUs that were not available during boot to be added to the system lat=
-er.
-> > +
-> > +``possible`` and ``present`` refer to the state of the CPU as seen by =
-linux.
-> > +
-> > +
-> > +CPU Hotplug on physical systems - CPUs not present at boot
-> > +----------------------------------------------------------
-> > +
-> > +Physical systems need to mark a CPU that is ``possible`` but not ``pre=
-sent`` as
-> > +being ``present``. An example would be a dual socket machine, where th=
-e package
-> > +in one of the sockets can be replaced while the system is running.
-> > +
-> > +This is not supported.
-> > +
-> > +In the arm64 world CPUs are not a single device but a slice of the sys=
-tem.
-> > +There are no systems that support the physical addition (or removal) o=
-f CPUs
-> > +while the system is running, and ACPI is not able to sufficiently desc=
-ribe
-> > +them.
-> > +
-> > +e.g. New CPUs come with new caches, but the platform's cache toplogy is
-> > +described in a static table, the PPTT. How caches are shared between C=
-PUs is
-> > +not discoverable, and must be described by firmware.
-> > +
-> > +e.g. The GIC redistributor for each CPU must be accessed by the driver=
- during
-> > +boot to discover the system wide supported features. ACPI's MADT GICC
-> > +structures can describe a redistributor associated with a disabled CPU=
-, but
-> > +can't describe whether the redistributor is accessible, only that it i=
-s not
-> > +'always on'.
-> > +
-> > +arm64's ACPI tables assume that everything described is ``present``.
-> > +
-> > +
-> > +CPU Hotplug on virtual systems - CPUs not enabled at boot
-> > +--------------------------------------------------------- =20
-> In my opinion "enabled" is not a good description here. It is too
-> general and confusing. For example, in enable_nonboot_cpus(), "enable"
-> means make a "present" CPU "online", while in ACPI MADT, "enabled"
-> means "possible" but not "present". So I suggest rename "enabled" to
-> "pending" or "usable" or some other better words. Thanks.
-Hi Huacai,
+Thanks for the report! I just panicked a bit and thought I had
+done something entirely wrong here, but after having a closer
+look it turned out to be a silly typo:
 
-Tricky to find a good word given the mess of terms being reused.
-The use of enabled is specifically referring to the terms used in ACPI
-so I think will be hard to get away from without making that connection
-really non obvious. =20
+diff --git a/arch/arm64/include/uapi/asm/unistd.h b/arch/arm64/include/uapi/asm/unistd.h
+index 038dddf8f554..df36f23876e8 100644
+--- a/arch/arm64/include/uapi/asm/unistd.h
++++ b/arch/arm64/include/uapi/asm/unistd.h
+@@ -1,2 +1,2 @@
+ /* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+-#include <unistd_64.h>
++#include <asm/unistd_64.h>
 
-The 'enabled' text in ACPI does describe 'enabled' as
-meaning 'ready for use'.  So perhaps
-CPU Hotplug on virtual systems - CPUs that are not ready for use at boot
-and rely on the existing text that says this is about the enabled and
-online capable bits to make that connection?
-The snag is that phrasing kind of suggests they are just late for some
-reason rather than it being a policy thing in the hypervisor.
+I'm folding the fix into the tree now, in addition to the Acks
+I received and another small fixup.
 
-James, I think this is your text, any thoughts?
+I checked that arm64 is the only architecture that has this
+particular bug, and I tried building kselftest now, which seems
+to work better. There are still a few warnings and errors
+I get doing that, but I suspect those are all preexisting
+issues.
 
-Jonathan
-
-
->=20
-> Huacai.
->=20
-> > +
-> > +Virtual systems have the advantage that all the properties the system =
-will
-> > +ever have can be described at boot. There are no power-domain consider=
-ations
-> > +as such devices are emulated.
-> > +
-> > +CPU Hotplug on virtual systems is supported. It is distinct from physi=
-cal
-> > +CPU Hotplug as all resources are described as ``present``, but CPUs ma=
-y be
-> > +marked as disabled by firmware. Only the CPU's online/offline behaviou=
-r is
-> > +influenced by firmware. An example is where a virtual machine boots wi=
-th a
-> > +single CPU, and additional CPUs are added once a cloud orchestrator de=
-ploys
-> > +the workload.
-> > +
-> > +For a virtual machine, the VMM (e.g. Qemu) plays the part of firmware.
-> > +
-> > +Virtual hotplug is implemented as a firmware policy affecting which CP=
-Us can be
-> > +brought online. Firmware can enforce its policy via PSCI's return code=
-s. e.g.
-> > +``DENIED``.
-> > +
-> > +The ACPI tables must describe all the resources of the virtual machine=
-. CPUs
-> > +that firmware wishes to disable either from boot (or later) should not=
- be
-> > +``enabled`` in the MADT GICC structures, but should have the ``online =
-capable``
-> > +bit set, to indicate they can be enabled later. The boot CPU must be m=
-arked as
-> > +``enabled``.  The 'always on' GICR structure must be used to describe =
-the
-> > +redistributors.
-> > +
-> > +CPUs described as ``online capable`` but not ``enabled`` can be set to=
- enabled
-> > +by the DSDT's Processor object's _STA method. On virtual systems the _=
-STA method
-> > +must always report the CPU as ``present``. Changes to the firmware pol=
-icy can
-> > +be notified to the OS via device-check or eject-request.
-> > +
-> > +CPUs described as ``enabled`` in the static table, should not have the=
-ir _STA
-> > +modified dynamically by firmware. Soft-restart features such as kexec =
-will
-> > +re-read the static properties of the system from these static tables, =
-and
-> > +may malfunction if these no longer describe the running system. Linux =
-will
-> > +re-discover the dynamic properties of the system from the _STA method =
-later
-> > +during boot.
-> > diff --git a/Documentation/arch/arm64/index.rst b/Documentation/arch/ar=
-m64/index.rst
-> > index d08e924204bf..78544de0a8a9 100644
-> > --- a/Documentation/arch/arm64/index.rst
-> > +++ b/Documentation/arch/arm64/index.rst
-> > @@ -13,6 +13,7 @@ ARM64 Architecture
-> >      asymmetric-32bit
-> >      booting
-> >      cpu-feature-registers
-> > +    cpu-hotplug
-> >      elf_hwcaps
-> >      hugetlbpage
-> >      kdump
-> > --
-> > 2.39.2
-> >
-> > =20
-
+     Arnd
 
