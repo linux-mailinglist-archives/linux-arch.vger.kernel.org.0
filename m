@@ -1,156 +1,188 @@
-Return-Path: <linux-arch+bounces-5354-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5355-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D32C92D6D8
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Jul 2024 18:49:13 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A43992D74D
+	for <lists+linux-arch@lfdr.de>; Wed, 10 Jul 2024 19:16:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 29FAD2815EC
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Jul 2024 16:49:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0737AB21E15
+	for <lists+linux-arch@lfdr.de>; Wed, 10 Jul 2024 17:16:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99559194C96;
-	Wed, 10 Jul 2024 16:49:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B99FF194150;
+	Wed, 10 Jul 2024 17:16:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GeE9psM3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gj3wTGeG"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44F49194C73;
-	Wed, 10 Jul 2024 16:49:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AE4034545;
+	Wed, 10 Jul 2024 17:16:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720630143; cv=none; b=YD3lAAgDBKpuSJh4FPdaUHZeUP8bMn34H6FQmmmHWuKiCg3QYTC3qbcpRHHO2KV69AWXvoAp5yVoBJWCIv2l37pCwdMthDRUCsShZFEtKggyz7vjm4Kp3TyL3+yd5VidK1ry//W3DsPZ+fc8518dSKJ5JyLJDC1vUf2V5R3SXUU=
+	t=1720631810; cv=none; b=VuVwc6igdi9i+bvt3kv1ciM0o0aAZQ/OZ16V7u8PUfYyNGFKqxpFhvZHKsorQsbQZ3YnqDziJuFugDiydgk1cqZP+2L1wI0K5fFfR8T9YmSuaM3bJHjU9QDOS6uk3BH4BT8dpIqiynzzXGG64QqlACvgvH8L+I7sNGa3IIi/J9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720630143; c=relaxed/simple;
-	bh=eS/RMGP4VxRIFbhmXWkCrFvxioDBvmLiKkBEAODdwGU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pCQ/7SSA2jPsUE9Nfax8t0rFtnFMzk6fWwhRqHFXxXe80js3uuqxMmIx7qjPIBXJvi1KybvFljiZsftFo/KWB5XYWPMWFnZwzrK6VEY0S709HDCs//wv87SQAKEbZtYt0L5QIam5uBo4tW70RAFEh1rPiNYyvrW7tJH9hIQSvb0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GeE9psM3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24C51C32781;
-	Wed, 10 Jul 2024 16:49:01 +0000 (UTC)
+	s=arc-20240116; t=1720631810; c=relaxed/simple;
+	bh=gbQbaUuiVBZ3rY0fazMfEsDsmp1EJvBByE9rwhcqv1M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=g3ylZxPg4GPLoSzOw7X9M18OOsyb6YINupmHzIyb2sE0rspVZfMKhrMRgQUSnjkh1+48pobcTUiQ6yFsPWAp/Aq/9YXCsfR8dfLeVzNRRaej9ZBgVed2ruPPztG7O4RASCCeyfDOtSJAeLJXCYYBFOUteWlwpW7e4j7CmkiS6g4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gj3wTGeG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67AEFC32781;
+	Wed, 10 Jul 2024 17:16:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720630142;
-	bh=eS/RMGP4VxRIFbhmXWkCrFvxioDBvmLiKkBEAODdwGU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=GeE9psM35dHGvAUo79TtOnu4kq5cY9EUrGF2ghylZhRExsJfxInrnrbzIGYTRdEyP
-	 JuNUksWFVoX99WDJK0OYBlsaXy6q6YA4gtH9ruZmomvqVAnZKrQ5V0cyaDEK1nrfmj
-	 TYzIOxglnzs0uEzQL7xFLg0IgYd2T3xSZ3m9tEEYvl2XCdOAvnosGa5j4fJc/Yy95m
-	 Fc5KKtoP2fmuVTazyDqaAh0RTuL+2gSo3Q0QXNcq8mXWHgnju0cDM5kOaxJGJVc4MU
-	 IX9XFPAHEsGhG08l+UfVEIDuPwq1AH3mfKgmvCy5HzZT6Og5qbJjr0Ohj8oZTpGXx8
-	 z5HtdpFuugVEQ==
-Date: Wed, 10 Jul 2024 09:49:00 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
- bpf@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, Donald Hunter <donald.hunter@gmail.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet
- <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, Ivan
- Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
- <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>,
- Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
- <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
- Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
- <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, Herbert
- Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, Willem
- de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>,
- Sumit Semwal <sumit.semwal@linaro.org>, "Christian =?UTF-8?B?S8O2bmln?="
- <christian.koenig@amd.com>, Bagas Sanjaya <bagasdotme@gmail.com>, Christoph
- Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>,
- Taehee Yoo <ap420073@gmail.com>, Pavel Begunkov <asml.silence@gmail.com>,
- David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin
- <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, Harshitha
- Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
- Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
- <pkaligineedi@google.com>, linux-mm@kvack.org, Matthew Wilcox
- <willy@infradead.org>
-Subject: Re: [PATCH net-next v16 05/13] page_pool: devmem support
-Message-ID: <20240710094900.0f808684@kernel.org>
-In-Reply-To: <20240710001749.1388631-6-almasrymina@google.com>
-References: <20240710001749.1388631-1-almasrymina@google.com>
-	<20240710001749.1388631-6-almasrymina@google.com>
+	s=k20201202; t=1720631810;
+	bh=gbQbaUuiVBZ3rY0fazMfEsDsmp1EJvBByE9rwhcqv1M=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gj3wTGeGvkQA66hJtscYz2CdurW/XaWmXT1LUad7xHcQlV6bJlMPYB6BYkarkGJzM
+	 qb1fJH/GWYe++EsAN1YPqxKxmTx70mi2pArTryxpc+tBbCuVT8RugoF5J51N45APGN
+	 x+ezB+0+cMxlPHdLjUWzayfTJu8mxxY70OY7vRayQ0pqy+eEScxUw5lPNBlw9PM4pl
+	 gHRJ2FF3NJhmef1/MM9944Z03bUSEMfjwNa8lSQVOBXi6SLTpzX79Nj4r2tZ5j+E5e
+	 PNrecmTOcerZ2rr+jDaPAfXGPZUcWnJiE7MQ+AaJcdd8y8iMm1ukZWkjVH5FmwuAtd
+	 4eGDODAKNmXiA==
+Date: Wed, 10 Jul 2024 18:16:46 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Marc Zyngier <maz@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	Ross Burton <ross.burton@arm.com>,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v9 13/39] KVM: arm64: Manage GCS registers for guests
+Message-ID: <Zo7B_sRyUyxv7xmO@finisterre.sirena.org.uk>
+References: <20240625-arm64-gcs-v9-0-0f634469b8f0@kernel.org>
+ <20240625-arm64-gcs-v9-13-0f634469b8f0@kernel.org>
+ <86v81d2s5t.wl-maz@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="tsBiN+tG2JsDrdFj"
+Content-Disposition: inline
+In-Reply-To: <86v81d2s5t.wl-maz@kernel.org>
+X-Cookie: Your love life will be... interesting.
 
-On Wed, 10 Jul 2024 00:17:38 +0000 Mina Almasry wrote:
-> @@ -68,17 +107,103 @@ static inline netmem_ref page_to_netmem(struct page *page)
->  
->  static inline int netmem_ref_count(netmem_ref netmem)
->  {
-> +	/* The non-pp refcount of net_iov is always 1. On net_iov, we only
-> +	 * support pp refcounting which uses the pp_ref_count field.
-> +	 */
-> +	if (netmem_is_net_iov(netmem))
-> +		return 1;
-> +
->  	return page_ref_count(netmem_to_page(netmem));
->  }
 
-How can this work if we had to revert the patch which made all of
-the networking stack take pp-aware refs? Maybe we should add the
-refcount, and let it be bumped, but WARN() if the net_iov is released
-with refcount other than 1? Or we need a very solid explanation why
-the conversion had to be reverted and this is fine.
+--tsBiN+tG2JsDrdFj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
->  static inline unsigned long netmem_to_pfn(netmem_ref netmem)
->  {
-> +	if (netmem_is_net_iov(netmem))
-> +		return 0;
-> +
->  	return page_to_pfn(netmem_to_page(netmem));
->  }
+On Wed, Jul 10, 2024 at 04:17:02PM +0100, Marc Zyngier wrote:
+> Mark Brown <broonie@kernel.org> wrote:
 
-Can we move this out and rename it to netmem_pfn_trace() ?
-Silently returning 0 is not generally okay, but since it's only 
-for tracing we don't care.
+> > +	if (ctxt_has_gcs(ctxt)) {
 
-> +static inline struct net_iov *__netmem_clear_lsb(netmem_ref netmem)
-> +{
-> +	return (struct net_iov *)((__force unsigned long)netmem & ~NET_IOV);
-> +}
-> +
-> +static inline unsigned long netmem_get_pp_magic(netmem_ref netmem)
-> +{
-> +	return __netmem_clear_lsb(netmem)->pp_magic;
-> +}
-> +
-> +static inline void netmem_or_pp_magic(netmem_ref netmem, unsigned long pp_magic)
-> +{
-> +	__netmem_clear_lsb(netmem)->pp_magic |= pp_magic;
-> +}
-> +
-> +static inline void netmem_clear_pp_magic(netmem_ref netmem)
-> +{
-> +	__netmem_clear_lsb(netmem)->pp_magic = 0;
-> +}
-> +
-> +static inline struct page_pool *netmem_get_pp(netmem_ref netmem)
-> +{
-> +	return __netmem_clear_lsb(netmem)->pp;
-> +}
-> +
-> +static inline void netmem_set_pp(netmem_ref netmem, struct page_pool *pool)
-> +{
-> +	__netmem_clear_lsb(netmem)->pp = pool;
-> +}
+> Since this is conditioned on S1PIE, it should be only be evaluated
+> when PIE is enabled in the guest.
 
-Why is all this stuff in the main header? It's really low level.
-Please put helpers which are only used by the core in a header
-under net/core/, like net/core/dev.h
+So make ctxt_has_gcs() embed a check of ctxt_has_s1pie()?
+
+> > +		ctxt_sys_reg(ctxt, GCSPR_EL1)	= read_sysreg_el1(SYS_GCSPR);
+> > +		ctxt_sys_reg(ctxt, GCSCR_EL1)	= read_sysreg_el1(SYS_GCSCR);
+> > +		ctxt_sys_reg(ctxt, GCSCRE0_EL1)	= read_sysreg_s(SYS_GCSCRE0_EL1);
+
+> Why is this part of the EL1 context? It clearly only matters to EL0
+> execution, so it could be switched in load/put on nVHE as well. And
+> actually, given that the whole thing is strictly for userspace, why do
+> we switch *anything* eagerly at all?
+
+GCS can also be used independently at EL1 (and EL2 for that matter),
+it's not purely for userspace even though this series only implements
+use in userspace.  GCSPR_EL1 and GCSCR_EL1 control the use of GCS at
+EL1, not EL0, and the guest might be using GCS at EL1 even if the host
+doesn't.
+
+GCSCRE0_EL1 is for EL0 though, it ended up here mainly because it's an
+_EL1 register and we are already context switching PIRE0_EL1 in the EL1
+functions so it seemed consistent to follow the same approach for GCS.
+The _el1 and _user save/restore functions are called from the same place
+for both VHE and nVHE so the practical impact of the placement should be
+minimal AFAICT.  Unlike PIRE0_EL1 GCSCRE0_EL1 only has an impact for
+code runnning at EL0 so I can move it to the _user functions.
+
+TBH I'm not following your comments about switching eagerly too here at
+all, where would you expect to see the switching done?  You've said
+something along these lines before which prompted me to send a patch to
+only save the S1PIE registers if they'd been written to which you were
+quite reasonably not happy with given the extra traps it would cause:
+
+   https://lore.kernel.org/r/20240301-kvm-arm64-defer-regs-v1-1-401e3de92e97@kernel.org
+
+but I'm at a loss as to how to make things less eager otherwise.
+
+> > @@ -2306,7 +2323,8 @@ static const struct sys_reg_desc sys_reg_descs[] = {
+> >  		   ID_AA64PFR0_EL1_GIC |
+> >  		   ID_AA64PFR0_EL1_AdvSIMD |
+> >  		   ID_AA64PFR0_EL1_FP), },
+> > -	ID_SANITISED(ID_AA64PFR1_EL1),
+> > +	ID_WRITABLE(ID_AA64PFR1_EL1, ~(ID_AA64PFR1_EL1_RES0 |
+> > +				       ID_AA64PFR1_EL1_BT)),
+
+> I don't know what you're trying to do here, but that's not right. If
+> you want to make this register writable, here's the shopping list:
+
+> https://lore.kernel.org/all/87ikxsi0v9.wl-maz@kernel.org/
+
+Yes, trying to make things writable.  I do see we need to exclude more
+bits there and I'm not clear why I excluded BTI, looks like I forgot to
+add a TODO comment at some point and finish that off.  Sorry about that.
+
+In the linked mail you say you want to see all fields explicitly
+handled, could you be more direct about what such explicit handling
+would look like?  I see a number of examples in the existing code like:
+
+	ID_WRITABLE(ID_AA64ZFR0_EL1, ~ID_AA64ZFR0_EL1_RES0),
+
+	ID_WRITABLE(ID_AA64ISAR0_EL1, ~ID_AA64ISAR0_EL1_RES0),
+	ID_WRITABLE(ID_AA64ISAR1_EL1, ~(ID_AA64ISAR1_EL1_GPI |
+					ID_AA64ISAR1_EL1_GPA |
+					ID_AA64ISAR1_EL1_API |
+					ID_AA64ISAR1_EL1_APA)),
+
+which look to my eye very similar to the above, they do not visibliy
+explictly enumerate every field in the registers and given that there's
+a single mask specified it's not clear how that would look.  If
+ID_WRITABLE() took separate read/write masks and combined them it'd be
+more obvious but it's just not written that way.
+
+--tsBiN+tG2JsDrdFj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmaOwf0ACgkQJNaLcl1U
+h9BiTwgAhG9qd8c+aLOWRDYY+jgC3wxTF25VtO52AztM2Y4fyGfPMHg+GgALH/zW
+kZPNqJcbu5fDOfkUg3obwE/dUqdlZDlbmmJBnaP1E9p3sXWuQ9sedlO17lyf3w8h
+mzzFxLDCS0j01M5YNj4ql9LmC4sTOWyuzvzKDzDnLfM93Jdj6nhT4S0si+iQdBB8
+PFhjdtH6qVUmQNG3ik40q/IPe+nA4u0mgs7XpKj8PuPtVDxe4SNhB8cZ8R+pEJBZ
+f3EHvbndiotEBkFARu84AC/F3XfNhGNYlaZg/fwr2yfpfpFV/1Cz0LABhH9WojA0
+z7VzLkWe/+pqYeMUNAJY6H+YDudaLA==
+=InCr
+-----END PGP SIGNATURE-----
+
+--tsBiN+tG2JsDrdFj--
 
