@@ -1,313 +1,207 @@
-Return-Path: <linux-arch+bounces-5339-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5340-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A5A992C78D
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Jul 2024 02:22:10 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 48A3592C7FC
+	for <lists+linux-arch@lfdr.de>; Wed, 10 Jul 2024 03:37:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DE0A51F23CC2
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Jul 2024 00:22:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 655301C20D24
+	for <lists+linux-arch@lfdr.de>; Wed, 10 Jul 2024 01:37:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72127127E18;
-	Wed, 10 Jul 2024 00:18:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CEA23D7A;
+	Wed, 10 Jul 2024 01:37:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EVV77sFc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q3ieyxy3"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FCF582485
-	for <linux-arch@vger.kernel.org>; Wed, 10 Jul 2024 00:18:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C9EE10FF;
+	Wed, 10 Jul 2024 01:37:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720570704; cv=none; b=bUMyUkZZN2sm8HFgwEYMlJQhnQjQlntrF7tbEtwFbPOgZjgtO/q/Holzj1lF67MXlDneLxh0yS8AaIoqPk1vOYi0rLI8jUP4KoY2n2FOziDEOzcufsUMTN6TcWlOSz4VjZC0MP60aVPC6R1xy/FugTSC9CsVLHh6G36rVS8YdT4=
+	t=1720575454; cv=none; b=AOvbn65nLKH8Ue/Xry788RfvZrL0RXEV2ouQqwjFFjl76WfAKyxLZE3rpcG3B6a/rzwdg8eylnbGtw9rX6pMDc8WsM3+pZPtyIF2aoxSoEAEyGd8ckldNSyOapH/pBgOcZbQFMdXxgRTUZ75ds9oy2fuTMKItICvroFcjkFsQe8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720570704; c=relaxed/simple;
-	bh=p9TCrtunq3Sc+tHM9HSo0pjT1D7aMbYnoIhXBBRGHcA=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=A0xQN1FXlTUDdJ98oD/rNcr4W8Y6pJpQ/mmYQfrEqvWK/9jdaaCOqEN9b92ijcAf9Y0xTU9X1PB7jxyshwABExdsQjs9ACmbxYAPRINMS+dQkfuX/ZO/H6QPdj+Fl3/uzCPDIXwyUIXzkO15rvohEK6QgYkxqHqY8Ad0KQLkTyE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EVV77sFc; arc=none smtp.client-ip=209.85.128.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-650f5b28822so92407627b3.2
-        for <linux-arch@vger.kernel.org>; Tue, 09 Jul 2024 17:18:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1720570696; x=1721175496; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5P7T8nlF1fJQfwxNLMQaeLRVD2aIiRw+Td5GpIM/t7s=;
-        b=EVV77sFceVqLWviNlasFmMPXU4GBHJpENMZH+Sm/tHPX0TueSjK0ZKKCFVJYMSvNDs
-         reOH61jlO3qdfcn85MDS69sd0u0z2PaX2tkL2SumrxgSCDJASw4I4k4T/vrSOf5/PI/S
-         o/0rKIrMrafJDGJzLCcQ9gFNUbhyT1FSl//biVrprxtE5umFIri2bP5/3BPMs+nHkV80
-         RvSB6kg4gO+DOlNId2ampA+XNE3J+RrBGzOimDFJsFPBeG8UeftfdAnuhyhmR1M0gHeh
-         HKzeFZow9jYU8bsN0lY2yIazW9QYEScP2bu/ncwvzuj1bZ3rh1PLNGxsYv0LhKPlNzB8
-         Sfqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720570696; x=1721175496;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5P7T8nlF1fJQfwxNLMQaeLRVD2aIiRw+Td5GpIM/t7s=;
-        b=luMOeOqXHzSt0pqbImMonB5UISqAsP7/7E7aNgz7xVkyQ2755Dls/L1gw9oOaV5a6t
-         nY4JqZdDttlXTWUihR6yNA2erkYByJkJdIAbmMTr0aDH5wtEIJcAzWFNc1wPF0bmjPYi
-         9llLgr4cK8DOL7G2yJNER3rbJVITX+By0ExZG67O383cL8dFkrpHtS/JVJui4fSPKOha
-         diL5huKevBfd+l+u6OGLlftYKt6uZfCPBae7fJuSel9pinw4HYEUIbo1oYY5ziKjWqid
-         NfNd9Obtm5JrrB6alErqzqQKnUvfSVi/3md1fLAfct4H6QnmIOPbaHgkTIzQKe3ZJgBp
-         BOzA==
-X-Forwarded-Encrypted: i=1; AJvYcCU0My3O8kgAdZ4vQI1OhTeqLWlO26RwFyGLOror5WJPeGrCH5t6BzjM3mrsWNLiB9E9+7A03CxCXlY0ZMh6tc8kW3Hu4tSDhZVLuQ==
-X-Gm-Message-State: AOJu0YwSYGYTR7OTs7oHvZ0MKbVPmZkLnXKtPSKG1P0/+gndTC/FQahp
-	bTpv8YGcRMuHFJkCWVrrMY6ANysPBoxsHlzmkopLtjL0AvLhWWKoO+4lud/sSYxhyPwzOEBJ9he
-	uSkD4bLj+P+PkL2zasOSdKg==
-X-Google-Smtp-Source: AGHT+IFcaWW5jqfEL6UmmKDurzwGMgILdQq8qULJRfWHlLzreMoST4DZONBBVue+Todgr1TAQxDVXsqBdlPZBjt4Ag==
-X-Received: from almasrymina.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:4bc5])
- (user=almasrymina job=sendgmr) by 2002:a05:690c:4882:b0:627:a787:abf4 with
- SMTP id 00721157ae682-658eed5ddcamr1032287b3.3.1720570696535; Tue, 09 Jul
- 2024 17:18:16 -0700 (PDT)
-Date: Wed, 10 Jul 2024 00:17:46 +0000
-In-Reply-To: <20240710001749.1388631-1-almasrymina@google.com>
+	s=arc-20240116; t=1720575454; c=relaxed/simple;
+	bh=7x3GEkDVh0i0eAqUuwQkrzhqPJO/oHPH+D8jftX54Cg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Iq2CkeuJoPFnYqpg36DDKuPqEvEEURB6Oz2RT/UoyNaf6RLQjdH+hrpJf22zkbMeDuUvEkyWDECuZuDyhfh54/OzAy8JaWRQyqfZ0RRSh8YpGeTWCqpC5T4sYk+pRfJ+QOhklsO4t2tAPchuLSlp4ke3liw1K8Tc9taTIFSKdy8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q3ieyxy3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98984C4AF0A;
+	Wed, 10 Jul 2024 01:37:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720575453;
+	bh=7x3GEkDVh0i0eAqUuwQkrzhqPJO/oHPH+D8jftX54Cg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=q3ieyxy3hJZaA8ysPOrc2YXxe1pB3d1xOvGF9DCxL9Kvq4f0vQFdITMNwBPClFs+Q
+	 cXMSx7MALQlD9VmQkzJp5P1HkU1YKc5mO3yaWA7v/02JKLboxIqA+ZwcoBdnx/DuDp
+	 V011/7qP2DcMuMPT3pCJ7d1pe1P23lI/BejJAzBAjGeo/P7it5uacwi95nt3SAQOhr
+	 xVXTzgQmVgXjbVrpRqU+iGYyQomBHvB5qxRTI3mfOJgZaLthyPCQjppM3OkJ2AgAVq
+	 FStxWUmQIcIa9yeA7gSdQoMxnIFKr1r+gVFvBSP3lH/M2I+Lf2uagwoNoK9qEuk3CM
+	 qvvUR64fbp9Yw==
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a77c9c5d68bso569318266b.2;
+        Tue, 09 Jul 2024 18:37:33 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCV4Xw2fWxUmvZQMvyPjfbuhSdULLTA0IhVtGAGlCYPc6B7h43RRB6vgcJoKVr4ookbF2MTY17bi2xe5Yn8i+TBADWWsp2x9wRbwxutcDS3Tlh3cmCw11yHMuO3X4xiCU61GU+EfeTwXN324aTnkQDDZJpSSkVBha0GQOnRMPSdsIc3sEw==
+X-Gm-Message-State: AOJu0Yw3LGdSj09vF2kBFw4roNmgEx3nyl6IFWe5danHQTU2NSOtJWD4
+	1w1DLoWg6wut5695rGsolfdplIgskkLFMQB/LUe9PYUlqhWyo7m4iXeB6fbxtZ/2xntRfIJWW3u
+	tB0Dn8GeO4lYWgMhLSxExX9QFthw=
+X-Google-Smtp-Source: AGHT+IHmd+/WXCkt/CKbzdND2sKIp/WdDdZr/w4zRmSZLHYnLmmE0cqn+UtqINsSDCF8jhyBLrwCDzYaroRAc5X3Z8E=
+X-Received: by 2002:a17:907:2dab:b0:a77:d481:d69f with SMTP id
+ a640c23a62f3a-a780b89e7cemr299719566b.70.1720575452132; Tue, 09 Jul 2024
+ 18:37:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240710001749.1388631-1-almasrymina@google.com>
-X-Mailer: git-send-email 2.45.2.803.g4e1b14247a-goog
-Message-ID: <20240710001749.1388631-14-almasrymina@google.com>
-Subject: [PATCH net-next v16 13/13] netdev: add dmabuf introspection
-From: Mina Almasry <almasrymina@google.com>
-To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org
-Cc: Mina Almasry <almasrymina@google.com>, Donald Hunter <donald.hunter@gmail.com>, 
-	Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, 
-	"=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>, Bagas Sanjaya <bagasdotme@gmail.com>, 
-	Christoph Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>, Taehee Yoo <ap420073@gmail.com>, 
-	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
-	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
+MIME-Version: 1.0
+References: <20240626130347.520750-1-alexghiti@rivosinc.com> <20240626130347.520750-7-alexghiti@rivosinc.com>
+In-Reply-To: <20240626130347.520750-7-alexghiti@rivosinc.com>
+From: Guo Ren <guoren@kernel.org>
+Date: Wed, 10 Jul 2024 09:37:21 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRiQ_zXDAa+Q7rQ4U8qfFGu_ab-y-cLSSOyUVyp0o8KvQ@mail.gmail.com>
+Message-ID: <CAJF2gTRiQ_zXDAa+Q7rQ4U8qfFGu_ab-y-cLSSOyUVyp0o8KvQ@mail.gmail.com>
+Subject: Re: [PATCH v2 06/10] riscv: Implement xchg8/16() using Zabha
+To: Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Andrea Parri <parri.andrea@gmail.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, 
+	Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Leonardo Bras <leobras@redhat.com>, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	linux-arch@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add dmabuf information to page_pool stats:
+On Wed, Jun 26, 2024 at 9:10=E2=80=AFPM Alexandre Ghiti <alexghiti@rivosinc=
+.com> wrote:
+>
+> This adds runtime support for Zabha in xchg8/16() operations.
+>
+> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> ---
+>  arch/riscv/include/asm/cmpxchg.h | 33 +++++++++++++++++++++++++++++---
+>  arch/riscv/include/asm/hwcap.h   |  1 +
+>  arch/riscv/kernel/cpufeature.c   |  1 +
+>  3 files changed, 32 insertions(+), 3 deletions(-)
+>
+> diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cm=
+pxchg.h
+> index da42f32ea53d..eb35e2d30a97 100644
+> --- a/arch/riscv/include/asm/cmpxchg.h
+> +++ b/arch/riscv/include/asm/cmpxchg.h
+> @@ -11,8 +11,17 @@
+>  #include <asm/fence.h>
+>  #include <asm/alternative.h>
+>
+> -#define __arch_xchg_masked(sc_sfx, prepend, append, r, p, n)           \
+> +#define __arch_xchg_masked(sc_sfx, swap_sfx, prepend, sc_append,       \
+> +                          swap_append, r, p, n)                        \
+>  ({                                                                     \
+> +       __label__ zabha, end;                                           \
+> +                                                                       \
+> +       if (IS_ENABLED(CONFIG_RISCV_ISA_ZABHA)) {                       \
+> +               asm goto(ALTERNATIVE("nop", "j %[zabha]", 0,            \
+> +                                    RISCV_ISA_EXT_ZABHA, 1)            \
+> +                        : : : : zabha);                                \
+> +       }                                                               \
+> +                                                                       \
+Could we exchange the sequence between Zabha & lr/sc?
+I mean:
+nop -> zabha
+j -> lr/sc
 
-$ ./cli.py --spec ../netlink/specs/netdev.yaml --dump page-pool-get
-...
- {'dmabuf': 10,
-  'id': 456,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 455,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 454,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 453,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 452,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 451,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 450,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 449,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
 
-And queue stats:
+>         u32 *__ptr32b =3D (u32 *)((ulong)(p) & ~0x3);                    =
+ \
+>         ulong __s =3D ((ulong)(p) & (0x4 - sizeof(*p))) * BITS_PER_BYTE; =
+ \
+>         ulong __mask =3D GENMASK(((sizeof(*p)) * BITS_PER_BYTE) - 1, 0)  =
+ \
+> @@ -28,12 +37,25 @@
+>                "        or   %1, %1, %z3\n"                             \
+>                "        sc.w" sc_sfx " %1, %1, %2\n"                    \
+>                "        bnez %1, 0b\n"                                  \
+> -              append                                                   \
+> +              sc_append                                                 =
+       \
+>                : "=3D&r" (__retx), "=3D&r" (__rc), "+A" (*(__ptr32b))    =
+   \
+>                : "rJ" (__newx), "rJ" (~__mask)                          \
+>                : "memory");                                             \
+>                                                                         \
+>         r =3D (__typeof__(*(p)))((__retx & __mask) >> __s);              =
+ \
+> +       goto end;                                                       \
+> +                                                                       \
+> +zabha:
+jump lr/sc implementation because it's already slow.
+                                                               \
+> +       if (IS_ENABLED(CONFIG_RISCV_ISA_ZABHA)) {                       \
+> +               __asm__ __volatile__ (                                  \
+> +                       prepend                                         \
+> +                       "       amoswap" swap_sfx " %0, %z2, %1\n"      \
+> +                       swap_append                                      =
+       \
+> +                       : "=3D&r" (r), "+A" (*(p))                       =
+ \
+> +                       : "rJ" (n)                                      \
+> +                       : "memory");                                    \
+> +       }                                                               \
+> +end:;                                                                  \
+>  })
+>
+>  #define __arch_xchg(sfx, prepend, append, r, p, n)                     \
+> @@ -56,8 +78,13 @@
+>                                                                         \
+>         switch (sizeof(*__ptr)) {                                       \
+>         case 1:                                                         \
+> +               __arch_xchg_masked(sc_sfx, ".b" swap_sfx,               \
+> +                                  prepend, sc_append, swap_append,     \
+> +                                  __ret, __ptr, __new);                \
+> +               break;                                                  \
+>         case 2:                                                         \
+> -               __arch_xchg_masked(sc_sfx, prepend, sc_append,          \
+> +               __arch_xchg_masked(sc_sfx, ".h" swap_sfx,               \
+> +                                  prepend, sc_append, swap_append,     \
+>                                    __ret, __ptr, __new);                \
+>                 break;                                                  \
+>         case 4:                                                         \
+> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwca=
+p.h
+> index e17d0078a651..f71ddd2ca163 100644
+> --- a/arch/riscv/include/asm/hwcap.h
+> +++ b/arch/riscv/include/asm/hwcap.h
+> @@ -81,6 +81,7 @@
+>  #define RISCV_ISA_EXT_ZTSO             72
+>  #define RISCV_ISA_EXT_ZACAS            73
+>  #define RISCV_ISA_EXT_XANDESPMU                74
+> +#define RISCV_ISA_EXT_ZABHA            75
+>
+>  #define RISCV_ISA_EXT_XLINUXENVCFG     127
+>
+> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeatur=
+e.c
+> index 5ef48cb20ee1..c125d82c894b 100644
+> --- a/arch/riscv/kernel/cpufeature.c
+> +++ b/arch/riscv/kernel/cpufeature.c
+> @@ -257,6 +257,7 @@ const struct riscv_isa_ext_data riscv_isa_ext[] =3D {
+>         __RISCV_ISA_EXT_DATA(zihintpause, RISCV_ISA_EXT_ZIHINTPAUSE),
+>         __RISCV_ISA_EXT_DATA(zihpm, RISCV_ISA_EXT_ZIHPM),
+>         __RISCV_ISA_EXT_DATA(zacas, RISCV_ISA_EXT_ZACAS),
+> +       __RISCV_ISA_EXT_DATA(zabha, RISCV_ISA_EXT_ZABHA),
+>         __RISCV_ISA_EXT_DATA(zfa, RISCV_ISA_EXT_ZFA),
+>         __RISCV_ISA_EXT_DATA(zfh, RISCV_ISA_EXT_ZFH),
+>         __RISCV_ISA_EXT_DATA(zfhmin, RISCV_ISA_EXT_ZFHMIN),
+> --
+> 2.39.2
+>
 
-$ ./cli.py --spec ../netlink/specs/netdev.yaml --dump queue-get
-...
-{'dmabuf': 10, 'id': 8, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 9, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 10, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 11, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 12, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 13, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 14, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 15, 'ifindex': 3, 'type': 'rx'},
 
-Suggested-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Mina Almasry <almasrymina@google.com>
-
----
- Documentation/netlink/specs/netdev.yaml | 10 ++++++++++
- include/uapi/linux/netdev.h             |  2 ++
- net/core/netdev-genl.c                  | 10 ++++++++++
- net/core/page_pool_user.c               |  4 ++++
- tools/include/uapi/linux/netdev.h       |  2 ++
- 5 files changed, 28 insertions(+)
-
-diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/netlink/specs/netdev.yaml
-index 0c747530c275e..08412c279297b 100644
---- a/Documentation/netlink/specs/netdev.yaml
-+++ b/Documentation/netlink/specs/netdev.yaml
-@@ -167,6 +167,10 @@ attribute-sets:
-           "re-attached", they are just waiting to disappear.
-           Attribute is absent if Page Pool has not been detached, and
-           can still be used to allocate new memory.
-+      -
-+        name: dmabuf
-+        doc: ID of the dmabuf this page-pool is attached to.
-+        type: u32
-   -
-     name: page-pool-info
-     subset-of: page-pool
-@@ -268,6 +272,10 @@ attribute-sets:
-         name: napi-id
-         doc: ID of the NAPI instance which services this queue.
-         type: u32
-+      -
-+        name: dmabuf
-+        doc: ID of the dmabuf attached to this queue, if any.
-+        type: u32
- 
-   -
-     name: qstats
-@@ -543,6 +551,7 @@ operations:
-             - inflight
-             - inflight-mem
-             - detach-time
-+            - dmabuf
-       dump:
-         reply: *pp-reply
-       config-cond: page-pool
-@@ -607,6 +616,7 @@ operations:
-             - type
-             - napi-id
-             - ifindex
-+            - dmabuf
-       dump:
-         request:
-           attributes:
-diff --git a/include/uapi/linux/netdev.h b/include/uapi/linux/netdev.h
-index 91bf3ecc5f1d9..7c308f04e7a06 100644
---- a/include/uapi/linux/netdev.h
-+++ b/include/uapi/linux/netdev.h
-@@ -93,6 +93,7 @@ enum {
- 	NETDEV_A_PAGE_POOL_INFLIGHT,
- 	NETDEV_A_PAGE_POOL_INFLIGHT_MEM,
- 	NETDEV_A_PAGE_POOL_DETACH_TIME,
-+	NETDEV_A_PAGE_POOL_DMABUF,
- 
- 	__NETDEV_A_PAGE_POOL_MAX,
- 	NETDEV_A_PAGE_POOL_MAX = (__NETDEV_A_PAGE_POOL_MAX - 1)
-@@ -131,6 +132,7 @@ enum {
- 	NETDEV_A_QUEUE_IFINDEX,
- 	NETDEV_A_QUEUE_TYPE,
- 	NETDEV_A_QUEUE_NAPI_ID,
-+	NETDEV_A_QUEUE_DMABUF,
- 
- 	__NETDEV_A_QUEUE_MAX,
- 	NETDEV_A_QUEUE_MAX = (__NETDEV_A_QUEUE_MAX - 1)
-diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
-index bd54cf50b658a..e944fd56c6b8e 100644
---- a/net/core/netdev-genl.c
-+++ b/net/core/netdev-genl.c
-@@ -293,6 +293,7 @@ static int
- netdev_nl_queue_fill_one(struct sk_buff *rsp, struct net_device *netdev,
- 			 u32 q_idx, u32 q_type, const struct genl_info *info)
- {
-+	struct net_devmem_dmabuf_binding *binding;
- 	struct netdev_rx_queue *rxq;
- 	struct netdev_queue *txq;
- 	void *hdr;
-@@ -312,6 +313,15 @@ netdev_nl_queue_fill_one(struct sk_buff *rsp, struct net_device *netdev,
- 		if (rxq->napi && nla_put_u32(rsp, NETDEV_A_QUEUE_NAPI_ID,
- 					     rxq->napi->napi_id))
- 			goto nla_put_failure;
-+
-+		binding = (struct net_devmem_dmabuf_binding *)
-+				  rxq->mp_params.mp_priv;
-+		if (binding) {
-+			if (nla_put_u32(rsp, NETDEV_A_QUEUE_DMABUF,
-+					binding->id))
-+				goto nla_put_failure;
-+		}
-+
- 		break;
- 	case NETDEV_QUEUE_TYPE_TX:
- 		txq = netdev_get_tx_queue(netdev, q_idx);
-diff --git a/net/core/page_pool_user.c b/net/core/page_pool_user.c
-index 3a3277ba167b1..ca13363aea343 100644
---- a/net/core/page_pool_user.c
-+++ b/net/core/page_pool_user.c
-@@ -212,6 +212,7 @@ static int
- page_pool_nl_fill(struct sk_buff *rsp, const struct page_pool *pool,
- 		  const struct genl_info *info)
- {
-+	struct net_devmem_dmabuf_binding *binding = pool->mp_priv;
- 	size_t inflight, refsz;
- 	void *hdr;
- 
-@@ -241,6 +242,9 @@ page_pool_nl_fill(struct sk_buff *rsp, const struct page_pool *pool,
- 			 pool->user.detach_time))
- 		goto err_cancel;
- 
-+	if (binding && nla_put_u32(rsp, NETDEV_A_PAGE_POOL_DMABUF, binding->id))
-+		goto err_cancel;
-+
- 	genlmsg_end(rsp, hdr);
- 
- 	return 0;
-diff --git a/tools/include/uapi/linux/netdev.h b/tools/include/uapi/linux/netdev.h
-index 91bf3ecc5f1d9..7c308f04e7a06 100644
---- a/tools/include/uapi/linux/netdev.h
-+++ b/tools/include/uapi/linux/netdev.h
-@@ -93,6 +93,7 @@ enum {
- 	NETDEV_A_PAGE_POOL_INFLIGHT,
- 	NETDEV_A_PAGE_POOL_INFLIGHT_MEM,
- 	NETDEV_A_PAGE_POOL_DETACH_TIME,
-+	NETDEV_A_PAGE_POOL_DMABUF,
- 
- 	__NETDEV_A_PAGE_POOL_MAX,
- 	NETDEV_A_PAGE_POOL_MAX = (__NETDEV_A_PAGE_POOL_MAX - 1)
-@@ -131,6 +132,7 @@ enum {
- 	NETDEV_A_QUEUE_IFINDEX,
- 	NETDEV_A_QUEUE_TYPE,
- 	NETDEV_A_QUEUE_NAPI_ID,
-+	NETDEV_A_QUEUE_DMABUF,
- 
- 	__NETDEV_A_QUEUE_MAX,
- 	NETDEV_A_QUEUE_MAX = (__NETDEV_A_QUEUE_MAX - 1)
--- 
-2.45.2.803.g4e1b14247a-goog
-
+--=20
+Best Regards
+ Guo Ren
 
