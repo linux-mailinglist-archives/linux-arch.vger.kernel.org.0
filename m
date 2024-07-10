@@ -1,52 +1,53 @@
-Return-Path: <linux-arch+bounces-5355-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5356-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A43992D74D
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Jul 2024 19:16:58 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF76092D839
+	for <lists+linux-arch@lfdr.de>; Wed, 10 Jul 2024 20:27:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0737AB21E15
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Jul 2024 17:16:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B65ABB21B17
+	for <lists+linux-arch@lfdr.de>; Wed, 10 Jul 2024 18:27:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B99FF194150;
-	Wed, 10 Jul 2024 17:16:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 277DA195B08;
+	Wed, 10 Jul 2024 18:27:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gj3wTGeG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kBignoqF"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AE4034545;
-	Wed, 10 Jul 2024 17:16:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE0B31922E3;
+	Wed, 10 Jul 2024 18:27:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720631810; cv=none; b=VuVwc6igdi9i+bvt3kv1ciM0o0aAZQ/OZ16V7u8PUfYyNGFKqxpFhvZHKsorQsbQZ3YnqDziJuFugDiydgk1cqZP+2L1wI0K5fFfR8T9YmSuaM3bJHjU9QDOS6uk3BH4BT8dpIqiynzzXGG64QqlACvgvH8L+I7sNGa3IIi/J9I=
+	t=1720636024; cv=none; b=Ws2UaXNSHwuHpw55JdI6RSS7PQ8+MMaCALHCSqtq/K7SV5oVZ40wGwTg76NEBMmZF9kHkbZ+eMaNnfbPESo2B8hipw0k0W9dYiYCMklBCENCOvv6S0EL68o16TZX5ZtlRO4nnctwiTiEryJtWX1d5VjaHwXQDxGQL6N0eVbz8UA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720631810; c=relaxed/simple;
-	bh=gbQbaUuiVBZ3rY0fazMfEsDsmp1EJvBByE9rwhcqv1M=;
+	s=arc-20240116; t=1720636024; c=relaxed/simple;
+	bh=eRrtqZRqKI+Vs713ksZJJnhpC7362rwfU+pQUCdgXy0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=g3ylZxPg4GPLoSzOw7X9M18OOsyb6YINupmHzIyb2sE0rspVZfMKhrMRgQUSnjkh1+48pobcTUiQ6yFsPWAp/Aq/9YXCsfR8dfLeVzNRRaej9ZBgVed2ruPPztG7O4RASCCeyfDOtSJAeLJXCYYBFOUteWlwpW7e4j7CmkiS6g4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gj3wTGeG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67AEFC32781;
-	Wed, 10 Jul 2024 17:16:49 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=aPeosFbvqjlyQYn1QY7GP5ha88SL7uqkhqj/oPwD8LsWatiSlC2EXsBnCkSq9yY9tpaRjrCuFH39gYyjskTz6WdSD1N+Os45fHKoGF/Y8Cdgmw6v0/yaK9kVBytpHWZDY5TX7Hm9eqCEeMEJH2YhttFQlFx9+k1gwwxxklLVaOw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kBignoqF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5056C32781;
+	Wed, 10 Jul 2024 18:27:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720631810;
-	bh=gbQbaUuiVBZ3rY0fazMfEsDsmp1EJvBByE9rwhcqv1M=;
+	s=k20201202; t=1720636023;
+	bh=eRrtqZRqKI+Vs713ksZJJnhpC7362rwfU+pQUCdgXy0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gj3wTGeGvkQA66hJtscYz2CdurW/XaWmXT1LUad7xHcQlV6bJlMPYB6BYkarkGJzM
-	 qb1fJH/GWYe++EsAN1YPqxKxmTx70mi2pArTryxpc+tBbCuVT8RugoF5J51N45APGN
-	 x+ezB+0+cMxlPHdLjUWzayfTJu8mxxY70OY7vRayQ0pqy+eEScxUw5lPNBlw9PM4pl
-	 gHRJ2FF3NJhmef1/MM9944Z03bUSEMfjwNa8lSQVOBXi6SLTpzX79Nj4r2tZ5j+E5e
-	 PNrecmTOcerZ2rr+jDaPAfXGPZUcWnJiE7MQ+AaJcdd8y8iMm1ukZWkjVH5FmwuAtd
-	 4eGDODAKNmXiA==
-Date: Wed, 10 Jul 2024 18:16:46 +0100
+	b=kBignoqFgMiQnAofIwr6TpBgYH9jPjzRaSC842ug8+rx6x5ll0CjTdOuNwKz+XNaU
+	 NDvkrwV2QNWMtc2QwoU1ijOz5da9rUzzZ4Zm4X9y1ohMBoG7CVKn0v8dUDWTmbo5kp
+	 qCrq3abaj3XVJlXugg7JTU4S4r1FduVMcT4Z37pYvXrQ+HC5Pfyh6axADebI74bLMd
+	 mL+FCPzGJMJSDDh/UgJFPTRSJhQcGB2O3dEluBrE8THwZhBROKgdbzxw1XeKE8fCoR
+	 WqmFYL3/Bn0OvLOJQI+kNsc03yBZkhbSjm+4JlasoCc+ZLBwTbq5WG/vpdgUXOB+/4
+	 KqrO9fqPgf3Gw==
+Date: Wed, 10 Jul 2024 19:27:00 +0100
 From: Mark Brown <broonie@kernel.org>
-To: Marc Zyngier <maz@kernel.org>
+To: Florian Weimer <fweimer@redhat.com>
 Cc: Catalin Marinas <catalin.marinas@arm.com>,
 	Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
 	Andrew Morton <akpm@linux-foundation.org>,
+	Marc Zyngier <maz@kernel.org>,
 	Oliver Upton <oliver.upton@linux.dev>,
 	James Morse <james.morse@arm.com>,
 	Suzuki K Poulose <suzuki.poulose@arm.com>,
@@ -60,7 +61,6 @@ Cc: Catalin Marinas <catalin.marinas@arm.com>,
 	Paul Walmsley <paul.walmsley@sifive.com>,
 	Palmer Dabbelt <palmer@dabbelt.com>,
 	Albert Ou <aou@eecs.berkeley.edu>,
-	Florian Weimer <fweimer@redhat.com>,
 	Christian Brauner <brauner@kernel.org>,
 	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
 	Ross Burton <ross.burton@arm.com>,
@@ -68,12 +68,15 @@ Cc: Catalin Marinas <catalin.marinas@arm.com>,
 	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
 	linux-arch@vger.kernel.org, linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v9 13/39] KVM: arm64: Manage GCS registers for guests
-Message-ID: <Zo7B_sRyUyxv7xmO@finisterre.sirena.org.uk>
+	linux-riscv@lists.infradead.org,
+	"Schimpe, Christina" <christina.schimpe@intel.com>,
+	"Pandey, Sunil K" <sunil.k.pandey@intel.com>
+Subject: Re: [PATCH v9 05/39] arm64/gcs: Document the ABI for Guarded Control
+ Stacks
+Message-ID: <Zo7SdDT_cBp6uXgT@finisterre.sirena.org.uk>
 References: <20240625-arm64-gcs-v9-0-0f634469b8f0@kernel.org>
- <20240625-arm64-gcs-v9-13-0f634469b8f0@kernel.org>
- <86v81d2s5t.wl-maz@kernel.org>
+ <20240625-arm64-gcs-v9-5-0f634469b8f0@kernel.org>
+ <87a5iph6u2.fsf@oldenburg.str.redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -81,108 +84,71 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="tsBiN+tG2JsDrdFj"
+	protocol="application/pgp-signature"; boundary="GNMZNZkOBV+voqRu"
 Content-Disposition: inline
-In-Reply-To: <86v81d2s5t.wl-maz@kernel.org>
+In-Reply-To: <87a5iph6u2.fsf@oldenburg.str.redhat.com>
 X-Cookie: Your love life will be... interesting.
 
 
---tsBiN+tG2JsDrdFj
+--GNMZNZkOBV+voqRu
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Wed, Jul 10, 2024 at 04:17:02PM +0100, Marc Zyngier wrote:
-> Mark Brown <broonie@kernel.org> wrote:
+On Wed, Jul 10, 2024 at 12:36:21PM +0200, Florian Weimer wrote:
+> * Mark Brown:
 
-> > +	if (ctxt_has_gcs(ctxt)) {
+> > +* When GCS is enabled for the interrupted thread a signal handling specific
+> > +  GCS cap token will be written to the GCS, this is an architectural GCS cap
+> > +  token with bit 63 set and the token type (bits 0..11) all clear.  The
+> > +  GCSPR_EL0 reported in the signal frame will point to this cap token.
 
-> Since this is conditioned on S1PIE, it should be only be evaluated
-> when PIE is enabled in the guest.
+> How does this marker interfere with Top Byte Ignore (TBI; I hope I got
+> the name right)?  The specification currently does not say that only
+> addresses pushed to the shadow stack with the top byte cleared, which
+> potentially makes the markup ambiguous.  On x86-64, the same issue may
 
-So make ctxt_has_gcs() embed a check of ctxt_has_s1pie()?
+Indeed...  Given that we use the address on the GCS as part of the token
+on first pass I think we could get away with just using the address and
+not setting the top bit, we'd have an invalid cap pointing into a GCS
+page which shouldn't otherwise be on the GCS.  I'll give that some more
+thought.
 
-> > +		ctxt_sys_reg(ctxt, GCSPR_EL1)	= read_sysreg_el1(SYS_GCSPR);
-> > +		ctxt_sys_reg(ctxt, GCSCR_EL1)	= read_sysreg_el1(SYS_GCSCR);
-> > +		ctxt_sys_reg(ctxt, GCSCRE0_EL1)	= read_sysreg_s(SYS_GCSCRE0_EL1);
+> exist with LAM.  I have not tested yet what happens there.  On AArch64
+> and RISC-V, it may be more natural to use the LSB instead of the LSB for
+> the mark bit because of its instruction alignment.
 
-> Why is this part of the EL1 context? It clearly only matters to EL0
-> execution, so it could be switched in load/put on nVHE as well. And
-> actually, given that the whole thing is strictly for userspace, why do
-> we switch *anything* eagerly at all?
+The LSB is already taken by the architecture on aarch64, the bottom bits
+of the value are used for the token type field with no values/bits
+reserved for software use.
 
-GCS can also be used independently at EL1 (and EL2 for that matter),
-it's not purely for userspace even though this series only implements
-use in userspace.  GCSPR_EL1 and GCSCR_EL1 control the use of GCS at
-EL1, not EL0, and the guest might be using GCS at EL1 even if the host
-doesn't.
+> We also have a gap on x86-64 for backtrace generation because the
+> interrupted instruction address does not end up on the shadow stack.
+> This address is potentially quite interesting for backtrace generation.
+> I assume it's currently missing because the kernel does not resume
+> execution using a regular return instruction.  It would be really useful
+> if it could be pushed to the shadow stack, or recoverable from the
+> shadow stack in some other way (e.g., the address of the signal context
+> could be pushed instead).  That would need some form of marker as well.
 
-GCSCRE0_EL1 is for EL0 though, it ended up here mainly because it's an
-_EL1 register and we are already context switching PIRE0_EL1 in the EL1
-functions so it seemed consistent to follow the same approach for GCS.
-The _el1 and _user save/restore functions are called from the same place
-for both VHE and nVHE so the practical impact of the placement should be
-minimal AFAICT.  Unlike PIRE0_EL1 GCSCRE0_EL1 only has an impact for
-code runnning at EL0 so I can move it to the _user functions.
+Right, we'd have to manually consume any extra address we put on the
+GCS.  I'm not seeing any gagetisation issues with writing an extra value
+there that isn't a valid stack cap at the minute but I'll need to think
+it through properly - don't know if anyone else has thoughts here?
 
-TBH I'm not following your comments about switching eagerly too here at
-all, where would you expect to see the switching done?  You've said
-something along these lines before which prompted me to send a patch to
-only save the S1PIE registers if they'd been written to which you were
-quite reasonably not happy with given the extra traps it would cause:
-
-   https://lore.kernel.org/r/20240301-kvm-arm64-defer-regs-v1-1-401e3de92e97@kernel.org
-
-but I'm at a loss as to how to make things less eager otherwise.
-
-> > @@ -2306,7 +2323,8 @@ static const struct sys_reg_desc sys_reg_descs[] = {
-> >  		   ID_AA64PFR0_EL1_GIC |
-> >  		   ID_AA64PFR0_EL1_AdvSIMD |
-> >  		   ID_AA64PFR0_EL1_FP), },
-> > -	ID_SANITISED(ID_AA64PFR1_EL1),
-> > +	ID_WRITABLE(ID_AA64PFR1_EL1, ~(ID_AA64PFR1_EL1_RES0 |
-> > +				       ID_AA64PFR1_EL1_BT)),
-
-> I don't know what you're trying to do here, but that's not right. If
-> you want to make this register writable, here's the shopping list:
-
-> https://lore.kernel.org/all/87ikxsi0v9.wl-maz@kernel.org/
-
-Yes, trying to make things writable.  I do see we need to exclude more
-bits there and I'm not clear why I excluded BTI, looks like I forgot to
-add a TODO comment at some point and finish that off.  Sorry about that.
-
-In the linked mail you say you want to see all fields explicitly
-handled, could you be more direct about what such explicit handling
-would look like?  I see a number of examples in the existing code like:
-
-	ID_WRITABLE(ID_AA64ZFR0_EL1, ~ID_AA64ZFR0_EL1_RES0),
-
-	ID_WRITABLE(ID_AA64ISAR0_EL1, ~ID_AA64ISAR0_EL1_RES0),
-	ID_WRITABLE(ID_AA64ISAR1_EL1, ~(ID_AA64ISAR1_EL1_GPI |
-					ID_AA64ISAR1_EL1_GPA |
-					ID_AA64ISAR1_EL1_API |
-					ID_AA64ISAR1_EL1_APA)),
-
-which look to my eye very similar to the above, they do not visibliy
-explictly enumerate every field in the registers and given that there's
-a single mask specified it's not clear how that would look.  If
-ID_WRITABLE() took separate read/write masks and combined them it'd be
-more obvious but it's just not written that way.
-
---tsBiN+tG2JsDrdFj
+--GNMZNZkOBV+voqRu
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmaOwf0ACgkQJNaLcl1U
-h9BiTwgAhG9qd8c+aLOWRDYY+jgC3wxTF25VtO52AztM2Y4fyGfPMHg+GgALH/zW
-kZPNqJcbu5fDOfkUg3obwE/dUqdlZDlbmmJBnaP1E9p3sXWuQ9sedlO17lyf3w8h
-mzzFxLDCS0j01M5YNj4ql9LmC4sTOWyuzvzKDzDnLfM93Jdj6nhT4S0si+iQdBB8
-PFhjdtH6qVUmQNG3ik40q/IPe+nA4u0mgs7XpKj8PuPtVDxe4SNhB8cZ8R+pEJBZ
-f3EHvbndiotEBkFARu84AC/F3XfNhGNYlaZg/fwr2yfpfpFV/1Cz0LABhH9WojA0
-z7VzLkWe/+pqYeMUNAJY6H+YDudaLA==
-=InCr
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmaO0nMACgkQJNaLcl1U
+h9CYNwf9FL92M924ZTMgdzdOGnvfj92Q8ImGFAmDoUP3IjVPivJTPYhDuY+GaQaY
+hojzU0+/ygci8GNBa3kaJGdT2kzo4J6aMfzV8Lw5OFhjfZvg98gQbw+HeRVou0BB
+trtAQLx/+CWEYHy1qXMPQ3jRHuINOT80L4T321NSPyd7rlSksPpZU/NqHmUI9iW9
+MpODGOLfCOg2W3CrQMA8AT1F09NeC4fBr+XRq1f3PwskzNRz/DR89M1amdCG7bky
+oOk/WAsSGY8RWuY7/GurREwf7vUc1akIFax3lqDscpCbSuZ89FcFfs6YEAUqgq86
+qV5kGewLUdqaGwutNJRSCAV+QkJXjw==
+=dJd9
 -----END PGP SIGNATURE-----
 
---tsBiN+tG2JsDrdFj--
+--GNMZNZkOBV+voqRu--
 
