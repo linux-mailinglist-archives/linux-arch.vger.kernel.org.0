@@ -1,110 +1,137 @@
-Return-Path: <linux-arch+bounces-5347-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5348-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7852692D1DE
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Jul 2024 14:46:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 30DF292D255
+	for <lists+linux-arch@lfdr.de>; Wed, 10 Jul 2024 15:08:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 20FEB1F24C92
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Jul 2024 12:46:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CF0891F222D5
+	for <lists+linux-arch@lfdr.de>; Wed, 10 Jul 2024 13:08:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29CA218FDA7;
-	Wed, 10 Jul 2024 12:46:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 937F019247D;
+	Wed, 10 Jul 2024 13:08:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="W/YNqMl+";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="crGDQrNc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S9hM2atZ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fout7-smtp.messagingengine.com (fout7-smtp.messagingengine.com [103.168.172.150])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BE5681723;
-	Wed, 10 Jul 2024 12:46:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5591619246A;
+	Wed, 10 Jul 2024 13:08:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720615568; cv=none; b=OLH03W0nmuAvrnDkBN5rxY6qAdo7HAgAUrWZl4bQF7fPW1dByZzC+U6fqmhban4gpqFTdgZH215/VA/DQVYtK0+VaGlc7t3Z+GH43n2vmzzW0PlOkwrp+723BuhfFDbQSLdjRRYeWVb6V92bfDd4/C6HtqRf+M0xrM+RizN2zUY=
+	t=1720616905; cv=none; b=eWCSlnyMa0SurAsX9MECYuiZBj8c971ZlxUT90K0AGJGfZD8RHGiobKLoze2GLZ2mjlbmVikCC9nPNdd+GTHDHq0QRp0SIlDno69SxmtKDeCigDYskWOHrxMHbAEVJbmtlfpBFyL5eQFOm3jIGn8ebIbpUcTCUs99JSMk80gT7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720615568; c=relaxed/simple;
-	bh=ENCye+tN6ZTv1qBEWwY9zTaG+Gvl9QpdG298D8ehGvs=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=WEsQnOOYHCMMj9lN4AuzjCcRAQgnzl9ttP/f3jhgNjM1DCZ+IfYbPpA+NsVchiioJKwrYCylCpdEmzXuI00jabRRcLyr73mjV1iuNjBuu6ACrf4edOX//lzrejLeTsRDdzI4WmfbMSlw5FTl6UhecdmZKrRtIhfXqfibgsCUNuI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=W/YNqMl+; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=crGDQrNc; arc=none smtp.client-ip=103.168.172.150
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfout.nyi.internal (Postfix) with ESMTP id 326441381D67;
-	Wed, 10 Jul 2024 08:46:01 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Wed, 10 Jul 2024 08:46:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1720615561; x=1720701961; bh=iHV40EwQ89
-	jWy0gmmC2olWSBS48TkU1OBQ1jmtxb560=; b=W/YNqMl+VwtHXRTXRaIaTOqRcu
-	mDP8QLj6Y/2fx3oKUqBRqm+/EvlkDGK6INDctqhYqZ3P0KT7vl/+ONvvpDWHtav/
-	INrtSGgAZfvTy2FfPZ9e5U/ctGW3UJ0bG2lUD2zECL27IMknS02KkO4xYtFqLPBj
-	L2f/0q2NsPYTnRD+eEcgUbmSqhyTxFukCCVcNLQJmYEKrojVaRMMcet0mseQivoc
-	o7zT9j6+vj6iRy4t3eL0G13u5IlzeRdY/5n5BJkOi+qzJS8IfesV2TO0CO28SgZd
-	FbG20NrFr2uvqVaRPkcxe+3M8kDz2yTGMUkIvfFov1HyYDVOaUnyF26xK+sw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1720615561; x=1720701961; bh=iHV40EwQ89jWy0gmmC2olWSBS48T
-	kU1OBQ1jmtxb560=; b=crGDQrNcTJb5MTItzXl+jd9CXkgr1tJQYNoL1x3el+K9
-	/M/IZo69NXq64HMZcDPOkuB+uJRF93MnUp9dD5hscD5u4VIFCqFsOhRkmjQm3ZAQ
-	2puyHiKtAn15LB0ldiIjH75pikyvlrLSOO72dQM9RQiLsXqHCKfm9CiykJ66sOpC
-	WAOmASa4SsEoMLBvP05Rk1dBUX4o8y8XSZ4hmZEchCGS9IirIHo68LpiVHkS/zWC
-	ZcDUm8RW2r696ghojf8F6LWcW07ZlGqrh9efhJEe3palyNaWXzgIOgwk/VguCm0o
-	WJaG/ijrOVzrKDAntP9FIW1kOdvTCK/q6FDTlxZLBg==
-X-ME-Sender: <xms:iIKOZuwRgj1GBkAB4crhdq046iBrTrYf_VQFUqmQo92yzGACZaFmYw>
-    <xme:iIKOZqTFAYKPr3m7m3IjGxxTUEes8tCXK0qurabiwEZG_6DwxZXwYu-xhCBUGffGX
-    t_UcNSWA38BHsgdlh4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrfedugdehiecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:iIKOZgXX4lS7AhfaBALO2NgUi_Q_hqGvfqsThQRcdzSW8AxNOcU2UQ>
-    <xmx:iIKOZkh3Q8Uv568BncsOYYwSy5NZqYdQ5vsYnP2OEyZUWVUErABkvQ>
-    <xmx:iIKOZgA-iD0SinnbnWicFgosiMfgcgfGqE6pQCD26vQq1I_TbrpU3w>
-    <xmx:iIKOZlICnUNdS2ZWXCfC8mojYGl6A5g57_lKFS3g1u2HUiNpWXxoZA>
-    <xmx:iYKOZjML3T9OUaj4EJch1lH_wzFpD2tpbfalNhCZaWdmfLSSIwJp8wc9>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id EB4A7B6008D; Wed, 10 Jul 2024 08:45:59 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-568-g843fbadbe-fm-20240701.003-g843fbadb
+	s=arc-20240116; t=1720616905; c=relaxed/simple;
+	bh=20hAmUQJ5H0dqXfMYq7iNS/LgEwVNBfRSwX6Fbv7Rx0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dF/l9j3q0AMiFLIr1MaYby7PsDj7jYFOk2tNhvDQPb8Kg6YBvJr9XrXsBlNYqARIDyJA5rv7RyfZ6+VIYrUQVMgAchHO2cejXS0Kdycm4CdwQ5dL5DvGXk57urfYEiMRUj6in7PIJ6lYGYL23nImY/ItBlzlag624bYDStWRwJU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S9hM2atZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6311EC32782;
+	Wed, 10 Jul 2024 13:08:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720616905;
+	bh=20hAmUQJ5H0dqXfMYq7iNS/LgEwVNBfRSwX6Fbv7Rx0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=S9hM2atZ5ZFhaUOVjx6PR2HXOtRcW2QNjebxTAoB2FvvbNZ4PvOIsIwpDlPboosKj
+	 aUtUzXLMfzd0O5DHyr4sCCAr1JRNez2zaVxXGyiPdJVbKNb37V2ly+VVxzpMDXgG/0
+	 yLekhO+MGKNgwADbhYOjSo5b4rpMXYgWwoL2bNSCBQKmOvzvqtC3rwJbQrGVvORCEw
+	 J4pHDoVTPveEEH9d10qvcPrL+POj3GC5r8YQvSmPXeVF0PMmlfQ/MZUMEctcHXW0qy
+	 0yxxDbGN2tLa8mdEVPGQM3LjZRro94QHKN4+ZoTczDbhEko0b/JGYs5RGeGNJyt6+s
+	 scOo6mzmOh59Q==
+Date: Wed, 10 Jul 2024 14:08:15 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Arnd Bergmann <arnd@kernel.org>,
+	Linux-Arch <linux-arch@vger.kernel.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Vineet Gupta <vgupta@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, guoren <guoren@kernel.org>,
+	Brian Cain <bcain@quicinc.com>, Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>, Dinh Nguyen <dinguyen@kernel.org>,
+	Jonas Bonn <jonas@southpole.se>,
+	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+	Stafford Horne <shorne@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Rich Felker <dalias@libc.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	"David S . Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+	linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
+	"linux-openrisc@vger.kernel.org" <linux-openrisc@vger.kernel.org>,
+	linux-riscv@lists.infradead.org,
+	Aishwarya TCV <Aishwarya.TCV@arm.com>, shuah <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 10/17] arm64: generate 64-bit syscall.tbl
+Message-ID: <Zo6Hv18S35K0hH_7@finisterre.sirena.org.uk>
+References: <20240704143611.2979589-1-arnd@kernel.org>
+ <20240704143611.2979589-11-arnd@kernel.org>
+ <c8c882ad-d508-40b7-9af5-b2a2ddf777c1@sirena.org.uk>
+ <93c84e97-b307-4486-8dfb-e966c96751a1@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <461243b3-4f80-4745-8169-c5dcee32ed63@app.fastmail.com>
-In-Reply-To: <5fc31a39-2068-4fff-b9bf-27feb4ca3bbe@arm.com>
-References: <20240612160038.522924-1-steven.price@arm.com>
- <7f258a4c-6048-4718-851d-4768789bc5e1@app.fastmail.com>
- <5fc31a39-2068-4fff-b9bf-27feb4ca3bbe@arm.com>
-Date: Wed, 10 Jul 2024 14:45:38 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Steven Price" <steven.price@arm.com>
-Cc: Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fixmap: Remove unused set_fixmap_offset_io()
-Content-Type: text/plain
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="LdSnlI4UojlRSCq3"
+Content-Disposition: inline
+In-Reply-To: <93c84e97-b307-4486-8dfb-e966c96751a1@app.fastmail.com>
+X-Cookie: Your love life will be... interesting.
 
-On Thu, Jun 27, 2024, at 15:58, Steven Price wrote:
-> On 12/06/2024 21:02, Arnd Bergmann wrote:
-> Actually for now it looks[1] like we're going to drop the overriding of 
-> set_fixmap_io() so if you want to apply this change separately please 
-> do!
 
-Applied now.
+--LdSnlI4UojlRSCq3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-    Arnd
+On Wed, Jul 10, 2024 at 10:57:25AM +0200, Arnd Bergmann wrote:
+
+> Thanks for the report! I just panicked a bit and thought I had
+> done something entirely wrong here, but after having a closer
+> look it turned out to be a silly typo:
+
+> -#include <unistd_64.h>
+> +#include <asm/unistd_64.h>
+
+Doh, I should've spotted that even from the very quick look I gave it!
+Thanks for the quick fix.
+
+> I checked that arm64 is the only architecture that has this
+> particular bug, and I tried building kselftest now, which seems
+> to work better. There are still a few warnings and errors
+> I get doing that, but I suspect those are all preexisting
+> issues.
+
+Yeah, not everything there builds cleanly (and there's a bunch of
+external deps you need for many of the suites).
+
+--LdSnlI4UojlRSCq3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmaOh74ACgkQJNaLcl1U
+h9CcQgf+N85DM6dZVHX8s5b4IoK8zBscjfKv6tCiwPcVRTNMH1dJqkR5LYNpb1am
+KnuwKdCAcqascCbdmTx6ZzWDw52YDXohUbXSLkof3qyp5Js5aEyrs51UQTogwoi4
+kW2K0EYgg4Wk0OF5Fe2Iq2ITXeoZ9O++joUeRHwXE9hSesKKiM+kZoHBaKHFQf8G
+KDEhNvrFyrB2F9RDVIHcqt7IlySirRkKj8aWx9Dytd3Z8QtLv8rI6mbWZQ17ym4y
+zDuDf4710dlhVUmR8eYF+JeHyJGcKQMF1BZAqwIkxQHuuP8uaNfhIR/rSOL1okjv
+4LFBmMQqolC9ttdMprhk/DBLuxJAwA==
+=NATo
+-----END PGP SIGNATURE-----
+
+--LdSnlI4UojlRSCq3--
 
