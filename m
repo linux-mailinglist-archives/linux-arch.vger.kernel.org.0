@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-5365-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5366-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4616092DDDE
-	for <lists+linux-arch@lfdr.de>; Thu, 11 Jul 2024 03:22:12 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8EACF92DDED
+	for <lists+linux-arch@lfdr.de>; Thu, 11 Jul 2024 03:23:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F1B5B2820BE
-	for <lists+linux-arch@lfdr.de>; Thu, 11 Jul 2024 01:22:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 411571F21FA7
+	for <lists+linux-arch@lfdr.de>; Thu, 11 Jul 2024 01:23:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6551B2F5A;
-	Thu, 11 Jul 2024 01:22:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69D7C79CC;
+	Thu, 11 Jul 2024 01:23:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nu7j9vqd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KObjfEuH"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0006321D;
-	Thu, 11 Jul 2024 01:22:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21231EDE;
+	Thu, 11 Jul 2024 01:23:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720660926; cv=none; b=OoB2JSqr0fMkK+OsRZGsYqFJrhQh3XNFOOOzqnKdSxHm1P4ldTF7T/FRwVmoZpj0N8I1nUpinDOHaT+pFbvkGqw1A+aovtohyifTLoJjM1Ltvz/LYO5k16uaDJNfkVAEn2hDxZC/0anyhX29OK+XNr+oNO2lrAohhqyK4djcd6c=
+	t=1720661005; cv=none; b=ZDjuKyJd8F/aCKl9XO5TvDU4vuPNSwdRoBvboAKwur+qrzwpjnrLnLa/sZ2BCRQnoqgHiEC2/oOXLgYLFsSg2qc7iXp2MwH3K3PaZ4dJRuj/x5oZBtjj1nliCGCQKqKzwL7Ze6WTRhceep9YOfUa9ufLbTCsrqUrL70pfXf20gQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720660926; c=relaxed/simple;
-	bh=QjOULS8b+CZJ29PyHWRuJmie+Hn55IcoVG3HP/3LohE=;
+	s=arc-20240116; t=1720661005; c=relaxed/simple;
+	bh=BNGP4duokc8ncBE7271BuDVYIIwbBx7q1BctfwQaFqA=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VnLLlJrh8akdwLMbZgs6JyUadYlISBRD8TKjtAK0oRxNmJsBE4UHUK+CaoBHXWev/sMdN+uNmXaSy98TkuseZ9dbLyMGkdIwQ1UHDi6b5GP4U2+RbFNtsJ4m0J4TdBYOVW+eLRZhesxjMkORYNlidiT1d3CLO/iDP0omG8gj5/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nu7j9vqd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAA79C32781;
-	Thu, 11 Jul 2024 01:22:03 +0000 (UTC)
+	 MIME-Version:Content-Type; b=eHy64VVL8cO57wA/RXq25TiTDMmwiSTq5Pteu0mEhhcyQhXAsWVtst4PmrMjNvvU5/hJ77XbxDlxaoGGoVhkUuMypd+mQFvse7HGtsYDTg+XBYWwRTBW6lP23sJyR+JBztzx3kyf9MOPqcKYrrNnm6z3cLubbokUAw/CDKasWyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KObjfEuH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0730CC32781;
+	Thu, 11 Jul 2024 01:23:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720660925;
-	bh=QjOULS8b+CZJ29PyHWRuJmie+Hn55IcoVG3HP/3LohE=;
+	s=k20201202; t=1720661004;
+	bh=BNGP4duokc8ncBE7271BuDVYIIwbBx7q1BctfwQaFqA=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Nu7j9vqdXFB65PlvnMG07kLL4ivK1FfVmXPHqTj2KJK596Mc9VqYs9lJeZEnKP7ON
-	 zXThKeg9bymdodZ2PIefG7emFD2gdT5qBsgTLm+H20XqJqPqzN0EFhC0m76b69HAKY
-	 IYbR340PfQzawxYhWyFufDRPBQHIiiklguQ7ygzJqm+l2Li6ovHnuc9HjM2IhUp6DQ
-	 /pG5oYdKyNVQMInWszt3EtEL8K4E758yZUnsbrn5XLQuIRBzGAmZ53YVSi6XiVF6Hp
-	 w6+ekApzB8N7QHyw3aeV+j7GzkIcFhh/EmmQxXvlulGRFFFtOWh1wCj2EME4SmvAhb
-	 q7RK7aphR1DUQ==
-Date: Wed, 10 Jul 2024 18:22:02 -0700
+	b=KObjfEuHg+F+/bNhywmUUTSGFn3bv/UvTtLsoLP/A8j+JrYJp2Ka3O/ezDg7IquU7
+	 64ig4waKXABYjNs3vbvrYkR7ULJbLzB1fN702YTrMz0Hkxis8BMfqdvmxik/sQQ21K
+	 XXeIDIYx3mYfCBeuUJq0aaQspg3EQOjFC5mPiG7btWl7kDBRHcLzhqrGBo3ghENCin
+	 5wPf+YTZV7+ICl9eWbLIMvEJhTp71W9ETPYKnyot5YbyIOKw8smwAldqsdn2p/dXmj
+	 xdQJd61Xv49iwsP6htPMECVZNf2v9MhwXGUeQ/ixSeS6yXvvH4jnN0ZxI/3Fhw701B
+	 s1ygLn4p0sytg==
+Date: Wed, 10 Jul 2024 18:23:22 -0700
 From: Jakub Kicinski <kuba@kernel.org>
 To: Mina Almasry <almasrymina@google.com>
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -75,12 +75,12 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  <pkaligineedi@google.com>, linux-mm@kvack.org, Matthew Wilcox
  <willy@infradead.org>
 Subject: Re: [PATCH net-next v16 05/13] page_pool: devmem support
-Message-ID: <20240710182202.0324279f@kernel.org>
-In-Reply-To: <CAHS8izPnFxeEMEQkxq=A9Rp7T8ADJ__3eWfeQmC2hEBYQVzcvw@mail.gmail.com>
+Message-ID: <20240710182322.667f0108@kernel.org>
+In-Reply-To: <CAHS8izPTqsNQnQWKpDPTxULTFL4vr4k6j9Zw8TQzJVDBMXWMaA@mail.gmail.com>
 References: <20240710001749.1388631-1-almasrymina@google.com>
 	<20240710001749.1388631-6-almasrymina@google.com>
 	<20240710094900.0f808684@kernel.org>
-	<CAHS8izPnFxeEMEQkxq=A9Rp7T8ADJ__3eWfeQmC2hEBYQVzcvw@mail.gmail.com>
+	<CAHS8izPTqsNQnQWKpDPTxULTFL4vr4k6j9Zw8TQzJVDBMXWMaA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -90,29 +90,23 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Wed, 10 Jul 2024 13:29:03 -0700 Mina Almasry wrote:
-> If we want to add __skb_frag_ref() support for net_iov I suggest something like:
+On Wed, 10 Jul 2024 16:42:04 -0700 Mina Almasry wrote:
+> > > +static inline void netmem_set_pp(netmem_ref netmem, struct page_pool *pool)
+> > > +{
+> > > +     __netmem_clear_lsb(netmem)->pp = pool;
+> > > +}  
+> >
+> > Why is all this stuff in the main header? It's really low level.
+> > Please put helpers which are only used by the core in a header
+> > under net/core/, like net/core/dev.h  
 > 
-> diff --git a/include/linux/skbuff_ref.h b/include/linux/skbuff_ref.h
-> index 0f3c58007488a..02f7f4c7d4821 100644
-> --- a/include/linux/skbuff_ref.h
-> +++ b/include/linux/skbuff_ref.h
-> @@ -17,7 +17,13 @@
->   */
->  static inline void __skb_frag_ref(skb_frag_t *frag)
->  {
-> -       get_page(skb_frag_page(frag));
-> +       netmem_ref netmem = skb_frag_netmem(frag);
-> +
-> +       /* netmem always uses pp-refs for refcounting. Never non-pp refs. */
-> +       if (!netmem_is_net_iov(netmem))
-> +               get_page(netmem_to_page(netmem));
-> +       else
-> +               page_pool_ref_netmem(netmem);
->  }
+> Sorry none of those are only used by net/core/*. Pretty much all of
+> these are used by include/net/page_pool/helpers.h, and some have
+> callers in net/core/devmem.c or net/core/skbuff.c
+> 
+> Would you like me to move these pp specific looking ones to
+> include/net/page_pool/netmem.h or something similar?
 
-Probably not much better since freeing still looks at the recycle bit.
-Eric and Willem acked patch 8, maybe it works, and if it doesn't we
-know who to call :) I can't point out any case that won't work so if 
-y'all think this is fine, let's leave it.
+That's because some things already in helpers have no real business
+being there either. Why is page_pool_set_pp_info() in helpers.h?
 
