@@ -1,160 +1,125 @@
-Return-Path: <linux-arch+bounces-5369-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5370-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FC1192EBAC
-	for <lists+linux-arch@lfdr.de>; Thu, 11 Jul 2024 17:28:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1FE692EBF0
+	for <lists+linux-arch@lfdr.de>; Thu, 11 Jul 2024 17:49:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 831F01F245D6
-	for <lists+linux-arch@lfdr.de>; Thu, 11 Jul 2024 15:28:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1BAA21C22AEC
+	for <lists+linux-arch@lfdr.de>; Thu, 11 Jul 2024 15:49:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED1D7168C26;
-	Thu, 11 Jul 2024 15:28:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4C2D16C6A2;
+	Thu, 11 Jul 2024 15:49:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tvbdEsk4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iEfV6QDW"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C553216C699
-	for <linux-arch@vger.kernel.org>; Thu, 11 Jul 2024 15:28:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A607D8479;
+	Thu, 11 Jul 2024 15:49:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720711701; cv=none; b=VS/lvRbvzQJDkKZXe+FOlqg+vFoa6/1zEhj+3D+gGBOJsAbj0+XGDMxQRuy4QdYsnq+MEy21U/jQGvsaThqaFYs4rWxcvBoryzIHh9NZ3EDVtuPCkcn4jt9C8UtUlvZ1WiqOGqS/3IsV/F4UxFyzFKeKT8LcA70KhGHI6NqHq4g=
+	t=1720712950; cv=none; b=ZlI4yHbvWzgbp160x3mDsOFNKCQu8joQT/SpSpdWPkCwnzTbFyfH3CoPcZz+GEJcGPN07A+TachmMU0WKTlyZs6ysn7kJlP5XjboKABeg5xuN01DlpyWtJtYUu8dn5hYIxRlJTC9lcn4+ArxHJsHXq4Wed2vceVxzt5FEmenVkU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720711701; c=relaxed/simple;
-	bh=SilAbBLlHxF1fFiXA5nZv8t2dj5EmTE+T6I22rXMb5M=;
+	s=arc-20240116; t=1720712950; c=relaxed/simple;
+	bh=ZuSNhp04Wh6EW5lLCQ+g2TTMsPvkJdMs1uzOY5TVPg0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sLLl9aZuLDBvmvUB3ufKhhaPPOdbb2ber9GWAI4BB7IR5UD8+CDUkQ2ifhAi0tvoSyjXAKK4bFbyqtdD9YU4Ilf10tZip5apGxGCfWgNczCnDl8UQaU1YkRIcNFnEwJAUIwSDuTuL0+DRWw3ExjQGnnCsMZFsfB+vwk964r4OQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tvbdEsk4; arc=none smtp.client-ip=209.85.219.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-6b5f4c7f4fbso6106696d6.2
-        for <linux-arch@vger.kernel.org>; Thu, 11 Jul 2024 08:28:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1720711699; x=1721316499; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WQkM2Ryk0ZQZFnLcaLIzbhoe7KSMFKbN9WHRd1zSTLE=;
-        b=tvbdEsk4sodNSvw9dH8d0RTBCUCIMpLRnkDWzwu+htuFGz9CKFgr7WVU3tljAoy3nm
-         hq++uQy+j+zsmqSFprVU8kf2JMITO/neuc77g+lZ3I11/gED/4qmLT5sywvJtSN1P2s/
-         Rw0IPojdYEmIuRqp2FDXdstx+z4YbcILMMm4jeXPKt2fdJSHOO/4qy55yPCcQ4qfHb5n
-         OgfJPbuVjsIc2HSwdt/TVN7xX0RCdKr9VHnb2j4BZdpkA4MqKHZCNrF4ryhprX2kM1YH
-         nbBCiHiZyEnGJuvFSFv6/cC6OfZU0QYi/JDkO1yidn53SMazkEtK1qJwK6CdGXv22vGM
-         r3OQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720711699; x=1721316499;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WQkM2Ryk0ZQZFnLcaLIzbhoe7KSMFKbN9WHRd1zSTLE=;
-        b=NDr9R6jVjyf3UBaP4RTugXkBEvr3bC7BOpic4UKtQReKZFK8eMegaeR6BaJR4bGpdk
-         b6OI1ZOi0Nb9v/TP5LE6OanuIhZpFteu5hOMvqHtYAyqC+wLpnA5JdovXqGhyPQ73Fdc
-         LUZQc3HWO+C9AbUAY0Jz6HdS3/jejTEfdrMVWox7/98WFdzIsI3ooru9LngdyFV+yenR
-         NfQg/4Hq7C3UVnnnB5OJG90Is8g9rkgnEUNp8YqyghO8nZbokjeky9epMHEAU92kxgTn
-         DnH6GmKbm8YL5zWaWIZCXedtU6SukEy77Yg6mz3xTx+oZILCDCyqccbSEM7xBonno8Kv
-         nn5A==
-X-Forwarded-Encrypted: i=1; AJvYcCU13npTpvDyHS97I1jbyBKx03jPB10B/vknmVFlaIXZSlBM5Z8xDnlSVCK8HBjUKYxJOq6B0OPcjnvVggBjdmi0mu2oH1UCxwPVbg==
-X-Gm-Message-State: AOJu0YyYMHBgEB0tPV+VPBl5aS1KWLIodCLBM1BwmLFE1nLD6NOF6WG+
-	KIXE8qhd48sgDWukLxjnC5AUi2xxkHPqkzap9l71mf6ax2B8h0Pv2uSg2QJHV6qIGMlnf7kR3Lt
-	OqjA5j86Y/GtQut0d7TuFIfIWVhNqag8+2rO6
-X-Google-Smtp-Source: AGHT+IE8HI6rD0D7bFmLR1Mn8tZE0XSsSvK7NyBw9sFmyI90jMNxfVlBfEcxHI84DHJue4HhA0QN9oG7JH/Vd9MHPxg=
-X-Received: by 2002:a05:6214:cad:b0:6b0:76f1:8639 with SMTP id
- 6a1803df08f44-6b61c1b6d8fmr100368136d6.42.1720711698460; Thu, 11 Jul 2024
- 08:28:18 -0700 (PDT)
+	 To:Cc:Content-Type; b=Sot1Csse3v4aV+0oq2rtEjZDn5vikZT+38xvpxEmVuqJcphfEqiQvMIhX6zxfBBN56FphWK/HTgTBIbCIjX4/4cyasomfesjnlnvx29Zm8C9czpdTiRkC+t3kN3PD3SzsudgcT3G43vjG/KXCcHgUurTVtxxlem8y2I5FWWVFFs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iEfV6QDW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1555CC116B1;
+	Thu, 11 Jul 2024 15:49:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720712949;
+	bh=ZuSNhp04Wh6EW5lLCQ+g2TTMsPvkJdMs1uzOY5TVPg0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=iEfV6QDWwbMnp9Ta0Jer7ufy7zKuRm0UWvkJW72QY10t6ps7bgp01pqrrI/nPJYK4
+	 aMRh9ZF/IE1zLE2CWaaFQqoH87euXHgcVDUCI8FRHQLRzl0Hn5cM5pGTcdcuB1ubWY
+	 7C0umyGH23O1dml7/cbWgv+m1S0Z5bC39W80eVrXz6QNggeVgiL7GVN5GGQXoSyNXO
+	 x9/a5jfhts/AMfl6Y1Ah/Pvl+GppiyWxzLsd7vdSq8U1uD/hk7ObzadMOrVkHQ6wWX
+	 mp+jdOGkXJyV7+IWDlVnAzxY48Ah5kvgicHHgUyI46+s+fRE2+Q7aNoVeQ82HxcNNS
+	 L2NSAQhoN06lw==
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2eecd2c6432so11605361fa.3;
+        Thu, 11 Jul 2024 08:49:08 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUW9zY4hS3Hy6ZeU7MOU82G0a8spyWi5/aC/0zLpGwnf5vRZVKbylW6XdREkqbiccwcq/UWcIGkPmJ/yHWmQNX9xFULm21MEZJHn0iB8dANj8LwT4cK0kjyZNiNgKLFjsd2QKYi16L32qabJV9wj9Gm9fzkFkNdSHiRfDS5fenQBz6wiDnihtCXEkhVkj72Stg1cU4E/Uz/+QgItjGPLvQUMxBH00QRzw2Wws/GQPFel2fKM1XaYTFGgm98lax1gPK2ng0RcA==
+X-Gm-Message-State: AOJu0YwSRB64OocGoCX4QpnlwOISrumaBTll7EA6guk3/CZt1EFo3ieX
+	KbK7aaB012u8ansLH4ahJZKtqofXQQ5Q8ngH0L6ofJ0V/NwLw54QcY8i4KAniByWV424Hwhu6+g
+	aNi7+pUQsBDHV2ZCJNv3STweS75c=
+X-Google-Smtp-Source: AGHT+IF7NQdXn1ehcZ9BG8DZDkjb0sOdI+MsrOYGuBrT+fO/aduK2xqVz6OBibzkuFUSmSL45H3g6KQ3ZY2sharGRnY=
+X-Received: by 2002:a2e:8ed3:0:b0:2ee:4d37:91df with SMTP id
+ 38308e7fff4ca-2eeb30fef50mr68275581fa.27.1720712947779; Thu, 11 Jul 2024
+ 08:49:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240710001749.1388631-1-almasrymina@google.com>
- <20240710001749.1388631-13-almasrymina@google.com> <4b0479b0-1e0f-43db-8333-26b7a1fd791c@nvidia.com>
-In-Reply-To: <4b0479b0-1e0f-43db-8333-26b7a1fd791c@nvidia.com>
-From: Mina Almasry <almasrymina@google.com>
-Date: Thu, 11 Jul 2024 08:28:03 -0700
-Message-ID: <CAHS8izOc4gZUP-aS747OVf3uyn8KAyfeBcYDx2CQc-L9RnvrXA@mail.gmail.com>
-Subject: Re: [PATCH net-next v16 12/13] selftests: add ncdevmem, netcat for
- devmem TCP
-To: John Hubbard <jhubbard@nvidia.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, Donald Hunter <donald.hunter@gmail.com>, 
-	Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, 
-	Nikolay Aleksandrov <razor@blackwall.org>, Taehee Yoo <ap420073@gmail.com>, 
-	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
-	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, 
-	Stanislav Fomichev <sdf@google.com>
+References: <20240704143611.2979589-1-arnd@kernel.org> <20240704143611.2979589-3-arnd@kernel.org>
+In-Reply-To: <20240704143611.2979589-3-arnd@kernel.org>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Fri, 12 Jul 2024 00:48:30 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATLVY1xtSMVMro-KMQVPgVHoiRKGX33ajCg8ZU0-EZS2w@mail.gmail.com>
+Message-ID: <CAK7LNATLVY1xtSMVMro-KMQVPgVHoiRKGX33ajCg8ZU0-EZS2w@mail.gmail.com>
+Subject: Re: [PATCH 02/17] csky: drop asm/gpio.h wrapper
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Vineet Gupta <vgupta@kernel.org>, 
+	Russell King <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>, Brian Cain <bcain@quicinc.com>, 
+	Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
+	Dinh Nguyen <dinguyen@kernel.org>, Jonas Bonn <jonas@southpole.se>, 
+	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>, Stafford Horne <shorne@gmail.com>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Rich Felker <dalias@libc.org>, 
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, "David S. Miller" <davem@davemloft.net>, 
+	Andreas Larsson <andreas@gaisler.com>, Christian Brauner <brauner@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-snps-arc@lists.infradead.org, 
+	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org, 
+	linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev, 
+	linux-openrisc@vger.kernel.org, linux-riscv@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 10, 2024 at 5:44=E2=80=AFPM John Hubbard <jhubbard@nvidia.com> =
-wrote:
+On Thu, Jul 4, 2024 at 11:36=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wro=
+te:
 >
-> On 7/9/24 5:17 PM, Mina Almasry wrote:
-> ...
-> > diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selft=
-ests/net/Makefile
-> > index bc3925200637c..39420a6e86b7f 100644
-> > --- a/tools/testing/selftests/net/Makefile
-> > +++ b/tools/testing/selftests/net/Makefile
-> > @@ -95,6 +95,11 @@ TEST_PROGS +=3D fq_band_pktlimit.sh
-> >   TEST_PROGS +=3D vlan_hw_filter.sh
-> >   TEST_PROGS +=3D bpf_offload.py
-> >
-> > +# YNL files, must be before "include ..lib.mk"
-> > +EXTRA_CLEAN +=3D $(OUTPUT)/libynl.a
-> > +YNL_GEN_FILES :=3D ncdevmem
-> > +TEST_GEN_FILES +=3D $(YNL_GEN_FILES)
-> > +
-> >   TEST_FILES :=3D settings
-> >   TEST_FILES +=3D in_netns.sh lib.sh net_helper.sh setup_loopback.sh se=
-tup_veth.sh
-> >
-> > @@ -104,6 +109,10 @@ TEST_INCLUDES :=3D forwarding/lib.sh
-> >
-> >   include ../lib.mk
-> >
-> > +# YNL build
-> > +YNL_GENS :=3D netdev
-> > +include ynl.mk
+> From: Arnd Bergmann <arnd@arndb.de>
 >
-> This seems to be missing a rule to generate ynl.mk, right?
+> The asm/gpio.h header is gone now that all architectures just use
+> gpiolib, and so the redirect is no longer valid.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+
+
+Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
+
+
+>  arch/csky/include/asm/Kbuild | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/arch/csky/include/asm/Kbuild b/arch/csky/include/asm/Kbuild
+> index 1117c28cb7e8..13ebc5e34360 100644
+> --- a/arch/csky/include/asm/Kbuild
+> +++ b/arch/csky/include/asm/Kbuild
+> @@ -1,7 +1,6 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  generic-y +=3D asm-offsets.h
+>  generic-y +=3D extable.h
+> -generic-y +=3D gpio.h
+>  generic-y +=3D kvm_para.h
+>  generic-y +=3D mcs_spinlock.h
+>  generic-y +=3D qrwlock.h
+> --
+> 2.39.2
 >
 
-Hi John,
-
-tools/testing/selftests/net/ynl.mk was merged as part of this patch a
-few days ago:
-
-https://patchwork.kernel.org/project/netdevbpf/patch/20240628003253.1694510=
--14-almasrymina@google.com/
-
-Is it not working for you by any chance?
 
 --=20
-Thanks,
-Mina
+Best Regards
+Masahiro Yamada
 
