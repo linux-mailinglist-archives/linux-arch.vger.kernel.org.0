@@ -1,124 +1,123 @@
-Return-Path: <linux-arch+bounces-5373-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5374-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8743692F13D
-	for <lists+linux-arch@lfdr.de>; Thu, 11 Jul 2024 23:41:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24CE392F532
+	for <lists+linux-arch@lfdr.de>; Fri, 12 Jul 2024 07:52:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B2B62837CA
-	for <lists+linux-arch@lfdr.de>; Thu, 11 Jul 2024 21:41:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 53B241C217CE
+	for <lists+linux-arch@lfdr.de>; Fri, 12 Jul 2024 05:52:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 044F819FA80;
-	Thu, 11 Jul 2024 21:41:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zp1w1M0V"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A62118042;
+	Fri, 12 Jul 2024 05:52:07 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6F4742042;
-	Thu, 11 Jul 2024 21:41:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D54BD182A0;
+	Fri, 12 Jul 2024 05:52:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720734070; cv=none; b=NkAdIyl/ln7Yr9JDS83PO99lR8Yp/7Facpdt66a3fQVW+qftYUjHw1NU5xf+ESTm44cdM1sdHUNtScHyAJZZlSLFwmLrBvkag7ZO3KFc72YprsGK35YNW7+OZsIPCramfyorf+B0r/czICMkSzskEBn6uoZbkVAEzL4O4XN7HT8=
+	t=1720763527; cv=none; b=UBR/GcwD8iVhpb+3VW+/u4kkpxtODdXPp4us7iG+5LXG8LTDi9KA/F5mL4u2m4sLS/6rxcuwco6U56kolF4/6FdBBFSO+nz5X4NGT6I/5lnS7wu0alwp8+xVJfIQQ1OuMdGPMSmvw93oOuxB3PNuZcnuz659rxrqf5oLjl3HazA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720734070; c=relaxed/simple;
-	bh=g1fNHOiGZm5mn96BaOhihxmzcRcyf74Q/bsZs8K17xc=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mS15uyU7uEN/YBA8rcw3899mmQM+1tliJ4Cub2R+B+zltPaz2nWpw5G52i1Fqg4sJGKX3MBekcmWIe9eVF7u941w7JWggt4VU0hJvEymXdJv+3wrpt/9TjbfxkbYMpKqaVgjOrpIdyFyRZRxt82dmSZLZg4yWwVEH+DsJXtbsAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zp1w1M0V; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45582C116B1;
-	Thu, 11 Jul 2024 21:41:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720734070;
-	bh=g1fNHOiGZm5mn96BaOhihxmzcRcyf74Q/bsZs8K17xc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Zp1w1M0VOLmBNoOKjAT5CTE8BYrya+H1UwJrflrWESuo7uZue7iRKRZ4zpVGBcO2r
-	 JfHDmhOh1K91cHcdNCjHshXjwawtPn6kxyHX3Y6rlLk3zHEnjhuBZX277+OqLX05+W
-	 +wUPVw/el9mcJ7uNpa3f0WEVqpMx9whj46qVyNBYA1YxFt6Gc+Aap+0IpsZsYS6b6x
-	 99LfRRVFyVT/9XwfcLz99b+8pOGsjni6NXPXPe6e3QNwec5LKy0mZnyaCTJLepsVDG
-	 wYu/+B5BdVB3cVS+n3GFpmp+4R/sbXU58e8C1Y6LSMHLZtG/aJJGaGXSa+fE4rRz4E
-	 M3SWkeRQ1GlnA==
-Date: Thu, 11 Jul 2024 14:41:07 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
- bpf@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, Donald Hunter <donald.hunter@gmail.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet
- <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, Ivan
- Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
- <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>,
- Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
- <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
- Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
- <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, Herbert
- Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, Willem
- de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>,
- Sumit Semwal <sumit.semwal@linaro.org>, Christian =?UTF-8?B?S8O2bmln?=
- <christian.koenig@amd.com>, Bagas Sanjaya <bagasdotme@gmail.com>, Christoph
- Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>,
- Taehee Yoo <ap420073@gmail.com>, Pavel Begunkov <asml.silence@gmail.com>,
- David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin
- <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, Harshitha
- Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
- Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
- <pkaligineedi@google.com>, linux-mm@kvack.org, Matthew Wilcox
- <willy@infradead.org>
-Subject: Re: [PATCH net-next v16 05/13] page_pool: devmem support
-Message-ID: <20240711144107.0086e0e1@kernel.org>
-In-Reply-To: <CAHS8izNMsCHhJM4hf7pf2p98sp9-3gxL6o7sC6JQnqThxiWjYw@mail.gmail.com>
-References: <20240710001749.1388631-1-almasrymina@google.com>
-	<20240710001749.1388631-6-almasrymina@google.com>
-	<20240710094900.0f808684@kernel.org>
-	<CAHS8izPTqsNQnQWKpDPTxULTFL4vr4k6j9Zw8TQzJVDBMXWMaA@mail.gmail.com>
-	<20240710182322.667f0108@kernel.org>
-	<CAHS8izNMsCHhJM4hf7pf2p98sp9-3gxL6o7sC6JQnqThxiWjYw@mail.gmail.com>
+	s=arc-20240116; t=1720763527; c=relaxed/simple;
+	bh=AkR672Oy5z6xePK2gngOndmUfuDA5V9f3rg3lYJIGpM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YGUK5pHv618lLWisy0V0+dqpj1ZOuhQmNpzkLmSLksypmcZMZ7sU0jITSkUC/esUC3NalyF/DUvQAVQBvwp4jjpewHyQW/s6/ENJiO7lQVFfhSDsLgzLDeRwghOe+Hb8maLqhD5azOJkTK9KKvyD/fdY/Sw++UtTOa7QrpSOTnM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4WL12B4QYTz9sSb;
+	Fri, 12 Jul 2024 07:52:02 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PazSdMF40BfC; Fri, 12 Jul 2024 07:52:02 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4WL12B3Xj0z9sSV;
+	Fri, 12 Jul 2024 07:52:02 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 60D1A8B778;
+	Fri, 12 Jul 2024 07:52:02 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id v6_nuzrMFLuu; Fri, 12 Jul 2024 07:52:02 +0200 (CEST)
+Received: from PO20335.idsi0.si.c-s.fr (PO22011.IDSI0.si.c-s.fr [192.168.233.128])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id CCC728B764;
+	Fri, 12 Jul 2024 07:52:01 +0200 (CEST)
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+To: Arnd Bergmann <arnd@arndb.de>,
+	Alexander Lobakin <alobakin@pm.me>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
+	linux-kernel@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-arch@vger.kernel.org,
+	Peter Zijlstra <peterz@infradead.org>,
+	kernel test robot <lkp@intel.com>
+Subject: [PATCH] vmlinux.lds.h: catch .bss..L* sections into BSS")
+Date: Fri, 12 Jul 2024 07:51:58 +0200
+Message-ID: <1f28df2a177cf632ac70162b345dc59711959f48.1720763318.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1720763518; l=2118; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=AkR672Oy5z6xePK2gngOndmUfuDA5V9f3rg3lYJIGpM=; b=VnIrALErtmEscWJLYHRlC6VmwQu7OUL9GBd8Ws9re3e+zrQ5BdYpS6uXnr1XZYjbcsddCBaLZ MYJJGMrSW6cCxi0OKn9LlVHWjie4BC3niS1DMW5gYI7flhMkRtWNUqK
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
 
-On Thu, 11 Jul 2024 13:57:01 -0700 Mina Almasry wrote:
-> > > Sorry none of those are only used by net/core/*. Pretty much all of
-> > > these are used by include/net/page_pool/helpers.h, and some have
-> > > callers in net/core/devmem.c or net/core/skbuff.c
-> > >
-> > > Would you like me to move these pp specific looking ones to
-> > > include/net/page_pool/netmem.h or something similar?  
-> >
-> > That's because some things already in helpers have no real business
-> > being there either. Why is page_pool_set_pp_info() in helpers.h?  
-> 
-> OK, I looked into this a bit. It looks like I can trivially move
-> page_pool_set/clear_pp_info() to page_pool_priv.h, and that lets me
-> move out a few of these netmem helpers to a header under net/core.
-> 
-> However, to move more of these netmem helpers to a private header, I
-> think I need to move all the page pool dma helpers and reffing helpers
-> to a private header or the .c file, which I think will uninline them
-> as they're eventually called from drivers.
-> 
-> I had guessed the previous authors put those dma and ref helpers in
-> the .h file to inline them as they're used in fast paths. Do you think
-> the refactor and the uninling is desirable? Or should I just do with
-> the trivial moving of the page_pool_set/clear_pp_info() to the private
-> file?
+Commit 9a427556fb8e ("vmlinux.lds.h: catch compound literals into
+data and BSS") added catches for .data..L* and .rodata..L* but missed
+.bss..L*
 
-The helpers which modify pp_magic and dma_addr should go. I don't see
-anything else on a quick look, but in general the public header
-shouldn't contain helpers which are meant for setup / init of a buffer.
+Since commit 5431fdd2c181 ("ptrace: Convert ptrace_attach() to use
+lock guards") the following appears at build:
+
+  LD      .tmp_vmlinux.kallsyms1
+powerpc64-linux-ld: warning: orphan section `.bss..Lubsan_data33' from `kernel/ptrace.o' being placed in section `.bss..Lubsan_data33'
+  NM      .tmp_vmlinux.kallsyms1.syms
+  KSYMS   .tmp_vmlinux.kallsyms1.S
+  AS      .tmp_vmlinux.kallsyms1.S
+  LD      .tmp_vmlinux.kallsyms2
+powerpc64-linux-ld: warning: orphan section `.bss..Lubsan_data33' from `kernel/ptrace.o' being placed in section `.bss..Lubsan_data33'
+  NM      .tmp_vmlinux.kallsyms2.syms
+  KSYMS   .tmp_vmlinux.kallsyms2.S
+  AS      .tmp_vmlinux.kallsyms2.S
+  LD      vmlinux
+powerpc64-linux-ld: warning: orphan section `.bss..Lubsan_data33' from `kernel/ptrace.o' being placed in section `.bss..Lubsan_data33'
+
+Lets add .bss..L* to BSS_MAIN macro to catch those sections into BSS.
+
+Fixes: 9a427556fb8e ("vmlinux.lds.h: catch compound literals into data and BSS")
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202404031349.nmKhyuUG-lkp@intel.com/
+---
+ include/asm-generic/vmlinux.lds.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index 5703526d6ebf..70bf1004076b 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -103,7 +103,7 @@
+ #define DATA_MAIN .data .data.[0-9a-zA-Z_]* .data..L* .data..compoundliteral* .data.$__unnamed_* .data.$L*
+ #define SDATA_MAIN .sdata .sdata.[0-9a-zA-Z_]*
+ #define RODATA_MAIN .rodata .rodata.[0-9a-zA-Z_]* .rodata..L*
+-#define BSS_MAIN .bss .bss.[0-9a-zA-Z_]* .bss..compoundliteral*
++#define BSS_MAIN .bss .bss.[0-9a-zA-Z_]* .bss..L* .bss..compoundliteral*
+ #define SBSS_MAIN .sbss .sbss.[0-9a-zA-Z_]*
+ #else
+ #define TEXT_MAIN .text
+-- 
+2.44.0
+
 
