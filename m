@@ -1,171 +1,143 @@
-Return-Path: <linux-arch+bounces-5379-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5380-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8FFC92F7B3
-	for <lists+linux-arch@lfdr.de>; Fri, 12 Jul 2024 11:13:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B2D992F811
+	for <lists+linux-arch@lfdr.de>; Fri, 12 Jul 2024 11:35:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8049A285274
-	for <lists+linux-arch@lfdr.de>; Fri, 12 Jul 2024 09:13:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EE6831F221A8
+	for <lists+linux-arch@lfdr.de>; Fri, 12 Jul 2024 09:35:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBF69146D79;
-	Fri, 12 Jul 2024 09:13:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B06BB13CA8E;
+	Fri, 12 Jul 2024 09:35:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="cMt4P0Gr";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="MgYDcZka"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="Y/eOyjZT"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fout2-smtp.messagingengine.com (fout2-smtp.messagingengine.com [103.168.172.145])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E18EA143C51;
-	Fri, 12 Jul 2024 09:13:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.145
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD07B143C51
+	for <linux-arch@vger.kernel.org>; Fri, 12 Jul 2024 09:35:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720775624; cv=none; b=sREGNOE7h9TRKFngngaqtT9d7++x0MCd2QBk0Z0vMd+ZzpMpVqguIgnNMmNXYNbAYFlFaGuoNSSCt+CheiQQrklG3P9SR7wtyU3pf4o7yOW4nHD98yiodwZu9blp7Uo+DJ7UqCHMu8v4Qq5qPiP8hBrYzeVE6B5OQNMEABVtb2k=
+	t=1720776937; cv=none; b=grXnTKb40hNsP3x6+bjkpWH/xcuR208CjvrC2Ibsw9PTdBhC4KHvBB0AUcMnFg/EhjjiDX27F8EuwJbHZ3INoIXtc8WL7Hr5TQU38boQmDDQhFAjcgvOxH6TpgVxVPs8c0bt4SoR8lPtf49pSrwi5CY4FhGsWOkFSwkBkFE9+FQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720775624; c=relaxed/simple;
-	bh=iFK37U2f70CC36s76QKCED26mTV/SsdiHM+sATzIl90=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=YzhWkSRwq7chtU5rIVWxdJf8fuW5LBNf4pATrNTEx7bNxII55ULwROLVHCAGH2Sel/QbQR73awyHS3XOKUrWJ3PRpsfLK8yn/wwj3DXQDCc1U6+eKaTRFESU7dDsy/7+gponcCz2nFp8xa4lI5Ix3N4HEEp66C9E4Oeb1tihmb8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=cMt4P0Gr; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=MgYDcZka; arc=none smtp.client-ip=103.168.172.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfout.nyi.internal (Postfix) with ESMTP id 093B913886AE;
-	Fri, 12 Jul 2024 05:13:42 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Fri, 12 Jul 2024 05:13:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1720775622;
-	 x=1720862022; bh=+8/B7nnlva+5zNPi7sf2bUE6DcSx2Ml3WIXcjT3v0KM=; b=
-	cMt4P0GrPCayVfGKqZ04Oldr7Mq6E4vJI+T0BQYmDKIDYEHrhuOriDb2sn8s1KAi
-	LzNn1/Ct3iNJHUj/9LKX/q5T+aPnWSU7HdJcQpfMzPrfFAubBhErxvUuy1P+kRh3
-	Kj28fPCP/bx/RANmMJOBlO81H2asQTcOtXF+xF5ATeo4o3qkokNXPtv3pTzE9sn9
-	2xy+j/kytN8CnYTQKueMwZdbAwZATfI+ZVxRd/0W7AmjdWmO9PW3UAbQyXY6/IYp
-	eraDlJ3tZEnbEj9QY4mUUhTOv9r5NABuy+DSOu58NXQVjkNkOs93daRnA4NzJ+i6
-	p3J3ei0lSuRTNcfUct143A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1720775622; x=
-	1720862022; bh=+8/B7nnlva+5zNPi7sf2bUE6DcSx2Ml3WIXcjT3v0KM=; b=M
-	gYDcZkamVp0txdHnMyaS7XkhFzNUlFoQzSTIyWZAj9H0avUirl9gdX5gYdz6XQ7Z
-	qC1CVsA2OHkEHJ5dPG3Y9/IlJBydnLypw2NP0jTgRp0vVGxMNT/F+GYe71li4sAw
-	KkXYBrpStP+OLQ6Igrv6lXWSxxyFj3Mfi8HvKhOVu7aDHGzfMwpWP8aPphGLveY1
-	0yxvR57ylk+qoUnc9ngMgO6svFMtGH8TEr+JdIp+XB2GuLJApzLN8ocObuI3RPjm
-	8oAW99cy5eFWAiK2kDQhrWzhogGOXGFnqfVrBW6dTz5CFt7kRPqZpUz/03sruZVI
-	06s5Pn7JCEWojOtFmbaMQ==
-X-ME-Sender: <xms:xPOQZt-gkPmGrHIkjqeUNvcRdLZEQU_Jz8dQ0G-CNop-bWBhKDU2Gw>
-    <xme:xPOQZhv1pioHUTjgPWVTQkPz0BGoB_PmdRozC5XLrsMXXBQWtRdymnz4I_DdIiusV
-    snjitaKeOOyhNgD2wY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrfeeigddtkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepgeefjeehvdelvdffieejieejiedvvdfhleeivdelveehjeelteegudektdfg
-    jeevnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:xPOQZrD2kH8otN3RHA4viULvGsXy6rh7LGueObOJ9FDelSl8S_oLUQ>
-    <xmx:xPOQZheVft2_07Rj9pEC1MUxQxSs1cKPU-CmR23h62f6VdXf7xLXeA>
-    <xmx:xPOQZiPpT6jkGVO7I3U5rxli4mDgimMarQvFMF6WpzzJDuvXO4Xqcg>
-    <xmx:xPOQZjlSpjww5SK-qGAGKRrkYnivx7JEazxU2Eq_z1bUBgXoi4Q2Xw>
-    <xmx:xvOQZosARBHlClwP4SI8f_7F32uxnt7h-kjJ5tyGMWjYdClF6iIiL_9w>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 62E5BB6008D; Fri, 12 Jul 2024 05:13:40 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-568-g843fbadbe-fm-20240701.003-g843fbadb
+	s=arc-20240116; t=1720776937; c=relaxed/simple;
+	bh=kXV0109FCOzso+L559vqF0BSPt0UUb6aogVBVgHjZvk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=m4zKSlBhw1jux5YCYAsKdPZ59eqd4kpjS/yugPfgIuIeWdlVeckORcc/oyvAKku6854veAd0+q5VPjm6BgWtmqBnsjq1IwGbAebCG1K/978xOiu+hYARmtqqHYesZukttf/3v5GEYljzwkpFXaYkW8d/EXOHpB4qD5vE2WQFeu0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=Y/eOyjZT; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a728f74c23dso258855566b.1
+        for <linux-arch@vger.kernel.org>; Fri, 12 Jul 2024 02:35:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1720776933; x=1721381733; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wn8z9cRdOEh+xpEHyWfRewfBG/LWm9irdSwzJQPt4vg=;
+        b=Y/eOyjZThmcsdw6Hs5Fxg2/ty7n1UbXh1E9545jEWIOAYdXgug5ZpTkA8Lvg2e2h+R
+         Y5HR4L8gwKUlpMapiyRxRLiGoWgDzgMN28UTRm+rxVl/KE+sxsin3Ug4WrHgxoYVliWc
+         KH2TXcFTLb2bObM8sSVTcVRlR3+9w8Kml0E8XpBMmuBSYXqhFtGhpvIbNKw8wAZPjlvc
+         qKqh/8UCN9nEDhs0xUj7F5LUk7J8VEpDsNtWF5tzcp8N7awPa0uNyQv5wVy/vWiXm3Fy
+         8LrryUtoN94wC8G0vVT53eMB+2Sgsmj7feJn2+1zS1+7Yfi6GMGLv032xVQ4tJxOaazL
+         9LaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720776933; x=1721381733;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wn8z9cRdOEh+xpEHyWfRewfBG/LWm9irdSwzJQPt4vg=;
+        b=Wj1JAY9AQ35SQY1wnxmPcQfizk9we2fVqTD0lkvwC4HWrriEktzKLQup612J0U9Gwt
+         xJhRwCfRHzqG3aVy81bAoSGKdhDptbvq1jScV3fxyaeJzUw55HVIFKgjWDTj2IqWVc/e
+         s8zWGyJbHqrB3AzBFKcD+/il6PZg5yKugQ2BUoqaqD4LnG8BGdiLvWEh50i6NJFSXMDO
+         YO9ePxsfdzQraVrFbOTm7wSWX6djwc48213R/rIz79SOuivHtE90tgilwvXn+iRYpiez
+         /pU1f8fcnwso7SzrS2o0WKKgtdDW5fzJfEbSQRFEXbhiE2VvPAagTZLm7K3Bx5xzCPch
+         RGxg==
+X-Gm-Message-State: AOJu0YxMg5GJeAkGLfznBKVPBtOkBXUP0/1z9ZUPxAdAhbd/JnVEjZ08
+	8buHqX7tZTHHbdXW/wR2CrCAgRmEtD4kaXz7KiH9ZiXUphaqh+KiBMwk5yb4reA=
+X-Google-Smtp-Source: AGHT+IHSQezVZTQQW1YWOTobbr+S5uTMZDEaxVRC5FiDnpQtUZO1W5xkFdreFDBnucdlNuc1el1aSg==
+X-Received: by 2002:a17:906:128d:b0:a77:e2e3:354f with SMTP id a640c23a62f3a-a780b6b180dmr793845966b.23.1720776932757;
+        Fri, 12 Jul 2024 02:35:32 -0700 (PDT)
+Received: from localhost (p50915eb1.dip0.t-ipconnect.de. [80.145.94.177])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a780a7300a5sm330569366b.94.2024.07.12.02.35.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Jul 2024 02:35:32 -0700 (PDT)
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] UAPI/ioctl: Improve parameter name of ioctl request definition helpers
+Date: Fri, 12 Jul 2024 11:35:23 +0200
+Message-ID: <20240712093524.905556-2-u.kleine-koenig@baylibre.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <1d998e37-926c-473f-a58a-1d47b96f882a@app.fastmail.com>
-In-Reply-To: 
- <CAK7LNAS=h6dML-06ox1dje_bxF2+R-Gq7Yw-s73Vi-FW39L9eg@mail.gmail.com>
-References: <20240704143611.2979589-1-arnd@kernel.org>
- <20240704143611.2979589-4-arnd@kernel.org>
- <CAK7LNAS=h6dML-06ox1dje_bxF2+R-Gq7Yw-s73Vi-FW39L9eg@mail.gmail.com>
-Date: Fri, 12 Jul 2024 11:13:16 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Masahiro Yamada" <masahiroy@kernel.org>,
- "Arnd Bergmann" <arnd@kernel.org>
-Cc: Linux-Arch <linux-arch@vger.kernel.org>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nicolas Schier" <nicolas@fjasle.eu>, "Vineet Gupta" <vgupta@kernel.org>,
- "Russell King" <linux@armlinux.org.uk>,
- "Catalin Marinas" <catalin.marinas@arm.com>,
- "Will Deacon" <will@kernel.org>, guoren <guoren@kernel.org>,
- "Brian Cain" <bcain@quicinc.com>, "Huacai Chen" <chenhuacai@kernel.org>,
- "WANG Xuerui" <kernel@xen0n.name>, "Dinh Nguyen" <dinguyen@kernel.org>,
- "Jonas Bonn" <jonas@southpole.se>,
- "Stefan Kristiansson" <stefan.kristiansson@saunalahti.fi>,
- "Stafford Horne" <shorne@gmail.com>,
- "Paul Walmsley" <paul.walmsley@sifive.com>,
- "Palmer Dabbelt" <palmer@dabbelt.com>,
- "Albert Ou" <aou@eecs.berkeley.edu>, "Rich Felker" <dalias@libc.org>,
- "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
- "David S . Miller" <davem@davemloft.net>,
- "Andreas Larsson" <andreas@gaisler.com>,
- "Christian Brauner" <brauner@kernel.org>,
- "Mark Rutland" <mark.rutland@arm.com>, linux-kbuild@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-snps-arc@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org,
- "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
- linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
- "linux-openrisc@vger.kernel.org" <linux-openrisc@vger.kernel.org>,
- linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 03/17] um: don't generate asm/bpf_perf_event.h
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2732; i=u.kleine-koenig@baylibre.com; h=from:subject; bh=kXV0109FCOzso+L559vqF0BSPt0UUb6aogVBVgHjZvk=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBmkPjdS6x38g4I61Cvhedr2EMZsoXcs7g4Pv0tO SONUGjNnLSJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZpD43QAKCRCPgPtYfRL+ Tvk/CAChvDEQCj5h5oxdkskTo+bNDeXrjti5iVsuEITNMn2N53JRn/kfWCAavFKe+AJPEKhy9rX brrBDiHCQ9nnDaRmA8f9p0iX0mnaDTlMs1PczrrS8YfZRMAP0QyMHXgiV/YlK/kUiSZTn/5z9v4 PFrD9Q4ogmKYm/n5aO7YwwBewnJThBjfTxs8uOijks8qLdrRQn79kqNiKnPe1IwQLnbhiLx6waY v8gW6Ep0LCrU1pyDSTIpiGaJcL5mv4wwBto8Lw8FzdA6lhGeqFsH3+FAEg9idYCME8SD6ZuIJzG QNsTpTqGcr2qXR8tGfbZaszEE2869L+MtVpCRrEbyxssqFxC
+X-Developer-Key: i=u.kleine-koenig@baylibre.com; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
 
-On Fri, Jul 12, 2024, at 10:37, Masahiro Yamada wrote:
-> On Thu, Jul 4, 2024 at 11:37=E2=80=AFPM Arnd Bergmann <arnd@kernel.org=
-> wrote:
->> --- a/arch/um/include/asm/Kbuild
->> +++ b/arch/um/include/asm/Kbuild
->> @@ -1,5 +1,4 @@
->>  # SPDX-License-Identifier: GPL-2.0
->> -generic-y +=3D bpf_perf_event.h
->>  generic-y +=3D bug.h
->>  generic-y +=3D compat.h
->>  generic-y +=3D current.h
->> diff --git a/arch/um/include/asm/bpf_perf_event.h b/arch/um/include/a=
-sm/bpf_perf_event.h
->> new file mode 100644
->> index 000000000000..0a30420c83de
->> --- /dev/null
->> +++ b/arch/um/include/asm/bpf_perf_event.h
->> @@ -0,0 +1,3 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +
->> +#include <asm-generic/bpf_perf_event.h>
->
-> I guess this is a step backward.
->
-> Technically, kernel-space asm/*.h files are allowed to
-> wrap UAPI <asm-generic/*.h>.
-> There is no reason why we ban generic-y for doing this,
-> whereas check-in source is allowed.
+The third parameter to _IOR et al is a type name, not a size. So the
+parameter being named "size" is irritating. Rename it to "argtype"
+instead to reduce confusion.
 
-I think in this case, the simplicity is the more important
-argument: this is the only case we have of wrapping a
-uapi header from a non-uapi header, and no other architecture
-would need to do this.
+There is a very minor chance that this breaks stuff. It only hurts
+however if there is a variable (or macro) in userspace that is called
+"argtype" *and* it's used in the parameters of _IOR and friends. IMHO
+this is negligible because usually definitions making use of these
+macros are provided by kernel headers (i.e. us) or if they are
+replicated in userspace code, they are replicated and so supposed to
+match the kernel definitions (e.g. to make them usable by programs
+without the need to update the kernel headers used to compile the
+program).
 
-The way the syscall-y rule works relies on enforcing some
-checking for existing asm-generic headers, and I could extend
-it to allow this special case, but that would make the
-Makefile rule less readable  in exchange for avoiding
-effectively a one-line file.
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
+---
+Hello,
 
-    Arnd
+if there are doubts about using "argtype": Would "_argtype" be better?
+
+Best regards
+Uwe
+
+ include/uapi/asm-generic/ioctl.h | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/include/uapi/asm-generic/ioctl.h b/include/uapi/asm-generic/ioctl.h
+index a84f4db8a250..e3290a5824c9 100644
+--- a/include/uapi/asm-generic/ioctl.h
++++ b/include/uapi/asm-generic/ioctl.h
+@@ -82,13 +82,13 @@
+  * NOTE: _IOW means userland is writing and kernel is reading. _IOR
+  * means userland is reading and kernel is writing.
+  */
+-#define _IO(type,nr)		_IOC(_IOC_NONE,(type),(nr),0)
+-#define _IOR(type,nr,size)	_IOC(_IOC_READ,(type),(nr),(_IOC_TYPECHECK(size)))
+-#define _IOW(type,nr,size)	_IOC(_IOC_WRITE,(type),(nr),(_IOC_TYPECHECK(size)))
+-#define _IOWR(type,nr,size)	_IOC(_IOC_READ|_IOC_WRITE,(type),(nr),(_IOC_TYPECHECK(size)))
+-#define _IOR_BAD(type,nr,size)	_IOC(_IOC_READ,(type),(nr),sizeof(size))
+-#define _IOW_BAD(type,nr,size)	_IOC(_IOC_WRITE,(type),(nr),sizeof(size))
+-#define _IOWR_BAD(type,nr,size)	_IOC(_IOC_READ|_IOC_WRITE,(type),(nr),sizeof(size))
++#define _IO(type,nr)			_IOC(_IOC_NONE,(type),(nr),0)
++#define _IOR(type,nr,argtype)		_IOC(_IOC_READ,(type),(nr),(_IOC_TYPECHECK(argtype)))
++#define _IOW(type,nr,argtype)		_IOC(_IOC_WRITE,(type),(nr),(_IOC_TYPECHECK(argtype)))
++#define _IOWR(type,nr,argtype)		_IOC(_IOC_READ|_IOC_WRITE,(type),(nr),(_IOC_TYPECHECK(argtype)))
++#define _IOR_BAD(type,nr,argtype)	_IOC(_IOC_READ,(type),(nr),sizeof(argtype))
++#define _IOW_BAD(type,nr,argtype)	_IOC(_IOC_WRITE,(type),(nr),sizeof(argtype))
++#define _IOWR_BAD(type,nr,argtype)	_IOC(_IOC_READ|_IOC_WRITE,(type),(nr),sizeof(argtype))
+ 
+ /* used to decode ioctl numbers.. */
+ #define _IOC_DIR(nr)		(((nr) >> _IOC_DIRSHIFT) & _IOC_DIRMASK)
+
+base-commit: 3fe121b622825ff8cc995a1e6b026181c48188db
+prerequisite-patch-id: 816efa50518af0814a168f7f0ac5904b7128e5b1
+-- 
+2.43.0
+
 
