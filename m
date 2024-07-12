@@ -1,85 +1,85 @@
-Return-Path: <linux-arch+bounces-5378-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5379-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90EED92F796
-	for <lists+linux-arch@lfdr.de>; Fri, 12 Jul 2024 11:09:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8FFC92F7B3
+	for <lists+linux-arch@lfdr.de>; Fri, 12 Jul 2024 11:13:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 473D02819BE
-	for <lists+linux-arch@lfdr.de>; Fri, 12 Jul 2024 09:09:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8049A285274
+	for <lists+linux-arch@lfdr.de>; Fri, 12 Jul 2024 09:13:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E719143C51;
-	Fri, 12 Jul 2024 09:09:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBF69146D79;
+	Fri, 12 Jul 2024 09:13:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="M7SN+q9i";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="NrQeQaoA"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="cMt4P0Gr";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="MgYDcZka"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from fout2-smtp.messagingengine.com (fout2-smtp.messagingengine.com [103.168.172.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99014143747;
-	Fri, 12 Jul 2024 09:09:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E18EA143C51;
+	Fri, 12 Jul 2024 09:13:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720775354; cv=none; b=B1XHoXHU/viJxbPN9p7GszhHcMMdEuBa1zQ8p7o868QHbUVvwowATZHEdsnwCudJoNMbl0ivEW/0UgITEK74eyLTbSyTzQHmv34U6xQuYGcMQT04w6Opz7GbioS/fS/HJ4IuxebKZtJwNPEx/0j2nqICyc23C3YxlS6tPh143yQ=
+	t=1720775624; cv=none; b=sREGNOE7h9TRKFngngaqtT9d7++x0MCd2QBk0Z0vMd+ZzpMpVqguIgnNMmNXYNbAYFlFaGuoNSSCt+CheiQQrklG3P9SR7wtyU3pf4o7yOW4nHD98yiodwZu9blp7Uo+DJ7UqCHMu8v4Qq5qPiP8hBrYzeVE6B5OQNMEABVtb2k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720775354; c=relaxed/simple;
-	bh=Dkgox/IQTwaQ+eQxNPJVC2wknfvPEUKKuT06ZCrgfKk=;
+	s=arc-20240116; t=1720775624; c=relaxed/simple;
+	bh=iFK37U2f70CC36s76QKCED26mTV/SsdiHM+sATzIl90=;
 	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=rbLnVIMTjxvHHuoiNEfMAumYSywNFoNp7orEJKubLwAuTHsbxztwE/vTmaRV22G82jiH4UNcrSDwsgOFImy2m1jW1kd9MIXUX6ek6rmXwKxi6cLlMWnFULnwGLdupxpY+7eCb/dZK+P5PWt7O1t2DkD9NbpIwMP5aQ+Zzf+lRew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=M7SN+q9i; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=NrQeQaoA; arc=none smtp.client-ip=103.168.172.145
+	 Subject:Content-Type; b=YzhWkSRwq7chtU5rIVWxdJf8fuW5LBNf4pATrNTEx7bNxII55ULwROLVHCAGH2Sel/QbQR73awyHS3XOKUrWJ3PRpsfLK8yn/wwj3DXQDCc1U6+eKaTRFESU7dDsy/7+gponcCz2nFp8xa4lI5Ix3N4HEEp66C9E4Oeb1tihmb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=cMt4P0Gr; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=MgYDcZka; arc=none smtp.client-ip=103.168.172.145
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfout.nyi.internal (Postfix) with ESMTP id AF4B4138221C;
-	Fri, 12 Jul 2024 05:09:11 -0400 (EDT)
+	by mailfout.nyi.internal (Postfix) with ESMTP id 093B913886AE;
+	Fri, 12 Jul 2024 05:13:42 -0400 (EDT)
 Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Fri, 12 Jul 2024 05:09:11 -0400
+  by compute5.internal (MEProxy); Fri, 12 Jul 2024 05:13:42 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
 	:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1720775351;
-	 x=1720861751; bh=sZ7e4XevovcBdrC0s9li43TyJDtZzYkioK9A8LGqM/Y=; b=
-	M7SN+q9i0T1/jB6rkxntX3fgDkaikboa5B4fEQ7f99816KkJDDm+CP8PZpT8ZezN
-	GNUQGwX8pzFBddHKwfg2FfGNMroyt65wjVT3xmfuIHK9WbS9ETLz6G3Tl6PSN+/F
-	Gfumz/LDeEJNUhs/uKhyYOFI8xO/2U2gYlzfwSI9iCp9A1u8FAaz3YdE96uOlsIy
-	C3z1sY56kT3e9DuxQR+jFBJ1IFYSZVRPnixfa4p7PBQmFvT6dCgKuWiOYdwH2RC8
-	FCkIWbjvRk0llcGrJ0HVxt8Kl4gGJsU5QivQRQPATjazMWPswZcZVynMUPFb/PJN
-	uQk5pfumf9/XpeBnVjhcTQ==
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1720775622;
+	 x=1720862022; bh=+8/B7nnlva+5zNPi7sf2bUE6DcSx2Ml3WIXcjT3v0KM=; b=
+	cMt4P0GrPCayVfGKqZ04Oldr7Mq6E4vJI+T0BQYmDKIDYEHrhuOriDb2sn8s1KAi
+	LzNn1/Ct3iNJHUj/9LKX/q5T+aPnWSU7HdJcQpfMzPrfFAubBhErxvUuy1P+kRh3
+	Kj28fPCP/bx/RANmMJOBlO81H2asQTcOtXF+xF5ATeo4o3qkokNXPtv3pTzE9sn9
+	2xy+j/kytN8CnYTQKueMwZdbAwZATfI+ZVxRd/0W7AmjdWmO9PW3UAbQyXY6/IYp
+	eraDlJ3tZEnbEj9QY4mUUhTOv9r5NABuy+DSOu58NXQVjkNkOs93daRnA4NzJ+i6
+	p3J3ei0lSuRTNcfUct143A==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1720775351; x=
-	1720861751; bh=sZ7e4XevovcBdrC0s9li43TyJDtZzYkioK9A8LGqM/Y=; b=N
-	rQeQaoAYrmIx4P9f1dJ204CLgUujqrXKFMFrNNLiFFla4i8EB7bhNuKzjgRj3DGO
-	Eym3G3cXIPA9uQzYswhcEucP6Mvp9c5FLUD/cdWl6bl7XVW+IM2TekwG8A4C79S9
-	RKniQ50ZGXAG+CDKWB/rNZdBZS4WCdmBTR/EUR3Rn55HgdUBgbbooTGJE781Y63f
-	S6Uud8LVRJi2zAyBSMhQQqQAgB1U3UpaSfZgH22siiPk6Nybr5f46Z1EhpNLZ6n7
-	L3D7R8EZOD7aNt3qY7lxRGjX9Jaluw6Js9KGMNAtvS0npAU0x/wzA6w3JvX3vwzq
-	2Y/W0ngCQNcaYui6ZdOew==
-X-ME-Sender: <xms:tPKQZsDR-wmYFg7MIczctzGLNXIg6jYekOWPBAT2oOYzOgmMIKfXtA>
-    <xme:tPKQZujqoKOXxeixBmlq_wWrG20-7I5PX6o1IAasYCOnLRcrQWPaioJkPDCSXXEcY
-    0tjiQB1LzzzPzvF32A>
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1720775622; x=
+	1720862022; bh=+8/B7nnlva+5zNPi7sf2bUE6DcSx2Ml3WIXcjT3v0KM=; b=M
+	gYDcZkamVp0txdHnMyaS7XkhFzNUlFoQzSTIyWZAj9H0avUirl9gdX5gYdz6XQ7Z
+	qC1CVsA2OHkEHJ5dPG3Y9/IlJBydnLypw2NP0jTgRp0vVGxMNT/F+GYe71li4sAw
+	KkXYBrpStP+OLQ6Igrv6lXWSxxyFj3Mfi8HvKhOVu7aDHGzfMwpWP8aPphGLveY1
+	0yxvR57ylk+qoUnc9ngMgO6svFMtGH8TEr+JdIp+XB2GuLJApzLN8ocObuI3RPjm
+	8oAW99cy5eFWAiK2kDQhrWzhogGOXGFnqfVrBW6dTz5CFt7kRPqZpUz/03sruZVI
+	06s5Pn7JCEWojOtFmbaMQ==
+X-ME-Sender: <xms:xPOQZt-gkPmGrHIkjqeUNvcRdLZEQU_Jz8dQ0G-CNop-bWBhKDU2Gw>
+    <xme:xPOQZhv1pioHUTjgPWVTQkPz0BGoB_PmdRozC5XLrsMXXBQWtRdymnz4I_DdIiusV
+    snjitaKeOOyhNgD2wY>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrfeeigddtkecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
     fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedftehr
     nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
     htvghrnhepgeefjeehvdelvdffieejieejiedvvdfhleeivdelveehjeelteegudektdfg
-    jeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    jeevnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomheprg
     hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:tPKQZvnM0POoj8h13xHmxb_HKBiaQZefN_oNtqRHbw4JDgxKnPxd9A>
-    <xmx:tPKQZixofpA8v3Gue5nkhh60aW_mzdzZJE689uqiwWZsm0JkKizC7A>
-    <xmx:tPKQZhSnPYREvuE2yvUVgs7XB7xgq8KM2oeEU38DYPogz8EKybqKvg>
-    <xmx:tPKQZta3spHoTBC_qk6-TiezbpzzI7noO1wvjB0mBLDEKDwWuROD3A>
-    <xmx:t_KQZhwIZzgBoFR5lfyh56NGNRguMKKXxXb63UdfFG80E_XGEKAnPekG>
+X-ME-Proxy: <xmx:xPOQZrD2kH8otN3RHA4viULvGsXy6rh7LGueObOJ9FDelSl8S_oLUQ>
+    <xmx:xPOQZheVft2_07Rj9pEC1MUxQxSs1cKPU-CmR23h62f6VdXf7xLXeA>
+    <xmx:xPOQZiPpT6jkGVO7I3U5rxli4mDgimMarQvFMF6WpzzJDuvXO4Xqcg>
+    <xmx:xPOQZjlSpjww5SK-qGAGKRrkYnivx7JEazxU2Eq_z1bUBgXoi4Q2Xw>
+    <xmx:xvOQZosARBHlClwP4SI8f_7F32uxnt7h-kjJ5tyGMWjYdClF6iIiL_9w>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 1B788B6008F; Fri, 12 Jul 2024 05:09:08 -0400 (EDT)
+	id 62E5BB6008D; Fri, 12 Jul 2024 05:13:40 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.11.0-alpha0-568-g843fbadbe-fm-20240701.003-g843fbadb
 Precedence: bulk
@@ -88,13 +88,13 @@ List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <b8fa2389-e666-4631-a872-d0144fb7b3ac@app.fastmail.com>
+Message-Id: <1d998e37-926c-473f-a58a-1d47b96f882a@app.fastmail.com>
 In-Reply-To: 
- <CAK7LNARpWB6Pqa80KDmpdJ_Rf5FZc71_bX9eSy3fFVCAyg8CAg@mail.gmail.com>
+ <CAK7LNAS=h6dML-06ox1dje_bxF2+R-Gq7Yw-s73Vi-FW39L9eg@mail.gmail.com>
 References: <20240704143611.2979589-1-arnd@kernel.org>
- <20240704143611.2979589-2-arnd@kernel.org>
- <CAK7LNARpWB6Pqa80KDmpdJ_Rf5FZc71_bX9eSy3fFVCAyg8CAg@mail.gmail.com>
-Date: Fri, 12 Jul 2024 11:07:34 +0200
+ <20240704143611.2979589-4-arnd@kernel.org>
+ <CAK7LNAS=h6dML-06ox1dje_bxF2+R-Gq7Yw-s73Vi-FW39L9eg@mail.gmail.com>
+Date: Fri, 12 Jul 2024 11:13:16 +0200
 From: "Arnd Bergmann" <arnd@arndb.de>
 To: "Masahiro Yamada" <masahiroy@kernel.org>,
  "Arnd Bergmann" <arnd@kernel.org>
@@ -123,30 +123,49 @@ Cc: Linux-Arch <linux-arch@vger.kernel.org>,
  linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
  "linux-openrisc@vger.kernel.org" <linux-openrisc@vger.kernel.org>,
  linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 01/17] syscalls: add generic scripts/syscall.tbl
+Subject: Re: [PATCH 03/17] um: don't generate asm/bpf_perf_event.h
 Content-Type: text/plain;charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jul 12, 2024, at 10:43, Masahiro Yamada wrote:
-> On Thu, Jul 4, 2024 at 11:36=E2=80=AFPM Arnd Bergmann <arnd@kernel.org=
+On Fri, Jul 12, 2024, at 10:37, Masahiro Yamada wrote:
+> On Thu, Jul 4, 2024 at 11:37=E2=80=AFPM Arnd Bergmann <arnd@kernel.org=
 > wrote:
+>> --- a/arch/um/include/asm/Kbuild
+>> +++ b/arch/um/include/asm/Kbuild
+>> @@ -1,5 +1,4 @@
+>>  # SPDX-License-Identifier: GPL-2.0
+>> -generic-y +=3D bpf_perf_event.h
+>>  generic-y +=3D bug.h
+>>  generic-y +=3D compat.h
+>>  generic-y +=3D current.h
+>> diff --git a/arch/um/include/asm/bpf_perf_event.h b/arch/um/include/a=
+sm/bpf_perf_event.h
+>> new file mode 100644
+>> index 000000000000..0a30420c83de
+>> --- /dev/null
+>> +++ b/arch/um/include/asm/bpf_perf_event.h
+>> @@ -0,0 +1,3 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +
+>> +#include <asm-generic/bpf_perf_event.h>
 >
-> I know this is already written in this way
-> in include/uapi/asm-generic/unistd.h, but
-> the native and compat have the same function name.
+> I guess this is a step backward.
 >
->
-> Can we simplify it like this?
->
-> 65     common  readv                           sys_readv
-> 66     common  writev                          sys_writev
+> Technically, kernel-space asm/*.h files are allowed to
+> wrap UAPI <asm-generic/*.h>.
+> There is no reason why we ban generic-y for doing this,
+> whereas check-in source is allowed.
 
-Good idea. It looks like this came from 5f764d624a89 ("fs:
-remove the compat readv/writev syscalls"), and I'll fix it up
-in my follow-up series, which has a lot of other cleanups
-like this one across architectures.
+I think in this case, the simplicity is the more important
+argument: this is the only case we have of wrapping a
+uapi header from a non-uapi header, and no other architecture
+would need to do this.
 
-Thanks,
+The way the syscall-y rule works relies on enforcing some
+checking for existing asm-generic headers, and I could extend
+it to allow this special case, but that would make the
+Makefile rule less readable  in exchange for avoiding
+effectively a one-line file.
 
-     Arnd
+    Arnd
 
