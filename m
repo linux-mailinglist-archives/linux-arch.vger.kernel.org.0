@@ -1,70 +1,70 @@
-Return-Path: <linux-arch+bounces-5394-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5395-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B9A793136C
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Jul 2024 13:49:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE82D931537
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Jul 2024 14:59:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1AEFCB24373
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Jul 2024 11:49:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0A6BE1C21506
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Jul 2024 12:59:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0514518A946;
-	Mon, 15 Jul 2024 11:49:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 621B718C349;
+	Mon, 15 Jul 2024 12:56:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="IzA8ESAn"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="QexLbJ93"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2352018A93A
-	for <linux-arch@vger.kernel.org>; Mon, 15 Jul 2024 11:49:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEDE318C19B
+	for <linux-arch@vger.kernel.org>; Mon, 15 Jul 2024 12:56:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721044151; cv=none; b=P4kbSx6nXcySnA1RNZI+IQu4+WoWlL1GDspa1U/vvPO15AmJSK7W+wZ0O5LD2jItYQ4/LpU5cIqKS6HGpbLnxqWige9yPiU01cc98WceW95/8XkGDxt1FfGdaTnN9p9+MbNvKoEFRxhzll3Q7uC+Kobf85fr86j5Os+U8OcJ3nk=
+	t=1721048208; cv=none; b=C6JwClC3pmaORILmNvUCm7/kPXozfHzvpmn2f2tI5wIi+usCFzPdm28LOW2GWfEhtyB/kiIHhGOiN90DjvrmmQimZThB8CmS1Tgd2NSJhFunAT5ElurPItGkYKPCEHnDoIQrpy1m9/eAjB3T024ybVKwJRAdIANSR2yAYPX8LFo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721044151; c=relaxed/simple;
-	bh=Rx2Y9LemseZJuQEPmIapBsiBSl9jftAgmsKlya+dApE=;
+	s=arc-20240116; t=1721048208; c=relaxed/simple;
+	bh=FXxvxDNMjpNVzwzqZhWBa1tOHGY8zYU9VrOR2o556sE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qUvRPHw0pz1syNNeV27K3Lv/B6lpj+oRu2DhWrzWYWS8Y6Jt/boWofYTe46VaPGNfB+OTerjg1gEYi0VgrTXOiF2bwyciG7M/31QlbgLEzbVsjM3wI+7IxBeOzXe7EpFvRMrDk4CoKKu3jBWfMRyUOArHlqOJnBbVJqFsDANTWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=IzA8ESAn; arc=none smtp.client-ip=209.85.218.50
+	 To:Cc:Content-Type; b=XGK0uuxUdm0KuMS2xlz+ZrFtFniiTqQj9p/jwXJXgzBH7RObYkcfIneP8/LCgyKi7tpNp6+cCNQpesL2Qd4wtWVD1owfAjFuHeWoQI2PQUX+/+MBoqGnqRRQfpcYfP6BvjsO0rl+NB/FnbzIJHp+UxF7P5NA0bwq6yEUETlC7Eg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=QexLbJ93; arc=none smtp.client-ip=209.85.218.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a77e7a6cfa7so463802966b.1
-        for <linux-arch@vger.kernel.org>; Mon, 15 Jul 2024 04:49:09 -0700 (PDT)
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a77e2f51496so512591466b.0
+        for <linux-arch@vger.kernel.org>; Mon, 15 Jul 2024 05:56:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1721044148; x=1721648948; darn=vger.kernel.org;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1721048205; x=1721653005; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=IWUt7fUeOslaf3J86kT2EHlZPfYeTYeze0uqvoVnIhg=;
-        b=IzA8ESAn19+FEDlzbOtrDYK2tftSWbRX9qQLYHU2gv9/MGJ6A0yuyVBpIs6QyE6kbO
-         5qXwlyg1E+rUF5xC/MsDDoYFIzHOi4tHF5lCAQQ30uOwBGqwM56OpOaIz7bVrlzZVR38
-         ofZntBVKKRxcLmpv/cTGRl53nlYF2RRFbd6pUhSa6m6nc/EhlkfkDphC6GLnpXkDNdKY
-         lmsgBPovNt1jv2ygdn0roQX+PzF9d0az+lp21m6eNwcHWzMcSWbqEzF9evMV3Y5W2Rpr
-         CHqr3C8gk+C1r4bjuZVc5qq+8qBv25fUSj5FSt6UPd7KylCeImaqoHDXCsNutmcCUMc6
-         aDAQ==
+        bh=XxfNNMp1rG3SXkek7cMYvB8iok7DNluaUVkXIU0Xf14=;
+        b=QexLbJ93JEyxZvu628I2UWvMqo8uXieaqS/fpZhsOWLWPD7aNNjLthPyQ+49lhkSOc
+         qBjx9AIiFwKY/lNLixLAfIQz2hzT5G7i6k5CwSz9v7RP7JSMJ9+s20TdV0yoeKMbvnZT
+         WOLcvr9D9LEDKan+HDj9esjlMQw+nFMmFFev9OreNwxHm1MiohItvszOBqAuUqUKDwD7
+         dea37r/x4Z3bbgHq3VXaYPO7JatHogAuW+EY01pM2U9RW4x5BtaP25v8zs105zzVVCC1
+         a/pXz1USpbpACQ4j4UzbXoybrK7WwMrDj2A7pqPyeZ4DBneAcs+eknHi0Vrj2wyeivK3
+         4sDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721044148; x=1721648948;
+        d=1e100.net; s=20230601; t=1721048205; x=1721653005;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=IWUt7fUeOslaf3J86kT2EHlZPfYeTYeze0uqvoVnIhg=;
-        b=fUcxCsMCIMNMMWoj2mg/JeqRIuKyyYTg6ieqJE5HnEf2sOAbSwlds4EEOWHTs0nJHw
-         bwCpJsuUROhotxX8rHddF/4RfbLXP6TUozdYwZZN9LSWMD+PkDJ1Ye0wXtumLAWfVefg
-         EzIC5Lbs0Z0HyXtWlnCKOLaGvzhby5jVLKb9RvW4Ly7/VXFX9jtuJLrD7rtL2KCUTSKs
-         GRzleB76n7AdJ4KHthK7VUOXEIgwJUTXIKxo8+ndXv68DHaumjOX9IbJT4vPwKK3EQQj
-         MpN3zR96V4nqUDuD8Wqv3A1rWKh7ct1+qp6gJ5lKKvV/G+9p2LkJVS3GCgvPGarZXW0M
-         8Owg==
-X-Forwarded-Encrypted: i=1; AJvYcCVDsGU6A+7iT5U/Mpg1+PTqjcz/6upbsRCbecV56t3CwtO3kYrKou2DGm5jfkQqRMHXdE4MxHqYdyrw6MXp0WJG++lw1if7hdbGmw==
-X-Gm-Message-State: AOJu0Yx1c+W4v4TXUjgyzyJ09BQ2rtP/RjV3IMOiYBPsobje9eyrzRZu
-	qhdLArsLi110np25jx06IWnpxOzq3PlgLFcX4I6/CjG1aGYGs1guijr8Usat1B6LQqw6U1JeeQs
-	Qxv/3yYnO4GRm86vwUbQZs883X1fDir3HuMuW6g==
-X-Google-Smtp-Source: AGHT+IGUcPUU2RIzFJtJOINEci/osf15ph1Bg+CJXHIaSjFd2XfYUaMENDIEhkpgMuT9oddToIRteMCL4WHc0Fj1gu0=
-X-Received: by 2002:a17:906:1388:b0:a72:428f:cd66 with SMTP id
- a640c23a62f3a-a780b705222mr1125612266b.39.1721044148245; Mon, 15 Jul 2024
- 04:49:08 -0700 (PDT)
+        bh=XxfNNMp1rG3SXkek7cMYvB8iok7DNluaUVkXIU0Xf14=;
+        b=DSzVC6aBToIhjC3EwrB1D47XEJmSIokjPbhJ0f5PC7uy4qVyk+6jL+VXcTPwoVbwBj
+         spoJB8A+eccMCzWgEiEWwXXyZKuRnv3uNJSC2pqIm2g6vwZxfiMRml1j7sQZVVtfguD/
+         X2aFy5kPIp8wW/E3vJSHieG8XOJaMU46F8es2jpG8TQPidFPlncHM74CDnsbpnD/TuUl
+         xN8U1VzVm3FT4DH8+ko7SucNmMlEzoO+ehoawuHdki6IdWvQ5vEHFJlTdK773e78pPtU
+         scH3oQFYOMU/nEj3x0toSuqETcCSvOdZiDcajchEtdAW4zUwvmOUTgbEiZFs2ijQ6mOr
+         qyCQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV1fayTBNTdTGRBBDxe79hqvf7HKr/HpaPMrv4uCfKy3zuEnIDTilnjUOb69zlFBBm0dofbFhwr8s0REk2g+2qXs0jpiZsO2abk6Q==
+X-Gm-Message-State: AOJu0Yz0z4+XRjj7hyj2i/Fdt057nh4mXOCoCbbs1fnUhNLUiucc6KRF
+	ZLgqd7eMH6CJFdoqTPIWjrTJZVyfWgJjMAQJaANNiKqrM7LyYE6fSEbzapLlWoj95RdtIm5pqAx
+	OgkvSJxfE4Tf6aHibXf6Du9XLJIS1A0yW8saooQ==
+X-Google-Smtp-Source: AGHT+IEQxCwmk3v9bZId3rguAE4ZhEMOX7OQcvnvy46JJ2wjs4mq+MuCAlAfeu4173n5ppDi6qdRzxNLjJYPZQTWSyo=
+X-Received: by 2002:a17:906:fa08:b0:a72:b811:4d43 with SMTP id
+ a640c23a62f3a-a780b883462mr1101581166b.59.1721048205077; Mon, 15 Jul 2024
+ 05:56:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -72,13 +72,13 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20240626130347.520750-1-alexghiti@rivosinc.com>
- <20240626130347.520750-2-alexghiti@rivosinc.com> <Zn1Hwpcamaz1YaEM@andrea>
- <4008aeca-352f-489e-ba07-7a11f5ab7ccb@ghiti.fr> <Zo3MH8idihW4o+6Z@andrea>
-In-Reply-To: <Zo3MH8idihW4o+6Z@andrea>
+ <20240626130347.520750-4-alexghiti@rivosinc.com> <Zn1StcN3H0r/eHjh@andrea>
+ <1cd452af-58cd-468c-9bb6-90f67711d0b0@ghiti.fr> <Zo3NBHUEMMec/6uD@andrea>
+In-Reply-To: <Zo3NBHUEMMec/6uD@andrea>
 From: Alexandre Ghiti <alexghiti@rivosinc.com>
-Date: Mon, 15 Jul 2024 13:48:57 +0200
-Message-ID: <CAHVXubiLJWtAit9T6OYx00qHu2QOVNqYRZZiOZHtmDBrDoW5Ew@mail.gmail.com>
-Subject: Re: [PATCH v2 01/10] riscv: Implement cmpxchg32/64() using Zacas
+Date: Mon, 15 Jul 2024 14:56:34 +0200
+Message-ID: <CAHVXubjCdse-3z3hKR81VpdvjxVaxPUZdmTwc4fvHordcfHVng@mail.gmail.com>
+Subject: Re: [PATCH v2 03/10] riscv: Implement cmpxchg8/16() using Zabha
 To: Andrea Parri <parri.andrea@gmail.com>
 Cc: Alexandre Ghiti <alex@ghiti.fr>, Jonathan Corbet <corbet@lwn.net>, 
 	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
@@ -93,56 +93,43 @@ Content-Transfer-Encoding: quoted-printable
 
 Hi Andrea,
 
-On Wed, Jul 10, 2024 at 1:47=E2=80=AFAM Andrea Parri <parri.andrea@gmail.co=
+On Wed, Jul 10, 2024 at 1:51=E2=80=AFAM Andrea Parri <parri.andrea@gmail.co=
 m> wrote:
 >
-> > > Is this second IS_ENABLED(CONFIG_RISCV_ISA_ZACAS) check actually need=
-ed?
-> > > (just wondering - no real objection)
+> > > I admit that I found this all quite difficult to read; IIUC, this is
+> > > missing an IS_ENABLED(CONFIG_RISCV_ISA_ZACAS) check.
 > >
-> > To me yes, otherwise a toolchain without zacas support would fail to
-> > assemble the amocas instruction.
+> > I'm not sure we need the zacas check here, since we could use a toolcha=
+in
+> > that supports zabha but not zacas, run this on a zabha/zacas platform a=
+nd it
+> > would work.
 >
-> To elaborate on my question:  Such a toolchain may be able to recognize
-> that the block of code following the zacas: label (and comprising the
-> amocas instruction) can't be reached/executed if the first IS_ENABLED()
-> evaluates to false (due to the goto end; statement), and consequently it
-> may compile out the entire block/instruction no matter the presence or
-> not of the second IS_ENABLE() check.  IOW, such a toolchain/compiler may
-> not actually have to assemble the amocas instruction under such config.
-> In fact, this is how the current gcc trunk (which doesn't support zacas)
-> seems to behave.  And this very same optimization/code removal seems to
-> be performed by clang when CONFIG_RISCV_ISA_ZACAS=3Dn.  IAC, I'd agree it
-> is good to be explicit in the sources and keep both of these checks.
+> One specific set-up I was concerned about is as follows:
+>
+>   1) hardware implements both zabha and zacas
+>   2) toolchain supports both zabha and zacas
+>   3) CONFIG_RISCV_ISA_ZABHA=3Dy and CONFIG_RISCV_ISA_ZACAS=3Dn
+>
+> Since CONFIG_RISCV_ISA_ZABHA=3Dy, the first asm goto will get executed
+> and, since the hardware implements zacas, that will result in a nop.
+> Then the second asm goto will get executed and, since the hardware
+> implements zabha, it will result in the j zabha.  In conclusion, the
+> amocas instruction following the zabha: label will get executed, thus
+> violating (the semantics of) CONFIG_RISCV_ISA_ZACAS=3Dn.  IIUC, the diff
+> I've posted previously in this thread shared a similar limitation/bug.
 
-Indeed, clang works fine without the second IS_ENABLED(). I'll remove
-it then as the code is complex enough.
+So you mean that when disabling Zacas, we should actually disable
+*all* the CAS instructions, even the Zabha ones. It makes sense and
+allows for a single way to disable the CAS instructions but keeping
+the other atomic operations.
+
+I'll fix that and add a comment.
 
 Thanks,
 
 Alex
 
->
->
-> > > Why the semicolon?
-> >
-> > That fixes a clang warning reported by Nathan here:
-> > https://lore.kernel.org/linux-riscv/20240528193110.GA2196855@thelio-399=
-0X/
->
-> I see.  Thanks for the pointer.
->
->
-> > > This is because the compiler doesn't realize __ret is actually
-> > > initialized, right?  IAC, seems a bit unexpected to initialize
-> > > with (old) (which indicates SUCCESS of the CMPXCHG operation);
-> > > how about using (new) for the initialization of __ret instead?
-> > > would (new) still work for you?
-> >
-> > But amocas rd register must contain the expected old value in order to
-> > actually work right?
->
-> Agreed.  Thanks for the clarification.
 >
 >   Andrea
 
