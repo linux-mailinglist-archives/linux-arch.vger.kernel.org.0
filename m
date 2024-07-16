@@ -1,292 +1,322 @@
-Return-Path: <linux-arch+bounces-5422-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5423-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C960493256E
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Jul 2024 13:21:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04491932667
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Jul 2024 14:20:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 56C031F2426C
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Jul 2024 11:21:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE4AC284BEF
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Jul 2024 12:20:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3005E1993AF;
-	Tue, 16 Jul 2024 11:16:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 992011991B6;
+	Tue, 16 Jul 2024 12:20:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HMx+mv1b"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="m81PWCUS"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E544B19922C;
-	Tue, 16 Jul 2024 11:16:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59C3B13C690
+	for <linux-arch@vger.kernel.org>; Tue, 16 Jul 2024 12:20:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721128619; cv=none; b=qgaJxB3akENLGj6X1eGMhvmgrXdaRJPhCCvtxibWLLHWS4fJczlsSBEtDPjb8VmXZH0NoJdIQRBJrw2RoM3B454mckzP/2i+SB9C00UkWuh/sDSCUoKo9PJX2KS+lCvBXPpaRsiP/oEQuTZSnHohlT3szZShp4Ctp1HuYBgUsac=
+	t=1721132412; cv=none; b=FZT0zr4UiNi1qvMX8Fzzh/CKSClFUKrH17yfSFRvqWNKlw2flQ6jMKmODT81b2cGWpgEQihc0M/nWvBJSb0tangKwKyR9X6e8bwydv7HW9nuI+vDKImmUFN9+F+l77sftKV8U41kmUS+xLPx1O4zPNtGsGo44egrBevUrQiZT8o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721128619; c=relaxed/simple;
-	bh=YeX/zOM98p7oq0+D8eMJgxNsT4zHLIp5lz3y21iev7w=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=otAl9oLiV9i0ALmVdbmn62ejIJYATSk7GeLNOPOFbYxgJwMG8xDRii0IFwGZpBqNktMt14yoMMOlMcdnrqlqn06vPePyW3c9/9i5u4JENfnawxKnX37c/H1Vj6nAEmtN1okUV1cFqSV/9DfAG9UVKr6Lv5nfFHKURtuvfkNO4hY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HMx+mv1b; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 332CBC116B1;
-	Tue, 16 Jul 2024 11:16:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721128618;
-	bh=YeX/zOM98p7oq0+D8eMJgxNsT4zHLIp5lz3y21iev7w=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=HMx+mv1bGMjSPO/WhXFoC7Rb6iwGJqO9+dc/PUQ7veMxE3nuT0c0YLJwrz38TAU5U
-	 0Q11IMAbO3FNvgruj4uJVrCJo6jk1vS1LAVFC81AqQ0MuvdcmgStTZWJbieXGzd32z
-	 Q1AvmWDPdMBMJcrP6CfzjFyV8++UxYuZCQYAOp+h3jZQ5SWk7yVa1h51Es450b+Bna
-	 bZVU+zwGud/LyPykJINM4pTaM5I/ZzInZVcM5NxM3FdZ+R1KpT3irgg+XUabbvLr17
-	 V3NQfhWGoJ5Yxgbl2OLtmxSFWA3NTbUkLFBCFfIYdmmncDx1yZMjgx/873JHAnRRkM
-	 +SJO1kobq7E8g==
-From: Mike Rapoport <rppt@kernel.org>
-To: linux-kernel@vger.kernel.org
-Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Borislav Petkov <bp@alien8.de>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	David Hildenbrand <david@redhat.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Mike Rapoport <rppt@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Will Deacon <will@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	loongarch@lists.linux.dev,
-	linux-mips@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org,
-	linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org,
-	linux-acpi@vger.kernel.org,
-	linux-cxl@vger.kernel.org,
-	nvdimm@lists.linux.dev,
-	devicetree@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	linux-mm@kvack.org,
-	x86@kernel.org
-Subject: [PATCH 17/17] mm: make range-to-target_node lookup facility a part of numa_memblks
-Date: Tue, 16 Jul 2024 14:13:46 +0300
-Message-ID: <20240716111346.3676969-18-rppt@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240716111346.3676969-1-rppt@kernel.org>
-References: <20240716111346.3676969-1-rppt@kernel.org>
+	s=arc-20240116; t=1721132412; c=relaxed/simple;
+	bh=NPFmz/N6G3Ip3lB/40h8jCNz3HQpYtZd62s4Uir8yVY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gjusBgKi5IiHMy5QoHY5AXyVbfecPq3ctLuvVy4XrymDeJcOqJPx/rihszTJj4YfQcF4RJrgTJQHmP7dAZPGTQKMOtc2cNChOoLsCU963ullVb6NfYD8Qwti4G/JQ7qEW8WqfRy9PvMgUVC+ENfkXYeySjT42xHhQWJYjKYJr8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=m81PWCUS; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a77e85cb9b4so595446566b.0
+        for <linux-arch@vger.kernel.org>; Tue, 16 Jul 2024 05:20:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1721132409; x=1721737209; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/wgyK3rI/+GRYXc3I3puXIGSeacbfUlZLjUaC5dlWKs=;
+        b=m81PWCUSKVoucZp1MciQ0ROjqMYeWq30mutTME71+Ze4PetsOU/Po1WY64iGU3Cq0f
+         uJYmkSmn9zLARYfzqWhiCfNFy29fljpudhlUwT2ptODTh25buk9XKGOGF7YUBHu+YeId
+         KREfsUbYrnYRE03IFqRjj/yHU3rd1hxzlEq2T5mE6URyjBAQSdNrA/YysAAMhvxU2fXQ
+         QYV/fu+mhL4T/xilppRMbll5NdNYZu+XsSPn+KuAGbLpf+F79d9Otzwc2J5DEEDbZa5f
+         2q03ZPG0iDTXLCte1jqnnW0fbRGwLGgLK19ufdkiENM7yALZ9TVtwEdWug5kC5sbFiBK
+         588g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721132409; x=1721737209;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/wgyK3rI/+GRYXc3I3puXIGSeacbfUlZLjUaC5dlWKs=;
+        b=UJEAKz3C5OkUIhHta5U6zB8+YapVB7j+f5lOs8volCSpOKm/ScEBHN2UvPoAORqm+n
+         uAPRi4+g7kuRXCUrWehYBFX8Mfb502d0rlWAzO/kqas/JI6OsReG0UHY2T9AdRHlqhgz
+         Zp61Qq9yk76mpfRW/cBF4tHQvRS7yP00GKITPgG1kdRyzs81K5/7PT1X22h54S0CCLe7
+         c6JzjNMmaYCZ/VlivnVNE2fdnN9GhSqme79k2Z3TP+qOEpEvHWRHLztA1SJMYSpCFEWQ
+         L1kKzucEQnZwheGN5/WCIAy8fvQRmjIfnqW9pYkbaL0hrvRkL/L65u1fWfZDXjuotD4M
+         owaw==
+X-Forwarded-Encrypted: i=1; AJvYcCVAkayIIDvycIBt5XsbOjafYHbOecMRNVqiSnef2vvSUYtN+iI72BJ5cW9t9GZQUYi1nxzQcIVCs9E5I/oFcGOMIn3zxhTxaLWWTg==
+X-Gm-Message-State: AOJu0YyU3+tH/s+MR2yHZ3CrR46dZbTl9my3to3xTrfIEH5oZVOpCUUM
+	lfv/wwSYqbTt7EO9M8mnnAUNosl3VCMRFpcqE8sdZb3kZu6Pzn3hXFP9y+5o2JSn3uLwauAQQA4
+	F3zafjC5E3iByZXdDRcvnj0TpcCgNNVknYLZbVQ==
+X-Google-Smtp-Source: AGHT+IG9FrD1fBVgqj60WTDAt3AQCQU/Sf+dX7Y3PES5xjXq+TMnTztj457Qr4E/dPajDDm9BXML7CFjSdsFPn+WNxQ=
+X-Received: by 2002:a17:906:2409:b0:a6f:c268:ff2e with SMTP id
+ a640c23a62f3a-a79ea3d7952mr139799466b.5.1721132408420; Tue, 16 Jul 2024
+ 05:20:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240626130347.520750-2-alexghiti@rivosinc.com>
+ <202407041157.odTZAYZ6-lkp@intel.com> <20240705172750.GF987634@thelio-3990X>
+In-Reply-To: <20240705172750.GF987634@thelio-3990X>
+From: Alexandre Ghiti <alexghiti@rivosinc.com>
+Date: Tue, 16 Jul 2024 14:19:57 +0200
+Message-ID: <CAHVXubhvk_CbBX=hWFGt+1HEM4cj=cAc1NsCEknn=B8UDcXVSQ@mail.gmail.com>
+Subject: Re: [PATCH v2 01/10] riscv: Implement cmpxchg32/64() using Zacas
+To: Nathan Chancellor <nathan@kernel.org>, Conor Dooley <conor.dooley@microchip.com>
+Cc: kernel test robot <lkp@intel.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Andrea Parri <parri.andrea@gmail.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, 
+	Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Leonardo Bras <leobras@redhat.com>, Guo Ren <guoren@kernel.org>, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	linux-arch@vger.kernel.org, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+Hi Nathan,
 
-The x86 implementation of range-to-target_node lookup (i.e.
-phys_to_target_node() and memory_add_physaddr_to_nid()) relies on
-numa_memblks.
+On Fri, Jul 5, 2024 at 7:27=E2=80=AFPM Nathan Chancellor <nathan@kernel.org=
+> wrote:
+>
+> On Thu, Jul 04, 2024 at 11:38:46AM +0800, kernel test robot wrote:
+> > Hi Alexandre,
+> >
+> > kernel test robot noticed the following build errors:
+> >
+> > [auto build test ERROR on soc/for-next]
+> > [also build test ERROR on linus/master v6.10-rc6 next-20240703]
+> > [cannot apply to arnd-asm-generic/master robh/for-next tip/locking/core=
+]
+> > [If your patch is applied to the wrong git tree, kindly drop us a note.
+> > And when submitting patch, we suggest to use '--base' as documented in
+> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> >
+> > url:    https://github.com/intel-lab-lkp/linux/commits/Alexandre-Ghiti/=
+riscv-Implement-cmpxchg32-64-using-Zacas/20240627-034946
+> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for=
+-next
+> > patch link:    https://lore.kernel.org/r/20240626130347.520750-2-alexgh=
+iti%40rivosinc.com
+> > patch subject: [PATCH v2 01/10] riscv: Implement cmpxchg32/64() using Z=
+acas
+> > config: riscv-randconfig-002-20240704 (https://download.01.org/0day-ci/=
+archive/20240704/202407041157.odTZAYZ6-lkp@intel.com/config)
+> > compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7c=
+bf1a2591520c2491aa35339f227775f4d3adf6)
+> > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arc=
+hive/20240704/202407041157.odTZAYZ6-lkp@intel.com/reproduce)
+> >
+> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
+rsion of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202407041157.odTZAYZ6-l=
+kp@intel.com/
+> >
+> > All errors (new ones prefixed by >>):
+> >
+> > >> kernel/sched/core.c:11873:7: error: cannot jump from this asm goto s=
+tatement to one of its possible targets
+> >                    if (try_cmpxchg(&pcpu_cid->cid, &lazy_cid, MM_CID_UN=
+SET))
+> >                        ^
+> >    include/linux/atomic/atomic-instrumented.h:4880:2: note: expanded fr=
+om macro 'try_cmpxchg'
+> >            raw_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+> >            ^
+> >    include/linux/atomic/atomic-arch-fallback.h:192:9: note: expanded fr=
+om macro 'raw_try_cmpxchg'
+> >            ___r =3D raw_cmpxchg((_ptr), ___o, (_new)); \
+> >                   ^
+> >    include/linux/atomic/atomic-arch-fallback.h:55:21: note: expanded fr=
+om macro 'raw_cmpxchg'
+> >    #define raw_cmpxchg arch_cmpxchg
+> >                        ^
+> >    arch/riscv/include/asm/cmpxchg.h:212:2: note: expanded from macro 'a=
+rch_cmpxchg'
+> >            _arch_cmpxchg((ptr), (o), (n), ".rl", "", "     fence rw, rw=
+\n")
+> >            ^
+> >    arch/riscv/include/asm/cmpxchg.h:189:3: note: expanded from macro '_=
+arch_cmpxchg'
+> >                    __arch_cmpxchg(".w", ".w" sc_sfx, prepend, append,  =
+    \
+> >                    ^
+> >    arch/riscv/include/asm/cmpxchg.h:144:3: note: expanded from macro '_=
+_arch_cmpxchg'
+> >                    asm goto(ALTERNATIVE("nop", "j %[zacas]", 0,        =
+    \
+> >                    ^
+> >    kernel/sched/core.c:11840:7: note: possible target of asm goto state=
+ment
+> >            if (!try_cmpxchg(&pcpu_cid->cid, &cid, lazy_cid))
+> >                 ^
+> >    include/linux/atomic/atomic-instrumented.h:4880:2: note: expanded fr=
+om macro 'try_cmpxchg'
+> >            raw_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+> >            ^
+> >    include/linux/atomic/atomic-arch-fallback.h:192:9: note: expanded fr=
+om macro 'raw_try_cmpxchg'
+> >            ___r =3D raw_cmpxchg((_ptr), ___o, (_new)); \
+> >                   ^
+> >    include/linux/atomic/atomic-arch-fallback.h:55:21: note: expanded fr=
+om macro 'raw_cmpxchg'
+> >    #define raw_cmpxchg arch_cmpxchg
+> >                        ^
+> >    arch/riscv/include/asm/cmpxchg.h:212:2: note: expanded from macro 'a=
+rch_cmpxchg'
+> >            _arch_cmpxchg((ptr), (o), (n), ".rl", "", "     fence rw, rw=
+\n")
+> >            ^
+> >    arch/riscv/include/asm/cmpxchg.h:189:3: note: expanded from macro '_=
+arch_cmpxchg'
+> >                    __arch_cmpxchg(".w", ".w" sc_sfx, prepend, append,  =
+    \
+> >                    ^
+> >    arch/riscv/include/asm/cmpxchg.h:161:10: note: expanded from macro '=
+__arch_cmpxchg'
+> >                                                                        =
+    \
+> >                                                                        =
+    ^
+> >    kernel/sched/core.c:11872:2: note: jump exits scope of variable with=
+ __attribute__((cleanup))
+> >            scoped_guard (irqsave) {
+> >            ^
+> >    include/linux/cleanup.h:169:20: note: expanded from macro 'scoped_gu=
+ard'
+> >            for (CLASS(_name, scope)(args),                             =
+    \
+> >                              ^
+> >    kernel/sched/core.c:11840:7: error: cannot jump from this asm goto s=
+tatement to one of its possible targets
+> >            if (!try_cmpxchg(&pcpu_cid->cid, &cid, lazy_cid))
+> >                 ^
+> >    include/linux/atomic/atomic-instrumented.h:4880:2: note: expanded fr=
+om macro 'try_cmpxchg'
+> >            raw_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+> >            ^
+> >    include/linux/atomic/atomic-arch-fallback.h:192:9: note: expanded fr=
+om macro 'raw_try_cmpxchg'
+> >            ___r =3D raw_cmpxchg((_ptr), ___o, (_new)); \
+> >                   ^
+> >    include/linux/atomic/atomic-arch-fallback.h:55:21: note: expanded fr=
+om macro 'raw_cmpxchg'
+> >    #define raw_cmpxchg arch_cmpxchg
+> >                        ^
+> >    arch/riscv/include/asm/cmpxchg.h:212:2: note: expanded from macro 'a=
+rch_cmpxchg'
+> >            _arch_cmpxchg((ptr), (o), (n), ".rl", "", "     fence rw, rw=
+\n")
+> >            ^
+> >    arch/riscv/include/asm/cmpxchg.h:189:3: note: expanded from macro '_=
+arch_cmpxchg'
+> >                    __arch_cmpxchg(".w", ".w" sc_sfx, prepend, append,  =
+    \
+> >                    ^
+> >    arch/riscv/include/asm/cmpxchg.h:144:3: note: expanded from macro '_=
+_arch_cmpxchg'
+> >                    asm goto(ALTERNATIVE("nop", "j %[zacas]", 0,        =
+    \
+> >                    ^
+> >    kernel/sched/core.c:11873:7: note: possible target of asm goto state=
+ment
+> >                    if (try_cmpxchg(&pcpu_cid->cid, &lazy_cid, MM_CID_UN=
+SET))
+> >                        ^
+> >    include/linux/atomic/atomic-instrumented.h:4880:2: note: expanded fr=
+om macro 'try_cmpxchg'
+> >            raw_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+> >            ^
+> >    include/linux/atomic/atomic-arch-fallback.h:192:9: note: expanded fr=
+om macro 'raw_try_cmpxchg'
+> >            ___r =3D raw_cmpxchg((_ptr), ___o, (_new)); \
+> >                   ^
+> >    include/linux/atomic/atomic-arch-fallback.h:55:21: note: expanded fr=
+om macro 'raw_cmpxchg'
+> >    #define raw_cmpxchg arch_cmpxchg
+> >                        ^
+> >    arch/riscv/include/asm/cmpxchg.h:212:2: note: expanded from macro 'a=
+rch_cmpxchg'
+> >            _arch_cmpxchg((ptr), (o), (n), ".rl", "", "     fence rw, rw=
+\n")
+> >            ^
+> >    arch/riscv/include/asm/cmpxchg.h:189:3: note: expanded from macro '_=
+arch_cmpxchg'
+> >                    __arch_cmpxchg(".w", ".w" sc_sfx, prepend, append,  =
+    \
+> >                    ^
+> >    arch/riscv/include/asm/cmpxchg.h:161:10: note: expanded from macro '=
+__arch_cmpxchg'
+> >                                                                        =
+    \
+> >                                                                        =
+    ^
+> >    kernel/sched/core.c:11872:2: note: jump bypasses initialization of v=
+ariable with __attribute__((cleanup))
+> >            scoped_guard (irqsave) {
+> >            ^
+> >    include/linux/cleanup.h:169:20: note: expanded from macro 'scoped_gu=
+ard'
+> >            for (CLASS(_name, scope)(args),                             =
+    \
+> >                              ^
+> >    2 errors generated.
+>
+> Ugh, this is an unfortunate interaction with clang's jump scope analysis
+> and asm goto in LLVM releases prior to 17 :/
+>
+> https://github.com/ClangBuiltLinux/linux/issues/1886#issuecomment-1645979=
+992
+>
+> Unfortunately, 'if (0)' does not prevent this (the analysis runs early
+> in the front end as far as I understand it), we would need to workaround
+> this with full preprocessor guards...
 
-Since numa_memblks are now part of the generic code, move these
-functions from x86 to mm/numa_memblks.c and select
-CONFIG_NUMA_KEEP_MEMINFO when CONFIG_NUMA_MEMBLKS=y for dax and cxl.
+Thanks for jumping in on this one, I was quite puzzled :)
 
-Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
----
- arch/x86/include/asm/sparsemem.h |  9 --------
- arch/x86/mm/numa.c               | 38 --------------------------------
- drivers/cxl/Kconfig              |  2 +-
- drivers/dax/Kconfig              |  2 +-
- include/linux/numa_memblks.h     |  7 ++++++
- mm/numa.c                        |  1 +
- mm/numa_memblks.c                | 38 ++++++++++++++++++++++++++++++++
- 7 files changed, 48 insertions(+), 49 deletions(-)
+>
+> Another alternative would be to require LLVM 17+ for RISC-V, which may
+> not be the worst alternative, since I think most people doing serious
+> work with clang will probably be living close to tip of tree anyways
+> because of all the extension work that goes on upstream.
 
-diff --git a/arch/x86/include/asm/sparsemem.h b/arch/x86/include/asm/sparsemem.h
-index 64df897c0ee3..3918c7a434f5 100644
---- a/arch/x86/include/asm/sparsemem.h
-+++ b/arch/x86/include/asm/sparsemem.h
-@@ -31,13 +31,4 @@
- 
- #endif /* CONFIG_SPARSEMEM */
- 
--#ifndef __ASSEMBLY__
--#ifdef CONFIG_NUMA_KEEP_MEMINFO
--extern int phys_to_target_node(phys_addr_t start);
--#define phys_to_target_node phys_to_target_node
--extern int memory_add_physaddr_to_nid(u64 start);
--#define memory_add_physaddr_to_nid memory_add_physaddr_to_nid
--#endif
--#endif /* __ASSEMBLY__ */
--
- #endif /* _ASM_X86_SPARSEMEM_H */
-diff --git a/arch/x86/mm/numa.c b/arch/x86/mm/numa.c
-index 16bc703c9272..8e790528805e 100644
---- a/arch/x86/mm/numa.c
-+++ b/arch/x86/mm/numa.c
-@@ -449,41 +449,3 @@ u64 __init numa_emu_dma_end(void)
- 	return PFN_PHYS(MAX_DMA32_PFN);
- }
- #endif /* CONFIG_NUMA_EMU */
--
--#ifdef CONFIG_NUMA_KEEP_MEMINFO
--static int meminfo_to_nid(struct numa_meminfo *mi, u64 start)
--{
--	int i;
--
--	for (i = 0; i < mi->nr_blks; i++)
--		if (mi->blk[i].start <= start && mi->blk[i].end > start)
--			return mi->blk[i].nid;
--	return NUMA_NO_NODE;
--}
--
--int phys_to_target_node(phys_addr_t start)
--{
--	int nid = meminfo_to_nid(&numa_meminfo, start);
--
--	/*
--	 * Prefer online nodes, but if reserved memory might be
--	 * hot-added continue the search with reserved ranges.
--	 */
--	if (nid != NUMA_NO_NODE)
--		return nid;
--
--	return meminfo_to_nid(&numa_reserved_meminfo, start);
--}
--EXPORT_SYMBOL_GPL(phys_to_target_node);
--
--int memory_add_physaddr_to_nid(u64 start)
--{
--	int nid = meminfo_to_nid(&numa_meminfo, start);
--
--	if (nid == NUMA_NO_NODE)
--		nid = numa_meminfo.blk[0].nid;
--	return nid;
--}
--EXPORT_SYMBOL_GPL(memory_add_physaddr_to_nid);
--
--#endif
-diff --git a/drivers/cxl/Kconfig b/drivers/cxl/Kconfig
-index 99b5c25be079..29c192f20082 100644
---- a/drivers/cxl/Kconfig
-+++ b/drivers/cxl/Kconfig
-@@ -6,7 +6,7 @@ menuconfig CXL_BUS
- 	select FW_UPLOAD
- 	select PCI_DOE
- 	select FIRMWARE_TABLE
--	select NUMA_KEEP_MEMINFO if (NUMA && X86)
-+	select NUMA_KEEP_MEMINFO if NUMA_MEMBLKS
- 	help
- 	  CXL is a bus that is electrically compatible with PCI Express, but
- 	  layers three protocols on that signalling (CXL.io, CXL.cache, and
-diff --git a/drivers/dax/Kconfig b/drivers/dax/Kconfig
-index a88744244149..d656e4c0eb84 100644
---- a/drivers/dax/Kconfig
-+++ b/drivers/dax/Kconfig
-@@ -30,7 +30,7 @@ config DEV_DAX_PMEM
- config DEV_DAX_HMEM
- 	tristate "HMEM DAX: direct access to 'specific purpose' memory"
- 	depends on EFI_SOFT_RESERVE
--	select NUMA_KEEP_MEMINFO if (NUMA && X86)
-+	select NUMA_KEEP_MEMINFO if NUMA_MEMBLKS
- 	default DEV_DAX
- 	help
- 	  EFI 2.8 platforms, and others, may advertise 'specific purpose'
-diff --git a/include/linux/numa_memblks.h b/include/linux/numa_memblks.h
-index 5c6e12ad0b7a..17d4bcc34091 100644
---- a/include/linux/numa_memblks.h
-+++ b/include/linux/numa_memblks.h
-@@ -46,6 +46,13 @@ static inline int numa_emu_cmdline(char *str)
- }
- #endif /* CONFIG_NUMA_EMU */
- 
-+#ifdef CONFIG_NUMA_KEEP_MEMINFO
-+extern int phys_to_target_node(phys_addr_t start);
-+#define phys_to_target_node phys_to_target_node
-+extern int memory_add_physaddr_to_nid(u64 start);
-+#define memory_add_physaddr_to_nid memory_add_physaddr_to_nid
-+#endif /* CONFIG_NUMA_KEEP_MEMINFO */
-+
- #endif /* CONFIG_NUMA_MEMBLKS */
- 
- #endif	/* __NUMA_MEMBLKS_H */
-diff --git a/mm/numa.c b/mm/numa.c
-index 0483cabc4c4b..64c30cab2208 100644
---- a/mm/numa.c
-+++ b/mm/numa.c
-@@ -3,6 +3,7 @@
- #include <linux/memblock.h>
- #include <linux/printk.h>
- #include <linux/numa.h>
-+#include <linux/numa_memblks.h>
- 
- struct pglist_data *node_data[MAX_NUMNODES];
- EXPORT_SYMBOL(node_data);
-diff --git a/mm/numa_memblks.c b/mm/numa_memblks.c
-index 640f3a3ce0ee..46ac3f998b4e 100644
---- a/mm/numa_memblks.c
-+++ b/mm/numa_memblks.c
-@@ -525,3 +525,41 @@ int __init numa_fill_memblks(u64 start, u64 end)
- 	}
- 	return 0;
- }
-+
-+#ifdef CONFIG_NUMA_KEEP_MEMINFO
-+static int meminfo_to_nid(struct numa_meminfo *mi, u64 start)
-+{
-+	int i;
-+
-+	for (i = 0; i < mi->nr_blks; i++)
-+		if (mi->blk[i].start <= start && mi->blk[i].end > start)
-+			return mi->blk[i].nid;
-+	return NUMA_NO_NODE;
-+}
-+
-+int phys_to_target_node(phys_addr_t start)
-+{
-+	int nid = meminfo_to_nid(&numa_meminfo, start);
-+
-+	/*
-+	 * Prefer online nodes, but if reserved memory might be
-+	 * hot-added continue the search with reserved ranges.
-+	 */
-+	if (nid != NUMA_NO_NODE)
-+		return nid;
-+
-+	return meminfo_to_nid(&numa_reserved_meminfo, start);
-+}
-+EXPORT_SYMBOL_GPL(phys_to_target_node);
-+
-+int memory_add_physaddr_to_nid(u64 start)
-+{
-+	int nid = meminfo_to_nid(&numa_meminfo, start);
-+
-+	if (nid == NUMA_NO_NODE)
-+		nid = numa_meminfo.blk[0].nid;
-+	return nid;
-+}
-+EXPORT_SYMBOL_GPL(memory_add_physaddr_to_nid);
-+
-+#endif /* CONFIG_NUMA_KEEP_MEMINFO */
--- 
-2.43.0
+Stupid question but why the fix in llvm 17 was not backported to
+previous versions?
 
+Anyway, I'd rather require llvm 17+ than add a bunch of preprocessor
+guards in this file (IIUC what you said above) as it is complex
+enough.
+
+@Conor Dooley @Palmer Dabbelt WDYT? Is there any interest in
+supporting llvm < 17? We may encounter this bug again in the future so
+I'd be in favor of moving to llvm 17+.
+
+Thanks again Nathan,
+
+Alex
+
+>
+> I am open to other thoughts though.
+>
+> Cheers,
+> Nathan
 
