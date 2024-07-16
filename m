@@ -1,127 +1,135 @@
-Return-Path: <linux-arch+bounces-5401-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5402-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DDBE2931E40
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Jul 2024 03:05:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84FE7931E48
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Jul 2024 03:09:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5C7861F21FEE
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Jul 2024 01:05:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 37EA21F22922
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Jul 2024 01:09:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EE2CAD48;
-	Tue, 16 Jul 2024 01:05:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87B6433EA;
+	Tue, 16 Jul 2024 01:09:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ToyINu31"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SuOdOMhM"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2BE8AD24;
-	Tue, 16 Jul 2024 01:05:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FE7617C2;
+	Tue, 16 Jul 2024 01:09:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721091905; cv=none; b=Xp40ndxZrH3FNxQLkWAAwSoQv4DXcYK6a5wvVD3mftQGkEos8bw75C59OU00MCX/hblKJqSGlDa3pk6ZvDEpGs03nn/GejNu5h2/Sm8iNZ/sbzy92Zz8fFqiavI6mkiB+6PEsG9zADbP1M475nX00NC+dJWywNNyPHohR+FxzGk=
+	t=1721092187; cv=none; b=TqTdpc820WNx7WtatStO4tYbD/2m3ijxWD8Csfzd+XBSdqf6nXLmbk4dwES65hEbFc/ruSeqBPxRd0IXZATcnbVV5e5S2G0Hnz8cF1DLwiwmahtkROt+Asf3XJSmIYapy7O3aupbe9IZowL0z9EMS1DgUc39dQCxoMiyZBNvTrs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721091905; c=relaxed/simple;
-	bh=QG29vkIJ/KvY/97Bru3A84cybIUnamlVoJnN1kflOmU=;
+	s=arc-20240116; t=1721092187; c=relaxed/simple;
+	bh=Q0kp7iabKKyIX54Klme9KRFmTX+5d+5P/TaWauXzIwc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gat1JSeWJMNyVgZJJP0NKoorwJHhciKRRoeTJGtpOttT1aLO+2MgYBW7GG/SCayCo9UYd5cziUToW53Nc78E7+CkV0JU9s32kUPOWtNfGdvpSKyZaqaqk5TIGcKoZCjpIBUkjIeRGY3icnOmK8yKAOaet+Z+vjJjA8JczotbbZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ToyINu31; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53982C4AF0B;
-	Tue, 16 Jul 2024 01:05:05 +0000 (UTC)
+	 To:Cc:Content-Type; b=QUOJiXuGCBEFXwwNgN39uRWgNDi3ldUT20EdzpntVGL5+DqDGz7p/9/trrthnv4AcTpFCxb1NZltVlocnfI2SkahEmoEhgyk2Q/OXZO55+pTbq+M1ZTGK3B4qn3pQU5wxN1duYjnCYi7kMkiAe3PwXh/7zD6Ge0RTZ3eR13yT6o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SuOdOMhM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF75AC4AF14;
+	Tue, 16 Jul 2024 01:09:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721091905;
-	bh=QG29vkIJ/KvY/97Bru3A84cybIUnamlVoJnN1kflOmU=;
+	s=k20201202; t=1721092186;
+	bh=Q0kp7iabKKyIX54Klme9KRFmTX+5d+5P/TaWauXzIwc=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ToyINu31o0mwiMTvB5jB7n0JqZmTDkbSgm3t3bwVwzYP75J65cEK6v6oyb8tYVOhv
-	 v283nYUQlfOOu5dkmJkSXA7x3GfOcAgcUwSZ23oscxwuTlMrDQv9GuHJ9AuZDnkjU3
-	 KGEZWRS6uz9S2DA8GajHIs6NU9sefPICsgdx2qDIbes6U6ElBomuJN3h+6C0pwpDmx
-	 abIAgm1tiGWHam/Y9EjCnlpXRq5alYhZmF4YpzXbnIkpfqe18YXG0uxRhfKfoIz+qJ
-	 Brbx0sk7a7jc2ovVW4SEzYnEvoOaLtrMtixOVW1ayPOwJnQ7UnVjRjO8mfbe4KjanQ
-	 Ei/CYG98ITPjw==
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2eea7e2b0e6so66159281fa.3;
-        Mon, 15 Jul 2024 18:05:05 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUKcym/LGhXmcssf/ceKZ7NWc59TOS+A321xZJpD/ZOzICcYpdEHVgWwPvYVkm2NtqXmkQsYuTITfOQJBvRbtehNHibRk5QUmhU7YLZ3lh4YxyaN2opC1i7Mrmb6OqHL0lv/Ho3y0jta1opkKRYE4cO0wK2AnLILdBb5ZWZe7nj4uu7DA==
-X-Gm-Message-State: AOJu0YxUXds6735nTgt9PB/5ot5W5pEE6qZgQaAf5q8yvMtQzogiXozI
-	eb/K8W87KDZ8CNDe9Qq3MTOKWcHo5QXteuofT1x/F+W2vrpT/dNIkypYfZvTpjnmmXVLe2QLlWa
-	zmthnOVEIOAZaxOtI/u19NrK8ZhQ=
-X-Google-Smtp-Source: AGHT+IEN6H27w2IkU8okfWfdkHSr98KLu1OkcEMwEZm2647siY5rx5myWRTdnfrOyys1KrSYGu4NevvkqFvZHj/70C0=
-X-Received: by 2002:a05:6512:138c:b0:52e:9b92:4990 with SMTP id
- 2adb3069b0e04-52edf0192ffmr286040e87.32.1721091903625; Mon, 15 Jul 2024
- 18:05:03 -0700 (PDT)
+	b=SuOdOMhMQrBKxsDhNOE2+dxfWNQn3d9vcNUQjYyXVgZOmD9eIHi4ZHka54A9BPnqU
+	 wrPoFacpN+3Yfg+IqHwVVmeyw8su9TXlxdoVIaWsncph7s1jQMZNAAxS6iUyRXB6wF
+	 f/5hbQSSh78DanJr9xSKo5wDHY3woLJD9c1DETeDxvGJ8CAUJ//76H6+DaniOBsy6C
+	 CubIvP+gNFfEJupN9r6VkJt4KDPxU9Z9RBbv5kONoq6c4WWs1ui+VpvKH4qSdwtvIv
+	 aP4ZmhyeYhnM2o4fYhJAIm+ALc9w520XYJmooV4JSa1+/kFJmtK2cR3yXxgOi1BF4c
+	 kTLI2DQSWYRDg==
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-52ea79e6979so5504582e87.2;
+        Mon, 15 Jul 2024 18:09:46 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVlj7mYgp2iI766vY864/v/XfLN52pbywQLXbL1doy+YBK8Qui44vDN/1UQg5sHEFd8/50+OMhWRcAT0KByx65fw1CGxhVy8wL+QFA/ojVYFCCbCzE5lCBVUz54OUhBJ557DG+mZXnqpFNPdZyS2PRDgZ+XeP5EwYy1qSaaW+EnVq466S7M4pKCP0/cglae+990Cs0OpJvhTWHIZtDOQvKw3SW79FGAkJFt2Zcm8BT73Yw4DOcNQMx/+zjGTyLKXBtC2OgtzjC7DyoAeJqO4LQ1ZZiOTXBWR+8lHS7nDm7PeYQ=
+X-Gm-Message-State: AOJu0Yx+VoKQHjyEl1qbUzpsZxyr8rF0V/zovzBPzvMUxtMadU/egISC
+	Lw7/cMPUtwBCkRDVYbCodpCWzi0HGAKkxj6Y1Bh4hnYj+TNB9MSDCSli3STepj1ZWubDcCegOxq
+	Jgogz77xK6yO6YrNHpvScGnEP5BA=
+X-Google-Smtp-Source: AGHT+IHWiEkBygbqwCGlDokgR7Nb1VQa68dIBoq67wVmj13obpWvn2q8U35d1Igma4IeakMMYKXavF2qtV7ei5Itrxo=
+X-Received: by 2002:a05:6512:3b06:b0:52c:952a:67da with SMTP id
+ 2adb3069b0e04-52edf0329c1mr316791e87.55.1721092185161; Mon, 15 Jul 2024
+ 18:09:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240626130347.520750-1-alexghiti@rivosinc.com>
- <20240626130347.520750-11-alexghiti@rivosinc.com> <CAJF2gTSG7HzV7mgZpkWLbSBNn2dRv_NaSmCimd+kRdU=EZrmmg@mail.gmail.com>
- <CAHVXubizLq=qZgVQ2vBFe5zVuLRP0DGw=UN4U_Wkx2P2xsP3Mw@mail.gmail.com> <a096151c-c349-455f-8939-3b739d73f016@redhat.com>
-In-Reply-To: <a096151c-c349-455f-8939-3b739d73f016@redhat.com>
+References: <20240704143611.2979589-1-arnd@kernel.org> <20240704143611.2979589-3-arnd@kernel.org>
+ <CAK7LNATLVY1xtSMVMro-KMQVPgVHoiRKGX33ajCg8ZU0-EZS2w@mail.gmail.com>
+In-Reply-To: <CAK7LNATLVY1xtSMVMro-KMQVPgVHoiRKGX33ajCg8ZU0-EZS2w@mail.gmail.com>
 From: Guo Ren <guoren@kernel.org>
-Date: Tue, 16 Jul 2024 09:04:52 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRrZwVk2xyhF_PsJGKCfkvun-rifG8MjDBcGDt3YBuhPg@mail.gmail.com>
-Message-ID: <CAJF2gTRrZwVk2xyhF_PsJGKCfkvun-rifG8MjDBcGDt3YBuhPg@mail.gmail.com>
-Subject: Re: [PATCH v2 10/10] riscv: Add qspinlock support based on Zabha extension
-To: Waiman Long <longman@redhat.com>
-Cc: Alexandre Ghiti <alexghiti@rivosinc.com>, Jonathan Corbet <corbet@lwn.net>, 
+Date: Tue, 16 Jul 2024 09:09:33 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQuu3SBKR-Q7+njKqbXZsRgWHjfDBYgBGMbERpuqWKjew@mail.gmail.com>
+Message-ID: <CAJF2gTQuu3SBKR-Q7+njKqbXZsRgWHjfDBYgBGMbERpuqWKjew@mail.gmail.com>
+Subject: Re: [PATCH 02/17] csky: drop asm/gpio.h wrapper
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Arnd Bergmann <arnd@kernel.org>, linux-arch@vger.kernel.org, 
+	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
+	Vineet Gupta <vgupta@kernel.org>, Russell King <linux@armlinux.org.uk>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Brian Cain <bcain@quicinc.com>, Huacai Chen <chenhuacai@kernel.org>, 
+	WANG Xuerui <kernel@xen0n.name>, Dinh Nguyen <dinguyen@kernel.org>, Jonas Bonn <jonas@southpole.se>, 
+	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>, Stafford Horne <shorne@gmail.com>, 
 	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Andrea Parri <parri.andrea@gmail.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Leonardo Bras <leobras@redhat.com>, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-arch@vger.kernel.org
+	Albert Ou <aou@eecs.berkeley.edu>, Rich Felker <dalias@libc.org>, 
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, "David S. Miller" <davem@davemloft.net>, 
+	Andreas Larsson <andreas@gaisler.com>, Christian Brauner <brauner@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-snps-arc@lists.infradead.org, 
+	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org, 
+	linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev, 
+	linux-openrisc@vger.kernel.org, linux-riscv@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 16, 2024 at 3:30=E2=80=AFAM Waiman Long <longman@redhat.com> wr=
-ote:
+On Thu, Jul 11, 2024 at 11:49=E2=80=AFPM Masahiro Yamada <masahiroy@kernel.=
+org> wrote:
 >
-> On 7/15/24 03:27, Alexandre Ghiti wrote:
-> > Hi Guo,
+> On Thu, Jul 4, 2024 at 11:36=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> w=
+rote:
 > >
-> > On Sun, Jul 7, 2024 at 4:20=E2=80=AFAM Guo Ren <guoren@kernel.org> wrot=
-e:
-> >> On Wed, Jun 26, 2024 at 9:14=E2=80=AFPM Alexandre Ghiti <alexghiti@riv=
-osinc.com> wrote:
-> >>> In order to produce a generic kernel, a user can select
-> >>> CONFIG_COMBO_SPINLOCKS which will fallback at runtime to the ticket
-> >>> spinlock implementation if Zabha is not present.
-> >>>
-> >>> Note that we can't use alternatives here because the discovery of
-> >>> extensions is done too late and we need to start with the qspinlock
-> >> That's not true; we treat spinlock as qspinlock at first.
-> > That's what I said: we have to use the qspinlock implementation at
-> > first *because* we can't discover the extensions soon enough to use
-> > the right spinlock implementation before the kernel uses a spinlock.
-> > And since the spinlocks are used *before* the discovery of the
-> > extensions, we cannot use the current alternative mechanism or we'd
-> > need to extend it to add an "initial" value which does not depend on
-> > the available extensions.
->
-> With qspinlock, the lock remains zero after a lock/unlock sequence. That
-> is not the case with ticket lock. Assuming that all the discovery will
-> be done before SMP boot, the qspinlock slowpath won't be activated and
-> so we don't need the presence of any extension. I believe that is the
-> main reason why qspinlock is used as the initial default and not ticket
-> lock.
-Thx Waiman,
-Yes, qspinlock is a clean guy, but ticket lock is a dirty one.
+> > From: Arnd Bergmann <arnd@arndb.de>
+> >
+> > The asm/gpio.h header is gone now that all architectures just use
+> > gpiolib, and so the redirect is no longer valid.
+> >
+> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Acked-by: Guo Ren <guoren@kernel.org>
 
-Hi Alexandre,
-Therefore, the switch point(before reset_init()) is late enough to
-change the lock mechanism, and this satisfies the requirements of
-apply_boot_alternatives(), apply_early_boot_alternatives(), and
-apply_module_alternatives().
+> > ---
+>
+>
+> Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
+>
+>
+> >  arch/csky/include/asm/Kbuild | 1 -
+> >  1 file changed, 1 deletion(-)
+> >
+> > diff --git a/arch/csky/include/asm/Kbuild b/arch/csky/include/asm/Kbuil=
+d
+> > index 1117c28cb7e8..13ebc5e34360 100644
+> > --- a/arch/csky/include/asm/Kbuild
+> > +++ b/arch/csky/include/asm/Kbuild
+> > @@ -1,7 +1,6 @@
+> >  # SPDX-License-Identifier: GPL-2.0
+> >  generic-y +=3D asm-offsets.h
+> >  generic-y +=3D extable.h
+> > -generic-y +=3D gpio.h
+> >  generic-y +=3D kvm_para.h
+> >  generic-y +=3D mcs_spinlock.h
+> >  generic-y +=3D qrwlock.h
+> > --
+> > 2.39.2
+> >
+>
+>
+> --
+> Best Regards
+> Masahiro Yamada
 
->
-> Cheers,
-> Longman
->
 
 
 --=20
