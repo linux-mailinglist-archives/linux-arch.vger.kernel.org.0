@@ -1,153 +1,246 @@
-Return-Path: <linux-arch+bounces-5434-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5435-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0E9E93368F
-	for <lists+linux-arch@lfdr.de>; Wed, 17 Jul 2024 08:02:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 125A29336C2
+	for <lists+linux-arch@lfdr.de>; Wed, 17 Jul 2024 08:20:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 510A81F241E4
-	for <lists+linux-arch@lfdr.de>; Wed, 17 Jul 2024 06:02:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 043071C20D91
+	for <lists+linux-arch@lfdr.de>; Wed, 17 Jul 2024 06:19:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 993D0E574;
-	Wed, 17 Jul 2024 06:02:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3945712B75;
+	Wed, 17 Jul 2024 06:19:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="TxdDuVHB";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="iy57Shj+"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="UthKgIQG"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fout2-smtp.messagingengine.com (fout2-smtp.messagingengine.com [103.168.172.145])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C997A11712;
-	Wed, 17 Jul 2024 06:02:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.145
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F31A125C9
+	for <linux-arch@vger.kernel.org>; Wed, 17 Jul 2024 06:19:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721196128; cv=none; b=mTnueleeKqnK1VoAGdf62pU82ateQr+NV6lFBgh6GweBHs2lHHoWddQ32uH+EWYuVBvyy9Om7rlfuc8nKobBzVTtdSRSkKmgx6dJonrV+7k888FdiGfrKIoIaORwmqvOgJjTXIvBCC4TIy5ijoiYyzk6A23Tvd5t3tGdglxS4j8=
+	t=1721197195; cv=none; b=gSgE+BidxtbC1YkfjGuq46JpUpVz2DYkiJbou1YXfDQ6btX8kxd7xsxHyqeaVpcyf5uSJhBpX4NKZa0NCGwKPe3H+o1tgMxI+x4QDKjzpGa6QlobQEljEsIUfzSgWcZho7Epycwp2SMI6bb+OlVgbXgvYZ9RKiHmYFqY8s67rYU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721196128; c=relaxed/simple;
-	bh=f+RmEIUQ9VSi19cek3Sz+RL9dW4upJpc7vO2wruJXm4=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=gVrXA0Ge1GI4Ac2TaXlFd16s5/07KBWNCRXCgTyILoRSCcuJU7U472ol+qMATuUrE/TBWdZQN+yrcAcmxs6Bl3m4SCgtoLyIZ8Sbq5gkhdmwkGiEcA8d4J658qQwL0h8v1qxAcJV7IWZn+YcfnB5QoUxRc0qA7qzPhFaIKTQLi4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=TxdDuVHB; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=iy57Shj+; arc=none smtp.client-ip=103.168.172.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailfout.nyi.internal (Postfix) with ESMTP id EC27B1380273;
-	Wed, 17 Jul 2024 02:02:05 -0400 (EDT)
-Received: from wimap26 ([10.202.2.86])
-  by compute6.internal (MEProxy); Wed, 17 Jul 2024 02:02:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1721196125; x=1721282525; bh=s7KuyIqvIg
-	I/k+6qXPqK6+K+0ILQ6zny5br217rA/cg=; b=TxdDuVHBA6pP2KAS6CIrwvUNlj
-	eXMZnKZ+s+Gn8e+mTrnqEfd3NAq531VmO+spYY4WHFjdYiG+C0y2Cv1oulqJJRug
-	McSGhGS+vxIisP70kd+QUSRlOB3S7ek2fTIWs26QCd6BMdXbSLv+ACLWaWgMuw0G
-	LLGbDHxb+ODAv+sDkOn9aqHsW2iNr2Lg+ZEcGzXMoHYcKhlqYp15tK7N4Hc1WaXR
-	gUIVDRnOtEp1qc7NJQGQGSR5Li0/mw5cJod3ROR2NZN0Cei1VvlkD1lENVdytYKu
-	FbMTlh3kfQkKWZHXITUqcAXJJut8/x4bfsLPIQUDM4oKNeI7lRlbfHal+eDg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1721196125; x=1721282525; bh=s7KuyIqvIgI/k+6qXPqK6+K+0ILQ
-	6zny5br217rA/cg=; b=iy57Shj+rMMq0tgL8F/b4GYe9Nu5PqrGYSCT/PbD9M5/
-	0KhYhe473tb02Gs5inSJPVoB4lIH9FVQdHR1oyz4lo2upKFXmc4nYOYa4teAaq3V
-	R07LkGrhuYforttrNu0XCLMZSeUNJEpz/k4KREfn6ajhuNuibkmPzv43lt8VN0fT
-	i1/a+8BEL5wXsZXK+ilbEO3bXZ1UMllWfAeWH0prDPs6T94pwOc3Z0fIUcrsW9vV
-	tcGWgiFRSV016P+CaygIErZsVUq2BBziw/u7gEZ+YeJzlA6fIwJf89RcGeh12UkR
-	uuW2Y+5Jhls8ywPxJYPKGMpaYqjhZJXvBZsbUWZFag==
-X-ME-Sender: <xms:XF6XZhASZKRtrx88hvmEqjeC4Joes9NXX9VPo9GyHKgpJNnVSx266Q>
-    <xme:XF6XZvgsjLXz3zi9oGV7g2tyYzXvEQ3w8lyegGX3eEuUoarepzwpZNoCIqdAKQySy
-    3eS9905O-rjWOG_Zq8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrgeehgddutdehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:XF6XZslNFrl7P2PNLVmEzkv4YrLUeV64nc8FBVEyYKCWGTO9AQBDRw>
-    <xmx:XF6XZrwgkSDQ7vjyFVOvY8HBHZdrHUnFS9hU3NzLrC3z-S7q4FAgYQ>
-    <xmx:XF6XZmScx7LJyMWu_IbYlUK4h8k_-ZMJQyTixDgUXprSjJv-cP9rag>
-    <xmx:XF6XZuYKltr-lNPOmRWTppGpWmh6NWQqxBsewHtt7h0sujRWIzzZRg>
-    <xmx:XV6XZn_oX9nmRr2w04j_4ZetEq37mOqIJ60LsUeH07ay06T4PzvAJjt_>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 83D2419C005D; Wed, 17 Jul 2024 02:02:04 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-568-g843fbadbe-fm-20240701.003-g843fbadb
+	s=arc-20240116; t=1721197195; c=relaxed/simple;
+	bh=+Sn6Vf/bipEMI9l0v7K5QZbcuQASnNZtDyvbVvWM/qk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Hjfm+0WITUkbe6w6/BFs5egPsy7iKorVHCfvq5m7YbQSxAxYpGXF3rL0GdfwFqKGYwzwT7AnwzUwbZAxd1YUVKTiGy2fCytyBTpVZImixhfFlRae/I4Jk3Cb2QrDqacadPvYqt4x4hekR/hUyWGKHRyYsDfPfxML1xaYInQbSI4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=UthKgIQG; arc=none smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-585e774fd3dso7863054a12.0
+        for <linux-arch@vger.kernel.org>; Tue, 16 Jul 2024 23:19:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1721197192; x=1721801992; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=731iNxkRio1CVh7O96GIueitOfVCcVF5gDjduzXxip0=;
+        b=UthKgIQGzhFxxtKf1ND1Iuj/gp2QWIpMxmG9CynONm63b6SDtdRrmC5VdG4SIH6xqG
+         /u0lzYUhzHPAexVVlCxH9FOINA1FsWC4AECymuQ4Cxr1iKLah29a85hUv95c7pbWyF14
+         QFxpBUJR1d9IN+VcguasKdrGJvsv8J7uo5ESACnOP0QsK+4gsxbBYXVJS45iRLaJzGUl
+         EtsNvn1zI5+bpZSPFfQi7Byhgz8+TCqevvowiOSK31Nr0kNTii6Trj+YzKOQPLfvkTlI
+         xg+BR9atnAMUQUTLPhr+JdLKRYP/daGmEIok8FKIf5LeuBbTbbrqzyI7E5Tmo8VS+qDF
+         8OJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721197192; x=1721801992;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=731iNxkRio1CVh7O96GIueitOfVCcVF5gDjduzXxip0=;
+        b=mwYhMr9uswfIVaiATMoSSP/mtpNn1+OYuw4LCgqyVjnVqw0sgR24O2AP7oJbg31QEG
+         YOsWEbi3IrhOnBJHG7j6xwiuS2lELmGdxz6BV1ec2LNCqVqwoB4tog0P96f/aXQIg5IN
+         w7NWm+pI86bmqNrjv8nAm4YuP9gT61Nd+q50vdlDqmK0CvQm8Xm394Vb+e23mLYNEEke
+         PUWlSWRZZzgPw6wQlnVaDKCp2UZ4jUMM70eKwbTli7w+uF9S0dNmCEEHAhQAlyK/s7Oy
+         eH4m23wdsAao/YDDWKu+CBj8fP6T94fwtnCyCzLeTJZwrhhWo+FhkZGJmpfdrwrPwSTX
+         HUHw==
+X-Forwarded-Encrypted: i=1; AJvYcCUbcqq+ynUs6ddhzTpDdn70cz58/MMxNSglBor+pJdqMIx+MycJ6M0JouBnPCr0UuvC4T62Mrn2NCPRhfpgZgpiIXU/crBfwijDHA==
+X-Gm-Message-State: AOJu0YzahBPpm6MahodeFmlL4sI4S0zRK3ekVBkwXhGBqaDzxZz+Wxov
+	xBtdUbJII9xAuBSE+7zvia9mEYTXeFjnFlfvGP3AG7+PNXLUqlcwaKwa9EJTjzkzBDzzYLlKDzN
+	YikDkOwm1kiojPaU/VTgWF3MATCxw3SLCwwjXtQ==
+X-Google-Smtp-Source: AGHT+IGmCAjPv7zwB8K75fubJVOq5OlXEphacZcFqc1Ig0qaFbGDPSRSsM3ncZkf/6nf74oTzNfnAo1WxpGDhcAy0Fs=
+X-Received: by 2002:a17:906:d297:b0:a77:9d57:97ad with SMTP id
+ a640c23a62f3a-a7a011cbfa5mr48554866b.40.1721197191549; Tue, 16 Jul 2024
+ 23:19:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <2b6336d1-34e0-48dd-b901-7b5208045597@app.fastmail.com>
-In-Reply-To: 
- <CAHk-=wjqr_ahprUjddSBdQfSXUtg3Y2dCxHre=-Wa4VGdi7wuw@mail.gmail.com>
-References: <a662962e-e650-4d99-bed2-aa45f0b2cf19@app.fastmail.com>
- <CAHk-=wibB7SvXnUftBgAt+4-3vEKRpvEgBeDEH=i=j2GvDitoA@mail.gmail.com>
- <d7d6854b-e10d-473f-90c8-5e67cc5d540a@app.fastmail.com>
- <CAHk-=wir5og_Pd6MBSDFS+dL-bxoBix03QyGheySeeWPX82SDw@mail.gmail.com>
- <CAHk-=wjqr_ahprUjddSBdQfSXUtg3Y2dCxHre=-Wa4VGdi7wuw@mail.gmail.com>
-Date: Wed, 17 Jul 2024 08:01:43 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc: "Masahiro Yamada" <masahiroy@kernel.org>, linux-kernel@vger.kernel.org,
- Linux-Arch <linux-arch@vger.kernel.org>,
- linux-arm-kernel@lists.infradead.org,
- "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
- linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
- "linux-openrisc@vger.kernel.org" <linux-openrisc@vger.kernel.org>,
- linux-snps-arc@lists.infradead.org
-Subject: Re: [GIT PULL] asm-generic updates for 6.11
-Content-Type: text/plain
+References: <20240626130347.520750-1-alexghiti@rivosinc.com>
+ <20240626130347.520750-11-alexghiti@rivosinc.com> <CAJF2gTSG7HzV7mgZpkWLbSBNn2dRv_NaSmCimd+kRdU=EZrmmg@mail.gmail.com>
+ <CAHVXubizLq=qZgVQ2vBFe5zVuLRP0DGw=UN4U_Wkx2P2xsP3Mw@mail.gmail.com>
+ <a096151c-c349-455f-8939-3b739d73f016@redhat.com> <CAJF2gTRrZwVk2xyhF_PsJGKCfkvun-rifG8MjDBcGDt3YBuhPg@mail.gmail.com>
+ <CAHVXubh00OyazGP2C6sg0N2=kWqV-HXpzEiZCDdex8hcmLEM2g@mail.gmail.com> <CAJF2gTRpXBS-YotgEO=cPGnwjYiUyda_wk_fQfA6j_QqdYHoQw@mail.gmail.com>
+In-Reply-To: <CAJF2gTRpXBS-YotgEO=cPGnwjYiUyda_wk_fQfA6j_QqdYHoQw@mail.gmail.com>
+From: Alexandre Ghiti <alexghiti@rivosinc.com>
+Date: Wed, 17 Jul 2024 08:19:40 +0200
+Message-ID: <CAHVXubia24OTad=NGAjcvYpPqJFutyZCy7KCH09R_=R3PAEanA@mail.gmail.com>
+Subject: Re: [PATCH v2 10/10] riscv: Add qspinlock support based on Zabha extension
+To: Guo Ren <guoren@kernel.org>
+Cc: Waiman Long <longman@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Andrea Parri <parri.andrea@gmail.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Leonardo Bras <leobras@redhat.com>, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 17, 2024, at 07:08, Linus Torvalds wrote:
-> On Tue, 16 Jul 2024 at 21:57, Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
->>
->> Note, it really might be just 'allmodconfig'. We've had things that
->> depend on config entries in the past, eg the whole
->> CONFIG_HEADERS_INSTALL etc could affect things.
+On Tue, Jul 16, 2024 at 10:31=E2=80=AFAM Guo Ren <guoren@kernel.org> wrote:
+>
+> On Tue, Jul 16, 2024 at 2:43=E2=80=AFPM Alexandre Ghiti <alexghiti@rivosi=
+nc.com> wrote:
+> >
+> > Hi Guo, Waiman,
+> >
+> > On Tue, Jul 16, 2024 at 3:05=E2=80=AFAM Guo Ren <guoren@kernel.org> wro=
+te:
+> > >
+> > > On Tue, Jul 16, 2024 at 3:30=E2=80=AFAM Waiman Long <longman@redhat.c=
+om> wrote:
+> > > >
+> > > > On 7/15/24 03:27, Alexandre Ghiti wrote:
+> > > > > Hi Guo,
+> > > > >
+> > > > > On Sun, Jul 7, 2024 at 4:20=E2=80=AFAM Guo Ren <guoren@kernel.org=
+> wrote:
+> > > > >> On Wed, Jun 26, 2024 at 9:14=E2=80=AFPM Alexandre Ghiti <alexghi=
+ti@rivosinc.com> wrote:
+> > > > >>> In order to produce a generic kernel, a user can select
+> > > > >>> CONFIG_COMBO_SPINLOCKS which will fallback at runtime to the ti=
+cket
+> > > > >>> spinlock implementation if Zabha is not present.
+> > > > >>>
+> > > > >>> Note that we can't use alternatives here because the discovery =
+of
+> > > > >>> extensions is done too late and we need to start with the qspin=
+lock
+> > > > >> That's not true; we treat spinlock as qspinlock at first.
+> > > > > That's what I said: we have to use the qspinlock implementation a=
+t
+> > > > > first *because* we can't discover the extensions soon enough to u=
+se
+> > > > > the right spinlock implementation before the kernel uses a spinlo=
+ck.
+> > > > > And since the spinlocks are used *before* the discovery of the
+> > > > > extensions, we cannot use the current alternative mechanism or we=
+'d
+> > > > > need to extend it to add an "initial" value which does not depend=
+ on
+> > > > > the available extensions.
+> > > >
+> > > > With qspinlock, the lock remains zero after a lock/unlock sequence.=
+ That
+> > > > is not the case with ticket lock. Assuming that all the discovery w=
+ill
+> > > > be done before SMP boot, the qspinlock slowpath won't be activated =
+and
+> > > > so we don't need the presence of any extension. I believe that is t=
+he
+> > > > main reason why qspinlock is used as the initial default and not ti=
+cket
+> > > > lock.
+> > > Thx Waiman,
+> > > Yes, qspinlock is a clean guy, but ticket lock is a dirty one.
+> >
+> > Guys, we all agree on that, that's why I kept this behaviour in this pa=
+tchset.
+> >
+> > >
+> > > Hi Alexandre,
+> > > Therefore, the switch point(before reset_init()) is late enough to
+> > > change the lock mechanism, and this satisfies the requirements of
+> > > apply_boot_alternatives(), apply_early_boot_alternatives(), and
+> > > apply_module_alternatives().
+> >
+> > I can't find reset_init().
+> Sorry for the typo, rest_init()
+> >
+> > The discovery of the extensions is done in riscv_fill_hwcap() called
+> > from setup_arch()
+> > https://elixir.bootlin.com/linux/latest/source/arch/riscv/kernel/setup.=
+c#L288.
+> > So *before* this point, we have no knowledge of the available
+> > extensions on the platform.  Let's imagine now that we use an
+> > alternative for the qspinlock implementation, it will look like this
+> > (I use only zabha here, that's an example):
+> >
+> > --- a/arch/riscv/include/asm/spinlock.h
+> > +++ b/arch/riscv/include/asm/spinlock.h
+> > @@ -16,8 +16,12 @@ DECLARE_STATIC_KEY_TRUE(qspinlock_key);
+> >  #define SPINLOCK_BASE_DECLARE(op, type, type_lock)                    =
+ \
+> >  static __always_inline type arch_spin_##op(type_lock lock)            =
+ \
+> >  {                                                                     =
+ \
+> > -       if (static_branch_unlikely(&qspinlock_key))                    =
+ \
+> > -               return queued_spin_##op(lock);                         =
+ \
+> > +       asm goto(ALTERNATIVE("j %[no_zabha]", "nop", 0,                =
+ \
+> > +                                     RISCV_ISA_EXT_ZABHA, 1)          =
+  \
+> > +                         : : : : no_zabha);                           =
+ \
+> > +                                                                      =
+ \
+> > +       return queued_spin_##op(lock);                                 =
+ \
+> > +no_zabha:                                                             =
+ \
+> >         return ticket_spin_##op(lock);                                 =
+ \
+> >  }
+> >
+> > apply_early_boot_alternatives() can't be used to patch the above
+> > alternative since it is called from setup_vm(), way before we know the
+> > available extensions.
+> > apply_boot_alternatives(), instead, is called after riscv_fill_hwcap()
+> > and then will be able to patch the alternatives correctly
+> > https://elixir.bootlin.com/linux/latest/source/arch/riscv/kernel/setup.=
+c#L290.
+> >
+> > But then, before apply_boot_alternatives(), any use of a spinlock
+> > (printk does so) will use a ticket spinlock implementation, and not
+> > the qspinlock implementation. How do you fix that?
+> Why "before apply_boot_alternatives(), any use of a spinlock (printk
+> does so) will use a ticket spinlock implementation" ?
+> We treat qspinlock as the initial spinlock forever, so there is only
+> qspinlock -> ticket_lock direction and no reverse.
 
-I had tried a partial allmodconfig build earlier to save time,
-did a full build again now, still nothing:
+Can you please provide an implementation of what you suggest using the
+current alternatives tools? I'm about to send the v3 of this series,
+you can use this as a base.
 
-arnd@studio:~/arm-soc/bisect$ make allmodconfig -sj20
-arnd@studio:~/arm-soc/bisect$ make -sj20
-arnd@studio:~/arm-soc/bisect$ touch .config
-arnd@studio:~/arm-soc/bisect$ make allmodconfig -sj20
-arnd@studio:~/arm-soc/bisect$ make -j20
-  SYNC    include/config/auto.conf.cmd
-  CALL    scripts/checksyscalls.sh
-  CHK     kernel/kheaders_data.tar.xz
-arnd@studio:~/arm-soc/bisect$ find . -newer .config
-.
-./arch/arm64/kvm
-./include/config
-./include/config/auto.conf.cmd
-./include/config/auto.conf
-./include/generated
-./include/generated/uapi/linux
-./include/generated/autoconf.h
-./include/generated/rustc_cfg
-./init
-./kernel
-./lib
-./scripts/mod
-./.missing-syscalls.d
+Thanks,
 
-This is in a fresh worktree, doing a native arm64 build
-in the source directory. In case the problem is related to
-changes in high-resolution timestamping, I am running
-a slightly older kernel (still 6.8) and I'm using btrfs
-with relatime for the build here. I also tried on tmpfs
-now, same results. ccache is disabled.
+Alex
 
-      Arnd
+>
+> >
+> > >
+> > > >
+> > > > Cheers,
+> > > > Longman
+> > > >
+> > >
+> > >
+> > > --
+> > > Best Regards
+> > >  Guo Ren
+>
+>
+>
+> --
+> Best Regards
+>  Guo Ren
 
