@@ -1,121 +1,168 @@
-Return-Path: <linux-arch+bounces-5457-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5458-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E494C933A32
-	for <lists+linux-arch@lfdr.de>; Wed, 17 Jul 2024 11:42:22 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 80385933B8C
+	for <lists+linux-arch@lfdr.de>; Wed, 17 Jul 2024 12:55:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A11402842E4
-	for <lists+linux-arch@lfdr.de>; Wed, 17 Jul 2024 09:42:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D14DDB2243E
+	for <lists+linux-arch@lfdr.de>; Wed, 17 Jul 2024 10:55:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7390D14A097;
-	Wed, 17 Jul 2024 09:42:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0D4E17F386;
+	Wed, 17 Jul 2024 10:55:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VRyzN9+M"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="sSzQKesS";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Uj/+wQX0"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fout5-smtp.messagingengine.com (fout5-smtp.messagingengine.com [103.168.172.148])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 483A7224FA;
-	Wed, 17 Jul 2024 09:42:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 361C717DE29;
+	Wed, 17 Jul 2024 10:55:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.148
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721209337; cv=none; b=cwSxxLzBRIwxy6xtEtrHIO65mEPGZ7QqbztWIqNaOTKgIDBTAYsE1HULZEmvHMewIWz+z6M4UBCPeYhcY29nd0NPDuPGHThpDRN6Fcnfa68zCCb7hCar0YT6BFycEhvqbyKkZuL+XTnDDXqLneVOmv0CF1bySiJVqpe4/UbjPAg=
+	t=1721213711; cv=none; b=l0f7lL4PEITz4NtMVGmatwWyNwYGN7+h9PXGGKWJivjMdBehu8CyrFoZkT94iUMntVM+FkviOIonV+lOvz97LtybyQ2KRCAoEv4aJfHyrosNmxBIUsyAYRgq4tEZ12u8yXd+MtcwEapTzSChbhd7f6ZiNJvGzuqlQztg4C1Knsk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721209337; c=relaxed/simple;
-	bh=4wsWKtT4pzbR3ZnSQuInnMNaiV+eFoZ7JNsZBHRlVZs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CzRv/V0ina9WP2qX3Al//dgAqMwUbs2mFd6jldds/waSwZNfvSE7BGR6ortP2tdvA4b6cC6+FjO/O2wnPKaSg07WI4QH/Gub16+9M8F36gmkIDUVLB7c3tVqls9RmpwHBOIVEo9taziHoOszaLvlyBsihH87rCo13IYrV1FlzQQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VRyzN9+M; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3AD7C4AF15;
-	Wed, 17 Jul 2024 09:42:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721209336;
-	bh=4wsWKtT4pzbR3ZnSQuInnMNaiV+eFoZ7JNsZBHRlVZs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=VRyzN9+MaTsL1fzKS9dRhvspzof/X5Mah4RnJPHPYcIp3cwyvZAV/NRdmCLxFzWDB
-	 ErM9VEKHPp1NV6bTn7eHTPWV8Y/JxJEYK0SQv6CQqZHEOW1ik20NTGEVjENzZIMKXN
-	 MiEL+30s8w29cSBvLxGB0ZppHRWVGISilrxjOwij0dTea8kDVlTku62UHCw0h/AzAO
-	 d8IW6CAo/Z3NTSds6sw1Fxy4sdQGxNdrNs9vZmP1yFp5jA6Kogs9MqsUYkTwUlgP2M
-	 T2+mZyXKvv6MsDxUHlZ6jg6fRWayutquo+53hClZRZHeLxrjoqG4eFruL3gqInOvxU
-	 MBBFxrSj7jwAQ==
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-58d24201934so1098138a12.0;
-        Wed, 17 Jul 2024 02:42:16 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXY9PFPrsBd2vf5yClF+it89OcHA2MecKio1hAy3JXTqvccy2WsNzhWvNwoPS6K+Vxk1ntP9iDxL5MGHts1nrw8F2oZ30vzGpF6kIswuSomdAM3ObxEDFqFu3REyqAO0yDHUq+JLemQPkb+dEJoHZ3mv5Q0BhjdehEqtXm8HMelTaBnWA==
-X-Gm-Message-State: AOJu0Yz7+5kZF23qmHm+/+LUVwNMv195wnf9IJIXhrl6P7LNlTCSMOh3
-	E5N8aVB2Bn8FYVpFd8l3bEpFCeXoJmn1lYrzCYuI/Skn1H9b+NhqmZFNpxv10fxftpdywnS1Q3u
-	1IkI1tZeagRVB9PDnqsSb9Pq9YTk=
-X-Google-Smtp-Source: AGHT+IGiAh07Q4bbOoU7hNbdq3a1E1po4+o3FRxrUjYkTgr0fGJMGJBP0KlzYZojtvYYoe1XftYpOs7aU54iRzxyjoo=
-X-Received: by 2002:a50:d7c1:0:b0:59c:50c3:af65 with SMTP id
- 4fb4d7f45d1cf-5a069e9bfa2mr1331551a12.14.1721209335328; Wed, 17 Jul 2024
- 02:42:15 -0700 (PDT)
+	s=arc-20240116; t=1721213711; c=relaxed/simple;
+	bh=AMsDz/Ku3aEvwfE1d5aax219Ew2wLx/1hyo1nCxhUyo=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=QbN1kmwT4dp6YckCVg6IpoQ3YSpynBXjONQQkB7XIjice5A3DR0Em6crSoA3IWPoWNSHu82dOMaKF+b7Cmt7pqyLJ5TT3PNyyt+HZlWZOAXCU+agDoEkp7oNobPQfJRLGcTHvdUKyHn7ytsPagYBiwXRIfcvKy8+jjZVmqWy3Mg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=sSzQKesS; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Uj/+wQX0; arc=none smtp.client-ip=103.168.172.148
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailfout.nyi.internal (Postfix) with ESMTP id 547B71380286;
+	Wed, 17 Jul 2024 06:55:08 -0400 (EDT)
+Received: from wimap26 ([10.202.2.86])
+  by compute6.internal (MEProxy); Wed, 17 Jul 2024 06:55:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1721213708; x=1721300108; bh=8TPRB3j9rL
+	zE1rwWl+Ls1dJsZyiFWQAyaVNpYBWytB8=; b=sSzQKesS28tzRD3ycMfsHJZzHM
+	mb+/LOuqTrCGwZJDGcQNnJdKH0Sj7JxGiyACbnSjdZ7jhKBEZhC26nSEXXff01YA
+	3JpotsV7/zJ5MCe+fdyamsjsp9S2DrchwkfORG/ELfJ3aXGRzEWYCd3zDP9Bk8HS
+	sGiiCkdFEOOq97/M6iqGdf4xbII/G8ccZWbljeSipuzObXbMUFC2VS/nqGduJ+kx
+	y07wayoLPaub+/tRYZ8V7VPF80IFiCXx+01rWOqumEUBbAPnjdCNT9jh51VvokDA
+	end0ch72kvrXPf2O/vnpUjMlgzNMfF+pA05NYI6k2P/CsDIDXTh+ilVpvT5w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1721213708; x=1721300108; bh=8TPRB3j9rLzE1rwWl+Ls1dJsZyiF
+	WQAyaVNpYBWytB8=; b=Uj/+wQX06B0+FbPAETtoiXpL19N2SDw2r05omykUv9vm
+	UQ5jN/5ooHFpKmC9/OeTLL/mryXkc+YdSCIbrqlgkbv3+XccswlTzizUh+8cP+IM
+	HJCDQz9PpU692+Tl3nYX54rTTCZ9ds+kC6kEsmRFV3vV536xSEkjUAl+N8diE1i9
+	noad3VfSoGRNuWozy1WyABALzTvES+8zWTHpl1+Hr4WXO+jNY6+EV3earT56nH+t
+	iSweoq2QRsewPiFbHluLa+M2Ge+gJf7KYIK/nzoCoxpfyxyfefWwmpdxm6YoK1Pa
+	7xVk1Bxni+/9WO5T8w/NDQyzIco11dk5HSvl10l6KQ==
+X-ME-Sender: <xms:C6OXZuQOkBGuoTGdD5m5RKKuty_76kxEVrX373t3PNyieEnI7U3eUA>
+    <xme:C6OXZjxL3aEmkVItid8N0JP73i5KAG3vPgc3CMf51q6jtRBrwlPslTjnkBmQB1zHG
+    HVrJSgDm8_j4GRDSjk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrgeeigdeffecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:C6OXZr1IgRed4C-ppieiHgf6s7NlVM1e-Ll20ASfZcKMAXmjw-RtvQ>
+    <xmx:C6OXZqAyhWKbw21N6I3g1uwuLk08AmNjKjHvsb2gM7PZ0X_Wt--2aQ>
+    <xmx:C6OXZngS9kXR_S5sGCT-6pUxi1CsSNHKGPU2wArBAcGIUJffhG0IrA>
+    <xmx:C6OXZmpJ5HUuZfi2Eqz99SkyJK2dvK0bGYs7ddTni3cSWiNH7X1NCQ>
+    <xmx:DKOXZsYyZp4SgPBafctwqljY71fPeEOjc5k00ZIdbHF5w7UykbObrQto>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id EB13219C005E; Wed, 17 Jul 2024 06:55:06 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-568-g843fbadbe-fm-20240701.003-g843fbadb
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240717061957.140712-1-alexghiti@rivosinc.com> <20240717061957.140712-11-alexghiti@rivosinc.com>
-In-Reply-To: <20240717061957.140712-11-alexghiti@rivosinc.com>
-From: Guo Ren <guoren@kernel.org>
-Date: Wed, 17 Jul 2024 17:42:03 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRSeoa+_w_bp4D9i3w61D769OZBcMAPPhbSadkvouwrLw@mail.gmail.com>
-Message-ID: <CAJF2gTRSeoa+_w_bp4D9i3w61D769OZBcMAPPhbSadkvouwrLw@mail.gmail.com>
-Subject: Re: [PATCH v3 10/11] dt-bindings: riscv: Add Ziccrse ISA extension description
-To: Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Andrea Parri <parri.andrea@gmail.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Leonardo Bras <leobras@redhat.com>, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <91b10591-1554-4860-8843-01c6cfd7de13@app.fastmail.com>
+In-Reply-To: <4d471a38-f86f-429d-a1a3-b882439ef7ba@app.fastmail.com>
+References: <a662962e-e650-4d99-bed2-aa45f0b2cf19@app.fastmail.com>
+ <CAHk-=wibB7SvXnUftBgAt+4-3vEKRpvEgBeDEH=i=j2GvDitoA@mail.gmail.com>
+ <d7d6854b-e10d-473f-90c8-5e67cc5d540a@app.fastmail.com>
+ <CAHk-=wir5og_Pd6MBSDFS+dL-bxoBix03QyGheySeeWPX82SDw@mail.gmail.com>
+ <CAHk-=wjqr_ahprUjddSBdQfSXUtg3Y2dCxHre=-Wa4VGdi7wuw@mail.gmail.com>
+ <2b6336d1-34e0-48dd-b901-7b5208045597@app.fastmail.com>
+ <ZpdnhhaQum_epcGp@hovoldconsulting.com>
+ <be80d8f6-2a1b-4f63-a43e-652fa5328d11@app.fastmail.com>
+ <Zpd-Bx3VwrYWVeTs@hovoldconsulting.com>
+ <4d471a38-f86f-429d-a1a3-b882439ef7ba@app.fastmail.com>
+Date: Wed, 17 Jul 2024 12:54:46 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Johan Hovold" <johan@kernel.org>
+Cc: "Linus Torvalds" <torvalds@linux-foundation.org>,
+ "Masahiro Yamada" <masahiroy@kernel.org>, linux-kernel@vger.kernel.org,
+ Linux-Arch <linux-arch@vger.kernel.org>,
+ linux-arm-kernel@lists.infradead.org,
+ "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+ linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
+ "linux-openrisc@vger.kernel.org" <linux-openrisc@vger.kernel.org>,
+ linux-snps-arc@lists.infradead.org
+Subject: Re: [GIT PULL] asm-generic updates for 6.11
+Content-Type: text/plain
 
-On Wed, Jul 17, 2024 at 2:30=E2=80=AFPM Alexandre Ghiti <alexghiti@rivosinc=
-.com> wrote:
+On Wed, Jul 17, 2024, at 11:36, Arnd Bergmann wrote:
+> On Wed, Jul 17, 2024, at 10:17, Johan Hovold wrote:
+>> On Wed, Jul 17, 2024 at 10:01:10AM +0200, Arnd Bergmann wrote:
+>>
+>> Yeah, that's not something I noticed at least (and I assume I would
+>> have). And I only did aarch64 builds on a 6.9 x86_64 host (make 4.4.1).
 >
-> Add description for the Ziccrse ISA extension which was introduced in
-> the riscv profiles specification v0.9.2.
+> Ok, I can reproduce the problem now: I installed a Fedora
+> VM guest and chroot mount and I see the same issue in there.
 >
-> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-> ---
->  Documentation/devicetree/bindings/riscv/extensions.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/riscv/extensions.yaml b/Do=
-cumentation/devicetree/bindings/riscv/extensions.yaml
-> index e6436260bdeb..b08bf1a8d8f8 100644
-> --- a/Documentation/devicetree/bindings/riscv/extensions.yaml
-> +++ b/Documentation/devicetree/bindings/riscv/extensions.yaml
-> @@ -245,6 +245,12 @@ properties:
->              in commit 64074bc ("Update version numbers for Zfh/Zfinx") o=
-f
->              riscv-isa-manual.
->
-> +        - const: ziccrse
-> +          description:
-> +            The standard Ziccrse extension which provides forward progre=
-ss
-> +            guarantee on LR/SC sequences, as introduced in the riscv pro=
-files
-> +            specification v0.9.2.
-> +
->          - const: zk
->            description:
->              The standard Zk Standard Scalar cryptography extension as ra=
-tified
-> --
-> 2.39.2
->
-Reviewed-by: Guo Ren <guoren@kernel.org>
+> My normal Debian host has make 4.3, so I'll see if I can figure
+> if a specific change in make does it.
 
---=20
-Best Regards
- Guo Ren
+I see that there is a version check in scripts/Makefile.include
+from commit 875ef1a57f32 ("kbuild: use .NOTINTERMEDIATE for
+future GNU Make versions") that detects Fedora's make 4.4.1
+as newer than 4.4, so for the first time enables this
+logic that I did not see on Debian.
+
+In my scripts/Makefile.asm-headers, I had copied the 'FORCE'
+from the existing rules in arch/x86/entry/syscalls/Makefile
+etc without fully understanding what that does.
+It looks like this does not make a difference for make-4.3
+but is actually wrong for make-4.4 on the generic rule.
+
+This makes it work for me with both versions of make:
+
+--- a/scripts/Makefile.asm-headers
++++ b/scripts/Makefile.asm-headers
+@@ -77,14 +77,14 @@ all: $(generic-y) $(syscall-y)
+ $(obj)/%.h: $(srctree)/$(generic)/%.h
+        $(call cmd,wrap)
+ 
+-$(obj)/unistd_%.h: $(syscalltbl) $(syshdr) FORCE
++$(obj)/unistd_%.h: $(syscalltbl) $(syshdr)
+        $(call if_changed,syshdr)
+ 
+ $(obj)/unistd_compat_%.h: syscall_compat:=1
+-$(obj)/unistd_compat_%.h: $(syscalltbl) $(syshdr) FORCE
++$(obj)/unistd_compat_%.h: $(syscalltbl) $(syshdr)
+        $(call if_changed,syshdr)
+ 
+-$(obj)/syscall_table_%.h: $(syscalltbl) $(systbl) FORCE
++$(obj)/syscall_table_%.h: $(syscalltbl) $(systbl)
+        $(call if_changed,systbl)
+ 
+ # Create output directory. Skip it if at least one old header exists
+
+Masahiro, does that make sense to you? I assume you can
+explain this properly, but I'll already send a patch with
+this version.
+
+       Arnd
 
