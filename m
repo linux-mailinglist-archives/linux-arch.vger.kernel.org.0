@@ -1,48 +1,48 @@
-Return-Path: <linux-arch+bounces-5449-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5450-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 837CE93374B
-	for <lists+linux-arch@lfdr.de>; Wed, 17 Jul 2024 08:42:28 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FF9B933773
+	for <lists+linux-arch@lfdr.de>; Wed, 17 Jul 2024 08:56:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A64BE1C21BE7
-	for <lists+linux-arch@lfdr.de>; Wed, 17 Jul 2024 06:42:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E510FB22608
+	for <lists+linux-arch@lfdr.de>; Wed, 17 Jul 2024 06:56:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60B8015E81;
-	Wed, 17 Jul 2024 06:42:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECFB317C64;
+	Wed, 17 Jul 2024 06:55:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D0hHQEEj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p5EzZrYW"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34AE414F6C;
-	Wed, 17 Jul 2024 06:42:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCA77171A1;
+	Wed, 17 Jul 2024 06:55:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721198542; cv=none; b=Vurol9e6+77yxdAa0ThBW/w3smkeiuE/doC0DVmXhcaf3R0J2KlcuA+C1IrCgzRf/HyTyGXiFBZtBFELW6N8StGR9f8mQegH0LkL0wRFfeiXKNzTg6ksUVC4e5H3DBXKJ65OqJYq69hT3qOsFsXqFLgePiXxJgjTvFE4F/K8RD8=
+	t=1721199356; cv=none; b=Z1UxCj2mSZxn/uMmhLsUtsaMDUG9DsGMIe+zUHP2ivvnu1SVBAYeNVLpmyKiLbE019PbRbzzvS+MxSejEqUxBFEPF6RP+oCPCo+jkaz1WBmxyJxq+rAqlIPQxMbAOcUEFyDbOO4vWGFm014yUTEx+IQXUHPLUGvjbKUE5LVOses=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721198542; c=relaxed/simple;
-	bh=spQRPZaYq5tzQGw7T8xlS+i7lp0wAGAT4aBxUl8eZco=;
+	s=arc-20240116; t=1721199356; c=relaxed/simple;
+	bh=WUKjxeCHiwFtmo+gm+BNy9YZfIYrgx0j4AH0tWl7VOc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=oB+cxNKo240403p/cZUv6dQy/P13yE37ERNxdymBekWARwTGaV2cFksZLzWvn24E2ujjkJOKWptCeL2anjLHd9YXUgtJegn1OHKV+TU32XGdCrJKQxQe72+T77i9jzFaA9tMv4GnUrK8NvTweVs3xCvWmilH3AAX7OGflKvAJ2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D0hHQEEj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17D2AC32782;
-	Wed, 17 Jul 2024 06:42:14 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=IYxUoOkx7Rh9yKgKjaHP8IwTURoHw01dPaTYXsOqoTqql/vZ+lA0p9qS4abSdX8jt+94PPvqqrYmP5G9nK31ilhq643KJxhx/X3O5ES8Bdfy8gZd7avDQLviaxUlftLV0ro39bYdPYM/+VjJBesDZDsXzBnZIV3ot2Yzl0fwszk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p5EzZrYW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61994C4AF0C;
+	Wed, 17 Jul 2024 06:55:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721198541;
-	bh=spQRPZaYq5tzQGw7T8xlS+i7lp0wAGAT4aBxUl8eZco=;
+	s=k20201202; t=1721199356;
+	bh=WUKjxeCHiwFtmo+gm+BNy9YZfIYrgx0j4AH0tWl7VOc=;
 	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=D0hHQEEjWyhI/GgZFL35GxpL/9QIa/DMN1CV7+7LwSiCdcM0HYp7NFQsuBjzkxFu7
-	 uTzAXqxcYHlcI4F7z8viOvmXocI5nqeKBYtOkeMHuLGwrJsEz/tBzESq0nuxB1r72a
-	 ovN6hnxaWRAec682e6xGTlWsceSdS7P3nbDuiJQn64fHmZRabijnuy1QZbQpC9Cs5i
-	 7E5H2sPGjyjRNzUvdBBOjqPoaxQtxCyMixY8rYBDX7+tJkN1DVJrwAc3EmMj7oEOf0
-	 2MvxB2JFWR/zv7jonR/WI6x9BOvm0QF18r/NoKvjbnqRNUL0UstN9eUkccBBpTLO9p
-	 /dtey7YdQPTfA==
-Message-ID: <032ca0b4-94e2-4ada-8ea1-9915cba01e86@kernel.org>
-Date: Wed, 17 Jul 2024 08:42:11 +0200
+	b=p5EzZrYWhoooorSQcFP16ktfLMDg5rNQK9Sh8ivta4yqXV2Yxljgrro1Up2zcRd1O
+	 zBI2nMFnfW748MnEo+H33KmGRAK2hq9rEg5VtlbyiNQs+u4GRDUND3XLBRiXg0KvI/
+	 0Ew5dZv0zEeHnn0q32/u7ug3zIE89KuZ8TSN503FqTMTA5pAJTXz78DeWu/GvgUOFP
+	 i8Z0BD3Qe8oc/dA1FiV2IJRODuqXmuUR+mktkX3xri9B7draEhWX6WDwpWttyjFkzr
+	 QIdX4plD/IjMr8thTcuUb5uaOdCYvq6XjHUOWic1cLYBUcC3kxmvEvSJ7GHS7KXwo4
+	 vU1xfONTGT9uQ==
+Message-ID: <656bc50f-3c8b-48de-a1ba-ff27749ebb78@kernel.org>
+Date: Wed, 17 Jul 2024 08:55:46 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 02/11] dt-bindings: riscv: Add Zabha ISA extension
+Subject: Re: [PATCH v3 10/11] dt-bindings: riscv: Add Ziccrse ISA extension
  description
 To: Alexandre Ghiti <alexghiti@rivosinc.com>, Jonathan Corbet
  <corbet@lwn.net>, Paul Walmsley <paul.walmsley@sifive.com>,
@@ -66,9 +66,9 @@ To: Alexandre Ghiti <alexghiti@rivosinc.com>, Jonathan Corbet
  linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
  linux-arch@vger.kernel.org
 References: <20240717061957.140712-1-alexghiti@rivosinc.com>
- <20240717061957.140712-3-alexghiti@rivosinc.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <20240717061957.140712-11-alexghiti@rivosinc.com>
 Content-Language: en-US
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
  cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
@@ -112,13 +112,13 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240717061957.140712-3-alexghiti@rivosinc.com>
+In-Reply-To: <20240717061957.140712-11-alexghiti@rivosinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 17/07/2024 08:19, Alexandre Ghiti wrote:
-> Add description for the Zabha ISA extension which was ratified in April
-> 2024.
+> Add description for the Ziccrse ISA extension which was introduced in
+> the riscv profiles specification v0.9.2.
 > 
 > Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
 
