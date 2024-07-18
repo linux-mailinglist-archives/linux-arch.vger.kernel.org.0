@@ -1,56 +1,38 @@
-Return-Path: <linux-arch+bounces-5495-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5496-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E48BF934B84
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Jul 2024 12:12:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B228D934D71
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Jul 2024 14:50:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D2A21C21D06
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Jul 2024 10:12:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BD22F1C20972
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Jul 2024 12:50:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A70697A715;
-	Thu, 18 Jul 2024 10:12:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=online.de header.i=frank.scheiner@online.de header.b="Gt2sJXq+"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D4AB13C8F0;
+	Thu, 18 Jul 2024 12:50:44 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0C448C06;
-	Thu, 18 Jul 2024 10:12:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.126.135
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C83613BC30;
+	Thu, 18 Jul 2024 12:50:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721297560; cv=none; b=Z99vQC0w1s5iwCvCECWTTEGivL6i+IwNsjRrLhAnpOpI/nV44nCEqzAwa2P8sjZqNKCq9y/WT3CyJTjxxdB1sISf7cDJZI3pwxADux/BTV0Tt7sHPOPY+SiHZAhP4xdYVj+qbCRQXN9wGUGptdPIlepESuxiIAY6Iu6cddCFZqQ=
+	t=1721307044; cv=none; b=SV3vN2C3qSMJgatg8b+2Av+KO5m6caHE8hmtjhlIC2zshK5f0L5Xp99v3qBuY3IpYjtKmnUt+AqE7VG7aNQXlC9pz1OBQKIQiPzb5n8zqL8NhEujdVIbfwDahmXtsqUxzCa1R3tJWYQr7SM3zy5gX4VT40hewJ/tU3mT2/iCq94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721297560; c=relaxed/simple;
-	bh=KY9GmeigUT2A3/Vsw1Iw7TBh+WH4pXgIITVAi38kpRc=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=cHH+lvto//sxM9hPRgSF+3JbgfB9BrQi3bP8uA6RSkS9+3hROSBKfWXnDOATKf7Q7k5Wkkh81oQHqwwARGNRGirS0zPZ/MUwNEPjYuaeEWn/FaUAhSS9R+H9DTO47LpL2wxkPxrOqh6zy4HKvFjPnI4xZyvhewiUDgX6wZx+GNw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=online.de; spf=pass smtp.mailfrom=online.de; dkim=pass (2048-bit key) header.d=online.de header.i=frank.scheiner@online.de header.b=Gt2sJXq+; arc=none smtp.client-ip=212.227.126.135
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=online.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=online.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=online.de;
-	s=s42582890; t=1721297553; x=1721902353;
-	i=frank.scheiner@online.de;
-	bh=KY9GmeigUT2A3/Vsw1Iw7TBh+WH4pXgIITVAi38kpRc=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
-	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=Gt2sJXq+CWgB0cuaWN+i1WdPz4OBu0Bi0JMFuFeYFcFwdTy/ARHjLE7yTcUoJrhW
-	 BsfoWGjRPnIWx3oqp4c1luYxjgntudJtnrHA2oKJ9jFoJOD5rB+xnjl+rwS/p/q1j
-	 f1vzuuRJokJcQZLxs8C/OCLFmgsxAJjRCQ7TW5dCtZBDy2v3iQ60Gk8q8e+Fose6d
-	 t402+cCguZppHe8GbEq2zpKaJR9I2Jzb4OY3ehbAhrp2zqWNUyzzq5gCKxqP8m0+u
-	 8IoUw9ze9qn3rcy1Kmvb5fF2wJ1KmId5YGJAGe3eHkbVfzPDil96q+NCSqSslCG5Z
-	 eEX+4b3/9nzvENcbDw==
-X-UI-Sender-Class: 6003b46c-3fee-4677-9b8b-2b628d989298
-Received: from [192.168.178.30] ([79.200.220.73]) by mrelayeu.kundenserver.de
- (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MHmuE-1saQRE04H8-00HCUb; Thu, 18 Jul 2024 12:06:15 +0200
-Message-ID: <8dcb5d36-fc38-46f3-bb97-0e4e335c313b@online.de>
-Date: Thu, 18 Jul 2024 12:06:12 +0200
+	s=arc-20240116; t=1721307044; c=relaxed/simple;
+	bh=Cgc5lay2ZIeeG0RzRquexFxU6ycCAOkFd515EOHZt2o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=U23+MfgiGjF1m+U4xOGvUCJyq4jei0rURMugDk2V6c/KvIGDAmakRvGxQT1Z6yeqT87mGDFLxuG11YuLVyoya+7E56aw/nk3XNH54bp9OWrzW4B8IplK/CxSIiD0A5N/iL21z4tvOZxy8VWW/4XPospfuP7T8mVBRWr/z96noPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr; spf=pass smtp.mailfrom=ghiti.fr; arc=none smtp.client-ip=217.70.183.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ghiti.fr
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4A1E21C000C;
+	Thu, 18 Jul 2024 12:50:29 +0000 (UTC)
+Message-ID: <fb03939b-502b-410a-85f5-2785b2bd0676@ghiti.fr>
+Date: Thu, 18 Jul 2024 14:50:28 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -58,89 +40,209 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: torvalds@linux-foundation.org
-Cc: =?UTF-8?B?VG9tw6HFoSBHbG96YXI=?= <tglozar@gmail.com>,
- linux-kernel@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>,
- linux-ia64@vger.kernel.org, t2@t2sde.org,
- debian-ia64 <debian-ia64@lists.debian.org>
-References: <CAHk-=wjV_O2g_K19McjGKrxFxMFDqex+fyGcKc3uac1ft_O2gg@mail.gmail.com>
-Subject: Re: Linux 6.10
+Subject: Re: [PATCH v3 03/11] riscv: Implement cmpxchg8/16() using Zabha
 Content-Language: en-US
-From: Frank Scheiner <frank.scheiner@online.de>
-In-Reply-To: <CAHk-=wjV_O2g_K19McjGKrxFxMFDqex+fyGcKc3uac1ft_O2gg@mail.gmail.com>
+To: Andrew Jones <ajones@ventanamicro.com>,
+ Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Paul Walmsley
+ <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Andrea Parri <parri.andrea@gmail.com>, Nathan Chancellor
+ <nathan@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+ Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>,
+ Arnd Bergmann <arnd@arndb.de>, Leonardo Bras <leobras@redhat.com>,
+ Guo Ren <guoren@kernel.org>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+ linux-arch@vger.kernel.org
+References: <20240717061957.140712-1-alexghiti@rivosinc.com>
+ <20240717061957.140712-4-alexghiti@rivosinc.com>
+ <20240717-e7104dac172d9f2cbc25d9c6@orel>
+From: Alexandre Ghiti <alex@ghiti.fr>
+In-Reply-To: <20240717-e7104dac172d9f2cbc25d9c6@orel>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:Q/HDgBgt8vDzzKiEs0Tdykgw+sZKbcEH1kFFE/a65ijK2jI80cH
- zTh5iWQbCSmiM8XcL/O63E9j+yedh9EJ/aMm6PJDu1C3vka8pgo+bY/e6q3+vvgaJIjLJxr
- BLzRcAxMHzIhFfomRkxeNEsUuHcUS9BEmimMeLj7kAHJtj08zcDoUlOujWbMgMbHneoFP3q
- qCFngMfJZNhlKzXrImEtA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:fq/vFAUCl5E=;nEruqZeqr+KGt9a5kffg276cqpV
- NNYciQi2b9nwc5NIi50N5qBnRaJG+Snhm+1x9qK8oA5u55+AjmOpUMq1at/cBLWPm8GdrRgEr
- Z/DPFRSTO4AaGPEiK+lktc9fN4U/j1Tm3AFwDYouXVjLjqpuLJu/OZhHGtqbJQ2EE4+uQ73hl
- BUE0h9AC9/30XfTKdfgjZsOGNUb5NWG2Li6xUrfI9TiKNyJ3EB2/yZBsjp0CvP46l9+3pIYj4
- RWyLj6v2EQKXxs5tu+3W+d5rkkrtdzF3TGilKirve5eZY472cv8mAzSXivKytMzL3wIkmsvZA
- BWqadfUvR52mBY1rudUHyCCobauMBbDrYU7/avb9Hb76NHYJpBgTOrk1OY8lfCf9nmHsOMJIz
- xOa5oPdHpqmcDeiLWKO53OtMSEkCM0zKE/WSk5odOpo3Jc/ZMtFWSVJOqiGeqhtej2lTMMmI1
- 4dtskTrR5zaK91eaDBktRe3bqLusWMuGJJ4cEzIPzoi0Qf3S0l66Bla80AoY5GsiBorsqQL1z
- GBFb1QSXwvnEQfnnfjX2BbOxmQo1H82dc/E6KqwnsjbySJ+JT4TQGXn2Ro4jMlQbKZarvNovh
- nhutqg2hN92n31keEsvcygl/qFfZRf7abuZ746SU1lE3COqcxKotj+bU34dVhYV4JTuDS/NSg
- M3VyPicauCdhcRsODzZ6lhtol2sLo42wsxksFCd4ymSm0A2Fj4eZ//pG9VI8rZZcD4fE7ARX+
- LpEfaDOhOWyXO/Zui7KNOCv8XdDuugOVw==
+Content-Transfer-Encoding: 7bit
+X-GND-Sasl: alex@ghiti.fr
 
-Dear all,
+Hi Drew,
 
-a little later than usual, here comes the update on Linux/ia64 for v6.10:
+On 17/07/2024 17:26, Andrew Jones wrote:
+> On Wed, Jul 17, 2024 at 08:19:49AM GMT, Alexandre Ghiti wrote:
+>> This adds runtime support for Zabha in cmpxchg8/16() operations.
+>>
+>> Note that in the absence of Zacas support in the toolchain, CAS
+>> instructions from Zabha won't be used.
+>>
+>> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+>> ---
+>>   arch/riscv/Kconfig               | 17 ++++++++++++++++
+>>   arch/riscv/Makefile              |  3 +++
+>>   arch/riscv/include/asm/cmpxchg.h | 33 ++++++++++++++++++++++++++++++--
+>>   arch/riscv/include/asm/hwcap.h   |  1 +
+>>   arch/riscv/kernel/cpufeature.c   |  1 +
+>>   5 files changed, 53 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+>> index 1caaedec88c7..d3b0f92f92da 100644
+>> --- a/arch/riscv/Kconfig
+>> +++ b/arch/riscv/Kconfig
+>> @@ -596,6 +596,23 @@ config RISCV_ISA_V_PREEMPTIVE
+>>   	  preemption. Enabling this config will result in higher memory
+>>   	  consumption due to the allocation of per-task's kernel Vector context.
+>>   
+>> +config TOOLCHAIN_HAS_ZABHA
+>> +	bool
+>> +	default y
+>> +	depends on !64BIT || $(cc-option,-mabi=lp64 -march=rv64ima_zabha)
+>> +	depends on !32BIT || $(cc-option,-mabi=ilp32 -march=rv32ima_zabha)
+>> +	depends on AS_HAS_OPTION_ARCH
+>> +
+>> +config RISCV_ISA_ZABHA
+>> +	bool "Zabha extension support for atomic byte/halfword operations"
+>> +	depends on TOOLCHAIN_HAS_ZABHA
+>> +	default y
+>> +	help
+>> +	  Enable the use of the Zabha ISA-extension to implement kernel
+>> +	  byte/halfword atomic memory operations when it is detected at boot.
+>> +
+>> +	  If you don't know what to do here, say Y.
+>> +
+>>   config TOOLCHAIN_HAS_ZACAS
+>>   	bool
+>>   	default y
+>> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+>> index 9fd13d7a9cc6..78dcaaeebf4e 100644
+>> --- a/arch/riscv/Makefile
+>> +++ b/arch/riscv/Makefile
+>> @@ -88,6 +88,9 @@ riscv-march-$(CONFIG_TOOLCHAIN_HAS_ZIHINTPAUSE) := $(riscv-march-y)_zihintpause
+>>   # Check if the toolchain supports Zacas
+>>   riscv-march-$(CONFIG_TOOLCHAIN_HAS_ZACAS) := $(riscv-march-y)_zacas
+>>   
+>> +# Check if the toolchain supports Zabha
+>> +riscv-march-$(CONFIG_TOOLCHAIN_HAS_ZABHA) := $(riscv-march-y)_zabha
+>> +
+>>   # Remove F,D,V from isa string for all. Keep extensions between "fd" and "v" by
+>>   # matching non-v and non-multi-letter extensions out with the filter ([^v_]*)
+>>   KBUILD_CFLAGS += -march=$(shell echo $(riscv-march-y) | sed -E 's/(rv32ima|rv64ima)fd([^v_]*)v?/\1\2/')
+>> diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
+>> index 5d38153e2f13..c86722a101d0 100644
+>> --- a/arch/riscv/include/asm/cmpxchg.h
+>> +++ b/arch/riscv/include/asm/cmpxchg.h
+>> @@ -105,8 +105,30 @@
+>>    * indicated by comparing RETURN with OLD.
+>>    */
+>>   
+>> -#define __arch_cmpxchg_masked(sc_sfx, prepend, append, r, p, o, n)	\
+>> +#define __arch_cmpxchg_masked(sc_sfx, cas_sfx, prepend, append, r, p, o, n)	\
+>>   ({									\
+>> +	__label__ no_zabha_zacas, end;					\
+>> +									\
+>> +	if (IS_ENABLED(CONFIG_RISCV_ISA_ZABHA) &&			\
+>> +	    IS_ENABLED(CONFIG_RISCV_ISA_ZACAS)) {			\
+>> +		asm goto(ALTERNATIVE("j %[no_zabha_zacas]", "nop", 0,	\
+>> +				     RISCV_ISA_EXT_ZABHA, 1)		\
+>> +			 : : : : no_zabha_zacas);			\
+>> +		asm goto(ALTERNATIVE("j %[no_zabha_zacas]", "nop", 0,	\
+>> +				     RISCV_ISA_EXT_ZACAS, 1)		\
+>> +			 : : : : no_zabha_zacas);			\
+> I came late to the call, but I guess trying to get rid of these asm gotos
+> was the topic of the discussion. The proposal was to try and use static
+> branches, but keep in mind that we've had trouble with static branches
+> inside macros in the past when those macros are used in many places[1]
+>
+> [1] commit 0b1d60d6dd9e ("riscv: Fix build with CONFIG_CC_OPTIMIZE_FOR_SIZE=y")
 
-Well, nothing special to report in this cycle compared to the last cycle
-(see last update on [1] for details).
 
-[1]:
-https://lore.kernel.org/lkml/d308ad95-bee4-4401-a6f5-27bcf5bcc52d@web.de/
+Thanks for the pointer, I was not aware of this. I came up with a 
+solution with preprocessor guards, not the prettiest solution but at 
+least it does not create more problems :)
 
-No new regressions were detected on any of the tested ia64 machines and
-platforms (HP Sim on Ski) we have available for testing. Again no system
-support was lost during this cycle. Everything works as expected.
 
-Tomas maintains the ia64 patchset for Linux on [2] and is currently
-working on some EPIC updates. Please note the new URL. You can always
-find the per Linux release (candidate) source code used for regular
-testing on [3]. Please use the `[...]-w-ia64` branches.
+>
+>> +									\
+>> +		__asm__ __volatile__ (					\
+>> +			prepend						\
+>> +			"	amocas" cas_sfx " %0, %z2, %1\n"	\
+>> +			append						\
+>> +			: "+&r" (r), "+A" (*(p))			\
+>> +			: "rJ" (n)					\
+>> +			: "memory");					\
+>> +		goto end;						\
+>> +	}								\
+>> +									\
+>> +no_zabha_zacas:;							\
+> unnecessary ;
 
-[2]: https://github.com/linux-ia64/linux-ia64/
 
-[3]: https://github.com/johnny-mnemonic/linux-ia64/
+Actually it is, it fixes a warning encountered on llvm: 
+https://lore.kernel.org/linux-riscv/20240528193110.GA2196855@thelio-3990X/
 
-****
+Thanks,
 
-In an earlier report I already mentioned our autobuilder that
-cross-builds Linux stable releases and release candidates on x86 for
-ia64 and also tests HP-Sim kernels within Ski (see [4] for an example
-run). This continues to be helpful in detecting issues in stable kernels
-early on and even catched two issues recently. But those two also were
-the only ones found so far in the roughly 6 months this has been
-established.
+Alex
 
-[4]: https://github.com/linux-ia64/linux-stable-rc/actions/runs/9984893242
 
-To also better cover the new developments outside of the kernel, this
-now got a commpanion autobuilder that cross-builds ia64 toolchain parts
-for us with T2 based on the regular snapshots of binutils, gcc and glibc
-(see [5] for an example run).
-
-[5]:
-https://github.com/johnny-mnemonic/toolchain-autobuilds/actions/runs/99849=
-83546
-
-****
-
-No new additions to the selection of Linux distributions for ia64 this
-time. In the meantime Debian on ia64 became history. Farewell.
-
-****
-
-Thank you all for your hard work on Linux!
-
-Cheers,
-Frank et al
+>
+>>   	u32 *__ptr32b = (u32 *)((ulong)(p) & ~0x3);			\
+>>   	ulong __s = ((ulong)(p) & (0x4 - sizeof(*p))) * BITS_PER_BYTE;	\
+>>   	ulong __mask = GENMASK(((sizeof(*p)) * BITS_PER_BYTE) - 1, 0)	\
+>> @@ -133,6 +155,8 @@
+>>   		: "memory");						\
+>>   									\
+>>   	r = (__typeof__(*(p)))((__retx & __mask) >> __s);		\
+>> +									\
+>> +end:;									\
+>>   })
+>>   
+>>   #define __arch_cmpxchg(lr_sfx, sc_cas_sfx, prepend, append, r, p, co, o, n)	\
+>> @@ -180,8 +204,13 @@ end:;									\
+>>   									\
+>>   	switch (sizeof(*__ptr)) {					\
+>>   	case 1:								\
+>> +		__arch_cmpxchg_masked(sc_sfx, ".b" sc_sfx,		\
+>> +					prepend, append,		\
+>> +					__ret, __ptr, __old, __new);    \
+>> +		break;							\
+>>   	case 2:								\
+>> -		__arch_cmpxchg_masked(sc_sfx, prepend, append,		\
+>> +		__arch_cmpxchg_masked(sc_sfx, ".h" sc_sfx,		\
+>> +					prepend, append,		\
+>>   					__ret, __ptr, __old, __new);	\
+>>   		break;							\
+>>   	case 4:								\
+>> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
+>> index e17d0078a651..f71ddd2ca163 100644
+>> --- a/arch/riscv/include/asm/hwcap.h
+>> +++ b/arch/riscv/include/asm/hwcap.h
+>> @@ -81,6 +81,7 @@
+>>   #define RISCV_ISA_EXT_ZTSO		72
+>>   #define RISCV_ISA_EXT_ZACAS		73
+>>   #define RISCV_ISA_EXT_XANDESPMU		74
+>> +#define RISCV_ISA_EXT_ZABHA		75
+>>   
+>>   #define RISCV_ISA_EXT_XLINUXENVCFG	127
+>>   
+>> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+>> index 5ef48cb20ee1..c125d82c894b 100644
+>> --- a/arch/riscv/kernel/cpufeature.c
+>> +++ b/arch/riscv/kernel/cpufeature.c
+>> @@ -257,6 +257,7 @@ const struct riscv_isa_ext_data riscv_isa_ext[] = {
+>>   	__RISCV_ISA_EXT_DATA(zihintpause, RISCV_ISA_EXT_ZIHINTPAUSE),
+>>   	__RISCV_ISA_EXT_DATA(zihpm, RISCV_ISA_EXT_ZIHPM),
+>>   	__RISCV_ISA_EXT_DATA(zacas, RISCV_ISA_EXT_ZACAS),
+>> +	__RISCV_ISA_EXT_DATA(zabha, RISCV_ISA_EXT_ZABHA),
+>>   	__RISCV_ISA_EXT_DATA(zfa, RISCV_ISA_EXT_ZFA),
+>>   	__RISCV_ISA_EXT_DATA(zfh, RISCV_ISA_EXT_ZFH),
+>>   	__RISCV_ISA_EXT_DATA(zfhmin, RISCV_ISA_EXT_ZFHMIN),
+>> -- 
+>> 2.39.2
+>>
+> Thanks,
+> drew
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
