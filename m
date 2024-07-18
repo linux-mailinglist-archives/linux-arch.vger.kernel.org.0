@@ -1,38 +1,38 @@
-Return-Path: <linux-arch+bounces-5496-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5497-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B228D934D71
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Jul 2024 14:50:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53670934DCD
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Jul 2024 15:08:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BD22F1C20972
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Jul 2024 12:50:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0EC1C2821AA
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Jul 2024 13:08:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D4AB13C8F0;
-	Thu, 18 Jul 2024 12:50:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E7C613C3F6;
+	Thu, 18 Jul 2024 13:08:47 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C83613BC30;
-	Thu, 18 Jul 2024 12:50:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BB75839E3;
+	Thu, 18 Jul 2024 13:08:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721307044; cv=none; b=SV3vN2C3qSMJgatg8b+2Av+KO5m6caHE8hmtjhlIC2zshK5f0L5Xp99v3qBuY3IpYjtKmnUt+AqE7VG7aNQXlC9pz1OBQKIQiPzb5n8zqL8NhEujdVIbfwDahmXtsqUxzCa1R3tJWYQr7SM3zy5gX4VT40hewJ/tU3mT2/iCq94=
+	t=1721308127; cv=none; b=VoqclKVnetjB7IwJ0QMlIw8iMPouOZrqGQH1KCTEP/3VRmJsc2LJZj1CUevQLGaz+si78TdV2cwjvS1xd8PuU/Jc5y/wMhamTnQg5941R/WUfjxZdxPqg0pELvbKo/g65GXlUL0Z0MSYiyuzat3/Wf6cejOSRzSC01zCrWmH3m0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721307044; c=relaxed/simple;
-	bh=Cgc5lay2ZIeeG0RzRquexFxU6ycCAOkFd515EOHZt2o=;
+	s=arc-20240116; t=1721308127; c=relaxed/simple;
+	bh=fPG4In1liwBLGKmi0Zhpipjq4VcDJmEnF0sgTNwj5CM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=U23+MfgiGjF1m+U4xOGvUCJyq4jei0rURMugDk2V6c/KvIGDAmakRvGxQT1Z6yeqT87mGDFLxuG11YuLVyoya+7E56aw/nk3XNH54bp9OWrzW4B8IplK/CxSIiD0A5N/iL21z4tvOZxy8VWW/4XPospfuP7T8mVBRWr/z96noPU=
+	 In-Reply-To:Content-Type; b=OJk0XdOBkDpLutQPJCZe3RKBmFbUDrRZVznpFUacm/tk7syg1hNy3M+4QjS6NMRpk9bFFT44x9nKjqi7NL2xLGqK9iU36AiJDXAr9cteOumymQJv4BjeEM4uZ5aY85w5tisBt586eK7gR5gE9EinCw4OU+BWijY1/fDpwIXUy2w=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr; spf=pass smtp.mailfrom=ghiti.fr; arc=none smtp.client-ip=217.70.183.197
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ghiti.fr
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4A1E21C000C;
-	Thu, 18 Jul 2024 12:50:29 +0000 (UTC)
-Message-ID: <fb03939b-502b-410a-85f5-2785b2bd0676@ghiti.fr>
-Date: Thu, 18 Jul 2024 14:50:28 +0200
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A304B1C0009;
+	Thu, 18 Jul 2024 13:08:39 +0000 (UTC)
+Message-ID: <2c227c58-d414-4994-9382-11feb80bb818@ghiti.fr>
+Date: Thu, 18 Jul 2024 15:08:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -40,206 +40,181 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 03/11] riscv: Implement cmpxchg8/16() using Zabha
+Subject: Re: [PATCH v3 11/11] riscv: Add qspinlock support
 Content-Language: en-US
-To: Andrew Jones <ajones@ventanamicro.com>,
+To: Andrea Parri <parri.andrea@gmail.com>,
  Alexandre Ghiti <alexghiti@rivosinc.com>
 Cc: Jonathan Corbet <corbet@lwn.net>, Paul Walmsley
  <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
  Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Andrea Parri <parri.andrea@gmail.com>, Nathan Chancellor
- <nathan@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
- Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>,
- Arnd Bergmann <arnd@arndb.de>, Leonardo Bras <leobras@redhat.com>,
- Guo Ren <guoren@kernel.org>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-arch@vger.kernel.org
+ Nathan Chancellor <nathan@kernel.org>, Peter Zijlstra
+ <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>,
+ Boqun Feng <boqun.feng@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+ Leonardo Bras <leobras@redhat.com>, Guo Ren <guoren@kernel.org>,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org
 References: <20240717061957.140712-1-alexghiti@rivosinc.com>
- <20240717061957.140712-4-alexghiti@rivosinc.com>
- <20240717-e7104dac172d9f2cbc25d9c6@orel>
+ <20240717061957.140712-12-alexghiti@rivosinc.com> <ZpfxUvIx+0ClOqCc@andrea>
 From: Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <20240717-e7104dac172d9f2cbc25d9c6@orel>
+In-Reply-To: <ZpfxUvIx+0ClOqCc@andrea>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-GND-Sasl: alex@ghiti.fr
 
-Hi Drew,
+Hi Andrea,
 
-On 17/07/2024 17:26, Andrew Jones wrote:
-> On Wed, Jul 17, 2024 at 08:19:49AM GMT, Alexandre Ghiti wrote:
->> This adds runtime support for Zabha in cmpxchg8/16() operations.
->>
->> Note that in the absence of Zacas support in the toolchain, CAS
->> instructions from Zabha won't be used.
->>
->> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
->> ---
->>   arch/riscv/Kconfig               | 17 ++++++++++++++++
->>   arch/riscv/Makefile              |  3 +++
->>   arch/riscv/include/asm/cmpxchg.h | 33 ++++++++++++++++++++++++++++++--
->>   arch/riscv/include/asm/hwcap.h   |  1 +
->>   arch/riscv/kernel/cpufeature.c   |  1 +
->>   5 files changed, 53 insertions(+), 2 deletions(-)
->>
->> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
->> index 1caaedec88c7..d3b0f92f92da 100644
->> --- a/arch/riscv/Kconfig
->> +++ b/arch/riscv/Kconfig
->> @@ -596,6 +596,23 @@ config RISCV_ISA_V_PREEMPTIVE
->>   	  preemption. Enabling this config will result in higher memory
->>   	  consumption due to the allocation of per-task's kernel Vector context.
->>   
->> +config TOOLCHAIN_HAS_ZABHA
->> +	bool
->> +	default y
->> +	depends on !64BIT || $(cc-option,-mabi=lp64 -march=rv64ima_zabha)
->> +	depends on !32BIT || $(cc-option,-mabi=ilp32 -march=rv32ima_zabha)
->> +	depends on AS_HAS_OPTION_ARCH
->> +
->> +config RISCV_ISA_ZABHA
->> +	bool "Zabha extension support for atomic byte/halfword operations"
->> +	depends on TOOLCHAIN_HAS_ZABHA
->> +	default y
->> +	help
->> +	  Enable the use of the Zabha ISA-extension to implement kernel
->> +	  byte/halfword atomic memory operations when it is detected at boot.
->> +
->> +	  If you don't know what to do here, say Y.
->> +
->>   config TOOLCHAIN_HAS_ZACAS
->>   	bool
->>   	default y
->> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
->> index 9fd13d7a9cc6..78dcaaeebf4e 100644
->> --- a/arch/riscv/Makefile
->> +++ b/arch/riscv/Makefile
->> @@ -88,6 +88,9 @@ riscv-march-$(CONFIG_TOOLCHAIN_HAS_ZIHINTPAUSE) := $(riscv-march-y)_zihintpause
->>   # Check if the toolchain supports Zacas
->>   riscv-march-$(CONFIG_TOOLCHAIN_HAS_ZACAS) := $(riscv-march-y)_zacas
->>   
->> +# Check if the toolchain supports Zabha
->> +riscv-march-$(CONFIG_TOOLCHAIN_HAS_ZABHA) := $(riscv-march-y)_zabha
->> +
->>   # Remove F,D,V from isa string for all. Keep extensions between "fd" and "v" by
->>   # matching non-v and non-multi-letter extensions out with the filter ([^v_]*)
->>   KBUILD_CFLAGS += -march=$(shell echo $(riscv-march-y) | sed -E 's/(rv32ima|rv64ima)fd([^v_]*)v?/\1\2/')
->> diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
->> index 5d38153e2f13..c86722a101d0 100644
->> --- a/arch/riscv/include/asm/cmpxchg.h
->> +++ b/arch/riscv/include/asm/cmpxchg.h
->> @@ -105,8 +105,30 @@
->>    * indicated by comparing RETURN with OLD.
->>    */
->>   
->> -#define __arch_cmpxchg_masked(sc_sfx, prepend, append, r, p, o, n)	\
->> +#define __arch_cmpxchg_masked(sc_sfx, cas_sfx, prepend, append, r, p, o, n)	\
->>   ({									\
->> +	__label__ no_zabha_zacas, end;					\
->> +									\
->> +	if (IS_ENABLED(CONFIG_RISCV_ISA_ZABHA) &&			\
->> +	    IS_ENABLED(CONFIG_RISCV_ISA_ZACAS)) {			\
->> +		asm goto(ALTERNATIVE("j %[no_zabha_zacas]", "nop", 0,	\
->> +				     RISCV_ISA_EXT_ZABHA, 1)		\
->> +			 : : : : no_zabha_zacas);			\
->> +		asm goto(ALTERNATIVE("j %[no_zabha_zacas]", "nop", 0,	\
->> +				     RISCV_ISA_EXT_ZACAS, 1)		\
->> +			 : : : : no_zabha_zacas);			\
-> I came late to the call, but I guess trying to get rid of these asm gotos
-> was the topic of the discussion. The proposal was to try and use static
-> branches, but keep in mind that we've had trouble with static branches
-> inside macros in the past when those macros are used in many places[1]
+On 17/07/2024 18:29, Andrea Parri wrote:
+>> +config RISCV_QUEUED_SPINLOCKS
+> I'm seeing the following warnings with CONFIG_RISCV_QUEUED_SPINLOCKS=y:
 >
-> [1] commit 0b1d60d6dd9e ("riscv: Fix build with CONFIG_CC_OPTIMIZE_FOR_SIZE=y")
+> In file included from ./arch/riscv/include/generated/asm/qspinlock.h:1,
+>                   from kernel/locking/qspinlock.c:24:
+> ./include/asm-generic/qspinlock.h:144:9: warning: "arch_spin_is_locked" redefined
+>    144 | #define arch_spin_is_locked(l)          queued_spin_is_locked(l)
+>        |         ^~~~~~~~~~~~~~~~~~~
+> In file included from ./arch/riscv/include/generated/asm/ticket_spinlock.h:1,
+>                   from ./arch/riscv/include/asm/spinlock.h:33,
+>                   from ./include/linux/spinlock.h:95,
+>                   from ./include/linux/sched.h:2142,
+>                   from ./include/linux/percpu.h:13,
+>                   from kernel/locking/qspinlock.c:19:
+> ./include/asm-generic/ticket_spinlock.h:97:9: note: this is the location of the previous definition
+>     97 | #define arch_spin_is_locked(l)          ticket_spin_is_locked(l)
+>        |         ^~~~~~~~~~~~~~~~~~~
+> ./include/asm-generic/qspinlock.h:145:9: warning: "arch_spin_is_contended" redefined
+>    145 | #define arch_spin_is_contended(l)       queued_spin_is_contended(l)
+>        |         ^~~~~~~~~~~~~~~~~~~~~~
+> ./include/asm-generic/ticket_spinlock.h:98:9: note: this is the location of the previous definition
+>     98 | #define arch_spin_is_contended(l)       ticket_spin_is_contended(l)
+>        |         ^~~~~~~~~~~~~~~~~~~~~~
+> ./include/asm-generic/qspinlock.h:146:9: warning: "arch_spin_value_unlocked" redefined
+>    146 | #define arch_spin_value_unlocked(l)     queued_spin_value_unlocked(l)
+>        |         ^~~~~~~~~~~~~~~~~~~~~~~~
+> ./include/asm-generic/ticket_spinlock.h:99:9: note: this is the location of the previous definition
+>     99 | #define arch_spin_value_unlocked(l)     ticket_spin_value_unlocked(l)
+>        |         ^~~~~~~~~~~~~~~~~~~~~~~~
+> ./include/asm-generic/qspinlock.h:147:9: warning: "arch_spin_lock" redefined
+>    147 | #define arch_spin_lock(l)               queued_spin_lock(l)
+>        |         ^~~~~~~~~~~~~~
+> ./include/asm-generic/ticket_spinlock.h:100:9: note: this is the location of the previous definition
+>    100 | #define arch_spin_lock(l)               ticket_spin_lock(l)
+>        |         ^~~~~~~~~~~~~~
+> ./include/asm-generic/qspinlock.h:148:9: warning: "arch_spin_trylock" redefined
+>    148 | #define arch_spin_trylock(l)            queued_spin_trylock(l)
+>        |         ^~~~~~~~~~~~~~~~~
+> ./include/asm-generic/ticket_spinlock.h:101:9: note: this is the location of the previous definition
+>    101 | #define arch_spin_trylock(l)            ticket_spin_trylock(l)
+>        |         ^~~~~~~~~~~~~~~~~
+> ./include/asm-generic/qspinlock.h:149:9: warning: "arch_spin_unlock" redefined
+>    149 | #define arch_spin_unlock(l)             queued_spin_unlock(l)
+>        |         ^~~~~~~~~~~~~~~~
+> ./include/asm-generic/ticket_spinlock.h:102:9: note: this is the location of the previous definition
+>    102 | #define arch_spin_unlock(l)             ticket_spin_unlock(l)
+>
+>
+> The following diff resolves them for me (please double check):
+>
+> diff --git a/arch/riscv/include/asm/spinlock.h b/arch/riscv/include/asm/spinlock.h
+> index 4856d50006f28..2d59f56a9e2d1 100644
+> --- a/arch/riscv/include/asm/spinlock.h
+> +++ b/arch/riscv/include/asm/spinlock.h
+> @@ -30,7 +30,11 @@ SPINLOCK_BASE_DECLARE(value_unlocked, int, arch_spinlock_t)
+>   
+>   #else
+>   
+> +#if defined(CONFIG_RISCV_TICKET_SPINLOCKS)
+>   #include <asm/ticket_spinlock.h>
+> +#elif defined(CONFIG_RISCV_QUEUED_SPINLOCKS)
+> +#include <asm/qspinlock.h>
+> +#endif
+>   
+>   #endif
 
 
-Thanks for the pointer, I was not aware of this. I came up with a 
-solution with preprocessor guards, not the prettiest solution but at 
-least it does not create more problems :)
+Thanks for testing this config (when I did not...)!
+
+I came up with something slightly different, but same fix in the end, 
+thanks!
 
 
 >
->> +									\
->> +		__asm__ __volatile__ (					\
->> +			prepend						\
->> +			"	amocas" cas_sfx " %0, %z2, %1\n"	\
->> +			append						\
->> +			: "+&r" (r), "+A" (*(p))			\
->> +			: "rJ" (n)					\
->> +			: "memory");					\
->> +		goto end;						\
->> +	}								\
->> +									\
->> +no_zabha_zacas:;							\
-> unnecessary ;
+>> +DEFINE_STATIC_KEY_TRUE(qspinlock_key);
+>> +EXPORT_SYMBOL(qspinlock_key);
+>> +
+>> +static void __init riscv_spinlock_init(void)
+>> +{
+>> +	char *using_ext;
+>> +
+>> +	if (IS_ENABLED(CONFIG_RISCV_ISA_ZACAS) &&
+>> +	    IS_ENABLED(CONFIG_RISCV_ISA_ZABHA)) {
+>> +		using_ext = "using Zabha";
+>> +
+>> +		asm goto(ALTERNATIVE("j %[no_zacas]", "nop", 0, RISCV_ISA_EXT_ZACAS, 1)
+>> +			 : : : : no_zacas);
+>> +		asm goto(ALTERNATIVE("nop", "j %[qspinlock]", 0, RISCV_ISA_EXT_ZABHA, 1)
+>> +			 : : : : qspinlock);
+>> +	}
+>> +
+>> +no_zacas:
+>> +	using_ext = "using Ziccrse";
+>> +	asm goto(ALTERNATIVE("nop", "j %[qspinlock]", 0,
+>> +			     RISCV_ISA_EXT_ZICCRSE, 1)
+>> +		 : : : : qspinlock);
+>> +
+>> +	static_branch_disable(&qspinlock_key);
+>> +	pr_info("Ticket spinlock: enabled\n");
+>> +
+>> +	return;
+>> +
+>> +qspinlock:
+>> +	pr_info("Queued spinlock %s: enabled\n", using_ext);
+>> +}
+>> +
+> Your commit message suggests that riscv_spinlock_init() doesn't need to
+> do anything if CONFIG_RISCV_COMBO_SPINLOCKS=n:
+>
+> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+> index d7c31c9b8ead2..b2be1b0b700d2 100644
+> --- a/arch/riscv/kernel/setup.c
+> +++ b/arch/riscv/kernel/setup.c
+> @@ -244,6 +244,7 @@ static void __init parse_dtb(void)
+>   #endif
+>   }
+>   
+> +#if defined(CONFIG_RISCV_COMBO_SPINLOCKS)
+>   DEFINE_STATIC_KEY_TRUE(qspinlock_key);
+>   EXPORT_SYMBOL(qspinlock_key);
+>   
+> @@ -275,6 +276,11 @@ static void __init riscv_spinlock_init(void)
+>   qspinlock:
+>   	pr_info("Queued spinlock %s: enabled\n", using_ext);
+>   }
+> +#else
+> +static void __init riscv_spinlock_init(void)
+> +{
+> +}
+> +#endif
+>   
+>   extern void __init init_rt_signal_env(void);
+>
+>
+> Makes sense?  What am I missing?
 
 
-Actually it is, it fixes a warning encountered on llvm: 
-https://lore.kernel.org/linux-riscv/20240528193110.GA2196855@thelio-3990X/
+Totally makes sense, I completely overlooked this when I added the 
+ticket/queued configs, thanks for taking the time to look into it.
 
-Thanks,
+That will be fixed in the next version.
+
+Thanks again,
 
 Alex
 
 
 >
->>   	u32 *__ptr32b = (u32 *)((ulong)(p) & ~0x3);			\
->>   	ulong __s = ((ulong)(p) & (0x4 - sizeof(*p))) * BITS_PER_BYTE;	\
->>   	ulong __mask = GENMASK(((sizeof(*p)) * BITS_PER_BYTE) - 1, 0)	\
->> @@ -133,6 +155,8 @@
->>   		: "memory");						\
->>   									\
->>   	r = (__typeof__(*(p)))((__retx & __mask) >> __s);		\
->> +									\
->> +end:;									\
->>   })
->>   
->>   #define __arch_cmpxchg(lr_sfx, sc_cas_sfx, prepend, append, r, p, co, o, n)	\
->> @@ -180,8 +204,13 @@ end:;									\
->>   									\
->>   	switch (sizeof(*__ptr)) {					\
->>   	case 1:								\
->> +		__arch_cmpxchg_masked(sc_sfx, ".b" sc_sfx,		\
->> +					prepend, append,		\
->> +					__ret, __ptr, __old, __new);    \
->> +		break;							\
->>   	case 2:								\
->> -		__arch_cmpxchg_masked(sc_sfx, prepend, append,		\
->> +		__arch_cmpxchg_masked(sc_sfx, ".h" sc_sfx,		\
->> +					prepend, append,		\
->>   					__ret, __ptr, __old, __new);	\
->>   		break;							\
->>   	case 4:								\
->> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
->> index e17d0078a651..f71ddd2ca163 100644
->> --- a/arch/riscv/include/asm/hwcap.h
->> +++ b/arch/riscv/include/asm/hwcap.h
->> @@ -81,6 +81,7 @@
->>   #define RISCV_ISA_EXT_ZTSO		72
->>   #define RISCV_ISA_EXT_ZACAS		73
->>   #define RISCV_ISA_EXT_XANDESPMU		74
->> +#define RISCV_ISA_EXT_ZABHA		75
->>   
->>   #define RISCV_ISA_EXT_XLINUXENVCFG	127
->>   
->> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
->> index 5ef48cb20ee1..c125d82c894b 100644
->> --- a/arch/riscv/kernel/cpufeature.c
->> +++ b/arch/riscv/kernel/cpufeature.c
->> @@ -257,6 +257,7 @@ const struct riscv_isa_ext_data riscv_isa_ext[] = {
->>   	__RISCV_ISA_EXT_DATA(zihintpause, RISCV_ISA_EXT_ZIHINTPAUSE),
->>   	__RISCV_ISA_EXT_DATA(zihpm, RISCV_ISA_EXT_ZIHPM),
->>   	__RISCV_ISA_EXT_DATA(zacas, RISCV_ISA_EXT_ZACAS),
->> +	__RISCV_ISA_EXT_DATA(zabha, RISCV_ISA_EXT_ZABHA),
->>   	__RISCV_ISA_EXT_DATA(zfa, RISCV_ISA_EXT_ZFA),
->>   	__RISCV_ISA_EXT_DATA(zfh, RISCV_ISA_EXT_ZFH),
->>   	__RISCV_ISA_EXT_DATA(zfhmin, RISCV_ISA_EXT_ZFHMIN),
->> -- 
->> 2.39.2
->>
-> Thanks,
-> drew
+>    Andrea
 >
 > _______________________________________________
 > linux-riscv mailing list
