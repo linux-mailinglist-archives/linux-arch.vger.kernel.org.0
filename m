@@ -1,155 +1,138 @@
-Return-Path: <linux-arch+bounces-5503-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5504-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2EE0935089
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Jul 2024 18:20:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8106793703A
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Jul 2024 23:46:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 363D11F22282
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Jul 2024 16:20:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 287062825A6
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Jul 2024 21:46:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BB1613A3F6;
-	Thu, 18 Jul 2024 16:20:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AB04145B13;
+	Thu, 18 Jul 2024 21:46:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="wJZYrC7E"
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="U+I4x50K"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBF8A57333
-	for <linux-arch@vger.kernel.org>; Thu, 18 Jul 2024 16:20:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 450507FBAC
+	for <linux-arch@vger.kernel.org>; Thu, 18 Jul 2024 21:46:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721319630; cv=none; b=hrXJtnR4fE1O6/f11BicNY3cPFxMNIRhR39qza6GfOXKfXNaCMjR3tuAPHWRd6DU7hHkH/ALKeHcRNVMN02ub99pz8TIkz8dcqIhQicqmq0KV01G56OrhOBBWnIH/ZalFJumYU+ZKgXRsTuXFlWv2akuT0Bp2DQDIYD+wR/bogo=
+	t=1721339185; cv=none; b=nf9LFEWE3kYfGNIPPH0a6DSpT/ngJjXI2KGTOTM9w5z1kr5jj2Pl5bsC5i6VJpThW6y6dAn0A1QL7qgKWv5/u8r3GHh3ZwDh6b5Xc76bv6j6oCQeqDPEmdX5h/RxoS50UYvx/dPyf3zBQSnpveiep+U70AF/SyC30w9F6R2jTHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721319630; c=relaxed/simple;
-	bh=hV/yjRqF09iUcs/e0H7EaoqxbBux+C8yA9yGsn7+gIM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XSp8WZM6tFHWlqetUPRkKzvgV0HVRNpsit0GcsgcU27/HYpSqHXJVxkft49PUi7dx05EuCc+SbJPgE0UGhNFNntE9f/ZNbFHfLe/rmS/DqeIssnMSpQWc4g5EL+t5Mj70R8c1z+lFgfnDdT0ytUIF74XEvmhYl5XUj+w2m+upq0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=wJZYrC7E; arc=none smtp.client-ip=209.85.218.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a77c25beae1so98064366b.2
-        for <linux-arch@vger.kernel.org>; Thu, 18 Jul 2024 09:20:28 -0700 (PDT)
+	s=arc-20240116; t=1721339185; c=relaxed/simple;
+	bh=QIe/2kbFHCA11Q9TL7mLMduOjYNsGQd/Tv+tn4jIdAA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oyw5vbXbtYM3Yw776fPfo0GomzEIlVa+yc38nJkgjEkJqtfmKMpnu2AUYodcSCUQayVIIJlTXOpiP61MyHAGh5O11ycQFUxobP5JZc/tQdQrcnkEg6uBTqasnqxHimOYkXyXLWAII3lbAasZuNIzFhYIqEujOG/EEVikQojIZKI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=U+I4x50K; arc=none smtp.client-ip=209.85.166.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-7eee7728b00so51089239f.3
+        for <linux-arch@vger.kernel.org>; Thu, 18 Jul 2024 14:46:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1721319627; x=1721924427; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=g7GxSN83wkZ2Gt6sREDponA0vNCLDJLytERV2W14H4I=;
-        b=wJZYrC7Enhxehy4aiAW/B2Xal1dfj95xgrcz4wNxRE5mqudVuBuYTsCBibCuvKFgjJ
-         1cggZdu66is6nSBVYj7yPhDnZSuFZFMthwdyVgDQbPUyM8TE/caj5YB6yUW9YwkU0Ife
-         0ho9DbiAnzWvtzaF1gphAAr1bYCaUtAx18EjET12bWjsi8qKkhvHquyRmsSVq7kpfHN/
-         K9Wo5xLTY+WIX+OfjBQNv+UQTdNfmlaEUUpZw0ovaU0ZaeY+s4guDoStImnPqIcXjKT6
-         B5bpuGcyIfnoq3nfkiKCuD+MO/Jh23fd0O7jwjI9gQxKH+XC4VNFkcOBQToMgOa6SrAj
-         DQ3A==
+        d=sifive.com; s=google; t=1721339181; x=1721943981; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=b/3KVXgmf69sNo7YCAFBU75fVyP3kLvsv8BGm2iEjzc=;
+        b=U+I4x50KPl4X8RHNN5WKXgaZlEHjW1XglGeBCiLPeDrA3B+KPiBhvahd+FDuWPjb3+
+         87XEXsm4pfnSHwtps3MIP+TEfZCsdspc+yTjRy2CuGXrEoam95Al6g0CygaBSnC7ExCA
+         RyHihQX9Zo7+MvnRzEr8pj4uCXjohr23/SwVBcsrkRfsRX2fqDkhdWkK11O/eSelP+eL
+         /d3uDT3c4Ryb2bL0kMYavtCuYoMYn2E5sOc6EGM3M2zuFmF625pNWCLDfHfN8m1dypcR
+         YCbJlYmcrqMljxJYDSm/J4J+WSao69397c5/M406TScUTHCJTPHsBmberRIPN7VbEQzd
+         3+aA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721319627; x=1721924427;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=g7GxSN83wkZ2Gt6sREDponA0vNCLDJLytERV2W14H4I=;
-        b=dQVA7DcfC2morwsyelX4j1AwEgOtZMMkwpiaB0ftfKHaWK/Etc8gklLmlOYwgLEq/7
-         0l/2e9hQPtQm8a+DaXmkC4IqJtQPUMWZAXzQi9yI/yKK9DjpWvDcazAZw6gxKvlASBeQ
-         5HfKHQp4gE+B7Kx2jzINjmquHBISbJTFSdbrmQTJOdLeHIbwHxtzl+ojGEREI7SXUUBD
-         0Cw3CuZwaWTR7EJCDpMm59HFZUsZO68PNQ5uGrBQUl3Nq0CeejtUkLagN6Gq/meaNlo3
-         fNmPkX5+fS/uBq4y7iHLD/uvJZPfzrp3TxlilQpQ3gzJW/LW+ixKHeyh9RYHfAsT+AHt
-         NYiQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVMjnj8JQrINxr64+dEP5VZ1GwycYckmJ/SBNlEYXYGJUZXOkpeK2KPucvvYEN9K1sayrSHe92nHECUQUyk/yNLPQsNMzLyvwmRag==
-X-Gm-Message-State: AOJu0YzXk+lJgLKAxnYT0qNEmH4xuH+otsYBxMjSJBenYzGcS3fH1rfb
-	1MnPEtF1/ejBR5lnFarqhHDlcHpXdzVd6FTqi1iLV6fOn/pBe+PowqY7zvgXM/zmvDrc9FL02ma
-	KYMZc5A7R2eXpCuO3QCr26EP+lQ5Rq/f/cRkgmQ==
-X-Google-Smtp-Source: AGHT+IFWxHKkplzJKRLqT5zU4jO3082AA0xXCpFalTdhVnKTUbtkr/nNZqNjYbQOPoY/7FuHv/90dOwfuXx6JMhiz28=
-X-Received: by 2002:a17:906:6c4:b0:a77:d1ea:ab39 with SMTP id
- a640c23a62f3a-a7a0115bfe2mr329353566b.16.1721319627120; Thu, 18 Jul 2024
- 09:20:27 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1721339181; x=1721943981;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=b/3KVXgmf69sNo7YCAFBU75fVyP3kLvsv8BGm2iEjzc=;
+        b=OBlc9kMiBgulHthRWKMz+Z/eX4/EHn5cGHrD6+0DQlms44iyLC5nArWIK1LLfLcWNG
+         601SvRDRgRprUvBzvYPhvO9SOj4cdsRRRt/gDcPqEV2SwM1bEetrDum8M1Wk2lju56W5
+         DTV4gbdouQtwafrybTSao7nS4wx3pncTcRSet3YB5dpv/vulPp37ik4XI7ZS10/UQ1Kb
+         kvx4S+dT9+Rw4Nav/vUNjnzRWy1azgrmbPH8E+OonHxt2qIBblT/xsGmbPyeQTBRArlE
+         I4oFbR7Nw/c4NX9DMFNLHUFAtbTLUbrfh/BcRDsh4K0cKlY89G7k80HBuAjQ6TKAe2Cj
+         piwA==
+X-Forwarded-Encrypted: i=1; AJvYcCUJid1VCzlmt8jo+aC2K+6oQiRZjAcHGBOrV8vFTFZEjKk2u9nobiXe0L3tnSzE/dwTto4YSKK4tZg712Qk1SmXFCwQG3AWXbpVzg==
+X-Gm-Message-State: AOJu0Ywq6DfMJIbX0LoLNi50Hl9X5NRcOZ1y1QxIcbJzA3Y60iGvDfJ4
+	zybQYv29c+DeTjt8eG0khxslmfho+o+j5b/47h9XIJz1c5yV/QhN6DKKuXHBWU0=
+X-Google-Smtp-Source: AGHT+IFfmYe/UsMSfgkCsdMUFOYZdCp937Ia8bMlaDCUPuHT0PtpOJmSb9jac6FVvVir80F2WXRXbQ==
+X-Received: by 2002:a05:6602:26c7:b0:806:7f5a:1fb7 with SMTP id ca18e2360f4ac-81710605dacmr801576939f.5.1721339181354;
+        Thu, 18 Jul 2024 14:46:21 -0700 (PDT)
+Received: from [100.64.0.1] ([147.124.94.167])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4c2342f164esm35433173.69.2024.07.18.14.46.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Jul 2024 14:46:20 -0700 (PDT)
+Message-ID: <8b402e92-d874-4b30-9108-f521bd20d36c@sifive.com>
+Date: Thu, 18 Jul 2024 16:46:17 -0500
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240717061957.140712-1-alexghiti@rivosinc.com>
- <20240717061957.140712-4-alexghiti@rivosinc.com> <20240717-e7104dac172d9f2cbc25d9c6@orel>
- <fb03939b-502b-410a-85f5-2785b2bd0676@ghiti.fr> <20240718-d583846f09bc103b7eab6b4e@orel>
-In-Reply-To: <20240718-d583846f09bc103b7eab6b4e@orel>
-From: Alexandre Ghiti <alexghiti@rivosinc.com>
-Date: Thu, 18 Jul 2024 18:20:15 +0200
-Message-ID: <CAHVXubjQo9WaHu1FwEaJ496xpYtshrOkkw_HP9cP_3rWjnMxzw@mail.gmail.com>
-Subject: Re: [PATCH v3 03/11] riscv: Implement cmpxchg8/16() using Zabha
-To: Andrew Jones <ajones@ventanamicro.com>
-Cc: Alexandre Ghiti <alex@ghiti.fr>, Jonathan Corbet <corbet@lwn.net>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Andrea Parri <parri.andrea@gmail.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Leonardo Bras <leobras@redhat.com>, Guo Ren <guoren@kernel.org>, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 13/17] mm: move numa_distance and related code from x86 to
+ numa_memblks
+To: Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org
+Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
+ Andreas Larsson <andreas@gaisler.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>,
+ Borislav Petkov <bp@alien8.de>, Catalin Marinas <catalin.marinas@arm.com>,
+ Christophe Leroy <christophe.leroy@csgroup.eu>,
+ Dan Williams <dan.j.williams@intel.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ David Hildenbrand <david@redhat.com>, "David S. Miller"
+ <davem@davemloft.net>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Heiko Carstens <hca@linux.ibm.com>, Huacai Chen <chenhuacai@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+ John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+ Jonathan Cameron <jonathan.cameron@huawei.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Palmer Dabbelt <palmer@dabbelt.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Rob Herring <robh@kernel.org>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Thomas Gleixner <tglx@linutronix.de>, Vasily Gorbik <gor@linux.ibm.com>,
+ Will Deacon <will@kernel.org>, linux-arm-kernel@lists.infradead.org,
+ loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+ linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-acpi@vger.kernel.org,
+ linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev,
+ devicetree@vger.kernel.org, linux-arch@vger.kernel.org, linux-mm@kvack.org,
+ x86@kernel.org
+References: <20240716111346.3676969-1-rppt@kernel.org>
+ <20240716111346.3676969-14-rppt@kernel.org>
+From: Samuel Holland <samuel.holland@sifive.com>
+Content-Language: en-US
+In-Reply-To: <20240716111346.3676969-14-rppt@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Jul 18, 2024 at 6:06=E2=80=AFPM Andrew Jones <ajones@ventanamicro.c=
-om> wrote:
->
-> On Thu, Jul 18, 2024 at 02:50:28PM GMT, Alexandre Ghiti wrote:
-> ...
-> > > > +                                                                 \
-> > > > +         __asm__ __volatile__ (                                  \
-> > > > +                 prepend                                         \
-> > > > +                 "       amocas" cas_sfx " %0, %z2, %1\n"        \
-> > > > +                 append                                          \
-> > > > +                 : "+&r" (r), "+A" (*(p))                        \
-> > > > +                 : "rJ" (n)                                      \
-> > > > +                 : "memory");                                    \
-> > > > +         goto end;                                               \
-> > > > + }                                                               \
-> > > > +                                                                 \
-> > > > +no_zabha_zacas:;                                                 \
-> > > unnecessary ;
-> >
-> >
-> > Actually it is, it fixes a warning encountered on llvm:
-> > https://lore.kernel.org/linux-riscv/20240528193110.GA2196855@thelio-399=
-0X/
->
-> I'm not complaining about the 'end:' label. That one we need ';' because
-> there's no following statement and labels must be followed by a statement=
-.
-> But no_zabha_zacas always has following statements.
+On 2024-07-16 6:13 AM, Mike Rapoport wrote:
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> 
+> Move code dealing with numa_distance array from arch/x86 to
+> mm/numa_memblks.c
+> 
+> This code will be later reused by arch_numa.
+> 
+> No functional changes.
+> 
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> ---
+>  arch/x86/mm/numa.c                   | 101 ---------------------------
+>  arch/x86/mm/numa_internal.h          |   2 -
+>  include/linux/numa_memblks.h         |   4 ++
+>  {arch/x86/mm => mm}/numa_emulation.c |   0
+>  mm/numa_memblks.c                    | 101 +++++++++++++++++++++++++++
+>  5 files changed, 105 insertions(+), 103 deletions(-)
+>  rename {arch/x86/mm => mm}/numa_emulation.c (100%)
 
-My bad, that's another warning that is emitted by llvm and requires the ';'=
-:
+The numa_emulation.c rename looks like it should be part of the next commit, not
+this one.
 
-../include/linux/atomic/atomic-arch-fallback.h:2026:9: warning: label
-followed by a declaration is a C23 extension [-Wc23-extensions]
- 2026 |         return raw_cmpxchg(&v->counter, old, new);
-      |                ^
-../include/linux/atomic/atomic-arch-fallback.h:55:21: note: expanded
-from macro 'raw_cmpxchg'
-   55 | #define raw_cmpxchg arch_cmpxchg
-      |                     ^
-../arch/riscv/include/asm/cmpxchg.h:310:2: note: expanded from macro
-'arch_cmpxchg'
-  310 |         _arch_cmpxchg((ptr), (o), (n), ".rl", ".aqrl",
-         \
-      |         ^
-../arch/riscv/include/asm/cmpxchg.h:269:3: note: expanded from macro
-'_arch_cmpxchg'
-  269 |                 __arch_cmpxchg_masked(sc_sfx, ".b" cas_sfx,
-         \
-      |                 ^
-../arch/riscv/include/asm/cmpxchg.h:178:2: note: expanded from macro
-'__arch_cmpxchg_masked'
-  178 |         u32 *__ptr32b =3D (u32 *)((ulong)(p) & ~0x3);
-         \
-      |         ^
-
-
->
-> Thanks,
-> drew
 
