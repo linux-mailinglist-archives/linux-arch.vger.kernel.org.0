@@ -1,138 +1,121 @@
-Return-Path: <linux-arch+bounces-5504-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5505-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8106793703A
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Jul 2024 23:46:34 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78D4093709C
+	for <lists+linux-arch@lfdr.de>; Fri, 19 Jul 2024 00:28:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 287062825A6
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Jul 2024 21:46:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0AFD8B22035
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Jul 2024 22:28:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AB04145B13;
-	Thu, 18 Jul 2024 21:46:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36424146003;
+	Thu, 18 Jul 2024 22:28:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="U+I4x50K"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yk2Q67NW"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 450507FBAC
-	for <linux-arch@vger.kernel.org>; Thu, 18 Jul 2024 21:46:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFE20145A18
+	for <linux-arch@vger.kernel.org>; Thu, 18 Jul 2024 22:28:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721339185; cv=none; b=nf9LFEWE3kYfGNIPPH0a6DSpT/ngJjXI2KGTOTM9w5z1kr5jj2Pl5bsC5i6VJpThW6y6dAn0A1QL7qgKWv5/u8r3GHh3ZwDh6b5Xc76bv6j6oCQeqDPEmdX5h/RxoS50UYvx/dPyf3zBQSnpveiep+U70AF/SyC30w9F6R2jTHc=
+	t=1721341717; cv=none; b=D7bN7LNU9+M7CM8MtxLxNJVGKL5t/jg1JylIA7yzOaQM5O/S3+pkId5kBEPNEpo2aRHv+iolgaSB4rxsI3ZPqsISWnL/uCvRoU5lGs4PrPB9oK+571i/to8EgBNU2wxBcojMuulXKcp1fPtkgDUnxvgo7ow/8IuFuTH2p0LeAa0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721339185; c=relaxed/simple;
-	bh=QIe/2kbFHCA11Q9TL7mLMduOjYNsGQd/Tv+tn4jIdAA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oyw5vbXbtYM3Yw776fPfo0GomzEIlVa+yc38nJkgjEkJqtfmKMpnu2AUYodcSCUQayVIIJlTXOpiP61MyHAGh5O11ycQFUxobP5JZc/tQdQrcnkEg6uBTqasnqxHimOYkXyXLWAII3lbAasZuNIzFhYIqEujOG/EEVikQojIZKI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=U+I4x50K; arc=none smtp.client-ip=209.85.166.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
-Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-7eee7728b00so51089239f.3
-        for <linux-arch@vger.kernel.org>; Thu, 18 Jul 2024 14:46:22 -0700 (PDT)
+	s=arc-20240116; t=1721341717; c=relaxed/simple;
+	bh=/dgDQ63gkEhY3dFzZwulJGUglg5Uq6j9k84TZuMsK6g=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=bw52PZxiiZreyGAlv80DUK6XxTQcgDLj3Qd+9wRe8uGjlbVIND23LD9I4r5sUDxHfl1KaPHnnkXm6i/u3wSN3nY+HnHnhEaLmfAzWYtezJuI57G1qPcTb7dxTuCWIsUcYRsV1wxvhhgNO+9vBtfM+zaA17Dk8E+3YIivEznSukc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=yk2Q67NW; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1fb0d88fdc8so8322825ad.2
+        for <linux-arch@vger.kernel.org>; Thu, 18 Jul 2024 15:28:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1721339181; x=1721943981; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=b/3KVXgmf69sNo7YCAFBU75fVyP3kLvsv8BGm2iEjzc=;
-        b=U+I4x50KPl4X8RHNN5WKXgaZlEHjW1XglGeBCiLPeDrA3B+KPiBhvahd+FDuWPjb3+
-         87XEXsm4pfnSHwtps3MIP+TEfZCsdspc+yTjRy2CuGXrEoam95Al6g0CygaBSnC7ExCA
-         RyHihQX9Zo7+MvnRzEr8pj4uCXjohr23/SwVBcsrkRfsRX2fqDkhdWkK11O/eSelP+eL
-         /d3uDT3c4Ryb2bL0kMYavtCuYoMYn2E5sOc6EGM3M2zuFmF625pNWCLDfHfN8m1dypcR
-         YCbJlYmcrqMljxJYDSm/J4J+WSao69397c5/M406TScUTHCJTPHsBmberRIPN7VbEQzd
-         3+aA==
+        d=linaro.org; s=google; t=1721341715; x=1721946515; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mAFp8cCYrsuMTkT1FWDyABYg4XKo158nqIj+Kj0+oyk=;
+        b=yk2Q67NWa8+dTo4mtO8Hr+K0y59jhtjda+Etj0LK+A7/KWxNpCdi6KM5daPbWAT74Q
+         alNN6uWfNHPUbIecqB1J6orraBztlI6k6/qrf8kxcciZ7zvUJLEBoZmVOVxitDawpNM0
+         kFi5xSxUpcfBdrIVu0MR8s2/I6vBKV5LfRHmDtbDUue3UOg+3PvH3SfsOm14EwW0WFDL
+         9DkQMOPqfEG5+kEht+pd9AJUclo8CjH0gxX81l3j4AzP3CJG06rS9wOESsPqYVW05wbW
+         BWcy1W86HS3UJwJ81FNdysCSWK4ep8M3JPiAGFSA9cW36QnMqlfqu6sKleZPlOOJjGmk
+         Qgfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721339181; x=1721943981;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=b/3KVXgmf69sNo7YCAFBU75fVyP3kLvsv8BGm2iEjzc=;
-        b=OBlc9kMiBgulHthRWKMz+Z/eX4/EHn5cGHrD6+0DQlms44iyLC5nArWIK1LLfLcWNG
-         601SvRDRgRprUvBzvYPhvO9SOj4cdsRRRt/gDcPqEV2SwM1bEetrDum8M1Wk2lju56W5
-         DTV4gbdouQtwafrybTSao7nS4wx3pncTcRSet3YB5dpv/vulPp37ik4XI7ZS10/UQ1Kb
-         kvx4S+dT9+Rw4Nav/vUNjnzRWy1azgrmbPH8E+OonHxt2qIBblT/xsGmbPyeQTBRArlE
-         I4oFbR7Nw/c4NX9DMFNLHUFAtbTLUbrfh/BcRDsh4K0cKlY89G7k80HBuAjQ6TKAe2Cj
-         piwA==
-X-Forwarded-Encrypted: i=1; AJvYcCUJid1VCzlmt8jo+aC2K+6oQiRZjAcHGBOrV8vFTFZEjKk2u9nobiXe0L3tnSzE/dwTto4YSKK4tZg712Qk1SmXFCwQG3AWXbpVzg==
-X-Gm-Message-State: AOJu0Ywq6DfMJIbX0LoLNi50Hl9X5NRcOZ1y1QxIcbJzA3Y60iGvDfJ4
-	zybQYv29c+DeTjt8eG0khxslmfho+o+j5b/47h9XIJz1c5yV/QhN6DKKuXHBWU0=
-X-Google-Smtp-Source: AGHT+IFfmYe/UsMSfgkCsdMUFOYZdCp937Ia8bMlaDCUPuHT0PtpOJmSb9jac6FVvVir80F2WXRXbQ==
-X-Received: by 2002:a05:6602:26c7:b0:806:7f5a:1fb7 with SMTP id ca18e2360f4ac-81710605dacmr801576939f.5.1721339181354;
-        Thu, 18 Jul 2024 14:46:21 -0700 (PDT)
-Received: from [100.64.0.1] ([147.124.94.167])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4c2342f164esm35433173.69.2024.07.18.14.46.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Jul 2024 14:46:20 -0700 (PDT)
-Message-ID: <8b402e92-d874-4b30-9108-f521bd20d36c@sifive.com>
-Date: Thu, 18 Jul 2024 16:46:17 -0500
+        d=1e100.net; s=20230601; t=1721341715; x=1721946515;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mAFp8cCYrsuMTkT1FWDyABYg4XKo158nqIj+Kj0+oyk=;
+        b=EtHxGpFH+Zpq+uzC3G5lkThU4bAXRCT48x8afx9TEa9rxe+Tkpgvo2wtPr2oyrPnXH
+         fb8E7G0DRC3L50k/6eiR2T8wnu8whZGIqoTEBTBzONbYBIHgJpHP7cMB3Vz7KZ1MGQTk
+         +2knPETg1O4lahQLKEZaAzF+6YFZWoYbI29RVKnLVzNYQI3Tsr2IrID6mkeom/aZv3vD
+         agc5qrqTdPMV1KkZsa+gQw1vPgPcbK5Nrre1kWkuSdE84G0XA83Tr57i/c2Hlsz5Tu9x
+         UsHGy/76q4P0y5EupeaGPfta+mcwdSw2lPi5jIb0pmrQ/VSLHyHjPFJs98I5+hkIfZUW
+         j59A==
+X-Forwarded-Encrypted: i=1; AJvYcCXfDVCfh3KZhhlvO474ptL5p3aidqZilRtwVipxC12CLQxnyEFHlQ/rpKlwcNUHXiV5dWWHX0tr3KyacSJ9KvP8Gb6Nfnlvq1M/FQ==
+X-Gm-Message-State: AOJu0YxKpiHDcdo0keCJ/CHb3ogIef1NF9Z1MOdyv6USg72cM//qmloO
+	I5luGWsuS0b5Ai87kGZzVjfMyyiB1jEx129DtDiP0WC74zsKDqxmJYCji6oCavo=
+X-Google-Smtp-Source: AGHT+IF+55vW6JaqSjwGQi3R1yuf8ZxKtUymaiTTvyr4EyfBefOjisnvw3P8CACe6QPfDEnW0zUgIw==
+X-Received: by 2002:a17:902:f707:b0:1fb:37fa:fedb with SMTP id d9443c01a7336-1fc4e154856mr54520445ad.10.1721341714980;
+        Thu, 18 Jul 2024 15:28:34 -0700 (PDT)
+Received: from localhost ([2804:14d:7e39:8470:15c8:3512:f33c:2f80])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fd64b51aebsm849435ad.27.2024.07.18.15.28.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Jul 2024 15:28:34 -0700 (PDT)
+From: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,  Will Deacon
+ <will@kernel.org>,  Jonathan Corbet <corbet@lwn.net>,  Andrew Morton
+ <akpm@linux-foundation.org>,  Marc Zyngier <maz@kernel.org>,  Oliver Upton
+ <oliver.upton@linux.dev>,  James Morse <james.morse@arm.com>,  Suzuki K
+ Poulose <suzuki.poulose@arm.com>,  Arnd Bergmann <arnd@arndb.de>,  Oleg
+ Nesterov <oleg@redhat.com>,  Eric Biederman <ebiederm@xmission.com>,
+  Shuah Khan <shuah@kernel.org>,  "Rick P. Edgecombe"
+ <rick.p.edgecombe@intel.com>,  Deepak Gupta <debug@rivosinc.com>,  Ard
+ Biesheuvel <ardb@kernel.org>,  Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+  Kees Cook <kees@kernel.org>,  "H.J. Lu" <hjl.tools@gmail.com>,  Paul
+ Walmsley <paul.walmsley@sifive.com>,  Palmer Dabbelt <palmer@dabbelt.com>,
+  Albert Ou <aou@eecs.berkeley.edu>,  Florian Weimer <fweimer@redhat.com>,
+  Christian Brauner <brauner@kernel.org>,  Ross Burton
+ <ross.burton@arm.com>,  linux-arm-kernel@lists.infradead.org,
+  linux-doc@vger.kernel.org,  kvmarm@lists.linux.dev,
+  linux-fsdevel@vger.kernel.org,  linux-arch@vger.kernel.org,
+  linux-mm@kvack.org,  linux-kselftest@vger.kernel.org,
+  linux-kernel@vger.kernel.org,  linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v9 35/39] kselftest/arm64: Add a GCS test program built
+ with the system libc
+In-Reply-To: <a1ee93ab-2168-4228-a4e8-eab02c046bd3@sirena.org.uk> (Mark
+	Brown's message of "Thu, 18 Jul 2024 17:16:39 +0100")
+References: <20240625-arm64-gcs-v9-0-0f634469b8f0@kernel.org>
+	<20240625-arm64-gcs-v9-35-0f634469b8f0@kernel.org>
+	<87plray8we.fsf@linaro.org>
+	<a1ee93ab-2168-4228-a4e8-eab02c046bd3@sirena.org.uk>
+Date: Thu, 18 Jul 2024 19:28:32 -0300
+Message-ID: <87ed7qxrlb.fsf@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 13/17] mm: move numa_distance and related code from x86 to
- numa_memblks
-To: Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org
-Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
- Andreas Larsson <andreas@gaisler.com>,
- Andrew Morton <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>,
- Borislav Petkov <bp@alien8.de>, Catalin Marinas <catalin.marinas@arm.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>,
- Dan Williams <dan.j.williams@intel.com>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- David Hildenbrand <david@redhat.com>, "David S. Miller"
- <davem@davemloft.net>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Heiko Carstens <hca@linux.ibm.com>, Huacai Chen <chenhuacai@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Jiaxun Yang <jiaxun.yang@flygoat.com>,
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
- Jonathan Cameron <jonathan.cameron@huawei.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Palmer Dabbelt <palmer@dabbelt.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Rob Herring <robh@kernel.org>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Thomas Gleixner <tglx@linutronix.de>, Vasily Gorbik <gor@linux.ibm.com>,
- Will Deacon <will@kernel.org>, linux-arm-kernel@lists.infradead.org,
- loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
- linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-acpi@vger.kernel.org,
- linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev,
- devicetree@vger.kernel.org, linux-arch@vger.kernel.org, linux-mm@kvack.org,
- x86@kernel.org
-References: <20240716111346.3676969-1-rppt@kernel.org>
- <20240716111346.3676969-14-rppt@kernel.org>
-From: Samuel Holland <samuel.holland@sifive.com>
-Content-Language: en-US
-In-Reply-To: <20240716111346.3676969-14-rppt@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 
-On 2024-07-16 6:13 AM, Mike Rapoport wrote:
-> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> 
-> Move code dealing with numa_distance array from arch/x86 to
-> mm/numa_memblks.c
-> 
-> This code will be later reused by arch_numa.
-> 
-> No functional changes.
-> 
-> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> ---
->  arch/x86/mm/numa.c                   | 101 ---------------------------
->  arch/x86/mm/numa_internal.h          |   2 -
->  include/linux/numa_memblks.h         |   4 ++
->  {arch/x86/mm => mm}/numa_emulation.c |   0
->  mm/numa_memblks.c                    | 101 +++++++++++++++++++++++++++
->  5 files changed, 105 insertions(+), 103 deletions(-)
->  rename {arch/x86/mm => mm}/numa_emulation.c (100%)
+Mark Brown <broonie@kernel.org> writes:
 
-The numa_emulation.c rename looks like it should be part of the next commit, not
-this one.
+> On Thu, Jul 18, 2024 at 01:14:41PM -0300, Thiago Jung Bauermann wrote:
+>
+>> In my FVP VM, this test gets a GCS SIGSEGV before running the first test:
+>
+> Do you have THP enabled?  That still doesn't work (I'm expecting it to
+> be fixed with -rc1).
 
+I did have it enabled. After turning it off in the kernel config, the
+test does pass. But I see 30 lines of "INVALID GCS" in dmesg while
+running it. Is it expected?
+
+-- 
+Thiago
 
