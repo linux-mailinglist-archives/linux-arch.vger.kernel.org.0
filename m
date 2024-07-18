@@ -1,100 +1,135 @@
-Return-Path: <linux-arch+bounces-5492-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5493-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 772E59349D1
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Jul 2024 10:23:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C83CA9349F9
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Jul 2024 10:34:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DA48AB21377
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Jul 2024 08:23:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 39C14B23924
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Jul 2024 08:34:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D86E1EA8F;
-	Thu, 18 Jul 2024 08:23:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97FB57BAFF;
+	Thu, 18 Jul 2024 08:33:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Xg+7pShL"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="c4Rnyl9j"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 389C07A15C
-	for <linux-arch@vger.kernel.org>; Thu, 18 Jul 2024 08:23:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4E2C74E26;
+	Thu, 18 Jul 2024 08:33:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721291014; cv=none; b=I95AFXKe47zLkIcCdFxdSiIZjRoKkHgvbex2jlq5zZ+qWc11sWwwIr0LB8PScBBDW1uUPGAHvb6e1BFD726sLCWyGTC4mMoDySborudcdxBri1XRWJVD1NsbUbx5EvOlH9aY+00ciqbaSFB7r/bmqOCcNjAIFMNpbBRxbR0auIk=
+	t=1721291636; cv=none; b=AMQYJJMd+nLH7HUQQxp3R2GJ3trKLZR5Q4TFhsoml1/MaqOZcdAHWkMVw6RYA8YNkCvb8vLoOjLFjrAEbHIz/dkRp31c8J/NqCXWCo4JMDo6x2rNIdhIQAAEHgfdHlDMoRiLkiiouP/IBVkJo3GXVMGw3uoJ8XUBAl258V9ob1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721291014; c=relaxed/simple;
-	bh=0y8AhGu2nWWxQy923GG8cGe+VNq4xXxcn6y0LVxjNxQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=lloytM63sXPyuCdMu0VjXJFmfcSdlXNVoBBLwltpVTG5cWhKtfj8A1P2V/0vL5xNVONngYF8cGnEo1GgjSkWXNvF4FqphG5k7vKnes1fD2EL+9A2VmS8+vm4DTf7fVA6wWW1Y4LtIpz51u4H5tM3uG/7yztTD/D6s3zPnCWNQh4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Xg+7pShL; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1721291636; c=relaxed/simple;
+	bh=gNIXVaNizqBLHCwLfM/UtwzkXFHA9hFNWND1AHtlbIM=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HSgzoV9ocdGTfZxA5jTi2zPlwSSrYXm3IuhHW/Pn4gdmrYVDfW7isJ2bG04s7K+70dJ6InO5zWwqdzLWlVBHhjA91XLO3wemHO6dN4PqpRB9+OLPHEvw7ORabfsPzOnlzWmvEcm+i2ESU7LjgbOkHBHN3/02vNhT0XAlWXuwsqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=c4Rnyl9j; arc=none smtp.client-ip=68.232.153.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1721291013; x=1752827013;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0y8AhGu2nWWxQy923GG8cGe+VNq4xXxcn6y0LVxjNxQ=;
-  b=Xg+7pShLPu+JKyBCMHGRfJD5NIQIgKY+BEWAzabzKj/U9lkhmYT1j2sW
-   Wh7RClBpEY3dXc5fckB5kJ8dw6X6LWFQwvwHUkk82QCaTMpASwJm4CGxw
-   HRQcTcMtrEcD/1VWys5Frqi0qA7Mouut8Oa446fDcy0Wsb7B4GyaSSpJL
-   TpytdW6IM3aZnt5PuiVZmUq4uiVkp26oAs9Y+HI8yAF4qNxwo1byqhdL7
-   a7mVCZpS+0I60zoGW91K+ZRLn46kOxlTmSQec3mvPNEMCoD8hLrJ0PsME
-   UegqW8S2Dm0vUzHjWU337h2wr6ur7uzC7gajDzfCfGHktC+KhSyiKRh7Q
-   Q==;
-X-CSE-ConnectionGUID: QLLYOy4xSEGrb3P+31l2Qg==
-X-CSE-MsgGUID: jg/o5YdnQSCYV4S5tO+sCQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11136"; a="30226019"
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1721291635; x=1752827635;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gNIXVaNizqBLHCwLfM/UtwzkXFHA9hFNWND1AHtlbIM=;
+  b=c4Rnyl9j5zQKjgdG0Qk9GDaPHvkBSRu7V6qFysehCBkhfhjG16Z5NTSP
+   7m1PkB/RHMqqjjA5DZPv2OQiu6A63n5d4gj+ckEF8/3RhQ4eprqEZYS3y
+   NoWQXKdPogBwa5YCX9dPZ0Tc6mH7HK0SeVdBjlS0cUjWluVe1HoUVCts6
+   spbMD4wpmWVqx0A5A1/y84GWcFkLiKk3fa4v1Dk6W5UCYggIWtQzkUhBu
+   +2eskH8+O2dW9vy5KbyjksSwhrHTjgGbK2ZXJdW0vLTQNJq7jM081zENe
+   HubP4LZ9lFL5ooyocufJ1aQnxip7y156J8kBITmHTZUNIR7tHmVkkeUe3
+   A==;
+X-CSE-ConnectionGUID: X6g/KyPBTa2lRsaYzZqfLg==
+X-CSE-MsgGUID: rYjAUFt2TkiUexP5qeRCzg==
 X-IronPort-AV: E=Sophos;i="6.09,217,1716274800"; 
-   d="scan'208";a="30226019"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2024 01:23:32 -0700
-X-CSE-ConnectionGUID: pQ2rLVzLTw28GJMprXC6NA==
-X-CSE-MsgGUID: f5KhluQETte6b/bOSEWl4w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,217,1716274800"; 
-   d="scan'208";a="51295207"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 18 Jul 2024 01:23:31 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sUMQC-000h5m-1p;
-	Thu, 18 Jul 2024 08:23:28 +0000
-Date: Thu, 18 Jul 2024 16:23:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: oe-kbuild-all@lists.linux.dev, linux-arch@vger.kernel.org
-Subject: [arnd-asm-generic:syscall-tbl-6.11 81/98] powerpc-linux-ld:
- arch/powerpc/kernel/systbl.o:undefined reference to
- `__powerpc_sys_fadvise64_64_2'
-Message-ID: <202407181648.IsTOYT9n-lkp@intel.com>
+   d="asc'?scan'208";a="29395240"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 18 Jul 2024 01:33:53 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Thu, 18 Jul 2024 01:33:44 -0700
+Received: from wendy (10.10.85.11) by chn-vm-ex01.mchp-main.com (10.10.85.143)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
+ Transport; Thu, 18 Jul 2024 01:33:40 -0700
+Date: Thu, 18 Jul 2024 09:33:17 +0100
+From: Conor Dooley <conor.dooley@microchip.com>
+To: Alexandre Ghiti <alexghiti@rivosinc.com>
+CC: Andrew Jones <ajones@ventanamicro.com>, Jonathan Corbet <corbet@lwn.net>,
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+	<palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley
+	<conor@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
+	<krzk+dt@kernel.org>, Andrea Parri <parri.andrea@gmail.com>, Nathan
+ Chancellor <nathan@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Ingo
+ Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Waiman Long
+	<longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>, Arnd Bergmann
+	<arnd@arndb.de>, Leonardo Bras <leobras@redhat.com>, Guo Ren
+	<guoren@kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+	<linux-arch@vger.kernel.org>
+Subject: Re: [PATCH v3 05/11] riscv: Implement arch_cmpxchg128() using Zacas
+Message-ID: <20240718-stammer-envy-f77637a8d039@wendy>
+References: <20240717061957.140712-1-alexghiti@rivosinc.com>
+ <20240717061957.140712-6-alexghiti@rivosinc.com>
+ <20240717-94b49fbac3c6bf97a0f96281@orel>
+ <CAHVXubi33T-5y9g1cqa+meM7q7b=0M54o+wrBeYmwfYpWAgAmQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="MBWKTf+6psjxKZC0"
 Content-Disposition: inline
+In-Reply-To: <CAHVXubi33T-5y9g1cqa+meM7q7b=0M54o+wrBeYmwfYpWAgAmQ@mail.gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git syscall-tbl-6.11
-head:   9a99991d90521113a738c2a4761a4147fe4b31ca
-commit: 895267a916ccea4816ebf852ee2fd278a705a18e [81/98] powerpc: use non-conflicting syscall function names
-config: powerpc-randconfig-003-20240718 (https://download.01.org/0day-ci/archive/20240718/202407181648.IsTOYT9n-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 14.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240718/202407181648.IsTOYT9n-lkp@intel.com/reproduce)
+--MBWKTf+6psjxKZC0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407181648.IsTOYT9n-lkp@intel.com/
+On Thu, Jul 18, 2024 at 09:48:42AM +0200, Alexandre Ghiti wrote:
+> On Wed, Jul 17, 2024 at 10:34=E2=80=AFPM Andrew Jones <ajones@ventanamicr=
+o.com> wrote:
+> > On Wed, Jul 17, 2024 at 08:19:51AM GMT, Alexandre Ghiti wrote:
+> > > +
+> > > +union __u128_halves {
+> > > +     u128 full;
+> > > +     struct {
+> > > +             u64 low, high;
+> >
+> > Should we consider big endian too?
+>=20
+> Should we care about big endian? We don't deal with big endian
+> anywhere in our kernel right now.
 
-All errors (new ones prefixed by >>):
+There's one or two places I think that we do actually have some
+conditional stuff for BE. The Zbb string routines I believe is one such
+place, and maybe there are one or two others. In general I'm not of the
+opinion that it is worth adding complexity for BE until there's
+linux-capable hardware that supports it (so not QEMU or people's toy
+implementations), unless it's something that userspace is able to see.
 
->> powerpc-linux-ld: arch/powerpc/kernel/systbl.o:(.rodata+0x3f8): undefined reference to `__powerpc_sys_fadvise64_64_2'
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--MBWKTf+6psjxKZC0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZpjTTQAKCRB4tDGHoIJi
+0rIEAQCcKgEg+YAkD5rI1kB21pebJiN0tYXyWkBOBx4nlblfvQEA9BuEuGmfgArr
+DZeMwbib+Suf9yhP4wp95mVBoRW2GAM=
+=Lsk5
+-----END PGP SIGNATURE-----
+
+--MBWKTf+6psjxKZC0--
 
