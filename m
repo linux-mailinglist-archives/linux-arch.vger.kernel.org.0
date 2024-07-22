@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-5552-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5553-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBAD2938D46
-	for <lists+linux-arch@lfdr.de>; Mon, 22 Jul 2024 12:10:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 336529390AE
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Jul 2024 16:31:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E44B4287E6C
-	for <lists+linux-arch@lfdr.de>; Mon, 22 Jul 2024 10:10:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E7EC928235C
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Jul 2024 14:31:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0C3E16C85F;
-	Mon, 22 Jul 2024 10:08:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 235B711CAF;
+	Mon, 22 Jul 2024 14:31:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fNcTvEEN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rjmEXCND"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66E5216C6BA;
-	Mon, 22 Jul 2024 10:08:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D542E8F70;
+	Mon, 22 Jul 2024 14:31:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721642936; cv=none; b=FPTo9/1KexsFYXc+TrSQOJlwXGfjP+DXJ8lg/MirdFuH2KYz137PTTgw/9SxvdZimaf5OUstFUituCK5JBHBq77EUxTuTMUu4ieH30FnuW4yFQZnipPtae5c3EgjRZI1ogVwyP+5UJ8m5dP6nnEapTtnHhTGjfFvCDhJzpT8Dfo=
+	t=1721658694; cv=none; b=mi2zRqTLwgPmi0cSEbhw96S17RzGjdQZSpYPL3klM9w1oYL8OzfAPKHN+1JazF0JY9q7BqJeRYS0VQKWnD1KONlA9b3z6v2chQGK+3/u07mTrwJdn9M8Ujbb1SkwZA82lAUjUmi2YCDRhpE2enPDBKnRNA6fBEk9k779Ho+C94k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721642936; c=relaxed/simple;
-	bh=7h5Kr+YpdYtQ4+7prp0Efe9cyc7VuT34aSYyd6+RWOc=;
+	s=arc-20240116; t=1721658694; c=relaxed/simple;
+	bh=19lbAMuG8/46S2vgOQ57EZ7eAEiw5QZgfuSPqQZDrsA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r6vwXO+f8gQ7NSk+gLWCQ3o2/dqtA/1lLHeXbTv2u0Jv3kPGmzlMHmGirrEL1723weDjPVDTu/srCzpaTV540l/5pShx7tRjwZq/HOHMG20votxa9fGLgkHpmv8PgeUs5afxWeDe1wMMh8GnBoL4Dr9wvb/qU1xzH5EFlc251YQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fNcTvEEN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 921B0C116B1;
-	Mon, 22 Jul 2024 10:08:49 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=n2z2wjoXmnLpYkBpeA+5vmNE1ET12mSsNohMdue1lW2dOpQ8DsnbCL+6TibuoOUXEejP3C2CKMj2vDNuSInxzpQFP+27S3n3GSOtV7x5Mzg71oaSdJpICW5zXMmeevPLAdJUxiAV/kJmu8U5TjV3eiXHEZrCtaMyHrnfWJts7Ls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rjmEXCND; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6A25C4AF0B;
+	Mon, 22 Jul 2024 14:31:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721642935;
-	bh=7h5Kr+YpdYtQ4+7prp0Efe9cyc7VuT34aSYyd6+RWOc=;
+	s=k20201202; t=1721658693;
+	bh=19lbAMuG8/46S2vgOQ57EZ7eAEiw5QZgfuSPqQZDrsA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fNcTvEENz+fFubHxaCVUTSqYq1ITDfo0ptFNNyhZiJtkY03TadBS1i+ZhqHLfVGJh
-	 wejLfRGO7/MXoIRjPmgVOznu/m8as04rC7MuUcV6ZUI86ATnFB/wd9trpSHBjpMIJe
-	 1zP6D6J4UnP/C2ivTwawSleVhDsGeYcY8f3s+xp8ATTVohoch6BbiYzMzCYthbAZSo
-	 Ju4lBHrZm7WycGEE++o52rHSPjU2WPyxwG9PV6SYXLz5E6v92bSrMIBCRBl79m4ZZz
-	 UbOhxWSEIT/Q1c55byiM2Jo3LnSq0IoSgxoIde6Xxp0OyfH8W75BVC3lhxcNX8Kqeg
-	 0Slz4wCmQVXnA==
-Date: Mon, 22 Jul 2024 11:08:46 +0100
+	b=rjmEXCNDKBFkXhGlJsIiF/YiOAsxKiiVQ1yy0ea0mM7am81QSF76gClDv9enAtAlY
+	 k5zMblh91dP2iCOQWwD6UXBINMw2SURV0D5VkPmSTcCj+7qrLkiTc9H5X2ZXYxh7QX
+	 /ztn3FxVCqDdZwqpFFWuHB/egHyBWfmfrmpKrYkCGpLDHUdnmnfjb/anl9IGvbPEnH
+	 XugwdYQn62/PfBmN2Sx/MlckvPbNVxoeQqCGdrWIx9EJAnA97fRcl1FAgUYZvFPWh/
+	 St8tz1MT7X7blLPvAvrsbs+/p6oIUcWDkcQJuST7wIJtoLExPii3xtAVeQFrVH08LG
+	 pTi8SManLPJQA==
+Date: Mon, 22 Jul 2024 15:31:24 +0100
 From: Mark Brown <broonie@kernel.org>
 To: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
 Cc: Catalin Marinas <catalin.marinas@arm.com>,
@@ -70,11 +70,10 @@ Cc: Catalin Marinas <catalin.marinas@arm.com>,
 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-riscv@lists.infradead.org
 Subject: Re: [PATCH v9 38/39] kselftest/arm64: Add a GCS stress test
-Message-ID: <53c98e88-b12a-40e4-8b01-d7a4394c2471@sirena.org.uk>
+Message-ID: <19c8a2eb-1c52-43aa-a329-3dc245c966e6@sirena.org.uk>
 References: <20240625-arm64-gcs-v9-0-0f634469b8f0@kernel.org>
  <20240625-arm64-gcs-v9-38-0f634469b8f0@kernel.org>
  <875xt2xojp.fsf@linaro.org>
- <871q3qxnx6.fsf@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -82,41 +81,39 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="d44XRLGyLTUTZna7"
+	protocol="application/pgp-signature"; boundary="fZmP/tHPENLmAEIV"
 Content-Disposition: inline
-In-Reply-To: <871q3qxnx6.fsf@linaro.org>
+In-Reply-To: <875xt2xojp.fsf@linaro.org>
 X-Cookie: Everything you know is wrong!
 
 
---d44XRLGyLTUTZna7
+--fZmP/tHPENLmAEIV
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Thu, Jul 18, 2024 at 08:47:49PM -0300, Thiago Jung Bauermann wrote:
-> Thiago Jung Bauermann <thiago.bauermann@linaro.org> writes:
+On Thu, Jul 18, 2024 at 08:34:18PM -0300, Thiago Jung Bauermann wrote:
+> Mark Brown <broonie@kernel.org> writes:
 
-> > # # Totals: pass:0 fail:9 xfail:0 xpass:0 skip:0 error:0
-> > ok 1 selftests: arm64: gcs-stress
+> # # Waiting for 9 children
+> # # Thread-4030: Failed to enable GCS
+> # # Thread-4031: Failed to enable GCS
 
-> Also, Shouldn't the test report "not ok" at the end considering that
-> there were fails?
+This is already fixed locally, just rebasing bitrot.
 
-It doesn't really matter either way, the per test results are captured.
-
---d44XRLGyLTUTZna7
+--fZmP/tHPENLmAEIV
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmaeL64ACgkQJNaLcl1U
-h9DdSwf+OKUfn8laXp+yxRv2lSbOzqFMeeL5M5MmJtaH4D5q5G9SwlMCVx3e+7BW
-utABRB30/1ASkvtYLdYwvPw6y+Jn9P2xtdttvx7+U/aggTBaWWW0fa6cB9YTKO+a
-aRyNaxotBkWFmPUl7qa4kpMWb5FDtxX3iLlCw0GicotYaWJKGHEUQ6AFxGjmQaM5
-O1eXLhARUQ8l2+k8A6a0WXVZvZJdhyLouFkswNGmAKdnfd6mYvY9DIBejxtsBJlH
-M7xvo9iPSz/18Y/x4HdPAjjwGHYNRkuhYT8QMhZG5TzTpNMXwEXpKbkkKETAklkz
-289HaQ9+gTL4ZnRsy1VMxkkxoqQ83g==
-=SALv
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmaebTsACgkQJNaLcl1U
+h9A1BAf/U0ze5vCUOiRu38u3xvKe2wO4c/NxU38BnN6U5lriKaPwnoC8WAtlYPBJ
+67+s8YadLJLRgDMtuUHW85HuikmcDmVUs5SUM7HwwVd6qMVx9FYmMls8aA9Powqn
+u0Y4vFhfQwlvL0aSBnYPBF2vjCXMYzN8EVHJaJhPJlB5HsZstADQQM77apbd9U2V
+BD0gJukw9LhNPPTmNyuuBnF9jXXCAUXEpEosdsWYl4f6+msBc5abKIt1agzRJhFE
+yYalLzSD/wqZOZGLXf/Cx/DzdJLC8/ahN8cI5MqCUDDQFLFnhV/vS2yld0/Cu0sw
+qwhjMxP9NPq+uiruBXIU7nGO40rudg==
+=Kw0J
 -----END PGP SIGNATURE-----
 
---d44XRLGyLTUTZna7--
+--fZmP/tHPENLmAEIV--
 
