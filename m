@@ -1,147 +1,128 @@
-Return-Path: <linux-arch+bounces-5554-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5555-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD2A39390EE
-	for <lists+linux-arch@lfdr.de>; Mon, 22 Jul 2024 16:48:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB95E93912A
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Jul 2024 16:59:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8332EB2085C
-	for <lists+linux-arch@lfdr.de>; Mon, 22 Jul 2024 14:48:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DC9FB1C21665
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Jul 2024 14:59:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0815916D9A5;
-	Mon, 22 Jul 2024 14:48:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5063E16DC38;
+	Mon, 22 Jul 2024 14:59:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="uscHRmSR"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D324D16B74D;
-	Mon, 22 Jul 2024 14:48:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA7AF16DEDD;
+	Mon, 22 Jul 2024 14:58:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721659713; cv=none; b=nuSNmWOK3JjoczE2Q8UJi6SAvFL6mcJYbFanP3ePWq7qFM95pQyn4feDUrpoTMieBd1BecMSsCrvwLIr6j0Shs71B5yp89llqD0RLfJ44EuTLljWqvvDvb1kZ0cP+iNZ6e+MpHsNBPapNDric0aAivA9ZDjvdE7K70cIHiqHN5g=
+	t=1721660341; cv=none; b=fKqAJRD1VmHvJCQv/7cud6AxaAMW8tm4CjRcu1ijYJlISaKVCdew3pcocSgVn5JjOxMKSICMNUfMWEGcN1Op4Ef8XNuOe0rJoFSxrfmV98WWN78wvF9XfjpDA9Hmbrg1u0pSr7uSJhMXs09yroc0iweF1gqgzC2oeMwE9A18mrM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721659713; c=relaxed/simple;
-	bh=cuzDDnA3GBV7pB5L/CiGYs8DablqcIWcQ3YQbmqoty0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pK1xQscqyWJl3VI3DkKq4JXosTwD3Y6dGceqBUKwMgZcrkoaiQsDeNhu/g4zENEvdcYhwUimUa3TLmMRIlVOMYqzty5felWo5nSj3mEh3s+TvaL7g0B42anhKGDQ4Wt96aYybKhxiusVRZlspFEKVTtydedifX5sUgS0hkVUzAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0280C116B1;
-	Mon, 22 Jul 2024 14:48:30 +0000 (UTC)
-From: Huacai Chen <chenhuacai@loongson.cn>
-To: Linus Torvalds <torvalds@linux-foundation.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Huacai Chen <chenhuacai@kernel.org>
-Cc: loongarch@lists.linux.dev,
-	linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Guo Ren <guoren@kernel.org>,
-	Xuerui Wang <kernel@xen0n.name>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Huacai Chen <chenhuacai@loongson.cn>
-Subject: [GIT PULL] LoongArch changes for v6.11
-Date: Mon, 22 Jul 2024 22:48:22 +0800
-Message-ID: <20240722144822.4040791-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.43.5
+	s=arc-20240116; t=1721660341; c=relaxed/simple;
+	bh=JQ0jOuwY7OGAtG7S+RKj2MsWF2RILfYys1zXtfeTUZA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=c+X6Pf0GKhobDqH+fKJ5iQHneGlhLMv3dq62NZt+a5G5ob0DS/5gPpt9KB1eltw1Tl1G05jrTmjpS4aXLdvx34ONy7+lTc+LdkQVGRUoDTtPRdXs7RTCctuMA1gRzXKmVtfY1Lk+kkalV5jFNEmP5px90mBY/257ZaoDZQ8kBZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=uscHRmSR; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=0suE9iJedWZqthG1aOPFasnjcurHspan+ck/bWfHjIM=; b=uscHRmSRk+y+GLKM2By67lV+UU
+	XSe59nM+l1Wg4HS0TEVTy8Isy4qoRD3oDcyXG01Zr5MGgKKuptPm4GszuWQaT/o8pRNdYYP+rW8Pg
+	1N4v40UJ2ZySxHcyHfcEX/+ZK4CYBW0R/8qdLu5PVChSyWm5/6a9ep9e/nqjUom3qWbOTNGwqIT0y
+	j9t2EvHFCj/arb0e8JdsN2gigvaj0N++Wic+yEFZWCUsYQB0ehtMRYIojlE6lLS1EO5EAM2ZoN8mE
+	D+xQpR4L8SF519STJZ9dEed/Pep3joo3U/GQyxfP3cjmVgp/VI8xufqfttws5kLMp01SAxxETU0DZ
+	WZDAYEnA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1sVuV4-00000009r7o-3jBD;
+	Mon, 22 Jul 2024 14:58:54 +0000
+Date: Mon, 22 Jul 2024 07:58:54 -0700
+From: Christoph Hellwig <hch@infradead.org>
+To: ysionneau@kalrayinc.com
+Cc: linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
+	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Nick Piggin <npiggin@gmail.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Jonathan Borne <jborne@kalrayinc.com>,
+	Julian Vetter <jvetter@kalrayinc.com>,
+	Clement Leger <clement@clement-leger.fr>,
+	Guillaume Thouvenin <thouveng@gmail.com>,
+	Jean-Christophe Pince <jcpince@gmail.com>,
+	Jules Maselbas <jmaselbas@zdiv.net>,
+	Julien Hascoet <jhascoet@kalrayinc.com>,
+	Louis Morhet <lmorhet@kalrayinc.com>,
+	Marc =?iso-8859-1?Q?Poulhi=E8s?= <dkm@kataplop.net>,
+	Marius Gligor <mgligor@kalrayinc.com>,
+	Vincent Chardon <vincent.chardon@elsys-design.com>,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-riscv@lists.infradead.org,
+	Robin Murphy <robin.murphy@arm.com>
+Subject: Re: [RFC PATCH v3 24/37] kvx: Add memory management
+Message-ID: <Zp5zrkwyagnkoY7F@infradead.org>
+References: <20240722094226.21602-1-ysionneau@kalrayinc.com>
+ <20240722094226.21602-25-ysionneau@kalrayinc.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240722094226.21602-25-ysionneau@kalrayinc.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-The following changes since commit 0c3836482481200ead7b416ca80c68a29cfdaabd:
+> +#include "../../../drivers/iommu/dma-iommu.h"
 
-  Linux 6.10 (2024-07-14 15:43:32 -0700)
+This is not a public header as you can guess from the file path.
 
-are available in the Git repository at:
+> +	switch (dir) {
+> +	case DMA_TO_DEVICE:
+> +		break;
+> +	case DMA_FROM_DEVICE:
+> +		break;
+> +
+> +	case DMA_BIDIRECTIONAL:
+> +		inval_dcache_range(paddr, size);
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-6.11
+Doing this just for bidirectional is weird unless your architecture
+never does any speculative prefetching.  Other architectures
+include DMA_FROM_DEVICE here.
 
-for you to fetch changes up to 998b17d4440b8559a8bf4926e86f493101995519:
+> +#ifdef CONFIG_IOMMU_DMA
+> +void arch_teardown_dma_ops(struct device *dev)
+> +{
+> +	dev->dma_ops = NULL;
+> +}
+> +#endif /* CONFIG_IOMMU_DMA*/
 
-  LoongArch: Make the users of larch_insn_gen_break() constant (2024-07-20 22:41:07 +0800)
+This should not be needed right now.  And will be completley
+useless once we do the direct calls to dma-iommu which we plan
+to do for Linux 6.12.
 
-----------------------------------------------------------------
-LoongArch changes for v6.11
+> +void arch_setup_dma_ops(struct device *dev, bool coherent)
+> +{
+> +	dev->dma_coherent = coherent;
+> +	if (device_iommu_mapped(dev))
+> +		iommu_setup_dma_ops(dev);
+> +}
 
-1, Define __ARCH_WANT_NEW_STAT in unistd.h;
-2, Always enumerate MADT and setup logical-physical CPU mapping;
-3, Add irq_work support via self IPIs;
-4, Add RANDOMIZE_KSTACK_OFFSET support;
-5, Add ARCH_HAS_PTE_DEVMAP support;
-6, Add ARCH_HAS_DEBUG_VM_PGTABLE support;
-7, Add writecombine support for DMW-based ioremap();
-8, Add architectural preparation for CPUFreq;
-9, Add ACPI standard hardware register based S3 support;
-10, Add support for relocating the kernel with RELR relocation;
-11, Some bug fixes and other small changes.
+And this seems odd, as iommu_setup_dma_ops is called from the iommu
+code and you shouldn't need it here.
 
-----------------------------------------------------------------
-Huacai Chen (10):
-      Merge tag 'asm-generic-6.11' into loongarch-next
-      LoongArch: Define __ARCH_WANT_NEW_STAT in unistd.h
-      LoongArch: Always enumerate MADT and setup logical-physical CPU mapping
-      LoongArch: Add irq_work support via self IPIs
-      LoongArch: Add ARCH_HAS_PTE_DEVMAP support
-      LoongArch: Add ARCH_HAS_DEBUG_VM_PGTABLE support
-      LoongArch: Add writecombine support for DMW-based ioremap()
-      LoongArch: Add architectural preparation for CPUFreq
-      LoongArch: Automatically disable KASLR for hibernation
-      LoongArch: Use correct API to map cmdline in relocate_kernel()
+I also wonder if we can come up with a way to do the ->dma_coherent
+setup in common code and remove a few of these arch hooks entirely.
 
-Jiaxun Yang (1):
-      LoongArch: Add ACPI standard hardware register based S3 support
-
-Jinjie Ruan (1):
-      LoongArch: Add RANDOMIZE_KSTACK_OFFSET support
-
-Oleg Nesterov (1):
-      LoongArch: Make the users of larch_insn_gen_break() constant
-
-Tiezhu Yang (1):
-      LoongArch: Check TIF_LOAD_WATCH to enable user space watchpoint
-
-WANG Rui (1):
-      LoongArch: Use rustc option -Zdirect-access-external-data
-
-Xi Ruoyao (2):
-      LoongArch: Remove a redundant checking in relocator
-      LoongArch: Add support for relocating the kernel with RELR relocation
-
- .../debug/debug-vm-pgtable/arch-support.txt        |  2 +-
- arch/loongarch/Kconfig                             |  5 +++
- arch/loongarch/Makefile                            |  3 +-
- arch/loongarch/include/asm/addrspace.h             |  4 ++
- arch/loongarch/include/asm/asmmacro.h              |  1 +
- arch/loongarch/include/asm/hardirq.h               |  3 +-
- arch/loongarch/include/asm/inst.h                  |  3 ++
- arch/loongarch/include/asm/io.h                    | 10 ++++-
- arch/loongarch/include/asm/irq_work.h              | 10 +++++
- arch/loongarch/include/asm/loongarch.h             | 13 +++++-
- arch/loongarch/include/asm/pgtable-bits.h          |  6 ++-
- arch/loongarch/include/asm/pgtable.h               | 19 ++++++++
- arch/loongarch/include/asm/setup.h                 |  5 +++
- arch/loongarch/include/asm/smp.h                   |  2 +
- arch/loongarch/include/asm/stackframe.h            | 11 +++++
- arch/loongarch/include/asm/unistd.h                |  1 +
- arch/loongarch/include/asm/uprobes.h               |  4 +-
- arch/loongarch/kernel/Makefile.syscalls            |  3 +-
- arch/loongarch/kernel/acpi.c                       | 22 ++++++---
- arch/loongarch/kernel/head.S                       | 11 +----
- arch/loongarch/kernel/hw_breakpoint.c              |  2 +-
- arch/loongarch/kernel/kprobes.c                    |  4 +-
- arch/loongarch/kernel/paravirt.c                   |  6 +++
- arch/loongarch/kernel/ptrace.c                     |  3 ++
- arch/loongarch/kernel/relocate.c                   | 52 ++++++++++++++++++++--
- arch/loongarch/kernel/setup.c                      |  4 +-
- arch/loongarch/kernel/smp.c                        | 21 +++++++--
- arch/loongarch/kernel/syscall.c                    | 22 ++++++++-
- arch/loongarch/kernel/vmlinux.lds.S                |  8 ++++
- arch/loongarch/power/platform.c                    | 37 ++++++++++++---
- arch/loongarch/power/suspend_asm.S                 |  8 +---
- drivers/firmware/efi/libstub/loongarch.c           |  2 +
- 32 files changed, 256 insertions(+), 51 deletions(-)
- create mode 100644 arch/loongarch/include/asm/irq_work.h
 
