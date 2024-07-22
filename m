@@ -1,50 +1,50 @@
-Return-Path: <linux-arch+bounces-5544-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5545-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D6D993814D
-	for <lists+linux-arch@lfdr.de>; Sat, 20 Jul 2024 14:35:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F6DE938A2A
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Jul 2024 09:37:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 805BB1C20826
-	for <lists+linux-arch@lfdr.de>; Sat, 20 Jul 2024 12:35:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 05D0E1F212CC
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Jul 2024 07:37:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B0667442F;
-	Sat, 20 Jul 2024 12:35:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D09E314B094;
+	Mon, 22 Jul 2024 07:37:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cu7ixXhd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V5rEoxjJ"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A956E1B86DD;
-	Sat, 20 Jul 2024 12:35:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84311125C0;
+	Mon, 22 Jul 2024 07:37:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721478949; cv=none; b=Tc1PMcTBhyKRCzC5lfK73Ynw19W0kAYi6nYSQEtXvsqMEHExC67V0EBh3ZvvZt9t1yZpNSVGkZJJWBvg4jO6+6BBh24+hlJTb9pzpYmgMv4Y45iRsGnL0AvxRqOgsOXIbLB43/3ApkcUfvKusinsNwzSpm05mnJwU2jw1kB7h+k=
+	t=1721633837; cv=none; b=AHbM73RsVE6mxgK4klzOTbjeVOBfDTg3XDbbIromD+I+xe6iHZJr9osxe5BDGP67E2nDpU9sU5v7NVhd7LmvLC+NLqTSR2XNH043iOs+QCY9mZdv+q3hC7PPegBE/iU95Mh5x8P50WpYFt1xYLTENDWcqRnob+bZGrzofFsZrBc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721478949; c=relaxed/simple;
-	bh=V1Mnl7GTUOfk7ipXzRO+FVNDqKlKteMfA0VSzXpSXNc=;
+	s=arc-20240116; t=1721633837; c=relaxed/simple;
+	bh=Dxslf8J1nw2EoO1825aVEeJAxLrpHgQU1wjgg+XF/0U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mbaYle++bNoMOEKuN9g/UVPxcwhqZYjkVS9RGhUFMyUKy9DSeTdejDP2v67ScovYVv6nyh6y8zvMWoy+LPLSxhijPLNs0BQTeSfm0d0jIEV7xJ8reOtUGIezr1OMBEFFsqRvRDSqptTl/8gUqRcgtHpTYn9cOgXlUqaO1EgI+tM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cu7ixXhd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 907FAC2BD10;
-	Sat, 20 Jul 2024 12:35:29 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=bEHEYwVMD4zmSR2Inx8/xm+5BTYzhC4bDJ/TAbB/G44qnfxWJgfmFDCOK7ISqp/jz6DC8z26w7sunC5Bio++y2Tj1wkUnVbS7zJKPc6TDvB7GUJa0FSTsvwwUzbg413uxr/jVw5iIyeyn/rTSBJHhYFp2OI5ZW6KGfa3j9jHK8o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V5rEoxjJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C14EC116B1;
+	Mon, 22 Jul 2024 07:37:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721478949;
-	bh=V1Mnl7GTUOfk7ipXzRO+FVNDqKlKteMfA0VSzXpSXNc=;
+	s=k20201202; t=1721633837;
+	bh=Dxslf8J1nw2EoO1825aVEeJAxLrpHgQU1wjgg+XF/0U=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Cu7ixXhdpKHX3WYl+oqtYrBp4FSGOrMfYS7JdXXFb+TW6Nk+7hUsvPSx3dhiTlklx
-	 eISAI9h3FnpKkm3821iYqQYW+t5vM3j/rQSfaM2c5ZSvkOS0dtVgUTa7UFD6+6Fd+V
-	 Swzw7lpBQ3cR8gtADz0+ZYCaj8cVNbhDnVWIeoGj2CAcdZJxya924itwrRRURR8D7p
-	 gdO9A2rVCcGxCsCfqgN6GjXc2Q+wsd6OQeVFtI5v6JPBQOlHrsAizNhEVEwpmqQI8J
-	 i+jsVT9EkWlzCyda1fYMGW9njAt5+hODmpTx/amSTJslyC8uufTXXBFDjlNyKbHrDE
-	 CHtZSP6W18ryg==
-Date: Sat, 20 Jul 2024 15:32:34 +0300
+	b=V5rEoxjJyp8Si4Ol1tKmDHfxujD1M6arK5yB3md41TgtMqzL7133QUbpMAiRqALI8
+	 zHqP2jnhANmIGx1K6HRYtObkAQqmVJ2vQFti7pCzHaOzz0dds7xFt2urt534cJHiXw
+	 CurmUQ1pi3n/TpSSCUqTSIn7TV/EpAfGuHiiiLk6U01osyb6JXJ0yznQ72y9r7YmE5
+	 p6fsNYiqRdEsZWZ4qQtfi/2IxHr6rbbdo6JlW+fM0tWjobtA9os1Uj3kz7eGY4SLEa
+	 ISuNDqsn9MvH468ghs8RFDYohLKYRIm2o5BjdJ/Ni63NJJU1x+XnEdyepZgDkMsXF7
+	 by+28UouvqBSA==
+Date: Mon, 22 Jul 2024 10:34:06 +0300
 From: Mike Rapoport <rppt@kernel.org>
 To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: linux-kernel@vger.kernel.org,
+Cc: David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org,
 	Alexander Gordeev <agordeev@linux.ibm.com>,
 	Andreas Larsson <andreas@gaisler.com>,
 	Andrew Morton <akpm@linux-foundation.org>,
@@ -53,7 +53,6 @@ Cc: linux-kernel@vger.kernel.org,
 	Christophe Leroy <christophe.leroy@csgroup.eu>,
 	Dan Williams <dan.j.williams@intel.com>,
 	Dave Hansen <dave.hansen@linux.intel.com>,
-	David Hildenbrand <david@redhat.com>,
 	"David S. Miller" <davem@davemloft.net>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Heiko Carstens <hca@linux.ibm.com>,
@@ -74,11 +73,13 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org,
 	nvdimm@lists.linux.dev, devicetree@vger.kernel.org,
 	linux-arch@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org
-Subject: Re: [PATCH 15/17] mm: make numa_memblks more self-contained
-Message-ID: <ZpuuYnMCd8RRZEcH@kernel.org>
+Subject: Re: [PATCH 02/17] MIPS: sgi-ip27: make NODE_DATA() the same as on
+ all other architectures
+Message-ID: <Zp4Lbh20_IHZ2I5n@kernel.org>
 References: <20240716111346.3676969-1-rppt@kernel.org>
- <20240716111346.3676969-16-rppt@kernel.org>
- <20240719190712.00001307@Huawei.com>
+ <20240716111346.3676969-3-rppt@kernel.org>
+ <e57eca18-b66d-4b5d-9e73-8ab22f6bc747@redhat.com>
+ <20240719153852.00003f44@Huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -87,165 +88,115 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240719190712.00001307@Huawei.com>
+In-Reply-To: <20240719153852.00003f44@Huawei.com>
 
-On Fri, Jul 19, 2024 at 07:07:12PM +0100, Jonathan Cameron wrote:
-> On Tue, 16 Jul 2024 14:13:44 +0300
-> Mike Rapoport <rppt@kernel.org> wrote:
+On Fri, Jul 19, 2024 at 03:38:52PM +0100, Jonathan Cameron wrote:
+> On Wed, 17 Jul 2024 16:32:59 +0200
+> David Hildenbrand <david@redhat.com> wrote:
 > 
-> > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> > On 16.07.24 13:13, Mike Rapoport wrote:
+> > > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> > > 
+> > > sgi-ip27 is the only system that defines NODE_DATA() differently than
+> > > the rest of NUMA machines.
+> > > 
+> > > Add node_data array of struct pglist pointers that will point to
+> > > __node_data[node]->pglist and redefine NODE_DATA() to use node_data
+> > > array.
+> > > 
+> > > This will allow pulling declaration of node_data to the generic mm code
+> > > in the next commit.
+> > > 
+> > > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> > > ---
+> > >   arch/mips/include/asm/mach-ip27/mmzone.h | 5 ++++-
+> > >   arch/mips/sgi-ip27/ip27-memory.c         | 5 ++++-
+> > >   2 files changed, 8 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/arch/mips/include/asm/mach-ip27/mmzone.h b/arch/mips/include/asm/mach-ip27/mmzone.h
+> > > index 08c36e50a860..629c3f290203 100644
+> > > --- a/arch/mips/include/asm/mach-ip27/mmzone.h
+> > > +++ b/arch/mips/include/asm/mach-ip27/mmzone.h
+> > > @@ -22,7 +22,10 @@ struct node_data {
+> > >   
+> > >   extern struct node_data *__node_data[];
+> > >   
+> > > -#define NODE_DATA(n)		(&__node_data[(n)]->pglist)
+> > >   #define hub_data(n)		(&__node_data[(n)]->hub)
+> > >   
+> > > +extern struct pglist_data *node_data[];
+> > > +
+> > > +#define NODE_DATA(nid)		(node_data[nid])
+> > > +
+> > >   #endif /* _ASM_MACH_MMZONE_H */
+> > > diff --git a/arch/mips/sgi-ip27/ip27-memory.c b/arch/mips/sgi-ip27/ip27-memory.c
+> > > index b8ca94cfb4fe..c30ef6958b97 100644
+> > > --- a/arch/mips/sgi-ip27/ip27-memory.c
+> > > +++ b/arch/mips/sgi-ip27/ip27-memory.c
+> > > @@ -34,8 +34,10 @@
+> > >   #define SLOT_PFNSHIFT		(SLOT_SHIFT - PAGE_SHIFT)
+> > >   #define PFN_NASIDSHFT		(NASID_SHFT - PAGE_SHIFT)
+> > >   
+> > > -struct node_data *__node_data[MAX_NUMNODES];
+> > > +struct pglist_data *node_data[MAX_NUMNODES];
+> > > +EXPORT_SYMBOL(node_data);
+> > >   
+> > > +struct node_data *__node_data[MAX_NUMNODES];
+> > >   EXPORT_SYMBOL(__node_data);
+> > >   
+> > >   static u64 gen_region_mask(void)
+> > > @@ -361,6 +363,7 @@ static void __init node_mem_init(nasid_t node)
+> > >   	 */
+> > >   	__node_data[node] = __va(slot_freepfn << PAGE_SHIFT);
+> > >   	memset(__node_data[node], 0, PAGE_SIZE);
+> > > +	node_data[node] = &__node_data[node]->pglist;
+> > >   
+> > >   	NODE_DATA(node)->node_start_pfn = start_pfn;
+> > >   	NODE_DATA(node)->node_spanned_pages = end_pfn - start_pfn;  
 > > 
-> > Introduce numa_memblks_init() and move some code around to avoid several
-> > global variables in numa_memblks.
-> 
-> Hi Mike,
-> 
-> Adding the effectively always on memblock_force_top_down
-> deserves a comment on why. I assume because you are going to do
-> something with it later? 
-
-Yes, arch_numa sets it to false. I'll add a note in the changelog.
-
-> There also seems to be more going on in here such as the change to
-> get_pfn_range_for_nid()  Perhaps break this up so each
-> change can have an explanation. 
- 
-Ok.
- 
+> > I was assuming we could get rid of __node_data->pglist.
 > > 
-> > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> > ---
-> >  arch/x86/mm/numa.c           | 53 ++++---------------------
-> >  include/linux/numa_memblks.h |  9 +----
-> >  mm/numa_memblks.c            | 77 +++++++++++++++++++++++++++---------
-> >  3 files changed, 68 insertions(+), 71 deletions(-)
-> > 
-> > diff --git a/arch/x86/mm/numa.c b/arch/x86/mm/numa.c
-> > index 3848e68d771a..16bc703c9272 100644
-> > --- a/arch/x86/mm/numa.c
-> > +++ b/arch/x86/mm/numa.c
-> > @@ -115,30 +115,19 @@ void __init setup_node_to_cpumask_map(void)
-> >  	pr_debug("Node to cpumask map for %u nodes\n", nr_node_ids);
-> >  }
-> >  
-> > -static int __init numa_register_memblks(struct numa_meminfo *mi)
-> > +static int __init numa_register_nodes(void)
-> >  {
-> > -	int i, nid, err;
-> > -
-> > -	err = numa_register_meminfo(mi);
-> > -	if (err)
-> > -		return err;
-> > +	int nid;
-> >  
-> >  	if (!memblock_validate_numa_coverage(SZ_1M))
-> >  		return -EINVAL;
-> >  
-> >  	/* Finally register nodes. */
-> >  	for_each_node_mask(nid, node_possible_map) {
-> > -		u64 start = PFN_PHYS(max_pfn);
-> > -		u64 end = 0;
-> > -
-> > -		for (i = 0; i < mi->nr_blks; i++) {
-> > -			if (nid != mi->blk[i].nid)
-> > -				continue;
-> > -			start = min(mi->blk[i].start, start);
-> > -			end = max(mi->blk[i].end, end);
-> > -		}
-> > +		unsigned long start_pfn, end_pfn;
-> >  
-> > -		if (start >= end)
-> > +		get_pfn_range_for_nid(nid, &start_pfn, &end_pfn);
+> > But now I am confused where that is actually set.
 > 
-> It's not immediately obvious to me that this code is equivalent so I'd
-> prefer it in a separate patch with some description of why
-> it is a valid change.
+> It looks nasty... 
 
-Will do.
- 
-> > +		if (start_pfn >= end_pfn)
-> >  			continue;
-> >  
-> >  		alloc_node_data(nid);
-> > @@ -178,39 +167,11 @@ static int __init numa_init(int (*init_func)(void))
-> >  	for (i = 0; i < MAX_LOCAL_APIC; i++)
-> >  		set_apicid_to_node(i, NUMA_NO_NODE);
-> >  
-> > -	nodes_clear(numa_nodes_parsed);
-> > -	nodes_clear(node_possible_map);
-> > -	nodes_clear(node_online_map);
-> > -	memset(&numa_meminfo, 0, sizeof(numa_meminfo));
-> > -	WARN_ON(memblock_set_node(0, ULLONG_MAX, &memblock.memory,
-> > -				  NUMA_NO_NODE));
-> > -	WARN_ON(memblock_set_node(0, ULLONG_MAX, &memblock.reserved,
-> > -				  NUMA_NO_NODE));
-> > -	/* In case that parsing SRAT failed. */
-> > -	WARN_ON(memblock_clear_hotplug(0, ULLONG_MAX));
-> > -	numa_reset_distance();
-> > -
-> > -	ret = init_func();
-> > -	if (ret < 0)
-> > -		return ret;
-> > -
-> > -	/*
-> > -	 * We reset memblock back to the top-down direction
-> > -	 * here because if we configured ACPI_NUMA, we have
-> > -	 * parsed SRAT in init_func(). It is ok to have the
-> > -	 * reset here even if we did't configure ACPI_NUMA
-> > -	 * or acpi numa init fails and fallbacks to dummy
-> > -	 * numa init.
-> > -	 */
-> > -	memblock_set_bottom_up(false);
-> > -
-> > -	ret = numa_cleanup_meminfo(&numa_meminfo);
-> > +	ret = numa_memblks_init(init_func, /* memblock_force_top_down */ true);
-> The comment in parameter list seems unnecessary.
-> Maybe add a comment above the call instead if need to call that out?
+Nasty indeed :)
 
-I'll drop it for now.
+> Cast in arch_refresh_nodedata() takes incoming pg_data_t * and casts it
+> to the local version of struct node_data * which I think is this one
+> 
+> struct node_data {
+> 	struct pglist_data pglist; (which is pg_data_t pglist)
+> 	struct hub_data hub;
+> };
+> 
+> https://elixir.bootlin.com/linux/v6.10/source/arch/mips/sgi-ip27/ip27-memory.c#L432
+> 
+> Now that pg_data_t is allocated by 
+> arch_alloc_nodedata() which might be fine (though types could be handled in a more
+> readable fashion via some container_of() magic.
+> https://elixir.bootlin.com/linux/v6.10/source/arch/mips/sgi-ip27/ip27-memory.c#L427
+> 
+> However that call is:
+> pg_data_t * __init arch_alloc_nodedata(int nid)
+> {
+> 	return memblock_alloc(sizeof(pg_data_t), SMP_CACHE_BYTES);
+> }
+> 
+> So doesn't seem to allocate enough space to me as should be sizeof(struct node_data)
+
+Well, it's there to silence a compiler error (commit f8f9f21c7848 ("MIPS:
+Fix build error for loongson64 and sgi-ip27")), but this is not a proper
+fix :(
+Luckily nothing calls cpumask_of_node() for offline nodes...
  
-> >  	if (ret < 0)
-> >  		return ret;
-> >  
-> > -	numa_emulation(&numa_meminfo, numa_distance_cnt);
-> > -
-> > -	ret = numa_register_memblks(&numa_meminfo);
-> > +	ret = numa_register_nodes();
-> >  	if (ret < 0)
-> >  		return ret;
-> >  
-> 
-> > diff --git a/mm/numa_memblks.c b/mm/numa_memblks.c
-> > index e0039549aaac..640f3a3ce0ee 100644
-> > --- a/mm/numa_memblks.c
-> > +++ b/mm/numa_memblks.c
-> > @@ -7,13 +7,27 @@
-> >  #include <linux/numa.h>
-> >  #include <linux/numa_memblks.h>
-> >  
-> 
-> > +/*
-> > + * Set nodes, which have memory in @mi, in *@nodemask.
-> > + */
-> > +static void __init numa_nodemask_from_meminfo(nodemask_t *nodemask,
-> > +					      const struct numa_meminfo *mi)
-> > +{
-> > +	int i;
-> > +
-> > +	for (i = 0; i < ARRAY_SIZE(mi->blk); i++)
-> > +		if (mi->blk[i].start != mi->blk[i].end &&
-> > +		    mi->blk[i].nid != NUMA_NO_NODE)
-> > +			node_set(mi->blk[i].nid, *nodemask);
-> > +}
-> 
-> The code move doesn't have an obvious purpose. Maybe call that
-> out in the patch description if it is needed for a future patch.
-> Or do it in two goes so first just adds the static, 2nd shuffles
-> the code.
+> Worth cleaning up whilst here?  Proper handling of types would definitely
+> help.
+
+Worth cleanup indeed, but I'd rather drop arch_alloc_nodedata() on MIPS
+altogether.
  
-Before the move numa_nodemask_from_meminfo() was global so it was ok to
-define it after its callers.
-I'll split this into a separate commit.
+> Jonathan
 
 -- 
 Sincerely yours,
