@@ -1,119 +1,147 @@
-Return-Path: <linux-arch+bounces-5553-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5554-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 336529390AE
-	for <lists+linux-arch@lfdr.de>; Mon, 22 Jul 2024 16:31:42 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD2A39390EE
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Jul 2024 16:48:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E7EC928235C
-	for <lists+linux-arch@lfdr.de>; Mon, 22 Jul 2024 14:31:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8332EB2085C
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Jul 2024 14:48:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 235B711CAF;
-	Mon, 22 Jul 2024 14:31:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rjmEXCND"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0815916D9A5;
+	Mon, 22 Jul 2024 14:48:34 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D542E8F70;
-	Mon, 22 Jul 2024 14:31:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D324D16B74D;
+	Mon, 22 Jul 2024 14:48:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721658694; cv=none; b=mi2zRqTLwgPmi0cSEbhw96S17RzGjdQZSpYPL3klM9w1oYL8OzfAPKHN+1JazF0JY9q7BqJeRYS0VQKWnD1KONlA9b3z6v2chQGK+3/u07mTrwJdn9M8Ujbb1SkwZA82lAUjUmi2YCDRhpE2enPDBKnRNA6fBEk9k779Ho+C94k=
+	t=1721659713; cv=none; b=nuSNmWOK3JjoczE2Q8UJi6SAvFL6mcJYbFanP3ePWq7qFM95pQyn4feDUrpoTMieBd1BecMSsCrvwLIr6j0Shs71B5yp89llqD0RLfJ44EuTLljWqvvDvb1kZ0cP+iNZ6e+MpHsNBPapNDric0aAivA9ZDjvdE7K70cIHiqHN5g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721658694; c=relaxed/simple;
-	bh=19lbAMuG8/46S2vgOQ57EZ7eAEiw5QZgfuSPqQZDrsA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n2z2wjoXmnLpYkBpeA+5vmNE1ET12mSsNohMdue1lW2dOpQ8DsnbCL+6TibuoOUXEejP3C2CKMj2vDNuSInxzpQFP+27S3n3GSOtV7x5Mzg71oaSdJpICW5zXMmeevPLAdJUxiAV/kJmu8U5TjV3eiXHEZrCtaMyHrnfWJts7Ls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rjmEXCND; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6A25C4AF0B;
-	Mon, 22 Jul 2024 14:31:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721658693;
-	bh=19lbAMuG8/46S2vgOQ57EZ7eAEiw5QZgfuSPqQZDrsA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rjmEXCNDKBFkXhGlJsIiF/YiOAsxKiiVQ1yy0ea0mM7am81QSF76gClDv9enAtAlY
-	 k5zMblh91dP2iCOQWwD6UXBINMw2SURV0D5VkPmSTcCj+7qrLkiTc9H5X2ZXYxh7QX
-	 /ztn3FxVCqDdZwqpFFWuHB/egHyBWfmfrmpKrYkCGpLDHUdnmnfjb/anl9IGvbPEnH
-	 XugwdYQn62/PfBmN2Sx/MlckvPbNVxoeQqCGdrWIx9EJAnA97fRcl1FAgUYZvFPWh/
-	 St8tz1MT7X7blLPvAvrsbs+/p6oIUcWDkcQJuST7wIJtoLExPii3xtAVeQFrVH08LG
-	 pTi8SManLPJQA==
-Date: Mon, 22 Jul 2024 15:31:24 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-	Eric Biederman <ebiederm@xmission.com>,
-	Shuah Khan <shuah@kernel.org>,
-	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
-	Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>,
-	"H.J. Lu" <hjl.tools@gmail.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Florian Weimer <fweimer@redhat.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Ross Burton <ross.burton@arm.com>,
-	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v9 38/39] kselftest/arm64: Add a GCS stress test
-Message-ID: <19c8a2eb-1c52-43aa-a329-3dc245c966e6@sirena.org.uk>
-References: <20240625-arm64-gcs-v9-0-0f634469b8f0@kernel.org>
- <20240625-arm64-gcs-v9-38-0f634469b8f0@kernel.org>
- <875xt2xojp.fsf@linaro.org>
+	s=arc-20240116; t=1721659713; c=relaxed/simple;
+	bh=cuzDDnA3GBV7pB5L/CiGYs8DablqcIWcQ3YQbmqoty0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pK1xQscqyWJl3VI3DkKq4JXosTwD3Y6dGceqBUKwMgZcrkoaiQsDeNhu/g4zENEvdcYhwUimUa3TLmMRIlVOMYqzty5felWo5nSj3mEh3s+TvaL7g0B42anhKGDQ4Wt96aYybKhxiusVRZlspFEKVTtydedifX5sUgS0hkVUzAo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0280C116B1;
+	Mon, 22 Jul 2024 14:48:30 +0000 (UTC)
+From: Huacai Chen <chenhuacai@loongson.cn>
+To: Linus Torvalds <torvalds@linux-foundation.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Huacai Chen <chenhuacai@kernel.org>
+Cc: loongarch@lists.linux.dev,
+	linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Guo Ren <guoren@kernel.org>,
+	Xuerui Wang <kernel@xen0n.name>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Huacai Chen <chenhuacai@loongson.cn>
+Subject: [GIT PULL] LoongArch changes for v6.11
+Date: Mon, 22 Jul 2024 22:48:22 +0800
+Message-ID: <20240722144822.4040791-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="fZmP/tHPENLmAEIV"
-Content-Disposition: inline
-In-Reply-To: <875xt2xojp.fsf@linaro.org>
-X-Cookie: Everything you know is wrong!
+Content-Transfer-Encoding: 8bit
 
+The following changes since commit 0c3836482481200ead7b416ca80c68a29cfdaabd:
 
---fZmP/tHPENLmAEIV
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+  Linux 6.10 (2024-07-14 15:43:32 -0700)
 
-On Thu, Jul 18, 2024 at 08:34:18PM -0300, Thiago Jung Bauermann wrote:
-> Mark Brown <broonie@kernel.org> writes:
+are available in the Git repository at:
 
-> # # Waiting for 9 children
-> # # Thread-4030: Failed to enable GCS
-> # # Thread-4031: Failed to enable GCS
+  git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-6.11
 
-This is already fixed locally, just rebasing bitrot.
+for you to fetch changes up to 998b17d4440b8559a8bf4926e86f493101995519:
 
---fZmP/tHPENLmAEIV
-Content-Type: application/pgp-signature; name="signature.asc"
+  LoongArch: Make the users of larch_insn_gen_break() constant (2024-07-20 22:41:07 +0800)
 
------BEGIN PGP SIGNATURE-----
+----------------------------------------------------------------
+LoongArch changes for v6.11
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmaebTsACgkQJNaLcl1U
-h9A1BAf/U0ze5vCUOiRu38u3xvKe2wO4c/NxU38BnN6U5lriKaPwnoC8WAtlYPBJ
-67+s8YadLJLRgDMtuUHW85HuikmcDmVUs5SUM7HwwVd6qMVx9FYmMls8aA9Powqn
-u0Y4vFhfQwlvL0aSBnYPBF2vjCXMYzN8EVHJaJhPJlB5HsZstADQQM77apbd9U2V
-BD0gJukw9LhNPPTmNyuuBnF9jXXCAUXEpEosdsWYl4f6+msBc5abKIt1agzRJhFE
-yYalLzSD/wqZOZGLXf/Cx/DzdJLC8/ahN8cI5MqCUDDQFLFnhV/vS2yld0/Cu0sw
-qwhjMxP9NPq+uiruBXIU7nGO40rudg==
-=Kw0J
------END PGP SIGNATURE-----
+1, Define __ARCH_WANT_NEW_STAT in unistd.h;
+2, Always enumerate MADT and setup logical-physical CPU mapping;
+3, Add irq_work support via self IPIs;
+4, Add RANDOMIZE_KSTACK_OFFSET support;
+5, Add ARCH_HAS_PTE_DEVMAP support;
+6, Add ARCH_HAS_DEBUG_VM_PGTABLE support;
+7, Add writecombine support for DMW-based ioremap();
+8, Add architectural preparation for CPUFreq;
+9, Add ACPI standard hardware register based S3 support;
+10, Add support for relocating the kernel with RELR relocation;
+11, Some bug fixes and other small changes.
 
---fZmP/tHPENLmAEIV--
+----------------------------------------------------------------
+Huacai Chen (10):
+      Merge tag 'asm-generic-6.11' into loongarch-next
+      LoongArch: Define __ARCH_WANT_NEW_STAT in unistd.h
+      LoongArch: Always enumerate MADT and setup logical-physical CPU mapping
+      LoongArch: Add irq_work support via self IPIs
+      LoongArch: Add ARCH_HAS_PTE_DEVMAP support
+      LoongArch: Add ARCH_HAS_DEBUG_VM_PGTABLE support
+      LoongArch: Add writecombine support for DMW-based ioremap()
+      LoongArch: Add architectural preparation for CPUFreq
+      LoongArch: Automatically disable KASLR for hibernation
+      LoongArch: Use correct API to map cmdline in relocate_kernel()
+
+Jiaxun Yang (1):
+      LoongArch: Add ACPI standard hardware register based S3 support
+
+Jinjie Ruan (1):
+      LoongArch: Add RANDOMIZE_KSTACK_OFFSET support
+
+Oleg Nesterov (1):
+      LoongArch: Make the users of larch_insn_gen_break() constant
+
+Tiezhu Yang (1):
+      LoongArch: Check TIF_LOAD_WATCH to enable user space watchpoint
+
+WANG Rui (1):
+      LoongArch: Use rustc option -Zdirect-access-external-data
+
+Xi Ruoyao (2):
+      LoongArch: Remove a redundant checking in relocator
+      LoongArch: Add support for relocating the kernel with RELR relocation
+
+ .../debug/debug-vm-pgtable/arch-support.txt        |  2 +-
+ arch/loongarch/Kconfig                             |  5 +++
+ arch/loongarch/Makefile                            |  3 +-
+ arch/loongarch/include/asm/addrspace.h             |  4 ++
+ arch/loongarch/include/asm/asmmacro.h              |  1 +
+ arch/loongarch/include/asm/hardirq.h               |  3 +-
+ arch/loongarch/include/asm/inst.h                  |  3 ++
+ arch/loongarch/include/asm/io.h                    | 10 ++++-
+ arch/loongarch/include/asm/irq_work.h              | 10 +++++
+ arch/loongarch/include/asm/loongarch.h             | 13 +++++-
+ arch/loongarch/include/asm/pgtable-bits.h          |  6 ++-
+ arch/loongarch/include/asm/pgtable.h               | 19 ++++++++
+ arch/loongarch/include/asm/setup.h                 |  5 +++
+ arch/loongarch/include/asm/smp.h                   |  2 +
+ arch/loongarch/include/asm/stackframe.h            | 11 +++++
+ arch/loongarch/include/asm/unistd.h                |  1 +
+ arch/loongarch/include/asm/uprobes.h               |  4 +-
+ arch/loongarch/kernel/Makefile.syscalls            |  3 +-
+ arch/loongarch/kernel/acpi.c                       | 22 ++++++---
+ arch/loongarch/kernel/head.S                       | 11 +----
+ arch/loongarch/kernel/hw_breakpoint.c              |  2 +-
+ arch/loongarch/kernel/kprobes.c                    |  4 +-
+ arch/loongarch/kernel/paravirt.c                   |  6 +++
+ arch/loongarch/kernel/ptrace.c                     |  3 ++
+ arch/loongarch/kernel/relocate.c                   | 52 ++++++++++++++++++++--
+ arch/loongarch/kernel/setup.c                      |  4 +-
+ arch/loongarch/kernel/smp.c                        | 21 +++++++--
+ arch/loongarch/kernel/syscall.c                    | 22 ++++++++-
+ arch/loongarch/kernel/vmlinux.lds.S                |  8 ++++
+ arch/loongarch/power/platform.c                    | 37 ++++++++++++---
+ arch/loongarch/power/suspend_asm.S                 |  8 +---
+ drivers/firmware/efi/libstub/loongarch.c           |  2 +
+ 32 files changed, 256 insertions(+), 51 deletions(-)
+ create mode 100644 arch/loongarch/include/asm/irq_work.h
 
