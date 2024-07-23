@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-5582-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5583-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AAE5939B06
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2024 08:51:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C4EC939B0F
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2024 08:51:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E27B41F22956
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2024 06:51:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C064F2847D1
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2024 06:51:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6704214E2C4;
-	Tue, 23 Jul 2024 06:46:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4514114E2CF;
+	Tue, 23 Jul 2024 06:47:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jgAoC+Hc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QNLg86Jy"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 293CC14A609;
-	Tue, 23 Jul 2024 06:46:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F13E714C581;
+	Tue, 23 Jul 2024 06:47:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721717217; cv=none; b=OUG/IEiAY9P1P5K4uuIAd38QGEZNu+YA+BH40kEvEbb70eppTGOfG9jkYFHbbtBBd4VbhglS1K3iZA6/HQsw/9JmExc1eK3SwNLgT91ZWsBJgNVk5275CT0TuuHHLvWhosSAvhUCsxUKGgVypOmS+j21Qqf3nZAJp4JwcdULP5Q=
+	t=1721717229; cv=none; b=fn5fAohQp9rbdMs0L4Ip4aFArr6HIoDYMrxhUwbEagtUnLNlZNvkS5YmreCgOEj34F2IN+9+0/sxobHvxogUZYdrqdkKT9KnrBHPuwLD8zRc7xuEQs4zEqyPOnQWCHvk19W/eWRqoPhzs6z7XTHBZ63LHkmVr9EkCzyQyY5AdNc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721717217; c=relaxed/simple;
-	bh=emeCYa9405g7/z24yhBWS68KWW8+Lb3s/YOK8bOaThI=;
+	s=arc-20240116; t=1721717229; c=relaxed/simple;
+	bh=XhBFop5H8bMuMnCv+pTVRkvsNA1D1d9rM83bQqfOsbg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=X39zL+ML5ZNo+iunUSlEywlE8HkFpQPaTX/lZy2tRn4cwkXUIwj1ViENWAgNnCO2TPlcRc5lkEM7tm33RrBtCZmU9CAyz28RbFq7b8GmUQ9tI+XEhbYfD1EBXpUPLU/n5zNV0w1zcOfKJxxAQnXUTPgZy/HpIRJ2aUtumcGCQvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jgAoC+Hc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDFFDC4AF12;
-	Tue, 23 Jul 2024 06:46:45 +0000 (UTC)
+	 MIME-Version; b=Qw8UwVVAYW0kNbHWuHwLfbt0Cm8dmJXGnePh8QGEqfllpHrRxyyGjWAigpIbhkBfWloSx1fk0xT//esojPCjbqqs6Kfer8mPypCmF1qdnuBOx2IXPpjP1Jp34JVJaTWdul6tcB5nONkkTU1yNmUrY5avFf4sm91BVrcC+vKKGCg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QNLg86Jy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88E7AC4AF10;
+	Tue, 23 Jul 2024 06:46:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721717217;
-	bh=emeCYa9405g7/z24yhBWS68KWW8+Lb3s/YOK8bOaThI=;
+	s=k20201202; t=1721717228;
+	bh=XhBFop5H8bMuMnCv+pTVRkvsNA1D1d9rM83bQqfOsbg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=jgAoC+Hcal9bWK9k7ho6yBYf06kymWVllDUMPiOaeuFSG/wojxIxKcWyED4DoWkCl
-	 ZyPnLzk1UZksRbBGs+vwS6J3QRkp5NCWUyBtV2hPxbzh2xDsZ8HA+/i+k9yezOal8u
-	 zhjJSmaqAV92XU7hpKX6nY/kRVxDgU4f5bxdcxuLSfaiLoEIwLORtA6VE/d1oMTTUm
-	 Pqc1pcChaNRo/+GbV4+lfx2+t+YfKTxY+qn5wYaSZxtCRIZx8059ZX38rWfyX1IoPG
-	 OdZJdrg7fImaUDMXuKWgBftxFVlRAZKp9u8sSnRW4s39ogVzgJG0rOPKH30S5pFCFo
-	 G7ZwK7pI1cKjg==
+	b=QNLg86Jyt1YyzxPEeX6D3F4KpgxoIA7kTTXU/4Vh40COSg2P7gWaFbk2wTlGFfl4o
+	 8VEFN0QnIMlGVDL9MQTFK1P9wKPcdxA6llZjn9naPajN8ELpS3/Hl6z/d8bIhTz8Bo
+	 crTLjwLalT1F0qF/XNoilpQdEa5ncV0aAZ/SpaB+6WLDO664rMOj6P6DtDnIvhdGiU
+	 c2Pr42NhZgqI9ZRisEeKX6Fejq+BKDo4BMOie7hVHOHzopjON0xM1GAA3kppApeLKE
+	 /0wmyOuJJNxXMREyX7/3OLD4TIDGDkn7CPLTl9q6nZ36lvACr6Abe1/mdtFq4g6M3X
+	 VaFW/sr1c5HuQ==
 From: Mike Rapoport <rppt@kernel.org>
 To: linux-kernel@vger.kernel.org
 Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
@@ -89,11 +89,10 @@ Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
 	loongarch@lists.linux.dev,
 	nvdimm@lists.linux.dev,
 	sparclinux@vger.kernel.org,
-	x86@kernel.org,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH v2 24/25] mm: make range-to-target_node lookup facility a part of numa_memblks
-Date: Tue, 23 Jul 2024 09:41:55 +0300
-Message-ID: <20240723064156.4009477-25-rppt@kernel.org>
+	x86@kernel.org
+Subject: [PATCH v2 25/25] docs: move numa=fake description to kernel-parameters.txt
+Date: Tue, 23 Jul 2024 09:41:56 +0300
+Message-ID: <20240723064156.4009477-26-rppt@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240723064156.4009477-1-rppt@kernel.org>
 References: <20240723064156.4009477-1-rppt@kernel.org>
@@ -107,192 +106,67 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-The x86 implementation of range-to-target_node lookup (i.e.
-phys_to_target_node() and memory_add_physaddr_to_nid()) relies on
-numa_memblks.
+NUMA emulation can be now enabled on arm64 and riscv in addition to x86.
 
-Since numa_memblks are now part of the generic code, move these
-functions from x86 to mm/numa_memblks.c and select
-CONFIG_NUMA_KEEP_MEMINFO when CONFIG_NUMA_MEMBLKS=y for dax and cxl.
+Move description of numa=fake parameters from x86 documentation of
+admin-guide/kernel-parameters.txt
 
+Suggested-by: Zi Yan <ziy@nvidia.com>
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 ---
- arch/x86/include/asm/sparsemem.h |  9 --------
- arch/x86/mm/numa.c               | 38 --------------------------------
- drivers/cxl/Kconfig              |  2 +-
- drivers/dax/Kconfig              |  2 +-
- include/linux/numa_memblks.h     |  7 ++++++
- mm/numa.c                        |  1 +
- mm/numa_memblks.c                | 38 ++++++++++++++++++++++++++++++++
- 7 files changed, 48 insertions(+), 49 deletions(-)
+ Documentation/admin-guide/kernel-parameters.txt | 15 +++++++++++++++
+ Documentation/arch/x86/x86_64/boot-options.rst  | 12 ------------
+ 2 files changed, 15 insertions(+), 12 deletions(-)
 
-diff --git a/arch/x86/include/asm/sparsemem.h b/arch/x86/include/asm/sparsemem.h
-index 64df897c0ee3..3918c7a434f5 100644
---- a/arch/x86/include/asm/sparsemem.h
-+++ b/arch/x86/include/asm/sparsemem.h
-@@ -31,13 +31,4 @@
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 27ec49af1bf2..d64e27768429 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -4158,6 +4158,21 @@
+ 			Disable NUMA, Only set up a single NUMA node
+ 			spanning all memory.
  
- #endif /* CONFIG_SPARSEMEM */
++	numa=fake=<size>[MG]
++			[KNL, ARM64, RISCV, X86, EARLY]
++			If given as a memory unit, fills all system RAM with
++			nodes of size interleaved over physical nodes.
++
++	numa=fake=<N>
++			[KNL, ARM64, RISCV, X86, EARLY]
++			If given as an integer, fills all system RAM with N
++			fake nodes interleaved over physical nodes.
++
++	numa=fake=<N>U
++			[KNL, ARM64, RISCV, X86, EARLY]
++			If given as an integer followed by 'U', it will
++			divide each physical node into N emulated nodes.
++
+ 	numa_balancing=	[KNL,ARM64,PPC,RISCV,S390,X86] Enable or disable automatic
+ 			NUMA balancing.
+ 			Allowed values are enable and disable
+diff --git a/Documentation/arch/x86/x86_64/boot-options.rst b/Documentation/arch/x86/x86_64/boot-options.rst
+index 137432d34109..98d4805f0823 100644
+--- a/Documentation/arch/x86/x86_64/boot-options.rst
++++ b/Documentation/arch/x86/x86_64/boot-options.rst
+@@ -170,18 +170,6 @@ NUMA
+     Don't parse the HMAT table for NUMA setup, or soft-reserved memory
+     partitioning.
  
--#ifndef __ASSEMBLY__
--#ifdef CONFIG_NUMA_KEEP_MEMINFO
--extern int phys_to_target_node(phys_addr_t start);
--#define phys_to_target_node phys_to_target_node
--extern int memory_add_physaddr_to_nid(u64 start);
--#define memory_add_physaddr_to_nid memory_add_physaddr_to_nid
--#endif
--#endif /* __ASSEMBLY__ */
+-  numa=fake=<size>[MG]
+-    If given as a memory unit, fills all system RAM with nodes of
+-    size interleaved over physical nodes.
 -
- #endif /* _ASM_X86_SPARSEMEM_H */
-diff --git a/arch/x86/mm/numa.c b/arch/x86/mm/numa.c
-index 16bc703c9272..8e790528805e 100644
---- a/arch/x86/mm/numa.c
-+++ b/arch/x86/mm/numa.c
-@@ -449,41 +449,3 @@ u64 __init numa_emu_dma_end(void)
- 	return PFN_PHYS(MAX_DMA32_PFN);
- }
- #endif /* CONFIG_NUMA_EMU */
+-  numa=fake=<N>
+-    If given as an integer, fills all system RAM with N fake nodes
+-    interleaved over physical nodes.
 -
--#ifdef CONFIG_NUMA_KEEP_MEMINFO
--static int meminfo_to_nid(struct numa_meminfo *mi, u64 start)
--{
--	int i;
+-  numa=fake=<N>U
+-    If given as an integer followed by 'U', it will divide each
+-    physical node into N emulated nodes.
 -
--	for (i = 0; i < mi->nr_blks; i++)
--		if (mi->blk[i].start <= start && mi->blk[i].end > start)
--			return mi->blk[i].nid;
--	return NUMA_NO_NODE;
--}
--
--int phys_to_target_node(phys_addr_t start)
--{
--	int nid = meminfo_to_nid(&numa_meminfo, start);
--
--	/*
--	 * Prefer online nodes, but if reserved memory might be
--	 * hot-added continue the search with reserved ranges.
--	 */
--	if (nid != NUMA_NO_NODE)
--		return nid;
--
--	return meminfo_to_nid(&numa_reserved_meminfo, start);
--}
--EXPORT_SYMBOL_GPL(phys_to_target_node);
--
--int memory_add_physaddr_to_nid(u64 start)
--{
--	int nid = meminfo_to_nid(&numa_meminfo, start);
--
--	if (nid == NUMA_NO_NODE)
--		nid = numa_meminfo.blk[0].nid;
--	return nid;
--}
--EXPORT_SYMBOL_GPL(memory_add_physaddr_to_nid);
--
--#endif
-diff --git a/drivers/cxl/Kconfig b/drivers/cxl/Kconfig
-index 99b5c25be079..29c192f20082 100644
---- a/drivers/cxl/Kconfig
-+++ b/drivers/cxl/Kconfig
-@@ -6,7 +6,7 @@ menuconfig CXL_BUS
- 	select FW_UPLOAD
- 	select PCI_DOE
- 	select FIRMWARE_TABLE
--	select NUMA_KEEP_MEMINFO if (NUMA && X86)
-+	select NUMA_KEEP_MEMINFO if NUMA_MEMBLKS
- 	help
- 	  CXL is a bus that is electrically compatible with PCI Express, but
- 	  layers three protocols on that signalling (CXL.io, CXL.cache, and
-diff --git a/drivers/dax/Kconfig b/drivers/dax/Kconfig
-index a88744244149..d656e4c0eb84 100644
---- a/drivers/dax/Kconfig
-+++ b/drivers/dax/Kconfig
-@@ -30,7 +30,7 @@ config DEV_DAX_PMEM
- config DEV_DAX_HMEM
- 	tristate "HMEM DAX: direct access to 'specific purpose' memory"
- 	depends on EFI_SOFT_RESERVE
--	select NUMA_KEEP_MEMINFO if (NUMA && X86)
-+	select NUMA_KEEP_MEMINFO if NUMA_MEMBLKS
- 	default DEV_DAX
- 	help
- 	  EFI 2.8 platforms, and others, may advertise 'specific purpose'
-diff --git a/include/linux/numa_memblks.h b/include/linux/numa_memblks.h
-index 5c6e12ad0b7a..17d4bcc34091 100644
---- a/include/linux/numa_memblks.h
-+++ b/include/linux/numa_memblks.h
-@@ -46,6 +46,13 @@ static inline int numa_emu_cmdline(char *str)
- }
- #endif /* CONFIG_NUMA_EMU */
+ ACPI
+ ====
  
-+#ifdef CONFIG_NUMA_KEEP_MEMINFO
-+extern int phys_to_target_node(phys_addr_t start);
-+#define phys_to_target_node phys_to_target_node
-+extern int memory_add_physaddr_to_nid(u64 start);
-+#define memory_add_physaddr_to_nid memory_add_physaddr_to_nid
-+#endif /* CONFIG_NUMA_KEEP_MEMINFO */
-+
- #endif /* CONFIG_NUMA_MEMBLKS */
- 
- #endif	/* __NUMA_MEMBLKS_H */
-diff --git a/mm/numa.c b/mm/numa.c
-index 67a0d7734a98..da27eb151dc5 100644
---- a/mm/numa.c
-+++ b/mm/numa.c
-@@ -3,6 +3,7 @@
- #include <linux/memblock.h>
- #include <linux/printk.h>
- #include <linux/numa.h>
-+#include <linux/numa_memblks.h>
- 
- struct pglist_data *node_data[MAX_NUMNODES];
- EXPORT_SYMBOL(node_data);
-diff --git a/mm/numa_memblks.c b/mm/numa_memblks.c
-index e4358ad92233..8609c6eb3998 100644
---- a/mm/numa_memblks.c
-+++ b/mm/numa_memblks.c
-@@ -528,3 +528,41 @@ int __init numa_fill_memblks(u64 start, u64 end)
- 	}
- 	return 0;
- }
-+
-+#ifdef CONFIG_NUMA_KEEP_MEMINFO
-+static int meminfo_to_nid(struct numa_meminfo *mi, u64 start)
-+{
-+	int i;
-+
-+	for (i = 0; i < mi->nr_blks; i++)
-+		if (mi->blk[i].start <= start && mi->blk[i].end > start)
-+			return mi->blk[i].nid;
-+	return NUMA_NO_NODE;
-+}
-+
-+int phys_to_target_node(phys_addr_t start)
-+{
-+	int nid = meminfo_to_nid(&numa_meminfo, start);
-+
-+	/*
-+	 * Prefer online nodes, but if reserved memory might be
-+	 * hot-added continue the search with reserved ranges.
-+	 */
-+	if (nid != NUMA_NO_NODE)
-+		return nid;
-+
-+	return meminfo_to_nid(&numa_reserved_meminfo, start);
-+}
-+EXPORT_SYMBOL_GPL(phys_to_target_node);
-+
-+int memory_add_physaddr_to_nid(u64 start)
-+{
-+	int nid = meminfo_to_nid(&numa_meminfo, start);
-+
-+	if (nid == NUMA_NO_NODE)
-+		nid = numa_meminfo.blk[0].nid;
-+	return nid;
-+}
-+EXPORT_SYMBOL_GPL(memory_add_physaddr_to_nid);
-+
-+#endif /* CONFIG_NUMA_KEEP_MEMINFO */
 -- 
 2.43.0
 
