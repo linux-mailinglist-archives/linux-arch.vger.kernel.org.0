@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-5564-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5565-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9832B939A3F
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2024 08:44:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9D0A939A4A
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2024 08:44:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C97F21C21AB6
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2024 06:44:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EE21E1C21B36
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2024 06:44:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C09713D89A;
-	Tue, 23 Jul 2024 06:43:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E4EE14B06C;
+	Tue, 23 Jul 2024 06:43:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ODt+aK2h"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LWkFKSq6"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 566A013CF85;
-	Tue, 23 Jul 2024 06:43:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBBC314A602;
+	Tue, 23 Jul 2024 06:43:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721717007; cv=none; b=csRi0eW0J2dctCYqk1SrA/v2MKJtnqrVhXYwSBXRyuvnQ7yWH1aH7iw0U/BGUDnOlpaMBZWSnvu925mEi7KCUi4QiIPRE+9Q9iL80bV+JOXplzzICLk0+lwtHlIxzD02R1KRKhMgmPV+8mBJp8hfO1QfMT3NyDzteahdJGcwDK0=
+	t=1721717019; cv=none; b=m3rOUvBTTsq/QD2V2BbRPJYnDd4hzuJQ+IOjX2bYA129Qt83jA0TakeJC3iu76CMhNF1I/A9tDjZxWcoXeHsmB1ym0zzQxBKChR+Fj06te2cXwBZ80mPFVK7G7FgB8/nOxKYwdCEAelLElA55ZGx5nC00ogHdxXIDbp4DqA9imw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721717007; c=relaxed/simple;
-	bh=V+dgSsdkLeaynaNLrjIFS/zeTuKNf5COhGBjma8zEGw=;
+	s=arc-20240116; t=1721717019; c=relaxed/simple;
+	bh=KMUHd3pa3/sGl5j0P1xwN5TvNIt/JcquxvbUe/9/m24=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ljrn4b1fNSCJgYbstbQnZEjxk/T+hz5eTIvlo0G8efXJ6wADM4+lcTmDuH81B9EqgG7Avtx6XUX4+kcOa/TWolyrSYPepNgeyppAI9rxZJ5beA12JopZTcE5PFF2pA0fyzLY4J3z00zv9TfzXwkr+DFY8HRTiuLTq/HZyHk3tDw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ODt+aK2h; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7754C4AF09;
-	Tue, 23 Jul 2024 06:43:15 +0000 (UTC)
+	 MIME-Version; b=L6AK/ODELuCCfIDOQLhlvXP4dnKvCiSJDrtvcB1QhVrbTQZ6dLlaBn3WFMhIDmtTVG20CfbLhELCZn4nKV0mGba8jYqd0WOF7TMZGT98PKdp0spNiQRM1MlTrtUEI4ahsyOCQD1dgzhyKvRRRG67nZw2BDLro4gtmxQTdD9qzxc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LWkFKSq6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A4FBC4AF0B;
+	Tue, 23 Jul 2024 06:43:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721717006;
-	bh=V+dgSsdkLeaynaNLrjIFS/zeTuKNf5COhGBjma8zEGw=;
+	s=k20201202; t=1721717018;
+	bh=KMUHd3pa3/sGl5j0P1xwN5TvNIt/JcquxvbUe/9/m24=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ODt+aK2hntJ4K/DgO09RgcVQDVlgQib7Wv18s95VxuIsyiapHrjR7UpxaSrWvMh/B
-	 pj3Df2JE3Wp1haN0UUedtmKxV3QLcnwsj0QgyWl9r7C+gnNnLt38Yzqwv1j7beSwg5
-	 aH2rb9R5eYKrpG2YqG8XS3aPxzV8glDHV5NMOCllzocifqXGs4uVkaHjHX768pSxWO
-	 Z25iFtRytazM4PcLalHwExjd1r6Tv/naAwgXnuZ5/yXhkY5HpR+cvHkuCkRX2imv3e
-	 +ecyEpCYd8FvvUZv/y821Qk4J0ZBS9qM1kFYRI+35C+c6GuPpt12bRmNQgnF1uSmwF
-	 vpeO54BCZmIOg==
+	b=LWkFKSq6/pd3Gz6zgozY8S3W7YN4XbwG3Jb+Xk1cnC7gLl9AmB1RBeBbxRXvm10mo
+	 9bPr1wCujAi72DOi3ZZ6MxSR662xYGaP/kzvSESqPfaz1lvZuDUlpNyX5dy0tZ3lAx
+	 vz+FWcxLgBq3UZrFr48M/v7opiixPXJGVSfeeBAwDCwB2EKwm/q6Ap7lwJBWSb6Ng5
+	 jnpe/p1tJ4ATxte1nyJpzrRcOlfhLY+Hu2RL+8RHtYPodmwgh7+5jPEPXLaZj05dRa
+	 DhWm6z0Df650Ih1lo97lRpDW1J7ogEdU4fxwaf5/0kt8pUV2Fa2hUe97zXFTJbJXes
+	 bhLJjXOhO3S/w==
 From: Mike Rapoport <rppt@kernel.org>
 To: linux-kernel@vger.kernel.org
 Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
@@ -90,9 +90,9 @@ Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
 	nvdimm@lists.linux.dev,
 	sparclinux@vger.kernel.org,
 	x86@kernel.org
-Subject: [PATCH v2 06/25] MIPS: loongson64: drop HAVE_ARCH_NODEDATA_EXTENSION
-Date: Tue, 23 Jul 2024 09:41:37 +0300
-Message-ID: <20240723064156.4009477-7-rppt@kernel.org>
+Subject: [PATCH v2 07/25] mm: drop CONFIG_HAVE_ARCH_NODEDATA_EXTENSION
+Date: Tue, 23 Jul 2024 09:41:38 +0300
+Message-ID: <20240723064156.4009477-8-rppt@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240723064156.4009477-1-rppt@kernel.org>
 References: <20240723064156.4009477-1-rppt@kernel.org>
@@ -106,63 +106,96 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-Commit f8f9f21c7848 ("MIPS: Fix build error for loongson64 and
-sgi-ip27") added HAVE_ARCH_NODEDATA_EXTENSION to loongson64 to silence a
-compilation error that happened because loongson64 didn't define array
-of pg_data_t as node_data like most other architectures did.
+There are no users of HAVE_ARCH_NODEDATA_EXTENSION left, so
+arch_alloc_nodedata() and arch_refresh_nodedata() are not needed
+anymore.
 
-After rename of __node_data to node_data arch_alloc_nodedata() and
-HAVE_ARCH_NODEDATA_EXTENSION can be dropped from loongson64.
-
-Since it was the only user of HAVE_ARCH_NODEDATA_EXTENSION config option
-also remove this option from arch/mips/Kconfig.
+Replace the call to arch_alloc_nodedata() in free_area_init() with
+memblock_alloc(), remove arch_refresh_nodedata() and cleanup
+include/linux/memory_hotplug.h from the associated ifdefery.
 
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
- arch/mips/Kconfig           |  4 ----
- arch/mips/loongson64/numa.c | 10 ----------
- 2 files changed, 14 deletions(-)
+ include/linux/memory_hotplug.h | 48 ----------------------------------
+ mm/mm_init.c                   |  3 +--
+ 2 files changed, 1 insertion(+), 50 deletions(-)
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 954f12a9e669..8221e47457aa 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -501,7 +501,6 @@ config MACH_LOONGSON64
- 	select USE_OF
- 	select BUILTIN_DTB
- 	select PCI_HOST_GENERIC
--	select HAVE_ARCH_NODEDATA_EXTENSION if NUMA
- 	help
- 	  This enables the support of Loongson-2/3 family of machines.
+diff --git a/include/linux/memory_hotplug.h b/include/linux/memory_hotplug.h
+index 7a9ff464608d..978c0dfb64a1 100644
+--- a/include/linux/memory_hotplug.h
++++ b/include/linux/memory_hotplug.h
+@@ -16,54 +16,6 @@ struct resource;
+ struct vmem_altmap;
+ struct dev_pagemap;
  
-@@ -2608,9 +2607,6 @@ config NUMA
- config SYS_SUPPORTS_NUMA
- 	bool
- 
--config HAVE_ARCH_NODEDATA_EXTENSION
--	bool
+-#ifdef CONFIG_HAVE_ARCH_NODEDATA_EXTENSION
+-/*
+- * For supporting node-hotadd, we have to allocate a new pgdat.
+- *
+- * If an arch has generic style NODE_DATA(),
+- * node_data[nid] = kzalloc() works well. But it depends on the architecture.
+- *
+- * In general, generic_alloc_nodedata() is used.
+- *
+- */
+-extern pg_data_t *arch_alloc_nodedata(int nid);
+-extern void arch_refresh_nodedata(int nid, pg_data_t *pgdat);
 -
- config RELOCATABLE
- 	bool "Relocatable kernel"
- 	depends on SYS_SUPPORTS_RELOCATABLE
-diff --git a/arch/mips/loongson64/numa.c b/arch/mips/loongson64/numa.c
-index b50ce28d2741..64fcfaa885b6 100644
---- a/arch/mips/loongson64/numa.c
-+++ b/arch/mips/loongson64/numa.c
-@@ -198,13 +198,3 @@ void __init prom_init_numa_memory(void)
- 	pr_info("CP0_PageGrain: CP0 5.1 (0x%x)\n", read_c0_pagegrain());
- 	prom_meminit();
- }
+-#else /* CONFIG_HAVE_ARCH_NODEDATA_EXTENSION */
 -
--pg_data_t * __init arch_alloc_nodedata(int nid)
--{
--	return memblock_alloc(sizeof(pg_data_t), SMP_CACHE_BYTES);
--}
+-#define arch_alloc_nodedata(nid)	generic_alloc_nodedata(nid)
 -
--void arch_refresh_nodedata(int nid, pg_data_t *pgdat)
+-#ifdef CONFIG_NUMA
+-/*
+- * XXX: node aware allocation can't work well to get new node's memory at this time.
+- *	Because, pgdat for the new node is not allocated/initialized yet itself.
+- *	To use new node's memory, more consideration will be necessary.
+- */
+-#define generic_alloc_nodedata(nid)				\
+-({								\
+-	memblock_alloc(sizeof(*pgdat), SMP_CACHE_BYTES);	\
+-})
+-
+-extern pg_data_t *node_data[];
+-static inline void arch_refresh_nodedata(int nid, pg_data_t *pgdat)
 -{
 -	node_data[nid] = pgdat;
 -}
+-
+-#else /* !CONFIG_NUMA */
+-
+-/* never called */
+-static inline pg_data_t *generic_alloc_nodedata(int nid)
+-{
+-	BUG();
+-	return NULL;
+-}
+-static inline void arch_refresh_nodedata(int nid, pg_data_t *pgdat)
+-{
+-}
+-#endif /* CONFIG_NUMA */
+-#endif /* CONFIG_HAVE_ARCH_NODEDATA_EXTENSION */
+-
+ #ifdef CONFIG_MEMORY_HOTPLUG
+ struct page *pfn_to_online_page(unsigned long pfn);
+ 
+diff --git a/mm/mm_init.c b/mm/mm_init.c
+index 3ec04933f7fd..e1b3ea0523bd 100644
+--- a/mm/mm_init.c
++++ b/mm/mm_init.c
+@@ -1831,11 +1831,10 @@ void __init free_area_init(unsigned long *max_zone_pfn)
+ 
+ 		if (!node_online(nid)) {
+ 			/* Allocator not initialized yet */
+-			pgdat = arch_alloc_nodedata(nid);
++			pgdat = memblock_alloc(sizeof(*pgdat), SMP_CACHE_BYTES);
+ 			if (!pgdat)
+ 				panic("Cannot allocate %zuB for node %d.\n",
+ 				       sizeof(*pgdat), nid);
+-			arch_refresh_nodedata(nid, pgdat);
+ 		}
+ 
+ 		pgdat = NODE_DATA(nid);
 -- 
 2.43.0
 
