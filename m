@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-5568-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5569-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 536C7939A70
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2024 08:45:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A40F9939A79
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2024 08:46:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F0F5D1F21E94
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2024 06:45:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 587811F216EB
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2024 06:46:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B20214D29C;
-	Tue, 23 Jul 2024 06:44:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFE5014AD25;
+	Tue, 23 Jul 2024 06:44:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DDQPEURu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Za5Jhcet"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17770149DF7;
-	Tue, 23 Jul 2024 06:44:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8307213D89A;
+	Tue, 23 Jul 2024 06:44:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721717054; cv=none; b=IIQBxIENAAeblDTdLvpncyUtbR9hgvvthIM6/2NBey6/u8zWuUyjUpDhJcN21HJkp23EJFEOlg1g+6lpVB/4S1UzHh89mlaWh80sgiWuvX7gj6tRbAaqScFkzbrDyo24PY8s3HXZNw3aFN6bbs1EXaR/NN4Ukd9Xz1tTN+AXmlw=
+	t=1721717065; cv=none; b=f+DE6T+A0wrhGXwhnU+TVmmwY8qBD0DpSt1RFvz2jXcE2uLCWHlQnSFo1Nj3gIKREIAyW6lmgrYpC938IHJbZZm3jwyTD1PsigdfpSvJPpePVj2RJXVNOOnKO5ipRXY825UdQCVrVvR20CxxgtcDCTYOvanS5V3OLv7fmRKYOdo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721717054; c=relaxed/simple;
-	bh=EH8wWBlMwsfXjtpnY4+zGDnJa6g8CExH9y2mEtavJgs=;
+	s=arc-20240116; t=1721717065; c=relaxed/simple;
+	bh=c6DgXq0zS+r3QhZ5flAVfEs4FfALF1+j15wi2hevr+8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Po6baNV3880DIad/vchPL1LHGnOTJoXO/0A9OCQt7OrtAfMUXCngHPBOcpnUcFdc+TD1INzBeTMAdqz7R7iyC22Ego0lieEAwb4PMC+WkxxT2/DWwF5dxWJm7CgiNtNsZZ6GLVHJxMpQstrczed9DFUtp2OWk0ARXDOOYun4JmY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DDQPEURu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 893C4C4AF0C;
-	Tue, 23 Jul 2024 06:44:02 +0000 (UTC)
+	 MIME-Version; b=okj/HxvC14Oha2LJOEBJjG9ec4ZSB7U+HfPIJEtpxCRU5tu8zkBQz22+iHCcXB3UzUWQHsQrA1nE+/KhLWnigJxCuRQSgl1R3ksmL1ja+FzcMiC4WH1/tYxKdHqTR9TTLXWXgvv1k0iE/901kUFSeutFZlSpUKF+hbgTAdZpDqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Za5Jhcet; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F62DC4AF09;
+	Tue, 23 Jul 2024 06:44:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721717053;
-	bh=EH8wWBlMwsfXjtpnY4+zGDnJa6g8CExH9y2mEtavJgs=;
+	s=k20201202; t=1721717065;
+	bh=c6DgXq0zS+r3QhZ5flAVfEs4FfALF1+j15wi2hevr+8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=DDQPEURuf/2youpPGfR9PjjP5vqWwzVt9eMvU1zvtUy1E8FR1p79NkbmM51BKspfd
-	 8pPjpSZwbogFIC5obAc5U6evqQGBM5HUm6lxVwnbAc2y0V9AQLZvJrPIWQm3H2eDUc
-	 0AfSs6duiMgIPOvoZ8jr4R6aW9CMtC2gm+/GLrYx+cHgiw6adzF0OS/0yTiaEKmYmh
-	 za6G0/Yrep1fQfHvALuhsHrvGHJ2rdPqnTHIGIUqj6QSFo41/n1Qco3z9vNXXkcwdU
-	 WlgTUrsz908dqxlqeUh9qqehWOyfDcAflFSCUd2WnY69Xee8sgqHsaJOe1Fv5ceY/y
-	 gEmEW190CPEBA==
+	b=Za5JhcetTAfLRbJccTWeAUNIxgrg96br5y87BwWzZPLzZYM5IjOw4ndfZ4nIfWM9a
+	 0kYpHEGaCq6sHARpYneu6wGWScDkDxMY9UcV7dpRLzFycumSP2BoGDaLlTOqcZLXTy
+	 MhVwp5rCs8e2OGmBS9+/Gn4wMTzHhc60AFxKa0ONJzfcOahicEDT4gok1reEmHY3m/
+	 yJ8eHIgkq+6rm34FFaAF6eeeqrWyvK1zv4CjW5ghkagLShm8uJGUIM4w2FQQtbu2np
+	 +gfe1coXyBC8uzt0RQsU4ls3le21w36/2yCPFPHrBIKqMRwOZM2lnaFEnBfBxNNJvK
+	 Lhh8CDiwUIDtw==
 From: Mike Rapoport <rppt@kernel.org>
 To: linux-kernel@vger.kernel.org
 Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
@@ -90,9 +90,9 @@ Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
 	nvdimm@lists.linux.dev,
 	sparclinux@vger.kernel.org,
 	x86@kernel.org
-Subject: [PATCH v2 10/25] x86/numa: simplify numa_distance allocation
-Date: Tue, 23 Jul 2024 09:41:41 +0300
-Message-ID: <20240723064156.4009477-11-rppt@kernel.org>
+Subject: [PATCH v2 11/25] x86/numa: use get_pfn_range_for_nid to verify that node spans memory
+Date: Tue, 23 Jul 2024 09:41:42 +0300
+Message-ID: <20240723064156.4009477-12-rppt@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240723064156.4009477-1-rppt@kernel.org>
 References: <20240723064156.4009477-1-rppt@kernel.org>
@@ -106,51 +106,41 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-Allocation of numa_distance uses memblock_phys_alloc_range() to limit
-allocation to be below the last mapped page.
+Instead of looping over numa_meminfo array to detect node's start and
+end addresses use get_pfn_range_for_init().
 
-But NUMA initializaition runs after the direct map is populated and
-there is also code in setup_arch() that adjusts memblock limit to
-reflect how much memory is already mapped in the direct map.
-
-Simplify the allocation of numa_distance and use plain memblock_alloc().
+This is shorter and make it easier to lift numa_memblks to generic code.
 
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
- arch/x86/mm/numa.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ arch/x86/mm/numa.c | 13 +++----------
+ 1 file changed, 3 insertions(+), 10 deletions(-)
 
 diff --git a/arch/x86/mm/numa.c b/arch/x86/mm/numa.c
-index 5e1dde26674b..edfc38803779 100644
+index edfc38803779..cfe7e5477cf8 100644
 --- a/arch/x86/mm/numa.c
 +++ b/arch/x86/mm/numa.c
-@@ -331,7 +331,6 @@ static int __init numa_alloc_distance(void)
- 	nodemask_t nodes_parsed;
- 	size_t size;
- 	int i, j, cnt = 0;
--	u64 phys;
+@@ -521,17 +521,10 @@ static int __init numa_register_memblks(struct numa_meminfo *mi)
  
- 	/* size the new table and allocate it */
- 	nodes_parsed = numa_nodes_parsed;
-@@ -342,16 +341,14 @@ static int __init numa_alloc_distance(void)
- 	cnt++;
- 	size = cnt * cnt * sizeof(numa_distance[0]);
+ 	/* Finally register nodes. */
+ 	for_each_node_mask(nid, node_possible_map) {
+-		u64 start = PFN_PHYS(max_pfn);
+-		u64 end = 0;
++		unsigned long start_pfn, end_pfn;
  
--	phys = memblock_phys_alloc_range(size, PAGE_SIZE, 0,
--					 PFN_PHYS(max_pfn_mapped));
--	if (!phys) {
-+	numa_distance = memblock_alloc(size, PAGE_SIZE);
-+	if (!numa_distance) {
- 		pr_warn("Warning: can't allocate distance table!\n");
- 		/* don't retry until explicitly reset */
- 		numa_distance = (void *)1LU;
- 		return -ENOMEM;
- 	}
+-		for (i = 0; i < mi->nr_blks; i++) {
+-			if (nid != mi->blk[i].nid)
+-				continue;
+-			start = min(mi->blk[i].start, start);
+-			end = max(mi->blk[i].end, end);
+-		}
+-
+-		if (start >= end)
++		get_pfn_range_for_nid(nid, &start_pfn, &end_pfn);
++		if (start_pfn >= end_pfn)
+ 			continue;
  
--	numa_distance = __va(phys);
- 	numa_distance_cnt = cnt;
- 
- 	/* fill with the default distances */
+ 		alloc_node_data(nid);
 -- 
 2.43.0
 
