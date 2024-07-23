@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-5566-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5567-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83E12939A59
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2024 08:45:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4C8D939A62
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2024 08:45:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B7F7282A83
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2024 06:45:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8C5A9282B95
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2024 06:45:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A38A114A627;
-	Tue, 23 Jul 2024 06:43:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B30CF14C5BD;
+	Tue, 23 Jul 2024 06:44:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZP+xdfEg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X7z8FkVA"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6060714A4CC;
-	Tue, 23 Jul 2024 06:43:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E540149DF7;
+	Tue, 23 Jul 2024 06:44:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721717030; cv=none; b=j2ef4dYFwlPikIMpgLucRnlAqcJH/aPnbzD5TAmIaQw/3BwaDJgwFYpIAhLwjZttz6pKRvOV2N1HwXHQHJU1kw1/iB/NGq09INWQXeBTV8nxlFVinW1Hx+81hUnL79ZkIsRvE6V32brOk08HybO5OatpNg0hL0Eacw3IFHpUX/c=
+	t=1721717042; cv=none; b=oHgK5qg4hNJ6KNGXOZK0365I/E8Xw3dO3vnC2EhslR1yQZSmC/3vsayJ5PVxhEYOG9PVUw5e2Oo29D+vTCDyb3LvCmtB0y2uCK76lK+LVD3iVQiqyb03fa5I06e6Yeb7G+G800t7IlMk0s1f5lA6FRknlWzstKdEo943wbY0EBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721717030; c=relaxed/simple;
-	bh=3tLDf1A3Qqi7b0Tvewht7ITo1ix4u9lyILXU8PE7OyA=;
+	s=arc-20240116; t=1721717042; c=relaxed/simple;
+	bh=E3MX7Qldt9CVztVnkyappGTQ+vc6bjnaP687BSR8VLc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TuNxECj77n+TP16tjBTfoChrfkhHOPJ8QdVOPs5vYF/5bU1/3/fISgJD0ftbW5NGxaTi+PSJcoKcWsIoSpnRI1+e4ltdWiAMiIdoF8aJqYP/H+cpcJLVBKbwVgsoQ3T5tGZYHLIG1P1E8IBV63LCQ2l3YzMr+p5SwhQG5eMOzqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZP+xdfEg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F270AC4AF0C;
-	Tue, 23 Jul 2024 06:43:38 +0000 (UTC)
+	 MIME-Version; b=Amm0qFQG6QDuvPBZVBJCXTDEvzsNi2ZteZAXSKBWnnjWTyuzRAhT+dKkmEASJCou573qTbn0tlI/5Wn7Oyb57H6492ZhU4cndoX18uGWlzjlzTyLYR9DgYgc1OBA5LcSxBuFnlGJQiBGqSZ81uxDkd0/UVllcdjq34NVSZKQsdo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X7z8FkVA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCBF2C4AF10;
+	Tue, 23 Jul 2024 06:43:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721717030;
-	bh=3tLDf1A3Qqi7b0Tvewht7ITo1ix4u9lyILXU8PE7OyA=;
+	s=k20201202; t=1721717042;
+	bh=E3MX7Qldt9CVztVnkyappGTQ+vc6bjnaP687BSR8VLc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ZP+xdfEgnVkDeUMe/9VXsuMyklUt1RjwTVlbRJF51rDHm8AJBlbxPqq1nzkVFz4W7
-	 DQMXFtFmYQN96MiC/SBmmfLAjGeocwUNhaDtsc6S4yvh5Ef32iknEAIlMVd1n3WUIV
-	 T4U21XrJ8XK4lg2jR+Xv8uvck408+9GsQFsePyi+u+Y0Uh4T+fMQRhznjYhnBS0ZHE
-	 VTKRDVzxlzg0b7JkdS8qRT9H7puoLZhxn3baAONxBEeF7u0GYwEqrJruTnwgdGt23B
-	 WGe/hqTjwO2N1wid/+SUKEjU07i5MFu6/mAn3TIJwDXglOmvcmn7DHW1fcPh8lh8g7
-	 mxdzTDaZXkAYQ==
+	b=X7z8FkVAZvIq78aouyUDmF3loPrwk9cNOmEJ2gIIHZpGHxyIUpocbZ0//nu0ZimcF
+	 1QgaXrD4gQlbul+cGBBqg2ZTKuGaelnu2qImq5mDgJD0THJ3uEcrJ4svVthnl/ZFxb
+	 wkUJmzcRgJtL//h91gqwgqUa/fTtvdwrkYFbcuNhY3g6c1QJA70VTkqkLR/lQYmcfR
+	 U0S2Gbc2h/YllFpQ+9NlopoW49HgABSnB24aLJIOOB6rwqxIR5ZTnseo3rErr/C4TG
+	 RVlcP7H6O3G98HAsHpOSk/AfkTs55rvZQSsHz08VvcJirUh/H4uTey93ISBHc/F2Cv
+	 gZciC2ZdEz2RA==
 From: Mike Rapoport <rppt@kernel.org>
 To: linux-kernel@vger.kernel.org
 Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
@@ -91,9 +91,9 @@ Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
 	sparclinux@vger.kernel.org,
 	x86@kernel.org,
 	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH v2 08/25] arch, mm: move definition of node_data to generic code
-Date: Tue, 23 Jul 2024 09:41:39 +0300
-Message-ID: <20240723064156.4009477-9-rppt@kernel.org>
+Subject: [PATCH v2 09/25] arch, mm: pull out allocation of NODE_DATA to generic code
+Date: Tue, 23 Jul 2024 09:41:40 +0300
+Message-ID: <20240723064156.4009477-10-rppt@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240723064156.4009477-1-rppt@kernel.org>
 References: <20240723064156.4009477-1-rppt@kernel.org>
@@ -107,537 +107,311 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-Every architecture that supports NUMA defines node_data in the same way:
+Architectures that support NUMA duplicate the code that allocates
+NODE_DATA on the node-local memory with slight variations in reporting
+of the addresses where the memory was allocated.
 
-	struct pglist_data *node_data[MAX_NUMNODES];
+Use x86 version as the basis for the generic alloc_node_data() function
+and call this function in architecture specific numa initialization.
 
-No reason to keep multiple copies of this definition and its forward
-declarations, especially when such forward declaration is the only thing
-in include/asm/mmzone.h for many architectures.
-
-Add definition and declaration of node_data to generic code and drop
-architecture-specific versions.
+Round up node data size to SMP_CACHE_BYTES rather than to PAGE_SIZE like
+x86 used to do since the bootmem era when allocation granularity was
+PAGE_SIZE anyway.
 
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 Acked-by: David Hildenbrand <david@redhat.com>
 Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Acked-by: Davidlohr Bueso <dave@stgolabs.net>
 ---
- arch/arm64/include/asm/Kbuild                  |  1 +
- arch/arm64/include/asm/mmzone.h                | 13 -------------
- arch/arm64/include/asm/topology.h              |  1 +
- arch/loongarch/include/asm/Kbuild              |  1 +
- arch/loongarch/include/asm/mmzone.h            | 16 ----------------
- arch/loongarch/include/asm/topology.h          |  1 +
- arch/loongarch/kernel/numa.c                   |  3 ---
- arch/mips/include/asm/mach-ip27/mmzone.h       |  4 ----
- arch/mips/include/asm/mach-loongson64/mmzone.h |  4 ----
- arch/mips/loongson64/numa.c                    |  2 --
- arch/mips/sgi-ip27/ip27-memory.c               |  3 ---
- arch/powerpc/include/asm/mmzone.h              |  6 ------
- arch/powerpc/mm/numa.c                         |  2 --
- arch/riscv/include/asm/Kbuild                  |  1 +
- arch/riscv/include/asm/mmzone.h                | 13 -------------
- arch/riscv/include/asm/topology.h              |  4 ++++
- arch/s390/include/asm/Kbuild                   |  1 +
- arch/s390/include/asm/mmzone.h                 | 17 -----------------
- arch/s390/kernel/numa.c                        |  3 ---
- arch/sh/include/asm/mmzone.h                   |  3 ---
- arch/sh/mm/numa.c                              |  3 ---
- arch/sparc/include/asm/mmzone.h                |  4 ----
- arch/sparc/mm/init_64.c                        |  2 --
- arch/x86/include/asm/Kbuild                    |  1 +
- arch/x86/include/asm/mmzone.h                  |  6 ------
- arch/x86/include/asm/mmzone_32.h               | 17 -----------------
- arch/x86/include/asm/mmzone_64.h               | 18 ------------------
- arch/x86/mm/numa.c                             |  3 ---
- drivers/base/arch_numa.c                       |  2 --
- include/asm-generic/mmzone.h                   |  5 +++++
- include/linux/numa.h                           |  3 +++
- mm/numa.c                                      |  3 +++
- 32 files changed, 22 insertions(+), 144 deletions(-)
- delete mode 100644 arch/arm64/include/asm/mmzone.h
- delete mode 100644 arch/loongarch/include/asm/mmzone.h
- delete mode 100644 arch/riscv/include/asm/mmzone.h
- delete mode 100644 arch/s390/include/asm/mmzone.h
- delete mode 100644 arch/x86/include/asm/mmzone.h
- delete mode 100644 arch/x86/include/asm/mmzone_32.h
- delete mode 100644 arch/x86/include/asm/mmzone_64.h
- create mode 100644 include/asm-generic/mmzone.h
+ arch/loongarch/kernel/numa.c | 18 ------------------
+ arch/mips/loongson64/numa.c  | 16 ++--------------
+ arch/powerpc/mm/numa.c       | 24 +++---------------------
+ arch/sh/mm/init.c            |  7 +------
+ arch/sparc/mm/init_64.c      |  9 ++-------
+ arch/x86/mm/numa.c           | 34 +---------------------------------
+ drivers/base/arch_numa.c     | 21 +--------------------
+ include/linux/numa.h         |  2 ++
+ mm/numa.c                    | 27 +++++++++++++++++++++++++++
+ 9 files changed, 39 insertions(+), 119 deletions(-)
 
-diff --git a/arch/arm64/include/asm/Kbuild b/arch/arm64/include/asm/Kbuild
-index 4b6d2d52053e..4aaaa821ab6b 100644
---- a/arch/arm64/include/asm/Kbuild
-+++ b/arch/arm64/include/asm/Kbuild
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- generic-y += early_ioremap.h
- generic-y += mcs_spinlock.h
-+generic-y += mmzone.h
- generic-y += qrwlock.h
- generic-y += qspinlock.h
- generic-y += parport.h
-diff --git a/arch/arm64/include/asm/mmzone.h b/arch/arm64/include/asm/mmzone.h
-deleted file mode 100644
-index fa17e01d9ab2..000000000000
---- a/arch/arm64/include/asm/mmzone.h
-+++ /dev/null
-@@ -1,13 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef __ASM_MMZONE_H
--#define __ASM_MMZONE_H
--
--#ifdef CONFIG_NUMA
--
--#include <asm/numa.h>
--
--extern struct pglist_data *node_data[];
--#define NODE_DATA(nid)		(node_data[(nid)])
--
--#endif /* CONFIG_NUMA */
--#endif /* __ASM_MMZONE_H */
-diff --git a/arch/arm64/include/asm/topology.h b/arch/arm64/include/asm/topology.h
-index 0f6ef432fb84..5fc3af9f8f29 100644
---- a/arch/arm64/include/asm/topology.h
-+++ b/arch/arm64/include/asm/topology.h
-@@ -5,6 +5,7 @@
- #include <linux/cpumask.h>
- 
- #ifdef CONFIG_NUMA
-+#include <asm/numa.h>
- 
- struct pci_bus;
- int pcibus_to_node(struct pci_bus *bus);
-diff --git a/arch/loongarch/include/asm/Kbuild b/arch/loongarch/include/asm/Kbuild
-index c862672ed953..2804f2a2ad61 100644
---- a/arch/loongarch/include/asm/Kbuild
-+++ b/arch/loongarch/include/asm/Kbuild
-@@ -15,6 +15,7 @@ generic-y += fcntl.h
- generic-y += ioctl.h
- generic-y += ioctls.h
- generic-y += mman.h
-+generic-y += mmzone.h
- generic-y += msgbuf.h
- generic-y += sembuf.h
- generic-y += shmbuf.h
-diff --git a/arch/loongarch/include/asm/mmzone.h b/arch/loongarch/include/asm/mmzone.h
-deleted file mode 100644
-index 2b9a90727e19..000000000000
---- a/arch/loongarch/include/asm/mmzone.h
-+++ /dev/null
-@@ -1,16 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--/*
-- * Author: Huacai Chen (chenhuacai@loongson.cn)
-- * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-- */
--#ifndef _ASM_MMZONE_H_
--#define _ASM_MMZONE_H_
--
--#include <asm/page.h>
--#include <asm/numa.h>
--
--extern struct pglist_data *node_data[];
--
--#define NODE_DATA(nid)	(node_data[(nid)])
--
--#endif /* _ASM_MMZONE_H_ */
-diff --git a/arch/loongarch/include/asm/topology.h b/arch/loongarch/include/asm/topology.h
-index 66128dec0bf6..50273c9187d0 100644
---- a/arch/loongarch/include/asm/topology.h
-+++ b/arch/loongarch/include/asm/topology.h
-@@ -8,6 +8,7 @@
- #include <linux/smp.h>
- 
- #ifdef CONFIG_NUMA
-+#include <asm/numa.h>
- 
- extern cpumask_t cpus_on_node[];
- 
 diff --git a/arch/loongarch/kernel/numa.c b/arch/loongarch/kernel/numa.c
-index 8fe21f868f72..acada671e020 100644
+index acada671e020..84fe7f854820 100644
 --- a/arch/loongarch/kernel/numa.c
 +++ b/arch/loongarch/kernel/numa.c
-@@ -27,10 +27,7 @@
- #include <asm/time.h>
- 
- int numa_off;
--struct pglist_data *node_data[MAX_NUMNODES];
- unsigned char node_distances[MAX_NUMNODES][MAX_NUMNODES];
--
--EXPORT_SYMBOL(node_data);
- EXPORT_SYMBOL(node_distances);
- 
- static struct numa_meminfo numa_meminfo;
-diff --git a/arch/mips/include/asm/mach-ip27/mmzone.h b/arch/mips/include/asm/mach-ip27/mmzone.h
-index 629c3f290203..56959eb9cb26 100644
---- a/arch/mips/include/asm/mach-ip27/mmzone.h
-+++ b/arch/mips/include/asm/mach-ip27/mmzone.h
-@@ -24,8 +24,4 @@ extern struct node_data *__node_data[];
- 
- #define hub_data(n)		(&__node_data[(n)]->hub)
- 
--extern struct pglist_data *node_data[];
--
--#define NODE_DATA(nid)		(node_data[nid])
--
- #endif /* _ASM_MACH_MMZONE_H */
-diff --git a/arch/mips/include/asm/mach-loongson64/mmzone.h b/arch/mips/include/asm/mach-loongson64/mmzone.h
-index 2effd5f8ed62..8fb70fd3c9c4 100644
---- a/arch/mips/include/asm/mach-loongson64/mmzone.h
-+++ b/arch/mips/include/asm/mach-loongson64/mmzone.h
-@@ -14,10 +14,6 @@
- #define pa_to_nid(addr)  (((addr) & 0xf00000000000) >> NODE_ADDRSPACE_SHIFT)
- #define nid_to_addrbase(nid) ((unsigned long)(nid) << NODE_ADDRSPACE_SHIFT)
- 
--extern struct pglist_data *node_data[];
--
--#define NODE_DATA(n)		(node_data[n])
--
- extern void __init prom_init_numa_memory(void);
- 
- #endif /* _ASM_MACH_MMZONE_H */
-diff --git a/arch/mips/loongson64/numa.c b/arch/mips/loongson64/numa.c
-index 64fcfaa885b6..d56238745744 100644
---- a/arch/mips/loongson64/numa.c
-+++ b/arch/mips/loongson64/numa.c
-@@ -29,8 +29,6 @@
- 
- unsigned char __node_distances[MAX_NUMNODES][MAX_NUMNODES];
- EXPORT_SYMBOL(__node_distances);
--struct pglist_data *node_data[MAX_NUMNODES];
--EXPORT_SYMBOL(node_data);
- 
- cpumask_t __node_cpumask[MAX_NUMNODES];
- EXPORT_SYMBOL(__node_cpumask);
-diff --git a/arch/mips/sgi-ip27/ip27-memory.c b/arch/mips/sgi-ip27/ip27-memory.c
-index eb6d2fa41a8a..1963313f55d8 100644
---- a/arch/mips/sgi-ip27/ip27-memory.c
-+++ b/arch/mips/sgi-ip27/ip27-memory.c
-@@ -34,9 +34,6 @@
- #define SLOT_PFNSHIFT		(SLOT_SHIFT - PAGE_SHIFT)
- #define PFN_NASIDSHFT		(NASID_SHFT - PAGE_SHIFT)
- 
--struct pglist_data *node_data[MAX_NUMNODES];
--EXPORT_SYMBOL(node_data);
--
- struct node_data *__node_data[MAX_NUMNODES];
- EXPORT_SYMBOL(__node_data);
- 
-diff --git a/arch/powerpc/include/asm/mmzone.h b/arch/powerpc/include/asm/mmzone.h
-index da827d2d0866..d99863cd6cde 100644
---- a/arch/powerpc/include/asm/mmzone.h
-+++ b/arch/powerpc/include/asm/mmzone.h
-@@ -20,12 +20,6 @@
- 
- #ifdef CONFIG_NUMA
- 
--extern struct pglist_data *node_data[];
--/*
-- * Return a pointer to the node data for node n.
-- */
--#define NODE_DATA(nid)		(node_data[nid])
--
- /*
-  * Following are specific to this numa platform.
-  */
-diff --git a/arch/powerpc/mm/numa.c b/arch/powerpc/mm/numa.c
-index a490724e84ad..8c18973cd71e 100644
---- a/arch/powerpc/mm/numa.c
-+++ b/arch/powerpc/mm/numa.c
-@@ -43,11 +43,9 @@ static char *cmdline __initdata;
- 
- int numa_cpu_lookup_table[NR_CPUS];
- cpumask_var_t node_to_cpumask_map[MAX_NUMNODES];
--struct pglist_data *node_data[MAX_NUMNODES];
- 
- EXPORT_SYMBOL(numa_cpu_lookup_table);
- EXPORT_SYMBOL(node_to_cpumask_map);
--EXPORT_SYMBOL(node_data);
- 
- static int primary_domain_index;
- static int n_mem_addr_cells, n_mem_size_cells;
-diff --git a/arch/riscv/include/asm/Kbuild b/arch/riscv/include/asm/Kbuild
-index 504f8b7e72d4..e44f168f60fc 100644
---- a/arch/riscv/include/asm/Kbuild
-+++ b/arch/riscv/include/asm/Kbuild
-@@ -2,6 +2,7 @@
- generic-y += early_ioremap.h
- generic-y += flat.h
- generic-y += kvm_para.h
-+generic-y += mmzone.h
- generic-y += parport.h
- generic-y += spinlock.h
- generic-y += spinlock_types.h
-diff --git a/arch/riscv/include/asm/mmzone.h b/arch/riscv/include/asm/mmzone.h
-deleted file mode 100644
-index fa17e01d9ab2..000000000000
---- a/arch/riscv/include/asm/mmzone.h
-+++ /dev/null
-@@ -1,13 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef __ASM_MMZONE_H
--#define __ASM_MMZONE_H
--
--#ifdef CONFIG_NUMA
--
--#include <asm/numa.h>
--
--extern struct pglist_data *node_data[];
--#define NODE_DATA(nid)		(node_data[(nid)])
--
--#endif /* CONFIG_NUMA */
--#endif /* __ASM_MMZONE_H */
-diff --git a/arch/riscv/include/asm/topology.h b/arch/riscv/include/asm/topology.h
-index 61183688bdd5..fe1a8bf6902d 100644
---- a/arch/riscv/include/asm/topology.h
-+++ b/arch/riscv/include/asm/topology.h
-@@ -4,6 +4,10 @@
- 
- #include <linux/arch_topology.h>
- 
-+#ifdef CONFIG_NUMA
-+#include <asm/numa.h>
-+#endif
-+
- /* Replace task scheduler's default frequency-invariant accounting */
- #define arch_scale_freq_tick		topology_scale_freq_tick
- #define arch_set_freq_scale		topology_set_freq_scale
-diff --git a/arch/s390/include/asm/Kbuild b/arch/s390/include/asm/Kbuild
-index 4b904110d27c..297bf7157968 100644
---- a/arch/s390/include/asm/Kbuild
-+++ b/arch/s390/include/asm/Kbuild
-@@ -7,3 +7,4 @@ generated-y += unistd_nr.h
- generic-y += asm-offsets.h
- generic-y += kvm_types.h
- generic-y += mcs_spinlock.h
-+generic-y += mmzone.h
-diff --git a/arch/s390/include/asm/mmzone.h b/arch/s390/include/asm/mmzone.h
-deleted file mode 100644
-index 73e3e7c6976c..000000000000
---- a/arch/s390/include/asm/mmzone.h
-+++ /dev/null
-@@ -1,17 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--/*
-- * NUMA support for s390
-- *
-- * Copyright IBM Corp. 2015
-- */
--
--#ifndef _ASM_S390_MMZONE_H
--#define _ASM_S390_MMZONE_H
--
--#ifdef CONFIG_NUMA
--
--extern struct pglist_data *node_data[];
--#define NODE_DATA(nid) (node_data[nid])
--
--#endif /* CONFIG_NUMA */
--#endif /* _ASM_S390_MMZONE_H */
-diff --git a/arch/s390/kernel/numa.c b/arch/s390/kernel/numa.c
-index 23ab9f02f278..ddc1448ea2e1 100644
---- a/arch/s390/kernel/numa.c
-+++ b/arch/s390/kernel/numa.c
-@@ -14,9 +14,6 @@
- #include <linux/node.h>
- #include <asm/numa.h>
- 
--struct pglist_data *node_data[MAX_NUMNODES];
--EXPORT_SYMBOL(node_data);
--
- void __init numa_setup(void)
- {
- 	int nid;
-diff --git a/arch/sh/include/asm/mmzone.h b/arch/sh/include/asm/mmzone.h
-index 7b8dead2723d..63f88b465e39 100644
---- a/arch/sh/include/asm/mmzone.h
-+++ b/arch/sh/include/asm/mmzone.h
-@@ -5,9 +5,6 @@
- #ifdef CONFIG_NUMA
- #include <linux/numa.h>
- 
--extern struct pglist_data *node_data[];
--#define NODE_DATA(nid)		(node_data[nid])
--
- static inline int pfn_to_nid(unsigned long pfn)
- {
- 	int nid;
-diff --git a/arch/sh/mm/numa.c b/arch/sh/mm/numa.c
-index 50f0dc1744d0..9bc212b5e762 100644
---- a/arch/sh/mm/numa.c
-+++ b/arch/sh/mm/numa.c
-@@ -14,9 +14,6 @@
- #include <linux/pfn.h>
- #include <asm/sections.h>
- 
--struct pglist_data *node_data[MAX_NUMNODES] __read_mostly;
--EXPORT_SYMBOL_GPL(node_data);
--
- /*
-  * On SH machines the conventional approach is to stash system RAM
-  * in node 0, and other memory blocks in to node 1 and up, ordered by
-diff --git a/arch/sparc/include/asm/mmzone.h b/arch/sparc/include/asm/mmzone.h
-index a236d8aa893a..74eb2c71d077 100644
---- a/arch/sparc/include/asm/mmzone.h
-+++ b/arch/sparc/include/asm/mmzone.h
-@@ -6,10 +6,6 @@
- 
- #include <linux/cpumask.h>
- 
--extern struct pglist_data *node_data[];
--
--#define NODE_DATA(nid)		(node_data[nid])
--
- extern int numa_cpu_lookup_table[];
- extern cpumask_t numa_cpumask_lookup_table[];
- 
-diff --git a/arch/sparc/mm/init_64.c b/arch/sparc/mm/init_64.c
-index 00b247d924a9..3cb698204609 100644
---- a/arch/sparc/mm/init_64.c
-+++ b/arch/sparc/mm/init_64.c
-@@ -1115,11 +1115,9 @@ static void init_node_masks_nonnuma(void)
+@@ -187,24 +187,6 @@ int __init numa_add_memblk(int nid, u64 start, u64 end)
+ 	return numa_add_memblk_to(nid, start, end, &numa_meminfo);
  }
  
+-static void __init alloc_node_data(int nid)
+-{
+-	void *nd;
+-	unsigned long nd_pa;
+-	size_t nd_sz = roundup(sizeof(pg_data_t), PAGE_SIZE);
+-
+-	nd_pa = memblock_phys_alloc_try_nid(nd_sz, SMP_CACHE_BYTES, nid);
+-	if (!nd_pa) {
+-		pr_err("Cannot find %zu Byte for node_data (initial node: %d)\n", nd_sz, nid);
+-		return;
+-	}
+-
+-	nd = __va(nd_pa);
+-
+-	node_data[nid] = nd;
+-	memset(nd, 0, sizeof(pg_data_t));
+-}
+-
+ static void __init node_mem_init(unsigned int node)
+ {
+ 	unsigned long start_pfn, end_pfn;
+diff --git a/arch/mips/loongson64/numa.c b/arch/mips/loongson64/numa.c
+index d56238745744..8388400d052f 100644
+--- a/arch/mips/loongson64/numa.c
++++ b/arch/mips/loongson64/numa.c
+@@ -81,12 +81,8 @@ static void __init init_topology_matrix(void)
+ 
+ static void __init node_mem_init(unsigned int node)
+ {
+-	struct pglist_data *nd;
+ 	unsigned long node_addrspace_offset;
+ 	unsigned long start_pfn, end_pfn;
+-	unsigned long nd_pa;
+-	int tnid;
+-	const size_t nd_size = roundup(sizeof(pg_data_t), SMP_CACHE_BYTES);
+ 
+ 	node_addrspace_offset = nid_to_addrbase(node);
+ 	pr_info("Node%d's addrspace_offset is 0x%lx\n",
+@@ -96,16 +92,8 @@ static void __init node_mem_init(unsigned int node)
+ 	pr_info("Node%d: start_pfn=0x%lx, end_pfn=0x%lx\n",
+ 		node, start_pfn, end_pfn);
+ 
+-	nd_pa = memblock_phys_alloc_try_nid(nd_size, SMP_CACHE_BYTES, node);
+-	if (!nd_pa)
+-		panic("Cannot allocate %zu bytes for node %d data\n",
+-		      nd_size, node);
+-	nd = __va(nd_pa);
+-	memset(nd, 0, sizeof(struct pglist_data));
+-	tnid = early_pfn_to_nid(nd_pa >> PAGE_SHIFT);
+-	if (tnid != node)
+-		pr_info("NODE_DATA(%d) on node %d\n", node, tnid);
+-	node_data[node] = nd;
++	alloc_node_data(node);
++
+ 	NODE_DATA(node)->node_start_pfn = start_pfn;
+ 	NODE_DATA(node)->node_spanned_pages = end_pfn - start_pfn;
+ 
+diff --git a/arch/powerpc/mm/numa.c b/arch/powerpc/mm/numa.c
+index 8c18973cd71e..4c54764af160 100644
+--- a/arch/powerpc/mm/numa.c
++++ b/arch/powerpc/mm/numa.c
+@@ -1081,27 +1081,9 @@ void __init dump_numa_cpu_topology(void)
+ static void __init setup_node_data(int nid, u64 start_pfn, u64 end_pfn)
+ {
+ 	u64 spanned_pages = end_pfn - start_pfn;
+-	const size_t nd_size = roundup(sizeof(pg_data_t), SMP_CACHE_BYTES);
+-	u64 nd_pa;
+-	void *nd;
+-	int tnid;
+-
+-	nd_pa = memblock_phys_alloc_try_nid(nd_size, SMP_CACHE_BYTES, nid);
+-	if (!nd_pa)
+-		panic("Cannot allocate %zu bytes for node %d data\n",
+-		      nd_size, nid);
+-
+-	nd = __va(nd_pa);
+-
+-	/* report and initialize */
+-	pr_info("  NODE_DATA [mem %#010Lx-%#010Lx]\n",
+-		nd_pa, nd_pa + nd_size - 1);
+-	tnid = early_pfn_to_nid(nd_pa >> PAGE_SHIFT);
+-	if (tnid != nid)
+-		pr_info("    NODE_DATA(%d) on node %d\n", nid, tnid);
+-
+-	node_data[nid] = nd;
+-	memset(NODE_DATA(nid), 0, sizeof(pg_data_t));
++
++	alloc_node_data(nid);
++
+ 	NODE_DATA(nid)->node_id = nid;
+ 	NODE_DATA(nid)->node_start_pfn = start_pfn;
+ 	NODE_DATA(nid)->node_spanned_pages = spanned_pages;
+diff --git a/arch/sh/mm/init.c b/arch/sh/mm/init.c
+index bf1b54055316..5cc89a0932c3 100644
+--- a/arch/sh/mm/init.c
++++ b/arch/sh/mm/init.c
+@@ -212,12 +212,7 @@ void __init allocate_pgdat(unsigned int nid)
+ 	get_pfn_range_for_nid(nid, &start_pfn, &end_pfn);
+ 
  #ifdef CONFIG_NUMA
--struct pglist_data *node_data[MAX_NUMNODES];
+-	NODE_DATA(nid) = memblock_alloc_try_nid(
+-				sizeof(struct pglist_data),
+-				SMP_CACHE_BYTES, MEMBLOCK_LOW_LIMIT,
+-				MEMBLOCK_ALLOC_ACCESSIBLE, nid);
+-	if (!NODE_DATA(nid))
+-		panic("Can't allocate pgdat for node %d\n", nid);
++	alloc_node_data(nid);
+ #endif
  
- EXPORT_SYMBOL(numa_cpu_lookup_table);
- EXPORT_SYMBOL(numa_cpumask_lookup_table);
--EXPORT_SYMBOL(node_data);
- 
- static int scan_pio_for_cfg_handle(struct mdesc_handle *md, u64 pio,
- 				   u32 cfg_handle)
-diff --git a/arch/x86/include/asm/Kbuild b/arch/x86/include/asm/Kbuild
-index a192bdea69e2..6c23d1661b17 100644
---- a/arch/x86/include/asm/Kbuild
-+++ b/arch/x86/include/asm/Kbuild
-@@ -11,3 +11,4 @@ generated-y += xen-hypercalls.h
- 
- generic-y += early_ioremap.h
- generic-y += mcs_spinlock.h
-+generic-y += mmzone.h
-diff --git a/arch/x86/include/asm/mmzone.h b/arch/x86/include/asm/mmzone.h
-deleted file mode 100644
-index c41b41edd691..000000000000
---- a/arch/x86/include/asm/mmzone.h
-+++ /dev/null
-@@ -1,6 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifdef CONFIG_X86_32
--# include <asm/mmzone_32.h>
--#else
--# include <asm/mmzone_64.h>
--#endif
-diff --git a/arch/x86/include/asm/mmzone_32.h b/arch/x86/include/asm/mmzone_32.h
-deleted file mode 100644
-index 2d4515e8b7df..000000000000
---- a/arch/x86/include/asm/mmzone_32.h
-+++ /dev/null
-@@ -1,17 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--/*
-- * Written by Pat Gaughen (gone@us.ibm.com) Mar 2002
-- *
-- */
--
--#ifndef _ASM_X86_MMZONE_32_H
--#define _ASM_X86_MMZONE_32_H
--
--#include <asm/smp.h>
--
+ 	NODE_DATA(nid)->node_start_pfn = start_pfn;
+diff --git a/arch/sparc/mm/init_64.c b/arch/sparc/mm/init_64.c
+index 3cb698204609..83279c43572d 100644
+--- a/arch/sparc/mm/init_64.c
++++ b/arch/sparc/mm/init_64.c
+@@ -1075,14 +1075,9 @@ static void __init allocate_node_data(int nid)
+ {
+ 	struct pglist_data *p;
+ 	unsigned long start_pfn, end_pfn;
 -#ifdef CONFIG_NUMA
--extern struct pglist_data *node_data[];
--#define NODE_DATA(nid)	(node_data[nid])
--#endif /* CONFIG_NUMA */
--
--#endif /* _ASM_X86_MMZONE_32_H */
-diff --git a/arch/x86/include/asm/mmzone_64.h b/arch/x86/include/asm/mmzone_64.h
-deleted file mode 100644
-index 0c585046f744..000000000000
---- a/arch/x86/include/asm/mmzone_64.h
-+++ /dev/null
-@@ -1,18 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--/* K8 NUMA support */
--/* Copyright 2002,2003 by Andi Kleen, SuSE Labs */
--/* 2.5 Version loosely based on the NUMAQ Code by Pat Gaughen. */
--#ifndef _ASM_X86_MMZONE_64_H
--#define _ASM_X86_MMZONE_64_H
--
--#ifdef CONFIG_NUMA
--
--#include <linux/mmdebug.h>
--#include <asm/smp.h>
--
--extern struct pglist_data *node_data[];
--
--#define NODE_DATA(nid)		(node_data[nid])
--
--#endif
--#endif /* _ASM_X86_MMZONE_64_H */
+ 
+-	NODE_DATA(nid) = memblock_alloc_node(sizeof(struct pglist_data),
+-					     SMP_CACHE_BYTES, nid);
+-	if (!NODE_DATA(nid)) {
+-		prom_printf("Cannot allocate pglist_data for nid[%d]\n", nid);
+-		prom_halt();
+-	}
++#ifdef CONFIG_NUMA
++	alloc_node_data(nid);
+ 
+ 	NODE_DATA(nid)->node_id = nid;
+ #endif
 diff --git a/arch/x86/mm/numa.c b/arch/x86/mm/numa.c
-index 6ce10e3c6228..7de725d6bb05 100644
+index 7de725d6bb05..5e1dde26674b 100644
 --- a/arch/x86/mm/numa.c
 +++ b/arch/x86/mm/numa.c
-@@ -24,9 +24,6 @@
- int numa_off;
- nodemask_t numa_nodes_parsed __initdata;
+@@ -191,39 +191,6 @@ int __init numa_add_memblk(int nid, u64 start, u64 end)
+ 	return numa_add_memblk_to(nid, start, end, &numa_meminfo);
+ }
  
--struct pglist_data *node_data[MAX_NUMNODES] __read_mostly;
--EXPORT_SYMBOL(node_data);
+-/* Allocate NODE_DATA for a node on the local memory */
+-static void __init alloc_node_data(int nid)
+-{
+-	const size_t nd_size = roundup(sizeof(pg_data_t), PAGE_SIZE);
+-	u64 nd_pa;
+-	void *nd;
+-	int tnid;
 -
- static struct numa_meminfo numa_meminfo __initdata_or_meminfo;
- static struct numa_meminfo numa_reserved_meminfo __initdata_or_meminfo;
+-	/*
+-	 * Allocate node data.  Try node-local memory and then any node.
+-	 * Never allocate in DMA zone.
+-	 */
+-	nd_pa = memblock_phys_alloc_try_nid(nd_size, SMP_CACHE_BYTES, nid);
+-	if (!nd_pa) {
+-		pr_err("Cannot find %zu bytes in any node (initial node: %d)\n",
+-		       nd_size, nid);
+-		return;
+-	}
+-	nd = __va(nd_pa);
+-
+-	/* report and initialize */
+-	printk(KERN_INFO "NODE_DATA(%d) allocated [mem %#010Lx-%#010Lx]\n", nid,
+-	       nd_pa, nd_pa + nd_size - 1);
+-	tnid = early_pfn_to_nid(nd_pa >> PAGE_SHIFT);
+-	if (tnid != nid)
+-		printk(KERN_INFO "    NODE_DATA(%d) on node %d\n", nid, tnid);
+-
+-	node_data[nid] = nd;
+-	memset(NODE_DATA(nid), 0, sizeof(pg_data_t));
+-
+-	node_set_online(nid);
+-}
+-
+ /**
+  * numa_cleanup_meminfo - Cleanup a numa_meminfo
+  * @mi: numa_meminfo to clean up
+@@ -571,6 +538,7 @@ static int __init numa_register_memblks(struct numa_meminfo *mi)
+ 			continue;
  
+ 		alloc_node_data(nid);
++		node_set_online(nid);
+ 	}
+ 
+ 	/* Dump memblock with node info and return. */
 diff --git a/drivers/base/arch_numa.c b/drivers/base/arch_numa.c
-index 5b59d133b6af..9b71ad2869f1 100644
+index 9b71ad2869f1..2ebf12eab99f 100644
 --- a/drivers/base/arch_numa.c
 +++ b/drivers/base/arch_numa.c
-@@ -15,8 +15,6 @@
+@@ -216,30 +216,11 @@ int __init numa_add_memblk(int nid, u64 start, u64 end)
+  */
+ static void __init setup_node_data(int nid, u64 start_pfn, u64 end_pfn)
+ {
+-	const size_t nd_size = roundup(sizeof(pg_data_t), SMP_CACHE_BYTES);
+-	u64 nd_pa;
+-	void *nd;
+-	int tnid;
+-
+ 	if (start_pfn >= end_pfn)
+ 		pr_info("Initmem setup node %d [<memory-less node>]\n", nid);
  
- #include <asm/sections.h>
+-	nd_pa = memblock_phys_alloc_try_nid(nd_size, SMP_CACHE_BYTES, nid);
+-	if (!nd_pa)
+-		panic("Cannot allocate %zu bytes for node %d data\n",
+-		      nd_size, nid);
+-
+-	nd = __va(nd_pa);
+-
+-	/* report and initialize */
+-	pr_info("NODE_DATA [mem %#010Lx-%#010Lx]\n",
+-		nd_pa, nd_pa + nd_size - 1);
+-	tnid = early_pfn_to_nid(nd_pa >> PAGE_SHIFT);
+-	if (tnid != nid)
+-		pr_info("NODE_DATA(%d) on node %d\n", nid, tnid);
++	alloc_node_data(nid);
  
--struct pglist_data *node_data[MAX_NUMNODES] __read_mostly;
--EXPORT_SYMBOL(node_data);
- nodemask_t numa_nodes_parsed __initdata;
- static int cpu_to_node_map[NR_CPUS] = { [0 ... NR_CPUS-1] = NUMA_NO_NODE };
- 
-diff --git a/include/asm-generic/mmzone.h b/include/asm-generic/mmzone.h
-new file mode 100644
-index 000000000000..2ab5193e8394
---- /dev/null
-+++ b/include/asm-generic/mmzone.h
-@@ -0,0 +1,5 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_GENERIC_MMZONE_H
-+#define _ASM_GENERIC_MMZONE_H
-+
-+#endif
+-	node_data[nid] = nd;
+-	memset(NODE_DATA(nid), 0, sizeof(pg_data_t));
+ 	NODE_DATA(nid)->node_id = nid;
+ 	NODE_DATA(nid)->node_start_pfn = start_pfn;
+ 	NODE_DATA(nid)->node_spanned_pages = end_pfn - start_pfn;
 diff --git a/include/linux/numa.h b/include/linux/numa.h
-index eb19503604fe..e5841d4057ab 100644
+index e5841d4057ab..3b12d8ca0afd 100644
 --- a/include/linux/numa.h
 +++ b/include/linux/numa.h
-@@ -30,6 +30,9 @@ static inline bool numa_valid_node(int nid)
- #ifdef CONFIG_NUMA
- #include <asm/sparsemem.h>
+@@ -33,6 +33,8 @@ static inline bool numa_valid_node(int nid)
+ extern struct pglist_data *node_data[];
+ #define NODE_DATA(nid)	(node_data[nid])
  
-+extern struct pglist_data *node_data[];
-+#define NODE_DATA(nid)	(node_data[nid])
++void __init alloc_node_data(int nid);
 +
  /* Generic implementation available */
  int numa_nearest_node(int node, unsigned int state);
  
 diff --git a/mm/numa.c b/mm/numa.c
-index 67ca6b8585c0..8c157d41c026 100644
+index 8c157d41c026..67a0d7734a98 100644
 --- a/mm/numa.c
 +++ b/mm/numa.c
-@@ -3,6 +3,9 @@
+@@ -1,11 +1,38 @@
+ // SPDX-License-Identifier: GPL-2.0-or-later
+ 
++#include <linux/memblock.h>
  #include <linux/printk.h>
  #include <linux/numa.h>
  
-+struct pglist_data *node_data[MAX_NUMNODES];
-+EXPORT_SYMBOL(node_data);
+ struct pglist_data *node_data[MAX_NUMNODES];
+ EXPORT_SYMBOL(node_data);
+ 
++/* Allocate NODE_DATA for a node on the local memory */
++void __init alloc_node_data(int nid)
++{
++	const size_t nd_size = roundup(sizeof(pg_data_t), SMP_CACHE_BYTES);
++	u64 nd_pa;
++	void *nd;
++	int tnid;
++
++	/* Allocate node data.  Try node-local memory and then any node. */
++	nd_pa = memblock_phys_alloc_try_nid(nd_size, SMP_CACHE_BYTES, nid);
++	if (!nd_pa)
++		panic("Cannot allocate %zu bytes for node %d data\n",
++		      nd_size, nid);
++	nd = __va(nd_pa);
++
++	/* report and initialize */
++	pr_info("NODE_DATA(%d) allocated [mem %#010Lx-%#010Lx]\n", nid,
++		nd_pa, nd_pa + nd_size - 1);
++	tnid = early_pfn_to_nid(nd_pa >> PAGE_SHIFT);
++	if (tnid != nid)
++		pr_info("    NODE_DATA(%d) on node %d\n", nid, tnid);
++
++	node_data[nid] = nd;
++	memset(NODE_DATA(nid), 0, sizeof(pg_data_t));
++}
 +
  /* Stub functions: */
  
