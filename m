@@ -1,67 +1,84 @@
-Return-Path: <linux-arch+bounces-5592-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5593-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 947A993A2CD
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2024 16:34:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59F9693A771
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2024 20:52:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3FB861F2152D
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2024 14:34:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 16487282641
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2024 18:52:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C16C7154445;
-	Tue, 23 Jul 2024 14:33:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 467EA13D898;
+	Tue, 23 Jul 2024 18:51:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="LlGImzz7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FV7yl5au"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E72214C59A;
-	Tue, 23 Jul 2024 14:33:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5D3B13D600;
+	Tue, 23 Jul 2024 18:51:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721745236; cv=none; b=jbSWCLA5C+4tqAQ3augvP2dYIT8FTgw6azhYi9+5MOBGv36UxtkIWj0M1TfF5aG+3SFRQRaVhgg/p6UM4NOpPNO5Bq9fjlW7S1xsixZlNfyouTDxSqV92eUIHW6q1hvEw+NmH8oon9nWWu5YYvs6UB22jxNHBYMdT+iAChDre5s=
+	t=1721760716; cv=none; b=gHXmP084Z+WdrO+ESP9hdczqa1b+90egdiBVPGyUemumaQXtD+pAmW/7L/jxXC2uJBt31aZpLMJwDH5jXKcyTmITip+UV3wtthydkxBhDy8T007+87hUkPWLV6H8geixwEUbqkDxZD3u+xgT/lCDIcvUK6EYi6oLbBdUSi4+Th0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721745236; c=relaxed/simple;
-	bh=NMu75Y301zEMrIr2IRooBUWNRfFIuij7M6H0IP31dhA=;
+	s=arc-20240116; t=1721760716; c=relaxed/simple;
+	bh=jwFoh6L9rTQrrkMo4N/xtydd5G7+Zqn3pnTBTVbfISg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Rg5EBMxGhE3r4BIr17CGdsqGeqGMe+jVuicDgjnI1VLvFvZgrNDiVWfruNn4KVMOMCE+KBwvxpiI07FxEaXKrPyIqnocP6+la0FRsRTYxaQ6p9YKkjn6Rc+UOk6pqUCGPz/Z86rc0f88BJ4qhWdveXf6KVt55+r5izTTyR4TI3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=LlGImzz7; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=zGob8cqOMQFMd6ZJ7aKelgl8bYUnwmxgqspoHZfsBx0=; b=LlGImzz7gLD4aCmwv8k4A0e1DZ
-	9GPGExELQMb2KbFmKQ+PVeYYxd+u3UDPu2eFN5slv6eWCOFjXC4eQv3mVkP9Lp2d2MNtl1O+afP09
-	XG4BbGox2nxhz11YruHX++g9dEN3hIXRBUrmLw4jTiE4t0Ol2b9R1vqXGaOGR0qVt9Hogrell65hH
-	zXMwfVspCNgUQnTfpCAkGokZP7Oca/Qb5Jo2DQMo0jZD8u27maea1kaAWaWTK7Fsc5SauwsDTCrQ5
-	AEkl44+PaDhnyrKcbbS2YHSwU947HsWksD1v28wQD+UEAjWaTY3TczmHsi3L6MxjLU6HTpkDwCLdl
-	9iITSJsQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sWGaC-0000000CjEg-3FBu;
-	Tue, 23 Jul 2024 14:33:40 +0000
-Date: Tue, 23 Jul 2024 07:33:40 -0700
-From: Christoph Hellwig <hch@infradead.org>
-To: Youling Tang <youling.tang@linux.dev>
-Cc: Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>,
-	Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-	David Sterba <dsterba@suse.com>, tytso@mit.edu,
-	Andreas Dilger <adilger.kernel@dilger.ca>,
-	Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
-	Christoph Hellwig <hch@infradead.org>, linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-btrfs@vger.kernel.org, linux-ext4@vger.kernel.org,
-	linux-f2fs-devel@lists.sourceforge.net,
-	Youling Tang <tangyouling@kylinos.cn>
-Subject: Re: [PATCH 1/4] module: Add module_subinit{_noexit} and
- module_subeixt helper macros
-Message-ID: <Zp-_RDk5n5431yyh@infradead.org>
-References: <20240723083239.41533-1-youling.tang@linux.dev>
- <20240723083239.41533-2-youling.tang@linux.dev>
+	 Content-Type:Content-Disposition:In-Reply-To; b=uHon+eQP6X6ADjmsXcKAXQ6pH0Xem9u3ZqdHmFfp2G/2GUJD16KWzbWRSk1loj+2SUuLUWEoqn0NTtJ4x5m9SWFSFGZi21K1ZITDFAcwCYUXDuQX8t0vZaAFGrzX3ZSc/m2+MYInpzcsD6XPKBnvtQGX9mx4PhVt48MmPK9kyaE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FV7yl5au; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1721760714; x=1753296714;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jwFoh6L9rTQrrkMo4N/xtydd5G7+Zqn3pnTBTVbfISg=;
+  b=FV7yl5auZxSf++jGVJ31ha8wAZh4CWp5XV16A6MB9uNoWmO1g+w0ldtD
+   2M1EtzatiNMh2ZrDoDgRC3TMKYDe/Ug1UaciKm54Nv6D9otrl9Kl84k1e
+   CTkxYK3kxfH1TrpfU9FOnshTEXb3ofMk/WFDWrgn+T5iDzolM+KJmk/70
+   o4OEeiMfcQjxlDDiIae1ytR5Cb6oHugH2SbROd6+9WxJelAVRLVki0Okk
+   M4MyJ5Kb9rLifpcB/sdgsx3GKjioaH4DM/1NcVnnugJGK56n66f09PVFW
+   BJjrPnHnq3Ps69COxquC4cbzLlaIHQ4gMa234OjDuJfotNc5EDlKWOS76
+   g==;
+X-CSE-ConnectionGUID: pw9JKDkdSeOaWLV3+wywNg==
+X-CSE-MsgGUID: fkxG+PZ6T62hnlu21nQ3AA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11142"; a="19591188"
+X-IronPort-AV: E=Sophos;i="6.09,231,1716274800"; 
+   d="scan'208";a="19591188"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2024 11:51:53 -0700
+X-CSE-ConnectionGUID: xOcSniOWQmiD7YKSdDl0lA==
+X-CSE-MsgGUID: YApj6lHvSC+kCsDNk6CK3Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,231,1716274800"; 
+   d="scan'208";a="82959106"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 23 Jul 2024 11:51:48 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sWKbx-000mGC-2V;
+	Tue, 23 Jul 2024 18:51:45 +0000
+Date: Wed, 24 Jul 2024 02:51:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Youling Tang <youling.tang@linux.dev>, Arnd Bergmann <arnd@arndb.de>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Chris Mason <chris.mason@fusionio.com>,
+	Josef Bacik <josef@toxicpanda.com>, David Sterba <dsterba@suse.com>,
+	tytso@mit.edu, Andreas Dilger <adilger.kernel@dilger.ca>,
+	Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <yuchao0@huawei.com>,
+	Chao Yu <chao@kernel.org>, Christoph Hellwig <hch@infradead.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-modules@vger.kernel.org, linux-btrfs@vger.kernel.org,
+	linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+	youling.tang@linux.dev, Youling Tang <tangyouling@kylinos.cn>
+Subject: Re: [PATCH 4/4] f2fs: Use module_{subinit, subeixt} helper macros
+Message-ID: <202407240204.KcPiCniO-lkp@intel.com>
+References: <20240723083239.41533-5-youling.tang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -70,28 +87,62 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240723083239.41533-2-youling.tang@linux.dev>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <20240723083239.41533-5-youling.tang@linux.dev>
 
-On Tue, Jul 23, 2024 at 04:32:36PM +0800, Youling Tang wrote:
-> Providing module_subinit{_noexit} and module_subeixt helps macros ensure
-> that modules init/exit match their order, while also simplifying the code.
-> 
-> The three macros are defined as follows:
-> - module_subinit(initfn, exitfn,rollback)
-> - module_subinit_noexit(initfn, rollback)
-> - module_subexit(rollback)
-> 
-> `initfn` is the initialization function and `exitfn` is the corresponding
-> exit function.
+Hi Youling,
 
-I find the interface a little confusing.  What I would have expected
-is to:
+kernel test robot noticed the following build warnings:
 
- - have the module_subinit call at file scope instead of in the
-   module_init helper, similar to module_init/module_exit
- - thus keep the rollback state explicitly in the module structure or
-   similar so that the driver itself doesn't need to care about at
-   all, and thus remove the need for the module_subexit call.
+[auto build test WARNING on kdave/for-next]
+[also build test WARNING on linus/master next-20240723]
+[cannot apply to jaegeuk-f2fs/dev-test jaegeuk-f2fs/dev soc/for-next v6.10]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Youling-Tang/module-Add-module_subinit-_noexit-and-module_subeixt-helper-macros/20240723-164434
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-next
+patch link:    https://lore.kernel.org/r/20240723083239.41533-5-youling.tang%40linux.dev
+patch subject: [PATCH 4/4] f2fs: Use module_{subinit, subeixt} helper macros
+config: i386-buildonly-randconfig-004-20240724 (https://download.01.org/0day-ci/archive/20240724/202407240204.KcPiCniO-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240724/202407240204.KcPiCniO-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407240204.KcPiCniO-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from fs/f2fs/node.c:16:
+>> fs/f2fs/f2fs.h:4131:57: warning: non-void function does not return a value [-Wreturn-type]
+    4131 | static inline int __init f2fs_create_root_stats(void) { }
+         |                                                         ^
+   1 warning generated.
+--
+   In file included from fs/f2fs/data.c:25:
+>> fs/f2fs/f2fs.h:4131:57: warning: non-void function does not return a value [-Wreturn-type]
+    4131 | static inline int __init f2fs_create_root_stats(void) { }
+         |                                                         ^
+   fs/f2fs/data.c:2373:10: warning: variable 'index' set but not used [-Wunused-but-set-variable]
+    2373 |         pgoff_t index;
+         |                 ^
+   2 warnings generated.
+
+
+vim +4131 fs/f2fs/f2fs.h
+
+  4128	
+  4129	static inline int f2fs_build_stats(struct f2fs_sb_info *sbi) { return 0; }
+  4130	static inline void f2fs_destroy_stats(struct f2fs_sb_info *sbi) { }
+> 4131	static inline int __init f2fs_create_root_stats(void) { }
+  4132	static inline void f2fs_destroy_root_stats(void) { }
+  4133	static inline void f2fs_update_sit_info(struct f2fs_sb_info *sbi) {}
+  4134	#endif
+  4135	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
