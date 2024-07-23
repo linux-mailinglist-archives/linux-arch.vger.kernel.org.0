@@ -1,162 +1,206 @@
-Return-Path: <linux-arch+bounces-5594-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5595-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ADA1893A8BC
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2024 23:32:01 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D1D793A8E1
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2024 23:50:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D032D1C22C37
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2024 21:32:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ADC75B22403
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2024 21:50:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9030F144D36;
-	Tue, 23 Jul 2024 21:31:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EBD81482E8;
+	Tue, 23 Jul 2024 21:49:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l2EaSC36"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Fyfp56ZR"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3CFD1448FB;
-	Tue, 23 Jul 2024 21:31:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89FB0145B34
+	for <linux-arch@vger.kernel.org>; Tue, 23 Jul 2024 21:49:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721770319; cv=none; b=lMFprOqEe2p6RxAzIjPz08UKc639Y5zEg46Szh6mL7v+9xvE05RurRpGvNhQa/0yYrkw7V65qQQGpyDy2jxdWpvw8ulPdUyeTcuCO5L114tWvgyfGHHjyIHq0ehnfXV/58fOKXPW2iHJsqFiPnkAtPsKFHSq/G0URy2AqZAP4eI=
+	t=1721771392; cv=none; b=FBX8g6REidbYYDUSGSy2TW8P1OOiUH6f36IByOkoybJW02IsLyT0EFjMYzwh+RLod1VaJQNhMVw3fwRynII8V9YxctW6/9jcDn8LPoqytsSfpn76QWoOpW/OpW95We8HEgLYM+4IrE8AqUXZGDpZiZcMr8lfl92cQUtZTmGkYZc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721770319; c=relaxed/simple;
-	bh=emqRXC4zbFB95UYh4yI6o+bUQDFgG7kIbVNfc6B+a/s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n08AnS2aKp9TraaFr5myujPvq+ycHp3o9D2r1iw0pUT4OAwWG/V6ro3x8ORXPxJ4Li72WlgUN4at41a3P9L6s1S6dxw5/I/UZUXfMy4ZZSuYZTNJpns3NRl8t/je+/0NFk+ls8ie+LBHuq3ZIfADMs0IXyZhk2r5Kf8U2x7Ch4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l2EaSC36; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1721770318; x=1753306318;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=emqRXC4zbFB95UYh4yI6o+bUQDFgG7kIbVNfc6B+a/s=;
-  b=l2EaSC36CRwYuclgheLeevXoDE+QVyVpaGWkU3FnYLlfKlPupB6ist5P
-   +cHFa6pBW252JZb8ju+8KI7SYUIX8qWhlfIqBOlSG2EuDG+XsNUgY+7GA
-   WmE/gJNyTWlNLrds+J1aYmIRCWCFsU1hm7r6950+54LLOpdCCVjghGy1C
-   pcutx0GI44SYrlejtSNOhOHV2eJNyJXkVzpSa2SsykzyEDKk0zNhg0Dwp
-   h+geDXw+XD4JTjqqZV1j7+XTN3y2RwfsaKGqHBwATUIPGt07QILnj4eUB
-   FeF7HIf8a/sWgcw5iqKwwtbK8ZqFd3BzyKx19dXqbGcXDEb3YJ6i4hAgp
-   A==;
-X-CSE-ConnectionGUID: Wem086CXToe0WtaOamq3jw==
-X-CSE-MsgGUID: pMst6wNeR5advhlE2Dj9Cg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11142"; a="41946561"
-X-IronPort-AV: E=Sophos;i="6.09,231,1716274800"; 
-   d="scan'208";a="41946561"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2024 14:31:58 -0700
-X-CSE-ConnectionGUID: 9PnZNZK5ROSFsJZBagkOvg==
-X-CSE-MsgGUID: nknNECQjS+WNfr/mbbyZBg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,231,1716274800"; 
-   d="scan'208";a="52598208"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 23 Jul 2024 14:31:53 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sWN6s-000mN4-1a;
-	Tue, 23 Jul 2024 21:31:50 +0000
-Date: Wed, 24 Jul 2024 05:31:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Youling Tang <youling.tang@linux.dev>, Arnd Bergmann <arnd@arndb.de>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Chris Mason <chris.mason@fusionio.com>,
-	Josef Bacik <josef@toxicpanda.com>, David Sterba <dsterba@suse.com>,
-	tytso@mit.edu, Andreas Dilger <adilger.kernel@dilger.ca>,
-	Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <yuchao0@huawei.com>,
-	Chao Yu <chao@kernel.org>, Christoph Hellwig <hch@infradead.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-btrfs@vger.kernel.org, linux-ext4@vger.kernel.org,
-	linux-f2fs-devel@lists.sourceforge.net, youling.tang@linux.dev,
-	Youling Tang <tangyouling@kylinos.cn>
-Subject: Re: [PATCH 4/4] f2fs: Use module_{subinit, subeixt} helper macros
-Message-ID: <202407240502.xqotqBQ1-lkp@intel.com>
-References: <20240723083239.41533-5-youling.tang@linux.dev>
+	s=arc-20240116; t=1721771392; c=relaxed/simple;
+	bh=2SPyJdYRw87M7kH/eiezDyPqKNLNQ+jlKjgodNew6rA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=j6mc419trT9bl943AotccOgGjDxT/WGQcBbx8jYhhIsNSKw4raMjw0/tubOHV/uH1LowW2RJ+Z+OBqMmTQd6TpfZVY44gVjCDuGpHnT5ASWoJf9+O9i4+F/3JDA3sTuexZrso1G1WrF9Dpk6OQgBSqeMoKE826Ke8CeRzuTgOIE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Fyfp56ZR; arc=none smtp.client-ip=209.85.219.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-e0354459844so5689217276.3
+        for <linux-arch@vger.kernel.org>; Tue, 23 Jul 2024 14:49:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1721771388; x=1722376188; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yF33mP3g3PVeShTJgLfx3fwdjlEE8z1s+DJQDSjcr+Y=;
+        b=Fyfp56ZR1ESGsr5WcO9ANtOIhEqOM3JSjZfk33f5RdokqN6GS9KYDSotLO4rDc3quS
+         RjaSdEa0xexo57qp/8eaJFSf+zj5XZipWjYU5j75zimicvyKmO6rnpXwNNJR6lYmWmJk
+         SG8Xxr9K0V+ggX/45/VWRKhbVNl7RGpR5nqlxjZgEbAojfKUDkcdkYwfHCzinB3T4Wye
+         jU2Gr6XsGMiaC47jaEWYclfWUf4OEtEWFLohdXMcuV2HfjZSalRjbdEiMVf9YPTCh+7y
+         F4XQxmwOHpl+ni2pn+YZF4mTb/UoJS4vHc26G62cqtXWxBfuopA2MLJPu0kXOMGaDy+R
+         Ijxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721771388; x=1722376188;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yF33mP3g3PVeShTJgLfx3fwdjlEE8z1s+DJQDSjcr+Y=;
+        b=bB+3Qgw/XCzwTlPueZh2u01ptCQ/XimEWKL15eU8Nw7nk3cC9WsoSDofK0TreoIoEn
+         9J3O8bP7nz4IowlS6dShqHAwiBOyOUIBf/K6y5AfQw7ON1mpdp4Oc/4Nois8LsEt+DEd
+         F2jipgyTf7XpbcVjRhg9SeEn2+piwYGxM/V/pWDyR1VfQm/onr/NJ+fgTx0Zgy5PGOeF
+         UUh9h2ZMWRSjvIYdao2HQOSqDWii43Zg5pX+/AGNwlFdl2m8STh5Bu+JYqL/2Cf7U8Es
+         xcB57lbGD0FI3MoDL5Azm64hTR/9UGxCMtmiiG/AwJkzLp6y0iLDH4ciFCxA1aXhNzOh
+         G10w==
+X-Forwarded-Encrypted: i=1; AJvYcCXSIQ4QJVNAw94muL2Zy0MS6SC8svcleRJAS90PBgNgctaCGKVQVmR9i5ASZqA0EEcPzpJ8h1h+YNLPAEYHQ1VUu5xSgLx6cmWGgQ==
+X-Gm-Message-State: AOJu0YxfqjTeRxxrcZlzLAokAEJql6IFTNUuMUp0DUbttGxbXOWA3piO
+	HnJ38mYVih/3KPgh+fcfc8ASZI7cy2uP+nnWFEyHmKbTMPe5nn9r0SnLoxNHfenhMq59TbOat0v
+	1xa99GcSbJX9nACOZD+7kX5PA4bOI4hKsaiZB
+X-Google-Smtp-Source: AGHT+IH5JJRTlNbepSdsOAGPfU8tDz3MNG4de1Wtf/RZgU4beT2V9Y9SRFjNnPwNA1SLBZA82p/Z63pCaOnO/csApGk=
+X-Received: by 2002:a05:6902:1108:b0:e08:7607:bbf3 with SMTP id
+ 3f1490d57ef6-e0b097d5744mr1316657276.34.1721771388342; Tue, 23 Jul 2024
+ 14:49:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240723083239.41533-5-youling.tang@linux.dev>
+References: <20240628003253.1694510-1-almasrymina@google.com>
+ <20240628003253.1694510-4-almasrymina@google.com> <CAMArcTUqqxam+BPwGExOFOLVi3t=dwA-5sSagKC5dndv07GDLQ@mail.gmail.com>
+ <CAHS8izNS5jZjPfc-sARbHV7mzqzH+UhHfAtCTKRRTfSAdhY4Cw@mail.gmail.com> <CAMArcTUdCxOBYGF3vpbq=eBvqZfnc44KBaQTN7H-wqdUxZdziw@mail.gmail.com>
+In-Reply-To: <CAMArcTUdCxOBYGF3vpbq=eBvqZfnc44KBaQTN7H-wqdUxZdziw@mail.gmail.com>
+From: Mina Almasry <almasrymina@google.com>
+Date: Tue, 23 Jul 2024 14:49:34 -0700
+Message-ID: <CAHS8izMTGgZ+4fOKegUDLqAoxrdVEb+nqjQEt8bP0WLBV=FfrQ@mail.gmail.com>
+Subject: Re: [PATCH net-next v15 03/14] netdev: support binding dma-buf to netdevice
+To: Taehee Yoo <ap420073@gmail.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
+	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, 
+	Nikolay Aleksandrov <razor@blackwall.org>, Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, 
+	Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, 
+	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst <jeroendb@google.com>, 
+	Praveen Kaligineedi <pkaligineedi@google.com>, Willem de Bruijn <willemb@google.com>, 
+	Kaiyuan Zhang <kaiyuanz@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Youling,
+On Tue, Jul 9, 2024 at 8:37=E2=80=AFAM Taehee Yoo <ap420073@gmail.com> wrot=
+e:
+...
+> Reproducer:
+> ./ncdevmem -f <interface name> -l -p 5201 -v 7 -t 0 -q 2 &
+> sleep 10
+> modprobe -rv bnxt_en
+> killall ncdevmem
+>
+> I think it's a devmemTCP core bug so this issue would be reproduced
+> with other drivers.
 
-kernel test robot noticed the following build warnings:
+Sorry for the late reply. I was out at netdev.
 
-[auto build test WARNING on kdave/for-next]
-[also build test WARNING on linus/master next-20240723]
-[cannot apply to jaegeuk-f2fs/dev-test jaegeuk-f2fs/dev soc/for-next v6.10]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I'm also having trouble reproducing this, not because the bug doesn't
+exist, but quirks with my test setup that I need to figure out. AFAICT
+this diff should fix the issue. If you have time to confirm, let me
+know if it doesn't work for you. It should apply on top of v16:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Youling-Tang/module-Add-module_subinit-_noexit-and-module_subeixt-helper-macros/20240723-164434
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-next
-patch link:    https://lore.kernel.org/r/20240723083239.41533-5-youling.tang%40linux.dev
-patch subject: [PATCH 4/4] f2fs: Use module_{subinit, subeixt} helper macros
-config: arm64-randconfig-002-20240724 (https://download.01.org/0day-ci/archive/20240724/202407240502.xqotqBQ1-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 14.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240724/202407240502.xqotqBQ1-lkp@intel.com/reproduce)
+commit 795b8ff01906d ("fix for release issue")
+Author: Mina Almasry <almasrymina@google.com>
+Date:   Tue Jul 23 00:18:23 2024 +0000
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407240502.xqotqBQ1-lkp@intel.com/
+    fix for release issue
 
-All warnings (new ones prefixed by >>):
-
-   In file included from fs/f2fs/dir.c:13:
-   fs/f2fs/f2fs.h: In function 'f2fs_create_root_stats':
->> fs/f2fs/f2fs.h:4131:1: warning: no return statement in function returning non-void [-Wreturn-type]
-    4131 | static inline int __init f2fs_create_root_stats(void) { }
-         | ^~~~~~
---
-   In file included from fs/f2fs/data.c:25:
-   fs/f2fs/f2fs.h: In function 'f2fs_create_root_stats':
->> fs/f2fs/f2fs.h:4131:1: warning: no return statement in function returning non-void [-Wreturn-type]
-    4131 | static inline int __init f2fs_create_root_stats(void) { }
-         | ^~~~~~
-   fs/f2fs/data.c: In function 'f2fs_mpage_readpages':
-   fs/f2fs/data.c:2373:17: warning: variable 'index' set but not used [-Wunused-but-set-variable]
-    2373 |         pgoff_t index;
-         |                 ^~~~~
---
-   aarch64-linux-ld: warning: orphan section `.subexitcall.exit' from `fs/ext4/super.o' being placed in section `.subexitcall.exit'
-   aarch64-linux-ld: warning: orphan section `.subinitcall.init' from `fs/ext4/super.o' being placed in section `.subinitcall.init'
->> aarch64-linux-ld: warning: orphan section `.subexitcall.exit' from `fs/f2fs/super.o' being placed in section `.subexitcall.exit'
->> aarch64-linux-ld: warning: orphan section `.subinitcall.init' from `fs/f2fs/super.o' being placed in section `.subinitcall.init'
-   aarch64-linux-ld: warning: orphan section `.subexitcall.exit' from `fs/ext4/super.o' being placed in section `.subexitcall.exit'
-   aarch64-linux-ld: warning: orphan section `.subinitcall.init' from `fs/ext4/super.o' being placed in section `.subinitcall.init'
->> aarch64-linux-ld: warning: orphan section `.subexitcall.exit' from `fs/f2fs/super.o' being placed in section `.subexitcall.exit'
->> aarch64-linux-ld: warning: orphan section `.subinitcall.init' from `fs/f2fs/super.o' being placed in section `.subinitcall.init'
-   aarch64-linux-ld: warning: orphan section `.subexitcall.exit' from `fs/ext4/super.o' being placed in section `.subexitcall.exit'
-   aarch64-linux-ld: warning: orphan section `.subinitcall.init' from `fs/ext4/super.o' being placed in section `.subinitcall.init'
->> aarch64-linux-ld: warning: orphan section `.subexitcall.exit' from `fs/f2fs/super.o' being placed in section `.subexitcall.exit'
->> aarch64-linux-ld: warning: orphan section `.subinitcall.init' from `fs/f2fs/super.o' being placed in section `.subinitcall.init'
+    Change-Id: Ib45a0aa6cba2918db5f7ba535414ffa860911fa4
 
 
-vim +4131 fs/f2fs/f2fs.h
 
-  4128	
-  4129	static inline int f2fs_build_stats(struct f2fs_sb_info *sbi) { return 0; }
-  4130	static inline void f2fs_destroy_stats(struct f2fs_sb_info *sbi) { }
-> 4131	static inline int __init f2fs_create_root_stats(void) { }
-  4132	static inline void f2fs_destroy_root_stats(void) { }
-  4133	static inline void f2fs_update_sit_info(struct f2fs_sb_info *sbi) {}
-  4134	#endif
-  4135	
+diff --git a/include/net/devmem.h b/include/net/devmem.h
+index 51b25ba193c96..df52526bb516a 100644
+--- a/include/net/devmem.h
++++ b/include/net/devmem.h
+@@ -68,6 +68,9 @@ net_devmem_bind_dmabuf(struct net_device *dev,
+unsigned int dmabuf_fd);
+ void net_devmem_unbind_dmabuf(struct net_devmem_dmabuf_binding *binding);
+ int net_devmem_bind_dmabuf_to_queue(struct net_device *dev, u32 rxq_idx,
+                                    struct net_devmem_dmabuf_binding *bindi=
+ng);
++
++void dev_dmabuf_uninstall(struct net_device *dev);
++
+ struct net_iov *
+ net_devmem_alloc_dmabuf(struct net_devmem_dmabuf_binding *binding);
+ void net_devmem_free_dmabuf(struct net_iov *ppiov);
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 5882ddc3f8592..7be084e4936e4 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -11320,6 +11320,7 @@ void unregister_netdevice_many_notify(struct
+list_head *head,
+                dev_tcx_uninstall(dev);
+                dev_xdp_uninstall(dev);
+                bpf_dev_bound_netdev_unregister(dev);
++               dev_dmabuf_uninstall(dev);
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+                netdev_offload_xstats_disable_all(dev);
+
+diff --git a/net/core/devmem.c b/net/core/devmem.c
+index e75057ecfa6de..227bcb1070ec0 100644
+--- a/net/core/devmem.c
++++ b/net/core/devmem.c
+@@ -362,4 +362,20 @@ bool mp_dmabuf_devmem_release_page(struct
+page_pool *pool, netmem_ref netmem)
+        return false;
+ }
+
++void dev_dmabuf_uninstall(struct net_device *dev)
++{
++       unsigned int i, count =3D dev->num_rx_queues;
++       struct net_devmem_dmabuf_binding *binding;
++       struct netdev_rx_queue *rxq;
++       unsigned long xa_idx;
++
++       for (i =3D 0; i < count; i++) {
++               binding =3D dev->_rx[i].mp_params.mp_priv;
++               if (binding)
++                       xa_for_each(&binding->bound_rxqs, xa_idx, rxq)
++                               if (rxq =3D=3D &dev->_rx[i])
++                                       xa_erase(&binding->bound_rxqs, xa_i=
+dx);
++       }
++}
++
+ #endif
+
+--=20
+Thanks,
+Mina
 
