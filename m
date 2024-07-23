@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-5571-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5572-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C16B6939A8D
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2024 08:46:41 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B3D2939A9B
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2024 08:47:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6BCE91F2275E
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2024 06:46:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BBBD0B222E6
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2024 06:47:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7800314B075;
-	Tue, 23 Jul 2024 06:44:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4024014E2DF;
+	Tue, 23 Jul 2024 06:45:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j35xuHfu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NVxK/dES"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2835E14A606;
-	Tue, 23 Jul 2024 06:44:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0113614C58C;
+	Tue, 23 Jul 2024 06:45:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721717089; cv=none; b=HZbuu0aB8K21Y+DhU9Kn0AT8l7t2MTOYlUgkX+u+AHcAVc1TbGJPGcRDgwqj1tDPzWtREFl9E6LGsIZ+8WTeBDPdX3H524y9naJekjlFCC7qliwRrfDAQ4e1nJI3Fig+8POzudSURGuIir8OuXqFYCyjm89ZKJO4s1KQ/MEQqsI=
+	t=1721717101; cv=none; b=iiFStO6Zyxfo91695yDEqOeyMz/6r0vyZTrJ2gMM9KnRD0BtGyTPdKdNbH9k4i3OsMOY3FwKQR8E+eS4lx3g5LzTBvZ60TMWXU4p7XSuip4HA30vsx13OnUbZeJi7FfPudRR5q7Nby467QEoixNnUjSt7qAe1ZajbdVG43Bbdd4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721717089; c=relaxed/simple;
-	bh=UMRR3QRNDoHU23r5jw2deXNa43lw6nj2o1uMl8WO5EY=;
+	s=arc-20240116; t=1721717101; c=relaxed/simple;
+	bh=YsRpIjHui/E4Nyhzc91eYVtJPXNfygPjzJVhFxfItC0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WWJbL26AKG2BNTmicJTUC9yAmyT6SeJ4BiR/62K3mPXBLiZVsHvR5KAtwSAazU/tz+2afTjeyBn/AQsxSQR8nY1reqzMKGjBV04oXLbKVF7ULv/EhTxSZJXyc9pC5si18HG2kwwGXpeVy/UVPyiJmQ/okpcnmYQGz9S6SyMPQFw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j35xuHfu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75DE2C4AF0C;
-	Tue, 23 Jul 2024 06:44:37 +0000 (UTC)
+	 MIME-Version; b=CYl498YTFrNjjXluA7gQi90kybPBLuMYs0CjoNlLOOD0t0sZDkii6GrA+AAd3UEd/bt948VmrctegNM96PNg7YGk9GPq2TOsCwD/Z8Fj3+zPCRkai1r3KRW/SuP9uQBunOCyUiSp75N8WUE+1VP0rZNdIDZxzjTt+YpMruxvWVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NVxK/dES; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41369C4AF0B;
+	Tue, 23 Jul 2024 06:44:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721717088;
-	bh=UMRR3QRNDoHU23r5jw2deXNa43lw6nj2o1uMl8WO5EY=;
+	s=k20201202; t=1721717100;
+	bh=YsRpIjHui/E4Nyhzc91eYVtJPXNfygPjzJVhFxfItC0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=j35xuHfuNJnQeqb7veAbB9mttyDh+negQYCVoPrqp5oqP0zJLv/BXespI7J//nCIr
-	 Sc5hLZUbxIz7818WwGcqoz5uRApIPm6FTsS8D2xgtV/3QhZq/vSHjbyYQFteCdX9J/
-	 Z0Q1q+EAiONG8IXS2KIYvn9ZTZrI3rN/ZDXZYtg5Ba0JDP5j1rydPiw07EDLRjnfzj
-	 pgm5ToFUGkUK44WCFFrLfRGFLEUz96+/NIboNOkbTCMEuxXkQqulA5vFQFBYRFoA+V
-	 bDUooind5lcDC0gKC+UTC2cNByUYBIjZr44sdbkDnMkyVdXJiz8oVeerB9hf/6EipM
-	 zivkL/l1N+MSA==
+	b=NVxK/dESWkZTLqLMzH+QJWFfHzOuDB5Zg9jxVFrm55l8etkE62sOi/PKgAV8Do0QY
+	 9rqjDpdBneIIs6hLXbaC9H5ardG4k9hNSS/24b9JnxWSwubCihG79QaFgLXjiOt26i
+	 p5kfVp+usEUs2GaoIHsD2Gg+yWKdMTm1ax+yF74qZvG4LhsUAIfWXOI8A0pzR+4k2C
+	 4L30n/ESR2jhEAg8I5Cgx9nuBQXnCjuKDvQSU/NlgeR8s9cl3adIfhZnMK/jclT8fC
+	 sCU2WFhWD8J2tFeo6YMWlMfyl6EZSdgTeivf6nLJX9D94/RMTIzVb5nPxrBdMYvlet
+	 +qODh3gpzSY0w==
 From: Mike Rapoport <rppt@kernel.org>
 To: linux-kernel@vger.kernel.org
 Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
@@ -91,9 +91,9 @@ Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
 	sparclinux@vger.kernel.org,
 	x86@kernel.org,
 	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH v2 13/25] x86/numa_emu: simplify allocation of phys_dist
-Date: Tue, 23 Jul 2024 09:41:44 +0300
-Message-ID: <20240723064156.4009477-14-rppt@kernel.org>
+Subject: [PATCH v2 14/25] x86/numa_emu: split __apicid_to_node update to a helper function
+Date: Tue, 23 Jul 2024 09:41:45 +0300
+Message-ID: <20240723064156.4009477-15-rppt@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240723064156.4009477-1-rppt@kernel.org>
 References: <20240723064156.4009477-1-rppt@kernel.org>
@@ -107,40 +107,88 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-By the time numa_emulation() is called, all physical memory is already
-mapped in the direct map and there is no need to define limits for
-memblock allocation.
-
-Replace memblock_phys_alloc_range() with memblock_alloc().
+This is required to make numa emulation code architecture independent so
+that it can be moved to generic code in following commits.
 
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 ---
- arch/x86/mm/numa_emulation.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ arch/x86/include/asm/numa.h  |  2 ++
+ arch/x86/mm/numa.c           | 22 ++++++++++++++++++++++
+ arch/x86/mm/numa_emulation.c | 14 +-------------
+ 3 files changed, 25 insertions(+), 13 deletions(-)
 
+diff --git a/arch/x86/include/asm/numa.h b/arch/x86/include/asm/numa.h
+index 2dab1ada96cf..7017d540894a 100644
+--- a/arch/x86/include/asm/numa.h
++++ b/arch/x86/include/asm/numa.h
+@@ -72,6 +72,8 @@ void debug_cpumask_set_cpu(int cpu, int node, bool enable);
+ 
+ #ifdef CONFIG_NUMA_EMU
+ int numa_emu_cmdline(char *str);
++void __init numa_emu_update_cpu_to_node(int *emu_nid_to_phys,
++					unsigned int nr_emu_nids);
+ #else /* CONFIG_NUMA_EMU */
+ static inline int numa_emu_cmdline(char *str)
+ {
+diff --git a/arch/x86/mm/numa.c b/arch/x86/mm/numa.c
+index cfe7e5477cf8..9180d524cfe4 100644
+--- a/arch/x86/mm/numa.c
++++ b/arch/x86/mm/numa.c
+@@ -848,6 +848,28 @@ EXPORT_SYMBOL(cpumask_of_node);
+ 
+ #endif	/* !CONFIG_DEBUG_PER_CPU_MAPS */
+ 
++#ifdef CONFIG_NUMA_EMU
++void __init numa_emu_update_cpu_to_node(int *emu_nid_to_phys,
++					unsigned int nr_emu_nids)
++{
++	int i, j;
++
++	/*
++	 * Transform __apicid_to_node table to use emulated nids by
++	 * reverse-mapping phys_nid.  The maps should always exist but fall
++	 * back to zero just in case.
++	 */
++	for (i = 0; i < ARRAY_SIZE(__apicid_to_node); i++) {
++		if (__apicid_to_node[i] == NUMA_NO_NODE)
++			continue;
++		for (j = 0; j < nr_emu_nids; j++)
++			if (__apicid_to_node[i] == emu_nid_to_phys[j])
++				break;
++		__apicid_to_node[i] = j < nr_emu_nids ? j : 0;
++	}
++}
++#endif /* CONFIG_NUMA_EMU */
++
+ #ifdef CONFIG_NUMA_KEEP_MEMINFO
+ static int meminfo_to_nid(struct numa_meminfo *mi, u64 start)
+ {
 diff --git a/arch/x86/mm/numa_emulation.c b/arch/x86/mm/numa_emulation.c
-index 1ce22e315b80..439804e21962 100644
+index 439804e21962..f2746e52ab93 100644
 --- a/arch/x86/mm/numa_emulation.c
 +++ b/arch/x86/mm/numa_emulation.c
-@@ -448,15 +448,11 @@ void __init numa_emulation(struct numa_meminfo *numa_meminfo, int numa_dist_cnt)
+@@ -476,19 +476,7 @@ void __init numa_emulation(struct numa_meminfo *numa_meminfo, int numa_dist_cnt)
+ 		    ei.blk[i].nid != NUMA_NO_NODE)
+ 			node_set(ei.blk[i].nid, numa_nodes_parsed);
  
- 	/* copy the physical distance table */
- 	if (numa_dist_cnt) {
--		u64 phys;
--
--		phys = memblock_phys_alloc_range(phys_size, PAGE_SIZE, 0,
--						 PFN_PHYS(max_pfn_mapped));
--		if (!phys) {
-+		phys_dist = memblock_alloc(phys_size, PAGE_SIZE);
-+		if (!phys_dist) {
- 			pr_warn("NUMA: Warning: can't allocate copy of distance table, disabling emulation\n");
- 			goto no_emu;
- 		}
--		phys_dist = __va(phys);
+-	/*
+-	 * Transform __apicid_to_node table to use emulated nids by
+-	 * reverse-mapping phys_nid.  The maps should always exist but fall
+-	 * back to zero just in case.
+-	 */
+-	for (i = 0; i < ARRAY_SIZE(__apicid_to_node); i++) {
+-		if (__apicid_to_node[i] == NUMA_NO_NODE)
+-			continue;
+-		for (j = 0; j < ARRAY_SIZE(emu_nid_to_phys); j++)
+-			if (__apicid_to_node[i] == emu_nid_to_phys[j])
+-				break;
+-		__apicid_to_node[i] = j < ARRAY_SIZE(emu_nid_to_phys) ? j : 0;
+-	}
++	numa_emu_update_cpu_to_node(emu_nid_to_phys, ARRAY_SIZE(emu_nid_to_phys));
  
- 		for (i = 0; i < numa_dist_cnt; i++)
- 			for (j = 0; j < numa_dist_cnt; j++)
+ 	/* make sure all emulated nodes are mapped to a physical node */
+ 	for (i = 0; i < ARRAY_SIZE(emu_nid_to_phys); i++)
 -- 
 2.43.0
 
