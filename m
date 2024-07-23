@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-5562-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5563-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E982939A2F
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2024 08:43:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A235939A3A
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2024 08:44:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 811D71C21B42
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2024 06:43:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5D8061C21B59
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2024 06:44:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 635DE14A618;
-	Tue, 23 Jul 2024 06:43:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31DA214AD0A;
+	Tue, 23 Jul 2024 06:43:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y6q4di16"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OfSN7mfv"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A27F13CF85;
-	Tue, 23 Jul 2024 06:43:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAFD513CF85;
+	Tue, 23 Jul 2024 06:43:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721716984; cv=none; b=QUg8PwmjR7xUQHwaDoLHMEYrJpiRNpNZkEkuoACGFb4AtQRmjw9txxPZ7tVLWTQjyswKMTlH20tH384ItPHHWLEnjfuY/CsC9q26J0ReH7ICJiIXZitP4vY4CHQGpuseB7qEB+UlIdfHc6ZKSyfYKPbhSnbq1rBME7YXuRV0QA0=
+	t=1721716996; cv=none; b=aEtzwLJCE81hxSoBrvrv5ywR1Bt2WA3LB52uqjc8jkMkSRo6OvvYyECdjY2OlVdrU3CYM1Y7OvTB5bPkXXroHjINgY4Sy3xnSpV82C6bhM9kv53mgPk2Ziabdvg8rf7BMGzy3yfb669f3yz1S7lbIKKBy5XNcaXW975PH1gcE4Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721716984; c=relaxed/simple;
-	bh=JjgIyTKyYMJEXmrY6iBKzQREjmuG7L6VHXSpEqp+u6g=;
+	s=arc-20240116; t=1721716996; c=relaxed/simple;
+	bh=jUiExhtxbXLJEeICWPE63efzW6eqLaOxDv+h7X1UR1I=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=B0jNXXKZWUBL4BKKMnVIhFbzdM/F1EC9aD89+Bb5SXfk5+maerg7gH6VCNZriHA+EQQgvolqLbeoqdxSl7AAMllT1Zz2puRogogZsiXmtSiaDLH/f0y994wqx/1I4bVNkYDjMdAKGBsZtvzv7JPZj//nx9uXyg8CPyy+A62BiYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y6q4di16; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81FA3C4AF10;
-	Tue, 23 Jul 2024 06:42:52 +0000 (UTC)
+	 MIME-Version; b=LDL40Ab7WKVV3zxQaugXKc04/7AH8MiOM3DdhOz+A6rpSvhurbgFlgG/TsxJ3Px5nZu5uerus+Iad2xKaJ0P31aH0bF/CASdNiNEkVsyllJyGEuAgEjVD0/4eh6UtCpndbNvKYpo1L82yKEWyR0RBjYO1OTXuZ6U6cyBk5EdREE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OfSN7mfv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A439C4AF0F;
+	Tue, 23 Jul 2024 06:43:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721716983;
-	bh=JjgIyTKyYMJEXmrY6iBKzQREjmuG7L6VHXSpEqp+u6g=;
+	s=k20201202; t=1721716995;
+	bh=jUiExhtxbXLJEeICWPE63efzW6eqLaOxDv+h7X1UR1I=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Y6q4di16/02FGfX+NKF4yx+rIcTYq07N0OxPOONcycTUcZeXWWAg2+tx+rB5WHgfz
-	 tsKcNAQI4BwTkHN/3v2QX1cY6ojJ2lI18zljRvYbx7HafeGw5Pxe7uDhrsU/knMhF1
-	 sGv6OFNaO+pEUIsgk7TQXeN+ZdJqc3rlk4PGDqWy5Oc2MdgiN3FrA7AaAf3CiZ2AN1
-	 ZbDg482Hlr+8t8pxvFNK458eAQFx0WMXdPrjGy/8R3glp7z9UTqm15jP9l9A3rl/Cd
-	 WTFGFwzRouQDOKzSKcD5VdKfKWOZKZs0wjR3BtKbQp+l1R4vFsdv+mBPtEeJsjeErs
-	 mRBwbG4jucomQ==
+	b=OfSN7mfvIUHKBfqIhZu4h7qRRVMm+y8oNmA1PZ8IOgiRONyTkevyAn920tkmmmcKr
+	 xpP457bzAjQ5o9Old6pNpgfaMN77kH+wg/flNiNsqar5IJx3UlJfc28GlDvb8g/Nki
+	 8YLM7G4hBB754wH8MzGzVejX8YEGGOFCBD+gjj204V9qWaf5iAgw1msKGw+93wNdiU
+	 Y/T9WsphBVb4jLUNIMh8fHzvQY7N57NFxeSu7sOI1PkKRtoBgEoaNx50ekhLLAYrkT
+	 rCehBGnW5IqnZfy3tDX8e9KwEEcASO0sRUWPNvbMrIy6RXKo7V247p2U1rVniZYinl
+	 SIgVomUX1tYbQ==
 From: Mike Rapoport <rppt@kernel.org>
 To: linux-kernel@vger.kernel.org
 Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
@@ -89,10 +89,11 @@ Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
 	loongarch@lists.linux.dev,
 	nvdimm@lists.linux.dev,
 	sparclinux@vger.kernel.org,
-	x86@kernel.org
-Subject: [PATCH v2 04/25] MIPS: sgi-ip27: drop HAVE_ARCH_NODEDATA_EXTENSION
-Date: Tue, 23 Jul 2024 09:41:35 +0300
-Message-ID: <20240723064156.4009477-5-rppt@kernel.org>
+	x86@kernel.org,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH v2 05/25] MIPS: loongson64: rename __node_data to node_data
+Date: Tue, 23 Jul 2024 09:41:36 +0300
+Message-ID: <20240723064156.4009477-6-rppt@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240723064156.4009477-1-rppt@kernel.org>
 References: <20240723064156.4009477-1-rppt@kernel.org>
@@ -106,52 +107,66 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-Commit f8f9f21c7848 ("MIPS: Fix build error for loongson64 and
-sgi-ip27") added HAVE_ARCH_NODEDATA_EXTENSION to sgi-ip27 to silence a
-compilation error that happened because sgi-ip27 didn't define array of
-pg_data_t as node_data like most other architectures did.
-
-After addition of node_data array that matches other architectures and
-after ensuring that offline nodes do not appear on node_possible_map, it
-is safe to drop arch_alloc_nodedata() and HAVE_ARCH_NODEDATA_EXTENSION
-from sgi-ip27.
+Make definition of node_data match other architectures.
+This will allow pulling declaration of node_data to the generic mm code in
+the following commit.
 
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Reviewed-by: David Hildenbrand <david@redhat.com>
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 ---
- arch/mips/Kconfig                |  1 -
- arch/mips/sgi-ip27/ip27-memory.c | 10 ----------
- 2 files changed, 11 deletions(-)
+ arch/mips/include/asm/mach-loongson64/mmzone.h | 4 ++--
+ arch/mips/loongson64/numa.c                    | 8 ++++----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index f1aa1bf11166..954f12a9e669 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -733,7 +733,6 @@ config SGI_IP27
- 	select WAR_R10000_LLSC
- 	select MIPS_L1_CACHE_SHIFT_7
- 	select NUMA
--	select HAVE_ARCH_NODEDATA_EXTENSION
- 	help
- 	  This are the SGI Origin 200, Origin 2000 and Onyx 2 Graphics
- 	  workstations.  To compile a Linux kernel that runs on these, say Y
-diff --git a/arch/mips/sgi-ip27/ip27-memory.c b/arch/mips/sgi-ip27/ip27-memory.c
-index c30ef6958b97..eb6d2fa41a8a 100644
---- a/arch/mips/sgi-ip27/ip27-memory.c
-+++ b/arch/mips/sgi-ip27/ip27-memory.c
-@@ -426,13 +426,3 @@ void __init mem_init(void)
- 	memblock_free_all();
- 	setup_zero_pages();	/* This comes from node 0 */
+diff --git a/arch/mips/include/asm/mach-loongson64/mmzone.h b/arch/mips/include/asm/mach-loongson64/mmzone.h
+index a3d65d37b8b5..2effd5f8ed62 100644
+--- a/arch/mips/include/asm/mach-loongson64/mmzone.h
++++ b/arch/mips/include/asm/mach-loongson64/mmzone.h
+@@ -14,9 +14,9 @@
+ #define pa_to_nid(addr)  (((addr) & 0xf00000000000) >> NODE_ADDRSPACE_SHIFT)
+ #define nid_to_addrbase(nid) ((unsigned long)(nid) << NODE_ADDRSPACE_SHIFT)
+ 
+-extern struct pglist_data *__node_data[];
++extern struct pglist_data *node_data[];
+ 
+-#define NODE_DATA(n)		(__node_data[n])
++#define NODE_DATA(n)		(node_data[n])
+ 
+ extern void __init prom_init_numa_memory(void);
+ 
+diff --git a/arch/mips/loongson64/numa.c b/arch/mips/loongson64/numa.c
+index 68dafd6d3e25..b50ce28d2741 100644
+--- a/arch/mips/loongson64/numa.c
++++ b/arch/mips/loongson64/numa.c
+@@ -29,8 +29,8 @@
+ 
+ unsigned char __node_distances[MAX_NUMNODES][MAX_NUMNODES];
+ EXPORT_SYMBOL(__node_distances);
+-struct pglist_data *__node_data[MAX_NUMNODES];
+-EXPORT_SYMBOL(__node_data);
++struct pglist_data *node_data[MAX_NUMNODES];
++EXPORT_SYMBOL(node_data);
+ 
+ cpumask_t __node_cpumask[MAX_NUMNODES];
+ EXPORT_SYMBOL(__node_cpumask);
+@@ -107,7 +107,7 @@ static void __init node_mem_init(unsigned int node)
+ 	tnid = early_pfn_to_nid(nd_pa >> PAGE_SHIFT);
+ 	if (tnid != node)
+ 		pr_info("NODE_DATA(%d) on node %d\n", node, tnid);
+-	__node_data[node] = nd;
++	node_data[node] = nd;
+ 	NODE_DATA(node)->node_start_pfn = start_pfn;
+ 	NODE_DATA(node)->node_spanned_pages = end_pfn - start_pfn;
+ 
+@@ -206,5 +206,5 @@ pg_data_t * __init arch_alloc_nodedata(int nid)
+ 
+ void arch_refresh_nodedata(int nid, pg_data_t *pgdat)
+ {
+-	__node_data[nid] = pgdat;
++	node_data[nid] = pgdat;
  }
--
--pg_data_t * __init arch_alloc_nodedata(int nid)
--{
--	return memblock_alloc(sizeof(pg_data_t), SMP_CACHE_BYTES);
--}
--
--void arch_refresh_nodedata(int nid, pg_data_t *pgdat)
--{
--	__node_data[nid] = (struct node_data *)pgdat;
--}
 -- 
 2.43.0
 
