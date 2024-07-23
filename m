@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-5579-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5580-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BE50939AE3
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2024 08:49:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68DD5939AF0
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2024 08:50:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7ED0A1C21BB7
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2024 06:49:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A7CD1C21C2C
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Jul 2024 06:50:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7700414BF86;
-	Tue, 23 Jul 2024 06:46:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F06F15217A;
+	Tue, 23 Jul 2024 06:46:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mh2GRPm2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GdtNpb5f"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A28114A0AE;
-	Tue, 23 Jul 2024 06:46:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22D1314D6FC;
+	Tue, 23 Jul 2024 06:46:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721717182; cv=none; b=IKqi3qlFn+Y+AUB50o1HpTs2+IOSVcV9AoZKfp3niEa+sGaRu/n7P3/HQusI3t6JpibEVoD4eoR8C55tH0u7Nq2NkfQ1pd7Iw3esILN15A8Al9W75njYg1Atul0BCgGAFEIALbydBsHkMzwL2wL09sdbkgGdwSfcY+xYu7cIaes=
+	t=1721717194; cv=none; b=snJACS8PYcwxek1Uk5AKUeMCNgvzqKnXQyPHEFZr5nczQUPENAeZASINwW+2Noq5JNIVvHdGXifWthkhkRLi/BTUY++KZ1HxuMgqAAdw24Y8woZDtfmfzCSm2ifXXf60qsnWwsDFSFVALQLUhBZn8CHKIClQxSFRWQyGaAyxDcY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721717182; c=relaxed/simple;
-	bh=czQlSB1prAUx4+nfVbpfC7vYMDzPDxbO3yiJDWAcvGA=;
+	s=arc-20240116; t=1721717194; c=relaxed/simple;
+	bh=zVDs6WKjT/YvUD2GuaqovEFQsz1PVdi+2wlgjwoVKBM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aMVNf/whwTB8bZIXTA5AuwgOLEb5Pi08AxLUvM3oSShl3iEvp89njQSK+vFIHU9mnmbDGP6eJZIUI/8HhaWj1YAVXWr1HcIB7rGzM9KsSgzZxX0/iMJeSka4PEAAak6Ed40VZgyivAQWCTeKlnWe25KQvrAN7UOXzh1jUq/C5Go=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mh2GRPm2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17035C4AF0C;
-	Tue, 23 Jul 2024 06:46:10 +0000 (UTC)
+	 MIME-Version; b=aiu8hoYwrVgd4EaMLjbCaHJXdcuK/OgClX3hWALtmgaBx0J11HiwCeGGhhcd9lnclOnviEElNnkVx4WXB7HQQ83NU2qKeycvS8dRkIFbbNir5G4Q8TeAsJm8u+lgnaNqv3/lejmnOnA56FiGIMrxuFXElB8H01ySTwTc4dD2bvM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GdtNpb5f; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E983C4AF14;
+	Tue, 23 Jul 2024 06:46:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721717182;
-	bh=czQlSB1prAUx4+nfVbpfC7vYMDzPDxbO3yiJDWAcvGA=;
+	s=k20201202; t=1721717193;
+	bh=zVDs6WKjT/YvUD2GuaqovEFQsz1PVdi+2wlgjwoVKBM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=mh2GRPm2wBte19heLPPhCf25v4O8wId4t+XDdcLCfWpGv5PTkhss9ReUL8uazZULe
-	 6eM8hQ+PWHhFnWT76FwkX2NWIgKyOpW3GylcxSfAvHhs0N7B5LuvANwWeCeqv+0nDx
-	 mhNPH8UgkiWp4VYIHXnZ1B4AFRHWcZw1ZlNwvtOAL0/JWEF+dZaXAkCexbuQgF77Kg
-	 MPc24q9PrvJh/gNzTjBu1XTMLLkvq6W+vGcmjsVIS4dX2Fgk3Bp7HPWIm4OA0YwdlJ
-	 shJ43oMYTjLQ/vbrZALQOA/kooXYb1d27NgGQfNNeu69CkjqYV2KsWm0OQI46bPrqY
-	 tFWPaODMjuktQ==
+	b=GdtNpb5fUIpXsX9U29NSh04YZWODgndxZxjste8kTAvvVKauwF6UNM6S9Dr3BCKEs
+	 yzF3a95E4FDYjaodsPNzYMUIiAFluD4W6BzfRkWMXJaN5mJiDqA0nbhJUlVN8YBreY
+	 N8Lfe55rcuYatNFvDLpb1o/ai1cq2a87KFY1vXc2G3PokM+pzDBZiGx1YYc0JvUIwd
+	 hD+FxT+d7coc5Nv4te6g48WPgLLOAIBVm7uSHK4G4+cw6nfe/xZpmv2v/wDAZjLxfx
+	 maJJGo9Hlb/cksHiz+XhQBIYl3hu/DniwedBxjLUcBhi+OlRUy+RXddlr9a1o66hWz
+	 zfdJosOcK+iJA==
 From: Mike Rapoport <rppt@kernel.org>
 To: linux-kernel@vger.kernel.org
 Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
@@ -90,9 +90,9 @@ Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
 	nvdimm@lists.linux.dev,
 	sparclinux@vger.kernel.org,
 	x86@kernel.org
-Subject: [PATCH v2 21/25] mm: numa_memblks: make several functions and variables static
-Date: Tue, 23 Jul 2024 09:41:52 +0300
-Message-ID: <20240723064156.4009477-22-rppt@kernel.org>
+Subject: [PATCH v2 22/25] mm: numa_memblks: use memblock_{start,end}_of_DRAM() when sanitizing meminfo
+Date: Tue, 23 Jul 2024 09:41:53 +0300
+Message-ID: <20240723064156.4009477-23-rppt@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240723064156.4009477-1-rppt@kernel.org>
 References: <20240723064156.4009477-1-rppt@kernel.org>
@@ -106,113 +106,33 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-Make functions and variables that are exclusively used by numa_memblks
-static.
+numa_cleanup_meminfo() moves blocks outside system RAM to
+numa_reserved_meminfo and it uses 0 and PFN_PHYS(max_pfn) to determine
+the memory boundaries.
 
-Move numa_nodemask_from_meminfo() before its callers to avoid forward
-declaration.
+Replace the memory range boundaries with more portable
+memblock_start_of_DRAM() and memblock_end_of_DRAM().
 
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
- include/linux/numa_memblks.h |  8 --------
- mm/numa_memblks.c            | 36 ++++++++++++++++++------------------
- 2 files changed, 18 insertions(+), 26 deletions(-)
+ mm/numa_memblks.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/numa_memblks.h b/include/linux/numa_memblks.h
-index 07381320848f..5c6e12ad0b7a 100644
---- a/include/linux/numa_memblks.h
-+++ b/include/linux/numa_memblks.h
-@@ -7,7 +7,6 @@
- 
- #define NR_NODE_MEMBLKS		(MAX_NUMNODES * 2)
- 
--extern int numa_distance_cnt;
- void __init numa_set_distance(int from, int to, int distance);
- void __init numa_reset_distance(void);
- 
-@@ -22,17 +21,10 @@ struct numa_meminfo {
- 	struct numa_memblk	blk[NR_NODE_MEMBLKS];
- };
- 
--extern struct numa_meminfo numa_meminfo __initdata_or_meminfo;
--extern struct numa_meminfo numa_reserved_meminfo __initdata_or_meminfo;
--
- int __init numa_add_memblk(int nodeid, u64 start, u64 end);
- void __init numa_remove_memblk_from(int idx, struct numa_meminfo *mi);
- 
- int __init numa_cleanup_meminfo(struct numa_meminfo *mi);
--int __init numa_register_meminfo(struct numa_meminfo *mi);
--
--void __init numa_nodemask_from_meminfo(nodemask_t *nodemask,
--				       const struct numa_meminfo *mi);
- 
- int __init numa_memblks_init(int (*init_func)(void),
- 			     bool memblock_force_top_down);
 diff --git a/mm/numa_memblks.c b/mm/numa_memblks.c
-index 7749b6f6b250..e97665a5e8ce 100644
+index e97665a5e8ce..e4358ad92233 100644
 --- a/mm/numa_memblks.c
 +++ b/mm/numa_memblks.c
-@@ -7,13 +7,27 @@
- #include <linux/numa.h>
- #include <linux/numa_memblks.h>
- 
--int numa_distance_cnt;
-+static int numa_distance_cnt;
- static u8 *numa_distance;
- 
- nodemask_t numa_nodes_parsed __initdata;
- 
--struct numa_meminfo numa_meminfo __initdata_or_meminfo;
--struct numa_meminfo numa_reserved_meminfo __initdata_or_meminfo;
-+static struct numa_meminfo numa_meminfo __initdata_or_meminfo;
-+static struct numa_meminfo numa_reserved_meminfo __initdata_or_meminfo;
-+
-+/*
-+ * Set nodes, which have memory in @mi, in *@nodemask.
-+ */
-+static void __init numa_nodemask_from_meminfo(nodemask_t *nodemask,
-+					      const struct numa_meminfo *mi)
-+{
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(mi->blk); i++)
-+		if (mi->blk[i].start != mi->blk[i].end &&
-+		    mi->blk[i].nid != NUMA_NO_NODE)
-+			node_set(mi->blk[i].nid, *nodemask);
-+}
- 
- /**
-  * numa_reset_distance - Reset NUMA distance table
-@@ -290,20 +304,6 @@ int __init numa_cleanup_meminfo(struct numa_meminfo *mi)
- 	return 0;
- }
- 
--/*
-- * Set nodes, which have memory in @mi, in *@nodemask.
-- */
--void __init numa_nodemask_from_meminfo(nodemask_t *nodemask,
--				       const struct numa_meminfo *mi)
--{
--	int i;
--
--	for (i = 0; i < ARRAY_SIZE(mi->blk); i++)
--		if (mi->blk[i].start != mi->blk[i].end &&
--		    mi->blk[i].nid != NUMA_NO_NODE)
--			node_set(mi->blk[i].nid, *nodemask);
--}
--
- /*
-  * Mark all currently memblock-reserved physical memory (which covers the
-  * kernel's own memory ranges) as hot-unswappable.
-@@ -371,7 +371,7 @@ static void __init numa_clear_kernel_node_hotplug(void)
- 	}
- }
- 
--int __init numa_register_meminfo(struct numa_meminfo *mi)
-+static int __init numa_register_meminfo(struct numa_meminfo *mi)
+@@ -212,8 +212,8 @@ int __init numa_add_memblk(int nid, u64 start, u64 end)
+  */
+ int __init numa_cleanup_meminfo(struct numa_meminfo *mi)
  {
- 	int i;
+-	const u64 low = 0;
+-	const u64 high = PFN_PHYS(max_pfn);
++	const u64 low = memblock_start_of_DRAM();
++	const u64 high = memblock_end_of_DRAM();
+ 	int i, j, k;
  
+ 	/* first, trim all entries */
 -- 
 2.43.0
 
