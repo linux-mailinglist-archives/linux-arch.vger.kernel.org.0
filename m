@@ -1,159 +1,122 @@
-Return-Path: <linux-arch+bounces-5628-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5629-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5E0A93C0FB
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Jul 2024 13:38:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC91D93C46E
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Jul 2024 16:40:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4C6ABB216B6
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Jul 2024 11:38:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 198DC1C21998
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Jul 2024 14:40:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0866919922A;
-	Thu, 25 Jul 2024 11:38:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25FBE19D082;
+	Thu, 25 Jul 2024 14:39:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ko+WbQFO"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="WL5/OYQ+"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2647199221
-	for <linux-arch@vger.kernel.org>; Thu, 25 Jul 2024 11:38:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81FB619D07A;
+	Thu, 25 Jul 2024 14:39:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721907487; cv=none; b=HO539jRIDoCbDq1g35ZbfNwE936H1a1PWl1vNPJZaYZtEkFfsoTopcefGRx1EIr1ZDi4QXzr4CXU7otmdXzwh9120TSfk23ONAZXotxAhVaD3HrUAihaVQLDcxlCfGVK0u1ThMg+2IPw+uXUKeYjMrWQYDN3M9fMmX+NiwSlKLw=
+	t=1721918392; cv=none; b=aglWUHhzA1enAx8OC47rV6Lx13R0rX12qHFT1L3neSLewyjfCw8Kg6M2uct9iServYFZ4Z0jYEaPwzEcJaSQIi1W9qqFjzmgc365mkksIKiDYyAvOZE3ShNEamV5r71hr4Qo2IWqvWzat/Rt29XNipFXuBRlDq2D97QCiGCpJb4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721907487; c=relaxed/simple;
-	bh=1qJVu1HlWGKlDQ02P7SicY4UWLDa5VRCZhXK7FXvIW4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=WnPl5xY48ETwihC65v4HWFfthSOSLbMu0PuyqFYPWWqtNahK2eGGGkM7OqAEbayrM7zfo5GKUtoEpoXqW3fAc9rWePtqsD4xOrALvKCa+cxzOqlbgsbJSQ0gFl3lnoC3fQdXAv0X32+MfBPSV7EZILnmvgwyv3ZvLemDLmF0+/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ko+WbQFO; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1721907485; x=1753443485;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1qJVu1HlWGKlDQ02P7SicY4UWLDa5VRCZhXK7FXvIW4=;
-  b=Ko+WbQFODl4CMmxuApwDczKJwpCFS3tB0q1ECoZR1Wpg+R8YK7bAhzkk
-   55/cqdz2WqqrR8MMus+IstS63wISJO/GvMVWFE3bLE8tjvpJCRPnrRVYv
-   TpjSIjbGlhK9YngY97EgCor351nKbuNJ2jTPPposl7YZNo3Gcm+X+SOEc
-   wToYE3WdYbEVWpZnwi0yRny+Bg2pTBPjNJWwE+Jo231NcRZYYewlSBz0T
-   /27Q6t96J/jbZADBsYwZTTtmEim/pgWB6s6j1BqbVFtyoozyIADOhrycu
-   8r/xoVV1NiSpZcWbY0fOBALJ/ude4IuMV7qEe9II1fG+7O6db2qO9wZF7
-   A==;
-X-CSE-ConnectionGUID: hoA86LHbSSKovAT8JK96iw==
-X-CSE-MsgGUID: Tnnv23PVSJKVeey6Lx+2Lw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11143"; a="19777513"
-X-IronPort-AV: E=Sophos;i="6.09,235,1716274800"; 
-   d="scan'208";a="19777513"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2024 04:38:04 -0700
-X-CSE-ConnectionGUID: ygZ2BTuiRmSrzG1NhThtpQ==
-X-CSE-MsgGUID: Y5CqZRKORwGzMeiHY9xU/A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,235,1716274800"; 
-   d="scan'208";a="53140372"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 25 Jul 2024 04:38:03 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sWwnI-000o3s-2Q;
-	Thu, 25 Jul 2024 11:38:00 +0000
-Date: Thu, 25 Jul 2024 19:37:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: oe-kbuild-all@lists.linux.dev, linux-arch@vger.kernel.org
-Subject: [arnd-asm-generic:syscall-tbl-6.11 77/80]
- include/linux/syscalls.h:247:42: error: 'sys_mmap' undeclared; did you mean
- 'sys_mremap'?
-Message-ID: <202407251910.EGPCqgCG-lkp@intel.com>
+	s=arc-20240116; t=1721918392; c=relaxed/simple;
+	bh=8iE2fLIuKiX/R1Mck8oWn/wV8sca/R7pF11OZS3T544=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y75VAZin04y/PrJkF93Tza6NV/OTJVo6aAMI73txpqM1ultU1NrZBiTzqyjZJttXWcqrb42xNbuz0n2CMLJVIs9Mdeb9JFG+CJwGU1jJGoyJnWFBO3v/zkpzTrRQ+XL0oNqMHzeJ54LoUOyd2Z5JT4PwMWLmMut9SlSl019LnGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=WL5/OYQ+; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Transfer-Encoding
+	:Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=fT+P3bL2alqk783XUIpMyvxWyxVKIMjRx9YDa8Msrv8=; b=WL5/OYQ+RT6V2Tl5hRTNfUjVwL
+	oYtEItO5DN/EmTddff9oHpV7Z1VvU/Hz+Wd/ZHHcYbz51Wp7Pyq1+pk0K/7zQPkMmENAMlmbCODHD
+	e5Vr8IhAmtm1e63eRQfIZYn4YhuFhEfyTM2m+FX40WG1cnKnrVwE7Qp3XJyhDFybOgRokQsOqhLVU
+	exQ2/h/Jc8DM+0kWg1+tInyN9tyTGSg30g+Urn5OCITbb2OMIKeZqU36FmGsCWt4pMVGSDnv5zLvN
+	cjcI8uRXUENjfZNyTD2zcw+U34WMrESbsJV14YTD1M0PxUQTTJxWSlubgoMyN5eOUzZyr4+eXPHz4
+	BZFIqkRQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1sWzdC-00000001Iql-2cGb;
+	Thu, 25 Jul 2024 14:39:46 +0000
+Date: Thu, 25 Jul 2024 07:39:46 -0700
+From: Christoph Hellwig <hch@infradead.org>
+To: Youling Tang <youling.tang@linux.dev>
+Cc: Christoph Hellwig <hch@infradead.org>, Arnd Bergmann <arnd@arndb.de>,
+	Luis Chamberlain <mcgrof@kernel.org>, Chris Mason <clm@fb.com>,
+	Josef Bacik <josef@toxicpanda.com>, David Sterba <dsterba@suse.com>,
+	tytso@mit.edu, Andreas Dilger <adilger.kernel@dilger.ca>,
+	Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
+	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-modules@vger.kernel.org, linux-btrfs@vger.kernel.org,
+	linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+	Youling Tang <tangyouling@kylinos.cn>
+Subject: Re: [PATCH 1/4] module: Add module_subinit{_noexit} and
+ module_subeixt helper macros
+Message-ID: <ZqJjsg3s7H5cTWlT@infradead.org>
+References: <20240723083239.41533-1-youling.tang@linux.dev>
+ <20240723083239.41533-2-youling.tang@linux.dev>
+ <Zp-_RDk5n5431yyh@infradead.org>
+ <0a63dfd1-ead3-4db3-a38c-2bc1db65f354@linux.dev>
+ <ZqEhMCjdFwC3wF4u@infradead.org>
+ <895360e3-97bb-4188-a91d-eaca3302bd43@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <895360e3-97bb-4188-a91d-eaca3302bd43@linux.dev>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git syscall-tbl-6.11
-head:   ece1b5ebc0b7064a8a130f64e85a81ec76381c3f
-commit: ce67487a0460367a60a68fa3de3e66b8caaa3b7c [77/80] syscalls: check syscall prototypes
-config: um-allyesconfig (https://download.01.org/0day-ci/archive/20240725/202407251910.EGPCqgCG-lkp@intel.com/config)
-compiler: gcc-13 (Ubuntu 13.2.0-4ubuntu3) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240725/202407251910.EGPCqgCG-lkp@intel.com/reproduce)
+On Thu, Jul 25, 2024 at 11:01:33AM +0800, Youling Tang wrote:
+> - It doesn't feel good to have only one subinit/exit in a file.
+>   Assuming that there is only one file in each file, how do we
+>   ensure that the files are linked in order?(Is it sorted by *.o
+>   in the Makefile?)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407251910.EGPCqgCG-lkp@intel.com/
+Yes, link order already matterns for initialization order for built-in
+code, so this is a well known concept.
 
-All errors (new ones prefixed by >>):
+> - Even if the order of each init is linked correctly, then the
+>   runtime will be iterated through the .subinitcall.init section,
+>   which executes each initfn in sequence (similar to do_initcalls),
+>   which means that no other code can be inserted between each subinit.
 
-   In file included from arch/x86/um/syscalls_64.c:10:
-   arch/x86/um/syscalls_64.c: In function '__se_sys_mmap':
->> include/linux/syscalls.h:247:42: error: 'sys_mmap' undeclared (first use in this function); did you mean 'sys_mremap'?
-     247 |                 (void)(__do_sys##name == sys##name);                    \
-         |                                          ^~~
-   include/linux/syscalls.h:229:9: note: in expansion of macro '__SYSCALL_DEFINEx'
-     229 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
-         |         ^~~~~~~~~~~~~~~~~
-   include/linux/syscalls.h:221:36: note: in expansion of macro 'SYSCALL_DEFINEx'
-     221 | #define SYSCALL_DEFINE6(name, ...) SYSCALL_DEFINEx(6, _##name, __VA_ARGS__)
-         |                                    ^~~~~~~~~~~~~~~
-   arch/x86/um/syscalls_64.c:56:1: note: in expansion of macro 'SYSCALL_DEFINE6'
-      56 | SYSCALL_DEFINE6(mmap, unsigned long, addr, unsigned long, len,
-         | ^~~~~~~~~~~~~~~
-   include/linux/syscalls.h:247:42: note: each undeclared identifier is reported only once for each function it appears in
-     247 |                 (void)(__do_sys##name == sys##name);                    \
-         |                                          ^~~
-   include/linux/syscalls.h:229:9: note: in expansion of macro '__SYSCALL_DEFINEx'
-     229 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
-         |         ^~~~~~~~~~~~~~~~~
-   include/linux/syscalls.h:221:36: note: in expansion of macro 'SYSCALL_DEFINEx'
-     221 | #define SYSCALL_DEFINE6(name, ...) SYSCALL_DEFINEx(6, _##name, __VA_ARGS__)
-         |                                    ^~~~~~~~~~~~~~~
-   arch/x86/um/syscalls_64.c:56:1: note: in expansion of macro 'SYSCALL_DEFINE6'
-      56 | SYSCALL_DEFINE6(mmap, unsigned long, addr, unsigned long, len,
-         | ^~~~~~~~~~~~~~~
+I don't understand this comment.  What do you mean with no other
+code could be inserted?
 
+> If module_subinit is called in module_init, other code can be inserted
+> between subinit, similar to the following:
+> 
+> ```
+> static int __init init_example(void)
+> {
+>     module_subinit(inita, exita);
+> 
+>     otherthing...
+> 
+>     module_subinit(initb, exitb);
+> 
+>     return 0;
+> }
 
-vim +247 include/linux/syscalls.h
+Yikes.  That's really not the point of having init calls, but just
+really, really convoluted control flow.
 
-   232	
-   233	/*
-   234	 * The asmlinkage stub is aliased to a function named __se_sys_*() which
-   235	 * sign-extends 32-bit ints to longs whenever needed. The actual work is
-   236	 * done within __do_sys_*().
-   237	 */
-   238	#ifndef __SYSCALL_DEFINEx
-   239	#define __SYSCALL_DEFINEx(x, name, ...)					\
-   240		ALLOW_ERROR_INJECTION(sys##name, ERRNO);			\
-   241		static inline asmlinkage long					\
-   242			__do_sys##name(__MAP(x,__SC_DECL,__VA_ARGS__));		\
-   243		asmlinkage long __se_sys##name(__MAP(x,__SC_LONG,__VA_ARGS__));	\
-   244		asmlinkage long __se_sys##name(__MAP(x,__SC_LONG,__VA_ARGS__))	\
-   245		{								\
-   246			long ret = __do_sys##name(__MAP(x,__SC_CAST,__VA_ARGS__));\
- > 247			(void)(__do_sys##name == sys##name);			\
-   248			__MAP(x,__SC_TEST,__VA_ARGS__);				\
-   249			__PROTECT(x, ret,__MAP(x,__SC_ARGS,__VA_ARGS__));	\
-   250			return ret;						\
-   251		}								\
-   252		__diag_push();							\
-   253		__diag_ignore(GCC, 8, "-Wattribute-alias",			\
-   254			      "Type aliasing is used to sanitize syscall arguments");\
-   255		asmlinkage long sys##name(__MAP(x,__SC_DECL,__VA_ARGS__))	\
-   256			__attribute__((alias(__stringify(__se_sys##name))));	\
-   257		__diag_pop();							\
-   258		static inline asmlinkage long					\
-   259			__do_sys##name(__MAP(x,__SC_DECL,__VA_ARGS__))
-   260	#endif /* __SYSCALL_DEFINEx */
-   261	
+> module_init(init_example);
+> ```
+> 
+> IMHO, module_subinit() might be better called in module_init().
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I strongly disagree.
+
 
