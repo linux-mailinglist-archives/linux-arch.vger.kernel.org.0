@@ -1,143 +1,119 @@
-Return-Path: <linux-arch+bounces-5622-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5623-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1517193BB09
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Jul 2024 05:01:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA0DE93BBAF
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Jul 2024 06:20:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4726A1C21A0F
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Jul 2024 03:01:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 62B331F227A5
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Jul 2024 04:20:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39E9A63C7;
-	Thu, 25 Jul 2024 03:01:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="t0bnRmik"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA0E11C683;
+	Thu, 25 Jul 2024 04:19:44 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 329B6134DE
-	for <linux-arch@vger.kernel.org>; Thu, 25 Jul 2024 03:01:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EB231CAA2;
+	Thu, 25 Jul 2024 04:19:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721876514; cv=none; b=f9T67ZfL9rjsQ9UCJ15wosQmisVgM3C7Sl58UEb0ygFbvfu5sgU++JjEwkYzrP1kyHvT8b9EjyKLhGrlIHHJjhUedwvT9eTzWk3xrqJ395GSE6bUy0Y+NxynM5ukdYIsJa2Y4tlEdd151AkYUPv4ghNSVS2Jt5J1XI08EfwW5Ow=
+	t=1721881184; cv=none; b=XZtZjkK+KhR314aMcwi4wG5eL6fbrKO31roRPI/aRgYDel3SE9Sf64zPn1Vsyq/V/6HttAVZ9d6+s355lF8hiykTfDEN0TKDR/kBLZxABdaH0vFO18P1RsXDg8bx+zgusXCt0yKh279EM86V7TtCuc9pFUGHwmDP5GMRSMTFQW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721876514; c=relaxed/simple;
-	bh=49jcBefj5FcT3M9x20xUQPUdsQZFD9U6hguK29l+JiI=;
+	s=arc-20240116; t=1721881184; c=relaxed/simple;
+	bh=S0cRj+oMwg12+CCQ+W84mXsrDS/1Vyw1BM28Fjx6tlE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lYvtY33wxtv6EVNOvoBGshF8mujfQQyLr1If5mm9Q79qVczpKmNBVyhqXKBouP5k49JTXDQhsUhmNhtr4r7njv2keb036ZUp5f+mRZ9Lu+rslO3Bsyb/zCBVoVfekD4BLDKElG8JUZ+8m7E8NSN91lxbavWYrulxbOhtQcN2F/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=t0bnRmik; arc=none smtp.client-ip=95.215.58.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <895360e3-97bb-4188-a91d-eaca3302bd43@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1721876510;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dinahWWNWKVgxUr2QQ8r5vtDMN47K5jpbrU4x04fZmQ=;
-	b=t0bnRmiksgMcuV2n4/X74UTpJITvS5MrnJV4M93S6NWIOs2XsMr+6Kz8W7etk9BqNLgiLm
-	WyW+SnXPb9G/KKg4743QNI4cw/8+OwX72AkIF3GAqZwoNi6QNrEMZbnhD9k/VEF+m8nY7q
-	VR/2e2/7phjKq6pM1GTTV0CvBfSEfNI=
-Date: Thu, 25 Jul 2024 11:01:33 +0800
+	 In-Reply-To:Content-Type; b=VOqpqsWSxoCLZA42U6/S/cL0uKjS8tHJz0oB6hiH/D4PhHo6H+QkRbUCOYGIecFlL02v4fJqiENbnjRimcE8qMxCti24qPY8hYg68w43plmwNA7TIDiKWGGVikAbadmWGt1glaXTIqWZ3pCLXTJpKku2e9vIirLzPJvHBQBWP7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F14FD1007;
+	Wed, 24 Jul 2024 21:20:00 -0700 (PDT)
+Received: from [10.162.40.19] (a077893.blr.arm.com [10.162.40.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 248C23F73F;
+	Wed, 24 Jul 2024 21:19:31 -0700 (PDT)
+Message-ID: <e394cf97-df7e-4eec-8ef5-3aba2075f89f@arm.com>
+Date: Thu, 25 Jul 2024 09:49:28 +0530
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH 1/4] module: Add module_subinit{_noexit} and
- module_subeixt helper macros
-To: Christoph Hellwig <hch@infradead.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>,
- Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
- David Sterba <dsterba@suse.com>, tytso@mit.edu,
- Andreas Dilger <adilger.kernel@dilger.ca>, Jaegeuk Kim <jaegeuk@kernel.org>,
- Chao Yu <chao@kernel.org>, linux-arch@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
- linux-btrfs@vger.kernel.org, linux-ext4@vger.kernel.org,
- linux-f2fs-devel@lists.sourceforge.net, Youling Tang <tangyouling@kylinos.cn>
-References: <20240723083239.41533-1-youling.tang@linux.dev>
- <20240723083239.41533-2-youling.tang@linux.dev>
- <Zp-_RDk5n5431yyh@infradead.org>
- <0a63dfd1-ead3-4db3-a38c-2bc1db65f354@linux.dev>
- <ZqEhMCjdFwC3wF4u@infradead.org>
-Content-Language: en-US, en-AU
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Youling Tang <youling.tang@linux.dev>
-In-Reply-To: <ZqEhMCjdFwC3wF4u@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-
-On 24/07/2024 23:43, Christoph Hellwig wrote:
-> On Wed, Jul 24, 2024 at 09:57:05AM +0800, Youling Tang wrote:
->> module_init(initfn)/module_exit(exitfn) has two definitions (via MODULE):
->> - buindin: uses do_initcalls() to iterate over the contents of the specified
->>    section and executes all initfn functions in the section in the order in
->>    which they are stored (exitfn is not required).
->>
->> - ko: run do_init_module(mod)->do_one_initcall(mod->init) to execute initfn
->>    of the specified module.
->>
->> If we change module_subinit to something like this, not called in
->> module_init,
->> Not only do we want to ensure that exit is executed in reverse order of
->> init, but we also want to ensure the order of init.
-> Yes.
->
->> This does not guarantee the order in which init will be executed (although
->> the init/exit order will remain the same)
-> Hmm, so the normal built-in initcalls depend on the link order, but when
-> they are in the same file, the compiler can reorder them before we even
-> get to the linker.
->
-> I wonder what a good syntax would be to still avoid the boilerplate
-> code.  We'd probably need one macro to actually define the init/exit
-> table in a single statement so that it can't be reordered, but that
-> would lose the ability to actually declare the module subinit/exit
-> handlers in multiple files, which really is the biggest win of this
-> scheme as it allows to keep the functions static instead of exposing
-> them to other compilation units.
->
-> And in fact even in your three converted file systems, most
-> subinit/exit handler are in separate files, so maybe instead
-> enforcing that there is just one per file and slightly refactoring
-> the code so that this is the case might be the best option?
-- It doesn't feel good to have only one subinit/exit in a file.
-   Assuming that there is only one file in each file, how do we
-   ensure that the files are linked in order?(Is it sorted by *.o
-   in the Makefile?)
-
-- Even if the order of each init is linked correctly, then the
-   runtime will be iterated through the .subinitcall.init section,
-   which executes each initfn in sequence (similar to do_initcalls),
-   which means that no other code can be inserted between each subinit.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] lib/test_bits.c: Add tests for GENMASK_U128()
+To: kernel test robot <lkp@intel.com>, linux-kernel@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, Andrew Morton <akpm@linux-foundation.org>,
+ Linux Memory Management List <linux-mm@kvack.org>,
+ Yury Norov <yury.norov@gmail.com>,
+ Rasmus Villemoes <linux@rasmusvillemoes.dk>, Arnd Bergmann <arnd@arndb.de>,
+ linux-arch@vger.kernel.org
+References: <20240724103142.165693-3-anshuman.khandual@arm.com>
+ <202407250853.f3pSzob6-lkp@intel.com>
+Content-Language: en-US
+From: Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <202407250853.f3pSzob6-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
 
-If module_subinit is called in module_init, other code can be inserted
-between subinit, similar to the following:
 
-```
-static int __init init_example(void)
-{
-     module_subinit(inita, exita);
+On 7/25/24 06:34, kernel test robot wrote:
+> Hi Anshuman,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on arnd-asm-generic/master]
+> [also build test ERROR on akpm-mm/mm-nonmm-unstable akpm-mm/mm-everything linus/master v6.10 next-20240724]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Anshuman-Khandual/uapi-Define-GENMASK_U128/20240724-184809
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git master
+> patch link:    https://lore.kernel.org/r/20240724103142.165693-3-anshuman.khandual%40arm.com
+> patch subject: [PATCH 2/2] lib/test_bits.c: Add tests for GENMASK_U128()
+> config: m68k-sun3x_defconfig (https://download.01.org/0day-ci/archive/20240725/202407250853.f3pSzob6-lkp@intel.com/config)
+> compiler: m68k-linux-gcc (GCC) 14.1.0
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240725/202407250853.f3pSzob6-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202407250853.f3pSzob6-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    In file included from lib/test_bits.c:6:
+>    lib/test_bits.c: In function 'genmask_u128_test':
+>>> include/uapi/linux/const.h:24:36: error: '__int128' is not supported on this target
+>       24 | #define _AC128(X)       ((unsigned __int128)(X))
+>          |                                    ^~~~~~~~
+>    include/kunit/test.h:708:22: note: in definition of macro 'KUNIT_BASE_BINARY_ASSERTION'
+>      708 |         const typeof(right) __right = (right);                                 \
+>          |                      ^~~~~
+>    include/kunit/test.h:903:9: note: in expansion of macro 'KUNIT_BINARY_INT_ASSERTION'
+>      903 |         KUNIT_BINARY_INT_ASSERTION(test,                                       \
+>          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>    include/kunit/test.h:900:9: note: in expansion of macro 'KUNIT_EXPECT_EQ_MSG'
+>      900 |         KUNIT_EXPECT_EQ_MSG(test, left, right, NULL)
+>          |         ^~~~~~~~~~~~~~~~~~~
+>    lib/test_bits.c:45:9: note: in expansion of macro 'KUNIT_EXPECT_EQ'
+>       45 |         KUNIT_EXPECT_EQ(test, 0x0000000000ff0000ULL, GENMASK_U128(87, 80) >> 64);
+>          |         ^~~~~~~~~~~~~~~
+>    include/uapi/linux/const.h:29:26: note: in expansion of macro '_AC128'
+>       29 | #define _U128(x)        (_AC128(x))
+>          |                          ^~~~~~
+>    include/uapi/linux/bits.h:16:13: note: in expansion of macro '_U128'
+>       16 |         (((~_U128(0)) - (_U128(1) << (l)) + 1) & \
+>          |             ^~~~~
+>    include/linux/bits.h:39:38: note: in expansion of macro '__GENMASK_U128'
+>       39 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK_U128(h, l))
+>          |                                      ^~~~~~~~~~~~~~
+>    lib/test_bits.c:45:54: note: in expansion of macro 'GENMASK_U128'
+>       45 |         KUNIT_EXPECT_EQ(test, 0x0000000000ff0000ULL, GENMASK_U128(87, 80) >> 64);
 
-     otherthing...
-
-     module_subinit(initb, exitb);
-
-     return 0;
-}
-
-module_init(init_example);
-```
-
-IMHO, module_subinit() might be better called in module_init().
-
-Thanks,
-Youling.
+This is probably triggered with GENMASK_U128() usage which is not protected
+with ARCH_SUPPORTS_INT128. Will respin the series with required fixes.
 
