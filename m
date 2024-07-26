@@ -1,45 +1,45 @@
-Return-Path: <linux-arch+bounces-5649-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5650-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DB4D93DAF3
-	for <lists+linux-arch@lfdr.de>; Sat, 27 Jul 2024 00:59:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C062393DAF8
+	for <lists+linux-arch@lfdr.de>; Sat, 27 Jul 2024 00:59:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 16C1DB21A7E
-	for <lists+linux-arch@lfdr.de>; Fri, 26 Jul 2024 22:59:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6B3F31F23D97
+	for <lists+linux-arch@lfdr.de>; Fri, 26 Jul 2024 22:59:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18FA4154BE0;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 302DA154C10;
 	Fri, 26 Jul 2024 22:59:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="Ay3ecAMl"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="HrFS4gQA"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DFB614EC4E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA1DC14EC5D;
 	Fri, 26 Jul 2024 22:59:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722034771; cv=none; b=LhZIVY464dxtTwbN/W1DDIXv5W4stjG9q7zPrjhB9lDI0TrI5VpAyXh5W0+uUKq8iiYq/G9OFsXpGq6sGuGIIyXv9oiHnKeT1r57tUYPhkDE/aJJifAjIaglL7iW7SUnYHAK8bkWb/4n9cKnfLaG6vn/2qFSix1766uhWNgPBoQ=
+	t=1722034771; cv=none; b=KCTETsts28xHshTZL8XD7FkH5xUNuZr/sVIZxcrZnU1ruxt/5P1ck4xxy/ekBCu3I+qNpRL5i7JPr2L+6v2AnT3mWDYx9X3kPLfQ1U17UmQjhx/Xd7x15tXfqNtU4QnGJkE29AcxT1BmRuVL+KlofZiDcB0cAfBs3qPgCGfnX7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1722034771; c=relaxed/simple;
-	bh=Lssq5DYvn0UB3De1jCUCZOPpcxO9JEDZzy/E/cIrDls=;
+	bh=rJcS3Jq98v2NWlttjuSO/XP10kOr038BA/9t0EitINY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=OSbAItAnTTUdIX8qP3W9SRUXhscvp0TUpWqqIE+kPlLzRscniJsvR+YgmkCnY3BBDlKXQ4tqcTXBDdPaezensJzpEIJNfW99fOmAAxyfzwVSBnX2pLkVmYnG9nQ0JyUck/UQtVQlYY7eG8Fjr/bjWQr9C5cjfQW7JwOplXbMorg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=Ay3ecAMl; arc=none smtp.client-ip=13.77.154.182
+	 MIME-Version; b=hjlTfOdwnUNdbmrZGj1bk5eF7nVtZm2lAAyrCjnH5z9K7Y0tNiD1jOvHPvaIOFCt93DRcZAsMauo8Op/25RRxVpw6E6MiNqNr8EzHL8h20MlTOVG+rLWV26MnO2cDSxwsXuOh42dOzjymlJzeMYhtRWHGAWIyRCm3vDDLDRzATk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=HrFS4gQA; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from romank-3650.corp.microsoft.com (unknown [131.107.159.62])
-	by linux.microsoft.com (Postfix) with ESMTPSA id CEE3D20B7127;
-	Fri, 26 Jul 2024 15:59:28 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CEE3D20B7127
+	by linux.microsoft.com (Postfix) with ESMTPSA id 2BD6420B712C;
+	Fri, 26 Jul 2024 15:59:29 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2BD6420B712C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
 	s=default; t=1722034769;
-	bh=aGtuuS44L1FWxWnw8aopWoYtUuyOCwVC3o0rFEImRa4=;
+	bh=tmxjj8vso9v/ojCxB2Cygc/rP9hc2qP1BIOw38tT1zE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Ay3ecAMlZzDzgdbwBOPeo/Jmf+KSFKuylv/Gf8gJBwUBwig9q2NhLAemzcG8ltPRV
-	 riKWHkp6130fkaOD9K/juYHtqmScjVjRoViUv5axRYPSEg0VFSVX6skSaUTMvxBk2Q
-	 Ct6fnu6En2IfZdKnhQbhNCdtbi3flTO7AuplpWoQ=
+	b=HrFS4gQA63f9ZtXluPQS6xKLvJ9iGcheKqe8qXFGmxALOaJxtC3mt7lByp/kfPsWG
+	 CorAVbwGjB2BghmnQvGHqY48CpEoYMi2x1oIf9LwIn3qH8lFQpxWB1QsjcsCDHwm89
+	 wjRy4XLGbPrRbKVDtla62/DUxosA9UgmY8vwKAxE=
 From: Roman Kisel <romank@linux.microsoft.com>
 To: arnd@arndb.de,
 	bhelgaas@google.com,
@@ -71,9 +71,9 @@ Cc: apais@microsoft.com,
 	ssengar@microsoft.com,
 	sunilmut@microsoft.com,
 	vdso@hexbites.dev
-Subject: [PATCH v3 3/7] Drivers: hv: Provide arch-neutral implementation of get_vtl()
-Date: Fri, 26 Jul 2024 15:59:06 -0700
-Message-Id: <20240726225910.1912537-4-romank@linux.microsoft.com>
+Subject: [PATCH v3 4/7] arm64: hyperv: Boot in a Virtual Trust Level
+Date: Fri, 26 Jul 2024 15:59:07 -0700
+Message-Id: <20240726225910.1912537-5-romank@linux.microsoft.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240726225910.1912537-1-romank@linux.microsoft.com>
 References: <20240726225910.1912537-1-romank@linux.microsoft.com>
@@ -87,181 +87,80 @@ Content-Transfer-Encoding: 8bit
 
 To run in the VTL mode, Hyper-V drivers have to know what
 VTL the system boots in, and the arm64/hyperv code does not
-have the means to compute that.
+update the variable that stores the value.
 
-Refactor the code to hoist the function that detects VTL,
-make it arch-neutral to be able to employ it to get the VTL
-on arm64. Fix the hypercall output address in `get_vtl(void)`
-not to overlap with the hypercall input area to adhere to
-the Hyper-V TLFS.
+Update the variable to enable the Hyper-V drivers to boot
+in the VTL mode and print the VTL the code runs in.
 
 Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
 ---
- arch/x86/hyperv/hv_init.c          | 34 ---------------------
- arch/x86/include/asm/hyperv-tlfs.h |  7 -----
- drivers/hv/hv_common.c             | 47 ++++++++++++++++++++++++++++--
- include/asm-generic/hyperv-tlfs.h  |  7 +++++
- include/asm-generic/mshyperv.h     |  6 ++++
- 5 files changed, 58 insertions(+), 43 deletions(-)
+ arch/arm64/hyperv/Makefile        |  1 +
+ arch/arm64/hyperv/hv_vtl.c        | 13 +++++++++++++
+ arch/arm64/hyperv/mshyperv.c      |  4 ++++
+ arch/arm64/include/asm/mshyperv.h |  7 +++++++
+ 4 files changed, 25 insertions(+)
+ create mode 100644 arch/arm64/hyperv/hv_vtl.c
 
-diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
-index 17a71e92a343..c350fa05ee59 100644
---- a/arch/x86/hyperv/hv_init.c
-+++ b/arch/x86/hyperv/hv_init.c
-@@ -413,40 +413,6 @@ static void __init hv_get_partition_id(void)
- 	local_irq_restore(flags);
- }
- 
--#if IS_ENABLED(CONFIG_HYPERV_VTL_MODE)
--static u8 __init get_vtl(void)
--{
--	u64 control = HV_HYPERCALL_REP_COMP_1 | HVCALL_GET_VP_REGISTERS;
--	struct hv_get_vp_registers_input *input;
--	struct hv_get_vp_registers_output *output;
--	unsigned long flags;
--	u64 ret;
--
--	local_irq_save(flags);
--	input = *this_cpu_ptr(hyperv_pcpu_input_arg);
--	output = (struct hv_get_vp_registers_output *)input;
--
--	memset(input, 0, struct_size(input, element, 1));
--	input->header.partitionid = HV_PARTITION_ID_SELF;
--	input->header.vpindex = HV_VP_INDEX_SELF;
--	input->header.inputvtl = 0;
--	input->element[0].name0 = HV_X64_REGISTER_VSM_VP_STATUS;
--
--	ret = hv_do_hypercall(control, input, output);
--	if (hv_result_success(ret)) {
--		ret = output->as64.low & HV_X64_VTL_MASK;
--	} else {
--		pr_err("Failed to get VTL(error: %lld) exiting...\n", ret);
--		BUG();
--	}
--
--	local_irq_restore(flags);
--	return ret;
--}
--#else
--static inline u8 get_vtl(void) { return 0; }
--#endif
--
- /*
-  * This function is to be invoked early in the boot sequence after the
-  * hypervisor has been detected.
-diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
-index 3787d26810c1..9ee68eb8e6ff 100644
---- a/arch/x86/include/asm/hyperv-tlfs.h
-+++ b/arch/x86/include/asm/hyperv-tlfs.h
-@@ -309,13 +309,6 @@ enum hv_isolation_type {
- #define HV_MSR_STIMER0_CONFIG	(HV_X64_MSR_STIMER0_CONFIG)
- #define HV_MSR_STIMER0_COUNT	(HV_X64_MSR_STIMER0_COUNT)
- 
--/*
-- * Registers are only accessible via HVCALL_GET_VP_REGISTERS hvcall and
-- * there is not associated MSR address.
-- */
--#define	HV_X64_REGISTER_VSM_VP_STATUS	0x000D0003
--#define	HV_X64_VTL_MASK			GENMASK(3, 0)
--
- /* Hyper-V memory host visibility */
- enum hv_mem_host_visibility {
- 	VMBUS_PAGE_NOT_VISIBLE		= 0,
-diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
-index 9c452bfbd571..7d6c1523b0b5 100644
---- a/drivers/hv/hv_common.c
-+++ b/drivers/hv/hv_common.c
-@@ -339,8 +339,8 @@ int __init hv_common_init(void)
- 	hyperv_pcpu_input_arg = alloc_percpu(void  *);
- 	BUG_ON(!hyperv_pcpu_input_arg);
- 
--	/* Allocate the per-CPU state for output arg for root */
--	if (hv_root_partition) {
-+	/* Allocate the per-CPU state for output arg for root or a VTL */
-+	if (hv_root_partition || IS_ENABLED(CONFIG_HYPERV_VTL_MODE)) {
- 		hyperv_pcpu_output_arg = alloc_percpu(void *);
- 		BUG_ON(!hyperv_pcpu_output_arg);
- 	}
-@@ -656,3 +656,46 @@ u64 __weak hv_tdx_hypercall(u64 control, u64 param1, u64 param2)
- 	return HV_STATUS_INVALID_PARAMETER;
- }
- EXPORT_SYMBOL_GPL(hv_tdx_hypercall);
-+
-+#if IS_ENABLED(CONFIG_HYPERV_VTL_MODE)
-+u8 __init get_vtl(void)
-+{
-+	u64 control = HV_HYPERCALL_REP_COMP_1 | HVCALL_GET_VP_REGISTERS;
-+	struct hv_get_vp_registers_input *input;
-+	struct hv_get_vp_registers_output *output;
-+	unsigned long flags;
-+	u64 ret;
-+
-+	local_irq_save(flags);
-+	input = *this_cpu_ptr(hyperv_pcpu_input_arg);
-+	output = *this_cpu_ptr(hyperv_pcpu_output_arg);
-+
-+	memset(input, 0, struct_size(input, element, 1));
-+	input->header.partitionid = HV_PARTITION_ID_SELF;
-+	input->header.vpindex = HV_VP_INDEX_SELF;
-+	input->header.inputvtl = 0;
-+	input->element[0].name0 = HV_REGISTER_VSM_VP_STATUS;
-+
-+	ret = hv_do_hypercall(control, input, output);
-+	if (hv_result_success(ret)) {
-+		ret = output->as64.low & HV_VTL_MASK;
-+	} else {
-+		pr_err("Failed to get VTL(error: %lld) exiting...\n", ret);
-+
-+		/*
-+		 * This is a dead end, something fundamental is broken.
-+		 *
-+		 * There is no sensible way of continuing as the Hyper-V drivers
-+		 * transitively depend via the vmbus driver on knowing which VTL
-+		 * they run in to establish communication with the host. The kernel
-+		 * is going to be worse off if continued booting than a panicked one,
-+		 * just hung and stuck, producing second-order failures, with neither
-+		 * a way to recover nor to provide expected services.
-+		 */
-+		BUG();
-+	}
-+
-+	local_irq_restore(flags);
-+	return ret;
-+}
-+#endif
-diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hyperv-tlfs.h
-index 814207e7c37f..271c365973d6 100644
---- a/include/asm-generic/hyperv-tlfs.h
-+++ b/include/asm-generic/hyperv-tlfs.h
-@@ -75,6 +75,13 @@
- /* AccessTscInvariantControls privilege */
- #define HV_ACCESS_TSC_INVARIANT			BIT(15)
- 
+diff --git a/arch/arm64/hyperv/Makefile b/arch/arm64/hyperv/Makefile
+index 87c31c001da9..9701a837a6e1 100644
+--- a/arch/arm64/hyperv/Makefile
++++ b/arch/arm64/hyperv/Makefile
+@@ -1,2 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0
+ obj-y		:= hv_core.o mshyperv.o
++obj-$(CONFIG_HYPERV_VTL_MODE)	+= hv_vtl.o
+diff --git a/arch/arm64/hyperv/hv_vtl.c b/arch/arm64/hyperv/hv_vtl.c
+new file mode 100644
+index 000000000000..38642b7b6be0
+--- /dev/null
++++ b/arch/arm64/hyperv/hv_vtl.c
+@@ -0,0 +1,13 @@
++// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * This synthetic register is only accessible via the HVCALL_GET_VP_REGISTERS
-+ * hvcall, and there is no an associated MSR on x86.
++ * Copyright (C) 2024, Microsoft, Inc.
++ *
++ * Author : Roman Kisel <romank@linux.microsoft.com>
 + */
-+#define	HV_REGISTER_VSM_VP_STATUS	0x000D0003
-+#define	HV_VTL_MASK			GENMASK(3, 0)
 +
- /*
-  * Group B features.
-  */
-diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
-index 8fe7aaab2599..85a5b8cb1702 100644
---- a/include/asm-generic/mshyperv.h
-+++ b/include/asm-generic/mshyperv.h
-@@ -315,4 +315,10 @@ static inline enum hv_isolation_type hv_get_isolation_type(void)
- }
- #endif /* CONFIG_HYPERV */
++#include <asm/mshyperv.h>
++
++void __init hv_vtl_init_platform(void)
++{
++	pr_info("Linux runs in Hyper-V Virtual Trust Level\n");
++}
+diff --git a/arch/arm64/hyperv/mshyperv.c b/arch/arm64/hyperv/mshyperv.c
+index 341f98312667..8fd04d6e4800 100644
+--- a/arch/arm64/hyperv/mshyperv.c
++++ b/arch/arm64/hyperv/mshyperv.c
+@@ -98,6 +98,10 @@ static int __init hyperv_init(void)
+ 		return ret;
+ 	}
  
-+#if IS_ENABLED(CONFIG_HYPERV_VTL_MODE)
-+u8 __init get_vtl(void);
++	/* Find the VTL */
++	ms_hyperv.vtl = get_vtl();
++	hv_vtl_init_platform();
++
+ 	ms_hyperv_late_init();
+ 
+ 	hyperv_initialized = true;
+diff --git a/arch/arm64/include/asm/mshyperv.h b/arch/arm64/include/asm/mshyperv.h
+index a7a3586f7cb1..63d6bb6998fc 100644
+--- a/arch/arm64/include/asm/mshyperv.h
++++ b/arch/arm64/include/asm/mshyperv.h
+@@ -49,6 +49,13 @@ static inline u64 hv_get_msr(unsigned int reg)
+ 				ARM_SMCCC_OWNER_VENDOR_HYP,	\
+ 				HV_SMCCC_FUNC_NUMBER)
+ 
++#ifdef CONFIG_HYPERV_VTL_MODE
++void __init hv_vtl_init_platform(void);
++int __init hv_vtl_early_init(void);
 +#else
-+static inline u8 get_vtl(void) { return 0; }
++static inline void __init hv_vtl_init_platform(void) {}
 +#endif
 +
- #endif
+ #include <asm-generic/mshyperv.h>
+ 
+ #define ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_0	0x7948734d
 -- 
 2.34.1
 
