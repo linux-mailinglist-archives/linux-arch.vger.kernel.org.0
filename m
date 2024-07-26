@@ -1,45 +1,45 @@
-Return-Path: <linux-arch+bounces-5647-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5648-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8804393DAE8
-	for <lists+linux-arch@lfdr.de>; Sat, 27 Jul 2024 00:59:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F35B493DAEC
+	for <lists+linux-arch@lfdr.de>; Sat, 27 Jul 2024 00:59:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 49954283785
-	for <lists+linux-arch@lfdr.de>; Fri, 26 Jul 2024 22:59:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2EA251C21E1D
+	for <lists+linux-arch@lfdr.de>; Fri, 26 Jul 2024 22:59:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58B0914F9FD;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE0C515380A;
 	Fri, 26 Jul 2024 22:59:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="ooH+d9b/"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="hwl/+ekN"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDEC714A0AE;
-	Fri, 26 Jul 2024 22:59:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 309EF14E2E2;
+	Fri, 26 Jul 2024 22:59:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722034770; cv=none; b=QBkWpZCG3On1aAmT4vRCf1pQwnuzLcwn1vyjv3QLPZ12ZwDyIerExQzT0ZRqXm+AcHLpW8vdokWN0xPJyF0M26YEfK7GnWMXB8iuGW5wihFIANvyA0Vse4qSiYNU9fB4aq7fr3KjOQUNgSUOYpyhonRkjRg6xlA19DCzEC9Q69o=
+	t=1722034770; cv=none; b=KhrdrkWqouWwi6qut7mjgJNkXVketPkhz1oPUOI3Dxff+LI2xQcMkvUo4sh5lU7sxDnZJZrMMBE4KiHjdmIMM3JVo8t5x2lnCsDI5aONBzQN59zVCN/ui5aXmO7jfwwpFjxz83l285mIpdVPOJ4qZ170y5tMvyXm0I/BOgZNA54=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1722034770; c=relaxed/simple;
-	bh=HFBoWSD8uQoZuJWa7FvNTiQLxRg6hK3Qpe4FaW2NSH8=;
+	bh=7HgWJE4cfgE61Dl7QjSO8v9EH9VKJc6vrXkGm9O5TYY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=J+GT5Df+RxE/0OBBScxluFOibS/dafxFliq5GkNDyjxnMwy6z3BWi86pSCS+6vwQHcxnShnfMwHO0BsEQalCDNlT7j+1YCfWtA6ACzn+D3BGuqiYPxNxAOjwDdarD1DRyoBrMsMVm2TdjImO1dDV8Nji9tlicVJ0Bzl4m8DnLnQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=ooH+d9b/; arc=none smtp.client-ip=13.77.154.182
+	 MIME-Version:Content-Type; b=hM2TGWtSM1Z3Wqs/VbNkQfdv2NUgrSUpUenRKNocHRDu9OhdpcBmVRPibwb/5e7Chap6rbTrBfSUMdzYqXy9UsmWzstazk4xT/fMotIxICa70+n1EkC7K1akmLQaCZlE8E17cG5L4iYDCNpyQWxrp3vl6tQqXln/56TvrTkYLMc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=hwl/+ekN; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from romank-3650.corp.microsoft.com (unknown [131.107.159.62])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 2ABEC20B7177;
+	by linux.microsoft.com (Postfix) with ESMTPSA id 7F9F520B7123;
 	Fri, 26 Jul 2024 15:59:28 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2ABEC20B7177
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7F9F520B7123
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
 	s=default; t=1722034768;
-	bh=WFxhd+9RO4zGcRAHUQgDgONPVosLPQEEwR7xsvUdJIE=;
+	bh=6VdNUotlmWFHm4fWqPlZRqwFWjZIXEM8OUM2hq4wFV8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ooH+d9b/veU9GXEUGc1iFPvDL8E0ekXCc57TFGFw0fK31DgQKrUK1o7HmfnsmfYR7
-	 kP//lNqDHHiUgdttFp2PWPsdhVSKaByiDO7b54XFkwFXZZ2x5SJFhHNcZALkVH1efF
-	 C4z1JtgXGDyzfqEeQzxZOv+39xhSCGNZ6RsZxvK8=
+	b=hwl/+ekNAzQ4Kdaq4mMERTDDqlqxl0CigI9TQpm1Icz7P+UdZ2vWwaHcnLaW10xO/
+	 RP1S4wMYsfZxiLGqP2P/SLt7Bor6CQcy85IpJnVgcsGhnFXMLau7H2DoJv2MglLSa2
+	 EiGuLV8sjO9gG8eRpncI47xmIFVSLitwz53M+xAk=
 From: Roman Kisel <romank@linux.microsoft.com>
 To: arnd@arndb.de,
 	bhelgaas@google.com,
@@ -71,9 +71,9 @@ Cc: apais@microsoft.com,
 	ssengar@microsoft.com,
 	sunilmut@microsoft.com,
 	vdso@hexbites.dev
-Subject: [PATCH v3 1/7] arm64: hyperv: Use SMC to detect hypervisor presence
-Date: Fri, 26 Jul 2024 15:59:04 -0700
-Message-Id: <20240726225910.1912537-2-romank@linux.microsoft.com>
+Subject: [PATCH v3 2/7] Drivers: hv: Enable VTL mode for arm64
+Date: Fri, 26 Jul 2024 15:59:05 -0700
+Message-Id: <20240726225910.1912537-3-romank@linux.microsoft.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240726225910.1912537-1-romank@linux.microsoft.com>
 References: <20240726225910.1912537-1-romank@linux.microsoft.com>
@@ -83,92 +83,50 @@ List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The arm64 Hyper-V startup path relies on ACPI to detect
-running under a Hyper-V compatible hypervisor. That
-doesn't work on non-ACPI systems.
-
-Hoist the ACPI detection logic into a separate function,
-use the new SMC added recently to Hyper-V to use in the
-non-ACPI case.
+Kconfig dependencies for arm64 guests on Hyper-V require that be ACPI enabled,
+and limit VTL mode to x86/x64. To enable VTL mode on arm64 as well, update the
+dependencies. Since VTL mode requires DeviceTree instead of ACPI, don’t require
+arm64 guests on Hyper-V to have ACPI.
 
 Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
 ---
- arch/arm64/hyperv/mshyperv.c      | 36 ++++++++++++++++++++++++++-----
- arch/arm64/include/asm/mshyperv.h |  5 +++++
- 2 files changed, 36 insertions(+), 5 deletions(-)
+ drivers/hv/Kconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/hyperv/mshyperv.c b/arch/arm64/hyperv/mshyperv.c
-index b1a4de4eee29..341f98312667 100644
---- a/arch/arm64/hyperv/mshyperv.c
-+++ b/arch/arm64/hyperv/mshyperv.c
-@@ -27,6 +27,34 @@ int hv_get_hypervisor_version(union hv_hypervisor_version_info *info)
- 	return 0;
- }
+diff --git a/drivers/hv/Kconfig b/drivers/hv/Kconfig
+index 862c47b191af..a5cd1365e248 100644
+--- a/drivers/hv/Kconfig
++++ b/drivers/hv/Kconfig
+@@ -5,7 +5,7 @@ menu "Microsoft Hyper-V guest support"
+ config HYPERV
+ 	tristate "Microsoft Hyper-V client drivers"
+ 	depends on (X86 && X86_LOCAL_APIC && HYPERVISOR_GUEST) \
+-		|| (ACPI && ARM64 && !CPU_BIG_ENDIAN)
++		|| (ARM64 && !CPU_BIG_ENDIAN)
+ 	select PARAVIRT
+ 	select X86_HV_CALLBACK_VECTOR if X86
+ 	select OF_EARLY_FLATTREE if OF
+@@ -15,7 +15,7 @@ config HYPERV
  
-+static bool hyperv_detect_via_acpi(void)
-+{
-+	if (acpi_disabled)
-+		return false;
-+#if IS_ENABLED(CONFIG_ACPI)
-+	/* Hypervisor ID is only available in ACPI v6+. */
-+	if (acpi_gbl_FADT.header.revision < 6)
-+		return false;
-+	return strncmp((char *)&acpi_gbl_FADT.hypervisor_id, "MsHyperV", 8) == 0;
-+#else
-+	return false;
-+#endif
-+}
-+
-+static bool hyperv_detect_via_smc(void)
-+{
-+	struct arm_smccc_res res = {};
-+
-+	if (arm_smccc_1_1_get_conduit() != SMCCC_CONDUIT_HVC)
-+		return false;
-+	arm_smccc_1_1_hvc(ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID, &res);
-+
-+	return res.a0 == ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_0 &&
-+		res.a1 == ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_1 &&
-+		res.a2 == ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_2 &&
-+		res.a3 == ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_3;
-+}
-+
- static int __init hyperv_init(void)
- {
- 	struct hv_get_vp_registers_output	result;
-@@ -35,13 +63,11 @@ static int __init hyperv_init(void)
+ config HYPERV_VTL_MODE
+ 	bool "Enable Linux to boot in VTL context"
+-	depends on X86_64 && HYPERV
++	depends on HYPERV
+ 	depends on SMP
+ 	default n
+ 	help
+@@ -31,7 +31,7 @@ config HYPERV_VTL_MODE
  
- 	/*
- 	 * Allow for a kernel built with CONFIG_HYPERV to be running in
--	 * a non-Hyper-V environment, including on DT instead of ACPI.
-+	 * a non-Hyper-V environment.
-+	 *
- 	 * In such cases, do nothing and return success.
- 	 */
--	if (acpi_disabled)
--		return 0;
--
--	if (strncmp((char *)&acpi_gbl_FADT.hypervisor_id, "MsHyperV", 8))
-+	if (!hyperv_detect_via_acpi() && !hyperv_detect_via_smc())
- 		return 0;
- 
- 	/* Setup the guest ID */
-diff --git a/arch/arm64/include/asm/mshyperv.h b/arch/arm64/include/asm/mshyperv.h
-index a975e1a689dd..a7a3586f7cb1 100644
---- a/arch/arm64/include/asm/mshyperv.h
-+++ b/arch/arm64/include/asm/mshyperv.h
-@@ -51,4 +51,9 @@ static inline u64 hv_get_msr(unsigned int reg)
- 
- #include <asm-generic/mshyperv.h>
- 
-+#define ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_0	0x7948734d
-+#define ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_1	0x56726570
-+#define ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_2	0
-+#define ARM_SMCCC_VENDOR_HYP_UID_HYPERV_REG_3	0
-+
- #endif
+ 	  Select this option to build a Linux kernel to run at a VTL other than
+ 	  the normal VTL0, which currently is only VTL2.  This option
+-	  initializes the x86 platform for VTL2, and adds the ability to boot
++	  initializes the kernel to run in VTL2, and adds the ability to boot
+ 	  secondary CPUs directly into 64-bit context as required for VTLs other
+ 	  than 0.  A kernel built with this option must run at VTL2, and will
+ 	  not run as a normal guest.
 -- 
 2.34.1
 
