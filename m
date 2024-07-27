@@ -1,167 +1,105 @@
-Return-Path: <linux-arch+bounces-5657-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5658-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5676893DE1E
-	for <lists+linux-arch@lfdr.de>; Sat, 27 Jul 2024 11:21:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84E9A93DFCD
+	for <lists+linux-arch@lfdr.de>; Sat, 27 Jul 2024 16:54:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5EB881C21767
-	for <lists+linux-arch@lfdr.de>; Sat, 27 Jul 2024 09:21:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AFFB01C20FC3
+	for <lists+linux-arch@lfdr.de>; Sat, 27 Jul 2024 14:54:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FC3B481B7;
-	Sat, 27 Jul 2024 09:21:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30C7F1802D7;
+	Sat, 27 Jul 2024 14:54:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iUfStM4g"
+	dkim=pass (2048-bit key) header.d=mit.edu header.i=@mit.edu header.b="W3SqZwj6"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47ADA548E0;
-	Sat, 27 Jul 2024 09:21:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 335387E111
+	for <linux-arch@vger.kernel.org>; Sat, 27 Jul 2024 14:54:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.9.28.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722072061; cv=none; b=u5Krl2v7gBQz7Djacccc26zUR6l6q7vJ/0xoG0xMoHrlWMHTKQPAjQQcFPQGK+e2f1/GOiFdxz3L5rq8flssfWAdp9WmMz2bliQWVIhjA51jcYmkoef8pbeNeaNmp+pSbR1w07rHrGdCMDFg4Q81wR2ErzizC6RCecw/t5bZ0v0=
+	t=1722092092; cv=none; b=KCbs6Jcf6a34n+/0TONnq+pNhXzLqYCswmCT7MuIfJek764jk5rZoITS16X4BHP4JcMRX3LRAoMUU4hu2Vvx8RmfD+HXflOmYPbcprmDw7rpenlqMQWM0NBEs7DwLZn/2+Ycq5hattLPOv4yn/OT1HD62C/1C2UmSUr6zhsfAZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722072061; c=relaxed/simple;
-	bh=ThQdrmdK+EMALR/mguXOUSvlEXDj9D2TPtTM/KgqOgM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jJUEN2R5qZyBWUwLOwdDtNq1RCqIqjRyYhJ36vy1SdEr/DwUFRJzE/ioZsF5ofRFtiLfHPXvlSJTBMc7HjkMDdWOUCUJOwGLZuzXFjloYIgLvJ5xkPqnRuOsIrg1lB2VVeulWCpHs0I6lPDKEoAdKodDmANsDDosqM+jdPUmn60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iUfStM4g; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EB52C32786;
-	Sat, 27 Jul 2024 09:20:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722072060;
-	bh=ThQdrmdK+EMALR/mguXOUSvlEXDj9D2TPtTM/KgqOgM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=iUfStM4g3uD8cr+8hZS7Lj2VMa31bZNh3aRUWTTbUIUBpEobmm07Z1IEUo/ISgA8c
-	 4SOb4h8YK+pWAaDrmL2YMY3rgNTqSqIq+ZetaSz/yewhrsVIIeIULiAj0A061kSb2O
-	 GonIbl0dk02BEs+5SSpZOsZDvIwT96vcB294IK8mSF2UdRydmIizpDNrWPbBv304Hj
-	 mVREeIIbfQx4KFGQM7ZEWSIZ6DcnVc5T/xRY5GPFmNBZ3Jo9JaKdRDjCLU7UlPmIRV
-	 v9tC3H5scWjr9BVs78YeUQUtCxtSJ7KjCtIQDQ1VSuHcaI3Jjf2NoTUP8BGiDDgNOZ
-	 s16e21m6madQA==
-Message-ID: <1e3dbe67-5210-4b76-b1de-c1afaf4c9fcc@kernel.org>
-Date: Sat, 27 Jul 2024 11:20:49 +0200
+	s=arc-20240116; t=1722092092; c=relaxed/simple;
+	bh=yiWuP8Onb+fyKehtZA9+3qlxXA9OLQ0daLGmt8gHCrY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BDkcfJrZQCZ6aBsorvpnvjZS/mkJYCdfVzxbh9I5DBvEwbDoMP0Dv7oy5xMz5NLanryy7W/MvMuxo/Sjr5M72uYuMG7alDn/jJDQpc1cRRTl1hsxGw2uxUYVMhtTOxuMJRUYU/km94qhJCyb9j/qt3LYv17jxPFif5eCWp9Mreg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mit.edu; spf=pass smtp.mailfrom=mit.edu; dkim=pass (2048-bit key) header.d=mit.edu header.i=@mit.edu header.b=W3SqZwj6; arc=none smtp.client-ip=18.9.28.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mit.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mit.edu
+Received: from cwcc.thunk.org (pool-173-48-113-198.bstnma.fios.verizon.net [173.48.113.198])
+	(authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+	by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 46REqWUW017051
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 27 Jul 2024 10:52:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+	t=1722091958; bh=qLhE8zhbnsrLQesDE5s8eN6bXS32QqwKbPnsHmPpjPs=;
+	h=Date:From:Subject:Message-ID:MIME-Version:Content-Type;
+	b=W3SqZwj6xO4JInZDIxy44/G9zuWEAwQBDT8wo9oAislq4E8B456lR87n3bSU9fcTu
+	 iY0V57/ee8ng08hyb4Csnb2aESguN8FAilgp5bT1uF+l0t0N6l5WFjifYiECO6bUDd
+	 t5BTjYHDKkOovBhtRTqwkR8rL7aX++aINeXzjuXf7n9rHduxZMGTecM7BxEExtLP51
+	 RiF9Pepy9ILquFzBv7I6nIGYyVPO16Y/OWE3V35dTFL7MdnWaaeUIgp9Z79JAPI2dj
+	 iZEP64jTBjnKooEX1ccphhGHyHOYzUv04vJ6/ie7IN7IddG/d/a9WC4B2NrMWDyWKL
+	 An8LLBeP0m5Aw==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+	id 8A69515C0251; Sat, 27 Jul 2024 10:52:32 -0400 (EDT)
+Date: Sat, 27 Jul 2024 10:52:32 -0400
+From: "Theodore Ts'o" <tytso@mit.edu>
+To: Christoph Hellwig <hch@infradead.org>
+Cc: David Sterba <dsterba@suse.cz>, Youling Tang <youling.tang@linux.dev>,
+        kreijack@inwind.it, Arnd Bergmann <arnd@arndb.de>,
+        Luis Chamberlain <mcgrof@kernel.org>, Chris Mason <clm@fb.com>,
+        Josef Bacik <josef@toxicpanda.com>, David Sterba <dsterba@suse.com>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org,
+        linux-modules@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        Youling Tang <tangyouling@kylinos.cn>
+Subject: Re: [PATCH 1/4] module: Add module_subinit{_noexit} and
+ module_subeixt helper macros
+Message-ID: <20240727145232.GA377174@mit.edu>
+References: <ZqJjsg3s7H5cTWlT@infradead.org>
+ <61beb54b-399b-442d-bfdb-bad23cefa586@app.fastmail.com>
+ <ZqJwa2-SsIf0aA_l@infradead.org>
+ <68584887-3dec-4ce5-8892-86af50651c41@libero.it>
+ <ZqKreStOD-eRkKZU@infradead.org>
+ <91bfea9b-ad7e-4f35-a2c1-8cd41499b0c0@linux.dev>
+ <ZqOs84hdYkSV_YWd@infradead.org>
+ <20240726152237.GH17473@twin.jikos.cz>
+ <20240726175800.GC131596@mit.edu>
+ <ZqPmPufwqbGOTyGI@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 6/7] Drivers: hv: vmbus: Get the IRQ number from DT
-To: Arnd Bergmann <arnd@arndb.de>, Roman Kisel <romank@linux.microsoft.com>,
- bhelgaas@google.com, Borislav Petkov <bp@alien8.de>,
- Catalin Marinas <catalin.marinas@arm.com>,
- Dave Hansen <dave.hansen@linux.intel.com>, Dexuan Cui <decui@microsoft.com>,
- Haiyang Zhang <haiyangz@microsoft.com>, "H. Peter Anvin" <hpa@zytor.com>,
- =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
- "K. Y. Srinivasan" <kys@microsoft.com>, Len Brown <lenb@kernel.org>,
- Lorenzo Pieralisi <lpieralisi@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- "Rafael J . Wysocki" <rafael@kernel.org>, Rob Herring <robh@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>, Wei Liu <wei.liu@kernel.org>,
- Will Deacon <will@kernel.org>, linux-acpi@vger.kernel.org,
- Linux-Arch <linux-arch@vger.kernel.org>,
- linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, x86@kernel.org
-Cc: apais@microsoft.com, benhill@microsoft.com, ssengar@microsoft.com,
- sunilmut@microsoft.com, vdso@hexbites.dev
-References: <20240726225910.1912537-1-romank@linux.microsoft.com>
- <20240726225910.1912537-7-romank@linux.microsoft.com>
- <7418bfcd-c572-4574-accc-7f2ae117529f@kernel.org>
- <ce8c1e88-2d2f-44de-bd43-c05e274c2660@app.fastmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <ce8c1e88-2d2f-44de-bd43-c05e274c2660@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZqPmPufwqbGOTyGI@infradead.org>
 
-On 27/07/2024 11:17, Arnd Bergmann wrote:
-> On Sat, Jul 27, 2024, at 10:56, Krzysztof Kozlowski wrote:
->> On 27/07/2024 00:59, Roman Kisel wrote:
->>> @@ -2338,6 +2372,21 @@ static int vmbus_device_add(struct platform_device *pdev)
->>>  		cur_res = &res->sibling;
->>>  	}
->>>  
->>> +	/*
->>> +	 * Hyper-V always assumes DMA cache coherency, and the DMA subsystem
->>> +	 * might default to 'not coherent' on some architectures.
->>> +	 * Avoid high-cost cache coherency maintenance done by the CPU.
->>> +	 */
->>> +#if defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_DEVICE) || \
->>> +	defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU) || \
->>> +	defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU_ALL)
->>> +
->>> +	if (!of_property_read_bool(np, "dma-coherent"))
->>> +		pr_warn("Assuming cache coherent DMA transactions, no 'dma-coherent' node supplied\n");
->>
->> Why do you need this property at all, if it is allways dma-coherent? Are
->> you supporting dma-noncoherent somewhere?
+On Fri, Jul 26, 2024 at 11:09:02AM -0700, Christoph Hellwig wrote:
+> On Fri, Jul 26, 2024 at 01:58:00PM -0400, Theodore Ts'o wrote:
+> > Yeah, that's my reaction as well.  This only saves 50 lines of code in
+> > ext4, and that includes unrelated changes such as getting rid of "int
+> > i" and putting the declaration into the for loop --- "for (int i =
+> > ...").  Sure, that saves two lines of code, but yay?
+> > 
+> > If the ordering how the functions gets called is based on the magic
+> > ordering in the Makefile, I'm not sure this actually makes the code
+> > clearer, more robust, and easier to maintain for the long term.
 > 
-> It's just a sanity check that the DT is well-formed.
-> 
-> Since the dma-coherent property is interpreted by common code, it's
-> not up to hv to change the default for the platform. I'm not sure
-> if the presence of CONFIG_ARCH_HAS_SYNC_DMA_* options is the correct
-> check to determine that an architecture defaults to noncoherent
-> though, as the function may be needed to do something else.
-> 
-> The global "dma_default_coherent' may be a better thing to check
-> for. This is e.g. set on powerpc64, riscv and on specific mips
-> platforms, but it's never set on arm64 as far as I can tell.
+> So you two object to kernel initcalls for the same reason and would
+> rather go back to calling everything explicitly?
 
-Kernel's task is not to validate the DT. Even if it was, above code
-works poor. What if someone adds 'dma-noncoherent'?
+I don't oject to kernel initcalls which don't have any
+interdependencies and where ordering doesn't matter.
 
-The job of the bindings and DT schema is to validate and check DT if is
-well formed.
-
-
-Best regards,
-Krzysztof
-
+						- Ted
 
