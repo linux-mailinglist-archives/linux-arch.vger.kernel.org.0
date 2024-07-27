@@ -1,48 +1,48 @@
-Return-Path: <linux-arch+bounces-5654-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5655-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD77C93DDDF
-	for <lists+linux-arch@lfdr.de>; Sat, 27 Jul 2024 10:53:53 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18C1393DDE4
+	for <lists+linux-arch@lfdr.de>; Sat, 27 Jul 2024 10:56:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4D079B22B20
-	for <lists+linux-arch@lfdr.de>; Sat, 27 Jul 2024 08:53:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 48B41B22638
+	for <lists+linux-arch@lfdr.de>; Sat, 27 Jul 2024 08:56:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D63B8433DC;
-	Sat, 27 Jul 2024 08:53:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8353543AAB;
+	Sat, 27 Jul 2024 08:56:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ohr4DxEm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LJsNctuj"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 930B042070;
-	Sat, 27 Jul 2024 08:53:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E3E94C9B;
+	Sat, 27 Jul 2024 08:56:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722070423; cv=none; b=dwjEMy8wEdUpciqOYKFnziGVZxm7eDbiQdaVXlK5IRxY3aWUIBMYAwJgobQEAgjlS1wPP2g92ckGhw7H2FKgel5ijmq6YtkHhK45atyoMr16qEIFEiS6Bk2TYZIhkVXh9bbpj0uSNThkSIJdl+/JCHXpMQVSt14aiYj4Ra4Qn3w=
+	t=1722070589; cv=none; b=P1t52BBROql032o4ac6NoiDA+calAYyjuDzxQm+VMNE377g1+HG/mBDMO9sgOcTfj+lERzLe71QQ2Df1R3UcJQE+iQE0gxPN+YJV2uoOhbo+fhuc+zhd/D/nd/xHHInTv1RBZ8Ks8W2vQmQo9VXtfkKn/sUXfCZL6gTT/OBYLGI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722070423; c=relaxed/simple;
-	bh=dXGvZKxGmNpF5RdmEdYVeR7vTOwZwUjhaxpu0fu4ArU=;
+	s=arc-20240116; t=1722070589; c=relaxed/simple;
+	bh=YZX+eUFnTZVDI0mLazr1SxOOdIekJM920sukaMYLSKk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UYJe07qTwwuRgGCjz69YM5UpBDc0nF/E6M7D/XIWLpia1prBErruSvdiMSBgWmxmu6p0SxyqpGXrrffS6TmhZmHkR6Gd411pTCGcaqezvuQAKFOal6XF1PHwlJSXRPBFw/jq9A/2/r9yOvmtTShfpo/C6To/2dKC4veUtU5QHx8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ohr4DxEm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71017C32781;
-	Sat, 27 Jul 2024 08:53:34 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=L5JsB2kcn3f8cYXza0nvhsvhGzUuGPfxSSiQG/gao9eSdjV8fx8y081JKAsVfMg/abXCnOqGjy4wg399FmROneHzXgAv/LNIKBVuH/hlcRwJQOY0POQgQAPazF2eqR8X5q3mmbmMWWzUF/LmSVP+vQlgNSlFOBaj8UCh9IqiqZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LJsNctuj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DE82C32781;
+	Sat, 27 Jul 2024 08:56:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722070423;
-	bh=dXGvZKxGmNpF5RdmEdYVeR7vTOwZwUjhaxpu0fu4ArU=;
+	s=k20201202; t=1722070588;
+	bh=YZX+eUFnTZVDI0mLazr1SxOOdIekJM920sukaMYLSKk=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Ohr4DxEmE6QJLT1zKSwAwaWcOiQ+mliG+bPW6E1AYjQghwKbPiQJTTZhXBcUUHL5k
-	 Dw7fZDNeAp1ULicuNRNsUfll6TwClWSCTE7qySyi+2Pxy+sEzdq6Re+BEw6bmeBbl4
-	 Lg7AXqPyaHqH6fK472jnTUx4CYtJZ0NOh7J8LQ6mcbe612WT525glY0KSH0zkDeOjU
-	 I3xwkBrMcFkF1lwpRJIf2oQtk6ga5JEe0dgznPUU5ii055jd0xn09uob4RsIQo6Col
-	 1CO0YUVAth7wBISZuTszcbVO2Ql6eBvUhXuQhK667SmTNnb3Fu5+GJAvdCM73va2WN
-	 zEY3iDm7skZWA==
-Message-ID: <c45516aa-3cf9-444e-8c71-f701dfd8a15b@kernel.org>
-Date: Sat, 27 Jul 2024 10:53:31 +0200
+	b=LJsNctujo4L47X4fMtysW/DacxQRGQCz0q3+ggHSUDOWFvnQwtHKZmK14FG3H+Ouk
+	 vpXRjjnZhqeBzSfVb+rVtEyT0S2l0FoGnTQGR2mASBYWjPh71CYIv7ew/KwFxy340I
+	 jcqSgak7IMzqQ5+AzhUv6+wiXGhoKOhgT6DUa572g0JWWp0cadDcrScnhSaTF/J0Zk
+	 8OcoH6GFlzMGcEHbyu7BUOVm99d6cLA/hgW0PI3xmqefoidMxIaHtmzq52ERLCyWWa
+	 Vc87xR5SxZxQAwdKexUeJJkEKQiyT91imewHnfbTvdQvDk60kwSk7/4PolccmPgK8z
+	 y7LD3vZ5VIGtA==
+Message-ID: <7418bfcd-c572-4574-accc-7f2ae117529f@kernel.org>
+Date: Sat, 27 Jul 2024 10:56:18 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -50,8 +50,7 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 5/7] dt-bindings: bus: Add Hyper-V VMBus cache
- coherency and IRQs
+Subject: Re: [PATCH v3 6/7] Drivers: hv: vmbus: Get the IRQ number from DT
 To: Roman Kisel <romank@linux.microsoft.com>, arnd@arndb.de,
  bhelgaas@google.com, bp@alien8.de, catalin.marinas@arm.com,
  dave.hansen@linux.intel.com, decui@microsoft.com, haiyangz@microsoft.com,
@@ -64,7 +63,7 @@ To: Roman Kisel <romank@linux.microsoft.com>, arnd@arndb.de,
 Cc: apais@microsoft.com, benhill@microsoft.com, ssengar@microsoft.com,
  sunilmut@microsoft.com, vdso@hexbites.dev
 References: <20240726225910.1912537-1-romank@linux.microsoft.com>
- <20240726225910.1912537-6-romank@linux.microsoft.com>
+ <20240726225910.1912537-7-romank@linux.microsoft.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -110,39 +109,29 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240726225910.1912537-6-romank@linux.microsoft.com>
+In-Reply-To: <20240726225910.1912537-7-romank@linux.microsoft.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 27/07/2024 00:59, Roman Kisel wrote:
-> Add dt-bindings for the Hyper-V VMBus DMA cache coherency
-> and interrupt specification.
-> 
+> @@ -2338,6 +2372,21 @@ static int vmbus_device_add(struct platform_device *pdev)
+>  		cur_res = &res->sibling;
+>  	}
+>  
+> +	/*
+> +	 * Hyper-V always assumes DMA cache coherency, and the DMA subsystem
+> +	 * might default to 'not coherent' on some architectures.
+> +	 * Avoid high-cost cache coherency maintenance done by the CPU.
+> +	 */
+> +#if defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_DEVICE) || \
+> +	defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU) || \
+> +	defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU_ALL)
+> +
+> +	if (!of_property_read_bool(np, "dma-coherent"))
+> +		pr_warn("Assuming cache coherent DMA transactions, no 'dma-coherent' node supplied\n");
 
-You did not add any bindings. I don't understand this description.
-
-Anyway, not tested.
-
-<form letter>
-Please use scripts/get_maintainers.pl to get a list of necessary people
-and lists to CC. It might happen, that command when run on an older
-kernel, gives you outdated entries. Therefore please be sure you base
-your patches on recent Linux kernel.
-
-Tools like b4 or scripts/get_maintainer.pl provide you proper list of
-people, so fix your workflow. Tools might also fail if you work on some
-ancient tree (don't, instead use mainline) or work on fork of kernel
-(don't, instead use mainline). Just use b4 and everything should be
-fine, although remember about `b4 prep --auto-to-cc` if you added new
-patches to the patchset.
-
-You missed at least devicetree list (maybe more), so this won't be
-tested by automated tooling. Performing review on untested code might be
-a waste of time.
-
-Please kindly resend and include all necessary To/Cc entries.
-</form letter>
-
+Why do you need this property at all, if it is allways dma-coherent? Are
+you supporting dma-noncoherent somewhere?
 
 Best regards,
 Krzysztof
