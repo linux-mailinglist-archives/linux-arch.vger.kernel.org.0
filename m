@@ -1,82 +1,83 @@
-Return-Path: <linux-arch+bounces-5681-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5682-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF52F93FFD3
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jul 2024 22:53:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B8B193FFE2
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jul 2024 22:55:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 594731F225C1
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jul 2024 20:53:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4DD5D1C22691
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jul 2024 20:55:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A56A1891C6;
-	Mon, 29 Jul 2024 20:53:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D03C418C324;
+	Mon, 29 Jul 2024 20:55:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ineyUz0G"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="h/nnWeya"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88160187847
-	for <linux-arch@vger.kernel.org>; Mon, 29 Jul 2024 20:53:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A4761891B2
+	for <linux-arch@vger.kernel.org>; Mon, 29 Jul 2024 20:55:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722286388; cv=none; b=HveQRdD8BcfaKEWPLKbxTYS3EyBnB2gKjiflqF9qjloSAG0bGYZGpgq5K45U7MAYra0W1B84cC4qaeSaUuOVLqhqxCT6ahwHPNLWotRJVKJcWASbYXhMgrPoVPbHF9mJCMrgLFTqif03RunwX1BHYFvtT5oxbcLoH/yWGsnfaOQ=
+	t=1722286526; cv=none; b=oAefmkCGzVeSjS3ig3rJ1u96cCDXrVPSL6fWflSF6ejqz1HF4/Mq3KD68gV/LPcaZZ/KXdHQtWqqwzWF5Q4NuWcaJDMk9p3myOwK+tlKxaWmiYJCbTar4hQ/xufsYgYA34EOVjBc9zTzLOJJevacOx8TvnCfLEniXbwMg3lIN1w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722286388; c=relaxed/simple;
-	bh=29JW7/dtjpDrW5DZNhY9crHWpW8ENrh1RbNqrfIMOPs=;
+	s=arc-20240116; t=1722286526; c=relaxed/simple;
+	bh=RTz+0z5SbA8fg9idABtdR1W3LTdJAfQ+K1FoGhBcJKo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pxlhy6g+YzUp2bVPtgRRI2cqeQk3RYXsn3j3ELtE5LQ3b1AN0Fo++ZEaQ3WFtGNoYZF6+tseNZUU4ugqduRvkoIwGElKZXp8Te7i5DVAIOdhslFt4LF45cD/qcjY3vs434xyqde+uAyE+ZhGRVa5ga17x5BmukuQWWiVShKDCSI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ineyUz0G; arc=none smtp.client-ip=209.85.160.172
+	 To:Cc:Content-Type; b=l/BelTWuM11UcjGv6Q7+/OYd89i86VFwHb/gmSVRejSU4aa0tCcnz9ZxFDA1ZI+2cGmO+y4oVmHqz9AFitM0+tbmFf1YON5UbQLI2EbLlXhL19IPQgUwPENYzlqTG2kkO008GDYotYgSp3f22YydgU9S4G8D2pVlgnDxkWCQIfU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=h/nnWeya; arc=none smtp.client-ip=209.85.160.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-44fee2bfd28so28611cf.1
-        for <linux-arch@vger.kernel.org>; Mon, 29 Jul 2024 13:53:06 -0700 (PDT)
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-44fdc70e695so110531cf.0
+        for <linux-arch@vger.kernel.org>; Mon, 29 Jul 2024 13:55:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1722286385; x=1722891185; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1722286522; x=1722891322; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=29JW7/dtjpDrW5DZNhY9crHWpW8ENrh1RbNqrfIMOPs=;
-        b=ineyUz0GGNj5orEMaw13Gq3Ve9i0/saPuoYdIITTcP3j77Rgt+3qS9yy2j5SBd85Co
-         gNOnImi5AWdNIMuUIgfJnl7fii72bOQ46+lp0KTiuNezcHhlj/zXqio/qCmO3zk1zvKc
-         NvZK1Adc7nxuKS5Rbw5niY3BBRVpAmZbexIk4IZGDcjKglVFV0aK9QcO7Fgg4qWOcgGs
-         r+pZsnw7vvGvCa0yDNALESBmqNo4qQmoUloBzzWipuqYjitAq1bWHiTi0FqwdRVlYiQG
-         wjbh1SvUY/EapqhSPGZTTAJ0vQ2dbUV8GSFGI5k8AASDiXbpMrejSAi8jvrlunvQ8E0v
-         5dag==
+        bh=niejWPzSGiHspwj4YntTxK5/QOZFWVp8np2sDleyrVI=;
+        b=h/nnWeyaW27Ao2xvbbFSE/Zt2VJmO48EkAeQz0RZj8F23e7gNiryg8lymrcGLWEWT7
+         fHdVAEg0XPtUc0g56RjGO+qOEix/2Io800UeFfwXdUZLQrKZZtAJdCuWJYiuVg/8QvDQ
+         YEcOLiM3HeSBtMi82IDcBqR397rtWDLLuUIBJQ+qJhfZJPuDB4Vme1SjbtedSxs0OC7y
+         97Cl5VKseASfQI2QSiqLovTiSBLLL6edYy3S1Bd0khZUsKr1nwQOPdH3Kub/5Glj8GBN
+         M3RELBvQnEbtI0qYiF2z6Id20NHzjZeQJ2G1SE3uvcHxiWgH4MwXwNukN4MOuRHVTcJ9
+         cb1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722286385; x=1722891185;
+        d=1e100.net; s=20230601; t=1722286522; x=1722891322;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=29JW7/dtjpDrW5DZNhY9crHWpW8ENrh1RbNqrfIMOPs=;
-        b=RNTidehjzEpnud7N8GxNXhjqTiXxC06WzwwLcKMRDJsWXnB0scG16xfMP4fwplmZZp
-         ZLPNBP0dD/5VhkcDV+6LRNulxRyUMSjKygv7ZSl1LypXPk/4svY4KkYne6S/uKVH9cLG
-         4UZZUoX/Qgmd9w2SWG3/1nPA6gNXQk5E04dYiouiUcUfpQ70xo9EzOckYm3Mvn4KIGUs
-         AVdXAkvlX0Ule6lm5EC6FDtpBIqmjTOA7fowO6LjvMgWVo+DewXJAgG/10tkdxejTC6v
-         TInCsKPQegJ8sa2N0yGmzI/3eiOUQgAvtpxOyCIKG0PvQT3+e8KwHla6hrCq8UXawrQE
-         VNdA==
-X-Forwarded-Encrypted: i=1; AJvYcCU3N5TJY8g13gnGGlJ97LDYmf8g7fSCgcCyzGxDStP72PRKAPCnQ+XNaVdC8vND+uNCu+LGyRC7qC63UsfOKgJ6ywW6r8oVtJRaXg==
-X-Gm-Message-State: AOJu0YwdeHmQnKxKrQatFVf6PHS2wcAag9TSFeT0BMoO5GePVTRzbhCE
-	LNgcGG8UTwdGHk4wcyWfAUH5yBLCJJ6uOCBf4v09dGOO2rmNY0eBJPAdzyGeohPiaDicbJqxDji
-	Y+/6Gh0INj3IKO2NDPo4AujlHAV75bxuudDNX
-X-Google-Smtp-Source: AGHT+IGdqHt+6En/vkut7lMYPmR6m6S3gJX5/4bnNDNPFadeFEDiu1DKJHGnDb+xcPgIp5dT/Iy1GTSikIgnXMmJuos=
-X-Received: by 2002:a05:622a:4cb:b0:447:d78d:773b with SMTP id
- d75a77b69052e-4503634c227mr56671cf.6.1722286385326; Mon, 29 Jul 2024 13:53:05
- -0700 (PDT)
+        bh=niejWPzSGiHspwj4YntTxK5/QOZFWVp8np2sDleyrVI=;
+        b=MRjXA9NWF4bvz/UqjxMpiUGgbbrqMNAJqM5Rpp54OIxSCec0OAuc/TF6cZGfKktz/r
+         ickv3ZDbrRDLtarqU/6iuOrLi+5OUSWn/sZ7M0V5jAPWaN5m9zrwydkcU/DvZEWXkxZp
+         5lseWFiqhCQgD8AzvWt42fpbfUNr16kGMaZaOsMNyKst3XkINUUbyWRbqw4rHXL302XB
+         eLqclQASGS6Nfk6yYslNUn2RV4eWow1ti9LzSdAoXrmr93mg2xTj1vC6uQxDou9uRrvP
+         C1l8FgJfQZCLuJhT808+EWYT7+X/3sLp5DAhjWxy0x+Y8dIOGRD9bFov/yIUGVao8Kg9
+         wX2w==
+X-Forwarded-Encrypted: i=1; AJvYcCWplTDkq49m1cspe65c7ZSNRz2EGWwCHg14ZGEcOEtYh3iy3oVGpzagtQ0mnZI2A144HbQzzL2S05RmIXKf/GwzG3E0JbBAMwF6Hg==
+X-Gm-Message-State: AOJu0Yw/JtUxPb3Ky1bxXHBji657HYM3KZvPsYSF2RDB3uqXlfYp5QhS
+	0J8ibQxk+JsmbHoToydHMiUiDxwHknduGy+pscSheZPDmgqZ0eLVkrEJvJ+GsvA8Qu+sJ4kZv6r
+	DVsz6DOWefKLtNRWL3fEtH//OCnu7ws19Aayj
+X-Google-Smtp-Source: AGHT+IH2rSZTSsniocXI2j9VEsSuvZAH/+8U38Hr61bPybhBcITR+1rWGMzIbas1ALvho8R2h8RifAfAD1wu6fS6OdI=
+X-Received: by 2002:ac8:5910:0:b0:447:eaaa:c852 with SMTP id
+ d75a77b69052e-45032ac32c8mr1554811cf.23.1722286521955; Mon, 29 Jul 2024
+ 13:55:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240728203001.2551083-1-xur@google.com> <20240729085052.GA37996@noisy.programming.kicks-ass.net>
-In-Reply-To: <20240729085052.GA37996@noisy.programming.kicks-ass.net>
+References: <20240728203001.2551083-1-xur@google.com> <20240728203001.2551083-4-xur@google.com>
+ <20240729093405.GC37996@noisy.programming.kicks-ass.net>
+In-Reply-To: <20240729093405.GC37996@noisy.programming.kicks-ass.net>
 From: Rong Xu <xur@google.com>
-Date: Mon, 29 Jul 2024 13:52:51 -0700
-Message-ID: <CAF1bQ=RfESfkYj3DPHjjNOEJxwwKBHgYp84=Tnk4=NwkjPuMxw@mail.gmail.com>
-Subject: Re: [PATCH 0/6] Add AutoFDO and Propeller support for Clang build
+Date: Mon, 29 Jul 2024 13:55:10 -0700
+Message-ID: <CAF1bQ=QgBBEBt1sZYM0HfGf_NhC+cX73Vf+wcu7dSsZ639EGXQ@mail.gmail.com>
+Subject: Re: [PATCH 3/6] Change the symbols order when --ffuntion-sections is enabled
 To: Peter Zijlstra <peterz@infradead.org>
 Cc: Han Shen <shenhan@google.com>, Sriraman Tallam <tmsriram@google.com>, 
 	David Li <davidxl@google.com>, Jonathan Corbet <corbet@lwn.net>, 
@@ -99,91 +100,105 @@ Cc: Han Shen <shenhan@google.com>, Sriraman Tallam <tmsriram@google.com>,
 	Sami Tolvanen <samitolvanen@google.com>, Xiao Wang <xiao.w.wang@intel.com>, 
 	Jan Kiszka <jan.kiszka@siemens.com>, linux-doc@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-efi@vger.kernel.org, linux-arch@vger.kernel.org, llvm@lists.linux.dev
+	linux-efi@vger.kernel.org, linux-arch@vger.kernel.org, llvm@lists.linux.dev, 
+	Krzysztof Pszeniczny <kpszeniczny@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jul 29, 2024 at 1:51=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
+On Mon, Jul 29, 2024 at 2:34=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
 g> wrote:
 >
-> On Sun, Jul 28, 2024 at 01:29:53PM -0700, Rong Xu wrote:
-> > Hi,
+> On Sun, Jul 28, 2024 at 01:29:56PM -0700, Rong Xu wrote:
+> > When the -ffunction-sections compiler option is enabled, each function
+> > is placed in a separate section named .text.function_name rather than
+> > putting all functions in a single .text section.
 > >
-> > This patch series is to integrate AutoFDO and Propeller support into
-> > the Linux kernel. AutoFDO is a profile-guided optimization technique
-> > that leverages hardware sampling to enhance binary performance.
-> > Unlike Instrumentation-based FDO (iFDO), AutoFDO offers a user-friendly
-> > and straightforward application process. While iFDO generally yields
-> > superior profile quality and performance, our findings reveal that
-> > AutoFDO achieves remarkable effectiveness, bringing performance close
-> > to iFDO for benchmark applications. Similar to AutoFDO, Propeller too
-> > utilizes hardware sampling to collect profiles and apply post-link
-> > optimizations to improve the benchmark=E2=80=99s performance over and a=
-bove
-> > AutoFDO.
+> > However, using -function-sections can cause problems with the
+> > linker script. The comments included in include/asm-generic/vmlinux.lds=
+.h
+> > note these issues.:
+> >   =E2=80=9CTEXT_MAIN here will match .text.fixup and .text.unlikely if =
+dead
+> >    code elimination is enabled, so these sections should be converted
+> >    to use ".." first.=E2=80=9D
 > >
-> > Our empirical data demonstrates significant performance improvements
-> > with AutoFDO and Propeller, up to 10% on microbenchmarks and up to 5%
-> > on large warehouse-scale benchmarks. This makes a strong case for their
-> > inclusion as supported features in the upstream kernel.
+> > It is unclear whether there is a straightforward method for converting
+> > a suffix to "..". This patch modifies the order of subsections within t=
+he
+> > text output section when the -ffunction-sections flag is enabled.
+> > Specifically, it repositions sections with certain fixed patterns (for
+> > example .text.unlikely) before TEXT_MAIN, ensuring that they are groupe=
+d
+> > and matched together.
 > >
-> > Background
-> >
-> > A significant fraction of fleet processing cycles (excluding idle time)
-> > from data center workloads are attributable to the kernel. Ware-house
-> > scale workloads maximize performance by optimizing the production kerne=
-l
-> > using iFDO (a.k.a instrumented PGO, Profile Guided Optimization).
-> >
-> > iFDO can significantly enhance application performance but its use
-> > within the kernel has raised concerns. AutoFDO is a variant of FDO that
-> > uses the hardware=E2=80=99s Performance Monitoring Unit (PMU) to collec=
-t
-> > profiling data. While AutoFDO typically yields smaller performance
-> > gains than iFDO, it presents unique benefits for optimizing kernels.
-> >
-> > AutoFDO eliminates the need for instrumented kernels, allowing a single
-> > optimized kernel to serve both execution and profile collection. It als=
-o
-> > minimizes slowdown during profile collection, potentially yielding
-> > higher-fidelity profiling, especially for time-sensitive code, compared
-> > to iFDO. Additionally, AutoFDO profiles can be obtained from production
-> > environments via the hardware=E2=80=99s PMU whereas iFDO profiles requi=
-re
-> > carefully curated load tests that are representative of real-world
-> > traffic.
-> >
-> > AutoFDO facilitates profile collection across diverse targets.
-> > Preliminary studies indicate significant variation in kernel hot spots
-> > within Google=E2=80=99s infrastructure, suggesting potential performanc=
-e gains
-> > through target-specific kernel customization.
-> >
-> > Furthermore, other advanced compiler optimization techniques, including
-> > ThinLTO and Propeller can be stacked on top of AutoFDO, similar to iFDO=
-.
-> > ThinLTO achieves better runtime performance through whole-program
-> > analysis and cross module optimizations. The main difference between
-> > traditional LTO and ThinLTO is that the latter is scalable in time and
-> > memory.
->
-> This,
->
-> > Propeller is a profile-guided, post-link optimizer that improves
-> > the performance of large-scale applications compiled with LLVM. It
-> > operates by relinking the binary based on an additional round of runtim=
+> > Note that the limitation arises because the linker script employs glob
+> > patterns instead of regular expressions for string matching. While ther=
 e
-> > profiles, enabling precise optimizations that are not possible at
-> > compile time.
+> > is a method to maintain the current order using complex patterns, this
+> > significantly complicates the pattern and increases the likelihood of
+> > errors.
+> >
+> > Co-developed-by: Han Shen <shenhan@google.com>
+> > Signed-off-by: Han Shen <shenhan@google.com>
+> > Signed-off-by: Rong Xu <xur@google.com>
+> > Suggested-by: Sriraman Tallam <tmsriram@google.com>
+> > Suggested-by: Krzysztof Pszeniczny <kpszeniczny@google.com>
+> > ---
+> >  include/asm-generic/vmlinux.lds.h | 19 ++++++++++++++++---
+> >  1 file changed, 16 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vm=
+linux.lds.h
+> > index 5703526d6ebf..f3de66bda293 100644
+> > --- a/include/asm-generic/vmlinux.lds.h
+> > +++ b/include/asm-generic/vmlinux.lds.h
+> > @@ -582,9 +582,21 @@
+> >   * during second ld run in second ld pass when generating System.map
+> >   *
+> >   * TEXT_MAIN here will match .text.fixup and .text.unlikely if dead
+> > - * code elimination is enabled, so these sections should be converted
+> > - * to use ".." first.
+> > + * code elimination or function-section is enabled. Match these symbol=
+s
+> > + * first when in these builds.
+> >   */
+> > +#if defined(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION) || defined(CONFIG_LT=
+O_CLANG)
+> > +#define TEXT_TEXT                                                    \
+> > +             *(.text.asan.* .text.tsan.*)                            \
+> > +             *(.text.unknown .text.unknown.*)                        \
+> > +             *(.text.unlikely .text.unlikely.*)                      \
+> > +             ALIGN_FUNCTION();                                       \
 >
-> should be on top somewhere, not hidden away inside a giant wall of text
-> somewhere at the end.
+> Why leave the above text sections unaligned?
 
-Thanks for the suggestion. I'll move it up. Maybe after the first
-paragraph in Background.
+They are considered cold text. They are not aligned before the change.
+But I have no objections to making it aligned.
 
-Sorry if you received a duplicated message -- I'm resending this in
-plain text mode.
+(Sorry if you receive a duplicated message. I'm resending this in
+plain text mode.)
 
--Rong
+>
+> > +             *(.text.hot .text.hot.*)                                \
+> > +             *(TEXT_MAIN .text.fixup)                                \
+> > +             NOINSTR_TEXT                                            \
+> > +             *(.ref.text)                                            \
+> > +     MEM_KEEP(init.text*)
+> > +#else
+> >  #define TEXT_TEXT                                                    \
+> >               ALIGN_FUNCTION();                                       \
+> >               *(.text.hot .text.hot.*)                                \
+> > @@ -594,7 +606,8 @@
+> >               NOINSTR_TEXT                                            \
+> >               *(.ref.text)                                            \
+> >               *(.text.asan.* .text.tsan.*)                            \
+> > -     MEM_KEEP(init.text*)                                            \
+> > +     MEM_KEEP(init.text*)
+> > +#endif
+> >
+> >
+> >  /* sched.text is aling to function alignment to secure we have same
+> > --
+> > 2.46.0.rc1.232.g9752f9e123-goog
+> >
 
