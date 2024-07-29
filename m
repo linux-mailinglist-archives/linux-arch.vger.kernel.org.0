@@ -1,53 +1,53 @@
-Return-Path: <linux-arch+bounces-5673-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5674-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CEB4193F135
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jul 2024 11:34:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2466F93F1E4
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jul 2024 11:57:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 806A8285F8F
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jul 2024 09:34:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C57A7285A25
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jul 2024 09:57:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2F5A13AA26;
-	Mon, 29 Jul 2024 09:34:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B8871419BA;
+	Mon, 29 Jul 2024 09:53:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="vRnJ603h"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="nNxfuwMT"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E879E770E1;
-	Mon, 29 Jul 2024 09:34:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74FE01422C5;
+	Mon, 29 Jul 2024 09:53:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722245663; cv=none; b=mHJuU3BPchROOrWu+G1NAtXANO7E5YIYdjki8MEa6ctWZ9CZHD9b6Z1tP1b7xAlJrvEI9HdEN0NHdmovS6+2I8Dny+tu1aq/SzA+Xi57J2l/4wuNcke1Ki6398A5mge3uoXCW2I/I5wfN6UemcOV1cd1y9Jo7vAF7VUvBMztW+s=
+	t=1722246820; cv=none; b=uzSZF02cuIoxY9k4gsaTi1LPK4+alM6ybWS2N5qp7BOgpOkQzdXO+3XDNvsZGV+s73wa+rfjOQmVlxf3Po3MiKVd+CxLuorL/jjQpn74LIBOCnSA8Gyf6JYAKBu6t1Jflcg4N8TQvlh/74PIYgDFSa+CXCY4lUa2YLPP5ui8Bhw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722245663; c=relaxed/simple;
-	bh=3jPwdF87VODfvLYMSLQ6a8U5V6bwkM9aoC2LVJskl4k=;
+	s=arc-20240116; t=1722246820; c=relaxed/simple;
+	bh=waGwMlMybwNO3CltygzQrDphXSMn46LZiyi6g/R+yFc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JEreezV5t9lnUxTuIBdJa3YFmVyFHMeZ+n7QNbh7ZIwpX6QeAt3bF8Mtnpx/g13V16i+NrbC+c1ZkeSVMLz9Gkv7Ns8w4ma5q0ROW6JV5kpIANkUoQsRpCphC4G/oRry1ZSxfKiW/GRlyVMvkXx7MlEH6iI/iwK/uwabXbv0in8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=vRnJ603h; arc=none smtp.client-ip=90.155.50.34
+	 Content-Type:Content-Disposition:In-Reply-To; b=eYC4tEmfx2rIXTlvcVQUtpx7Aic5seBrN47nxOtehhPIgoWUkl7tUEsCu2HhIKzox1EW/AflVt142frT0xzokB6wgG8ijsjtImpDkNG0sNG8/+mT/Lk3C9bFWR6uyo/uYsR/B5CqwGDTN0ZGuRGuPP6AQ6dNg/KKQRGgTNe7G7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=nNxfuwMT; arc=none smtp.client-ip=90.155.92.199
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=8JC9Mk7PKGPRsFj1tUJdTnT65oycReDEnXbNeaPrch8=; b=vRnJ603hG2qrYgjH37cZsIaTty
-	kbnnWa7CjLIqvatukxS67LykRqrQgJkaCNBwfmtKqR4SlBruRVepVz5alu67HS0JQAWmWFRDO/N7A
-	od/rHvVXsl6oM7N955Rb5sa+a8xJ97rYORUGm4fgJ0xmlyJRcR61xnGllcfSu8IugcJKiLpqzkKKL
-	HNYmPh4hrfJvQaXquK4Ni9lzRMMLs3Q9e6TGSXZ66gAPNwb34qKpVNmOJaPXE5x4r/pDx9bKMuD0C
-	1mbVBy9VfyT+tWOqSqsD/HTRS0rn5NIr7IuXjdIvHSXxuBOWoKqZIdmq+4NYePiNAVqodzmMhz/UQ
-	9oYkfk/Q==;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=jjG+pKIqGn1D+6CeUBJo2nl6wL62M7n6k540Ij2MXrA=; b=nNxfuwMT+vQO2UECrfkJeM/Ij8
+	klMYiiXJ2Fe+pRKQGp8v0P+WGTRieUHCYRFial9e21r3/M5G6rlbH/Lw6Q+4zrKsi1dRBhNEZvPO3
+	fYpMrXvrRt00mrbQTlz7dHIcekYQYFM868EC29eRAdp6ChUHTx/yq4WfvHhIB24JVpxpW+aCYJpuM
+	h8aJTxiFg9bTN3JmB7twL3/lCYjjlb8cCNTn3u4b4uABIDcGApJYChhOXskIGhBHuvhekQrFcNUZE
+	TqjJ5bkzJ1/L3LKv3VQWsbldpxPjGM/bcwdAFsGotHdZIJZuTk+ouFKWSHR9458/SoxoaqEudAsZf
+	+000/EFw==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sYMla-0000000DQiR-1KUO;
-	Mon, 29 Jul 2024 09:34:06 +0000
+	by desiato.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1sYN3v-00000004lAr-2tHM;
+	Mon, 29 Jul 2024 09:53:04 +0000
 Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id EAFEC300439; Mon, 29 Jul 2024 11:34:05 +0200 (CEST)
-Date: Mon, 29 Jul 2024 11:34:05 +0200
+	id 2D409300439; Mon, 29 Jul 2024 11:53:03 +0200 (CEST)
+Date: Mon, 29 Jul 2024 11:53:03 +0200
 From: Peter Zijlstra <peterz@infradead.org>
 To: Rong Xu <xur@google.com>
 Cc: Han Shen <shenhan@google.com>, Sriraman Tallam <tmsriram@google.com>,
@@ -87,99 +87,37 @@ Cc: Han Shen <shenhan@google.com>, Sriraman Tallam <tmsriram@google.com>,
 	Jan Kiszka <jan.kiszka@siemens.com>, linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
 	linux-efi@vger.kernel.org, linux-arch@vger.kernel.org,
-	llvm@lists.linux.dev, Krzysztof Pszeniczny <kpszeniczny@google.com>
-Subject: Re: [PATCH 3/6] Change the symbols order when --ffuntion-sections is
- enabled
-Message-ID: <20240729093405.GC37996@noisy.programming.kicks-ass.net>
+	llvm@lists.linux.dev, Krzysztof Pszeniczny <kpszeniczny@google.com>,
+	Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH 6/6] Add Propeller configuration for kernel build.
+Message-ID: <20240729095303.GD37996@noisy.programming.kicks-ass.net>
 References: <20240728203001.2551083-1-xur@google.com>
- <20240728203001.2551083-4-xur@google.com>
+ <20240728203001.2551083-7-xur@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240728203001.2551083-4-xur@google.com>
+In-Reply-To: <20240728203001.2551083-7-xur@google.com>
 
-On Sun, Jul 28, 2024 at 01:29:56PM -0700, Rong Xu wrote:
-> When the -ffunction-sections compiler option is enabled, each function
-> is placed in a separate section named .text.function_name rather than
-> putting all functions in a single .text section.
+On Sun, Jul 28, 2024 at 01:29:59PM -0700, Rong Xu wrote:
+> Add the build support for using Clang's Propeller optimizer. Like
+> AutoFDO, Propeller uses hardware sampling to gather information
+> about the frequency of execution of different code paths within a
+> binary. This information is then used to guide the compiler's
+> optimization decisions, resulting in a more efficient binary.
 > 
-> However, using -function-sections can cause problems with the
-> linker script. The comments included in include/asm-generic/vmlinux.lds.h
-> note these issues.:
->   “TEXT_MAIN here will match .text.fixup and .text.unlikely if dead
->    code elimination is enabled, so these sections should be converted
->    to use ".." first.”
-> 
-> It is unclear whether there is a straightforward method for converting
-> a suffix to "..". This patch modifies the order of subsections within the
-> text output section when the -ffunction-sections flag is enabled.
-> Specifically, it repositions sections with certain fixed patterns (for
-> example .text.unlikely) before TEXT_MAIN, ensuring that they are grouped
-> and matched together.
-> 
-> Note that the limitation arises because the linker script employs glob
-> patterns instead of regular expressions for string matching. While there
-> is a method to maintain the current order using complex patterns, this
-> significantly complicates the pattern and increases the likelihood of
-> errors.
-> 
-> Co-developed-by: Han Shen <shenhan@google.com>
-> Signed-off-by: Han Shen <shenhan@google.com>
-> Signed-off-by: Rong Xu <xur@google.com>
-> Suggested-by: Sriraman Tallam <tmsriram@google.com>
-> Suggested-by: Krzysztof Pszeniczny <kpszeniczny@google.com>
-> ---
->  include/asm-generic/vmlinux.lds.h | 19 ++++++++++++++++---
->  1 file changed, 16 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-> index 5703526d6ebf..f3de66bda293 100644
-> --- a/include/asm-generic/vmlinux.lds.h
-> +++ b/include/asm-generic/vmlinux.lds.h
-> @@ -582,9 +582,21 @@
->   * during second ld run in second ld pass when generating System.map
->   *
->   * TEXT_MAIN here will match .text.fixup and .text.unlikely if dead
-> - * code elimination is enabled, so these sections should be converted
-> - * to use ".." first.
-> + * code elimination or function-section is enabled. Match these symbols
-> + * first when in these builds.
->   */
-> +#if defined(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION) || defined(CONFIG_LTO_CLANG)
-> +#define TEXT_TEXT							\
-> +		*(.text.asan.* .text.tsan.*)				\
-> +		*(.text.unknown .text.unknown.*)			\
-> +		*(.text.unlikely .text.unlikely.*)			\
-> +		ALIGN_FUNCTION();					\
+> The support requires a Clang compiler LLVM 19 or later, and the
+> create_llvm_prof tool
+> (https://github.com/google/autofdo/releases/tag/v0.30.1). This
 
-Why leave the above text sections unaligned?
+What's the relation between this and llvm-profgen? Is the above simply
+a google 'internal' proof of concept thing that will eventually make its
+way into llvm-profgen?
 
-> +		*(.text.hot .text.hot.*)				\
-> +		*(TEXT_MAIN .text.fixup)				\
-> +		NOINSTR_TEXT						\
-> +		*(.ref.text)						\
-> +	MEM_KEEP(init.text*)
-> +#else
->  #define TEXT_TEXT							\
->  		ALIGN_FUNCTION();					\
->  		*(.text.hot .text.hot.*)				\
-> @@ -594,7 +606,8 @@
->  		NOINSTR_TEXT						\
->  		*(.ref.text)						\
->  		*(.text.asan.* .text.tsan.*)				\
-> -	MEM_KEEP(init.text*)						\
-> +	MEM_KEEP(init.text*)
-> +#endif
->  
->  
->  /* sched.text is aling to function alignment to secure we have same
-> -- 
-> 2.46.0.rc1.232.g9752f9e123-goog
-> 
+It seems a bit weird LLVM landed propeller without the required profile
+generation tool.
 
