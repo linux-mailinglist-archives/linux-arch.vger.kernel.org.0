@@ -1,151 +1,113 @@
-Return-Path: <linux-arch+bounces-5678-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5679-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F83C93FBD3
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jul 2024 18:51:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 67AD493FDE1
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jul 2024 20:57:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 18B851F2041D
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jul 2024 16:51:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1353A1F22DFE
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jul 2024 18:57:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12B97156654;
-	Mon, 29 Jul 2024 16:51:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7DC2186E37;
+	Mon, 29 Jul 2024 18:57:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="cAnu5aOE"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ej0EAM7w"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 051B62AD22;
-	Mon, 29 Jul 2024 16:51:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C8D615A87C;
+	Mon, 29 Jul 2024 18:57:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722271867; cv=none; b=GQ1SPSVSHhWBv2aSpyHgoiI6tSmBM+QE55e1UtMGIIXR0mxE9oYdPKRztUX+HIR0ByGpIM7W6YsvrkxK75YcOX1RHRYefSHznMXONiBNZv3qh+OuYbDUG7m4vQNEQPx54qfM0rAlJKkUdBNZp0qJX1SEVMPrKaRmDydMQW8VhZo=
+	t=1722279465; cv=none; b=V8b3s5GhYug9n1U5LJ2pOovYJyICThH3y4ft3MIRWg3VX/VCBv4qU8RgtguukBUF9KvB1aeEmPSsyQXem3KUfSI71M2FAsDpuMlRTKXfMHUH7F1XUkk5lW4VUll663xtnMVXSiCyvkiy90X1vsTzBej4zq1d2g31kqXuGxWzcBY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722271867; c=relaxed/simple;
-	bh=tpiIBI/XLHi/5xgbxI4SzoqzwjrDyP7UJ+SV9h01uUc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=d4kYztLXuU5endEl4Uzt/AW600MP7YRrqr05YKt7OGsSQo7tKYaWrH+kj3lJ88//1T1tj9/Rqg/VAGEZa3FW00VfWYJO/JUtULFTthTNTOhiUctm4S3ohuWC8Gh7pz/5ZfIUxK9wwEXqF/q/GY/GfLOurDxRDn2jh4/monh+Q/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=cAnu5aOE; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [10.137.186.190] (unknown [131.107.159.62])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 576B620B7165;
-	Mon, 29 Jul 2024 09:51:04 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 576B620B7165
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1722271864;
-	bh=+cXxOiDKrFT9b5NlMgR7bH2wonHbOte3VUO2//bA1jM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=cAnu5aOEkHh7wxXbogTb1Cop95sAfjfbO6Fw31tIR4cHaVDOUVNcmci5CV+FTodxU
-	 2hFQZTn0VXTMRnbETa7vKc9SRTH3mFJ8pocSP9iggoq5Wp3rZGswCxndPgnRoMD0px
-	 8uhorG0O/RjITxfLaGDscHaSu2QcqX6qnqfiH1uM=
-Message-ID: <dd25f792-3ea4-4660-a5cc-79b589b2b881@linux.microsoft.com>
-Date: Mon, 29 Jul 2024 09:51:07 -0700
+	s=arc-20240116; t=1722279465; c=relaxed/simple;
+	bh=DH6q17wJwE/X5Qp0zBeWBEB/NztwTzM0wLQxTlpxGTU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tyqRHkVa9oaJDIs2UZIVdA/uNwb3dtWpoZEQ0kTkiyBuLpiV7ED4W9qC+7fEIQSpjvIAq/ub2C6fK7mT2NNVb/2vuVUHJ8oa+CrYJc9fFh6UZI/WWcbvXDE4L4mgJqA4WJ9NqdrmHmaWvFhEpSSRV5iMax9jAB7qi1VKn5wfeUg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ej0EAM7w; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=bI98vnr4STfnlezdFEzg4Ja3ISFYbT1ZwioxbeX8MKA=; b=ej0EAM7w2vW2zx7IVBK5UWb6kj
+	wN1ljrPR09MnAd97P+fTuB/kR5lUi1RXb/2QVebNH54cfJkcVdn1DRLq3wIEF0L6HoO11Wpaq31KH
+	b3HS8xuAqVh03lWz/yE/u/Ow4kdwDfTmmKIn1lYNQAiHIsSLGMaD6CF3yGFFxC5Vu9WtjGlQ60UOy
+	Q4BgloNHbkwvChMYnO+355i5pha1GxRbPUdTrd6mvYaBUccsoS/rnsx/t69CMPNmh+bDgQ7LKqIkf
+	Sjd3SluVefNGGxsPirSouasiVgrHnm6V+d9KUEa831qxQ9pkwr7Uw7PFflXMznzSAxHEHWl7Kshw0
+	rtNYHKgA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1sYVYt-0000000CPTa-3gro;
+	Mon, 29 Jul 2024 18:57:35 +0000
+Date: Mon, 29 Jul 2024 11:57:35 -0700
+From: Christoph Hellwig <hch@infradead.org>
+To: Theodore Ts'o <tytso@mit.edu>
+Cc: Youling Tang <youling.tang@linux.dev>,
+	Christoph Hellwig <hch@infradead.org>,
+	David Sterba <dsterba@suse.cz>, Arnd Bergmann <arnd@arndb.de>,
+	kreijack@inwind.it, Luis Chamberlain <mcgrof@kernel.org>,
+	Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+	David Sterba <dsterba@suse.com>,
+	Andreas Dilger <adilger.kernel@dilger.ca>,
+	Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
+	Linux-Arch <linux-arch@vger.kernel.org>,
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+	linux-btrfs@vger.kernel.org, linux-ext4@vger.kernel.org,
+	linux-f2fs-devel@lists.sourceforge.net,
+	Youling Tang <tangyouling@kylinos.cn>
+Subject: Re: [PATCH 1/4] module: Add module_subinit{_noexit} and
+ module_subeixt helper macros
+Message-ID: <ZqfmH9vJo4ikr1RG@infradead.org>
+References: <68584887-3dec-4ce5-8892-86af50651c41@libero.it>
+ <ZqKreStOD-eRkKZU@infradead.org>
+ <91bfea9b-ad7e-4f35-a2c1-8cd41499b0c0@linux.dev>
+ <ZqOs84hdYkSV_YWd@infradead.org>
+ <20240726152237.GH17473@twin.jikos.cz>
+ <20240726175800.GC131596@mit.edu>
+ <ZqPmPufwqbGOTyGI@infradead.org>
+ <20240727145232.GA377174@mit.edu>
+ <23862652-a702-4a5d-b804-db9ee9f6f539@linux.dev>
+ <20240729024412.GD377174@mit.edu>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 6/7] Drivers: hv: vmbus: Get the IRQ number from DT
-To: Arnd Bergmann <arnd@arndb.de>, Krzysztof Kozlowski <krzk@kernel.org>,
- bhelgaas@google.com, Borislav Petkov <bp@alien8.de>,
- Catalin Marinas <catalin.marinas@arm.com>,
- Dave Hansen <dave.hansen@linux.intel.com>, Dexuan Cui <decui@microsoft.com>,
- Haiyang Zhang <haiyangz@microsoft.com>, "H. Peter Anvin" <hpa@zytor.com>,
- =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
- "K. Y. Srinivasan" <kys@microsoft.com>, Len Brown <lenb@kernel.org>,
- Lorenzo Pieralisi <lpieralisi@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- "Rafael J . Wysocki" <rafael@kernel.org>, Rob Herring <robh@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>, Wei Liu <wei.liu@kernel.org>,
- Will Deacon <will@kernel.org>, linux-acpi@vger.kernel.org,
- Linux-Arch <linux-arch@vger.kernel.org>,
- linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, x86@kernel.org
-Cc: apais@microsoft.com, benhill@microsoft.com, ssengar@microsoft.com,
- sunilmut@microsoft.com, vdso@hexbites.dev
-References: <20240726225910.1912537-1-romank@linux.microsoft.com>
- <20240726225910.1912537-7-romank@linux.microsoft.com>
- <7418bfcd-c572-4574-accc-7f2ae117529f@kernel.org>
- <ce8c1e88-2d2f-44de-bd43-c05e274c2660@app.fastmail.com>
-Content-Language: en-US
-From: Roman Kisel <romank@linux.microsoft.com>
-In-Reply-To: <ce8c1e88-2d2f-44de-bd43-c05e274c2660@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240729024412.GD377174@mit.edu>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-
-
-On 7/27/2024 2:17 AM, Arnd Bergmann wrote:
-> On Sat, Jul 27, 2024, at 10:56, Krzysztof Kozlowski wrote:
->> On 27/07/2024 00:59, Roman Kisel wrote:
->>> @@ -2338,6 +2372,21 @@ static int vmbus_device_add(struct platform_device *pdev)
->>>   		cur_res = &res->sibling;
->>>   	}
->>>   
->>> +	/*
->>> +	 * Hyper-V always assumes DMA cache coherency, and the DMA subsystem
->>> +	 * might default to 'not coherent' on some architectures.
->>> +	 * Avoid high-cost cache coherency maintenance done by the CPU.
->>> +	 */
->>> +#if defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_DEVICE) || \
->>> +	defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU) || \
->>> +	defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU_ALL)
->>> +
->>> +	if (!of_property_read_bool(np, "dma-coherent"))
->>> +		pr_warn("Assuming cache coherent DMA transactions, no 'dma-coherent' node supplied\n");
->>
->> Why do you need this property at all, if it is allways dma-coherent? Are
->> you supporting dma-noncoherent somewhere?
+On Sun, Jul 28, 2024 at 10:44:12PM -0400, Theodore Ts'o wrote:
+> >
+> > Personally, I prefer the implementation of method two.
 > 
-> It's just a sanity check that the DT is well-formed.
+> But there's also method zero --- keep things the way they are, and
+> don't try to add a new astraction.
 > 
-> Since the dma-coherent property is interpreted by common code, it's
-> not up to hv to change the default for the platform. I'm not sure
-> if the presence of CONFIG_ARCH_HAS_SYNC_DMA_* options is the correct
-> check to determine that an architecture defaults to noncoherent
-> though, as the function may be needed to do something else.
-I used the ifdef as the dma_coherent field is declared under these macros:
-
-#if defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_DEVICE) || \
-	defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU) || \
-	defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU_ALL)
-extern bool dma_default_coherent;
-static inline bool dev_is_dma_coherent(struct device *dev)
-{
-	return dev->dma_coherent;
-}
-#else
-#define dma_default_coherent true
-
-static inline bool dev_is_dma_coherent(struct device *dev)
-{
-	return true;
-}
-
-i.e., there is no API to set dma_coherent. As I see it, the options
-are either warn the user if they forgot to add `dma-coherent`
-
-if (!dev_is_dma_coherent(dev)) pr_warn("add dma-coherent to be faster\n"),
-
-or warn and force the flag to true. Maybe just warn
-the user I think now... The code will be cleaner (no need to emulate
-a-would-be set_dma_coherent) , and the user will
-know how to make the system perform at its best.
-
-Appreciate sharing the reservations about that piece!
-
+> Advantage:
 > 
-> The global "dma_default_coherent' may be a better thing to check
-> for. This is e.g. set on powerpc64, riscv and on specific mips
-> platforms, but it's never set on arm64 as far as I can tell.
+>  -- Code has worked for decades, so it is very well tested
+>  -- Very easy to understand and maintain
 > 
->       Arnd
+> Disadvantage
+> 
+>  --- A few extra lines of C code.
+> 
+> which we need to weigh against the other choices.
 
--- 
-Thank you,
-Roman
+I think option zero is the right option for you and David and anyone
+scared of link order issues.
+
+But I know for XFS or the nvme code having multiple initcalls per
+module would be extremely helpfu.  I don't really want to drag Youling
+into implementing something he is not behind, but I plan to try that
+out myself once I find a little time.
 
 
