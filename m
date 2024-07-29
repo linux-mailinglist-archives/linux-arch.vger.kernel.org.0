@@ -1,160 +1,126 @@
-Return-Path: <linux-arch+bounces-5675-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5676-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1FAD93F714
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jul 2024 15:54:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E8B793FB55
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jul 2024 18:36:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 743BA281D5D
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jul 2024 13:54:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5FAF01C21C64
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jul 2024 16:36:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 548ED146D54;
-	Mon, 29 Jul 2024 13:53:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1E4E15B999;
+	Mon, 29 Jul 2024 16:33:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DhKZrnP3"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="ZUDmSJGE"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC88914C5B0
-	for <linux-arch@vger.kernel.org>; Mon, 29 Jul 2024 13:53:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54569147C79;
+	Mon, 29 Jul 2024 16:33:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722261225; cv=none; b=aDXlqHLYY6ZbwzJ5jUAsi2tVM/+lYJ1iV72BcLcqfOL/vGHRpHEAIYRxI69FgzIMHSpNJtSdNZCFbZ2+2z4V8rLFCpfhTTtgoqlXa6jgjqoqMZVfPkxHUeB7kPTy1lRiKxuVunDbfjDnUEmQbo4MdKdvTbUJzZu8zNUVJBbBwP8=
+	t=1722270829; cv=none; b=jiU2TZrdHnOTVo39WvYD2XhUj+5Rc2VAYcWtRuZHzTVJ9njDk00oJAOIu21KqLlPZY2c3Mju6pgkzqPiqrjKYyhVNa5oMT13BVhbG+iinSgQ+HiSVzY51WSh5K4r2pXTTDaV/IaQj4ijMKn+JdkerVChbucw4Afrf1N1jkGKrOU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722261225; c=relaxed/simple;
-	bh=zevFigggh9gav77vOeUqQEZLN00S3klYyCxmhPrpO0k=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Y9LoHudwdHvJkJUf3hXV146PSQL8NDKQBeT39CIImQcZryp+KEkUpxSuIrijNedIVFbggdkglWy/pUhOkRnHWegXvDzesBBmg0vyg+ahFSg2m+4BfaY+Ql0pqy49kT0KfP2LvWrmZjnRKvJOFIru2ZxWS9dWwMt+Gt0bsQCwpnU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DhKZrnP3; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1722261219;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6yEq5CChoNdWngYsHC+lDcujFG99veLH/xTIPSOMsNE=;
-	b=DhKZrnP3TxhUnvl5fLyd12xOmSxvn4skU5fsVqsQEV2PT8pCCWG/snxQSYP+VTDtLyRo90
-	Gpjvpz1poJL9YSYjHOXtWRY8rEVO6jkk+BtlifOZvFf6yzfjiYvc+00vnClJDauvtOWjqT
-	W+zda9g/c/ZUCPEZV6kUQdqLMPJVYxs=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-400-qIFfQ4fRMzG1WUaVMTE8nA-1; Mon, 29 Jul 2024 09:53:38 -0400
-X-MC-Unique: qIFfQ4fRMzG1WUaVMTE8nA-1
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4281ca9f4dbso9672645e9.0
-        for <linux-arch@vger.kernel.org>; Mon, 29 Jul 2024 06:53:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722261217; x=1722866017;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6yEq5CChoNdWngYsHC+lDcujFG99veLH/xTIPSOMsNE=;
-        b=ppFsUbqqwix+bleg3fG/gKHmtV/jpNwkRZ2yPHCWoAXulsr5w8TquGEESJbgq14YHt
-         7/SM/nXOuXA41O1dfFh6bbAoqPKVDgOGb8bL3bfVdyeQapD9g3w/PJWjTbOvwXOf+vXR
-         Om6ZuHrSjuvr6wj2nAZBdH0ry19fDCMW0mkQ8dffsrLQWfdiG7f6Miw23jdnpqwvVCWI
-         830uyIv4wY691MX0tQeb2KtlXtY8EAIuhXUTwypAdSBaI1vN/ed9VWSomVjDInekuDtT
-         oTNC+ndblv9DNnAE45dp8XkO3Wwq60TdNi43TobBjjuwelJLR1pRX1qoHzQKZ5WYgxHN
-         a/gA==
-X-Forwarded-Encrypted: i=1; AJvYcCUTnWIkQ7TLGwon47gdwep0o6IzhjAafuvb+LmCHUWIqYcxKax8m+WeSDfqCzkyygSNYd3SplTFK2ESBDYXax8bl416veaX6cQ4KA==
-X-Gm-Message-State: AOJu0Yx8PvoDaOTNW3fFBEKMtn3+SAyEI6Y0E9f24NOf/s8b4yIklrq0
-	5XeKmKdklS6ydgY36wQ/XIw6c4Kiga55yrNxt0tcVZJ/I+edXB0gFp28G0KLU3wQ7dZ/wjfPPYO
-	PL+ohqlkCg98LbkJtlIGpbfR3sxlhC2h4SzZVqsp6jnTqHFgu1Pe67Z/MWU8=
-X-Received: by 2002:a05:600c:444d:b0:426:65bf:5cc2 with SMTP id 5b1f17b1804b1-42811d83c38mr50666495e9.1.1722261216887;
-        Mon, 29 Jul 2024 06:53:36 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEQ34nlwG6HFfNMqNvetJJ+pbG8/TxeOUBuPfISPhjduWTs2MRaELaUuF0Pc7fNro9Ocof+NQ==
-X-Received: by 2002:a05:600c:444d:b0:426:65bf:5cc2 with SMTP id 5b1f17b1804b1-42811d83c38mr50666185e9.1.1722261216359;
-        Mon, 29 Jul 2024 06:53:36 -0700 (PDT)
-Received: from fedora (g2.ign.cz. [91.219.240.8])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4280d13570bsm123111095e9.7.2024.07.29.06.53.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jul 2024 06:53:36 -0700 (PDT)
-From: Vitaly Kuznetsov <vkuznets@redhat.com>
-To: Nicolas Saenz Julienne <nsaenz@amazon.com>,
- linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc: pbonzini@redhat.com, seanjc@google.com, linux-doc@vger.kernel.org,
- linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, graf@amazon.de, dwmw2@infradead.org,
- pdurrant@amazon.com, mlevitsk@redhat.com, jgowans@amazon.com,
- corbet@lwn.net, decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
- bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
- amoorthy@google.com
-Subject: Re: [PATCH 01/18] KVM: x86: hyper-v: Introduce XMM output support
-In-Reply-To: <D2RVJ6QCVNOU.XC0OC54QHI51@amazon.com>
-References: <20240609154945.55332-1-nsaenz@amazon.com>
- <20240609154945.55332-2-nsaenz@amazon.com> <87tth0rku3.fsf@redhat.com>
- <D2RVJ6QCVNOU.XC0OC54QHI51@amazon.com>
-Date: Mon, 29 Jul 2024 15:53:34 +0200
-Message-ID: <878qxk5mox.fsf@redhat.com>
+	s=arc-20240116; t=1722270829; c=relaxed/simple;
+	bh=wcDxgonwgoBA/zGy+67qp1P4PGEmPqKogRz1aMKHZx8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RCYrpV3WvskVzWwkohc5w1xvIDd/RgCYJZRiR+7mLqNifWz4KqQLWyHVdPoJ8QGIeSxQUv5JKl1DM0O0HWyiC/HwIIkT+C/Oq3NHWurLQZWIP4t/qohfRwpR930j5CMWSFnv3iTpKUt54dGi1xR/8vyg9AMhlEFmQonjSMupRSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=ZUDmSJGE; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [10.137.186.190] (unknown [131.107.159.62])
+	by linux.microsoft.com (Postfix) with ESMTPSA id AEA0120B7165;
+	Mon, 29 Jul 2024 09:33:41 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com AEA0120B7165
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1722270822;
+	bh=Pe5a2f6xBZU/rfjsgpGCDuU34zxs5EfhIwpF9ZP48FE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=ZUDmSJGEKlgFu3BCYCt6kVfYlnI4eyFxaBwtFaduKGqJBCxQXD41+WwyJRuBfUrCe
+	 JfuA8ynk7np8yHVAVj2LZ6OSCILEhbjKQBW7yOEQ45HdrNJyF7XhwTHeszIIV2zbZm
+	 glBZOzJV3EzEJWSnBXkp6NnYrqjvD2b9++2ffHOU=
+Message-ID: <e7559a1f-600b-4f7d-b17c-53fbd2920201@linux.microsoft.com>
+Date: Mon, 29 Jul 2024 09:33:44 -0700
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 5/7] dt-bindings: bus: Add Hyper-V VMBus cache
+ coherency and IRQs
+To: Krzysztof Kozlowski <krzk@kernel.org>, arnd@arndb.de,
+ bhelgaas@google.com, bp@alien8.de, catalin.marinas@arm.com,
+ dave.hansen@linux.intel.com, decui@microsoft.com, haiyangz@microsoft.com,
+ hpa@zytor.com, kw@linux.com, kys@microsoft.com, lenb@kernel.org,
+ lpieralisi@kernel.org, mingo@redhat.com, rafael@kernel.org, robh@kernel.org,
+ tglx@linutronix.de, wei.liu@kernel.org, will@kernel.org,
+ linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, x86@kernel.org
+Cc: apais@microsoft.com, benhill@microsoft.com, ssengar@microsoft.com,
+ sunilmut@microsoft.com, vdso@hexbites.dev
+References: <20240726225910.1912537-1-romank@linux.microsoft.com>
+ <20240726225910.1912537-6-romank@linux.microsoft.com>
+ <c45516aa-3cf9-444e-8c71-f701dfd8a15b@kernel.org>
+Content-Language: en-US
+From: Roman Kisel <romank@linux.microsoft.com>
+In-Reply-To: <c45516aa-3cf9-444e-8c71-f701dfd8a15b@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Nicolas Saenz Julienne <nsaenz@amazon.com> writes:
 
-> Hi Vitaly,
-> Thanks for having a look at this.
->
-> On Mon Jul 8, 2024 at 2:59 PM UTC, Vitaly Kuznetsov wrote:
->> Nicolas Saenz Julienne <nsaenz@amazon.com> writes:
+
+On 7/27/2024 1:53 AM, Krzysztof Kozlowski wrote:
+> On 27/07/2024 00:59, Roman Kisel wrote:
+>> Add dt-bindings for the Hyper-V VMBus DMA cache coherency
+>> and interrupt specification.
 >>
->> > Prepare infrastructure to be able to return data through the XMM
->> > registers when Hyper-V hypercalls are issues in fast mode. The XMM
->> > registers are exposed to user-space through KVM_EXIT_HYPERV_HCALL and
->> > restored on successful hypercall completion.
->> >
->> > Signed-off-by: Nicolas Saenz Julienne <nsaenz@amazon.com>
->> >
->> > ---
->> >
->> > There was some discussion in the RFC about whether growing 'struct
->> > kvm_hyperv_exit' is ABI breakage. IMO it isn't:
->> > - There is padding in 'struct kvm_run' that ensures that a bigger
->> >   'struct kvm_hyperv_exit' doesn't alter the offsets within that struct.
->> > - Adding a new field at the bottom of the 'hcall' field within the
->> >   'struct kvm_hyperv_exit' should be fine as well, as it doesn't alter
->> >   the offsets within that struct either.
->> > - Ultimately, previous updates to 'struct kvm_hyperv_exit's hint that
->> >   its size isn't part of the uABI. It already grew when syndbg was
->> >   introduced.
->>
->> Yes but SYNDBG exit comes with KVM_EXIT_HYPERV_SYNDBG. While I don't see
->> any immediate issues with the current approach, we may want to introduce
->> something like KVM_EXIT_HYPERV_HCALL_XMM: the userspace must be prepared
->> to handle this new information anyway and it is better to make
->> unprepared userspace fail with 'unknown exit' then to mishandle a
->> hypercall by ignoring XMM portion of the data.
->
-> OK, I'll go that way. Just wanted to get a better understanding of why
-> you felt it was necessary.
->
+> 
+> You did not add any bindings. I don't understand this description.
+> 
+My bad, extended the example for the interrupt controller node.
+Will fix in the next version.
 
-(sorry for delayed reply, I was on vacation)
+> Anyway, not tested.
+> 
+Understood. I didn't realize that yml goes through testing, thought it
+was akin to a machine-readable portion of the documentation.
 
-I don't think it's an absolute must but it appears as a cleaner approach
-to me. 
+> <form letter>
+> Please use scripts/get_maintainers.pl to get a list of necessary people
+> and lists to CC. It might happen, that command when run on an older
+> kernel, gives you outdated entries. Therefore please be sure you base
+> your patches on recent Linux kernel.
+I used the "cached" version of the get_maintainers.pl output produced 
+for v2. The bad assumption was that adding a yml do Documentation would 
+not affect that. Will fix, appreciate helping me so much in getting this 
+into a good shape!
 
-Imagine there's some userspace which handles KVM_EXIT_HYPERV_HCALL today
-and we want to add XMM handling there. How would we know if xmm portion
-of the data is actually filled by KVM or not? With your patch, we can of
-course check for HV_X64_HYPERCALL_XMM_OUTPUT_AVAILABLE in
-KVM_GET_SUPPORTED_HV_CPUID but this is not really straightforward, is
-it? Checking the size is not good either. E.g. think about downstream
-versions of KVM which may or may not have certain backports. In case we
-(theoretically) do several additions to 'struct kvm_hyperv_exit', it
-will quickly become a nightmare.
-
-On the contrary, KVM_EXIT_HYPERV_HCALL_XMM (or just
-KVM_EXIT_HYPERV_HCALL2) approach looks cleaner: once userspace sees it,
-it knows that 'xmm' portion of the data can be relied upon.
+> 
+> Tools like b4 or scripts/get_maintainer.pl provide you proper list of
+> people, so fix your workflow. Tools might also fail if you work on some
+> ancient tree (don't, instead use mainline) or work on fork of kernel
+> (don't, instead use mainline). Just use b4 and everything should be
+> fine, although remember about `b4 prep --auto-to-cc` if you added new
+> patches to the patchset.
+> 
+> You missed at least devicetree list (maybe more), so this won't be
+> tested by automated tooling. Performing review on untested code might be
+> a waste of time.
+> 
+> Please kindly resend and include all necessary To/Cc entries.
+> </form letter>
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
 
 -- 
-Vitaly
+Thank you,
+Roman
 
 
