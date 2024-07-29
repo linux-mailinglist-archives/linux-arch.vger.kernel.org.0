@@ -1,143 +1,169 @@
-Return-Path: <linux-arch+bounces-5670-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5671-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D3B693EE8F
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jul 2024 09:36:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CC2B93F024
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jul 2024 10:51:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A92E31C219EE
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jul 2024 07:36:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1E2D31F2218B
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jul 2024 08:51:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4995C12D773;
-	Mon, 29 Jul 2024 07:36:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A558B13B597;
+	Mon, 29 Jul 2024 08:51:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fa6fveY5"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="leoCy3lX"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1133312D758;
-	Mon, 29 Jul 2024 07:36:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E5CF328B6;
+	Mon, 29 Jul 2024 08:51:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722238587; cv=none; b=PrnVCAh71yXWJBCzz558VYmmJLQpnnGRMutyBYqiGvNZn7i8idXuCow3OEs9Yicwmn7Z39+GXTz+bZP2aAphznWVIm5x/MVjN6EUs4EKElpqecJy6HL4FQ8GlrN/Wb0M5n709f7+Ml2MCAHVvXUnbMRU36M3Ul4R8D/tFZY9VQs=
+	t=1722243086; cv=none; b=aM+t5kr+avTijml+epLPFp6nOQYqy+i5zmNvQ5ZQ/Fson6iL1v76jdFBhKeAjMQm1TRFIBsCgUWHdfonmPJL7hptIDfAQQGHdihzb0fznKtWCFwrFUp2aZlxMBgZs6/4RB+9lNBX4RehQ7rua7TnWrWSHZTB7Vc43+898lFMPU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722238587; c=relaxed/simple;
-	bh=I7SM50EkhC2nL2ONJulc7JgZPylZSIxXMjC88jHd45E=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GmNaPuuT6l8QaQHBW4ixf+pNsAw08Z1mMGCYLr2A39SzdaEvxjlcGnt+Ulbz8JoKb2nGJw9P5fEJbKa13KPi1ejCJfFSzA5UqdOeQlXtUdulFidL4NSpsl3h9mxvG5SCF/swWYpGo0IufybH82eo8cAbcztfwaTbxa+9f0kd1VE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fa6fveY5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D8ACC4AF1D;
-	Mon, 29 Jul 2024 07:36:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722238586;
-	bh=I7SM50EkhC2nL2ONJulc7JgZPylZSIxXMjC88jHd45E=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Fa6fveY5Ozp8Qi0n3/hPO5DEd1iGrETkxxvEaxa2i8VIOrt9BWpJ4/r9gOd+QIXwJ
-	 JO+HzPBJUvPG6z6MpyCp9NcOh+P4gPsC6BU7o+qv29WgvbVlXkZ3C29uHh6JHWex+K
-	 kIpnBY0Rpy9gQOZe3A243Hdm+DPesmd8KhhPrHyutUtjjlwMzctdHFD6/joCgVlJt7
-	 tNsLT8oUQDeu1l5kwcMRHTkqlfzD2/n20qDKMWxx+nQNyEnfb4F5izjYZv+PrGW8TA
-	 Q0iaUB92LfW7JeSUJV6MVDt+0aLs608/WwPxq41g341/jrptITnIkbkftwjWMTWYlN
-	 UzMrR5qb/yXRw==
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2ef2ed592f6so35690621fa.0;
-        Mon, 29 Jul 2024 00:36:26 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVNMwrdGTqu71H7eZwuZDSGQYmVS6gZIscH0Pf5YpkJNAs0zIH0mFHehzXR48cPRXI52Lr093reR2xgi0B743etvRkTkQ4fiKEZmEqvGuKtryjlnLqFnfa73BHi8tOu8j+9LJZmulW9Wl8b2JtUmSU8E/WYQUDsE1fwl3Qb6MmEObMyiJ/4dI3y5UgJckCT4Ae3SbT/92KEHeYPAmKC6kS8VkDW2l1CazUadh9GzXug+kWfOILb/lGy8DLcWQ==
-X-Gm-Message-State: AOJu0YxnM0UdeObyFPn7cwdBODzEkh7cNriOMCZrxsnWyt+CxotIvk0m
-	pWaLpdqREJ8Ff8DXT4MiC10bFDahI7HbkQ6uFRTJE+uHMN0KwA9GFn0VEJYpmG3hf6sbzeRSEoB
-	+VOHsm7MEP9Jgu8aggZwt+LyIkIk=
-X-Google-Smtp-Source: AGHT+IH5q1QJoJgi2M+CBahXKgkZVjCTvPJ0BnyNWvUsOEOWg5UXlc8Ue86En+VxK2Wx5SAGgAROLzJpHmdnKGVd0n4=
-X-Received: by 2002:a2e:b4ba:0:b0:2ef:2311:cc66 with SMTP id
- 38308e7fff4ca-2f12ee62913mr36565691fa.44.1722238584976; Mon, 29 Jul 2024
- 00:36:24 -0700 (PDT)
+	s=arc-20240116; t=1722243086; c=relaxed/simple;
+	bh=t036mvc+S68XKyD1LE/5fTRSY8CMezFH4ZsbUu+gbu0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NUw2H9+mmea/EKHWyEmhAzkZkn1bpD3mYvCGq2+sJfvyijBKg/+S2o4apn3Bj0a/Lveaw4z+WK/8X4xcSWa2L9E6HJwwGSzoullfXq9ikxhHEe3WwZXtPkHM/E6+eoFKlvLqsApiwjB6lqMD+CbETvT0543fNjaEHMxx6Y4Lv14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=leoCy3lX; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=K4Jpsm5DX88VFcPkZAIC2BbJowza/7NzQCGPZM8v4Pg=; b=leoCy3lXxnAROtLduJbi58x+ak
+	vI83fhz1KRN0OKOHF9/v9rOWLljOxxQE7kKJxogxjurDjS6RQ7Gsx3t74CsbpZTpaj+k+wK9Z0LNG
+	qNga4tYbc/8WfSawf2actItMHYw04fFsFPlDzr+IRYRE1lavh/WGNDmfceEkkWRt+vs3iHiGkfeYa
+	9NnvhaB3hJ138b7JRaq92Ko7cxrCNOoneGqQUq2hEFtOwhk7AOnKCrhP4JXFlmHl3lfCb41YrS1MW
+	HVfC435p+KCfRPZQ57xdgXwVJxwCktblqaOG4l0iH99dtxLgBeAk1DfWF+YmJdFUxNld25x0vMWnD
+	S4k9Ho0g==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1sYM5l-0000000DOBC-20zs;
+	Mon, 29 Jul 2024 08:50:53 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 4B394300439; Mon, 29 Jul 2024 10:50:52 +0200 (CEST)
+Date: Mon, 29 Jul 2024 10:50:52 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Rong Xu <xur@google.com>
+Cc: Han Shen <shenhan@google.com>, Sriraman Tallam <tmsriram@google.com>,
+	David Li <davidxl@google.com>, Jonathan Corbet <corbet@lwn.net>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H . Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Josh Poimboeuf <jpoimboe@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Vegard Nossum <vegard.nossum@oracle.com>,
+	John Moon <john@jmoon.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	"Paul E . McKenney" <paulmck@kernel.org>,
+	Rafael Aquini <aquini@redhat.com>, Petr Pavlu <petr.pavlu@suse.com>,
+	Eric DeVolder <eric.devolder@oracle.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Benjamin Segall <bsegall@google.com>,
+	Breno Leitao <leitao@debian.org>,
+	Wei Yang <richard.weiyang@gmail.com>,
+	Brian Gerst <brgerst@gmail.com>, Juergen Gross <jgross@suse.com>,
+	Palmer Dabbelt <palmer@rivosinc.com>,
+	Alexandre Ghiti <alexghiti@rivosinc.com>,
+	Kees Cook <kees@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Xiao Wang <xiao.w.wang@intel.com>,
+	Jan Kiszka <jan.kiszka@siemens.com>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-efi@vger.kernel.org, linux-arch@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH 0/6] Add AutoFDO and Propeller support for Clang build
+Message-ID: <20240729085052.GA37996@noisy.programming.kicks-ass.net>
+References: <20240728203001.2551083-1-xur@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240728203001.2551083-1-xur@google.com> <20240728203001.2551083-7-xur@google.com>
- <63eb1654-c614-4f6a-9bc5-8c8085eadf8c@app.fastmail.com>
-In-Reply-To: <63eb1654-c614-4f6a-9bc5-8c8085eadf8c@app.fastmail.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Mon, 29 Jul 2024 16:35:48 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAT9EU1ZAUh9SAEQ4Ar5LY-wUstaCjGLt7=Kr=uJMNfJvQ@mail.gmail.com>
-Message-ID: <CAK7LNAT9EU1ZAUh9SAEQ4Ar5LY-wUstaCjGLt7=Kr=uJMNfJvQ@mail.gmail.com>
-Subject: Re: [PATCH 6/6] Add Propeller configuration for kernel build.
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Rong Xu <xur@google.com>, Han Shen <shenhan@google.com>, 
-	Sriraman Tallam <tmsriram@google.com>, David Li <davidxl@google.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Vegard Nossum <vegard.nossum@oracle.com>, John Moon <john@jmoon.dev>, 
-	Andrew Morton <akpm@linux-foundation.org>, Heiko Carstens <hca@linux.ibm.com>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Samuel Holland <samuel.holland@sifive.com>, 
-	Mike Rapoport <rppt@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>, Rafael Aquini <aquini@redhat.com>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Eric DeVolder <eric.devolder@oracle.com>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Randy Dunlap <rdunlap@infradead.org>, 
-	Benjamin Segall <bsegall@google.com>, Breno Leitao <leitao@debian.org>, 
-	Wei Yang <richard.weiyang@gmail.com>, Brian Gerst <brgerst@gmail.com>, 
-	Juergen Gross <jgross@suse.com>, Palmer Dabbelt <palmer@rivosinc.com>, 
-	Alexandre Ghiti <alexghiti@rivosinc.com>, Kees Cook <kees@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Xiao W Wang <xiao.w.wang@intel.com>, 
-	Jan Kiszka <jan.kiszka@siemens.com>, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-efi@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>, 
-	llvm@lists.linux.dev, Krzysztof Pszeniczny <kpszeniczny@google.com>, 
-	Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240728203001.2551083-1-xur@google.com>
 
-On Mon, Jul 29, 2024 at 4:02=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote=
-:
->
-> On Sun, Jul 28, 2024, at 22:29, Rong Xu wrote:
-> >  Documentation/dev-tools/index.rst     |   1 +
-> >  Documentation/dev-tools/propeller.rst | 188 ++++++++++++++++++++++++++
-> >  MAINTAINERS                           |   7 +
-> >  Makefile                              |   1 +
-> >  arch/Kconfig                          |  22 +++
-> >  arch/x86/Kconfig                      |   1 +
-> >  arch/x86/boot/compressed/Makefile     |   3 +
-> >  arch/x86/kernel/vmlinux.lds.S         |   4 +
-> >  arch/x86/platform/efi/Makefile        |   1 +
-> >  drivers/firmware/efi/libstub/Makefile |   2 +
-> >  include/asm-generic/vmlinux.lds.h     |   8 +-
-> >  scripts/Makefile.lib                  |  10 ++
-> >  scripts/Makefile.propeller            |  25 ++++
-> >  tools/objtool/check.c                 |   1 +
->
-> I have not looked in much detail, but I see that you need
-> a special case for arch/x86/boot/compressed and
-> drivers/firmware/efi, which makes it likely that you
-> need to also disable properller support for
-> arch/x86/purgatory/Makefile, which tends to have similar
-> requirements.
->
->      Arnd
+On Sun, Jul 28, 2024 at 01:29:53PM -0700, Rong Xu wrote:
+> Hi,
+> 
+> This patch series is to integrate AutoFDO and Propeller support into
+> the Linux kernel. AutoFDO is a profile-guided optimization technique
+> that leverages hardware sampling to enhance binary performance.
+> Unlike Instrumentation-based FDO (iFDO), AutoFDO offers a user-friendly
+> and straightforward application process. While iFDO generally yields
+> superior profile quality and performance, our findings reveal that
+> AutoFDO achieves remarkable effectiveness, bringing performance close
+> to iFDO for benchmark applications. Similar to AutoFDO, Propeller too
+> utilizes hardware sampling to collect profiles and apply post-link
+> optimizations to improve the benchmark’s performance over and above
+> AutoFDO.
+> 
+> Our empirical data demonstrates significant performance improvements
+> with AutoFDO and Propeller, up to 10% on microbenchmarks and up to 5%
+> on large warehouse-scale benchmarks. This makes a strong case for their
+> inclusion as supported features in the upstream kernel.
+> 
+> Background
+> 
+> A significant fraction of fleet processing cycles (excluding idle time)
+> from data center workloads are attributable to the kernel. Ware-house
+> scale workloads maximize performance by optimizing the production kernel
+> using iFDO (a.k.a instrumented PGO, Profile Guided Optimization).
+> 
+> iFDO can significantly enhance application performance but its use
+> within the kernel has raised concerns. AutoFDO is a variant of FDO that
+> uses the hardware’s Performance Monitoring Unit (PMU) to collect
+> profiling data. While AutoFDO typically yields smaller performance
+> gains than iFDO, it presents unique benefits for optimizing kernels.
+> 
+> AutoFDO eliminates the need for instrumented kernels, allowing a single
+> optimized kernel to serve both execution and profile collection. It also
+> minimizes slowdown during profile collection, potentially yielding
+> higher-fidelity profiling, especially for time-sensitive code, compared
+> to iFDO. Additionally, AutoFDO profiles can be obtained from production
+> environments via the hardware’s PMU whereas iFDO profiles require
+> carefully curated load tests that are representative of real-world
+> traffic.
+> 
+> AutoFDO facilitates profile collection across diverse targets.
+> Preliminary studies indicate significant variation in kernel hot spots
+> within Google’s infrastructure, suggesting potential performance gains
+> through target-specific kernel customization.
+> 
+> Furthermore, other advanced compiler optimization techniques, including
+> ThinLTO and Propeller can be stacked on top of AutoFDO, similar to iFDO.
+> ThinLTO achieves better runtime performance through whole-program
+> analysis and cross module optimizations. The main difference between
+> traditional LTO and ThinLTO is that the latter is scalable in time and
+> memory. 
 
+This, 
 
+> Propeller is a profile-guided, post-link optimizer that improves
+> the performance of large-scale applications compiled with LLVM. It
+> operates by relinking the binary based on an additional round of runtime
+> profiles, enabling precise optimizations that are not possible at
+> compile time.
 
-
-I applied the following commits:
-
- - 9c2d1328f88adb6cbfb218163623254b96f680d3
- - 7f7f6f7ad654b326897c9f54438a06f03454bd0d
-
-
-
-This might be another case to apply a similar approach
-instead of sprinkling PROPELLER__PROFILE=3Dn.
-
-
-
-
---=20
-Best Regards
-Masahiro Yamada
+should be on top somewhere, not hidden away inside a giant wall of text
+somewhere at the end.
 
