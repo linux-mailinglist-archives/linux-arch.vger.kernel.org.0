@@ -1,123 +1,160 @@
-Return-Path: <linux-arch+bounces-5674-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5675-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2466F93F1E4
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jul 2024 11:57:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1FAD93F714
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jul 2024 15:54:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C57A7285A25
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Jul 2024 09:57:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 743BA281D5D
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Jul 2024 13:54:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B8871419BA;
-	Mon, 29 Jul 2024 09:53:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 548ED146D54;
+	Mon, 29 Jul 2024 13:53:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="nNxfuwMT"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DhKZrnP3"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74FE01422C5;
-	Mon, 29 Jul 2024 09:53:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC88914C5B0
+	for <linux-arch@vger.kernel.org>; Mon, 29 Jul 2024 13:53:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722246820; cv=none; b=uzSZF02cuIoxY9k4gsaTi1LPK4+alM6ybWS2N5qp7BOgpOkQzdXO+3XDNvsZGV+s73wa+rfjOQmVlxf3Po3MiKVd+CxLuorL/jjQpn74LIBOCnSA8Gyf6JYAKBu6t1Jflcg4N8TQvlh/74PIYgDFSa+CXCY4lUa2YLPP5ui8Bhw=
+	t=1722261225; cv=none; b=aDXlqHLYY6ZbwzJ5jUAsi2tVM/+lYJ1iV72BcLcqfOL/vGHRpHEAIYRxI69FgzIMHSpNJtSdNZCFbZ2+2z4V8rLFCpfhTTtgoqlXa6jgjqoqMZVfPkxHUeB7kPTy1lRiKxuVunDbfjDnUEmQbo4MdKdvTbUJzZu8zNUVJBbBwP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722246820; c=relaxed/simple;
-	bh=waGwMlMybwNO3CltygzQrDphXSMn46LZiyi6g/R+yFc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eYC4tEmfx2rIXTlvcVQUtpx7Aic5seBrN47nxOtehhPIgoWUkl7tUEsCu2HhIKzox1EW/AflVt142frT0xzokB6wgG8ijsjtImpDkNG0sNG8/+mT/Lk3C9bFWR6uyo/uYsR/B5CqwGDTN0ZGuRGuPP6AQ6dNg/KKQRGgTNe7G7o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=nNxfuwMT; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=jjG+pKIqGn1D+6CeUBJo2nl6wL62M7n6k540Ij2MXrA=; b=nNxfuwMT+vQO2UECrfkJeM/Ij8
-	klMYiiXJ2Fe+pRKQGp8v0P+WGTRieUHCYRFial9e21r3/M5G6rlbH/Lw6Q+4zrKsi1dRBhNEZvPO3
-	fYpMrXvrRt00mrbQTlz7dHIcekYQYFM868EC29eRAdp6ChUHTx/yq4WfvHhIB24JVpxpW+aCYJpuM
-	h8aJTxiFg9bTN3JmB7twL3/lCYjjlb8cCNTn3u4b4uABIDcGApJYChhOXskIGhBHuvhekQrFcNUZE
-	TqjJ5bkzJ1/L3LKv3VQWsbldpxPjGM/bcwdAFsGotHdZIJZuTk+ouFKWSHR9458/SoxoaqEudAsZf
-	+000/EFw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sYN3v-00000004lAr-2tHM;
-	Mon, 29 Jul 2024 09:53:04 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 2D409300439; Mon, 29 Jul 2024 11:53:03 +0200 (CEST)
-Date: Mon, 29 Jul 2024 11:53:03 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Rong Xu <xur@google.com>
-Cc: Han Shen <shenhan@google.com>, Sriraman Tallam <tmsriram@google.com>,
-	David Li <davidxl@google.com>, Jonathan Corbet <corbet@lwn.net>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H . Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Josh Poimboeuf <jpoimboe@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Vegard Nossum <vegard.nossum@oracle.com>,
-	John Moon <john@jmoon.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Samuel Holland <samuel.holland@sifive.com>,
-	Mike Rapoport <rppt@kernel.org>,
-	"Paul E . McKenney" <paulmck@kernel.org>,
-	Rafael Aquini <aquini@redhat.com>, Petr Pavlu <petr.pavlu@suse.com>,
-	Eric DeVolder <eric.devolder@oracle.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Benjamin Segall <bsegall@google.com>,
-	Breno Leitao <leitao@debian.org>,
-	Wei Yang <richard.weiyang@gmail.com>,
-	Brian Gerst <brgerst@gmail.com>, Juergen Gross <jgross@suse.com>,
-	Palmer Dabbelt <palmer@rivosinc.com>,
-	Alexandre Ghiti <alexghiti@rivosinc.com>,
-	Kees Cook <kees@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Xiao Wang <xiao.w.wang@intel.com>,
-	Jan Kiszka <jan.kiszka@siemens.com>, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	linux-efi@vger.kernel.org, linux-arch@vger.kernel.org,
-	llvm@lists.linux.dev, Krzysztof Pszeniczny <kpszeniczny@google.com>,
-	Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH 6/6] Add Propeller configuration for kernel build.
-Message-ID: <20240729095303.GD37996@noisy.programming.kicks-ass.net>
-References: <20240728203001.2551083-1-xur@google.com>
- <20240728203001.2551083-7-xur@google.com>
+	s=arc-20240116; t=1722261225; c=relaxed/simple;
+	bh=zevFigggh9gav77vOeUqQEZLN00S3klYyCxmhPrpO0k=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Y9LoHudwdHvJkJUf3hXV146PSQL8NDKQBeT39CIImQcZryp+KEkUpxSuIrijNedIVFbggdkglWy/pUhOkRnHWegXvDzesBBmg0vyg+ahFSg2m+4BfaY+Ql0pqy49kT0KfP2LvWrmZjnRKvJOFIru2ZxWS9dWwMt+Gt0bsQCwpnU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DhKZrnP3; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1722261219;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=6yEq5CChoNdWngYsHC+lDcujFG99veLH/xTIPSOMsNE=;
+	b=DhKZrnP3TxhUnvl5fLyd12xOmSxvn4skU5fsVqsQEV2PT8pCCWG/snxQSYP+VTDtLyRo90
+	Gpjvpz1poJL9YSYjHOXtWRY8rEVO6jkk+BtlifOZvFf6yzfjiYvc+00vnClJDauvtOWjqT
+	W+zda9g/c/ZUCPEZV6kUQdqLMPJVYxs=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-400-qIFfQ4fRMzG1WUaVMTE8nA-1; Mon, 29 Jul 2024 09:53:38 -0400
+X-MC-Unique: qIFfQ4fRMzG1WUaVMTE8nA-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4281ca9f4dbso9672645e9.0
+        for <linux-arch@vger.kernel.org>; Mon, 29 Jul 2024 06:53:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722261217; x=1722866017;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6yEq5CChoNdWngYsHC+lDcujFG99veLH/xTIPSOMsNE=;
+        b=ppFsUbqqwix+bleg3fG/gKHmtV/jpNwkRZ2yPHCWoAXulsr5w8TquGEESJbgq14YHt
+         7/SM/nXOuXA41O1dfFh6bbAoqPKVDgOGb8bL3bfVdyeQapD9g3w/PJWjTbOvwXOf+vXR
+         Om6ZuHrSjuvr6wj2nAZBdH0ry19fDCMW0mkQ8dffsrLQWfdiG7f6Miw23jdnpqwvVCWI
+         830uyIv4wY691MX0tQeb2KtlXtY8EAIuhXUTwypAdSBaI1vN/ed9VWSomVjDInekuDtT
+         oTNC+ndblv9DNnAE45dp8XkO3Wwq60TdNi43TobBjjuwelJLR1pRX1qoHzQKZ5WYgxHN
+         a/gA==
+X-Forwarded-Encrypted: i=1; AJvYcCUTnWIkQ7TLGwon47gdwep0o6IzhjAafuvb+LmCHUWIqYcxKax8m+WeSDfqCzkyygSNYd3SplTFK2ESBDYXax8bl416veaX6cQ4KA==
+X-Gm-Message-State: AOJu0Yx8PvoDaOTNW3fFBEKMtn3+SAyEI6Y0E9f24NOf/s8b4yIklrq0
+	5XeKmKdklS6ydgY36wQ/XIw6c4Kiga55yrNxt0tcVZJ/I+edXB0gFp28G0KLU3wQ7dZ/wjfPPYO
+	PL+ohqlkCg98LbkJtlIGpbfR3sxlhC2h4SzZVqsp6jnTqHFgu1Pe67Z/MWU8=
+X-Received: by 2002:a05:600c:444d:b0:426:65bf:5cc2 with SMTP id 5b1f17b1804b1-42811d83c38mr50666495e9.1.1722261216887;
+        Mon, 29 Jul 2024 06:53:36 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEQ34nlwG6HFfNMqNvetJJ+pbG8/TxeOUBuPfISPhjduWTs2MRaELaUuF0Pc7fNro9Ocof+NQ==
+X-Received: by 2002:a05:600c:444d:b0:426:65bf:5cc2 with SMTP id 5b1f17b1804b1-42811d83c38mr50666185e9.1.1722261216359;
+        Mon, 29 Jul 2024 06:53:36 -0700 (PDT)
+Received: from fedora (g2.ign.cz. [91.219.240.8])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4280d13570bsm123111095e9.7.2024.07.29.06.53.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Jul 2024 06:53:36 -0700 (PDT)
+From: Vitaly Kuznetsov <vkuznets@redhat.com>
+To: Nicolas Saenz Julienne <nsaenz@amazon.com>,
+ linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc: pbonzini@redhat.com, seanjc@google.com, linux-doc@vger.kernel.org,
+ linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, graf@amazon.de, dwmw2@infradead.org,
+ pdurrant@amazon.com, mlevitsk@redhat.com, jgowans@amazon.com,
+ corbet@lwn.net, decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
+ bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+ amoorthy@google.com
+Subject: Re: [PATCH 01/18] KVM: x86: hyper-v: Introduce XMM output support
+In-Reply-To: <D2RVJ6QCVNOU.XC0OC54QHI51@amazon.com>
+References: <20240609154945.55332-1-nsaenz@amazon.com>
+ <20240609154945.55332-2-nsaenz@amazon.com> <87tth0rku3.fsf@redhat.com>
+ <D2RVJ6QCVNOU.XC0OC54QHI51@amazon.com>
+Date: Mon, 29 Jul 2024 15:53:34 +0200
+Message-ID: <878qxk5mox.fsf@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240728203001.2551083-7-xur@google.com>
+Content-Type: text/plain
 
-On Sun, Jul 28, 2024 at 01:29:59PM -0700, Rong Xu wrote:
-> Add the build support for using Clang's Propeller optimizer. Like
-> AutoFDO, Propeller uses hardware sampling to gather information
-> about the frequency of execution of different code paths within a
-> binary. This information is then used to guide the compiler's
-> optimization decisions, resulting in a more efficient binary.
-> 
-> The support requires a Clang compiler LLVM 19 or later, and the
-> create_llvm_prof tool
-> (https://github.com/google/autofdo/releases/tag/v0.30.1). This
+Nicolas Saenz Julienne <nsaenz@amazon.com> writes:
 
-What's the relation between this and llvm-profgen? Is the above simply
-a google 'internal' proof of concept thing that will eventually make its
-way into llvm-profgen?
+> Hi Vitaly,
+> Thanks for having a look at this.
+>
+> On Mon Jul 8, 2024 at 2:59 PM UTC, Vitaly Kuznetsov wrote:
+>> Nicolas Saenz Julienne <nsaenz@amazon.com> writes:
+>>
+>> > Prepare infrastructure to be able to return data through the XMM
+>> > registers when Hyper-V hypercalls are issues in fast mode. The XMM
+>> > registers are exposed to user-space through KVM_EXIT_HYPERV_HCALL and
+>> > restored on successful hypercall completion.
+>> >
+>> > Signed-off-by: Nicolas Saenz Julienne <nsaenz@amazon.com>
+>> >
+>> > ---
+>> >
+>> > There was some discussion in the RFC about whether growing 'struct
+>> > kvm_hyperv_exit' is ABI breakage. IMO it isn't:
+>> > - There is padding in 'struct kvm_run' that ensures that a bigger
+>> >   'struct kvm_hyperv_exit' doesn't alter the offsets within that struct.
+>> > - Adding a new field at the bottom of the 'hcall' field within the
+>> >   'struct kvm_hyperv_exit' should be fine as well, as it doesn't alter
+>> >   the offsets within that struct either.
+>> > - Ultimately, previous updates to 'struct kvm_hyperv_exit's hint that
+>> >   its size isn't part of the uABI. It already grew when syndbg was
+>> >   introduced.
+>>
+>> Yes but SYNDBG exit comes with KVM_EXIT_HYPERV_SYNDBG. While I don't see
+>> any immediate issues with the current approach, we may want to introduce
+>> something like KVM_EXIT_HYPERV_HCALL_XMM: the userspace must be prepared
+>> to handle this new information anyway and it is better to make
+>> unprepared userspace fail with 'unknown exit' then to mishandle a
+>> hypercall by ignoring XMM portion of the data.
+>
+> OK, I'll go that way. Just wanted to get a better understanding of why
+> you felt it was necessary.
+>
 
-It seems a bit weird LLVM landed propeller without the required profile
-generation tool.
+(sorry for delayed reply, I was on vacation)
+
+I don't think it's an absolute must but it appears as a cleaner approach
+to me. 
+
+Imagine there's some userspace which handles KVM_EXIT_HYPERV_HCALL today
+and we want to add XMM handling there. How would we know if xmm portion
+of the data is actually filled by KVM or not? With your patch, we can of
+course check for HV_X64_HYPERCALL_XMM_OUTPUT_AVAILABLE in
+KVM_GET_SUPPORTED_HV_CPUID but this is not really straightforward, is
+it? Checking the size is not good either. E.g. think about downstream
+versions of KVM which may or may not have certain backports. In case we
+(theoretically) do several additions to 'struct kvm_hyperv_exit', it
+will quickly become a nightmare.
+
+On the contrary, KVM_EXIT_HYPERV_HCALL_XMM (or just
+KVM_EXIT_HYPERV_HCALL2) approach looks cleaner: once userspace sees it,
+it knows that 'xmm' portion of the data can be relied upon.
+
+-- 
+Vitaly
+
 
