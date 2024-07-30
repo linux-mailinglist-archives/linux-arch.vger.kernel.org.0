@@ -1,63 +1,63 @@
-Return-Path: <linux-arch+bounces-5722-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5723-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E67C940ED7
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Jul 2024 12:20:26 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6938941020
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Jul 2024 13:01:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 558692824C3
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Jul 2024 10:20:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DCD9EB247AA
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Jul 2024 10:41:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CF9E194A6B;
-	Tue, 30 Jul 2024 10:20:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6CB119AD81;
+	Tue, 30 Jul 2024 10:35:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="RJlGkIxR"
+	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="Lo0HYcEB"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from GBR01-CWX-obe.outbound.protection.outlook.com (mail-cwxgbr01on2128.outbound.protection.outlook.com [40.107.121.128])
+Received: from LO2P265CU024.outbound.protection.outlook.com (mail-uksouthazon11021134.outbound.protection.outlook.com [52.101.95.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41F73208DA;
-	Tue, 30 Jul 2024 10:20:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.121.128
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1200D1990AD;
+	Tue, 30 Jul 2024 10:35:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.95.134
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722334822; cv=fail; b=XLFPoGdn7iYGqikLXR0Rbk3qT2q1MLeWiARsgO1GrH41i9sbmkjCzygy6PfQQdAPlxOoTToli+Aiqxb1dBT11/0rADtC0pL/fpQwt+DUENC7HPO3ug6i6iRf4Fc1C4jMcmZDb4eqHrYjwZpcB/qxuU68riU8mfVrS86rzSAtktI=
+	t=1722335735; cv=fail; b=fjOHUidLB6L4DA1RA6bZvIPhiUSQjS1O5jyqA8oSLzvRSSn/q9qDqyKpT94CWC/g9i2/3eP0BU1mzNyRNXtJE+FhXR1N7afPEOtL/5+egMaNR6TYxAhHvske2/DoNaacZO2+fiE5MxnXt6Waazf4UM2vfwSJfA6rkvNQobyRAgs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722334822; c=relaxed/simple;
-	bh=DRBX85TKORC6ogGB9Xdfymm5GWtJCaf6cp+bzF5BvNI=;
+	s=arc-20240116; t=1722335735; c=relaxed/simple;
+	bh=cECuk2V2fAOl60BXMo+bifWkbuO76pR/Hkju5V9RRLQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=FZE5w1vLZron4/ekd2EgulCISMznFI3DP8FsJtDUEXgrDiWv1QRljhZQCYut/9jM5KFP8r7V05LBNmN72QEQe5hT+ihBe+DrsNYWeJhVAEjmYdNbkM7ZpBtJJLCL6RmEu7Y4nBoeL3qY/XSZBb91joYid6YJLEeTsq5Q3vTnRSc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=RJlGkIxR; arc=fail smtp.client-ip=40.107.121.128
+	 Content-Type:MIME-Version; b=D7QIZb0ykQpO3VqWcohniID3QDMXu0MJtdXCOv9E6sRANGqpT7Ub4ZCEnrWN35hAAgpP9Kp15aPkEQuHqOVRdXWH26nsxze+bzLSYxasa5/gWxWCeS/RqlGjA8HkB6dPWKKYE+BxhUkcE2NeY5elJ2KiR7FvAgCNLh8QOrofafo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=Lo0HYcEB; arc=fail smtp.client-ip=52.101.95.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=garyguo.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=H15IKT4X4gpjBH0ZtjQEraW+3QLG1g5joOzVUjQq9Sm64V+ypIwqyqIdrp3wmnoJh1gaK0U11KkxTGLeT8SlEMA7axaUHl8wm4AHyJVraHVSQYCSSHrRWCcilAVK0dGI3a+ET7FqBREvFtVlLevxsdtUsqNkBA7yE4j2oiU7eEGalicy4EfwniCJpbIaoMBzlo3E5N+MpRMnlkUuBi/z/cHo/onGHi3BLmNShZ+O52pHSwrg9koN0VVacHG3iXa6/LvXzSugwDGeDHUS0ps+/DUVVaYle964ArDq9KBNHtd8PjF5Gc3OWeq/05Jtk1SC2jbgyKpuugYn5tTvxoxCog==
+ b=iJRyzB+kLSqxIVkAojJwXCiVVL1r36DFQRqJa40YbjnmpFWVeFt8Dpo5CFlJQ71yIEqw3ZA219OdvjTuvFOW8CTRTbx/6PqwPY34+GrnEOVnBdRTIM1NIVwCHM/fxIRjh/XMUo3PoK+tagSy1ugBEb5hArZjbGmJIpXrxVA7EM448Kn1BPs34+O8LglIkPWeAO/ozyDHWF5g+OB9BfgahkauBt/gb5p0LeB0hFJdWQ7MH+8WQi2z+Q0a8xh3CR17CAQm3HeOojq8bL7WqOc6HnRkCjpkxhA7Xpo22znmdMtEk3Ho3GeU9rkZDgEjNyxvAsha3Pd1u8t0M+p1iJEoMA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gFZ82QBk/r0tIiq+WrT1tcKo2VV8NOsNSkcij4YS1pg=;
- b=Ggft1D4oulvbyEWNZMDfApoFwK+ToPgN389N+OcMbSTX2xGJ6qchY97kyAJ2pY4jCsOgSkLa7fEoe00sS2lPquryAICgA8CyDUEj7Pb/UuZPjnVYnHzdouHM+4ZkL1H69/uaFGtUkklB1LpSjNNKZhuNKpDbE5pCnG4Wpso+H71shnMToAit24LwTs9a3J2VbBfv+YkhZ5CblIuy7rkgOpTN4nB8Rjg0L6Rav/V69nO0RtWzWMuOYVfBeITxXI59caAgtsHR05Jp70Nrq7ooqk/EWD2B22Eh4EbMWb3685KX2cLtE70X0fRjlkE9HsEU5SYuKJUCqLq0X2UnIp56EQ==
+ bh=ifExQZBT2KRq/Wuc/SNvXo9/avN+B5ru3aUvVgkGPUs=;
+ b=m9EUSdR1cYl6F0eDUS8sbvd7rUoQ9o9K6WOSr+EL1jasQsT3EDg5zW/doxDCddNwaVhEGFhclDTDU6Didn9NszMbtdVLdXRZcL/29LroemaczH6bsdynv88pMJKy9w+py7T/+qhETk5Nko/0kABOyfe76KEDcXtdKI2xIExXfFbTHsguFtIqL0uqjys1SX5IyyKVSnm0r8YJW4lZ4SUCtUVsmRXhh7zd3dAD09SPgAl6D/frRjiaS/qLpCTdb/kW0oS0YkjqTVSWlf46FE2961i/vV8LAYFpZitTUGYL9KNHEt7mOj9trxbsvs/pg46UE3oyqCFuVNzkmfgkyaAf9w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
  dkim=pass header.d=garyguo.net; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gFZ82QBk/r0tIiq+WrT1tcKo2VV8NOsNSkcij4YS1pg=;
- b=RJlGkIxR8mQmOnjSLUu9nwNd32BFSnZxcDREeSrA+bZuqDBWqiKrVbt9fe9JI/vo8OhyGmpTaQeO3DoLmmXWXSUwnmwIVXqN0KfWfVq6zVAGmL6y7ZMuBuEhUg2kjj5FrjhlxtKBxW9p8PW1/SmxNkRxJvSy/iY98gnG9gqHpTo=
+ bh=ifExQZBT2KRq/Wuc/SNvXo9/avN+B5ru3aUvVgkGPUs=;
+ b=Lo0HYcEBQYDdGMdyHmWcsH77z8a3siH01wQj5FpHmj6RWBGmUodkdkoFzW/487rfnPvYegQEBiL4n01j1LCabYVVaszNu5Karom0Yf9HXwhuqdUfrAKrBh4/l1cBJo87j90L3Ab7+qxhI3chQXyfx/hIvJLWtjupIFUd0AdcmD8=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=garyguo.net;
 Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
- by LO2P265MB3481.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:1a2::7) with
+ by LO0P265MB2748.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:14a::8) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7807.28; Tue, 30 Jul
- 2024 10:20:17 +0000
+ 2024 10:35:31 +0000
 Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
  ([fe80::1818:a2bf:38a7:a1e7]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
  ([fe80::1818:a2bf:38a7:a1e7%7]) with mapi id 15.20.7807.026; Tue, 30 Jul 2024
- 10:20:17 +0000
-Date: Tue, 30 Jul 2024 11:20:13 +0100
+ 10:35:31 +0000
+Date: Tue, 30 Jul 2024 11:35:27 +0100
 From: Gary Guo <gary@garyguo.net>
 To: Alice Ryhl <aliceryhl@google.com>
 Cc: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
@@ -89,16 +89,16 @@ Cc: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
  <maobibo@loongson.cn>, Tiezhu Yang <yangtiezhu@loongson.cn>, Andrew Morton
  <akpm@linux-foundation.org>, Tianrui Zhao <zhaotianrui@loongson.cn>,
  loongarch@lists.linux.dev
-Subject: Re: [PATCH v4 1/2] rust: add static_key_false
-Message-ID: <20240730112013.4d0cd624@eugeo>
-In-Reply-To: <20240628-tracepoint-v4-1-353d523a9c15@google.com>
+Subject: Re: [PATCH v4 2/2] rust: add tracepoint support
+Message-ID: <20240730113527.5c9896db@eugeo>
+In-Reply-To: <20240628-tracepoint-v4-2-353d523a9c15@google.com>
 References: <20240628-tracepoint-v4-0-353d523a9c15@google.com>
-	<20240628-tracepoint-v4-1-353d523a9c15@google.com>
+	<20240628-tracepoint-v4-2-353d523a9c15@google.com>
 X-Mailer: Claws Mail 4.2.0 (GTK 3.24.42; x86_64-pc-linux-gnu)
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AM9P250CA0024.EURP250.PROD.OUTLOOK.COM
- (2603:10a6:20b:21c::29) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+X-ClientProxiedBy: LO4P123CA0448.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:1a9::21) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
  (2603:10a6:600:253::10)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -107,103 +107,181 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|LO2P265MB3481:EE_
-X-MS-Office365-Filtering-Correlation-Id: 08349b05-4d70-48aa-6913-08dcb081352b
+X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|LO0P265MB2748:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8361ad91-41fd-4b3b-1133-08dcb08355d9
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|1800799024|366016;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|7416014|366016;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?6InyZ1pyPdlryjPSoDsqa3qc5xecLwKH2pZ2dSBXOiS7gY1uEP6ohU1xMUYh?=
- =?us-ascii?Q?j/9TTKBsuucGStJUqNwSzzaJAjQCDGAlbgIKz+7E0BxCwkOBHX45Wxv5aGSM?=
- =?us-ascii?Q?GwvkxhZVToGtOgEENkx8rJvLNP3DTBSzYKYYcQYpXLLO6JrKXbFVzIJK4MES?=
- =?us-ascii?Q?RixYG5RvXPKNUZKYd0WxkbYLSQBFs43CAGpMNfSmRFDdN+N6Do0jmnLjAwhI?=
- =?us-ascii?Q?StU019DdXLpsw3YVcTpKr0I+FERrCXZ1TxQc6hIB8h7mOB/SmQ1rCzyiK3r3?=
- =?us-ascii?Q?gMnlUF+ps8d7/twrbOJB4KGxrW/CkOJRKuC0ixHi5WqF0Pm4yJDavsBaDiMe?=
- =?us-ascii?Q?wghIJRhQuUhqDyaLx/wF38Ff7kyCEXzOGwz69R6iYQEL0Y2opRmJnzhpl3Yi?=
- =?us-ascii?Q?h5n+GGsk9h3gtBWdOw34/ZbOGYCaz2bFetVSPCgnPYsFdsWoZZJ7pvI/Om5g?=
- =?us-ascii?Q?Of18hllFtQCoQDfeBe4PVtmZ9tqQ2tNu5TY/m04/c1ulvyLliiHRM5jmW7Ro?=
- =?us-ascii?Q?GRnKq7sBmdluFdPd8ISFbFYC47KYM6WhEqXS4om2lqRNWo4ZSK5Ejcx/e7lE?=
- =?us-ascii?Q?sJFSNtYDwIyxKT8fFvqVYWTDTIozymMx9G+Axv6PegMLstw911ZfiKh13Uyn?=
- =?us-ascii?Q?B7Rt/cY3elLC0dunxvucu06d3MtMLFO5m91UNuu+e4UnfCq6413CoyFPjptc?=
- =?us-ascii?Q?vAr1zanRmmzMxy4hxezOl8JLZVhZxuz0tSuSYprV6EE43rfGVzd+lUfhEy30?=
- =?us-ascii?Q?Pc/8epaUHzn7KPRj3xXs/aStFmrEv45/pPCDuGUFJ1Jft1U4ZSxzCbXvDt2Z?=
- =?us-ascii?Q?G8nRDd4RcPDebMGpYZv6r7qTvJhq9nEhIB8hnAXc+7bAiXBUx/74xlddiul/?=
- =?us-ascii?Q?SYSPN/vpMEkYz9u3HV+Q6uxGts/1+Mcmbhx8AW0gjY906jJefzi2z0pNnbhi?=
- =?us-ascii?Q?BNPaL3IsWumqmLSrhtJoODAIOvYrZmKRneQVpWcjjDZOd3UZxTY6zykqN/LO?=
- =?us-ascii?Q?WDmH9bAPaa29mjnJwK36uTyjswh+sMyqJl/rOhx/hEsVayjF539WR3MwUvUA?=
- =?us-ascii?Q?/Iyf9cKlPwOsr/6iaiDzekENyVSIKRVBokmrWLJrAfpLz4PF21w/n3C4lTAb?=
- =?us-ascii?Q?L+XJ8jWv/hnRBZIvs4wZW237hTuuagJ31NtN9WNorZy09Kao++w1QB+UMZxw?=
- =?us-ascii?Q?OqMR+HZ1Mq8A1O3P5oYxTeORLx6BmjjVfpaDveWdUZ3tzTNLExq6foCSYn9T?=
- =?us-ascii?Q?akguO5NylAQ3P0DEUAMEd0GtM7VPu6Cy1jqCNM+CEooyH7kpZwnvUm+sarJU?=
- =?us-ascii?Q?/Gc48ri2j0kr0a4pkb91sBnqjMMdapkskMFwN+VP7bdIww=3D=3D?=
+	=?us-ascii?Q?302UUQ8rxSXXztzDtjumQghT8qY7syjxSIcRzcWf3w/CbKQsR6whxCbcp47c?=
+ =?us-ascii?Q?brwsrz9ueMJZgTUhPTldTEkMIdFD4XUuzzXaGAAG5UVCk/Ztk5+U99e56/54?=
+ =?us-ascii?Q?CzfT2arCRjXykRIdpnxqaSj4xe8z1UgTf1FWED5uK64/xnZ9/zM3FrvT3Q/C?=
+ =?us-ascii?Q?Y/ejfOuGlDiqmCdebcJDZuFlgICB08ZwrBsZTUUztJNVkbsk46HEMPpSkDt1?=
+ =?us-ascii?Q?NDEAS9vjV6qjW955At5ywMp752nVIcEXu744miXYzmFgS9UwAxJ/lXZb72lX?=
+ =?us-ascii?Q?nCEDP0PUgi6HE1njnO5ZID7P6jcTu2P7eKPMEhTeYNl0g5VbKnfMJbKPS8ui?=
+ =?us-ascii?Q?5zRsYw1TP3chf391ZHdB4WjYxT6Goru5epRO9HwTvH1gZzX8LjOa95miQ2DR?=
+ =?us-ascii?Q?kDJfj5sAqJ8YcUEW0BtCCEg0UY25mU+wELtJwn8YaaCYCPckp5tais7SKQ7x?=
+ =?us-ascii?Q?cE1NhrGM+UsewE2nxToJAoFPjFvAQ3nqa1fSMI8Vc1sxk8wqsCYGLGcWOqHa?=
+ =?us-ascii?Q?rlTRNr5xvF4/CHViuD1kHuiwj0qF0f+otgD8+eFnE1RRmRWTungNC3EoH4Fk?=
+ =?us-ascii?Q?WGVjmZ5Hm92mA28extNU6+VhOIqfSendAs+RKqERPkny9NOUTSn8G26plchG?=
+ =?us-ascii?Q?gA67m+K1K8dX7e9mNB/GCsBRpHFqvA3MLTQIbiHdmi2Vb89VacM9er55tNXC?=
+ =?us-ascii?Q?kE4HJ/q675U1wKlrB+fcb8PlFKO6UNBpvs+h8dEFwXqRzAUZ1ciQn8BvjB5C?=
+ =?us-ascii?Q?ITtXbu9Ova35BcDRE/u1cc89EwfUAVbN7vIashQpf4uMIZRTrTYQ8WSA/Elx?=
+ =?us-ascii?Q?d32LMheXOJ3QN7bEXaw2LUAln2Rx8WkTEq1EX180ziEaUub02utPA0+Lo16K?=
+ =?us-ascii?Q?4LV9XV3HhsZyEXTMXs+Bhh/6yDOtolJbrRqU/nKfnSBGysf+Uodl4lv+O6C4?=
+ =?us-ascii?Q?Uut3EJWDjZvGGGgVJJDsiZfFZ7ztoiygJ60CTmUgFE9Blegdbt04Z5wuElAr?=
+ =?us-ascii?Q?6VHhMA0Rs90sq+So+W3zWJoWNvz38vOFeUXYed6fP7zPe4UdSQsZ+neQ9BJt?=
+ =?us-ascii?Q?d567ue7GLFq/NNwIpNCz0Tqo4Bz/dVj69em8isCeW3pBAd/7GdChblozdSJJ?=
+ =?us-ascii?Q?5WCvzOWXggNpRas0PN0G7FrSiZt6TRzEoj/yOGai6iWAMcttCTNdO/hxKT08?=
+ =?us-ascii?Q?9O4qlSwsjkWXCcr/LnS1/ucclmCq5YvkvhcUUNMEUwOIKr3C0eX4GGQKxlbD?=
+ =?us-ascii?Q?pJ0Nmojijr98F9qfd4W/+jA2rXP6beP3zhQpizs39ho1W5xjM+Y+PFBaJ+aQ?=
+ =?us-ascii?Q?vUi0xFvSttPD1cF6xFyJ0LF3fUg4hr6iICs6vYSLyaPZ7Q=3D=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016);DIR:OUT;SFP:1102;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?l7gP54bxgXn652BZq7K1Jc4ll7qzkjUERp2b+Q0uQfl2xJo+tiXAl5iOAGNa?=
- =?us-ascii?Q?zoKD8cGxRWhzX0uHtc3AcVTtDZU/9hsJPWRUowT5BRirCpilGE/Gc+itwT82?=
- =?us-ascii?Q?3wExkpg8qGE+yClKj5sK+V4rNTaKlDxIPFRkw+YSGuBM7cHSWgW+2/cSwxKj?=
- =?us-ascii?Q?dW6NuU7HFTfVETg2+5jSAX96vUjMAYNH9p32vnxs22YZY/fYpkRry+py5Np5?=
- =?us-ascii?Q?DZzUJ6JHDQ7LSVFsdrXFDJIcu4IIdaCiSlLjlU08eDr12qcnsXq/MWkGv9UQ?=
- =?us-ascii?Q?+u0iEFe2oEySGJACspIDMSZeudqkp54X2czbpEOSudoIzE4DM1hakv57wgCw?=
- =?us-ascii?Q?RRzZPEvBALdESNfqDPLiZ/ATq0HUInTzp+mYqXCFkNzsDolJRNcEhps6JUQx?=
- =?us-ascii?Q?EdFic9U5nePg6eV1FraDWRUfVuy8WypNRn0Y3qV9SlP8mPv4P/K7XTYpAMfO?=
- =?us-ascii?Q?r0qge7PAOcvi/JHfmaUlUxg4RKliRVXlED209vX+G2RlRA7QCZwSnxm0EyUg?=
- =?us-ascii?Q?KS+aE12UzHocwhCrl4V7wI434Sn9CYG2zEF4QaVztgY3gsG7HA1iTUlcZOAV?=
- =?us-ascii?Q?6OiFG1XGmGW2R1zhjjxc+Zhnwh/LTjIqW0E66KMCpNyDGxyw8O+0sm6FEzT7?=
- =?us-ascii?Q?fAKyta0Rds7XbIttVMEXhCmj7LqyE7O+R6Zk9Fu7siZ73SyvERt1QwYcy+G1?=
- =?us-ascii?Q?LiCI8Y5aIfzsaW02lFwiiZsujH4PX4JaMXbO/F8D2fYHVlXhnbwONvAsXbQ/?=
- =?us-ascii?Q?AeshYtEFeD0Y4fvupGlt8mbm1N8n+hEowHMZsgqokxm7U5IFJhCWggy+YilY?=
- =?us-ascii?Q?laNi8MnL3omjlnqde30movfFH+GA1ArJXBjEOSsBsomYC1w8mPKi6od8uAxO?=
- =?us-ascii?Q?rOJGEdUnwBO2kmK1WKRL/I0xwycwGW6S9bfqzuH/zQaBfD6RYSh53Zh20Hj7?=
- =?us-ascii?Q?L9t5Avd0Qb8B+ZlRHf9X5wZHad4af05ZtLQxddZp2w1QA8GDn979c8tePATr?=
- =?us-ascii?Q?zJdKYMFEWcwdXIUI73IUuwzAaG9Nq5f+EaBTY2Ofm6CcoplXZ0zeRSFUeJ1H?=
- =?us-ascii?Q?jSMhoaHmnNmtJRu2xxOkDmdTxj1ovTHJL/fdoaFzAUWTIDEL8qcuygQk0Ygr?=
- =?us-ascii?Q?0Sh7XKpWrok7fzMB5StLEA/uKe8hN9YFvliG8ligyUhkduu5i0dMAZwr+kRA?=
- =?us-ascii?Q?foJN7vO8h2ZvapQJUNSwjALglrIfrtc35oDzzlwx4k0C6m/X89rAc434Xc4+?=
- =?us-ascii?Q?khh7W5OsAw0Bg/+mNla+qeannP9XQsP/WYk2lvviUGK+xElo+KYa+AMVo0H3?=
- =?us-ascii?Q?Ac2IvOUxXOktIbuT68KYxLrMInLIccVpetC7N36gjqlyim40kCZGpEclTr+i?=
- =?us-ascii?Q?gJb7umNn7q3eg+cnSqKhciuSzhLxglovY5IWFjSzeZSOZ/YSpsvfconxugvq?=
- =?us-ascii?Q?Zldr1UdfeLiMI8WJY6zRqEA1OIChbamcvcQOKKhMBcQMzL7vs2YGVk2gNF28?=
- =?us-ascii?Q?/FSMVPI/dxUzZ8n1ZEGXHKcRGMtdS6i0vCtKEsfa3nElluK1j7lGfVNcpZfq?=
- =?us-ascii?Q?f8BIX/+ZPk6I4/gYAl1R7EQkKXA2aZ30Yy4AP7By?=
+	=?us-ascii?Q?JNPd4zEcuC6LaJpiKh1VXzBz3Yeimyu4wFPkDJPj4vcJtM8/AViWIa9kXHGX?=
+ =?us-ascii?Q?Bl75zBfrkIYU5caqLc4YfrRlAyrsOzRZamHsVx0FtYtjzioD76l0NQogfPDR?=
+ =?us-ascii?Q?Qp2+2fLBQG6WlaKhoB4ZBGrpCAWlN43V/lexTTx8uxZ+FAVE6H2Z8eNe9G82?=
+ =?us-ascii?Q?nvXAo1j5Dv3j7hg+PyO11sxXkXGiD+A9uMjhax3r8dwzmlvPx+lol3X+W67y?=
+ =?us-ascii?Q?e4NhaRfnR8M/2cv1ZDfMi3nI8mqAvMU/Bz9a8UmcZTIS2qEI4OCKf5w5aE90?=
+ =?us-ascii?Q?8JPm8FIfe2gWuqOcp/9C2jGjHm/k8OY6UNeAhG5giQUoP1FOWh+D6mHsWaM3?=
+ =?us-ascii?Q?M2s4fd7mlBNK8/+nCjokfH9N63GwoZtVjB1s5QxIYgM4xr5DBNhMivYli+kw?=
+ =?us-ascii?Q?OfhBF0sOw3PMLUYTpQKDQfAMhZDeA+Jh0yeW98dz+0C19IgNn3T5XDDTLmhL?=
+ =?us-ascii?Q?kuD0O08rCubAH3FtQOHJwcvbnIr5wddGFSmeN15w+PDZY21xlO+49kCY2EMh?=
+ =?us-ascii?Q?rvE5NfWTtt21ZM70ETd18P3TZEf7ElcP2xMlMKUfMjOea9fjn8VfA8VoEzB3?=
+ =?us-ascii?Q?PH5saY5qeM/JeuDKluCUSDv1k0GODol6YC5trSWk+S1oQMbqWqkB+wlhR3It?=
+ =?us-ascii?Q?bPc69/b2BLGqahclFU0+HiP2zzf0OoS7ynE6Ok2CZKifXudzTDmXPUie0z46?=
+ =?us-ascii?Q?i7frrLOQ9ZLF7NznY+uOPIIC/B3LgJpkOnJLG806ypERJDkUobmHkQ4uPYjZ?=
+ =?us-ascii?Q?UEAAG82F5w7NjkRQ2CFb/OEE6+ODzYY9/DKa0TDcwtz2UUJcNUS1CEuWyAeJ?=
+ =?us-ascii?Q?DG/vDq4WyRQtI66eMGVbP5Ij/UHkvNU7FIK9GhYvvn0nj2+Uh54xi/GvCWpk?=
+ =?us-ascii?Q?IwSGyexVHQVoaolIEl7qU4u17w+HnrfNaIOO5Qzy+6upRJfVdRvdawPey0Rq?=
+ =?us-ascii?Q?imkWOGM5fbNkdtK6qLbAecOGn1d3UachOwk3pPu6oABhdDspHZPBoFn9f5qh?=
+ =?us-ascii?Q?dGCEBeh68fk7DeXQZYCPURQ/m4wcMU0KX8wp5zGmW7gNtngDIKyq+aUjilyb?=
+ =?us-ascii?Q?E8I+zWKQUsCj3mfddgxtdsEH1HquwwiuFKj5bvWDVPezD+JW6lbm8wAMZ0eu?=
+ =?us-ascii?Q?irH7urlBSvAppTVG9KDfq/dsmCKMsnOPG+y08R69O5UnyaaZ4rlwCSy44TqB?=
+ =?us-ascii?Q?4pMVvXcF4GfvdDy5dos1clrxOlAfEYRGkZxGKG8bYsvCP9CKZxSmJBbNu3Zw?=
+ =?us-ascii?Q?GwieiRiqDzVu0lBAFglC2VPMN9p85cPIBvkLi0/c1XnMM0gGAXZz2j5BM380?=
+ =?us-ascii?Q?UovLKd83FFyy1IA+EcIBRY7O76W1h4D5S2wyXaRxD1FnHsPjAp85f/ax05Pg?=
+ =?us-ascii?Q?hBN0rPb5YgdcrCWPMz2h4GR3RTpKFoVvyfNCCLqLjaCkJ4KaCMi2u2599Lx9?=
+ =?us-ascii?Q?oijKttmsHOatvL2z+cZoMz/3txHUVd2YNB2KpzJExmwKsyDw6YItjwg7ybvy?=
+ =?us-ascii?Q?O6UmOP1YJ2B7o834JGAklJxwRsBRyCKqPGYrJO65IHqmWqSCY6zr16/M1iVK?=
+ =?us-ascii?Q?NbWZqYP0R7yoH7VM+KKqiq6+j8Gl+trlY/dViAo3?=
 X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 08349b05-4d70-48aa-6913-08dcb081352b
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8361ad91-41fd-4b3b-1133-08dcb08355d9
 X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jul 2024 10:20:17.0874
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jul 2024 10:35:30.9518
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BnqH9N/yzHb61y5doCAdlqbsaLVkwmp33gdB7v1mqY05HviLF/DyVb/0pEGRnsjzIl8bwhE133VXVGzle7l0Tw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO2P265MB3481
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0uz3L3g3HUPw8B9wx2kZgf9iM0O4b9Hl+0Zk7PVRKYbEuZGcHGglchfgjq0pgiXmNOKX7mwQsO9GsrgCXfVb0A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO0P265MB2748
 
-On Fri, 28 Jun 2024 13:23:31 +0000
+On Fri, 28 Jun 2024 13:23:32 +0000
 Alice Ryhl <aliceryhl@google.com> wrote:
 
-> Add just enough support for static key so that we can use it from
-> tracepoints. Tracepoints rely on `static_key_false` even though it is
-> deprecated, so we add the same functionality to Rust.
-> 
-> It is not possible to use the existing C implementation of
-> arch_static_branch because it passes the argument `key` to inline
-> assembly as an 'i' parameter, so any attempt to add a C helper for this
-> function will fail to compile because the value of `key` must be known
-> at compile-time.
+> Make it possible to have Rust code call into tracepoints defined by C
+> code. It is still required that the tracepoint is declared in a C
+> header, and that this header is included in the input to bindgen.
 > 
 > Signed-off-by: Alice Ryhl <aliceryhl@google.com>
 
-Reviewed-by: Gary Guo <gary@garyguo.net>
+The Rust part LGTM. Some comment about the C part.
 
 > ---
->  rust/kernel/arch/arm64/jump_label.rs     | 34 ++++++++++++++++++++++++++++
->  rust/kernel/arch/loongarch/jump_label.rs | 35 +++++++++++++++++++++++++++++
->  rust/kernel/arch/mod.rs                  | 24 ++++++++++++++++++++
->  rust/kernel/arch/riscv/jump_label.rs     | 38 ++++++++++++++++++++++++++++++++
->  rust/kernel/arch/x86/jump_label.rs       | 35 +++++++++++++++++++++++++++++
->  rust/kernel/lib.rs                       |  2 ++
->  rust/kernel/static_key.rs                | 32 +++++++++++++++++++++++++++
->  scripts/Makefile.build                   |  2 +-
->  8 files changed, 201 insertions(+), 1 deletion(-)
+>  include/linux/tracepoint.h      | 18 +++++++++++++++-
+>  include/trace/define_trace.h    | 12 +++++++++++
+>  rust/bindings/bindings_helper.h |  1 +
+>  rust/kernel/lib.rs              |  1 +
+>  rust/kernel/tracepoint.rs       | 47 +++++++++++++++++++++++++++++++++++++++++
+>  5 files changed, 78 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/tracepoint.h b/include/linux/tracepoint.h
+> index 689b6d71590e..d82af4d77c9f 100644
+> --- a/include/linux/tracepoint.h
+> +++ b/include/linux/tracepoint.h
+> @@ -238,6 +238,20 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
+>  #define __DECLARE_TRACE_RCU(name, proto, args, cond)
+>  #endif
+>  
+> +/*
+> + * Declare an exported function that Rust code can call to trigger this
+> + * tracepoint. This function does not include the static branch; that is done
+> + * in Rust to avoid a function call when the tracepoint is disabled.
+> + */
+> +#define DEFINE_RUST_DO_TRACE(name, proto, args)
+> +#define DEFINE_RUST_DO_TRACE_REAL(name, proto, args)			\
+> +	notrace void rust_do_trace_##name(proto)			\
+> +	{								\
+> +		__DO_TRACE(name,					\
+> +			TP_ARGS(args),					\
+> +			cpu_online(raw_smp_processor_id()), 0);		\
+
+I guess this doesn't support conditions. Currently the conditions are
+specified during declaration and not during definition.
+
+Would it make sense to have
+
+	static inline void do_trace_##name(proto)
+	{
+		__DO_TRACE(name, TP_ARGS(args), TP_CONDITION(cond), 0);
+	}
+
+in `__DECLARE_TRACE` and then simply call it in `rust_do_trace_##name`?
+
+> +	}
+> +
+>  /*
+>   * Make sure the alignment of the structure in the __tracepoints section will
+>   * not add unwanted padding between the beginning of the section and the
+> @@ -253,6 +267,7 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
+>  	extern int __traceiter_##name(data_proto);			\
+>  	DECLARE_STATIC_CALL(tp_func_##name, __traceiter_##name);	\
+>  	extern struct tracepoint __tracepoint_##name;			\
+> +	extern void rust_do_trace_##name(proto);			\
+>  	static inline void trace_##name(proto)				\
+>  	{								\
+>  		if (static_key_false(&__tracepoint_##name.key))		\
+> @@ -337,7 +352,8 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
+>  	void __probestub_##_name(void *__data, proto)			\
+>  	{								\
+>  	}								\
+> -	DEFINE_STATIC_CALL(tp_func_##_name, __traceiter_##_name);
+> +	DEFINE_STATIC_CALL(tp_func_##_name, __traceiter_##_name);	\
+> +	DEFINE_RUST_DO_TRACE(_name, TP_PROTO(proto), TP_ARGS(args))
+>  
+>  #define DEFINE_TRACE(name, proto, args)		\
+>  	DEFINE_TRACE_FN(name, NULL, NULL, PARAMS(proto), PARAMS(args));
+> diff --git a/include/trace/define_trace.h b/include/trace/define_trace.h
+> index 00723935dcc7..08ed5ce63a96 100644
+> --- a/include/trace/define_trace.h
+> +++ b/include/trace/define_trace.h
+> @@ -72,6 +72,13 @@
+>  #define DECLARE_TRACE(name, proto, args)	\
+>  	DEFINE_TRACE(name, PARAMS(proto), PARAMS(args))
+>  
+> +/* If requested, create helpers for calling these tracepoints from Rust. */
+> +#ifdef CREATE_RUST_TRACE_POINTS
+> +#undef DEFINE_RUST_DO_TRACE
+> +#define DEFINE_RUST_DO_TRACE(name, proto, args)	\
+> +	DEFINE_RUST_DO_TRACE_REAL(name, PARAMS(proto), PARAMS(args))
+> +#endif
+> +
+>  #undef TRACE_INCLUDE
+>  #undef __TRACE_INCLUDE
+>  
+> @@ -129,6 +136,11 @@
+>  # undef UNDEF_TRACE_INCLUDE_PATH
+>  #endif
+>  
+> +#ifdef CREATE_RUST_TRACE_POINTS
+> +# undef DEFINE_RUST_DO_TRACE
+> +# define DEFINE_RUST_DO_TRACE(name, proto, args)
+> +#endif
+> +
+>  /* We may be processing more files */
+>  #define CREATE_TRACE_POINTS
+>  
 
