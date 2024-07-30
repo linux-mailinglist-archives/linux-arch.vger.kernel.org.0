@@ -1,155 +1,206 @@
-Return-Path: <linux-arch+bounces-5732-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5733-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A53C0941F71
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Jul 2024 20:20:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7420194216C
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Jul 2024 22:15:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 583BB284A4E
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Jul 2024 18:20:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2B699282DDB
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Jul 2024 20:15:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2917918A6A9;
-	Tue, 30 Jul 2024 18:20:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27C6A18DF9B;
+	Tue, 30 Jul 2024 20:15:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lNGnDsgZ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4YEdRqJn"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B531F18A6C4;
-	Tue, 30 Jul 2024 18:20:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6101D18DF8B
+	for <linux-arch@vger.kernel.org>; Tue, 30 Jul 2024 20:15:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722363640; cv=none; b=hoKF6kLlShp4KUhYlcPqtTJAqrm7smM6REu1M0R4BhTPZQXq/mkmZzXXS71W+kydGQ0zpQZvOOOudnmb5XO3eAhA08dkeL9WPEpnVaoEXT+xGg4iKW4xsnJZYoRbkFyYOPD6279dY7S/2ohfelZqmI2DDU26vDGfpNBu9d/UuJM=
+	t=1722370526; cv=none; b=SPsFlmcQ5tscovBjktHbGf1qFfG2qzsulmD57wUCp5stqFYH+DgU/y/jwKVHl2cRZt8QzyXlZduwlyAdnph4BZiMhXJYMQ7Bo/NYpoBCZrE0ODh6g4u038ThtgsbbqH+JSOmJKETTVmuOO67OvkTjdMF/a6TljjqqkxXvV2smEE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722363640; c=relaxed/simple;
-	bh=G8sVbBwZJnyPhfnH8dBskagamVDv8p4AWzth221C2Kg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cFW1cLQ2Czdo9JWyN/ir4+Eqmqps0vh0Ql89GbXjyXd5Ixd4ATLzh2h2O8evjmNCeHM7GS96nJauL6pEdFL6sXpMuHVOUCxnV9cq4a7QuWG2B+9q1nNj/cup+3HHFAnFVYXcsxTv+vE7Dlb6fpKKdujCfi4LEQYY1GE78i/9a1g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lNGnDsgZ; arc=none smtp.client-ip=209.85.210.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-70cec4aa1e4so3326983b3a.1;
-        Tue, 30 Jul 2024 11:20:38 -0700 (PDT)
+	s=arc-20240116; t=1722370526; c=relaxed/simple;
+	bh=rsUtJOr5uf6xI/SHZkaRwLOdSyrVoVqLcTwk6EZKpNE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=nZUAchcHWZDDM2jl0qjJ0xVhjYoigo2LLjtE/+SzR4+FHDoYYHoiPHdA6MCW0X84yAsG9TH6OuA57WoyxaYwqTMApG+wpW6Wo4CyWC5kS+SJ7wWR5gdiFuY7GxO85/ifv2PubTPnZuWTjMo8NyQiLMpkHxiczOUlW6K8ofxgvRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4YEdRqJn; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-428078ebeb9so10965e9.0
+        for <linux-arch@vger.kernel.org>; Tue, 30 Jul 2024 13:15:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722363638; x=1722968438; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=evmrDuWTpAztCWJC+WfQy/HIbwzxhxVcOsF3DausHNg=;
-        b=lNGnDsgZsfEbonMGadxCBfW17O28uSK50S1eQJYImCWSyDIiZ1E4+VqVkrVXFKFS6X
-         34JNrKrn8BNWsQmVRigDC8Z+AG0X5XVeHTkJFWtcXwqURLdvXhGCYdq51wrhMaEFFlU2
-         Lkv6sWdI9VL26Rd9FVPPYe+Uq//rhE0TeBoc0CrpINAbrX7RJNa6sHAOin/94UNPxZ9i
-         gp4zeC1vrTXoR4lMPr3vXRVlgAPoLcYRmxEP6fgA1buF9tAqSOSCMgNoEeWi4wEHz8yC
-         8i3rwlSr7UewWmV2cVebj/Af/4wBUfti84NpGChKGJgDvjO48cuth+1aCybw/NXFBJmm
-         DQ8A==
+        d=google.com; s=20230601; t=1722370522; x=1722975322; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GbC9UKeYMk5Ne4+C+5nQILNnrxv/5Wxp3vD/sA5rOPk=;
+        b=4YEdRqJnF+6YwkSu0+EWgrStSYMalYAOxV6kSWvws8D0CgY2rMjanJ2rFvbZ0ORYvl
+         vkNnNrV6PGD5WvBQNS7qpyZQHzlDBkwloQHXUOusxILwqsZ0Nocqm53yqPpComV3qlpy
+         mX3wgFPt3Aghi225UVS3Nsvh0q5Z4lTeXzuYcZhBZmvgM0EJ6irCSLTGesNonXoWkANV
+         46ofgQy6t+bCLbHjmiHRooFJSsaP4B34X/U5p35dIPp1DKZmaRlOfEkWmeYFEMaOanrK
+         nLYbTEzTbH68ucSWpPCCweMQ3QyKzFDpBGJ+opXOO+F6W4GJuujo0gjincYCy5oU/GJD
+         wQcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722363638; x=1722968438;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=evmrDuWTpAztCWJC+WfQy/HIbwzxhxVcOsF3DausHNg=;
-        b=mBooUsoLYKf7W7W+zqsNGLQ+YZiwnAX8OJI+LuLR2eVRB4+BesH/l3Dy8D/Q0ugfPk
-         uCZj5s5yeSv5tiDe6qmUo/PBX1TpEsh3a0i2G5IilcyHmZJi6cc+mUPlcNbC7nEsGTQb
-         b3ONL/Xc3MiF2qdTOPpdMMAO/w+74VpUPV/x1n6ltwWdaLRRsdjIoePYViBpXfxG1K6T
-         ZWeJZ7vkw3Tl/ARHXf2ABe61gS9wI9BEP1Xw0v6TLQZfEUEPPWfxLncDvya/lC/yRBAm
-         HFE4yZhghtaVxPhYL2hUldXmPbUfF/Ttpf3Lst/Cz2UvHOcXo5V1cxzpraJwpzQ8TmDX
-         VOXg==
-X-Forwarded-Encrypted: i=1; AJvYcCXQ05JClB9OYmBDQDDQEJjjarzRA+A6z8vAGs+TIZiUqUNDDm43Li2OydK/8XN3c2SxJEOgsD4H39NQLQL7oUTwbpkXheyQarWFrw==
-X-Gm-Message-State: AOJu0YzOQOkRN2b3nPViDD+aKZXrxfl/hV2mcr/DAr3Ncj9APp6Xduji
-	acf6onRlZRnv1vOjH8Ma62QAI6/9xecdfM2vFLM76ceCHWJO6oKh
-X-Google-Smtp-Source: AGHT+IGceJ76vBCda+Ox4UC6J6EQeEM+C24t3cQicUirSbaFgBk6NqiUYBUJOc9w3qL6fVvgKLL0CQ==
-X-Received: by 2002:a05:6a21:3284:b0:1c0:e728:a99e with SMTP id adf61e73a8af0-1c4a12e31aamr16928307637.26.1722363637952;
-        Tue, 30 Jul 2024 11:20:37 -0700 (PDT)
-Received: from localhost ([216.228.127.129])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70ead72bd7csm8983783b3a.95.2024.07.30.11.20.36
+        d=1e100.net; s=20230601; t=1722370522; x=1722975322;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GbC9UKeYMk5Ne4+C+5nQILNnrxv/5Wxp3vD/sA5rOPk=;
+        b=bncaRCaGKSiWO3ZsYgfFItZ0fXl/aMrQ5XamgHKI5D7arqf3CjGfQY5DzIC3fDBwuv
+         BxTzeD1myKPxIDgLPcCBtKxjyzCxXE43kG/SUJskWjYMxT5mGS3Sav5+CCsTi+y8/+aG
+         IwwNBfUwIcANOoMGJSbJB6P0lKswzUBPHXHKvNb39UmO+8AokFLIwSeL1oyEGLBDGehK
+         DTsupd9mu+up44Y1i70Fb+7MBC2kaF5HsMbSq2zgtOdB7nooMabPkzOxkS/guGZD7dUD
+         86JULq37grFhbv3MDft6otw2FwFJS9X3XnkatB7VaE4juE69eiKjpcKP/qGAByTgNfGP
+         HyiA==
+X-Forwarded-Encrypted: i=1; AJvYcCVcwxL/vk0Ory/iUa2SY42nIOa7IRQpQkK71dvIdF7Dd8Eh9y/PsjBj5tEGyhML0o5wVOp34wkVuiTu31tvQvrR7x1FofjmsZTmNg==
+X-Gm-Message-State: AOJu0YzXSTkNh6hgZYtN3/+zAHpCoxpVCMR1iUsdl+ywQ8C6EnJ8FdlX
+	gsD5YfoKIUo0nUy5JRawyU4zcAVauxlKPdoZXPdJ4IQM0xjRH8OjhqRn96uSKg==
+X-Google-Smtp-Source: AGHT+IFc88rxPpono4+Iwy5LAjLRDVlbjIErlSn/ZQzI/kRwLwwyWlo83gbzFy9/j160CW2PDZTnCQ==
+X-Received: by 2002:a05:600c:4fc1:b0:428:31c:5a4f with SMTP id 5b1f17b1804b1-42829f4723fmr18055e9.3.1722370521005;
+        Tue, 30 Jul 2024 13:15:21 -0700 (PDT)
+Received: from localhost ([2a00:79e0:9d:4:be6a:cd70:bdf:6a62])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36b8f51eaf5sm2074784f8f.29.2024.07.30.13.15.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jul 2024 11:20:37 -0700 (PDT)
-Date: Tue, 30 Jul 2024 11:20:35 -0700
-From: Yury Norov <yury.norov@gmail.com>
-To: Anshuman Khandual <anshuman.khandual@arm.com>
-Cc: linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org
-Subject: Re: [PATCH V2 2/2] lib/test_bits.c: Add tests for GENMASK_U128()
-Message-ID: <Zqku82z-y2fjtIZT@yury-ThinkPad>
-References: <20240725054808.286708-1-anshuman.khandual@arm.com>
- <20240725054808.286708-3-anshuman.khandual@arm.com>
+        Tue, 30 Jul 2024 13:15:20 -0700 (PDT)
+From: Jann Horn <jannh@google.com>
+Date: Tue, 30 Jul 2024 22:15:16 +0200
+Subject: [PATCH] runtime constants: move list of constants to vmlinux.lds.h
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240725054808.286708-3-anshuman.khandual@arm.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240730-runtime-constants-refactor-v1-1-90c2c884c3f8@google.com>
+X-B4-Tracking: v=1; b=H4sIANNJqWYC/x3MTQqDQAxA4atI1gbiDxa9irgYxqhZNCPJWAri3
+ Tt0+fHg3eBswg5TdYPxR1ySFjR1BfEIujPKWgwttT29OkK7NMubMSb1HDQ7Gm8h5mTY0biNw7D
+ 2DRGUwVmKfP/zeXmeHxICEJlsAAAA
+To: Arnd Bergmann <arnd@arndb.de>, 
+ Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, Heiko Carstens <hca@linux.ibm.com>, 
+ Vasily Gorbik <gor@linux.ibm.com>, 
+ Alexander Gordeev <agordeev@linux.ibm.com>, 
+ Christian Borntraeger <borntraeger@linux.ibm.com>, 
+ Sven Schnelle <svens@linux.ibm.com>, Thomas Gleixner <tglx@linutronix.de>, 
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+ "H. Peter Anvin" <hpa@zytor.com>, linux-arm-kernel@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org, 
+ linux-arch@vger.kernel.org, Jann Horn <jannh@google.com>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1722370517; l=3172;
+ i=jannh@google.com; s=20240730; h=from:subject:message-id;
+ bh=rsUtJOr5uf6xI/SHZkaRwLOdSyrVoVqLcTwk6EZKpNE=;
+ b=MlTEOhWkW4Bugg/+QlvwFd1FRN1rJ6V5BN337jS5TdJqtH26gADznIruIJvSeYBrOrhYaQ/zA
+ PKWhOPq6oKVAUX6ZLZ2S2ZFYLegT0MkMNh5nJWOe+sXb9NFVCkqkbI1
+X-Developer-Key: i=jannh@google.com; a=ed25519;
+ pk=AljNtGOzXeF6khBXDJVVvwSEkVDGnnZZYqfWhP1V+C8=
 
-On Thu, Jul 25, 2024 at 11:18:08AM +0530, Anshuman Khandual wrote:
-> This adds GENMASK_U128() tests although currently only 64 bit wide masks
-> are being tested.
-> 
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> ---
->  lib/test_bits.c | 25 +++++++++++++++++++++++++
->  1 file changed, 25 insertions(+)
-> 
-> diff --git a/lib/test_bits.c b/lib/test_bits.c
-> index 01313980f175..f0d1033cf3c9 100644
-> --- a/lib/test_bits.c
-> +++ b/lib/test_bits.c
-> @@ -39,6 +39,26 @@ static void genmask_ull_test(struct kunit *test)
->  #endif
->  }
->  
-> +#ifdef CONFIG_ARCH_SUPPORTS_INT128
+Refactor the list of constant variables into a macro.
+This should make it easier to add more constants in the future.
 
-Can you move this ifdefery inside the function scope, so that you'll
-not have do it below in tests array declarattion?
+Signed-off-by: Jann Horn <jannh@google.com>
+---
+I'm not sure whose tree this has to go through - I guess Arnd's?
+---
+ arch/arm64/kernel/vmlinux.lds.S   | 3 +--
+ arch/s390/kernel/vmlinux.lds.S    | 3 +--
+ arch/x86/kernel/vmlinux.lds.S     | 3 +--
+ include/asm-generic/vmlinux.lds.h | 4 ++++
+ 4 files changed, 7 insertions(+), 6 deletions(-)
 
-> +static void genmask_u128_test(struct kunit *test)
-> +{
-> +	/* Tests mask generation only when the mask width is within 64 bits */
-> +	KUNIT_EXPECT_EQ(test, 0x0000000000ff0000ULL, GENMASK_U128(87, 80) >> 64);
-> +	KUNIT_EXPECT_EQ(test, 0x0000000000ffffffULL, GENMASK_U128(87, 64) >> 64);
-> +	KUNIT_EXPECT_EQ(test, 0x0000000000000001ULL, GENMASK_U128(0, 0));
-> +	KUNIT_EXPECT_EQ(test, 0xffffffffffffffffULL, GENMASK_U128(63, 0));
-> +	KUNIT_EXPECT_EQ(test, 0xffffffffffffffffULL, GENMASK_U128(64, 0) >> 1);
-> +	KUNIT_EXPECT_EQ(test, 0x00000000ffffffffULL, GENMASK_U128(81, 50) >> 50);
-> +
-> +#ifdef TEST_GENMASK_FAILURES
-> +	/* these should fail compilation */
-> +	GENMASK_U128(0, 1);
-> +	GENMASK_U128(0, 10);
-> +	GENMASK_U128(9, 10);
-> +#endif
-> +}
-> +#endif
-> +
->  static void genmask_input_check_test(struct kunit *test)
->  {
->  	unsigned int x, y;
-> @@ -56,12 +76,17 @@ static void genmask_input_check_test(struct kunit *test)
->  	/* Valid input */
->  	KUNIT_EXPECT_EQ(test, 0, GENMASK_INPUT_CHECK(1, 1));
->  	KUNIT_EXPECT_EQ(test, 0, GENMASK_INPUT_CHECK(39, 21));
-> +	KUNIT_EXPECT_EQ(test, 0, GENMASK_INPUT_CHECK(100, 80));
-> +	KUNIT_EXPECT_EQ(test, 0, GENMASK_INPUT_CHECK(110, 65));
->  }
->  
->  
->  static struct kunit_case bits_test_cases[] = {
->  	KUNIT_CASE(genmask_test),
->  	KUNIT_CASE(genmask_ull_test),
-> +#ifdef CONFIG_ARCH_SUPPORTS_INT128
-> +	KUNIT_CASE(genmask_u128_test),
-> +#endif
->  	KUNIT_CASE(genmask_input_check_test),
->  	{}
->  };
-> -- 
-> 2.30.2
+diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.lds.S
+index 55a8e310ea12..58d89d997d05 100644
+--- a/arch/arm64/kernel/vmlinux.lds.S
++++ b/arch/arm64/kernel/vmlinux.lds.S
+@@ -261,14 +261,13 @@ SECTIONS
+ 		*(.init.altinstructions .init.bss)	/* from the EFI stub */
+ 	}
+ 	.exit.data : {
+ 		EXIT_DATA
+ 	}
+ 
+-	RUNTIME_CONST(shift, d_hash_shift)
+-	RUNTIME_CONST(ptr, dentry_hashtable)
++	RUNTIME_CONST_VARIABLES
+ 
+ 	PERCPU_SECTION(L1_CACHE_BYTES)
+ 	HYPERVISOR_PERCPU_SECTION
+ 
+ 	HYPERVISOR_RELOC_SECTION
+ 
+diff --git a/arch/s390/kernel/vmlinux.lds.S b/arch/s390/kernel/vmlinux.lds.S
+index 975c654cf5a5..3e8ebf1d64c5 100644
+--- a/arch/s390/kernel/vmlinux.lds.S
++++ b/arch/s390/kernel/vmlinux.lds.S
+@@ -187,14 +187,13 @@ SECTIONS
+ 	_eamode31 = .;
+ 
+ 	/* early.c uses stsi, which requires page aligned data. */
+ 	. = ALIGN(PAGE_SIZE);
+ 	INIT_DATA_SECTION(0x100)
+ 
+-	RUNTIME_CONST(shift, d_hash_shift)
+-	RUNTIME_CONST(ptr, dentry_hashtable)
++	RUNTIME_CONST_VARIABLES
+ 
+ 	PERCPU_SECTION(0x100)
+ 
+ 	. = ALIGN(PAGE_SIZE);
+ 	__init_end = .;		/* freed after init ends here */
+ 
+diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
+index 6e73403e874f..6726be89b7a6 100644
+--- a/arch/x86/kernel/vmlinux.lds.S
++++ b/arch/x86/kernel/vmlinux.lds.S
+@@ -354,14 +354,13 @@ SECTIONS
+ 	}
+ 
+ #if !defined(CONFIG_X86_64) || !defined(CONFIG_SMP)
+ 	PERCPU_SECTION(INTERNODE_CACHE_BYTES)
+ #endif
+ 
+-	RUNTIME_CONST(shift, d_hash_shift)
+-	RUNTIME_CONST(ptr, dentry_hashtable)
++	RUNTIME_CONST_VARIABLES
+ 
+ 	. = ALIGN(PAGE_SIZE);
+ 
+ 	/* freed after init ends here */
+ 	.init.end : AT(ADDR(.init.end) - LOAD_OFFSET) {
+ 		__init_end = .;
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index ad6afc5c4918..54986eac2f73 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -916,12 +916,16 @@
+ #define RUNTIME_CONST(t,x)						\
+ 	. = ALIGN(8);							\
+ 	RUNTIME_NAME(t,x) : AT(ADDR(RUNTIME_NAME(t,x)) - LOAD_OFFSET) {	\
+ 		*(RUNTIME_NAME(t,x));					\
+ 	}
+ 
++#define RUNTIME_CONST_VARIABLES						\
++		RUNTIME_CONST(shift, d_hash_shift)			\
++		RUNTIME_CONST(ptr, dentry_hashtable)
++
+ /* Alignment must be consistent with (kunit_suite *) in include/kunit/test.h */
+ #define KUNIT_TABLE()							\
+ 		. = ALIGN(8);						\
+ 		BOUNDED_SECTION_POST_LABEL(.kunit_test_suites, __kunit_suites, _start, _end)
+ 
+ /* Alignment must be consistent with (kunit_suite *) in include/kunit/test.h */
+
+---
+base-commit: 94ede2a3e9135764736221c080ac7c0ad993dc2d
+change-id: 20240730-runtime-constants-refactor-309f966d4100
+-- 
+Jann Horn <jannh@google.com>
+
 
