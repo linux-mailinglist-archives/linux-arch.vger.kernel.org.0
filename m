@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-5703-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5704-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEC629408A9
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Jul 2024 08:44:12 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DE8F9408AF
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Jul 2024 08:44:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 52696B245C2
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Jul 2024 06:44:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AED7FB247DD
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Jul 2024 06:44:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FEE718FC6E;
-	Tue, 30 Jul 2024 06:43:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBAE618FDA2;
+	Tue, 30 Jul 2024 06:43:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pCvcQ31O"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sF6QdOTY"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0845818FC61;
-	Tue, 30 Jul 2024 06:43:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 976B718F2E7;
+	Tue, 30 Jul 2024 06:43:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722321822; cv=none; b=ZyzpSlXKGXscJ0SaoG9cyQsmLhdZpyNnmqPOBxlSDsPlpxo3Fb1MjPaw6qlKzowN4xvovOuVCJXp7Rpr2DV2YCyUGN9nocYYMmMzmYEJQR7mvpGTBfH+rRx9KjsJnhhNGcCOS8tUBPDkuhsAdUZMe8nHnBzvafqmBx1PzppDa2E=
+	t=1722321835; cv=none; b=Ws6wghqM/QpLNMr46XQZzwYn6rUWVgAm+Z4F0MxwDLIF5B0Od2bnJXz4EKfy7u1mYu8LPaHwMzi6jxPyxdzjyfigUZ62HJzTRZt837Q9mY+qV45Lj2Z8dwM04NwizuLG/XBso/30+j5WfUN13TFNCGXUZQhct+U7XCn/bVPpf0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722321822; c=relaxed/simple;
-	bh=0HxdBM1LE6ysqiZRX6SJTg2axmKV4cup3qnH1WxeykQ=;
+	s=arc-20240116; t=1722321835; c=relaxed/simple;
+	bh=liNll9iqljHOGZGyoe5+iBjU60hIZmqEawxmeeNx05k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TTb3KhgRCOfVb12sp932ZnNlNUWIOzNkIpOthtwmHZgT+22bAsH3feMDOPWiTRrr7ADoFSN19lUzgpI0Sv1m7G+2suOZcaUi/wXuSc3m17jw4vAZGtlhIoXFhb9FPUl6luS72vUu/orb1ulQI3IsAV89zYNRtGgU4/5IF5v86po=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pCvcQ31O; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BACF0C4AF0F;
-	Tue, 30 Jul 2024 06:43:28 +0000 (UTC)
+	 MIME-Version; b=kTJDvKaVUnZx/d7mK4n5eseWaPG+1YrCc6C4+4E4ajil5HQAhtBXnA2vHP/7f5SE5P9kQYeCvVnA/1WwnKZXJDjkT2LchYRElpwgC9MQZaRNFZYX2Qau9xSBs+YUKXNadxsk7TSRJmO34SzHeElmD3xjFNzlGpwDKz6DB9zMb3M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sF6QdOTY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33505C4AF10;
+	Tue, 30 Jul 2024 06:43:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722321821;
-	bh=0HxdBM1LE6ysqiZRX6SJTg2axmKV4cup3qnH1WxeykQ=;
+	s=k20201202; t=1722321835;
+	bh=liNll9iqljHOGZGyoe5+iBjU60hIZmqEawxmeeNx05k=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=pCvcQ31Oh/rZrX6vYGdEMdYSwjAA1+34RzrEr/t9o7MT5D+PNTa7YGGRObsY3Vj9J
-	 MUxGysHSwKrQcTkpl2SvBl6MqrXIGFBmI4eQ8UJaSIMIEoLnBkMvA28EEmbuYs8lJK
-	 mCDTcdUtjWr6glb6vgLgL4UY0BRUmhgrr7fA+xoTqQOS70P7y/nWIOhbfFqpU6R5sg
-	 QonRXyIz/vNUbS7vAW+pLYDApyNCiOl6Tc9/c2usw+ur/OSWJW0zIG0rK19z5A7Fpr
-	 j1UM3Hg0YFwY8/lXeCo/dTo4rnWTG7ZllMILNLVedgbzdeKrt+O1TPgn6MC8iP/Fif
-	 4XWWZnrr+crcw==
+	b=sF6QdOTYXsuhZ5/wKcNXr1fpLi2Nc7NTYTTlW0GyhipNPb/9ArXCaTfUMRF4glafN
+	 ERGFWbhPiJp0rpmYk//9iOQ4Y6AWC6KbdqdnXw9EAsyfZb9SiKLpZrjeJa4W887xAU
+	 iVeioOBZRlSigQTkAI1svU6u1CTnxum7RI995sRZM+TABKT73TI9KeunNb+F7Daix0
+	 V49XC5PL7gFKWpc7LTU2ULT4wVE0DoSUB5onWtjcXwdrpZRUDJf6X0eNb/eT2TMkmJ
+	 5rFakvhSK2oYTuzfh3G24YHCdvf2JT6UzyA+rwvZu+uZaNsor+hHhabSQIlD9nTc6+
+	 JA10DmcfN2EZw==
 From: alexs@kernel.org
 To: Will Deacon <will@kernel.org>,
 	"Aneesh Kumar K . V" <aneesh.kumar@kernel.org>,
@@ -108,9 +108,9 @@ Cc: Guo Ren <guoren@kernel.org>,
 	Matthew Wilcox <willy@infradead.org>,
 	Alex Shi <alexs@kernel.org>,
 	Andrew Morton <akpm@linux-foundation.org>
-Subject: [RFC PATCH 04/18] mm/thp: use ptdesc pointer in __do_huge_pmd_anonymous_page
-Date: Tue, 30 Jul 2024 14:46:58 +0800
-Message-ID: <20240730064712.3714387-5-alexs@kernel.org>
+Subject: [RFC PATCH 05/18] mm/thp: use ptdesc in do_huge_pmd_anonymous_page
+Date: Tue, 30 Jul 2024 14:46:59 +0800
+Message-ID: <20240730064712.3714387-6-alexs@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240730064712.3714387-1-alexs@kernel.org>
 References: <20240730064712.3714387-1-alexs@kernel.org>
@@ -124,7 +124,7 @@ Content-Transfer-Encoding: 8bit
 
 From: Alex Shi <alexs@kernel.org>
 
-Since we have ptdesc struct now, better to use replace pgtable_t, aka
+ince we have ptdesc struct now, better to use replace pgtable_t, aka
 'struct page *'. It's alaos a preparation for return ptdesc pointer
 in pte_alloc_one series function.
 
@@ -133,62 +133,60 @@ Cc: linux-kernel@vger.kernel.org
 Cc: linux-mm@kvack.org
 Cc: Andrew Morton <akpm@linux-foundation.org>
 ---
- mm/huge_memory.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ mm/huge_memory.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
 diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 0167dc27e365..0ee104093121 100644
+index 0ee104093121..d86108d81a99 100644
 --- a/mm/huge_memory.c
 +++ b/mm/huge_memory.c
-@@ -943,7 +943,7 @@ static vm_fault_t __do_huge_pmd_anonymous_page(struct vm_fault *vmf,
- {
- 	struct vm_area_struct *vma = vmf->vma;
- 	struct folio *folio = page_folio(page);
--	pgtable_t pgtable;
-+	struct ptdesc *ptdesc;
- 	unsigned long haddr = vmf->address & HPAGE_PMD_MASK;
- 	vm_fault_t ret = 0;
+@@ -1087,16 +1087,16 @@ vm_fault_t do_huge_pmd_anonymous_page(struct vm_fault *vmf)
+ 	if (!(vmf->flags & FAULT_FLAG_WRITE) &&
+ 			!mm_forbids_zeropage(vma->vm_mm) &&
+ 			transparent_hugepage_use_zero_page()) {
+-		pgtable_t pgtable;
++		struct ptdesc *ptdesc;
+ 		struct folio *zero_folio;
+ 		vm_fault_t ret;
  
-@@ -959,8 +959,8 @@ static vm_fault_t __do_huge_pmd_anonymous_page(struct vm_fault *vmf,
- 	}
- 	folio_throttle_swaprate(folio, gfp);
- 
--	pgtable = pte_alloc_one(vma->vm_mm);
--	if (unlikely(!pgtable)) {
-+	ptdesc = page_ptdesc(pte_alloc_one(vma->vm_mm));
-+	if (unlikely(!ptdesc)) {
- 		ret = VM_FAULT_OOM;
- 		goto release;
- 	}
-@@ -987,7 +987,7 @@ static vm_fault_t __do_huge_pmd_anonymous_page(struct vm_fault *vmf,
- 		if (userfaultfd_missing(vma)) {
- 			spin_unlock(vmf->ptl);
- 			folio_put(folio);
+-		pgtable = pte_alloc_one(vma->vm_mm);
+-		if (unlikely(!pgtable))
++		ptdesc = page_ptdesc(pte_alloc_one(vma->vm_mm));
++		if (unlikely(!ptdesc))
+ 			return VM_FAULT_OOM;
+ 		zero_folio = mm_get_huge_zero_folio(vma->vm_mm);
+ 		if (unlikely(!zero_folio)) {
 -			pte_free(vma->vm_mm, pgtable);
 +			pte_free(vma->vm_mm, ptdesc_page(ptdesc));
- 			ret = handle_userfault(vmf, VM_UFFD_MISSING);
- 			VM_BUG_ON(ret & VM_FAULT_FALLBACK);
- 			return ret;
-@@ -997,7 +997,7 @@ static vm_fault_t __do_huge_pmd_anonymous_page(struct vm_fault *vmf,
- 		entry = maybe_pmd_mkwrite(pmd_mkdirty(entry), vma);
- 		folio_add_new_anon_rmap(folio, vma, haddr, RMAP_EXCLUSIVE);
- 		folio_add_lru_vma(folio, vma);
--		pgtable_trans_huge_deposit(vma->vm_mm, vmf->pmd, pgtable);
-+		pgtable_trans_huge_deposit(vma->vm_mm, vmf->pmd, ptdesc_page(ptdesc));
- 		set_pmd_at(vma->vm_mm, haddr, vmf->pmd, entry);
- 		update_mmu_cache_pmd(vma, vmf->address, vmf->pmd);
- 		add_mm_counter(vma->vm_mm, MM_ANONPAGES, HPAGE_PMD_NR);
-@@ -1012,8 +1012,8 @@ static vm_fault_t __do_huge_pmd_anonymous_page(struct vm_fault *vmf,
- unlock_release:
- 	spin_unlock(vmf->ptl);
- release:
--	if (pgtable)
--		pte_free(vma->vm_mm, pgtable);
-+	if (ptdesc)
-+		pte_free(vma->vm_mm, ptdesc_page(ptdesc));
- 	folio_put(folio);
- 	return ret;
- 
+ 			count_vm_event(THP_FAULT_FALLBACK);
+ 			return VM_FAULT_FALLBACK;
+ 		}
+@@ -1106,21 +1106,21 @@ vm_fault_t do_huge_pmd_anonymous_page(struct vm_fault *vmf)
+ 			ret = check_stable_address_space(vma->vm_mm);
+ 			if (ret) {
+ 				spin_unlock(vmf->ptl);
+-				pte_free(vma->vm_mm, pgtable);
++				pte_free(vma->vm_mm, ptdesc_page(ptdesc));
+ 			} else if (userfaultfd_missing(vma)) {
+ 				spin_unlock(vmf->ptl);
+-				pte_free(vma->vm_mm, pgtable);
++				pte_free(vma->vm_mm, ptdesc_page(ptdesc));
+ 				ret = handle_userfault(vmf, VM_UFFD_MISSING);
+ 				VM_BUG_ON(ret & VM_FAULT_FALLBACK);
+ 			} else {
+-				set_huge_zero_folio(pgtable, vma->vm_mm, vma,
++				set_huge_zero_folio(ptdesc_page(ptdesc), vma->vm_mm, vma,
+ 						   haddr, vmf->pmd, zero_folio);
+ 				update_mmu_cache_pmd(vma, vmf->address, vmf->pmd);
+ 				spin_unlock(vmf->ptl);
+ 			}
+ 		} else {
+ 			spin_unlock(vmf->ptl);
+-			pte_free(vma->vm_mm, pgtable);
++			pte_free(vma->vm_mm, ptdesc_page(ptdesc));
+ 		}
+ 		return ret;
+ 	}
 -- 
 2.43.0
 
