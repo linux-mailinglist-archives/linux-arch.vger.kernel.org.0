@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-5705-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5706-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C513A9408B3
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Jul 2024 08:44:51 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E5AC9408BE
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Jul 2024 08:45:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 84C74284F8C
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Jul 2024 06:44:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4F2E6B23920
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Jul 2024 06:45:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AF8818FDD2;
-	Tue, 30 Jul 2024 06:44:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7388F18FDB7;
+	Tue, 30 Jul 2024 06:44:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZEtbsRJn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J/Njo24p"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0362E524C;
-	Tue, 30 Jul 2024 06:44:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ECD818F2FF;
+	Tue, 30 Jul 2024 06:44:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722321849; cv=none; b=aYzxOsv6ZhM0BjxoebV4zsjLcsLic7+OjQQ8TE5K0aMtCyoyhykOSrWcTNgI1XFVORfkbFH1ik0CCyCO9Nk1LdlAziICKsXzTUXvEFAvmRRkijrifraMtA3OfhGkjxW2Veje5+fnrwe6jQvX30s18G5/KZXj8mS1xmfVURLjvwg=
+	t=1722321862; cv=none; b=T78rMS8oxAiArTibFjJYAtlBIaQFlN6LYJEsWZbrjxNdF8Shi6AaOufCGKwZfLCBXZB7Gb6KzN9duA2C+H3yfiZp0jO1IcP+MC4pJvM0FoyRQhTaoXKi/FYrx5s7zxsjNd+a4Vt2L6zmCT2OEldUNendmfBv7ZQOMZxYNKdT0ig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722321849; c=relaxed/simple;
-	bh=PV8eOJ4vyzS4FxAkaZ5NDLLSz9ktugALPQl2HkO57GQ=;
+	s=arc-20240116; t=1722321862; c=relaxed/simple;
+	bh=G//eVJ9Nw8aOOKl2d7JUp/+QzzL5npEnufgRCiBDKNQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SjC+VepTAcSpYVlNGBFFWdVUcbvOOKyfXFKJGYJJrBLObkJ8ikwgDMzEUJKqH94VPDvb3BY9+kUQad8wPWuCN4f0GoaI5oIMklxs3+tCq7Yk1DWKCogbGm3iQoyYJrvfPTnyA8ut3PKcLm0wJmMeJwDFgaUvDXdTK2GH43dG2Wk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZEtbsRJn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1846C4AF11;
-	Tue, 30 Jul 2024 06:43:55 +0000 (UTC)
+	 MIME-Version; b=Mdnpl+vDhTBNDDtWYpxG7fthOrQSp9bhRqTAYYlSclpZAFYWceVH/2a/W5I8W/SUlKGuQBeDeHvJN2gtuWdwwkTHxaQS1Nak/F3XK1N+h9gtnvX48x0bNFcf6SEfXdwJz6cNQDqMXCjiT7dcGIOyLDFs4G3emyqlD6vwq3qvSeI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J/Njo24p; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20371C4AF09;
+	Tue, 30 Jul 2024 06:44:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722321848;
-	bh=PV8eOJ4vyzS4FxAkaZ5NDLLSz9ktugALPQl2HkO57GQ=;
+	s=k20201202; t=1722321862;
+	bh=G//eVJ9Nw8aOOKl2d7JUp/+QzzL5npEnufgRCiBDKNQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ZEtbsRJnMf7Ux0oUP43wBe2ysz4FoXhhZTuwRiPtnQvwBzcF04hW3I71Xi5W3eYCz
-	 vb88N88O7flGQsN6anDDUISBm6/xyE43fRkDhAbxLnCjDlVv82fGw6FotjAYvt6GYX
-	 QFHcPrRinsx/+c7KPzDEsLxpolwpWompiMzb0pXGb0blFP07SEq1UyKFHAQv8XC/pa
-	 pwgu/eKYgUvwjUgeNQmkj2V0n+sfCR/zx78ePeUsj8CmLWrWcX3OzbvvjpOQap3f7i
-	 4IH69bYV6ej5Ph0nh99eBqc8supUb+vBuZOERYMAwubQqITEfEu+UKFYgdgEO9AhVB
-	 gqDximJu4aCiQ==
+	b=J/Njo24pZ085kd/eT/gy5nmywtW77TTpW3xwRWYKhIkRHK+lzJdbLggDAN6TpyGvN
+	 rW07M9G7E1rNbOiK/BYavaoAKy5hQTRctqPFFo3zD8RaDkoOT734VNnkfzYGuRTgPr
+	 7lKhNURsW3JqfLiFVe6G4I5vB1kH5jyn1aLmIMd7FJoJlqMApaFJRvyhUsEwo7ZIpN
+	 7RM5QFW8/cV4jRPKXNJ+uwP9fbxQTUYzoz9IEwP+GKQXDzHKvni3jbtRsnh4VwsG8Q
+	 iDZw7zJUhoXwEXAb/FQFLoYiOb7hjhzSksX+Dz2XjNV5rBm5sV5pprZ9SrmxaTGPRh
+	 KrVL8p90HnjKQ==
 From: alexs@kernel.org
 To: Will Deacon <will@kernel.org>,
 	"Aneesh Kumar K . V" <aneesh.kumar@kernel.org>,
@@ -108,9 +108,9 @@ Cc: Guo Ren <guoren@kernel.org>,
 	Matthew Wilcox <willy@infradead.org>,
 	Alex Shi <alexs@kernel.org>,
 	Andrew Morton <akpm@linux-foundation.org>
-Subject: [RFC PATCH 06/18] mm/thp: convert insert_pfn_pmd and its caller to use ptdesc
-Date: Tue, 30 Jul 2024 14:47:00 +0800
-Message-ID: <20240730064712.3714387-7-alexs@kernel.org>
+Subject: [RFC PATCH 07/18] mm/thp: use ptdesc in copy_huge_pmd
+Date: Tue, 30 Jul 2024 14:47:01 +0800
+Message-ID: <20240730064712.3714387-8-alexs@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240730064712.3714387-1-alexs@kernel.org>
 References: <20240730064712.3714387-1-alexs@kernel.org>
@@ -133,74 +133,68 @@ Cc: linux-kernel@vger.kernel.org
 Cc: linux-mm@kvack.org
 Cc: Andrew Morton <akpm@linux-foundation.org>
 ---
- mm/huge_memory.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ mm/huge_memory.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
 diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index d86108d81a99..a331d4504d52 100644
+index a331d4504d52..236e1582d97e 100644
 --- a/mm/huge_memory.c
 +++ b/mm/huge_memory.c
-@@ -1136,7 +1136,7 @@ vm_fault_t do_huge_pmd_anonymous_page(struct vm_fault *vmf)
- 
- static void insert_pfn_pmd(struct vm_area_struct *vma, unsigned long addr,
- 		pmd_t *pmd, pfn_t pfn, pgprot_t prot, bool write,
--		pgtable_t pgtable)
-+		struct ptdesc *ptdesc)
- {
- 	struct mm_struct *mm = vma->vm_mm;
- 	pmd_t entry;
-@@ -1166,10 +1166,10 @@ static void insert_pfn_pmd(struct vm_area_struct *vma, unsigned long addr,
- 		entry = maybe_pmd_mkwrite(entry, vma);
- 	}
- 
--	if (pgtable) {
--		pgtable_trans_huge_deposit(mm, pmd, pgtable);
-+	if (ptdesc) {
-+		pgtable_trans_huge_deposit(mm, pmd, ptdesc_page(ptdesc));
- 		mm_inc_nr_ptes(mm);
--		pgtable = NULL;
-+		ptdesc = NULL;
- 	}
- 
- 	set_pmd_at(mm, addr, pmd, entry);
-@@ -1177,8 +1177,8 @@ static void insert_pfn_pmd(struct vm_area_struct *vma, unsigned long addr,
- 
- out_unlock:
- 	spin_unlock(ptl);
--	if (pgtable)
--		pte_free(mm, pgtable);
-+	if (ptdesc)
-+		pte_free(mm, ptdesc_page(ptdesc));
- }
- 
- /**
-@@ -1196,7 +1196,7 @@ vm_fault_t vmf_insert_pfn_pmd(struct vm_fault *vmf, pfn_t pfn, bool write)
- 	unsigned long addr = vmf->address & PMD_MASK;
- 	struct vm_area_struct *vma = vmf->vma;
- 	pgprot_t pgprot = vma->vm_page_prot;
+@@ -1369,15 +1369,15 @@ int copy_huge_pmd(struct mm_struct *dst_mm, struct mm_struct *src_mm,
+ 	struct page *src_page;
+ 	struct folio *src_folio;
+ 	pmd_t pmd;
 -	pgtable_t pgtable = NULL;
 +	struct ptdesc *ptdesc = NULL;
+ 	int ret = -ENOMEM;
  
- 	/*
- 	 * If we had pmd_special, we could avoid all these restrictions,
-@@ -1213,14 +1213,14 @@ vm_fault_t vmf_insert_pfn_pmd(struct vm_fault *vmf, pfn_t pfn, bool write)
- 		return VM_FAULT_SIGBUS;
+ 	/* Skip if can be re-fill on fault */
+ 	if (!vma_is_anonymous(dst_vma))
+ 		return 0;
  
- 	if (arch_needs_pgtable_deposit()) {
--		pgtable = pte_alloc_one(vma->vm_mm);
--		if (!pgtable)
-+		ptdesc = page_ptdesc(pte_alloc_one(vma->vm_mm));
-+		if (!ptdesc)
- 			return VM_FAULT_OOM;
+-	pgtable = pte_alloc_one(dst_mm);
+-	if (unlikely(!pgtable))
++	ptdesc = page_ptdesc(pte_alloc_one(dst_mm));
++	if (unlikely(!ptdesc))
+ 		goto out;
+ 
+ 	dst_ptl = pmd_lock(dst_mm, dst_pmd);
+@@ -1404,7 +1404,7 @@ int copy_huge_pmd(struct mm_struct *dst_mm, struct mm_struct *src_mm,
+ 		}
+ 		add_mm_counter(dst_mm, MM_ANONPAGES, HPAGE_PMD_NR);
+ 		mm_inc_nr_ptes(dst_mm);
+-		pgtable_trans_huge_deposit(dst_mm, dst_pmd, pgtable);
++		pgtable_trans_huge_deposit(dst_mm, dst_pmd, ptdesc_page(ptdesc));
+ 		if (!userfaultfd_wp(dst_vma))
+ 			pmd = pmd_swp_clear_uffd_wp(pmd);
+ 		set_pmd_at(dst_mm, addr, dst_pmd, pmd);
+@@ -1414,7 +1414,7 @@ int copy_huge_pmd(struct mm_struct *dst_mm, struct mm_struct *src_mm,
+ #endif
+ 
+ 	if (unlikely(!pmd_trans_huge(pmd))) {
+-		pte_free(dst_mm, pgtable);
++		pte_free(dst_mm, ptdesc_page(ptdesc));
+ 		goto out_unlock;
  	}
- 
- 	track_pfn_insert(vma, &pgprot, pfn);
- 
--	insert_pfn_pmd(vma, addr, vmf->pmd, pfn, pgprot, write, pgtable);
-+	insert_pfn_pmd(vma, addr, vmf->pmd, pfn, pgprot, write, ptdesc);
- 	return VM_FAULT_NOPAGE;
- }
- EXPORT_SYMBOL_GPL(vmf_insert_pfn_pmd);
+ 	/*
+@@ -1440,7 +1440,7 @@ int copy_huge_pmd(struct mm_struct *dst_mm, struct mm_struct *src_mm,
+ 	if (unlikely(folio_try_dup_anon_rmap_pmd(src_folio, src_page, src_vma))) {
+ 		/* Page maybe pinned: split and retry the fault on PTEs. */
+ 		folio_put(src_folio);
+-		pte_free(dst_mm, pgtable);
++		pte_free(dst_mm, ptdesc_page(ptdesc));
+ 		spin_unlock(src_ptl);
+ 		spin_unlock(dst_ptl);
+ 		__split_huge_pmd(src_vma, src_pmd, addr, false, NULL);
+@@ -1449,7 +1449,7 @@ int copy_huge_pmd(struct mm_struct *dst_mm, struct mm_struct *src_mm,
+ 	add_mm_counter(dst_mm, MM_ANONPAGES, HPAGE_PMD_NR);
+ out_zero_page:
+ 	mm_inc_nr_ptes(dst_mm);
+-	pgtable_trans_huge_deposit(dst_mm, dst_pmd, pgtable);
++	pgtable_trans_huge_deposit(dst_mm, dst_pmd, ptdesc_page(ptdesc));
+ 	pmdp_set_wrprotect(src_mm, addr, src_pmd);
+ 	if (!userfaultfd_wp(dst_vma))
+ 		pmd = pmd_clear_uffd_wp(pmd);
 -- 
 2.43.0
 
