@@ -1,81 +1,81 @@
-Return-Path: <linux-arch+bounces-5731-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5732-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFA2B941F52
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Jul 2024 20:16:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A53C0941F71
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Jul 2024 20:20:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0ED731C215E6
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Jul 2024 18:16:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 583BB284A4E
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Jul 2024 18:20:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07A58187FE2;
-	Tue, 30 Jul 2024 18:16:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2917918A6A9;
+	Tue, 30 Jul 2024 18:20:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gxblxc6X"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lNGnDsgZ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8494454648;
-	Tue, 30 Jul 2024 18:16:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B531F18A6C4;
+	Tue, 30 Jul 2024 18:20:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722363362; cv=none; b=aO+6gc+DcRYUcryDXxw/XkN/k8w1+CkMPTOJcjXGBkrDItYFerezpf+dAkLOpKAut+aT8d15kIf9KTmgDjYHeC0yyu88kC90PXYyNYKKXkYb/QFVTEzLmjLaiq+j2ZBICPW+GyNKMOcBCk6TaVS9L9cWUFLjO0iwDUnwIYibapA=
+	t=1722363640; cv=none; b=hoKF6kLlShp4KUhYlcPqtTJAqrm7smM6REu1M0R4BhTPZQXq/mkmZzXXS71W+kydGQ0zpQZvOOOudnmb5XO3eAhA08dkeL9WPEpnVaoEXT+xGg4iKW4xsnJZYoRbkFyYOPD6279dY7S/2ohfelZqmI2DDU26vDGfpNBu9d/UuJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722363362; c=relaxed/simple;
-	bh=7Dt+EiDOIG9FTgUWs5mQwUm3EnLxmry8VZ4p/ANjCEk=;
+	s=arc-20240116; t=1722363640; c=relaxed/simple;
+	bh=G8sVbBwZJnyPhfnH8dBskagamVDv8p4AWzth221C2Kg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JbcKDt84S788BcOTYlBJx0sAvZ3NiRSnZDctcfnzkO/slw7akeAMZ9Rn4EbE6ytJxoRQQSAJaLj82/ACsJE0p70hiVe2hmAoHVJCyKnLm+Mbab01Opy2Nbrqqu0iFuydXEVHtLUAZGgV9TyyhclP+XHf2s0KzWTYnX8cGGj9pmM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gxblxc6X; arc=none smtp.client-ip=209.85.210.176
+	 Content-Type:Content-Disposition:In-Reply-To; b=cFW1cLQ2Czdo9JWyN/ir4+Eqmqps0vh0Ql89GbXjyXd5Ixd4ATLzh2h2O8evjmNCeHM7GS96nJauL6pEdFL6sXpMuHVOUCxnV9cq4a7QuWG2B+9q1nNj/cup+3HHFAnFVYXcsxTv+vE7Dlb6fpKKdujCfi4LEQYY1GE78i/9a1g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lNGnDsgZ; arc=none smtp.client-ip=209.85.210.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-70d1fb6c108so3468004b3a.3;
-        Tue, 30 Jul 2024 11:16:01 -0700 (PDT)
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-70cec4aa1e4so3326983b3a.1;
+        Tue, 30 Jul 2024 11:20:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722363361; x=1722968161; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1722363638; x=1722968438; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3d05lVpk2PS8LF6saDvzv531mIV2sO6Z2VMgmPghOMA=;
-        b=Gxblxc6XyoTAgCmq9hAg5iwNRhiCg9d7QtxsM+8TRutBwwbGsfOMdPU4AURAOdcam3
-         Zb8i77vJpzAv0hOMvureC1yznobJued/QgrNxfuMuViPzw5HKNNkt/L85E3g+fgh27Tv
-         ILcqWSJz/Z9ciC88DooazQssHHR6sDttu0S0/JrDwifk7ts9J6EU0U4IYkq3JsRn1IFQ
-         rWmtx2Zzm8merw5Myev8CTLKboWvmvEI77cjfIp9PdAVd9fKknr0W+YkO/9QGdGs1rXB
-         j+lGSHvd/66iYqylbr3piUQIwHJ9qtDI3RWFVXirN7VgyNtPUSKD2F4/GfzMymltbL6x
-         ptag==
+        bh=evmrDuWTpAztCWJC+WfQy/HIbwzxhxVcOsF3DausHNg=;
+        b=lNGnDsgZsfEbonMGadxCBfW17O28uSK50S1eQJYImCWSyDIiZ1E4+VqVkrVXFKFS6X
+         34JNrKrn8BNWsQmVRigDC8Z+AG0X5XVeHTkJFWtcXwqURLdvXhGCYdq51wrhMaEFFlU2
+         Lkv6sWdI9VL26Rd9FVPPYe+Uq//rhE0TeBoc0CrpINAbrX7RJNa6sHAOin/94UNPxZ9i
+         gp4zeC1vrTXoR4lMPr3vXRVlgAPoLcYRmxEP6fgA1buF9tAqSOSCMgNoEeWi4wEHz8yC
+         8i3rwlSr7UewWmV2cVebj/Af/4wBUfti84NpGChKGJgDvjO48cuth+1aCybw/NXFBJmm
+         DQ8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722363361; x=1722968161;
+        d=1e100.net; s=20230601; t=1722363638; x=1722968438;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3d05lVpk2PS8LF6saDvzv531mIV2sO6Z2VMgmPghOMA=;
-        b=V/1gH9s46gXiBy5SGJJJcVS7vSR8n1Ur3orWTO/CaZFqLTYa7N3IOijozZp29FQHIm
-         QUgFDQR3XV6yJVesWOpWxJ+V5U9+KDA45MGziu6U8L0SzKmnzTtqlchrtagF7Z15pIcx
-         xCSqcMR9xcSwhvxrsAYqnnNaZuJ7n59O00vb+S42VXUrl7g3OwIgcWgxPhAyK0FyVGYq
-         4L/sxSfpcVMysgx5yLhHjdkh9i4mWjn1Vl4w7p4Uk5Mb+Z7W5LgnYhpevc6V1XaFQSli
-         SN3xEOAjtok9zOh+knN1YE4eJw8qOGsK8y6rC2bn1F2nlvODyHAusmw3BGKpEi8ZrSSC
-         cXtA==
-X-Forwarded-Encrypted: i=1; AJvYcCXIb+8eoGzKl20W/QAHDFFhALYvy6AuZHxHPNhzIhqI7VScNGrUH3YQJslvUk38L+kyjtz8/3gNYqBdwqeY41PWR4aSfWD1IMnxrA==
-X-Gm-Message-State: AOJu0YyZ3WjeAPgHuHLlsk4mOcQQ8a9e4Qnmh/ow5GcMOhQLa9EraOxM
-	YPKeNsgGOMME59FY1TGtdwYzNC46wPsKM5nEyNqjAmW2RV77nDIl
-X-Google-Smtp-Source: AGHT+IHb2fKz1aXKzt0sKcve3mazQq1tjUkBukTatORAeLSphnAmbrsZ1UhkMTNPJ61IK+qaEXbtLA==
-X-Received: by 2002:a05:6a20:a111:b0:1c0:ee57:a9a3 with SMTP id adf61e73a8af0-1c4a13a354dmr11043975637.35.1722363360629;
-        Tue, 30 Jul 2024 11:16:00 -0700 (PDT)
+        bh=evmrDuWTpAztCWJC+WfQy/HIbwzxhxVcOsF3DausHNg=;
+        b=mBooUsoLYKf7W7W+zqsNGLQ+YZiwnAX8OJI+LuLR2eVRB4+BesH/l3Dy8D/Q0ugfPk
+         uCZj5s5yeSv5tiDe6qmUo/PBX1TpEsh3a0i2G5IilcyHmZJi6cc+mUPlcNbC7nEsGTQb
+         b3ONL/Xc3MiF2qdTOPpdMMAO/w+74VpUPV/x1n6ltwWdaLRRsdjIoePYViBpXfxG1K6T
+         ZWeJZ7vkw3Tl/ARHXf2ABe61gS9wI9BEP1Xw0v6TLQZfEUEPPWfxLncDvya/lC/yRBAm
+         HFE4yZhghtaVxPhYL2hUldXmPbUfF/Ttpf3Lst/Cz2UvHOcXo5V1cxzpraJwpzQ8TmDX
+         VOXg==
+X-Forwarded-Encrypted: i=1; AJvYcCXQ05JClB9OYmBDQDDQEJjjarzRA+A6z8vAGs+TIZiUqUNDDm43Li2OydK/8XN3c2SxJEOgsD4H39NQLQL7oUTwbpkXheyQarWFrw==
+X-Gm-Message-State: AOJu0YzOQOkRN2b3nPViDD+aKZXrxfl/hV2mcr/DAr3Ncj9APp6Xduji
+	acf6onRlZRnv1vOjH8Ma62QAI6/9xecdfM2vFLM76ceCHWJO6oKh
+X-Google-Smtp-Source: AGHT+IGceJ76vBCda+Ox4UC6J6EQeEM+C24t3cQicUirSbaFgBk6NqiUYBUJOc9w3qL6fVvgKLL0CQ==
+X-Received: by 2002:a05:6a21:3284:b0:1c0:e728:a99e with SMTP id adf61e73a8af0-1c4a12e31aamr16928307637.26.1722363637952;
+        Tue, 30 Jul 2024 11:20:37 -0700 (PDT)
 Received: from localhost ([216.228.127.129])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70ead87d58asm8986339b3a.177.2024.07.30.11.15.58
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70ead72bd7csm8983783b3a.95.2024.07.30.11.20.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jul 2024 11:15:59 -0700 (PDT)
-Date: Tue, 30 Jul 2024 11:15:57 -0700
+        Tue, 30 Jul 2024 11:20:37 -0700 (PDT)
+Date: Tue, 30 Jul 2024 11:20:35 -0700
 From: Yury Norov <yury.norov@gmail.com>
 To: Anshuman Khandual <anshuman.khandual@arm.com>
 Cc: linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
 	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
 	Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org
-Subject: Re: [PATCH V2 1/2] uapi: Define GENMASK_U128
-Message-ID: <Zqkt3byHNZQvCZiB@yury-ThinkPad>
+Subject: Re: [PATCH V2 2/2] lib/test_bits.c: Add tests for GENMASK_U128()
+Message-ID: <Zqku82z-y2fjtIZT@yury-ThinkPad>
 References: <20240725054808.286708-1-anshuman.khandual@arm.com>
- <20240725054808.286708-2-anshuman.khandual@arm.com>
+ <20240725054808.286708-3-anshuman.khandual@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -84,84 +84,72 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240725054808.286708-2-anshuman.khandual@arm.com>
+In-Reply-To: <20240725054808.286708-3-anshuman.khandual@arm.com>
 
-On Thu, Jul 25, 2024 at 11:18:07AM +0530, Anshuman Khandual wrote:
-> This adds GENMASK_U128() and __GENMASK_U128() macros using __BITS_PER_U128
-> and __int128 data types. These macros will be used in providing support for
-> generating 128 bit masks.
+On Thu, Jul 25, 2024 at 11:18:08AM +0530, Anshuman Khandual wrote:
+> This adds GENMASK_U128() tests although currently only 64 bit wide masks
+> are being tested.
 > 
-> Cc: Yury Norov <yury.norov@gmail.com>
-> Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-> Cc: Arnd Bergmann <arnd@arndb.de>>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
 > Cc: linux-kernel@vger.kernel.org
-> Cc: linux-arch@vger.kernel.org
 > Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 > ---
->  include/linux/bits.h                   | 2 ++
->  include/uapi/asm-generic/bitsperlong.h | 2 ++
->  include/uapi/linux/bits.h              | 3 +++
->  include/uapi/linux/const.h             | 1 +
->  4 files changed, 8 insertions(+)
+>  lib/test_bits.c | 25 +++++++++++++++++++++++++
+>  1 file changed, 25 insertions(+)
 > 
-> diff --git a/include/linux/bits.h b/include/linux/bits.h
-> index 0eb24d21aac2..0a174cce09d2 100644
-> --- a/include/linux/bits.h
-> +++ b/include/linux/bits.h
-> @@ -35,5 +35,7 @@
->  	(GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
->  #define GENMASK_ULL(h, l) \
->  	(GENMASK_INPUT_CHECK(h, l) + __GENMASK_ULL(h, l))
-> +#define GENMASK_U128(h, l) \
-> +	(GENMASK_INPUT_CHECK(h, l) + __GENMASK_U128(h, l))
->  
->  #endif	/* __LINUX_BITS_H */
-> diff --git a/include/uapi/asm-generic/bitsperlong.h b/include/uapi/asm-generic/bitsperlong.h
-> index fadb3f857f28..6275367b17bb 100644
-> --- a/include/uapi/asm-generic/bitsperlong.h
-> +++ b/include/uapi/asm-generic/bitsperlong.h
-> @@ -28,4 +28,6 @@
->  #define __BITS_PER_LONG_LONG 64
+> diff --git a/lib/test_bits.c b/lib/test_bits.c
+> index 01313980f175..f0d1033cf3c9 100644
+> --- a/lib/test_bits.c
+> +++ b/lib/test_bits.c
+> @@ -39,6 +39,26 @@ static void genmask_ull_test(struct kunit *test)
 >  #endif
+>  }
 >  
-> +#define __BITS_PER_U128 128
+> +#ifdef CONFIG_ARCH_SUPPORTS_INT128
 
-Do we need such a macro for a fixed-width type? Even if we do, I'm not
-sure that a header named bitsperlong.h is a good place to host it.
+Can you move this ifdefery inside the function scope, so that you'll
+not have do it below in tests array declarattion?
 
+> +static void genmask_u128_test(struct kunit *test)
+> +{
+> +	/* Tests mask generation only when the mask width is within 64 bits */
+> +	KUNIT_EXPECT_EQ(test, 0x0000000000ff0000ULL, GENMASK_U128(87, 80) >> 64);
+> +	KUNIT_EXPECT_EQ(test, 0x0000000000ffffffULL, GENMASK_U128(87, 64) >> 64);
+> +	KUNIT_EXPECT_EQ(test, 0x0000000000000001ULL, GENMASK_U128(0, 0));
+> +	KUNIT_EXPECT_EQ(test, 0xffffffffffffffffULL, GENMASK_U128(63, 0));
+> +	KUNIT_EXPECT_EQ(test, 0xffffffffffffffffULL, GENMASK_U128(64, 0) >> 1);
+> +	KUNIT_EXPECT_EQ(test, 0x00000000ffffffffULL, GENMASK_U128(81, 50) >> 50);
 > +
->  #endif /* _UAPI__ASM_GENERIC_BITS_PER_LONG */
-> diff --git a/include/uapi/linux/bits.h b/include/uapi/linux/bits.h
-> index 3c2a101986a3..4d4b7b08003c 100644
-> --- a/include/uapi/linux/bits.h
-> +++ b/include/uapi/linux/bits.h
-> @@ -12,4 +12,7 @@
->          (((~_ULL(0)) - (_ULL(1) << (l)) + 1) & \
->           (~_ULL(0) >> (__BITS_PER_LONG_LONG - 1 - (h))))
->  
-> +#define __GENMASK_U128(h, l) \
-> +	((_BIT128((h) + 1)) - (_BIT128(l)))
+> +#ifdef TEST_GENMASK_FAILURES
+> +	/* these should fail compilation */
+> +	GENMASK_U128(0, 1);
+> +	GENMASK_U128(0, 10);
+> +	GENMASK_U128(9, 10);
+> +#endif
+> +}
+> +#endif
 > +
->  #endif /* _UAPI_LINUX_BITS_H */
-> diff --git a/include/uapi/linux/const.h b/include/uapi/linux/const.h
-> index a429381e7ca5..a0211136dfd8 100644
-> --- a/include/uapi/linux/const.h
-> +++ b/include/uapi/linux/const.h
-> @@ -27,6 +27,7 @@
+>  static void genmask_input_check_test(struct kunit *test)
+>  {
+>  	unsigned int x, y;
+> @@ -56,12 +76,17 @@ static void genmask_input_check_test(struct kunit *test)
+>  	/* Valid input */
+>  	KUNIT_EXPECT_EQ(test, 0, GENMASK_INPUT_CHECK(1, 1));
+>  	KUNIT_EXPECT_EQ(test, 0, GENMASK_INPUT_CHECK(39, 21));
+> +	KUNIT_EXPECT_EQ(test, 0, GENMASK_INPUT_CHECK(100, 80));
+> +	KUNIT_EXPECT_EQ(test, 0, GENMASK_INPUT_CHECK(110, 65));
+>  }
 >  
->  #define _BITUL(x)	(_UL(1) << (x))
->  #define _BITULL(x)	(_ULL(1) << (x))
-> +#define _BIT128(x)	((unsigned __int128)(1) << (x))
-
-GENMASK() macros may be used in assembly code. This is not the case
-for GENMASK_128 at this time, of course, but I think we'd introduce 
-assembly glue at this point to simplify things in future. Can you
-check the include/uapi/linux/const.h and add something like _U128()
-in there?
-
 >  
->  #define __ALIGN_KERNEL(x, a)		__ALIGN_KERNEL_MASK(x, (__typeof__(x))(a) - 1)
->  #define __ALIGN_KERNEL_MASK(x, mask)	(((x) + (mask)) & ~(mask))
+>  static struct kunit_case bits_test_cases[] = {
+>  	KUNIT_CASE(genmask_test),
+>  	KUNIT_CASE(genmask_ull_test),
+> +#ifdef CONFIG_ARCH_SUPPORTS_INT128
+> +	KUNIT_CASE(genmask_u128_test),
+> +#endif
+>  	KUNIT_CASE(genmask_input_check_test),
+>  	{}
+>  };
 > -- 
 > 2.30.2
 
