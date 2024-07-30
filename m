@@ -1,265 +1,140 @@
-Return-Path: <linux-arch+bounces-5719-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5720-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D45D940B1E
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Jul 2024 10:17:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36EC1940BD0
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Jul 2024 10:39:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7FE50B22505
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Jul 2024 08:17:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A41C61F21D80
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Jul 2024 08:39:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 137341922E7;
-	Tue, 30 Jul 2024 08:17:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B767618FDA6;
+	Tue, 30 Jul 2024 08:39:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="K0SNL6uI"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="iBhmIlEu"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
+Received: from mout.web.de (mout.web.de [217.72.192.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D868D18FDC0;
-	Tue, 30 Jul 2024 08:17:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.110
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A3A8156C4B;
+	Tue, 30 Jul 2024 08:39:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722327468; cv=none; b=hOg1EnHun6w2sxRk/sNH5oKq+3V8bWRg+3hbY3ve4Io0pAAIWMY0KhG+gMl22lNb9a+akU34KXUXi3lfZfG02akaWrJ3CaX8BenoJr8ICN6WDUUARZcoxKsUTRDva0C6i9zWdRHJz9K6co1VNn77HXRajstnSnFUQsiL1uvX+0k=
+	t=1722328770; cv=none; b=RzAZJaqEENxI4qkLNIxlWPllEwuxudL8Kkmu9bTgzDr0awsWB6ndx3eSsV5LAor78AxQVGfVPkvjkVpxZvaC8aYFfl1yyIuuTztLX65ip3/1xv+GW8NdlAF8pXAH2IXNI/zUCKk/c3eDPOU4XSVYQFbnHffRgqJV5MFkypN47ew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722327468; c=relaxed/simple;
-	bh=SoTuAhXH8DAcGS2Zg9eo9Y+q6LWEAmfzEF5TC+h8Cco=;
-	h=Message-ID:Subject:Date:From:To:Cc:References:In-Reply-To; b=KrgrT3Qo+/mHbCDS077VXDGPGIE/LZkJC5b9b4hZfNWWI7J6ZhGwBn6NwFd9kihaSydUWRA1Uu5ZeTTUPu7XwotuNo6xcTcmwDURYQI2y4w7HZ54tliBtgVszYrJv66Rglbu3iPoC3TMopfw8ZSDBSIwJfbEKZRI1PfJDR21G+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=K0SNL6uI; arc=none smtp.client-ip=115.124.30.110
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1722327455; h=Message-ID:Subject:Date:From:To;
-	bh=BL5MMNWBxRZiD5bwdc51aQGuezbk7sZ94pe6i1nz4Vo=;
-	b=K0SNL6uIC0eITT6Ch2r7BogGPhKmMDjZy9Nxz+6Qhajjb1Vgq/5wlNA9xcpE72fmkEEE7MYawZrvsms1DS5GczCXuJHg1wM70Cz7KiIdGiCXxcAwrzA7UdmVW+UJmSxEwAkF5AoIWCTtZnkCxdajJydcKxgpmyWuYlcQLFHpbj4=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037067113;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=53;SR=0;TI=SMTPD_---0WBexhuz_1722327451;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0WBexhuz_1722327451)
-          by smtp.aliyun-inc.com;
-          Tue, 30 Jul 2024 16:17:32 +0800
-Message-ID: <1722327259.5659568-1-xuanzhuo@linux.alibaba.com>
-Subject: Re: [PATCH net-next v17 01/14] netdev: add netdev_rx_queue_restart()
-Date: Tue, 30 Jul 2024 16:14:19 +0800
-From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To: Mina Almasry <almasrymina@google.com>
-Cc: Mina Almasry <almasrymina@google.com>,
- "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>,
- Donald Hunter <donald.hunter@gmail.com>,
- Jonathan Corbet <corbet@lwn.net>,
- Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
- Matt Turner <mattst88@gmail.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- Helge Deller <deller@gmx.de>,
- Andreas Larsson <andreas@gaisler.com>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Arnd Bergmann <arnd@arndb.de>,
- Steffen Klassert <steffen.klassert@secunet.com>,
- Herbert Xu <herbert@gondor.apana.org.au>,
- David Ahern <dsahern@kernel.org>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Shuah Khan <shuah@kernel.org>,
- Sumit Semwal <sumit.semwal@linaro.org>,
- =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Bagas Sanjaya <bagasdotme@gmail.com>,
- Christoph Hellwig <hch@infradead.org>,
- Nikolay Aleksandrov <razor@blackwall.org>,
- Taehee Yoo <ap420073@gmail.com>,
- Pavel Begunkov <asml.silence@gmail.com>,
- David Wei <dw@davidwei.uk>,
- Jason Gunthorpe <jgg@ziepe.ca>,
- Yunsheng Lin <linyunsheng@huawei.com>,
- Shailend Chand <shailend@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>,
- Shakeel Butt <shakeel.butt@linux.dev>,
- Jeroen de Borst <jeroendb@google.com>,
- Praveen Kaligineedi <pkaligineedi@google.com>,
- netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org,
- linux-alpha@vger.kernel.org,
- linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org,
- sparclinux@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org,
- linux-kselftest@vger.kernel.org,
- bpf@vger.kernel.org,
- linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org
-References: <20240730022623.98909-1-almasrymina@google.com>
- <20240730022623.98909-2-almasrymina@google.com>
-In-Reply-To: <20240730022623.98909-2-almasrymina@google.com>
+	s=arc-20240116; t=1722328770; c=relaxed/simple;
+	bh=07fx0OcCY32v0SirWQHDNSZfPG7HMF4hAqbJnMhyg3s=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=doaUhOprRAe6U8YQwCTdBJQwJbWw9dLJU7RBmP68ZdyLXzzOzPNT9M1raD3mNIuv+cF7+d/BcMrV+1wq5T8hKILBNJ6KknE68eHe3LlFgU2Sxsf3blqqOB59WLoUA6hlwdVhuzZeHa1kXBePQxAvtH6MCw3VAMexAe3hKYpzT9k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=iBhmIlEu; arc=none smtp.client-ip=217.72.192.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1722328685; x=1722933485; i=markus.elfring@web.de;
+	bh=07fx0OcCY32v0SirWQHDNSZfPG7HMF4hAqbJnMhyg3s=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
+	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=iBhmIlEu1DTEhbIId4CW/iiPJylb+jiOQ9na/RS5h69bGT/imWvKAbYeaJ6pivjz
+	 JMnQXpy3cOlHf6p3bxFw2uqBaGPOuz17LrdoEApiGvMmHL9F2kIIYCb9ueGy62+tI
+	 Z412cOhJGP5xxEr98kCfPNdYFjVPufN30A6OcLhTRbHeOoqDpZ30cxm7YBR3nSSWl
+	 8w95ukxErNzkX2hWTvH3N3Q/O+9nRoQJ+CINjbJQKXo8kr7CjpakPcjmpI9mTGMkm
+	 t7htz1r1rdr1c1sSbkVKfGHWXeJSssKDwuuEu3A8VxxvqEIW9YncbE1WpCLHOz/i4
+	 zpVozzeWA1xcB3gjBw==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.90.95]) by smtp.web.de (mrweb105
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MKMA1-1sq6tO21QF-00MgS1; Tue, 30
+ Jul 2024 10:38:05 +0200
+Message-ID: <5d3c74da-7d44-4b88-8961-60f21f84f0ac@web.de>
+Date: Tue, 30 Jul 2024 10:37:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Daniel Vetter <daniel.vetter@ffwll.ch>,
+ Kaiyuan Zhang <kaiyuanz@google.com>, Mina Almasry <almasrymina@google.com>,
+ Pavel Begunkov <asml.silence@gmail.com>,
+ Willem de Bruijn <willemb@google.com>, netdev@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ bpf@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org
+Cc: LKML <linux-kernel@vger.kernel.org>, Andreas Larsson
+ <andreas@gaisler.com>, Arnd Bergmann <arnd@arndb.de>,
+ Bagas Sanjaya <bagasdotme@gmail.com>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Christoph Hellwig <hch@infradead.org>, David Ahern <dsahern@kernel.org>,
+ "David S. Miller" <davem@davemloft.net>, David Wei <dw@davidwei.uk>,
+ Donald Hunter <donald.hunter@gmail.com>, Eric Dumazet <edumazet@google.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>, Helge Deller <deller@gmx.de>,
+ Herbert Xu <herbert@gondor.apana.org.au>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Jakub Kicinski
+ <kuba@kernel.org>,
+ "James E. J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Jeroen de Borst <jeroendb@google.com>,
+ Jesper Dangaard Brouer <hawk@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Matt Turner <mattst88@gmail.com>, Nikolay Aleksandrov <razor@blackwall.org>,
+ Paolo Abeni <pabeni@redhat.com>,
+ Praveen Kaligineedi <pkaligineedi@google.com>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Shailend Chand <shailend@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Shuah Khan <shuah@kernel.org>,
+ Steffen Klassert <steffen.klassert@secunet.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Sumit Semwal
+ <sumit.semwal@linaro.org>, Taehee Yoo <ap420073@gmail.com>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Yunsheng Lin <linyunsheng@huawei.com>
+References: <20240730022623.98909-4-almasrymina@google.com>
+Subject: Re: [PATCH net-next v17 03/14] netdev: support binding dma-buf to
+ netdevice
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20240730022623.98909-4-almasrymina@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:3zASUQdt0WnRJJo2JsH8HgMCSLLJrSOm6wxlRg1HbHDrGJYPFAR
+ 4UrI46t5fFnsIQP5D20a4Q4/ar+Qe149EAafa7XhskHQN56xyU9dWXWOdOe9cqX+BeVMF3I
+ 8WFhpDkIxnYHJeZdnRHZDAN3teiQz55j6x07IL1LXqdRPVKwtTq1AIEwtRutuGvYx2Pn/lI
+ 6wer7tct5AinmIXcBPXRw==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:pHmLyOskFkY=;I7pCl1VILl5yztEF5uEKXmycDP5
+ HNg30ml4ujtQp8hDTQ3k68nNJHnulVh43c1GvXrokXoDUhvvfoxNn12GmkZ+HgPxu8P5cN86n
+ HjOpfP8/MmUIpzxPlAqq3wxO4BHOXC7nCoou7XGF6loLekm4A+xubNt9riTQyV1qFBcyB94i1
+ 9nkx3l/0I3vtPPF6IXAuFeSgWGNbnMAc5yBzRdvhRx4NgMckDkjJvObOV+sApUE4abxW5IdYc
+ buKUkVmNMowUtx9d8ohNyHP5l0MvM+BrMJ+U6i6NSpHCcHyN+Db4gk/km/Nfpyxzicq+cw9kM
+ dbUuFQy20IeEzlt0JBmJTvh3npkouDOC8d+ppHNvGFDc2VX95QZiP8oAV1KqYVeet622rengR
+ 3AtZYxLW2HL9cJRJdGCFiSSoh2Ma1PdedqtRTNQE8x65ul4oZ5zC5oC7GI0KrfC2lDBmt7U9H
+ d3quaXmP5M08fs3HGNmDo2dJT4Mof8Rvu8b/1zeyNdFkx2ISKEqxruq9cgOvPVDOzWnM6q1hQ
+ j/Oo//f3eoHLmD9gSZJlyPqNPXnEofdZIoAkzr1NHrrLlxHQQCxQg4K2Ctyi0eEOGrXaAGGMW
+ U86dnhPzR1dN3MoSlZwMFv+d+ur6MNAU2LFwQiVgsiYO2r4PdA6g2/epD6XWGMZzsV3xD1bW9
+ ezFK4C0vxtvaDH0C0PO+CEdfJXWpA6ElBZbDAsD0DefszWZDdZo0DdR8nfhg96M442XbukoWM
+ HqCWkB1S51RK5OLQqCoLFxLM1/As4Y1LHCojxd9Oj8S237g0l+yUpVWT2ul1az/vHGJE2iOpx
+ VrU7WYLZwjqQf3tDPMnChwHw==
 
-On Tue, 30 Jul 2024 02:26:05 +0000, Mina Almasry <almasrymina@google.com> wrote:
-> Add netdev_rx_queue_restart() function to netdev_rx_queue.h
+=E2=80=A6
+> +++ b/include/net/devmem.h
+> @@ -0,0 +1,115 @@
+=E2=80=A6
+> +#ifndef _NET_DEVMEM_H
+> +#define _NET_DEVMEM_H
+=E2=80=A6
 
+I suggest to omit leading underscores from such identifiers.
+https://wiki.sei.cmu.edu/confluence/display/c/DCL37-C.+Do+not+declare+or+d=
+efine+a+reserved+identifier
 
-Can you say more? As far as I understand, we just release the buffer
-submitted to the rx ring and get a new page pool.
-
-But I personally feel that the interface here is a bit too complicated. In
-particular, we also need to copy the rx struct memory, which means it is a
-dangerous operation for many pointers.
-
-Thanks.
-
-
->
-> Signed-off-by: David Wei <dw@davidwei.uk>
-> Signed-off-by: Mina Almasry <almasrymina@google.com>
-> Reviewed-by: Pavel Begunkov <asml.silence@gmail.com>
-> Reviewed-by: Jakub Kicinski <kuba@kernel.org>
->
-> ---
->
-> v17:
-> - Use ASSERT_RTNL() (Jakub).
->
-> v13:
-> - Add reviewed-by from Pavel (thanks!)
-> - Fixed comment (Pavel)
->
-> v11:
-> - Fix not checking dev->queue_mgmt_ops (Pavel).
-> - Fix ndo_queue_mem_free call that passed the wrong pointer (David).
->
-> v9: https://lore.kernel.org/all/20240502045410.3524155-4-dw@davidwei.uk/
-> (submitted by David).
-> - fixed SPDX license identifier (Simon).
-> - Rebased on top of merged queue API definition, and changed
->   implementation to match that.
-> - Replace rtnl_lock() with rtnl_is_locked() to make it useable from my
->   netlink code where rtnl is already locked.
->
-> ---
->  include/net/netdev_rx_queue.h |  3 ++
->  net/core/Makefile             |  1 +
->  net/core/netdev_rx_queue.c    | 74 +++++++++++++++++++++++++++++++++++
->  3 files changed, 78 insertions(+)
->  create mode 100644 net/core/netdev_rx_queue.c
->
-> diff --git a/include/net/netdev_rx_queue.h b/include/net/netdev_rx_queue.h
-> index aa1716fb0e53c..e78ca52d67fbf 100644
-> --- a/include/net/netdev_rx_queue.h
-> +++ b/include/net/netdev_rx_queue.h
-> @@ -54,4 +54,7 @@ get_netdev_rx_queue_index(struct netdev_rx_queue *queue)
->  	return index;
->  }
->  #endif
-> +
-> +int netdev_rx_queue_restart(struct net_device *dev, unsigned int rxq);
-> +
->  #endif
-> diff --git a/net/core/Makefile b/net/core/Makefile
-> index 62be9aef25285..f82232b358a2c 100644
-> --- a/net/core/Makefile
-> +++ b/net/core/Makefile
-> @@ -19,6 +19,7 @@ obj-$(CONFIG_NETDEV_ADDR_LIST_TEST) += dev_addr_lists_test.o
->
->  obj-y += net-sysfs.o
->  obj-y += hotdata.o
-> +obj-y += netdev_rx_queue.o
->  obj-$(CONFIG_PAGE_POOL) += page_pool.o page_pool_user.o
->  obj-$(CONFIG_PROC_FS) += net-procfs.o
->  obj-$(CONFIG_NET_PKTGEN) += pktgen.o
-> diff --git a/net/core/netdev_rx_queue.c b/net/core/netdev_rx_queue.c
-> new file mode 100644
-> index 0000000000000..da11720a59830
-> --- /dev/null
-> +++ b/net/core/netdev_rx_queue.c
-> @@ -0,0 +1,74 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +
-> +#include <linux/netdevice.h>
-> +#include <net/netdev_queues.h>
-> +#include <net/netdev_rx_queue.h>
-> +
-> +int netdev_rx_queue_restart(struct net_device *dev, unsigned int rxq_idx)
-> +{
-> +	void *new_mem, *old_mem;
-> +	int err;
-> +
-> +	if (!dev->queue_mgmt_ops || !dev->queue_mgmt_ops->ndo_queue_stop ||
-> +	    !dev->queue_mgmt_ops->ndo_queue_mem_free ||
-> +	    !dev->queue_mgmt_ops->ndo_queue_mem_alloc ||
-> +	    !dev->queue_mgmt_ops->ndo_queue_start)
-> +		return -EOPNOTSUPP;
-> +
-> +	ASSERT_RTNL();
-> +
-> +	new_mem = kvzalloc(dev->queue_mgmt_ops->ndo_queue_mem_size, GFP_KERNEL);
-> +	if (!new_mem)
-> +		return -ENOMEM;
-> +
-> +	old_mem = kvzalloc(dev->queue_mgmt_ops->ndo_queue_mem_size, GFP_KERNEL);
-> +	if (!old_mem) {
-> +		err = -ENOMEM;
-> +		goto err_free_new_mem;
-> +	}
-> +
-> +	err = dev->queue_mgmt_ops->ndo_queue_mem_alloc(dev, new_mem, rxq_idx);
-> +	if (err)
-> +		goto err_free_old_mem;
-> +
-> +	err = dev->queue_mgmt_ops->ndo_queue_stop(dev, old_mem, rxq_idx);
-> +	if (err)
-> +		goto err_free_new_queue_mem;
-> +
-> +	err = dev->queue_mgmt_ops->ndo_queue_start(dev, new_mem, rxq_idx);
-> +	if (err)
-> +		goto err_start_queue;
-> +
-> +	dev->queue_mgmt_ops->ndo_queue_mem_free(dev, old_mem);
-> +
-> +	kvfree(old_mem);
-> +	kvfree(new_mem);
-> +
-> +	return 0;
-> +
-> +err_start_queue:
-> +	/* Restarting the queue with old_mem should be successful as we haven't
-> +	 * changed any of the queue configuration, and there is not much we can
-> +	 * do to recover from a failure here.
-> +	 *
-> +	 * WARN if we fail to recover the old rx queue, and at least free
-> +	 * old_mem so we don't also leak that.
-> +	 */
-> +	if (dev->queue_mgmt_ops->ndo_queue_start(dev, old_mem, rxq_idx)) {
-> +		WARN(1,
-> +		     "Failed to restart old queue in error path. RX queue %d may be unhealthy.",
-> +		     rxq_idx);
-> +		dev->queue_mgmt_ops->ndo_queue_mem_free(dev, old_mem);
-> +	}
-> +
-> +err_free_new_queue_mem:
-> +	dev->queue_mgmt_ops->ndo_queue_mem_free(dev, new_mem);
-> +
-> +err_free_old_mem:
-> +	kvfree(old_mem);
-> +
-> +err_free_new_mem:
-> +	kvfree(new_mem);
-> +
-> +	return err;
-> +}
-> --
-> 2.46.0.rc1.232.g9752f9e123-goog
->
->
+Regards,
+Markus
 
