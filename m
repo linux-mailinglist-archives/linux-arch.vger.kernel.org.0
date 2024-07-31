@@ -1,61 +1,61 @@
-Return-Path: <linux-arch+bounces-5772-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5773-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B38199430EF
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Jul 2024 15:33:47 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B50939430F2
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Jul 2024 15:34:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6E9B12819E8
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Jul 2024 13:33:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 13AB1B21C80
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Jul 2024 13:34:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 644EB1B29A2;
-	Wed, 31 Jul 2024 13:33:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE0B11B3721;
+	Wed, 31 Jul 2024 13:33:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="mliT2B7+"
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="N20k++xT"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2041.outbound.protection.outlook.com [40.107.255.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADB8D1B0119;
-	Wed, 31 Jul 2024 13:33:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 887641B29AA;
+	Wed, 31 Jul 2024 13:33:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.255.41
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722432816; cv=fail; b=sGd2+GOSLbnYEZ+34DUdvOhS6mQrj4h9T7eUvWrNutF4K+1zza2yBfbrzF6K/I1NcvzFpCQRSQr/Xxim5fZA4jQv6JwZn0D33I+cA1ZXf1wEH+n1/FKbn6MlzEbtBuennPPIobNWAr6qS724v03+n9OYOdB8Ko7QYC7eytOjpxc=
+	t=1722432818; cv=fail; b=V5INZK510Iha3KL0Bp26fwBP2AZ1U1S3QDhBwi9E6wdUUTY8tPHaN7Fumtg24WQjm8A5A7+rdvFj8BRcQQuGw+iCuiVUKElfrYJn0NjMW7jGWbTDCAu7fz7OJBUaXxcHMRwEvfnQutPDFAR2ntpHrMq0ZUjmSLOkt0a/TSIqHzM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722432816; c=relaxed/simple;
-	bh=IfynjR46K2oSu9CTIKJ9uwo869z4B089oeIEDxZt0tM=;
+	s=arc-20240116; t=1722432818; c=relaxed/simple;
+	bh=+iJVGKoEt7o7gzZZ+n2YojVRk0C/wAQhBY7sEsqzSY8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=m7msGqpC6jhWryxxNMagbh31NNLHnMA2RzQ2olyqtZ7wnbDzKjGFage+XbtjZnBU61p2ZTXfDF3Xu6b/A+ykXXoCJM1dcmj4isD0971Mp9pAMdJCsMJdGDuZbyS7Ph8hskBYZQCHMTGzqZ+j7B6aWpq7ZhgkhfnPNmkoeQtHeEA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=mliT2B7+; arc=fail smtp.client-ip=40.107.255.41
+	 Content-Type:MIME-Version; b=Gek+tQFLW8y/0DfTLTrwosWkmHd5XpXZ1ZzwGFe3k9jVxsdxxVaq7h/yfmsAgR6R8V309fnmLrsRuEcmPEEjbbox29tKFZYsTDbkMeN2RkepWm0YUjIWRjgUhyY7NtuFTlh+TXIwnAXOTwgq3w9oVwvaFWnhPsrcvSmiJ8MFMKM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=N20k++xT; arc=fail smtp.client-ip=40.107.255.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=wyg155LufuVX4eGFF/0cX0V3abhdfgQa1lnTMNA0Uc96kQDO4W49Ke0cixnSt+vQ0WE56oS1sM0LK2O8B75UVfAcDbf4WbPJ+88sjCh1JbJk74aRYw1MEdit9CCGq/bS9pQb6EEu14KdhKJrMrAImLRQ72YFYPdC1sU2x/IBKkTp9imp3E0aZPvIB4qEsxNMKSlplY9c3Pp6F2FdrelsYs1Rjc+ESVWq5dFgg8sfqtfI6ENfVHxZRO1iAXwm64cKT8LXE+FM0mEDUYUrI75jIMqMtlSji8cdu/t7ELnmzJ2trrhfLjG75JZR/uYMVf22ulyQBdp9EQfE4QVf36Gy3A==
+ b=IBbfGChWJfoEiU108qZSB0MpTAbXX/mIL6mWEpcV8P/yDDdIPkog9CXqYMbu4fNppPSZU4KYk9n/qQ0+Npj20L+quBGlkBhYgyPIzXIow7ut+GQ8eGcMhL899H0Tq6zU2w7OdBYbkFyHH9To+oVm3wa4gFdOpBOn4wGEUw3hpf8yM020kGfl4eQMkb6sRP//yut+ocEbazSLGC2ihhKRYpaFdxjsEhmqe+jEq4OuU90bbrO638UijYm3+tUHx8WYl3wwxWwukqtRP8gnKIuVGU8vgVYU0D6rtBn8fwnpwT/xYmm9uOeOqkU1BBxahkuY2yVgMhewTiwnWHKG6yI1Bg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lyxFrc6Clfrofhrb3kvsAmejA25jBTP+9YIvp/aeLhU=;
- b=hxWM9XcSAJTzsa97wiINYEpO6p66Vqq+HbbtuiSblvdw7hWS92TFKxeikV1unI7oPx72ZrHsP7UJpqxDoazSdsMfJCqud9vwRlNoWxYKTOfdKDuKlY61kqOtbsICBqY4M0+NHMH3dpO7iLNgb5tU50oHeNHlSqzIkf/KP7QVnkU0OkKZfYq4BSiqDb44U/+DnJcJkgke8nN1sZ7NC2TzuIsjYPED+z+7/z/rScDLDvm+FnvknTtcqWemAS8cHnEWr9riFu7I6yj32pZkW1mBMZzXrMnoCfapCt3kaWxeZHlJMDetx2/NWaco3jFLlTMfNSIKFR0gWsw4y0QOrVjrPw==
+ bh=ObihyOKZQ/WIgIQoj2hpGxPMHAvrXspcNNpS+vgDLoE=;
+ b=Trave3MxE3fjUC702S9wrHfVzPH6cKFuArIps0uEmHl8eDrHTDKhTmwet0tnofQA1eo4DgW235d2pXTyb3mPogGOBJbjdHgJfKnBJF/GdIRqEf3uAfab/vM68Yp9XxCJy815RWm9IWMQMApZ3Qj7ldIpiTFkPCz0rZKZWyWvPyqJvgM4ZvaKe4cjCS9sQZLTrWooad0sZ2/k73F6AkMsMzYUXeO6/FuoOhdsdoYy3cOgPO+yqp7Ue2iKH1Ot3lHZzkE3MJRjjoBEriMhgV2DYqg3tEaoQzfZvYS94yALLyVvav5la+zR2HY07I4dzHsmQ+AEjvI40b9+Pk3g1prfQw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
  dkim=pass header.d=vivo.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lyxFrc6Clfrofhrb3kvsAmejA25jBTP+9YIvp/aeLhU=;
- b=mliT2B7+DK5nLl1qGxYmhcmtArAFoDwiIUCYjr2KevP/VQmrOY/3ivqJXzg0mcikQxbO0B9QZPUhIUpk/fl101zdVIp9HmWzLFfWI0U3PWFlqPS9tTtNHp2KNXfujA9IxZ3+5wyyc9YjDPRl8WNmuluH5PRgJkpP1vOJIX6N8Btjvsyu2nstoPJmS3KvHcL7hsS0EiZplQyF0WMuYLElv5/cXPe1b1+zaAHbBv/PxpW3AldxuHnnmMx1Vz5kHVa0xp2oKfIMm4xhIW+HIp1xNMxN2JjJQ4HY9cIy2Rf8hVEon85LWj3GVMQ2wNGB5JMUTKAoIlREieRaQUbQGKkVEw==
+ bh=ObihyOKZQ/WIgIQoj2hpGxPMHAvrXspcNNpS+vgDLoE=;
+ b=N20k++xTQGf41fe6tvxUAFocppip0WoaAm3t/4BAvGkR+W2ggDCnYEeqfLc+ine2IrMIwS0dZTXMIntTDTZHVBsf7h8lp3tJjESrGt9/6XGDebBak2V/9i4swdwz0tWvd985uRN7Aj+ZIr6xai5hsdzaTWaQjKo9MFmYkUF74m7Dvx8nv4iugGZ855SSEFB4fxXErwhEsC+VkCmEVtrOpZH9XBZ6arm/CdB+ACy2b8ltX5digrkBCtsftHtouOCuDJhgJj/JetOvPDnTMxjPb1XF6QC7CtIewirMMUv9rGBFn8CCqnkccbZ6aqCGlE3Q25jIVqpQFcmUtDMguM8F5Q==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=vivo.com;
 Received: from JH0PR06MB6849.apcprd06.prod.outlook.com (2603:1096:990:47::12)
  by TYZPR06MB7334.apcprd06.prod.outlook.com (2603:1096:405:a4::9) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7807.27; Wed, 31 Jul
- 2024 13:33:28 +0000
+ 2024 13:33:30 +0000
 Received: from JH0PR06MB6849.apcprd06.prod.outlook.com
  ([fe80::ed24:a6cd:d489:c5ed]) by JH0PR06MB6849.apcprd06.prod.outlook.com
  ([fe80::ed24:a6cd:d489:c5ed%3]) with mapi id 15.20.7828.016; Wed, 31 Jul 2024
- 13:33:28 +0000
+ 13:33:30 +0000
 From: Zhiguo Jiang <justinjiang@vivo.com>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	linux-mm@kvack.org,
@@ -76,9 +76,9 @@ To: Andrew Morton <akpm@linux-foundation.org>,
 	kernel test robot <lkp@intel.com>,
 	Zhiguo Jiang <justinjiang@vivo.com>
 Cc: opensource.kernel@vivo.com
-Subject: [PATCH v2 1/3] mm: move task_is_dying to h headfile
-Date: Wed, 31 Jul 2024 21:33:15 +0800
-Message-ID: <20240731133318.527-2-justinjiang@vivo.com>
+Subject: [PATCH v2 2/3] mm: tlb: add tlb swap entries batch async release
+Date: Wed, 31 Jul 2024 21:33:16 +0800
+Message-ID: <20240731133318.527-3-justinjiang@vivo.com>
 X-Mailer: git-send-email 2.41.0.windows.3
 In-Reply-To: <20240731133318.527-1-justinjiang@vivo.com>
 References: <20240731133318.527-1-justinjiang@vivo.com>
@@ -95,123 +95,597 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: JH0PR06MB6849:EE_|TYZPR06MB7334:EE_
-X-MS-Office365-Filtering-Correlation-Id: ea452106-f2b6-40ab-a08c-08dcb1655cbd
+X-MS-Office365-Filtering-Correlation-Id: bf23920c-4bdb-41ac-fc64-08dcb1655dc4
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|7416014|1800799024|52116014|366016|376014|38350700014|921020;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?R7+Gq8enhSWUiHDdpLEDJfkl4ilHVQVdUr1XKj9MG7b9tzwF7GYT8hSKeKAj?=
- =?us-ascii?Q?Q8X0tBHcIyA7mD0qD4m2pqansTNG1xArGa5OgAN0lEePSJepdFt7tDRcAi1G?=
- =?us-ascii?Q?HoczXZpomW/ez2wkbg4C9b/+Rh7ZYOn5BbI8SEJ04p0ijOBnHmlSzUfqQnhm?=
- =?us-ascii?Q?2gfhQ2lrh+N2Cs/n2B7bp9QBIQeJVYMgsVfhdI9/CyBjOyMAwO3qQBO6BPKa?=
- =?us-ascii?Q?F3gL9gd5FN4nkdUTjEfwhw3iutRWQwobI7Gxz2WJRGWQwC33hV213knlIIL7?=
- =?us-ascii?Q?ubI8ZTjnK0Bo4i0BqCYvz6vILHEGX4+EHQIQlESniXKBrcSLWp5BJ99w/CD8?=
- =?us-ascii?Q?nIAcfobaW67jmADPAOe6DoONW/fOybRX57CxsFZVB9TXCY2cohXLM/9kNQbV?=
- =?us-ascii?Q?ZG0VrOGJOtAPoH+YMHVuYudonpspri0PIe/pCajLUDyoEAfi6N7wqEhAekQs?=
- =?us-ascii?Q?iP/uAs7sR8tW0Y+tStBC/hs0BD6yC0beaHhjZRUaFkcPx4l3M200KaIcoxU8?=
- =?us-ascii?Q?2XnpVTmT6m/V+1rMyUgDmkOtStMci3+DETDkCCyxV2W35V1VfVnS1nRP03rP?=
- =?us-ascii?Q?YLCz15s++3zDAFuK2SQYNgx5fI4O8rcIp/aQk7jB5axUcL9DM4AIwM0FxFd1?=
- =?us-ascii?Q?obwW7mUpg6U/+8HbDwPbNJxTDypzvq2MBVSE1iuGgJFr0lxRngZtxbvqbAmW?=
- =?us-ascii?Q?x2xTcHLHVQF3lq4tzqAw3ZxLpSlBhpOAhyY4w+kPyqSKK3UfcDgqLPVKBfOm?=
- =?us-ascii?Q?rOusNCJ2qyX6ZGW6b6dR6jLofve9jbF+y1CiGuk+kVb/y5Z1ABYYpVztQ8D5?=
- =?us-ascii?Q?fWN1SFJU5qGg1MoOS+JzX+3asr8QD1O0AC2aF69B/6CXYHX0VLETzjt5JvPY?=
- =?us-ascii?Q?RR+yHQ9Ohr+qmXz2erfy3lm34Z7qtNg+AKEws3C5PHdcKAHa+/k7lg78FzYT?=
- =?us-ascii?Q?q84cK6Pf1nTc/2m18FtSvpQYTrGFD9aSc1NthUWRcOowPO+NDtaZhWEvd48N?=
- =?us-ascii?Q?IQsZrnA6osHwabN1rVhYA5+/SXwH1/2KI28vcr1vuDkuSsrWbe4HNdCjFm9r?=
- =?us-ascii?Q?A4elqmSB748yWeORsWBO+LGORc8mrnjkRM4EqIvvh+fXhasumLIOESoBEGf2?=
- =?us-ascii?Q?3ekLj71Ey7cvgDtGnrECFztGPgksOnSrXDb5bWhWKmFG0Bp0PjAiRwuzaYhl?=
- =?us-ascii?Q?WeufL3pU1FW7OZU3mPx9nbm90a86Fj2cRQp7IWh2wk9qJE585CNM+2sKyRCQ?=
- =?us-ascii?Q?269gifz+266KShRidA3noOWwefa/S8XCluqDmP4No71k1zSZOAfs0nehYwsv?=
- =?us-ascii?Q?IJF+8NV9B9FWS5qa9AKsmp5L5jKxAEtW1KWOw9RUI9uxq0gGwdnqMzaQAzXP?=
- =?us-ascii?Q?GGHKlphrPS6chZ66o5KIOcEEVAVJ+waFjmDoY7eUUEkCW2jm/+AtOZYGFgWC?=
- =?us-ascii?Q?AQFLa8dw8Ug=3D?=
+	=?us-ascii?Q?WcS2cwrN/SqJaTKjK4Jb64PW5HGI1ROvkjpIrFVPSRqptTu52eywdLoS+uju?=
+ =?us-ascii?Q?AnvGfSCQf2+7G7sfT7NF7RN+7qdkq9m9qOc+uaDWuWoZanbECBW1Nc0bA/D8?=
+ =?us-ascii?Q?Q0Gw5SV7TAtqOR8TZU9a44KYEciC1Qlp9UMVPeOiMxiv0w83pKdi5T5bONjq?=
+ =?us-ascii?Q?Wrad20qu5lBSNDQgasmcirXlYjpHMN2WLrafOzzi+y7DP2/E7Rj7R+G5+fR+?=
+ =?us-ascii?Q?+9Xixqy1sDGYJBVFot08T1wiAoayy25i4ksUe5AeeVpqQpyaWAdu1Zm9Owp3?=
+ =?us-ascii?Q?d3yg9sBwJTdAHorcuUIowaAKbG1wRHnZPyBvS0aKgf6XXlNpAi0J6QLEafV9?=
+ =?us-ascii?Q?5Ci9OtFD9rcYOEDqAb8sgf9hXl8B20r5ANwhGTrfUNbWKpJTqd1z4EBNPIdk?=
+ =?us-ascii?Q?AylhT7em10ZvGSOv1c+9uGYOieil1CISw+sEbHRWmIY6+1cwJ9UHX/oz6WpM?=
+ =?us-ascii?Q?gFuj57tmtLwY2l80Io3nbS2Y+fyduAuAjq8WoDs+hfkEMHRzycDoaNNQSzaw?=
+ =?us-ascii?Q?WIZoOw1MGuRF0nbYBl6vOFrqfhgBJdRHGF/usi9Izv6GeZWpgt1JnpOMRt3q?=
+ =?us-ascii?Q?S1RZFrzDUUd7k3Zg9IWpNW9BL85vKXwNxMUGYpxyghVw9mLjmCKBHQzbGaeM?=
+ =?us-ascii?Q?DBi7CUTt8PSi9ek+Fo7RD811UldKEzQeAl/XdU2TW7RlFjfY33zu6Q2dMMWM?=
+ =?us-ascii?Q?QpWPMZFR037glVBRDNOBCac/4zG7m1OXbHBT395ml54mnwsdWdnw65zC8nhP?=
+ =?us-ascii?Q?Fdi7ri6hVpZna3FctmCzSKOGXk8/UCsc4oVh0a23VDtoPTDzuPp8ypZImt8s?=
+ =?us-ascii?Q?gvYkrxZKRpAp6tXd1d1Gx7rjBraloEHmqr4SS2SxFrPxnLT5hmoc4GuTd0/v?=
+ =?us-ascii?Q?7ckXLAF0XVhYMxRzrDYnsqG5C12McSXkW04A5ShL114v/Whj4uuX8H38sJ/c?=
+ =?us-ascii?Q?mmCiFpf/Q3fDZ1t1FK3/+ZL1XzDl/NNIJSdKLmtEJXovBjYUzhUM2VVTOerg?=
+ =?us-ascii?Q?WWR9hg1c1+zjI7YY3msNDkGdTBhuHdYKlR32QoeiCfxR9OLKl/dDEQY65yeX?=
+ =?us-ascii?Q?5S6OKMbRRzwndEHIcxp51OT9/vURf0yekL9hedYJQw5Dh4PQGIrntH3IcNam?=
+ =?us-ascii?Q?vcd8PMEkmOPEF2sRdrVZgSfLyqKLEdwxBsMf4SciPN6ECQDMAcpk+ZVvBBeQ?=
+ =?us-ascii?Q?Q11ylcFyb7O7VHREt20p2IyTbt5ryni1ytPfOzNIj0oPvEfEoquMD9G/chb4?=
+ =?us-ascii?Q?F2JoQbRId3H5ZjyQo2dnPvgc/+LWqFeg7Z4+fDrgxCc/U4shNBAvidbrL9sz?=
+ =?us-ascii?Q?N1Htfq+H66Ut2wAmX0mb4JbZm09B+Kb73SHSnXGgYkNoxPxcEsLNnu5VGO1H?=
+ =?us-ascii?Q?Eqi1XIX9GIw5xZoeiCklUngqitw8z+PXnfW3kye3s6zeQ1v+IXn0/ru4H22X?=
+ =?us-ascii?Q?WSwokLCcxdk=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:JH0PR06MB6849.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(1800799024)(52116014)(366016)(376014)(38350700014)(921020);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?n6Uy8ZX8UOw9LR60+E3DJH3zgWAXiCDvb9Z4fgYcXXrN2L1qYTaB+/shsEjH?=
- =?us-ascii?Q?MTka+MV8ULkBzEVgPUxdG6l8lCdd9XvS7KwRW6NR0brbp9nVXbreBV7oYfmN?=
- =?us-ascii?Q?/8BWFTH+c+E3roBb4/ankx+AD2Bk9R4PFqWitS9GTxvhD9wbWQX+8uybTzLT?=
- =?us-ascii?Q?YdaoTW8XsLtOYnxlWrHbGp8N0KMe5/y8orcaJlYLefJnP0VmfUcfQFDBrzFF?=
- =?us-ascii?Q?o5dOSTPGeu+prZ+QWeE0RcGSgpIClA2L5jrQYYvugW60KDO5h6gTuwfcUktp?=
- =?us-ascii?Q?Fz5DzAn9KNhmKTF1S5B9HKKFPIAvtlHDsjBlGDu3WMAtsB30Skzzj+xReU4O?=
- =?us-ascii?Q?01M+/eIDTaxTax7YpRs/QyBblRYAEmuBbcwCBAHwRUHwU/emltmraIBxAWG9?=
- =?us-ascii?Q?TJbw4bCBWDXzyHlJV0/zYGXIRQL5sImCGQhpDJ/D0CLGlvSyB723ScVZlN4J?=
- =?us-ascii?Q?Qz3eLn3PcqL9Es1Tr8mMZvL+ur5zcqqGH3XaJVM6jyDbcnHAUPNFafIroodk?=
- =?us-ascii?Q?V3kHjL5AnUEALSeLqSA9Hdcj+Mk2RV8FLIQ5oT0smmu3dp+uNvmOLc7c28HU?=
- =?us-ascii?Q?v1a+tUSVilMlDa/MQ+JcZURgkaQ99QXNrOh5J8gV1OMm4DGXRs60qnYFJReR?=
- =?us-ascii?Q?lq+tY4OeWfl3CBfY3+NgvfzMoVlHggx+cCFTC/9IVyY9XL9G/w/+NJYbYasD?=
- =?us-ascii?Q?gNX2TQzBj31GOtBrgbQft3ocPxJ5b/8emjqUfI0MTSmYZhUXeqDaeLdmKJg4?=
- =?us-ascii?Q?MbFhFD4Vwp9HEOjb4MTFTc//8PwPLon8VqulPjDyFEIIVdDwVfv1XkP5hpnU?=
- =?us-ascii?Q?KFe6Wl9MF5cgImytvqJafBpmOzaPUgEz+UcaFIjjA0kdDmS43mP832642L/v?=
- =?us-ascii?Q?fq9ybCVqON/QJifoYt8GFPMRULL4ZJIThmSg/Syit3Yw1pK5IkdjfA6oeDxQ?=
- =?us-ascii?Q?XEBaywV07spE/qtKwMyWUAjZhsZXMPITur8+g2RFzBgGuaR//42kx0VmvNrc?=
- =?us-ascii?Q?WgWztDO/qixTGjagR2X//JyFqH5qpQvqW6WYa47d0vuHucSBnXdMfnK4hw4H?=
- =?us-ascii?Q?EQjmrNIF//GpL0nZWeyocTEG2A7UFy/MIiQMwiLFQ/UWMdQgTKN/C6eON1zR?=
- =?us-ascii?Q?XkydXMc9VLKZrEziDUdXXIHmIFnezu0iWvY6dlL9xl3iiidhh3NDQZwra1PH?=
- =?us-ascii?Q?d4XH3C5c//QcfGFpQn/OGm9auNGstfYLiMbfE0l1bVHrNq5fSMN138fUI4Zt?=
- =?us-ascii?Q?XVoi4vp0atp+6gH6h62oJRFnnjK2UykOgOpYF2wKge1JzXd7pKDbt9nYiLpt?=
- =?us-ascii?Q?GrvbpYa3PP5q+D8dxmSPse6rtwe/UaMqsn1sm5A9U0PoYvMYXfEAknMgs0Uv?=
- =?us-ascii?Q?ALZIiAtSzMMab6rEOxN2h9br2cS4DruP7ebKD/vB5fEYvisLkNrY+/v0TqKv?=
- =?us-ascii?Q?l5UlfHVlfs/4B/yNc3kDxArEbkWBuGxFIHmphT2IeAevnlv7vK4aM7t4I8Is?=
- =?us-ascii?Q?2/7oS0lB5PWvGrrlwTaPmHHjD9Lp22y6rlUgy74XWK9YNsPtyeUuMWcQJJnK?=
- =?us-ascii?Q?YpJ5wQ0W0MJS1NAPxEx+sqQDDvLWQWPZUNmaKmby?=
+	=?us-ascii?Q?2jYb25M6hDgjt+dphtwRh3WQ34xnFFQ20GFVoAUIyaDAJ+urjaSv73STOni0?=
+ =?us-ascii?Q?+3ufOUAjklFxZM2G6g1J3rhng5thjhlHAPdYyE9jjaTJhF/8uXUe9llnx65C?=
+ =?us-ascii?Q?Yw+jWEpk5xc6pB2mlR/6k0Y/PYyBqwCTcYR8Lt1keDGd/rqPZoZ64JgWY0GT?=
+ =?us-ascii?Q?7JBJnySb+vKCgr0loADOV0z34ffwbZXGbLnIAocGzt/pUENFRzIWFld4ClHW?=
+ =?us-ascii?Q?SfcThhJoTMfXRG3WtCNZoPSmbomHn1/WNwEHSCH0Suf2mvrRiIxt1zZsyjOt?=
+ =?us-ascii?Q?drVUDs2VzUWLrQK05sOL9+1DcW1M8afteRol5t3rObKQLraQZzDfKVfhvQiM?=
+ =?us-ascii?Q?73bCCOxn4cvQvCl75m44EaFhJhCRgbyQNAzOdF+XNMVxciwsj6kBiljiRM7q?=
+ =?us-ascii?Q?y5JrfOEZnxBD4r14aOa9CFw6wcPC/9ffe6LBVntcuaMfOze2j5qgIdDKYulS?=
+ =?us-ascii?Q?2mgqUjBSIkMUPCIz1HJ2kZEenx1CYGP3vE5KvhHhAZkcFkRFCiFxWXY3JQI+?=
+ =?us-ascii?Q?gf710YgeN2ufyu18aGRE9punIMLlyrNlu4QI6IOHTI36JrLIMuobgxnJ4GZI?=
+ =?us-ascii?Q?SZiGNZrC6cFmBBbt/jH1wSfHezw/7quCilkxBXxmwBxCKBy3wJfoJltwsncH?=
+ =?us-ascii?Q?gpQ+hUBmz+lMwJi7T6pbsfEhkxrGIMUO+dwN511SRTUftf9EW/5BWnqNqju+?=
+ =?us-ascii?Q?DzWMI8D01W+WHR4xhz1AZKAmpYXH7tKsEiJXhiSEKgxuRzc+62JQ8/GOvpVe?=
+ =?us-ascii?Q?yWCyHgMNSA08puExBcBu+PwaIqnPQRNIsm2knE6Wqhs6lUWvInrqwUSmsFyE?=
+ =?us-ascii?Q?rEPZgI+R8ofj4U1KBwLtJZG4gIVR+2Kn2nKHSgkyyTDKL3ubXTWzAeghcdm/?=
+ =?us-ascii?Q?SYzui7fifWnu9rwmJBiCqSGjwkG/VlJh7q7psQ91u8D+O9IATn9qQZShsuMQ?=
+ =?us-ascii?Q?WLBUKg3PsUIjM4aV2NHBneQRQhAqV+YCjoDB64OeiQaAfW0ZyUvVm6ewYTa9?=
+ =?us-ascii?Q?xP1uaZorjKQM6suUQoxBTU1S4sC3Yf6vozpWJLEt3RhbaI0p5O7wFXsf28hC?=
+ =?us-ascii?Q?RiO0Lcyy947QwZSH0Cekh8WbPlG9q0O9YemQkZyyLrdWcZU0O8lca5X+MRZH?=
+ =?us-ascii?Q?SsIsEQyFdzl7TOAxCB8WW+ofkcFj5Rw33tAUjoMwOTIgsOO/3P9OTBlcmRVB?=
+ =?us-ascii?Q?Ga2su4JfFG/ghU7GojO478jZXT+m1VAlCXiRu49alCfdPi69mxaMs+g7Olg1?=
+ =?us-ascii?Q?ZRAkvIhZJqoiJ8qVZG8fu7pMskq4UprfzQz3yeJAZ5CKnK8h84lqHv4Ftw/V?=
+ =?us-ascii?Q?L8LQCU3g0n/9IFORMNYpm59YxG5VEefVWVi7PZ2H8hmWu7exRN6aQB7Ha+Th?=
+ =?us-ascii?Q?MkMzHDCvBWOeQg7diNug4LObb4kU5NvU9aePlwUQr3IvjLCvIl8n6xoPPkSh?=
+ =?us-ascii?Q?qD4B9sNeVHWXI3UwXg5XKGZr+3FXm1Np1enzxF/Uhzjx3bp+AlxZTOuK4w7z?=
+ =?us-ascii?Q?TAwsBFDbYEkTiorkxOo/WCLGs9j2d4NFcN3HuYUbrRCM4uwHijIOTChcnhJM?=
+ =?us-ascii?Q?Rr8y4A8x/Q+mueTEd5zFK7nv6VekTIq9ItDpdS9/?=
 X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ea452106-f2b6-40ab-a08c-08dcb1655cbd
+X-MS-Exchange-CrossTenant-Network-Message-Id: bf23920c-4bdb-41ac-fc64-08dcb1655dc4
 X-MS-Exchange-CrossTenant-AuthSource: JH0PR06MB6849.apcprd06.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jul 2024 13:33:28.6958
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jul 2024 13:33:30.4061
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VZQ0hbMmoHrTMOPGbmSTZOVFasdEXeXhH4qqqkuRKxZBg+9RaDM8NEdbgE45htRMmGggI/QP8E3WyjzWZ6iEgA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: qD4gS2vb2uDXKPlbmJYwYeTnsfa4sExi4kPoErPBHaSNx7lIKeiCpanMQfSMXnqXnPYYD8Rolb5m9lErKT+YAQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB7334
 
-Move task_is_dying() to include/linux/oom.h so that it can be
-referenced elsewhere.
+The main reasons for the prolonged exit of a background process is the
+time-consuming release of its swap entries. The proportion of swap memory
+occupied by the background process increases with its duration in the
+background, and after a period of time, this value can reach 60% or more.
+Additionally, the relatively lengthy path for releasing swap entries
+further contributes to the longer time required for the background process
+to release its swap entries.
+
+In the multiple background applications scenario, when launching a large
+memory application such as a camera, system may enter a low memory state,
+which will triggers the killing of multiple background processes at the
+same time. Due to multiple exiting processes occupying multiple CPUs for
+concurrent execution, the current foreground application's CPU resources
+are tight and may cause issues such as lagging.
+
+To solve this problem, we have introduced the multiple exiting process
+asynchronous swap memory release mechanism, which isolates and caches
+swap entries occupied by multiple exit processes, and hands them over
+to an asynchronous kworker to complete the release. This allows the
+exiting processes to complete quickly and release CPU resources. We have
+validated this modification on the products and achieved the expected
+benefits.
+
+It offers several benefits:
+1. Alleviate the high system cpu load caused by multiple exiting
+   processes running simultaneously.
+2. Reduce lock competition in swap entry free path by an asynchronous
+   kworker instead of multiple exiting processes parallel execution.
+3. Release memory occupied by exiting processes more efficiently.
 
 Signed-off-by: Zhiguo Jiang <justinjiang@vivo.com>
 ---
- include/linux/oom.h | 6 ++++++
- mm/memcontrol.c     | 6 ------
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ include/asm-generic/tlb.h |  44 ++++++
+ include/linux/mm_types.h  |  58 ++++++++
+ mm/memory.c               |   3 +-
+ mm/mmu_gather.c           | 297 ++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 401 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/oom.h b/include/linux/oom.h
-index 7d0c9c48a0c5..a3a58463c0d5
---- a/include/linux/oom.h
-+++ b/include/linux/oom.h
-@@ -77,6 +77,12 @@ static inline bool tsk_is_oom_victim(struct task_struct * tsk)
- 	return tsk->signal->oom_mm;
- }
+diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
+index 709830274b75..8b4d516b35b8
+--- a/include/asm-generic/tlb.h
++++ b/include/asm-generic/tlb.h
+@@ -294,6 +294,37 @@ extern void tlb_flush_rmaps(struct mmu_gather *tlb, struct vm_area_struct *vma);
+ static inline void tlb_flush_rmaps(struct mmu_gather *tlb, struct vm_area_struct *vma) { }
+ #endif
  
-+static inline bool task_is_dying(void)
-+{
-+	return tsk_is_oom_victim(current) || fatal_signal_pending(current) ||
-+		(current->flags & PF_EXITING);
-+}
++#ifndef CONFIG_MMU_GATHER_NO_GATHER
++struct mmu_swap_batch {
++	struct mmu_swap_batch *next;
++	unsigned int nr;
++	unsigned int max;
++	encoded_swpentry_t encoded_entrys[];
++};
++
++#define MAX_SWAP_GATHER_BATCH	\
++	((PAGE_SIZE - sizeof(struct mmu_swap_batch)) / sizeof(void *))
++
++#define MAX_SWAP_GATHER_BATCH_COUNT	(10000UL / MAX_SWAP_GATHER_BATCH)
++
++struct mmu_swap_gather {
++	/*
++	 * the asynchronous kworker to batch
++	 * release swap entries
++	 */
++	struct work_struct free_work;
++
++	/* batch cache swap entries */
++	unsigned int batch_count;
++	struct mmu_swap_batch *active;
++	struct mmu_swap_batch local;
++	encoded_swpentry_t __encoded_entrys[MMU_GATHER_BUNDLE];
++};
++
++bool __tlb_remove_swap_entries(struct mmu_gather *tlb,
++		swp_entry_t entry, int nr);
++#endif
 +
  /*
-  * Checks whether a page fault on the given mm is still reliable.
-  * This is no longer true if the oom reaper started to reap the
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 9b3ef3a70833..c54a8aea19b0
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -98,12 +98,6 @@ static DECLARE_WAIT_QUEUE_HEAD(memcg_cgwb_frn_waitq);
- #define THRESHOLDS_EVENTS_TARGET 128
- #define SOFTLIMIT_EVENTS_TARGET 1024
+  * struct mmu_gather is an opaque type used by the mm code for passing around
+  * any data needed by arch specific code for tlb_remove_page.
+@@ -343,6 +374,18 @@ struct mmu_gather {
+ 	unsigned int		vma_exec : 1;
+ 	unsigned int		vma_huge : 1;
+ 	unsigned int		vma_pfn  : 1;
++#ifndef CONFIG_MMU_GATHER_NO_GATHER
++	/*
++	 * Two states of releasing swap entries
++	 * asynchronously:
++	 * swp_freeable - have opportunity to
++	 * release asynchronously future
++	 * swp_freeing - be releasing asynchronously.
++	 */
++	unsigned int		swp_freeable : 1;
++	unsigned int		swp_freeing : 1;
++	unsigned int		swp_disable : 1;
++#endif
  
--static inline bool task_is_dying(void)
--{
--	return tsk_is_oom_victim(current) || fatal_signal_pending(current) ||
--		(current->flags & PF_EXITING);
--}
--
- /* Some nice accessors for the vmpressure. */
- struct vmpressure *memcg_to_vmpressure(struct mem_cgroup *memcg)
+ 	unsigned int		batch_count;
+ 
+@@ -354,6 +397,7 @@ struct mmu_gather {
+ #ifdef CONFIG_MMU_GATHER_PAGE_SIZE
+ 	unsigned int page_size;
+ #endif
++	struct mmu_swap_gather *swp;
+ #endif
+ };
+ 
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index 485424979254..f26fbff93ff4
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -283,6 +283,64 @@ typedef struct {
+ 	unsigned long val;
+ } swp_entry_t;
+ 
++/*
++ * encoded_swpentry_t - a type marking the encoded swp_entry_t.
++ *
++ * An 'encoded_swpentry_t' represents a 'swp_enrty_t' with its the highest
++ * bit indicating extra context-dependent information. Only used in swp_entry
++ * asynchronous release path by mmu_swap_gather.
++ */
++typedef struct {
++	unsigned long val;
++} encoded_swpentry_t;
++
++/*
++ * The next item in an encoded_swpentry_t array is the "nr" argument, specifying the
++ * total number of consecutive swap entries associated with the same folio. If this
++ * bit is not set, "nr" is implicitly 1.
++ *
++ * Refer to include\asm\pgtable.h, swp_offset bits: 0 ~ 57, swp_type bits: 58 ~ 62.
++ * Bit63 can be used here.
++ */
++#define ENCODED_SWPENTRY_BIT_NR_ENTRYS_NEXT (1UL << (BITS_PER_LONG - 1))
++
++static __always_inline encoded_swpentry_t
++encode_swpentry(swp_entry_t entry, unsigned long flags)
++{
++	encoded_swpentry_t ret;
++
++	VM_WARN_ON_ONCE(flags & ~ENCODED_SWPENTRY_BIT_NR_ENTRYS_NEXT);
++	ret.val = flags | entry.val;
++	return ret;
++}
++
++static inline unsigned long encoded_swpentry_flags(encoded_swpentry_t entry)
++{
++	return ENCODED_SWPENTRY_BIT_NR_ENTRYS_NEXT & entry.val;
++}
++
++static inline swp_entry_t encoded_swpentry_data(encoded_swpentry_t entry)
++{
++	swp_entry_t ret;
++
++	ret.val = ~ENCODED_SWPENTRY_BIT_NR_ENTRYS_NEXT & entry.val;
++	return ret;
++}
++
++static __always_inline encoded_swpentry_t encode_nr_swpentrys(unsigned long nr)
++{
++	encoded_swpentry_t ret;
++
++	VM_WARN_ON_ONCE(nr & ENCODED_SWPENTRY_BIT_NR_ENTRYS_NEXT);
++	ret.val = nr;
++	return ret;
++}
++
++static __always_inline unsigned long encoded_nr_swpentrys(encoded_swpentry_t entry)
++{
++	return ((~ENCODED_SWPENTRY_BIT_NR_ENTRYS_NEXT) & entry.val);
++}
++
+ /**
+  * struct folio - Represents a contiguous set of bytes.
+  * @flags: Identical to the page flags.
+diff --git a/mm/memory.c b/mm/memory.c
+index b9f5cc0db3eb..bfa1995558d2
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -1650,7 +1650,8 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
+ 			if (!should_zap_cows(details))
+ 				continue;
+ 			rss[MM_SWAPENTS] -= nr;
+-			free_swap_and_cache_nr(entry, nr);
++			if (!__tlb_remove_swap_entries(tlb, entry, nr))
++				free_swap_and_cache_nr(entry, nr);
+ 		} else if (is_migration_entry(entry)) {
+ 			folio = pfn_swap_entry_folio(entry);
+ 			if (!should_zap_folio(details, folio))
+diff --git a/mm/mmu_gather.c b/mm/mmu_gather.c
+index 99b3e9408aa0..2bb413d052bd
+--- a/mm/mmu_gather.c
++++ b/mm/mmu_gather.c
+@@ -9,11 +9,304 @@
+ #include <linux/smp.h>
+ #include <linux/swap.h>
+ #include <linux/rmap.h>
++#include <linux/oom.h>
+ 
+ #include <asm/pgalloc.h>
+ #include <asm/tlb.h>
+ 
+ #ifndef CONFIG_MMU_GATHER_NO_GATHER
++/*
++ * The swp_entry asynchronous release mechanism for multiple processes exiting
++ * simultaneously.
++ *
++ * During the multiple exiting processes releasing their own mm simultaneously,
++ * the swap entries in the exiting processes are handled by isolating, caching
++ * and handing over to an asynchronous kworker to complete the release.
++ *
++ * The conditions for the exiting process entering the swp_entry asynchronous
++ * release path:
++ * 1. The exiting process's MM_SWAPENTS count is >= SWAP_CLUSTER_MAX, avoiding
++ *    to alloc struct mmu_swap_gather frequently.
++ * 2. The number of exiting processes is >= NR_MIN_EXITING_PROCESSES.
++ *
++ * Since the time for determining the number of exiting processes is dynamic,
++ * the exiting process may start to enter the swp_entry asynchronous release
++ * at the beginning or middle stage of the exiting process's swp_entry release
++ * path.
++ *
++ * Once an exiting process enters the swp_entry asynchronous release, all remaining
++ * swap entries in this exiting process need to be fully released by asynchronous
++ * kworker theoretically.
++ *
++ * The function of the swp_entry asynchronous release:
++ * 1. Alleviate the high system cpu load caused by multiple exiting processes
++ *    running simultaneously.
++ * 2. Reduce lock competition in swap entry free path by an asynchronous kworker
++ *    instead of multiple exiting processes parallel execution.
++ * 3. Release memory occupied by exiting processes more efficiently.
++ */
++
++/*
++ * The min number of exiting processes required for swp_entry asynchronous release
++ */
++#define NR_MIN_EXITING_PROCESSES 2
++
++atomic_t nr_exiting_processes = ATOMIC_INIT(0);
++static struct kmem_cache *swap_gather_cachep;
++static struct workqueue_struct *swapfree_wq;
++static DEFINE_STATIC_KEY_TRUE(tlb_swap_asyncfree_disabled);
++
++static int __init tlb_swap_async_free_setup(void)
++{
++	swapfree_wq = alloc_workqueue("smfree_wq", WQ_UNBOUND |
++		WQ_HIGHPRI | WQ_MEM_RECLAIM, 1);
++	if (!swapfree_wq)
++		goto fail;
++
++	swap_gather_cachep = kmem_cache_create("swap_gather",
++		sizeof(struct mmu_swap_gather),
++		0, SLAB_TYPESAFE_BY_RCU | SLAB_PANIC | SLAB_ACCOUNT,
++		NULL);
++	if (!swap_gather_cachep)
++		goto kcache_fail;
++
++	static_branch_disable(&tlb_swap_asyncfree_disabled);
++	return 0;
++
++kcache_fail:
++	destroy_workqueue(swapfree_wq);
++fail:
++	return -ENOMEM;
++}
++postcore_initcall(tlb_swap_async_free_setup);
++
++static void __tlb_swap_gather_free(struct mmu_swap_gather *swap_gather)
++{
++	struct mmu_swap_batch *swap_batch, *next;
++
++	for (swap_batch = swap_gather->local.next; swap_batch; swap_batch = next) {
++		next = swap_batch->next;
++		free_page((unsigned long)swap_batch);
++	}
++	swap_gather->local.next = NULL;
++	kmem_cache_free(swap_gather_cachep, swap_gather);
++}
++
++static void tlb_swap_async_free_work(struct work_struct *w)
++{
++	int i, nr_multi, nr_free;
++	swp_entry_t start_entry;
++	struct mmu_swap_batch *swap_batch;
++	struct mmu_swap_gather *swap_gather = container_of(w,
++		struct mmu_swap_gather, free_work);
++
++	/* Release swap entries cached in mmu_swap_batch. */
++	for (swap_batch = &swap_gather->local; swap_batch && swap_batch->nr;
++	    swap_batch = swap_batch->next) {
++		nr_free = 0;
++		for (i = 0; i < swap_batch->nr; i++) {
++			if (unlikely(encoded_swpentry_flags(swap_batch->encoded_entrys[i]) &
++			    ENCODED_SWPENTRY_BIT_NR_ENTRYS_NEXT)) {
++				start_entry = encoded_swpentry_data(swap_batch->encoded_entrys[i]);
++				nr_multi = encoded_nr_swpentrys(swap_batch->encoded_entrys[++i]);
++				free_swap_and_cache_nr(start_entry, nr_multi);
++				nr_free += 2;
++			} else {
++				start_entry = encoded_swpentry_data(swap_batch->encoded_entrys[i]);
++				free_swap_and_cache_nr(start_entry, 1);
++				nr_free++;
++			}
++		}
++		swap_batch->nr -= nr_free;
++		WARN_ON_ONCE(swap_batch->nr);
++	}
++	__tlb_swap_gather_free(swap_gather);
++}
++
++static bool __tlb_swap_gather_mmu_check(struct mmu_gather *tlb)
++{
++	/*
++	 * Only the exiting processes with the MM_SWAPENTS counter >=
++	 * SWAP_CLUSTER_MAX have the opportunity to release their swap
++	 * entries by asynchronous kworker.
++	 */
++	if (!task_is_dying() ||
++	    get_mm_counter(tlb->mm, MM_SWAPENTS) < SWAP_CLUSTER_MAX)
++		return true;
++
++	atomic_inc(&nr_exiting_processes);
++	if (atomic_read(&nr_exiting_processes) < NR_MIN_EXITING_PROCESSES)
++		tlb->swp_freeable = 1;
++	else
++		tlb->swp_freeing = 1;
++
++	return false;
++}
++
++/**
++ * __tlb_swap_gather_init - Initialize an mmu_swap_gather structure
++ * for swp_entry tear-down.
++ * @tlb: the mmu_swap_gather structure belongs to tlb
++ */
++static bool __tlb_swap_gather_init(struct mmu_gather *tlb)
++{
++	tlb->swp = kmem_cache_alloc(swap_gather_cachep, GFP_ATOMIC | GFP_NOWAIT);
++	if (unlikely(!tlb->swp))
++		return false;
++
++	tlb->swp->local.next  = NULL;
++	tlb->swp->local.nr    = 0;
++	tlb->swp->local.max   = ARRAY_SIZE(tlb->swp->__encoded_entrys);
++
++	tlb->swp->active      = &tlb->swp->local;
++	tlb->swp->batch_count = 0;
++
++	INIT_WORK(&tlb->swp->free_work, tlb_swap_async_free_work);
++	return true;
++}
++
++static void __tlb_swap_gather_mmu(struct mmu_gather *tlb)
++{
++	if (static_branch_unlikely(&tlb_swap_asyncfree_disabled))
++		return;
++
++	tlb->swp = NULL;
++	tlb->swp_freeable = 0;
++	tlb->swp_freeing = 0;
++	tlb->swp_disable = 0;
++
++	if (__tlb_swap_gather_mmu_check(tlb))
++		return;
++
++	/*
++	 * If the exiting process meets the conditions of
++	 * swp_entry asynchronous release, an mmu_swap_gather
++	 * structure will be initialized.
++	 */
++	if (tlb->swp_freeing)
++		__tlb_swap_gather_init(tlb);
++}
++
++static void __tlb_swap_gather_queuework(struct mmu_gather *tlb, bool finish)
++{
++	queue_work(swapfree_wq, &tlb->swp->free_work);
++	tlb->swp = NULL;
++	if (!finish)
++		__tlb_swap_gather_init(tlb);
++}
++
++static bool __tlb_swap_next_batch(struct mmu_gather *tlb)
++{
++	struct mmu_swap_batch *swap_batch;
++
++	if (tlb->swp->batch_count == MAX_SWAP_GATHER_BATCH_COUNT)
++		goto free;
++
++	swap_batch = (void *)__get_free_page(GFP_ATOMIC | GFP_NOWAIT);
++	if (unlikely(!swap_batch))
++		goto free;
++
++	swap_batch->next = NULL;
++	swap_batch->nr   = 0;
++	swap_batch->max  = MAX_SWAP_GATHER_BATCH;
++
++	tlb->swp->active->next = swap_batch;
++	tlb->swp->active = swap_batch;
++	tlb->swp->batch_count++;
++	return true;
++free:
++	/* batch move to wq */
++	__tlb_swap_gather_queuework(tlb, false);
++	return false;
++}
++
++/**
++ * __tlb_remove_swap_entries - the swap entries in exiting process are
++ * isolated, batch cached in struct mmu_swap_batch.
++ * @tlb: the current mmu_gather
++ * @entry: swp_entry to be isolated and cached
++ * @nr: the number of consecutive entries starting from entry parameter.
++ */
++bool __tlb_remove_swap_entries(struct mmu_gather *tlb,
++			     swp_entry_t entry, int nr)
++{
++	struct mmu_swap_batch *swap_batch;
++	unsigned long flags = 0;
++	bool ret = false;
++
++	if (tlb->swp_disable)
++		return ret;
++
++	if (!tlb->swp_freeable && !tlb->swp_freeing)
++		return ret;
++
++
++	if (tlb->swp_freeable) {
++		if (atomic_read(&nr_exiting_processes) <
++		    NR_MIN_EXITING_PROCESSES)
++			return ret;
++		/*
++		 * If the current number of exiting processes
++		 * is >= NR_MIN_EXITING_PROCESSES, the exiting
++		 * process with swp_freeable state will enter
++		 * swp_freeing state to start releasing its
++		 * remaining swap entries by the asynchronous
++		 * kworker.
++		 */
++		tlb->swp_freeable = 0;
++		tlb->swp_freeing = 1;
++	}
++
++	VM_BUG_ON(tlb->swp_freeable || !tlb->swp_freeing);
++	if (!tlb->swp && !__tlb_swap_gather_init(tlb))
++		return ret;
++
++	swap_batch = tlb->swp->active;
++	if (unlikely(swap_batch->nr >= swap_batch->max - 1)) {
++		__tlb_swap_gather_queuework(tlb, false);
++		return ret;
++	}
++
++	if (likely(nr == 1)) {
++		swap_batch->encoded_entrys[swap_batch->nr++] = encode_swpentry(entry, flags);
++	} else {
++		flags |= ENCODED_SWPENTRY_BIT_NR_ENTRYS_NEXT;
++		swap_batch->encoded_entrys[swap_batch->nr++] = encode_swpentry(entry, flags);
++		swap_batch->encoded_entrys[swap_batch->nr++] = encode_nr_swpentrys(nr);
++	}
++	ret = true;
++
++	if (swap_batch->nr >= swap_batch->max - 1) {
++		if (!__tlb_swap_next_batch(tlb))
++			goto exit;
++		swap_batch = tlb->swp->active;
++	}
++	VM_BUG_ON(swap_batch->nr > swap_batch->max - 1);
++exit:
++	return ret;
++}
++
++static void __tlb_batch_swap_finish(struct mmu_gather *tlb)
++{
++	if (tlb->swp_disable)
++		return;
++
++	if (!tlb->swp_freeable && !tlb->swp_freeing)
++		return;
++
++	if (tlb->swp_freeable) {
++		tlb->swp_freeable = 0;
++		VM_BUG_ON(tlb->swp_freeing);
++		goto exit;
++	}
++	tlb->swp_freeing = 0;
++	if (unlikely(!tlb->swp))
++		goto exit;
++
++	__tlb_swap_gather_queuework(tlb, true);
++exit:
++	atomic_dec(&nr_exiting_processes);
++}
+ 
+ static bool tlb_next_batch(struct mmu_gather *tlb)
  {
+@@ -386,6 +679,9 @@ static void __tlb_gather_mmu(struct mmu_gather *tlb, struct mm_struct *mm,
+ 	tlb->local.max  = ARRAY_SIZE(tlb->__pages);
+ 	tlb->active     = &tlb->local;
+ 	tlb->batch_count = 0;
++
++	tlb->swp_disable = 1;
++	__tlb_swap_gather_mmu(tlb);
+ #endif
+ 	tlb->delayed_rmap = 0;
+ 
+@@ -466,6 +762,7 @@ void tlb_finish_mmu(struct mmu_gather *tlb)
+ 
+ #ifndef CONFIG_MMU_GATHER_NO_GATHER
+ 	tlb_batch_list_free(tlb);
++	__tlb_batch_swap_finish(tlb);
+ #endif
+ 	dec_tlb_flush_pending(tlb->mm);
+ }
 -- 
 2.39.0
 
