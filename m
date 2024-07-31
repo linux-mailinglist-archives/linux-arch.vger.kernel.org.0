@@ -1,178 +1,127 @@
-Return-Path: <linux-arch+bounces-5781-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5782-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92D929433F8
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Jul 2024 18:15:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A78199433FB
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Jul 2024 18:15:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D7E6BB22F24
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Jul 2024 16:14:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3662FB249A7
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Jul 2024 16:15:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E46781BC06F;
-	Wed, 31 Jul 2024 16:14:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="TNEjvtAf"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E35AF1BC081;
+	Wed, 31 Jul 2024 16:15:10 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DAD91BBBD9
-	for <linux-arch@vger.kernel.org>; Wed, 31 Jul 2024 16:14:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B732A1BC2A;
+	Wed, 31 Jul 2024 16:15:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722442490; cv=none; b=lF3z5HLmAVZ57yKg1bRvaDn319+46eksIf+GX6W9PEJVm22UFnwszX7TXtbh9/r4h+4UetYu748r0QZX3x9ZDLBhNJnutI0eFEcRl3YqBKl1h8hnqhecwzI1vFBauJUCh/yg9otpcHi+0WmrX2v10LOpp2eWby+5+iF9OyJ/6KM=
+	t=1722442510; cv=none; b=Wfvp/0zL/C13uDMspEjbFTjD5EGSTDvVrB+h9u5nbOI/J+9GjhjxfZtYp23ihqDWbw6ctaQeAnVrvI0nThWnmzXBVs6m1jQdfkiYDNLBofClUuIsg8YGTM80FsjZjZ5afKwvY5SCThdKnn9wk/qvvt3Iy0wc1cbbEXnUfj3XeYE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722442490; c=relaxed/simple;
-	bh=cNmf4hLHtT750pA4+kUwJFpSQGwrs+yeu83m+UjRIKI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=vDN1WIH0iYxyMP5sNhyJsIfxBauqGDSvpoBiW4tdK8T0EOg9WyoiY8/ZUtLZCgsf8S/OhUv5jGliPScGLCujcUo9CcrG0IT5zzHiH7xdKvLAWCG6e3igseJlZiDdGSb9KLEM3UXHPqv9VsXUbMGW7pUNvccnw7PiFy30uLv2gVo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=TNEjvtAf; arc=none smtp.client-ip=209.85.167.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-52f01993090so9089770e87.2
-        for <linux-arch@vger.kernel.org>; Wed, 31 Jul 2024 09:14:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1722442487; x=1723047287; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=67YJB4t8a3rStJX7eamZLcHUt6OpExFZ1HW0neqY3tc=;
-        b=TNEjvtAfiXB59yP8d9MNytBR4BC6wS4j4CLxEWVfx7ztJz8FCRhuLcsCS/ffejOuDx
-         vXq+S7MwvTWPWd01WawevthYB8DX3advZL805A2Yj18bF3ph0guCrlCJvYEOkj+tOl/c
-         +utLdNFVKnXxHXRqt1+uKT26OjUanUSPEjOLTuhiSHhHGxRT41vN38fFUGjB/EhofBWM
-         MCW1TMxwBjW6Z9IJl6+3vNkop5Fg5A+mTMBP9P1Q5ctW55DjPkjX/31tAhZKh96OKnCX
-         7W/tvOFp9K0AG053j/IGSVvU8v79erAt+Ln1yUmdgR0Zrm6gUUMSKlmTcxhzSmPuUsaD
-         r+Sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722442487; x=1723047287;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=67YJB4t8a3rStJX7eamZLcHUt6OpExFZ1HW0neqY3tc=;
-        b=YgT6lSs7CJYuwbFWHKjfWdBYI2/7rbh2IJ0uyA10DOkue50LXNeoTdPTtdCTc+yAzm
-         XydUzB78Cg2oZvjtT5A+MZ0zmKMJ/XXnm0+BTP3KAOYVp8PRNqJAiu9IiSrdIGVnY+S0
-         0v+R6ZXVKZHaVGJpBYIUvHdi8jWgTEHGmPmv2M9ikbW6Gzg55UUYYT8KOY1m1w39CxP8
-         g7K0dyfs+Uq4F/AIF3H0wsv2Irk3VI7ay0sBOtD7loIjVmbmqNdRugmrZvzzDljg/wNn
-         jXAfaXZ+24x4chi3F+1/wqEADymrlntARMDweKK97kuTr30EEFK97NA3BftYynM9LFHW
-         +rsg==
-X-Forwarded-Encrypted: i=1; AJvYcCXZu9j23M+sAfNOqzKnr1DZ99yThycaGMahz3VQaX0/oWQT1uQMOUBCWBDHKE2KQ2Vpf6rNYwFONG4FdSyU+ZpSJvk2uYBrq+/m6g==
-X-Gm-Message-State: AOJu0YyWAw52IZpPKWd7y80Ksko9osfy+xDvKZ4XclCCyxCblkhX+5vl
-	nedHLz7Eu3zD/r73ORkFSgLZzVyFRsEkAxXexYkZa00+5sTr9Z+Vd5n23eizSWQ=
-X-Google-Smtp-Source: AGHT+IGOSG7HPoKuH/nQ4CZs4W9P+Dy9DzwopPIOkIR/omN2X/bNWde8qWGEJwuhDElsEfYRrR40NQ==
-X-Received: by 2002:ac2:5b0f:0:b0:52c:df6f:a66 with SMTP id 2adb3069b0e04-5309b2c5c91mr8627043e87.58.1722442486580;
-        Wed, 31 Jul 2024 09:14:46 -0700 (PDT)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7acad41616sm785979066b.137.2024.07.31.09.14.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Jul 2024 09:14:45 -0700 (PDT)
-Date: Wed, 31 Jul 2024 18:14:44 +0200
-From: Andrew Jones <ajones@ventanamicro.com>
-To: Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Andrea Parri <parri.andrea@gmail.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Leonardo Bras <leobras@redhat.com>, Guo Ren <guoren@kernel.org>, linux-doc@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-arch@vger.kernel.org
-Subject: Re: [PATCH v4 02/13] riscv: Do not fail to build on byte/halfword
- operations with Zawrs
-Message-ID: <20240731-676154f31336c78bafea57d0@orel>
-References: <20240731072405.197046-1-alexghiti@rivosinc.com>
- <20240731072405.197046-3-alexghiti@rivosinc.com>
- <20240731-56ba72420d7f745dacb66fd8@orel>
- <CAHVXubjrrWVnw1ufXRJh_5N9M5UiOVZseb0C78fjLaYhNKF7eA@mail.gmail.com>
+	s=arc-20240116; t=1722442510; c=relaxed/simple;
+	bh=pfHnPMYK0TtleosbWCfB/5JPB/LqQy3ukFb8Be23aPU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=FBPNbVwP5N7Twdzu+RLivXWR0SPEroLFYPNvBCxXbJrrXIBiScysvNFjc5UA/fbl1Z+rnMYrO/NzAWk73N9AHTSTE2s5PqWvY04uIYBLU+2DtjYRdCnJEqRYxzmlv7q+dloM7M1usijOrh5Pp0tUg1yZ3BntccR35f2eYbCYXsE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBC10C116B1;
+	Wed, 31 Jul 2024 16:15:04 +0000 (UTC)
+Date: Wed, 31 Jul 2024 12:15:39 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Gary Guo <gary@garyguo.net>
+Cc: Alice Ryhl <aliceryhl@google.com>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf
+ <jpoimboe@kernel.org>, Jason Baron <jbaron@akamai.com>, Ard Biesheuvel
+ <ardb@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor
+ <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun
+ Feng <boqun.feng@gmail.com>, "=?UTF-8?B?QmrDtnJu?= Roy Baron"
+ <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, Andreas
+ Hindborg <a.hindborg@samsung.com>, linux-trace-kernel@vger.kernel.org,
+ rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, Arnd Bergmann
+ <arnd@arndb.de>, linux-arch@vger.kernel.org, Thomas Gleixner
+ <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
+ <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, "Peter Zijlstra (Intel)"
+ <peterz@infradaed.org>, Sean Christopherson <seanjc@google.com>, Uros
+ Bizjak <ubizjak@gmail.com>, Catalin Marinas <catalin.marinas@arm.com>, Will
+ Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton
+ <oliver.upton@linux.dev>, Mark Rutland <mark.rutland@arm.com>, Ryan Roberts
+ <ryan.roberts@arm.com>, Fuad Tabba <tabba@google.com>,
+ linux-arm-kernel@lists.infradead.org, Paul Walmsley
+ <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
+ <aou@eecs.berkeley.edu>, Anup Patel <apatel@ventanamicro.com>, Andrew Jones
+ <ajones@ventanamicro.com>, Alexandre Ghiti <alexghiti@rivosinc.com>, Conor
+ Dooley <conor.dooley@microchip.com>, Samuel Holland
+ <samuel.holland@sifive.com>, linux-riscv@lists.infradead.org, Huacai Chen
+ <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, Bibo Mao
+ <maobibo@loongson.cn>, Tiezhu Yang <yangtiezhu@loongson.cn>, Andrew Morton
+ <akpm@linux-foundation.org>, Tianrui Zhao <zhaotianrui@loongson.cn>,
+ loongarch@lists.linux.dev
+Subject: Re: [PATCH v4 2/2] rust: add tracepoint support
+Message-ID: <20240731121539.0888738b@gandalf.local.home>
+In-Reply-To: <20240730113527.5c9896db@eugeo>
+References: <20240628-tracepoint-v4-0-353d523a9c15@google.com>
+	<20240628-tracepoint-v4-2-353d523a9c15@google.com>
+	<20240730113527.5c9896db@eugeo>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHVXubjrrWVnw1ufXRJh_5N9M5UiOVZseb0C78fjLaYhNKF7eA@mail.gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jul 31, 2024 at 05:52:46PM GMT, Alexandre Ghiti wrote:
-> Hi Drew,
-> 
-> On Wed, Jul 31, 2024 at 4:10 PM Andrew Jones <ajones@ventanamicro.com> wrote:
-> >
-> > On Wed, Jul 31, 2024 at 09:23:54AM GMT, Alexandre Ghiti wrote:
-> > > riscv does not have lr instructions on byte and halfword but the
-> > > qspinlock implementation actually uses such atomics provided by the
-> > > Zabha extension, so those sizes are legitimate.
-> >
-> > We currently always come to __cmpwait() through smp_cond_load_relaxed()
-> > and queued_spin_lock_slowpath() adds another invocation.
-> 
-> atomic_cond_read_relaxed() and smp_cond_load_acquire() also call
-> smp_cond_load_relaxed()
-> 
-> And here https://elixir.bootlin.com/linux/v6.11-rc1/source/kernel/locking/qspinlock.c#L380,
-> the size passed is 1.
+On Tue, 30 Jul 2024 11:35:27 +0100
+Gary Guo <gary@garyguo.net> wrote:
 
-Oh, I see.
+> > +/*
+> > + * Declare an exported function that Rust code can call to trigger this
+> > + * tracepoint. This function does not include the static branch; that is done
+> > + * in Rust to avoid a function call when the tracepoint is disabled.
+> > + */
+> > +#define DEFINE_RUST_DO_TRACE(name, proto, args)
+> > +#define DEFINE_RUST_DO_TRACE_REAL(name, proto, args)			\
+> > +	notrace void rust_do_trace_##name(proto)			\
+> > +	{								\
+> > +		__DO_TRACE(name,					\
+> > +			TP_ARGS(args),					\
+> > +			cpu_online(raw_smp_processor_id()), 0);		\  
+> 
+> I guess this doesn't support conditions. Currently the conditions are
+> specified during declaration and not during definition.
+> 
+> Would it make sense to have
+> 
+> 	static inline void do_trace_##name(proto)
+> 	{
+> 		__DO_TRACE(name, TP_ARGS(args), TP_CONDITION(cond), 0);
 
-> 
-> > However, isn't
-> > the reason we're hitting the BUILD_BUG() because the switch fails to find
-> > a case for 16, not because it fails to find cases for 1 or 2? The new
-> > invocation passes a pointer to a struct mcs_spinlock, which looks like
-> > it has size 16. We need to ensure that when ptr points to a pointer that
-> > we pass the size of uintptr_t.
-> 
-> I guess you're refering to this call here
-> https://elixir.bootlin.com/linux/v6.11-rc1/source/kernel/locking/qspinlock.c#L551,
-> but it's a pointer to a pointer, which will then pass a size 8.
+But where is the "cond" passed in from?
 
-Ah, missed that '&'...
+I guess in the future if you want to add conditions, you would then just
+add:
 
-> 
-> And the build error that I get is the following:
-> 
-> In function '__cmpwait',
->     inlined from 'queued_spin_lock_slowpath' at
-> ../kernel/locking/qspinlock.c:380:3:
-> ./../include/linux/compiler_types.h:510:45: error: call to
-> '__compiletime_assert_2' declared with attribute error: BUILD_BUG
-> failed
->   510 |         _compiletime_assert(condition, msg,
-> __compiletime_assert_, __COUNTER__)
->       |                                             ^
-> ./../include/linux/compiler_types.h:491:25: note: in definition of
-> macro '__compiletime_assert'
->   491 |                         prefix ## suffix();
->          \
->       |                         ^~~~~~
-> ./../include/linux/compiler_types.h:510:9: note: in expansion of macro
-> '_compiletime_assert'
->   510 |         _compiletime_assert(condition, msg,
-> __compiletime_assert_, __COUNTER__)
->       |         ^~~~~~~~~~~~~~~~~~~
-> ../include/linux/build_bug.h:39:37: note: in expansion of macro
-> 'compiletime_assert'
->    39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
->       |                                     ^~~~~~~~~~~~~~~~~~
-> ../include/linux/build_bug.h:59:21: note: in expansion of macro
-> 'BUILD_BUG_ON_MSG'
->    59 | #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
->       |                     ^~~~~~~~~~~~~~~~
-> ../arch/riscv/include/asm/cmpxchg.h:376:17: note: in expansion of
-> macro 'BUILD_BUG'
->   376 |                 BUILD_BUG();
-> 
-> which points to the first smp_cond_load_relaxed() I mentioned above.
-> 
+#define DEFINE_RUST_DO_TRACE_REAL_CONDITION(name, proto, args, cond)			\
+	notrace void rust_do_trace_##name(proto)			\
+	{								\
+		__DO_TRACE(name,					\
+			TP_ARGS(args),					\
+			cpu_online(raw_smp_processor_id()) &&		\
+			TP_CONDITION(cond), 0);				\  
 
-OK, you've got me straightened out now, but can we only add the fallback
-for sizes 1 and 2 and leave the default as a BUILD_BUG()?
+-- Steve
 
-Thanks,
-drew
+> 	}
+> 
+> in `__DECLARE_TRACE` and then simply call it in `rust_do_trace_##name`?
+> 
+> > +	}
+> > +
+> >  /*
 
