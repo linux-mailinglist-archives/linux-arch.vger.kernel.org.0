@@ -1,87 +1,88 @@
-Return-Path: <linux-arch+bounces-5762-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5763-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC460942B4D
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Jul 2024 11:55:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3171F942B57
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Jul 2024 11:59:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0CAA21C20D8C
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Jul 2024 09:55:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA8E5285CD7
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Jul 2024 09:59:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 167771AAE06;
-	Wed, 31 Jul 2024 09:55:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A3DF1AAE0E;
+	Wed, 31 Jul 2024 09:59:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OKgiI3mT"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="W0ctBFs8"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 910CB1A7F7B;
-	Wed, 31 Jul 2024 09:55:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4CB51A8C12
+	for <linux-arch@vger.kernel.org>; Wed, 31 Jul 2024 09:59:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722419738; cv=none; b=EkpP+fS/JHHo1ofQQmglpi5FuyvM6fwW9lZpRGSRT/T6yQio0ntEfL90hAFERZh7pdIdoieHFkokX91zpbowHvMTQ5P78oFj+lTwRa9ritT+yP2kAuikcN7Be4gI3HIBEZ8tqjD6LmL2OI7vnt6QsmK5AczqRHFDiVyd7HcCQzs=
+	t=1722419948; cv=none; b=ADFCpMN2f65uH3GVEDRU5yCbpFBx6XLYiemYwP6+iQBKtFEHEflvChBqVEOdW7HpNj6hQvqGE6Q8qVaCKlcSJn/LPak0LK9DBBnXKO5ttltyJJVCaGZII/4fBl9Hrd5UsAkpecbUEk6lcn3AGtZDQATeorL128cLk8pjx1Vn064=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722419738; c=relaxed/simple;
-	bh=NZiQ96yH/XbzaJcguLiVgQDXACBxZBeSKgIFxc/b5i8=;
+	s=arc-20240116; t=1722419948; c=relaxed/simple;
+	bh=wTVQfpXR1XuPyTPgw7aCES0qm8DAblDVWLz4UjOeLo0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BP8/WTeT650MxJW4JaDgCohdDkWpg6GwCM66miSvyf0363FA4EwOKFMpO0KeijegXVeUB5t+v4RNwX7DXpGZxwLqrqpNV2sownGjbAU2KjVT+Ty0bUlX/RmxK1U9wuZ0onnl3E1aOLNGUz7KRqEYZxX/gcqbRDNBgi8OEAEr8KU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OKgiI3mT; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722419736; x=1753955736;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NZiQ96yH/XbzaJcguLiVgQDXACBxZBeSKgIFxc/b5i8=;
-  b=OKgiI3mTyOJqOxrKnrtrmyl7m28tyQcKi+L+uRxxTsGB5K8YxhXSbA1A
-   DVDjec1RQvNiCe4LidyldYy1tKXsPUE7ekCIuyKZzDmsYmZ4qbUZBHgdH
-   35vrxKjdkeaXaWYsWkk/DaGdX87XAoiMvDggv/6vxzPqZ2Rcwh6hhEMcZ
-   jMRIQ0TljLV6pDEBs1VndYOxbfotG2doPr5HC1Hs+tIs9zNOukYDAGG13
-   a1GwN5FOso9Jiw94HO5BJdQCzF0bjp+n1gDvM8pp/lHHySIOXuMAb7oJB
-   bYbSZm7N8Swuv2HnFQNkZRJtmHVfCJYbe3vl35EXga+w1+pVYPwFm076g
-   Q==;
-X-CSE-ConnectionGUID: zEJRoio7RJKVVPd7nsqgrA==
-X-CSE-MsgGUID: Xbhw8njoSOK9OmjbE9svBg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11149"; a="19980358"
-X-IronPort-AV: E=Sophos;i="6.09,251,1716274800"; 
-   d="scan'208";a="19980358"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2024 02:55:35 -0700
-X-CSE-ConnectionGUID: 08yzgvntRdKLkdAKnIlFsA==
-X-CSE-MsgGUID: lJx5Y85qSHyNjZ/vpV6aqg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,251,1716274800"; 
-   d="scan'208";a="54324690"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 31 Jul 2024 02:55:30 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sZ63L-000u6q-2z;
-	Wed, 31 Jul 2024 09:55:27 +0000
-Date: Wed, 31 Jul 2024 17:55:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Zhiguo Jiang <justinjiang@vivo.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
-	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
-	Nick Piggin <npiggin@kernel.dk>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Arnd Bergmann <arnd@arndb.de>, Johannes Weiner <hannes@cmpxchg.org>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>, linux-arch@vger.kernel.org,
-	cgroups@vger.kernel.org, Barry Song <21cnbao@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	opensource.kernel@vivo.com
-Subject: Re: [PATCH 2/2] mm: tlb: add tlb swap entries batch async release
-Message-ID: <202407311703.8q8sDQ2p-lkp@intel.com>
-References: <20240730114426.511-3-justinjiang@vivo.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=KRQwuestPSqF3hO2b6jOmApj9uMzVsoWWWOnUoZh/s6GM1V5+A5sok9SSxF/lxBFh9SEjl9K8CaFZ7mTTiDTv2PpLfBS8BemH+kSOEkISeZ13XbQ+l5tWYyNYCYA0ML78n9PYkSw+Kl4Ja5q0CS58Ao2zl9TLsmAXoqGagaioxA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=W0ctBFs8; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-369f68f63b1so2581729f8f.2
+        for <linux-arch@vger.kernel.org>; Wed, 31 Jul 2024 02:59:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1722419944; x=1723024744; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DZL9zyo8+QIZP9qYtmF0cSugcmoTJ8zS+zVFfXlZuPA=;
+        b=W0ctBFs8kq26P8fUDQKS5n3ggW6hOMU0zCQ2noljG1twi9ETAzXRSTRMRU0bUVQhKH
+         z3LMzel6S6spB7nqSz2P6a/+0v2XMSTV6kSUAbYd7EtH3EaChpRnyKUK5BVqgSZdx41y
+         c9lbv480C8Yk6NsJyoTYBQF0xkOpLOpqtGMoY8h8szrZfWAqxGZpjyyGfj5kURW+p64I
+         MN3S2OXOhR6LxRjBbI1PiXper/1+31wWaHX1ujOAVDN1gn/1FYG23hnFwsYYbPfy5Exx
+         lPr7i0yfmKS34E2NeEAfTFQiawzpzpgO2nneYnz1oFNX3e/6cUq9xPLB8gRS7e9zWLCm
+         Z4vw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722419944; x=1723024744;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DZL9zyo8+QIZP9qYtmF0cSugcmoTJ8zS+zVFfXlZuPA=;
+        b=Ysb0nV4LVvzCgAgsPs93cVl+EdyhZmyokg6FLzLo/y7jeC6Mru3n4+QuTT6L3afWC/
+         jee55iwOKyta6LYwrjrsVW8bazhR+/VerozWBjNu95bBnPoZxBgKQpQNA96tJmv54GAl
+         MTs2uHXpCcFSBSVShN5oFTrbkXBsUXUHoO4O9z/8fMlAwx4HWHOWzYZtZDBxoUEqp63e
+         bHC/hH+3vcE8Zz4341IbJKNqwiD3rOLr0bstbGZlg+VidsyDKWbYzk9Y4k++U4ZpBczt
+         PziECa4iDUcDAO8aURR8rOcMc9ELM+REyuU8AWqFEKYzLfCsvuqG4dbF6O9i66Zt+4ww
+         ghHQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXr8QfFSgO2qEWzmgEqSMJnJRGl1568MZLd3I2am+aqdVpGruYsZXV+sDtNBBg15ETen8ByeHmEBsU1r2kTjIwnW76LPOitAlpIAQ==
+X-Gm-Message-State: AOJu0YzqGL9Qnzb+5XCICjTkvaoA38+p79RvHLP8Nx+8IMF6dz4IpwUa
+	IxHqYqI6Z1vdU9m+Z8nfXfdmbfr6/f3Qs/rwa+OUcRHR6nx8aDx31ODwIzpRFH8=
+X-Google-Smtp-Source: AGHT+IGj2vgkkOoloE2p739Ji1R+yoNVMoR4esedc6MTJxKkDNqXruJjeVInsrb0lGpkMUOuVeEVSA==
+X-Received: by 2002:a5d:59a6:0:b0:368:71bc:2b08 with SMTP id ffacd0b85a97d-36b5cee3038mr10692404f8f.3.1722419943456;
+        Wed, 31 Jul 2024 02:59:03 -0700 (PDT)
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36b36861b70sm16532045f8f.102.2024.07.31.02.59.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Jul 2024 02:59:03 -0700 (PDT)
+Date: Wed, 31 Jul 2024 11:59:02 +0200
+From: Andrew Jones <ajones@ventanamicro.com>
+To: Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Andrea Parri <parri.andrea@gmail.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Leonardo Bras <leobras@redhat.com>, Guo Ren <guoren@kernel.org>, linux-doc@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	linux-arch@vger.kernel.org, Andrea Parri <andrea@rivosinc.com>
+Subject: Re: [PATCH v4 06/13] riscv: Improve zacas fully-ordered cmpxchg()
+Message-ID: <20240731-260cce60e1a6cd06670d1b24@orel>
+References: <20240731072405.197046-1-alexghiti@rivosinc.com>
+ <20240731072405.197046-7-alexghiti@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -90,351 +91,214 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240730114426.511-3-justinjiang@vivo.com>
+In-Reply-To: <20240731072405.197046-7-alexghiti@rivosinc.com>
 
-Hi Zhiguo,
+On Wed, Jul 31, 2024 at 09:23:58AM GMT, Alexandre Ghiti wrote:
+> The current fully-ordered cmpxchgXX() implementation results in:
+> 
+>   amocas.X.rl     a5,a4,(s1)
+>   fence           rw,rw
+> 
+> This provides enough sync but we can actually use the following better
+> mapping instead:
+> 
+>   amocas.X.aqrl   a5,a4,(s1)
 
-kernel test robot noticed the following build errors:
+We won't get release semantics if the exchange fails. Does that matter?
 
-[auto build test ERROR on akpm-mm/mm-everything]
+> 
+> Suggested-by: Andrea Parri <andrea@rivosinc.com>
+> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> ---
+>  arch/riscv/include/asm/cmpxchg.h | 72 +++++++++++++++++++-------------
+>  1 file changed, 44 insertions(+), 28 deletions(-)
+> 
+> diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
+> index ebcd4a30ae60..391730367213 100644
+> --- a/arch/riscv/include/asm/cmpxchg.h
+> +++ b/arch/riscv/include/asm/cmpxchg.h
+> @@ -107,8 +107,10 @@
+>   * store NEW in MEM.  Return the initial value in MEM.  Success is
+>   * indicated by comparing RETURN with OLD.
+>   */
+> -
+> -#define __arch_cmpxchg_masked(sc_sfx, cas_sfx, prepend, append, r, p, o, n)	\
+> +#define __arch_cmpxchg_masked(sc_sfx, cas_sfx,					\
+> +			      sc_prepend, sc_append,				\
+> +			      cas_prepend, cas_append,				\
+> +			      r, p, o, n)					\
+>  ({										\
+>  	if (IS_ENABLED(CONFIG_RISCV_ISA_ZABHA) &&				\
+>  	    IS_ENABLED(CONFIG_RISCV_ISA_ZACAS) &&				\
+> @@ -117,9 +119,9 @@
+>  		r = o;								\
+>  										\
+>  		__asm__ __volatile__ (						\
+> -			prepend							\
+> +			cas_prepend							\
+>  			"	amocas" cas_sfx " %0, %z2, %1\n"		\
+> -			append							\
+> +			cas_append							\
+>  			: "+&r" (r), "+A" (*(p))				\
+>  			: "rJ" (n)						\
+>  			: "memory");						\
+> @@ -134,7 +136,7 @@
+>  		ulong __rc;							\
+>  										\
+>  		__asm__ __volatile__ (						\
+> -			prepend							\
+> +			sc_prepend							\
+>  			"0:	lr.w %0, %2\n"					\
+>  			"	and  %1, %0, %z5\n"				\
+>  			"	bne  %1, %z3, 1f\n"				\
+> @@ -142,7 +144,7 @@
+>  			"	or   %1, %1, %z4\n"				\
+>  			"	sc.w" sc_sfx " %1, %1, %2\n"			\
+>  			"	bnez %1, 0b\n"					\
+> -			append							\
+> +			sc_append							\
+>  			"1:\n"							\
+>  			: "=&r" (__retx), "=&r" (__rc), "+A" (*(__ptr32b))	\
+>  			: "rJ" ((long)__oldx), "rJ" (__newx),			\
+> @@ -153,16 +155,19 @@
+>  	}									\
+>  })
+>  
+> -#define __arch_cmpxchg(lr_sfx, sc_cas_sfx, prepend, append, r, p, co, o, n)	\
+> +#define __arch_cmpxchg(lr_sfx, sc_sfx, cas_sfx,				\
+> +		       sc_prepend, sc_append,				\
+> +		       cas_prepend, cas_append,				\
+> +		       r, p, co, o, n)					\
+>  ({									\
+>  	if (IS_ENABLED(CONFIG_RISCV_ISA_ZACAS) &&			\
+>  	    riscv_has_extension_unlikely(RISCV_ISA_EXT_ZACAS)) {	\
+>  		r = o;							\
+>  									\
+>  		__asm__ __volatile__ (					\
+> -			prepend						\
+> -			"	amocas" sc_cas_sfx " %0, %z2, %1\n"	\
+> -			append						\
+> +			cas_prepend					\
+> +			"	amocas" cas_sfx " %0, %z2, %1\n"	\
+> +			cas_append					\
+>  			: "+&r" (r), "+A" (*(p))			\
+>  			: "rJ" (n)					\
+>  			: "memory");					\
+> @@ -170,12 +175,12 @@
+>  		register unsigned int __rc;				\
+>  									\
+>  		__asm__ __volatile__ (					\
+> -			prepend						\
+> +			sc_prepend					\
+>  			"0:	lr" lr_sfx " %0, %2\n"			\
+>  			"	bne  %0, %z3, 1f\n"			\
+> -			"	sc" sc_cas_sfx " %1, %z4, %2\n"		\
+> +			"	sc" sc_sfx " %1, %z4, %2\n"		\
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Zhiguo-Jiang/mm-move-task_is_dying-to-h-headfile/20240730-215136
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20240730114426.511-3-justinjiang%40vivo.com
-patch subject: [PATCH 2/2] mm: tlb: add tlb swap entries batch async release
-config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20240731/202407311703.8q8sDQ2p-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project ccae7b461be339e717d02f99ac857cf0bc7d17fc)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240731/202407311703.8q8sDQ2p-lkp@intel.com/reproduce)
+nit: If patch3 hadn't renamed sc_sfx to sc_cas_sfx then we wouldn't
+need to rename it again now.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407311703.8q8sDQ2p-lkp@intel.com/
+>  			"	bnez %1, 0b\n"				\
+> -			append						\
+> +			sc_append					\
+>  			"1:\n"						\
+>  			: "=&r" (r), "=&r" (__rc), "+A" (*(p))		\
+>  			: "rJ" (co o), "rJ" (n)				\
+> @@ -183,7 +188,9 @@
+>  	}								\
+>  })
+>  
+> -#define _arch_cmpxchg(ptr, old, new, sc_cas_sfx, prepend, append)	\
+> +#define _arch_cmpxchg(ptr, old, new, sc_sfx, cas_sfx,			\
+> +		      sc_prepend, sc_append,				\
+> +		      cas_prepend, cas_append)				\
+>  ({									\
+>  	__typeof__(ptr) __ptr = (ptr);					\
+>  	__typeof__(*(__ptr)) __old = (old);				\
+> @@ -192,22 +199,28 @@
+>  									\
+>  	switch (sizeof(*__ptr)) {					\
+>  	case 1:								\
+> -		__arch_cmpxchg_masked(sc_cas_sfx, ".b" sc_cas_sfx,	\
+> -					prepend, append,		\
+> -					__ret, __ptr, __old, __new);    \
+> +		__arch_cmpxchg_masked(sc_sfx, ".b" cas_sfx,		\
+> +				      sc_prepend, sc_append,		\
+> +				      cas_prepend, cas_append,		\
+> +				      __ret, __ptr, __old, __new);	\
+>  		break;							\
+>  	case 2:								\
+> -		__arch_cmpxchg_masked(sc_cas_sfx, ".h" sc_cas_sfx,	\
+> -					prepend, append,		\
+> -					__ret, __ptr, __old, __new);	\
+> +		__arch_cmpxchg_masked(sc_sfx, ".h" cas_sfx,		\
+> +				      sc_prepend, sc_append,		\
+> +				      cas_prepend, cas_append,		\
+> +				      __ret, __ptr, __old, __new);	\
+>  		break;							\
+>  	case 4:								\
+> -		__arch_cmpxchg(".w", ".w" sc_cas_sfx, prepend, append,	\
+> -				__ret, __ptr, (long), __old, __new);	\
+> +		__arch_cmpxchg(".w", ".w" sc_sfx, ".w" cas_sfx,		\
+> +			       sc_prepend, sc_append,			\
+> +			       cas_prepend, cas_append,			\
+> +			       __ret, __ptr, (long), __old, __new);	\
+>  		break;							\
+>  	case 8:								\
+> -		__arch_cmpxchg(".d", ".d" sc_cas_sfx, prepend, append,	\
+> -				__ret, __ptr, /**/, __old, __new);	\
+> +		__arch_cmpxchg(".d", ".d" sc_sfx, ".d" cas_sfx,		\
+> +			       sc_prepend, sc_append,			\
+> +			       cas_prepend, cas_append,			\
+> +			       __ret, __ptr, /**/, __old, __new);	\
+>  		break;							\
+>  	default:							\
+>  		BUILD_BUG();						\
+> @@ -216,16 +229,19 @@
+>  })
+>  
+>  #define arch_cmpxchg_relaxed(ptr, o, n)					\
+> -	_arch_cmpxchg((ptr), (o), (n), "", "", "")
+> +	_arch_cmpxchg((ptr), (o), (n), "", "", "", "", "", "")
+>  
+>  #define arch_cmpxchg_acquire(ptr, o, n)					\
+> -	_arch_cmpxchg((ptr), (o), (n), "", "", RISCV_ACQUIRE_BARRIER)
+> +	_arch_cmpxchg((ptr), (o), (n), "", "",				\
+> +		      "", RISCV_ACQUIRE_BARRIER, "", RISCV_ACQUIRE_BARRIER)
+>  
+>  #define arch_cmpxchg_release(ptr, o, n)					\
+> -	_arch_cmpxchg((ptr), (o), (n), "", RISCV_RELEASE_BARRIER, "")
+> +	_arch_cmpxchg((ptr), (o), (n), "", "",				\
+> +		      RISCV_RELEASE_BARRIER, "", RISCV_RELEASE_BARRIER, "")
+>  
+>  #define arch_cmpxchg(ptr, o, n)						\
+> -	_arch_cmpxchg((ptr), (o), (n), ".rl", "", "	fence rw, rw\n")
+> +	_arch_cmpxchg((ptr), (o), (n), ".rl", ".aqrl",			\
+> +		      "", RISCV_FULL_BARRIER, "", "")
 
-All error/warnings (new ones prefixed by >>):
+These aren't the easiest things to read, but I can't think of a way to
+improve it other than maybe some macro annotations. E.g.
 
-   In file included from arch/s390/mm/init.c:17:
-   In file included from include/linux/ptrace.h:10:
-   In file included from include/linux/pid_namespace.h:7:
-   In file included from include/linux/mm.h:2234:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from arch/s390/mm/init.c:25:
-   In file included from include/linux/memblock.h:13:
-   In file included from arch/s390/include/asm/dma.h:5:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from arch/s390/mm/init.c:25:
-   In file included from include/linux/memblock.h:13:
-   In file included from arch/s390/include/asm/dma.h:5:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from arch/s390/mm/init.c:25:
-   In file included from include/linux/memblock.h:13:
-   In file included from arch/s390/include/asm/dma.h:5:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   In file included from arch/s390/mm/init.c:42:
-   In file included from arch/s390/include/asm/tlb.h:39:
->> include/asm-generic/tlb.h:327:6: warning: no previous prototype for function '__tlb_remove_swap_entries' [-Wmissing-prototypes]
-     327 | bool __tlb_remove_swap_entries(struct mmu_gather *tlb,
-         |      ^
-   include/asm-generic/tlb.h:327:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     327 | bool __tlb_remove_swap_entries(struct mmu_gather *tlb,
-         | ^
-         | static 
-   14 warnings generated.
---
-   In file included from arch/s390/mm/pgtable.c:11:
-   In file included from include/linux/mm.h:2234:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from arch/s390/mm/pgtable.c:22:
-   In file included from arch/s390/include/asm/tlb.h:39:
->> include/asm-generic/tlb.h:327:6: warning: no previous prototype for function '__tlb_remove_swap_entries' [-Wmissing-prototypes]
-     327 | bool __tlb_remove_swap_entries(struct mmu_gather *tlb,
-         |      ^
-   include/asm-generic/tlb.h:327:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     327 | bool __tlb_remove_swap_entries(struct mmu_gather *tlb,
-         | ^
-         | static 
-   2 warnings generated.
---
-   In file included from mm/memory.c:44:
-   In file included from include/linux/mm.h:2234:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from mm/memory.c:45:
-   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
-         |                                    ~~~~~~~~~~~ ^ ~~~
-   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
-         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
-   In file included from mm/memory.c:84:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from mm/memory.c:84:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from mm/memory.c:84:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   In file included from mm/memory.c:88:
-   In file included from arch/s390/include/asm/tlb.h:39:
->> include/asm-generic/tlb.h:327:6: warning: no previous prototype for function '__tlb_remove_swap_entries' [-Wmissing-prototypes]
-     327 | bool __tlb_remove_swap_entries(struct mmu_gather *tlb,
-         |      ^
-   include/asm-generic/tlb.h:327:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     327 | bool __tlb_remove_swap_entries(struct mmu_gather *tlb,
-         | ^
-         | static 
-   16 warnings generated.
---
-   In file included from mm/mmap.c:14:
-   In file included from include/linux/backing-dev.h:15:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:181:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2234:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from mm/mmap.c:16:
-   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
-         |                                    ~~~~~~~~~~~ ^ ~~~
-   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
-         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
-   In file included from mm/mmap.c:53:
-   In file included from arch/s390/include/asm/tlb.h:39:
->> include/asm-generic/tlb.h:327:6: warning: no previous prototype for function '__tlb_remove_swap_entries' [-Wmissing-prototypes]
-     327 | bool __tlb_remove_swap_entries(struct mmu_gather *tlb,
-         |      ^
-   include/asm-generic/tlb.h:327:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     327 | bool __tlb_remove_swap_entries(struct mmu_gather *tlb,
-         | ^
-         | static 
-   4 warnings generated.
---
-   In file included from mm/mremap.c:11:
-   In file included from include/linux/mm.h:2234:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from mm/mremap.c:12:
-   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
-         |                                    ~~~~~~~~~~~ ^ ~~~
-   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
-         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
-   In file included from mm/mremap.c:30:
-   In file included from arch/s390/include/asm/tlb.h:39:
->> include/asm-generic/tlb.h:327:6: warning: no previous prototype for function '__tlb_remove_swap_entries' [-Wmissing-prototypes]
-     327 | bool __tlb_remove_swap_entries(struct mmu_gather *tlb,
-         |      ^
-   include/asm-generic/tlb.h:327:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     327 | bool __tlb_remove_swap_entries(struct mmu_gather *tlb,
-         | ^
-         | static 
-   mm/mremap.c:228:20: warning: unused function 'arch_supports_page_table_move' [-Wunused-function]
-     228 | static inline bool arch_supports_page_table_move(void)
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   mm/mremap.c:227:39: note: expanded from macro 'arch_supports_page_table_move'
-     227 | #define arch_supports_page_table_move arch_supports_page_table_move
-         |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   5 warnings generated.
---
-   In file included from kernel/sched/core.c:10:
-   In file included from include/linux/highmem.h:10:
-   In file included from include/linux/mm.h:2234:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from kernel/sched/core.c:34:
-   In file included from include/linux/sched/isolation.h:7:
-   In file included from include/linux/tick.h:8:
-   In file included from include/linux/clockchips.h:14:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from kernel/sched/core.c:34:
-   In file included from include/linux/sched/isolation.h:7:
-   In file included from include/linux/tick.h:8:
-   In file included from include/linux/clockchips.h:14:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from kernel/sched/core.c:34:
-   In file included from include/linux/sched/isolation.h:7:
-   In file included from include/linux/tick.h:8:
-   In file included from include/linux/clockchips.h:14:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   In file included from kernel/sched/core.c:80:
-   In file included from arch/s390/include/asm/tlb.h:39:
->> include/asm-generic/tlb.h:327:6: warning: no previous prototype for function '__tlb_remove_swap_entries' [-Wmissing-prototypes]
-     327 | bool __tlb_remove_swap_entries(struct mmu_gather *tlb,
-         |      ^
-   include/asm-generic/tlb.h:327:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     327 | bool __tlb_remove_swap_entries(struct mmu_gather *tlb,
-         | ^
-         | static 
-   kernel/sched/core.c:6330:20: warning: unused function 'sched_core_cpu_deactivate' [-Wunused-function]
-    6330 | static inline void sched_core_cpu_deactivate(unsigned int cpu) {}
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~
-   15 warnings generated.
-..
+ #define SC_SFX(x)      x
+ #define CAS_SFX(x)     x
+ #define SC_PREPEND(x)  x
+ #define SC_APPEND(x)   x
+ #define CAS_PREPEND(x) x
+ #define CAS_APPEND(x)  x
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+ #define arch_cmpxchg(ptr, o, n)                        \
+     _arch_cmpxchg(ptr, o, n,                           \
+         SC_SFX(".rl"), CAS_SFX(".aqrl"),               \
+         SC_PREPEND(""), SC_APPEND(RISCV_FULL_BARRIER), \
+	 CAS_PREPEND(""), CAS_APPEND(""))
+
+>  
+>  #define arch_cmpxchg_local(ptr, o, n)					\
+>  	arch_cmpxchg_relaxed((ptr), (o), (n))
+> -- 
+> 2.39.2
+>
+
+Thanks,
+drew
 
