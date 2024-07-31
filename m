@@ -1,83 +1,100 @@
-Return-Path: <linux-arch+bounces-5785-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5786-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E97B94343B
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Jul 2024 18:38:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 760769434AD
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Jul 2024 19:05:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 72DA21C21AB0
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Jul 2024 16:38:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A11A11C215F0
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Jul 2024 17:05:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 295731B3F08;
-	Wed, 31 Jul 2024 16:38:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 309DF1BD00E;
+	Wed, 31 Jul 2024 17:05:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ru429+M+"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="URmAXo4v"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90FBC1B14E8;
-	Wed, 31 Jul 2024 16:38:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C59C1AC443;
+	Wed, 31 Jul 2024 17:05:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722443927; cv=none; b=AHKE7G0M5nqRqZWen6skVPjufAZi1r8Y/s9xhJfPJv9BT1Xn0eTlZYUHg59YpJ1esej6xlv7U1M7N45Ip6BesUMdQ4qVA/gWy/f97E6PfJQrpnaRF1iufIiU1cEGm/i8SbwMkmohoHFEaubxSCpQeKnpdA0Zaem9GQSBn/uiXT0=
+	t=1722445534; cv=none; b=AaHX2c6RGvF7z8gBthZe+HdAOPzAowZjZFZE1urvuZwCnnMIwppT0JIBb8fiP9HLWmgpUDBhtj85OGTHRIahg//d2fnGYr6hYyDEKkLwj8qz/bmsJ3vcpgCgkDdUqhnu+xSKzYUgUIMlS7a2avn+XDlPZyb0zFwRzGnwBRJTXPY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722443927; c=relaxed/simple;
-	bh=Ax2M8eZolJ5AqIl+ZFAh4EOOJ/giVQYBxYUBY3D/57w=;
+	s=arc-20240116; t=1722445534; c=relaxed/simple;
+	bh=Kvo+Qg69Lf9bUXUEg3NaEQbb4hHBPQA3suJvsVKDU/Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QBZs4Xfw7WzQPbrqd2l9Yx5J8/vk60TU67PH7OAn6nTkCIyjClWQRUBDOLBHEp6vbx1VKDHCpb9O1YcPVMbtCoXt5SY2jR5E9zSWxkiqoEDzRXSppkMXhrazsXRkSvNaVMCS4XaX1mKtS2wnHLrFgqT9cSsgG4X8zeIX0ehjnpI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ru429+M+; arc=none smtp.client-ip=209.85.215.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-7163489149eso4257480a12.1;
-        Wed, 31 Jul 2024 09:38:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722443925; x=1723048725; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=btG52vS5eF8c6WYn6xfMUyCfzZayQfXXcyfEYjYJiBI=;
-        b=Ru429+M+WKuv99vc54Zcdzlapzpo+rVQyvNbT6d4pMZSLqx79HPBTbRxikDWswiQwA
-         zSUZM4000MjQ2Ji5xUXpVmTjR61GlpeDOjnJHfnrW7QlB1eZHXMJrwZe3lPqtiDLBT9q
-         VBdtV35lvZ42Q25PF5M5hVbXIrxLDg0Vkx3W2bC3IhA6KTrTt6gFdkDhcCXBj+Mm0Uod
-         POErufkel6fQA0kRqxL0uBnvKDnpmTwFb7yXrMRQ8Bl+FwJYZQ2AJDYaTZIN8kiWrRh3
-         7z5Y7/cfaoyHxCTmz9R4oJKwcOW+TEw7TiTrg9YrR8lwbEjN2kJTA44XJtcm4ZTQv84n
-         1GDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722443925; x=1723048725;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=btG52vS5eF8c6WYn6xfMUyCfzZayQfXXcyfEYjYJiBI=;
-        b=D0WGaOZwDWdRZG9sM1N/FXqUeLTGa9fiQ4NciwVcOHsFd/PQPBz5OgqZyKkG/RkHiQ
-         ua4SElDQQNRn8JEbsE3MvbTYSu1M+QoSkuBfH3bT45aEqafxTUPTrR1T08lW4XL4YKKU
-         vTfz8lqr8LDKuPt+KpaPG2LlGcRfXVeuSFGzYxSELhmv+V3P+dpdN8Hl9ii8uzVR5nax
-         oAXMvWMLnI/Q0keaKIdDzKqyWd1co2nXFYzpegSy8nfL8LBCF4Do8YWw36Qs99WmAPrk
-         RiP/YtiQo5xfeOFKiCla+I9yywK5wnW4tJq89B9XmAKBkpaHCHDmeIP/zXV5ClaRA3D4
-         QuPg==
-X-Forwarded-Encrypted: i=1; AJvYcCX+wbaJAlxgGS18CqlLGG2mcNsux6hPqQiryQpRHOMWO0dRDHzCh4KUoO5XwNWxIK/hCmwHE1GnCQDwXRNPEkO5ddYAEF5hacVAmA==
-X-Gm-Message-State: AOJu0YwlOj0ArNaeSJUd9CUNg+TGmqT5p6oxnuDuAP5oKQUVTScmvezn
-	mv894If/PBxlTKpeGZTOt1cElLbqWqwVACFST1EiysIuAUQLYUer
-X-Google-Smtp-Source: AGHT+IEs+4Dn4uNxpriOCfxp/I79l74lDnaM1jv97vbGKORPOSXyawgVXyMyYPwdErDOvzrmZeAJwA==
-X-Received: by 2002:a17:90b:b12:b0:2cd:40ef:4763 with SMTP id 98e67ed59e1d1-2cf7e1d4e55mr15791173a91.15.1722443924643;
-        Wed, 31 Jul 2024 09:38:44 -0700 (PDT)
-Received: from localhost ([216.228.127.128])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2cfdc4513ecsm1585679a91.20.2024.07.31.09.38.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Jul 2024 09:38:44 -0700 (PDT)
-Date: Wed, 31 Jul 2024 09:38:41 -0700
-From: Yury Norov <yury.norov@gmail.com>
-To: Anshuman Khandual <anshuman.khandual@arm.com>
-Cc: linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org
-Subject: Re: [PATCH V2 1/2] uapi: Define GENMASK_U128
-Message-ID: <ZqpokVWg75iROgKH@yury-ThinkPad>
-References: <20240725054808.286708-1-anshuman.khandual@arm.com>
- <20240725054808.286708-2-anshuman.khandual@arm.com>
- <Zqkt3byHNZQvCZiB@yury-ThinkPad>
- <b1dd907d-d45b-4602-964e-70654094a315@arm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=tNAb1jqmCFqkddOq555fxOExQGX7KlKDDh9ikzL3z5UOWcP6yM9UGCKG7SKhYpvf3r0YRoiQQCwUi3frzH6CvunxNIZBirRAgnWc7/QsV4CNOoffnsKwNOwQQHdPyhFIvHzIixRsdy2e2nVqz/FIZwp/jHPJ1EnG+muqMWzBfYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=URmAXo4v; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=loxjFiVI2FUEfLt+uJa/RoAUGOvN0EDyWPzOQRMKPYM=; b=URmAXo4vciLmD8RF26rtYBhhPA
+	G31cEdVvEozLEj+TiA4d2wRtMbewzkqNphoc2s1IzH1fwbGdgUMbQNYsKuTX+GtkdZ8pEsRGMt9Wn
+	tZQSzzAqb3x2Uk9yvAISY4PyRWfI4rIeUhfqY+XHg229yLUoAWWG6EtbDAEJOBSVAIZeFSjmu/2V8
+	Pe2mEvZC+zNGXJ1eBrKKrLSpn1gYZQVD7rVJktSOYg7A9wFPxSPVGGsY8mXuYJcnjrATmgmr+YrWG
+	DAC751NQGurBuTOXhxDSNHxQTCs/XNPevta1qUx7LxS11QH1clIvk+t7MXDQ5uCJXdDON6+G+Q0Gx
+	vGpwi0oA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1sZClB-0000000GMnQ-09lX;
+	Wed, 31 Jul 2024 17:05:09 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 3BB5F300820; Wed, 31 Jul 2024 19:05:08 +0200 (CEST)
+Date: Wed, 31 Jul 2024 19:05:08 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Alice Ryhl <aliceryhl@google.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Jason Baron <jbaron@akamai.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@samsung.com>,
+	linux-trace-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+	linux-arch@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	"Peter Zijlstra (Intel)" <peterz@infradaed.org>,
+	Sean Christopherson <seanjc@google.com>,
+	Uros Bizjak <ubizjak@gmail.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Ryan Roberts <ryan.roberts@arm.com>, Fuad Tabba <tabba@google.com>,
+	linux-arm-kernel@lists.infradead.org,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Anup Patel <apatel@ventanamicro.com>,
+	Andrew Jones <ajones@ventanamicro.com>,
+	Alexandre Ghiti <alexghiti@rivosinc.com>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	linux-riscv@lists.infradead.org,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>, Bibo Mao <maobibo@loongson.cn>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Tianrui Zhao <zhaotianrui@loongson.cn>, loongarch@lists.linux.dev
+Subject: Re: [PATCH v4 1/2] rust: add static_key_false
+Message-ID: <20240731170508.GJ33588@noisy.programming.kicks-ass.net>
+References: <20240628-tracepoint-v4-0-353d523a9c15@google.com>
+ <20240628-tracepoint-v4-1-353d523a9c15@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -86,132 +103,68 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b1dd907d-d45b-4602-964e-70654094a315@arm.com>
+In-Reply-To: <20240628-tracepoint-v4-1-353d523a9c15@google.com>
 
-On Wed, Jul 31, 2024 at 09:14:54AM +0530, Anshuman Khandual wrote:
-> 
-> 
-> On 7/30/24 23:45, Yury Norov wrote:
-> > On Thu, Jul 25, 2024 at 11:18:07AM +0530, Anshuman Khandual wrote:
-> >> This adds GENMASK_U128() and __GENMASK_U128() macros using __BITS_PER_U128
-> >> and __int128 data types. These macros will be used in providing support for
-> >> generating 128 bit masks.
-> >>
-> >> Cc: Yury Norov <yury.norov@gmail.com>
-> >> Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-> >> Cc: Arnd Bergmann <arnd@arndb.de>>
-> >> Cc: linux-kernel@vger.kernel.org
-> >> Cc: linux-arch@vger.kernel.org
-> >> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> >> ---
-> >>  include/linux/bits.h                   | 2 ++
-> >>  include/uapi/asm-generic/bitsperlong.h | 2 ++
-> >>  include/uapi/linux/bits.h              | 3 +++
-> >>  include/uapi/linux/const.h             | 1 +
-> >>  4 files changed, 8 insertions(+)
-> >>
-> >> diff --git a/include/linux/bits.h b/include/linux/bits.h
-> >> index 0eb24d21aac2..0a174cce09d2 100644
-> >> --- a/include/linux/bits.h
-> >> +++ b/include/linux/bits.h
-> >> @@ -35,5 +35,7 @@
-> >>  	(GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
-> >>  #define GENMASK_ULL(h, l) \
-> >>  	(GENMASK_INPUT_CHECK(h, l) + __GENMASK_ULL(h, l))
-> >> +#define GENMASK_U128(h, l) \
-> >> +	(GENMASK_INPUT_CHECK(h, l) + __GENMASK_U128(h, l))
-> >>  
-> >>  #endif	/* __LINUX_BITS_H */
-> >> diff --git a/include/uapi/asm-generic/bitsperlong.h b/include/uapi/asm-generic/bitsperlong.h
-> >> index fadb3f857f28..6275367b17bb 100644
-> >> --- a/include/uapi/asm-generic/bitsperlong.h
-> >> +++ b/include/uapi/asm-generic/bitsperlong.h
-> >> @@ -28,4 +28,6 @@
-> >>  #define __BITS_PER_LONG_LONG 64
-> >>  #endif
-> >>  
-> >> +#define __BITS_PER_U128 128
-> > 
-> > Do we need such a macro for a fixed-width type? Even if we do, I'm not
-> > sure that a header named bitsperlong.h is a good place to host it.
-> 
-> __BITS_PER_U128 is being used anymore, will drop it.
-> 
-> > 
-> >> +
-> >>  #endif /* _UAPI__ASM_GENERIC_BITS_PER_LONG */
-> >> diff --git a/include/uapi/linux/bits.h b/include/uapi/linux/bits.h
-> >> index 3c2a101986a3..4d4b7b08003c 100644
-> >> --- a/include/uapi/linux/bits.h
-> >> +++ b/include/uapi/linux/bits.h
-> >> @@ -12,4 +12,7 @@
-> >>          (((~_ULL(0)) - (_ULL(1) << (l)) + 1) & \
-> >>           (~_ULL(0) >> (__BITS_PER_LONG_LONG - 1 - (h))))
-> >>  
-> >> +#define __GENMASK_U128(h, l) \
-> >> +	((_BIT128((h) + 1)) - (_BIT128(l)))
-> >> +
-> >>  #endif /* _UAPI_LINUX_BITS_H */
-> >> diff --git a/include/uapi/linux/const.h b/include/uapi/linux/const.h
-> >> index a429381e7ca5..a0211136dfd8 100644
-> >> --- a/include/uapi/linux/const.h
-> >> +++ b/include/uapi/linux/const.h
-> >> @@ -27,6 +27,7 @@
-> >>  
-> >>  #define _BITUL(x)	(_UL(1) << (x))
-> >>  #define _BITULL(x)	(_ULL(1) << (x))
-> >> +#define _BIT128(x)	((unsigned __int128)(1) << (x))
-> > 
-> > GENMASK() macros may be used in assembly code. This is not the case
-> > for GENMASK_128 at this time, of course, but I think we'd introduce 
-> > assembly glue at this point to simplify things in future. Can you
-> > check the include/uapi/linux/const.h and add something like _U128()
-> > in there?
-> 
-> 
-> https://lore.kernel.org/lkml/20240724103142.165693-1-anshuman.khandual@arm.com/
-> 
-> We had _U128() in the previous version V1 but as Arnd explained earlier
-> gcc silently truncates the constant passed into that helper. So _U128()
-> cannot take a real large 128 bit constant as the input.
-> 
-> --- a/include/uapi/linux/const.h
-> +++ b/include/uapi/linux/const.h
-> @@ -16,14 +16,17 @@
->  #ifdef __ASSEMBLY__
->  #define _AC(X,Y)	X
->  #define _AT(T,X)	X
-> +#define _AC128(X)	X
->  #else
->  #define __AC(X,Y)	(X##Y)
->  #define _AC(X,Y)	__AC(X,Y)
->  #define _AT(T,X)	((T)(X))
-> +#define _AC128(X)	((unsigned __int128)(X))
->  #endif
->  
->  #define _UL(x)		(_AC(x, UL))
->  #define _ULL(x)		(_AC(x, ULL))
-> +#define _U128(x)	(_AC128(x))
->  
->  #define _BITUL(x)	(_UL(1) << (x))
->  #define _BITULL(x)	(_ULL(1) << (x))
-> 
-> AFAICS unsigned __int128 based constants can only be formed via shifting
-> and merging operations involving two distinct user provided 64 bit parts.
-> Probably something like the following
-> 
-> #define _AC128(h, l)	(((unsigned __int128)h << 64) | (unsigned __int128)l)
-> #define _U128(h, l)	(_AC128(h, l))
-> 
-> But then carving out h and l components for the required 128 bit constant
-> needs to be done manually and for assembly the shifting operations has to
-> be platform specific. Hence just wondering if it is worth adding the macro
-> _U128().
+On Fri, Jun 28, 2024 at 01:23:31PM +0000, Alice Ryhl wrote:
 
-OK then, I see. So, is that a GCC bug or intentional behavior? Anyways,
-can you put a comment on top of GENMASK_U128 and BIT128 that they wouldn't
-work in asm code and why?
+>  rust/kernel/arch/arm64/jump_label.rs     | 34 ++++++++++++++++++++++++++++
+>  rust/kernel/arch/loongarch/jump_label.rs | 35 +++++++++++++++++++++++++++++
+>  rust/kernel/arch/mod.rs                  | 24 ++++++++++++++++++++
+>  rust/kernel/arch/riscv/jump_label.rs     | 38 ++++++++++++++++++++++++++++++++
+>  rust/kernel/arch/x86/jump_label.rs       | 35 +++++++++++++++++++++++++++++
+>  rust/kernel/lib.rs                       |  2 ++
+>  rust/kernel/static_key.rs                | 32 +++++++++++++++++++++++++++
+>  scripts/Makefile.build                   |  2 +-
+>  8 files changed, 201 insertions(+), 1 deletion(-)
 
-Thanks,
-Yury
+So I really find the amount of duplicated asm offensive. Is is far too
+easy for any of this to get out of sync.
+
+> diff --git a/rust/kernel/arch/x86/jump_label.rs b/rust/kernel/arch/x86/jump_label.rs
+> new file mode 100644
+> index 000000000000..383bed273c50
+> --- /dev/null
+> +++ b/rust/kernel/arch/x86/jump_label.rs
+> @@ -0,0 +1,35 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +// Copyright (C) 2024 Google LLC.
+> +
+> +//! X86 Rust implementation of jump_label.h
+> +
+> +/// x86 implementation of arch_static_branch
+> +#[macro_export]
+> +#[cfg(target_arch = "x86_64")]
+> +macro_rules! arch_static_branch {
+> +    ($key:path, $keytyp:ty, $field:ident, $branch:expr) => {'my_label: {
+> +        core::arch::asm!(
+> +            r#"
+> +            1: .byte 0x0f,0x1f,0x44,0x00,0x00
+> +
+> +            .pushsection __jump_table,  "aw"
+> +            .balign 8
+> +            .long 1b - .
+> +            .long {0} - .
+> +            .quad {1} + {2} + {3} - .
+> +            .popsection
+> +            "#,
+> +            label {
+> +                break 'my_label true;
+> +            },
+> +            sym $key,
+> +            const ::core::mem::offset_of!($keytyp, $field),
+> +            const $crate::arch::bool_to_int($branch),
+> +        );
+> +
+> +        break 'my_label false;
+> +    }};
+> +}
+
+Note that this uses the forced 5 byte version, and not the dynamic sized
+one. On top of that it hard-codes the nop5 string :/
+
+Please work harder to not have to duplicate stuff like this.
+
+NAK.
+
 
