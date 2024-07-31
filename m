@@ -1,91 +1,107 @@
-Return-Path: <linux-arch+bounces-5764-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5765-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A923942B8B
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Jul 2024 12:04:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7C48942BC4
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Jul 2024 12:15:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8CCB81C20DE8
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Jul 2024 10:04:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 960B31F2307C
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Jul 2024 10:15:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89B601AB500;
-	Wed, 31 Jul 2024 10:03:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D48E1AAE24;
+	Wed, 31 Jul 2024 10:15:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="fjZt/u+B"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F1371AB537;
-	Wed, 31 Jul 2024 10:03:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5BF053370;
+	Wed, 31 Jul 2024 10:15:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722420198; cv=none; b=axJ6q7kffMq4Dn0h3whzinLt7gD8NMWPQuP9HR9+iSEIQiqd6ba3DCaUIE+DBjRU+dzKibSabSb/6qh+06GCkCfHSO9tbtcD06PUeGs8dsqVQVgyI2f9ISuLve6cTFNwv2StPIr+VjCUFSvwKWP73ZFWE7Uc7asUArUr40a+Ao8=
+	t=1722420931; cv=none; b=sO5bTrQ+RAcnVqFHiDW4v3uO3xdK3YZSiCxTZmCKyAMod8AvCTIdy/pWdcM+Aw79h8wDD3i3/Hwyu+QhOmVvNXBkMw9uCZsLzUnkHswILJblcohDA/qN5NsmWHKOvgdOo+E9Plp/RyEo2gZ+N99f6BCd1uE2zGA7a0XZF6QZowc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722420198; c=relaxed/simple;
-	bh=DukT5UE7XKYXtC2eML+NcnbLOHXSPE0vVMkE58Iu10Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=GPOtHgMRixKjJ/w+EGqaFXCH4QyU2h0+e6QeiRqRFuMKLnzcbqKzhcVdxadyiSogF/+0IRcgu5fdnWnAI/VFM+c1fvUUxTFbJ9gQWGI2/PQSbyNGP63ZCRW5tHgbgPLsFYcc1ndGoRq4FtpMqHjeMZ0eHSfRWis9ohjBCHIcJ/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.254])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4WYnbW00MbzyPGX;
-	Wed, 31 Jul 2024 17:58:14 +0800 (CST)
-Received: from kwepemi100008.china.huawei.com (unknown [7.221.188.57])
-	by mail.maildlp.com (Postfix) with ESMTPS id 4878B180101;
-	Wed, 31 Jul 2024 18:03:13 +0800 (CST)
-Received: from [10.67.109.254] (10.67.109.254) by
- kwepemi100008.china.huawei.com (7.221.188.57) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Wed, 31 Jul 2024 18:03:12 +0800
-Message-ID: <034499ea-2cd6-8775-ee94-771cbecd4cdb@huawei.com>
-Date: Wed, 31 Jul 2024 18:03:11 +0800
+	s=arc-20240116; t=1722420931; c=relaxed/simple;
+	bh=z+VQEntqBxo5Gd2LvLOmLC4MpGmQveBzWyM3KmPsLAo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tqfkTJcZ2j+ghZC5nak4DTKU1r5Jvss66xaFX6/3ki+6rXPgvCVph0Klw4EJxTDu20XQkXAOZq0C4n/ENmEglfqr5EXnLbdG81R90M59sks97f999JRbc/aWW/zdTnGsjdYA+Dh3BgEaSNF8/k7aoT3pYqCD1CFjTYFkIp6GGmg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=fjZt/u+B; arc=none smtp.client-ip=78.32.30.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=qMBM7pjQFwnbFVqnUX8SB3vfklTZ2ocTvkMoeIJbxQ4=; b=fjZt/u+BQ9Vz/yMivaqlHmM58H
+	OgLS6W+bfy2IQA0xkn3anddDj+f5ij2o3A9jTJHE96XREjU3SE0wSBJhRhZScfR9ZtdrT5Q5ni8cr
+	7pu7f7uEwLsruVT2u60fxv9OUHIJt1ZQsIvCrKPpx5gwjWcTx4WxDewRAEKyXWl/tm3WcGLvK7GDu
+	ikow8z5kDrgmUGvoLWpdNsZHBamXkCPMVVumCAVXgRfKS20GQdJCVKMY9S8CVvDDXOFdUs1rTmzJ6
+	xbvjYTgPJTt7Qp2zA0PNedoTQBkcVPyEaHr7SalzMkgtBUyGbOzSZgRPFK0Xjmh2mWCBUDaUcmrsh
+	zm7ia9JQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:47592)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1sZ6ME-00005e-0w;
+	Wed, 31 Jul 2024 11:14:58 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1sZ6MD-00067m-VX; Wed, 31 Jul 2024 11:14:58 +0100
+Date: Wed, 31 Jul 2024 11:14:57 +0100
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+To: Jinjie Ruan <ruanjinjie@huawei.com>
+Cc: arnd@arndb.de, afd@ti.com, akpm@linux-foundation.org,
+	linus.walleij@linaro.org, eric.devolder@oracle.com, robh@kernel.org,
+	vincent.whitchurch@axis.com, bhe@redhat.com, nico@fluxnic.net,
+	ardb@kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH] ARM: support PREEMPT_DYNAMIC
+Message-ID: <ZqoOoUPDIeJX5M0e@shell.armlinux.org.uk>
+References: <20240620090028.729373-1-ruanjinjie@huawei.com>
+ <79a3de7c-21da-12ce-8372-9c9029c237ac@huawei.com>
+ <Zqn0wL5iScf455O5@shell.armlinux.org.uk>
+ <034499ea-2cd6-8775-ee94-771cbecd4cdb@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH] ARM: support PREEMPT_DYNAMIC
-Content-Language: en-US
-To: "Russell King (Oracle)" <linux@armlinux.org.uk>
-CC: <arnd@arndb.de>, <afd@ti.com>, <akpm@linux-foundation.org>,
-	<linus.walleij@linaro.org>, <eric.devolder@oracle.com>, <robh@kernel.org>,
-	<vincent.whitchurch@axis.com>, <bhe@redhat.com>, <nico@fluxnic.net>,
-	<ardb@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>
-References: <20240620090028.729373-1-ruanjinjie@huawei.com>
- <79a3de7c-21da-12ce-8372-9c9029c237ac@huawei.com>
- <Zqn0wL5iScf455O5@shell.armlinux.org.uk>
-From: Jinjie Ruan <ruanjinjie@huawei.com>
-In-Reply-To: <Zqn0wL5iScf455O5@shell.armlinux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemi100008.china.huawei.com (7.221.188.57)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <034499ea-2cd6-8775-ee94-771cbecd4cdb@huawei.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-
-
-On 2024/7/31 16:24, Russell King (Oracle) wrote:
-> On Wed, Jul 31, 2024 at 10:07:53AM +0800, Jinjie Ruan wrote:
->>>  #ifdef CONFIG_PREEMPTION
->>> +#ifdef CONFIG_PREEMPT_DYNAMIC
->>> +	bl	need_irq_preemption
->>> +	cmp	r0, #0
->>> +	beq	2f
->>> +#endif
+On Wed, Jul 31, 2024 at 06:03:11PM +0800, Jinjie Ruan wrote:
+> On 2024/7/31 16:24, Russell King (Oracle) wrote:
+> > On Wed, Jul 31, 2024 at 10:07:53AM +0800, Jinjie Ruan wrote:
+> >>>  #ifdef CONFIG_PREEMPTION
+> >>> +#ifdef CONFIG_PREEMPT_DYNAMIC
+> >>> +	bl	need_irq_preemption
+> >>> +	cmp	r0, #0
+> >>> +	beq	2f
+> >>> +#endif
+> > 
+> > Depending on the interrupt rate, this can be regarded as a fast path,
+> > it would be nice if we could find a way to use static branches in
+> > assembly code.
+> It seems to be hard to use static keys in assembly code.
 > 
-> Depending on the interrupt rate, this can be regarded as a fast path,
-> it would be nice if we could find a way to use static branches in
-> assembly code.
-It seems to be hard to use static keys in assembly code.
+> By the way, currently, most architectures have simplified assembly code
+> and implemented its most functions in C functions. Does arm32 have this
+> plan?
 
-By the way, currently, most architectures have simplified assembly code
-and implemented its most functions in C functions. Does arm32 have this
-plan?
+arm32 is effectively in maintenance mode; very little active development
+is occuring. So, there are no plans to change the code without good
+reason (as code changes without reason will needlessly affect its
+stability.)
 
-> 
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
 
