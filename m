@@ -1,121 +1,132 @@
-Return-Path: <linux-arch+bounces-5787-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5788-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC3C89434DB
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Jul 2024 19:17:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7EC3594358A
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Jul 2024 20:20:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 67C97B21218
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Jul 2024 17:17:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 950BE1C218DB
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Jul 2024 18:20:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B94041799F;
-	Wed, 31 Jul 2024 17:17:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE8648288F;
+	Wed, 31 Jul 2024 18:20:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="PP9t2c3+";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="H679FsUr"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QHrDunwf"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fout2-smtp.messagingengine.com (fout2-smtp.messagingengine.com [103.168.172.145])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D2D51396;
-	Wed, 31 Jul 2024 17:17:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.145
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E4F145BE3;
+	Wed, 31 Jul 2024 18:20:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722446233; cv=none; b=q9BTr2K9ZmdL6rna+B5/xv47RplcNYCPU3gYKoTKLuLCzWc6SwTcZy6Y0kuawtH6QujMFmLrWp4ZJvvkzkEIvi+a/rSX1NhcTUS0OJA3wI8+id31wRB8q1rPAxBkmNUB02m891IKB8AazXyInInHgu576EK8VSoYiVBMuJTQ/MA=
+	t=1722450003; cv=none; b=ds3vq+Ouu2aCLzM8A+zZKppml+XOW9Hobq6MRtj9uGTpxS8CUF41ZjB3rZmrYZ3DYzv/H8mZTQ8Hnt43WG0+CF1wmkLc0Y4cJywtejdBzArGrYhNUhLp6uXY+GNfY/BSI+TtGNPpEkVeFSQoEzrrM8up5jCxZvmVyV+2pIi28KM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722446233; c=relaxed/simple;
-	bh=/ptNCRa8BuFsInH6VMyF0zSzEPmkxWE1KAQ8UMgYdpk=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=fSUteZUgC14pGeebUOlzZarQgMQ7w2getzFTUwRwWSDWARJKt9l0zcoQl8cFPY/qvw92FN2HQVoVGYEwgXjrW49vD+z7Qy2tOm2zjDKc18eHR6eEmM9oNMUXl5N2eRXBJ2i4QqfsaFMwUeJpBNLS2+o9ZN9gZe8oTZ0t5jhdUic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=PP9t2c3+; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=H679FsUr; arc=none smtp.client-ip=103.168.172.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-	by mailfout.nyi.internal (Postfix) with ESMTP id 75CD313832BF;
-	Wed, 31 Jul 2024 13:17:10 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute4.internal (MEProxy); Wed, 31 Jul 2024 13:17:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1722446230;
-	 x=1722532630; bh=qqLGv/Rrjo/QdG2fPOcEcMg2UTgPErujpTL4/GBY9Sc=; b=
-	PP9t2c3+Z6iCxXXrYyz9oCR9E43ZG0wRPBncMpfqEzFbm6CRg+b99FtDRyRlinYr
-	XoF/v+4P6xhDnrw7VAI2mknndHgI9zMUEbnmo0B36ODFHu1nYXoqSPdOU2uO7HAJ
-	TZ+vk3bexwM4gFtikS/Atw3X1yQf7ZwCjjl+UlpMQ7dyAi1fOcRKVJvl/AzAeeYo
-	t4/0Gzh2W+rWIEqtijKdsTlZXo6Uiw8xfdmSyXGTOZJE9/L8SR+086lNNb/XzDSl
-	PKxSa792oJlmRG7PxQHGTMRhDtERjIHLtosYHdVjm61rZXQu2GxvvvnDyrMQEnNM
-	RSexXBb4UIesEcIoWyJmrw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1722446230; x=
-	1722532630; bh=qqLGv/Rrjo/QdG2fPOcEcMg2UTgPErujpTL4/GBY9Sc=; b=H
-	679FsUrBlfj+kk49OlW7cZG3wbt5jFGaONqC5Gs/fGp/Xvd1HHbWnocAldqnzR5K
-	lET3iQf0YRhrzUMgyrbOFlVXoanQSMe19Cx0fjuAac/jh/OM6tgbsOnVEUVA3aCQ
-	KoyCWfL17ecD9whEBK2Gby6B5tr68FPBhuIwBLDLNflbvmi0XXMl/ZzUlVHPns2b
-	E/E5XfZd983D23PxTbOwqZMVFq9txIqL/GaUwGS7BK2XJmIyhiUumKlQULHWqaTw
-	XBGJYxMAbg2SVFhEEYB3sN9jn8Up1pP7wI8TukwHZCiGo+AS6CL9Ttw4P1+4iElA
-	PcSTZHrAHP3w/40APLpPQ==
-X-ME-Sender: <xms:lnGqZg_cEcg5hKayVx_EM3MDocic-pJQqH0ahJwA9R5nik_gSH9vMw>
-    <xme:lnGqZotIGmNfKJoih6GqlvHJVXw5qZNJ340v7LnrVWxrL1vASJhnDGdm1gYzpCjVH
-    dr5cRsfj1QI9kzwrFc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrjeeigdduudduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefggfevudegudevledvkefh
-    vdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtoheptd
-X-ME-Proxy: <xmx:lnGqZmAd4jA1c0RQIdnRMHMGFV5GTZSqwmEjJND5BRh1BR_kv7NtoQ>
-    <xmx:lnGqZgcuDpC1-dokiPTxvXowbqhHdrcMF8_yzOXugorzqhPOLO8gRg>
-    <xmx:lnGqZlOnG9C5TwfhUWzfBu0bgsoNiZ5MGaItHdD0AFpPInJIZ6hz3w>
-    <xmx:lnGqZqlshS-puMMw02UN8PXw8qUFjNA8YrD4UWwM-cryoOuhySFj0A>
-    <xmx:lnGqZo3wO6s9IhaUiLu6GtEZvMVd3id7IN6mh-_QGYxlsKkH5TbCjQIg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 1B80FB6008D; Wed, 31 Jul 2024 13:17:10 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1722450003; c=relaxed/simple;
+	bh=mhUJZkJDoBn6UrBK6j9k/Zhefn6WhHvCy2ysDMhWtOg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gjpuWtC1uDS9oJ8OPfJJuumiQiCxfsLpexmJ54cTjhmxmUtRgFK175UXFz6sUgozW4+nQMC9cg3aRKxsXdRyirrIDHLVJTjOoOtoyzUspNFlktjcmXhiqBt4avOGhIClZzH6WN4gMMBfAtHP75YC2sIrMgBM3EuFiVvJsHWylEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QHrDunwf; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1722450001; x=1753986001;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mhUJZkJDoBn6UrBK6j9k/Zhefn6WhHvCy2ysDMhWtOg=;
+  b=QHrDunwfmTljnjUMhJp4vd5IXXUNGVW/dgSH/T/RyNzOlzNJbKuDoxpt
+   wZyHV+t86/OpZ2CoTrVC5r794mqkDPGyh42bsdd1BFl/ph2X1w33RfMb0
+   mr8AREaPMDqxH+7ES+IuOn29VRBkgv3131Og+oR2bioLqlQdcfRJM/jod
+   FF1L+JOcnRCjuugoQf1VxZ68UUqkPIgmoHQ9WLM3FSyKlTH7grazvfHIm
+   nbg4gYyzn5/U+xp8fHUtG69qRccZdnfKyF/swvf3ydSFTgkQzS0PVVFiE
+   OQASByNZMbLsmG8N3L9oj1NQJjiOMcstWbNCMsPcn6bTi3DC59uXjb7OY
+   Q==;
+X-CSE-ConnectionGUID: Un/HTtHSSXaxC+gn2TF7Hg==
+X-CSE-MsgGUID: xAQGIqJNSXCILtYcEE9g7Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11150"; a="23268184"
+X-IronPort-AV: E=Sophos;i="6.09,251,1716274800"; 
+   d="scan'208";a="23268184"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2024 11:20:00 -0700
+X-CSE-ConnectionGUID: g2GxWhHnQRqpX6Q0Gsc6Bw==
+X-CSE-MsgGUID: RwGiN8jVSjmeOtf88aroXA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,251,1716274800"; 
+   d="scan'208";a="55368613"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 31 Jul 2024 11:19:56 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sZDvV-000uhg-0v;
+	Wed, 31 Jul 2024 18:19:53 +0000
+Date: Thu, 1 Aug 2024 02:19:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: Zhiguo Jiang <justinjiang@vivo.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
+	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
+	Nick Piggin <npiggin@kernel.dk>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Arnd Bergmann <arnd@arndb.de>, Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>, linux-arch@vger.kernel.org,
+	cgroups@vger.kernel.org, Barry Song <21cnbao@gmail.com>
+Cc: oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	opensource.kernel@vivo.com
+Subject: Re: [PATCH 2/2] mm: tlb: add tlb swap entries batch async release
+Message-ID: <202408010150.13yZScv6-lkp@intel.com>
+References: <20240730114426.511-3-justinjiang@vivo.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Wed, 31 Jul 2024 19:16:49 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Yury Norov" <yury.norov@gmail.com>,
- "Anshuman Khandual" <anshuman.khandual@arm.com>
-Cc: linux-kernel@vger.kernel.org, "Andrew Morton" <akpm@linux-foundation.org>,
- "Rasmus Villemoes" <linux@rasmusvillemoes.dk>,
- Linux-Arch <linux-arch@vger.kernel.org>
-Message-Id: <14f622a9-599a-4b63-8830-0bc825f7c468@app.fastmail.com>
-In-Reply-To: <ZqpokVWg75iROgKH@yury-ThinkPad>
-References: <20240725054808.286708-1-anshuman.khandual@arm.com>
- <20240725054808.286708-2-anshuman.khandual@arm.com>
- <Zqkt3byHNZQvCZiB@yury-ThinkPad>
- <b1dd907d-d45b-4602-964e-70654094a315@arm.com>
- <ZqpokVWg75iROgKH@yury-ThinkPad>
-Subject: Re: [PATCH V2 1/2] uapi: Define GENMASK_U128
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240730114426.511-3-justinjiang@vivo.com>
 
-On Wed, Jul 31, 2024, at 18:38, Yury Norov wrote:
+Hi Zhiguo,
 
-> OK then, I see. So, is that a GCC bug or intentional behavior? 
+kernel test robot noticed the following build warnings:
 
-I just double-checked to see what is in C23 and found that
-it indeed defines a 'wb' and 'wbu' suffix for arbitrarily
-sized integers. This is supported by gcc-14 and clang-15
-or higher on 64-bit architectures.
+[auto build test WARNING on akpm-mm/mm-everything]
 
-It's too early to rely on those versions though, as gcc-14
-was only just released.
+url:    https://github.com/intel-lab-lkp/linux/commits/Zhiguo-Jiang/mm-move-task_is_dying-to-h-headfile/20240730-215136
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20240730114426.511-3-justinjiang%40vivo.com
+patch subject: [PATCH 2/2] mm: tlb: add tlb swap entries batch async release
+config: i386-randconfig-061-20240731 (https://download.01.org/0day-ci/archive/20240801/202408010150.13yZScv6-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240801/202408010150.13yZScv6-lkp@intel.com/reproduce)
 
-     Arnd
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408010150.13yZScv6-lkp@intel.com/
+
+sparse warnings: (new ones prefixed by >>)
+>> mm/mmu_gather.c:54:10: sparse: sparse: symbol 'nr_exiting_processes' was not declared. Should it be static?
+   mm/mmu_gather.c: note: in included file (through include/linux/mmzone.h, include/linux/gfp.h):
+   include/linux/page-flags.h:235:46: sparse: sparse: self-comparison always evaluates to false
+   include/linux/page-flags.h:235:46: sparse: sparse: self-comparison always evaluates to false
+
+vim +/nr_exiting_processes +54 mm/mmu_gather.c
+
+    53	
+  > 54	atomic_t nr_exiting_processes = ATOMIC_INIT(0);
+    55	static struct kmem_cache *swap_gather_cachep;
+    56	static struct workqueue_struct *swapfree_wq;
+    57	static DEFINE_STATIC_KEY_TRUE(tlb_swap_asyncfree_disabled);
+    58	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
