@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-5798-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5799-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2072F944320
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Aug 2024 08:09:47 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A3B894432D
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Aug 2024 08:10:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CB952283AD0
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Aug 2024 06:09:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DB646B21C26
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Aug 2024 06:10:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C222F15853C;
-	Thu,  1 Aug 2024 06:09:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BA99158203;
+	Thu,  1 Aug 2024 06:09:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UlXPnIkk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bucdLnSW"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71B6215749A;
-	Thu,  1 Aug 2024 06:09:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E63C0157464;
+	Thu,  1 Aug 2024 06:09:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722492551; cv=none; b=hDb8X5Xd4hlnBXYTze2inz1hI6dxwBBxYEjafwuY7QEC6lcOWbYy+z81DyaL51x3XuhTVPoKaWPbeJOZQz0hhR7XLUqzysu0putAz0qQaYaqFLT/ojtp1zmfSRmemOuC8v1zib8pgErlbsTsHL/ARFYTpuICXXvjX7VhXg1M5pc=
+	t=1722492563; cv=none; b=bNKcXlWRBUv7qH0mXDzeq7WFdyiuSus+MV6vLVMKSVdANkDTYU2YNCuueVBxvtbvq3PB3bbQVAYWZHOzAO/tBSO7Jk2fS52BYw/rxpK1u/L9Gs5S7+YLHlPWTOl5xu3N5k+sYqW7RP82iOamBwTm6dXrucgqeDdmNZo6b/9lnGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722492551; c=relaxed/simple;
-	bh=wE9udk3T5PUOzWhffSqfqF0jfi91yVWMRgCuaEhaWIs=;
+	s=arc-20240116; t=1722492563; c=relaxed/simple;
+	bh=mRZLqq2N2ryJ5ZO7g59g+rrLvkwOpPlbSt8yNKJxh4c=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=eOvPvMlEg62NzsaSHpyqKx3bsNoUIuOrQmN8h7v30iYL6Y16LIowp4wfFH4IUVfe4c44SU4cUVEaJqFcvmy1UlUd6x6tyjL0brSLkyw8u3BTCFgZsNoqBmMpSWSIX+ROQNnknxVxtCyMTiaWU7BjqTVfxPaNV3INJ4d8ltndOuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UlXPnIkk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D56BCC4AF0E;
-	Thu,  1 Aug 2024 06:08:59 +0000 (UTC)
+	 MIME-Version; b=RwV6fsacgGwlOn7PRGPBMBdi4Paf0AbEqxwqnxcBn/cRjRZWlMPkM/GEy/Gm83ghi5MykjS6wEl1jRHFPeLERH4fvZnmp/e+avLswuM5lxVGJve/RrHsZPRW3FNqA/gBeuFfZ/iKiPX3UwwJFoXAc63Kx2cSYgStSaKpjke+KrQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bucdLnSW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A06DC4AF14;
+	Thu,  1 Aug 2024 06:09:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722492550;
-	bh=wE9udk3T5PUOzWhffSqfqF0jfi91yVWMRgCuaEhaWIs=;
+	s=k20201202; t=1722492562;
+	bh=mRZLqq2N2ryJ5ZO7g59g+rrLvkwOpPlbSt8yNKJxh4c=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=UlXPnIkkZQR2dXJRdGRF6ypg+KOsiM9/67c6rYYrhDo2FguVGlVV8shyU7Gz8VzYr
-	 +u4Ya4vP+UoPOnxh6t1MSmRl1cHJ08bQvMpxgJIkc9zewWuRHTWoiilbb7qKzEj/Ma
-	 RD1tGKdlLTPrJaG8ZEblPomDJdXVPP7dAGf4NXPs+5wYFBxEN5X0Hp589/maJAgny+
-	 TIWDD/cr8uy0CHdC8oTDx0a0OUfJcsPttk+4G1CzKYSKRQW3M5bjNgPSdfPRy3HQTZ
-	 ASefzpnG9NOh2q5N+dfBb4Hi3WipAZUAo6fBCWwI90MfToAMZrVqzzDByoyHFMeEDu
-	 vLoDKbCBr6w0g==
+	b=bucdLnSWpcdcRT5+EXB/9Vj9t5MS7Qn5CSNmaKRNv6NvVMt0IwHITPfQUHQKw5W4m
+	 KADunInG9ypv2EkiXb1dRp15PO6S9ZkhHC5orlcNDwZxNq0LAq7vdXnHs51UeN8XC1
+	 qCCdGkD+IwBfa9Dhu62NGSOzskzofKuRJmzlYh8EWIjKqjsCMlnSFjv0suv/LWA7bE
+	 /v17MsWN6GsK6hkUk2PpkklVDGARhQKEyYhJxEEdEsm6jaYBM6ERY08yC3+8fZvikl
+	 QSv5CNmiG7++F2AcsgKSBHXAeR922kJ8/hbCjc1GagkI6K0Ok0uQtB2agu2yqJ1ylk
+	 Nz7e1f94h+Kfg==
 From: Mike Rapoport <rppt@kernel.org>
 To: linux-kernel@vger.kernel.org
 Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
@@ -90,9 +90,9 @@ Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
 	nvdimm@lists.linux.dev,
 	sparclinux@vger.kernel.org,
 	x86@kernel.org
-Subject: [PATCH v3 02/26] MIPS: sgi-ip27: make NODE_DATA() the same as on all other architectures
-Date: Thu,  1 Aug 2024 09:08:02 +0300
-Message-ID: <20240801060826.559858-3-rppt@kernel.org>
+Subject: [PATCH v3 03/26] MIPS: sgi-ip27: ensure node_possible_map only contains valid nodes
+Date: Thu,  1 Aug 2024 09:08:03 +0300
+Message-ID: <20240801060826.559858-4-rppt@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240801060826.559858-1-rppt@kernel.org>
 References: <20240801060826.559858-1-rppt@kernel.org>
@@ -106,62 +106,34 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-sgi-ip27 is the only system that defines NODE_DATA() differently than
-the rest of NUMA machines.
+For SGI IP27 machines node_possible_map is statically set to
+NODE_MASK_ALL and it is not updated during NUMA initialization.
 
-Add node_data array of struct pglist pointers that will point to
-__node_data[node]->pglist and redefine NODE_DATA() to use node_data
-array.
-
-This will allow pulling declaration of node_data to the generic mm code
-in the next commit.
+Ensure that it only contains nodes present in the system.
 
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
- arch/mips/include/asm/mach-ip27/mmzone.h | 5 ++++-
- arch/mips/sgi-ip27/ip27-memory.c         | 5 ++++-
- 2 files changed, 8 insertions(+), 2 deletions(-)
+ arch/mips/sgi-ip27/ip27-smp.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/mips/include/asm/mach-ip27/mmzone.h b/arch/mips/include/asm/mach-ip27/mmzone.h
-index 08c36e50a860..629c3f290203 100644
---- a/arch/mips/include/asm/mach-ip27/mmzone.h
-+++ b/arch/mips/include/asm/mach-ip27/mmzone.h
-@@ -22,7 +22,10 @@ struct node_data {
+diff --git a/arch/mips/sgi-ip27/ip27-smp.c b/arch/mips/sgi-ip27/ip27-smp.c
+index 5d2652a1d35a..62733e049570 100644
+--- a/arch/mips/sgi-ip27/ip27-smp.c
++++ b/arch/mips/sgi-ip27/ip27-smp.c
+@@ -70,11 +70,13 @@ void cpu_node_probe(void)
+ 	gda_t *gdap = GDA;
  
- extern struct node_data *__node_data[];
+ 	nodes_clear(node_online_map);
++	nodes_clear(node_possible_map);
+ 	for (i = 0; i < MAX_NUMNODES; i++) {
+ 		nasid_t nasid = gdap->g_nasidtable[i];
+ 		if (nasid == INVALID_NASID)
+ 			break;
+ 		node_set_online(nasid);
++		node_set(nasid, node_possible_map);
+ 		highest = node_scan_cpus(nasid, highest);
+ 	}
  
--#define NODE_DATA(n)		(&__node_data[(n)]->pglist)
- #define hub_data(n)		(&__node_data[(n)]->hub)
- 
-+extern struct pglist_data *node_data[];
-+
-+#define NODE_DATA(nid)		(node_data[nid])
-+
- #endif /* _ASM_MACH_MMZONE_H */
-diff --git a/arch/mips/sgi-ip27/ip27-memory.c b/arch/mips/sgi-ip27/ip27-memory.c
-index b8ca94cfb4fe..c30ef6958b97 100644
---- a/arch/mips/sgi-ip27/ip27-memory.c
-+++ b/arch/mips/sgi-ip27/ip27-memory.c
-@@ -34,8 +34,10 @@
- #define SLOT_PFNSHIFT		(SLOT_SHIFT - PAGE_SHIFT)
- #define PFN_NASIDSHFT		(NASID_SHFT - PAGE_SHIFT)
- 
--struct node_data *__node_data[MAX_NUMNODES];
-+struct pglist_data *node_data[MAX_NUMNODES];
-+EXPORT_SYMBOL(node_data);
- 
-+struct node_data *__node_data[MAX_NUMNODES];
- EXPORT_SYMBOL(__node_data);
- 
- static u64 gen_region_mask(void)
-@@ -361,6 +363,7 @@ static void __init node_mem_init(nasid_t node)
- 	 */
- 	__node_data[node] = __va(slot_freepfn << PAGE_SHIFT);
- 	memset(__node_data[node], 0, PAGE_SIZE);
-+	node_data[node] = &__node_data[node]->pglist;
- 
- 	NODE_DATA(node)->node_start_pfn = start_pfn;
- 	NODE_DATA(node)->node_spanned_pages = end_pfn - start_pfn;
 -- 
 2.43.0
 
