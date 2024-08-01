@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-5807-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5808-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4ABC4944381
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Aug 2024 08:13:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1B5594438D
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Aug 2024 08:13:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E52E41F23796
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Aug 2024 06:13:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2F4EF1C21A88
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Aug 2024 06:13:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 620F616D4EA;
-	Thu,  1 Aug 2024 06:10:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC78C158533;
+	Thu,  1 Aug 2024 06:11:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bNC6SBuY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iwZjfAqj"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D4AA157A5A;
-	Thu,  1 Aug 2024 06:10:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 895D6157A5A;
+	Thu,  1 Aug 2024 06:11:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722492656; cv=none; b=Xg/t/42zpK1a+kPue+NUCHnZ5Cvs0jSPNY817ZA2M8t8vdSvH0FL6MKGdIvBkEHOFQtqhwHYNq/SKDgO3I08gz7YF7MkvudM4uCl5LAVdixjg+1Jyt0GSjoeufKVBd2KAKdIp/fFYeO4SSJphzQNLbu++0QFE9JE/XaCAf0YHKI=
+	t=1722492667; cv=none; b=BhnzYwyNXBWdtAROfxgIkPjdBwFgLMik36ZMkuABcVfezMBmcOIVaEjrVI7tpYPY6VEXh5B8BY9otQfPxiqEO1A6s7tC0stxm5JyxyVnoOLooHeK+PvqHLF+77cxpcRH871YbvmmT4FLR6a7d1qXcewS1Qj4TFrc53H37uK19a4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722492656; c=relaxed/simple;
-	bh=Rjf0iRc+VbNov1IXYA1f8/WuGCpuVfgjGuHB5zpeQrI=;
+	s=arc-20240116; t=1722492667; c=relaxed/simple;
+	bh=9xX4GW03Y9jnCjd61LosuHfHXAjDKwtO3hWmKCiBLr4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ew2OK0AgYNG7cJbkXQdIXhqOVVn0694gtFXEVx1PWGADJjFuT1ij9Co1xZC7/hDfpotyL9X5+lYLs31ctbKPsIeaAu7X7EDIc9oKht14kEeztJ7JwarlmaNHmtY8lA+wjocaMtEu0SPiaBGXCuM5TZcDscuzgO4CgBLnbhscv7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bNC6SBuY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 959F9C4AF09;
-	Thu,  1 Aug 2024 06:10:44 +0000 (UTC)
+	 MIME-Version; b=da5eP+xVuo03cfK+GhmHenV0y0WDMvVqnZk0WqZFkjl5wVsVk6VuWQNUYFoVD3sP9GfQclPb2l+tzFBoXUqZD2Vlw4LpivG2OWbF7yR6l3mYyPDZnwANAzU0Es9WOZ5hoWo5H5NJ5hVxAUPcXWP5fzVOz8MNHeWuqmT2Xi/ouJk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iwZjfAqj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D0B8C4AF0D;
+	Thu,  1 Aug 2024 06:10:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722492655;
-	bh=Rjf0iRc+VbNov1IXYA1f8/WuGCpuVfgjGuHB5zpeQrI=;
+	s=k20201202; t=1722492667;
+	bh=9xX4GW03Y9jnCjd61LosuHfHXAjDKwtO3hWmKCiBLr4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=bNC6SBuY+2C9vgNv6AmEuNkLzbIiXAVs/wMzl1r36Gs0k8CLoQWb0q62HVoiTSgwA
-	 yQRxQAj2MPhJPq0x0p/VUMiIU9P2gj0sy8r4TrFGEl5cblhhm6dYAsyBqUDMFH+X+W
-	 +D8Q7EB3niaXdEH17S/n6XfMr5sBAkGSoqR2/AdaFEBFqO95ruILiTWlbyxMwoc2Ih
-	 gyipgDPNN380SXng7+cEQlO6DS0+22xe+S8kPgh/BsQ9oW27iWFyuyh5YutwywPGcT
-	 LFaiTvhOfihkxBHZNNKH6590ZbIZ1bzu/P7b+HwhiGgpJyPBVSvwX30a7PsrsgvCDJ
-	 El5tISvg50iFA==
+	b=iwZjfAqjYFuWiVOPXvynm6SGM1EFpAukZfMkt6R9F4SwhI5QT+Xp7QvTIEpuLE3KP
+	 FplaU//xDRQisqOHnlLu39H26TkCIv4PZzSU7MGzz+2/p27FJxqLasq83v+lxsZ6ea
+	 av9mDrJ0bQ/+h0XBKELeakt837vrywc0WgoES31rQbqguhIQv2Q9CYKxTRYKhvXSh8
+	 TqOn+l7L0Cq4ZpG2bGce/4xmpyaLmDwwj54B+YZmwJPikT33fFp9LO1Kxo0BHwZAkT
+	 tXbllQKTbH1zDS3xF3bDHNztoODZx7SzsEmXyCACl4y9jaMcCs8hkhJ07v0t5vyk/L
+	 xXtMTp3EUhJaw==
 From: Mike Rapoport <rppt@kernel.org>
 To: linux-kernel@vger.kernel.org
 Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
@@ -89,10 +89,11 @@ Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
 	loongarch@lists.linux.dev,
 	nvdimm@lists.linux.dev,
 	sparclinux@vger.kernel.org,
-	x86@kernel.org
-Subject: [PATCH v3 11/26] x86/numa: use get_pfn_range_for_nid to verify that node spans memory
-Date: Thu,  1 Aug 2024 09:08:11 +0300
-Message-ID: <20240801060826.559858-12-rppt@kernel.org>
+	x86@kernel.org,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH v3 12/26] x86/numa: move FAKE_NODE_* defines to numa_emu
+Date: Thu,  1 Aug 2024 09:08:12 +0300
+Message-ID: <20240801060826.559858-13-rppt@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240801060826.559858-1-rppt@kernel.org>
 References: <20240801060826.559858-1-rppt@kernel.org>
@@ -106,42 +107,45 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-Instead of looping over numa_meminfo array to detect node's start and
-end addresses use get_pfn_range_for_init().
-
-This is shorter and make it easier to lift numa_memblks to generic code.
+The definitions of FAKE_NODE_MIN_SIZE and FAKE_NODE_MIN_HASH_MASK are
+only used by numa emulation code, make them local to
+arch/x86/mm/numa_emulation.c
 
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Tested-by: Zi Yan <ziy@nvidia.com> # for x86_64 and arm64
 ---
- arch/x86/mm/numa.c | 13 +++----------
- 1 file changed, 3 insertions(+), 10 deletions(-)
+ arch/x86/include/asm/numa.h  | 2 --
+ arch/x86/mm/numa_emulation.c | 3 +++
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/mm/numa.c b/arch/x86/mm/numa.c
-index edfc38803779..cfe7e5477cf8 100644
---- a/arch/x86/mm/numa.c
-+++ b/arch/x86/mm/numa.c
-@@ -521,17 +521,10 @@ static int __init numa_register_memblks(struct numa_meminfo *mi)
+diff --git a/arch/x86/include/asm/numa.h b/arch/x86/include/asm/numa.h
+index ef2844d69173..2dab1ada96cf 100644
+--- a/arch/x86/include/asm/numa.h
++++ b/arch/x86/include/asm/numa.h
+@@ -71,8 +71,6 @@ void debug_cpumask_set_cpu(int cpu, int node, bool enable);
+ #endif
  
- 	/* Finally register nodes. */
- 	for_each_node_mask(nid, node_possible_map) {
--		u64 start = PFN_PHYS(max_pfn);
--		u64 end = 0;
-+		unsigned long start_pfn, end_pfn;
+ #ifdef CONFIG_NUMA_EMU
+-#define FAKE_NODE_MIN_SIZE	((u64)32 << 20)
+-#define FAKE_NODE_MIN_HASH_MASK	(~(FAKE_NODE_MIN_SIZE - 1UL))
+ int numa_emu_cmdline(char *str);
+ #else /* CONFIG_NUMA_EMU */
+ static inline int numa_emu_cmdline(char *str)
+diff --git a/arch/x86/mm/numa_emulation.c b/arch/x86/mm/numa_emulation.c
+index 9a9305367fdd..1ce22e315b80 100644
+--- a/arch/x86/mm/numa_emulation.c
++++ b/arch/x86/mm/numa_emulation.c
+@@ -10,6 +10,9 @@
  
--		for (i = 0; i < mi->nr_blks; i++) {
--			if (nid != mi->blk[i].nid)
--				continue;
--			start = min(mi->blk[i].start, start);
--			end = max(mi->blk[i].end, end);
--		}
--
--		if (start >= end)
-+		get_pfn_range_for_nid(nid, &start_pfn, &end_pfn);
-+		if (start_pfn >= end_pfn)
- 			continue;
+ #include "numa_internal.h"
  
- 		alloc_node_data(nid);
++#define FAKE_NODE_MIN_SIZE	((u64)32 << 20)
++#define FAKE_NODE_MIN_HASH_MASK	(~(FAKE_NODE_MIN_SIZE - 1UL))
++
+ static int emu_nid_to_phys[MAX_NUMNODES];
+ static char *emu_cmdline __initdata;
+ 
 -- 
 2.43.0
 
