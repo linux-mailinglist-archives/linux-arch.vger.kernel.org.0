@@ -1,622 +1,453 @@
-Return-Path: <linux-arch+bounces-5829-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5827-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 802249444D8
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Aug 2024 08:53:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73A869444CF
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Aug 2024 08:53:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A11481C2278A
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Aug 2024 06:53:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 29FA5283778
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Aug 2024 06:53:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33FE615853F;
-	Thu,  1 Aug 2024 06:53:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEC96158556;
+	Thu,  1 Aug 2024 06:53:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="lNMAKy5P"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from h3cspam02-ex.h3c.com (smtp.h3c.com [60.191.123.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 279F2157478;
-	Thu,  1 Aug 2024 06:53:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.191.123.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADD96158543
+	for <linux-arch@vger.kernel.org>; Thu,  1 Aug 2024 06:53:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722495219; cv=none; b=ZoVxpm6FEJnCW+XlOsXcpUdKlOwZm6jDWGNk1sCfnEWX3JbytizfUI/V8EBhdJ2fRIJUYJOChR8U4LdIaayo73sayOz1bzclCtHdQNIIRgK0uqgpKsAWgBNcAyGsPHboEqK3e+7pfnruyWwIbtNEEtzZdbhxtxQMYNg7CSLThUk=
+	t=1722495202; cv=none; b=lWSTALXxBaHyVwFSQ2QhtbW4FNxEfwrTe40jeKH8XrYXBIYtQpLuFSfDTONZ3QGMKei3ID/sQOepCgfe3GJV3aMFbCkPlZkzK+XkQaEcZtJEOUhqyXy0qu4hpNX5CDGxz8OHYgM2xD3gdsOnerZirUPHtEsEjprVxZOW750zzVI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722495219; c=relaxed/simple;
-	bh=mGxq7/zYPAaxkPsIlPF+kaaKpQtqaucgap446oglPX4=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=uPdqfUu6/AATpnGmzsnlzs3B+q31V5SJb4ediCRNH2j9+4aFMoA93N29vRflaJL9r7RXrJVCcdOPjkQDD0jrmDJpH3+Xl1HAXhfp9Tkn4FiPyPuGKH8d8/mAE8x0Z6MGM1kolXi+I1IPVP83F6kqzVFZYqltgpRH2+eoUOIBZVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=h3c.com; spf=pass smtp.mailfrom=h3c.com; arc=none smtp.client-ip=60.191.123.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=h3c.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=h3c.com
-Received: from mail.maildlp.com ([172.25.15.154])
-	by h3cspam02-ex.h3c.com with ESMTP id 4716pNwR013230;
-	Thu, 1 Aug 2024 14:51:26 +0800 (GMT-8)
-	(envelope-from zhang.renze@h3c.com)
-Received: from DAG6EX09-BJD.srv.huawei-3com.com (unknown [10.153.34.11])
-	by mail.maildlp.com (Postfix) with ESMTP id D379C20071B6;
-	Thu,  1 Aug 2024 14:56:11 +0800 (CST)
-Received: from localhost.localdomain (10.99.206.12) by
- DAG6EX09-BJD.srv.huawei-3com.com (10.153.34.11) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.1258.27; Thu, 1 Aug 2024 14:51:27 +0800
-From: BiscuitOS Broiler <zhang.renze@h3c.com>
-To: <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <akpm@linux-foundation.org>
-CC: <arnd@arndb.de>, <linux-arch@vger.kernel.org>, <chris@zankel.net>,
-        <jcmvbkbc@gmail.com>, <James.Bottomley@HansenPartnership.com>,
-        <deller@gmx.de>, <linux-parisc@vger.kernel.org>,
-        <tsbogend@alpha.franken.de>, <rdunlap@infradead.org>,
-        <bhelgaas@google.com>, <linux-mips@vger.kernel.org>,
-        <richard.henderson@linaro.org>, <ink@jurassic.park.msu.ru>,
-        <mattst88@gmail.com>, <linux-alpha@vger.kernel.org>,
-        <jiaoxupo@h3c.com>, <zhou.haofan@h3c.com>, <zhang.renze@h3c.com>
-Subject: [PATCH 1/1] mm: introduce MADV_DEMOTE/MADV_PROMOTE
-Date: Thu, 1 Aug 2024 14:50:35 +0800
-Message-ID: <20240801065035.15377-2-zhang.renze@h3c.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20240801065035.15377-1-zhang.renze@h3c.com>
-References: <20240801065035.15377-1-zhang.renze@h3c.com>
+	s=arc-20240116; t=1722495202; c=relaxed/simple;
+	bh=ELRDpOX7iQZaXmAGlS1lYFWEvSr7nDDizEwqaP2kcSE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ppeDNhiQmbciiokac6oXDqyX1b8fxL3pBbd7uGdE/7RFtxU+B7Mfy/W4zj6vGeU0+qTGrMj0cC2/LpZ+uAQdIHCQBBjZhJajSGcUk+J29haeBFHTDWR4fdQUUPnQKChcB+/BqIQKFS2PjMuj37yoSs1XlHGX47O10b5pf7zmJls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=lNMAKy5P; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a7a843bef98so695479366b.2
+        for <linux-arch@vger.kernel.org>; Wed, 31 Jul 2024 23:53:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1722495198; x=1723099998; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vHAsVfbdJrFts1avj4zdTyj/Mnf36OuWegU8jQ/euug=;
+        b=lNMAKy5P+lR7mybvx1aD1bQn6zNQumc5JWj483+XtJL5QdTrJsz9iYMGWXiyRBC5jA
+         ZkfgSoZM91gSqse60b0acyqpRCapVlcd/AiOzTuHnbpjOPBmoLG01Wv7V4pkJHG+zE9g
+         +Gv7NhADQHiPcK7eBOeBdT7MMKMTwXbYzMzIeA8vQiTfNQOgjgI/IPGKvMlusNd1QoCM
+         QEEAMzNDHVM8BY1naME4pU03e44YgsVUUezF4N+824ylp0pyhiX0UQUxPhL7GySdZU0s
+         BU+kQdD2SMNH6suhQIToTeGDCoFL23ysubX55EjfDgLIjo4rgG5iVnp1hTBtOPstz2ea
+         4flg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722495198; x=1723099998;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vHAsVfbdJrFts1avj4zdTyj/Mnf36OuWegU8jQ/euug=;
+        b=LII+55sT8ZRuL7cx+f9b0sNpGa7qE9ziOiupzbp+L5Nkre0vLC6XdgJ+T2ZCCdyUN1
+         EuD04f3fO8or9NM5e6C4zHAUonrpLqTi+sjmyOAmgruBsjvNHIm9Y9CJQt/AFAfQmHaY
+         6EXpqUEg8+pmohgIZXCebndUlZMateUdOu17g/gurjKOPzOlMRZy3UlCr56kUHod09hQ
+         6m7n+u6SGB2Ao6ikxK4FUxCUFYuGeMppSxp1b7Zma6hhaQauVWK8YLZqVVwyt1y8OxD2
+         l89hVXd1BA4m2cKDd510i0u2Y/ymxI4yyQX969YauBeotr6byNQQ2Bb2FUAK9cC+Tl5i
+         z2Hg==
+X-Forwarded-Encrypted: i=1; AJvYcCV3DeCjO8oTJdAYOtpmY4hWHo7zF5nfoddh5HKUiRj2ugd2YuDnXBVA3Ku8dPh/oab+Xb2+ekTeltUmUIe+GjSu40Yc0nWNGNImcg==
+X-Gm-Message-State: AOJu0YyNLlNyDTnc5lx0TfEoF1PEQHX27x2l2+etnDdOqynqNv5omc9/
+	ItzuFwd5keCP7Ku6SYpqa59ci2WQf8nu11Gs30prDqGauKFTKQur0B3VQSPYnUZkFXOuxDUK8zr
+	Az35l1RR379H9td1wD7g/XjGKaJkiS3gCgCUIVA==
+X-Google-Smtp-Source: AGHT+IEOG7hj3X1Q5Uvcw41YT16N5nNW/goXfjRZDN+4mN7YOeKiEhliKN6ktMwfEWdRTwIVkMqwH+bf7/LNC5aemU0=
+X-Received: by 2002:a17:906:6a1a:b0:a77:b784:deba with SMTP id
+ a640c23a62f3a-a7daf793b1bmr80420666b.6.1722495197613; Wed, 31 Jul 2024
+ 23:53:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: BJSMTP02-EX.srv.huawei-3com.com (10.63.20.133) To
- DAG6EX09-BJD.srv.huawei-3com.com (10.153.34.11)
+References: <20240731072405.197046-1-alexghiti@rivosinc.com>
+ <20240731072405.197046-14-alexghiti@rivosinc.com> <20240731-ce25dcdc5ce9ccc6c82912c0@orel>
+In-Reply-To: <20240731-ce25dcdc5ce9ccc6c82912c0@orel>
+From: Alexandre Ghiti <alexghiti@rivosinc.com>
+Date: Thu, 1 Aug 2024 08:53:06 +0200
+Message-ID: <CAHVXubgtD_nDBL2H-MYb9V+3jLBoszz8HAZ2NTTsiS2wR6aPDQ@mail.gmail.com>
+Subject: Re: [PATCH v4 13/13] riscv: Add qspinlock support
+To: Andrew Jones <ajones@ventanamicro.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Andrea Parri <parri.andrea@gmail.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Leonardo Bras <leobras@redhat.com>, Guo Ren <guoren@kernel.org>, 
+	linux-doc@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-DNSRBL: 
-X-SPAM-SOURCE-CHECK: pass
-X-MAIL:h3cspam02-ex.h3c.com 4716pNwR013230
 
-In a tiered memory architecture, when a process does not access memory
-in the fast nodes for a long time, the kernel will demote the memory
-to slower memory through a reclamation mechanism. This frees up the
-fast memory for other processes. When the process accesses the demoted
-memory again, the tiered memory system will, following certain
-policies, promote it back to fast memory. Since memory demotion and
-promotion in a tiered memory system do not occur instantly but require
-a gradual process, this can severely impact the performance of programs
-in high-performance computing scenarios.
+On Wed, Jul 31, 2024 at 5:29=E2=80=AFPM Andrew Jones <ajones@ventanamicro.c=
+om> wrote:
+>
+> On Wed, Jul 31, 2024 at 09:24:05AM GMT, Alexandre Ghiti wrote:
+> > In order to produce a generic kernel, a user can select
+> > CONFIG_COMBO_SPINLOCKS which will fallback at runtime to the ticket
+> > spinlock implementation if Zabha or Ziccrse are not present.
+> >
+> > Note that we can't use alternatives here because the discovery of
+> > extensions is done too late and we need to start with the qspinlock
+> > implementation because the ticket spinlock implementation would pollute
+> > the spinlock value, so let's use static keys.
+> >
+> > This is largely based on Guo's work and Leonardo reviews at [1].
+> >
+> > Link: https://lore.kernel.org/linux-riscv/20231225125847.2778638-1-guor=
+en@kernel.org/ [1]
+> > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> > ---
+> >  .../locking/queued-spinlocks/arch-support.txt |  2 +-
+> >  arch/riscv/Kconfig                            | 29 +++++++++++++
+> >  arch/riscv/include/asm/Kbuild                 |  4 +-
+> >  arch/riscv/include/asm/spinlock.h             | 43 +++++++++++++++++++
+> >  arch/riscv/kernel/setup.c                     | 38 ++++++++++++++++
+> >  include/asm-generic/qspinlock.h               |  2 +
+> >  include/asm-generic/ticket_spinlock.h         |  2 +
+> >  7 files changed, 118 insertions(+), 2 deletions(-)
+> >  create mode 100644 arch/riscv/include/asm/spinlock.h
+> >
+> > diff --git a/Documentation/features/locking/queued-spinlocks/arch-suppo=
+rt.txt b/Documentation/features/locking/queued-spinlocks/arch-support.txt
+> > index 22f2990392ff..cf26042480e2 100644
+> > --- a/Documentation/features/locking/queued-spinlocks/arch-support.txt
+> > +++ b/Documentation/features/locking/queued-spinlocks/arch-support.txt
+> > @@ -20,7 +20,7 @@
+> >      |    openrisc: |  ok  |
+> >      |      parisc: | TODO |
+> >      |     powerpc: |  ok  |
+> > -    |       riscv: | TODO |
+> > +    |       riscv: |  ok  |
+> >      |        s390: | TODO |
+> >      |          sh: | TODO |
+> >      |       sparc: |  ok  |
+> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > index ef55ab94027e..c9ff8081efc1 100644
+> > --- a/arch/riscv/Kconfig
+> > +++ b/arch/riscv/Kconfig
+> > @@ -79,6 +79,7 @@ config RISCV
+> >       select ARCH_WANT_OPTIMIZE_HUGETLB_VMEMMAP
+> >       select ARCH_WANTS_NO_INSTR
+> >       select ARCH_WANTS_THP_SWAP if HAVE_ARCH_TRANSPARENT_HUGEPAGE
+> > +     select ARCH_WEAK_RELEASE_ACQUIRE if ARCH_USE_QUEUED_SPINLOCKS
+>
+> Why do we need this? Also, we presumably would prefer not to have it
+> when we end up using ticket spinlocks when combo spinlocks is selected.
+> Is there no way to avoid it?
 
-This patch introduces new MADV_DEMOTE and MADV_PROMOTE hints to the
-madvise syscall. MADV_DEMOTE can mark a range of memory pages as cold
-pages and immediately demote them to slow memory. MADV_PROMOTE can mark
-a range of memory pages as hot pages and immediately promote them to
-fast memory, allowing applications to better balance large memory
-capacity with latency.
+I'll let Andrea answer this as he asked for it.
 
-Signed-off-by: BiscuitOS Broiler <zhang.renze@h3c.com>
----
- arch/alpha/include/uapi/asm/mman.h           |   3 +
- arch/mips/include/uapi/asm/mman.h            |   3 +
- arch/parisc/include/uapi/asm/mman.h          |   3 +
- arch/xtensa/include/uapi/asm/mman.h          |   3 +
- include/uapi/asm-generic/mman-common.h       |   3 +
- mm/internal.h                                |   1 +
- mm/madvise.c                                 | 251 +++++++++++++++++++
- mm/vmscan.c                                  |  57 +++++
- tools/include/uapi/asm-generic/mman-common.h |   3 +
- 9 files changed, 327 insertions(+)
+>
+> >       select BINFMT_FLAT_NO_DATA_START_OFFSET if !MMU
+> >       select BUILDTIME_TABLE_SORT if MMU
+> >       select CLINT_TIMER if RISCV_M_MODE
+> > @@ -488,6 +489,34 @@ config NODES_SHIFT
+> >         Specify the maximum number of NUMA Nodes available on the targe=
+t
+> >         system.  Increases memory reserved to accommodate various table=
+s.
+> >
+> > +choice
+> > +     prompt "RISC-V spinlock type"
+> > +     default RISCV_COMBO_SPINLOCKS
+> > +
+> > +config RISCV_TICKET_SPINLOCKS
+> > +     bool "Using ticket spinlock"
+> > +
+> > +config RISCV_QUEUED_SPINLOCKS
+> > +     bool "Using queued spinlock"
+> > +     depends on SMP && MMU && NONPORTABLE
+> > +     select ARCH_USE_QUEUED_SPINLOCKS
+> > +     help
+> > +       The queued spinlock implementation requires the forward progres=
+s
+> > +       guarantee of cmpxchg()/xchg() atomic operations: CAS with Zabha=
+ or
+> > +       LR/SC with Ziccrse provide such guarantee.
+> > +
+> > +       Select this if and only if Zabha or Ziccrse is available on you=
+r
+> > +       platform.
+>
+> Maybe some text recommending combo spinlocks here? As it stands it sounds
+> like enabling queued spinlocks is a bad idea for anybody that doesn't kno=
+w
+> what platforms will run the kernel they're building, which is all distros=
+.
 
-diff --git a/arch/alpha/include/uapi/asm/mman.h b/arch/alpha/include/uapi/a=
-sm/mman.h
-index 763929e814e9..98e7609d51ab 100644
---- a/arch/alpha/include/uapi/asm/mman.h
-+++ b/arch/alpha/include/uapi/asm/mman.h
-@@ -78,6 +78,9 @@
+That's NONPORTABLE, so people enabling this config are supposed to
+know that right?
 
- #define MADV_COLLAPSE  25              /* Synchronous hugepage collapse */
+>
+> > +
+> > +config RISCV_COMBO_SPINLOCKS
+> > +     bool "Using combo spinlock"
+> > +     depends on SMP && MMU
+> > +     select ARCH_USE_QUEUED_SPINLOCKS
+> > +     help
+> > +       Embed both queued spinlock and ticket lock so that the spinlock
+> > +       implementation can be chosen at runtime.
+>
+> nit: Add a blank line here
 
-+#define MADV_DEMOTE    26              /* Demote page into slow node */
-+#define MADV_PROMOTE   27              /* Promote page into fast node */
-+
- /* compatibility flags */
- #define MAP_FILE       0
+Done
 
-diff --git a/arch/mips/include/uapi/asm/mman.h b/arch/mips/include/uapi/asm=
-/mman.h
-index 9c48d9a21aa0..aae4cd01c20d 100644
---- a/arch/mips/include/uapi/asm/mman.h
-+++ b/arch/mips/include/uapi/asm/mman.h
-@@ -105,6 +105,9 @@
+>
+> > +endchoice
+> > +
+> >  config RISCV_ALTERNATIVE
+> >       bool
+> >       depends on !XIP_KERNEL
+> > diff --git a/arch/riscv/include/asm/Kbuild b/arch/riscv/include/asm/Kbu=
+ild
+> > index 5c589770f2a8..1c2618c964f0 100644
+> > --- a/arch/riscv/include/asm/Kbuild
+> > +++ b/arch/riscv/include/asm/Kbuild
+> > @@ -5,10 +5,12 @@ syscall-y +=3D syscall_table_64.h
+> >  generic-y +=3D early_ioremap.h
+> >  generic-y +=3D flat.h
+> >  generic-y +=3D kvm_para.h
+> > +generic-y +=3D mcs_spinlock.h
+> >  generic-y +=3D parport.h
+> > -generic-y +=3D spinlock.h
+> >  generic-y +=3D spinlock_types.h
+> > +generic-y +=3D ticket_spinlock.h
+> >  generic-y +=3D qrwlock.h
+> >  generic-y +=3D qrwlock_types.h
+> > +generic-y +=3D qspinlock.h
+> >  generic-y +=3D user.h
+> >  generic-y +=3D vmlinux.lds.h
+> > diff --git a/arch/riscv/include/asm/spinlock.h b/arch/riscv/include/asm=
+/spinlock.h
+> > new file mode 100644
+> > index 000000000000..503aef31db83
+> > --- /dev/null
+> > +++ b/arch/riscv/include/asm/spinlock.h
+> > @@ -0,0 +1,43 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +
+> > +#ifndef __ASM_RISCV_SPINLOCK_H
+> > +#define __ASM_RISCV_SPINLOCK_H
+> > +
+> > +#ifdef CONFIG_RISCV_COMBO_SPINLOCKS
+> > +#define _Q_PENDING_LOOPS     (1 << 9)
+> > +
+> > +#define __no_arch_spinlock_redefine
+> > +#include <asm/ticket_spinlock.h>
+> > +#include <asm/qspinlock.h>
+> > +#include <asm/alternative.h>
+>
+> We need asm/jump_label.h instead of asm/alternative.h, but...
+>
+> > +
+> > +DECLARE_STATIC_KEY_TRUE(qspinlock_key);
+> > +
+> > +#define SPINLOCK_BASE_DECLARE(op, type, type_lock)                   \
+> > +static __always_inline type arch_spin_##op(type_lock lock)           \
+> > +{                                                                    \
+> > +     if (static_branch_unlikely(&qspinlock_key))                     \
+> > +             return queued_spin_##op(lock);                          \
+> > +     return ticket_spin_##op(lock);                                  \
+> > +}
+>
+> ...do you know what impact this inlined static key check has on the
+> kernel size?
 
- #define MADV_COLLAPSE  25              /* Synchronous hugepage collapse */
+No, I'll check, thanks.
 
-+#define MADV_DEMOTE    26              /* Demote page into slow node */
-+#define MADV_PROMOTE   27              /* Promote page into fast node */
-+
- /* compatibility flags */
- #define MAP_FILE       0
+>
+> Actually, why not use ALTERNATIVE with any nonzero cpufeature value.
+> Then add code to riscv_cpufeature_patch_check() to return true when
+> qspinlocks should be enabled (based on the value of some global set
+> during riscv_spinlock_init)?
 
-diff --git a/arch/parisc/include/uapi/asm/mman.h b/arch/parisc/include/uapi=
-/asm/mman.h
-index 68c44f99bc93..8b50ac91d0c9 100644
---- a/arch/parisc/include/uapi/asm/mman.h
-+++ b/arch/parisc/include/uapi/asm/mman.h
-@@ -72,6 +72,9 @@
+As discussed with Guo in the previous iteration, the patching of the
+alternatives intervenes far after the first use of the spinlocks and
+the ticket spinlock implementation pollutes the spinlock value, so
+we'd have to unconditionally start with the qspinlock implementation
+and after switch to the ticket implementation if not supported by the
+platform. It works but it's dirty, I really don't like this hack.
 
- #define MADV_COLLAPSE  25              /* Synchronous hugepage collapse */
+We could though:
+- add an initial value to the alternatives (not sure it's feasible though)
+- make the patching of alternatives happen sooner by parsing the isa
+string sooner, either in DT or ACPI (I have a working PoC for very
+early parsing of ACPI).
 
-+#define MADV_DEMOTE    26              /* Demote page into slow node */
-+#define MADV_PROMOTE   27              /* Promote page into fast node */
-+
- #define MADV_HWPOISON     100          /* poison a page for testing */
- #define MADV_SOFT_OFFLINE 101          /* soft offline page for testing */
+I intend to do the latter as I think we should be aware of the
+extensions sooner in the boot process, so I'll change that to the
+alternatives when it's done. WDYT, any other idea?
 
-diff --git a/arch/xtensa/include/uapi/asm/mman.h b/arch/xtensa/include/uapi=
-/asm/mman.h
-index 1ff0c858544f..8f820d4f5901 100644
---- a/arch/xtensa/include/uapi/asm/mman.h
-+++ b/arch/xtensa/include/uapi/asm/mman.h
-@@ -113,6 +113,9 @@
 
- #define MADV_COLLAPSE  25              /* Synchronous hugepage collapse */
-
-+#define MADV_DEMOTE    26              /* Demote page into slow node */
-+#define MADV_PROMOTE   27              /* Promote page into fast node */
-+
- /* compatibility flags */
- #define MAP_FILE       0
-
-diff --git a/include/uapi/asm-generic/mman-common.h b/include/uapi/asm-gene=
-ric/mman-common.h
-index 6ce1f1ceb432..52222c2245a8 100644
---- a/include/uapi/asm-generic/mman-common.h
-+++ b/include/uapi/asm-generic/mman-common.h
-@@ -79,6 +79,9 @@
-
- #define MADV_COLLAPSE  25              /* Synchronous hugepage collapse */
-
-+#define MADV_DEMOTE    26              /* Demote page into slow node */
-+#define MADV_PROMOTE   27              /* Promote page into fast node */
-+
- /* compatibility flags */
- #define MAP_FILE       0
-
-diff --git a/mm/internal.h b/mm/internal.h
-index 7a3bcc6d95e7..105c2621e335 100644
---- a/mm/internal.h
-+++ b/mm/internal.h
-@@ -1096,6 +1096,7 @@ extern unsigned long  __must_check vm_mmap_pgoff(stru=
-ct file *, unsigned long,
- extern void set_pageblock_order(void);
- struct folio *alloc_migrate_folio(struct folio *src, unsigned long private=
-);
- unsigned long reclaim_pages(struct list_head *folio_list);
-+unsigned long demotion_pages(struct list_head *folio_list);
- unsigned int reclaim_clean_pages_from_list(struct zone *zone,
-                                            struct list_head *folio_list);
- /* The ALLOC_WMARK bits are used as an index to zone->watermark */
-diff --git a/mm/madvise.c b/mm/madvise.c
-index 89089d84f8df..9e41936a2dc5 100644
---- a/mm/madvise.c
-+++ b/mm/madvise.c
-@@ -31,6 +31,9 @@
- #include <linux/swapops.h>
- #include <linux/shmem_fs.h>
- #include <linux/mmu_notifier.h>
-+#include <linux/memory-tiers.h>
-+#include <linux/migrate.h>
-+#include <linux/sched/numa_balancing.h>
-
- #include <asm/tlb.h>
-
-@@ -56,6 +59,8 @@ static int madvise_need_mmap_write(int behavior)
-        case MADV_DONTNEED_LOCKED:
-        case MADV_COLD:
-        case MADV_PAGEOUT:
-+       case MADV_DEMOTE:
-+       case MADV_PROMOTE:
-        case MADV_FREE:
-        case MADV_POPULATE_READ:
-        case MADV_POPULATE_WRITE:
-@@ -639,6 +644,242 @@ static long madvise_pageout(struct vm_area_struct *vm=
-a,
-        return 0;
- }
-
-+static int madvise_demotion_pte_range(pmd_t *pmd,
-+                               unsigned long addr, unsigned long end,
-+                               struct mm_walk *walk)
-+{
-+       struct mmu_gather *tlb =3D walk->private;
-+       struct vm_area_struct *vma =3D walk->vma;
-+       struct mm_struct *mm =3D tlb->mm;
-+       pte_t *start_pte, *pte, ptent;
-+       struct folio *folio =3D NULL;
-+       LIST_HEAD(folio_list);
-+       spinlock_t *ptl;
-+       int nid;
-+
-+       if (fatal_signal_pending(current))
-+               return -EINTR;
-+
-+#ifdef CONFIG_TRANSPARENT_HUGEPAGE
-+       if (pmd_trans_huge(*pmd))
-+               return 0;
-+#endif
-+       tlb_change_page_size(tlb, PAGE_SIZE);
-+       start_pte =3D pte =3D pte_offset_map_lock(vma->vm_mm, pmd, addr, &p=
-tl);
-+       if (!start_pte)
-+               return 0;
-+       flush_tlb_batched_pending(mm);
-+       arch_enter_lazy_mmu_mode();
-+       for (; addr < end; pte++, addr +=3D PAGE_SIZE) {
-+               ptent =3D ptep_get(pte);
-+
-+               if (pte_none(ptent))
-+                       continue;
-+
-+               if (!pte_present(ptent))
-+                       continue;
-+
-+               folio =3D vm_normal_folio(vma, addr, ptent);
-+               if (!folio || folio_is_zone_device(folio))
-+                       continue;
-+
-+               if (folio_test_large(folio))
-+                       continue;
-+
-+               if (!folio_test_anon(folio))
-+                       continue;
-+
-+               nid =3D folio_nid(folio);
-+               if (!node_is_toptier(nid))
-+                       continue;
-+
-+               /* no tiered memory node */
-+               if (next_demotion_node(nid) =3D=3D NUMA_NO_NODE)
-+                       continue;
-+
-+               /*
-+                * Do not interfere with other mappings of this folio and
-+                * non-LRU folio. If we have a large folio at this point, w=
-e
-+                * know it is fully mapped so if its mapcount is the same a=
-s its
-+                * number of pages, it must be exclusive.
-+                */
-+               if (!folio_test_lru(folio) ||
-+                   folio_mapcount(folio) !=3D folio_nr_pages(folio))
-+                       continue;
-+
-+               folio_clear_referenced(folio);
-+               folio_test_clear_young(folio);
-+               if (folio_test_active(folio))
-+                       folio_set_workingset(folio);
-+               if (folio_isolate_lru(folio)) {
-+                       if (folio_test_unevictable(folio))
-+                               folio_putback_lru(folio);
-+                       else
-+                               list_add(&folio->lru, &folio_list);
-+               }
-+       }
-+
-+       if (start_pte) {
-+               arch_leave_lazy_mmu_mode();
-+               pte_unmap_unlock(start_pte, ptl);
-+       }
-+
-+       demotion_pages(&folio_list);
-+       cond_resched();
-+
-+       return 0;
-+}
-+
-+static const struct mm_walk_ops demotion_walk_ops =3D {
-+       .pmd_entry =3D madvise_demotion_pte_range,
-+       .walk_lock =3D PGWALK_RDLOCK,
-+};
-+
-+static void madvise_demotion_page_range(struct mmu_gather *tlb,
-+                            struct vm_area_struct *vma,
-+                            unsigned long addr, unsigned long end)
-+{
-+       tlb_start_vma(tlb, vma);
-+       walk_page_range(vma->vm_mm, addr, end, &demotion_walk_ops, tlb);
-+       tlb_end_vma(tlb, vma);
-+}
-+
-+static long madvise_demotion(struct vm_area_struct *vma,
-+                       struct vm_area_struct **prev,
-+                       unsigned long start_addr, unsigned long end_addr)
-+{
-+       struct mm_struct *mm =3D vma->vm_mm;
-+       struct mmu_gather tlb;
-+
-+       *prev =3D vma;
-+       if (!can_madv_lru_vma(vma))
-+               return -EINVAL;
-+
-+       if (!numa_demotion_enabled && !vma_is_anonymous(vma) &&
-+                               (vma->vm_flags & VM_MAYSHARE))
-+               return 0;
-+
-+       lru_add_drain();
-+       tlb_gather_mmu(&tlb, mm);
-+       madvise_demotion_page_range(&tlb, vma, start_addr, end_addr);
-+       tlb_finish_mmu(&tlb);
-+
-+       return 0;
-+}
-+
-+static int madvise_promotion_pte_range(pmd_t *pmd,
-+                               unsigned long addr, unsigned long end,
-+                               struct mm_walk *walk)
-+{
-+       struct mmu_gather *tlb =3D walk->private;
-+       struct vm_area_struct *vma =3D walk->vma;
-+       struct mm_struct *mm =3D tlb->mm;
-+       struct folio *folio =3D NULL;
-+       LIST_HEAD(folio_list);
-+       int nid, target_nid;
-+       pte_t *pte, ptent;
-+       spinlock_t *ptl;
-+
-+       if (fatal_signal_pending(current))
-+               return -EINTR;
-+
-+#ifdef CONFIG_TRANSPARENT_HUGEPAGE
-+       if (pmd_trans_huge(*pmd))
-+               return 0;
-+#endif
-+       tlb_change_page_size(tlb, PAGE_SIZE);
-+       pte =3D pte_offset_map_nolock(vma->vm_mm, pmd, addr, &ptl);
-+       if (!pte)
-+               return 0;
-+       flush_tlb_batched_pending(mm);
-+       arch_enter_lazy_mmu_mode();
-+       for (; addr < end; pte++, addr +=3D PAGE_SIZE) {
-+               ptent =3D ptep_get(pte);
-+
-+               if (pte_none(ptent))
-+                       continue;
-+
-+               if (!pte_present(ptent))
-+                       continue;
-+
-+               folio =3D vm_normal_folio(vma, addr, ptent);
-+               if (!folio || folio_is_zone_device(folio))
-+                       continue;
-+
-+               if (folio_test_large(folio))
-+                       continue;
-+
-+               if (!folio_test_anon(folio))
-+                       continue;
-+
-+               /* skip page on fast node */
-+               nid =3D folio_nid(folio);
-+               if (node_is_toptier(nid))
-+                       continue;
-+
-+               if (!folio_test_lru(folio) ||
-+                   folio_mapcount(folio) !=3D folio_nr_pages(folio))
-+                       continue;
-+
-+               /* force update folio last access time */
-+               folio_xchg_access_time(folio, jiffies_to_msecs(jiffies));
-+
-+               target_nid =3D numa_node_id();
-+               if (!should_numa_migrate_memory(current, folio, nid, target=
-_nid))
-+                       continue;
-+
-+               /* prepare pormote */
-+               if (!folio_isolate_lru(folio))
-+                       continue;
-+
-+               /* promote page directly */
-+               migrate_misplaced_folio(folio, vma, target_nid);
-+               tlb_remove_tlb_entry(tlb, pte, addr);
-+       }
-+
-+       arch_leave_lazy_mmu_mode();
-+       cond_resched();
-+
-+       return 0;
-+}
-+
-+static const struct mm_walk_ops promotion_walk_ops =3D {
-+       .pmd_entry =3D madvise_promotion_pte_range,
-+       .walk_lock =3D PGWALK_RDLOCK,
-+};
-+
-+static void madvise_promotion_page_range(struct mmu_gather *tlb,
-+                            struct vm_area_struct *vma,
-+                            unsigned long addr, unsigned long end)
-+{
-+       tlb_start_vma(tlb, vma);
-+       walk_page_range(vma->vm_mm, addr, end, &promotion_walk_ops, tlb);
-+       tlb_end_vma(tlb, vma);
-+}
-+
-+static long madvise_promotion(struct vm_area_struct *vma,
-+                       struct vm_area_struct **prev,
-+                       unsigned long start_addr, unsigned long end_addr)
-+{
-+       struct mm_struct *mm =3D vma->vm_mm;
-+       struct mmu_gather tlb;
-+
-+       *prev =3D vma;
-+       if (!can_madv_lru_vma(vma))
-+               return -EINVAL;
-+
-+       if (!numa_demotion_enabled && !vma_is_anonymous(vma) &&
-+                               (vma->vm_flags & VM_MAYSHARE))
-+               return 0;
-+
-+       lru_add_drain();
-+       tlb_gather_mmu(&tlb, mm);
-+       madvise_promotion_page_range(&tlb, vma, start_addr, end_addr);
-+       tlb_finish_mmu(&tlb);
-+
-+       return 0;
-+}
-+
- static int madvise_free_pte_range(pmd_t *pmd, unsigned long addr,
-                                unsigned long end, struct mm_walk *walk)
-
-@@ -1040,6 +1281,10 @@ static int madvise_vma_behavior(struct vm_area_struc=
-t *vma,
-                return madvise_cold(vma, prev, start, end);
-        case MADV_PAGEOUT:
-                return madvise_pageout(vma, prev, start, end);
-+       case MADV_DEMOTE:
-+               return madvise_demotion(vma, prev, start, end);
-+       case MADV_PROMOTE:
-+               return madvise_promotion(vma, prev, start, end);
-        case MADV_FREE:
-        case MADV_DONTNEED:
-        case MADV_DONTNEED_LOCKED:
-@@ -1179,6 +1424,8 @@ madvise_behavior_valid(int behavior)
-        case MADV_FREE:
-        case MADV_COLD:
-        case MADV_PAGEOUT:
-+       case MADV_DEMOTE:
-+       case MADV_PROMOTE:
-        case MADV_POPULATE_READ:
-        case MADV_POPULATE_WRITE:
- #ifdef CONFIG_KSM
-@@ -1210,6 +1457,8 @@ static bool process_madvise_behavior_valid(int behavi=
-or)
-        switch (behavior) {
-        case MADV_COLD:
-        case MADV_PAGEOUT:
-+       case MADV_DEMOTE:
-+       case MADV_PROMOTE:
-        case MADV_WILLNEED:
-        case MADV_COLLAPSE:
-                return true;
-@@ -1391,6 +1640,8 @@ int madvise_set_anon_name(struct mm_struct *mm, unsig=
-ned long start,
-  *             triggering read faults if required
-  *  MADV_POPULATE_WRITE - populate (prefault) page tables writable by
-  *             triggering write faults if required
-+ *  MADV_DEMOTE  - the application forces pages into slow node.
-+ *  MADV_PROMOTE - the application forces pages into fast node.
-  *
-  * return values:
-  *  zero    - success
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index c89d0551655e..88d7a1dd05a0 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -2185,6 +2185,63 @@ unsigned long reclaim_pages(struct list_head *folio_=
-list)
-        return nr_reclaimed;
- }
-
-+static unsigned int demotion_folio_list(struct list_head *folio_list,
-+                                     struct pglist_data *pgdat)
-+{
-+       struct reclaim_stat dummy_stat;
-+       unsigned int nr_demoted;
-+       struct folio *folio;
-+       struct scan_control sc =3D {
-+               .gfp_mask =3D GFP_KERNEL,
-+               .may_writepage =3D 1,
-+               .may_unmap =3D 1,
-+               .may_swap =3D 1,
-+               .no_demotion =3D 0,
-+       };
-+
-+       nr_demoted =3D shrink_folio_list(folio_list, pgdat, &sc, &dummy_sta=
-t, true);
-+       while (!list_empty(folio_list)) {
-+               folio =3D lru_to_folio(folio_list);
-+               list_del(&folio->lru);
-+               folio_putback_lru(folio);
-+       }
-+
-+       return nr_demoted;
-+}
-+
-+unsigned long demotion_pages(struct list_head *folio_list)
-+{
-+       unsigned int nr_demoted =3D 0;
-+       LIST_HEAD(node_folio_list);
-+       unsigned int noreclaim_flag;
-+       int nid;
-+
-+       if (list_empty(folio_list))
-+               return nr_demoted;
-+
-+       noreclaim_flag =3D memalloc_noreclaim_save();
-+
-+       nid =3D folio_nid(lru_to_folio(folio_list));
-+       do {
-+               struct folio *folio =3D lru_to_folio(folio_list);
-+
-+               if (nid =3D=3D folio_nid(folio)) {
-+                       folio_clear_active(folio);
-+                       list_move(&folio->lru, &node_folio_list);
-+                       continue;
-+               }
-+
-+               nr_demoted +=3D demotion_folio_list(&node_folio_list, NODE_=
-DATA(nid));
-+               nid =3D folio_nid(lru_to_folio(folio_list));
-+       } while (!list_empty(folio_list));
-+
-+       nr_demoted +=3D demotion_folio_list(&node_folio_list, NODE_DATA(nid=
-));
-+
-+       memalloc_noreclaim_restore(noreclaim_flag);
-+
-+       return nr_demoted;
-+}
-+
- static unsigned long shrink_list(enum lru_list lru, unsigned long nr_to_sc=
-an,
-                                 struct lruvec *lruvec, struct scan_control=
- *sc)
- {
-diff --git a/tools/include/uapi/asm-generic/mman-common.h b/tools/include/u=
-api/asm-generic/mman-common.h
-index 6ce1f1ceb432..52222c2245a8 100644
---- a/tools/include/uapi/asm-generic/mman-common.h
-+++ b/tools/include/uapi/asm-generic/mman-common.h
-@@ -79,6 +79,9 @@
-
- #define MADV_COLLAPSE  25              /* Synchronous hugepage collapse */
-
-+#define MADV_DEMOTE    26              /* Demote page into slow node */
-+#define MADV_PROMOTE   27              /* Promote page into fast node */
-+
- /* compatibility flags */
- #define MAP_FILE       0
-
---
-2.34.1
-
----------------------------------------------------------------------------=
-----------------------------------------------------------
-=B1=BE=D3=CA=BC=FE=BC=B0=C6=E4=B8=BD=BC=FE=BA=AC=D3=D0=D0=C2=BB=AA=C8=FD=BC=
-=AF=CD=C5=B5=C4=B1=A3=C3=DC=D0=C5=CF=A2=A3=AC=BD=F6=CF=DE=D3=DA=B7=A2=CB=CD=
-=B8=F8=C9=CF=C3=E6=B5=D8=D6=B7=D6=D0=C1=D0=B3=F6
-=B5=C4=B8=F6=C8=CB=BB=F2=C8=BA=D7=E9=A1=A3=BD=FB=D6=B9=C8=CE=BA=CE=C6=E4=CB=
-=FB=C8=CB=D2=D4=C8=CE=BA=CE=D0=CE=CA=BD=CA=B9=D3=C3=A3=A8=B0=FC=C0=A8=B5=AB=
-=B2=BB=CF=DE=D3=DA=C8=AB=B2=BF=BB=F2=B2=BF=B7=D6=B5=D8=D0=B9=C2=B6=A1=A2=B8=
-=B4=D6=C6=A1=A2
-=BB=F2=C9=A2=B7=A2=A3=A9=B1=BE=D3=CA=BC=FE=D6=D0=B5=C4=D0=C5=CF=A2=A1=A3=C8=
-=E7=B9=FB=C4=FA=B4=ED=CA=D5=C1=CB=B1=BE=D3=CA=BC=FE=A3=AC=C7=EB=C4=FA=C1=A2=
-=BC=B4=B5=E7=BB=B0=BB=F2=D3=CA=BC=FE=CD=A8=D6=AA=B7=A2=BC=FE=C8=CB=B2=A2=C9=
-=BE=B3=FD=B1=BE
-=D3=CA=BC=FE=A3=A1
-This e-mail and its attachments contain confidential information from New H=
-3C, which is
-intended only for the person or entity whose address is listed above. Any u=
-se of the
-information contained herein in any way (including, but not limited to, tot=
-al or partial
-disclosure, reproduction, or dissemination) by persons other than the inten=
-ded
-recipient(s) is prohibited. If you receive this e-mail in error, please not=
-ify the sender
-by phone or email immediately and delete it!
+>
+> > +
+> > +SPINLOCK_BASE_DECLARE(lock, void, arch_spinlock_t *)
+> > +SPINLOCK_BASE_DECLARE(unlock, void, arch_spinlock_t *)
+> > +SPINLOCK_BASE_DECLARE(is_locked, int, arch_spinlock_t *)
+> > +SPINLOCK_BASE_DECLARE(is_contended, int, arch_spinlock_t *)
+> > +SPINLOCK_BASE_DECLARE(trylock, bool, arch_spinlock_t *)
+> > +SPINLOCK_BASE_DECLARE(value_unlocked, int, arch_spinlock_t)
+> > +
+> > +#elif defined(CONFIG_RISCV_QUEUED_SPINLOCKS)
+> > +
+> > +#include <asm/qspinlock.h>
+> > +
+> > +#else
+> > +
+> > +#include <asm/ticket_spinlock.h>
+> > +
+> > +#endif
+> > +
+> > +#include <asm/qrwlock.h>
+> > +
+> > +#endif /* __ASM_RISCV_SPINLOCK_H */
+> > diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+> > index a2cde65b69e9..b811fa331982 100644
+> > --- a/arch/riscv/kernel/setup.c
+> > +++ b/arch/riscv/kernel/setup.c
+> > @@ -244,6 +244,43 @@ static void __init parse_dtb(void)
+> >  #endif
+> >  }
+> >
+> > +#if defined(CONFIG_RISCV_COMBO_SPINLOCKS)
+> > +DEFINE_STATIC_KEY_TRUE(qspinlock_key);
+> > +EXPORT_SYMBOL(qspinlock_key);
+> > +#endif
+> > +
+> > +static void __init riscv_spinlock_init(void)
+> > +{
+> > +     char *using_ext =3D NULL;
+> > +
+> > +     if (IS_ENABLED(CONFIG_RISCV_TICKET_SPINLOCKS)) {
+> > +             pr_info("Ticket spinlock: enabled\n");
+> > +             return;
+> > +     }
+> > +
+> > +     if (IS_ENABLED(CONFIG_RISCV_ISA_ZABHA) &&
+> > +         IS_ENABLED(CONFIG_RISCV_ISA_ZACAS) &&
+> > +         riscv_isa_extension_available(NULL, ZABHA) &&
+> > +         riscv_isa_extension_available(NULL, ZACAS)) {
+> > +             using_ext =3D "using Zabha";
+> > +     } else if (riscv_isa_extension_available(NULL, ZICCRSE)) {
+> > +             using_ext =3D "using Ziccrse";
+> > +     }
+> > +#if defined(CONFIG_RISCV_COMBO_SPINLOCKS)
+> > +     else {
+>
+> else if (IS_ENABLED(CONFIG_RISCV_COMBO_SPINLOCKS))
+>
+> > +             static_branch_disable(&qspinlock_key);
+> > +             pr_info("Ticket spinlock: enabled\n");
+> > +
+>
+> nit: remove this blank line
+>
+> > +             return;
+> > +     }
+> > +#endif
+> > +
+> > +     if (!using_ext)
+> > +             pr_err("Queued spinlock without Zabha or Ziccrse");
+> > +     else
+> > +             pr_info("Queued spinlock %s: enabled\n", using_ext);
+> > +}
+> > +
+> >  extern void __init init_rt_signal_env(void);
+> >
+> >  void __init setup_arch(char **cmdline_p)
+> > @@ -297,6 +334,7 @@ void __init setup_arch(char **cmdline_p)
+> >       riscv_set_dma_cache_alignment();
+> >
+> >       riscv_user_isa_enable();
+> > +     riscv_spinlock_init();
+> >  }
+> >
+> >  bool arch_cpu_is_hotpluggable(int cpu)
+> > diff --git a/include/asm-generic/qspinlock.h b/include/asm-generic/qspi=
+nlock.h
+> > index 0655aa5b57b2..bf47cca2c375 100644
+> > --- a/include/asm-generic/qspinlock.h
+> > +++ b/include/asm-generic/qspinlock.h
+> > @@ -136,6 +136,7 @@ static __always_inline bool virt_spin_lock(struct q=
+spinlock *lock)
+> >  }
+> >  #endif
+> >
+> > +#ifndef __no_arch_spinlock_redefine
+>
+> I'm not sure what's better/worse, but instead of inventing this
+> __no_arch_spinlock_redefine thing we could just name all the functions
+> something like __arch_spin* and then add defines for both to asm/spinlock=
+.h,
+> i.e.
+>
+> #define queued_spin_lock(l) __arch_spin_lock(l)
+> ...
+>
+> #define ticket_spin_lock(l) __arch_spin_lock(l)
+> ...
+>
+> Besides not having to touch asm-generic/qspinlock.h and
+> asm-generic/ticket_spinlock.h it allows one to find the implementations
+> a bit easier as following a tag to arch_spin_lock() will take them to
+> queued_spin_lock() which will then take them to
+> arch/riscv/include/asm/spinlock.h and there they'll figure out how
+> __arch_spin_lock() was defined.
+>
+> >  /*
+> >   * Remapping spinlock architecture specific functions to the correspon=
+ding
+> >   * queued spinlock functions.
+> > @@ -146,5 +147,6 @@ static __always_inline bool virt_spin_lock(struct q=
+spinlock *lock)
+> >  #define arch_spin_lock(l)            queued_spin_lock(l)
+> >  #define arch_spin_trylock(l)         queued_spin_trylock(l)
+> >  #define arch_spin_unlock(l)          queued_spin_unlock(l)
+> > +#endif
+> >
+> >  #endif /* __ASM_GENERIC_QSPINLOCK_H */
+> > diff --git a/include/asm-generic/ticket_spinlock.h b/include/asm-generi=
+c/ticket_spinlock.h
+> > index cfcff22b37b3..325779970d8a 100644
+> > --- a/include/asm-generic/ticket_spinlock.h
+> > +++ b/include/asm-generic/ticket_spinlock.h
+> > @@ -89,6 +89,7 @@ static __always_inline int ticket_spin_is_contended(a=
+rch_spinlock_t *lock)
+> >       return (s16)((val >> 16) - (val & 0xffff)) > 1;
+> >  }
+> >
+> > +#ifndef __no_arch_spinlock_redefine
+> >  /*
+> >   * Remapping spinlock architecture specific functions to the correspon=
+ding
+> >   * ticket spinlock functions.
+> > @@ -99,5 +100,6 @@ static __always_inline int ticket_spin_is_contended(=
+arch_spinlock_t *lock)
+> >  #define arch_spin_lock(l)            ticket_spin_lock(l)
+> >  #define arch_spin_trylock(l)         ticket_spin_trylock(l)
+> >  #define arch_spin_unlock(l)          ticket_spin_unlock(l)
+> > +#endif
+> >
+> >  #endif /* __ASM_GENERIC_TICKET_SPINLOCK_H */
+> > --
+> > 2.39.2
+> >
+>
+> Thanks,
+> drew
 
