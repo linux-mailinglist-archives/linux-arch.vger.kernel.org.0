@@ -1,199 +1,195 @@
-Return-Path: <linux-arch+bounces-5828-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5826-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0586C9444D6
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Aug 2024 08:53:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23E639444C1
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Aug 2024 08:50:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 292341C2277B
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Aug 2024 06:53:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A0836281A4F
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Aug 2024 06:50:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27B752747B;
-	Thu,  1 Aug 2024 06:53:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C90BD158542;
+	Thu,  1 Aug 2024 06:50:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="DOG10ZYx"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from h3cspam02-ex.h3c.com (smtp.h3c.com [60.191.123.50])
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2075.outbound.protection.outlook.com [40.107.255.75])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27A5015853E;
-	Thu,  1 Aug 2024 06:53:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.191.123.50
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722495219; cv=none; b=WteHPJVY0aWd9+QV4udYd+zQh3YNcZOzm9mY4ZSuUdPK026qoX5NJCgnxH1NV/32MuEp0zudRkraHdYmTRUXxp6LuSIklXlqUD+YXHI6xcuduLn5WrnXLSWJ+zfaoz9rQQnf0Bda/cUuXriP/S3IGn3BR69xhrqwjXeKYmtVdCI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722495219; c=relaxed/simple;
-	bh=4hc8SFJafE8nX5khHv3obkGEDR7jGjNXZ+RQ3UyZ4p4=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=mpw/NV1A26HN4JV472VGygdUKAXouh+jOiT8QyXir740Ad1BmuadLFJcwNZaJIE3NNKnQFTAS9z9oDvICFPNhBi+XSHZCAzYPlM7zI2OmjFnQ0I4S/3lkJQV8Zl3zQD7j4LXD61fQAN25UxVEAYw1zhIZgg1gtcVLhTNjV9HIYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=h3c.com; spf=pass smtp.mailfrom=h3c.com; arc=none smtp.client-ip=60.191.123.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=h3c.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=h3c.com
-Received: from mail.maildlp.com ([172.25.15.154])
-	by h3cspam02-ex.h3c.com with ESMTP id 4716p8Fp012906;
-	Thu, 1 Aug 2024 14:51:08 +0800 (GMT-8)
-	(envelope-from zhang.renze@h3c.com)
-Received: from DAG6EX09-BJD.srv.huawei-3com.com (unknown [10.153.34.11])
-	by mail.maildlp.com (Postfix) with ESMTP id B360A20071B5;
-	Thu,  1 Aug 2024 14:55:54 +0800 (CST)
-Received: from localhost.localdomain (10.99.206.12) by
- DAG6EX09-BJD.srv.huawei-3com.com (10.153.34.11) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.1258.27; Thu, 1 Aug 2024 14:51:10 +0800
-From: BiscuitOS Broiler <zhang.renze@h3c.com>
-To: <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <akpm@linux-foundation.org>
-CC: <arnd@arndb.de>, <linux-arch@vger.kernel.org>, <chris@zankel.net>,
-        <jcmvbkbc@gmail.com>, <James.Bottomley@HansenPartnership.com>,
-        <deller@gmx.de>, <linux-parisc@vger.kernel.org>,
-        <tsbogend@alpha.franken.de>, <rdunlap@infradead.org>,
-        <bhelgaas@google.com>, <linux-mips@vger.kernel.org>,
-        <richard.henderson@linaro.org>, <ink@jurassic.park.msu.ru>,
-        <mattst88@gmail.com>, <linux-alpha@vger.kernel.org>,
-        <jiaoxupo@h3c.com>, <zhou.haofan@h3c.com>, <zhang.renze@h3c.com>
-Subject: [PATCH 0/1] mm: introduce MADV_DEMOTE/MADV_PROMOTE
-Date: Thu, 1 Aug 2024 14:50:34 +0800
-Message-ID: <20240801065035.15377-1-zhang.renze@h3c.com>
-X-Mailer: git-send-email 2.17.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DACA4157490;
+	Thu,  1 Aug 2024 06:50:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.255.75
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1722495050; cv=fail; b=qKTx38eLjlYc7rtLX7eBDegVj/188wsSCZtaXI0vOjWUaCEVyH6Pa3V50jU5m3WoehmGHZgDZrzodhwAyYkThkY+o6y+G5IgPiuK9uTLLm+u6K7C1OnThUjV7R5nbwU+flV9y3CGXVHCNg+LooI6qy0UxEYTiUoBLWAJHWGUP8E=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1722495050; c=relaxed/simple;
+	bh=ngUk+D4yBN5F6sL8rV78k/hKoaG0avczY+uzlaxE00c=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=OcMXhlRtEpGy7tTAn6q74UTDbTQoxT7oKPE+fXBQI4GPZ3R7IGSYAkWApQrxOd3VVxVhddnYZ9Y5sLMF1HV91H2dxzoIjIMSKeBwxi27Oi5+D74VFzIQJIXCyUvcD2I+E23fj2t6hcjlHyqxC++7FLc5c+lXdgKxOmFBInTAJW8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=DOG10ZYx; arc=fail smtp.client-ip=40.107.255.75
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=iwH8bPtmu0FhcIP12SISLqph0RhE+5nliY07LCkeNxPNPebPAtPRUo+Z3RUWM8o8qMFgYJ2SaqEJl9PfDtEWUuDhnZOLnbRNhl6exj88KGQK2yXTx4sSMcAEuMZbx7dDxkZioQZ8nUHUBYgdbHcMnEDk89noc/5z/1/EpsBn0nCsB6iaiX5V0T0thsQj29sLDvpYLh+JtCxK5AW96Utj5Ei8i0CMcb1b/4qP6mL3cv/BRzujltgX65FjX0RU2QxARyDx8fOORjByG+zLRNAu9NZ3GzerPpmVHZ8baWNreKITDPXqqkf0V8y2C8mldB1wag+h+i55epv6Sp/YMs/sEQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sk2gYF+c0tq3zemogGai/59wQ1myWfN4IictHGRvkXI=;
+ b=XbmFXUoae74cCVWLeB9p0TskNNN5TC3u8lAJogqfeNrgUvdKI2QH4qijf9QYTYw+zVsjZvVwyjWVVBOsnXCqbWG2YK+H+HUQunpNs3/9yE3fjPke0CwaokdTCGLbgTV1m4/2ypkBthHbGBMtfGMHFSFTDT8pRnDSmZf12VvyuxQvC2M5WJ5ZeilB8LU7P1TYNYDmej7pxjrrK/j4JAbXpYhSC50dsrO7qkRwNvN+i+F8SAUbqd475QYn3mITsTTdCSJa3hVo6ixjUsQEtr5/XQ3vq32mHmtYooOzgHtil4BHtH786WTuEEBduqvyo68zdiG3I5hM6xl7Wy6zhNnlaw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sk2gYF+c0tq3zemogGai/59wQ1myWfN4IictHGRvkXI=;
+ b=DOG10ZYx/QQAoL9N4C3Nc3iuEKFCFGGu4VzIN8z4IR514Likph+XVHqxuInS0i65opIkqQm/LF1EgTDZQa3912AQUAt8j6PYQ1ZSXSjPLepsNmoV5IxzORo2KAe631iFnnegeWTObl23tnqiDqvxMu3mteylu6qA1A1Z0oQ+d5E8qgiAQM2JvH80o2QmK/DiYOHzA2IvPvluGUptmMlJvbMs8sLXlagy5cYHlQD6kDEjVOpbUsIISEbsNb+2S5o/y8zEbZjQKIzR4QmeuElnMCHxxas2+QDBSlrT2zuJA0Joaho6s5VIybBJY0WJ9+K2NBx/xBmKuyM+8xTD/g7oDw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from JH0PR06MB6849.apcprd06.prod.outlook.com (2603:1096:990:47::12)
+ by JH0PR06MB7326.apcprd06.prod.outlook.com (2603:1096:990:a9::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7807.27; Thu, 1 Aug
+ 2024 06:50:43 +0000
+Received: from JH0PR06MB6849.apcprd06.prod.outlook.com
+ ([fe80::ed24:a6cd:d489:c5ed]) by JH0PR06MB6849.apcprd06.prod.outlook.com
+ ([fe80::ed24:a6cd:d489:c5ed%3]) with mapi id 15.20.7828.016; Thu, 1 Aug 2024
+ 06:50:43 +0000
+From: Zhiguo Jiang <justinjiang@vivo.com>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	Will Deacon <will@kernel.org>,
+	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
+	Nick Piggin <npiggin@gmail.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	linux-arch@vger.kernel.org,
+	cgroups@vger.kernel.org,
+	kernel test robot <lkp@intel.com>,
+	Barry Song <21cnbao@gmail.com>,
+	Zhiguo Jiang <justinjiang@vivo.com>
+Cc: opensource.kernel@vivo.com
+Subject: [PATCH] mm: fix compilation warning in patchs
+Date: Thu,  1 Aug 2024 14:50:34 +0800
+Message-ID: <20240801065035.621-1-justinjiang@vivo.com>
+X-Mailer: git-send-email 2.41.0.windows.3
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG3P274CA0004.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:be::16)
+ To JH0PR06MB6849.apcprd06.prod.outlook.com (2603:1096:990:47::12)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: BJSMTP02-EX.srv.huawei-3com.com (10.63.20.133) To
- DAG6EX09-BJD.srv.huawei-3com.com (10.153.34.11)
-Content-Transfer-Encoding: quoted-printable
-X-DNSRBL: 
-X-SPAM-SOURCE-CHECK: pass
-X-MAIL:h3cspam02-ex.h3c.com 4716p8Fp012906
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: JH0PR06MB6849:EE_|JH0PR06MB7326:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3de912c4-f562-4023-eb30-08dcb1f643b9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|366016|1800799024|7416014|52116014|921020|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?T0qCrtpKKAwA7QjLnxLRp5IVQCEKNQcQsCNRv78DEvcqxXThpuVli29ZCt5h?=
+ =?us-ascii?Q?Yq7ot1LIHWJClGsbciPcv3RxDHjSuMX3KLUokdtHM3WNXNrzluehfZVZf4TC?=
+ =?us-ascii?Q?tOl3Lv3Xb4muNDNbEKHQbtgDE5sOo0jNI+9nzDpWL2Ux47UPUYzeVZ9d2lEi?=
+ =?us-ascii?Q?BtyXc8D0jJ15OWESPtm8v2tapqlQfJ1uxRDVFJuSDalxpeI4+ncxSvWJobPg?=
+ =?us-ascii?Q?Chst8gqjsChngZ17m6+yefWGC29GvVYGlXKa5oK+7wSFE/ar1MW5SjNYhBK7?=
+ =?us-ascii?Q?MMz0G1G1nE5Kj/VXb3BgygwDk5d8UxNecx1aCDekPQupkqKJK2PBWF2zLPyh?=
+ =?us-ascii?Q?d3u1UUaypQpU4OpM2VBv7zJSiXLum2BB2R6hZ0QQHWEUQJsqbAApGx92IwTT?=
+ =?us-ascii?Q?99g0P6AQ7jeJCgqV/3djjghCBX59AI006PBJ6U0+b7tEko4mjW0V9jP506QI?=
+ =?us-ascii?Q?67em77/pDOnKMdOpmodevqT1smNaa/s2TXaE8CW8rXSPCXpW5BmsvgeK3UJr?=
+ =?us-ascii?Q?61tiDR2j0GP/QfcV37gnzIQZ416EoA+Q607DZXV0hhkIGiAyQFhGrishFDPb?=
+ =?us-ascii?Q?GN3FGSWbYkwX8OfD7nG+Qhi6NNQEApgA7vCSy3j5Qo74K7+Nshn19LFciVd5?=
+ =?us-ascii?Q?FHGNSajjbyxdmO12L0h6oVv33w+EdoiUKHrqw/bUekGzdAPrAUNU8OijghfR?=
+ =?us-ascii?Q?urX7Wz8YIdEeieoWTSQOmGaHHMGIRMLRWUj+8j5/1KsKkrdhBAJ4xD1aYpTy?=
+ =?us-ascii?Q?39qe6AvyjJnK7oztpI/SBQIXWUzQdkRjXRuicbbrDWvtZ3eiaQ520Un/L6Qz?=
+ =?us-ascii?Q?iGuNBDXmZl995/t8m+3g/50Iytdt/W+H4tdouaJLoIPo7Vj8OSk7cNvYvMNA?=
+ =?us-ascii?Q?3EUMzYsm5rBFl4vy5Crk7Or6QUETYiW8nflYhEJzAAAfgofUDMAkvL5yrSw0?=
+ =?us-ascii?Q?px6zvLKXWFDXsA9yFqRYoO1c21YgRFarjHUcHICiD/GSQn6s6ZkvYIic+iQr?=
+ =?us-ascii?Q?DXKDqZTuPfxXel2FjUO8ON1wYNSOZofi/ljg99Xugi9zWGLcaOGtXNRvfw8h?=
+ =?us-ascii?Q?Hr+fr54X3qGEAX7bNRnTJwx8d50w2uI8wq+lkQLLWBllRYymHl+G1UzgaevT?=
+ =?us-ascii?Q?Wbr4lgikBNfVzSx36TwSoEugtfDwMP9Dt+KTlMUjj3IgfrzeKkoz03L/Ppos?=
+ =?us-ascii?Q?7hwL+XHyaQa031UDX6mt916MBUOFJYblFrjRHt0SBKaj4KAedFs7g/sVadMb?=
+ =?us-ascii?Q?m/4ipTg3pqdyV88DeaGD5xRIHwtFZT7uyHnSxYD0HJz5ZhjgDvNGdfvHEdKs?=
+ =?us-ascii?Q?X/XnrgK78mzFAYDDQzsWJBmxFh7eXSzSF2OLR2TOJrArwiV2LDRPZMzoJz8n?=
+ =?us-ascii?Q?FVoooejofXB33Wo+qaW8znEMdiEp?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:JH0PR06MB6849.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(7416014)(52116014)(921020)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?b7yf0onOocr4JYNVOKdnh+Sl7T/XMgt70eiZJikJTGqLWQyxSRqcat9yNEuW?=
+ =?us-ascii?Q?KKWGbB4mAzwpyCW+WzJk7E7MVXAF3K01P0MGZse1+mO7xMlfyAy+ZyIj+O3k?=
+ =?us-ascii?Q?CYlk10G2ynRoscXYmBDqFdhVuGw2jroqXakyzR4n/vtv+ZTGHAc1aKcMlvbc?=
+ =?us-ascii?Q?wNNy4wB11w44LzqkS9eurw2QG49xr22S/blaHoaS2z8y3nBjk/tKHofmycnh?=
+ =?us-ascii?Q?2lCGlHPfntFW/ZG6nepv4ppmnEJSV4sUv0uh0lm9nq6U6N9bhfjqESO7UMKv?=
+ =?us-ascii?Q?jDv2FIJ8PU4HUyD1Sq0jpWhsxki1aUPO9Qe6F+7SBfUyfn9OohBSbdtaqUGu?=
+ =?us-ascii?Q?rnPE8C9pCbkUzOkaRd4/XVsDdE2lEfuB5Y3kwMMx4xcBU34X7mtxnfO/S0Oy?=
+ =?us-ascii?Q?QZNe0NFbgvJqRrYXR+izoR52519byq8Kc19POoQMWijWqqf7gn0p/rcLacka?=
+ =?us-ascii?Q?jjcQ207JDYKO7Qt8l1ts03VBMzrfrR+IcFkFmeJa5PASk0NVa/oG0B31/aoR?=
+ =?us-ascii?Q?sidVdoRyyDizLBZZYwJmJfZJ2gtrLaR6g8GkH9YQU9Z7vEWIC/UFazOqEQvQ?=
+ =?us-ascii?Q?/luHYKlOsNejZcVvdSqaYizZWb2t7LBK4j/VsAgqyoMQ6QkD0gGqEAgIyaGL?=
+ =?us-ascii?Q?qSG9NQiu7O3yh/UFtEyV4slx14iqGR7PoABG2ouRwnnr7b3kaWeUospxakKD?=
+ =?us-ascii?Q?eTIsezx+6y3PUwUZcI0DnUaPO2EJaF77ATOHJKWPGXxGhJaeabaO96T4isTu?=
+ =?us-ascii?Q?thFlihA1ZxtTXgq0lxts97eNTYjTnWMHMgjrXRUdz3ENrcd6+r9ZmU5XE6MO?=
+ =?us-ascii?Q?9tqV9DkoFSeAyvSjWoBS+eNk0/TCpCJDRo3M8O9wxI/q/l+DLsk+t2jKyUCS?=
+ =?us-ascii?Q?N6PRM+VxRtzxuhbqjxqHZW9OAK9axYpeO8K4EYsJZ2wn6Ebh1NFO4T1vglcH?=
+ =?us-ascii?Q?JSi/+FU5Nfot7OkRlIdPGzBqjYTfNMBulDkAK+hya6cqU8x4BdV+Zv/DOZX8?=
+ =?us-ascii?Q?8sxiE1eg000qQw6ywgi84IodmPtrHMOjevynG4t8OmdGIqZQ5GxUWHFS0JuC?=
+ =?us-ascii?Q?AgiyO3Nmtw4qxVKVNw8PkCgC+K2HiQjZMYCe6rrz1mVAPnQNrrnESI5YrTll?=
+ =?us-ascii?Q?h+3AHDdnKu85ck0MZqwYW5TogDg1/+ZHbqsQy0c/9LWfy1TQxkWz9j6Yzuet?=
+ =?us-ascii?Q?p9O8KiWMJNQ5rgMshxYFkchJi/VIMu/2R+jCw0Rf3bOR+EeCfLLCWoWWIyJD?=
+ =?us-ascii?Q?5FpOrFTKIoZTX40IuKvC9/vAU5g0Ckf7viyjNElMibI4OYNN1veBIKg9ahuF?=
+ =?us-ascii?Q?WERPDnQR3mzVVmNBBFO8iyeRhnsPsIj05nSTGgpxq2nvn5GRAY/kAkJXuIjJ?=
+ =?us-ascii?Q?O6C84vhdJxzhMCUAL2/tmv3ICYQKu1j0vbRzJ1YSnn6AKmr/sPNqt2bso8OH?=
+ =?us-ascii?Q?+LMmORzcs78wOb5CaJ/qgKiZ7ogLOeG4fYXGHRSn69iWjaIqlUo1qRP3WsNr?=
+ =?us-ascii?Q?ADc4Y3EKRZeKzj/uCpiKhdnCjNJ5VH5oebBstFdFmQOMju6S9PUcM1krnWOH?=
+ =?us-ascii?Q?M3QH0TN41raOZ4+JKjEDQ+jArEQnHhnN1bDHz5sN?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3de912c4-f562-4023-eb30-08dcb1f643b9
+X-MS-Exchange-CrossTenant-AuthSource: JH0PR06MB6849.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Aug 2024 06:50:43.7258
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ff4iWsCud+Z1IKQI1h0pdD+/8tBM6z2YHWTDJ7LDqC18ZdSozbTkYANrlPDcitWZnZluAeDU7d/V/uGpI4kvQg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: JH0PR06MB7326
 
-Sure, here's the Scalable Tiered Memory Control (STMC)
+Fix compilation warning in bellow patch.
+https://lore.kernel.org/linux-mm/202408010150.13yZScv6-lkp@intel.com/
 
-**Background**
+Signed-off-by: Zhiguo Jiang <justinjiang@vivo.com>
+---
 
-In the era when artificial intelligence, big data analytics, and
-machine learning have become mainstream research topics and
-application scenarios, the demand for high-capacity and high-
-bandwidth memory in computers has become increasingly important.
-The emergence of CXL (Compute Express Link) provides the
-possibility of high-capacity memory. Although CXL TYPE3 devices
-can provide large memory capacities, their access speed is lower
-than traditional DRAM due to hardware architecture limitations.
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408010150.13yZScv6-lkp@intel.com/
 
-To enjoy the large capacity brought by CXL memory while minimizing
-the impact of high latency, Linux has introduced the Tiered Memory
-architecture. In the Tiered Memory architecture, CXL memory is
-treated as an independent, slower NUMA NODE, while DRAM is
-considered as a relatively faster NUMA NODE. Applications allocate
-memory from the local node, and Tiered Memory, leveraging memory
-reclamation and NUMA Balancing mechanisms, can transparently demote
-physical pages not recently accessed by user processes to the slower
-CXL NUMA NODE. However, when user processes re-access the demoted
-memory, the Tiered Memory mechanism will, based on certain logic,
-decide whether to promote the demoted physical pages back to the
-fast NUMA NODE. If the promotion is successful, the memory accessed
-by the user process will reside in DRAM; otherwise, it will reside in
-the CXL NODE. Through the Tiered Memory mechanism, Linux balances
-betweenlarge memory capacity and latency, striving to maintain an
-equilibrium for applications.
+ mm/mmu_gather.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-**Problem**
-Although Tiered Memory strives to balance between large capacity and
-latency, specific scenarios can lead to the following issues:
+diff --git a/mm/mmu_gather.c b/mm/mmu_gather.c
+index 2bb413d052bd..405383f619f5 100644
+--- a/mm/mmu_gather.c
++++ b/mm/mmu_gather.c
+@@ -51,7 +51,7 @@
+  */
+ #define NR_MIN_EXITING_PROCESSES 2
+ 
+-atomic_t nr_exiting_processes = ATOMIC_INIT(0);
++static atomic_t nr_exiting_processes = ATOMIC_INIT(0);
+ static struct kmem_cache *swap_gather_cachep;
+ static struct workqueue_struct *swapfree_wq;
+ static DEFINE_STATIC_KEY_TRUE(tlb_swap_asyncfree_disabled);
+-- 
+2.39.0
 
-  1. In scenarios requiring massive computations, if data is heavily
-     stored in CXL slow memory and Tiered Memory cannot promptly
-     promote this memory to fast DRAM, it will significantly impact
-     program performance.
-  2. Similar to the scenario described in point 1, if Tiered Memory
-     decides to promote these physical pages to fast DRAM NODE, but
-     due to limitations in the DRAM NODE promote ratio, these physical
-     pages cannot be promoted. Consequently, the program will keep
-     running in slow memory.
-  3. After an application finishes computing on a large block of fast
-     memory, it may not immediately re-access it. Hence, this memory
-     can only wait for the memory reclamation mechanism to demote it.
-  4. Similar to the scenario described in point 3, if the demotion
-     speed is slow, these cold pages will occupy the promotion
-     resources, preventing some eligible slow pages from being
-     immediately promoted, severely affecting application efficiency.
-
-**Solution**
-We propose the **Scalable Tiered Memory Control (STMC)** mechanism,
-which delegates the authority of promoting and demoting memory to the
-application. The principle is simple, as follows:
-
-  1. When an application is preparing for computation, it can promote
-     the memory it needs to use or ensure the memory resides on a fast
-     NODE.
-  2. When an application will not use the memory shortly, it can
-     immediately demote the memory to slow memory, freeing up valuable
-     promotion resources.
-
-STMC mechanism is implemented through the madvise system call, providing
-two new advice options: MADV_DEMOTE and MADV_PROMOTE. MADV_DEMOTE
-advises demote the physical memory to the node where slow memory
-resides; this advice only fails if there is no free physical memory on
-the slow memory node. MADV_PROMOTE advises retaining the physical memory
-in the fast memory; this advice only fails if there are no promotion
-slots available on the fast memory node. Benefits brought by STMC
-include:
-
-  1. The STMC mechanism is a variant of on-demand memory management
-     designed to let applications enjoy fast memory as much as possible,
-     while actively demoting to slow memory when not in use, thus
-     freeing up promotion slots for the NODE and allowing it to run in
-     an optimized Tiered Memory environment.
-  2. The STMC mechanism better balances large capacity and latency.
-
-**Shortcomings of STMC**
-The STMC mechanism requires the caller to manage memory demotion and
-promotion. If the memory is not promptly demoting after an promotion,
-it may cause issues similar to memory leaks, leading to short-term
-promotion bottlenecks.
-
-
-BiscuitOS Broiler (1):
-  mm: introduce MADV_DEMOTE/MADV_PROMOTE
-
- arch/alpha/include/uapi/asm/mman.h           |   3 +
- arch/mips/include/uapi/asm/mman.h            |   3 +
- arch/parisc/include/uapi/asm/mman.h          |   3 +
- arch/xtensa/include/uapi/asm/mman.h          |   3 +
- include/uapi/asm-generic/mman-common.h       |   3 +
- mm/internal.h                                |   1 +
- mm/madvise.c                                 | 251 +++++++++++++++++++
- mm/vmscan.c                                  |  57 +++++
- tools/include/uapi/asm-generic/mman-common.h |   3 +
- 9 files changed, 327 insertions(+)
-
---
-2.34.1
-
----------------------------------------------------------------------------=
-----------------------------------------------------------
-=B1=BE=D3=CA=BC=FE=BC=B0=C6=E4=B8=BD=BC=FE=BA=AC=D3=D0=D0=C2=BB=AA=C8=FD=BC=
-=AF=CD=C5=B5=C4=B1=A3=C3=DC=D0=C5=CF=A2=A3=AC=BD=F6=CF=DE=D3=DA=B7=A2=CB=CD=
-=B8=F8=C9=CF=C3=E6=B5=D8=D6=B7=D6=D0=C1=D0=B3=F6
-=B5=C4=B8=F6=C8=CB=BB=F2=C8=BA=D7=E9=A1=A3=BD=FB=D6=B9=C8=CE=BA=CE=C6=E4=CB=
-=FB=C8=CB=D2=D4=C8=CE=BA=CE=D0=CE=CA=BD=CA=B9=D3=C3=A3=A8=B0=FC=C0=A8=B5=AB=
-=B2=BB=CF=DE=D3=DA=C8=AB=B2=BF=BB=F2=B2=BF=B7=D6=B5=D8=D0=B9=C2=B6=A1=A2=B8=
-=B4=D6=C6=A1=A2
-=BB=F2=C9=A2=B7=A2=A3=A9=B1=BE=D3=CA=BC=FE=D6=D0=B5=C4=D0=C5=CF=A2=A1=A3=C8=
-=E7=B9=FB=C4=FA=B4=ED=CA=D5=C1=CB=B1=BE=D3=CA=BC=FE=A3=AC=C7=EB=C4=FA=C1=A2=
-=BC=B4=B5=E7=BB=B0=BB=F2=D3=CA=BC=FE=CD=A8=D6=AA=B7=A2=BC=FE=C8=CB=B2=A2=C9=
-=BE=B3=FD=B1=BE
-=D3=CA=BC=FE=A3=A1
-This e-mail and its attachments contain confidential information from New H=
-3C, which is
-intended only for the person or entity whose address is listed above. Any u=
-se of the
-information contained herein in any way (including, but not limited to, tot=
-al or partial
-disclosure, reproduction, or dissemination) by persons other than the inten=
-ded
-recipient(s) is prohibited. If you receive this e-mail in error, please not=
-ify the sender
-by phone or email immediately and delete it!
 
