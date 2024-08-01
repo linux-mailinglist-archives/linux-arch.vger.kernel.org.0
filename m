@@ -1,133 +1,102 @@
-Return-Path: <linux-arch+bounces-5794-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5795-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33C08943846
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Jul 2024 23:52:24 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEAB5944104
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Aug 2024 04:24:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A87A11F21E4E
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Jul 2024 21:52:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3BAA5B2850C
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Aug 2024 02:13:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F5E916D325;
-	Wed, 31 Jul 2024 21:52:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OFXIhAa4"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B8861A255A;
+	Thu,  1 Aug 2024 01:27:04 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18F3D160860;
-	Wed, 31 Jul 2024 21:52:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8A9C1A2562;
+	Thu,  1 Aug 2024 01:27:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722462729; cv=none; b=qMX9SZjSQ/9YKrqTk+yYtEIaAKZ0NIuwvg08qaeHZ096A9VwqUo5HcQE+WCgKuKGtkzxrmFHR8rYOobuTjhLtUjogeIUAUyyk75e+A9civh1nLd4gUJdwMzm+R0YgiKBkYhtB/g4oPrHZusPgX0yhIY3UEvC+Y+BjzVqlhfKQBY=
+	t=1722475624; cv=none; b=bWh4c1PdvIV1O9KFqlmzsBhpVbVE+e/Bz2sLuPY/y6CvBhp7BiXksqT6QdSES0JlRo8T1lfNUz2OpwNKnIU6LQajchnxR8Sb1pBcnyDYLJR0hqkn9wIaGyTcmlc0oPy8lXW4Sst0k2uE4j/URAK8XM/81AlAujTLjqB46tabuNY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722462729; c=relaxed/simple;
-	bh=dMejEloAEVcCZyvgcOEVM+yjF7rV83Fb47hNrMHcm60=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MHtg85PDOyVMQsMOpVm4QzLbSbjoTb7w0Wg1uVKqyYDHDWMJvjMOAptLFzmY9WniKf5mGoB0+ID81F6U9MtpljBUH1PR814rnc+stEwhVXMklfKk8mX4DH4tZfL1mYWZ6iWppgIoOacSbwlOvD9pxgRG1MuUTtR8OYZPknsO4mY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OFXIhAa4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98839C4AF10;
-	Wed, 31 Jul 2024 21:52:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722462728;
-	bh=dMejEloAEVcCZyvgcOEVM+yjF7rV83Fb47hNrMHcm60=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=OFXIhAa49ozspRb+Vkg+haQ1CJdlME/Xu6FJdG8xHm7AzdmrR0yzch+x0i9bROVyY
-	 A7wd3yYyAt+eCNuFst9nR2ZQS/1gpYyvZOzG/cuh2mlrXx6WzgcLLOyi12IUWANWpx
-	 h8dSoJG1kAWngOTiF0/6RrXOEz6P42V5R+CIQai4isVMDTBYGAvSi1IewPlHxhqdY8
-	 7wYaZEhcMyhOkfCLDmRYEmNbNpGUW/p+Att0Sfiiq6WqbV3DJ/P0kVgHLqPYbB+F+N
-	 ZvD9Jkl3Xu6RT1X8KGEr2viOY0DavTkf5K8zxAMghH1Cu+pYg1q+Ae5sLsXF+hOpaq
-	 Lgp93F6wJDETw==
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5afa207b8bfso6450764a12.0;
-        Wed, 31 Jul 2024 14:52:08 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUjhpIWkT9GxUjipgmLwwtWoDWTF3iKPV0Yy2RJJ2QHj6+LZno4PJY+O5uWzIdFljSXJKSIQMya/1QhnkVMPcTarQuVCd99MkqX+HMZcdr14eP1Bh67n2jMtfWa1+OEziYwONsz1wOW7ekXKhfyXbL/3QRaCxDehn+7IWr99sAlPhjnpZ3fG25ozOE8BaU5vOMHiProJcN3CQlW8Xiuefc=
-X-Gm-Message-State: AOJu0YyJ1yCbKxmbc23v/hsQIZpLTNBQdq+ZFHUO+P7K4RXMu39zClxj
-	BxfFRtepXB0W4VHl0vIQkOfWFNMmNWwbZq61cWX1P8F9nlGb8bd8/GUBC0viu6Rhl1Y8gIh3czJ
-	paNakYdR8BcxxNQ7yqeugXLbVqYM=
-X-Google-Smtp-Source: AGHT+IG6u+LBC1U/4ah8Phx3p1l/q7k/uRvdbCWTGY0uN3N8etMJmLSzVrI0hwkofLSh7v3Pv8RNG16kgZqR0K/TkXM=
-X-Received: by 2002:a05:6402:3d6:b0:5a1:73fc:6bd4 with SMTP id
- 4fb4d7f45d1cf-5b6ff0005f4mr189800a12.19.1722462727169; Wed, 31 Jul 2024
- 14:52:07 -0700 (PDT)
+	s=arc-20240116; t=1722475624; c=relaxed/simple;
+	bh=NyUJU5qt9KOZ5V2FlZXxo9KiqYr69JBvG75ao6KughU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=jz7Ib3XCggv5WLCqqTdVn2jiiOHi1iXuaqxWXCr/44I3kNRZWipJCN1pWRVoWf2QLBsIcFoHOlG3DG52iswSjoJuLwBrGBpWDKffEfcS4AyKqweF+gdaS2zrH7wy6Ffud6jguaNRwVTG72uXwvM7xare17FzmlRFiuOjSJxxUQ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.255
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.48])
+	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4WZBBv2kjRz1L927;
+	Thu,  1 Aug 2024 09:26:47 +0800 (CST)
+Received: from kwepemi100008.china.huawei.com (unknown [7.221.188.57])
+	by mail.maildlp.com (Postfix) with ESMTPS id 799C718009B;
+	Thu,  1 Aug 2024 09:26:59 +0800 (CST)
+Received: from [10.67.109.254] (10.67.109.254) by
+ kwepemi100008.china.huawei.com (7.221.188.57) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Thu, 1 Aug 2024 09:26:58 +0800
+Message-ID: <3855e3a4-769b-5162-0747-cf72b94f7089@huawei.com>
+Date: Thu, 1 Aug 2024 09:26:58 +0800
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240731072405.197046-1-alexghiti@rivosinc.com>
- <20240731072405.197046-3-alexghiti@rivosinc.com> <ea55bb29-c3ba-4e71-a76a-f788c4a7ea16@redhat.com>
-In-Reply-To: <ea55bb29-c3ba-4e71-a76a-f788c4a7ea16@redhat.com>
-From: Guo Ren <guoren@kernel.org>
-Date: Thu, 1 Aug 2024 06:51:55 +0900
-X-Gmail-Original-Message-ID: <CAJF2gTTGpTG6Va+7Sa9t2BFGFc5oy-yR5zEdiWretygO1jD_Ww@mail.gmail.com>
-Message-ID: <CAJF2gTTGpTG6Va+7Sa9t2BFGFc5oy-yR5zEdiWretygO1jD_Ww@mail.gmail.com>
-Subject: Re: [PATCH v4 02/13] riscv: Do not fail to build on byte/halfword
- operations with Zawrs
-To: Waiman Long <longman@redhat.com>
-Cc: Alexandre Ghiti <alexghiti@rivosinc.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Andrea Parri <parri.andrea@gmail.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Leonardo Bras <leobras@redhat.com>, linux-doc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-arch@vger.kernel.org
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH] ARM: support PREEMPT_DYNAMIC
+Content-Language: en-US
+To: "Russell King (Oracle)" <linux@armlinux.org.uk>
+CC: <arnd@arndb.de>, <afd@ti.com>, <akpm@linux-foundation.org>,
+	<linus.walleij@linaro.org>, <eric.devolder@oracle.com>, <robh@kernel.org>,
+	<vincent.whitchurch@axis.com>, <bhe@redhat.com>, <nico@fluxnic.net>,
+	<ardb@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>
+References: <20240620090028.729373-1-ruanjinjie@huawei.com>
+ <79a3de7c-21da-12ce-8372-9c9029c237ac@huawei.com>
+ <Zqn0wL5iScf455O5@shell.armlinux.org.uk>
+ <034499ea-2cd6-8775-ee94-771cbecd4cdb@huawei.com>
+ <ZqoOoUPDIeJX5M0e@shell.armlinux.org.uk>
+From: Jinjie Ruan <ruanjinjie@huawei.com>
+In-Reply-To: <ZqoOoUPDIeJX5M0e@shell.armlinux.org.uk>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Aug 1, 2024 at 1:27=E2=80=AFAM Waiman Long <longman@redhat.com> wro=
-te:
->
-> On 7/31/24 03:23, Alexandre Ghiti wrote:
-> > riscv does not have lr instructions on byte and halfword but the
-> > qspinlock implementation actually uses such atomics provided by the
-> > Zabha extension, so those sizes are legitimate.
->
-> Note that the native qspinlock code only need halfword atomic cmpxchg
-> operation. However, if you also plan to use paravirtual qspinlock, you
-> need to have byte-level atomic cmpxchg().
-Thx for reminding me; I will update paravirt qspinlock after these
-patches merge.
-
-Zabha & Zcas extension provides byte and half-word atomic cmpxchg.
-
->
-> Cheers,
-> Longman
->
-> >
-> > Then instead of failing to build, just fallback to the !Zawrs path.
-> >
-> > Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-> > ---
-> >   arch/riscv/include/asm/cmpxchg.h | 3 ++-
-> >   1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/=
-cmpxchg.h
-> > index ebbce134917c..9ba497ea18a5 100644
-> > --- a/arch/riscv/include/asm/cmpxchg.h
-> > +++ b/arch/riscv/include/asm/cmpxchg.h
-> > @@ -268,7 +268,8 @@ static __always_inline void __cmpwait(volatile void=
- *ptr,
-> >               break;
-> >   #endif
-> >       default:
-> > -             BUILD_BUG();
-> > +             /* RISC-V doesn't have lr instructions on byte and half-w=
-ord. */
-> > +             goto no_zawrs;
-> >       }
-> >
-> >       return;
->
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemi100008.china.huawei.com (7.221.188.57)
 
 
---=20
-Best Regards
- Guo Ren
+
+On 2024/7/31 18:14, Russell King (Oracle) wrote:
+> On Wed, Jul 31, 2024 at 06:03:11PM +0800, Jinjie Ruan wrote:
+>> On 2024/7/31 16:24, Russell King (Oracle) wrote:
+>>> On Wed, Jul 31, 2024 at 10:07:53AM +0800, Jinjie Ruan wrote:
+>>>>>  #ifdef CONFIG_PREEMPTION
+>>>>> +#ifdef CONFIG_PREEMPT_DYNAMIC
+>>>>> +	bl	need_irq_preemption
+>>>>> +	cmp	r0, #0
+>>>>> +	beq	2f
+>>>>> +#endif
+>>>
+>>> Depending on the interrupt rate, this can be regarded as a fast path,
+>>> it would be nice if we could find a way to use static branches in
+>>> assembly code.
+>> It seems to be hard to use static keys in assembly code.
+>>
+>> By the way, currently, most architectures have simplified assembly code
+>> and implemented its most functions in C functions. Does arm32 have this
+>> plan?
+> 
+> arm32 is effectively in maintenance mode; very little active development
+> is occuring. So, there are no plans to change the code without good
+> reason (as code changes without reason will needlessly affect its
+> stability.)
+
+Thank you for helping me with my question.
+
+> 
 
