@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-5797-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5798-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32706944311
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Aug 2024 08:09:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2072F944320
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Aug 2024 08:09:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DB2EF1F2207F
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Aug 2024 06:09:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CB952283AD0
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Aug 2024 06:09:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14C86157488;
-	Thu,  1 Aug 2024 06:09:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C222F15853C;
+	Thu,  1 Aug 2024 06:09:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jnYRQTD4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UlXPnIkk"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1B1128379;
-	Thu,  1 Aug 2024 06:08:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71B6215749A;
+	Thu,  1 Aug 2024 06:09:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722492540; cv=none; b=Re45k6ZPVU4kyCkyW1wwJWTEAFqHP5LjOYNuWCXHV8oV1AtGR28dD4egyQJ+web4ThQ48uR9fgxiPVUWyKCRWasGq6lZM1gm57VzqrDZuwJpMJzy+pj6/LURwoAUYG/6zb5rNGPUECT1gG1YfATH+TKkIBOs27BXmED2OdNn1cQ=
+	t=1722492551; cv=none; b=hDb8X5Xd4hlnBXYTze2inz1hI6dxwBBxYEjafwuY7QEC6lcOWbYy+z81DyaL51x3XuhTVPoKaWPbeJOZQz0hhR7XLUqzysu0putAz0qQaYaqFLT/ojtp1zmfSRmemOuC8v1zib8pgErlbsTsHL/ARFYTpuICXXvjX7VhXg1M5pc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722492540; c=relaxed/simple;
-	bh=ahZO7HcpjJfu28QyxaeMh/IeX+F8/tsP9+GBaY7P+JU=;
+	s=arc-20240116; t=1722492551; c=relaxed/simple;
+	bh=wE9udk3T5PUOzWhffSqfqF0jfi91yVWMRgCuaEhaWIs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LeZPkEvIQUhKc5lvIXci8W+b4jjRTEcAQ7JthAiolOQSoPlN+rXrdOq88IAVZJx7DHnJ8N9ErrmiXL2zDUb1EbkoSdm20X4poVAqjDx6gnIuWA6ZOnBCf3c8uc8sEjx8tTJep6M9L259ngwaHWIs53RbuZngu4wRcdXMd0BrAc0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jnYRQTD4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 160B6C4AF0D;
-	Thu,  1 Aug 2024 06:08:47 +0000 (UTC)
+	 MIME-Version; b=eOvPvMlEg62NzsaSHpyqKx3bsNoUIuOrQmN8h7v30iYL6Y16LIowp4wfFH4IUVfe4c44SU4cUVEaJqFcvmy1UlUd6x6tyjL0brSLkyw8u3BTCFgZsNoqBmMpSWSIX+ROQNnknxVxtCyMTiaWU7BjqTVfxPaNV3INJ4d8ltndOuU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UlXPnIkk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D56BCC4AF0E;
+	Thu,  1 Aug 2024 06:08:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722492539;
-	bh=ahZO7HcpjJfu28QyxaeMh/IeX+F8/tsP9+GBaY7P+JU=;
+	s=k20201202; t=1722492550;
+	bh=wE9udk3T5PUOzWhffSqfqF0jfi91yVWMRgCuaEhaWIs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=jnYRQTD4LOi6UYgIg7wnq6U4iqrnpuP08zjDaKgtXu3WJUYa/E097kuxH2aeK5VY/
-	 Bcq+eK7GU5lblfPhzlOYIPo3Arzk4E40wMmg3gN1FTZ2TxhvcvhTRw68CsZTvioJTn
-	 Wk3ISPON95CHAcboKkfATHNIu6XwkVsh4264IZAISjY8p9ijm4bYlQ+mnOeh5hZziE
-	 RPlKjD3veB4BttqTLV9MIi8S0/XpTfL9SupmvL01R3UMwD8Xz5dAC7pERBZLD3bqkX
-	 W9+XZrhHYiJ2Mids5IYyn3anSkKL5z5ZYL4TiQyrUAV2GaerVPAbMpNy9iVuloAcq2
-	 f8gJBIb48MQag==
+	b=UlXPnIkkZQR2dXJRdGRF6ypg+KOsiM9/67c6rYYrhDo2FguVGlVV8shyU7Gz8VzYr
+	 +u4Ya4vP+UoPOnxh6t1MSmRl1cHJ08bQvMpxgJIkc9zewWuRHTWoiilbb7qKzEj/Ma
+	 RD1tGKdlLTPrJaG8ZEblPomDJdXVPP7dAGf4NXPs+5wYFBxEN5X0Hp589/maJAgny+
+	 TIWDD/cr8uy0CHdC8oTDx0a0OUfJcsPttk+4G1CzKYSKRQW3M5bjNgPSdfPRy3HQTZ
+	 ASefzpnG9NOh2q5N+dfBb4Hi3WipAZUAo6fBCWwI90MfToAMZrVqzzDByoyHFMeEDu
+	 vLoDKbCBr6w0g==
 From: Mike Rapoport <rppt@kernel.org>
 To: linux-kernel@vger.kernel.org
 Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
@@ -89,11 +89,10 @@ Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
 	loongarch@lists.linux.dev,
 	nvdimm@lists.linux.dev,
 	sparclinux@vger.kernel.org,
-	x86@kernel.org,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH v3 01/26] mm: move kernel/numa.c to mm/
-Date: Thu,  1 Aug 2024 09:08:01 +0300
-Message-ID: <20240801060826.559858-2-rppt@kernel.org>
+	x86@kernel.org
+Subject: [PATCH v3 02/26] MIPS: sgi-ip27: make NODE_DATA() the same as on all other architectures
+Date: Thu,  1 Aug 2024 09:08:02 +0300
+Message-ID: <20240801060826.559858-3-rppt@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240801060826.559858-1-rppt@kernel.org>
 References: <20240801060826.559858-1-rppt@kernel.org>
@@ -107,44 +106,62 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-The stub functions in kernel/numa.c belong to mm/ rather than to kernel/
+sgi-ip27 is the only system that defines NODE_DATA() differently than
+the rest of NUMA machines.
+
+Add node_data array of struct pglist pointers that will point to
+__node_data[node]->pglist and redefine NODE_DATA() to use node_data
+array.
+
+This will allow pulling declaration of node_data to the generic mm code
+in the next commit.
 
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-Acked-by: David Hildenbrand <david@redhat.com>
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Tested-by: Zi Yan <ziy@nvidia.com> # for x86_64 and arm64
 ---
- kernel/Makefile       | 1 -
- mm/Makefile           | 1 +
- {kernel => mm}/numa.c | 0
- 3 files changed, 1 insertion(+), 1 deletion(-)
- rename {kernel => mm}/numa.c (100%)
+ arch/mips/include/asm/mach-ip27/mmzone.h | 5 ++++-
+ arch/mips/sgi-ip27/ip27-memory.c         | 5 ++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/Makefile b/kernel/Makefile
-index 3c13240dfc9f..87866b037fbe 100644
---- a/kernel/Makefile
-+++ b/kernel/Makefile
-@@ -116,7 +116,6 @@ obj-$(CONFIG_SHADOW_CALL_STACK) += scs.o
- obj-$(CONFIG_HAVE_STATIC_CALL) += static_call.o
- obj-$(CONFIG_HAVE_STATIC_CALL_INLINE) += static_call_inline.o
- obj-$(CONFIG_CFI_CLANG) += cfi.o
--obj-$(CONFIG_NUMA) += numa.o
+diff --git a/arch/mips/include/asm/mach-ip27/mmzone.h b/arch/mips/include/asm/mach-ip27/mmzone.h
+index 08c36e50a860..629c3f290203 100644
+--- a/arch/mips/include/asm/mach-ip27/mmzone.h
++++ b/arch/mips/include/asm/mach-ip27/mmzone.h
+@@ -22,7 +22,10 @@ struct node_data {
  
- obj-$(CONFIG_PERF_EVENTS) += events/
+ extern struct node_data *__node_data[];
  
-diff --git a/mm/Makefile b/mm/Makefile
-index d2915f8c9dc0..4e668be85f0b 100644
---- a/mm/Makefile
-+++ b/mm/Makefile
-@@ -141,3 +141,4 @@ obj-$(CONFIG_HAVE_BOOTMEM_INFO_NODE) += bootmem_info.o
- obj-$(CONFIG_GENERIC_IOREMAP) += ioremap.o
- obj-$(CONFIG_SHRINKER_DEBUG) += shrinker_debug.o
- obj-$(CONFIG_EXECMEM) += execmem.o
-+obj-$(CONFIG_NUMA) += numa.o
-diff --git a/kernel/numa.c b/mm/numa.c
-similarity index 100%
-rename from kernel/numa.c
-rename to mm/numa.c
+-#define NODE_DATA(n)		(&__node_data[(n)]->pglist)
+ #define hub_data(n)		(&__node_data[(n)]->hub)
+ 
++extern struct pglist_data *node_data[];
++
++#define NODE_DATA(nid)		(node_data[nid])
++
+ #endif /* _ASM_MACH_MMZONE_H */
+diff --git a/arch/mips/sgi-ip27/ip27-memory.c b/arch/mips/sgi-ip27/ip27-memory.c
+index b8ca94cfb4fe..c30ef6958b97 100644
+--- a/arch/mips/sgi-ip27/ip27-memory.c
++++ b/arch/mips/sgi-ip27/ip27-memory.c
+@@ -34,8 +34,10 @@
+ #define SLOT_PFNSHIFT		(SLOT_SHIFT - PAGE_SHIFT)
+ #define PFN_NASIDSHFT		(NASID_SHFT - PAGE_SHIFT)
+ 
+-struct node_data *__node_data[MAX_NUMNODES];
++struct pglist_data *node_data[MAX_NUMNODES];
++EXPORT_SYMBOL(node_data);
+ 
++struct node_data *__node_data[MAX_NUMNODES];
+ EXPORT_SYMBOL(__node_data);
+ 
+ static u64 gen_region_mask(void)
+@@ -361,6 +363,7 @@ static void __init node_mem_init(nasid_t node)
+ 	 */
+ 	__node_data[node] = __va(slot_freepfn << PAGE_SHIFT);
+ 	memset(__node_data[node], 0, PAGE_SIZE);
++	node_data[node] = &__node_data[node]->pglist;
+ 
+ 	NODE_DATA(node)->node_start_pfn = start_pfn;
+ 	NODE_DATA(node)->node_spanned_pages = end_pfn - start_pfn;
 -- 
 2.43.0
 
