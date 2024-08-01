@@ -1,408 +1,382 @@
-Return-Path: <linux-arch+bounces-5844-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5846-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C097F944958
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Aug 2024 12:33:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A542944BD1
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Aug 2024 14:57:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 76ABA281AAC
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Aug 2024 10:33:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EE07F1F217FD
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Aug 2024 12:57:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 942D113D626;
-	Thu,  1 Aug 2024 10:33:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 754BC194125;
+	Thu,  1 Aug 2024 12:57:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="pTLvbacu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JkikZKih"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2064.outbound.protection.outlook.com [40.107.215.64])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EB0F3BBE5;
-	Thu,  1 Aug 2024 10:33:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.215.64
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722508415; cv=fail; b=n4CvKrHPcwq1QfoasHOaQ2ywU4mkpSJWj72nNqtoqAoIXYVc5ywzNg/jfii3yKNj80WosqJrmK0785ob4ttY/LxkPbH3Xkru5ek1apgN2lTZnGIEdDTkQJQHqBslwhguDBjHbjkVk0heXiygfyC2ekSUOUrPdFo1EGKV0zOIOXk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722508415; c=relaxed/simple;
-	bh=6rXwTGW/kJFgD7RBRMnmL9hjkgCO2pQcuxFvVqL4/60=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=nezT46KNADSLw9JeRpH5Cuni2x0YspDxw9qpUHFt2UadnxFo9VRiPPnMrLx/2J5sTyhFRE5y9c/Dt++FX8i11izOpZMvUaSwzFlRmA5dE1jRnyLSulPGQc05izWO66waEfHhqyJtip+XarEcZCREAQNqG0dmCcxBixFkbpbIKy8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=pTLvbacu; arc=fail smtp.client-ip=40.107.215.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Yo8Apioke3v1+7GeEoO9oPIKiqRj16k4tg9vxldEqCdAxhmxMYaAnjC47vv6IsGW3Q4OxSPq+65JEFzG/Rp4rOxweRwHlUFPuHtZP5Lj68fzO9HRfz2nZZ2GccytyEA7PYRQgEQEQF59Xvs8mPMmlO2IXwdmI9m3PfYr6j+jXYfFbdThwZWrl0CbD1NMW9txNAvIc4KQ+jQdarq/OjeqI6OcAPlodiwcaOmRwYrVKxoZiykmOB3WIebVP46erR7Dynw7cGGVLn2BX4I7yerwYTsBB8cY6Aykcl+OB7A7pWJNx5xJCFKvEevuIsAp2ZuH9rOnwyS36rZsiXTb0BE92Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DSuE5Oa7/DmjtlVa8Mg5447RmfexKka8rSYuQMUbJTk=;
- b=V+YFPLH4R55WRPI/tLjFtLUPhCOi1dx8Wm1mgDkSgp6Ndnu1tBsy9UyZUNjrCdIay73lKDdOQm9+3xyZlaxWkwhmUuYYh6XHUFnem944N0/ayG7Ea3tYb/Tu/qFHXyI1mi0CnBPXbvJN50Ee7fpl2yJQv41wCUb1k95Syv4msz6zog/PcqI0EOb8mvbchmriaQShnaf8eRAoFXhadc8jACHV010qmM5HRYyMP6rxx6pTH1U73zjTDIywWdNNOwPvq3AORiy2UY2WVt5/JyYqi3gs4PWPaiTNo44b8qrxZU2qGl66bEE52ORXzsbchjAI/WmbLRwRHygZOWjzA8bcWA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DSuE5Oa7/DmjtlVa8Mg5447RmfexKka8rSYuQMUbJTk=;
- b=pTLvbacuSwVBxp3fM6RhesnI1CiTrenqsfXeeb0OicRVaJtVNy9ye95m1E3zP+oqPXoFfQH5cfXOtqV/rbHfpusnKMBMCopzCewd/lYAO9pT1bu67S3Z0trGr+Stit8t9LrKYUOTxmbHWUeZnVx66ljGRJa9ghWcOO4pqlqR0cHF4RRJkSXuWFuG4t/GtZcjSe7EFCYhv5nRx+LOXXX5WJ2lC3HJl1f8H+jp7PHxC4a6lqHa2+QpOkDaJX9CphYPjt/PkQXlbl4+XU7/4vd8zfnl95+Z3Neo12+OpDPpjC2FoX0cyZSV9IGxY17GBQaAu5XW0/0zrLvZYPoD6l13OQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from JH0PR06MB6849.apcprd06.prod.outlook.com (2603:1096:990:47::12)
- by TYZPR06MB5099.apcprd06.prod.outlook.com (2603:1096:400:1c5::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7807.28; Thu, 1 Aug
- 2024 10:33:27 +0000
-Received: from JH0PR06MB6849.apcprd06.prod.outlook.com
- ([fe80::ed24:a6cd:d489:c5ed]) by JH0PR06MB6849.apcprd06.prod.outlook.com
- ([fe80::ed24:a6cd:d489:c5ed%3]) with mapi id 15.20.7828.016; Thu, 1 Aug 2024
- 10:33:27 +0000
-Message-ID: <820dfff4-1f09-474e-aa68-30d779a72fed@vivo.com>
-Date: Thu, 1 Aug 2024 18:33:24 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/3] mm: tlb swap entries batch async release
-To: Barry Song <21cnbao@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
- "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Nick Piggin
- <npiggin@gmail.com>, Peter Zijlstra <peterz@infradead.org>,
- Arnd Bergmann <arnd@arndb.de>, Johannes Weiner <hannes@cmpxchg.org>,
- Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>,
- Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>,
- linux-arch@vger.kernel.org, cgroups@vger.kernel.org,
- kernel test robot <lkp@intel.com>, opensource.kernel@vivo.com
-References: <20240731133318.527-1-justinjiang@vivo.com>
- <20240731091715.b78969467c002fa3a120e034@linux-foundation.org>
- <dbead7ca-e9a4-4ee8-9247-4e1ba9f6695c@vivo.com>
- <CAGsJ_4xv--92w+hOVWtMtYK-0TsR6z67xiHEXCvuRNvXx71b2A@mail.gmail.com>
-From: zhiguojiang <justinjiang@vivo.com>
-In-Reply-To: <CAGsJ_4xv--92w+hOVWtMtYK-0TsR6z67xiHEXCvuRNvXx71b2A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SG2P153CA0008.APCP153.PROD.OUTLOOK.COM (2603:1096::18) To
- JH0PR06MB6849.apcprd06.prod.outlook.com (2603:1096:990:47::12)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B6AE158A2C;
+	Thu,  1 Aug 2024 12:57:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1722517039; cv=none; b=X1zeO0m+YAYhx+UK9KoI0vg2iSGCbrvhiTZ4pReoKIJSRPAZiDGc1Y2wUXCPWR5F9gu/tHY0u2hd8B/i0vjNPqw/EhIlCigjEbFKfSvoyykAquKshC/IXC+7dV+d3eoFh775XDaBPl15NM6Mx6wKl+xEKFIIUGHfCFFaIMQvJ70=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1722517039; c=relaxed/simple;
+	bh=U475xcRFgFiU1cZUXJj+PiDWuwAev7AQsTZb3LnNrZw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=btNutpi5u0Y1xOjz5aeBgvPs/A9WtJLf/FWEhla4wAFVohlGVVeuwHmUglNy1lQ2EvxrO9BMxUh+t+1xf5MQFoRnsEiOxWOdeEpxJ9QWiBiqgQ7Bs87mrIZ8yt6YYwbhHuJNQIss1jev/sl0EwWp8IRLuL58vcFokYyludSiueo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JkikZKih; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48D07C4AF0F;
+	Thu,  1 Aug 2024 12:57:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722517039;
+	bh=U475xcRFgFiU1cZUXJj+PiDWuwAev7AQsTZb3LnNrZw=;
+	h=From:Subject:Date:To:Cc:From;
+	b=JkikZKih6IeS7vKpVgeU31KVPMWDSdVQuHpnj6lVMWl7yY9SgAlWZ54OyRJvEAmRu
+	 TSJ5orSKnKrwkVMlPPQIPa3z2iJy+sP2KUPnVyCwUpMKTsZw0YTaWu4fghU/hOyFE4
+	 4Wv7r+ztpG6XpTI9UM3iMMEcF8rQ+cbFLYjK1v0aU3kjMJ5lNugDt44uXO+NYtZN63
+	 OQmNYWy3xmzirWPDY9kkluNSvbGUFf6kxKI+qa0YpDomkPRx/oQPe3SrZjjeUrWuQk
+	 yUtxbhksUN4PpgXb/q4OV5LUzSRMAxlywWa9xRFCl40orkmyj08/GDY5FQ+HeLf2Ch
+	 YyXf7eLiWqfYA==
+From: Mark Brown <broonie@kernel.org>
+Subject: [PATCH v10 00/40] arm64/gcs: Provide support for GCS in userspace
+Date: Thu, 01 Aug 2024 13:06:27 +0100
+Message-Id: <20240801-arm64-gcs-v10-0-699e2bd2190b@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: JH0PR06MB6849:EE_|TYZPR06MB5099:EE_
-X-MS-Office365-Filtering-Correlation-Id: b2686242-a7fa-4821-d12f-08dcb2156140
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|7416014|376014|366016|43062017;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?KzhwQzhQT21lWk51dW0vdDM2S1JGZXJQYU1tUnh3YXN3b1Rtb0dNeCtBSGN6?=
- =?utf-8?B?SGdhMUR6anVnZTQ4WEJmOGpxRFdlaGZlUGw4V0lvQWVnTW8vMnJhOTNTMnYv?=
- =?utf-8?B?bGhzVU96d3JYZkQwMzl6TnQrYVpnRTloRmJKN2h4bEZmSzQyTU9EV1BnSFhH?=
- =?utf-8?B?WEhxcURFQXkyMmVNcm1VUTh1UFJzYXhob09nMWQxb3BpV3ZPVWdLcUtTV0sz?=
- =?utf-8?B?TVphNzFJZW80NVBuOGlnZGcyalp6VG1wWmk3RVYwNUxwSzZWZmREdDlUTTRH?=
- =?utf-8?B?S0hKSkU1NElRSDFxdGpjRkZVdzhIWkRJZG5rY0lnZ3BHZUp4TTdKOENjcXdu?=
- =?utf-8?B?YTE3aGtubGRsUlJkZysvUzJ6L0xFY1RvR1ZPUnExRVdQZ1JHSVo3RTA1T1Zv?=
- =?utf-8?B?cldXcDFOd1J1UjIva1FmR05sZnNmVEhtS1JGenU0d1lBT3VDMXF0TjlmYUlL?=
- =?utf-8?B?QmcxL1F1aVJVOWc4NnBGZ1FmR1JwRU02VG42cmFmQWNqSjBxYnlVT092S2Vp?=
- =?utf-8?B?T2dHZFMzOEJZV24wWEV5RFVXYituL1FheDlBaHBhL2VaelBycnRqUUc5TVE1?=
- =?utf-8?B?TWtEMmpWSzBaNTFRR2J5QUNRekhhbHdnV1dVYUtqRWtrR2RZdUNxUzFPUFNX?=
- =?utf-8?B?RXZSTytuV2FRalVaQXVrMDR1clgvU25Kdk9uOVRBRE9nd0pmV29YZk4rRnFZ?=
- =?utf-8?B?dG9qMWhvMEVpVDY3ODhSWVhzWGtoYUJwVzhoV0psWUZ1ZFFmR09DL2dNemZi?=
- =?utf-8?B?UVJVZ0hwcE5Qd0V4allNQXkrNzdIbi96bGE4Z3pLN2Q1SDk4MWtvbUNjY1ky?=
- =?utf-8?B?UFhnY2EwcW1iYXhFTFVEWjlkeUt6dy9RRXhyVHBNdGxtTDVLdDZYZW8yYXZn?=
- =?utf-8?B?RHgrWFdOM0FTWnBuSk11aE1QTXNtTHI2c3AvbUpnWW05WHhLWDU2aXByb2U5?=
- =?utf-8?B?bmlDZXk4Yld3SXZYY284TU1HSXh4eUo5QjRQWmErMlgzbVFHS0F0bzhtVXhE?=
- =?utf-8?B?eVg3Y3phUmlQR1FBV3p2Z3Zjc3hGb2pqdXpXekxlQzM1NERJQ3N1NWd1bFhD?=
- =?utf-8?B?OEFFc1BvOXYyU0E0YkhpNFd1WjErVzRhcllRaDlEUXlibnFsc0p6T2dCenZl?=
- =?utf-8?B?NFQvdTRSYVBOVnZIOHdNc1VrUzJuYUgzVVVoYVhHcTZxdXpDMDEzWXozR3BX?=
- =?utf-8?B?TW1yczFSTW40bXpsZDhIYnpBaW81TjFKdTBmaklmd200RGhWOGZDWTZvdkNk?=
- =?utf-8?B?WUJwTFlVSHpTaS9VZTRVanl6VXcvYS9CMldVaHBpbDU3c296Ulp2WWxZekg0?=
- =?utf-8?B?bHc5Y2xWSXJ5UUYwQXV2OUFaTWxXZFh0U2p5L1orUmpvb2MvM3JpQ1BlVnFX?=
- =?utf-8?B?dmswanBySkxRcVdNK2Y3NThsRUFLVzcwUWZNbmc0SmwySFVKd2xHQUEwRUxI?=
- =?utf-8?B?SHpFVDV2b3Z3d2hWWkczZXRwSDFkNVN1MnF4TDczQlo3VjZ0T252cFJCMHJY?=
- =?utf-8?B?ZXQza1BtQVBYcjF0dWVhZFBCRGNKODY4ZFZnZU95eDlreVRpVFh4ZW9QQkhk?=
- =?utf-8?B?Y3FGQWRsOGV1QmNjLzRVbVZRc2ZKbmNJSVFnVDhYbEhBOGpDN1Jzd1ZzSDkw?=
- =?utf-8?B?R01laHlJb3RYdGUwcTQ3MU9iVnhoTGdRdlZKZ0JETmxqWmpEcmljWkZCMkhz?=
- =?utf-8?B?UitZdHowODQwRnlFMUNmRVlRT0VYdDNrR05nVTdBSG14M0x6bjh2SHB6VUNj?=
- =?utf-8?B?NGMzSUFNZC9lcDVCU3FyTm11Z2xZTStnaUUrSm9rQ3pOSWc1WHNHQ3VzV2lx?=
- =?utf-8?B?aFg5RjgrN2JHSWRoVWFGUko0VG11L1pjM2tIYVpJcVMveGdhdlJYU2ppaTJK?=
- =?utf-8?B?Y1JYaEc4RXMrRmJBd0R2RFlVZ0dFdHlNRXZDWDRzN3pGQWc9PQ==?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:JH0PR06MB6849.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016)(43062017);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?ejJVc3FMZnNMaHZDcXJZcDY1QzhvOU1BbDRMdFZXWEZ5ODJRWHozdGhPZ1JQ?=
- =?utf-8?B?dVNocUF3VC9RbkV4QkNONThhVnRFZEtJODU5WU5RNkNweWVpTVVwZ1ZZQTFU?=
- =?utf-8?B?MzlsbktTdnRYQlVtNG9KMmpiZUpiUS9hNEhmWGluMS9vMzFUVHI0RldILzI4?=
- =?utf-8?B?ZDhzYThxTHcvbEdPVEQzSzYzNlZKL2pCYmtUWlNydFJUOTVpdFdxckNDL00x?=
- =?utf-8?B?dW15bDJ4ZlB0UXhwWTE5SUw5cm1INXEwQmtoK3JyWXV1bzg5ZHRMSTRVTGJT?=
- =?utf-8?B?a2UvYVdwdHhiOUlrM0hUTmFLeWFnaVIyaVJ6YWJDZmdNWDRCa0d5N0FGaWQ0?=
- =?utf-8?B?NVJqWU5WMGdnd3pwdjZ6ZWZyRVZSdmxzc09MMExyWUR3WFRqSG8xNmVvejJx?=
- =?utf-8?B?MldBc1QyY1dGZ2d3dlMvWGVIYVlxb1NZamRKb3NNRkVCY0Q4VE9kY21mVlZS?=
- =?utf-8?B?RFdxU2ppSEtuZEd4TTA5QjRBNExzRzcyT2sxQk8ySVZvSXV4RWpSRXVzRFo1?=
- =?utf-8?B?UEhrcWNPNGJpUUdERlNqU2xEbmsvVWhVVnFKTDVaUDluSFNVSVM3ZXMyT2th?=
- =?utf-8?B?Z3IwMjNVaWtMT0wvdGVwNUxnSUovVVV6eVdKT05mMlhrTlg2am1RUXRTQ2h1?=
- =?utf-8?B?MzA0c0g3MEREMnl5QlpZdVFROE5PdE5VNlhKY3Zqb0JmTFpaMmVKZ2pSK2xt?=
- =?utf-8?B?dU5hdEt4WnlqVnBZQW44ZFdIUGJ0cENIbWxmVW5wZUpVK0hGR3ZxWUQzQnls?=
- =?utf-8?B?TFFiOW43RXdkQW9SMW0rS0xKMnJWcEVqbEl6bGxJUTJLNGxvWTNWdFVMTllu?=
- =?utf-8?B?NDZrRjA0N3licnI2RTVsVlJzcm9wcVp5VURsMUk4K2pZZjUzQ2h3NHZRWmxm?=
- =?utf-8?B?M2lvV2taMzNuNkJBUXpIcnpjYURuYXp2SVMvSlJBajZwUERZVFFLanZSeHht?=
- =?utf-8?B?WDhNU3BHdkowbmJCT0xWYzN5Q1RMMTBvVSt0Rit5REIvMTRFVVA4Q3NBakR1?=
- =?utf-8?B?RUlMNitFdFlXLzRQZW9uQlA3NmZMV3JtMzdrM0FyWGF3VFNIemh2K2Y0NXR4?=
- =?utf-8?B?L0RoMHdvUzVsREpXWDd0SDNFdnlUUlZDTCt2MnE5d2xZWUxwc2w1MGdDOHdG?=
- =?utf-8?B?bzIwWFlsZzQ0NGp4QmU3eGJBbm5DcEl3SHVrTE1ZSVBsWHlSdU5QS0RmeERN?=
- =?utf-8?B?UDRyOGxUSVZFNFNKTGJHV1dxYXU4TXR3TkVjMVNnY1BCK3R0L2lrOW9DU0JP?=
- =?utf-8?B?RnlJVFJySlVrY09PbTVOa0l1c2xyN2tGd0RoNEVDTEhqeC9WQmxCZjBSUytq?=
- =?utf-8?B?Q0l6N09aSkZzQkxyc1dwa3haVmlBQzhDUlMzQzc2N0JkRUo1Ym92QmFVTGJN?=
- =?utf-8?B?ZG5RckRad2krTWQ1VDRTU1lxTGdWckRSdVNzbTNIdm5UQy9NRmhkM3ZXVXNp?=
- =?utf-8?B?Rmc0aGQ3SWt4aDd1TkIrR2tLdlkwYkVVNURSTDA0ME1zaWl3REQyV0hqT0ZH?=
- =?utf-8?B?OC85M0FzdU1YcVdVb3ZRaEduYjRlQlowTklQcmdEY2RJOThUcU4wUjJ4QU9P?=
- =?utf-8?B?dXBwVWdnakZHRmc4RHZNSHRXOUtsdEl2eSt2QVc2eHo3MGNGKzBBQkJSZ3ps?=
- =?utf-8?B?bXE2Q0RjbEpTbmUrNVY5WGxCbzJaMERKTVNHMm9CSlRnbkptRys0ZHFGVW9V?=
- =?utf-8?B?QmF5UWxuakVVK3M0NnJ6MFlaMHllTVJpM25EdkR3UU5zb25waUNDMk9XbitW?=
- =?utf-8?B?TmpjMDArbE9GTUZHTXEvTVg1WEN4MzFlakxqVVlSM0MrMmRna3Fwa2wvN25R?=
- =?utf-8?B?Q2dzb05HV0tHZElCMDlwQUxPWWp1c05qbktXTWpMWFdFeW9KSTM1QmZ6cjB6?=
- =?utf-8?B?aU9CWUpsWXM2ZlJLaXZiV1F5RzNPb0llbFZ1THB2OHVkdU9Qc3lpU29VUStr?=
- =?utf-8?B?UWRxUmZtQnBjUlVoUnhMNlZvVXpxYTdEUFFnTzdTQUJIS21GNGhkZWxKcHNi?=
- =?utf-8?B?K21FL0FGa0UzMG83UnpIYW9BbXpLRHhaSzJrMWc0b1doQmdmekxVVkR0WlBu?=
- =?utf-8?B?WVpjUElqd2FmMUFMN2FsR2s0UlVTY3ZJUDJYYk96UmJkZG82cW5QOWM5N25m?=
- =?utf-8?Q?nky/LTdnuY3BZQECO68OeNV0u?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b2686242-a7fa-4821-d12f-08dcb2156140
-X-MS-Exchange-CrossTenant-AuthSource: JH0PR06MB6849.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Aug 2024 10:33:27.6474
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BbudOa4mvgHWrRbw1RBjYXfE59jc82ck80P/fyv9VpWIdKmy1FGRW1rgUXm9Vbopn/lzafG4qNp2g5hFUorUwA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB5099
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAER6q2YC/2XRS04DMQwG4KtUWRPkOG9W3AOxyMNpR9CZKlONQ
+ FXvTqYImmqUla18/q3kwmaqA83sZXdhlZZhHqaxFQKediwdwrgnPuTWYAgooR0e6tEovk8zJyl
+ EiJCdRc/a/Rhm4rGGMR1WcT6e1u6pUhm+bhFv760+DPN5qt+3xEWs3d/ZVphu9iI48Fi0scXLG
+ IN5/aA60ufzVPdsHbNgR1H1FBvNCZPISiWkuKGyo1L0VDaaci6+eAfZuw1Vd+rA9lQ1alwqQba
+ VwfgN1R1F7Klu1FMRTuRsJKoNNf9UAPiemkatI60zhaBy3lB7p+Ix1TaKIJJyMmZr9Ya6P6oAH
+ z5+cesz+ULJWmMllQ31d2pQ99Q3CsVIpYyPrsADvV6vP8PnJ9KSAgAA
+To: Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+ Andrew Morton <akpm@linux-foundation.org>, Marc Zyngier <maz@kernel.org>, 
+ Oliver Upton <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, 
+ Suzuki K Poulose <suzuki.poulose@arm.com>, Arnd Bergmann <arnd@arndb.de>, 
+ Oleg Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, 
+ Shuah Khan <shuah@kernel.org>, 
+ "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>, 
+ Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>, 
+ Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>
+Cc: "H.J. Lu" <hjl.tools@gmail.com>, 
+ Paul Walmsley <paul.walmsley@sifive.com>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ Florian Weimer <fweimer@redhat.com>, Christian Brauner <brauner@kernel.org>, 
+ Thiago Jung Bauermann <thiago.bauermann@linaro.org>, 
+ Ross Burton <ross.burton@arm.com>, linux-arm-kernel@lists.infradead.org, 
+ linux-doc@vger.kernel.org, kvmarm@lists.linux.dev, 
+ linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org, 
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
+ Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.15-dev-37811
+X-Developer-Signature: v=1; a=openpgp-sha256; l=15062; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=U475xcRFgFiU1cZUXJj+PiDWuwAev7AQsTZb3LnNrZw=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBmq4YFod/Z3Lomd1dmbOLUlpMn226o7HlKmnZgpc+h
+ 617q/OuJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZquGBQAKCRAk1otyXVSH0GThB/
+ 9DcZ0LVm1TrH/yltJ2xo39dYNzAAqjO4xMq8AEsUq/HzuoMuVA7IW9UWoUo2qEIEbOExnQQJJjWm9Z
+ Al2WXa67Srrj+BGHvnT2LsrWUiUIP+Xj3njGeF8aTzPHs1hFIFbYJh0KxapyaUmOPHxyXpRsqBYXAc
+ 2gjySuAYoowEGMWSm+Lj3siz2Jnx2/Jk1eNV13jFY3lV+Ti3FflbiaVLSJmZDRBoNLWJI4hA4Zorti
+ kHNBLIutfC81Jnls6AzEKyBCUHqnvvOL3drVxmLgQK1jfN9LawqKWvVFUkw/5XyRjQyVkZ6nrUJ5Un
+ 8Ua/EkapH4BvuopBeTOKExYBymHhw8
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
+The arm64 Guarded Control Stack (GCS) feature provides support for
+hardware protected stacks of return addresses, intended to provide
+hardening against return oriented programming (ROP) attacks and to make
+it easier to gather call stacks for applications such as profiling.
 
+When GCS is active a secondary stack called the Guarded Control Stack is
+maintained, protected with a memory attribute which means that it can
+only be written with specific GCS operations.  The current GCS pointer
+can not be directly written to by userspace.  When a BL is executed the
+value stored in LR is also pushed onto the GCS, and when a RET is
+executed the top of the GCS is popped and compared to LR with a fault
+being raised if the values do not match.  GCS operations may only be
+performed on GCS pages, a data abort is generated if they are not.
 
-在 2024/8/1 15:36, Barry Song 写道:
-> On Thu, Aug 1, 2024 at 2:31 PM zhiguojiang <justinjiang@vivo.com> wrote:
->>
->> 在 2024/8/1 0:17, Andrew Morton 写道:
->>> [Some people who received this message don't often get email from akpm@linux-foundation.org. Learn why this is important at https://aka.ms/LearnAboutSenderIdentification ]
->>>
->>> On Wed, 31 Jul 2024 21:33:14 +0800 Zhiguo Jiang <justinjiang@vivo.com> wrote:
->>>
->>>> The main reasons for the prolonged exit of a background process is the
->>> The kernel really doesn't have a concept of a "background process".
->>> It's a userspace concept - perhaps "the parent process isn't waiting on
->>> this process via wait()".
->>>
->>> I assume here you're referring to an Android userspace concept?  I
->>> expect that when Android "backgrounds" a process, it does lots of
->>> things to that process.  Perhaps scheduling priority, perhaps
->>> alteration of various MM tunables, etc.
->>>
->>> So rather than referring to "backgrounding" it would be better to
->>> identify what tuning alterations are made to such processes to bring
->>> about this behavior.
->> Hi Andrew Morton,
->>
->> Thank you for your review and comments.
->>
->> You are right. The "background process" here refers to the process
->> corresponding to an Android application switched to the background.
->> In fact, this patch is applicable to any exiting process.
->>
->> The further explaination the concept of "multiple exiting processes",
->> is that it refers to different processes owning independent mm rather
->> than sharing the same mm.
->>
->> I will use "mm" to describe process instead of "background" in next
->> version.
->>>> time-consuming release of its swap entries. The proportion of swap memory
->>>> occupied by the background process increases with its duration in the
->>>> background, and after a period of time, this value can reach 60% or more.
->>> Again, what is it about the tuning of such processes which causes this
->>> behavior?
->> When system is low memory, memory recycling will be trigged, where
->> anonymous folios in the process will be continuously reclaimed, resulting
->> in an increase of swap entries occupies by this process. So when the
->> process is killed, it takes more time to release it's swap entries over
->> time.
->>
->> Testing datas of process occuping different physical memory sizes at
->> different time points:
->> Testing Platform: 8GB RAM
->> Testing procedure:
->> After booting up, start 15 processes first, and then observe the
->> physical memory size occupied by the last launched process at
->> different time points.
->>
->> Example:
->> The process launched last: com.qiyi.video
->> |  memory type  |  0min  |  1min  | BG 5min | BG 10min | BG 15min |
->> -------------------------------------------------------------------
->> |     VmRSS(KB) | 453832 | 252300 |  204364 |   199944 |  199748  |
->> |   RssAnon(KB) | 247348 |  99296 |   71268 |    67808 |   67660  |
->> |   RssFile(KB) | 205536 | 152020 |  132144 |   131184 |  131136  |
->> |  RssShmem(KB) |   1048 |    984 |     952 |     952  |     952  |
->> |    VmSwap(KB) | 202692 | 334852 |  362880 |   366340 |  366488  |
->> | Swap ratio(%) | 30.87% | 57.03% |  63.97% |   64.69% |  64.72%  |
->> min - minute.
->>
->> Based on the above datas, we can know that the swap ratio occupied by
->> the process gradually increases over time.
-> If I understand correctly, during zap_pte_range(), if 64.72% of the anonymous
-> pages are actually swapped out, you end up zapping 100 PTEs but only freeing
-> 36.28 pages of memory. By doing this asynchronously, you prevent the
-> swap_release operation from blocking the process of zapping normal
-> PTEs that are mapping to memory.
->
-> Could you provide data showing the improvements after implementing
-> asynchronous freeing of swap entries?
-Hi Barry,
+The combination of hardware enforcement and lack of extra instructions
+in the function entry and exit paths should result in something which
+has less overhead and is more difficult to attack than a purely software
+implementation like clang's shadow stacks.
 
-Your understanding is correct. From the perspective of the benefits of
-releasing the physical memory occupied by the exiting process, an
-asynchronous kworker releasing swap entries can indeed accelerate
-the exiting process to release its pte_present memory (e.g. file and
-anonymous folio) faster.
+This series implements support for use of GCS by userspace, along with
+support for use of GCS within KVM guests.  It does not enable use of GCS
+by either EL1 or EL2, this will be implemented separately.  Executables
+are started without GCS and must use a prctl() to enable it, it is
+expected that this will be done very early in application execution by
+the dynamic linker or other startup code.  For dynamic linking this will
+be done by checking that everything in the executable is marked as GCS
+compatible.
 
-In addition, from the perspective of CPU resources, for scenarios where
-multiple exiting processes are running simultaneously, an asynchronous
-kworker instead of multiple exiting processes is used to release swap
-entries can release more CPU core resources for the current non-exiting
-and important processes to use, thereby improving the user experience
-of the current non-exiting and important processes. I think this is the
-main contribution of this modification.
+x86 has an equivalent feature called shadow stacks, this series depends
+on the x86 patches for generic memory management support for the new
+guarded/shadow stack page type and shares APIs as much as possible.  As
+there has been extensive discussion with the wider community around the
+ABI for shadow stacks I have as far as practical kept implementation
+decisions close to those for x86, anticipating that review would lead to
+similar conclusions in the absence of strong reasoning for divergence.
 
-Example:
-When there are multiple processes and the system memory is low, if
-the camera processes are started at this time, it will trigger the
-instantaneous killing of many processes because the camera processes
-need to alloc a large amount of memory, resulting in multiple exiting
-processes running simultaneously. These exiting processes will compete
-with the current camera processes for CPU resources, and the release of
-physical memory occupied by multiple exiting processes due to scheduling
-is slow, ultimately affecting the slow execution of the camera process.
+The main divergence I am concious of is that x86 allows shadow stack to
+be enabled and disabled repeatedly, freeing the shadow stack for the
+thread whenever disabled, while this implementation keeps the GCS
+allocated after disable but refuses to reenable it.  This is to avoid
+races with things actively walking the GCS during a disable, we do
+anticipate that some systems will wish to disable GCS at runtime but are
+not aware of any demand for subsequently reenabling it.
 
-By using this optimization modification, multiple exiting processes can
-quickly exit, freeing up their CPU resources and physical memory of
-pte_preset, improving the running speed of camera processes.
+x86 uses an arch_prctl() to manage enable and disable, since only x86
+and S/390 use arch_prctl() a generic prctl() was proposed[1] as part of a
+patch set for the equivalent RISC-V Zicfiss feature which I initially
+adopted fairly directly but following review feedback has been revised
+quite a bit.
 
-Testing Platform: 8GB RAM
-Testing procedure:
-After restarting the machine, start 15 app processes first, and then
-start the camera app processes, we monitor the cold start and preview
-time datas of the camera app processes.
+We currently maintain the x86 pattern of implicitly allocating a shadow
+stack for threads started with shadow stack enabled, there has been some
+discussion of removing this support and requiring the use of clone3()
+with explicit allocation of shadow stacks instead.  I have no strong
+feelings either way, implicit allocation is not really consistent with
+anything else we do and creates the potential for errors around thread
+exit but on the other hand it is existing ABI on x86 and minimises the
+changes needed in userspace code.
 
-Test datas of camera processes cold start time (unit: millisecond):
-|  seq   |   1  |   2  |   3  |   4  |   5  |   6  | average |
-| before | 1498 | 1476 | 1741 | 1337 | 1367 | 1655 |   1512  |
-| after  | 1396 | 1107 | 1136 | 1178 | 1071 | 1339 |   1204  |
+glibc and bionic changes using this ABI have been implemented and
+tested.  Headless Android systems have been validated and Ross Burton
+has used this code has been used to bring up a Yocto system with GCS
+enabed as standard, a test implementation of V8 support has also been
+done.
 
-Test datas of camera processes preview time (unit: millisecond):
-|  seq   |   1  |   2  |   3  |   4  |   5  |   6  | average |
-| before |  267 |  402 |  504 |  513 |  161 |  265 |   352   |
-| after  |  188 |  223 |  301 |  203 |  162 |  154 |   205   |
+There is an open issue with support for CRIU, on x86 this required the
+ability to set the GCS mode via ptrace.  This series supports
+configuring mode bits other than enable/disable via ptrace but it needs
+to be confirmed if this is sufficient.
 
-Base on the average of the six sets of test datas above, we can see that
-the benefit datas of the modified patch:
-1. The cold start time of camera app processes has reduced by about 20%.
-2. The preview time of camera app processes has reduced by about 42%.
->
->>>> Additionally, the relatively lengthy path for releasing swap entries
->>>> further contributes to the longer time required for the background process
->>>> to release its swap entries.
->>>>
->>>> In the multiple background applications scenario, when launching a large
->>>> memory application such as a camera, system may enter a low memory state,
->>>> which will triggers the killing of multiple background processes at the
->>>> same time. Due to multiple exiting processes occupying multiple CPUs for
->>>> concurrent execution, the current foreground application's CPU resources
->>>> are tight and may cause issues such as lagging.
->>>>
->>>> To solve this problem, we have introduced the multiple exiting process
->>>> asynchronous swap memory release mechanism, which isolates and caches
->>>> swap entries occupied by multiple exit processes, and hands them over
->>>> to an asynchronous kworker to complete the release. This allows the
->>>> exiting processes to complete quickly and release CPU resources. We have
->>>> validated this modification on the products and achieved the expected
->>>> benefits.
->>> Dumb question: why can't this be done in userspace?  The exiting
->>> process does fork/exit and lets the child do all this asynchronous freeing?
->> The logic optimization for kernel releasing swap entries cannot be
->> implemented in userspace. The multiple exiting processes here own
->> their independent mm, rather than parent and child processes share the
->> same mm. Therefore, when the kernel executes multiple exiting process
->> simultaneously, they will definitely occupy multiple CPU core resources
->> to complete it.
->>>> It offers several benefits:
->>>> 1. Alleviate the high system cpu load caused by multiple exiting
->>>>      processes running simultaneously.
->>>> 2. Reduce lock competition in swap entry free path by an asynchronous
->>>>      kworker instead of multiple exiting processes parallel execution.
->>> Why is lock contention reduced?  The same amount of work needs to be
->>> done.
->> When multiple CPU cores run to release the different swap entries belong
->> to different exiting processes simultaneously, cluster lock or swapinfo
->> lock may encounter lock contention issues, and while an asynchronous
->> kworker that only occupies one CPU core is used to complete this work,
->> it can reduce the probability of lock contention and free up the
->> remaining CPU core resources for other non-exiting processes to use.
->>>> 3. Release memory occupied by exiting processes more efficiently.
->>> Probably it's slightly less efficient.
->> We observed that using an asynchronous kworker can result in more free
->> memory earlier. When multiple processes exit simultaneously, due to CPU
->> core resources competition, these exiting processes remain in a
->> runnable state for a long time and cannot release their occupied memory
->> resources timely.
->>> There are potential problems with this approach of passing work to a
->>> kernel thread:
->>>
->>> - The process will exit while its resources are still allocated.  But
->>>     its parent process assumes those resources are now all freed and the
->>>     parent process then proceeds to allocate resources.  This results in
->>>     a time period where peak resource consumption is higher than it was
->>>     before such a change.
->> - I don't think this modification will cause such a problem. Perhaps I
->>     haven't fully understood your meaning yet. Can you give me a specific
->>     example?
-> Normally, after completing zap_pte_range, your swap slots are returned to
-> the swap file, except for a few slot caches. However, with the asynchronous
-> approach, it means that even after your process has completely exited,
->   some swap slots might still not be released to the system. This could
-> potentially starve other processes waiting for swap slots to perform
-> swap-outs. I assume this isn't a critical issue for you because, in the
-> case of killing processes, freeing up memory is more important than
-> releasing swap entries?
-  I did not encounter issues caused by the slow release of swap entries
-by asynchronous kworker during our testing. Normally, asynchronous
-kworker can also release cached swap entries in a short period of time.
-Of course, if the system allows, it is necessary to increase the running
-priority of the asynchronous kworker appropriately in order to release
-swap entries faster, which is also beneficial for the system.
+The series depends on support for shadow stacks in clone3(), that series
+includes the addition of ARCH_HAS_USER_SHADOW_STACK.
 
-The swap-out datas for swap entries is also compressed and stored in the
-zram memory space, so it is relatively important to release the zram
-memory space corresponding to swap entries as soon as possible.
->
->>> - If all CPUs are running in userspace with realtime policy
->>>     (SCHED_FIFO, for example) then the kworker thread will not run,
->>>     indefinitely.
->> - In my clumsy understanding, the execution priority of kernel threads
->>     should not be lower than that of the exiting process, and the
->>     asynchronous kworker execution should only be triggered when the
->>     process exits. The exiting process should not be set to SCHED_LFO,
->>     so when the exiting process is executed, the asynchronous kworker
->>     should also have opportunity to get timely execution.
->>> - Work which should have been accounted to the exiting process will
->>>     instead go unaccounted.
->> - You are right, the statistics of process exit time may no longer be
->>     complete.
->>> So please fully address all these potential issues.
->> Thanks
->> Zhiguo
->>
-> Thanks
-> Barry
-Thanks
-Zhiguo
+   https://lore.kernel.org/r/20240731-clone3-shadow-stack-v7-0-a9532eebfb1d@kernel.org
+
+You can see a branch with the full set of dependencies against Linus'
+tree at:
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git arm64-gcs
+
+[1] https://lore.kernel.org/lkml/20230213045351.3945824-1-debug@rivosinc.com/
+
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+Changes in v10:
+- Fix issues with THP.
+- Tighten up requirements for initialising GCSCR*.
+- Only generate GCS signal frames for threads using GCS.
+- Only context switch EL1 GCS registers if S1PIE is enabled.
+- Move context switch of GCSCRE0_EL1 to EL0 context switch.
+- Make GCS registers unconditionally visible to userspace.
+- Use FHU infrastructure.
+- Don't change writability of ID_AA64PFR1_EL1 for KVM.
+- Remove unused arguments from alloc_gcs().
+- Typo fixes.
+- Link to v9: https://lore.kernel.org/r/20240625-arm64-gcs-v9-0-0f634469b8f0@kernel.org
+
+Changes in v9:
+- Rebase onto v6.10-rc3.
+- Restructure and clarify memory management fault handling.
+- Fix up basic-gcs for the latest clone3() changes.
+- Convert to newly merged KVM ID register based feature configuration.
+- Fixes for NV traps.
+- Link to v8: https://lore.kernel.org/r/20240203-arm64-gcs-v8-0-c9fec77673ef@kernel.org
+
+Changes in v8:
+- Invalidate signal cap token on stack when consuming.
+- Typo and other trivial fixes.
+- Don't try to use process_vm_write() on GCS, it intentionally does not
+  work.
+- Fix leak of thread GCSs.
+- Rebase onto latest clone3() series.
+- Link to v7: https://lore.kernel.org/r/20231122-arm64-gcs-v7-0-201c483bd775@kernel.org
+
+Changes in v7:
+- Rebase onto v6.7-rc2 via the clone3() patch series.
+- Change the token used to cap the stack during signal handling to be
+  compatible with GCSPOPM.
+- Fix flags for new page types.
+- Fold in support for clone3().
+- Replace copy_to_user_gcs() with put_user_gcs().
+- Link to v6: https://lore.kernel.org/r/20231009-arm64-gcs-v6-0-78e55deaa4dd@kernel.org
+
+Changes in v6:
+- Rebase onto v6.6-rc3.
+- Add some more gcsb_dsync() barriers following spec clarifications.
+- Due to ongoing discussion around clone()/clone3() I've not updated
+  anything there, the behaviour is the same as on previous versions.
+- Link to v5: https://lore.kernel.org/r/20230822-arm64-gcs-v5-0-9ef181dd6324@kernel.org
+
+Changes in v5:
+- Don't map any permissions for user GCSs, we always use EL0 accessors
+  or use a separate mapping of the page.
+- Reduce the standard size of the GCS to RLIMIT_STACK/2.
+- Enforce a PAGE_SIZE alignment requirement on map_shadow_stack().
+- Clarifications and fixes to documentation.
+- More tests.
+- Link to v4: https://lore.kernel.org/r/20230807-arm64-gcs-v4-0-68cfa37f9069@kernel.org
+
+Changes in v4:
+- Implement flags for map_shadow_stack() allowing the cap and end of
+  stack marker to be enabled independently or not at all.
+- Relax size and alignment requirements for map_shadow_stack().
+- Add more blurb explaining the advantages of hardware enforcement.
+- Link to v3: https://lore.kernel.org/r/20230731-arm64-gcs-v3-0-cddf9f980d98@kernel.org
+
+Changes in v3:
+- Rebase onto v6.5-rc4.
+- Add a GCS barrier on context switch.
+- Add a GCS stress test.
+- Link to v2: https://lore.kernel.org/r/20230724-arm64-gcs-v2-0-dc2c1d44c2eb@kernel.org
+
+Changes in v2:
+- Rebase onto v6.5-rc3.
+- Rework prctl() interface to allow each bit to be locked independently.
+- map_shadow_stack() now places the cap token based on the size
+  requested by the caller not the actual space allocated.
+- Mode changes other than enable via ptrace are now supported.
+- Expand test coverage.
+- Various smaller fixes and adjustments.
+- Link to v1: https://lore.kernel.org/r/20230716-arm64-gcs-v1-0-bf567f93bba6@kernel.org
+
+---
+Mark Brown (40):
+      arm64/mm: Restructure arch_validate_flags() for extensibility
+      prctl: arch-agnostic prctl for shadow stack
+      mman: Add map_shadow_stack() flags
+      arm64: Document boot requirements for Guarded Control Stacks
+      arm64/gcs: Document the ABI for Guarded Control Stacks
+      arm64/sysreg: Add definitions for architected GCS caps
+      arm64/gcs: Add manual encodings of GCS instructions
+      arm64/gcs: Provide put_user_gcs()
+      arm64/gcs: Provide basic EL2 setup to allow GCS usage at EL0 and EL1
+      arm64/cpufeature: Runtime detection of Guarded Control Stack (GCS)
+      arm64/mm: Allocate PIE slots for EL0 guarded control stack
+      mm: Define VM_SHADOW_STACK for arm64 when we support GCS
+      arm64/mm: Map pages for guarded control stack
+      KVM: arm64: Manage GCS access and registers for guests
+      arm64/idreg: Add overrride for GCS
+      arm64/hwcap: Add hwcap for GCS
+      arm64/traps: Handle GCS exceptions
+      arm64/mm: Handle GCS data aborts
+      arm64/gcs: Context switch GCS state for EL0
+      arm64/gcs: Ensure that new threads have a GCS
+      arm64/gcs: Implement shadow stack prctl() interface
+      arm64/mm: Implement map_shadow_stack()
+      arm64/signal: Set up and restore the GCS context for signal handlers
+      arm64/signal: Expose GCS state in signal frames
+      arm64/ptrace: Expose GCS via ptrace and core files
+      arm64: Add Kconfig for Guarded Control Stack (GCS)
+      kselftest/arm64: Verify the GCS hwcap
+      kselftest: Provide shadow stack enable helpers for arm64
+      selftests/clone3: Enable arm64 shadow stack testing
+      kselftest/arm64: Add GCS as a detected feature in the signal tests
+      kselftest/arm64: Add framework support for GCS to signal handling tests
+      kselftest/arm64: Allow signals tests to specify an expected si_code
+      kselftest/arm64: Always run signals tests with GCS enabled
+      kselftest/arm64: Add very basic GCS test program
+      kselftest/arm64: Add a GCS test program built with the system libc
+      kselftest/arm64: Add test coverage for GCS mode locking
+      kselftest/arm64: Add GCS signal tests
+      kselftest/arm64: Add a GCS stress test
+      kselftest/arm64: Enable GCS for the FP stress tests
+      KVM: selftests: arm64: Add GCS registers to get-reg-list
+
+ Documentation/admin-guide/kernel-parameters.txt    |   3 +
+ Documentation/arch/arm64/booting.rst               |  30 +
+ Documentation/arch/arm64/elf_hwcaps.rst            |   2 +
+ Documentation/arch/arm64/gcs.rst                   | 233 +++++++
+ Documentation/arch/arm64/index.rst                 |   1 +
+ Documentation/filesystems/proc.rst                 |   2 +-
+ arch/arm64/Kconfig                                 |  20 +
+ arch/arm64/include/asm/cpufeature.h                |   6 +
+ arch/arm64/include/asm/el2_setup.h                 |  29 +
+ arch/arm64/include/asm/esr.h                       |  28 +-
+ arch/arm64/include/asm/exception.h                 |   2 +
+ arch/arm64/include/asm/gcs.h                       | 107 +++
+ arch/arm64/include/asm/hwcap.h                     |   1 +
+ arch/arm64/include/asm/kvm_host.h                  |   8 +
+ arch/arm64/include/asm/mman.h                      |  23 +-
+ arch/arm64/include/asm/pgtable-prot.h              |  14 +-
+ arch/arm64/include/asm/processor.h                 |   7 +
+ arch/arm64/include/asm/sysreg.h                    |  20 +
+ arch/arm64/include/asm/uaccess.h                   |  40 ++
+ arch/arm64/include/asm/vncr_mapping.h              |   2 +
+ arch/arm64/include/uapi/asm/hwcap.h                |   1 +
+ arch/arm64/include/uapi/asm/ptrace.h               |   8 +
+ arch/arm64/include/uapi/asm/sigcontext.h           |   9 +
+ arch/arm64/kernel/cpufeature.c                     |  12 +
+ arch/arm64/kernel/cpuinfo.c                        |   1 +
+ arch/arm64/kernel/entry-common.c                   |  23 +
+ arch/arm64/kernel/pi/idreg-override.c              |   2 +
+ arch/arm64/kernel/process.c                        |  85 +++
+ arch/arm64/kernel/ptrace.c                         |  59 ++
+ arch/arm64/kernel/signal.c                         | 240 ++++++-
+ arch/arm64/kernel/traps.c                          |  11 +
+ arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h         |  49 +-
+ arch/arm64/kvm/sys_regs.c                          |  12 +
+ arch/arm64/mm/Makefile                             |   1 +
+ arch/arm64/mm/fault.c                              |  42 ++
+ arch/arm64/mm/gcs.c                                | 324 +++++++++
+ arch/arm64/mm/mmap.c                               |  10 +-
+ arch/arm64/tools/cpucaps                           |   1 +
+ arch/x86/include/uapi/asm/mman.h                   |   3 -
+ include/linux/mm.h                                 |  16 +-
+ include/uapi/asm-generic/mman.h                    |   4 +
+ include/uapi/linux/elf.h                           |   1 +
+ include/uapi/linux/prctl.h                         |  22 +
+ kernel/sys.c                                       |  30 +
+ tools/testing/selftests/arm64/Makefile             |   2 +-
+ tools/testing/selftests/arm64/abi/hwcap.c          |  19 +
+ tools/testing/selftests/arm64/fp/assembler.h       |  15 +
+ tools/testing/selftests/arm64/fp/fpsimd-test.S     |   2 +
+ tools/testing/selftests/arm64/fp/sve-test.S        |   2 +
+ tools/testing/selftests/arm64/fp/za-test.S         |   2 +
+ tools/testing/selftests/arm64/fp/zt-test.S         |   2 +
+ tools/testing/selftests/arm64/gcs/.gitignore       |   5 +
+ tools/testing/selftests/arm64/gcs/Makefile         |  24 +
+ tools/testing/selftests/arm64/gcs/asm-offsets.h    |   0
+ tools/testing/selftests/arm64/gcs/basic-gcs.c      | 357 ++++++++++
+ tools/testing/selftests/arm64/gcs/gcs-locking.c    | 200 ++++++
+ .../selftests/arm64/gcs/gcs-stress-thread.S        | 311 +++++++++
+ tools/testing/selftests/arm64/gcs/gcs-stress.c     | 530 +++++++++++++++
+ tools/testing/selftests/arm64/gcs/gcs-util.h       | 100 +++
+ tools/testing/selftests/arm64/gcs/libc-gcs.c       | 736 +++++++++++++++++++++
+ tools/testing/selftests/arm64/signal/.gitignore    |   1 +
+ .../testing/selftests/arm64/signal/test_signals.c  |  17 +-
+ .../testing/selftests/arm64/signal/test_signals.h  |   6 +
+ .../selftests/arm64/signal/test_signals_utils.c    |  32 +-
+ .../selftests/arm64/signal/test_signals_utils.h    |  39 ++
+ .../arm64/signal/testcases/gcs_exception_fault.c   |  62 ++
+ .../selftests/arm64/signal/testcases/gcs_frame.c   |  88 +++
+ .../arm64/signal/testcases/gcs_write_fault.c       |  67 ++
+ .../selftests/arm64/signal/testcases/testcases.c   |   7 +
+ .../selftests/arm64/signal/testcases/testcases.h   |   1 +
+ tools/testing/selftests/clone3/clone3_selftests.h  |  26 +
+ tools/testing/selftests/ksft_shstk.h               |  37 ++
+ tools/testing/selftests/kvm/aarch64/get-reg-list.c |  28 +
+ 73 files changed, 4222 insertions(+), 40 deletions(-)
+---
+base-commit: 2d2c15fd64fcaba525a96e3198e4a4732680a49e
+change-id: 20230303-arm64-gcs-e311ab0d8729
+
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
 
 
