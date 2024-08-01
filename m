@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-5814-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5815-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F4E19443D3
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Aug 2024 08:17:03 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D00FE9443E1
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Aug 2024 08:17:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8F05C282199
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Aug 2024 06:17:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3F340B24258
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Aug 2024 06:17:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 962CA189B87;
-	Thu,  1 Aug 2024 06:12:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E72A916EC0F;
+	Thu,  1 Aug 2024 06:12:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hc6uVGpe"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L+wJRNZM"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51E2615747D;
-	Thu,  1 Aug 2024 06:12:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A17DA1586C7;
+	Thu,  1 Aug 2024 06:12:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722492738; cv=none; b=GaNGGknKBAsAdJPed3SfYmx3UKFsk+vdX2YH+GtH8+ubfCAOx7zcgYv/NuKfqgKTTqqGJKxZik08FDvZN40h0Zm4lTHzmWVC+Kgkfo5QC3Qh6WPG+6gShXBCQ3xhNqOy56sp20IpM1XHDi2oYx7IY7VysrsXibHk0URASoygzOE=
+	t=1722492749; cv=none; b=d4lNatcfLMts12dPfduqwa5QavwcTK45YYK0nq1ge++CmudJssvnL994qmNlXh2lB97aPhTagVNyMJrhCu+LRg9Qpy21SQYBF1F9iGK3dtCKDasVkjxRp4bHTAAzRnG8y0THI09HSHDaI3BY4y/MJUryIX+h5E4UBn+r/eJm/+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722492738; c=relaxed/simple;
-	bh=6A0wIF55cySeIy8NiLF4qmp7wlH9rgdcaWMh1AJbYRs=;
+	s=arc-20240116; t=1722492749; c=relaxed/simple;
+	bh=nydmRjvUm2d1wafFnDPFYAA7CHVPdBf8ubFwxDVp0cs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IC+uE0yYUvNZBDUilwUX15xaLhCiQYNTVk84uZFALwl7fHlxiOvvCruj7epi2ggiZEpETOBxA6N+AeJ2HpzG0sinGXh4CrvGLMXI7OCAiQOOnNFY3JTGGVFQhMXebML7KsM9k75brQBJJebMxYN8HGLnRttXVDmG6hA8/Pme3bs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hc6uVGpe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFFDBC4AF0E;
-	Thu,  1 Aug 2024 06:12:06 +0000 (UTC)
+	 MIME-Version; b=uP2iceUbAF1hWyzK+ivcGKVKK4nzdbyksbhpGNle+ZubocGzG6S5/bOJcODvMdNPg85XtW9FXVwoXkOjCJEEIBSxksOQKiKrBoRT21mrsjFDhxewBFY3SBw8bxrIIg6X3aE0VeQYJo7l30n1Q1yhomauyuUl5CEHHJ2J+RTUkwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L+wJRNZM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76C5BC4AF0D;
+	Thu,  1 Aug 2024 06:12:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722492737;
-	bh=6A0wIF55cySeIy8NiLF4qmp7wlH9rgdcaWMh1AJbYRs=;
+	s=k20201202; t=1722492749;
+	bh=nydmRjvUm2d1wafFnDPFYAA7CHVPdBf8ubFwxDVp0cs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=hc6uVGpecAI1zFcYZyBHCN2s/v1sSFhd1thfLQmuesBa3xOXeuBfexTBcgntspCRH
-	 dXB1SchKNuC8bKQlbAwfjDcR/i/R9FYc5TJ5kLWs9fy5hJuglptCZXHz4KfwCqVMn/
-	 D3z5FascdFszO7vt9JCmOzaNHDE9uQHhAt2CzNYc06cq0vf5j/lF1yhV/JfQo9cJa5
-	 snhcqRtI22STgHPejW0r2nk5E2leCyeVNpvm4LKvCrY9mJm5mDm1kOwSvp/LHnuPQB
-	 MnCCd+ENB07aC4pEeiqaTkovNCpkidgZsG8teItIZxO7yw7vhFSvMA+BXQz9dveoyT
-	 3yq60hFkjkr8A==
+	b=L+wJRNZMTgJr6I6+BoItXEqAuy+SLsAdRKGs6NjGUx4Qt4YJ1R0Lys5OD7cYUzvSO
+	 BOO0+AD+yKoq9/KU270Kleyml66/HiOyGPrjMzH9rllhP3WUyWkAPYYXB21YVdnJwT
+	 W5DKUVCmky0YMaTD9mZbhN0Yf2Pfp2PA6aiLhCA6EZNdBZ8pI/XFxWsKAtCbKw0pzC
+	 xykfAOcMCZwkqv9qvRJo44kWT5Acm5eTeHUbBiGS0S69GTh1zFhk6Dkh4reMVC+WQ2
+	 0IQD6wa3uxShl0BUnXgFG1VYvj6HG3CyO3plcyprTh8TyPqlgAMs25SQRyUM0D7fbU
+	 eDYxJPB98EVSQ==
 From: Mike Rapoport <rppt@kernel.org>
 To: linux-kernel@vger.kernel.org
 Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
@@ -90,9 +90,9 @@ Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
 	nvdimm@lists.linux.dev,
 	sparclinux@vger.kernel.org,
 	x86@kernel.org
-Subject: [PATCH v3 18/26] mm: move numa_distance and related code from x86 to numa_memblks
-Date: Thu,  1 Aug 2024 09:08:18 +0300
-Message-ID: <20240801060826.559858-19-rppt@kernel.org>
+Subject: [PATCH v3 19/26] mm: introduce numa_emulation
+Date: Thu,  1 Aug 2024 09:08:19 +0300
+Message-ID: <20240801060826.559858-20-rppt@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240801060826.559858-1-rppt@kernel.org>
 References: <20240801060826.559858-1-rppt@kernel.org>
@@ -106,8 +106,7 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-Move code dealing with numa_distance array from arch/x86 to
-mm/numa_memblks.c
+Move numa_emulation codfrom arch/x86 to mm/numa_emulation.c
 
 This code will be later reused by arch_numa.
 
@@ -116,296 +115,163 @@ No functional changes.
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 Tested-by: Zi Yan <ziy@nvidia.com> # for x86_64 and arm64
 ---
- arch/x86/include/asm/numa.h  |   2 -
- arch/x86/mm/numa.c           | 104 -----------------------------------
- arch/x86/mm/numa_internal.h  |   2 -
- include/linux/numa_memblks.h |   4 ++
- mm/numa_memblks.c            | 104 +++++++++++++++++++++++++++++++++++
- 5 files changed, 108 insertions(+), 108 deletions(-)
+ arch/x86/Kconfig                     |  8 --------
+ arch/x86/include/asm/numa.h          | 12 ------------
+ arch/x86/mm/Makefile                 |  1 -
+ arch/x86/mm/numa_internal.h          | 11 -----------
+ include/linux/numa_memblks.h         | 17 +++++++++++++++++
+ mm/Kconfig                           |  8 ++++++++
+ mm/Makefile                          |  1 +
+ {arch/x86/mm => mm}/numa_emulation.c |  4 +---
+ 8 files changed, 27 insertions(+), 35 deletions(-)
+ rename {arch/x86/mm => mm}/numa_emulation.c (99%)
 
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 74afb59c6603..acd9745bf2ae 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -1600,14 +1600,6 @@ config X86_64_ACPI_NUMA
+ 	help
+ 	  Enable ACPI SRAT based node topology detection.
+ 
+-config NUMA_EMU
+-	bool "NUMA emulation"
+-	depends on NUMA
+-	help
+-	  Enable NUMA emulation. A flat machine will be split
+-	  into virtual nodes when booted with "numa=fake=N", where N is the
+-	  number of nodes. This is only useful for debugging.
+-
+ config NODES_SHIFT
+ 	int "Maximum NUMA Nodes (as a power of 2)" if !MAXSMP
+ 	range 1 10
 diff --git a/arch/x86/include/asm/numa.h b/arch/x86/include/asm/numa.h
-index 6e9a50bf03d4..203100500f24 100644
+index 203100500f24..5469d7a7c40f 100644
 --- a/arch/x86/include/asm/numa.h
 +++ b/arch/x86/include/asm/numa.h
-@@ -23,8 +23,6 @@ extern int numa_off;
- extern s16 __apicid_to_node[MAX_LOCAL_APIC];
- extern nodemask_t numa_nodes_parsed __initdata;
+@@ -65,16 +65,4 @@ static inline void init_gi_nodes(void)			{ }
+ void debug_cpumask_set_cpu(unsigned int cpu, int node, bool enable);
+ #endif
  
--extern void __init numa_set_distance(int from, int to, int distance);
+-#ifdef CONFIG_NUMA_EMU
+-int numa_emu_cmdline(char *str);
+-void __init numa_emu_update_cpu_to_node(int *emu_nid_to_phys,
+-					unsigned int nr_emu_nids);
+-u64 __init numa_emu_dma_end(void);
+-#else /* CONFIG_NUMA_EMU */
+-static inline int numa_emu_cmdline(char *str)
+-{
+-	return -EINVAL;
+-}
+-#endif /* CONFIG_NUMA_EMU */
 -
- static inline void set_apicid_to_node(int apicid, s16 node)
- {
- 	__apicid_to_node[apicid] = node;
-diff --git a/arch/x86/mm/numa.c b/arch/x86/mm/numa.c
-index 6874d5650b4d..8eb15578625e 100644
---- a/arch/x86/mm/numa.c
-+++ b/arch/x86/mm/numa.c
-@@ -24,9 +24,6 @@
+ #endif	/* _ASM_X86_NUMA_H */
+diff --git a/arch/x86/mm/Makefile b/arch/x86/mm/Makefile
+index 8d3a00e5c528..690fbf48e853 100644
+--- a/arch/x86/mm/Makefile
++++ b/arch/x86/mm/Makefile
+@@ -57,7 +57,6 @@ obj-$(CONFIG_MMIOTRACE_TEST)	+= testmmiotrace.o
+ obj-$(CONFIG_NUMA)		+= numa.o numa_$(BITS).o
+ obj-$(CONFIG_AMD_NUMA)		+= amdtopology.o
+ obj-$(CONFIG_ACPI_NUMA)		+= srat.o
+-obj-$(CONFIG_NUMA_EMU)		+= numa_emulation.o
  
- int numa_off;
- 
--static int numa_distance_cnt;
--static u8 *numa_distance;
--
- static __init int numa_setup(char *opt)
- {
- 	if (!opt)
-@@ -118,107 +115,6 @@ void __init setup_node_to_cpumask_map(void)
- 	pr_debug("Node to cpumask map for %u nodes\n", nr_node_ids);
- }
- 
--/**
-- * numa_reset_distance - Reset NUMA distance table
-- *
-- * The current table is freed.  The next numa_set_distance() call will
-- * create a new one.
-- */
--void __init numa_reset_distance(void)
--{
--	size_t size = numa_distance_cnt * numa_distance_cnt * sizeof(numa_distance[0]);
--
--	/* numa_distance could be 1LU marking allocation failure, test cnt */
--	if (numa_distance_cnt)
--		memblock_free(numa_distance, size);
--	numa_distance_cnt = 0;
--	numa_distance = NULL;	/* enable table creation */
--}
--
--static int __init numa_alloc_distance(void)
--{
--	nodemask_t nodes_parsed;
--	size_t size;
--	int i, j, cnt = 0;
--
--	/* size the new table and allocate it */
--	nodes_parsed = numa_nodes_parsed;
--	numa_nodemask_from_meminfo(&nodes_parsed, &numa_meminfo);
--
--	for_each_node_mask(i, nodes_parsed)
--		cnt = i;
--	cnt++;
--	size = cnt * cnt * sizeof(numa_distance[0]);
--
--	numa_distance = memblock_alloc(size, PAGE_SIZE);
--	if (!numa_distance) {
--		pr_warn("Warning: can't allocate distance table!\n");
--		/* don't retry until explicitly reset */
--		numa_distance = (void *)1LU;
--		return -ENOMEM;
--	}
--
--	numa_distance_cnt = cnt;
--
--	/* fill with the default distances */
--	for (i = 0; i < cnt; i++)
--		for (j = 0; j < cnt; j++)
--			numa_distance[i * cnt + j] = i == j ?
--				LOCAL_DISTANCE : REMOTE_DISTANCE;
--	printk(KERN_DEBUG "NUMA: Initialized distance table, cnt=%d\n", cnt);
--
--	return 0;
--}
--
--/**
-- * numa_set_distance - Set NUMA distance from one NUMA to another
-- * @from: the 'from' node to set distance
-- * @to: the 'to'  node to set distance
-- * @distance: NUMA distance
-- *
-- * Set the distance from node @from to @to to @distance.  If distance table
-- * doesn't exist, one which is large enough to accommodate all the currently
-- * known nodes will be created.
-- *
-- * If such table cannot be allocated, a warning is printed and further
-- * calls are ignored until the distance table is reset with
-- * numa_reset_distance().
-- *
-- * If @from or @to is higher than the highest known node or lower than zero
-- * at the time of table creation or @distance doesn't make sense, the call
-- * is ignored.
-- * This is to allow simplification of specific NUMA config implementations.
-- */
--void __init numa_set_distance(int from, int to, int distance)
--{
--	if (!numa_distance && numa_alloc_distance() < 0)
--		return;
--
--	if (from >= numa_distance_cnt || to >= numa_distance_cnt ||
--			from < 0 || to < 0) {
--		pr_warn_once("Warning: node ids are out of bound, from=%d to=%d distance=%d\n",
--			     from, to, distance);
--		return;
--	}
--
--	if ((u8)distance != distance ||
--	    (from == to && distance != LOCAL_DISTANCE)) {
--		pr_warn_once("Warning: invalid distance parameter, from=%d to=%d distance=%d\n",
--			     from, to, distance);
--		return;
--	}
--
--	numa_distance[from * numa_distance_cnt + to] = distance;
--}
--
--int __node_distance(int from, int to)
--{
--	if (from >= numa_distance_cnt || to >= numa_distance_cnt)
--		return from == to ? LOCAL_DISTANCE : REMOTE_DISTANCE;
--	return numa_distance[from * numa_distance_cnt + to];
--}
--EXPORT_SYMBOL(__node_distance);
--
- static int __init numa_register_memblks(struct numa_meminfo *mi)
- {
- 	int nid, err;
+ obj-$(CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS)	+= pkeys.o
+ obj-$(CONFIG_RANDOMIZE_MEMORY)			+= kaslr.o
 diff --git a/arch/x86/mm/numa_internal.h b/arch/x86/mm/numa_internal.h
-index a51229a2f5af..249e3aaeadce 100644
+index 249e3aaeadce..11e1ff370c10 100644
 --- a/arch/x86/mm/numa_internal.h
 +++ b/arch/x86/mm/numa_internal.h
-@@ -5,8 +5,6 @@
- #include <linux/types.h>
- #include <asm/numa.h>
+@@ -7,15 +7,4 @@
  
--void __init numa_reset_distance(void);
--
  void __init x86_numa_init(void);
  
- struct numa_meminfo;
+-struct numa_meminfo;
+-
+-#ifdef CONFIG_NUMA_EMU
+-void __init numa_emulation(struct numa_meminfo *numa_meminfo,
+-			   int numa_dist_cnt);
+-#else
+-static inline void numa_emulation(struct numa_meminfo *numa_meminfo,
+-				  int numa_dist_cnt)
+-{ }
+-#endif
+-
+ #endif	/* __X86_MM_NUMA_INTERNAL_H */
 diff --git a/include/linux/numa_memblks.h b/include/linux/numa_memblks.h
-index 6981cf97d2c9..968a590535ac 100644
+index 968a590535ac..f81f98678074 100644
 --- a/include/linux/numa_memblks.h
 +++ b/include/linux/numa_memblks.h
-@@ -7,6 +7,10 @@
+@@ -34,6 +34,23 @@ int __init numa_register_meminfo(struct numa_meminfo *mi);
+ void __init numa_nodemask_from_meminfo(nodemask_t *nodemask,
+ 				       const struct numa_meminfo *mi);
  
- #define NR_NODE_MEMBLKS		(MAX_NUMNODES * 2)
- 
-+extern int numa_distance_cnt;
-+void __init numa_set_distance(int from, int to, int distance);
-+void __init numa_reset_distance(void);
++#ifdef CONFIG_NUMA_EMU
++int numa_emu_cmdline(char *str);
++void __init numa_emu_update_cpu_to_node(int *emu_nid_to_phys,
++					unsigned int nr_emu_nids);
++u64 __init numa_emu_dma_end(void);
++void __init numa_emulation(struct numa_meminfo *numa_meminfo,
++			   int numa_dist_cnt);
++#else
++static inline void numa_emulation(struct numa_meminfo *numa_meminfo,
++				  int numa_dist_cnt)
++{ }
++static inline int numa_emu_cmdline(char *str)
++{
++	return -EINVAL;
++}
++#endif /* CONFIG_NUMA_EMU */
 +
- struct numa_memblk {
- 	u64			start;
- 	u64			end;
-diff --git a/mm/numa_memblks.c b/mm/numa_memblks.c
-index 72f191a94c66..e3c3519725d4 100644
---- a/mm/numa_memblks.c
-+++ b/mm/numa_memblks.c
-@@ -7,11 +7,115 @@
- #include <linux/numa.h>
+ #endif /* CONFIG_NUMA_MEMBLKS */
+ 
+ #endif	/* __NUMA_MEMBLKS_H */
+diff --git a/mm/Kconfig b/mm/Kconfig
+index dc5912d29ed5..3b466df1d9e2 100644
+--- a/mm/Kconfig
++++ b/mm/Kconfig
+@@ -1266,6 +1266,14 @@ config EXECMEM
+ config NUMA_MEMBLKS
+ 	bool
+ 
++config NUMA_EMU
++	bool "NUMA emulation"
++	depends on NUMA_MEMBLKS
++	help
++	  Enable NUMA emulation. A flat machine will be split
++	  into virtual nodes when booted with "numa=fake=N", where N is the
++	  number of nodes. This is only useful for debugging.
++
+ source "mm/damon/Kconfig"
+ 
+ endmenu
+diff --git a/mm/Makefile b/mm/Makefile
+index e3fac7efd880..75a189cc67ef 100644
+--- a/mm/Makefile
++++ b/mm/Makefile
+@@ -143,3 +143,4 @@ obj-$(CONFIG_SHRINKER_DEBUG) += shrinker_debug.o
+ obj-$(CONFIG_EXECMEM) += execmem.o
+ obj-$(CONFIG_NUMA) += numa.o
+ obj-$(CONFIG_NUMA_MEMBLKS) += numa_memblks.o
++obj-$(CONFIG_NUMA_EMU) += numa_emulation.o
+diff --git a/arch/x86/mm/numa_emulation.c b/mm/numa_emulation.c
+similarity index 99%
+rename from arch/x86/mm/numa_emulation.c
+rename to mm/numa_emulation.c
+index 33610026b7a3..031fb9961bf7 100644
+--- a/arch/x86/mm/numa_emulation.c
++++ b/mm/numa_emulation.c
+@@ -7,9 +7,7 @@
+ #include <linux/topology.h>
+ #include <linux/memblock.h>
  #include <linux/numa_memblks.h>
+-#include <asm/dma.h>
+-
+-#include "numa_internal.h"
++#include <asm/numa.h>
  
-+int numa_distance_cnt;
-+static u8 *numa_distance;
-+
- nodemask_t numa_nodes_parsed __initdata;
- 
- struct numa_meminfo numa_meminfo __initdata_or_meminfo;
- struct numa_meminfo numa_reserved_meminfo __initdata_or_meminfo;
- 
-+/**
-+ * numa_reset_distance - Reset NUMA distance table
-+ *
-+ * The current table is freed.  The next numa_set_distance() call will
-+ * create a new one.
-+ */
-+void __init numa_reset_distance(void)
-+{
-+	size_t size = numa_distance_cnt * numa_distance_cnt * sizeof(numa_distance[0]);
-+
-+	/* numa_distance could be 1LU marking allocation failure, test cnt */
-+	if (numa_distance_cnt)
-+		memblock_free(numa_distance, size);
-+	numa_distance_cnt = 0;
-+	numa_distance = NULL;	/* enable table creation */
-+}
-+
-+static int __init numa_alloc_distance(void)
-+{
-+	nodemask_t nodes_parsed;
-+	size_t size;
-+	int i, j, cnt = 0;
-+
-+	/* size the new table and allocate it */
-+	nodes_parsed = numa_nodes_parsed;
-+	numa_nodemask_from_meminfo(&nodes_parsed, &numa_meminfo);
-+
-+	for_each_node_mask(i, nodes_parsed)
-+		cnt = i;
-+	cnt++;
-+	size = cnt * cnt * sizeof(numa_distance[0]);
-+
-+	numa_distance = memblock_alloc(size, PAGE_SIZE);
-+	if (!numa_distance) {
-+		pr_warn("Warning: can't allocate distance table!\n");
-+		/* don't retry until explicitly reset */
-+		numa_distance = (void *)1LU;
-+		return -ENOMEM;
-+	}
-+
-+	numa_distance_cnt = cnt;
-+
-+	/* fill with the default distances */
-+	for (i = 0; i < cnt; i++)
-+		for (j = 0; j < cnt; j++)
-+			numa_distance[i * cnt + j] = i == j ?
-+				LOCAL_DISTANCE : REMOTE_DISTANCE;
-+	printk(KERN_DEBUG "NUMA: Initialized distance table, cnt=%d\n", cnt);
-+
-+	return 0;
-+}
-+
-+/**
-+ * numa_set_distance - Set NUMA distance from one NUMA to another
-+ * @from: the 'from' node to set distance
-+ * @to: the 'to'  node to set distance
-+ * @distance: NUMA distance
-+ *
-+ * Set the distance from node @from to @to to @distance.  If distance table
-+ * doesn't exist, one which is large enough to accommodate all the currently
-+ * known nodes will be created.
-+ *
-+ * If such table cannot be allocated, a warning is printed and further
-+ * calls are ignored until the distance table is reset with
-+ * numa_reset_distance().
-+ *
-+ * If @from or @to is higher than the highest known node or lower than zero
-+ * at the time of table creation or @distance doesn't make sense, the call
-+ * is ignored.
-+ * This is to allow simplification of specific NUMA config implementations.
-+ */
-+void __init numa_set_distance(int from, int to, int distance)
-+{
-+	if (!numa_distance && numa_alloc_distance() < 0)
-+		return;
-+
-+	if (from >= numa_distance_cnt || to >= numa_distance_cnt ||
-+			from < 0 || to < 0) {
-+		pr_warn_once("Warning: node ids are out of bound, from=%d to=%d distance=%d\n",
-+			     from, to, distance);
-+		return;
-+	}
-+
-+	if ((u8)distance != distance ||
-+	    (from == to && distance != LOCAL_DISTANCE)) {
-+		pr_warn_once("Warning: invalid distance parameter, from=%d to=%d distance=%d\n",
-+			     from, to, distance);
-+		return;
-+	}
-+
-+	numa_distance[from * numa_distance_cnt + to] = distance;
-+}
-+
-+int __node_distance(int from, int to)
-+{
-+	if (from >= numa_distance_cnt || to >= numa_distance_cnt)
-+		return from == to ? LOCAL_DISTANCE : REMOTE_DISTANCE;
-+	return numa_distance[from * numa_distance_cnt + to];
-+}
-+EXPORT_SYMBOL(__node_distance);
-+
- static int __init numa_add_memblk_to(int nid, u64 start, u64 end,
- 				     struct numa_meminfo *mi)
- {
+ #define FAKE_NODE_MIN_SIZE	((u64)32 << 20)
+ #define FAKE_NODE_MIN_HASH_MASK	(~(FAKE_NODE_MIN_SIZE - 1UL))
 -- 
 2.43.0
 
