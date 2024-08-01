@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-5799-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5800-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A3B894432D
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Aug 2024 08:10:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF544944332
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Aug 2024 08:10:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DB646B21C26
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Aug 2024 06:10:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AAFC7283CA8
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Aug 2024 06:10:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BA99158203;
-	Thu,  1 Aug 2024 06:09:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72E04158529;
+	Thu,  1 Aug 2024 06:09:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bucdLnSW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cr1CiLPN"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E63C0157464;
-	Thu,  1 Aug 2024 06:09:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23B0115748E;
+	Thu,  1 Aug 2024 06:09:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722492563; cv=none; b=bNKcXlWRBUv7qH0mXDzeq7WFdyiuSus+MV6vLVMKSVdANkDTYU2YNCuueVBxvtbvq3PB3bbQVAYWZHOzAO/tBSO7Jk2fS52BYw/rxpK1u/L9Gs5S7+YLHlPWTOl5xu3N5k+sYqW7RP82iOamBwTm6dXrucgqeDdmNZo6b/9lnGY=
+	t=1722492574; cv=none; b=KUzqacLNv/ni0+AL/KHO0h9Fncws/09suRjldEwXdf+0FqBkf9yO6hlPG1FTK1U7XyuTq69g5rVgoalkwiHa3RjJzvUA2lkAO0bzkYfBdMYE4MfCjzngrUbq9S69VEJ0QQ1JvHPFDnwfwUut8kMfCnI7UNkEVJ5qj+Dd8kgM7e8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722492563; c=relaxed/simple;
-	bh=mRZLqq2N2ryJ5ZO7g59g+rrLvkwOpPlbSt8yNKJxh4c=;
+	s=arc-20240116; t=1722492574; c=relaxed/simple;
+	bh=mmhHQYCETRJBHfScnhlLv4Zo+WisPGGfSJnH6vP+xjc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RwV6fsacgGwlOn7PRGPBMBdi4Paf0AbEqxwqnxcBn/cRjRZWlMPkM/GEy/Gm83ghi5MykjS6wEl1jRHFPeLERH4fvZnmp/e+avLswuM5lxVGJve/RrHsZPRW3FNqA/gBeuFfZ/iKiPX3UwwJFoXAc63Kx2cSYgStSaKpjke+KrQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bucdLnSW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A06DC4AF14;
-	Thu,  1 Aug 2024 06:09:11 +0000 (UTC)
+	 MIME-Version; b=aEJhFIENbQ4dNJRBh7KfAy3C+RKKoW9TKEnA+iZSlmlr53/FFFMkV4hLraMeu8xFlhA87iGo2XwfG8m485jQQHB20/BfAxdppEm11Uic/LnqUXiW1no0w2swzmNtdgUDQDpt11prC6uw0FWd9njMml+osr82EwKtyqLdk4AS2QU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cr1CiLPN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0025DC4AF09;
+	Thu,  1 Aug 2024 06:09:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722492562;
-	bh=mRZLqq2N2ryJ5ZO7g59g+rrLvkwOpPlbSt8yNKJxh4c=;
+	s=k20201202; t=1722492574;
+	bh=mmhHQYCETRJBHfScnhlLv4Zo+WisPGGfSJnH6vP+xjc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=bucdLnSWpcdcRT5+EXB/9Vj9t5MS7Qn5CSNmaKRNv6NvVMt0IwHITPfQUHQKw5W4m
-	 KADunInG9ypv2EkiXb1dRp15PO6S9ZkhHC5orlcNDwZxNq0LAq7vdXnHs51UeN8XC1
-	 qCCdGkD+IwBfa9Dhu62NGSOzskzofKuRJmzlYh8EWIjKqjsCMlnSFjv0suv/LWA7bE
-	 /v17MsWN6GsK6hkUk2PpkklVDGARhQKEyYhJxEEdEsm6jaYBM6ERY08yC3+8fZvikl
-	 QSv5CNmiG7++F2AcsgKSBHXAeR922kJ8/hbCjc1GagkI6K0Ok0uQtB2agu2yqJ1ylk
-	 Nz7e1f94h+Kfg==
+	b=Cr1CiLPN8Njdras4Btqnv341rMINjlqlnS1idBt/fsGeA4aaKp/Ea7yaeCTLRW+OD
+	 SLPSIWQWQGJwKbXyYy0pIWVIzgViSpnkqTQGdGOGlErfpLRWbytg7pgdYGk+qx62Zh
+	 vYO75yHA7yY/Uy0nBoxrtxxpTUVILgIgN/WYcr56R6lmrJ6AHRlpmtU1yA6AtLKxrM
+	 ZMeWtHyXc0v0Y5TlxT1McUabePfZDEmVQfqH5OPEDQwG1SfJboJ8M8tXb85NcwNlTk
+	 yRFhOlgDBqiScu3LsYNIWwFXmfZDKp8obRgWw9/g6qXMgFBNCRXgedXGkmX7WEaQAO
+	 2ahFkgooeohiw==
 From: Mike Rapoport <rppt@kernel.org>
 To: linux-kernel@vger.kernel.org
 Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
@@ -90,9 +90,9 @@ Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
 	nvdimm@lists.linux.dev,
 	sparclinux@vger.kernel.org,
 	x86@kernel.org
-Subject: [PATCH v3 03/26] MIPS: sgi-ip27: ensure node_possible_map only contains valid nodes
-Date: Thu,  1 Aug 2024 09:08:03 +0300
-Message-ID: <20240801060826.559858-4-rppt@kernel.org>
+Subject: [PATCH v3 04/26] MIPS: sgi-ip27: drop HAVE_ARCH_NODEDATA_EXTENSION
+Date: Thu,  1 Aug 2024 09:08:04 +0300
+Message-ID: <20240801060826.559858-5-rppt@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240801060826.559858-1-rppt@kernel.org>
 References: <20240801060826.559858-1-rppt@kernel.org>
@@ -106,34 +106,52 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-For SGI IP27 machines node_possible_map is statically set to
-NODE_MASK_ALL and it is not updated during NUMA initialization.
+Commit f8f9f21c7848 ("MIPS: Fix build error for loongson64 and
+sgi-ip27") added HAVE_ARCH_NODEDATA_EXTENSION to sgi-ip27 to silence a
+compilation error that happened because sgi-ip27 didn't define array of
+pg_data_t as node_data like most other architectures did.
 
-Ensure that it only contains nodes present in the system.
+After addition of node_data array that matches other architectures and
+after ensuring that offline nodes do not appear on node_possible_map, it
+is safe to drop arch_alloc_nodedata() and HAVE_ARCH_NODEDATA_EXTENSION
+from sgi-ip27.
 
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
- arch/mips/sgi-ip27/ip27-smp.c | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/mips/Kconfig                |  1 -
+ arch/mips/sgi-ip27/ip27-memory.c | 10 ----------
+ 2 files changed, 11 deletions(-)
 
-diff --git a/arch/mips/sgi-ip27/ip27-smp.c b/arch/mips/sgi-ip27/ip27-smp.c
-index 5d2652a1d35a..62733e049570 100644
---- a/arch/mips/sgi-ip27/ip27-smp.c
-+++ b/arch/mips/sgi-ip27/ip27-smp.c
-@@ -70,11 +70,13 @@ void cpu_node_probe(void)
- 	gda_t *gdap = GDA;
- 
- 	nodes_clear(node_online_map);
-+	nodes_clear(node_possible_map);
- 	for (i = 0; i < MAX_NUMNODES; i++) {
- 		nasid_t nasid = gdap->g_nasidtable[i];
- 		if (nasid == INVALID_NASID)
- 			break;
- 		node_set_online(nasid);
-+		node_set(nasid, node_possible_map);
- 		highest = node_scan_cpus(nasid, highest);
- 	}
- 
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 60077e576935..ea5f3c3c31f6 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -735,7 +735,6 @@ config SGI_IP27
+ 	select WAR_R10000_LLSC
+ 	select MIPS_L1_CACHE_SHIFT_7
+ 	select NUMA
+-	select HAVE_ARCH_NODEDATA_EXTENSION
+ 	help
+ 	  This are the SGI Origin 200, Origin 2000 and Onyx 2 Graphics
+ 	  workstations.  To compile a Linux kernel that runs on these, say Y
+diff --git a/arch/mips/sgi-ip27/ip27-memory.c b/arch/mips/sgi-ip27/ip27-memory.c
+index c30ef6958b97..eb6d2fa41a8a 100644
+--- a/arch/mips/sgi-ip27/ip27-memory.c
++++ b/arch/mips/sgi-ip27/ip27-memory.c
+@@ -426,13 +426,3 @@ void __init mem_init(void)
+ 	memblock_free_all();
+ 	setup_zero_pages();	/* This comes from node 0 */
+ }
+-
+-pg_data_t * __init arch_alloc_nodedata(int nid)
+-{
+-	return memblock_alloc(sizeof(pg_data_t), SMP_CACHE_BYTES);
+-}
+-
+-void arch_refresh_nodedata(int nid, pg_data_t *pgdat)
+-{
+-	__node_data[nid] = (struct node_data *)pgdat;
+-}
 -- 
 2.43.0
 
