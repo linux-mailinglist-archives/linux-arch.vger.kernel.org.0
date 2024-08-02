@@ -1,48 +1,48 @@
-Return-Path: <linux-arch+bounces-5903-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5902-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A867094554C
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7094994554B
 	for <lists+linux-arch@lfdr.de>; Fri,  2 Aug 2024 02:22:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CBD0B1C21FCB
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 295F1286737
 	for <lists+linux-arch@lfdr.de>; Fri,  2 Aug 2024 00:22:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DB0ED2EE;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29FC3C156;
 	Fri,  2 Aug 2024 00:22:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SDKpDYCf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rx547oAj"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F055DA935;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEE5DA92D;
 	Fri,  2 Aug 2024 00:22:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722558138; cv=none; b=cGbC5Wvpi4TrIVqSgc0h866xqCXZFntDyrIXNK3AqPNXOzmePayMr9/qHM5L06ESt0mOMxYQoOZAdKNEp4eiRJ+N9rj2rd2pFiICCMQ2V2l93z9eA9kS/LFtmutu4TPqsbiDckdrIlwTsZGUC8nmF7yEjH8lrhOzyCTTSqMYG7U=
+	t=1722558138; cv=none; b=XDiAqTNJYnqQUYfMKljKV8mHGAopSo6QkjA5FvUz/RFFb/sFMyDRgxWAd3B7WqrtuMhqA8An514+3rkvbhVtVantjhBjVGhgdE7ddKohCruwtx+oj/wWpUC9Yv0X4E7DJDEBQIASBDQBCi/S/0fh35i5IXx0yl7Dp/6gl6VgGbU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1722558138; c=relaxed/simple;
-	bh=vebIt+Hpgy4uDqbFeEXyt1jdBxLf1nRFeVvnQsvQDyg=;
+	bh=HWgXzYpJ7/mbDcOQ+89qAzkXxLhuNy9Ezr+ijzp8aQQ=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Fs2G7w+jFLWNJb67w144si0csAmhBKiCLkzfZsJHaDjKXSK+2icPhN1xpq4VFhvSXISDq01HN1+C/IXAAGcBbbL9BvijFMSz9D1e1mTEllLK3hnc+KODCav8aFgDCOv3JicDGpgSPe0wsaYSYOQF1d6qHNi2pyQEO9uTfr8nr/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SDKpDYCf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D7C7C4AF0A;
+	 MIME-Version; b=E8Uwn24jqAr7CbkHqYS7WBs17fBV4OlppAqE7V//h2bYdEaZLF0FoXtKriYgElAOvfFhuQjopd+Fsy6vm4Y21VlaPL5qRAATNjmXPbLsS9RUSpL2EHsIx3Q9l0XrPXpeWosYW4ORkbq7HkMv/Wyan/I+F6oCdAwbb+T37L7k6tk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rx547oAj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94A22C4AF0E;
 	Fri,  2 Aug 2024 00:22:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1722558137;
-	bh=vebIt+Hpgy4uDqbFeEXyt1jdBxLf1nRFeVvnQsvQDyg=;
+	bh=HWgXzYpJ7/mbDcOQ+89qAzkXxLhuNy9Ezr+ijzp8aQQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=SDKpDYCf/uxuLxSPLyD2Cr3V4ipXBtyoTsCmZ5Czgd63LxKTXzws7sBRBtc/fPfj2
-	 NCSPiOZ+AvmH7hnDBrc3K9LQ9Szc67A/YxE0uK72IVsHTfBvQWRroWNwhZxSmCWh5q
-	 MWklL0XQKqKYucdxsF8zArfpTFT5X3zZGVdZUOdotOzp43yYirnikzxy5oMLAEN6tw
-	 3W7tzxqUGGvbefttJjRUmsJQm2b6VloAc0P2oTERVxSOXnJ0+2WWJ3PgZoCIwY4Eab
-	 14AJTUxstXcI7kR2dOjnW+eXxRvX58fN02h9kIqr7qkhlON9WQFwbnL1kmyiwgPlh6
-	 snjJ+ZYXRq3pw==
+	b=Rx547oAjhx0eCaJSEDCH1dUI0bkjyduk0/5k/th+eB5774fuQUS4wY4bPDix780dw
+	 yexIIUSusFf/0thrndRb6/j1M586ecscemJZmDUqHX1EcTxXOdr6Jh2mkUVC7pAEKF
+	 tipcKybyht6iE+dC1kWFzTATYDErokkwL25TWktIuz5BlqEYwlbdBfwuEaBGbMqXnv
+	 AJHv2+vlLlj1sY0K436g/7L1wFfxZobI/VtFKlvcib1mvcbr2ETrXhtxLQQfjVUTiH
+	 Z4ID0Q8faVmp3i0j2JgrpYFVn7vNYaT7jA+48yk7WCmiRSC4jWU/AhXMJLTG80lqbs
+	 /jyyGGb4Iqerg==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 3553FCE0BC3; Thu,  1 Aug 2024 17:22:17 -0700 (PDT)
+	id 385E2CE0E0B; Thu,  1 Aug 2024 17:22:17 -0700 (PDT)
 From: "Paul E. McKenney" <paulmck@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	linux-arch@vger.kernel.org,
@@ -59,11 +59,11 @@ Cc: stern@rowland.harvard.edu,
 	j.alglave@ucl.ac.uk,
 	luc.maranget@inria.fr,
 	akiyks@gmail.com,
-	Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>,
+	Marco Elver <elver@google.com>,
 	"Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH memory-model 3/7] tools/memory-model: Document herd7 (abstract) representation
-Date: Thu,  1 Aug 2024 17:22:11 -0700
-Message-Id: <20240802002215.4133695-3-paulmck@kernel.org>
+Subject: [PATCH memory-model 4/7] tools/memory-model: Add locking.txt and glossary.txt to README
+Date: Thu,  1 Aug 2024 17:22:12 -0700
+Message-Id: <20240802002215.4133695-4-paulmck@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <e384a9ac-05c1-45d6-9639-28457dd183d9@paulmck-laptop>
 References: <e384a9ac-05c1-45d6-9639-28457dd183d9@paulmck-laptop>
@@ -75,170 +75,78 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Andrea Parri <parri.andrea@gmail.com>
+From: Akira Yokosawa <akiyks@gmail.com>
 
-The Linux-kernel memory model (LKMM) source code and the herd7 tool are
-closely linked in that the latter is responsible for (pre)processing
-each C-like macro of a litmus test, and for providing the LKMM with a
-set of events, or "representation", corresponding to the given macro.
-This commit therefore provides herd-representation.txt to document
-the representations of the concurrency macros, following their
-"classification" in Documentation/atomic_t.txt.
+locking.txt and glossary.txt have been in LKMM's documentation for
+quite a while.
 
-Link: https://lore.kernel.org/all/ZnFZPJlILp5B9scN@andrea/
+Add them in README's introduction of docs and the list of docs at the
+bottom.  Add access-marking.txt in the former as well.
 
-Suggested-by: Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>
-Signed-off-by: Andrea Parri <parri.andrea@gmail.com>
-Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
-Reviewed-by: Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>
+Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+Acked-by: Andrea Parri <parri.andrea@gmail.com>
+Cc: Marco Elver <elver@google.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- tools/memory-model/Documentation/README       |   7 +-
- .../Documentation/herd-representation.txt     | 110 ++++++++++++++++++
- 2 files changed, 116 insertions(+), 1 deletion(-)
- create mode 100644 tools/memory-model/Documentation/herd-representation.txt
+ tools/memory-model/Documentation/README | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
 diff --git a/tools/memory-model/Documentation/README b/tools/memory-model/Documentation/README
-index 304162743a5b8..44e7dae73b296 100644
+index 44e7dae73b296..9999c1effdb65 100644
 --- a/tools/memory-model/Documentation/README
 +++ b/tools/memory-model/Documentation/README
-@@ -33,7 +33,8 @@ o	You are familiar with Linux-kernel concurrency and the use of
+@@ -9,6 +9,8 @@ depending on what you know and what you would like to learn.  Please note
+ that the documents later in this list assume that the reader understands
+ the material provided by documents earlier in this list.
  
- o	You are familiar with Linux-kernel concurrency and the use
- 	of LKMM, and would like to learn about LKMM's requirements,
--	rationale, and implementation:	explanation.txt
-+	rationale, and implementation:	explanation.txt and
-+	herd-representation.txt
++If LKMM-specific terms lost you, glossary.txt might help you.
++
+ o	You are new to Linux-kernel concurrency: simple.txt
  
- o	You are interested in the publications related to LKMM, including
- 	hardware manuals, academic literature, standards-committee
-@@ -61,6 +62,10 @@ control-dependencies.txt
+ o	You have some background in Linux-kernel concurrency, and would
+@@ -21,6 +23,9 @@ o	You are familiar with the Linux-kernel concurrency primitives
+ 	that you need, and just want to get started with LKMM litmus
+ 	tests:  litmus-tests.txt
+ 
++o	You would like to access lock-protected shared variables without
++	having their corresponding locks held:  locking.txt
++
+ o	You are familiar with Linux-kernel concurrency, and would
+ 	like a detailed intuitive understanding of LKMM, including
+ 	situations involving more than two threads:  recipes.txt
+@@ -28,6 +33,11 @@ o	You are familiar with Linux-kernel concurrency, and would
+ o	You would like a detailed understanding of what your compiler can
+ 	and cannot do to control dependencies:  control-dependencies.txt
+ 
++o	You would like to mark concurrent normal accesses to shared
++	variables so that intentional "racy" accesses can be properly
++	documented, especially when you are responding to complaints
++	from KCSAN:  access-marking.txt
++
+ o	You are familiar with Linux-kernel concurrency and the use of
+ 	LKMM, and would like a quick reference:  cheatsheet.txt
+ 
+@@ -62,6 +72,9 @@ control-dependencies.txt
  explanation.txt
  	Detailed description of the memory model.
  
-+herd-representation.txt
-+	The (abstract) representation of the Linux-kernel concurrency
-+	primitives in terms of events.
++glossary.txt
++	Brief definitions of LKMM-related terms.
 +
- litmus-tests.txt
+ herd-representation.txt
+ 	The (abstract) representation of the Linux-kernel concurrency
+ 	primitives in terms of events.
+@@ -70,6 +83,10 @@ litmus-tests.txt
  	The format, features, capabilities, and limitations of the litmus
  	tests that LKMM can evaluate.
-diff --git a/tools/memory-model/Documentation/herd-representation.txt b/tools/memory-model/Documentation/herd-representation.txt
-new file mode 100644
-index 0000000000000..ed988906f2b71
---- /dev/null
-+++ b/tools/memory-model/Documentation/herd-representation.txt
-@@ -0,0 +1,110 @@
-+#
-+# Legend:
-+#	R,	a Load event
-+#	W,	a Store event
-+#	F,	a Fence event
-+#	LKR,	a Lock-Read event
-+#	LKW,	a Lock-Write event
-+#	UL,	an Unlock event
-+#	LF,	a Lock-Fail event
-+#	RL,	a Read-Locked event
-+#	RU,	a Read-Unlocked event
-+#	R*,	a Load event included in RMW
-+#	W*,	a Store event included in RMW
-+#	SRCU,	a Sleepable-Read-Copy-Update event
-+#
-+#	po,	a Program-Order link
-+#	rmw,	a Read-Modify-Write link - every rmw link is a po link
-+#
-+# By convention, a blank line in a cell means "same as the preceding line".
-+#
-+# Disclaimer.  The table includes representations of "add" and "and" operations;
-+# corresponding/identical representations of "sub", "inc", "dec" and "or", "xor",
-+# "andnot" operations are omitted.
-+#
-+    ------------------------------------------------------------------------------
-+    |                        C macro | Events                                    |
-+    ------------------------------------------------------------------------------
-+    |                    Non-RMW ops |                                           |
-+    ------------------------------------------------------------------------------
-+    |                      READ_ONCE | R[once]                                   |
-+    |                    atomic_read |                                           |
-+    |                     WRITE_ONCE | W[once]                                   |
-+    |                     atomic_set |                                           |
-+    |               smp_load_acquire | R[acquire]                                |
-+    |            atomic_read_acquire |                                           |
-+    |              smp_store_release | W[release]                                |
-+    |             atomic_set_release |                                           |
-+    |                   smp_store_mb | W[once] ->po F[mb]                        |
-+    |                         smp_mb | F[mb]                                     |
-+    |                        smp_rmb | F[rmb]                                    |
-+    |                        smp_wmb | F[wmb]                                    |
-+    |          smp_mb__before_atomic | F[before-atomic]                          |
-+    |           smp_mb__after_atomic | F[after-atomic]                           |
-+    |                    spin_unlock | UL                                        |
-+    |                 spin_is_locked | On success: RL                            |
-+    |                                | On failure: RU                            |
-+    |         smp_mb__after_spinlock | F[after-spinlock]                         |
-+    |      smp_mb__after_unlock_lock | F[after-unlock-lock]                      |
-+    |                  rcu_read_lock | F[rcu-lock]                               |
-+    |                rcu_read_unlock | F[rcu-unlock]                             |
-+    |                synchronize_rcu | F[sync-rcu]                               |
-+    |                rcu_dereference | R[once]                                   |
-+    |             rcu_assign_pointer | W[release]                                |
-+    |                 srcu_read_lock | R[srcu-lock]                              |
-+    |                 srcu_down_read |                                           |
-+    |               srcu_read_unlock | W[srcu-unlock]                            |
-+    |                   srcu_up_read |                                           |
-+    |               synchronize_srcu | SRCU[sync-srcu]                           |
-+    | smp_mb__after_srcu_read_unlock | F[after-srcu-read-unlock]                 |
-+    ------------------------------------------------------------------------------
-+    |       RMW ops w/o return value |                                           |
-+    ------------------------------------------------------------------------------
-+    |                     atomic_add | R*[noreturn] ->rmw W*[once]               |
-+    |                     atomic_and |                                           |
-+    |                      spin_lock | LKR ->po LKW                              |
-+    ------------------------------------------------------------------------------
-+    |        RMW ops w/ return value |                                           |
-+    ------------------------------------------------------------------------------
-+    |              atomic_add_return | F[mb] ->po R*[once]                       |
-+    |                                |     ->rmw W*[once] ->po F[mb]             |
-+    |               atomic_fetch_add |                                           |
-+    |               atomic_fetch_and |                                           |
-+    |                    atomic_xchg |                                           |
-+    |                           xchg |                                           |
-+    |            atomic_add_negative |                                           |
-+    |      atomic_add_return_relaxed | R*[once] ->rmw W*[once]                   |
-+    |       atomic_fetch_add_relaxed |                                           |
-+    |       atomic_fetch_and_relaxed |                                           |
-+    |            atomic_xchg_relaxed |                                           |
-+    |                   xchg_relaxed |                                           |
-+    |    atomic_add_negative_relaxed |                                           |
-+    |      atomic_add_return_acquire | R*[acquire] ->rmw W*[once]                |
-+    |       atomic_fetch_add_acquire |                                           |
-+    |       atomic_fetch_and_acquire |                                           |
-+    |            atomic_xchg_acquire |                                           |
-+    |                   xchg_acquire |                                           |
-+    |    atomic_add_negative_acquire |                                           |
-+    |      atomic_add_return_release | R*[once] ->rmw W*[release]                |
-+    |       atomic_fetch_add_release |                                           |
-+    |       atomic_fetch_and_release |                                           |
-+    |            atomic_xchg_release |                                           |
-+    |                   xchg_release |                                           |
-+    |    atomic_add_negative_release |                                           |
-+    ------------------------------------------------------------------------------
-+    |            Conditional RMW ops |                                           |
-+    ------------------------------------------------------------------------------
-+    |                 atomic_cmpxchg | On success: F[mb] ->po R*[once]           |
-+    |                                |                 ->rmw W*[once] ->po F[mb] |
-+    |                                | On failure: R*[once]                      |
-+    |                        cmpxchg |                                           |
-+    |              atomic_add_unless |                                           |
-+    |         atomic_cmpxchg_relaxed | On success: R*[once] ->rmw W*[once]       |
-+    |                                | On failure: R*[once]                      |
-+    |         atomic_cmpxchg_acquire | On success: R*[acquire] ->rmw W*[once]    |
-+    |                                | On failure: R*[once]                      |
-+    |         atomic_cmpxchg_release | On success: R*[once] ->rmw W*[release]    |
-+    |                                | On failure: R*[once]                      |
-+    |                   spin_trylock | On success: LKR ->po LKW                  |
-+    |                                | On failure: LF                            |
-+    ------------------------------------------------------------------------------
+ 
++locking.txt
++	Rules for accessing lock-protected shared variables outside of
++	their corresponding critical sections.
++
+ ordering.txt
+ 	Overview of the Linux kernel's low-level memory-ordering
+ 	primitives by category.
 -- 
 2.40.1
 
