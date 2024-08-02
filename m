@@ -1,186 +1,134 @@
-Return-Path: <linux-arch+bounces-5931-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5932-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23859945D6B
-	for <lists+linux-arch@lfdr.de>; Fri,  2 Aug 2024 13:52:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59063945E91
+	for <lists+linux-arch@lfdr.de>; Fri,  2 Aug 2024 15:21:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 86417B2105D
-	for <lists+linux-arch@lfdr.de>; Fri,  2 Aug 2024 11:52:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 10090284985
+	for <lists+linux-arch@lfdr.de>; Fri,  2 Aug 2024 13:21:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 054001DB44E;
-	Fri,  2 Aug 2024 11:52:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E8E31E4851;
+	Fri,  2 Aug 2024 13:21:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H8OHikux"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="epIVo00W";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="kldSn2t2"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from flow1-smtp.messagingengine.com (flow1-smtp.messagingengine.com [103.168.172.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3831C1E877;
-	Fri,  2 Aug 2024 11:52:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92A881E3CD9;
+	Fri,  2 Aug 2024 13:21:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722599540; cv=none; b=qJ//gE7gwg6/mn5TaG2XfzhpsJYOoA0GJcrIgRbFdnHZpiEAAPHY8UEn0sV7Qerm/eOR6318VqAyR1yIiWnJxOrqrMoP7Jnh9ZRtqsJik2vgoAz8EWm94YQy44uvtfsMYWYN2k3Abj9nDYmbaiTEcfnfjp/N4U1XWuPveslhx1I=
+	t=1722604889; cv=none; b=stEAiPLXCAITbeLDzpiLtf/+l4x4xYUXww1MYZ9K7Sh9dk2pScJNWTGPsZHqatPu5kdMCuaTdhvACPzWmkTLtUTlD1jMQOiW5POwldaKMmYkK7ykRgNVH2iFpjrjEKDwc9RGE++qSn3PH+Zwae/6vsIYR32pALxdo7xOwpgb+mE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722599540; c=relaxed/simple;
-	bh=oDTT9xD0J08N7Yb3Af6JPWNNvQszF2stgvrDAhrhfNs=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aKjosMjKLr9DLcRrb7/Vc6FneSPTdmgg0L37w1sgQjZUA9dom25IBKUaHLT0yHxH/KZdeFE7c9FHSfheciQb2NfITHzZ7v8FHzoO+E9CFH+2XdIA+bYzBDKOOJxTUZxpDKv8nmm1nOhcWkcoD0lTaTXzCsedxekDzkOA6m7iNpI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H8OHikux; arc=none smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5afa207b8bfso8541894a12.0;
-        Fri, 02 Aug 2024 04:52:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722599537; x=1723204337; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=46L6nTfwlpEOKrJbpXIYVmIVoshBQpihOVyTwQcqTFE=;
-        b=H8OHikuxVOXEa2KdX7+r5MdgTERQKDBwCCktu33zql3HrI6sZDkvLTZfHe7iUne8Ba
-         Jubpa9FFDGQynKIwgawMA/na6cFrLsAmlFwy7Zz2QEqHIHfOy2x3AOQBymmMI7501ukc
-         ljoDqUKN8S4L2iBJO5LBVV70OMaTxR8gyDC8tAT/SFOw9HKPYVcfGyfC3d7LrffsVBLr
-         lv48OOw5S9WWVLlD7Vh7yo57lAivqEU5KwbaaHyftz0HzpaDINfOhoUylDR2C9hdAPoQ
-         t6p8sxBXRIfaP6W5SP7U60QTor4pRu56nxppH8WSW5B/QPeW89LHFXl6wS7fvBT0dfvH
-         HYZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722599537; x=1723204337;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=46L6nTfwlpEOKrJbpXIYVmIVoshBQpihOVyTwQcqTFE=;
-        b=e4x5rv1vBdQoXZOq3ExFLdfAAejIJk2dZw4oJT1sj5I1ys05kBq1knCId6OQp0qLSu
-         vffjrxTQSgy5teBLhcCoxpQy+rgTscs2FkShHXdiEzxPNrYyUmjeg/Z81+7ZREikIldW
-         UVw1ez47NppmdknAn70Bhtpy21EX+xRfhxVV3+W31DEwOZTcy2zmknUwmiPWSgrUffGa
-         1xsXcwi1Za4sSkxuc03AoapWTNHAdx8VbWAgJ6uhbTxFE/kWi3oVGeuRn47IU0EJPHok
-         I+PAxzvpGuePVhFAwDy1iq6S3Wc7eZND518g3aZuRCpP0jyqu7rAoUezDPMJz2xs/G3p
-         574g==
-X-Forwarded-Encrypted: i=1; AJvYcCVEVZKau2XfD70REDq86FQvLCqv3qxWcUgCBS+okgcNE6Zpgq459PJrvT5XftDG9p3SLnG8YWrfCt9g+eNRsK+Q9wQMwelcJzwahqwJgaHigoRR7f4OQ3xHpm1NxNT0pIacT9zRYh1vCQ==
-X-Gm-Message-State: AOJu0YxIYQEVrYxpgTvuyJGsaQYmUxI3dRjeoMCux1/HkptJaYZKNxid
-	R7/aeGVQnjb+FCI/ZvyBczEp6hAEjIu0xYQiRrzMkYwzo/yoAwQq
-X-Google-Smtp-Source: AGHT+IHufQNlGzmcrJffDFBWsb/bmgsJq/VLohwdwIe5kh6bRAB1LAYhwpPtXYIzKtv8V3TcSCECmA==
-X-Received: by 2002:aa7:c406:0:b0:5a0:f0c4:aa7b with SMTP id 4fb4d7f45d1cf-5b7f5129461mr2068504a12.27.1722599536954;
-        Fri, 02 Aug 2024 04:52:16 -0700 (PDT)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5b839b2b0f0sm1009301a12.28.2024.08.02.04.52.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Aug 2024 04:52:16 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Fri, 2 Aug 2024 13:52:13 +0200
-To: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Arnd Bergmann <arnd@kernel.org>, Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	Arnd Bergmann <arnd@arndb.de>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>, Guo Ren <guoren@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Kees Cook <kees@kernel.org>,
-	"peterz@infradead.org" <peterz@infradead.org>,
-	"H.J. Lu" <hjl.tools@gmail.com>,
-	Sohil Mehta <sohil.mehta@intel.com>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Andrii Nakryiko <andrii@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [RFC] uretprobe: change syscall number, again
-Message-ID: <ZqzIbU_T6sN01o5B@krava>
-References: <20240730154500.3155437-1-arnd@kernel.org>
- <20240802181437.29b439e26608561f1289892a@kernel.org>
+	s=arc-20240116; t=1722604889; c=relaxed/simple;
+	bh=cSLJlId3048xUDzDzETlQq2kyFOAUGRX9QnBxR7627Q=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=CquXCPPJmRAVuiEPVOqQM6J0r4toYo8T67xX7OfOD6n2a2pq1DkC+Ti0wr83Lircc07orTPkmXkkwKCt4z9EIKVYIJtQYNeWxgslSA7Q8NJOeMfH2Wx5zXgWoQrAHaxGLX8jf2imuNbis6+rYHXIzet7fot5Ux2fqYb6Dzk3/EU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=epIVo00W; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=kldSn2t2; arc=none smtp.client-ip=103.168.172.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+	by mailflow.nyi.internal (Postfix) with ESMTP id 91C96200DFC;
+	Fri,  2 Aug 2024 09:21:26 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute4.internal (MEProxy); Fri, 02 Aug 2024 09:21:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1722604886;
+	 x=1722612086; bh=R0DqKzGqX1xbFZH9FuQ/nKBXdcQF/KmOifqz6blhFYM=; b=
+	epIVo00Wp9YMmgC8ttebh96AyyWJ0vAYt35/n8Ah1/6GY9ca74EgslxUxVYBy6F/
+	alDG1oRu77WQKa12vLryeyas4G0q4g6y1pbWWehUQFT5jc4vNYNmMF1n/QeyjKk8
+	jyIgz90MQxO8Px0o9f3CDEWWv9n42BZHqCsEJvkyzXbDHwcY67PX8j0cvQ+8XuFD
+	L/FahPp3Y36o2t4UNs4ukx7quF/xJeQNFt670ItFWoqKvWlUnaLZcmsHV2n8+zCQ
+	qul3z/SWL2uqUBNwpRyPuCYAvJndGN8bHvzeSHYAL87Gon937cjshMhTmnUwtvNZ
+	Mz833tOZb04f9SOf+zhaMw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1722604886; x=
+	1722612086; bh=R0DqKzGqX1xbFZH9FuQ/nKBXdcQF/KmOifqz6blhFYM=; b=k
+	ldSn2t2FtBUOpOcVK5o8ITMmEbXPZEsoi6QwwoYGucMAGz6/sqnNsZ90q/7ovktm
+	kqQTg8WttPN+yB/iKLzFb/lCGRysoCblxcVN5h8AgIHS9YGJ/IhOphNwAk6Mikqe
+	uXppIuQPHd+TGUg0z9XtAejATk5V8+Ldru7JghIHVEVg1xGIEG1hUFaBd/eR92pn
+	2+y3apg4bWfv1nI6D2F3irjTxiQ+742zop0DEI77juuhyKdaHNw/rYyHOaT0/yhK
+	JFlC0a480YQmdJTGtMKn4cbe2dVLMOJBCMHzl8bbOLkTUp3nR7wxe0TQtLD++MMA
+	c+lQGI31lnfeSQb+abfCg==
+X-ME-Sender: <xms:Vd2sZtIPksSVLwqVWP20KQPBb6WAsqKVG5PBBve_xYkoQUfuqDvxaQ>
+    <xme:Vd2sZpKE9eWo0CbVEPoIiV5zMut6irh_xZyEUaU4QGpx9QDWmKK5cGhpdAbRgyeqA
+    UojwRIMa_FLJSzK9ec>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrkedtgdeifecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpefhtdfhvddtfeehudekteeggffghfejgeegteefgffgvedugeduveelvdekhfdv
+    ieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopedt
+X-ME-Proxy: <xmx:Vd2sZlv2nEgNMtIrDfuarcE-IsCX971gYvIrlSwicWxEgcc1EaTjJQ>
+    <xmx:Vd2sZuYS8jqkM2Nc_Ebdow8iPW5fOox28yQNpQONjcw_7H5-XhMhrw>
+    <xmx:Vd2sZkZ0WLLb9ySlLDZ2kXhAqDFNpLMUjgspUwm0AnjzbCSf_sATZg>
+    <xmx:Vd2sZiACj81lIx51y_lXAxSLVckwPu-xI6Shd0DP_sgO0Ls0NGt-fA>
+    <xmx:Vt2sZkNqje0BCjj3jKuDa5CPjs_vBlOJJ6Xug-0-GnuQbN9FKiLzJ5aC>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id B96AFB60092; Fri,  2 Aug 2024 09:21:25 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Date: Fri, 02 Aug 2024 15:18:52 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Masami Hiramatsu" <mhiramat@kernel.org>,
+ "Arnd Bergmann" <arnd@kernel.org>
+Cc: "Andy Lutomirski" <luto@kernel.org>,
+ "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar" <mingo@redhat.com>,
+ "Borislav Petkov" <bp@alien8.de>,
+ "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "Jiri Olsa" <jolsa@kernel.org>,
+ "Linus Torvalds" <torvalds@linux-foundation.org>,
+ "H. Peter Anvin" <hpa@zytor.com>, "Palmer Dabbelt" <palmer@dabbelt.com>,
+ guoren <guoren@kernel.org>, "Geert Uytterhoeven" <geert@linux-m68k.org>,
+ "Kees Cook" <kees@kernel.org>, "Peter Zijlstra" <peterz@infradead.org>,
+ "H.J. Lu" <hjl.tools@gmail.com>, "Sohil Mehta" <sohil.mehta@intel.com>,
+ "Oleg Nesterov" <oleg@redhat.com>, "Andrii Nakryiko" <andrii@kernel.org>,
+ linux-kernel@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>,
+ linux-riscv@lists.infradead.org
+Message-Id: <6662ea26-9850-48fd-a67c-01daf412dc2e@app.fastmail.com>
 In-Reply-To: <20240802181437.29b439e26608561f1289892a@kernel.org>
+References: <20240730154500.3155437-1-arnd@kernel.org>
+ <20240802181437.29b439e26608561f1289892a@kernel.org>
+Subject: Re: [RFC] uretprobe: change syscall number, again
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Fri, Aug 02, 2024 at 06:14:37PM +0900, Masami Hiramatsu wrote:
-> On Tue, 30 Jul 2024 17:43:36 +0200
-> Arnd Bergmann <arnd@kernel.org> wrote:
-> 
-> > From: Arnd Bergmann <arnd@arndb.de>
-> > 
-> > Despite multiple attempts to get the syscall number assignment right
-> > for the newly added uretprobe syscall, we ended up with a bit of a mess:
-> > 
-> >  - The number is defined as 467 based on the assumption that the
-> >    xattrat family of syscalls would use 463 through 466, but those
-> >    did not make it into 6.11.
-> 
-> OK... that was not expected.
-> 
-> > 
-> >  - The include/uapi/asm-generic/unistd.h file still lists the number
-> >    463, but the new scripts/syscall.tbl that was supposed to have the
-> >    same data lists 467 instead as the number for arc, arm64, csky,
-> >    hexagon, loongarch, nios2, openrisc and riscv. None of these
-> >    architectures actually provide a uretprobe syscall.
-> 
-> Oops, thanks for finding.
-> 
-> > 
-> >  - All the other architectures (powerpc, arm, mips, ...) don't list
-> >    this syscall at all.
-> 
-> OK, so even if it is not supported on those, we need to put it as a
-> placeholder.
-> 
-> > 
-> > There are two ways to make it consistent again: either list it with
-> > the same syscall number on all architectures, or only list it on x86
-> > but not in scripts/syscall.tbl and asm-generic/unistd.h.
-> > 
-> > Based on the most recent discussion, it seems like we won't need it
-> > anywhere else, so just remove the inconsistent assignment and instead
-> > move the x86 number to the next available one in the architecture
-> > specific range, which is 335.
-> > 
-> > Fixes: 5c28424e9a34 ("syscalls: Fix to add sys_uretprobe to syscall.tbl")
-> > Fixes: 190fec72df4a ("uprobe: Wire up uretprobe system call")
-> > Fixes: 63ded110979b ("uprobe: Change uretprobe syscall scope and number")
-> > Cc: Linus Torvalds <torvalds@linux-foundation.org>
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > ---
-> > I think we should fix this as soon as possible. Please let me know if
-> > you agree on this approach, or prefer one of the alternatives.
-> 
+On Fri, Aug 2, 2024, at 11:14, Masami Hiramatsu wrote:
+> On Tue, 30 Jul 2024 17:43:36 +0200 Arnd Bergmann <arnd@kernel.org> wrote:
+>> ---
+>> I think we should fix this as soon as possible. Please let me know if
+>> you agree on this approach, or prefer one of the alternatives.
+>
 > OK, I think it is good. But you missed to fix a selftest code which
 > also needs to be updated.
-> 
+>
 > Could you revert commit 3e301b431b91 ("selftests/bpf: Change uretprobe
 >  syscall number in uprobe_syscall test") too?
-> 
+
+I folded the change that Jiri suggested now.
+
 > Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> 
-> Thank you,
 
-yes, it still needs the selftest change like below
-otherwise if that new number works for you then lgtm
+Thanks,
 
-Reviewed-by: Jiri Olsa <jolsa@kernel.org>
-
-thanks,
-jirka
-
-
----
-diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-index bd8c75b620c2..5f78edca6540 100644
---- a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-+++ b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-@@ -216,7 +216,7 @@ static void test_uretprobe_regs_change(void)
- }
- 
- #ifndef __NR_uretprobe
--#define __NR_uretprobe 467
-+#define __NR_uretprobe 335
- #endif
- 
- __naked unsigned long uretprobe_syscall_call_1(void)
+     Arnd
 
