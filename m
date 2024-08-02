@@ -1,100 +1,84 @@
-Return-Path: <linux-arch+bounces-5915-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5916-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5187F945B31
-	for <lists+linux-arch@lfdr.de>; Fri,  2 Aug 2024 11:40:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F617945B55
+	for <lists+linux-arch@lfdr.de>; Fri,  2 Aug 2024 11:46:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 07E121F24D25
-	for <lists+linux-arch@lfdr.de>; Fri,  2 Aug 2024 09:40:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B38A281574
+	for <lists+linux-arch@lfdr.de>; Fri,  2 Aug 2024 09:46:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0F711DAC69;
-	Fri,  2 Aug 2024 09:40:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F6501D0DF6;
+	Fri,  2 Aug 2024 09:46:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Zw/KFesV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K2Lvqibp"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5476E1C2BD;
-	Fri,  2 Aug 2024 09:40:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9451C1BF32B;
+	Fri,  2 Aug 2024 09:46:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722591620; cv=none; b=hmsmlMeQwSwJ1SzFTuVFl9DxZfFZ8/6MQsE96XU6P54JGSuIt4GFc/nSwJOFc0vBbl2XgrenNjeGZNbKX24DiHR7xc0eImuY2Xs6HIuesN2pgVbaXm0U09prYmxVIOWlbZHCt8mp/BiuVugmELgwHTEfKaUAzOiDkbZSG592h3A=
+	t=1722591989; cv=none; b=paL4chfMPMp5VWbTMUKXcZjcuyL26B01SqkJ4YiYCFHhUKFn/x8ErWamIv02BdhQFyeUEUf4h7fRc1WlRe2zyOlY45C51yVXXEMu7gvCuZ9XXcwHTmSeMOkpz03iz8ChRY194EK/EjdmSGsImKQeE6FHkV5Pl3rj9nO5BNF/aDg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722591620; c=relaxed/simple;
-	bh=msG2bFBQBZqPQE+/Mc9DqGJxJPZH2XOVibyXJ4vjKh8=;
+	s=arc-20240116; t=1722591989; c=relaxed/simple;
+	bh=r+CuKV0BtJAp/fMFn++g/APZ2xgoalbuTBMWgFPMv9Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Dd7GzLm6K/uQ4IZYPmDM6zGfWOv97dipwj2luUUe0B49BFs4rb47WltcQLF4r56SNqofOKoezyqt22NOIS+rVgeKkd4YENVqciHm+TKequNhVnog+LYl42YxePnwVXwuO9JOJW4MbAM3vjHNsnJ1eHrKEDoxvphSSzBKjBbHP48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Zw/KFesV; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=9Z+aZs0SZ0YC0bCCXeGs8Vm6t97KZ36rxeFA4yv6VTs=; b=Zw/KFesVnIdv3zfmHq5Lgrs5Kv
-	latri07BG8i4S1nwE+kxVm9CRqcaJllTU0uxtIwT+uKPxG/dphWK7zASeRnTfEmWTLCOvBAx4B+z1
-	Ern+lvCmTDVXbcv1dPN0zqMgMzI33TKcRsu4+hzgnhPyCmKqs/Bp988YBtzUM25rpb14ipJQ85AVw
-	A1qBCb2qKv9XsTXMMRilLG3dSTaFmu2TAPcrSPMf3fgPRaPA0fNV8MXpDhCO0KnujT0DRLJAQNj5X
-	5mfm7dVDr1DErxLIcmXKv4X2gk+qdWI705etIfroB8ccBkAw6pd1ol+D+g0iBbcD4UIEBWrLj46po
-	txqO3NeQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sZolO-00000005g5O-43JP;
-	Fri, 02 Aug 2024 09:39:55 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 7E0F230088D; Fri,  2 Aug 2024 11:39:54 +0200 (CEST)
-Date: Fri, 2 Aug 2024 11:39:54 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Alice Ryhl <aliceryhl@google.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Jason Baron <jbaron@akamai.com>, Ard Biesheuvel <ardb@kernel.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	linux-trace-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-	linux-arch@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Uros Bizjak <ubizjak@gmail.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Ryan Roberts <ryan.roberts@arm.com>, Fuad Tabba <tabba@google.com>,
-	linux-arm-kernel@lists.infradead.org,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Anup Patel <apatel@ventanamicro.com>,
-	Andrew Jones <ajones@ventanamicro.com>,
-	Alexandre Ghiti <alexghiti@rivosinc.com>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Samuel Holland <samuel.holland@sifive.com>,
-	linux-riscv@lists.infradead.org,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>, Bibo Mao <maobibo@loongson.cn>,
-	Tiezhu Yang <yangtiezhu@loongson.cn>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Tianrui Zhao <zhaotianrui@loongson.cn>, loongarch@lists.linux.dev,
-	WANG Rui <wangrui@loongson.cn>
-Subject: Re: [PATCH v5 1/2] rust: add static_key_false
-Message-ID: <20240802093954.GH39708@noisy.programming.kicks-ass.net>
-References: <20240802-tracepoint-v5-0-faa164494dcb@google.com>
- <20240802-tracepoint-v5-1-faa164494dcb@google.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=u9hQb9tL8wJNxp2t7q0JLyWpa6uj492L++zYLGNdKSMi/3TgY9Xzfqs8xdS6FAPR0fVaZbZoRJpPdd3i5W1Zgc/Jkl3bTabJMUIQoy1fiZJm5TJ/rhVx+oM40fHJPlXVT134nDC91Ucf2X7jq3JSLjW0iakyC2vpW5JcULf5Zgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K2Lvqibp; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-42817bee9e8so49610815e9.3;
+        Fri, 02 Aug 2024 02:46:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722591986; x=1723196786; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=q67BM/SyptRvsJWIM+wuVI8aE85d1Z8XEHPF+IhIGiI=;
+        b=K2Lvqibp59XTun7HLk+FkLfU7HXYM5cbgwL5ynUsAc47kqwX21WjexcA2b2YTUd9Lh
+         5CzeoI8JwTv5KjsiETAhTt+7HKWPypBCIwMACr7T2TN/+Yoa8QRbPGSOKghq4zHKWfRC
+         IahXcwKOniF0D/d1VRmVbUfwYOA90w0flKUy7xiBADMxy1/2limlp2wb+wi/glsUnj3f
+         T88zgOp542EHP/q/7m0Nxu1l4c0bJrrgUGAQDUD8WnDnZvVC6vMmxI1eY9LKnY0iy5tX
+         VeVv/8TGLxtFnNfnFVV1WQWe4sBcv/u7p0xiMY3IwF07zvc+wiWpObcWL3g+oLg2eLXi
+         TzHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722591986; x=1723196786;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=q67BM/SyptRvsJWIM+wuVI8aE85d1Z8XEHPF+IhIGiI=;
+        b=litUxoEkN7s0KrKYhhdRdYXToJZRVdAl8UDNi5Ijj+W2Aamy7d8itqhtUAubDX2KZ1
+         fooazsdJ4URzfep4bdXcGdLo+ERQNWOqvS5V/o/mFJexKvOXvXulyh9gr8VEWuZrrN8C
+         1H9UeUsSFjPCBWYLBUgj2jKYPzDpNpxhz9Kq+johnfp+xRl6hwhoctt4CHmmkyU2q7eD
+         +AmKQw4puvTC9dIhtf4pepA46NY86pu8Z14zpbpam7LdFPOF+0Wt6sC1KJNn6LZo0Ika
+         M+V5IiP0w3A3ij7tdXru7dNrCxceFNvZ9cy+SQRdCMbNiADoWj56PfUjb/b/M3Vn94mS
+         7Epw==
+X-Forwarded-Encrypted: i=1; AJvYcCVbn0KShfi0v6nJsdrNgXqerVTD5YwXWGzcMxNMEa5DzCIOa6aOj2MDs56rp1e2Iorm7i+ezybgPRz6n0ZJfErRPYNrMoTNBDLYiQ==
+X-Gm-Message-State: AOJu0Ywb3orxpaNmOSRTzJLJ0V+ibELPdZxR2nMYUZRow9mFiiYUL+Cx
+	by1X0pi7m2Cj+sRG0D8pVdG1QfDwZXQ2A6Hr4EZQRd2R6aa0r92UGdX3usaEfmQ=
+X-Google-Smtp-Source: AGHT+IFCLBjPsFTWDZkjzm22AGa3mLr/3SDceOhn+SPwLeYiThM/NnCa7DDCeZhNCep2iLYyQ6EoVg==
+X-Received: by 2002:a05:600c:1906:b0:426:686f:cb4c with SMTP id 5b1f17b1804b1-428e6b96b3bmr20772425e9.32.1722591985295;
+        Fri, 02 Aug 2024 02:46:25 -0700 (PDT)
+Received: from andrea ([151.76.3.213])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42824ae7a59sm74389155e9.1.2024.08.02.02.46.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Aug 2024 02:46:24 -0700 (PDT)
+Date: Fri, 2 Aug 2024 11:46:20 +0200
+From: Andrea Parri <parri.andrea@gmail.com>
+To: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	lkmm@lists.linux.dev, kernel-team@meta.com, mingo@kernel.org,
+	stern@rowland.harvard.edu, will@kernel.org, peterz@infradead.org,
+	boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
+	j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com
+Subject: Re: [PATCH memory-model 7/7] MAINTAINERS: Add the dedicated maillist
+ info for LKMM
+Message-ID: <Zqyq7DjIrHAOqf0k@andrea>
+References: <e384a9ac-05c1-45d6-9639-28457dd183d9@paulmck-laptop>
+ <20240802002215.4133695-7-paulmck@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -103,30 +87,21 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240802-tracepoint-v5-1-faa164494dcb@google.com>
+In-Reply-To: <20240802002215.4133695-7-paulmck@kernel.org>
 
-On Fri, Aug 02, 2024 at 09:31:27AM +0000, Alice Ryhl wrote:
-> Add just enough support for static key so that we can use it from
-> tracepoints. Tracepoints rely on `static_key_false` even though it is
-> deprecated, so we add the same functionality to Rust.
+On Thu, Aug 01, 2024 at 05:22:15PM -0700, Paul E. McKenney wrote:
+> From: Boqun Feng <boqun.feng@gmail.com>
 > 
-> It is not possible to use the existing C implementation of
-> arch_static_branch because it passes the argument `key` to inline
-> assembly as an 'i' parameter, so any attempt to add a C helper for this
-> function will fail to compile because the value of `key` must be known
-> at compile-time.
+> A dedicated mail list has been created for Linux kernel memory model
+> discussion, which could help people more easily track memory model
+> related discussions.  This could also help bring memory model discussions
+> to a broader audience.  Therefore, add the list information to the LKMM
+> maintainers entry.
 > 
-> One disadvantage of this patch is that it introduces a fair amount of
-> duplicated inline assembly. However, this is a limited and temporary
-> situation:
-> 
-> 1. Most inline assembly has no reason to be duplicated like this. It is
->    only needed here due to the use of 'i' parameters.
-> 
-> 2. Alice will submit a patch along the lines of [1] that removes the
->    duplication. This will happen as a follow-up to this patch series.
+> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 
-You're talking about yourself in the 3rd person?
+Acked-by: Andrea Parri <parri.andrea@gmail.com>
 
-What's the rush, why not do it right first?
+  Andrea
 
