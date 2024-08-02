@@ -1,45 +1,45 @@
-Return-Path: <linux-arch+bounces-5917-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5918-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D5DC945B6B
-	for <lists+linux-arch@lfdr.de>; Fri,  2 Aug 2024 11:49:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26B99945B8C
+	for <lists+linux-arch@lfdr.de>; Fri,  2 Aug 2024 11:55:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 541BD282A2B
-	for <lists+linux-arch@lfdr.de>; Fri,  2 Aug 2024 09:49:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5966C1C2088B
+	for <lists+linux-arch@lfdr.de>; Fri,  2 Aug 2024 09:55:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 042A51DB438;
-	Fri,  2 Aug 2024 09:49:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 811311DB44D;
+	Fri,  2 Aug 2024 09:55:35 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1986B1DAC65;
-	Fri,  2 Aug 2024 09:49:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 109051C2BD;
+	Fri,  2 Aug 2024 09:55:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722592172; cv=none; b=D9wWN/FsAzaKPb5scFTI+bakvck1iRYCDL7uF2H8N/ttNQjus3gD8zpzzHB+KmtPw7fLVkL4DHKGkj+5ckLtUfWN0bTpdZWoCzMBHXQMazPM/7WQPRyAV58xF1DRwXr2rW+xW735nG9WICW1mPazDbEvaxGL/A7LPLdbTz+Ctec=
+	t=1722592535; cv=none; b=nMzyYhygBK/IeaV+xdQfjXHeNevpzN5q2n8FrW0ryEyRgGOXXFHHrZlzTTGo5RUmBSWnbxYOOvljTKtzO9hAtFtqbLIlJ2Ndhy2wuWcAYusqxQx93ZbMIibGp8uHrzHZbs8QXxR74dPzhxDcGfbFOzREjYn69f/nyuO51/SH92E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722592172; c=relaxed/simple;
-	bh=V6rv7TGpmKX1umA5P31mK46zzcAigO8h1m0IHBWCnyE=;
+	s=arc-20240116; t=1722592535; c=relaxed/simple;
+	bh=WGch83+auWMTzDfx3QBlwfimVN5n/QF3g/w9CXRWSKc=;
 	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BnQKWjHgYBWIMQYS5djQ0Dmxf2vrtOMWJQ/bDZ4fKK+Aj99nyTn9PFAavj27ZmFDoyYvMiEQ79GGCmKoIej2AyL1xhS4bHKnXEWQsmZkbXZDB+LMdfbG4CAzdU7NHS/FJljz/lLqufbND3rJIi0qC6bKTYaefTqphey3A5vj6RY=
+	 MIME-Version:Content-Type; b=PfRTUpc6CJf0EflZ+AyfJgIhTQvnNvXeD7Dl4OuruiS7Nw9veRcJLj4BN3i5S9/qlbkuH11C9qBJHThZoPlZeDfmA4LUiid5WgoBkOEoNsvMsVnQDjynmcVzsb/8LBPyiZQbkoIQ7iCB6f3G2WvFEHYQqViBe1ME+ehpUfke7fY=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Wb1G048mKz6K610;
-	Fri,  2 Aug 2024 17:47:20 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Wb1NN08c9z6K99q;
+	Fri,  2 Aug 2024 17:52:52 +0800 (CST)
 Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 129BE140A08;
-	Fri,  2 Aug 2024 17:49:24 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 51A73140A86;
+	Fri,  2 Aug 2024 17:55:29 +0800 (CST)
 Received: from localhost (10.203.177.66) by lhrpeml500005.china.huawei.com
  (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Fri, 2 Aug
- 2024 10:49:23 +0100
-Date: Fri, 2 Aug 2024 10:49:22 +0100
+ 2024 10:55:28 +0100
+Date: Fri, 2 Aug 2024 10:55:27 +0100
 From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
 To: Mike Rapoport <rppt@kernel.org>
 CC: <linux-kernel@vger.kernel.org>, Alexander Gordeev
@@ -66,11 +66,12 @@ CC: <linux-kernel@vger.kernel.org>, Alexander Gordeev
 	<linux-s390@vger.kernel.org>, <linux-sh@vger.kernel.org>,
 	<linuxppc-dev@lists.ozlabs.org>, <loongarch@lists.linux.dev>,
 	<nvdimm@lists.linux.dev>, <sparclinux@vger.kernel.org>, <x86@kernel.org>
-Subject: Re: [PATCH v3 07/26] mm: drop CONFIG_HAVE_ARCH_NODEDATA_EXTENSION
-Message-ID: <20240802104922.000051a0@Huawei.com>
-In-Reply-To: <20240801060826.559858-8-rppt@kernel.org>
+Subject: Re: [PATCH v3 09/26] arch, mm: pull out allocation of NODE_DATA to
+ generic code
+Message-ID: <20240802105527.00005240@Huawei.com>
+In-Reply-To: <20240801060826.559858-10-rppt@kernel.org>
 References: <20240801060826.559858-1-rppt@kernel.org>
-	<20240801060826.559858-8-rppt@kernel.org>
+	<20240801060826.559858-10-rppt@kernel.org>
 Organization: Huawei Technologies Research and Development (UK) Ltd.
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
@@ -84,124 +85,67 @@ Content-Transfer-Encoding: 7bit
 X-ClientProxiedBy: lhrpeml100004.china.huawei.com (7.191.162.219) To
  lhrpeml500005.china.huawei.com (7.191.163.240)
 
-On Thu,  1 Aug 2024 09:08:07 +0300
+On Thu,  1 Aug 2024 09:08:09 +0300
 Mike Rapoport <rppt@kernel.org> wrote:
 
 > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 > 
-> There are no users of HAVE_ARCH_NODEDATA_EXTENSION left, so
-> arch_alloc_nodedata() and arch_refresh_nodedata() are not needed
-> anymore.
+> Architectures that support NUMA duplicate the code that allocates
+> NODE_DATA on the node-local memory with slight variations in reporting
+> of the addresses where the memory was allocated.
 > 
-> Replace the call to arch_alloc_nodedata() in free_area_init() with
-> memblock_alloc(), remove arch_refresh_nodedata() and cleanup
-> include/linux/memory_hotplug.h from the associated ifdefery.
+> Use x86 version as the basis for the generic alloc_node_data() function
+> and call this function in architecture specific numa initialization.
+> 
+> Round up node data size to SMP_CACHE_BYTES rather than to PAGE_SIZE like
+> x86 used to do since the bootmem era when allocation granularity was
+> PAGE_SIZE anyway.
 > 
 > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> Acked-by: David Hildenbrand <david@redhat.com>
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 > Tested-by: Zi Yan <ziy@nvidia.com> # for x86_64 and arm64
 
-Hi Mike, 
+One comment unrelated to this patch set as such, just made
+more obvious by it.
 
-This has an accidental (I assume) functional change and if
-you have an initially offline node it all goes wrong.
+> diff --git a/arch/powerpc/mm/numa.c b/arch/powerpc/mm/numa.c
+> index 0744a9a2944b..3c1da08304d0 100644
+> --- a/arch/powerpc/mm/numa.c
+> +++ b/arch/powerpc/mm/numa.c
+> @@ -1093,27 +1093,9 @@ void __init dump_numa_cpu_topology(void)
+>  static void __init setup_node_data(int nid, u64 start_pfn, u64 end_pfn)
+>  {
+>  	u64 spanned_pages = end_pfn - start_pfn;
 
+Trivial, but might as well squash this local variable into the
+single place it's used.
 
-> ---
->  include/linux/memory_hotplug.h | 48 ----------------------------------
->  mm/mm_init.c                   |  3 +--
->  2 files changed, 1 insertion(+), 50 deletions(-)
-> 
-> diff --git a/include/linux/memory_hotplug.h b/include/linux/memory_hotplug.h
-> index ebe876930e78..b27ddce5d324 100644
-> --- a/include/linux/memory_hotplug.h
-> +++ b/include/linux/memory_hotplug.h
-> @@ -16,54 +16,6 @@ struct resource;
->  struct vmem_altmap;
->  struct dev_pagemap;
->  
-> -#ifdef CONFIG_HAVE_ARCH_NODEDATA_EXTENSION
-> -/*
-> - * For supporting node-hotadd, we have to allocate a new pgdat.
-> - *
-> - * If an arch has generic style NODE_DATA(),
-> - * node_data[nid] = kzalloc() works well. But it depends on the architecture.
-> - *
-> - * In general, generic_alloc_nodedata() is used.
-> - *
-> - */
-> -extern pg_data_t *arch_alloc_nodedata(int nid);
-> -extern void arch_refresh_nodedata(int nid, pg_data_t *pgdat);
+> -	const size_t nd_size = roundup(sizeof(pg_data_t), SMP_CACHE_BYTES);
+> -	u64 nd_pa;
+> -	void *nd;
+> -	int tnid;
 > -
-> -#else /* CONFIG_HAVE_ARCH_NODEDATA_EXTENSION */
+> -	nd_pa = memblock_phys_alloc_try_nid(nd_size, SMP_CACHE_BYTES, nid);
+> -	if (!nd_pa)
+> -		panic("Cannot allocate %zu bytes for node %d data\n",
+> -		      nd_size, nid);
 > -
-> -#define arch_alloc_nodedata(nid)	generic_alloc_nodedata(nid)
+> -	nd = __va(nd_pa);
 > -
-> -#ifdef CONFIG_NUMA
-> -/*
-> - * XXX: node aware allocation can't work well to get new node's memory at this time.
-> - *	Because, pgdat for the new node is not allocated/initialized yet itself.
-> - *	To use new node's memory, more consideration will be necessary.
-> - */
-> -#define generic_alloc_nodedata(nid)				\
-> -({								\
-> -	memblock_alloc(sizeof(*pgdat), SMP_CACHE_BYTES);	\
-> -})
+> -	/* report and initialize */
+> -	pr_info("  NODE_DATA [mem %#010Lx-%#010Lx]\n",
+> -		nd_pa, nd_pa + nd_size - 1);
+> -	tnid = early_pfn_to_nid(nd_pa >> PAGE_SHIFT);
+> -	if (tnid != nid)
+> -		pr_info("    NODE_DATA(%d) on node %d\n", nid, tnid);
 > -
-> -extern pg_data_t *node_data[];
-> -static inline void arch_refresh_nodedata(int nid, pg_data_t *pgdat)
-> -{
-> -	node_data[nid] = pgdat;
-> -}
-> -
-> -#else /* !CONFIG_NUMA */
-> -
-> -/* never called */
-> -static inline pg_data_t *generic_alloc_nodedata(int nid)
-> -{
-> -	BUG();
-> -	return NULL;
-> -}
-> -static inline void arch_refresh_nodedata(int nid, pg_data_t *pgdat)
-> -{
-> -}
-> -#endif /* CONFIG_NUMA */
-> -#endif /* CONFIG_HAVE_ARCH_NODEDATA_EXTENSION */
-> -
->  #ifdef CONFIG_MEMORY_HOTPLUG
->  struct page *pfn_to_online_page(unsigned long pfn);
->  
-> diff --git a/mm/mm_init.c b/mm/mm_init.c
-> index 75c3bd42799b..bcc2f2dd8021 100644
-> --- a/mm/mm_init.c
-> +++ b/mm/mm_init.c
-> @@ -1838,11 +1838,10 @@ void __init free_area_init(unsigned long *max_zone_pfn)
->  
->  		if (!node_online(nid)) {
->  			/* Allocator not initialized yet */
-> -			pgdat = arch_alloc_nodedata(nid);
-> +			pgdat = memblock_alloc(sizeof(*pgdat), SMP_CACHE_BYTES);
->  			if (!pgdat)
->  				panic("Cannot allocate %zuB for node %d.\n",
->  				       sizeof(*pgdat), nid);
-> -			arch_refresh_nodedata(nid, pgdat);
-
-This allocates pgdat but never sets node_data[nid] to it
-and promptly leaks it on the line below. 
-
-Just to sanity check this I spun up a qemu machine with no memory
-initially present on some nodes and it went boom as you'd expect.
-
-I tested with addition of
-			NODE_DATA(nid) = pgdat;
-and it all seems to work as expected.
-
-Jonathan
-
-
-
->  		}
->  
->  		pgdat = NODE_DATA(nid);
-
-
+> -	node_data[nid] = nd;
+> -	memset(NODE_DATA(nid), 0, sizeof(pg_data_t));
+> +
+> +	alloc_node_data(nid);
+> +
+>  	NODE_DATA(nid)->node_id = nid;
+>  	NODE_DATA(nid)->node_start_pfn = start_pfn;
+>  	NODE_DATA(nid)->node_spanned_pages = spanned_pages;
 
