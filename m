@@ -1,79 +1,146 @@
-Return-Path: <linux-arch+bounces-5943-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5944-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D96A8946214
-	for <lists+linux-arch@lfdr.de>; Fri,  2 Aug 2024 18:53:08 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC79E946262
+	for <lists+linux-arch@lfdr.de>; Fri,  2 Aug 2024 19:24:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 174301C214FB
-	for <lists+linux-arch@lfdr.de>; Fri,  2 Aug 2024 16:53:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 44558B21DD8
+	for <lists+linux-arch@lfdr.de>; Fri,  2 Aug 2024 17:24:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9141E13634C;
-	Fri,  2 Aug 2024 16:53:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFCBF1537DF;
+	Fri,  2 Aug 2024 17:24:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sJpdP40F"
+	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="NvaGzkys"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail-40134.protonmail.ch (mail-40134.protonmail.ch [185.70.40.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6421116BE0E;
-	Fri,  2 Aug 2024 16:53:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62F661537A0;
+	Fri,  2 Aug 2024 17:24:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722617583; cv=none; b=O4rUnyGryKoBn5qyVO0RqkeaM8MkWliGFoIzQXOHq5UdKXH5sDXidBH5C2vGKHhidMSRgKHE/JKBkjHNSIL8q2bEOe3l/rtdfg7tOApgu3Vssp3nhXxiDC5lw/hOkru1QnN8AwG/gwKbEQ7buVPeU+AVn8B51TP4n95mJlNaOuQ=
+	t=1722619450; cv=none; b=TA7DlaeOy2zHmtJOBmuefSenD9P37r2JwJ5zWh01erAifXo+uWASfCdV6y+xFb+M/tAT57+vEIRVt/6AAu6/8mSqMZevp3i+DTmytPzFdKeeKwoi3Pbo9Qj9A93dCOa3ABKWruo0MrBgnKvw2MPa12vTVnDSZVDd+Pmh5Ldq9CY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722617583; c=relaxed/simple;
-	bh=ksPx/nJVMGiJKRwCNbH4MWMtCx9sEzvONXFeeg4Grws=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=Iq5kePJmW8VzTiuCrL2isKrXg3KuFrY+06SM+WTqyLr/RjITkp8O0t6Rxm0HxZTGhMaiRlngFusDgNs8nz0L9LB5zP1BbCzD9i61s7eGM5Pkrx8IIHuTTj51GG+XK6oyncICNqz8yUgWCbY763hfYo3PxmPrR7Mf1s6ItG6Mb+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sJpdP40F; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3F10CC32782;
-	Fri,  2 Aug 2024 16:53:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722617583;
-	bh=ksPx/nJVMGiJKRwCNbH4MWMtCx9sEzvONXFeeg4Grws=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=sJpdP40F3S7YmLRwecw1IU6GFRwnzBqNjVKyQi5aoxUgFmIQRZnLviiut6QGiFVMo
-	 Yvr57OQrDeMd8hW5AcmOe0rjY4qVu+/TkevR1uMM93/pfS+PyXavrWdZVVZwOi/Iqb
-	 OGJvWYknELKrVzrgmogWOqvgT439BmAT1NremOrHheCQfeIfUk1qAwpDyXWorjqZzh
-	 lC+TtQLUqLgnmwKC8m1ADouyUKCN+wyFyxzDHF0F0kpMzNIlg0/aN+mJZ2TlWjv9ck
-	 TfTV0u+PMnr6QOLKcYaMHW1KyE72ZeNSiQpvIDhD8RD8vZKJfd7fSpiKK8xX165dKD
-	 1dKdbcFhJz2Eg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 35A42D0C60A;
-	Fri,  2 Aug 2024 16:53:03 +0000 (UTC)
-Subject: Re: [GIT PULL] asm-generic: fixes for 6.11
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <9a365229-9f76-47ac-87e2-fdeafe8550ab@app.fastmail.com>
-References: <9a365229-9f76-47ac-87e2-fdeafe8550ab@app.fastmail.com>
-X-PR-Tracked-List-Id: <linux-arch.vger.kernel.org>
-X-PR-Tracked-Message-Id: <9a365229-9f76-47ac-87e2-fdeafe8550ab@app.fastmail.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/asm-generic-fixes-6.11-1
-X-PR-Tracked-Commit-Id: 343416f0c11c42bed07f6db03ca599f4f1771b17
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 29ccb40f2b543ccb1d143e54e8227b80d277bc2f
-Message-Id: <172261758320.28369.9121389422290459623.pr-tracker-bot@kernel.org>
-Date: Fri, 02 Aug 2024 16:53:03 +0000
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-alpha@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>, "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, Florian Weimer <fweimer@redhat.com>, Andreas Schwab <schwab@suse.de>, linux-kernel@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>, linux-api@vger.kernel.org
+	s=arc-20240116; t=1722619450; c=relaxed/simple;
+	bh=WFAHa2ete4Xb+JbywsGV+pLk9gCOl+vYhLmCllbETPw=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=uRMSxlC+UBENbYmTNjSFv2V4jOPB7SmXCrPRNylip1LQQXAnQDwU6iHbtjcrNC4hwbhulAQbTWlBnwOCweFmrI4OxDWSnzmwb8VG3UDH3OLDvtWwsSj1bgYC243HaSWxh6nKZMECFIb7ZLIMdYPdfGUNRRPHokzkUsZOCoT/UZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=NvaGzkys; arc=none smtp.client-ip=185.70.40.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+	s=protonmail; t=1722619446; x=1722878646;
+	bh=KYJ880DzvybbissblwMCNzUlLxxe1Ktl0TOAACRRXAQ=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=NvaGzkysirXcjizn6Jo4e4bFXgCgbyugGW/9RojsJdsReD3ddkqxDsLLila/aLRf6
+	 zAbt4EB/1Gu795L1QQ/3CavkmtMHt7uIFQq8t2ItVC3iOl9fwTeC1AthRSX4z+8iNe
+	 oTr8wCRurge3wMmBL2CzZSMR6HFHR48iZ/RMDQcD0zhPEJL/htJer4r63YJ548B1tb
+	 J6FK0Z9l/PtQc892UbtZkC+5Plst5EtSJMIYvNubk7qKCDAz8J/AnUw2YqS/s397gC
+	 G+gnJ0EzhLYfOWcLjc7ypKcE9FOL5T0G59OgxWS4zTsdbw3CdY61bx6jAIVXRefpsV
+	 feUbG72Eojoow==
+Date: Fri, 02 Aug 2024 17:23:59 +0000
+To: Alice Ryhl <aliceryhl@google.com>, Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@kernel.org>, Jason Baron <jbaron@akamai.com>, Ard Biesheuvel <ardb@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@samsung.com>
+From: Benno Lossin <benno.lossin@proton.me>
+Cc: linux-trace-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, Sean Christopherson <seanjc@google.com>, Uros Bizjak <ubizjak@gmail.com>, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, Mark Rutland <mark.rutland@arm.com>, Ryan Roberts <ryan.roberts@arm.com>, Fuad Tabba <tabba@google.com>, linux-arm-kernel@lists.infradead.org, Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Anup Patel <apatel@ventanamicro.com>, Andrew Jones <ajones@ventanamicro.com>, Alexandre Ghiti <alexghiti@rivosinc.com>, Conor Dooley <conor.dooley@microchip.com>,
+	Samuel Holland <samuel.holland@sifive.com>, linux-riscv@lists.infradead.org, Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, Bibo Mao <maobibo@loongson.cn>, Tiezhu Yang <yangtiezhu@loongson.cn>, Andrew Morton <akpm@linux-foundation.org>, Tianrui Zhao <zhaotianrui@loongson.cn>, loongarch@lists.linux.dev, Carlos Llamas <cmllamas@google.com>
+Subject: Re: [PATCH v5 2/2] rust: add tracepoint support
+Message-ID: <a381ef22-96f4-4a72-8e3a-cc023dee111a@proton.me>
+In-Reply-To: <20240802-tracepoint-v5-2-faa164494dcb@google.com>
+References: <20240802-tracepoint-v5-0-faa164494dcb@google.com> <20240802-tracepoint-v5-2-faa164494dcb@google.com>
+Feedback-ID: 71780778:user:proton
+X-Pm-Message-ID: d47c8e3b3391333c5a5926396deb7ee3ad135f33
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-The pull request you sent on Fri, 02 Aug 2024 15:29:25 +0200:
+On 02.08.24 11:31, Alice Ryhl wrote:
+> diff --git a/rust/kernel/tracepoint.rs b/rust/kernel/tracepoint.rs
+> new file mode 100644
+> index 000000000000..69dafdb8bfe8
+> --- /dev/null
+> +++ b/rust/kernel/tracepoint.rs
+> @@ -0,0 +1,49 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +// Copyright (C) 2024 Google LLC.
+> +
+> +//! Logic for tracepoints.
+> +
+> +/// Declare the Rust entry point for a tracepoint.
+> +///
+> +/// This macro generates an unsafe function that calls into C, and its s=
+afety requirements will be
+> +/// whatever the relevant C code requires. To document these safety requ=
+irements, you may add
+> +/// doc-comments when invoking the macro.
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/asm-generic-fixes-6.11-1
+I think we should mandate safety documentation for the function.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/29ccb40f2b543ccb1d143e54e8227b80d277bc2f
+> +#[macro_export]
+> +macro_rules! declare_trace {
+> +    ($($(#[$attr:meta])* $pub:vis fn $name:ident($($argname:ident : $arg=
+typ:ty),* $(,)?);)*) =3D> {$(
 
-Thank you!
+Can you add an `unsafe` in front of `fn`, since this macro generates an
+`unsafe` function? Otherwise I don't see how the SAFETY comment below is
+correct.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+---
+Cheers,
+Benno
+
+> +        $( #[$attr] )*
+> +        #[inline(always)]
+> +        $pub unsafe fn $name($($argname : $argtyp),*) {
+> +            #[cfg(CONFIG_TRACEPOINTS)]
+> +            {
+> +                // SAFETY: It's always okay to query the static key for =
+a tracepoint.
+> +                let should_trace =3D unsafe {
+> +                    $crate::macros::paste! {
+> +                        $crate::static_key::static_key_false!(
+> +                            $crate::bindings::[< __tracepoint_ $name >],
+> +                            $crate::bindings::tracepoint,
+> +                            key
+> +                        )
+> +                    }
+> +                };
+> +
+> +                if should_trace {
+> +                    $crate::macros::paste! {
+> +                        // SAFETY: The caller guarantees that it is okay=
+ to call this tracepoint.
+> +                        unsafe { $crate::bindings::[< rust_do_trace_ $na=
+me >]($($argname),*) };
+> +                    }
+> +                }
+> +            }
+> +
+> +            #[cfg(not(CONFIG_TRACEPOINTS))]
+> +            {
+> +                // If tracepoints are disabled, insert a trivial use of =
+each argument
+> +                // to avoid unused argument warnings.
+> +                $( let _unused =3D $argname; )*
+> +            }
+> +        }
+> +    )*}
+> +}
+> +
+> +pub use declare_trace;
+>=20
+> --
+> 2.46.0.rc2.264.g509ed76dc8-goog
+>=20
+
 
