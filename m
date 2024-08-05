@@ -1,161 +1,201 @@
-Return-Path: <linux-arch+bounces-5969-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5970-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B216947C91
-	for <lists+linux-arch@lfdr.de>; Mon,  5 Aug 2024 16:12:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C35E3947C99
+	for <lists+linux-arch@lfdr.de>; Mon,  5 Aug 2024 16:13:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C7BD1C21BA5
-	for <lists+linux-arch@lfdr.de>; Mon,  5 Aug 2024 14:12:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 45BCD1F22BBD
+	for <lists+linux-arch@lfdr.de>; Mon,  5 Aug 2024 14:13:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F6E012EBCA;
-	Mon,  5 Aug 2024 14:12:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DE8E137750;
+	Mon,  5 Aug 2024 14:13:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="Lo2Ip46l"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="q+A31pQZ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp-fw-80008.amazon.com (smtp-fw-80008.amazon.com [99.78.197.219])
+Received: from SJ2PR03CU001.outbound.protection.outlook.com (mail-westusazolkn19012057.outbound.protection.outlook.com [52.103.2.57])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A727517C64;
-	Mon,  5 Aug 2024 14:12:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=99.78.197.219
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722867137; cv=none; b=oTh0NtzpuDRx0iuYyGfJCMFOTLxbjnfDWQxb4reuQcYmDcu1gKKUp31oYSWlYnaquGGeyFxszI3o1OFvIQAIxTR50UPsD8wp7brb+I8GIIeP4D+Oe9vWfBtfVcZj5Das1QmqE5TYZ0YYQv98YIpQU7lnIK8XGSwxN3aJ7Bv1pmA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722867137; c=relaxed/simple;
-	bh=9M4xpkoH3LimV0O0XQcpYnwFUNXxsSPpdOBU2ZuvMyY=;
-	h=Subject:MIME-Version:Content-Type:Date:Message-ID:CC:From:To:
-	 References:In-Reply-To; b=MfR2Uo70qspShBNPq0l2OxJaCH9rvj5Nl6YeiOv/wOWcoA5fi5qlUhEcFRoGH3zAaLS6Rb3MQnkN2XiS8jRjpNUihHrFOfcsum1VIpnCNddadXd+MY1cXbHkYH6FG1qVcmi35OOtSzFLrIDQ7+gP1I3RxKOid60PeSfAHak/yDA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.es; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=Lo2Ip46l; arc=none smtp.client-ip=99.78.197.219
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.es
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1722867135; x=1754403135;
-  h=mime-version:content-transfer-encoding:date:message-id:
-   cc:from:to:references:in-reply-to:subject;
-  bh=MK25yrGsMeryEu/GddZa4lO4IjN5z+54ON7xDCNErE8=;
-  b=Lo2Ip46lrst1H5aB7j2LI1HD6MWx6P2XQcFLmajRQ4QXSczhFQRQEcKJ
-   9YjGWrwxdBeaWGWBYJgEI9sT2HCT+BH5PUousdxcNxhSDX6FLlkFc72KK
-   JvHMkPIJPYl1jMOrRB/60O2TJpkhsnmwS2Nn8iADSrfV+bBOnMczxgagP
-   s=;
-X-IronPort-AV: E=Sophos;i="6.09,264,1716249600"; 
-   d="scan'208";a="112496171"
-Subject: Re: [PATCH 01/18] KVM: x86: hyper-v: Introduce XMM output support
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO smtpout.prod.us-east-1.prod.farcaster.email.amazon.dev) ([10.25.36.214])
-  by smtp-border-fw-80008.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2024 14:08:58 +0000
-Received: from EX19MTAEUB001.ant.amazon.com [10.0.43.254:29010]
- by smtpin.naws.eu-west-1.prod.farcaster.email.amazon.dev [10.0.0.23:2525] with esmtp (Farcaster)
- id e194f651-d149-4251-920f-bb202d846005; Mon, 5 Aug 2024 14:08:57 +0000 (UTC)
-X-Farcaster-Flow-ID: e194f651-d149-4251-920f-bb202d846005
-Received: from EX19D004EUC001.ant.amazon.com (10.252.51.190) by
- EX19MTAEUB001.ant.amazon.com (10.252.51.28) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
- Mon, 5 Aug 2024 14:08:56 +0000
-Received: from localhost (10.13.235.138) by EX19D004EUC001.ant.amazon.com
- (10.252.51.190) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34; Mon, 5 Aug 2024
- 14:08:50 +0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25401139CE3;
+	Mon,  5 Aug 2024 14:12:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.2.57
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1722867181; cv=fail; b=Cc/g3q4bqGpli9ve+O1ldH/mAiM7KroycOmGAcmO+2UHBCtF9FIBiYUOK632YnRvRKmlAKwZtfEGZGB61v+rkevqO+r2SxG/KdQTnxC13nBXmVwvjWs/DGH0DVhQydl13O8oXzVknPF1jq8M4HTJWQcRata+os9Ox3Plx4iEJKg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1722867181; c=relaxed/simple;
+	bh=q+Qlf4d/CGHKsuy1HT2+74gMu2UmkkiGr2bNk3UPs28=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=mD4XHJtK1NYbKs9zmeaoYlcqi4/p5rDq2X6DbbBubTJEvG36CJri8wizn3z41nPBW8piF30CRsQ0TYO8NXl3dmFAKaHIeH+WO5RATrUEJyGVEIrMWtoboy0zVRAwA73VwQtpWdgauQVPpczJfxn6lm3ujLs3tcjklbkofY2+jiM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=q+A31pQZ; arc=fail smtp.client-ip=52.103.2.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=KTpbertyn2Jof3Z57/QXUyqLWhsaMjT+4+9Pj0n31ZSCXQH8J35BShff3A5RjXxwO7e2szAbn2TFl40i61IYvw+DRv8ngQNdluYj8VgdMVGusKgJoAWQ4ruNjAJKWgjRl+QEOJf4MBYZ3d/7jQPe4QFHYJkSjXnTZ7fI4Z+e5mQBfyrI24xSUzo0DM2kPAfWElLuvXYontD51G/apKtczEnQOPECEeiY1RKHK0yz77/+vwiMJQzJ3r9lGTW5LWFDVieSqvrfj1+fx5NsXGH+viZZwabcdsQnyO2oTO2wDvqYQ9Fsa0CwrtD/G3Jak6lY7jpaWS1x9gQUSdHLqNi1OA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0+M04b7BgIER6F7iCEgjrg2kJ6k+WAI7Fg3Jx/fAhPs=;
+ b=Ltz2VYeBpJ31oTs/EtwM7I6Sar3mO/Pnc4xfdmrm2UMa4Aky5Fw4PqmmdlTYbNAfbYHZmWrIwcmLSvrubhIEGWOkJCo0OgbKsJsqJdTUZ6k2OKh/kSk/6MIRDdFy2bdzUsTgA0eb11a371HgPA6m6enrRg8/u5tDFPYTAlKJjwytqY3TPD57eCkpcWaQy5Mm/uauw2fSpMYGsEp6gWi+wpxI1NXst3DC23ti8//G3oJQTF8Ub2urDTtSGWaLXjlrYKzDXoms8z82UGzGPSxBolGeT5IBYhL/1gtvqf9dq8G3w8CF7f4LRj3BGv2woNNTe0I+Qo68FeWiYUntwLjG9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0+M04b7BgIER6F7iCEgjrg2kJ6k+WAI7Fg3Jx/fAhPs=;
+ b=q+A31pQZvsKLGP0LVth0U3kjLbt555GPehOtvRa+LJQcMvOSYUsERXomGqS+6PySjSlhTgHKvXxuMeOBKiS/ajahbNAu5Dbp4t40rRLhRgW/LPDye9SMeGR5rS3OKS+2eOa/UmZr9YLwaVpPXW0gsI6eRMZTe1KGkr44bufAVqzUgdzs/WwJUppLuaEjIOEvK1Q9brmPZ7xSqOSEeUkaDwT9zI1CUD1gsPEzVxk0BBTlUxu8FJ+07z/3hYsjo7YCzQCsY2pmp7dylxjGf1nq7Ej2uB9ld94ei9fLCOUNS3/Epw/rW7UWJ8sOepRXRqHg0UN6gIdJtOVwXU6FtZvaRQ==
+Received: from SN6PR02MB4157.namprd02.prod.outlook.com (2603:10b6:805:33::23)
+ by IA3PR02MB10589.namprd02.prod.outlook.com (2603:10b6:208:535::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7828.22; Mon, 5 Aug
+ 2024 14:12:41 +0000
+Received: from SN6PR02MB4157.namprd02.prod.outlook.com
+ ([fe80::cedd:1e64:8f61:b9df]) by SN6PR02MB4157.namprd02.prod.outlook.com
+ ([fe80::cedd:1e64:8f61:b9df%6]) with mapi id 15.20.7807.026; Mon, 5 Aug 2024
+ 14:12:41 +0000
+From: Michael Kelley <mhklinux@outlook.com>
+To: Saurabh Singh Sengar <ssengar@linux.microsoft.com>, Roman Kisel
+	<romank@linux.microsoft.com>
+CC: "arnd@arndb.de" <arnd@arndb.de>, "bhelgaas@google.com"
+	<bhelgaas@google.com>, "bp@alien8.de" <bp@alien8.de>,
+	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"decui@microsoft.com" <decui@microsoft.com>, "haiyangz@microsoft.com"
+	<haiyangz@microsoft.com>, "hpa@zytor.com" <hpa@zytor.com>, "kw@linux.com"
+	<kw@linux.com>, "kys@microsoft.com" <kys@microsoft.com>, "lenb@kernel.org"
+	<lenb@kernel.org>, "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+	"mingo@redhat.com" <mingo@redhat.com>, "rafael@kernel.org"
+	<rafael@kernel.org>, "robh@kernel.org" <robh@kernel.org>,
+	"tglx@linutronix.de" <tglx@linutronix.de>, "wei.liu@kernel.org"
+	<wei.liu@kernel.org>, "will@kernel.org" <will@kernel.org>,
+	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-hyperv@vger.kernel.org"
+	<linux-hyperv@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-pci@vger.kernel.org"
+	<linux-pci@vger.kernel.org>, "x86@kernel.org" <x86@kernel.org>,
+	"apais@microsoft.com" <apais@microsoft.com>, "benhill@microsoft.com"
+	<benhill@microsoft.com>, "ssengar@microsoft.com" <ssengar@microsoft.com>,
+	"sunilmut@microsoft.com" <sunilmut@microsoft.com>, "vdso@hexbites.dev"
+	<vdso@hexbites.dev>
+Subject: RE: [PATCH v3 6/7] Drivers: hv: vmbus: Get the IRQ number from DT
+Thread-Topic: [PATCH v3 6/7] Drivers: hv: vmbus: Get the IRQ number from DT
+Thread-Index: AQHa36/Ax7vrWbxjOkqE907xHGTdubIYZA8AgABfOFA=
+Date: Mon, 5 Aug 2024 14:12:41 +0000
+Message-ID:
+ <SN6PR02MB415701C313BD5E296393A29DD4BE2@SN6PR02MB4157.namprd02.prod.outlook.com>
+References: <20240726225910.1912537-1-romank@linux.microsoft.com>
+ <20240726225910.1912537-7-romank@linux.microsoft.com>
+ <20240805083024.GB31897@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+In-Reply-To:
+ <20240805083024.GB31897@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-tmn: [KjvQz9zTnNR4Zn9QTpCYtX305timbdLV]
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SN6PR02MB4157:EE_|IA3PR02MB10589:EE_
+x-ms-office365-filtering-correlation-id: 90fd52ca-3af2-420c-6a0e-08dcb558ab70
+x-microsoft-antispam:
+ BCL:0;ARA:14566002|8060799006|19110799003|461199028|440099028|3412199025|102099032;
+x-microsoft-antispam-message-info:
+ RbdD8ftR0LvqD/8NYZoHbMRDkzf51h0QcvqBwp8U/CkAD4hg4whhikZ4TqG0BIvj1wHu7S5zWnyGZHuDxoPaEKOOvzBCa1oRB9fCjG3lZrcsYytGFUZxfQN3Jn0AYImLvCDaxvYTfc49DU8wfaEXjh/fms2yl4J0dI8vacSTLD4nc1xPy7aL9j/i9lYFhD2We5+e0PNATsb2zDktINvWc6sKlTfFQ2DPPibChTwjUEYAGI6zVQNuHnis49PqDPiYoJOmNz7FDLl99LJaGJykQV0O1sg0yfyr/eNJ/e/0j3PItP4+bz8tdT/hzZK057omFmOGcHodMSrD+fQofK1SMytGPXXs9FWuqUP16HrYn324MZ1sJCxZ+QMk1BHGcAbYpMPemV33Vt1kYkdgJdcXt/IJNxIGguN7G49OyODQsZ5ZWMYsKshBWqyi6aUy1/8gIsZLLZDD9OXhhmt3jfCcT5jZCgjDWG5vcQlQdw2XV9FDl5BnMP0Lx5mQbKWfgJlNjYRgOVxX0nQNwQO0C1JhCRX0+hFEa/Fuv3sE1y4lfVFFQ/G4/8gcmpfz8fNShY5WYhmOZ6hJgvkq0cGLvQXUeXjw0EfKGzhJSfo12ss+FG7Lc4GB/APW4xYLPCP4tzbVZJjZ9IOG4UAO5wQUmfcf2A==
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?HkZEZ/1H2Vr5pgZzeCJpGJV2+pTiKXbl7/LgYhjjH+9EPWTIXnzefcRvqyTJ?=
+ =?us-ascii?Q?FNazZWVuNkZ6wdj4NxWcdbz3E8jHm0p2Kphl+SsM7rDboW7XKVmyidT2w11Z?=
+ =?us-ascii?Q?JxaENh8hsGb3uN5/wZjzqaYdjMUPElQdOEM5gkIk96ncg8BuXVJ/uNkJ1yzT?=
+ =?us-ascii?Q?1A3sd7a3lq6bTRWCsZ/wUw3ys2P/zeGcLy93EU+bQxxJvHBDGrQsXBMrtyoN?=
+ =?us-ascii?Q?xsMLhjBr8SjpIiS46U9S2XulI0eAEYj50H5s7oRWtGw60VHzxVrJQHOyMKrp?=
+ =?us-ascii?Q?bC7S9IrmDx3c2rn2hg+SRbKK08I4eU29IT90+B2vlUAMJaf9ht7lcwsdV5rZ?=
+ =?us-ascii?Q?17NcS0dYwA/ylQqmdKYJW9Nq32G6EJr23hA+2F/1rnUA94C9YQnwZLgi7FFu?=
+ =?us-ascii?Q?ztpMGin2USJst/JQI3kRuX1qNO9WDuh1xWTWs/Tws1KY+mi9dOOxfuAGmPGu?=
+ =?us-ascii?Q?k26J6TLGQryfmy3UfmFR2op3Sj9puBabR5cws3Cu4KIpLT7IAzb9FHE+Qd7c?=
+ =?us-ascii?Q?4DeWqTl6zORTJ+Mmvg1ZHLUMq1mwvahb9ef5ZSr7Tx+NHROoHcKP4fMG6Ubd?=
+ =?us-ascii?Q?V5R1Zbxsa4S5eIVeKZts3QLteGqOlqJlz778zBSER8zudd6cup7kmEYL2A52?=
+ =?us-ascii?Q?R6LoY3swH7n59g3Gai7xy5nJ54MPClOUTAEATPBzfZZRDjVjZq0Lu/FDbpld?=
+ =?us-ascii?Q?cBnNYGpO+nGkClLvsV19tWx70591nhkc3jRjyUtoCUuR2yVEIgFzo08XSVPh?=
+ =?us-ascii?Q?o2umBaVZ1lfEbPgbwzemZQWITUkL/ejPn58r325TzvR9TotYwklBC+pZQgRL?=
+ =?us-ascii?Q?rtURAutDbF4yrSi0SWF7/sZRiywEKWx+rg/EQglJNUeC2bBKqfB7XId7iTSK?=
+ =?us-ascii?Q?8/ZoNyk4VgcBSI+bfnfsGbTuhuruDVv4RLGRMZol2a8i9EwS0xnYTv2aSqER?=
+ =?us-ascii?Q?IK6WSgZKQWakYvrI24nO2D6BRsL6IS6W2Zyj27ventnH6crBvCqR2Rv6k9dC?=
+ =?us-ascii?Q?ekv3Oo13AyU610seqy5WXR3REMJomjFZKn+yw2kbP76w3ywlXHJeOa7hF3pC?=
+ =?us-ascii?Q?XYeNAma8KSfTAi4Vx6OG6CBsmhF/LYKbze2fc0fwnZRB8O7sfaKeaC/7CPjm?=
+ =?us-ascii?Q?LWV5xZtCxt3qGzbhAMfWqdO+kEWmNobc32bMbkhyRAF/bJxjRkO0sm5xubu0?=
+ =?us-ascii?Q?w6vUuAAV/drxWaOGvvJiXOdgh5frnlvQ5Jpp5b1YHKRq5aU+ehpeb5Xsg98?=
+ =?us-ascii?Q?=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-Date: Mon, 5 Aug 2024 14:08:46 +0000
-Message-ID: <D381CRQ2XJL9.1NBVMKT4SR51P@amazon.com>
-CC: <pbonzini@redhat.com>, <seanjc@google.com>, <linux-doc@vger.kernel.org>,
-	<linux-hyperv@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-	<linux-trace-kernel@vger.kernel.org>, <graf@amazon.de>,
-	<dwmw2@infradead.org>, <pdurrant@amazon.com>, <mlevitsk@redhat.com>,
-	<jgowans@amazon.com>, <corbet@lwn.net>, <decui@microsoft.com>,
-	<tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-	<dave.hansen@linux.intel.com>, <x86@kernel.org>, <amoorthy@google.com>
-From: Nicolas Saenz Julienne <nsaenz@amazon.com>
-To: Vitaly Kuznetsov <vkuznets@redhat.com>, <linux-kernel@vger.kernel.org>,
-	<kvm@vger.kernel.org>
-X-Mailer: aerc 0.17.0-152-g73bcb4661460-dirty
-References: <20240609154945.55332-1-nsaenz@amazon.com>
- <20240609154945.55332-2-nsaenz@amazon.com> <87tth0rku3.fsf@redhat.com>
- <D2RVJ6QCVNOU.XC0OC54QHI51@amazon.com> <878qxk5mox.fsf@redhat.com>
-In-Reply-To: <878qxk5mox.fsf@redhat.com>
-X-ClientProxiedBy: EX19D046UWA004.ant.amazon.com (10.13.139.76) To
- EX19D004EUC001.ant.amazon.com (10.252.51.190)
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR02MB4157.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: 90fd52ca-3af2-420c-6a0e-08dcb558ab70
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Aug 2024 14:12:41.7171
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA3PR02MB10589
 
-On Mon Jul 29, 2024 at 1:53 PM UTC, Vitaly Kuznetsov wrote:
-> CAUTION: This email originated from outside of the organization. Do not c=
-lick links or open attachments unless you can confirm the sender and know t=
-he content is safe.
-> Nicolas Saenz Julienne <nsaenz@amazon.com> writes:
->
-> > Hi Vitaly,
-> > Thanks for having a look at this.
+From: Saurabh Singh Sengar <ssengar@linux.microsoft.com> Sent: Monday, Augu=
+st 5, 2024 1:30 AM
+>=20
+> On Fri, Jul 26, 2024 at 03:59:09PM -0700, Roman Kisel wrote:
+> > The VMBus driver uses ACPI for interrupt assignment on
+> > arm64 hence it won't function in the VTL mode where only
+> > DeviceTree can be used.
 > >
-> > On Mon Jul 8, 2024 at 2:59 PM UTC, Vitaly Kuznetsov wrote:
-> >> Nicolas Saenz Julienne <nsaenz@amazon.com> writes:
-> >>
-> >> > Prepare infrastructure to be able to return data through the XMM
-> >> > registers when Hyper-V hypercalls are issues in fast mode. The XMM
-> >> > registers are exposed to user-space through KVM_EXIT_HYPERV_HCALL an=
-d
-> >> > restored on successful hypercall completion.
-> >> >
-> >> > Signed-off-by: Nicolas Saenz Julienne <nsaenz@amazon.com>
-> >> >
-> >> > ---
-> >> >
-> >> > There was some discussion in the RFC about whether growing 'struct
-> >> > kvm_hyperv_exit' is ABI breakage. IMO it isn't:
-> >> > - There is padding in 'struct kvm_run' that ensures that a bigger
-> >> >   'struct kvm_hyperv_exit' doesn't alter the offsets within that str=
-uct.
-> >> > - Adding a new field at the bottom of the 'hcall' field within the
-> >> >   'struct kvm_hyperv_exit' should be fine as well, as it doesn't alt=
-er
-> >> >   the offsets within that struct either.
-> >> > - Ultimately, previous updates to 'struct kvm_hyperv_exit's hint tha=
-t
-> >> >   its size isn't part of the uABI. It already grew when syndbg was
-> >> >   introduced.
-> >>
-> >> Yes but SYNDBG exit comes with KVM_EXIT_HYPERV_SYNDBG. While I don't s=
-ee
-> >> any immediate issues with the current approach, we may want to introdu=
-ce
-> >> something like KVM_EXIT_HYPERV_HCALL_XMM: the userspace must be prepar=
-ed
-> >> to handle this new information anyway and it is better to make
-> >> unprepared userspace fail with 'unknown exit' then to mishandle a
-> >> hypercall by ignoring XMM portion of the data.
+> > Update the VMBus driver to discover interrupt configuration
+> > via DeviceTree and indicate DMA cache coherency.
 > >
-> > OK, I'll go that way. Just wanted to get a better understanding of why
-> > you felt it was necessary.
+> > Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
+> > ---
+> >  drivers/hv/vmbus_drv.c | 49 ++++++++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 49 insertions(+)
 > >
->
-> (sorry for delayed reply, I was on vacation)
->
-> I don't think it's an absolute must but it appears as a cleaner approach
-> to me.
->
-> Imagine there's some userspace which handles KVM_EXIT_HYPERV_HCALL today
-> and we want to add XMM handling there. How would we know if xmm portion
-> of the data is actually filled by KVM or not? With your patch, we can of
-> course check for HV_X64_HYPERCALL_XMM_OUTPUT_AVAILABLE in
-> KVM_GET_SUPPORTED_HV_CPUID but this is not really straightforward, is
-> it? Checking the size is not good either. E.g. think about downstream
-> versions of KVM which may or may not have certain backports. In case we
-> (theoretically) do several additions to 'struct kvm_hyperv_exit', it
-> will quickly become a nightmare.
->
-> On the contrary, KVM_EXIT_HYPERV_HCALL_XMM (or just
-> KVM_EXIT_HYPERV_HCALL2) approach looks cleaner: once userspace sees it,
-> it knows that 'xmm' portion of the data can be relied upon.
+> > diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+> > index 12a707ab73f8..7eee7caff5f6 100644
+> > --- a/drivers/hv/vmbus_drv.c
+> > +++ b/drivers/hv/vmbus_drv.c
+> > @@ -2306,6 +2306,34 @@ static int vmbus_acpi_add(struct platform_device=
+ *pdev)
+> >  }
+> >  #endif
+> >
+> > +static int __maybe_unused vmbus_set_irq(struct platform_device *pdev)
+> > +{
+> > +	struct irq_desc *desc;
+> > +	int irq;
+> > +
+> > +	irq =3D platform_get_irq(pdev, 0);
+> > +	if (irq =3D=3D 0) {
+> > +		pr_err("VMBus interrupt mapping failure\n");
+> > +		return -EINVAL;
+> > +	}
+> > +	if (irq < 0) {
+> > +		pr_err("VMBus interrupt data can't be read from DeviceTree, error %d=
+\n", irq);
+> > +		return irq;
+> > +	}
+> > +
+> > +	desc =3D irq_to_desc(irq);
+>=20
+> irq_to_desc is not an exported symbol if CONFIG_SPARSE_IRQ is enabled. Th=
+is will
+> break the builds for HYPERV as module.
+>=20
 
-Makes sense, thanks for the explanation.
+Instead, use irq_get_irq_data(), then irqd_to_hwirq().
 
-Nicolas
+Michael
 
