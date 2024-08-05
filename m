@@ -1,73 +1,75 @@
-Return-Path: <linux-arch+bounces-5960-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5961-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32E9E94739F
-	for <lists+linux-arch@lfdr.de>; Mon,  5 Aug 2024 05:03:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 06B969473AC
+	for <lists+linux-arch@lfdr.de>; Mon,  5 Aug 2024 05:04:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 789CAB20C25
-	for <lists+linux-arch@lfdr.de>; Mon,  5 Aug 2024 03:03:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 34C73B2126F
+	for <lists+linux-arch@lfdr.de>; Mon,  5 Aug 2024 03:04:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 814E013D51E;
-	Mon,  5 Aug 2024 03:03:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D62221448D9;
+	Mon,  5 Aug 2024 03:03:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="NRTAMyQj"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="aSe6OWBO"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from SJ2PR03CU001.outbound.protection.outlook.com (mail-westusazolkn19012054.outbound.protection.outlook.com [52.103.2.54])
+Received: from DM1PR04CU001.outbound.protection.outlook.com (mail-centralusazolkn19010007.outbound.protection.outlook.com [52.103.13.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A55012F50A;
-	Mon,  5 Aug 2024 03:03:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.2.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFB6D13CFB7;
+	Mon,  5 Aug 2024 03:03:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.13.7
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722826989; cv=fail; b=PoqW0EXWkKSCX9Zu0S2vQW+J2ja+3UYluGpwQg65gKa5EY7FKYu/t1Bg88WqNvxCCBQaQK2FcNSwL7inR8pRmeRboaAmrqzZZRzJj0KgpJ3OuYCs8Xdw7dkxnY+wuUoKiW3FRATnYYSaL/qF2SWKoHk21mj5lPv+onJgKMInXR8=
+	t=1722827004; cv=fail; b=R5QgueCrDJK0U5Bb3oe/4NUVS5/b/w+kFElJueVoZMgZXomLkKUOksX6Cbvsn1Hy34ar5M+MrKJiQjGHdhHpdtBlzHD54VFSMiCBKQVruoLBCLUuyKZitlvlGXrqKgsP/kKxwGBoomd93PvC3fXeykhA+MGzqc4IQfM2p3x203U=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722826989; c=relaxed/simple;
-	bh=ilwDXyO0LlKG0J6xlX+5eYBj+4YKbHVcOE8hXZyP+Ew=;
+	s=arc-20240116; t=1722827004; c=relaxed/simple;
+	bh=Bg2KchTu9I+NMkgn7t2lFaMmzzA1cnv8Z7v9L+xw+WE=;
 	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=l1CmZQylJduDUiemK9TbNVKBVJutdaUCcGs0lj+rjnBIJZvq33X+tqgPffW4a78XjvcVROny5rVpbzbxc+HswIo6yiAx/vQJLYT8CoIyR7v8cc0dc5DyqUS28DqS40GIGJOLKS7bYVry6cIU/JxU8bp+LPULvFFcSbVoYNWYSMk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=NRTAMyQj; arc=fail smtp.client-ip=52.103.2.54
+	 Content-Type:MIME-Version; b=MxngjSM0alZ94cSJ7FKX83VZtPJ2KQEEitvaYBn0xnXBN3Sz4nHEvOMYDi6KVY6ryKaC/MQK8yWmBK1yYuJcxKU5gEYc9xTBEZD2viIteMxmzLwwYm6Jg6triM/h1KTnUvORx73uF2z8sM69C5qU4HCjSjUrJmJqG3ded53lEdE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=aSe6OWBO; arc=fail smtp.client-ip=52.103.13.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=uOWuO3pa3rpKeGDHK3UxZipGLWcEf41jrimlqqCP932mLos7cCt/lIUCnmEet5v5dX17YO/T6sJM56b08qNBjnJCJEmJFeLoRaK+kxbhWnx7335u+Ulc6o60AWOgGEJXwKSJi8jPQvX9sQ6VhSJDhdxNHPoq5t+Az0gGfylLtydrw/UlXjoJVKUxXShL9m4+g8Cdjl6yuvThijbG5PNU2JTywowuoW8QJuL/l14O06VSBO5RB5Eg87NXpiw20NuJio0EdHUFAN/3gtmXfYXtNuxsMu2jMmEa/6G0voIn3AceMnijm9I7fAMy+0ZX8ONnUwcAQi1w5AEy47PIH8xN1w==
+ b=yTVpXOB5QPV1GKSAnsbe2GG0A2d7B+T7qMLn6n/y2GosN5uvYGXjIMuxVmSSVrMFsU2r/Tmm9EHODf3i9+UIIwkXjwim25e52eYRd3zTdrXsR5GkeOIcE6rol7TMzY41LvhQLz8rXn2GCMJiN8/k+oN1DHZifezQ7Eci9a0FxpGcd6n9KcH2qEvVGXdUPdm87FYmLzg0AIZEiXz+MBAVGrkihdDI8JUE4IVhOjqWwJ+6IQ+wFKAc6pVnXjauyExNlLsoK9qAKAaPt1lLKh1W/HpVd8MlzDEBxkLlXiHfM05AGs2vj+FO0UsYqTo0VRzYI8NClQhWHilsDIYMUjkH8Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+XIyJ1RmY7Zy3JeeHYhASGTzOHZS3d2nhLMdIMcDZMM=;
- b=feZpTagLqI6yPoWfspOR4e4Z55HDiUdxCxOvM9pTh7wQPIc0WMcDZABBxiHkLehYYSt19r1WnEGDyM8ZtmfleBkdax3in8hfYhi/F0W9nafZZhsTu29Gy+QMLIivhTUEeIExh197rg/wNbRvqv4jw6NgUhL0Kzkj5/n39hSsq8bntDjKcVw5qIxLowfaEPDbP7fGLbg6ld3rIyQchvSpZ2SbfD3Jy04rybNhkBFPru0VF0Osg+jUvtKweHk0qokLv9/yrI4T4MeEkShtLodrtez1g/bSGLKrnVPzvBPwPShALZknXY/rlZUaPB5hK9zP25O3AemY/lcOlSZ0POpj5A==
+ bh=38Fru6njonOy+Wr18XTQqdX9S63F+IbRt7F2luOEVsY=;
+ b=gx3FhI69H8D/hHezZyz1Bmk0HGU51L8fn3ikI9fpTFXsvAMLbkZqehcviEaRYjr2ls3LTaUBSfF9uLjbs3gbMy1dcxnkQHJhCCzeW+B+us8hPPdZJ+AgMNfJ1Dwe1aPSkUEOwo5ofsbUiITNf50OBM+pSs8D6ONOweMXOntBuJhksfFT32EGbHDrzmQrV8w46TSH4OsKL9unRjRpk5XmWYaOE/ORGIvrlulWUv5b13Xd+tLgWb53+cbQhewzFxqmohf6M2MJdA81xSBfAk/1asFA8CkBulw5GVLAGoXyvSmbAPOuaYIuOGiEzEOO9Hw1XQmoh80jItSBuQSPDf2afg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+XIyJ1RmY7Zy3JeeHYhASGTzOHZS3d2nhLMdIMcDZMM=;
- b=NRTAMyQjHvr+Ca0J09C4NxlPCUOMKIMVrc6ZLJTrZx8Y0fJnurA7tsvvvzR2OTV7VTKe8vb46V+cZERD9qT5MfHYErryxOzEwxDtxWP2bLR+lbPgOxenTH/PNeJILwjAbGMo9STjP9+no9cOskciw67ODXWtsRiURD6sMpiVtgq5DzNTHrFWOr18xuYyuzUdI0DT3d1LiD1qr3r8Lk5HA0iGZHtaZxN9EbHoUBdV+Vwa0sAjzxelLcSpBBU5HVEKBmdyxfyms9n75uZ+EIqlW9sK8aXXSvNMiXR7Bdhm9T2E/2LRTMkzUQ8ufw5Xqar/E/9ucQ7pnSTytpLL2oPQbA==
+ bh=38Fru6njonOy+Wr18XTQqdX9S63F+IbRt7F2luOEVsY=;
+ b=aSe6OWBOrQD4dHsbEARwZkaAptwgKPuYvKhszdLlB2PBlHwGsI6DmpPFzA0rfrb9ix9/Lydov10/w9WY02kLrtf02/XdoDPE+HE2VAwVSmbta7FHxpCrehgK9IxWbvdpVpC5P1rAGvscyAOryEYuhntowUgbezXUyVtVh+rbs1udvfjKLbidWhzdJ67iI9t7WAD9crFmr6JDcID3pjTgfR80z5vCkwhDPYzzKfLzR82GW6RILuDUZSBfceUK2Bgu6BuTBr9OBce0W/0oglMGYzt+476NZMpvDKwCpYdaZOuq6OOBDmSoAz9CfjwRAxiaJnHTkW6CZJ/xuQ3H+VIlPA==
 Received: from SN6PR02MB4157.namprd02.prod.outlook.com (2603:10b6:805:33::23)
  by LV3PR02MB10738.namprd02.prod.outlook.com (2603:10b6:408:28b::12) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7828.25; Mon, 5 Aug
- 2024 03:03:04 +0000
+ 2024 03:03:19 +0000
 Received: from SN6PR02MB4157.namprd02.prod.outlook.com
  ([fe80::cedd:1e64:8f61:b9df]) by SN6PR02MB4157.namprd02.prod.outlook.com
  ([fe80::cedd:1e64:8f61:b9df%6]) with mapi id 15.20.7807.026; Mon, 5 Aug 2024
- 03:03:04 +0000
+ 03:03:19 +0000
 From: Michael Kelley <mhklinux@outlook.com>
-To: Roman Kisel <romank@linux.microsoft.com>, Arnd Bergmann <arnd@arndb.de>,
-	Krzysztof Kozlowski <krzk@kernel.org>, "bhelgaas@google.com"
-	<bhelgaas@google.com>, Borislav Petkov <bp@alien8.de>, Catalin Marinas
-	<catalin.marinas@arm.com>, Dave Hansen <dave.hansen@linux.intel.com>, Dexuan
- Cui <decui@microsoft.com>, Haiyang Zhang <haiyangz@microsoft.com>, "H. Peter
- Anvin" <hpa@zytor.com>, =?iso-8859-2?Q?Krzysztof_Wilczy=F1ski?=
-	<kw@linux.com>, "K. Y. Srinivasan" <kys@microsoft.com>, Len Brown
-	<lenb@kernel.org>, Lorenzo Pieralisi <lpieralisi@kernel.org>, Ingo Molnar
-	<mingo@redhat.com>, "Rafael J . Wysocki" <rafael@kernel.org>, Rob Herring
-	<robh@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Wei Liu
-	<wei.liu@kernel.org>, Will Deacon <will@kernel.org>,
-	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>, Linux-Arch
-	<linux-arch@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
+To: Roman Kisel <romank@linux.microsoft.com>, "arnd@arndb.de" <arnd@arndb.de>,
+	"bhelgaas@google.com" <bhelgaas@google.com>, "bp@alien8.de" <bp@alien8.de>,
+	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"decui@microsoft.com" <decui@microsoft.com>, "haiyangz@microsoft.com"
+	<haiyangz@microsoft.com>, "hpa@zytor.com" <hpa@zytor.com>, "kw@linux.com"
+	<kw@linux.com>, "kys@microsoft.com" <kys@microsoft.com>, "lenb@kernel.org"
+	<lenb@kernel.org>, "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+	"mingo@redhat.com" <mingo@redhat.com>, "rafael@kernel.org"
+	<rafael@kernel.org>, "robh@kernel.org" <robh@kernel.org>,
+	"tglx@linutronix.de" <tglx@linutronix.de>, "wei.liu@kernel.org"
+	<wei.liu@kernel.org>, "will@kernel.org" <will@kernel.org>,
+	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org"
 	<linux-arm-kernel@lists.infradead.org>, "linux-hyperv@vger.kernel.org"
 	<linux-hyperv@vger.kernel.org>, "linux-kernel@vger.kernel.org"
 	<linux-kernel@vger.kernel.org>, "linux-pci@vger.kernel.org"
@@ -76,57 +78,54 @@ CC: "apais@microsoft.com" <apais@microsoft.com>, "benhill@microsoft.com"
 	<benhill@microsoft.com>, "ssengar@microsoft.com" <ssengar@microsoft.com>,
 	"sunilmut@microsoft.com" <sunilmut@microsoft.com>, "vdso@hexbites.dev"
 	<vdso@hexbites.dev>
-Subject: RE: [PATCH v3 6/7] Drivers: hv: vmbus: Get the IRQ number from DT
-Thread-Topic: [PATCH v3 6/7] Drivers: hv: vmbus: Get the IRQ number from DT
-Thread-Index: AQHa36/Ax7vrWbxjOkqE907xHGTdubIKRlAAgAAF4QCAA6NygIAJZJYQ
-Date: Mon, 5 Aug 2024 03:03:04 +0000
+Subject: RE: [PATCH v3 7/7] PCI: hv: Get vPCI MSI IRQ domain from DT
+Thread-Topic: [PATCH v3 7/7] PCI: hv: Get vPCI MSI IRQ domain from DT
+Thread-Index: AQHa36/CalEutWTYNUKLLP/VpfBp8rIX/jtg
+Date: Mon, 5 Aug 2024 03:03:19 +0000
 Message-ID:
- <SN6PR02MB41571723DB27E0A29877854ED4BE2@SN6PR02MB4157.namprd02.prod.outlook.com>
+ <SN6PR02MB4157D5A2DA10658D506EA1B1D4BE2@SN6PR02MB4157.namprd02.prod.outlook.com>
 References: <20240726225910.1912537-1-romank@linux.microsoft.com>
- <20240726225910.1912537-7-romank@linux.microsoft.com>
- <7418bfcd-c572-4574-accc-7f2ae117529f@kernel.org>
- <ce8c1e88-2d2f-44de-bd43-c05e274c2660@app.fastmail.com>
- <dd25f792-3ea4-4660-a5cc-79b589b2b881@linux.microsoft.com>
-In-Reply-To: <dd25f792-3ea4-4660-a5cc-79b589b2b881@linux.microsoft.com>
+ <20240726225910.1912537-8-romank@linux.microsoft.com>
+In-Reply-To: <20240726225910.1912537-8-romank@linux.microsoft.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach:
 X-MS-TNEF-Correlator:
-x-tmn: [L7YRdbtNl+ALCqzVj5Q1yecY/H4THnvL]
+x-tmn: [ygEcJixfN/IXp4zyUODM/mOVqWtv9DBW]
 x-ms-publictraffictype: Email
 x-ms-traffictypediagnostic: SN6PR02MB4157:EE_|LV3PR02MB10738:EE_
-x-ms-office365-filtering-correlation-id: 85487154-fc25-4544-a84c-08dcb4fb1fa4
+x-ms-office365-filtering-correlation-id: 94dec24c-251b-4118-46bb-08dcb4fb28eb
 x-ms-exchange-slblob-mailprops:
- AZnQBsB9Xmqyyf+cGoeQ3Ulm4AiLwQwdQvjOaKpcwm25FIOkVpeOw5totQYlwy9D9VF1XNs/96VCvyoDRBCCglRTe2tWnsCShLpKAzkJiHva52IEe0sbXDcoiPBDa0ui0YE29hI3CBLXWXbLyOHdpukEgPP9FNILKake3ssMp8SD0iIOLASqjh/jfox19PgS6GBrhoe6wNUvS3D2R2NnsEOlG4xi3uwUz4K7UlFRWDh86QEgOmbvt868o+4NRYF+OWmjkDVSjyf0Emnp47S3puiHgBUNh86HUJOD86dGLoeqrA/E0fujvIJ1G7HgybXBzA7ZmpMLVRHjz2Qvt0mkMz7F6yvrC6zydmnYJb0PZWfemCY4rFVIaz81QN6HZUkoMzR47V1hHKMWy2jcLeIfSbEErdjE+G7BKM/ZIiNG20sO+W9qnFie9sFGIqCwY4R/uGnn0kU4aK4+KkU6Sc5M68YBX8Gq4CGf0CIxmkRbC2tHBVoq4jJOHUPH7PqGWU7i93CPMU1ncsaVz2pOZYy6JD8Y0kdBNvEBFsIhfn76Iy4c6FzyWx0jHmCmq3b6n+hNEw1V577Yl08dEFCVefEGHVFenAL3dLV0ghPohnix08kTkL69BS+P0X8P2dU1dHkPGHZsBr7AAjSmyeXfj+x/OxNPZWvlou1Z5AZQyoV7u0xyHxXfedvaYw8Cch36lqcWvfqx/edl+/kKgfMtT3J6nMCeed6vQcCHvvcsvm2lkaQb6wpqTn/Jl6ufUkWqE5hpAM1oE7tpeUk=
+ ZILSnhm0P3lDkJH5G1p2lgJ3jVl70zcdO/1Z1ycHr0XvJOm3UDpjb0D5pRAd8gJ2EPN2+aPwcYl+/mhg1LyzVluMau3RbP63di4J+OySA520JHnaXvvyGMdOZIs73GVfcQKP2BG/mpb4I1HQe68BUS2OTP42WoXdxHx6ypcZARgnoKAIgOnuotxe0dI+XxYQPHDjaFU1qXQfCES+mGWc8lDEfnYMcQbxgk1HfB2VRrehoSZUtEaOXs7t98s7cwiLPM/IfJT58701wJlLEVt0PrAzxQUNotS9ih7CZanYFAxdMBB895MvolLs2cLi8in9ljklwF/X3FYMIaF5ghPnykX9Tj6gv4FBmnMT3dhUYqwGtaPnANQIiyye8FBbwHs7DhdilMCnunNNT7SMbNVvbRXvfi/O5x/MMsYNibsTL7/XAxWPtc+zOdki77WWBd6qFAiszrW6HnqAgb1ugoNT6HePpHBjtJ2zQ1wQwwTu6zPS6MtvqF0ZABXCF7A6rPeusZn53lA0Rc9S1KeijAi1G5f4GlDmP6c+fPPf5n8fYwWNNM5PY3owhbcNbYIYQ4jsBl/vH8sJ/C+EaFr4vY78tswdqa5P85pzIOBJRgDX0gl2KfTuRZzbZVTqDrL7VtZFhKPUpoG0Zf9nEIWUfwg75rvsUZqW8xRy1Cg66YF5w49GRfBIOyD3vpRCQRm/AOB+cdeQ57uty3SysP4BbkIM4wO3DS4OPQnR83hcRiMLuti476rP1GHsWqk1U8jm1o42i+t/ijx0dDgTcbk3hXcE/EoYgiImimVd
 x-microsoft-antispam:
- BCL:0;ARA:14566002|19110799003|8060799006|461199028|3412199025|440099028|102099032;
+ BCL:0;ARA:14566002|19110799003|8060799006|461199028|3412199025|440099028|102099032|56899033;
 x-microsoft-antispam-message-info:
- 2YiRxs0KPHmFCRHzAtO0txk5RVkFzg06Lr3wulIPx+SUJ5t5TvKU3x6laTU7Hp/lCVeknh37yO8Iv6RZxRp4uBGsl9HI40Zw603Him+XyrhL8IYI/8umxx0Iky/CwzqoltVIYIpgYEavdFCeiBtT1w3P840B9qZVuQDZDkciJn9i76beiVwGr1dof6DiAWlD5j29XnZa9FsM1Y3ckt7O3UVplKvYtKUUTiLYRmYqmEC2DrGdPWrWxYN6WewTfFVc3b9iGFfycKYpjz3QWxRMGSVbeqULFoV/mX3Lt+FDNORd9yeirCJ3jfH3yQ0Jn4Zhz73Cf5eXyKqJHYBj/vBtiAjakqMhj1Ut/+Pi/EO8CphPvF5u3vXFh+bCQh4YINdONswazsJYS/7wKaxvwadR5gYJquhAgTDEWLYlkDKjhr9BzN2PVDsZ8gyc9dfphC+bXJ1uMu5+Qn2fHDAN3+r65v9UjcxPThIoRAmG7qggk9WhcfDU7t9eCvJP2szfvIjWpBkl34ABZAu2DsGBOgmRgujFZBh5fzzYn+MGQpDZqMInTwoIrZxqKR5pwLp3nesIuGvESNfoHAiBe/WpJb3eFr6x9K0WCD/1kHDf5qmMYy+Rw3OPgAp97qan5GiHNqK90r6vJdMZ6tkDZBydiTZTMg==
+ LSTr+xwXi2HDpv0Gdp0sDg4B6oZJeebVgT5NwD10DMKZCRjRA56utT7Clb+bCkZiWTODpWucegN6ku89tuAJsHHmq0E5C0Cx7OiEx2HEvw5Np8unshTeD8b1vW3Thu9wo9v3DSXq+vsRfDK0R99zA5RTnH65frWRlLM/RxDtL22stWLnkV998NM22Ndu5w3U2H8qPh+4oES8k1CuTtWfx/BpWrv0f+DYeG1yVh4FY9lY6Q+oUPDneWkfr5qG8EfxyPd1XFjfckHakYnc4UWC3wyLoIS75PjUl/t9pBfyHPt0OzWzRGO+WVbNqsHMyRnFe4+AIwvDpszgDwl6vdeEZrNi0CFztSMjt1fKR+BnYD8p5MiTyVKRyNO8LrfAgu0r1FQGLfH0yWXCrt1VFa6NARcZrjJjtoYiNoyDF6iWpp0sAMDm1PJXg9mF5/v0JPeRNHGTbMK/Bww73vIbG5O97FAmpznsg+A4JtbDfnTzAhLsHScByayg8371QG4C52ds6G2BeIvyF7qqCNx+XW59zFNU49Z/jh2koS9Xr4TwiLoUGEWZkJZ0d9CLTUZ4ODJB5V675ceBbWvyl6rQmlh2WCoQmgREagW0CBoM/2b5sxuabj+POcQVDTJH+nKACQ4yNs1i9S9jyCSWYOhPDvbHgw==
 x-ms-exchange-antispam-messagedata-chunkcount: 1
 x-ms-exchange-antispam-messagedata-0:
- =?iso-8859-2?Q?wYof8AD/HN6nlNbiQBv0ifVLYG+u3cf2Muxwiiuewjl+8swNY/JJmgsclB?=
- =?iso-8859-2?Q?/NDOlRhEdojrkZQv7RLwru/235jWVyyahtYb3AWsZLhi860dAjPdrULLhl?=
- =?iso-8859-2?Q?dl6fSz2FchDEEFntGbzGAF3a06a6ZKGIMcYPEXBbpWtD8GTnCBZhuMPGOe?=
- =?iso-8859-2?Q?W2IoBORQwmvhMzTsk27COBSe4QW1Chj01ZhYZ6yUQjkIR6LhUppKwnlVjD?=
- =?iso-8859-2?Q?DETzvAgIuR9JnOAcwoSfW6vE+baXCjtSFll00ewhewu1VuakUlloHpb2RJ?=
- =?iso-8859-2?Q?gl2WpbEOETAXPwr7oX0WQSXYbb5Lbj6FO1WX05RPHQ7uJKU3CdB/CDvaQK?=
- =?iso-8859-2?Q?UeG4k072w1s4SEtvINw8/cGk4h0nypsfWsa43gdqa92Wug8h4w3MPGnwXi?=
- =?iso-8859-2?Q?fe9DXahWqr8j6B/Y96ZakkCmFFlMultj/l55cs12LQVjfNcFsPMzViNJ4b?=
- =?iso-8859-2?Q?Yph/FCk4RJ1VegIXOE7Xl0/H5GTdS/1VrAK2pXDMuvBqXEyhCMCHx7k+9D?=
- =?iso-8859-2?Q?AVy2xNggu3DOq5eLKxDrm8vq79kvgPODDJ+YBdd/dw3VmFw8xd/cbBIf+o?=
- =?iso-8859-2?Q?w7ZctCRBnHm69RN+gouXCUd7zBCeFRNNpFmzvb1jaT9wO/mCjtiuoyl1A2?=
- =?iso-8859-2?Q?WHNwPfj3nwBQUTx25RB45/pmBeWubxWqfoqzy3Hbg5RxgcuwITU44r94aM?=
- =?iso-8859-2?Q?UMgAzOD1DMsVNoTrkPFeeTsJSjpvUKiIq56TE8khMqNhYsaq0ZczyA932o?=
- =?iso-8859-2?Q?64y/oYuNRpzg4Wac9Ute7jJovwU02iwBsmlCtiY7q502NZLRR698oGmSv1?=
- =?iso-8859-2?Q?Dhg8EcYBjnoUQepmZaGPmtb51s2SyIk29/cE+LWw3xv/DSEz3vMDDrtCRT?=
- =?iso-8859-2?Q?FsBE5UCOvPmUxIdTELAUx3jUJzRCHzPxohc+VPPa2u9yX0MvGYP5Y3KNsv?=
- =?iso-8859-2?Q?zPuk8O3IKzbgD0JyMxeHbbNqDUWS7kf6zajFsom1ITHp5gKg1RnTHfZksX?=
- =?iso-8859-2?Q?hwkbaMn6t9gtE6VpNar6GAGwVYGV5LzacwY4+itE/t0IuqaK8zbbuCI/r2?=
- =?iso-8859-2?Q?HPa8l2kcAOCECvjqcKhw3AWESEZuaSz9MjR5az/t2NGoRLazaRQftA/pxu?=
- =?iso-8859-2?Q?P1n1QnoHK89oLAhXDEEpZ9zdvegypt+3J7BTvAK0OTVFtYAg4fZ3rkcQAQ?=
- =?iso-8859-2?Q?GRRCUg3MZA9prBPaBZgvh5Mquuy0x/GfA+egbtZdRNT7eqy0li6mMwnHvU?=
- =?iso-8859-2?Q?jzGg241Kl8yhkBALQwEQjZ/7K46BmcJ0DqpOSjK04=3D?=
-Content-Type: text/plain; charset="iso-8859-2"
+ =?us-ascii?Q?S9tok+Wf0LraUV8Z/t9u4tfv6lRegAhkTNRmo1cYvs2uby36jFg7ZtTgV2HA?=
+ =?us-ascii?Q?I+Z3kJu1l5FcyfuEIAHDPG4gFOuaD80wieHGFvEkbTp849Jan0ai+wZKTLOc?=
+ =?us-ascii?Q?oG2cgAdQWAQoK99+H7yJFQmVX+PULNZzREC9bbSNybKYK6mSodg/wQzTtvsU?=
+ =?us-ascii?Q?noQQ3fBRzeNoK4CjMrWEkkDr9Qk3ReSNJv0l5UMD3AMXB16rMM+SU3HmRAkU?=
+ =?us-ascii?Q?tWo/85TB98JDLEDpV76ni/wE92xk0EW/v6hfXEqoVnG1ZeFn3wAsvYuu/mzW?=
+ =?us-ascii?Q?8Yz2tG+PUj02i77gDW7XmpHYV9WAEakxc09beOCFuVucMD/tDrgdD2E3prrz?=
+ =?us-ascii?Q?MisJ3HIE7C5DON8k+sgaKSBPw/0JzIvP0ZKUbXI6JfsJBJrHimhtbc4FXXfJ?=
+ =?us-ascii?Q?icH4C/F3z0/zOwIyXma4hFO5VPG55ikVRQyLsKhctgGu5nkD8Cuz3/Tox/fL?=
+ =?us-ascii?Q?JmY6aZvmlLTm8UE2pySq/+3ucj0szqi4vIY/5Ii/p2/7E1SnZIr1qF1z46zd?=
+ =?us-ascii?Q?H1jrHVKEyMeTi73WlvG/7T7laRRjjZjzm3n4Vj2VmRhL8OxpNPKVFf9v+8ZQ?=
+ =?us-ascii?Q?j7g8CQ93ZVOKnZ1ACiAunbLQs8ByNjY0Z8+Tt4RZtQLEH3tAtfrrR0m6+aKC?=
+ =?us-ascii?Q?Te5dETP9gvVJsUbW4NdOGnwyZhiNgTczfHtesKP2VrzhDoCFDtqZyUOp5QXo?=
+ =?us-ascii?Q?qvNt/FeCb4xaBbOVB3OFW6M3Kzx4sj8c6oU9ocIb0sPLRonuvd4y+zqqR2yy?=
+ =?us-ascii?Q?J7JUBTKWWJpvcFU0WTUiWaTIeIzzuyNzA8HrclW1G2Amn41esl6fYTlMI+oK?=
+ =?us-ascii?Q?kwXYUkpEy6WK2od5YQ8zqT79a0Q9YQ5adFYrIaY1aKCZvEiH+jT8eNNQFSVx?=
+ =?us-ascii?Q?/1M2CaJC3PElOF0m1WgUZahHHk5M47juq9VE5wSo/Noft49n+ucO64uL3jMm?=
+ =?us-ascii?Q?VjoPG3R3WCGWAiSY6ivGUjiq5M7aZmyUBGVV9Pz1oMe5mO1QWA59pAzkUR6y?=
+ =?us-ascii?Q?OBlaUFBvapZxrUDXSTu40ovOVAn6FHyq5pMj1iubeXyo0t98RTb82dVikyQQ?=
+ =?us-ascii?Q?iogdSh42SGGYWV2qc9OsAk+qRw5WLmubxpp459U7QZk7sqnYdNAXIZTn1n/s?=
+ =?us-ascii?Q?xKu3twmsBrUjKoEppNmEi53Uz9FeAqWxRdyaziSdmL8dwqzCP5MsWvO33Iu0?=
+ =?us-ascii?Q?gXlA4isppJXshIjHooyGgBaoQN3jWuPKHsLAYp3E5mNFq/UBCuppoqd+itA?=
+ =?us-ascii?Q?=3D?=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -138,116 +137,269 @@ X-OriginatorOrg: outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: SN6PR02MB4157.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 85487154-fc25-4544-a84c-08dcb4fb1fa4
+X-MS-Exchange-CrossTenant-Network-Message-Id: 94dec24c-251b-4118-46bb-08dcb4fb28eb
 X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Aug 2024 03:03:04.0176
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Aug 2024 03:03:19.6015
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR02MB10738
 
-From: Roman Kisel <romank@linux.microsoft.com> Sent: Monday, July 29, 2024 =
-9:51 AM
+From: Roman Kisel <romank@linux.microsoft.com> Sent: Friday, July 26, 2024 =
+3:59 PM
 >=20
+> The hyperv-pci driver uses ACPI for MSI IRQ domain configuration on
+> arm64. It won't be able to do that in the VTL mode where only DeviceTree
+> can be used.
 >=20
-> On 7/27/2024 2:17 AM, Arnd Bergmann wrote:
-> > On Sat, Jul 27, 2024, at 10:56, Krzysztof Kozlowski wrote:
-> >> On 27/07/2024 00:59, Roman Kisel wrote:
-> >>> @@ -2338,6 +2372,21 @@ static int vmbus_device_add(struct platform_de=
-vice *pdev)
-> >>>   		cur_res =3D &res->sibling;
-> >>>   	}
-> >>>
-> >>> +	/*
-> >>> +	 * Hyper-V always assumes DMA cache coherency, and the DMA subsyste=
-m
-> >>> +	 * might default to 'not coherent' on some architectures.
-> >>> +	 * Avoid high-cost cache coherency maintenance done by the CPU.
-> >>> +	 */
-> >>> +#if defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_DEVICE) || \
-> >>> +	defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU) || \
-> >>> +	defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU_ALL)
-> >>> +
-> >>> +	if (!of_property_read_bool(np, "dma-coherent"))
-> >>> +		pr_warn("Assuming cache coherent DMA transactions, no 'dma-coheren=
-t' node supplied\n");
-> >>
-> >> Why do you need this property at all, if it is allways dma-coherent? A=
-re
-> >> you supporting dma-noncoherent somewhere?
-> >
-> > It's just a sanity check that the DT is well-formed.
+> Update the hyperv-pci driver to get vPCI MSI IRQ domain in the DeviceTree
+> case, too.
+>=20
+> Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
 
-In my view, this chunk of code can be dropped entirely. The guest
-should believe what the Hyper-V host tells it via DT, and that includes
-operating in non-coherent mode. There might be some future case
-where non-coherent DMA is correct. In such a case, we don't want to
-have to come back and remove an overly aggressive sanity test from
-Linux kernel code.
+Overall, this makes sense to me, and I think it works. As you noted in the =
+cover
+letter for the patch series, it's a bit messy.  But see my two comments bel=
+ow.
 
-As Arnd noted, the dma-coherent (or dma-noncoherent) property should
-be interpreted and applied to the device by common code. If that's not
-working for some reason in this case, we should investigate why not.
+> ---
+>  drivers/hv/vmbus_drv.c              | 23 +++++++-----
+>  drivers/pci/controller/pci-hyperv.c | 55 +++++++++++++++++++++++++++--
+>  include/linux/hyperv.h              |  2 ++
+>  3 files changed, 69 insertions(+), 11 deletions(-)
+>=20
+> diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+> index 7eee7caff5f6..038bd9be64b7 100644
+> --- a/drivers/hv/vmbus_drv.c
+> +++ b/drivers/hv/vmbus_drv.c
+> @@ -45,7 +45,8 @@ struct vmbus_dynid {
+>  	struct hv_vmbus_device_id id;
+>  };
+>=20
+> -static struct device  *hv_dev;
+> +/* VMBus Root Device */
+> +static struct device  *vmbus_root_device;
+>=20
+>  static int hyperv_cpuhp_online;
+>=20
+> @@ -80,9 +81,15 @@ static struct resource *fb_mmio;
+>  static struct resource *hyperv_mmio;
+>  static DEFINE_MUTEX(hyperv_mmio_lock);
+>=20
+> +struct device *get_vmbus_root_device(void)
+> +{
+> +	return vmbus_root_device;
+> +}
+> +EXPORT_SYMBOL_GPL(get_vmbus_root_device);
+> +
+>  static int vmbus_exists(void)
+>  {
+> -	if (hv_dev =3D=3D NULL)
+> +	if (vmbus_root_device =3D=3D NULL)
+>  		return -ENODEV;
+>=20
+>  	return 0;
+> @@ -861,7 +868,7 @@ static int vmbus_dma_configure(struct device *child_d=
+evice)
+>  	 * On x86/x64 coherence is assumed and these calls have no effect.
+>  	 */
+>  	hv_setup_dma_ops(child_device,
+> -		device_get_dma_attr(hv_dev) =3D=3D DEV_DMA_COHERENT);
+> +		device_get_dma_attr(vmbus_root_device) =3D=3D DEV_DMA_COHERENT);
+>  	return 0;
+>  }
+>=20
+> @@ -1892,7 +1899,7 @@ int vmbus_device_register(struct hv_device *child_d=
+evice_obj)
+>  		     &child_device_obj->channel->offermsg.offer.if_instance);
+>=20
+>  	child_device_obj->device.bus =3D &hv_bus;
+> -	child_device_obj->device.parent =3D hv_dev;
+> +	child_device_obj->device.parent =3D vmbus_root_device;
+>  	child_device_obj->device.release =3D vmbus_device_release;
+>=20
+>  	child_device_obj->device.dma_parms =3D &child_device_obj->dma_parms;
+> @@ -2253,7 +2260,7 @@ static int vmbus_acpi_add(struct platform_device *p=
+dev)
+>  	struct acpi_device *ancestor;
+>  	struct acpi_device *device =3D ACPI_COMPANION(&pdev->dev);
+>=20
+> -	hv_dev =3D &device->dev;
+> +	vmbus_root_device =3D &device->dev;
+>=20
+>  	/*
+>  	 * Older versions of Hyper-V for ARM64 fail to include the _CCA
+> @@ -2342,7 +2349,7 @@ static int vmbus_device_add(struct platform_device =
+*pdev)
+>  	struct device_node *np =3D pdev->dev.of_node;
+>  	int ret;
+>=20
+> -	hv_dev =3D &pdev->dev;
+> +	vmbus_root_device =3D &pdev->dev;
+>=20
+>  	ret =3D of_range_parser_init(&parser, np);
+>  	if (ret)
+> @@ -2675,7 +2682,7 @@ static int __init hv_acpi_init(void)
+>  	if (ret)
+>  		return ret;
+>=20
+> -	if (!hv_dev) {
+> +	if (!vmbus_root_device) {
+>  		ret =3D -ENODEV;
+>  		goto cleanup;
+>  	}
+> @@ -2706,7 +2713,7 @@ static int __init hv_acpi_init(void)
+>=20
+>  cleanup:
+>  	platform_driver_unregister(&vmbus_platform_driver);
+> -	hv_dev =3D NULL;
+> +	vmbus_root_device =3D NULL;
+>  	return ret;
+>  }
+>=20
+> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller=
+/pci-hyperv.c
+> index 5992280e8110..cdecefd1f9bd 100644
+> --- a/drivers/pci/controller/pci-hyperv.c
+> +++ b/drivers/pci/controller/pci-hyperv.c
+> @@ -50,6 +50,7 @@
+>  #include <linux/irqdomain.h>
+>  #include <linux/acpi.h>
+>  #include <linux/sizes.h>
+> +#include <linux/of_irq.h>
+>  #include <asm/mshyperv.h>
+>=20
+>  /*
+> @@ -887,6 +888,35 @@ static const struct irq_domain_ops hv_pci_domain_ops=
+ =3D {
+>  	.activate =3D hv_pci_vec_irq_domain_activate,
+>  };
+>=20
+> +#ifdef CONFIG_OF
+> +
+> +static struct irq_domain *hv_pci_of_irq_domain_parent(void)
+> +{
+> +	struct device_node *parent;
+> +	struct irq_domain *domain;
+> +
+> +	parent =3D of_irq_find_parent(to_platform_device(get_vmbus_root_device(=
+))->dev.of_node);
 
-Note that the ACPI code for VMBus does the same thing -- it believes and
-uses whatever the _CCA property says. The exception is that there
-are deployed version of Hyper-V that don't set _CCA at all, contrary to the
-ACPI spec. So there's a hack in vmbus_acpi_add() to work around this case
-and force coherent_dma. But that's the only place where the current
-Hyper-V assumption of coherence comes into play. I sincerely hope Hyper-V
-ensures that the DT correctly includes dma-coherent from the start, and
-that we don't have to replicate the hack on the DT side.
+I think the above can be simplified to:
+
+	parent =3D of_irq_find_parent(get_vmbus_root_device()->of_node);
+
+Converting the vmbus_root_device to the platform device, and then accessing
+the "dev" field of the platform device puts you back where you started with
+the vmbus_root_device.  See the code in vmbus_device_add() where the
+vmbus_root_device is set to the dev field of the platform device.
+
+> +	domain =3D NULL;
+> +	if (parent) {
+> +		domain =3D irq_find_host(parent);
+> +		of_node_put(parent);
+> +	}
+> +
+> +	/*
+> +	 * `domain =3D=3D NULL` shouldn't happen.
+> +	 *
+> +	 * If somehow the code does end up in that state, treat this as a confi=
+guration
+> +	 * issue rather than a hard error, emit a warning, and let the code pro=
+ceed.
+> +	 * The NULL parent domain is an acceptable option for the `irq_domain_c=
+reate_hierarchy`
+> +	 * function called later.
+> +	 */
+> +	if (!domain)
+> +		WARN_ONCE(1, "No interrupt-parent found, check the DeviceTree data.\n"=
+);
+> +	return domain;
+> +}
+
+Here's a thought, which may or may not be a good one:  Push some or all
+the functionality of hv_pci_of_irq_domain_parent() into vmbus_device_add().
+In the simplest case, have vmbus_device_add() store the of_node (which is
+already the "np" local variable) in a global static variable, and provide
+hv_get_vmbus_of_node() instead of get_vmbus_root_device().
+
+The next step to consider would be to compute the parent in
+vmbus_device_add(), and provide hv_get_vmbus_parent_of_node() instead
+of hv_get_vmbus_of_node(). One difference is that vmbus_device_add()
+runs for both x86 and arm64, while hv_pci_of_irq_domain_parent() is for
+arm64 only.  The parent node may not exist on x86, but maybe that isn't
+really a problem.
+
+Pushing everything into vmbus_device_add() would entail doing the
+irq_find_host(parent) as well, and the accessor function would just
+return the IRQ domain. In that case, hv_pci_of_irq_domain_parent()
+can go away. The domain might be NULL on x86, but that's OK
+because the accessor function won't be called on x86.
+
+Maybe there's a snag that prevents this idea from working well,
+particularly on x86 where the domain will be NULL. But if it works,
+it seems slightly less messy to me, though that is a judgment call.
+I'll leave it to you to decide, and I'm OK either way. :-)
 
 Michael
 
-> >
-> > Since the dma-coherent property is interpreted by common code, it's
-> > not up to hv to change the default for the platform. I'm not sure
-> > if the presence of CONFIG_ARCH_HAS_SYNC_DMA_* options is the correct
-> > check to determine that an architecture defaults to noncoherent
-> > though, as the function may be needed to do something else.
-> I used the ifdef as the dma_coherent field is declared under these macros=
-:
+> +
+> +#endif
+> +
+>  static int hv_pci_irqchip_init(void)
+>  {
+>  	static struct hv_pci_chip_data *chip_data;
+> @@ -906,10 +936,29 @@ static int hv_pci_irqchip_init(void)
+>  	 * IRQ domain once enabled, should not be removed since there is no
+>  	 * way to ensure that all the corresponding devices are also gone and
+>  	 * no interrupts will be generated.
+> +	 *
+> +	 * In the ACPI case, the parent IRQ domain is supplied by the ACPI
+> +	 * subsystem, and it is the default GSI domain pointing to the GIC.
+> +	 * Neither is available outside of the ACPI subsystem, cannot avoid
+> +	 * the messy ifdef below.
+> +	 * There is apparently no such default in the OF subsystem, and
+> +	 * `hv_pci_of_irq_domain_parent` finds the parent IRQ domain that
+> +	 * points to the GIC as well.
+> +	 * None of these two cases reaches for the MSI parent domain.
+>  	 */
+> -	hv_msi_gic_irq_domain =3D acpi_irq_create_hierarchy(0, HV_PCI_MSI_SPI_N=
+R,
+> -							  fn, &hv_pci_domain_ops,
+> -							  chip_data);
+> +#ifdef CONFIG_ACPI
+> +	if (!acpi_disabled)
+> +		hv_msi_gic_irq_domain =3D acpi_irq_create_hierarchy(0, HV_PCI_MSI_SPI_=
+NR,
+> +			fn, &hv_pci_domain_ops,
+> +			chip_data);
+> +#endif
+> +#if defined(CONFIG_OF)
+> +	if (!hv_msi_gic_irq_domain)
+> +		hv_msi_gic_irq_domain =3D irq_domain_create_hierarchy(
+> +			hv_pci_of_irq_domain_parent(), 0, HV_PCI_MSI_SPI_NR,
+> +			fn, &hv_pci_domain_ops,
+> +			chip_data);
+> +#endif
 >=20
-> #if defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_DEVICE) || \
-> 	defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU) || \
-> 	defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU_ALL)
-> extern bool dma_default_coherent;
-> static inline bool dev_is_dma_coherent(struct device *dev)
-> {
-> 	return dev->dma_coherent;
-> }
-> #else
-> #define dma_default_coherent true
+>  	if (!hv_msi_gic_irq_domain) {
+>  		pr_err("Failed to create Hyper-V arm64 vPCI MSI IRQ domain\n");
+> diff --git a/include/linux/hyperv.h b/include/linux/hyperv.h
+> index 5e39baa7f6cb..b4aa1f579a97 100644
+> --- a/include/linux/hyperv.h
+> +++ b/include/linux/hyperv.h
+> @@ -1346,6 +1346,8 @@ static inline void *hv_get_drvdata(struct hv_device=
+ *dev)
+>  	return dev_get_drvdata(&dev->device);
+>  }
 >=20
-> static inline bool dev_is_dma_coherent(struct device *dev)
-> {
-> 	return true;
-> }
->=20
-> i.e., there is no API to set dma_coherent. As I see it, the options
-> are either warn the user if they forgot to add `dma-coherent`
->=20
-> if (!dev_is_dma_coherent(dev)) pr_warn("add dma-coherent to be faster\n")=
-,
->=20
-> or warn and force the flag to true. Maybe just warn
-> the user I think now... The code will be cleaner (no need to emulate
-> a-would-be set_dma_coherent) , and the user will
-> know how to make the system perform at its best.
->=20
-> Appreciate sharing the reservations about that piece!
->=20
-> >
-> > The global "dma_default_coherent' may be a better thing to check
-> > for. This is e.g. set on powerpc64, riscv and on specific mips
-> > platforms, but it's never set on arm64 as far as I can tell.
-> >
-> >       Arnd
->=20
+> +struct device *get_vmbus_root_device(void);
+> +
+>  struct hv_ring_buffer_debug_info {
+>  	u32 current_interrupt_mask;
+>  	u32 current_read_index;
 > --
-> Thank you,
-> Roman
+> 2.34.1
 >=20
 
 
