@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-6007-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6008-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96D7B948390
-	for <lists+linux-arch@lfdr.de>; Mon,  5 Aug 2024 22:36:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 231A39483A1
+	for <lists+linux-arch@lfdr.de>; Mon,  5 Aug 2024 22:37:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C89D01C2209E
-	for <lists+linux-arch@lfdr.de>; Mon,  5 Aug 2024 20:36:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 546CC1C22075
+	for <lists+linux-arch@lfdr.de>; Mon,  5 Aug 2024 20:37:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAABC14B08E;
-	Mon,  5 Aug 2024 20:35:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8FAC14A4E1;
+	Mon,  5 Aug 2024 20:37:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g0ifEE+/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bF0xgt41"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EAA813E881;
-	Mon,  5 Aug 2024 20:35:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A79C149C60;
+	Mon,  5 Aug 2024 20:37:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722890158; cv=none; b=JOntuJRi39P9TIi6nOysa5VL9maWhlgHy5FUIKQZGLKpSS+JLzzJSLaACMENEJhdMyHWn9PwCegSjXgD5/l1W5x0BuNJb8i59Ic1DDRywonLlhIZz5aWNEA0anyEJE/e65YFYIRjuI4eENIE0xjyJyrn6vGjQsCFjWlq/wsFhhE=
+	t=1722890261; cv=none; b=VyMGhhVCt9F5N+8ZsowL3bmWZaNNs1IUQN1p07TKxi0IEsOkPDp85rT2Eun7TSzwTN5Iiv8fa1LeveyEqJkpX56REfaQiQtIDeL3RJUP4FAsF0XVeQBH47jVcUFftc8XSa3h96K59jg0rE3ECNHbAnPM1f44obhjrpqp6AKVUvQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722890158; c=relaxed/simple;
-	bh=wRagKm6MS39NDYLBbcdNfb/zxQJOwJqmtNN36cxhWNE=;
+	s=arc-20240116; t=1722890261; c=relaxed/simple;
+	bh=qdRuOti9XNlLltkR78ltAp8iub7ZiaEGkve5ZQKgRXs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NRX5D6tfGFNevLoF+XowPQOn+LAZeWzqVQABuUYVjklm/f2woquJ9idyWqgf0jcc8jLBmkAgUervbhn8xTTloSjyarn7Sd7DTJJNIn8SOgEmi5Do465o9tqE3rd045jcBJeI3V3aZnQ3EIGLEc+gBhNLQEcaage2Ll8KFx+UdRU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g0ifEE+/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A51B2C32782;
-	Mon,  5 Aug 2024 20:35:43 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Pc04VQjcCngW/HvjKCfRW2IYnMJQ0cmyqcTO1Wc44W+q4zd6W4B5OpnnYGmJpPnKFBmt8AvgBHa3lViJHzJOv2zndQgO9ogdHuZZ+lQ7RlTeOsR50ukTmMnOcU/FaAre5qJFobpaKML6hxJIt09pAoq3F/WxWdgnWzu1zydv5t0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bF0xgt41; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 087EBC4AF0E;
+	Mon,  5 Aug 2024 20:37:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722890158;
-	bh=wRagKm6MS39NDYLBbcdNfb/zxQJOwJqmtNN36cxhWNE=;
+	s=k20201202; t=1722890261;
+	bh=qdRuOti9XNlLltkR78ltAp8iub7ZiaEGkve5ZQKgRXs=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=g0ifEE+/fQd9VQyFJiGF6eqG5LkKWn0QoytIRLG6RGNO3Qz+ixAqBqBhJXWXYzJE8
-	 0lFaNo21LgP2mbO565lm6BtVRnS7fXNHEJVy8zEtHsy8Uw8u/a5v19B4OkrZVUS3fx
-	 ix+vSxthkk0vtjORnJgV3NWtYxBAy3BhlS8nwLVfIFfPyq5ww4vSd2FHKgUzoj06Iv
-	 Vb4ByzZFa5e2puJlKIa3k2+AazNy3wMipT1Qok9eH8nBZ24hNYG5OjUnktHHi7xdO4
-	 HdW3CuSUf4iLi1uAYROJiEHzYtewSLvIDZn8z4DY92o6CWtrXY1hYgkOWg3WUTpR8E
-	 O3fqMHFNWnE8A==
-Date: Mon, 5 Aug 2024 23:33:39 +0300
+	b=bF0xgt419GbxyCGFRj0fNjByi1OtMInAxUy0fO7kuEExoo6r6jeZMXGjN5ikPGLYH
+	 /M1nzHizackmgautp/VnDSLRxQXCurMyrYVEwg5Yf+PdgGkwhSt7ZiA1a6tEsPe3+w
+	 oJPfE55fHB91q50vVv1vV9hAXYemhAyhr6OpNgWOOvXUx9/9Vw4S7evidbf87YcNj+
+	 pEPIiDW05PYUn8lRlujrJ1DKbY3WIHytjXuNelSTWpy7nXBiYR1lO2v9ZQh4g3aHrR
+	 PgFXkbijAdUJ0BywpuS1YJGB4AvPiLFgG1t0OrXdtLJEh5IFQJb88z75ZKH8cfv8oU
+	 ALk7ATW/rOneA==
+Date: Mon, 5 Aug 2024 23:35:22 +0300
 From: Mike Rapoport <rppt@kernel.org>
 To: Dan Williams <dan.j.williams@intel.com>
 Cc: linux-kernel@vger.kernel.org,
@@ -78,12 +78,12 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
 	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
 	nvdimm@lists.linux.dev, sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v3 22/26] mm: numa_memblks: use
- memblock_{start,end}_of_DRAM() when sanitizing meminfo
-Message-ID: <ZrE3I6qCdfHPa3FB@kernel.org>
+Subject: Re: [PATCH v3 11/26] x86/numa: use get_pfn_range_for_nid to verify
+ that node spans memory
+Message-ID: <ZrE3ijXA3efepKcH@kernel.org>
 References: <20240801060826.559858-1-rppt@kernel.org>
- <20240801060826.559858-23-rppt@kernel.org>
- <66b1342e8af7f_c1448294af@dwillia2-xfh.jf.intel.com.notmuch>
+ <20240801060826.559858-12-rppt@kernel.org>
+ <66b1302ce5fd3_c1448294d3@dwillia2-xfh.jf.intel.com.notmuch>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -92,25 +92,56 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <66b1342e8af7f_c1448294af@dwillia2-xfh.jf.intel.com.notmuch>
+In-Reply-To: <66b1302ce5fd3_c1448294d3@dwillia2-xfh.jf.intel.com.notmuch>
 
-On Mon, Aug 05, 2024 at 01:21:02PM -0700, Dan Williams wrote:
+On Mon, Aug 05, 2024 at 01:03:56PM -0700, Dan Williams wrote:
 > Mike Rapoport wrote:
 > > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 > > 
-> > numa_cleanup_meminfo() moves blocks outside system RAM to
-> > numa_reserved_meminfo and it uses 0 and PFN_PHYS(max_pfn) to determine
-> > the memory boundaries.
+> > Instead of looping over numa_meminfo array to detect node's start and
+> > end addresses use get_pfn_range_for_init().
 > > 
-> > Replace the memory range boundaries with more portable
-> > memblock_start_of_DRAM() and memblock_end_of_DRAM().
+> > This is shorter and make it easier to lift numa_memblks to generic code.
+> > 
+> > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> > Tested-by: Zi Yan <ziy@nvidia.com> # for x86_64 and arm64
+> > ---
+> >  arch/x86/mm/numa.c | 13 +++----------
+> >  1 file changed, 3 insertions(+), 10 deletions(-)
+> > 
+> > diff --git a/arch/x86/mm/numa.c b/arch/x86/mm/numa.c
+> > index edfc38803779..cfe7e5477cf8 100644
+> > --- a/arch/x86/mm/numa.c
+> > +++ b/arch/x86/mm/numa.c
+> > @@ -521,17 +521,10 @@ static int __init numa_register_memblks(struct numa_meminfo *mi)
+> >  
+> >  	/* Finally register nodes. */
+> >  	for_each_node_mask(nid, node_possible_map) {
+> > -		u64 start = PFN_PHYS(max_pfn);
+> > -		u64 end = 0;
+> > +		unsigned long start_pfn, end_pfn;
+> >  
+> > -		for (i = 0; i < mi->nr_blks; i++) {
+> > -			if (nid != mi->blk[i].nid)
+> > -				continue;
+> > -			start = min(mi->blk[i].start, start);
+> > -			end = max(mi->blk[i].end, end);
+> > -		}
+> > -
+> > -		if (start >= end)
+> > +		get_pfn_range_for_nid(nid, &start_pfn, &end_pfn);
+> > +		if (start_pfn >= end_pfn)
 > 
-> Can you say a bit more about why this is more portable? Is there any
-> scenario for which (0, max_pfn) does the wrong thing?
+> Assuming I understand why this works, would it be worth a comment like:
+> 
+> "Note, get_pfn_range_for_nid() depends on memblock_set_node() having
+>  already happened"
 
-arm64 may have DRAM starting at addresses other than 0.
-And max_pfn seems to me a redundant global variable that I'd love to see
-gone.
+Will add a comment, sure.
+ 
+> ...at least that context was not part of the diff so took me second to
+> figure out how this works.
+> 
 
 -- 
 Sincerely yours,
