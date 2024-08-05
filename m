@@ -1,45 +1,45 @@
-Return-Path: <linux-arch+bounces-5965-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5966-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF33E94753C
-	for <lists+linux-arch@lfdr.de>; Mon,  5 Aug 2024 08:28:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8AE49947750
+	for <lists+linux-arch@lfdr.de>; Mon,  5 Aug 2024 10:30:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E8851F224D3
-	for <lists+linux-arch@lfdr.de>; Mon,  5 Aug 2024 06:28:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 392331F218CF
+	for <lists+linux-arch@lfdr.de>; Mon,  5 Aug 2024 08:30:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82A3A142E86;
-	Mon,  5 Aug 2024 06:28:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE96B14B966;
+	Mon,  5 Aug 2024 08:30:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="ln0nDgh3"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="h0enI0Nz"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 185581DFF7;
-	Mon,  5 Aug 2024 06:28:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 696156BFB5;
+	Mon,  5 Aug 2024 08:30:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722839303; cv=none; b=NxJLf2Jq6e3zddYL2h65RjQ0616rIxUgWUIpnHUKnkTpr0ZBTFVQZEAWTB+z1UDK8zpbKyTOXp4c+X2rxYFMoXqS1Pqew3ZdGeywBTP2NhhIe0VzLmPkBkUpuzz8SZDksy4Za2EaR3HxN0GDqKhoHQX7f35/oy37fAKTo25YngY=
+	t=1722846626; cv=none; b=oH3qpJVIudQQ6Uk5goRn/xaOowkpZlzBSQxqqZLB8RNrmmM2GV0EK4T5tzEXCP4O/1KQF45sVLcLH8S+2M5VmB8+pyug8qne4DxXVZ16RIrUH5SH3dgrCkKp1j1GYtOjWaRWhJV7/G7I45QvtTHNReeFZnFaONUav7kt4U/ycCw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722839303; c=relaxed/simple;
-	bh=9GIoyi3vCEXFFyYGEr0wsqBNa4FTgGkvni+KwMAQ9PM=;
+	s=arc-20240116; t=1722846626; c=relaxed/simple;
+	bh=89w4/dsEv0i3Cnr8cTwhmNrSeVvE6WWWhRigNFNYrRA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O5oAvqbxxlibk9IdYvKb+W7kX2La5wRS/FhisS7rYNBxTMreAbEcfEvaRjrvID3pbNjQsNIzGcDL1BpK9/4eoAv2aqzvGEbzVg7Vmw7OIaYS8cX9wh5U96kWUgZSrHjE/SrN6Dqy8cHqPsXZoBPj+I0/s5aL6wpdjk5OsRjoOQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=ln0nDgh3; arc=none smtp.client-ip=13.77.154.182
+	 Content-Type:Content-Disposition:In-Reply-To; b=OVYLiEk9xg4EyPCpTQDs8biA60HeA6+gvp1VBDnBQi85a9q+RKkf/ekr2qEtu6QVEnsxSc/4Hgj8UAQXMaDrgTXTnSd04t6SQEVxRPgy2sG5Ml/yPeIjDYe/T/VAmCH4Sdo0tDrXFtxMoFuh/HW0IAhSVZW4rCtmy0CaiPKZ1JI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=h0enI0Nz; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: by linux.microsoft.com (Postfix, from userid 1127)
-	id A8D5620B7127; Sun,  4 Aug 2024 23:28:21 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A8D5620B7127
+	id D178320B7123; Mon,  5 Aug 2024 01:30:24 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D178320B7123
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1722839301;
-	bh=0EyiuCQjwZtY7cc05nIywrStY+vcE+GzimaJl2ixH/s=;
+	s=default; t=1722846624;
+	bh=ZMhkGoAt3nHKrkR3GOV1cGVDXt2ZM4vel/TKh6vKLos=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ln0nDgh3lc7pJQo8FjqGY8IN1/FyLkrqKolSABpiRTvjgfYGDRnNJEzS0ZK7I9HHj
-	 3JIYAot8yUVGgXWyTWlAGsTsK1dp8sh/SbBEn+1BdklnDXSc782yGRwYJALhiQtSr5
-	 fY3J6G2Gtw+B7ixfgjDVy7cym63u8h/xkypUyAMI=
-Date: Sun, 4 Aug 2024 23:28:21 -0700
+	b=h0enI0Nz5nIJg3QmOqKULmKtzZJVIYwVyeraibFcsUbfMWBOzT++Qlvb6R6RUsgPs
+	 sHcn3ukM25Vexlq3W+879tsqLgLdNeFs6RTFxxLc76MvC+QEK45P4R7LNX2r+T3pGZ
+	 2xMr1BNCXkrGJ99eRVfRULe4QTOcnV+C6pl5AJAI=
+Date: Mon, 5 Aug 2024 01:30:24 -0700
 From: Saurabh Singh Sengar <ssengar@linux.microsoft.com>
 To: Roman Kisel <romank@linux.microsoft.com>
 Cc: arnd@arndb.de, bhelgaas@google.com, bp@alien8.de,
@@ -54,10 +54,10 @@ Cc: arnd@arndb.de, bhelgaas@google.com, bp@alien8.de,
 	linux-pci@vger.kernel.org, x86@kernel.org, apais@microsoft.com,
 	benhill@microsoft.com, ssengar@microsoft.com,
 	sunilmut@microsoft.com, vdso@hexbites.dev
-Subject: Re: [PATCH v3 4/7] arm64: hyperv: Boot in a Virtual Trust Level
-Message-ID: <20240805062821.GA31897@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+Subject: Re: [PATCH v3 6/7] Drivers: hv: vmbus: Get the IRQ number from DT
+Message-ID: <20240805083024.GB31897@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
 References: <20240726225910.1912537-1-romank@linux.microsoft.com>
- <20240726225910.1912537-5-romank@linux.microsoft.com>
+ <20240726225910.1912537-7-romank@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -66,85 +66,49 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240726225910.1912537-5-romank@linux.microsoft.com>
+In-Reply-To: <20240726225910.1912537-7-romank@linux.microsoft.com>
 User-Agent: Mutt/1.5.21 (2010-09-15)
 
-On Fri, Jul 26, 2024 at 03:59:07PM -0700, Roman Kisel wrote:
-> To run in the VTL mode, Hyper-V drivers have to know what
-> VTL the system boots in, and the arm64/hyperv code does not
-> update the variable that stores the value.
+On Fri, Jul 26, 2024 at 03:59:09PM -0700, Roman Kisel wrote:
+> The VMBus driver uses ACPI for interrupt assignment on
+> arm64 hence it won't function in the VTL mode where only
+> DeviceTree can be used.
 > 
-> Update the variable to enable the Hyper-V drivers to boot
-> in the VTL mode and print the VTL the code runs in.
+> Update the VMBus driver to discover interrupt configuration
+> via DeviceTree and indicate DMA cache coherency.
 > 
 > Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
 > ---
->  arch/arm64/hyperv/Makefile        |  1 +
->  arch/arm64/hyperv/hv_vtl.c        | 13 +++++++++++++
->  arch/arm64/hyperv/mshyperv.c      |  4 ++++
->  arch/arm64/include/asm/mshyperv.h |  7 +++++++
->  4 files changed, 25 insertions(+)
->  create mode 100644 arch/arm64/hyperv/hv_vtl.c
+>  drivers/hv/vmbus_drv.c | 49 ++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 49 insertions(+)
 > 
-> diff --git a/arch/arm64/hyperv/Makefile b/arch/arm64/hyperv/Makefile
-> index 87c31c001da9..9701a837a6e1 100644
-> --- a/arch/arm64/hyperv/Makefile
-> +++ b/arch/arm64/hyperv/Makefile
-> @@ -1,2 +1,3 @@
->  # SPDX-License-Identifier: GPL-2.0
->  obj-y		:= hv_core.o mshyperv.o
-> +obj-$(CONFIG_HYPERV_VTL_MODE)	+= hv_vtl.o
-> diff --git a/arch/arm64/hyperv/hv_vtl.c b/arch/arm64/hyperv/hv_vtl.c
-> new file mode 100644
-> index 000000000000..38642b7b6be0
-> --- /dev/null
-> +++ b/arch/arm64/hyperv/hv_vtl.c
-> @@ -0,0 +1,13 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2024, Microsoft, Inc.
-> + *
-> + * Author : Roman Kisel <romank@linux.microsoft.com>
-> + */
-> +
-> +#include <asm/mshyperv.h>
-> +
-> +void __init hv_vtl_init_platform(void)
+> diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+> index 12a707ab73f8..7eee7caff5f6 100644
+> --- a/drivers/hv/vmbus_drv.c
+> +++ b/drivers/hv/vmbus_drv.c
+> @@ -2306,6 +2306,34 @@ static int vmbus_acpi_add(struct platform_device *pdev)
+>  }
+>  #endif
+>  
+> +static int __maybe_unused vmbus_set_irq(struct platform_device *pdev)
 > +{
-> +	pr_info("Linux runs in Hyper-V Virtual Trust Level\n");
-> +}
-> diff --git a/arch/arm64/hyperv/mshyperv.c b/arch/arm64/hyperv/mshyperv.c
-> index 341f98312667..8fd04d6e4800 100644
-> --- a/arch/arm64/hyperv/mshyperv.c
-> +++ b/arch/arm64/hyperv/mshyperv.c
-> @@ -98,6 +98,10 @@ static int __init hyperv_init(void)
->  		return ret;
->  	}
->  
-> +	/* Find the VTL */
-> +	ms_hyperv.vtl = get_vtl();
-> +	hv_vtl_init_platform();
+> +	struct irq_desc *desc;
+> +	int irq;
 > +
->  	ms_hyperv_late_init();
->  
->  	hyperv_initialized = true;
-> diff --git a/arch/arm64/include/asm/mshyperv.h b/arch/arm64/include/asm/mshyperv.h
-> index a7a3586f7cb1..63d6bb6998fc 100644
-> --- a/arch/arm64/include/asm/mshyperv.h
-> +++ b/arch/arm64/include/asm/mshyperv.h
-> @@ -49,6 +49,13 @@ static inline u64 hv_get_msr(unsigned int reg)
->  				ARM_SMCCC_OWNER_VENDOR_HYP,	\
->  				HV_SMCCC_FUNC_NUMBER)
->  
-> +#ifdef CONFIG_HYPERV_VTL_MODE
-> +void __init hv_vtl_init_platform(void);
-> +int __init hv_vtl_early_init(void);
-> +#else
-> +static inline void __init hv_vtl_init_platform(void) {}
-> +#endif
+> +	irq = platform_get_irq(pdev, 0);
+> +	if (irq == 0) {
+> +		pr_err("VMBus interrupt mapping failure\n");
+> +		return -EINVAL;
+> +	}
+> +	if (irq < 0) {
+> +		pr_err("VMBus interrupt data can't be read from DeviceTree, error %d\n", irq);
+> +		return irq;
+> +	}
 > +
+> +	desc = irq_to_desc(irq);
 
-These functions are defined in x86 header as well. We can move it to generic header.
+irq_to_desc is not an exported symbol if CONFIG_SPARSE_IRQ is enabled. This will
+break the builds for HYPERV as module.
 
 - Saurabh
 
