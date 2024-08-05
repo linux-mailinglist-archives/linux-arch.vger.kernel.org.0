@@ -1,89 +1,58 @@
-Return-Path: <linux-arch+bounces-5991-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5992-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD781948021
-	for <lists+linux-arch@lfdr.de>; Mon,  5 Aug 2024 19:17:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF359948229
+	for <lists+linux-arch@lfdr.de>; Mon,  5 Aug 2024 21:20:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 69A442870D0
-	for <lists+linux-arch@lfdr.de>; Mon,  5 Aug 2024 17:17:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 69886284134
+	for <lists+linux-arch@lfdr.de>; Mon,  5 Aug 2024 19:20:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9730C15D5BE;
-	Mon,  5 Aug 2024 17:17:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0E37143879;
+	Mon,  5 Aug 2024 19:20:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z7q/lW63"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aCHw9O+3"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FD9D2C684;
-	Mon,  5 Aug 2024 17:17:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6244364AB;
+	Mon,  5 Aug 2024 19:20:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722878260; cv=none; b=I5czU5lgfJeItm1sdUPEHk75g5NILwgvGeBs60LyJCZLdAADTti/MwXJ6+fWAAv3MT9gM3NfJ8i+p0ydzC4FNuQi45dZeoIFtSipbsXmFg5PVW75IW7QVywsUYJR5g7z7rhsoehrg6HrXaj7tM3gwEnipYWCz6OK5iYkhd3V2RM=
+	t=1722885630; cv=none; b=FqCghGW34JOL3ZFPVcP/oOc4u90Q+3Ttz0swhcMhOEJd451g5+gHyHLuV0h3BscwkjplqOdiAOne8OtaGQIey/Q8Hbu9aQ8fd+GhnCar3Oiuuow06m9FiH9WKYQZIagrOkTi5QP2infhmS13oMv9TDPAC9kiin2Ql2qnXIZZ81A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722878260; c=relaxed/simple;
-	bh=xUiHKiiFB+eGRf4/0vdH6U+v/YkOQHoLKaT521lWFxI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=D6fonsPxPoEW1w3NbypP1JGml4NY44fBfEzA9w4WOi9HJwnHAx6jpjf1iA/8hXIiLeH7vDZv0y3LkVBAJqYIuCNFQQs9dxVfYEWfrpLJHCg0D1svymfbkT1DgVSsGqMwI8lSqP64kU4tcMbR3TZAe0+PNtJenJzLXSF3sEQT53A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z7q/lW63; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A951C32782;
-	Mon,  5 Aug 2024 17:17:24 +0000 (UTC)
+	s=arc-20240116; t=1722885630; c=relaxed/simple;
+	bh=yDMt0EqrqAyLKxe7X4rCEOBXWgRTFVTEgyEZvPiduZo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=mRyrQPIUaQ/6rR2N20Z3Abui+F/23WzcwMak0HyMCZ0CQdYyz32w5HJL57M1qqmxaq62OUbL0dgmA1Aa4GMena7ML/MW1VU/NpiISQVd/FRvuZluv5/ejkOAOdhwTsqcqsN4IXdmE8OyFWRJ3q9UOP3oqTSIeRA2FwokSSuTSu0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aCHw9O+3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DA8AC4AF0B;
+	Mon,  5 Aug 2024 19:20:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722878259;
-	bh=xUiHKiiFB+eGRf4/0vdH6U+v/YkOQHoLKaT521lWFxI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Z7q/lW639aowtINXwVebTG+OLoxrXof+zBNSeR/8WY86B+624ZIuqcPJ12uz6WAq3
-	 TOktvjQuFO3Psh/zSZk6bupzno8UjNgzGdjWYsGzuDHPa53tI5UwJrFUIiEWAMkla2
-	 aZhopzXWwqHlnm+KETHsoZ8cxcOCV/ES/RMeaNClV0U/lI74zaSa7QLz8oGGmPM5b+
-	 WVRXAQQqToAOAcGGygHFeY2KPxgU/pB39IDAe0i7d4FyqehFfReXcy3JQ8TWWNvwl/
-	 YnEvZ6i15oUR+XxxozKV+u9zlrKVedpz+W1ReJtnBjYdPuNzzekfqSWqwV+cKpPHX5
-	 XzWc8YkjVKQSQ==
-Date: Mon, 5 Aug 2024 20:15:22 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: linux-kernel@vger.kernel.org,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	David Hildenbrand <david@redhat.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Samuel Holland <samuel.holland@sifive.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Vasily Gorbik <gor@linux.ibm.com>, Will Deacon <will@kernel.org>,
-	Zi Yan <ziy@nvidia.com>, devicetree@vger.kernel.org,
-	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-cxl@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-mips@vger.kernel.org,
-	linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-	nvdimm@lists.linux.dev, sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v3 09/26] arch, mm: pull out allocation of NODE_DATA to
- generic code
-Message-ID: <ZrEIqogZ4UJJY0c2@kernel.org>
-References: <20240801060826.559858-1-rppt@kernel.org>
- <20240801060826.559858-10-rppt@kernel.org>
- <20240802105527.00005240@Huawei.com>
+	s=k20201202; t=1722885630;
+	bh=yDMt0EqrqAyLKxe7X4rCEOBXWgRTFVTEgyEZvPiduZo=;
+	h=Date:From:To:Cc:Subject:Reply-To:From;
+	b=aCHw9O+3I7TwTqw2bgfYVX6WUAu1hjbYIeBT6Tvsk5RZkdWLdrx1y79mOL30w9ic+
+	 T3B2USrL8Lb6wosurq1IxTway3u1g6PZo6ctQ+rfZ/41S/ad2pfmEZ0CrBrhSrby6F
+	 Yw23/AFYdNfctK6rax3X9KEaoWk8DzIzIeG+ospSOHPd0wlfaQUkVs9ECdl18vZYcZ
+	 pOON4GD3hv3t3ETaOq+GIaJPOJQ5v3VWHEWl5TaTQjP2p7LKrDB+XYk6sm8eZjgaj6
+	 IwEjGGRDVcgxCwlHZXSY3p27ALgGEhws0COdLj9PqOjJZkfcqrfoRf3n/a/xSZcmPW
+	 LRA2d52n+Y2IQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id BFCC1CE0A6F; Mon,  5 Aug 2024 12:20:29 -0700 (PDT)
+Date: Mon, 5 Aug 2024 12:20:29 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: elver@google.com, akpm@linux-foundation.org, tglx@linutronix.de,
+	peterz@infradead.org, torvalds@linux-foundation.org, arnd@arndb.de,
+	geert@linux-m68k.org, palmer@rivosinc.com, mhiramat@kernel.org,
+	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org
+Subject: [PATCH cmpxchg 0/3] Provide emulation for one-byte cmpxchg()
+Message-ID: <c1b7f3a2-da50-4dfb-af6f-a1898eaf2b79@paulmck-laptop>
+Reply-To: paulmck@kernel.org
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -92,62 +61,35 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240802105527.00005240@Huawei.com>
 
-On Fri, Aug 02, 2024 at 10:55:27AM +0100, Jonathan Cameron wrote:
-> On Thu,  1 Aug 2024 09:08:09 +0300
-> Mike Rapoport <rppt@kernel.org> wrote:
-> 
-> > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> > 
-> > Architectures that support NUMA duplicate the code that allocates
-> > NODE_DATA on the node-local memory with slight variations in reporting
-> > of the addresses where the memory was allocated.
-> > 
-> > Use x86 version as the basis for the generic alloc_node_data() function
-> > and call this function in architecture specific numa initialization.
-> > 
-> > Round up node data size to SMP_CACHE_BYTES rather than to PAGE_SIZE like
-> > x86 used to do since the bootmem era when allocation granularity was
-> > PAGE_SIZE anyway.
-> > 
-> > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> > Acked-by: David Hildenbrand <david@redhat.com>
-> > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > Tested-by: Zi Yan <ziy@nvidia.com> # for x86_64 and arm64
-> 
-> One comment unrelated to this patch set as such, just made
-> more obvious by it.
-> 
-> > diff --git a/arch/powerpc/mm/numa.c b/arch/powerpc/mm/numa.c
-> > index 0744a9a2944b..3c1da08304d0 100644
-> > --- a/arch/powerpc/mm/numa.c
-> > +++ b/arch/powerpc/mm/numa.c
-> > @@ -1093,27 +1093,9 @@ void __init dump_numa_cpu_topology(void)
-> >  static void __init setup_node_data(int nid, u64 start_pfn, u64 end_pfn)
-> >  {
-> >  	u64 spanned_pages = end_pfn - start_pfn;
-> 
-> Trivial, but might as well squash this local variable into the
-> single place it's used.
- 
+Hello!
 
-> > -	const size_t nd_size = roundup(sizeof(pg_data_t), SMP_CACHE_BYTES);
+This series provides an emulation function for one-byte cmpxchg(),
+and uses it for the remaining architectures not supporting these in
+hardware and not providing emulation.  The emulation is in terms of
+the fully ordered four-byte cmpxchg() that is supplied by all of these
+architectures.  The emulation has been used in mainline since v6.9
+by csky.
 
-...
+Once this emulation is in place for all architectures needing
+it, RCU Tasks will use this capability in place of the current
+rcu_trc_cmpxchg_need_qs() open-coding of this emulation.
 
-> > +
-> > +	alloc_node_data(nid);
-> > +
-> >  	NODE_DATA(nid)->node_id = nid;
-> >  	NODE_DATA(nid)->node_start_pfn = start_pfn;
-> >  	NODE_DATA(nid)->node_spanned_pages = spanned_pages;
+1.	xtensa: Emulate one-byte cmpxchg.
 
-These are actually overridden later in free_area_init(), it would make
-sense to audit all arch-specific node setup functions and clean them up a
-bit.
+2.	ARC: Emulate one-byte cmpxchg.
 
--- 
-Sincerely yours,
-Mike.
+3.	sh: Emulate one-byte cmpxchg.
+
+						Thanx, Paul
+
+------------------------------------------------------------------------
+
+ arc/Kconfig                  |    1 +
+ arc/include/asm/cmpxchg.h    |   33 ++++++++++++++++++++++++---------
+ sh/Kconfig                   |    1 +
+ sh/include/asm/cmpxchg.h     |    3 +++
+ xtensa/Kconfig               |    1 +
+ xtensa/include/asm/cmpxchg.h |    2 ++
+ 6 files changed, 32 insertions(+), 9 deletions(-)
 
