@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-5987-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5988-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79E3E947F53
-	for <lists+linux-arch@lfdr.de>; Mon,  5 Aug 2024 18:26:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9604A947F5D
+	for <lists+linux-arch@lfdr.de>; Mon,  5 Aug 2024 18:31:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 846BDB2182A
-	for <lists+linux-arch@lfdr.de>; Mon,  5 Aug 2024 16:26:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B85561C21168
+	for <lists+linux-arch@lfdr.de>; Mon,  5 Aug 2024 16:31:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F6BD15C14C;
-	Mon,  5 Aug 2024 16:26:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CB8C1591F0;
+	Mon,  5 Aug 2024 16:30:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="M2enHHT1"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="nGWIptCO"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0146A15C13D;
-	Mon,  5 Aug 2024 16:26:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CC8E2D7B8;
+	Mon,  5 Aug 2024 16:30:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722875194; cv=none; b=s74k+eCMCYfLMA9LzRh8ddQ+PwlbRVuwFRJeJuQmmav/pJL9dXwi1pCJqZ3+iEvchFmgMsLrKEz/0Mq9IYBOSyiveEy72PT/mlZODzoSN+cf8tlzk24guEtztG3YRbg64iyBDXxNbrccjFHk4l8KYP6kG6c31geVTzRU0qMnReI=
+	t=1722875455; cv=none; b=MMQbfDLqp+9f41qFoYscZ73odgJsUssI9n1HghJMHrJ818PyvsG4McwTCMya5AyyXe2V3fUORXP30pxoNFGMQUoOXHYDPywPK6jKoGnSuodgQEjWQ2xen4P4JHUgVCWL+YDD6WjLAyRbNLE0F/8RlVxQoOQbo+Fhcnzv3w7kyYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722875194; c=relaxed/simple;
-	bh=YpMvYEsDyIBcNhx0zyCdRa2fNLdcyXBzZRjN3TB+9xQ=;
+	s=arc-20240116; t=1722875455; c=relaxed/simple;
+	bh=Iva8b8kTU8b/cjbIgVQupXCjkBRFLveCYsjechSqTsw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lDKHaMwTB5qlmsJ0sX+KF7f4lksqtb5qdLOUpG9eAlRtz8M/qpKx/WKZy14c7IN+uippWTl9yNDq3BZ86FrYNH+G3uLUh+lTcntHvBRoYY1uGBldO67Ranvgx1hrlXEd6vdAw+wfy9UOXbFVBvNi1zoBTxMDIwEN+ApD8uxx15M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=M2enHHT1; arc=none smtp.client-ip=13.77.154.182
+	 In-Reply-To:Content-Type; b=SpE4UAAGsxGq/hVqpiAl6d8xF7IP49VZeAokGH1hwUJOnDaxJSny25S3Lp6N9pYlNMMuSNp/BJ6sCK7Q/uEe7MsCkDQ5VRUaQNdvFHWCAtrFJP+YQxkL9Y+n2J5STeEcfvnBunHJ5WJMN3ju0xntBiS05UOFdI1NTfL92XUZUP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=nGWIptCO; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from [10.137.186.190] (unknown [131.107.159.62])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 3E3CB20B7165;
-	Mon,  5 Aug 2024 09:26:32 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3E3CB20B7165
+	by linux.microsoft.com (Postfix) with ESMTPSA id B79D420B7165;
+	Mon,  5 Aug 2024 09:30:52 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B79D420B7165
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1722875192;
-	bh=/7LJYKqa3LR9nd7+LVTDdKOnQjGAqsUsYobxWuYOmVY=;
+	s=default; t=1722875453;
+	bh=OdRa7JogdAe4OsRKdZDtCLOwSHuOnd3sa5a9IhaNzD0=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=M2enHHT1Cs+o6b0L0ThXriYUvccNmN628VwCtO3a45MKicNg3JmOLE3WA/NrOrvdP
-	 4i6Eei2U7jkjNnjNzOqyx+KLHeNANBCTliApvHLlzOIX5QCnJs5mD12tnOhIw4nSk1
-	 96xEOah2nFxyuf6wrDNtKNLxv4pZ3ZZlCCu50z0M=
-Message-ID: <eb0ffccd-4ec8-42c8-86a3-ae1a7f25fc9c@linux.microsoft.com>
-Date: Mon, 5 Aug 2024 09:26:32 -0700
+	b=nGWIptCOU3Hw/uCeSLbzwgPrYaldsRGyYFPpHR2hegELwsFlZ+ae6voF1g+6F46qh
+	 rLV3C6fJ7vfGmqLm8yEsWhgqmZeHoGGh1fOSe7tlh6WI1yM0nKfTxILmVKLNDaHYAs
+	 DpNY6G432ORc9dXW36yO7m93gg9zCJka7njvFSgw=
+Message-ID: <a8e4cd69-9920-458e-b405-a9a72ecd0b4b@linux.microsoft.com>
+Date: Mon, 5 Aug 2024 09:30:53 -0700
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -49,21 +49,23 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 6/7] Drivers: hv: vmbus: Get the IRQ number from DT
-To: Michael Kelley <mhklinux@outlook.com>, Arnd Bergmann <arnd@arndb.de>,
- Krzysztof Kozlowski <krzk@kernel.org>,
- "bhelgaas@google.com" <bhelgaas@google.com>, Borislav Petkov <bp@alien8.de>,
- Catalin Marinas <catalin.marinas@arm.com>,
- Dave Hansen <dave.hansen@linux.intel.com>, Dexuan Cui <decui@microsoft.com>,
- Haiyang Zhang <haiyangz@microsoft.com>, "H. Peter Anvin" <hpa@zytor.com>,
- =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
- "K. Y. Srinivasan" <kys@microsoft.com>, Len Brown <lenb@kernel.org>,
- Lorenzo Pieralisi <lpieralisi@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- "Rafael J . Wysocki" <rafael@kernel.org>, Rob Herring <robh@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>, Wei Liu <wei.liu@kernel.org>,
- Will Deacon <will@kernel.org>,
- "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
- Linux-Arch <linux-arch@vger.kernel.org>,
+Subject: Re: [PATCH v3 7/7] PCI: hv: Get vPCI MSI IRQ domain from DT
+To: Michael Kelley <mhklinux@outlook.com>, "arnd@arndb.de" <arnd@arndb.de>,
+ "bhelgaas@google.com" <bhelgaas@google.com>, "bp@alien8.de" <bp@alien8.de>,
+ "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+ "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+ "decui@microsoft.com" <decui@microsoft.com>,
+ "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
+ "hpa@zytor.com" <hpa@zytor.com>, "kw@linux.com" <kw@linux.com>,
+ "kys@microsoft.com" <kys@microsoft.com>, "lenb@kernel.org"
+ <lenb@kernel.org>, "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+ "mingo@redhat.com" <mingo@redhat.com>, "rafael@kernel.org"
+ <rafael@kernel.org>, "robh@kernel.org" <robh@kernel.org>,
+ "tglx@linutronix.de" <tglx@linutronix.de>,
+ "wei.liu@kernel.org" <wei.liu@kernel.org>, "will@kernel.org"
+ <will@kernel.org>, "linux-acpi@vger.kernel.org"
+ <linux-acpi@vger.kernel.org>,
+ "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
  "linux-arm-kernel@lists.infradead.org"
  <linux-arm-kernel@lists.infradead.org>,
  "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
@@ -76,119 +78,261 @@ Cc: "apais@microsoft.com" <apais@microsoft.com>,
  "sunilmut@microsoft.com" <sunilmut@microsoft.com>,
  "vdso@hexbites.dev" <vdso@hexbites.dev>
 References: <20240726225910.1912537-1-romank@linux.microsoft.com>
- <20240726225910.1912537-7-romank@linux.microsoft.com>
- <7418bfcd-c572-4574-accc-7f2ae117529f@kernel.org>
- <ce8c1e88-2d2f-44de-bd43-c05e274c2660@app.fastmail.com>
- <dd25f792-3ea4-4660-a5cc-79b589b2b881@linux.microsoft.com>
- <SN6PR02MB41571723DB27E0A29877854ED4BE2@SN6PR02MB4157.namprd02.prod.outlook.com>
+ <20240726225910.1912537-8-romank@linux.microsoft.com>
+ <SN6PR02MB4157D5A2DA10658D506EA1B1D4BE2@SN6PR02MB4157.namprd02.prod.outlook.com>
 Content-Language: en-US
 From: Roman Kisel <romank@linux.microsoft.com>
-In-Reply-To: <SN6PR02MB41571723DB27E0A29877854ED4BE2@SN6PR02MB4157.namprd02.prod.outlook.com>
+In-Reply-To: <SN6PR02MB4157D5A2DA10658D506EA1B1D4BE2@SN6PR02MB4157.namprd02.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
 On 8/4/2024 8:03 PM, Michael Kelley wrote:
-> From: Roman Kisel <romank@linux.microsoft.com> Sent: Monday, July 29, 2024 9:51 AM
+> From: Roman Kisel <romank@linux.microsoft.com> Sent: Friday, July 26, 2024 3:59 PM
 >>
+>> The hyperv-pci driver uses ACPI for MSI IRQ domain configuration on
+>> arm64. It won't be able to do that in the VTL mode where only DeviceTree
+>> can be used.
 >>
->> On 7/27/2024 2:17 AM, Arnd Bergmann wrote:
->>> On Sat, Jul 27, 2024, at 10:56, Krzysztof Kozlowski wrote:
->>>> On 27/07/2024 00:59, Roman Kisel wrote:
->>>>> @@ -2338,6 +2372,21 @@ static int vmbus_device_add(struct platform_device *pdev)
->>>>>    		cur_res = &res->sibling;
->>>>>    	}
->>>>>
->>>>> +	/*
->>>>> +	 * Hyper-V always assumes DMA cache coherency, and the DMA subsystem
->>>>> +	 * might default to 'not coherent' on some architectures.
->>>>> +	 * Avoid high-cost cache coherency maintenance done by the CPU.
->>>>> +	 */
->>>>> +#if defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_DEVICE) || \
->>>>> +	defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU) || \
->>>>> +	defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU_ALL)
->>>>> +
->>>>> +	if (!of_property_read_bool(np, "dma-coherent"))
->>>>> +		pr_warn("Assuming cache coherent DMA transactions, no 'dma-coherent' node supplied\n");
->>>>
->>>> Why do you need this property at all, if it is allways dma-coherent? Are
->>>> you supporting dma-noncoherent somewhere?
->>>
->>> It's just a sanity check that the DT is well-formed.
+>> Update the hyperv-pci driver to get vPCI MSI IRQ domain in the DeviceTree
+>> case, too.
+>>
+>> Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
 > 
-> In my view, this chunk of code can be dropped entirely. The guest
-> should believe what the Hyper-V host tells it via DT, and that includes
-> operating in non-coherent mode. There might be some future case
-> where non-coherent DMA is correct. In such a case, we don't want to
-> have to come back and remove an overly aggressive sanity test from
-> Linux kernel code.
+> Overall, this makes sense to me, and I think it works. As you noted in the cover
+> letter for the patch series, it's a bit messy.  But see my two comments below.
 > 
-> As Arnd noted, the dma-coherent (or dma-noncoherent) property should
-> be interpreted and applied to the device by common code. If that's not
-> working for some reason in this case, we should investigate why not.
+>> ---
+>>   drivers/hv/vmbus_drv.c              | 23 +++++++-----
+>>   drivers/pci/controller/pci-hyperv.c | 55 +++++++++++++++++++++++++++--
+>>   include/linux/hyperv.h              |  2 ++
+>>   3 files changed, 69 insertions(+), 11 deletions(-)
+>>
+>> diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+>> index 7eee7caff5f6..038bd9be64b7 100644
+>> --- a/drivers/hv/vmbus_drv.c
+>> +++ b/drivers/hv/vmbus_drv.c
+>> @@ -45,7 +45,8 @@ struct vmbus_dynid {
+>>   	struct hv_vmbus_device_id id;
+>>   };
+>>
+>> -static struct device  *hv_dev;
+>> +/* VMBus Root Device */
+>> +static struct device  *vmbus_root_device;
+>>
+>>   static int hyperv_cpuhp_online;
+>>
+>> @@ -80,9 +81,15 @@ static struct resource *fb_mmio;
+>>   static struct resource *hyperv_mmio;
+>>   static DEFINE_MUTEX(hyperv_mmio_lock);
+>>
+>> +struct device *get_vmbus_root_device(void)
+>> +{
+>> +	return vmbus_root_device;
+>> +}
+>> +EXPORT_SYMBOL_GPL(get_vmbus_root_device);
+>> +
+>>   static int vmbus_exists(void)
+>>   {
+>> -	if (hv_dev == NULL)
+>> +	if (vmbus_root_device == NULL)
+>>   		return -ENODEV;
+>>
+>>   	return 0;
+>> @@ -861,7 +868,7 @@ static int vmbus_dma_configure(struct device *child_device)
+>>   	 * On x86/x64 coherence is assumed and these calls have no effect.
+>>   	 */
+>>   	hv_setup_dma_ops(child_device,
+>> -		device_get_dma_attr(hv_dev) == DEV_DMA_COHERENT);
+>> +		device_get_dma_attr(vmbus_root_device) == DEV_DMA_COHERENT);
+>>   	return 0;
+>>   }
+>>
+>> @@ -1892,7 +1899,7 @@ int vmbus_device_register(struct hv_device *child_device_obj)
+>>   		     &child_device_obj->channel->offermsg.offer.if_instance);
+>>
+>>   	child_device_obj->device.bus = &hv_bus;
+>> -	child_device_obj->device.parent = hv_dev;
+>> +	child_device_obj->device.parent = vmbus_root_device;
+>>   	child_device_obj->device.release = vmbus_device_release;
+>>
+>>   	child_device_obj->device.dma_parms = &child_device_obj->dma_parms;
+>> @@ -2253,7 +2260,7 @@ static int vmbus_acpi_add(struct platform_device *pdev)
+>>   	struct acpi_device *ancestor;
+>>   	struct acpi_device *device = ACPI_COMPANION(&pdev->dev);
+>>
+>> -	hv_dev = &device->dev;
+>> +	vmbus_root_device = &device->dev;
+>>
+>>   	/*
+>>   	 * Older versions of Hyper-V for ARM64 fail to include the _CCA
+>> @@ -2342,7 +2349,7 @@ static int vmbus_device_add(struct platform_device *pdev)
+>>   	struct device_node *np = pdev->dev.of_node;
+>>   	int ret;
+>>
+>> -	hv_dev = &pdev->dev;
+>> +	vmbus_root_device = &pdev->dev;
+>>
+>>   	ret = of_range_parser_init(&parser, np);
+>>   	if (ret)
+>> @@ -2675,7 +2682,7 @@ static int __init hv_acpi_init(void)
+>>   	if (ret)
+>>   		return ret;
+>>
+>> -	if (!hv_dev) {
+>> +	if (!vmbus_root_device) {
+>>   		ret = -ENODEV;
+>>   		goto cleanup;
+>>   	}
+>> @@ -2706,7 +2713,7 @@ static int __init hv_acpi_init(void)
+>>
+>>   cleanup:
+>>   	platform_driver_unregister(&vmbus_platform_driver);
+>> -	hv_dev = NULL;
+>> +	vmbus_root_device = NULL;
+>>   	return ret;
+>>   }
+>>
+>> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
+>> index 5992280e8110..cdecefd1f9bd 100644
+>> --- a/drivers/pci/controller/pci-hyperv.c
+>> +++ b/drivers/pci/controller/pci-hyperv.c
+>> @@ -50,6 +50,7 @@
+>>   #include <linux/irqdomain.h>
+>>   #include <linux/acpi.h>
+>>   #include <linux/sizes.h>
+>> +#include <linux/of_irq.h>
+>>   #include <asm/mshyperv.h>
+>>
+>>   /*
+>> @@ -887,6 +888,35 @@ static const struct irq_domain_ops hv_pci_domain_ops = {
+>>   	.activate = hv_pci_vec_irq_domain_activate,
+>>   };
+>>
+>> +#ifdef CONFIG_OF
+>> +
+>> +static struct irq_domain *hv_pci_of_irq_domain_parent(void)
+>> +{
+>> +	struct device_node *parent;
+>> +	struct irq_domain *domain;
+>> +
+>> +	parent = of_irq_find_parent(to_platform_device(get_vmbus_root_device())->dev.of_node);
 > 
-> Note that the ACPI code for VMBus does the same thing -- it believes and
-> uses whatever the _CCA property says. The exception is that there
-> are deployed version of Hyper-V that don't set _CCA at all, contrary to the
-> ACPI spec. So there's a hack in vmbus_acpi_add() to work around this case
-> and force coherent_dma. But that's the only place where the current
-> Hyper-V assumption of coherence comes into play. I sincerely hope Hyper-V
-> ensures that the DT correctly includes dma-coherent from the start, and
-> that we don't have to replicate the hack on the DT side.
+> I think the above can be simplified to:
 > 
-I was replicating the _CCA hack diligently a bit much too much, agreed. 
-This great conversation really gives me reassurance that the code 
-doesn't have to be paranoid, and I can happily remove this if statement.
+> 	parent = of_irq_find_parent(get_vmbus_root_device()->of_node);
+> 
+> Converting the vmbus_root_device to the platform device, and then accessing
+> the "dev" field of the platform device puts you back where you started with
+> the vmbus_root_device.  See the code in vmbus_device_add() where the
+> vmbus_root_device is set to the dev field of the platform device.
+> 
+Appreciate your help with making this code looks better! Will try your 
+suggestion out!
+
+>> +	domain = NULL;
+>> +	if (parent) {
+>> +		domain = irq_find_host(parent);
+>> +		of_node_put(parent);
+>> +	}
+>> +
+>> +	/*
+>> +	 * `domain == NULL` shouldn't happen.
+>> +	 *
+>> +	 * If somehow the code does end up in that state, treat this as a configuration
+>> +	 * issue rather than a hard error, emit a warning, and let the code proceed.
+>> +	 * The NULL parent domain is an acceptable option for the `irq_domain_create_hierarchy`
+>> +	 * function called later.
+>> +	 */
+>> +	if (!domain)
+>> +		WARN_ONCE(1, "No interrupt-parent found, check the DeviceTree data.\n");
+>> +	return domain;
+>> +}
+> 
+> Here's a thought, which may or may not be a good one:  Push some or all
+> the functionality of hv_pci_of_irq_domain_parent() into vmbus_device_add().
+> In the simplest case, have vmbus_device_add() store the of_node (which is
+> already the "np" local variable) in a global static variable, and provide
+> hv_get_vmbus_of_node() instead of get_vmbus_root_device().
+> 
+> The next step to consider would be to compute the parent in
+> vmbus_device_add(), and provide hv_get_vmbus_parent_of_node() instead
+> of hv_get_vmbus_of_node(). One difference is that vmbus_device_add()
+> runs for both x86 and arm64, while hv_pci_of_irq_domain_parent() is for
+> arm64 only.  The parent node may not exist on x86, but maybe that isn't
+> really a problem.
+> 
+> Pushing everything into vmbus_device_add() would entail doing the
+> irq_find_host(parent) as well, and the accessor function would just
+> return the IRQ domain. In that case, hv_pci_of_irq_domain_parent()
+> can go away. The domain might be NULL on x86, but that's OK
+> because the accessor function won't be called on x86.
+> 
+> Maybe there's a snag that prevents this idea from working well,
+> particularly on x86 where the domain will be NULL. But if it works,
+> it seems slightly less messy to me, though that is a judgment call.
+> I'll leave it to you to decide, and I'm OK either way. :-)
+> 
+I'll explore your great idea, thanks for sharing! Since v1 this code has 
+improved quite a bit thanks to your suggestions :)
 
 > Michael
 > 
->>>
->>> Since the dma-coherent property is interpreted by common code, it's
->>> not up to hv to change the default for the platform. I'm not sure
->>> if the presence of CONFIG_ARCH_HAS_SYNC_DMA_* options is the correct
->>> check to determine that an architecture defaults to noncoherent
->>> though, as the function may be needed to do something else.
->> I used the ifdef as the dma_coherent field is declared under these macros:
+>> +
+>> +#endif
+>> +
+>>   static int hv_pci_irqchip_init(void)
+>>   {
+>>   	static struct hv_pci_chip_data *chip_data;
+>> @@ -906,10 +936,29 @@ static int hv_pci_irqchip_init(void)
+>>   	 * IRQ domain once enabled, should not be removed since there is no
+>>   	 * way to ensure that all the corresponding devices are also gone and
+>>   	 * no interrupts will be generated.
+>> +	 *
+>> +	 * In the ACPI case, the parent IRQ domain is supplied by the ACPI
+>> +	 * subsystem, and it is the default GSI domain pointing to the GIC.
+>> +	 * Neither is available outside of the ACPI subsystem, cannot avoid
+>> +	 * the messy ifdef below.
+>> +	 * There is apparently no such default in the OF subsystem, and
+>> +	 * `hv_pci_of_irq_domain_parent` finds the parent IRQ domain that
+>> +	 * points to the GIC as well.
+>> +	 * None of these two cases reaches for the MSI parent domain.
+>>   	 */
+>> -	hv_msi_gic_irq_domain = acpi_irq_create_hierarchy(0, HV_PCI_MSI_SPI_NR,
+>> -							  fn, &hv_pci_domain_ops,
+>> -							  chip_data);
+>> +#ifdef CONFIG_ACPI
+>> +	if (!acpi_disabled)
+>> +		hv_msi_gic_irq_domain = acpi_irq_create_hierarchy(0, HV_PCI_MSI_SPI_NR,
+>> +			fn, &hv_pci_domain_ops,
+>> +			chip_data);
+>> +#endif
+>> +#if defined(CONFIG_OF)
+>> +	if (!hv_msi_gic_irq_domain)
+>> +		hv_msi_gic_irq_domain = irq_domain_create_hierarchy(
+>> +			hv_pci_of_irq_domain_parent(), 0, HV_PCI_MSI_SPI_NR,
+>> +			fn, &hv_pci_domain_ops,
+>> +			chip_data);
+>> +#endif
 >>
->> #if defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_DEVICE) || \
->> 	defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU) || \
->> 	defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU_ALL)
->> extern bool dma_default_coherent;
->> static inline bool dev_is_dma_coherent(struct device *dev)
->> {
->> 	return dev->dma_coherent;
->> }
->> #else
->> #define dma_default_coherent true
+>>   	if (!hv_msi_gic_irq_domain) {
+>>   		pr_err("Failed to create Hyper-V arm64 vPCI MSI IRQ domain\n");
+>> diff --git a/include/linux/hyperv.h b/include/linux/hyperv.h
+>> index 5e39baa7f6cb..b4aa1f579a97 100644
+>> --- a/include/linux/hyperv.h
+>> +++ b/include/linux/hyperv.h
+>> @@ -1346,6 +1346,8 @@ static inline void *hv_get_drvdata(struct hv_device *dev)
+>>   	return dev_get_drvdata(&dev->device);
+>>   }
 >>
->> static inline bool dev_is_dma_coherent(struct device *dev)
->> {
->> 	return true;
->> }
->>
->> i.e., there is no API to set dma_coherent. As I see it, the options
->> are either warn the user if they forgot to add `dma-coherent`
->>
->> if (!dev_is_dma_coherent(dev)) pr_warn("add dma-coherent to be faster\n"),
->>
->> or warn and force the flag to true. Maybe just warn
->> the user I think now... The code will be cleaner (no need to emulate
->> a-would-be set_dma_coherent) , and the user will
->> know how to make the system perform at its best.
->>
->> Appreciate sharing the reservations about that piece!
->>
->>>
->>> The global "dma_default_coherent' may be a better thing to check
->>> for. This is e.g. set on powerpc64, riscv and on specific mips
->>> platforms, but it's never set on arm64 as far as I can tell.
->>>
->>>        Arnd
->>
+>> +struct device *get_vmbus_root_device(void);
+>> +
+>>   struct hv_ring_buffer_debug_info {
+>>   	u32 current_interrupt_mask;
+>>   	u32 current_read_index;
 >> --
->> Thank you,
->> Roman
+>> 2.34.1
 >>
 
 -- 
