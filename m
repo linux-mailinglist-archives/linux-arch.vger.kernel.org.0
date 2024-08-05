@@ -1,249 +1,229 @@
-Return-Path: <linux-arch+bounces-5971-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-5972-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28479947D06
-	for <lists+linux-arch@lfdr.de>; Mon,  5 Aug 2024 16:42:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A4AF4947D39
+	for <lists+linux-arch@lfdr.de>; Mon,  5 Aug 2024 16:52:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 769A1B22656
-	for <lists+linux-arch@lfdr.de>; Mon,  5 Aug 2024 14:42:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C76781C21C94
+	for <lists+linux-arch@lfdr.de>; Mon,  5 Aug 2024 14:52:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A74A6156960;
-	Mon,  5 Aug 2024 14:42:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2268C13C9C4;
+	Mon,  5 Aug 2024 14:51:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QeZVbyPB"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="X8ffdVm0"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A21013B2AC;
-	Mon,  5 Aug 2024 14:42:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0150813C684;
+	Mon,  5 Aug 2024 14:51:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722868922; cv=none; b=Y9Hx8eMeKvW8DzIKFOJTpwOVXSKFXDPKMQ/aTksRKVULFaPvit0u/j2ecguhHj8G0MZbc+CkOjJDu5c2EqDa7gaJnOF16XxGYZzta+MyGYYY4pB/91H2DCwSYOk8L0ftd7uWk2bDY021/GkgUOV28p/z7KFwYrmWuC9qt5QX2SU=
+	t=1722869481; cv=none; b=teCxQbrishUMDt6x4zyV4Fkc1XYI7VRkeo9oRA5fUfWh2XtSll1HaV57EM/GSWD0hulKI+jen5ExCt59RnXFA7zB39M6fkwe6DhrdDp/YTd/ww7FIGiKxiVES48oMPY6UR5c5o+tyOXlLaWBQYLPImCsxO4HjOiimTVG9VLtIdQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722868922; c=relaxed/simple;
-	bh=KAAzyiSgI5VUznoplq6rpjnO/fNKSFt30uf+NxUGEms=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ukgz8u41uaXi621pagvIzDmkDZmkWHv0MtOm5SZ8EpS1folz/kbAOjr2B4mf1/X201HVAVoN4fzTIvmZBPUyIvuWMYkn5Jv5eBdSV3pt+aGR2gP2ytRqCPS1K7MYPusfQzyp+QAKIdxNqyZgGrmyh9gK4w7PTBBUzmTbxtErWAY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QeZVbyPB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F5ADC4AF0C;
-	Mon,  5 Aug 2024 14:41:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722868921;
-	bh=KAAzyiSgI5VUznoplq6rpjnO/fNKSFt30uf+NxUGEms=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QeZVbyPBXcN5TPefvaZdSJjjdX4y6Cq/DxczfJ+Znju3yHvNTlO4aXvamUiVWCNfm
-	 dJFw3BUgSadYOQ78s/G2NFZdYqOSMyUBf2zL4pLaMFZ2EewzmNmJ9Rhn37EaPRg84N
-	 9/e8uP7RFruygWPGM1gHiLdkGIBlGPcbSW51E1iNan8BRdokqw6NeOBGxu0KFh/Qks
-	 mRAvGlnoK48IZtmY+61J7iNsk0pg1002E708O3v+oVXriGyhI/7ytWZoPV2JtIBVsT
-	 FjMUFjm01xX837WqtfHRuVUblGy21ffay5yDOackY6gR8nnfP4nTbw6GxA72f9QZSb
-	 FucTO3UZRmE+A==
-Date: Mon, 5 Aug 2024 17:39:41 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	David Hildenbrand <david@redhat.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Samuel Holland <samuel.holland@sifive.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Vasily Gorbik <gor@linux.ibm.com>, Will Deacon <will@kernel.org>,
-	Zi Yan <ziy@nvidia.com>, devicetree@vger.kernel.org,
-	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-cxl@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-mips@vger.kernel.org,
-	linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-	nvdimm@lists.linux.dev, sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v3 07/26] mm: drop CONFIG_HAVE_ARCH_NODEDATA_EXTENSION
-Message-ID: <ZrDkLeLxQAVvZcBn@kernel.org>
-References: <20240801060826.559858-1-rppt@kernel.org>
- <20240801060826.559858-8-rppt@kernel.org>
- <20240802104922.000051a0@Huawei.com>
- <20240803115813.809f808f1afbe9f9feaae129@linux-foundation.org>
- <Zq8sn5iD1iOmYrss@kernel.org>
- <20240804161119.00003a02@Huawei.com>
+	s=arc-20240116; t=1722869481; c=relaxed/simple;
+	bh=7ykty8/x0wz5UdqrPTbpaCVE/KB7yVy+KsHezueQZPs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JZfO4wqSAWHw8B4wapcrT5vC9yBpv6P9zDyvDhIV7zhHksQiFcSSus/A+220W8YFz8nDdgg+6C8BLWmSJLYz6OG21KSZuhMk/njrhrg54k9NbPYacwhLR4OBmSUj33a94fWBcShHLpKHF0z4ATUrVAN9kiNUqilBN/hs/SL2FmI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=X8ffdVm0; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [10.137.186.190] (unknown [131.107.159.62])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 3F41B20B7165;
+	Mon,  5 Aug 2024 07:51:18 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3F41B20B7165
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1722869478;
+	bh=pauF332H9RYtwbTh4jt8TXNF4EdtpJCWqYxBIdY4ptU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=X8ffdVm0EwvH9cISLR9ZZZRKprEo04Um0VqddaKwHaaG5FXXTy/B3AVHowWL2FIkF
+	 vn6mm0I6ZO0vdpHX+1dlYa6XsD2FOGm9nrXMQFEXjkEePfTn662n16Sr99C7sAz/Ii
+	 ACauUgAQ7XzRLcxcOjk8N8fMfsudY9DdAsBUfPJI=
+Message-ID: <2679199c-3f73-4326-85ee-622541d26153@linux.microsoft.com>
+Date: Mon, 5 Aug 2024 07:51:18 -0700
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240804161119.00003a02@Huawei.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 7/7] PCI: hv: Get vPCI MSI IRQ domain from DT
+To: Wei Liu <wei.liu@kernel.org>
+Cc: arnd@arndb.de, bhelgaas@google.com, bp@alien8.de,
+ catalin.marinas@arm.com, dave.hansen@linux.intel.com, decui@microsoft.com,
+ haiyangz@microsoft.com, hpa@zytor.com, kw@linux.com, kys@microsoft.com,
+ lenb@kernel.org, lpieralisi@kernel.org, mingo@redhat.com, rafael@kernel.org,
+ robh@kernel.org, tglx@linutronix.de, will@kernel.org,
+ linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, x86@kernel.org,
+ apais@microsoft.com, benhill@microsoft.com, ssengar@microsoft.com,
+ sunilmut@microsoft.com, vdso@hexbites.dev
+References: <20240726225910.1912537-1-romank@linux.microsoft.com>
+ <20240726225910.1912537-8-romank@linux.microsoft.com>
+ <Zq2F-l2FWIrQ2Jt1@liuwe-devbox-debian-v2>
+Content-Language: en-US
+From: Roman Kisel <romank@linux.microsoft.com>
+In-Reply-To: <Zq2F-l2FWIrQ2Jt1@liuwe-devbox-debian-v2>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Sun, Aug 04, 2024 at 04:11:19PM +0100, Jonathan Cameron wrote:
-> On Sun, 4 Aug 2024 10:24:15 +0300
-> Mike Rapoport <rppt@kernel.org> wrote:
-> 
-> > On Sat, Aug 03, 2024 at 11:58:13AM -0700, Andrew Morton wrote:
-> > > On Fri, 2 Aug 2024 10:49:22 +0100 Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
-> > >   
-> > > > > --- a/mm/mm_init.c
-> > > > > +++ b/mm/mm_init.c
-> > > > > @@ -1838,11 +1838,10 @@ void __init free_area_init(unsigned long *max_zone_pfn)
-> > > > >  
-> > > > >  		if (!node_online(nid)) {
-> > > > >  			/* Allocator not initialized yet */
-> > > > > -			pgdat = arch_alloc_nodedata(nid);
-> > > > > +			pgdat = memblock_alloc(sizeof(*pgdat), SMP_CACHE_BYTES);
-> > > > >  			if (!pgdat)
-> > > > >  				panic("Cannot allocate %zuB for node %d.\n",
-> > > > >  				       sizeof(*pgdat), nid);
-> > > > > -			arch_refresh_nodedata(nid, pgdat);  
-> > > > 
-> > > > This allocates pgdat but never sets node_data[nid] to it
-> > > > and promptly leaks it on the line below. 
-> > > > 
-> > > > Just to sanity check this I spun up a qemu machine with no memory
-> > > > initially present on some nodes and it went boom as you'd expect.
-> > > > 
-> > > > I tested with addition of
-> > > > 			NODE_DATA(nid) = pgdat;
-> > > > and it all seems to work as expected.  
-> > > 
-> > > Thanks, I added that.  It blew up on x86_64 allnoconfig because
-> > > node_data[] (and hence NODE_DATA()) isn't an lvalue when CONFIG_NUMA=n.
-> > > 
-> > > I'll put some #ifdef CONFIG_NUMAs in there for now but
-> > > 
-> > > a) NODE_DATA() is upper-case. Implies "constant".  Shouldn't be assigned to.
-> > > 
-> > > b) NODE_DATA() should be non-lvalue when CONFIG_NUMA=y also.  But no,
-> > >    we insist on implementing things in cpp instead of in C.  
-> > 
-> > This looks like a candidate for a separate tree-wide cleanup.
-> >  
-> > > c) In fact assigning to anything which ends in "()" is nuts.  Please
-> > >    clean up my tempfix.
-> > > 
-> > > c) Mike, generally I'm wondering if there's a bunch of code here
-> > >    which isn't needed on CONFIG_NUMA=n.  Please check all of this for
-> > >    unneeded bloatiness.  
-> > 
-> > I believe the patch addresses your concerns, just with this the commit log
-> > needs update. Instead of 
-> > 
-> >     Replace the call to arch_alloc_nodedata() in free_area_init() with
-> >     memblock_alloc(), remove arch_refresh_nodedata() and cleanup
-> >     include/linux/memory_hotplug.h from the associated ifdefery.
-> > 
-> > it should be
-> > 
-> >     Replace the call to arch_alloc_nodedata() in free_area_init() with a
-> >     new helper alloc_offline_node_data(), remove arch_refresh_nodedata()
-> >     and cleanup include/linux/memory_hotplug.h from the associated
-> >     ifdefery.
-> > 
-> > I can send an updated patch if you prefer.
-> This solution looks good to me - except for a Freudian typo that means it won't
-> compile :)
 
-Right :)
 
-I'll post v4 after kbuild confirms it compiles :)
- 
-> Jonathan
+On 8/2/2024 6:20 PM, Wei Liu wrote:
+> On Fri, Jul 26, 2024 at 03:59:10PM -0700, Roman Kisel wrote:
+>> The hyperv-pci driver uses ACPI for MSI IRQ domain configuration on
+>> arm64. It won't be able to do that in the VTL mode where only DeviceTree
+>> can be used.
+>>
+>> Update the hyperv-pci driver to get vPCI MSI IRQ domain in the DeviceTree
+>> case, too.
+>>
+>> Signed-off-by: Roman Kisel <romank@linux.microsoft.com>
+>> ---
+>>   drivers/hv/vmbus_drv.c              | 23 +++++++-----
+>>   drivers/pci/controller/pci-hyperv.c | 55 +++++++++++++++++++++++++++--
+>>   include/linux/hyperv.h              |  2 ++
+>>   3 files changed, 69 insertions(+), 11 deletions(-)
+>>
+>> diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+>> index 7eee7caff5f6..038bd9be64b7 100644
+>> --- a/drivers/hv/vmbus_drv.c
+>> +++ b/drivers/hv/vmbus_drv.c
+>> @@ -45,7 +45,8 @@ struct vmbus_dynid {
+>>   	struct hv_vmbus_device_id id;
+>>   };
+>>   
+>> -static struct device  *hv_dev;
+>> +/* VMBus Root Device */
+>> +static struct device  *vmbus_root_device;
 > 
-> > 
-> > diff --git a/include/linux/numa.h b/include/linux/numa.h
-> > index 3b12d8ca0afd..5a749fd67f39 100644
-> > --- a/include/linux/numa.h
-> > +++ b/include/linux/numa.h
-> > @@ -34,6 +34,7 @@ extern struct pglist_data *node_data[];
-> >  #define NODE_DATA(nid)	(node_data[nid])
-> >  
-> >  void __init alloc_node_data(int nid);
-> > +void __init alloc_offline_node_data(int nit);
-> >  
-> >  /* Generic implementation available */
-> >  int numa_nearest_node(int node, unsigned int state);
-> > @@ -62,6 +63,8 @@ static inline int phys_to_target_node(u64 start)
-> >  {
-> >  	return 0;
-> >  }
-> > +
-> > +static inline void alloc_offline_node_data(int nit) {}
-> nid
-> >  #endif
-> >  
-> >  #define numa_map_to_online_node(node) numa_nearest_node(node, N_ONLINE)
-> > diff --git a/mm/mm_init.c b/mm/mm_init.c
-> > index bcc2f2dd8021..2785be04e7bb 100644
-> > --- a/mm/mm_init.c
-> > +++ b/mm/mm_init.c
-> > @@ -1836,13 +1836,8 @@ void __init free_area_init(unsigned long *max_zone_pfn)
-> >  	for_each_node(nid) {
-> >  		pg_data_t *pgdat;
-> >  
-> > -		if (!node_online(nid)) {
-> > -			/* Allocator not initialized yet */
-> > -			pgdat = memblock_alloc(sizeof(*pgdat), SMP_CACHE_BYTES);
-> > -			if (!pgdat)
-> > -				panic("Cannot allocate %zuB for node %d.\n",
-> > -				       sizeof(*pgdat), nid);
-> > -		}
-> > +		if (!node_online(nid))
-> > +			alloc_offline_node_data(nid);
-> >  
-> >  		pgdat = NODE_DATA(nid);
-> >  		free_area_init_node(nid);
-> > diff --git a/mm/numa.c b/mm/numa.c
-> > index da27eb151dc5..07e486a977c7 100644
-> > --- a/mm/numa.c
-> > +++ b/mm/numa.c
-> > @@ -34,6 +34,18 @@ void __init alloc_node_data(int nid)
-> >  	memset(NODE_DATA(nid), 0, sizeof(pg_data_t));
-> >  }
-> >  
-> > +void __init alloc_offline_node_data(int nit)
+> You're changing the name of the variable. That should preferably be done
+> in a separate patch. That's going to make this patch shorter and easier
+> to review.
 > 
-> nid
+Will fix in v4, thanks!
+
+>>   
+>>   static int hyperv_cpuhp_online;
+>>   
+>> @@ -80,9 +81,15 @@ static struct resource *fb_mmio;
+>>   static struct resource *hyperv_mmio;
+>>   static DEFINE_MUTEX(hyperv_mmio_lock);
+>>   
+>> +struct device *get_vmbus_root_device(void)
+>> +{
+>> +	return vmbus_root_device;
+>> +}
+>> +EXPORT_SYMBOL_GPL(get_vmbus_root_device);
 > 
-> > +{
-> > +	pg_data_t *pgdat;
-> > +
-> > +	pgdat = memblock_alloc(sizeof(*pgdat), SMP_CACHE_BYTES);
-> > +	if (!pgdat)
-> > +		panic("Cannot allocate %zuB for node %d.\n",
-> > +		      sizeof(*pgdat), nid);
-> > +
-> > +	node_data[nid] = pgdat;
-> > +}
-> > +
-> >  /* Stub functions: */
-> >  
-> >  #ifndef memory_add_physaddr_to_nid
-> > 
-> >  
-> > 
+> I would like you to add "hv_" prefix to this exported symbol, or rename
+> it to "vmbus_get_root_device()".
 > 
+>> +
+>>   static int vmbus_exists(void)
+>>   {
+>> -	if (hv_dev == NULL)
+>> +	if (vmbus_root_device == NULL)
+>>   		return -ENODEV;
+>>   
+>>   	return 0;
+>> @@ -861,7 +868,7 @@ static int vmbus_dma_configure(struct device *child_device)
+>>   	 * On x86/x64 coherence is assumed and these calls have no effect.
+>>   	 */
+>>   	hv_setup_dma_ops(child_device,
+>> -		device_get_dma_attr(hv_dev) == DEV_DMA_COHERENT);
+>> +		device_get_dma_attr(vmbus_root_device) == DEV_DMA_COHERENT);
+>>   	return 0;
+>>   }
+>>   
+>> @@ -1892,7 +1899,7 @@ int vmbus_device_register(struct hv_device *child_device_obj)
+>>   		     &child_device_obj->channel->offermsg.offer.if_instance);
+>>   
+>>   	child_device_obj->device.bus = &hv_bus;
+>> -	child_device_obj->device.parent = hv_dev;
+>> +	child_device_obj->device.parent = vmbus_root_device;
+>>   	child_device_obj->device.release = vmbus_device_release;
+>>   
+>>   	child_device_obj->device.dma_parms = &child_device_obj->dma_parms;
+>> @@ -2253,7 +2260,7 @@ static int vmbus_acpi_add(struct platform_device *pdev)
+>>   	struct acpi_device *ancestor;
+>>   	struct acpi_device *device = ACPI_COMPANION(&pdev->dev);
+>>   
+>> -	hv_dev = &device->dev;
+>> +	vmbus_root_device = &device->dev;
+>>   
+>>   	/*
+>>   	 * Older versions of Hyper-V for ARM64 fail to include the _CCA
+>> @@ -2342,7 +2349,7 @@ static int vmbus_device_add(struct platform_device *pdev)
+>>   	struct device_node *np = pdev->dev.of_node;
+>>   	int ret;
+>>   
+>> -	hv_dev = &pdev->dev;
+>> +	vmbus_root_device = &pdev->dev;
+>>   
+>>   	ret = of_range_parser_init(&parser, np);
+>>   	if (ret)
+>> @@ -2675,7 +2682,7 @@ static int __init hv_acpi_init(void)
+>>   	if (ret)
+>>   		return ret;
+>>   
+>> -	if (!hv_dev) {
+>> +	if (!vmbus_root_device) {
+>>   		ret = -ENODEV;
+>>   		goto cleanup;
+>>   	}
+>> @@ -2706,7 +2713,7 @@ static int __init hv_acpi_init(void)
+>>   
+>>   cleanup:
+>>   	platform_driver_unregister(&vmbus_platform_driver);
+>> -	hv_dev = NULL;
+>> +	vmbus_root_device = NULL;
+>>   	return ret;
+>>   }
+>>   
+>> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
+>> index 5992280e8110..cdecefd1f9bd 100644
+>> --- a/drivers/pci/controller/pci-hyperv.c
+>> +++ b/drivers/pci/controller/pci-hyperv.c
+>> @@ -50,6 +50,7 @@
+>>   #include <linux/irqdomain.h>
+>>   #include <linux/acpi.h>
+>>   #include <linux/sizes.h>
+>> +#include <linux/of_irq.h>
+>>   #include <asm/mshyperv.h>
+>>   
+>>   /*
+>> @@ -887,6 +888,35 @@ static const struct irq_domain_ops hv_pci_domain_ops = {
+>>   	.activate = hv_pci_vec_irq_domain_activate,
+>>   };
+>>   
+>> +#ifdef CONFIG_OF
+>> +
+>> +static struct irq_domain *hv_pci_of_irq_domain_parent(void)
+>> +{
+>> +	struct device_node *parent;
+>> +	struct irq_domain *domain;
+>> +
+>> +	parent = of_irq_find_parent(to_platform_device(get_vmbus_root_device())->dev.of_node);
+>> +	domain = NULL;
+>> +	if (parent) {
+>> +		domain = irq_find_host(parent);
+>> +		of_node_put(parent);
+>> +	}
+>> +
 > 
+> I cannot really comment on the ARM side of things around how this system
+> is set up. I will leave that to someone who's more familiar with the
+> matter to review.
+> 
+> Thanks,
+> Wei.
 
 -- 
-Sincerely yours,
-Mike.
+Thank you,
+Roman
+
 
