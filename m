@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-6065-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6066-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C14A94997A
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Aug 2024 22:47:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B1D909499B8
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Aug 2024 22:59:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 628DEB22603
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Aug 2024 20:47:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5DB091F21F41
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Aug 2024 20:59:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3996156C7B;
-	Tue,  6 Aug 2024 20:47:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B145D15E5CE;
+	Tue,  6 Aug 2024 20:59:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lJVWCQrD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bD3DuZ2+"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71323824A0;
-	Tue,  6 Aug 2024 20:47:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50179158DDC;
+	Tue,  6 Aug 2024 20:59:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722977231; cv=none; b=L2pZR7xdmQ/SlsSijflD3oQG60GcfUiaPziIOtNoBmy07XeYvsbPq4JQXRXweAZGh4EN6BOtk7s6o6Z3IdW5ARRZYeHuIEtc9ICpTvDOTo3ub+dXODCm6taOFAyloBIhanlkp+8DXvtw3p3b/bKwItFGlLdjB9WcYx1rXt8xKVk=
+	t=1722977968; cv=none; b=jnyKKzJB86LyfIogb9FV3tp2NilDiN6apXGRofxGwLftFU0rLww3QykJbxNu/JGQmaBXg0KEzfkxM5cOZBmzS/wEyYYJzwpEln4RjpW/ZdTox2/8OBjSSlZERp4+YRXLFA1NiQ04kGzUh1y6vLmec0lyI0FxDbuWMyYiYqB6Bek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722977231; c=relaxed/simple;
-	bh=HeETL+5tKib6MH9kgC1zObM+7LwAINK+PlEoC3/qshQ=;
+	s=arc-20240116; t=1722977968; c=relaxed/simple;
+	bh=oQ7qityzvDiPJTZS3Szpb70s0aIQdtnagYi0Qj0kT00=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=t7odOjkYK48fg4ULfKk9HYnBNE8z92grOULOcONzpRUbTjqH4r1RjT2zgNblKRqkiYWhBFXtoMejeZm1gbVAn8U00x5KOALrFWzC5ZnqRZ8KjefqGexHABtzQGjXf7CyjheIDIL1iYdG6KF0Sv7q0Fo5diTdjJEORyN1HYzn/hg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lJVWCQrD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10B60C32786;
-	Tue,  6 Aug 2024 20:47:09 +0000 (UTC)
+	 MIME-Version:Content-Type; b=AEEW477lcgjBGq7yGuKF5TgqGMVBoWFAcobVzlRbN7vhgmmESrDqCfXXAb9DqAlc2Ij2Bei5pW/M8Tayz+OIzBDetdw526ZFhNlJCleNjqROiheIb20yDLN4vhBV1/3snfrIWF+65LbhW/O1DeLVQHFTSmLsgTz7bBVkvwHV75s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bD3DuZ2+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A82C3C32786;
+	Tue,  6 Aug 2024 20:59:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722977231;
-	bh=HeETL+5tKib6MH9kgC1zObM+7LwAINK+PlEoC3/qshQ=;
+	s=k20201202; t=1722977967;
+	bh=oQ7qityzvDiPJTZS3Szpb70s0aIQdtnagYi0Qj0kT00=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=lJVWCQrDDKbsQvjukGMXCuSF87yugWQc8eRoJZgUsHxBiA50NHj8igJpW3o7M3HHd
-	 79C9gNRxH+J+CcZPmkDa6ukWiHoYcUVfbmRFRwyuvX1WclRmhh+y4UzX6VQhL3nTeM
-	 R5p3AjzShDOAF6hUXR2mm53HqxfYWeM0k5C5K6MGIH2TebObE/cUAQ/Um0sdEaem6O
-	 wzlLmeOb5IJqItDaMLMoLwbM9Tbh+li84r3/OKD9sPt8xZRQXHGP3i9fT2T/ZC9EEK
-	 W8rDe8+o+cFBWwV+PlFV69qQChiCIaGXsfvDg4psTAABB1428TkKfvhRZiXunEebvX
-	 7mVyWaxnYtF6A==
-Date: Tue, 6 Aug 2024 13:47:08 -0700
+	b=bD3DuZ2+SxmgaCgzJWHtZH/BYbg66l2gd+LZppP8V0SjvcVqsJKtaaiDssO1v+eTr
+	 DepGkqmJxITFe54Lre2tS/vEGrc22Vu63ljH1RRMC3HUSH2BP59CbVsybYRx5BroxY
+	 QzqlaSzYfm+jheMBLL1UJu7QHVFmgQmRAU9zimWldMZ8D1XFiUqchTvoNAaiXS7hzH
+	 URysUscNMnVRS9xQk9PTPdzDrWF0jmd8XP7i5YGixpWl4NoGrnzp/dD/HTEvG8s/13
+	 HUuL28HXkNnUqRHm0Cu4xB/2+bNxvDDDYP/Iqrw7CXRtllgNPubXkFhZKGOucEcp/W
+	 CHGsOnZxxgIOw==
+Date: Tue, 6 Aug 2024 13:59:24 -0700
 From: Jakub Kicinski <kuba@kernel.org>
 To: Mina Almasry <almasrymina@google.com>
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -74,11 +74,12 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
  <pkaligineedi@google.com>, Willem de Bruijn <willemb@google.com>, Kaiyuan
  Zhang <kaiyuanz@google.com>
-Subject: Re: [PATCH net-next v18 04/14] netdev: netdevice devmem allocator
-Message-ID: <20240806134708.0034c4b9@kernel.org>
-In-Reply-To: <20240805212536.2172174-5-almasrymina@google.com>
+Subject: Re: [PATCH net-next v18 07/14] memory-provider: dmabuf devmem
+ memory provider
+Message-ID: <20240806135924.5bb65ec7@kernel.org>
+In-Reply-To: <20240805212536.2172174-8-almasrymina@google.com>
 References: <20240805212536.2172174-1-almasrymina@google.com>
-	<20240805212536.2172174-5-almasrymina@google.com>
+	<20240805212536.2172174-8-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -88,27 +89,28 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Mon,  5 Aug 2024 21:25:17 +0000 Mina Almasry wrote:
-> +struct net_iov *
-> +net_devmem_alloc_dmabuf(struct net_devmem_dmabuf_binding *binding)
-> +{
-> +	struct dmabuf_genpool_chunk_owner *owner;
-> +	unsigned long dma_addr;
-> +	struct net_iov *niov;
-> +	ssize_t offset;
-> +	ssize_t index;
-> +
-> +	dma_addr = gen_pool_alloc_owner(binding->chunk_pool, PAGE_SIZE,
-> +					(void **)&owner);
-> +	if (!dma_addr)
-> +		return NULL;
-> +
-> +	offset = dma_addr - owner->base_dma_addr;
-> +	index = offset / PAGE_SIZE;
-> +	niov = &owner->niovs[index];
-> +
-> +	niov->dma_addr = 0;
+On Mon,  5 Aug 2024 21:25:20 +0000 Mina Almasry wrote:
+> +	if (pool->p.queue) {
+> +		/* We rely on rtnl_lock()ing to make sure netdev_rx_queue
+> +		 * configuration doesn't change while we're initializing the
+> +		 * page_pool.
+> +		 */
+> +		ASSERT_RTNL();
+> +		pool->mp_priv = pool->p.queue->mp_params.mp_priv;
 
-Is the dma_addr not constant for a given niov for the entire lifetime
-of the binding? Why flip it back and forth between its value and 0?
+How do you know that the driver:
+ - supports net_iov at all (let's not make implicit assumptions based
+   on presence of queue API);
+ - supports net_iov in current configuration (eg header-data split is
+   enabled)
+ - supports net_iov for _this_ pool (all drivers must have separate
+   buffer pools for headers and data for this to work, some will use
+   page pool for both)
+
+What comes to mind is adding an "I can gobble up net_iovs from this
+pool" flag in page pool params (the struct that comes from the driver),
+and then on the installation path we can check if after queue reset
+the refcount of the binding has increased. If it did - driver has
+created a pool as we expected, otherwise - fail, something must be off.
+Maybe that's a bit hacky?
 
