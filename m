@@ -1,185 +1,199 @@
-Return-Path: <linux-arch+bounces-6034-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6036-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8533F9489C6
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Aug 2024 09:08:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C930948F39
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Aug 2024 14:40:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3FA62282A95
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Aug 2024 07:08:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4FFAD1C2366A
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Aug 2024 12:40:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73F1C165F08;
-	Tue,  6 Aug 2024 07:08:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 968031C68BE;
+	Tue,  6 Aug 2024 12:39:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VKlxrqan"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f173.google.com (mail-vk1-f173.google.com [209.85.221.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52FD615FA72;
-	Tue,  6 Aug 2024 07:08:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7EFC1C57BD;
+	Tue,  6 Aug 2024 12:39:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722928088; cv=none; b=O25SBxDjOlvpcFJlHfhOet540n9/TBqKfdKiTTo8MjSU6UZjrTpaCDbsZcMhRv5HrUNHHAoYT76N2/Q9xZOM4fibYY0VOUB1ChAeuiYWKGAST+jO+wayzMA7BuWLZDYqFPN/8ykb76ZIqPGf3+BE4z+75GOlX4dll78yIJMWoCo=
+	t=1722947978; cv=none; b=B7IWww1Fg6972u4BDApPUB8xMKPbdGTTLWK8zv/Rcz78+M8yuv4Ntqf4OSP4zzQD6co6C/q4OW0ygKWL4t2PzzLpTOpoagQ5sQUbSt3TkfMYQlIE0luURcExN6BblQPmSn+oWPIIDBAWg/OA8FKse0wrkXTVoZ/ZxJ4wlkZpLGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722928088; c=relaxed/simple;
-	bh=iEwktt8Rx8h2dYXaJk7IyXpqPBEjz8cLyrQLNmVwRdY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ed01Tl2XIgXG2zQB1uYzwdtB7U9Vfq1suSIzDWUONbBRveEStkQeOJ116cDvhqtMGvexSD6WPCvCYOOLtpRw3I5/iepML8OmaP2Ix1Lq4DnXx4P67MtkI26lh0CXvumJ5IWNwKPK3Sr4pT1b6f039/iDVQrXF3gvt0GOLGO3eqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F61EC32786;
-	Tue,  6 Aug 2024 07:08:05 +0000 (UTC)
-From: Huacai Chen <chenhuacai@loongson.cn>
-To: Arnd Bergmann <arnd@arndb.de>,
-	Huacai Chen <chenhuacai@kernel.org>
-Cc: loongarch@lists.linux.dev,
-	linux-arch@vger.kernel.org,
-	Xuefeng Li <lixuefeng@loongson.cn>,
-	Guo Ren <guoren@kernel.org>,
-	Xuerui Wang <kernel@xen0n.name>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	linux-kernel@vger.kernel.org,
-	loongson-kernel@lists.loongnix.cn,
-	Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH] LoongArch: Add ARCH_HAS_SET_DIRECT_MAP support
-Date: Tue,  6 Aug 2024 15:07:42 +0800
-Message-ID: <20240806070742.128064-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.43.5
+	s=arc-20240116; t=1722947978; c=relaxed/simple;
+	bh=pRGjwMQFuXx8nS2LCderaOx79LtJsbSQjU6aMaxd08o=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=TKK2KnVVy1rJbTHObhoK3/wKw5taAyFPyFvVG0RZpbtLNHUJ15pfoX+fEnYFWkkgCrkj90LaHHeTPz54ahzTFBBpb37lZQ0b8fuEUtGvgLQ5Nr/krMquGBR8NuPLanCWQsQY0Hmwqb/6qIDGrktMHds0OUcA0ut4GWUxNQP1NTQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VKlxrqan; arc=none smtp.client-ip=209.85.221.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f173.google.com with SMTP id 71dfb90a1353d-4f50dd3eab9so240273e0c.1;
+        Tue, 06 Aug 2024 05:39:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722947976; x=1723552776; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zrdmTtiXVmTM/1NHHOYdmmDXOI3jR7XQcOI+pwOJhWY=;
+        b=VKlxrqanIheS9Sd5XzmNfv9ScS8GGE/obB6rli6JcQfzv8OQyH1ms5LfzyftBPJlAw
+         sfZMoNB7fMIUVJbfSp28rtM1yLUdMdnW27USd+yevM4WhMxcn2tC0kCwT21BzrtIUUHR
+         Gs3J1wl0qryBTZV4pStD26pH1HB09vV81qeXzTdRPH8cT7SCJpF5PsIvdPYcQcoZb/bU
+         lS+DuGbMun0iJwWow8q9nb7YSa1fpQ79XatO8EdXq8FWVvnWo4atP4i/rHxrlW27fHfJ
+         SUpp7IX8Dh3JdPkm8lpi4n5ypupMKNxoU+XW+rEQCrGBXD5UQfBs/vy59JIZ6bD1Fmo1
+         zdgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722947976; x=1723552776;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=zrdmTtiXVmTM/1NHHOYdmmDXOI3jR7XQcOI+pwOJhWY=;
+        b=YwoX+XXfHLFESv4nU6ef39maHkPDlzto+lpgxBYhmTJEGyg2MbrBTQuBRLzRIMetp7
+         MQo8C31NtC9IZUGo9PHUc9W5l2dFksMlgvi0QohkNNrkdg4xQrtwhhuVJp8AE+/6ZwsQ
+         18SRSbZ2kcflIWn99kpghh+EsNMIKy603tqnS5oZtciShQj7G1+LyGSVb1bWbmQlC4s6
+         zOFuUMxal+8Y4F6zIsS88V3ZjSIHwj26kh2J0B93/ye4/Pfxq7mRdnBEDbepUUVUF+Un
+         E/8H1bwvmgq3UU6gjegXYWuZJmcJeH8x9s01MRCBTsNyyPGs315OJchwwKbtfo1ePb8w
+         FjPg==
+X-Forwarded-Encrypted: i=1; AJvYcCUCTL3GifOoTkGotVQKHsht3DH11hDZibW61aSUOHYmvH8IO2m8nbbHB4vV63n+wNxBJfCcxiS88C2+z1upzJbLrWmIu6BvineuFcHLv+zQRkbWwJ5woYB0Rp6z1J9OsObiq0BDbZy8aUaI/o8DoCpcfiIn5M4NjWpUVOucS89c+cCJYuFy3hblNRb+aS9l7uNxbvPYmIqIO/SKZa//lBNIJmEfQGAWGB6KOX6w4lu0PECsvwrDEIHRoSypUvkwoM6wr8nbiwptxAlGu0Q2nfri3ivhFPaQ0a58BZ3JjhgHBkMZ+ZxRbGFJjExm9gtw7Q6DN/0jI/infzNnGKupNyYRy9ob9tkjzf4Giii2kSAGYdSkDzMcMup97D6whg1Arys+dL0HfUhjVC2cdmgR+NzVZX2Dcq6rmsYNH42+t182nBhSh2GY21ecMPVrx3+rk6rROHyUGoWoVjbrnX1mVY8JOfgyEYZALUMv2CcFUQDww0dClYG9XRp3hPYyliKGX6G+v7PhjQ==
+X-Gm-Message-State: AOJu0YwpsNYteLdDFoX1IKaNFFCuUC+P89kqXZcyX2ui47QVOzUubQGf
+	/7ZVPgtJdbk9sA4CS5+NFrTN9dPmJbKUl6w6X+olQ2zL47KdPisM
+X-Google-Smtp-Source: AGHT+IEzF8kEieTvm400vGSAD/FxkfKWUdB+Qp9zmFjvlH9NnaUdLi1L0Oe0+UqgMX4/h+bhgaOPVA==
+X-Received: by 2002:a05:6122:4584:b0:4eb:5cb9:f219 with SMTP id 71dfb90a1353d-4f89fe84d6fmr18355377e0c.0.1722947975581;
+        Tue, 06 Aug 2024 05:39:35 -0700 (PDT)
+Received: from localhost (73.84.86.34.bc.googleusercontent.com. [34.86.84.73])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a34f6dce75sm450350985a.14.2024.08.06.05.39.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Aug 2024 05:39:34 -0700 (PDT)
+Date: Tue, 06 Aug 2024 08:39:34 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Markus Elfring <Markus.Elfring@web.de>, 
+ Mina Almasry <almasrymina@google.com>, 
+ netdev@vger.kernel.org, 
+ linux-doc@vger.kernel.org
+Cc: Daniel Vetter <daniel.vetter@ffwll.ch>, 
+ Kaiyuan Zhang <kaiyuanz@google.com>, 
+ Pavel Begunkov <asml.silence@gmail.com>, 
+ Willem de Bruijn <willemb@google.com>, 
+ linux-alpha@vger.kernel.org, 
+ linux-mips@vger.kernel.org, 
+ linux-parisc@vger.kernel.org, 
+ sparclinux@vger.kernel.org, 
+ linux-trace-kernel@vger.kernel.org, 
+ linux-arch@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ bpf@vger.kernel.org, 
+ linux-media@vger.kernel.org, 
+ dri-devel@lists.freedesktop.org, 
+ LKML <linux-kernel@vger.kernel.org>, 
+ Andreas Larsson <andreas@gaisler.com>, 
+ Arnd Bergmann <arnd@arndb.de>, 
+ Bagas Sanjaya <bagasdotme@gmail.com>, 
+ =?UTF-8?B?Q2hyaXN0aWFuIEvDtm5pZw==?= <christian.koenig@amd.com>, 
+ Christoph Hellwig <hch@infradead.org>, 
+ David Ahern <dsahern@kernel.org>, 
+ "David S. Miller" <davem@davemloft.net>, 
+ David Wei <dw@davidwei.uk>, 
+ Donald Hunter <donald.hunter@gmail.com>, 
+ Eric Dumazet <edumazet@google.com>, 
+ Harshitha Ramamurthy <hramamurthy@google.com>, 
+ Helge Deller <deller@gmx.de>, 
+ Herbert Xu <herbert@gondor.apana.org.au>, 
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>, 
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ "James E. J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
+ Jason Gunthorpe <jgg@ziepe.ca>, 
+ Jeroen de Borst <jeroendb@google.com>, 
+ Jesper Dangaard Brouer <hawk@kernel.org>, 
+ Jonathan Corbet <corbet@lwn.net>, 
+ Masami Hiramatsu <mhiramat@kernel.org>, 
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+ Matt Turner <mattst88@gmail.com>, 
+ Nikolay Aleksandrov <razor@blackwall.org>, 
+ Paolo Abeni <pabeni@redhat.com>, 
+ Praveen Kaligineedi <pkaligineedi@google.com>, 
+ Richard Henderson <richard.henderson@linaro.org>, 
+ Shailend Chand <shailend@google.com>, 
+ Shakeel Butt <shakeel.butt@linux.dev>, 
+ Shuah Khan <shuah@kernel.org>, 
+ Steffen Klassert <steffen.klassert@secunet.com>, 
+ Steven Rostedt <rostedt@goodmis.org>, 
+ Sumit Semwal <sumit.semwal@linaro.org>, 
+ Taehee Yoo <ap420073@gmail.com>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+ Yunsheng Lin <linyunsheng@huawei.com>
+Message-ID: <66b2198686b91_3206cf29453@willemb.c.googlers.com.notmuch>
+In-Reply-To: <9aad36fe-cd4c-4ce5-b4d8-6c8619d10c46@web.de>
+References: <20240730022623.98909-4-almasrymina@google.com>
+ <5d3c74da-7d44-4b88-8961-60f21f84f0ac@web.de>
+ <CAHS8izPxfCv1VMFBK1FahGTjVmUSSfrabgY5y6V+XtaszoHQ4w@mail.gmail.com>
+ <9aad36fe-cd4c-4ce5-b4d8-6c8619d10c46@web.de>
+Subject: Re: [PATCH net-next v17 03/14] netdev: support binding dma-buf to
+ netdevice
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Add set_direct_map_*() functions for setting the direct map alias for
-the page to its default permissions and to an invalid state that cannot
-be cached in a TLB. (See d253ca0c3 ("x86/mm/cpa: Add set_direct_map_*()
-functions")) Add a similar implementation for LoongArch.
+Markus Elfring wrote:
+> >> =E2=80=A6
+> >>> +++ b/include/net/devmem.h
+> >>> @@ -0,0 +1,115 @@
+> >> =E2=80=A6
+> >>> +#ifndef _NET_DEVMEM_H
+> >>> +#define _NET_DEVMEM_H
+> >> =E2=80=A6
+> >>
+> >> I suggest to omit leading underscores from such identifiers.
+> >> https://wiki.sei.cmu.edu/confluence/display/c/DCL37-C.+Do+not+declar=
+e+or+define+a+reserved+identifier
+> >>
+> >
+> > I was gonna apply this change, but I ack'd existing files and I find
+> > that all of them include leading underscores, including some very
+> > recently added files like net/core/page_pool_priv.h.
+> >
+> > I would prefer to stick to existing conventions if that's OK, unless
+> > there is widespread agreement to the contrary.
+> =
 
-This fixes the KFENCE warnings during hibernation:
+> Under which circumstances would you become interested to reduce develop=
+ment risks
+> also according to undefined behaviour?
+> https://wiki.sei.cmu.edu/confluence/display/c/CC.+Undefined+Behavior#CC=
+.UndefinedBehavior-ub_106
 
- ==================================================================
- BUG: KFENCE: invalid read in swsusp_save+0x368/0x4d8
+This series is following established practice in kernel networking.
 
- Invalid read at 0x00000000f7b89a3c:
-  swsusp_save+0x368/0x4d8
-  hibernation_snapshot+0x3f0/0x4e0
-  hibernate+0x20c/0x440
-  state_store+0x128/0x140
-  kernfs_fop_write_iter+0x160/0x260
-  vfs_write+0x2c0/0x520
-  ksys_write+0x74/0x160
-  do_syscall+0xb0/0x160
+If that conflicts with a C standard, then perhaps that needs to be
+resolved project wide.
 
- CPU: 0 UID: 0 PID: 812 Comm: bash Tainted: G    B              6.11.0-rc1+ #1566
- Tainted: [B]=BAD_PAGE
- Hardware name: Loongson-LS3A5000-7A1000-1w-CRB, BIOS vUDK2018-LoongArch-V2.0.0 10/21/2022
- ==================================================================
+Forcing an individual feature to diverge just brings inconsistency.
+That said, this appears to be inconsistent already.
 
-Note: We can only set permissions for KVRANGE/XKVRANGE kernel addresses.
+Main question is whether this is worth respinning a series already at
+v17 with no more fundamental feedback.
 
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
- arch/loongarch/Kconfig                  |  1 +
- arch/loongarch/include/asm/set_memory.h |  4 ++
- arch/loongarch/mm/pageattr.c            | 60 +++++++++++++++++++++++++
- 3 files changed, 65 insertions(+)
+For reference:
 
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index 49efa0470e16..727dc80d0477 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -26,6 +26,7 @@ config LOONGARCH
- 	select ARCH_HAS_PTE_DEVMAP
- 	select ARCH_HAS_PTE_SPECIAL
- 	select ARCH_HAS_SET_MEMORY
-+	select ARCH_HAS_SET_DIRECT_MAP
- 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
- 	select ARCH_INLINE_READ_LOCK if !PREEMPTION
- 	select ARCH_INLINE_READ_LOCK_BH if !PREEMPTION
-diff --git a/arch/loongarch/include/asm/set_memory.h b/arch/loongarch/include/asm/set_memory.h
-index 64c7f942e8ec..d70505b6676c 100644
---- a/arch/loongarch/include/asm/set_memory.h
-+++ b/arch/loongarch/include/asm/set_memory.h
-@@ -14,4 +14,8 @@ int set_memory_nx(unsigned long addr, int numpages);
- int set_memory_ro(unsigned long addr, int numpages);
- int set_memory_rw(unsigned long addr, int numpages);
- 
-+bool kernel_page_present(struct page *page);
-+int set_direct_map_default_noflush(struct page *page);
-+int set_direct_map_invalid_noflush(struct page *page);
-+
- #endif /* _ASM_LOONGARCH_SET_MEMORY_H */
-diff --git a/arch/loongarch/mm/pageattr.c b/arch/loongarch/mm/pageattr.c
-index d11c8f4b8248..5ca25481b275 100644
---- a/arch/loongarch/mm/pageattr.c
-+++ b/arch/loongarch/mm/pageattr.c
-@@ -157,3 +157,63 @@ int set_memory_rw(unsigned long addr, int numpages)
- 
- 	return __set_memory(addr, numpages, __pgprot(_PAGE_WRITE | _PAGE_DIRTY), __pgprot(0));
- }
-+
-+bool kernel_page_present(struct page *page)
-+{
-+	pgd_t *pgd;
-+	p4d_t *p4d;
-+	pud_t *pud;
-+	pmd_t *pmd;
-+	pte_t *pte;
-+	unsigned long addr = (unsigned long)page_address(page);
-+
-+	if (addr < vm_map_base)
-+		return true;
-+
-+	pgd = pgd_offset_k(addr);
-+	if (pgd_none(pgdp_get(pgd)))
-+		return false;
-+	if (pgd_leaf(pgdp_get(pgd)))
-+		return true;
-+
-+	p4d = p4d_offset(pgd, addr);
-+	if (p4d_none(p4dp_get(p4d)))
-+		return false;
-+	if (p4d_leaf(p4dp_get(p4d)))
-+		return true;
-+
-+	pud = pud_offset(p4d, addr);
-+	if (pud_none(pudp_get(pud)))
-+		return false;
-+	if (pud_leaf(pudp_get(pud)))
-+		return true;
-+
-+	pmd = pmd_offset(pud, addr);
-+	if (pmd_none(pmdp_get(pmd)))
-+		return false;
-+	if (pmd_leaf(pmdp_get(pmd)))
-+		return true;
-+
-+	pte = pte_offset_kernel(pmd, addr);
-+	return pte_present(ptep_get(pte));
-+}
-+
-+int set_direct_map_default_noflush(struct page *page)
-+{
-+	unsigned long addr = (unsigned long)page_address(page);
-+
-+	if (addr < vm_map_base)
-+		return 0;
-+
-+	return __set_memory(addr, 1, PAGE_KERNEL, __pgprot(0));
-+}
-+
-+int set_direct_map_invalid_noflush(struct page *page)
-+{
-+	unsigned long addr = (unsigned long)page_address(page);
-+
-+	if (addr < vm_map_base)
-+		return 0;
-+
-+	return __set_memory(addr, 1, __pgprot(0), __pgprot(_PAGE_PRESENT | _PAGE_VALID));
-+}
--- 
-2.43.5
+$ grep -nrI '^#ifndef\ _\+NET[_A-Z]\+H' include/  | wc -l
+149
 
+$ grep -nrI '^#ifndef\ NET[_A-Z]\+H' include/  | wc -l
+4
+
+$ grep -nrI '^#ifndef\ [_]\+[A-Z][_A-Z]\+H' include/  | wc -l
+3805
+
+$ grep -nrI '^#ifndef\ [A-Z][_A-Z]\+H' include/  | wc -l
+583
 
