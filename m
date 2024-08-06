@@ -1,81 +1,81 @@
-Return-Path: <linux-arch+bounces-6048-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6049-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D6819490CC
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Aug 2024 15:19:13 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B99F9490E0
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Aug 2024 15:20:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C16F286F8B
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Aug 2024 13:19:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 67704B288CA
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Aug 2024 13:20:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6133B1E7A4C;
-	Tue,  6 Aug 2024 13:16:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8849F1D6180;
+	Tue,  6 Aug 2024 13:17:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VNx+FAu/"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Wb3dW5ib"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEA691E7A2E
-	for <linux-arch@vger.kernel.org>; Tue,  6 Aug 2024 13:16:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BAA71D54C9
+	for <linux-arch@vger.kernel.org>; Tue,  6 Aug 2024 13:17:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722950182; cv=none; b=OLrJ0kbZNlb5x6LQz8VqeLCdxYcdtscrkQsKNaSJChJsRmPAjnGIAVratn4m1Xp9EKZhEaKBO082HK++fZMg+l3m58ckOGtR+/NB7cKjT/V/i2xYVzPxG2ioybCdYsRJ0zxHkkAA6puTqSLqOnn7xYOXafNstrY+BuqUuw8roM8=
+	t=1722950230; cv=none; b=j6G2ixQLT4LM2LmSvc/bvQJEO3BEvhmy3soYVFWP5v8bK0RuBTp7oUTu7XNS76NV7wmJYRTMeAcTL2wxSDNoix6atyCx84mRFmNIttahXHlH2OOGMJIXbVg+k2sbrMhmGcnH/PQMFqS7/rUhJ/dKiGrFZqhuSwWzBiL0hRYE+iI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722950182; c=relaxed/simple;
-	bh=hCm7JB+DDlPTp3WwgyVGn/SLXKNk7R6bquMjVVBzJlE=;
+	s=arc-20240116; t=1722950230; c=relaxed/simple;
+	bh=XIfVNXxRNJMWMotZUOMfVtqu9KIyQ6rld0dQQOWt9ag=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=isJIjnLIWxkEGV4pVcGeCkcBL3l/WB0Jk9pxuZvWSk91jtn1IJexzjn1wun+vrTdoEwsJTsJuotzltWXvoK+owXRgFqt4MSlM5Sjg1wRhwmp2OFlnHgR01Hc0o/gCxaJMuO9+GI06ukFgmToo/wzGSXJqG7TMRoQVfKLNOJ6nSE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VNx+FAu/; arc=none smtp.client-ip=170.10.129.124
+	 In-Reply-To:Content-Type; b=gZmo4eJvG8Oy3TfyNHtmbd46rWZm2waRAaGwX27cvAmKb9NI8JakpYX/qymsHxPqRqvx08dLI4KSOv34jUwTCwD5Sw+u2Q/1TKzugJvAsYjvMIwlBO7nu9NeODgRF/KYWqfw4LlrDReveypkKRIdDwqvxicREeYPR8PaEehMfeI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Wb3dW5ib; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1722950180;
+	s=mimecast20190719; t=1722950226;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=ENd5r5CFc7+8cWEDv8rBeOmXatXpFeaF/te9b40fNxQ=;
-	b=VNx+FAu/jioZ0Bo1E+yghi8m+3SsLivdNuaVzR6w3UoDXqvvCgkKYEdHamCNY098pq7ycE
-	svgd9G2wvOKnje+EkchOc0zkJFzTgTa2HcRRBNGYgBM7EhpZ0+CZ2Rvdg2+H7UBrWuqd0S
-	KT8tx1HAAWKHYFVBTrbNV4pJcV1k9nE=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=z7OItE80eE9UGfmeRgKVMPW9zfG5/riUT9eGnET0PAc=;
+	b=Wb3dW5ibBEqeH/PdHcChkjbPyTnxenQwa1/5AI4lgincDIlSpA4SScdDVqxyBdf/MrTPNL
+	Snj1hYHaMJrkDKBmmqLNWwK/1+4dAB24AQV0slf52qDotlW3ugZbrcnDLFqhJ03g1LLC92
+	uYCnO3frU/NIUKcVUXvN2S/SQ1/H4ew=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-647-afXWl8QMNfqIUgSPgPLlJg-1; Tue, 06 Aug 2024 09:16:17 -0400
-X-MC-Unique: afXWl8QMNfqIUgSPgPLlJg-1
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-368374dc565so314058f8f.2
-        for <linux-arch@vger.kernel.org>; Tue, 06 Aug 2024 06:16:17 -0700 (PDT)
+ us-mta-279-8Zqcku6HOHOk0hCB9UpDAw-1; Tue, 06 Aug 2024 09:17:04 -0400
+X-MC-Unique: 8Zqcku6HOHOk0hCB9UpDAw-1
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-367990b4beeso437989f8f.2
+        for <linux-arch@vger.kernel.org>; Tue, 06 Aug 2024 06:17:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722950176; x=1723554976;
+        d=1e100.net; s=20230601; t=1722950223; x=1723555023;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
          :content-language:from:references:cc:to:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=ENd5r5CFc7+8cWEDv8rBeOmXatXpFeaF/te9b40fNxQ=;
-        b=pBUjnAZtJ9jqHclVS184yhksmBIaCxSMhbbzz/hZx5OP8/g7thzQTQZWcJRn3IV6Mj
-         BO4ho4F1qzgcdExEA8xLBmZ9iZmvSGuXCCvN7LdKATmPGPtrA9dFILXICwjOWTKGUx+K
-         NnkbtB/ALrEfNYNgYdJn/hQywLLpctQAqM9X9kglBi/fXqhO6ll+oRQqL2SvRXaOiWHJ
-         hu+f76QAPtmA7O3AR0LWExiiCIBFMdKi1lxad9boNT7iNpp6ZtNEFl0QDNTCqj1rgEXr
-         bDjlArxXBqUYRwRqC4FMvo9atkaFQGJIBhzQbwZDs0ujDQjq1Uz61aaftyPQYGV3K+b7
-         vkvA==
-X-Forwarded-Encrypted: i=1; AJvYcCWQ8Hx09QA7Qi+O+aL3zPhsVrIjWl7D97oE5uh1PULA45YKbtWp4oU/I6KuZt96G2RSoml1blHrXe6kO3azFWdYOLwe95br3Q5M5g==
-X-Gm-Message-State: AOJu0Yz+cS2XyA9Tc7eMcMpL13YYkg3p74GTALJ3/TAurvZEpPKq0vUv
-	D9XLplh7UhoCNCSwIsHNAsMWWjzy6T5T0Z5sBlCaoNFtKCok2t26M/2tONcT9cTRwc8Zq2KADhr
-	Etr9/uTOTdPxNJN8OH2UFjtWqEfl/FHXHb0Ngy48hMWREw2Z4OEqJuTA3aD8=
-X-Received: by 2002:adf:f012:0:b0:367:9765:b2ae with SMTP id ffacd0b85a97d-36bbc1d3558mr9354699f8f.61.1722950176386;
-        Tue, 06 Aug 2024 06:16:16 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IE4acjWXC1BMnBxpO/X5gtVtgtmzS8yRPvSDCBN3Z/xMxD9LIbm8D788P755lBi6xVWsPCj0A==
-X-Received: by 2002:adf:f012:0:b0:367:9765:b2ae with SMTP id ffacd0b85a97d-36bbc1d3558mr9354671f8f.61.1722950175913;
-        Tue, 06 Aug 2024 06:16:15 -0700 (PDT)
+        bh=z7OItE80eE9UGfmeRgKVMPW9zfG5/riUT9eGnET0PAc=;
+        b=KxZi7Ref+YJQDrljQZ0lpivKrrS/raunibVkTHOOhTzuQcp0/7EgoatqkAWlCWmo1k
+         6s0NF5WhFQNnMY5l4MP8Oe8qL+Hv6fu3dVfuToXqKiHxNGPFfdzdIU7G77jwwI+Nvcdb
+         s44lsWgWuhOJjVd+T7asf6iUH/M527tgtPB2kVvX8KL2WjQ50q1RtR3FzjYzUJH4DbYX
+         gSWb7Bg+/NTZ7qs28r6Jgkt57gvS9ENH+Lf+MwQ/gynsNgMmztdY/8RC+rK10SCXV1Tc
+         l5vAau3DjKDEvjAQ8P2GdIM2KDB4qSy2YUKM/iIn8u1Wv6uPuQslcvSJj9G5Dh+Gye4I
+         cmkg==
+X-Forwarded-Encrypted: i=1; AJvYcCXZXxBhSrvESheg0zMjh8nYs4I2zcLNlW5TRt+fZD+W7kwVleMeQ63xlLDxdQ7Z3OYh4aP5AZ6ctpZweFG2u/wl/hDKEBKW0Z9C0w==
+X-Gm-Message-State: AOJu0YyNsYlP2M9oTXV8XJolG3nra5QpiPl6L20jDCtGDdnGd5OiQj+/
+	5cNtSHG4y55Sro4SBt+TUaVQlEpC/eRtMOEgWsm5qjNDK0LCmBUfAZEjbGuWrAvXwk0eCRQOqw+
+	4Xyv3pAxXscXv2td/opKba620i0iUru6enU+jXMGvkZkLEny1F0VdavxXL7Q=
+X-Received: by 2002:a05:6000:d2:b0:368:71fa:7532 with SMTP id ffacd0b85a97d-36bbc0e7225mr8701756f8f.31.1722950223342;
+        Tue, 06 Aug 2024 06:17:03 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHlLglIEjR9rFtL+sSPIT+UzBF73pqZFIoxLhNAPL/6toXBTToQ2vIjEcceFihDtmOpZF6+rA==
+X-Received: by 2002:a05:6000:d2:b0:368:71fa:7532 with SMTP id ffacd0b85a97d-36bbc0e7225mr8701695f8f.31.1722950222793;
+        Tue, 06 Aug 2024 06:17:02 -0700 (PDT)
 Received: from ?IPV6:2003:cb:c73f:8500:f83c:3602:5300:88af? (p200300cbc73f8500f83c3602530088af.dip0.t-ipconnect.de. [2003:cb:c73f:8500:f83c:3602:5300:88af])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36bc5a6fa1csm12193113f8f.78.2024.08.06.06.16.13
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-428e6d6b942sm181949825e9.5.2024.08.06.06.17.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Aug 2024 06:16:15 -0700 (PDT)
-Message-ID: <454c3cfb-601f-4807-ad4a-6b8a59f1063c@redhat.com>
-Date: Tue, 6 Aug 2024 15:16:13 +0200
+        Tue, 06 Aug 2024 06:17:02 -0700 (PDT)
+Message-ID: <fedd1b32-cace-45a1-82f0-7effaccd4145@redhat.com>
+Date: Tue, 6 Aug 2024 15:16:59 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -83,7 +83,8 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 17/26] mm: introduce numa_memblks
+Subject: Re: [PATCH v3 18/26] mm: move numa_distance and related code from x86
+ to numa_memblks
 To: Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org
 Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
  Andreas Larsson <andreas@gaisler.com>,
@@ -114,7 +115,7 @@ Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
  loongarch@lists.linux.dev, nvdimm@lists.linux.dev,
  sparclinux@vger.kernel.org, x86@kernel.org
 References: <20240801060826.559858-1-rppt@kernel.org>
- <20240801060826.559858-18-rppt@kernel.org>
+ <20240801060826.559858-19-rppt@kernel.org>
 From: David Hildenbrand <david@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
@@ -162,15 +163,15 @@ Autocrypt: addr=david@redhat.com; keydata=
  jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
  WNyWQQ==
 Organization: Red Hat
-In-Reply-To: <20240801060826.559858-18-rppt@kernel.org>
+In-Reply-To: <20240801060826.559858-19-rppt@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 01.08.24 08:08, Mike Rapoport wrote:
 > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 > 
-> Move code dealing with numa_memblks from arch/x86 to mm/ and add Kconfig
-> options to let x86 select it in its Kconfig.
+> Move code dealing with numa_distance array from arch/x86 to
+> mm/numa_memblks.c
 > 
 > This code will be later reused by arch_numa.
 > 
