@@ -1,81 +1,81 @@
-Return-Path: <linux-arch+bounces-6040-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6041-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8A38949022
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Aug 2024 15:07:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F00F949036
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Aug 2024 15:09:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D4C5281733
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Aug 2024 13:07:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1B0531F222F1
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Aug 2024 13:09:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 821211C9ECE;
-	Tue,  6 Aug 2024 13:07:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C67BB1D0DD6;
+	Tue,  6 Aug 2024 13:09:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aK3u9PRl"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NVIHC/q5"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB6FB1C9EBF
-	for <linux-arch@vger.kernel.org>; Tue,  6 Aug 2024 13:07:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5470A1CB333
+	for <linux-arch@vger.kernel.org>; Tue,  6 Aug 2024 13:09:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722949633; cv=none; b=ZjQAXDUcTtz8Fz2cLEEh26LU8ruO8GIwKMsIV/EqAUhq3TuPVzsnvoeDbmyllBqPe00NKTzUexjEi+MBceKxa1lnzdWKNj+zyeDi4by59skqea9HxMd/gPAj2SafthLxYhnXnDOBwJsFXgkmgZWuPXCb7+qGIBQyTBTTLypMomU=
+	t=1722949743; cv=none; b=tXkt6v786Al0V8bw9tgdBbcB8WtRR6kzzmzrgprfRFA7ixfmoIGdGOeeyjrqkd92q5nf3s1R2bekLh/Ur5eEvScn4/keo3Cs5ZSOUn47g7bQBXdrSqZs1CTeILjQfJ1uremtXxGnibYwpIipyhSl2aPjOOOvR5cQTldi/bFuGRo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722949633; c=relaxed/simple;
-	bh=ohktJkp32zdBlRDAVBckFX8Ux8G76FRLJDuU/j98O4Y=;
+	s=arc-20240116; t=1722949743; c=relaxed/simple;
+	bh=NlvCVcgzNBQvzWk0ULL/laFzmUNUPHDCoHnEHFHl5pU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kVhdvfbVucNI+yKW+WbjqlV8GGhtRPfgEemOiHrqyntORMMqfmC6RQ9G+RPAHiiGc5NBGmXPSnUdVHOuztd5hM6FKgxLQFbBIJTk5YyBEw7K3XM34M5tpIN9G0Apd79H815E9i1I5DZn3Ax81CSzJHnPb0liEviiBBul3n3ydmk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aK3u9PRl; arc=none smtp.client-ip=170.10.129.124
+	 In-Reply-To:Content-Type; b=EO/qVEQms91rAxhcFotHqle1W4bJYurHBl4wbOuQJlMZk8dJqHeaU2PhfDkfPffRL/7TkxlVfhZ7GZMC5d3ArGjALprInYztCqGm1x2fdOlxI4VBqzlC9sduDrbGI6VGAOODKEY3/9zCYrp38K72ER356W5QW3ZQTl/reAhm96M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NVIHC/q5; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1722949630;
+	s=mimecast20190719; t=1722949740;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=TIyQLvWnyqqMtiLKFFzAu2zlk32GezvKg83XuQ8tLc0=;
-	b=aK3u9PRlJV1wkREJ8PHAR9tt41wu3+a353OweueThdeaUEUObNbJR2+1NlUldG57ynPWfa
-	4QziCTzgLGxCvMbqyfmjigs5OF0C4YCOxykEzn7N37TD9UPVhHYGHTeRXoaX0orlXQr0W1
-	o9GeAxPYQTV75pKmn2iKsDKAUHnJBsU=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=Ymyg7I71Fs0sg8CtsGSIaycwpz8ew411IQLDdoaQsT0=;
+	b=NVIHC/q5iycZvS2B+TNoVDTZitihoAruoIfEhx9km85/UFUJ3/76O17TnihpgDQJfJBuhM
+	OWc582/Q89Ie5Jny/WiUtiGOZvh36TfQCaPGFadrIvJTBxpcdANAb01EGGJjjqPY+xrw3a
+	wEauog4ESX1LwMRAkUsLzNhAVh82j3U=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-471-k8KoOcYrOliF2Tqcpm72JA-1; Tue, 06 Aug 2024 09:07:09 -0400
-X-MC-Unique: k8KoOcYrOliF2Tqcpm72JA-1
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-3685a5a765fso377831f8f.1
-        for <linux-arch@vger.kernel.org>; Tue, 06 Aug 2024 06:07:09 -0700 (PDT)
+ us-mta-613-yposl-_0MXKBkQo2TZCrwA-1; Tue, 06 Aug 2024 09:08:59 -0400
+X-MC-Unique: yposl-_0MXKBkQo2TZCrwA-1
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-36835daf8b7so526214f8f.2
+        for <linux-arch@vger.kernel.org>; Tue, 06 Aug 2024 06:08:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722949628; x=1723554428;
+        d=1e100.net; s=20230601; t=1722949738; x=1723554538;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
          :content-language:from:references:cc:to:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=TIyQLvWnyqqMtiLKFFzAu2zlk32GezvKg83XuQ8tLc0=;
-        b=VNKJxVqUybb/+sBTcmd4tsbXOmOCWhXeiNa/2gI6F6CVGgILbs/H5YK4OeKn+P/6mI
-         NM6ep7Rv/fJieF9sEeM/OxBBBiVROSeAg474o9snf1Xt3ap78b5CNFTleiAmNHqxj/1h
-         gO8d/51jchT/nPWjpD9a0q8F+5muZc7nX6k7rIcuEZzAat9VUlTiAGSWJ7NIYoB8tCYF
-         I3sFraSsUgn19kjPPjMwgDhuTtyyim6R4MPtyvAdltDkGlUS+JzVZMm9qR5Evt62OFHv
-         Y9Meo9AOdHfFkd3Hst+k0V3Px93EKVyznLfJGtXIh8Io4vYn/1cHoHtszq2V9IFhpcUR
-         mzlQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV/DWOarWU8RYa9j6qE/ClaKLzqoGl4Eqlb3S2RtE+vOVuBIp5eog3dJ1N1/b4ZcDSprJ20j8W0tLa6//2XUu6fB5iHDeNd/9YxNA==
-X-Gm-Message-State: AOJu0YyGhNYmvYIxiE1ERfGpTEqFXjCmr+LS6UhKNlKP0FBpqrBrg2Mk
-	pJQFY3LEpSnwNZYgwNFE9mVpvbtqsM4hTIYlif04ucxgdkqHLh2C2jtbYzRshIGNpt92T+gu/zH
-	EYD4ev74byEIxHyr/eVgAc6l8ls/7eSR5MNhRHxKc1IbbBeMlj2uiqSSxkyk=
-X-Received: by 2002:adf:fc8e:0:b0:367:8a3b:2098 with SMTP id ffacd0b85a97d-36bbc0cd4f4mr9122604f8f.3.1722949628125;
-        Tue, 06 Aug 2024 06:07:08 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IG5hu4Yl048YBcD0iUaoL+L6g8sWN82xUft0hO7GbEEUwPYqCeeCeFFMLPGzwr84CCZLQ21jQ==
-X-Received: by 2002:adf:fc8e:0:b0:367:8a3b:2098 with SMTP id ffacd0b85a97d-36bbc0cd4f4mr9122568f8f.3.1722949627565;
-        Tue, 06 Aug 2024 06:07:07 -0700 (PDT)
+        bh=Ymyg7I71Fs0sg8CtsGSIaycwpz8ew411IQLDdoaQsT0=;
+        b=NViFPcmUSYbY3b4hqFN3CNrOvYoyb0zV36kDGPwM7lprgauNGMr4IvO/0k4CYnddP2
+         OsEplvDSFrg4YaZSpkh2c1CoQrJw2O4xgDSK4QBFawWpEU0b06j6UJqFcnOO5cprnMtJ
+         9LNfnxPjZSXAoLj4YmO8kIL5epeQOQ4laM3vakxhEF1/z86n6zXaDF9bYRETJ4Q9kPXR
+         slQMc+EiJJxwYnDFufgsYxzPFn7yI20bz9FShLp1cWwuF1+WvAzMNwtSvki3rnB2j0IN
+         lzQ7JbXxB22N6BxZdd4hHIzu0uVCr31TFM9TVXPZSPp9WFTHFUKGQmNxzi+n3jL6HpQf
+         UAIw==
+X-Forwarded-Encrypted: i=1; AJvYcCXLIhdCLIY7v3XeivtvdWwk85+gBm9DQW7bpY/kVhgI2qZUCVnr12qLn26roBhraG7cH4LVftkvcNUB6fT4V/Nk9n5fzs97ISKJPA==
+X-Gm-Message-State: AOJu0YwyyFC71GYrgrpl1inJn/OSZVpiXB0TzNc6FzmGwb7iEd43wsi0
+	JQ3wfxe7AbI7FxTR/LHp4mAlaiiCsIQU+d//XQHsl2YogXkHUgXPjpQWKG12CPlLs1C3u5/ctZK
+	j3CtPrGlf5bv8/p4AatK8A9plcAsOev4biWK8J9jiqGqsGwWJRvZrj1lYBFE=
+X-Received: by 2002:a5d:4e90:0:b0:368:4def:921a with SMTP id ffacd0b85a97d-36bbc1a5169mr12334796f8f.48.1722949737775;
+        Tue, 06 Aug 2024 06:08:57 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IG1N4uFeqi+NWe1f9fVl3miIHQqaq6Q/tnxLvqhbktACP+7KSLG3iV3Mu3CZuQJ+hwF3W+LMw==
+X-Received: by 2002:a5d:4e90:0:b0:368:4def:921a with SMTP id ffacd0b85a97d-36bbc1a5169mr12334748f8f.48.1722949737235;
+        Tue, 06 Aug 2024 06:08:57 -0700 (PDT)
 Received: from ?IPV6:2003:cb:c73f:8500:f83c:3602:5300:88af? (p200300cbc73f8500f83c3602530088af.dip0.t-ipconnect.de. [2003:cb:c73f:8500:f83c:3602:5300:88af])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36bbd01ee30sm12949582f8f.50.2024.08.06.06.07.05
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4290171e822sm7108145e9.47.2024.08.06.06.08.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Aug 2024 06:07:06 -0700 (PDT)
-Message-ID: <d2ee3f9a-f2b0-4c8b-9623-20bbca03cf50@redhat.com>
-Date: Tue, 6 Aug 2024 15:07:04 +0200
+        Tue, 06 Aug 2024 06:08:56 -0700 (PDT)
+Message-ID: <3073b605-8019-4f69-b35c-b5099e32d204@redhat.com>
+Date: Tue, 6 Aug 2024 15:08:53 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -83,8 +83,7 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 06/26] MIPS: loongson64: drop
- HAVE_ARCH_NODEDATA_EXTENSION
+Subject: Re: [PATCH v3 10/26] x86/numa: simplify numa_distance allocation
 To: Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org
 Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
  Andreas Larsson <andreas@gaisler.com>,
@@ -115,7 +114,7 @@ Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
  loongarch@lists.linux.dev, nvdimm@lists.linux.dev,
  sparclinux@vger.kernel.org, x86@kernel.org
 References: <20240801060826.559858-1-rppt@kernel.org>
- <20240801060826.559858-7-rppt@kernel.org>
+ <20240801060826.559858-11-rppt@kernel.org>
 From: David Hildenbrand <david@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
@@ -163,25 +162,24 @@ Autocrypt: addr=david@redhat.com; keydata=
  jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
  WNyWQQ==
 Organization: Red Hat
-In-Reply-To: <20240801060826.559858-7-rppt@kernel.org>
+In-Reply-To: <20240801060826.559858-11-rppt@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 01.08.24 08:08, Mike Rapoport wrote:
 > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 > 
-> Commit f8f9f21c7848 ("MIPS: Fix build error for loongson64 and
-> sgi-ip27") added HAVE_ARCH_NODEDATA_EXTENSION to loongson64 to silence a
-> compilation error that happened because loongson64 didn't define array
-> of pg_data_t as node_data like most other architectures did.
+> Allocation of numa_distance uses memblock_phys_alloc_range() to limit
+> allocation to be below the last mapped page.
 > 
-> After rename of __node_data to node_data arch_alloc_nodedata() and
-> HAVE_ARCH_NODEDATA_EXTENSION can be dropped from loongson64.
+> But NUMA initializaition runs after the direct map is populated and
+> there is also code in setup_arch() that adjusts memblock limit to
+> reflect how much memory is already mapped in the direct map.
 > 
-> Since it was the only user of HAVE_ARCH_NODEDATA_EXTENSION config option
-> also remove this option from arch/mips/Kconfig.
+> Simplify the allocation of numa_distance and use plain memblock_alloc().
 > 
 > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> Tested-by: Zi Yan <ziy@nvidia.com> # for x86_64 and arm64
 > ---
 
 Acked-by: David Hildenbrand <david@redhat.com>
