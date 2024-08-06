@@ -1,140 +1,245 @@
-Return-Path: <linux-arch+bounces-6067-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6062-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6897949A47
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Aug 2024 23:36:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FC45949938
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Aug 2024 22:37:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 97A29285692
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Aug 2024 21:36:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B3F32829FD
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Aug 2024 20:37:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E69F115F409;
-	Tue,  6 Aug 2024 21:36:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04BBA14901A;
+	Tue,  6 Aug 2024 20:37:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SemJxCq1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X8YxGWgP"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com [209.85.221.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55F8F14C5A1;
-	Tue,  6 Aug 2024 21:36:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA03440875;
+	Tue,  6 Aug 2024 20:37:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722980183; cv=none; b=CXyWlovd3t7Y/jDt31HbnpJzWxSXW5XmVPVTDJfgPlgpWb7xakt6nl39PT6dfReiO2ZuuZYYiVd23vXHgKIdJqeswUQ/p92xZFCDYvtMSE/2s1SPxkyBE5FiXofYdFbfFs/PNQ5iXEqnjb26To0S/du5F7syunvzIZFOIaIKFjU=
+	t=1722976642; cv=none; b=e1UywqPh5Z+jweJs3fYBe26pJ/IfwukLn/m9ckGASEOM3LOI2fFlfHMY5HZ1YszePqpsS7xp5hjwfGYoA9OQAaz8a6/QUi97zpYr0e8cG3uL/922elDOQkdXYw4wGxe3QKRiB9DqYgn/oWmcpxFxOclUHHDa4mUGIPrMYg7bW7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722980183; c=relaxed/simple;
-	bh=2t+WutVWb5K5+D7fiMz4bLOCIU3ZQR0TMlrkjEcV3Ec=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=I/9UB2h+KdSvLbzneFhslfDMqYPWVrutFTuRCcr9phnabJ3rcvtw5U+kicPyRZBn4M6QLEVw62EtXQHRWb5TYfEzdrh1axhghxZX9xId1uxmkkYLmJam5CSDN4BaLNsbOeURUXQGepxfuKMvPrjB5bagaJjHDq/D5Yw1dFumrEY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SemJxCq1; arc=none smtp.client-ip=209.85.221.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f171.google.com with SMTP id 71dfb90a1353d-4f6ac1628dfso424924e0c.0;
-        Tue, 06 Aug 2024 14:36:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722980181; x=1723584981; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Dh/CnSErYT7/6V79W9GXrn6y0woRRKH6f2DR4IxHNx8=;
-        b=SemJxCq1iiNIrRCHDZzGFroL2IyUfxTOy1ZQ+Ov3aAOMFSNH2UW/10MR3kGh/Pr/GZ
-         iMUlmcUCJVwUu9W0EcgWAXZIPmFmVVSgZlQuFk/8yLE+SeC1kghCi/FPDEEwFcKuTCog
-         XgB4n3bF2VNcpF7MJzRdwpmX2qt7RiG5J6S/Aze1IcTGF+d43uXyJghyaTdWlNbmuSuk
-         EfNPzhtM9HeCaPzgkZ8hT3is5zUgOkQb7/eQ0Nn9sF/Fksgktm+7T3yuH70+gcLTU41I
-         7JoSX2yO8j323tepfhKEziLbWhIywTznisnsNNYjdjULdbtzqly4AVFtTbHVZPeZh5Si
-         bCjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722980181; x=1723584981;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Dh/CnSErYT7/6V79W9GXrn6y0woRRKH6f2DR4IxHNx8=;
-        b=Kc4YuB2okayI2sj2ETwL3N7wQTNF7oiBVjvn1r0/WuaSDynlDR8lKVEG2OTz9YPXus
-         V0IttrwuV6/5m5zpuUWVeUpQMnh99AFAJmp21AB4eU9b1l81+68LusD4Ax5TdIAoQMuQ
-         hWcrnbtTMj/wtjExzu4Ie47pEwu9Ozzwr8v9FuC7fXzhX3ZWZhcyb8LvE2V5ZdI1RVKI
-         kpj2ctFWaz87ytPQelmBm5pArTDibJC5ZEM6VWRkVAnvenTTaPaonoiqrxN9L9VyZY2/
-         q/kdmzqopMc6FBAy8eUtn92/BkA59F0AVn1Pv1zfiG9oqq1HenoK1VuCuYAmNixO0vyN
-         XPqA==
-X-Forwarded-Encrypted: i=1; AJvYcCW7cBLGUZQYgxMC6P/3KTVZgKAfPZvQfw9P3JgAchkkbA2YfSiMX04ABQQtRCIbABi9tN/e2qu7rVvavESmbu1YZTKZtQz1a45JbzdDRJ3fnH0doLrGiSpih9bLCmGUVytthevX9KXG7zXtG5raBXyNIxmRKRW3Altds/2kSQwWBv0=
-X-Gm-Message-State: AOJu0YyTYuAwSjWF3a7zxV4lqX85xNFuQZm3bU3tWV/S1Msr32kLSAPN
-	pJ8c/7QfyiFzOcb1ItO1YsghNxnNKWzQ3p1zwFtMYX+ZhWopSKyQ47nHYg0I3LpM3xy4x/9G7HF
-	6xSDJd1j2lt/eYjFbZri2f5B0M0Y=
-X-Google-Smtp-Source: AGHT+IFmUCpFy0ikEOsHVNcJ0/zIKB6zFAVRuMB81ZBEkWgUduwTajthzToYqvIUNMbqXOXZ0iKU7UA3pdcWrBARjqM=
-X-Received: by 2002:a05:6102:6d4:b0:492:a11f:a878 with SMTP id
- ada2fe7eead31-4945bebdc3dmr20433130137.23.1722980181051; Tue, 06 Aug 2024
- 14:36:21 -0700 (PDT)
+	s=arc-20240116; t=1722976642; c=relaxed/simple;
+	bh=g7QmdLe9IFWfz7C77+mSFv4ErgmVpHHeVChQmimHYG8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=vEkR2Sih9hN6YqOQJbx3rNxW2RwuyeGL+6UAKwT7b9PkKvDpFV8FtRNM2N+B9FdB/S7+8WORFnPHGop5IOtyMZ7ukzXFfEbjrSL/rYMElPBMOam3iJvmVON2y9AbaXSV6AdxiNwTjboaPQY4+/dciggFe0imMTNhZHLGLbZsr4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X8YxGWgP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2EDAC32786;
+	Tue,  6 Aug 2024 20:37:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722976642;
+	bh=g7QmdLe9IFWfz7C77+mSFv4ErgmVpHHeVChQmimHYG8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=X8YxGWgP2UMFZzmnwxFTZacJCBIWbq/z7d+2P/PY9Q5HIpRaRo5UUK629pTV5bU+K
+	 L3ODKR2S5C8Cly3RBZpnOtbw5A5RD74DNc4Aj4LRaY63F5SOWYn6WNAABfQVNaoSB4
+	 FnE3lOClziNlgKZEPEYmJBdLpHfq+tGNeTW7non+xpfZ8H3Lr3TTodHiZ+fYNm7oFa
+	 r005iJn+WbIbLd0BIb+hBF88OkmE45EdIBQjJcPcfRT2D2o5UiOYQ/EiQLGXjGO1tH
+	 AfKdXhSddmFMc8kSMXFn4WyrWcVQtGQCNAtdpP2AnK1qNaK4TzeqntlXV0d0ds42aS
+	 r3Mb4dSi5D2ZA==
+Date: Tue, 6 Aug 2024 13:37:18 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ bpf@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, Donald Hunter <donald.hunter@gmail.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet
+ <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, Ivan
+ Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
+ <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>,
+ Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
+ <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
+ Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
+ <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, Herbert
+ Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, Willem
+ de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ Sumit Semwal <sumit.semwal@linaro.org>, "Christian =?UTF-8?B?S8O2bmln?="
+ <christian.koenig@amd.com>, Bagas Sanjaya <bagasdotme@gmail.com>, Christoph
+ Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>,
+ Taehee Yoo <ap420073@gmail.com>, Pavel Begunkov <asml.silence@gmail.com>,
+ David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin
+ <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, Harshitha
+ Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
+ <pkaligineedi@google.com>, Willem de Bruijn <willemb@google.com>, Kaiyuan
+ Zhang <kaiyuanz@google.com>, Daniel Vetter <daniel.vetter@ffwll.ch>
+Subject: Re: [PATCH net-next v18 03/14] netdev: support binding dma-buf to
+ netdevice
+Message-ID: <20240806133718.71a53a4f@kernel.org>
+In-Reply-To: <20240805212536.2172174-4-almasrymina@google.com>
+References: <20240805212536.2172174-1-almasrymina@google.com>
+	<20240805212536.2172174-4-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240731133318.527-1-justinjiang@vivo.com> <20240731091715.b78969467c002fa3a120e034@linux-foundation.org>
- <dbead7ca-e9a4-4ee8-9247-4e1ba9f6695c@vivo.com> <20240806133823.5cb3f27ef30c42dad5d0c3e8@linux-foundation.org>
-In-Reply-To: <20240806133823.5cb3f27ef30c42dad5d0c3e8@linux-foundation.org>
-From: Barry Song <21cnbao@gmail.com>
-Date: Wed, 7 Aug 2024 04:32:09 +0800
-Message-ID: <CAGsJ_4x1tLEmRFbnUYcNYtV73SyBYpBtAx_syjfcnjrom-R+4w@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] mm: tlb swap entries batch async release
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: zhiguojiang <justinjiang@vivo.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	Will Deacon <will@kernel.org>, "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, 
-	Nick Piggin <npiggin@gmail.com>, Peter Zijlstra <peterz@infradead.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Muchun Song <muchun.song@linux.dev>, linux-arch@vger.kernel.org, cgroups@vger.kernel.org, 
-	kernel test robot <lkp@intel.com>, opensource.kernel@vivo.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, Aug 7, 2024 at 4:38=E2=80=AFAM Andrew Morton <akpm@linux-foundation=
-.org> wrote:
->
-> On Thu, 1 Aug 2024 14:30:52 +0800 zhiguojiang <justinjiang@vivo.com> wrot=
-e:
->
-> > > Dumb question: why can't this be done in userspace?  The exiting
-> > > process does fork/exit and lets the child do all this asynchronous fr=
-eeing?
-> > The logic optimization for kernel releasing swap entries cannot be
-> > implemented in userspace. The multiple exiting processes here own
-> > their independent mm, rather than parent and child processes share the
-> > same mm. Therefore, when the kernel executes multiple exiting process
-> > simultaneously, they will definitely occupy multiple CPU core resources
-> > to complete it.
->
-> What I'm asking is why not change those userspace processes so that they
-> fork off a child process which shares the MM (shared mm_struct) and
-> then the original process exits, leaving the asynchronously-running
-> child to clean up the MM resources.
+On Mon,  5 Aug 2024 21:25:16 +0000 Mina Almasry wrote:
+> +/* Protected by rtnl_lock() */
+> +static DEFINE_XARRAY_FLAGS(net_devmem_dmabuf_bindings, XA_FLAGS_ALLOC1);
 
-Not Zhiguo. From my perspective as a phone engineer, this issue isn't relat=
-ed
-to the parent-child process or the wait() function. Phones rely heavily on
-mechanisms similar to the OOM killer to function efficiently. For instance,
-if you're using apps like YouTube, TikTok, and Facebook, and then you
-open the camera app to take a photo, the camera app becomes the foreground
-process and demands a lot of memory. In this scenario, the phone might
-decide to terminate the most memory-consuming and less important apps,
-such as TikTok or YouTube, to free up memory for the camera app. TikTok
-and YouTube become less important because they are no longer occupying
-the phone's screen and have moved to the background. The faster TikTok
-and YouTube can be unmapped, the quicker the camera app can launch,
-enhancing the user experience.
+nit: global variable declarations before any code
 
-An important reason why apps can launch very slowly is due to the time late=
-ncy
-of alloc_pages(). That's why I'm quite interested in Zhiguo's patchset. On =
-the
-other hand, mTHP can help alleviate the situation by releasing swap slots t=
-hree
-times faster in my other patch:
-https://lore.kernel.org/linux-mm/20240806012409.61962-1-21cnbao@gmail.com/
+> +void net_devmem_unbind_dmabuf(struct net_devmem_dmabuf_binding *binding)
+> +{
+> +	struct netdev_rx_queue *rxq;
+> +	unsigned long xa_idx;
+> +	unsigned int rxq_idx;
+> +
+> +	if (binding->list.next)
+> +		list_del(&binding->list);
+> +
+> +	xa_for_each(&binding->bound_rxqs, xa_idx, rxq) {
+> +		if (rxq->mp_params.mp_priv == binding) {
+> +			rxq->mp_params.mp_priv = NULL;
+> +
+> +			rxq_idx = get_netdev_rx_queue_index(rxq);
+> +
+> +			netdev_rx_queue_restart(binding->dev, rxq_idx);
 
-This is likely another advantage of mTHP.
+Throw in a WARN_ON() around this, hopefully we'll get to addressing it
+later..
 
-Thanks
-Barry
+> +		}
+> +	}
+> +
+> +	xa_erase(&net_devmem_dmabuf_bindings, binding->id);
+> +
+> +	net_devmem_dmabuf_binding_put(binding);
+> +}
+> +
+> +int net_devmem_bind_dmabuf_to_queue(struct net_device *dev, u32 rxq_idx,
+> +				    struct net_devmem_dmabuf_binding *binding)
+> +{
+> +	struct netdev_rx_queue *rxq;
+> +	u32 xa_idx;
+> +	int err;
+> +
+> +	if (rxq_idx >= dev->real_num_rx_queues)
+> +		return -ERANGE;
+
+If we prevent binding to an inactive queue we should also prevent
+deactivation.
+
+Please take a look at the (two?) callers of
+ethtool_get_max_rxnfc_channel() and ethtool_get_max_rxfh_channel().
+Wrap those into a new function for reading max active channel, and
+take mp binds into account as well (send the refactor separately 
+from the series to avoid making it longer).
+
+> +	rxq = __netif_get_rx_queue(dev, rxq_idx);
+> +	if (rxq->mp_params.mp_priv)
+> +		return -EEXIST;
+> +
+> +	err = xa_alloc(&binding->bound_rxqs, &xa_idx, rxq, xa_limit_32b,
+> +		       GFP_KERNEL);
+> +	if (err)
+> +		return err;
+> +
+> +	rxq->mp_params.mp_priv = binding;
+> +
+> +	err = netdev_rx_queue_restart(dev, rxq_idx);
+> +	if (err)
+> +		goto err_xa_erase;
+> +
+> +	return 0;
+> +
+> +err_xa_erase:
+> +	rxq->mp_params.mp_priv = NULL;
+> +	xa_erase(&binding->bound_rxqs, xa_idx);
+> +
+> +	return err;
+> +}
+
+> +void dev_dmabuf_uninstall(struct net_device *dev)
+> +{
+> +	unsigned int i, count = dev->num_rx_queues;
+
+nit: why stash the value of num_rx_queues ?
+
+> +	struct net_devmem_dmabuf_binding *binding;
+> +	struct netdev_rx_queue *rxq;
+> +	unsigned long xa_idx;
+> +
+> +	for (i = 0; i < count; i++) {
+> +		binding = dev->_rx[i].mp_params.mp_priv;
+> +		if (binding)
+> +			xa_for_each(&binding->bound_rxqs, xa_idx, rxq)
+> +				if (rxq == &dev->_rx[i])
+> +					xa_erase(&binding->bound_rxqs, xa_idx);
+
+nit: Please use "continue", this is too deeply indented
+
+> +	nla_for_each_attr_type(attr, NETDEV_A_DMABUF_QUEUES,
+> +			       genlmsg_data(info->genlhdr),
+> +			       genlmsg_len(info->genlhdr), rem) {
+> +		err = nla_parse_nested(
+> +			tb, ARRAY_SIZE(netdev_queue_id_nl_policy) - 1, attr,
+> +			netdev_queue_id_nl_policy, info->extack);
+> +		if (err < 0)
+> +			goto err_unbind;
+> +
+> +		rxq_idx = nla_get_u32(tb[NETDEV_A_QUEUE_ID]);
+
+How do we know this attribute is present?  NL_REQ_ATTR_CHECK()
+
+> +		err = net_devmem_bind_dmabuf_to_queue(netdev, rxq_idx, binding);
+> +		if (err)
+> +			goto err_unbind;
+> +	}
+> +
+> +	list_add(&binding->list, sock_binding_list);
+> +
+> +	nla_put_u32(rsp, NETDEV_A_DMABUF_ID, binding->id);
+> +	genlmsg_end(rsp, hdr);
+> +
+> +	rtnl_unlock();
+
+nit: for symmetry you should also unlock after list_add(),
+     netlink msg alloc and prep are before rtnl_lock()
+
+> +	return genlmsg_reply(rsp, info);
+> +
+> +err_unbind:
+> +	net_devmem_unbind_dmabuf(binding);
+> +err_unlock:
+> +	rtnl_unlock();
+> +err_genlmsg_free:
+> +	nlmsg_free(rsp);
+> +	return err;
+>  }
+
+> +void netdev_nl_sock_priv_init(struct list_head *priv)
+> +{
+> +	INIT_LIST_HEAD(priv);
+> +}
+> +
+> +void netdev_nl_sock_priv_destroy(struct list_head *priv)
+> +{
+> +	struct net_devmem_dmabuf_binding *binding;
+> +	struct net_devmem_dmabuf_binding *temp;
+> +
+> +	list_for_each_entry_safe(binding, temp, priv, list) {
+> +		rtnl_lock();
+> +		net_devmem_unbind_dmabuf(binding);
+> +		rtnl_unlock();
+> +	}
+> +}
+
+nit: move these before the subsys_initcall.. and what it calls
 
