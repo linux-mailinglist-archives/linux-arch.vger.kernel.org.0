@@ -1,70 +1,70 @@
-Return-Path: <linux-arch+bounces-6112-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6113-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80E7194B6A3
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Aug 2024 08:24:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C9A794B6AB
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Aug 2024 08:25:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A3CF81C212BA
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Aug 2024 06:23:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 249931C20F6F
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Aug 2024 06:25:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80D6C186E24;
-	Thu,  8 Aug 2024 06:23:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7E07186E5D;
+	Thu,  8 Aug 2024 06:25:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QUo65wpZ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WmGLmIUu"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E840D1862B8
-	for <linux-arch@vger.kernel.org>; Thu,  8 Aug 2024 06:23:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44013186E42
+	for <linux-arch@vger.kernel.org>; Thu,  8 Aug 2024 06:25:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723098236; cv=none; b=MYD1PN0/mYZx7YWAV+UXrjFDSIlDkV3CjCO9fNRLLwe8or1wi0PMT1+KMDPIhlKh82NYZPz7Xc65hh7zv5aMXP6rb5xYtjj9CWCyndFKpjevF6zFAdEWk8o8oHmAv3VEZzFEW/EFY3EAf7cmTrEj7iDzoraJSl9d4AponffKQIc=
+	t=1723098328; cv=none; b=UNDxJtaktHJH0ZKFawu6WN0k0jyX3QSCUMrxS23WkbNw+aVDVqYAltVDWvx972d2gj4BbWdsvGxav6tUxdImECJAv8rFgLI7wI6ZQDMAABboJ0AH5vFojXpNIFVWRLCevu5BrQ6FC+Dmq/uPIW0nSOQozbxHg8jKO1Ib13aChE8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723098236; c=relaxed/simple;
-	bh=uKqCXjU3OwyQco6s8NZiGRa60Gd+8G0xHDsozU6gM1s=;
+	s=arc-20240116; t=1723098328; c=relaxed/simple;
+	bh=vLLuKNqR9XU5O+YIcehGr09FLrfxLy2W9TjakvRNxc4=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=kvez2uBv3MGqilv4aB9EeVeeM14vPZ6JmskkKUR62FYh61wAkeMPhn/k7R5HiCbW4FruQiVBo98DswLNd5Ljn1u+TUwfG/r8CNKnqmfjCuBPKTvErOvsa3SmK4lo4nml+qOGiQbg/PHMte/zSjWPIiaUvJGs1d/e2RUoAyx9M6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=QUo65wpZ; arc=none smtp.client-ip=209.85.210.174
+	 MIME-Version:Content-Type; b=f5FY8zA7X5TjyyaNkaWcqIiSuZefGHxgV3IlApMgGpiw6XLjsgecT8eGlBg3NwwE3W+hMcY2lKxI4N4tSfMmLoYYCAR4W/7my2oD7Q7tKqnQ49nFPFoUjY5RsPT0wEvLN99xsRnm1Ic46ECl63Gvq18fWp/wH0ILAJRKtN0Nmvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=WmGLmIUu; arc=none smtp.client-ip=209.85.216.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-70f5ef740b7so584532b3a.2
-        for <linux-arch@vger.kernel.org>; Wed, 07 Aug 2024 23:23:54 -0700 (PDT)
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-2d1bb65e906so496864a91.3
+        for <linux-arch@vger.kernel.org>; Wed, 07 Aug 2024 23:25:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1723098234; x=1723703034; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1723098326; x=1723703126; darn=vger.kernel.org;
         h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
          :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WK8rtcyRr8ddH6sUXU5fxnXTw/gvxfa7lKvESZemSbI=;
-        b=QUo65wpZ5EG/+gbWg/6d2zgmY9dnXT+tMlD33MqDxT+VcHFh3+/Qg5FiqEgHNu+2+P
-         7JGEtQI8cSyXHqfVpZPZr4RjyBlYg71SFeZgnKwk/HWCzyW0ne3JoAQFTW1AnoJNwgWk
-         eWYkUVjnoqr8PtkeMgh153LTm7KXx2Tn0y+Q8kNcP1Fd9CsmFBurE5B8JF18Z8c5lGoQ
-         wLRa/358D3sxt7aGLTCsrnmK1uFgUT5dHkPsJGqNWKPvXQcewppyOxmzE5f90CFslytR
-         7+5qhyOokdb51ieb1BRm4qFw1+lmtujdiDvYr6ANr4bx6OJ5B3ItM3KBZb2iumLcvHKL
-         hdHQ==
+        bh=sJzbBpFNwwY6e+GIMU5iIyI4LLoSSqWXmhkhActO1pM=;
+        b=WmGLmIUuyf/l/oP5Hc2I25c7ckQjT7UoU3H/6dcJrZmI2maX7Bev/9eznq4a+khWXP
+         /LC+JVPWu2e/M62gXdMw7ykdMV+5da8AdUr6dfQVlmsGBVWAKThLy4+iUS5xcdCD/7Ku
+         lBZ79qs1pffGXIkx0MrEe2vV2LdTkbTQ6ZT1rgWfPeYiYyyGFimBWirEeqrIXoabg3Ou
+         RgsGIFLJWbNHCyOHAJdJTXQFuur9jj0EXzMYoYz0wWmFGl/mXEoLzC/E6Fso2p/ImABX
+         GL4pI9+q5ClclOpBH85/56Fa1uZRD1ciupe8PIaiAtVUyvLQD2KKJe//G0DKddq5+al4
+         J0kA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723098234; x=1723703034;
+        d=1e100.net; s=20230601; t=1723098326; x=1723703126;
         h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
          :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WK8rtcyRr8ddH6sUXU5fxnXTw/gvxfa7lKvESZemSbI=;
-        b=XdfZVBAf/yJ0IdhmxK5xZuP5sSmKL4ctKf81BDfOB135D/5MkF4Q1YKOFxE4e3i6EK
-         lySEXqVXCgntC3HYkA45Wg8BGe+xinAeduZK4BVndVpSuHT/ilOqLGvTqKvYT2zxRdlO
-         KtG4+RtmPJaJn6GHRT/KrLgTIjPzt0Ib+8tL3RC22insDrpXs1XxQn5qj+lNouU6uF49
-         1qE5Gxhm1RUwfTmerwX/x21iuOIg+eG+OT+5EH7hOsCvnkcyLmmcDXW/IXvt1DUyPhD+
-         afe+quKFSrx2PKomAXChevcGsRNTHCoYS5ugcRWRJlp1IpHFDtGUINEFGSK0JMgm+mVn
-         Sp7A==
-X-Forwarded-Encrypted: i=1; AJvYcCWuucHJTA4IRTZm6aB4og40wRutnUa+LgCRJmdJFBCnd9zepKytmSrv/HJxJon2Ax8nHYcAuPc6L2rnvnhsc+cov8XeuZMyMRVIVw==
-X-Gm-Message-State: AOJu0YyJaMRhCFFtoSVwSZA1gBkHNroOC8I+nHeso5shVsmOn2/uJhPD
-	5f7R8WAXCO7orpRo4u7K0NqncR3yht8dxxpqBtGOWp3EMTaC5cPPGVS4Tzi+R1k=
-X-Google-Smtp-Source: AGHT+IFYw3pObWR57BLXtwXu43FaZ7f39AGJpk9DJobImXbFcvJMmOT0vZh2bJKK6Qf6HCB4wbBa5w==
-X-Received: by 2002:a05:6a20:7f8a:b0:1c3:ce0f:bfb2 with SMTP id adf61e73a8af0-1c6fcec8890mr851553637.23.1723098234214;
-        Wed, 07 Aug 2024 23:23:54 -0700 (PDT)
+        bh=sJzbBpFNwwY6e+GIMU5iIyI4LLoSSqWXmhkhActO1pM=;
+        b=dngzv+3KpZ/wFACsbh17p/poAoSbUIC8BUwKb39/jyQDIGo/aGLGUIU2sFQD4hveZk
+         js0GY3OupbITBRdhmmGR9EdDt/D4UDdkS9ugYad1YBGKfmSSzHCf7Ghen9sl9L7p89kH
+         ZvXjBh8bilNFxg2qfBi3TEn96Y5oAnhgIFW3cKwgFtPLkQP7CclSar5aVgvXM5hzYSi2
+         LxTLHjnyHEItEiteNa+0S7Yo8XFqhnUMOtugxShahY5i0iMIP7X6HkBxUVMql7BFnPkJ
+         70Uuf0EgFcSGnohLk+3Gdypf5X5QRMYXxIIw94h5+bCMJxSM0rZFVhGBWOJKG7z6YRiG
+         qsWg==
+X-Forwarded-Encrypted: i=1; AJvYcCVoki8W2WJuSERtI3PpKhh58ybh/smDcNhBVqmY5w2x5IkzAbikQI7y9xXBsswjXIXOv+JX9GochBQtztOq9nTKFAOS32Kqtli3/A==
+X-Gm-Message-State: AOJu0Yy7lZko199IKSFQhyBdntT/jsZN79NFZU1TTTOBqL9FhK1UM6fD
+	zSAYJFyiOhcoNyOT4RgJ1Nst08vvMTVbWIPRwqCRqRgZZBlLCovLiwg2fyp/ePs=
+X-Google-Smtp-Source: AGHT+IG5Sh4RPZDFGIdFKwM0iRTPb/2nHrMhAgBHSqeUq3wn62Dbr5Jen5m7Eo7OeNMhWJA7SfHwfg==
+X-Received: by 2002:a17:90b:4ac9:b0:2c4:dc63:96d7 with SMTP id 98e67ed59e1d1-2d1c349446emr921727a91.41.1723098326578;
+        Wed, 07 Aug 2024 23:25:26 -0700 (PDT)
 Received: from localhost ([2804:14c:87d5:5261:ed46:7c69:6cee:3c20])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-710cb2e89ffsm480393b3a.180.2024.08.07.23.23.52
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d1c9db74a0sm328001a91.47.2024.08.07.23.25.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Aug 2024 23:23:53 -0700 (PDT)
+        Wed, 07 Aug 2024 23:25:26 -0700 (PDT)
 From: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
 To: Mark Brown <broonie@kernel.org>
 Cc: Catalin Marinas <catalin.marinas@arm.com>,  Will Deacon
@@ -85,15 +85,14 @@ Cc: Catalin Marinas <catalin.marinas@arm.com>,  Will Deacon
   linux-fsdevel@vger.kernel.org,  linux-arch@vger.kernel.org,
   linux-mm@kvack.org,  linux-kselftest@vger.kernel.org,
   linux-kernel@vger.kernel.org,  linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v10 38/40] kselftest/arm64: Add a GCS stress test
-In-Reply-To: <ZrP-9gHsvVHr2Y5B@finisterre.sirena.org.uk> (Mark Brown's message
-	of "Thu, 8 Aug 2024 00:10:46 +0100")
+Subject: Re: [PATCH v10 39/40] kselftest/arm64: Enable GCS for the FP stress
+ tests
+In-Reply-To: <20240801-arm64-gcs-v10-39-699e2bd2190b@kernel.org> (Mark Brown's
+	message of "Thu, 01 Aug 2024 13:07:06 +0100")
 References: <20240801-arm64-gcs-v10-0-699e2bd2190b@kernel.org>
-	<20240801-arm64-gcs-v10-38-699e2bd2190b@kernel.org>
-	<877ccsdkjp.fsf@linaro.org>
-	<ZrP-9gHsvVHr2Y5B@finisterre.sirena.org.uk>
-Date: Thu, 08 Aug 2024 03:23:50 -0300
-Message-ID: <87y157cz2h.fsf@linaro.org>
+	<20240801-arm64-gcs-v10-39-699e2bd2190b@kernel.org>
+Date: Thu, 08 Aug 2024 03:25:23 -0300
+Message-ID: <87v80bcyzw.fsf@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -104,40 +103,24 @@ Content-Type: text/plain
 
 Mark Brown <broonie@kernel.org> writes:
 
-> On Wed, Aug 07, 2024 at 07:39:54PM -0300, Thiago Jung Bauermann wrote:
-> 
->> # # Thread-4870: Failed to enable GCS
+> While it's a bit off topic for them the floating point stress tests do give
+> us some coverage of context thrashing cases, and also of active signal
+> delivery separate to the relatively complicated framework in the actual
+> signals tests. Have the tests enable GCS on startup, ignoring failures so
+> they continue to work as before on systems without GCS.
 >
-> which is printed if a basic PR_SET_SHADOW_STACK_STATUS fails immediately
-> the program starts executing:
->
-> function _start
->         // Run with GCS
->         mov     x0, PR_SET_SHADOW_STACK_STATUS
->         mov     x1, PR_SHADOW_STACK_ENABLE
->         mov     x2, xzr
->         mov     x3, xzr
->         mov     x4, xzr
->         mov     x5, xzr
->         mov     x8, #__NR_prctl
->         svc     #0
->         cbz     x0, 1f
->         puts    "Failed to enable GCS\n"
->         b       abort
->
-> the defines for which all seem up to date (and unlikely to fail in
-> system or config specific fashions).  What happens if you try to execute
-> the gcs-stress-thread binary directly, does strace show anything
-> interesting?  If you instrument arch_set_shadow_stack_status() in the
-> kernel does it show anything?
+> Reviewed-by: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>  tools/testing/selftests/arm64/fp/assembler.h   | 15 +++++++++++++++
+>  tools/testing/selftests/arm64/fp/fpsimd-test.S |  2 ++
+>  tools/testing/selftests/arm64/fp/sve-test.S    |  2 ++
+>  tools/testing/selftests/arm64/fp/za-test.S     |  2 ++
+>  tools/testing/selftests/arm64/fp/zt-test.S     |  2 ++
+>  5 files changed, 23 insertions(+)
 
-Thank you for the pointer. It turned out that I accidentally ran the
-selftests binaries from the v9 version instead of the v10 version, and
-the gcs-stress-thread binary failed because it was using the old value
-for PR_SET_SHADOW_STACK_STATUS.
-
-Using the v10 version of the selftests the gcs-stress test passes. Sorry
-for the false alarm.
+The fpsimd, sve, za and zt tests don't find any errors on my FVP setup
+when left running for a while:
 
 Tested-by: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
 
