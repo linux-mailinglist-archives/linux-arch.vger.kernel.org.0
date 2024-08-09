@@ -1,159 +1,176 @@
-Return-Path: <linux-arch+bounces-6133-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6134-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D68C94D63E
-	for <lists+linux-arch@lfdr.de>; Fri,  9 Aug 2024 20:21:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26A8E94D72D
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Aug 2024 21:25:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E863BB21958
-	for <lists+linux-arch@lfdr.de>; Fri,  9 Aug 2024 18:21:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6EEC283234
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Aug 2024 19:25:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA962155322;
-	Fri,  9 Aug 2024 18:21:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FBE115EFA3;
+	Fri,  9 Aug 2024 19:25:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sJcmtJDO"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="mlTp0Gb9";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="eNDuJbAl"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout2-smtp.messagingengine.com (fout2-smtp.messagingengine.com [103.168.172.145])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15F7914E2E6
-	for <linux-arch@vger.kernel.org>; Fri,  9 Aug 2024 18:21:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DF8529CE1;
+	Fri,  9 Aug 2024 19:25:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723227687; cv=none; b=sxuDPKprPLagQacYsRDf2rb9QLzs5sd7epqvCEHmTChjyN1OTcShZ1/b/DzIDtKe5DPhtSb/SUoyKywKUdE3PuzgSahZ6Mt640/rsMjhq4EEFEIj6INi82jvPa7r0QuMWMRAuqtvO0n5S2SS549Q11SClJhNhwTzTn1CMWnHKaw=
+	t=1723231508; cv=none; b=TNb3IDpdIjZv7oMh+CwmJ6okoZ6DGl9thYUTHvyNAN2r4ES0hLgB6pQQXo9A+BQw8lCkFleTqxZBz7fG3X1NDxZkXKziIyjL/Idp7C2iJRC0FSLjSB1fALVGLv6dtUgfIjQ6t+ELFDsKZVXXEmSMirj8TI0fhluwOU/7vW0Q2P4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723227687; c=relaxed/simple;
-	bh=yrIcLQX/cGReHkkuFz6o+An8j150bAv3nUdA7o3gDL0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Yt7zHF2FZOgFF/huiTnx2dt900Fa5S647Z1SxhfdTlUjp9nyD5jkMjHO8gQTX39O13YSN9e1i2mjgMSxfUK+6PkTMAOso7IEa0oNgwaNciKkLASX/iLRAhNx7R54MFb+2TkYJKzDpdzfwbKlrXX++OM5GTrxtWX7U4p1VFG608c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sJcmtJDO; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-42817f1eb1fso16001635e9.1
-        for <linux-arch@vger.kernel.org>; Fri, 09 Aug 2024 11:21:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1723227683; x=1723832483; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l5aSgr88/PRGVfxdX8pAdBy1fV+mFF55FgD+2QlLqzo=;
-        b=sJcmtJDO6IcdSHbFJHJFTerN1lwcpGV1kzIY54hTYTt9b8jdx4PlyzAAo8AD2J1giG
-         Yxd0irUSMQn31741vmkZvTDLKMiQKO3RNvrvDGhCuzNSiGNmWscnjex4l0o+rD0ZZ0Xf
-         iCZ+HCqfj/ZvtWYTXNQLSvBJx9K5W1lE3EE8++/1rlwoKW//YFlhku3AcY4I8zhA5Yp6
-         0sKf2a/J9AUbun0fdVxbf2iAXb8xZp/uJbREx/g/D+FpT/XaHoR3uRU2+MUAd5HGVnXM
-         HVDA/cRQtCbEy14Lg0STVLMTRCHZG+Glxc7HMivTAToE5jnCU3WEjsAfIWZNP4psaRFD
-         Qitw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723227683; x=1723832483;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=l5aSgr88/PRGVfxdX8pAdBy1fV+mFF55FgD+2QlLqzo=;
-        b=oDK2Q356l4V09QfesWLwZTXl3vARl698N6PbZBomF0+gTKuAzSEailVpOfxzi4WEa0
-         FnlTEEioxCFp2XQueQpSXlbjMQOq1cdz1d8aw3qz7vzsnMbeSGSMyFwP5Qxc87M0lN9e
-         hf0kQ+BFRtXzGD1wRO1vhfoRYWQix41fk4YzCv00nNzJBg4Eu2IhbHGBphzyC8DinSc8
-         pkfOYJ+kxaPKwxXgGG2iyBTE+8KpmWCxpl1vj8vJ4b93taNMt34Vr6no+su1FyoEnHjY
-         slas/A/46FaMmTnAJdu12du8G7v0UpRLjmU1m7YjO2tycnKF8d5ED4YY2dqpYUFPryaM
-         SsZw==
-X-Forwarded-Encrypted: i=1; AJvYcCWU8lGl5I2HXP3NDyLpC63LkHuMe4YA0mbZtQu4kL1I4Ka9wPCdyTiyW9B4VHyYeaYhiTr0NBMXtiIiWXVoXc45fiqjRJvyoKCh7w==
-X-Gm-Message-State: AOJu0Yy/OliDp78GpblL0WNPRqEPAhj90ypd7WN1s0DzQBCMdaob1EVO
-	0LO9WX3012McLKdnpqYftvJkiA+0wVEfcWAfbCc7V31hcu1p6fYEjYWyg/idwY64lDGqHHMbFKG
-	zCmLlfbb06YhWC2ImVlU9XK+KdDIFPgxvoQSO
-X-Google-Smtp-Source: AGHT+IH5Ep/88bbCWZXRUVBPEQ+tzupqROr5HmyaRJfMyZWiEj8it63tIiOzqdgNyDMpwvhyZfPAAiV2XhcMqLgvZrs=
-X-Received: by 2002:a5d:4642:0:b0:362:8201:fa3 with SMTP id
- ffacd0b85a97d-36d5ff6f35bmr1589390f8f.34.1723227683079; Fri, 09 Aug 2024
- 11:21:23 -0700 (PDT)
+	s=arc-20240116; t=1723231508; c=relaxed/simple;
+	bh=dLse45f0Y/r6aYazJTjVLZujpjzO+wRDSgsZpV4WXQg=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ctiYNFn442hRTwk6FfQeBkrCJWz6FhrzTnXmrbVMoNgDSKhFgEE7tp5ReQk9eJJa6q0wqRGLNPKVAXOCoNPdCMS6zRK9AsVy5HSxsK1hAlcqCKGCPXe5KocqsxH56G0DSlr19YreRp2/kq/8AMGsDydkatEnwGmmANLe8W+5KGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=mlTp0Gb9; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=eNDuJbAl; arc=none smtp.client-ip=103.168.172.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+	by mailfout.nyi.internal (Postfix) with ESMTP id 08C06138DD84;
+	Fri,  9 Aug 2024 15:25:05 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Fri, 09 Aug 2024 15:25:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm1; t=1723231505; x=1723317905; bh=3/
+	X8xr20DmbMYTocfx25oo9rVKmKK5I+3ao7EXk+ioc=; b=mlTp0Gb9oEyn2Zwr3u
+	e2kkz6P47RqlQFInMZUaAsv8mN1TcRNhAujGPh7MYvuQIL8qOMdPdIbfD+V/vQRG
+	uxSmuj9csB1bly/LjQuKWYhvXotpxa2rzrwI1/674FDhKT9HQGULEl8VxF/UzCmi
+	Fz34BeIqp09a6QuQmUclRblFm2ROeDjt/OMprbz9Me5ocsYOac3pKLW9w4J/thS3
+	Pbr9wb2U4I1QbOTrWr8IXuMYTRHVStOFSieZ3PyQLGx8qAhJUp0UQhs2W2Eh6cid
+	fWXj7AjoStcnzUcweox4vIJj3us+GRePs/I0YMcqemtsDv8x68Ry+fk7hoCLN0Wv
+	8/tw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm3; t=1723231505; x=1723317905; bh=3/X8xr20DmbMY
+	Tocfx25oo9rVKmKK5I+3ao7EXk+ioc=; b=eNDuJbAl9UUGUZw5KZzLJaTQ8q88t
+	1PLI4a/msg87dVJz1r930wVhsSnDbofK2OmNuBb8KyegueATnzP/Ktze6EDeED1a
+	kljYTL3cYqUTxeMzbIIrrKcEPVdSG6kQaZr2rqtJL9DoheV1buwn3lKYH45K11nL
+	p4ndeWZNq1L/Oo4lpGv2yJ89TMv6HZR2XZlMDAxSPYJapwzB0ktK9UOUMJ9Z7t09
+	T6Nie25C5LzpnKWGY1tlEj65INWLdgVGyq2Y/kimm8QJeDoCFHrSYJKo/i8ZXMpc
+	T46MdxMZYmQE6Lb7fJWL3dUd4C6clJ5icvyaBur+uI13rcV8j8NoFCbig==
+X-ME-Sender: <xms:EG22ZjnMqR5LLNKOsfRB2wDgj4jDO2xG7npwvDeZq6wV-sthWmZKXA>
+    <xme:EG22Zm1GSZZL-DcXUbXPQKZPRDrCCH0bFGDIl_jlRsvVJYw5kIw3p1l84TmzYTh5q
+    -h5aYc-i16TmmAWVZg>
+X-ME-Received: <xmr:EG22ZppCVTwXu8kox9BcCH2MFfXs0y5dAx_B5XSaBVzgg2khAf7591s_Y5mE4IQ5cQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrleeggddufeegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhephffufffkgggtgffvvefosehtjeertdertdejnecu
+    hfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgoh
+    grthdrtghomheqnecuggftrfgrthhtvghrnhepudffffffhfeuheevhffgleevkeeugeet
+    feegieeijeehfeekheekveduveeigeeunecuvehluhhsthgvrhfuihiivgeptdenucfrrg
+    hrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtgho
+    mhdpnhgspghrtghpthhtohepkedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprg
+    hrnhgusegrrhhnuggsrdguvgdprhgtphhtthhopehjihgrgihunhdrhigrnhhgsehflhih
+    ghhorghtrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkh
+    gvrhhnvghlrdhorhhgpdhrtghpthhtohepthhssghoghgvnhgusegrlhhphhgrrdhfrhgr
+    nhhkvghnrdguvgdprhgtphhtthhopegthhgvnhhhuhgrtggriheskhgvrhhnvghlrdhorh
+    hgpdhrtghpthhtoheplhhinhhugidqmhhiphhssehvghgvrhdrkhgvrhhnvghlrdhorhhg
+    pdhrtghpthhtoheplhhinhhugidqrghrtghhsehvghgvrhdrkhgvrhhnvghlrdhorhhgpd
+    hrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:EG22Zrkj_4ChEpb3xRiYAWeWLkDIBEKv_3Y6JKaY69lMz03Wg_qOcQ>
+    <xmx:EG22Zh0wir9c1ZTnWuwxN8RVXMD3Yn7AIBHhIMsbEJfQdZ3B4WO7Xg>
+    <xmx:EG22Zqsms7Yl5k69nRBqMqA79005_eJz7EQ54UAvt0IQ1fZBGR_7YA>
+    <xmx:EG22ZlWqRiEPXCb1vAi8HUslrnqJjo0vCD4BqH5c0j0-p5xVD5-_UA>
+    <xmx:EW22ZqIFoiHLZpQpTQiMq27AzYYnxOly9aOQCxGG1U82T8BCbNMYfiHI>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 9 Aug 2024 15:25:03 -0400 (EDT)
+From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH 0/7] MIPS: arch_numa enablement
+Date: Fri, 09 Aug 2024 20:25:00 +0100
+Message-Id: <20240809-mips-numa-v1-0-568751803bf8@flygoat.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240808-tracepoint-v6-0-a23f800f1189@google.com>
- <20240808-tracepoint-v6-1-a23f800f1189@google.com> <20240809191601.3d15e3af.gary@garyguo.net>
-In-Reply-To: <20240809191601.3d15e3af.gary@garyguo.net>
-From: Alice Ryhl <aliceryhl@google.com>
-Date: Fri, 9 Aug 2024 20:21:10 +0200
-Message-ID: <CAH5fLgi7dy9PV+YfCJuVoH98M0z2FUnOAjBoFKkqyG8P9iPSEQ@mail.gmail.com>
-Subject: Re: [PATCH v6 1/5] rust: add generic static_key_false
-To: Gary Guo <gary@garyguo.net>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Jason Baron <jbaron@akamai.com>, 
-	Ard Biesheuvel <ardb@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
-	linux-trace-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Sean Christopherson <seanjc@google.com>, Uros Bizjak <ubizjak@gmail.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, 
-	Oliver Upton <oliver.upton@linux.dev>, Mark Rutland <mark.rutland@arm.com>, 
-	Ryan Roberts <ryan.roberts@arm.com>, Fuad Tabba <tabba@google.com>, 
-	linux-arm-kernel@lists.infradead.org, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Anup Patel <apatel@ventanamicro.com>, 
-	Andrew Jones <ajones@ventanamicro.com>, Alexandre Ghiti <alexghiti@rivosinc.com>, 
-	Conor Dooley <conor.dooley@microchip.com>, Samuel Holland <samuel.holland@sifive.com>, 
-	linux-riscv@lists.infradead.org, Huacai Chen <chenhuacai@kernel.org>, 
-	WANG Xuerui <kernel@xen0n.name>, Bibo Mao <maobibo@loongson.cn>, 
-	Tiezhu Yang <yangtiezhu@loongson.cn>, Andrew Morton <akpm@linux-foundation.org>, 
-	Tianrui Zhao <zhaotianrui@loongson.cn>, loongarch@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAA1ttmYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDCwNz3dzMgmLdvNLcRF2z5OSUFBMLI0MTwyQloPqCotS0zAqwWdGxtbU
+ AR+k0HlsAAAA=
+To: "Rafael J. Wysocki" <rafael@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Huacai Chen <chenhuacai@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+ linux-mips@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2334;
+ i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
+ bh=dLse45f0Y/r6aYazJTjVLZujpjzO+wRDSgsZpV4WXQg=;
+ b=owGbwMvMwCXmXMhTe71c8zDjabUkhrRtufz39sXN/m4Q25OTZ9IU8E5d5vtLvf0hwkKfGbclf
+ 1fl/Lqgo5SFQYyLQVZMkSVEQKlvQ+PFBdcfZP2BmcPKBDKEgYtTACbyxpnhf/Azpm7HGNfexF9q
+ h5bMknx5IOfO/PIFy1gUnq4qFZt2v4Dhv+tvm1vdAq839x6qPafRMCmZb7V1fozwNN5Ye/agyV9
+ vsAMA
+X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
+ fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 
-On Fri, Aug 9, 2024 at 8:16=E2=80=AFPM Gary Guo <gary@garyguo.net> wrote:
->
-> On Thu, 08 Aug 2024 17:23:37 +0000
-> Alice Ryhl <aliceryhl@google.com> wrote:
->
-> > Add just enough support for static key so that we can use it from
-> > tracepoints. Tracepoints rely on `static_key_false` even though it is
-> > deprecated, so we add the same functionality to Rust.
-> >
-> > This patch only provides a generic implementation without code patching
-> > (matching the one used when CONFIG_JUMP_LABEL is disabled). Later
-> > patches add support for inline asm implementations that use runtime
-> > patching.
-> >
-> > When CONFIG_JUMP_LABEL is unset, `static_key_count` is a static inline
-> > function, so a Rust helper is defined for `static_key_count` in this
-> > case. If Rust is compiled with LTO, this call should get inlined. The
-> > helper can be eliminated once we have the necessary inline asm to make
-> > atomic operations from Rust.
-> >
-> > Signed-off-by: Alice Ryhl <aliceryhl@google.com>
-> > ---
-> >  rust/bindings/bindings_helper.h       |  1 +
-> >  rust/helpers.c                        |  9 +++++++++
-> >  rust/kernel/arch_static_branch_asm.rs |  1 +
-> >  rust/kernel/jump_label.rs             | 29 +++++++++++++++++++++++++++=
-++
-> >  rust/kernel/lib.rs                    |  1 +
-> >  5 files changed, 41 insertions(+)
-> >
-> > diff --git a/rust/kernel/arch_static_branch_asm.rs b/rust/kernel/arch_s=
-tatic_branch_asm.rs
-> > new file mode 100644
-> > index 000000000000..958f1f130455
-> > --- /dev/null
-> > +++ b/rust/kernel/arch_static_branch_asm.rs
-> > @@ -0,0 +1 @@
-> > +::kernel::concat_literals!("1: jmp " "{l_yes}" " # objtool NOPs this \=
-n\t" ".pushsection __jump_table,  \"aw\" \n\t" " " ".balign 8" " " "\n\t" "=
-.long 1b - . \n\t" ".long " "{l_yes}" "- . \n\t" " " ".quad" " " " " "{symb=
-} + {off} + {branch}" " - . \n\t" ".popsection \n\t")
->
->
-> I believe this file is included by mistake, given it's added to
-> gitignore in patch 5.
+Hi all,
 
-We may have to rethink the file extension used here. You have no idea
-how many times I've deleted that file from this commit.
+This series enabled arch_numa for generic MIPS machine, and ported
+loongson64 machine to arch_numa infra. SGI IP27 is left untouched
+with legacy NUMA implementation as I don't have access to hardware.
 
-Alice
+Tested on Loongson64 NUMA system and numa_emu on Boston.
+
+Please review.
+
+Thanks
+
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+---
+Jiaxun Yang (7):
+      arch_numa: Provide platform numa init hook
+      MIPS: pci: Unify pcibus_to_node implementation
+      MIPS: Prepare NUMA headers for arch_numa
+      MIPS: mm: init: Prepare for arch_numa
+      MIPS: smp: Process NUMA information
+      MIPS: generic: Make NUMA available
+      MIPS: Loongson64: Migrate to arch_numa
+
+ arch/mips/Kconfig                                |   4 +
+ arch/mips/include/asm/mach-generic/mmzone.h      |  11 ++
+ arch/mips/include/asm/mach-generic/numa.h        |  11 ++
+ arch/mips/include/asm/mach-generic/topology.h    |   7 +
+ arch/mips/include/asm/mach-ip27/numa.h           |  22 ++++
+ arch/mips/include/asm/mach-ip27/topology.h       |  12 +-
+ arch/mips/include/asm/mach-loongson64/mmzone.h   |   2 -
+ arch/mips/include/asm/mach-loongson64/topology.h |  25 ----
+ arch/mips/include/asm/mmzone.h                   |   5 +-
+ arch/mips/include/asm/numa.h                     |  12 ++
+ arch/mips/include/asm/pci.h                      |  12 ++
+ arch/mips/include/asm/smp-ops.h                  |   7 +-
+ arch/mips/kernel/setup.c                         |   3 +-
+ arch/mips/kernel/smp-cps.c                       |   6 +
+ arch/mips/kernel/smp.c                           |  26 ++++
+ arch/mips/loongson64/init.c                      |  27 ++--
+ arch/mips/loongson64/numa.c                      | 158 ++---------------------
+ arch/mips/loongson64/smp.c                       |   2 +
+ arch/mips/mm/init.c                              |  14 +-
+ arch/mips/pci/pci-ip27.c                         |  10 --
+ arch/mips/pci/pci-xtalk-bridge.c                 |   1 +
+ drivers/base/arch_numa.c                         |   7 +
+ include/asm-generic/numa.h                       |   1 +
+ 23 files changed, 155 insertions(+), 230 deletions(-)
+---
+base-commit: eec5d86d5bac6b3e972eb9c1898af3c08303c52d
+change-id: 20240807-mips-numa-6ccdd482141b
+
+Best regards,
+-- 
+Jiaxun Yang <jiaxun.yang@flygoat.com>
+
 
