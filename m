@@ -1,153 +1,177 @@
-Return-Path: <linux-arch+bounces-6125-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6126-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37C7294CBB8
-	for <lists+linux-arch@lfdr.de>; Fri,  9 Aug 2024 09:56:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15AD194D1DC
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Aug 2024 16:11:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BC7201F21DF4
-	for <lists+linux-arch@lfdr.de>; Fri,  9 Aug 2024 07:56:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1DFAE1C20F87
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Aug 2024 14:11:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B36B18C918;
-	Fri,  9 Aug 2024 07:56:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 162C2197A68;
+	Fri,  9 Aug 2024 14:10:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iWy7JWX6"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nGkVC6hx"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 013EA1552EB;
-	Fri,  9 Aug 2024 07:56:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BE9519581F
+	for <linux-arch@vger.kernel.org>; Fri,  9 Aug 2024 14:10:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723190188; cv=none; b=q/icM8tm/GJw5AQmaxamY0zCZ+d7puypdEBlXsVnmGXFm3qgU5ZumjLFz44PqwyjmMTts65fVHiepjd5mgB4OvprVL9Xbqg6UGtfnychHv6wEotwSsI5FGXuHlKrGb3dxBSoT3pDDzqkrkXajJuGpWY8Rev4RoEnA81aK3mRo3w=
+	t=1723212652; cv=none; b=pvXLThf/YghftEXJsxu1VKChat8KstGhLohQwNg16SB4Xtq74OnTUEHX4lgUeEhzyGdxYb6bp+1xH8ocXqrnGlxWep6MIXYNmwAOqrp2y8ETJdqXm35LAGE7CA1YWjPh9E13/bWnG5esaLYz/P0frBZ6mBqpwglIVVrNyM651rc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723190188; c=relaxed/simple;
-	bh=WciictBvnZZognJdSB//Vkpj36Vtrbm418N+k4gXKM8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lue6vbwtS3HJzRZ4DDuQJNKtEil0h6h4lG6IFkP1B5hZIGG8ikUOuuF5Kcihcvq2LJABgU2zkSn7SqbHzVyIsJVSGrB0gMVkoRhgO4qxg5JpAJ98rXp/4ZTYvfg+2Q4hTsM6NO+bTCsHgTb5IFuX9QdMpXBrbmjngJBHjJfFHqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iWy7JWX6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 952AFC4AF0D;
-	Fri,  9 Aug 2024 07:56:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723190187;
-	bh=WciictBvnZZognJdSB//Vkpj36Vtrbm418N+k4gXKM8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iWy7JWX63DlQVy2d0mNGhQfP+E5wTH7yt+zLcJ0XE+/2H7ya+xPuYTTvng2lSdR0P
-	 fY3FcxC8uU8GMeAkyI60nvRDENoJPGv+KO8RJqpQagYElLNKgByK/OFTroSX355YCs
-	 LkPyVbDTwM5NLcPamf6V9UY8mS/5OHdlCJ1Bf0Wrzy8CzH4nnoBsnommLbSLYVYa0S
-	 vit/eTqSx1gLR+UhLsyyqz5moCQu5XrPJ2lKHYZlMNpbvAKOB2UKpjpb3hjS9c0GG8
-	 efszcgVI6ngSguWbXJ9ztgvoCk8mZPBFojeGqb+x30Hdvr6lK6GLQBG40LF/KOtnNT
-	 rWCJ8B29HDgmg==
-Date: Fri, 9 Aug 2024 08:56:15 +0100
-From: Simon Horman <horms@kernel.org>
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: Markus Elfring <Markus.Elfring@web.de>,
-	Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
-	linux-doc@vger.kernel.org, Daniel Vetter <daniel.vetter@ffwll.ch>,
-	Kaiyuan Zhang <kaiyuanz@google.com>,
-	Pavel Begunkov <asml.silence@gmail.com>,
-	Willem de Bruijn <willemb@google.com>, linux-alpha@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	bpf@vger.kernel.org, linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	LKML <linux-kernel@vger.kernel.org>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Arnd Bergmann <arnd@arndb.de>, Bagas Sanjaya <bagasdotme@gmail.com>,
-	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-	Christoph Hellwig <hch@infradead.org>,
-	David Ahern <dsahern@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>, David Wei <dw@davidwei.uk>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Harshitha Ramamurthy <hramamurthy@google.com>,
-	Helge Deller <deller@gmx.de>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Jakub Kicinski <kuba@kernel.org>,
-	"James E. J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Jeroen de Borst <jeroendb@google.com>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Matt Turner <mattst88@gmail.com>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Praveen Kaligineedi <pkaligineedi@google.com>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Shailend Chand <shailend@google.com>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Shuah Khan <shuah@kernel.org>,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Taehee Yoo <ap420073@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Yunsheng Lin <linyunsheng@huawei.com>
-Subject: Re: [PATCH net-next v17 03/14] netdev: support binding dma-buf to
- netdevice
-Message-ID: <20240809075615.GD3075665@kernel.org>
-References: <20240730022623.98909-4-almasrymina@google.com>
- <5d3c74da-7d44-4b88-8961-60f21f84f0ac@web.de>
- <CAHS8izPxfCv1VMFBK1FahGTjVmUSSfrabgY5y6V+XtaszoHQ4w@mail.gmail.com>
- <9aad36fe-cd4c-4ce5-b4d8-6c8619d10c46@web.de>
- <66b2198686b91_3206cf29453@willemb.c.googlers.com.notmuch>
+	s=arc-20240116; t=1723212652; c=relaxed/simple;
+	bh=pB3wkCjy5BE4htN+Z4c0bK/ig1XSKbZvFviaBIbuCvM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JmJbciG6NPEA3LzteEclRaH+MOLx6LKep31wdwBBFXS5Il18y3goShZHVIXlDc42WjXyhjQEcesOtLaz2DNO1MoKUO5OnV6oRzBVDlP2JwkKE8PN9tXnlfU2G5TA/g86kWVny07QgcEYLWobYVbqFfI64kW51QPlCvSY49wplh4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nGkVC6hx; arc=none smtp.client-ip=209.85.219.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-6b7a8cada97so12305986d6.3
+        for <linux-arch@vger.kernel.org>; Fri, 09 Aug 2024 07:10:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1723212648; x=1723817448; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FAq+1P/w8tI0/3HVArG8ZV5u6VZadlBPolUAhgI5gl8=;
+        b=nGkVC6hxQ9S94WAmAtW1FrPD+sAJjm1t7W7DWwmib99g2VOp5oTHDqQ2+68I0/eYEp
+         8eXTYe57hgcorkTI0JKHeahl4P1an0OMTZJyKUgIk/fnniE8fpC2PA8fRhBa8WE7BGS7
+         H6kaid+22SIrTnql0Fd5G0ajp25ihNBSedmRiVL8yvZbAgJlHstkcnxGnQidLwuoJoxv
+         jE10ts1fOpJY6oTcNJnhYJqnSpKGwBgdJjrcov8NiuS9zokXBd11N3junnsVVJK/+G7A
+         OCeem5nn2uPObKCluMe/lty6tymkNrEoW+CwVVQiwF50Y2F/2uuTESyNfQw5rFhgwlSP
+         Hhlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723212648; x=1723817448;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FAq+1P/w8tI0/3HVArG8ZV5u6VZadlBPolUAhgI5gl8=;
+        b=syn5pnapHncQ7z0JaI7VVPeq5gPdT+ezYdsulT1dTpq6A+EHfcIPzoZwmhJfxRt2th
+         K52kvTIF6r84o207VKqAFvfeUZtHuiZOzehbu3GKsoKJwqQ3w3ixe03Hl4Cd9fboGY+M
+         PLyYmLimwge/PRc8nN+bIuPrv/OGWpSE7hLVGq5rIviMVhNWO9/iDNkcaAUEZXeTScm8
+         QfUjx4Egjdj6eRkcrSFbvSQkUM4yTarGmZboFwbQH8CkjJKAq5gHn4UNATDV6UCRy3eU
+         OaBYIcUYFJw09gMFZzgoxCGz1viDlEdDbrDj5EO9/DoDjX9vdt6SJNgAQI86Vo+UZaPv
+         ICzg==
+X-Forwarded-Encrypted: i=1; AJvYcCWxFoBKWyfO+SJdeZpWzq/ASTfGPFNIJD/q85mLEjq/5myrXzYdlYaVX5xvdAapVWhUg3cdcieoBItsfJKlxWzD6BiZzVae4lRcKQ==
+X-Gm-Message-State: AOJu0Yw3axphwLWV8B1I4UlJL9UGxKe5U7Bs1Whq5RhEFF2h554/1X9C
+	A78ftk5vYygprEYPzonMMfqOn5w5/3Aw8MmiOA9zWFhCB2LUY3Cp2YX/GeR3zCcXup9ve+FD0Ee
+	5I7mMe7YaAh8fptlxzpwdCNrVaeuW9h/6/aYp
+X-Google-Smtp-Source: AGHT+IHtXT623FzOsQrwA3QF53Omar/D5N9kMqOW264VduXGeLM8mfJ22+dFZ2QyvytnqYSwbN8pGocgZbvLtoABiDw=
+X-Received: by 2002:a05:6214:459a:b0:6b7:a947:18ea with SMTP id
+ 6a1803df08f44-6bd78dcb419mr20493616d6.34.1723212647651; Fri, 09 Aug 2024
+ 07:10:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <66b2198686b91_3206cf29453@willemb.c.googlers.com.notmuch>
+References: <20240805212536.2172174-1-almasrymina@google.com>
+ <20240805212536.2172174-8-almasrymina@google.com> <20240806135924.5bb65ec7@kernel.org>
+ <CAHS8izOA80dxpB9rzOwv7Oe_1w4A7vo5S3c3=uCES8TSnjyzpg@mail.gmail.com> <20240808192410.37a49724@kernel.org>
+In-Reply-To: <20240808192410.37a49724@kernel.org>
+From: Mina Almasry <almasrymina@google.com>
+Date: Fri, 9 Aug 2024 10:10:35 -0400
+Message-ID: <CAHS8izMH4UhD+UDYqMjt9d=gu-wpGPQBLyewzVrCWRyoVtQcgA@mail.gmail.com>
+Subject: Re: [PATCH net-next v18 07/14] memory-provider: dmabuf devmem memory provider
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, Donald Hunter <donald.hunter@gmail.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
+	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, 
+	Nikolay Aleksandrov <razor@blackwall.org>, Taehee Yoo <ap420073@gmail.com>, 
+	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
+	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, 
+	Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 06, 2024 at 08:39:34AM -0400, Willem de Bruijn wrote:
-> Markus Elfring wrote:
-> > >> …
-> > >>> +++ b/include/net/devmem.h
-> > >>> @@ -0,0 +1,115 @@
-> > >> …
-> > >>> +#ifndef _NET_DEVMEM_H
-> > >>> +#define _NET_DEVMEM_H
-> > >> …
-> > >>
-> > >> I suggest to omit leading underscores from such identifiers.
-> > >> https://wiki.sei.cmu.edu/confluence/display/c/DCL37-C.+Do+not+declare+or+define+a+reserved+identifier
-> > >>
+On Thu, Aug 8, 2024 at 10:24=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
+ote:
+>
+> On Thu, 8 Aug 2024 16:36:24 -0400 Mina Almasry wrote:
+> > > How do you know that the driver:
+> > >  - supports net_iov at all (let's not make implicit assumptions based
+> > >    on presence of queue API);
+> > >  - supports net_iov in current configuration (eg header-data split is
+> > >    enabled)
+> > >  - supports net_iov for _this_ pool (all drivers must have separate
+> > >    buffer pools for headers and data for this to work, some will use
+> > >    page pool for both)
 > > >
-> > > I was gonna apply this change, but I ack'd existing files and I find
-> > > that all of them include leading underscores, including some very
-> > > recently added files like net/core/page_pool_priv.h.
-> > >
-> > > I would prefer to stick to existing conventions if that's OK, unless
-> > > there is widespread agreement to the contrary.
-> > 
-> > Under which circumstances would you become interested to reduce development risks
-> > also according to undefined behaviour?
-> > https://wiki.sei.cmu.edu/confluence/display/c/CC.+Undefined+Behavior#CC.UndefinedBehavior-ub_106
-> 
-> This series is following established practice in kernel networking.
-> 
-> If that conflicts with a C standard, then perhaps that needs to be
-> resolved project wide.
-> 
-> Forcing an individual feature to diverge just brings inconsistency.
-> That said, this appears to be inconsistent already.
-> 
-> Main question is whether this is worth respinning a series already at
-> v17 with no more fundamental feedback.
+> > > What comes to mind is adding an "I can gobble up net_iovs from this
+> > > pool" flag in page pool params (the struct that comes from the driver=
+),
+> >
+> > This already sorta exists in the current iteration, although maybe in
+> > an implicit way. As written, drivers need to set params.queue,
+> > otherwise core will not attempt to grab the mp information from
+> > params.queue. A driver can set params.queue for its data pages pool
+> > and not set it for the headers pool. AFAICT that deals with all 3
+> > issues you present above.
+> >
+> > The awkward part is if params.queue starts getting used for other
+> > reasons rather than passing mp configuration, but as of today that's
+> > not the case so I didn't add the secondary flag. If you want a second
+> > flag to be added preemptively, I can do that, no problem. Can you
+> > confirm params.queue is not good enough?
+>
+> I'd prefer a flag. The setting queue in a param struct is not a good
+> API for conveying that the page pool is for netmem payloads only.
+>
+> > > and then on the installation path we can check if after queue reset
+> > > the refcount of the binding has increased. If it did - driver has
+> > > created a pool as we expected, otherwise - fail, something must be of=
+f.
+> > > Maybe that's a bit hacky?
+> >
+> > What's missing is for core to check at binding time that the driver
+> > supports net_iov. I had relied on the implicit presence of the
+> > queue-API.
+> >
+> > What you're proposing works, but AFAICT it's quite hacky, yes. I
+> > basically need to ASSERT_RTNL in net_devmem_binding_get() to ensure
+> > nothing can increment the refcount while the binding is happening so
+> > that the refcount check is valid.
+>
+> True. Shooting from the hip, but we could walk the page pools of the
+> netdev and find the one that has the right mp installed, and matches
+> queue? The page pools are on a list hooked up to the netdev, trivial
+> to walk.
+>
 
-No, from my point of view, it is not.
+I think this is good, and it doesn't seem hacky to me, because we can
+check the page_pools of the netdev while we hold rtnl, so we can be
+sure nothing is messing with the pp configuration in the meantime.
+Like you say below it does validate the driver rather than rely on the
+driver saying it's doing the right thing. I'll look into putting this
+in the next version.
 
-This really is a trivial and somewhat subjective mater.
-I don't think it should hold up a substantial piece of work.
+
+--
+Thanks,
+Mina
 
