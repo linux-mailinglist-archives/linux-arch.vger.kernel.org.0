@@ -1,117 +1,133 @@
-Return-Path: <linux-arch+bounces-6145-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6146-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF63A94DA7C
-	for <lists+linux-arch@lfdr.de>; Sat, 10 Aug 2024 05:54:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0212894DEA2
+	for <lists+linux-arch@lfdr.de>; Sat, 10 Aug 2024 23:04:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6ABDC1F22B23
-	for <lists+linux-arch@lfdr.de>; Sat, 10 Aug 2024 03:54:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9DB5F1F21560
+	for <lists+linux-arch@lfdr.de>; Sat, 10 Aug 2024 21:04:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D7FE13BAE7;
-	Sat, 10 Aug 2024 03:52:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 928F113C83A;
+	Sat, 10 Aug 2024 21:04:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CdKet3hL"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="WSyOlZN4"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA01C13B7A1;
-	Sat, 10 Aug 2024 03:52:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B3D93AC36;
+	Sat, 10 Aug 2024 21:04:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723261959; cv=none; b=EBphkCqQNYk+b2s1jOLwcabVjnXGf5d43BlwWsT0dIf2n4O3yr+QwhZZPOOhUoXs/t8RsBLVvTrcdZWP76fD6HwEEoMjKQmhsZgnjpClkVbWKYVJjrFUaiLptv4uYZeJfqPMjLaRusUIHTyfZXeG9uE8V8qJpOT809254qs6PIE=
+	t=1723323877; cv=none; b=sHMUvV7+1AJKoTaHy5kOSmbRSv/MdPLaC9pphvtqysU48DkQ4g0Bpiz7peSVHwltVKjk3xix2pPeMpk4/pYBFaLw0BnsO5PwfbrDBW5bFSQZjUl79InKHst6x1H0erBDxCULr2v9Kc9pgvSZFCiu/fjP5m6XWahvzwVGok5sQg0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723261959; c=relaxed/simple;
-	bh=rioiNetuw2BwYMEikBfSgmKCffnfLditttehbRMvIxI=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZGa+nzfl4bf004yue6KKwM2HDDkQU6FgTBUAjyYxIfmrCmS3yA/P/h0uwmF12XacJ3nbOwUZSXhOPAlMAwVpBQnDx0QMGuM3N4VTHSbg2bACo14bppN2qj6Ypj7779qsXanHyUtAsTYwpv6inmXvKBGMIl5OWHV6PhCJzovGcSQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CdKet3hL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ED11C32781;
-	Sat, 10 Aug 2024 03:52:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723261959;
-	bh=rioiNetuw2BwYMEikBfSgmKCffnfLditttehbRMvIxI=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=CdKet3hLwuiF3hixS1amRwINUTmJ/gUYj4tM+7R+uUjAmmtWQYtHwD4p5wiAd61AF
-	 VkSbA7XQtUkEk30X7cCDULjbHR5DU3U38yIdQM1+dk+orTayU9fzvXymqYHZpHlaHi
-	 hyjeBhWfrS/hMmFB29QMsoPNVAkLsxuw/90JgcM2TeQ8fVP5I6OPwn7ohQou79zYdu
-	 FBzsdEQWvKniGqipav0cBZBuCiWnLDar9JFKMrfV0s/XDMpQo0Pc2EWj5RIj9yKt93
-	 Iwy5u4Cyszg+jmWc3Vh4cmaKDln+7ik2d5TFJV9WU7Z32Kv3ooadBQBvjkudvgamCS
-	 2bZhpBDbhYrKQ==
-Date: Fri, 9 Aug 2024 20:52:36 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, Donald Hunter
- <donald.hunter@gmail.com>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Jonathan
- Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge
- Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>, Jesper
- Dangaard Brouer <hawk@kernel.org>, Ilias Apalodimas
- <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, Masami
- Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Arnd Bergmann <arnd@arndb.de>, Steffen
- Klassert <steffen.klassert@secunet.com>, Herbert Xu
- <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, Willem de
- Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>,
- Sumit Semwal <sumit.semwal@linaro.org>, Christian =?UTF-8?B?S8O2bmln?=
- <christian.koenig@amd.com>, Bagas Sanjaya <bagasdotme@gmail.com>, Christoph
- Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>,
- Taehee Yoo <ap420073@gmail.com>, David Wei <dw@davidwei.uk>, Jason
- Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, Shailend
- Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>,
- Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
- <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
- Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
-Subject: Re: [PATCH net-next v18 07/14] memory-provider: dmabuf devmem
- memory provider
-Message-ID: <20240809205236.77c959b0@kernel.org>
-In-Reply-To: <fc6a8f0a-cdb4-4705-a08f-7033ef15213e@gmail.com>
-References: <20240805212536.2172174-1-almasrymina@google.com>
-	<20240805212536.2172174-8-almasrymina@google.com>
-	<20240806135924.5bb65ec7@kernel.org>
-	<CAHS8izOA80dxpB9rzOwv7Oe_1w4A7vo5S3c3=uCES8TSnjyzpg@mail.gmail.com>
-	<20240808192410.37a49724@kernel.org>
-	<CAHS8izMH4UhD+UDYqMjt9d=gu-wpGPQBLyewzVrCWRyoVtQcgA@mail.gmail.com>
-	<fc6a8f0a-cdb4-4705-a08f-7033ef15213e@gmail.com>
+	s=arc-20240116; t=1723323877; c=relaxed/simple;
+	bh=U6uyqW0VIsr3ynf+I05mOzu59oLHp/XRqRKQdkUKQPs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YkFoGwfSWIZ9nV+AcCAuP/+Y9mk2ozoqkIHT1FL/Gy0/bqNkZApyG1qALvdmIrDjNRfr8mVuc1ZvgK2jaG05zSpCrMWz4pus+4Uj0MzhJcxKdMXMhhdAe4RU4VnZ+oo3FJq774gSkKR2EcT16lK7XWOhJO/ch8inhkoEtaSRaFk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=WSyOlZN4; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=L5ZaMkcysgxHBoobfCUH51gejY2SZF51sPwk8BxYjEY=; b=WSyOlZN4Nni7gLJNXzcNaOAvzJ
+	AGptP8rQIgN+f0r3MKaa4DkO8n0uajfvfFHFin2/Bt8kD3YAo9vEUuRl1Bupm9EadiUsbtx7hSql/
+	a8CkFGhTcyPe5ZoM/Dz28ZIEApK1jA67plyopWOnjdxd8Am17AfJWo7UaF3NqvbZcOn5fRgJ5ikG/
+	p7WlXxAtLLnWnn/XjjEmwkOEdDCvSLYCRAq1X4fFc4ZgXbYymk4kT6SIvGoQtEcCkjSjqLxp+eKdj
+	acvI13ItRy/3Cn738bv0ltJVQZNhgXszAuribt/HlAdGjnA9yaqgfs/Kf+cSvUsGKtI8rLZwpgI+r
+	WLGtRLyA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1sctFn-00000007Fdg-2gux;
+	Sat, 10 Aug 2024 21:04:00 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 3BB1B300729; Sat, 10 Aug 2024 23:03:59 +0200 (CEST)
+Date: Sat, 10 Aug 2024 23:03:59 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Alice Ryhl <aliceryhl@google.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Jason Baron <jbaron@akamai.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@samsung.com>,
+	linux-trace-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+	linux-arch@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Uros Bizjak <ubizjak@gmail.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Ryan Roberts <ryan.roberts@arm.com>, Fuad Tabba <tabba@google.com>,
+	linux-arm-kernel@lists.infradead.org,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Anup Patel <apatel@ventanamicro.com>,
+	Andrew Jones <ajones@ventanamicro.com>,
+	Alexandre Ghiti <alexghiti@rivosinc.com>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	linux-riscv@lists.infradead.org,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>, Bibo Mao <maobibo@loongson.cn>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Tianrui Zhao <zhaotianrui@loongson.cn>, loongarch@lists.linux.dev
+Subject: Re: [PATCH v6 5/5] rust: add arch_static_branch
+Message-ID: <20240810210359.GD11646@noisy.programming.kicks-ass.net>
+References: <20240808-tracepoint-v6-0-a23f800f1189@google.com>
+ <20240808-tracepoint-v6-5-a23f800f1189@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240808-tracepoint-v6-5-a23f800f1189@google.com>
 
-On Fri, 9 Aug 2024 16:45:50 +0100 Pavel Begunkov wrote:
-> > I think this is good, and it doesn't seem hacky to me, because we can
-> > check the page_pools of the netdev while we hold rtnl, so we can be
-> > sure nothing is messing with the pp configuration in the meantime.
-> > Like you say below it does validate the driver rather than rely on the
-> > driver saying it's doing the right thing. I'll look into putting this
-> > in the next version.  
-> 
-> Why not have a flag set by the driver and advertising whether it
-> supports providers or not, which should be checked for instance in
-> netdev_rx_queue_restart()? If set, the driver should do the right
-> thing. That's in addition to a new pp_params flag explicitly telling
-> if pp should use providers. It's more explicit and feels a little
-> less hacky.
+On Thu, Aug 08, 2024 at 05:23:41PM +0000, Alice Ryhl wrote:
 
-You mean like I suggested in the previous two emails? :)
+> +/// Wrapper around `asm!` that uses at&t syntax on x86.
+> +// Uses a semicolon to avoid parsing ambiguities, even though this does not match native `asm!`
+> +// syntax.
+> +#[cfg(target_arch = "x86_64")]
+> +#[macro_export]
+> +macro_rules! asm {
+> +    ($($asm:expr),* ; $($rest:tt)*) => {
+> +        ::core::arch::asm!( $($asm)*, options(att_syntax), $($rest)* )
+> +    };
+> +}
+> +
+> +/// Wrapper around `asm!` that uses at&t syntax on x86.
 
-Given how easy the check is to implement, I think it's worth
-adding as a sanity check. But the flag should be the main API,
-if the sanity check starts to be annoying we'll ditch it.
+^ the above line seems out of place given the 'not' below.
+
+> +// For non-x86 arches we just pass through to `asm!`.
+> +#[cfg(not(target_arch = "x86_64"))]
+         ^^^
+> +#[macro_export]
+> +macro_rules! asm {
+> +    ($($asm:expr),* ; $($rest:tt)*) => {
+> +        ::core::arch::asm!( $($asm)*, $($rest)* )
+> +    };
+> +}
 
