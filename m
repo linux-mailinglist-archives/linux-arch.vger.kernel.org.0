@@ -1,123 +1,184 @@
-Return-Path: <linux-arch+bounces-6152-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6153-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63CDB94E66A
-	for <lists+linux-arch@lfdr.de>; Mon, 12 Aug 2024 08:14:03 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20DE194E9EA
+	for <lists+linux-arch@lfdr.de>; Mon, 12 Aug 2024 11:37:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 14ABD1F2237C
-	for <lists+linux-arch@lfdr.de>; Mon, 12 Aug 2024 06:14:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7278BB20812
+	for <lists+linux-arch@lfdr.de>; Mon, 12 Aug 2024 09:37:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B931A14F9C9;
-	Mon, 12 Aug 2024 06:13:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8864916CD3D;
+	Mon, 12 Aug 2024 09:37:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="WX7ZY6UM";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="PadxE0TY"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+Received: from fout4-smtp.messagingengine.com (fout4-smtp.messagingengine.com [103.168.172.147])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE01614E2EF;
-	Mon, 12 Aug 2024 06:13:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CCD120323;
+	Mon, 12 Aug 2024 09:37:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.147
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723443231; cv=none; b=V692/Y+gynSNqo8dgs2PSFlrYG1AAlcGigmBBgbLhT0v+NawNfKkOjrN7g8cuE7LczEW0pdAA1irx+/REmc4u5jCz5wrT568G1pcepaszawKodzb7NglTGlHXuzAv62NW2637C7yy0fbTWoZeiIZhPT+7qJUqg+Oci12JFZVtjA=
+	t=1723455447; cv=none; b=HOHJezXDwOY615190Udluyu59gSKjUFBpUfY3pZDscyLn8DssH9rDfT8nSd5p8XD45oynz6czYbmm5emNrkmbl2VnQKMS1xF/T0e9y1ALzEDWFiMcToLzDvI05GLbBDeoBaFjAzJyeNeRfolrl+bbOjffYzBv3QeAOcpU84VSvQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723443231; c=relaxed/simple;
-	bh=JxHQkpLX42zbYR/K/LXcoZTUYa6MhYcukw+z5FRgmUk=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=DiObCjNmG1fqqNYU5J9Khu7iH7I2haG4kXTNwh9PJSd1A3cQYYxGWw6LdWPewvRcJrREElWw52zVOLh278DtoVxl+UzBVF/foZWlz+tXd2Kcy7LD9CMghCe6JKK3SJoANhvL65Gp2swjqdU+luH2eUjklnRT8F/CTwdRmJFonMc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.105])
-	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Wj3xb4K1vzQpcx;
-	Mon, 12 Aug 2024 14:09:07 +0800 (CST)
-Received: from kwepemi100008.china.huawei.com (unknown [7.221.188.57])
-	by mail.maildlp.com (Postfix) with ESMTPS id 9213E1402E2;
-	Mon, 12 Aug 2024 14:13:39 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by kwepemi100008.china.huawei.com
- (7.221.188.57) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Mon, 12 Aug
- 2024 14:13:38 +0800
-From: Jinjie Ruan <ruanjinjie@huawei.com>
-To: <catalin.marinas@arm.com>, <bhe@redhat.com>, <vgoyal@redhat.com>,
-	<dyoung@redhat.com>, <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-	<aou@eecs.berkeley.edu>, <akpm@linux-foundation.org>,
-	<linux-kernel@vger.kernel.org>, <kexec@lists.infradead.org>,
-	<linux-riscv@lists.infradead.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-arch@vger.kernel.org>
-CC: <ruanjinjie@huawei.com>
-Subject: [PATCH -next v2] crash: Fix riscv64 crash memory reserve dead loop
-Date: Mon, 12 Aug 2024 14:20:17 +0800
-Message-ID: <20240812062017.2674441-1-ruanjinjie@huawei.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1723455447; c=relaxed/simple;
+	bh=l3vFiyDfS5OlYid1lRIhy3ppAAY2nz2gB/IJ8Owqvn4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=jbqcN/YZlMQ2W3z8DeY8k1YdQtwz+VOVSKVCe65hF7SaZiXyCr3OJCp0XYHB/Dk3QXqoHwr6CDKoGgJJOIvqaDlghcAo7qL4/1cy8kY0AnSQRGidI2AokKWqrpL2NIwTWaA9EeP/Fgm5RvT7Tg7cGHT8EuyaHXDg+j975gbamyQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=WX7ZY6UM; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=PadxE0TY; arc=none smtp.client-ip=103.168.172.147
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from phl-compute-03.internal (phl-compute-03.nyi.internal [10.202.2.43])
+	by mailfout.nyi.internal (Postfix) with ESMTP id A7C3F1382998;
+	Mon, 12 Aug 2024 05:37:23 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by phl-compute-03.internal (MEProxy); Mon, 12 Aug 2024 05:37:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm1; t=1723455443; x=1723541843; bh=qE
+	cVq2E1HC4dTQQWILZwFzSh/d6pUjYS7xMcCE3J20A=; b=WX7ZY6UM97GBAzQNRP
+	Alf1qA/S1HnMhMNU4HQKH71f1sqOpA2OGvnU7+VJ7Q/7kIXK+TGjTlZR0CZvZM53
+	El5uxzV4ats+9/LUQg5tQfNAWiesWq8vjxaGwnKqTnIVr+fbLrCkLRShdqNEjqgp
+	VYh0b2dTvy/+mdPvkXf9TaTbXD0DK5CZCyXlPrMlDb2G/izI90EnlK6CAZMpf84P
+	OX6hmrpE6qlGo5UpZ3GG1M/2AHXuS1CD4Ar3aKkT2NmfsAtHUVCRadaPdbly+0uJ
+	HKkEBnqBkID6eAzl5CpItI6tBM5yWwBrFfk6o3EQsAdCdbT7cocrMe1fbETcLI1X
+	T4iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm3; t=1723455443; x=1723541843; bh=qEcVq2E1HC4dT
+	QQWILZwFzSh/d6pUjYS7xMcCE3J20A=; b=PadxE0TYmRgSgbWIhmE3t9IbtCUD6
+	M+XQw/AbyQ6ClaYKYt5juAuby0gk2M/ipfcZKTYnGB109CloIOzA1CBl+/oznx29
+	VG0H63gI3uKt5mNCNpC+OTC3ib79m6JVAStPqaFwa6SkqE3VuV+g/ZrDpHIbdxjp
+	CluHR7BdXN28jBaOmtPssMhESWW+SW9s6WB/1rOb4SjHEPqIyOyFGKj+fX7viTCk
+	3EXGDLdtcja6jAVy2qiQeTUqDseFK05rnE+0W6td7F28PN0JcAMlPWdE0P6nZhR4
+	5ptyXTpEKB+QfxdV2icBl+HHpIGnaHP1jWz9wIjo1GyodcA+asgAnJd2Q==
+X-ME-Sender: <xms:09e5ZsNdtt5A7cs0gGtYQaQyKQ4hkQM8VDLQjLlX-b7SNPqLSqxAeQ>
+    <xme:09e5Zi86nX3Kd5A-ueeoibdWFyre1pRYfp8NTp2TG93YHGKkzGD934aFr3kF9BUq1
+    OsyUt6I_c9jwmZx7C0>
+X-ME-Received: <xmr:09e5ZjRY7Bp8AojkY6Wl2xrTyT6bzpF9_q3XQ3AbsXVhUC2nrGjnspCoAb6O-dppaA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddruddttddgudejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhephffufffkgggtgffvvefosehtjeertdertdejnecu
+    hfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgoh
+    grthdrtghomheqnecuggftrfgrthhtvghrnhepgfevffejteegjeeflefgkeetleekhfeu
+    gfegvdeuueejkeejteekkedvfffffedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrgh
+    enucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgr
+    gihunhdrhigrnhhgsehflhihghhorghtrdgtohhmpdhnsggprhgtphhtthhopeekpdhmoh
+    guvgepshhmthhpohhuthdprhgtphhtthhopehlihhnuhigqdhmihhpshesvhhgvghrrdhk
+    vghrnhgvlhdrohhrghdprhgtphhtthhopegthhgvnhhhuhgrtggriheskhgvrhhnvghlrd
+    horhhgpdhrtghpthhtoheplhhinhhugidqrghrtghhsehvghgvrhdrkhgvrhhnvghlrdho
+    rhhgpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhope
+    grrhhnugesrghrnhgusgdruggvpdhrtghpthhtohepthhssghoghgvnhgusegrlhhphhgr
+    rdhfrhgrnhhkvghnrdguvgdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvg
+    hrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehjihgrgihunhdrhigrnhhgsehflhih
+    ghhorghtrdgtohhm
+X-ME-Proxy: <xmx:09e5Zkuys3pwttnYehfZ5g8hSFjmsiMtk5NKWCRfKnHFZp-yow150g>
+    <xmx:09e5ZkcQGlR5jY6IPoFNw872nbf2MeIsi6PIkmWgBNEEosRD5X4Ciw>
+    <xmx:09e5Zo1UE04hOJ7ii79xoCT1TFHWoc_TDMnpVshaOFVQ-ONVCAKFOQ>
+    <xmx:09e5Zo8_y0YkuyF6Sksp18H19fQlZdp_08p3qTgIYhWeVMVppvr7dA>
+    <xmx:09e5Zry18V0snQUMyckufit3xnK-Kc0ZOsa1sfwGFnmIya6F85QhXeNY>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 12 Aug 2024 05:37:22 -0400 (EDT)
+From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH v2 0/7] MIPS: arch_numa enablement
+Date: Mon, 12 Aug 2024 10:37:14 +0100
+Message-Id: <20240812-mips-numa-v2-0-fd9bdb2033b9@flygoat.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemi100008.china.huawei.com (7.221.188.57)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAMrXuWYC/03MSwqDMBSF4a3IHfeWJPWRdtR9FAeah16oiSRWK
+ pK9NxUKHf6Hw7dDNIFMhFuxQzArRfIuhzgVoMbODQZJ5wbBRMkka3CiOaJ7TR3WSmldSsFL3kP
+ +z8FYeh/Wo809Ulx82A565d/1p1z/lJUjw6qWTcUlu/RW3u1zG3y3nJWfoE0pfQC1NhfhpAAAA
+ A==
+To: "Rafael J. Wysocki" <rafael@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Huacai Chen <chenhuacai@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+ linux-mips@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2561;
+ i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
+ bh=l3vFiyDfS5OlYid1lRIhy3ppAAY2nz2gB/IJ8Owqvn4=;
+ b=owGbwMvMwCXmXMhTe71c8zDjabUkhrSd1y9N8pynufbOia9fd+u2JegruN3YOu/zPsHesG6Zd
+ StmK7LYd5SyMIhxMciKKbKECCj1bWi8uOD6g6w/MHNYmUCGMHBxCsBE4j0YGXbeTJv0P7Uw4M3U
+ 9hzup15yG0xCtmeduHp73dZd/9a0/5Jh+GfHsSjTX2hu1YdLi3aK3pZV/z/R8NkOiysZzXs99lz
+ YwMsAAA==
+X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
+ fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 
-On RISCV64 Qemu machine with 512MB memory, cmdline "crashkernel=500M,high"
-will cause system stall as below:
+Hi all,
 
-	 Zone ranges:
-	   DMA32    [mem 0x0000000080000000-0x000000009fffffff]
-	   Normal   empty
-	 Movable zone start for each node
-	 Early memory node ranges
-	   node   0: [mem 0x0000000080000000-0x000000008005ffff]
-	   node   0: [mem 0x0000000080060000-0x000000009fffffff]
-	 Initmem setup node 0 [mem 0x0000000080000000-0x000000009fffffff]
-	(stall here)
+This series enabled arch_numa for generic MIPS machine, and ported
+loongson64 machine to arch_numa infra. SGI IP27 is left untouched
+with legacy NUMA implementation as I don't have access to hardware.
 
-commit 5d99cadf1568 ("crash: fix x86_32 crash memory reserve dead loop
-bug") fix this on 32-bit architecture. However, the problem is not
-completely solved. If `CRASH_ADDR_LOW_MAX = CRASH_ADDR_HIGH_MAX` on 64-bit
-architecture, for example, when system memory is equal to
-CRASH_ADDR_LOW_MAX on RISCV64, the following infinite loop will also occur:
+Tested on Loongson64 NUMA system and numa_emu on Boston.
 
-	-> reserve_crashkernel_generic() and high is true
-	   -> alloc at [CRASH_ADDR_LOW_MAX, CRASH_ADDR_HIGH_MAX] fail
-	      -> alloc at [0, CRASH_ADDR_LOW_MAX] fail and repeatedly
-	         (because CRASH_ADDR_LOW_MAX = CRASH_ADDR_HIGH_MAX).
+Please review.
 
-As Catalin suggested, do not remove the ",high" reservation fallback to
-",low" logic which will change arm64's kdump behavior, but fix it by
-skipping the above situation similar to commit d2f32f23190b ("crash: fix
-x86_32 crash memory reserve dead loop").
+Thanks
 
-After this patch, it print:
-	cannot allocate crashkernel (size:0x1f400000)
-
-Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
-Suggested-by: Catalin Marinas <catalin.marinas@arm.com>
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
-v2:
-- Fix it in another way suggested by Catalin.
-- Add Suggested-by.
----
- kernel/crash_reserve.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Changes in v2:
+- Use Kconfig symbol instead of weak function (Arnd)
+- Link to v1: https://lore.kernel.org/r/20240809-mips-numa-v1-0-568751803bf8@flygoat.com
 
-diff --git a/kernel/crash_reserve.c b/kernel/crash_reserve.c
-index 5387269114f6..aae4a9e998d1 100644
---- a/kernel/crash_reserve.c
-+++ b/kernel/crash_reserve.c
-@@ -427,7 +427,8 @@ void __init reserve_crashkernel_generic(char *cmdline,
- 		if (high && search_end == CRASH_ADDR_HIGH_MAX) {
- 			search_end = CRASH_ADDR_LOW_MAX;
- 			search_base = 0;
--			goto retry;
-+			if (search_end != CRASH_ADDR_HIGH_MAX)
-+				goto retry;
- 		}
- 		pr_warn("cannot allocate crashkernel (size:0x%llx)\n",
- 			crash_size);
+---
+Jiaxun Yang (7):
+      arch_numa: Provide platform numa init hook
+      MIPS: pci: Unify pcibus_to_node implementation
+      MIPS: Prepare NUMA headers for arch_numa
+      MIPS: mm: init: Prepare for arch_numa
+      MIPS: smp: Process NUMA information
+      MIPS: generic: Make NUMA available
+      MIPS: Loongson64: Migrate to arch_numa
+
+ arch/mips/Kconfig                                |   5 +
+ arch/mips/include/asm/mach-generic/mmzone.h      |  11 ++
+ arch/mips/include/asm/mach-generic/numa.h        |  11 ++
+ arch/mips/include/asm/mach-generic/topology.h    |   7 +
+ arch/mips/include/asm/mach-ip27/numa.h           |  22 ++++
+ arch/mips/include/asm/mach-ip27/topology.h       |  12 +-
+ arch/mips/include/asm/mach-loongson64/mmzone.h   |   2 -
+ arch/mips/include/asm/mach-loongson64/topology.h |  25 ----
+ arch/mips/include/asm/mmzone.h                   |   5 +-
+ arch/mips/include/asm/numa.h                     |  12 ++
+ arch/mips/include/asm/pci.h                      |  12 ++
+ arch/mips/include/asm/smp-ops.h                  |   7 +-
+ arch/mips/kernel/setup.c                         |   3 +-
+ arch/mips/kernel/smp-cps.c                       |   6 +
+ arch/mips/kernel/smp.c                           |  26 ++++
+ arch/mips/loongson64/init.c                      |  28 ++--
+ arch/mips/loongson64/numa.c                      | 158 ++---------------------
+ arch/mips/loongson64/smp.c                       |   2 +
+ arch/mips/mm/init.c                              |  14 +-
+ arch/mips/pci/pci-ip27.c                         |  10 --
+ arch/mips/pci/pci-xtalk-bridge.c                 |   1 +
+ drivers/base/Kconfig                             |   4 +
+ drivers/base/arch_numa.c                         |   9 ++
+ include/asm-generic/numa.h                       |   1 +
+ 24 files changed, 163 insertions(+), 230 deletions(-)
+---
+base-commit: eec5d86d5bac6b3e972eb9c1898af3c08303c52d
+change-id: 20240807-mips-numa-6ccdd482141b
+
+Best regards,
 -- 
-2.34.1
+Jiaxun Yang <jiaxun.yang@flygoat.com>
 
 
