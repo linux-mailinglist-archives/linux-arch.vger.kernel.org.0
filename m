@@ -1,70 +1,70 @@
-Return-Path: <linux-arch+bounces-6154-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6155-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22BEB94E9EB
-	for <lists+linux-arch@lfdr.de>; Mon, 12 Aug 2024 11:37:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BD0594E9F0
+	for <lists+linux-arch@lfdr.de>; Mon, 12 Aug 2024 11:37:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D0004280F8D
-	for <lists+linux-arch@lfdr.de>; Mon, 12 Aug 2024 09:37:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8F4D51F2249D
+	for <lists+linux-arch@lfdr.de>; Mon, 12 Aug 2024 09:37:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E02F616D4F9;
-	Mon, 12 Aug 2024 09:37:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09B5816D9C7;
+	Mon, 12 Aug 2024 09:37:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="YWRxtvtu";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="LXNA/x1J"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="LSKfliIh";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="mR6KyuL9"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fhigh7-smtp.messagingengine.com (fhigh7-smtp.messagingengine.com [103.168.172.158])
+Received: from fout4-smtp.messagingengine.com (fout4-smtp.messagingengine.com [103.168.172.147])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7FC715099B;
-	Mon, 12 Aug 2024 09:37:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 242B616132B;
+	Mon, 12 Aug 2024 09:37:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.147
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723455447; cv=none; b=eV+eaxCtNhKKFb5qB578zQiRUKGyhPcLmsRTxsw5USLNgtgOSBLxwDtlt18oA8wA471jMPncs52cT6ZZR7RG6Ei6Qbv/j1ReVugpFgVTGMbXiHsrnYxHelYGCf5DvquonnGCAy1DhSntCD79yHy0OhzkP7O/cYjuNWX5Hl2Dq10=
+	t=1723455448; cv=none; b=gdNnNFzNUsuZ8aroElxbt1Ap0YRy9db2f2bTaYHgN9TSe3ZGIKqH/IAFC4Mjis8CvzOJQNJ2t/LRwdL82DuYhghn/LrG2CL386PrWVdPZ3SpXVTqH505wUNfySJI/OJjvDZiGV+nwuckgzlmDOIbYKuFZcyTymHgjvQ81xpO+sE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723455447; c=relaxed/simple;
-	bh=HZtNM2iYdTDdJK9RBWXmVSgejXa+e7s20WbxWq/3ZHY=;
+	s=arc-20240116; t=1723455448; c=relaxed/simple;
+	bh=GaLop2K+QIkqMSJJz9AAraVySsj9T+4NejqFddiZQMc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=d4Od+DL1B/EV79g8zX3JUvyUSy4/fQ0S6qF9WtsHEhCc/sRq6tbtnfR3he9a5Sp3ChVnbEGY9VIVEBIi+/e5XuML+kgRCcnJfBW8UO7fBrAwF4G6YJR6pjNsu6zL57VaLqnONKWXUt5Rkah+oZC6pksNKSVFdEthEVWPs2O5LbA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=YWRxtvtu; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=LXNA/x1J; arc=none smtp.client-ip=103.168.172.158
+	 In-Reply-To:To:Cc; b=rVUrY8tet8NpnSUNnhYBXFl/vT1Harl+3/IlkcRykAkwQTDpfyXuxNwpplQj0EFnYeEsUHZVz2fnxPF0cB6KeY+g/sVaGMoTzEZYDcW8hK2REfSJOLXJeXjjyqfG9oI0g6rZ1WDhmxQjBc6g/xOFBV/fp24TbyEm+y3P6V7tbJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=LSKfliIh; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=mR6KyuL9; arc=none smtp.client-ip=103.168.172.147
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from phl-compute-06.internal (phl-compute-06.nyi.internal [10.202.2.46])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id E42BE114AB6B;
-	Mon, 12 Aug 2024 05:37:24 -0400 (EDT)
+Received: from phl-compute-04.internal (phl-compute-04.nyi.internal [10.202.2.44])
+	by mailfout.nyi.internal (Postfix) with ESMTP id 36C56138FD52;
+	Mon, 12 Aug 2024 05:37:26 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by phl-compute-06.internal (MEProxy); Mon, 12 Aug 2024 05:37:24 -0400
+  by phl-compute-04.internal (MEProxy); Mon, 12 Aug 2024 05:37:26 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
 	cc:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1723455444;
-	 x=1723541844; bh=63VkM8R6TTBXVYCj/tQEl1CrLjl1cy5T2PmvGmxYctU=; b=
-	YWRxtvtuRRFl+/0dABaEySxEMLxzAIOq31Vcqwk52a05HCcn8RpyW6xIxNIPQEHt
-	fb5SBSsPy+O1N8ztVicXSzEXC3mgCgtHcVOi7bUQ6oaAvGifNFwgD7y0eS/g6ziR
-	TK3WJOnVt+MsIA3k6r/2EZuM1NpQoXVtFPk+R0p2RbzEJsenO9sQxiEopFceIiQM
-	BSshfaqobo6qU3KIanKBsJXwldg1g56WGjLZwrfw8GIDc+FRBPC8IcDkL0CipqwV
-	xRvB7AdhOz7qsZET/HkISMWW01nI215vnXfSPtPpfgg/r6MxlxhZ/gTYGTwRc9lU
-	AVAv/ZEnmPDN5JDuVsB1Gw==
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1723455446;
+	 x=1723541846; bh=ZKGq9+O9qy8NbbI92dWd4mhTg7vxYZDdv7ZdobM9JZ0=; b=
+	LSKfliIhqnmUdfSqnGcT3JS/oDdK7Ei8uHE4HMkogsuU2OiW4ahvavD4gLFx4d86
+	l6zt+XW9589atiLLlCdDvV4nf1dSan2+ZlYFMRy4/GcTUm0l6DIyYbL+CdSHYfW7
+	xB+M/M7so3A7dVsvTE1n+hS9ZuUGR3sAkTaeb6FeV8HmeQwl34WRWGezuZJTPgKa
+	Lwn656ebOgHx4+ckI/yq9u1P05tDjOoXOEU2FzR/1nLGbMi++deAqToNfGZMIPy5
+	87UiGXHBggsjgx58ixr5dDPAteAajOiIbhAybhyILB4cjH1XCWkndWA00w9+Qca6
+	Y9x4DtIKXRAOmA5FtEY2fw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1723455444; x=
-	1723541844; bh=63VkM8R6TTBXVYCj/tQEl1CrLjl1cy5T2PmvGmxYctU=; b=L
-	XNA/x1Jtm0al2hkeTZF3C0EkIFieIhrtGqs2nKE+RED00Pv1ZYrRTf82JS0W3hJt
-	fvPT3PQ9ybQ1b1KZtQQ5l+Q2BflxcakG2Hmw3M2D2ZTZZoup+JqWO5E1Dnoqq4ml
-	EYRqviIcKN7nS/peTQg4k9iy09sRtsKhWvHQ4pgUbAEoqDVfFrk7ECwlReaqF8Io
-	2FCNoaq0oiIPyjOjOYO8v0w1zOs585raBwxzCckWG5oCe/UAEKY6L/picXkGJ0Op
-	n1f9pze2em7scEWD7cJ01syC5sym1lhHZJc5bQrocVt2uLSmymXt0nR9S7aJVJLr
-	m9720iTPJtJnmuJ0fnRFA==
-X-ME-Sender: <xms:1Ne5Zk7JRVFz8iFeBlG2x1wbW1rOTOucX7KkpKGTgfTxYVCICF_G7A>
-    <xme:1Ne5Zl7mcM0dtj3Z5Kjgosyq_3vRP8fWaMLSxTmwfJ-idbJaNum90EgPuU5hhhXm1
-    J5c50BD6ed65bvXpqE>
-X-ME-Received: <xmr:1Ne5ZjfiEsKc3WKkarkwEmK9jFS2-kMrkxcIBJIHxsvnjwXO5qSGAG2DNzFWARi_-Q>
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1723455446; x=
+	1723541846; bh=ZKGq9+O9qy8NbbI92dWd4mhTg7vxYZDdv7ZdobM9JZ0=; b=m
+	R6KyuL994a4qCvzuGhuRsH6EtuKPupvXAQtIcGlm0u3+3Dr8ReW+jH8vtUQEBNyt
+	PvVKCJFhDOT8ClsMgj4JngCR5HJMjY3wjchI9rI9CfhY0oJgVcRDhy/FYKxMqEht
+	XZQ9cgB9Y7B76uLLK7fxpGeszje4gp4CElXXfHHFrH99j03Pv80w9XL436e9RLyd
+	kL6m8HoIQ7EE7kOom6BSbkPeMllKW137k+lsJNQpYn4+LZTBjUfuiP+zvy/JU2yZ
+	Y42Zmu9Aqg1le28CZSVAswIAlvBGmCpcCwkOugPo996B4Pt6yQ3ab33mgIcS/Pc7
+	n2pVIVSLP75Mnh8t5/tDg==
+X-ME-Sender: <xms:1te5ZoGcyp91layNMkQC1poJqzPIjrtBV4XFB4jvDOi5WhqmfUXj8Q>
+    <xme:1te5ZhWlwn54gwG_e5_Wecw-B4U1_tHxhU1urgQp6QKW9f_1sPTN1ov-OF8be5eZi
+    XB2CsYp1AkAVD8uHd0>
+X-ME-Received: <xmr:1te5ZiKA7TWnWtxgTi0rX7Q4j_Zao-VYQgcb942dc2QoYNIoMdiTLAddXm1VRK6pUA>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddruddttddgudekucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
     rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
@@ -81,17 +81,17 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddruddttddgudekucetufdoteggod
     htthhopehtshgsohhgvghnugesrghlphhhrgdrfhhrrghnkhgvnhdruggvpdhrtghpthht
     oheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpth
     htohepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:1Ne5ZpIn3xqH21vHb370SIRsXAaOkOsWgrB1Gd__DQuRYSoNyMYEzQ>
-    <xmx:1Ne5ZoLJbEHA3ZbS5vtyt7hmPnk4Ug_-pjY9GGrJtXLTidPfgArUYg>
-    <xmx:1Ne5Zqw0G5kJWFgZjZXqEn4SyYSmtApcA-uVR3Ke0r70hbfIhx-zlw>
-    <xmx:1Ne5ZsKGFcsVZXXLuDTJaH2kqxnZxLxVYJdynTENOZs_YWHoxv1vvQ>
-    <xmx:1Ne5Zn_GKsXhZj2HS5m-yXne2G2Fgs02HLr5BjaDM44eoy_QO3SC9EQS>
+X-ME-Proxy: <xmx:1te5ZqGGeTcZNpXxxpaU4Nismq3NQ7XXP_gh2hbYJbwUhhrw4krc9w>
+    <xmx:1te5ZuW8YsRoftLcJeawN64QsXn7FaUXf9BgfcSK9YoNBvj9VnCbzQ>
+    <xmx:1te5ZtPHwo0kTJdjVdP7hJkznqLdY6IrfUIOh5At9v72ymQJ5UmAsg>
+    <xmx:1te5Zl04mP4EqObqjU0AbEcAUKXLOKBpCGyYykIhZJvIWkol0Tl8OA>
+    <xmx:1te5Ziq1ZJMpbeR2s62MPpw-S5e05cyloV-lMI0T9_ghgbnJisjQgkob>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 12 Aug 2024 05:37:23 -0400 (EDT)
+ 12 Aug 2024 05:37:25 -0400 (EDT)
 From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date: Mon, 12 Aug 2024 10:37:15 +0100
-Subject: [PATCH v2 1/7] arch_numa: Provide platform numa init hook
+Date: Mon, 12 Aug 2024 10:37:16 +0100
+Subject: [PATCH v2 2/7] MIPS: pci: Unify pcibus_to_node implementation
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -100,7 +100,7 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240812-mips-numa-v2-1-fd9bdb2033b9@flygoat.com>
+Message-Id: <20240812-mips-numa-v2-2-fd9bdb2033b9@flygoat.com>
 References: <20240812-mips-numa-v2-0-fd9bdb2033b9@flygoat.com>
 In-Reply-To: <20240812-mips-numa-v2-0-fd9bdb2033b9@flygoat.com>
 To: "Rafael J. Wysocki" <rafael@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
@@ -109,86 +109,136 @@ To: "Rafael J. Wysocki" <rafael@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
 Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
  linux-mips@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2225;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4206;
  i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
- bh=HZtNM2iYdTDdJK9RBWXmVSgejXa+e7s20WbxWq/3ZHY=;
- b=owGbwMvMwCXmXMhTe71c8zDjabUkhrSd1y9t+t7VMvfflPYDNjNzdk6btq5gStL+OfeOK243S
- /qrE2eypKOUhUGMi0FWTJElRECpb0PjxQXXH2T9gZnDygQyhIGLUwAmYsvJ8D/frnFBS7npvWuJ
- nxdk1L11iNXc2CazfY725FUMDuzflTsZ/hctSuvaeKxr9ZlUY88Nr/a/+qy23zj2VNGrfacdfM8
- sjGQAAA==
+ bh=GaLop2K+QIkqMSJJz9AAraVySsj9T+4NejqFddiZQMc=;
+ b=owGbwMvMwCXmXMhTe71c8zDjabUkhrSd1y9lH6y77HTGxn7ToY1cp/m+PoiLDI5c8zDumN+c2
+ ZfmSZw611HKwiDGxSArpsgSIqDUt6Hx4oLrD7L+wMxhZQIZwsDFKQATmXqY4Z+KbM5B9px28cvH
+ 2B4mz91ynXd1iNFTboXZ6/yWqTVHSxowMiyRZTO//Prr+r28FT+jjESyJKVUGdabzRafmL6xIk1
+ oDgMA
 X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
  fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 
-For some pre-devicetree systems, NUMA information may come from
-platform specific way.
+Nowadays PCI Bus NUMA node information is always stored in struct
+device of host bridge.
 
-Provide platform numa init hook to allow platform code kick in
-as last resort method to supply NUMA configuration, and use
-ARCH_PLATFORM_NUMA Kconfig symbol to gate that function.
+Unify the implementation of pcibus_to_node to simplify code.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
-v2: Use Kconfig symbol instead of weak function (arnd)
----
- drivers/base/Kconfig       | 4 ++++
- drivers/base/arch_numa.c   | 9 +++++++++
- include/asm-generic/numa.h | 1 +
- 3 files changed, 14 insertions(+)
+ arch/mips/include/asm/mach-ip27/topology.h       |  4 ----
+ arch/mips/include/asm/mach-loongson64/topology.h |  5 -----
+ arch/mips/include/asm/pci.h                      | 12 ++++++++++++
+ arch/mips/loongson64/numa.c                      |  7 -------
+ arch/mips/pci/pci-ip27.c                         | 10 ----------
+ arch/mips/pci/pci-xtalk-bridge.c                 |  1 +
+ 6 files changed, 13 insertions(+), 26 deletions(-)
 
-diff --git a/drivers/base/Kconfig b/drivers/base/Kconfig
-index 064eb52ff7e2..e169627b9172 100644
---- a/drivers/base/Kconfig
-+++ b/drivers/base/Kconfig
-@@ -231,6 +231,10 @@ config GENERIC_ARCH_NUMA
- 	  Enable support for generic NUMA implementation. Currently, RISC-V
- 	  and ARM64 use it.
+diff --git a/arch/mips/include/asm/mach-ip27/topology.h b/arch/mips/include/asm/mach-ip27/topology.h
+index d66cc53feab8..0ad74e2e0d85 100644
+--- a/arch/mips/include/asm/mach-ip27/topology.h
++++ b/arch/mips/include/asm/mach-ip27/topology.h
+@@ -17,10 +17,6 @@ extern struct cpuinfo_ip27 sn_cpu_info[NR_CPUS];
+ #define cpumask_of_node(node)	((node) == -1 ?				\
+ 				 cpu_all_mask :				\
+ 				 &hub_data(node)->h_cpus)
+-struct pci_bus;
+-extern int pcibus_to_node(struct pci_bus *);
+-
+-#define cpumask_of_pcibus(bus)	(cpumask_of_node(pcibus_to_node(bus)))
  
-+config ARCH_PLATFORM_NUMA
-+	bool
-+	depends on GENERIC_ARCH_NUMA
-+
- config FW_DEVLINK_SYNC_STATE_TIMEOUT
- 	bool "sync_state() behavior defaults to timeout instead of strict"
- 	help
-diff --git a/drivers/base/arch_numa.c b/drivers/base/arch_numa.c
-index 8d49893c0e94..19be18b35430 100644
---- a/drivers/base/arch_numa.c
-+++ b/drivers/base/arch_numa.c
-@@ -305,6 +305,13 @@ static int __init arch_acpi_numa_init(void)
+ extern unsigned char __node_distances[MAX_NUMNODES][MAX_NUMNODES];
+ 
+diff --git a/arch/mips/include/asm/mach-loongson64/topology.h b/arch/mips/include/asm/mach-loongson64/topology.h
+index 3414a1fd1783..c60ccdbe5a94 100644
+--- a/arch/mips/include/asm/mach-loongson64/topology.h
++++ b/arch/mips/include/asm/mach-loongson64/topology.h
+@@ -9,11 +9,6 @@
+ extern cpumask_t __node_cpumask[];
+ #define cpumask_of_node(node)	(&__node_cpumask[node])
+ 
+-struct pci_bus;
+-extern int pcibus_to_node(struct pci_bus *);
+-
+-#define cpumask_of_pcibus(bus)	(cpu_online_mask)
+-
+ extern unsigned char __node_distances[MAX_NUMNODES][MAX_NUMNODES];
+ 
+ #define node_distance(from, to)	(__node_distances[(from)][(to)])
+diff --git a/arch/mips/include/asm/pci.h b/arch/mips/include/asm/pci.h
+index d993df6302dc..09323348d362 100644
+--- a/arch/mips/include/asm/pci.h
++++ b/arch/mips/include/asm/pci.h
+@@ -134,6 +134,18 @@ static inline int pci_proc_domain(struct pci_bus *bus)
  }
- #endif
+ #endif /* CONFIG_PCI_DOMAINS */
  
-+#ifndef CONFIG_ARCH_PLATFORM_NUMA
-+int __init arch_platform_numa_init(void)
++#ifdef CONFIG_NUMA
++static inline int pcibus_to_node(struct pci_bus *bus)
 +{
-+	return -EOPNOTSUPP;
++	return dev_to_node(&bus->dev);
 +}
++#ifndef cpumask_of_pcibus
++#define cpumask_of_pcibus(bus)	(pcibus_to_node(bus) == -1 ?		\
++				 cpu_all_mask :				\
++				 cpumask_of_node(pcibus_to_node(bus)))
++#endif
 +#endif
 +
- /**
-  * arch_numa_init() - Initialize NUMA
-  *
-@@ -318,6 +325,8 @@ void __init arch_numa_init(void)
- 			return;
- 		if (acpi_disabled && !numa_init(of_numa_init))
- 			return;
-+		if (!numa_init(arch_platform_numa_init))
-+			return;
+ #endif /* __KERNEL__ */
+ 
+ /* Do platform specific device initialization at pci_enable_device() time */
+diff --git a/arch/mips/loongson64/numa.c b/arch/mips/loongson64/numa.c
+index 8388400d052f..d49180562c9f 100644
+--- a/arch/mips/loongson64/numa.c
++++ b/arch/mips/loongson64/numa.c
+@@ -171,13 +171,6 @@ void __init mem_init(void)
+ 	setup_zero_pages();	/* This comes from node 0 */
+ }
+ 
+-/* All PCI device belongs to logical Node-0 */
+-int pcibus_to_node(struct pci_bus *bus)
+-{
+-	return 0;
+-}
+-EXPORT_SYMBOL(pcibus_to_node);
+-
+ void __init prom_init_numa_memory(void)
+ {
+ 	pr_info("CP0_Config3: CP0 16.3 (0x%x)\n", read_c0_config3());
+diff --git a/arch/mips/pci/pci-ip27.c b/arch/mips/pci/pci-ip27.c
+index 973faea61cad..d919c70e02b1 100644
+--- a/arch/mips/pci/pci-ip27.c
++++ b/arch/mips/pci/pci-ip27.c
+@@ -17,16 +17,6 @@
+ #include <asm/sn/ioc3.h>
+ #include <asm/pci/bridge.h>
+ 
+-#ifdef CONFIG_NUMA
+-int pcibus_to_node(struct pci_bus *bus)
+-{
+-	struct bridge_controller *bc = BRIDGE_CONTROLLER(bus);
+-
+-	return bc->nasid;
+-}
+-EXPORT_SYMBOL(pcibus_to_node);
+-#endif /* CONFIG_NUMA */
+-
+ static void ip29_fixup_phy(struct pci_dev *dev)
+ {
+ 	int nasid = pcibus_to_node(dev->bus);
+diff --git a/arch/mips/pci/pci-xtalk-bridge.c b/arch/mips/pci/pci-xtalk-bridge.c
+index 45ddbaa6c123..45b2b390e553 100644
+--- a/arch/mips/pci/pci-xtalk-bridge.c
++++ b/arch/mips/pci/pci-xtalk-bridge.c
+@@ -633,6 +633,7 @@ static int bridge_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
  	}
  
- 	numa_init(dummy_numa_init);
-diff --git a/include/asm-generic/numa.h b/include/asm-generic/numa.h
-index c2b046d1fd82..53a8210fde00 100644
---- a/include/asm-generic/numa.h
-+++ b/include/asm-generic/numa.h
-@@ -31,6 +31,7 @@ static inline const struct cpumask *cpumask_of_node(int node)
- #endif
++	set_dev_node(dev, bd->nasid);
+ 	pci_set_flags(PCI_PROBE_ONLY);
  
- void __init arch_numa_init(void);
-+int __init arch_platform_numa_init(void);
- int __init numa_add_memblk(int nodeid, u64 start, u64 end);
- void __init early_map_cpu_to_node(unsigned int cpu, int nid);
- int __init early_cpu_to_node(int cpu);
+ 	host = devm_pci_alloc_host_bridge(dev, sizeof(*bc));
 
 -- 
 2.46.0
