@@ -1,50 +1,50 @@
-Return-Path: <linux-arch+bounces-6175-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6176-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3DBA9507B7
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Aug 2024 16:33:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 41A919507EE
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Aug 2024 16:39:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 843A5284FAF
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Aug 2024 14:33:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F1F9A280DBA
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Aug 2024 14:39:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F3AB19D89C;
-	Tue, 13 Aug 2024 14:33:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E95F19EEA0;
+	Tue, 13 Aug 2024 14:39:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nAXt0UBa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kJUMvPwY"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3542125AC;
-	Tue, 13 Aug 2024 14:33:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD9F219E802;
+	Tue, 13 Aug 2024 14:39:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723559603; cv=none; b=VHuIgvml+PBqZWL9UhpbY8Qs+GhGbakWSD4iYvOpI4WLd0vnNUT1xG+eVIGvW7d/H5KXjGa/GQX/qNZtN8DzwfygMcolb6Bz3Q7uGqlZ2q5Cycd3tIpScOWI5lyeveMYIh8cnCzPPzDo+v2p6JSkn9gYK2bwpP0cz5U+l50iGaA=
+	t=1723559961; cv=none; b=TuO4QbzTBMr5oFp40Y3QwOdSkxiSrFmymYJTRg/kz6oOiIGej2LGcl4MkTzz30Rf6j/cB7bswh88YTXOC102dc7Uvn4mZ6qLdvZ3AZ9e0eETFVhqf9idpBiCSd1GZnsbu8BviXxO6EMXW36ZdKeo2/9D6AICqmn8XhX4DKRpd+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723559603; c=relaxed/simple;
-	bh=sFtPPJXw+oDaZO18986PArH/7XXzUe8DO5XJvEGKSxM=;
+	s=arc-20240116; t=1723559961; c=relaxed/simple;
+	bh=BkMT1oZs8wsRPi0UzxeExZ+sMn6QcdSVOxPluJLt7fQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Gwg/AnhkoZfbqdTnPRlXLcytcUtSTZKMmziQ0ia9oua4R8gmyf99ef19r9HDjOo/Ttz89Gi0/ErZXh2CmAwXxBW1UacS+laV7ttZL4l+v74uFBo1rB86nEm/Z5V65i0IxJfKmWqi0o58SNYCEJOYWgtWIxbIyWlIrPjTq0KI1QM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nAXt0UBa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44B31C4AF0B;
-	Tue, 13 Aug 2024 14:33:21 +0000 (UTC)
+	 MIME-Version:Content-Type; b=hgIG9oAS7o+mmdqIhPmDoFD+K0YJXKsnfVrUNrYrhr2IO4g3m0dLptqSzRekY1aC5SfBjsfrRM7DIlXn8V22YX3b00NjZztyFO9tGVLkUtdXGBMWbpf8ctgEXLrXHjJ2kzaDVp/EF0O5XJ4UQupZR1+huJtVr6VKdRSHHue/Q28=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kJUMvPwY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C51EC4AF09;
+	Tue, 13 Aug 2024 14:39:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723559603;
-	bh=sFtPPJXw+oDaZO18986PArH/7XXzUe8DO5XJvEGKSxM=;
+	s=k20201202; t=1723559960;
+	bh=BkMT1oZs8wsRPi0UzxeExZ+sMn6QcdSVOxPluJLt7fQ=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=nAXt0UBalXvRn5zwD1LdgdqfsSHBNoAVzH7FOq28vl2bdsMsjXxBOPrVhyzduT5fk
-	 ZOdKEve+Q7qIR8SptTGdTkU+N79oXR6c72PuXovvAWYmTa+/i3BSLJNHB7fJkcnSTB
-	 ZnBanDEqYplCz3PPD5kCrTc5ETqDkdCcdBL2+J+HckGXQkmZtVedZyW8AlPfQC44lJ
-	 3UDTeCym8iKlUNEnnYvc+JLEW4/esRUVAGrYu45/ASzO9kqLwDXCMY6gZQdwHE85Oq
-	 G2WszNB9e7ZDzWCR7R0rryd3z94kTMCr7pUSaJQBgF4tsx7T66UCmY0QRAgVQWENY0
-	 /cgHRiYx1Af9A==
-Date: Tue, 13 Aug 2024 07:33:20 -0700
+	b=kJUMvPwYEz4twWJkX2/DBO6lgBCLmry7xNwcj7mHVF1Wu2r8anDxNlilhF+jy27aG
+	 Jx4dgTgc0s0HDaUublN5PoN+H2skcCgaLvJGlu/2GxlZwYI7trTSQQXdb74w8R7tRn
+	 kCAPwm2Cvvz4ybkwcPKvuy2ErXaxmTGR863mS4+qtva0pxa/f44xuE8jHSz/3UVCmz
+	 lVJkV9Q5J5+Req3XUGUlQgEEwM+nqyKtfAcw+m/7oLQ42wuYXHvL56R/79oq9hyP1W
+	 bTxxyYQPhwO7iNiUaDaMkCYKVsACtIKK6NbL+EWpR45m+gJVBf9pcDvFLplWXr/S3t
+	 BGr028oZ7DLMQ==
+Date: Tue, 13 Aug 2024 07:39:17 -0700
 From: Jakub Kicinski <kuba@kernel.org>
-To: Mina Almasry <almasrymina@google.com>
-Cc: Pavel Begunkov <asml.silence@gmail.com>, netdev@vger.kernel.org,
+To: Pavel Begunkov <asml.silence@gmail.com>
+Cc: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
  linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
@@ -76,8 +76,8 @@ Cc: Pavel Begunkov <asml.silence@gmail.com>, netdev@vger.kernel.org,
  Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
 Subject: Re: [PATCH net-next v18 07/14] memory-provider: dmabuf devmem
  memory provider
-Message-ID: <20240813073320.3e5c3a7e@kernel.org>
-In-Reply-To: <CAHS8izPyGwe_i4eNemW+A+MgMVHqJ0fdp=+-ju2ynqgc0mb_Ow@mail.gmail.com>
+Message-ID: <20240813073917.690ac1cc@kernel.org>
+In-Reply-To: <5a51b11d-9c35-42a5-879b-08dc7ca2ca18@gmail.com>
 References: <20240805212536.2172174-1-almasrymina@google.com>
 	<20240805212536.2172174-8-almasrymina@google.com>
 	<20240806135924.5bb65ec7@kernel.org>
@@ -89,49 +89,38 @@ References: <20240805212536.2172174-1-almasrymina@google.com>
 	<CAHS8izOXwZS-8sfvn3DuT1XWhjc--7-ZLjr8rMn1XHr5F+ckbA@mail.gmail.com>
 	<48f3a61f-9e04-4755-b50c-8fae6e6112eb@gmail.com>
 	<20240812105732.5d2845e4@kernel.org>
-	<7e2ffe62-032a-4c5e-953b-b7117ab076be@gmail.com>
-	<71260e3c-dee4-4bf0-b257-cdabd8cff3f1@gmail.com>
-	<20240812171548.509ca539@kernel.org>
-	<CAHS8izPyGwe_i4eNemW+A+MgMVHqJ0fdp=+-ju2ynqgc0mb_Ow@mail.gmail.com>
+	<CAHS8izPb51gvEHGHeQwWTs4YmimLLamau1c4j=Z4KGM8ZJrx5g@mail.gmail.com>
+	<a6747b29-ed79-49d4-9ffe-b62074db1e09@gmail.com>
+	<20240812165708.33234ed6@kernel.org>
+	<5a51b11d-9c35-42a5-879b-08dc7ca2ca18@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, 13 Aug 2024 04:39:47 -0400 Mina Almasry wrote:
-> On Mon, Aug 12, 2024 at 8:15=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> =
-wrote:
-> > BTW, Mina, the core should probably also check that XDP isn't installed
-> > before / while the netmem is bound to a queue. =20
->=20
-> Sorry if noob question, but what is the proper check for this?
+On Tue, 13 Aug 2024 03:31:13 +0100 Pavel Begunkov wrote:
+> I'm getting lost, so repeating myself a bit. What I think
+> would be a good approach is if we get an error back from
+> the driver if it doesn't support netiov / providers.
+> 
+> netdev_rx_queue_restart() {
+> 	...
+> 	err = dev->queue_mgmt_ops->ndo_queue_mem_alloc();
+> 	if (err == -EOPNOTSUPP) // the driver doesn't support netiov
+> 		return -EOPNOTSUPP;
+> 	...
+> }
+> 
+> That can be done if drivers opt in to support providers,
+> e.g. via a page pool flag.
+> 
+> What I think wouldn't be a great option is getting back a
+> "success" from the driver even though it ignored
 
-	if (dev_xdp_prog_count(netdev))
-
-> I tried adding this to net_devmem_bind_dmabuf_to_queue():
->=20
-> if (xdp_rxq_info_is_reg(&rxq->xdp_rxq))
->                  return -EEXIST;
->=20
-> But quickly found out that in  netif_alloc_rx_queues() we initialize
-> all the rxq->xdp_rxq to state REGISTERED regardless whether xdp is
-> installed or not, so this check actually fails.
->=20
-> Worthy of note is that GVE holds an instance of xdp_rxq_info in
-> gve_rx_ring, and seems to use that for its xdp information, not the
-> one that hangs off of netdev_rx_queue in core.
->=20
-> Additionally, my understanding of XDP is limited, but why do we want
-> to disable it? My understanding is that XDP is a kernel bypass that
-> hands the data directly to userspace. In theory at least there should
-> be no issue binding dmabuf to a queue, then getting the data in the
-> queue via an XDP program instead of via TCP sockets or io uring. Is
-> there some fundamental reason why dmabuf and XDP are incompatible?
-
-You're conflating XDP with AF_XDP, two different things, slightly
-related but different.
+page pool params are not the right place for a supported flag.
+Sooner or later we'll want to expose this flag to user space.
 
