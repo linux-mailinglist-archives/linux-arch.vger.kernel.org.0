@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-6168-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6169-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC5D294FA78
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Aug 2024 01:57:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF10E94FA95
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Aug 2024 02:15:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6DDB128159D
-	for <lists+linux-arch@lfdr.de>; Mon, 12 Aug 2024 23:57:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 667291F22978
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Aug 2024 00:15:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62D9219A295;
-	Mon, 12 Aug 2024 23:57:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F584A3D;
+	Tue, 13 Aug 2024 00:15:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yu7jc8ms"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AQm5zO/c"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2DC91804F;
-	Mon, 12 Aug 2024 23:57:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8BB780B;
+	Tue, 13 Aug 2024 00:15:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723507032; cv=none; b=VXDGJ1080Bpq1HoMeJX0aDMLMvh2OEyrLEJPYi6G7+3onaI5edMxkDxIXu+Dl9umfkk9Pp3IeHdSEhpFJG/XteAxQhJ8yy77bl8jtnBuj0RMA3KfpbRO4HfGncf3wHnS1EYCavjkPG/4cw8lolTW6wPXlL3Wz7c8aZF6uyRGuQU=
+	t=1723508152; cv=none; b=Rxu74Ij/+b3v6IHveGbcYp8yQzZJbbiiUOZBqmItA6WjtalSXVJUBvR0Il9KhpUdp9yfHqEyjZlSUdbAEHej9pOUgBz6P/oLa3YEnc4XfGi25+J9fIGEmRG76NG8gO+0dnXPXqCUM87GJych4LdqqXux2QUs7Hk7JXTWI5hzgUs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723507032; c=relaxed/simple;
-	bh=Jr9ZiAeKQT2m5eKlEJkFL1K/dVRLIXlbe8RR0cKjDv0=;
+	s=arc-20240116; t=1723508152; c=relaxed/simple;
+	bh=S1XJ/Rz0CP+PA+3mSURlVDBTpHV1w7efu3oNCRizCkY=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XjNnPzye6aB/mJ1Dq+ppTkpeu4jB2DGvY7et1ZbsP2zXYk/8LibtFoCw9xWUf3OjOD6r40yGAB5JD4aWEyPjmwhqZwYBn/ya8+BsyILCKkbg8BV5nXp9pgoCKuxfG8OjrQBQ06JL3qhYuFnAcGOIKC3RbxCa5B7foEl7R9FYl8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yu7jc8ms; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2500C4AF0E;
-	Mon, 12 Aug 2024 23:57:09 +0000 (UTC)
+	 MIME-Version:Content-Type; b=jHPIrdBLUV6NXkS48N2T47PEtrd92zCGTE19Yg6CPt39T9W5gg0OjnXWJjeuVL1XLO1JXvBteH6vkI9zLIV7jHeYW0xt5AAbmlpnDCyHZrbPeskgPX9w1nR6pzikN7EP8mOmGJ0Srfmp9Fh9DHPHHLyy8Wf2e7BXu9yI48q8jQ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AQm5zO/c; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D6C7C4AF0E;
+	Tue, 13 Aug 2024 00:15:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723507031;
-	bh=Jr9ZiAeKQT2m5eKlEJkFL1K/dVRLIXlbe8RR0cKjDv0=;
+	s=k20201202; t=1723508151;
+	bh=S1XJ/Rz0CP+PA+3mSURlVDBTpHV1w7efu3oNCRizCkY=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Yu7jc8msljkFCiQiwDF8/zfbezYJqanad92vT7bLx1dIuUShflvBssxWFPxEF/6Tn
-	 Y6qZR26h6davxDADewPqVrDbdDczF8Qcfmj7XUmuNBVgamCljt10Aq6S9lIkNZrlTC
-	 DI1MmuAnHiAfpgm3qDz7e1Bxg9pWMNEsq3xGTfFREDalBFadkOa+tffRzqkA0tT8uP
-	 fY9gXJLt3AIpZK7oFuq6X15n6MRFUxghZeDdZK64myodmq9N2bG7na/OJa4W3FBwc+
-	 VjF7d55qI3ua0l1zhG9f4oRBuranyt4ci5N38sYz5rLuG4RyFeUjSKg0qqpUAjLWuY
-	 q9MRn2l+gjx0g==
-Date: Mon, 12 Aug 2024 16:57:08 -0700
+	b=AQm5zO/caWjx/0boPDLSn9iybZGi2E9coWEf8vuRSJQZxFonF6ZMTqNRdf16uoSCa
+	 VwE1WzgKVmX0nyQvbpgls5jI3pUxjVDgFpGWDenYKwnUaW60chOXGR7lkefPfATg+1
+	 vBAWWTcYTsX1Lcgs1IKvy2oe7UfJqQyNo1o+QfSGRfaNuInEGL84+5SR+SfHh7l8fI
+	 V7fXA1AyV0xE9M5t7Flqo0i4T3GntLyIkd8sZcews0vKvH2nqbnRU6yLT6Dr5hQkXL
+	 meOJ/JxdpV+tg2ejXTwmE+baIIo1DOu1ervh33EeUjG1j9bXW6gAPX7UuKhT5J3WJx
+	 1ANCH5J5uVR7g==
+Date: Mon, 12 Aug 2024 17:15:48 -0700
 From: Jakub Kicinski <kuba@kernel.org>
 To: Pavel Begunkov <asml.silence@gmail.com>
 Cc: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
@@ -76,8 +76,8 @@ Cc: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
  Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
 Subject: Re: [PATCH net-next v18 07/14] memory-provider: dmabuf devmem
  memory provider
-Message-ID: <20240812165708.33234ed6@kernel.org>
-In-Reply-To: <a6747b29-ed79-49d4-9ffe-b62074db1e09@gmail.com>
+Message-ID: <20240812171548.509ca539@kernel.org>
+In-Reply-To: <71260e3c-dee4-4bf0-b257-cdabd8cff3f1@gmail.com>
 References: <20240805212536.2172174-1-almasrymina@google.com>
 	<20240805212536.2172174-8-almasrymina@google.com>
 	<20240806135924.5bb65ec7@kernel.org>
@@ -89,8 +89,8 @@ References: <20240805212536.2172174-1-almasrymina@google.com>
 	<CAHS8izOXwZS-8sfvn3DuT1XWhjc--7-ZLjr8rMn1XHr5F+ckbA@mail.gmail.com>
 	<48f3a61f-9e04-4755-b50c-8fae6e6112eb@gmail.com>
 	<20240812105732.5d2845e4@kernel.org>
-	<CAHS8izPb51gvEHGHeQwWTs4YmimLLamau1c4j=Z4KGM8ZJrx5g@mail.gmail.com>
-	<a6747b29-ed79-49d4-9ffe-b62074db1e09@gmail.com>
+	<7e2ffe62-032a-4c5e-953b-b7117ab076be@gmail.com>
+	<71260e3c-dee4-4bf0-b257-cdabd8cff3f1@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -100,28 +100,25 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Mon, 12 Aug 2024 20:10:39 +0100 Pavel Begunkov wrote:
-> > 1. Drivers need to be able to say "I support unreadable netmem".
-> > Failure to report unreadable netmem support should cause the netlink
-> > API to fail when the user tries to bind dmabuf/io uring memory.
-> > 
-> > 2. Drivers need to be able to say "I want a header pool (with readable
-> > netmem)" or "I want a data pool (potentially with unreadable netmem)".
-> > 
-> > Pavel is suggesting implementing both of these in 2 different flags.
-> > 
-> > Jakub is suggesting implementing both with 1 flag which says "I can
-> > support unreadable netmem for this pool" , and guarding against #1
-> > with a refcount check to detect if a dmabuf pool should have been
-> > created but wasn't.  
+On Mon, 12 Aug 2024 20:04:41 +0100 Pavel Begunkov wrote:
+> >> Also don't see the upside of the explicit "non-capable" flag,
+> >> but I haven't thought of that. Is there any use?  
 > 
-> That would be iffy IIUC, but I think Jakub just explicitly said
-> that the refcount trick was just for debugging purposes and not
-> for gauging errors like "providers are not supported by the driver".
+> Or maybe I don't get what you're asking, I explained
+> why to have that "PP_IGNORE_PROVIDERS" on top of the flag
+> saying that it's supported.
 > 
-> "Yup, the refcount (now: check of the page pool list) was meant
-> as a WARN_ONCE() to catch bad drivers."
+> Which "non-capable" flag you have in mind? A page pool create
+> flag or one facing upper layers like devmem tcp?
 
-Sorry, insufficient caffeine level in the morning.
-We can't WARN_ONCE(), indeed.
+Let me rephrase - what's the point of having both PP_PROVIDERS_SUPPORTED
+and PP_IGNORE_PROVIDERS at the page pool level? PP_CAP_NET(MEM|IOV),
+and it's either there or it's not.
+
+If you're thinking about advertising the support all the way to the
+user, I'm not sure if page pool is the right place to do so. It's more
+of a queue property.
+
+BTW, Mina, the core should probably also check that XDP isn't installed
+before / while the netmem is bound to a queue.
 
