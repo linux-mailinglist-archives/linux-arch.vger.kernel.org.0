@@ -1,96 +1,153 @@
-Return-Path: <linux-arch+bounces-6197-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6203-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF911951ED7
-	for <lists+linux-arch@lfdr.de>; Wed, 14 Aug 2024 17:44:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C6B6951F4A
+	for <lists+linux-arch@lfdr.de>; Wed, 14 Aug 2024 18:00:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2E4FB1C21CDE
-	for <lists+linux-arch@lfdr.de>; Wed, 14 Aug 2024 15:44:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A97E01F23911
+	for <lists+linux-arch@lfdr.de>; Wed, 14 Aug 2024 16:00:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 884921DA5E;
-	Wed, 14 Aug 2024 15:44:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF1541B14E7;
+	Wed, 14 Aug 2024 16:00:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="vm4v2bc1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C1Qo0Znc"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0247C1B5830;
-	Wed, 14 Aug 2024 15:44:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8515C3D552;
+	Wed, 14 Aug 2024 16:00:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723650277; cv=none; b=ujeC6DTsNe5f16aDaXTDBHWHPXvnmL5Q3O7A4PP4mSrXVzmSNm6oMYSUfYjKi5RxaQj22LdwyX32AtyW47wMjk9GxsRIu10KZUAS7E+a+PYyNcGr2534v/ZbSgQgoRI8ixPck1s3E0LSJfK+GKXQHd0LMNnl60doMYft22Uts3U=
+	t=1723651233; cv=none; b=HHfFwydcQ3IV9xTwvzx1fw3fAyV6fyRlW+jTFbEwHigLrZA+7oZg/yeWw+f+HmMjKL/Yy/pfRgGoWrGRiy6OA9V9k31lRtSlkj2DzwH1O1VczD1ts3zvILZl55wHxa4fkxG4cIOnpoZhjg7SoVq/E3CoC+kskV1JBvPqvfhOwKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723650277; c=relaxed/simple;
-	bh=tdadX9fO7MJt/rojFQaWHf4gVWAH38mayzTo//zSQD0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hC9Xg6lAvQjnPrMKqfGfYvHXuZTqMrVomA4sEENMogVnVS432rR3rALySSVYh+Kzhb1e5vW5tuuN7sm7mcycZqsG/7L2BSMLeZvWU+jEFMQN987vkUu8lnuwoFXSBt0gwfHtj4k3WzEu0kYkla3GH944Ie02X7X2tkv0xE9vvio=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=vm4v2bc1; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-Type:Content-ID:Content-Description;
-	bh=ImVhDDZvGKdMvHRXKWtBY7b1k/mxkNbLUAPdKjzQZA4=; b=vm4v2bc1RJWujLJZeuHTO2tTsQ
-	r9TLvhRGZHshO+cnttcm3iLy974IWx6T811ohmQwtnkXjc3sCZkSRvrTVT/gR9nkri6yeC707ghwJ
-	Bh1bmjfmYR0tTcecAL4mF+rr6iy3ahkAozOJf1TqTanDkuXZmQXqfPxMOfu2lC3wBDD1Bl2AxnxTi
-	tLvueUBRhx2Yljo6YI2vWB60Ha40L4FgOjsz7Ly3zHPmvRBwfRbjAJgWdFcwILeE/J2+nWDSyaOxr
-	WowQrt9wNTEQv7Go8sxdc2Qep7gI0w3W6K+x60EZuFdRON7IxbDs6/aVGC1P2klBWA8+azfqVgUVj
-	SOSl8zGQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1seGAs-00000000gHd-25s5;
-	Wed, 14 Aug 2024 15:44:34 +0000
-From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
-To: linux-mm@kvack.org,
-	linux-arch@vger.kernel.org
-Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	linux-s390@vger.kernel.org,
-	linux-um@lists.infradead.org,
-	x86@kernel.org
-Subject: [PATCH 5/5] mm: Make mk_pte() definition unconditional
-Date: Wed, 14 Aug 2024 16:44:25 +0100
-Message-ID: <20240814154427.162475-6-willy@infradead.org>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240814154427.162475-1-willy@infradead.org>
-References: <20240814154427.162475-1-willy@infradead.org>
+	s=arc-20240116; t=1723651233; c=relaxed/simple;
+	bh=tJ9y/t0p8CoWT3GLrKdQZ0dSWk0FZ5F+3VCb9/8rtJc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=X7XGZRWMcpbMavEVGi3q05wmpt+fgLDWxzw9/hRsYv5DM4jFHWaiP26xAY3nkrwrphVyuLQ+WArt5vz4+mD0FlW8ZmBRnhCXoe5XK+OVqPq5wH8lGG7JyLOO543LOBXln1CTf7pNkw1APPKloIwMZWclRO3fd7zT0F2NxCB212g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C1Qo0Znc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAE22C116B1;
+	Wed, 14 Aug 2024 16:00:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723651233;
+	bh=tJ9y/t0p8CoWT3GLrKdQZ0dSWk0FZ5F+3VCb9/8rtJc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=C1Qo0Zncz+RdR9DeUEI52CB7DQtewBYXVGfRUQ4A1toxpkFsbuQ6aJyDgJz7UfDuH
+	 bzxXCMK2CVyRwzj4Fzsp12NcASucmaKle8j/eMgOwWVzR2lvflN7lzCLHhTyQ3ScD3
+	 +3H4j8mCCyM0GSJc3pBhGBO2bXmXG5WzBuDhGy5GyWML6OrUSxKM3fVQt794iZbGN7
+	 zq37MEqlxsQmv9ud3qgMIDnCP26tQt1p0hjVBhliLYp5ui4XBUgvCNn/OsKWmUZrSd
+	 Krpj/jmqgiJLPoYpTX6m1uOjpJNj4kjuDK0YvvBuQWHt0Y9IyIEzIa3etR5NZwtbL6
+	 zsq/MP82yJmiw==
+Date: Wed, 14 Aug 2024 17:00:23 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Dave Martin <Dave.Martin@arm.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	Ross Burton <ross.burton@arm.com>,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v10 23/40] arm64/signal: Set up and restore the GCS
+ context for signal handlers
+Message-ID: <08932f6d-01ef-40e8-97d2-08f0d2016191@sirena.org.uk>
+References: <20240801-arm64-gcs-v10-0-699e2bd2190b@kernel.org>
+ <20240801-arm64-gcs-v10-23-699e2bd2190b@kernel.org>
+ <ZrzEfg5LqdAzgJ6+@e133380.arm.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="d9byunHM6BED1bDk"
+Content-Disposition: inline
+In-Reply-To: <ZrzEfg5LqdAzgJ6+@e133380.arm.com>
+X-Cookie: The second best policy is dishonesty.
 
-All architectures now use the common mk_pte() definition, so we
-can remove the condition.
 
-Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
----
- include/linux/pgtable.h | 2 --
- 1 file changed, 2 deletions(-)
+--d9byunHM6BED1bDk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-index 8204ffd87d74..1d46422b79cc 100644
---- a/include/linux/pgtable.h
-+++ b/include/linux/pgtable.h
-@@ -41,12 +41,10 @@
- #define FIRST_USER_ADDRESS	0UL
- #endif
- 
--#ifndef mk_pte
- static inline pte_t mk_pte(struct page *page, pgprot_t pgprot)
- {
- 	return pfn_pte(page_to_pfn(page), pgprot);
- }
--#endif
- 
- /*
-  * This defines the generic helper for accessing PMD page
--- 
-2.43.0
+On Wed, Aug 14, 2024 at 03:51:42PM +0100, Dave Martin wrote:
+> On Thu, Aug 01, 2024 at 01:06:50PM +0100, Mark Brown wrote:
 
+> > +	put_user_gcs((unsigned long)sigtramp, gcspr_el0 - 2, &ret);
+> > +	put_user_gcs(GCS_SIGNAL_CAP(gcspr_el0 - 1), gcspr_el0 - 1, &ret);
+> > +	if (ret != 0)
+> > +		return ret;
+
+> What happens if we went wrong here, or if the signal we are delivering
+> was caused by a GCS overrun or bad GCSPR_EL0 in the first place?
+
+> It feels like a program has no way to rescue itself from excessive
+> recursion in some thread.  Is there something equivalent to
+> sigaltstack()?
+
+> Or is the shadow stack always supposed to be big enough to cope with
+> recursion that exhausts the main stack and alternate signal stack (and
+> if so, how is this ensured)?
+
+There's no sigaltstack() for GCS, this is also the ABI with the existing
+shadow stack on x86 and should be addressed in a cross architecture
+fashion.  There have been some discussions about providing a shadow alt
+stack but they've generally been circular and inconclusive, there were a
+bunch of tradeoffs for corner cases and nobody had a clear sense as to
+what a good solution should be.  It was a bit unclear that actively
+doing anything was worthwhile.  The issues were IIRC around unwinders
+and disjoint shadow stacks, compatibility with non-shadow stacks and
+behaviour when we overflow the shadow stack.  I think there were also
+some applications trying to be very clever with alt stacks that needed
+to be interacted with and complicated everything but I could be
+misremembering there.
+
+Practically speaking since we're only storing return addresses the
+default GCS should be extremely large so it's unlikely to come up
+without first encountering and handling issues on the normal stack.
+Users allocating their own shadow stacks should be careful.  This isn't
+really satisfying but is probably fine in practice, there's certainly
+not been any pressure yet from the existing x86 deployments (though at
+present nobody can explicitly select their own shadow stack size,
+perhaps it'll become more of an issue when the clone3() stuff is in).
+
+--d9byunHM6BED1bDk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAma81JcACgkQJNaLcl1U
+h9DStQf+MHf5MIvFUrZBpQZg07XSllBYTCVHtBIGn5XzIx/KW1GJXKIov1DxWUTX
+4/a2ua/8So/yt7XHqWLjBgCUd7U4AsSNKO3kBxUGH1j85SY4YPkZtb+t8AriDoS5
+aBVNq2boS8RzipYyeieLa1TUtet845IqOUX6AZ6yMIyWEcqaST5KfdYG0vmy3tKH
+Rk85zpx0YvxXhmd63f+dAZYPPsOxVaJxVgUGl8/qDJzXEHHsT8nNlkLc4x6s7vja
+MyVsVWQGYTa7MKQofcxfH+yB1UtWlMV9oxMRWab4Uy7GPaBO05yTKxDukJQUklbt
+S47T7TUaZvxSLe1aJLMls0FHfdO5uQ==
+=go3J
+-----END PGP SIGNATURE-----
+
+--d9byunHM6BED1bDk--
 
