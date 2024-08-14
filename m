@@ -1,156 +1,120 @@
-Return-Path: <linux-arch+bounces-6196-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6202-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C239E951E30
-	for <lists+linux-arch@lfdr.de>; Wed, 14 Aug 2024 17:10:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35DB3951EE2
+	for <lists+linux-arch@lfdr.de>; Wed, 14 Aug 2024 17:44:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7FF082835D1
-	for <lists+linux-arch@lfdr.de>; Wed, 14 Aug 2024 15:10:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5AF951C21B71
+	for <lists+linux-arch@lfdr.de>; Wed, 14 Aug 2024 15:44:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53C7A1B3F2C;
-	Wed, 14 Aug 2024 15:10:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94F791B5824;
+	Wed, 14 Aug 2024 15:44:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Nlp68Wv4"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 662E61B3F15;
-	Wed, 14 Aug 2024 15:09:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 024531B582B;
+	Wed, 14 Aug 2024 15:44:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723648201; cv=none; b=jPyfkvi9PsqP9yE6G4ujcWz8E15+diebxQajtI1Jp8EIIRLqz1VxHquFKFUCZMfYdufIEGbr1Y7jAzY180kW2UBVvmOtkI5TruxpRUZJXS0LO6eqMiSe2upcBqsUq+x1u7Hmqqs0wNLEo34PTgBLIowpgB1TNVf31Lm57UlC7Ds=
+	t=1723650278; cv=none; b=uj23HwJMDowyIvLJWWV6RN6yWh4b/h3GdROMBgCHO8XTVNhVFCbN20Usd6uMFZ2NA43nnvFg0I8E2hOaqylBunbt6WWP0weJw8Ir5LOCwp0BAFZAd31w0r77sWAxwwiGOHt1U8OdEKuALj/f587kPKLkV7B2/tKmu3+1G/xQmPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723648201; c=relaxed/simple;
-	bh=Ex5i7IuYmiDIp+jR8sdfsK2sQRn/4xZA629mGrDAPFk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QuTvfX5+HVKgKZGscM29tShfMeWzPiTTSSvCmcAg7MFYBiLq2HH3E0rLKBk7aANg3ESQFbxhWgAFSocdJGpqhInKf38vkgfcanuSI4UZU6pKODzkn7pw80uABRM0WX9MnTotfspnLLj3CG46NiMHSlAyDUqrnfcCkxmjWXch1n0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A2CD2DA7;
-	Wed, 14 Aug 2024 08:10:24 -0700 (PDT)
-Received: from e133380.arm.com (e133380.arm.com [10.1.197.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 126053F58B;
-	Wed, 14 Aug 2024 08:09:53 -0700 (PDT)
-Date: Wed, 14 Aug 2024 16:09:51 +0100
-From: Dave Martin <Dave.Martin@arm.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-	Eric Biederman <ebiederm@xmission.com>,
-	Shuah Khan <shuah@kernel.org>,
-	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
-	Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>,
-	"H.J. Lu" <hjl.tools@gmail.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Florian Weimer <fweimer@redhat.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
-	Ross Burton <ross.burton@arm.com>,
-	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v10 24/40] arm64/signal: Expose GCS state in signal frames
-Message-ID: <ZrzIv3FWNgJizDc2@e133380.arm.com>
-References: <20240801-arm64-gcs-v10-0-699e2bd2190b@kernel.org>
- <20240801-arm64-gcs-v10-24-699e2bd2190b@kernel.org>
+	s=arc-20240116; t=1723650278; c=relaxed/simple;
+	bh=U7WuHYR57mLXTPaEpqW6Wd2ZQf59JaIgOYyS+tdv5xU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DAw4KtLV8kS69IFmow5Mf6Nh5tCWHOeAyG588t6zHfKr9yB4bmqx6e14jy0Rqtx9qAJINT6ru++kwzYEmcx3pNt3HAU6EqPvWr7J3P6XchW5i36ummUx1KNyc+KbibxyhRl97AjMgKGcyGY3CaspNM75MdomRHMTSjlo8Inn39A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Nlp68Wv4; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+	Content-Description:In-Reply-To:References;
+	bh=Y8GzTtU2QoStw/WgTavIsPk3vntaV6mcfxUlw+vTkw4=; b=Nlp68Wv4gWlG8g9amXu9RSnoTE
+	bGIkORrON8YDkyXuNB3pHR0x3EWS8Cj46g5V0nmkoNra8NLu3eoLcdQDcSfXtQUcNoQv73JbO5irY
+	YO/2KtHV5uYXpcKre5wKy5/4Hv3pAdgjf5CgBoylTiilTIclax+k/Y1qqeGMWDIu25oBopw+ZSuo/
+	+PbCg3gzutTroTrptbNhWjqMZBqJlVGdigr+h7eL9Gwfxuq3uaXQEiYu6lJesN6VHloOF2NJxcVQ5
+	g8Bi5zp2BmmvlEC8p4EYP5Qf2CZacyuv2wEMcW0vqzDern12I/bCWq9yZIfLqu4qinNlF3KSoMUbe
+	DgnzBqVg==;
+Received: from willy by casper.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1seGAr-00000000gH2-3gSE;
+	Wed, 14 Aug 2024 15:44:33 +0000
+From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+To: linux-mm@kvack.org,
+	linux-arch@vger.kernel.org
+Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	linux-s390@vger.kernel.org,
+	linux-um@lists.infradead.org,
+	x86@kernel.org
+Subject: [PATCH 0/5] Provide a single definition of mk_pte()
+Date: Wed, 14 Aug 2024 16:44:20 +0100
+Message-ID: <20240814154427.162475-1-willy@infradead.org>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240801-arm64-gcs-v10-24-699e2bd2190b@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Aug 01, 2024 at 01:06:51PM +0100, Mark Brown wrote:
-> Add a context for the GCS state and include it in the signal context when
-> running on a system that supports GCS. We reuse the same flags that the
-> prctl() uses to specify which GCS features are enabled and also provide the
-> current GCS pointer.
-> 
-> We do not support enabling GCS via signal return, there is a conflict
-> between specifying GCSPR_EL0 and allocation of a new GCS and this is not
-> an ancticipated use case.  We also enforce GCS configuration locking on
-> signal return.
-> 
-> Reviewed-by: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
->  arch/arm64/include/uapi/asm/sigcontext.h |   9 +++
->  arch/arm64/kernel/signal.c               | 106 +++++++++++++++++++++++++++++++
->  2 files changed, 115 insertions(+)
+Each architecturee must provide a definition of mk_pte() today.  They must
+also provide pfn_pte().  Usually the former is defined in terms of the
+latter, but not on some architectures.  I was trying to decide what we
+should do for creating PTEs in a folio world, and it struck me that we
+should have architectures only provide pfn_pte() and then I don't need
+to trouble the arch maintainers with whatever MM API I come up with.
 
-[...]
+The architectures not on the cc list I considered trivial.  The
+architectures who have named patches are less trivial, and I did my
+best to write a decent commit message explaining why I did what I did
+to each architecture.
 
-> diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
+I have some followup patches which remove folio->page conversions, but
+if this set of patches are wrong on any architecture, then they'll also
+be wrong, so I'm not sending them right now.
 
-[...]
+Matthew Wilcox (Oracle) (5):
+  mm: Introduce a common definition of mk_pte()
+  x86: Remove custom definition of mk_pte()
+  um: Remove custom definition of mk_pte()
+  s390: Remove custom definition of mk_pte()
+  mm: Make mk_pte() definition unconditional
 
-> @@ -999,6 +1092,13 @@ static int setup_sigframe_layout(struct rt_sigframe_user_layout *user,
->  			return err;
->  	}
->  
-> +	if (add_all || task_gcs_el0_enabled(current)) {
-> +		err = sigframe_alloc(user, &user->gcs_offset,
-> +				     sizeof(struct gcs_context));
-> +		if (err)
-> +			return err;
-> +	}
-> +
+ arch/alpha/include/asm/pgtable.h         |  7 -------
+ arch/arc/include/asm/pgtable-levels.h    |  1 -
+ arch/arm/include/asm/pgtable.h           |  1 -
+ arch/arm64/include/asm/pgtable.h         |  6 ------
+ arch/csky/include/asm/pgtable.h          |  5 -----
+ arch/hexagon/include/asm/pgtable.h       |  3 ---
+ arch/loongarch/include/asm/pgtable.h     |  6 ------
+ arch/m68k/include/asm/mcf_pgtable.h      |  6 ------
+ arch/m68k/include/asm/motorola_pgtable.h |  6 ------
+ arch/m68k/include/asm/sun3_pgtable.h     |  6 ------
+ arch/microblaze/include/asm/pgtable.h    |  8 --------
+ arch/mips/include/asm/pgtable.h          |  6 ------
+ arch/nios2/include/asm/pgtable.h         |  6 ------
+ arch/openrisc/include/asm/pgtable.h      |  2 --
+ arch/parisc/include/asm/pgtable.h        |  2 --
+ arch/powerpc/include/asm/pgtable.h       |  1 -
+ arch/riscv/include/asm/pgtable.h         |  2 --
+ arch/s390/include/asm/pgtable.h          | 10 ----------
+ arch/sh/include/asm/pgtable_32.h         |  8 --------
+ arch/sparc/include/asm/pgtable_32.h      |  9 ++-------
+ arch/sparc/include/asm/pgtable_64.h      |  1 -
+ arch/um/include/asm/pgtable-2level.h     |  1 -
+ arch/um/include/asm/pgtable-3level.h     |  9 ---------
+ arch/um/include/asm/pgtable.h            | 17 ++++++++++-------
+ arch/x86/include/asm/pgtable.h           | 19 +++----------------
+ arch/xtensa/include/asm/pgtable.h        |  1 -
+ include/linux/pgtable.h                  |  5 +++++
+ 27 files changed, 20 insertions(+), 134 deletions(-)
 
-Who turns on GCS?  I have a concern that if libc is new enough to be
-built for GCS then the libc startup code will to turn it on, even if
-the binary stack running on top of libc is old.
+-- 
+2.43.0
 
-Whether a given library should break old binaries is a bit of a grey
-area, but I think that libraries that deliberately export stable ABIs
-probably shouldn't.
-
-
-With that in mind, does any GCS state need to be saved at all?
-
-Is there any scenario where it is legitimate for the signal handler to
-change the shadow stack mode or to return with an altered GCSPR_EL0?
-
-Is the guarded stack considered necessary (or at least beneficial) for
-backtracing, or is the regular stack sufficient?
-
-(I'm assuming that unwind tables / debug info should allow the shadow
-stack to be unwound anyway; rather this question is about whether
-software can straightforwardly find out the interrupted GCSPR_EL0
-without this information... and whether it needs to.)
-
-
->  	if (system_supports_sve() || system_supports_sme()) {
->  		unsigned int vq = 0;
->  
-> @@ -1099,6 +1199,12 @@ static int setup_sigframe(struct rt_sigframe_user_layout *user,
->  		__put_user_error(current->thread.fault_code, &esr_ctx->esr, err);
->  	}
->  
-> +	if (system_supports_gcs() && err == 0 && user->gcs_offset) {
-> +		struct gcs_context __user *gcs_ctx =
-> +			apply_user_offset(user, user->gcs_offset);
-> +		err |= preserve_gcs_context(gcs_ctx);
-> +	}
-> +
-
-[...]
-
-Cheers
----Dave
 
