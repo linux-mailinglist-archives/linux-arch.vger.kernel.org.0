@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-6203-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6204-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C6B6951F4A
-	for <lists+linux-arch@lfdr.de>; Wed, 14 Aug 2024 18:00:39 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6ADCE951FE9
+	for <lists+linux-arch@lfdr.de>; Wed, 14 Aug 2024 18:27:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A97E01F23911
-	for <lists+linux-arch@lfdr.de>; Wed, 14 Aug 2024 16:00:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 05F6FB24314
+	for <lists+linux-arch@lfdr.de>; Wed, 14 Aug 2024 16:26:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF1541B14E7;
-	Wed, 14 Aug 2024 16:00:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 398351BBBCE;
+	Wed, 14 Aug 2024 16:21:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C1Qo0Znc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q4rPNJ6Z"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8515C3D552;
-	Wed, 14 Aug 2024 16:00:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F135D1BBBC1;
+	Wed, 14 Aug 2024 16:21:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723651233; cv=none; b=HHfFwydcQ3IV9xTwvzx1fw3fAyV6fyRlW+jTFbEwHigLrZA+7oZg/yeWw+f+HmMjKL/Yy/pfRgGoWrGRiy6OA9V9k31lRtSlkj2DzwH1O1VczD1ts3zvILZl55wHxa4fkxG4cIOnpoZhjg7SoVq/E3CoC+kskV1JBvPqvfhOwKE=
+	t=1723652514; cv=none; b=r3MSCah6bq70dpv42QfWQaocr5iXxMwGHY7ZCl+SspKMpj9h2/AhCotoWBLopAe2P7YyyI+N4ArQ3CBlqbcpIrnDpvl5LGRFYOmZKZ9qTtC56PWe4E8mlo5Yhz1OXH0eef4wiESvy4Qj4/t7xtacTDb1fXicixRJdA15l1vWcjc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723651233; c=relaxed/simple;
-	bh=tJ9y/t0p8CoWT3GLrKdQZ0dSWk0FZ5F+3VCb9/8rtJc=;
+	s=arc-20240116; t=1723652514; c=relaxed/simple;
+	bh=y8gPBkTOEvl5zKXterrWvlJucqFgWO/8eWjzKQnvzD4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X7XGZRWMcpbMavEVGi3q05wmpt+fgLDWxzw9/hRsYv5DM4jFHWaiP26xAY3nkrwrphVyuLQ+WArt5vz4+mD0FlW8ZmBRnhCXoe5XK+OVqPq5wH8lGG7JyLOO543LOBXln1CTf7pNkw1APPKloIwMZWclRO3fd7zT0F2NxCB212g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C1Qo0Znc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAE22C116B1;
-	Wed, 14 Aug 2024 16:00:26 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=MypPMNqIFcx80G15We0GjLvZpIA/0VzUFScWZrw3gD/EgtXRrmBzU9oDXtlApeuBIpgWmgPgT+foK8IAEuIRCon6ICva2hJJsAkI2GktoBfodfNXPrCQdC1Er+O6d/DO6nYfbKe+WEpQ8yfCuzJAQPv165ezRpDtgC8PAOh2saQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q4rPNJ6Z; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F5CBC4AF09;
+	Wed, 14 Aug 2024 16:21:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723651233;
-	bh=tJ9y/t0p8CoWT3GLrKdQZ0dSWk0FZ5F+3VCb9/8rtJc=;
+	s=k20201202; t=1723652513;
+	bh=y8gPBkTOEvl5zKXterrWvlJucqFgWO/8eWjzKQnvzD4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=C1Qo0Zncz+RdR9DeUEI52CB7DQtewBYXVGfRUQ4A1toxpkFsbuQ6aJyDgJz7UfDuH
-	 bzxXCMK2CVyRwzj4Fzsp12NcASucmaKle8j/eMgOwWVzR2lvflN7lzCLHhTyQ3ScD3
-	 +3H4j8mCCyM0GSJc3pBhGBO2bXmXG5WzBuDhGy5GyWML6OrUSxKM3fVQt794iZbGN7
-	 zq37MEqlxsQmv9ud3qgMIDnCP26tQt1p0hjVBhliLYp5ui4XBUgvCNn/OsKWmUZrSd
-	 Krpj/jmqgiJLPoYpTX6m1uOjpJNj4kjuDK0YvvBuQWHt0Y9IyIEzIa3etR5NZwtbL6
-	 zsq/MP82yJmiw==
-Date: Wed, 14 Aug 2024 17:00:23 +0100
+	b=Q4rPNJ6ZS8/YTjHc/9HkxRU27ouAY0yibwaXXAm+1vcSBPqrepnOKEU4AR3KEhnOt
+	 s58dD84l+9v/yfPZN6YN2ee+5/Ym6lay4t2aiB6H3CiXfg445fDVhup1StlDclBTyN
+	 d6Tf9ZIXcKqcM2L3sfgF+ddNkeVAxqDhU5qIjR7ZPgaAoUWw/E0xVSN5pIIVghvJgH
+	 ao3pIeIoMl3CcpagSZ9IYoUJzDC0aICQgPiBRlV88oVgdcBIHluUExu1ctrkOZWkoE
+	 9l/H09OLwebwQfZ3EaETR7W2P/kahXmTAg0E5aVvsQbbYfL+9JItY7NLBOg8IGqomK
+	 WAZ23R2KyrVjw==
+Date: Wed, 14 Aug 2024 17:21:44 +0100
 From: Mark Brown <broonie@kernel.org>
 To: Dave Martin <Dave.Martin@arm.com>
 Cc: Catalin Marinas <catalin.marinas@arm.com>,
@@ -70,12 +70,11 @@ Cc: Catalin Marinas <catalin.marinas@arm.com>,
 	linux-arch@vger.kernel.org, linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v10 23/40] arm64/signal: Set up and restore the GCS
- context for signal handlers
-Message-ID: <08932f6d-01ef-40e8-97d2-08f0d2016191@sirena.org.uk>
+Subject: Re: [PATCH v10 24/40] arm64/signal: Expose GCS state in signal frames
+Message-ID: <7433e3d2-996a-45a0-b917-666a340ad109@sirena.org.uk>
 References: <20240801-arm64-gcs-v10-0-699e2bd2190b@kernel.org>
- <20240801-arm64-gcs-v10-23-699e2bd2190b@kernel.org>
- <ZrzEfg5LqdAzgJ6+@e133380.arm.com>
+ <20240801-arm64-gcs-v10-24-699e2bd2190b@kernel.org>
+ <ZrzIv3FWNgJizDc2@e133380.arm.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -83,71 +82,69 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="d9byunHM6BED1bDk"
+	protocol="application/pgp-signature"; boundary="m4k347TUK5jMfMto"
 Content-Disposition: inline
-In-Reply-To: <ZrzEfg5LqdAzgJ6+@e133380.arm.com>
+In-Reply-To: <ZrzIv3FWNgJizDc2@e133380.arm.com>
 X-Cookie: The second best policy is dishonesty.
 
 
---d9byunHM6BED1bDk
+--m4k347TUK5jMfMto
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Wed, Aug 14, 2024 at 03:51:42PM +0100, Dave Martin wrote:
-> On Thu, Aug 01, 2024 at 01:06:50PM +0100, Mark Brown wrote:
+On Wed, Aug 14, 2024 at 04:09:51PM +0100, Dave Martin wrote:
+> On Thu, Aug 01, 2024 at 01:06:51PM +0100, Mark Brown wrote:
 
-> > +	put_user_gcs((unsigned long)sigtramp, gcspr_el0 - 2, &ret);
-> > +	put_user_gcs(GCS_SIGNAL_CAP(gcspr_el0 - 1), gcspr_el0 - 1, &ret);
-> > +	if (ret != 0)
-> > +		return ret;
+> > +	if (add_all || task_gcs_el0_enabled(current)) {
+> > +		err = sigframe_alloc(user, &user->gcs_offset,
+> > +				     sizeof(struct gcs_context));
+> > +		if (err)
+> > +			return err;
+> > +	}
 
-> What happens if we went wrong here, or if the signal we are delivering
-> was caused by a GCS overrun or bad GCSPR_EL0 in the first place?
+> Who turns on GCS?  I have a concern that if libc is new enough to be
+> built for GCS then the libc startup code will to turn it on, even if
+> the binary stack running on top of libc is old.
 
-> It feels like a program has no way to rescue itself from excessive
-> recursion in some thread.  Is there something equivalent to
-> sigaltstack()?
+It should normally be the dynamic linker which should be looking for
+annotatations in the binaries it's loading before it decides if it's
+going to turn on GCS (and libc doing something similar if it's going to
+dlopen() things in a process with GCS enabled).
 
-> Or is the shadow stack always supposed to be big enough to cope with
-> recursion that exhausts the main stack and alternate signal stack (and
-> if so, how is this ensured)?
+> Is there any scenario where it is legitimate for the signal handler to
+> change the shadow stack mode or to return with an altered GCSPR_EL0?
 
-There's no sigaltstack() for GCS, this is also the ABI with the existing
-shadow stack on x86 and should be addressed in a cross architecture
-fashion.  There have been some discussions about providing a shadow alt
-stack but they've generally been circular and inconclusive, there were a
-bunch of tradeoffs for corner cases and nobody had a clear sense as to
-what a good solution should be.  It was a bit unclear that actively
-doing anything was worthwhile.  The issues were IIRC around unwinders
-and disjoint shadow stacks, compatibility with non-shadow stacks and
-behaviour when we overflow the shadow stack.  I think there were also
-some applications trying to be very clever with alt stacks that needed
-to be interacted with and complicated everything but I could be
-misremembering there.
+If userspace can rewrite the stack pointer on return (eg, to return to a
+different context as part of userspace threading) then it will need to
+be able to also update GCSPR_EL0 to something consistent otherwise
+attempting to return from the interrupted context isn't going to go
+well.  Changing the mode is a bit more exotic, as it is in general.
+It's as much to provide information to the signal handler as anything
+else.
 
-Practically speaking since we're only storing return addresses the
-default GCS should be extremely large so it's unlikely to come up
-without first encountering and handling issues on the normal stack.
-Users allocating their own shadow stacks should be careful.  This isn't
-really satisfying but is probably fine in practice, there's certainly
-not been any pressure yet from the existing x86 deployments (though at
-present nobody can explicitly select their own shadow stack size,
-perhaps it'll become more of an issue when the clone3() stuff is in).
+> Is the guarded stack considered necessary (or at least beneficial) for
+> backtracing, or is the regular stack sufficient?
 
---d9byunHM6BED1bDk
+It's potentially beneficial, being less vulnerable to corruption and
+simpler to parse if all you're interested in is return addresses.
+Profiling in particular was mentioned, grabbing a linear block of memory
+will hopefully be less overhead than chasing down the stack.  The
+regular stack should generally be sufficient though.
+
+--m4k347TUK5jMfMto
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAma81JcACgkQJNaLcl1U
-h9DStQf+MHf5MIvFUrZBpQZg07XSllBYTCVHtBIGn5XzIx/KW1GJXKIov1DxWUTX
-4/a2ua/8So/yt7XHqWLjBgCUd7U4AsSNKO3kBxUGH1j85SY4YPkZtb+t8AriDoS5
-aBVNq2boS8RzipYyeieLa1TUtet845IqOUX6AZ6yMIyWEcqaST5KfdYG0vmy3tKH
-Rk85zpx0YvxXhmd63f+dAZYPPsOxVaJxVgUGl8/qDJzXEHHsT8nNlkLc4x6s7vja
-MyVsVWQGYTa7MKQofcxfH+yB1UtWlMV9oxMRWab4Uy7GPaBO05yTKxDukJQUklbt
-S47T7TUaZvxSLe1aJLMls0FHfdO5uQ==
-=go3J
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAma82ZcACgkQJNaLcl1U
+h9Dw8Af/XElMBO/KVokIR07KfaB7sgnHeJUwP31NSZhm66aDj1xZVgyEok6vrQOQ
+UAQRifPV98myi1QmsusRk+fCC2OGUG2eLWctGHDghxBwYs5hOCl5kebcUIKzzjNH
+8aqD3GZNX1JLH8PLbzDMVhdLpM4uyKOvZFammGDrnoXjhZaBVSKS0PibtS54TY+R
+HA7tSTIm/+xG4rXkAPJ/vo9YZf+cF1bTp1ccC47oQGzsPJIlPfulipp25A71VIiQ
+9enlRUbkSEEZhQH+UZ2Rkpk1+sMCKUv5uT/m2vNWx1gRkngD8YkNUG2TnE9FQqSE
+01uJahLacQ3yCSaWsm6UnjpUxI3Qng==
+=9afo
 -----END PGP SIGNATURE-----
 
---d9byunHM6BED1bDk--
+--m4k347TUK5jMfMto--
 
