@@ -1,178 +1,202 @@
-Return-Path: <linux-arch+bounces-6240-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6241-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BF44953EDB
-	for <lists+linux-arch@lfdr.de>; Fri, 16 Aug 2024 03:22:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B36919541B3
+	for <lists+linux-arch@lfdr.de>; Fri, 16 Aug 2024 08:28:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0BD60B24141
-	for <lists+linux-arch@lfdr.de>; Fri, 16 Aug 2024 01:22:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 353AD287043
+	for <lists+linux-arch@lfdr.de>; Fri, 16 Aug 2024 06:28:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3559417BA1;
-	Fri, 16 Aug 2024 01:22:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TcPBNpDC"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A1A17E76F;
+	Fri, 16 Aug 2024 06:28:13 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C37ED2BCFF;
-	Fri, 16 Aug 2024 01:22:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF99D34CD8;
+	Fri, 16 Aug 2024 06:28:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723771370; cv=none; b=HHliaLykvjS5QHln6rT75b1KHsOpJJP2q8e6aqOrydJoQ/vNHZCS9x+9GSiJi6et39DAB/zouVTGGuU3NKzJ2cfpfxPtliwdOviG54D4kgoRQv2Rqx0ldcATxsU6nYmf1fAXNWYIgT0BbO7Jjf3C8PTyJFoaIqQdK2lZ3B57+ZE=
+	t=1723789693; cv=none; b=nmPMQoxnmSo/WcVL2YbDK4z/PEJmiF7HTd1nJUpLxZiW4C9LCTJ2R0Pbl+dLq9LQC0YY56CzlLon8+RboP5aW2aas/fjg/MoQ5HR1OOKc8YLXRHHS4QNN0nQTr3D3XZpsGhbE4d4cYHcStwTABd8K+pSVv9nP7Jymp/b9LIrgfU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723771370; c=relaxed/simple;
-	bh=IkxgNU5lZE6GtoPPMNJU9i4n15FLyHYKT67mAHsJDsU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jjXxlA+OcErznBVhV1xxC/pcFs0oBTNVMuFhQQVR89PC29oO7Tm6didaOPDcV/wikNf2pxWyrk/0wkZwXbWNfzcwWO8vluFEGbPsX1MlI1b2sLE/rkTDuFi163eWPHdeEbq1WCEDRpVZlJs4X8mawfGF/5hY2muFK7BFmzdef0U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TcPBNpDC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C07B2C4AF09;
-	Fri, 16 Aug 2024 01:22:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723771369;
-	bh=IkxgNU5lZE6GtoPPMNJU9i4n15FLyHYKT67mAHsJDsU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=TcPBNpDCRFXY8kGxpg2OnRKk1wK1Dnq5Nh134fk9HH+HXrxS9P35iW+jorPaKYS1N
-	 xAMygGZ/o8VttaAfDJ73kbiQunXv00m488MEt5zFzKx0LmQ+yM91SMEj/TOTfvHriW
-	 5gsmMzKyX4hCr0NdhJXl+6EFrUUTMZlDnL9mk+hbDY69YRrM4P0eypdGanoGEqyjwW
-	 VnKH4FrMCPyOazttbwCRLeHANRE3uJJckxjidvB49sZn2byX+9sHs42dntssCrTNqq
-	 kbYFHxD1BHqZoc/Cao/daL6ihfXWV1GKXL7xuhyFlGg+FRagNIGfP4rt1DbGZ2ks8D
-	 3C5SoToFZwuJg==
-Date: Thu, 15 Aug 2024 18:22:45 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, "David S.
- Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
- Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
- Jonathan Corbet <corbet@lwn.net>, Richard Henderson
- <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
- Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer
- <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
- <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>,
- Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
- <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
- Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
- <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, Herbert
- Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, Willem
- de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, Sumit
- Semwal <sumit.semwal@linaro.org>, Christian =?UTF-8?B?S8O2bmln?=
- <christian.koenig@amd.com>, Bagas Sanjaya <bagasdotme@gmail.com>, Christoph
- Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>,
- Taehee Yoo <ap420073@gmail.com>, David Wei <dw@davidwei.uk>, Jason
- Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, Shailend
- Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>,
- Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
- <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
- Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
-Subject: Re: [PATCH net-next v19 06/13] memory-provider: dmabuf devmem
- memory provider
-Message-ID: <20240815182245.2b5e3f44@kernel.org>
-In-Reply-To: <31640ff4-25a6-4115-85e6-82092ce57393@gmail.com>
-References: <20240813211317.3381180-7-almasrymina@google.com>
-	<de7daf80-a2e4-4451-b666-2a67ccc3649e@gmail.com>
-	<CAHS8izPMC+XhXKbJOQ3ymizyKuARSOv_cO_xO+q1EG4zoy6Gig@mail.gmail.com>
-	<31640ff4-25a6-4115-85e6-82092ce57393@gmail.com>
+	s=arc-20240116; t=1723789693; c=relaxed/simple;
+	bh=YWQI/nyT5QdlLevRRr/GwMqaTttd/nH11Y3stUGbZrY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RQVhX5AAj3v8CtuuFBAqgKoX6cK7mscR12xqkrR3vnDZVrRTvC02hf6HW/N+nrx9n33eIlnFsAo1/MGG+w5j8cKVSgNqct6VlslxykdCliS0rlBovyxjYOhvBr45FzkJ4zkE7ZfaV1IRyBK3g3y+LiqCR/qMGPUVA9AIKcgifvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B0D9E143D;
+	Thu, 15 Aug 2024 23:28:35 -0700 (PDT)
+Received: from [10.163.57.106] (unknown [10.163.57.106])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 315173F73B;
+	Thu, 15 Aug 2024 23:28:06 -0700 (PDT)
+Message-ID: <090eb237-10f4-4358-be07-1eb8d30c3ec1@arm.com>
+Date: Fri, 16 Aug 2024 11:58:04 +0530
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V3 1/2] uapi: Define GENMASK_U128
+To: linux-kernel@vger.kernel.org
+Cc: ardb@kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+ Yury Norov <yury.norov@gmail.com>,
+ Rasmus Villemoes <linux@rasmusvillemoes.dk>, Arnd Bergmann <arnd@arndb.de>,
+ linux-arch@vger.kernel.org
+References: <20240801071646.682731-1-anshuman.khandual@arm.com>
+ <20240801071646.682731-2-anshuman.khandual@arm.com>
+Content-Language: en-US
+From: Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20240801071646.682731-2-anshuman.khandual@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, 14 Aug 2024 17:32:53 +0100 Pavel Begunkov wrote:
-> > This is where I get a bit confused. Jakub did mention that it is
-> > desirable for core to verify that the driver did the right thing,
-> > instead of trusting that a driver did the right thing without
-> > verifying. Relying on a flag from the driver opens the door for the
-> > driver to say "I support this" but actually not create the mp
-> > page_pool. In my mind the explicit check is superior to getting
-> > feedback from the driver.  
-> 
-> You can apply the same argument to anything, but not like
-> after each for example ->ndo_start_xmit we dig into the
-> interface's pending queue to make sure it was actually queued.
-> 
-> And even if you check that there is a page pool, the driver
-> can just create an empty pool that it'll never use. There
-> are always ways to make it wrong.
-> 
-> Yes, there is a difference, and I'm not against it as a
-> WARN_ON_ONCE after failing it in a more explicit way.
-> 
-> Jakub might have a different opinion on how it should look
-> like, and we can clarify on that, but I do believe it's a
-> confusing interface that can be easily made better.
 
-My queue API RFC patches had configuration arguments, not sure if this
-is the right version but you'll get the idea:
-https://github.com/kuba-moo/linux/blob/qcfg/include/net/netdev_cfg.h#L43-L50
-This way we can _tell_ the driver what the config should be. That part
-got lost somewhere along the way, because perhaps in its embryonic form
-it doesn't make sense.
 
-We can bring it back, add HDS with threshold of 0, to it, and a bit for
-non-readable memory. On top of that "capability bits" in struct
-netdev_queue_mgmt_ops to mark that the driver pays attention to particular
-fields of the config.
+On 8/1/24 12:46, Anshuman Khandual wrote:
+> This adds GENMASK_U128() and __GENMASK_U128() macros using __BITS_PER_U128
+> and __int128 data types. These macros will be used in providing support for
+> generating 128 bit masks.
+> 
+> Cc: Yury Norov <yury.norov@gmail.com>
+> Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> Cc: Arnd Bergmann <arnd@arndb.de>>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-arch@vger.kernel.org
+> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> ---
+>  include/linux/bits.h       | 13 +++++++++++++
+>  include/uapi/linux/bits.h  |  3 +++
+>  include/uapi/linux/const.h | 15 +++++++++++++++
+>  3 files changed, 31 insertions(+)
+> 
+> diff --git a/include/linux/bits.h b/include/linux/bits.h
+> index 0eb24d21aac2..bf99feb5570e 100644
+> --- a/include/linux/bits.h
+> +++ b/include/linux/bits.h
+> @@ -36,4 +36,17 @@
+>  #define GENMASK_ULL(h, l) \
+>  	(GENMASK_INPUT_CHECK(h, l) + __GENMASK_ULL(h, l))
+>  
+> +/*
+> + * Missing asm support
+> + *
+> + * __GENMASK_U128() depends on _BIT128() which would not work
+> + * in the asm code, as it shifts an 'unsigned __init128' data
+> + * type instead of direct representation of 128 bit constants
+> + * such as long and unsigned long. The fundamental problem is
+> + * that a 128 bit constant will get silently truncated by the
+> + * gcc compiler.
+> + */
+> +#define GENMASK_U128(h, l) \
+> +	(GENMASK_INPUT_CHECK(h, l) + __GENMASK_U128(h, l))
+> +
+>  #endif	/* __LINUX_BITS_H */
+> diff --git a/include/uapi/linux/bits.h b/include/uapi/linux/bits.h
+> index 3c2a101986a3..4d4b7b08003c 100644
+> --- a/include/uapi/linux/bits.h
+> +++ b/include/uapi/linux/bits.h
+> @@ -12,4 +12,7 @@
+>          (((~_ULL(0)) - (_ULL(1) << (l)) + 1) & \
+>           (~_ULL(0) >> (__BITS_PER_LONG_LONG - 1 - (h))))
+>  
+> +#define __GENMASK_U128(h, l) \
+> +	((_BIT128((h) + 1)) - (_BIT128(l)))
+> +
+>  #endif /* _UAPI_LINUX_BITS_H */
+> diff --git a/include/uapi/linux/const.h b/include/uapi/linux/const.h
+> index a429381e7ca5..5be12e8f8f9c 100644
+> --- a/include/uapi/linux/const.h
+> +++ b/include/uapi/linux/const.h
+> @@ -28,6 +28,21 @@
+>  #define _BITUL(x)	(_UL(1) << (x))
+>  #define _BITULL(x)	(_ULL(1) << (x))
+>  
+> +/*
+> + * Missing asm support
+> + *
+> + * __BIT128() would not work in the asm code, as it shifts an
+> + * 'unsigned __init128' data type as direct representation of
+> + * 128 bit constants is not supported in the gcc compiler, as
+> + * they get silently truncated.
+> + *
+> + * TODO: Please revisit this implementation when gcc compiler
+> + * starts representing 128 bit constants directly like long
+> + * and unsigned long etc. Subsequently drop the comment for
+> + * GENMASK_U128() which would then start supporting asm code.
+> + */
+> +#define _BIT128(x)	((unsigned __int128)(1) << (x))
+> +
+>  #define __ALIGN_KERNEL(x, a)		__ALIGN_KERNEL_MASK(x, (__typeof__(x))(a) - 1)
+>  #define __ALIGN_KERNEL_MASK(x, mask)	(((x) + (mask)) & ~(mask))
+>  
 
-Not sure if it should block the series, but that'd be the way I'd do it
-(for now?)
+Hello Yuri/Arnd,
 
-I'd keep the current check with a WARN_ON_ONCE(), tho.
-Given the absence of tests driver developers can use.
-Especially those who _aren't_ supporting the feature.
+This proposed GENMASK_U128(h, l) warns during build when the higher end
+bit is 127 (which in itself is a valid input).
 
-> > and cons to each approach; I don't see a showstopping reason to go
-> > with one over the other.
-> >   
-> >> And page_pool_check_memory_provider() is not that straightforward,
-> >> it doesn't walk through pools of a queue.  
-> > 
-> > Right, we don't save the pp of a queue, only a netdev. The outer loop
-> > checks all the pps of the netdev to find one with the correct binding,
-> > and the inner loop checks that this binding is attached to the correct
-> > queue.  
-> 
-> That's the thing, I doubt about the second part.
-> 
-> net_devmem_bind_dmabuf_to_queue() {
-> 	err = xa_alloc(&binding->bound_rxqs, &xa_idx, rxq);
-> 	if (err)
-> 		return err;
-> 
-> 	netdev_rx_queue_restart();
-> 
-> 	// page_pool_check_memory_provider
-> 	...
-> 	xa_for_each(&binding->bound_rxqs, xa_idx, binding_rxq) {
-> 		if (rxq == binding_rxq)
-> 			return success;
-> }
-> 
-> Can't b4 the patches for some reason, but that's the highlight
-> from the patchset, correct me if I'm wrong. That xa_for_each
-> check is always true because you put the queue in there right
-> before it, and I don't that anyone could've erased it.
-> 
-> The problem here is that it seems the ->bound_rxqs state doesn't
-> depend on what page pools were actually created and with what mp.
+./include/uapi/linux/const.h:45:44: warning: left shift count >= width of type [-Wshift-count-overflow]
+   45 | #define _BIT128(x) ((unsigned __int128)(1) << (x))
+      |                                            ^~
+./include/asm-generic/bug.h:123:25: note: in definition of macro ‘WARN_ON’
+  123 |  int __ret_warn_on = !!(condition);    \
+      |                         ^~~~~~~~~
+./include/uapi/linux/bits.h:16:4: note: in expansion of macro ‘_BIT128’
+   16 |  ((_BIT128((h) + 1)) - (_BIT128(l)))
+      |    ^~~~~~~
+./include/linux/bits.h:51:31: note: in expansion of macro ‘__GENMASK_U128’
+   51 |  (GENMASK_INPUT_CHECK(h, l) + __GENMASK_U128(h, l))
+      |                               ^~~~~~~~~~~~~~
 
-FWIW I don't understand the point of walking the xa either.
-Just check the queue number of the pp you found matches,
-page pool params are saved in the page pool. No?
+This is caused by ((unsigned __int128)(1) << (128)) which is generated
+via (h + 1) element in __GENMASK_U128().
 
+#define _BIT128(x)	((unsigned __int128)(1) << (x))
+#define __GENMASK_U128(h, l) \
+	((_BIT128((h) + 1)) - (_BIT128(l)))
+
+Adding some extra tests in lib/test_bits.c exposes this build problem,
+although it does not fail these new tests.
+
+[    1.719221]     # Subtest: bits-test
+[    1.719291]     # module: test_bits
+[    1.720522]     ok 1 genmask_test
+[    1.721570]     ok 2 genmask_ull_test
+[    1.722668]     ok 3 genmask_u128_test
+[    1.723760]     ok 4 genmask_input_check_test
+[    1.723909] # bits-test: pass:4 fail:0 skip:0 total:4
+[    1.724101] ok 1 bits-test
+
+diff --git a/lib/test_bits.c b/lib/test_bits.c
+index d3d858b24e02..7a972edc7122 100644
+--- a/lib/test_bits.c
++++ b/lib/test_bits.c
+@@ -49,6 +49,8 @@ static void genmask_u128_test(struct kunit *test)
+        KUNIT_EXPECT_EQ(test, 0xffffffffffffffffULL, GENMASK_U128(63, 0));
+        KUNIT_EXPECT_EQ(test, 0xffffffffffffffffULL, GENMASK_U128(64, 0) >> 1);
+        KUNIT_EXPECT_EQ(test, 0x00000000ffffffffULL, GENMASK_U128(81, 50) >> 50);
++       KUNIT_EXPECT_EQ(test, 0x0000000000000003ULL, GENMASK_U128(127, 126) >> 126);
++       KUNIT_EXPECT_EQ(test, 0x0000000000000001ULL, GENMASK_U128(127, 127) >> 127);
+
+The most significant bit in the generate mask can be added separately
+, thus voiding that extra shift. The following patch solves the build
+problem.
+
+diff --git a/include/uapi/linux/bits.h b/include/uapi/linux/bits.h
+index 4d4b7b08003c..4e50f635c6d9 100644
+--- a/include/uapi/linux/bits.h
++++ b/include/uapi/linux/bits.h
+@@ -13,6 +13,6 @@
+          (~_ULL(0) >> (__BITS_PER_LONG_LONG - 1 - (h))))
+ 
+ #define __GENMASK_U128(h, l) \
+-       ((_BIT128((h) + 1)) - (_BIT128(l)))
++       (((_BIT128(h)) - (_BIT128(l))) | (_BIT128(h)))
 
