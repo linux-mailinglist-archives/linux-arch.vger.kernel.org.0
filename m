@@ -1,156 +1,117 @@
-Return-Path: <linux-arch+bounces-6273-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6274-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FB06954D35
-	for <lists+linux-arch@lfdr.de>; Fri, 16 Aug 2024 16:57:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 512C8954DDF
+	for <lists+linux-arch@lfdr.de>; Fri, 16 Aug 2024 17:36:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A3B48B263C0
-	for <lists+linux-arch@lfdr.de>; Fri, 16 Aug 2024 14:56:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F0E361F2555D
+	for <lists+linux-arch@lfdr.de>; Fri, 16 Aug 2024 15:36:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A62EE1C37AD;
-	Fri, 16 Aug 2024 14:52:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 176A61BDAA6;
+	Fri, 16 Aug 2024 15:35:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BeF+YsDn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bKSTGrm8"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67CF91BE25A;
-	Fri, 16 Aug 2024 14:52:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B51CA1BDA94;
+	Fri, 16 Aug 2024 15:35:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723819924; cv=none; b=taLGIpD/2cO1KUpixPmRyb5f0h3nWdRsSGNRVgjbbKYq/7DlmKw3YWq/UdlrcVKPwkvq3ku255zt91IsRNy7walpHfrbC6y9KFeyXAYs16GTIY/j/UcHM9tH/C873WtUXn3jBHZeu5kYectEz95jX34AjvL2WtM2MWvgcuujzOs=
+	t=1723822514; cv=none; b=q8vdHNDbEtIVp/Jle4ZR6+Qb0Q2g4qgWqA1nO4BCiOQUoiu3YE5CiN/NvmxC+l19eHqfkNLfS68Wyz9ROfQo4DzeyRACsH72BHFtT/z1uUsxNW6pVdEYh29cOUq+gwpxW4G5FApEprUi1lSiw6iAMo0nPyjk1i7jTRrePYT1TO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723819924; c=relaxed/simple;
-	bh=aCsAMYNwuNLSPVHVux3H7Fr1gU8Y/2OHAz58FNdjFh4=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LTlocXFzinosb+wsNAbQEewIxmWveFZGEfrGiJj015JQukUWz7Hxaj8g/+i/g4h+RM2tL4YL/cMVNHpTlBibq+7PkoYAsC4DftVlfMksVcxBUJHHZm03vqd4Q3tLI2Bjw+3P7EiIERsRd5JjSEIYncRjR5zpKLqdkc0on8fjVlU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BeF+YsDn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D69DBC32782;
-	Fri, 16 Aug 2024 14:52:03 +0000 (UTC)
+	s=arc-20240116; t=1723822514; c=relaxed/simple;
+	bh=Q18cNSCViMkznglQB7U8THt2jlE6uRjEx/JSrUARwzc=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=QfDIvowUn708IFttF9aIWWLZhB9jvsVT9fLhFMcle1MI9fav49grmqhGIY13TsYQQUXajDVB8SCq4Nc9KOIPTPoNt26ucXVjL+EQNFzQT1k+iFGvUeaLAz3s+DGK9P3YCe54ZAB1SKCrBv5pM/aJz7JRsXRJ3TR81a04RtUVp10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bKSTGrm8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41C32C32782;
+	Fri, 16 Aug 2024 15:35:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723819923;
-	bh=aCsAMYNwuNLSPVHVux3H7Fr1gU8Y/2OHAz58FNdjFh4=;
+	s=k20201202; t=1723822513;
+	bh=Q18cNSCViMkznglQB7U8THt2jlE6uRjEx/JSrUARwzc=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=BeF+YsDnIob191w0ZGxINOu0jYhGxn63hEvhpdwFa5jW6Ni9L1j5zNVOpziP8Me0j
-	 VdJs4rtfVWtbONAJ2r0/x3uS1uJZc2XPYoBcdPMqJrUCV+x88lcdwCaKqSzjILyxCl
-	 pPqLCIIfO0T4TVHG0cB1VAhMSqMnUKLz0cQF1rYeVUgRmF3ySFmVl5HH9P3APi/JdA
-	 OGvydVVsY9YgrNN5+mf6fbDIFAeE2+9CGNMViKsCCCrgA8yjKVqwuBgIuodAtGnMB+
-	 bJ1HDN0++jB7l7MXDZDd5l+5rR7YSeKr9kXUadrtaZSXP/sile1fdjzQVOwoK02sNK
-	 pOQwo0zbUdYjg==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1seyJ7-004JCN-Lr;
-	Fri, 16 Aug 2024 15:52:01 +0100
-Date: Fri, 16 Aug 2024 15:52:00 +0100
-Message-ID: <86frr4zfjj.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Eric Biederman <ebiederm@xmission.com>,
-	Shuah Khan <shuah@kernel.org>,
-	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-	Deepak Gupta <debug@rivosinc.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-	Kees Cook <kees@kernel.org>,
-	"H.J. Lu" <hjl.tools@gmail.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Florian Weimer <fweimer@redhat.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
-	Ross Burton <ross.burton@arm.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev,
-	linux-fsdevel@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	joey.gouly@arm.com
-Subject: Re: [PATCH v10 14/40] KVM: arm64: Manage GCS access and registers for guests
-In-Reply-To: <8c1e8fb6-0152-42f7-ab6d-93f6fe70b4aa@sirena.org.uk>
-References: <20240801-arm64-gcs-v10-0-699e2bd2190b@kernel.org>
-	<20240801-arm64-gcs-v10-14-699e2bd2190b@kernel.org>
-	<86h6bkzh8o.wl-maz@kernel.org>
-	<8c1e8fb6-0152-42f7-ab6d-93f6fe70b4aa@sirena.org.uk>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	b=bKSTGrm8LaF2gwztx+/6SinSoy24s5gR4CldYRBEkiNOSwgcpm7hLvrrK2gtq0Pvx
+	 hMOv7Np2xjcElkjbz06G6kxT1paCcuIl6tgDnhA1FReWgEk0VrJIV5VnmY28VW+uM3
+	 rZACO8v+MYhjqas3sNB0o4umHsNfCDqpROl01Mt/tH5odX/nLSTCmpnMqAFo9lHFii
+	 7gaHt6gXGlFMnEUaVC739Sgm/hKhGjvNlG4yZPxcjScZu7DwFyzYVs8aZxgV2ToxjC
+	 MflEhOxEm/9blSXnL7eNEt3U0O1uRbAir3rluhSYsWuh/JjkeQLFqL1D7S/NCKi2I7
+	 8SQyYhQ0iAcDw==
+Date: Fri, 16 Aug 2024 08:35:10 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Mina Almasry <almasrymina@google.com>
+Cc: Pavel Begunkov <asml.silence@gmail.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, "David S.
+ Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
+ Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
+ Jonathan Corbet <corbet@lwn.net>, Richard Henderson
+ <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+ Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer
+ <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
+ <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>,
+ Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
+ <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
+ Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
+ <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, Herbert
+ Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, Willem
+ de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, Sumit
+ Semwal <sumit.semwal@linaro.org>, Christian =?UTF-8?B?S8O2bmln?=
+ <christian.koenig@amd.com>, Bagas Sanjaya <bagasdotme@gmail.com>, Christoph
+ Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>,
+ Taehee Yoo <ap420073@gmail.com>, David Wei <dw@davidwei.uk>, Jason
+ Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, Shailend
+ Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
+ <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
+ Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
+Subject: Re: [PATCH net-next v19 06/13] memory-provider: dmabuf devmem
+ memory provider
+Message-ID: <20240816083510.3386fb10@kernel.org>
+In-Reply-To: <CAHS8izO9LDM9rLVnJPgp6QXb4YLW5+3ziGOHTqScy-SKOLejYA@mail.gmail.com>
+References: <20240813211317.3381180-7-almasrymina@google.com>
+	<de7daf80-a2e4-4451-b666-2a67ccc3649e@gmail.com>
+	<CAHS8izPMC+XhXKbJOQ3ymizyKuARSOv_cO_xO+q1EG4zoy6Gig@mail.gmail.com>
+	<31640ff4-25a6-4115-85e6-82092ce57393@gmail.com>
+	<20240815182245.2b5e3f44@kernel.org>
+	<CAHS8izO9LDM9rLVnJPgp6QXb4YLW5+3ziGOHTqScy-SKOLejYA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: broonie@kernel.org, catalin.marinas@arm.com, will@kernel.org, corbet@lwn.net, akpm@linux-foundation.org, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, arnd@arndb.de, oleg@redhat.com, ebiederm@xmission.com, shuah@kernel.org, rick.p.edgecombe@intel.com, debug@rivosinc.com, ardb@kernel.org, Szabolcs.Nagy@arm.com, kees@kernel.org, hjl.tools@gmail.com, paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, fweimer@redhat.com, brauner@kernel.org, thiago.bauermann@linaro.org, ross.burton@arm.com, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, joey.gouly@arm.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+Content-Transfer-Encoding: 7bit
 
-On Fri, 16 Aug 2024 15:40:33 +0100,
-Mark Brown <broonie@kernel.org> wrote:
+On Fri, 16 Aug 2024 08:20:44 -0400 Mina Almasry wrote:
+> > I'd keep the current check with a WARN_ON_ONCE(), tho.
+> > Given the absence of tests driver developers can use.
+> > Especially those who _aren't_ supporting the feature.
 > 
-> [1  <text/plain; us-ascii (7bit)>]
-> On Fri, Aug 16, 2024 at 03:15:19PM +0100, Marc Zyngier wrote:
-> > Mark Brown <broonie@kernel.org> wrote:
-> 
-> > > +	{ SYS_DESC(SYS_GCSCR_EL1), NULL, reset_val, GCSCR_EL1, 0 },
-> > > +	{ SYS_DESC(SYS_GCSPR_EL1), NULL, reset_unknown, GCSPR_EL1 },
-> > > +	{ SYS_DESC(SYS_GCSCRE0_EL1), NULL, reset_val, GCSCRE0_EL1, 0 },
-> 
-> > Global visibility for these registers? Why should we expose them to
-> > userspace if the feature is neither present nor configured?
-> 
-> ...
-> 
-> > > +	if (!kvm_has_feat(kvm, ID_AA64PFR1_EL1, GCS, IMP))
-> > > +		kvm->arch.fgu[HFGxTR_GROUP] |= (HFGxTR_EL2_nGCS_EL0 |
-> > > +						HFGxTR_EL2_nGCS_EL1);
-> 
-> > How can this work if you don't handle ID_AA64PFR_EL1 being written to?
-> > You are exposing GCS to all guests without giving the VMM an
-> > opportunity to turn it off. This breaks A->B->A migration, which is
-> > not acceptable.
-> 
-> This was done based on your positive review of the POE series which
-> follows the same pattern:
-> 
->    https://lore.kernel.org/linux-arm-kernel/20240503130147.1154804-8-joey.gouly@arm.com/
->    https://lore.kernel.org/linux-arm-kernel/864jagmxn7.wl-maz@kernel.org/
-> 
-> in which you didn't note any concerns about the handling for the
-> sysregs.
-> 
-> If your decisions have changed then you'll need to withdraw your review
-> there, I'd figured that given the current incompleteness of the
-> writability conversions and there being a bunch of existing registers
-> exposed unconditionally you'd decided to defer until some more general
-> cleanup of the situation.
+> Yes what I have locally is the driver setting
+> netdev_rx_queue->unreadable_netmem_supported when header split is
+> turned on, and additionally a WARN_ON_ONCE around the check in core. I
+> was about to send that when I read your email. I'm hoping we don't
+> have to go through the scope creep of adding configuration via the
+> queue API, which I think is a very significant undertaking.
 
-Thanks for pointing out that I missed this crucial detail in the POE
-series. I'll immediately go and point that out.
+I don't like adding more and more transient stuff to netdev_rx_queue.
+It's one thing if we create a temporary solution in the core, which
+we can easily redo later. It's another altogether when we expect drivers
+to keep some bit up to date across all the reconfiguration paths they
+have. Just to then got an replace that with another API.
 
-	M.
-
--- 
-Without deviation from the norm, progress is not possible.
+If the post-check works let's go with that for now.
 
