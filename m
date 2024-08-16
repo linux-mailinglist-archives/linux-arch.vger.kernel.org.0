@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-6238-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6239-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FEA1953E64
-	for <lists+linux-arch@lfdr.de>; Fri, 16 Aug 2024 02:50:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A230953E77
+	for <lists+linux-arch@lfdr.de>; Fri, 16 Aug 2024 02:56:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F2261286880
-	for <lists+linux-arch@lfdr.de>; Fri, 16 Aug 2024 00:50:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AE1D41C22070
+	for <lists+linux-arch@lfdr.de>; Fri, 16 Aug 2024 00:56:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 235198C1E;
-	Fri, 16 Aug 2024 00:50:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67D638C06;
+	Fri, 16 Aug 2024 00:55:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q/yX59CT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D5thZ3pI"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C137F383;
-	Fri, 16 Aug 2024 00:50:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B9F61392;
+	Fri, 16 Aug 2024 00:55:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723769429; cv=none; b=XYgVCdybNxT/9ucGj0+r7xHs4oXNIE5HXfXSCuDpDwg3w6f8RQRtlqdc1IkoIWvy7EKsB/+x4gU6W0OPWy+Qo7d8c5U1/S9JkkcyMpSHax+fR/UA66cruHly3gcBhvWVeeaLGlfnac5YmrYPVaBfArDcQQi8C06eiz19hjdNtNg=
+	t=1723769757; cv=none; b=h8cvPFFX8XhTqcL7liAWy2zmtyljkv9NUIIiDDEn0fi+dD03JhNsV0WDZzVVh81hazZyXi3U54A2RpiQW3CFZ1tQCYI82P3oB5fD5RNHg1T7Vv7LIOH1qP4eZDhTYnFcaKkxdgw/tIeKF7R3wtPo3Tr1aDvHLyiTBLDphRLucP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723769429; c=relaxed/simple;
-	bh=qD+gWLDqKaHuiOr76pTdf8osGmw137rkKAK9HLs+pZ0=;
+	s=arc-20240116; t=1723769757; c=relaxed/simple;
+	bh=ZcHo/CbFLNbPU3TGom7ZDR4V5kCpLxNvdVNXgVhQZtI=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VSoJ9csomo8wGOFjZpXvTjG/UOer2nnzFq4c3esW/xBWT5BPwR43vaRNBZ9oePZblEbWlcmPsI7g2DUlaf3dNzcxzzHQqWX/UPiOOzBtm5jtnxfXwfodQELuCxyjHBUEYUJ8z2TtWcHkkyCfha3KysTMXkpy112In/v5dFxGIdg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q/yX59CT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFD5FC32786;
-	Fri, 16 Aug 2024 00:50:25 +0000 (UTC)
+	 MIME-Version:Content-Type; b=HFRJbOovW4FZHEZ3y0I58RY/tH4BfJyAXzfNUsIkU1kVedVRgGdYwHCVFFcn0qKDQvngHXfmIm0FpQIaMD5jRUG+D5bNmhQUKnk34d7PjxAw3FT45hnBijr8albl/Kyuvh1lTFOU3zb2hrUAvd3mDOk9gdi1iMMZO32FLSdFRX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D5thZ3pI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 191E9C4AF09;
+	Fri, 16 Aug 2024 00:55:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723769428;
-	bh=qD+gWLDqKaHuiOr76pTdf8osGmw137rkKAK9HLs+pZ0=;
+	s=k20201202; t=1723769756;
+	bh=ZcHo/CbFLNbPU3TGom7ZDR4V5kCpLxNvdVNXgVhQZtI=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Q/yX59CTbrhndkfDiANrULjY+4RS4tIYA8vdUHOs81mKmKqU3mNdo6QRNMA69qPk+
-	 aa3D+D+NqeNBD4fvkJsk84cBp/lxjlCjRtNq+moCqUIqeESyH3pgIUMOsAGWFST5pR
-	 /JYsbFYK7HAYmgzHTadiwuf+aBp6oCj8CTORCdWUuveeugfHiJ41Be8OlhkFV5tItG
-	 3rOQMeK+jH82QItDhKEmWdvuQKvKc1n+2xUpQzamlfASf4dfWms2gBSAyIGLoJm8KN
-	 s3IFrvCvvtAIRpumD3vuva00vpJjiZvhhUi8aKJRcHDiKt82lnzYB5uLD9UCKG+J+m
-	 ygrT2UWki5oyg==
-Date: Thu, 15 Aug 2024 17:50:24 -0700
+	b=D5thZ3pIG8CdZTJ7ULX66/YI+PW4xX2vuXdbIpeULwVF/4EhtQt+rxGELEUCN7/fK
+	 uVUKkj17/jDJllEyftu2zgNowQqVq+c12dY/Q+ZGfCBnYA2PJgEuSJdPU9lx91tViQ
+	 SPIk6cnl8p9R/vfLN7XYeBfVi+1OGgGgPS9UiypNGKXk2iTboS8UVF/Yn0dnwh8MDk
+	 DkyGkBwK2vbF14dHWxS26BO7IjCgkd+FuzxY6VuHQK9qo31BNgG2IoK6Jm8sFkZbrl
+	 us8xI4/cgRelVrDFTzCZakYFqcLo5kMWjIjiqj96VgGQJpkvazoYEFmVfHke7JA2Ga
+	 wRcm6f17hNcUw==
+Date: Thu, 15 Aug 2024 17:55:53 -0700
 From: Jakub Kicinski <kuba@kernel.org>
 To: Mina Almasry <almasrymina@google.com>
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -75,12 +75,12 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
  Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
  <pkaligineedi@google.com>, Willem de Bruijn <willemb@google.com>, Kaiyuan
- Zhang <kaiyuanz@google.com>, Daniel Vetter <daniel.vetter@ffwll.ch>
-Subject: Re: [PATCH net-next v19 03/13] netdev: support binding dma-buf to
- netdevice
-Message-ID: <20240815175024.0a87b1ca@kernel.org>
-In-Reply-To: <20240813211317.3381180-4-almasrymina@google.com>
-References: <20240813211317.3381180-4-almasrymina@google.com>
+ Zhang <kaiyuanz@google.com>
+Subject: Re: [PATCH net-next v19 06/13] memory-provider: dmabuf devmem
+ memory provider
+Message-ID: <20240815175553.51d9f0fe@kernel.org>
+In-Reply-To: <20240813211317.3381180-7-almasrymina@google.com>
+References: <20240813211317.3381180-7-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -90,24 +90,9 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Tue, 13 Aug 2024 21:13:05 +0000 Mina Almasry wrote:
-> +		if (NL_REQ_ATTR_CHECK(info->extack, attr, tb,
-> +				      NETDEV_A_QUEUE_ID)) {
-> +			err = -EINVAL;
-> +			goto err_unlock;
-> +		}
-> +
-> +		if (NL_REQ_ATTR_CHECK(info->extack, attr, tb,
-> +				      NETDEV_A_QUEUE_TYPE)) {
-> +			err = -EINVAL;
-> +			goto err_unlock;
-> +		}
-> +
-> +		if (nla_get_u32(tb[NETDEV_A_QUEUE_TYPE]) !=
-> +		    NETDEV_QUEUE_TYPE_RX) {
-> +			err = -EINVAL;
-> +			goto err_unlock;
-> +		}
+On Tue, 13 Aug 2024 21:13:08 +0000 Mina Almasry wrote:
+> +EXPORT_SYMBOL(page_pool_mem_providers);
 
-nit: you can || these three into as single if statement
+not sure if this export is needed, but it doesn't appear to be needed
+by this patch?
 
