@@ -1,145 +1,112 @@
-Return-Path: <linux-arch+bounces-6236-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6237-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A2569539D4
-	for <lists+linux-arch@lfdr.de>; Thu, 15 Aug 2024 20:19:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97C3C953E56
+	for <lists+linux-arch@lfdr.de>; Fri, 16 Aug 2024 02:49:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AAF091C23BF3
-	for <lists+linux-arch@lfdr.de>; Thu, 15 Aug 2024 18:19:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C3E711C220EB
+	for <lists+linux-arch@lfdr.de>; Fri, 16 Aug 2024 00:49:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B60757CBA;
-	Thu, 15 Aug 2024 18:19:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B78F34A0A;
+	Fri, 16 Aug 2024 00:48:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jmAPusW9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e5ITK+WQ"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2DEF481C4;
-	Thu, 15 Aug 2024 18:19:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B1B93D64;
+	Fri, 16 Aug 2024 00:48:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723745974; cv=none; b=kfpb7c10tXyPMkfSqvs4mocrlwaiqfEts36Zdftn4HPfCA2U+g3JuYb3YQRrkWyy6lu3lq+YeJ8HvIYVGDDDt07niEh6pp1mEzMgNF5qjpPJ3T5pHNzY3rLA3sOeSWUcENGFrfjf0oOK6xmS9DNybS78D3LtxeIawrzkFz22KmI=
+	t=1723769336; cv=none; b=hM7t2UtWG79RXaYpnazMEWjvYXl4XV7xPUb0Lp+o299IJfQCalpbC1MDsh9g9vuKOyPMq6X/whfVFWefeybLuAGstyqF8SuNop7tQuIdLgTgNvgsbG4J5Mgy5WjiTGj6VC15PB1lb/sBKKOMoVFPyDi2APnyATobeRIQ9SK6MFk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723745974; c=relaxed/simple;
-	bh=gvOHdCK9aUdR7DPVLDdBmQ4rCqBdWg1NiIKC9n0vn/s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=na5yoBDuTp9Xk4YocxzqnEyvyg236iZd4McF7x8d1wVI4N+IfgKQVVmRMUsrtJuVfq1T3updEVyZDF7fuintRexxbYKECmfb/puUBG20Rh+C6hcbsVOic3QeAAC7U9ZfZzaJ11hnZMJtj7S4DgriVZaTxOcodAL8GIpcNZ2JNVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jmAPusW9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BDE0C32786;
-	Thu, 15 Aug 2024 18:19:26 +0000 (UTC)
+	s=arc-20240116; t=1723769336; c=relaxed/simple;
+	bh=Ytv9yoDmPpxLpzsc/yRsSXmYq/2gwEitzTmx7ZSGLI4=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=AK2dVa/UI+er9WvHD2h1yPh0pLaHMIputNVffjywqzM5FBy7NVmzsOa6+dLJAIaxTuPJI/xLsKOMXprDHpqmkpg9bz3lLgcJiqhprIz1Q9PacDchH9qHfy8MWPT3i6x0RLFg9WIRmOK+zlgssVevUNqWz8LgRNxn2SFAxV5NPIc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e5ITK+WQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62AD2C32786;
+	Fri, 16 Aug 2024 00:48:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723745973;
-	bh=gvOHdCK9aUdR7DPVLDdBmQ4rCqBdWg1NiIKC9n0vn/s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jmAPusW9RWevvrm7Hg88q9xewbIsd/N/8xTtQyDPWPc982vMFTh7r29JlLa6aHf0o
-	 8io0uPtO83IiC/fkk0GKoQNNWuDUbOcvZAodgohYE/SjWTMQpUBTSbad1t64GFmGyS
-	 iVChoroyACoTlO+/w+ZVPqDVFAt/hYnGedb6MWnURMr/r772xCwXH9niKnJdXYUqJX
-	 ljF+fG3keMrMEmAZlQBZgeB5qVBYqMTd2O22DXiRYL9ul8f7b5FVTiy0/sBLHu0Gpw
-	 9wAE4WmxHy9lFZGd0S9lYGKcP1IFTR4cDZzHAlueePqA4AxAzNcZtdqHVh8a0mF8BL
-	 9fI1RwFnauAuw==
-Date: Thu, 15 Aug 2024 19:19:24 +0100
-From: Mark Brown <broonie@kernel.org>
-To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc: "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-	"ross.burton@arm.com" <ross.burton@arm.com>,
-	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
-	"Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
-	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-	"corbet@lwn.net" <corbet@lwn.net>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
-	"kees@kernel.org" <kees@kernel.org>,
-	"oliver.upton@linux.dev" <oliver.upton@linux.dev>,
-	"palmer@dabbelt.com" <palmer@dabbelt.com>,
-	"debug@rivosinc.com" <debug@rivosinc.com>,
-	"aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-	"shuah@kernel.org" <shuah@kernel.org>,
-	"arnd@arndb.de" <arnd@arndb.de>, "maz@kernel.org" <maz@kernel.org>,
-	"oleg@redhat.com" <oleg@redhat.com>,
-	"fweimer@redhat.com" <fweimer@redhat.com>,
-	"thiago.bauermann@linaro.org" <thiago.bauermann@linaro.org>,
-	"james.morse@arm.com" <james.morse@arm.com>,
-	"ebiederm@xmission.com" <ebiederm@xmission.com>,
-	"brauner@kernel.org" <brauner@kernel.org>,
-	"will@kernel.org" <will@kernel.org>,
-	"hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-	"ardb@kernel.org" <ardb@kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Subject: Re: [PATCH v10 12/40] mm: Define VM_SHADOW_STACK for arm64 when we
- support GCS
-Message-ID: <9949a344-be8e-40ed-b483-02ff95175072@sirena.org.uk>
-References: <20240801-arm64-gcs-v10-0-699e2bd2190b@kernel.org>
- <20240801-arm64-gcs-v10-12-699e2bd2190b@kernel.org>
- <34f7a5378447b1a8d5a9561594b37cfeaa6bd2b1.camel@intel.com>
- <3a7d9b69-e9df-4271-a3f0-8e8683c2654f@sirena.org.uk>
- <68ec09da-fb4a-4d59-9c8c-6fae4c48ea68@sirena.org.uk>
- <e6c8618a1585006dde44c17192a3bb7ae8ec5c0b.camel@intel.com>
+	s=k20201202; t=1723769335;
+	bh=Ytv9yoDmPpxLpzsc/yRsSXmYq/2gwEitzTmx7ZSGLI4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=e5ITK+WQTBSBd0ONLrV8Z07tHWXazMUo9DUF+ybTMbIx8l9X8e7vv9fHgLRLwkL+F
+	 fUFlVZCO1aZmTn7HWjJSb1AFkTLPqJqexHx6JDAUHI/lE1ooDN/ZmbwRaq0hcD2sIc
+	 /F7bmJ0uF7YPbeEXlceauH+SehcI+RC1efSfm1PYPBCp+HRMArbvvawNtTwYtB8POl
+	 9zKqa00MUqjxTyPKr3oN4UM5dGM6BoxIx87kHA8X+R1VWZcpQ8zvTvKpwX3WbVenMV
+	 YHtccFvyDipTPgy5bT8DeAmspcKtDeaACtk8f7jp3VsmXF75Z6u27ITubBXiFFaH7U
+	 ddgfGM5Dpvcxw==
+Date: Thu, 15 Aug 2024 17:48:52 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ bpf@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Donald
+ Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, Richard
+ Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky
+ <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, Thomas
+ Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
+ <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>,
+ Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
+ <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
+ Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
+ <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, Herbert
+ Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, Willem
+ de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, Sumit
+ Semwal <sumit.semwal@linaro.org>, "Christian =?UTF-8?B?S8O2bmln?="
+ <christian.koenig@amd.com>, Bagas Sanjaya <bagasdotme@gmail.com>, Christoph
+ Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>,
+ Taehee Yoo <ap420073@gmail.com>, Pavel Begunkov <asml.silence@gmail.com>,
+ David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin
+ <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, Harshitha
+ Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
+ <pkaligineedi@google.com>, Willem de Bruijn <willemb@google.com>, Kaiyuan
+ Zhang <kaiyuanz@google.com>, Daniel Vetter <daniel.vetter@ffwll.ch>
+Subject: Re: [PATCH net-next v19 03/13] netdev: support binding dma-buf to
+ netdevice
+Message-ID: <20240815174852.48bbfccf@kernel.org>
+In-Reply-To: <20240813211317.3381180-4-almasrymina@google.com>
+References: <20240813211317.3381180-4-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="U12vN05f82sjc1Kd"
-Content-Disposition: inline
-In-Reply-To: <e6c8618a1585006dde44c17192a3bb7ae8ec5c0b.camel@intel.com>
-X-Cookie: -- Owen Meredith
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+On Tue, 13 Aug 2024 21:13:05 +0000 Mina Almasry wrote:
+> +int dev_get_max_mp_channel(const struct net_device *dev)
+> +{
+> +	int i, max = -1;
 
---U12vN05f82sjc1Kd
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I presume the bug from yesterday is self evident once reported? :)
 
-On Thu, Aug 15, 2024 at 05:53:19PM +0000, Edgecombe, Rick P wrote:
-> On Thu, 2024-08-15 at 17:39 +0100, Mark Brown wrote:
+> +	ASSERT_RTNL();
+> +
+> +	for (i = 0; i < dev->real_num_rx_queues; i++)
+> +		if (dev->_rx[i].mp_params.mp_priv)
+> +			/* The number of queues is the idx plus 1. */
+> +			max = i + 1;
 
-> > > Oh, thanks for the heads up - I'd missed that.
+The +1 is odd. The function as it stands reports min channel count.
+Not max_mp_channel, if you ask me. And if you renamed it, you don't
+have to use -1 as "not installed".
 
-> > Looking at this I think it makes sense to do as was done for x86 and
-> > split this out into a separate series (part of why I'd missed it),
-> > updating the generic implementation to do this by default.=A0 That'll
-> > touch a bunch of architectures and the series is already quite big,
-> > it's not really an ABI impact.
-
-> The series is already upstream. You just need to add an arm version of th=
-at
-> linked patch. But up to you.
-
-Your series modified the existing x86 custom arch_get_unmapped_area*()
-functions, arm64 uses the generic implementation of those so I'd have to
-either add custom implementations (which I can't imagine would be met
-with great enthusiasm) or update the generic ones.  A generic
-implementation seems reasonable and it looks like RISC-V would also end
-up using it so while it's a bit invasive it does seem more sensible to
-do the change there.
-
---U12vN05f82sjc1Kd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAma+RqsACgkQJNaLcl1U
-h9C2ogf/ZUz9M5cZLraiijYr3jTrEMdCaa6D0jRDGoL0IP3BclPhluw29VOQVf4x
-aJ10O4eGMRHl32XL0oWXQlmSmjiHfXTvVmeAnPrKkq6Sx8BDI7tOW1f4b64Iyouq
-aGNPYw1YjXPdazXxXLbaQVZZOrq5BE2dbXw6ocHaombvt/oG6sAGc4F4KFXwb6+A
-OR+jpoND8CbzSxh4EO89eoixTKgqvVZTLfQ3zZBdyjrrk1jyp6Q/63wMC325Bmam
-FebFR/NFJlNNAGpnhBbZhme21z1oZ+1h9K6G37zJUsXqqkOnH56fbsfKJ3wGW37B
-VjXIsdlILKUDIICvYmo5rxepKRyUqQ==
-=DIrs
------END PGP SIGNATURE-----
-
---U12vN05f82sjc1Kd--
+> +	return max;
 
