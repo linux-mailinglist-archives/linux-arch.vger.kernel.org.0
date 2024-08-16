@@ -1,35 +1,35 @@
-Return-Path: <linux-arch+bounces-6251-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6252-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64B4595479A
-	for <lists+linux-arch@lfdr.de>; Fri, 16 Aug 2024 13:11:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 801659547AC
+	for <lists+linux-arch@lfdr.de>; Fri, 16 Aug 2024 13:13:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 20120281EDE
-	for <lists+linux-arch@lfdr.de>; Fri, 16 Aug 2024 11:11:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 205B01F21CDC
+	for <lists+linux-arch@lfdr.de>; Fri, 16 Aug 2024 11:13:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5B7B1A4F20;
-	Fri, 16 Aug 2024 11:10:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56B6E19D06C;
+	Fri, 16 Aug 2024 11:12:55 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA8FC19DF9F;
-	Fri, 16 Aug 2024 11:10:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B2EF1991AA;
+	Fri, 16 Aug 2024 11:12:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723806656; cv=none; b=qOkPn7xPOrJKTp2uv2B3CY76fDOmpbkmOJ20fo7Qg1m8sxXgvR9d7kdCPmOqSp8uvR8HKkm1vFymImMmFCetO9CwepfLmPYSaC/hSjQc40O3d+W7udkjVkpMCnzSEao0CAU0pqIOX31xC3hfIvCQOGOvc3Iigj7ez3Mri7/W8fM=
+	t=1723806775; cv=none; b=PDn06zk2Jb+jiOhPoGpJUGF5c7RLIzNYdAcGra8iqU6gnbQ7e9MzUkJHbVl/IfHoBEHN/w0BV0Ji1KAEyHjqLTd+58TzVswss8Y91Y1Oj43JNPXK718amfOrYRT9QWVqClEga9bvZQMQjC8TmHFHmY4B0bImH+ZOM7YVPDog55Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723806656; c=relaxed/simple;
-	bh=7AuT09/kigp8EsKuGdcnahvbZs5FXt+btd7+T0zxmoo=;
+	s=arc-20240116; t=1723806775; c=relaxed/simple;
+	bh=6R4O9J3ICVeVbc4+EdLu04NswhU7HbU0el3VJkuKwig=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B/2zGWRd3kFNyigTAXDMaPwjMrDIF6kvlsdaCNUb4A0oKz8ERfNqFOVQZdq+IekglYd6USxS9nbqLU4DMJ60Ic2q5lcZq6U8Xn+UbjImqTbJAeVSjL2Dlv+aFO3wJK7xGQsv6yD+R0TdPWfoB1T3WqlEOVzLekUnTMEAKjnToic=
+	 Content-Type:Content-Disposition:In-Reply-To; b=VUBW3o63YmYzhgw7yvhZ8ngrVX8ttOR/so2b4gOOcCtkI07L5xNFYSgSzPZrMOolY/Ib+8TXe0HEC/1gs/Q5btxnE64o7dRjE0ySi69kbscJSg/KOTZQNIUSRcgOz5qR+e86ruM9yi3VYtgO3q1Xb1KfWRd/QAplwfLfMVlwmXg=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD531C32782;
-	Fri, 16 Aug 2024 11:10:50 +0000 (UTC)
-Date: Fri, 16 Aug 2024 12:10:48 +0100
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B1F3C4AF0C;
+	Fri, 16 Aug 2024 11:12:49 +0000 (UTC)
+Date: Fri, 16 Aug 2024 12:12:47 +0100
 From: Catalin Marinas <catalin.marinas@arm.com>
 To: Mark Brown <broonie@kernel.org>
 Cc: Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
@@ -57,11 +57,10 @@ Cc: Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
 	linux-arch@vger.kernel.org, linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v10 07/40] arm64/gcs: Add manual encodings of GCS
- instructions
-Message-ID: <Zr8zuBgFrs6xYR0U@arm.com>
+Subject: Re: [PATCH v10 08/40] arm64/gcs: Provide put_user_gcs()
+Message-ID: <Zr80L7v-kjtGbYzh@arm.com>
 References: <20240801-arm64-gcs-v10-0-699e2bd2190b@kernel.org>
- <20240801-arm64-gcs-v10-7-699e2bd2190b@kernel.org>
+ <20240801-arm64-gcs-v10-8-699e2bd2190b@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -70,19 +69,14 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240801-arm64-gcs-v10-7-699e2bd2190b@kernel.org>
+In-Reply-To: <20240801-arm64-gcs-v10-8-699e2bd2190b@kernel.org>
 
-On Thu, Aug 01, 2024 at 01:06:34PM +0100, Mark Brown wrote:
-> Define C callable functions for GCS instructions used by the kernel. In
-> order to avoid ambitious toolchain requirements for GCS support these are
-> manually encoded, this means we have fixed register numbers which will be
-> a bit limiting for the compiler but none of these should be used in
-> sufficiently fast paths for this to be a problem.
-> 
-> Note that GCSSTTR is used to store to EL0.
+On Thu, Aug 01, 2024 at 01:06:35PM +0100, Mark Brown wrote:
+> In order for EL1 to write to an EL0 GCS it must use the GCSSTTR instruction
+> rather than a normal STTR. Provide a put_user_gcs() which does this.
 > 
 > Reviewed-by: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
 > Signed-off-by: Mark Brown <broonie@kernel.org>
 
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
 
