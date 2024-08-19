@@ -1,70 +1,70 @@
-Return-Path: <linux-arch+bounces-6310-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6311-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7825E9561EB
-	for <lists+linux-arch@lfdr.de>; Mon, 19 Aug 2024 05:57:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DFCA9561E8
+	for <lists+linux-arch@lfdr.de>; Mon, 19 Aug 2024 05:57:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E9A7D1F216D0
-	for <lists+linux-arch@lfdr.de>; Mon, 19 Aug 2024 03:57:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 537C21C21475
+	for <lists+linux-arch@lfdr.de>; Mon, 19 Aug 2024 03:57:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63FFA1586C8;
-	Mon, 19 Aug 2024 03:55:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26E3A15853C;
+	Mon, 19 Aug 2024 03:55:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DP2+sonv"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kp4R79Rv"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 525401411E3
-	for <linux-arch@vger.kernel.org>; Mon, 19 Aug 2024 03:55:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46CFC15666A
+	for <linux-arch@vger.kernel.org>; Mon, 19 Aug 2024 03:55:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724039711; cv=none; b=BofRtwu6N0fu7jzghbDXifhfSVjY3SYZ2dsyqRxWv65+b/EugtWBefV05Au7pWhtj18NLQ6QniPD6N0YZYTyMFcKFkmuLt7YbNCne+V6OgAwxb/iKx18E7fdJHzOV2LoHbW2B0rLfoxP7xNYrifjOvch5VBDvYRM9q0hnLpPdTw=
+	t=1724039711; cv=none; b=LmNWjhQQZkI6xj5KKPRxRRC8lxN8HabxJazCyb3/CYxSk23yjqtjLoqBX05DBtypBUZzvJFUt7XYxosQ/PocrtyLHsW3h0ikDF0gXJ7ELEgEl3ClgtpnN2JugF6kVbq8/1IBhGSumJHzhdulEGxxjjUpz3uPGAnaS39/3zabotc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1724039711; c=relaxed/simple;
-	bh=g87cnJEAEYQuJwIaCe/asckSp8mb/c9FiWNvn/kDzGk=;
+	bh=1omwaWkrudHhcH9VOJ+5YBWvg9WuzkNk6Wb6NFn4s8U=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=fmrY1H/gxORlgqBhnLYVDFKMIuQ4U1N0dsiuRB/aqdxUkrNQOkfawwOnsorF5e1nGsEmPG4KdaWs1o3DUaNeN1X5SA26CznQA+KLmWP4djXvyaSVqhrbyEbCYndVjQOeEbn5hyWlppNMxsPfQlAGQx5p+nlpf8wI3QWG73Vo/AY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DP2+sonv; arc=none smtp.client-ip=209.85.128.202
+	 To:Cc:Content-Type; b=kHuTn/cLEAO7kRCYL9V+dF1MmxGpwvkfofZrlJexPTMyCtdpqcptAhSNfgTeXzrNVbP+JRCe8hw6hqjml2lTFyhbMnWk7gK5rkZ3lUmURq2D/lQvMDCBrQYScKWC/8o5qo4y8fH0GGkgRwicxTAOEmO4BU1SUyDpLyh/R2qm/tc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kp4R79Rv; arc=none smtp.client-ip=209.85.128.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-6b0f068833bso42353037b3.0
-        for <linux-arch@vger.kernel.org>; Sun, 18 Aug 2024 20:55:05 -0700 (PDT)
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-690404fd230so62074217b3.3
+        for <linux-arch@vger.kernel.org>; Sun, 18 Aug 2024 20:55:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1724039703; x=1724644503; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1724039705; x=1724644505; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=38N2mnCyB6NKtemrRM3mBvs8UHuNO1oUKPgmyDKBTvA=;
-        b=DP2+sonvj586e+1Rqak2WYMZk43uprRFiWRjx+j0VoNFiBtf9B6QePwCiSA6RXG+7u
-         Bi/0maOmDW8kH79K9C6zVdcC9UkaNdsto6S2X7UEvwsGPClUYh8nvsAxE3CIKXI2Qw8B
-         lE68xKx6im0RaxBPhckfHB6dhcRlHNs41gKNhyU1lALSDpQVMmM6odgpYKWDAJKwR9Cs
-         4zeDGDvOGlZsj4vsoFyPpaIdQ5w7PlLwpI1sQJ8x3pXrozj5Lzxmr7q4hyYQgH/nQh9N
-         O3uMUNdAXETqlIpA07uxt3r5gacSEgQhp+q5raPvhLt3RW0+X09XCTZAIxOVPwaRGESF
-         hjrQ==
+        bh=ekGuldRNJLuUjpEW1vMoRAUfm1dC152Imt/vS8FPR5c=;
+        b=kp4R79Rvn5Sc+5wiD0I4ARyg9im8nr+7fgfG2NUaF2iVXrLTJ4lEKK4Yll6+o7TY/W
+         rfEQ3kCoWLztSmQAKSuxEBSSEkMAPr4W8NCQZMO2F8nvT4f9KkAy3twae9DYe4b5e6FO
+         /L3jNxuAaJpVrKdF4axcFEq8eWdmWK2MMPonhpVTzOT4jn9uEQqeMoFwsk4hKKNbmiqn
+         jI+bsVi24RSWFyXqtNutozabN0TbtIamq7GF6pf2qMx/xMAicOhAOG+CVzo4yQNTGFWF
+         9ilwvlPjlzfC6H7nZYqUf2vVXtNmizRlRdS+CztaUFX0Q3sHG8DabwDr5ZuksqgGEwz5
+         m29g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724039703; x=1724644503;
+        d=1e100.net; s=20230601; t=1724039705; x=1724644505;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=38N2mnCyB6NKtemrRM3mBvs8UHuNO1oUKPgmyDKBTvA=;
-        b=jSzvkxkQ7ss8ptVOeRjTfMUnYujPzsE8xcxPI3RIeFDhuqjSZW84PDf7hzh98vil2g
-         jDKT7aJUwVnJMixltOenu/r0j61O6873HeX1RvtFb/cy0WgxI5r/Kc3FJ8VeNGL/MJzz
-         hiI9YsNKSgHdJ1KwZ34pWCxrOGml1Ms90sU0MXkaveohk8Ym3xkhGqD1RcTRJ4Rp1d8R
-         qYQ22Xq0vKBrCxhTMf44X74uPajNVOyODaNR+k9lGMYXn3GezY70w+aLq/WXm+CrzhH8
-         uMWr41KA6dd8Q/O8VSX+M4xVwPfsvCRM5SA1b+CviMWIqp6fKe7Bsr0SRndziJL8AT0M
-         kuWQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWfwMPjOAoB9jst6d8PCm8nwHaTlBHRK/OSQxKtecBlDZyL80yFkcDqlxsDH9dH+d9EJvM+Wq+XDdArpiO81esKlcVoa4kvZ/c73g==
-X-Gm-Message-State: AOJu0Yyba5tdmZmD0UONTJ57iTHTUZZRg2Prd40Y/6L17WWzBdbsS5Db
-	qSHZTvAoJxoMnMtCz/dbSbp5lEOC60FWstjtqPUoe6ldghuTmzdTp8adbGuxfwyUd9YHHif7TDq
-	yqNQkdOHWUKWPg20qsjrEzQ==
-X-Google-Smtp-Source: AGHT+IF6nvUUTpxgwJzge0iJGlbYECWQOzBk6M2HQZK0kJmLzNzfKYo94tilSvK+SUogeTQu0C3uytiioDSeBBjEZA==
+        bh=ekGuldRNJLuUjpEW1vMoRAUfm1dC152Imt/vS8FPR5c=;
+        b=BCEMLcA5ttg2kM3aXTuUSDsOa2mOFAreqm4K7ymjATTjdXTFgHhgdvz8cPEswq91GD
+         mlvmZsxrh7Z40Usk4IH0doMG9s06nhWyZzASquVauppbmXIqcdvrVCg06VGWG/rUpI24
+         d7tzllk6Rvrb0z7KJd7iYK2IX7DNKQ0P16m6lMbMzzMEi4ZKPyKfJGlSzF0Wjuu6RZH0
+         w3ypjAqrxQ+kMRQM4eAWMRIbDZA/xyDyIAMkWmHt6Y6YFSBYnMsSliaVHonZArPcDu+5
+         4qMn42eCDp4p6QZ9kjaVoLqLyieJBS/PSbe0gZiifyZ4vRATI6trcvYRvXo3hrpQQ5hw
+         OpbA==
+X-Forwarded-Encrypted: i=1; AJvYcCXVN+Yf6UD7dJNX0TzzlTSbzoffAbAbVVx6bdBd67VTEeEk+p/xJr/PDfaMJe+tYsUBC9cGMrEtoges1aHEfOV6a/9wOZ1UKFo6aw==
+X-Gm-Message-State: AOJu0YynBPPU8FgSBE+9yrSivqV9SS5IPCNvY3kCBse6qVMqQsIfIkzA
+	aDTceu6DjVUD9/M37Dlm/PK/2OenWU9aMo5fsPbg0DRr4ZbIUqOrX3WoLX7ceoecJolt3ODXmVn
+	LmcT+Fm4mE/OEYOrgutfReg==
+X-Google-Smtp-Source: AGHT+IH9hkhnNF2/5xsHheULETRqS01b2avGAMUYuIVmP+QJkZWcTR3mOouuO1Ef+Q8UdP7IZb+EM3c0HC0DC0vepw==
 X-Received: from almasrymina.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:4bc5])
- (user=almasrymina job=sendgmr) by 2002:a25:910e:0:b0:e0b:a34d:f223 with SMTP
- id 3f1490d57ef6-e116cecab95mr183108276.5.1724039702913; Sun, 18 Aug 2024
- 20:55:02 -0700 (PDT)
-Date: Mon, 19 Aug 2024 03:54:42 +0000
+ (user=almasrymina job=sendgmr) by 2002:a05:690c:4988:b0:68d:52a1:be9 with
+ SMTP id 00721157ae682-6b1b749efecmr376687b3.1.1724039704691; Sun, 18 Aug 2024
+ 20:55:04 -0700 (PDT)
+Date: Mon, 19 Aug 2024 03:54:43 +0000
 In-Reply-To: <20240819035448.2473195-1-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -74,8 +74,8 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240819035448.2473195-1-almasrymina@google.com>
 X-Mailer: git-send-email 2.46.0.184.g6999bdac58-goog
-Message-ID: <20240819035448.2473195-8-almasrymina@google.com>
-Subject: [PATCH net-next v20 07/13] net: support non paged skb frags
+Message-ID: <20240819035448.2473195-9-almasrymina@google.com>
+Subject: [PATCH net-next v20 08/13] net: add support for skbs with unreadable frags
 From: Mina Almasry <almasrymina@google.com>
 To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
@@ -103,245 +103,434 @@ Cc: Mina Almasry <almasrymina@google.com>, "David S. Miller" <davem@davemloft.ne
 	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
 	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
 	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
+	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, 
+	Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Make skb_frag_page() fail in the case where the frag is not backed
-by a page, and fix its relevant callers to handle this case.
+For device memory TCP, we expect the skb headers to be available in host
+memory for access, and we expect the skb frags to be in device memory
+and unaccessible to the host. We expect there to be no mixing and
+matching of device memory frags (unaccessible) with host memory frags
+(accessible) in the same skb.
 
+Add a skb->devmem flag which indicates whether the frags in this skb
+are device memory frags or not.
+
+__skb_fill_netmem_desc() now checks frags added to skbs for net_iov,
+and marks the skb as skb->devmem accordingly.
+
+Add checks through the network stack to avoid accessing the frags of
+devmem skbs and avoid coalescing devmem skbs with non devmem skbs.
+
+Signed-off-by: Willem de Bruijn <willemb@google.com>
+Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
 Signed-off-by: Mina Almasry <almasrymina@google.com>
 Reviewed-by: Eric Dumazet <edumazet@google.com>
 
 
 ---
 
-v10:
-- Fixed newly generated kdoc warnings found by patchwork. While we're
-  at it, fix the Return section of the functions I touched.
+v16:
+- Fix unreadable handling in skb_split_no_header() (Eric).
 
-v6:
-- Rebased on top of the merged netmem changes.
+v11:
+- drop excessive checks for frag 0 pull (Paolo)
+
+v9: https://lore.kernel.org/netdev/20240403002053.2376017-11-almasrymina@google.com/
+- change skb->readable to skb->unreadable (Pavel/David).
+
+skb->readable was very complicated, because by default skbs are readable
+so the flag needed to be set to true in all code paths where new skbs
+were created or cloned. Forgetting to set skb->readable=true in some
+paths caused crashes.
+
+Flip it to skb->unreadable so that the default 0 value works well, and
+we only need to set it to true when we add unreadable frags.
+
+v6
+- skb->dmabuf -> skb->readable (Pavel). Pavel's original suggestion was
+  to remove the skb->dmabuf flag entirely, but when I looked into it
+  closely, I found the issue that if we remove the flag we have to
+  dereference the shinfo(skb) pointer to obtain the first frag, which
+  can cause a performance regression if it dirties the cache line when
+  the shinfo(skb) was not really needed. Instead, I converted the
+  skb->dmabuf flag into a generic skb->readable flag which can be
+  re-used by io_uring.
 
 Changes in v1:
-- Fix illegal_highdma() (Yunsheng).
-- Rework napi_pp_put_page() slightly to reduce code churn (Willem).
+- Rename devmem -> dmabuf (David).
+- Flip skb_frags_not_readable (Jakub).
 
 ---
- include/linux/skbuff.h     | 42 +++++++++++++++++++++++++++++++++++++-
- include/linux/skbuff_ref.h |  9 ++++----
- net/core/dev.c             |  3 ++-
- net/core/gro.c             |  3 ++-
- net/core/skbuff.c          | 11 ++++++++++
- net/ipv4/esp4.c            |  3 ++-
- net/ipv4/tcp.c             |  3 +++
- net/ipv6/esp6.c            |  3 ++-
- 8 files changed, 67 insertions(+), 10 deletions(-)
+ include/linux/skbuff.h | 19 +++++++++++++++++--
+ include/net/tcp.h      |  5 +++--
+ net/core/datagram.c    |  6 ++++++
+ net/core/skbuff.c      | 43 ++++++++++++++++++++++++++++++++++++++++--
+ net/ipv4/tcp.c         |  3 +++
+ net/ipv4/tcp_input.c   | 13 ++++++++++---
+ net/ipv4/tcp_output.c  |  5 ++++-
+ net/packet/af_packet.c |  4 ++--
+ 8 files changed, 86 insertions(+), 12 deletions(-)
 
 diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index cf8f6ce06742..dbadf2dd6b35 100644
+index dbadf2dd6b35..d02a88bad953 100644
 --- a/include/linux/skbuff.h
 +++ b/include/linux/skbuff.h
-@@ -3523,21 +3523,58 @@ static inline void skb_frag_off_copy(skb_frag_t *fragto,
- 	fragto->offset = fragfrom->offset;
- }
- 
-+/* Return: true if the skb_frag contains a net_iov. */
-+static inline bool skb_frag_is_net_iov(const skb_frag_t *frag)
-+{
-+	return netmem_is_net_iov(frag->netmem);
-+}
-+
-+/**
-+ * skb_frag_net_iov - retrieve the net_iov referred to by fragment
-+ * @frag: the fragment
-+ *
-+ * Return: the &struct net_iov associated with @frag. Returns NULL if this
-+ * frag has no associated net_iov.
-+ */
-+static inline struct net_iov *skb_frag_net_iov(const skb_frag_t *frag)
-+{
-+	if (!skb_frag_is_net_iov(frag))
-+		return NULL;
-+
-+	return netmem_to_net_iov(frag->netmem);
-+}
-+
- /**
-  * skb_frag_page - retrieve the page referred to by a paged fragment
-  * @frag: the paged fragment
-  *
-- * Returns the &struct page associated with @frag.
-+ * Return: the &struct page associated with @frag. Returns NULL if this frag
-+ * has no associated page.
-  */
- static inline struct page *skb_frag_page(const skb_frag_t *frag)
- {
-+	if (skb_frag_is_net_iov(frag))
-+		return NULL;
-+
- 	return netmem_to_page(frag->netmem);
- }
- 
-+/**
-+ * skb_frag_netmem - retrieve the netmem referred to by a fragment
-+ * @frag: the fragment
-+ *
-+ * Return: the &netmem_ref associated with @frag.
-+ */
-+static inline netmem_ref skb_frag_netmem(const skb_frag_t *frag)
-+{
-+	return frag->netmem;
-+}
-+
- int skb_pp_cow_data(struct page_pool *pool, struct sk_buff **pskb,
- 		    unsigned int headroom);
- int skb_cow_data_for_xdp(struct page_pool *pool, struct sk_buff **pskb,
- 			 struct bpf_prog *prog);
-+
- /**
-  * skb_frag_address - gets the address of the data contained in a paged fragment
-  * @frag: the paged fragment buffer
-@@ -3547,6 +3584,9 @@ int skb_cow_data_for_xdp(struct page_pool *pool, struct sk_buff **pskb,
-  */
- static inline void *skb_frag_address(const skb_frag_t *frag)
- {
-+	if (!skb_frag_page(frag))
-+		return NULL;
-+
- 	return page_address(skb_frag_page(frag)) + skb_frag_off(frag);
- }
- 
-diff --git a/include/linux/skbuff_ref.h b/include/linux/skbuff_ref.h
-index 16c241a23472..0f3c58007488 100644
---- a/include/linux/skbuff_ref.h
-+++ b/include/linux/skbuff_ref.h
-@@ -34,14 +34,13 @@ static inline void skb_frag_ref(struct sk_buff *skb, int f)
- 
- bool napi_pp_put_page(netmem_ref netmem);
- 
--static inline void
--skb_page_unref(struct page *page, bool recycle)
-+static inline void skb_page_unref(netmem_ref netmem, bool recycle)
- {
- #ifdef CONFIG_PAGE_POOL
--	if (recycle && napi_pp_put_page(page_to_netmem(page)))
-+	if (recycle && napi_pp_put_page(netmem))
- 		return;
+@@ -827,6 +827,8 @@ enum skb_tstamp_type {
+  *	@csum_level: indicates the number of consecutive checksums found in
+  *		the packet minus one that have been verified as
+  *		CHECKSUM_UNNECESSARY (max 3)
++ *	@unreadable: indicates that at least 1 of the fragments in this skb is
++ *		unreadable.
+  *	@dst_pending_confirm: need to confirm neighbour
+  *	@decrypted: Decrypted SKB
+  *	@slow_gro: state present at GRO time, slower prepare step required
+@@ -1008,7 +1010,7 @@ struct sk_buff {
+ #if IS_ENABLED(CONFIG_IP_SCTP)
+ 	__u8			csum_not_inet:1;
  #endif
--	put_page(page);
-+	put_page(netmem_to_page(netmem));
+-
++	__u8			unreadable:1;
+ #if defined(CONFIG_NET_SCHED) || defined(CONFIG_NET_XGRESS)
+ 	__u16			tc_index;	/* traffic control index */
+ #endif
+@@ -1823,6 +1825,12 @@ static inline void skb_zcopy_downgrade_managed(struct sk_buff *skb)
+ 		__skb_zcopy_downgrade_managed(skb);
  }
  
- /**
-@@ -54,7 +53,7 @@ skb_page_unref(struct page *page, bool recycle)
-  */
- static inline void __skb_frag_unref(skb_frag_t *frag, bool recycle)
++/* Return true if frags in this skb are readable by the host. */
++static inline bool skb_frags_readable(const struct sk_buff *skb)
++{
++	return !skb->unreadable;
++}
++
+ static inline void skb_mark_not_on_list(struct sk_buff *skb)
  {
--	skb_page_unref(skb_frag_page(frag), recycle);
-+	skb_page_unref(skb_frag_netmem(frag), recycle);
+ 	skb->next = NULL;
+@@ -2539,10 +2547,17 @@ static inline void skb_len_add(struct sk_buff *skb, int delta)
+ static inline void __skb_fill_netmem_desc(struct sk_buff *skb, int i,
+ 					  netmem_ref netmem, int off, int size)
+ {
+-	struct page *page = netmem_to_page(netmem);
++	struct page *page;
+ 
+ 	__skb_fill_netmem_desc_noacc(skb_shinfo(skb), i, netmem, off, size);
+ 
++	if (netmem_is_net_iov(netmem)) {
++		skb->unreadable = true;
++		return;
++	}
++
++	page = netmem_to_page(netmem);
++
+ 	/* Propagate page pfmemalloc to the skb if we can. The problem is
+ 	 * that not all callers have unique ownership of the page but rely
+ 	 * on page_is_pfmemalloc doing the right thing(tm).
+diff --git a/include/net/tcp.h b/include/net/tcp.h
+index 2aac11e7e1cc..e8f6e602c2ad 100644
+--- a/include/net/tcp.h
++++ b/include/net/tcp.h
+@@ -1060,7 +1060,7 @@ static inline int tcp_skb_mss(const struct sk_buff *skb)
+ 
+ static inline bool tcp_skb_can_collapse_to(const struct sk_buff *skb)
+ {
+-	return likely(!TCP_SKB_CB(skb)->eor);
++	return likely(!TCP_SKB_CB(skb)->eor && skb_frags_readable(skb));
  }
  
- /**
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 019f86a3d614..f6f40c682b83 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -3431,8 +3431,9 @@ static int illegal_highdma(struct net_device *dev, struct sk_buff *skb)
- 	if (!(dev->features & NETIF_F_HIGHDMA)) {
- 		for (i = 0; i < skb_shinfo(skb)->nr_frags; i++) {
- 			skb_frag_t *frag = &skb_shinfo(skb)->frags[i];
-+			struct page *page = skb_frag_page(frag);
+ static inline bool tcp_skb_can_collapse(const struct sk_buff *to,
+@@ -1069,7 +1069,8 @@ static inline bool tcp_skb_can_collapse(const struct sk_buff *to,
+ 	/* skb_cmp_decrypted() not needed, use tcp_write_collapse_fence() */
+ 	return likely(tcp_skb_can_collapse_to(to) &&
+ 		      mptcp_skb_can_collapse(to, from) &&
+-		      skb_pure_zcopy_same(to, from));
++		      skb_pure_zcopy_same(to, from) &&
++		      skb_frags_readable(to) == skb_frags_readable(from));
+ }
  
--			if (PageHighMem(skb_frag_page(frag)))
-+			if (page && PageHighMem(page))
- 				return 1;
- 		}
+ static inline bool tcp_skb_can_collapse_rx(const struct sk_buff *to,
+diff --git a/net/core/datagram.c b/net/core/datagram.c
+index a40f733b37d7..f0693707aece 100644
+--- a/net/core/datagram.c
++++ b/net/core/datagram.c
+@@ -407,6 +407,9 @@ static int __skb_datagram_iter(const struct sk_buff *skb, int offset,
+ 			return 0;
  	}
-diff --git a/net/core/gro.c b/net/core/gro.c
-index b3b43de1a650..26f09c3e830b 100644
---- a/net/core/gro.c
-+++ b/net/core/gro.c
-@@ -408,7 +408,8 @@ static inline void skb_gro_reset_offset(struct sk_buff *skb, u32 nhoff)
- 	pinfo = skb_shinfo(skb);
- 	frag0 = &pinfo->frags[0];
  
--	if (pinfo->nr_frags && !PageHighMem(skb_frag_page(frag0)) &&
-+	if (pinfo->nr_frags && skb_frag_page(frag0) &&
-+	    !PageHighMem(skb_frag_page(frag0)) &&
- 	    (!NET_IP_ALIGN || !((skb_frag_off(frag0) + nhoff) & 3))) {
- 		NAPI_GRO_CB(skb)->frag0 = skb_frag_address(frag0);
- 		NAPI_GRO_CB(skb)->frag0_len = min_t(unsigned int,
++	if (!skb_frags_readable(skb))
++		goto short_copy;
++
+ 	/* Copy paged appendix. Hmm... why does this look so complicated? */
+ 	for (i = 0; i < skb_shinfo(skb)->nr_frags; i++) {
+ 		int end;
+@@ -623,6 +626,9 @@ int zerocopy_fill_skb_from_iter(struct sk_buff *skb,
+ {
+ 	int frag = skb_shinfo(skb)->nr_frags;
+ 
++	if (!skb_frags_readable(skb))
++		return -EFAULT;
++
+ 	while (length && iov_iter_count(from)) {
+ 		struct page *head, *last_head = NULL;
+ 		struct page *pages[MAX_SKB_FRAGS];
 diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 9e2b28342793..91c7def73700 100644
+index 91c7def73700..ea60dae05168 100644
 --- a/net/core/skbuff.c
 +++ b/net/core/skbuff.c
-@@ -1371,6 +1371,14 @@ void skb_dump(const char *level, const struct sk_buff *skb, bool full_pkt)
- 		struct page *p;
- 		u8 *vaddr;
+@@ -1972,6 +1972,9 @@ int skb_copy_ubufs(struct sk_buff *skb, gfp_t gfp_mask)
+ 	if (skb_shared(skb) || skb_unclone(skb, gfp_mask))
+ 		return -EINVAL;
  
-+		if (skb_frag_is_net_iov(frag)) {
-+			printk("%sskb frag %d: not readable\n", level, i);
-+			len -= skb_frag_size(frag);
-+			if (!len)
-+				break;
-+			continue;
-+		}
++	if (!skb_frags_readable(skb))
++		return -EFAULT;
 +
- 		skb_frag_foreach_page(frag, skb_frag_off(frag),
- 				      skb_frag_size(frag), p, p_off, p_len,
- 				      copied) {
-@@ -3163,6 +3171,9 @@ static bool __skb_splice_bits(struct sk_buff *skb, struct pipe_inode_info *pipe,
+ 	if (!num_frags)
+ 		goto release;
+ 
+@@ -2145,6 +2148,9 @@ struct sk_buff *skb_copy(const struct sk_buff *skb, gfp_t gfp_mask)
+ 	unsigned int size;
+ 	int headerlen;
+ 
++	if (!skb_frags_readable(skb))
++		return NULL;
++
+ 	if (WARN_ON_ONCE(skb_shinfo(skb)->gso_type & SKB_GSO_FRAGLIST))
+ 		return NULL;
+ 
+@@ -2483,6 +2489,9 @@ struct sk_buff *skb_copy_expand(const struct sk_buff *skb,
+ 	struct sk_buff *n;
+ 	int oldheadroom;
+ 
++	if (!skb_frags_readable(skb))
++		return NULL;
++
+ 	if (WARN_ON_ONCE(skb_shinfo(skb)->gso_type & SKB_GSO_FRAGLIST))
+ 		return NULL;
+ 
+@@ -2827,6 +2836,9 @@ void *__pskb_pull_tail(struct sk_buff *skb, int delta)
+ 	 */
+ 	int i, k, eat = (skb->tail + delta) - skb->end;
+ 
++	if (!skb_frags_readable(skb))
++		return NULL;
++
+ 	if (eat > 0 || skb_cloned(skb)) {
+ 		if (pskb_expand_head(skb, 0, eat > 0 ? eat + 128 : 0,
+ 				     GFP_ATOMIC))
+@@ -2980,6 +2992,9 @@ int skb_copy_bits(const struct sk_buff *skb, int offset, void *to, int len)
+ 		to     += copy;
+ 	}
+ 
++	if (!skb_frags_readable(skb))
++		goto fault;
++
+ 	for (i = 0; i < skb_shinfo(skb)->nr_frags; i++) {
+ 		int end;
+ 		skb_frag_t *f = &skb_shinfo(skb)->frags[i];
+@@ -3168,6 +3183,9 @@ static bool __skb_splice_bits(struct sk_buff *skb, struct pipe_inode_info *pipe,
+ 	/*
+ 	 * then map the fragments
+ 	 */
++	if (!skb_frags_readable(skb))
++		return false;
++
  	for (seg = 0; seg < skb_shinfo(skb)->nr_frags; seg++) {
  		const skb_frag_t *f = &skb_shinfo(skb)->frags[seg];
  
-+		if (WARN_ON_ONCE(!skb_frag_page(f)))
-+			return false;
+@@ -3391,6 +3409,9 @@ int skb_store_bits(struct sk_buff *skb, int offset, const void *from, int len)
+ 		from += copy;
+ 	}
+ 
++	if (!skb_frags_readable(skb))
++		goto fault;
 +
- 		if (__splice_segment(skb_frag_page(f),
- 				     skb_frag_off(f), skb_frag_size(f),
- 				     offset, len, spd, false, sk, pipe))
-diff --git a/net/ipv4/esp4.c b/net/ipv4/esp4.c
-index 47378ca41904..f3281312eb5e 100644
---- a/net/ipv4/esp4.c
-+++ b/net/ipv4/esp4.c
-@@ -115,7 +115,8 @@ static void esp_ssg_unref(struct xfrm_state *x, void *tmp, struct sk_buff *skb)
- 	 */
- 	if (req->src != req->dst)
- 		for (sg = sg_next(req->src); sg; sg = sg_next(sg))
--			skb_page_unref(sg_page(sg), skb->pp_recycle);
-+			skb_page_unref(page_to_netmem(sg_page(sg)),
-+				       skb->pp_recycle);
+ 	for (i = 0; i < skb_shinfo(skb)->nr_frags; i++) {
+ 		skb_frag_t *frag = &skb_shinfo(skb)->frags[i];
+ 		int end;
+@@ -3470,6 +3491,9 @@ __wsum __skb_checksum(const struct sk_buff *skb, int offset, int len,
+ 		pos	= copy;
+ 	}
+ 
++	if (!skb_frags_readable(skb))
++		return 0;
++
+ 	for (i = 0; i < skb_shinfo(skb)->nr_frags; i++) {
+ 		int end;
+ 		skb_frag_t *frag = &skb_shinfo(skb)->frags[i];
+@@ -3570,6 +3594,9 @@ __wsum skb_copy_and_csum_bits(const struct sk_buff *skb, int offset,
+ 		pos	= copy;
+ 	}
+ 
++	if (!skb_frags_readable(skb))
++		return 0;
++
+ 	for (i = 0; i < skb_shinfo(skb)->nr_frags; i++) {
+ 		int end;
+ 
+@@ -4061,6 +4088,7 @@ static inline void skb_split_inside_header(struct sk_buff *skb,
+ 		skb_shinfo(skb1)->frags[i] = skb_shinfo(skb)->frags[i];
+ 
+ 	skb_shinfo(skb1)->nr_frags = skb_shinfo(skb)->nr_frags;
++	skb1->unreadable	   = skb->unreadable;
+ 	skb_shinfo(skb)->nr_frags  = 0;
+ 	skb1->data_len		   = skb->data_len;
+ 	skb1->len		   += skb1->data_len;
+@@ -4108,6 +4136,8 @@ static inline void skb_split_no_header(struct sk_buff *skb,
+ 		pos += size;
+ 	}
+ 	skb_shinfo(skb1)->nr_frags = k;
++
++	skb1->unreadable = skb->unreadable;
  }
  
- #ifdef CONFIG_INET_ESPINTCP
+ /**
+@@ -4346,6 +4376,9 @@ unsigned int skb_seq_read(unsigned int consumed, const u8 **data,
+ 		return block_limit - abs_offset;
+ 	}
+ 
++	if (!skb_frags_readable(st->cur_skb))
++		return 0;
++
+ 	if (st->frag_idx == 0 && !st->frag_data)
+ 		st->stepped_offset += skb_headlen(st->cur_skb);
+ 
+@@ -5958,7 +5991,10 @@ bool skb_try_coalesce(struct sk_buff *to, struct sk_buff *from,
+ 	if (to->pp_recycle != from->pp_recycle)
+ 		return false;
+ 
+-	if (len <= skb_tailroom(to)) {
++	if (skb_frags_readable(from) != skb_frags_readable(to))
++		return false;
++
++	if (len <= skb_tailroom(to) && skb_frags_readable(from)) {
+ 		if (len)
+ 			BUG_ON(skb_copy_bits(from, 0, skb_put(to, len), len));
+ 		*delta_truesize = 0;
+@@ -6135,6 +6171,9 @@ int skb_ensure_writable(struct sk_buff *skb, unsigned int write_len)
+ 	if (!pskb_may_pull(skb, write_len))
+ 		return -ENOMEM;
+ 
++	if (!skb_frags_readable(skb))
++		return -EFAULT;
++
+ 	if (!skb_cloned(skb) || skb_clone_writable(skb, write_len))
+ 		return 0;
+ 
+@@ -6814,7 +6853,7 @@ void skb_condense(struct sk_buff *skb)
+ {
+ 	if (skb->data_len) {
+ 		if (skb->data_len > skb->end - skb->tail ||
+-		    skb_cloned(skb))
++		    skb_cloned(skb) || !skb_frags_readable(skb))
+ 			return;
+ 
+ 		/* Nice, we can free page frag(s) right now */
 diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index 8514257f4ecd..20a1b0333017 100644
+index 20a1b0333017..30e0aa38ba9b 100644
 --- a/net/ipv4/tcp.c
 +++ b/net/ipv4/tcp.c
-@@ -2177,6 +2177,9 @@ static int tcp_zerocopy_receive(struct sock *sk,
+@@ -2160,6 +2160,9 @@ static int tcp_zerocopy_receive(struct sock *sk,
+ 				skb = tcp_recv_skb(sk, seq, &offset);
+ 			}
+ 
++			if (!skb_frags_readable(skb))
++				break;
++
+ 			if (TCP_SKB_CB(skb)->has_rxtstamp) {
+ 				tcp_update_recv_tstamps(skb, tss);
+ 				zc->msg_flags |= TCP_CMSG_TS;
+diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+index e37488d3453f..9f314dfa1490 100644
+--- a/net/ipv4/tcp_input.c
++++ b/net/ipv4/tcp_input.c
+@@ -5391,6 +5391,9 @@ tcp_collapse(struct sock *sk, struct sk_buff_head *list, struct rb_root *root,
+ 	for (end_of_skbs = true; skb != NULL && skb != tail; skb = n) {
+ 		n = tcp_skb_next(skb, list);
+ 
++		if (!skb_frags_readable(skb))
++			goto skip_this;
++
+ 		/* No new bits? It is possible on ofo queue. */
+ 		if (!before(start, TCP_SKB_CB(skb)->end_seq)) {
+ 			skb = tcp_collapse_one(sk, skb, list, root);
+@@ -5411,17 +5414,20 @@ tcp_collapse(struct sock *sk, struct sk_buff_head *list, struct rb_root *root,
  			break;
  		}
- 		page = skb_frag_page(frags);
-+		if (WARN_ON_ONCE(!page))
-+			break;
-+
- 		prefetchw(page);
- 		pages[pages_to_map++] = page;
- 		length += PAGE_SIZE;
-diff --git a/net/ipv6/esp6.c b/net/ipv6/esp6.c
-index 3920e8aa1031..b2400c226a32 100644
---- a/net/ipv6/esp6.c
-+++ b/net/ipv6/esp6.c
-@@ -132,7 +132,8 @@ static void esp_ssg_unref(struct xfrm_state *x, void *tmp, struct sk_buff *skb)
- 	 */
- 	if (req->src != req->dst)
- 		for (sg = sg_next(req->src); sg; sg = sg_next(sg))
--			skb_page_unref(sg_page(sg), skb->pp_recycle);
-+			skb_page_unref(page_to_netmem(sg_page(sg)),
-+				       skb->pp_recycle);
- }
  
- #ifdef CONFIG_INET6_ESPINTCP
+-		if (n && n != tail && tcp_skb_can_collapse_rx(skb, n) &&
++		if (n && n != tail && skb_frags_readable(n) &&
++		    tcp_skb_can_collapse_rx(skb, n) &&
+ 		    TCP_SKB_CB(skb)->end_seq != TCP_SKB_CB(n)->seq) {
+ 			end_of_skbs = false;
+ 			break;
+ 		}
+ 
++skip_this:
+ 		/* Decided to skip this, advance start seq. */
+ 		start = TCP_SKB_CB(skb)->end_seq;
+ 	}
+ 	if (end_of_skbs ||
+-	    (TCP_SKB_CB(skb)->tcp_flags & (TCPHDR_SYN | TCPHDR_FIN)))
++	    (TCP_SKB_CB(skb)->tcp_flags & (TCPHDR_SYN | TCPHDR_FIN)) ||
++	    !skb_frags_readable(skb))
+ 		return;
+ 
+ 	__skb_queue_head_init(&tmp);
+@@ -5463,7 +5469,8 @@ tcp_collapse(struct sock *sk, struct sk_buff_head *list, struct rb_root *root,
+ 				if (!skb ||
+ 				    skb == tail ||
+ 				    !tcp_skb_can_collapse_rx(nskb, skb) ||
+-				    (TCP_SKB_CB(skb)->tcp_flags & (TCPHDR_SYN | TCPHDR_FIN)))
++				    (TCP_SKB_CB(skb)->tcp_flags & (TCPHDR_SYN | TCPHDR_FIN)) ||
++				    !skb_frags_readable(skb))
+ 					goto end;
+ 			}
+ 		}
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index cdd0def14427..4fd746bd4d54 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -2344,7 +2344,8 @@ static bool tcp_can_coalesce_send_queue_head(struct sock *sk, int len)
+ 
+ 		if (unlikely(TCP_SKB_CB(skb)->eor) ||
+ 		    tcp_has_tx_tstamp(skb) ||
+-		    !skb_pure_zcopy_same(skb, next))
++		    !skb_pure_zcopy_same(skb, next) ||
++		    skb_frags_readable(skb) != skb_frags_readable(next))
+ 			return false;
+ 
+ 		len -= skb->len;
+@@ -3264,6 +3265,8 @@ static bool tcp_can_collapse(const struct sock *sk, const struct sk_buff *skb)
+ 		return false;
+ 	if (skb_cloned(skb))
+ 		return false;
++	if (!skb_frags_readable(skb))
++		return false;
+ 	/* Some heuristics for collapsing over SACK'd could be invented */
+ 	if (TCP_SKB_CB(skb)->sacked & TCPCB_SACKED_ACKED)
+ 		return false;
+diff --git a/net/packet/af_packet.c b/net/packet/af_packet.c
+index 4a364cdd445e..a705ec214254 100644
+--- a/net/packet/af_packet.c
++++ b/net/packet/af_packet.c
+@@ -2216,7 +2216,7 @@ static int packet_rcv(struct sk_buff *skb, struct net_device *dev,
+ 		}
+ 	}
+ 
+-	snaplen = skb->len;
++	snaplen = skb_frags_readable(skb) ? skb->len : skb_headlen(skb);
+ 
+ 	res = run_filter(skb, sk, snaplen);
+ 	if (!res)
+@@ -2336,7 +2336,7 @@ static int tpacket_rcv(struct sk_buff *skb, struct net_device *dev,
+ 		}
+ 	}
+ 
+-	snaplen = skb->len;
++	snaplen = skb_frags_readable(skb) ? skb->len : skb_headlen(skb);
+ 
+ 	res = run_filter(skb, sk, snaplen);
+ 	if (!res)
 -- 
 2.46.0.184.g6999bdac58-goog
 
