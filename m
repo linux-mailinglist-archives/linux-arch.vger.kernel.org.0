@@ -1,37 +1,49 @@
-Return-Path: <linux-arch+bounces-6326-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6327-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67E60956A54
-	for <lists+linux-arch@lfdr.de>; Mon, 19 Aug 2024 14:05:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 14E14956E62
+	for <lists+linux-arch@lfdr.de>; Mon, 19 Aug 2024 17:15:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A7131C22F49
-	for <lists+linux-arch@lfdr.de>; Mon, 19 Aug 2024 12:05:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 469261C221C8
+	for <lists+linux-arch@lfdr.de>; Mon, 19 Aug 2024 15:15:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFF3516C879;
-	Mon, 19 Aug 2024 12:04:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AFBA176AB9;
+	Mon, 19 Aug 2024 15:14:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lCYk6sau"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DAD116B3BD;
-	Mon, 19 Aug 2024 12:04:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 226022AD2C;
+	Mon, 19 Aug 2024 15:14:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724069066; cv=none; b=ENeXTlbqBagGHKtmMV26Xtf+HppGMhU2r+UEr95OzF1X2wajo63aR+Ajxej1tUrtgcNfuEJlvZKilv7gfXWX9LyRyRE8J2p8ovcwmy4+JzB2ylYHTPVac5/56LZacbk4onAtIDOuL5UweR+b8o4sQ8S+I9RKdmQkwuzMqtYpj18=
+	t=1724080491; cv=none; b=XSJYua2hnxAhmf0d7klJ9mHbGkiw/z7g+/XO5nNVnRaHNq+FxDReAlBbU8GpKIQYZiilLR3A0zMg25/M4eU85Zdi34R7Wg3FhQHhnkiwvtGDw1MnRdsiBqi3Ib7f0+jB1ZIXSE6a6BIe/SjqM1pEMc+oIwZ6HiXSIaDpHSbGfOo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724069066; c=relaxed/simple;
-	bh=aOsW0+lWbeQKqbvgTx+i39YwF3O+mmvE/GLBzRh1v3A=;
+	s=arc-20240116; t=1724080491; c=relaxed/simple;
+	bh=S8xLhlX6RpZyNHWb7anPniOddgqkLHLd/F+Q/aXteFs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d9N0Za9c6vpOKaZG7ajess+6kN1mhbdDBTn7ueq2x/Uq+y7vn5BQ08iN7eaTRfdGtQ030Le/0+wMoi7UTL1thAP/om80Wy6eysTr1SohwsmZ7uEZJ+ci4IF9iXk0lxWdhldwg67xUqTl91aBU3pCjAVWcjqYjxMHXWidGDS+Ii8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 949ABC32782;
-	Mon, 19 Aug 2024 12:04:20 +0000 (UTC)
-Date: Mon, 19 Aug 2024 13:04:18 +0100
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Mark Brown <broonie@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=hKHTWfhqPuW3e9FJLuiFsjLXeVfq7k0k5vPZZZd9Lpzzj3w/VOD76l2FzB636Ye4mxIOC+4hBDWA29Mmu9feTeXF3qu00Y3Impg9VsU2WnGlygzJaNHp/q1v3a8utfo+b/lKRXA1cWp4xBfJpNBrF2DcW9IOnokOORNpqq54/VY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lCYk6sau; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33AF7C32782;
+	Mon, 19 Aug 2024 15:14:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724080490;
+	bh=S8xLhlX6RpZyNHWb7anPniOddgqkLHLd/F+Q/aXteFs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lCYk6sauuzGZXdmOUXd2qTfJWvnED9bat34saswazgl+M63wcMrmkDGih3C8kQurA
+	 Y2P6GJV0apLQodqEjQKA4tdHpmZayAUehizPYmJryKzc9k2pe7FjLLsB+nMt+yQu9h
+	 6haqcAo1ROW4FSaTAo1ixtaogoPe/ZoVBT9tJrC3lFtzrBO+EUNak/Eatw3H2Lcpe/
+	 c/nYpouIZebXmyZmxMOP8ewWLGfSRVwk2VIvLTWpC+zyPpx85rnhXiCbZ9E8XxLZ9C
+	 WuivjB335AbSXgBL+2B1hZIrxM8FYBoq6IoTjhDAc4WPE3BbvP3auleWIgXw19OJYa
+	 wCRcfVWJ45ZMA==
+Date: Mon, 19 Aug 2024 16:14:41 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Catalin Marinas <catalin.marinas@arm.com>
 Cc: Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	Marc Zyngier <maz@kernel.org>,
@@ -57,121 +69,71 @@ Cc: Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
 	linux-arch@vger.kernel.org, linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v10 20/40] arm64/gcs: Ensure that new threads have a GCS
-Message-ID: <ZsM0wkRRguMchecK@arm.com>
+Subject: Re: [PATCH v10 18/40] arm64/mm: Handle GCS data aborts
+Message-ID: <24d33455-d958-4f27-8a2c-4f237fc2bd29@sirena.org.uk>
 References: <20240801-arm64-gcs-v10-0-699e2bd2190b@kernel.org>
- <20240801-arm64-gcs-v10-20-699e2bd2190b@kernel.org>
+ <20240801-arm64-gcs-v10-18-699e2bd2190b@kernel.org>
+ <ZsMNwAsAWr2IxFns@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="4ClE/UJ5laHl8PFo"
+Content-Disposition: inline
+In-Reply-To: <ZsMNwAsAWr2IxFns@arm.com>
+X-Cookie: Interchangeable parts won't.
+
+
+--4ClE/UJ5laHl8PFo
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240801-arm64-gcs-v10-20-699e2bd2190b@kernel.org>
 
-On Thu, Aug 01, 2024 at 01:06:47PM +0100, Mark Brown wrote:
-> diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
-> index 5f00cb0da9c3..d6d3a96cf2e4 100644
-> --- a/arch/arm64/kernel/process.c
-> +++ b/arch/arm64/kernel/process.c
-> @@ -285,9 +285,32 @@ static void flush_gcs(void)
->  	write_sysreg_s(0, SYS_GCSPR_EL0);
->  }
->  
-> +static int copy_thread_gcs(struct task_struct *p,
-> +			   const struct kernel_clone_args *args)
-> +{
-> +	unsigned long gcs;
-> +
-> +	gcs = gcs_alloc_thread_stack(p, args);
-> +	if (IS_ERR_VALUE(gcs))
-> +		return PTR_ERR((void *)gcs);
+On Mon, Aug 19, 2024 at 10:17:52AM +0100, Catalin Marinas wrote:
+> On Thu, Aug 01, 2024 at 01:06:45PM +0100, Mark Brown wrote:
 
-Is 0 an ok value here? I can see further down that
-gcs_alloc_thread_stack() may return 0.
+> > +static bool is_invalid_gcs_access(struct vm_area_struct *vma, u64 esr)
+> > +{
 
-> +
-> +	p->thread.gcs_el0_mode = current->thread.gcs_el0_mode;
-> +	p->thread.gcs_el0_locked = current->thread.gcs_el0_locked;
-> +
-> +	/* Ensure the current state of the GCS is seen by CoW */
-> +	gcsb_dsync();
+> > +	if (unlikely(is_gcs_fault(esr))) {
+> > +		/* GCS accesses must be performed on a GCS page */
+> > +		if (!(vma->vm_flags & VM_SHADOW_STACK))
+> > +			return true;
+> > +		if (!(vma->vm_flags & VM_WRITE))
+> > +			return true;
 
-I don't get this barrier. What does it have to do with CoW, which memory
-effects is it trying to order?
+> Do we need the VM_WRITE check here? Further down in do_page_fault(), we
+> already do the check as we set vm_flags = VM_WRITE.
 
-> diff --git a/arch/arm64/mm/gcs.c b/arch/arm64/mm/gcs.c
-> index b0a67efc522b..b71f6b408513 100644
-> --- a/arch/arm64/mm/gcs.c
-> +++ b/arch/arm64/mm/gcs.c
-> @@ -8,6 +8,138 @@
->  #include <asm/cpufeature.h>
->  #include <asm/page.h>
->  
-> +static unsigned long alloc_gcs(unsigned long addr, unsigned long size)
-> +{
-> +	int flags = MAP_ANONYMOUS | MAP_PRIVATE;
-> +	struct mm_struct *mm = current->mm;
-> +	unsigned long mapped_addr, unused;
-> +
-> +	if (addr)
-> +		flags |= MAP_FIXED_NOREPLACE;
-> +
-> +	mmap_write_lock(mm);
-> +	mapped_addr = do_mmap(NULL, addr, size, PROT_READ, flags,
-> +			      VM_SHADOW_STACK | VM_WRITE, 0, &unused, NULL);
-> +	mmap_write_unlock(mm);
-> +
-> +	return mapped_addr;
-> +}
-> +
-> +static unsigned long gcs_size(unsigned long size)
-> +{
-> +	if (size)
-> +		return PAGE_ALIGN(size);
-> +
-> +	/* Allocate RLIMIT_STACK/2 with limits of PAGE_SIZE..2G */
-> +	size = PAGE_ALIGN(min_t(unsigned long long,
-> +				rlimit(RLIMIT_STACK) / 2, SZ_2G));
-> +	return max(PAGE_SIZE, size);
-> +}
+> >       if (!(vma->vm_flags & vm_flags)) {
+> >               vma_end_read(vma);
+> >               fault = 0;
 
-So we still have RLIMIT_STACK/2. I thought we got rid of that and just
-went with RLIMIT_STACK (or I misremember).
+It looks bitrotted, yes.
 
-> +
-> +static bool gcs_consume_token(struct mm_struct *mm, unsigned long user_addr)
-> +{
-> +	u64 expected = GCS_CAP(user_addr);
-> +	u64 val;
-> +	int ret;
-> +
-> +	/* This should really be an atomic cmpxchg.  It is not. */
-> +	ret = access_remote_vm(mm, user_addr, &val, sizeof(val),
-> +			       FOLL_FORCE);
-> +	if (ret != sizeof(val))
-> +		return false;
-> +
-> +	if (val != expected)
-> +		return false;
-> +
-> +	val = 0;
-> +	ret = access_remote_vm(mm, user_addr, &val, sizeof(val),
-> +			       FOLL_FORCE | FOLL_WRITE);
-> +	if (ret != sizeof(val))
-> +		return false;
-> +
-> +	return true;
-> +}
+> I was wondering whether we should prevent mprotect(PROT_READ) on the GCS
+> page. But I guess that's fine, we'll SIGSEGV later if we get an invalid
+> GCS access.
 
-As per the clone3() thread, I think we should try to use
-get_user_page_vma_remote() and do a cmpxchg() directly.
+Yeah, that doesn't seem like a particular problem - the concern is
+adding rather than removing GCS.
 
-How does the user write the initial token? Do we need any barriers
-before/after consuming the token?
+--4ClE/UJ5laHl8PFo
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-Catalin
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmbDYWAACgkQJNaLcl1U
+h9CIagf8CVGRJRPIYEL8OXtLlRDHe/BAx31NyJ8PnnV2H/LyZ/HkpxFqkEdopZ2W
+SnomGLDZ/Sbry7VZUUVbO9QNmD/7UinwFR26WOigUY8aHtv/SDsMpx68OMvMPGtp
+aOgTkLDZdZiL3OZbxsdYj24aQ2gywicEb/JxgcqYwclQvQn3geXt9wvBJIZvUqOI
+f9ioaV7/pP5zWb35Kra+jjC2CUxouQ1ozkrxlJhyTT9VM3I4iefpf6eaGmgah7G9
+n5vrIJWkdxaC4B8K/p+Uk/2LJYWdvOho+S1PnJPJloXX/3+dCvveT+3yVcEzT1z0
+73smiFLb21oBkc5wjzRqiGDdQA7z3Q==
+=d5gu
+-----END PGP SIGNATURE-----
+
+--4ClE/UJ5laHl8PFo--
 
