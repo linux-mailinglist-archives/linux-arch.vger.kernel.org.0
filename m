@@ -1,139 +1,157 @@
-Return-Path: <linux-arch+bounces-6327-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6328-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14E14956E62
-	for <lists+linux-arch@lfdr.de>; Mon, 19 Aug 2024 17:15:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78655956E69
+	for <lists+linux-arch@lfdr.de>; Mon, 19 Aug 2024 17:15:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 469261C221C8
-	for <lists+linux-arch@lfdr.de>; Mon, 19 Aug 2024 15:15:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 033A51F22A83
+	for <lists+linux-arch@lfdr.de>; Mon, 19 Aug 2024 15:15:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AFBA176AB9;
-	Mon, 19 Aug 2024 15:14:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D702C2AD2C;
+	Mon, 19 Aug 2024 15:15:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lCYk6sau"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="w0FZSam9"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 226022AD2C;
-	Mon, 19 Aug 2024 15:14:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEA832628C
+	for <linux-arch@vger.kernel.org>; Mon, 19 Aug 2024 15:15:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724080491; cv=none; b=XSJYua2hnxAhmf0d7klJ9mHbGkiw/z7g+/XO5nNVnRaHNq+FxDReAlBbU8GpKIQYZiilLR3A0zMg25/M4eU85Zdi34R7Wg3FhQHhnkiwvtGDw1MnRdsiBqi3Ib7f0+jB1ZIXSE6a6BIe/SjqM1pEMc+oIwZ6HiXSIaDpHSbGfOo=
+	t=1724080517; cv=none; b=sdkAatqlR0FbXO8VUP7BypARuugITB77l6GPm8m1yfbCzVLWdC0+Wn08lBwazMhTXRU3Qumv8YFjzFco0efUZdFsFSnu7Y0ejgdy1DpymYFCLUVgx5F0zLetVQZ/z87jHAljAfu5+a8cLIWmn52L7kC9LAVOxI5XJ040W/a6Pus=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724080491; c=relaxed/simple;
-	bh=S8xLhlX6RpZyNHWb7anPniOddgqkLHLd/F+Q/aXteFs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hKHTWfhqPuW3e9FJLuiFsjLXeVfq7k0k5vPZZZd9Lpzzj3w/VOD76l2FzB636Ye4mxIOC+4hBDWA29Mmu9feTeXF3qu00Y3Impg9VsU2WnGlygzJaNHp/q1v3a8utfo+b/lKRXA1cWp4xBfJpNBrF2DcW9IOnokOORNpqq54/VY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lCYk6sau; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33AF7C32782;
-	Mon, 19 Aug 2024 15:14:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724080490;
-	bh=S8xLhlX6RpZyNHWb7anPniOddgqkLHLd/F+Q/aXteFs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lCYk6sauuzGZXdmOUXd2qTfJWvnED9bat34saswazgl+M63wcMrmkDGih3C8kQurA
-	 Y2P6GJV0apLQodqEjQKA4tdHpmZayAUehizPYmJryKzc9k2pe7FjLLsB+nMt+yQu9h
-	 6haqcAo1ROW4FSaTAo1ixtaogoPe/ZoVBT9tJrC3lFtzrBO+EUNak/Eatw3H2Lcpe/
-	 c/nYpouIZebXmyZmxMOP8ewWLGfSRVwk2VIvLTWpC+zyPpx85rnhXiCbZ9E8XxLZ9C
-	 WuivjB335AbSXgBL+2B1hZIrxM8FYBoq6IoTjhDAc4WPE3BbvP3auleWIgXw19OJYa
-	 wCRcfVWJ45ZMA==
-Date: Mon, 19 Aug 2024 16:14:41 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-	Eric Biederman <ebiederm@xmission.com>,
-	Shuah Khan <shuah@kernel.org>,
-	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
-	Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>,
-	"H.J. Lu" <hjl.tools@gmail.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Florian Weimer <fweimer@redhat.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
-	Ross Burton <ross.burton@arm.com>,
-	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v10 18/40] arm64/mm: Handle GCS data aborts
-Message-ID: <24d33455-d958-4f27-8a2c-4f237fc2bd29@sirena.org.uk>
-References: <20240801-arm64-gcs-v10-0-699e2bd2190b@kernel.org>
- <20240801-arm64-gcs-v10-18-699e2bd2190b@kernel.org>
- <ZsMNwAsAWr2IxFns@arm.com>
+	s=arc-20240116; t=1724080517; c=relaxed/simple;
+	bh=E50KkIeJzI2UI/KUMPCFchsUF1az6c7lpuIqxhkdzhs=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=P+Ad0K72nWDLWqfvn/sDUF49fKdw+Fw3h8YkpXyjQAHcogmW5Diyg8obawKkPcWvhlipo4p5BWZTMAGrK++Vn83crsWKhVkNJRcRqiLG1Tb582APSkuZG1Knsl+VMYjSSlN/9B/se4r3CN5/1uaX74kp0SfUD8yI+LVuJY0Rc30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=w0FZSam9; arc=none smtp.client-ip=209.85.128.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6ad660add0fso56109537b3.0
+        for <linux-arch@vger.kernel.org>; Mon, 19 Aug 2024 08:15:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1724080515; x=1724685315; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=A78JLOnxz0DbZH9XkqfQj68kUgx61DwizYim3aGCBzo=;
+        b=w0FZSam90qoqcmPtroBX1SfaxkIY3OAsY76yGUY8YBorHDlykooSOtSI7QQPkFd1Qs
+         RYqYsb/YM9dHdZC0EFvgJTgVWEek+zR/1tkKLXnSsW5QiuOOLTmhki+gKZ2x7/O2YCT0
+         PMgeuDbvhb9LM6H7Tgfqq5ufU9OzYLyUTTh0D+K60RncIDgkZIPBETUJ1pDVSZsT8gRx
+         stRTX3O2moscXjYzOHjgTwKjvDjB4UiI7KZU+XU6FbVyASe1VjruaRQgIKC92IHABrdn
+         qgOUeoTnFMo/TTN6ustLebs9tk1spGwDt8dylK/AytdvtSuoFyBjNwMwUv6xZ3LBaajO
+         yA1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724080515; x=1724685315;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=A78JLOnxz0DbZH9XkqfQj68kUgx61DwizYim3aGCBzo=;
+        b=bEENzcEhqVwee4ExXBb31mnZUZryF84AVgPgVeliWySjo8B0E1sFSKtbi8bTBTN8/9
+         fNQG1gOOCQnUl7SfYzKY+7omGScI3tCzPR3xERMn46sQ5hAp3rHdLitlkcAjunNVuclA
+         hqon/ZMm0VdZkWAIxDFH/Lsl14XqbGceomT1sq5I7uLt356RwlunWnJ55JsZ1sPlbCus
+         BmgPCVN2NqdGS56eXoSDvf8zUZa034s9eeOyWYiqB0nBo6EZe1qE8tf7cRBM2CNwlf1R
+         XzVsm0SrND2uYLrzixck68cvwL5voh6r4IPSZKSBAE4pvDNWY8Fb8iasovClmf2Ifn78
+         qDDQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXbENNLMqpDw/wIxp1b14BKk9Fhz+wUkMQd24YgYihbvw0B1GqzJHocmNHeFdKw0vrA/v68JCIN3BSF@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz5tjb1BBuQFkBOw8+YVfsrjRgTxlQ4JaouhPO+Qvh6nGBnX4WH
+	wweYq32f/b1dgYwZElkIQg69P5wKMEUnAvNILHS2PB7GtigKa0xbzSCJSHJByUyZCd7n63/lEEV
+	SmQ==
+X-Google-Smtp-Source: AGHT+IGn4wFVR9Ch9/vmxxSH0rhO9DsLWlVWUxLzfz71jRdOXd7qjKZt0JLceuItsIaKthQC3GCSSl3ZiT0=
+X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:5aea:cf26:50f4:76db])
+ (user=surenb job=sendgmr) by 2002:a05:690c:2b06:b0:6b2:e9cd:ede9 with SMTP id
+ 00721157ae682-6b2e9cdef05mr783597b3.3.1724080514873; Mon, 19 Aug 2024
+ 08:15:14 -0700 (PDT)
+Date: Mon, 19 Aug 2024 08:15:06 -0700
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="4ClE/UJ5laHl8PFo"
-Content-Disposition: inline
-In-Reply-To: <ZsMNwAsAWr2IxFns@arm.com>
-X-Cookie: Interchangeable parts won't.
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.46.0.184.g6999bdac58-goog
+Message-ID: <20240819151512.2363698-1-surenb@google.com>
+Subject: [PATCH 0/5] page allocation tag compression
+From: Suren Baghdasaryan <surenb@google.com>
+To: akpm@linux-foundation.org
+Cc: kent.overstreet@linux.dev, corbet@lwn.net, arnd@arndb.de, 
+	mcgrof@kernel.org, rppt@kernel.org, paulmck@kernel.org, thuth@redhat.com, 
+	tglx@linutronix.de, bp@alien8.de, xiongwei.song@windriver.com, 
+	ardb@kernel.org, david@redhat.com, vbabka@suse.cz, mhocko@suse.com, 
+	hannes@cmpxchg.org, roman.gushchin@linux.dev, dave@stgolabs.net, 
+	willy@infradead.org, liam.howlett@oracle.com, pasha.tatashin@soleen.com, 
+	souravpanda@google.com, keescook@chromium.org, dennis@kernel.org, 
+	jhubbard@nvidia.com, yuzhao@google.com, vvvvvv@google.com, 
+	rostedt@goodmis.org, iamjoonsoo.kim@lge.com, rientjes@google.com, 
+	minchan@google.com, kaleshsingh@google.com, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, linux-mm@kvack.org, 
+	linux-modules@vger.kernel.org, kernel-team@android.com, surenb@google.com
+Content-Type: text/plain; charset="UTF-8"
+
+This patchset implements several improvements:
+1. Gracefully handles module unloading while there are used allocations
+allocated from that module;
+2. Provides an option to reduce memory overhead from storing page
+allocation references by indexing allocation tags;
+3. Provides an option to store page allocation tag references in the
+page flags, removing dependency on page extensions and eliminating the
+memory overhead from storing page allocation references (~0.2% of total
+system memory).
+4. Improves page allocation performance when CONFIG_MEM_ALLOC_PROFILING
+is enabled by eliminating page extension lookup. Page allocation
+performance overhead is reduced from 14% to 5.5%.
+
+Patch #1 copies module tags into virtually contiguous memory which
+serves two purposes:
+- Lets us deal with the situation when module is unloaded while there
+are still live allocations from that module. Since we are using a copy
+version of the tags we can safely unload the module. Space and gaps in
+this contiguous memory are managed using a maple tree.
+- Enables simple indexing of the tags in the later patches.
+
+Preallocated virtually contiguous memory size can be configured using
+max_module_alloc_tags kernel parameter.
+
+Patch #2 is a code cleanup to simplify later changes.
+
+Patch #3 abstracts page allocation tag reference to simplify later
+changes.
+
+Patch #4 lets us control page allocation tag reference sizes and
+introduces tag indexing.
+
+Patch #5 adds a config to store page allocation tag references inside
+page flags if they fit.
+
+Patchset applies to mm-unstable.
+
+Suren Baghdasaryan (5):
+  alloc_tag: load module tags into separate continuous memory
+  alloc_tag: eliminate alloc_tag_ref_set
+  alloc_tag: introduce pgalloc_tag_ref to abstract page tag references
+  alloc_tag: make page allocation tag reference size configurable
+  alloc_tag: config to store page allocation tag refs in page flags
+
+ .../admin-guide/kernel-parameters.txt         |   4 +
+ include/asm-generic/codetag.lds.h             |  19 ++
+ include/linux/alloc_tag.h                     |  46 ++-
+ include/linux/codetag.h                       |  38 ++-
+ include/linux/mmzone.h                        |   3 +
+ include/linux/page-flags-layout.h             |  10 +-
+ include/linux/pgalloc_tag.h                   | 257 ++++++++++++---
+ kernel/module/main.c                          |  67 ++--
+ lib/Kconfig.debug                             |  36 ++-
+ lib/alloc_tag.c                               | 300 ++++++++++++++++--
+ lib/codetag.c                                 | 105 +++++-
+ mm/mm_init.c                                  |   1 +
+ mm/page_ext.c                                 |   2 +-
+ scripts/module.lds.S                          |   5 +-
+ 14 files changed, 759 insertions(+), 134 deletions(-)
 
 
---4ClE/UJ5laHl8PFo
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+base-commit: 651c8c1d735983040bec4f71d0e2e690f3c0fc2d
+-- 
+2.46.0.184.g6999bdac58-goog
 
-On Mon, Aug 19, 2024 at 10:17:52AM +0100, Catalin Marinas wrote:
-> On Thu, Aug 01, 2024 at 01:06:45PM +0100, Mark Brown wrote:
-
-> > +static bool is_invalid_gcs_access(struct vm_area_struct *vma, u64 esr)
-> > +{
-
-> > +	if (unlikely(is_gcs_fault(esr))) {
-> > +		/* GCS accesses must be performed on a GCS page */
-> > +		if (!(vma->vm_flags & VM_SHADOW_STACK))
-> > +			return true;
-> > +		if (!(vma->vm_flags & VM_WRITE))
-> > +			return true;
-
-> Do we need the VM_WRITE check here? Further down in do_page_fault(), we
-> already do the check as we set vm_flags = VM_WRITE.
-
-> >       if (!(vma->vm_flags & vm_flags)) {
-> >               vma_end_read(vma);
-> >               fault = 0;
-
-It looks bitrotted, yes.
-
-> I was wondering whether we should prevent mprotect(PROT_READ) on the GCS
-> page. But I guess that's fine, we'll SIGSEGV later if we get an invalid
-> GCS access.
-
-Yeah, that doesn't seem like a particular problem - the concern is
-adding rather than removing GCS.
-
---4ClE/UJ5laHl8PFo
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmbDYWAACgkQJNaLcl1U
-h9CIagf8CVGRJRPIYEL8OXtLlRDHe/BAx31NyJ8PnnV2H/LyZ/HkpxFqkEdopZ2W
-SnomGLDZ/Sbry7VZUUVbO9QNmD/7UinwFR26WOigUY8aHtv/SDsMpx68OMvMPGtp
-aOgTkLDZdZiL3OZbxsdYj24aQ2gywicEb/JxgcqYwclQvQn3geXt9wvBJIZvUqOI
-f9ioaV7/pP5zWb35Kra+jjC2CUxouQ1ozkrxlJhyTT9VM3I4iefpf6eaGmgah7G9
-n5vrIJWkdxaC4B8K/p+Uk/2LJYWdvOho+S1PnJPJloXX/3+dCvveT+3yVcEzT1z0
-73smiFLb21oBkc5wjzRqiGDdQA7z3Q==
-=d5gu
------END PGP SIGNATURE-----
-
---4ClE/UJ5laHl8PFo--
 
