@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-6335-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6336-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F227E956F5F
-	for <lists+linux-arch@lfdr.de>; Mon, 19 Aug 2024 17:57:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BFC4495705F
+	for <lists+linux-arch@lfdr.de>; Mon, 19 Aug 2024 18:33:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8057BB23440
-	for <lists+linux-arch@lfdr.de>; Mon, 19 Aug 2024 15:57:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 68FD41F22692
+	for <lists+linux-arch@lfdr.de>; Mon, 19 Aug 2024 16:33:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DD0B13698F;
-	Mon, 19 Aug 2024 15:57:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9E464F5FB;
+	Mon, 19 Aug 2024 16:33:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZshOpuuO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p/Xaqf57"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C561B13698B;
-	Mon, 19 Aug 2024 15:57:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FB3432C8B;
+	Mon, 19 Aug 2024 16:33:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724083039; cv=none; b=sgfatrmCbcfeCddOmtizqUEjq6mLCI15A7jX+uREzCG2huikZTLWvjW1elVoAXpzKdgZ/GxF66avmb0PuI1J/2fDbU/w/UJg1fjb+iagdHjdf2fmxcffBQIETFg7BMC0E1G1g/l/1sumOSO4BOo5vFKh9g/iYO+mnfkccTZm418=
+	t=1724085214; cv=none; b=LVRzf2VDIH+ItZZa5dkR4Ksl9R+hyrRLG6IYh2ZkvLcPC4ApEN1Wb0/w+hCG+EtcLYVMyOFJQgAfy/4OII8XLsZBSATMtqjFsNbt74EdU1zIMlmfPZY7dlv8/mDFOx3hcnEUpWB4Fh2e8PXNAFDuNLzfNq+9KUjwanvfnMoxrmY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724083039; c=relaxed/simple;
-	bh=v3qZPwIeSRlS1QcsBxR5WSu2pfKLNLQcLI/q+clxwYM=;
+	s=arc-20240116; t=1724085214; c=relaxed/simple;
+	bh=evii6L2sZLuBZsDeVmQaiukOZYaMAFg0RqLOntPinT8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ob7RHmWYcs23qAfKb0FkmIYE0zsibaSwl9313iTHFmZMZtrwSs4Gvp/Cv07jMMd+Efx92jCBAihJC3ErCgJJg7OndEE5MfQFXaVCUgDL+9FJmDsfr7yS3mKvGDRbRfczUSrc9kmmbZ91yr1ayH8J9abuz3vQbJOrdgoSbe6d7Kg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZshOpuuO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4129C4AF0E;
-	Mon, 19 Aug 2024 15:57:11 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=r9TSpGbN1Xv4AYgPS1oDUqBedOXgXtZhqpw5fRiKxWl7ixZwaY6DdYhww0KX8VcLl0ivUJO0mtfUJgfL6O45R+9LPO3LivDn/JEolmin7c4ULn3gBewNxFM/s0NUnu4Hi0Zw62AockZrnoaI0bnYwUKJBywYf4ogW8Rq0Xpof1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p/Xaqf57; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B21E0C32782;
+	Mon, 19 Aug 2024 16:33:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724083039;
-	bh=v3qZPwIeSRlS1QcsBxR5WSu2pfKLNLQcLI/q+clxwYM=;
+	s=k20201202; t=1724085214;
+	bh=evii6L2sZLuBZsDeVmQaiukOZYaMAFg0RqLOntPinT8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZshOpuuOha2m4jngC5/MOOet1h6SG+jGlUt+nz0zAcvFxaYVevSimDv5TPH5RhGBk
-	 n9vXYpX2cb21q0uvpWQv1L6nybcMoVEMup5m4axyZt05/rSJoSBjekbnGpY8sr0ywF
-	 Gnp2cqrKP/n0xk9tO5th3hGes39+M3iEGePBCZbWExauae/tlRw3tpDARhLj6Oorsg
-	 rIN5jPdnyNDiNGWeAYS7CxM75DLtEWLAVknNiDb3ExafscAPpWC0uwHsY0zKDE31ie
-	 0Qn9rSwvoAU5BKY8j1qsz3b8iuKoZrmb6ZqECQIQZAr7Ul403nM7FWVzz2x+/GzUCl
-	 B0n1sNxvYU1SQ==
-Date: Mon, 19 Aug 2024 16:57:08 +0100
+	b=p/Xaqf57XaWAVesDIXzLwFNmcsGpxCWxCiEl8e7wqsfX6gbZTVZaibIjtofHP+HQy
+	 mNkfUOElC8Ed0VjXXvNq9aoGwmAtJUoqRfPxjW6pG4WzPvDPwk2E/ohMtDCdY0XuRP
+	 7k9QW/RaYwIiYXeuG0zIRmMObdLvwZzA0wsODoXlGTOLMwINsKdtHKc+TgwAqr4ZO9
+	 DbshXmifSQvXAnQSw7yxsDdm+PnnWXUw62cMAbR8DWLupzNOAJI8jMLgI1UYKzU84R
+	 zNfPjPPoV8e0rLVIwnBnTaZ7upD0UC+dpiqjmwOqR5FFGfmA4YvEC6JEHoxtzdMqKk
+	 RiCeykpYkKbQA==
+Date: Mon, 19 Aug 2024 17:33:24 +0100
 From: Mark Brown <broonie@kernel.org>
 To: Catalin Marinas <catalin.marinas@arm.com>
 Cc: Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
@@ -69,11 +69,11 @@ Cc: Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
 	linux-arch@vger.kernel.org, linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v10 20/40] arm64/gcs: Ensure that new threads have a GCS
-Message-ID: <e1d40f17-2c03-4440-8d41-85368e138f03@sirena.org.uk>
+Subject: Re: [PATCH v10 13/40] arm64/mm: Map pages for guarded control stack
+Message-ID: <d43f8036-cc06-430c-9e9e-b938037fc64c@sirena.org.uk>
 References: <20240801-arm64-gcs-v10-0-699e2bd2190b@kernel.org>
- <20240801-arm64-gcs-v10-20-699e2bd2190b@kernel.org>
- <ZsM0wkRRguMchecK@arm.com>
+ <20240801-arm64-gcs-v10-13-699e2bd2190b@kernel.org>
+ <ZsMMDNIp6Pkfbg1e@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -81,89 +81,69 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="RbrhEhE3nEZQH9R3"
+	protocol="application/pgp-signature"; boundary="eyTciqf51C2CbNXu"
 Content-Disposition: inline
-In-Reply-To: <ZsM0wkRRguMchecK@arm.com>
+In-Reply-To: <ZsMMDNIp6Pkfbg1e@arm.com>
 X-Cookie: Interchangeable parts won't.
 
 
---RbrhEhE3nEZQH9R3
+--eyTciqf51C2CbNXu
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Mon, Aug 19, 2024 at 01:04:18PM +0100, Catalin Marinas wrote:
-> On Thu, Aug 01, 2024 at 01:06:47PM +0100, Mark Brown wrote:
+On Mon, Aug 19, 2024 at 10:10:36AM +0100, Catalin Marinas wrote:
+> On Thu, Aug 01, 2024 at 01:06:40PM +0100, Mark Brown wrote:
 
-> > +static int copy_thread_gcs(struct task_struct *p,
-> > +			   const struct kernel_clone_args *args)
-> > +{
-> > +	unsigned long gcs;
-> > +
-> > +	gcs = gcs_alloc_thread_stack(p, args);
-> > +	if (IS_ERR_VALUE(gcs))
-> > +		return PTR_ERR((void *)gcs);
+> > +	if (system_supports_gcs() && (vm_flags & VM_SHADOW_STACK)) {
+> > +		/*
+> > +		 * An executable GCS isn't a good idea, and the mm
+> > +		 * core can't cope with a shared GCS.
+> > +		 */
+> > +		if (vm_flags & (VM_EXEC | VM_ARM64_BTI | VM_SHARED))
+> > +			return false;
+> > +	}
 
-> Is 0 an ok value here? I can see further down that
-> gcs_alloc_thread_stack() may return 0.
+> I wonder whether we should clear VM_MAYEXEC early on during the vma
+> creation. This way the mprotect() case will be handled in the core code.
+> At a quick look, do_mmap() seems to always set VM_MAYEXEC but discard it
+> for non-executable file mmap. Last time I looked (when doing MTE) there
+> wasn't a way for the arch code to clear specific VM_* flags, only to
+> validate them. But I think we should just clear VM_MAYEXEC and also
+> return an error for VM_EXEC in the core do_mmap() if VM_SHADOW_STACK. It
+> would cover the other architectures doing shadow stacks.
 
-Yes, it's fine for a thread not to have a GCS.
+Yes, I think adding something generic would make sense here.  That feels
+like a cleanup which could be split out?
 
-> > +	p->thread.gcs_el0_mode = current->thread.gcs_el0_mode;
-> > +	p->thread.gcs_el0_locked = current->thread.gcs_el0_locked;
+> Regarding VM_SHARED, how do we even end up with this via the
+> map_shadow_stack() syscall? I can't see how one can pass MAP_SHARED to
+> do_mmap() on this path. I'm fine with a VM_WARN_ON() if you want the
+> check (and there's no way a user can trigger it).
 
-> > +	/* Ensure the current state of the GCS is seen by CoW */
-> > +	gcsb_dsync();
+It's just a defenesive programming thing, I'm not aware of any way in
+which it should be possible to trigger this.
 
-> I don't get this barrier. What does it have to do with CoW, which memory
-> effects is it trying to order?
+> Is there any arch restriction with setting BTI and GCS? It doesn't make
+> sense but curious if it matters. We block the exec permission anyway
+> (unless the BTI pages moved to PIE as well, I don't remember).
 
-Yeah, I can't remember what that's supposed to be protecting.
+As you say BTI should be meaningless for a non-executable page like GCS,
+I'm not aware of any way in which it matters.  BTI is separate to PIE.
 
-> > +	/* Allocate RLIMIT_STACK/2 with limits of PAGE_SIZE..2G */
-> > +	size = PAGE_ALIGN(min_t(unsigned long long,
-> > +				rlimit(RLIMIT_STACK) / 2, SZ_2G));
-> > +	return max(PAGE_SIZE, size);
-> > +}
-
-> So we still have RLIMIT_STACK/2. I thought we got rid of that and just
-> went with RLIMIT_STACK (or I misremember).
-
-I honestly can't remember either way, it's quite possible it's changed
-multiple times.  I don't have super strong feelings on the particular
-value here.
-
-> > +static bool gcs_consume_token(struct mm_struct *mm, unsigned long user_addr)
-> > +{
-
-> As per the clone3() thread, I think we should try to use
-> get_user_page_vma_remote() and do a cmpxchg() directly.
-
-I've left this as is for now, mainly because it keeps the code in line
-with x86 and I can't directly test the x86 code.  IIRC we can't just do
-a standard userspace cmpxchg since that will access as though we were at
-EL0 but EL0 doesn't have standard write permission for the page.
-
-> How does the user write the initial token? Do we need any barriers
-> before/after consuming the token?
-
-The token is created by map_shadow_stack() or as part of a GCS pivot.  A
-sync beforehand is probably safer, with the current code we'll have one
-when we switch to the task.
-
---RbrhEhE3nEZQH9R3
+--eyTciqf51C2CbNXu
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmbDa1MACgkQJNaLcl1U
-h9DbuQf/SjnwfLskheecxP/Aw1iuvcdM5Lad9HYiZl1LzHJXMVCIt1kMcKPJ3MS6
-O9iMeWyDk7d7EKrWneyrvSODTNZAFjUnExoo/+WNpnaumrwTH4vS12ZNpq7/1a8W
-AsxmGCrQ8IsHpSkEuJyMKshASponZtgCQwUqQX24QyTqP527qXCrX2VmwKppiR0K
-4Ve0jwxpZxGhlRUdEWD2k1yIsfxh8qa336gUFDOLxmwW1SRYdQnUpfDzrBg1Kj7m
-svrFPBMCQySshntbpRCF0xNG2bxseTrXAKwuqFM1Om5CwvV5DVSRD1n7AaaJmOm0
-Gki/1SM6NelVLm9JiPdHIZCf3bkbZg==
-=dVcd
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmbDc9MACgkQJNaLcl1U
+h9DcCAf/aZF31au2O5tCW1iS32zwyPysrbia2QSwmoMPN4cH+zZF6jGKfJP53y/G
+CNgaoXcyBX2iypaZnICHU23amdDQeA311XwIhP3tEc32tH2i0LgSO39EGLdA4dqe
+j9An/W7fAj/0GD9s5qxLjEUDr8DKmihD4s/yemH3g2xwf/NF2Ya/tFXJWfAcJPNr
+rg55UlkNM+WG6bZ21EKnqi/ykDJhHVBdmTEYE7vfyMDjneyhO5oMG6ESXUJFBTd6
+JrYRPZb0Cr7QlXE2JRP2yZQG9TzS0WMvsi3TN5T17PRy8WpwtCyfLi3Drj5popSF
+K/uduuEHbCFXxkFNmqeaOTGvnX2ozA==
+=Qsdz
 -----END PGP SIGNATURE-----
 
---RbrhEhE3nEZQH9R3--
+--eyTciqf51C2CbNXu--
 
