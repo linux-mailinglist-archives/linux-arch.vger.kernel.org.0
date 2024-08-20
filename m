@@ -1,137 +1,170 @@
-Return-Path: <linux-arch+bounces-6365-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6366-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 310B4957E68
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Aug 2024 08:40:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FE25957F2A
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Aug 2024 09:13:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CB6661F23805
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Aug 2024 06:40:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 16D291F21B71
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Aug 2024 07:13:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1FBA17B4ED;
-	Tue, 20 Aug 2024 06:36:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BCC116C86B;
+	Tue, 20 Aug 2024 07:13:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="OKXbRiwX";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="pXEC8dOF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gz+4Mc8a"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fhigh3-smtp.messagingengine.com (fhigh3-smtp.messagingengine.com [103.168.172.154])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A87CA1741DC;
-	Tue, 20 Aug 2024 06:35:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDD4B152165;
+	Tue, 20 Aug 2024 07:13:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724135761; cv=none; b=ZeEUtcCxtXxcexZtKiw7R3TDoEB9rRhib06zPVz9hg6h3UGTKIdBsCoStpvOWq5UhsXiJjKJ/fEZGDJmZ+DTuLV3EmePNJdEnNXqUpBHjkyO9/VSJurP2NItTE9YEKBb6xhop7684opofyr326YVlMbguBBdo62Id32MRos+oJs=
+	t=1724138011; cv=none; b=jHy2MQdHKcTY6C78okmBUsyJ2bshsEtf0iDLGxUqk8FM+KVvKoHQrH4rBvcZZPGaHXieKR3eliQCoqE852mKjG8UAyC+c2VG2lR5pJya57wtUi7ezLzdoM2vMjHKp4FDdUNlUzj6AXGX/dfhTpzQzmwWTrqwIAjcctSaA+sYbfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724135761; c=relaxed/simple;
-	bh=eIZBPiIt5zVdvAwtZhCOpzSYBNx2G8omnWVeneqoGgU=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=QkVwAH7mnePRQxgTjHORFmRxgN0jSYO4PXfqPNRrbUgUaYtuh8sTluliXUbg/iYqdO8EmmNikbQvWV2DvgZNoOOCh/OrjdIRE0DW+yBDUi6x32EqdiSa3YsMORSb8hMURPDP/+lGMsXeCJU8ybO7pvgObFi62gg5g9nScYtalXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=OKXbRiwX; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=pXEC8dOF; arc=none smtp.client-ip=103.168.172.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-01.internal (phl-compute-01.nyi.internal [10.202.2.41])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id 796291151BE8;
-	Tue, 20 Aug 2024 02:35:58 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-01.internal (MEProxy); Tue, 20 Aug 2024 02:35:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1724135758;
-	 x=1724222158; bh=0vDYNAbB+WPOrWtq2CTrXg2IiuXw5vXI+vIJEKJZWmk=; b=
-	OKXbRiwXpVJJCx4bX4GFgnZcQYliwB0hi29SUulPXgS5RNckJ/vZOVGPTUalwO9R
-	Qc+3Zu4KjcIEDF3b1lrAYrwnyKYiJp0Xny9CWLYJ8FGmCtGwdhrjJgJKayGWPLbO
-	A+ceAyTZ7p5V5e/ZudRH5MO4G2ryn4swJzEzzcxFOefc4nocFAFANXClNUT3xTBJ
-	rElpMSjQ60DwQwHR+2KjK7c4d4OzEXfnaYDa6Y6AiSUwcJwClYVOQt3ihhGNgvCg
-	OSiiDAOjCH49rcRm5rLf///YpTSvVC6y4BAvuQ0IeFZAoMlJLMPZKgBrcFNPRhMm
-	G2XKI/y1EkCfMw6c0e77fw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1724135758; x=
-	1724222158; bh=0vDYNAbB+WPOrWtq2CTrXg2IiuXw5vXI+vIJEKJZWmk=; b=p
-	XEC8dOFtyoHLQpQbJEJkNxzJCA94u33rkIvGhvM6xgS2+gc7eAmFUdotuRn0uzuW
-	oNeIQqzLSTQ64PYp5aOVwhZvKtqUb6u0utY49tGwjvyYrSrwcNUupohXbwkOSz2i
-	2OA8cvr7rWpGB5lD0WiDjPhdNoin5gbcgaEOhfYrt9sJ4j4syuS0zrRMpqWMNWpG
-	5G8v232a3BVmDviirjxAPc/pRWInsNPMionWt+cVJ/miz2DcLkbDa/0EvOcIUq49
-	C86HZ1I85P2zmdEo/jF7YWC00oJu9WUw2ba04OK/lYHEVm/bsRraEOtR/XMVNav2
-	vlvP4SWXss4TrMCGwLPbw==
-X-ME-Sender: <xms:TjnEZmmPHf9C8Oe6UUmrgXxuvxb-nEaMDNwE3SwMIl2ALMp9aqfr2w>
-    <xme:TjnEZt2BMLm8htPnoCaDwQTze3_yIVqinJsSIRvzGNnBWWacMg5xEMh3ZyYv_Flci
-    UO3Pq9M6qnuYvL018A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudduhedguddutdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
-    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
-    druggvqeenucggtffrrghtthgvrhhnpefhtdfhvddtfeehudekteeggffghfejgeegteef
-    gffgvedugeduveelvdekhfdvieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopeej
-    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegrnhhshhhumhgrnhdrkhhhrghnug
-    hurghlsegrrhhmrdgtohhmpdhrtghpthhtohephihurhihrdhnohhrohhvsehgmhgrihhl
-    rdgtohhmpdhrtghpthhtoheprghruggssehkvghrnhgvlhdrohhrghdprhgtphhtthhope
-    grkhhpmheslhhinhhugidqfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoheplhhi
-    nhhugiesrhgrshhmuhhsvhhilhhlvghmohgvshdrughkpdhrtghpthhtoheplhhinhhugi
-    dqrghrtghhsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidq
-    khgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:TjnEZkoxcMMvwMveTgw8HY9M80jw74AvtHnqW9i1fr0Lo_TV5j8Xaw>
-    <xmx:TjnEZqnkKOQ2333Jgug6eARcVqxZsJ6O58nBkSdbRVeZzZcGNZJ-Hw>
-    <xmx:TjnEZk326Hgm_wdYq2rnsethr0XVBPZM-tuwx9UvyvVXwtrx0xVhWA>
-    <xmx:TjnEZhupXB4OSFode3f7PmJ0ud_JoPifs0fEDCjSs06WSziUx4o9Gw>
-    <xmx:TjnEZuqgoQhTEAUlTvoW7DrzsMjIVc67lY-WCNfYiwNfv2MDUBlRnxlc>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 387C016005E; Tue, 20 Aug 2024 02:35:58 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1724138011; c=relaxed/simple;
+	bh=P4Xoto1kb9GxBJ4mRYqIpsziqZnk0OuzLbdWEFfVZxw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YOsgOHzJf4Y9RKab8NWfzx65+o6g/pAqOUtGqLyn6IwbAdUtm2y/BxTNMyQHHsR6qhIV4ahNeZsFzTmg3SmrcAHDEV71oOyFNGunYAlybuAO3+QtNzsgWbm6d9o51TxaYmf0w6OFBF7fTgFnsGym0+ct2ss0oqiCNl/ymPY9/84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gz+4Mc8a; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DD46C4AF09;
+	Tue, 20 Aug 2024 07:13:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724138010;
+	bh=P4Xoto1kb9GxBJ4mRYqIpsziqZnk0OuzLbdWEFfVZxw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Gz+4Mc8a6bR73MyttJH1WKF45lDJDtOwWsfsUBDrK6xUysURbUJcwEvyW17ferVr5
+	 b8xWmLKE7Hw4lwwchPrCzinppb3/s7DNzQ56UV9asRxSibNosq/tQewjQ3NGlt8BHu
+	 E6TvIE+cC6ndzeFv7iv4yn4hz/XWioUueUZubt9uGQyeRDQbWlHPl3xI778KnsjJVL
+	 oNalnsafluqag/HrQfU/xgw9mSUC1vUKX0nZFB5Ej0ZbSGOOkLPNT02Hw9OSAe/CRR
+	 3Jb8vTiQ1oDNQjqzfk4bqcsSrAHxtXvU2dsPRiqgjmvF7bsdLFIanOAfCPEx5gavMS
+	 asTEvBA/nwoLg==
+Date: Tue, 20 Aug 2024 10:13:07 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, corbet@lwn.net,
+	arnd@arndb.de, mcgrof@kernel.org, paulmck@kernel.org,
+	thuth@redhat.com, tglx@linutronix.de, bp@alien8.de,
+	xiongwei.song@windriver.com, ardb@kernel.org, david@redhat.com,
+	vbabka@suse.cz, mhocko@suse.com, hannes@cmpxchg.org,
+	roman.gushchin@linux.dev, dave@stgolabs.net, willy@infradead.org,
+	liam.howlett@oracle.com, pasha.tatashin@soleen.com,
+	souravpanda@google.com, keescook@chromium.org, dennis@kernel.org,
+	jhubbard@nvidia.com, yuzhao@google.com, vvvvvv@google.com,
+	rostedt@goodmis.org, iamjoonsoo.kim@lge.com, rientjes@google.com,
+	minchan@google.com, kaleshsingh@google.com,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH 1/5] alloc_tag: load module tags into separate continuous
+ memory
+Message-ID: <ZsRCAy5cCp0Ig3I/@kernel.org>
+References: <20240819151512.2363698-1-surenb@google.com>
+ <20240819151512.2363698-2-surenb@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 20 Aug 2024 08:35:37 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Anshuman Khandual" <anshuman.khandual@arm.com>,
- linux-kernel@vger.kernel.org
-Cc: "Ard Biesheuvel" <ardb@kernel.org>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Yury Norov" <yury.norov@gmail.com>,
- "Rasmus Villemoes" <linux@rasmusvillemoes.dk>,
- Linux-Arch <linux-arch@vger.kernel.org>
-Message-Id: <8b780eda-bb64-4baf-8e24-501baf8ed8db@app.fastmail.com>
-In-Reply-To: <17020e56-b0a9-4705-8ee3-c675eca99490@arm.com>
-References: <20240801071646.682731-1-anshuman.khandual@arm.com>
- <20240801071646.682731-2-anshuman.khandual@arm.com>
- <090eb237-10f4-4358-be07-1eb8d30c3ec1@arm.com>
- <3b219e52-1d2a-4e6d-adff-efbab3e2282d@app.fastmail.com>
- <17020e56-b0a9-4705-8ee3-c675eca99490@arm.com>
-Subject: Re: [PATCH V3 1/2] uapi: Define GENMASK_U128
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240819151512.2363698-2-surenb@google.com>
 
-On Tue, Aug 20, 2024, at 03:25, Anshuman Khandual wrote:
-> On 8/19/24 12:43, Arnd Bergmann wrote:
->
-> Should not the second shift operation warn about the possible
-> overflow scenario ? But actually it does not. Or the compiler
-> is too smart in detecting what's happening next in the overall
-> equation and do the needful while creating the mask below the
-> highest bit.
+On Mon, Aug 19, 2024 at 08:15:07AM -0700, Suren Baghdasaryan wrote:
+> When a module gets unloaded there is a possibility that some of the
+> allocations it made are still used and therefore the allocation tags
+> corresponding to these allocations are still referenced. As such, the
+> memory for these tags can't be freed. This is currently handled as an
+> abnormal situation and module's data section is not being unloaded.
+> To handle this situation without keeping module's data in memory,
+> allow codetags with longer lifespan than the module to be loaded into
+> their own separate memory. The in-use memory areas and gaps after
+> module unloading in this separate memory are tracked using maple trees.
+> Allocation tags arrange their separate memory so that it is virtually
+> contiguous and that will allow simple allocation tag indexing later on
+> in this patchset. The size of this virtually contiguous memory is set
+> to store up to 100000 allocation tags and max_module_alloc_tags kernel
+> parameter is introduced to change this size.
+> 
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> ---
+>  .../admin-guide/kernel-parameters.txt         |   4 +
+>  include/asm-generic/codetag.lds.h             |  19 ++
+>  include/linux/alloc_tag.h                     |  13 +-
+>  include/linux/codetag.h                       |  35 ++-
+>  kernel/module/main.c                          |  67 +++--
+>  lib/alloc_tag.c                               | 245 ++++++++++++++++--
+>  lib/codetag.c                                 | 101 +++++++-
+>  scripts/module.lds.S                          |   5 +-
+>  8 files changed, 429 insertions(+), 60 deletions(-)
+ 
+...
 
-Not sure about the reasoning behind the compiler warning for
-one but not the other, but I know that we rely on similar
-behavior in places like:
+> diff --git a/include/linux/codetag.h b/include/linux/codetag.h
+> index c2a579ccd455..c4a3dd60205e 100644
+> --- a/include/linux/codetag.h
+> +++ b/include/linux/codetag.h
+> @@ -35,8 +35,13 @@ struct codetag_type_desc {
+>  	size_t tag_size;
+>  	void (*module_load)(struct codetag_type *cttype,
+>  			    struct codetag_module *cmod);
+> -	bool (*module_unload)(struct codetag_type *cttype,
+> +	void (*module_unload)(struct codetag_type *cttype,
+>  			      struct codetag_module *cmod);
+> +	void (*module_replaced)(struct module *mod, struct module *new_mod);
+> +	bool (*needs_section_mem)(struct module *mod, unsigned long size);
+> +	void *(*alloc_section_mem)(struct module *mod, unsigned long size,
+> +				   unsigned int prepend, unsigned long align);
+> +	void (*free_section_mem)(struct module *mod, bool unused);
+>  };
+>  
+>  struct codetag_iterator {
+> @@ -71,11 +76,31 @@ struct codetag_type *
+>  codetag_register_type(const struct codetag_type_desc *desc);
+>  
+>  #if defined(CONFIG_CODE_TAGGING) && defined(CONFIG_MODULES)
+> +
+> +bool codetag_needs_module_section(struct module *mod, const char *name,
+> +				  unsigned long size);
+> +void *codetag_alloc_module_section(struct module *mod, const char *name,
+> +				   unsigned long size, unsigned int prepend,
+> +				   unsigned long align);
+> +void codetag_free_module_sections(struct module *mod);
+> +void codetag_module_replaced(struct module *mod, struct module *new_mod);
+>  void codetag_load_module(struct module *mod);
+> -bool codetag_unload_module(struct module *mod);
+> -#else
+> +void codetag_unload_module(struct module *mod);
+> +
+> +#else /* defined(CONFIG_CODE_TAGGING) && defined(CONFIG_MODULES) */
+> +
+> +static inline bool
+> +codetag_needs_module_section(struct module *mod, const char *name,
+> +			     unsigned long size) { return false; }
+> +static inline void *
+> +codetag_alloc_module_section(struct module *mod, const char *name,
+> +			     unsigned long size, unsigned int prepend,
+> +			     unsigned long align) { return NULL; }
+> +static inline void codetag_free_module_sections(struct module *mod) {}
+> +static inline void codetag_module_replaced(struct module *mod, struct module *new_mod) {}
+>  static inline void codetag_load_module(struct module *mod) {}
+> -static inline bool codetag_unload_module(struct module *mod) { return true; }
+> -#endif
+> +static inline void codetag_unload_module(struct module *mod) {}
+> +
+> +#endif /* defined(CONFIG_CODE_TAGGING) && defined(CONFIG_MODULES) */
 
-#define upper_32_bits(n) ((u32)(((n) >> 16) >> 16))
+Maybe I'm missing something, but can't alloc_tag::module_unload() just copy
+the tags that cannot be freed somewhere outside of module sections and then
+free the module?
 
-which is intended to return a zero without a compiler
-warning when passing an 'unsigned long' input on 32-bit
-architectures.
+The heavy lifting would be localized to alloc_tags rather than spread all
+over.
 
-      Arnd
+-- 
+Sincerely yours,
+Mike.
 
