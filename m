@@ -1,123 +1,97 @@
-Return-Path: <linux-arch+bounces-6346-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6347-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C62CE957AE3
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Aug 2024 03:25:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9691F957B22
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Aug 2024 03:47:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 824D12842BF
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Aug 2024 01:25:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C91191C22EDF
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Aug 2024 01:47:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 989F4B657;
-	Tue, 20 Aug 2024 01:25:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 938E9171BB;
+	Tue, 20 Aug 2024 01:46:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="jix3qp/N"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 868BD1B7F4;
-	Tue, 20 Aug 2024 01:25:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 415013A1BA;
+	Tue, 20 Aug 2024 01:46:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724117125; cv=none; b=I7t7ouZ3wrZCLhadjesONq3b1viQNtSKyIVQ+qAsXaL25Dd64sDE6pZDnrqzZoJiDWAezNWjDBJGBSGIkeOIkXkgJH4uRa6fNMhQ3y9aYotWER/OI47BwAVOEx4QJGdFAlNlEpLxPuppr7+ARmZ5tIV04fCVU/IVHXOSu51aV98=
+	t=1724118411; cv=none; b=GcVRFakRT9dkOA2MYsoLX6TMGEKUfXXHZUzF/XbOw2ISHE69GOTJM65wmkjTXkN3WKWtYrtM7q1gM4efNtIPb66Q/uDzzY/VBEsISkxgNWbpuOWIqoZAEn++Y544sbL3UUW1entapshDCKdRYudgl9RwGLiKzvrFYCtY7j30uNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724117125; c=relaxed/simple;
-	bh=NYpqG6MuyLP+uwqlcSvTaHZzQ56TalLVNSBSB5HjaDI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=F7MMZhlZTb/z4EEBY7BUuGpEuvRDHkeCD3fUnz9gLrs2XtjfVC1q2Ihirx1M+OlqAJhI/DjNnPJTc3H2f18Z6YWOgizzrXN9oE/PwxybsOnWTGnnKGFzQM53QPKBFB9yI+ym0HX0TQuqZ0aHvSflsKvFwGDViZ7H4FCsU2Se3Gs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A0657339;
-	Mon, 19 Aug 2024 18:25:47 -0700 (PDT)
-Received: from [10.163.58.147] (unknown [10.163.58.147])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 414F73F73B;
-	Mon, 19 Aug 2024 18:25:18 -0700 (PDT)
-Message-ID: <17020e56-b0a9-4705-8ee3-c675eca99490@arm.com>
-Date: Tue, 20 Aug 2024 06:55:16 +0530
+	s=arc-20240116; t=1724118411; c=relaxed/simple;
+	bh=rA2KKwezxMOw6UPaznb0hf7DP0Mow7wiG3m7yVXGBTk=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=tOECHzSKw4qVcL9HQMeWEWpHNGceouxNb2krax47WLRnfVXwqbokouX8pHOaPQxSXpj/nGoX/EVcStA0w29/QGTCmVOiEC3IDwboSdXVq3y3P8hVGzujnwfHr9wHUaskLE/0JY5CRU0ke/X/LmKtVz7Le3VXQ4UznQfHW8ktV+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=jix3qp/N; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C77A6C32782;
+	Tue, 20 Aug 2024 01:46:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1724118410;
+	bh=rA2KKwezxMOw6UPaznb0hf7DP0Mow7wiG3m7yVXGBTk=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=jix3qp/NdvOwD3MXE1iLaiyPurkDmKXMgyvVN5f6craLLKdZ4RrJQ9PJhZcGbVwjj
+	 S71p0O32+TVGOhmo1o2Wh2YKmM1YEvC7gHbpUlnNNC+Xont7T1qFz9csoVPDFZhkv6
+	 C5TYeg7PHhn+Ys+rvHXw6L0TOosywYTW7NVJQ1Vk=
+Date: Mon, 19 Aug 2024 18:46:49 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Matthew Wilcox <willy@infradead.org>
+Cc: Suren Baghdasaryan <surenb@google.com>, kent.overstreet@linux.dev,
+ corbet@lwn.net, arnd@arndb.de, mcgrof@kernel.org, rppt@kernel.org,
+ paulmck@kernel.org, thuth@redhat.com, tglx@linutronix.de, bp@alien8.de,
+ xiongwei.song@windriver.com, ardb@kernel.org, david@redhat.com,
+ vbabka@suse.cz, mhocko@suse.com, hannes@cmpxchg.org,
+ roman.gushchin@linux.dev, dave@stgolabs.net, liam.howlett@oracle.com,
+ pasha.tatashin@soleen.com, souravpanda@google.com, keescook@chromium.org,
+ dennis@kernel.org, jhubbard@nvidia.com, yuzhao@google.com,
+ vvvvvv@google.com, rostedt@goodmis.org, iamjoonsoo.kim@lge.com,
+ rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-mm@kvack.org,
+ linux-modules@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH 5/5] alloc_tag: config to store page allocation tag refs
+ in page flags
+Message-Id: <20240819184649.8fc7da59f89290f716ae0553@linux-foundation.org>
+In-Reply-To: <ZsOtwhWC_JpgWe_J@casper.infradead.org>
+References: <20240819151512.2363698-1-surenb@google.com>
+	<20240819151512.2363698-6-surenb@google.com>
+	<ZsOeVSlToyhsyDGD@casper.infradead.org>
+	<CAJuCfpH4yFw6RNKVDK0hqXQQhAhMsyGNp5A50E+c2PZd+_vOgw@mail.gmail.com>
+	<ZsOtwhWC_JpgWe_J@casper.infradead.org>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V3 1/2] uapi: Define GENMASK_U128
-To: Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
-Cc: Ard Biesheuvel <ardb@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Yury Norov
- <yury.norov@gmail.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>,
- Linux-Arch <linux-arch@vger.kernel.org>
-References: <20240801071646.682731-1-anshuman.khandual@arm.com>
- <20240801071646.682731-2-anshuman.khandual@arm.com>
- <090eb237-10f4-4358-be07-1eb8d30c3ec1@arm.com>
- <3b219e52-1d2a-4e6d-adff-efbab3e2282d@app.fastmail.com>
-Content-Language: en-US
-From: Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <3b219e52-1d2a-4e6d-adff-efbab3e2282d@app.fastmail.com>
+Mime-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+On Mon, 19 Aug 2024 21:40:34 +0100 Matthew Wilcox <willy@infradead.org> wrote:
 
-
-On 8/19/24 12:43, Arnd Bergmann wrote:
-> On Fri, Aug 16, 2024, at 08:28, Anshuman Khandual wrote:
->>
->> This is caused by ((unsigned __int128)(1) << (128)) which is generated
->> via (h + 1) element in __GENMASK_U128().
->>
->> #define _BIT128(x)	((unsigned __int128)(1) << (x))
->> #define __GENMASK_U128(h, l) \
->> 	((_BIT128((h) + 1)) - (_BIT128(l)))
+> On Mon, Aug 19, 2024 at 01:39:16PM -0700, Suren Baghdasaryan wrote:
+> > On Mon, Aug 19, 2024 at 12:34 PM Matthew Wilcox <willy@infradead.org> wrote:
+> > > So if ALLOC_TAG_REF_WIDTH is big enough, it's going to force last_cpupid
+> > > into struct page.
+> > 
+> > Thanks for taking a look!
+> > Yes, but how is this field different from say KASAN_TAG_WIDTH which
+> > can also force last_cpupid out of page flags?
 > 
-> Right, makes sense.
+> Because KASAN isn't for production use?
 > 
->>
->> The most significant bit in the generate mask can be added separately
->> , thus voiding that extra shift. The following patch solves the build
->> problem.
->>
->> diff --git a/include/uapi/linux/bits.h b/include/uapi/linux/bits.h
->> index 4d4b7b08003c..4e50f635c6d9 100644
->> --- a/include/uapi/linux/bits.h
->> +++ b/include/uapi/linux/bits.h
->> @@ -13,6 +13,6 @@
->>           (~_ULL(0) >> (__BITS_PER_LONG_LONG - 1 - (h))))
->>
->>  #define __GENMASK_U128(h, l) \
->> -       ((_BIT128((h) + 1)) - (_BIT128(l)))
->> +       (((_BIT128(h)) - (_BIT128(l))) | (_BIT128(h)))
+> > >  That will misalign struct page and disable HVO -- with no warning!
+> > 
+> > mminit_verify_pageflags_layout already has a mminit_dprintk() to
+> > indicate this condition. Is that not enough?
 > 
-> This could probably use a comment then, as it's less intuitive.
+> Fair.
 
-Right, a comment explaining the need for this additional bit to
-cover the corner 127 bit case could be added for reference.
-
-> 
-> Another solution might be to use a double shift, as in
-> 
-> #define __GENMASK_U128(h, l) \
->        ((_BIT128((h)) << 1) - (_BIT128(l)))
-
-This looks much cleaner, passed all the tests without warning.
-But for the above 127 bit case, wondering how the bit position
-is managed after the second shift operation because it still
-goes beyond __int128 element's 128 bit representation.
-
-(_BIT128((127)) << 1)
-(((unsigned __int128)(1) << (127)) << 1)
-
-Should not the second shift operation warn about the possible
-overflow scenario ? But actually it does not. Or the compiler
-is too smart in detecting what's happening next in the overall
-equation and do the needful while creating the mask below the
-highest bit.
-
-> 
-> but I have not checked if this is correct for all inputs
-> or if it avoids the warning. Your version looks fine to
-> me otherwise.
-
-This approach is much cleaner, passes all tests without warning,
-unless something else shows up, will fold this in instead.
+Is a BUILD_BUG_ON() feasible here?
 
