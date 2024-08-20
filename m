@@ -1,169 +1,234 @@
-Return-Path: <linux-arch+bounces-6368-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6369-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9768E958571
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Aug 2024 13:10:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3D8095897E
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Aug 2024 16:36:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4EAB11F21D73
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Aug 2024 11:10:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 135681C211B0
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Aug 2024 14:36:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A13ED18DF84;
-	Tue, 20 Aug 2024 11:10:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9198A191F73;
+	Tue, 20 Aug 2024 14:36:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="NP8bQsKX"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="KKXDE6+V"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f67.google.com (mail-lf1-f67.google.com [209.85.167.67])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AA1218DF80
-	for <linux-arch@vger.kernel.org>; Tue, 20 Aug 2024 11:10:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EF10155C80
+	for <linux-arch@vger.kernel.org>; Tue, 20 Aug 2024 14:36:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724152223; cv=none; b=KzeinPK0yd5fi0Jlyr9TPsGCVJPwhrBb2jk7n7NoNZD2nyLYYLEYH3/9cOhgEPALWbZtrHci+K9tBKahOUwlMzUTtFjAoiGZMK9kVlEI6tUSmdmrIcQlTtO2bPVsG5PftPzgm9oVi6S96HcM83pddqrfjm3QuowuxdQXIApYhA0=
+	t=1724164576; cv=none; b=Q8khbPBehzRHVqMWQExOoNusl+RDdYVXA7w52RmmqoJAIXTiDVPjezNJu7RbVhBhmaTi/95GKKcXsZFFxi9UfdFqlgLvJ9fr8qg4A+dzQSxA5G4J0y+5hJApZWfhbzGwl+BtukjXOQ7fz437WH0EcX3gAgs+QrJJ09mKz20cMk4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724152223; c=relaxed/simple;
-	bh=P+vTiQNfxpFCjYYg0es8JH75oId7BoY89LGYmb3nA18=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rYzpr09PqtvSvb72FDsdBcWZQogFmfv4IH35ej/yu/G5JL6AhTTbT6IFMZcwF72ZpWrtzbi2gGeIw9qBmj4Qj5+2F1RKU1kH8Y3dK2V+gkhcNxQBtuQMdcKpmarfLv3VL2Sz3T4c7n7ONl1EBNjD6dB7TI40yiBoOtGVwaJY2lE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=NP8bQsKX; arc=none smtp.client-ip=91.218.175.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Tue, 20 Aug 2024 07:10:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1724152217;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=UrvRMz+I1gRJfeA35OXeWpHMimIWlbjsoNl2/JOsDPI=;
-	b=NP8bQsKXUU0lsovxuRtz0Ny98VqZ6sb3M0pF7We+DamT+Nkxzg+jEfcz/+so+XoYucaCwl
-	HyHe1BH61bKKin9KYl5it34q73DaQAIAISB/XzkwT6U1NBU4njeT6fpwDxpd4AvPofWpZ/
-	OMZcGIne2AwXUUICsUeUxK7QRHF+ObM=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kent Overstreet <kent.overstreet@linux.dev>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org, 
-	corbet@lwn.net, arnd@arndb.de, mcgrof@kernel.org, paulmck@kernel.org, 
-	thuth@redhat.com, tglx@linutronix.de, bp@alien8.de, xiongwei.song@windriver.com, 
-	ardb@kernel.org, david@redhat.com, vbabka@suse.cz, mhocko@suse.com, 
-	hannes@cmpxchg.org, roman.gushchin@linux.dev, dave@stgolabs.net, willy@infradead.org, 
-	liam.howlett@oracle.com, pasha.tatashin@soleen.com, souravpanda@google.com, 
-	keescook@chromium.org, dennis@kernel.org, jhubbard@nvidia.com, yuzhao@google.com, 
-	vvvvvv@google.com, rostedt@goodmis.org, iamjoonsoo.kim@lge.com, rientjes@google.com, 
-	minchan@google.com, kaleshsingh@google.com, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, linux-mm@kvack.org, 
-	linux-modules@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH 1/5] alloc_tag: load module tags into separate continuous
- memory
-Message-ID: <sf7siu4vxwnz2lrcspxetmzabajfvebb47htjsrh7mmdoed73i@wivswoh55dfv>
-References: <20240819151512.2363698-1-surenb@google.com>
- <20240819151512.2363698-2-surenb@google.com>
- <ZsRCAy5cCp0Ig3I/@kernel.org>
+	s=arc-20240116; t=1724164576; c=relaxed/simple;
+	bh=nbes6SGqdEbR+eyIYqDvar9JyRtfpfTelp/Kn/mm0qE=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=E1XTuqBr2p3MwxE7GZBa/z+3y1wW2UolhD0/uU6NxYhMSIylE0C138F9fcCFnaPnoHZPzIeZId9da/9y/oN7/l0KJR/qwbgZQrV5cETdNSUjSwLGqb8M4Bosupy+hwEzDNu79IKSzvjhToNN72D5ZL0hxg3lKQ+eVc4lBhlWbNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=KKXDE6+V; arc=none smtp.client-ip=209.85.167.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-lf1-f67.google.com with SMTP id 2adb3069b0e04-52efdf02d13so7406980e87.2
+        for <linux-arch@vger.kernel.org>; Tue, 20 Aug 2024 07:36:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1724164572; x=1724769372; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OfyTQeSSkPZ+QzWWZU+FNyyT4+itZMzr8DmOygd/33U=;
+        b=KKXDE6+VlWxMwU68/tuVqlu9RQlRNHMaF6Z34J4PJ43FtC60HeUzBrXTUP7Q4DIfeS
+         PWxXfLORCxZm0LrljfFDH5dyMGxyQTOL/SVSxyfYROYqimYM7f4F1eWtgXa3Fbiaxelw
+         8Y40wOmM+3QUMM5gVacy+l5unwQ5urO4uvVAniDP81If5tIfVU00Fw+X6GDF2nxALs4O
+         9c15gcz4VvGTG+a8mv3n2xTM73n9H0v73rwnNhKVZB+gE1snnUKU6iEtX3A8y5Ujenxj
+         zgdWfDihJHN8JpMj/C3S8WhSZ99tTeJcP/ry6D4+0WIb4YdiGbG1JdCnDK6TWgtahFyz
+         ecAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724164572; x=1724769372;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OfyTQeSSkPZ+QzWWZU+FNyyT4+itZMzr8DmOygd/33U=;
+        b=OtOq/EdSfam6dxLgj8PbDO7rILiXBp6eq0rdeTgLq749YZQR1rHEw1xDyORtxFgqns
+         RVCvycRACE4zXnDnbF2+eCbxWymovitrrKr6b5N05BnrdrF0efWXG/tkAYgJkb/utd2p
+         QzNoAaeOucmJY8CAERkvrB/8Ssx2StrAKYyjgIEbBBoT/e1gT8uOC2mZd6KjUWf28bDi
+         Ko4dpIOU8F3svNr46LXaFTv/w7E7zGHhroHAbecvMKhCVxR3yrt/pN0roHw6NU4jGYsc
+         IN2h9yb9ko+QaIkSfSb16EvpyHwmxkC/xy+j38q46izaECRpVX3Br0+0qWEAonjHTg/2
+         b7Wg==
+X-Forwarded-Encrypted: i=1; AJvYcCXMHXKoxjefU/GGmJfK6Yb+rqs6tsrjXU9TJUoNhi3AK8agQoEkJ0+U1uGQo4Y1CInkFo1be7TmCwDA8u+2zTybwYZmuyIH2r7uQA==
+X-Gm-Message-State: AOJu0Yx8kqiZVCSj0fQpaVbxVaNlBhWQa8b2TuIjWannluSkWbPhsJFj
+	1oWm0Y6IiEbeZ7jedT2GdZGAlAeJf5DzvymYisd7zBK9p6twpB5otpeDrFRdF5M=
+X-Google-Smtp-Source: AGHT+IFLUQVFBJiZPnU1UIStc9VMSRLEpQuaGd1PxEKJ/fpKdzW6906wlGxbUZmW87C0ek7drDgHNg==
+X-Received: by 2002:a05:6512:3b8b:b0:52e:fa5f:b6a7 with SMTP id 2adb3069b0e04-5331c6a0569mr10710062e87.13.1724164571458;
+        Tue, 20 Aug 2024 07:36:11 -0700 (PDT)
+Received: from localhost ([87.13.33.30])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a838396940fsm772692466b.189.2024.08.20.07.36.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Aug 2024 07:36:11 -0700 (PDT)
+From: Andrea della Porta <andrea.porta@suse.com>
+To: Andrea della Porta <andrea.porta@suse.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Derek Kiernan <derek.kiernan@amd.com>,
+	Dragan Cvetic <dragan.cvetic@amd.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Saravana Kannan <saravanak@google.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-rpi-kernel@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	Lee Jones <lee@kernel.org>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Stefan Wahren <wahrenst@gmx.net>
+Subject: [PATCH 00/11] Add support for RaspberryPi RP1 PCI device using a DT overlay
+Date: Tue, 20 Aug 2024 16:36:02 +0200
+Message-ID: <cover.1724159867.git.andrea.porta@suse.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZsRCAy5cCp0Ig3I/@kernel.org>
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 
-On Tue, Aug 20, 2024 at 10:13:07AM GMT, Mike Rapoport wrote:
-> On Mon, Aug 19, 2024 at 08:15:07AM -0700, Suren Baghdasaryan wrote:
-> > When a module gets unloaded there is a possibility that some of the
-> > allocations it made are still used and therefore the allocation tags
-> > corresponding to these allocations are still referenced. As such, the
-> > memory for these tags can't be freed. This is currently handled as an
-> > abnormal situation and module's data section is not being unloaded.
-> > To handle this situation without keeping module's data in memory,
-> > allow codetags with longer lifespan than the module to be loaded into
-> > their own separate memory. The in-use memory areas and gaps after
-> > module unloading in this separate memory are tracked using maple trees.
-> > Allocation tags arrange their separate memory so that it is virtually
-> > contiguous and that will allow simple allocation tag indexing later on
-> > in this patchset. The size of this virtually contiguous memory is set
-> > to store up to 100000 allocation tags and max_module_alloc_tags kernel
-> > parameter is introduced to change this size.
-> > 
-> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > ---
-> >  .../admin-guide/kernel-parameters.txt         |   4 +
-> >  include/asm-generic/codetag.lds.h             |  19 ++
-> >  include/linux/alloc_tag.h                     |  13 +-
-> >  include/linux/codetag.h                       |  35 ++-
-> >  kernel/module/main.c                          |  67 +++--
-> >  lib/alloc_tag.c                               | 245 ++++++++++++++++--
-> >  lib/codetag.c                                 | 101 +++++++-
-> >  scripts/module.lds.S                          |   5 +-
-> >  8 files changed, 429 insertions(+), 60 deletions(-)
->  
-> ...
-> 
-> > diff --git a/include/linux/codetag.h b/include/linux/codetag.h
-> > index c2a579ccd455..c4a3dd60205e 100644
-> > --- a/include/linux/codetag.h
-> > +++ b/include/linux/codetag.h
-> > @@ -35,8 +35,13 @@ struct codetag_type_desc {
-> >  	size_t tag_size;
-> >  	void (*module_load)(struct codetag_type *cttype,
-> >  			    struct codetag_module *cmod);
-> > -	bool (*module_unload)(struct codetag_type *cttype,
-> > +	void (*module_unload)(struct codetag_type *cttype,
-> >  			      struct codetag_module *cmod);
-> > +	void (*module_replaced)(struct module *mod, struct module *new_mod);
-> > +	bool (*needs_section_mem)(struct module *mod, unsigned long size);
-> > +	void *(*alloc_section_mem)(struct module *mod, unsigned long size,
-> > +				   unsigned int prepend, unsigned long align);
-> > +	void (*free_section_mem)(struct module *mod, bool unused);
-> >  };
-> >  
-> >  struct codetag_iterator {
-> > @@ -71,11 +76,31 @@ struct codetag_type *
-> >  codetag_register_type(const struct codetag_type_desc *desc);
-> >  
-> >  #if defined(CONFIG_CODE_TAGGING) && defined(CONFIG_MODULES)
-> > +
-> > +bool codetag_needs_module_section(struct module *mod, const char *name,
-> > +				  unsigned long size);
-> > +void *codetag_alloc_module_section(struct module *mod, const char *name,
-> > +				   unsigned long size, unsigned int prepend,
-> > +				   unsigned long align);
-> > +void codetag_free_module_sections(struct module *mod);
-> > +void codetag_module_replaced(struct module *mod, struct module *new_mod);
-> >  void codetag_load_module(struct module *mod);
-> > -bool codetag_unload_module(struct module *mod);
-> > -#else
-> > +void codetag_unload_module(struct module *mod);
-> > +
-> > +#else /* defined(CONFIG_CODE_TAGGING) && defined(CONFIG_MODULES) */
-> > +
-> > +static inline bool
-> > +codetag_needs_module_section(struct module *mod, const char *name,
-> > +			     unsigned long size) { return false; }
-> > +static inline void *
-> > +codetag_alloc_module_section(struct module *mod, const char *name,
-> > +			     unsigned long size, unsigned int prepend,
-> > +			     unsigned long align) { return NULL; }
-> > +static inline void codetag_free_module_sections(struct module *mod) {}
-> > +static inline void codetag_module_replaced(struct module *mod, struct module *new_mod) {}
-> >  static inline void codetag_load_module(struct module *mod) {}
-> > -static inline bool codetag_unload_module(struct module *mod) { return true; }
-> > -#endif
-> > +static inline void codetag_unload_module(struct module *mod) {}
-> > +
-> > +#endif /* defined(CONFIG_CODE_TAGGING) && defined(CONFIG_MODULES) */
-> 
-> Maybe I'm missing something, but can't alloc_tag::module_unload() just copy
-> the tags that cannot be freed somewhere outside of module sections and then
-> free the module?
-> 
-> The heavy lifting would be localized to alloc_tags rather than spread all
-> over.
+RP1 is an MFD chipset that acts as a south-bridge PCIe endpoint sporting
+a pletora of subdevices (i.e.  Ethernet, USB host controller, I2C, PWM, 
+etc.) whose registers are all reachable starting from an offset from the
+BAR address.  The main point here is that while the RP1 as an endpoint
+itself is discoverable via usual PCI enumeraiton, the devices it contains
+are not discoverable and must be declared e.g. via the devicetree.
 
-The reason they can't be freed is because they're referenced by
-slab/page allocatons - can't move them either.
+This patchset is an attempt to provide a minimum infrastructure to allow
+the RP1 chipset to be discovered and perpherals it contains to be added
+from a devictree overlay loaded during RP1 PCI endpoint enumeration.
+Followup patches should add support for the several peripherals contained
+in RP1.
+
+This work is based upon dowstream drivers code and the proposal from RH
+et al. (see [1] and [2]). A similar approach is also pursued in [3].
+
+The patches are ordered as follows:
+
+-PATCHES 1 and 2: add binding schemas for clock and gpio peripherals 
+ found in RP1. They are needed to support the other peripherals, e.g.
+ the ethernet mac depends on a clock generated by RP1 and the phy is
+ reset though the on-board gpio controller.
+
+-PATCHES 3, 4 and 5: preparatory patches that fix the address mapping
+ translation (especially wrt dma-ranges) and permit to place the dtbo
+ binary blob to be put in non transient section.
+
+-PATCH 6 and 7: add clock and gpio device drivers.
+
+-PATCH 8: this is the main patch to support RP1 chipset and peripherals
+ enabling through dtb overlay. It contains the dtso since its intimately
+ coupled with the driver and will be linked in as binary blob in the driver
+ obj, but of course it can be easily split in a separate patch if the
+ maintainer feels it so. The real dtso is in devicetree folder while
+ the dtso in driver folder is just a placeholder to include the real dtso.
+ In this way it is possible to check the dtso against dt-bindings.
+
+-PATCH 9: add the relevant kernel CONFIG_ options to defconfig.
+
+-PATCHES 10 and 11: these (still unpolished) patches are not intended to
+ be upstreamed (yet), they serve just as a test reference to be able to
+ use the ethernet MAC contained in RP1.
+
+This patchset is also a first attempt to be more agnostic wrt hardware
+description standards such as OF devicetree and ACPI, where 'agnostic'
+means "using DT in coexistence with ACPI", as been alredy promoted
+by e.g. AL (see [4]). Although there's currently no evidence it will also
+run out of the box on purely ACPI system, it is a first step towards
+that direction.
+
+Please note that albeit this patchset has no prerequisites in order to
+be applied cleanly, it still depends on Stanimir's WIP patchset for BCM2712
+PCIe controller (see [5]) in order to work at runtime.
+
+Many thanks,
+Andrea della Porta
+
+Link:
+- [1]: https://lpc.events/event/17/contributions/1421/attachments/1337/2680/LPC2023%20Non-discoverable%20devices%20in%20PCI.pdf
+- [2]: https://lore.kernel.org/lkml/20230419231155.GA899497-robh@kernel.org/t/
+- [3]: https://lore.kernel.org/all/20240808154658.247873-1-herve.codina@bootlin.com/#t
+- [4]: https://lore.kernel.org/all/73e05c77-6d53-4aae-95ac-415456ff0ae4@lunn.ch/
+- [5]: https://lore.kernel.org/all/20240626104544.14233-1-svarbanov@suse.de/
+
+Andrea della Porta (11):
+  dt-bindings: clock: Add RaspberryPi RP1 clock bindings
+  dt-bindings: pinctrl: Add RaspberryPi RP1 gpio/pinctrl/pinmux bindings
+  PCI: of_property: Sanitize 32 bit PCI address parsed from DT
+  of: address: Preserve the flags portion on 1:1 dma-ranges mapping
+  vmlinux.lds.h: Preserve DTB sections from being discarded after init
+  clk: rp1: Add support for clocks provided by RP1
+  pinctrl: rp1: Implement RaspberryPi RP1 gpio support
+  misc: rp1: RaspberryPi RP1 misc driver
+  arm64: defconfig: Enable RP1 misc/clock/gpio drivers as built-in
+  net: macb: Add support for RP1's MACB variant
+  arm64: dts: rp1: Add support for MACB contained in RP1
+
+ .../clock/raspberrypi,rp1-clocks.yaml         |   87 +
+ .../pinctrl/raspberrypi,rp1-gpio.yaml         |  177 ++
+ MAINTAINERS                                   |   12 +
+ arch/arm64/boot/dts/broadcom/rp1.dtso         |  175 ++
+ arch/arm64/configs/defconfig                  |    3 +
+ drivers/clk/Kconfig                           |    9 +
+ drivers/clk/Makefile                          |    1 +
+ drivers/clk/clk-rp1.c                         | 1655 +++++++++++++++++
+ drivers/misc/Kconfig                          |    1 +
+ drivers/misc/Makefile                         |    1 +
+ drivers/misc/rp1/Kconfig                      |   20 +
+ drivers/misc/rp1/Makefile                     |    3 +
+ drivers/misc/rp1/rp1-pci.c                    |  333 ++++
+ drivers/misc/rp1/rp1-pci.dtso                 |    8 +
+ drivers/net/ethernet/cadence/macb.h           |   25 +
+ drivers/net/ethernet/cadence/macb_main.c      |  152 +-
+ drivers/of/address.c                          |    3 +-
+ drivers/pci/of_property.c                     |    5 +-
+ drivers/pci/quirks.c                          |    1 +
+ drivers/pinctrl/Kconfig                       |   10 +
+ drivers/pinctrl/Makefile                      |    1 +
+ drivers/pinctrl/pinctrl-rp1.c                 |  719 +++++++
+ include/asm-generic/vmlinux.lds.h             |    2 +-
+ include/dt-bindings/clock/rp1.h               |   56 +
+ include/dt-bindings/misc/rp1.h                |  235 +++
+ include/linux/pci_ids.h                       |    3 +
+ 26 files changed, 3692 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/raspberrypi,rp1-clocks.yaml
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/raspberrypi,rp1-gpio.yaml
+ create mode 100644 arch/arm64/boot/dts/broadcom/rp1.dtso
+ create mode 100644 drivers/clk/clk-rp1.c
+ create mode 100644 drivers/misc/rp1/Kconfig
+ create mode 100644 drivers/misc/rp1/Makefile
+ create mode 100644 drivers/misc/rp1/rp1-pci.c
+ create mode 100644 drivers/misc/rp1/rp1-pci.dtso
+ create mode 100644 drivers/pinctrl/pinctrl-rp1.c
+ create mode 100644 include/dt-bindings/clock/rp1.h
+ create mode 100644 include/dt-bindings/misc/rp1.h
+
+-- 
+2.35.3
+
 
