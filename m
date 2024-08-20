@@ -1,72 +1,72 @@
-Return-Path: <linux-arch+bounces-6375-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6377-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 036B39589AC
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Aug 2024 16:38:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB0CD9589C3
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Aug 2024 16:39:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A9941283C8C
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Aug 2024 14:38:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0C4901C216E1
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Aug 2024 14:39:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAF3A1953A9;
-	Tue, 20 Aug 2024 14:36:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88BB419308F;
+	Tue, 20 Aug 2024 14:36:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="XZC2iw2u"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="FyK8mSHn"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+Received: from mail-lj1-f193.google.com (mail-lj1-f193.google.com [209.85.208.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 859801917F5
-	for <linux-arch@vger.kernel.org>; Tue, 20 Aug 2024 14:36:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B9791946BA
+	for <linux-arch@vger.kernel.org>; Tue, 20 Aug 2024 14:36:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724164587; cv=none; b=XrhmRzIk/HUGHPKFJyYYBrL4thanK0sq0aLPJKuDcFGXnhMiLYEqxkgEQ5ulK9S8tWVhvvr603cUb6H56iihb3UkOFxBEYmRESxmLM0WX4M3Jgsve6AI3GIAnLzaFAhQ8xMCYO+RQIrHaI/qkIkiWg/mYPqzhh7EdbsHjH7N+AI=
+	t=1724164591; cv=none; b=X8XBlLSm19Iw78RNHut2w+dq3jzckiMMaNHZi/3NAYGDIGxPNpIOE2nMe+x07274BLJQVLS0qbqw460FrK8bv6d0SXGiMY1jKhZOVUzAYwTJUd3VHTSTUJqjS+rxjSBBJfQJFLWM4Gepl2g39JBj/wXYkvtM0di+XFQVVkK+vIE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724164587; c=relaxed/simple;
-	bh=vC+8qXUixYzMWMyxsaBs8W2uFK8Ng/UjB07ri0M+N0s=;
+	s=arc-20240116; t=1724164591; c=relaxed/simple;
+	bh=p5DIYYPmnf5GAUCo2DGsMlFe4KWuwcB9Zgt0wGz5W7w=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ydwv3XfAqvA5Ejr7L3hRWHjztv7bd7Aejtzj2edbtfMQVuZqTNILYxkeANbvoUzelkxZ5qPRXmhJiMtFgdVKjKIAlw5qV3F5OYWytyIqiVBqY5eP5710ilfl0FfYfyMxaOPeTtXmQ5utW4SOCbtGNOncHhY+i8RmKmsRXX0AhPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=XZC2iw2u; arc=none smtp.client-ip=209.85.208.41
+	 MIME-Version; b=dqetIoP78Q2RK8VwSXTqBW2/JSghILqhgrldY6Pe+msfZoEGkDRIhZ30VEBQjDlDnH0Xs55CfthdkIwr0KiANzMcaxPu8hQsu8GrYsR1odcyPRo1vwRRAoUkWFDFJXyOGtFDAn/+Qz2BoWe6QijKBgwRXWd+TtOwSfxbNB+qugk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=FyK8mSHn; arc=none smtp.client-ip=209.85.208.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-5bed83488b6so4507784a12.2
-        for <linux-arch@vger.kernel.org>; Tue, 20 Aug 2024 07:36:20 -0700 (PDT)
+Received: by mail-lj1-f193.google.com with SMTP id 38308e7fff4ca-2f3cb747ed7so37959031fa.0
+        for <linux-arch@vger.kernel.org>; Tue, 20 Aug 2024 07:36:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1724164579; x=1724769379; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1724164581; x=1724769381; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=IuJLOmsgONfa20tmd/ubsVTst6KpAyds6+Zdm1mcXT0=;
-        b=XZC2iw2ui3r9QU19bqetRJ+GEwmQC8oJUHH9nWY202oe31jyycDPGkgvWYF3VUXH2W
-         yeXRbZl1UTVrKu6YSXr0qaee07UbM4IGVhlSSDW/nYPk/OTedDd+labL5ENR1je178Am
-         n9IcwKKFwmCOrykadIFUHHa+mcDgJb6Isd5TczjqlBpzFspULVY+DHWtN/V9QhL8nYzm
-         +PPmAOIjr0t5NILWgn5P/9l50KDHV356CqEi2iUSeZ3WjuYq+HhDkens3nLOya8I0NNC
-         345eQY8jmVl+qAKmKvW9voyaBmCUPnfyLt61lInV5fxDuVBacDTByw5hNtFgIRilPX7T
-         6neQ==
+        bh=lpssDU0ANQ0XzdDxnha8iafuj4FS6tV1LC1H29qKgqc=;
+        b=FyK8mSHnEZ3W75pXjHKUoBFmydEO+A7BOHk1lHSoxZXY5XAEVYSDX8WWsZpCqfVJdz
+         8ImdKa70e0kGqKmxJgSGSCoe/hfzTz3QLAZTGwUbDCfKUEypswYEyeNSCp46jiI5KBT6
+         VpBy4cI7ugfSSgrmcVp8I/cOgEwsci7uQnaWK84deHy3cdB0E9fdhFsT3ww66536mdsa
+         ckGUJamzLpDFyW41NmlROOA15SmlooHJxCIwJr10UBy6wzIUsZXjL6lN26uJ45TlY/yv
+         jbuaZQzhF4PY6HMKXYYPCEFpNAaaZDstW5RR5eAANft/e/PxTjGAd8UGVLCM8jzESmIn
+         Ipwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724164579; x=1724769379;
+        d=1e100.net; s=20230601; t=1724164581; x=1724769381;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=IuJLOmsgONfa20tmd/ubsVTst6KpAyds6+Zdm1mcXT0=;
-        b=QzNC82VM+szToiOGOeFucNbkA3soGJKdOzvXj0blGR7QR1LSB0PmRthnIRGyK4hRkP
-         i3OdqdmeTh+CkPwB+ewo+iEJBhLTEfqUpJJNjQTcyV7nB7Q1TR/kpQmuFNIFzfwcKnj1
-         7CMD77qOLNBfbzgjF4wtd7mssMUfshfF7nOJW+c+vMV9rztY/xnY1ny2zr9lfWEbpouN
-         FuwdsEWeE87iBf81vw9jZ5ArueSCJzWtICenPlqdf+hXczxhOd7BHn/yI9ZMkatUQ/RP
-         8aezNf50oBqHiaVvKDILdJLJ0DB0JYtzA0FVFQP7e3d4hZymHhM7FcKJdr8P1J4nICdG
-         OdUw==
-X-Forwarded-Encrypted: i=1; AJvYcCXhrouUwBU0SLdsSnyjOFTrqF2Mu6joXRVjED3HRUiBWsj0KLrE88rX9OG4vuXCXAD2q8BU2ljbH8nO@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7Qq0bcIhDCcGdVq9zvqjPpsByf1JAI7DJvKyjLViXTDhlTzRq
-	TSuuhWEXl1Oo0JJB7QV8wOOkZxPPeo7quCiXl98gNkpJRNj7OdmTZhTvkeQ328g=
-X-Google-Smtp-Source: AGHT+IFbX32Zr8tanuRgz5QwmeW+Cyy3YjI+3qQAjDqThUwtS/XowH/Pxy/YgbgPoxpJSDT+UfCS6w==
-X-Received: by 2002:a05:6402:358d:b0:5be:eb9b:b724 with SMTP id 4fb4d7f45d1cf-5beeb9bb8f0mr6574935a12.1.1724164578912;
-        Tue, 20 Aug 2024 07:36:18 -0700 (PDT)
+        bh=lpssDU0ANQ0XzdDxnha8iafuj4FS6tV1LC1H29qKgqc=;
+        b=bklT/NyVft3csmGMyxnGZjWDS5PKluHBh0055KILYeFWynLk/XUvom+C4AtAr5UC6D
+         dvQGaBq0x8v1pK5wU3omZamtUx92R5yPnshYkdb+jbPVHysKqMHSWXTu1rzo2V2ajfq+
+         vWI9RR/XYDcjCNpFgH9E7SLdnqX+wzJbShQ465lqFdJKg9Y51TqOCEASLYDrn+XqTI4r
+         PTEKK/PLMUID7hoM07cUrh/BN5SyqyHaRLTPBKUBdxYgjLQLb11+DBGIKD0vtRpCD/I8
+         WYxd7BBeC8vX0o2exhS/vDfL/Lfhq6n1v9ROaJDCySw5vYP3mb9GO4bHyC9wHt1Igbvc
+         vD5Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWpJ8CMMS6ww5vEWtJUf41mdHZE+fthmqfC6NmKz/pulOg37YyM7RRfc0nTSvwMuCemSjSiVQgCrf9kFudQvMOM0TmXvq9tf5xU7g==
+X-Gm-Message-State: AOJu0YyoPNiMm/oxGYdF6gWXqIPllQKudPODTfQ82iwTDjXI6JkaOnpB
+	hTFfnGlMa8tpQyERLjhoGrwOBUABMpOg1DLdOqsdcNgFyDAnZTZFBlIy/A1arxY=
+X-Google-Smtp-Source: AGHT+IHzxFWw3egfmj0xIj7AQUPWFAaRy1NB6eQNNhxxRBm4y+LCCXnx0Ke/f+b2cD4VrJ1utTrwOQ==
+X-Received: by 2002:a2e:a9a9:0:b0:2f3:ea34:596 with SMTP id 38308e7fff4ca-2f3ea34063amr22855301fa.44.1724164580168;
+        Tue, 20 Aug 2024 07:36:20 -0700 (PDT)
 Received: from localhost ([87.13.33.30])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5bebbbe26desm6741728a12.11.2024.08.20.07.36.18
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5bebbdfa6a7sm6897409a12.40.2024.08.20.07.36.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Aug 2024 07:36:18 -0700 (PDT)
+        Tue, 20 Aug 2024 07:36:19 -0700 (PDT)
 From: Andrea della Porta <andrea.porta@suse.com>
 To: Andrea della Porta <andrea.porta@suse.com>,
 	Michael Turquette <mturquette@baylibre.com>,
@@ -103,9 +103,9 @@ To: Andrea della Porta <andrea.porta@suse.com>,
 	Lee Jones <lee@kernel.org>,
 	Andrew Lunn <andrew@lunn.ch>,
 	Stefan Wahren <wahrenst@gmx.net>
-Subject: [PATCH 07/11] pinctrl: rp1: Implement RaspberryPi RP1 gpio support
-Date: Tue, 20 Aug 2024 16:36:09 +0200
-Message-ID: <eb39a5f3cefff2a1240a18a255dac090af16f223.1724159867.git.andrea.porta@suse.com>
+Subject: [PATCH 08/11] misc: rp1: RaspberryPi RP1 misc driver
+Date: Tue, 20 Aug 2024 16:36:10 +0200
+Message-ID: <5954e4dccc0e158cf434d2c281ad57120538409b.1724159867.git.andrea.porta@suse.com>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <cover.1724159867.git.andrea.porta@suse.com>
 References: <cover.1724159867.git.andrea.porta@suse.com>
@@ -117,790 +117,644 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The RP1 is an MFD supporting a gpio controller and /pinmux/pinctrl.
-Add minimum support for the gpio only portion. The driver is in
-pinctrl folder since upcoming patches will add the pinmux/pinctrl
-support where the gpio part can be seen as an addition.
+The RaspberryPi RP1 is ia PCI multi function device containing
+peripherals ranging from Ethernet to USB controller, I2C, SPI
+and others.
+Implement a bare minimum driver to operate the RP1, leveraging
+actual OF based driver implementations for the on-borad peripherals
+by loading a devicetree overlay during driver probe.
+The peripherals are accessed by mapping MMIO registers starting
+from PCI BAR1 region.
+As a minimum driver, the peripherals will not be added to the
+dtbo here, but in following patches.
 
+Link: https://datasheets.raspberrypi.com/rp1/rp1-peripherals.pdf
 Signed-off-by: Andrea della Porta <andrea.porta@suse.com>
 ---
- MAINTAINERS                   |   1 +
- drivers/pinctrl/Kconfig       |  10 +
- drivers/pinctrl/Makefile      |   1 +
- drivers/pinctrl/pinctrl-rp1.c | 719 ++++++++++++++++++++++++++++++++++
- 4 files changed, 731 insertions(+)
- create mode 100644 drivers/pinctrl/pinctrl-rp1.c
+ MAINTAINERS                           |   2 +
+ arch/arm64/boot/dts/broadcom/rp1.dtso | 152 ++++++++++++
+ drivers/misc/Kconfig                  |   1 +
+ drivers/misc/Makefile                 |   1 +
+ drivers/misc/rp1/Kconfig              |  20 ++
+ drivers/misc/rp1/Makefile             |   3 +
+ drivers/misc/rp1/rp1-pci.c            | 333 ++++++++++++++++++++++++++
+ drivers/misc/rp1/rp1-pci.dtso         |   8 +
+ drivers/pci/quirks.c                  |   1 +
+ include/linux/pci_ids.h               |   3 +
+ 10 files changed, 524 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/broadcom/rp1.dtso
+ create mode 100644 drivers/misc/rp1/Kconfig
+ create mode 100644 drivers/misc/rp1/Makefile
+ create mode 100644 drivers/misc/rp1/rp1-pci.c
+ create mode 100644 drivers/misc/rp1/rp1-pci.dtso
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 4ce7b049d67e..67f460c36ea1 100644
+index 67f460c36ea1..1359538b76e8 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -19122,6 +19122,7 @@ S:	Maintained
+@@ -19119,9 +19119,11 @@ F:	include/uapi/linux/media/raspberrypi/
+ RASPBERRY PI RP1 PCI DRIVER
+ M:	Andrea della Porta <andrea.porta@suse.com>
+ S:	Maintained
++F:	arch/arm64/boot/dts/broadcom/rp1.dtso
  F:	Documentation/devicetree/bindings/clock/raspberrypi,rp1-clocks.yaml
  F:	Documentation/devicetree/bindings/pinctrl/raspberrypi,rp1-gpio.yaml
  F:	drivers/clk/clk-rp1.c
-+F:	drivers/pinctrl/pinctrl-rp1.c
++F:	drivers/misc/rp1/
+ F:	drivers/pinctrl/pinctrl-rp1.c
  F:	include/dt-bindings/clock/rp1.h
  F:	include/dt-bindings/misc/rp1.h
- 
-diff --git a/drivers/pinctrl/Kconfig b/drivers/pinctrl/Kconfig
-index 7e4f93a3bc7a..18bb1a8bd102 100644
---- a/drivers/pinctrl/Kconfig
-+++ b/drivers/pinctrl/Kconfig
-@@ -565,6 +565,16 @@ config PINCTRL_MLXBF3
- 	  each pin. This driver can also be built as a module called
- 	  pinctrl-mlxbf3.
- 
-+config PINCTRL_RP1
-+	bool "Pinctrl driver for RP1"
-+	select PINMUX
-+	select PINCONF
-+	select GENERIC_PINCONF
-+	select GPIOLIB_IRQCHIP
-+	help
-+	  Enable the gpio and pinctrl/mux  driver for RaspberryPi RP1
-+	  multi function device. 
-+
- source "drivers/pinctrl/actions/Kconfig"
- source "drivers/pinctrl/aspeed/Kconfig"
- source "drivers/pinctrl/bcm/Kconfig"
-diff --git a/drivers/pinctrl/Makefile b/drivers/pinctrl/Makefile
-index cc809669405a..f1ca23b563f6 100644
---- a/drivers/pinctrl/Makefile
-+++ b/drivers/pinctrl/Makefile
-@@ -45,6 +45,7 @@ obj-$(CONFIG_PINCTRL_PIC32)	+= pinctrl-pic32.o
- obj-$(CONFIG_PINCTRL_PISTACHIO)	+= pinctrl-pistachio.o
- obj-$(CONFIG_PINCTRL_RK805)	+= pinctrl-rk805.o
- obj-$(CONFIG_PINCTRL_ROCKCHIP)	+= pinctrl-rockchip.o
-+obj-$(CONFIG_PINCTRL_RP1)       += pinctrl-rp1.o
- obj-$(CONFIG_PINCTRL_SCMI)	+= pinctrl-scmi.o
- obj-$(CONFIG_PINCTRL_SINGLE)	+= pinctrl-single.o
- obj-$(CONFIG_PINCTRL_ST) 	+= pinctrl-st.o
-diff --git a/drivers/pinctrl/pinctrl-rp1.c b/drivers/pinctrl/pinctrl-rp1.c
+diff --git a/arch/arm64/boot/dts/broadcom/rp1.dtso b/arch/arm64/boot/dts/broadcom/rp1.dtso
 new file mode 100644
-index 000000000000..c035d2014505
+index 000000000000..d80178a278ee
 --- /dev/null
-+++ b/drivers/pinctrl/pinctrl-rp1.c
-@@ -0,0 +1,719 @@
++++ b/arch/arm64/boot/dts/broadcom/rp1.dtso
+@@ -0,0 +1,152 @@
++// SPDX-License-Identifier: (GPL-2.0 OR MIT)
++
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/interrupt-controller/irq.h>
++#include <dt-bindings/clock/rp1.h>
++#include <dt-bindings/misc/rp1.h>
++
++/dts-v1/;
++/plugin/;
++
++/ {
++	fragment@0 {
++		target-path="";
++		__overlay__ {
++			#address-cells = <3>;
++			#size-cells = <2>;
++
++			rp1: rp1@0 {
++				compatible = "simple-bus";
++				#address-cells = <2>;
++				#size-cells = <2>;
++				interrupt-controller;
++				interrupt-parent = <&rp1>;
++				#interrupt-cells = <2>;
++
++				// ranges and dma-ranges must be provided by the includer
++				ranges = <0xc0 0x40000000
++					  0x01/*0x02000000*/ 0x00 0x00000000
++					  0x00 0x00400000>;
++
++				dma-ranges =
++				// inbound RP1 1x_xxxxxxxx -> PCIe 1x_xxxxxxxx
++					     <0x10 0x00000000
++					      0x43000000 0x10 0x00000000
++					      0x10 0x00000000>;
++
++				clk_xosc: clk_xosc {
++					compatible = "fixed-clock";
++					#clock-cells = <0>;
++					clock-output-names = "xosc";
++					clock-frequency = <50000000>;
++				};
++
++				macb_pclk: macb_pclk {
++					compatible = "fixed-clock";
++					#clock-cells = <0>;
++					clock-output-names = "pclk";
++					clock-frequency = <200000000>;
++				};
++
++				macb_hclk: macb_hclk {
++					compatible = "fixed-clock";
++					#clock-cells = <0>;
++					clock-output-names = "hclk";
++					clock-frequency = <200000000>;
++				};
++
++				rp1_clocks: clocks@c040018000 {
++					compatible = "raspberrypi,rp1-clocks";
++					#clock-cells = <1>;
++					reg = <0xc0 0x40018000 0x0 0x10038>;
++					clocks = <&clk_xosc>;
++					clock-names = "xosc";
++
++					assigned-clocks = <&rp1_clocks RP1_PLL_SYS_CORE>,
++							  <&rp1_clocks RP1_PLL_AUDIO_CORE>,
++							  // RP1_PLL_VIDEO_CORE and dividers are now managed by VEC,DPI drivers
++							  <&rp1_clocks RP1_PLL_SYS>,
++							  <&rp1_clocks RP1_PLL_SYS_SEC>,
++							  <&rp1_clocks RP1_PLL_SYS_PRI_PH>,
++							  <&rp1_clocks RP1_CLK_ETH_TSU>;
++
++					assigned-clock-rates = <1000000000>, // RP1_PLL_SYS_CORE
++							       <1536000000>, // RP1_PLL_AUDIO_CORE
++							       <200000000>,  // RP1_PLL_SYS
++							       <125000000>,  // RP1_PLL_SYS_SEC
++							       <100000000>,  // RP1_PLL_SYS_PRI_PH
++							       <50000000>;   // RP1_CLK_ETH_TSU
++				};
++
++				rp1_gpio: pinctrl@c0400d0000 {
++					reg = <0xc0 0x400d0000  0x0 0xc000>,
++					      <0xc0 0x400e0000  0x0 0xc000>,
++					      <0xc0 0x400f0000  0x0 0xc000>;
++					compatible = "raspberrypi,rp1-gpio";
++					gpio-controller;
++					#gpio-cells = <2>;
++					interrupt-controller;
++					#interrupt-cells = <2>;
++					interrupts = <RP1_INT_IO_BANK0 IRQ_TYPE_LEVEL_HIGH>,
++						     <RP1_INT_IO_BANK1 IRQ_TYPE_LEVEL_HIGH>,
++						     <RP1_INT_IO_BANK2 IRQ_TYPE_LEVEL_HIGH>;
++					gpio-line-names =
++						"ID_SDA", // GPIO0
++						"ID_SCL", // GPIO1
++						"GPIO2", // GPIO2
++						"GPIO3", // GPIO3
++						"GPIO4", // GPIO4
++						"GPIO5", // GPIO5
++						"GPIO6", // GPIO6
++						"GPIO7", // GPIO7
++						"GPIO8", // GPIO8
++						"GPIO9", // GPIO9
++						"GPIO10", // GPIO10
++						"GPIO11", // GPIO11
++						"GPIO12", // GPIO12
++						"GPIO13", // GPIO13
++						"GPIO14", // GPIO14
++						"GPIO15", // GPIO15
++						"GPIO16", // GPIO16
++						"GPIO17", // GPIO17
++						"GPIO18", // GPIO18
++						"GPIO19", // GPIO19
++						"GPIO20", // GPIO20
++						"GPIO21", // GPIO21
++						"GPIO22", // GPIO22
++						"GPIO23", // GPIO23
++						"GPIO24", // GPIO24
++						"GPIO25", // GPIO25
++						"GPIO26", // GPIO26
++						"GPIO27", // GPIO27
++						"PCIE_RP1_WAKE", // GPIO28
++						"FAN_TACH", // GPIO29
++						"HOST_SDA", // GPIO30
++						"HOST_SCL", // GPIO31
++						"ETH_RST_N", // GPIO32
++						"", // GPIO33
++						"CD0_IO0_MICCLK", // GPIO34
++						"CD0_IO0_MICDAT0", // GPIO35
++						"RP1_PCIE_CLKREQ_N", // GPIO36
++						"", // GPIO37
++						"CD0_SDA", // GPIO38
++						"CD0_SCL", // GPIO39
++						"CD1_SDA", // GPIO40
++						"CD1_SCL", // GPIO41
++						"USB_VBUS_EN", // GPIO42
++						"USB_OC_N", // GPIO43
++						"RP1_STAT_LED", // GPIO44
++						"FAN_PWM", // GPIO45
++						"CD1_IO0_MICCLK", // GPIO46
++						"2712_WAKE", // GPIO47
++						"CD1_IO1_MICDAT1", // GPIO48
++						"EN_MAX_USB_CUR", // GPIO49
++						"", // GPIO50
++						"", // GPIO51
++						"", // GPIO52
++						""; // GPIO53
++				};
++			};
++		};
++	};
++};
+diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
+index 41c3d2821a78..02405209e6c4 100644
+--- a/drivers/misc/Kconfig
++++ b/drivers/misc/Kconfig
+@@ -618,4 +618,5 @@ source "drivers/misc/uacce/Kconfig"
+ source "drivers/misc/pvpanic/Kconfig"
+ source "drivers/misc/mchp_pci1xxxx/Kconfig"
+ source "drivers/misc/keba/Kconfig"
++source "drivers/misc/rp1/Kconfig"
+ endmenu
+diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
+index c2f990862d2b..84bfa866fbee 100644
+--- a/drivers/misc/Makefile
++++ b/drivers/misc/Makefile
+@@ -71,3 +71,4 @@ obj-$(CONFIG_TPS6594_PFSM)	+= tps6594-pfsm.o
+ obj-$(CONFIG_NSM)		+= nsm.o
+ obj-$(CONFIG_MARVELL_CN10K_DPI)	+= mrvl_cn10k_dpi.o
+ obj-y				+= keba/
++obj-$(CONFIG_MISC_RP1)		+= rp1/
+diff --git a/drivers/misc/rp1/Kconfig b/drivers/misc/rp1/Kconfig
+new file mode 100644
+index 000000000000..050417ee09ae
+--- /dev/null
++++ b/drivers/misc/rp1/Kconfig
+@@ -0,0 +1,20 @@
++# SPDX-License-Identifier: GPL-2.0-only
++#
++# RaspberryPi RP1 misc device
++#
++
++config MISC_RP1
++        tristate "RaspberryPi RP1 PCIe support"
++        depends on PCI && PCI_QUIRKS
++        select OF
++        select OF_OVERLAY
++        select IRQ_DOMAIN
++        select PCI_DYNAMIC_OF_NODES
++        help
++          Support for the RP1 peripheral chip found on Raspberry Pi 5 board.
++          This device supports several sub-devices including e.g. Ethernet controller,
++          USB controller, I2C, SPI and UART.
++          The driver is responsible for enabling the DT node once the PCIe endpoint
++          has been configured, and handling interrupts.
++          This driver uses an overlay to load other drivers to support for RP1
++          internal sub-devices.
+diff --git a/drivers/misc/rp1/Makefile b/drivers/misc/rp1/Makefile
+new file mode 100644
+index 000000000000..e83854b4ed2c
+--- /dev/null
++++ b/drivers/misc/rp1/Makefile
+@@ -0,0 +1,3 @@
++# SPDX-License-Identifier: GPL-2.0-only
++rp1-pci-objs			:= rp1-pci.o rp1-pci.dtbo.o
++obj-$(CONFIG_MISC_RP1)		+= rp1-pci.o
+diff --git a/drivers/misc/rp1/rp1-pci.c b/drivers/misc/rp1/rp1-pci.c
+new file mode 100644
+index 000000000000..a6093ba7e19a
+--- /dev/null
++++ b/drivers/misc/rp1/rp1-pci.c
+@@ -0,0 +1,333 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Driver for Raspberry Pi RP1 GPIO unit
-+ *
-+ * Copyright (C) 2023 Raspberry Pi Ltd.
-+ *
-+ * This driver is inspired by:
-+ * pinctrl-bcm2835.c, please see original file for copyright information
++ * Copyright (c) 2018-22 Raspberry Pi Ltd.
++ * All rights reserved.
 + */
 +
-+#include <linux/bitmap.h>
-+#include <linux/bitops.h>
-+#include <linux/bug.h>
-+#include <linux/delay.h>
-+#include <linux/device.h>
++#include <linux/clk.h>
++#include <linux/clkdev.h>
++#include <linux/clk-provider.h>
 +#include <linux/err.h>
-+#include <linux/gpio/driver.h>
-+#include <linux/io.h>
++#include <linux/interrupt.h>
 +#include <linux/irq.h>
-+#include <linux/irqdesc.h>
-+#include <linux/init.h>
-+#include <linux/of_address.h>
-+#include <linux/of.h>
-+#include <linux/of_irq.h>
++#include <linux/irqchip/chained_irq.h>
++#include <linux/irqdomain.h>
++#include <linux/module.h>
++#include <linux/msi.h>
++#include <linux/of_platform.h>
++#include <linux/pci.h>
 +#include <linux/platform_device.h>
-+#include <linux/seq_file.h>
-+#include <linux/spinlock.h>
-+#include <linux/types.h>
++#include <linux/reset.h>
 +
-+#define MODULE_NAME "pinctrl-rp1"
-+#define RP1_NUM_GPIOS	54
-+#define RP1_NUM_BANKS	3
++#include <dt-bindings/misc/rp1.h>
 +
-+#define RP1_RW_OFFSET			0x0000
-+#define RP1_XOR_OFFSET			(RP1_RW_OFFSET + 0x1000)
-+#define RP1_SET_OFFSET			(RP1_RW_OFFSET + 0x2000)
-+#define RP1_CLR_OFFSET			(RP1_RW_OFFSET + 0x3000)
++#define RP1_B0_CHIP_ID		0x10001927
++#define RP1_C0_CHIP_ID		0x20001927
 +
-+#define RP1_GPIO_REG_OFFSET		0x0000
-+#define RP1_GPIO_STATUS			(RP1_GPIO_REG_OFFSET + 0x0000)
-+#define RP1_GPIO_CTRL			(RP1_GPIO_REG_OFFSET + 0x0004)
++#define RP1_PLATFORM_ASIC	BIT(1)
++#define RP1_PLATFORM_FPGA	BIT(0)
 +
-+#define RP1_GPIO_EVENTS_SHIFT_RAW	20
++#define RP1_DRIVER_NAME		"rp1"
 +
-+#define RP1_GPIO_CTRL_FUNCSEL_LSB	0
-+#define RP1_GPIO_CTRL_FUNCSEL_MASK	GENMASK(RP1_GPIO_CTRL_FUNCSEL_LSB + 4, \
-+						RP1_GPIO_CTRL_FUNCSEL_LSB)
-+#define RP1_GPIO_CTRL_OUTOVER_LSB	12
-+#define RP1_GPIO_CTRL_OUTOVER_MASK	GENMASK(RP1_GPIO_CTRL_OUTOVER_LSB + 1, \
-+						RP1_GPIO_CTRL_OUTOVER_LSB)
-+#define RP1_GPIO_CTRL_OEOVER_LSB	14
-+#define RP1_GPIO_CTRL_OEOVER_MASK	GENMASK(RP1_GPIO_CTRL_OEOVER_LSB + 1, \
-+						RP1_GPIO_CTRL_OEOVER_LSB)
-+#define RP1_GPIO_CTRL_INOVER_LSB	16
-+#define RP1_GPIO_CTRL_INOVER_MASK	GENMASK(RP1_GPIO_CTRL_INOVER_LSB + 1, \
-+						RP1_GPIO_CTRL_INOVER_LSB)
-+#define RP1_GPIO_CTRL_IRQEN_FALLING	BIT(20)
-+#define RP1_GPIO_CTRL_IRQEN_RISING	BIT(21)
-+#define RP1_GPIO_CTRL_IRQEN_LOW		BIT(22)
-+#define RP1_GPIO_CTRL_IRQEN_HIGH	BIT(23)
-+#define RP1_GPIO_CTRL_IRQEN_F_FALLING	BIT(24)
-+#define RP1_GPIO_CTRL_IRQEN_F_RISING	BIT(25)
-+#define RP1_GPIO_CTRL_IRQEN_F_LOW	BIT(26)
-+#define RP1_GPIO_CTRL_IRQEN_F_HIGH	BIT(27)
-+#define RP1_GPIO_CTRL_IRQRESET		BIT(28)
-+#define RP1_GPIO_CTRL_IRQOVER_LSB	30
-+#define RP1_GPIO_CTRL_IRQOVER_MASK	GENMASK(RP1_GPIO_CTRL_IRQOVER_LSB + 1, \
-+						RP1_GPIO_CTRL_IRQOVER_LSB)
++#define RP1_ACTUAL_IRQS		RP1_INT_END
++#define RP1_IRQS		RP1_ACTUAL_IRQS
++#define RP1_HW_IRQ_MASK		GENMASK(5, 0)
 +
-+#define RP1_INT_EDGE_FALLING		BIT(0)
-+#define RP1_INT_EDGE_RISING		BIT(1)
-+#define RP1_INT_LEVEL_LOW		BIT(2)
-+#define RP1_INT_LEVEL_HIGH		BIT(3)
-+#define RP1_INT_MASK			GENMASK(3, 0)
-+
-+#define RP1_INT_EDGE_BOTH		(RP1_INT_EDGE_FALLING |	\
-+					 RP1_INT_EDGE_RISING)
++#define RP1_SYSCLK_RATE		200000000
++#define RP1_SYSCLK_FPGA_RATE	60000000
 +
 +enum {
-+	RP1_PUD_OFF			= 0,
-+	RP1_PUD_DOWN			= 1,
-+	RP1_PUD_UP			= 2,
++	SYSINFO_CHIP_ID_OFFSET	= 0,
++	SYSINFO_PLATFORM_OFFSET	= 4,
 +};
 +
-+#define RP1_FSEL_COUNT			9
++#define REG_SET			0x800
++#define REG_CLR			0xc00
 +
-+#define RP1_FSEL_ALT0			0x00
-+#define RP1_FSEL_GPIO			0x05
-+#define RP1_FSEL_NONE			0x09
-+#define RP1_FSEL_NONE_HW		0x1f
++/* MSIX CFG registers start at 0x8 */
++#define MSIX_CFG(x) (0x8 + (4 * (x)))
 +
-+enum {
-+	RP1_DIR_OUTPUT			= 0,
-+	RP1_DIR_INPUT			= 1,
-+};
++#define MSIX_CFG_IACK_EN        BIT(3)
++#define MSIX_CFG_IACK           BIT(2)
++#define MSIX_CFG_TEST           BIT(1)
++#define MSIX_CFG_ENABLE         BIT(0)
 +
-+enum {
-+	RP1_OUTOVER_PERI		= 0,
-+	RP1_OUTOVER_INVPERI		= 1,
-+	RP1_OUTOVER_LOW			= 2,
-+	RP1_OUTOVER_HIGH		= 3,
-+};
++#define INTSTATL		0x108
++#define INTSTATH		0x10c
 +
-+enum {
-+	RP1_OEOVER_PERI			= 0,
-+	RP1_OEOVER_INVPERI		= 1,
-+	RP1_OEOVER_DISABLE		= 2,
-+	RP1_OEOVER_ENABLE		= 3,
-+};
++extern char __dtbo_rp1_pci_begin[];
++extern char __dtbo_rp1_pci_end[];
 +
-+enum {
-+	RP1_INOVER_PERI			= 0,
-+	RP1_INOVER_INVPERI		= 1,
-+	RP1_INOVER_LOW			= 2,
-+	RP1_INOVER_HIGH			= 3,
-+};
-+
-+#define RP1_RIO_OUT			0x00
-+#define RP1_RIO_OE			(RP1_RIO_OUT + 0x04)
-+#define RP1_RIO_IN			(RP1_RIO_OUT + 0x08)
-+
-+#define RP1_PAD_SLEWFAST_LSB		0
-+#define RP1_PAD_SLEWFAST_MASK		BIT(RP1_PAD_SLEWFAST_LSB)
-+#define RP1_PAD_SCHMITT_LSB		1
-+#define RP1_PAD_SCHMITT_MASK		BIT(RP1_PAD_SCHMITT_LSB)
-+#define RP1_PAD_PULL_LSB		2
-+#define RP1_PAD_PULL_MASK		GENMASK(RP1_PAD_PULL_LSB + 1, \
-+						RP1_PAD_PULL_LSB)
-+#define RP1_PAD_DRIVE_LSB		4
-+#define RP1_PAD_DRIVE_MASK		GENMASK(RP1_PAD_DRIVE_LSB + 1, \
-+						RP1_PAD_DRIVE_LSB)
-+#define RP1_PAD_IN_ENABLE_LSB		6
-+#define RP1_PAD_IN_ENABLE_MASK		BIT(RP1_PAD_IN_ENABLE_LSB)
-+#define RP1_PAD_OUT_DISABLE_LSB		7
-+#define RP1_PAD_OUT_DISABLE_MASK	BIT(RP1_PAD_OUT_DISABLE_LSB)
-+
-+#define RP1_PAD_DRIVE_2MA		0x00000000
-+#define RP1_PAD_DRIVE_4MA		BIT(4)
-+#define RP1_PAD_DRIVE_8MA		BIT(5)
-+#define RP1_PAD_DRIVE_12MA		(RP1_PAD_DRIVE_4MA | \
-+					RP1_PAD_DRIVE_8MA)
-+
-+#define FIELD_SET(_reg, _mask, _val)			\
-+	({						\
-+		_reg &= ~(_mask);				\
-+		_reg |= FIELD_PREP((_mask), (_val));	\
-+	})
-+
-+#define FUNC(f) \
-+	[func_##f] = #f
-+
-+struct rp1_iobank_desc {
-+	int min_gpio;
-+	int num_gpios;
-+	int gpio_offset;
-+	int inte_offset;
-+	int ints_offset;
-+	int rio_offset;
-+	int pads_offset;
-+};
-+
-+struct rp1_pin_info {
-+	u8 num;
-+	u8 bank;
-+	u8 offset;
-+	u8 fsel;
-+	u8 irq_type;
-+
-+	void __iomem *gpio;
-+	void __iomem *rio;
-+	void __iomem *inte;
-+	void __iomem *ints;
-+	void __iomem *pad;
-+};
-+
-+struct rp1_pinctrl {
++struct rp1_dev {
++	struct pci_dev *pdev;
 +	struct device *dev;
-+	void __iomem *gpio_base;
-+	void __iomem *rio_base;
-+	void __iomem *pads_base;
-+	int irq[RP1_NUM_BANKS];
-+	struct rp1_pin_info pins[RP1_NUM_GPIOS];
-+
-+	struct pinctrl_dev *pctl_dev;
-+	struct gpio_chip gpio_chip;
-+	struct pinctrl_gpio_range gpio_range;
-+
-+	raw_spinlock_t irq_lock[RP1_NUM_BANKS];
++	struct clk *sys_clk;
++	struct irq_domain *domain;
++	struct irq_data *pcie_irqds[64];
++	void __iomem *bar1;
++	int ovcs_id;
++	bool level_triggered_irq[RP1_ACTUAL_IRQS];
 +};
 +
-+const struct rp1_iobank_desc rp1_iobanks[RP1_NUM_BANKS] = {
-+	/*         gpio   inte    ints     rio    pads */
-+	{  0, 28, 0x0000, 0x011c, 0x0124, 0x0000, 0x0004 },
-+	{ 28,  6, 0x4000, 0x411c, 0x4124, 0x4000, 0x4004 },
-+	{ 34, 20, 0x8000, 0x811c, 0x8124, 0x8000, 0x8004 },
-+};
-+
-+static int rp1_pinconf_set(struct rp1_pin_info *pin,
-+			   unsigned int offset, unsigned long *configs,
-+			   unsigned int num_configs);
-+
-+static struct rp1_pin_info *rp1_get_pin(struct gpio_chip *chip,
-+					unsigned int offset)
++static void dump_bar(struct pci_dev *pdev, unsigned int bar)
 +{
-+	struct rp1_pinctrl *pc = gpiochip_get_data(chip);
-+
-+	if (pc && offset < RP1_NUM_GPIOS)
-+		return &pc->pins[offset];
-+	return NULL;
++	dev_info(&pdev->dev,
++		 "bar%d len 0x%llx, start 0x%llx, end 0x%llx, flags, 0x%lx\n",
++		 bar,
++		 pci_resource_len(pdev, bar),
++		 pci_resource_start(pdev, bar),
++		 pci_resource_end(pdev, bar),
++		 pci_resource_flags(pdev, bar));
 +}
 +
-+static void rp1_pad_update(struct rp1_pin_info *pin, u32 clr, u32 set)
++static void msix_cfg_set(struct rp1_dev *rp1, unsigned int hwirq, u32 value)
 +{
-+	u32 padctrl = readl(pin->pad);
-+
-+	padctrl &= ~clr;
-+	padctrl |= set;
-+
-+	writel(padctrl, pin->pad);
++	iowrite32(value, rp1->bar1 + RP1_PCIE_APBS_BASE + REG_SET + MSIX_CFG(hwirq));
 +}
 +
-+static void rp1_input_enable(struct rp1_pin_info *pin, int value)
++static void msix_cfg_clr(struct rp1_dev *rp1, unsigned int hwirq, u32 value)
 +{
-+	rp1_pad_update(pin, RP1_PAD_IN_ENABLE_MASK,
-+		       value ? RP1_PAD_IN_ENABLE_MASK : 0);
++	iowrite32(value, rp1->bar1 + RP1_PCIE_APBS_BASE + REG_CLR + MSIX_CFG(hwirq));
 +}
 +
-+static void rp1_output_enable(struct rp1_pin_info *pin, int value)
++static void rp1_mask_irq(struct irq_data *irqd)
 +{
-+	rp1_pad_update(pin, RP1_PAD_OUT_DISABLE_MASK,
-+		       value ? 0 : RP1_PAD_OUT_DISABLE_MASK);
++	struct rp1_dev *rp1 = irqd->domain->host_data;
++	struct irq_data *pcie_irqd = rp1->pcie_irqds[irqd->hwirq];
++
++	pci_msi_mask_irq(pcie_irqd);
 +}
 +
-+static u32 rp1_get_fsel(struct rp1_pin_info *pin)
++static void rp1_unmask_irq(struct irq_data *irqd)
 +{
-+	u32 ctrl = readl(pin->gpio + RP1_GPIO_CTRL);
-+	u32 oeover = FIELD_GET(RP1_GPIO_CTRL_OEOVER_MASK, ctrl);
-+	u32 fsel = FIELD_GET(RP1_GPIO_CTRL_FUNCSEL_MASK, ctrl);
++	struct rp1_dev *rp1 = irqd->domain->host_data;
++	struct irq_data *pcie_irqd = rp1->pcie_irqds[irqd->hwirq];
 +
-+	if (oeover != RP1_OEOVER_PERI || fsel >= RP1_FSEL_COUNT)
-+		fsel = RP1_FSEL_NONE;
-+
-+	return fsel;
++	pci_msi_unmask_irq(pcie_irqd);
 +}
 +
-+static void rp1_set_fsel(struct rp1_pin_info *pin, u32 fsel)
++static int rp1_irq_set_type(struct irq_data *irqd, unsigned int type)
 +{
-+	u32 ctrl = readl(pin->gpio + RP1_GPIO_CTRL);
-+
-+	if (fsel >= RP1_FSEL_COUNT)
-+		fsel = RP1_FSEL_NONE_HW;
-+
-+	rp1_input_enable(pin, 1);
-+	rp1_output_enable(pin, 1);
-+
-+	if (fsel == RP1_FSEL_NONE) {
-+		FIELD_SET(ctrl, RP1_GPIO_CTRL_OEOVER_MASK, RP1_OEOVER_DISABLE);
-+	} else {
-+		FIELD_SET(ctrl, RP1_GPIO_CTRL_OUTOVER_MASK, RP1_OUTOVER_PERI);
-+		FIELD_SET(ctrl, RP1_GPIO_CTRL_OEOVER_MASK, RP1_OEOVER_PERI);
-+	}
-+
-+	FIELD_SET(ctrl, RP1_GPIO_CTRL_FUNCSEL_MASK, fsel);
-+	writel(ctrl, pin->gpio + RP1_GPIO_CTRL);
-+}
-+
-+static int rp1_get_dir(struct rp1_pin_info *pin)
-+{
-+	return !(readl(pin->rio + RP1_RIO_OE) & (1 << pin->offset)) ?
-+		RP1_DIR_INPUT : RP1_DIR_OUTPUT;
-+}
-+
-+static void rp1_set_dir(struct rp1_pin_info *pin, bool is_input)
-+{
-+	int offset = is_input ? RP1_CLR_OFFSET : RP1_SET_OFFSET;
-+
-+	writel(1 << pin->offset, pin->rio + RP1_RIO_OE + offset);
-+}
-+
-+static int rp1_get_value(struct rp1_pin_info *pin)
-+{
-+	return !!(readl(pin->rio + RP1_RIO_IN) & (1 << pin->offset));
-+}
-+
-+static void rp1_set_value(struct rp1_pin_info *pin, int value)
-+{
-+	/* Assume the pin is already an output */
-+	writel(1 << pin->offset,
-+	       pin->rio + RP1_RIO_OUT + (value ? RP1_SET_OFFSET : RP1_CLR_OFFSET));
-+}
-+
-+static int rp1_gpio_get(struct gpio_chip *chip, unsigned int offset)
-+{
-+	struct rp1_pin_info *pin = rp1_get_pin(chip, offset);
-+	int ret;
-+
-+	if (!pin)
-+		return -EINVAL;
-+
-+	ret = rp1_get_value(pin);
-+
-+	return ret;
-+}
-+
-+static void rp1_gpio_set(struct gpio_chip *chip, unsigned int offset, int value)
-+{
-+	struct rp1_pin_info *pin = rp1_get_pin(chip, offset);
-+
-+	if (pin)
-+		rp1_set_value(pin, value);
-+}
-+
-+static int rp1_gpio_get_direction(struct gpio_chip *chip, unsigned int offset)
-+{
-+	struct rp1_pin_info *pin = rp1_get_pin(chip, offset);
-+	u32 fsel;
-+
-+	if (!pin)
-+		return -EINVAL;
-+
-+	fsel = rp1_get_fsel(pin);
-+	if (fsel != RP1_FSEL_GPIO)
-+		return -EINVAL;
-+
-+	return (rp1_get_dir(pin) == RP1_DIR_OUTPUT) ?
-+		GPIO_LINE_DIRECTION_OUT :
-+		GPIO_LINE_DIRECTION_IN;
-+}
-+
-+static int rp1_gpio_direction_input(struct gpio_chip *chip, unsigned int offset)
-+{
-+	struct rp1_pin_info *pin = rp1_get_pin(chip, offset);
-+
-+	if (!pin)
-+		return -EINVAL;
-+	rp1_set_dir(pin, RP1_DIR_INPUT);
-+	rp1_set_fsel(pin, RP1_FSEL_GPIO);
-+
-+	return 0;
-+}
-+
-+static int rp1_gpio_direction_output(struct gpio_chip *chip, unsigned int offset,
-+				     int value)
-+{
-+	struct rp1_pin_info *pin = rp1_get_pin(chip, offset);
-+
-+	if (!pin)
-+		return -EINVAL;
-+	rp1_set_value(pin, value);
-+	rp1_set_dir(pin, RP1_DIR_OUTPUT);
-+	rp1_set_fsel(pin, RP1_FSEL_GPIO);
-+
-+	return 0;
-+}
-+
-+static int rp1_gpio_set_config(struct gpio_chip *chip, unsigned int offset,
-+			       unsigned long config)
-+{
-+	struct rp1_pin_info *pin = rp1_get_pin(chip, offset);
-+	unsigned long configs[] = { config };
-+
-+	return rp1_pinconf_set(pin, offset, configs,
-+			       ARRAY_SIZE(configs));
-+}
-+
-+static const struct gpio_chip rp1_gpio_chip = {
-+	.label = MODULE_NAME,
-+	.owner = THIS_MODULE,
-+	.request = gpiochip_generic_request,
-+	.free = gpiochip_generic_free,
-+	.direction_input = rp1_gpio_direction_input,
-+	.direction_output = rp1_gpio_direction_output,
-+	.get_direction = rp1_gpio_get_direction,
-+	.get = rp1_gpio_get,
-+	.set = rp1_gpio_set,
-+	.base = -1,
-+	.set_config = rp1_gpio_set_config,
-+	.ngpio = RP1_NUM_GPIOS,
-+	.can_sleep = false,
-+};
-+
-+static void rp1_gpio_irq_handler(struct irq_desc *desc)
-+{
-+	struct gpio_chip *chip = irq_desc_get_handler_data(desc);
-+	struct irq_chip *host_chip = irq_desc_get_chip(desc);
-+	struct rp1_pinctrl *pc = gpiochip_get_data(chip);
-+	const struct rp1_iobank_desc *bank;
-+	int irq = irq_desc_get_irq(desc);
-+	unsigned long ints;
-+	int bit_pos;
-+
-+	if (pc->irq[0] == irq)
-+		bank = &rp1_iobanks[0];
-+	else if (pc->irq[1] == irq)
-+		bank = &rp1_iobanks[1];
-+	else
-+		bank = &rp1_iobanks[2];
-+
-+	chained_irq_enter(host_chip, desc);
-+
-+	ints = readl(pc->gpio_base + bank->ints_offset);
-+	for_each_set_bit(bit_pos, &ints, 32) {
-+		struct rp1_pin_info *pin = rp1_get_pin(chip, bit_pos);
-+
-+		writel(RP1_GPIO_CTRL_IRQRESET,
-+		       pin->gpio + RP1_SET_OFFSET + RP1_GPIO_CTRL);
-+		generic_handle_irq(irq_linear_revmap(pc->gpio_chip.irq.domain,
-+						     bank->gpio_offset + bit_pos));
-+	}
-+
-+	chained_irq_exit(host_chip, desc);
-+}
-+
-+static void rp1_gpio_irq_config(struct rp1_pin_info *pin, bool enable)
-+{
-+	writel(1 << pin->offset,
-+	       pin->inte + (enable ? RP1_SET_OFFSET : RP1_CLR_OFFSET));
-+	if (!enable)
-+		/* Clear any latched events */
-+		writel(RP1_GPIO_CTRL_IRQRESET,
-+		       pin->gpio + RP1_SET_OFFSET + RP1_GPIO_CTRL);
-+}
-+
-+static void rp1_gpio_irq_enable(struct irq_data *data)
-+{
-+	struct gpio_chip *chip = irq_data_get_irq_chip_data(data);
-+	unsigned int gpio = irqd_to_hwirq(data);
-+	struct rp1_pin_info *pin = rp1_get_pin(chip, gpio);
-+
-+	rp1_gpio_irq_config(pin, true);
-+}
-+
-+static void rp1_gpio_irq_disable(struct irq_data *data)
-+{
-+	struct gpio_chip *chip = irq_data_get_irq_chip_data(data);
-+	unsigned int gpio = irqd_to_hwirq(data);
-+	struct rp1_pin_info *pin = rp1_get_pin(chip, gpio);
-+
-+	rp1_gpio_irq_config(pin, false);
-+}
-+
-+static int rp1_irq_set_type(struct rp1_pin_info *pin, unsigned int type)
-+{
-+	u32 irq_flags;
++	struct rp1_dev *rp1 = irqd->domain->host_data;
++	unsigned int hwirq = (unsigned int)irqd->hwirq;
++	int ret = 0;
 +
 +	switch (type) {
-+	case IRQ_TYPE_NONE:
-+		irq_flags = 0;
-+		break;
-+	case IRQ_TYPE_EDGE_RISING:
-+		irq_flags = RP1_INT_EDGE_RISING;
-+		break;
-+	case IRQ_TYPE_EDGE_FALLING:
-+		irq_flags = RP1_INT_EDGE_FALLING;
-+		break;
-+	case IRQ_TYPE_EDGE_BOTH:
-+		irq_flags = RP1_INT_EDGE_RISING | RP1_INT_EDGE_FALLING;
-+		break;
 +	case IRQ_TYPE_LEVEL_HIGH:
-+		irq_flags = RP1_INT_LEVEL_HIGH;
++		dev_dbg(rp1->dev, "MSIX IACK EN for irq %d\n", hwirq);
++		msix_cfg_set(rp1, hwirq, MSIX_CFG_IACK_EN);
++		rp1->level_triggered_irq[hwirq] = true;
++	break;
++	case IRQ_TYPE_EDGE_RISING:
++		msix_cfg_clr(rp1, hwirq, MSIX_CFG_IACK_EN);
++		rp1->level_triggered_irq[hwirq] = false;
 +		break;
-+	case IRQ_TYPE_LEVEL_LOW:
-+		irq_flags = RP1_INT_LEVEL_LOW;
-+		break;
-+
 +	default:
-+		return -EINVAL;
++		ret = -EINVAL;
++		break;
 +	}
-+
-+	/* Clear them all */
-+	writel(RP1_INT_MASK << RP1_GPIO_EVENTS_SHIFT_RAW,
-+	       pin->gpio + RP1_CLR_OFFSET + RP1_GPIO_CTRL);
-+	/* Set those that are needed */
-+	writel(irq_flags << RP1_GPIO_EVENTS_SHIFT_RAW,
-+	       pin->gpio + RP1_SET_OFFSET + RP1_GPIO_CTRL);
-+	pin->irq_type = type;
-+
-+	return 0;
-+}
-+
-+static int rp1_gpio_irq_set_type(struct irq_data *data, unsigned int type)
-+{
-+	struct gpio_chip *chip = irq_data_get_irq_chip_data(data);
-+	unsigned int gpio = irqd_to_hwirq(data);
-+	struct rp1_pin_info *pin = rp1_get_pin(chip, gpio);
-+	struct rp1_pinctrl *pc = gpiochip_get_data(chip);
-+	int bank = pin->bank;
-+	unsigned long flags;
-+	int ret;
-+
-+	raw_spin_lock_irqsave(&pc->irq_lock[bank], flags);
-+
-+	ret = rp1_irq_set_type(pin, type);
-+	if (!ret) {
-+		if (type & IRQ_TYPE_EDGE_BOTH)
-+			irq_set_handler_locked(data, handle_edge_irq);
-+		else
-+			irq_set_handler_locked(data, handle_level_irq);
-+	}
-+
-+	raw_spin_unlock_irqrestore(&pc->irq_lock[bank], flags);
 +
 +	return ret;
 +}
 +
-+static void rp1_gpio_irq_ack(struct irq_data *data)
-+{
-+	struct gpio_chip *chip = irq_data_get_irq_chip_data(data);
-+	unsigned int gpio = irqd_to_hwirq(data);
-+	struct rp1_pin_info *pin = rp1_get_pin(chip, gpio);
-+
-+	/* Clear any latched events */
-+	writel(RP1_GPIO_CTRL_IRQRESET, pin->gpio + RP1_SET_OFFSET + RP1_GPIO_CTRL);
-+}
-+
-+static struct irq_chip rp1_gpio_irq_chip = {
-+	.name = MODULE_NAME,
-+	.irq_enable = rp1_gpio_irq_enable,
-+	.irq_disable = rp1_gpio_irq_disable,
-+	.irq_set_type = rp1_gpio_irq_set_type,
-+	.irq_ack = rp1_gpio_irq_ack,
-+	.irq_mask = rp1_gpio_irq_disable,
-+	.irq_unmask = rp1_gpio_irq_enable,
-+	.flags = IRQCHIP_IMMUTABLE,
++static struct irq_chip rp1_irq_chip = {
++	.name            = "rp1_irq_chip",
++	.irq_mask        = rp1_mask_irq,
++	.irq_unmask      = rp1_unmask_irq,
++	.irq_set_type    = rp1_irq_set_type,
 +};
 +
-+static void rp1_pull_config_set(struct rp1_pin_info *pin, unsigned int arg)
++static void rp1_chained_handle_irq(struct irq_desc *desc)
 +{
-+	u32 padctrl = readl(pin->pad);
++	unsigned int hwirq = desc->irq_data.hwirq & RP1_HW_IRQ_MASK;
++	struct rp1_dev *rp1 = irq_desc_get_handler_data(desc);
++	struct irq_chip *chip = irq_desc_get_chip(desc);
++	int virq;
 +
-+	FIELD_SET(padctrl, RP1_PAD_PULL_MASK, arg & 0x3);
-+	writel(padctrl, pin->pad);
++	chained_irq_enter(chip, desc);
++
++	virq = irq_find_mapping(rp1->domain, hwirq);
++	generic_handle_irq(virq);
++	if (rp1->level_triggered_irq[hwirq])
++		msix_cfg_set(rp1, hwirq, MSIX_CFG_IACK);
++
++	chained_irq_exit(chip, desc);
 +}
 +
-+static int rp1_pinconf_set(struct rp1_pin_info *pin, unsigned int offset,
-+			   unsigned long *configs, unsigned int num_configs)
++static int rp1_irq_xlate(struct irq_domain *d, struct device_node *node,
++			 const u32 *intspec, unsigned int intsize,
++			 unsigned long *out_hwirq, unsigned int *out_type)
 +{
-+	u32 param, arg;
-+	int i;
++	struct rp1_dev *rp1 = d->host_data;
++	struct irq_data *pcie_irqd;
++	unsigned long hwirq;
++	int pcie_irq;
++	int ret;
 +
-+	if (!pin)
-+		return -EINVAL;
++	ret = irq_domain_xlate_twocell(d, node, intspec, intsize,
++				       &hwirq, out_type);
++	if (!ret) {
++		pcie_irq = pci_irq_vector(rp1->pdev, hwirq);
++		pcie_irqd = irq_get_irq_data(pcie_irq);
++		rp1->pcie_irqds[hwirq] = pcie_irqd;
++		*out_hwirq = hwirq;
++	}
 +
-+	for (i = 0; i < num_configs; i++) {
-+		param = pinconf_to_config_param(configs[i]);
-+		arg = pinconf_to_config_argument(configs[i]);
-+
-+		switch (param) {
-+		case PIN_CONFIG_BIAS_DISABLE:
-+			rp1_pull_config_set(pin, RP1_PUD_OFF);
-+			break;
-+
-+		case PIN_CONFIG_BIAS_PULL_DOWN:
-+			rp1_pull_config_set(pin, RP1_PUD_DOWN);
-+			break;
-+
-+		case PIN_CONFIG_BIAS_PULL_UP:
-+			rp1_pull_config_set(pin, RP1_PUD_UP);
-+			break;
-+
-+		case PIN_CONFIG_INPUT_ENABLE:
-+			rp1_input_enable(pin, arg);
-+			break;
-+
-+		case PIN_CONFIG_OUTPUT_ENABLE:
-+			rp1_output_enable(pin, arg);
-+			break;
-+
-+		case PIN_CONFIG_OUTPUT:
-+			rp1_set_value(pin, arg);
-+			rp1_set_dir(pin, RP1_DIR_OUTPUT);
-+			rp1_set_fsel(pin, RP1_FSEL_GPIO);
-+			break;
-+
-+		case PIN_CONFIG_INPUT_SCHMITT_ENABLE:
-+			rp1_pad_update(pin, RP1_PAD_SCHMITT_MASK,
-+				       arg ? RP1_PAD_SCHMITT_MASK : 0);
-+			break;
-+
-+		case PIN_CONFIG_SLEW_RATE:
-+			rp1_pad_update(pin, RP1_PAD_SLEWFAST_MASK,
-+				       arg ? RP1_PAD_SLEWFAST_MASK : 0);
-+			break;
-+
-+		case PIN_CONFIG_DRIVE_STRENGTH:
-+			switch (arg) {
-+			case 2:
-+				arg = RP1_PAD_DRIVE_2MA;
-+				break;
-+			case 4:
-+				arg = RP1_PAD_DRIVE_4MA;
-+				break;
-+			case 8:
-+				arg = RP1_PAD_DRIVE_8MA;
-+				break;
-+			case 12:
-+				arg = RP1_PAD_DRIVE_12MA;
-+				break;
-+			default:
-+				return -ENOTSUPP;
-+			}
-+			rp1_pad_update(pin, RP1_PAD_DRIVE_MASK, arg);
-+			break;
-+
-+		default:
-+			return -ENOTSUPP;
-+
-+		} /* switch param type */
-+	} /* for each config */
-+
-+	return 0;
++	return ret;
 +}
 +
-+static const struct of_device_id rp1_pinctrl_match[] = {
-+	{ .compatible = "raspberrypi,rp1-gpio" },
-+	{},
++static int rp1_irq_activate(struct irq_domain *d, struct irq_data *irqd,
++			    bool reserve)
++{
++	struct rp1_dev *rp1 = d->host_data;
++	struct irq_data *pcie_irqd;
++
++	pcie_irqd = rp1->pcie_irqds[irqd->hwirq];
++	msix_cfg_set(rp1, (unsigned int)irqd->hwirq, MSIX_CFG_ENABLE);
++
++	return irq_domain_activate_irq(pcie_irqd, reserve);
++}
++
++static void rp1_irq_deactivate(struct irq_domain *d, struct irq_data *irqd)
++{
++	struct rp1_dev *rp1 = d->host_data;
++	struct irq_data *pcie_irqd;
++
++	pcie_irqd = rp1->pcie_irqds[irqd->hwirq];
++	msix_cfg_clr(rp1, (unsigned int)irqd->hwirq, MSIX_CFG_ENABLE);
++
++	return irq_domain_deactivate_irq(pcie_irqd);
++}
++
++static const struct irq_domain_ops rp1_domain_ops = {
++	.xlate      = rp1_irq_xlate,
++	.activate   = rp1_irq_activate,
++	.deactivate = rp1_irq_deactivate,
 +};
 +
-+static int rp1_pinctrl_probe(struct platform_device *pdev)
++static int rp1_probe(struct pci_dev *pdev, const struct pci_device_id *id)
 +{
 +	struct device *dev = &pdev->dev;
-+	struct device_node *np = dev->of_node;
-+	struct gpio_irq_chip *girq;
-+	struct rp1_pinctrl *pc;
-+	int err, i;
++	struct device_node *rp1_node;
++	struct reset_control *reset;
++	struct rp1_dev *rp1;
++	int err  = 0;
++	int i;
 +
-+	pc = devm_kzalloc(dev, sizeof(*pc), GFP_KERNEL);
-+	if (!pc)
++	rp1_node = dev_of_node(dev);
++	if (!rp1_node) {
++		dev_err(dev, "Missing of_node for device\n");
++		return -EINVAL;
++	}
++
++	rp1 = devm_kzalloc(&pdev->dev, sizeof(*rp1), GFP_KERNEL);
++	if (!rp1)
 +		return -ENOMEM;
 +
-+	pc->dev = dev;
-+	pc->gpio_chip = rp1_gpio_chip;
-+	pc->gpio_chip.parent = dev;
++	rp1->pdev = pdev;
++	rp1->dev = &pdev->dev;
 +
-+	pc->gpio_base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(pc->gpio_base)) {
-+		dev_err(dev, "could not get GPIO IO memory\n");
-+		return PTR_ERR(pc->gpio_base);
++	reset = devm_reset_control_get_optional_exclusive(&pdev->dev, NULL);
++	if (IS_ERR(reset))
++		return PTR_ERR(reset);
++	reset_control_reset(reset);
++
++	dump_bar(pdev, 0);
++	dump_bar(pdev, 1);
++
++	if (pci_resource_len(pdev, 1) <= 0x10000) {
++		dev_err(&pdev->dev,
++			"Not initialised - is the firmware running?\n");
++		return -EINVAL;
 +	}
 +
-+	pc->rio_base = devm_platform_ioremap_resource(pdev, 1);
-+	if (IS_ERR(pc->rio_base)) {
-+		dev_err(dev, "could not get RIO IO memory\n");
-+		return PTR_ERR(pc->rio_base);
-+	}
-+
-+	pc->pads_base = devm_platform_ioremap_resource(pdev, 2);
-+	if (IS_ERR(pc->pads_base)) {
-+		dev_err(dev, "could not get PADS IO memory\n");
-+		return PTR_ERR(pc->pads_base);
-+	}
-+
-+	for (i = 0; i < RP1_NUM_BANKS; i++) {
-+		const struct rp1_iobank_desc *bank = &rp1_iobanks[i];
-+		int j;
-+
-+		for (j = 0; j < bank->num_gpios; j++) {
-+			struct rp1_pin_info *pin =
-+				&pc->pins[bank->min_gpio + j];
-+
-+			pin->num = bank->min_gpio + j;
-+			pin->bank = i;
-+			pin->offset = j;
-+
-+			pin->gpio = pc->gpio_base + bank->gpio_offset +
-+				    j * sizeof(u32) * 2;
-+			pin->inte = pc->gpio_base + bank->inte_offset;
-+			pin->ints = pc->gpio_base + bank->ints_offset;
-+			pin->rio  = pc->rio_base + bank->rio_offset;
-+			pin->pad  = pc->pads_base + bank->pads_offset +
-+				    j * sizeof(u32);
-+		}
-+
-+		raw_spin_lock_init(&pc->irq_lock[i]);
-+	}
-+
-+	girq = &pc->gpio_chip.irq;
-+	girq->chip = &rp1_gpio_irq_chip;
-+	girq->parent_handler = rp1_gpio_irq_handler;
-+	girq->num_parents = RP1_NUM_BANKS;
-+	girq->parents = pc->irq;
-+	girq->default_type = IRQ_TYPE_NONE;
-+	girq->handler = handle_level_irq;
-+
-+	/*
-+	 * Use the same handler for all groups: this is necessary
-+	 * since we use one gpiochip to cover all lines - the
-+	 * irq handler then needs to figure out which group and
-+	 * bank that was firing the IRQ and look up the per-group
-+	 * and bank data.
-+	 */
-+	for (i = 0; i < RP1_NUM_BANKS; i++) {
-+		pc->irq[i] = irq_of_parse_and_map(np, i);
-+		if (!pc->irq[i]) {
-+			girq->num_parents = i;
-+			break;
-+		}
-+	}
-+
-+	platform_set_drvdata(pdev, pc);
-+
-+	err = devm_gpiochip_add_data(dev, &pc->gpio_chip, pc);
-+	if (err) {
-+		dev_err(dev, "could not add GPIO chip\n");
++	err = pcim_enable_device(pdev);
++	if (err < 0) {
++		dev_err(&pdev->dev, "Enabling PCI device has failed: %d",
++			err);
 +		return err;
 +	}
 +
++	rp1->bar1 = pci_iomap(pdev, 1, 0);
++	if (!rp1->bar1) {
++		dev_err(&pdev->dev, "Cannot map PCI bar\n");
++		return -EIO;
++	}
++
++	u32 dtbo_size = __dtbo_rp1_pci_end - __dtbo_rp1_pci_begin;
++	void *dtbo_start = __dtbo_rp1_pci_begin;
++
++	err = of_overlay_fdt_apply(dtbo_start, dtbo_size, &rp1->ovcs_id, rp1_node);
++	if (err)
++		goto err_unmap_bar;
++
++	pci_set_master(pdev);
++
++	err = pci_alloc_irq_vectors(pdev, RP1_IRQS, RP1_IRQS,
++				    PCI_IRQ_MSIX);
++	if (err != RP1_IRQS) {
++		dev_err(&pdev->dev, "pci_alloc_irq_vectors failed - %d\n", err);
++		goto err_unload_overlay;
++	}
++
++	pci_set_drvdata(pdev, rp1);
++	rp1->domain = irq_domain_add_linear(of_find_node_by_name(NULL, "rp1"), RP1_IRQS,
++					    &rp1_domain_ops, rp1);
++
++	for (i = 0; i < RP1_IRQS; i++) {
++		int irq = irq_create_mapping(rp1->domain, i);
++
++		if (irq < 0) {
++			dev_err(&pdev->dev, "failed to create irq mapping\n");
++			err = irq;
++			goto err_unload_overlay;
++		}
++		irq_set_chip_and_handler(irq, &rp1_irq_chip, handle_level_irq);
++		irq_set_probe(irq);
++		irq_set_chained_handler_and_data(pci_irq_vector(pdev, i),
++						 rp1_chained_handle_irq, rp1);
++	}
++
++	err = of_platform_default_populate(rp1_node, NULL, dev);
++	if (err)
++		goto err_unload_overlay;
++
 +	return 0;
++
++err_unload_overlay:
++	of_overlay_remove(&rp1->ovcs_id);
++err_unmap_bar:
++	pci_iounmap(pdev, rp1->bar1);
++
++	return err;
 +}
 +
-+static struct platform_driver rp1_pinctrl_driver = {
-+	.probe = rp1_pinctrl_probe,
-+	.driver = {
-+		.name = MODULE_NAME,
-+		.of_match_table = rp1_pinctrl_match,
-+		.suppress_bind_attrs = true,
-+	},
++static void rp1_remove(struct pci_dev *pdev)
++{
++	struct rp1_dev *rp1 = pci_get_drvdata(pdev);
++	struct device *dev = &pdev->dev;
++
++	of_platform_depopulate(dev);
++	pci_iounmap(pdev, rp1->bar1);
++	of_overlay_remove(&rp1->ovcs_id);
++
++	clk_unregister(rp1->sys_clk);
++}
++
++static const struct pci_device_id dev_id_table[] = {
++	{ PCI_DEVICE(PCI_VENDOR_ID_RPI, PCI_DEVICE_ID_RP1_C0), },
++	{ 0, }
 +};
-+builtin_platform_driver(rp1_pinctrl_driver);
++
++static struct pci_driver rp1_driver = {
++	.name		= RP1_DRIVER_NAME,
++	.id_table	= dev_id_table,
++	.probe		= rp1_probe,
++	.remove		= rp1_remove,
++};
++
++module_pci_driver(rp1_driver);
++
++MODULE_AUTHOR("Phil Elwell <phil@raspberrypi.com>");
++MODULE_DESCRIPTION("RP1 wrapper");
++MODULE_LICENSE("GPL");
+diff --git a/drivers/misc/rp1/rp1-pci.dtso b/drivers/misc/rp1/rp1-pci.dtso
+new file mode 100644
+index 000000000000..0bf2f4bb18e6
+--- /dev/null
++++ b/drivers/misc/rp1/rp1-pci.dtso
+@@ -0,0 +1,8 @@
++// SPDX-License-Identifier: (GPL-2.0 OR MIT)
++
++/* the dts overlay is included from the dts directory so
++ * it can be possible to check it with CHECK_DTBS while
++ * also compile it from the driver source directory.
++ */
++
++#include "arm64/broadcom/rp1.dtso"
+diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+index a2ce4e08edf5..8c2e6238535e 100644
+--- a/drivers/pci/quirks.c
++++ b/drivers/pci/quirks.c
+@@ -6245,6 +6245,7 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0xa76e, dpc_log_size);
+ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_XILINX, 0x5020, of_pci_make_dev_node);
+ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_XILINX, 0x5021, of_pci_make_dev_node);
+ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_REDHAT, 0x0005, of_pci_make_dev_node);
++DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_RPI, PCI_DEVICE_ID_RP1_C0, of_pci_make_dev_node);
+ 
+ /*
+  * Devices known to require a longer delay before first config space access
+diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+index e388c8b1cbc2..2120f2895bb8 100644
+--- a/include/linux/pci_ids.h
++++ b/include/linux/pci_ids.h
+@@ -2610,6 +2610,9 @@
+ #define PCI_VENDOR_ID_TEKRAM		0x1de1
+ #define PCI_DEVICE_ID_TEKRAM_DC290	0xdc29
+ 
++#define PCI_VENDOR_ID_RPI		0x1de4
++#define PCI_DEVICE_ID_RP1_C0		0x0001
++
+ #define PCI_VENDOR_ID_ALIBABA		0x1ded
+ 
+ #define PCI_VENDOR_ID_CXL		0x1e98
 -- 
 2.35.3
 
