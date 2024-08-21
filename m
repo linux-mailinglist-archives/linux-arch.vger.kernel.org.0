@@ -1,143 +1,126 @@
-Return-Path: <linux-arch+bounces-6438-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6440-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCC8A95A454
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Aug 2024 20:03:30 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CFEF695A471
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Aug 2024 20:10:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 06A9D1C22719
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Aug 2024 18:03:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 37061B21291
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Aug 2024 18:10:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 392381B2EC8;
-	Wed, 21 Aug 2024 18:03:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0A601B3B14;
+	Wed, 21 Aug 2024 18:10:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hVf6XBs6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mi8hKXWv"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02B1F7D07D;
-	Wed, 21 Aug 2024 18:03:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 780F41B2EEF;
+	Wed, 21 Aug 2024 18:10:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724263404; cv=none; b=NXuch/NubouTctiBn2In/PcAgz771ATwMwFmNzTGqjviYfsu+J/dj/qDH4Z8SsbIZmxvdjVcvI4dLIR2nTksRPq0qmzX91jYCNp/lrkBC8R/HVz6C9qxajghllLROa72BtB33KgiM/LjdNOR5QzjcE2Yka7DNCoCUdWCqsPmJhg=
+	t=1724263813; cv=none; b=pQ404HRjvn7XPOVGRNCXrqyMydY8YYl/DwPyzj4WGbAEuLzRSoVyCXGR98j9Bt5zOMrDYMeoRGMhmKW2AIVwNwpOqyQpAx0/EfCfeJychBDZJnq2xkqV438I84j/KDrK+hgyx8JL2xA5e61scBCHIMF3fCIG25b9/G+ru8GssAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724263404; c=relaxed/simple;
-	bh=/aRfrKXnSS1N7hftXMF8UQpgchZc2Ul1bFVicgzIero=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JeSFTyWybtepfIkOb135erCIv7limj2W+81DRv9mR3eC9fvykAfnLd0wbuRb24KS9UnS2vdl6gUR3Jyv4qhC37qKqVXAUuAWd0mOZYIlsou2IVHdQWjIStKrog0/EbuiPCz5N4as3qKlziO4FlbiyXA9+LIK/4Woi+anS0jIyoc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hVf6XBs6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E75F2C32781;
-	Wed, 21 Aug 2024 18:03:16 +0000 (UTC)
+	s=arc-20240116; t=1724263813; c=relaxed/simple;
+	bh=SsfSYlvMJfbrFJhxWSLRoEWcjcncMnxVxwE9E1US2+0=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=UnOTh7F8Bqsip4OX7ZDEshZpHogMYS7OUW6T+ENVVAQZIvts+qn3uQ1rawaE9etvjh9NbZ72GgUEVF1pk/c8RaR1moCATbZD/ZA4UjQX5kEieWQ566iaLDZy9LXaWHSV6DplKF0FexHuehNNrFjbsqVT2zZRndGUguVFpJuGv9o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mi8hKXWv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26FEAC4AF09;
+	Wed, 21 Aug 2024 18:10:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724263403;
-	bh=/aRfrKXnSS1N7hftXMF8UQpgchZc2Ul1bFVicgzIero=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hVf6XBs6LZ1VwE8MCvsuECUI8wDLGVGOsDoP+OXniIlNf3c8k325LY7GWi5qo07XQ
-	 L5WmJeQ22aV02dE0bx8Uv+TTVGqk392h6XEVMUcuE3/Bquc1IP3YU+Tv4lXSErAX1A
-	 tIPxc5SMCm4nwEyJW3TPX0DkImgCK/ZstcvqRamVSUaFlJI7wlo8DK+zzT1787oA5Q
-	 JymUOdFqBvriwf4scDwIi3uE8VJVvMh86PiQJ2tfnUuD/uI1YznuR8F+kaHBKgHIDU
-	 UKW/QdL/rg3e0M2U1kBKyw20f1xQDKzBhdwPOjgZjNs5tM589OUaEaken7gv5k/X4w
-	 /DkM7l6sKJTGg==
-Date: Wed, 21 Aug 2024 19:03:13 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-	Eric Biederman <ebiederm@xmission.com>,
-	Shuah Khan <shuah@kernel.org>,
-	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
-	Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>,
-	"H.J. Lu" <hjl.tools@gmail.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Florian Weimer <fweimer@redhat.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
-	Ross Burton <ross.burton@arm.com>,
-	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v10 23/40] arm64/signal: Set up and restore the GCS
- context for signal handlers
-Message-ID: <d5473c27-167f-46c3-9368-487ed4b657cf@sirena.org.uk>
-References: <20240801-arm64-gcs-v10-0-699e2bd2190b@kernel.org>
- <20240801-arm64-gcs-v10-23-699e2bd2190b@kernel.org>
- <ZsYj0YYMuX1YRBZT@arm.com>
+	s=k20201202; t=1724263813;
+	bh=SsfSYlvMJfbrFJhxWSLRoEWcjcncMnxVxwE9E1US2+0=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Mi8hKXWvAOjmdqCKmwwPBuyC/Bi6ih8OGQOxWRnoREf7UzDrED43aPxGGpuM65Q5e
+	 PCujx8KWqnrkuVLpxYriJVGOqPZ+8wfc3GdKh4jIn2YtEOi+ah6HZl/kvRWfs3/cxI
+	 idoK/rTHjBnwoapgNadhElunGQsTA8pLce86C5iLsNwUVfi4fCH6NaW2Vfnx/mHEIE
+	 cmiiHDwaROmnKcVr1+YfAxefVzg/g+yks0Nk+iPy8f9EKHEgWWdUdODMpX6OEg78wF
+	 BUK/jBh39c9QkUWK1AmQKaSFN1luClo/Xm40/YUORWOazweQe1W69LGIhbiUJIBYZn
+	 5JPMRv+hEjM3g==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id B99BDCE160F; Wed, 21 Aug 2024 11:10:12 -0700 (PDT)
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	elver@google.com
+Cc: akpm@linux-foundation.org,
+	tglx@linutronix.de,
+	peterz@infradead.org,
+	torvalds@linux-foundation.org,
+	arnd@arndb.de,
+	geert@linux-m68k.org,
+	kernel-team@meta.com,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Yujie Liu <yujie.liu@intel.com>,
+	Andi Shyti <andi.shyti@linux.intel.com>
+Subject: [PATCH v2 cmpxchg 1/3] xtensa: Emulate one-byte cmpxchg
+Date: Wed, 21 Aug 2024 11:10:09 -0700
+Message-Id: <20240821181011.2604152-1-paulmck@kernel.org>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <04a6010c-536d-4906-bf7c-b2335a2f54b0@paulmck-laptop>
+References: <04a6010c-536d-4906-bf7c-b2335a2f54b0@paulmck-laptop>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="vOVm5CyTt8nbbuUu"
-Content-Disposition: inline
-In-Reply-To: <ZsYj0YYMuX1YRBZT@arm.com>
-X-Cookie: You are false data.
+Content-Transfer-Encoding: 8bit
 
+Use the new cmpxchg_emu_u8() to emulate one-byte cmpxchg() on xtensa.
 
---vOVm5CyTt8nbbuUu
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+[ paulmck: Apply kernel test robot feedback. ]
+[ paulmck: Drop two-byte support per Arnd Bergmann feedback. ]
+[ Apply Geert Uytterhoeven feedback. ]
 
-On Wed, Aug 21, 2024 at 06:28:49PM +0100, Catalin Marinas wrote:
-> On Thu, Aug 01, 2024 at 01:06:50PM +0100, Mark Brown wrote:
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+Tested-by: Yujie Liu <yujie.liu@intel.com>
+Cc: Andi Shyti <andi.shyti@linux.intel.com>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: "Peter Zijlstra (Intel)" <peterz@infradead.org>
+---
+ arch/xtensa/Kconfig               | 1 +
+ arch/xtensa/include/asm/cmpxchg.h | 2 ++
+ 2 files changed, 3 insertions(+)
 
-> > +	ret = copy_from_user(&cap, (__user void*)gcspr_el0, sizeof(cap));
-> > +	if (ret)
-> > +		return -EFAULT;
+diff --git a/arch/xtensa/Kconfig b/arch/xtensa/Kconfig
+index f200a4ec044e6..d3db28f2f8110 100644
+--- a/arch/xtensa/Kconfig
++++ b/arch/xtensa/Kconfig
+@@ -14,6 +14,7 @@ config XTENSA
+ 	select ARCH_HAS_DMA_SET_UNCACHED if MMU
+ 	select ARCH_HAS_STRNCPY_FROM_USER if !KASAN
+ 	select ARCH_HAS_STRNLEN_USER
++	select ARCH_NEED_CMPXCHG_1_EMU
+ 	select ARCH_USE_MEMTEST
+ 	select ARCH_USE_QUEUED_RWLOCKS
+ 	select ARCH_USE_QUEUED_SPINLOCKS
+diff --git a/arch/xtensa/include/asm/cmpxchg.h b/arch/xtensa/include/asm/cmpxchg.h
+index 675a11ea8de76..95e33a913962d 100644
+--- a/arch/xtensa/include/asm/cmpxchg.h
++++ b/arch/xtensa/include/asm/cmpxchg.h
+@@ -15,6 +15,7 @@
+ 
+ #include <linux/bits.h>
+ #include <linux/stringify.h>
++#include <linux/cmpxchg-emu.h>
+ 
+ /*
+  * cmpxchg
+@@ -74,6 +75,7 @@ static __inline__ unsigned long
+ __cmpxchg(volatile void *ptr, unsigned long old, unsigned long new, int size)
+ {
+ 	switch (size) {
++	case 1:  return cmpxchg_emu_u8(ptr, old, new);
+ 	case 4:  return __cmpxchg_u32(ptr, old, new);
+ 	default: __cmpxchg_called_with_bad_pointer();
+ 		 return old;
+-- 
+2.40.1
 
-> Can the user change GCSPR_EL0 to a non-shadow-stack region, fake the
-> cap before sigreturn? copy_from_user() cannot check it's a GCS page.
-> Does it actually matter?
-
-We don't take any steps to prevent that since I'm not clear that it
-matters, as soon as userspace tries to use the non-GCS page as a GCS it
-will fault.  Given the abundance of ways in which a signal handler can
-cause a crash it didn't seem worth specific code, the cap token check is
-about protecting an actual GCS.
-
-> > +	/*
-> > +	 * Push a cap and the GCS entry for the trampoline onto the GCS.
-> > +	 */
-> > +	put_user_gcs((unsigned long)sigtramp, gcspr_el0 - 2, &ret);
-> > +	put_user_gcs(GCS_SIGNAL_CAP(gcspr_el0 - 1), gcspr_el0 - 1, &ret);
-> > +	if (ret != 0)
-> > +		return ret;
-
-> Doesn't the second put_user_gcs() override the previous ret?
-
-No, we only set ret on error - if the first one faults it'll set ret
-then the second one will either leave it unchanged or write the same
-error code depending on if it fails.  This idiom is used quite a lot in
-the signal code.
-
---vOVm5CyTt8nbbuUu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmbGK+AACgkQJNaLcl1U
-h9DN2ggAhLNXxP2D63m8tGi5TB8JVrMOEHceQoOhWbYArtPnk8DUJUwAVQKy4370
-gWRlpUv3C9Prym8J79cdGllLtJAxGtFL846FtZ4GEzCwI0h42OKyIHIK0ayYDGwT
-7mhlLJAE9x/zLEwqeSMWfUiGAUZs+B5Bcc/qe3gEkuBX9zJ1D4kkt0rUSUB8PR9+
-mb7bq8tnqBOZ2/Ys/rHd7YOVTKnL9fNb3BG6ORxTFjKI/wwea16GhNrhUMcSaGCx
-OjyC6/p6czJQmOMjRXUIRp2W8KD6YyRu8dOKy8imoKaZl7tcxZRwOC2XNWdH+9vC
-sBN7fffBdrQUaKButl4to5BBOZzO0w==
-=oJjq
------END PGP SIGNATURE-----
-
---vOVm5CyTt8nbbuUu--
 
