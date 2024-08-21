@@ -1,115 +1,126 @@
-Return-Path: <linux-arch+bounces-6411-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6412-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDEA1959EA1
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Aug 2024 15:28:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05718959EE7
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Aug 2024 15:41:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 67CB9B21306
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Aug 2024 13:28:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 381731C223B5
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Aug 2024 13:41:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D5B3199FA9;
-	Wed, 21 Aug 2024 13:28:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93D271ACDF4;
+	Wed, 21 Aug 2024 13:41:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N8y/D6aj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YA0XHROX"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E4FC19994C;
-	Wed, 21 Aug 2024 13:28:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FDBB1ABEB2;
+	Wed, 21 Aug 2024 13:41:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724246884; cv=none; b=kr04tKg/lcnmdCmy8hzVpDWA+x4ZrgTyg3+WItg0mUl1mydGDQB38TS8rwPnT4ajL9mG5Ib06AQa3wUo4ceKSS6UfjkMlPmdfseFWvScHrfp1DD1V2lD1JmRI+sGks+K+gIAFENGkiBaPqZ8WV5mR8Va3SFu+Rj045olP+rLGOY=
+	t=1724247688; cv=none; b=JHC8lToQmJoNNxmsbpu4hU1KG261M6NgCEhGn6Bokbtlryixt8XB6auILt0HChvougM8ShBlr4ugzg8BfuCECCN8fhWfG6nNdx4B3bN79V6sMOMSm6OyrjU28IET1Y3miLo4CGTcbp2BU1B0TB9s5I4ky7EDD8TFxEOb6kxVpKk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724246884; c=relaxed/simple;
-	bh=EfwypYdM33lZ/G4fq92xQyPXwP/Q8lFk9UP+Y3zqev8=;
+	s=arc-20240116; t=1724247688; c=relaxed/simple;
+	bh=eTD2Cb24CybXMxpAV7IV6bVikyFp8ac2v7wmurkqCBE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ETz4WqG+fhH3JTRrxLtLlammYzJ25doooN5qMPRErnyF0reEIRsX54sBAYRDCn7o56lSf1eWfGbNOcKi4HKMylzvoU6V1Kqjq1R4CAHx5zv9oykr6fTF7L3maCy7TomWsQgmurFg3B0jj965hb19wxDf+nRdVS7kaVX79rRADpA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N8y/D6aj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 913DFC4AF0C;
-	Wed, 21 Aug 2024 13:27:56 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=HFl+UUsuunfJPr62OJPu2RC7Gm/n25949XKx1ka25wCgaisLx5pwNpMOx7QU6s3Q0eJuSGEnDBVh3CHayAVPkjbXx+hsK5awyyz/eszkdHw0E3AXEk7bOIcCdld4Pn++/BbSse5Ezg9/Ia5FxOU1rWqy3Zg33bo0qb6KY0DNrUA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YA0XHROX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E120EC32782;
+	Wed, 21 Aug 2024 13:41:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724246882;
-	bh=EfwypYdM33lZ/G4fq92xQyPXwP/Q8lFk9UP+Y3zqev8=;
+	s=k20201202; t=1724247688;
+	bh=eTD2Cb24CybXMxpAV7IV6bVikyFp8ac2v7wmurkqCBE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=N8y/D6ajVEV0BAph5QjS9IHl8V1bvulMD2qXUH9Q329DJmK+yb2x2l0ySSjgh0jM7
-	 7/Q0QvG+wLcf6PqhaFlxQqY1ELM375gZZzB/4FykmIP405NOoDF+1h+mrRwcMBuG/0
-	 2s3YycJls0/7SB/Fbw6aGK1kbi2sSueaGCscT8OYR7I5faFBfDcygYB6qH9qeaqY08
-	 qnDenq4c3K3Mi00VqH1ClQy5fvXOIkQVAceypb2DEXf5bD2nNYSTfTPGRfGGs1QkWS
-	 denv1ouRjB1LTDk4dt3OYgly9vkwtPm1XYK8fqNcvosizMDRoo+uTa70uTUAfXRg98
-	 qI9Wpn51OmS2Q==
-Date: Wed, 21 Aug 2024 14:27:54 +0100
-From: Simon Horman <horms@kernel.org>
-To: Andrea della Porta <andrea.porta@suse.com>
-Cc: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Derek Kiernan <derek.kiernan@amd.com>,
-	Dragan Cvetic <dragan.cvetic@amd.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Saravana Kannan <saravanak@google.com>,
-	Bjorn Helgaas <bhelgaas@google.com>, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, netdev@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
-	Lee Jones <lee@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-	Stefan Wahren <wahrenst@gmx.net>
-Subject: Re: [PATCH 07/11] pinctrl: rp1: Implement RaspberryPi RP1 gpio
- support
-Message-ID: <20240821132754.GC6387@kernel.org>
-References: <cover.1724159867.git.andrea.porta@suse.com>
- <eb39a5f3cefff2a1240a18a255dac090af16f223.1724159867.git.andrea.porta@suse.com>
+	b=YA0XHROXOcQsdivO+elHDRjUSAQW6gMvqksgn9sJYx6HIQqgOSqBWvwYAKEoAudJ6
+	 jpQFknVrYgPzVDOARVuSc6ndK09miMBS/01QDO3m/u8EM9AE7JMF5GhbKwPzkFwqnw
+	 y4RvjlX8hCT1cWOdz2s5B5Hg+habrQnztB9Vn3DjTJKQfLxzs9VNsSM74lIHD/r5pY
+	 m8AgYIe8mNkTYx8Rh64Z2A5FYg/IGH8Rmd/TeKBCchC+7HTnea+t4Vt/fEOjItOCaD
+	 P8WifT5qdMaqyT/W50EYvaoxCO/vst1XsHX+DsxGESHgI2BbyBJq/FsYuxD4uzQtP/
+	 bmJqgBU9LV9bQ==
+Date: Wed, 21 Aug 2024 14:41:19 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	Ross Burton <ross.burton@arm.com>,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v10 21/40] arm64/gcs: Implement shadow stack prctl()
+ interface
+Message-ID: <ba752f63-6a6b-4353-b2c2-0531d943cfd6@sirena.org.uk>
+References: <20240801-arm64-gcs-v10-0-699e2bd2190b@kernel.org>
+ <20240801-arm64-gcs-v10-21-699e2bd2190b@kernel.org>
+ <ZsXjiTlfLE61-jJC@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="Si11auRToJrS8sAl"
+Content-Disposition: inline
+In-Reply-To: <ZsXjiTlfLE61-jJC@arm.com>
+X-Cookie: You are false data.
+
+
+--Si11auRToJrS8sAl
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <eb39a5f3cefff2a1240a18a255dac090af16f223.1724159867.git.andrea.porta@suse.com>
 
-On Tue, Aug 20, 2024 at 04:36:09PM +0200, Andrea della Porta wrote:
-> The RP1 is an MFD supporting a gpio controller and /pinmux/pinctrl.
-> Add minimum support for the gpio only portion. The driver is in
-> pinctrl folder since upcoming patches will add the pinmux/pinctrl
-> support where the gpio part can be seen as an addition.
-> 
-> Signed-off-by: Andrea della Porta <andrea.porta@suse.com>
+On Wed, Aug 21, 2024 at 01:54:33PM +0100, Catalin Marinas wrote:
 
-...
+> Otherwise it looks fine.
 
-> diff --git a/drivers/pinctrl/pinctrl-rp1.c b/drivers/pinctrl/pinctrl-rp1.c
+> Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
 
-...
+I've also added:
 
-> +const struct rp1_iobank_desc rp1_iobanks[RP1_NUM_BANKS] = {
-> +	/*         gpio   inte    ints     rio    pads */
-> +	{  0, 28, 0x0000, 0x011c, 0x0124, 0x0000, 0x0004 },
-> +	{ 28,  6, 0x4000, 0x411c, 0x4124, 0x4000, 0x4004 },
-> +	{ 34, 20, 0x8000, 0x811c, 0x8124, 0x8000, 0x8004 },
-> +};
++
++       /* Ensure we remember GCSPR_EL0 if we're disabling. */
++       if (task_gcs_el0_enabled(current))
++               current->thread.gcspr_el0 = read_sysreg_s(SYS_GCSPR_EL0);
 
-rp1_iobanks seems to only be used in this file.
-If so, it should be static.
+to handle the disable case.
 
-Flagged by Sparse.
+--Si11auRToJrS8sAl
+Content-Type: application/pgp-signature; name="signature.asc"
 
-...
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmbF7n4ACgkQJNaLcl1U
+h9Bergf+Lr+93qbWZ/k9ZOtInPd8jxasSRO+qC6wGQEBNiup/wbDIYe/v8WZVn5Z
+w4bw2cz7o7ojaKCFrw6eAoto2EKZQXDc2r5UsFegjSdYsFudCg/L7odHSXP1ac2l
+J8b/gmDEioJaw8kwgKsABb/7c2Knjpz7HxgzNTBhEV+DJ3ngHp81A7ehdvXyDLT5
+C11CbLBC6dWDVxAlFPBR+WUwuIfQLjIfbbZfCl7L0sbtkPQZUTrRN7UhC4e+Ll7x
+N01ynknfyTCaCqyfpyfuGxfi7+OKJeKZbGAcLiUvTRikhEIblv9PXLFW+FiUfNWw
+SgJ1gyR8bJSUZHgN4w2DFsl0xhPcKg==
+=tt95
+-----END PGP SIGNATURE-----
+
+--Si11auRToJrS8sAl--
 
