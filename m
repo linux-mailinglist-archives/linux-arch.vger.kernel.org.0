@@ -1,158 +1,181 @@
-Return-Path: <linux-arch+bounces-6433-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6434-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98DCA95A409
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Aug 2024 19:40:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE93A95A430
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Aug 2024 19:55:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5759B281B36
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Aug 2024 17:40:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E2D721C211B6
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Aug 2024 17:55:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5D981B2EE1;
-	Wed, 21 Aug 2024 17:40:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D01041B2EEF;
+	Wed, 21 Aug 2024 17:55:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="La+OxHUF"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8015C1B2EDE;
-	Wed, 21 Aug 2024 17:40:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E2AF1B253B;
+	Wed, 21 Aug 2024 17:55:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724262028; cv=none; b=U0Mrp16t8SNuVhKrHhAS057tCsNmBhWaRUjsvZixG9IjvbJfZ3vYT5cWjKxyx+bP3J33YoRlQ2W+6hiIN+1NJVoaivBggqrj7Sb9u0J/5+5O7OYjR+4ZpuMN9LP3vIH2xwBDC3UWsY1rqX6QFPCmrhIZTykAgwyUTXblXN1RlGg=
+	t=1724262905; cv=none; b=pV6n7HTs1fRdmrz97cWLZGygJXWyX8IikbESd+mrzxkbtZUibGMCCbjGpDcOVIvPYAvXfp8W9oC36A+9xtKBhLhNlovbSs2HmrOSoskaZXItgnqYRaai83xiikOzCPiF7yZMcqoU2L03mLy98o3TKE6CmJGDKTv9Jj+Ej8bENUg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724262028; c=relaxed/simple;
-	bh=3jSo8xTV6g9gk/XnSONwS00e5gGR/ZZ3onU+FR9wQio=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RyTxCN/8YGTCW4g6AdSboYlFeBlnO9ctQWrlWOORPeuh6AmruK8RCfO+WH0yOpz9N5J2tuCmyb+AinaSz8KhjygqasbZ8jfqf54Hn0yFLfuliFkfkKWRL5rEKaV+wXX5Eq0bSK/fkbprEXiInNlVA1j5ANUKlSKWk0Yf8d7TIys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A67B2C32781;
-	Wed, 21 Aug 2024 17:40:22 +0000 (UTC)
-Date: Wed, 21 Aug 2024 18:40:20 +0100
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-	Eric Biederman <ebiederm@xmission.com>,
-	Shuah Khan <shuah@kernel.org>,
-	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
-	Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>,
-	"H.J. Lu" <hjl.tools@gmail.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Florian Weimer <fweimer@redhat.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
-	Ross Burton <ross.burton@arm.com>,
-	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v10 24/40] arm64/signal: Expose GCS state in signal frames
-Message-ID: <ZsYmhHHmqSu7wWWW@arm.com>
-References: <20240801-arm64-gcs-v10-0-699e2bd2190b@kernel.org>
- <20240801-arm64-gcs-v10-24-699e2bd2190b@kernel.org>
+	s=arc-20240116; t=1724262905; c=relaxed/simple;
+	bh=gR41Sagi3MVianUSnce+ZoVIT1ol5TlwXr/MDVUkl4c=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LrWZxgFcFDKXIh4S29KlmYMWU/CvjHh0rla/crSCbTT/YdAQNtOQF/G3uj4ihiCA8bt924s7r2sSXByMJZ46KxvstNnGsTRgGod30IarHeDqokZoj4hUTBuYMWU2MMwoon6ejt5BwV8d4QLKzBDwoeCh8rxqLBKwgEF2LFSFUvA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=La+OxHUF; arc=none smtp.client-ip=209.85.210.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-70d22b6dab0so115588b3a.1;
+        Wed, 21 Aug 2024 10:55:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724262904; x=1724867704; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=99UTJcdmOMSq3QL9Ld/ZYDtqRpwRWCrHaSBTyLsenAI=;
+        b=La+OxHUFGPzFnuzLmMpxRdtApbmCPaO9oHbAl7DSTa0Na0Srs2QN8k+SSFiXKAdt32
+         ITwRU1QbSfFV2OA+zt4zuYDAcOmcc87DTo9c9D+uWIJJ95/O+7RZnBHLPcpcNTcgC2jS
+         HUGoKTjYgMAwqsq7eXqqx7hJ1og7UyEjUZBfsQHufFmOx+1JJf931J1wGa+DfWbWoBTo
+         5rD+7hnNQQf5oapT+I9y/d4tkUh03SlOMbXOGw/XS4RUMU0HwyaQIkWXCiyZxcLE3Bsu
+         8rbpGmpqjV5T+asqKHm3f01qdwfnBwbI46Wia6swgmgap+VCX4z3S/Q9LLEbWt1Ru7eA
+         911g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724262904; x=1724867704;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=99UTJcdmOMSq3QL9Ld/ZYDtqRpwRWCrHaSBTyLsenAI=;
+        b=BhoI7tLCIIilMX3e3+iEt+MVJn+3/sIin8wv3lE9L9R2nGXJUogWpYxxQS02dSLcRv
+         lYAxeiNqbAR3T+CYz3rxvPY3XSckUIbRexiu6NuR7saXwFEIB1XuOnomRZ7/97tJBlEG
+         XmO+s+N+I2fvgf7cm7mHmauwSGm/TBzwLRjkE8aixJFLHPASjQJykaN7hXHZYbPJDFPk
+         ZBVL1YBLFniVdlPVWfgWMMATYBU7oDo9QXjy9RWqeK7yw/iOki58IINvJktVvMDK/w5J
+         pKGoucjPe92i3KQIxJOZ87VcFPE4tDjDLE9v62XIgF97fcI6p+i2M+leqOJLEkLUexcq
+         VfRQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVVW85OFbr7OHXZ9GGyDYxk2fIX1Z8wkVZcMt7muZaHHyKO3//68TLaRqaNfN6ykYhSn9EWUZ2adV1KxuCH79s=@vger.kernel.org, AJvYcCVp3qrQwlxI9JqjVuJbpU6P7FjBa+kePvG+uWYDhfBJnyhRy+G2EQq9aPC+gIbiunKYjptUEvIdqWm8hBsQ@vger.kernel.org, AJvYcCWZkFvWbauxD2DyCBiCtATTiYmJyuorZYk+/DtPrHpjhktnyQ8v+IOHM8KmEBKr70yRdbpq8F37M6wPEft3fhGRWPUc@vger.kernel.org, AJvYcCXDwKcFLQIxDpa8pa+3lYNPo2RABVdnP7a4eWwBRWtgND8KlbSzTxVliXvbLVWBDYHtiSFRqhXMHXvB@vger.kernel.org
+X-Gm-Message-State: AOJu0YzFfOh2LVz3C+J9L69jc0A/1fjcNSjIzhLr6sMVdtxqOCk4IomW
+	i5u5tdXqRg6V2POdMz7UAn0TeMCkpWAdFFYNBcmTPGal639eR2r7vKh3qKnCVg9DMRhyxE8JLsh
+	CjwywDIwN6SrimZAB9n1CgpjO1qQ=
+X-Google-Smtp-Source: AGHT+IEzWQ9FWxtgUqDPIkbMELTDsn643+uCsx+x59lAbwOzM67Cgp8McbVys7i78Q39WJ4bizO6S55PWpHdgZM9zIQ=
+X-Received: by 2002:a05:6a00:2d90:b0:710:5243:4161 with SMTP id
+ d2e1a72fcca58-714235d73ecmr2136069b3a.5.1724262903448; Wed, 21 Aug 2024
+ 10:55:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240801-arm64-gcs-v10-24-699e2bd2190b@kernel.org>
+References: <20240816-tracepoint-v7-0-d609b916b819@google.com>
+ <20240816-tracepoint-v7-5-d609b916b819@google.com> <ZsYfAFrBFVewchGM@boqun-archlinux>
+In-Reply-To: <ZsYfAFrBFVewchGM@boqun-archlinux>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Wed, 21 Aug 2024 19:54:51 +0200
+Message-ID: <CANiq72np8GhZ4V22b7RekvQOhCbM67A-19Px2aVLgweC4Qxebg@mail.gmail.com>
+Subject: Re: [PATCH v7 5/5] rust: add arch_static_branch
+To: Boqun Feng <boqun.feng@gmail.com>
+Cc: Alice Ryhl <aliceryhl@google.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Jason Baron <jbaron@akamai.com>, Ard Biesheuvel <ardb@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
+	linux-trace-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Sean Christopherson <seanjc@google.com>, Uros Bizjak <ubizjak@gmail.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, 
+	Oliver Upton <oliver.upton@linux.dev>, Mark Rutland <mark.rutland@arm.com>, 
+	Ryan Roberts <ryan.roberts@arm.com>, Fuad Tabba <tabba@google.com>, 
+	linux-arm-kernel@lists.infradead.org, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Anup Patel <apatel@ventanamicro.com>, 
+	Andrew Jones <ajones@ventanamicro.com>, Alexandre Ghiti <alexghiti@rivosinc.com>, 
+	Conor Dooley <conor.dooley@microchip.com>, Samuel Holland <samuel.holland@sifive.com>, 
+	linux-riscv@lists.infradead.org, Huacai Chen <chenhuacai@kernel.org>, 
+	WANG Xuerui <kernel@xen0n.name>, Bibo Mao <maobibo@loongson.cn>, 
+	Tiezhu Yang <yangtiezhu@loongson.cn>, Andrew Morton <akpm@linux-foundation.org>, 
+	Tianrui Zhao <zhaotianrui@loongson.cn>, loongarch@lists.linux.dev
+Content-Type: multipart/mixed; boundary="000000000000dc2d130620353d5b"
 
-On Thu, Aug 01, 2024 at 01:06:51PM +0100, Mark Brown wrote:
-> @@ -636,6 +639,81 @@ extern int restore_zt_context(struct user_ctxs *user);
->  
->  #endif /* ! CONFIG_ARM64_SME */
->  
-> +#ifdef CONFIG_ARM64_GCS
-> +
-> +static int preserve_gcs_context(struct gcs_context __user *ctx)
-> +{
-> +	int err = 0;
-> +	u64 gcspr;
-> +
-> +	/*
-> +	 * We will add a cap token to the frame, include it in the
-> +	 * GCSPR_EL0 we report to support stack switching via
-> +	 * sigreturn.
-> +	 */
-> +	gcs_preserve_current_state();
-> +	gcspr = current->thread.gcspr_el0 - 8;
+--000000000000dc2d130620353d5b
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-We discussed briefly offline. Not a problem in this patch but
-gcs_preserve_current_state() only saves it conditionally on GCS being
-enabled for the task. However, you mentioned that the register is always
-available to the user, so I'd rather change the preserving function to
-save it unconditionally.
+On Wed, Aug 21, 2024 at 7:08=E2=80=AFPM Boqun Feng <boqun.feng@gmail.com> w=
+rote:
+>
+> Have you try this with "make O=3D<dir>"? I hit the following issue, but I
+> am rebasing on rust-dev, so I might miss something:
+>
+>         error: couldn't read ../rust/kernel/arch_static_branch_asm.rs: No=
+ such file or directory (os error 2)
+>           --> ../rust/kernel/jump_label.rs:39:17
+>            |
+>         39 | const _: &str =3D include!("arch_static_branch_asm.rs");
+>            |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            |
+>            =3D note: this error originates in the macro `include` (in Nig=
+htly builds, run with -Z macro-backtrace for more info)
+>
+>         error: aborting due to 1 previous error
 
-> +
-> +	__put_user_error(GCS_MAGIC, &ctx->head.magic, err);
-> +	__put_user_error(sizeof(*ctx), &ctx->head.size, err);
-> +	__put_user_error(gcspr, &ctx->gcspr, err);
-> +	__put_user_error(0, &ctx->reserved, err);
-> +	__put_user_error(current->thread.gcs_el0_mode,
-> +			 &ctx->features_enabled, err);
-> +
-> +	return err;
-> +}
-> +
-> +static int restore_gcs_context(struct user_ctxs *user)
-> +{
-> +	u64 gcspr, enabled;
-> +	int err = 0;
-> +
-> +	if (user->gcs_size != sizeof(*user->gcs))
-> +		return -EINVAL;
-> +
-> +	__get_user_error(gcspr, &user->gcs->gcspr, err);
-> +	__get_user_error(enabled, &user->gcs->features_enabled, err);
-> +	if (err)
-> +		return err;
-> +
-> +	/* Don't allow unknown modes */
-> +	if (enabled & ~PR_SHADOW_STACK_SUPPORTED_STATUS_MASK)
-> +		return -EINVAL;
-> +
-> +	err = gcs_check_locked(current, enabled);
-> +	if (err != 0)
-> +		return err;
-> +
-> +	/* Don't allow enabling */
-> +	if (!task_gcs_el0_enabled(current) &&
-> +	    (enabled & PR_SHADOW_STACK_ENABLE))
-> +		return -EINVAL;
+Yeah, we should use a `*TREE` everywhere. In addition, we should not
+use `SRCTREE` but `OBJTREE`. It is my fault, this comes from my
+prototype I gave Alice.
 
-We don't allow enabling and that's fine but we don't restore gcspr
-either with this early return.
+Please see the attached diff.
 
-> +
-> +	/* If we are disabling disable everything */
-> +	if (!(enabled & PR_SHADOW_STACK_ENABLE))
-> +		enabled = 0;
-> +
-> +	current->thread.gcs_el0_mode = enabled;
-> +
-> +	/*
-> +	 * We let userspace set GCSPR_EL0 to anything here, we will
-> +	 * validate later in gcs_restore_signal().
-> +	 */
-> +	current->thread.gcspr_el0 = gcspr;
-> +	write_sysreg_s(current->thread.gcspr_el0, SYS_GCSPR_EL0);
+Cheers,
+Miguel
 
-I think you should move this further up unconditionally.
+--000000000000dc2d130620353d5b
+Content-Type: text/x-patch; charset="US-ASCII"; name="objtree.diff"
+Content-Disposition: attachment; filename="objtree.diff"
+Content-Transfer-Encoding: base64
+Content-ID: <f_m045ljec0>
+X-Attachment-Id: f_m045ljec0
 
--- 
-Catalin
+ZGlmZiAtLWdpdCBhL3J1c3Qva2VybmVsL2p1bXBfbGFiZWwucnMgYi9ydXN0L2tlcm5lbC9qdW1w
+X2xhYmVsLnJzCmluZGV4IDc3NTdlNGY4ZTg1ZS4uY2NmZDIwNTg5YzIxIDEwMDY0NAotLS0gYS9y
+dXN0L2tlcm5lbC9qdW1wX2xhYmVsLnJzCisrKyBiL3J1c3Qva2VybmVsL2p1bXBfbGFiZWwucnMK
+QEAgLTM2LDcgKzM2LDcgQEAgbWFjcm9fcnVsZXMhIHN0YXRpY19rZXlfZmFsc2UgewoKIC8vLyBB
+c3NlcnQgdGhhdCB0aGUgYXNzZW1ibHkgYmxvY2sgZXZhbHVhdGVzIHRvIGEgc3RyaW5nIGxpdGVy
+YWwuCiAjW2NmZyhDT05GSUdfSlVNUF9MQUJFTCldCi1jb25zdCBfOiAmc3RyID0gaW5jbHVkZSEo
+ImFyY2hfc3RhdGljX2JyYW5jaF9hc20ucnMiKTsKK2NvbnN0IF86ICZzdHIgPSBpbmNsdWRlIShj
+b25jYXQhKGVudiEoIk9CSlRSRUUiKSwgIi9ydXN0L2tlcm5lbC9hcmNoX3N0YXRpY19icmFuY2hf
+YXNtLnJzIikpOwoKICNbbWFjcm9fZXhwb3J0XQogI1tkb2MoaGlkZGVuKV0KQEAgLTQ1LDcgKzQ1
+LDcgQEAgbWFjcm9fcnVsZXMhIHN0YXRpY19rZXlfZmFsc2UgewogbWFjcm9fcnVsZXMhIGFyY2hf
+c3RhdGljX2JyYW5jaCB7CiAgICAgKCRrZXk6cGF0aCwgJGtleXR5cDp0eSwgJGZpZWxkOmlkZW50
+LCAkYnJhbmNoOmV4cHIpID0+IHsnbXlfbGFiZWw6IHsKICAgICAgICAgJGNyYXRlOjphc20hKAot
+ICAgICAgICAgICAgaW5jbHVkZSEoY29uY2F0IShlbnYhKCJTUkNUUkVFIiksICIvcnVzdC9rZXJu
+ZWwvYXJjaF9zdGF0aWNfYnJhbmNoX2FzbS5ycyIpKTsKKyAgICAgICAgICAgIGluY2x1ZGUhKGNv
+bmNhdCEoZW52ISgiT0JKVFJFRSIpLCAiL3J1c3Qva2VybmVsL2FyY2hfc3RhdGljX2JyYW5jaF9h
+c20ucnMiKSk7CiAgICAgICAgICAgICBsX3llcyA9IGxhYmVsIHsKICAgICAgICAgICAgICAgICBi
+cmVhayAnbXlfbGFiZWwgdHJ1ZTsKICAgICAgICAgICAgIH0sCkBAIC02NSw3ICs2NSw3IEBAIG1h
+Y3JvX3J1bGVzISBhcmNoX3N0YXRpY19icmFuY2ggewogbWFjcm9fcnVsZXMhIGFyY2hfc3RhdGlj
+X2JyYW5jaCB7CiAgICAgKCRrZXk6cGF0aCwgJGtleXR5cDp0eSwgJGZpZWxkOmlkZW50LCAkYnJh
+bmNoOmV4cHIpID0+IHsnbXlfbGFiZWw6IHsKICAgICAgICAgJGNyYXRlOjphc20hKAotICAgICAg
+ICAgICAgaW5jbHVkZSEoY29uY2F0IShlbnYhKCJTUkNUUkVFIiksICIvcnVzdC9rZXJuZWwvYXJj
+aF9zdGF0aWNfYnJhbmNoX2FzbS5ycyIpKTsKKyAgICAgICAgICAgIGluY2x1ZGUhKGNvbmNhdCEo
+ZW52ISgiT0JKVFJFRSIpLCAiL3J1c3Qva2VybmVsL2FyY2hfc3RhdGljX2JyYW5jaF9hc20ucnMi
+KSk7CiAgICAgICAgICAgICBsX3llcyA9IGxhYmVsIHsKICAgICAgICAgICAgICAgICBicmVhayAn
+bXlfbGFiZWwgdHJ1ZTsKICAgICAgICAgICAgIH0sCmRpZmYgLS1naXQgYS9zY3JpcHRzL01ha2Vm
+aWxlLmJ1aWxkIGIvc2NyaXB0cy9NYWtlZmlsZS5idWlsZAppbmRleCA0ZjBmNmIxM2ViZDcuLjc0
+NmNjZTgwNTQ1ZiAxMDA2NDQKLS0tIGEvc2NyaXB0cy9NYWtlZmlsZS5idWlsZAorKysgYi9zY3Jp
+cHRzL01ha2VmaWxlLmJ1aWxkCkBAIC0yNjksNyArMjY5LDcgQEAgcnVzdF9hbGxvd2VkX2ZlYXR1
+cmVzIDo9IGFzbV9jb25zdCxhc21fZ290byxuZXdfdW5pbml0CiAjIGN1cnJlbnQgd29ya2luZyBk
+aXJlY3RvcnksIHdoaWNoIG1heSBiZSBub3QgYWNjZXNzaWJsZSBpbiB0aGUgb3V0LW9mLXRyZWUK
+ICMgbW9kdWxlcyBjYXNlLgogcnVzdF9jb21tb25fY21kID0gXAotCVNSQ1RSRUU9JChhYnNwYXRo
+ICQoc3JjdHJlZSkpIFwKKwlPQkpUUkVFPSQoYWJzcGF0aCAkKG9ianRyZWUpKSBcCiAJUlVTVF9N
+T0RGSUxFPSQobW9kZmlsZSkgJChSVVNUQ19PUl9DTElQUFkpICQocnVzdF9mbGFncykgXAogCS1a
+YWxsb3ctZmVhdHVyZXM9JChydXN0X2FsbG93ZWRfZmVhdHVyZXMpIFwKIAktWmNyYXRlLWF0dHI9
+bm9fc3RkIFwK
+--000000000000dc2d130620353d5b--
 
