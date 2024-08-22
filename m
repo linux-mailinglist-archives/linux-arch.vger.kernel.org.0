@@ -1,191 +1,93 @@
-Return-Path: <linux-arch+bounces-6507-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6508-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E996795AF0D
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Aug 2024 09:21:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D70EE95B0FC
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Aug 2024 10:59:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9664F1F266B6
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Aug 2024 07:21:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 799831F221BB
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Aug 2024 08:59:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A47D188011;
-	Thu, 22 Aug 2024 07:14:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9329E16EBED;
+	Thu, 22 Aug 2024 08:59:04 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C38C3187FEF;
-	Thu, 22 Aug 2024 07:14:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B0B219470;
+	Thu, 22 Aug 2024 08:59:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724310884; cv=none; b=u4MdGpRUMhEjvA7Yb+nsqYncTbV/+H1RmLB9XrExyuTx3BzuFQca3YSopd0UXaIMBAiV8TxJHpZJQytigrQcRkHH7W1R1n12cJT/kYFbRPKwpxCDEOVjtaR+ZXcQgTzNykp/ttA+YlCIXBkXCpfdoVuuW3nlWmB4f20tf9TSgSM=
+	t=1724317144; cv=none; b=APwsXk/lkXVLnbgnxsi+ZdbYJ8+hMuykLQG9FB+ictV/FM4Izq/kodz4MUsEa01Y6so3A6a2kQT6GOijhx0Lt8fRkjatVWdpn2xTYLD4jFmHIGj2Tgo2lyX+MqlejHkGzhEUJ9rrdV8UcHsm5DPndfcaKhPVD90AJg4OsP1NmM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724310884; c=relaxed/simple;
-	bh=yXWU/vOrVCh1tH6IvVskRabYNHCoI2MUD+0kW8f8BRY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=N2NRfjVnzkrq+s41/HWxNTmlvZjAgOKieInbMf1QybnyvJf0uLMMfxWHxibt/MtUXuwKefXjN/oVEeK7ZxdXVdFS0WU3PJiDdIY+aXYXUKfFxHnByZVe1zeOWDvQQZ+bsOkstiiYNwinL9P2eG2I1+sR3k6bZabmz4K9CnkV7p4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4WqDvS5M5gz9sTD;
-	Thu, 22 Aug 2024 09:13:40 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 5BXvRolJCPmB; Thu, 22 Aug 2024 09:13:40 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4WqDvS4Ts4z9sSy;
-	Thu, 22 Aug 2024 09:13:40 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 898D68B763;
-	Thu, 22 Aug 2024 09:13:40 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id M06ncktVG1Is; Thu, 22 Aug 2024 09:13:40 +0200 (CEST)
-Received: from PO20335.idsi0.si.c-s.fr (PO16920.IDSI0.si.c-s.fr [192.168.232.181])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 7999F8B77D;
-	Thu, 22 Aug 2024 09:13:39 +0200 (CEST)
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-To: Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	"Theodore Ts'o" <tytso@mit.edu>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>,
-	Arnd Bergmann <arnd@arndb.de>,
+	s=arc-20240116; t=1724317144; c=relaxed/simple;
+	bh=DpcDNDe+KZn/iuhwArlRSzqBJ/Xnc+TAR6oqznVkNwQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mvdGvfKVcprgHzwvOmlghkxJ8t8tPNQIK2tP07h4I1OgjK+/YDYC78oCdz3qiyIj13twSlon5xlqdoxMYOGMFkzE7bFaYhYa4zD9AU5iiLcBBkiYp8kxVUWQUBb2XhWgSUJ5K8hAcAKbmrk0QrqsCPElU0hQUmlq76deb5bcS+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35801C4AF0B;
+	Thu, 22 Aug 2024 08:58:58 +0000 (UTC)
+Date: Thu, 22 Aug 2024 09:58:55 +0100
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
 	Andrew Morton <akpm@linux-foundation.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: linuxppc-dev@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 17/17] selftests: vdso: Add support for vdso_test_random for powerpc
-Date: Thu, 22 Aug 2024 09:13:25 +0200
-Message-ID: <7a612370f645d6f8defd4dc8c1ebf31ee39dfb1f.1724309198.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <cover.1724309198.git.christophe.leroy@csgroup.eu>
-References: <cover.1724309198.git.christophe.leroy@csgroup.eu>
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	Ross Burton <ross.burton@arm.com>,
+	Yury Khrustalev <yury.khrustalev@arm.com>,
+	Wilco Dijkstra <wilco.dijkstra@arm.com>,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v11 05/39] arm64: Document boot requirements for Guarded
+ Control Stacks
+Message-ID: <Zsb9z2giUQbUTH5a@arm.com>
+References: <20240822-arm64-gcs-v11-0-41b81947ecb5@kernel.org>
+ <20240822-arm64-gcs-v11-5-41b81947ecb5@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1724310795; l=2831; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=yXWU/vOrVCh1tH6IvVskRabYNHCoI2MUD+0kW8f8BRY=; b=KS6Wqd4DIG71241Ra4HKWqyJqfA08PcnWHdqJqXSzHx1GQ2rQRMw4i3n5nKIJ8DUdMbYpgKlH PcZJDDWZcGgD4/4e4J7ugbtDnH9tX2JYCnkXxsBKExFDkk4hm1KeDA9
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240822-arm64-gcs-v11-5-41b81947ecb5@kernel.org>
 
-Add the necessary symbolic link and tell Makefile to build
-vdso_test_random for powerpc.
+On Thu, Aug 22, 2024 at 02:15:08AM +0100, Mark Brown wrote:
+> FEAT_GCS introduces a number of new system registers, we require that
+> access to these registers is not trapped when we identify that the feature
+> is present.  There is also a HCRX_EL2 control to make GCS operations
+> functional.
+> 
+> Since if GCS is enabled any function call instruction will cause a fault
+> we also require that the feature be specifically disabled, existing
+> kernels implicitly have this requirement and especially given that the
+> MMU must be disabled it is difficult to see a situation where leaving
+> GCS enabled would be reasonable.
+> 
+> Reviewed-by: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 
-In makefile, don't use $(uname_M) which is wrong when cross-building
-for powerpc on an x86_64.
-
-Implement the required VDSO_CALL macro to correctly handle errors.
-
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- tools/arch/powerpc/vdso                  |  1 +
- tools/testing/selftests/vDSO/Makefile    |  6 ++++
- tools/testing/selftests/vDSO/vdso_call.h | 40 ++++++++++++++++++++++++
- 3 files changed, 47 insertions(+)
- create mode 120000 tools/arch/powerpc/vdso
-
-diff --git a/tools/arch/powerpc/vdso b/tools/arch/powerpc/vdso
-new file mode 120000
-index 000000000000..d31004bf8f55
---- /dev/null
-+++ b/tools/arch/powerpc/vdso
-@@ -0,0 +1 @@
-+../../../arch/powerpc/kernel/vdso/
-\ No newline at end of file
-diff --git a/tools/testing/selftests/vDSO/Makefile b/tools/testing/selftests/vDSO/Makefile
-index 10ffdda3f2fa..7e7c9fd200d3 100644
---- a/tools/testing/selftests/vDSO/Makefile
-+++ b/tools/testing/selftests/vDSO/Makefile
-@@ -17,6 +17,12 @@ ifneq ($(SODIUM),)
- TEST_GEN_PROGS += vdso_test_chacha
- endif
- endif
-+ifeq ($(ARCH),powerpc)
-+TEST_GEN_PROGS += vdso_test_getrandom
-+ifneq ($(SODIUM),)
-+TEST_GEN_PROGS += vdso_test_chacha
-+endif
-+endif
- 
- CFLAGS := -std=gnu99
- 
-diff --git a/tools/testing/selftests/vDSO/vdso_call.h b/tools/testing/selftests/vDSO/vdso_call.h
-index ca5db2220925..2a33c25756dc 100644
---- a/tools/testing/selftests/vDSO/vdso_call.h
-+++ b/tools/testing/selftests/vDSO/vdso_call.h
-@@ -7,6 +7,46 @@
- #ifndef __VDSO_CALL_H__
- #define __VDSO_CALL_H__
- 
-+#ifdef __powerpc__
-+
-+#define LOADARGS_5(fn, __arg1, __arg2, __arg3, __arg4, __arg5) do { 	\
-+	_r0 = fn;							\
-+	_r3 = (long)__arg1;						\
-+	_r4 = (long)__arg2;						\
-+	_r5 = (long)__arg3;						\
-+	_r6 = (long)__arg4;						\
-+	_r7 = (long)__arg5;						\
-+} while (0)
-+
-+#define VDSO_CALL(fn, nr, args...) ({					\
-+	register void *_r0 asm ("r0");					\
-+	register long _r3 asm ("r3");					\
-+	register long _r4 asm ("r4");					\
-+	register long _r5 asm ("r5");					\
-+	register long _r6 asm ("r6");					\
-+	register long _r7 asm ("r7");					\
-+	register long _r8 asm ("r8");					\
-+	register long _rval asm ("r3");					\
-+									\
-+	LOADARGS_##nr(fn, args);					\
-+									\
-+	asm volatile(							\
-+		"	mtctr %0\n"					\
-+		"	bctrl\n"					\
-+		"	bns+	1f\n"					\
-+		"	neg	3, 3\n"					\
-+		"1:"							\
-+		: "+r" (_r0), "=r" (_r3), "+r" (_r4), "+r" (_r5),	\
-+		  "+r" (_r6), "+r" (_r7), "+r" (_r8)			\
-+		: "r" (_rval)						\
-+		: "r9", "r10", "r11", "r12", "cr0", "cr1", "cr5",	\
-+		  "cr6", "cr7", "xer", "lr", "ctr", "memory"		\
-+	);								\
-+	_rval;								\
-+})
-+
-+#else
- #define VDSO_CALL(fn, nr, args...)	fn(args)
-+#endif
- 
- #endif
--- 
-2.44.0
-
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
 
