@@ -1,48 +1,48 @@
-Return-Path: <linux-arch+bounces-6511-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6512-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 882A495B24A
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Aug 2024 11:51:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC28D95B262
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Aug 2024 11:52:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 019431F24472
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Aug 2024 09:51:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F1EA81C22AAF
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Aug 2024 09:52:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D1A6178381;
-	Thu, 22 Aug 2024 09:50:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C286317E004;
+	Thu, 22 Aug 2024 09:52:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T5X/GGVf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dh6KNaeU"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF12C17C224;
-	Thu, 22 Aug 2024 09:50:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 857E51CF8B;
+	Thu, 22 Aug 2024 09:52:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724320244; cv=none; b=FXpRBk8ocU/XdeFDZepKUZdn4gXuDymYKykrFSvcVPydkR2WRaECAP9RM0jEaqfZFJfx/WP0VVA7zXqwbb1bHzbvCUkhebPXSLofj5tWbS+0+ZXnRFEYH5uyjY2RDTFsPnzPOKYJ6l1HuxnCokbTL2orr+z2w50ZsKOCBhfxdV4=
+	t=1724320363; cv=none; b=feGPHwNkF/YC9CVGRi/JCrjJhzB+UR0zenCul7612lfw6yVwp4TqJwP9Qc9T6EzHsewZ3Y+BThqIKuhkBsHNH76Ivwqj3Ik/9pPBXSf+UkVrhSzlHu/PSlxMCmorgEPhwK35kIIqGtV2P3lGNUe2oJKQGj4jJUH291HmLGdja98=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724320244; c=relaxed/simple;
-	bh=TTvf5bOa7tlLKbNRDJ3OgK41JVPVbPXdEh6l7OW6QG8=;
+	s=arc-20240116; t=1724320363; c=relaxed/simple;
+	bh=c17xwt2hmAnmUIH5Ljz9mvg5PeMzUgVb+UvId+Q5omE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=WkY1I+Qm/Z/FRl7J+OLw4aDQ3Hkfk52PD2XWV+uoa5lRF6UTjOLxqaxOy7vw1prQhgY/acdOU3koOW+uXplzfMlhJNGDmdPSDHwcMlOcqzczGW79zRtFPUc3bEdUg4zsNqZjIGIpz0NisJ+SCITjAwUDW6fSn4FeDjzu6gokX5I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T5X/GGVf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05F3AC32782;
-	Thu, 22 Aug 2024 09:50:31 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=s4kvtF9RHAkzl7scisDz3fw329/B977jaEpXxDtvbNeisR91gUz602FdojhcaoW1Mdwo3aWvcIj0tPD+NZQJnzm8tI+gqiTUNtlSAWGVrmtGHD1Ah5lpKHScV1F0uFq+hYfe2X/XE11C30hfG4urNewM0KefPmlH2eZKDTfoZoY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dh6KNaeU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FD3FC32782;
+	Thu, 22 Aug 2024 09:52:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724320243;
-	bh=TTvf5bOa7tlLKbNRDJ3OgK41JVPVbPXdEh6l7OW6QG8=;
+	s=k20201202; t=1724320363;
+	bh=c17xwt2hmAnmUIH5Ljz9mvg5PeMzUgVb+UvId+Q5omE=;
 	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=T5X/GGVfbNIXMHeBG8cZd3alkWT88netB82MxmN3bFjBVcePJXYO9XxhIZQ6mLfxA
-	 bXV1lMoSWGVjomdqxJztWWzF29ljmyYvR+kv6fYha5OEbur0+bLf/5TBA7ApWG7e/b
-	 EVSgw17GzyXfqVldrQar9kYer771XQVr3sU/Z3Dnbgbb+TklP7hdXRBcY4d8WJSYP+
-	 wYOs2yo7hb6nL2mv+ZSXaEQkIdg16bCCfvRVIFnW+c92BDIuwMZyx4FqTkbuqCSk2J
-	 xAaJ+zb61GFnf24jBs+TPIIFniAKaaO0RX8FMJVhzuttfYsfDxyboU1z1C7w4u4SgM
-	 CR6KQWUYkEmmQ==
-Message-ID: <d97dbb0b-2e9c-4a62-b6c2-c1ec3fa1225b@kernel.org>
-Date: Thu, 22 Aug 2024 11:50:28 +0200
+	b=Dh6KNaeUzxmRVg7H844ll/9gV0K5AJ0t5YTRulJK0DHthiuskwp0Xji1RGhzUl9RI
+	 Pbl0rvajBzESq3wAweIoplTEB2dDL5l+rMIX58hedNDeXXarVuD0wazrEPaazFGJRZ
+	 V2GTTUjHP2iEIQeVhj5+nsr5UQa2XfaUFbIzaBkFO+iGphCcjiGNTAA7WkexFqQiLJ
+	 OhsVONI9C6Xn0Zr2juRhiMG5p89NyYLGlvKbrs/yn/4aaZD67RdnKATh+xT60aaY18
+	 jtcvohHkhEox+Eoz9RKRz+kqSAKya0TDBVdu/tzDdSsp/1780JAyTGQN0GI9ePVMcH
+	 mPf1RkMZxHpeQ==
+Message-ID: <399ff156-ffc9-4d50-8e5f-a86dc82da2fa@kernel.org>
+Date: Thu, 22 Aug 2024 11:52:27 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -50,9 +50,10 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 00/11] Add support for RaspberryPi RP1 PCI device using a
- DT overlay
-To: Andrea della Porta <andrea.porta@suse.com>,
+Subject: Re: [PATCH 01/11] dt-bindings: clock: Add RaspberryPi RP1 clock
+ bindings
+To: Conor Dooley <conor@kernel.org>,
+ Andrea della Porta <andrea.porta@suse.com>,
  Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
  <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
@@ -76,8 +77,9 @@ To: Andrea della Porta <andrea.porta@suse.com>,
  linux-arch@vger.kernel.org, Lee Jones <lee@kernel.org>,
  Andrew Lunn <andrew@lunn.ch>, Stefan Wahren <wahrenst@gmx.net>
 References: <cover.1724159867.git.andrea.porta@suse.com>
- <14990d25-40a2-46c0-bf94-25800f379a30@kernel.org>
- <Zsb_ZeczWd-gQ5po@apocalypse>
+ <8d7dd7ca5da41f2a96e3ef4e2e3f29fd0d71906a.1724159867.git.andrea.porta@suse.com>
+ <20240820-baritone-delegate-5711f7a0bc76@spud> <ZsTfoC3aKLdmFPCL@apocalypse>
+ <20240821-exception-nearby-5adeaaf0178b@spud> <ZscGdxgoNJrifSgk@apocalypse>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -123,187 +125,166 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <Zsb_ZeczWd-gQ5po@apocalypse>
+In-Reply-To: <ZscGdxgoNJrifSgk@apocalypse>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 22/08/2024 11:05, Andrea della Porta wrote:
-> Hi Krzysztof,
+On 22/08/2024 11:35, Andrea della Porta wrote:
+> Hi Conor,
 > 
-> On 15:42 Wed 21 Aug     , Krzysztof Kozlowski wrote:
->> On 20/08/2024 16:36, Andrea della Porta wrote:
->>> RP1 is an MFD chipset that acts as a south-bridge PCIe endpoint sporting
->>> a pletora of subdevices (i.e.  Ethernet, USB host controller, I2C, PWM, 
->>> etc.) whose registers are all reachable starting from an offset from the
->>> BAR address.  The main point here is that while the RP1 as an endpoint
->>> itself is discoverable via usual PCI enumeraiton, the devices it contains
->>> are not discoverable and must be declared e.g. via the devicetree.
+> On 12:46 Wed 21 Aug     , Conor Dooley wrote:
+>> On Tue, Aug 20, 2024 at 08:25:36PM +0200, Andrea della Porta wrote:
+>>> Hi Conor,
 >>>
->>> This patchset is an attempt to provide a minimum infrastructure to allow
->>> the RP1 chipset to be discovered and perpherals it contains to be added
->>> from a devictree overlay loaded during RP1 PCI endpoint enumeration.
->>> Followup patches should add support for the several peripherals contained
->>> in RP1.
+>>> On 17:19 Tue 20 Aug     , Conor Dooley wrote:
+>>>> On Tue, Aug 20, 2024 at 04:36:03PM +0200, Andrea della Porta wrote:
+>>>>> Add device tree bindings for the clock generator found in RP1 multi
+>>>>> function device, and relative entries in MAINTAINERS file.
+>>>>>
+>>>>> Signed-off-by: Andrea della Porta <andrea.porta@suse.com>
+>>>>> ---
+>>>>>  .../clock/raspberrypi,rp1-clocks.yaml         | 87 +++++++++++++++++++
+>>>>>  MAINTAINERS                                   |  6 ++
+>>>>>  include/dt-bindings/clock/rp1.h               | 56 ++++++++++++
+>>>>>  3 files changed, 149 insertions(+)
+>>>>>  create mode 100644 Documentation/devicetree/bindings/clock/raspberrypi,rp1-clocks.yaml
+>>>>>  create mode 100644 include/dt-bindings/clock/rp1.h
+>>>>>
+>>>>> diff --git a/Documentation/devicetree/bindings/clock/raspberrypi,rp1-clocks.yaml b/Documentation/devicetree/bindings/clock/raspberrypi,rp1-clocks.yaml
+>>>>> new file mode 100644
+>>>>> index 000000000000..b27db86d0572
+>>>>> --- /dev/null
+>>>>> +++ b/Documentation/devicetree/bindings/clock/raspberrypi,rp1-clocks.yaml
+>>>>> @@ -0,0 +1,87 @@
+>>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>>>> +%YAML 1.2
+>>>>> +---
+>>>>> +$id: http://devicetree.org/schemas/clock/raspberrypi,rp1-clocks.yaml#
+>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>>> +
+>>>>> +title: RaspberryPi RP1 clock generator
+>>>>> +
+>>>>> +maintainers:
+>>>>> +  - Andrea della Porta <andrea.porta@suse.com>
+>>>>> +
+>>>>> +description: |
+>>>>> +  The RP1 contains a clock generator designed as three PLLs (CORE, AUDIO,
+>>>>> +  VIDEO), and each PLL output can be programmed though dividers to generate
+>>>>> +  the clocks to drive the sub-peripherals embedded inside the chipset.
+>>>>> +
+>>>>> +  Link to datasheet:
+>>>>> +  https://datasheets.raspberrypi.com/rp1/rp1-peripherals.pdf
+>>>>> +
+>>>>> +properties:
+>>>>> +  compatible:
+>>>>> +    const: raspberrypi,rp1-clocks
+>>>>> +
+>>>>> +  reg:
+>>>>> +    maxItems: 1
+>>>>> +
+>>>>> +  '#clock-cells':
+>>>>> +    description:
+>>>>> +      The index in the assigned-clocks is mapped to the output clock as per
+>>>>> +      definitions in dt-bindings/clock/rp1.h.
+>>>>> +    const: 1
+>>>>> +
+>>>>> +  clocks:
+>>>>> +    maxItems: 1
+>>>>> +
+>>>>> +required:
+>>>>> +  - compatible
+>>>>> +  - reg
+>>>>> +  - '#clock-cells'
+>>>>> +  - clocks
+>>>>> +
+>>>>> +additionalProperties: false
+>>>>> +
+>>>>> +examples:
+>>>>> +  - |
+>>>>> +    #include <dt-bindings/clock/rp1.h>
+>>>>> +
+>>>>> +    rp1 {
+>>>>> +        #address-cells = <2>;
+>>>>> +        #size-cells = <2>;
+>>>>> +
+>>>>> +        rp1_clocks: clocks@18000 {
+>>>>
+>>>> The unit address does not match the reg property. I'm surprised that
+>>>> dtc doesn't complain about that.
 >>>
->>> This work is based upon dowstream drivers code and the proposal from RH
->>> et al. (see [1] and [2]). A similar approach is also pursued in [3].
+>>> Agreed. I'll update the address with the reg value in the next release
+>>>
+>>>>
+>>>>> +            compatible = "raspberrypi,rp1-clocks";
+>>>>> +            reg = <0xc0 0x40018000 0x0 0x10038>;
+>>>>
+>>>> This is a rather oddly specific size. It leads me to wonder if this
+>>>> region is inside some sort of syscon area?
+>>>
+>>> >From downstream source code and RP1 datasheet it seems that the last addressable
+>>> register is at 0xc040028014 while the range exposed through teh devicetree ends
+>>> up at 0xc040028038, so it seems more of a little safe margin. I wouldn't say it
+>>> is a syscon area since those register are quite specific for video clock
+>>> generation and not to be intended to be shared among different peripherals.
+>>> Anyway, the next register aperture is at 0xc040030000 so I would say we can 
+>>> extend the clock mapped register like the following:
+>>>
+>>> reg = <0xc0 0x40018000 0x0 0x18000>;
+>>>
+>>> if you think it is more readable.
 >>
->> Looking briefly at findings it seems this was not really tested by
->> automation and you expect reviewers to find issues which are pointed out
->> by tools. That's not nice approach. Reviewer's time is limited, while
->> tools do it for free. And the tools are free - you can use them without
->> any effort.
+>> I don't care
 > 
-> Sorry if I gave you that impression, but this is not obviously the case.
-
-Just look at number of reports... so many sparse reports that I wonder
-how it is not the case.
-
-And many kbuild reports.
-
-> I've spent quite a bit of time in trying to deliver a patchset that ease
-> your and others work, at least to the best I can. In fact, I've used many
-> of the checking facilities you mentioned before sending it, solving all
-> of the reported issues, except the ones for which there are strong reasons
-> to leave untouched, as explained below.
+> Ack.
 > 
+>>>>> +            #clock-cells = <1>;
+>>>>> +            clocks = <&clk_xosc>;
+>>>>> +
+>>>>> +            assigned-clocks = <&rp1_clocks RP1_PLL_SYS_CORE>,
+>>>
+>>>> FWIW, I don't think any of these assigned clocks are helpful for the
+>>>> example. That said, why do you need to configure all of these assigned
+>>>> clocks via devicetree when this node is the provider of them?
+>>>
+>>> Not sure to understand what you mean here, the example is there just to
+>>> show how to compile the dt node, maybe you're referring to the fact that
+>>> the consumer should setup the clock freq?
 >>
->> It does not look like you tested the DTS against bindings. Please run
->> `make dtbs_check W=1` (see
->> Documentation/devicetree/bindings/writing-schema.rst or
->> https://www.linaro.org/blog/tips-and-tricks-for-validating-devicetree-sources-with-the-devicetree-schema/
->> for instructions).
-> 
-> #> make W=1 dt_binding_check DT_SCHEMA_FILES=raspberrypi,rp1-gpio.yaml
->    CHKDT   Documentation/devicetree/bindings
->    LINT    Documentation/devicetree/bindings
->    DTEX    Documentation/devicetree/bindings/pinctrl/raspberrypi,rp1-gpio.example.dts
->    DTC_CHK Documentation/devicetree/bindings/pinctrl/raspberrypi,rp1-gpio.example.dtb
-> 
-> #> make W=1 dt_binding_check DT_SCHEMA_FILES=raspberrypi,rp1-clocks.yaml
->    CHKDT   Documentation/devicetree/bindings
->    LINT    Documentation/devicetree/bindings
->    DTEX    Documentation/devicetree/bindings/clock/raspberrypi,rp1-clocks.example.dts
->    DTC_CHK Documentation/devicetree/bindings/clock/raspberrypi,rp1-clocks.example.dtb
-> 
-> I see no issues here, in case you've found something different, I kindly ask you to post
-> the results.
-> 
-> #> make W=1 CHECK_DTBS=y broadcom/rp1.dtbo
->    DTC     arch/arm64/boot/dts/broadcom/rp1.dtbo
->    arch/arm64/boot/dts/broadcom/rp1.dtso:37.24-42.7: Warning (simple_bus_reg): /fragment@0/__overlay__/rp1@0/clk_xosc: missing or empty reg/ranges property
->    arch/arm64/boot/dts/broadcom/rp1.dtso:44.26-49.7: Warning (simple_bus_reg): /fragment@0/__overlay__/rp1@0/macb_pclk: missing or empty reg/ranges property
->    arch/arm64/boot/dts/broadcom/rp1.dtso:51.26-56.7: Warning (simple_bus_reg): /fragment@0/__overlay__/rp1@0/macb_hclk: missing or empty reg/ranges property
->    arch/arm64/boot/dts/broadcom/rp1.dtso:14.15-173.5: Warning (avoid_unnecessary_addr_size): /fragment@0/__overlay__: unnecessary #address-cells/#size-cells without "ranges", "dma-ranges" or child "reg" property 
-> 
-> I believe that These warnings are unavoidable, and stem from the fact that this
-> is quite a peculiar setup (PCI endpoint which dynamically loads platform driver
-> addressable via BAR).
-> The missing reg/ranges in the threee clocks are due to the simple-bus of the
-> containing node to which I believe they should belong: I did a test to place
-
-This is not the place where they belong. non-MMIO nodes should not be
-under simple-bus.
-
-> those clocks in the same dtso under root or /clocks node but AFAIK it doesn't
-> seems to work. I could move them in a separate dtso to be loaded before the main
-
-Well... who instantiates them? If they are in top-level, then
-CLK_OF_DECLARE which is not called at your point?
-
-You must instantiate clocks different way, since they are not part of
-"rp1". That's another bogus DT description... external oscilator is not
-part of RP1.
-
-
-> one but this is IMHO even more cumbersome than having a couple of warnings in
-> CHECK_DTBS.
-> Of course, if you have any suggestion on how to improve it I would be glad to
-> discuss.
-> About the last warning about the address/size-cells, if I drop those two lines
-> in the _overlay_ node it generates even more warning, so again it's a "don't fix"
-> one.
-> 
->>
->> Please run standard kernel tools for static analysis, like coccinelle,
->> smatch and sparse, and fix reported warnings. Also please check for
->> warnings when building with W=1. Most of these commands (checks or W=1
->> build) can build specific targets, like some directory, to narrow the
->> scope to only your code. The code here looks like it needs a fix. Feel
->> free to get in touch if the warning is not clear.
-> 
-> I didn't run those static analyzers since I've preferred a more "manual" aproach
-> by carfeully checking the code, but I agree that something can escape even the
-> more carefully executed code inspection so I will add them to my arsenal from
-> now on. Thanks for the heads up.
-
-I don't care if you do not run static analyzers if you produce good
-code. But if you produce bugs which could have been easily spotted with
-sparser, than it is different thing.
-
-Start running static checkers instead of asking reviewers to do that.
-
-> 
->>
->> Please run scripts/checkpatch.pl and fix reported warnings. Then please
->> run `scripts/checkpatch.pl --strict` and (probably) fix more warnings.
->> Some warnings can be ignored, especially from --strict run, but the code
->> here looks like it needs a fix. Feel free to get in touch if the warning
->> is not clear.
+>> I suppose, yeah. I don't think a particular configuration is relevant
+>> for the example binding, but simultaneously don't get why you are
+>> assigning the rate for clocks used by audio devices or ethernet in the
+>> clock provider node.
 >>
 > 
-> Again, most of checkpatch's complaints have been addressed, the remaining
-> ones I deemed as not worth fixing, for example:>
-> #> scripts/checkpatch.pl --strict --codespell tmp/*.patch
+> Honestly I don't have a strong preference here, I can manage to do some tests
+> moving the clock rate settings inside the consumer nodes but I kinda like
+> the curernt idea of a centralized node where clocks are setup beforehand.
+> In RP1 the clock generator and peripherals such as ethernet are all on-board
+> and cannot be rewired in any other way so the devices are not standalone
+> consumer in their own right (such it would be an ethernet chip wired to an
+> external CPU). But of course this is debatable, on the other hand the current
+> approach of provider/consumer is of course very clean. I'm just wondering
+> wthether you think I should take action on this or we can leave it as it is.
+> Please see also below.
 > 
-> WARNING: please write a help paragraph that fully describes the config symbol
-> #42: FILE: drivers/clk/Kconfig:91:
-> +config COMMON_CLK_RP1
-> +       tristate "Raspberry Pi RP1-based clock support"
-> +       depends on PCI || COMPILE_TEST
-> +       depends on COMMON_CLK
-> +       help
-> +         Enable common clock framework support for Raspberry Pi RP1.
-> +         This mutli-function device has 3 main PLLs and several clock
-> +         generators to drive the internal sub-peripherals.
-> +
+>>> Consider that the rp1-clocks
+>>> is coupled to the peripherals contained in the same RP1 chip so there is
+>>> not much point in letting the peripherals set the clock to their leisure.
+>>
+>> How is that any different to the many other SoCs in the kernel?
 > 
-> I don't understand this warning, the paragraph is there and is more or less similar
-> to many in the same file that are already upstream. Checkpatch bug?
+> In fact, it isn't. Please take a look at:
+>  
+> arch/arm/boot/dts/st/stm32mp15xx-dhcom-som.dtsi
+> arch/arm/boot/dts/ti/omap/omap44xx-clocks.dtsi
+> arch/arm/boot/dts/ti/omap/dra7xx-clocks.dtsi
+> arch/arm/boot/dts/nxp/imx/imx7d-zii-rpu2.dts
 > 
-> 
-> CHECK: Alignment should match open parenthesis
-> #1541: FILE: drivers/clk/clk-rp1.c:1470:
-> +       if (WARN_ON_ONCE(clock_data->num_std_parents > AUX_SEL &&
-> +           strcmp("-", clock_data->parents[AUX_SEL])))
-> 
-> This would have worsen the code readability.
-> 
-> 
-> WARNING: ENOTSUPP is not a SUSV4 error code, prefer EOPNOTSUPP
-> #673: FILE: drivers/pinctrl/pinctrl-rp1.c:600:
-> +                               return -ENOTSUPP;
-> 
-> This I must investigate: I've already tried to fix it before sending the patchset
-> but for some reason it wouldn't work, so I planned to fix it in the upcoming 
-> releases.
-> 
-> 
-> WARNING: externs should be avoided in .c files
-> #331: FILE: drivers/misc/rp1/rp1-pci.c:58:
-> +extern char __dtbo_rp1_pci_begin[];
-> 
-> True, but in this case we don't have a symbol that should be exported to other
-> translation units, it just needs to be referenced inside the driver and
-> consumed locally. Hence it would be better to place the extern in .c file.
-> 
-> 
-> Apologies for a couple of other warnings that I could have seen in the first
-> place, but honestly they don't seems to be a big deal (one typo and on over
-> 100 chars comment, that will be fixed in next patch version). 
+> and probably many others... they use the same approach, so I assumed it is at
+> least reasonable to assign the clock rate this way.
 
-Again, judging by number of reports from checkers that is a big deal,
-because it is your task to run the tools.
+Please do not bring some ancient DTS, not really worked on, as example.
+stm32 could is moderately recent but dra and omap are not.
 
 Best regards,
 Krzysztof
