@@ -1,35 +1,35 @@
-Return-Path: <linux-arch+bounces-6516-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6517-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E4BD95B2C4
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Aug 2024 12:20:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCE8795B3D4
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Aug 2024 13:30:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D1D671C22CD6
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Aug 2024 10:20:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 927C51F21555
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Aug 2024 11:30:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 553A217DFE8;
-	Thu, 22 Aug 2024 10:19:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B9721C6F7B;
+	Thu, 22 Aug 2024 11:30:13 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2594E14F9DA;
-	Thu, 22 Aug 2024 10:19:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24F621A2C10;
+	Thu, 22 Aug 2024 11:30:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724321999; cv=none; b=l2YRJ95h3hknl/aJqDCA2EhBlIJ9bw4MY9qyB13uPCVCCMfFcAf0IY35PS4rPq6UW2J1Ld+RYvw5iOY3ZOjTKm5fU1HPlnGE6YYJ8LUTjSTJ4IJ5xNtS9fix6fgT24khryNaFmOIHN5GLE0VPshstDwEiJrok1M25GI5GYUk0zk=
+	t=1724326213; cv=none; b=k4iZstPRHIoxTpeJeEMqMSzduv2vcpXxgU1qcCvOJR7wNJcn8opMSWzrv+5xl24TL3ZzQDDXwthfYxdMRjojqcXq86nq9pgjdNh8jLNJhkLkq/JR6Y0OOvYVfaZgfIx042vWVfIguuWdVQIHpUuSAN8OfwaQx6gTFVQKkefYY+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724321999; c=relaxed/simple;
-	bh=EKZr39InrxJs348PMtmf9ETHw+B/7T2Vh8xHcpRmmoQ=;
+	s=arc-20240116; t=1724326213; c=relaxed/simple;
+	bh=BDrs6Un52wYeKJaaHzXRq/2axxKAwlrLJwTQCz0kT6M=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XJZSsnJ3imtC3alLBS6o1YozqRtyUrPTf6wnmua0z6lN/VOmmqFu2EBK68UL8CUm2UXiBto6OdhzO0AqSWDHJ/kukZjpWUDPEft9rlx59KlIhE6gnmg1e3/NMaopZZXoQrrc7+D1icKc4WpqSblmH7b7+abtFJ4TCw+/NAcDcro=
+	 Content-Type:Content-Disposition:In-Reply-To; b=B723+2i+PMNAJMx9jGVZ3vCKGMXYj+1P0ClQOpJvzNDQ3Vg3Iu7UG8cMf90zRA6ZP3YxUgDrv7DeX0m/a+4oDb064p9+EDP4H/JStt/D1nxRvP3nWmZSSjBzrbSZfsRRoY9vadszX/X/dCJLHFrWR3Lw3qHj5HgQIjLfgEgfK3E=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEBE0C32782;
-	Thu, 22 Aug 2024 10:19:52 +0000 (UTC)
-Date: Thu, 22 Aug 2024 11:19:50 +0100
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E549C32782;
+	Thu, 22 Aug 2024 11:30:06 +0000 (UTC)
+Date: Thu, 22 Aug 2024 12:30:04 +0100
 From: Catalin Marinas <catalin.marinas@arm.com>
 To: Mark Brown <broonie@kernel.org>
 Cc: Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
@@ -59,10 +59,10 @@ Cc: Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
 	linux-arch@vger.kernel.org, linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v11 14/39] arm64/mm: Map pages for guarded control stack
-Message-ID: <ZscQxkigY0uNM6Xc@arm.com>
+Subject: Re: [PATCH v11 16/39] arm64/idreg: Add overrride for GCS
+Message-ID: <ZschPLEzEq2dOpgN@arm.com>
 References: <20240822-arm64-gcs-v11-0-41b81947ecb5@kernel.org>
- <20240822-arm64-gcs-v11-14-41b81947ecb5@kernel.org>
+ <20240822-arm64-gcs-v11-16-41b81947ecb5@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -71,60 +71,14 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240822-arm64-gcs-v11-14-41b81947ecb5@kernel.org>
+In-Reply-To: <20240822-arm64-gcs-v11-16-41b81947ecb5@kernel.org>
 
-On Thu, Aug 22, 2024 at 02:15:17AM +0100, Mark Brown wrote:
-> diff --git a/arch/arm64/include/asm/mman.h b/arch/arm64/include/asm/mman.h
-> index c21849ffdd88..37dfd2882f04 100644
-> --- a/arch/arm64/include/asm/mman.h
-> +++ b/arch/arm64/include/asm/mman.h
-> @@ -61,6 +61,15 @@ static inline bool arch_validate_flags(unsigned long vm_flags)
->  			return false;
->  	}
->  
-> +	if (system_supports_gcs() && (vm_flags & VM_SHADOW_STACK)) {
-> +		/* An executable GCS isn't a good idea. */
-> +		if (vm_flags & VM_EXEC)
-> +			return false;
-
-Later we should look at clear VM_MAYEXEC in the core code (if the x86
-folk agree).
-
-> +
-> +		/* The memory management core should prevent this */
-> +		VM_WARN_ON(vm_flags & VM_SHARED);
-> +	}
-> +
->  	return true;
->  
->  }
-> diff --git a/arch/arm64/mm/mmap.c b/arch/arm64/mm/mmap.c
-> index 642bdf908b22..3ed63fc8cd0a 100644
-> --- a/arch/arm64/mm/mmap.c
-> +++ b/arch/arm64/mm/mmap.c
-> @@ -83,9 +83,17 @@ arch_initcall(adjust_protection_map);
->  
->  pgprot_t vm_get_page_prot(unsigned long vm_flags)
->  {
-> -	pteval_t prot = pgprot_val(protection_map[vm_flags &
-> +	pteval_t prot;
-> +
-> +	/* Short circuit GCS to avoid bloating the table. */
-> +	if (system_supports_gcs() && (vm_flags & VM_SHADOW_STACK)) {
-> +		prot = _PAGE_GCS_RO;
-> +	} else {
-> +		prot = pgprot_val(protection_map[vm_flags &
->  				   (VM_READ|VM_WRITE|VM_EXEC|VM_SHARED)]);
-> +	}
->  
-> +	/* VM_ARM64_BTI on a GCS is rejected in arch_validate_flags() */
-
-Not anymore.
-
->  	if (vm_flags & VM_ARM64_BTI)
->  		prot |= PTE_GP;
-
-Other than the comment above, it looks good.
+On Thu, Aug 22, 2024 at 02:15:19AM +0100, Mark Brown wrote:
+> Hook up an override for GCS, allowing it to be disabled from the command
+> line by specifying arm64.nogcs in case there are problems.
+> 
+> Reviewed-by: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 
 Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
 
