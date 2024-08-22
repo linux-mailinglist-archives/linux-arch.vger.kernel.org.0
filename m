@@ -1,245 +1,131 @@
-Return-Path: <linux-arch+bounces-6532-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6533-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D179B95B8E2
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Aug 2024 16:47:01 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0886495B9FB
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Aug 2024 17:21:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 94E6AB25ABC
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Aug 2024 14:46:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DC77CB227C6
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Aug 2024 15:21:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7359D1CC167;
-	Thu, 22 Aug 2024 14:46:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B88DF181B86;
+	Thu, 22 Aug 2024 15:21:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MNFLc+oB"
+	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="Nb3175Ni"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-fw-52003.amazon.com (smtp-fw-52003.amazon.com [52.119.213.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C5D21CC165;
-	Thu, 22 Aug 2024 14:46:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6570D2C87A;
+	Thu, 22 Aug 2024 15:21:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.119.213.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724337977; cv=none; b=YoLGr5MXW7GqwsponRQj72s9ZFq+u/TeN/Fadqhd71ysol7KNXLUS1ieEaveU/dd1PP8QNBeter4Qa9GpGClqOajwdhrlqvYB7lwlRlFlcjneVPTqz1QIV5S3zGaGTCiCk5luvufc/2YSUe8syqszXpjdoChyXj4Lw6kFrBBB+g=
+	t=1724340077; cv=none; b=OKS6VDokbvBVkGPHL0j3/qg1VSJPhxwyPXXdoN5qUSeXdp4mNamARu2YhgqxTXQUmpwcUO2STYNTjeM86Bp8ugpiBxc+llos8LKsccW/BagKdAL8OVeWa0kduZalqlCE93yW9PDyeb3wJkEps/gu3RJuHg4mrWG8xX7iKCS1SK8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724337977; c=relaxed/simple;
-	bh=5v3tCV9kMZOqOSCUGiBY/lU7WWrnzRK+cImVi7EnQ2g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=liOE4arVZsu6cySv5L6dU5pCZaaxB+Kqbtz9uKSgr7RV/uvnFzPHGaCW71HQtTdCpyra4zamr7m6F+1MH/Ue5jjp4T9nrBRjnK/p4KD2aJuD4Fvclcfp9e8AR9AQpKZBAH3f6QGv6a3IjGhDhkkIHQVcII6UFErMbbWx/63krlo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MNFLc+oB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 037FAC32782;
-	Thu, 22 Aug 2024 14:46:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724337976;
-	bh=5v3tCV9kMZOqOSCUGiBY/lU7WWrnzRK+cImVi7EnQ2g=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=MNFLc+oBwZiyAhoYsiKONffoxs2QdCPy30fTTuweAnZ8dprMTHoUoBmLrBBidba2R
-	 wooagB8un4vGmgm3KJHOW3WlTydxZ/U/k2tjiQOTBl3wiuDmF8Cw9yH0tF+2PjUESw
-	 L2xnDiQjpXFlcZ9nRc2n0vyXxdbTAg5a9U63LkEkun85eZz2P933i7QvOjlr9yuY9g
-	 rdGG+I2gIDze3tAY2/Gsztj82ylykPrRTRWzsLsBDLbWKAaFWV0OcBU9oGD0Df69t2
-	 7Rt197l5qz85/AfgNh53SPg+mu/EgnL+3u7mMCiUpRq+5oTa003Vk600tUHL1pEk21
-	 E0Bo8KEtzQgAg==
-Message-ID: <98ec373b-7c7d-4775-b166-9be1e1b3eda1@kernel.org>
-Date: Thu, 22 Aug 2024 16:46:07 +0200
+	s=arc-20240116; t=1724340077; c=relaxed/simple;
+	bh=0ebK4nIoa5BOEpjmy0XRvJ7VKPjWzhDV62tWEIf3CvI=;
+	h=MIME-Version:Content-Type:Date:Message-ID:Subject:From:To:CC:
+	 References:In-Reply-To; b=f3cMRQPypWpP9xBgt2Yu3WsqFxPxlPIVUBlPzi4r5chT5co6HVQFM+lhN+IPx9Ez+ChreuQ7S6v1K/L3Pu2qKWi+WFkOQSz4DDjp4IPULbxANbZ5qD746M/RFiqvLD4ttxvY45XQ859TGj7h1KUI+TiXDKztwg96w3KGefUqf88=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.es; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=Nb3175Ni; arc=none smtp.client-ip=52.119.213.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.es
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1724340076; x=1755876076;
+  h=mime-version:content-transfer-encoding:date:message-id:
+   subject:from:to:cc:references:in-reply-to;
+  bh=f2eZRkmfeS+Cis+NAGo9bRj42tCz3s9a2o3q7s6DBDI=;
+  b=Nb3175NisnR/bLRTZF5JH6RsxlhnLRl4jkdVvDYmOEDpb1BAzPLVGMhd
+   riJlEe8TVeazzg14jUnoxOq6nFTd/eNN7MtsOZr1T0Iw32dIZBRS+bclh
+   NcMXkPQJLulj8VcPAjbLFUiAokMerKtGAtuY912QW53BvmS0BQ+GL9U/5
+   A=;
+X-IronPort-AV: E=Sophos;i="6.10,167,1719878400"; 
+   d="scan'208";a="20619224"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO smtpout.prod.us-east-1.prod.farcaster.email.amazon.dev) ([10.43.8.6])
+  by smtp-border-fw-52003.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2024 15:21:13 +0000
+Received: from EX19MTAEUA001.ant.amazon.com [10.0.17.79:7014]
+ by smtpin.naws.eu-west-1.prod.farcaster.email.amazon.dev [10.0.33.212:2525] with esmtp (Farcaster)
+ id a3167566-1ec3-4ce8-b883-c56528e2878a; Thu, 22 Aug 2024 15:21:12 +0000 (UTC)
+X-Farcaster-Flow-ID: a3167566-1ec3-4ce8-b883-c56528e2878a
+Received: from EX19D004EUC001.ant.amazon.com (10.252.51.190) by
+ EX19MTAEUA001.ant.amazon.com (10.252.50.192) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
+ Thu, 22 Aug 2024 15:21:11 +0000
+Received: from localhost (10.13.235.138) by EX19D004EUC001.ant.amazon.com
+ (10.252.51.190) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34; Thu, 22 Aug 2024
+ 15:21:05 +0000
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 08/11] misc: rp1: RaspberryPi RP1 misc driver
-To: Andrea della Porta <andrea.porta@suse.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Florian Fainelli <florian.fainelli@broadcom.com>,
- Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>,
- Linus Walleij <linus.walleij@linaro.org>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Derek Kiernan <derek.kiernan@amd.com>, Dragan Cvetic
- <dragan.cvetic@amd.com>, Arnd Bergmann <arnd@arndb.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Nicolas Ferre <nicolas.ferre@microchip.com>,
- Claudiu Beznea <claudiu.beznea@tuxon.dev>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Saravana Kannan <saravanak@google.com>, Bjorn Helgaas <bhelgaas@google.com>,
- linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
- linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
- netdev@vger.kernel.org, linux-pci@vger.kernel.org,
- linux-arch@vger.kernel.org, Lee Jones <lee@kernel.org>,
- Andrew Lunn <andrew@lunn.ch>, Stefan Wahren <wahrenst@gmx.net>
-References: <cover.1724159867.git.andrea.porta@suse.com>
- <5954e4dccc0e158cf434d2c281ad57120538409b.1724159867.git.andrea.porta@suse.com>
- <lrv7cpbt2n7eidog5ydhrbyo5se5l2j23n7ljxvojclnhykqs2@nfeu4wpi2d76>
- <400486cd-e23c-4501-98c0-aa999aa45f75@kernel.org>
- <ZsdMLgf2U-CRpnH4@apocalypse>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <ZsdMLgf2U-CRpnH4@apocalypse>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+Date: Thu, 22 Aug 2024 15:21:02 +0000
+Message-ID: <D3MJJCTNY7OM.WOB5W8AVBH9G@amazon.com>
+Subject: Re: [PATCH 16/18] KVM: x86: Take mem attributes into account when
+ faulting memory
+From: Nicolas Saenz Julienne <nsaenz@amazon.com>
+To: Nicolas Saenz Julienne <nsaenz@amazon.com>,
+	<linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>
+CC: <pbonzini@redhat.com>, <seanjc@google.com>, <vkuznets@redhat.com>,
+	<linux-doc@vger.kernel.org>, <linux-hyperv@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
+	<graf@amazon.de>, <dwmw2@infradead.org>, <pdurrant@amazon.com>,
+	<mlevitsk@redhat.com>, <jgowans@amazon.com>, <corbet@lwn.net>,
+	<decui@microsoft.com>, <tglx@linutronix.de>, <mingo@redhat.com>,
+	<bp@alien8.de>, <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+	<amoorthy@google.com>
+X-Mailer: aerc 0.18.2-22-gfff69046b02f-dirty
+References: <20240609154945.55332-1-nsaenz@amazon.com>
+ <20240609154945.55332-17-nsaenz@amazon.com>
+In-Reply-To: <20240609154945.55332-17-nsaenz@amazon.com>
+X-ClientProxiedBy: EX19D043UWA003.ant.amazon.com (10.13.139.31) To
+ EX19D004EUC001.ant.amazon.com (10.252.51.190)
 
-On 22/08/2024 16:33, Andrea della Porta wrote:
-> Hi Krzysztof,
-> 
-> On 16:20 Wed 21 Aug     , Krzysztof Kozlowski wrote:
->> On 21/08/2024 10:38, Krzysztof Kozlowski wrote:
->>> On Tue, Aug 20, 2024 at 04:36:10PM +0200, Andrea della Porta wrote:
->>
->> ...
->>
->>>>  drivers/misc/Kconfig                  |   1 +
->>>>  drivers/misc/Makefile                 |   1 +
->>>>  drivers/misc/rp1/Kconfig              |  20 ++
->>>>  drivers/misc/rp1/Makefile             |   3 +
->>>>  drivers/misc/rp1/rp1-pci.c            | 333 ++++++++++++++++++++++++++
->>>>  drivers/misc/rp1/rp1-pci.dtso         |   8 +
->>>>  drivers/pci/quirks.c                  |   1 +
->>>>  include/linux/pci_ids.h               |   3 +
->>>>  10 files changed, 524 insertions(+)
->>>>  create mode 100644 arch/arm64/boot/dts/broadcom/rp1.dtso
->>>>  create mode 100644 drivers/misc/rp1/Kconfig
->>>>  create mode 100644 drivers/misc/rp1/Makefile
->>>>  create mode 100644 drivers/misc/rp1/rp1-pci.c
->>>>  create mode 100644 drivers/misc/rp1/rp1-pci.dtso
->>>>
->>>> diff --git a/MAINTAINERS b/MAINTAINERS
->>>> index 67f460c36ea1..1359538b76e8 100644
->>>> --- a/MAINTAINERS
->>>> +++ b/MAINTAINERS
->>>> @@ -19119,9 +19119,11 @@ F:	include/uapi/linux/media/raspberrypi/
->>>>  RASPBERRY PI RP1 PCI DRIVER
->>>>  M:	Andrea della Porta <andrea.porta@suse.com>
->>>>  S:	Maintained
->>>> +F:	arch/arm64/boot/dts/broadcom/rp1.dtso
->>>>  F:	Documentation/devicetree/bindings/clock/raspberrypi,rp1-clocks.yaml
->>>>  F:	Documentation/devicetree/bindings/pinctrl/raspberrypi,rp1-gpio.yaml
->>>>  F:	drivers/clk/clk-rp1.c
->>>> +F:	drivers/misc/rp1/
->>>>  F:	drivers/pinctrl/pinctrl-rp1.c
->>>>  F:	include/dt-bindings/clock/rp1.h
->>>>  F:	include/dt-bindings/misc/rp1.h
->>>> diff --git a/arch/arm64/boot/dts/broadcom/rp1.dtso b/arch/arm64/boot/dts/broadcom/rp1.dtso
->>>> new file mode 100644
->>>> index 000000000000..d80178a278ee
->>>> --- /dev/null
->>>> +++ b/arch/arm64/boot/dts/broadcom/rp1.dtso
->>>> @@ -0,0 +1,152 @@
->>>> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
->>>> +
->>>> +#include <dt-bindings/gpio/gpio.h>
->>>> +#include <dt-bindings/interrupt-controller/irq.h>
->>>> +#include <dt-bindings/clock/rp1.h>
->>>> +#include <dt-bindings/misc/rp1.h>
->>>> +
->>>> +/dts-v1/;
->>>> +/plugin/;
->>>> +
->>>> +/ {
->>>> +	fragment@0 {
->>>> +		target-path="";
->>>> +		__overlay__ {
->>>> +			#address-cells = <3>;
->>>> +			#size-cells = <2>;
->>>> +
->>>> +			rp1: rp1@0 {
->>>> +				compatible = "simple-bus";
->>>> +				#address-cells = <2>;
->>>> +				#size-cells = <2>;
->>>> +				interrupt-controller;
->>>> +				interrupt-parent = <&rp1>;
->>>> +				#interrupt-cells = <2>;
->>>> +
->>>> +				// ranges and dma-ranges must be provided by the includer
->>>> +				ranges = <0xc0 0x40000000
->>>> +					  0x01/*0x02000000*/ 0x00 0x00000000
->>>> +					  0x00 0x00400000>;
->>>
->>> Are you 100% sure you do not have here dtc W=1 warnings?
->>
->> One more thing, I do not see this overlay applied to any target, which
->> means it cannot be tested. You miss entry in Makefile.
->>
-> 
-> The dtso is intended to be built from driver/misc/rp1/Makefile as it will
-> be included in the driver obj:
-> 
-> --- /dev/null
-> +++ b/drivers/misc/rp1/Makefile
-> @@ -0,0 +1,3 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +rp1-pci-objs                   := rp1-pci.o rp1-pci.dtbo.o
-> +obj-$(CONFIG_MISC_RP1)         += rp1-pci.o
-> 
-> and not as part of the dtb system, hence it's m issing in
-> arch/arm64/boot/dts/broadcom/Makefile.
-> 
-> On the other hand:
-> 
-> #> make W=1 CHECK_DTBS=y broadcom/rp1.dtbo
->   DTC     arch/arm64/boot/dts/broadcom/rp1.dtbo
-> arch/arm64/boot/dts/broadcom/rp1.dtso:37.24-42.7: Warning (simple_bus_reg): /fragment@0/__overlay__/rp1@0/clk_xosc: missing or empty reg/ranges property
-> arch/arm64/boot/dts/broadcom/rp1.dtso:44.26-49.7: Warning (simple_bus_reg): /fragment@0/__overlay__/rp1@0/macb_pclk: missing or empty reg/ranges property
-> arch/arm64/boot/dts/broadcom/rp1.dtso:51.26-56.7: Warning (simple_bus_reg): /fragment@0/__overlay__/rp1@0/macb_hclk: missing or empty reg/ranges property
-> arch/arm64/boot/dts/broadcom/rp1.dtso:14.15-173.5: Warning (avoid_unnecessary_addr_size): /fragment@0/__overlay__: unnecessary #address-cells/#size-cells without "ranges", "dma-ranges" or child "reg" property
-> 
-> seems to do the checks, unless I'm missing something.
+On Sun Jun 9, 2024 at 3:49 PM UTC, Nicolas Saenz Julienne wrote:
+> Take into account access restrictions memory attributes when faulting
+> guest memory. Prohibited memory accesses will cause an user-space fault
+> exit.
+>
+> Additionally, bypass a warning in the !tdp case. Access restrictions in
+> guest page tables might not necessarily match the host pte's when memory
+> attributes are in use.
+>
+> Signed-off-by: Nicolas Saenz Julienne <nsaenz@amazon.com>
 
-Yeah, there is still no target which applies the overlay, so no one can
-tell whether it applies cleanly or not. You can only test single
-overlay, but it is expected to test each overlay being applied to chosen
-DTB.
+I now realize that only taking into account memory attributes during
+faults isn't good enough for VSM. We should check the attributes anytime
+KVM takes GPAs as input for any action initiated by the guest. If the
+memory attributes are incompatible with such action, it should be
+stopped. Failure to do so opens side channels that unprivileged VTLs can
+abuse to infer information about privileged VTL. Some examples I came up
+with:
+- Guest page walks: VTL0 could install malicious directory entries that
+  point to GPAs only visible to VTL1. KVM will happily continue the
+  walk. Among other things, this could be use to infer VTL1's GVA->GPA
+  mappings.
+- PV interfaces like the Hyper-V TSC page or VP assist page, could be
+  used to modify portions of VTL1 memory.
+- Hyper-V hypercalls that take GPAs as input/output can be abused in a
+  myriad of ways. Including ones that exit into user-space.
 
-Best regards,
-Krzysztof
+We would be protected against all these if we implemented the memory
+access restrictions through the memory slots API. As is, it has the
+drawback of having to quiesce the whole VM for any non-trivial slot
+modification (i.e. VSM's memory protections). But if we found a way to
+speed up the slot updates we could rely on that, and avoid having to
+teach kvm_read/write_guest() and friends to deal with memattrs. Note
+that we would still need to use memory attributes to request for faults
+to exit onto user-space on those select GPAs. Any opinions or
+suggestions?
 
+Note that, for now, I'll stick with the memory attributes approach to
+see what the full solution looks like.
+
+Nicolas
 
