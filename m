@@ -1,109 +1,151 @@
-Return-Path: <linux-arch+bounces-6555-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6556-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0078395D235
-	for <lists+linux-arch@lfdr.de>; Fri, 23 Aug 2024 17:59:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A4F9D95D238
+	for <lists+linux-arch@lfdr.de>; Fri, 23 Aug 2024 17:59:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7C5FDB28AA4
-	for <lists+linux-arch@lfdr.de>; Fri, 23 Aug 2024 15:58:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 306B22829A1
+	for <lists+linux-arch@lfdr.de>; Fri, 23 Aug 2024 15:59:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A4F6190051;
-	Fri, 23 Aug 2024 15:56:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ULK5zsyi"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAE0618953D;
+	Fri, 23 Aug 2024 15:59:20 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ACB318EFF3
-	for <linux-arch@vger.kernel.org>; Fri, 23 Aug 2024 15:56:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C2FB189535;
+	Fri, 23 Aug 2024 15:59:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724428594; cv=none; b=Acd7+5lMG/hTZnjyjFT8cMFKEtM/UpnJOU4n+QlwsO0llgvTYn2F7xlTTFr+RYcycP1cgYeeac8VHaHoWgkuKVAEIg9AmiuKu0epR2YeUGBqLW0PvognKPcSfuY5MeKvPjXO2rACVipBcWwiaLeaTKKNYLgHKXdclZXpfVEtDbY=
+	t=1724428760; cv=none; b=Ha3sJI0A4EAEBlngAZBusI0R5miEhdRwj0ynJeVq3tZtP8dXS37jktwO9KMGqnR5FD06YDKN4DpJIrZwklmpI/U3EUfywb5AK6t1oyMGP1q9NrXAjjMki8AA0OP5GhyE/lPY5VZK8JyP/AjSCNzmN6F5KDsZ0eHi6nmtzIYkL34=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724428594; c=relaxed/simple;
-	bh=HGqhcQes5Ttfrfat5u189/JTp3kgH468GuYjDVQlEsE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=I4If9cJgwE/KR9w8ceTvQBNrnP7oh8Q8gQdvu2EbazIFe5gyc4UficI0mxjMlM6PIZzvLALnZ/r2H8+Wj4k0rI9Or2krrt9nbukfXT3HUEMCWoWGLbz1DNTgTBlF4TQak/DFxQXVSjAFy8D0i66J2Q+xMAEWvltaz0CBUiZhfXg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ULK5zsyi; arc=none smtp.client-ip=209.85.167.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5333b2fbedaso3463272e87.0
-        for <linux-arch@vger.kernel.org>; Fri, 23 Aug 2024 08:56:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1724428588; x=1725033388; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HGqhcQes5Ttfrfat5u189/JTp3kgH468GuYjDVQlEsE=;
-        b=ULK5zsyi7EshijB5bsVouhIqAj9xq7elWP6IrA0bo0GcHf8Hbk5w4RvLDLHTZ+Jucu
-         tST58t2QXF7zmT+yfrnHIyMxYVR6Bj4XGelQuFHnBsegZJCsUpVmVCkskM7NfBwesC0y
-         g1jgTNwR7poxDu67BrnrakEORpE58f0ycdIebMYu5hrBGkYOELij2jRSNpcpamdj9PdU
-         com+ea+t5KopRsbTF+jn9f801/+tZMr8RFDCLOBNROq/igkjMLX8xsLYHja9dl/521dX
-         UZaWNXBl/JRLcNMnmJcmXT2NDygAr9rGNmHz583sZ+Jq30AcwqLXkS7JwwQDt5vE6fuO
-         ISTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724428588; x=1725033388;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HGqhcQes5Ttfrfat5u189/JTp3kgH468GuYjDVQlEsE=;
-        b=DImz3+wWsyMGFM6nNm2/HhG8db96PdmvM6LmPELhpXGnuRJNqb4ba9UlVs/kZsC5Up
-         TpyiN7Ld1MFisKeuO2N6bmI3hyd7zuJu6cRWKpZZ8e55VElS2BQwf7lvNYaC3Zm09g8B
-         4rGBDImFQSj/ZhtuS2HSi9yHZAQLBNhbbil3QL0Dnrk0CL+RBUTMzMJMSmvxbzMfVFSC
-         fDDum3yZIgYo7Ox202Lp7179pgGe7yjPvQd2arP8jDRpdNJBWxk4stz6mWM7r82gS36p
-         mQaCDFof6wVaH0jcBPvHmPLJVyjGLdNbgvTsuYTYZ+YQl6XTSlq6+A7l8SD9JyFBEuND
-         CIjw==
-X-Forwarded-Encrypted: i=1; AJvYcCUxTEZarh7nnQN3IQ6U5YqA+kSO1IN1qj24+NKzKcnu6WRqecdAYX2T9MmxD6VlcadwaWtxkhwKEEiA@vger.kernel.org
-X-Gm-Message-State: AOJu0YzNSulghCs7lOYJisAM03H0O6ihDcFOZ11VLSUlUbzBBdzUs6zO
-	L5IEunQKLkcNKomtqzpo/AzlwrNdktIa0L41DAfEjOONM02cEdgZON0Y0zVOUfRWboqVMCJTuOq
-	PjGjmtbzhxJrV5SUon7zSlmgKPTp8Wuo2t1NBsg==
-X-Google-Smtp-Source: AGHT+IF+VJqrZG6jMDTEJ3q6NJ/NApbAQdSMXyFziZqx6qMBZdyXh5nvJ/NMn+LngJ0u+dNzIY1IbzFCNGCR5eMpqEM=
-X-Received: by 2002:a05:6512:239e:b0:52f:d15f:d46b with SMTP id
- 2adb3069b0e04-5343877a8f0mr2130796e87.14.1724428587991; Fri, 23 Aug 2024
- 08:56:27 -0700 (PDT)
+	s=arc-20240116; t=1724428760; c=relaxed/simple;
+	bh=yTzD+B1z/7Em4lUy5BYRbkbEdL3Ho0yTaWOm/CmXCIw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cJMCOE2izDzMywFqc3DbRIF8HbFWhSd2S3sL1R/vtoV2S8ranaIPxMXOkwznXRYRAmXwEZZxuy+i9FIBZSQkaElZSidVXivOcMpBnQ15o/dmMZcKP3xIVBocsyLa1LvIUNHXgOf+jYDkWfV/85OmhOoggz/uFupLOnYW3yNq+9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B7C1C32786;
+	Fri, 23 Aug 2024 15:59:14 +0000 (UTC)
+Date: Fri, 23 Aug 2024 16:59:11 +0100
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	Ross Burton <ross.burton@arm.com>,
+	Yury Khrustalev <yury.khrustalev@arm.com>,
+	Wilco Dijkstra <wilco.dijkstra@arm.com>,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v11 25/39] arm64/signal: Expose GCS state in signal frames
+Message-ID: <Zsixz6Y9xWxqaQaV@arm.com>
+References: <20240822-arm64-gcs-v11-0-41b81947ecb5@kernel.org>
+ <20240822-arm64-gcs-v11-25-41b81947ecb5@kernel.org>
+ <ZshYTyNbveD7WMyJ@arm.com>
+ <ZshjmuYcejbhaSBg@finisterre.sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240620090028.729373-1-ruanjinjie@huawei.com>
- <79a3de7c-21da-12ce-8372-9c9029c237ac@huawei.com> <Zqn0wL5iScf455O5@shell.armlinux.org.uk>
- <034499ea-2cd6-8775-ee94-771cbecd4cdb@huawei.com>
-In-Reply-To: <034499ea-2cd6-8775-ee94-771cbecd4cdb@huawei.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Fri, 23 Aug 2024 17:56:16 +0200
-Message-ID: <CACRpkdYfn6Wxo6N4hNRoMVSQXnsSVAjZXRfYzZtbRuzZyKvhkQ@mail.gmail.com>
-Subject: Re: [PATCH] ARM: support PREEMPT_DYNAMIC
-To: Jinjie Ruan <ruanjinjie@huawei.com>
-Cc: "Russell King (Oracle)" <linux@armlinux.org.uk>, arnd@arndb.de, afd@ti.com, 
-	akpm@linux-foundation.org, eric.devolder@oracle.com, robh@kernel.org, 
-	vincent.whitchurch@axis.com, bhe@redhat.com, nico@fluxnic.net, 
-	ardb@kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZshjmuYcejbhaSBg@finisterre.sirena.org.uk>
 
-On Wed, Jul 31, 2024 at 12:03=E2=80=AFPM Jinjie Ruan <ruanjinjie@huawei.com=
-> wrote:
+On Fri, Aug 23, 2024 at 11:25:30AM +0100, Mark Brown wrote:
+> On Fri, Aug 23, 2024 at 10:37:19AM +0100, Catalin Marinas wrote:
+> > On Thu, Aug 22, 2024 at 02:15:28AM +0100, Mark Brown wrote:
+> 
+> > > +	gcs_preserve_current_state();
+> > > +	gcspr = current->thread.gcspr_el0 - 8;
+> 
+> > > +	__put_user_error(gcspr, &ctx->gcspr, err);
+> 
+> > Do we actually need to store the gcspr value after the cap token has
+> > been pushed or just the value of the interrupted context? If we at some
+> > point get a sigaltshadowstack() syscall, the saved GCS wouldn't point to
+> > the new stack but rather the original one. Unwinders should be able to
+> > get the actual GCSPR_EL0 register, no need for the sigcontext to point
+> > to the new shadow stack.
+> 
+> We could store either the cap token or the interrupted GCSPR_EL0 (the
+> address below the cap token).  It felt more joined up to go with the cap
+> token since notionally signal return is consuming the cap token but
+> either way would work, we could just add an offset when looking at the
+> pointer.
 
-> By the way, currently, most architectures have simplified assembly code
-> and implemented its most functions in C functions. Does arm32 have this
-> plan?
+In a hypothetical sigaltshadowstack() scenario, would the cap go on the
+new signal shadow stack or on the old one? I assume on the new one but
+in sigcontext we'd save the original GCSPR_EL0. In such hypothetical
+case, the original GCSPR_EL0 would not need 8 subtracted.
 
-I would turn it around, since I saw that Huawei contributed generic entry
-code for Aarch64, do you folks have a plan to also do patches for ARM32?
+I need to think some more about this. The gcs_restore_signal() function
+makes sense, it starts with the current GCSPR_EL0 on the signal stack
+and consumes the token, adds 8 to the shadow stack pointer. The
+restore_gcs_context() one is confusing as it happens before consuming
+the cap token and assumes that the GCSPR_EL0 value actually points to
+the signal stack. If we ever implement an alternative shadow stack, the
+original GCSPR_EL0 of the interrupted context would be lost. I know it's
+not planned for now but the principles should be the same. The
+sigframe.uc should store the interrupted state.
 
-I have many ARM32 systems and I am happy to help out with reviewing
-and testing if you do.
+To me the order for sigreturn should be first to consume the cap token,
+validate it etc. and then restore GCSPR_EL0 to whatever was saved in the
+sigframe.uc prior to the signal being delivered.
 
-Alternatively I might be able to have a look at it, because the entry code
-is right in my work area all the time.
+> > Also in gcs_signal_entry() in the previous patch, we seem to subtract 16
+> > rather than 8.
+> 
+> We need to not only place a cap but also a GCS frame for the sigreturn
+> trampoline, the sigreturn trampoline isn't part of the interrupted
+> context so isn't included in the signal frame but it needs to have a
+> record on the GCS so that the signal handler doesn't just generate a GCS
+> fault if it tries to return to the trampoline.  This means that the
+> GCSPR_EL0 that is set for the signal handler needs to move two entries,
+> one for the cap token and one for the trampoline.
 
-Yours,
-Linus Walleij
+Yes, this makes sense.
+
+> > What I find confusing is that both restore_gcs_context() and
+> > gcs_restore_signal() seem to touch current->thread.gcspr_el0 and the
+> > sysreg. Which one takes priority? I should probably check the branch out
+> > to see the end result.
+> 
+> restore_gcs_context() is loading values from the signal frame in memory
+> (which will only happen if a GCS context is present) then
+> gcs_restore_signal() consumes the token at the top of the stack.  The
+> split is because userspace can skip the restore_X_context() functions
+> for the optional signal frame elements by removing them from the context
+> but we want to ensure that we always consume a token.
+
+I agree we should always consume a token but this should be done from
+the actual hardware GCSPR_EL0 value on the sigreturn call rather than
+the one restored from sigframe.uc. The restoring should be the last
+step.
+
+-- 
+Catalin
 
