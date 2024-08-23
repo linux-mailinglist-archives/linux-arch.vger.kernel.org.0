@@ -1,251 +1,181 @@
-Return-Path: <linux-arch+bounces-6563-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6564-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3A8995D84E
-	for <lists+linux-arch@lfdr.de>; Fri, 23 Aug 2024 23:05:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09EDB95D8E9
+	for <lists+linux-arch@lfdr.de>; Sat, 24 Aug 2024 00:01:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4BE6B1F22563
-	for <lists+linux-arch@lfdr.de>; Fri, 23 Aug 2024 21:05:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2C3C284905
+	for <lists+linux-arch@lfdr.de>; Fri, 23 Aug 2024 22:01:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC3B0194AD9;
-	Fri, 23 Aug 2024 21:05:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C31C31922F8;
+	Fri, 23 Aug 2024 22:01:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="YwzsGVYQ";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Etv/EtDZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DJhUw/1q"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01E56193064;
-	Fri, 23 Aug 2024 21:05:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F1A1195;
+	Fri, 23 Aug 2024 22:01:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724447135; cv=none; b=UqySpBUoShlnUaAtlSoblpdldmgscQRc7Bau6b7o1PIJOe7dL6li7JO6CXpy3IkcAfHPJz928kaUgxn091deiHEipTtZqlFtIK7tgB+s/ixfeD2IOoXVpJblrdoTCKI7fsxa0oHzZ3l8gTMG6VsnFHghEhcc5ylfIBJr/xTxoAU=
+	t=1724450477; cv=none; b=Tts6HZLrgTPuVNecKVK3rEdEwtnxg+okY1lzAv/Rk/uVw6alQu8n+KHrxCCnR/+r7go9OzjaEFtUd0P2E3WE3BxTIwewcgwtyWUGTmeKg3eYbk3BD7GDiK6BBl1vTOUDB0c79Pqj6DEFGawwZh6AaJ01TorZiK68WhM8UGgIRug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724447135; c=relaxed/simple;
-	bh=VsZQyduwlI0vFv1Db4QIaS1KTScu2zoqyBgsAN/WpRQ=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=FRXCzE/EW6B+ncZ9I6LZ7xPPLXUtz9VzmwCr8IwgH1EvO1+Zkx6YcUDdxss8j3WvoicEZP/NuDb6Rgk/z2ez5zrU18ik4S4XpAeynTIaxsQ4by4rS8+CXlDqMQLSKLeTY+EqI9Qw0/3GkK4brgdXfnZBPU0ppe1KxXKoosmJ1lk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=YwzsGVYQ; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Etv/EtDZ; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1724447131;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=CaUWysiD7XirCK5HuajRc2QEt1BaDWiUbxhTzIekA+0=;
-	b=YwzsGVYQ5XR7NRFLfI/nzcORuNypZpfKRXI4fvQ7uFLG4XB8ht8QJ7UubXKqBhgWq/FMW9
-	c9IBL1HeA4MpBm8SU+uoAXBUiQLOlIMXj+1vB4TVvZeXevMq0MH8dro8AM8RpQUi6b0gud
-	/4DHdiLfStMahn78gc9JpomQI1F5RwCBa1nz9twIlK0IGbkA/gAuRmk5cz198dwJQ/KIbS
-	orMR6waO5r5oijY63LSjk+B6nR+zybuR7fjiVbvGpSQTFQZuKkiu3Ce8xBXpVRRm0ygNe2
-	gwaArWJN5ilmV9jESC203ZLO5Pj7EO9R/kveZZvqElZ7SqiDpKyoMI5M3cKMPA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1724447131;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=CaUWysiD7XirCK5HuajRc2QEt1BaDWiUbxhTzIekA+0=;
-	b=Etv/EtDZ4MKLo1zgBOn/jZ4XjhaeeyIfMv4KVDs8i5C1AA011fmqaGilJL6XYVrs7Bl6nV
-	Wdy2Y5lHAvWFeoCA==
-To: Christoph Lameter via B4 Relay <devnull+cl.gentwo.org@kernel.org>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-arch@vger.kernel.org, "Christoph Lameter (Ampere)" <cl@gentwo.org>
-Subject: Re: [PATCH v2] Avoid memory barrier in read_seqcount() through load
- acquire
-In-Reply-To: <20240819-seq_optimize-v2-1-9d0da82b022f@gentwo.org>
-References: <20240819-seq_optimize-v2-1-9d0da82b022f@gentwo.org>
-Date: Fri, 23 Aug 2024 23:05:30 +0200
-Message-ID: <87ttfbeyqt.ffs@tglx>
+	s=arc-20240116; t=1724450477; c=relaxed/simple;
+	bh=4E2/SMw5ipU2qtwXN1Uwic3Rzbvi3xioIyGpbAx2lVk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EcgypmTIJU0XR7o0nULt7S3/QGG12G6OV8vEQhZx81mjKR7K0cTyMjWUuGRyl7i08hyCJB7QDB92eixgkyvSzJUKQwLGoOh6k0akNFAuZKsuDPzbNsJlTqudtNKFnW4ZXUQRpcxW0qr6ax7oU2GLUsUmL6NtllOjGM1sqYzAp7Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DJhUw/1q; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71569C32786;
+	Fri, 23 Aug 2024 22:01:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724450477;
+	bh=4E2/SMw5ipU2qtwXN1Uwic3Rzbvi3xioIyGpbAx2lVk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DJhUw/1qZ9BDQyGdrwh4ZFy64bp7OwurHPaIZF/8dlHGGMyUg6oD3nsAesh264NNS
+	 FoGyn2Rq2QL39OrogIEFtmo21ioxgFBgEj7Es9kG5Qpgra3wSXqqpYQ1pNK2A8IoYg
+	 Z8fN8zNIL9aOQlXGKDnm0SrmFwR/DdFSAkSXCqRoUqve0c9CIlohY5Kez50qcxZXm+
+	 BBy4p4qNCrGMIXT5+V5RxKrFG95GKkg8ilN9BZLYBhNJwhkvW2QkCMhzkT8j4erCII
+	 zjx/mdrol0O8/FIK5z9vPsPhmzvc3K733r3dtwz1kN8Njo8cs83m645QMmL+XqdHr7
+	 WVHT/FDFTov3Q==
+Date: Fri, 23 Aug 2024 23:01:13 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	Ross Burton <ross.burton@arm.com>,
+	Yury Khrustalev <yury.khrustalev@arm.com>,
+	Wilco Dijkstra <wilco.dijkstra@arm.com>,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v11 25/39] arm64/signal: Expose GCS state in signal frames
+Message-ID: <ZskGqU8BSvR01W30@finisterre.sirena.org.uk>
+References: <20240822-arm64-gcs-v11-0-41b81947ecb5@kernel.org>
+ <20240822-arm64-gcs-v11-25-41b81947ecb5@kernel.org>
+ <ZshYTyNbveD7WMyJ@arm.com>
+ <ZshjmuYcejbhaSBg@finisterre.sirena.org.uk>
+ <Zsixz6Y9xWxqaQaV@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="BjuuYVXdnzsl9n3l"
+Content-Disposition: inline
+In-Reply-To: <Zsixz6Y9xWxqaQaV@arm.com>
+X-Cookie: Your love life will be... interesting.
 
-On Mon, Aug 19 2024 at 11:30, Christoph Lameter via wrote:
-> @@ -293,6 +321,18 @@ SEQCOUNT_LOCKNAME(mutex,        struct mutex,    true,     mutex)
->   *
->   * Return: count to be passed to read_seqcount_retry()
->   */
-> +#ifdef CONFIG_ARCH_HAS_ACQUIRE_RELEASE
-> +#define raw_read_seqcount_begin(s)					\
-> +({									\
-> +	unsigned _seq;							\
-> +									\
-> +	while ((_seq = seqprop_sequence_acquire(s)) & 1)		\
-> +		cpu_relax();						\
-> +									\
-> +	kcsan_atomic_next(KCSAN_SEQLOCK_REGION_MAX);			\
-> +	_seq;								\
-> +})
 
-So this covers only raw_read_seqcount_begin(), but not
-raw_read_seqcount() which has the same smp_rmb() inside.
+--BjuuYVXdnzsl9n3l
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-This all can be done without the extra copies of the counter
-accessors. Uncompiled patch below.
+On Fri, Aug 23, 2024 at 04:59:11PM +0100, Catalin Marinas wrote:
+> On Fri, Aug 23, 2024 at 11:25:30AM +0100, Mark Brown wrote:
 
-It's a little larger than I initialy wanted to do it, but I had to keep
-the raw READ_ONCE() for __read_seqcount_begin() to not inflict the
-smp_load_acquire() to the only usage site in the dcache code.
+> > We could store either the cap token or the interrupted GCSPR_EL0 (the
+> > address below the cap token).  It felt more joined up to go with the cap
+> > token since notionally signal return is consuming the cap token but
+> > either way would work, we could just add an offset when looking at the
+> > pointer.
 
-The acquire conditional in __seqprop_load_sequence() is optimized out by
-the compiler as all of this is macro/__always_inline.
+> In a hypothetical sigaltshadowstack() scenario, would the cap go on the
+> new signal shadow stack or on the old one? I assume on the new one but
+> in sigcontext we'd save the original GCSPR_EL0. In such hypothetical
+> case, the original GCSPR_EL0 would not need 8 subtracted.
 
-Thanks,
+I would have put the token on the old stack since that's what we'd be
+returning to.  This raises interesting questions about what happens if
+the reason for the signal is that we just overflowed the normal stack
+(which are among the issues that have got in the way of working out if
+or how we do something with sigaltshadowstack).  I'm not clear what the
+purpose of the token would be on the new stack, the token basically says
+"this is somewhere we can sigreturn to", that's not the case for the
+alternative stack.
 
-        tglx
----
---- a/include/linux/seqlock.h
-+++ b/include/linux/seqlock.h
-@@ -132,6 +132,14 @@ static inline void seqcount_lockdep_read
- #define seqcount_rwlock_init(s, lock)		seqcount_LOCKNAME_init(s, lock, rwlock)
- #define seqcount_mutex_init(s, lock)		seqcount_LOCKNAME_init(s, lock, mutex)
- 
-+static __always_inline unsigned __seqprop_load_sequence(const seqcount_t *s, bool acquire)
-+{
-+	if (acquire && IS_ENABLED(CONFIG_ARCH_HAS_ACQUIRE_RELEASE))
-+		return smp_load_acquire(&s->sequence);
-+	else
-+		return READ_ONCE(s->sequence);
-+}
-+
- /*
-  * SEQCOUNT_LOCKNAME()	- Instantiate seqcount_LOCKNAME_t and helpers
-  * seqprop_LOCKNAME_*()	- Property accessors for seqcount_LOCKNAME_t
-@@ -155,9 +163,10 @@ static __always_inline const seqcount_t
- }									\
- 									\
- static __always_inline unsigned						\
--__seqprop_##lockname##_sequence(const seqcount_##lockname##_t *s)	\
-+__seqprop_##lockname##_sequence(const seqcount_##lockname##_t *s,	\
-+				bool acquire)				\
- {									\
--	unsigned seq = READ_ONCE(s->seqcount.sequence);			\
-+	unsigned seq = __seqprop_load_sequence(&s->seqcount, acquire);	\
- 									\
- 	if (!IS_ENABLED(CONFIG_PREEMPT_RT))				\
- 		return seq;						\
-@@ -170,7 +179,7 @@ static __always_inline unsigned						\
- 		 * Re-read the sequence counter since the (possibly	\
- 		 * preempted) writer made progress.			\
- 		 */							\
--		seq = READ_ONCE(s->seqcount.sequence);			\
-+		seq = __seqprop_load_sequence(&s->seqcount, acquire);	\
- 	}								\
- 									\
- 	return seq;							\
-@@ -206,9 +215,9 @@ static inline const seqcount_t *__seqpro
- 	return s;
- }
- 
--static inline unsigned __seqprop_sequence(const seqcount_t *s)
-+static inline unsigned __seqprop_sequence(const seqcount_t *s, bool acquire)
- {
--	return READ_ONCE(s->sequence);
-+	return __seqprop_load_sequence(s, acquire);
- }
- 
- static inline bool __seqprop_preemptible(const seqcount_t *s)
-@@ -258,29 +267,23 @@ SEQCOUNT_LOCKNAME(mutex,        struct m
- 
- #define seqprop_ptr(s)			__seqprop(s, ptr)(s)
- #define seqprop_const_ptr(s)		__seqprop(s, const_ptr)(s)
--#define seqprop_sequence(s)		__seqprop(s, sequence)(s)
-+#define seqprop_sequence(s, a)		__seqprop(s, sequence)(s, a)
- #define seqprop_preemptible(s)		__seqprop(s, preemptible)(s)
- #define seqprop_assert(s)		__seqprop(s, assert)(s)
- 
- /**
-- * __read_seqcount_begin() - begin a seqcount_t read section w/o barrier
-- * @s: Pointer to seqcount_t or any of the seqcount_LOCKNAME_t variants
-- *
-- * __read_seqcount_begin is like read_seqcount_begin, but has no smp_rmb()
-- * barrier. Callers should ensure that smp_rmb() or equivalent ordering is
-- * provided before actually loading any of the variables that are to be
-- * protected in this critical section.
-- *
-- * Use carefully, only in critical code, and comment how the barrier is
-- * provided.
-+ * read_seqcount_begin_cond_acquire() - begin a seqcount_t read section
-+ * @s:	     Pointer to seqcount_t or any of the seqcount_LOCKNAME_t variants
-+ * @acquire: If true, the read of the sequence count uses smp_load_acquire()
-+ *	     if the architecure provides and enabled it.
-  *
-  * Return: count to be passed to read_seqcount_retry()
-  */
--#define __read_seqcount_begin(s)					\
-+#define read_seqcount_begin_cond_acquire(s, acquire)			\
- ({									\
- 	unsigned __seq;							\
- 									\
--	while ((__seq = seqprop_sequence(s)) & 1)			\
-+	while ((__seq = seqprop_sequence(s, acquire)) & 1)		\
- 		cpu_relax();						\
- 									\
- 	kcsan_atomic_next(KCSAN_SEQLOCK_REGION_MAX);			\
-@@ -288,6 +291,26 @@ SEQCOUNT_LOCKNAME(mutex,        struct m
- })
- 
- /**
-+ * __read_seqcount_begin() - begin a seqcount_t read section w/o barrier
-+ * @s: Pointer to seqcount_t or any of the seqcount_LOCKNAME_t variants
-+ *
-+ * __read_seqcount_begin is like read_seqcount_begin, but it neither
-+ * provides a smp_rmb() barrier nor does it use smp_load_acquire() on
-+ * architectures which provide it.
-+ *
-+ * Callers should ensure that smp_rmb() or equivalent ordering is provided
-+ * before actually loading any of the variables that are to be protected in
-+ * this critical section.
-+ *
-+ * Use carefully, only in critical code, and comment how the barrier is
-+ * provided.
-+ *
-+ * Return: count to be passed to read_seqcount_retry()
-+ */
-+#define __read_seqcount_begin(s)					\
-+	read_seqcount_begin_cond_acquire(s, false)
-+
-+/**
-  * raw_read_seqcount_begin() - begin a seqcount_t read section w/o lockdep
-  * @s: Pointer to seqcount_t or any of the seqcount_LOCKNAME_t variants
-  *
-@@ -295,9 +318,10 @@ SEQCOUNT_LOCKNAME(mutex,        struct m
-  */
- #define raw_read_seqcount_begin(s)					\
- ({									\
--	unsigned _seq = __read_seqcount_begin(s);			\
-+	unsigned _seq = read_seqcount_begin_cond_acquire(s, true);	\
- 									\
--	smp_rmb();							\
-+	if (!IS_ENABLED(CONFIG_ARCH_HAS_ACQUIRE_RELEASE))		\
-+		smp_rmb();						\
- 	_seq;								\
- })
- 
-@@ -326,9 +350,10 @@ SEQCOUNT_LOCKNAME(mutex,        struct m
-  */
- #define raw_read_seqcount(s)						\
- ({									\
--	unsigned __seq = seqprop_sequence(s);				\
-+	unsigned __seq = seqprop_sequence(s, true);			\
- 									\
--	smp_rmb();							\
-+	if (!IS_ENABLED(CONFIG_ARCH_HAS_ACQUIRE_RELEASE))		\
-+		smp_rmb();						\
- 	kcsan_atomic_next(KCSAN_SEQLOCK_REGION_MAX);			\
- 	__seq;								\
- })
+> I need to think some more about this. The gcs_restore_signal() function
+> makes sense, it starts with the current GCSPR_EL0 on the signal stack
+> and consumes the token, adds 8 to the shadow stack pointer. The
+> restore_gcs_context() one is confusing as it happens before consuming
+> the cap token and assumes that the GCSPR_EL0 value actually points to
+> the signal stack. If we ever implement an alternative shadow stack, the
+> original GCSPR_EL0 of the interrupted context would be lost. I know it's
+> not planned for now but the principles should be the same. The
+> sigframe.uc should store the interrupted state.
+
+I think the issues you're pointing out here go to the thing with the cap
+token marking a place we can sigreturn to and therefore being on the
+original stack.
+
+> To me the order for sigreturn should be first to consume the cap token,
+> validate it etc. and then restore GCSPR_EL0 to whatever was saved in the
+> sigframe.uc prior to the signal being delivered.
+
+To me what we're doing here is that the signal frame says where
+userspace wants to point GCSPR_EL0 in the returned context, we then go
+and confirm that this is a valid address by looking at it and checking
+for a token.  The token serves to validate what was saved in sigframe.uc
+so that it can't just be pointed at some random address.
+
+> > restore_gcs_context() is loading values from the signal frame in memory
+> > (which will only happen if a GCS context is present) then
+> > gcs_restore_signal() consumes the token at the top of the stack.  The
+> > split is because userspace can skip the restore_X_context() functions
+> > for the optional signal frame elements by removing them from the context
+> > but we want to ensure that we always consume a token.
+
+> I agree we should always consume a token but this should be done from
+> the actual hardware GCSPR_EL0 value on the sigreturn call rather than
+> the one restored from sigframe.uc. The restoring should be the last
+> step.
+
+If we look for a token at the GCSPR_EL0 on sigreturn then it wouldn't be
+valid to call sigreturn() (well, without doing something first to unwind
+the stack which seems hostile and would require code to become GCS aware
+that wouldn't otherwise), if you do a sigreturn from somewhere other
+than the vDSO then you'd have at least the vDSO signal frame left in the
+GCS.  You'd also be able to point GCSPR_EL0 to anywhere since we'd just
+load a value from the signal frame but not do the cap verification.
+
+--BjuuYVXdnzsl9n3l
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmbJBqgACgkQJNaLcl1U
+h9BLswf/SWEpbfZkH/LtOITztzCmYc/9r1ewDv1+OENkYT92eXaB9xbvJoP9TSK7
+9L5zc2aRpMs8ND7Z79oBC2ukkLkNGlZgk50jrxAj/ABNYEwGhWr6WCEURjpJCREV
+waO+TZDL2bO84z/f9ES1W4aKPZfTVfDArJ7orEQM8OgkSdql3wE/D9qqw2FgivU+
+pO4BYgkO67qg2p1/UIlgWEJAQAgYLI60IZkP2g6CawlFdze3kHo5cnIBh0Ou3sxa
++HfHlY5BIjhQvlSdEx5GfhZuGdRSUlZdYwbbJGKAXt9sB80z6QbAet3BfFUGt83I
+CqP6WBYkc5NW8mLg/8gZCbn3Quh5Xg==
+=fp7z
+-----END PGP SIGNATURE-----
+
+--BjuuYVXdnzsl9n3l--
 
