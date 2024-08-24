@@ -1,72 +1,72 @@
-Return-Path: <linux-arch+bounces-6567-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6568-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E715695E04F
-	for <lists+linux-arch@lfdr.de>; Sun, 25 Aug 2024 01:07:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86F1E95E055
+	for <lists+linux-arch@lfdr.de>; Sun, 25 Aug 2024 01:07:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A4D21C20D91
-	for <lists+linux-arch@lfdr.de>; Sat, 24 Aug 2024 23:07:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 441F0282738
+	for <lists+linux-arch@lfdr.de>; Sat, 24 Aug 2024 23:07:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C27D1448EF;
-	Sat, 24 Aug 2024 23:07:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E54D143C65;
+	Sat, 24 Aug 2024 23:07:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=illinois-edu.20230601.gappssmtp.com header.i=@illinois-edu.20230601.gappssmtp.com header.b="gK56Mtz0"
+	dkim=pass (2048-bit key) header.d=illinois-edu.20230601.gappssmtp.com header.i=@illinois-edu.20230601.gappssmtp.com header.b="ahNNMuu3"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-io1-f65.google.com (mail-io1-f65.google.com [209.85.166.65])
+Received: from mail-io1-f66.google.com (mail-io1-f66.google.com [209.85.166.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65A79143C46
-	for <linux-arch@vger.kernel.org>; Sat, 24 Aug 2024 23:07:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80FA81448D8
+	for <linux-arch@vger.kernel.org>; Sat, 24 Aug 2024 23:07:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724540825; cv=none; b=f4UYSsAoN93CAj5DoCBIhin9uMDg3GUWKgLAcxqkaG99xsdK04cUJJ7aPbxt5PllsOukaQDiMq0Q7gYRQiUjVkkpQbTcTR02gdd/XxLiMebCOg1U7ksY8t/nLc9RnWPx4lo7IcG3kmYGImULiW9LTMp0MVas4UzQo8yfzrewTvE=
+	t=1724540844; cv=none; b=Fvcgy+OTfrjdZTr6cNh3+Rzgz/45VasvCCgBg/WDJUr6VVyKaXE+4ExErs5msDHaRMtR2DNK6VhwOHVotq38Myn2DXY+tmoBwRRbvx4KbgiQ3WJOWFpbjSjfHTQ19JOBoR8QrzNWRwcmImns3lL7cxDvHuBV50/qb16PTxZIWRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724540825; c=relaxed/simple;
-	bh=HFFgMUe0sXLt8uy3R2lYoPH0xrrMmgwABqkiDy8B3Qo=;
+	s=arc-20240116; t=1724540844; c=relaxed/simple;
+	bh=U0S4KY4P4mMk6kXYBXhOMBGppwcV8ZYcGXaIpEav1FE=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=kDaokf5jmL0LqHzfgmxSDiW6Fb3dnvwbwgGgCZRab79vqzFNqmOkBrCsIxZAf+R9h8SAL5OMk4dxGeJ49WbhQeDRrGbLgOi1bT1SidWzvzSAyBEXtHGqd/ze5vtnj+i6GxH7i+RBxkE/sIP3kfUp+4goJwrZKh+m9bFVxInb4GA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=illinois.edu; spf=pass smtp.mailfrom=illinois.edu; dkim=pass (2048-bit key) header.d=illinois-edu.20230601.gappssmtp.com header.i=@illinois-edu.20230601.gappssmtp.com header.b=gK56Mtz0; arc=none smtp.client-ip=209.85.166.65
+	 MIME-Version; b=Pl/M2S/AuOBF0AXs4Os+IxlCNkNehCKu+MTa22x+G60IdrRl+4WjuDvFuudl28WLMSu92CXvG3RPpp0+z0z9JYlh63X361/dIzyJO7l5PDi6H4XVhrOBIAKYeYcmnhM1DwF/Zhc6mKzn+ikpyNo2VTi+IbGdb3fW/ZG1Fhqt87k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=illinois.edu; spf=pass smtp.mailfrom=illinois.edu; dkim=pass (2048-bit key) header.d=illinois-edu.20230601.gappssmtp.com header.i=@illinois-edu.20230601.gappssmtp.com header.b=ahNNMuu3; arc=none smtp.client-ip=209.85.166.66
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=illinois.edu
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=illinois.edu
-Received: by mail-io1-f65.google.com with SMTP id ca18e2360f4ac-82521c46feaso113287939f.2
-        for <linux-arch@vger.kernel.org>; Sat, 24 Aug 2024 16:07:03 -0700 (PDT)
+Received: by mail-io1-f66.google.com with SMTP id ca18e2360f4ac-81f96eaa02aso185977439f.2
+        for <linux-arch@vger.kernel.org>; Sat, 24 Aug 2024 16:07:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=illinois-edu.20230601.gappssmtp.com; s=20230601; t=1724540822; x=1725145622; darn=vger.kernel.org;
+        d=illinois-edu.20230601.gappssmtp.com; s=20230601; t=1724540840; x=1725145640; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6KIwALI9lcPb0lT76UFCEG4r4cwMraGgAV9q6NNiJF4=;
-        b=gK56Mtz0TjsY+Rp/mE17J30X/dypHWfN5918T/Q8RxwkDOL+OH78rpLMhjofuwOABh
-         Wri0Kp7WQu6vPvLYRFaayGyuQgYcnUm92Cl2hy9kx20In2BLbj1aO7KoYifZw/GU+jKp
-         qK/SrjtRea7aqwzd45sIEf3soIUPPjbxgsxJBuR4UjCQGYRRi+zhbK8+QtanYt4TV8p4
-         r4daB55RbkEAC4c7ax4KwKjaRgZ26+6G00OZ8n79yNaOx+w5bqQPlWcaU+m1nX0chI9w
-         GMzzV5yQ1mWMPl9pQIbLSblPhDjqG9wvJW10qegj40vUDNLUA8hANz+a+Weokkat/6yp
-         lEvA==
+        bh=eplaYsiiWgCTy5PRkFB4ff2nqvq9q3OfHUIofrtUZ0k=;
+        b=ahNNMuu3ulrpbVkyPWNKCl2Bk8ogfR3zSqzuxlMpajB5Xtb9UDKhaiBbWY9VhtVWyX
+         VHjl3+vq/kjFVPvUtSp18vNB1H7R+eGUgSRvId+PFwgyZYU63GYLrYYfP0psPHEMWjPV
+         rt4crUFF3Z6Iazfn9GKhSaX0mYqXz6FvftLolcXQjvCMVc9W58g25m8U3ByR5tv2cFih
+         4WUhggnonBInufetnfhOS605gjMqlNN+lwePT8ho/Dvy5wQaUEHp/xp1B9/Wt7pd8CEs
+         +yF2py+HsyoGKSNqD/MUSqxcALn4fQ8ispcza7Kj0mIzK1CGb/xyV2pqFWjK7seF8Qjb
+         IWkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724540822; x=1725145622;
+        d=1e100.net; s=20230601; t=1724540840; x=1725145640;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6KIwALI9lcPb0lT76UFCEG4r4cwMraGgAV9q6NNiJF4=;
-        b=uMbugvhf8EtXDOmTcuWW3xrTScwTw8HnhI1hhW6ZEms/w8b3LfcyqR+g32oczNMoGw
-         AfVNEkf11euFkYSdNQ2wNQKiHahR98EklndfnYAFsNJk6tarXDimUWOAnF6UshIqSyGq
-         4/6t5owxJJSIKRi4h8lqJcManYPnZy26TBrKdsgxkqIWTXuEmg9SQKjSTbV9+f8Y7YId
-         ZRQ9JTnBS/14tKmZs2zWYS2WQ8J8IBvMqJ4AswE0F/KtFdsdicyP6sC29lh1DKA+gy6d
-         3PmA/f7tZFQAyHux98YMH/b6tjZBEtVVaz9AQos/gU8mA5SCEQzUQO4jQnAyyfrhONw0
-         dKcg==
-X-Forwarded-Encrypted: i=1; AJvYcCViS+Pb4xXyPxYsFupqkeULGQ/6HDCHjecSyy+vsd4qEWJcgafoWYPv9323pZDXOd/ipv0RlATUBhOp@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+/vgsqp0GKYNqFm7WPZtM7nuboOpW+FO7gKaIf/OcPeIKadqa
-	wHOMHLY30yKFm6eZZRYzrsmWSawIwoD+NzdxS4/BUZ4ESqfG1D/JO7GKbm1KRg==
-X-Google-Smtp-Source: AGHT+IF5JX0Jk4k4VxnekA9ZAMpPy+eSge9GLI2pHIyDjL7LjOoFyPID7Vz4y3rMhqO0ju3PL8Nfvg==
-X-Received: by 2002:a05:6602:2c94:b0:824:e42e:a1bd with SMTP id ca18e2360f4ac-827881eb403mr770732339f.17.1724540822378;
-        Sat, 24 Aug 2024 16:07:02 -0700 (PDT)
+        bh=eplaYsiiWgCTy5PRkFB4ff2nqvq9q3OfHUIofrtUZ0k=;
+        b=VLxk/Lp983zw1AP9tWgjBPRWdJeu1W+EV56fcNNoJVnoS4W1aKbaibb5NXBVvVfarM
+         R4xULcacui3IFXFqAxNt1ETfGyZGO3Pj4ENIEgN6CyaDtvvClneCQm0nb1nnQHHk0Ppt
+         Td56Py4mJhNVdqKet5OYsjg69MNAd+7k88KO8ontg6CTHYtSgN0FxCBKTizZ+FEsfren
+         WwY69l4HxYgYxIEKicaS5ua1z1LJ/rmL3cggwPbRfuwM8ELuZTQayGI2pg9SnhREv+mE
+         /oPLTjEkPBmXrXYMTEnDXgjxJIIGdqsFLbBEFo2gR6jBSpnns5tTH1CCgZVKIVbMpwns
+         TiWg==
+X-Forwarded-Encrypted: i=1; AJvYcCW3aabgnRKs6Xg7H6pcUxqsdn+fEiDgyHuzI0EqXX1I2oujxT1uqW3uGezBtBVcF/LZNrcqLPzvLgn3@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy7yifPyq5UFmbTKvFW26ElDOcUjHGFXsFSCeKhERGWaeHnt5Wd
+	PiImffCPCH7cS9Hrw7GPZNqAbGF9+KNcONIrgq+YruHCkxu0XraCflz9zy6gbA==
+X-Google-Smtp-Source: AGHT+IGMHgrjxuTK1IXh9WwnvBXGAgm3x0MPaDSYXa/O8CNdJcXDMS3NKmaFRHTenHG7ThmwiB9kVg==
+X-Received: by 2002:a05:6602:6b87:b0:804:2b28:75db with SMTP id ca18e2360f4ac-82787329bbemr590220339f.10.1724540840544;
+        Sat, 24 Aug 2024 16:07:20 -0700 (PDT)
 Received: from shizuku.. (mobile-130-126-255-62.near.illinois.edu. [130.126.255.62])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4ce70f85671sm1563938173.80.2024.08.24.16.07.00
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4ce70f85671sm1563938173.80.2024.08.24.16.07.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Aug 2024 16:07:01 -0700 (PDT)
+        Sat, 24 Aug 2024 16:07:20 -0700 (PDT)
 From: Wentao Zhang <wentaoz5@illinois.edu>
 To: linux-kbuild@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
@@ -117,9 +117,9 @@ Cc: wentaoz5@illinois.edu,
 	justinstitt@google.com,
 	maskray@google.com,
 	dvyukov@google.com
-Subject: [RFC PATCH 1/3] llvm-cov: add Clang's Source-based Code Coverage support
-Date: Sat, 24 Aug 2024 18:06:39 -0500
-Message-Id: <20240824230641.385839-2-wentaoz5@illinois.edu>
+Subject: [RFC PATCH 2/3] kbuild, llvm-cov: disable instrumentation in odd or sensitive code
+Date: Sat, 24 Aug 2024 18:06:40 -0500
+Message-Id: <20240824230641.385839-3-wentaoz5@illinois.edu>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240824230641.385839-1-wentaoz5@illinois.edu>
 References: <20240824230641.385839-1-wentaoz5@illinois.edu>
@@ -131,655 +131,139 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Implement debugfs entries for serializing profiles and resetting
-counters/bitmaps. Also adds Source-based Code Coverage flags and kconfig
-options.
-
-This work reuses a portion of code from a previous effort by Sami
-Tolvanen et al. [1], specifically its debugfs interface and the
-underlying profile processing, but discards all its PGO-specific parts,
-notably value profiling.  To our end (code coverage, like MC/DC,
-required for high assurance), we do instrumentation at the compiler
-frontend, instead of IR; we care about counters and bitmaps, but not
-value profiling.
-
-[1] https://lore.kernel.org/lkml/20210407211704.367039-1-morbo@google.com/
+Disable instrumentation in the same areas that were disabled for
+kernel/gcov/
 
 Signed-off-by: Wentao Zhang <wentaoz5@illinois.edu>
 Signed-off-by: Chuck Wolber <chuck.wolber@boeing.com>
 ---
- Makefile                          |   3 +
- arch/Kconfig                      |   1 +
- arch/x86/Kconfig                  |   1 +
- arch/x86/kernel/vmlinux.lds.S     |   2 +
- include/asm-generic/vmlinux.lds.h |  38 +++++
- kernel/Makefile                   |   1 +
- kernel/llvm-cov/Kconfig           |  29 ++++
- kernel/llvm-cov/Makefile          |   5 +
- kernel/llvm-cov/fs.c              | 253 ++++++++++++++++++++++++++++++
- kernel/llvm-cov/llvm-cov.h        | 156 ++++++++++++++++++
- scripts/Makefile.lib              |  10 ++
- scripts/mod/modpost.c             |   2 +
- 12 files changed, 501 insertions(+)
- create mode 100644 kernel/llvm-cov/Kconfig
- create mode 100644 kernel/llvm-cov/Makefile
- create mode 100644 kernel/llvm-cov/fs.c
- create mode 100644 kernel/llvm-cov/llvm-cov.h
+ arch/x86/boot/Makefile                | 1 +
+ arch/x86/boot/compressed/Makefile     | 1 +
+ arch/x86/entry/vdso/Makefile          | 1 +
+ arch/x86/platform/efi/Makefile        | 1 +
+ arch/x86/purgatory/Makefile           | 1 +
+ arch/x86/realmode/rm/Makefile         | 1 +
+ arch/x86/um/vdso/Makefile             | 1 +
+ drivers/firmware/efi/libstub/Makefile | 2 ++
+ kernel/trace/Makefile                 | 1 +
+ scripts/Makefile.modfinal             | 1 +
+ 10 files changed, 11 insertions(+)
 
-diff --git a/Makefile b/Makefile
-index 68ebd6d6b444..1750a2b7dfe8 100644
---- a/Makefile
-+++ b/Makefile
-@@ -737,6 +737,9 @@ endif # KBUILD_EXTMOD
- # Defaults to vmlinux, but the arch makefile usually adds further targets
- all: vmlinux
+diff --git a/arch/x86/boot/Makefile b/arch/x86/boot/Makefile
+index 9cc0ff6e9067..2cc2c55af305 100644
+--- a/arch/x86/boot/Makefile
++++ b/arch/x86/boot/Makefile
+@@ -57,6 +57,7 @@ KBUILD_AFLAGS	:= $(KBUILD_CFLAGS) -D__ASSEMBLY__
+ KBUILD_CFLAGS	+= $(call cc-option,-fmacro-prefix-map=$(srctree)/=)
+ KBUILD_CFLAGS	+= -fno-asynchronous-unwind-tables
+ KBUILD_CFLAGS	+= $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
++LLVM_COV_PROFILE := n
  
-+CFLAGS_LLVM_COV := -fprofile-instr-generate -fcoverage-mapping
-+export CFLAGS_LLVM_COV
-+
- CFLAGS_GCOV	:= -fprofile-arcs -ftest-coverage
- ifdef CONFIG_CC_IS_GCC
- CFLAGS_GCOV	+= -fno-tree-loop-im
-diff --git a/arch/Kconfig b/arch/Kconfig
-index 975dd22a2dbd..0727265f677f 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -1601,6 +1601,7 @@ config ARCH_HAS_KERNEL_FPU_SUPPORT
- 	  the kernel, as described in Documentation/core-api/floating-point.rst.
+ $(obj)/bzImage: asflags-y  := $(SVGA_MODE)
  
- source "kernel/gcov/Kconfig"
-+source "kernel/llvm-cov/Kconfig"
+diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
+index f2051644de94..86c79c36db2e 100644
+--- a/arch/x86/boot/compressed/Makefile
++++ b/arch/x86/boot/compressed/Makefile
+@@ -43,6 +43,7 @@ KBUILD_CFLAGS += -D__DISABLE_EXPORTS
+ # Disable relocation relaxation in case the link is not PIE.
+ KBUILD_CFLAGS += $(call cc-option,-Wa$(comma)-mrelax-relocations=no)
+ KBUILD_CFLAGS += -include $(srctree)/include/linux/hidden.h
++LLVM_COV_PROFILE := n
  
- source "scripts/gcc-plugins/Kconfig"
+ # sev.c indirectly includes inat-table.h which is generated during
+ # compilation and stored in $(objtree). Add the directory to the includes so
+diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
+index c9216ac4fb1e..d9587b3b6bf2 100644
+--- a/arch/x86/entry/vdso/Makefile
++++ b/arch/x86/entry/vdso/Makefile
+@@ -156,6 +156,7 @@ quiet_cmd_vdso = VDSO    $@
  
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 007bab9f2a0e..87a793b82bab 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -85,6 +85,7 @@ config X86
- 	select ARCH_HAS_FORTIFY_SOURCE
- 	select ARCH_HAS_GCOV_PROFILE_ALL
- 	select ARCH_HAS_KCOV			if X86_64
-+	select ARCH_HAS_LLVM_COV		if X86_64
- 	select ARCH_HAS_KERNEL_FPU_SUPPORT
- 	select ARCH_HAS_MEM_ENCRYPT
- 	select ARCH_HAS_MEMBARRIER_SYNC_CORE
-diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
-index 6e73403e874f..90433772240a 100644
---- a/arch/x86/kernel/vmlinux.lds.S
-+++ b/arch/x86/kernel/vmlinux.lds.S
-@@ -191,6 +191,8 @@ SECTIONS
+ VDSO_LDFLAGS = -shared --hash-style=both --build-id=sha1 \
+ 	$(call ld-option, --eh-frame-hdr) -Bsymbolic -z noexecstack
++LLVM_COV_PROFILE := n
  
- 	BUG_TABLE
+ quiet_cmd_vdso_and_check = VDSO    $@
+       cmd_vdso_and_check = $(cmd_vdso); $(cmd_vdso_check)
+diff --git a/arch/x86/platform/efi/Makefile b/arch/x86/platform/efi/Makefile
+index 500cab4a7f7c..a07852e8f3ae 100644
+--- a/arch/x86/platform/efi/Makefile
++++ b/arch/x86/platform/efi/Makefile
+@@ -1,6 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+ KASAN_SANITIZE := n
+ GCOV_PROFILE := n
++LLVM_COV_PROFILE := n
  
-+	LLVM_COV_DATA
-+
- 	ORC_UNWIND_TABLE
+ obj-$(CONFIG_EFI) 		+= memmap.o quirks.o efi.o efi_$(BITS).o \
+ 				   efi_stub_$(BITS).o
+diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
+index ebdfd7b84feb..b4e619114898 100644
+--- a/arch/x86/purgatory/Makefile
++++ b/arch/x86/purgatory/Makefile
+@@ -28,6 +28,7 @@ PURGATORY_LDFLAGS := -e purgatory_start -z nodefaultlib
+ LDFLAGS_purgatory.ro := -r $(PURGATORY_LDFLAGS)
+ LDFLAGS_purgatory.chk := $(PURGATORY_LDFLAGS)
+ targets += purgatory.ro purgatory.chk
++LLVM_COV_PROFILE := n
  
- 	. = ALIGN(PAGE_SIZE);
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index 1ae44793132a..770ff8469dcd 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -334,6 +334,44 @@
- #define THERMAL_TABLE(name)
- #endif
+ # These are adjustments to the compiler flags used for objects that
+ # make up the standalone purgatory.ro
+diff --git a/arch/x86/realmode/rm/Makefile b/arch/x86/realmode/rm/Makefile
+index a0fb39abc5c8..d36338bfa2ce 100644
+--- a/arch/x86/realmode/rm/Makefile
++++ b/arch/x86/realmode/rm/Makefile
+@@ -67,3 +67,4 @@ KBUILD_CFLAGS	:= $(REALMODE_CFLAGS) -D_SETUP -D_WAKEUP \
+ 		   -I$(srctree)/arch/x86/boot
+ KBUILD_AFLAGS	:= $(KBUILD_CFLAGS) -D__ASSEMBLY__
+ KBUILD_CFLAGS	+= -fno-asynchronous-unwind-tables
++LLVM_COV_PROFILE := n
+diff --git a/arch/x86/um/vdso/Makefile b/arch/x86/um/vdso/Makefile
+index 6a77ea6434ff..3ea2f5d123fe 100644
+--- a/arch/x86/um/vdso/Makefile
++++ b/arch/x86/um/vdso/Makefile
+@@ -60,3 +60,4 @@ quiet_cmd_vdso = VDSO    $@
+ 		 sh $(src)/checkundef.sh '$(NM)' '$@'
  
-+#ifdef CONFIG_LLVM_COV_KERNEL
-+#define LLVM_COV_DATA							\
-+	__llvm_prf_data : AT(ADDR(__llvm_prf_data) - LOAD_OFFSET) {	\
-+		__llvm_prf_start = .;					\
-+		__llvm_prf_data_start = .;				\
-+		*(__llvm_prf_data)					\
-+		__llvm_prf_data_end = .;				\
-+	}								\
-+	__llvm_prf_cnts : AT(ADDR(__llvm_prf_cnts) - LOAD_OFFSET) {	\
-+		__llvm_prf_cnts_start = .;				\
-+		*(__llvm_prf_cnts)					\
-+		__llvm_prf_cnts_end = .;				\
-+	}								\
-+	__llvm_prf_names : AT(ADDR(__llvm_prf_names) - LOAD_OFFSET) {	\
-+		__llvm_prf_names_start = .;				\
-+		*(__llvm_prf_names)					\
-+		__llvm_prf_names_end = .;				\
-+	}								\
-+	__llvm_prf_bits : AT(ADDR(__llvm_prf_bits) - LOAD_OFFSET) {	\
-+		__llvm_prf_bits_start = .;				\
-+		*(__llvm_prf_bits)					\
-+		__llvm_prf_bits_end = .;				\
-+	}								\
-+	__llvm_covfun : AT(ADDR(__llvm_covfun) - LOAD_OFFSET) {		\
-+		__llvm_covfun_start = .;				\
-+		*(__llvm_covfun)					\
-+		__llvm_covfun_end = .;					\
-+	}								\
-+	__llvm_covmap : AT(ADDR(__llvm_covmap) - LOAD_OFFSET) {		\
-+		__llvm_covmap_start = .;				\
-+		*(__llvm_covmap)					\
-+		__llvm_covmap_end = .;					\
-+		__llvm_prf_end = .;					\
-+	}
-+#else
-+#define LLVM_COV_DATA
-+#endif
-+
- #define KERNEL_DTB()							\
- 	STRUCT_ALIGN();							\
- 	__dtb_start = .;						\
-diff --git a/kernel/Makefile b/kernel/Makefile
-index 3c13240dfc9f..773e6a9ee00a 100644
---- a/kernel/Makefile
-+++ b/kernel/Makefile
-@@ -117,6 +117,7 @@ obj-$(CONFIG_HAVE_STATIC_CALL) += static_call.o
- obj-$(CONFIG_HAVE_STATIC_CALL_INLINE) += static_call_inline.o
- obj-$(CONFIG_CFI_CLANG) += cfi.o
- obj-$(CONFIG_NUMA) += numa.o
-+obj-$(CONFIG_LLVM_COV_KERNEL) += llvm-cov/
+ VDSO_LDFLAGS = -fPIC -shared -Wl,--hash-style=sysv -z noexecstack
++LLVM_COV_PROFILE := n
+diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
+index ed4e8ddbe76a..b8224ff291d9 100644
+--- a/drivers/firmware/efi/libstub/Makefile
++++ b/drivers/firmware/efi/libstub/Makefile
+@@ -62,6 +62,8 @@ KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_LTO), $(KBUILD_CFLAGS))
+ # `-fdata-sections` flag from KBUILD_CFLAGS_KERNEL
+ KBUILD_CFLAGS_KERNEL := $(filter-out -fdata-sections, $(KBUILD_CFLAGS_KERNEL))
  
- obj-$(CONFIG_PERF_EVENTS) += events/
- 
-diff --git a/kernel/llvm-cov/Kconfig b/kernel/llvm-cov/Kconfig
-new file mode 100644
-index 000000000000..505eba5bd23c
---- /dev/null
-+++ b/kernel/llvm-cov/Kconfig
-@@ -0,0 +1,29 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+menu "Clang's source-based kernel coverage measurement (EXPERIMENTAL)"
-+
-+config ARCH_HAS_LLVM_COV
-+	bool
-+
-+config LLVM_COV_KERNEL
-+	bool "Enable Clang's source-based kernel coverage measurement"
-+	depends on DEBUG_FS
-+	depends on ARCH_HAS_LLVM_COV
-+	depends on CC_IS_CLANG && CLANG_VERSION >= 180000
-+	default n
-+	help
-+	  This option enables Clang's Source-based Code Coverage.
-+
-+	  If unsure, say N.
-+
-+	  On a kernel compiled with this option, run your test suites, and
-+	  download the raw profile from /sys/kernel/debug/llvm-cov/profraw.
-+	  This file can then be converted into the indexed format with
-+	  llvm-profdata and used to generate coverage reports with llvm-cov.
-+
-+	  Note that a kernel compiled with coverage flags will be significantly
-+	  larger and run slower.
-+
-+	  Note that the debugfs filesystem has to be mounted to access the raw
-+	  profile.
-+
-+endmenu
-diff --git a/kernel/llvm-cov/Makefile b/kernel/llvm-cov/Makefile
-new file mode 100644
-index 000000000000..a0f45e05f8fb
---- /dev/null
-+++ b/kernel/llvm-cov/Makefile
-@@ -0,0 +1,5 @@
-+# SPDX-License-Identifier: GPL-2.0
-+GCOV_PROFILE		:= n
-+LLVM_COV_PROFILE	:= n
-+
-+obj-y	+= fs.o
-\ No newline at end of file
-diff --git a/kernel/llvm-cov/fs.c b/kernel/llvm-cov/fs.c
-new file mode 100644
-index 000000000000..c56f660a174e
---- /dev/null
-+++ b/kernel/llvm-cov/fs.c
-@@ -0,0 +1,253 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2019	Sami Tolvanen <samitolvanen@google.com>, Google, Inc.
-+ * Copyright (C) 2024	Jinghao Jia   <jinghao7@illinois.edu>,   UIUC
-+ * Copyright (C) 2024	Wentao Zhang  <wentaoz5@illinois.edu>,   UIUC
-+ *
-+ * This software is licensed under the terms of the GNU General Public
-+ * License version 2, as published by the Free Software Foundation, and
-+ * may be copied, distributed, and modified under those terms.
-+ *
-+ * This program is distributed in the hope that it will be useful,
-+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-+ * GNU General Public License for more details.
-+ *
-+ */
-+
-+#define pr_fmt(fmt)	"llvm-cov: " fmt
-+
-+#include <linux/kernel.h>
-+#include <linux/debugfs.h>
-+#include <linux/fs.h>
-+#include <linux/module.h>
-+#include <linux/slab.h>
-+#include <linux/vmalloc.h>
-+#include <linux/spinlock.h>
-+#include "llvm-cov.h"
-+
-+/*
-+ * This lock guards both counter/bitmap reset and serialization of the
-+ * raw profile data. Keeping both of these activities separate via locking
-+ * ensures that we don't try to serialize data that's being reset.
-+ */
-+DEFINE_SPINLOCK(llvm_cov_lock);
-+
-+static struct dentry *directory;
-+
-+struct llvm_cov_private_data {
-+	char *buffer;
-+	unsigned long size;
-+};
-+
-+/*
-+ * Raw profile data format:
-+ * https://llvm.org/docs/InstrProfileFormat.html#raw-profile-format. We will
-+ * only populate information that's relevant to basic Source-based Code Coverage
-+ * before serialization. Other features like binary IDs, continuous mode,
-+ * single-byte mode, value profiling, type profiling etc are not implemented.
-+ */
-+
-+static void llvm_cov_fill_raw_profile_header(void **buffer)
-+{
-+	struct __llvm_profile_header *header = *(struct __llvm_profile_header **)buffer;
-+
-+	header->magic = INSTR_PROF_RAW_MAGIC_64;
-+	header->version = INSTR_PROF_RAW_VERSION;
-+	header->binary_ids_size = 0;
-+	header->num_data = __llvm_prf_data_count();
-+	header->padding_bytes_before_counters = 0;
-+	header->num_counters = __llvm_prf_cnts_count();
-+	header->padding_bytes_after_counters =
-+		__llvm_prf_get_padding(__llvm_prf_cnts_size());
-+	header->num_bitmap_bytes = __llvm_prf_bits_size();
-+	header->padding_bytes_after_bitmap_bytes =
-+		__llvm_prf_get_padding(__llvm_prf_bits_size());
-+	header->names_size = __llvm_prf_names_size();
-+	header->counters_delta = (u64)__llvm_prf_cnts_start -
-+				 (u64)__llvm_prf_data_start;
-+	header->bitmap_delta   = (u64)__llvm_prf_bits_start -
-+				 (u64)__llvm_prf_data_start;
-+	header->names_delta    = (u64)__llvm_prf_names_start;
-+#if defined(CONFIG_CC_IS_CLANG) && CONFIG_CLANG_VERSION >= 190000
-+	header->num_v_tables = 0;
-+	header->v_names_size = 0;
-+#endif
-+	header->value_kind_last = IPVK_LAST;
-+
-+	*buffer += sizeof(*header);
-+}
-+
-+/*
-+ * Copy the source into the buffer, incrementing the pointer into buffer in the
-+ * process.
-+ */
-+static void llvm_cov_copy_section_to_buffer(void **buffer, void *src,
-+					    unsigned long size)
-+{
-+	memcpy(*buffer, src, size);
-+	*buffer += size;
-+}
-+
-+static unsigned long llvm_cov_get_raw_profile_size(void)
-+{
-+	return sizeof(struct __llvm_profile_header) +
-+	       __llvm_prf_data_size() +
-+	       __llvm_prf_cnts_size() +
-+	       __llvm_prf_get_padding(__llvm_prf_cnts_size()) +
-+	       __llvm_prf_bits_size() +
-+	       __llvm_prf_get_padding(__llvm_prf_bits_size()) +
-+	       __llvm_prf_names_size() +
-+	       __llvm_prf_get_padding(__llvm_prf_names_size());
-+}
-+
-+/*
-+ * Serialize in-memory data into a format LLVM tools can understand
-+ * (https://llvm.org/docs/InstrProfileFormat.html#raw-profile-format)
-+ */
-+static int llvm_cov_serialize_raw_profile(struct llvm_cov_private_data *p)
-+{
-+	int err = 0;
-+	void *buffer;
-+
-+	p->size = llvm_cov_get_raw_profile_size();
-+	p->buffer = vzalloc(p->size);
-+
-+	if (!p->buffer) {
-+		err = -ENOMEM;
-+		goto out;
-+	}
-+
-+	buffer = p->buffer;
-+
-+	llvm_cov_fill_raw_profile_header(&buffer);
-+	llvm_cov_copy_section_to_buffer(&buffer, __llvm_prf_data_start,
-+					__llvm_prf_data_size());
-+	llvm_cov_copy_section_to_buffer(&buffer, __llvm_prf_cnts_start,
-+					__llvm_prf_cnts_size());
-+	buffer += __llvm_prf_get_padding(__llvm_prf_cnts_size());
-+	llvm_cov_copy_section_to_buffer(&buffer, __llvm_prf_bits_start,
-+					__llvm_prf_bits_size());
-+	buffer += __llvm_prf_get_padding(__llvm_prf_bits_size());
-+	llvm_cov_copy_section_to_buffer(&buffer, __llvm_prf_names_start,
-+					__llvm_prf_names_size());
-+	buffer += __llvm_prf_get_padding(__llvm_prf_names_size());
-+
-+out:
-+	return err;
-+}
-+
-+/* open() implementation for llvm-cov data file. */
-+static int llvm_cov_open(struct inode *inode, struct file *file)
-+{
-+	struct llvm_cov_private_data *data;
-+	unsigned long flags;
-+	int err;
-+
-+	data = kzalloc(sizeof(*data), GFP_KERNEL);
-+	if (!data) {
-+		err = -ENOMEM;
-+		goto out;
-+	}
-+
-+	flags = llvm_cov_claim_lock();
-+
-+	err = llvm_cov_serialize_raw_profile(data);
-+	if (unlikely(err)) {
-+		kfree(data);
-+		goto out_unlock;
-+	}
-+
-+	file->private_data = data;
-+
-+out_unlock:
-+	llvm_cov_release_lock(flags);
-+out:
-+	return err;
-+}
-+
-+/* read() implementation for llvm-cov data file. */
-+static ssize_t llvm_cov_read(struct file *file, char __user *buf, size_t count,
-+			loff_t *ppos)
-+{
-+	struct llvm_cov_private_data *data = file->private_data;
-+
-+	if (!data)
-+		return -EBADF;
-+
-+	return simple_read_from_buffer(buf, count, ppos, data->buffer,
-+				       data->size);
-+}
-+
-+/* release() implementation for llvm-cov data file. */
-+static int llvm_cov_release(struct inode *inode, struct file *file)
-+{
-+	struct llvm_cov_private_data *data = file->private_data;
-+
-+	if (data) {
-+		vfree(data->buffer);
-+		kfree(data);
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct file_operations llvm_cov_data_fops = {
-+	.owner		= THIS_MODULE,
-+	.open		= llvm_cov_open,
-+	.read		= llvm_cov_read,
-+	.llseek		= default_llseek,
-+	.release	= llvm_cov_release
-+};
-+
-+/* write() implementation for llvm-cov reset file */
-+static ssize_t reset_write(struct file *file, const char __user *addr,
-+			   size_t len, loff_t *pos)
-+{
-+	unsigned long flags;
-+
-+	flags = llvm_cov_claim_lock();
-+	memset(__llvm_prf_cnts_start, 0, __llvm_prf_cnts_size());
-+	memset(__llvm_prf_bits_start, 0, __llvm_prf_bits_size());
-+	llvm_cov_release_lock(flags);
-+
-+	return len;
-+}
-+
-+static const struct file_operations llvm_cov_reset_fops = {
-+	.owner		= THIS_MODULE,
-+	.write		= reset_write,
-+	.llseek		= noop_llseek,
-+};
-+
-+/* Create debugfs entries. */
-+static int __init llvm_cov_init(void)
-+{
-+	directory = debugfs_create_dir("llvm-cov", NULL);
-+	if (!directory)
-+		goto err_remove;
-+
-+	if (!debugfs_create_file("profraw", 0400, directory, NULL,
-+				 &llvm_cov_data_fops))
-+		goto err_remove;
-+
-+	if (!debugfs_create_file("reset", 0200, directory, NULL,
-+				 &llvm_cov_reset_fops))
-+		goto err_remove;
-+
-+	return 0;
-+
-+err_remove:
-+	debugfs_remove_recursive(directory);
-+	pr_err("initialization failed\n");
-+	return -EIO;
-+}
-+
-+/* Remove debugfs entries. */
-+static void __exit llvm_cov_exit(void)
-+{
-+	debugfs_remove_recursive(directory);
-+}
-+
-+module_init(llvm_cov_init);
-+module_exit(llvm_cov_exit);
-diff --git a/kernel/llvm-cov/llvm-cov.h b/kernel/llvm-cov/llvm-cov.h
-new file mode 100644
-index 000000000000..d9551a685756
---- /dev/null
-+++ b/kernel/llvm-cov/llvm-cov.h
-@@ -0,0 +1,156 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2019	Sami Tolvanen <samitolvanen@google.com>, Google, Inc.
-+ * Copyright (C) 2024	Jinghao Jia   <jinghao7@illinois.edu>,   UIUC
-+ * Copyright (C) 2024	Wentao Zhang  <wentaoz5@illinois.edu>,   UIUC
-+ *
-+ * This software is licensed under the terms of the GNU General Public
-+ * License version 2, as published by the Free Software Foundation, and
-+ * may be copied, distributed, and modified under those terms.
-+ *
-+ * This program is distributed in the hope that it will be useful,
-+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-+ * GNU General Public License for more details.
-+ *
-+ */
-+
-+#ifndef _LLVM_COV_H
-+#define _LLVM_COV_H
-+
-+extern spinlock_t llvm_cov_lock;
-+
-+static __always_inline unsigned long llvm_cov_claim_lock(void)
-+{
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&llvm_cov_lock, flags);
-+
-+	return flags;
-+}
-+
-+static __always_inline void llvm_cov_release_lock(unsigned long flags)
-+{
-+	spin_unlock_irqrestore(&llvm_cov_lock, flags);
-+}
-+
-+/*
-+ * Note: These internal LLVM definitions must match the compiler version.
-+ * See llvm/include/llvm/ProfileData/InstrProfData.inc in LLVM's source code.
-+ */
-+
-+#define INSTR_PROF_RAW_MAGIC_64		\
-+		((u64)255 << 56 |	\
-+		 (u64)'l' << 48 |	\
-+		 (u64)'p' << 40 |	\
-+		 (u64)'r' << 32 |	\
-+		 (u64)'o' << 24 |	\
-+		 (u64)'f' << 16 |	\
-+		 (u64)'r' << 8  |	\
-+		 (u64)129)
-+
-+#if defined(CONFIG_CC_IS_CLANG) && CONFIG_CLANG_VERSION >= 190000
-+#define INSTR_PROF_RAW_VERSION		10
-+#define INSTR_PROF_DATA_ALIGNMENT	8
-+#define IPVK_LAST			2
-+#elif defined(CONFIG_CC_IS_CLANG) && CONFIG_CLANG_VERSION >= 180000
-+#define INSTR_PROF_RAW_VERSION		9
-+#define INSTR_PROF_DATA_ALIGNMENT	8
-+#define IPVK_LAST			1
-+#endif
-+
-+/**
-+ * struct __llvm_profile_header - represents the raw profile header data
-+ * structure. Description of each member can be found here:
-+ * https://llvm.org/docs/InstrProfileFormat.html#header.
-+ */
-+struct __llvm_profile_header {
-+	u64 magic;
-+	u64 version;
-+	u64 binary_ids_size;
-+	u64 num_data;
-+	u64 padding_bytes_before_counters;
-+	u64 num_counters;
-+	u64 padding_bytes_after_counters;
-+	u64 num_bitmap_bytes;
-+	u64 padding_bytes_after_bitmap_bytes;
-+	u64 names_size;
-+	u64 counters_delta;
-+	u64 bitmap_delta;
-+	u64 names_delta;
-+#if defined(CONFIG_CC_IS_CLANG) && CONFIG_CLANG_VERSION >= 190000
-+	u64 num_v_tables;
-+	u64 v_names_size;
-+#endif
-+	u64 value_kind_last;
-+};
-+
-+/**
-+ * struct __llvm_profile_data - represents the per-function control structure.
-+ * Description of each member can be found here:
-+ * https://llvm.org/docs/InstrProfileFormat.html#profile-metadata. To measure
-+ * Source-based Code Coverage, the internals of this struct don't matter at run
-+ * time. The only purpose of the definition below is to run sizeof() against it
-+ * so that we can calculate the "num_data" field in header.
-+ */
-+struct __llvm_profile_data {
-+	const u64 name_ref;
-+	const u64 func_hash;
-+	const void *counter_ptr;
-+	const void *bitmap_ptr;
-+	const void *function_pointer;
-+	void *values;
-+	const u32 num_counters;
-+	const u16 num_value_sites[IPVK_LAST + 1];
-+	const u32 num_bitmap_bytes;
-+} __aligned(INSTR_PROF_DATA_ALIGNMENT);
-+
-+/* Payload sections */
-+
-+extern struct __llvm_profile_data __llvm_prf_data_start[];
-+extern struct __llvm_profile_data __llvm_prf_data_end[];
-+
-+extern u64 __llvm_prf_cnts_start[];
-+extern u64 __llvm_prf_cnts_end[];
-+
-+extern char __llvm_prf_names_start[];
-+extern char __llvm_prf_names_end[];
-+
-+extern char __llvm_prf_bits_start[];
-+extern char __llvm_prf_bits_end[];
-+
-+#define __DEFINE_SECTION_SIZE(s)					\
-+	static inline unsigned long __llvm_prf_ ## s ## _size(void)	\
-+	{								\
-+		unsigned long start =					\
-+			(unsigned long)__llvm_prf_ ## s ## _start;	\
-+		unsigned long end =					\
-+			(unsigned long)__llvm_prf_ ## s ## _end;	\
-+		return end - start;					\
-+	}
-+#define __DEFINE_SECTION_COUNT(s)					\
-+	static inline unsigned long __llvm_prf_ ## s ## _count(void)	\
-+	{								\
-+		return __llvm_prf_ ## s ## _size() /			\
-+			sizeof(__llvm_prf_ ## s ## _start[0]);		\
-+	}
-+
-+__DEFINE_SECTION_SIZE(data)
-+__DEFINE_SECTION_SIZE(cnts)
-+__DEFINE_SECTION_SIZE(names)
-+__DEFINE_SECTION_SIZE(bits)
-+
-+__DEFINE_SECTION_COUNT(data)
-+__DEFINE_SECTION_COUNT(cnts)
-+__DEFINE_SECTION_COUNT(names)
-+__DEFINE_SECTION_COUNT(bits)
-+
-+#undef __DEFINE_SECTION_SIZE
-+#undef __DEFINE_SECTION_COUNT
-+
-+static inline unsigned long __llvm_prf_get_padding(unsigned long size)
-+{
-+	return 7 & (sizeof(u64) - size % sizeof(u64));
-+}
-+
-+#endif /* _LLVM_COV_H */
-diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-index fe3668dc4954..b9ceaee34b28 100644
---- a/scripts/Makefile.lib
-+++ b/scripts/Makefile.lib
-@@ -158,6 +158,16 @@ _c_flags += $(if $(patsubst n%,, \
- 		$(CFLAGS_GCOV))
++LLVM_COV_PROFILE := n
++
+ lib-y				:= efi-stub-helper.o gop.o secureboot.o tpm.o \
+ 				   file.o mem.o random.o randomalloc.o pci.o \
+ 				   skip_spaces.o lib-cmdline.o lib-ctype.o \
+diff --git a/kernel/trace/Makefile b/kernel/trace/Makefile
+index 057cd975d014..0293acc50afa 100644
+--- a/kernel/trace/Makefile
++++ b/kernel/trace/Makefile
+@@ -30,6 +30,7 @@ endif
+ ifdef CONFIG_GCOV_PROFILE_FTRACE
+ GCOV_PROFILE := y
  endif
++LLVM_COV_PROFILE := n
  
-+#
-+# Enable Clang's Source-based Code Coverage flags for a file or directory
-+# depending on variables LLVM_COV_PROFILE_obj.o and LLVM_COV_PROFILE.
-+#
-+ifeq ($(CONFIG_LLVM_COV_KERNEL),y)
-+_c_flags += $(if $(patsubst n%,, \
-+		$(LLVM_COV_PROFILE_$(basetarget).o)$(LLVM_COV_PROFILE)y), \
-+		$(CFLAGS_LLVM_COV))
-+endif
-+
- #
- # Enable address sanitizer flags for kernel except some files or directories
- # we don't want to check (depends on variables KASAN_SANITIZE_obj.o, KASAN_SANITIZE)
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index d16d0ace2775..836c2289b8d8 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -743,6 +743,8 @@ static const char *const section_white_list[] =
- 	".gnu.lto*",
- 	".discard.*",
- 	".llvm.call-graph-profile",	/* call graph */
-+	"__llvm_covfun",
-+	"__llvm_covmap",
- 	NULL
- };
+ # Functions in this file could be invoked from early interrupt
+ # code and produce random code coverage.
+diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
+index 1fa98b5e952b..4fc791fff26c 100644
+--- a/scripts/Makefile.modfinal
++++ b/scripts/Makefile.modfinal
+@@ -22,6 +22,7 @@ __modfinal: $(modules:%.o=%.ko)
+ modname = $(notdir $(@:.mod.o=))
+ part-of-module = y
+ GCOV_PROFILE := n
++LLVM_COV_PROFILE := n
+ KCSAN_SANITIZE := n
  
+ quiet_cmd_cc_o_c = CC [M]  $@
 -- 
 2.45.2
 
