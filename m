@@ -1,150 +1,248 @@
-Return-Path: <linux-arch+bounces-6636-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6637-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5AF895FBBF
-	for <lists+linux-arch@lfdr.de>; Mon, 26 Aug 2024 23:34:45 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDE7495FD5B
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Aug 2024 00:49:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 60AE41F22D6F
-	for <lists+linux-arch@lfdr.de>; Mon, 26 Aug 2024 21:34:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0D961B233F1
+	for <lists+linux-arch@lfdr.de>; Mon, 26 Aug 2024 22:49:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 846EB19A28D;
-	Mon, 26 Aug 2024 21:34:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60F0B19DF53;
+	Mon, 26 Aug 2024 22:46:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BupbacOo"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="YcAh79LX"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2041.outbound.protection.outlook.com [40.107.96.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59B5019992B;
-	Mon, 26 Aug 2024 21:34:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724708079; cv=none; b=fSqxKXsu7cKZmeLXjqz7W+FWu9tCQaNcz3XSq+RsWQluXgdWKR/rFEvd2oPd1kAfBuooEi6Orhtjb0xYuE3lfH+sgo8H6J0nl8OjjF/SxaOvSHslRoCVq+BjdPaJTNCE34YjUoZ/f67qLm0grPoemT4tovOAKWTJZBR5TE7bfoQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724708079; c=relaxed/simple;
-	bh=f6QVJ7gqPlOJSdYw6NwfRnwjtN71dpr2Yeva23qqdXQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E/a6nafIQwPPn/AQ6kGN+n3jyuZBcIlbkAT5S5Ue7wSk8KrLhDIpqMRtYOEyVxAv/HkCH6tLhT4vbTJqPaJm4z0vv2NJwfkJ+jptXBY18sTMiRKlzodxU8Fg8nrHTiKYJHQk9teKdmcRXcgjGKKySB5if2cFkpdW5BSEY6kLKlw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BupbacOo; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724708077; x=1756244077;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=f6QVJ7gqPlOJSdYw6NwfRnwjtN71dpr2Yeva23qqdXQ=;
-  b=BupbacOoMmqT3KnKPl/JPcq4K8Brb5EleBhUTGjrfkGTsbNNqj4GHreD
-   hj3iV1Ynrqa2eesLEt49BjRHuKGiAYNIegbw5HjHR+E9cAqL0ihI8ombR
-   Z2UG576G176oSWVlyY+1Tdd9ad16Rvd29JkDhd7lEdobgcc8sCGRod+tj
-   LBPdro3r/y1b7Re+VDvMW8abOZDhLOeoiRI8HIE3++Otr/YzkxDsWvLME
-   gXpcwXjWh72mcydxGvG3C+bz1Dz0o8C/qhRV81lnmnnXLfUxsC3YjHZ6g
-   bzD+5KPv2FDwIDTtdU2PxHS6+JaE6nFI5qum9rbDG8KHG8VLz9Z5uZpHx
-   Q==;
-X-CSE-ConnectionGUID: FqqkaVnbQvqq0cJAkJwvbg==
-X-CSE-MsgGUID: DDdZtAKsRmGoI1w2JYxCxA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11176"; a="23025216"
-X-IronPort-AV: E=Sophos;i="6.10,178,1719903600"; 
-   d="scan'208";a="23025216"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2024 14:34:36 -0700
-X-CSE-ConnectionGUID: eZLAVeVBSbC/mqEo8Mbbug==
-X-CSE-MsgGUID: QnvKqTknQ4GeCeBOqGKUpA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,178,1719903600"; 
-   d="scan'208";a="66801034"
-Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 26 Aug 2024 14:34:30 -0700
-Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sihM4-000Hcg-1d;
-	Mon, 26 Aug 2024 21:34:28 +0000
-Date: Tue, 27 Aug 2024 05:34:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Naveen N Rao <naveen@kernel.org>, Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Theodore Ts'o <tytso@mit.edu>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Shuah Khan <skhan@linuxfoundation.org>
-Cc: oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 07/17] mm: Define VM_DROPPABLE for powerpc/32
-Message-ID: <202408270553.2S5d14Ar-lkp@intel.com>
-References: <315e3a268b165b6edad7dcb723b0d8a506a56c4e.1724309198.git.christophe.leroy@csgroup.eu>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 786C0199E9E;
+	Mon, 26 Aug 2024 22:46:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.96.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724712391; cv=fail; b=nqyuA1MYaevHgCgndYvTKWuSzx5B2iiHH9M3L0LLD84RQO11yXtkj6pKqsXtIMPLGTYGfWHnGFUVWfXo2gpjK4+o0KMRRf2fa6SlXVn5PjOSqPomoqQO5cyAvAyBzPamhWQnGVAyvcafvKdyO09BTD5C4lwC1sFwTFHsGkIV86g=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724712391; c=relaxed/simple;
+	bh=CvsnoZOnhatFHpsGg4jpXg2L/nnzElWsi8E41Qc7GNA=;
+	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=tnqy6SNow3mn9yD81q0TUd4X8fYEzyK//0ujeBwX//vMFd4xealfj1yJeQmi/GTj2lvN7l7imgpnzBlSEj1ZK1PvNZSPmXUun6J+XsC+dcZ51vy9EEfJ+qRc5pcSJvt8cXxO+EuVj4X9NtLf7AeLnUDNv3t9rQMhnLe4f7T8U9A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=YcAh79LX; arc=fail smtp.client-ip=40.107.96.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=bTrIedz8XmWUyD90/Pqe6EtM/pIbSyt32coRCHdR8Td6sqE6OMWSyZ/gUp6+llzBjyn/iL8Da4q3nBpu0KuSdNxbaLDDG9rJ94BzjtFsD6EnnZOLDham2pU5X7/rqA1m/zytBqa8XiZwWoX+cbcxNvstOg2SX9MS/rE02aZSuhDYhm/qVJ/iOHz7lI1l7/RbAWJLHCCulxrzc+64wSnioMCvX5TRvPNPQSDxr97Z07nHgsMzO3d2mvjPmp2u4lDOMtAwI2BVvg//++nl34A5kpZfiJbQitUsezQSsIW40TkO/waARTw413csfXR1knYJc4oJxOk3hz9ZH2anBWaU2w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CvsnoZOnhatFHpsGg4jpXg2L/nnzElWsi8E41Qc7GNA=;
+ b=ksV0y2Bvp59QHlY/tazyCcUGKPoLi+1SvibpSYbxpSC5xU8JyhX9IoFTPoRmTM7bmtlPf4kampX+rA6OApnovb9vQF9wrqi0Y0E36Voo/hVY9+wlJmh3QnwhxlZ7vRp18kRePjANpvfE7lwKU2v8Bbxw4UE7HoaUWk7j28HV4Ax3qgk+5eVHYDj8+dMcbjRmVqMsQjxtynP0Gwo/ElBiTuQ2/H4aH/rHcyib93HFMALHGDFzHqtqkC7CQPS/fyr5lznuYaUJQAs6r5WvQj03D2Zalpox40Z90FfRuw66aEfynXABraYSCg4oOj12M1oGj1yo3kxfulMq66vzYkM2zA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CvsnoZOnhatFHpsGg4jpXg2L/nnzElWsi8E41Qc7GNA=;
+ b=YcAh79LXVztSVyfxDirKpGYkP2NNuouSaM1DBKZ2WEP0p7M5pQAqZPW6Q/j0oPfF3jIKy5wgl3/qBc5Yx6L9jhdDC96P4lnmJj9KJbWFGok+XJUWSVjGeEHMrrS/h2SkLTYHYZymu9pajqTg0Gy0tkrOIVqKJopruhBFFuDX92x+H00ZWtiVcYUHHe2xgXFyDfySxTcuqdn/aX3tjsaf1DJK/RbbJfloJ0DTPXHCj4nfbSfF1lS7kLajHz5+WCDQGsf/zn6cZ8NDXsyElCRyViUFHnC5q/uj4sQUj1T0r7eB2Bt4PRUXjcE4wyxTYiUKEsB6HT5GeDfZYOBxOOwXDQ==
+Received: from MW4PR12MB7261.namprd12.prod.outlook.com (2603:10b6:303:229::22)
+ by BL1PR12MB5898.namprd12.prod.outlook.com (2603:10b6:208:396::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7897.25; Mon, 26 Aug
+ 2024 22:46:26 +0000
+Received: from MW4PR12MB7261.namprd12.prod.outlook.com
+ ([fe80::d231:4655:2e3d:af1b]) by MW4PR12MB7261.namprd12.prod.outlook.com
+ ([fe80::d231:4655:2e3d:af1b%3]) with mapi id 15.20.7897.021; Mon, 26 Aug 2024
+ 22:46:25 +0000
+From: Bruno Faccini <bfaccini@nvidia.com>
+To: Mike Rapoport <rppt@kernel.org>
+CC: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Alexander
+ Gordeev <agordeev@linux.ibm.com>, Andreas Larsson <andreas@gaisler.com>,
+	Andrew Morton <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>,
+	Borislav Petkov <bp@alien8.de>, Catalin Marinas <catalin.marinas@arm.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Dan Williams
+	<dan.j.williams@intel.com>, Dave Hansen <dave.hansen@linux.intel.com>, David
+ Hildenbrand <david@redhat.com>, "David S. Miller" <davem@davemloft.net>,
+	Davidlohr Bueso <dave@stgolabs.net>, Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>, Heiko Carstens <hca@linux.ibm.com>, Huacai Chen
+	<chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>, Jiaxun Yang
+	<jiaxun.yang@flygoat.com>, John Paul Adrian Glaubitz
+	<glaubitz@physik.fu-berlin.de>, Jonathan Cameron
+	<jonathan.cameron@huawei.com>, Jonathan Corbet <corbet@lwn.net>, Michael
+ Ellerman <mpe@ellerman.id.au>, Palmer Dabbelt <palmer@dabbelt.com>, "Rafael
+ J. Wysocki" <rafael@kernel.org>, Rob Herring <robh@kernel.org>, Samuel
+ Holland <samuel.holland@sifive.com>, Thomas Bogendoerfer
+	<tsbogend@alpha.franken.de>, Thomas Gleixner <tglx@linutronix.de>, Vasily
+ Gorbik <gor@linux.ibm.com>, Will Deacon <will@kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-cxl@vger.kernel.org"
+	<linux-cxl@vger.kernel.org>, "linux-doc@vger.kernel.org"
+	<linux-doc@vger.kernel.org>, "linux-mips@vger.kernel.org"
+	<linux-mips@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+	"linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+	"linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
+	"linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+	"loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+	"nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>,
+	"sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>, "x86@kernel.org"
+	<x86@kernel.org>, Zi Yan <ziy@nvidia.com>, Bruno Faccini
+	<bfaccini@nvidia.com>
+Subject: Re: [PATCH v4 24/26] arch_numa: switch over to numa_memblks
+Thread-Topic: [PATCH v4 24/26] arch_numa: switch over to numa_memblks
+Thread-Index: AQHa+AnIRBd2eSXrZ0i2X6o1hDRrJQ==
+Date: Mon, 26 Aug 2024 22:46:25 +0000
+Message-ID: <1DDED2FB-35F4-4159-B46B-0F3846DCF98E@nvidia.com>
+Accept-Language: en-US
+Content-Language: en-GB
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MW4PR12MB7261:EE_|BL1PR12MB5898:EE_
+x-ms-office365-filtering-correlation-id: b75fd6d2-6a02-4a56-8fdb-08dcc620eabf
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|366016|1800799024|376014|7416014|38070700018;
+x-microsoft-antispam-message-info:
+ =?utf-8?B?ZjRQeGFoQWdlckUvUERuV3dPMWJjNW1VU0JFc3dVR0ZNVFdUaWF5Y3ZkenJr?=
+ =?utf-8?B?R2drcnhMZUpCeWhIekNJcXdQNUJwanFvbGJlV3lnQVpoRFZvV3ZhOHBDMnhB?=
+ =?utf-8?B?UlBDVVhKYUZ2RUwyd0M5TTZmY2htYUpnaXhvbCs2R251blA3YnNRUWpjV3o3?=
+ =?utf-8?B?MnhiR2wxOW9WbU1zdndwdGtSVmVxaGNiU1R0alZDZzczYXpMVWNYOU50aEdO?=
+ =?utf-8?B?bmNtTGMveHkwaWNOZnZLemF5b1pQWUJrRHN0V2l1QTRMRVVwK0YyS1E2czlR?=
+ =?utf-8?B?Z1E4Tlh5OWVzMjRiVExZcHhxbWh5VUM1ZkQva3h3OTlzL1Q2OWs5YVQwYmVp?=
+ =?utf-8?B?cjBUY1BMMnpqcVhEaUtZUTZvN3NwaG5wVGRvNHF5R0lnOWJnTWJweVN0OWlD?=
+ =?utf-8?B?Rms3TC9WRm9ZWlcxR1YvSnpYZWwxdW4yZGRHMytEaW8yamo4SGRPVXp3Qldk?=
+ =?utf-8?B?Slk5L1JORmhKMG9wL3Q5M3luaHNPQ3hKbURQbTV3dWhneWhXZVg5L1A1S1A0?=
+ =?utf-8?B?SG1JQThxamJKNWJUbUIzMlEwbU5pUjhGaUZiRGRkdnJvZURCdzMwL3VZbHJF?=
+ =?utf-8?B?eFYrUnhFRUtvUFY5OUtJWXdJbFFVV1NlSE5wVHFxTUlWTG03eDdpa3V5R0hX?=
+ =?utf-8?B?TUhPeHNXTVpVVlRPMXFyTUVjd0hSM1R0TmRqcE9xMWJ2MW5nd0N4WWZ5L2J2?=
+ =?utf-8?B?YU5xMVk0WTRYdHdjVTl1YzZ0a2NwOWM2UlhybSsrMEFIU3p2eTBUaHRxKyta?=
+ =?utf-8?B?UmUrZ3Y3bE1YMU96RmU2cmxIdllhWnFid3gxNWMzMXVxZHh1RCswSGFHVEIv?=
+ =?utf-8?B?VTRBdUJoaHlZSzN6bUtxQnFEb1dLNGprSlc0ckMyUmNCYXFFaUFFSmQyeDhv?=
+ =?utf-8?B?elI5YUd2bUpWSFNPQVhlVmxYWmxNYXVRZSszelpnamVGMm55TEpVb3llVlZa?=
+ =?utf-8?B?R29ybG9XR2wybVkvdHNRMlhTS08vNUk1SHcxck96MFFEK3ZlZW5lZ1V0a1Fy?=
+ =?utf-8?B?OU1iZFh1clF5czMzaXF4djdXMnMwdGNtSGZheGxYSlJabm5BM1FXSXhQc1dh?=
+ =?utf-8?B?ckg0a1NEZzZFb2kvdVdOdW9DRHViUTR6TzJaaUdBSUY0dklPbk85dWxlMGFu?=
+ =?utf-8?B?bDA1MWdEbGVhMGlrbXA3YVlsVmFqWXpJaE1ZTEFpMGpJSjJ4NDcrSE9FWEgv?=
+ =?utf-8?B?aW1TRGs5bDA2ZTlxbXdnWStMKzdUQUN0Qm1WcVVuTHNtN1dZdEIxM04yajZN?=
+ =?utf-8?B?S3NlN0k4OUduZHFBVEhScFI4T21MTlczNGdRNndOWEM3Ri9aa2wrcTNZQklo?=
+ =?utf-8?B?dG02NTB1aEcwQ0I1SEZWbFA3VHYxaGdlUVpIQkl5ajA1M3UxVlZNazdBaFll?=
+ =?utf-8?B?R05jR2dJVkhmVUJmSkhLeVRpdmlGMUhJdldjWUUyUWFmM3NTNTFybU9yTitE?=
+ =?utf-8?B?NUFXNUQ2MEsxdkFuaUpVV3hUSjlxR1ZPMTIxcEowcE5uTGp6NVR5b2R5Z0Fx?=
+ =?utf-8?B?djA0Y0laWlgyakJaK2t2NGRqelBlNkJQdlJ0VDAzUUxyT3Y3NXhPUEl2ZUV5?=
+ =?utf-8?B?a0ExbTNHWDk5QjRETGtOdVN3dnVTYXcxTzZmOTYzVk1sb3NUcWFiZTRFcFZ4?=
+ =?utf-8?B?VmNJZjZQNVc5Rm80RkVEQXE2YmduOS9uMzdSU1l5VWVUWThBdWR4ckRoYnRx?=
+ =?utf-8?B?N2IrZmw0cmM2RnJIVktoUnBwTnRJOUhVYWN1OEpMVk82NklCODBmTnVBUThF?=
+ =?utf-8?B?QXpmajR1M3Q1UVlFMTJ0OHBSV2F6YndrWmRqRktkUTJENW1tRmpPRWszZnNm?=
+ =?utf-8?B?UGlXY3JqVDI0bmpLVWlQd3N6bEV5Nm0zZHp4ZVNkYmtMeXFaMlF1QU90SUh2?=
+ =?utf-8?B?aW00M3VrRXlSZHpxVmlwUmZaeG45STg4U2pMeURTUFhFUFE9PQ==?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR12MB7261.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?NlVnaWFuakxjOE5OTk5rb0ZTRkhIS3NJVVNNdForOGYrK1NSSTJacEdvZmE0?=
+ =?utf-8?B?aTBwbUZtVGh4OHp6ZStERUlCM0NVLzF4KzZMSklOR3FsUjEwdUcxb2YzYnl5?=
+ =?utf-8?B?TFByWkJqbnV1YXBsbDI3Tjd0TDU5VGZqU2lPdjZNK2ZENGVKUlovTlJmVGgw?=
+ =?utf-8?B?ZVRWUEpjeVl1KzhieTNjb2VSa0ZxTENGNURoUmI2Z3N3bmhETVdEcnRWNzBX?=
+ =?utf-8?B?bDBhMkw4ZDZQZmF3Wk5IWHdiWmdIS3h6ck5BUTMvaTB0WXZOSGVyTkE1c0FD?=
+ =?utf-8?B?eEQreXhnZTZ2TUxwREpleGt6czU1OFZrQlN4cXFCUDR4RHdtc3MxVVl5KzBh?=
+ =?utf-8?B?TWVGa0I1MEdrUUlXK1NkV3pHaE5IZUoxak9HSDczMWVtWkV3aWtISk9wWFRP?=
+ =?utf-8?B?WU0xN0ZpbEZBN24rbjR4SUZYY3V1cmhmd3ZzM0JoRXVuR280SzljRFBVTVd5?=
+ =?utf-8?B?NGRxZHI1UnhhZHpobVUwREluQVNqSUtQbUwwVTZNeHgrcy9NZXdFRXcrczgv?=
+ =?utf-8?B?YkJBcGVtRWZ1N1owRC9vc2MvTHNvTWdMUVpsNHhCZVlncDFpcURHZHRBTlVQ?=
+ =?utf-8?B?TGE1L3I1anlHd2paWmM0SWZhaXVvajJsUk5SeUJGRU1ZVytzTmkyOFJoaUE5?=
+ =?utf-8?B?MHJ5NkR3bllwSHhkSVk0UkxqMWt3R25CajFPYVIxSExtaTIzbDVodVIvTFRM?=
+ =?utf-8?B?RXlhSFZkWnJpenZpS21tQVJPamppcnF4UEtzZDNQc1BxYXlCVWNtUSttZ3Qz?=
+ =?utf-8?B?c0pzYTFGZ21uSVJOSk5sYXM0ZkVpQVFrb09FbDhHSzAyVlN6MHNDMk9TVkNa?=
+ =?utf-8?B?VEh6T1FUWFlOZ0IrT0xtdzUyR3NCOU1TZ0NwVUNKc0xuU1NvazlJaDludHQ2?=
+ =?utf-8?B?K1UzOVJnQXpnMHFRYThkNEpMM1d1cFVyQzZUb1RHWUVUSGU4ZHV4R2Rtb3dz?=
+ =?utf-8?B?UVlUYnl1SUFsTDZIempHWDJDSGhBU0U3cG52U0t6SSt5QktnTTluOGwzSEJP?=
+ =?utf-8?B?dERBMHZ0NzdlMkdXUFM1NmthWUx1LzEzVW5URVZiamQ1cU5xN3FuMnNGYmxK?=
+ =?utf-8?B?Z1Q0VDNMVDU1cUw0Qk92blVxOHluVzF3RGFQTjYxT29KTWd0U1lWYkxUdzNL?=
+ =?utf-8?B?cFpxbTVXMWZYanJ5MDF6MmZkdTBCQWptQ3RSdjc2UHZmYkV0ZnVSTG8zSjFC?=
+ =?utf-8?B?cHZ6OWZjVGVBdXQ1OHM5MTQzcVRDb2hMV1pYNlU4T25yQnFQeUpvT1dUKytp?=
+ =?utf-8?B?dUIyMU5GTVNwRy9yeU5aOWFnaExvN1hZUzFoQks5NlNtd1VvbmpLK3ZINGhW?=
+ =?utf-8?B?bDlPYTB0RG9pMHp4QkQ5dUNtZjdoVHVzN1hHbXJmaE5Ed2RNbElRTWUrdUoz?=
+ =?utf-8?B?WUo2akxUNzk0WFp3TXY5WlFEbVpHdDlxd3lpeGFXNWQycTAxRGxIcnVNcGdq?=
+ =?utf-8?B?L04wWEh2ME1xK2p4WnJhb1UvYzlQTEV5RHdFUmh3V0dJQTNXWFRFNGxKNmNo?=
+ =?utf-8?B?WjlBNmFYMS9xSjlGbnZDcmNxcFAvNDd3QmV6dGU4dmVoeGRISVhYOEFrcXNL?=
+ =?utf-8?B?ckRISDdKVi9LN1MyTUtZOEpLMmdJQnBaOVdTYWpYamtaSW9ZZDhKYmhwaDA5?=
+ =?utf-8?B?cW5Oc0FNaHBvK25lc1F2Q0JnS1JQMVc2MmZFQnpPeWxlZXNwSnFMakhuZTls?=
+ =?utf-8?B?dDRGYVVaczJhM3hCZ09kZ1lvYktFZjBNRmFSUDUxdDJmdk4wNzFSejc5UGVD?=
+ =?utf-8?B?MXhHTGJBSWhjdFU2bDhDc0tHR3BFNEpXNzIrUTQyMWN0N0xZRU45N20xdjBu?=
+ =?utf-8?B?U3ZRd1FPNWVzcEppZzBRWFN0WXc1cWZCaGc5WjlGVEpsWlBpRnFsSGoxWDFk?=
+ =?utf-8?B?ZnNnZnkxZTVURnlTM0dyMi9pSmFYYjdvWGlUMG8xWllEUHZFUXVLV25tbkhD?=
+ =?utf-8?B?WGwyNjZieE1rdGtuN0VQRWFvaVpGZDN2QnprbUo3RE9oODIrQmhhTUllTklU?=
+ =?utf-8?B?SlBOWFlZWGFiTG9LaWJ2SXl5WEpXTVNMbjBlS0c1cndDL0s4TFhPMi9EU0hT?=
+ =?utf-8?B?TmZjZmxRN1o3MW9rQjdYS1c2L1J5WnVLMm9DeGF6M1cwUWZscW9KQVgrai80?=
+ =?utf-8?B?ZjlvQkgzZm9sTDlxd1dENldWRy85bEtmL2taUnlCVEVpeHEyMjRjeDE3aHBB?=
+ =?utf-8?B?Snc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <2F4492824914CA4FA50DC0267F51BB56@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <315e3a268b165b6edad7dcb723b0d8a506a56c4e.1724309198.git.christophe.leroy@csgroup.eu>
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW4PR12MB7261.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b75fd6d2-6a02-4a56-8fdb-08dcc620eabf
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Aug 2024 22:46:25.9148
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Wi0Dfi/63jsXvLarc8o7ASUEHowwfoiQMYoZLqlu59h29J6rQnEETTrBrEKSHueUDnyk13A+f+gnM8UJgLFBIQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5898
 
-Hi Christophe,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on powerpc/next]
-[also build test WARNING on powerpc/fixes shuah-kselftest/next shuah-kselftest/fixes linus/master v6.11-rc5 next-20240826]
-[cannot apply to crng-random/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Christophe-Leroy/asm-generic-unaligned-h-Extract-common-header-for-vDSO/20240826-103525
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
-patch link:    https://lore.kernel.org/r/315e3a268b165b6edad7dcb723b0d8a506a56c4e.1724309198.git.christophe.leroy%40csgroup.eu
-patch subject: [PATCH v2 07/17] mm: Define VM_DROPPABLE for powerpc/32
-config: um-randconfig-r122-20240826 (https://download.01.org/0day-ci/archive/20240827/202408270553.2S5d14Ar-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240827/202408270553.2S5d14Ar-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408270553.2S5d14Ar-lkp@intel.com/
-
-sparse warnings: (new ones prefixed by >>)
-   mm/debug_page_ref.c: note: in included file (through include/trace/events/page_ref.h):
->> include/trace/events/mmflags.h:168:5: sparse: sparse: undefined preprocessor identifier 'VM_DROPPABLE'
->> include/trace/events/mmflags.h:168:21: sparse: sparse: undefined preprocessor identifier 'VM_NONE'
-   mm/debug_page_ref.c: note: in included file (through include/trace/events/page_ref.h, include/trace/define_trace.h, include/trace/events/page_ref.h):
->> include/trace/events/mmflags.h:168:5: sparse: sparse: undefined preprocessor identifier 'VM_DROPPABLE'
->> include/trace/events/mmflags.h:168:21: sparse: sparse: undefined preprocessor identifier 'VM_NONE'
-   mm/debug_page_ref.c: note: in included file (through include/trace/events/page_ref.h, include/trace/trace_events.h, include/trace/define_trace.h, ...):
-   include/trace/events/mmflags.h:169:10: sparse: sparse: preprocessor token IF_HAVE_VM_DROPPABLE redefined
-   mm/debug_page_ref.c: note: in included file (through include/trace/events/page_ref.h):
-   include/trace/events/mmflags.h:171:10: sparse: this was the original definition
-
-vim +/VM_DROPPABLE +168 include/trace/events/mmflags.h
-
-   167	
- > 168	#if VM_DROPPABLE != VM_NONE
-   169	# define IF_HAVE_VM_DROPPABLE(flag, name) {flag, name},
-   170	#else
-   171	# define IF_HAVE_VM_DROPPABLE(flag, name)
-   172	#endif
-   173	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+T24gNyBBdWcgMjAyNCwgYXQgMjo0MSwgTWlrZSBSYXBvcG9ydCB3cm90ZToNCg0KRnJvbTogIk1p
+a2UgUmFwb3BvcnQgKE1pY3Jvc29mdCkiIDxycHB0QGtlcm5lbC5vcmc+DQoNClVudGlsIG5vdyBh
+cmNoX251bWEgd2FzIGRpcmVjdGx5IHRyYW5zbGF0aW5nIGZpcm13YXJlIE5VTUEgaW5mb3JtYXRp
+b24NCnRvIG1lbWJsb2NrLg0KDQpVc2luZyBudW1hX21lbWJsa3MgYXMgYW4gaW50ZXJtZWRpYXRl
+IHN0ZXAgaGFzIGEgZmV3IGFkdmFudGFnZXM6DQoqIGFsaWdubWVudCB3aXRoIG1vcmUgYmF0dGxl
+IHRlc3RlZCB4ODYgaW1wbGVtZW50YXRpb24NCiogYXZhaWxhYmlsaXR5IG9mIE5VTUEgZW11bGF0
+aW9uDQoqIG1haW50YWluaW5nIG5vZGUgaW5mb3JtYXRpb24gZm9yIG5vdCB5ZXQgcG9wdWxhdGVk
+IG1lbW9yeQ0KDQpBZGp1c3QgYSBmZXcgcGxhY2VzIGluIG51bWFfbWVtYmxrcyB0byBjb21waWxl
+IHdpdGggMzItYml0IHBoeXNfYWRkcl90DQphbmQgcmVwbGFjZSBjdXJyZW50IGZ1bmN0aW9uYWxp
+dHkgcmVsYXRlZCB0byBudW1hX2FkZF9tZW1ibGsoKSBhbmQNCl9fbm9kZV9kaXN0YW5jZSgpIGlu
+IGFyY2hfbnVtYSB3aXRoIHRoZSBpbXBsZW1lbnRhdGlvbiBiYXNlZCBvbg0KbnVtYV9tZW1ibGtz
+IGFuZCBhZGQgZnVuY3Rpb25zIHJlcXVpcmVkIGJ5IG51bWFfZW11bGF0aW9uLg0KDQpTaWduZWQt
+b2ZmLWJ5OiBNaWtlIFJhcG9wb3J0IChNaWNyb3NvZnQpIDxycHB0QGtlcm5lbC5vcmc+DQpUZXN0
+ZWQtYnk6IFppIFlhbiA8eml5QG52aWRpYS5jb20+ICMgZm9yIHg4Nl82NCBhbmQgYXJtNjQNClJl
+dmlld2VkLWJ5OiBKb25hdGhhbiBDYW1lcm9uIDxKb25hdGhhbi5DYW1lcm9uQGh1YXdlaS5jb20+
+DQpUZXN0ZWQtYnk6IEpvbmF0aGFuIENhbWVyb24gPEpvbmF0aGFuLkNhbWVyb25AaHVhd2VpLmNv
+bT4gW2FybTY0ICsgQ1hMIHZpYSBRRU1VXQ0KQWNrZWQtYnk6IERhbiBXaWxsaWFtcyA8ZGFuLmou
+d2lsbGlhbXNAaW50ZWwuY29tPg0KQWNrZWQtYnk6IERhdmlkIEhpbGRlbmJyYW5kIDxkYXZpZEBy
+ZWRoYXQuY29tPg0KLS0tDQogIGRyaXZlcnMvYmFzZS9LY29uZmlnICAgICAgIHwgICAxICsNCiAg
+ZHJpdmVycy9iYXNlL2FyY2hfbnVtYS5jICAgfCAyMDEgKysrKysrKysrKystLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLQ0KICBpbmNsdWRlL2FzbS1nZW5lcmljL251bWEuaCB8ICAgNiArLQ0KICBt
+bS9udW1hX21lbWJsa3MuYyAgICAgICAgICB8ICAxNyArKy0tDQogIDQgZmlsZXMgY2hhbmdlZCwg
+NzUgaW5zZXJ0aW9ucygrKSwgMTUwIGRlbGV0aW9ucygtKQ0KDQoNCjxzbmlwPg0KDQorDQordTY0
+IF9faW5pdCBudW1hX2VtdV9kbWFfZW5kKHZvaWQpDQorew0KKyAgICAgICAgICAgICByZXR1cm4g
+UEZOX1BIWVMobWVtYmxvY2tfc3RhcnRfb2ZfRFJBTSgpICsgU1pfNEcpOw0KK30NCisNCg0KUEZO
+X1BIWVMoKSB0cmFuc2xhdGlvbiBpcyB1bm5lY2Vzc2FyeSBoZXJlLCBhcw0KbWVtYmxvY2tfc3Rh
+cnRfb2ZfRFJBTSgpICsgU1pfNEcgaXMgYWxyZWFkeSBhDQptZW1vcnkgc2l6ZS4NCg0KVGhpcyBz
+aG91bGQgZml4IGl0Og0KPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PQ0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvYmFzZS9hcmNoX251bWEuYyBiL2RyaXZl
+cnMvYmFzZS9hcmNoX251bWEuYw0KaW5kZXggOGQ0OTg5M2MwZTk0Li5lMTg3MDE2NzY0MjYgMTAw
+NjQ0DQotLS0gYS9kcml2ZXJzL2Jhc2UvYXJjaF9udW1hLmMNCisrKyBiL2RyaXZlcnMvYmFzZS9h
+cmNoX251bWEuYw0KQEAgLTM0Niw3ICszNDYsNyBAQCB2b2lkIF9faW5pdCBudW1hX2VtdV91cGRh
+dGVfY3B1X3RvX25vZGUoaW50ICplbXVfbmlkX3RvX3BoeXMsDQoNCnU2NCBfX2luaXQgbnVtYV9l
+bXVfZG1hX2VuZCh2b2lkKQ0Kew0KLSAgICAgICAgICAgICAgcmV0dXJuIFBGTl9QSFlTKG1lbWJs
+b2NrX3N0YXJ0X29mX0RSQU0oKSArIFNaXzRHKTsNCisgICAgICAgICAgICAgcmV0dXJuIG1lbWJs
+b2NrX3N0YXJ0X29mX0RSQU0oKSArIFNaXzRHOw0KfQ0KDQp2b2lkIGRlYnVnX2NwdW1hc2tfc2V0
+X2NwdSh1bnNpZ25lZCBpbnQgY3B1LCBpbnQgbm9kZSwgYm9vbCBlbmFibGUpDQo9PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09DQoNCg0KDQohISEgSSBo
+YWQgYSBsb3Qgb2YgdHJvdWJsZSB0byBzZW5kIGluIHBsYWluIHRleHQgZnJvbSBPdXRsb29rIG9u
+IG15IE1hYywgc29ycnkgZm9yIHRoZSBub2lzZSBhbmQgdGhlIGR1cGxpY2F0ZSBjb3BpZXMgISEh
+DQoNCg0KDQo=
 
