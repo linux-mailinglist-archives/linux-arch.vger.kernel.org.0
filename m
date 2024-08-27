@@ -1,242 +1,139 @@
-Return-Path: <linux-arch+bounces-6653-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6655-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A929F9604F0
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Aug 2024 10:55:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF68D9605A2
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Aug 2024 11:32:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3291E1F230CC
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Aug 2024 08:55:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 78D3E1F24430
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Aug 2024 09:32:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32F96198A19;
-	Tue, 27 Aug 2024 08:55:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1279119CD17;
+	Tue, 27 Aug 2024 09:31:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="DxHa9hxJ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 044C6158DD0;
-	Tue, 27 Aug 2024 08:55:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCFA41714B8;
+	Tue, 27 Aug 2024 09:31:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724748938; cv=none; b=jCGLF0lu15EN3HuIdG9dTf/lnQkrPv4n38QK2mcv6fJbkaFj6YSKhu3txS25cRjrz/kug9wyIT6iFlUeau32cXgMl8K5VO8kpnh/eQEvht1YZOlGsJynhUihwoY/GsWLK2Wih6QoV0lhj9stG8JFnUmuZ9dCJDLdWDnAhf8pGmQ=
+	t=1724751118; cv=none; b=jS7VOEKwk+TGbQNfgPssDUo+BdADNEbu1l2/WtO87+XVA0eby24E39OkZHiu9EUHS7tofcht9VrJfcLKK8iTOWss6Gw2W3TCQG/0xN7E8ZpPPSPxhL2htpfXSdK9Gv1ARM4RtzEQ0rrEsRVQ+kHPhyNJ4SVHJV76eNngkOjdXL4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724748938; c=relaxed/simple;
-	bh=ZfA+lNjZLRY1OVSU5/JRfG/bdaLh+2XWOYPWuqUMM4M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pwCFYbO6/0I9bxAgahES6xPLa4tHSMyLxnZBIxsy8RObOSIt3CZCc0Q0jhQI79nTSDWmagreGPBTk8OAscGTUDHms4+VvsJX6g9oUUmbBdnw8bPhEhSH1rxy9t7ZCBwKPRqk+sXGsd0tyZaDlnuwLBv/Huywjas/n5LO41QKDAY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4WtLwk0nMzz9sRr;
-	Tue, 27 Aug 2024 10:55:34 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id XOoAxCltyyiQ; Tue, 27 Aug 2024 10:55:34 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4WtLwj6xKNz9rvV;
-	Tue, 27 Aug 2024 10:55:33 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id DC4A38B781;
-	Tue, 27 Aug 2024 10:55:33 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id E77BewEmZDDY; Tue, 27 Aug 2024 10:55:33 +0200 (CEST)
-Received: from [192.168.233.149] (unknown [192.168.233.149])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 2BECF8B763;
-	Tue, 27 Aug 2024 10:55:33 +0200 (CEST)
-Message-ID: <cd32f64c-e3c4-46f3-94cc-69baf493f452@csgroup.eu>
-Date: Tue, 27 Aug 2024 10:55:32 +0200
+	s=arc-20240116; t=1724751118; c=relaxed/simple;
+	bh=v5la12xuZlpJAHBwKesqG3ct7vbuw4Dwscy40oiBezU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BXZXHBKbFxio7amxifvsto4gD/RExVzGPVwdoVERrJ/jsknJUx24GeM0Ukx4+/QZ89JetBZt+/B3RiFEGhS9VsWpGb5hJvIdZzcVvDfmtN4/OYqf6BpHIri2vHfGbRGKL2sBbX2K7ibnkX1acthQf48BAPwSOxekvEgpZLBhnPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=DxHa9hxJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94408C8B7CD;
+	Tue, 27 Aug 2024 09:31:54 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="DxHa9hxJ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+	t=1724751112;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=JdIowXx5hArmXp0irpZ89oIJDLeZuVLuZPGcLtq5hgU=;
+	b=DxHa9hxJdBbjx/iowG23VxSZyG/CGmRspd62YsjFHqw0za1fqkq/Nd7+a80kDZL2Tm7peD
+	o/We6F+5fwEzQZMoosma4XFBPFOH2qWxrLQ/P73o66d8kChstBj6lF3d8wi2fZxcpqCXkw
+	uIFnWdSd9qKW1JqXm2PC/smuCa0IZ5c=
+Received: 
+	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id ecb5f7c9 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+	Tue, 27 Aug 2024 09:31:50 +0000 (UTC)
+Date: Tue, 27 Aug 2024 11:31:43 +0200
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>, Xi Ruoyao <xry111@xry111.site>,
+	Jinyang He <hejinyang@loongson.cn>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Adhemerval Zanella <adhemerval.zanella@linaro.org>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Naveen N Rao <naveen@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Theodore Ts'o <tytso@mit.edu>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	loongarch@lists.linux.dev
+Subject: getrandom() vDSO archs (arm64, ppc, loongarch) for 6.12 [Was: Re:
+ [PATCH v2 00/17] Wire up getrandom() vDSO implementation on powerpc]
+Message-ID: <Zs2c_9Z6sFMNJs1O@zx2c4.com>
+References: <cover.1724309198.git.christophe.leroy@csgroup.eu>
+ <Zswsennpw6fvigVh@zx2c4.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] random: vDSO: Redefine PAGE_SIZE and PAGE_MASK
-To: "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc: Theodore Ts'o <tytso@mit.edu>, Arnd Bergmann <arnd@arndb.de>,
- Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- Vincenzo Frascino <vincenzo.frascino@arm.com>, Ingo Molnar
- <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org
-References: <b8f8fb6d1d10386c74f2d8826b737a74c60b76b2.1724743492.git.christophe.leroy@csgroup.eu>
- <defab86b7fb897c88a05a33b62ccf38467dda884.1724747058.git.christophe.leroy@csgroup.eu>
- <Zs2RCfMgfNu_2vos@zx2c4.com>
-Content-Language: fr-FR
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-In-Reply-To: <Zs2RCfMgfNu_2vos@zx2c4.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Zswsennpw6fvigVh@zx2c4.com>
 
+Hey again,
 
+On Mon, Aug 26, 2024 at 09:19:22AM +0200, Jason A. Donenfeld wrote:
+> Thanks for this series. There are quite a few preliminary patches in it,
+> before you get to the PPC part, which fix up general build system or test
+> harness correctness issues. Since some of those affect all architectures
+> that are adding vDSO getrandom() support for 6.12, I'm going to take
+> those into my random.git tree as a fix for 6.11 now, in hopes that the
+> new archs can mostly go into arch trees without too many tree
+> interdependencies.
+> 
+> So I'll reply to individual patches for that, mentioning which ones I
+> extract.
 
-Le 27/08/2024 à 10:40, Jason A. Donenfeld a écrit :
-> I don't love this, but it might be the lesser of evils, so sure, let's
-> do it.
+Seeing the volume of these and the amount of ground they touch, I'm now
+having second thoughts about rushing this into 6.11. Particularly with
+the header changes, I think it might be smart to let it cook in
+linux-next for a bit before sending it to Linus.
 
-I don't love it either but I still prefer it to:
+  $ git --no-pager diff --name-only linus/master
+  arch/x86/entry/vdso/vma.c
+  arch/x86/include/asm/pvclock.h
+  arch/x86/include/asm/vdso/vsyscall.h
+  drivers/char/random.c
+  include/asm-generic/unaligned.h
+  include/vdso/helpers.h
+  include/vdso/unaligned.h
+  lib/vdso/Makefile
+  lib/vdso/getrandom.c
+  tools/arch/x86/vdso
+  tools/include/linux/linkage.h
+  tools/testing/selftests/vDSO/Makefile
+  tools/testing/selftests/vDSO/vdso_config.h
+  tools/testing/selftests/vDSO/vdso_test_getrandom.c
 
-#ifndef PAGE_SIZE
-#define PAGE_SIZE
-#define PAGE_MASK
-#endif
+So I think what I'll do is, for 6.11-rc6, send in the real bug fixes,
+which right now amount to:
 
-At least we are sure that every architecture get the same , independant 
-of the selected options, and we know what we get.
+  - random: vDSO: reject unknown getrandom() flags
+  - random: vDSO: don't use 64-bit atomics on 32-bit architectures
 
-For instance, on x86, when you select CONFIG_HYPERV_TIMER you get 
-asm/hyperv_timer.h which indirectly pulls page.h. But when 
-CONFIG_HYPERV_TIMER is not selected you don't get asm/hyperv_timer.h
+  $ git --no-pager diff --name-only linus/master..a90592ab7cad
+  drivers/char/random.c
+  lib/vdso/getrandom.c
 
-> 
-> I think I'll combine these header fixups so that the whole operation is
-> a bit more clear. The commit is still pretty small. Something like
-> below:
+And then for the pending aarm64, ppc64(/32?), and loongarch enablement
+patches for 6.12, I'll just take those through my random.git tree, which
+have all of these build-system preliminaries. And then we'll obviously
+require acks from the maintainers of the archs for each of those arch
+enablement patches.
 
-Looks good to me.
+If that sounds like an acceptable plan, you might want to mention in the
+cover letter that you're basing your arch-specific patches on
+https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git/ and
+want an ack from the arch maintainer, etc.
 
-Thanks
-Christophe
-
-> 
->  From 0d9a3d68cd6222395a605abd0ac625c41d4cabfa Mon Sep 17 00:00:00 2001
-> From: Christophe Leroy <christophe.leroy@csgroup.eu>
-> Date: Tue, 27 Aug 2024 09:31:47 +0200
-> Subject: [PATCH] random: vDSO: clean header inclusion in getrandom
-> 
-> Depending on the architecture, building a 32-bit vDSO on a 64-bit kernel
-> is problematic when some system headers are included.
-> 
-> Minimise the amount of headers by moving needed items, such as
-> __{get,put}_unaligned_t, into dedicated common headers and in general
-> use more specific headers, similar to what was done in commit
-> 8165b57bca21 ("linux/const.h: Extract common header for vDSO") and
-> commit 8c59ab839f52 ("lib/vdso: Enable common headers").
-> 
-> On some architectures this results in missing PAGE_SIZE, as was
-> described by commit 8b3843ae3634 ("vdso/datapage: Quick fix - use
-> asm/page-def.h for ARM64"), so define this if necessary, in the same way
-> as done prior by commit cffaefd15a8f ("vdso: Use CONFIG_PAGE_SHIFT in
-> vdso/datapage.h").
-> 
-> Removing linux/time64.h leads to missing 'struct timespec64' in
-> x86's asm/pvclock.h. Add a forward declaration of that struct in
-> that file.
-> 
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
->   arch/x86/include/asm/pvclock.h  |  1 +
->   include/asm-generic/unaligned.h | 11 +----------
->   include/vdso/helpers.h          |  1 +
->   include/vdso/unaligned.h        | 15 +++++++++++++++
->   lib/vdso/getrandom.c            | 13 ++++++++-----
->   5 files changed, 26 insertions(+), 15 deletions(-)
->   create mode 100644 include/vdso/unaligned.h
-> 
-> diff --git a/arch/x86/include/asm/pvclock.h b/arch/x86/include/asm/pvclock.h
-> index 0c92db84469d..6e4f8fae3ce9 100644
-> --- a/arch/x86/include/asm/pvclock.h
-> +++ b/arch/x86/include/asm/pvclock.h
-> @@ -5,6 +5,7 @@
->   #include <asm/clocksource.h>
->   #include <asm/pvclock-abi.h>
-> 
-> +struct timespec64;
->   /* some helper functions for xen and kvm pv clock sources */
->   u64 pvclock_clocksource_read(struct pvclock_vcpu_time_info *src);
->   u64 pvclock_clocksource_read_nowd(struct pvclock_vcpu_time_info *src);
-> diff --git a/include/asm-generic/unaligned.h b/include/asm-generic/unaligned.h
-> index a84c64e5f11e..95acdd70b3b2 100644
-> --- a/include/asm-generic/unaligned.h
-> +++ b/include/asm-generic/unaligned.h
-> @@ -8,16 +8,7 @@
->    */
->   #include <linux/unaligned/packed_struct.h>
->   #include <asm/byteorder.h>
-> -
-> -#define __get_unaligned_t(type, ptr) ({						\
-> -	const struct { type x; } __packed *__pptr = (typeof(__pptr))(ptr);	\
-> -	__pptr->x;								\
-> -})
-> -
-> -#define __put_unaligned_t(type, val, ptr) do {					\
-> -	struct { type x; } __packed *__pptr = (typeof(__pptr))(ptr);		\
-> -	__pptr->x = (val);							\
-> -} while (0)
-> +#include <vdso/unaligned.h>
-> 
->   #define get_unaligned(ptr)	__get_unaligned_t(typeof(*(ptr)), (ptr))
->   #define put_unaligned(val, ptr) __put_unaligned_t(typeof(*(ptr)), (val), (ptr))
-> diff --git a/include/vdso/helpers.h b/include/vdso/helpers.h
-> index 73501149439d..3ddb03bb05cb 100644
-> --- a/include/vdso/helpers.h
-> +++ b/include/vdso/helpers.h
-> @@ -4,6 +4,7 @@
-> 
->   #ifndef __ASSEMBLY__
-> 
-> +#include <asm/barrier.h>
->   #include <vdso/datapage.h>
-> 
->   static __always_inline u32 vdso_read_begin(const struct vdso_data *vd)
-> diff --git a/include/vdso/unaligned.h b/include/vdso/unaligned.h
-> new file mode 100644
-> index 000000000000..eee3d2a4dbe4
-> --- /dev/null
-> +++ b/include/vdso/unaligned.h
-> @@ -0,0 +1,15 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef __VDSO_UNALIGNED_H
-> +#define __VDSO_UNALIGNED_H
-> +
-> +#define __get_unaligned_t(type, ptr) ({						\
-> +	const struct { type x; } __packed *__pptr = (typeof(__pptr))(ptr);	\
-> +	__pptr->x;								\
-> +})
-> +
-> +#define __put_unaligned_t(type, val, ptr) do {					\
-> +	struct { type x; } __packed *__pptr = (typeof(__pptr))(ptr);		\
-> +	__pptr->x = (val);							\
-> +} while (0)
-> +
-> +#endif /* __VDSO_UNALIGNED_H */
-> diff --git a/lib/vdso/getrandom.c b/lib/vdso/getrandom.c
-> index 1281fa3546c2..938ca539aaa6 100644
-> --- a/lib/vdso/getrandom.c
-> +++ b/lib/vdso/getrandom.c
-> @@ -4,15 +4,18 @@
->    */
-> 
->   #include <linux/array_size.h>
-> -#include <linux/cache.h>
-> -#include <linux/kernel.h>
-> -#include <linux/time64.h>
-> +#include <linux/minmax.h>
->   #include <vdso/datapage.h>
->   #include <vdso/getrandom.h>
-> +#include <vdso/unaligned.h>
->   #include <asm/vdso/getrandom.h>
-> -#include <asm/vdso/vsyscall.h>
-> -#include <asm/unaligned.h>
->   #include <uapi/linux/mman.h>
-> +#include <uapi/linux/random.h>
-> +
-> +#undef PAGE_SIZE
-> +#undef PAGE_MASK
-> +#define PAGE_SIZE (1UL << CONFIG_PAGE_SHIFT)
-> +#define PAGE_MASK (~(PAGE_SIZE - 1))
-> 
->   #define MEMCPY_AND_ZERO_SRC(type, dst, src, len) do {				\
->   	while (len >= sizeof(type)) {						\
-> --
-> 2.46.0
+Jason
 
