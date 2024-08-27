@@ -1,53 +1,54 @@
-Return-Path: <linux-arch+bounces-6638-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6639-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 516D8960318
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Aug 2024 09:32:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F38496031F
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Aug 2024 09:32:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 844E81C220D6
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Aug 2024 07:32:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9282D1C20C17
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Aug 2024 07:32:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B7814CB4E;
-	Tue, 27 Aug 2024 07:32:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D535015B54C;
+	Tue, 27 Aug 2024 07:32:12 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDEEC747F;
-	Tue, 27 Aug 2024 07:32:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 185BA4CB4E;
+	Tue, 27 Aug 2024 07:32:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724743928; cv=none; b=PoP9dxwiMWBzIOcREmgeUknN7AFEzEvhe4scNw4qczYmtXQ2whiCJkTi1iTOxxL/7kL7duRSjCk/HFE/p81D1KJMXhADKpLZ46o0bBqmk78ozf5IjNqLO9jg0aGHH9nSmg7cORXa3wtUNB8v1FkEi+Ep0DBD9mhJsFk6kNV9fRM=
+	t=1724743932; cv=none; b=s1PWd5FsV/Z3TDKqdw+20J+1cx+C0iHqjqg2HLfG7SUbt2JDTsJ4rvWKdK52HEWkeq7h/fQ6DPdyhRIUcpYuqAI8SOI4di2D/aPWE8xBzD/DNU2eQLvVn9AwfsOujID5NDtUfSPV5lk+Ew9Rrb+DG+oCdx65+P0KBCYHIsIrK5M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724743928; c=relaxed/simple;
-	bh=DlsazXpgUZ+Rtf+gb3LjakzOdGFeaxRc9UblP4KWKkc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YrjJIcHSYTfdW9Bm+1QwxOcYbfgXxgS3eN+aejiRABpw3SLBFgicWBtKD2AidhFQ0CWxFIsC+vwQDRDrcWvyxoS3W63ixr6Nl7wNRzInwSJEFvXaK0vtq0jKYmvG9+mJy1FOwiEHJYu6ADky5Oej+pArGWdaP8/Ua1lt4mMRoZE=
+	s=arc-20240116; t=1724743932; c=relaxed/simple;
+	bh=PMuEkb4wUUODc8BHWuAMDd3O1VO5F7l6ew490+ETezs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=loaaeDK7t72zJv6zhUz2gPTSxLLuKlHdOJmOGTLA7aUPGQo9EZw+kDs8cDk0tUYhMHd46F2/SaoGtaaavX4qt29BHwCMoE9vtXwxXA4J7bZDJJgAJlN0VYo3ZOA32+p/Dc8OCkk1Ai1hBy8J8HuZ7cws8IuXEFsqjds8ScyRMUg=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
 Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4WtK4N4xQ2z9sPd;
-	Tue, 27 Aug 2024 09:32:04 +0200 (CEST)
+	by localhost (Postfix) with ESMTP id 4WtK4P2W7bz9sRk;
+	Tue, 27 Aug 2024 09:32:05 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from pegase2.c-s.fr ([172.26.127.65])
 	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mjwE0QcQuI4l; Tue, 27 Aug 2024 09:32:04 +0200 (CEST)
+	with ESMTP id RiFew2TziKmP; Tue, 27 Aug 2024 09:32:05 +0200 (CEST)
 Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4WtK4N469Zz9rvV;
-	Tue, 27 Aug 2024 09:32:04 +0200 (CEST)
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4WtK4P1YDbz9rvV;
+	Tue, 27 Aug 2024 09:32:05 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 708458B77B;
-	Tue, 27 Aug 2024 09:32:04 +0200 (CEST)
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 1FACA8B763;
+	Tue, 27 Aug 2024 09:32:05 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from messagerie.si.c-s.fr ([127.0.0.1])
 	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id 6FfdSprD4Gq4; Tue, 27 Aug 2024 09:32:04 +0200 (CEST)
+	with ESMTP id 6YCOSSZW0mJI; Tue, 27 Aug 2024 09:32:05 +0200 (CEST)
 Received: from PO20335.idsi0.si.c-s.fr (PO19727.IDSI0.si.c-s.fr [192.168.233.149])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id BCBAA8B763;
-	Tue, 27 Aug 2024 09:32:03 +0200 (CEST)
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 762398B77C;
+	Tue, 27 Aug 2024 09:32:04 +0200 (CEST)
 From: Christophe Leroy <christophe.leroy@csgroup.eu>
 To: "Theodore Ts'o" <tytso@mit.edu>,
 	"Jason A. Donenfeld" <Jason@zx2c4.com>,
@@ -64,44 +65,81 @@ Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
 	linux-kernel@vger.kernel.org,
 	linuxppc-dev@lists.ozlabs.org,
 	linux-arch@vger.kernel.org
-Subject: [PATCH 0/4] Fixups for random vDSO
-Date: Tue, 27 Aug 2024 09:31:46 +0200
-Message-ID: <cover.1724743492.git.christophe.leroy@csgroup.eu>
+Subject: [PATCH 1/4] asm-generic/unaligned.h: Extract common header for vDSO
+Date: Tue, 27 Aug 2024 09:31:47 +0200
+Message-ID: <5b72ae99e07ca3360fccfcec603afac2410e05b6.1724743492.git.christophe.leroy@csgroup.eu>
 X-Mailer: git-send-email 2.44.0
+In-Reply-To: <cover.1724743492.git.christophe.leroy@csgroup.eu>
+References: <cover.1724743492.git.christophe.leroy@csgroup.eu>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1724743907; l=1053; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=DlsazXpgUZ+Rtf+gb3LjakzOdGFeaxRc9UblP4KWKkc=; b=sdhBscEZA9sEt9ACfOkHid5Wfi17/wl5Iazag5dtcitKymflhseYNsbZYejQ9fMxtytfSgFyH pX/OHgL9JrkDr4wlbpnFZqxdwB157PBRrLw0bDx7LlggB506rgXG0pm
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1724743908; l=2154; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=PMuEkb4wUUODc8BHWuAMDd3O1VO5F7l6ew490+ETezs=; b=ALhlsQl4VRbLc40pb9oImNXUKFq4TqKvoMldqBrkUAl0/m4uIVX4FpBcwGoswPuFUuYHOXd+c o/BH9fC/9j7CTPaDabFIdEbw+1RKWRm2jRJCtiF0ajM9gs5WwqG5KQy
 X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
 
-This small series is an extract of fixups for generic part of random vDSO in
-preparation of implementing vDSO getrandom for powerpc.
+getrandom vDSO implementation requires __put_unaligned_t() and
+__put_unaligned_t() but including asm-generic/unaligned.h pulls
+too many other headers.
 
-See last version of full series at:
-https://patchwork.ozlabs.org/project/linuxppc-dev/cover/cover.1724309198.git.christophe.leroy@csgroup.eu/
+Follow the same approach as for most things in include/vdso/,
+see for instance commit 8165b57bca21 ("linux/const.h: Extract
+common header for vDSO"): Move __get_unaligned_t and __put_unaligned_t
+into a new unaligned.h living in the vdso/ include directory.
 
-This series is based on top of:
-https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git master
-
-Christophe Leroy (4):
-  asm-generic/unaligned.h: Extract common header for vDSO
-  random: vDSO: Don't use PAGE_SIZE and PAGE_MASK
-  random: vDSO: Clean header inclusion in getrandom
-  random: vDSO: don't use 64 bits atomics on 32 bits architectures
-
- arch/x86/include/asm/pvclock.h  |  1 +
- drivers/char/random.c           |  9 ++++++++-
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
  include/asm-generic/unaligned.h | 11 +----------
- include/vdso/helpers.h          |  1 +
  include/vdso/unaligned.h        | 15 +++++++++++++++
- lib/vdso/getrandom.c            | 16 ++++++++--------
- 6 files changed, 34 insertions(+), 19 deletions(-)
+ 2 files changed, 16 insertions(+), 10 deletions(-)
  create mode 100644 include/vdso/unaligned.h
 
+diff --git a/include/asm-generic/unaligned.h b/include/asm-generic/unaligned.h
+index a84c64e5f11e..95acdd70b3b2 100644
+--- a/include/asm-generic/unaligned.h
++++ b/include/asm-generic/unaligned.h
+@@ -8,16 +8,7 @@
+  */
+ #include <linux/unaligned/packed_struct.h>
+ #include <asm/byteorder.h>
+-
+-#define __get_unaligned_t(type, ptr) ({						\
+-	const struct { type x; } __packed *__pptr = (typeof(__pptr))(ptr);	\
+-	__pptr->x;								\
+-})
+-
+-#define __put_unaligned_t(type, val, ptr) do {					\
+-	struct { type x; } __packed *__pptr = (typeof(__pptr))(ptr);		\
+-	__pptr->x = (val);							\
+-} while (0)
++#include <vdso/unaligned.h>
+ 
+ #define get_unaligned(ptr)	__get_unaligned_t(typeof(*(ptr)), (ptr))
+ #define put_unaligned(val, ptr) __put_unaligned_t(typeof(*(ptr)), (val), (ptr))
+diff --git a/include/vdso/unaligned.h b/include/vdso/unaligned.h
+new file mode 100644
+index 000000000000..eee3d2a4dbe4
+--- /dev/null
++++ b/include/vdso/unaligned.h
+@@ -0,0 +1,15 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __VDSO_UNALIGNED_H
++#define __VDSO_UNALIGNED_H
++
++#define __get_unaligned_t(type, ptr) ({						\
++	const struct { type x; } __packed *__pptr = (typeof(__pptr))(ptr);	\
++	__pptr->x;								\
++})
++
++#define __put_unaligned_t(type, val, ptr) do {					\
++	struct { type x; } __packed *__pptr = (typeof(__pptr))(ptr);		\
++	__pptr->x = (val);							\
++} while (0)
++
++#endif /* __VDSO_UNALIGNED_H */
 -- 
 2.44.0
 
