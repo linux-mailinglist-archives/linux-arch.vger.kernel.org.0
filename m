@@ -1,152 +1,176 @@
-Return-Path: <linux-arch+bounces-6732-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6733-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 776A2963163
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Aug 2024 22:02:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 00A7E96318B
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Aug 2024 22:15:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 004B8284A71
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Aug 2024 20:01:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 916D1287794
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Aug 2024 20:15:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A5FF1AB50F;
-	Wed, 28 Aug 2024 20:01:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8D351AC44E;
+	Wed, 28 Aug 2024 20:15:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="L5CkIwdX";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="eTaZv7iJ"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="QexoVRSQ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fhigh4-smtp.messagingengine.com (fhigh4-smtp.messagingengine.com [103.168.172.155])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF8773AC2B;
-	Wed, 28 Aug 2024 20:01:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.155
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D52111A2554
+	for <linux-arch@vger.kernel.org>; Wed, 28 Aug 2024 20:15:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724875313; cv=none; b=nr3dIZVxqBNiI++n1R0YA6j6OkXpdqtQ1n/yAi+J7wYfB1Jp/xUm5kSkDBaiq+ybCh8PfGgSQL34Bxs2mfKe5kuewXTD+vLEJR/ZaxpZ4P6ak5bayZdM8q7BAfM81wOFzffSxFxE8MB0veNPyyzmq0DzWp/3Z+JaqvGwZBz406A=
+	t=1724876137; cv=none; b=oSCyh6cjTmP8oCMjHi10Rm3MmduudhlC9galuOULS73M4AXmj8SQZvg3IykgAOetSaavXFijbmRm2AUZZFrwcYPeykcWXsy5iUzd4YGJQgssjATbDmKjV8CxWrBG+/B03NV8ut7GDtxvx09RwQO59tz8q+Z51HxeR4RhiGEWyEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724875313; c=relaxed/simple;
-	bh=F/DqEhIax/SEgiB7bpr7KLFZzIj/Zgv1gdYBSaDykp4=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=FzUywbckp/klF+EugUZSORNmsD6qMKpgjdwHgYjyslHB/yTwnuojJgqS8qodTHQmWvwA2NXlukdBsDiH5tC/+HOEwsRZhwdUyqkQSWpwkoUAMakxQqUFCkA2H4FYqTaDBnslCHHt3dl1EN/5eD3f9rH1allhNS3CbAsA9WNVISw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=L5CkIwdX; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=eTaZv7iJ; arc=none smtp.client-ip=103.168.172.155
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-04.internal (phl-compute-04.nyi.internal [10.202.2.44])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id A6F811140557;
-	Wed, 28 Aug 2024 16:01:49 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-04.internal (MEProxy); Wed, 28 Aug 2024 16:01:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1724875309;
-	 x=1724961709; bh=ed7LujsTpZKV3Khr/dqL+Zy9OCqu4p5alag84yh45KA=; b=
-	L5CkIwdXM0+wNYsjcmZIdZY/xOxo8EIBpJwkJ8DT5RKcsdZV67qbDGGyjbHXWf4Q
-	CZgXm+d54btaVAJ4MC1z+0IURoR0dJV07KloBg2oVbKyTM6ko6TtFv96nVjFPtqx
-	MFt20zKTk2Ep4+AO380q0w37JdYL34uVBqDsB7j4pn3d4G081eiq2APq6M6RLkIs
-	A+hTdFq/UX2teguAKUB6Dl9iTGEPzqcARuUvsueWwFG+GrNKaNgjtR10UEZc+eh6
-	nFsQyLt2XqLfOQ0C+vEwfEzlzMTJhBgaGnyH1JNkmwHAmrfxDpCkpy+9Ywc2dH4I
-	cc65GtwAP9YZRtQcgiTV2A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1724875309; x=
-	1724961709; bh=ed7LujsTpZKV3Khr/dqL+Zy9OCqu4p5alag84yh45KA=; b=e
-	TaZv7iJt8kh54ngKSp9jc8NGjd2GWsOydeF1Xs3LyBtOd02kaYHLzm6JZPlyaLri
-	/4EwO+sM+vfunP7qxhY5TZEQuHbHxOZiljtUpLAf54Zkm94uGLl1irD3UzsTvpdM
-	Yo/8hzq6eG7qphDTp8lnhCxMwV6x0mcE82C2v4MiqnL/1PsER4zk9cU9W9szAtX0
-	2Khhc8j7ZhLlqrQwooaRUKsxvbJbjDw1Ph3IlabaRNcZslOUKquu+rC1U1pg5C86
-	qnWmyRvxi5O2UN/kN/nvPiicPGwCdpWKPLs8ioH5otv+/vn6ywbG6a9gXuzH7vUG
-	KN4fJZ1jqLnGL3wrVE3iw==
-X-ME-Sender: <xms:LYLPZuz0PdbqzpOrAvhRoPJVM2vgNj8Z8zUGXUeNBoK0yaPPoagWbg>
-    <xme:LYLPZqRs85tFtWW_duYTuUYi9npPNFFfkwY7jpWAQZAivG_aJJHniF3REOTVarWaq
-    9EHG9YQOJ6YH4uLcFY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudefvddgudegvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
-    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
-    druggvqeenucggtffrrghtthgvrhhnpefhtdfhvddtfeehudekteeggffghfejgeegteef
-    gffgvedugeduveelvdekhfdvieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopeef
-    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehprghulhhmtghksehkvghrnhgvlh
-    drohhrghdprhgtphhtthhopehlihhnuhigqdgrrhgthhesvhhgvghrrdhkvghrnhgvlhdr
-    ohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlh
-    drohhrgh
-X-ME-Proxy: <xmx:LYLPZgXy0HBp5HSdX7RSDmd5gqV3y-Hb1XXEwHJue6MZutegI4abjg>
-    <xmx:LYLPZkj25nkPEJHy9BqCer-qgAiBa7PnTBWlOUMh3Y2pPHh-jJgLVQ>
-    <xmx:LYLPZgBRPx_mw603Wf78RU6yq9uIuis4DuOx1dNXczN_SFr_gQQBPA>
-    <xmx:LYLPZlIZol0pyadOzs03CaAsRvVXAYonVBiLhnt-jDeelJjU1Vc98A>
-    <xmx:LYLPZjN-Q8y_0fcnhmUb2Gx2_eePe20swxasINj0z2UtLU7dV9R5pzr->
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 5D7B52220071; Wed, 28 Aug 2024 16:01:49 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1724876137; c=relaxed/simple;
+	bh=bYt3NNBaLSmLKZlvbIxmegVun2i4HAdZ1sNs8730jNM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Fo6BK+pr7Nv3PmB1DK0QmnwSyovlkWsHszBg4japA0tMCLz662zsa8GFc3R4nDX+8myFdHYcvynE3DoUSYy8hG2RumNDvcSUWSCXpsYgSvzEYNgN2Z4GC37Kwu0/BJp0Z+7UxVlvI2gGjSxVRFM8Fx48jVs/gXb57Gg0LGh3290=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=QexoVRSQ; arc=none smtp.client-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-7141b04e7a3so5886326b3a.3
+        for <linux-arch@vger.kernel.org>; Wed, 28 Aug 2024 13:15:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1724876135; x=1725480935; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DYouNjU8LVMpXKc1rxZ9hcDgJ8HQG0MfeaXtb0VLyGI=;
+        b=QexoVRSQ+Qj1kBx1FyMlS7JWbF7HpN1U2iPzAVYOglWarAkEuOtXBpiIwMac67nzqH
+         rp1HBZBu6/+9xmHswfdeQC5EZmXjIw442shzAg6hCloVi2Rd3Igco0A6VEhi1hcDdFkR
+         iQ1aTv8K7wXaArOdVlpCpNH/TkW2MFEl3riUVSiBBBhpqsHPD+G6zAY5zgw2H3RfnPW4
+         /ipyK8AqIXQBU8TC4E9g8ks0FyU9cGLb81iW8B+v7zZAYXijInaq2guKXM8g9NhZhCkl
+         C59RhhFnsd5uO9ErfvBJXDMUOSV6WTtvJ/d78yDM3OQTdKx4qrcV0JMZAlGu9AZ6vkBF
+         FzZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724876135; x=1725480935;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DYouNjU8LVMpXKc1rxZ9hcDgJ8HQG0MfeaXtb0VLyGI=;
+        b=w+MjTXO2uURps2nZQKwSSfwKWVUx6VOv29ro07SCgesPF+xhaIgtb/8KkU6nrWPusd
+         Hir2iMcZyxNPoi/C/IAAsl/lYbDVF8vXU+cwJoboszvXgcrtMrbFLYg9Gne7As9rc1U6
+         sbrIDQN//DCECuQ0QRXH7jW9Wv6hW3vOBitRR9dIHjrnQRseS37OyEJQIMqcOSKnibVV
+         KjE7jp8KyiDbcNgdRRRjNGMqYDTtqQJzy6YAYF0hY5mVp/pX7qQ/jiJuZQ1TNv9g/S99
+         7PuLrFpboHQy+H9Mwdpn2IykyxuaGWiIBgiwD8ctEvAX3zmCeasn7Pu0k0GeZmqI0TZ/
+         jC5w==
+X-Forwarded-Encrypted: i=1; AJvYcCVjfDuEGNFHBwktUpY+UIru6ONgIBu/qZkKYZOqzo1mHtg5pZKhIBXueOGWdgIzO0r2wN8FsI7j6yZn@vger.kernel.org
+X-Gm-Message-State: AOJu0YyUqJD7YtxGtlZeXnz4aX/6ZillGZcQfhFvaePeniHkOXNHWaiD
+	F7inNVw1jppsmSJmwmMYENaf4ajrJDRhS1x6hgqjN2IO2KFqHkbiF+8pPmvFTjs=
+X-Google-Smtp-Source: AGHT+IHnVszzxRV7qQ07aFqnxjDB7ZJDRj+3FpzGhCxnl0U0Ndnw3gA3qfk5sipB0cB/w/7yeJxxIA==
+X-Received: by 2002:aa7:88cf:0:b0:714:15ff:a2a4 with SMTP id d2e1a72fcca58-715dfc042a7mr734410b3a.13.1724876134994;
+        Wed, 28 Aug 2024 13:15:34 -0700 (PDT)
+Received: from ghost ([50.145.13.30])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-714343097fasm10850305b3a.173.2024.08.28.13.15.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Aug 2024 13:15:34 -0700 (PDT)
+Date: Wed, 28 Aug 2024 13:15:29 -0700
+From: Charlie Jenkins <charlie@rivosinc.com>
+To: Dave Hansen <dave.hansen@intel.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Muchun Song <muchun.song@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Russell King <linux@armlinux.org.uk>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	Rich Felker <dalias@libc.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Alexandre Ghiti <alexghiti@rivosinc.com>,
+	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Palmer Dabbelt <palmer@rivosinc.com>,
+	linux-riscv@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+	linux-mm@kvack.org, loongarch@lists.linux.dev,
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 00/16] mm: Introduce MAP_BELOW_HINT
+Message-ID: <Zs+FYbII0ewwdisg@ghost>
+References: <20240827-patches-below_hint_mmap-v1-0-46ff2eb9022d@rivosinc.com>
+ <fd1b8016-e73d-4535-9c67-579ab994351f@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Wed, 28 Aug 2024 22:01:06 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>
-Message-Id: <9242c5c2-2011-45bf-8679-3f918323788e@app.fastmail.com>
-In-Reply-To: <289c7e10-06df-435b-a30d-c2a5bc4eea29@paulmck-laptop>
-References: <3ca4590a-8256-42d1-89ca-f337ae6f755c@paulmck-laptop>
- <b3512703-bab3-4999-ac20-b1b874fcfcc3@app.fastmail.com>
- <289c7e10-06df-435b-a30d-c2a5bc4eea29@paulmck-laptop>
-Subject: Re: 16-bit store instructions &c?
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fd1b8016-e73d-4535-9c67-579ab994351f@intel.com>
 
-On Wed, Aug 28, 2024, at 14:22, Paul E. McKenney wrote:
-> On Wed, Aug 28, 2024 at 01:48:41PM +0000, Arnd Bergmann wrote:
->
->> There is a related problem with ARM RiscPC, which
->> uses a kernel built with -march=armv3, and that
->> disallows 16-bit load/store instructions entirely,
->> similar to how alpha ev5 and earlier lacked both
->> byte and word access.
->
-> And one left to go.  Progress, anyway.  ;-)
+On Wed, Aug 28, 2024 at 11:29:56AM -0700, Dave Hansen wrote:
+> On 8/27/24 22:49, Charlie Jenkins wrote:
+> > Some applications rely on placing data in free bits addresses allocated
+> > by mmap. Various architectures (eg. x86, arm64, powerpc) restrict the
+> > address returned by mmap to be less than the maximum address space,
+> > unless the hint address is greater than this value.
+> 
+> Which applications are these, btw?
 
-What I meant to say about this one is also that we can probably
-ignore it as well, since it's on the way out already, at the latest
-when gcc-9 becomes the minimum compiler, as gcc-8 was the last
-to support -march=armv3. We can also ask Russell if he's ok with
-dropping it earlier, as he is almost certainly the only user.
+Java and Go require this feature. These applications store flags that
+represent the type of data a pointer holds in the upper bits of the
+pointer itself.
 
->> Everything else that I see has native load/store
->> on 16-bit words and either has 16-bit atomics or
->> can emulate them using the 32-bit ones.
->> 
->> However, the one thing that people usually
->> want 16-bit xchg() for is qspinlock, and that
->> one not only depends on it being atomic but also
->> on strict forward-progress guarantees, which
->> I think the emulated version can't provide
->> in general.
->> 
->> This does not prevent architectures from doing
->> it anyway.
->
-> Given that the simpler spinlock does not provide forward-progress
-> guarantees, I don't see any reason that these guarantees cannot be voided
-> for architectures without native 16-bit stores and atomics.
->
-> After all, even without those guarantees, qspinlock provides very real
-> benefits over simple spinlocks.
+> 
+> Is this the same crowd as the folks who are using the address tagging
+> features like X86_FEATURE_LAM?
 
-My understanding of this problem is that with a trivial bit spinlock,
-the worst case is that one task never gets the lock while others
-also want it, but a qspinlock based on a flawed xchg() implementation
-may end with none of the CPUs ever getting the lock. It may not
-matter in practice, but it does feel worse.
+Yes it is. LAM helps to mask the bits out on x86, and this feature could
+be used to ensure that mmap() doesn't return an address with bits that
+would be masked out. I chose not to tie this feature to x86 LAM which
+only has masking boundaries at 57 and 48 bits to allow it to be
+independent of architecture specific address masking.
 
-      Arnd
+> 
+> Even if they are different, I also wonder if a per-mmap() thing
+> MAP_BELOW_HINT is really what we want.  Or should the applications
+> you're trying to service here use a similar mechanism to how LAM affects
+> the *whole* address space as opposed to an individual mmap().
+
+LAM is required to be enabled for entire address spaces because the
+hardware needs to be configured to mask out the bits. It is not possible
+to influence the granularity of LAM in the current implementation.
+However mmap() does not require any of this hardware configuration so it
+is possible to have finer granularity.
+
+A way to restrict mmap() to return LAM compliant addresses in an entire
+address space also doesn't have to be mutually exclusive with this flag.
+This flag allows for the greatest degree of control from applications.
+I don't believe there is additionally performance saving that could be
+achieved by having this be on a per address space basis.
+
+Link: https://cdrdv2.intel.com/v1/dl/getContent/671368 [1]
+
+- Charlie
+
 
