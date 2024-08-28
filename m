@@ -1,117 +1,142 @@
-Return-Path: <linux-arch+bounces-6705-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6706-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CF639622F0
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Aug 2024 11:06:23 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7C5F9625CF
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Aug 2024 13:18:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BFD681C21CC7
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Aug 2024 09:06:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 65522B210E4
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Aug 2024 11:18:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8750315F33A;
-	Wed, 28 Aug 2024 09:06:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39B8E16CD24;
+	Wed, 28 Aug 2024 11:18:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="B57pwSUN"
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ie1ZgaJb"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C64C215E5C8
-	for <linux-arch@vger.kernel.org>; Wed, 28 Aug 2024 09:06:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4C024D108;
+	Wed, 28 Aug 2024 11:18:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724835969; cv=none; b=fGbVLjENSMJdeVS/N/764a1eSCHoZcK98h5UvFsGz01/iCm1PcdvZkpdFS7Albtm74DwPtn3guu3yUTq0DIXhqq1oaG8G3BinBdkNuWmJO/dm8cBqB/Sn7x0anCUKxMONvzRcaEBy/GQihKnRpKr+LqlyKP+Fl37w/Aj2q56kLE=
+	t=1724843921; cv=none; b=Oqgj5/ACQ7Fvv6r7pu3kkW66XXUBu1rjYJJpougXBsixisMN9Tee01pdzgJHwqDV0llaqr4TcBjh+X1nugzuAHbZQddLHJqBSgZciYjW3WAzCrUkMHIJtjRosLTDEqhgf5fr0WTPnCkK29ufnkFSkMnsHLaUQff1hMOTC6zjtP4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724835969; c=relaxed/simple;
-	bh=tilZU3Kh158lJuUVKV7O5vJ4OjgZWFiiF6RI0BZAfg8=;
+	s=arc-20240116; t=1724843921; c=relaxed/simple;
+	bh=K4ffkU1d24Lo6Vpr60xC27K+SzTzNldohctsI0B5LAk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tq6Fyym9yN7UjrFbXn15LY9ZhSm3qwGEktW2hONyZJzGRXD/Bfga5TwNF/XOl+c0zdgMBFqkPsYL1xLKeC5aXjPRDgpCfmPKM2TpV/cFryiIAKup3b1ZZPYyoUrNr5X2qk+l/qMmn2UtEoQUNpphaT8SHJCLSDe3m0Q9XZS4O04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=B57pwSUN; arc=none smtp.client-ip=209.85.208.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2f3f0bdbcd9so71793721fa.1
-        for <linux-arch@vger.kernel.org>; Wed, 28 Aug 2024 02:06:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1724835966; x=1725440766; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=eUwP1bH89y2mjDwy+uYIsF7q8d+iUjc7F7MG+V5YoHA=;
-        b=B57pwSUNrzfkeq72C1HWzOwMvaNQjY3cIv/ivPN2tDcAUNjRGZQbMvcXTA9yxXEpdw
-         +bKFt1GzR/Tl1v51WshqzJDq+Jlkxnt9sugzURczlNMOiPt7vZ/BtL5P9LiGBh0lSAey
-         YAVLyQM1BF0b16ig0dGX225roICmwcZkFa2/cOVVHYPBCJxLeKHXMJ1HBtk5h5kMh8/m
-         KZDS/7bGVgDW90C8SMON16UZW2qf2WfHmOmp7DOp33Nqdag5LX9Iwz5rL7RtHv3TUmoh
-         5IkCSMrDGmHWvhbE1lyt9s0c3r22oDbVFKs+ll86gOJpP6sBh8PpD/y06sQ6hQ4iV1tp
-         RGow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724835966; x=1725440766;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eUwP1bH89y2mjDwy+uYIsF7q8d+iUjc7F7MG+V5YoHA=;
-        b=lwAf95Ssl+bTb28QrwkXUsgtBCnc+0cyYAWWIBpXfaTJR5lhZFmInibMPGjTYWCL8K
-         aSdr8NNTzUjgEj8w8DrlIcRfNe7rU2Sbznz549PslA0qEOJ/mchLu3+x+HuLscH8mTtv
-         AuIYk38S5ENaLppB3Ees0eB9XJi9pieKh5b2VfE8pEe+5GxUnjdMMtu/6/VcT93zj1gx
-         3Dz2A8r/zbznzIAr2bAV47R/IO6ty+LhmIPMej2lgjo7DvpuM2wX7u91RVB85+iWnhGc
-         D7mumRLDaASVVXA3fUcQV/CPVyXKbDKdSG+L6dWysWDnU+/6E6fUfzjaxEOKXLbkRIgn
-         n3OQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWVexsrR0hmGo5Ek+ZRSAQio61wpbyxghH7lxOBKxG/Sqygma75qLMqCiAlU8cYB5PHlZqWBAZfwdpi@vger.kernel.org
-X-Gm-Message-State: AOJu0YxvU5lJYEbtbhOx77NWGu9itT70Dk9LZkFQh/Yt4+a3e51YKT4i
-	FGsWt96gRArI7jIPxdZmg6KfwkPoroXV1nr7Y5+mW0wp+q9gdqVK9z6t/0m6t20=
-X-Google-Smtp-Source: AGHT+IEk0hGUKNFKy1gAbF519cS1Zf9jNVuoleszEhO12zfKPjpQIg/vIHKKuEXsuMjAwz6KFlZ/ow==
-X-Received: by 2002:a2e:908a:0:b0:2ef:2d3a:e70a with SMTP id 38308e7fff4ca-2f4f49090f4mr89975361fa.18.1724835964996;
-        Wed, 28 Aug 2024 02:06:04 -0700 (PDT)
-Received: from localhost (cst2-173-13.cust.vodafone.cz. [31.30.173.13])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c0bb4824e7sm1973814a12.92.2024.08.28.02.06.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Aug 2024 02:06:04 -0700 (PDT)
-Date: Wed, 28 Aug 2024 11:06:02 +0200
-From: Andrew Jones <ajones@ventanamicro.com>
-To: Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Andrea Parri <parri.andrea@gmail.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Leonardo Bras <leobras@redhat.com>, Guo Ren <guoren@kernel.org>, linux-doc@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-arch@vger.kernel.org
-Subject: Re: [PATCH v5 13/13] riscv: Add qspinlock support
-Message-ID: <20240828-801ce72599586044dcaa767d@orel>
-References: <20240818063538.6651-1-alexghiti@rivosinc.com>
- <20240818063538.6651-14-alexghiti@rivosinc.com>
- <20240821-ec1ec92842570050429621d1@orel>
- <CAHVXubgtw3rZq1+jNv2LrsQBhViu4Sm9Gw3B_7-XLzBw52x6oQ@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=NvqefsuWo035y194PtUONVMgnmYQJAH3ApfPJuBS5KIXz14Q5YZsoz6upH3K6vGG76QAvoit8P4dmU+R/O/3qu94ODB+6KMJUrG0uO6FVhkVadeIN3IGEknS6btoUUPNZkM2Wo3v2vMX63WD6hR0g+K5AqyYvv9BsFvT5CUSL+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=ie1ZgaJb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0F77C98EC1;
+	Wed, 28 Aug 2024 11:18:37 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ie1ZgaJb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+	t=1724843916;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TaIlxacxM0cvax8nGT0Wo3sn3OzyvoPLEHrLd84XeNU=;
+	b=ie1ZgaJbmdO0NFZiWnbQxMHvES+WVoJwzMG9ptpU3Emt2rn3BokeH+49oxcj4dV6dn2A7R
+	OZIoYXalY4Ws4iv74BUjZGRKqr/jYLeyEjR6fhELEgh04xz8/D5eJuiLFmdCA7UTqCRd8K
+	hMYFoVGZZlHMLnB3FsT4kBzzeg3/4HU=
+Received: 
+	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 8e8b7172 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+	Wed, 28 Aug 2024 11:18:35 +0000 (UTC)
+Date: Wed, 28 Aug 2024 13:18:34 +0200
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+To: Segher Boessenkool <segher@kernel.crashing.org>
+Cc: Eric Biggers <ebiggers@kernel.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Naveen N Rao <naveen@kernel.org>, Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Theodore Ts'o <tytso@mit.edu>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Shuah Khan <shuah@kernel.org>, linuxppc-dev@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 05/17] vdso: Avoid call to memset() by getrandom
+Message-ID: <Zs8HirKLk-SrwTIu@zx2c4.com>
+References: <cover.1724309198.git.christophe.leroy@csgroup.eu>
+ <5deb67090b214f0e6eae96b7c406546d1a16f89b.1724309198.git.christophe.leroy@csgroup.eu>
+ <20240827180819.GB2049@sol.localdomain>
+ <20240827225330.GC29862@gate.crashing.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAHVXubgtw3rZq1+jNv2LrsQBhViu4Sm9Gw3B_7-XLzBw52x6oQ@mail.gmail.com>
+In-Reply-To: <20240827225330.GC29862@gate.crashing.org>
 
-On Wed, Aug 28, 2024 at 10:16:40AM GMT, Alexandre Ghiti wrote:
-...
-> I sent the kernel size impact using -Os as asked and
-> ARCH_WEAK_RELEASE_ACQUIRE should be handled by Andrea.
-
-Sounds good. Thanks.
-
+On Tue, Aug 27, 2024 at 05:53:30PM -0500, Segher Boessenkool wrote:
+> On Tue, Aug 27, 2024 at 11:08:19AM -0700, Eric Biggers wrote:
+> > On Thu, Aug 22, 2024 at 09:13:13AM +0200, Christophe Leroy wrote:
+> > > With the current implementation, __cvdso_getrandom_data() calls
+> > > memset(), which is unexpected in the VDSO.
+> > > 
+> > > Rewrite opaque data initialisation to avoid memset().
+> > > 
+> > > Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> > > ---
+> > >  lib/vdso/getrandom.c | 15 ++++++++++-----
+> > >  1 file changed, 10 insertions(+), 5 deletions(-)
+> > > 
+> > > diff --git a/lib/vdso/getrandom.c b/lib/vdso/getrandom.c
+> > > index cab153c5f9be..4a56f45141b4 100644
+> > > --- a/lib/vdso/getrandom.c
+> > > +++ b/lib/vdso/getrandom.c
+> > > @@ -4,6 +4,7 @@
+> > >   */
+> > >  
+> > >  #include <linux/minmax.h>
+> > > +#include <linux/array_size.h>
+> > >  #include <vdso/datapage.h>
+> > >  #include <vdso/getrandom.h>
+> > >  #include <vdso/unaligned.h>
+> > > @@ -74,11 +75,15 @@ __cvdso_getrandom_data(const struct vdso_rng_data *rng_info, void *buffer, size_
+> > >  	u32 counter[2] = { 0 };
+> > >  
+> > >  	if (unlikely(opaque_len == ~0UL && !buffer && !len && !flags)) {
+> > > -		*(struct vgetrandom_opaque_params *)opaque_state = (struct vgetrandom_opaque_params) {
+> > > -			.size_of_opaque_state = sizeof(*state),
+> > > -			.mmap_prot = PROT_READ | PROT_WRITE,
+> > > -			.mmap_flags = MAP_DROPPABLE | MAP_ANONYMOUS
+> > > -		};
+> > > +		struct vgetrandom_opaque_params *params = opaque_state;
+> > > +		int i;
+> > > +
+> > > +		params->size_of_opaque_state = sizeof(*state);
+> > > +		params->mmap_prot = PROT_READ | PROT_WRITE;
+> > > +		params->mmap_flags = MAP_DROPPABLE | MAP_ANONYMOUS;
+> > > +		for (i = 0; i < ARRAY_SIZE(params->reserved); i++)
+> > > +			params->reserved[i] = 0;
+> > > +
+> > >  		return 0;
+> > >  	}
+> > 
+> > Is there a compiler flag that could be used to disable the generation of calls
+> > to memset?
 > 
-> Thanks for all the reviews drew, the patchset is way better now! I
-> won't respin a new version since there is only a minor comment change
-> requested in "riscv: Improve zacas fully-ordered cmpxchg()" unless you
-> insist.
+> -fno-tree-loop-distribute-patterns .  But, as always, read up on it, see
+> what it actually does (and how it avoids your problem, and mostly: learn
+> what the actual problem *was*!)
 
-I don't insist. It might be nice to change the comment text at merge
-though since it's safe to do with only compile-testing and it would
-improve readability.
-
-Thanks,
-drew
+This might help with various loops, but it doesn't help with the matter
+that this patch fixes, which is struct initialization. I just tried it
+with the arm64 patch to no avail.
 
