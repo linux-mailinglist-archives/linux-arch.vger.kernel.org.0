@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-6683-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6684-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09B16961BF2
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Aug 2024 04:15:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D0549961C0B
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Aug 2024 04:24:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 301311C23310
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Aug 2024 02:15:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0EDD11C232F6
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Aug 2024 02:24:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE14E3EA71;
-	Wed, 28 Aug 2024 02:15:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8536B59B71;
+	Wed, 28 Aug 2024 02:24:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qErgpU0R"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b9Bmt1JR"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 571B411CBD;
-	Wed, 28 Aug 2024 02:15:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AF74481B3;
+	Wed, 28 Aug 2024 02:24:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724811323; cv=none; b=dHLsB8/Q4Qy+xtSvbOTrbtn4wRAT/lh6OYoxANo6DyFscgDeyfOXq2ktHCruLam/1VI5fTLYuSAATCKxA3sJBWG8eOzsTUw+JUnLxPVyq36A5PKNkueAJ39di4AzLaUB/NygI34nWZ3JK3cvklx5hEaxgI6h2KC2a0iXequnFQI=
+	t=1724811875; cv=none; b=U8N+6m44nYBDymuCksiX2gGrS/veRxwo+sIsFI+w34CAr7NoOm6HGtwJQMLnx85/n4lEMykJy4081/jTgez4R5FQuyYfij+YlSNg3bWMszRzMFN3m9Ovqbwr7Eje9LK6ndEzkn9GbW4dkRItM7tqcfMfCUqR79Amn1C15KJeEo8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724811323; c=relaxed/simple;
-	bh=BjF/SI+Clg9VwmD1YDiNY5kSZ6b/7YEV1Coee82xshg=;
+	s=arc-20240116; t=1724811875; c=relaxed/simple;
+	bh=tbhzQ1da3mBVV060Og29QANn1s4vz5Vd4ovZ/NNJcUg=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=K221If8Tjue/+pKxgZX5jI50OOVysYSM94VdqON/2rGAQ4LUlacB0BxLx5nIJ9UuxHeGrB05ERM65Nz+7WC3bcvWegla/5wcM78Q4pqYNuLo04kWh4E/df4VAxixtYG5CyARpvbCXp0B6nsTZC6KGjMsmYXdwIw7lGsiPklB3y0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qErgpU0R; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91CF9C4AF60;
-	Wed, 28 Aug 2024 02:15:20 +0000 (UTC)
+	 MIME-Version:Content-Type; b=u5aEUoWvDmUqMs0c9BmJSCKrEw+/wJAr7ybcv8sT+gvqIQKl9lsaDWM9uv5QiqmW0ZIm/DuwNNPw3IBHY+5s4uggJx4wNcUdkHrCVgIa2ITWA7PiQ6E5lg+bpWScRzmL2nWCUogKSgh2eZKnjnnKRlXxYc+CcIfyphh1JrstlV8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b9Bmt1JR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E784C4FEE9;
+	Wed, 28 Aug 2024 02:24:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724811322;
-	bh=BjF/SI+Clg9VwmD1YDiNY5kSZ6b/7YEV1Coee82xshg=;
+	s=k20201202; t=1724811874;
+	bh=tbhzQ1da3mBVV060Og29QANn1s4vz5Vd4ovZ/NNJcUg=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=qErgpU0RhYH5WDJJXkws/HENWDPAZrNV4DIAGhLruIvnrdv3ETwsMJaqlJwbsGqBG
-	 sOXE0rshTwA67CfrMAyRLqfniN21SQvvoGipcCdy5EFJuKE8jvV4G2PfqPNFgiS8It
-	 4dPunWamEUGMRhzS5KC8Ts7cFkyW+7TDVf2RUUn9JS/FAj+cUaBIPIwdP72q7mflEV
-	 HS/9jaDHMHisZPyMz7+Cl+J5EU7axirOz22wZxDO+Neit95DQIA2Zn57ERIMVACRxP
-	 VyV6iPqNF2tEA75Czk7faOlTESzI0kcVa7iIp8ySMs9wv6/gdVM6qZQWlKav9fit6N
-	 KOxTNe3Rdac3Q==
-Date: Tue, 27 Aug 2024 19:15:19 -0700
+	b=b9Bmt1JRKFBCrnIFqkRTsrtV2UxALLlwq9vjsa8mb6ADifsmdWpQkF6hV/RYp8vQA
+	 KnlrsUZWHHrZTtadELynyygYzNgxIL5XjiYXqvsDF4WjDbVNdoVWcjeJP/CMV5jE+5
+	 zHY1WzE7dhEgfg1nYdKdE+Kss/9anIAQAvEtqTsmXn5d1UFI9SFv6kPJc99SCMRNQM
+	 e5zmbEEJvj2B7cIjhKHtljG3nSZ00UtlbSdrVtBkmpzbQotM4l2h2mL+SWEBBmpQt7
+	 JSmguwlN4ydS894ghDp569iFgNhfAjPbkNp3FHOMAwrnt4gmuwMvVn9FUd04rX88Ko
+	 f0IMC8yARB4lw==
+Date: Tue, 27 Aug 2024 19:24:31 -0700
 From: Jakub Kicinski <kuba@kernel.org>
 To: Mina Almasry <almasrymina@google.com>
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -77,13 +77,13 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
  <pkaligineedi@google.com>, Bagas Sanjaya <bagasdotme@gmail.com>, Christoph
  Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>,
- Taehee Yoo <ap420073@gmail.com>, Willem de Bruijn <willemb@google.com>,
- Kaiyuan Zhang <kaiyuanz@google.com>
-Subject: Re: [PATCH net-next v22 04/13] netdev: netdevice devmem allocator
-Message-ID: <20240827191519.5464a0b2@kernel.org>
-In-Reply-To: <20240825041511.324452-5-almasrymina@google.com>
+ Taehee Yoo <ap420073@gmail.com>, linux-mm@kvack.org, Matthew Wilcox
+ <willy@infradead.org>
+Subject: Re: [PATCH net-next v22 05/13] page_pool: devmem support
+Message-ID: <20240827192431.7145b06e@kernel.org>
+In-Reply-To: <20240825041511.324452-6-almasrymina@google.com>
 References: <20240825041511.324452-1-almasrymina@google.com>
-	<20240825041511.324452-5-almasrymina@google.com>
+	<20240825041511.324452-6-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -93,17 +93,28 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Sun, 25 Aug 2024 04:15:02 +0000 Mina Almasry wrote:
-> +void net_devmem_free_dmabuf(struct net_iov *niov)
-> +{
-> +	struct net_devmem_dmabuf_binding *binding = net_iov_binding(niov);
-> +	unsigned long dma_addr = net_devmem_get_dma_addr(niov);
-> +
-> +	if (gen_pool_has_addr(binding->chunk_pool, dma_addr, PAGE_SIZE))
-> +		gen_pool_free(binding->chunk_pool, dma_addr, PAGE_SIZE);
+On Sun, 25 Aug 2024 04:15:03 +0000 Mina Almasry wrote:
+> +	/* Assume net_iov are on the preferred node without actually
+> +	 * checking...
+> +	 *
+> +	 * This check is only used to check for recycling memory in the page
+> +	 * pool's fast paths. Currently the only implementation of net_iov
+> +	 * is dmabuf device memory. It's a deliberate decision by the user to
+> +	 * bind a certain dmabuf to a certain netdev, and the netdev rx queue
+> +	 * would not be able to reallocate memory from another dmabuf that
+> +	 * exists on the preferred node, so, this check doesn't make much sense
+> +	 * in this case. Assume all net_iovs can be recycled for now.
+> +	 */
 
-Is the check necessary for correctness? Should it perhaps be a WARN
-under DEBUG_NET instead? The rest LGTM:
+This is probably a bit too verbose, and we shouldn't talk about dmabuf
+specifically:
 
-Reviewed-by: Jakub Kicinski <kuba@kernel.org>
+	/* NUMA node preference only makes sense if we're allocating
+	 * system memory. Memory providers (which give us net_iovs)
+	 * choose for us.
+	 */
+
+Some of the code moves could be a separate patch, but either way:
+
+Acked-by: Jakub Kicinski <kuba@kernel.org>
 
