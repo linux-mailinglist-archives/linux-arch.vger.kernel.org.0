@@ -1,145 +1,149 @@
-Return-Path: <linux-arch+bounces-6718-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6719-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 716B9962C98
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Aug 2024 17:40:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4F4B962D9D
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Aug 2024 18:27:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DA9CFB2462A
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Aug 2024 15:40:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D974C1C23A25
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Aug 2024 16:27:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3906418B476;
-	Wed, 28 Aug 2024 15:40:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hDdad5/I"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C9321A3BA0;
+	Wed, 28 Aug 2024 16:27:35 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0430114831D;
-	Wed, 28 Aug 2024 15:40:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCC5444C68;
+	Wed, 28 Aug 2024 16:27:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.228.1.57
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724859638; cv=none; b=rdTunW4YN6UjEgrj0fswHayCuUacgWq9q/7Bplk9WwrcJdnofyzf5whkBP+PWpq5hDqBZVvLmMflJ/qkanLxaU7Ybxy7p2wtRtrjQ/YWgaHbdLBBQ7mxKeVyU6KrUowgUl1eD6eVxY3BUPmIP6rI1H9vJ5KBg8pRMAjOT5B4Ae4=
+	t=1724862455; cv=none; b=RmFuMeoWFtgqFBlrYaIyx1mZUFqP8kRwLdnEB5TB+ft4zrrqfg+nfKgOBcyNnBDf7dGzPOffyGQV+EFEkhfcBThbNJyCM0xf79OmMw9jl9exsMjZHoYkxdmB2JEozjTXfPGJ1m+f9TDfeo/L/Sw9wpTSGMXI5J+Ev8hjH2WDXQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724859638; c=relaxed/simple;
-	bh=+z7/VLAc5zAKqxwt9kQI0vxm8x7sulgvUDeMTRfB+wo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PRedaW+VPkSXEZiXQm/b7MiqpdY6PJQpleAa0t0DXb44Xms0VE2kBJv/v4oDujlSejYTT0oShgIalDrWiTSryjKxtsxt90pz97jPaMiAwT3lvkaOAWSWqhGOI/Dp+IUta4NdauZr6VsIqC0tazew2hsdaLctPgO+a6G1JBtb4OM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hDdad5/I; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 781E7C4CEC9;
-	Wed, 28 Aug 2024 15:40:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724859637;
-	bh=+z7/VLAc5zAKqxwt9kQI0vxm8x7sulgvUDeMTRfB+wo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=hDdad5/IY68zkrft/92YWfFtjDz6TFndSmnpp5pqAtaDdhgaQHXnMYujF2CwZtAvo
-	 s1dVBctohqByWUo15KsHC1yXOsb3CsxrVYgXiTlMrxSNBqKSRHb2u/dgFnWDlyP45P
-	 kmzBzCQlLYmgzPMvmTlIEcYXhkLufuTJDpchreYUAd0yoHp8hJGCENnAbHqZR1NUMB
-	 63ZyNil+E22vWl4w+ZhugE7V8Y5RiBnHkIJ248WfFc80AZtPJMZpvtsLhvJEQmQQ7b
-	 rjS4mie2g2VPxttgup163SLxFXlpDbWSy4ple6kkn/VZnDNkSEFpYi5cJmSqRwT5Qa
-	 F/BVlj/jrU5iw==
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2f3e071eb64so94243731fa.1;
-        Wed, 28 Aug 2024 08:40:37 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCV05xct5gfUJ2WZGILTjXAdPU1k8W3sJVDHX0yp56hujCJuB0om51JlDpME3pndc1JSGNNhTppmsXal/h0gRg==@vger.kernel.org, AJvYcCWCZcSHufCGoUAdCMPQp0fRVxzYrmJVjlDzwf0cxRS/AVusgr5YsPCWVlftT7yGyfOU/wqCrlcjbhFN6Cmn@vger.kernel.org, AJvYcCWJc0C107/wSVlSw7lu1Aj6ndpsarTY6yOGjRRO4HE/t98Ijb6jv9LZCMI7jFCd7FcjbgtKAFMoWKnBMAHGhHxd@vger.kernel.org, AJvYcCWjqeQIr7Tp60H/3mg3ypNTH87qpaqx7Qo/ZbC9RsxV1WEmgE6ye0ccCcN7C8UoAVsL5VQxbixOBVqhyYtSNozUr6l3@vger.kernel.org, AJvYcCXXwvItc36YPp8dou+RaeRRAFMMDrdJ/AutmCKqlkH8WFKpoWipIYNKclPx/lM6JATUIbrBztf3eUOk@vger.kernel.org
-X-Gm-Message-State: AOJu0YxdD0WqGot810jQ21YEOxntFmOYzJGRAgRGKnttnKWwoA4o9Ruq
-	remfgM00GECRUV8PLUP2W7qAfs+qOrF6p2t/1b537Jptf0jXTwVFEddbyUz0ByKKmqRPPkNMiJR
-	cm0v6Z7nuSvrjE8S7emkgFHCZQ7k=
-X-Google-Smtp-Source: AGHT+IHIXIHDcxvkoioWarqDfEAwvoOHHvvDveL69dLtIdivksLO7ybL0XqtoFeExKbS+796rHsbT/SXItR1tBLUGxI=
-X-Received: by 2002:a2e:461a:0:b0:2f3:f182:49f3 with SMTP id
- 38308e7fff4ca-2f6106e36e6mr594741fa.22.1724859635743; Wed, 28 Aug 2024
- 08:40:35 -0700 (PDT)
+	s=arc-20240116; t=1724862455; c=relaxed/simple;
+	bh=J7TamwyLq/TO8kGKKSchuFfy18yYms4GzoxH5TmQHp0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Mime-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fGaiDOKF0osJn5/k76SQi0QdT+DP3WQKkZW4kxKWPVbWBNrWUYD455LaSe40jtCTQbEqctQeQQsoZF+Iy6PziYHP+aGbvCDuq7BIenk+4ycJmiAPbY808UtwL2uGMGQRjqeWfO6CWwfJwKiW1Dc2Z/FPR3784Z0FXkE6qPBwfF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.crashing.org; spf=pass smtp.mailfrom=kernel.crashing.org; arc=none smtp.client-ip=63.228.1.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.crashing.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.crashing.org
+Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
+	by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 47SGKT1D008844;
+	Wed, 28 Aug 2024 11:20:29 -0500
+Received: (from segher@localhost)
+	by gate.crashing.org (8.14.1/8.14.1/Submit) id 47SGKPkx008843;
+	Wed, 28 Aug 2024 11:20:25 -0500
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date: Wed, 28 Aug 2024 11:20:25 -0500
+From: Segher Boessenkool <segher@kernel.crashing.org>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, "Jason A . Donenfeld" <Jason@zx2c4.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>, Naveen N Rao <naveen@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, "Theodore Ts'o" <tytso@mit.edu>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        shuah <shuah@kernel.org>, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>, linux-mm@kvack.org,
+        linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 05/17] vdso: Avoid call to memset() by getrandom
+Message-ID: <20240828162025.GG29862@gate.crashing.org>
+References: <cover.1724309198.git.christophe.leroy@csgroup.eu> <5deb67090b214f0e6eae96b7c406546d1a16f89b.1724309198.git.christophe.leroy@csgroup.eu> <20240827180819.GB2049@sol.localdomain> <20240827225330.GC29862@gate.crashing.org> <Zs8HirKLk-SrwTIu@zx2c4.com> <fc19bf63-d519-46e2-be70-80202c85ff92@app.fastmail.com> <20240828124519.GE29862@gate.crashing.org> <CAMj1kXGmDmxy75eP=rf_fzKmg0g_FeKV43jk2G_gibnKZBtVww@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <cover.1724309198.git.christophe.leroy@csgroup.eu>
- <5deb67090b214f0e6eae96b7c406546d1a16f89b.1724309198.git.christophe.leroy@csgroup.eu>
- <20240827180819.GB2049@sol.localdomain> <20240827225330.GC29862@gate.crashing.org>
- <Zs8HirKLk-SrwTIu@zx2c4.com> <fc19bf63-d519-46e2-be70-80202c85ff92@app.fastmail.com>
- <20240828124519.GE29862@gate.crashing.org>
-In-Reply-To: <20240828124519.GE29862@gate.crashing.org>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Wed, 28 Aug 2024 17:40:23 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXGmDmxy75eP=rf_fzKmg0g_FeKV43jk2G_gibnKZBtVww@mail.gmail.com>
-Message-ID: <CAMj1kXGmDmxy75eP=rf_fzKmg0g_FeKV43jk2G_gibnKZBtVww@mail.gmail.com>
-Subject: Re: [PATCH v2 05/17] vdso: Avoid call to memset() by getrandom
-To: Segher Boessenkool <segher@kernel.crashing.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, "Jason A . Donenfeld" <Jason@zx2c4.com>, Eric Biggers <ebiggers@kernel.org>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Naveen N Rao <naveen@kernel.org>, Andy Lutomirski <luto@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, "Theodore Ts'o" <tytso@mit.edu>, Andrew Morton <akpm@linux-foundation.org>, 
-	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, shuah <shuah@kernel.org>, 
-	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>, 
-	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXGmDmxy75eP=rf_fzKmg0g_FeKV43jk2G_gibnKZBtVww@mail.gmail.com>
+User-Agent: Mutt/1.4.2.3i
 
-On Wed, 28 Aug 2024 at 14:57, Segher Boessenkool
-<segher@kernel.crashing.org> wrote:
->
-> On Wed, Aug 28, 2024 at 12:24:12PM +0000, Arnd Bergmann wrote:
-> > On Wed, Aug 28, 2024, at 11:18, Jason A. Donenfeld wrote:
-> > > On Tue, Aug 27, 2024 at 05:53:30PM -0500, Segher Boessenkool wrote:
-> > >> On Tue, Aug 27, 2024 at 11:08:19AM -0700, Eric Biggers wrote:
-> > >> >
-> > >> > Is there a compiler flag that could be used to disable the generation of calls
-> > >> > to memset?
-> > >>
-> > >> -fno-tree-loop-distribute-patterns .  But, as always, read up on it, see
-> > >> what it actually does (and how it avoids your problem, and mostly: learn
-> > >> what the actual problem *was*!)
-> > >
-> > > This might help with various loops, but it doesn't help with the matter
-> > > that this patch fixes, which is struct initialization. I just tried it
-> > > with the arm64 patch to no avail.
+Hi!
+
+On Wed, Aug 28, 2024 at 05:40:23PM +0200, Ard Biesheuvel wrote:
+> On Wed, 28 Aug 2024 at 14:57, Segher Boessenkool
+> <segher@kernel.crashing.org> wrote:
 > >
-> > Maybe -ffreestanding can help here? That should cause the vdso to be built
-> > with the assumption that there is no libc, so it would neither add nor
-> > remove standard library calls. Not sure if that causes other problems,
-> > e.g. if the calling conventions are different.
->
-> "GCC requires the freestanding
-> environment provide 'memcpy', 'memmove', 'memset' and 'memcmp'."
->
-> This is precisely to implement things like struct initialisation.  Maybe
-> we should have a "-ffreeerstanding" or "-ffreefloating" or think of
-> something funnier still environment as well, this problem has been there
-> since the -ffreestanding flag has existed, but the problem is as old as
-> the night.
->
-> -fno-builtin might help a bit more, but just attack the problem at
-> its root, like I suggested?
->
+> > On Wed, Aug 28, 2024 at 12:24:12PM +0000, Arnd Bergmann wrote:
+> > > On Wed, Aug 28, 2024, at 11:18, Jason A. Donenfeld wrote:
+> > > > On Tue, Aug 27, 2024 at 05:53:30PM -0500, Segher Boessenkool wrote:
+> > > >> On Tue, Aug 27, 2024 at 11:08:19AM -0700, Eric Biggers wrote:
+> > > >> >
+> > > >> > Is there a compiler flag that could be used to disable the generation of calls
+> > > >> > to memset?
+> > > >>
+> > > >> -fno-tree-loop-distribute-patterns .  But, as always, read up on it, see
+> > > >> what it actually does (and how it avoids your problem, and mostly: learn
+> > > >> what the actual problem *was*!)
+> > > >
+> > > > This might help with various loops, but it doesn't help with the matter
+> > > > that this patch fixes, which is struct initialization. I just tried it
+> > > > with the arm64 patch to no avail.
+> > >
+> > > Maybe -ffreestanding can help here? That should cause the vdso to be built
+> > > with the assumption that there is no libc, so it would neither add nor
+> > > remove standard library calls. Not sure if that causes other problems,
+> > > e.g. if the calling conventions are different.
+> >
+> > "GCC requires the freestanding
+> > environment provide 'memcpy', 'memmove', 'memset' and 'memcmp'."
+> >
+> > This is precisely to implement things like struct initialisation.  Maybe
+> > we should have a "-ffreeerstanding" or "-ffreefloating" or think of
+> > something funnier still environment as well, this problem has been there
+> > since the -ffreestanding flag has existed, but the problem is as old as
+> > the night.
+> >
+> > -fno-builtin might help a bit more, but just attack the problem at
+> > its root, like I suggested?
+> >
+> 
+> In my experience, this is likely to do the opposite: it causes the
+> compiler to 'forget' the semantics of memcpy() and memset(), so that
+> explicit trivial calls will no longer be elided and replaced with
+> plain loads and stores (as it can no longer guarantee the equivalence)
 
-In my experience, this is likely to do the opposite: it causes the
-compiler to 'forget' the semantics of memcpy() and memset(), so that
-explicit trivial calls will no longer be elided and replaced with
-plain loads and stores (as it can no longer guarantee the equivalence)
+No, the compiler will never forget those semantics.  But if you tell it
+your function named memset() is not the actual standard memset -- via
+-fno-builtin-memset for example -- the compiler won't optimise things
+involving it quite as much.  You told it so eh?
 
-> (This isn't a new problem, originally it showed up as "GCC replaces
-> (part of) my memcpy() implementation by a (recursive) call to memcpy()"
-> and, well, that doesn't quite work!)
->
+You can also tell it not to have a __builtin_memset function, but in
+this particular case that won;t quite work, since the compiler does need
+to have that builtin available to do struct and array initialisations
+and the like.
 
-This needs to be fixed for Clang as well, so throwing GCC specific
-flags at it will at best be a partial solution.
+> > (This isn't a new problem, originally it showed up as "GCC replaces
+> > (part of) my memcpy() implementation by a (recursive) call to memcpy()"
+> > and, well, that doesn't quite work!)
+> >
+> 
+> This needs to be fixed for Clang as well, so throwing GCC specific
+> flags at it will at best be a partial solution.
 
-Omitting the struct assignment is a reasonable way to reduce the
-likelihood that a memset() will be emitted, so for this patch
+clang says it is a 100% plug-in replacement for GCC, so they will have
+to accept all GCC flags.  And in many cases they do.  Cases where they
+don't are bugs.
 
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
+> It is not a complete solution, unfortunately, and I guess there may be
+> other situations (compiler/arch combinations) where this might pop up
+> again.
 
-It is not a complete solution, unfortunately, and I guess there may be
-other situations (compiler/arch combinations) where this might pop up
-again.
+Why do mem* not work in VDSOs?  Fix that, and all these problems
+disappear, and you do not need workrarounds :-)
+
+
+Segher
 
