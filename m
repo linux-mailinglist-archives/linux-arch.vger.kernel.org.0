@@ -1,101 +1,123 @@
-Return-Path: <linux-arch+bounces-6721-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6723-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5947B962E64
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Aug 2024 19:24:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E88BC962E95
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Aug 2024 19:32:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8BAD11C21816
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Aug 2024 17:24:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 949CC1F23EFB
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Aug 2024 17:32:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7848E19F470;
-	Wed, 28 Aug 2024 17:24:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b="c7PC2lWR"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCD251A4F15;
+	Wed, 28 Aug 2024 17:32:33 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from gentwo.org (gentwo.org [62.72.0.81])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5D7D14600F;
-	Wed, 28 Aug 2024 17:24:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.72.0.81
+Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1809F142633;
+	Wed, 28 Aug 2024 17:32:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.228.1.57
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724865881; cv=none; b=tyOfuawXFDGjLcvfQTD7XfqyTgRRZnveaFKoDqsRmzRUkcQyZ6VYeORdADDFIewv3DmcsX948MBC5EF3ugBNsgFjG4/bWFYHbwnLE0xLKRs0V3qUFVSgJsITSl5FZEs2+yqIF7FPqeQMuAOFErc8XOaVxdr8NODY7mkFTiZ/mBs=
+	t=1724866353; cv=none; b=nLXAjrUDuJoFTbpBk7ZI6QV8oiBf8G8w6RJoCBe4zEFj1gxDR7jrmDE0eBadB4qAUvRTgMX08FBcJowxNE61uLiLf5gLLaJva7fRK3M/oeejIsUDOm9lIL2hh3WSLCauQk0AF3Um/qnMAnzyxDdCIl9K7LE39J6sHvBMiCuTS88=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724865881; c=relaxed/simple;
-	bh=nSvT5YRDGKjvsPRngtDmL2GgKvhYz22L9LD9LQewmAI=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=aZxVSZZ98NlLb4tSSjjfK5hTraZSi5yiUtfVbu2IGvq+uK7begzdn2SokDqsi8lTdwUGfoO/3G7pUAXPx9R9emxYSvOg/bhwo35Ru3Gf6XDS4R32dnAiWHnlnYoPxLRqYTgGyUaEyjmsm0LmKInfpq5GkXck4lh9oVL9i7yei3E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org; spf=pass smtp.mailfrom=gentwo.org; dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b=c7PC2lWR; arc=none smtp.client-ip=62.72.0.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentwo.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.org;
-	s=default; t=1724865333;
-	bh=nSvT5YRDGKjvsPRngtDmL2GgKvhYz22L9LD9LQewmAI=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-	b=c7PC2lWRLJXBkhAPKDJmiYcEyzVK87P+5QEVOGpaROKk+wM6c2mJNQXH/JzuCm0hR
-	 vRn7wtleBZLuZFfNL5A/aJpXbZ2le4E8wtypD6laLXduYkBPpEdFPWkSSdygb121VD
-	 FhGeFb+FDR9SMj3j9B2KViReeqZ2NQxONUOX5+Tg=
-Received: by gentwo.org (Postfix, from userid 1003)
-	id E3CA0404BB; Wed, 28 Aug 2024 10:15:33 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-	by gentwo.org (Postfix) with ESMTP id E2B08404BA;
-	Wed, 28 Aug 2024 10:15:33 -0700 (PDT)
-Date: Wed, 28 Aug 2024 10:15:33 -0700 (PDT)
-From: "Christoph Lameter (Ampere)" <cl@gentwo.org>
-To: Thomas Gleixner <tglx@linutronix.de>
-cc: Christoph Lameter via B4 Relay <devnull+cl.gentwo.org@kernel.org>, 
-    Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-    Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-    Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>, 
-    Linus Torvalds <torvalds@linux-foundation.org>, linux-mm@kvack.org, 
-    linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-    linux-arch@vger.kernel.org
-Subject: Re: [PATCH v2] Avoid memory barrier in read_seqcount() through load
- acquire
-In-Reply-To: <87ttfbeyqt.ffs@tglx>
-Message-ID: <b0543714-9176-f3a3-1ca9-55bbedf6a0c3@gentwo.org>
-References: <20240819-seq_optimize-v2-1-9d0da82b022f@gentwo.org> <87ttfbeyqt.ffs@tglx>
+	s=arc-20240116; t=1724866353; c=relaxed/simple;
+	bh=oxW2+MTjMrJ+ZeeK8Liz6ctDws6qsgf5Ch9PI4RjS2M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Mime-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tip5iUbohSgFAXsqTbsZHvRNF9f2zcI7uexSQ5rRqywz82a9XM5ZuBBVjeJjmcPuLH4EM0JNbLQLO/GDGK5tvffo+8WPznJ4seh65/TbvDGXVrIF5DprV8YwBLbXuFSH1yciMp9DRWiYn4+1nrH54s8A+71GF41QOtQrTtfQdqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.crashing.org; spf=pass smtp.mailfrom=kernel.crashing.org; arc=none smtp.client-ip=63.228.1.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.crashing.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.crashing.org
+Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
+	by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 47SHPeo9010804;
+	Wed, 28 Aug 2024 12:25:40 -0500
+Received: (from segher@localhost)
+	by gate.crashing.org (8.14.1/8.14.1/Submit) id 47SHPc5F010803;
+	Wed, 28 Aug 2024 12:25:38 -0500
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date: Wed, 28 Aug 2024 12:25:38 -0500
+From: Segher Boessenkool <segher@kernel.crashing.org>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, "Jason A . Donenfeld" <Jason@zx2c4.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>, Naveen N Rao <naveen@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, "Theodore Ts'o" <tytso@mit.edu>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        shuah <shuah@kernel.org>, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>, linux-mm@kvack.org,
+        linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 05/17] vdso: Avoid call to memset() by getrandom
+Message-ID: <20240828172538.GI29862@gate.crashing.org>
+References: <cover.1724309198.git.christophe.leroy@csgroup.eu> <5deb67090b214f0e6eae96b7c406546d1a16f89b.1724309198.git.christophe.leroy@csgroup.eu> <20240827180819.GB2049@sol.localdomain> <20240827225330.GC29862@gate.crashing.org> <Zs8HirKLk-SrwTIu@zx2c4.com> <fc19bf63-d519-46e2-be70-80202c85ff92@app.fastmail.com> <20240828124519.GE29862@gate.crashing.org> <CAMj1kXGmDmxy75eP=rf_fzKmg0g_FeKV43jk2G_gibnKZBtVww@mail.gmail.com> <20240828162025.GG29862@gate.crashing.org> <CAMj1kXHZPfr2Sz78UrgsdX-2uBp0D1sCnznQnz5ZyMdiJq6rAA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXHZPfr2Sz78UrgsdX-2uBp0D1sCnznQnz5ZyMdiJq6rAA@mail.gmail.com>
+User-Agent: Mutt/1.4.2.3i
 
-On Fri, 23 Aug 2024, Thomas Gleixner wrote:
+On Wed, Aug 28, 2024 at 07:12:55PM +0200, Ard Biesheuvel wrote:
+> On Wed, 28 Aug 2024 at 18:24, Segher Boessenkool
+> <segher@kernel.crashing.org> wrote:
+> > > In my experience, this is likely to do the opposite: it causes the
+> > > compiler to 'forget' the semantics of memcpy() and memset(), so that
+> > > explicit trivial calls will no longer be elided and replaced with
+> > > plain loads and stores (as it can no longer guarantee the equivalence)
+> >
+> > No, the compiler will never forget those semantics.  But if you tell it
+> > your function named memset() is not the actual standard memset -- via
+> > -fno-builtin-memset for example -- the compiler won't optimise things
+> > involving it quite as much.  You told it so eh?
+> 
+> That is exactly the point I am making. So how would this help in this case?
 
-> This all can be done without the extra copies of the counter
-> accessors. Uncompiled patch below.
+I think we agree?  :-)
 
-Great. Thanks. Tried it too initially but could not make it work right.
+> > > This needs to be fixed for Clang as well, so throwing GCC specific
+> > > flags at it will at best be a partial solution.
+> >
+> > clang says it is a 100% plug-in replacement for GCC, so they will have
+> > to accept all GCC flags.  And in many cases they do.  Cases where they
+> > don't are bugs.
+> 
+> Even if this were true, we support Clang versions today that do not
+> support -fno-tree-loop-distribute-patterns so my point stands.
 
-One thing that we also want is the use of the smp_cond_load_acquire to
-have the cpu power down while waiting for a cacheline change.
+It is true.  Yes, this cause problems for their users.
 
-The code has several places where loops occur when the last bit is set in
-the seqcount.
+> > > It is not a complete solution, unfortunately, and I guess there may be
+> > > other situations (compiler/arch combinations) where this might pop up
+> > > again.
+> >
+> > Why do mem* not work in VDSOs?  Fix that, and all these problems
+> > disappear, and you do not need workrarounds :-)
+> 
+> Good point. We should just import memcpy and memset in the VDSO ELF metadata.
 
-We could use smp_cond_load_acquire in load_sequence() but what do we do
-about the loops at the higher level? Also this does not sync with the lock
-checking logic.
+Yeah.  In many cases GCC will replace such calls by (faster and/or
+smaller) inline code anyway, but when it does leave a call, there needs
+to be an external function implementing it :-)
+
+> Not sure about static binaries, though: do those even use the VDSO?
+
+With "static binary" people usually mean "a binary not using any DSOs",
+I think the VDSO is a DSO, also in this respect?  As always, -static
+builds are *way* less problematic (and faster and smaller :-) )
 
 
-diff --git a/include/linux/seqlock.h b/include/linux/seqlock.h
-index 68b3af8bd6c6..4442a97ffe9a 100644
---- a/include/linux/seqlock.h
-+++ b/include/linux/seqlock.h
-@@ -135,7 +135,7 @@ static inline void seqcount_lockdep_reader_access(const seqcount_t *s)
- static __always_inline unsigned __seqprop_load_sequence(const seqcount_t *s, bool acquire)
- {
- 	if (acquire && IS_ENABLED(CONFIG_ARCH_HAS_ACQUIRE_RELEASE))
--		return smp_load_acquire(&s->sequence);
-+		return smp_cond_load_acquire(&s->sequence, (s->sequence & 1) == 0);
- 	else
- 		return READ_ONCE(s->sequence);
- }
-
+Segher
 
