@@ -1,128 +1,79 @@
-Return-Path: <linux-arch+bounces-6730-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6731-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B078963051
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Aug 2024 20:43:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C0C69630D8
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Aug 2024 21:18:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CB9B1282941
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Aug 2024 18:43:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 077D11F2288D
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Aug 2024 19:18:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D47111AAE28;
-	Wed, 28 Aug 2024 18:43:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED65C15821A;
+	Wed, 28 Aug 2024 19:18:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ROtLpkCE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PkwL2AGL"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D54D1D696;
-	Wed, 28 Aug 2024 18:43:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C23BF2868B;
+	Wed, 28 Aug 2024 19:18:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724870616; cv=none; b=uJZwamkrjh5oRjpH6SBD4rh3eC2qJJ6li8bOxd5aUabP5asyfwAiyQQA7r8VU6YltEMBEq+S6n9QP8Dlx4h+rbIj5vevFLwfXMyBxp6V75zSS4V8oRmmBnAY/TOGSN9fiuLocENf5HO10aJBI6GJisdLzQ84IBuSHLgi6aEDWZ4=
+	t=1724872707; cv=none; b=LubixWMjOxYbe/Z5fP2j/GujgZwxcEKmJuJDdZkpkPNJw2s9T3ANZoUQ0gWEG+X1AFEwZxuk71a5BeCQJp+62txevMvBNmaiUP+x2P7+P8XzAyeqjEgxNnyrq4rrkjvf46vqPL/nHhjuo03ng7WyyjhKf8eDtvbBn42TppstG4E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724870616; c=relaxed/simple;
-	bh=bWjjtD9ux0QAGG3fGYObh74lsPxgFpjHa3YWm0m0vIU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Tg8NLAiN1pUYg/CZyuIe3v/9AOKfJ3kdjm5n9ZUcJWOqRE17Iih5BlNWvRTbUydOrtYLKo/GvtwNdO9eC4UuAeS2ybdlpWXDVR7yAc0xB1IA6dKqW3Bccz1evVcTEc5V2SZTYQ6YzZwJWwYLE+78WGN6UYT7cyU0DtjrZPKn/ko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ROtLpkCE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72659C4CEC0;
-	Wed, 28 Aug 2024 18:43:34 +0000 (UTC)
+	s=arc-20240116; t=1724872707; c=relaxed/simple;
+	bh=zGUaLfjyNhVscAoZoq99+/cK/SGu4jhpsn9v6C6i5UA=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=md0ldCD94A5j0OutNiw/buXcRZRb/3QZtMFz8fObBt6L6QUiDL4Snap1892HO3QMVpEpg98iuyl5sYNmu1Fwrd5TX09L6R7DfwHiXRENoyejXRNgbRVoFHdmnfAXyQsGcYnXwZfV9Uew9mFnAN/5ycf0WDiYPO1P6OG4By+4ocE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PkwL2AGL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 462A1C4CEC2;
+	Wed, 28 Aug 2024 19:18:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724870616;
-	bh=bWjjtD9ux0QAGG3fGYObh74lsPxgFpjHa3YWm0m0vIU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=ROtLpkCEGD8Ucdbs7a1iRfvuc32G3qJBY6quO3vEkfgfTtRxHiuhmUPG4800e2RsG
-	 /Lm2aGh9ZM5echC/qr/x2EXrVQ45i6g+DGFDj3b4IL1+1nBBMKPOO7F2EVPH21SXWt
-	 D3wyLlY3wzUG+pAwc9PiOyoANcpRLYBPjrk80WBsoM0sK/mk/Y/+Np3wR59Dnj9tMd
-	 zCiuTrI/cV8v34a6M0pTb4HTETCCVIQdFJzGlV39b2ciDrjitNDYPxuwRZojB40abg
-	 4ctkvmZU35i1iPs5RMsbgdrXOvldO8psyPOoy6iI6yqUNNrEivtWT76jv46HwMkF1o
-	 46/gB0lOrWDFQ==
-Date: Wed, 28 Aug 2024 11:43:33 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, Donald Hunter <donald.hunter@gmail.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet
- <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, Ivan
- Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
- <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>,
- Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
- <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
- Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
- <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, Herbert
- Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, Willem
- de Bruijn <willemdebruijn.kernel@gmail.com>, =?UTF-8?B?QmrDtnJuIFTDtnBl?=
- =?UTF-8?B?bA==?= <bjorn@kernel.org>, Magnus Karlsson
- <magnus.karlsson@intel.com>, Maciej Fijalkowski
- <maciej.fijalkowski@intel.com>, Jonathan Lemon <jonathan.lemon@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>,
- Sumit Semwal <sumit.semwal@linaro.org>, Christian =?UTF-8?B?S8O2bmln?=
- <christian.koenig@amd.com>, Pavel Begunkov <asml.silence@gmail.com>, David
- Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin
- <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, Harshitha
- Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
- Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
- <pkaligineedi@google.com>, Bagas Sanjaya <bagasdotme@gmail.com>, Christoph
- Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>,
- Taehee Yoo <ap420073@gmail.com>, Willem de Bruijn <willemb@google.com>,
- Kaiyuan Zhang <kaiyuanz@google.com>
-Subject: Re: [PATCH net-next v22 04/13] netdev: netdevice devmem allocator
-Message-ID: <20240828114333.560895f0@kernel.org>
-In-Reply-To: <CAHS8izP8T5Xj97M7efecBmCrG9z8E0PYTxWCYZ0ym0hv13-DKg@mail.gmail.com>
-References: <20240825041511.324452-1-almasrymina@google.com>
-	<20240825041511.324452-5-almasrymina@google.com>
-	<20240827191519.5464a0b2@kernel.org>
-	<CAHS8izP8T5Xj97M7efecBmCrG9z8E0PYTxWCYZ0ym0hv13-DKg@mail.gmail.com>
+	s=k20201202; t=1724872706;
+	bh=zGUaLfjyNhVscAoZoq99+/cK/SGu4jhpsn9v6C6i5UA=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=PkwL2AGLmZRS7yfuNfVoDu09vm+r4ab+xuelU3EFeCb+R/BtYTWD1B82hU3UFUVj6
+	 +1BGjSAArakFEeRrgNPIFExrTGUCgzdtSzK5kXA48DVUK1vfFHT+viKUfzLAB3sI3p
+	 W+l2nMramEb2r1g+j/Z1d+PRjgR0uiilF0bgM2f3ZL22wquLFzAKDrENTSC7Lx1GoO
+	 MtP2yw2Tg6zd/EGtpeVTIQ0sA6GvNls7oAU9lC+32/h5GESAIDxSETX5fZD0Y5TbqH
+	 62hKChTKDHhu+q1i1xX5LAdSkcUAgE5y/CtnFC7/uFBMDCuk/pjhlwY2pLY/1890re
+	 j+NLhfEqkBAHg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE2D83809A80;
+	Wed, 28 Aug 2024 19:18:27 +0000 (UTC)
+Subject: Re: [GIT PULL] LoongArch fixes for v6.11-rc6
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <20240828134408.3231389-1-chenhuacai@loongson.cn>
+References: <20240828134408.3231389-1-chenhuacai@loongson.cn>
+X-PR-Tracked-List-Id: <linux-arch.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20240828134408.3231389-1-chenhuacai@loongson.cn>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-fixes-6.11-2
+X-PR-Tracked-Commit-Id: 4956e07f05e239b274d042618a250c9fa3e92629
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 928f79a188aacc057ba36c85b36b6d1e99c8f595
+Message-Id: <172487270626.1401757.15704898692520776590.pr-tracker-bot@kernel.org>
+Date: Wed, 28 Aug 2024 19:18:26 +0000
+To: Huacai Chen <chenhuacai@loongson.cn>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev, linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>, Jiaxun Yang <jiaxun.yang@flygoat.com>, Huacai Chen <chenhuacai@loongson.cn>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 
-On Wed, 28 Aug 2024 00:20:23 -0700 Mina Almasry wrote:
-> > On Sun, 25 Aug 2024 04:15:02 +0000 Mina Almasry wrote:  
-> > > +void net_devmem_free_dmabuf(struct net_iov *niov)
-> > > +{
-> > > +     struct net_devmem_dmabuf_binding *binding = net_iov_binding(niov);
-> > > +     unsigned long dma_addr = net_devmem_get_dma_addr(niov);
-> > > +
-> > > +     if (gen_pool_has_addr(binding->chunk_pool, dma_addr, PAGE_SIZE))
-> > > +             gen_pool_free(binding->chunk_pool, dma_addr, PAGE_SIZE);  
-> >
-> > Is the check necessary for correctness? Should it perhaps be a WARN
-> > under DEBUG_NET instead? The rest LGTM:
-> >  
-> 
-> Not really necessary for correctness per se, but if we try to free a
-> dma_addr that is not in a gen_pool (due to some other bug in the
-> code), then gen_pool_free ends up BUG_ON, crashing the kernel.
-> 
-> Arguably gen_pool_free should not BUG_ON, but I think that's an old
-> API, and existing call sites have worked around the BUG_ON by doing a
-> gen_pool_has_addr check like I do here, for example kernel/dma/pool.c.
-> So I did not seek to change this established behavior.
-> 
-> I think WARN seems fine to me, but maybe not under DEBUG_NET. I don't
-> want production code crashing due to this error, if it's OK with you.
-> 
-> Unless I hear otherwise I'll add a WARN without debug here.
+The pull request you sent on Wed, 28 Aug 2024 21:44:08 +0800:
 
-WARN makes sense, I didn't know about the BUG_ON() hiding inside
-gen_pool :(
+> git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-fixes-6.11-2
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/928f79a188aacc057ba36c85b36b6d1e99c8f595
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
