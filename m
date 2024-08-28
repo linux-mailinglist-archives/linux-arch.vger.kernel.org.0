@@ -1,176 +1,101 @@
-Return-Path: <linux-arch+bounces-6720-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6721-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 936A2962E3C
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Aug 2024 19:13:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5947B962E64
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Aug 2024 19:24:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 349D2B2343D
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Aug 2024 17:13:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8BAD11C21816
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Aug 2024 17:24:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 857171A4F27;
-	Wed, 28 Aug 2024 17:13:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7848E19F470;
+	Wed, 28 Aug 2024 17:24:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SFar5KJc"
+	dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b="c7PC2lWR"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gentwo.org (gentwo.org [62.72.0.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 478CF4D108;
-	Wed, 28 Aug 2024 17:13:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5D7D14600F;
+	Wed, 28 Aug 2024 17:24:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.72.0.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724865189; cv=none; b=Butdw3tk9OBvaayASeXyiF2jDrK5eruWqSDH0zEk4iuWtvevHJn/NW3wsN1sK5byIaoXqcac2S+C82k+7oyRAgFsaNRuiHvLmQBOhSOcVGffmKfY72SFOaXT/M2iagyylae7KBMSCjYBd9K7Ud9wD3bsodCr8q8xMPJz48ZJlPg=
+	t=1724865881; cv=none; b=tyOfuawXFDGjLcvfQTD7XfqyTgRRZnveaFKoDqsRmzRUkcQyZ6VYeORdADDFIewv3DmcsX948MBC5EF3ugBNsgFjG4/bWFYHbwnLE0xLKRs0V3qUFVSgJsITSl5FZEs2+yqIF7FPqeQMuAOFErc8XOaVxdr8NODY7mkFTiZ/mBs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724865189; c=relaxed/simple;
-	bh=wTRLnPlAZutCpvLR9R0pglZtR1qgqcPfis4YRXDGlYs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sd5mDTnPhZZbVSoBsv/vdW7iysEvZ4B5G7zMhnCtJAIQrKiNfGLlKPe++bsKP1kMs/iglQotWL20rN0oILA8a3Zbfh77CjpS6sJf9oEs2i+Igmb7kjtoojX2A4KVsuFkGKGhqlPY3pVdlvuVKDN5IuBPlwbnTMoq+aJxBWu68oM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SFar5KJc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCE0BC4CECD;
-	Wed, 28 Aug 2024 17:13:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724865188;
-	bh=wTRLnPlAZutCpvLR9R0pglZtR1qgqcPfis4YRXDGlYs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=SFar5KJcyOOqLxwhcaGjzk/s+2JLgrGwjQyRUqMnq6qFBlWFPPLW87QI6cfGTmo/s
-	 kTVZAokZ2cisPjdcnUa3o49tV1Mw1SpGBGSGUcYilXuMO9Efm1NJJ5zCWyc1Tt2Hzm
-	 lNCW48SmTnuXeiI0kQ7hshKa57+I34WmOj4Hs7S81TVeAqFWJ+xVjZqUuI0mSAO995
-	 Iq9KaCwlEo1MddLN2KZngqRFwoh2+BZIWdXuoIxh32ggUPof8YLd8aatTgjH5SX1m+
-	 77gnG1IU3Jm1Xrpe8VgMpb4xQNmxAy8A/Nn9dhjj9hgXea2lYFDEJuJm/71JAeV9HL
-	 rP2cvKtthC9KQ==
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-533de5a88f8so6545155e87.3;
-        Wed, 28 Aug 2024 10:13:08 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU+P2qlF24YkJxueyjHkcwkKg84GfjzlVxcwONc0jiQI7qBplZx5frXVIAV5oYpoj9fXm6XFa11dC+V4dCRMO2Y@vger.kernel.org, AJvYcCUi1nLSWPcLirdQZS9Zb35uHve3dcYWHMtEvUy67C65h42yQIp9h3cm9CMOcKgAAniKzaDPo8CWp7xsak6hHw==@vger.kernel.org, AJvYcCW9uR44BVHP0f+zlg2iieZe28SYE8a1hV6urtW3mLh9Uf4iIU84edzu7w5plMXuxQoAC7Qx++bv3jDD@vger.kernel.org, AJvYcCXBX5TPRX/ZBhCinkFUECNYcT2szdOKk5Q8fRyR5rNKWpYflMsvw6mPIzkDJIS04AFxNo5fi1myzKQeA5Gr@vger.kernel.org, AJvYcCXDf7o2Pg5l3qK+mH0+rNjbFLepmOGdNv7GIqSTMNjrYVbKt8JLuBX35goNt9/reyeJQDPucDVF/xxfXdU8y573x0Z8@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywb6b8LmTm+GE5EjsR3a7UWfNkoYQWxcj/m+0UBc+wM5cH6AtYB
-	CYOyz4Gxe4lwmjLNcW17M0BraembDbTmK9HPhoBad0Aq8mRM62aqETHmYVCGva3VD1PmE5Kooo+
-	/kd4wZg0CxaygJtjODWpot49POXQ=
-X-Google-Smtp-Source: AGHT+IGT9a5qWQBtajQWghZ5b1FsgrYGjXl26AJMqNqo5EHBiRSmkhizffOxvoPuUqVl91lIQUxQnoyI/1L7KXA3rkA=
-X-Received: by 2002:a05:6512:131e:b0:533:4689:9750 with SMTP id
- 2adb3069b0e04-5346c626565mr2097762e87.26.1724865187012; Wed, 28 Aug 2024
- 10:13:07 -0700 (PDT)
+	s=arc-20240116; t=1724865881; c=relaxed/simple;
+	bh=nSvT5YRDGKjvsPRngtDmL2GgKvhYz22L9LD9LQewmAI=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=aZxVSZZ98NlLb4tSSjjfK5hTraZSi5yiUtfVbu2IGvq+uK7begzdn2SokDqsi8lTdwUGfoO/3G7pUAXPx9R9emxYSvOg/bhwo35Ru3Gf6XDS4R32dnAiWHnlnYoPxLRqYTgGyUaEyjmsm0LmKInfpq5GkXck4lh9oVL9i7yei3E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org; spf=pass smtp.mailfrom=gentwo.org; dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b=c7PC2lWR; arc=none smtp.client-ip=62.72.0.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentwo.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.org;
+	s=default; t=1724865333;
+	bh=nSvT5YRDGKjvsPRngtDmL2GgKvhYz22L9LD9LQewmAI=;
+	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+	b=c7PC2lWRLJXBkhAPKDJmiYcEyzVK87P+5QEVOGpaROKk+wM6c2mJNQXH/JzuCm0hR
+	 vRn7wtleBZLuZFfNL5A/aJpXbZ2le4E8wtypD6laLXduYkBPpEdFPWkSSdygb121VD
+	 FhGeFb+FDR9SMj3j9B2KViReeqZ2NQxONUOX5+Tg=
+Received: by gentwo.org (Postfix, from userid 1003)
+	id E3CA0404BB; Wed, 28 Aug 2024 10:15:33 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+	by gentwo.org (Postfix) with ESMTP id E2B08404BA;
+	Wed, 28 Aug 2024 10:15:33 -0700 (PDT)
+Date: Wed, 28 Aug 2024 10:15:33 -0700 (PDT)
+From: "Christoph Lameter (Ampere)" <cl@gentwo.org>
+To: Thomas Gleixner <tglx@linutronix.de>
+cc: Christoph Lameter via B4 Relay <devnull+cl.gentwo.org@kernel.org>, 
+    Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+    Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+    Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>, 
+    Linus Torvalds <torvalds@linux-foundation.org>, linux-mm@kvack.org, 
+    linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+    linux-arch@vger.kernel.org
+Subject: Re: [PATCH v2] Avoid memory barrier in read_seqcount() through load
+ acquire
+In-Reply-To: <87ttfbeyqt.ffs@tglx>
+Message-ID: <b0543714-9176-f3a3-1ca9-55bbedf6a0c3@gentwo.org>
+References: <20240819-seq_optimize-v2-1-9d0da82b022f@gentwo.org> <87ttfbeyqt.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1724309198.git.christophe.leroy@csgroup.eu>
- <5deb67090b214f0e6eae96b7c406546d1a16f89b.1724309198.git.christophe.leroy@csgroup.eu>
- <20240827180819.GB2049@sol.localdomain> <20240827225330.GC29862@gate.crashing.org>
- <Zs8HirKLk-SrwTIu@zx2c4.com> <fc19bf63-d519-46e2-be70-80202c85ff92@app.fastmail.com>
- <20240828124519.GE29862@gate.crashing.org> <CAMj1kXGmDmxy75eP=rf_fzKmg0g_FeKV43jk2G_gibnKZBtVww@mail.gmail.com>
- <20240828162025.GG29862@gate.crashing.org>
-In-Reply-To: <20240828162025.GG29862@gate.crashing.org>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Wed, 28 Aug 2024 19:12:55 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXHZPfr2Sz78UrgsdX-2uBp0D1sCnznQnz5ZyMdiJq6rAA@mail.gmail.com>
-Message-ID: <CAMj1kXHZPfr2Sz78UrgsdX-2uBp0D1sCnznQnz5ZyMdiJq6rAA@mail.gmail.com>
-Subject: Re: [PATCH v2 05/17] vdso: Avoid call to memset() by getrandom
-To: Segher Boessenkool <segher@kernel.crashing.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, "Jason A . Donenfeld" <Jason@zx2c4.com>, Eric Biggers <ebiggers@kernel.org>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Naveen N Rao <naveen@kernel.org>, Andy Lutomirski <luto@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, "Theodore Ts'o" <tytso@mit.edu>, Andrew Morton <akpm@linux-foundation.org>, 
-	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, shuah <shuah@kernel.org>, 
-	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>, 
-	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
 
-On Wed, 28 Aug 2024 at 18:24, Segher Boessenkool
-<segher@kernel.crashing.org> wrote:
->
-> Hi!
->
-> On Wed, Aug 28, 2024 at 05:40:23PM +0200, Ard Biesheuvel wrote:
-> > On Wed, 28 Aug 2024 at 14:57, Segher Boessenkool
-> > <segher@kernel.crashing.org> wrote:
-> > >
-> > > On Wed, Aug 28, 2024 at 12:24:12PM +0000, Arnd Bergmann wrote:
-> > > > On Wed, Aug 28, 2024, at 11:18, Jason A. Donenfeld wrote:
-> > > > > On Tue, Aug 27, 2024 at 05:53:30PM -0500, Segher Boessenkool wrote:
-> > > > >> On Tue, Aug 27, 2024 at 11:08:19AM -0700, Eric Biggers wrote:
-> > > > >> >
-> > > > >> > Is there a compiler flag that could be used to disable the generation of calls
-> > > > >> > to memset?
-> > > > >>
-> > > > >> -fno-tree-loop-distribute-patterns .  But, as always, read up on it, see
-> > > > >> what it actually does (and how it avoids your problem, and mostly: learn
-> > > > >> what the actual problem *was*!)
-> > > > >
-> > > > > This might help with various loops, but it doesn't help with the matter
-> > > > > that this patch fixes, which is struct initialization. I just tried it
-> > > > > with the arm64 patch to no avail.
-> > > >
-> > > > Maybe -ffreestanding can help here? That should cause the vdso to be built
-> > > > with the assumption that there is no libc, so it would neither add nor
-> > > > remove standard library calls. Not sure if that causes other problems,
-> > > > e.g. if the calling conventions are different.
-> > >
-> > > "GCC requires the freestanding
-> > > environment provide 'memcpy', 'memmove', 'memset' and 'memcmp'."
-> > >
-> > > This is precisely to implement things like struct initialisation.  Maybe
-> > > we should have a "-ffreeerstanding" or "-ffreefloating" or think of
-> > > something funnier still environment as well, this problem has been there
-> > > since the -ffreestanding flag has existed, but the problem is as old as
-> > > the night.
-> > >
-> > > -fno-builtin might help a bit more, but just attack the problem at
-> > > its root, like I suggested?
-> > >
-> >
-> > In my experience, this is likely to do the opposite: it causes the
-> > compiler to 'forget' the semantics of memcpy() and memset(), so that
-> > explicit trivial calls will no longer be elided and replaced with
-> > plain loads and stores (as it can no longer guarantee the equivalence)
->
-> No, the compiler will never forget those semantics.  But if you tell it
-> your function named memset() is not the actual standard memset -- via
-> -fno-builtin-memset for example -- the compiler won't optimise things
-> involving it quite as much.  You told it so eh?
->
+On Fri, 23 Aug 2024, Thomas Gleixner wrote:
 
-That is exactly the point I am making. So how would this help in this case?
+> This all can be done without the extra copies of the counter
+> accessors. Uncompiled patch below.
 
-> You can also tell it not to have a __builtin_memset function, but in
-> this particular case that won;t quite work, since the compiler does need
-> to have that builtin available to do struct and array initialisations
-> and the like.
->
-> > > (This isn't a new problem, originally it showed up as "GCC replaces
-> > > (part of) my memcpy() implementation by a (recursive) call to memcpy()"
-> > > and, well, that doesn't quite work!)
-> > >
-> >
-> > This needs to be fixed for Clang as well, so throwing GCC specific
-> > flags at it will at best be a partial solution.
->
-> clang says it is a 100% plug-in replacement for GCC, so they will have
-> to accept all GCC flags.  And in many cases they do.  Cases where they
-> don't are bugs.
->
+Great. Thanks. Tried it too initially but could not make it work right.
 
-Even if this were true, we support Clang versions today that do not
-support -fno-tree-loop-distribute-patterns so my point stands.
+One thing that we also want is the use of the smp_cond_load_acquire to
+have the cpu power down while waiting for a cacheline change.
 
-> > It is not a complete solution, unfortunately, and I guess there may be
-> > other situations (compiler/arch combinations) where this might pop up
-> > again.
->
-> Why do mem* not work in VDSOs?  Fix that, and all these problems
-> disappear, and you do not need workrarounds :-)
->
+The code has several places where loops occur when the last bit is set in
+the seqcount.
 
-Good point. We should just import memcpy and memset in the VDSO ELF metadata.
+We could use smp_cond_load_acquire in load_sequence() but what do we do
+about the loops at the higher level? Also this does not sync with the lock
+checking logic.
 
-Not sure about static binaries, though: do those even use the VDSO?
+
+diff --git a/include/linux/seqlock.h b/include/linux/seqlock.h
+index 68b3af8bd6c6..4442a97ffe9a 100644
+--- a/include/linux/seqlock.h
++++ b/include/linux/seqlock.h
+@@ -135,7 +135,7 @@ static inline void seqcount_lockdep_reader_access(const seqcount_t *s)
+ static __always_inline unsigned __seqprop_load_sequence(const seqcount_t *s, bool acquire)
+ {
+ 	if (acquire && IS_ENABLED(CONFIG_ARCH_HAS_ACQUIRE_RELEASE))
+-		return smp_load_acquire(&s->sequence);
++		return smp_cond_load_acquire(&s->sequence, (s->sequence & 1) == 0);
+ 	else
+ 		return READ_ONCE(s->sequence);
+ }
+
 
