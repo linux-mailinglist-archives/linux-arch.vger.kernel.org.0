@@ -1,101 +1,111 @@
-Return-Path: <linux-arch+bounces-6825-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6826-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F356B9650E5
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Aug 2024 22:46:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC375965164
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Aug 2024 23:08:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B2781285837
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Aug 2024 20:46:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1B4841C22FF9
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Aug 2024 21:08:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 252731662F1;
-	Thu, 29 Aug 2024 20:46:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFD6C18C003;
+	Thu, 29 Aug 2024 21:08:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Vv8R8Q3z"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p6UVAYJ6"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7A73156F41;
-	Thu, 29 Aug 2024 20:46:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76415189F5F;
+	Thu, 29 Aug 2024 21:08:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724964386; cv=none; b=WZeZ7o9qr5YrUwM8hZDsNEqU0Wrh7M9mX1lM0Ba2Mpl0HXl7SDtPjQTqgOBxN1xEIar+iNqFox67L6OIPem4e2gGeLu/taE8i2zxNa3+Y+xgXbjUyA/3nij9Rcx2wWIAbhmyFmPv2I6c60se1jDWNo/Qc+wZSsezsn5Gam8eSL0=
+	t=1724965708; cv=none; b=mK8YyqU0teTxJW7qOv05BprOW5ankmDrECkAxUVI0ZKKbJbkhNABUDzmphu+9neoiiSIGJEAlIDG5gav+Cn3XgkCKCcPdQYARodENTqnixN0fihM7jlLqQXA1uhri51vPEljffwGmMsK1bLwSUXM85dV62aDo8q5DbgrxDM0l+E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724964386; c=relaxed/simple;
-	bh=sz6bfXs+WP0Ejzb1cu2NDB1RHCuklbR3uaZZtR0pUr4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X2l/UWPhafFrO0x5AKqZrDVJ+31xFbvHuSWCD5hmvZAk5ar3KsAeqDnpHllTf2BmyKs+yyAqet2zuZ01Q+2sDAOE8EXT6DERbh/S1DAIlj9eGK+aG4lUMFp66oy9tiXjiwHtA+5WfBclbFIhB8SJFJ7DXcqYzjQID1qjyXjI79E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=Vv8R8Q3z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35297C4CEC1;
-	Thu, 29 Aug 2024 20:46:24 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Vv8R8Q3z"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-	t=1724964382;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=yzYDFZGf2D5cZoFoVdkeZRMawcANUGavo1EP8gkyRN0=;
-	b=Vv8R8Q3z+7wPzTo9eIO+3m5iei8oI72IZPwUa8plD03Ut0uV8cLK836ZWfGlhCUOeSA201
-	mD56+sbS0UJOQuJe4YO93tBXgz2Qfy77h0SrQhS7kGLLr9qzCurqHPt6FMKwx8RN+5Q5cG
-	S9Mf7yO4HBoYD07/Fv9N092aS0vlU8A=
-Received: 
-	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 2ad44a09 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-	Thu, 29 Aug 2024 20:46:22 +0000 (UTC)
-Date: Thu, 29 Aug 2024 22:46:17 +0200
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
-To: Adhemerval Zanella <adhemerval.zanella@linaro.org>
-Cc: Theodore Ts'o <tytso@mit.edu>, linux-kernel@vger.kernel.org,
-	linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-arch@vger.kernel.org,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-	Eric Biggers <ebiggers@kernel.org>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: Re: [PATCH v2] aarch64: vdso: Wire up getrandom() vDSO implementation
-Message-ID: <ZtDeGbgdpeI082i6@zx2c4.com>
-References: <20240829201728.2825-1-adhemerval.zanella@linaro.org>
+	s=arc-20240116; t=1724965708; c=relaxed/simple;
+	bh=NEubUSRUeBvvm22Q348Fp9RYCVjR27lHQZqlTUf2ioM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=A6btoZvru3Ygv9BB7FiUQdZ83/d46y8CVYeAV3eHDeRWmmV6ZA0heVuif1HEKZ4itOjKdBPXnFRXzsA1JMkO4+xaE9qCigEJLJIm+fnwLKvDSz81AASMTadAec3l7PFiW56PCYpZC3lcFhz2JIK4vKoJuQRBRAJdvNQDQ/qnhy0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p6UVAYJ6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B8E2C4CEC2;
+	Thu, 29 Aug 2024 21:08:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724965708;
+	bh=NEubUSRUeBvvm22Q348Fp9RYCVjR27lHQZqlTUf2ioM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=p6UVAYJ6/p5bhrYPea9y9LVZ73ntO1QP/0zR+Q+1patwv+tVmGiYjdDlAD218lAA8
+	 wmRGDX7i+DfyMahGib9Mm8V4I9AQEoLn8b9mtc+xdG36nS0cbP0QL45E59ogicrDMH
+	 UMsuv+C0jmECY39fsLsHq8fo4kUC/uT4Z1zk3MIcsu1n23rlQDYMcUqNN6ZZxIgzKS
+	 o9KRpRUv0V5uSxIszbyhHC/WKLKdlgKWDVMjA6m+icA4tY75YYjIYNbbXAYQUyxbZn
+	 M/VljWIX+Kv0vyYr8HtbjQKj1fUsJoxFw6I3C6QjqGuRCR3iyJC/09ocJiJFlPa4pV
+	 vik20KHhv5pnw==
+Date: Thu, 29 Aug 2024 14:08:24 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Donald
+ Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, Richard
+ Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky
+ <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, Thomas
+ Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
+ <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>,
+ Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
+ <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
+ Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
+ <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, Herbert
+ Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, Willem
+ de Bruijn <willemdebruijn.kernel@gmail.com>, "=?UTF-8?B?QmrDtnJuIFTDtnBl?=
+ =?UTF-8?B?bA==?=" <bjorn@kernel.org>, Magnus Karlsson
+ <magnus.karlsson@intel.com>, Maciej Fijalkowski
+ <maciej.fijalkowski@intel.com>, Jonathan Lemon <jonathan.lemon@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel
+ Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>,
+ Sumit Semwal <sumit.semwal@linaro.org>, "Christian =?UTF-8?B?S8O2bmln?="
+ <christian.koenig@amd.com>, Pavel Begunkov <asml.silence@gmail.com>, David
+ Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin
+ <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, Harshitha
+ Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
+ <pkaligineedi@google.com>, Bagas Sanjaya <bagasdotme@gmail.com>, Christoph
+ Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>,
+ Taehee Yoo <ap420073@gmail.com>, Willem de Bruijn <willemb@google.com>,
+ Kaiyuan Zhang <kaiyuanz@google.com>, Daniel Vetter <daniel.vetter@ffwll.ch>
+Subject: Re: [PATCH net-next v23 03/13] netdev: support binding dma-buf to
+ netdevice
+Message-ID: <20240829140824.555d016c@kernel.org>
+In-Reply-To: <20240829060126.2792671-4-almasrymina@google.com>
+References: <20240829060126.2792671-1-almasrymina@google.com>
+	<20240829060126.2792671-4-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240829201728.2825-1-adhemerval.zanella@linaro.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Catalin, Will, Adhemerval,
+On Thu, 29 Aug 2024 06:01:16 +0000 Mina Almasry wrote:
+> +	err = genlmsg_reply(rsp, info);
+> +	if (err)
+> +		goto err_unbind;
+> +
+>  	return 0;
+> +
+> +err_unbind:
 
-On Thu, Aug 29, 2024 at 08:17:14PM +0000, Adhemerval Zanella wrote:
-> Hook up the generic vDSO implementation to the aarch64 vDSO data page.
-> The _vdso_rng_data required data is placed within the _vdso_data vvar
-> page, by using a offset larger than the vdso_data.
-> 
-> The vDSO function requires a ChaCha20 implementation that does not
-> write to the stack, and that can do an entire ChaCha20 permutation.
-> The one provided is based on the current chacha-neon-core.S and uses NEON
-> on the permute operation. The fallback for chips that do not support
-> NEON issues the syscall.
-> 
-> This also passes the vdso_test_chacha test along with
-> vdso_test_getrandom. The vdso_test_getrandom bench-single result on
-> Neoverse-N1 shows:
-> 
->    vdso: 25000000 times in 0.746506464 seconds
->    libc: 25000000 times in 8.849179444 seconds
-> syscall: 25000000 times in 8.818726425 seconds
+rtnl_lock()
 
-Aside from the big endian concerns we discussed on IRC, this is looking
-fine to me, and I'd like to get some variant of this queued up in my
-random.git tree for 6.12 soon.
-
-But first, Catalin or Will -- could one of you take a look and provide
-your Acked-by for that, if the patch looks good to you?
-
-Thanks,
-Jason
+> +	net_devmem_unbind_dmabuf(binding);
+> +err_unlock:
+> +	rtnl_unlock();
 
