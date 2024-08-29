@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-6832-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6833-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1714B9651E9
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Aug 2024 23:26:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 057B99651F5
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Aug 2024 23:28:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 72122B21142
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Aug 2024 21:26:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B714A285002
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Aug 2024 21:28:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 060451B653D;
-	Thu, 29 Aug 2024 21:26:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F9221B5820;
+	Thu, 29 Aug 2024 21:28:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q/aH4yCw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ax9B3K99"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2A7A18A92E;
-	Thu, 29 Aug 2024 21:26:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F31FF18950B;
+	Thu, 29 Aug 2024 21:28:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724966807; cv=none; b=o/vFMUoeLHEBkFn1rE6MjgiYGlTxdEuuD1C7JY0jH0/EI8zgo0dsFAca6J2GqsoJ0eiJAz0On5ynEyO3Z/iXWiW2WjLt6M/VbYGoN0rpMqhDX9w1gPaZ4/dSX+C21CqiOG2qvwFKINV6WGFYgFvYkstH64AlQQQOEGKHefBMNKk=
+	t=1724966923; cv=none; b=MyX+lK5Wv0PmTRA0wYjCXnSAnZ5tfCaOdUruvkl8Nm26kLrvfMn+540XswD4GT/mHdAouJ6WbJeAbmXFeispkHnPaPB/DGqLW3RavIOcppboUVqiQ5n3C9QkaH4Z68p4taGyXhegrIJ5B9DjNkP9wcSUt3bQBmjIdwnlJPdu1x4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724966807; c=relaxed/simple;
-	bh=qv1w3i8ppp9WEatmXOTIDaygnDc4b+KopM2kue4iUXA=;
+	s=arc-20240116; t=1724966923; c=relaxed/simple;
+	bh=eLbNQ6G9fAtikDeusW+cHvDy3CVuzcI4mzdMls/Dda8=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=WXB6G1x4TdbB7KF2x07obGUAoWS3v11WckNv2bDPfI0L1etIn7E3BO0UFeufUs3++g73wHj7QYUOvS1QY8yxK9oSFriIxYaLBh1TCEpE9b5AmAe1D8zNqjm98H0LFus46JuXMcXHUMYB/gaelTiABL8Ti1Y4x3OAw3PiS2gzFAQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q/aH4yCw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE5BBC4CEC1;
-	Thu, 29 Aug 2024 21:26:44 +0000 (UTC)
+	 MIME-Version:Content-Type; b=IPli1IdQ7lUIIKUmBMH+yVaOiPnjsKC7WLiaY0Io5fd+zdQqioU+Fs5PyWHqIU7MG5dppBjMeVBkqmz+ylRmLpMBi/YtVnoznYfUdLSXdi7WcQwmCx/eDcEsP+6VgoCDQVLs5+I/zN+VABbvklsjX1irC+X7C5kzikD8jf2G0Nw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ax9B3K99; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F341EC4CEC1;
+	Thu, 29 Aug 2024 21:28:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724966807;
-	bh=qv1w3i8ppp9WEatmXOTIDaygnDc4b+KopM2kue4iUXA=;
+	s=k20201202; t=1724966922;
+	bh=eLbNQ6G9fAtikDeusW+cHvDy3CVuzcI4mzdMls/Dda8=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Q/aH4yCwlgAE0YdZkEXc5ZWzCRJpVizL7u3qOFqjdHTLBh/GACVu7V+LYtSu7k99i
-	 fuCsKpIG7Ycih3jx7Nea0jL7wfVPoPaH1K7VToVloVY9GnEbAh3blFw6mIfvwkfi8P
-	 v86W/H6gdGgrjLiTOcnC8zC7buNYkwMeca7w7pi0Q4Fy5cqWuRd9dFXOCmrZIEh0OG
-	 +egu64hiZCWHl0GbAoGuKWN2aH034agEq7Cezds5QwuoX+mPfEdjmTihMkJMsnin7J
-	 6kRj6oJBykEyxE6SnnmmUTf7JH4YP5PCAIPbElrGwvuwvXryYVm9axq9Kg8g+IWpFZ
-	 IMeHpXeFot+4w==
-Date: Thu, 29 Aug 2024 14:26:43 -0700
+	b=Ax9B3K99aMwINgqedd1GcT2dh/xdXD8pelnJFa0YCRuR/soamnOCjmO8Q7rJ4Fv6Q
+	 sEwbQInsjU1BtifOjEMXuzvy8/mh2sgE4y7ixp5ihzT99ZxVNrOYbXHac0LE26BZqQ
+	 CDSAE8Ak/F9AIweL+4PLXkKI80OiLotLrQWXEdHBtv1WWoo5JDPV0nnC+U0g8E6eAE
+	 kUQy9LribXMePHEEkB3FlLKdE9p4QFhr5jM8nv80dQ9ZJW5lx2PuyftHJGMGvhq9G1
+	 yl/Yax3vmf6U7MAaxruFfaqjoDdufjyTrqszjtXIbsHkWAx/FV87xBCq1ChdTckR3V
+	 fVNP4KW9ZS8+Q==
+Date: Thu, 29 Aug 2024 14:28:39 -0700
 From: Jakub Kicinski <kuba@kernel.org>
 To: Mina Almasry <almasrymina@google.com>
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -77,12 +77,14 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
  <pkaligineedi@google.com>, Bagas Sanjaya <bagasdotme@gmail.com>, Christoph
  Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>,
- Taehee Yoo <ap420073@gmail.com>
-Subject: Re: [PATCH net-next v23 13/13] netdev: add dmabuf introspection
-Message-ID: <20240829142643.4aa5c52a@kernel.org>
-In-Reply-To: <20240829060126.2792671-14-almasrymina@google.com>
+ Taehee Yoo <ap420073@gmail.com>, Willem de Bruijn <willemb@google.com>,
+ Kaiyuan Zhang <kaiyuanz@google.com>
+Subject: Re: [PATCH net-next v23 06/13] memory-provider: dmabuf devmem
+ memory provider
+Message-ID: <20240829142839.7f09715b@kernel.org>
+In-Reply-To: <20240829060126.2792671-7-almasrymina@google.com>
 References: <20240829060126.2792671-1-almasrymina@google.com>
-	<20240829060126.2792671-14-almasrymina@google.com>
+	<20240829060126.2792671-7-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -92,25 +94,9 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Thu, 29 Aug 2024 06:01:26 +0000 Mina Almasry wrote:
-> +		binding = (struct net_devmem_dmabuf_binding *)
-> +				  rxq->mp_params.mp_priv;
-> +		if (binding) {
-> +			if (nla_put_u32(rsp, NETDEV_A_QUEUE_DMABUF,
-> +					binding->id))
-> +				goto nla_put_failure;
-> +		}
+On Thu, 29 Aug 2024 06:01:19 +0000 Mina Almasry wrote:
+> +	if (WARN_ON_ONCE(atomic_long_read(netmem_get_pp_ref_count_ref(netmem)) !=
+> +		     1))
 
-
-> +	struct net_devmem_dmabuf_binding *binding = pool->mp_priv;
-
-> +	if (binding && nla_put_u32(rsp, NETDEV_A_PAGE_POOL_DMABUF, binding->id))
-> +		goto err_cancel;
-
-nit: this is better than the put in queue_fill_one()
-no need to cast void pointer there, and you can use a single 
-
-		if (binding &&
-		    nla_put_u32(rsp, NETDEV_A_QUEUE_DMABUF, binding->id)))
-			goto nla_put_failure;
+nit: temporary variable for this refcount, please
 
