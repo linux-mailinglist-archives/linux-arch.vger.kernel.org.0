@@ -1,135 +1,139 @@
-Return-Path: <linux-arch+bounces-6820-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6822-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FFC7964F16
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Aug 2024 21:38:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6272965065
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Aug 2024 21:59:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CE9BBB20DA7
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Aug 2024 19:38:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8CF911F248AD
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Aug 2024 19:59:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 593A81BA28F;
-	Thu, 29 Aug 2024 19:38:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D04F61BA288;
+	Thu, 29 Aug 2024 19:57:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Vyqjdfwa"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Uj62fJaO";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="smnTD1qI"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout7-smtp.messagingengine.com (fout7-smtp.messagingengine.com [103.168.172.150])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBC3F1B9B55
-	for <linux-arch@vger.kernel.org>; Thu, 29 Aug 2024 19:38:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6487D1B5813;
+	Thu, 29 Aug 2024 19:57:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724960310; cv=none; b=Aq2ntSZbCcjswavbzgKa/th6iHUf9Mf0vQCsZzYgWfywrC1tJZ+81ts9+RMPey5zAtxIbUYCQUe1kBvSeGKAZDBwWS07hm1xwPR5xEKDnIAlXphfg+LQJ11KxNKH41IMtyv3pGJR9HbVqAiXW2WExrg0QFNp5dgk+zeuURjWG9A=
+	t=1724961446; cv=none; b=W7BibrBHHFGpJMHhbZ/oHO5qOuG/cNGbkbfSAA6Jyv6CvfySk93+Eo5UC7RvxcczlEXzWo5szRi48OEyo0B1lqyGgBw1BwMjFbgSJXM+Ba5DUS5R1yOGiisB6oSRXDSGqVGo1TioD7Li5NBhirScDftXPsKE/HjoYJPn3Aiy9qw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724960310; c=relaxed/simple;
-	bh=4ASADOnCoqNrKV+beHl14a4vrTkq7UjCX+g5PUIp7tg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ehnciuuE6OsLcxrZKL+8s+TCG0uLQB3R4Rca67K2/s+HZvzebCgcL9AnrVFHur+AGOBuSAPu6v+b5Swam1tSkVL9X1KJlNaqszlB0LwYUWbVpcpsxQ16SORyq7MpD41213A8HRo3p7q3Vq7AgPzMzxXyvdRsdr5H8FRuUX4zQJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Vyqjdfwa; arc=none smtp.client-ip=209.85.160.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-45029af1408so5231cf.1
-        for <linux-arch@vger.kernel.org>; Thu, 29 Aug 2024 12:38:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1724960307; x=1725565107; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1ZUAgIcTyrR43pe3gP0emMAssjHjCGemTU8nsF1ejxc=;
-        b=VyqjdfwarXMeB4Y4INlQGUPhZkirtCNWsnj7M3szpM9Xkt7avb/e7YL2r2AdYlJkCS
-         /Bpf7hR7X6IlL1U00gOg9VKWrTicKAP4a4yqJWgpfD21VBRGI411IWdBSUD/5Y7hsg9E
-         wiVrzRVTIUriossLHYwrF3NOTBlUA3fP1JfXXgA9ryu2/FdUqqHMT8zgBxP1tTSWZWlL
-         QCyKGDNZFHsNdIEwBTf7SgOpdzJpSQ9AKGvSvwmWIzeVHSp0cwe2o0wB9IAFaHfCkgXB
-         wDw8hEMaWDSzGdgfIQ/2EvAJXL3hA9d/YHiz5Hi5yCNbiwnKJ3rLPdpN++PpwyVTZWmo
-         hrMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724960307; x=1725565107;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1ZUAgIcTyrR43pe3gP0emMAssjHjCGemTU8nsF1ejxc=;
-        b=wCtzmXjMS5NaTdOfwIrHNsN6t54+1Ru+EqklI9cEQIWefDjM6IpTUxB6yxgrP6cc76
-         RQixo6/Y2avBDoQmduxpsYQKY5EYS9wz/sWHELzOTRj/nv0Wn8CTB5EFF1k9uu4apooj
-         bKlKwStx5cVYtVKWQUy4JlTziujTkfmj21ALCw5raQ6N7k6mAMO6d4GyEPO9ataND5Vx
-         hwF8Q1+vOWGOQ4B4HSk3qFKDCZ+b0r5V5z1Q6PS7k7b73fSnyDqL2wmNGguggjWNRwtZ
-         nRxzaYfkRN89MlBzCBVB4TwL8/iA83ptRHg403MESennUtLSsuvjqAj5hSI8LqDKA6Iu
-         k1sg==
-X-Forwarded-Encrypted: i=1; AJvYcCV/e3B+m/3KhL1XP3QHEHLmJbDks9UUHcrHy++CNFX0/vDwaJccOusfRYVF3noPPn41DzgHZ87nXqzw@vger.kernel.org
-X-Gm-Message-State: AOJu0YyiXH8b5PiS+FNcaFNWTDnltXOA9cLzVRTrDxDGjEt8tJmwauzw
-	ljESjgbyD/NxVVMI86mVOHFWNvSgUstgCMegtBvzaopXK0/CbexQRyQr5KBJ2r7fnw647fL3lsY
-	THPBONxU0u7LijQP8oGGaTT7mW1aMiO89dl3b
-X-Google-Smtp-Source: AGHT+IEckjBQSLEDMwf1jYHRwORJ2ZVKtBH36SKJpIYMP8NrCeogwJVm7Q7nebuPSmPKh9r8A+fJeiK+617lAC3ocsU=
-X-Received: by 2002:a05:622a:281:b0:447:e59b:54eb with SMTP id
- d75a77b69052e-4568aacd777mr496041cf.26.1724960306474; Thu, 29 Aug 2024
- 12:38:26 -0700 (PDT)
+	s=arc-20240116; t=1724961446; c=relaxed/simple;
+	bh=w5h0FOioO/iwBrzuMZxmdnXFQ//IzHTfU2X2gorK1b0=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=NrU4gWsUqS+mgiCRldrKSaHWC6UaR7NfKUvua7RYBsTzRe1UPujgkFOQlEUUeQYFqfye18z+rjxmddhGd+e93BAj7BModr4OpzWKLPmuQZFBAX+aB4X8yKhbLzVPaTVVbzhwD0oD5d1UbOEAEhtB1ORvz8bCVvhYNSb/hyBziIo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Uj62fJaO; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=smnTD1qI; arc=none smtp.client-ip=103.168.172.150
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-04.internal (phl-compute-04.nyi.internal [10.202.2.44])
+	by mailfout.nyi.internal (Postfix) with ESMTP id 6FC9C1383A46;
+	Thu, 29 Aug 2024 15:57:23 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-04.internal (MEProxy); Thu, 29 Aug 2024 15:57:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1724961443;
+	 x=1725047843; bh=6e+N05Fhw7yeM+JJ3iUAtFs9O+udW7eiEJhW+TG7NNU=; b=
+	Uj62fJaOkFjK7yY1wwRmwTzei2hA2EIOwznWBBPHdDNDn2uqLnmjwryRPKwYgYhb
+	Og+8jwMDsfF4+xF2i/XnCNROU9Aehbj+C5wBPTd/CeK3/OxIzuULWWvf1PX0K4JV
+	/EUkthXUWX1OQJ4Bu8K1s09EV5LZVrPyvDz1H+lY0xYmLOhzrHx83hovg6DUE/xz
+	ynOUcWkAXPNFc6sEdaZSEoKoYBoeAZ9ozQIavb3kt28cubvPhTfVGlVx2+mIFj3G
+	4atPenoBuKlC/FmUIpWKpXWlcWQ9sey+OK8eFFQkvl+ZdvgrA0JttAU6k1BtgVWC
+	24CEPQW1Nd2rIxpD5reBfg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1724961443; x=
+	1725047843; bh=6e+N05Fhw7yeM+JJ3iUAtFs9O+udW7eiEJhW+TG7NNU=; b=s
+	mnTD1qIHE0QQTy63dO4iDSKHq6j/yzaMDAuyqZFKYAxq9WMjGxX421SOs3urIMgp
+	JeVyBb+LBwVy89HDlBzT2P4fnOLYca0YgoBnfJyPFv0vjA3W05cTR/fIuu2HhiQo
+	azFfuuVK9g1rwZezRMecw7+zzCxVisH2oJ5R+i8jMdcIF6qSUSp5BrzqbzUE1iql
+	IWiH+4V2/OuZHov0Lsa1ezMRWyEKjn3dugJENChaY3J6bzx5kqoaI0LdD5WMLRm4
+	GUVTJRqcczg+RfuklNq1fdC7To2wnXd6ySs2U9xBTMUZd3VWzDgzzstWVnhU2vEt
+	axwpjq4x9uoNcW/KSsjQA==
+X-ME-Sender: <xms:o9LQZps_sigBReXozr8vNHfPsXnB2gKzg0OoU8uWFlAnbW9ZMZSgBg>
+    <xme:o9LQZidz5M2PgF_l6CpXpzK1wUH989tvgcCuk9TVrBIbrZg_ZzYB83xBAp-AVSz2o
+    sqlbUxeETaTrxxwEBc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudefgedgudegvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
+    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
+    druggvqeenucggtffrrghtthgvrhhnpefhtdfhvddtfeehudekteeggffghfejgeegteef
+    gffgvedugeduveelvdekhfdvieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopeef
+    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehprghulhhmtghksehkvghrnhgvlh
+    drohhrghdprhgtphhtthhopehlihhnuhigqdgrrhgthhesvhhgvghrrdhkvghrnhgvlhdr
+    ohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlh
+    drohhrgh
+X-ME-Proxy: <xmx:o9LQZsxpDtuMz6AUISdH3kkNkpuIc3esJiYvfjrS630UdTYnMNqd8w>
+    <xmx:o9LQZgPAI-3iAOyyDB5fAyROXe3OuHP9Su4eAh8EqNWCIc9N1BitaA>
+    <xmx:o9LQZp83w-8IgKksnaRdNbBsvC0MhdGz3VKy6v_Ggmx-8qkEikkJyQ>
+    <xmx:o9LQZgUlkiPm7mCgNvrDmeTvaYAa1rIFWE5A9amAA6-I2ivphNNDTg>
+    <xmx:o9LQZrL5e68Eppbw4SGy-aGhXZF-CMj4O5gzJLEcagZ6YEWoJpVCPmKI>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 2E054222006F; Thu, 29 Aug 2024 15:57:23 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240829060126.2792671-1-almasrymina@google.com> <20240829060126.2792671-4-almasrymina@google.com>
-In-Reply-To: <20240829060126.2792671-4-almasrymina@google.com>
-From: Mina Almasry <almasrymina@google.com>
-Date: Thu, 29 Aug 2024 12:38:13 -0700
-Message-ID: <CAHS8izMCZbynEQQ3rPs2QaEbD51ew7VK0sMziBTayCi2yEZ_EA@mail.gmail.com>
-Subject: Re: [PATCH net-next v23 03/13] netdev: support binding dma-buf to netdevice
-To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org
-Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
-	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
-	Magnus Karlsson <magnus.karlsson@intel.com>, 
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Jonathan Lemon <jonathan.lemon@gmail.com>, 
-	Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
-	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, 
-	Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, 
-	Nikolay Aleksandrov <razor@blackwall.org>, Taehee Yoo <ap420073@gmail.com>, 
-	Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>, 
-	Daniel Vetter <daniel.vetter@ffwll.ch>
-Content-Type: text/plain; charset="UTF-8"
+Date: Thu, 29 Aug 2024 21:56:52 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: linux-kernel@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>
+Message-Id: <f209bf4d-1d14-404b-8bff-8d6d2854d704@app.fastmail.com>
+In-Reply-To: <1bb58d8d-4a2a-4728-a8f3-9295145dbbb0@paulmck-laptop>
+References: <3ca4590a-8256-42d1-89ca-f337ae6f755c@paulmck-laptop>
+ <b3512703-bab3-4999-ac20-b1b874fcfcc3@app.fastmail.com>
+ <289c7e10-06df-435b-a30d-c2a5bc4eea29@paulmck-laptop>
+ <9242c5c2-2011-45bf-8679-3f918323788e@app.fastmail.com>
+ <1bb58d8d-4a2a-4728-a8f3-9295145dbbb0@paulmck-laptop>
+Subject: Re: 16-bit store instructions &c?
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-> +#include <linux/list.h>
->  #include <uapi/linux/netdev.h>
+On Thu, Aug 29, 2024, at 15:37, Paul E. McKenney wrote:
+> My plan is to submit a pull request for the remaining three 8-bit
+> cmpxchg() emulation commits into the upcoming merge window.  In the
+> meantime, I will create similar patches for 16-bit cmpxchg() and perhaps
+> also both 8-bit and 16-bit xchg().  I will obviously CC both you and
+> Russell on the full set.  And if there are hardware-incompatibility
+> complaints, we can deal with them, whether by dropping the offending
+> pieces of my patches or by whatever other adjustments make sense.
 >
-...
+> Does that seem like a reasonable approach, or is there a better way?
 
->
-> +#include <linux/list.h>
->  #include <uapi/linux/netdev.h>
->
+There is one thing I'd really like to see happen here, and that is
+changing the architectures so they only define the fixed-length
+__arch_xchg{8,16,32,64} and __arch_cmpxchg{8,16,32,64} helpers,
+ideally as inline functions to have type checking on the pointer.
 
-Darn, I went too overboard with sorting of includes. ynl-regen.sh
-wants these in the reverse order, which is unsorted. I'll fix it in
-the next iteration, and I added this check as well to my presubmits.
+If we make the xchg()/cmpxchg() functiuons handle all sizes
+across architectures, that just ends up cementing the type
+agnostic macros, so I feel it would be better to have
+fixed-size helpers as the generic API so we can phase out the
+use of the existing macros on smaller-than-u32 arguments.
 
-BTW I submitted 2 iterations already this week, Sunday and Wednesday.
-This is easily fixable and I can resend before the end of the week,
-but if I'm stressing NIPA too much with reposts of this large series I
-can wait until next week. Sorry about that.
+The macro is still needed to allow dealing with both integer
+and pointer objects, as well as a mix of 'int' and 'long'
+arguments on 64-bit, but for normal fixed-size objects I
+think we can best use the same method as the current
+xchg64()/cmpxchg64().
 
--- 
-Thanks,
-Mina
+    Arnd
+
 
