@@ -1,317 +1,339 @@
-Return-Path: <linux-arch+bounces-6789-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6790-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0142963AD0
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Aug 2024 08:06:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B658963C5A
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Aug 2024 09:14:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A52C286FA6
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Aug 2024 06:06:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8EFFC1F22851
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Aug 2024 07:14:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 330EB18952A;
-	Thu, 29 Aug 2024 06:02:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 562DC15CD7D;
+	Thu, 29 Aug 2024 07:14:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0Us3J72l"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="PIIEhp54"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8377915749C
-	for <linux-arch@vger.kernel.org>; Thu, 29 Aug 2024 06:02:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43F6C16D33C
+	for <linux-arch@vger.kernel.org>; Thu, 29 Aug 2024 07:14:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724911329; cv=none; b=MRzG3c8Orr4oyhWHzybL9Anb+vqy/PW3AU12AFVbT8l0tZahUtMvnwzUOg4n9gpNwoH7d7WgDXPPkAeTechcOsecgBKO6StuxViQtQCWJo981+OPpqc+awN2HhxOQrfYNQvIHxmxW8QDT7ohGrs9deoJ6EIvYsJJcKaC/Ln+vYs=
+	t=1724915672; cv=none; b=lnJEh/Fq49KDKB2veGH23NXPsNCAesqSJhFnfRHLcdzJXeewOZP02qgPD3jLu1ZqEzepV70F+qG6Q4cT5rRD2+KnXKSLzbgY2Ky+Yg7WRcQlFtVKWeWL7sjytAToep5gjJnZPHf5kxK7DMTtSK2M4YeFUy8VoBb/pMp03bDGYwI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724911329; c=relaxed/simple;
-	bh=PXCA9a97gwO6Rx45x8jPpvYFbNkIF4OHxIg84Wdv4U4=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=h1BqHIEDrRgpSsNxvL58NkUVleu8oXvkN6tYUvsia+qyIPGTCxkrhxJNVOrE5BSyDoNxUEUHVDLPmpn+UvErsYhZ0Z5ZrmVWpqbixB2zDWAUJEHp6wODTSQakCCHP2TJxmsrAOEfPh14GleNVlre5Fj9ZiWBuW/koM62PqpiEtQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0Us3J72l; arc=none smtp.client-ip=209.85.128.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6b2822668c2so7362947b3.1
-        for <linux-arch@vger.kernel.org>; Wed, 28 Aug 2024 23:02:02 -0700 (PDT)
+	s=arc-20240116; t=1724915672; c=relaxed/simple;
+	bh=mNPIeGFfgjC58ulUTJ+p+Pb5VTFBXszyjEecP5hXE0g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OLwshiBirKWkk0CYH5n4gHVVLrApQq9lVwJO0oGkOTRdjxVKAiBoN7Zmaa9AXN+gV4XVS9qypjo/jfaYMsL5yvFrRcdtVwwA7GbsEpD1MF1tJzO/0bkIIDZeF4Qb/flitRkyGX108KPRIVrRlmzpASeAxdf9IqIUC+8MdT9n3Vw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=PIIEhp54; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-7143ae1b560so190842b3a.1
+        for <linux-arch@vger.kernel.org>; Thu, 29 Aug 2024 00:14:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1724911320; x=1725516120; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q09KG2LtUFq7/0hB8XZYqxR9Zv71xizkrAmEszHqBu8=;
-        b=0Us3J72l+L/mivWxOnBspIkpBrWUOVkiWl2MlBwrRluseFQJPqaGciVpGknpkE7od9
-         Uan0d7NNyXfEkR/oCLlLxL9eu3/11z/ODU+aQJ2Blj5tqlSt92Y3wvTJHJfEBzOsHgeO
-         7v9hgo0+BIigj1BVf2Lcbb5JanHkZsA3c2tPEzxIKr84ydfEVVSjhDMGznn/KzejFzxv
-         0LdKLrb8yUGyDkZcxpJ3Bq0v4hnwPnyoucsY3T52CLGYWbmJqTs7MLFpLdIhiqopwqVS
-         g82gDHHJ/0x418QZupwOTqIS+bucRYSRGXnVWErbrFEqRW+v2HPdLhEW2qTFd97yuYg8
-         hDtA==
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1724915668; x=1725520468; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=59qS8d6E7jAm/hvEeiY72pf/LRpSv6Q2qjD/8hJgS38=;
+        b=PIIEhp54GOUcEbiVG3smr8WA1ZLj8nAAx5k3WfnPUD++LVzbh72TtgNZcQqA4Loc69
+         SfxWVNo8xkoGeVS3KZsCBKyJ2HN+N+B9N3tFN/48xOhqVeDVHX/S/1hCPBb2gol/BP8J
+         hdzWRj3w25NqzOwmdHVXrDu8ncd9378ljlADKQRHSxz9v9cv6+fdtr6Kbo+mzYoXkNsv
+         3HDohwlD3A3RWzUyLLsEVoJt10ASz2Dn+1GZvl7GWagfRXsztJXa/8zKZL3MmKhws1e1
+         AhDILhheeUphBmdl/ETIszbSXtndhDvM2zL9L6igHZOVUdCnhWWLRPxOcFwaz0A7HXyH
+         1r7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724911320; x=1725516120;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q09KG2LtUFq7/0hB8XZYqxR9Zv71xizkrAmEszHqBu8=;
-        b=Jr//U9iGx+IMayuCbVOSFJbAIMTrsDJIAs6r9IT7l5m0NejL6ImY9s1CQC3iFhoSA9
-         VlXxGOMv5Bdw6GWIBs1YiSgi+vWW1/wd7cCMzs5OH7ED3zjOmq1mImyr9fbm0fGmTQo2
-         FZhnFoq4XoqOIY72qGBjMVwW/acvlCq4qre3Vo6etVEDQGeUoQ7l1X5D3zzrFM0EXxK2
-         DGnZZswoMnNbEmXXghFMo/hmd6PkCBwq2jay4E3bbj0OmVkTuhkFiucXOBtDSDG6FR2P
-         /UjLrOPK0NQBFcwTBkj1nEW1GuRzPxbfdlJTZg0+wVGqfUQ2sROO1x7q+xtwY6J8LRGt
-         tIiw==
-X-Forwarded-Encrypted: i=1; AJvYcCVucaIox/8tFxaThwytGaqDYgk/JFO3sTfa7golBUp28ekoLRAFJsI/tF88Pgypq0NtHOjMYsHHxzU/@vger.kernel.org
-X-Gm-Message-State: AOJu0YxtX+OPfgYQZedJGCz8H3iYvjMt/65qTuDDfXZh/kWhJ9JwioKp
-	8M3KbRwOXE4vRw3Uhx7zGni3zHHD9VLMw7eXR+8k8iZpWCLD49YGbmMAepi4EE0AUFeHwt0LWR3
-	WxmzZ/Y3NwxDQBQaIExNwLg==
-X-Google-Smtp-Source: AGHT+IFhVsY9dMuG1cWOZF0OfZKruBiCeO194EOj0MLnC6UMx6DwH7q6IpAeLuCd3MtmXCV4ZY5V1ZdPEiGOTmmI6w==
-X-Received: from almasrymina.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:4bc5])
- (user=almasrymina job=sendgmr) by 2002:a05:6902:134e:b0:e11:6fcc:b656 with
- SMTP id 3f1490d57ef6-e1a5af5e2efmr3854276.6.1724911320312; Wed, 28 Aug 2024
- 23:02:00 -0700 (PDT)
-Date: Thu, 29 Aug 2024 06:01:26 +0000
-In-Reply-To: <20240829060126.2792671-1-almasrymina@google.com>
+        d=1e100.net; s=20230601; t=1724915668; x=1725520468;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=59qS8d6E7jAm/hvEeiY72pf/LRpSv6Q2qjD/8hJgS38=;
+        b=ErO9fYRmAARPtVyASUAojSGrURKk8pcSemoTUrWDpUcSmckprrwUWjiafnYUyzy8tp
+         POjTFNQ4KTAnlUur60sxaSSp0woATS9M9Q1vnjYtEwjW92mFb9kBt/rGAWuIgr6eVo6t
+         QojgKXWs04Cf7wTcR8p1ees0T9q6z1BfzhjSkk42AuglfdBu/Ou0hj4fpGaizo2zv6ff
+         g17HN5za81JQ0vlGnH4BkoAi8ODQuhIAY6iovocwqnaNavweAjUEDME/b13TIZ98KkdA
+         R3FU1p45AyJqCmF2N8ECElvYj/dkg1ESq6JCO1rr0FZknoRdCA7+UJ/mntGXwfylXjlH
+         MUVg==
+X-Forwarded-Encrypted: i=1; AJvYcCVXSIPAe2ur8Lb4qU0W5obqJUnoir336rQQq/pp9dPJ34vHoqgXwcxlJY2p7deMQwpt6grQZeHLMre1@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/uPXHLPqUPrKJiDcCkQCagg+/YqDWwoEVuQ2TtBFFRWNNZWC/
+	jpwlbZYJG1zninKmKtsj4rxbTk6PbhcfkcANGpDcSgGR/LF5L8jRerOfYnN4u0A=
+X-Google-Smtp-Source: AGHT+IFxhM4cuDGdAmG+3DSZ8PIKqAZRC1xEgxgW4g8JXtjfrvLb83nabdJs3AxBg2ozZcKKdgajyA==
+X-Received: by 2002:a05:6a20:e196:b0:1c4:c1cd:a29d with SMTP id adf61e73a8af0-1cce101c8fdmr2021570637.28.1724915668227;
+        Thu, 29 Aug 2024 00:14:28 -0700 (PDT)
+Received: from ghost (c-67-164-127-253.hsd1.ca.comcast.net. [67.164.127.253])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-715e56d9716sm545002b3a.174.2024.08.29.00.14.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Aug 2024 00:14:27 -0700 (PDT)
+Date: Thu, 29 Aug 2024 00:14:22 -0700
+From: Charlie Jenkins <charlie@rivosinc.com>
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Muchun Song <muchun.song@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Russell King <linux@armlinux.org.uk>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	Rich Felker <dalias@libc.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Alexandre Ghiti <alexghiti@rivosinc.com>,
+	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Palmer Dabbelt <palmer@rivosinc.com>,
+	linux-riscv@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+	linux-mm@kvack.org, loongarch@lists.linux.dev,
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 00/16] mm: Introduce MAP_BELOW_HINT
+Message-ID: <ZtAfzrOMitPlx96X@ghost>
+References: <20240827-patches-below_hint_mmap-v1-0-46ff2eb9022d@rivosinc.com>
+ <2570b1ea-d2a4-4bcb-9bb3-8d979657c56a@lucifer.local>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240829060126.2792671-1-almasrymina@google.com>
-X-Mailer: git-send-email 2.46.0.469.g59c65b2a67-goog
-Message-ID: <20240829060126.2792671-14-almasrymina@google.com>
-Subject: [PATCH net-next v23 13/13] netdev: add dmabuf introspection
-From: Mina Almasry <almasrymina@google.com>
-To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org
-Cc: Mina Almasry <almasrymina@google.com>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
-	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
-	"=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?=" <bjorn@kernel.org>, Magnus Karlsson <magnus.karlsson@intel.com>, 
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Jonathan Lemon <jonathan.lemon@gmail.com>, 
-	Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, 
-	"=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>, Pavel Begunkov <asml.silence@gmail.com>, 
-	David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, 
-	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst <jeroendb@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>, Bagas Sanjaya <bagasdotme@gmail.com>, 
-	Christoph Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>, Taehee Yoo <ap420073@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2570b1ea-d2a4-4bcb-9bb3-8d979657c56a@lucifer.local>
 
-Add dmabuf information to page_pool stats:
+On Wed, Aug 28, 2024 at 07:19:36PM +0100, Lorenzo Stoakes wrote:
+> On Tue, Aug 27, 2024 at 10:49:06PM GMT, Charlie Jenkins wrote:
+> > Some applications rely on placing data in free bits addresses allocated
+> > by mmap. Various architectures (eg. x86, arm64, powerpc) restrict the
+> > address returned by mmap to be less than the maximum address space,
+> > unless the hint address is greater than this value.
+> >
+> > On arm64 this barrier is at 52 bits and on x86 it is at 56 bits. This
+> > flag allows applications a way to specify exactly how many bits they
+> > want to be left unused by mmap. This eliminates the need for
+> > applications to know the page table hierarchy of the system to be able
+> > to reason which addresses mmap will be allowed to return.
+> >
+> > ---
+> > riscv made this feature of mmap returning addresses less than the hint
+> > address the default behavior. This was in contrast to the implementation
+> > of x86/arm64 that have a single boundary at the 5-level page table
+> > region. However this restriction proved too great -- the reduced
+> > address space when using a hint address was too small.
+> >
+> > A patch for riscv [1] reverts the behavior that broke userspace. This
+> > series serves to make this feature available to all architectures.
+> 
+> I'm a little confused as to the justification for this - you broke RISC V by
+> doing this, and have now reverted it, but now offer the same behaviour that
+> broke RISC V to all other architectures?
+> 
+> I mean this is how this reads, so I might be being ungenerous here :) but would
+> be good to clarify what the value-add is here.
 
-$ ./cli.py --spec ../netlink/specs/netdev.yaml --dump page-pool-get
-...
- {'dmabuf': 10,
-  'id': 456,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 455,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 454,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 453,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 452,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 451,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 450,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 449,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
+Yeah I did not do a good job of explaining this! Having this be the
+default behavior was broken, not that this feature in general was
+broken.
 
-And queue stats:
+> 
+> I also wonder at use of a new MAP_ flag, they're a limited resource and we
+> should only ever add them if we _really_ need to. This seems a bit niche and
+> specific to be making such a big change for including touching a bunch of pretty
+> sensitive arch-specific code.
+>
+> We have the ability to change how mmap() functions through 'personalities'
+> though of course this would impact every mmap() call in the process.
+> 
+> Overall I'm really not hugely convinced by this, it feels like userland
+> could find better ways of doing this (mostly you'd do a PROT_NONE mmap() to
+> reserve a domain and mprotect() it on allocation or mmap() over it).
+> 
+> So I just struggle to see the purpose myself. BUT absolutely I may be
+> missing context/others may have a view on the value of this. So happy to
+> stand corrected.
+> 
+> >
+> > I have only tested on riscv and x86. There is a tremendous amount of
+> 
+> Yeah, OK this is crazy, you can't really submit something as non-RFC that
+> touches every single arch and not test it.
+> 
+> I also feel like we need more justification than 'this is a neat thing that
+> we use in RISC V sometimes' conceptually for such a big change.
 
-$ ./cli.py --spec ../netlink/specs/netdev.yaml --dump queue-get
-...
-{'dmabuf': 10, 'id': 8, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 9, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 10, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 11, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 12, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 13, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 14, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 15, 'ifindex': 3, 'type': 'rx'},
+I will send out a new version that does a much better job at explaining!
+This is not something that is done on riscv ever currently. This is
+something that is done on other architectures such as x86 and arm64.
+This flag is to make similar behavior (the ability to force mmap to
+return addresses that have a constrained address space) available to all
+architectures.
 
-Suggested-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Mina Almasry <almasrymina@google.com>
-Reviewed-by: Jakub Kicinski <kuba@kernel.org>
+> 
+> Also your test program is currently completely broken afaict (have
+> commented on it directly). I also feel like your test program is a little
+> rudimentary, and should test some edge cases close to the limit etc.
+> 
+> So I think this is a NACK until there is testing across the board and a little
+> more justification.
+> 
+> Feel free to respin, but I think any future revisions should be RFC until
+> we're absolutely sure on testing/justification.
+> 
+> I appreciate your efforts here so sorry to be negative, but just obviously
+> want to make sure this is functional and trades off added complexity for
+> value for the kernel and userland :)
+> 
 
----
- Documentation/netlink/specs/netdev.yaml | 10 ++++++++++
- include/uapi/linux/netdev.h             |  2 ++
- net/core/netdev-genl.c                  | 10 ++++++++++
- net/core/page_pool_user.c               |  4 ++++
- tools/include/uapi/linux/netdev.h       |  2 ++
- 5 files changed, 28 insertions(+)
+Totally understand thank you! After reviewing comments I have realized
+that I made this much more complicated than it needs to be. This should
+be able to be done without changing any architecture specific code. That
+will mostly eliminate all of the complexity, but still has the downside
+of consuming a MAP_ flag.
 
-diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/netlink/specs/netdev.yaml
-index 0c747530c275..08412c279297 100644
---- a/Documentation/netlink/specs/netdev.yaml
-+++ b/Documentation/netlink/specs/netdev.yaml
-@@ -167,6 +167,10 @@ attribute-sets:
-           "re-attached", they are just waiting to disappear.
-           Attribute is absent if Page Pool has not been detached, and
-           can still be used to allocate new memory.
-+      -
-+        name: dmabuf
-+        doc: ID of the dmabuf this page-pool is attached to.
-+        type: u32
-   -
-     name: page-pool-info
-     subset-of: page-pool
-@@ -268,6 +272,10 @@ attribute-sets:
-         name: napi-id
-         doc: ID of the NAPI instance which services this queue.
-         type: u32
-+      -
-+        name: dmabuf
-+        doc: ID of the dmabuf attached to this queue, if any.
-+        type: u32
- 
-   -
-     name: qstats
-@@ -543,6 +551,7 @@ operations:
-             - inflight
-             - inflight-mem
-             - detach-time
-+            - dmabuf
-       dump:
-         reply: *pp-reply
-       config-cond: page-pool
-@@ -607,6 +616,7 @@ operations:
-             - type
-             - napi-id
-             - ifindex
-+            - dmabuf
-       dump:
-         request:
-           attributes:
-diff --git a/include/uapi/linux/netdev.h b/include/uapi/linux/netdev.h
-index 91bf3ecc5f1d..7c308f04e7a0 100644
---- a/include/uapi/linux/netdev.h
-+++ b/include/uapi/linux/netdev.h
-@@ -93,6 +93,7 @@ enum {
- 	NETDEV_A_PAGE_POOL_INFLIGHT,
- 	NETDEV_A_PAGE_POOL_INFLIGHT_MEM,
- 	NETDEV_A_PAGE_POOL_DETACH_TIME,
-+	NETDEV_A_PAGE_POOL_DMABUF,
- 
- 	__NETDEV_A_PAGE_POOL_MAX,
- 	NETDEV_A_PAGE_POOL_MAX = (__NETDEV_A_PAGE_POOL_MAX - 1)
-@@ -131,6 +132,7 @@ enum {
- 	NETDEV_A_QUEUE_IFINDEX,
- 	NETDEV_A_QUEUE_TYPE,
- 	NETDEV_A_QUEUE_NAPI_ID,
-+	NETDEV_A_QUEUE_DMABUF,
- 
- 	__NETDEV_A_QUEUE_MAX,
- 	NETDEV_A_QUEUE_MAX = (__NETDEV_A_QUEUE_MAX - 1)
-diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
-index 71363d258a52..50604dfd628e 100644
---- a/net/core/netdev-genl.c
-+++ b/net/core/netdev-genl.c
-@@ -293,6 +293,7 @@ static int
- netdev_nl_queue_fill_one(struct sk_buff *rsp, struct net_device *netdev,
- 			 u32 q_idx, u32 q_type, const struct genl_info *info)
- {
-+	struct net_devmem_dmabuf_binding *binding;
- 	struct netdev_rx_queue *rxq;
- 	struct netdev_queue *txq;
- 	void *hdr;
-@@ -312,6 +313,15 @@ netdev_nl_queue_fill_one(struct sk_buff *rsp, struct net_device *netdev,
- 		if (rxq->napi && nla_put_u32(rsp, NETDEV_A_QUEUE_NAPI_ID,
- 					     rxq->napi->napi_id))
- 			goto nla_put_failure;
-+
-+		binding = (struct net_devmem_dmabuf_binding *)
-+				  rxq->mp_params.mp_priv;
-+		if (binding) {
-+			if (nla_put_u32(rsp, NETDEV_A_QUEUE_DMABUF,
-+					binding->id))
-+				goto nla_put_failure;
-+		}
-+
- 		break;
- 	case NETDEV_QUEUE_TYPE_TX:
- 		txq = netdev_get_tx_queue(netdev, q_idx);
-diff --git a/net/core/page_pool_user.c b/net/core/page_pool_user.c
-index ce5167eb5548..92d8b1d1022a 100644
---- a/net/core/page_pool_user.c
-+++ b/net/core/page_pool_user.c
-@@ -213,6 +213,7 @@ static int
- page_pool_nl_fill(struct sk_buff *rsp, const struct page_pool *pool,
- 		  const struct genl_info *info)
- {
-+	struct net_devmem_dmabuf_binding *binding = pool->mp_priv;
- 	size_t inflight, refsz;
- 	void *hdr;
- 
-@@ -242,6 +243,9 @@ page_pool_nl_fill(struct sk_buff *rsp, const struct page_pool *pool,
- 			 pool->user.detach_time))
- 		goto err_cancel;
- 
-+	if (binding && nla_put_u32(rsp, NETDEV_A_PAGE_POOL_DMABUF, binding->id))
-+		goto err_cancel;
-+
- 	genlmsg_end(rsp, hdr);
- 
- 	return 0;
-diff --git a/tools/include/uapi/linux/netdev.h b/tools/include/uapi/linux/netdev.h
-index 91bf3ecc5f1d..7c308f04e7a0 100644
---- a/tools/include/uapi/linux/netdev.h
-+++ b/tools/include/uapi/linux/netdev.h
-@@ -93,6 +93,7 @@ enum {
- 	NETDEV_A_PAGE_POOL_INFLIGHT,
- 	NETDEV_A_PAGE_POOL_INFLIGHT_MEM,
- 	NETDEV_A_PAGE_POOL_DETACH_TIME,
-+	NETDEV_A_PAGE_POOL_DMABUF,
- 
- 	__NETDEV_A_PAGE_POOL_MAX,
- 	NETDEV_A_PAGE_POOL_MAX = (__NETDEV_A_PAGE_POOL_MAX - 1)
-@@ -131,6 +132,7 @@ enum {
- 	NETDEV_A_QUEUE_IFINDEX,
- 	NETDEV_A_QUEUE_TYPE,
- 	NETDEV_A_QUEUE_NAPI_ID,
-+	NETDEV_A_QUEUE_DMABUF,
- 
- 	__NETDEV_A_QUEUE_MAX,
- 	NETDEV_A_QUEUE_MAX = (__NETDEV_A_QUEUE_MAX - 1)
--- 
-2.46.0.469.g59c65b2a67-goog
+- Charlie
 
+> Thanks!
+> 
+> > duplicated code in mmap so the implementations across architectures I
+> > believe should be mostly consistent. I added this feature to all
+> > architectures that implement either
+> > arch_get_mmap_end()/arch_get_mmap_base() or
+> > arch_get_unmapped_area_topdown()/arch_get_unmapped_area(). I also added
+> > it to the default behavior for arch_get_mmap_end()/arch_get_mmap_base().
+> >
+> > Link: https://lore.kernel.org/lkml/20240826-riscv_mmap-v1-2-cd8962afe47f@rivosinc.com/T/ [1]
+> >
+> > To: Arnd Bergmann <arnd@arndb.de>
+> > To: Paul Walmsley <paul.walmsley@sifive.com>
+> > To: Palmer Dabbelt <palmer@dabbelt.com>
+> > To: Albert Ou <aou@eecs.berkeley.edu>
+> > To: Catalin Marinas <catalin.marinas@arm.com>
+> > To: Will Deacon <will@kernel.org>
+> > To: Michael Ellerman <mpe@ellerman.id.au>
+> > To: Nicholas Piggin <npiggin@gmail.com>
+> > To: Christophe Leroy <christophe.leroy@csgroup.eu>
+> > To: Naveen N Rao <naveen@kernel.org>
+> > To: Muchun Song <muchun.song@linux.dev>
+> > To: Andrew Morton <akpm@linux-foundation.org>
+> > To: Liam R. Howlett <Liam.Howlett@oracle.com>
+> > To: Vlastimil Babka <vbabka@suse.cz>
+> > To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+> > To: Thomas Gleixner <tglx@linutronix.de>
+> > To: Ingo Molnar <mingo@redhat.com>
+> > To: Borislav Petkov <bp@alien8.de>
+> > To: Dave Hansen <dave.hansen@linux.intel.com>
+> > To: x86@kernel.org
+> > To: H. Peter Anvin <hpa@zytor.com>
+> > To: Huacai Chen <chenhuacai@kernel.org>
+> > To: WANG Xuerui <kernel@xen0n.name>
+> > To: Russell King <linux@armlinux.org.uk>
+> > To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> > To: James E.J. Bottomley <James.Bottomley@HansenPartnership.com>
+> > To: Helge Deller <deller@gmx.de>
+> > To: Alexander Gordeev <agordeev@linux.ibm.com>
+> > To: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+> > To: Heiko Carstens <hca@linux.ibm.com>
+> > To: Vasily Gorbik <gor@linux.ibm.com>
+> > To: Christian Borntraeger <borntraeger@linux.ibm.com>
+> > To: Sven Schnelle <svens@linux.ibm.com>
+> > To: Yoshinori Sato <ysato@users.sourceforge.jp>
+> > To: Rich Felker <dalias@libc.org>
+> > To: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+> > To: David S. Miller <davem@davemloft.net>
+> > To: Andreas Larsson <andreas@gaisler.com>
+> > To: Shuah Khan <shuah@kernel.org>
+> > To: Alexandre Ghiti <alexghiti@rivosinc.com>
+> > Cc: linux-arch@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Cc: Palmer Dabbelt <palmer@rivosinc.com>
+> > Cc: linux-riscv@lists.infradead.org
+> > Cc: linux-arm-kernel@lists.infradead.org
+> > Cc: linuxppc-dev@lists.ozlabs.org
+> > Cc: linux-mm@kvack.org
+> > Cc: loongarch@lists.linux.dev
+> > Cc: linux-mips@vger.kernel.org
+> > Cc: linux-parisc@vger.kernel.org
+> > Cc: linux-s390@vger.kernel.org
+> > Cc: linux-sh@vger.kernel.org
+> > Cc: sparclinux@vger.kernel.org
+> > Cc: linux-kselftest@vger.kernel.org
+> > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> >
+> > ---
+> > Charlie Jenkins (16):
+> >       mm: Add MAP_BELOW_HINT
+> >       riscv: mm: Do not restrict mmap address based on hint
+> >       mm: Add flag and len param to arch_get_mmap_base()
+> >       mm: Add generic MAP_BELOW_HINT
+> >       riscv: mm: Support MAP_BELOW_HINT
+> >       arm64: mm: Support MAP_BELOW_HINT
+> >       powerpc: mm: Support MAP_BELOW_HINT
+> >       x86: mm: Support MAP_BELOW_HINT
+> >       loongarch: mm: Support MAP_BELOW_HINT
+> >       arm: mm: Support MAP_BELOW_HINT
+> >       mips: mm: Support MAP_BELOW_HINT
+> >       parisc: mm: Support MAP_BELOW_HINT
+> >       s390: mm: Support MAP_BELOW_HINT
+> >       sh: mm: Support MAP_BELOW_HINT
+> >       sparc: mm: Support MAP_BELOW_HINT
+> >       selftests/mm: Create MAP_BELOW_HINT test
+> >
+> >  arch/arm/mm/mmap.c                           | 10 ++++++++
+> >  arch/arm64/include/asm/processor.h           | 34 ++++++++++++++++++++++----
+> >  arch/loongarch/mm/mmap.c                     | 11 +++++++++
+> >  arch/mips/mm/mmap.c                          |  9 +++++++
+> >  arch/parisc/include/uapi/asm/mman.h          |  1 +
+> >  arch/parisc/kernel/sys_parisc.c              |  9 +++++++
+> >  arch/powerpc/include/asm/task_size_64.h      | 36 +++++++++++++++++++++++-----
+> >  arch/riscv/include/asm/processor.h           | 32 -------------------------
+> >  arch/s390/mm/mmap.c                          | 10 ++++++++
+> >  arch/sh/mm/mmap.c                            | 10 ++++++++
+> >  arch/sparc/kernel/sys_sparc_64.c             |  8 +++++++
+> >  arch/x86/kernel/sys_x86_64.c                 | 25 ++++++++++++++++---
+> >  fs/hugetlbfs/inode.c                         |  2 +-
+> >  include/linux/sched/mm.h                     | 34 ++++++++++++++++++++++++--
+> >  include/uapi/asm-generic/mman-common.h       |  1 +
+> >  mm/mmap.c                                    |  2 +-
+> >  tools/arch/parisc/include/uapi/asm/mman.h    |  1 +
+> >  tools/include/uapi/asm-generic/mman-common.h |  1 +
+> >  tools/testing/selftests/mm/Makefile          |  1 +
+> >  tools/testing/selftests/mm/map_below_hint.c  | 29 ++++++++++++++++++++++
+> >  20 files changed, 216 insertions(+), 50 deletions(-)
+> > ---
+> > base-commit: 5be63fc19fcaa4c236b307420483578a56986a37
+> > change-id: 20240827-patches-below_hint_mmap-b13d79ae1c55
+> > --
+> > - Charlie
+> >
+> >
+> > _______________________________________________
+> > linux-riscv mailing list
+> > linux-riscv@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-riscv
 
