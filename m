@@ -1,141 +1,153 @@
-Return-Path: <linux-arch+bounces-6809-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6810-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2E329646E3
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Aug 2024 15:38:58 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C46B29647A3
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Aug 2024 16:10:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8011B2847EF
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Aug 2024 13:38:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 618D0B24A90
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Aug 2024 14:08:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BDC4197A69;
-	Thu, 29 Aug 2024 13:37:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="llgUmdBC"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C765519FA93;
+	Thu, 29 Aug 2024 14:07:57 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 444FC19408D;
-	Thu, 29 Aug 2024 13:37:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 061F542A96;
+	Thu, 29 Aug 2024 14:07:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724938671; cv=none; b=neUSkoz7F9IDMhpPuh32eqIu+WiiOV9U1kjep2cui/XOlTLsgeoKOOpoIuWJ88zdz+rGk7+3v+lrCFgsrOWCCDrQVOtwfoP2zSNeuTjg8frZKPMqX5xMWNhcvsQZdBLRyXyU8dqI0mp3uzbh7MwzOXQHaTdOnqh8qFCrtKKo5No=
+	t=1724940477; cv=none; b=l80I3blWofJbaGc9N/Vkp/ArHd/m844YS1hruAI3TrGA5QaWInh3nH1InkYL45ABjtCpZzFrtWZos4mLwShNkFytFtxYtvd3tjwpnYxYbKnBRX+t59EoVrvugnSOhAcJucYGxXNQoWwr94kltINXt83vuxyHDbrWRiGnu+4qpK0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724938671; c=relaxed/simple;
-	bh=Ca+p3EBy6mFIJiseSrgzhJ3uhFfJHvkFK+bEdDKuuBE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r7gCfvsYMvI92iO+f7kYKfFTM+R9C3JTV13FB5evJA4RsExQ7JYxcnz6eLzfJAoxYlavfyZ9DMnEi0oiZC7kP+Xb4Jk3L3WG5yi8uU/O534IBBtTKBHC00kleoJa9cXBaG9Bam3VX2ampVOG9NiEV7qgSaSCli+foWktBGlLQxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=llgUmdBC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBA5CC4CEC1;
-	Thu, 29 Aug 2024 13:37:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724938670;
-	bh=Ca+p3EBy6mFIJiseSrgzhJ3uhFfJHvkFK+bEdDKuuBE=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=llgUmdBCThp6X16iae1KFMQ0xTfN49f3PUWONK5Zj8t8fZMrLztX3otPGqDW7Cqpx
-	 vpFCeqZaoZGqcGQHm6nafaMiCUI3LgEKVElU7w8Kw9ilGP3KciDaQTRatnZ4Sdi76L
-	 5Y106K47AAGjgYG6eaqP3+3/qwtyWAs4kKYAAf1coL0jm+oS9AJ5NBZ3hUxUpkexB/
-	 xaGTHHp3d4xTh8qdUfza0hNskAYa98B4Eqiju3RZ9yPue+sTZrCZNrKYYMXzRKLMFL
-	 NDx5DVq4YLrHupcgKLTvNsDYwkQb/i+IhGWBam9YFjUhpRg4Ou0fNa5ck2Lbqf0UfV
-	 uA+1OtxyXppUg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 4D86ECE0D9C; Thu, 29 Aug 2024 06:37:50 -0700 (PDT)
-Date: Thu, 29 Aug 2024 06:37:50 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: linux-kernel@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>
-Subject: Re: 16-bit store instructions &c?
-Message-ID: <1bb58d8d-4a2a-4728-a8f3-9295145dbbb0@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <3ca4590a-8256-42d1-89ca-f337ae6f755c@paulmck-laptop>
- <b3512703-bab3-4999-ac20-b1b874fcfcc3@app.fastmail.com>
- <289c7e10-06df-435b-a30d-c2a5bc4eea29@paulmck-laptop>
- <9242c5c2-2011-45bf-8679-3f918323788e@app.fastmail.com>
+	s=arc-20240116; t=1724940477; c=relaxed/simple;
+	bh=N6jQY7dJIu7Wj1NSW9NfuGVgak4WVqzj8Hx2bsm+JK4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Rn4rxaZdbhdXWhDTH2c/4Q+hYmtwjqqvKxpTSTR4A614A4cx/zmicGrSNSdcVXbkXItU4erMUmeHR5hM8tpOwmiyEx7jKbOzSdjNsGB6sQnoMW17Ja3O8M4uQsiby+0eoZRANzYnypYy8EbRe+r19A8G9a8lNd7rh9aJGRW5kfc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 97650DA7;
+	Thu, 29 Aug 2024 07:08:20 -0700 (PDT)
+Received: from [10.1.196.72] (e119884-lin.cambridge.arm.com [10.1.196.72])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 72DE93F66E;
+	Thu, 29 Aug 2024 07:07:52 -0700 (PDT)
+Message-ID: <632b8da1-c165-4d17-804f-4edf1438d55a@arm.com>
+Date: Thu, 29 Aug 2024 15:07:50 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9242c5c2-2011-45bf-8679-3f918323788e@app.fastmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] random: vDSO: Redefine PAGE_SIZE and PAGE_MASK
+To: LEROY Christophe <christophe.leroy2@cs-soprasteria.com>,
+ Arnd Bergmann <arnd@arndb.de>, "Jason A . Donenfeld" <Jason@zx2c4.com>
+Cc: Theodore Ts'o <tytso@mit.edu>, Andy Lutomirski <luto@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ "x86@kernel.org" <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+ Linux-Arch <linux-arch@vger.kernel.org>
+References: <b8f8fb6d1d10386c74f2d8826b737a74c60b76b2.1724743492.git.christophe.leroy@csgroup.eu>
+ <defab86b7fb897c88a05a33b62ccf38467dda884.1724747058.git.christophe.leroy@csgroup.eu>
+ <Zs2RCfMgfNu_2vos@zx2c4.com>
+ <cb66b582-ba63-4a5a-9df8-b07288f1f66d@app.fastmail.com>
+ <0f9255f1-5860-408c-8eaa-ccb4dd3747fa@csgroup.eu>
+ <17437f43-9d1f-4263-888e-573a355cb0b5@arm.com>
+ <85efc7c5-40c8-4c89-b65f-dd13536fb8c7@cs-soprasteria.com>
+Content-Language: en-US
+From: Vincenzo Frascino <vincenzo.frascino@arm.com>
+In-Reply-To: <85efc7c5-40c8-4c89-b65f-dd13536fb8c7@cs-soprasteria.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, Aug 28, 2024 at 10:01:06PM +0200, Arnd Bergmann wrote:
-> On Wed, Aug 28, 2024, at 14:22, Paul E. McKenney wrote:
-> > On Wed, Aug 28, 2024 at 01:48:41PM +0000, Arnd Bergmann wrote:
-> >
-> >> There is a related problem with ARM RiscPC, which
-> >> uses a kernel built with -march=armv3, and that
-> >> disallows 16-bit load/store instructions entirely,
-> >> similar to how alpha ev5 and earlier lacked both
-> >> byte and word access.
-> >
-> > And one left to go.  Progress, anyway.  ;-)
+Hi Christophe,
+
+On 27/08/2024 18:38, LEROY Christophe wrote:
+> Hi Vicenzo,
 > 
-> What I meant to say about this one is also that we can probably
-> ignore it as well, since it's on the way out already, at the latest
-> when gcc-9 becomes the minimum compiler, as gcc-8 was the last
-> to support -march=armv3. We can also ask Russell if he's ok with
-> dropping it earlier, as he is almost certainly the only user.
-
-Even better, thank you!
-
-My plan is to submit a pull request for the remaining three 8-bit
-cmpxchg() emulation commits into the upcoming merge window.  In the
-meantime, I will create similar patches for 16-bit cmpxchg() and perhaps
-also both 8-bit and 16-bit xchg().  I will obviously CC both you and
-Russell on the full set.  And if there are hardware-incompatibility
-complaints, we can deal with them, whether by dropping the offending
-pieces of my patches or by whatever other adjustments make sense.
-
-Does that seem like a reasonable approach, or is there a better way?
-
-> >> Everything else that I see has native load/store
-> >> on 16-bit words and either has 16-bit atomics or
-> >> can emulate them using the 32-bit ones.
-> >> 
-> >> However, the one thing that people usually
-> >> want 16-bit xchg() for is qspinlock, and that
-> >> one not only depends on it being atomic but also
-> >> on strict forward-progress guarantees, which
-> >> I think the emulated version can't provide
-> >> in general.
-> >> 
-> >> This does not prevent architectures from doing
-> >> it anyway.
-> >
-> > Given that the simpler spinlock does not provide forward-progress
-> > guarantees, I don't see any reason that these guarantees cannot be voided
-> > for architectures without native 16-bit stores and atomics.
-> >
-> > After all, even without those guarantees, qspinlock provides very real
-> > benefits over simple spinlocks.
+> Le 27/08/2024 à 18:05, Vincenzo Frascino a écrit :
+>> Hi Christophe,
+>>
+>> On 27/08/2024 11:49, Christophe Leroy wrote:
+>>
+>> ...
+>>
+>>
+>>
+>> I agree with Arnd here. uapi/linux/mman.h can cause us problems in the long run.
+>>
+>> I am attaching a patch to provide my view on how to minimize the headers
+>> included and use only the vdso/ namespace. Please, before using the code,
+>> consider that I conducted very limited testing.
+>>
+>> Note: It should apply clean on Jason's tree.
+>>
+>> Let me know your thoughts.
+>>
 > 
-> My understanding of this problem is that with a trivial bit spinlock,
-> the worst case is that one task never gets the lock while others
-> also want it, but a qspinlock based on a flawed xchg() implementation
-> may end with none of the CPUs ever getting the lock. It may not
-> matter in practice, but it does feel worse.
+> Your patch looks nice, maybe a bit too much. For instance getrandom.c 
+> can include directly asm/vdso/page.h instead of creating vdso/page.h
+> 
+> Or create a vdso/page.h that only use CONFIG_PAGE_SHIFT and doesn't 
+> include anything from architectures.
+> 
 
-I could argue that there is no law saying that a flawed atomic operation
-cannot cause a trivial bit spinlock to never be actually handed to any
-CPU, but point taken.  Given that the emulated xchg() would be implemented
-in terms of cmpxchg(), there is clearly less opportunity for the hardware
-to "do the right thing" in terms of fairness and starvation.  After all,
-the hardware very likekly has less visibility into a cmpxchg()-emulated
-xchg() operation than into a hardware xchg() instruction.
+IMHO there should be only one place per architecture where PAGE_SIZE and
+PAGE_MASK are defined. This makes sure that if there is a problem, we do not
+have multiple places to look into.
 
-Perhaps the best approach is a comment on the xchg() emulation stating
-that it might offer weaker forward-progress guarantees.
+The indirection helps to keep consistent the namespace and allows for future
+extension. Similar logic has been used during my original vDSO headers
+definition and implementation.
 
-An alternative approach is to emulate 16-bit cmpxchg(), and defer
-emulation of 8-bit and 16-bit xchg().
+> We should also keep PROT_READ and PROT_WRITE in getrandom.c , that's 
+> better for readability. Same for MAP_DROPPABLE | MAP_ANONYMOUS. I can't 
+> see the benefit of hiding them in a header.
+> 
 
-Thoughts?
+The idea is not to make the code unreadable but to defer to the architecture the
+decision of prot and flags avoiding the inclusion of headers coming from the
+uapi namespace.
 
-							Thanx, Paul
+> I can't see which header provides you with min_t() or ARRAY_SIZE().
+> 
+
+Good point, this needs to be addressed by my patch, I will extend it, do some
+more testing and post it again next week.
+
+> I think you should also work on removing headers included by 
+> arch/x86/include/asm/vdso/gettimeofday.h which is included by 
+> include/vdso/datapage.h :
+> 
+>    #include <uapi/linux/time.h>
+>    #include <asm/vgtod.h>
+>    #include <asm/vvar.h>
+>    #include <asm/unistd.h>
+>    #include <asm/msr.h>
+>    #include <asm/pvclock.h>
+>    #include <clocksource/hyperv_timer.h>
+> 
+> As a comparison, the one from powerpc only includes the following one so 
+> it pulls a lot less non-vdso headers:
+> 
+>    #include <asm/vdso/timebase.h>
+>    #include <asm/barrier.h>
+>    #include <asm/unistd.h>
+>    #include <uapi/linux/time.h>
+> 
+> Christophe
+
+This does not seem a concern, in fact I believe that the generic vDSO library
+should not mandate to the architecture how to organize headers. As far as the
+requirements are satisfied each architecture should be able to define its own
+naming and conventions independently.
+
+-- 
+Regards,
+Vincenzo
 
