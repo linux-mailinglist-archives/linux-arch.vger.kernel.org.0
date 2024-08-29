@@ -1,119 +1,187 @@
-Return-Path: <linux-arch+bounces-6803-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6804-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 402309643B5
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Aug 2024 14:01:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 716CD9643B8
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Aug 2024 14:02:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A83DDB215DD
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Aug 2024 12:01:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25BDC283D11
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Aug 2024 12:02:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A206192B83;
-	Thu, 29 Aug 2024 12:01:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D90841946C4;
+	Thu, 29 Aug 2024 12:01:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="gToss/rZ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B54CE18CC02;
-	Thu, 29 Aug 2024 12:01:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B97851946BA
+	for <linux-arch@vger.kernel.org>; Thu, 29 Aug 2024 12:01:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724932908; cv=none; b=UiGwoT0fC0j/KMUH3WtzPVHMzQU6kkLOpgq0pEwBEQs/EzkJkurlWEGwZ/CKv/q+Vyaytr2yKdmhbIARG96V7AfWLNE5MjOa+/aj1p2f5wIs4INa4kSPVKDNrNKnj0P1upFvF89Eu8kj0VaaQNJS0Xko7CmjQ+dKSaanFMVzfMg=
+	t=1724932915; cv=none; b=lGk22XcS8VTuwtNN+DEm4ugM++IrQD+frRnDJX/DjVtYJ9nO+Bdpb/Ai1H/o/4iOawwlaknc1ZUugq6Dra/28n3eRHvoZYLFeAbihej8JGSfKtuL4eVHJ/gUJaXBv6w76UsI07Q61VQA5L1twvNSRu/l7vh4XAfnCv0D1b4vjmo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724932908; c=relaxed/simple;
-	bh=4mJjWETIZmbDstqAvIMhzLQse09kCQvTp1m1O7h/UN0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WQf8oHjmE8va2H8WfHUEdfzVXP6KlnT1TeQIy7VaUwAiYaRL1Ne4xKOZy+QJm4neKTpUZEka5AUavxTTB0TTJ2PJpe9jytouxrS2izFir/h2BKUj6Zg9XfCc+zVYF0ksryNYYV+0y1AKI6QNio9TsvT7nvA3rM3CkIynizUkXG0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 822E2DA7;
-	Thu, 29 Aug 2024 05:02:05 -0700 (PDT)
-Received: from [10.1.196.72] (e119884-lin.cambridge.arm.com [10.1.196.72])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 604163F762;
-	Thu, 29 Aug 2024 05:01:37 -0700 (PDT)
-Message-ID: <bab7286c-e27e-450a-8bb6-e5b09063a033@arm.com>
-Date: Thu, 29 Aug 2024 13:01:35 +0100
+	s=arc-20240116; t=1724932915; c=relaxed/simple;
+	bh=fOZO2d20iA45ijbTFXi/g1LkvqA+AHUmsj+CK1eEIxw=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qa6Se8b9l8YfLe3KTopcEPstw0PtpVHJHQ0bV+6mogSUfSHZuvsHhtkVWDR0kNpy/EF8GHmVZR4hu9UqqZ6+dw6+gV7tdvWxOTnJ5FUUPkouHR8vG19GoiXRMo0ir4hIBCGIi4o4XvK06EmWeY0JBki5W62E3ZaQv1ttot8wubI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=gToss/rZ; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a8696e9bd24so65298466b.0
+        for <linux-arch@vger.kernel.org>; Thu, 29 Aug 2024 05:01:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1724932912; x=1725537712; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:date:from:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mXBtr/JbiSQG7W9JfMUYCtQfQyKUiftjthV/2nojugU=;
+        b=gToss/rZvgKVjfAPyacL/q76YmsCND4RSc+aZ2fGN9apgKW2KWpDoeRDWPAZnSBlqQ
+         mIxSU8x1ZPW//YSICJDua82zbgukZ9NzqnHfc69WdqzKHpZLKAYOnQCBbxwP/hRyGOyZ
+         m1+Pr4NezMRbmuARSjLinJrBWmlBPkR1u8hUIvJKA0RmcZ59bxkDMydo8nXjE7AcNQ9t
+         2FFoSazdfqV3ibXedxh3OzfH8Y4+9cvckn/uyvxXFZL7mqsyS3w6jj3V/XdRH/Eb/xG6
+         k4EPzxy2RvVDMFFyv98ukloFIGKNWasVr5iKaaZ4dE+LL8cSlp9OtJyDMuwLxLlPyGQA
+         qngA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724932912; x=1725537712;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mXBtr/JbiSQG7W9JfMUYCtQfQyKUiftjthV/2nojugU=;
+        b=fuufhHy+Adgjn5T8YJ8smQtn41+bceRB71kUeY5wTdVyORs2CJmNWoa0ue1SGZ69B+
+         5L1ygVg+3VPtNkFD1PNhG3AMhtD61+N+bsT3X46gwXCgi0Qi8oTwvWQkX8+73FXot/xU
+         XW/CXpABi6OMCkajIYk6b/ULkKaE9iqw97zqyVPA7yXlB2ifcSmqZnsYPdioRbS8x6FI
+         8v7FusuaNbdlr57YcoMkkZOHcJdIABXo3tVOsW2RZbn7W8nhqRKn5Et6PXGjsJZyrxsB
+         OU3YPQSTkU9hYW3oThPOQbODozUI041GkrXZ6xo/tFKrZBYEuNiSy35byGW19tnxvMhD
+         w3Cw==
+X-Forwarded-Encrypted: i=1; AJvYcCV149h0cX507n0j4Rga/0JPMxK/3wfY9KGP/CRBzXIZcXr10iNUxjmLQNtxnyIfznf1XZ7HHdfH4Q9F@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx22IAntNtCIUriA6d6pkefQc1OxvOzydZ9G6CefAKtP4+rxT1Q
+	fpqCn0CP6+lFRSUNCAtwjD1xrB/RsVnujbOT6bNVUy0qk0tpw3b377dt1oDnrpc=
+X-Google-Smtp-Source: AGHT+IFsyk0IWnaZFMb265yPeWvESMoqgeE3DSP8XvW62AVSUHg1bVi4x43hO0c3ITnEgvBmjx2LDg==
+X-Received: by 2002:a17:907:9708:b0:a80:7ce0:8b2a with SMTP id a640c23a62f3a-a897f84d44cmr193846766b.19.1724932909698;
+        Thu, 29 Aug 2024 05:01:49 -0700 (PDT)
+Received: from localhost (host-80-182-198-72.retail.telecomitalia.it. [80.182.198.72])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a8989021960sm71432166b.79.2024.08.29.05.01.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Aug 2024 05:01:49 -0700 (PDT)
+From: Andrea della Porta <andrea.porta@suse.com>
+X-Google-Original-From: Andrea della Porta <aporta@suse.de>
+Date: Thu, 29 Aug 2024 14:01:54 +0200
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>,
+	Andrea della Porta <andrea.porta@suse.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Derek Kiernan <derek.kiernan@amd.com>,
+	Dragan Cvetic <dragan.cvetic@amd.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Saravana Kannan <saravanak@google.com>,
+	Bjorn Helgaas <bhelgaas@google.com>, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org, netdev@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+	Lee Jones <lee@kernel.org>, Stefan Wahren <wahrenst@gmx.net>
+Subject: Re: [PATCH 00/11] Add support for RaspberryPi RP1 PCI device using a
+ DT overlay
+Message-ID: <ZtBjMpMGtA4WfDij@apocalypse>
+Mail-Followup-To: Andrew Lunn <andrew@lunn.ch>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Andrea della Porta <andrea.porta@suse.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Derek Kiernan <derek.kiernan@amd.com>,
+	Dragan Cvetic <dragan.cvetic@amd.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Saravana Kannan <saravanak@google.com>,
+	Bjorn Helgaas <bhelgaas@google.com>, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org, netdev@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+	Lee Jones <lee@kernel.org>, Stefan Wahren <wahrenst@gmx.net>
+References: <cover.1724159867.git.andrea.porta@suse.com>
+ <14990d25-40a2-46c0-bf94-25800f379a30@kernel.org>
+ <Zsb_ZeczWd-gQ5po@apocalypse>
+ <45a41ed9-2e42-4fd5-a1d5-35de93ce0512@lunn.ch>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] random: vDSO: Redefine PAGE_SIZE and PAGE_MASK
-To: Christophe Leroy <christophe.leroy@csgroup.eu>,
- Arnd Bergmann <arnd@arndb.de>, "Jason A . Donenfeld" <Jason@zx2c4.com>
-Cc: Theodore Ts'o <tytso@mit.edu>, Andy Lutomirski <luto@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
- linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- Linux-Arch <linux-arch@vger.kernel.org>
-References: <b8f8fb6d1d10386c74f2d8826b737a74c60b76b2.1724743492.git.christophe.leroy@csgroup.eu>
- <defab86b7fb897c88a05a33b62ccf38467dda884.1724747058.git.christophe.leroy@csgroup.eu>
- <Zs2RCfMgfNu_2vos@zx2c4.com>
- <cb66b582-ba63-4a5a-9df8-b07288f1f66d@app.fastmail.com>
- <0f9255f1-5860-408c-8eaa-ccb4dd3747fa@csgroup.eu>
- <17437f43-9d1f-4263-888e-573a355cb0b5@arm.com>
- <272cb38a-c0e3-4e6e-89ce-b503c75c2c33@csgroup.eu>
-Content-Language: en-US
-From: Vincenzo Frascino <vincenzo.frascino@arm.com>
-In-Reply-To: <272cb38a-c0e3-4e6e-89ce-b503c75c2c33@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <45a41ed9-2e42-4fd5-a1d5-35de93ce0512@lunn.ch>
 
-Hi Christophe,
+Hi Andrew,
 
-On 27/08/2024 18:14, Christophe Leroy wrote:
+On 15:04 Thu 22 Aug     , Andrew Lunn wrote:
+> > WARNING: ENOTSUPP is not a SUSV4 error code, prefer EOPNOTSUPP
+> > #673: FILE: drivers/pinctrl/pinctrl-rp1.c:600:
+> > +                               return -ENOTSUPP;
+> > 
+> > This I must investigate: I've already tried to fix it before sending the patchset
+> > but for some reason it wouldn't work, so I planned to fix it in the upcoming 
+> > releases.
 > 
-> 
-> Le 27/08/2024 à 18:05, Vincenzo Frascino a écrit :
->> Hi Christophe,
->>
->> On 27/08/2024 11:49, Christophe Leroy wrote:
->>
->> ...
+> ENOTSUPP is an NFS error. It should not be used outside for NFS. You
+> want EOPNOTSUPP.
 
-...
-
->>
->> Could you please clarify where minmax is needed? I tried to build Jason's master
->> tree for x86, commenting the header and it seems building fine. I might be
->> missing something.
-> 
-> Without it:
-> 
->   VDSO32C arch/powerpc/kernel/vdso/vgetrandom-32.o
-> In file included from /home/chleroy/linux-powerpc/lib/vdso/getrandom.c:11,
->                  from <command-line>:
-...
+Ack.
 
 > 
-> 
->>
->>> Same for ARRAY_SIZE(->reserved) by the way, easy to do opencode, we also have it
->>> only once
->>>
->>
->> I have a similar issue to figure out why linux/array_size.h and
->> uapi/linux/random.h are needed. It seems that I can build the object without
->> them. Could you please explain?
-> 
-> Without linux/array_size.h:
-> 
->   VDSO32C arch/powerpc/kernel/vdso/vgetrandom-32.o
-> In file included from <command-line>:
-> /home/chleroy/linux-powerpc/lib/vdso/getrandom.c: In function
-> '__cvdso_getrandom_data':
-> /home/chleroy/linux-powerpc/lib/vdso/getrandom.c:89:40: error: implicit
-If this is the case, those headers should be defined for the powerpc
-implementation only. The generic implementation should be interpreted as the
-minimum common denominator in between all the architectures for what concerns
-the headers.
+>  
+> > WARNING: externs should be avoided in .c files
+> > #331: FILE: drivers/misc/rp1/rp1-pci.c:58:
+> > +extern char __dtbo_rp1_pci_begin[];
+> > 
+> > True, but in this case we don't have a symbol that should be exported to other
+> > translation units, it just needs to be referenced inside the driver and
+> > consumed locally. Hence it would be better to place the extern in .c file.
+>  
+> Did you try making it static.
 
--- 
-Regards,
-Vincenzo
+The dtso is compiled into an obj and linked with the driver which is in
+a different transaltion unit. I'm not aware on other ways to include that
+symbol without declaring it extern (the exception being some hackery 
+trick that compile the dtso into a .c file to be included into the driver
+main source file). 
+Or probably I'm not seeing what you are proposing, could you please elaborate
+on that?
+
+Many thanks,
+Andrea
+
+> 
+> 	Andrew
 
