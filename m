@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-6826-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6827-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC375965164
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Aug 2024 23:08:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 504CE965177
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Aug 2024 23:09:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1B4841C22FF9
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Aug 2024 21:08:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 83B271C2329B
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Aug 2024 21:09:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFD6C18C003;
-	Thu, 29 Aug 2024 21:08:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 963C418A955;
+	Thu, 29 Aug 2024 21:08:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p6UVAYJ6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oKnahoF3"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76415189F5F;
-	Thu, 29 Aug 2024 21:08:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42F8518A92C;
+	Thu, 29 Aug 2024 21:08:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724965708; cv=none; b=mK8YyqU0teTxJW7qOv05BprOW5ankmDrECkAxUVI0ZKKbJbkhNABUDzmphu+9neoiiSIGJEAlIDG5gav+Cn3XgkCKCcPdQYARodENTqnixN0fihM7jlLqQXA1uhri51vPEljffwGmMsK1bLwSUXM85dV62aDo8q5DbgrxDM0l+E=
+	t=1724965733; cv=none; b=Iv8E8/EfzgC4wFwoIDkXYCnNueG0hRGmQPllAA4FJ6Qp1rtz1tqk3FcwvejCBtFmZ1l4i2TTNe9hGLDJqw1+jDziOjndlyBzLGHzoB6UPr3ws1Lpdzm9N+ZzXq8LuMlouvPjoE8sOKRnGLUyOG+j2KHUeZbfmFIBzKeNte3sME0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724965708; c=relaxed/simple;
-	bh=NEubUSRUeBvvm22Q348Fp9RYCVjR27lHQZqlTUf2ioM=;
+	s=arc-20240116; t=1724965733; c=relaxed/simple;
+	bh=WQDz1S69lUbD5RaUd2dQntjnNMx34I5STJbAEjGgtEE=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=A6btoZvru3Ygv9BB7FiUQdZ83/d46y8CVYeAV3eHDeRWmmV6ZA0heVuif1HEKZ4itOjKdBPXnFRXzsA1JMkO4+xaE9qCigEJLJIm+fnwLKvDSz81AASMTadAec3l7PFiW56PCYpZC3lcFhz2JIK4vKoJuQRBRAJdvNQDQ/qnhy0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p6UVAYJ6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B8E2C4CEC2;
-	Thu, 29 Aug 2024 21:08:25 +0000 (UTC)
+	 MIME-Version:Content-Type; b=eDlvJ9vX291eZMmsYa5O5hCPg5AyGTiAen4FX/3zURselMuZWh4+8qsogSSCK1qbVZbGD4BnznP27DiXt7O61x2LwkFGwkxz+f78SivU8ui9oo0fbVRUF5pVtlwz2+pOzwPuFGpQ7opjclD7yDNAnQttwEtI1GDsbBmkhi7C0ec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oKnahoF3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56F45C4CEC1;
+	Thu, 29 Aug 2024 21:08:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724965708;
-	bh=NEubUSRUeBvvm22Q348Fp9RYCVjR27lHQZqlTUf2ioM=;
+	s=k20201202; t=1724965732;
+	bh=WQDz1S69lUbD5RaUd2dQntjnNMx34I5STJbAEjGgtEE=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=p6UVAYJ6/p5bhrYPea9y9LVZ73ntO1QP/0zR+Q+1patwv+tVmGiYjdDlAD218lAA8
-	 wmRGDX7i+DfyMahGib9Mm8V4I9AQEoLn8b9mtc+xdG36nS0cbP0QL45E59ogicrDMH
-	 UMsuv+C0jmECY39fsLsHq8fo4kUC/uT4Z1zk3MIcsu1n23rlQDYMcUqNN6ZZxIgzKS
-	 o9KRpRUv0V5uSxIszbyhHC/WKLKdlgKWDVMjA6m+icA4tY75YYjIYNbbXAYQUyxbZn
-	 M/VljWIX+Kv0vyYr8HtbjQKj1fUsJoxFw6I3C6QjqGuRCR3iyJC/09ocJiJFlPa4pV
-	 vik20KHhv5pnw==
-Date: Thu, 29 Aug 2024 14:08:24 -0700
+	b=oKnahoF3iIB3OiWjLXfDamL3XOBev+vSjazGWq8rTP7Ppxi4UGmN/uKdLnc7LQ2rF
+	 VM/I+vbkeheUjJeQBuOQXWAnO1EejxO3lkqs2zLZh4HIcMKI7c515FwOkN9EEnrar7
+	 tKN/h4JUoSor5bBVhEsDxbmkMag4YHYtjT+8C/ZPDjzBXRG8gfAV5mgIzqW+CIdqkB
+	 9ORTf2NxGWFaC7MaWdB/Qm0gnyVicNVyAGPXtOa54WSNnw/LODVrtyzzAnBMdcrzI+
+	 T2gqW25OSKReZgf4+zcsM43P1ado4M0LgY/kuR6IF9COtmrpGKiH2G26jBBqWdNrAr
+	 /EZITocUE2/YQ==
+Date: Thu, 29 Aug 2024 14:08:49 -0700
 From: Jakub Kicinski <kuba@kernel.org>
 To: Mina Almasry <almasrymina@google.com>
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -81,7 +81,7 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  Kaiyuan Zhang <kaiyuanz@google.com>, Daniel Vetter <daniel.vetter@ffwll.ch>
 Subject: Re: [PATCH net-next v23 03/13] netdev: support binding dma-buf to
  netdevice
-Message-ID: <20240829140824.555d016c@kernel.org>
+Message-ID: <20240829140849.44ded041@kernel.org>
 In-Reply-To: <20240829060126.2792671-4-almasrymina@google.com>
 References: <20240829060126.2792671-1-almasrymina@google.com>
 	<20240829060126.2792671-4-almasrymina@google.com>
@@ -95,17 +95,10 @@ Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
 On Thu, 29 Aug 2024 06:01:16 +0000 Mina Almasry wrote:
-> +	err = genlmsg_reply(rsp, info);
-> +	if (err)
-> +		goto err_unbind;
-> +
->  	return 0;
-> +
-> +err_unbind:
+> +	if (dev_xdp_prog_count(netdev)) {
+> +		NL_SET_ERR_MSG(info->extack, "netdevice has xdp program attached");
+> +		return -EEXIST;
+> +	}
 
-rtnl_lock()
-
-> +	net_devmem_unbind_dmabuf(binding);
-> +err_unlock:
-> +	rtnl_unlock();
+goto err_unlock
 
