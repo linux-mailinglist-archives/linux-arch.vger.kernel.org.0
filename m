@@ -1,644 +1,292 @@
-Return-Path: <linux-arch+bounces-6848-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6849-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0C3E9661A2
-	for <lists+linux-arch@lfdr.de>; Fri, 30 Aug 2024 14:28:46 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B54C966360
+	for <lists+linux-arch@lfdr.de>; Fri, 30 Aug 2024 15:49:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 67A461F20FC0
-	for <lists+linux-arch@lfdr.de>; Fri, 30 Aug 2024 12:28:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 80703B233B9
+	for <lists+linux-arch@lfdr.de>; Fri, 30 Aug 2024 13:49:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDDD619995A;
-	Fri, 30 Aug 2024 12:28:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E00919048D;
+	Fri, 30 Aug 2024 13:49:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="d9TqjrGB"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="PDuS2BzV"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+Received: from mail-lf1-f68.google.com (mail-lf1-f68.google.com [209.85.167.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C6D1194C86
-	for <linux-arch@vger.kernel.org>; Fri, 30 Aug 2024 12:28:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 381DA18CBF8
+	for <linux-arch@vger.kernel.org>; Fri, 30 Aug 2024 13:49:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725020918; cv=none; b=KI+VSkBGQHoi+GEXkALAVSb+Rdv9G22/7S9Nk2+WlSLYlc+zb3rT9RSV3f1nydf6l7MXf/dXtyt2OfjnxsKnaLUQZpWQyQVWTYIABvvxwLsvt9V12gHxXiJXaRZOv0zsXnbqS/w2NicnLDoNPW9Eg4u38f76y2lAzxliC/JubOs=
+	t=1725025745; cv=none; b=Y/T7F6gpAs+VHT/7J2+F4DRgdz6asDgC9fSUxr6PFioOZy2WaovW6G228fqgfiz85mGIY0HhzEE958ovceGyGxSVXqWEQ9s2zE3kwdXPUlzLVP5b5/Ag1jhkTygEXfSTRJOatDWeEM7XqoNeaXlbI6DzkTktgyhB8w1C1IQP1tk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725020918; c=relaxed/simple;
-	bh=Opnwb8ctcrOwbj/Tjm56rcEz/sTQlIM0nnVacBUd35w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pq5dZaPNQbjfT72/K2h/WaNsGIMXuhFBTWzwvPfB0AM06EZtSb5B627UmIcH+uZLscHqUrUexGVgFWilJM5V5LyWFVil6XZUA66lWl+/C4kb0rPdbDn1ZBezQ4a9nyIBS9khrgy4hF9j+GnNnE/tWi62FOEOu/4c2MhrYaQWGYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=d9TqjrGB; arc=none smtp.client-ip=209.85.215.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-6e7b121be30so1077443a12.1
-        for <linux-arch@vger.kernel.org>; Fri, 30 Aug 2024 05:28:35 -0700 (PDT)
+	s=arc-20240116; t=1725025745; c=relaxed/simple;
+	bh=9UIDn+zRPs2233Ey/wAks0cZbBTGHswiziDn3qxUXnM=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=phoG+yNjyGFPmn8hf8YyUlyfOW4Ozj6UOZNFkdC8/x214/SQgHogzZsbyQUOlpd0zbXN8EKVYx2F8laTAgXCjtv7YZEaka9UZHIyMehzi+46YuB8YZV+Q5JlgAKozkpEUkUUCvXi2DsRrUAZlRYZ+agORq5Mmqn/YEj5Ogzau/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=PDuS2BzV; arc=none smtp.client-ip=209.85.167.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-lf1-f68.google.com with SMTP id 2adb3069b0e04-534366c194fso1763535e87.0
+        for <linux-arch@vger.kernel.org>; Fri, 30 Aug 2024 06:49:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1725020914; x=1725625714; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=+Th+qMhq2cjKD5Fgl9CwGa0jsfXUC4j54BPAyCg1LNE=;
-        b=d9TqjrGBqlj6VLmAiwjZlV5MgIRXrksaF4WC6qHsbuTF4AfqCbQgqfug3Atn2H6Y/7
-         iwGTmoJ+W9o9XFlJimz9gARcfPQxymFf4EUHvgrPadtDm7OAk+GySq2rzp4CZas20/y0
-         pMdG4ci2oW3s6iHtgAe5nlKkj1NO2UTsm0iIhKgTZl+AOgsAgKw7dAwTNdI0EApF2HyP
-         UJbFtkr9M52jC3Prk0J54Bde/hnlrVL1h+dfyt6FfmJd8ygnZmmcpJm2Ns6ttCbSamhx
-         YfAwyulPwFM8R392mhjEjjgfR4SEji1GjqFEfKVBAxWz+VkIbuvq8UTgZ3/a3SxJfZGe
-         GIdw==
+        d=suse.com; s=google; t=1725025740; x=1725630540; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=j3jLKDfv9G/F1hAhLjOmCz8z3HV7wHNtLsdpyhwWqPo=;
+        b=PDuS2BzVfxchFZMyByYEGwyuKZRjmhIXr67oiuwxqdKame7MEY5qOATnH7IHb4aj5L
+         wZqp7f/HQM0dLneKyaI59P7vc1CQkk3LrS1VkLcP1wKl2+rUYGy25E9rk//nFbjECcLU
+         nBuq+WDwXFhX9xuE2pc4Mss7xDR0rkj19UTOrdDIRxugvhvpT1caR5U3IX+03n9DiSmU
+         NNqX24qYfExAirqGvjVbRf7wGzi3kY5d0SLDm8v23nCoygrzGQKdPpZQJwib2qAKWTAr
+         TiphpUpBag8TxY7oqY6eWNA6WCToqXe93d3MEYu6T3zzLr/fjx0oK/ATibKJHJ6Osx+P
+         YrjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725020914; x=1725625714;
-        h=content-transfer-encoding:in-reply-to:organization:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1725025740; x=1725630540;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+Th+qMhq2cjKD5Fgl9CwGa0jsfXUC4j54BPAyCg1LNE=;
-        b=i4Tb5IdQHpImolxU+7/soAk7zvPwqJJul36/FuGZAa/QJidyqfETOSER4YtrtwIhG1
-         r6v1R95q0gSt6fDxrMk6mAaCLp9bYcTtg7u8rHparm/EwXWziCQ8v2TyTWKjkcCQJuP7
-         mq9Jat1sRNIZ1Cf4WYYOxw7wtbHBEmtRIWanrhWsxP5IOr20+REb36UiTqWm2nPdeOae
-         ifdM6oToZEhYwPF8T99/xjNiA0PYmoT398DeZ6zq3gFC0WSi5fczBPnyxtk5U1L4uidk
-         8FcdrD4k1e8Kg69305Wdio8ACWohxMa6JJwXmBQUiCalDmwuzIpzpPdywCI5/ASPUPG4
-         rhJA==
-X-Forwarded-Encrypted: i=1; AJvYcCWINm2D06y8OpIryYBaBXQrdaM9PgjvxWlwOTBQ5ouB6gAGeUZ4kfuaz7q+447Ui6KH8f3wvqAyGfvz@vger.kernel.org
-X-Gm-Message-State: AOJu0YzGfE1kBs73sDJ60I0fo3FW9VgvEsnGHSZyca1+AHxgkfDBlAZM
-	XbLnb0neZyRi1YoVF2UvCA7kukV8kuBLbcsXs+MR+ka66DL2PHr7etDDzfQrW0A=
-X-Google-Smtp-Source: AGHT+IEazpT/G9Ys/cyIunCDC3GmOL+Gq93gFc/l4nyYeE3H/9oBxt8gcNz85EZJ4yfFnjFx3Xbi/A==
-X-Received: by 2002:a17:90a:67cc:b0:2cf:2bf6:b030 with SMTP id 98e67ed59e1d1-2d8564cb306mr6449970a91.33.1725020914449;
-        Fri, 30 Aug 2024 05:28:34 -0700 (PDT)
-Received: from ?IPV6:2804:1b3:a7c3:4c2c:97d:de0:fa17:dbc6? ([2804:1b3:a7c3:4c2c:97d:de0:fa17:dbc6])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d8445d5a9fsm6245377a91.3.2024.08.30.05.28.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Aug 2024 05:28:34 -0700 (PDT)
-Message-ID: <963afe11-fd48-4fe9-be70-2e202f836e34@linaro.org>
-Date: Fri, 30 Aug 2024 09:28:29 -0300
+        bh=j3jLKDfv9G/F1hAhLjOmCz8z3HV7wHNtLsdpyhwWqPo=;
+        b=ayotcNZKW89CZIOjWxdXhF+SecX5HjVhXHFlbsu1pVcq6qQ+57moIF0wl3O7W24tpN
+         CO14stBdL45ur7QFzAOZNVxkAigCcdLZAcPqv0G4+WqbGEanArbgnfHE1lxC0VL+ftUm
+         1ujU686kcxEc1FzKdoCqZgQaBoQNef3BqNXHFi2dcmyswYIps011hMh/5FHZpSfwxH0S
+         pz+wfJZNVh8R7nk9caHtDW2yJDlenAHJZ5YSDx0KzfIfTnXJKrZ2bEQo63zIw4NWIa5C
+         dE4kh+5oT275lOjSrBZ7Lt+8BhA5XRetTxNramlYp/Csts1c3MJQAVeCP2OVi0Jlrj/+
+         DZzg==
+X-Forwarded-Encrypted: i=1; AJvYcCVMOviKPrdeesZ2goxb0+A+AUnBsWnrYUIwVxEUS8tXitqwMKhrtjouJcqdUOwxZhADs3gJXB7Cpgau@vger.kernel.org
+X-Gm-Message-State: AOJu0YxINDglHsh43TLiPNT71msg41ztu49hDShEbWPxqDLZ6bLVrOB0
+	QH9rD4Qg9uB3vCPBI9n0/qX/elWrLHAVsMM25AKuRzfWneT3Up0SYy/9n7cg258=
+X-Google-Smtp-Source: AGHT+IGg9M4Rtabw2zg4qqU8iskz42/lxuttsuGGIjXpiaV4rVUp+9fovEZeeF3bRXArRqzbS0RuVw==
+X-Received: by 2002:a05:6512:3b8c:b0:52f:159:2dc5 with SMTP id 2adb3069b0e04-53546ba9fd4mr1622050e87.42.1725025739816;
+        Fri, 30 Aug 2024 06:48:59 -0700 (PDT)
+Received: from localhost (host-80-182-198-72.pool80182.interbusiness.it. [80.182.198.72])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a8988feb072sm217505266b.28.2024.08.30.06.48.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Aug 2024 06:48:59 -0700 (PDT)
+From: Andrea della Porta <andrea.porta@suse.com>
+X-Google-Original-From: Andrea della Porta <aporta@suse.de>
+Date: Fri, 30 Aug 2024 15:49:04 +0200
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Andrea della Porta <andrea.porta@suse.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Derek Kiernan <derek.kiernan@amd.com>,
+	Dragan Cvetic <dragan.cvetic@amd.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Saravana Kannan <saravanak@google.com>,
+	Bjorn Helgaas <bhelgaas@google.com>, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org, netdev@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+	Lee Jones <lee@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+	Stefan Wahren <wahrenst@gmx.net>
+Subject: Re: [PATCH 08/11] misc: rp1: RaspberryPi RP1 misc driver
+Message-ID: <ZtHN0B8VEGZFXs95@apocalypse>
+References: <cover.1724159867.git.andrea.porta@suse.com>
+ <5954e4dccc0e158cf434d2c281ad57120538409b.1724159867.git.andrea.porta@suse.com>
+ <lrv7cpbt2n7eidog5ydhrbyo5se5l2j23n7ljxvojclnhykqs2@nfeu4wpi2d76>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] aarch64: vdso: Wire up getrandom() vDSO implementation
-To: Will Deacon <will@kernel.org>
-Cc: "Jason A . Donenfeld" <Jason@zx2c4.com>, Theodore Ts'o <tytso@mit.edu>,
- linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
- Catalin Marinas <catalin.marinas@arm.com>,
- Thomas Gleixner <tglx@linutronix.de>, Eric Biggers <ebiggers@kernel.org>,
- Christophe Leroy <christophe.leroy@csgroup.eu>, ardb@kernel.org
-References: <20240829201728.2825-1-adhemerval.zanella@linaro.org>
- <20240830114645.GA8219@willie-the-truck>
-Content-Language: en-US
-From: Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>
-Organization: Linaro
-In-Reply-To: <20240830114645.GA8219@willie-the-truck>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <lrv7cpbt2n7eidog5ydhrbyo5se5l2j23n7ljxvojclnhykqs2@nfeu4wpi2d76>
 
+Hi Krzysztof,
 
-
-On 30/08/24 08:46, Will Deacon wrote:
-> On Thu, Aug 29, 2024 at 08:17:14PM +0000, Adhemerval Zanella wrote:
->> Hook up the generic vDSO implementation to the aarch64 vDSO data page.
->> The _vdso_rng_data required data is placed within the _vdso_data vvar
->> page, by using a offset larger than the vdso_data.
->>
->> The vDSO function requires a ChaCha20 implementation that does not
->> write to the stack, and that can do an entire ChaCha20 permutation.
->> The one provided is based on the current chacha-neon-core.S and uses NEON
->> on the permute operation. The fallback for chips that do not support
->> NEON issues the syscall.
->>
->> This also passes the vdso_test_chacha test along with
->> vdso_test_getrandom. The vdso_test_getrandom bench-single result on
->> Neoverse-N1 shows:
->>
->>    vdso: 25000000 times in 0.746506464 seconds
->>    libc: 25000000 times in 8.849179444 seconds
->> syscall: 25000000 times in 8.818726425 seconds
->>
->> Changes from v1:
->> - Fixed style issues and typos.
->> - Added fallback for systems without NEON support.
->> - Avoid use of non-volatile vector registers in neon chacha20.
->> - Use c-getrandom-y for vgetrandom.c.
->> - Fixed TIMENS vdso_rnd_data access.
->>
->> Signed-off-by: Adhemerval Zanella <adhemerval.zanella@linaro.org>
->> ---
->>  arch/arm64/Kconfig                         |   1 +
->>  arch/arm64/include/asm/vdso.h              |   6 +
->>  arch/arm64/include/asm/vdso/getrandom.h    |  49 ++++++
->>  arch/arm64/include/asm/vdso/vsyscall.h     |  10 ++
->>  arch/arm64/kernel/vdso.c                   |   6 -
->>  arch/arm64/kernel/vdso/Makefile            |  11 +-
->>  arch/arm64/kernel/vdso/vdso                |   1 +
->>  arch/arm64/kernel/vdso/vdso.lds.S          |   4 +
->>  arch/arm64/kernel/vdso/vgetrandom-chacha.S | 168 +++++++++++++++++++++
->>  arch/arm64/kernel/vdso/vgetrandom.c        |  15 ++
->>  lib/vdso/getrandom.c                       |   1 +
->>  tools/arch/arm64/vdso                      |   1 +
->>  tools/include/linux/compiler.h             |   4 +
->>  tools/testing/selftests/vDSO/Makefile      |   5 +-
+On 10:38 Wed 21 Aug     , Krzysztof Kozlowski wrote:
+> On Tue, Aug 20, 2024 at 04:36:10PM +0200, Andrea della Porta wrote:
+> > The RaspberryPi RP1 is ia PCI multi function device containing
+> > peripherals ranging from Ethernet to USB controller, I2C, SPI
+> > and others.
+> > Implement a bare minimum driver to operate the RP1, leveraging
+> > actual OF based driver implementations for the on-borad peripherals
+> > by loading a devicetree overlay during driver probe.
+> > The peripherals are accessed by mapping MMIO registers starting
+> > from PCI BAR1 region.
+> > As a minimum driver, the peripherals will not be added to the
+> > dtbo here, but in following patches.
+> > 
+> > Link: https://datasheets.raspberrypi.com/rp1/rp1-peripherals.pdf
+> > Signed-off-by: Andrea della Porta <andrea.porta@suse.com>
+> > ---
+> >  MAINTAINERS                           |   2 +
+> >  arch/arm64/boot/dts/broadcom/rp1.dtso | 152 ++++++++++++
 > 
-> Please can you split the tools/ changes into a separate patch?
+> Do not mix DTS with drivers.
+> 
+> These MUST be separate.
 
-Alright, it would require to be after the inclusion on vgetrandom-chacha.S
-otherwise vdso_test_chacha will not build on aarch64. 
+Separating the dtso from the driver in two different patches would mean
+that the dtso patch would be ordered before the driver one. This is because
+the driver embeds the dtbo binary blob inside itself, at build time. So
+in order to build the driver, the dtso needs to be there also. This is not
+the standard approach used with 'normal' dtb/dtbo, where the dtb patch is
+ordered last wrt the driver it refers to.
+Are you sure you want to proceed in this way?
 
 > 
->>  14 files changed, 273 insertions(+), 9 deletions(-)
->>  create mode 100644 arch/arm64/include/asm/vdso/getrandom.h
->>  create mode 120000 arch/arm64/kernel/vdso/vdso
->>  create mode 100644 arch/arm64/kernel/vdso/vgetrandom-chacha.S
->>  create mode 100644 arch/arm64/kernel/vdso/vgetrandom.c
->>  create mode 120000 tools/arch/arm64/vdso
->>
->> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
->> index a2f8ff354ca6..7f7424d1b3b8 100644
->> --- a/arch/arm64/Kconfig
->> +++ b/arch/arm64/Kconfig
->> @@ -262,6 +262,7 @@ config ARM64
->>  	select TRACE_IRQFLAGS_NMI_SUPPORT
->>  	select HAVE_SOFTIRQ_ON_OWN_STACK
->>  	select USER_STACKTRACE_SUPPORT
->> +	select VDSO_GETRANDOM
->>  	help
->>  	  ARM 64-bit (AArch64) Linux support.
->>  
->> diff --git a/arch/arm64/include/asm/vdso.h b/arch/arm64/include/asm/vdso.h
->> index 4305995c8f82..18407b757c95 100644
->> --- a/arch/arm64/include/asm/vdso.h
->> +++ b/arch/arm64/include/asm/vdso.h
->> @@ -16,6 +16,12 @@
->>  
->>  #ifndef __ASSEMBLY__
->>  
->> +enum vvar_pages {
->> +	VVAR_DATA_PAGE_OFFSET,
->> +	VVAR_TIMENS_PAGE_OFFSET,
->> +	VVAR_NR_PAGES,
->> +};
->> +
->>  #include <generated/vdso-offsets.h>
->>  
->>  #define VDSO_SYMBOL(base, name)						   \
->> diff --git a/arch/arm64/include/asm/vdso/getrandom.h b/arch/arm64/include/asm/vdso/getrandom.h
->> new file mode 100644
->> index 000000000000..fca66ba49d4c
->> --- /dev/null
->> +++ b/arch/arm64/include/asm/vdso/getrandom.h
->> @@ -0,0 +1,49 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +
->> +#ifndef __ASM_VDSO_GETRANDOM_H
->> +#define __ASM_VDSO_GETRANDOM_H
->> +
->> +#ifndef __ASSEMBLY__
->> +
->> +#include <asm/vdso.h>
->> +#include <asm/unistd.h>
->> +#include <vdso/datapage.h>
->> +
->> +/**
->> + * getrandom_syscall - Invoke the getrandom() syscall.
->> + * @buffer:	Destination buffer to fill with random bytes.
->> + * @len:	Size of @buffer in bytes.
->> + * @flags:	Zero or more GRND_* flags.
->> + * Returns:	The number of random bytes written to @buffer, or a negative value indicating an error.
->> + */
->> +static __always_inline ssize_t getrandom_syscall(void *_buffer, size_t _len, unsigned int _flags)
->> +{
->> +	register void *buffer asm ("x0") = _buffer;
->> +	register size_t len asm ("x1") = _len;
->> +	register unsigned int flags asm ("x2") = _flags;
->> +	register long ret asm ("x0");
->> +	register long nr asm ("x8") = __NR_getrandom;
->> +
->> +	asm volatile(
->> +	"       svc #0\n"
->> +	: "=r" (ret)
->> +	: "r" (buffer), "r" (len), "r" (flags), "r" (nr)
->> +	: "memory");
->> +
->> +	return ret;
->> +}
->> +
->> +static __always_inline const struct vdso_rng_data *__arch_get_vdso_rng_data(void)
->> +{
->> +	/*
->> +	 * If a task belongs to a time namespace then a namespace the real
->> +	 * VVAR page is mapped with the VVAR_TIMENS_PAGE_OFFSET.
->> +	 */
+> >  drivers/misc/Kconfig                  |   1 +
+> >  drivers/misc/Makefile                 |   1 +
+> >  drivers/misc/rp1/Kconfig              |  20 ++
+> >  drivers/misc/rp1/Makefile             |   3 +
+> >  drivers/misc/rp1/rp1-pci.c            | 333 ++++++++++++++++++++++++++
+> >  drivers/misc/rp1/rp1-pci.dtso         |   8 +
+> >  drivers/pci/quirks.c                  |   1 +
+> >  include/linux/pci_ids.h               |   3 +
+> >  10 files changed, 524 insertions(+)
+> >  create mode 100644 arch/arm64/boot/dts/broadcom/rp1.dtso
+> >  create mode 100644 drivers/misc/rp1/Kconfig
+> >  create mode 100644 drivers/misc/rp1/Makefile
+> >  create mode 100644 drivers/misc/rp1/rp1-pci.c
+> >  create mode 100644 drivers/misc/rp1/rp1-pci.dtso
+> > 
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 67f460c36ea1..1359538b76e8 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -19119,9 +19119,11 @@ F:	include/uapi/linux/media/raspberrypi/
+> >  RASPBERRY PI RP1 PCI DRIVER
+> >  M:	Andrea della Porta <andrea.porta@suse.com>
+> >  S:	Maintained
+> > +F:	arch/arm64/boot/dts/broadcom/rp1.dtso
+> >  F:	Documentation/devicetree/bindings/clock/raspberrypi,rp1-clocks.yaml
+> >  F:	Documentation/devicetree/bindings/pinctrl/raspberrypi,rp1-gpio.yaml
+> >  F:	drivers/clk/clk-rp1.c
+> > +F:	drivers/misc/rp1/
+> >  F:	drivers/pinctrl/pinctrl-rp1.c
+> >  F:	include/dt-bindings/clock/rp1.h
+> >  F:	include/dt-bindings/misc/rp1.h
+> > diff --git a/arch/arm64/boot/dts/broadcom/rp1.dtso b/arch/arm64/boot/dts/broadcom/rp1.dtso
+> > new file mode 100644
+> > index 000000000000..d80178a278ee
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/broadcom/rp1.dtso
+> > @@ -0,0 +1,152 @@
+> > +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> > +
+> > +#include <dt-bindings/gpio/gpio.h>
+> > +#include <dt-bindings/interrupt-controller/irq.h>
+> > +#include <dt-bindings/clock/rp1.h>
+> > +#include <dt-bindings/misc/rp1.h>
+> > +
+> > +/dts-v1/;
+> > +/plugin/;
+> > +
+> > +/ {
+> > +	fragment@0 {
+> > +		target-path="";
+> > +		__overlay__ {
+> > +			#address-cells = <3>;
+> > +			#size-cells = <2>;
+> > +
+> > +			rp1: rp1@0 {
+> > +				compatible = "simple-bus";
+> > +				#address-cells = <2>;
+> > +				#size-cells = <2>;
+> > +				interrupt-controller;
+> > +				interrupt-parent = <&rp1>;
+> > +				#interrupt-cells = <2>;
+> > +
+> > +				// ranges and dma-ranges must be provided by the includer
+> > +				ranges = <0xc0 0x40000000
+> > +					  0x01/*0x02000000*/ 0x00 0x00000000
+> > +					  0x00 0x00400000>;
 > 
-> This comment doesn't make sense.
+> Are you 100% sure you do not have here dtc W=1 warnings?
 
-I reprased it from arch/arm64/kernel/vdso.c (vvar_fault). Did I confuse something?
+the W=1 warnings are:
 
-This is indeed required, otherwise the getrandom vDSO on a timens does not
-see the generation counter with correctly and fallback to syscall.
+arch/arm64/boot/dts/broadcom/rp1.dtso:37.24-42.7: Warning (simple_bus_reg): /fragment@0/__overlay__/rp1@0/clk_xosc: missing or empty reg/ranges property
+arch/arm64/boot/dts/broadcom/rp1.dtso:44.26-49.7: Warning (simple_bus_reg): /fragment@0/__overlay__/rp1@0/macb_pclk: missing or empty reg/ranges property
+arch/arm64/boot/dts/broadcom/rp1.dtso:51.26-56.7: Warning (simple_bus_reg): /fragment@0/__overlay__/rp1@0/macb_hclk: missing or empty reg/ranges property
+arch/arm64/boot/dts/broadcom/rp1.dtso:14.15-173.5: Warning (avoid_unnecessary_addr_size): /fragment@0/__overlay__: unnecessary #address-cells/#size-cells without "ranges", "dma-ranges" or child "reg" property
+
+I don't see anything related to the ranges line you mentioned.
 
 > 
->> +	if (IS_ENABLED(CONFIG_TIME_NS) && _vdso_data->clock_mode == VDSO_CLOCKMODE_TIMENS)
->> +		return (void*)&_vdso_rng_data + VVAR_TIMENS_PAGE_OFFSET * PAGE_SIZE;
->> +	return &_vdso_rng_data;
->> +}
->> +
->> +#endif /* !__ASSEMBLY__ */
->> +
->> +#endif /* __ASM_VDSO_GETRANDOM_H */
->> diff --git a/arch/arm64/include/asm/vdso/vsyscall.h b/arch/arm64/include/asm/vdso/vsyscall.h
->> index f94b1457c117..2a87f0e1b144 100644
->> --- a/arch/arm64/include/asm/vdso/vsyscall.h
->> +++ b/arch/arm64/include/asm/vdso/vsyscall.h
->> @@ -2,8 +2,11 @@
->>  #ifndef __ASM_VDSO_VSYSCALL_H
->>  #define __ASM_VDSO_VSYSCALL_H
->>  
->> +#define __VDSO_RND_DATA_OFFSET  480
+> > +
+> > +				dma-ranges =
+> > +				// inbound RP1 1x_xxxxxxxx -> PCIe 1x_xxxxxxxx
+> > +					     <0x10 0x00000000
+> > +					      0x43000000 0x10 0x00000000
+> > +					      0x10 0x00000000>;
+> > +
+> > +				clk_xosc: clk_xosc {
 > 
-> Why 480?
-
-I used the x86 strategy to place the the vdso_rng_data and the vdso_data,
-but I could not make to fit the vdso_data generation with the linker
-script machinery required for vdso.lds.S (I think Jason faced a similar
-issue with x86).
-
-I will try to see if I can refactor in a subsequent patch the vdso_data 
-definition to place the vdso_rng_data in a common struct.  It does not 
-help that it seems know that each architecture is placing the 
-vdso_rng_data in a different place.
-
-> 
->> +
->>  #ifndef __ASSEMBLY__
->>  
->> +#include <asm/vdso.h>
->>  #include <linux/timekeeper_internal.h>
->>  #include <vdso/datapage.h>
->>  
->> @@ -21,6 +24,13 @@ struct vdso_data *__arm64_get_k_vdso_data(void)
->>  }
->>  #define __arch_get_k_vdso_data __arm64_get_k_vdso_data
->>  
->> +static __always_inline
->> +struct vdso_rng_data *__arm64_get_k_vdso_rnd_data(void)
->> +{
->> +	return (void*)vdso_data + __VDSO_RND_DATA_OFFSET;
->> +}
->> +#define __arch_get_k_vdso_rng_data __arm64_get_k_vdso_rnd_data
->> +
->>  static __always_inline
->>  void __arm64_update_vsyscall(struct vdso_data *vdata, struct timekeeper *tk)
->>  {
->> diff --git a/arch/arm64/kernel/vdso.c b/arch/arm64/kernel/vdso.c
->> index 89b6e7840002..706c9c3a7a50 100644
->> --- a/arch/arm64/kernel/vdso.c
->> +++ b/arch/arm64/kernel/vdso.c
->> @@ -34,12 +34,6 @@ enum vdso_abi {
->>  	VDSO_ABI_AA32,
->>  };
->>  
->> -enum vvar_pages {
->> -	VVAR_DATA_PAGE_OFFSET,
->> -	VVAR_TIMENS_PAGE_OFFSET,
->> -	VVAR_NR_PAGES,
->> -};
->> -
->>  struct vdso_abi_info {
->>  	const char *name;
->>  	const char *vdso_code_start;
->> diff --git a/arch/arm64/kernel/vdso/Makefile b/arch/arm64/kernel/vdso/Makefile
->> index d11da6461278..50246a38d6bd 100644
->> --- a/arch/arm64/kernel/vdso/Makefile
->> +++ b/arch/arm64/kernel/vdso/Makefile
->> @@ -9,7 +9,7 @@
->>  # Include the generic Makefile to check the built vdso.
->>  include $(srctree)/lib/vdso/Makefile
->>  
->> -obj-vdso := vgettimeofday.o note.o sigreturn.o
->> +obj-vdso := vgettimeofday.o note.o sigreturn.o vgetrandom.o vgetrandom-chacha.o
->>  
->>  # Build rules
->>  targets := $(obj-vdso) vdso.so vdso.so.dbg
->> @@ -40,13 +40,22 @@ CFLAGS_REMOVE_vgettimeofday.o = $(CC_FLAGS_FTRACE) -Os $(CC_FLAGS_SCS) \
->>  				$(RANDSTRUCT_CFLAGS) $(GCC_PLUGINS_CFLAGS) \
->>  				$(CC_FLAGS_LTO) $(CC_FLAGS_CFI) \
->>  				-Wmissing-prototypes -Wmissing-declarations
->> +CFLAGS_REMOVE_vgetrandom.o = $(CC_FLAGS_FTRACE) -Os $(CC_FLAGS_SCS) \
->> +			     $(RANDSTRUCT_CFLAGS) $(GCC_PLUGINS_CFLAGS) \
->> +			     $(CC_FLAGS_LTO) $(CC_FLAGS_CFI) \
->> +			     -Wmissing-prototypes -Wmissing-declarations
->>  
->>  CFLAGS_vgettimeofday.o = -O2 -mcmodel=tiny -fasynchronous-unwind-tables
->> +CFLAGS_vgetrandom.o = -O2 -mcmodel=tiny -fasynchronous-unwind-tables
-> 
-> You're using identical CFLAGS_ and CFLAGS_REMOVE_ definitions for
-> vgettimeofdat.o and vgetrandom.o. Please refactor this so that they use
-> common definitions.
+> Nope, switch to DTS coding style.
 
 Ack.
 
 > 
->> diff --git a/arch/arm64/kernel/vdso/vdso b/arch/arm64/kernel/vdso/vdso
->> new file mode 120000
->> index 000000000000..233c7a26f6e5
->> --- /dev/null
->> +++ b/arch/arm64/kernel/vdso/vdso
->> @@ -0,0 +1 @@
->> +../../../arch/arm64/kernel/vdso
->> \ No newline at end of file
->> diff --git a/arch/arm64/kernel/vdso/vdso.lds.S b/arch/arm64/kernel/vdso/vdso.lds.S
->> index 45354f2ddf70..f204a9ddc833 100644
->> --- a/arch/arm64/kernel/vdso/vdso.lds.S
->> +++ b/arch/arm64/kernel/vdso/vdso.lds.S
->> @@ -11,7 +11,9 @@
->>  #include <linux/const.h>
->>  #include <asm/page.h>
->>  #include <asm/vdso.h>
->> +#include <asm/vdso/vsyscall.h>
->>  #include <asm-generic/vmlinux.lds.h>
->> +#include <vdso/datapage.h>
->>  
->>  OUTPUT_FORMAT("elf64-littleaarch64", "elf64-bigaarch64", "elf64-littleaarch64")
->>  OUTPUT_ARCH(aarch64)
->> @@ -19,6 +21,7 @@ OUTPUT_ARCH(aarch64)
->>  SECTIONS
->>  {
->>  	PROVIDE(_vdso_data = . - __VVAR_PAGES * PAGE_SIZE);
->> +	PROVIDE(_vdso_rng_data = _vdso_data + __VDSO_RND_DATA_OFFSET);
->>  #ifdef CONFIG_TIME_NS
->>  	PROVIDE(_timens_data = _vdso_data + PAGE_SIZE);
->>  #endif
->> @@ -102,6 +105,7 @@ VERSION
->>  		__kernel_gettimeofday;
->>  		__kernel_clock_gettime;
->>  		__kernel_clock_getres;
->> +		__kernel_getrandom;
->>  	local: *;
->>  	};
->>  }
->> diff --git a/arch/arm64/kernel/vdso/vgetrandom-chacha.S b/arch/arm64/kernel/vdso/vgetrandom-chacha.S
->> new file mode 100644
->> index 000000000000..9ebf12a09c65
->> --- /dev/null
->> +++ b/arch/arm64/kernel/vdso/vgetrandom-chacha.S
->> @@ -0,0 +1,168 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +
->> +#include <linux/linkage.h>
->> +#include <asm/cache.h>
->> +#include <asm/assembler.h>
->> +
->> +	.text
->> +
->> +#define state0		v0
->> +#define state1		v1
->> +#define state2		v2
->> +#define state3		v3
->> +#define copy0		v4
->> +#define copy1		v5
->> +#define copy2		v6
->> +#define copy3		v7
->> +#define copy3_d		d7
->> +#define one_d		d16
->> +#define one_q		q16
->> +#define tmp		v17
->> +#define rot8		v18
->> +
->> +/*
->> + * ARM64 ChaCha20 implementation meant for vDSO.  Produces a given positive
->> + * number of blocks of output with nonce 0, taking an input key and 8-bytes
->> + * counter.  Importantly does not spill to the stack.
->> + *
->> + * void __arch_chacha20_blocks_nostack(uint8_t *dst_bytes,
->> + *				       const uint8_t *key,
->> + * 				       uint32_t *counter,
->> + *				       size_t nblocks)
->> + *
->> + * 	x0: output bytes
->> + *	x1: 32-byte key input
->> + *	x2: 8-byte counter input/output
->> + *	x3: number of 64-byte block to write to output
->> + */
->> +SYM_FUNC_START(__arch_chacha20_blocks_nostack)
+> > +					compatible = "fixed-clock";
+> > +					#clock-cells = <0>;
+> > +					clock-output-names = "xosc";
+> > +					clock-frequency = <50000000>;
+> > +				};
+> > +
+> > +				macb_pclk: macb_pclk {
+> > +					compatible = "fixed-clock";
+> > +					#clock-cells = <0>;
+> > +					clock-output-names = "pclk";
+> > +					clock-frequency = <200000000>;
+> > +				};
+> > +
+> > +				macb_hclk: macb_hclk {
+> > +					compatible = "fixed-clock";
+> > +					#clock-cells = <0>;
+> > +					clock-output-names = "hclk";
+> > +					clock-frequency = <200000000>;
+> > +				};
+> > +
+> > +				rp1_clocks: clocks@c040018000 {
 > 
-> Is there any way we can reuse the existing code in
-> crypto/chacha-neon-core.S for this? It looks to my untrained eye like
-> this is an arbitrarily different implementation to what we already have.
-> 
->> +	/* copy0 = "expand 32-byte k" */
->> +	adr_l		x8, CTES
->> +	ld1		{copy0.4s}, [x8]
->> +	/* copy1,copy2 = key */
->> +	ld1		{ copy1.4s, copy2.4s }, [x1]
->> +	/* copy3 = counter || zero nonce  */
->> +	ldr		copy3_d, [x2]
->> +
->> +	adr_l		x8, ONE
->> +	ldr		one_q, [x8]
->> +
->> +	adr_l		x10, ROT8
->> +	ld1		{rot8.4s}, [x10]
->> +.Lblock:
->> +	/* copy state to auxiliary vectors for the final add after the permute.  */
->> +	mov		state0.16b, copy0.16b
->> +	mov		state1.16b, copy1.16b
->> +	mov		state2.16b, copy2.16b
->> +	mov		state3.16b, copy3.16b
->> +
->> +	mov		w4, 20
->> +.Lpermute:
->> +	/*
->> +	 * Permute one 64-byte block where the state matrix is stored in the four NEON
->> +	 * registers state0-state3.  It performs matrix operations on four words in parallel,
->> +	 * but requires shuffling to rearrange the words after each round.
->> +	 */
->> +
->> +.Ldoubleround:
->> +	/* state0 += state1, state3 = rotl32(state3 ^ state0, 16) */
->> +	add		state0.4s, state0.4s, state1.4s
->> +	eor		state3.16b, state3.16b, state0.16b
->> +	rev32		state3.8h, state3.8h
->> +
->> +	/* state2 += state3, state1 = rotl32(state1 ^ state2, 12) */
->> +	add		state2.4s, state2.4s, state3.4s
->> +	eor		tmp.16b, state1.16b, state2.16b
->> +	shl		state1.4s, tmp.4s, #12
->> +	sri		state1.4s, tmp.4s, #20
->> +
->> +	/* state0 += state1, state3 = rotl32(state3 ^ state0, 8) */
->> +	add		state0.4s, state0.4s, state1.4s
->> +	eor		state3.16b, state3.16b, state0.16b
->> +	tbl		state3.16b, {state3.16b}, rot8.16b
->> +
->> +	/* state2 += state3, state1 = rotl32(state1 ^ state2, 7) */
->> +	add		state2.4s, state2.4s, state3.4s
->> +	eor		tmp.16b, state1.16b, state2.16b
->> +	shl		state1.4s, tmp.4s, #7
->> +	sri		state1.4s, tmp.4s, #25
->> +
->> +	/* state1[0,1,2,3] = state1[1,2,3,0] */
->> +	ext		state1.16b, state1.16b, state1.16b, #4
->> +	/* state2[0,1,2,3] = state2[2,3,0,1] */
->> +	ext		state2.16b, state2.16b, state2.16b, #8
->> +	/* state3[0,1,2,3] = state3[1,2,3,0] */
->> +	ext		state3.16b, state3.16b, state3.16b, #12
->> +
->> +	/* state0 += state1, state3 = rotl32(state3 ^ state0, 16) */
->> +	add		state0.4s, state0.4s, state1.4s
->> +	eor		state3.16b, state3.16b, state0.16b
->> +	rev32		state3.8h, state3.8h
->> +
->> +	/* state2 += state3, state1 = rotl32(state1 ^ state2, 12) */
->> +	add		state2.4s, state2.4s, state3.4s
->> +	eor		tmp.16b, state1.16b, state2.16b
->> +	shl		state1.4s, tmp.4s, #12
->> +	sri		state1.4s, tmp.4s, #20
->> +
->> +	/* state0 += state1, state3 = rotl32(state3 ^ state0, 8) */
->> +	add		state0.4s, state0.4s, state1.4s
->> +	eor		state3.16b, state3.16b, state0.16b
->> +	tbl		state3.16b, {state3.16b}, rot8.16b
->> +
->> +	/* state2 += state3, state1 = rotl32(state1 ^ state2, 7) */
->> +	add		state2.4s, state2.4s, state3.4s
->> +	eor		tmp.16b, state1.16b, state2.16b
->> +	shl		state1.4s, tmp.4s, #7
->> +	sri		state1.4s, tmp.4s, #25
->> +
->> +	/* state1[0,1,2,3] = state1[3,0,1,2] */
->> +	ext		state1.16b, state1.16b, state1.16b, #12
->> +	/* state2[0,1,2,3] = state2[2,3,0,1] */
->> +	ext		state2.16b, state2.16b, state2.16b, #8
->> +	/* state3[0,1,2,3] = state3[1,2,3,0] */
->> +	ext		state3.16b, state3.16b, state3.16b, #4
->> +
->> +	subs		w4, w4, #2
->> +	b.ne		.Ldoubleround
->> +
->> +	/* output0 = state0 + state0 */
->> +	add		state0.4s, state0.4s, copy0.4s
->> +	/* output1 = state1 + state1 */
->> +	add		state1.4s, state1.4s, copy1.4s
->> +	/* output2 = state2 + state2 */
->> +	add		state2.4s, state2.4s, copy2.4s
->> +	/* output2 = state3 + state3 */
->> +	add		state3.4s, state3.4s, copy3.4s
->> +	st1		{ state0.4s - state3.4s }, [x0]
->> +
->> +	/* ++copy3.counter */
->> +	add		copy3_d, copy3_d, one_d
->> +
->> +	/* output += 64, --nblocks */
->> +	add		x0, x0, 64
->> +	subs		x3, x3, #1
->> +	b.ne		.Lblock
->> +
->> +	/* counter = copy3.counter */
->> +	str		copy3_d, [x2]
->> +
->> +	/* Zero out the potentially sensitive regs, in case nothing uses these again. */
->> +	eor		state0.16b, state0.16b, state0.16b
->> +	eor		state1.16b, state1.16b, state1.16b
->> +	eor		state2.16b, state2.16b, state2.16b
->> +	eor		state3.16b, state3.16b, state3.16b
->> +	eor		copy1.16b, copy1.16b, copy1.16b
->> +	eor		copy2.16b, copy2.16b, copy2.16b
->> +	ret
->> +SYM_FUNC_END(__arch_chacha20_blocks_nostack)
->> +
->> +        .section        ".rodata", "a", %progbits
->> +        .align          L1_CACHE_SHIFT
->> +
->> +CTES:	.word		1634760805, 857760878, 	2036477234, 1797285236
->> +ONE:    .xword		1, 0
->> +ROT8:	.word		0x02010003, 0x06050407, 0x0a09080b, 0x0e0d0c0f
->> +
->> +emit_aarch64_feature_1_and
->> diff --git a/arch/arm64/kernel/vdso/vgetrandom.c b/arch/arm64/kernel/vdso/vgetrandom.c
->> new file mode 100644
->> index 000000000000..0833d25f3121
->> --- /dev/null
->> +++ b/arch/arm64/kernel/vdso/vgetrandom.c
->> @@ -0,0 +1,15 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +
->> +typeof(__cvdso_getrandom) __kernel_getrandom;
->> +
->> +ssize_t __kernel_getrandom(void *buffer, size_t len, unsigned int flags, void *opaque_state, size_t opaque_len)
->> +{
->> +	asm goto (
->> +	ALTERNATIVE("b %[fallback]", "nop", RM64_HAS_FPSIMD) : : : : fallback);
-> 
-> "RM64_HAS_FPSIMD". Are you sure you've tested this?
+> Why do you mix MMIO with non-MMIO nodes? This really does not look
+> correct.
+>
 
-I am not sure why build has not failed (I double test and it does not generate
-a wrong relocation) or why vdso does seems to have the nop in the expected place.
-I have changed to ARM64_HAS_FPSIMD.
+Right. This is already under discussion here:
+https://lore.kernel.org/all/ZtBzis5CzQMm8loh@apocalypse/
+
+IIUC you proposed to instantiate the non-MMIO nodes (the three clocks) by
+using CLK_OF_DECLARE.
+ 
+> > +					compatible = "raspberrypi,rp1-clocks";
+> > +					#clock-cells = <1>;
+> > +					reg = <0xc0 0x40018000 0x0 0x10038>;
+> 
+> Wrong order of properties - see DTS coding style.
+
+Ack.
+
+Many thanks,
+Andrea
 
 > 
->> +	return __cvdso_getrandom(buffer, len, flags, opaque_state, opaque_len);
->> +
->> +fallback:
->> +	if (unlikely(opaque_len == ~0UL && !buffer && !len && !flags))
->> +		return -ENOSYS;
->> +	return getrandom_syscall(buffer, len, flags);
->> +}
->> diff --git a/lib/vdso/getrandom.c b/lib/vdso/getrandom.c
->> index 938ca539aaa6..7c9711248d9b 100644
->> --- a/lib/vdso/getrandom.c
->> +++ b/lib/vdso/getrandom.c
->> @@ -5,6 +5,7 @@
->>  
->>  #include <linux/array_size.h>
->>  #include <linux/minmax.h>
->> +#include <linux/mm.h>
->>  #include <vdso/datapage.h>
->>  #include <vdso/getrandom.h>
->>  #include <vdso/unaligned.h>
+> > +					clocks = <&clk_xosc>;
+> > +					clock-names = "xosc";
 > 
-> Looks like this should be a separate change?
-
-
-It is required so arm64 can use  c-getrandom-y, otherwise vgetrandom.o build
-fails:
-
-CC      arch/arm64/kernel/vdso/vgetrandom.o
-In file included from ./include/uapi/linux/mman.h:5,
-                 from /mnt/projects/linux/linux-git/lib/vdso/getrandom.c:13,
-                 from <command-line>:
-./arch/arm64/include/asm/mman.h: In function ‘arch_calc_vm_prot_bits’:
-./arch/arm64/include/asm/mman.h:14:13: error: implicit declaration of function ‘system_supports_bti’ [-Werror=implicit-function-declaration]
-   14 |         if (system_supports_bti() && (prot & PROT_BTI))
-      |             ^~~~~~~~~~~~~~~~~~~
-./arch/arm64/include/asm/mman.h:15:24: error: ‘VM_ARM64_BTI’ undeclared (first use in this function); did you mean ‘ARM64_BTI’?
-   15 |                 ret |= VM_ARM64_BTI;
-      |                        ^~~~~~~~~~~~
-      |                        ARM64_BTI
-./arch/arm64/include/asm/mman.h:15:24: note: each undeclared identifier is reported only once for each function it appears in
-./arch/arm64/include/asm/mman.h:17:13: error: implicit declaration of function ‘system_supports_mte’ [-Werror=implicit-function-declaration]
-   17 |         if (system_supports_mte() && (prot & PROT_MTE))
-      |             ^~~~~~~~~~~~~~~~~~~
-./arch/arm64/include/asm/mman.h:18:24: error: ‘VM_MTE’ undeclared (first use in this function)
-   18 |                 ret |= VM_MTE;
-      |                        ^~~~~~
-./arch/arm64/include/asm/mman.h: In function ‘arch_calc_vm_flag_bits’:
-./arch/arm64/include/asm/mman.h:32:24: error: ‘VM_MTE_ALLOWED’ undeclared (first use in this function)
-   32 |                 return VM_MTE_ALLOWED;
-      |                        ^~~~~~~~~~~~~~
-./arch/arm64/include/asm/mman.h: In function ‘arch_validate_flags’:
-./arch/arm64/include/asm/mman.h:59:29: error: ‘VM_MTE’ undeclared (first use in this function)
-   59 |         return !(vm_flags & VM_MTE) || (vm_flags & VM_MTE_ALLOWED);
-      |                             ^~~~~~
-./arch/arm64/include/asm/mman.h:59:52: error: ‘VM_MTE_ALLOWED’ undeclared (first use in this function)
-   59 |         return !(vm_flags & VM_MTE) || (vm_flags & VM_MTE_ALLOWED);
-      |                                                    ^~~~~~~~~~~~~~
-arch/arm64/kernel/vdso/vgetrandom.c: In function ‘__kernel_getrandom’:
-arch/arm64/kernel/vdso/vgetrandom.c:18:25: error: ‘ENOSYS’ undeclared (first use in this function); did you mean ‘ENOSPC’?
-   18 |                 return -ENOSYS;
-      |                         ^~~~~~
-      |                         ENOSPC
-cc1: some warnings being treated as errors
-
-I can move to a different patch, but this is really tied to this patch.
+> Best regards,
+> Krzysztof
+> 
 
