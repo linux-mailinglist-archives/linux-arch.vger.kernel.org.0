@@ -1,174 +1,192 @@
-Return-Path: <linux-arch+bounces-6905-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6906-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD309968241
-	for <lists+linux-arch@lfdr.de>; Mon,  2 Sep 2024 10:44:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BB6596827E
+	for <lists+linux-arch@lfdr.de>; Mon,  2 Sep 2024 10:56:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EF8781C2216D
-	for <lists+linux-arch@lfdr.de>; Mon,  2 Sep 2024 08:44:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3B7FA1C223CB
+	for <lists+linux-arch@lfdr.de>; Mon,  2 Sep 2024 08:56:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6668E186E33;
-	Mon,  2 Sep 2024 08:44:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4281187335;
+	Mon,  2 Sep 2024 08:55:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="PKU9ECjX"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="WCJxxXNk";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="JvYWLP3R"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout4-smtp.messagingengine.com (fout4-smtp.messagingengine.com [103.168.172.147])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9236D186601
-	for <linux-arch@vger.kernel.org>; Mon,  2 Sep 2024 08:44:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF148186E39;
+	Mon,  2 Sep 2024 08:55:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.147
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725266661; cv=none; b=Mg7Ou11tGCC08NZHtu9pFUAtS/I3JO7CUDGUEajCzmV7S0S2MG9Okd/Fuxhl4ktpDVPN0j+HzRWI8CUHIQaJoLqjR1R9gmZ1oLwdVGXX5IA+BSY4sqtGDOzymTjtD5QinXyUKPAypbSfo10IBu9UVeummq759epz4LbNqQjivqs=
+	t=1725267352; cv=none; b=pTQPjoqBPSHHsAUHhYmKk4J/zExquBout8Wni2md7hjrUvEKtjD50G4JbV5JqZ3evBtQkloV26jWoDF1fDV2GhqTZzUF3/kSEMy8LiKPJD0fsLsU4yAoJvQpVxBXqMlgSt5aoZsKPZx4hfEHnKEkrdKXryyv6sHKicK2fuw11pk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725266661; c=relaxed/simple;
-	bh=LN6JNZFcXNQtWOPufPtp0JNJPUrJ2pZL1p27gLGF2IY=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MfJbR9w6y1CYNueeW8jGPOReNSRuT/J3kBKrpIkHFU2rJVeZeN37O/OrRCcI72M5QHbpXZpLJd73TRpkwfjoPu87uCcq0OBajw8ZiiQKE5GQMr/QVDTKvfRzBSdQrdyvfbxuAv6jN1oX2UKHSQ0n8dfSyDNJ8X2dJLU48FtFTtg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=PKU9ECjX; arc=none smtp.client-ip=209.85.208.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5c0ba8c7c17so1681678a12.3
-        for <linux-arch@vger.kernel.org>; Mon, 02 Sep 2024 01:44:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1725266658; x=1725871458; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=DtFvUOlggwnSeLAOJpUbgPD+rPcosq7JSEShF0DBVDE=;
-        b=PKU9ECjXqYYYZd+EgOrpddJ7gjntAgBch69LAvTaqeFsw/Q5HhZhNQvQE1K0NuWGyQ
-         A+euPMUH4u3HLf5Zs3977HYTTkEb/yr6+ybtIyGCusMspUNCnGbyvZi1Iw8tj614pE9M
-         phwuW8Q7xz94M9p0CGn801SqEQjMDnGt6olrqMwp2HtMkROcXM+286Qy22K3FL6/ovaB
-         y3trBB0hRJYg2XJsxKZ4tGlG+BuqPld8jnSmeYZbFC2NJkBJ9QOrGyUj/C5qLtAFaS/+
-         J8OFkINSiiniHyrale2zfpDIfWY2/FKfKYXcM2ps9ukDgXNYcTpC74ZSH+5GFvUfXaFf
-         Feew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725266658; x=1725871458;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DtFvUOlggwnSeLAOJpUbgPD+rPcosq7JSEShF0DBVDE=;
-        b=Hu0nRG3/CrRljfFYmaq1JuX5Kqf5hwj7WDyJmSIYnkvuAa+ewz1vCK0lSoUK3nyLLq
-         llqo+gYyRvcOkjzfp73BgkHN9PxEnxWVYL90NqFCdM3EyiKEc2DW4dOi5ZFA1yApQhrg
-         GkwEAQjsrozgv5Fr2XUFBSyYc4m5z/sIi5y/6KoSxGEZinsJi2puC8nhrj/Bs0KL7HJ5
-         8gxdccLqhMoSgoyFlOvCFTT8gcBUyUSEORGZXHLInU/SY3SA2G3uRocwDpPIhKdUYGXw
-         k4ltnt4rbvORcvOb/2mQ2UFT9HjzFOEIxdrmE1e7Bk8OU0IyPxE9m8UZvSALVkx3zUyk
-         1CCg==
-X-Forwarded-Encrypted: i=1; AJvYcCVbQl19/TD+JP5Yy16ERvPCzIid3zeEVgZR6xTDY4lO9ypKAKo1mIVphBv+40nP9fKmCuZalREulPgB@vger.kernel.org
-X-Gm-Message-State: AOJu0YxJ6lfeq81dFREe8g0HVKO42X6wtOgMcAPt/rrt2xvxPNaIb6Nk
-	wcQ53MDmeQ7RPIPZWUHflVghgwVLESpuXVMwhofJf5vADIji9eFxZxK4O3k+ErA=
-X-Google-Smtp-Source: AGHT+IG98mGI6ewy00GdXcZOqWLixBDXOEPu/wYdqw/JNaxYhNTMsSkYAS1b2LLsz7REgS8Iyi90kg==
-X-Received: by 2002:a05:6402:40ca:b0:5be:9bc5:f6b4 with SMTP id 4fb4d7f45d1cf-5c21ed315fbmr13546644a12.8.1725266657478;
-        Mon, 02 Sep 2024 01:44:17 -0700 (PDT)
-Received: from localhost (host-80-182-198-72.retail.telecomitalia.it. [80.182.198.72])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c226c7c1f7sm4978743a12.42.2024.09.02.01.44.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Sep 2024 01:44:17 -0700 (PDT)
-From: Andrea della Porta <andrea.porta@suse.com>
-X-Google-Original-From: Andrea della Porta <aporta@suse.de>
-Date: Mon, 2 Sep 2024 10:44:24 +0200
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Andrea della Porta <andrea.porta@suse.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Derek Kiernan <derek.kiernan@amd.com>,
-	Dragan Cvetic <dragan.cvetic@amd.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Saravana Kannan <saravanak@google.com>,
-	Bjorn Helgaas <bhelgaas@google.com>, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, netdev@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
-	Lee Jones <lee@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-	Stefan Wahren <wahrenst@gmx.net>
-Subject: Re: [PATCH 02/11] dt-bindings: pinctrl: Add RaspberryPi RP1
- gpio/pinctrl/pinmux bindings
-Message-ID: <ZtV66FOMJitMmtTv@apocalypse>
-References: <cover.1724159867.git.andrea.porta@suse.com>
- <82d57814075ed1bc76bf17bde124c5c83925ac59.1724159867.git.andrea.porta@suse.com>
- <5zlaxts46utk66k2n2uxeqr6umppfasnqoxhwdzah44hcmyfnp@euwjda6zk5rh>
- <ZtGdTjZPYtm3EGM0@apocalypse>
- <e05705c1-95dc-4d77-8a0d-8c2a785b0b05@kernel.org>
+	s=arc-20240116; t=1725267352; c=relaxed/simple;
+	bh=BsMRZ2X437PZQO1ciTfhruhMsAj9I0m3fSE6geobgtw=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=CQTMaAgt1tMflCdZalPVSaicf13otefYliWKJXAZfYWxt3CYvsn4//F9/Zx1+c6pamMHGjJE+qK+83oV6eXQJIaSA44Xu9galJOxUpzqCekeUihpUJVJKEN3+Xo4XY3s9CpzZ4NnbaCys87FdSez6xmGp+bmP2SBv9IiPnHTb4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=WCJxxXNk; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=JvYWLP3R; arc=none smtp.client-ip=103.168.172.147
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-04.internal (phl-compute-04.nyi.internal [10.202.2.44])
+	by mailfout.nyi.internal (Postfix) with ESMTP id CF70A13800A9;
+	Mon,  2 Sep 2024 04:55:49 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-04.internal (MEProxy); Mon, 02 Sep 2024 04:55:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1725267349;
+	 x=1725353749; bh=LF7xpMJNWj3ZriHPHEsj5u5MBL/vfCltp6iqjmEY5XQ=; b=
+	WCJxxXNkjKBvaXKlDicxYmZiCkivs/xh8EF0IZyc54kt0ZOWzilCuljgNCUe/eOE
+	kkJhY/2vZXsrXsbJcexM1UhtwFMjUJillVSUstEuRoMGhjD/Q7cW4CfNHaYBK7ey
+	mB89omYgOo2bly2M0SBRFP4UFE0uI/2Wm5HMutNYWiX9WRZ2wuKZ+rbe7NPAbCK5
+	lQ6XcbLVUIhWhrb3bwEbmm+t9Qdo1r6H3F0jDztY31OrkMCsI8G5J+AX2vijrsrG
+	3M0FPtH9FESOiCRT0MrPqlpPUQj2t6GlKa8e+CJvOUKQvTk+Gb0YdnPrqCFTEb7b
+	/Hs0+5PRNJFRqNRJmBW65Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1725267349; x=
+	1725353749; bh=LF7xpMJNWj3ZriHPHEsj5u5MBL/vfCltp6iqjmEY5XQ=; b=J
+	vYWLP3R6cWafAkSZmMItfGBr0wVqo4qGTfJqQGx+hf/riaN/E7OZA5Int4Zg8aib
+	pwabqPE+1bho+JM7SnNcJLIpMw3+Nsw9AT275r/N6BFrsQEDgo9CiIvU9/M4hrEA
+	4nKYz6v+wtdKl47Mw+YpWTVGqVzmjTNNPIdQaMfeOy8z5hnhUYg5NcqfTpoyymj5
+	sKDoFbCmVqh2jKtFda1rXbUZ9lusw4DTz0aSPQ0/rdQdYCVex+zubqvA3IqAC4je
+	0RSqOoNLAnR60Q38OldQ1MiMaHXJMr6MESe2+MFmfw0dPYK81PRKUSW9p9qWto3X
+	iYMqnqN3qs0QmC5VOxCag==
+X-ME-Sender: <xms:lX3VZqv7SM2Rc2Rs4sfSvRwiD-bRCtSRs2UD-JNfsyI79WU3BV3oHw>
+    <xme:lX3VZvflyI2TtHFnqJbdW9b2MliflvvMMJsspU7Ea8ZD7lvThs2KB53iuo7rSU1xg
+    JmQXPVSEVvsqxdCznw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudehfedguddtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddt
+    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
+    guvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefg
+    gfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepvddv
+    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopeguihgvthhmrghrrdgvghhgvghmrg
+    hnnhesrghrmhdrtghomhdprhgtphhtthhopehmrghrkhdrrhhuthhlrghnugesrghrmhdr
+    tghomhdprhgtphhtthhopegthihphhgrrhestgihphhhrghrrdgtohhmpdhrtghpthhtoh
+    eprhhoshhtvgguthesghhoohgumhhishdrohhrghdprhgtphhtthhopegsshgvghgrlhhl
+    sehgohhoghhlvgdrtghomhdprhgtphhtthhopehpvghtvghriiesihhnfhhrrgguvggrug
+    drohhrghdprhgtphhtthhopegsrhgruhhnvghrsehkvghrnhgvlhdrohhrghdprhgtphht
+    thhopehkvggvsheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhhuhgrhheskhgvrh
+    hnvghlrdhorhhg
+X-ME-Proxy: <xmx:lX3VZlwsOgbUBtnEeR80dCbOpc_esF6F_IlwvTxzd-5bKUBxncmo3w>
+    <xmx:lX3VZlP3UtxIBxk0_0nQFl1NhjqmAXOzhMTwAWStfvuryQTP2QZqhg>
+    <xmx:lX3VZq-kT5DyyXyjwFmIeyCUr2Ygwiw3XweX9afDuf3t863YKxGusQ>
+    <xmx:lX3VZtX0GBRv2ZfrJy-b6x5UkxilddUNe9nRwwn6bP6PpTVhxfbONg>
+    <xmx:lX3VZgkDgKbamK4UOILT-fXFQeW3l2De0D4NVfqsOgkPPCRJ2v8ahhwW>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 06AE52220083; Mon,  2 Sep 2024 04:55:48 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e05705c1-95dc-4d77-8a0d-8c2a785b0b05@kernel.org>
+Date: Mon, 02 Sep 2024 08:55:28 +0000
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Aleksa Sarai" <cyphar@cyphar.com>, "Ingo Molnar" <mingo@redhat.com>,
+ "Peter Zijlstra" <peterz@infradead.org>,
+ "Juri Lelli" <juri.lelli@redhat.com>,
+ "Vincent Guittot" <vincent.guittot@linaro.org>,
+ "Dietmar Eggemann" <dietmar.eggemann@arm.com>,
+ "Steven Rostedt" <rostedt@goodmis.org>,
+ "Benjamin Segall" <bsegall@google.com>, "Mel Gorman" <mgorman@suse.de>,
+ "Valentin Schneider" <vschneid@redhat.com>,
+ "Alexander Viro" <viro@zeniv.linux.org.uk>,
+ "Christian Brauner" <brauner@kernel.org>, "Jan Kara" <jack@suse.cz>,
+ shuah <shuah@kernel.org>
+Cc: "Kees Cook" <kees@kernel.org>, "Florian Weimer" <fweimer@redhat.com>,
+ "Mark Rutland" <mark.rutland@arm.com>, linux-kernel@vger.kernel.org,
+ linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ Linux-Arch <linux-arch@vger.kernel.org>, linux-kselftest@vger.kernel.org
+Message-Id: <319c0da6-3d9c-4b45-a14c-07c5bbc3afb7@app.fastmail.com>
+In-Reply-To: 
+ <20240902-extensible-structs-check_fields-v1-1-545e93ede2f2@cyphar.com>
+References: 
+ <20240902-extensible-structs-check_fields-v1-0-545e93ede2f2@cyphar.com>
+ <20240902-extensible-structs-check_fields-v1-1-545e93ede2f2@cyphar.com>
+Subject: Re: [PATCH RFC 1/8] uaccess: add copy_struct_to_user helper
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Hi Krzysztof,
+On Mon, Sep 2, 2024, at 07:06, Aleksa Sarai wrote:
+> This is based on copy_struct_from_user(), but there is one additional
+> case to consider when creating a syscall that returns an
+> extensible-struct to userspace -- how should data in the struct that
+> cannot fit into the userspace struct be handled (ksize > usize)?
+>
+> There are three possibilies:
+>
+>  1. The interface is like sched_getattr(2), where new information will
+>     be silently not provided to userspace. This is probably what most
+>     interfaces will want to do, as it provides the most possible
+>     backwards-compatibility.
+>
+>  2. The interface is like lsm_list_modules(2), where you want to return
+>     an error like -EMSGSIZE if not providing information could result in
+>     the userspace program making a serious mistake (such as one that
+>     could lead to a security problem) or if you want to provide some
+>     flag to userspace so they know that they are missing some
+>     information.
 
-On 13:46 Fri 30 Aug     , Krzysztof Kozlowski wrote:
-> On 30/08/2024 12:22, Andrea della Porta wrote:
-> > Hi Krzysztof,
-> > 
-> 
-> ...
-> 
-> >>> +#define RP1_USBHOST0_AXIS_BASE 0x200000
-> >>> +#define RP1_USBHOST1_AXIS_BASE 0x300000
-> >>> +#define RP1_EXAC_BASE 0x400000
-> >>> +
-> >>> +/* Interrupts */
-> >>> +
-> >>> +#define RP1_INT_IO_BANK0 0
-> >>> +#define RP1_INT_IO_BANK1 1
-> >>
-> >> Also no, interrupt numbers are not considered bindings. That's too much
-> >> churn. Otherwise, please point me to driver code using the define
-> >> (directly! that's the requirement).
-> > 
-> > As mentioned above, RP1_INT_END is used in rp1-pci.c. To get rid of all those
-> 
-> Number of interrupts is not a binding, either. Does not appear in the DTS.
+I'm not sure if EMSGSIZE is the best choice here, my feeling is that
+the kernel should instead try to behave the same way as an older kernel
+that did not know about the extra fields:
 
-Ack.
+- if the structure has always been longer than the provided buffer,
+  -EMSGSIZE should likely have been returned all along. If older
+  kernels just provided a short buffer, changing it now is an ABI
+  change that would only affect intentionally broken callers, and
+  I think keeping the behavior unchanged is more consistent.
 
-> 
-> > macroes from dt-binding would mean to hardcode the interrupt number in both
-> > the binding example and in dtso, from this:
-> > 
-> > interrupts = <RP1_INT_IO_BANK0 IRQ_TYPE_LEVEL_HIGH>,
-> >              <RP1_INT_IO_BANK1 IRQ_TYPE_LEVEL_HIGH>,
-> >              <RP1_INT_IO_BANK2 IRQ_TYPE_LEVEL_HIGH>;
-> > 
-> > to this:
-> > 
-> > interrupts = <0 IRQ_TYPE_LEVEL_HIGH>,
-> > 	     <1 IRQ_TYPE_LEVEL_HIGH>,
-> >              <2 IRQ_TYPE_LEVEL_HIGH>;
-> > 
-> > is this what you are proposing?
-> 
-> Yes, just like every DTS does. I think the hard-coding of numbers is not
-> a problem.
+- if an extra flag was added along with the larger buffer size,
+  the old kernel would likely have rejected the new flag with -EINVAL,
+  so I think returning the same thing for userspace built against
+  the old kernel headers is more consistent.
 
-Ack.
 
-Regards,
-Andrea
+> +static __always_inline __must_check int
+> +copy_struct_to_user(void __user *dst, size_t usize, const void *src,
+> +		    size_t ksize, bool *ignored_trailing)
 
-> 
-> Best regards,
-> Krzysztof
-> 
+This feels like the kind of function that doesn't need to be inline
+at all and could be moved to lib/usercopy.c instead. It should clearly
+stay in the same place as copy_struct_from_user(), but we could move
+that as well.
+
+> +{
+> +	size_t size = min(ksize, usize);
+> +	size_t rest = max(ksize, usize) - size;
+> +
+> +	/* Double check if ksize is larger than a known object size. */
+> +	if (WARN_ON_ONCE(ksize > __builtin_object_size(src, 1)))
+> +		return -E2BIG;
+
+I guess the __builtin_object_size() check is the reason for making
+it __always_inline, but that could be done in a trivial inline
+wrapper around the extern function.  If ksize is always expected
+to be a constant for all callers, the check could even become a
+compile-time check instead of a WARN_ON_ONCE() that feels wrong
+here: if there is a code path where this can get triggered, there
+is clearly a kernel bug, but the only way to find out is to have
+a userspace caller that triggers the code path.
+
+Again, the same code is already in copy_struct_from_user(), so
+this is not something you are adding but rather something we
+may want to change for both.
+
+      Arnd
 
