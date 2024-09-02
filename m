@@ -1,146 +1,152 @@
-Return-Path: <linux-arch+bounces-6909-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6910-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8957E96835B
-	for <lists+linux-arch@lfdr.de>; Mon,  2 Sep 2024 11:34:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89D089686C9
+	for <lists+linux-arch@lfdr.de>; Mon,  2 Sep 2024 13:55:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 422D7281F62
-	for <lists+linux-arch@lfdr.de>; Mon,  2 Sep 2024 09:34:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 564851C22229
+	for <lists+linux-arch@lfdr.de>; Mon,  2 Sep 2024 11:55:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81E741D319C;
-	Mon,  2 Sep 2024 09:33:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD5EF1D6DC9;
+	Mon,  2 Sep 2024 11:55:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="XwhWPDX8"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="0cQML09U";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="lkIJ4uXa"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D6991D2F79
-	for <linux-arch@vger.kernel.org>; Mon,  2 Sep 2024 09:33:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DDD41D6C73;
+	Mon,  2 Sep 2024 11:55:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725269638; cv=none; b=J66IxxGLzg4cgY3mj8z6MTshvkNExv+KzJHC3w2BUoQjDH3ZTZGQ+ZWV32B6Y+ndgsGs6912x3D0yDRQlesza02jXnOLQta9xI/fuqnktOPaA9QUfSDMaL6P5vFOPH2wmpkPeVpzP72plcZ05s/ZLT1qNbnVzKunJpX/9ouMXwY=
+	t=1725278105; cv=none; b=uuE8zD23fRzfOfJKR+GNhw/fWZlevUZwPby/JWgfYn+ttGOU2Ks8ohwyRhliSt20/eQl4t0L7YFpKK555BTjRYFkK5TRK5IwfzmQvwur/lRW0Kb1v2FUGvKTG0Nypi0tUeOl8k2vZILUa4hxKJkKaiMlADFTFEXxvjh2j1n4mdU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725269638; c=relaxed/simple;
-	bh=bZT6HOFefTCtK8dJDH5XgBal9zoVpEOw5ZS27xXJrBw=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Cylz7cpabf+fwTVBzHkwg1mO1hNEvkP3/Z23Hz/ycAG2jV7b3SEVtuYWf3V2k63NB5X3s+IxMOFYKIuTWT663W1uyn2REhQQwr/JN/wTjtpI1vFwRWKMiCk6wwSerQyLa0gq5sWtS1RhwACt0nRD8jRzdQtmtjXBFXlILpPClWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=XwhWPDX8; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a83597ce5beso646712366b.1
-        for <linux-arch@vger.kernel.org>; Mon, 02 Sep 2024 02:33:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1725269635; x=1725874435; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=nkFfwghHSavbjYo+VJPUeYMN2TlcRh+j2R34rUyvbNY=;
-        b=XwhWPDX8jDvrKTPDva8jFo1mIstNKJ+KKz71PfS3MtcQeLxeml9Q+OajUJ+06327j/
-         jdVLQf2odYjxixUQf5X8EgRpw2usche70C4PtzsaYFk85k91ypUWcZ0x8zMNATRlBnnU
-         cmKnsRDcBX6l5w4pvahJdOc/TJ104e19SXvB8hC6QiKr/8Y96/ot2vgiEJBXPqN2UTlk
-         isRGM1OiJiS3Hweqp1yvUvXIugM57DoMB20gVoJEgu1nluhvF2zjVqVh8l/8Tskdanm8
-         UZ+wlOK1U0mgTBpRXZmslX0qiuXcft5gZGR7SvBRPrTN2Srnt9hD1eXk2wgzIk2fOty8
-         PRgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725269635; x=1725874435;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nkFfwghHSavbjYo+VJPUeYMN2TlcRh+j2R34rUyvbNY=;
-        b=Tje4TqTulqoT399ZlIaAaZ02jK+yabdKdZlTxXZRfogkBJZiZkGZWViLmVCBdObPte
-         ctUsEebn+snbL13nwoPcmnAEQqhaBiWjie3RAsFtQOaY8pcjqv+bFVHqStNCMKdDOREZ
-         1EQVKyCPBipCJm8CEKsw+8abUXMw7QOCRXKwkv6SCGMISzFHhGAFhZh0j9NDwD5TWPav
-         MQ3hwTkKY+dtxwdndstRXrtuJjvlB2RJyNkXfx6tffVrBCErGSCYYmzMADswLSAV6zZC
-         3zlL6ptnXYGrUTDqer2/UelyAc2MHklyYffjZQ6SZvTVwTmuwYcMWNdg17wZwsRYFTAc
-         5Ezw==
-X-Forwarded-Encrypted: i=1; AJvYcCXRO78zKDD544J/mY9JivkEmuVNPzTucuo02p16J6011hQx9TrfG5n8+sgQgWP2jGw52vSl47hXcg2m@vger.kernel.org
-X-Gm-Message-State: AOJu0YxkSstpmUqM6x1+I+vbk1dEjKKehH59raK9misBULdzFwOaV1o0
-	Xku/EjVBYJmfBCWbkztcUdUiaA2wpJEvq5hFVVia4MmvivIad1yaikQqYbezUWQ=
-X-Google-Smtp-Source: AGHT+IFzqMMMEekpBj1FaMcTXT8G69ZzPIWqB+7+/4FijlOwcga3oDJHGPe2vbWjoVRgbBwsvahR5w==
-X-Received: by 2002:a17:906:d7c8:b0:a86:9fac:6939 with SMTP id a640c23a62f3a-a89a29f3862mr1013061366b.30.1725269634232;
-        Mon, 02 Sep 2024 02:33:54 -0700 (PDT)
-Received: from localhost (host-80-182-198-72.retail.telecomitalia.it. [80.182.198.72])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a89892220e5sm527704366b.195.2024.09.02.02.33.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Sep 2024 02:33:53 -0700 (PDT)
-From: Andrea della Porta <andrea.porta@suse.com>
-X-Google-Original-From: Andrea della Porta <aporta@suse.de>
-Date: Mon, 2 Sep 2024 11:34:01 +0200
-To: Rob Herring <robh@kernel.org>
-Cc: Stefan Wahren <wahrenst@gmx.net>,
-	Andrea della Porta <andrea.porta@suse.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Derek Kiernan <derek.kiernan@amd.com>,
-	Dragan Cvetic <dragan.cvetic@amd.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Saravana Kannan <saravanak@google.com>,
-	Bjorn Helgaas <bhelgaas@google.com>, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, netdev@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
-	Lee Jones <lee@kernel.org>, Andrew Lunn <andrew@lunn.ch>
-Subject: Re: [PATCH 08/11] misc: rp1: RaspberryPi RP1 misc driver
-Message-ID: <ZtWGiXUsWZOVAXRv@apocalypse>
-References: <cover.1724159867.git.andrea.porta@suse.com>
- <5954e4dccc0e158cf434d2c281ad57120538409b.1724159867.git.andrea.porta@suse.com>
- <98c570cb-c2ca-4816-9ca4-94033f7fb3fb@gmx.net>
- <ZshZ6yAmyFoiF5qu@apocalypse>
- <015a0dd9-7a13-45b7-971a-19775a6bdd04@gmx.net>
- <Zsi5fNftL21vqJ3w@apocalypse>
- <CAL_Jsq+XSWEfNF-Dn3paf1io0vxTmfFNbPf7AfRWFf4XiOYkaw@mail.gmail.com>
+	s=arc-20240116; t=1725278105; c=relaxed/simple;
+	bh=oBHHMeHiBha/fXabSA6UGxz6iD01FGTyzpDAgaM2OBw=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=fz6FMhSvbyhwJzAROjY1zqImIsk+mBEzDxvCZOhv7fg5TwzVLNWAOG3ZcoSpcxVYNWkochH3gzbh9aYtOd+H3UMuwZebbQlETpi+6sxgA/+9rFJyHeQpYgUnp4ySw+RrQ6tIhyi3W61VyUnbiypq+PEV9rJSK31cNORG+7in0OU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=0cQML09U; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=lkIJ4uXa; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1725278102;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=sEgsc5hfwM3ia/sAR7ebt4TKSr5Pvzs7BQG/4VSVeIk=;
+	b=0cQML09UZi5csPnYHKk9/AcDeo9RrboR8toJS2MoJJxZtJjbZQO4er92aqP37pf3tF3KYo
+	B7CsiytHbvp5JAwoUmaIFKDOljiwHBgHKsSbpSFyGL77SHKiXzKbc7rIuOBbjjJletV5b5
+	+vQAtzPInUxUb96foq9u3SAulT2wCQ3fTM4ktJcOtpBTTJY2KF69ybew7eI9dU8mPwtkjc
+	l9h4jNj+5gzVVrr8YA+VUFwl6tCDu5tSbfP71X/5oRYupvqqqBsNyp4SSjpJhTvSMDK/Ov
+	VZTUa0/3lgBgYuGrbaZ6GPNdxKy1fsCZ6lWqX8xPEan5Agc2UzhfbDcontaS9Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1725278102;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=sEgsc5hfwM3ia/sAR7ebt4TKSr5Pvzs7BQG/4VSVeIk=;
+	b=lkIJ4uXaxPac8zjaUxEtoY+WcZYF7rh33Smg10Am/Xgg45lhdJBXhlNLzsejtGadHI4nEz
+	TuBxXTEcTfvmpXCA==
+To: "Christoph Lameter (Ampere)" <cl@gentwo.org>
+Cc: Christoph Lameter via B4 Relay <devnull+cl.gentwo.org@kernel.org>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>, Linus
+ Torvalds <torvalds@linux-foundation.org>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-arch@vger.kernel.org
+Subject: Re: [PATCH v2] Avoid memory barrier in read_seqcount() through load
+ acquire
+In-Reply-To: <b0543714-9176-f3a3-1ca9-55bbedf6a0c3@gentwo.org>
+References: <20240819-seq_optimize-v2-1-9d0da82b022f@gentwo.org>
+ <87ttfbeyqt.ffs@tglx> <b0543714-9176-f3a3-1ca9-55bbedf6a0c3@gentwo.org>
+Date: Mon, 02 Sep 2024 13:55:01 +0200
+Message-ID: <871q226zje.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAL_Jsq+XSWEfNF-Dn3paf1io0vxTmfFNbPf7AfRWFf4XiOYkaw@mail.gmail.com>
+Content-Type: text/plain
 
-Hi Rob,
+On Wed, Aug 28 2024 at 10:15, Christoph Lameter wrote:
+> On Fri, 23 Aug 2024, Thomas Gleixner wrote:
+>
+>> This all can be done without the extra copies of the counter
+>> accessors. Uncompiled patch below.
+>
+> Great. Thanks. Tried it too initially but could not make it work right.
+>
+> One thing that we also want is the use of the smp_cond_load_acquire to
+> have the cpu power down while waiting for a cacheline change.
+>
+> The code has several places where loops occur when the last bit is set in
+> the seqcount.
+>
+> We could use smp_cond_load_acquire in load_sequence() but what do we do
+> about the loops at the higher level? Also this does not sync with the lock
+> checking logic.
 
-On 13:27 Fri 30 Aug     , Rob Herring wrote:
-> On Fri, Aug 23, 2024 at 11:31 AM Andrea della Porta
-> <andrea.porta@suse.com> wrote:
-> >
-...
-> >
-> > Since u-boot is lacking support for RP1 we cannot really produce some test
-> > results to check the compatibility versus kernel dtb overlay but we can
-> > speculate a little bit about it. AFAIK u-boot would probably place the rp1
-> > node directly under its pcie@12000 node in DT while the dtb overlay will use
-> > dynamically created PCI endpoint node (dev@0) as parent for rp1 node.
-> 
-> u-boot could do that and it would not be following the 25+ year old
-> PCI bus bindings. Some things may be argued about as "Linux bindings",
-> but that isn't one of them.
+Come on. It's not rocket science to figure that out.
 
-Indeed. It was just speculation, not something I would bet on.
+Uncompiled delta patch below.
 
-Regards,
-Andrea
+Thanks,
 
-> 
-> Rob
+        tglx
+---
+--- a/include/linux/seqlock.h
++++ b/include/linux/seqlock.h
+@@ -23,6 +23,13 @@
+ 
+ #include <asm/processor.h>
+ 
++#ifdef CONFIG_ARCH_HAS_ACQUIRE_RELEASE
++# define USE_LOAD_ACQUIRE	true
++# define USE_COND_LOAD_ACQUIRE	!IS_ENABLED(CONFIG_PREEMPT_RT)
++#else
++# define USE_LOAD_ACQUIRE	false
++# define USE_COND_LOAD_ACQUIRE	false
++#endif
+ /*
+  * The seqlock seqcount_t interface does not prescribe a precise sequence of
+  * read begin/retry/end. For readers, typically there is a call to
+@@ -134,10 +141,13 @@ static inline void seqcount_lockdep_read
+ 
+ static __always_inline unsigned __seqprop_load_sequence(const seqcount_t *s, bool acquire)
+ {
+-	if (acquire && IS_ENABLED(CONFIG_ARCH_HAS_ACQUIRE_RELEASE))
+-		return smp_load_acquire(&s->sequence);
+-	else
++	if (!acquire || !USE_LOAD_ACQUIRE)
+ 		return READ_ONCE(s->sequence);
++
++	if (USE_COND_LOAD_ACQUIRE)
++		return smp_cond_load_acquire(&s->sequence, (s->sequence & 1) == 0);
++
++	return smp_load_acquire(&s->sequence);
+ }
+ 
+ /*
+@@ -283,8 +293,12 @@ SEQCOUNT_LOCKNAME(mutex,        struct m
+ ({									\
+ 	unsigned __seq;							\
+ 									\
+-	while ((__seq = seqprop_sequence(s, acquire)) & 1)		\
+-		cpu_relax();						\
++	if (acquire && USE_COND_LOAD_ACQUIRE) {				\
++		__seq = seqprop_sequence(s, acquire);			\
++	} else {							\
++		while ((__seq = seqprop_sequence(s, acquire)) & 1)	\
++			cpu_relax();					\
++	}								\
+ 									\
+ 	kcsan_atomic_next(KCSAN_SEQLOCK_REGION_MAX);			\
+ 	__seq;								\
 
