@@ -1,148 +1,141 @@
-Return-Path: <linux-arch+bounces-6922-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6923-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E9C2968B9D
-	for <lists+linux-arch@lfdr.de>; Mon,  2 Sep 2024 18:09:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2BA7968BEA
+	for <lists+linux-arch@lfdr.de>; Mon,  2 Sep 2024 18:19:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BFF5D1F22082
-	for <lists+linux-arch@lfdr.de>; Mon,  2 Sep 2024 16:09:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7D75B283AE5
+	for <lists+linux-arch@lfdr.de>; Mon,  2 Sep 2024 16:19:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 499871AB6CA;
-	Mon,  2 Sep 2024 16:08:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A7C7185B4C;
+	Mon,  2 Sep 2024 16:19:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b="cNNUa0S3"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="VMLpFaeW"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D27221A3023;
-	Mon,  2 Sep 2024 16:08:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D04F514BF86
+	for <linux-arch@vger.kernel.org>; Mon,  2 Sep 2024 16:19:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725293328; cv=none; b=CNy9z/tA1r3kJcJS6m28Yxm9qQG257u0TJNugY3e1TwF29S7Q8aQ/7A0eJ8omVFpP/GypbbvNVRq2TZlGCYfwXNI1bYF3WRptEv0hG/OQ/2OESBx/jCRENzmqkz9vSEm+FG2IKxVSSYYW4K8i9K9QMwXZhu/X2NmgXtyghsSZOQ=
+	t=1725293958; cv=none; b=jfgIMKUifZJwe5F5/hweOv7Dt0AZnlSmVyz9+PgIZXzrut/EIY7c1HiC5962RGw+7uGIUNaMwTmYLS05odIpitclqQDDxzmNkt1j3P/VgtsR7aQU1pchnHk1V+idgkBnDhSX6G2/Ha9VFDbTo3QayrxX+CZlA43W9P4NHB0DzfU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725293328; c=relaxed/simple;
-	bh=udCLYS03vFzY0pDP0VXNCARsSZDvZr7IQUhpJq1Ey+U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=onEpcdftinpaHWC3P4qCUBC+xIZNIgJx8GfFplOR+2F3I6qeYpx1xMCHMPoJw5K/w50qZfeJyR9mKFo24qMRD1p8xLWyq1k0q7dxyDTA4cW7H9GJuWiXhfaZidooy+NXF/xq69mtlkKKWkSknwZ4lJ8Sqv//mhXtPHne9fRlEYA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com; spf=pass smtp.mailfrom=cyphar.com; dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b=cNNUa0S3; arc=none smtp.client-ip=80.241.56.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cyphar.com
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:b231:465::1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4WyDFj5pVYz9t1t;
-	Mon,  2 Sep 2024 18:08:41 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cyphar.com; s=MBO0001;
-	t=1725293321;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bnehve9VjMnII0s4fDhfCcbW2zyjJe5jdh+Zfgbp8WE=;
-	b=cNNUa0S3Iq182pJH+ahbE5zzdZTntjXR7caJZLh8wQQK2pMWA6nS8n0jBn0sakWP6e24vw
-	kMyOlQqR1AxWzazQMHSjUF9doKKXWRwz+IPz2sGzN7DGBIJeXXfdFWb08AQ258ZuzGVxSu
-	LXj+t+WneeeH68MNhgSIWKr6buPAbu1oOas4jIHbs3z0YfK2pWm7Qq2XTxwRSrSOmJguNE
-	MsJF+6bK8BpckmA6qEi0k+NY/ft5i1QVgD4PPuwH0jflDz5he3FpP1GP9xto7ln1lyc6OH
-	XSKAzWs8jgM0FzNrXYZFk7E1i0JDtXbXUSB+OU3vohpz0STXzPCQx2Oqly+/7g==
-Date: Tue, 3 Sep 2024 02:08:26 +1000
-From: Aleksa Sarai <cyphar@cyphar.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Benjamin Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Valentin Schneider <vschneid@redhat.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, shuah <shuah@kernel.org>, 
-	Kees Cook <kees@kernel.org>, Florian Weimer <fweimer@redhat.com>, 
-	Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org, linux-api@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>, 
-	linux-kselftest@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH RFC 3/8] openat2: explicitly return -E2BIG for (usize >
- PAGE_SIZE)
-Message-ID: <20240902.160305-cuddly.doc.quaint.provider-RsRaXpw78cll@cyphar.com>
-References: <20240902-extensible-structs-check_fields-v1-0-545e93ede2f2@cyphar.com>
- <20240902-extensible-structs-check_fields-v1-3-545e93ede2f2@cyphar.com>
- <63193b87-7057-4ad0-aef2-fdb5d15138c3@app.fastmail.com>
+	s=arc-20240116; t=1725293958; c=relaxed/simple;
+	bh=hj3MXW4jHA3xVGuuoslii7RqqzICqV3FJUookSbQJhk=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=Pz6GWVM8835Co5p1q3INFmuu2QytCZJaEM1JhXrQ/n4ZLOckY8p7qSzkVKDCsiqNCkxRvfwiHCrqLJf52PKIWUuEw8hNpyBIVsDZDc98PrQgKobARxqRB4znVMTDKii3ZXXq4RcefYQCqeQnZXPerpbPhx1eQ3DP0RJjYq+8JLA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=VMLpFaeW; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-374bd059b12so1388102f8f.1
+        for <linux-arch@vger.kernel.org>; Mon, 02 Sep 2024 09:19:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1725293955; x=1725898755; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vkyMDCLd9ysLyI5RLQZB8Ncj/M1dFlma3LBWXQip8L8=;
+        b=VMLpFaeWOH0YhF8aRyUpWLTDcoFvgXUqODZwvDVmXLXRjjePn34lwH6zatVL8zZSko
+         vLSnUpjBiQ/YSnI47jt3fw3iK3o2PyslK2ebrzDa5Inwo1XxU9bQB67N+hxvaTYMK5jh
+         QhOwSaM1t3kbRikfIIAJoq6Jdc3k+aFaAljwsmrpRCswvrLMmUaxMRL6nlgGTP5MDWpO
+         lhbfsuMbtLAntAERYXdRgMYSN85xWr7ow1IidofWD87oqJ+L9jex1sM+GbCF1uroOcY5
+         IfelqjxHCovPOE4v6vUg/dNWXhLWzzKSCIPNUfB9zqwvI0meKl7iCTXQYFNfjyMSvHjA
+         kPgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725293955; x=1725898755;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vkyMDCLd9ysLyI5RLQZB8Ncj/M1dFlma3LBWXQip8L8=;
+        b=hSooIOtpa9JhFBt4tQD+gxby59nqs+YgFoSLZ+3d+cbusFOERhOo/X09H4W/6WUNeD
+         Z8AhKgWOi71/QcboKpdh5H0o+rEsUg3muDDyv7X33dCNdG6koxU03sFpGNmzFGimeDM+
+         zMsFLYyOuVx5GFvFGp96ushBstr1HLXbQ4GMafGlLpZCAhMqD238abN8N0YZA+hjwhxn
+         TApLynKcIjMV/FfgC50WZaWPQGE6QMrJmpS/d0tDYKg5tu03RcsDaUb8NEvBb64cCjtf
+         COWG4Ka2DBaJMdG96f88uxUD2sjPyeo51o6sKKI9yTtfe3fItwgUD5c1OwCxObn9Yb4Y
+         pheA==
+X-Forwarded-Encrypted: i=1; AJvYcCVLJR5ax6Lt/luo7f1yS+jPtcm1RkOIC02uMfupq6XhhDYo0GuIZyukdS5SeRLl5KT74w5EVQQdcuv/@vger.kernel.org
+X-Gm-Message-State: AOJu0YzG7afZIi3x5ey16yvCu+gA+NKmmxgGcbkTJfx585xEYBlBq/iW
+	XS7lrkK7ytKpIITP0EvrEsLOtR07NDZWz7eU5MdfQkOZoQl1buHjMLKf1JZDTcY=
+X-Google-Smtp-Source: AGHT+IHesPPhCPjvUcRq0H6NjoEXRkOvc8FVbv0aFUX8CIV5jvLI1kMhKeSNICFtv/lYiO8fmaQ/Fg==
+X-Received: by 2002:a05:6000:cf:b0:374:c101:32 with SMTP id ffacd0b85a97d-374c10100c3mr3726845f8f.46.1725293954927;
+        Mon, 02 Sep 2024 09:19:14 -0700 (PDT)
+Received: from ubuntu-vm.. (51-148-40-55.dsl.zen.co.uk. [51.148.40.55])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42bb6deb239sm145970065e9.5.2024.09.02.09.19.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Sep 2024 09:19:14 -0700 (PDT)
+From: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+To: "Jason A . Donenfeld" <Jason@zx2c4.com>,
+	Theodore Ts'o <tytso@mit.edu>,
+	linux-kernel@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-arch@vger.kernel.org,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: [PATCH v4 0/2] arm64: Implement getrandom() in vDSO
+Date: Mon,  2 Sep 2024 16:15:45 +0000
+Message-ID: <20240902161912.2751-1-adhemerval.zanella@linaro.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="3itig22h2tekijst"
-Content-Disposition: inline
-In-Reply-To: <63193b87-7057-4ad0-aef2-fdb5d15138c3@app.fastmail.com>
-X-Rspamd-Queue-Id: 4WyDFj5pVYz9t1t
+Content-Transfer-Encoding: 8bit
 
+Implement stack-less ChaCha20 and wire it with the generic vDSO
+getrandom code.  The first patch is Mark's fix to the alternatives
+system in the vDSO, while the the second is the actual vDSO work.
 
---3itig22h2tekijst
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Changes from v3:
+- Use alternative_has_cap_likely instead of ALTERNATIVE.
 
-On 2024-09-02, Arnd Bergmann <arnd@arndb.de> wrote:
-> On Mon, Sep 2, 2024, at 07:06, Aleksa Sarai wrote:
-> > While we do currently return -EFAULT in this case, it seems prudent to
-> > follow the behaviour of other syscalls like clone3. It seems quite
-> > unlikely that anyone depends on this error code being EFAULT, but we can
-> > always revert this if it turns out to be an issue.
->=20
-> Right, it's probably a good idea to have a limit there rather than
-> having a busy loop with a user-provided length when the only bound is
-> the available virtual memory.
->=20
-> >  	if (unlikely(usize < OPEN_HOW_SIZE_VER0))
-> >  		return -EINVAL;
-> > +	if (unlikely(usize > PAGE_SIZE))
-> > +		return -E2BIG;
-> >=20
->=20
-> Is PAGE_SIZE significant here? If there is a need to enforce a limit,
-> I would expect this to be the same regardless of kernel configuration,
-> since the structure layout is also independent of the configuration.
+Changes from v2:
+- Refactor Makefile to use same flags for vgettimeofday and
+  vgetrandom.
+- Removed rodata usage and fixed BE on vgetrandom-chacha.S.
 
-PAGE_SIZE is what clone3, perf_event_open, sched_setattr, bpf, etc all
-use. The idea was that PAGE_SIZE is the absolute limit of any reasonable
-extensible structure size because we are never going to have argument
-structures that are larger than a page (I think this was discussed in
-the original copy_struct_from_user() patchset thread in late 2019, but I
-can't find the reference at the moment.)
+Changes from v1:
+- Fixed style issues and typos.
+- Added fallback for systems without NEON support.
+- Avoid use of non-volatile vector registers in neon chacha20.
+- Use c-getrandom-y for vgetrandom.c.
+- Fixed TIMENS vdso_rnd_data access.
 
-I simply forgot to add this when I first submitted openat2, the original
-intention was to just match the other syscalls.
+Adhemerval Zanella (1):
+  arm64: vdso: wire up getrandom() vDSO implementation
 
-> Where is the current -EFAULT for users passing more than a page?
-> I only see it for reads beyond the VMA, but not e.g. when checking
-> terabytes of zero pages from an anonymous mapping.
+Mark Rutland (1):
+  arm64: alternative: make alternative_has_cap_likely() VDSO compatible
 
-I meant that we in practice return -EFAULT if you pass a really large
-size (because you end up running off the end of mapped memory). There is
-no explicit -EFAULT for large sizes, which is exactly the problem. :P
+ arch/arm64/Kconfig                          |   1 +
+ arch/arm64/include/asm/alternative-macros.h |   4 +
+ arch/arm64/include/asm/mman.h               |   6 +-
+ arch/arm64/include/asm/vdso.h               |   6 +
+ arch/arm64/include/asm/vdso/getrandom.h     |  50 ++++++
+ arch/arm64/include/asm/vdso/vsyscall.h      |  10 ++
+ arch/arm64/kernel/vdso.c                    |   6 -
+ arch/arm64/kernel/vdso/Makefile             |  25 ++-
+ arch/arm64/kernel/vdso/vdso                 |   1 +
+ arch/arm64/kernel/vdso/vdso.lds.S           |   4 +
+ arch/arm64/kernel/vdso/vgetrandom-chacha.S  | 178 ++++++++++++++++++++
+ arch/arm64/kernel/vdso/vgetrandom.c         |  15 ++
+ tools/arch/arm64/vdso                       |   1 +
+ tools/include/linux/compiler.h              |   4 +
+ tools/testing/selftests/vDSO/Makefile       |   3 +-
+ 15 files changed, 298 insertions(+), 16 deletions(-)
+ create mode 100644 arch/arm64/include/asm/vdso/getrandom.h
+ create mode 120000 arch/arm64/kernel/vdso/vdso
+ create mode 100644 arch/arm64/kernel/vdso/vgetrandom-chacha.S
+ create mode 100644 arch/arm64/kernel/vdso/vgetrandom.c
+ create mode 120000 tools/arch/arm64/vdso
 
->=20
->     Arnd
+-- 
+2.43.0
 
---=20
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-<https://www.cyphar.com/>
-
---3itig22h2tekijst
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQS2TklVsp+j1GPyqQYol/rSt+lEbwUCZtXi+gAKCRAol/rSt+lE
-b/CVAP4/UIPzUm7VHMdeZy4qfDO8V7V0ojxi/W5gHbAzDDpC9AEA+OOBAKvxJ0NQ
-ghIM9lErOJb+9JyKInzhgYT3v5S9KQ4=
-=pzTi
------END PGP SIGNATURE-----
-
---3itig22h2tekijst--
 
