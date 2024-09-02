@@ -1,163 +1,331 @@
-Return-Path: <linux-arch+bounces-6931-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6932-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6CC8968E6F
-	for <lists+linux-arch@lfdr.de>; Mon,  2 Sep 2024 21:24:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D8A7968EF8
+	for <lists+linux-arch@lfdr.de>; Mon,  2 Sep 2024 22:57:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3BEAD1F226EF
-	for <lists+linux-arch@lfdr.de>; Mon,  2 Sep 2024 19:24:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5836B1C22032
+	for <lists+linux-arch@lfdr.de>; Mon,  2 Sep 2024 20:57:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A08E1A3022;
-	Mon,  2 Sep 2024 19:24:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB71B1865E2;
+	Mon,  2 Sep 2024 20:57:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="kYS17uwl";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Fd0XsXTD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fMkMAQQf"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fout2-smtp.messagingengine.com (fout2-smtp.messagingengine.com [103.168.172.145])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD20F15CD49;
-	Mon,  2 Sep 2024 19:24:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.145
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8A6C1A4E6C;
+	Mon,  2 Sep 2024 20:57:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725305052; cv=none; b=i4xaxpwPihLGIaD74nDClBYLjILop9+FyBCTxaCSb+Txn8Lo+93qOoVku6O4f8/Q0s8liWSGPhCCHraObk22kYOLo22tA4oslr2m3GP6eTS0reOq2AgCBxkCiAcAtIxREEyQTZo9AFZXIjVsRgOjEQW/mo2H7hXlqjjNKdou3UA=
+	t=1725310666; cv=none; b=IfSdYVnv0hzijYO8SijkbJVxp3uHmx/N3g+xJEICZvp+thfokaSi+rLwHi3i62GtR0LxvwkFQiNAeWH1VjKK99cT/QLB8vCaSAuhz+0dWSQlOuD5IqUnVrE53b77rqyS/sGy1/bYJtuYv/TWqOCx07Iz/I7oyM+zDXna52X2cxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725305052; c=relaxed/simple;
-	bh=+6sndHk1cC890cCE8qSqOM/U5/AapJx58aGOL1j9Lzg=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=pBzdBqMqeGaYtjP+CWwrj6vFEZOeM7qkbh4hp7Ztg0MpvtWDgDLVXCedHF74RvDYS4xAFHN1yp5vKMTWv9x6WVmcA7ixTb6/YBJwZFSZrY7W52+JGiZY1tN3FQeMIpwQoHfoJ2JP7ZnrE/45lM9gxAgA2oSO58PNXi/qnauS9zA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=kYS17uwl; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Fd0XsXTD; arc=none smtp.client-ip=103.168.172.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-04.internal (phl-compute-04.nyi.internal [10.202.2.44])
-	by mailfout.nyi.internal (Postfix) with ESMTP id DB5BF13801F5;
-	Mon,  2 Sep 2024 15:24:08 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-04.internal (MEProxy); Mon, 02 Sep 2024 15:24:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1725305048;
-	 x=1725391448; bh=FIkfggRvlXFcRPLeJORBzcKCauI6djscbZezqFrZhqU=; b=
-	kYS17uwl3bJgwT+U/IDIoJ/p/MZRGS0OsrSUWfKGwtvrVLghRNf9DjeffPbFOebN
-	6ihFg71jKmHvFlHi0Kqe+k0zzgsMy45vT+DsSAQYH7tGX1+QRnsVGDNW+1BClrun
-	PwLwfN+jiDxZkeoxWIsEjPmsQm2tDar1K2ELICv3gb4CFBXtkZK8iJdLf5kEYvHO
-	/hc3dTiL3K1ftda6NqGelD4rJGkZMeD4zzmqiG1tHJcrzSQ2nsXn6FJCJgjy9hr6
-	QOJrbW7BLB8nvXHPyiB8OgpjtUNXEc/+YODvviFAvSprDPIeLC0tPTl89jDdrLEm
-	EFhItVWE8gDqGCi0Lck52A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1725305048; x=
-	1725391448; bh=FIkfggRvlXFcRPLeJORBzcKCauI6djscbZezqFrZhqU=; b=F
-	d0XsXTDvdhjAGxaj1FUhEBfryK7ggVPEt6xnvxgCXuzvQIqpzrT/cy0c869nRK60
-	pVYx69hAXZ/+2BF+Tf9v3ER2dwIMnyqIsH87E4kbxKs+uO0baP71agiQh06kmU6m
-	M+E8Acv9XzwNydgFSZ5aJfN3xOX0RD1o/OppDpysu1IkkPjsXBwA7pJBClTxUyZv
-	LXW2XRLg4sm6Be/sj7DoliA5KO7ZZ83+KEXKz1l35LcWIHRv4FqFNX4eWLvveen5
-	T4Q7T0UEbzonUk+yjIDsKuurRJmjmjbIbD1mD+WlGRx4tMisTb+HcFqTfp4MC2dh
-	WtWWWSQtQadEKKYK6tRNg==
-X-ME-Sender: <xms:2BDWZoVL2xtCQ3WLF5Wb6oW397_NETzYexZ0y6dURlDkqL0q1DlDnw>
-    <xme:2BDWZsnByh7ChGyPo5yOZxvD4Otc-j9KEPDiG4_nrohAqe8HqAYbFLtPsXmZTKpwV
-    PoY_X73MbwE4mJPaKs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudehfedgudefiecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
-    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
-    druggvqeenucggtffrrghtthgvrhhnpefhtdfhvddtfeehudekteeggffghfejgeegteef
-    gffgvedugeduveelvdekhfdvieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopedv
-    fedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepughivghtmhgrrhdrvghgghgvmh
-    grnhhnsegrrhhmrdgtohhmpdhrtghpthhtohepmhgrrhhkrdhruhhtlhgrnhgusegrrhhm
-    rdgtohhmpdhrtghpthhtoheptgihphhhrghrsegthihphhgrrhdrtghomhdprhgtphhtth
-    hopehrohhsthgvughtsehgohhoughmihhsrdhorhhgpdhrtghpthhtohepsghsvghgrghl
-    lhesghhoohhglhgvrdgtohhmpdhrtghpthhtohepphgvthgvrhiisehinhhfrhgruggvrg
-    gurdhorhhgpdhrtghpthhtohepsghrrghunhgvrheskhgvrhhnvghlrdhorhhgpdhrtghp
-    thhtohepkhgvvghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehshhhurghhsehkvg
-    hrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:2BDWZsZwGzGYyB9WFg6EWx1zQFqXBmVWedNyJlBxDQ6Nq1PS69l2MA>
-    <xmx:2BDWZnVUbH-5zipttfFVWPM1sLhvms_RK7Zw7fRZSwoxW4eWNBhxeQ>
-    <xmx:2BDWZinYICP3lPnBKewO2apgaKvEL3s3YltmTcgPfrT5YTOAAAbIvg>
-    <xmx:2BDWZsd748uiIonRMUQ7kgFvzdf4COBSLkUKxHdnwKMJMuoueecXwQ>
-    <xmx:2BDWZkWMfZMs016-pk_blB0KV_aQo0-MIqGaOf71kxSBaIjX-mMu8R7F>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id BED9B2220083; Mon,  2 Sep 2024 15:24:07 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1725310666; c=relaxed/simple;
+	bh=sUiZRUjhLBtW8/wNG0mFQD+PLGXOhO1CknuDEWXqJL8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=IaUF0ma605VjmUoZcBhZHEZdxU0U4vRFp+G7Azlzaisg7mSmb38dlRXbFMt8LCWWs5tn1xKbJaaywnk2EKqXbcRqCJkc9LGzax0BZ+ece/grJzZ/PVXaUULeVgY9o9ZSBbgHFCUbauH4PD7NsrUlcIDIgsJCzUjSfjijFW1gK+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fMkMAQQf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78BD3C4CECB;
+	Mon,  2 Sep 2024 20:57:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725310666;
+	bh=sUiZRUjhLBtW8/wNG0mFQD+PLGXOhO1CknuDEWXqJL8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=fMkMAQQfCRGOnSP5Nklo0bJBGWDoDHU4KbBwJq78JW1pO8Q0ipi1uHC3Rymm4M2KA
+	 tXsFLR+XPFqo75iih+91f6rPEmO/m6Kp88kc83tLYF+ECs3yTJKNhWHZefs+PtNb2t
+	 g3+juNx6ZTcmCSLQ9Qb99O/B5VqZGDNXJ8oijc1oxrdd4Vu37F8rE35GyWy+vNShWU
+	 c3FdLW539uLTZZoEZctJQ21tdkJZoXtcOD95h5WG3clNYas+ohCF7QpyuuhpYve26N
+	 aFrl5+3VO9sO1KN7dsDXL7Bsikrxw6gNu01bC9kEi6SfAV8UUBsmagJqX8N0TE3e1a
+	 Z61R36lkCKUHQ==
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-533521cd1c3so5305733e87.1;
+        Mon, 02 Sep 2024 13:57:46 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUnDomQwnP2TOnqcTcXH9kWPiXpoLSybxmcaYFGJtcQzIQIMS8MWJj4ufsy+UXTO2Bn2xMo9AnKbtUvxjlS@vger.kernel.org, AJvYcCVVTnE5yRVgEfHC3rDKru+uqi4XsLD91lLgEbN6VVLuAm62RiYd0JpXRuZ+wkv1L1rFj+oRyEZzLoc5UUJz@vger.kernel.org, AJvYcCXx0HqFUIwPVRcQq3DQlViRNNr1BcpcPeuy2dyObbp6mXlMkFrW4zg/8EAkFRZN3+oADafZGtdWtQ6a@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw2tmvj+7yznlxMhbgeiSZ8lEhiyfq5W4dhLif5YlCrQXmDRYp8
+	CbfcBTZWGZE/qb+HgTvbELRkb0OQwiiOcHQP7TCZY0Sz8lAWQ/5eN1pNPGYj24ZD7yhVXf44lOH
+	m/wlF939vwb6uIoQAB2lQmBekamg=
+X-Google-Smtp-Source: AGHT+IHJ4p0worhGswOIFYLV7bIu2jWZ5GSGj9+2fAyp9M6ZhDVhQ+mMD4GzTfXDOxpV03WgUGUVjyv1c/AsxX555Zs=
+X-Received: by 2002:a05:6512:10d0:b0:52f:cd03:a823 with SMTP id
+ 2adb3069b0e04-53546bde481mr10323462e87.45.1725310664710; Mon, 02 Sep 2024
+ 13:57:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Mon, 02 Sep 2024 19:23:47 +0000
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Aleksa Sarai" <cyphar@cyphar.com>
-Cc: "Ingo Molnar" <mingo@redhat.com>, "Peter Zijlstra" <peterz@infradead.org>,
- "Juri Lelli" <juri.lelli@redhat.com>,
- "Vincent Guittot" <vincent.guittot@linaro.org>,
- "Dietmar Eggemann" <dietmar.eggemann@arm.com>,
- "Steven Rostedt" <rostedt@goodmis.org>,
- "Benjamin Segall" <bsegall@google.com>, "Mel Gorman" <mgorman@suse.de>,
- "Valentin Schneider" <vschneid@redhat.com>,
- "Alexander Viro" <viro@zeniv.linux.org.uk>,
- "Christian Brauner" <brauner@kernel.org>, "Jan Kara" <jack@suse.cz>,
- shuah <shuah@kernel.org>, "Kees Cook" <kees@kernel.org>,
- "Florian Weimer" <fweimer@redhat.com>, "Mark Rutland" <mark.rutland@arm.com>,
- linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>,
- linux-kselftest@vger.kernel.org, stable@vger.kernel.org
-Message-Id: <0455ebf7-3f84-44c7-84b3-9ed6e218cdc0@app.fastmail.com>
-In-Reply-To: 
- <20240902.160305-cuddly.doc.quaint.provider-RsRaXpw78cll@cyphar.com>
-References: 
- <20240902-extensible-structs-check_fields-v1-0-545e93ede2f2@cyphar.com>
- <20240902-extensible-structs-check_fields-v1-3-545e93ede2f2@cyphar.com>
- <63193b87-7057-4ad0-aef2-fdb5d15138c3@app.fastmail.com>
- <20240902.160305-cuddly.doc.quaint.provider-RsRaXpw78cll@cyphar.com>
-Subject: Re: [PATCH RFC 3/8] openat2: explicitly return -E2BIG for (usize > PAGE_SIZE)
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+References: <20240902161912.2751-1-adhemerval.zanella@linaro.org> <20240902161912.2751-3-adhemerval.zanella@linaro.org>
+In-Reply-To: <20240902161912.2751-3-adhemerval.zanella@linaro.org>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Mon, 2 Sep 2024 22:57:33 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXGddK5pkVUM0Gx5OZStpOhYEYQteRk-pPtZZZiDAn0wiw@mail.gmail.com>
+Message-ID: <CAMj1kXGddK5pkVUM0Gx5OZStpOhYEYQteRk-pPtZZZiDAn0wiw@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] arm64: vdso: wire up getrandom() vDSO implementation
+To: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+Cc: "Jason A . Donenfeld" <Jason@zx2c4.com>, "Theodore Ts'o" <tytso@mit.edu>, linux-kernel@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-arch@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Eric Biggers <ebiggers@kernel.org>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Sep 2, 2024, at 16:08, Aleksa Sarai wrote:
->> >  	if (unlikely(usize < OPEN_HOW_SIZE_VER0))
->> >  		return -EINVAL;
->> > +	if (unlikely(usize > PAGE_SIZE))
->> > +		return -E2BIG;
->> > 
->> 
->> Is PAGE_SIZE significant here? If there is a need to enforce a limit,
->> I would expect this to be the same regardless of kernel configuration,
->> since the structure layout is also independent of the configuration.
+Hi Adhemerval,
+
+I have just a couple of more points below, on the BE handling in the asm.
+
+On Mon, 2 Sept 2024 at 18:19, Adhemerval Zanella
+<adhemerval.zanella@linaro.org> wrote:
 >
-> PAGE_SIZE is what clone3, perf_event_open, sched_setattr, bpf, etc all
-> use. The idea was that PAGE_SIZE is the absolute limit of any reasonable
-> extensible structure size because we are never going to have argument
-> structures that are larger than a page (I think this was discussed in
-> the original copy_struct_from_user() patchset thread in late 2019, but I
-> can't find the reference at the moment.)
+> Hook up the generic vDSO implementation to the aarch64 vDSO data page.
+> The _vdso_rng_data required data is placed within the _vdso_data vvar
+> page, by using a offset larger than the vdso_data.
 >
-> I simply forgot to add this when I first submitted openat2, the original
-> intention was to just match the other syscalls.
-
-Ok, I see. I guess it makes sense to keep this one consistent with the
-other ones, but we may want to revisit this in the future and
-come up with something that is independent of CONFIG_PAGE_SIZE.
-
->> Where is the current -EFAULT for users passing more than a page?
->> I only see it for reads beyond the VMA, but not e.g. when checking
->> terabytes of zero pages from an anonymous mapping.
+> The vDSO function requires a ChaCha20 implementation that does not write
+> to the stack, and that can do an entire ChaCha20 permutation.  The one
+> provided uses NEON on the permute operation, with a fallback to the
+> syscall for chips that do not support AdvSIMD.
 >
-> I meant that we in practice return -EFAULT if you pass a really large
-> size (because you end up running off the end of mapped memory). There is
-> no explicit -EFAULT for large sizes, which is exactly the problem. :P
+> This also passes the vdso_test_chacha test along with
+> vdso_test_getrandom. The vdso_test_getrandom bench-single result on
+> Neoverse-N1 shows:
+>
+>    vdso: 25000000 times in 0.783884250 seconds
+>    libc: 25000000 times in 8.780275399 seconds
+> syscall: 25000000 times in 8.786581518 seconds
+>
+> A small fixup to arch/arm64/include/asm/mman.h was required to avoid
+> pulling kernel code into the vDSO, similar to what's already done in
+> arch/arm64/include/asm/rwonce.h.
+>
+> Signed-off-by: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+> ---
+>  arch/arm64/Kconfig                         |   1 +
+>  arch/arm64/include/asm/mman.h              |   6 +-
+>  arch/arm64/include/asm/vdso.h              |   6 +
+>  arch/arm64/include/asm/vdso/getrandom.h    |  50 ++++++
+>  arch/arm64/include/asm/vdso/vsyscall.h     |  10 ++
+>  arch/arm64/kernel/vdso.c                   |   6 -
+>  arch/arm64/kernel/vdso/Makefile            |  25 ++-
+>  arch/arm64/kernel/vdso/vdso                |   1 +
+>  arch/arm64/kernel/vdso/vdso.lds.S          |   4 +
+>  arch/arm64/kernel/vdso/vgetrandom-chacha.S | 178 +++++++++++++++++++++
+>  arch/arm64/kernel/vdso/vgetrandom.c        |  15 ++
+>  tools/arch/arm64/vdso                      |   1 +
+>  tools/include/linux/compiler.h             |   4 +
+>  tools/testing/selftests/vDSO/Makefile      |   3 +-
+>  14 files changed, 294 insertions(+), 16 deletions(-)
+>  create mode 100644 arch/arm64/include/asm/vdso/getrandom.h
+>  create mode 120000 arch/arm64/kernel/vdso/vdso
+>  create mode 100644 arch/arm64/kernel/vdso/vgetrandom-chacha.S
+>  create mode 100644 arch/arm64/kernel/vdso/vgetrandom.c
+>  create mode 120000 tools/arch/arm64/vdso
+>
+...
+> diff --git a/arch/arm64/kernel/vdso/vgetrandom-chacha.S b/arch/arm64/kernel/vdso/vgetrandom-chacha.S
+> new file mode 100644
+> index 000000000000..4e5f9c349522
+> --- /dev/null
+> +++ b/arch/arm64/kernel/vdso/vgetrandom-chacha.S
+> @@ -0,0 +1,178 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <linux/linkage.h>
+> +#include <asm/cache.h>
+> +#include <asm/assembler.h>
+> +
+> +       .text
+> +
+> +#define state0         v0
+> +#define state1         v1
+> +#define state2         v2
+> +#define state3         v3
+> +#define copy0          v4
+> +#define copy0_q                q4
+> +#define copy1          v5
+> +#define copy2          v6
+> +#define copy3          v7
+> +#define copy3_d                d7
+> +#define one_d          d16
+> +#define one_q          q16
+> +#define one_v          v16
+> +#define tmp            v17
+> +#define rot8           v18
+> +
+> +/*
+> + * ARM64 ChaCha20 implementation meant for vDSO.  Produces a given positive
+> + * number of blocks of output with nonce 0, taking an input key and 8-bytes
+> + * counter.  Importantly does not spill to the stack.
+> + *
+> + * This implementation avoids d8-d15 because they are callee-save in user
+> + * space.
+> + *
+> + * void __arch_chacha20_blocks_nostack(uint8_t *dst_bytes,
+> + *                                    const uint8_t *key,
+> + *                                    uint32_t *counter,
+> + *                                    size_t nblocks)
+> + *
+> + *     x0: output bytes
+> + *     x1: 32-byte key input
+> + *     x2: 8-byte counter input/output
+> + *     x3: number of 64-byte block to write to output
+> + */
+> +SYM_FUNC_START(__arch_chacha20_blocks_nostack)
+> +
+> +       /* copy0 = "expand 32-byte k" */
+> +       mov_q           x8, 0x3320646e61707865
+> +       mov_q           x9, 0x6b20657479622d32
+> +       mov             copy0.d[0], x8
+> +       mov             copy0.d[1], x9
+> +
+> +       /* copy1,copy2 = key */
+> +       ld1             { copy1.4s, copy2.4s }, [x1]
+> +       /* copy3 = counter || zero nonce  */
+> +       ldr             copy3_d, [x2]
+> +CPU_BE( rev64          copy3.4s, copy3.4s)
+> +
 
-Got it, thanks.
+This loads 2 u32s as a single u64, and then swaps them if we are running on BE.
+So better to just use
 
-     Arnd
+  ld1 {copy3.2s}, [x2]
+
+here, and drop the CPU_BE() special case.
+
+> +       movi            one_v.2s, #1
+> +       uzp1            one_v.4s, one_v.4s, one_v.4s
+> +
+> +.Lblock:
+> +       /* copy state to auxiliary vectors for the final add after the permute.  */
+> +       mov             state0.16b, copy0.16b
+> +       mov             state1.16b, copy1.16b
+> +       mov             state2.16b, copy2.16b
+> +       mov             state3.16b, copy3.16b
+> +
+> +       mov             w4, 20
+> +.Lpermute:
+> +       /*
+> +        * Permute one 64-byte block where the state matrix is stored in the four NEON
+> +        * registers state0-state3.  It performs matrix operations on four words in parallel,
+> +        * but requires shuffling to rearrange the words after each round.
+> +        */
+> +
+> +.Ldoubleround:
+> +       /* state0 += state1, state3 = rotl32(state3 ^ state0, 16) */
+> +       add             state0.4s, state0.4s, state1.4s
+> +       eor             state3.16b, state3.16b, state0.16b
+> +       rev32           state3.8h, state3.8h
+> +
+> +       /* state2 += state3, state1 = rotl32(state1 ^ state2, 12) */
+> +       add             state2.4s, state2.4s, state3.4s
+> +       eor             tmp.16b, state1.16b, state2.16b
+> +       shl             state1.4s, tmp.4s, #12
+> +       sri             state1.4s, tmp.4s, #20
+> +
+> +       /* state0 += state1, state3 = rotl32(state3 ^ state0, 8) */
+> +       add             state0.4s, state0.4s, state1.4s
+> +       eor             tmp.16b, state3.16b, state0.16b
+> +       shl             state3.4s, tmp.4s, #8
+> +       sri             state3.4s, tmp.4s, #24
+> +
+> +       /* state2 += state3, state1 = rotl32(state1 ^ state2, 7) */
+> +       add             state2.4s, state2.4s, state3.4s
+> +       eor             tmp.16b, state1.16b, state2.16b
+> +       shl             state1.4s, tmp.4s, #7
+> +       sri             state1.4s, tmp.4s, #25
+> +
+> +       /* state1[0,1,2,3] = state1[1,2,3,0] */
+> +       ext             state1.16b, state1.16b, state1.16b, #4
+> +       /* state2[0,1,2,3] = state2[2,3,0,1] */
+> +       ext             state2.16b, state2.16b, state2.16b, #8
+> +       /* state3[0,1,2,3] = state3[1,2,3,0] */
+> +       ext             state3.16b, state3.16b, state3.16b, #12
+> +
+> +       /* state0 += state1, state3 = rotl32(state3 ^ state0, 16) */
+> +       add             state0.4s, state0.4s, state1.4s
+> +       eor             state3.16b, state3.16b, state0.16b
+> +       rev32           state3.8h, state3.8h
+> +
+> +       /* state2 += state3, state1 = rotl32(state1 ^ state2, 12) */
+> +       add             state2.4s, state2.4s, state3.4s
+> +       eor             tmp.16b, state1.16b, state2.16b
+> +       shl             state1.4s, tmp.4s, #12
+> +       sri             state1.4s, tmp.4s, #20
+> +
+> +       /* state0 += state1, state3 = rotl32(state3 ^ state0, 8) */
+> +       add             state0.4s, state0.4s, state1.4s
+> +       eor             tmp.16b, state3.16b, state0.16b
+> +       shl             state3.4s, tmp.4s, #8
+> +       sri             state3.4s, tmp.4s, #24
+> +
+> +       /* state2 += state3, state1 = rotl32(state1 ^ state2, 7) */
+> +       add             state2.4s, state2.4s, state3.4s
+> +       eor             tmp.16b, state1.16b, state2.16b
+> +       shl             state1.4s, tmp.4s, #7
+> +       sri             state1.4s, tmp.4s, #25
+> +
+> +       /* state1[0,1,2,3] = state1[3,0,1,2] */
+> +       ext             state1.16b, state1.16b, state1.16b, #12
+> +       /* state2[0,1,2,3] = state2[2,3,0,1] */
+> +       ext             state2.16b, state2.16b, state2.16b, #8
+> +       /* state3[0,1,2,3] = state3[1,2,3,0] */
+> +       ext             state3.16b, state3.16b, state3.16b, #4
+> +
+> +       subs            w4, w4, #2
+> +       b.ne            .Ldoubleround
+> +
+> +       /* output0 = state0 + state0 */
+> +       add             state0.4s, state0.4s, copy0.4s
+> +CPU_BE( rev32          state0.16b, state0.16b)
+> +       /* output1 = state1 + state1 */
+> +       add             state1.4s, state1.4s, copy1.4s
+> +CPU_BE( rev32          state1.16b, state1.16b)
+> +       /* output2 = state2 + state2 */
+> +       add             state2.4s, state2.4s, copy2.4s
+> +CPU_BE( rev32          state2.16b, state2.16b)
+> +       /* output2 = state3 + state3 */
+> +       add             state3.4s, state3.4s, copy3.4s
+> +CPU_BE( rev32          state3.16b, state3.16b)
+> +       st1             { state0.4s - state3.4s }, [x0]
+> +
+
+If the u32s shouldn't be swabbed for BE, you should simply be able to do
+
+st1 {state0.16b - state3.16b}, [x0]
+
+here, and drop the CPU_BE(*).
+
+> +       /*
+> +        * ++copy3.counter, the 'add' clears the upper half of the SIMD register
+> +        * which is the expected behaviour here.
+> +        */
+> +       add             copy3_d, copy3_d, one_d
+> +
+> +       /* output += 64, --nblocks */
+> +       add             x0, x0, 64
+> +       subs            x3, x3, #1
+> +       b.ne            .Lblock
+> +
+> +       /* counter = copy3.counter */
+> +CPU_BE( rev64          copy3.4s, copy3.4s)
+> +       str             copy3_d, [x2]
+> +
+
+... and this could be
+
+st1 {copy3.2s}, [x2]
+
+> +       /* Zero out the potentially sensitive regs, in case nothing uses these again. */
+> +       movi            state0.16b, #0
+> +       movi            state1.16b, #0
+> +       movi            state2.16b, #0
+> +       movi            state3.16b, #0
+> +       movi            copy1.16b, #0
+> +       movi            copy2.16b, #0
+> +       ret
+> +SYM_FUNC_END(__arch_chacha20_blocks_nostack)
+> +
+> +emit_aarch64_feature_1_and
 
