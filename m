@@ -1,66 +1,66 @@
-Return-Path: <linux-arch+bounces-6982-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6985-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 775C796ACD0
-	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2024 01:24:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43A5796ACD7
+	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2024 01:25:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9BC321C237BF
-	for <lists+linux-arch@lfdr.de>; Tue,  3 Sep 2024 23:24:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EF22E286C51
+	for <lists+linux-arch@lfdr.de>; Tue,  3 Sep 2024 23:25:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1AD61D79BC;
-	Tue,  3 Sep 2024 23:23:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5180A1D88CF;
+	Tue,  3 Sep 2024 23:24:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Gyq+srtC"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Lgqq6CIz"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F23461D5CEC;
-	Tue,  3 Sep 2024 23:23:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A17CA1EC01D;
+	Tue,  3 Sep 2024 23:24:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725405839; cv=none; b=CVwoBOnyOqBYn4nqonXmVNvXRkFMj3xyGkySp5oLMuZxQOH4bAptaoQOgrmqZet4s1elVGuYQglsthjN2dCY6b/EL5uLtEt+h/6OjFV/7J1OW+HpujR9qrvc2y3simg2zXAHnuAl+oebz3Hi7Z593tZO6+M4DgUOsJ7zzju5clQ=
+	t=1725405848; cv=none; b=NGSRbVy5RHlil5BeOAt6iXPZRYVr7PoOoaCyXwPeLt/8q79XcgoJB1U3RyedEGq2BjwLD1N9+4HQ7SP5B+YVqmsnQl1PtfYBVd4pNdtbQgd3gtQQoQ+0L+dl0/eBZRvFF3+MbXa9/1gDsPTKved5fVEzSfrBi+q4VQXXjNH4Iao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725405839; c=relaxed/simple;
-	bh=MnKbj6sSS3HCJqNa+kkOnsAeT3g9xf0IOvxLxlKUb28=;
+	s=arc-20240116; t=1725405848; c=relaxed/simple;
+	bh=E0wdGn4erRY3cJDI5vot5H6GCBmQffIc9up71IcdSjs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Hf1giXc2PBJMjJz+BJNX1YSlidGkRw/RZ6Znw+37MaF0YeC9BVGAjQvkYRohGVEV8gTZROrOej2HUYJ2YSSxw9OkpgJK8D8m0FKX7dz81N0pB4MTIXlGsPidEKNKJTceCtvLhQIw0lJ9dd6eREQLAbnvJFbnifaBkf6+hOVkMPo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Gyq+srtC; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version; b=oHXgDyc/w56snBikQPPTEtpgMgux2JOoKVH5L7+G/OzznMKUW9zGqVh1M7in6RsVZANFczl9H4ZXGDSsR2d2yFpsIyjTGfHzjF2qmBDPu6y3w6YzvvLK+rHasvlFcn1Xe3gu7atLJzQRXjNfjT47lCQLwMFmXZMd3rY5GfT+pBI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Lgqq6CIz; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 483LBUmx028866;
-	Tue, 3 Sep 2024 23:23:32 GMT
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 483LBXtV019214;
+	Tue, 3 Sep 2024 23:23:36 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
 	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding; s=corp-2023-11-20; bh=q
-	EfvffDSVfz+Cs+eDRWcr3G6GuHXhaLNpWU2hJkHeiQ=; b=Gyq+srtC+arStnlah
-	Us7IAI2/G+LfgIpGjAK8YYVBmyqXbNrPdVSsYfi6KxSst/w//YW85yCDlvqKbgGk
-	a6XQFyfiHiUNspyERhIq2oXw4HCL3XZHfk4aOIufJCxJGWByFbOk3X6X1SFy532i
-	Zb7jAjs8YD0gSHcgJW4ZM0Ik85p1/fEBy/Fvs3oDrkTDIeKROz3Jl3UD1cr3h+Eb
-	fStki0YNMIkS6Io0UYpRQpWQJ+EGHP1BXHscMnPRUmdAMFd08E18023W1JMJALfG
-	1wo93GM8jya6z7nlhHpLcq5Bki7UAK/mLwf0PVFSNpkYCduT7PR9p86CvMO4LDxl
-	GuGkQ==
+	:mime-version:content-transfer-encoding; s=corp-2023-11-20; bh=I
+	ZQX5Rr0ub/XJMfRdfY262glhjZWupIHzaraDs2Ywu8=; b=Lgqq6CIzpuQX3U9X6
+	iDa58SGs4E0AAapCVCBdEQV877eZHX/dUHEHyK6LTiS6pGCk5JUG8g43WwdiC9jJ
+	ZrKgW8RSINLnh7hb74L3mn/6X7muQGneLkQSOvvOnXiVKWY5ACbPi1G5jZF/GYtY
+	6tWLZdVZ9UleXIrnz9Q8Ho4mtzdsmuB6jSwuFYHJZ6KmSD4BZYVfAy+KXYlDUBmR
+	i/iHccgvQVxuoJQshtVXcBUs3OktK3mu3Wv5ja0oR1UjkbM1G1H+uBz2iAsfYWE4
+	ktReTIrdKQ/MpcGjsU5QimzV0roVztQ0ppHy13/qvSRm1rCYpdhxzoUEfLcszL1E
+	fhY/Q==
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 41dwndj1ax-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 41dw51t439-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 03 Sep 2024 23:23:32 +0000 (GMT)
+	Tue, 03 Sep 2024 23:23:36 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 483L2mjO001723;
-	Tue, 3 Sep 2024 23:23:31 GMT
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 483MmNpe001958;
+	Tue, 3 Sep 2024 23:23:35 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 41bsmfmndr-1
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 41bsmfmnf8-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 03 Sep 2024 23:23:31 +0000
+	Tue, 03 Sep 2024 23:23:35 +0000
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 483NMkfG040456;
-	Tue, 3 Sep 2024 23:23:30 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 483NMkfI040456;
+	Tue, 3 Sep 2024 23:23:34 GMT
 Received: from localhost.us.oracle.com (dhcp-10-159-133-114.vpn.oracle.com [10.159.133.114])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 41bsmfmmwr-6;
-	Tue, 03 Sep 2024 23:23:30 +0000
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 41bsmfmmwr-7;
+	Tue, 03 Sep 2024 23:23:33 +0000
 From: Anthony Yznaga <anthony.yznaga@oracle.com>
 To: akpm@linux-foundation.org, willy@infradead.org, markhemm@googlemail.com,
         viro@zeniv.linux.org.uk, david@redhat.com, khalid@kernel.org
@@ -71,9 +71,9 @@ Cc: anthony.yznaga@oracle.com, andreyknvl@gmail.com, dave.hansen@intel.com,
         linux-mm@kvack.org, mhiramat@kernel.org, rostedt@goodmis.org,
         vasily.averin@linux.dev, xhao@linux.alibaba.com, pcc@google.com,
         neilb@suse.de, maz@kernel.org
-Subject: [RFC PATCH v3 05/10] mm/mshare: Add ioctl support
-Date: Tue,  3 Sep 2024 16:22:36 -0700
-Message-ID: <20240903232241.43995-6-anthony.yznaga@oracle.com>
+Subject: [RFC PATCH v3 06/10] mm/mshare: Add vm flag for shared PTEs
+Date: Tue,  3 Sep 2024 16:22:37 -0700
+Message-ID: <20240903232241.43995-7-anthony.yznaga@oracle.com>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20240903232241.43995-1-anthony.yznaga@oracle.com>
 References: <20240903232241.43995-1-anthony.yznaga@oracle.com>
@@ -88,181 +88,83 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-03_11,2024-09-03_01,2024-09-02_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0
- mlxlogscore=999 suspectscore=0 phishscore=0 bulkscore=0 adultscore=0
+ mlxlogscore=679 suspectscore=0 phishscore=0 bulkscore=0 adultscore=0
  spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2407110000 definitions=main-2409030187
-X-Proofpoint-GUID: F6ATNHHZ8mdBkmlzSGVUWfQGjEu59pOv
-X-Proofpoint-ORIG-GUID: F6ATNHHZ8mdBkmlzSGVUWfQGjEu59pOv
+X-Proofpoint-ORIG-GUID: atzil67mt7N0tlp4YnnhsIyhWgXr7t7D
+X-Proofpoint-GUID: atzil67mt7N0tlp4YnnhsIyhWgXr7t7D
 
 From: Khalid Aziz <khalid@kernel.org>
 
-Reserve a range of ioctls for msharefs and add the first two ioctls
-to get and set the start address and size of an mshare region.
+Add a bit to vm_flags to indicate a vma shares PTEs with others. Add
+a function to determine if a vma shares PTEs by checking this flag.
+This is to be used to find the shared page table entries on page fault
+for vmas sharing PTEs.
 
 Signed-off-by: Khalid Aziz <khalid@kernel.org>
+Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 Signed-off-by: Anthony Yznaga <anthony.yznaga@oracle.com>
 ---
- .../userspace-api/ioctl/ioctl-number.rst      |  1 +
- include/uapi/linux/msharefs.h                 | 29 ++++++++
- mm/mshare.c                                   | 72 +++++++++++++++++++
- 3 files changed, 102 insertions(+)
- create mode 100644 include/uapi/linux/msharefs.h
+ include/linux/mm.h             | 7 +++++++
+ include/trace/events/mmflags.h | 3 +++
+ mm/internal.h                  | 5 +++++
+ 3 files changed, 15 insertions(+)
 
-diff --git a/Documentation/userspace-api/ioctl/ioctl-number.rst b/Documentation/userspace-api/ioctl/ioctl-number.rst
-index e91c0376ee59..d2fa6b117f66 100644
---- a/Documentation/userspace-api/ioctl/ioctl-number.rst
-+++ b/Documentation/userspace-api/ioctl/ioctl-number.rst
-@@ -301,6 +301,7 @@ Code  Seq#    Include File                                           Comments
- 'v'   20-27  arch/powerpc/include/uapi/asm/vas-api.h		     VAS API
- 'v'   C0-FF  linux/meye.h                                            conflict!
- 'w'   all                                                            CERN SCI driver
-+'x'   00-1F  linux/msharefs.h                                        msharefs filesystem
- 'y'   00-1F                                                          packet based user level communications
-                                                                      <mailto:zapman@interlan.net>
- 'z'   00-3F                                                          CAN bus card conflict!
-diff --git a/include/uapi/linux/msharefs.h b/include/uapi/linux/msharefs.h
-new file mode 100644
-index 000000000000..c7b509c7e093
---- /dev/null
-+++ b/include/uapi/linux/msharefs.h
-@@ -0,0 +1,29 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+/*
-+ * msharefs defines a memory region that is shared across processes.
-+ * ioctl is used on files created under msharefs to set various
-+ * attributes on these shared memory regions
-+ *
-+ *
-+ * Copyright (C) 2024 Oracle Corp. All rights reserved.
-+ * Author:	Khalid Aziz <khalid@kernel.org>
-+ */
-+
-+#ifndef _UAPI_LINUX_MSHAREFS_H
-+#define _UAPI_LINUX_MSHAREFS_H
-+
-+#include <linux/ioctl.h>
-+#include <linux/types.h>
-+
-+/*
-+ * msharefs specific ioctl commands
-+ */
-+#define MSHAREFS_GET_SIZE	_IOR('x', 0,  struct mshare_info)
-+#define MSHAREFS_SET_SIZE	_IOW('x', 1,  struct mshare_info)
-+
-+struct mshare_info {
-+	__u64 start;
-+	__u64 size;
-+};
-+
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 6549d0979b28..3aa0b3322284 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -413,6 +413,13 @@ extern unsigned int kobjsize(const void *objp);
+ #define VM_DROPPABLE		VM_NONE
+ #endif
+ 
++#ifdef CONFIG_64BIT
++#define VM_SHARED_PT_BIT	41
++#define VM_SHARED_PT		BIT(VM_SHARED_PT_BIT)
++#else
++#define VM_SHARED_PT		VM_NONE
 +#endif
-diff --git a/mm/mshare.c b/mm/mshare.c
-index a37849e724e1..af46eb76d2bc 100644
---- a/mm/mshare.c
-+++ b/mm/mshare.c
-@@ -10,15 +10,20 @@
-  *
-  * Copyright (C) 2024 Oracle Corp. All rights reserved.
-  * Author:	Khalid Aziz <khalid@kernel.org>
-+ * Author:	Matthew Wilcox <willy@infradead.org>
-  *
-  */
++
+ #ifdef CONFIG_64BIT
+ /* VM is sealed, in vm_flags */
+ #define VM_SEALED	_BITUL(63)
+diff --git a/include/trace/events/mmflags.h b/include/trace/events/mmflags.h
+index b63d211bd141..e1ae1e60d086 100644
+--- a/include/trace/events/mmflags.h
++++ b/include/trace/events/mmflags.h
+@@ -167,8 +167,10 @@ IF_HAVE_PG_ARCH_X(arch_3)
  
- #include <linux/fs.h>
- #include <linux/fs_context.h>
-+#include <linux/spinlock_types.h>
- #include <uapi/linux/magic.h>
-+#include <uapi/linux/msharefs.h>
+ #ifdef CONFIG_64BIT
+ # define IF_HAVE_VM_DROPPABLE(flag, name) {flag, name},
++# define IF_HAVE_VM_SHARED_PT(flag, name) {flag, name},
+ #else
+ # define IF_HAVE_VM_DROPPABLE(flag, name)
++# define IF_HAVE_VM_SHARED_PT(flag, name)
+ #endif
  
- struct mshare_data {
- 	struct mm_struct *mm;
-+	spinlock_t m_lock;
-+	struct mshare_info minfo;
- };
+ #define __def_vmaflag_names						\
+@@ -204,6 +206,7 @@ IF_HAVE_VM_SOFTDIRTY(VM_SOFTDIRTY,	"softdirty"	)		\
+ 	{VM_HUGEPAGE,			"hugepage"	},		\
+ 	{VM_NOHUGEPAGE,			"nohugepage"	},		\
+ IF_HAVE_VM_DROPPABLE(VM_DROPPABLE,	"droppable"	)		\
++IF_HAVE_VM_SHARED_PT(VM_SHARED_PT,	"sharedpt"	)		\
+ 	{VM_MERGEABLE,			"mergeable"	}		\
  
- struct msharefs_info {
-@@ -28,8 +33,74 @@ struct msharefs_info {
- static const struct inode_operations msharefs_dir_inode_ops;
- static const struct inode_operations msharefs_file_inode_ops;
+ #define show_vma_flags(flags)						\
+diff --git a/mm/internal.h b/mm/internal.h
+index b4d86436565b..8005d5956b6e 100644
+--- a/mm/internal.h
++++ b/mm/internal.h
+@@ -1578,4 +1578,9 @@ void unlink_file_vma_batch_init(struct unlink_vma_file_batch *);
+ void unlink_file_vma_batch_add(struct unlink_vma_file_batch *, struct vm_area_struct *);
+ void unlink_file_vma_batch_final(struct unlink_vma_file_batch *);
  
-+static long
-+msharefs_set_size(struct mm_struct *mm, struct mshare_data *m_data,
-+			struct mshare_info *minfo)
++static inline bool vma_is_shared(const struct vm_area_struct *vma)
 +{
-+	unsigned long end = minfo->start + minfo->size;
-+
-+	/*
-+	 * Validate alignment for start address, and size
-+	 */
-+	if ((minfo->start | end) & (PGDIR_SIZE - 1)) {
-+		spin_unlock(&m_data->m_lock);
-+		return -EINVAL;
-+	}
-+
-+	mm->mmap_base = minfo->start;
-+	mm->task_size = minfo->size;
-+	if (!mm->task_size)
-+		mm->task_size--;
-+
-+	m_data->minfo.start = mm->mmap_base;
-+	m_data->minfo.size = mm->task_size;
-+	spin_unlock(&m_data->m_lock);
-+
-+	return 0;
++	return VM_SHARED_PT && (vma->vm_flags & VM_SHARED_PT);
 +}
 +
-+static long
-+msharefs_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
-+{
-+	struct mshare_data *m_data = filp->private_data;
-+	struct mm_struct *mm = m_data->mm;
-+	struct mshare_info minfo;
-+
-+	switch (cmd) {
-+	case MSHAREFS_GET_SIZE:
-+		spin_lock(&m_data->m_lock);
-+		minfo = m_data->minfo;
-+		spin_unlock(&m_data->m_lock);
-+
-+		if (copy_to_user((void __user *)arg, &minfo, sizeof(minfo)))
-+			return -EFAULT;
-+
-+		return 0;
-+
-+	case MSHAREFS_SET_SIZE:
-+		if (copy_from_user(&minfo, (struct mshare_info __user *)arg,
-+			sizeof(minfo)))
-+			return -EFAULT;
-+
-+		/*
-+		 * If this mshare region has been set up once already, bail out
-+		 */
-+		spin_lock(&m_data->m_lock);
-+		if (m_data->minfo.start != 0) {
-+			spin_unlock(&m_data->m_lock);
-+			return -EINVAL;
-+		}
-+
-+		return msharefs_set_size(mm, m_data, &minfo);
-+
-+	default:
-+		return -ENOTTY;
-+	}
-+}
-+
- static const struct file_operations msharefs_file_operations = {
- 	.open		= simple_open,
-+	.unlocked_ioctl	= msharefs_ioctl,
- 	.llseek		= no_llseek,
- };
- 
-@@ -54,6 +125,7 @@ msharefs_fill_mm(struct inode *inode)
- 		goto err_free;
- 	}
- 	m_data->mm = mm;
-+	spin_lock_init(&m_data->m_lock);
- 	inode->i_private = m_data;
- 
- 	return 0;
+ #endif	/* __MM_INTERNAL_H */
 -- 
 2.43.5
 
