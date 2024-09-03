@@ -1,126 +1,149 @@
-Return-Path: <linux-arch+bounces-6975-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6976-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D85596AA97
-	for <lists+linux-arch@lfdr.de>; Tue,  3 Sep 2024 23:51:59 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C27C996AC30
+	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2024 00:26:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B8F1D282B7B
-	for <lists+linux-arch@lfdr.de>; Tue,  3 Sep 2024 21:51:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2677DB2413C
+	for <lists+linux-arch@lfdr.de>; Tue,  3 Sep 2024 22:26:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B6A81A265F;
-	Tue,  3 Sep 2024 21:51:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE4261D5888;
+	Tue,  3 Sep 2024 22:26:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pLZNXCj0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dZn4TZXV"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11150B647;
-	Tue,  3 Sep 2024 21:51:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF5E51EBFE4;
+	Tue,  3 Sep 2024 22:26:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725400314; cv=none; b=pGZQdNjxDtGE6dYWjNbpSE9ARcFQh/KwZGLDqZpK/l7o4EZ64MZjaMsFFyLGxqCkQKlT4wD3qkyWIZkQgGkslIFNinSv/CkCCfOtc4oY5I0Wq+yGiv1ZSJICS9UuoqlA0sbnjIEiEzG4UTZUv111oBqchwasFkQ7vEJz9wl2g5g=
+	t=1725402406; cv=none; b=nDLxfs5UW/Qeh6He6KB0MfPwPE/grdeGGxDR469836Ph5SgumU4hoAfGwWtwNIUiRVMsk5Pg8SiAL0SyAljToD++j8XLm1LHmMbnYmYjFIgsok8ddRUnkgKoZKji4ICjPc7+bspNSnIForNeZKgGyPakq/1B4+KI7VxE/InvPM8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725400314; c=relaxed/simple;
-	bh=tN5vqlCKPar7XP4sqfMn5SllXz0g+GvMXAGcorIVqYM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=t6cxjg39/RKDfQYxxe+OFBE7/Xs5sUqg/aXRZIPveKrsdrsAVsX92+Yhs7ew5OmAQ8duHQp+NLZOzIanhAUL/BzkYDm5DwfEI0DPgF8qq6j7WorltBlA2F6FeTPhZg49v4FCqaDqnFshKlDLuG57VC/7wAbOxWbiSmVclEl5pD4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pLZNXCj0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42686C4CEC4;
-	Tue,  3 Sep 2024 21:51:51 +0000 (UTC)
+	s=arc-20240116; t=1725402406; c=relaxed/simple;
+	bh=YXQIagdDPc90ZbJET9jNpaM1MPJKmJ5Y5fngYc6zZ5E=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=VZMM6QfOdfOIsPgcFMIvR2Co69DR7Vwe9M2ZEKtZZ6911mC8xz9L4Hl6YD6H7dv+Je6L9OfqOa1ZE4MtzfXdRAzUeYBwUmlHv08Bru2sfpZq77UfYVbB/QVYjrrDWC9kFf02JsvFpcfQcj60PoXPtwU5KMExDBb2qHgOT07xXiE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dZn4TZXV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE497C4CEC4;
+	Tue,  3 Sep 2024 22:26:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725400313;
-	bh=tN5vqlCKPar7XP4sqfMn5SllXz0g+GvMXAGcorIVqYM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=pLZNXCj0UEyKhvBJH5OnAGowSygKD8coz1erfWLAmf25HQz7h56PVHW0XMx2E/+w7
-	 xIjmR/ODgmkQ6EkT6qbdOkd5+85QO1VKRGcUIdp6j2mkLuyJOvw/tsogx2g6M2wzva
-	 plaXBbA4zNqKIrFF1xpYvfxDeNxXAy01Gmo8YJ+WZVfKF+cf6OJiYtW+gQBUW93FAy
-	 xIbMwFjMhxNIKZyJ57an/ZH5OFRWVdtyWrTv6ylNleOf2fa0XbMtEJRZe8/7ngefo1
-	 qikCcPNCOUF1XR5udOGdG6WVHyWR9fGyOzvTd3fowwLf6pKYqM5v5MJzgqDs6Hj2YM
-	 mtSUblomNCqHQ==
-Date: Tue, 3 Sep 2024 14:51:50 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, Donald Hunter <donald.hunter@gmail.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet
- <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, Ivan
- Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
- <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>,
- Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
- <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
- Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
- <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, Herbert
- Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, Willem
- de Bruijn <willemdebruijn.kernel@gmail.com>, "=?UTF-8?B?QmrDtnJuIFTDtnBl?=
- =?UTF-8?B?bA==?=" <bjorn@kernel.org>, Magnus Karlsson
- <magnus.karlsson@intel.com>, Maciej Fijalkowski
- <maciej.fijalkowski@intel.com>, Jonathan Lemon <jonathan.lemon@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>,
- Sumit Semwal <sumit.semwal@linaro.org>, "Christian =?UTF-8?B?S8O2bmln?="
- <christian.koenig@amd.com>, Pavel Begunkov <asml.silence@gmail.com>, David
- Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin
- <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, Harshitha
- Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
- Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
- <pkaligineedi@google.com>, Bagas Sanjaya <bagasdotme@gmail.com>, Christoph
- Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>,
- Taehee Yoo <ap420073@gmail.com>
-Subject: Re: [PATCH net-next v24 11/13] net: add devmem TCP documentation
-Message-ID: <20240903145150.4ffee51b@kernel.org>
-In-Reply-To: <20240831004313.3713467-12-almasrymina@google.com>
-References: <20240831004313.3713467-1-almasrymina@google.com>
-	<20240831004313.3713467-12-almasrymina@google.com>
+	s=k20201202; t=1725402406;
+	bh=YXQIagdDPc90ZbJET9jNpaM1MPJKmJ5Y5fngYc6zZ5E=;
+	h=Date:From:To:Subject:In-Reply-To:From;
+	b=dZn4TZXVbXEzEwa3ibet6GkytN3NXh0+F+/hWh7n22CyMZmwuMO1drbR6aDqPSH/m
+	 1onS+XmaNIzxiX4h1AD6FfLhQyYnaF2/AgM8LQSsl2aVq3kh1VZZBtMEcyN3NWmoV7
+	 WlGawzRAr97kNfsueOFPzVcWLHcCL9fx1uyE4BVpWiZCD3Br+lCJ4EnLT86dFuTSFv
+	 RNtwJ1gX9LNZsCrEFoRM1ff4GhTGAT9H3wladciEnJy5WJx+dAMD0kSmMMoulZg4hk
+	 aulQSWoX0q7ifdHNpRfXx5NwOgTa64bW7nZm0ZcA6mpu5hGiXwivszhbdpATg3smEr
+	 PHbM0Q+6gtxrw==
+Date: Tue, 3 Sep 2024 17:26:44 -0500
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Andrea della Porta <andrea.porta@suse.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Derek Kiernan <derek.kiernan@amd.com>,
+	Dragan Cvetic <dragan.cvetic@amd.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Saravana Kannan <saravanak@google.com>,
+	Bjorn Helgaas <bhelgaas@google.com>, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org, netdev@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+	Lee Jones <lee@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+	Stefan Wahren <wahrenst@gmx.net>
+Subject: Re: [PATCH 03/11] PCI: of_property: Sanitize 32 bit PCI address
+ parsed from DT
+Message-ID: <20240903222644.GA126427@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Zszcps6bnCcdFa54@apocalypse>
 
-On Sat, 31 Aug 2024 00:43:11 +0000 Mina Almasry wrote:
-> +The socket must be flow steered to the dmabuf bound RX queue::
-> +
-> +	ethtool -N eth1 flow-type tcp4 ... queue 15,
+On Mon, Aug 26, 2024 at 09:51:02PM +0200, Andrea della Porta wrote:
+> On 10:24 Wed 21 Aug     , Bjorn Helgaas wrote:
+> > On Tue, Aug 20, 2024 at 04:36:05PM +0200, Andrea della Porta wrote:
+> > > The of_pci_set_address() function parses devicetree PCI range
+> > > specifier assuming the address is 'sanitized' at the origin,
+> > > i.e. without checking whether the incoming address is 32 or 64
+> > > bit has specified in the flags.  In this way an address with no
+> > > OF_PCI_ADDR_SPACE_MEM64 set in the flags could leak through and
+> > > the upper 32 bits of the address will be set too, and this
+> > > violates the PCI specs stating that in 32 bit address the upper
+> > > bit should be zero.
 
-nit: tailing comma here
+> > I don't understand this code, so I'm probably missing something.  It
+> > looks like the interesting path here is:
+> > 
+> >   of_pci_prop_ranges
+> >     res = &pdev->resource[...];
+> >     for (j = 0; j < num; j++) {
+> >       val64 = res[j].start;
+> >       of_pci_set_address(..., val64, 0, flags, false);
+> >  +      if (OF_PCI_ADDR_SPACE_MEM64)
+> >  +        prop[1] = upper_32_bits(val64);
+> >  +      else
+> >  +        prop[1] = 0;
+> > 
+> > OF_PCI_ADDR_SPACE_MEM64 tells us about the size of the PCI bus
+> > address, but the address (val64) is a CPU physical address, not a PCI
+> > bus address, so I don't understand why of_pci_set_address() should use
+> > OF_PCI_ADDR_SPACE_MEM64 to clear part of the CPU address.
+> 
+> It all starts from of_pci_prop_ranges(), that is the caller of
+> of_pci_set_address().
 
-> +Devmem payloads are inaccessible to the kernel processing the packets. This
-> +results in a few quirks for payloads of devmem skbs:
-> +
-> +- Loopback is not functional. Loopback relies on copying the payload, which is
-> +  not possible with devmem skbs.
-> +
-> +- Software checksum calculation fails.
+> val64 (i.e. res[j].start) is the address part of a struct resource
+> that has its own flags.  Those flags are directly translated to
+> of_pci_range flags by of_pci_get_addr_flags(), so any
+> IORESOURCE_MEM_64 / IORESOURCE_MEM in the resource flag will
+> respectively become OF_PCI_ADDR_SPACE_MEM64 /
+> OF_PCI_ADDR_SPACE_MEM32 in pci range.
 
-Speaking of which, I think we need to add readability check to 
-skb_checksum_help(). Shouldn't the check in __skb_checksum() 
-have a WARN_ON_ONCE() around it? It's impossible to return 
-an error from there.
+> What is advertised as 32 bit at the origin (val64) should not become
+> a 64 bit PCI address at the output of of_pci_set_address(), so the
+> upper 32 bit portion should be dropped. 
 
-> +- TCP Dump and bpf can't access devmem packet payloads.
-> +
-> +
-> +Testing
-> +=======
-> +
-> +More realistic example code can be found in the kernel source under
-> +tools/testing/selftests/net/ncdevmem.c
+> This is explicitly stated in [1] (see page 5), where a space code of 0b10
+> implies that the upper 32 bit of the address must be zeroed out.
 
-looks like HTML output wraps the file path, maybe quote it as
-``tools/testing/selftests/net/ncdevmem.c`` ?
+OK, I was confused and thought IORESOURCE_MEM_64 was telling us
+something about the *CPU* address, but it's actually telling us
+something about what *PCI bus* addresses are possible, i.e., whether
+it's a 32-bit BAR or a 64-bit BAR.
+
+However, the CPU physical address space and the PCI bus address are
+not the same.  Generic code paths should account for that different by
+applying an offset (the offset will be zero on many platforms where
+CPU and PCI bus addresses *look* the same).
+
+So a generic code path like of_pci_prop_ranges() that basically copies
+a CPU physical address to a PCI bus address looks broken to me.
+
+Maybe my expectation of this being described in DT is mistaken.
+
+Bjorn
 
