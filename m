@@ -1,38 +1,38 @@
-Return-Path: <linux-arch+bounces-6957-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6958-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC97C96A1DE
-	for <lists+linux-arch@lfdr.de>; Tue,  3 Sep 2024 17:16:37 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CD5F96A1E2
+	for <lists+linux-arch@lfdr.de>; Tue,  3 Sep 2024 17:16:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 725581F268CB
-	for <lists+linux-arch@lfdr.de>; Tue,  3 Sep 2024 15:16:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C1C73B26F6B
+	for <lists+linux-arch@lfdr.de>; Tue,  3 Sep 2024 15:16:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A37E4188590;
-	Tue,  3 Sep 2024 15:15:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0152218859E;
+	Tue,  3 Sep 2024 15:15:22 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4299818732D;
-	Tue,  3 Sep 2024 15:15:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 901A2187571;
+	Tue,  3 Sep 2024 15:15:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725376518; cv=none; b=bxLidcnzMZR5GJs2ohLSckWgyUlDF35B4BOgNEppg848YiWXYyMYywCa+FUzLo8ZpqJKv8RovLXhtGk98bVoQpMdLBhT4RAoZU1JQnbqRQi+seUIA7zPavFq/AjBsbJh4kY8CWIB0MPr0ddei3fXunulh9PrHkTXDTdpKvN32eE=
+	t=1725376521; cv=none; b=gl5DdQkDmZJ7Si9hutTwk5xR8JcuJ8xPR9jv8+BMu89ED+8CecERNF0Vn/KQHuox8qT6Q+onU21dJyupVm2wn0WNOGbRCMlvCkLFI8BxZ3UBwoB88BTFB3zbLgU6HdhcYN+a1AxLNGRuBCpdBl5w8SveLuszqOWWwzIoXsdos5E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725376518; c=relaxed/simple;
-	bh=LtJZgC1Q5rRYzbtACB0LDjsbjwXWFZt+O6+hA8TaX6g=;
+	s=arc-20240116; t=1725376521; c=relaxed/simple;
+	bh=AQxwLnCeXR4Tt2nNEssfZPp+mkppPyi+qa+VwXA7ggc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=TzouvCVGXFcOYyH9MvjPaUCChKXITvvEoa1ESMkteDlLYxlOlefagTGN7a76C1t9hzA5Ty2n/FtjjS8J7nA++Fvylcolw8rkRJiNEi2hSer4a4itMGiuu+mtk82HBz973yPB/iWzut6fkI3HV9aDE94V49hJryu8GSJeFikP0OU=
+	 MIME-Version; b=myz9wIg6UiIBBeXY1eNYfWUI5u0l/Ggs2Cr8WY6Mjxvu/xf7ZVA2U57bdBJGo/x6UIppp515YmopA5hBrOrC3wM9BfG8aF1tujlZURMqgVg1dz588yDWPiiGkXzwTQqK8grKMOfUnzm5iUTKf6WHuUcNXwNxmxENwohsecthgZI=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3CE85FEC;
-	Tue,  3 Sep 2024 08:15:43 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6AF7E1063;
+	Tue,  3 Sep 2024 08:15:46 -0700 (PDT)
 Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DB2E13F66E;
-	Tue,  3 Sep 2024 08:15:13 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 150153F66E;
+	Tue,  3 Sep 2024 08:15:16 -0700 (PDT)
 From: Vincenzo Frascino <vincenzo.frascino@arm.com>
 To: linux-kernel@vger.kernel.org,
 	linux-arch@vger.kernel.org,
@@ -55,9 +55,9 @@ Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>,
 	Steven Rostedt <rostedt@goodmis.org>,
 	Masami Hiramatsu <mhiramat@kernel.org>,
 	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH 7/9] x86: vdso: Modify asm/vdso/getrandom.h to include datapage
-Date: Tue,  3 Sep 2024 16:14:35 +0100
-Message-Id: <20240903151437.1002990-8-vincenzo.frascino@arm.com>
+Subject: [PATCH 8/9] vdso: Modify vdso/getrandom.h to include the asm header
+Date: Tue,  3 Sep 2024 16:14:36 +0100
+Message-Id: <20240903151437.1002990-9-vincenzo.frascino@arm.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240903151437.1002990-1-vincenzo.frascino@arm.com>
 References: <20240903151437.1002990-1-vincenzo.frascino@arm.com>
@@ -72,29 +72,28 @@ Content-Transfer-Encoding: 8bit
 The VDSO implementation includes headers from outside of the
 vdso/ namespace.
 
-Modify asm/vdso/getrandom.h to include datapage.
+Modify vdso/getrandom.h to include the getrandom asm header.
 
 Cc: Andy Lutomirski <luto@kernel.org>
 Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
 ---
- arch/x86/include/asm/vdso/getrandom.h | 2 ++
- 1 file changed, 2 insertions(+)
+ include/vdso/getrandom.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/x86/include/asm/vdso/getrandom.h b/arch/x86/include/asm/vdso/getrandom.h
-index ff5334ad32a0..4597d5a6f094 100644
---- a/arch/x86/include/asm/vdso/getrandom.h
-+++ b/arch/x86/include/asm/vdso/getrandom.h
-@@ -7,6 +7,8 @@
+diff --git a/include/vdso/getrandom.h b/include/vdso/getrandom.h
+index 6ca4d6de9e46..5cf3f75d6fb6 100644
+--- a/include/vdso/getrandom.h
++++ b/include/vdso/getrandom.h
+@@ -7,6 +7,7 @@
+ #define _VDSO_GETRANDOM_H
  
- #ifndef __ASSEMBLY__
+ #include <linux/types.h>
++#include <asm/vdso/getrandom.h>
  
-+#include <vdso/datapage.h>
-+
- #include <asm/unistd.h>
- #include <asm/vvar.h>
- 
+ #define CHACHA_KEY_SIZE         32
+ #define CHACHA_BLOCK_SIZE       64
 -- 
 2.34.1
 
