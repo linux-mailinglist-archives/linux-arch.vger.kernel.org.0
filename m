@@ -1,78 +1,61 @@
-Return-Path: <linux-arch+bounces-6976-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6977-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C27C996AC30
-	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2024 00:26:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 201FE96AC3D
+	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2024 00:34:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2677DB2413C
-	for <lists+linux-arch@lfdr.de>; Tue,  3 Sep 2024 22:26:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4B5151C243D6
+	for <lists+linux-arch@lfdr.de>; Tue,  3 Sep 2024 22:34:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE4261D5888;
-	Tue,  3 Sep 2024 22:26:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36100187552;
+	Tue,  3 Sep 2024 22:34:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dZn4TZXV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cl1JUbCM"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF5E51EBFE4;
-	Tue,  3 Sep 2024 22:26:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EC1D186E30;
+	Tue,  3 Sep 2024 22:34:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725402406; cv=none; b=nDLxfs5UW/Qeh6He6KB0MfPwPE/grdeGGxDR469836Ph5SgumU4hoAfGwWtwNIUiRVMsk5Pg8SiAL0SyAljToD++j8XLm1LHmMbnYmYjFIgsok8ddRUnkgKoZKji4ICjPc7+bspNSnIForNeZKgGyPakq/1B4+KI7VxE/InvPM8=
+	t=1725402841; cv=none; b=bpnzZQd1aCQts54c5gp2Y7WGjC/jZbyTMBGgCV5g3csgMS96mt3XGXoid5xKrQRYPXnZskIIeQbueRPdAk/K6gMlNMqg6I/yo3Ll/NNXDvALyU2UNLnQXWNLilqaYBqw3kjJH9ct1Df4+YsLEMB9FacyZuYDsNcixG6VP2Nps+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725402406; c=relaxed/simple;
-	bh=YXQIagdDPc90ZbJET9jNpaM1MPJKmJ5Y5fngYc6zZ5E=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=VZMM6QfOdfOIsPgcFMIvR2Co69DR7Vwe9M2ZEKtZZ6911mC8xz9L4Hl6YD6H7dv+Je6L9OfqOa1ZE4MtzfXdRAzUeYBwUmlHv08Bru2sfpZq77UfYVbB/QVYjrrDWC9kFf02JsvFpcfQcj60PoXPtwU5KMExDBb2qHgOT07xXiE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dZn4TZXV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE497C4CEC4;
-	Tue,  3 Sep 2024 22:26:45 +0000 (UTC)
+	s=arc-20240116; t=1725402841; c=relaxed/simple;
+	bh=PJuaEhOFGYtVYPKXwDpttFc+q5OxRf2zKobxdkoJmTg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=K//wJPfSpYyF+/ye7k80CBlGo2aCH2VPno69gSuYuumKkB8ERtGJZjwNvyMu/+0ALmaHEl4UBAFF5getHjCj5f3oBzfmLmkW+027dV32T3z5hihyw2QPnNnrmFFznSPDEUGN8Zj66YYbY1z+Tmc4YfMhZiJDOlS6242n7ijSk3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cl1JUbCM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93953C4CEC4;
+	Tue,  3 Sep 2024 22:34:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725402406;
-	bh=YXQIagdDPc90ZbJET9jNpaM1MPJKmJ5Y5fngYc6zZ5E=;
-	h=Date:From:To:Subject:In-Reply-To:From;
-	b=dZn4TZXVbXEzEwa3ibet6GkytN3NXh0+F+/hWh7n22CyMZmwuMO1drbR6aDqPSH/m
-	 1onS+XmaNIzxiX4h1AD6FfLhQyYnaF2/AgM8LQSsl2aVq3kh1VZZBtMEcyN3NWmoV7
-	 WlGawzRAr97kNfsueOFPzVcWLHcCL9fx1uyE4BVpWiZCD3Br+lCJ4EnLT86dFuTSFv
-	 RNtwJ1gX9LNZsCrEFoRM1ff4GhTGAT9H3wladciEnJy5WJx+dAMD0kSmMMoulZg4hk
-	 aulQSWoX0q7ifdHNpRfXx5NwOgTa64bW7nZm0ZcA6mpu5hGiXwivszhbdpATg3smEr
-	 PHbM0Q+6gtxrw==
-Date: Tue, 3 Sep 2024 17:26:44 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Andrea della Porta <andrea.porta@suse.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Derek Kiernan <derek.kiernan@amd.com>,
-	Dragan Cvetic <dragan.cvetic@amd.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Saravana Kannan <saravanak@google.com>,
-	Bjorn Helgaas <bhelgaas@google.com>, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, netdev@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
-	Lee Jones <lee@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-	Stefan Wahren <wahrenst@gmx.net>
-Subject: Re: [PATCH 03/11] PCI: of_property: Sanitize 32 bit PCI address
- parsed from DT
-Message-ID: <20240903222644.GA126427@bhelgaas>
+	s=k20201202; t=1725402840;
+	bh=PJuaEhOFGYtVYPKXwDpttFc+q5OxRf2zKobxdkoJmTg=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=cl1JUbCM9uq01AMIDCJyqCBNoHE8kVLu1Zlum4zDmNcdU2M0Z6EnPJa4JG9Wf+Lxg
+	 9ikXHR3b/LYZxALX/n3kJYWb7UJYyMiEn1vNR5OCoz4ZCXgdA7WsjjR/KAa4Pi2vy9
+	 9/lR7RZJ0t3ms1ZapFF6OgOvJnROLB0By59ayo2ih88WYMa7m3GTJJC01d/rn3oYQ0
+	 24PkAfQWeVHT5hlr+LZ2A/A4/cCBMd4MI4fJ26ElWmpyUx65ztX3RD57VttODew+X/
+	 4AHQ8QRRDKcdEeX934gyYgqkJhQY1wkPe5af2W/7hZ+emoTMzhPMVelMq2ZT4TGqhg
+	 trCXY1uR0rR5w==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 3796ACE1257; Tue,  3 Sep 2024 15:34:00 -0700 (PDT)
+Date: Tue, 3 Sep 2024 15:34:00 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-kernel@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>
+Subject: Re: 16-bit store instructions &c?
+Message-ID: <0974da0a-8788-470d-bb9c-8fc90d7e6f08@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <3ca4590a-8256-42d1-89ca-f337ae6f755c@paulmck-laptop>
+ <b3512703-bab3-4999-ac20-b1b874fcfcc3@app.fastmail.com>
+ <289c7e10-06df-435b-a30d-c2a5bc4eea29@paulmck-laptop>
+ <9242c5c2-2011-45bf-8679-3f918323788e@app.fastmail.com>
+ <1bb58d8d-4a2a-4728-a8f3-9295145dbbb0@paulmck-laptop>
+ <f209bf4d-1d14-404b-8bff-8d6d2854d704@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -81,69 +64,43 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Zszcps6bnCcdFa54@apocalypse>
+In-Reply-To: <f209bf4d-1d14-404b-8bff-8d6d2854d704@app.fastmail.com>
 
-On Mon, Aug 26, 2024 at 09:51:02PM +0200, Andrea della Porta wrote:
-> On 10:24 Wed 21 Aug     , Bjorn Helgaas wrote:
-> > On Tue, Aug 20, 2024 at 04:36:05PM +0200, Andrea della Porta wrote:
-> > > The of_pci_set_address() function parses devicetree PCI range
-> > > specifier assuming the address is 'sanitized' at the origin,
-> > > i.e. without checking whether the incoming address is 32 or 64
-> > > bit has specified in the flags.  In this way an address with no
-> > > OF_PCI_ADDR_SPACE_MEM64 set in the flags could leak through and
-> > > the upper 32 bits of the address will be set too, and this
-> > > violates the PCI specs stating that in 32 bit address the upper
-> > > bit should be zero.
-
-> > I don't understand this code, so I'm probably missing something.  It
-> > looks like the interesting path here is:
-> > 
-> >   of_pci_prop_ranges
-> >     res = &pdev->resource[...];
-> >     for (j = 0; j < num; j++) {
-> >       val64 = res[j].start;
-> >       of_pci_set_address(..., val64, 0, flags, false);
-> >  +      if (OF_PCI_ADDR_SPACE_MEM64)
-> >  +        prop[1] = upper_32_bits(val64);
-> >  +      else
-> >  +        prop[1] = 0;
-> > 
-> > OF_PCI_ADDR_SPACE_MEM64 tells us about the size of the PCI bus
-> > address, but the address (val64) is a CPU physical address, not a PCI
-> > bus address, so I don't understand why of_pci_set_address() should use
-> > OF_PCI_ADDR_SPACE_MEM64 to clear part of the CPU address.
+On Thu, Aug 29, 2024 at 09:56:52PM +0200, Arnd Bergmann wrote:
+> On Thu, Aug 29, 2024, at 15:37, Paul E. McKenney wrote:
+> > My plan is to submit a pull request for the remaining three 8-bit
+> > cmpxchg() emulation commits into the upcoming merge window.  In the
+> > meantime, I will create similar patches for 16-bit cmpxchg() and perhaps
+> > also both 8-bit and 16-bit xchg().  I will obviously CC both you and
+> > Russell on the full set.  And if there are hardware-incompatibility
+> > complaints, we can deal with them, whether by dropping the offending
+> > pieces of my patches or by whatever other adjustments make sense.
+> >
+> > Does that seem like a reasonable approach, or is there a better way?
 > 
-> It all starts from of_pci_prop_ranges(), that is the caller of
-> of_pci_set_address().
+> There is one thing I'd really like to see happen here, and that is
+> changing the architectures so they only define the fixed-length
+> __arch_xchg{8,16,32,64} and __arch_cmpxchg{8,16,32,64} helpers,
+> ideally as inline functions to have type checking on the pointer.
+> 
+> If we make the xchg()/cmpxchg() functiuons handle all sizes
+> across architectures, that just ends up cementing the type
+> agnostic macros, so I feel it would be better to have
+> fixed-size helpers as the generic API so we can phase out the
+> use of the existing macros on smaller-than-u32 arguments.
+> 
+> The macro is still needed to allow dealing with both integer
+> and pointer objects, as well as a mix of 'int' and 'long'
+> arguments on 64-bit, but for normal fixed-size objects I
+> think we can best use the same method as the current
+> xchg64()/cmpxchg64().
 
-> val64 (i.e. res[j].start) is the address part of a struct resource
-> that has its own flags.  Those flags are directly translated to
-> of_pci_range flags by of_pci_get_addr_flags(), so any
-> IORESOURCE_MEM_64 / IORESOURCE_MEM in the resource flag will
-> respectively become OF_PCI_ADDR_SPACE_MEM64 /
-> OF_PCI_ADDR_SPACE_MEM32 in pci range.
+So the idea is to have architecture-independent xchg()/cmpxchg() that
+invoke the __arch_xchg{8,16,32,64} and __arch_cmpxchg{8,16,32,64} helpers?
+Seems plausible to me.
 
-> What is advertised as 32 bit at the origin (val64) should not become
-> a 64 bit PCI address at the output of of_pci_set_address(), so the
-> upper 32 bit portion should be dropped. 
+How can I best help?  My guess is that I should prototype an emulated
+xchg() function, given my limited familiarity with the architectures.
 
-> This is explicitly stated in [1] (see page 5), where a space code of 0b10
-> implies that the upper 32 bit of the address must be zeroed out.
-
-OK, I was confused and thought IORESOURCE_MEM_64 was telling us
-something about the *CPU* address, but it's actually telling us
-something about what *PCI bus* addresses are possible, i.e., whether
-it's a 32-bit BAR or a 64-bit BAR.
-
-However, the CPU physical address space and the PCI bus address are
-not the same.  Generic code paths should account for that different by
-applying an offset (the offset will be zero on many platforms where
-CPU and PCI bus addresses *look* the same).
-
-So a generic code path like of_pci_prop_ranges() that basically copies
-a CPU physical address to a PCI bus address looks broken to me.
-
-Maybe my expectation of this being described in DT is mistaken.
-
-Bjorn
+						Thanx, Paul
 
