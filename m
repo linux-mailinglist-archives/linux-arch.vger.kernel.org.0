@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-6974-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6975-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1854D96AA5E
-	for <lists+linux-arch@lfdr.de>; Tue,  3 Sep 2024 23:40:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D85596AA97
+	for <lists+linux-arch@lfdr.de>; Tue,  3 Sep 2024 23:51:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9A023B243C6
-	for <lists+linux-arch@lfdr.de>; Tue,  3 Sep 2024 21:40:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B8F1D282B7B
+	for <lists+linux-arch@lfdr.de>; Tue,  3 Sep 2024 21:51:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E9871922C7;
-	Tue,  3 Sep 2024 21:40:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B6A81A265F;
+	Tue,  3 Sep 2024 21:51:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A4goTdAB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pLZNXCj0"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 011671EBFFF;
-	Tue,  3 Sep 2024 21:40:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11150B647;
+	Tue,  3 Sep 2024 21:51:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725399616; cv=none; b=pnq/erd7W7DhDO/gIkWF5LaxupWGgICQF+a4+6e3HJWNYSI5+repj2eUQTsCom3BhkOTs7cPZ6p2PAdUm0ilw16wjNp/Nt5O333k8OjalmtwQ0jHLPbjrM6REB7y6yWDRafpGo7zEGhAB23eX2hi/IO/pBhojytizin4t0MAw4w=
+	t=1725400314; cv=none; b=pGZQdNjxDtGE6dYWjNbpSE9ARcFQh/KwZGLDqZpK/l7o4EZ64MZjaMsFFyLGxqCkQKlT4wD3qkyWIZkQgGkslIFNinSv/CkCCfOtc4oY5I0Wq+yGiv1ZSJICS9UuoqlA0sbnjIEiEzG4UTZUv111oBqchwasFkQ7vEJz9wl2g5g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725399616; c=relaxed/simple;
-	bh=oaZPjF2Hwc2UCWScGNmiQSzXQJql29ev4HaTxsSINYo=;
+	s=arc-20240116; t=1725400314; c=relaxed/simple;
+	bh=tN5vqlCKPar7XP4sqfMn5SllXz0g+GvMXAGcorIVqYM=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MNiq848We7MieN0YGETzK0GVCOEGb4lUd8Wy11sykZMUIr57pJNtZswBhZsdN3YmvjslR0Ee3UzcjauOltUGqZPEf6WSBexrTItlq1TVk9sfnfNvVqH3q2CNk4hLRZBiwb+CAaUwmPulWfMfhT6FaMHvhP0FWVMnF4t2VvR18v8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A4goTdAB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD1E2C4CEC4;
-	Tue,  3 Sep 2024 21:40:12 +0000 (UTC)
+	 MIME-Version:Content-Type; b=t6cxjg39/RKDfQYxxe+OFBE7/Xs5sUqg/aXRZIPveKrsdrsAVsX92+Yhs7ew5OmAQ8duHQp+NLZOzIanhAUL/BzkYDm5DwfEI0DPgF8qq6j7WorltBlA2F6FeTPhZg49v4FCqaDqnFshKlDLuG57VC/7wAbOxWbiSmVclEl5pD4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pLZNXCj0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42686C4CEC4;
+	Tue,  3 Sep 2024 21:51:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725399615;
-	bh=oaZPjF2Hwc2UCWScGNmiQSzXQJql29ev4HaTxsSINYo=;
+	s=k20201202; t=1725400313;
+	bh=tN5vqlCKPar7XP4sqfMn5SllXz0g+GvMXAGcorIVqYM=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=A4goTdABFpGLC7mNQ/iVNNtHVfhNY/snxGEsDUa98eLJzqulK3ihS0CVSipU96DK2
-	 3agJPo5pYijI12pg058sMg5p8hCcNXCEauwckXRY7h4zVH9Jd9r/OmjcWMFSD2I4Fb
-	 vhOC8d29Lh3Yq20wLvewdmOt6DL0VbQUXOC2W9xf3KIahEOFazunBtOoli4RkVFfqO
-	 TbsqMbuOmAvBRN0QJFCfV4KByNO/TvecjblgEuNrC5dms7rLuD7KEwUESkL47WEeSi
-	 fiZs89Uax1pO4oUVtn/yjeMvhWyk9fie28eRXWUDHTlk0Xr9w4DhQPgSP9ixXxLwcd
-	 a65KUuwzWJNQQ==
-Date: Tue, 3 Sep 2024 14:40:11 -0700
+	b=pLZNXCj0UEyKhvBJH5OnAGowSygKD8coz1erfWLAmf25HQz7h56PVHW0XMx2E/+w7
+	 xIjmR/ODgmkQ6EkT6qbdOkd5+85QO1VKRGcUIdp6j2mkLuyJOvw/tsogx2g6M2wzva
+	 plaXBbA4zNqKIrFF1xpYvfxDeNxXAy01Gmo8YJ+WZVfKF+cf6OJiYtW+gQBUW93FAy
+	 xIbMwFjMhxNIKZyJ57an/ZH5OFRWVdtyWrTv6ylNleOf2fa0XbMtEJRZe8/7ngefo1
+	 qikCcPNCOUF1XR5udOGdG6WVHyWR9fGyOzvTd3fowwLf6pKYqM5v5MJzgqDs6Hj2YM
+	 mtSUblomNCqHQ==
+Date: Tue, 3 Sep 2024 14:51:50 -0700
 From: Jakub Kicinski <kuba@kernel.org>
 To: Mina Almasry <almasrymina@google.com>
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -77,14 +77,12 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
  <pkaligineedi@google.com>, Bagas Sanjaya <bagasdotme@gmail.com>, Christoph
  Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>,
- Taehee Yoo <ap420073@gmail.com>, Willem de Bruijn <willemb@google.com>,
- Kaiyuan Zhang <kaiyuanz@google.com>
-Subject: Re: [PATCH net-next v24 08/13] net: add support for skbs with
- unreadable frags
-Message-ID: <20240903144011.3e7135f9@kernel.org>
-In-Reply-To: <20240831004313.3713467-9-almasrymina@google.com>
+ Taehee Yoo <ap420073@gmail.com>
+Subject: Re: [PATCH net-next v24 11/13] net: add devmem TCP documentation
+Message-ID: <20240903145150.4ffee51b@kernel.org>
+In-Reply-To: <20240831004313.3713467-12-almasrymina@google.com>
 References: <20240831004313.3713467-1-almasrymina@google.com>
-	<20240831004313.3713467-9-almasrymina@google.com>
+	<20240831004313.3713467-12-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -94,13 +92,35 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Sat, 31 Aug 2024 00:43:08 +0000 Mina Almasry wrote:
->  static inline bool tcp_skb_can_collapse_to(const struct sk_buff *skb)
->  {
-> -	return likely(!TCP_SKB_CB(skb)->eor);
-> +	return likely(!TCP_SKB_CB(skb)->eor && skb_frags_readable(skb));
+On Sat, 31 Aug 2024 00:43:11 +0000 Mina Almasry wrote:
+> +The socket must be flow steered to the dmabuf bound RX queue::
+> +
+> +	ethtool -N eth1 flow-type tcp4 ... queue 15,
 
-Do you remember why this is here? Both for Rx and Tx what should matter
-is whether the "readability" matches, right? We can merge two unreadable
-messages.
+nit: tailing comma here
+
+> +Devmem payloads are inaccessible to the kernel processing the packets. This
+> +results in a few quirks for payloads of devmem skbs:
+> +
+> +- Loopback is not functional. Loopback relies on copying the payload, which is
+> +  not possible with devmem skbs.
+> +
+> +- Software checksum calculation fails.
+
+Speaking of which, I think we need to add readability check to 
+skb_checksum_help(). Shouldn't the check in __skb_checksum() 
+have a WARN_ON_ONCE() around it? It's impossible to return 
+an error from there.
+
+> +- TCP Dump and bpf can't access devmem packet payloads.
+> +
+> +
+> +Testing
+> +=======
+> +
+> +More realistic example code can be found in the kernel source under
+> +tools/testing/selftests/net/ncdevmem.c
+
+looks like HTML output wraps the file path, maybe quote it as
+``tools/testing/selftests/net/ncdevmem.c`` ?
 
