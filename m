@@ -1,250 +1,145 @@
-Return-Path: <linux-arch+bounces-6942-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6943-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A159E969921
-	for <lists+linux-arch@lfdr.de>; Tue,  3 Sep 2024 11:35:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5035C969D07
+	for <lists+linux-arch@lfdr.de>; Tue,  3 Sep 2024 14:10:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2D0E01F2519E
-	for <lists+linux-arch@lfdr.de>; Tue,  3 Sep 2024 09:35:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F3A3E1F25F47
+	for <lists+linux-arch@lfdr.de>; Tue,  3 Sep 2024 12:10:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FCA11D094F;
-	Tue,  3 Sep 2024 09:33:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A51E1C9861;
+	Tue,  3 Sep 2024 12:09:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ID+2qPcP"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="S9fJCH2U"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EAC41D0485
-	for <linux-arch@vger.kernel.org>; Tue,  3 Sep 2024 09:33:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 253EF1B984D
+	for <linux-arch@vger.kernel.org>; Tue,  3 Sep 2024 12:09:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725355989; cv=none; b=krU9hSys6/PPjbiAcjM7YBaN52IvUXTeMSesHswxX9LWfvgf4RXrAnditOYGksFLIK4R9nOC/F2JwHwJmTDnHuSjS3iBs8MvGBqeoxt+8rK6VUootwR/Yy5zK0js1hbZN4ULmMF0TyRqnCtifhpyuA/w9k33gjqGUoA/AhqhTZA=
+	t=1725365397; cv=none; b=haYLyDcx8eKMnXa4lIpUU1S69+BGdwIzOtBy3gBveceRpGZo7vh2qR04vlj0lo4wR0rxSFEIHc6eyBxJ8MfvNOpFs+e2IfTM9+4I0/JIUUUiNlWrLNLNNf5XhpFI1sFU95Y3RPJuyWpBQn4l7rktFMrY1HkCpVLueU0GVZT+CRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725355989; c=relaxed/simple;
-	bh=9bwQymfzf4ndqd3FHXuhSQAaB8hV+38lgAKZNuAsONE=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nB+5bGF4uMg5U2ichV4YjCcEz9n6efzNtDkBP+83RrnoqFZLHgdnQY+z/BTc4pAWSp4OGKgNL01eTYHqyB1nh+sZ7Ql49hXswg47eUFBIS+qCSjUrfZOO66Fmg/IDr++NZW7JlwDaioRLLnX7LfZQ23auj5Z1k4RDPkSRse+aC0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ID+2qPcP; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a8692bbec79so569008366b.3
-        for <linux-arch@vger.kernel.org>; Tue, 03 Sep 2024 02:33:07 -0700 (PDT)
+	s=arc-20240116; t=1725365397; c=relaxed/simple;
+	bh=N1qqn7vYKBlbeXYmAR1aaSBjOkAuuoIsPmVXjG1IKa0=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=VmNJfX/BOPeAunGp7pSccIQaQqsqpNYfzcMfJtbdiGQ03nUn/MiuBKKRII4PQNO/OaT112ahNiUGajEwvE5p7rgFNwhYYqYPQdbF/oSgZxRSu9MjeVCRKB0R0DpVfQaN5PrkWy7Hyl2IoAYIVxyNgxvfmbh+FXaUWV/4e/kkT60=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=S9fJCH2U; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-42bc19e94bdso28244245e9.3
+        for <linux-arch@vger.kernel.org>; Tue, 03 Sep 2024 05:09:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1725355985; x=1725960785; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=wTnKFrfUmE/uIkrL7Z9DoBSa27AtxRfrH2Z2SWNCR6U=;
-        b=ID+2qPcPviliUAh87/JIQZz+GwIz0+ikXhuwcYGZa9KU6XMlIU8hFqVZRSbEdsPIqr
-         MZ78jllU9dwC2lQ7yQsdVW9FRGjchQFvttzbA8u9FExn48Ek0g8SwUcTUp6kABIsboFJ
-         p4N4aWiEW0akaDfCUe+a/XbTz0mC65VUvR6UxL93A7ImF5ivD7UTiuPVUm1cGNzWM514
-         xPQfTF0sp6IBRDO/nNmPZd3k8qjC1RGxuwvbITv5tPpgzgva7ucgxfmgn98mN7dhFPnC
-         AOkbFRyJv6vQJSMupMAO1d7rVN2dxZAPCccFCd6xrJi3fMINK4Xy6po0g50gS0w3rNZT
-         0yig==
+        d=linaro.org; s=google; t=1725365393; x=1725970193; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JLYlLLGKbB0TvMjhCmijODtjVYZ8RqD6X4SH5pHru3k=;
+        b=S9fJCH2UgJkF2l+UauktRfkH4nq6TM7EIxAYnstUodWneXJ/guUWV3jxiexAaIpX4P
+         cOq8nLDzfXxC24xhhrjvz8eoi7ZCHnuoeIc9i5DH2nwzRDOdkBbkMElRrv5Dx5N8rVH0
+         daBP0biULvTTipG6uBkctB9INyCkes3hes1btVssSexWAWLn9xBLIUnBQYOpgVKLNU3I
+         RmQVAeQuXl+Z1Ew8SF0UsboblwrwBQioUMVgi3C8lf1Xu3gc0XDkEQeX3+dzbKYdjQjt
+         tB2SGlEpDmfrbfc0mEyAoZ40Cj+dHGrp4/SxzdaspfziCz5RqhBjWQmsWgv+wodJCxeR
+         faOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725355985; x=1725960785;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wTnKFrfUmE/uIkrL7Z9DoBSa27AtxRfrH2Z2SWNCR6U=;
-        b=JiJ/QFl9VPzQKJY3PVuJmFsfzvpFk8JzayBbDHN6Z6gTj2HAO3sML7EpKsZQe71vrs
-         4HM/Bt78H+UYP5xwxyO0w+60FdP6Uyc77o5arzJKfbzUKqwWeHrZ1N+2ul9pXr5eCbWx
-         0fVP/sFPjZ6fucozLLxEJo56Axqg+kqIgPRJkJllLxkJjLvfYgeqrT1Iv3cDPWlRXli6
-         Qrunw1SJaM2x+XrEIOWNf909Tk9xFDJmmezgY98+RRQpumP4wzhG9cY3LOi5CC3+MTGc
-         RaXznxLPY+4beVnE5gEDHMC4zVfmCuKliwuVeQMn7yOzhje+xgEnrKewRhsoJBjM0Pz6
-         eqjQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXOZbFZSq1618YLgtruqBxNo9oroL5GDfzZCU6c24mYVR3yWTSBz5LhYZaaCWBEkXYLso7SKIcagG5l@vger.kernel.org
-X-Gm-Message-State: AOJu0YwUB7s0M6BfsH8aff9Culah1pHDzyJnpAcUdzn0ILGPt4P9YTbn
-	mgFbz+dKJgTOQapfDi9tsA9jw47EamnI32V8fw0QxPFAzbLonFg0Gkxhiy/Kisw=
-X-Google-Smtp-Source: AGHT+IF1reVINALdSgJc0RMsY6rt9TxEJ4rR+Xojf3y9r57wj6wnX0V9PBsi2NJ940berEZ0OfsA7Q==
-X-Received: by 2002:a17:907:72c7:b0:a86:a30f:4aef with SMTP id a640c23a62f3a-a89a35dee4cmr901597466b.22.1725355985011;
-        Tue, 03 Sep 2024 02:33:05 -0700 (PDT)
-Received: from localhost (host-80-182-198-72.retail.telecomitalia.it. [80.182.198.72])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a8988bdcf57sm659603066b.0.2024.09.03.02.33.04
+        d=1e100.net; s=20230601; t=1725365393; x=1725970193;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JLYlLLGKbB0TvMjhCmijODtjVYZ8RqD6X4SH5pHru3k=;
+        b=fKGC6c5kcG+zXDW4LUkMYUE2r4iXGgA9HS58VlRtHtQ0bz0zLybXZ3dpMqwEF62j+z
+         DtcxERMnIlvFjkeGjR2Q2DM7X8utRwHU9VnSuJ1QuvJxMw2UkMr5Qg8FflIF9FvgqS1c
+         rgiYC6RgBNldu1RrOSTxkmDy1QVg31+s2KQTSYLDsxy+DwHI5565DAecRYZc79E1IQy8
+         jTVHBFBcDLYo93zWGxv2zlsF5qgrQKg8Gjes4AzaQfw5Bxw+gJJr6NjCdrLVM+aXblsk
+         eFwFM1RoVdgceEqGv3bvDuJe54q8LDmA6S2puGfaebAsjYeMtlr9tYxHdi/cIyUcf9wN
+         60Vw==
+X-Forwarded-Encrypted: i=1; AJvYcCWGn6lE2FVgZX+QzOW4KWeIMTwbUOpbmZNlnDPZ/2dXAf3NT8SefQApNdIanf6JpN7F9P9uUw8dAV0W@vger.kernel.org
+X-Gm-Message-State: AOJu0YwTNKPdpMWFgZNts65v138Vq+An7YS+N90U7gWGuv3j90hRHv0U
+	+MudRcA7yX74C13rKwh/vAKCTponLPAztzk61ZATT4wHQCcGBjtmADHM0jFYsFk=
+X-Google-Smtp-Source: AGHT+IEyoZ4C1GIHdc4etZJ5y8/7i4ZOxLROM5omYazPOI3P6CpupmD7KGheFpP2J3CHj/uHt2FC5g==
+X-Received: by 2002:a5d:440b:0:b0:374:c847:852 with SMTP id ffacd0b85a97d-376dd71aa2bmr403119f8f.29.1725365393138;
+        Tue, 03 Sep 2024 05:09:53 -0700 (PDT)
+Received: from ubuntu-vm.. (51-148-40-55.dsl.zen.co.uk. [51.148.40.55])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3749ee4a55fsm14069238f8f.10.2024.09.03.05.09.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Sep 2024 02:33:04 -0700 (PDT)
-From: Andrea della Porta <andrea.porta@suse.com>
-X-Google-Original-From: Andrea della Porta <aporta@suse.de>
-Date: Tue, 3 Sep 2024 11:33:12 +0200
-To: Herve Codina <herve.codina@bootlin.com>
-Cc: Rob Herring <robh@kernel.org>,
-	Andrea della Porta <andrea.porta@suse.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
+        Tue, 03 Sep 2024 05:09:51 -0700 (PDT)
+From: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+To: "Jason A . Donenfeld" <Jason@zx2c4.com>,
+	Theodore Ts'o <tytso@mit.edu>,
+	linux-kernel@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-arch@vger.kernel.org,
 	Catalin Marinas <catalin.marinas@arm.com>,
 	Will Deacon <will@kernel.org>,
-	Derek Kiernan <derek.kiernan@amd.com>,
-	Dragan Cvetic <dragan.cvetic@amd.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Saravana Kannan <saravanak@google.com>,
-	Bjorn Helgaas <bhelgaas@google.com>, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, netdev@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
-	Lee Jones <lee@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-	Stefan Wahren <wahrenst@gmx.net>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH 04/11] of: address: Preserve the flags portion on 1:1
- dma-ranges mapping
-Message-ID: <ZtbX2NZ6A6ATqQLh@apocalypse>
-References: <cover.1724159867.git.andrea.porta@suse.com>
- <5ca13a5b01c6c737f07416be53eb05b32811da21.1724159867.git.andrea.porta@suse.com>
- <20240821001618.GA2309328-robh@kernel.org>
- <ZsWi86I1KG91fteb@apocalypse>
- <CAL_JsqKN0ZNMtq+_dhurwLR+FL2MBOmWujp7uy+5HzXxUb_qDQ@mail.gmail.com>
- <ZtBJ0jIq-QrTVs1m@apocalypse>
- <CAL_Jsq+_-m3cjTRsFZ0RwVpot3Pdcr1GWt-qiiFC8kQvsmV7VQ@mail.gmail.com>
- <ZtChPt4cD8PzfEkF@apocalypse>
- <CAL_JsqJNcZx-HH-TJhsNai2fqwPJ+dtcWTdPagRjgqM31wsJkA@mail.gmail.com>
- <20240903110953.2b1f55b6@bootlin.com>
+	Thomas Gleixner <tglx@linutronix.de>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: [PATCH v5 0/2] arm64: Implement getrandom() in vDSO
+Date: Tue,  3 Sep 2024 12:09:15 +0000
+Message-ID: <20240903120948.13743-1-adhemerval.zanella@linaro.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240903110953.2b1f55b6@bootlin.com>
 
-Hi Herve,
+Implement stack-less ChaCha20 and wire it with the generic vDSO
+getrandom code.  The first patch is Mark's fix to the alternatives
+system in the vDSO, while the the second is the actual vDSO work.
 
-On 11:09 Tue 03 Sep     , Herve Codina wrote:
-> Hi,
-> 
-> On Fri, 30 Aug 2024 14:37:54 -0500
-> Rob Herring <robh@kernel.org> wrote:
-> 
-> ...
-> 
-> > > this view is much like Bootlin's approach, also my pci-ep-bus node now would look
-> > > like this:
-> > >  ...
-> > >  pci-ep-bus@0 {
-> > >         ranges = <0xc0 0x40000000
-> > >                   0x01 0x00 0x00000000
-> > >                   0x00 0x00400000>;
-> > >         ...
-> > >  };
-> > >
-> > > and also the correct unit address here is 0 again, since the parent address in
-> > > ranges is 0x01 0x00 0x00000000 (0x01 is the flags and in this case represent
-> > > BAR1, I assume that for the unit address I should use only the address part that
-> > > is 0, right?).  
-> > 
-> > No, it should be 1 for BAR1. It's 1 node per BAR.
-> 
-> It should be 1 node per BAR but in some cases it is not.
-> 
-> Indeed, in the LAN966x case, the pci-ep-bus need to have access to several
-> BARs and we have:
+Changes from v4:
+- Improve BE handling.
 
-I second this, on RP1 there are multiple BARs too, but for this minimal
-implementation we need only one. Splitting them in one bus per BAR or
-merging them with multiple ranges entries depend on whether the peripherals
-can access different BARs simultaneously. Besides this contraint, I would
-say both approach are viable.
+Changes from v3:
+- Use alternative_has_cap_likely instead of ALTERNATIVE.
+- Header/include and comment fixups.
 
-> 	...
-> 	pci-ep-bus@0 {
-> 		compatible = "simple-bus";
-> 		#address-cells = <1>;
-> 		#size-cells = <1>;
-> 
-> 		/*
-> 		 * map @0xe2000000 (32MB) to BAR0 (CPU)
-> 		 * map @0xe0000000 (16MB) to BAR1 (AMBA)
-> 		 */
-> 		ranges = <0xe2000000 0x00 0x00 0x00 0x2000000
-> 		          0xe0000000 0x01 0x00 0x00 0x1000000>;
-> 	...
-> 
-> Some devices under this bus need to use both BARs and use two regs values
-> in their reg properties to access BAR0 and BAR1.
-> 
-> 
-> > > > > > The assumption so far with all of this is that you have some specific
-> > > > > > PCI device (and therefore a driver). The simple-buses under it are
-> > > > > > defined per BAR. Not really certain if that makes sense in all cases,
-> > > > > > but since the address assignment is dynamic, it may have to. I'm also
-> > > > > > not completely convinced we should reuse 'simple-bus' here or define
-> > > > > > something specific like 'pci-bar-bus' or something.  
-> > > > >
-> > > > > Good point. Labeling a new bus for this kind of 'appliance' could be
-> > > > > beneficial to unify the dt overlay approach, and I guess it could be
-> > > > > adopted by the aforementioned Bootlin's Microchip patchset too.
-> > > > > However, since the difference with simple-bus would be basically non
-> > > > > existent, I believe that this could be done in a future patch due to
-> > > > > the fact that the dtbo is contained into the driver itself, so we do
-> > > > > not suffer from the proliferation that happens when dtb are managed
-> > > > > outside.  
-> > > >
-> > > > It's an ABI, so we really need to decide first.  
-> > >
-> > > Okay. How should we proceed?  
-> > 
-> > I think simple-bus where you have it is fine. It is really 1 level up
-> > that needs to be specified. Basically something that's referenced from
-> > the specific PCI device's schema (e.g. the RP1 schema (which you are
-> > missing)).
-> > 
-> > That schema needs to roughly look like this:
-> > 
-> > properties:
-> >   "#address-cells":
-> >     const: 3
-> >   "#size-cells":
-> >     const: 2
-> >   ranges:
-> >     minItems: 1
-> >     maxItems: 6
-> >     items:
-> >       additionalItems: true
-> >       items:
-> >         - maximum: 5  # The BAR number
-> >         - const: 0
-> >         - const: 0
-> >         - # TODO: valid PCI memory flags
-> > 
-> > patternProperties:
-> >   "^bar-bus@[0-5]$":
-> >     type: object
-> >     additionalProperties: true
-> >     properties:
-> >       compatible:
-> >         const: simple-bus
-> >       ranges: true
-> > 
-> 
-> IMHO, the node should not have 'bar' in the name.
-> In the LAN966x PCI use case, multiple BARs have to be accessed by devices
-> under this simple-bus. That's why I choose pci-ep-bus for this node name.
->
+Changes from v2:
+- Refactor Makefile to use same flags for vgettimeofday and
+  vgetrandom.
+- Removed rodata usage and fixed BE on vgetrandom-chacha.S.
 
-Agreed for your scenario. Anyway, since the dtbo and driver are shipped together,
-we are free to change the name anytime without impacting anything.
+Changes from v1:
+- Fixed style issues and typos.
+- Added fallback for systems without NEON support.
+- Avoid use of non-volatile vector registers in neon chacha20.
+- Use c-getrandom-y for vgetrandom.c.
+- Fixed TIMENS vdso_rnd_data access.
 
-Many thanks,
-Andrea
- 
-> Best regards,
-> Hervé
+Adhemerval Zanella (1):
+  arm64: vdso: wire up getrandom() vDSO implementation
+
+Mark Rutland (1):
+  arm64: alternative: make alternative_has_cap_likely() VDSO compatible
+
+ arch/arm64/Kconfig                          |   1 +
+ arch/arm64/include/asm/alternative-macros.h |   4 +
+ arch/arm64/include/asm/mman.h               |   6 +-
+ arch/arm64/include/asm/vdso.h               |   6 +
+ arch/arm64/include/asm/vdso/getrandom.h     |  50 ++++++
+ arch/arm64/include/asm/vdso/vsyscall.h      |  10 ++
+ arch/arm64/kernel/vdso.c                    |   6 -
+ arch/arm64/kernel/vdso/Makefile             |  25 ++-
+ arch/arm64/kernel/vdso/vdso                 |   1 +
+ arch/arm64/kernel/vdso/vdso.lds.S           |   4 +
+ arch/arm64/kernel/vdso/vgetrandom-chacha.S  | 172 ++++++++++++++++++++
+ arch/arm64/kernel/vdso/vgetrandom.c         |  15 ++
+ tools/arch/arm64/vdso                       |   1 +
+ tools/include/linux/compiler.h              |   4 +
+ tools/testing/selftests/vDSO/Makefile       |   3 +-
+ 15 files changed, 292 insertions(+), 16 deletions(-)
+ create mode 100644 arch/arm64/include/asm/vdso/getrandom.h
+ create mode 120000 arch/arm64/kernel/vdso/vdso
+ create mode 100644 arch/arm64/kernel/vdso/vgetrandom-chacha.S
+ create mode 100644 arch/arm64/kernel/vdso/vgetrandom.c
+ create mode 120000 tools/arch/arm64/vdso
+
+-- 
+2.43.0
+
 
