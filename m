@@ -1,205 +1,147 @@
-Return-Path: <linux-arch+bounces-6963-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6964-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF49996A3F8
-	for <lists+linux-arch@lfdr.de>; Tue,  3 Sep 2024 18:15:10 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D834E96A431
+	for <lists+linux-arch@lfdr.de>; Tue,  3 Sep 2024 18:24:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 95A8B287061
-	for <lists+linux-arch@lfdr.de>; Tue,  3 Sep 2024 16:15:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 172E51C23DFB
+	for <lists+linux-arch@lfdr.de>; Tue,  3 Sep 2024 16:24:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28DBC18BB8E;
-	Tue,  3 Sep 2024 16:15:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 415E718BB86;
+	Tue,  3 Sep 2024 16:24:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="WmFFff2k"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sg6V9ryn"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ej1-f66.google.com (mail-ej1-f66.google.com [209.85.218.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB67B18A951
-	for <linux-arch@vger.kernel.org>; Tue,  3 Sep 2024 16:15:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05E45189915;
+	Tue,  3 Sep 2024 16:24:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725380107; cv=none; b=s4+n2A04yc8hcBeX5hbim2/Xjg/n9O8w1K6RfHLK9DL2uhWWen3f1mMFG28Nkhn3p1CdmpX4b6rRvL4LLBPbfivqV93z0l8BHgCos2p/ah7B2F4NO607J9U+vNtJN18NzzBWg3sZtp4fBQVlc6b4nbZscDiVmGxIjBIcOoLF/Ac=
+	t=1725380668; cv=none; b=RMOik9t6nvzYmQ5ecYnwkwsl227r+XKEn+0Ju3Ub7N2IFJIdEDaXUbs1PY5HKw9W1IHXnYLeHJauOK5sFNX5YWLQ6JvU2H1cRwwKjB7sYVx/K5JIWpxAomN7MqKYEkvp25EsYo2aIk8AvzcBEc/nwIIk7niRNe26X2143OYGSUY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725380107; c=relaxed/simple;
-	bh=xpPrjjx3C5+Im8uDKPe6tjHcImbiqGdfdOEgJ6hTna4=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H7G7TOm46c6cZVsdJaWVUPE5yCzyUUWDm+xhvqe2OsWpi/tE2/jpzGdfs/vhKmoPCi7oC7jmhryoSSZMFGlsjk2CCNlPc6ugQXmMJTSFT2lk7jWypuZqV+m6+YWBJnbKzAeSMydzKKJTUQszF83QNXVKnJmzq0ISQsnvBAMbee4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=WmFFff2k; arc=none smtp.client-ip=209.85.218.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ej1-f66.google.com with SMTP id a640c23a62f3a-a8a1d78e7b0so163447166b.3
-        for <linux-arch@vger.kernel.org>; Tue, 03 Sep 2024 09:15:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1725380103; x=1725984903; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ujcJQ5WbiK5TK1a1sgf7j5ujXkTQVZFXM9n+2iP5G8w=;
-        b=WmFFff2kFIq19MtQaDjm0FzF2D+n4UmBArivKNenpVoyPiaLTVuuoy/2JRdmVHz05u
-         Lqa4vliOXLpIra5yAWbRIRmH/gr73eNVqOuCZmERDdoW4IBJPAW0sYaVGWss4Y3rKkFr
-         4krm7cnvbgu1nkic+2VZPaHyF42IWfbWvSKSNHgM6O3W1GyyexRpDg7m2fL5vczsU6T9
-         rrPJgADQIB4TeWtAEmnA82LaI4PPec7TQ4J02+Yu8Ger2/dtigf3afQhVAjjOCTzdvv+
-         35EMIx1mozZG7cBMF6y4hcXC4tVN306+ThGE/zCgjgLD3OTRWnpd8TJymP+El+OaQLAH
-         PeVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725380103; x=1725984903;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ujcJQ5WbiK5TK1a1sgf7j5ujXkTQVZFXM9n+2iP5G8w=;
-        b=fJKItpulcCmpZvp/oikXr9RDUtDV3PEmru9aAu85QmfeaOe8eDNVlqgskPnaZltFr2
-         t1XPHOBe+de7bi7DBuNIZe0yYKfUHvUFIqh3pnfk7bDdQM4Css4GcZJFP5CS3p2CVB9y
-         ZZa7cwW+dKhdbg+5eSY73l+nC+tula6HBlOw4axhKZwfAf+AHSvucL/KWQA2gOgj9cwH
-         i5X585zBc4oaPHkma3/PVyCgzhMulgXD1RgOW6lVKLBfQl4X0TJ3CiGrqsrlzHr3V3LB
-         XlvNQ1DWjTLxSaF8C1uTM3mnR1UDPioz46MWYMODcRNIfrabk0kuTo6bk0f1BGIiLSDc
-         Tp6w==
-X-Forwarded-Encrypted: i=1; AJvYcCWgBL7xFPlLV8d7VCR5hnMxf+lXjFlKwfsgIy1xv85XzIxnHPz+CJms3WLjBhM5tLxUCLOjBgAShMuv@vger.kernel.org
-X-Gm-Message-State: AOJu0YxAEV0VJP0DeRrBuZp+4J6aRF2nlBwcFi90dLLgomnrDes3DZ4A
-	9lhUj2yE4qhseD28KmIPJz3ABu2bfIwc3PAE2miRR4it6y2N6K+ajUKSWnGpRng=
-X-Google-Smtp-Source: AGHT+IGOVI/KlbnVkPKcUFB/WP4ky/V34Mnqxzaki61Es6M5ZEdZH9hu90OMWXXvI1MZc9xKoKdrvw==
-X-Received: by 2002:a17:907:d08:b0:a86:6d39:cbfd with SMTP id a640c23a62f3a-a89fafad393mr618619866b.57.1725380102711;
-        Tue, 03 Sep 2024 09:15:02 -0700 (PDT)
-Received: from localhost (host-80-182-198-72.pool80182.interbusiness.it. [80.182.198.72])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a8a1dbfba91sm145366666b.225.2024.09.03.09.15.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Sep 2024 09:15:02 -0700 (PDT)
-From: Andrea della Porta <andrea.porta@suse.com>
-X-Google-Original-From: Andrea della Porta <aporta@suse.de>
-Date: Tue, 3 Sep 2024 18:15:09 +0200
-To: Rob Herring <robh@kernel.org>
-Cc: Andrea della Porta <andrea.porta@suse.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Derek Kiernan <derek.kiernan@amd.com>,
-	Dragan Cvetic <dragan.cvetic@amd.com>,
+	s=arc-20240116; t=1725380668; c=relaxed/simple;
+	bh=9iVOVu/9OW9hC1XMij8LOQYkL6JBtfZqflc0EqcwKzo=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Oqn5NFMxffPzhtBIVrX4upX+ZE+41rXbwig8fXFid4L8i6/yKUH4zk70VSA5AKsXWqVxq4Yd3B977G9MAQieBFCEwi+oxmcor4ru4jmduO4jE1TePzasUamUO+eX6qj2ysLO6hx9bKM9WvFtP9XMWR7q+zOstqpPI2NssRADbPs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sg6V9ryn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66625C4CEC4;
+	Tue,  3 Sep 2024 16:24:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725380667;
+	bh=9iVOVu/9OW9hC1XMij8LOQYkL6JBtfZqflc0EqcwKzo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Sg6V9rynIO66aMzDEBdKiQ0PGMnzTSeEnWtbuUwm1PMyXSw6Eb5HLrr+fSzCLg5VS
+	 RpTpcLZdH0/HhnyFmkx7TdZyKyFyZyb2qNdRz3JhkQrXjbDjTft5YAHYZX93CBNlS7
+	 CJlI1eqDSRpSThx4MCtKO9jqYyuli7Keqv5WG70qcjiQ5cCbYfJf5Lv8ERlynMtaid
+	 lzVOPLg/KQ+9XmZQmpdlE39b4X7g4bqYuZVHPFpOgmTf1jNIgR/+ZnL/1E+0kWG8+i
+	 iua2ccNDnbGg78bfE4O5uA36r5FQCvCw5QYJDz5l7ZWpbwBbCiVV9kck1fdcGNeMcK
+	 dTaJAroCrhjDg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1slWKP-009J5x-7F;
+	Tue, 03 Sep 2024 17:24:25 +0100
+Date: Tue, 03 Sep 2024 17:24:24 +0100
+Message-ID: <86r0a0vh6v.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Catalin Marinas <catalin.marinas@arm.com>,	Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>
+Cc:	Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
 	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Saravana Kannan <saravanak@google.com>,
-	Bjorn Helgaas <bhelgaas@google.com>, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, netdev@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
-	Lee Jones <lee@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-	Stefan Wahren <wahrenst@gmx.net>,
-	Herve Codina <herve.codina@bootlin.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH 04/11] of: address: Preserve the flags portion on 1:1
- dma-ranges mapping
-Message-ID: <Ztc2DadAnxLIYFj-@apocalypse>
-References: <cover.1724159867.git.andrea.porta@suse.com>
- <5ca13a5b01c6c737f07416be53eb05b32811da21.1724159867.git.andrea.porta@suse.com>
- <20240821001618.GA2309328-robh@kernel.org>
- <ZsWi86I1KG91fteb@apocalypse>
- <CAL_JsqKN0ZNMtq+_dhurwLR+FL2MBOmWujp7uy+5HzXxUb_qDQ@mail.gmail.com>
- <ZtBJ0jIq-QrTVs1m@apocalypse>
- <CAL_Jsq+_-m3cjTRsFZ0RwVpot3Pdcr1GWt-qiiFC8kQvsmV7VQ@mail.gmail.com>
- <ZtChPt4cD8PzfEkF@apocalypse>
- <CAL_JsqJNcZx-HH-TJhsNai2fqwPJ+dtcWTdPagRjgqM31wsJkA@mail.gmail.com>
+	Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+	Kees Cook <kees@kernel.org>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	Ross Burton <ross.burton@arm.com>,
+	Yury Khrustalev <yury.khrustalev@arm.com>,
+	Wilco Dijkstra <wilco.dijkstra@arm.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v12 15/39] KVM: arm64: Manage GCS access and registers for guests
+In-Reply-To: <20240829-arm64-gcs-v12-15-42fec947436a@kernel.org>
+References: <20240829-arm64-gcs-v12-0-42fec947436a@kernel.org>
+	<20240829-arm64-gcs-v12-15-42fec947436a@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAL_JsqJNcZx-HH-TJhsNai2fqwPJ+dtcWTdPagRjgqM31wsJkA@mail.gmail.com>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: catalin.marinas@arm.com, will@kernel.org, broonie@kernel.org, corbet@lwn.net, akpm@linux-foundation.org, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, arnd@arndb.de, oleg@redhat.com, ebiederm@xmission.com, shuah@kernel.org, rick.p.edgecombe@intel.com, debug@rivosinc.com, ardb@kernel.org, Szabolcs.Nagy@arm.com, kees@kernel.org, hjl.tools@gmail.com, paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, fweimer@redhat.com, brauner@kernel.org, thiago.bauermann@linaro.org, ross.burton@arm.com, yury.khrustalev@arm.com, wilco.dijkstra@arm.com, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-Hi Rob,
-
-On 14:37 Fri 30 Aug     , Rob Herring wrote:
-> On Thu, Aug 29, 2024 at 11:26 AM Andrea della Porta
-> <andrea.porta@suse.com> wrote:
-> >
-> > Hi Rob,
-> >
-
-...
-
+On Thu, 29 Aug 2024 00:27:31 +0100,
+Mark Brown <broonie@kernel.org> wrote:
 > 
-> I think simple-bus where you have it is fine. It is really 1 level up
-> that needs to be specified. Basically something that's referenced from
-> the specific PCI device's schema (e.g. the RP1 schema (which you are
-> missing)).
+> GCS introduces a number of system registers for EL1 and EL0, on systems
+> with GCS we need to context switch them and expose them to VMMs to allow
+> guests to use GCS.
 > 
-> That schema needs to roughly look like this:
+> In order to allow guests to use GCS we also need to configure
+> HCRX_EL2.GCSEn, if this is not set GCS instructions will be noops and
+> CHKFEAT will report GCS as disabled.  Also enable fine grained traps for
+> access to the GCS registers by guests which do not have the feature
+> enabled.
 > 
-> properties:
->   "#address-cells":
->     const: 3
->   "#size-cells":
->     const: 2
->   ranges:
->     minItems: 1
->     maxItems: 6
->     items:
->       additionalItems: true
->       items:
->         - maximum: 5  # The BAR number
->         - const: 0
->         - const: 0
->         - # TODO: valid PCI memory flags
+> In order to allow userspace to control availability of the feature to
+> guests we enable writability for only ID_AA64PFR1_EL1.GCS, this is a
+> deliberately conservative choice to avoid errors due to oversights.
+> Further fields should be made writable in future.
 > 
-> patternProperties:
->   "^bar-bus@[0-5]$":
->     type: object
->     additionalProperties: true
->     properties:
->       compatible:
->         const: simple-bus
->       ranges: true
->
+> Reviewed-by: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>  arch/arm64/include/asm/kvm_host.h          | 12 ++++++++
+>  arch/arm64/include/asm/vncr_mapping.h      |  2 ++
+>  arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h | 49 ++++++++++++++++++++++++------
+>  arch/arm64/kvm/sys_regs.c                  | 27 +++++++++++++++-
+>  4 files changed, 79 insertions(+), 11 deletions(-)
 
-Hmmm.. not sure how this is going to work. The PCI device (RP1) will
-havei, at runtime, a compatible like this:
+FWIW, this patch is going to conflict badly with -next, because of the
+"conservative" approach to dealing with ID_AA64PFR1_EL1 (thankfully,
+the *progressive* approach has been merged).
 
-compatible = "pci1de4,1\0pciclass,0200000\0pciclass,0200";
+If it gets stuck on a branch together with patch #11 (which seems to
+be the minimum for things to compile), I can take it independently and
+fix it myself. Just let me know.
 
-that is basically generated automatically by the OF framework. So, in the
-schema you proposed above, I can put something like:
+Thanks,
 
-properties:
-  compatible:
-    contains:
-      pattern: '^pci1de4,1'
+	M.
 
-or maybe I could omit the compatible entirely, like in:
-
-https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/pci/pci-iommu.yaml
-
-that seems to refer to generic compatible values.
-In both cases though, I don't see how these binding could work with
-make dt_binding_check, since there's no compatible known at compile
-time (for the first approach), or no compatible at all (the second
-approach).
-Is it intended only as a loose documentation?
-Or are you proposing that for a future new bus (hence with a new, specific,
-compatible) that could be described by the schema above?
-
-Many thanks,
-Andrea
- 
-> There were some discussions around interrupt handling that might also
-> factor into this.
-> 
-> Rob
+-- 
+Without deviation from the norm, progress is not possible.
 
