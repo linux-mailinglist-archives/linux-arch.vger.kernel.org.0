@@ -1,230 +1,183 @@
-Return-Path: <linux-arch+bounces-6967-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6968-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AECC796A654
-	for <lists+linux-arch@lfdr.de>; Tue,  3 Sep 2024 20:20:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33E9C96A672
+	for <lists+linux-arch@lfdr.de>; Tue,  3 Sep 2024 20:27:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 32DDA1F24929
-	for <lists+linux-arch@lfdr.de>; Tue,  3 Sep 2024 18:20:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B65FE1F26B9C
+	for <lists+linux-arch@lfdr.de>; Tue,  3 Sep 2024 18:27:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28DDF1917C8;
-	Tue,  3 Sep 2024 18:20:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 634011917C8;
+	Tue,  3 Sep 2024 18:27:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ydlfzMSb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cZUJ+bTe"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F6F6191477
-	for <linux-arch@vger.kernel.org>; Tue,  3 Sep 2024 18:20:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25E2418FDD7;
+	Tue,  3 Sep 2024 18:27:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725387605; cv=none; b=bdv21ldJC1cGCog/dCHqG8eay703VALeNWKFJbxkMTVYUX4rx5hg8yqOmJfhH6gXC2vLmrWhyV4zLndUTsy7kguLmfYg5mTzz3aIl+KNLE9yWEXofWG1IN4hBvaftR5zqvh8fqdVv9vp1fE7o+ow9thY9UmTZfNeYuH43K1SwZI=
+	t=1725388046; cv=none; b=ou/RFko5nRNMFP2DvXOcTkXlgT78LRbdGobEYFNevHkWhV1IJKBcC1Fi+ZJD40zNABztD+fMZZbHxMqW7nOVTr8d6npOAv9aSBrfqHEhGoZ9TSlW/gnsrB0oupFf45EcGAyMcwUa9k74TSsRQakIxJwZiS8+hv9bvn8iQggqtsE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725387605; c=relaxed/simple;
-	bh=zXN/cYGVl2WUochENDfjWT91MjJc/vSw44nrbwt6mHY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KV1fEQ35/GPh5ls0cJjIlQJh67xAiY8t8v19IxfwqO1rYE9RiHpy2JmlXULd9wi0ZG+i09Z9kZnV9n7vtIhgB7pC1ZbnLkGpnq4tQeCp4oCabJLv6awlg2d1pA0uM3/yRFPpSghFkXU6aKnEsQ0CZ+rORBvumhuelWWwOAF9D24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ydlfzMSb; arc=none smtp.client-ip=209.85.160.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-4567deb9f9dso32881cf.1
-        for <linux-arch@vger.kernel.org>; Tue, 03 Sep 2024 11:20:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1725387602; x=1725992402; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BavSPl5fUtSdj/rsZpwNTR+qZ+A98RwNx6tvieBDuTs=;
-        b=ydlfzMSbYXzau+BOfW2sp03zEDKQYC/IFvlDYBhswif2+dYiCemHCZ+nAoyveHzIim
-         tOTtCnb7z9y+J1vU4fKwIDmAlgUuZIb+KIETCfuwaVEKqq7Tpim1tMhUQZvjEINyc78g
-         f21uvBuco5g9pO1EYQzesZ0UzdtemAwe7f3PtiBEBUqzV1RMHfeYLTKyAANMGgYeW1ee
-         w0svIlm+2mM20Iodr+qj7rmBF0K/8bIdJ8vGGBtBefMP0aLBY5FkY5GlW8Hl2L0JLcOT
-         SDEFOPBVthrIpzJnGGXSETeuBztCM93c996X/BgwPz/bo2vpP0N2iT59qDWDXqIxh4MR
-         5wAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725387602; x=1725992402;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BavSPl5fUtSdj/rsZpwNTR+qZ+A98RwNx6tvieBDuTs=;
-        b=wK6sr7XqMLPS/+Q+JeDzI2m5ZVQm9UAlwmo+LetdhfdL8z7nLooDp4KnpVa6D1Qb81
-         2FQXafGH7b0I1F0Pr3t+wGhPythk6OgEPqxmM40TYHF2gGuKy4aeH/WpgLVUQSjIyHfo
-         cWE8bd1Mkjixu/mmY3hJB3Ak1c8JU0wRLBHTeBke7s/WeSe12Zxif/y8b58NR8am+Chz
-         /zoPEFKCkM+L1QjIOSkLjH7fjp+Eqn4yYULYWN6I5pVVXo0GK7WGFVylYg6fGvPRxCi2
-         0540mY2hiQZObvcVXHN7qoDGUvMtS3W7UvSPrR8t7ZFs9wBlTElOM06lS9uTHheLS2N+
-         dXVw==
-X-Forwarded-Encrypted: i=1; AJvYcCVRaQnLRCIl0X+0eVxRvYwNK/hhr/SlWH3ZNihj2LT0Q6kSgLRmQCDm8GgXKX7DQf5TSbiG5WPLk7V3@vger.kernel.org
-X-Gm-Message-State: AOJu0YyHx/tQdGAhEt2MsAiy51PEKDthtGw2QgT49wtqFND2amP/D+fy
-	wDUP4rswP4YeU8uRHFh2dCcuVUhHrrRN1luAPWNg0XgXrrfbYZKWlEWqfduGUNkfshsIMZDsie7
-	VohWqZlWU+ceq/i+MfYC63+PuHKxnaNNeV6y5
-X-Google-Smtp-Source: AGHT+IGGVsLSR0VWiAw1Ihng2p7h4/4G9uaafKrLUqbwk2Hx9YjWEaRA9FJvSAxgGPWu1F5yx8Cnzf/j56ZBNxw7Whk=
-X-Received: by 2002:ac8:7d85:0:b0:453:56d3:d155 with SMTP id
- d75a77b69052e-457f6225901mr370451cf.8.1725387601590; Tue, 03 Sep 2024
- 11:20:01 -0700 (PDT)
+	s=arc-20240116; t=1725388046; c=relaxed/simple;
+	bh=jtq+NV2hFNSsN40Ko7LAblrCis08mq85mqLfSbvwx4A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GVLkNy11Fcl92VrdgtiaJN7ybo/DNBZ3U3zPIg7ms9i+bEx0bOpLfvoTnD9DcsDsRgJsBfa+UncQO3u7gLswbZbmrk20SgJCqbciy6t8wDSoqkVa3GRfr1lHPQDDU/ULa0dPmmdMBLh9AZAP9cNasa62L543GgoIq2jFAchO6xo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cZUJ+bTe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F48FC4CEC5;
+	Tue,  3 Sep 2024 18:27:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725388045;
+	bh=jtq+NV2hFNSsN40Ko7LAblrCis08mq85mqLfSbvwx4A=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=cZUJ+bTeqLi5y51bzBiYvYdQHngkR/4dba4aCV397G5bKm7jE99jg4yrTptWd3CTm
+	 /eEbjScXUiD/gVAKNKlGmafp3i5yrPI2V4t91OpF105/nMYV2sSVHssF8+W+QGmMLK
+	 JdqP/bwxwprfZCNmaFuoPq/FSWeGZ3iuFRCQbrV4iwdvxJYp3IGphdluTKzdOprdQH
+	 FZ3X4Cm1vfYA5tjyYrJbVaVIvudaOqno31GQQc5OpYL8+x3yoLziuN0Z9/7guSd5dE
+	 MIrzLZyOjhvGNjE1OkfiWm+GrcAuRgpr6pjLNN1jjchtLM+S3aPzAp3d5fU+tWc5fK
+	 UPPgxFN4IYuoA==
+Message-ID: <39735704-ae94-4ff8-bf4d-d2638b046c8e@kernel.org>
+Date: Tue, 3 Sep 2024 20:27:14 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240902044128.664075-1-surenb@google.com> <20240902044128.664075-7-surenb@google.com>
- <20240901221636.5b0af3694510482e9d9e67df@linux-foundation.org>
-In-Reply-To: <20240901221636.5b0af3694510482e9d9e67df@linux-foundation.org>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Tue, 3 Sep 2024 11:19:48 -0700
-Message-ID: <CAJuCfpGNYgx0GW4suHRzmxVH28RGRnFBvFC6WO+F8BD4HDqxXA@mail.gmail.com>
-Subject: Re: [PATCH v2 6/6] alloc_tag: config to store page allocation tag
- refs in page flags
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: kent.overstreet@linux.dev, corbet@lwn.net, arnd@arndb.de, 
-	mcgrof@kernel.org, rppt@kernel.org, paulmck@kernel.org, thuth@redhat.com, 
-	tglx@linutronix.de, bp@alien8.de, xiongwei.song@windriver.com, 
-	ardb@kernel.org, david@redhat.com, vbabka@suse.cz, mhocko@suse.com, 
-	hannes@cmpxchg.org, roman.gushchin@linux.dev, dave@stgolabs.net, 
-	willy@infradead.org, liam.howlett@oracle.com, pasha.tatashin@soleen.com, 
-	souravpanda@google.com, keescook@chromium.org, dennis@kernel.org, 
-	jhubbard@nvidia.com, yuzhao@google.com, vvvvvv@google.com, 
-	rostedt@goodmis.org, iamjoonsoo.kim@lge.com, rientjes@google.com, 
-	minchan@google.com, kaleshsingh@google.com, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, linux-mm@kvack.org, 
-	linux-modules@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 08/11] misc: rp1: RaspberryPi RP1 misc driver
+To: Andrea della Porta <andrea.porta@suse.com>
+Cc: Michael Turquette <mturquette@baylibre.com>,
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Florian Fainelli <florian.fainelli@broadcom.com>,
+ Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>,
+ Linus Walleij <linus.walleij@linaro.org>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Derek Kiernan <derek.kiernan@amd.com>, Dragan Cvetic
+ <dragan.cvetic@amd.com>, Arnd Bergmann <arnd@arndb.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Nicolas Ferre <nicolas.ferre@microchip.com>,
+ Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Saravana Kannan <saravanak@google.com>, Bjorn Helgaas <bhelgaas@google.com>,
+ linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+ netdev@vger.kernel.org, linux-pci@vger.kernel.org,
+ linux-arch@vger.kernel.org, Lee Jones <lee@kernel.org>,
+ Andrew Lunn <andrew@lunn.ch>, Stefan Wahren <wahrenst@gmx.net>
+References: <cover.1724159867.git.andrea.porta@suse.com>
+ <5954e4dccc0e158cf434d2c281ad57120538409b.1724159867.git.andrea.porta@suse.com>
+ <lrv7cpbt2n7eidog5ydhrbyo5se5l2j23n7ljxvojclnhykqs2@nfeu4wpi2d76>
+ <ZtHN0B8VEGZFXs95@apocalypse>
+ <b74327b8-43f6-47cf-ba9d-cc9a4559767b@kernel.org>
+ <ZtcoFmK6NPLcIwVt@apocalypse>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <ZtcoFmK6NPLcIwVt@apocalypse>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sun, Sep 1, 2024 at 10:16=E2=80=AFPM Andrew Morton <akpm@linux-foundatio=
-n.org> wrote:
->
-> On Sun,  1 Sep 2024 21:41:28 -0700 Suren Baghdasaryan <surenb@google.com>=
- wrote:
->
-> > Add CONFIG_PGALLOC_TAG_USE_PAGEFLAGS to store allocation tag
-> > references directly in the page flags. This removes dependency on
-> > page_ext and results in better performance for page allocations as
-> > well as reduced page_ext memory overhead.
-> > CONFIG_PGALLOC_TAG_REF_BITS controls the number of bits required
-> > to be available in the page flags to store the references. If the
-> > number of page flag bits is insufficient, the build will fail and
-> > either CONFIG_PGALLOC_TAG_REF_BITS would have to be lowered or
-> > CONFIG_PGALLOC_TAG_USE_PAGEFLAGS should be disabled.
-> >
-> > ...
-> >
-> > +config PGALLOC_TAG_USE_PAGEFLAGS
-> > +     bool "Use pageflags to encode page allocation tag reference"
-> > +     default n
-> > +     depends on MEM_ALLOC_PROFILING
-> > +     help
-> > +       When set, page allocation tag references are encoded inside pag=
-e
-> > +       flags, otherwise they are encoded in page extensions.
-> > +
-> > +       Setting this flag reduces memory and performance overhead of me=
-mory
-> > +       allocation profiling but also limits how many allocations can b=
-e
-> > +       tagged. The number of bits is set by PGALLOC_TAG_USE_PAGEFLAGS =
-and
-> > +       they must fit in the page flags field.
->
-> Again.  Please put yourself in the position of one of the all-minus-two
-> people in this world who aren't kernel-memory-profiling-developers.
-> How the heck are they to decide whether or not to enable this?  OK, 59%
-> of them are likely to say "yes" because reasons.  But then what?  How
-> are they to determine whether it was the correct choice for them?  If
-> we don't tell them, who will?
+On 03/09/2024 17:15, Andrea della Porta wrote:
+>>>>> +
+>>>>> +				rp1_clocks: clocks@c040018000 {
+>>>>
+>>>> Why do you mix MMIO with non-MMIO nodes? This really does not look
+>>>> correct.
+>>>>
+>>>
+>>> Right. This is already under discussion here:
+>>> https://lore.kernel.org/all/ZtBzis5CzQMm8loh@apocalypse/
+>>>
+>>> IIUC you proposed to instantiate the non-MMIO nodes (the three clocks) by
+>>> using CLK_OF_DECLARE.
+>>
+>> Depends. Where are these clocks? Naming suggests they might not be even
+>> part of this device. But if these are part of the device, then why this
+>> is not a clock controller (if they are controllable) or even removed
+>> (because we do not represent internal clock tree in DTS).
+> 
+> xosc is a crystal connected to the oscillator input of the RP1, so I would
+> consider it an external fixed-clock. If we were in the entire dts, I would have
+> put it in root under /clocks node, but here we're in the dtbo so I'm not sure
+> where else should I put it.
 
-Fair point. I think one would want to enable this config unless there
-aren't enough unused bits if the page flags to address all page
-allocation tags. That last part of determining how many bits we need
-is a bit tricky.
-If we put aside loadable modules for now, there are 3 cases:
+But physically, on which PCB, where is this clock located?
 
-1. The number of unused page flag bits is enough to address all page
-allocations.
-2. The number of unused page flag bits is enough if we push
-last_cpupid out of page flags. In that case we get the warning at
-https://elixir.bootlin.com/linux/v6.11-rc6/source/mm/mm_init.c#L124.
-3. The number of unused page flag bits is not enough even if we push
-last_cpupid out of page flags. In that case we get the  "Not enough
-bits in page flags" build time error.
+> 
+> Regarding pclk and hclk, I'm still trying to understand where they come from.
+> If they are external clocks (since they are fixed-clock too), they should be
+> in the same node as xosc. CLK_OF_DECLARE does not seem to fit here because
 
-So, maybe I should make this option "default y" when
-CONFIG_MEM_ALLOC_PROFILING=3Dy and let the user disable it if they hit
-case #3 or (case #2 and performance hit is unacceptable)?
+There is no such node as "/clocks" so do not focus on that. That's just
+placeholder but useless and it is inconsistent with other cases (e.g.
+regulators).
 
-For loadable modules, if we hit the limit when loading a module at
-runtime, we could issue a warning and disable allocation tagging via
-the static key. Another option is to fail to load the module with a
-proper warning but that IMO would be less appealing.
+If this is external oscillator then it is not part of RP1 and you cannot
+put it inside just to satisfy your drivers.
 
->
-> >  config PGALLOC_TAG_REF_BITS
-> >       int "Number of bits for page allocation tag reference (10-64)"
-> >       range 10 64
-> > -     default "64"
-> > +     default "16" if PGALLOC_TAG_USE_PAGEFLAGS
-> > +     default "64" if !PGALLOC_TAG_USE_PAGEFLAGS
-> >       depends on MEM_ALLOC_PROFILING
-> >       help
-> >         Number of bits used to encode a page allocation tag reference.
-> > @@ -1011,6 +1027,13 @@ config PGALLOC_TAG_REF_BITS
-> >         Smaller number results in less memory overhead but limits the n=
-umber of
-> >         allocations which can be tagged (including allocations from mod=
-ules).
-> >
-> > +       If PGALLOC_TAG_USE_PAGEFLAGS is set, the number of requested bi=
-ts should
-> > +       fit inside the page flags.
->
-> What does "should fit" mean?  "It is your responsibility to make it
-> fit"?  "We think it will fit but we aren't really sure"?
+> there's no special management of these clocks, so no new clock definition is
+> needed.
 
-This is the case #3 I described above, the user will get a "Not enough
-bits in page flags" build time error. If we stick with this config, I
-can clarify that in this description.
+> If they are internal tree, I cannot simply get rid of them because rp1_eth node
+> references these two clocks (see clocks property), so they must be decalred 
+> somewhere. Any hint about this?.
+> 
 
->
-> > +       If PGALLOC_TAG_USE_PAGEFLAGS is not set, the number of bits use=
-d to store
-> > +       a reference is rounded up to the closest basic type. If set hig=
-her than 32,
-> > +       a direct pointer to the allocation tag is stored for performanc=
-e reasons.
-> > +
->
-> We shouldn't be offering things like this to our users.  If we cannot dec=
-ide, how
-> can they?
+Describe the hardware. Show the diagram or schematics where is which device.
 
-Thinking about the ease of use, the CONFIG_PGALLOC_TAG_REF_BITS is the
-hardest one to set. The user does not know how many page allocations
-are there. I think I can simplify this by trying to use all unused
-page flag bits for addressing the tags. Then, after compilation we can
-follow the rules I mentioned before:
-- If the available bits are not enough to address all kernel page
-allocations, we issue an error. The user should disable
-CONFIG_PGALLOC_TAG_USE_PAGEFLAGS.
-- If there are enough unused bits but we have to push last_cpupid out
-of page flags, we issue a warning and continue. The user can disable
-CONFIG_PGALLOC_TAG_USE_PAGEFLAGS if last_cpupid has to stay in page
-flags.
-- If we run out of addressing space during module loading, we disable
-allocation tagging and continue. The user should disable
-CONFIG_PGALLOC_TAG_USE_PAGEFLAGS.
+Best regards,
+Krzysztof
 
-This leaves one outstanding case:
-- If we run out of addressing space during module loading but we would
-not run out of space if we pushed last_cpupid out of page flags during
-compilation.
-In this case I would want the user to have an option to request a
-larger addressing space for page allocation tags at compile time.
-Maybe I can keep CONFIG_PGALLOC_TAG_REF_BITS for such explicit
-requests for a larger space? This would limit the use of
-CONFIG_PGALLOC_TAG_REF_BITS to this case only. In all other cases the
-number of bits would be set automatically. WDYT?
 
