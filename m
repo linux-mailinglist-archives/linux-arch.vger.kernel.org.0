@@ -1,140 +1,183 @@
-Return-Path: <linux-arch+bounces-7032-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7033-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3544D96C560
-	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2024 19:25:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2694096C567
+	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2024 19:27:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4C8F11C25329
-	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2024 17:25:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5715F1C20A5F
+	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2024 17:27:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCEB71E2008;
-	Wed,  4 Sep 2024 17:23:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="h1s4T6m4";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="NhO+4sF9"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BA0A7E563;
+	Wed,  4 Sep 2024 17:27:02 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fout7-smtp.messagingengine.com (fout7-smtp.messagingengine.com [103.168.172.150])
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3B5B1D0169;
-	Wed,  4 Sep 2024 17:23:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0FCB10A12;
+	Wed,  4 Sep 2024 17:26:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725470629; cv=none; b=ZbGgf7n8WAw/NBiiOyn7WOveK5fxOIu/fhPsmnCy7Qykhb4xaHZSD061Rm6VPVi6pm37xt05s0JvmJzNClKmtEiiwUr6szwMgiZE0L9YVC89T8kCgiIoeN+eBqlteYtCBdZaaz0xJtKlP660fAjCe4GX8Xj/l9vqKIbhnKQf3PU=
+	t=1725470822; cv=none; b=RNm1rNsx9xyeXCCTPYI0tZMhW0IAz+c4MxfrUmT1nj2zSMyQIYbz9o7eEGPR2U7H4qQOaOY8rLvX3bdsOpPbBWaCY5y0EJgExG0UkPNfVjGW301Rjy/aSKSRjVfMUsrAjpsVd/GC2VegOzHhSu8u8FOT/fcPsVNwpB3zasNwx+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725470629; c=relaxed/simple;
-	bh=s2efDce6CDX31pgQiN32+eqcS1MxoqBaGVtMSiBMXWI=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=FvNOW2LPY5aruw5typNs9BLpImCUcSnNtO3HTSOFgGrLD/UkCYOGX9Cfg3+Y7r/Nmh2xLwl1HXhFNVMXTIaKn0ocHXRkenykbkDRQ1Hw86jkR19c0pn53bk2W0H4Mb4Exn61eKKvtR9ooVpaA9l0denz91SYtg50xz0olTfbDa8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=h1s4T6m4; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=NhO+4sF9; arc=none smtp.client-ip=103.168.172.150
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
-	by mailfout.phl.internal (Postfix) with ESMTP id D83CE13801B5;
-	Wed,  4 Sep 2024 13:23:45 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-04.internal (MEProxy); Wed, 04 Sep 2024 13:23:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1725470625;
-	 x=1725557025; bh=gejL7XLc5uyclMWWJdGk4rD+yPLuNoi/CA2jk7RUBJw=; b=
-	h1s4T6m4iK2zaF3B0ZwkXrMbhPP2nwgbKVXxqnhCfSQEnjN53s8t3yVDUSAev9KC
-	3AEjGSgDaLKTQNRwoi7fbJSG9C1QJJ8tp/5HWeDe4Zzyocfh8wKIBihi+b6Orcfc
-	ieLkV2zyWCko+STaBJqUHF/aO3SxLPtfQotKAUbJVPkchcd3zLu1Iu7YKMJ3rqVo
-	elLg5YnOCQvFQiRSAQZ492Dn4eDuhvrEZCbOFvKBEVu1rsgp5dqrFdu8xHpmo79L
-	xTiK0stcIwKi0Ihsk8ubKPfQKVbEb9+a9lgYUIzimL4YoTq2gfkEiqUdSqN1WyU3
-	GLMs5zBfBLKmuN81Phay2A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1725470625; x=
-	1725557025; bh=gejL7XLc5uyclMWWJdGk4rD+yPLuNoi/CA2jk7RUBJw=; b=N
-	hO+4sF9227F3QJuwaq7xvDb0H7crblJIVyuynjtvnBEZasu6OX4UfSHw4p6QhIRO
-	zJ7sjUw61uKsQrJHxW4wXM0U6TwJOYckamYvSA9CQUXnjCnqxRF1Pa7W4IuhphpC
-	1tfe0mT89Gi0+WmjVz0gFwtgNWkOlVnSY1IIAVZ9AeHaWOyl16UuxEWUaiToDHTi
-	hqAtJ5mA9FzKktpUQHjG2z1QWU5hBVXjzILIVP0JAq+Db3Lp9x4sTzvSc26dVcYj
-	Ix4v79rY+WHgh0F1kp0f6rpUgRW2nbvFKuOQGVHiiDsVEpn4qdua+X3yVua1Ujdo
-	YMG/Wx2YChwU1gFE4cgnQ==
-X-ME-Sender: <xms:oJfYZlJz4HzYpfZ91WDDlaWdiSSdqb_coPO9POqoTUSa1LQCbpkrVQ>
-    <xme:oJfYZhLiuoaPqIJCtbig3f9vp8AG6NdBrMb0lfVOc-ankVT7f5nqhLSd-I4xbGZGv
-    Vgnkd5bLjBfqTYhE3I>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudehjedgudduudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthhqredtredt
-    jeenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
-    druggvqeenucggtffrrghtthgvrhhnpedvhfdvkeeuudevfffftefgvdevfedvleehvddv
-    geejvdefhedtgeegveehfeeljeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopedv
-    tddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepsghpsegrlhhivghnkedruggvpd
-    hrtghpthhtohepvhhinhgtvghniihordhfrhgrshgtihhnohesrghrmhdrtghomhdprhgt
-    phhtthhopegthhhrihhsthhophhhvgdrlhgvrhhohiestghsghhrohhuphdrvghupdhrtg
-    hpthhtohepmhgrthhhihgvuhdruggvshhnohihvghrshesvghffhhitghiohhsrdgtohhm
-    pdhrtghpthhtohepmhhpvgesvghllhgvrhhmrghnrdhiugdrrghupdhrtghpthhtohepnh
-    hpihhgghhinhesghhmrghilhdrtghomhdprhgtphhtthhopehrohhsthgvughtsehgohho
-    ughmihhsrdhorhhgpdhrtghpthhtoheplhhuthhosehkvghrnhgvlhdrohhrghdprhgtph
-    htthhopehmhhhirhgrmhgrtheskhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:oJfYZtvFpkA9rcBOZ1jgUYe9gHISIPWjwZQkBUvRmnhvmUE7iX0JDA>
-    <xmx:oJfYZmZsjPErShFS0ldf-_fntBtiV7un_d1OH7s6vBvsrwzHo-Rwwg>
-    <xmx:oJfYZsaPeaCFve5BbPMgCQm116oWRLhYnb7skgTJ1EiQQFebW6_OXA>
-    <xmx:oJfYZqC3XEp3bkHYUUlEHZVtxwhrcCy0VoW-bkQffQnhMuhZeoKtbQ>
-    <xmx:oZfYZsOv0G6dQMMz0hfmsvPCpUPxnHW-PNR-ysEkGjd3t6UCzd2wmjYS>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 960A82220083; Wed,  4 Sep 2024 13:23:44 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1725470822; c=relaxed/simple;
+	bh=x5UWK4tq3vfEQd6AfQd7ddjKoEFsxO1Siq4LgZPbl8E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RbX8xk6mQN1IWyod5A3Bb6VtbHjzVY45xStNHN4pwIAtCL/1rvl5rZ1IswrmXneWS4kNzhCDxh+frFSy0ItJxfX/GQ9GgCA2nu9oiZvtX6BJRP04OU/Bejvoo/inHUP7oGoplkz1oBEvxg99cRIfWVOCvD8lghivVVO5bXwyqkw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4WzTv604t4z9sSX;
+	Wed,  4 Sep 2024 19:26:58 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id k6RUWDAoBkJa; Wed,  4 Sep 2024 19:26:57 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4WzTv55sdgz9sSC;
+	Wed,  4 Sep 2024 19:26:57 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id AF0A08B77A;
+	Wed,  4 Sep 2024 19:26:57 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id Dk3TEmDg0kec; Wed,  4 Sep 2024 19:26:57 +0200 (CEST)
+Received: from [192.168.234.246] (unknown [192.168.234.246])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id C6F468B778;
+	Wed,  4 Sep 2024 19:26:56 +0200 (CEST)
+Message-ID: <b899bce8-8704-4288-9f32-bcb2fa0d29a8@csgroup.eu>
+Date: Wed, 4 Sep 2024 19:26:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Wed, 04 Sep 2024 17:23:24 +0000
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Christophe Leroy" <christophe.leroy@csgroup.eu>,
- "Vincenzo Frascino" <vincenzo.frascino@arm.com>,
- linux-kernel@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>,
- linux-mm@kvack.org
-Cc: "Andy Lutomirski" <luto@kernel.org>,
- "Thomas Gleixner" <tglx@linutronix.de>,
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 9/9] vdso: Modify getrandom to include the correct
+ namespace
+To: Vincenzo Frascino <vincenzo.frascino@arm.com>,
+ linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, linux-mm@kvack.org
+Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
  "Jason A . Donenfeld" <Jason@zx2c4.com>,
- "Michael Ellerman" <mpe@ellerman.id.au>,
- "Nicholas Piggin" <npiggin@gmail.com>, "Naveen N Rao" <naveen@kernel.org>,
- "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
- "Dave Hansen" <dave.hansen@linux.intel.com>,
- "H. Peter Anvin" <hpa@zytor.com>, "Theodore Ts'o" <tytso@mit.edu>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Steven Rostedt" <rostedt@goodmis.org>,
- "Masami Hiramatsu" <mhiramat@kernel.org>,
- "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-Message-Id: <780d969f-8057-41aa-901f-08a5fbebcba9@app.fastmail.com>
-In-Reply-To: <b78eab34-61f5-4c9e-b080-d2524cd30eb8@csgroup.eu>
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Naveen N Rao <naveen@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ "H . Peter Anvin" <hpa@zytor.com>, Theodore Ts'o <tytso@mit.edu>,
+ Arnd Bergmann <arnd@arndb.de>, Andrew Morton <akpm@linux-foundation.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 References: <20240903151437.1002990-1-vincenzo.frascino@arm.com>
- <20240903151437.1002990-6-vincenzo.frascino@arm.com>
- <b78eab34-61f5-4c9e-b080-d2524cd30eb8@csgroup.eu>
-Subject: Re: [PATCH 5/9] vdso: Split linux/minmax.h
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+ <20240903151437.1002990-10-vincenzo.frascino@arm.com>
+Content-Language: fr-FR
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <20240903151437.1002990-10-vincenzo.frascino@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Sep 4, 2024, at 17:17, Christophe Leroy wrote:
-> Le 03/09/2024 =C3=A0 17:14, Vincenzo Frascino a =C3=A9crit=C2=A0:
->> The VDSO implementation includes headers from outside of the
->> vdso/ namespace.
->>=20
->> Split linux/minmax.h to make sure that the generic library
->> uses only the allowed namespace.
->
-> It is probably easier to just don't use min_t() in VDSO. Can be open=20
-> coded without impeeding readability.
 
-Right, or possibly the even simpler MIN()/MAX() if the arguments
-have no side-effects.
 
-       Arnd
+Le 03/09/2024 à 17:14, Vincenzo Frascino a écrit :
+> The VDSO implementation includes headers from outside of the
+> vdso/ namespace.
+> 
+> Modify getrandom to take advantage of the refactoring done in the
+> previous patches and to include only the vdso/ namespace.
+> 
+> Cc: Andy Lutomirski <luto@kernel.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Jason A. Donenfeld <Jason@zx2c4.com>
+> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> ---
+>   lib/vdso/getrandom.c | 22 ++++++++--------------
+>   1 file changed, 8 insertions(+), 14 deletions(-)
+> 
+> diff --git a/lib/vdso/getrandom.c b/lib/vdso/getrandom.c
+> index 938ca539aaa6..9c26b738e4a1 100644
+> --- a/lib/vdso/getrandom.c
+> +++ b/lib/vdso/getrandom.c
+> @@ -3,19 +3,13 @@
+>    * Copyright (C) 2022-2024 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
+>    */
+>   
+> -#include <linux/array_size.h>
+> -#include <linux/minmax.h>
+>   #include <vdso/datapage.h>
+>   #include <vdso/getrandom.h>
+>   #include <vdso/unaligned.h>
+> -#include <asm/vdso/getrandom.h>
+> -#include <uapi/linux/mman.h>
+> -#include <uapi/linux/random.h>
+
+Now build fails on powerpc because struct vgetrandom_opaque_params is 
+unknown.
+
+x86 get it by chance via the following header inclusion chain:
+
+In file included from ./include/linux/random.h:10,
+                  from ./include/linux/nodemask.h:98,
+                  from ./include/linux/mmzone.h:18,
+                  from ./include/linux/gfp.h:7,
+                  from ./include/linux/xarray.h:16,
+                  from ./include/linux/radix-tree.h:21,
+                  from ./include/linux/idr.h:15,
+                  from ./include/linux/kernfs.h:12,
+                  from ./include/linux/sysfs.h:16,
+                  from ./include/linux/kobject.h:20,
+                  from ./include/linux/of.h:18,
+                  from ./include/linux/clocksource.h:19,
+                  from ./include/clocksource/hyperv_timer.h:16,
+                  from ./arch/x86/include/asm/vdso/gettimeofday.h:21,
+                  from ./include/vdso/datapage.h:164,
+                  from 
+arch/x86/entry/vdso/../../../../lib/vdso/getrandom.c:7,
+                  from arch/x86/entry/vdso/vgetrandom.c:7:
+
+
+
+
+> -
+> -#undef PAGE_SIZE
+> -#undef PAGE_MASK
+> -#define PAGE_SIZE (1UL << CONFIG_PAGE_SHIFT)
+> -#define PAGE_MASK (~(PAGE_SIZE - 1))
+> +#include <vdso/mman.h>
+> +#include <vdso/page.h>
+> +#include <vdso/array_size.h>
+> +#include <vdso/minmax.h>
+>   
+>   #define MEMCPY_AND_ZERO_SRC(type, dst, src, len) do {				\
+>   	while (len >= sizeof(type)) {						\
+> @@ -68,7 +62,7 @@ static __always_inline ssize_t
+>   __cvdso_getrandom_data(const struct vdso_rng_data *rng_info, void *buffer, size_t len,
+>   		       unsigned int flags, void *opaque_state, size_t opaque_len)
+>   {
+> -	ssize_t ret = min_t(size_t, INT_MAX & PAGE_MASK /* = MAX_RW_COUNT */, len);
+> +	ssize_t ret = min_t(size_t, INT_MAX & VDSO_PAGE_MASK /* = MAX_RW_COUNT */, len);
+>   	struct vgetrandom_state *state = opaque_state;
+>   	size_t batch_len, nblocks, orig_len = len;
+>   	bool in_use, have_retried = false;
+> @@ -79,15 +73,15 @@ __cvdso_getrandom_data(const struct vdso_rng_data *rng_info, void *buffer, size_
+>   	if (unlikely(opaque_len == ~0UL && !buffer && !len && !flags)) {
+>   		struct vgetrandom_opaque_params *params = opaque_state;
+>   		params->size_of_opaque_state = sizeof(*state);
+> -		params->mmap_prot = PROT_READ | PROT_WRITE;
+> -		params->mmap_flags = MAP_DROPPABLE | MAP_ANONYMOUS;
+> +		params->mmap_prot = VDSO_MMAP_PROT;
+> +		params->mmap_flags = VDSO_MMAP_FLAGS;
+>   		for (size_t i = 0; i < ARRAY_SIZE(params->reserved); ++i)
+>   			params->reserved[i] = 0;
+>   		return 0;
+>   	}
+>   
+>   	/* The state must not straddle a page, since pages can be zeroed at any time. */
+> -	if (unlikely(((unsigned long)opaque_state & ~PAGE_MASK) + sizeof(*state) > PAGE_SIZE))
+> +	if (unlikely(((unsigned long)opaque_state & ~VDSO_PAGE_MASK) + sizeof(*state) > VDSO_PAGE_SIZE))
+>   		return -EFAULT;
+>   
+>   	/* Handle unexpected flags by falling back to the kernel. */
 
