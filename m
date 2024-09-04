@@ -1,128 +1,140 @@
-Return-Path: <linux-arch+bounces-7012-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7013-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84E0596C1CC
-	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2024 17:09:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87E1996C1B9
+	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2024 17:05:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B78CCB2D856
-	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2024 15:03:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BB2721C21107
+	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2024 15:05:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA21D1DEFC0;
-	Wed,  4 Sep 2024 15:03:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CCvDF9pP"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23DE91DC1B5;
+	Wed,  4 Sep 2024 15:05:30 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78C381DCB07;
-	Wed,  4 Sep 2024 15:03:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4476E1DA2FE;
+	Wed,  4 Sep 2024 15:05:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725462181; cv=none; b=C+CFNhxJGoR6MwCR87QJT+GvzNmmxk/n5oNxsRFfCVSTjH70HfjiVQKw07JwNI2xbxMHNXDTTtXXryP7MOg3V2TXlQd6ytszkNieu1hS/pOE1oXUOyA1Q44eAm2wZjy4giG8b3NcUORAR0JfWt6iaUq0tncqpOGh7sZF5G/IpnI=
+	t=1725462330; cv=none; b=J3c1E4rDyVMa7jlFWbff3l915rjIh/6Fogz1vqPJuEgwnPf+tlk/lI+wTmlFS8K2UX9YEobN4U1NS7koHnjXl4X5vgv5gfWKnLStEh4SsIehcgS2cDkfxEUFZDnMrY6hSQsbLxOVhjrD2N3zAK5ghNNWS1ywUjTQzFgup6izcwY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725462181; c=relaxed/simple;
-	bh=Rr62ZUBbhFRmGxMpSUooVTp/zwJrJMHB5CDDGvfY9ow=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nJ+IQSX8CLmUNn12eqeR3eWjpppZ/By+EJ9EjfofYiCNCQ/vDb5pVuRzMqTmcXiHj/Iv4gH00wq2+nTF368I4MjomsO11MLA53S4GZKuu0W06+WtLgJGM2XEMeD6VpOoVOykUjcIZd0RBR/JG+orpWZR899eiitgsKyq2pWVzUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CCvDF9pP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C288FC4CECA;
-	Wed,  4 Sep 2024 15:02:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725462181;
-	bh=Rr62ZUBbhFRmGxMpSUooVTp/zwJrJMHB5CDDGvfY9ow=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CCvDF9pPNqn4yahTr0CnU/WFUi7+1ghrRvy6PWj450wswPOAS+28oHQG0vlbB5FC+
-	 KljOX4XpT1YT8GCi0ee0rlp+W3fXLkUs3RZUpM5Mb3P8wsgpzWDP+A0xwI1mbNX4zY
-	 0UA4lRQTS5VG3rnyuSf24yGSP1jrVflo2ikxpiumpXOycy9poiwiZKWeib7qMGZTEs
-	 3JwwRB8VEmJzPAzT80N9yd/NGpPkOjCnZVj+xpBfrstAkSxdKohUpz9xG0UW5hyAyZ
-	 C+IW7l8yLKgGEnH1fG12VarTdXr7ClwGsahV5L2NWwXC98pxId52Rp3m7Ve9SKpKqc
-	 LylTiw7g38R2w==
-Date: Wed, 4 Sep 2024 16:02:55 +0100
-From: Will Deacon <will@kernel.org>
-To: "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc: Ard Biesheuvel <ardb@kernel.org>,
-	Adhemerval Zanella <adhemerval.zanella@linaro.org>,
-	Theodore Ts'o <tytso@mit.edu>, linux-kernel@vger.kernel.org,
-	linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-arch@vger.kernel.org,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Eric Biggers <ebiggers@kernel.org>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: Re: [PATCH v5 0/2] arm64: Implement getrandom() in vDSO
-Message-ID: <20240904150254.GA13919@willie-the-truck>
-References: <20240903120948.13743-1-adhemerval.zanella@linaro.org>
- <20240904120504.GB13550@willie-the-truck>
- <CAMj1kXHsfmaydb+RCxA1rJPs9K8o4y8LSMTO8sMH-pmAwrZ6PA@mail.gmail.com>
- <ZthmZrDUcau5Ebc6@zx2c4.com>
+	s=arc-20240116; t=1725462330; c=relaxed/simple;
+	bh=f+0vRXoih0EUpPP0SzBjRwhKHqCaRkEfFTPGXPO5bZA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UOfWwB2CyewJVBMrFesfHP3Q7dI8ZilMoCH85WCZOTEOFvsGjZkYg7fvqANwWAieeeBiU8AgFY774qrxqRxgXQb44v7uZ7VReMaYn6KNRA6GhdP72liyMePYMQIil53J+tu1Icm9gkLTy4y3i81RzzQQFo4L7pwoxgoOv4KzJI0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4WzQlj02Xdz9sS7;
+	Wed,  4 Sep 2024 17:05:21 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6oFgwZsIkdDQ; Wed,  4 Sep 2024 17:05:20 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4WzQlh6HLQz9sRy;
+	Wed,  4 Sep 2024 17:05:20 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id C48C38B77A;
+	Wed,  4 Sep 2024 17:05:20 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id E_t6YZIKUyZe; Wed,  4 Sep 2024 17:05:20 +0200 (CEST)
+Received: from [192.168.234.246] (unknown [192.168.234.246])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id EB1F68B778;
+	Wed,  4 Sep 2024 17:05:19 +0200 (CEST)
+Message-ID: <a298ba4e-cbbf-4f50-b175-8ee3063963bc@csgroup.eu>
+Date: Wed, 4 Sep 2024 17:05:19 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZthmZrDUcau5Ebc6@zx2c4.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/9] x86: vdso: Introduce asm/vdso/page.h
+To: Arnd Bergmann <arnd@arndb.de>,
+ Vincenzo Frascino <vincenzo.frascino@arm.com>, linux-kernel@vger.kernel.org,
+ Linux-Arch <linux-arch@vger.kernel.org>, linux-mm@kvack.org
+Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+ "Jason A . Donenfeld" <Jason@zx2c4.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Naveen N Rao <naveen@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, Theodore Ts'o <tytso@mit.edu>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+References: <20240903151437.1002990-1-vincenzo.frascino@arm.com>
+ <20240903151437.1002990-4-vincenzo.frascino@arm.com>
+ <cfb5ea05-0322-492b-815d-17a4aad4da99@app.fastmail.com>
+Content-Language: fr-FR
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <cfb5ea05-0322-492b-815d-17a4aad4da99@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Sep 04, 2024 at 03:53:42PM +0200, Jason A. Donenfeld wrote:
-> On Wed, Sep 04, 2024 at 02:28:32PM +0200, Ard Biesheuvel wrote:
-> > On Wed, 4 Sept 2024 at 14:05, Will Deacon <will@kernel.org> wrote:
-> > >
-> > > +Ard as he had helpful comments on the previous version.
-> > >
-> > 
-> > Thanks for the cc
-> > 
-> > > On Tue, Sep 03, 2024 at 12:09:15PM +0000, Adhemerval Zanella wrote:
-> > > > Implement stack-less ChaCha20 and wire it with the generic vDSO
-> > > > getrandom code.  The first patch is Mark's fix to the alternatives
-> > > > system in the vDSO, while the the second is the actual vDSO work.
-> > > >
-> > > > Changes from v4:
-> > > > - Improve BE handling.
-> > > >
-> > > > Changes from v3:
-> > > > - Use alternative_has_cap_likely instead of ALTERNATIVE.
-> > > > - Header/include and comment fixups.
-> > > >
-> > > > Changes from v2:
-> > > > - Refactor Makefile to use same flags for vgettimeofday and
-> > > >   vgetrandom.
-> > > > - Removed rodata usage and fixed BE on vgetrandom-chacha.S.
-> > > >
-> > > > Changes from v1:
-> > > > - Fixed style issues and typos.
-> > > > - Added fallback for systems without NEON support.
-> > > > - Avoid use of non-volatile vector registers in neon chacha20.
-> > > > - Use c-getrandom-y for vgetrandom.c.
-> > > > - Fixed TIMENS vdso_rnd_data access.
-> > > >
-> > > > Adhemerval Zanella (1):
-> > > >   arm64: vdso: wire up getrandom() vDSO implementation
-> > > >
-> > > > Mark Rutland (1):
-> > > >   arm64: alternative: make alternative_has_cap_likely() VDSO compatible
-> > > >
-> > 
-> > This looks ok to me now
-> > 
-> > Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
+
+
+Le 04/09/2024 à 16:52, Arnd Bergmann a écrit :
+> On Tue, Sep 3, 2024, at 15:14, Vincenzo Frascino wrote:
 > 
-> Great. Thanks a bunch for your reviews, Ard.
+>> diff --git a/arch/x86/include/asm/vdso/page.h b/arch/x86/include/asm/vdso/page.h
+>> new file mode 100644
+>> index 000000000000..b0af8fbef27c
+>> --- /dev/null
+>> +++ b/arch/x86/include/asm/vdso/page.h
+>> @@ -0,0 +1,15 @@
+>> +
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +#ifndef __ASM_VDSO_PAGE_H
+>> +#define __ASM_VDSO_PAGE_H
+>> +
+>> +#ifndef __ASSEMBLY__
+>> +
+>> +#include <asm/page_types.h>
+>> +
+>> +#define VDSO_PAGE_MASK	PAGE_MASK
+>> +#define VDSO_PAGE_SIZE	PAGE_SIZE
+>> +
+>> +#endif /* !__ASSEMBLY__ */
+>> +
+>> +#endif /* __ASM_VDSO_PAGE_H */
 > 
-> Will, if you want to Ack this, I'll queue it up with the other getrandom
-> vDSO patches for 6.12.
+> I don't get this one: the x86 asm/page_types.h still includes other
+> headers outside of the vdso namespace, but you seem to only need these
+> two definitions that are the same across everything.
+> 
+> Why not put PAGE_MASK and PAGE_SIZE into a global vdso/page.h
+> header? I did spend a lot of time a few months ago ensuring that
+> we can have a single definition for all architectures based on
+> CONFIG_PAGE_SHIFT, so all the extra copies should just go away.
+> 
 
-I won't pretend to have reviewed the chacha asm, but the rest of it looks
-good to me. Thanks!
+Just wondering, after looking at x86, powerpc and arm64, is there any 
+difference between:
 
-Acked-by: Will Deacon <will@kernel.org>
+X86,ARM64:
+#define PAGE_SIZE		(_AC(1,UL) << PAGE_SHIFT)
+#define PAGE_MASK		(~(PAGE_SIZE-1))
 
-Will
+POWERPC:
+#define PAGE_SIZE		(ASM_CONST(1) << PAGE_SHIFT)
+/*
+  * Subtle: (1 << PAGE_SHIFT) is an int, not an unsigned long. So if we
+  * assign PAGE_MASK to a larger type it gets extended the way we want
+  * (i.e. with 1s in the high bits)
+  */
+#define PAGE_MASK      (~((1 << PAGE_SHIFT) - 1))
+
+
+Which one should be taken in vdso/page.h ?
+
+Christophe
 
