@@ -1,128 +1,131 @@
-Return-Path: <linux-arch+bounces-7025-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7026-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C35A96C445
-	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2024 18:39:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D911796C47F
+	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2024 18:56:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 115141F21991
-	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2024 16:39:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8FE1C1F25B9E
+	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2024 16:56:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38C061E0B60;
-	Wed,  4 Sep 2024 16:39:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4NDvVEAQ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACA261E009E;
+	Wed,  4 Sep 2024 16:56:40 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CE271DC07B
-	for <linux-arch@vger.kernel.org>; Wed,  4 Sep 2024 16:39:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B45AE4778C;
+	Wed,  4 Sep 2024 16:56:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725467987; cv=none; b=VHRPe3X3kuPT4g34On6ojksO7vk2wU2J2kBOurhgIVOKPb6QaViw2N3u11t9a+AILw+aAfKNcksPsBNKXpX1+3rOUSMj6O2w665NnrM/Dni5uFo2h+vY3NjOKpZzw2ObPBJV+ZQREZa261u5xYAiiYMS+bY2eNiWbIsgeXV0fJI=
+	t=1725469000; cv=none; b=q177mAh38Fhx1vB7r0tplY+sJ3fPg9Axh7cTK749+ibV6dvPxafYRun6be4Rpkqjf7GYe/0KeLT7cqzBZnW3BG/U2pYnaUc3qtoaQzJWKnWCarpXb3HxZpUIT7HUQTXLcRrW/45AakVA7zXm8DOuJe4exLcZIPMpTqM/BSWdU7w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725467987; c=relaxed/simple;
-	bh=nn/g8cIBSnZ11bpaYzZZ8NthHY/+J2Dj+WTEu3myqks=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Z7CRxrL2Bndb3H5/XJwAlOvTj/LmD67OmEulTls/ql5P2JEhHAKSrxn9HBcW01nvKSeQSmFeY5516XLOzAb1DTTSeZzgmhiuPSADNHx7msJxtS/LM1dsKqtu8v9j/rdDGjTBU4cBtyF88MtfOzLji0ST9D6iKD5KjAn4Ky8LyKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4NDvVEAQ; arc=none smtp.client-ip=209.85.160.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-4567fe32141so3081cf.0
-        for <linux-arch@vger.kernel.org>; Wed, 04 Sep 2024 09:39:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1725467984; x=1726072784; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aVKgBZWcIsT5jzi2Y61F5gCJD2ntfYeuhQqcN6HyFFE=;
-        b=4NDvVEAQ/E8D7qwFNSsUh8b34gKbzyvh/WcZx7FL2DwEyQ8kQgOntCTawE/JmnYIH4
-         as8YCcT5j/iAUc8uEl0x3oN7ArONbAxN80QPkiDxOt4Pc8upx5tdIk65JyBoIIZiLpXL
-         D3a3bRnUPM4wqL+7IApmoo7TZjLXJ23PjIINwSd0Xs3Fojk3vdLbxBeCVzp0rERrj9GN
-         wSyttTI4O11+IHK3+Vve0KCU9cBstD56K2QTnpjFyq55QxScQUcSqm5hg1T+UYUR2fB4
-         jUAcZyAxxm2yJuCVXZl5F2V5R2BJrrvvQNOLEE/2CyowEULParc+4vZmgimIr9+KoVyN
-         Nygw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725467984; x=1726072784;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aVKgBZWcIsT5jzi2Y61F5gCJD2ntfYeuhQqcN6HyFFE=;
-        b=LOc8ycvKy9/C9GogIHc1MoVvfYEgjfE2dnwHFxyXmbUYqIj071M6cdGtn076GktQno
-         s8O48S7ekH2jL56sJUq9yLg1/fEcWh+2R5FFin3iYP75sjP/kacHArRh0ibg+Dq0lT+k
-         vOMQPQ91FjMqna7QY7H5dBKrsmTVEZ+6XkGV0VN3Qoi1G7fQ2wVN5IyZnTIP5aby900M
-         PF0S2ITb3WHG6PAJCcV7BoG1YoiIdNd/OcGRDjc8eYYB8nO0gQKRjRW6T4ZsKo3gebHM
-         bw0ctKENfo29mRIix5V1rtUhje/jpW+TGwDSou8uRLMC5Psk57tyM47TTuJwfngSoa0f
-         u2zg==
-X-Forwarded-Encrypted: i=1; AJvYcCVnHF59FliWMVe8A9Wi1p0Jp+E1B8J3rwUFSoBPJqlhNmzMo+g3ep1Fu7gZdrQyz82njd7dAXVbhMi6@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywy3kFVc74capgw+EGwv6Iay5ujrXqxgPMBKKgar0lTQQLMX4er
-	LiUYchGPIf7XbIN5/sABrXpxsU3TKwZovmjodO+wyzDHphTLo/fdu7hNWJ0czt7E/DUPOsx8bzk
-	5qRLXY29Uys01hu1lTj2NmhNG9+1ik0PKh77h
-X-Google-Smtp-Source: AGHT+IGwhDrAQPEAmF0bOfcaTr6MOXUafuS1vP9sMQ9KrAbdAewI1zke0LJG2AKiNDfA445/E3iPPiTzSRTtLdtDDnM=
-X-Received: by 2002:ac8:5ad3:0:b0:456:7ec0:39a9 with SMTP id
- d75a77b69052e-457f7a9c517mr3513941cf.5.1725467984034; Wed, 04 Sep 2024
- 09:39:44 -0700 (PDT)
+	s=arc-20240116; t=1725469000; c=relaxed/simple;
+	bh=R3p88TseIIEU6PDnnA8E0S+vB/2n7XxrZwfCGfhYxRA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ol2y2e8edDe5TLLsn/uqXm5DjB3CI16vn0ue3qcXlIJR/3Z4Om33InqSzkrFAIW4SvMsAPjQTL66gRsZommABZZ4eyCJ42I6xD3pUD9/Fj9MiwvJpgWABSIlLEwyALGoaAWJvXdb2lBKcfZM/M1Iwe2IUDYIYq7j87pAnCeWgdk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4WzTD43dS3z9sSC;
+	Wed,  4 Sep 2024 18:56:36 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id nZyS882MMwzh; Wed,  4 Sep 2024 18:56:36 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4WzTD42jdmz9sS7;
+	Wed,  4 Sep 2024 18:56:36 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 4B2068B77A;
+	Wed,  4 Sep 2024 18:56:36 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id RPtdGw1i-ycG; Wed,  4 Sep 2024 18:56:36 +0200 (CEST)
+Received: from [192.168.234.246] (unknown [192.168.234.246])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 78B008B778;
+	Wed,  4 Sep 2024 18:56:35 +0200 (CEST)
+Message-ID: <710f9663-e99c-40e2-9c0e-2f5e6e854653@csgroup.eu>
+Date: Wed, 4 Sep 2024 18:56:35 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240902044128.664075-1-surenb@google.com> <20240902044128.664075-7-surenb@google.com>
- <20240901221636.5b0af3694510482e9d9e67df@linux-foundation.org>
- <CAJuCfpGNYgx0GW4suHRzmxVH28RGRnFBvFC6WO+F8BD4HDqxXA@mail.gmail.com>
- <47c4ef47-3948-4e46-8ea5-6af747293b18@nvidia.com> <ZtfDiH3lZ9ozxm0v@casper.infradead.org>
- <CAJuCfpHJ9PwNOqmFOH373gn6Uqa-orG6zP3rqk-_x=GkpUo2+Q@mail.gmail.com>
- <ZtiMZWqht_8Bse-5@casper.infradead.org> <keaqrfkkoswtpbtvr3l5oetd4d3ncbpaxsay7dckn74qdob2u2@lohq26fuccib>
-In-Reply-To: <keaqrfkkoswtpbtvr3l5oetd4d3ncbpaxsay7dckn74qdob2u2@lohq26fuccib>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Wed, 4 Sep 2024 09:39:33 -0700
-Message-ID: <CAJuCfpEtsWM2S0K=UB1QZ81qeq_5jY-R0zNz3Kc8WojvJfj76w@mail.gmail.com>
-Subject: Re: [PATCH v2 6/6] alloc_tag: config to store page allocation tag
- refs in page flags
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: Matthew Wilcox <willy@infradead.org>, John Hubbard <jhubbard@nvidia.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, corbet@lwn.net, arnd@arndb.de, 
-	mcgrof@kernel.org, rppt@kernel.org, paulmck@kernel.org, thuth@redhat.com, 
-	tglx@linutronix.de, bp@alien8.de, xiongwei.song@windriver.com, 
-	ardb@kernel.org, david@redhat.com, vbabka@suse.cz, mhocko@suse.com, 
-	hannes@cmpxchg.org, roman.gushchin@linux.dev, dave@stgolabs.net, 
-	liam.howlett@oracle.com, pasha.tatashin@soleen.com, souravpanda@google.com, 
-	keescook@chromium.org, dennis@kernel.org, yuzhao@google.com, 
-	vvvvvv@google.com, rostedt@goodmis.org, iamjoonsoo.kim@lge.com, 
-	rientjes@google.com, minchan@google.com, kaleshsingh@google.com, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-mm@kvack.org, linux-modules@vger.kernel.org, 
-	kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/9] x86: vdso: Introduce asm/vdso/mman.h
+To: Vincenzo Frascino <vincenzo.frascino@arm.com>,
+ linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, linux-mm@kvack.org
+Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+ "Jason A . Donenfeld" <Jason@zx2c4.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Naveen N Rao <naveen@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ "H . Peter Anvin" <hpa@zytor.com>, Theodore Ts'o <tytso@mit.edu>,
+ Arnd Bergmann <arnd@arndb.de>, Andrew Morton <akpm@linux-foundation.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+References: <20240903151437.1002990-1-vincenzo.frascino@arm.com>
+ <20240903151437.1002990-2-vincenzo.frascino@arm.com>
+Content-Language: fr-FR
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <20240903151437.1002990-2-vincenzo.frascino@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Sep 4, 2024 at 9:37=E2=80=AFAM Kent Overstreet
-<kent.overstreet@linux.dev> wrote:
->
-> On Wed, Sep 04, 2024 at 05:35:49PM GMT, Matthew Wilcox wrote:
-> > On Wed, Sep 04, 2024 at 09:18:01AM -0700, Suren Baghdasaryan wrote:
-> > > I'm not sure I understand your suggestion, Matthew. We allocate a
-> > > folio and need to store a reference to the tag associated with the
-> > > code that allocated that folio. We are not operating with ranges here=
-.
-> > > Are you suggesting to use a maple tree instead of page_ext to store
-> > > this reference?
-> >
-> > I'm saying that a folio has a physical address.  So you can use a physi=
-cal
-> > address as an index into a maple tree to store additional information
-> > instead of using page_ext or trying to hammer the additional informatio=
-n
-> > into struct page somewhere.
->
-> Ah, thanks, that makes more sense.
->
-> But it would add a lot of overhead to the page alloc/free paths...
 
-Yeah, inserting into a maple_tree in the fast path of page allocation
-would introduce considerable performance overhead.
+
+Le 03/09/2024 à 17:14, Vincenzo Frascino a écrit :
+> The VDSO implementation includes headers from outside of the
+> vdso/ namespace.
+> 
+> Introduce asm/vdso/mman.h to make sure that the generic library
+> uses only the allowed namespace.
+> 
+> Cc: Andy Lutomirski <luto@kernel.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Jason A. Donenfeld <Jason@zx2c4.com>
+> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> ---
+>   arch/x86/include/asm/vdso/mman.h | 15 +++++++++++++++
+>   1 file changed, 15 insertions(+)
+>   create mode 100644 arch/x86/include/asm/vdso/mman.h
+> 
+> diff --git a/arch/x86/include/asm/vdso/mman.h b/arch/x86/include/asm/vdso/mman.h
+> new file mode 100644
+> index 000000000000..4c936c9d11ab
+> --- /dev/null
+> +++ b/arch/x86/include/asm/vdso/mman.h
+> @@ -0,0 +1,15 @@
+> +
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef __ASM_VDSO_MMAN_H
+> +#define __ASM_VDSO_MMAN_H
+> +
+> +#ifndef __ASSEMBLY__
+> +
+> +#include <uapi/linux/mman.h>
+> +
+> +#define VDSO_MMAP_PROT	PROT_READ | PROT_WRITE
+> +#define VDSO_MMAP_FLAGS	MAP_DROPPABLE | MAP_ANONYMOUS
+
+I still can't see the benefit of duplicating those two defines in every 
+arch.
+
+I understand your point that some arch might in the future want to use 
+different flags, but unless we already have one such architecture in 
+mind we shouldn't make things more complicated than needed.
+
+In case such an architecture is already identified it should be said in 
+the commit message
+
+> +
+> +#endif /* !__ASSEMBLY__ */
+> +
+> +#endif /* __ASM_VDSO_MMAN_H */
 
