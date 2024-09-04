@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-7045-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7046-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65D3E96CB2B
-	for <lists+linux-arch@lfdr.de>; Thu,  5 Sep 2024 01:50:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3684F96CB33
+	for <lists+linux-arch@lfdr.de>; Thu,  5 Sep 2024 01:50:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E97A71F285A2
-	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2024 23:50:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E745328498C
+	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2024 23:50:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8D401917D9;
-	Wed,  4 Sep 2024 23:48:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F30F1922CB;
+	Wed,  4 Sep 2024 23:48:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RYTs406l"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WXanL2S1"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3D7018E02B;
-	Wed,  4 Sep 2024 23:48:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5783E1917F9;
+	Wed,  4 Sep 2024 23:48:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725493714; cv=none; b=UMGxvOd46w77Rec6SvS4DX/oZPRcYGZtDzy/T4wS+btlUDf64pnzCLs1WqXi2/v00kkasR/QJCKORkSgwsldJiXyjCyFpHuPv7U5HW7/26LaK0SROu94abnuogmdpZQfwRt8e3qDuQP37f0eizNqEBED+pzx/vedt0KODcMWFbM=
+	t=1725493717; cv=none; b=H4mHx1O+sCrkscBypUJxB458a0gzjpzQnVP9zsPw4Wvmftw4a0gCjZ8csCaiHuJ6wPclZ3lB3muI0Q69oKeSQ8foPOgkJlMEWl9d7xqyx+CTL4FYQpVliup0fjpTgGryhdY/+fzUGlSxgbp3is1m4vRGsndW0RqMuFC+Q+ma64w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725493714; c=relaxed/simple;
-	bh=ShH7X/nJUOJT346TPtT8MDMv6QalWDIylxJwzZgk3lc=;
+	s=arc-20240116; t=1725493717; c=relaxed/simple;
+	bh=dk04zi59AciF5LL6akuqjWabef8tuzvQHnluBCG6Dq0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=U7INiiCh+G+hJ27zrlySuUqHxE80SJK6oVN/vWzjBkOWfPYQ63gyHkA/oI0Fl0/VsJkLU8IUfOvswHczFHQc32YgKz3EawrreNL4fD8BxCqjozeeW0s2TPZN5gRyMqMXshl8BaXkaC1yMT6Jexn3fMQuOHsLDj4tt/wWkBvyPXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RYTs406l; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D540BC4CECA;
-	Wed,  4 Sep 2024 23:48:31 +0000 (UTC)
+	 MIME-Version; b=Huvl8eXOtiO3Z8BiNhExZZ27Q78POJpMoO+Yrk+r8yeQz1f9ZXWzSsJaJeuDUI8ya49HJMYrWxsTE0EOzCZ+j6dfXwz3HN9xpYYjzjjkQljxYL0RxFrtVAr3DB6XvYCc1flPCxAKiwuErvVlid+dP5Ru7yl6BnqKnHZqDPXOqjQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WXanL2S1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C44EFC4CEC9;
+	Wed,  4 Sep 2024 23:48:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725493714;
-	bh=ShH7X/nJUOJT346TPtT8MDMv6QalWDIylxJwzZgk3lc=;
+	s=k20201202; t=1725493716;
+	bh=dk04zi59AciF5LL6akuqjWabef8tuzvQHnluBCG6Dq0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=RYTs406lL9RVGMTvwddw7pj2H9g2O9zYNJjASRMvJlNrHHQzUvSYQ5dL4NUkrnATX
-	 s0iznwK98cW8R9Ll+TbIVOcGRYFmVX6BtoM5XjrgLjMxQc3qKLY8Jf92EhAFav4hC+
-	 MS7ZRw7cWLg9FotPvnbdYjuaJ7uTDwxIhcVmcaCyfZ2GI7HLaLDv7fDj/zkNDqEdcx
-	 ihG9tR/V1isusbNSsNSXoCr5RWd1a+3x1M3TXEAl9ZOqCj53KbWz5oZnNVp1NeG0af
-	 3e+xowAe808Kn6LHg4/bPMhiliZTlJG/0V1wErXUCqqlCNEWEroYvnQaRnDgO6JGPf
-	 nkKS33OG/4rqA==
+	b=WXanL2S1ncP9VL15QlXjB215wU1hNbN2vKvw3EYtXVZFbUBVEeZHly5axKhoCCqTu
+	 oUB3D/bJEjWxqQ0rm18DKkHgVADRiZpRKAIM69av4S7HT4mCZ354pk2zPEJqwsO+YP
+	 MgKw4KPnBKLnddm7a+GxJPtumoGmTve3flq+PEAZJVXniDdiVRWK2FyTQjzXpjuqsO
+	 lEX2H/XdvkhCwK23r7h8Gboj4cEE+GUUI7BnsmLxjion7OPZSlveblpMAT6nvodfQw
+	 K6LAnw/GRi2YAPwiQw08MxjH/D+2oPQP+xVF0oE2dBysiOLMmSPZdcUd6Jn56F4G+o
+	 5L8kSbjfqxaEA==
 From: Masahiro Yamada <masahiroy@kernel.org>
 To: linux-kbuild@vger.kernel.org
 Cc: linux-arch@vger.kernel.org,
@@ -53,9 +53,9 @@ Cc: linux-arch@vger.kernel.org,
 	linux-openrisc@vger.kernel.org,
 	Dinh Nguyen <dinguyen@kernel.org>,
 	Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH 08/15] ARC: migrate to the generic rule for built-in DTB
-Date: Thu,  5 Sep 2024 08:47:44 +0900
-Message-ID: <20240904234803.698424-9-masahiroy@kernel.org>
+Subject: [PATCH 09/15] openrisc: migrate to the generic rule for built-in DTB
+Date: Thu,  5 Sep 2024 08:47:45 +0900
+Message-ID: <20240904234803.698424-10-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240904234803.698424-1-masahiroy@kernel.org>
 References: <20240904234803.698424-1-masahiroy@kernel.org>
@@ -71,258 +71,100 @@ Select GENERIC_BUILTIN_DTB to use the generic rule to support built-in
 DTB.
 
 To keep consistency across architectures, this commit also renames
-CONFIG_ARC_BUILTIN_DTB_NAME to CONFIG_BUILTIN_DTB_NAME.
+CONFIG_OPENRISC_BUILTIN_DTB_NAME to CONFIG_BUILTIN_DTB_NAME.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
- arch/arc/Kconfig                           | 7 ++++---
- arch/arc/Makefile                          | 3 ---
- arch/arc/boot/dts/Makefile                 | 9 +--------
- arch/arc/configs/axs101_defconfig          | 2 +-
- arch/arc/configs/axs103_defconfig          | 2 +-
- arch/arc/configs/axs103_smp_defconfig      | 2 +-
- arch/arc/configs/haps_hs_defconfig         | 2 +-
- arch/arc/configs/haps_hs_smp_defconfig     | 2 +-
- arch/arc/configs/hsdk_defconfig            | 2 +-
- arch/arc/configs/nsim_700_defconfig        | 2 +-
- arch/arc/configs/nsimosci_defconfig        | 2 +-
- arch/arc/configs/nsimosci_hs_defconfig     | 2 +-
- arch/arc/configs/nsimosci_hs_smp_defconfig | 2 +-
- arch/arc/configs/tb10x_defconfig           | 2 +-
- arch/arc/configs/vdk_hs38_defconfig        | 2 +-
- arch/arc/configs/vdk_hs38_smp_defconfig    | 2 +-
- 16 files changed, 18 insertions(+), 27 deletions(-)
+ arch/openrisc/Kbuild                       | 1 -
+ arch/openrisc/Kconfig                      | 3 ++-
+ arch/openrisc/boot/dts/Makefile            | 2 +-
+ arch/openrisc/configs/or1klitex_defconfig  | 2 +-
+ arch/openrisc/configs/or1ksim_defconfig    | 2 +-
+ arch/openrisc/configs/simple_smp_defconfig | 2 +-
+ 6 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arc/Kconfig b/arch/arc/Kconfig
-index d01e69a29b69..11fe4f497571 100644
---- a/arch/arc/Kconfig
-+++ b/arch/arc/Kconfig
-@@ -16,6 +16,7 @@ config ARC
- 	select ARCH_SUPPORTS_ATOMIC_RMW if ARC_HAS_LLSC
- 	select ARCH_32BIT_OFF_T
- 	select BUILDTIME_TABLE_SORT
-+	select GENERIC_BUILTIN_DTB
- 	select CLONE_BACKWARDS
- 	select COMMON_CLK
- 	select DMA_DIRECT_REMAP
-@@ -549,11 +550,11 @@ config ARC_DBG_JUMP_LABEL
- 	  part of static keys (jump labels) related code.
- endif
- 
--config ARC_BUILTIN_DTB_NAME
-+config BUILTIN_DTB_NAME
- 	string "Built in DTB"
-+	default "nsim_700"
- 	help
--	  Set the name of the DTB to embed in the vmlinux binary
--	  Leaving it blank selects the "nsim_700" dtb.
-+	  Set the name of the DTB to embed in the vmlinux binary.
- 
- endmenu	 # "ARC Architecture Configuration"
- 
-diff --git a/arch/arc/Makefile b/arch/arc/Makefile
-index 2390dd042e36..deb830bdeaa0 100644
---- a/arch/arc/Makefile
-+++ b/arch/arc/Makefile
-@@ -82,9 +82,6 @@ KBUILD_CFLAGS	+= $(cflags-y)
- KBUILD_AFLAGS	+= $(KBUILD_CFLAGS)
- KBUILD_LDFLAGS	+= $(ldflags-y)
- 
--# w/o this dtb won't embed into kernel binary
--core-y		+= arch/arc/boot/dts/
--
- core-y				+= arch/arc/plat-sim/
- core-$(CONFIG_ARC_PLAT_TB10X)	+= arch/arc/plat-tb10x/
- core-$(CONFIG_ARC_PLAT_AXS10X)	+= arch/arc/plat-axs10x/
-diff --git a/arch/arc/boot/dts/Makefile b/arch/arc/boot/dts/Makefile
-index 48704dfdf75c..ee5664f0640d 100644
---- a/arch/arc/boot/dts/Makefile
-+++ b/arch/arc/boot/dts/Makefile
-@@ -1,13 +1,6 @@
+diff --git a/arch/openrisc/Kbuild b/arch/openrisc/Kbuild
+index b0b0f2b03f87..70bdb24ff204 100644
+--- a/arch/openrisc/Kbuild
++++ b/arch/openrisc/Kbuild
+@@ -1,6 +1,5 @@
  # SPDX-License-Identifier: GPL-2.0
--# Built-in dtb
--builtindtb-y		:= nsim_700
+ obj-y += lib/ kernel/ mm/
+-obj-y += boot/dts/
  
--ifneq ($(CONFIG_ARC_BUILTIN_DTB_NAME),)
--	builtindtb-y	:= $(CONFIG_ARC_BUILTIN_DTB_NAME)
--endif
--
--obj-y   += $(builtindtb-y).dtb.o
--dtb-y := $(builtindtb-y).dtb
-+dtb-y	:= $(addsuffix .dtb, $(CONFIG_BUILTIN_DTB_NAME))
+ # for cleaning
+ subdir- += boot
+diff --git a/arch/openrisc/Kconfig b/arch/openrisc/Kconfig
+index 69c0258700b2..11ffcf33652c 100644
+--- a/arch/openrisc/Kconfig
++++ b/arch/openrisc/Kconfig
+@@ -10,6 +10,7 @@ config OPENRISC
+ 	select ARCH_HAS_DMA_SET_UNCACHED
+ 	select ARCH_HAS_DMA_CLEAR_UNCACHED
+ 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
++	select GENERIC_BUILTIN_DTB
+ 	select COMMON_CLK
+ 	select OF
+ 	select OF_EARLY_FLATTREE
+@@ -89,7 +90,7 @@ config DCACHE_WRITETHROUGH
  
- # for CONFIG_OF_ALL_DTBS test
- dtb-	:= $(patsubst $(src)/%.dts,%.dtb, $(wildcard $(src)/*.dts))
-diff --git a/arch/arc/configs/axs101_defconfig b/arch/arc/configs/axs101_defconfig
-index 89720d6d7e0d..628d55057cde 100644
---- a/arch/arc/configs/axs101_defconfig
-+++ b/arch/arc/configs/axs101_defconfig
-@@ -23,7 +23,7 @@ CONFIG_PARTITION_ADVANCED=y
- CONFIG_ARC_PLAT_AXS10X=y
- CONFIG_AXS101=y
- CONFIG_ARC_CACHE_LINE_SHIFT=5
--CONFIG_ARC_BUILTIN_DTB_NAME="axs101"
-+CONFIG_BUILTIN_DTB_NAME="axs101"
- CONFIG_PREEMPT=y
- # CONFIG_COMPACTION is not set
- CONFIG_NET=y
-diff --git a/arch/arc/configs/axs103_defconfig b/arch/arc/configs/axs103_defconfig
-index 73ec01ed0492..7e4d4cbf1fb7 100644
---- a/arch/arc/configs/axs103_defconfig
-+++ b/arch/arc/configs/axs103_defconfig
-@@ -22,7 +22,7 @@ CONFIG_PARTITION_ADVANCED=y
- CONFIG_ARC_PLAT_AXS10X=y
- CONFIG_AXS103=y
- CONFIG_ISA_ARCV2=y
--CONFIG_ARC_BUILTIN_DTB_NAME="axs103"
-+CONFIG_BUILTIN_DTB_NAME="axs103"
- CONFIG_PREEMPT=y
- # CONFIG_COMPACTION is not set
- CONFIG_NET=y
-diff --git a/arch/arc/configs/axs103_smp_defconfig b/arch/arc/configs/axs103_smp_defconfig
-index 4da0f626fa9d..764cbc781a7d 100644
---- a/arch/arc/configs/axs103_smp_defconfig
-+++ b/arch/arc/configs/axs103_smp_defconfig
-@@ -22,7 +22,7 @@ CONFIG_ARC_PLAT_AXS10X=y
- CONFIG_AXS103=y
- CONFIG_ISA_ARCV2=y
- CONFIG_SMP=y
--CONFIG_ARC_BUILTIN_DTB_NAME="axs103_idu"
-+CONFIG_BUILTIN_DTB_NAME="axs103_idu"
- CONFIG_PREEMPT=y
- # CONFIG_COMPACTION is not set
- CONFIG_NET=y
-diff --git a/arch/arc/configs/haps_hs_defconfig b/arch/arc/configs/haps_hs_defconfig
-index 8c3ed5d6e6c3..3a1577112078 100644
---- a/arch/arc/configs/haps_hs_defconfig
-+++ b/arch/arc/configs/haps_hs_defconfig
-@@ -14,7 +14,7 @@ CONFIG_BLK_DEV_INITRD=y
+ 	  If unsure say N here
+ 
+-config OPENRISC_BUILTIN_DTB
++config BUILTIN_DTB_NAME
+ 	string "Builtin DTB"
+ 	default ""
+ 
+diff --git a/arch/openrisc/boot/dts/Makefile b/arch/openrisc/boot/dts/Makefile
+index 13db5a2aab52..3a66e0ef3985 100644
+--- a/arch/openrisc/boot/dts/Makefile
++++ b/arch/openrisc/boot/dts/Makefile
+@@ -1,4 +1,4 @@
+ # SPDX-License-Identifier: GPL-2.0
+-obj-y += $(addsuffix .dtb.o, $(CONFIG_OPENRISC_BUILTIN_DTB))
++dtb-y += $(addsuffix .dtb, $(CONFIG_BUILTIN_DTB_NAME))
+ 
+ #DTC_FLAGS ?= -p 1024
+diff --git a/arch/openrisc/configs/or1klitex_defconfig b/arch/openrisc/configs/or1klitex_defconfig
+index 466f31a091be..3e849d25838a 100644
+--- a/arch/openrisc/configs/or1klitex_defconfig
++++ b/arch/openrisc/configs/or1klitex_defconfig
+@@ -7,7 +7,7 @@ CONFIG_BLK_DEV_INITRD=y
+ CONFIG_CC_OPTIMIZE_FOR_SIZE=y
+ CONFIG_SGETMASK_SYSCALL=y
  CONFIG_EXPERT=y
- CONFIG_PERF_EVENTS=y
- # CONFIG_COMPAT_BRK is not set
--CONFIG_ARC_BUILTIN_DTB_NAME="haps_hs"
-+CONFIG_BUILTIN_DTB_NAME="haps_hs"
- CONFIG_MODULES=y
- # CONFIG_BLK_DEV_BSG is not set
- # CONFIG_COMPACTION is not set
-diff --git a/arch/arc/configs/haps_hs_smp_defconfig b/arch/arc/configs/haps_hs_smp_defconfig
-index 6fc98c1b9b36..a3cf940b1f5b 100644
---- a/arch/arc/configs/haps_hs_smp_defconfig
-+++ b/arch/arc/configs/haps_hs_smp_defconfig
-@@ -16,7 +16,7 @@ CONFIG_PERF_EVENTS=y
- # CONFIG_VM_EVENT_COUNTERS is not set
- # CONFIG_COMPAT_BRK is not set
- CONFIG_SMP=y
--CONFIG_ARC_BUILTIN_DTB_NAME="haps_hs_idu"
-+CONFIG_BUILTIN_DTB_NAME="haps_hs_idu"
- CONFIG_KPROBES=y
- CONFIG_MODULES=y
- # CONFIG_BLK_DEV_BSG is not set
-diff --git a/arch/arc/configs/hsdk_defconfig b/arch/arc/configs/hsdk_defconfig
-index 9e79154b5535..1558e8e87767 100644
---- a/arch/arc/configs/hsdk_defconfig
-+++ b/arch/arc/configs/hsdk_defconfig
-@@ -20,7 +20,7 @@ CONFIG_ISA_ARCV2=y
- CONFIG_SMP=y
- CONFIG_LINUX_LINK_BASE=0x90000000
- CONFIG_LINUX_RAM_BASE=0x80000000
--CONFIG_ARC_BUILTIN_DTB_NAME="hsdk"
-+CONFIG_BUILTIN_DTB_NAME="hsdk"
- CONFIG_PREEMPT=y
- # CONFIG_COMPACTION is not set
+-CONFIG_OPENRISC_BUILTIN_DTB="or1klitex"
++CONFIG_BUILTIN_DTB_NAME="or1klitex"
+ CONFIG_HZ_100=y
+ CONFIG_OPENRISC_HAVE_SHADOW_GPRS=y
  CONFIG_NET=y
-diff --git a/arch/arc/configs/nsim_700_defconfig b/arch/arc/configs/nsim_700_defconfig
-index 51092c39e360..f8b3235d9a65 100644
---- a/arch/arc/configs/nsim_700_defconfig
-+++ b/arch/arc/configs/nsim_700_defconfig
-@@ -17,7 +17,7 @@ CONFIG_PERF_EVENTS=y
- # CONFIG_SLUB_DEBUG is not set
- # CONFIG_COMPAT_BRK is not set
- CONFIG_ISA_ARCOMPACT=y
--CONFIG_ARC_BUILTIN_DTB_NAME="nsim_700"
-+CONFIG_BUILTIN_DTB_NAME="nsim_700"
- CONFIG_KPROBES=y
+diff --git a/arch/openrisc/configs/or1ksim_defconfig b/arch/openrisc/configs/or1ksim_defconfig
+index 0116e465238f..59fe33cefba2 100644
+--- a/arch/openrisc/configs/or1ksim_defconfig
++++ b/arch/openrisc/configs/or1ksim_defconfig
+@@ -14,7 +14,7 @@ CONFIG_SLUB=y
+ CONFIG_SLUB_TINY=y
  CONFIG_MODULES=y
- # CONFIG_BLK_DEV_BSG is not set
-diff --git a/arch/arc/configs/nsimosci_defconfig b/arch/arc/configs/nsimosci_defconfig
-index 70c17bca4939..ee45dc0877fb 100644
---- a/arch/arc/configs/nsimosci_defconfig
-+++ b/arch/arc/configs/nsimosci_defconfig
-@@ -19,7 +19,7 @@ CONFIG_ISA_ARCOMPACT=y
- CONFIG_KPROBES=y
- CONFIG_MODULES=y
- # CONFIG_BLK_DEV_BSG is not set
--CONFIG_ARC_BUILTIN_DTB_NAME="nsimosci"
-+CONFIG_BUILTIN_DTB_NAME="nsimosci"
- # CONFIG_COMPACTION is not set
+ # CONFIG_BLOCK is not set
+-CONFIG_OPENRISC_BUILTIN_DTB="or1ksim"
++CONFIG_BUILTIN_DTB_NAME="or1ksim"
+ CONFIG_HZ_100=y
  CONFIG_NET=y
  CONFIG_PACKET=y
-diff --git a/arch/arc/configs/nsimosci_hs_defconfig b/arch/arc/configs/nsimosci_hs_defconfig
-index 59a3b6642fe7..e0a309970c20 100644
---- a/arch/arc/configs/nsimosci_hs_defconfig
-+++ b/arch/arc/configs/nsimosci_hs_defconfig
-@@ -19,7 +19,7 @@ CONFIG_KPROBES=y
+diff --git a/arch/openrisc/configs/simple_smp_defconfig b/arch/openrisc/configs/simple_smp_defconfig
+index b990cb6c9309..6008e824d31c 100644
+--- a/arch/openrisc/configs/simple_smp_defconfig
++++ b/arch/openrisc/configs/simple_smp_defconfig
+@@ -20,7 +20,7 @@ CONFIG_SLUB=y
+ CONFIG_SLUB_TINY=y
  CONFIG_MODULES=y
- # CONFIG_BLK_DEV_BSG is not set
- CONFIG_ISA_ARCV2=y
--CONFIG_ARC_BUILTIN_DTB_NAME="nsimosci_hs"
-+CONFIG_BUILTIN_DTB_NAME="nsimosci_hs"
- # CONFIG_COMPACTION is not set
- CONFIG_NET=y
- CONFIG_PACKET=y
-diff --git a/arch/arc/configs/nsimosci_hs_smp_defconfig b/arch/arc/configs/nsimosci_hs_smp_defconfig
-index 1419fc946a08..88325b8b49cf 100644
---- a/arch/arc/configs/nsimosci_hs_smp_defconfig
-+++ b/arch/arc/configs/nsimosci_hs_smp_defconfig
-@@ -16,7 +16,7 @@ CONFIG_MODULES=y
- CONFIG_ISA_ARCV2=y
+ # CONFIG_BLOCK is not set
+-CONFIG_OPENRISC_BUILTIN_DTB="simple_smp"
++CONFIG_BUILTIN_DTB_NAME="simple_smp"
  CONFIG_SMP=y
- # CONFIG_ARC_TIMERS_64BIT is not set
--CONFIG_ARC_BUILTIN_DTB_NAME="nsimosci_hs_idu"
-+CONFIG_BUILTIN_DTB_NAME="nsimosci_hs_idu"
- CONFIG_PREEMPT=y
- # CONFIG_COMPACTION is not set
- CONFIG_NET=y
-diff --git a/arch/arc/configs/tb10x_defconfig b/arch/arc/configs/tb10x_defconfig
-index 1a68e4beebca..41a90e836e39 100644
---- a/arch/arc/configs/tb10x_defconfig
-+++ b/arch/arc/configs/tb10x_defconfig
-@@ -26,7 +26,7 @@ CONFIG_MODULE_UNLOAD=y
- CONFIG_ARC_PLAT_TB10X=y
- CONFIG_ARC_CACHE_LINE_SHIFT=5
- CONFIG_HZ=250
--CONFIG_ARC_BUILTIN_DTB_NAME="abilis_tb100_dvk"
-+CONFIG_BUILTIN_DTB_NAME="abilis_tb100_dvk"
- CONFIG_PREEMPT_VOLUNTARY=y
- # CONFIG_COMPACTION is not set
- CONFIG_NET=y
-diff --git a/arch/arc/configs/vdk_hs38_defconfig b/arch/arc/configs/vdk_hs38_defconfig
-index 50c343913825..03d9ac20baa9 100644
---- a/arch/arc/configs/vdk_hs38_defconfig
-+++ b/arch/arc/configs/vdk_hs38_defconfig
-@@ -13,7 +13,7 @@ CONFIG_PARTITION_ADVANCED=y
- CONFIG_ARC_PLAT_AXS10X=y
- CONFIG_AXS103=y
- CONFIG_ISA_ARCV2=y
--CONFIG_ARC_BUILTIN_DTB_NAME="vdk_hs38"
-+CONFIG_BUILTIN_DTB_NAME="vdk_hs38"
- CONFIG_PREEMPT=y
- CONFIG_NET=y
- CONFIG_PACKET=y
-diff --git a/arch/arc/configs/vdk_hs38_smp_defconfig b/arch/arc/configs/vdk_hs38_smp_defconfig
-index 6d9e1d9f71d2..c09488992f13 100644
---- a/arch/arc/configs/vdk_hs38_smp_defconfig
-+++ b/arch/arc/configs/vdk_hs38_smp_defconfig
-@@ -15,7 +15,7 @@ CONFIG_AXS103=y
- CONFIG_ISA_ARCV2=y
- CONFIG_SMP=y
- # CONFIG_ARC_TIMERS_64BIT is not set
--CONFIG_ARC_BUILTIN_DTB_NAME="vdk_hs38_smp"
-+CONFIG_BUILTIN_DTB_NAME="vdk_hs38_smp"
- CONFIG_PREEMPT=y
- CONFIG_NET=y
- CONFIG_PACKET=y
+ CONFIG_HZ_100=y
+ CONFIG_OPENRISC_HAVE_SHADOW_GPRS=y
 -- 
 2.43.0
 
