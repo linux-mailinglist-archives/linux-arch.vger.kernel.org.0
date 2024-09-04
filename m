@@ -1,514 +1,227 @@
-Return-Path: <linux-arch+bounces-7035-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7036-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E54396C827
-	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2024 22:06:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BE7D96C92A
+	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2024 23:08:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 80A35B21029
-	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2024 20:06:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 808101F26C75
+	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2024 21:08:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 286561E6DE7;
-	Wed,  4 Sep 2024 20:06:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7261016EC19;
+	Wed,  4 Sep 2024 21:07:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T+npcAwr"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UfdzCB5s"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F17E91DA113;
-	Wed,  4 Sep 2024 20:06:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB021154BFF
+	for <linux-arch@vger.kernel.org>; Wed,  4 Sep 2024 21:07:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725480404; cv=none; b=RBJqqUfLCDshK28YryfffJVj/9FR1PrhrpnZ6uBaKzIB4zT30mhWH6VHd2U/gz8zMeP+f2JCVQRjh2U0IhUGF8TuRE3agWuMcJr+yKz4+yUweNPgRDeaNyusOTrB4Y9XYvz2KcEqYii8WHtHquTkTeDOCmWwSexXFAjVKoFJXcs=
+	t=1725484069; cv=none; b=N2gNR12Rr5Hd0rz1CJlByMA+elzxSMF5HEGyGCv6k4HBtzVcRn8WtFqnV9epp0QF3ljvSabPggiHuh+9U3LbJn4wFYpHeorOrRUiWbS5Mv3rkgggsSWCZDjeNf1d9PYo3rNzgaVzxFH9WaP7ELZGKeUAWTjLTfJAYfJ5FIkt7xM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725480404; c=relaxed/simple;
-	bh=GYmHKj9WtQNtXkPosh61f2LE+En+tKg7gwSUHi8vYR0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ng1k4/rxuCEZV9BUCR/2bmjGpMPMFhb9xiKtcr36fpgJQa5hUI/6xi1NnIbmTmLN0VR5iDvK+EQAVq21/5Gkg9Dj79WOTjTQZ3UaGDLi7o4IDlfsiSBGcHyhz5DXioLq7cxIK72d9hWphqkxBkXJ7SuCxNlegarOjftiXSSQZr4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T+npcAwr; arc=none smtp.client-ip=209.85.210.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-70f657cc420so36498a34.0;
-        Wed, 04 Sep 2024 13:06:41 -0700 (PDT)
+	s=arc-20240116; t=1725484069; c=relaxed/simple;
+	bh=uqOzk7cpoKkEi2MG7rO8J+EGBTGB6GV6x/+HS5AP9MY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CwxkK3MygfFjEWWIS9KGdJFx2RUvIx5tY4XYGn9RYZQYdDpvZbVeNGcZKIAvUXo92LreXf5bCGN9yyZ38MA99f3cDeXSehoqxHLt2ra9GfTe8oPOXdRy9AWFfJxQpbQxxjdpYNzC2JomikYBIX/p+HPP40mTRtYhGUbwRiX040A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UfdzCB5s; arc=none smtp.client-ip=209.85.166.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-3a045f08fd6so21425ab.0
+        for <linux-arch@vger.kernel.org>; Wed, 04 Sep 2024 14:07:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725480401; x=1726085201; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OJQbvAlwUoY2JNCuZeiksl55n3TI5XeOMxFA1c7akjs=;
-        b=T+npcAwrLmfPXZiIyFo+jwdJ6Y3/1zghk2H2J5VYrsGc8FRnvhM5RP9kxGTaiFvR/V
-         yszUGKGdEtRuFH25EvDzWrvF7WxCQvIdU5gq73rvzIiSN20n6mBDXHR6QpFfoNqh8mLS
-         f3dAIm22Y7F8TwxU31dQfJnJFcYSWtBqAJH3E/r34bC6N2yQ+IvJ/NBI+eCLgq15+ndf
-         UCUnkPxXt7TKmFePX5Gm2EK0VIHKjAItS9ADCwr2xlr/+LFwI5PBWsoigMHtpEmTsAY1
-         w6gxma/qErmkrh4TIa9ZtsAbFGSKUnAmJdv+jnp0Sie4hqm+ks8js3Q4II1IvbUiVqra
-         OhPg==
+        d=google.com; s=20230601; t=1725484067; x=1726088867; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=w42R7BNbzfV9m9Ak5XplqSqEhc1UT4kjpkgNMP3MoEY=;
+        b=UfdzCB5sHb6PJvB65wMCgLjR9cZnYete4t2lk0uR6fZBMaOJtgwrlFFa3SbMr/WuOp
+         2GkLviVRZyPS/EIssHzblOE3O4kgS0FbnopapRAjsRkR5AD4sAoepzD4lVEwr0Jl3jdh
+         GEV28fmd2xrV5u8vcw1tRr9koP30wMBWgsCoG32FjiGbngdNvFo3nbC/EMzEwewNckmO
+         y3re6TxfUehlRWcPUs8pjqUUJc8zVzr7+T9iyVLaQS1U4OEsPtLs8CpxpORAEWv7od8f
+         VioXN5x16Nzd61oRaAH+KDSZyr3O4KQtN9DRrU7v0MFnD1KdOqau9AXpcDOSBkRMSD20
+         tF/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725480401; x=1726085201;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OJQbvAlwUoY2JNCuZeiksl55n3TI5XeOMxFA1c7akjs=;
-        b=lxawnN4v8VloYbKPnSYeCXdCT0QeQUyUPD8+p7YA45/hJhKOvFkZzmboK4kGdunKVB
-         tAJmmFUP+oX/AQMdhz9OHVYjTqkSuXNfPlM+A7ROzX+mhwTSLlJjuGngI79k8GdpoPSy
-         jJOgt2O+Khs0Jp+8dEbSpmJG3pS2c3xsIJq9RsFg/lncU8vIEQ04DBgsKWyplASAT6GD
-         mB0jaea6d1obUkguZpNZDdIvQBH9O1NGA2KRHYxTHkmQV6W89SBkdpnL0v1xmTPwI+T4
-         u65yrsrVNa0GlQJpZ2E1xbYN7b+bokJ6A4NPj3ZBDLdDA0cvYXkTv7Iwd/78EU41E0K9
-         rvOA==
-X-Forwarded-Encrypted: i=1; AJvYcCUjF2kydwPCovokfAWvXjA5YlA5ePlKMHehXkTYYPiSFjBgcabnCJAY3ElsYVwtS+xKabIVupHPSN/Uxw==@vger.kernel.org, AJvYcCWFLkkpxgeRpM3gSKgusqtrkUodgp6YheyuaubGTPTbQvp/BBdnvW5akOuVHGSF4bjvjrF0lXn4F3Ip@vger.kernel.org, AJvYcCWln5s5Bo5Dn7MUpAmfgJ7wUDNb8zdrcXLJiZtzmyuWlJJoUSWmLqEJhlXhA1MlehP0RKPo5vqTdMHwsiA=@vger.kernel.org, AJvYcCWqphptvb85a6hkLi1IXEU/zW9ayO3qFjPSCbhwkmmdY5v4mxlgiaUXECTPdthKNS1FM39VsO5FmH73@vger.kernel.org, AJvYcCWrmI899Q49tqye5i+SFuuoiOGTMuzol7xI70Ibsgvv0p2bcEd2gH4Zt430exD/QG7zBxFKTJgvNBnc@vger.kernel.org, AJvYcCX62mlCIG9azFaOdtrv84bXkv3q1ERjaRM2E4NmvcCAokl8WeLUCgXSQphLLMI4zhT0wo06SnUjHrYb8GCu@vger.kernel.org
-X-Gm-Message-State: AOJu0YyRhz065CvNSbGBTikPt7jBIgnH8ifpp0SH6gAqKMNTO4aIB193
-	B2lsuxJD1wW9arq3Y3kqE2hosZmTxvN+5gNciQXSWLJmVEyHmJ/c
-X-Google-Smtp-Source: AGHT+IFJIzwFEjNMCeeRnuPT1gf3RSqZ9ppugOO3TFBT5nBzUQKB3Sy0clCOv4K9+pV3ndJct0SI9Q==
-X-Received: by 2002:a05:6808:1203:b0:3dd:349c:ba5b with SMTP id 5614622812f47-3df05dbe25emr22606799b6e.24.1725480400808;
-        Wed, 04 Sep 2024 13:06:40 -0700 (PDT)
-Received: from ?IPV6:2603:8080:7400:36da:dff5:4180:2562:4c1e? ([2603:8080:7400:36da:dff5:4180:2562:4c1e])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-3df117d9ffesm2951302b6e.30.2024.09.04.13.06.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Sep 2024 13:06:40 -0700 (PDT)
-Message-ID: <7ad0e72c-df24-4b6e-abb2-bbae9dce8289@gmail.com>
-Date: Wed, 4 Sep 2024 15:06:36 -0500
+        d=1e100.net; s=20230601; t=1725484067; x=1726088867;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=w42R7BNbzfV9m9Ak5XplqSqEhc1UT4kjpkgNMP3MoEY=;
+        b=vW7Y6SLBYQR9IV5cEwJn3J1WWqjYqDuN6NTh11p8lwK5BJdAbaxR3zg+MDWwWIGNxs
+         9wiod0hNsQek5mTYD69QlkzYDmaD5NH7J8lalWlLsCZRQb1j+WnVLfrM8fGu+JD47sli
+         kGcmJF1Jgr2OAvjWaquf53LwbmtSO0nE5B9sWE8tPn+Zwbug0PajZ02CscPmiulJz7Ko
+         TFrWMNO3ZfWb1fLLMm2MkNom9SnJSfobMAKvTQ7e8PB3IdFXFU+louLifk1iu2UzKaGZ
+         pn2Cv2sHkMFrRBPSQ5M/KnhYloFs27i2eC8VUDU4yb1VZiWhS6NiLrEVtQ2W0nVg2Soh
+         0Nug==
+X-Forwarded-Encrypted: i=1; AJvYcCW74wa3O7ZWB+EkBgu8DHuXfY5yU2FisjbXh6GkpW51DpDy9aAaLcdg2T+BRQJ3xmyjYVAcd9oLm9tn@vger.kernel.org
+X-Gm-Message-State: AOJu0YxwFPHXZHg8oRu2cGQ7WKKfnoLa2OII2dmcr1lYww3z+MeVJF8u
+	omR3f1zOogsQatzAAQGfnMKSU1A2DYzhP6flSxmioGeceVFwJGpOKQO1SwaFBXeZjhwX1x8HM5/
+	kIV/Eneeq86pyq1/X35DlOAmEOQevfFYWrNzi
+X-Google-Smtp-Source: AGHT+IGl61F4f0ftYFMGsiQbwYzHE/z5H02ZJShnK57l4cZ0n0C26unhLmoZ1lt/9kS0S1twnCdNwstxD7QTkD9leS4=
+X-Received: by 2002:a05:6e02:194e:b0:377:14ab:42ea with SMTP id
+ e9e14a558f8ab-3a047199bb8mr996875ab.16.1725484066426; Wed, 04 Sep 2024
+ 14:07:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] docs: Move fault injection section to dev-tools
-To: Breno Leitao <leitao@debian.org>, Jonathan Corbet <corbet@lwn.net>,
- Akinobu Mita <akinobu.mita@gmail.com>,
- Federico Vaga <federico.vaga@vaga.pv.it>, Akira Yokosawa <akiyks@gmail.com>,
- Avadhut Naik <avadhut.naik@amd.com>, Alex Shi <alexs@kernel.org>,
- Yanteng Si <siyanteng@loongson.cn>, Hu Haowen <2023002089@link.tyut.edu.cn>,
- Jens Axboe <axboe@kernel.dk>, Kees Cook <kees@kernel.org>,
- Arnd Bergmann <arnd@arndb.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>,
- Bart Van Assche <bvanassche@acm.org>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: leit@meta.com, "Paul E. McKenney" <paulmck@kernel.org>,
- Thomas Huth <thuth@redhat.com>, "Borislav Petkov (AMD)" <bp@alien8.de>,
- Thomas Gleixner <tglx@linutronix.de>,
- Xiongwei Song <xiongwei.song@windriver.com>, Ard Biesheuvel
- <ardb@kernel.org>, John Moon <john@jmoon.dev>,
- Vegard Nossum <vegard.nossum@oracle.com>, Miguel Ojeda <ojeda@kernel.org>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>,
- SeongJae Park <sj@kernel.org>, "Ran.Park" <ranpark@foxmail.com>,
- Tiezhu Yang <yangtiezhu@loongson.cn>, Remington Brasga <rbrasga@uci.edu>,
- Damien Le Moal <dlemoal@kernel.org>, Hannes Reinecke <hare@suse.de>,
- Chaitanya Kulkarni <kch@nvidia.com>,
- Johannes Thumshirn <johannes.thumshirn@wdc.com>,
- Zhu Yanjun <yanjun.zhu@linux.dev>, John Garry <john.g.garry@oracle.com>,
- Chengming Zhou <zhouchengming@bytedance.com>, Yu Kuai <yukuai3@huawei.com>,
- Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>,
- Vlastimil Babka <vbabka@suse.cz>,
- "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
- open list <linux-kernel@vger.kernel.org>,
- "open list:DOCUMENTATION PROCESS" <workflows@vger.kernel.org>,
- "open list:BLOCK LAYER" <linux-block@vger.kernel.org>,
- "open list:UNIVERSAL FLASH STORAGE HOST CONTROLLER DRIVER"
- <linux-scsi@vger.kernel.org>,
- "open list:GENERIC INCLUDE/ASM HEADER FILES" <linux-arch@vger.kernel.org>
-References: <20240902125421.569668-1-leitao@debian.org>
-Content-Language: en-US
-From: Carlos Bilbao <carlos.bilbao.osdev@gmail.com>
-In-Reply-To: <20240902125421.569668-1-leitao@debian.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20240902044128.664075-1-surenb@google.com> <20240902044128.664075-7-surenb@google.com>
+ <20240901221636.5b0af3694510482e9d9e67df@linux-foundation.org>
+ <CAJuCfpGNYgx0GW4suHRzmxVH28RGRnFBvFC6WO+F8BD4HDqxXA@mail.gmail.com>
+ <47c4ef47-3948-4e46-8ea5-6af747293b18@nvidia.com> <70ef75d9-a573-4989-9a9d-c8bc087f212b@nvidia.com>
+ <CAJuCfpEQLDW1A7EX8LAcaRYdxKYBvP1E1cmYDoFXrG_V+AXv+g@mail.gmail.com> <c55739ec-3f0c-4f37-ad86-fe337d71d5a2@nvidia.com>
+In-Reply-To: <c55739ec-3f0c-4f37-ad86-fe337d71d5a2@nvidia.com>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Wed, 4 Sep 2024 14:07:31 -0700
+Message-ID: <CAJuCfpH_BSiQiNyUs8Jx3WZHmEELW3_NESi8ii0XCQR_x+gxNg@mail.gmail.com>
+Subject: Re: [PATCH v2 6/6] alloc_tag: config to store page allocation tag
+ refs in page flags
+To: John Hubbard <jhubbard@nvidia.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, kent.overstreet@linux.dev, corbet@lwn.net, 
+	arnd@arndb.de, mcgrof@kernel.org, rppt@kernel.org, paulmck@kernel.org, 
+	thuth@redhat.com, tglx@linutronix.de, bp@alien8.de, 
+	xiongwei.song@windriver.com, ardb@kernel.org, david@redhat.com, 
+	vbabka@suse.cz, mhocko@suse.com, hannes@cmpxchg.org, roman.gushchin@linux.dev, 
+	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com, 
+	pasha.tatashin@soleen.com, souravpanda@google.com, keescook@chromium.org, 
+	dennis@kernel.org, yuzhao@google.com, vvvvvv@google.com, rostedt@goodmis.org, 
+	iamjoonsoo.kim@lge.com, rientjes@google.com, minchan@google.com, 
+	kaleshsingh@google.com, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, linux-mm@kvack.org, 
+	linux-modules@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 9/2/24 07:53, Breno Leitao wrote:
-
-> Fault injection is a development tool, and should be under dev-tools
-
-
-Nit: not "and should be under" but "hence move under"
-
-
-> section.
+On Wed, Sep 4, 2024 at 11:58=E2=80=AFAM 'John Hubbard' via kernel-team
+<kernel-team@android.com> wrote:
 >
-> Suggested-by: Jonathan Corbet <corbet@lwn.net>
-> Signed-off-by: Breno Leitao <leitao@debian.org>
-> ---
-> Changelog:
+> On 9/4/24 9:08 AM, Suren Baghdasaryan wrote:
+> > On Tue, Sep 3, 2024 at 7:06=E2=80=AFPM 'John Hubbard' via kernel-team
+> > <kernel-team@android.com> wrote:
+> >> On 9/3/24 6:25 PM, John Hubbard wrote:
+> >>> On 9/3/24 11:19 AM, Suren Baghdasaryan wrote:
+> >>>> On Sun, Sep 1, 2024 at 10:16=E2=80=AFPM Andrew Morton <akpm@linux-fo=
+undation.org> wrote:
+> >>>>> On Sun,  1 Sep 2024 21:41:28 -0700 Suren Baghdasaryan <surenb@googl=
+e.com> wrote:
+> ...
+> >> The configuration should disable itself, in this case. But if that is
+> >> too big of a change for now, I suppose we could fall back to an error
+> >> message to the effect of, "please disable CONFIG_PGALLOC_TAG_USE_PAGEF=
+LAGS
+> >> because the kernel build system is still too primitive to do that for =
+you". :)
+> >
+> > I don't think we can detect this at build time. We need to know how
+> > many page allocations there are, which we find out only after we build
+> > the kernel image (from the section size that holds allocation tags).
+> > Therefore it would have to be a post-build check. So I think the best
+> > we can do is to generate the error like the one you suggested after we
+> > build the image.
+> > Dependency on CONFIG_PAGE_EXTENSION is yet another complexity because
+> > if we auto-disable CONFIG_PGALLOC_TAG_USE_PAGEFLAGS, we would have to
+> > also auto-enable CONFIG_PAGE_EXTENSION if it's not already enabled.
+> >
+> > I'll dig around some more to see if there is a better way.
+> >>
+> >>>> - If there are enough unused bits but we have to push last_cpupid ou=
+t
+> >>>> of page flags, we issue a warning and continue. The user can disable
+> >>>> CONFIG_PGALLOC_TAG_USE_PAGEFLAGS if last_cpupid has to stay in page
+> >>>> flags.
+> >>
+> >> Let's try to decide now, what that tradeoff should be. Just pick one b=
+ased
+> >> on what some of us perceive to be the expected usefulness and frequenc=
+y of
+> >> use between last_cpuid and these tag refs.
+> >>
+> >> If someone really needs to change the tradeoff for that one bit, then =
+that
+> >> someone is also likely able to hack up a change for it.
+> >
+> > Yeah, from all the feedback, I realize that by pursuing the maximum
+> > flexibility I made configuring this mechanism close to impossible. I
+> > think the first step towards simplifying this would be to identify
+> > usable configurations. From that POV, I can see 3 useful modes:
+> >
+> > 1. Page flags are not used. In this mode we will use direct pointer
+> > references and page extensions, like we do today. This mode is used
+> > when we don't have enough page flags. This can be a safe default which
+> > keeps things as they are today and should always work.
 >
-> v2:
->   * Fixed a remaining file pointing to the wrong file, as reported by
->     kernel test robot:
-> 	* https://lore.kernel.org/all/202408312350.DEf53QzI-lkp@intel.com/ 
+> Definitely my favorite so far.
 >
-> v1:
->   * https://lore.kernel.org/all/20240830174502.3732959-1-leitao@debian.org/
+> > 2. Page flags are used but not forced. This means we will try to use
+> > all free page flags bits (up to a reasonable limit of 16) without
+> > pushing out last_cpupid.
 >
->  Documentation/admin-guide/kernel-parameters.txt              | 2 +-
->  .../{ => dev-tools}/fault-injection/fault-injection.rst      | 0
->  Documentation/{ => dev-tools}/fault-injection/index.rst      | 0
->  .../fault-injection/notifier-error-inject.rst                | 0
->  .../{ => dev-tools}/fault-injection/nvme-fault-injection.rst | 0
->  .../{ => dev-tools}/fault-injection/provoke-crashes.rst      | 0
->  Documentation/dev-tools/index.rst                            | 1 +
->  Documentation/index.rst                                      | 1 -
->  Documentation/process/4.Coding.rst                           | 2 +-
->  Documentation/process/submit-checklist.rst                   | 2 +-
->  Documentation/translations/it_IT/process/4.Coding.rst        | 2 +-
->  .../translations/it_IT/process/submit-checklist.rst          | 2 +-
->  Documentation/translations/ja_JP/SubmitChecklist             | 2 +-
->  .../translations/sp_SP/process/submit-checklist.rst          | 2 +-
->  Documentation/translations/zh_CN/index.rst                   | 2 +-
->  Documentation/translations/zh_CN/process/4.Coding.rst        | 2 +-
->  .../translations/zh_CN/process/submit-checklist.rst          | 2 +-
->  Documentation/translations/zh_TW/index.rst                   | 2 +-
->  Documentation/translations/zh_TW/process/4.Coding.rst        | 2 +-
->  .../translations/zh_TW/process/submit-checklist.rst          | 2 +-
->  MAINTAINERS                                                  | 2 +-
->  drivers/block/null_blk/main.c                                | 2 +-
->  drivers/misc/lkdtm/core.c                                    | 2 +-
->  drivers/ufs/core/ufs-fault-injection.c                       | 2 +-
->  include/asm-generic/error-injection.h                        | 5 +++--
->  include/linux/fault-inject.h                                 | 2 +-
->  lib/Kconfig.debug                                            | 4 ++--
->  tools/testing/fault-injection/failcmd.sh                     | 2 +-
->  28 files changed, 25 insertions(+), 24 deletions(-)
->  rename Documentation/{ => dev-tools}/fault-injection/fault-injection.rst (100%)
->  rename Documentation/{ => dev-tools}/fault-injection/index.rst (100%)
->  rename Documentation/{ => dev-tools}/fault-injection/notifier-error-inject.rst (100%)
->  rename Documentation/{ => dev-tools}/fault-injection/nvme-fault-injection.rst (100%)
->  rename Documentation/{ => dev-tools}/fault-injection/provoke-crashes.rst (100%)
+> This is a logical next step, agreed.
 >
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index 09126bb8cc9f..70d2077c9b3f 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -1532,7 +1532,7 @@
->  	fail_make_request=[KNL]
->  			General fault injection mechanism.
->  			Format: <interval>,<probability>,<space>,<times>
-> -			See also Documentation/fault-injection/.
-> +			See also Documentation/dev-tools/fault-injection/.
->  
->  	fb_tunnels=	[NET]
->  			Format: { initns | none }
-> diff --git a/Documentation/fault-injection/fault-injection.rst b/Documentation/dev-tools/fault-injection/fault-injection.rst
-> similarity index 100%
-> rename from Documentation/fault-injection/fault-injection.rst
-> rename to Documentation/dev-tools/fault-injection/fault-injection.rst
-> diff --git a/Documentation/fault-injection/index.rst b/Documentation/dev-tools/fault-injection/index.rst
-> similarity index 100%
-> rename from Documentation/fault-injection/index.rst
-> rename to Documentation/dev-tools/fault-injection/index.rst
-> diff --git a/Documentation/fault-injection/notifier-error-inject.rst b/Documentation/dev-tools/fault-injection/notifier-error-inject.rst
-> similarity index 100%
-> rename from Documentation/fault-injection/notifier-error-inject.rst
-> rename to Documentation/dev-tools/fault-injection/notifier-error-inject.rst
-> diff --git a/Documentation/fault-injection/nvme-fault-injection.rst b/Documentation/dev-tools/fault-injection/nvme-fault-injection.rst
-> similarity index 100%
-> rename from Documentation/fault-injection/nvme-fault-injection.rst
-> rename to Documentation/dev-tools/fault-injection/nvme-fault-injection.rst
-> diff --git a/Documentation/fault-injection/provoke-crashes.rst b/Documentation/dev-tools/fault-injection/provoke-crashes.rst
-> similarity index 100%
-> rename from Documentation/fault-injection/provoke-crashes.rst
-> rename to Documentation/dev-tools/fault-injection/provoke-crashes.rst
-> diff --git a/Documentation/dev-tools/index.rst b/Documentation/dev-tools/index.rst
-> index 53d4d124f9c5..ade850c4b344 100644
-> --- a/Documentation/dev-tools/index.rst
-> +++ b/Documentation/dev-tools/index.rst
-> @@ -34,6 +34,7 @@ Documentation/dev-tools/testing-overview.rst
->     ktap
->     checkuapi
->     gpio-sloppy-logic-analyzer
-> +   Fault injection <fault-injection/index>
->  
->  
->  .. only::  subproject and html
-> diff --git a/Documentation/index.rst b/Documentation/index.rst
-> index f9f525f4c0dd..9b57d6bc04f4 100644
-> --- a/Documentation/index.rst
-> +++ b/Documentation/index.rst
-> @@ -57,7 +57,6 @@ Various other manuals with useful information for all kernel developers.
->     Testing guide <dev-tools/testing-overview>
->     Hacking guide <kernel-hacking/index>
->     Tracing <trace/index>
-> -   Fault injection <fault-injection/index>
->     Livepatching <livepatch/index>
->     Rust <rust/index>
->  
-> diff --git a/Documentation/process/4.Coding.rst b/Documentation/process/4.Coding.rst
-> index 80bcc1cabc23..1fc0a7fc2f43 100644
-> --- a/Documentation/process/4.Coding.rst
-> +++ b/Documentation/process/4.Coding.rst
-> @@ -300,7 +300,7 @@ enabled, a configurable percentage of memory allocations will be made to
->  fail; these failures can be restricted to a specific range of code.
->  Running with fault injection enabled allows the programmer to see how the
->  code responds when things go badly.  See
-> -Documentation/fault-injection/fault-injection.rst for more information on
-> +Documentation/dev-tools/fault-injection/fault-injection.rst for more information on
->  how to use this facility.
->  
->  Other kinds of errors can be found with the "sparse" static analysis tool.
-> diff --git a/Documentation/process/submit-checklist.rst b/Documentation/process/submit-checklist.rst
-> index e531dd504b6c..b513b3d05426 100644
-> --- a/Documentation/process/submit-checklist.rst
-> +++ b/Documentation/process/submit-checklist.rst
-> @@ -124,7 +124,7 @@ Test your code
->  3) All codepaths have been exercised with all lockdep features enabled.
->  
->  4) Has been checked with injection of at least slab and page-allocation
-> -   failures.  See ``Documentation/fault-injection/``.
-> +   failures.  See ``Documentation/dev-tools/fault-injection/``.
->     If the new code is substantial, addition of subsystem-specific fault
->     injection might be appropriate.
->  
-> diff --git a/Documentation/translations/it_IT/process/4.Coding.rst b/Documentation/translations/it_IT/process/4.Coding.rst
-> index ec874a8dfb9d..b7b9ab6df103 100644
-> --- a/Documentation/translations/it_IT/process/4.Coding.rst
-> +++ b/Documentation/translations/it_IT/process/4.Coding.rst
-> @@ -317,7 +317,7 @@ di allocazione di memoria sarà destinata al fallimento; questi fallimenti
->  possono essere ridotti ad uno specifico pezzo di codice.  Procedere con
->  l'inserimento dei fallimenti attivo permette al programmatore di verificare
->  come il codice risponde quando le cose vanno male.  Consultate:
-> -Documentation/fault-injection/fault-injection.rst per avere maggiori
-> +Documentation/dev-tools/fault-injection/fault-injection.rst per avere maggiori
->  informazioni su come utilizzare questo strumento.
->  
->  Altre tipologie di errori possono essere riscontrati con lo strumento di
-> diff --git a/Documentation/translations/it_IT/process/submit-checklist.rst b/Documentation/translations/it_IT/process/submit-checklist.rst
-> index 2fc09cc1f0be..60ec660702fa 100644
-> --- a/Documentation/translations/it_IT/process/submit-checklist.rst
-> +++ b/Documentation/translations/it_IT/process/submit-checklist.rst
-> @@ -99,7 +99,7 @@ sottomissione delle patch, in particolare
->      essere inviate in copia anche a linux-api@vger.kernel.org.
->  
->  20) La patch è stata verificata con l'iniezione di fallimenti in slab e
-> -    nell'allocazione di pagine.  Vedere ``Documentation/fault-injection/``.
-> +    nell'allocazione di pagine.  Vedere ``Documentation/dev-tools/fault-injection/``.
->  
->      Se il nuovo codice è corposo, potrebbe essere opportuno aggiungere
->      l'iniezione di fallimenti specifici per il sottosistema.
-> diff --git a/Documentation/translations/ja_JP/SubmitChecklist b/Documentation/translations/ja_JP/SubmitChecklist
-> index 1759c6b452d6..193641581e98 100644
-> --- a/Documentation/translations/ja_JP/SubmitChecklist
-> +++ b/Documentation/translations/ja_JP/SubmitChecklist
-> @@ -90,7 +90,7 @@ Linux カーネルパッチ投稿者向けチェックリスト
->  
->  19: 少なくともslabアロケーションとpageアロケーションに失敗した場合の
->      挙動について、fault-injectionを利用して確認してください。
-> -    Documentation/fault-injection/ を参照してください。
-> +    Documentation/dev-tools/fault-injection/ を参照してください。
->  
->      追加したコードがかなりの量であったならば、サブシステム特有の
->      fault-injectionを追加したほうが良いかもしれません。
-> diff --git a/Documentation/translations/sp_SP/process/submit-checklist.rst b/Documentation/translations/sp_SP/process/submit-checklist.rst
-> index 0d6651f9d871..d2b09a10c1fe 100644
-> --- a/Documentation/translations/sp_SP/process/submit-checklist.rst
-> +++ b/Documentation/translations/sp_SP/process/submit-checklist.rst
-> @@ -102,7 +102,7 @@ y en otros lugares con respecto al envío de parches del kernel de Linux.
->      espacio de usuario deben ser CCed a linux-api@vger.kernel.org.
->  
->  19) Se ha comprobado con la inyección de al menos errores de asignación
-> -    de slab y página. Consulte ``Documentation/fault-injection/``.
-> +    de slab y página. Consulte ``Documentation/dev-tools/fault-injection/``.
->  
->      Si el nuevo código es sustancial, la adición de la inyección de
->      errores específica del subsistema podría ser apropiada.
-> diff --git a/Documentation/translations/zh_CN/index.rst b/Documentation/translations/zh_CN/index.rst
-> index 20b9d4270d1f..e471f22a5473 100644
-> --- a/Documentation/translations/zh_CN/index.rst
-> +++ b/Documentation/translations/zh_CN/index.rst
-> @@ -73,7 +73,7 @@
->  TODOList:
->  
->  * trace/index
-> -* fault-injection/index
-> +* dev-tools/fault-injection/index
->  * livepatch/index
->  
->  面向用户的文档
-> diff --git a/Documentation/translations/zh_CN/process/4.Coding.rst b/Documentation/translations/zh_CN/process/4.Coding.rst
-> index 4cc35d410dbc..2794761a1cbe 100644
-> --- a/Documentation/translations/zh_CN/process/4.Coding.rst
-> +++ b/Documentation/translations/zh_CN/process/4.Coding.rst
-> @@ -208,7 +208,7 @@ Linus对这个问题给出了最佳答案:
->  启用故障注入后，内存分配的可配置失败的百分比；这些失败可以限定在特定的代码
->  范围内。在启用了故障注入的情况下运行，程序员可以看到当情况恶化时代码如何响
->  应。有关如何使用此工具的详细信息，请参阅
-> -Documentation/fault-injection/fault-injection.rst。
-> +Documentation/dev-tools/fault-injection/fault-injection.rst。
->  
->  “sparse”静态分析工具可以发现其他类型的错误。sparse可以警告程序员用户空间
->  和内核空间地址之间的混淆、大端序与小端序的混淆、在需要一组位标志的地方传递
-> diff --git a/Documentation/translations/zh_CN/process/submit-checklist.rst b/Documentation/translations/zh_CN/process/submit-checklist.rst
-> index 10536b74aeec..4f8d7480673d 100644
-> --- a/Documentation/translations/zh_CN/process/submit-checklist.rst
-> +++ b/Documentation/translations/zh_CN/process/submit-checklist.rst
-> @@ -85,7 +85,7 @@ Linux内核补丁提交检查单
->      请参阅 ``Documentation/ABI/README`` 。更改用户空间接口的补丁应该抄送
->      linux-api@vger.kernel.org。
->  
-> -19) 已通过至少注入slab和page分配失败进行检查。请参阅 ``Documentation/fault-injection/`` 。
-> +19) 已通过至少注入slab和page分配失败进行检查。请参阅 ``Documentation/dev-tools/fault-injection/`` 。
->      如果新代码是实质性的，那么添加子系统特定的故障注入可能是合适的。
->  
->  20) 新添加的代码已经用 ``gcc -W`` 编译（使用 ``make EXTRA-CFLAGS=-W`` ）。这
-> diff --git a/Documentation/translations/zh_TW/index.rst b/Documentation/translations/zh_TW/index.rst
-> index 660a74d2023c..1932a5f28069 100644
-> --- a/Documentation/translations/zh_TW/index.rst
-> +++ b/Documentation/translations/zh_TW/index.rst
-> @@ -64,7 +64,7 @@ TODOList:
->  * kernel-hacking/index
->  * rust/index
->  * trace/index
-> -* fault-injection/index
-> +* dev-tools/fault-injection/index
->  * livepatch/index
->  
->  面向用戶的文檔
-> diff --git a/Documentation/translations/zh_TW/process/4.Coding.rst b/Documentation/translations/zh_TW/process/4.Coding.rst
-> index e90a6b51fb98..3841da1e6729 100644
-> --- a/Documentation/translations/zh_TW/process/4.Coding.rst
-> +++ b/Documentation/translations/zh_TW/process/4.Coding.rst
-> @@ -211,7 +211,7 @@ Linus對這個問題給出了最佳答案:
->  啓用故障注入後，內存分配的可配置失敗的百分比；這些失敗可以限定在特定的代碼
->  範圍內。在啓用了故障注入的情況下運行，程序員可以看到當情況惡化時代碼如何響
->  應。有關如何使用此工具的詳細信息，請參閱
-> -Documentation/fault-injection/fault-injection.rst。
-> +Documentation/dev-tools/fault-injection/fault-injection.rst。
->  
->  “sparse”靜態分析工具可以發現其他類型的錯誤。sparse可以警告程序員用戶空間
->  和內核空間地址之間的混淆、大端序與小端序的混淆、在需要一組位標誌的地方傳遞
-> diff --git a/Documentation/translations/zh_TW/process/submit-checklist.rst b/Documentation/translations/zh_TW/process/submit-checklist.rst
-> index 0ecb187753e4..e7a6c3332017 100644
-> --- a/Documentation/translations/zh_TW/process/submit-checklist.rst
-> +++ b/Documentation/translations/zh_TW/process/submit-checklist.rst
-> @@ -88,7 +88,7 @@ Linux內核補丁提交檢查單
->      請參閱 ``Documentation/ABI/README`` 。更改用戶空間接口的補丁應該抄送
->      linux-api@vger.kernel.org。
->  
-> -19) 已通過至少注入slab和page分配失敗進行檢查。請參閱 ``Documentation/fault-injection/`` 。
-> +19) 已通過至少注入slab和page分配失敗進行檢查。請參閱 ``Documentation/dev-tools/fault-injection/`` 。
->      如果新代碼是實質性的，那麼添加子系統特定的故障注入可能是合適的。
->  
->  20) 新添加的代碼已經用 ``gcc -W`` 編譯（使用 ``make EXTRA-CFLAGS=-W`` ）。這
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index e4fa9010fcb6..b5fd319b8786 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -8537,7 +8537,7 @@ F:	drivers/net/wan/farsync.*
->  FAULT INJECTION SUPPORT
->  M:	Akinobu Mita <akinobu.mita@gmail.com>
->  S:	Supported
-> -F:	Documentation/fault-injection/
-> +F:	Documentation/dev-tools/fault-injection/
->  F:	lib/fault-inject.c
->  
->  FBTFT Framebuffer drivers
-> diff --git a/drivers/block/null_blk/main.c b/drivers/block/null_blk/main.c
-> index 2f0431e42c49..2266c80649a2 100644
-> --- a/drivers/block/null_blk/main.c
-> +++ b/drivers/block/null_blk/main.c
-> @@ -100,7 +100,7 @@ MODULE_PARM_DESC(home_node, "Home node for the device");
->  #ifdef CONFIG_BLK_DEV_NULL_BLK_FAULT_INJECTION
->  /*
->   * For more details about fault injection, please refer to
-> - * Documentation/fault-injection/fault-injection.rst.
-> + * Documentation/dev-tools/fault-injection/fault-injection.rst.
->   */
->  static char g_timeout_str[80];
->  module_param_string(timeout, g_timeout_str, sizeof(g_timeout_str), 0444);
-> diff --git a/drivers/misc/lkdtm/core.c b/drivers/misc/lkdtm/core.c
-> index 5732fd59a227..029592f2d07e 100644
-> --- a/drivers/misc/lkdtm/core.c
-> +++ b/drivers/misc/lkdtm/core.c
-> @@ -15,7 +15,7 @@
->   *
->   * Debugfs support added by Simon Kagstrom <simon.kagstrom@netinsight.net>
->   *
-> - * See Documentation/fault-injection/provoke-crashes.rst for instructions
-> + * See Documentation/dev-tools/fault-injection/provoke-crashes.rst for instructions
->   */
->  #include "lkdtm.h"
->  #include <linux/fs.h>
-> diff --git a/drivers/ufs/core/ufs-fault-injection.c b/drivers/ufs/core/ufs-fault-injection.c
-> index 169540417079..3afe1e7fb407 100644
-> --- a/drivers/ufs/core/ufs-fault-injection.c
-> +++ b/drivers/ufs/core/ufs-fault-injection.c
-> @@ -19,7 +19,7 @@ enum { FAULT_INJ_STR_SIZE = 80 };
->  
->  /*
->   * For more details about fault injection, please refer to
-> - * Documentation/fault-injection/fault-injection.rst.
-> + * Documentation/dev-tools/fault-injection/fault-injection.rst.
->   */
->  static char g_trigger_eh_str[FAULT_INJ_STR_SIZE];
->  module_param_cb(trigger_eh, &ufs_fault_ops, g_trigger_eh_str, 0644);
-> diff --git a/include/asm-generic/error-injection.h b/include/asm-generic/error-injection.h
-> index b05253f68eaa..26b80eec6d5f 100644
-> --- a/include/asm-generic/error-injection.h
-> +++ b/include/asm-generic/error-injection.h
-> @@ -21,8 +21,9 @@ struct pt_regs;
->  /*
->   * Whitelist generating macro. Specify functions which can be error-injectable
->   * using this macro. If you unsure what is required for the error-injectable
-> - * functions, please read Documentation/fault-injection/fault-injection.rst
-> - * 'Error Injectable Functions' section.
-> + * functions, please read
-> + * Documentation/dev-tools/fault-injection/fault-injection.rst 'Error
-> + * Injectable Functions' section.
->   */
->  #define ALLOW_ERROR_INJECTION(fname, _etype)				\
->  static struct error_injection_entry __used				\
-> diff --git a/include/linux/fault-inject.h b/include/linux/fault-inject.h
-> index 354413950d34..9b10e50155a6 100644
-> --- a/include/linux/fault-inject.h
-> +++ b/include/linux/fault-inject.h
-> @@ -12,7 +12,7 @@
->  
->  /*
->   * For explanation of the elements of this struct, see
-> - * Documentation/fault-injection/fault-injection.rst
-> + * Documentation/dev-tools/fault-injection/fault-injection.rst
->   */
->  struct fault_attr {
->  	unsigned long probability;
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index a30c03a66172..a0e66c01042e 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -2019,7 +2019,7 @@ config FAULT_INJECTION
->  	depends on DEBUG_KERNEL
->  	help
->  	  Provide fault-injection framework.
-> -	  For more details, see Documentation/fault-injection/.
-> +	  For more details, see Documentation/dev-tools/fault-injection/.
->  
->  config FAILSLAB
->  	bool "Fault-injection capability for kmalloc"
-> @@ -2225,7 +2225,7 @@ config LKDTM
->  	called lkdtm.
->  
->  	Documentation on how to use the module can be found in
-> -	Documentation/fault-injection/provoke-crashes.rst
-> +	Documentation/dev-tools/fault-injection/provoke-crashes.rst
->  
->  config CPUMASK_KUNIT_TEST
->  	tristate "KUnit test for cpumask" if !KUNIT_ALL_TESTS
-> diff --git a/tools/testing/fault-injection/failcmd.sh b/tools/testing/fault-injection/failcmd.sh
-> index 78dac34264be..ea384c7cae68 100644
-> --- a/tools/testing/fault-injection/failcmd.sh
-> +++ b/tools/testing/fault-injection/failcmd.sh
-> @@ -42,7 +42,7 @@ OPTIONS
->  	--interval=value, --space=value, --verbose=value, --task-filter=value,
->  	--stacktrace-depth=value, --require-start=value, --require-end=value,
->  	--reject-start=value, --reject-end=value, --ignore-gfp-wait=value
-> -		See Documentation/fault-injection/fault-injection.rst for more
-> +		See Documentation/dev-tools/fault-injection/fault-injection.rst for more
->  		information
->  
->  	failslab options:
+> > 3. Page flags are forced. This means we will try to use all free page
+> > flags bits after pushing last_cpupid out of page flags. This mode
+> > could be used if the user cares about memory profiling more than the
+> > performance overhead caused by last_cpupid.
+> >
+> > I'm not 100% sure (3) is needed, so I think we can skip it until
+> > someone asks for it. It should be easy to add that in the future.
+>
+> Right.
+>
+> > If we detect at build time that we don't have enough page flag bits to
+> > cover kernel allocations for modes (2) or (3), we issue an error
+> > prompting the user to reconfigure to mode (1).
+> >
+> > Ideally, I would like to have (2) as default mode and automatically
+> > fall back to (1) when it's impossible but as I mentioned before, I
+> > don't yet see a way to do that automatically.
+> >
+> > For loadable modules, I think my earlier suggestion should work fine.
+> > If a module causes us to run out of space for tags, we disable memory
+> > profiling at runtime and log a warning for the user stating that we
+> > disabled memory profiling and if the user needs it they should
+> > configure mode (1). I *think* I can even disable profiling only for
+> > that module and not globally but I need to try that first.
+> >
+> > I can start with modes (1) and (2) support which requires only
+> > CONFIG_PGALLOC_TAG_USE_PAGEFLAGS defaulted to N. Any user can try
+> > enabling this config and if that builds fine then keeping it for
+> > better performance and memory usage. Does that sound acceptable?
+> > Thanks,
+> > Suren.
+> >
+>
+> How badly do we need (2)? Because this is really expensive:
+>
+>     a) It adds complexity to a complex,delicate core part of mm.
+>
+>     b) It adds constraints, which prevent possible future features.
+>
+> It's not yet clear that (2) is valuable enough (compared to (1))
+> to compensate, at least from what I've read. Unless I missed
+> something big.
+
+(1) is what we already have today.
+(2) would allow us to drop page_ext dependency, so there is
+considerable memory saving and performance improvement (no need to
+lookup the page extension on each tag reference). The benefits are
+described in the cover letter at:
+https://lore.kernel.org/all/20240902044128.664075-1-surenb@google.com/.
 
 
-Thanks, Carlos
-
+>
+>
+> thanks,
+> --
+> John Hubbard
+>
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to kernel-team+unsubscribe@android.com.
+>
 
