@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-7040-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7041-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3AB0296CB10
-	for <lists+linux-arch@lfdr.de>; Thu,  5 Sep 2024 01:49:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2659D96CB15
+	for <lists+linux-arch@lfdr.de>; Thu,  5 Sep 2024 01:49:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C821CB25CF2
-	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2024 23:49:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A6ACD1F268B4
+	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2024 23:49:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CEC1188A13;
-	Wed,  4 Sep 2024 23:48:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBCB518951C;
+	Wed,  4 Sep 2024 23:48:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p01iU+/D"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X36dfIG0"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06EE4188A11;
-	Wed,  4 Sep 2024 23:48:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 975A818950B;
+	Wed,  4 Sep 2024 23:48:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725493701; cv=none; b=nGeSgM0zoza816RfkEY6iDedynMHGyUEKC95aFaosv/m/cR4o9suKprN3PBp3WZcOWvtucTL/G3OIR6FEvw5e5e3lLm138tcPTyVO5x7nrUtDdb7XVl1mvHUBVjf088anfNCwdb7EMI64SoviOGjoJdUcw6+X42sFLCpOMszYJs=
+	t=1725493703; cv=none; b=sYDiIueje9DN/QXnug+dSLlSN71uvUXEybXDhh2oMDJXUQC3CJj1Qd1RTRY7DGDt+0kWi31EIs2RqorR9KpCs1eJr09fzzgUOiaW3ZDGw8fYB+dwwzA6Kv+DWPEVY8cqy9edEmcjgf0CNkS+1Wt0z6NQnxbZSGtYpKKDGWKDgiM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725493701; c=relaxed/simple;
-	bh=i8mV+tLCUsiRlMheHxr5JXcHpK1KBT9MA15Lx4XtwsA=;
+	s=arc-20240116; t=1725493703; c=relaxed/simple;
+	bh=nsKwaA1C+DPeHbXqGcBjvOLIHgXiFg4rrFKZpG8IZuo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ItoimNL2P8XRqhvovHqHng09MDG4YkssJxGivdgNCYcBaqm5GkvOXzPr05EnEs7IddMKKyMA7MG9KUKLTjn/BJXAvnbc7ykiqzUfD3kGJnRFjsA5zLEm3gGrnxgt31Oc1nZNV1huQ7AsAiQfpKUpXeBAYe5RTvUgxZnHEM6IdgY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p01iU+/D; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66AE1C4CECA;
-	Wed,  4 Sep 2024 23:48:18 +0000 (UTC)
+	 MIME-Version; b=d7isZF91I4KmIEWWeIDByY9L8GIzV1cw8a42MYC2JyIZMjbSoJfSV4cYOQO3KheVMjSZP4uZgiBYtoa1wm3GAHUCXY/ojJ/UlBrUQ2jspbN77Lo/QOA9SIKY1CoyXK2rrFvVB652AFaWSI9nZ/Nyv8W9YDFwduW0vJEvo4crUXE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X36dfIG0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C6CDC4CEC2;
+	Wed,  4 Sep 2024 23:48:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725493700;
-	bh=i8mV+tLCUsiRlMheHxr5JXcHpK1KBT9MA15Lx4XtwsA=;
+	s=k20201202; t=1725493703;
+	bh=nsKwaA1C+DPeHbXqGcBjvOLIHgXiFg4rrFKZpG8IZuo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=p01iU+/DYZkCBKD+GyQL6lhOUiwSAj3Q1p6CnM5OK22KlkOrax1RJmnOt6LB+Apcp
-	 bBsoAvnElMn/98XgiSLlemsa6C5HW/rv7FKWbV6kl3CK0ePwXVTZbjoL/ze9Fw35XS
-	 ZEREPhLP5y69C6m0zSQK869zMAs82s9olIqLjlw/pJOMh0mG/dVnu2rGBGfLFYt3UN
-	 tI68kjCfCFD7m+fooNeuc9s8i0JX+k92EzrAa6o2Xd3XrtR0rJmnaR2F8AwHwjQfny
-	 HMsXX52wEpzDPlUyGWF3q+UPziBedRSvRDFKfyH8H63HLv61KQxdKOEhJkAhmGjAWC
-	 HCCTVgsTH+96w==
+	b=X36dfIG0wtcgWQzkkeDHpAyyy7pGPLtXcd3jbuFGMOXbrfAVNzUobsJqzX/p+sC0Q
+	 AbUbU4aws5JbrmphPMcCQ7MYHbG4F4boFFsW+/e/i+qXTMSUjRU4T5aczjlIxJ5Pw4
+	 t34G6/LKKvTJvVADNXak2AQF8cQK4NlwOLTxdGz+AhrhppnCiWJ4jsI7ZxQQNvw7fD
+	 gAsnyHevuSc63Bwbr0Q/VSIwdAKzcjAeU6dX84uJhzAfhzlTAXAzhg/p7+CklJ0Utp
+	 R+UYNm9msmK+XOypnjCuSyfhyqmTPDq2PfN6hPFsL9cn097TWpteabOhfpjZyRNBaf
+	 B8Fg46ryR3CeQ==
 From: Masahiro Yamada <masahiroy@kernel.org>
 To: linux-kbuild@vger.kernel.org
 Cc: linux-arch@vger.kernel.org,
@@ -53,9 +53,9 @@ Cc: linux-arch@vger.kernel.org,
 	linux-openrisc@vger.kernel.org,
 	Dinh Nguyen <dinguyen@kernel.org>,
 	Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH 03/15] kbuild: move non-boot builtin DTBs to .init.rodata section
-Date: Thu,  5 Sep 2024 08:47:39 +0900
-Message-ID: <20240904234803.698424-4-masahiroy@kernel.org>
+Subject: [PATCH 04/15] kbuild: add generic support for built-in boot DTBs
+Date: Thu,  5 Sep 2024 08:47:40 +0900
+Message-ID: <20240904234803.698424-5-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240904234803.698424-1-masahiroy@kernel.org>
 References: <20240904234803.698424-1-masahiroy@kernel.org>
@@ -67,99 +67,174 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Some architectures support embedding boot DTB(s) in vmlinux. These
-architectures, except MIPS and MicroBlaze, expect a single DTB in
-the .dtb.init.rodata section. MIPS embeds multiple DTBs in vmlinux.
-MicroBlaze embeds a DTB in its own __fdt_blob section instead of the
-.dtb.init.rodata section.
+Some architectures embed boot DTBs in vmlinux. A potential issue for
+these architectures is a race condition during parallel builds because
+Kbuild descends into arch/*/boot/dts/ twice.
 
-For example, RISC-V previously allowed embedding multiple DTBs, but
-only the first DTB in the .dtb.init.rodata section was used. Commit
-2672031b20f6 ("riscv: dts: Move BUILTIN_DTB_SOURCE to common Kconfig")
-ensured only one boot DTB is embedded.
+One build thread is initiated by the 'dtbs' target, which is a
+prerequisite of the 'all' target in the top-level Makefile:
 
-Meanwhile, commit 7b937cc243e5 ("of: Create of_root if no dtb provided
-by firmware") introduced another DTB into the .dtb.init.rodata section.
+  ifdef CONFIG_OF_EARLY_FLATTREE
+  all: dtbs
+  endif
 
-The symbol dump (sorted by address) for ARCH=riscv nommu_k210_defconfig
-is now as follows:
+For architectures that support the embedded boot dtb, arch/*/boot/dts/
+is visited also during the ordinary directory traversal in order to
+build obj-y objects that wrap DTBs.
 
-    00000000801290e0 D __dtb_start
-    00000000801290e0 D __dtb_k210_generic_begin
-    000000008012b571 D __dtb_k210_generic_end
-    000000008012b580 D __dtb_empty_root_begin
-    000000008012b5c8 D __dtb_empty_root_end
-    000000008012b5e0 D __dtb_end
+Since these build threads are unaware of each other, they can run
+simultaneously during parallel builds.
 
-The .dtb.init.rodata section contains the following two DTB files:
+This commit introduces a generic build rule to scripts/Makefile.vmlinux
+to support embedded boot DTBs in a race-free way. Architectures that
+want to use this rule need to select CONFIG_GENERIC_BUILTIN_DTB.
 
-    arch/riscv/boot/dts/canaan/k210_generic.dtb
-    drivers/of/empty_root.dtb
+After the migration, Makefiles under arch/*/boot/dts/ will be visited
+only once to build only *.dtb files.
 
-This is not an immediate problem because the boot code chooses the
-first DTB, k210_generic.dtb. The second one, empty_root.dtb is ignored.
-However, relying on the link order (i.e., the order in Makefiles) is
-fragile.
+This change also aims to unify the CONFIG options used for embedded DTBs
+support. Currently, different architectures use different CONFIG options
+for the same purposes.
 
-Only the boot DTB should be placed in the .dtb.init.rodata because the
-arch boot code generally does not know the DT name, thus it uses the
-__dtb_start symbol to find it.
+The CONFIG options are unified as follows:
 
-empty_root.dtb is looked up by name, so it can be moved to the generic
-.init.rodata section.
+ - CONFIG_GENERIC_BUILTIN_DTB
 
-When CONFIG_OF_UNITTEST is enabled, more unittest DTBOs are embedded in
-the .dtb.init.rodata section. These are also looked up by name, so can
-be moved to the .init.rodata section.
+   This enables the generic rule for embedded boot DTBs. This will be
+   renamed to CONFIG_BUILTIN_DTB after all architectures migrate to the
+   generic rule.
 
-I added the __initdata annotation to the overlay_info data array because
-modpost knows the .init.rodata section is discarded, and would otherwise
-warn about it.
+ - CONFIG_BUILTIN_DTB_NAME
 
-The implementation is kind of cheesy; the section is .dtb.init.rodata
-under the arch/ directory, and .init.rodata section otherwise. This will
-be refactored later.
+   This specifies the path to the embedded DTB.
+   (relative to arch/*/boot/dts/)
+
+ - CONFIG_BUILTIN_DTB_ALL
+
+   If this is enabled, all DTB files compiled under arch/*/boot/dts/ are
+   embedded into vmlinux. Only used by MIPS.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
- drivers/of/unittest.c | 2 +-
- scripts/Makefile.dtbs | 4 +++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ Makefile                 |  7 ++++++-
+ drivers/of/Kconfig       |  6 ++++++
+ scripts/Makefile.vmlinux | 44 ++++++++++++++++++++++++++++++++++++++++
+ scripts/link-vmlinux.sh  |  4 ++++
+ 4 files changed, 60 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
-index fd8cb931b1cc..f5d18ae01c90 100644
---- a/drivers/of/unittest.c
-+++ b/drivers/of/unittest.c
-@@ -3585,7 +3585,7 @@ OVERLAY_INFO_EXTERN(overlay_bad_symbol);
- OVERLAY_INFO_EXTERN(overlay_bad_unresolved);
+diff --git a/Makefile b/Makefile
+index 145112bf281a..1c765c12ab9e 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1417,6 +1417,10 @@ ifdef CONFIG_OF_EARLY_FLATTREE
+ all: dtbs
+ endif
  
- /* entries found by name */
--static struct overlay_info overlays[] = {
-+static __initdata struct overlay_info overlays[] = {
- 	OVERLAY_INFO(overlay_base, -9999, 0),
- 	OVERLAY_INFO(overlay, 0, 0),
- 	OVERLAY_INFO(overlay_0, 0, 0),
-diff --git a/scripts/Makefile.dtbs b/scripts/Makefile.dtbs
-index 46009d5f1486..55998b878e54 100644
---- a/scripts/Makefile.dtbs
-+++ b/scripts/Makefile.dtbs
-@@ -34,12 +34,14 @@ $(obj)/dtbs-list: $(dtb-y) FORCE
- # Assembly file to wrap dtb(o)
- # ---------------------------------------------------------------------------
- 
-+builtin-dtb-section = $(if $(filter arch/%, $(obj)),.dtb.init.rodata,.init.rodata)
++ifdef CONFIG_GENERIC_BUILTIN_DTB
++vmlinux: dtbs
++endif
 +
- # Generate an assembly file to wrap the output of the device tree compiler
- quiet_cmd_wrap_S_dtb = WRAP    $@
-       cmd_wrap_S_dtb = {								\
- 		symbase=__$(patsubst .%,%,$(suffix $<))_$(subst -,_,$(notdir $*));	\
- 		echo '\#include <asm-generic/vmlinux.lds.h>';				\
--		echo '.section .dtb.init.rodata,"a"';					\
-+		echo '.section $(builtin-dtb-section),"a"';				\
- 		echo '.balign STRUCT_ALIGNMENT';					\
- 		echo ".global $${symbase}_begin";					\
- 		echo "$${symbase}_begin:";						\
+ endif
+ 
+ PHONY += scripts_dtc
+@@ -1483,7 +1487,8 @@ endif # CONFIG_MODULES
+ CLEAN_FILES += vmlinux.symvers modules-only.symvers \
+ 	       modules.builtin modules.builtin.modinfo modules.nsdeps \
+ 	       compile_commands.json rust/test \
+-	       rust-project.json .vmlinux.objs .vmlinux.export.c
++	       rust-project.json .vmlinux.objs .vmlinux.export.c \
++               .builtin-dtbs-list .builtin-dtb.S
+ 
+ # Directories & files removed with 'make mrproper'
+ MRPROPER_FILES += include/config include/generated          \
+diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
+index dd726c7056bf..5142e7d7fef8 100644
+--- a/drivers/of/Kconfig
++++ b/drivers/of/Kconfig
+@@ -2,6 +2,12 @@
+ config DTC
+ 	bool
+ 
++config GENERIC_BUILTIN_DTB
++	bool
++
++config BUILTIN_DTB_ALL
++	bool
++
+ menuconfig OF
+ 	bool "Device Tree and Open Firmware support"
+ 	help
+diff --git a/scripts/Makefile.vmlinux b/scripts/Makefile.vmlinux
+index 5ceecbed31eb..4626b472da49 100644
+--- a/scripts/Makefile.vmlinux
++++ b/scripts/Makefile.vmlinux
+@@ -17,6 +17,50 @@ quiet_cmd_cc_o_c = CC      $@
+ %.o: %.c FORCE
+ 	$(call if_changed_dep,cc_o_c)
+ 
++quiet_cmd_as_o_S = AS      $@
++      cmd_as_o_S = $(CC) $(a_flags) -c -o $@ $<
++
++%.o: %.S FORCE
++	$(call if_changed_dep,as_o_S)
++
++# Built-in dtb
++# ---------------------------------------------------------------------------
++
++quiet_cmd_wrap_dtbs = WRAP    $@
++      cmd_wrap_dtbs = {							\
++	echo '\#include <asm-generic/vmlinux.lds.h>';			\
++	echo '.section .dtb.init.rodata,"a"';				\
++	while read dtb; do						\
++		symbase=__dtb_$$(basename -s .dtb "$${dtb}" | tr - _);	\
++		echo '.balign STRUCT_ALIGNMENT';			\
++		echo ".global $${symbase}_begin";			\
++		echo "$${symbase}_begin:";				\
++		echo '.incbin "'$$dtb'" ';				\
++		echo ".global $${symbase}_end";				\
++		echo "$${symbase}_end:";				\
++	done < $<;							\
++	} > $@
++
++.builtin-dtbs.S: .builtin-dtbs-list FORCE
++	$(call if_changed,wrap_dtbs)
++
++quiet_cmd_gen_dtbs_list = GEN     $@
++      cmd_gen_dtbs_list = \
++	$(if $(CONFIG_BUILTIN_DTB_NAME), echo "arch/$(SRCARCH)/boot/dts/$(CONFIG_BUILTIN_DTB_NAME).dtb",:) > $@
++
++.builtin-dtbs-list: arch/$(SRCARCH)/boot/dts/dtbs-list FORCE
++	$(call if_changed,$(if $(CONFIG_BUILTIN_DTB_ALL),copy,gen_dtbs_list))
++
++targets += .builtin-dtbs-list
++
++ifdef CONFIG_GENERIC_BUILTIN_DTB
++targets += .builtin-dtbs.S .builtin-dtbs.o
++vmlinux: .builtin-dtbs.o
++endif
++
++# vmlinux
++# ---------------------------------------------------------------------------
++
+ ifdef CONFIG_MODULES
+ targets += .vmlinux.export.o
+ vmlinux: .vmlinux.export.o
+diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+index c27b4e969f20..bd196944e350 100755
+--- a/scripts/link-vmlinux.sh
++++ b/scripts/link-vmlinux.sh
+@@ -68,6 +68,10 @@ vmlinux_link()
+ 		libs="${KBUILD_VMLINUX_LIBS}"
+ 	fi
+ 
++	if is_enabled CONFIG_GENERIC_BUILTIN_DTB; then
++		objs="${objs} .builtin-dtbs.o"
++	fi
++
+ 	if is_enabled CONFIG_MODULES; then
+ 		objs="${objs} .vmlinux.export.o"
+ 	fi
 -- 
 2.43.0
 
