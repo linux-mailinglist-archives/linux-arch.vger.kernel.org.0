@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-7046-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7047-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3684F96CB33
-	for <lists+linux-arch@lfdr.de>; Thu,  5 Sep 2024 01:50:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5057D96CB39
+	for <lists+linux-arch@lfdr.de>; Thu,  5 Sep 2024 01:51:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E745328498C
-	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2024 23:50:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D10CA1F288DD
+	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2024 23:51:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F30F1922CB;
-	Wed,  4 Sep 2024 23:48:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BD6A1925B7;
+	Wed,  4 Sep 2024 23:48:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WXanL2S1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bhjADhw3"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5783E1917F9;
-	Wed,  4 Sep 2024 23:48:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5912B1925B3;
+	Wed,  4 Sep 2024 23:48:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725493717; cv=none; b=H4mHx1O+sCrkscBypUJxB458a0gzjpzQnVP9zsPw4Wvmftw4a0gCjZ8csCaiHuJ6wPclZ3lB3muI0Q69oKeSQ8foPOgkJlMEWl9d7xqyx+CTL4FYQpVliup0fjpTgGryhdY/+fzUGlSxgbp3is1m4vRGsndW0RqMuFC+Q+ma64w=
+	t=1725493720; cv=none; b=J0SzsBh/S9tM2PEBm4IgWpdImeUjvh8x+iXKRh9xnsK7NOCrKBVhF1WYAIoshQiY2mI8hg7dyx0gstQKq2xey76siEQmQiq60hik7Sxk1uQcD4tMJIRFN6HxyJGb7BS+sH4o9s8ui7nwoFXe+OtBdNU9c6LXIGJS2ZittshP5Lc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725493717; c=relaxed/simple;
-	bh=dk04zi59AciF5LL6akuqjWabef8tuzvQHnluBCG6Dq0=;
+	s=arc-20240116; t=1725493720; c=relaxed/simple;
+	bh=Hx8xawNp6pSOR9yjQH6NLrBLbl8X/A3JIv5Jk19JmG8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Huvl8eXOtiO3Z8BiNhExZZ27Q78POJpMoO+Yrk+r8yeQz1f9ZXWzSsJaJeuDUI8ya49HJMYrWxsTE0EOzCZ+j6dfXwz3HN9xpYYjzjjkQljxYL0RxFrtVAr3DB6XvYCc1flPCxAKiwuErvVlid+dP5Ru7yl6BnqKnHZqDPXOqjQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WXanL2S1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C44EFC4CEC9;
-	Wed,  4 Sep 2024 23:48:34 +0000 (UTC)
+	 MIME-Version; b=TK0puNQxUq+esvgtnlcC1AfN4hbJMYXMS8I7wyM5x09/JJnzem9Gk2FHt5nRAqKOYcjXPS+uoUlV+SvAUYTpUU1bD5NCwjvPeVjSA+gmSlU0LFoGazGGWQ0M0aWNhV7HVn7DF0C0BBeHFLPYWUgIXxFUncyMzRPiDcbJM4US9+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bhjADhw3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71F7DC4CEC3;
+	Wed,  4 Sep 2024 23:48:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725493716;
-	bh=dk04zi59AciF5LL6akuqjWabef8tuzvQHnluBCG6Dq0=;
+	s=k20201202; t=1725493719;
+	bh=Hx8xawNp6pSOR9yjQH6NLrBLbl8X/A3JIv5Jk19JmG8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=WXanL2S1ncP9VL15QlXjB215wU1hNbN2vKvw3EYtXVZFbUBVEeZHly5axKhoCCqTu
-	 oUB3D/bJEjWxqQ0rm18DKkHgVADRiZpRKAIM69av4S7HT4mCZ354pk2zPEJqwsO+YP
-	 MgKw4KPnBKLnddm7a+GxJPtumoGmTve3flq+PEAZJVXniDdiVRWK2FyTQjzXpjuqsO
-	 lEX2H/XdvkhCwK23r7h8Gboj4cEE+GUUI7BnsmLxjion7OPZSlveblpMAT6nvodfQw
-	 K6LAnw/GRi2YAPwiQw08MxjH/D+2oPQP+xVF0oE2dBysiOLMmSPZdcUd6Jn56F4G+o
-	 5L8kSbjfqxaEA==
+	b=bhjADhw3VFUuXUNrhgvaImjM65DClBDuU7++FngZwmnnBwfzzLtzQLZ9HdIkkfFB+
+	 F7uTpm0Oo7qRXJCNGr5wMCZ1wwaB1/2P7v/RSgdP1GD9DKVuLi+OJRrc2TvfJMiS+G
+	 dctbjGIh2kV+BJgqZTa2Hh1/saZNPzv/9X//xp7ANnEymaIThWdtqY0gsmbRjLlNpZ
+	 /bRG/F4cMobP20RzhAYovofjxSuuCbIh50W/mi8KxeT1Mn/zj7E5iAd7wnzTYf5diH
+	 4UIYVly2da5V/SeZsFWT5gI8Y7mrt4fnrXLFF9bK+qOB25LM4sbjc58enAkkdFmy2V
+	 MWWgneAT1nyjA==
 From: Masahiro Yamada <masahiroy@kernel.org>
 To: linux-kbuild@vger.kernel.org
 Cc: linux-arch@vger.kernel.org,
@@ -53,9 +53,9 @@ Cc: linux-arch@vger.kernel.org,
 	linux-openrisc@vger.kernel.org,
 	Dinh Nguyen <dinguyen@kernel.org>,
 	Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH 09/15] openrisc: migrate to the generic rule for built-in DTB
-Date: Thu,  5 Sep 2024 08:47:45 +0900
-Message-ID: <20240904234803.698424-10-masahiroy@kernel.org>
+Subject: [PATCH 10/15] xtensa: migrate to the generic rule for built-in DTB
+Date: Thu,  5 Sep 2024 08:47:46 +0900
+Message-ID: <20240904234803.698424-11-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240904234803.698424-1-masahiroy@kernel.org>
 References: <20240904234803.698424-1-masahiroy@kernel.org>
@@ -71,100 +71,156 @@ Select GENERIC_BUILTIN_DTB to use the generic rule to support built-in
 DTB.
 
 To keep consistency across architectures, this commit also renames
-CONFIG_OPENRISC_BUILTIN_DTB_NAME to CONFIG_BUILTIN_DTB_NAME.
+CONFIG_BUILTIN_DTB_SOURCE to CONFIG_BUILTIN_DTB_NAME.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
- arch/openrisc/Kbuild                       | 1 -
- arch/openrisc/Kconfig                      | 3 ++-
- arch/openrisc/boot/dts/Makefile            | 2 +-
- arch/openrisc/configs/or1klitex_defconfig  | 2 +-
- arch/openrisc/configs/or1ksim_defconfig    | 2 +-
- arch/openrisc/configs/simple_smp_defconfig | 2 +-
- 6 files changed, 6 insertions(+), 6 deletions(-)
+ arch/xtensa/Kbuild                          | 2 +-
+ arch/xtensa/Kconfig                         | 3 ++-
+ arch/xtensa/boot/dts/Makefile               | 2 +-
+ arch/xtensa/configs/audio_kc705_defconfig   | 2 +-
+ arch/xtensa/configs/cadence_csp_defconfig   | 2 +-
+ arch/xtensa/configs/generic_kc705_defconfig | 2 +-
+ arch/xtensa/configs/nommu_kc705_defconfig   | 2 +-
+ arch/xtensa/configs/smp_lx200_defconfig     | 2 +-
+ arch/xtensa/configs/virt_defconfig          | 2 +-
+ arch/xtensa/configs/xip_kc705_defconfig     | 2 +-
+ 10 files changed, 11 insertions(+), 10 deletions(-)
 
-diff --git a/arch/openrisc/Kbuild b/arch/openrisc/Kbuild
-index b0b0f2b03f87..70bdb24ff204 100644
---- a/arch/openrisc/Kbuild
-+++ b/arch/openrisc/Kbuild
-@@ -1,6 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0
- obj-y += lib/ kernel/ mm/
--obj-y += boot/dts/
- 
- # for cleaning
- subdir- += boot
-diff --git a/arch/openrisc/Kconfig b/arch/openrisc/Kconfig
-index 69c0258700b2..11ffcf33652c 100644
---- a/arch/openrisc/Kconfig
-+++ b/arch/openrisc/Kconfig
-@@ -10,6 +10,7 @@ config OPENRISC
- 	select ARCH_HAS_DMA_SET_UNCACHED
- 	select ARCH_HAS_DMA_CLEAR_UNCACHED
- 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
+diff --git a/arch/xtensa/Kbuild b/arch/xtensa/Kbuild
+index fd12f61745ba..015baeb765b9 100644
+--- a/arch/xtensa/Kbuild
++++ b/arch/xtensa/Kbuild
+@@ -1,2 +1,2 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+-obj-y += kernel/ mm/ platforms/ boot/dts/
++obj-y += kernel/ mm/ platforms/
+diff --git a/arch/xtensa/Kconfig b/arch/xtensa/Kconfig
+index f200a4ec044e..5fd1d248e147 100644
+--- a/arch/xtensa/Kconfig
++++ b/arch/xtensa/Kconfig
+@@ -19,6 +19,7 @@ config XTENSA
+ 	select ARCH_USE_QUEUED_SPINLOCKS
+ 	select ARCH_WANT_IPC_PARSE_VERSION
+ 	select BUILDTIME_TABLE_SORT
 +	select GENERIC_BUILTIN_DTB
+ 	select CLONE_BACKWARDS
  	select COMMON_CLK
- 	select OF
- 	select OF_EARLY_FLATTREE
-@@ -89,7 +90,7 @@ config DCACHE_WRITETHROUGH
+ 	select DMA_NONCOHERENT_MMAP if MMU
+@@ -461,7 +462,7 @@ config USE_OF
+ 	help
+ 	  Include support for flattened device tree machine descriptions.
  
- 	  If unsure say N here
- 
--config OPENRISC_BUILTIN_DTB
+-config BUILTIN_DTB_SOURCE
 +config BUILTIN_DTB_NAME
- 	string "Builtin DTB"
- 	default ""
+ 	string "DTB to build into the kernel image"
+ 	depends on OF
  
-diff --git a/arch/openrisc/boot/dts/Makefile b/arch/openrisc/boot/dts/Makefile
-index 13db5a2aab52..3a66e0ef3985 100644
---- a/arch/openrisc/boot/dts/Makefile
-+++ b/arch/openrisc/boot/dts/Makefile
-@@ -1,4 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0
--obj-y += $(addsuffix .dtb.o, $(CONFIG_OPENRISC_BUILTIN_DTB))
-+dtb-y += $(addsuffix .dtb, $(CONFIG_BUILTIN_DTB_NAME))
+diff --git a/arch/xtensa/boot/dts/Makefile b/arch/xtensa/boot/dts/Makefile
+index d6408c16d74e..7271294ce523 100644
+--- a/arch/xtensa/boot/dts/Makefile
++++ b/arch/xtensa/boot/dts/Makefile
+@@ -7,7 +7,7 @@
+ #
+ #
  
- #DTC_FLAGS ?= -p 1024
-diff --git a/arch/openrisc/configs/or1klitex_defconfig b/arch/openrisc/configs/or1klitex_defconfig
-index 466f31a091be..3e849d25838a 100644
---- a/arch/openrisc/configs/or1klitex_defconfig
-+++ b/arch/openrisc/configs/or1klitex_defconfig
-@@ -7,7 +7,7 @@ CONFIG_BLK_DEV_INITRD=y
- CONFIG_CC_OPTIMIZE_FOR_SIZE=y
- CONFIG_SGETMASK_SYSCALL=y
- CONFIG_EXPERT=y
--CONFIG_OPENRISC_BUILTIN_DTB="or1klitex"
-+CONFIG_BUILTIN_DTB_NAME="or1klitex"
- CONFIG_HZ_100=y
- CONFIG_OPENRISC_HAVE_SHADOW_GPRS=y
+-obj-$(CONFIG_OF) += $(addsuffix .dtb.o, $(CONFIG_BUILTIN_DTB_SOURCE))
++dtb-$(CONFIG_OF) += $(addsuffix .dtb, $(CONFIG_BUILTIN_DTB_NAME))
+ 
+ # for CONFIG_OF_ALL_DTBS test
+ dtb-	:= $(patsubst $(src)/%.dts,%.dtb, $(wildcard $(src)/*.dts))
+diff --git a/arch/xtensa/configs/audio_kc705_defconfig b/arch/xtensa/configs/audio_kc705_defconfig
+index 436b7cac9694..f2af1a32c9c7 100644
+--- a/arch/xtensa/configs/audio_kc705_defconfig
++++ b/arch/xtensa/configs/audio_kc705_defconfig
+@@ -30,7 +30,7 @@ CONFIG_XTENSA_PLATFORM_XTFPGA=y
+ CONFIG_CMDLINE_BOOL=y
+ CONFIG_CMDLINE="earlycon=uart8250,mmio32native,0xfd050020,115200n8 console=ttyS0,115200n8 ip=dhcp root=/dev/nfs rw debug memmap=0x38000000@0"
+ CONFIG_USE_OF=y
+-CONFIG_BUILTIN_DTB_SOURCE="kc705"
++CONFIG_BUILTIN_DTB_NAME="kc705"
+ # CONFIG_COMPACTION is not set
+ # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
+ CONFIG_PM=y
+diff --git a/arch/xtensa/configs/cadence_csp_defconfig b/arch/xtensa/configs/cadence_csp_defconfig
+index 91c4c4cae8a7..5a272a278740 100644
+--- a/arch/xtensa/configs/cadence_csp_defconfig
++++ b/arch/xtensa/configs/cadence_csp_defconfig
+@@ -35,7 +35,7 @@ CONFIG_HIGHMEM=y
+ # CONFIG_PCI is not set
+ CONFIG_XTENSA_PLATFORM_XTFPGA=y
+ CONFIG_USE_OF=y
+-CONFIG_BUILTIN_DTB_SOURCE="csp"
++CONFIG_BUILTIN_DTB_NAME="csp"
+ # CONFIG_COMPACTION is not set
+ CONFIG_XTFPGA_LCD=y
+ # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
+diff --git a/arch/xtensa/configs/generic_kc705_defconfig b/arch/xtensa/configs/generic_kc705_defconfig
+index e376238bc5ca..4427907becca 100644
+--- a/arch/xtensa/configs/generic_kc705_defconfig
++++ b/arch/xtensa/configs/generic_kc705_defconfig
+@@ -29,7 +29,7 @@ CONFIG_XTENSA_PLATFORM_XTFPGA=y
+ CONFIG_CMDLINE_BOOL=y
+ CONFIG_CMDLINE="earlycon=uart8250,mmio32native,0xfd050020,115200n8 console=ttyS0,115200n8 ip=dhcp root=/dev/nfs rw debug memmap=0x38000000@0"
+ CONFIG_USE_OF=y
+-CONFIG_BUILTIN_DTB_SOURCE="kc705"
++CONFIG_BUILTIN_DTB_NAME="kc705"
+ # CONFIG_COMPACTION is not set
+ # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
  CONFIG_NET=y
-diff --git a/arch/openrisc/configs/or1ksim_defconfig b/arch/openrisc/configs/or1ksim_defconfig
-index 0116e465238f..59fe33cefba2 100644
---- a/arch/openrisc/configs/or1ksim_defconfig
-+++ b/arch/openrisc/configs/or1ksim_defconfig
-@@ -14,7 +14,7 @@ CONFIG_SLUB=y
- CONFIG_SLUB_TINY=y
- CONFIG_MODULES=y
- # CONFIG_BLOCK is not set
--CONFIG_OPENRISC_BUILTIN_DTB="or1ksim"
-+CONFIG_BUILTIN_DTB_NAME="or1ksim"
- CONFIG_HZ_100=y
+diff --git a/arch/xtensa/configs/nommu_kc705_defconfig b/arch/xtensa/configs/nommu_kc705_defconfig
+index c2ab4306ee20..5828228522ba 100644
+--- a/arch/xtensa/configs/nommu_kc705_defconfig
++++ b/arch/xtensa/configs/nommu_kc705_defconfig
+@@ -36,7 +36,7 @@ CONFIG_XTENSA_PLATFORM_XTFPGA=y
+ CONFIG_CMDLINE_BOOL=y
+ CONFIG_CMDLINE="earlycon=uart8250,mmio32native,0x9d050020,115200n8 console=ttyS0,115200n8 ip=dhcp root=/dev/nfs rw debug memmap=256M@0x60000000"
+ CONFIG_USE_OF=y
+-CONFIG_BUILTIN_DTB_SOURCE="kc705_nommu"
++CONFIG_BUILTIN_DTB_NAME="kc705_nommu"
+ CONFIG_BINFMT_FLAT=y
  CONFIG_NET=y
  CONFIG_PACKET=y
-diff --git a/arch/openrisc/configs/simple_smp_defconfig b/arch/openrisc/configs/simple_smp_defconfig
-index b990cb6c9309..6008e824d31c 100644
---- a/arch/openrisc/configs/simple_smp_defconfig
-+++ b/arch/openrisc/configs/simple_smp_defconfig
-@@ -20,7 +20,7 @@ CONFIG_SLUB=y
- CONFIG_SLUB_TINY=y
+diff --git a/arch/xtensa/configs/smp_lx200_defconfig b/arch/xtensa/configs/smp_lx200_defconfig
+index 63b56ce79f83..326966ca7831 100644
+--- a/arch/xtensa/configs/smp_lx200_defconfig
++++ b/arch/xtensa/configs/smp_lx200_defconfig
+@@ -33,7 +33,7 @@ CONFIG_XTENSA_PLATFORM_XTFPGA=y
+ CONFIG_CMDLINE_BOOL=y
+ CONFIG_CMDLINE="earlycon=uart8250,mmio32native,0xfd050020,115200n8 console=ttyS0,115200n8 ip=dhcp root=/dev/nfs rw debug memmap=96M@0"
+ CONFIG_USE_OF=y
+-CONFIG_BUILTIN_DTB_SOURCE="lx200mx"
++CONFIG_BUILTIN_DTB_NAME="lx200mx"
+ # CONFIG_COMPACTION is not set
+ # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
+ CONFIG_NET=y
+diff --git a/arch/xtensa/configs/virt_defconfig b/arch/xtensa/configs/virt_defconfig
+index 98acb7191cb7..e37048985b47 100644
+--- a/arch/xtensa/configs/virt_defconfig
++++ b/arch/xtensa/configs/virt_defconfig
+@@ -24,7 +24,7 @@ CONFIG_HIGHMEM=y
+ CONFIG_CMDLINE_BOOL=y
+ CONFIG_CMDLINE="console=ttyS0,115200n8 ip=dhcp root=/dev/nfs rw debug memmap=0x80000000@0"
+ CONFIG_USE_OF=y
+-CONFIG_BUILTIN_DTB_SOURCE="virt"
++CONFIG_BUILTIN_DTB_NAME="virt"
+ # CONFIG_PARSE_BOOTPARAM is not set
+ CONFIG_JUMP_LABEL=y
  CONFIG_MODULES=y
- # CONFIG_BLOCK is not set
--CONFIG_OPENRISC_BUILTIN_DTB="simple_smp"
-+CONFIG_BUILTIN_DTB_NAME="simple_smp"
- CONFIG_SMP=y
- CONFIG_HZ_100=y
- CONFIG_OPENRISC_HAVE_SHADOW_GPRS=y
+diff --git a/arch/xtensa/configs/xip_kc705_defconfig b/arch/xtensa/configs/xip_kc705_defconfig
+index 165652c45b85..ee47438f9b51 100644
+--- a/arch/xtensa/configs/xip_kc705_defconfig
++++ b/arch/xtensa/configs/xip_kc705_defconfig
+@@ -29,7 +29,7 @@ CONFIG_XTENSA_PLATFORM_XTFPGA=y
+ CONFIG_CMDLINE_BOOL=y
+ CONFIG_CMDLINE="earlycon=uart8250,mmio32native,0xfd050020,115200n8 console=ttyS0,115200n8 ip=dhcp root=/dev/nfs rw debug memmap=0x38000000@0"
+ CONFIG_USE_OF=y
+-CONFIG_BUILTIN_DTB_SOURCE="kc705"
++CONFIG_BUILTIN_DTB_NAME="kc705"
+ # CONFIG_PARSE_BOOTPARAM is not set
+ # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
+ # CONFIG_COMPACTION is not set
 -- 
 2.43.0
 
