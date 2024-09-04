@@ -1,257 +1,754 @@
-Return-Path: <linux-arch+bounces-6998-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-6999-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B46E896B49B
-	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2024 10:33:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B219996B642
+	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2024 11:16:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6CD2A28BF1B
-	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2024 08:33:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0791C1F2112D
+	for <lists+linux-arch@lfdr.de>; Wed,  4 Sep 2024 09:16:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1040D1CC160;
-	Wed,  4 Sep 2024 08:33:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50E5E19DF50;
+	Wed,  4 Sep 2024 09:16:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="AEbkVfIg"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MMuLD8/U"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ej1-f65.google.com (mail-ej1-f65.google.com [209.85.218.65])
+Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com [209.85.222.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F4671CB30D
-	for <linux-arch@vger.kernel.org>; Wed,  4 Sep 2024 08:32:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06D241922C6;
+	Wed,  4 Sep 2024 09:16:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725438780; cv=none; b=j7bQc+pN9by5jF8q0fSNx+EAKpBwHb+jzflbUksO3xLj+g8zcNWckX7JshJc0Pog1aXjpK4/K6o1K7fx/XzcvCk3Sv5qja62sWAddGXjQXW9DGdF2iQM1luqEMPLwiCK3wLTKvk8cKXyZmBrNxwahe2S0WVVqAEbWXzFTG7kNps=
+	t=1725441394; cv=none; b=F3cwODzqh22QOpGXtA67iNpgSrW+RVvB5/V+nMlx3UtB67BGDxOQ/a8FZhbVm4upUAfwp5BK5VKcePvkSbfzvXolpaut7bNPpMVd1lew8+12xeFanKz/eTk3CgN+Mbu6/aOKWJRlqqvaGtAjVgPCwXhCdbPfzN9vqVt8T2e+8T4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725438780; c=relaxed/simple;
-	bh=Xv0p+AJofBlCcpb3u4bgKBZYMhgzStHTHgFTPhmw1pE=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tPGJovrmJToYTkQ2c202/vkRNW/r3UCk5WFmVVEut7rjZAQOCf4x0qmbXRY5KMM/0RlMciJmcGaqEe34bg+r8Uakhzg83VPkndFuObz4u4TRCFCf8XliwS6FuM7gEVJ3ZwFKeFkNIVhX0H93B2hA3WI/MNziRxnqAcmKd9bYG7M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=AEbkVfIg; arc=none smtp.client-ip=209.85.218.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ej1-f65.google.com with SMTP id a640c23a62f3a-a868b8bb0feso755664966b.0
-        for <linux-arch@vger.kernel.org>; Wed, 04 Sep 2024 01:32:56 -0700 (PDT)
+	s=arc-20240116; t=1725441394; c=relaxed/simple;
+	bh=fkYhIqiAtAUVtkSclCJqpQswvACkNtJD4fQse0z8W5k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=afA+6y6DHnxuijph3twhaziC8htfUZGd+0/OuLhhSt+LWDH6F/dsUwZsqFfFFL2lzrQPjxCXySWjrmUpU6AXFDcd14oW4D+znxD6m/Z9OlKVx70eNtiPXcjOOnMpqUlTLLVaPypQIHCWiiuznJ751aGg6Utir+DN5fR83re1RMI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MMuLD8/U; arc=none smtp.client-ip=209.85.222.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ua1-f42.google.com with SMTP id a1e0cc1a2514c-846bd770d9cso284945241.1;
+        Wed, 04 Sep 2024 02:16:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1725438775; x=1726043575; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=czuWwJfvtYwCI1yRbL1xXo5MWTUEx5+lgQqq8jdG4Bg=;
-        b=AEbkVfIgg41Etbmw1+4g5J0R5NmCwhfHwx23LU+LzIEk7m0E4mAqRG6jgZUsJFamgn
-         L+mOk9hNx0oQ8wypBYKuu6KvJCMQGWXUKkxULYzmg6o+0VJn5HTHqJRjekkFYxaLKCM1
-         hLG3RbpQ8/4y82I5tH9ONW8PpzQBn7JJW29XPtChfemnXe+ahNuXwfis2VOB7/rcd88v
-         gqNZXb93EJtHOyCG1yq4LzDFuRyfnmvZ86A9xDX+0TVqOXBU+g2NO5L6cpgwclT3eLmr
-         63KsmC6AVXKiuwwyi6gSHvZ7Rr9UV4fzYskeuZRaHhHpKlmeZ9yd2LgRDp1ZxKFCjV49
-         tt5Q==
+        d=gmail.com; s=20230601; t=1725441391; x=1726046191; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=91sNbecszOwzw0QRWul48uq73nEoQ/YU8yT66MgJfuQ=;
+        b=MMuLD8/UVBe/L4+Lvn5SL4dzYf63DEi3XGmh666ks2KaqI8g9oH3InPJ243Nd+NpBh
+         1d201taa9ietDw4LK8X1Lx1vDrWDibaxg+TQVP0zagFDWkNG/PWJLhbDLjkm7+V9JJNR
+         NzhpLa4rSWEOtTa3mcmS3ZnCG2g7a7zm6i7lX+krxZT8SV2rpvjx9Slompq3gVFHUC7W
+         vI6vkckZ0+TF7/M+22EzhNWdVOo2e9Vp61DORB9UFE/Pxd7i7asPDIGL2sLzHkgTicJ2
+         GvsNQNAs58YvrrDi0nHwGn+VdVCYhIsIHFkHs2FOACd/clA4bEWUIVnUgnbXKfDctb+9
+         i9cA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725438775; x=1726043575;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=czuWwJfvtYwCI1yRbL1xXo5MWTUEx5+lgQqq8jdG4Bg=;
-        b=nKO337fowh3MJVQMHBrXYYi4JSiwZEu0OW4aZwgY6dT24yHDiTZSsGKZviYUiz6SZX
-         N8tKovFEiWoU1LoYU1sXu8rCzVEtuLIkEeRaS6X2cevJkmqLlVZVPrIUNhus7Vey+CYw
-         fry5IV7dl6C4n89JFy5GeITUV1vclbc7Q4epm+Jacii4f4h3U2zYL9eAIJuQ/pGq49PT
-         IxpEpt7iTFdkHmxjpzdp0gfhjNPdRDEeH6hXO8PkjCypJbLFo+XYNj0k627JpfEiVzqI
-         0+l9AItoSDuve/VmcWxcj0nDzqN2EsiZvpHIhO+0WAD/c2co37Dek901J+EIHN0g+BXm
-         BCdw==
-X-Forwarded-Encrypted: i=1; AJvYcCXC/7UnRCI/nHcPVtA6T34GEvaPcxAlMDHZWH9sMBaYegovooRY70SYgyR4jsbdFRM/DLTsztpCa2La@vger.kernel.org
-X-Gm-Message-State: AOJu0YyHDKIEOC5lHS+Z0uFFhQyUNB4l1o6nZMrR1CrSqqtjroCNLY3J
-	NrhrXbmudSDk1yECfLggeOFyuw5YqLGx2pfqrqUs4uPK8dmZFDSwyFFyHKY4qA0=
-X-Google-Smtp-Source: AGHT+IFsYrIc/8V6Dd0Wb4ac4K3yCfFqAZyqP0j4It4wu1Ti01Hf/Xj9KyshDVwvjUwn7G7BVIArrg==
-X-Received: by 2002:a17:907:1c94:b0:a7a:b643:654f with SMTP id a640c23a62f3a-a89a358274emr1229334866b.15.1725438774327;
-        Wed, 04 Sep 2024 01:32:54 -0700 (PDT)
-Received: from localhost (host-80-182-198-72.retail.telecomitalia.it. [80.182.198.72])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a8a3d3177basm69728966b.64.2024.09.04.01.32.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Sep 2024 01:32:53 -0700 (PDT)
-From: Andrea della Porta <andrea.porta@suse.com>
-X-Google-Original-From: Andrea della Porta <aporta@suse.de>
-Date: Wed, 4 Sep 2024 10:33:02 +0200
-To: Rob Herring <robh@kernel.org>
-Cc: Andrea della Porta <andrea.porta@suse.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Derek Kiernan <derek.kiernan@amd.com>,
-	Dragan Cvetic <dragan.cvetic@amd.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Saravana Kannan <saravanak@google.com>,
-	Bjorn Helgaas <bhelgaas@google.com>, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, netdev@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
-	Lee Jones <lee@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-	Stefan Wahren <wahrenst@gmx.net>,
-	Herve Codina <herve.codina@bootlin.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH 04/11] of: address: Preserve the flags portion on 1:1
- dma-ranges mapping
-Message-ID: <ZtgbPtYXu0yOieou@apocalypse>
-References: <5ca13a5b01c6c737f07416be53eb05b32811da21.1724159867.git.andrea.porta@suse.com>
- <20240821001618.GA2309328-robh@kernel.org>
- <ZsWi86I1KG91fteb@apocalypse>
- <CAL_JsqKN0ZNMtq+_dhurwLR+FL2MBOmWujp7uy+5HzXxUb_qDQ@mail.gmail.com>
- <ZtBJ0jIq-QrTVs1m@apocalypse>
- <CAL_Jsq+_-m3cjTRsFZ0RwVpot3Pdcr1GWt-qiiFC8kQvsmV7VQ@mail.gmail.com>
- <ZtChPt4cD8PzfEkF@apocalypse>
- <CAL_JsqJNcZx-HH-TJhsNai2fqwPJ+dtcWTdPagRjgqM31wsJkA@mail.gmail.com>
- <Ztc2DadAnxLIYFj-@apocalypse>
- <CAL_Jsq+mpVEDthuViQZ6T7tDQ_krgxYSQ0Qg1pBMNW8Kpr+Qcw@mail.gmail.com>
+        d=1e100.net; s=20230601; t=1725441391; x=1726046191;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=91sNbecszOwzw0QRWul48uq73nEoQ/YU8yT66MgJfuQ=;
+        b=uIdfA+Q6U5DrTIKv5LFCuIFZxWII/kFZTM6v21aHi6hdWc7u1NnlPnnzR2z8Ak8h4q
+         O795zBGbeU5LrHVgNUcZXoamu8/vJk1g2/JFIm16Ifp55HfpxbVBoAK3iWJDB16l0q2T
+         noXnvQHXE/+hOi0dC8AzHaJFMFqf5KqoQFNBDog2WJfBkwv2oDpYV6i7ZOOujoDtMXto
+         aPHD/cY9v4HpwtiRWwcM2uKlHoVM2vSE6IfMCZSLPt2cJLaK1E+RMhcfHn+C2WiQ5yW+
+         lmNHAe/PuVXyYZWblUTSf78giX/bF/r7CvhVCQpFwj2GXAQce70nn427rc6uZ41TZ5Mn
+         OjmQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUxOnKqaQ90xSbVFtqvUxGfxeltyLvDh849sw+pm4eAL833+8xw7r892TM57y8BTMyDEVJ5W8vUKL/Rew==@vger.kernel.org, AJvYcCVKV2WRB2iH0JWRMK6EW3lsYoAj4AZPY+uPOOCORJa3vOh46gHZvYrH5LUSy1kflgJGWqWAzWmX+rh1mUxs@vger.kernel.org, AJvYcCWbwgLDRAFKavVBoxnG/QL0ELrmokqSiHgZM+6hh5eVEmOEUsLajUnN9g/MK6V9NQjdmbakGNRE@vger.kernel.org
+X-Gm-Message-State: AOJu0YyUn1bOT6/oVlKlRKiiVtAN0Vf9Q6dyRcZxvXDgsTMo4Kz9KvHZ
+	vefMKRT1Y8HmGwGVj2d0WYrSlP00SrF+MkA0CtaHAjiqt34XU2W3YpnWYpLLlYPP3gY0hmAG+3M
+	cedBG1l0pGG7Y23+MtA6lblLa/Fs=
+X-Google-Smtp-Source: AGHT+IFNCFzpgp7HilV6aNl+E7w7ZoHrpVIaxChMt0OEAh+EnavZjow925kCbCCaoGTGHpIOZRazcuO1joORWaiaH7I=
+X-Received: by 2002:a05:6102:f06:b0:492:84ac:2eb7 with SMTP id
+ ada2fe7eead31-49bba729b41mr435608137.11.1725441390653; Wed, 04 Sep 2024
+ 02:16:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAL_Jsq+mpVEDthuViQZ6T7tDQ_krgxYSQ0Qg1pBMNW8Kpr+Qcw@mail.gmail.com>
+References: <20240805153639.1057-1-justinjiang@vivo.com> <20240805153639.1057-3-justinjiang@vivo.com>
+In-Reply-To: <20240805153639.1057-3-justinjiang@vivo.com>
+From: Barry Song <21cnbao@gmail.com>
+Date: Wed, 4 Sep 2024 21:16:19 +1200
+Message-ID: <CAGsJ_4zXtJvBdgpDs+yyEwfdJ0gy+_dgrWLF1zxMgBbaLBeiYA@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] mm: tlb: add tlb swap entries batch async release
+To: Zhiguo Jiang <justinjiang@vivo.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>, 
+	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Nick Piggin <npiggin@gmail.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Muchun Song <muchun.song@linux.dev>, linux-arch@vger.kernel.org, cgroups@vger.kernel.org, 
+	David Hildenbrand <david@redhat.com>, opensource.kernel@vivo.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Rob,
+On Tue, Aug 6, 2024 at 3:36=E2=80=AFAM Zhiguo Jiang <justinjiang@vivo.com> =
+wrote:
+>
+> One of the main reasons for the prolonged exit of the process with
+> independent mm is the time-consuming release of its swap entries.
+> The proportion of swap memory occupied by the process increases over
+> time due to high memory pressure triggering to reclaim anonymous folio
+> into swapspace, e.g., in Android devices, we found this proportion can
+> reach 60% or more after a period of time. Additionally, the relatively
+> lengthy path for releasing swap entries further contributes to the
+> longer time required to release swap entries.
+>
+> Testing Platform: 8GB RAM
+> Testing procedure:
+> After booting up, start 15 processes first, and then observe the
+> physical memory size occupied by the last launched process at different
+> time points.
+> Example: The process launched last: com.qiyi.video
+> |  memory type  |  0min  |  1min  |   5min  |   10min  |   15min  |
+> -------------------------------------------------------------------
+> |     VmRSS(KB) | 453832 | 252300 |  204364 |   199944 |  199748  |
+> |   RssAnon(KB) | 247348 |  99296 |   71268 |    67808 |   67660  |
+> |   RssFile(KB) | 205536 | 152020 |  132144 |   131184 |  131136  |
+> |  RssShmem(KB) |   1048 |    984 |     952 |     952  |     952  |
+> |    VmSwap(KB) | 202692 | 334852 |  362880 |   366340 |  366488  |
+> | Swap ratio(%) | 30.87% | 57.03% |  63.97% |   64.69% |  64.72%  |
+> Note: min - minute.
+>
+> When there are multiple processes with independent mm and the high
+> memory pressure in system, if the large memory required process is
+> launched at this time, system will is likely to trigger the instantaneous
+> killing of many processes with independent mm. Due to multiple exiting
+> processes occupying multiple CPU core resources for concurrent execution,
+> leading to some issues such as the current non-exiting and important
+> processes lagging.
+>
+> To solve this problem, we have introduced the multiple exiting process
+> asynchronous swap entries release mechanism, which isolates and caches
+> swap entries occupied by multiple exiting processes, and hands them over
+> to an asynchronous kworker to complete the release. This allows the
+> exiting processes to complete quickly and release CPU resources. We have
+> validated this modification on the Android products and achieved the
+> expected benefits.
+>
+> Testing Platform: 8GB RAM
+> Testing procedure:
+> After restarting the machine, start 15 app processes first, and then
+> start the camera app processes, we monitor the cold start and preview
+> time datas of the camera app processes.
+>
+> Test datas of camera processes cold start time (unit: millisecond):
+> |  seq   |   1  |   2  |   3  |   4  |   5  |   6  | average |
+> | before | 1498 | 1476 | 1741 | 1337 | 1367 | 1655 |   1512  |
+> | after  | 1396 | 1107 | 1136 | 1178 | 1071 | 1339 |   1204  |
+>
+> Test datas of camera processes preview time (unit: millisecond):
+> |  seq   |   1  |   2  |   3  |   4  |   5  |   6  | average |
+> | before |  267 |  402 |  504 |  513 |  161 |  265 |   352   |
+> | after  |  188 |  223 |  301 |  203 |  162 |  154 |   205   |
+>
+> Base on the average of the six sets of test datas above, we can see that
+> the benefit datas of the modified patch:
+> 1. The cold start time of camera app processes has reduced by about 20%.
+> 2. The preview time of camera app processes has reduced by about 42%.
+>
+> It offers several benefits:
+> 1. Alleviate the high system cpu loading caused by multiple exiting
+>    processes running simultaneously.
+> 2. Reduce lock competition in swap entry free path by an asynchronous
+>    kworker instead of multiple exiting processes parallel execution.
+> 3. Release pte_present memory occupied by exiting processes more
+>    efficiently.
+>
+> Signed-off-by: Zhiguo Jiang <justinjiang@vivo.com>
+> ---
+>  arch/s390/include/asm/tlb.h |   8 +
+>  include/asm-generic/tlb.h   |  44 ++++++
+>  include/linux/mm_types.h    |  58 +++++++
+>  mm/memory.c                 |   3 +-
+>  mm/mmu_gather.c             | 296 ++++++++++++++++++++++++++++++++++++
+>  5 files changed, 408 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/s390/include/asm/tlb.h b/arch/s390/include/asm/tlb.h
+> index e95b2c8081eb..3f681f63390f
+> --- a/arch/s390/include/asm/tlb.h
+> +++ b/arch/s390/include/asm/tlb.h
+> @@ -28,6 +28,8 @@ static inline bool __tlb_remove_page_size(struct mmu_ga=
+ther *tlb,
+>                 struct page *page, bool delay_rmap, int page_size);
+>  static inline bool __tlb_remove_folio_pages(struct mmu_gather *tlb,
+>                 struct page *page, unsigned int nr_pages, bool delay_rmap=
+);
+> +static inline bool __tlb_remove_swap_entries(struct mmu_gather *tlb,
+> +               swp_entry_t entry, int nr);
+>
+>  #define tlb_flush tlb_flush
+>  #define pte_free_tlb pte_free_tlb
+> @@ -69,6 +71,12 @@ static inline bool __tlb_remove_folio_pages(struct mmu=
+_gather *tlb,
+>         return false;
+>  }
+>
+> +static inline bool __tlb_remove_swap_entries(struct mmu_gather *tlb,
+> +               swp_entry_t entry, int nr)
+> +{
+> +       return false;
+> +}
+> +
+>  static inline void tlb_flush(struct mmu_gather *tlb)
+>  {
+>         __tlb_flush_mm_lazy(tlb->mm);
+> diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
+> index 709830274b75..8b4d516b35b8
+> --- a/include/asm-generic/tlb.h
+> +++ b/include/asm-generic/tlb.h
+> @@ -294,6 +294,37 @@ extern void tlb_flush_rmaps(struct mmu_gather *tlb, =
+struct vm_area_struct *vma);
+>  static inline void tlb_flush_rmaps(struct mmu_gather *tlb, struct vm_are=
+a_struct *vma) { }
+>  #endif
+>
+> +#ifndef CONFIG_MMU_GATHER_NO_GATHER
+> +struct mmu_swap_batch {
+> +       struct mmu_swap_batch *next;
+> +       unsigned int nr;
+> +       unsigned int max;
+> +       encoded_swpentry_t encoded_entrys[];
+> +};
+> +
+> +#define MAX_SWAP_GATHER_BATCH  \
+> +       ((PAGE_SIZE - sizeof(struct mmu_swap_batch)) / sizeof(void *))
+> +
+> +#define MAX_SWAP_GATHER_BATCH_COUNT    (10000UL / MAX_SWAP_GATHER_BATCH)
+> +
+> +struct mmu_swap_gather {
+> +       /*
+> +        * the asynchronous kworker to batch
+> +        * release swap entries
+> +        */
+> +       struct work_struct free_work;
+> +
+> +       /* batch cache swap entries */
+> +       unsigned int batch_count;
+> +       struct mmu_swap_batch *active;
+> +       struct mmu_swap_batch local;
+> +       encoded_swpentry_t __encoded_entrys[MMU_GATHER_BUNDLE];
+> +};
+> +
+> +bool __tlb_remove_swap_entries(struct mmu_gather *tlb,
+> +               swp_entry_t entry, int nr);
+> +#endif
+> +
+>  /*
+>   * struct mmu_gather is an opaque type used by the mm code for passing a=
+round
+>   * any data needed by arch specific code for tlb_remove_page.
+> @@ -343,6 +374,18 @@ struct mmu_gather {
+>         unsigned int            vma_exec : 1;
+>         unsigned int            vma_huge : 1;
+>         unsigned int            vma_pfn  : 1;
+> +#ifndef CONFIG_MMU_GATHER_NO_GATHER
+> +       /*
+> +        * Two states of releasing swap entries
+> +        * asynchronously:
+> +        * swp_freeable - have opportunity to
+> +        * release asynchronously future
+> +        * swp_freeing - be releasing asynchronously.
+> +        */
+> +       unsigned int            swp_freeable : 1;
+> +       unsigned int            swp_freeing : 1;
+> +       unsigned int            swp_disable : 1;
+> +#endif
+>
+>         unsigned int            batch_count;
+>
+> @@ -354,6 +397,7 @@ struct mmu_gather {
+>  #ifdef CONFIG_MMU_GATHER_PAGE_SIZE
+>         unsigned int page_size;
+>  #endif
+> +       struct mmu_swap_gather *swp;
+>  #endif
+>  };
+>
+> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+> index 165c58b12ccc..2f66303f1519
+> --- a/include/linux/mm_types.h
+> +++ b/include/linux/mm_types.h
+> @@ -283,6 +283,64 @@ typedef struct {
+>         unsigned long val;
+>  } swp_entry_t;
+>
+> +/*
+> + * encoded_swpentry_t - a type marking the encoded swp_entry_t.
+> + *
+> + * An 'encoded_swpentry_t' represents a 'swp_enrty_t' with its the highe=
+st
+> + * bit indicating extra context-dependent information. Only used in swp_=
+entry
+> + * asynchronous release path by mmu_swap_gather.
+> + */
+> +typedef struct {
+> +       unsigned long val;
+> +} encoded_swpentry_t;
+> +
+> +/*
+> + * The next item in an encoded_swpentry_t array is the "nr" argument, sp=
+ecifying the
+> + * total number of consecutive swap entries associated with the same fol=
+io. If this
+> + * bit is not set, "nr" is implicitly 1.
+> + *
+> + * Refer to include\asm\pgtable.h, swp_offset bits: 0 ~ 57, swp_type bit=
+s: 58 ~ 62.
+> + * Bit63 can be used here.
+> + */
+> +#define ENCODED_SWPENTRY_BIT_NR_ENTRYS_NEXT (1UL << (BITS_PER_LONG - 1))
+> +
+> +static __always_inline encoded_swpentry_t
+> +encode_swpentry(swp_entry_t entry, unsigned long flags)
+> +{
+> +       encoded_swpentry_t ret;
+> +
+> +       VM_WARN_ON_ONCE(flags & ~ENCODED_SWPENTRY_BIT_NR_ENTRYS_NEXT);
+> +       ret.val =3D flags | entry.val;
+> +       return ret;
+> +}
+> +
+> +static inline unsigned long encoded_swpentry_flags(encoded_swpentry_t en=
+try)
+> +{
+> +       return ENCODED_SWPENTRY_BIT_NR_ENTRYS_NEXT & entry.val;
+> +}
+> +
+> +static inline swp_entry_t encoded_swpentry_data(encoded_swpentry_t entry=
+)
+> +{
+> +       swp_entry_t ret;
+> +
+> +       ret.val =3D ~ENCODED_SWPENTRY_BIT_NR_ENTRYS_NEXT & entry.val;
+> +       return ret;
+> +}
+> +
+> +static __always_inline encoded_swpentry_t encode_nr_swpentrys(unsigned l=
+ong nr)
+> +{
+> +       encoded_swpentry_t ret;
+> +
+> +       VM_WARN_ON_ONCE(nr & ENCODED_SWPENTRY_BIT_NR_ENTRYS_NEXT);
+> +       ret.val =3D nr;
+> +       return ret;
+> +}
+> +
+> +static __always_inline unsigned long encoded_nr_swpentrys(encoded_swpent=
+ry_t entry)
+> +{
+> +       return ((~ENCODED_SWPENTRY_BIT_NR_ENTRYS_NEXT) & entry.val);
+> +}
+> +
+>  /**
+>   * struct folio - Represents a contiguous set of bytes.
+>   * @flags: Identical to the page flags.
+> diff --git a/mm/memory.c b/mm/memory.c
+> index d6a9dcddaca4..023a8adcb67c
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -1650,7 +1650,8 @@ static unsigned long zap_pte_range(struct mmu_gathe=
+r *tlb,
+>                         if (!should_zap_cows(details))
+>                                 continue;
+>                         rss[MM_SWAPENTS] -=3D nr;
+> -                       free_swap_and_cache_nr(entry, nr);
+> +                       if (!__tlb_remove_swap_entries(tlb, entry, nr))
+> +                               free_swap_and_cache_nr(entry, nr);
+>                 } else if (is_migration_entry(entry)) {
+>                         folio =3D pfn_swap_entry_folio(entry);
+>                         if (!should_zap_folio(details, folio))
+> diff --git a/mm/mmu_gather.c b/mm/mmu_gather.c
+> index 99b3e9408aa0..33dc9d1faff9
+> --- a/mm/mmu_gather.c
+> +++ b/mm/mmu_gather.c
+> @@ -9,11 +9,303 @@
+>  #include <linux/smp.h>
+>  #include <linux/swap.h>
+>  #include <linux/rmap.h>
+> +#include <linux/oom.h>
+>
+>  #include <asm/pgalloc.h>
+>  #include <asm/tlb.h>
+>
+>  #ifndef CONFIG_MMU_GATHER_NO_GATHER
+> +/*
+> + * The swp_entry asynchronous release mechanism for multiple processes w=
+ith
+> + * independent mm exiting simultaneously.
+> + *
+> + * During the multiple exiting processes releasing their own mm simultan=
+eously,
+> + * the swap entries in the exiting processes are handled by isolating, c=
+aching
+> + * and handing over to an asynchronous kworker to complete the release.
+> + *
+> + * The conditions for the exiting process entering the swp_entry asynchr=
+onous
+> + * release path:
+> + * 1. The exiting process's MM_SWAPENTS count is >=3D SWAP_CLUSTER_MAX, =
+avoiding
+> + *    to alloc struct mmu_swap_gather frequently.
+> + * 2. The number of exiting processes is >=3D NR_MIN_EXITING_PROCESSES.
 
-On 13:46 Tue 03 Sep     , Rob Herring wrote:
-> On Tue, Sep 3, 2024 at 11:15 AM Andrea della Porta
-> <andrea.porta@suse.com> wrote:
-> >
-> > Hi Rob,
-> >
-> > On 14:37 Fri 30 Aug     , Rob Herring wrote:
-> > > On Thu, Aug 29, 2024 at 11:26 AM Andrea della Porta
-> > > <andrea.porta@suse.com> wrote:
-> > > >
-> > > > Hi Rob,
-> > > >
-> >
-> > ...
-> >
-> > >
-> > > I think simple-bus where you have it is fine. It is really 1 level up
-> > > that needs to be specified. Basically something that's referenced from
-> > > the specific PCI device's schema (e.g. the RP1 schema (which you are
-> > > missing)).
-> > >
-> > > That schema needs to roughly look like this:
-> > >
-> > > properties:
-> > >   "#address-cells":
-> > >     const: 3
-> > >   "#size-cells":
-> > >     const: 2
-> > >   ranges:
-> > >     minItems: 1
-> > >     maxItems: 6
-> > >     items:
-> > >       additionalItems: true
-> > >       items:
-> > >         - maximum: 5  # The BAR number
-> > >         - const: 0
-> > >         - const: 0
-> > >         - # TODO: valid PCI memory flags
-> > >
-> > > patternProperties:
-> > >   "^bar-bus@[0-5]$":
-> > >     type: object
-> > >     additionalProperties: true
-> > >     properties:
-> > >       compatible:
-> > >         const: simple-bus
-> > >       ranges: true
-> > >
-> >
-> > Hmmm.. not sure how this is going to work. The PCI device (RP1) will
-> > havei, at runtime, a compatible like this:
-> >
-> > compatible = "pci1de4,1\0pciclass,0200000\0pciclass,0200";
-> >
-> > that is basically generated automatically by the OF framework. So, in the
-> > schema you proposed above, I can put something like:
-> >
-> > properties:
-> >   compatible:
-> >     contains:
-> >       pattern: '^pci1de4,1'
-> 
-> No, it should be like this:
-> 
-> compatible:
->   items:
->     - const: pci1de4,1
->     - const: pciclass,0200000
->     - const: pciclass,0200
-> 
-> or
-> 
-> compatible:
->   addtionalItems: true
->   maxItems: 3
->   items:
->     - const: pci1de4,1
+Hi Zhiguo,
+
+I'm curious about the significance of NR_MIN_EXITING_PROCESSES. It seems th=
+at
+batched swap entry freeing, even with one process, could be a
+bottleneck for a single
+process based on the data from this patch:
+
+mm: attempt to batch free swap entries for zap_pte_range()
+https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/commit/?h=3Dmm-=
+stable&id=3Dbea67dcc5ee
+"munmap bandwidth becomes 3X faster."
+
+So what would happen if you simply set NR_MIN_EXITING_PROCESSES to 1?
+
+> + *
+> + * Since the time for determining the number of exiting processes is dyn=
+amic,
+> + * the exiting process may start to enter the swp_entry asynchronous rel=
+ease
+> + * at the beginning or middle stage of the exiting process's swp_entry r=
+elease
+> + * path.
+> + *
+> + * Once an exiting process enters the swp_entry asynchronous release, al=
+l remaining
+> + * swap entries in this exiting process need to be fully released by asy=
+nchronous
+> + * kworker theoretically.
+
+Freeing a slot can indeed release memory from `zRAM`, potentially returning
+it to the system for allocation. Your patch frees swap slots asynchronously=
+;
+I assume this doesn=E2=80=99t slow down the memory freeing process for `zRA=
+M`, or
+could it even slow down the freeing of `zRAM` memory? Freeing compressed
+memory might not be as crucial compared to freeing uncompressed memory with
+present PTEs?
+
+> + *
+> + * The function of the swp_entry asynchronous release:
+> + * 1. Alleviate the high system cpu load caused by multiple exiting proc=
+esses
+> + *    running simultaneously.
+> + * 2. Reduce lock competition in swap entry free path by an asynchronous=
+ kworker
+> + *    instead of multiple exiting processes parallel execution.
+> + * 3. Release pte_present memory occupied by exiting processes more effi=
+ciently.
+> + */
+> +
+> +/*
+> + * The min number of exiting processes required for swp_entry asynchrono=
+us release
+> + */
+> +#define NR_MIN_EXITING_PROCESSES 2
+> +
+> +static atomic_t nr_exiting_processes =3D ATOMIC_INIT(0);
+> +static struct kmem_cache *swap_gather_cachep;
+> +static struct workqueue_struct *swapfree_wq;
+> +static DEFINE_STATIC_KEY_TRUE(tlb_swap_asyncfree_disabled);
+> +
+> +static int __init tlb_swap_async_free_setup(void)
+> +{
+> +       swapfree_wq =3D alloc_workqueue("smfree_wq", WQ_UNBOUND |
+> +               WQ_HIGHPRI | WQ_MEM_RECLAIM, 1);
+> +       if (!swapfree_wq)
+> +               goto fail;
+> +
+> +       swap_gather_cachep =3D kmem_cache_create("swap_gather",
+> +               sizeof(struct mmu_swap_gather),
+> +               0, SLAB_TYPESAFE_BY_RCU | SLAB_PANIC | SLAB_ACCOUNT,
+> +               NULL);
+> +       if (!swap_gather_cachep)
+> +               goto kcache_fail;
+> +
+> +       static_branch_disable(&tlb_swap_asyncfree_disabled);
+> +       return 0;
+> +
+> +kcache_fail:
+> +       destroy_workqueue(swapfree_wq);
+> +fail:
+> +       return -ENOMEM;
+> +}
+> +postcore_initcall(tlb_swap_async_free_setup);
+> +
+> +static void __tlb_swap_gather_free(struct mmu_swap_gather *swap_gather)
+> +{
+> +       struct mmu_swap_batch *swap_batch, *next;
+> +
+> +       for (swap_batch =3D swap_gather->local.next; swap_batch; swap_bat=
+ch =3D next) {
+> +               next =3D swap_batch->next;
+> +               free_page((unsigned long)swap_batch);
+> +       }
+> +       swap_gather->local.next =3D NULL;
+> +       kmem_cache_free(swap_gather_cachep, swap_gather);
+> +}
+> +
+> +static void tlb_swap_async_free_work(struct work_struct *w)
+> +{
+> +       int i, nr_multi, nr_free;
+> +       swp_entry_t start_entry;
+> +       struct mmu_swap_batch *swap_batch;
+> +       struct mmu_swap_gather *swap_gather =3D container_of(w,
+> +               struct mmu_swap_gather, free_work);
+> +
+> +       /* Release swap entries cached in mmu_swap_batch. */
+> +       for (swap_batch =3D &swap_gather->local; swap_batch && swap_batch=
+->nr;
+> +           swap_batch =3D swap_batch->next) {
+> +               nr_free =3D 0;
+> +               for (i =3D 0; i < swap_batch->nr; i++) {
+> +                       if (unlikely(encoded_swpentry_flags(swap_batch->e=
+ncoded_entrys[i]) &
+> +                           ENCODED_SWPENTRY_BIT_NR_ENTRYS_NEXT)) {
+> +                               start_entry =3D encoded_swpentry_data(swa=
+p_batch->encoded_entrys[i]);
+> +                               nr_multi =3D encoded_nr_swpentrys(swap_ba=
+tch->encoded_entrys[++i]);
+> +                               free_swap_and_cache_nr(start_entry, nr_mu=
+lti);
+> +                               nr_free +=3D 2;
+> +                       } else {
+> +                               start_entry =3D encoded_swpentry_data(swa=
+p_batch->encoded_entrys[i]);
+> +                               free_swap_and_cache_nr(start_entry, 1);
+> +                               nr_free++;
+> +                       }
+> +               }
+> +               swap_batch->nr -=3D nr_free;
+> +               VM_BUG_ON(swap_batch->nr);
+> +       }
+> +       __tlb_swap_gather_free(swap_gather);
+> +}
+> +
+> +static bool __tlb_swap_gather_mmu_check(struct mmu_gather *tlb)
+> +{
+> +       /*
+> +        * Only the exiting processes with the MM_SWAPENTS counter >=3D
+> +        * SWAP_CLUSTER_MAX have the opportunity to release their swap
+> +        * entries by asynchronous kworker.
+> +        */
+> +       if (!task_is_dying() ||
+> +           get_mm_counter(tlb->mm, MM_SWAPENTS) < SWAP_CLUSTER_MAX)
+> +               return true;
+> +
+> +       atomic_inc(&nr_exiting_processes);
+> +       if (atomic_read(&nr_exiting_processes) < NR_MIN_EXITING_PROCESSES=
+)
+> +               tlb->swp_freeable =3D 1;
+> +       else
+> +               tlb->swp_freeing =3D 1;
+> +
+> +       return false;
+> +}
+> +
+> +/**
+> + * __tlb_swap_gather_init - Initialize an mmu_swap_gather structure
+> + * for swp_entry tear-down.
+> + * @tlb: the mmu_swap_gather structure belongs to tlb
+> + */
+> +static bool __tlb_swap_gather_init(struct mmu_gather *tlb)
+> +{
+> +       tlb->swp =3D kmem_cache_alloc(swap_gather_cachep, GFP_ATOMIC | GF=
+P_NOWAIT);
+> +       if (unlikely(!tlb->swp))
+> +               return false;
+> +
+> +       tlb->swp->local.next  =3D NULL;
+> +       tlb->swp->local.nr    =3D 0;
+> +       tlb->swp->local.max   =3D ARRAY_SIZE(tlb->swp->__encoded_entrys);
+> +
+> +       tlb->swp->active      =3D &tlb->swp->local;
+> +       tlb->swp->batch_count =3D 0;
+> +
+> +       INIT_WORK(&tlb->swp->free_work, tlb_swap_async_free_work);
+> +       return true;
+> +}
+> +
+> +static void __tlb_swap_gather_mmu(struct mmu_gather *tlb)
+> +{
+> +       if (static_branch_unlikely(&tlb_swap_asyncfree_disabled))
+> +               return;
+> +
+> +       tlb->swp =3D NULL;
+> +       tlb->swp_freeable =3D 0;
+> +       tlb->swp_freeing =3D 0;
+> +       tlb->swp_disable =3D 0;
+> +
+> +       if (__tlb_swap_gather_mmu_check(tlb))
+> +               return;
+> +
+> +       /*
+> +        * If the exiting process meets the conditions of
+> +        * swp_entry asynchronous release, an mmu_swap_gather
+> +        * structure will be initialized.
+> +        */
+> +       if (tlb->swp_freeing)
+> +               __tlb_swap_gather_init(tlb);
+> +}
+> +
+> +static void __tlb_swap_gather_queuework(struct mmu_gather *tlb, bool fin=
+ish)
+> +{
+> +       queue_work(swapfree_wq, &tlb->swp->free_work);
+> +       tlb->swp =3D NULL;
+> +       if (!finish)
+> +               __tlb_swap_gather_init(tlb);
+> +}
+> +
+> +static bool __tlb_swap_next_batch(struct mmu_gather *tlb)
+> +{
+> +       struct mmu_swap_batch *swap_batch;
+> +
+> +       if (tlb->swp->batch_count =3D=3D MAX_SWAP_GATHER_BATCH_COUNT)
+> +               goto free;
+> +
+> +       swap_batch =3D (void *)__get_free_page(GFP_ATOMIC | GFP_NOWAIT);
+> +       if (unlikely(!swap_batch))
+> +               goto free;
+> +
+> +       swap_batch->next =3D NULL;
+> +       swap_batch->nr   =3D 0;
+> +       swap_batch->max  =3D MAX_SWAP_GATHER_BATCH;
+> +
+> +       tlb->swp->active->next =3D swap_batch;
+> +       tlb->swp->active =3D swap_batch;
+> +       tlb->swp->batch_count++;
+> +       return true;
+> +free:
+> +       /* batch move to wq */
+> +       __tlb_swap_gather_queuework(tlb, false);
+> +       return false;
+> +}
+> +
+> +/**
+> + * __tlb_remove_swap_entries - the swap entries in exiting process are
+> + * isolated, batch cached in struct mmu_swap_batch.
+> + * @tlb: the current mmu_gather
+> + * @entry: swp_entry to be isolated and cached
+> + * @nr: the number of consecutive entries starting from entry parameter.
+> + */
+> +bool __tlb_remove_swap_entries(struct mmu_gather *tlb,
+> +                            swp_entry_t entry, int nr)
+> +{
+> +       struct mmu_swap_batch *swap_batch;
+> +       unsigned long flags =3D 0;
+> +       bool ret =3D false;
+> +
+> +       if (tlb->swp_disable)
+> +               return ret;
+> +
+> +       if (!tlb->swp_freeable && !tlb->swp_freeing)
+> +               return ret;
+> +
+> +       if (tlb->swp_freeable) {
+> +               if (atomic_read(&nr_exiting_processes) <
+> +                   NR_MIN_EXITING_PROCESSES)
+> +                       return ret;
+> +               /*
+> +                * If the current number of exiting processes
+> +                * is >=3D NR_MIN_EXITING_PROCESSES, the exiting
+> +                * process with swp_freeable state will enter
+> +                * swp_freeing state to start releasing its
+> +                * remaining swap entries by the asynchronous
+> +                * kworker.
+> +                */
+> +               tlb->swp_freeable =3D 0;
+> +               tlb->swp_freeing =3D 1;
+> +       }
+> +
+> +       VM_BUG_ON(tlb->swp_freeable || !tlb->swp_freeing);
+> +       if (!tlb->swp && !__tlb_swap_gather_init(tlb))
+> +               return ret;
+> +
+> +       swap_batch =3D tlb->swp->active;
+> +       if (unlikely(swap_batch->nr >=3D swap_batch->max - 1)) {
+> +               __tlb_swap_gather_queuework(tlb, false);
+> +               return ret;
+> +       }
+> +
+> +       if (likely(nr =3D=3D 1)) {
+> +               swap_batch->encoded_entrys[swap_batch->nr++] =3D encode_s=
+wpentry(entry, flags);
+> +       } else {
+> +               flags |=3D ENCODED_SWPENTRY_BIT_NR_ENTRYS_NEXT;
+> +               swap_batch->encoded_entrys[swap_batch->nr++] =3D encode_s=
+wpentry(entry, flags);
+> +               swap_batch->encoded_entrys[swap_batch->nr++] =3D encode_n=
+r_swpentrys(nr);
+> +       }
+> +       ret =3D true;
+> +
+> +       if (swap_batch->nr >=3D swap_batch->max - 1) {
+> +               if (!__tlb_swap_next_batch(tlb))
+> +                       goto exit;
+> +               swap_batch =3D tlb->swp->active;
+> +       }
+> +       VM_BUG_ON(swap_batch->nr > swap_batch->max - 1);
+> +exit:
+> +       return ret;
+> +}
+> +
+> +static void __tlb_batch_swap_finish(struct mmu_gather *tlb)
+> +{
+> +       if (tlb->swp_disable)
+> +               return;
+> +
+> +       if (!tlb->swp_freeable && !tlb->swp_freeing)
+> +               return;
+> +
+> +       if (tlb->swp_freeable) {
+> +               tlb->swp_freeable =3D 0;
+> +               VM_BUG_ON(tlb->swp_freeing);
+> +               goto exit;
+> +       }
+> +       tlb->swp_freeing =3D 0;
+> +       if (unlikely(!tlb->swp))
+> +               goto exit;
+> +
+> +       __tlb_swap_gather_queuework(tlb, true);
+> +exit:
+> +       atomic_dec(&nr_exiting_processes);
+> +}
+>
+>  static bool tlb_next_batch(struct mmu_gather *tlb)
+>  {
+> @@ -386,6 +678,9 @@ static void __tlb_gather_mmu(struct mmu_gather *tlb, =
+struct mm_struct *mm,
+>         tlb->local.max  =3D ARRAY_SIZE(tlb->__pages);
+>         tlb->active     =3D &tlb->local;
+>         tlb->batch_count =3D 0;
+> +
+> +       tlb->swp_disable =3D 1;
+> +       __tlb_swap_gather_mmu(tlb);
+>  #endif
+>         tlb->delayed_rmap =3D 0;
+>
+> @@ -466,6 +761,7 @@ void tlb_finish_mmu(struct mmu_gather *tlb)
+>
+>  #ifndef CONFIG_MMU_GATHER_NO_GATHER
+>         tlb_batch_list_free(tlb);
+> +       __tlb_batch_swap_finish(tlb);
+>  #endif
+>         dec_tlb_flush_pending(tlb->mm);
+>  }
+> --
+> 2.39.0
 >
 
-Ack.
- 
-> 
-> Alternatively, we could instead only generate 'pciclass' compatibles
-> for bridge nodes. The reason being that being an ethernet controller
-> doesn't really tell us anything. There's no standard interface
-> associated with that class.
-
-I'd avoid this one, since the class is not representative in this case. RP1
-is an MFD and not an Ethernet controller. Also, it would prevent other similar
-PCI devices with differnt class from using this schema.
-
-> 
-> > or maybe I could omit the compatible entirely, like in:
-> 
-> No.
-> 
-> > https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/pci/pci-iommu.yaml
-> 
-> That's not a device node, but just part of pci-host-bridge.yaml.
-> 
-> > that seems to refer to generic compatible values.
-> > In both cases though, I don't see how these binding could work with
-> > make dt_binding_check, since there's no compatible known at compile
-> > time (for the first approach), or no compatible at all (the second
-> > approach).
-> > Is it intended only as a loose documentation?
-> 
-> No, schemas define exactly what a binding can and can't contain. But
-> they are divided into device schemas and common schemas. The latter
-> are incomplete and are included by the former. Generally, "compatible"
-> goes in device schemas.
-
-Ack.
-
-> 
-> > Or are you proposing that for a future new bus (hence with a new, specific,
-> > compatible) that could be described by the schema above?
-> 
-> The above schema would be the common schema included by a RP1 schema,
-> LAN966x schema, or any other device doing the same thing.
-
-Many thanks, I believe I've got it now :)
-
-Cheers,
-Andrea
-
-> Rob
+Thanks
+Barry
 
