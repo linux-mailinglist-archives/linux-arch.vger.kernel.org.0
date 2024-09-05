@@ -1,197 +1,322 @@
-Return-Path: <linux-arch+bounces-7081-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7082-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E6B796E112
-	for <lists+linux-arch@lfdr.de>; Thu,  5 Sep 2024 19:27:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94F4696E18A
+	for <lists+linux-arch@lfdr.de>; Thu,  5 Sep 2024 20:08:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A33FB1C228A9
-	for <lists+linux-arch@lfdr.de>; Thu,  5 Sep 2024 17:27:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 185741F2531A
+	for <lists+linux-arch@lfdr.de>; Thu,  5 Sep 2024 18:08:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29A3A1A38E1;
-	Thu,  5 Sep 2024 17:27:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1218B17ADE7;
+	Thu,  5 Sep 2024 18:08:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="QoO4qY6U"
+	dkim=pass (2048-bit key) header.d=illinois-edu.20230601.gappssmtp.com header.i=@illinois-edu.20230601.gappssmtp.com header.b="XRn3JJ/w"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+Received: from mail-oo1-f68.google.com (mail-oo1-f68.google.com [209.85.161.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14CCE1A2C2C
-	for <linux-arch@vger.kernel.org>; Thu,  5 Sep 2024 17:26:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C66C15ADB4
+	for <linux-arch@vger.kernel.org>; Thu,  5 Sep 2024 18:08:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725557221; cv=none; b=dPmn+ECkR6CVaXb/PU6JSe8w+m4+nz2zDmQsMNbeJWFQGBqM2unJQ+ytYMLMY17EAlO48nHnkNAM7oxiCi9BAECER+oEwmhY4wO9rJZWuVIisHv541MgzbKW4/EPrQnd79zDLaBtD7TB+mf2std+ccxUyti/bzHAWkhgSNQjYM8=
+	t=1725559708; cv=none; b=XWQQzSUn/BT1f/yxL4m99l0utmnByAM/qnzhgYZ5/YAdLGX8A9ydCWdaUpSbiHR+z5KSlnXs0+OMhTyUhI5rSBLGsUHK8VAlb60aM1p5zQX1SUG0WUq7LVypkg37nt/k8b5DGHYWUGG6nKTjQW3wTnc7VDKKTtsKvGlcAMOgWWY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725557221; c=relaxed/simple;
-	bh=h9V6gwSALxoQh2n6tyi2ux0NqTNkpRulrrb7ZNYpQ6g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fEmfno/hXH9Kg0SzfTuFu6w0epXM5PC4DgWfzzVfYuorklz2gjU/vYMOIiyr5xq6paeSfE3xUf0jtYL7JZmiICiXASaTSzkUDBkZZiXghLfDfNzr9KuC2xEnfbaew9GSWJDfm92tNWDrwoRGHlyL1cjEF8wUrfHmvYtHooovd0I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=QoO4qY6U; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2d87176316eso1658976a91.0
-        for <linux-arch@vger.kernel.org>; Thu, 05 Sep 2024 10:26:58 -0700 (PDT)
+	s=arc-20240116; t=1725559708; c=relaxed/simple;
+	bh=yTjFB74aYheCz0jzkiyD05MEqttD3cBEB16TrrKu6ME=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=JTzZmeFFy/ZgbB/o5q6fvrJgC0kFlnF/UIqWZrRS+8bhXzarpmC6dEuI6wEELF3WxwjFAWavwiMUukELIetBvkX0VYi/NEetZKwSeHK8WaXuPtuq56eoOVowyqJy/DbpRI+l2MLzkY/1shkKw0BX1YxK9/ZDoKfeSrZa3ulN7lg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=illinois.edu; spf=pass smtp.mailfrom=illinois.edu; dkim=pass (2048-bit key) header.d=illinois-edu.20230601.gappssmtp.com header.i=@illinois-edu.20230601.gappssmtp.com header.b=XRn3JJ/w; arc=none smtp.client-ip=209.85.161.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=illinois.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=illinois.edu
+Received: by mail-oo1-f68.google.com with SMTP id 006d021491bc7-5e172cc6d66so675413eaf.2
+        for <linux-arch@vger.kernel.org>; Thu, 05 Sep 2024 11:08:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1725557218; x=1726162018; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TzHtjVKsvMG2J+VEdT3JJ4mY+8euHciuRxZ037YJyIs=;
-        b=QoO4qY6USsGxO5XvIoat2k65P6i4wxlRnTgjBvYfCtoLxebRI229jv5sogxj7RMGaP
-         wxrIHBrZD9mDcWn0w7dzz9pGI7kNlnkBNwb2hkkp3g20x6j1ExOQmOZHA6mtxlLTDOxk
-         VuqvFcbqqBjCuOgHu9KSBhCAmVTWPqLPf3J3++XMQ5BZvVoYJBk1S3NcFfMGRXNLV5kq
-         AUgDvf3doF0EDUK9fYbA78HgRn8Tl5rhjAsCnxNQBjeSo8JRikhiBDhyUMk1Il9ljhKb
-         UNIwPmlJ2sLZa03LVE5TjEVlS4Y/k5nXMF7NCjwacPbf0q0KnyNDIVuxMN4EmcjtWN+V
-         cAvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725557218; x=1726162018;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=illinois-edu.20230601.gappssmtp.com; s=20230601; t=1725559705; x=1726164505; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=TzHtjVKsvMG2J+VEdT3JJ4mY+8euHciuRxZ037YJyIs=;
-        b=hKBwaNkpx/5drlw27ihe24dEzRWiQJKLgVk3Sul1VTr+Oam2+qDRqWIVeRB5AZUM9r
-         JR8wgFdjrqwOy7WwAsxif2Mt44D408k+FQoDejvT14rRpyr9kXL4snPEzXhgl29wO/pk
-         n/qsVo+CbrOCgheTJjmcrMLB8JDB12j2lZISMJaEPIaMkhJwmZtJGo5j2Bwo0HGmnj8Z
-         WciP43YPKVKoBMGJ9CvEDl5UvoSdRHbKGiYSSTL3Y71Eult53eJ5aqL9WUy4UzQP9RY6
-         QUrCf2A1bexjy/PSy1/PGr9gocrzv4++eAU8wmC0QH4Zxib+yrZrvPgXf69Z0AQZsvd0
-         uLqA==
-X-Forwarded-Encrypted: i=1; AJvYcCWsB2PaUsILvfj5jvoxtRvqFtE8Eh4whV9cEf+8jK1wyeMAL6DxvYbNlJ6kc300beP8oOlshap3wl1G@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQqt15JG3YS5EfOZzZwhVjHY7bmx5N+MvX1LTKJL8PWEkDyfcD
-	dwrBKnOD8NhrURpYqSypJEVU+2ApjhadOZmpcLlvThpTh3RI5eqwOhRHt8yXP4E=
-X-Google-Smtp-Source: AGHT+IFxrgWNtdxCWG0RBGHbyeqfO4T1K/TMURzEB4vAspGF/eaSh/6stCCkbbdo5V+yBGPBQxqCJA==
-X-Received: by 2002:a17:90b:3d2:b0:2d8:9fbe:6727 with SMTP id 98e67ed59e1d1-2dad4f0e4damr67155a91.4.1725557218097;
-        Thu, 05 Sep 2024 10:26:58 -0700 (PDT)
-Received: from ghost ([50.145.13.30])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2da5932d1ecsm6506552a91.43.2024.09.05.10.26.54
+        bh=iaax2KMv1pfmqcinOyW9AJBjnAW5CoEYUzGnm6PN3kM=;
+        b=XRn3JJ/wxpgAJg5u1rMyafvgZEmDo7OAiVDkihVTT8nRzySm3XGHQa8dTttx8Q2mrz
+         zrBiTyglFkD23YNZrK7UI6JzGwg4C8YDuiI9YZN0FKILglmGUNagWAOUtgdOOFyN9ofn
+         mhG3t9/zkXZIsjgOi8Ubh/IVnm8FBr0afGdu/wjWDYAwgd5KImf+oYh87z6Cb3uPigAw
+         p054fXDJTZ3cWXcOSRHN/7nNaTGD9G9QzdpzN58nGiorqQCfcTL2nqiNZ2uQ4r1fGbXh
+         x1XsxCtjB/hzs3JkmPFA9mG1c+ikwNxJIEguHghXfvCNaL4SAVgPOpisq8YUcz/GiPg7
+         xfKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725559705; x=1726164505;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iaax2KMv1pfmqcinOyW9AJBjnAW5CoEYUzGnm6PN3kM=;
+        b=PGy8TCcBiLADpk+260ndCCKKCywYwMla3uLh+LJ6aDNe//6OfKfGiQiCVY9scyV/uo
+         BUIsc+ydfxvnoLwGjhBfNx260CilypBC3/hB69T+mlLERDFlQx5rT4oNopBrvZ0xPVwD
+         Xfu6nWBLcACrlZfNfLH7IuNH6NJCGwDNJJ1RDFJNFo/8X4KqnhBWoDS6/5gzAoDNzjT9
+         5wGD67+41HVmLIYIOXjyOPpzHgo2jwxlOtVmcBNjeLXwSAZ9XejcSMKlE3vRz/+NCvp4
+         oRpYGPUiR6z9gKhihdxVJiHENPEjIo7TpUrmHq4Be81b6OJC/jbHErtf47EeJLY5nO4c
+         gpFQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUfJY7J9LijHLreyVTtQpkElJVoDCy624xpI5dbTNsW7IJvkB80jobAQh93FZSs9/JkqN40jG7gY76u@vger.kernel.org
+X-Gm-Message-State: AOJu0YzErayzrE8Fb6NvQ1Z16d3CnWylA/boqkZaBvUUoTHJOzOAtkYV
+	W6Tlevba1L3N3u1RTjrJbHG/NH/LX9Jnp1GxWPgawMXai9WaixWHHPfEQ4rn/w==
+X-Google-Smtp-Source: AGHT+IElODMM0rQh4mddrzv/F5ovRuzJwZcdSq8FKd1lAPOBIO5XJpe1dPGMgoqhRfT//mb9dwT12Q==
+X-Received: by 2002:a05:6358:3123:b0:1b5:fc87:f033 with SMTP id e5c5f4694b2df-1b8385d965amr10429755d.11.1725559704945;
+        Thu, 05 Sep 2024 11:08:24 -0700 (PDT)
+Received: from node0.kernel3.linux-mcdc-pg0.utah.cloudlab.us ([128.110.218.246])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6c5201e43dasm9566796d6.46.2024.09.05.11.08.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Sep 2024 10:26:57 -0700 (PDT)
-Date: Thu, 5 Sep 2024 10:26:52 -0700
-From: Charlie Jenkins <charlie@rivosinc.com>
-To: "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
-	Russell King <linux@armlinux.org.uk>, Guo Ren <guoren@kernel.org>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Shuah Khan <shuah@kernel.org>, linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC v2 0/4] mm: Introduce MAP_BELOW_HINT
-Message-ID: <Ztnp3OAIRz/daj7s@ghost>
-References: <20240829-patches-below_hint_mmap-v2-0-638a28d9eae0@rivosinc.com>
- <yu7um2tcxg2apoz372rmzpkrfgbb42ndvabvrsp4usb2e3bkrf@huaucjsp5vlj>
+        Thu, 05 Sep 2024 11:08:24 -0700 (PDT)
+From: Wentao Zhang <wentaoz5@illinois.edu>
+To: peterz@infradead.org
+Cc: Matt.Kelly2@boeing.com,
+	akpm@linux-foundation.org,
+	andrew.j.oppelt@boeing.com,
+	anton.ivanov@cambridgegreys.com,
+	ardb@kernel.org,
+	arnd@arndb.de,
+	bhelgaas@google.com,
+	bp@alien8.de,
+	chuck.wolber@boeing.com,
+	dave.hansen@linux.intel.com,
+	dvyukov@google.com,
+	hpa@zytor.com,
+	jinghao7@illinois.edu,
+	johannes@sipsolutions.net,
+	jpoimboe@kernel.org,
+	justinstitt@google.com,
+	kees@kernel.org,
+	kent.overstreet@linux.dev,
+	linux-arch@vger.kernel.org,
+	linux-efi@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-um@lists.infradead.org,
+	llvm@lists.linux.dev,
+	luto@kernel.org,
+	marinov@illinois.edu,
+	masahiroy@kernel.org,
+	maskray@google.com,
+	mathieu.desnoyers@efficios.com,
+	matthew.l.weber3@boeing.com,
+	mhiramat@kernel.org,
+	mingo@redhat.com,
+	morbo@google.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	oberpar@linux.ibm.com,
+	paulmck@kernel.org,
+	richard@nod.at,
+	rostedt@goodmis.org,
+	samitolvanen@google.com,
+	samuel.sarkisian@boeing.com,
+	steven.h.vanderleest@boeing.com,
+	tglx@linutronix.de,
+	tingxur@illinois.edu,
+	tyxu@illinois.edu,
+	wentaoz5@illinois.edu,
+	x86@kernel.org
+Subject: Re: [PATCH v2 0/4] Enable measuring the kernel's Source-based Code Coverage and MC/DC with Clang
+Date: Thu,  5 Sep 2024 13:07:58 -0500
+Message-ID: <20240905180758.1396234-1-wentaoz5@illinois.edu>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20240905114140.GN4723@noisy.programming.kicks-ass.net>
+References: <20240905114140.GN4723@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <yu7um2tcxg2apoz372rmzpkrfgbb42ndvabvrsp4usb2e3bkrf@huaucjsp5vlj>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Sep 05, 2024 at 09:47:47AM +0300, Kirill A. Shutemov wrote:
-> On Thu, Aug 29, 2024 at 12:15:57AM -0700, Charlie Jenkins wrote:
-> > Some applications rely on placing data in free bits addresses allocated
-> > by mmap. Various architectures (eg. x86, arm64, powerpc) restrict the
-> > address returned by mmap to be less than the 48-bit address space,
-> > unless the hint address uses more than 47 bits (the 48th bit is reserved
-> > for the kernel address space).
-> > 
-> > The riscv architecture needs a way to similarly restrict the virtual
-> > address space. On the riscv port of OpenJDK an error is thrown if
-> > attempted to run on the 57-bit address space, called sv57 [1].  golang
-> > has a comment that sv57 support is not complete, but there are some
-> > workarounds to get it to mostly work [2].
-> > 
-> > These applications work on x86 because x86 does an implicit 47-bit
-> > restriction of mmap() address that contain a hint address that is less
-> > than 48 bits.
-> > 
-> > Instead of implicitly restricting the address space on riscv (or any
-> > current/future architecture), a flag would allow users to opt-in to this
-> > behavior rather than opt-out as is done on other architectures. This is
-> > desirable because it is a small class of applications that do pointer
-> > masking.
+On 2024-09-05 06:41, Peter Zijlstra wrote:
+> On Wed, Sep 04, 2024 at 11:32:41PM -0500, Wentao Zhang wrote:
+>> From: Wentao Zhang <zhangwt1997@gmail.com>
+>>
+>> This series adds support for building x86-64 kernels with Clang's Source-
+>> based Code Coverage[1] in order to facilitate Modified Condition/Decision
+>> Coverage (MC/DC)[2] that provably correlates to source code for all levels
+>> of compiler optimization.
+>>
+>> The newly added kernel/llvm-cov/ directory complements the existing gcov
+>> implementation. Gcov works at the object code level which may better
+>> reflect actual execution. However, Gcov lacks the necessary information to
+>> correlate coverage measurement with source code location when compiler
+>> optimization level is non-zero (which is the default when building the
+>> kernel). In addition, gcov reports are occasionally ambiguous when
+>> attempting to compare with source code level developer intent.
+>>
+>> In the following gcov example from drivers/firmware/dmi_scan.c, an
+>> expression with four conditions is reported to have six branch outcomes,
+>> which is not ideally informative in many safety related use cases, such as
+>> automotive, medical, and aerospace.
+>>
+>>          5: 1068:	if (s == e || *e != '/' || !month || month > 12) {
+>> branch  0 taken 5 (fallthrough)
+>> branch  1 taken 0
+>> branch  2 taken 5 (fallthrough)
+>> branch  3 taken 0
+>> branch  4 taken 0 (fallthrough)
+>> branch  5 taken 5
+>>
+>> On the other hand, Clang's Source-based Code Coverage instruments at the
+>> compiler frontend which maintains an accurate mapping from coverage
+>> measurement to source code location. Coverage reports reflect exactly how
+>> the code is written regardless of optimization and can present advanced
+>> metrics like branch coverage and MC/DC in a clearer way. Coverage report
+>> for the same snippet by llvm-cov would look as follows:
+>>
+>>   1068|      5|	if (s == e || *e != '/' || !month || month > 12) {
+>>    ------------------
+>>    |  Branch (1068:6): [True: 0, False: 5]
+>>    |  Branch (1068:16): [True: 0, False: 5]
+>>    |  Branch (1068:29): [True: 0, False: 5]
+>>    |  Branch (1068:39): [True: 0, False: 5]
+>>    ------------------
+>>
+>> Clang has added MC/DC support as of its 18.1.0 release. MC/DC is a fine-
+>> grained coverage metric required by many automotive and aviation industrial
+>> standards for certifying mission-critical software [3].
+>>
+>> In the following example from arch/x86/events/probe.c, llvm-cov gives the
+>> MC/DC measurement for the compound logic decision at line 43.
+>>
+>>     43|     12|			if (msr[bit].test && !msr[bit].test(bit, data))
+>>    ------------------
+>>    |---> MC/DC Decision Region (43:8) to (43:50)
+>>    |
+>>    |  Number of Conditions: 2
+>>    |     Condition C1 --> (43:8)
+>>    |     Condition C2 --> (43:25)
+>>    |
+>>    |  Executed MC/DC Test Vectors:
+>>    |
+>>    |     C1, C2    Result
+>>    |  1 { T,  F  = F      }
+>>    |  2 { T,  T  = T      }
+>>    |
+>>    |  C1-Pair: not covered
+>>    |  C2-Pair: covered: (1,2)
+>>    |  MC/DC Coverage for Decision: 50.00%
+>>    |
+>>    ------------------
+>>     44|      5|				continue;
+>>
+>> As the results suggest, during the span of measurement, only condition C2
+>> (!msr[bit].test(bit, data)) is covered. That means C2 was evaluated to both
+>> true and false, and in those test vectors C2 affected the decision outcome
+>> independently. Therefore MC/DC for this decision is 1 out of 2 (50.00%).
+>>
+>> To do a full kernel measurement, instrument the kernel with
+>> LLVM_COV_KERNEL_MCDC enabled, and optionally set a
+>> LLVM_COV_KERNEL_MCDC_MAX_CONDITIONS value (the default is six). Run the
+>> testsuites, and collect the raw profile data under
+>> /sys/kernel/debug/llvm-cov/profraw. Such raw profile data can be merged and
+>> indexed, and used for generating coverage reports in various formats.
+>>
+>>    $ cp /sys/kernel/debug/llvm-cov/profraw vmlinux.profraw
+>>    $ llvm-profdata merge vmlinux.profraw -o vmlinux.profdata
+>>    $ llvm-cov show --show-mcdc --show-mcdc-summary                         \
+>>               --format=text --use-color=false -output-dir=coverage_reports \
+>>               -instr-profile vmlinux.profdata vmlinux
+>>
+>> The first two patches enable the llvm-cov infrastructure, where the first
+>> enables source based code coverage and the second adds MC/DC support. The
+>> next patch disables instrumentation for curve25519-x86_64.c for the same
+>> reason as gcov. The final patch enables coverage for x86-64.
+>>
+>> The choice to use a new Makefile variable LLVM_COV_PROFILE, instead of
+>> reusing GCOV_PROFILE, was deliberate. More work needs to be done to
+>> determine if it is appropriate to reuse the same flag. In addition, given
+>> the fundamentally different approaches to instrumentation and the resulting
+>> variation in coverage reports, there is a strong likelihood that coverage
+>> type will need to be managed separately.
+>>
+>> This work reuses code from a previous effort by Sami Tolvanen et al. [4].
+>> Our aim is for source-based *code coverage* required for high assurance
+>> (MC/DC) while [4] focused more on performance optimization.
+>>
+>> This initial submission is restricted to x86-64. Support for other
+>> architectures would need a bit more Makefile & linker script modification.
+>> Informally we've confirmed that arm64 works and more are being tested.
+>>
+>> Note that Source-based Code Coverage is Clang-specific and isn't compatible
+>> with Clang's gcov support in kernel/gcov/. Currently, kernel/gcov/ is not
+>> able to measure MC/DC without modifying CFLAGS_GCOV and it would face the
+>> same issues in terms of source correlation as gcov in general does.
+>>
+>> Some demo and results can be found in [5]. We will talk about this patch
+>> series in the Refereed Track at LPC 2024 [6].
+>>
+>> Known Limitations:
+>>
+>> Kernel code with logical expressions exceeding
+>> LVM_COV_KERNEL_MCDC_MAX_CONDITIONS will produce a compiler warning.
+>> Expressions with up to 47 conditions are found in the Linux kernel source
+>> tree (as of v6.11), but 46 seems to be the max value before the build fails
+>> due to kernel size. As of LLVM 19 the max number of conditions possible is
+>> 32767.
+>>
+>> As of LLVM 19, certain expressions are still not covered, and will produce
+>> build warnings when they are encountered:
+>>
+>> "[...] if a boolean expression is embedded in the nest of another boolean
+>>   expression but separated by a non-logical operator, this is also not
+>>   supported. For example, in x = (a && b && c && func(d && f)), the d && f
+>>   case starts a new boolean expression that is separated from the other
+>>   conditions by the operator func(). When this is encountered, a warning
+>>   will be generated and the boolean expression will not be
+>>   instrumented." [7]
+>>
 > 
-> This argument looks broken to me.
+> What does this actually look like in the generated code?
 > 
-> The "small class of applications" is going to be broken unless they got
-> patched to use your new mmap() flag. You are asking for bugs.
-> 
-> Consider the case when you write, compile and validate a piece of software
-> on machine that has <=47bit VA. The binary got shipped to customers.
-> Later, customer gets a new shiny machine that supports larger address
-> space and your previously working software is broken. Such binaries might
-> exist today.
-> 
-> It is bad idea to use >47bit VA by default. Most of software got tested on
-> x86 with 47bit VA.
-> 
-> We can consider more options to opt-in into wider address space like
-> personality or prctl() handle. But opt-out is no-go from what I see.
-> 
-> -- 
->   Kiryl Shutsemau / Kirill A. Shutemov
 
-riscv is in an interesting state in regards to this because the software
-ecosystem is much less mature than other architectures. The existing
-riscv hardware supports either 38 or 47 bit userspace VAs, but a lot of
-people test on QEMU which defaults to 56 bit. As a result, a lot of
-code is tested with the larger address space. Applications that don't
-work on the larger address space, like OpenJDK, currently throw an error
-and exit.
+Example 1: https://godbolt.org/z/PT6ssxdv1 (Taken from Message-ID:
+<20210614153545.GA68749@worktop.programming.kicks-ass.net>) where counter
+updates look like "inc qword ptr [rip + .L__profc_instr(int)]".
 
-Since riscv does not currently have the address space default to 47
-bits, some applications just don't work on 56 bits. We could change the
-kernel so that these applications start working without the need for
-them to change their code, but that seems like the kernel is
-overstepping and fixing binaries rather than providing users tools to
-fix the binaries themselves.
+Example 2 with MC/DC: https://godbolt.org/z/ronMc578z where bitmap updates
+look like "or byte ptr [rip + .L__profbm_instr(int)], 8".
 
-This mmap flag was an attempt to provide a tool for these applications
-that work on the existing 47 bit VA hardware to also work on different
-hardware that supports a 56 bit VA space. After feedback, it looks like
-a better solution than the mmap flag is to use the personality syscall
-to set a process wide restriction to 47 bits instead, which matches the
-32 bit flag that already exists.
+> Where is the modification to noinstr ?
+>
 
-- Charlie
+In both two examples the compiler is respecting
+"__no_profile_instrument_function__" attribute, which is part of
+"__no_profile" macro, which is in turn part of "noinstr" macro.
+
+> What is the impact on certification of not covering the noinstr code.
+> 
+> 
+
+Allow me to reformat Steve's <steven.h.vanderleest@boeing.com> reply below:
+
+  -------------------------------------------------------------------------
+  I'll answer Peter's last question: "What is the impact on certification
+  of not covering the noinstr code."
+ 
+  Any code in the target image that is not executed by a test (and thus not
+  covered) must be analyzed and justified as an exception. For example,
+  defensive code is often impossible to exercise by test, but can be
+  included in the image with a justification to the regulatory authority
+  such as the Federal Aviation Administration (FAA). In practice, this
+  means the number of unique instances of non-instrumented code needs to be
+  manageable.  I say "unique instances" because there may be many instances
+  of a particular category, but justified by the same analysis/rationale.
+  Where we specifically mark a section of code with noinstr, it is
+  typically because the instrumentation would change the behavior of the
+  code, perturbing the test results. With some analysis for each distinct
+  category of this issue, we could then write justification(s) to show
+  the overall coverage is sufficient.
+ 
+  Regards,
+  Steve
+  -------------------------------------------------------------------------
+
+Thanks,
+Wentao
 
 
