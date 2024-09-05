@@ -1,234 +1,197 @@
-Return-Path: <linux-arch+bounces-7080-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7081-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3421D96E032
-	for <lists+linux-arch@lfdr.de>; Thu,  5 Sep 2024 18:52:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E6B796E112
+	for <lists+linux-arch@lfdr.de>; Thu,  5 Sep 2024 19:27:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B08551F250AB
-	for <lists+linux-arch@lfdr.de>; Thu,  5 Sep 2024 16:52:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A33FB1C228A9
+	for <lists+linux-arch@lfdr.de>; Thu,  5 Sep 2024 17:27:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36D761A01BA;
-	Thu,  5 Sep 2024 16:52:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29A3A1A38E1;
+	Thu,  5 Sep 2024 17:27:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aJiK/RmV"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="QoO4qY6U"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED713C2FD;
-	Thu,  5 Sep 2024 16:52:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14CCE1A2C2C
+	for <linux-arch@vger.kernel.org>; Thu,  5 Sep 2024 17:26:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725555146; cv=none; b=Y/TXixOVQNMENEIN01qMUGpMIDy2BSvHnB8mEMTUGcyYHMk2+EXC5kjxTxf5VmnxlavMHiXbwBgSCwOsydT3+7uZlPSooclPE0yAPGJtPjs56jGnA0YkM+fvAE8bJM3CuY+H80kqrNUsVi9eiZcRDA5ZNHEOCn9fMeRTwTgqBps=
+	t=1725557221; cv=none; b=dPmn+ECkR6CVaXb/PU6JSe8w+m4+nz2zDmQsMNbeJWFQGBqM2unJQ+ytYMLMY17EAlO48nHnkNAM7oxiCi9BAECER+oEwmhY4wO9rJZWuVIisHv541MgzbKW4/EPrQnd79zDLaBtD7TB+mf2std+ccxUyti/bzHAWkhgSNQjYM8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725555146; c=relaxed/simple;
-	bh=LxreSBk46ePe4SK89Oq0or2qu57zLm/XmRM6LSpM+D4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KBnAwZUyUt2uDOwBJHEjgXt8h509ES0hzYy0D8lPw0C17K2QptsSm7/0vNBzhHv/beTAjmoNPXcvmI5D96+a6GJxhahxgSFcBk7QTm24c1h9BjNGSQMQILl4ucgnQjgiW8Z9ovHUAxjD8YBc7xMoIt7L67LhmEisDRK9IdNbUsQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aJiK/RmV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AB2FC4CEC3;
-	Thu,  5 Sep 2024 16:52:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725555143;
-	bh=LxreSBk46ePe4SK89Oq0or2qu57zLm/XmRM6LSpM+D4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=aJiK/RmVZU+4QKnS20PevtZxI9Ao5l8kyPyrEFRfP5OJUiANjObzveTqFVMZvBfaq
-	 WvBZ+sESik2xeJo7HJwHV0YtQmU/k+E9sevdItiN3gY+oLQvNT6DIzErhTFmAtRfvW
-	 Z3Th9wsbWepCEbJIn8XbaTM2jgGsDsmD8igQpy4bYxlw1YLVMkgk1IHrAZ5ESpS4oO
-	 bGLgGWuO0oL57SU0Ub3Ntu7DwZK3eT0dYB3UuIjeRCvdcJ/zI6p6vNbBkpIANesZa+
-	 otXUzG3BSdj36YMneV4hn7uLwaEtsfN2PluWHfEebPoVRWvofMfzhvbjttQkItfin6
-	 Z02VSAPBtn/eA==
-Message-ID: <f39edf3d-aa9e-43a0-8997-762d76c9c248@kernel.org>
-Date: Thu, 5 Sep 2024 18:52:10 +0200
+	s=arc-20240116; t=1725557221; c=relaxed/simple;
+	bh=h9V6gwSALxoQh2n6tyi2ux0NqTNkpRulrrb7ZNYpQ6g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fEmfno/hXH9Kg0SzfTuFu6w0epXM5PC4DgWfzzVfYuorklz2gjU/vYMOIiyr5xq6paeSfE3xUf0jtYL7JZmiICiXASaTSzkUDBkZZiXghLfDfNzr9KuC2xEnfbaew9GSWJDfm92tNWDrwoRGHlyL1cjEF8wUrfHmvYtHooovd0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=QoO4qY6U; arc=none smtp.client-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2d87176316eso1658976a91.0
+        for <linux-arch@vger.kernel.org>; Thu, 05 Sep 2024 10:26:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1725557218; x=1726162018; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=TzHtjVKsvMG2J+VEdT3JJ4mY+8euHciuRxZ037YJyIs=;
+        b=QoO4qY6USsGxO5XvIoat2k65P6i4wxlRnTgjBvYfCtoLxebRI229jv5sogxj7RMGaP
+         wxrIHBrZD9mDcWn0w7dzz9pGI7kNlnkBNwb2hkkp3g20x6j1ExOQmOZHA6mtxlLTDOxk
+         VuqvFcbqqBjCuOgHu9KSBhCAmVTWPqLPf3J3++XMQ5BZvVoYJBk1S3NcFfMGRXNLV5kq
+         AUgDvf3doF0EDUK9fYbA78HgRn8Tl5rhjAsCnxNQBjeSo8JRikhiBDhyUMk1Il9ljhKb
+         UNIwPmlJ2sLZa03LVE5TjEVlS4Y/k5nXMF7NCjwacPbf0q0KnyNDIVuxMN4EmcjtWN+V
+         cAvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725557218; x=1726162018;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TzHtjVKsvMG2J+VEdT3JJ4mY+8euHciuRxZ037YJyIs=;
+        b=hKBwaNkpx/5drlw27ihe24dEzRWiQJKLgVk3Sul1VTr+Oam2+qDRqWIVeRB5AZUM9r
+         JR8wgFdjrqwOy7WwAsxif2Mt44D408k+FQoDejvT14rRpyr9kXL4snPEzXhgl29wO/pk
+         n/qsVo+CbrOCgheTJjmcrMLB8JDB12j2lZISMJaEPIaMkhJwmZtJGo5j2Bwo0HGmnj8Z
+         WciP43YPKVKoBMGJ9CvEDl5UvoSdRHbKGiYSSTL3Y71Eult53eJ5aqL9WUy4UzQP9RY6
+         QUrCf2A1bexjy/PSy1/PGr9gocrzv4++eAU8wmC0QH4Zxib+yrZrvPgXf69Z0AQZsvd0
+         uLqA==
+X-Forwarded-Encrypted: i=1; AJvYcCWsB2PaUsILvfj5jvoxtRvqFtE8Eh4whV9cEf+8jK1wyeMAL6DxvYbNlJ6kc300beP8oOlshap3wl1G@vger.kernel.org
+X-Gm-Message-State: AOJu0YxQqt15JG3YS5EfOZzZwhVjHY7bmx5N+MvX1LTKJL8PWEkDyfcD
+	dwrBKnOD8NhrURpYqSypJEVU+2ApjhadOZmpcLlvThpTh3RI5eqwOhRHt8yXP4E=
+X-Google-Smtp-Source: AGHT+IFxrgWNtdxCWG0RBGHbyeqfO4T1K/TMURzEB4vAspGF/eaSh/6stCCkbbdo5V+yBGPBQxqCJA==
+X-Received: by 2002:a17:90b:3d2:b0:2d8:9fbe:6727 with SMTP id 98e67ed59e1d1-2dad4f0e4damr67155a91.4.1725557218097;
+        Thu, 05 Sep 2024 10:26:58 -0700 (PDT)
+Received: from ghost ([50.145.13.30])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2da5932d1ecsm6506552a91.43.2024.09.05.10.26.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Sep 2024 10:26:57 -0700 (PDT)
+Date: Thu, 5 Sep 2024 10:26:52 -0700
+From: Charlie Jenkins <charlie@rivosinc.com>
+To: "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+	Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
+	Russell King <linux@armlinux.org.uk>, Guo Ren <guoren@kernel.org>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	Rich Felker <dalias@libc.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Muchun Song <muchun.song@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Shuah Khan <shuah@kernel.org>, linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-snps-arc@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC v2 0/4] mm: Introduce MAP_BELOW_HINT
+Message-ID: <Ztnp3OAIRz/daj7s@ghost>
+References: <20240829-patches-below_hint_mmap-v2-0-638a28d9eae0@rivosinc.com>
+ <yu7um2tcxg2apoz372rmzpkrfgbb42ndvabvrsp4usb2e3bkrf@huaucjsp5vlj>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 08/11] misc: rp1: RaspberryPi RP1 misc driver
-To: Andrea della Porta <andrea.porta@suse.com>
-Cc: Michael Turquette <mturquette@baylibre.com>,
- Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Florian Fainelli <florian.fainelli@broadcom.com>,
- Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>,
- Linus Walleij <linus.walleij@linaro.org>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Derek Kiernan <derek.kiernan@amd.com>, Dragan Cvetic
- <dragan.cvetic@amd.com>, Arnd Bergmann <arnd@arndb.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Nicolas Ferre <nicolas.ferre@microchip.com>,
- Claudiu Beznea <claudiu.beznea@tuxon.dev>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Saravana Kannan <saravanak@google.com>, Bjorn Helgaas <bhelgaas@google.com>,
- linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
- linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
- netdev@vger.kernel.org, linux-pci@vger.kernel.org,
- linux-arch@vger.kernel.org, Lee Jones <lee@kernel.org>,
- Andrew Lunn <andrew@lunn.ch>, Stefan Wahren <wahrenst@gmx.net>
-References: <cover.1724159867.git.andrea.porta@suse.com>
- <5954e4dccc0e158cf434d2c281ad57120538409b.1724159867.git.andrea.porta@suse.com>
- <lrv7cpbt2n7eidog5ydhrbyo5se5l2j23n7ljxvojclnhykqs2@nfeu4wpi2d76>
- <ZtHN0B8VEGZFXs95@apocalypse>
- <b74327b8-43f6-47cf-ba9d-cc9a4559767b@kernel.org>
- <ZtcoFmK6NPLcIwVt@apocalypse>
- <39735704-ae94-4ff8-bf4d-d2638b046c8e@kernel.org>
- <ZtndaYh2Faf6t3fC@apocalypse>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <ZtndaYh2Faf6t3fC@apocalypse>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <yu7um2tcxg2apoz372rmzpkrfgbb42ndvabvrsp4usb2e3bkrf@huaucjsp5vlj>
 
-On 05/09/2024 18:33, Andrea della Porta wrote:
-> Hi Krzysztof,
+On Thu, Sep 05, 2024 at 09:47:47AM +0300, Kirill A. Shutemov wrote:
+> On Thu, Aug 29, 2024 at 12:15:57AM -0700, Charlie Jenkins wrote:
+> > Some applications rely on placing data in free bits addresses allocated
+> > by mmap. Various architectures (eg. x86, arm64, powerpc) restrict the
+> > address returned by mmap to be less than the 48-bit address space,
+> > unless the hint address uses more than 47 bits (the 48th bit is reserved
+> > for the kernel address space).
+> > 
+> > The riscv architecture needs a way to similarly restrict the virtual
+> > address space. On the riscv port of OpenJDK an error is thrown if
+> > attempted to run on the 57-bit address space, called sv57 [1].  golang
+> > has a comment that sv57 support is not complete, but there are some
+> > workarounds to get it to mostly work [2].
+> > 
+> > These applications work on x86 because x86 does an implicit 47-bit
+> > restriction of mmap() address that contain a hint address that is less
+> > than 48 bits.
+> > 
+> > Instead of implicitly restricting the address space on riscv (or any
+> > current/future architecture), a flag would allow users to opt-in to this
+> > behavior rather than opt-out as is done on other architectures. This is
+> > desirable because it is a small class of applications that do pointer
+> > masking.
 > 
-> On 20:27 Tue 03 Sep     , Krzysztof Kozlowski wrote:
->> On 03/09/2024 17:15, Andrea della Porta wrote:
->>>>>>> +
->>>>>>> +				rp1_clocks: clocks@c040018000 {
->>>>>>
->>>>>> Why do you mix MMIO with non-MMIO nodes? This really does not look
->>>>>> correct.
->>>>>>
->>>>>
->>>>> Right. This is already under discussion here:
->>>>> https://lore.kernel.org/all/ZtBzis5CzQMm8loh@apocalypse/
->>>>>
->>>>> IIUC you proposed to instantiate the non-MMIO nodes (the three clocks) by
->>>>> using CLK_OF_DECLARE.
->>>>
->>>> Depends. Where are these clocks? Naming suggests they might not be even
->>>> part of this device. But if these are part of the device, then why this
->>>> is not a clock controller (if they are controllable) or even removed
->>>> (because we do not represent internal clock tree in DTS).
->>>
->>> xosc is a crystal connected to the oscillator input of the RP1, so I would
->>> consider it an external fixed-clock. If we were in the entire dts, I would have
->>> put it in root under /clocks node, but here we're in the dtbo so I'm not sure
->>> where else should I put it.
->>
->> But physically, on which PCB, where is this clock located?
+> This argument looks broken to me.
 > 
-> xosc is a crystal, feeding the reference clock oscillator input pins of the RP1,
-> please see page 12 of the following document:
-> https://datasheets.raspberrypi.com/rp1/rp1-peripherals.pdf
+> The "small class of applications" is going to be broken unless they got
+> patched to use your new mmap() flag. You are asking for bugs.
+> 
+> Consider the case when you write, compile and validate a piece of software
+> on machine that has <=47bit VA. The binary got shipped to customers.
+> Later, customer gets a new shiny machine that supports larger address
+> space and your previously working software is broken. Such binaries might
+> exist today.
+> 
+> It is bad idea to use >47bit VA by default. Most of software got tested on
+> x86 with 47bit VA.
+> 
+> We can consider more options to opt-in into wider address space like
+> personality or prctl() handle. But opt-out is no-go from what I see.
+> 
+> -- 
+>   Kiryl Shutsemau / Kirill A. Shutemov
 
-That's not the answer. Where is it physically located?
+riscv is in an interesting state in regards to this because the software
+ecosystem is much less mature than other architectures. The existing
+riscv hardware supports either 38 or 47 bit userspace VAs, but a lot of
+people test on QEMU which defaults to 56 bit. As a result, a lot of
+code is tested with the larger address space. Applications that don't
+work on the larger address space, like OpenJDK, currently throw an error
+and exit.
 
-> On Rpi5, the PCB is the very same as the one on which the BCM2712 (SoC) and RP1
-> are soldered. Would you consider it external (since the crystal is outside the RP1)
-> or internal (since the oscillator feeded by the crystal is inside the RP1)?
+Since riscv does not currently have the address space default to 47
+bits, some applications just don't work on 56 bits. We could change the
+kernel so that these applications start working without the need for
+them to change their code, but that seems like the kernel is
+overstepping and fixing binaries rather than providing users tools to
+fix the binaries themselves.
 
-So it is on RPi 5 board? Just like every other SoC and every other
-vendor? Then just like every other SoC and every other vendor it is in
-board DTS file.
+This mmap flag was an attempt to provide a tool for these applications
+that work on the existing 47 bit VA hardware to also work on different
+hardware that supports a 56 bit VA space. After feedback, it looks like
+a better solution than the mmap flag is to use the personality syscall
+to set a process wide restriction to 47 bits instead, which matches the
+32 bit flag that already exists.
 
-> 
->>
->>>
->>> Regarding pclk and hclk, I'm still trying to understand where they come from.
->>> If they are external clocks (since they are fixed-clock too), they should be
->>> in the same node as xosc. CLK_OF_DECLARE does not seem to fit here because
->>
->> There is no such node as "/clocks" so do not focus on that. That's just
->> placeholder but useless and it is inconsistent with other cases (e.g.
->> regulators).
-> 
-> Fine, I beleve that the root node would be okay then, or some other carefully named
-> node in root, if the clock is not internal to any chip.
-> 
->>
->> If this is external oscillator then it is not part of RP1 and you cannot
->> put it inside just to satisfy your drivers.
-> 
-> Ack.
-> 
->>
->>> there's no special management of these clocks, so no new clock definition is
->>> needed.
->>
->>> If they are internal tree, I cannot simply get rid of them because rp1_eth node
->>> references these two clocks (see clocks property), so they must be decalred 
->>> somewhere. Any hint about this?.
->>>
->>
->> Describe the hardware. Show the diagram or schematics where is which device.
-> 
-> Unfortunately I don't have the documentation (schematics or other info) about
-> how these two clocks (pclk and hclk) are arranged, but I'm trying to get
-> some insight about that from various sources. While we're waiting for some
-> (hopefully) more certain info, I'd like to speculate a bit. I would say that
-> they both probably be either external (just like xosc), or generated internally
-> to the RP1:
-> 
-> If externals, I would place them in the same position as xosc, so root node
-> or some other node under root (eg.: /rp1-clocks)
-
-Just like /clocks, /rp1-clocks is not better. Neither /rp1-foo-clocks.
-
-I think there is some sort of big misunderstanding here. Is this RP1
-co-processor on the RP board, connected over PCI to Broadcom SoC?
-
-> 
-> If internals, I would leave them just where they are, i.e. inside the rp1 node
-> 
-> Does it make sense?
-
-No, because you do not have xosc there, according to my knowledge.
-
-Best regards,
-Krzysztof
+- Charlie
 
 
