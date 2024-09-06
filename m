@@ -1,40 +1,40 @@
-Return-Path: <linux-arch+bounces-7108-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7109-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14B1B96F309
-	for <lists+linux-arch@lfdr.de>; Fri,  6 Sep 2024 13:27:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D662296F324
+	for <lists+linux-arch@lfdr.de>; Fri,  6 Sep 2024 13:35:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B48911F23B2A
-	for <lists+linux-arch@lfdr.de>; Fri,  6 Sep 2024 11:26:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 997D2286CAC
+	for <lists+linux-arch@lfdr.de>; Fri,  6 Sep 2024 11:35:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FF911C8FC7;
-	Fri,  6 Sep 2024 11:26:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 513101C9DF7;
+	Fri,  6 Sep 2024 11:35:31 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F1811A2C39;
-	Fri,  6 Sep 2024 11:26:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9531715852B;
+	Fri,  6 Sep 2024 11:35:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725622014; cv=none; b=ed0i+kqHNz+DsWGkIFJh1tvaHMN0N3lSAEyWfYQkui3xrvi0Aiw6rTwIWBbqwTFahdsYDT4A2u205WR6eF5IgNw6SfeeiXGgo5g6Zdkzd19ldWvv/xYPUCFUFjrJVwioHhbf21Di3afHyhftS2VWXFNo/mmBJTrKrCtw2BXwxBA=
+	t=1725622531; cv=none; b=hsqpx8TAo5K6l2VoEYwDimfVU6y9tV1vDlHw5MUwS8z1y5Upzy3wL/qRUach4bKfU4JfjiwoCLnbUwF20WA7W3R1SddRDn5D/zwtenrqnCF+RWyln7VEIMp5zAyYYXOtyZAweBvzjHjdMrnIDX7n+3mpkEAqNTciM0/qrzgceFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725622014; c=relaxed/simple;
-	bh=6USmevgAKj0TyTAIi4ocDh6np/lUc3s/1UeLS1HvASo=;
+	s=arc-20240116; t=1725622531; c=relaxed/simple;
+	bh=cP5H11M94mDRYEtC3KilSyKz8vdV//0EuGPxUnLCELc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uqYx6/de7uYRDd7pKGrTi1BsbZRshoWspKAekicuqIJEt37yffk8DpsziLVquV/+ixmrZWE1ee06Ah8+tJ863R9osx+eJtZllHI9tw4VxrE/kTAJnPkx6bARUkMmYD86r5KxNawPko7jAdSH+ceXvGB4+KF6dOFpy9C99zyJSx4=
+	 In-Reply-To:Content-Type; b=VnGc/xRNmaMZzkR0NaSqwMo6KZnlXcf1r+squPtA9QjuCwm88CtXafK0Bl7+oE887l2pAefD2PzZCECi0I/N/dGtEDC5Q0wkvEc5vyr4r+qdFUsYho+Y0qxkAe6/CFxCyVo9NMAxLWfWXnn0g7OJnOY+7EN3rVw7vKYXJ5jGPts=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A7FD7FEC;
-	Fri,  6 Sep 2024 04:27:18 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 033B7FEC;
+	Fri,  6 Sep 2024 04:35:56 -0700 (PDT)
 Received: from [10.1.196.72] (e119884-lin.cambridge.arm.com [10.1.196.72])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 497F23F73B;
-	Fri,  6 Sep 2024 04:26:49 -0700 (PDT)
-Message-ID: <fa3d3397-4e5f-437d-b73e-439f4f336c90@arm.com>
-Date: Fri, 6 Sep 2024 12:26:47 +0100
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 25FE53F73B;
+	Fri,  6 Sep 2024 04:35:25 -0700 (PDT)
+Message-ID: <23a1c751-d957-4785-b54d-7e0b03b9117f@arm.com>
+Date: Fri, 6 Sep 2024 12:35:25 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -42,85 +42,70 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/9] x86: vdso: Introduce asm/vdso/page.h
+Subject: Re: [PATCH 4/9] vdso: Introduce vdso/page.h
 To: Christophe Leroy <christophe.leroy@csgroup.eu>,
- Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
- Linux-Arch <linux-arch@vger.kernel.org>, linux-mm@kvack.org
+ linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, linux-mm@kvack.org
 Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
  "Jason A . Donenfeld" <Jason@zx2c4.com>,
  Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
  Naveen N Rao <naveen@kernel.org>, Ingo Molnar <mingo@redhat.com>,
  Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- "H. Peter Anvin" <hpa@zytor.com>, Theodore Ts'o <tytso@mit.edu>,
- Andrew Morton <akpm@linux-foundation.org>,
+ "H . Peter Anvin" <hpa@zytor.com>, Theodore Ts'o <tytso@mit.edu>,
+ Arnd Bergmann <arnd@arndb.de>, Andrew Morton <akpm@linux-foundation.org>,
  Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
  <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 References: <20240903151437.1002990-1-vincenzo.frascino@arm.com>
- <20240903151437.1002990-4-vincenzo.frascino@arm.com>
- <cfb5ea05-0322-492b-815d-17a4aad4da99@app.fastmail.com>
- <a298ba4e-cbbf-4f50-b175-8ee3063963bc@csgroup.eu>
+ <20240903151437.1002990-5-vincenzo.frascino@arm.com>
+ <18bcf426-b0a8-486b-b9f7-8418d401bb70@csgroup.eu>
 Content-Language: en-US
 From: Vincenzo Frascino <vincenzo.frascino@arm.com>
-In-Reply-To: <a298ba4e-cbbf-4f50-b175-8ee3063963bc@csgroup.eu>
+In-Reply-To: <18bcf426-b0a8-486b-b9f7-8418d401bb70@csgroup.eu>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
+Hi Christophe,
 
-
-On 04/09/2024 16:05, Christophe Leroy wrote:
+On 04/09/2024 18:16, Christophe Leroy wrote:
 > 
 > 
-> Le 04/09/2024 à 16:52, Arnd Bergmann a écrit :
->> On Tue, Sep 3, 2024, at 15:14, Vincenzo Frascino wrote:
+> Le 03/09/2024 à 17:14, Vincenzo Frascino a écrit :
+>> The VDSO implementation includes headers from outside of the
+>> vdso/ namespace.
 >>
-...
-
->>> +
->>> +#ifndef __ASSEMBLY__
->>> +
->>> +#include <asm/page_types.h>
->>> +
->>> +#define VDSO_PAGE_MASK    PAGE_MASK
->>> +#define VDSO_PAGE_SIZE    PAGE_SIZE
->>> +
->>> +#endif /* !__ASSEMBLY__ */
->>> +
->>> +#endif /* __ASM_VDSO_PAGE_H */
+>> Introduce vdso/page.h to make sure that the generic library
+>> uses only the allowed namespace.
 >>
->> I don't get this one: the x86 asm/page_types.h still includes other
->> headers outside of the vdso namespace, but you seem to only need these
->> two definitions that are the same across everything.
+>> Cc: Andy Lutomirski <luto@kernel.org>
+>> Cc: Thomas Gleixner <tglx@linutronix.de>
+>> Cc: Jason A. Donenfeld <Jason@zx2c4.com>
+>> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+>> ---
+>>   include/vdso/page.h | 7 +++++++
+>>   1 file changed, 7 insertions(+)
+>>   create mode 100644 include/vdso/page.h
 >>
->> Why not put PAGE_MASK and PAGE_SIZE into a global vdso/page.h
->> header? I did spend a lot of time a few months ago ensuring that
->> we can have a single definition for all architectures based on
->> CONFIG_PAGE_SHIFT, so all the extra copies should just go away.
->>
+>> diff --git a/include/vdso/page.h b/include/vdso/page.h
+>> new file mode 100644
+>> index 000000000000..f18e304941cb
+>> --- /dev/null
+>> +++ b/include/vdso/page.h
+>> @@ -0,0 +1,7 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +#ifndef __VDSO_PAGE_H
+>> +#define __VDSO_PAGE_H
+>> +
+>> +#include <asm/vdso/page.h>
 > 
-> Just wondering, after looking at x86, powerpc and arm64, is there any difference
-> between:
+> I can't see the benefit of that, the generic library can directly include
+> asm/vdso/page.h
 > 
-> X86,ARM64:
-> #define PAGE_SIZE        (_AC(1,UL) << PAGE_SHIFT)
-> #define PAGE_MASK        (~(PAGE_SIZE-1))
-> 
-> POWERPC:
-> #define PAGE_SIZE        (ASM_CONST(1) << PAGE_SHIFT)
-> /*
->  * Subtle: (1 << PAGE_SHIFT) is an int, not an unsigned long. So if we
->  * assign PAGE_MASK to a larger type it gets extended the way we want
->  * (i.e. with 1s in the high bits)
->  */
-> #define PAGE_MASK      (~((1 << PAGE_SHIFT) - 1))
-> 
-> 
-> Which one should be taken in vdso/page.h ?
->
 
-I am not sure either on this point. That's the main reason why I proposed an
-indirection for the definitions.
+I think you agree that any discussion we can have on this point will be made
+obsolete by the fact that we will end up defining PAGE_SIZE/PAGE_MASK in
+vdso/page.h.
 
-> Christophe
+>> +
+>> +#endif    /* __VDSO_PAGE_H */
 
 -- 
 Regards,
