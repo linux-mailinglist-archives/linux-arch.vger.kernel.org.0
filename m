@@ -1,218 +1,124 @@
-Return-Path: <linux-arch+bounces-7104-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7105-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A6C896F08B
-	for <lists+linux-arch@lfdr.de>; Fri,  6 Sep 2024 11:57:00 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD28B96F1FD
+	for <lists+linux-arch@lfdr.de>; Fri,  6 Sep 2024 12:56:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 664C41C20823
-	for <lists+linux-arch@lfdr.de>; Fri,  6 Sep 2024 09:56:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 36C02B20920
+	for <lists+linux-arch@lfdr.de>; Fri,  6 Sep 2024 10:56:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C92CF1C9DED;
-	Fri,  6 Sep 2024 09:56:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="JRZJEoBD";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="YbuZKsYy"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E02B41C9EDE;
+	Fri,  6 Sep 2024 10:56:06 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fout8-smtp.messagingengine.com (fout8-smtp.messagingengine.com [103.168.172.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 758A413CFB6;
-	Fri,  6 Sep 2024 09:56:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.151
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 503C71CA6AA;
+	Fri,  6 Sep 2024 10:56:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725616566; cv=none; b=adBUzLjbZZeW4/TorWldShE0AjYxHXER0lBCG9NYYgmass1qVzJ+Rb/2pos9U0ALG8Bdxfx5F8cki6lk62KWugaz1cW6HWVm+4LJuY79dth/lsKut/0sCqPAGExsh7mfocgpl1w6RVPvjsPb6QpubEwVQ13CyaUSV6MqWszjOd0=
+	t=1725620166; cv=none; b=q75esVrPANhDV77+BzDU3SRrTydsg4M19HGKOYSL+0eNj4PaB0CA8FVgaZ90kkZkvXZDTZ3DCxxCIgoU5B6QjpgF6KW0hOyAHbLjwuLhWiruZy3VOdNakQaS5T1wdHnLMiYwzyXBMPI+KMSh6vKVwFb4qW0v+kbPAgMmd0NUkII=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725616566; c=relaxed/simple;
-	bh=gUUvPOjWWjObJ8l/tpxlAMuAowT/tNkWWi/REiyptbc=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=g0RveAz/cGOgC8/UW8yjyFAgo8Efh462/9MSCcVwKExO2O+Z1p2NG98PVi9JD5GQ0tAhzSYmKf8kGbW4Y++ON3tnvFMiJXrfdoKA4AI0ASWoaclM1c8vwzOFD18jKzyAlOsZhuGGXx2y7O5uZ8JGjgyb3DH3zSYOUYv3tutxCL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=JRZJEoBD; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=YbuZKsYy; arc=none smtp.client-ip=103.168.172.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfout.phl.internal (Postfix) with ESMTP id 8D7481380406;
-	Fri,  6 Sep 2024 05:56:03 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-10.internal (MEProxy); Fri, 06 Sep 2024 05:56:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1725616563;
-	 x=1725702963; bh=spCdL3tE0yzwRJuzWoP/dh86M1NxHAaaOfguj/M3bzI=; b=
-	JRZJEoBD7E03AtrbWnWmR/E4Bky06zQyVOaqEDrYtzVCYUtVqqML6vpNkpePZvmu
-	LkDh6ZKUYFxJIhFekagPIpis+EvEHIBr/7jMAKJCx4Mp0eFXfjOxw4omuLvqxgqq
-	yopa3r5GTd6Dz3crswRx7hsJ7t/FqRvEwoY6w6ScKbyAV1eQttm8AKxhpPqlNYjU
-	9JD/6Z9/Sox2d8GPcqjQb3jreF0sJhqOjKP6b8Q9pi23HKr0G3Q2i9oKPk62DsQi
-	bnERniHGyUEeY9laCvDrkugc4NYwfP/OCnL8b9dt+urZV20UCu5ikrb+SDJqWKSB
-	6zYPX7cpruqXL/kbX7r6Sg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1725616563; x=
-	1725702963; bh=spCdL3tE0yzwRJuzWoP/dh86M1NxHAaaOfguj/M3bzI=; b=Y
-	buZKsYyDBXnvApXrykY/L9TZDdHeKiS5BvrOg1KjB4lbLjI+Pz1jBrWfjCBGz7b6
-	QXoSEn7Sp5lgP8KIwTf+hpIAuN6xMt+Dud9rMLf9h9nNfQXz+kLEj1T1fYuiKkDn
-	xo2M7cYQuagF0gPBh4D2qe1Wm8EMnc4zc2xpnH+h3RJCYoBoNbhpLVM7n2DrBQve
-	nOJIj1atr+y+akqlq99cnqMu0Y1Z41cYcQ6TazzWs/WDPHXiYWR3Qw9WjMENBVX2
-	iUJ0akO/5txv9gEcf9lT9E+LbAUOH02gMaeLaylnY6s67cj7xFzlL+qqk6Ct/Ig/
-	6GGTCcVbscbDGcLe6hjUA==
-X-ME-Sender: <xms:s9HaZg6T99twwNpEAUrg5EMam6_B2aHEhP2d_0uPbtGSUObGn3qT3Q>
-    <xme:s9HaZh5NZhMxeB34qIKrdxYW9sIdBeQtetUXCpcOF3KjfuOVbQCtzH8LOB7VyjGqv
-    BZtDrk_Wx610_rXHfA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudeiuddgvddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdej
-    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
-    guvgeqnecuggftrfgrthhtvghrnhepvdfhvdekueduveffffetgfdvveefvdelhedvvdeg
-    jedvfeehtdeggeevheefleejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepuddu
-    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehlihhnuhigqdgrrhgthhesvhhgvg
-    hrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgtshhkhiesvhhgvghr
-    rdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvg
-    hrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkshgvlhhfthgvshht
-    sehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqmhhiphhsse
-    hvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphgrrhhishgt
-    sehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqshefledtse
-    hvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqshhhsehvghgv
-    rhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhprghrtghlihhnuhigsehvghgvrh
-    drkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:s9HaZvch4D5vjjeEUW8mCIns9gzXdDSCUK38eMYIOGz553WMOPB-_A>
-    <xmx:s9HaZlLMieryUgKfA90cp4bUrWxNAVkU-wPsVZ-4KCgHhrZXR664VQ>
-    <xmx:s9HaZkJvGV5rxrgidiv5v1AmF2Mr8SvDBii6qhVDEiQ_2ikC_UI0NQ>
-    <xmx:s9HaZmxHiDjy7TaPbAFN7scjDMfoVG7YWIlY3lLlwksDsPAwcRm4GA>
-    <xmx:s9HaZhBWotF2O5UX0Guk6WHI5NDPU9Edg2euSCzo2MFXf-Zyq83idrXt>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id E5FF5222006F; Fri,  6 Sep 2024 05:56:02 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1725620166; c=relaxed/simple;
+	bh=s65V3MJ9MtbfJfmv2YobiFjfN/XToUEbJVYOauK9bR4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=X24IxOj8LXofNaJSFEPG3765furcFUlmNyONnxEWdZesPKzA+FO88Glg1aq0GEP1NediFiaMdSwEs+NWT4MaJMbL+zLded7Ytdh0OkPHf698ZKkxeTsUQNCIzFVic7BR59zYHbkjzhdu25T/KfRXPwTp7y88hMRckVINdawmRkA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 82855FEC;
+	Fri,  6 Sep 2024 03:56:30 -0700 (PDT)
+Received: from [10.1.196.72] (e119884-lin.cambridge.arm.com [10.1.196.72])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B6EC73F66E;
+	Fri,  6 Sep 2024 03:56:00 -0700 (PDT)
+Message-ID: <043e992f-487e-4102-9543-16da1f57b7bc@arm.com>
+Date: Fri, 6 Sep 2024 11:55:59 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Fri, 06 Sep 2024 09:55:42 +0000
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: guoren <guoren@kernel.org>
-Cc: "Charlie Jenkins" <charlie@rivosinc.com>,
- "Richard Henderson" <richard.henderson@linaro.org>,
- "Ivan Kokshaysky" <ink@jurassic.park.msu.ru>,
- "Matt Turner" <mattst88@gmail.com>, "Vineet Gupta" <vgupta@kernel.org>,
- "Russell King" <linux@armlinux.org.uk>,
- "Huacai Chen" <chenhuacai@kernel.org>, "WANG Xuerui" <kernel@xen0n.name>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
- "Helge Deller" <deller@gmx.de>, "Michael Ellerman" <mpe@ellerman.id.au>,
- "Nicholas Piggin" <npiggin@gmail.com>,
- "Christophe Leroy" <christophe.leroy@csgroup.eu>,
- "Naveen N Rao" <naveen@kernel.org>,
- "Alexander Gordeev" <agordeev@linux.ibm.com>,
- "Gerald Schaefer" <gerald.schaefer@linux.ibm.com>,
- "Heiko Carstens" <hca@linux.ibm.com>,
- "Vasily Gorbik" <gor@linux.ibm.com>,
- "Christian Borntraeger" <borntraeger@linux.ibm.com>,
- "Sven Schnelle" <svens@linux.ibm.com>,
- "Yoshinori Sato" <ysato@users.sourceforge.jp>,
- "Rich Felker" <dalias@libc.org>,
- "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
- "David S . Miller" <davem@davemloft.net>,
- "Andreas Larsson" <andreas@gaisler.com>,
- "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar" <mingo@redhat.com>,
- "Borislav Petkov" <bp@alien8.de>,
- "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, "Andy Lutomirski" <luto@kernel.org>,
- "Peter Zijlstra" <peterz@infradead.org>,
- "Muchun Song" <muchun.song@linux.dev>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- "Vlastimil Babka" <vbabka@suse.cz>,
- "Lorenzo Stoakes" <lorenzo.stoakes@oracle.com>, shuah <shuah@kernel.org>,
- "Christoph Hellwig" <hch@infradead.org>,
- "Michal Hocko" <mhocko@suse.com>,
- "Kirill A. Shutemov" <kirill@shutemov.name>,
- "Chris Torek" <chris.torek@gmail.com>,
- Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org,
- "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
- loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-abi-devel@lists.sourceforge.net
-Message-Id: <f23b18c6-1856-4b59-9ba3-59809b425c81@app.fastmail.com>
-In-Reply-To: 
- <CAJF2gTTVX9CFM3oRZZP3hGExwVwA_=n1Lrq_0DQKWA+-ZbOekg@mail.gmail.com>
-References: <20240905-patches-below_hint_mmap-v3-0-3cd5564efbbb@rivosinc.com>
- <20240905-patches-below_hint_mmap-v3-1-3cd5564efbbb@rivosinc.com>
- <9fc4746b-8e9d-4a75-b966-e0906187e6b7@app.fastmail.com>
- <CAJF2gTTVX9CFM3oRZZP3hGExwVwA_=n1Lrq_0DQKWA+-ZbOekg@mail.gmail.com>
-Subject: Re: [PATCH RFC v3 1/2] mm: Add personality flag to limit address to 47 bits
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/9] x86: vdso: Introduce asm/vdso/mman.h
+To: Christophe Leroy <christophe.leroy@csgroup.eu>,
+ linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, linux-mm@kvack.org
+Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+ "Jason A . Donenfeld" <Jason@zx2c4.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Naveen N Rao <naveen@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ "H . Peter Anvin" <hpa@zytor.com>, Theodore Ts'o <tytso@mit.edu>,
+ Arnd Bergmann <arnd@arndb.de>, Andrew Morton <akpm@linux-foundation.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+References: <20240903151437.1002990-1-vincenzo.frascino@arm.com>
+ <20240903151437.1002990-2-vincenzo.frascino@arm.com>
+ <710f9663-e99c-40e2-9c0e-2f5e6e854653@csgroup.eu>
+Content-Language: en-US
+From: Vincenzo Frascino <vincenzo.frascino@arm.com>
+In-Reply-To: <710f9663-e99c-40e2-9c0e-2f5e6e854653@csgroup.eu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, Sep 6, 2024, at 09:14, Guo Ren wrote:
-> On Fri, Sep 6, 2024 at 3:18=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> w=
-rote:
->>
->> It's also unclear to me how we want this flag to interact with
->> the existing logic in arch_get_mmap_end(), which attempts to
->> limit the default mapping to a 47-bit address space already.
->
-> To optimize RISC-V progress, I recommend:
->
-> Step 1: Approve the patch.
-> Step 2: Update Go and OpenJDK's RISC-V backend to utilize it.
-> Step 3: Wait approximately several iterations for Go & OpenJDK
-> Step 4: Remove the 47-bit constraint in arch_get_mmap_end()
+Hi Christophe,
 
-I really want to first see a plausible explanation about why
-RISC-V can't just implement this using a 47-bit DEFAULT_MAP_WINDOW
-like all the other major architectures (x86, arm64, powerpc64),
-e.g. something like the patch below (untested, probably slightly
-wrong but show illustrate my point).
+Thank you for your review.
 
-     Arnd
+On 04/09/2024 17:56, Christophe Leroy wrote:
+> 
+> 
+> Le 03/09/2024 à 17:14, Vincenzo Frascino a écrit :
+...
 
-diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/include/asm=
-/processor.h
-index 8702b8721a27..de9863be1efd 100644
---- a/arch/riscv/include/asm/processor.h
-+++ b/arch/riscv/include/asm/processor.h
-@@ -20,17 +20,8 @@
-  * mmap_end < addr, being mmap_end the top of that address space.
-  * See Documentation/arch/riscv/vm-layout.rst for more details.
-  */
--#define arch_get_mmap_end(addr, len, flags)			\
--({								\
--	unsigned long mmap_end;					\
--	typeof(addr) _addr =3D (addr);				\
--	if ((_addr) =3D=3D 0 || is_compat_task() ||			\
--	    ((_addr + len) > BIT(VA_BITS - 1)))			\
--		mmap_end =3D STACK_TOP_MAX;			\
--	else							\
--		mmap_end =3D (_addr + len);			\
--	mmap_end;						\
--})
-+#define arch_get_mmap_end(addr, len, flags) \
-+		(((addr) > DEFAULT_MAP_WINDOW) ? TASK_SIZE : DEFAULT_MAP_WINDOW)
-=20
- #define arch_get_mmap_base(addr, base)				\
- ({								\
-@@ -47,7 +38,7 @@
- })
-=20
- #ifdef CONFIG_64BIT
--#define DEFAULT_MAP_WINDOW     (UL(1) << (MMAP_VA_BITS - 1))
-+#define DEFAULT_MAP_WINDOW     (is_compat_task() ? (UL(1) << (MMAP_VA_B=
-ITS - 1)) : TASK_SIZE_32)
- #define STACK_TOP_MAX          TASK_SIZE_64
- #else
- #define DEFAULT_MAP_WINDOW     TASK_SIZE
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +#ifndef __ASM_VDSO_MMAN_H
+>> +#define __ASM_VDSO_MMAN_H
+>> +
+>> +#ifndef __ASSEMBLY__
+>> +
+>> +#include <uapi/linux/mman.h>
+>> +
+>> +#define VDSO_MMAP_PROT    PROT_READ | PROT_WRITE
+>> +#define VDSO_MMAP_FLAGS    MAP_DROPPABLE | MAP_ANONYMOUS
+> 
+> I still can't see the benefit of duplicating those two defines in every arch.
+> 
+> I understand your point that some arch might in the future want to use different
+> flags, but unless we already have one such architecture in mind we shouldn't
+> make things more complicated than needed.
+> 
+> In case such an architecture is already identified it should be said in the
+> commit message
+> 
+
+I do not have such an architecture in mind, hence I did not add it to the commit
+message.
+
+Apart being future proof the real problem here is to handle the mman.h header.
+As Arnd was saying [1] (and I agree), including it on some architectures might
+be problematic if they change it in a way that is incompatible with compat vdso.
+
+In this way we make sure that the each architecture that decides to include it
+specifically validates it for this purpose. I am not a fan of complicating code
+either but this seems the lesser evil. I am open to any solution you can come up
+that is better then this one.
+
+The other issue I see is that being these defines in a uapi header that is
+included directly by userspace splitting it requires some validation to make
+sure we do not break the status quo.
+
+[1]
+https://lore.kernel.org/lkml/cb66b582-ba63-4a5a-9df8-b07288f1f66d@app.fastmail.com/
+
+>> +
+>> +#endif /* !__ASSEMBLY__ */
+>> +
+>> +#endif /* __ASM_VDSO_MMAN_H */
+
+-- 
+Regards,
+Vincenzo
 
