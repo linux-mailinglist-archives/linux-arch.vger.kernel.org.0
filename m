@@ -1,328 +1,296 @@
-Return-Path: <linux-arch+bounces-7140-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7141-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D01E0970D93
-	for <lists+linux-arch@lfdr.de>; Mon,  9 Sep 2024 07:47:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3512B970E21
+	for <lists+linux-arch@lfdr.de>; Mon,  9 Sep 2024 08:48:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EAEA81C21D51
-	for <lists+linux-arch@lfdr.de>; Mon,  9 Sep 2024 05:46:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A9C4A1F21634
+	for <lists+linux-arch@lfdr.de>; Mon,  9 Sep 2024 06:48:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E75941B1D4C;
-	Mon,  9 Sep 2024 05:43:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B3351ACDF5;
+	Mon,  9 Sep 2024 06:47:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FjgbLPZK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GZTJc1yo"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77B4F1AED40
-	for <linux-arch@vger.kernel.org>; Mon,  9 Sep 2024 05:43:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98C8A177999;
+	Mon,  9 Sep 2024 06:47:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725860634; cv=none; b=alvUWb6Sa9QCfqyEE+eGQMwxwBHIU4ZbOIqYOeXdtJZguQejFJg/Wx7i8YEfySXLd+Ak4ec4+Ld7dBY6DPDLX1mpf1frRBIxdj+9uL7N8zRqCZD1dyCVmbZ8X4I50YI9WEtmw7uoXFu4YR1KJqsUqZC8Shx8oKpjIJtX4HeAC64=
+	t=1725864475; cv=none; b=OSWNftjZhoEH3mAVgKqgqoUoRG8jnZ75wqpI1lbtuWSe4HVFr4kHAACFpp7jXwjGrpFLc97tR6abEPWSy/kbV0u07+doxUs8On/yS66H4eKmsDknBHEs89fLhTPs11w8uEeeqiFJjApbyhWGD21PJgdVS3uQnV1oxE5MXpfMUAo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725860634; c=relaxed/simple;
-	bh=PJB8MnDkY64lJweDrjdNdgxrCAth9X9p/HaOyMbjVAA=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=VhzKoRRayhytYRUPuQyZltyqki2suwJO7Qd6fGRyG6Xo3zu+L5LAFSUyEpDXQO5ScMfB3M97vtTuooONhRAYr15Mmb2aQT3sy+bzHPqg1usJWeZM4AqQFMzrqzou3k1oRKfYggjdZxXVQfvty1U9EGVY2JEMD2UdNw3D6pTSoS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FjgbLPZK; arc=none smtp.client-ip=209.85.215.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-7d5a54dcaefso2566675a12.2
-        for <linux-arch@vger.kernel.org>; Sun, 08 Sep 2024 22:43:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1725860628; x=1726465428; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WTSeEQvvLz7JMkJB8rY34SUA6KPOOIDr3cyazlDccxw=;
-        b=FjgbLPZKVhfU2DWXWw/vaBN4AiU7a72MxExlOzESVkOU4SjQ9DN4jKTq+y/GpwILhE
-         nGkj8H+cuSH6jVIkLN8egUsm0Ted/iBL4R08oRUo7yVzWPIO4Z304awPqdekLEA18g5p
-         Mw2cj319aYt9sIDSryz+A8vDTOhW2WY4e8zO2nXzKjODkOlUeOIGpSFnozo3jY+7GebC
-         UOFFCYusTlVhkTPnuft1hv7hrnnMsVVv75SrYgwGiVajRxz4c5tsFD3NUVQgV6y8qNGU
-         xx9YJrfsBb9XlKQzwPt4xUgoSt1/NOK2N8dTS/MFWihI9RboOGtW/8fxmVoFlm5lUbNL
-         8p7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725860628; x=1726465428;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WTSeEQvvLz7JMkJB8rY34SUA6KPOOIDr3cyazlDccxw=;
-        b=J7RTNWB4Jufk4fodv68YPjaYorPuBh/ctEuoA0HHRIuL8nYxx8m9jizaBA8F/nAwx1
-         b1x0KsDaGVlVZW8xyRQzQu4VpfU8wBWG8a37BJ2dShk10TzO5qKC8PRa8t4jiHqIT1IR
-         cbq0lFmJL6LRTr8IQJ1uSzQ2Sv2dpTDshuHxtoa5tM21O43yO8fE1xbvboLpjsG7+NnF
-         4saYETI1x/E02uFZ4QKkhl+N3N2KbzlizzYyOFGFeqWI8H5E1rC3NjMPFCAQRDgph9W4
-         aqGkcJnIzgp5PLs2MQKTAUvFRiwM3BqyhzOEP6/WesY65A7R97ZXyqJmjXoAjTdT79+p
-         9mmQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXSUlqsdPB9Dr4C9MdoMRCV1nushKkkdpzuqBhwnNGXKQ8loMaJru13e8QYNqfPTeFyTRiHHnpKCy5d@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7/K2BXxl40gJ04Tl+n2sgTZmQKPb+1a57gqK5R/FQkmUFYQG/
-	0gnmf3sUK1loIKSLEM/k+dLUbD9XccwbAaXx0b0f0v64EVxgbFxFWkNj/AhXwCfeVJYdwT/Ipp+
-	3VmpJc7VKLc69/sDLjDgsyg==
-X-Google-Smtp-Source: AGHT+IFlawdC4KCQfLhqI0Xy7yk4ED2go+LFfUpiqb3BRrNWwO5I+1bNuk03iJCYZid8NNj/xbpv1Yi7TsuSmuqPKg==
-X-Received: from almasrymina.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:4bc5])
- (user=almasrymina job=sendgmr) by 2002:a63:3755:0:b0:6f3:b24:6c27 with SMTP
- id 41be03b00d2f7-7d79f6e5f59mr68139a12.5.1725860627260; Sun, 08 Sep 2024
- 22:43:47 -0700 (PDT)
-Date: Mon,  9 Sep 2024 05:43:18 +0000
-In-Reply-To: <20240909054318.1809580-1-almasrymina@google.com>
+	s=arc-20240116; t=1725864475; c=relaxed/simple;
+	bh=B9x+q6EZd7K9Ar6u2d/l/9Mk8JmglYJFdX3xwumRUgY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FOGr9+OdsAcyIVzvAhIbw/GJ6y/l7QDoXgX+TEriVvQ1F4JHxFfUlOz/vIoA9MyxhVSm73XttDr4fpwdgg9Y6tdnmokdaNPMlB59TDMMq9ZwCnXCRyHnTfFOJA2uq4wTWpyZZsMWX22QUDqWc5B9tsaxuchjfUNrfG2IT+JR/fs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GZTJc1yo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F127C4CEC5;
+	Mon,  9 Sep 2024 06:47:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725864475;
+	bh=B9x+q6EZd7K9Ar6u2d/l/9Mk8JmglYJFdX3xwumRUgY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=GZTJc1yoHgAC1vrKmkrTik6bpeO/Ba3QeazSMwPEzdJE6v6r2E7ixgB1ws7HJXN1F
+	 HRwEzExXYATn3fg6VyMu83WZRGIqkCuTqIpvYBgI7GMvZ2fNpZanOxVPd3ZxuoqB0K
+	 kwTmCftX0HBa5qu7J42H4mXCg8BICIgqgeYhEDOMsEPSqM10sT99D9eEaHA26BQrpc
+	 fWMQM7MbpHVOJx1YrHAuv2j7+cuQdZMv1YBYBeSYPLwSZAqusrJbcD9XnNmcUVYqMp
+	 6acnhTwIIPKoUx5UMRy32HTx9KDEvPL+OqTadSOplha4y8PQUwonrxBocNmxw0Twq/
+	 7gmEoI8OZn75Q==
+From: Mike Rapoport <rppt@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Borislav Petkov <bp@alien8.de>,
+	Brian Cain <bcain@quicinc.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christoph Hellwig <hch@infradead.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>,
+	Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Matt Turner <mattst88@gmail.com>,
+	Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>,
+	Mike Rapoport <rppt@kernel.org>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>,
+	Song Liu <song@kernel.org>,
+	Stafford Horne <shorne@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>,
+	Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-alpha@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org,
+	linux-hexagon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-modules@vger.kernel.org,
+	linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-sh@vger.kernel.org,
+	linux-snps-arc@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-um@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org,
+	loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org,
+	x86@kernel.org
+Subject: [PATCH v3 0/8] x86/module: use large ROX pages for text allocations
+Date: Mon,  9 Sep 2024 09:47:22 +0300
+Message-ID: <20240909064730.3290724-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240909054318.1809580-1-almasrymina@google.com>
-X-Mailer: git-send-email 2.46.0.469.g59c65b2a67-goog
-Message-ID: <20240909054318.1809580-14-almasrymina@google.com>
-Subject: [PATCH net-next v25 13/13] netdev: add dmabuf introspection
-From: Mina Almasry <almasrymina@google.com>
-To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org
-Cc: Mina Almasry <almasrymina@google.com>, Donald Hunter <donald.hunter@gmail.com>, 
-	Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
-	"=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?=" <bjorn@kernel.org>, Magnus Karlsson <magnus.karlsson@intel.com>, 
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Jonathan Lemon <jonathan.lemon@gmail.com>, 
-	Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, 
-	"=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>, Pavel Begunkov <asml.silence@gmail.com>, 
-	David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, 
-	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst <jeroendb@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>, Bagas Sanjaya <bagasdotme@gmail.com>, 
-	Christoph Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>, Taehee Yoo <ap420073@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Add dmabuf information to page_pool stats:
+From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-$ ./cli.py --spec ../netlink/specs/netdev.yaml --dump page-pool-get
-...
- {'dmabuf': 10,
-  'id': 456,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 455,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 454,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 453,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 452,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 451,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 450,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 449,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
+Hi,
 
-And queue stats:
+These patches add support for using large ROX pages for allocations of
+executable memory on x86.
 
-$ ./cli.py --spec ../netlink/specs/netdev.yaml --dump queue-get
-...
-{'dmabuf': 10, 'id': 8, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 9, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 10, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 11, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 12, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 13, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 14, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 15, 'ifindex': 3, 'type': 'rx'},
+They address Andy's comments [1] about having executable mappings for code
+that was not completely formed.
 
-Suggested-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Mina Almasry <almasrymina@google.com>
-Reviewed-by: Jakub Kicinski <kuba@kernel.org>
+The approach taken is to allocate ROX memory along with writable but not
+executable memory and use the writable copy to perform relocations and
+alternatives patching. After the module text gets into its final shape, the
+contents of the writable memory is copied into the actual ROX location
+using text poking.
 
----
+The allocations of the ROX memory use vmalloc(VMAP_ALLOW_HUGE_MAP) to
+allocate PMD aligned memory, fill that memory with invalid instructions and
+in the end remap it as ROX. Portions of these large pages are handed out to
+execmem_alloc() callers without any changes to the permissions. When the
+memory is freed with execmem_free() it is invalidated again so that it
+won't contain stale instructions.
 
-v24:
-- Code cleanup, no cast and use 1 if statement (Jakub)
+The module memory allocation, x86 code dealing with relocations and
+alternatives patching take into account the existence of the two copies,
+the writable memory and the ROX memory at the actual allocated virtual
+address.
 
----
- Documentation/netlink/specs/netdev.yaml | 10 ++++++++++
- include/uapi/linux/netdev.h             |  2 ++
- net/core/netdev-genl.c                  |  7 +++++++
- net/core/page_pool_user.c               |  5 +++++
- tools/include/uapi/linux/netdev.h       |  2 ++
- 5 files changed, 26 insertions(+)
+The patches are available at git:
+https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/log/?h=execmem/x86-rox/v2
 
-diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/netlink/specs/netdev.yaml
-index 0c747530c275..08412c279297 100644
---- a/Documentation/netlink/specs/netdev.yaml
-+++ b/Documentation/netlink/specs/netdev.yaml
-@@ -167,6 +167,10 @@ attribute-sets:
-           "re-attached", they are just waiting to disappear.
-           Attribute is absent if Page Pool has not been detached, and
-           can still be used to allocate new memory.
-+      -
-+        name: dmabuf
-+        doc: ID of the dmabuf this page-pool is attached to.
-+        type: u32
-   -
-     name: page-pool-info
-     subset-of: page-pool
-@@ -268,6 +272,10 @@ attribute-sets:
-         name: napi-id
-         doc: ID of the NAPI instance which services this queue.
-         type: u32
-+      -
-+        name: dmabuf
-+        doc: ID of the dmabuf attached to this queue, if any.
-+        type: u32
- 
-   -
-     name: qstats
-@@ -543,6 +551,7 @@ operations:
-             - inflight
-             - inflight-mem
-             - detach-time
-+            - dmabuf
-       dump:
-         reply: *pp-reply
-       config-cond: page-pool
-@@ -607,6 +616,7 @@ operations:
-             - type
-             - napi-id
-             - ifindex
-+            - dmabuf
-       dump:
-         request:
-           attributes:
-diff --git a/include/uapi/linux/netdev.h b/include/uapi/linux/netdev.h
-index 91bf3ecc5f1d..7c308f04e7a0 100644
---- a/include/uapi/linux/netdev.h
-+++ b/include/uapi/linux/netdev.h
-@@ -93,6 +93,7 @@ enum {
- 	NETDEV_A_PAGE_POOL_INFLIGHT,
- 	NETDEV_A_PAGE_POOL_INFLIGHT_MEM,
- 	NETDEV_A_PAGE_POOL_DETACH_TIME,
-+	NETDEV_A_PAGE_POOL_DMABUF,
- 
- 	__NETDEV_A_PAGE_POOL_MAX,
- 	NETDEV_A_PAGE_POOL_MAX = (__NETDEV_A_PAGE_POOL_MAX - 1)
-@@ -131,6 +132,7 @@ enum {
- 	NETDEV_A_QUEUE_IFINDEX,
- 	NETDEV_A_QUEUE_TYPE,
- 	NETDEV_A_QUEUE_NAPI_ID,
-+	NETDEV_A_QUEUE_DMABUF,
- 
- 	__NETDEV_A_QUEUE_MAX,
- 	NETDEV_A_QUEUE_MAX = (__NETDEV_A_QUEUE_MAX - 1)
-diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
-index 9153a8ab0cf8..1cb954f2d39e 100644
---- a/net/core/netdev-genl.c
-+++ b/net/core/netdev-genl.c
-@@ -295,6 +295,7 @@ static int
- netdev_nl_queue_fill_one(struct sk_buff *rsp, struct net_device *netdev,
- 			 u32 q_idx, u32 q_type, const struct genl_info *info)
- {
-+	struct net_devmem_dmabuf_binding *binding;
- 	struct netdev_rx_queue *rxq;
- 	struct netdev_queue *txq;
- 	void *hdr;
-@@ -314,6 +315,12 @@ netdev_nl_queue_fill_one(struct sk_buff *rsp, struct net_device *netdev,
- 		if (rxq->napi && nla_put_u32(rsp, NETDEV_A_QUEUE_NAPI_ID,
- 					     rxq->napi->napi_id))
- 			goto nla_put_failure;
-+
-+		binding = rxq->mp_params.mp_priv;
-+		if (binding &&
-+		    nla_put_u32(rsp, NETDEV_A_QUEUE_DMABUF, binding->id))
-+			goto nla_put_failure;
-+
- 		break;
- 	case NETDEV_QUEUE_TYPE_TX:
- 		txq = netdev_get_tx_queue(netdev, q_idx);
-diff --git a/net/core/page_pool_user.c b/net/core/page_pool_user.c
-index cd6267ba6fa3..48335766c1bf 100644
---- a/net/core/page_pool_user.c
-+++ b/net/core/page_pool_user.c
-@@ -9,6 +9,7 @@
- #include <net/page_pool/types.h>
- #include <net/sock.h>
- 
-+#include "devmem.h"
- #include "page_pool_priv.h"
- #include "netdev-genl-gen.h"
- 
-@@ -213,6 +214,7 @@ static int
- page_pool_nl_fill(struct sk_buff *rsp, const struct page_pool *pool,
- 		  const struct genl_info *info)
- {
-+	struct net_devmem_dmabuf_binding *binding = pool->mp_priv;
- 	size_t inflight, refsz;
- 	void *hdr;
- 
-@@ -242,6 +244,9 @@ page_pool_nl_fill(struct sk_buff *rsp, const struct page_pool *pool,
- 			 pool->user.detach_time))
- 		goto err_cancel;
- 
-+	if (binding && nla_put_u32(rsp, NETDEV_A_PAGE_POOL_DMABUF, binding->id))
-+		goto err_cancel;
-+
- 	genlmsg_end(rsp, hdr);
- 
- 	return 0;
-diff --git a/tools/include/uapi/linux/netdev.h b/tools/include/uapi/linux/netdev.h
-index 91bf3ecc5f1d..7c308f04e7a0 100644
---- a/tools/include/uapi/linux/netdev.h
-+++ b/tools/include/uapi/linux/netdev.h
-@@ -93,6 +93,7 @@ enum {
- 	NETDEV_A_PAGE_POOL_INFLIGHT,
- 	NETDEV_A_PAGE_POOL_INFLIGHT_MEM,
- 	NETDEV_A_PAGE_POOL_DETACH_TIME,
-+	NETDEV_A_PAGE_POOL_DMABUF,
- 
- 	__NETDEV_A_PAGE_POOL_MAX,
- 	NETDEV_A_PAGE_POOL_MAX = (__NETDEV_A_PAGE_POOL_MAX - 1)
-@@ -131,6 +132,7 @@ enum {
- 	NETDEV_A_QUEUE_IFINDEX,
- 	NETDEV_A_QUEUE_TYPE,
- 	NETDEV_A_QUEUE_NAPI_ID,
-+	NETDEV_A_QUEUE_DMABUF,
- 
- 	__NETDEV_A_QUEUE_MAX,
- 	NETDEV_A_QUEUE_MAX = (__NETDEV_A_QUEUE_MAX - 1)
+[1] https://lore.kernel.org/all/a17c65c6-863f-4026-9c6f-a04b659e9ab4@app.fastmail.com
+
+v2: https://lore.kernel.org/all/20240826065532.2618273-1-rppt@kernel.org
+* add comment why ftrace_swap_func() is needed (Steve)
+
+Since RFC: https://lore.kernel.org/all/20240411160526.2093408-1-rppt@kernel.org
+* update changelog about HUGE_VMAP allocations (Christophe) 
+* move module_writable_address() from x86 to modules core (Ingo)
+* rename execmem_invalidate() to execmem_fill_trapping_insns() (Peter)
+* call alternatives_smp_unlock() after module text in-place is up to
+  date (Nadav)
+
+Mike Rapoport (Microsoft) (7):
+  mm: vmalloc: group declarations depending on CONFIG_MMU together
+  mm: vmalloc: don't account for number of nodes for HUGE_VMAP allocations
+  asm-generic: introduce text-patching.h
+  module: prepare to handle ROX allocations for text
+  x86/module: perpare module loading for ROX allocations of text
+  execmem: add support for cache of large ROX pages
+  x86/module: enable ROX caches for module text
+
+Song Liu (1):
+  ftrace: Add swap_func to ftrace_process_locs()
+
+ arch/alpha/include/asm/Kbuild                 |   1 +
+ arch/arc/include/asm/Kbuild                   |   1 +
+ .../include/asm/{patch.h => text-patching.h}  |   0
+ arch/arm/kernel/ftrace.c                      |   2 +-
+ arch/arm/kernel/jump_label.c                  |   2 +-
+ arch/arm/kernel/kgdb.c                        |   2 +-
+ arch/arm/kernel/patch.c                       |   2 +-
+ arch/arm/probes/kprobes/core.c                |   2 +-
+ arch/arm/probes/kprobes/opt-arm.c             |   2 +-
+ .../asm/{patching.h => text-patching.h}       |   0
+ arch/arm64/kernel/ftrace.c                    |   2 +-
+ arch/arm64/kernel/jump_label.c                |   2 +-
+ arch/arm64/kernel/kgdb.c                      |   2 +-
+ arch/arm64/kernel/patching.c                  |   2 +-
+ arch/arm64/kernel/probes/kprobes.c            |   2 +-
+ arch/arm64/kernel/traps.c                     |   2 +-
+ arch/arm64/net/bpf_jit_comp.c                 |   2 +-
+ arch/csky/include/asm/Kbuild                  |   1 +
+ arch/hexagon/include/asm/Kbuild               |   1 +
+ arch/loongarch/include/asm/Kbuild             |   1 +
+ arch/m68k/include/asm/Kbuild                  |   1 +
+ arch/microblaze/include/asm/Kbuild            |   1 +
+ arch/mips/include/asm/Kbuild                  |   1 +
+ arch/nios2/include/asm/Kbuild                 |   1 +
+ arch/openrisc/include/asm/Kbuild              |   1 +
+ .../include/asm/{patch.h => text-patching.h}  |   0
+ arch/parisc/kernel/ftrace.c                   |   2 +-
+ arch/parisc/kernel/jump_label.c               |   2 +-
+ arch/parisc/kernel/kgdb.c                     |   2 +-
+ arch/parisc/kernel/kprobes.c                  |   2 +-
+ arch/parisc/kernel/patch.c                    |   2 +-
+ arch/powerpc/include/asm/kprobes.h            |   2 +-
+ .../asm/{code-patching.h => text-patching.h}  |   0
+ arch/powerpc/kernel/crash_dump.c              |   2 +-
+ arch/powerpc/kernel/epapr_paravirt.c          |   2 +-
+ arch/powerpc/kernel/jump_label.c              |   2 +-
+ arch/powerpc/kernel/kgdb.c                    |   2 +-
+ arch/powerpc/kernel/kprobes.c                 |   2 +-
+ arch/powerpc/kernel/module_32.c               |   2 +-
+ arch/powerpc/kernel/module_64.c               |   2 +-
+ arch/powerpc/kernel/optprobes.c               |   2 +-
+ arch/powerpc/kernel/process.c                 |   2 +-
+ arch/powerpc/kernel/security.c                |   2 +-
+ arch/powerpc/kernel/setup_32.c                |   2 +-
+ arch/powerpc/kernel/setup_64.c                |   2 +-
+ arch/powerpc/kernel/static_call.c             |   2 +-
+ arch/powerpc/kernel/trace/ftrace.c            |   2 +-
+ arch/powerpc/kernel/trace/ftrace_64_pg.c      |   2 +-
+ arch/powerpc/lib/code-patching.c              |   2 +-
+ arch/powerpc/lib/feature-fixups.c             |   2 +-
+ arch/powerpc/lib/test-code-patching.c         |   2 +-
+ arch/powerpc/lib/test_emulate_step.c          |   2 +-
+ arch/powerpc/mm/book3s32/mmu.c                |   2 +-
+ arch/powerpc/mm/book3s64/hash_utils.c         |   2 +-
+ arch/powerpc/mm/book3s64/slb.c                |   2 +-
+ arch/powerpc/mm/kasan/init_32.c               |   2 +-
+ arch/powerpc/mm/mem.c                         |   2 +-
+ arch/powerpc/mm/nohash/44x.c                  |   2 +-
+ arch/powerpc/mm/nohash/book3e_pgtable.c       |   2 +-
+ arch/powerpc/mm/nohash/tlb.c                  |   2 +-
+ arch/powerpc/mm/nohash/tlb_64e.c              |   2 +-
+ arch/powerpc/net/bpf_jit_comp.c               |   2 +-
+ arch/powerpc/perf/8xx-pmu.c                   |   2 +-
+ arch/powerpc/perf/core-book3s.c               |   2 +-
+ arch/powerpc/platforms/85xx/smp.c             |   2 +-
+ arch/powerpc/platforms/86xx/mpc86xx_smp.c     |   2 +-
+ arch/powerpc/platforms/cell/smp.c             |   2 +-
+ arch/powerpc/platforms/powermac/smp.c         |   2 +-
+ arch/powerpc/platforms/powernv/idle.c         |   2 +-
+ arch/powerpc/platforms/powernv/smp.c          |   2 +-
+ arch/powerpc/platforms/pseries/smp.c          |   2 +-
+ arch/powerpc/xmon/xmon.c                      |   2 +-
+ arch/riscv/errata/andes/errata.c              |   2 +-
+ arch/riscv/errata/sifive/errata.c             |   2 +-
+ arch/riscv/errata/thead/errata.c              |   2 +-
+ .../include/asm/{patch.h => text-patching.h}  |   0
+ arch/riscv/include/asm/uprobes.h              |   2 +-
+ arch/riscv/kernel/alternative.c               |   2 +-
+ arch/riscv/kernel/cpufeature.c                |   3 +-
+ arch/riscv/kernel/ftrace.c                    |   2 +-
+ arch/riscv/kernel/jump_label.c                |   2 +-
+ arch/riscv/kernel/patch.c                     |   2 +-
+ arch/riscv/kernel/probes/kprobes.c            |   2 +-
+ arch/riscv/net/bpf_jit_comp64.c               |   2 +-
+ arch/riscv/net/bpf_jit_core.c                 |   2 +-
+ arch/sh/include/asm/Kbuild                    |   1 +
+ arch/sparc/include/asm/Kbuild                 |   1 +
+ arch/um/kernel/um_arch.c                      |  16 +-
+ arch/x86/entry/vdso/vma.c                     |   3 +-
+ arch/x86/include/asm/alternative.h            |  14 +-
+ arch/x86/include/asm/text-patching.h          |   1 +
+ arch/x86/kernel/alternative.c                 | 160 ++++++----
+ arch/x86/kernel/ftrace.c                      |  41 ++-
+ arch/x86/kernel/module.c                      |  45 ++-
+ arch/x86/mm/init.c                            |  26 +-
+ arch/xtensa/include/asm/Kbuild                |   1 +
+ include/asm-generic/text-patching.h           |   5 +
+ include/linux/execmem.h                       |  25 ++
+ include/linux/ftrace.h                        |   2 +
+ include/linux/module.h                        |   9 +
+ include/linux/moduleloader.h                  |   4 +
+ include/linux/text-patching.h                 |  15 +
+ include/linux/vmalloc.h                       |  60 ++--
+ kernel/module/main.c                          |  77 ++++-
+ kernel/module/strict_rwx.c                    |   3 +
+ kernel/trace/ftrace.c                         |  19 +-
+ mm/execmem.c                                  | 300 +++++++++++++++++-
+ mm/vmalloc.c                                  |   9 +-
+ 108 files changed, 752 insertions(+), 236 deletions(-)
+ rename arch/arm/include/asm/{patch.h => text-patching.h} (100%)
+ rename arch/arm64/include/asm/{patching.h => text-patching.h} (100%)
+ rename arch/parisc/include/asm/{patch.h => text-patching.h} (100%)
+ rename arch/powerpc/include/asm/{code-patching.h => text-patching.h} (100%)
+ rename arch/riscv/include/asm/{patch.h => text-patching.h} (100%)
+ create mode 100644 include/asm-generic/text-patching.h
+ create mode 100644 include/linux/text-patching.h
+
+
+base-commit: 47ac09b91befbb6a235ab620c32af719f8208399
 -- 
-2.46.0.469.g59c65b2a67-goog
+2.43.0
 
 
