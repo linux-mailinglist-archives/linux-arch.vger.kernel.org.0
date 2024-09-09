@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-7145-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7146-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B044B970E64
-	for <lists+linux-arch@lfdr.de>; Mon,  9 Sep 2024 08:50:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15AC1970E71
+	for <lists+linux-arch@lfdr.de>; Mon,  9 Sep 2024 08:51:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DD431B22626
-	for <lists+linux-arch@lfdr.de>; Mon,  9 Sep 2024 06:50:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C7F0C280D88
+	for <lists+linux-arch@lfdr.de>; Mon,  9 Sep 2024 06:51:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA2B21AE85C;
-	Mon,  9 Sep 2024 06:48:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30B441AF4D2;
+	Mon,  9 Sep 2024 06:49:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WJrrV/wB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gE5rHksS"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C6881AD9CF;
-	Mon,  9 Sep 2024 06:48:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDEDE1AED55;
+	Mon,  9 Sep 2024 06:49:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725864536; cv=none; b=u9X1e2thyEagN2pWXEIuwLEh3bMUOrz+8iE93LpzkPRZqkxGKxkcZllAx2Ss3/qzImJZn5IHqxTIV9KIBPUnd0ZVRfMSeQphbBxnnCboBONqYxTjhg4lt8cM+G+4115Y84C2W2MNgQw4mNOJHo6iX2OjMTcf7oWaQ6gGJy0e/sA=
+	t=1725864552; cv=none; b=ExyDWQDejVubaeYfwJPtNMjXAQ5ZxCmLleSRfgH8iYZGAdjFR70rExE4kS0CTvknD/qNlR2dOYMT9bJlVx5lQ/xYrgJSd8Tg2+3UnBz+Me3XyGv5L6p8QY08AzRhw7eZrmTxlK/RjGWF8z9LefKDyTQkKd0cnuoVB8NmouP663U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725864536; c=relaxed/simple;
-	bh=r822LaZRSo48kh1hH5WoG20uCbxKP6lu+ngNzNWB1aE=;
+	s=arc-20240116; t=1725864552; c=relaxed/simple;
+	bh=X9sfhUFgPK5V3fglnGNo5sHB9wMPevyPr+qKgRxwoik=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=J7P7VL4sMQwS9IF1aNsj8qNrnC23j2LoTzEGT/gThbMzBt7Y8WC6neFQ/mpyGOXi/cup3SMErhdyWftRSlTSvu0WrqttH1zouQ9lU+6tM/J2dCK7s+8EQST0hZTaGeaygaSfoU2+WrVlaDUq30xMPCwHiogub1yvujtNN2+KnQY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WJrrV/wB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8009CC4CED0;
-	Mon,  9 Sep 2024 06:48:41 +0000 (UTC)
+	 MIME-Version; b=M34AQrNv/+tDhGHiJLQfTO2QZ41+qfQJ6UzADe2ywd4KwUdpqAJUG9czxlfoj8nVGNMJGbUOX4Rdk9jLjwH06w+5zXjDqD+vtkTLkDp6HBWGSiNJ240qwXIJ0Lnwy3qY74B72Ym6ssi63+obVKad19Q753mFgXUHVvIxCerCCJ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gE5rHksS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4244C4CECA;
+	Mon,  9 Sep 2024 06:48:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725864536;
-	bh=r822LaZRSo48kh1hH5WoG20uCbxKP6lu+ngNzNWB1aE=;
+	s=k20201202; t=1725864551;
+	bh=X9sfhUFgPK5V3fglnGNo5sHB9wMPevyPr+qKgRxwoik=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=WJrrV/wB4ttVQTl1stuLF7XB+p4fCDB9zlNmYMZ42tpPasESLcnQAJyWBb8sHrcqz
-	 4DwfESLn716OeBcqMj9DSCxGlpCUIWFaunreF+0SH0dzLe2Fdot1oA9AGxDSeMkGqq
-	 99/fbCknHTE/mgCPdr3aF72AJh+4JiOtK/jr4Heu776roadaoS3s+1lkPVqIiMY8LQ
-	 dLEeOYHRwkQhjEMH0dr/JDSqvyVZtXveQLIYXpjOKNJGW40nzO4SRKeRCBlBpG0Ze9
-	 wFkAg2jcXFFJjnFUF3e61ro0evn/ANYK2zP+i4/dh3Tk1efBsNLDf32mKIp89prPj1
-	 0NnT/iLD/4K6Q==
+	b=gE5rHksSDO3uZ8d+BpxC3iCqxZ+t+kYtAmK8ij3ReKzOLwADAXD1KPV81Gv59cLJB
+	 QeffyMC9I/10+jXBXTc3t+0L43Q/5LUUYAuSWRRkqMF1qUTuLgE0CHJfsn1QJzpnCc
+	 vpbE4JzC9jBNebxwgUnNlq4/NCkpYAMAlNBdq0T9QBn3F+30lZRo0AKiT/LUxF50CU
+	 ovqI5rDJnLv1Xkn6214K1cbtBxdD6gx3ThLFeZUH9qVKkVoE+XrXj8aDCwlWIX7+qy
+	 pjaJ4YltFeHWHyE9MeOm4kT8zBk9Qw94w2NQP5QJetbV7d9rtaQpBgupHNkhqraFay
+	 cord90B6KD2bQ==
 From: Mike Rapoport <rppt@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: Andreas Larsson <andreas@gaisler.com>,
@@ -105,9 +105,9 @@ Cc: Andreas Larsson <andreas@gaisler.com>,
 	loongarch@lists.linux.dev,
 	sparclinux@vger.kernel.org,
 	x86@kernel.org
-Subject: [PATCH v3 4/8] module: prepare to handle ROX allocations for text
-Date: Mon,  9 Sep 2024 09:47:26 +0300
-Message-ID: <20240909064730.3290724-5-rppt@kernel.org>
+Subject: [PATCH v3 5/8] ftrace: Add swap_func to ftrace_process_locs()
+Date: Mon,  9 Sep 2024 09:47:27 +0300
+Message-ID: <20240909064730.3290724-6-rppt@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240909064730.3290724-1-rppt@kernel.org>
 References: <20240909064730.3290724-1-rppt@kernel.org>
@@ -119,315 +119,67 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+From: Song Liu <song@kernel.org>
 
-In order to support ROX allocations for module text, it is necessary to
-handle modifications to the code, such as relocations and alternatives
-patching, without write access to that memory.
+ftrace_process_locs sorts module mcount, which is inside RO memory. Add a
+ftrace_swap_func so that archs can use RO-memory-poke function to do the
+sorting.
 
-One option is to use text patching, but this would make module loading
-extremely slow and will expose executable code that is not finally formed.
-
-A better way is to have memory allocated with ROX permissions contain
-invalid instructions and keep a writable, but not executable copy of the
-module text. The relocations and alternative patches would be done on the
-writable copy using the addresses of the ROX memory.
-Once the module is completely ready, the updated text will be copied to ROX
-memory using text patching in one go and the writable copy will be freed.
-
-Add support for that to module initialization code and provide necessary
-interfaces in execmem.
-
+Signed-off-by: Song Liu <song@kernel.org>
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
- include/linux/execmem.h      | 23 +++++++++++
- include/linux/module.h       | 11 ++++++
- include/linux/moduleloader.h |  4 ++
- kernel/module/main.c         | 77 ++++++++++++++++++++++++++++++++----
- kernel/module/strict_rwx.c   |  3 ++
- mm/execmem.c                 | 11 ++++++
- 6 files changed, 122 insertions(+), 7 deletions(-)
+ include/linux/ftrace.h |  2 ++
+ kernel/trace/ftrace.c  | 19 ++++++++++++++++++-
+ 2 files changed, 20 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/execmem.h b/include/linux/execmem.h
-index 32cef1144117..dfdf19f8a5e8 100644
---- a/include/linux/execmem.h
-+++ b/include/linux/execmem.h
-@@ -46,9 +46,11 @@ enum execmem_type {
- /**
-  * enum execmem_range_flags - options for executable memory allocations
-  * @EXECMEM_KASAN_SHADOW:	allocate kasan shadow
-+ * @EXECMEM_ROX_CACHE:		allocations should use ROX cache of huge pages
-  */
- enum execmem_range_flags {
- 	EXECMEM_KASAN_SHADOW	= (1 << 0),
-+	EXECMEM_ROX_CACHE	= (1 << 1),
- };
+diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
+index fd5e84d0ec47..b794dcb7cae8 100644
+--- a/include/linux/ftrace.h
++++ b/include/linux/ftrace.h
+@@ -1188,4 +1188,6 @@ unsigned long arch_syscall_addr(int nr);
  
- /**
-@@ -123,6 +125,27 @@ void *execmem_alloc(enum execmem_type type, size_t size);
-  */
- void execmem_free(void *ptr);
+ #endif /* CONFIG_FTRACE_SYSCALLS */
  
-+/**
-+ * execmem_update_copy - copy an update to executable memory
-+ * @dst:  destination address to update
-+ * @src:  source address containing the data
-+ * @size: how many bytes of memory shold be copied
-+ *
-+ * Copy @size bytes from @src to @dst using text poking if the memory at
-+ * @dst is read-only.
-+ *
-+ * Return: a pointer to @dst or NULL on error
-+ */
-+void *execmem_update_copy(void *dst, const void *src, size_t size);
++void ftrace_swap_func(void *a, void *b, int n);
 +
-+/**
-+ * execmem_is_rox - check if execmem is read-only
-+ * @type - the execmem type to check
-+ *
-+ * Return: %true if the @type is read-only, %false if it's writable
-+ */
-+bool execmem_is_rox(enum execmem_type type);
-+
- #if defined(CONFIG_EXECMEM) && !defined(CONFIG_ARCH_WANTS_EXECMEM_LATE)
- void execmem_init(void);
- #else
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 88ecc5e9f523..7039f609c6ef 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -367,6 +367,8 @@ enum mod_mem_type {
- 
- struct module_memory {
- 	void *base;
-+	void *rw_copy;
-+	bool is_rox;
- 	unsigned int size;
- 
- #ifdef CONFIG_MODULES_TREE_LOOKUP
-@@ -374,6 +376,15 @@ struct module_memory {
+ #endif /* _LINUX_FTRACE_H */
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index 4c28dd177ca6..95bb9b52ab36 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -6989,6 +6989,23 @@ static void test_is_sorted(unsigned long *start, unsigned long count)
+ }
  #endif
- };
  
-+#ifdef CONFIG_MODULES
-+void *module_writable_address(struct module *mod, void *loc);
-+#else
-+static inline void *module_writable_address(struct module *mod, void *loc)
++/*
++ * ftrace_process_locs sorts module mcount, which might be inside RO
++ * memory.
++ * ftrace_swap_func allows architectures to use RO-memory-poke function to
++ * do the sorting.
++ */
++void __weak ftrace_swap_func(void *a, void *b, int n)
 +{
-+	return loc;
-+}
-+#endif
++	unsigned long t;
 +
- #ifdef CONFIG_MODULES_TREE_LOOKUP
- /* Only touch one cacheline for common rbtree-for-core-layout case. */
- #define __module_memory_align ____cacheline_aligned
-diff --git a/include/linux/moduleloader.h b/include/linux/moduleloader.h
-index e395461d59e5..1f5507ba5a12 100644
---- a/include/linux/moduleloader.h
-+++ b/include/linux/moduleloader.h
-@@ -108,6 +108,10 @@ int module_finalize(const Elf_Ehdr *hdr,
- 		    const Elf_Shdr *sechdrs,
- 		    struct module *mod);
- 
-+int module_post_finalize(const Elf_Ehdr *hdr,
-+			 const Elf_Shdr *sechdrs,
-+			 struct module *mod);
++	WARN_ON_ONCE(n != sizeof(t));
 +
- #ifdef CONFIG_MODULES
- void flush_module_init_free_work(void);
- #else
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 71396e297499..55f53f0095d4 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -1189,6 +1189,21 @@ void __weak module_arch_freeing_init(struct module *mod)
- {
- }
- 
-+void *module_writable_address(struct module *mod, void *loc)
-+{
-+	if (!mod)
-+		return loc;
-+
-+	for_class_mod_mem_type(type, text) {
-+		struct module_memory *mem = &mod->mem[type];
-+
-+		if (loc >= mem->base && loc < mem->base + mem->size)
-+			return loc + (mem->rw_copy - mem->base);
-+	}
-+
-+	return loc;
++	t = *((unsigned long *)a);
++	*(unsigned long *)a = *(unsigned long *)b;
++	*(unsigned long *)b = t;
 +}
 +
- static int module_memory_alloc(struct module *mod, enum mod_mem_type type)
- {
- 	unsigned int size = PAGE_ALIGN(mod->mem[type].size);
-@@ -1206,6 +1221,23 @@ static int module_memory_alloc(struct module *mod, enum mod_mem_type type)
- 	if (!ptr)
- 		return -ENOMEM;
- 
-+	mod->mem[type].base = ptr;
-+
-+	if (execmem_is_rox(execmem_type)) {
-+		ptr = vzalloc(size);
-+
-+		if (!ptr) {
-+			execmem_free(mod->mem[type].base);
-+			return -ENOMEM;
-+		}
-+
-+		mod->mem[type].rw_copy = ptr;
-+		mod->mem[type].is_rox = true;
-+	} else {
-+		mod->mem[type].rw_copy = mod->mem[type].base;
-+		memset(mod->mem[type].base, 0, size);
-+	}
-+
- 	/*
- 	 * The pointer to these blocks of memory are stored on the module
- 	 * structure and we keep that around so long as the module is
-@@ -1219,16 +1251,17 @@ static int module_memory_alloc(struct module *mod, enum mod_mem_type type)
+ static int ftrace_process_locs(struct module *mod,
+ 			       unsigned long *start,
+ 			       unsigned long *end)
+@@ -7016,7 +7033,7 @@ static int ftrace_process_locs(struct module *mod,
  	 */
- 	kmemleak_not_leak(ptr);
- 
--	memset(ptr, 0, size);
--	mod->mem[type].base = ptr;
--
- 	return 0;
- }
- 
- static void module_memory_free(struct module *mod, enum mod_mem_type type,
- 			       bool unload_codetags)
- {
--	void *ptr = mod->mem[type].base;
-+	struct module_memory *mem = &mod->mem[type];
-+	void *ptr = mem->base;
-+
-+	if (mem->is_rox)
-+		vfree(mem->rw_copy);
- 
- 	if (!unload_codetags && mod_mem_type_is_core_data(type))
- 		return;
-@@ -2251,6 +2284,7 @@ static int move_module(struct module *mod, struct load_info *info)
- 	for_each_mod_mem_type(type) {
- 		if (!mod->mem[type].size) {
- 			mod->mem[type].base = NULL;
-+			mod->mem[type].rw_copy = NULL;
- 			continue;
- 		}
- 
-@@ -2267,11 +2301,14 @@ static int move_module(struct module *mod, struct load_info *info)
- 		void *dest;
- 		Elf_Shdr *shdr = &info->sechdrs[i];
- 		enum mod_mem_type type = shdr->sh_entsize >> SH_ENTSIZE_TYPE_SHIFT;
-+		unsigned long offset = shdr->sh_entsize & SH_ENTSIZE_OFFSET_MASK;
-+		unsigned long addr;
- 
- 		if (!(shdr->sh_flags & SHF_ALLOC))
- 			continue;
- 
--		dest = mod->mem[type].base + (shdr->sh_entsize & SH_ENTSIZE_OFFSET_MASK);
-+		addr = (unsigned long)mod->mem[type].base + offset;
-+		dest = mod->mem[type].rw_copy + offset;
- 
- 		if (shdr->sh_type != SHT_NOBITS) {
- 			/*
-@@ -2293,7 +2330,7 @@ static int move_module(struct module *mod, struct load_info *info)
- 		 * users of info can keep taking advantage and using the newly
- 		 * minted official memory area.
- 		 */
--		shdr->sh_addr = (unsigned long)dest;
-+		shdr->sh_addr = addr;
- 		pr_debug("\t0x%lx 0x%.8lx %s\n", (long)shdr->sh_addr,
- 			 (long)shdr->sh_size, info->secstrings + shdr->sh_name);
+ 	if (!IS_ENABLED(CONFIG_BUILDTIME_MCOUNT_SORT) || mod) {
+ 		sort(start, count, sizeof(*start),
+-		     ftrace_cmp_ips, NULL);
++		     ftrace_cmp_ips, ftrace_swap_func);
+ 	} else {
+ 		test_is_sorted(start, count);
  	}
-@@ -2441,8 +2478,17 @@ int __weak module_finalize(const Elf_Ehdr *hdr,
- 	return 0;
- }
- 
-+int __weak module_post_finalize(const Elf_Ehdr *hdr,
-+				const Elf_Shdr *sechdrs,
-+				struct module *me)
-+{
-+	return 0;
-+}
-+
- static int post_relocation(struct module *mod, const struct load_info *info)
- {
-+	int ret;
-+
- 	/* Sort exception table now relocations are done. */
- 	sort_extable(mod->extable, mod->extable + mod->num_exentries);
- 
-@@ -2454,7 +2500,24 @@ static int post_relocation(struct module *mod, const struct load_info *info)
- 	add_kallsyms(mod, info);
- 
- 	/* Arch-specific module finalizing. */
--	return module_finalize(info->hdr, info->sechdrs, mod);
-+	ret = module_finalize(info->hdr, info->sechdrs, mod);
-+	if (ret)
-+		return ret;
-+
-+	for_each_mod_mem_type(type) {
-+		struct module_memory *mem = &mod->mem[type];
-+
-+		if (mem->is_rox) {
-+			if (!execmem_update_copy(mem->base, mem->rw_copy,
-+						 mem->size))
-+				return -ENOMEM;
-+
-+			vfree(mem->rw_copy);
-+			mem->rw_copy = NULL;
-+		}
-+	}
-+
-+	return module_post_finalize(info->hdr, info->sechdrs, mod);
- }
- 
- /* Call module constructors. */
-diff --git a/kernel/module/strict_rwx.c b/kernel/module/strict_rwx.c
-index c45caa4690e5..239e5013359d 100644
---- a/kernel/module/strict_rwx.c
-+++ b/kernel/module/strict_rwx.c
-@@ -34,6 +34,9 @@ int module_enable_text_rox(const struct module *mod)
- 	for_class_mod_mem_type(type, text) {
- 		int ret;
- 
-+		if (mod->mem[type].is_rox)
-+			continue;
-+
- 		if (IS_ENABLED(CONFIG_STRICT_MODULE_RWX))
- 			ret = module_set_memory(mod, type, set_memory_rox);
- 		else
-diff --git a/mm/execmem.c b/mm/execmem.c
-index 0c4b36bc6d10..0f6691e9ffe6 100644
---- a/mm/execmem.c
-+++ b/mm/execmem.c
-@@ -10,6 +10,7 @@
- #include <linux/vmalloc.h>
- #include <linux/execmem.h>
- #include <linux/moduleloader.h>
-+#include <linux/text-patching.h>
- 
- static struct execmem_info *execmem_info __ro_after_init;
- static struct execmem_info default_execmem_info __ro_after_init;
-@@ -69,6 +70,16 @@ void execmem_free(void *ptr)
- 	vfree(ptr);
- }
- 
-+void *execmem_update_copy(void *dst, const void *src, size_t size)
-+{
-+	return text_poke_copy(dst, src, size);
-+}
-+
-+bool execmem_is_rox(enum execmem_type type)
-+{
-+	return !!(execmem_info->ranges[type].flags & EXECMEM_ROX_CACHE);
-+}
-+
- static bool execmem_validate(struct execmem_info *info)
- {
- 	struct execmem_range *r = &info->ranges[EXECMEM_DEFAULT];
 -- 
 2.43.0
 
