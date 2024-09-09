@@ -1,70 +1,70 @@
-Return-Path: <linux-arch+bounces-7129-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7130-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEFE3970D2C
-	for <lists+linux-arch@lfdr.de>; Mon,  9 Sep 2024 07:43:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9173E970D41
+	for <lists+linux-arch@lfdr.de>; Mon,  9 Sep 2024 07:44:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 98B9F2813A1
-	for <lists+linux-arch@lfdr.de>; Mon,  9 Sep 2024 05:43:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B054D1C20D4B
+	for <lists+linux-arch@lfdr.de>; Mon,  9 Sep 2024 05:44:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C07C41AD9E0;
-	Mon,  9 Sep 2024 05:43:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA69D1AE85A;
+	Mon,  9 Sep 2024 05:43:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="a5d9kbNw"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RRylbBqh"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA92F1AD3FD
-	for <linux-arch@vger.kernel.org>; Mon,  9 Sep 2024 05:43:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 120951AD41A
+	for <linux-arch@vger.kernel.org>; Mon,  9 Sep 2024 05:43:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725860610; cv=none; b=KQrJ6lIFib7wDqoVWhDkVktVmaRbc1dN/AUInoSehXI8Ut8doo8kZk8tGVfdP9SSO5OW8NBPetLJnELdPDz+GukZMBJTJRFXpQSycvvxJHykRSvXgS+ENRFsIAOBDoLIH0DW5wV1w71P7H06rgi0rIr3RMHWK6CtHEfeA31ToG8=
+	t=1725860615; cv=none; b=aVORNV1P0ZH3rKjJ/Ix7S0t36os3EwpVTrq8wKqex3ARCVeTjxmdVud+fsG+sA9O9frmpOSI2ertW7mHU5UeXAS299F2Dzep5TDL/nOwgcxgjIM/HYdLiFa5Epx+3u8nIs8trPlvJzZLd9Pygb5U2EjhSc6gL50TxO0g+fBLE3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725860610; c=relaxed/simple;
-	bh=ifkk5EzOQnvX7N0pj7xFyfgeQQygVm1rE0XeuABHrqg=;
+	s=arc-20240116; t=1725860615; c=relaxed/simple;
+	bh=YThCjVefsi6IAUul05R1hSkYRX10WGwXp9CM5JFxoBU=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=OAap/5meDcmyC2UY8/AAEDDLnfCNkF9gEpRPxNQvHwmBZqCBzyfUb6iRWHfYE7AjSaOZJzqvsrnmWC1aOm2PRKTirt5qVyv8VicDAeC3LjeeUP63dKXJPevo18oYKGmInwl0b0sFXcXjGuGRcBfPiPGLzyOb3v20+psDtEFA0Mw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=a5d9kbNw; arc=none smtp.client-ip=209.85.128.201
+	 To:Cc:Content-Type; b=kXIhwDLFsFnppGfCIMOs1pkm2kI7BCDq9XgFbTlvcksv3Lrg9x7ZvVsJKxUfB1+i38lzg8SOWpPEHOLVSAiD0wCtfAOtI9cB4vkzcFFUxk2YM0jxjn6vcBL4LOSvO0j3nd9t7Dz2t+PbbmcRHeHeFD3xL9i3iA4EU0EB3WBom4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RRylbBqh; arc=none smtp.client-ip=209.85.219.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6d475205628so119548657b3.0
-        for <linux-arch@vger.kernel.org>; Sun, 08 Sep 2024 22:43:26 -0700 (PDT)
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-e1a892d8438so8839064276.3
+        for <linux-arch@vger.kernel.org>; Sun, 08 Sep 2024 22:43:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1725860606; x=1726465406; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1725860608; x=1726465408; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6CrK96qJP4z3b0FDzKM+/eICeW01UPDJxn1zoMHr9yY=;
-        b=a5d9kbNwdXiCQbq7DjyOkRduY4lwRlWMHxQCjsVOXTYIv8VgDQsn3pbzMIeVKUj7Zh
-         GeYKL8wFoWwy2BJk9w4jf6ShaUOJLbQYpCusSL6ltur9jECYJbm6rMdVPG/AzneKWpb1
-         XdYsqqMwL456RWqcGXnoAeIIC6EQ7TEy829ODkxhVBsjH7YVaIyCwQJ/C+16ZEYkOnnm
-         PixTvYmiWIGfLJNNPwCMMzJawU7wstHxl0joH0TI8uELhdwGYcDhF3hX2M+sOo1Oekbg
-         A8mrRQypKgDay9idu4MHqYGX1BtYuo+pdmYR9qYHsRs1jAkJf0QFp9sb4lX8Q1gkOBlS
-         yrpw==
+        bh=4Kxo90iZIgMuTSIU5YNDMy1A1yixSpqC3oKgCU2lYcA=;
+        b=RRylbBqhDlbsBdnkpx9T6PHGV/HhiwV5uHUQspuh/8W+h8WTKNLJAbVaTZnD7AFRZM
+         bHN5Gj1gzZSihLfgzoINjsSUn7JQ1qrzvDVomeKmVlZxylaOpJzXU+RFbx3XWYyZ/VaL
+         vXB5R4QyUmXFqaZiWJy1OwoyEJsTACHfYeyKh4zMv14mJRc9BUKLY19ym2MvykAfu3o4
+         BvgrYYOymWyj8CYExVhEh8e684RZiW0RQvcd1jmpAyxJ8C6Jg6Ai+GAmjsHHX9QY/NpA
+         sUK5kpl4gXMFgA4/UIbWrnxPB+AW1pSnESfsuinLoiusabJLhhQ0eXLggB9gzWzrw5Fb
+         tpaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725860606; x=1726465406;
+        d=1e100.net; s=20230601; t=1725860608; x=1726465408;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6CrK96qJP4z3b0FDzKM+/eICeW01UPDJxn1zoMHr9yY=;
-        b=cNNJGEAWa5H6HvoIv3trOIrhDoGPQba8YkJp3424YjckVZcLLJTyqZGnNw0nv6SNmX
-         Lo2/YC8ltpL9jdwWnNALRxGK4q6rrhFhmdEyETHfHvYiybNhbiCnqVRpIYRaZv+NZLgT
-         MFEhfdGLP5zlzke9PhLjICB9y4YS+gW6htFuo7HdI/zcbB5pJm4TNx3aqSjaFolKKhd0
-         FOTIosNJsx4XPdC7kFfz/9uK12N0Wotymg0lOnY2/jbO9SdkQ6YibLwaTL2x4B2Msenk
-         kPTlwNvbCygzON2A/S5p8QHdwD/bhHGxKxAtkP9oLC3CC9sLheTzPHoScAqbHt+tsNfA
-         wyMw==
-X-Forwarded-Encrypted: i=1; AJvYcCVeDnZ05Sx3VVhBNpZd9AqTXWOiX+u/IAu8nfqoGMnmJtQ3XDtbHbfuXVDJos6CzrI2gxGHXsbOMI78@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWzturCA7UD3SMYXNEZ2NvZIU5VjTgD3HA6pUA23PJ8uECEGT3
-	7Pj9jTE/RrPJyeem4LBKczvl5+VZl7PHUk6JC80cnv2oNtke1XFEzcA/NqUYJEaEiRyn/I8B2hV
-	VJEyTuYqAwVDaMZf1KrXOgg==
-X-Google-Smtp-Source: AGHT+IGwQgjuvNyD+Z4vlmdws3yK/iqd/mq/O3+Dp4Tm5KrdXVTdk9Si6mlTifCHDFeMeeeKzuzLtTC/snqQIS+9nw==
+        bh=4Kxo90iZIgMuTSIU5YNDMy1A1yixSpqC3oKgCU2lYcA=;
+        b=mKSsnHtYm+2qJ+v4V1z2/i/pddf2mAmlrBkF4nmY27/ScU+ivrEDa+cPl8qhsFraTK
+         egvI893WCt0xmubacJiOcjfw5stzy0CBApkG5xGh/NVAwUKaTnyWezQzIhZwMP4YzdYe
+         g9MarymCfsnnziviNiR/igcT9r3fMwEVEjWLpDJjLtp1gzmSFGZzmYxZRuxtx0lWQLZH
+         3AopLct7bc0gV7po0zGrTNwRqEl331tM26HvyVDL9GnTD6iAhxAjqWtLj5wpjSegPqoo
+         b2ZnrD4sTGY4fjg/dzCkhVAuKhwhip8MXOknfzyn8kbMDhwXONk3x3hXX+AigvihvzFI
+         3dDQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW3OweZihWHRH2yKQhJLkHH4S1W2z1rkfEic1E24GucHPmi5DXVjWaB9Hn/Mgyn8it4JQ2pCexhpp7g@vger.kernel.org
+X-Gm-Message-State: AOJu0YylhEjpaG4PW1h7FWBFdY4HJjhMHD3zQ0dLTfc5k968C0YI5Evt
+	0E3paDgSY4nnMkNIO53DzUSE+S5bMz+OIueWIZKlsTak5BpWKOqcW3wmgyK6tAGtO8Z08buAKF/
+	/6Vdw9Mh+kiLDJfZoZ6sv/Q==
+X-Google-Smtp-Source: AGHT+IGwu6xLZdN1A9EcPYwq+tgHKt/okVw2EehcgL7FBwO38gz8vq3ImBQouq4fcGDNJz94s4s22QDgQvqSv3NTVA==
 X-Received: from almasrymina.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:4bc5])
- (user=almasrymina job=sendgmr) by 2002:a0d:e4c2:0:b0:68d:cbd6:e28 with SMTP
- id 00721157ae682-6db4516321bmr3046067b3.6.1725860605736; Sun, 08 Sep 2024
- 22:43:25 -0700 (PDT)
-Date: Mon,  9 Sep 2024 05:43:07 +0000
+ (user=almasrymina job=sendgmr) by 2002:a5b:b50:0:b0:e0e:445b:606 with SMTP id
+ 3f1490d57ef6-e1d346b001fmr18938276.0.1725860607547; Sun, 08 Sep 2024 22:43:27
+ -0700 (PDT)
+Date: Mon,  9 Sep 2024 05:43:08 +0000
 In-Reply-To: <20240909054318.1809580-1-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -74,9 +74,8 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240909054318.1809580-1-almasrymina@google.com>
 X-Mailer: git-send-email 2.46.0.469.g59c65b2a67-goog
-Message-ID: <20240909054318.1809580-3-almasrymina@google.com>
-Subject: [PATCH net-next v25 02/13] net: netdev netlink api to bind dma-buf to
- a net device
+Message-ID: <20240909054318.1809580-4-almasrymina@google.com>
+Subject: [PATCH net-next v25 03/13] netdev: support binding dma-buf to netdevice
 From: Mina Almasry <almasrymina@google.com>
 To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
@@ -109,252 +108,1025 @@ Cc: Mina Almasry <almasrymina@google.com>, Donald Hunter <donald.hunter@gmail.co
 	Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst <jeroendb@google.com>, 
 	Praveen Kaligineedi <pkaligineedi@google.com>, Bagas Sanjaya <bagasdotme@gmail.com>, 
 	Christoph Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>, Taehee Yoo <ap420073@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>
+	Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>, 
+	Daniel Vetter <daniel.vetter@ffwll.ch>
 Content-Type: text/plain; charset="UTF-8"
 
-API takes the dma-buf fd as input, and binds it to the netdevice. The
-user can specify the rx queues to bind the dma-buf to.
+Add a netdev_dmabuf_binding struct which represents the
+dma-buf-to-netdevice binding. The netlink API will bind the dma-buf to
+rx queues on the netdevice. On the binding, the dma_buf_attach
+& dma_buf_map_attachment will occur. The entries in the sg_table from
+mapping will be inserted into a genpool to make it ready
+for allocation.
 
-Suggested-by: Stanislav Fomichev <sdf@fomichev.me>
+The chunks in the genpool are owned by a dmabuf_chunk_owner struct which
+holds the dma-buf offset of the base of the chunk and the dma_addr of
+the chunk. Both are needed to use allocations that come from this chunk.
+
+We create a new type that represents an allocation from the genpool:
+net_iov. We setup the net_iov allocation size in the
+genpool to PAGE_SIZE for simplicity: to match the PAGE_SIZE normally
+allocated by the page pool and given to the drivers.
+
+The user can unbind the dmabuf from the netdevice by closing the netlink
+socket that established the binding. We do this so that the binding is
+automatically unbound even if the userspace process crashes.
+
+The binding and unbinding leaves an indicator in struct netdev_rx_queue
+that the given queue is bound, and the binding is actuated by resetting
+the rx queue using the queue API.
+
+The netdev_dmabuf_binding struct is refcounted, and releases its
+resources only when all the refs are released.
+
+Signed-off-by: Willem de Bruijn <willemb@google.com>
+Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
 Signed-off-by: Mina Almasry <almasrymina@google.com>
-Reviewed-by: Donald Hunter <donald.hunter@gmail.com>
+Reviewed-by: Pavel Begunkov <asml.silence@gmail.com> # excluding netlink
+Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
 Reviewed-by: Jakub Kicinski <kuba@kernel.org>
 
 ---
 
+v25:
+- Move include/net/devmem.h to net/core/devmem.h.
+- netmem.h no longer includes devmem.h (which enables moving devmem.h to
+  internal include file).
+
+v24:
+- Fix a couple of problematic goto err_ on error paths (Jakub & Vadim)
+- Add NL_SET_BAD_ATTR (Jakub).
+- Fix wrong include order causing ynl check to fail (NIPA)
+- Add extack error messages (Jakub).
+
+v23:
+- Create CONFIG_NET_DEVMEM instead of checking for
+  CONFIG_DMA_SHARED_BUFFER && CONFIG_GENERIC_ALLOCATOR (Jakub).
+- Rework loop in dev_get_min_mp_channel_count (Jakub).
+- Sort includes (Jakub).
+- WARN_ON if queue in bound_rxqs doesn't match the memory provider being
+  unbound (Jakub).
+- Add some extack error messages (Jakub).
+- Move dev_xdp_prog_count check to the device bending rather than the
+  queue binding (Jakub).
+- goto err_unbind on genlmsg_reply failure (Jakub).
+
+v22:
+- Disable binding xdp to mp bound netdevs, and propagating xdp
+  configuration to mp bound netdevs
+- Add extack error messages.
+- Prevent binding dmabuf to a queue with xsk_buff_pool (Jakub)
+- Prevent xp_assign_dev to a device using memory provider (Jakub)
+
+v21:
+
+- Move definition of net_devmem_dmabuf_bindings to inside the #ifdef to
+  prevent unused static variable warning.
+
+v20:
+- rename dev_get_max_mp_channel to dev_get_min_mp_channel_count (Jakub)
+- Removed unnecessary includes from dev.c
+- Fixed bug with return value of dev_get_min_mp_channel_count getting
+  implicitly cast to unsigned int (Jakub)
+- Combine netlink attr checks into one statement with || (Jakub)
+- Removed unnecessary include from ethtool/common.c
+
+v19:
+- Prevent deactivating queues bound to mp (Jakub).
+- disable attaching xdp to memory provider netdev (Jakub).
+- Address various nits from Jakub.
+- In the netlink API, check for presence of queue_id, queue_type and
+  that the queue_type is RX (Jakub).
+
+v17:
+- Add missing kfree(owner) (Jakub)
+- Fix issue found by Taehee, where may access an rxq that has already
+  been freed if the driver has been unloaded in the meantime (thanks!)
+
 v16:
-- Use subset-of: queue queue-id instead of queue-dmabuf (Jakub).
-- Rename attribute 'bind-dmabuf' to more generic 'dmabuf' (Jakub).
-- Use 'dmabuf' everywhere instead of mix of 'dma-buf' and 'dmabuf'
-  (Donald).
-- Remove repetitive 'dmabuf' naming that appeared in some places
-  (Jakub).
-- Reordered where the new operations went so I don't break the enum UAPI
-  (Jakub).
+- Fix rtnl_lock() not being acquired on unbind path (Reported by
+  Taehee).
+- Use unlocked versions of dma_buf_[un]map_attachment (Reported by
+  Taehee).
+- Use real_num_rx_queues instead of num_rx_queues (Taehee).
+- bound_rxq_list -> bound_rxqs (Jakub).
+- Removed READ_ONCE/WRITE_ONCE infavor of rtnl_lock() sync. (Jakub).
+- Use ERR_CAST instead of out param (Jakub).
+- Add NULL Check for kzalloc_node() call (Paolo).
+- Move genl_sk_priv_get, genlmsg_new, genlmsg_input outside of the lock
+  acquisition (Jakub).
+- Add netif_device_present() check (Jakub).
+- Use nla_for_each_attr_type(Jakub).
+
+v13:
+- Fixed a couple of places that still listed DMA_BIDIRECTIONAL (Pavel).
+- Added reviewed-by from Pavel.
+
+v11:
+- Fix build error with CONFIG_DMA_SHARED_BUFFER &&
+  !CONFIG_GENERIC_ALLOCATOR
+- Rebased on top of no memory provider ops.
+
+v10:
+- Moved net_iov_dma_addr() to devmem.h and made it devmem specific
+  helper (David).
+
+v9: https://lore.kernel.org/all/20240403002053.2376017-5-almasrymina@google.com/
+- Removed net_devmem_restart_rx_queues and put it in its own patch
+  (David).
+
+v8:
+- move dmabuf_devmem_ops usage to later patch to avoid patch-by-patch
+  build error.
 
 v7:
-- Use flags: [ admin-perm ] instead of a CAP_NET_ADMIN check.
+- Use IS_ERR() instead of IS_ERR_OR_NULL() for the dma_buf_get() return
+  value.
+- Changes netdev_* naming in devmem.c to net_devmem_* (Yunsheng).
+- DMA_BIDIRECTIONAL -> DMA_FROM_DEVICE (Yunsheng).
+- Added a comment around recovering of the old rx queue in
+  net_devmem_restart_rx_queue(), and added freeing of old_mem if the
+  restart of the old queue fails. (Yunsheng).
+- Use kernel-family sock-priv (Jakub).
+- Put pp_memory_provider_params in netdev_rx_queue instead of the
+  dma-buf specific binding (Pavel & David).
+- Move queue management ops to queue_mgmt_ops instead of netdev_ops
+  (Jakub).
+- Remove excess whitespaces (Jakub).
+- Use genlmsg_iput (Jakub).
 
-Changes in v1:
-- Add rx-queue-type to distingish rx from tx (Jakub)
-- Return dma-buf ID from netlink API (David, Stan)
+v6:
+- Validate rx queue index
+- Refactor new functions into devmem.c (Pavel)
 
-Changes in RFC-v3:
-- Support binding multiple rx rx-queues
+v5:
+- Renamed page_pool_iov to net_iov, and moved that support to devmem.h
+  or netmem.h.
+
+v1:
+- Introduce devmem.h instead of bloating netdevice.h (Jakub)
+- ENOTSUPP -> EOPNOTSUPP (checkpatch.pl I think)
+- Remove unneeded rcu protection for binding->list (rtnl protected)
+- Removed extraneous err_binding_put: label.
+- Removed dma_addr += len (Paolo).
+- Don't override err on netdev_bind_dmabuf_to_queue failure.
+- Rename devmem -> dmabuf (David).
+- Add id to dmabuf binding (David/Stan).
+- Fix missing xa_destroy bound_rq_list.
+- Use queue api to reset bound RX queues (Jakub).
+- Update netlink API for rx-queue type (tx/re) (Jakub).
+
+RFC v3:
+- Support multi rx-queue binding
 
 ---
- Documentation/netlink/specs/netdev.yaml | 47 +++++++++++++++++++++++++
- include/uapi/linux/netdev.h             | 11 ++++++
- net/core/netdev-genl-gen.c              | 19 ++++++++++
- net/core/netdev-genl-gen.h              |  2 ++
- net/core/netdev-genl.c                  |  6 ++++
- tools/include/uapi/linux/netdev.h       | 11 ++++++
- 6 files changed, 96 insertions(+)
+ Documentation/netlink/specs/netdev.yaml |   4 +
+ include/linux/netdevice.h               |   2 +
+ include/net/netdev_rx_queue.h           |   2 +
+ include/net/netmem.h                    |   8 +
+ include/net/page_pool/types.h           |   6 +
+ net/Kconfig                             |   5 +
+ net/core/Makefile                       |   1 +
+ net/core/dev.c                          |  26 +++
+ net/core/devmem.c                       | 274 ++++++++++++++++++++++++
+ net/core/devmem.h                       | 124 +++++++++++
+ net/core/netdev-genl-gen.c              |   4 +
+ net/core/netdev-genl-gen.h              |   4 +
+ net/core/netdev-genl.c                  | 128 ++++++++++-
+ net/ethtool/common.c                    |   8 +
+ net/xdp/xsk_buff_pool.c                 |   5 +
+ 15 files changed, 596 insertions(+), 5 deletions(-)
+ create mode 100644 net/core/devmem.c
+ create mode 100644 net/core/devmem.h
 
 diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/netlink/specs/netdev.yaml
-index 959755be4d7f..4930e8142aa6 100644
+index 4930e8142aa6..0c747530c275 100644
 --- a/Documentation/netlink/specs/netdev.yaml
 +++ b/Documentation/netlink/specs/netdev.yaml
-@@ -457,6 +457,39 @@ attribute-sets:
-           Number of times driver re-started accepting send
-           requests to this queue from the stack.
-         type: uint
-+  -
-+    name: queue-id
-+    subset-of: queue
-+    attributes:
-+      -
-+        name: id
-+      -
-+        name: type
-+  -
-+    name: dmabuf
-+    attributes:
-+      -
-+        name: ifindex
-+        doc: netdev ifindex to bind the dmabuf to.
-+        type: u32
-+        checks:
-+          min: 1
-+      -
-+        name: queues
-+        doc: receive queues to bind the dmabuf to.
-+        type: nest
-+        nested-attributes: queue-id
-+        multi-attr: true
-+      -
-+        name: fd
-+        doc: dmabuf file descriptor to bind.
-+        type: u32
-+      -
-+        name: id
-+        doc: id of the dmabuf binding
-+        type: u32
-+        checks:
-+          min: 1
+@@ -667,6 +667,10 @@ operations:
+           attributes:
+             - id
  
- operations:
-   list:
-@@ -619,6 +652,20 @@ operations:
-             - rx-bytes
-             - tx-packets
-             - tx-bytes
-+    -
-+      name: bind-rx
-+      doc: Bind dmabuf to netdev
-+      attribute-set: dmabuf
-+      flags: [ admin-perm ]
-+      do:
-+        request:
-+          attributes:
-+            - ifindex
-+            - fd
-+            - queues
-+        reply:
-+          attributes:
-+            - id
- 
++kernel-family:
++  headers: [ "linux/list.h"]
++  sock-priv: struct list_head
++
  mcast-groups:
    list:
-diff --git a/include/uapi/linux/netdev.h b/include/uapi/linux/netdev.h
-index 43742ac5b00d..91bf3ecc5f1d 100644
---- a/include/uapi/linux/netdev.h
-+++ b/include/uapi/linux/netdev.h
-@@ -173,6 +173,16 @@ enum {
- 	NETDEV_A_QSTATS_MAX = (__NETDEV_A_QSTATS_MAX - 1)
- };
+     -
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index b47c00657bd0..bc167a1288fe 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -3944,6 +3944,8 @@ u8 dev_xdp_prog_count(struct net_device *dev);
+ int dev_xdp_propagate(struct net_device *dev, struct netdev_bpf *bpf);
+ u32 dev_xdp_prog_id(struct net_device *dev, enum bpf_xdp_mode mode);
  
-+enum {
-+	NETDEV_A_DMABUF_IFINDEX = 1,
-+	NETDEV_A_DMABUF_QUEUES,
-+	NETDEV_A_DMABUF_FD,
-+	NETDEV_A_DMABUF_ID,
++u32 dev_get_min_mp_channel_count(const struct net_device *dev);
 +
-+	__NETDEV_A_DMABUF_MAX,
-+	NETDEV_A_DMABUF_MAX = (__NETDEV_A_DMABUF_MAX - 1)
+ int __dev_forward_skb(struct net_device *dev, struct sk_buff *skb);
+ int dev_forward_skb(struct net_device *dev, struct sk_buff *skb);
+ int dev_forward_skb_nomtu(struct net_device *dev, struct sk_buff *skb);
+diff --git a/include/net/netdev_rx_queue.h b/include/net/netdev_rx_queue.h
+index e78ca52d67fb..ac34f5fb4f71 100644
+--- a/include/net/netdev_rx_queue.h
++++ b/include/net/netdev_rx_queue.h
+@@ -6,6 +6,7 @@
+ #include <linux/netdevice.h>
+ #include <linux/sysfs.h>
+ #include <net/xdp.h>
++#include <net/page_pool/types.h>
+ 
+ /* This structure contains an instance of an RX queue. */
+ struct netdev_rx_queue {
+@@ -25,6 +26,7 @@ struct netdev_rx_queue {
+ 	 * Readers and writers must hold RTNL
+ 	 */
+ 	struct napi_struct		*napi;
++	struct pp_memory_provider_params mp_params;
+ } ____cacheline_aligned_in_smp;
+ 
+ /*
+diff --git a/include/net/netmem.h b/include/net/netmem.h
+index 46cc9b89ac79..c23e224dd6a0 100644
+--- a/include/net/netmem.h
++++ b/include/net/netmem.h
+@@ -8,6 +8,14 @@
+ #ifndef _NET_NETMEM_H
+ #define _NET_NETMEM_H
+ 
++/* net_iov */
++
++struct net_iov {
++	struct dmabuf_genpool_chunk_owner *owner;
 +};
 +
- enum {
- 	NETDEV_CMD_DEV_GET = 1,
- 	NETDEV_CMD_DEV_ADD_NTF,
-@@ -186,6 +196,7 @@ enum {
- 	NETDEV_CMD_QUEUE_GET,
- 	NETDEV_CMD_NAPI_GET,
- 	NETDEV_CMD_QSTATS_GET,
-+	NETDEV_CMD_BIND_RX,
++/* netmem */
++
+ /**
+  * typedef netmem_ref - a nonexistent type marking a reference to generic
+  * network memory.
+diff --git a/include/net/page_pool/types.h b/include/net/page_pool/types.h
+index 50569fed7868..4afd6dd56351 100644
+--- a/include/net/page_pool/types.h
++++ b/include/net/page_pool/types.h
+@@ -139,6 +139,10 @@ struct page_pool_stats {
+  */
+ #define PAGE_POOL_FRAG_GROUP_ALIGN	(4 * sizeof(long))
  
- 	__NETDEV_CMD_MAX,
- 	NETDEV_CMD_MAX = (__NETDEV_CMD_MAX - 1)
-diff --git a/net/core/netdev-genl-gen.c b/net/core/netdev-genl-gen.c
-index 8350a0afa9ec..6b7fe6035067 100644
---- a/net/core/netdev-genl-gen.c
-+++ b/net/core/netdev-genl-gen.c
-@@ -27,6 +27,11 @@ const struct nla_policy netdev_page_pool_info_nl_policy[NETDEV_A_PAGE_POOL_IFIND
- 	[NETDEV_A_PAGE_POOL_IFINDEX] = NLA_POLICY_FULL_RANGE(NLA_U32, &netdev_a_page_pool_ifindex_range),
- };
- 
-+const struct nla_policy netdev_queue_id_nl_policy[NETDEV_A_QUEUE_TYPE + 1] = {
-+	[NETDEV_A_QUEUE_ID] = { .type = NLA_U32, },
-+	[NETDEV_A_QUEUE_TYPE] = NLA_POLICY_MAX(NLA_U32, 1),
++struct pp_memory_provider_params {
++	void *mp_priv;
 +};
 +
- /* NETDEV_CMD_DEV_GET - do */
- static const struct nla_policy netdev_dev_get_nl_policy[NETDEV_A_DEV_IFINDEX + 1] = {
- 	[NETDEV_A_DEV_IFINDEX] = NLA_POLICY_MIN(NLA_U32, 1),
-@@ -74,6 +79,13 @@ static const struct nla_policy netdev_qstats_get_nl_policy[NETDEV_A_QSTATS_SCOPE
- 	[NETDEV_A_QSTATS_SCOPE] = NLA_POLICY_MASK(NLA_UINT, 0x1),
- };
+ struct page_pool {
+ 	struct page_pool_params_fast p;
  
-+/* NETDEV_CMD_BIND_RX - do */
-+static const struct nla_policy netdev_bind_rx_nl_policy[NETDEV_A_DMABUF_FD + 1] = {
-+	[NETDEV_A_DMABUF_IFINDEX] = NLA_POLICY_MIN(NLA_U32, 1),
-+	[NETDEV_A_DMABUF_FD] = { .type = NLA_U32, },
-+	[NETDEV_A_DMABUF_QUEUES] = NLA_POLICY_NESTED(netdev_queue_id_nl_policy),
-+};
+@@ -197,6 +201,8 @@ struct page_pool {
+ 	 */
+ 	struct ptr_ring ring;
+ 
++	void *mp_priv;
 +
- /* Ops table for netdev */
- static const struct genl_split_ops netdev_nl_ops[] = {
- 	{
-@@ -151,6 +163,13 @@ static const struct genl_split_ops netdev_nl_ops[] = {
- 		.maxattr	= NETDEV_A_QSTATS_SCOPE,
- 		.flags		= GENL_CMD_CAP_DUMP,
- 	},
-+	{
-+		.cmd		= NETDEV_CMD_BIND_RX,
-+		.doit		= netdev_nl_bind_rx_doit,
-+		.policy		= netdev_bind_rx_nl_policy,
-+		.maxattr	= NETDEV_A_DMABUF_FD,
-+		.flags		= GENL_ADMIN_PERM | GENL_CMD_CAP_DO,
-+	},
- };
+ #ifdef CONFIG_PAGE_POOL_STATS
+ 	/* recycle stats are per-cpu to avoid locking */
+ 	struct page_pool_recycle_stats __percpu *recycle_stats;
+diff --git a/net/Kconfig b/net/Kconfig
+index d27d0deac0bf..7574b066d7cd 100644
+--- a/net/Kconfig
++++ b/net/Kconfig
+@@ -66,6 +66,11 @@ config SKB_DECRYPTED
+ config SKB_EXTENSIONS
+ 	bool
  
- static const struct genl_multicast_group netdev_nl_mcgrps[] = {
-diff --git a/net/core/netdev-genl-gen.h b/net/core/netdev-genl-gen.h
-index 4db40fd5b4a9..67c34005750c 100644
---- a/net/core/netdev-genl-gen.h
-+++ b/net/core/netdev-genl-gen.h
-@@ -13,6 +13,7 @@
++config NET_DEVMEM
++	def_bool y
++	depends on DMA_SHARED_BUFFER
++	depends on GENERIC_ALLOCATOR
++
+ menu "Networking options"
  
- /* Common nested types */
- extern const struct nla_policy netdev_page_pool_info_nl_policy[NETDEV_A_PAGE_POOL_IFINDEX + 1];
-+extern const struct nla_policy netdev_queue_id_nl_policy[NETDEV_A_QUEUE_TYPE + 1];
+ source "net/packet/Kconfig"
+diff --git a/net/core/Makefile b/net/core/Makefile
+index f82232b358a2..c3ebbaf9c81e 100644
+--- a/net/core/Makefile
++++ b/net/core/Makefile
+@@ -44,3 +44,4 @@ obj-$(CONFIG_BPF_SYSCALL) += sock_map.o
+ obj-$(CONFIG_BPF_SYSCALL) += bpf_sk_storage.o
+ obj-$(CONFIG_OF)	+= of_net.o
+ obj-$(CONFIG_NET_TEST) += net_test.o
++obj-$(CONFIG_NET_DEVMEM) += devmem.o
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 22c3f14d9287..34d73d152f19 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -161,6 +161,7 @@
+ #include <linux/phy_link_topology.h>
  
- int netdev_nl_dev_get_doit(struct sk_buff *skb, struct genl_info *info);
- int netdev_nl_dev_get_dumpit(struct sk_buff *skb, struct netlink_callback *cb);
-@@ -30,6 +31,7 @@ int netdev_nl_napi_get_doit(struct sk_buff *skb, struct genl_info *info);
- int netdev_nl_napi_get_dumpit(struct sk_buff *skb, struct netlink_callback *cb);
- int netdev_nl_qstats_get_dumpit(struct sk_buff *skb,
- 				struct netlink_callback *cb);
-+int netdev_nl_bind_rx_doit(struct sk_buff *skb, struct genl_info *info);
+ #include "dev.h"
++#include "devmem.h"
+ #include "net-sysfs.h"
  
- enum {
- 	NETDEV_NLGRP_MGMT,
-diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
-index a17d7eaeb001..699c34b9b03c 100644
---- a/net/core/netdev-genl.c
-+++ b/net/core/netdev-genl.c
-@@ -723,6 +723,12 @@ int netdev_nl_qstats_get_dumpit(struct sk_buff *skb,
+ static DEFINE_SPINLOCK(ptype_lock);
+@@ -9374,6 +9375,11 @@ int dev_xdp_propagate(struct net_device *dev, struct netdev_bpf *bpf)
+ 	if (!dev->netdev_ops->ndo_bpf)
+ 		return -EOPNOTSUPP;
+ 
++	if (dev_get_min_mp_channel_count(dev)) {
++		NL_SET_ERR_MSG(bpf->extack, "unable to propagate XDP to device using memory provider");
++		return -EBUSY;
++	}
++
+ 	return dev->netdev_ops->ndo_bpf(dev, bpf);
+ }
+ EXPORT_SYMBOL_GPL(dev_xdp_propagate);
+@@ -9406,6 +9412,11 @@ static int dev_xdp_install(struct net_device *dev, enum bpf_xdp_mode mode,
+ 	struct netdev_bpf xdp;
+ 	int err;
+ 
++	if (dev_get_min_mp_channel_count(dev)) {
++		NL_SET_ERR_MSG(extack, "unable to install XDP to device using memory provider");
++		return -EBUSY;
++	}
++
+ 	memset(&xdp, 0, sizeof(xdp));
+ 	xdp.command = mode == XDP_MODE_HW ? XDP_SETUP_PROG_HW : XDP_SETUP_PROG;
+ 	xdp.extack = extack;
+@@ -9830,6 +9841,20 @@ int dev_change_xdp_fd(struct net_device *dev, struct netlink_ext_ack *extack,
  	return err;
  }
  
-+/* Stub */
-+int netdev_nl_bind_rx_doit(struct sk_buff *skb, struct genl_info *info)
++u32 dev_get_min_mp_channel_count(const struct net_device *dev)
 +{
++	int i;
++
++	ASSERT_RTNL();
++
++	for (i = dev->real_num_rx_queues - 1; i >= 0; i--)
++		if (dev->_rx[i].mp_params.mp_priv)
++			/* The channel count is the idx plus 1. */
++			return i + 1;
++
 +	return 0;
 +}
 +
- static int netdev_genl_netdevice_event(struct notifier_block *nb,
- 				       unsigned long event, void *ptr)
- {
-diff --git a/tools/include/uapi/linux/netdev.h b/tools/include/uapi/linux/netdev.h
-index 43742ac5b00d..91bf3ecc5f1d 100644
---- a/tools/include/uapi/linux/netdev.h
-+++ b/tools/include/uapi/linux/netdev.h
-@@ -173,6 +173,16 @@ enum {
- 	NETDEV_A_QSTATS_MAX = (__NETDEV_A_QSTATS_MAX - 1)
- };
+ /**
+  * dev_index_reserve() - allocate an ifindex in a namespace
+  * @net: the applicable net namespace
+@@ -11366,6 +11391,7 @@ void unregister_netdevice_many_notify(struct list_head *head,
+ 		dev_tcx_uninstall(dev);
+ 		dev_xdp_uninstall(dev);
+ 		bpf_dev_bound_netdev_unregister(dev);
++		dev_dmabuf_uninstall(dev);
  
-+enum {
-+	NETDEV_A_DMABUF_IFINDEX = 1,
-+	NETDEV_A_DMABUF_QUEUES,
-+	NETDEV_A_DMABUF_FD,
-+	NETDEV_A_DMABUF_ID,
+ 		netdev_offload_xstats_disable_all(dev);
+ 
+diff --git a/net/core/devmem.c b/net/core/devmem.c
+new file mode 100644
+index 000000000000..8dd7beb080d2
+--- /dev/null
++++ b/net/core/devmem.c
+@@ -0,0 +1,274 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ *      Devmem TCP
++ *
++ *      Authors:	Mina Almasry <almasrymina@google.com>
++ *			Willem de Bruijn <willemdebruijn.kernel@gmail.com>
++ *			Kaiyuan Zhang <kaiyuanz@google.com
++ */
 +
-+	__NETDEV_A_DMABUF_MAX,
-+	NETDEV_A_DMABUF_MAX = (__NETDEV_A_DMABUF_MAX - 1)
++#include <linux/dma-buf.h>
++#include <linux/genalloc.h>
++#include <linux/mm.h>
++#include <linux/netdevice.h>
++#include <linux/types.h>
++#include <net/netdev_queues.h>
++#include <net/netdev_rx_queue.h>
++#include <net/page_pool/helpers.h>
++#include <trace/events/page_pool.h>
++
++#include "devmem.h"
++
++/* Device memory support */
++
++/* Protected by rtnl_lock() */
++static DEFINE_XARRAY_FLAGS(net_devmem_dmabuf_bindings, XA_FLAGS_ALLOC1);
++
++static void net_devmem_dmabuf_free_chunk_owner(struct gen_pool *genpool,
++					       struct gen_pool_chunk *chunk,
++					       void *not_used)
++{
++	struct dmabuf_genpool_chunk_owner *owner = chunk->owner;
++
++	kvfree(owner->niovs);
++	kfree(owner);
++}
++
++void __net_devmem_dmabuf_binding_free(struct net_devmem_dmabuf_binding *binding)
++{
++	size_t size, avail;
++
++	gen_pool_for_each_chunk(binding->chunk_pool,
++				net_devmem_dmabuf_free_chunk_owner, NULL);
++
++	size = gen_pool_size(binding->chunk_pool);
++	avail = gen_pool_avail(binding->chunk_pool);
++
++	if (!WARN(size != avail, "can't destroy genpool. size=%zu, avail=%zu",
++		  size, avail))
++		gen_pool_destroy(binding->chunk_pool);
++
++	dma_buf_unmap_attachment_unlocked(binding->attachment, binding->sgt,
++					  DMA_FROM_DEVICE);
++	dma_buf_detach(binding->dmabuf, binding->attachment);
++	dma_buf_put(binding->dmabuf);
++	xa_destroy(&binding->bound_rxqs);
++	kfree(binding);
++}
++
++void net_devmem_unbind_dmabuf(struct net_devmem_dmabuf_binding *binding)
++{
++	struct netdev_rx_queue *rxq;
++	unsigned long xa_idx;
++	unsigned int rxq_idx;
++
++	if (binding->list.next)
++		list_del(&binding->list);
++
++	xa_for_each(&binding->bound_rxqs, xa_idx, rxq) {
++		WARN_ON(rxq->mp_params.mp_priv != binding);
++
++		rxq->mp_params.mp_priv = NULL;
++
++		rxq_idx = get_netdev_rx_queue_index(rxq);
++
++		WARN_ON(netdev_rx_queue_restart(binding->dev, rxq_idx));
++	}
++
++	xa_erase(&net_devmem_dmabuf_bindings, binding->id);
++
++	net_devmem_dmabuf_binding_put(binding);
++}
++
++int net_devmem_bind_dmabuf_to_queue(struct net_device *dev, u32 rxq_idx,
++				    struct net_devmem_dmabuf_binding *binding,
++				    struct netlink_ext_ack *extack)
++{
++	struct netdev_rx_queue *rxq;
++	u32 xa_idx;
++	int err;
++
++	if (rxq_idx >= dev->real_num_rx_queues) {
++		NL_SET_ERR_MSG(extack, "rx queue index out of range");
++		return -ERANGE;
++	}
++
++	rxq = __netif_get_rx_queue(dev, rxq_idx);
++	if (rxq->mp_params.mp_priv) {
++		NL_SET_ERR_MSG(extack, "designated queue already memory provider bound");
++		return -EEXIST;
++	}
++
++#ifdef CONFIG_XDP_SOCKETS
++	if (rxq->pool) {
++		NL_SET_ERR_MSG(extack, "designated queue already in use by AF_XDP");
++		return -EBUSY;
++	}
++#endif
++
++	err = xa_alloc(&binding->bound_rxqs, &xa_idx, rxq, xa_limit_32b,
++		       GFP_KERNEL);
++	if (err)
++		return err;
++
++	rxq->mp_params.mp_priv = binding;
++
++	err = netdev_rx_queue_restart(dev, rxq_idx);
++	if (err)
++		goto err_xa_erase;
++
++	return 0;
++
++err_xa_erase:
++	rxq->mp_params.mp_priv = NULL;
++	xa_erase(&binding->bound_rxqs, xa_idx);
++
++	return err;
++}
++
++struct net_devmem_dmabuf_binding *
++net_devmem_bind_dmabuf(struct net_device *dev, unsigned int dmabuf_fd,
++		       struct netlink_ext_ack *extack)
++{
++	struct net_devmem_dmabuf_binding *binding;
++	static u32 id_alloc_next;
++	struct scatterlist *sg;
++	struct dma_buf *dmabuf;
++	unsigned int sg_idx, i;
++	unsigned long virtual;
++	int err;
++
++	dmabuf = dma_buf_get(dmabuf_fd);
++	if (IS_ERR(dmabuf))
++		return ERR_CAST(dmabuf);
++
++	binding = kzalloc_node(sizeof(*binding), GFP_KERNEL,
++			       dev_to_node(&dev->dev));
++	if (!binding) {
++		err = -ENOMEM;
++		goto err_put_dmabuf;
++	}
++
++	binding->dev = dev;
++
++	err = xa_alloc_cyclic(&net_devmem_dmabuf_bindings, &binding->id,
++			      binding, xa_limit_32b, &id_alloc_next,
++			      GFP_KERNEL);
++	if (err < 0)
++		goto err_free_binding;
++
++	xa_init_flags(&binding->bound_rxqs, XA_FLAGS_ALLOC);
++
++	refcount_set(&binding->ref, 1);
++
++	binding->dmabuf = dmabuf;
++
++	binding->attachment = dma_buf_attach(binding->dmabuf, dev->dev.parent);
++	if (IS_ERR(binding->attachment)) {
++		err = PTR_ERR(binding->attachment);
++		NL_SET_ERR_MSG(extack, "Failed to bind dmabuf to device");
++		goto err_free_id;
++	}
++
++	binding->sgt = dma_buf_map_attachment_unlocked(binding->attachment,
++						       DMA_FROM_DEVICE);
++	if (IS_ERR(binding->sgt)) {
++		err = PTR_ERR(binding->sgt);
++		NL_SET_ERR_MSG(extack, "Failed to map dmabuf attachment");
++		goto err_detach;
++	}
++
++	/* For simplicity we expect to make PAGE_SIZE allocations, but the
++	 * binding can be much more flexible than that. We may be able to
++	 * allocate MTU sized chunks here. Leave that for future work...
++	 */
++	binding->chunk_pool =
++		gen_pool_create(PAGE_SHIFT, dev_to_node(&dev->dev));
++	if (!binding->chunk_pool) {
++		err = -ENOMEM;
++		goto err_unmap;
++	}
++
++	virtual = 0;
++	for_each_sgtable_dma_sg(binding->sgt, sg, sg_idx) {
++		dma_addr_t dma_addr = sg_dma_address(sg);
++		struct dmabuf_genpool_chunk_owner *owner;
++		size_t len = sg_dma_len(sg);
++		struct net_iov *niov;
++
++		owner = kzalloc_node(sizeof(*owner), GFP_KERNEL,
++				     dev_to_node(&dev->dev));
++		if (!owner) {
++			err = -ENOMEM;
++			goto err_free_chunks;
++		}
++
++		owner->base_virtual = virtual;
++		owner->base_dma_addr = dma_addr;
++		owner->num_niovs = len / PAGE_SIZE;
++		owner->binding = binding;
++
++		err = gen_pool_add_owner(binding->chunk_pool, dma_addr,
++					 dma_addr, len, dev_to_node(&dev->dev),
++					 owner);
++		if (err) {
++			kfree(owner);
++			err = -EINVAL;
++			goto err_free_chunks;
++		}
++
++		owner->niovs = kvmalloc_array(owner->num_niovs,
++					      sizeof(*owner->niovs),
++					      GFP_KERNEL);
++		if (!owner->niovs) {
++			err = -ENOMEM;
++			goto err_free_chunks;
++		}
++
++		for (i = 0; i < owner->num_niovs; i++) {
++			niov = &owner->niovs[i];
++			niov->owner = owner;
++		}
++
++		virtual += len;
++	}
++
++	return binding;
++
++err_free_chunks:
++	gen_pool_for_each_chunk(binding->chunk_pool,
++				net_devmem_dmabuf_free_chunk_owner, NULL);
++	gen_pool_destroy(binding->chunk_pool);
++err_unmap:
++	dma_buf_unmap_attachment_unlocked(binding->attachment, binding->sgt,
++					  DMA_FROM_DEVICE);
++err_detach:
++	dma_buf_detach(dmabuf, binding->attachment);
++err_free_id:
++	xa_erase(&net_devmem_dmabuf_bindings, binding->id);
++err_free_binding:
++	kfree(binding);
++err_put_dmabuf:
++	dma_buf_put(dmabuf);
++	return ERR_PTR(err);
++}
++
++void dev_dmabuf_uninstall(struct net_device *dev)
++{
++	struct net_devmem_dmabuf_binding *binding;
++	struct netdev_rx_queue *rxq;
++	unsigned long xa_idx;
++	unsigned int i;
++
++	for (i = 0; i < dev->real_num_rx_queues; i++) {
++		binding = dev->_rx[i].mp_params.mp_priv;
++		if (!binding)
++			continue;
++
++		xa_for_each(&binding->bound_rxqs, xa_idx, rxq)
++			if (rxq == &dev->_rx[i]) {
++				xa_erase(&binding->bound_rxqs, xa_idx);
++				break;
++			}
++	}
++}
+diff --git a/net/core/devmem.h b/net/core/devmem.h
+new file mode 100644
+index 000000000000..c50f91d858dd
+--- /dev/null
++++ b/net/core/devmem.h
+@@ -0,0 +1,124 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++/*
++ * Device memory TCP support
++ *
++ * Authors:	Mina Almasry <almasrymina@google.com>
++ *		Willem de Bruijn <willemb@google.com>
++ *		Kaiyuan Zhang <kaiyuanz@google.com>
++ *
++ */
++#ifndef _NET_DEVMEM_H
++#define _NET_DEVMEM_H
++
++struct netlink_ext_ack;
++
++struct net_devmem_dmabuf_binding {
++	struct dma_buf *dmabuf;
++	struct dma_buf_attachment *attachment;
++	struct sg_table *sgt;
++	struct net_device *dev;
++	struct gen_pool *chunk_pool;
++
++	/* The user holds a ref (via the netlink API) for as long as they want
++	 * the binding to remain alive. Each page pool using this binding holds
++	 * a ref to keep the binding alive. Each allocated net_iov holds a
++	 * ref.
++	 *
++	 * The binding undos itself and unmaps the underlying dmabuf once all
++	 * those refs are dropped and the binding is no longer desired or in
++	 * use.
++	 */
++	refcount_t ref;
++
++	/* The list of bindings currently active. Used for netlink to notify us
++	 * of the user dropping the bind.
++	 */
++	struct list_head list;
++
++	/* rxq's this binding is active on. */
++	struct xarray bound_rxqs;
++
++	/* ID of this binding. Globally unique to all bindings currently
++	 * active.
++	 */
++	u32 id;
 +};
 +
- enum {
- 	NETDEV_CMD_DEV_GET = 1,
- 	NETDEV_CMD_DEV_ADD_NTF,
-@@ -186,6 +196,7 @@ enum {
- 	NETDEV_CMD_QUEUE_GET,
- 	NETDEV_CMD_NAPI_GET,
- 	NETDEV_CMD_QSTATS_GET,
-+	NETDEV_CMD_BIND_RX,
++#if defined(CONFIG_NET_DEVMEM)
++/* Owner of the dma-buf chunks inserted into the gen pool. Each scatterlist
++ * entry from the dmabuf is inserted into the genpool as a chunk, and needs
++ * this owner struct to keep track of some metadata necessary to create
++ * allocations from this chunk.
++ */
++struct dmabuf_genpool_chunk_owner {
++	/* Offset into the dma-buf where this chunk starts.  */
++	unsigned long base_virtual;
++
++	/* dma_addr of the start of the chunk.  */
++	dma_addr_t base_dma_addr;
++
++	/* Array of net_iovs for this chunk. */
++	struct net_iov *niovs;
++	size_t num_niovs;
++
++	struct net_devmem_dmabuf_binding *binding;
++};
++
++void __net_devmem_dmabuf_binding_free(struct net_devmem_dmabuf_binding *binding);
++struct net_devmem_dmabuf_binding *
++net_devmem_bind_dmabuf(struct net_device *dev, unsigned int dmabuf_fd,
++		       struct netlink_ext_ack *extack);
++void net_devmem_unbind_dmabuf(struct net_devmem_dmabuf_binding *binding);
++int net_devmem_bind_dmabuf_to_queue(struct net_device *dev, u32 rxq_idx,
++				    struct net_devmem_dmabuf_binding *binding,
++				    struct netlink_ext_ack *extack);
++void dev_dmabuf_uninstall(struct net_device *dev);
++
++static inline void
++net_devmem_dmabuf_binding_get(struct net_devmem_dmabuf_binding *binding)
++{
++	refcount_inc(&binding->ref);
++}
++
++static inline void
++net_devmem_dmabuf_binding_put(struct net_devmem_dmabuf_binding *binding)
++{
++	if (!refcount_dec_and_test(&binding->ref))
++		return;
++
++	__net_devmem_dmabuf_binding_free(binding);
++}
++
++#else
++static inline void
++__net_devmem_dmabuf_binding_free(struct net_devmem_dmabuf_binding *binding)
++{
++}
++
++static inline struct net_devmem_dmabuf_binding *
++net_devmem_bind_dmabuf(struct net_device *dev, unsigned int dmabuf_fd,
++		       struct netlink_ext_ack *extack)
++{
++	return ERR_PTR(-EOPNOTSUPP);
++}
++
++static inline void
++net_devmem_unbind_dmabuf(struct net_devmem_dmabuf_binding *binding)
++{
++}
++
++static inline int
++net_devmem_bind_dmabuf_to_queue(struct net_device *dev, u32 rxq_idx,
++				struct net_devmem_dmabuf_binding *binding,
++				struct netlink_ext_ack *extack)
++
++{
++	return -EOPNOTSUPP;
++}
++
++static inline void dev_dmabuf_uninstall(struct net_device *dev)
++{
++}
++#endif
++
++#endif /* _NET_DEVMEM_H */
+diff --git a/net/core/netdev-genl-gen.c b/net/core/netdev-genl-gen.c
+index 6b7fe6035067..b28424ae06d5 100644
+--- a/net/core/netdev-genl-gen.c
++++ b/net/core/netdev-genl-gen.c
+@@ -9,6 +9,7 @@
+ #include "netdev-genl-gen.h"
  
- 	__NETDEV_CMD_MAX,
- 	NETDEV_CMD_MAX = (__NETDEV_CMD_MAX - 1)
+ #include <uapi/linux/netdev.h>
++#include <linux/list.h>
+ 
+ /* Integer value ranges */
+ static const struct netlink_range_validation netdev_a_page_pool_id_range = {
+@@ -187,4 +188,7 @@ struct genl_family netdev_nl_family __ro_after_init = {
+ 	.n_split_ops	= ARRAY_SIZE(netdev_nl_ops),
+ 	.mcgrps		= netdev_nl_mcgrps,
+ 	.n_mcgrps	= ARRAY_SIZE(netdev_nl_mcgrps),
++	.sock_priv_size	= sizeof(struct list_head),
++	.sock_priv_init	= (void *)netdev_nl_sock_priv_init,
++	.sock_priv_destroy = (void *)netdev_nl_sock_priv_destroy,
+ };
+diff --git a/net/core/netdev-genl-gen.h b/net/core/netdev-genl-gen.h
+index 67c34005750c..8cda334fd042 100644
+--- a/net/core/netdev-genl-gen.h
++++ b/net/core/netdev-genl-gen.h
+@@ -10,6 +10,7 @@
+ #include <net/genetlink.h>
+ 
+ #include <uapi/linux/netdev.h>
++#include <linux/list.h>
+ 
+ /* Common nested types */
+ extern const struct nla_policy netdev_page_pool_info_nl_policy[NETDEV_A_PAGE_POOL_IFINDEX + 1];
+@@ -40,4 +41,7 @@ enum {
+ 
+ extern struct genl_family netdev_nl_family;
+ 
++void netdev_nl_sock_priv_init(struct list_head *priv);
++void netdev_nl_sock_priv_destroy(struct list_head *priv);
++
+ #endif /* _LINUX_NETDEV_GEN_H */
+diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
+index 699c34b9b03c..9153a8ab0cf8 100644
+--- a/net/core/netdev-genl.c
++++ b/net/core/netdev-genl.c
+@@ -3,16 +3,17 @@
+ #include <linux/netdevice.h>
+ #include <linux/notifier.h>
+ #include <linux/rtnetlink.h>
++#include <net/busy_poll.h>
+ #include <net/net_namespace.h>
++#include <net/netdev_queues.h>
++#include <net/netdev_rx_queue.h>
+ #include <net/sock.h>
+ #include <net/xdp.h>
+ #include <net/xdp_sock.h>
+-#include <net/netdev_rx_queue.h>
+-#include <net/netdev_queues.h>
+-#include <net/busy_poll.h>
+ 
+-#include "netdev-genl-gen.h"
+ #include "dev.h"
++#include "devmem.h"
++#include "netdev-genl-gen.h"
+ 
+ struct netdev_nl_dump_ctx {
+ 	unsigned long	ifindex;
+@@ -723,10 +724,127 @@ int netdev_nl_qstats_get_dumpit(struct sk_buff *skb,
+ 	return err;
+ }
+ 
+-/* Stub */
+ int netdev_nl_bind_rx_doit(struct sk_buff *skb, struct genl_info *info)
+ {
++	struct nlattr *tb[ARRAY_SIZE(netdev_queue_id_nl_policy)];
++	struct net_devmem_dmabuf_binding *binding;
++	struct list_head *sock_binding_list;
++	u32 ifindex, dmabuf_fd, rxq_idx;
++	struct net_device *netdev;
++	struct sk_buff *rsp;
++	struct nlattr *attr;
++	int rem, err = 0;
++	void *hdr;
++
++	if (GENL_REQ_ATTR_CHECK(info, NETDEV_A_DEV_IFINDEX) ||
++	    GENL_REQ_ATTR_CHECK(info, NETDEV_A_DMABUF_FD) ||
++	    GENL_REQ_ATTR_CHECK(info, NETDEV_A_DMABUF_QUEUES))
++		return -EINVAL;
++
++	ifindex = nla_get_u32(info->attrs[NETDEV_A_DEV_IFINDEX]);
++	dmabuf_fd = nla_get_u32(info->attrs[NETDEV_A_DMABUF_FD]);
++
++	sock_binding_list = genl_sk_priv_get(&netdev_nl_family,
++					     NETLINK_CB(skb).sk);
++	if (IS_ERR(sock_binding_list))
++		return PTR_ERR(sock_binding_list);
++
++	rsp = genlmsg_new(GENLMSG_DEFAULT_SIZE, GFP_KERNEL);
++	if (!rsp)
++		return -ENOMEM;
++
++	hdr = genlmsg_iput(rsp, info);
++	if (!hdr) {
++		err = -EMSGSIZE;
++		goto err_genlmsg_free;
++	}
++
++	rtnl_lock();
++
++	netdev = __dev_get_by_index(genl_info_net(info), ifindex);
++	if (!netdev || !netif_device_present(netdev)) {
++		err = -ENODEV;
++		goto err_unlock;
++	}
++
++	if (dev_xdp_prog_count(netdev)) {
++		NL_SET_ERR_MSG(info->extack, "unable to bind dmabuf to device with XDP program attached");
++		err = -EEXIST;
++		goto err_unlock;
++	}
++
++	binding = net_devmem_bind_dmabuf(netdev, dmabuf_fd, info->extack);
++	if (IS_ERR(binding)) {
++		err = PTR_ERR(binding);
++		goto err_unlock;
++	}
++
++	nla_for_each_attr_type(attr, NETDEV_A_DMABUF_QUEUES,
++			       genlmsg_data(info->genlhdr),
++			       genlmsg_len(info->genlhdr), rem) {
++		err = nla_parse_nested(
++			tb, ARRAY_SIZE(netdev_queue_id_nl_policy) - 1, attr,
++			netdev_queue_id_nl_policy, info->extack);
++		if (err < 0)
++			goto err_unbind;
++
++		if (NL_REQ_ATTR_CHECK(info->extack, attr, tb, NETDEV_A_QUEUE_ID) ||
++		    NL_REQ_ATTR_CHECK(info->extack, attr, tb, NETDEV_A_QUEUE_TYPE)) {
++			err = -EINVAL;
++			goto err_unbind;
++		}
++
++		if (nla_get_u32(tb[NETDEV_A_QUEUE_TYPE]) != NETDEV_QUEUE_TYPE_RX) {
++			NL_SET_BAD_ATTR(info->extack, tb[NETDEV_A_QUEUE_TYPE]);
++			err = -EINVAL;
++			goto err_unbind;
++		}
++
++		rxq_idx = nla_get_u32(tb[NETDEV_A_QUEUE_ID]);
++
++		err = net_devmem_bind_dmabuf_to_queue(netdev, rxq_idx, binding,
++						      info->extack);
++		if (err)
++			goto err_unbind;
++	}
++
++	list_add(&binding->list, sock_binding_list);
++
++	nla_put_u32(rsp, NETDEV_A_DMABUF_ID, binding->id);
++	genlmsg_end(rsp, hdr);
++
++	err = genlmsg_reply(rsp, info);
++	if (err)
++		goto err_unbind;
++
++	rtnl_unlock();
++
+ 	return 0;
++
++err_unbind:
++	net_devmem_unbind_dmabuf(binding);
++err_unlock:
++	rtnl_unlock();
++err_genlmsg_free:
++	nlmsg_free(rsp);
++	return err;
++}
++
++void netdev_nl_sock_priv_init(struct list_head *priv)
++{
++	INIT_LIST_HEAD(priv);
++}
++
++void netdev_nl_sock_priv_destroy(struct list_head *priv)
++{
++	struct net_devmem_dmabuf_binding *binding;
++	struct net_devmem_dmabuf_binding *temp;
++
++	list_for_each_entry_safe(binding, temp, priv, list) {
++		rtnl_lock();
++		net_devmem_unbind_dmabuf(binding);
++		rtnl_unlock();
++	}
+ }
+ 
+ static int netdev_genl_netdevice_event(struct notifier_block *nb,
+diff --git a/net/ethtool/common.c b/net/ethtool/common.c
+index 781834ef57c3..91203851a476 100644
+--- a/net/ethtool/common.c
++++ b/net/ethtool/common.c
+@@ -654,6 +654,7 @@ int ethtool_check_max_channel(struct net_device *dev,
+ {
+ 	u64 max_rxnfc_in_use;
+ 	u32 max_rxfh_in_use;
++	int max_mp_in_use;
+ 
+ 	/* ensure the new Rx count fits within the configured Rx flow
+ 	 * indirection table/rxnfc settings
+@@ -672,6 +673,13 @@ int ethtool_check_max_channel(struct net_device *dev,
+ 		return -EINVAL;
+ 	}
+ 
++	max_mp_in_use = dev_get_min_mp_channel_count(dev);
++	if (channels.combined_count + channels.rx_count <= max_mp_in_use) {
++		if (info)
++			GENL_SET_ERR_MSG_FMT(info, "requested channel counts are too low for existing memory provider setting (%d)", max_mp_in_use);
++		return -EINVAL;
++	}
++
+ 	return 0;
+ }
+ 
+diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
+index c0e0204b9630..6b2756f95629 100644
+--- a/net/xdp/xsk_buff_pool.c
++++ b/net/xdp/xsk_buff_pool.c
+@@ -211,6 +211,11 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
+ 		goto err_unreg_pool;
+ 	}
+ 
++	if (dev_get_min_mp_channel_count(netdev)) {
++		err = -EBUSY;
++		goto err_unreg_pool;
++	}
++
+ 	bpf.command = XDP_SETUP_XSK_POOL;
+ 	bpf.xsk.pool = pool;
+ 	bpf.xsk.queue_id = queue_id;
 -- 
 2.46.0.469.g59c65b2a67-goog
 
