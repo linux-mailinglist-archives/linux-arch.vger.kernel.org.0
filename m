@@ -1,858 +1,973 @@
-Return-Path: <linux-arch+bounces-7126-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7127-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 223FC970B9B
-	for <lists+linux-arch@lfdr.de>; Mon,  9 Sep 2024 03:59:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CCD3B970D13
+	for <lists+linux-arch@lfdr.de>; Mon,  9 Sep 2024 07:43:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 40DFC1C21911
-	for <lists+linux-arch@lfdr.de>; Mon,  9 Sep 2024 01:59:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EB92E1C21BFB
+	for <lists+linux-arch@lfdr.de>; Mon,  9 Sep 2024 05:43:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67BD911CA1;
-	Mon,  9 Sep 2024 01:59:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F5841741C3;
+	Mon,  9 Sep 2024 05:43:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y4TuZvc5"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="f/V1Vbgp"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com [209.85.217.54])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E336FDDBB;
-	Mon,  9 Sep 2024 01:59:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 862961AD3E0
+	for <linux-arch@vger.kernel.org>; Mon,  9 Sep 2024 05:43:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725847174; cv=none; b=Gizwl76SAuX2k8MDhkfyKc7JnvrTB17oLkYtfPj7m7gEwnQygriFRa4Zps+KFn9A60JxjJDAi0DNm1sCwNEj1q3A06wEK/dhzc57jP8dmi6NeG8aqoH6joGBWbG5vEXKwcu9Edo9JFKHsQwyFiC9Q7gmF3AdggIq2Fwm1cmJrhI=
+	t=1725860607; cv=none; b=t3I3HA4thGYZRGaia9kBrBiBMkLnt1/j51/Dt0Rzw8VzvAa1aNBERRcfagYfVPoE9uxsZYoXV/Rqk7q+cW8V1vLIHx61pIRP4w48J+Cw1y+yQ3E3mF4yDFxKy252x3NmrKYnY2g9ItolriIqajpmEPyURCYg+Y3tss6sWALWApc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725847174; c=relaxed/simple;
-	bh=aWpwSihKbTAfuYHPnzWGqIxmaMSPG/j9vuVD4QDP4fo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bz8J9bxNuK+jkxnonmRtnz3gzssNIYhOmZyrTqt1qZnGGjoo6KabtF36lxstADpNIkgZy4VI3elg2YTYpH7kC6kUUs6Z6JMZpG/KGQ22t3ZezSgJrAiPg5SGstAA8HWP/MQSkhT0AbC/GAivHdEbkZs29b3IimY03jLmKa9M7Hg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y4TuZvc5; arc=none smtp.client-ip=209.85.217.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f54.google.com with SMTP id ada2fe7eead31-49bd643f858so993954137.0;
-        Sun, 08 Sep 2024 18:59:31 -0700 (PDT)
+	s=arc-20240116; t=1725860607; c=relaxed/simple;
+	bh=BQHkXRb4SkX9bcuNkjCzVJo1FnkVSA3Fi/J2wC+c//Q=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=nZDQ3RPLpcWQDE3Qc56pFACdWyPiv/kdDE0Ag1Egu92wKbJJ6XNjzy/TCS+faLopqyKGkm35xoZ8ydkJQ+FSmvt1tCEjYsi/nUCphMa3V8VxrX+TZgPT0WlMqsDHK6pNZ9KzygNtcOqQwNemd2DmthT6O7DpAskERhwUACQdFao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=f/V1Vbgp; arc=none smtp.client-ip=209.85.219.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-e1ce191f74fso8229666276.2
+        for <linux-arch@vger.kernel.org>; Sun, 08 Sep 2024 22:43:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725847171; x=1726451971; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gAAZ0f2WyxSSz8MgJLL6AL4ULY3csQawjo4/nuh+B/c=;
-        b=Y4TuZvc5nDq8oP9K3UQcL4AtuXQrPx7ynaKTcRbTBlBZqH0vr6XozW2yiVbVijezLN
-         MXT4lzkYkm+Ljq236qDJ63kb2sg8I3ZbGpEf7Ih73YWhcRt/IOmp8+5mK12UKOCmkf00
-         EQbdDO3MY2XT+sQPbkR2M7iQbt7XFadebJ7PnXIEsQr1YTTuLr8//ddhSZRxT92PXAlg
-         2NomjUIgS1sxOA5ACz2ovE4SOmkgqoRt+vvvDJbaDt1Pi733bWXCAO0HQVSpUdt0WNDg
-         h+GehVdz5zSWX8IQ5JOUKXMrrNUMf/MLIFpcZoTxGZkaI3bGRIjsSZSmikmv2JEaIM9b
-         +wOg==
+        d=google.com; s=20230601; t=1725860602; x=1726465402; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=VSzZ9/B1SlVaizAkOUaIaBETrEK+3O9/EEMGiwxlTfQ=;
+        b=f/V1VbgpyHlHN1KAU6JBQlauEsOmunpKkqqYbFc/i8kWkiLknmcEbKx02E9HVcVmJ6
+         L78Chfd3MsTTCfVjCweW6yK6jUn9iJ/Gie9Zrmbwv5oNuvbOqhCMyqcyeIgL+Kfcq/TO
+         SQ0i8/jDKX2u9/Q9bVetNDc6AJX2H5nGrGVxT+4pQ4FNeh3g9esWNk1Y4FRxwuDG1wEp
+         Gvhop8UAV8WG1aONNgtYU54jCHLx1vlILwS/MPykGwIS55SwNQkHynS6v9vVJTdMFjVo
+         oD8stN2vSq9wCNYDv972GZ34xpwCc+kxj48oLpKtirca7rx+G6qjlL7wpmJI9Q2FSBXz
+         T8uQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725847171; x=1726451971;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gAAZ0f2WyxSSz8MgJLL6AL4ULY3csQawjo4/nuh+B/c=;
-        b=dRWP680RoLJ//CXfHSYtCiXIcLuSCgRGI/G6KpT4RxdwMVkH3UOq+NYUcQiBk2i7xo
-         mlN2ZVkcmlqfpWwJ8D5CfqiwNPcfHKmBM5MNpiXsb1sSxTC4UuCib3GkRy3sQN9RTU6A
-         yOlRjbFAYZyi5sFYoVB9pDIkQh29vy7rIGaieW+oteOEOR5+9CJXzW0UKLj8vAbGl9sG
-         QG5k7eu4Z3geikTlesdZ6lMTruwz3sIxKKGMXA9d/lReABbTvtP4QQiAAdSBA9IYYC6D
-         0tSrQoz6rYSvemIfdXX6R6iM8PRYlo3CvjlpydtV68lF3f6MI7U9PMuCaBBo/qag9NOw
-         PFXA==
-X-Forwarded-Encrypted: i=1; AJvYcCUgCL2+/GFYQ5YXQ5qv+m6HCyxlxOFMN3NT/Rm1dF/jRy6KipspmBg514bnzo8l2W1E3YdTP5XEXsfpYA==@vger.kernel.org, AJvYcCUsH4BFkYzJvhKcKw+PCYDNVxBAf77au6VNSVyn2rfK8EGbKvv0gqiiyLHYfKl8Tu4ynFv3cZAX@vger.kernel.org, AJvYcCXyMzdlIX0gnJBAhKjZIJEvzfG4Z/28BZGmZYwrrHXBoSjXTEaR/hgdocJsJDQ8qsDYgd4YfalDSIy1fXjp@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7U/kZjBrg6Z4HzfqxyveY2+A+EwiqDXN//2JBQrDewD9kC1Wj
-	7k/TJLLf9uYk8MiX83yE6AwTMj+oIVxGGF6OYzuNE8+CG94Dp1VUenqr7hgQVuuw8ZP5YCWnnx+
-	mBnG1JG/1UzzNK7L6yX2cttZwuRjww0YRLzU=
-X-Google-Smtp-Source: AGHT+IGy7MGMpoYUHKRByXrb9ZwG/C6gf/Xiyi6GlKkh30jniQ4suu0pzb+o/kQ8AxoiClGtHaoEbVS73z9lUsbahnc=
-X-Received: by 2002:a05:6102:3707:b0:48f:aa7c:97c5 with SMTP id
- ada2fe7eead31-49beccbc895mr4299335137.6.1725847170502; Sun, 08 Sep 2024
- 18:59:30 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1725860602; x=1726465402;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VSzZ9/B1SlVaizAkOUaIaBETrEK+3O9/EEMGiwxlTfQ=;
+        b=WjPYaEL2eoKhJ9KWBkXBkAqJHzD3hDsFze8B2s8snfS959ZPveU55USIewBTX2AODc
+         lqewhgKrXLae3aMXJCfYOTDxEaOow1/ioQ/1fj+i111XE45BUYf+NmLDdPyzgFQL5yp8
+         rG5EeHidqjZUEvECeXazV71OTauvr6iSPgsKw7J9BXECGODKbpFFCe/HVGDVEvos5ghX
+         575P5k3SnVhAWnE2m0QM7QeZKiUVcVC825Kxrba3cSvYXVRDhgEBM5FAjs7K5jQXq+jD
+         h+TnUyx2qoSSlhgjPD6E0/3cyWLRobCXEPpQeVGIAgsrWX6xsVbDJHx/RYf7y9kCcmgR
+         JPWg==
+X-Forwarded-Encrypted: i=1; AJvYcCV8OdUdaLuyL/j6WgCYo3Vlh5pLPvA2OJLAS4K2vzuIE+j3nQgoZRi0hyI4Gb2CNJInq37mA7Em1SUc@vger.kernel.org
+X-Gm-Message-State: AOJu0YxnlGPxqb4jw47eLehjPA7kZ4k6z39bKxJNW0ksukY1VyyJ32+b
+	W1cixgrYR91q+baBJw+wP8BMDFGCp8mfOzUaYsFDBDtyUKAOyFWMFD2ujEPbXXFDE8hcGjoAPL8
+	cHJQRGH88s8E44IsxFfBF6g==
+X-Google-Smtp-Source: AGHT+IHFYMJ0RZJOsEtiTENln/iSRmnHEPe/xIpWTvfg1LkRaYwcJcrDdziXg4G5CIJmBRPKtC2h01Zwjw6KgN2DGQ==
+X-Received: from almasrymina.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:4bc5])
+ (user=almasrymina job=sendgmr) by 2002:a25:ec02:0:b0:e03:3cfa:1aa7 with SMTP
+ id 3f1490d57ef6-e1d348639c7mr16791276.1.1725860602366; Sun, 08 Sep 2024
+ 22:43:22 -0700 (PDT)
+Date: Mon,  9 Sep 2024 05:43:05 +0000
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240805153639.1057-1-justinjiang@vivo.com> <20240805153639.1057-3-justinjiang@vivo.com>
- <CAGsJ_4zXtJvBdgpDs+yyEwfdJ0gy+_dgrWLF1zxMgBbaLBeiYA@mail.gmail.com> <400918d7-aaaf-4ccc-af8e-ab48576746d1@vivo.com>
-In-Reply-To: <400918d7-aaaf-4ccc-af8e-ab48576746d1@vivo.com>
-From: Barry Song <21cnbao@gmail.com>
-Date: Mon, 9 Sep 2024 13:59:19 +1200
-Message-ID: <CAGsJ_4yAeuEFbmOoAqW4FRv3x9WNtfu3TZcuXOqb7sf3Jsgd9g@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] mm: tlb: add tlb swap entries batch async release
-To: zhiguojiang <justinjiang@vivo.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>, 
-	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Nick Piggin <npiggin@gmail.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Muchun Song <muchun.song@linux.dev>, linux-arch@vger.kernel.org, cgroups@vger.kernel.org, 
-	David Hildenbrand <david@redhat.com>, opensource.kernel@vivo.com
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.46.0.469.g59c65b2a67-goog
+Message-ID: <20240909054318.1809580-1-almasrymina@google.com>
+Subject: [PATCH net-next v25 00/13] Device Memory TCP
+From: Mina Almasry <almasrymina@google.com>
+To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org
+Cc: Mina Almasry <almasrymina@google.com>, Donald Hunter <donald.hunter@gmail.com>, 
+	Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+	"=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?=" <bjorn@kernel.org>, Magnus Karlsson <magnus.karlsson@intel.com>, 
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Jonathan Lemon <jonathan.lemon@gmail.com>, 
+	Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, 
+	"=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>, Pavel Begunkov <asml.silence@gmail.com>, 
+	David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, 
+	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst <jeroendb@google.com>, 
+	Praveen Kaligineedi <pkaligineedi@google.com>, Bagas Sanjaya <bagasdotme@gmail.com>, 
+	Christoph Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>, Taehee Yoo <ap420073@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 4, 2024 at 11:26=E2=80=AFPM zhiguojiang <justinjiang@vivo.com> =
-wrote:
->
->
->
-> =E5=9C=A8 2024/9/4 17:16, Barry Song =E5=86=99=E9=81=93:
-> > On Tue, Aug 6, 2024 at 3:36=E2=80=AFAM Zhiguo Jiang <justinjiang@vivo.c=
-om> wrote:
-> >> One of the main reasons for the prolonged exit of the process with
-> >> independent mm is the time-consuming release of its swap entries.
-> >> The proportion of swap memory occupied by the process increases over
-> >> time due to high memory pressure triggering to reclaim anonymous folio
-> >> into swapspace, e.g., in Android devices, we found this proportion can
-> >> reach 60% or more after a period of time. Additionally, the relatively
-> >> lengthy path for releasing swap entries further contributes to the
-> >> longer time required to release swap entries.
-> >>
-> >> Testing Platform: 8GB RAM
-> >> Testing procedure:
-> >> After booting up, start 15 processes first, and then observe the
-> >> physical memory size occupied by the last launched process at differen=
-t
-> >> time points.
-> >> Example: The process launched last: com.qiyi.video
-> >> |  memory type  |  0min  |  1min  |   5min  |   10min  |   15min  |
-> >> -------------------------------------------------------------------
-> >> |     VmRSS(KB) | 453832 | 252300 |  204364 |   199944 |  199748  |
-> >> |   RssAnon(KB) | 247348 |  99296 |   71268 |    67808 |   67660  |
-> >> |   RssFile(KB) | 205536 | 152020 |  132144 |   131184 |  131136  |
-> >> |  RssShmem(KB) |   1048 |    984 |     952 |     952  |     952  |
-> >> |    VmSwap(KB) | 202692 | 334852 |  362880 |   366340 |  366488  |
-> >> | Swap ratio(%) | 30.87% | 57.03% |  63.97% |   64.69% |  64.72%  |
-> >> Note: min - minute.
-> >>
-> >> When there are multiple processes with independent mm and the high
-> >> memory pressure in system, if the large memory required process is
-> >> launched at this time, system will is likely to trigger the instantane=
-ous
-> >> killing of many processes with independent mm. Due to multiple exiting
-> >> processes occupying multiple CPU core resources for concurrent executi=
-on,
-> >> leading to some issues such as the current non-exiting and important
-> >> processes lagging.
-> >>
-> >> To solve this problem, we have introduced the multiple exiting process
-> >> asynchronous swap entries release mechanism, which isolates and caches
-> >> swap entries occupied by multiple exiting processes, and hands them ov=
-er
-> >> to an asynchronous kworker to complete the release. This allows the
-> >> exiting processes to complete quickly and release CPU resources. We ha=
-ve
-> >> validated this modification on the Android products and achieved the
-> >> expected benefits.
-> >>
-> >> Testing Platform: 8GB RAM
-> >> Testing procedure:
-> >> After restarting the machine, start 15 app processes first, and then
-> >> start the camera app processes, we monitor the cold start and preview
-> >> time datas of the camera app processes.
-> >>
-> >> Test datas of camera processes cold start time (unit: millisecond):
-> >> |  seq   |   1  |   2  |   3  |   4  |   5  |   6  | average |
-> >> | before | 1498 | 1476 | 1741 | 1337 | 1367 | 1655 |   1512  |
-> >> | after  | 1396 | 1107 | 1136 | 1178 | 1071 | 1339 |   1204  |
-> >>
-> >> Test datas of camera processes preview time (unit: millisecond):
-> >> |  seq   |   1  |   2  |   3  |   4  |   5  |   6  | average |
-> >> | before |  267 |  402 |  504 |  513 |  161 |  265 |   352   |
-> >> | after  |  188 |  223 |  301 |  203 |  162 |  154 |   205   |
-> >>
-> >> Base on the average of the six sets of test datas above, we can see th=
-at
-> >> the benefit datas of the modified patch:
-> >> 1. The cold start time of camera app processes has reduced by about 20=
-%.
-> >> 2. The preview time of camera app processes has reduced by about 42%.
-> >>
-> >> It offers several benefits:
-> >> 1. Alleviate the high system cpu loading caused by multiple exiting
-> >>     processes running simultaneously.
-> >> 2. Reduce lock competition in swap entry free path by an asynchronous
-> >>     kworker instead of multiple exiting processes parallel execution.
-> >> 3. Release pte_present memory occupied by exiting processes more
-> >>     efficiently.
-> >>
-> >> Signed-off-by: Zhiguo Jiang <justinjiang@vivo.com>
-> >> ---
-> >>   arch/s390/include/asm/tlb.h |   8 +
-> >>   include/asm-generic/tlb.h   |  44 ++++++
-> >>   include/linux/mm_types.h    |  58 +++++++
-> >>   mm/memory.c                 |   3 +-
-> >>   mm/mmu_gather.c             | 296 ++++++++++++++++++++++++++++++++++=
-++
-> >>   5 files changed, 408 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/arch/s390/include/asm/tlb.h b/arch/s390/include/asm/tlb.h
-> >> index e95b2c8081eb..3f681f63390f
-> >> --- a/arch/s390/include/asm/tlb.h
-> >> +++ b/arch/s390/include/asm/tlb.h
-> >> @@ -28,6 +28,8 @@ static inline bool __tlb_remove_page_size(struct mmu=
-_gather *tlb,
-> >>                  struct page *page, bool delay_rmap, int page_size);
-> >>   static inline bool __tlb_remove_folio_pages(struct mmu_gather *tlb,
-> >>                  struct page *page, unsigned int nr_pages, bool delay_=
-rmap);
-> >> +static inline bool __tlb_remove_swap_entries(struct mmu_gather *tlb,
-> >> +               swp_entry_t entry, int nr);
-> >>
-> >>   #define tlb_flush tlb_flush
-> >>   #define pte_free_tlb pte_free_tlb
-> >> @@ -69,6 +71,12 @@ static inline bool __tlb_remove_folio_pages(struct =
-mmu_gather *tlb,
-> >>          return false;
-> >>   }
-> >>
-> >> +static inline bool __tlb_remove_swap_entries(struct mmu_gather *tlb,
-> >> +               swp_entry_t entry, int nr)
-> >> +{
-> >> +       return false;
-> >> +}
-> >> +
-> >>   static inline void tlb_flush(struct mmu_gather *tlb)
-> >>   {
-> >>          __tlb_flush_mm_lazy(tlb->mm);
-> >> diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
-> >> index 709830274b75..8b4d516b35b8
-> >> --- a/include/asm-generic/tlb.h
-> >> +++ b/include/asm-generic/tlb.h
-> >> @@ -294,6 +294,37 @@ extern void tlb_flush_rmaps(struct mmu_gather *tl=
-b, struct vm_area_struct *vma);
-> >>   static inline void tlb_flush_rmaps(struct mmu_gather *tlb, struct vm=
-_area_struct *vma) { }
-> >>   #endif
-> >>
-> >> +#ifndef CONFIG_MMU_GATHER_NO_GATHER
-> >> +struct mmu_swap_batch {
-> >> +       struct mmu_swap_batch *next;
-> >> +       unsigned int nr;
-> >> +       unsigned int max;
-> >> +       encoded_swpentry_t encoded_entrys[];
-> >> +};
-> >> +
-> >> +#define MAX_SWAP_GATHER_BATCH  \
-> >> +       ((PAGE_SIZE - sizeof(struct mmu_swap_batch)) / sizeof(void *))
-> >> +
-> >> +#define MAX_SWAP_GATHER_BATCH_COUNT    (10000UL / MAX_SWAP_GATHER_BAT=
-CH)
-> >> +
-> >> +struct mmu_swap_gather {
-> >> +       /*
-> >> +        * the asynchronous kworker to batch
-> >> +        * release swap entries
-> >> +        */
-> >> +       struct work_struct free_work;
-> >> +
-> >> +       /* batch cache swap entries */
-> >> +       unsigned int batch_count;
-> >> +       struct mmu_swap_batch *active;
-> >> +       struct mmu_swap_batch local;
-> >> +       encoded_swpentry_t __encoded_entrys[MMU_GATHER_BUNDLE];
-> >> +};
-> >> +
-> >> +bool __tlb_remove_swap_entries(struct mmu_gather *tlb,
-> >> +               swp_entry_t entry, int nr);
-> >> +#endif
-> >> +
-> >>   /*
-> >>    * struct mmu_gather is an opaque type used by the mm code for passi=
-ng around
-> >>    * any data needed by arch specific code for tlb_remove_page.
-> >> @@ -343,6 +374,18 @@ struct mmu_gather {
-> >>          unsigned int            vma_exec : 1;
-> >>          unsigned int            vma_huge : 1;
-> >>          unsigned int            vma_pfn  : 1;
-> >> +#ifndef CONFIG_MMU_GATHER_NO_GATHER
-> >> +       /*
-> >> +        * Two states of releasing swap entries
-> >> +        * asynchronously:
-> >> +        * swp_freeable - have opportunity to
-> >> +        * release asynchronously future
-> >> +        * swp_freeing - be releasing asynchronously.
-> >> +        */
-> >> +       unsigned int            swp_freeable : 1;
-> >> +       unsigned int            swp_freeing : 1;
-> >> +       unsigned int            swp_disable : 1;
-> >> +#endif
-> >>
-> >>          unsigned int            batch_count;
-> >>
-> >> @@ -354,6 +397,7 @@ struct mmu_gather {
-> >>   #ifdef CONFIG_MMU_GATHER_PAGE_SIZE
-> >>          unsigned int page_size;
-> >>   #endif
-> >> +       struct mmu_swap_gather *swp;
-> >>   #endif
-> >>   };
-> >>
-> >> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-> >> index 165c58b12ccc..2f66303f1519
-> >> --- a/include/linux/mm_types.h
-> >> +++ b/include/linux/mm_types.h
-> >> @@ -283,6 +283,64 @@ typedef struct {
-> >>          unsigned long val;
-> >>   } swp_entry_t;
-> >>
-> >> +/*
-> >> + * encoded_swpentry_t - a type marking the encoded swp_entry_t.
-> >> + *
-> >> + * An 'encoded_swpentry_t' represents a 'swp_enrty_t' with its the hi=
-ghest
-> >> + * bit indicating extra context-dependent information. Only used in s=
-wp_entry
-> >> + * asynchronous release path by mmu_swap_gather.
-> >> + */
-> >> +typedef struct {
-> >> +       unsigned long val;
-> >> +} encoded_swpentry_t;
-> >> +
-> >> +/*
-> >> + * The next item in an encoded_swpentry_t array is the "nr" argument,=
- specifying the
-> >> + * total number of consecutive swap entries associated with the same =
-folio. If this
-> >> + * bit is not set, "nr" is implicitly 1.
-> >> + *
-> >> + * Refer to include\asm\pgtable.h, swp_offset bits: 0 ~ 57, swp_type =
-bits: 58 ~ 62.
-> >> + * Bit63 can be used here.
-> >> + */
-> >> +#define ENCODED_SWPENTRY_BIT_NR_ENTRYS_NEXT (1UL << (BITS_PER_LONG - =
-1))
-> >> +
-> >> +static __always_inline encoded_swpentry_t
-> >> +encode_swpentry(swp_entry_t entry, unsigned long flags)
-> >> +{
-> >> +       encoded_swpentry_t ret;
-> >> +
-> >> +       VM_WARN_ON_ONCE(flags & ~ENCODED_SWPENTRY_BIT_NR_ENTRYS_NEXT);
-> >> +       ret.val =3D flags | entry.val;
-> >> +       return ret;
-> >> +}
-> >> +
-> >> +static inline unsigned long encoded_swpentry_flags(encoded_swpentry_t=
- entry)
-> >> +{
-> >> +       return ENCODED_SWPENTRY_BIT_NR_ENTRYS_NEXT & entry.val;
-> >> +}
-> >> +
-> >> +static inline swp_entry_t encoded_swpentry_data(encoded_swpentry_t en=
-try)
-> >> +{
-> >> +       swp_entry_t ret;
-> >> +
-> >> +       ret.val =3D ~ENCODED_SWPENTRY_BIT_NR_ENTRYS_NEXT & entry.val;
-> >> +       return ret;
-> >> +}
-> >> +
-> >> +static __always_inline encoded_swpentry_t encode_nr_swpentrys(unsigne=
-d long nr)
-> >> +{
-> >> +       encoded_swpentry_t ret;
-> >> +
-> >> +       VM_WARN_ON_ONCE(nr & ENCODED_SWPENTRY_BIT_NR_ENTRYS_NEXT);
-> >> +       ret.val =3D nr;
-> >> +       return ret;
-> >> +}
-> >> +
-> >> +static __always_inline unsigned long encoded_nr_swpentrys(encoded_swp=
-entry_t entry)
-> >> +{
-> >> +       return ((~ENCODED_SWPENTRY_BIT_NR_ENTRYS_NEXT) & entry.val);
-> >> +}
-> >> +
-> >>   /**
-> >>    * struct folio - Represents a contiguous set of bytes.
-> >>    * @flags: Identical to the page flags.
-> >> diff --git a/mm/memory.c b/mm/memory.c
-> >> index d6a9dcddaca4..023a8adcb67c
-> >> --- a/mm/memory.c
-> >> +++ b/mm/memory.c
-> >> @@ -1650,7 +1650,8 @@ static unsigned long zap_pte_range(struct mmu_ga=
-ther *tlb,
-> >>                          if (!should_zap_cows(details))
-> >>                                  continue;
-> >>                          rss[MM_SWAPENTS] -=3D nr;
-> >> -                       free_swap_and_cache_nr(entry, nr);
-> >> +                       if (!__tlb_remove_swap_entries(tlb, entry, nr)=
-)
-> >> +                               free_swap_and_cache_nr(entry, nr);
-> >>                  } else if (is_migration_entry(entry)) {
-> >>                          folio =3D pfn_swap_entry_folio(entry);
-> >>                          if (!should_zap_folio(details, folio))
-> >> diff --git a/mm/mmu_gather.c b/mm/mmu_gather.c
-> >> index 99b3e9408aa0..33dc9d1faff9
-> >> --- a/mm/mmu_gather.c
-> >> +++ b/mm/mmu_gather.c
-> >> @@ -9,11 +9,303 @@
-> >>   #include <linux/smp.h>
-> >>   #include <linux/swap.h>
-> >>   #include <linux/rmap.h>
-> >> +#include <linux/oom.h>
-> >>
-> >>   #include <asm/pgalloc.h>
-> >>   #include <asm/tlb.h>
-> >>
-> >>   #ifndef CONFIG_MMU_GATHER_NO_GATHER
-> >> +/*
-> >> + * The swp_entry asynchronous release mechanism for multiple processe=
-s with
-> >> + * independent mm exiting simultaneously.
-> >> + *
-> >> + * During the multiple exiting processes releasing their own mm simul=
-taneously,
-> >> + * the swap entries in the exiting processes are handled by isolating=
-, caching
-> >> + * and handing over to an asynchronous kworker to complete the releas=
-e.
-> >> + *
-> >> + * The conditions for the exiting process entering the swp_entry asyn=
-chronous
-> >> + * release path:
-> >> + * 1. The exiting process's MM_SWAPENTS count is >=3D SWAP_CLUSTER_MA=
-X, avoiding
-> >> + *    to alloc struct mmu_swap_gather frequently.
-> >> + * 2. The number of exiting processes is >=3D NR_MIN_EXITING_PROCESSE=
-S.
-> > Hi Zhiguo,
-> >
-> > I'm curious about the significance of NR_MIN_EXITING_PROCESSES. It seem=
-s that
-> > batched swap entry freeing, even with one process, could be a
-> > bottleneck for a single
-> > process based on the data from this patch:
-> >
-> > mm: attempt to batch free swap entries for zap_pte_range()
-> > https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/commit/?h=
-=3Dmm-stable&id=3Dbea67dcc5ee
-> > "munmap bandwidth becomes 3X faster."
-> >
-> > So what would happen if you simply set NR_MIN_EXITING_PROCESSES to 1?
-> Hi Barry,
->
-> Thanks for your comments.
->
-> The reason for NR_MIN_EXITING_PROCESSES =3D 2 is that previously we
-> conducted the multiple android apps continuous startup performance
-> test on the case of NR_MIN_EXITING_PROCESSES =3D 1, and the results
-> showed that the startup time had deteriorated slightly. However,
-> the patch's logic in this test was different from the one I submitted
-> to the community, and it may be due to some other issues with the
-> previous old patch.
->
-> However, we have conducted relevant memory performance tests on this
-> patches submitted to the community (NR_MIN_EXITING_PROCESSES=3D2), and
-> the results are better than before the modification. The patches have
-> been used on multiple projects.
-> For example:
-> Test the time consumption and subjective fluency experience of
-> launching 30 android apps continuously for two rounds.
-> Test machine: RAM 16GB
-> |        | time(s) | Frame-droped rate(%) |
-> | before | 230.76  |         0.54         |
-> | after  | 225.23  |         0.74         |
-> We can see that the patch has been optimized 5.53s for startup time and
-> 0.2% frame-droped rate and better subjective smoothness experience.
->
-> Perhaps the patches submitted to the community has also improved the
-> multiple android apps continuous startup performance in the case
-> of NR_MIN_EXITING_PROCESSES=3D1. If necessary, I will conduct relevant
-> tests to verify this situation in the future.
+v25: https://patchwork.kernel.org/project/netdevbpf/list/?series=3D885396&s=
+tate=3D*
+=3D=3D=3D
 
-Using a fixed value like 2 feels more like a workaround than a solid soluti=
-on.
-It would be better if we could eliminate this hack.
+Major changes:
+- Moved devmem.h and mp_dmabuf_devmem.h to internal header files.
+- Changed the page_pool_params to take in a queue_idx rather than
+  a struct netdev_rx_queue.
+- Added WARN_ON_ONCE around __skb_checksum readability check and added
+  check to skb_checksum_help().
 
-Additionally, this type of asynchronous reclamation might struggle to scale
-effectively, particularly on NUMA systems with many CPU cores.
+Other more minor feedback addressed as well.
 
-Many kernel threads are per-node, like kswapd. For instance, if we have 100
-threads running on 100 CPUs executing zap_pte_range(), your approach, which
-relies on a single async thread to reclaim swap entries, might lead to
-performance
-regressions.
+v24: https://patchwork.kernel.org/project/netdevbpf/list/?series=3D884556&s=
+tate=3D*
+=3D=3D=3D=3D
 
-We might need to consider a more adaptable approach that can evaluate
-the machine's
-topology and dynamically determine the appropriate number of async
-threads, rather
-than hard-coding it to just one. Otherwise, there could be ongoing
-concerns about
-whether this solution is truly applicable to all systems.
+No major changes. Mostly addressing issues in the error paths of dmabuf
+binding, and code cleanups/improvements from reviewers:
 
-Alternatively, we might be able to develop a method to speed up
-batched freeing in a
-synchronous manner after collecting the mmu_swap_batch. mmu_gather isn't
-async, but it can still speed up tlb flush, right?
+Changes:
+- Fix failing ynl regen error.
+- Error path fixes & extack error messages in dmabuf binding.
+- Code cleanup in introspection.
+- gitignore ynl.d generated file.
 
-For phones with just 8 CPU cores, I definitely like your patch.
-However, since we're
-aiming for something which can affect all systems, the situation might be m=
-ore
-complex.
+Full devmem TCP changes including the full GVE driver implementation is
+here:
 
-> >
-> >> + *
-> >> + * Since the time for determining the number of exiting processes is =
-dynamic,
-> >> + * the exiting process may start to enter the swp_entry asynchronous =
-release
-> >> + * at the beginning or middle stage of the exiting process's swp_entr=
-y release
-> >> + * path.
-> >> + *
-> >> + * Once an exiting process enters the swp_entry asynchronous release,=
- all remaining
-> >> + * swap entries in this exiting process need to be fully released by =
-asynchronous
-> >> + * kworker theoretically.
-> > Freeing a slot can indeed release memory from `zRAM`, potentially retur=
-ning
-> > it to the system for allocation. Your patch frees swap slots asynchrono=
-usly;
-> > I assume this doesn=E2=80=99t slow down the memory freeing process for =
-`zRAM`, or
-> > could it even slow down the freeing of `zRAM` memory? Freeing compresse=
-d
-> > memory might not be as crucial compared to freeing uncompressed memory =
-with
-> > present PTEs?
-> Yes, freeing uncompressed memory with present PTEs is more important
-> compared to freeing compressed 'zRAM' memory.
->
-> I guess that the multiple exiting processes releasing swap entries
-> simultaneously may result in the swap_info->lock competition pressure
-> in swapcache_free_entries(), affecting the efficiency of releasing swap
-> entries. However, if the asynchronous kworker is used, this issue can
-> be avoided, and perhaps the improvement is minor.
->
-> The freeing of zRAM memory does not slow down. We have observed traces
-> in the camera startup scene and found that the asynchronous kworker
-> can release all swap entries before entering the camera preview.
-> Compared to not using the asynchronous kworker, the exiting processes
-> completed after entering the camera preview.
-> >
-> >> + *
-> >> + * The function of the swp_entry asynchronous release:
-> >> + * 1. Alleviate the high system cpu load caused by multiple exiting p=
-rocesses
-> >> + *    running simultaneously.
-> >> + * 2. Reduce lock competition in swap entry free path by an asynchron=
-ous kworker
-> >> + *    instead of multiple exiting processes parallel execution.
-> >> + * 3. Release pte_present memory occupied by exiting processes more e=
-fficiently.
-> >> + */
-> >> +
-> >> +/*
-> >> + * The min number of exiting processes required for swp_entry asynchr=
-onous release
-> >> + */
-> >> +#define NR_MIN_EXITING_PROCESSES 2
-> >> +
-> >> +static atomic_t nr_exiting_processes =3D ATOMIC_INIT(0);
-> >> +static struct kmem_cache *swap_gather_cachep;
-> >> +static struct workqueue_struct *swapfree_wq;
-> >> +static DEFINE_STATIC_KEY_TRUE(tlb_swap_asyncfree_disabled);
-> >> +
-> >> +static int __init tlb_swap_async_free_setup(void)
-> >> +{
-> >> +       swapfree_wq =3D alloc_workqueue("smfree_wq", WQ_UNBOUND |
-> >> +               WQ_HIGHPRI | WQ_MEM_RECLAIM, 1);
-> >> +       if (!swapfree_wq)
-> >> +               goto fail;
-> >> +
-> >> +       swap_gather_cachep =3D kmem_cache_create("swap_gather",
-> >> +               sizeof(struct mmu_swap_gather),
-> >> +               0, SLAB_TYPESAFE_BY_RCU | SLAB_PANIC | SLAB_ACCOUNT,
-> >> +               NULL);
-> >> +       if (!swap_gather_cachep)
-> >> +               goto kcache_fail;
-> >> +
-> >> +       static_branch_disable(&tlb_swap_asyncfree_disabled);
-> >> +       return 0;
-> >> +
-> >> +kcache_fail:
-> >> +       destroy_workqueue(swapfree_wq);
-> >> +fail:
-> >> +       return -ENOMEM;
-> >> +}
-> >> +postcore_initcall(tlb_swap_async_free_setup);
-> >> +
-> >> +static void __tlb_swap_gather_free(struct mmu_swap_gather *swap_gathe=
-r)
-> >> +{
-> >> +       struct mmu_swap_batch *swap_batch, *next;
-> >> +
-> >> +       for (swap_batch =3D swap_gather->local.next; swap_batch; swap_=
-batch =3D next) {
-> >> +               next =3D swap_batch->next;
-> >> +               free_page((unsigned long)swap_batch);
-> >> +       }
-> >> +       swap_gather->local.next =3D NULL;
-> >> +       kmem_cache_free(swap_gather_cachep, swap_gather);
-> >> +}
-> >> +
-> >> +static void tlb_swap_async_free_work(struct work_struct *w)
-> >> +{
-> >> +       int i, nr_multi, nr_free;
-> >> +       swp_entry_t start_entry;
-> >> +       struct mmu_swap_batch *swap_batch;
-> >> +       struct mmu_swap_gather *swap_gather =3D container_of(w,
-> >> +               struct mmu_swap_gather, free_work);
-> >> +
-> >> +       /* Release swap entries cached in mmu_swap_batch. */
-> >> +       for (swap_batch =3D &swap_gather->local; swap_batch && swap_ba=
-tch->nr;
-> >> +           swap_batch =3D swap_batch->next) {
-> >> +               nr_free =3D 0;
-> >> +               for (i =3D 0; i < swap_batch->nr; i++) {
-> >> +                       if (unlikely(encoded_swpentry_flags(swap_batch=
-->encoded_entrys[i]) &
-> >> +                           ENCODED_SWPENTRY_BIT_NR_ENTRYS_NEXT)) {
-> >> +                               start_entry =3D encoded_swpentry_data(=
-swap_batch->encoded_entrys[i]);
-> >> +                               nr_multi =3D encoded_nr_swpentrys(swap=
-_batch->encoded_entrys[++i]);
-> >> +                               free_swap_and_cache_nr(start_entry, nr=
-_multi);
-> >> +                               nr_free +=3D 2;
-> >> +                       } else {
-> >> +                               start_entry =3D encoded_swpentry_data(=
-swap_batch->encoded_entrys[i]);
-> >> +                               free_swap_and_cache_nr(start_entry, 1)=
-;
-> >> +                               nr_free++;
-> >> +                       }
-> >> +               }
-> >> +               swap_batch->nr -=3D nr_free;
-> >> +               VM_BUG_ON(swap_batch->nr);
-> >> +       }
-> >> +       __tlb_swap_gather_free(swap_gather);
-> >> +}
-> >> +
-> >> +static bool __tlb_swap_gather_mmu_check(struct mmu_gather *tlb)
-> >> +{
-> >> +       /*
-> >> +        * Only the exiting processes with the MM_SWAPENTS counter >=
-=3D
-> >> +        * SWAP_CLUSTER_MAX have the opportunity to release their swap
-> >> +        * entries by asynchronous kworker.
-> >> +        */
-> >> +       if (!task_is_dying() ||
-> >> +           get_mm_counter(tlb->mm, MM_SWAPENTS) < SWAP_CLUSTER_MAX)
-> >> +               return true;
-> >> +
-> >> +       atomic_inc(&nr_exiting_processes);
-> >> +       if (atomic_read(&nr_exiting_processes) < NR_MIN_EXITING_PROCES=
-SES)
-> >> +               tlb->swp_freeable =3D 1;
-> >> +       else
-> >> +               tlb->swp_freeing =3D 1;
-> >> +
-> >> +       return false;
-> >> +}
-> >> +
-> >> +/**
-> >> + * __tlb_swap_gather_init - Initialize an mmu_swap_gather structure
-> >> + * for swp_entry tear-down.
-> >> + * @tlb: the mmu_swap_gather structure belongs to tlb
-> >> + */
-> >> +static bool __tlb_swap_gather_init(struct mmu_gather *tlb)
-> >> +{
-> >> +       tlb->swp =3D kmem_cache_alloc(swap_gather_cachep, GFP_ATOMIC |=
- GFP_NOWAIT);
-> >> +       if (unlikely(!tlb->swp))
-> >> +               return false;
-> >> +
-> >> +       tlb->swp->local.next  =3D NULL;
-> >> +       tlb->swp->local.nr    =3D 0;
-> >> +       tlb->swp->local.max   =3D ARRAY_SIZE(tlb->swp->__encoded_entry=
-s);
-> >> +
-> >> +       tlb->swp->active      =3D &tlb->swp->local;
-> >> +       tlb->swp->batch_count =3D 0;
-> >> +
-> >> +       INIT_WORK(&tlb->swp->free_work, tlb_swap_async_free_work);
-> >> +       return true;
-> >> +}
-> >> +
-> >> +static void __tlb_swap_gather_mmu(struct mmu_gather *tlb)
-> >> +{
-> >> +       if (static_branch_unlikely(&tlb_swap_asyncfree_disabled))
-> >> +               return;
-> >> +
-> >> +       tlb->swp =3D NULL;
-> >> +       tlb->swp_freeable =3D 0;
-> >> +       tlb->swp_freeing =3D 0;
-> >> +       tlb->swp_disable =3D 0;
-> >> +
-> >> +       if (__tlb_swap_gather_mmu_check(tlb))
-> >> +               return;
-> >> +
-> >> +       /*
-> >> +        * If the exiting process meets the conditions of
-> >> +        * swp_entry asynchronous release, an mmu_swap_gather
-> >> +        * structure will be initialized.
-> >> +        */
-> >> +       if (tlb->swp_freeing)
-> >> +               __tlb_swap_gather_init(tlb);
-> >> +}
-> >> +
-> >> +static void __tlb_swap_gather_queuework(struct mmu_gather *tlb, bool =
-finish)
-> >> +{
-> >> +       queue_work(swapfree_wq, &tlb->swp->free_work);
-> >> +       tlb->swp =3D NULL;
-> >> +       if (!finish)
-> >> +               __tlb_swap_gather_init(tlb);
-> >> +}
-> >> +
-> >> +static bool __tlb_swap_next_batch(struct mmu_gather *tlb)
-> >> +{
-> >> +       struct mmu_swap_batch *swap_batch;
-> >> +
-> >> +       if (tlb->swp->batch_count =3D=3D MAX_SWAP_GATHER_BATCH_COUNT)
-> >> +               goto free;
-> >> +
-> >> +       swap_batch =3D (void *)__get_free_page(GFP_ATOMIC | GFP_NOWAIT=
-);
-> >> +       if (unlikely(!swap_batch))
-> >> +               goto free;
-> >> +
-> >> +       swap_batch->next =3D NULL;
-> >> +       swap_batch->nr   =3D 0;
-> >> +       swap_batch->max  =3D MAX_SWAP_GATHER_BATCH;
-> >> +
-> >> +       tlb->swp->active->next =3D swap_batch;
-> >> +       tlb->swp->active =3D swap_batch;
-> >> +       tlb->swp->batch_count++;
-> >> +       return true;
-> >> +free:
-> >> +       /* batch move to wq */
-> >> +       __tlb_swap_gather_queuework(tlb, false);
-> >> +       return false;
-> >> +}
-> >> +
-> >> +/**
-> >> + * __tlb_remove_swap_entries - the swap entries in exiting process ar=
+https://github.com/mina/linux/commits/tcpdevmem-v24/
+
+v23: https://patchwork.kernel.org/project/netdevbpf/list/?series=3D882978&s=
+tate=3D*
+=3D=3D=3D=3D
+
+Fixing relatively minor issues called out in v22. (thanks again!)
+
+Mostly code cleanups, extack error messages, and minor reworks. Nothing
+major really changed, so the exact changes per commit is called in the
+commit messages.
+
+Full devmem TCP changes including the full GVE driver implementation is
+here:
+
+https://github.com/mina/linux/commits/tcpdevmem-v23/
+
+v22: https://patchwork.kernel.org/project/netdevbpf/list/?series=3D881158&s=
+tate=3D*
+=3D=3D=3D=3D
+
+v22 aims to resolve the pending issue pointed to in v21, which is the
+interaction with xdp. In this series I rebase on top of the minor
+refactor which refactors propagating xdp configuration to slave devices:
+
+https://patchwork.kernel.org/project/netdevbpf/list/?series=3D881994&state=
+=3D*
+
+I then disable setting xdp on devices using memory providers, and
+propagating xdp configuration to devices using memory providers.
+
+Full devmem TCP changes including the full GVE driver implementation is
+here:
+
+https://github.com/mina/linux/commits/tcpdevmem-v22/
+
+v21: https://patchwork.kernel.org/project/netdevbpf/list/?series=3D880735&s=
+tate=3D*
+=3D=3D=3D=3D
+
+v20 addressed some comments and resolved a test failure, but introduced
+an unfortunate build error with a config edge case I wasn't testing. v21
+simply resolves that error.
+
+Major Changes:
+- Resolve build error with CONFIG_PAGE_POOL=3Dn && CONFIG_NET=3Dy
+
+Full devmem TCP changes including the full GVE driver implementation is
+here:
+
+https://github.com/mina/linux/commits/tcpdevmem-v21/
+
+v20: https://patchwork.kernel.org/project/netdevbpf/list/?series=3D879373&s=
+tate=3D*
+=3D=3D=3D=3D
+
+v20 aims to resolve a couple of bug reports against v19, and addresses
+some review comments around the page_pool_check_memory_provider
+mechanism.
+
+Major changes:
+- Test edge cases such as header split disabled in selftest.
+- Change `offset =3D 0` back to `offset =3D offset - start` to resolve issu=
 e
-> >> + * isolated, batch cached in struct mmu_swap_batch.
-> >> + * @tlb: the current mmu_gather
-> >> + * @entry: swp_entry to be isolated and cached
-> >> + * @nr: the number of consecutive entries starting from entry paramet=
-er.
-> >> + */
-> >> +bool __tlb_remove_swap_entries(struct mmu_gather *tlb,
-> >> +                            swp_entry_t entry, int nr)
-> >> +{
-> >> +       struct mmu_swap_batch *swap_batch;
-> >> +       unsigned long flags =3D 0;
-> >> +       bool ret =3D false;
-> >> +
-> >> +       if (tlb->swp_disable)
-> >> +               return ret;
-> >> +
-> >> +       if (!tlb->swp_freeable && !tlb->swp_freeing)
-> >> +               return ret;
-> >> +
-> >> +       if (tlb->swp_freeable) {
-> >> +               if (atomic_read(&nr_exiting_processes) <
-> >> +                   NR_MIN_EXITING_PROCESSES)
-> >> +                       return ret;
-> >> +               /*
-> >> +                * If the current number of exiting processes
-> >> +                * is >=3D NR_MIN_EXITING_PROCESSES, the exiting
-> >> +                * process with swp_freeable state will enter
-> >> +                * swp_freeing state to start releasing its
-> >> +                * remaining swap entries by the asynchronous
-> >> +                * kworker.
-> >> +                */
-> >> +               tlb->swp_freeable =3D 0;
-> >> +               tlb->swp_freeing =3D 1;
-> >> +       }
-> >> +
-> >> +       VM_BUG_ON(tlb->swp_freeable || !tlb->swp_freeing);
-> >> +       if (!tlb->swp && !__tlb_swap_gather_init(tlb))
-> >> +               return ret;
-> >> +
-> >> +       swap_batch =3D tlb->swp->active;
-> >> +       if (unlikely(swap_batch->nr >=3D swap_batch->max - 1)) {
-> >> +               __tlb_swap_gather_queuework(tlb, false);
-> >> +               return ret;
-> >> +       }
-> >> +
-> >> +       if (likely(nr =3D=3D 1)) {
-> >> +               swap_batch->encoded_entrys[swap_batch->nr++] =3D encod=
-e_swpentry(entry, flags);
-> >> +       } else {
-> >> +               flags |=3D ENCODED_SWPENTRY_BIT_NR_ENTRYS_NEXT;
-> >> +               swap_batch->encoded_entrys[swap_batch->nr++] =3D encod=
-e_swpentry(entry, flags);
-> >> +               swap_batch->encoded_entrys[swap_batch->nr++] =3D encod=
-e_nr_swpentrys(nr);
-> >> +       }
-> >> +       ret =3D true;
-> >> +
-> >> +       if (swap_batch->nr >=3D swap_batch->max - 1) {
-> >> +               if (!__tlb_swap_next_batch(tlb))
-> >> +                       goto exit;
-> >> +               swap_batch =3D tlb->swp->active;
-> >> +       }
-> >> +       VM_BUG_ON(swap_batch->nr > swap_batch->max - 1);
-> >> +exit:
-> >> +       return ret;
-> >> +}
-> >> +
-> >> +static void __tlb_batch_swap_finish(struct mmu_gather *tlb)
-> >> +{
-> >> +       if (tlb->swp_disable)
-> >> +               return;
-> >> +
-> >> +       if (!tlb->swp_freeable && !tlb->swp_freeing)
-> >> +               return;
-> >> +
-> >> +       if (tlb->swp_freeable) {
-> >> +               tlb->swp_freeable =3D 0;
-> >> +               VM_BUG_ON(tlb->swp_freeing);
-> >> +               goto exit;
-> >> +       }
-> >> +       tlb->swp_freeing =3D 0;
-> >> +       if (unlikely(!tlb->swp))
-> >> +               goto exit;
-> >> +
-> >> +       __tlb_swap_gather_queuework(tlb, true);
-> >> +exit:
-> >> +       atomic_dec(&nr_exiting_processes);
-> >> +}
-> >>
-> >>   static bool tlb_next_batch(struct mmu_gather *tlb)
-> >>   {
-> >> @@ -386,6 +678,9 @@ static void __tlb_gather_mmu(struct mmu_gather *tl=
-b, struct mm_struct *mm,
-> >>          tlb->local.max  =3D ARRAY_SIZE(tlb->__pages);
-> >>          tlb->active     =3D &tlb->local;
-> >>          tlb->batch_count =3D 0;
-> >> +
-> >> +       tlb->swp_disable =3D 1;
-> >> +       __tlb_swap_gather_mmu(tlb);
-> >>   #endif
-> >>          tlb->delayed_rmap =3D 0;
-> >>
-> >> @@ -466,6 +761,7 @@ void tlb_finish_mmu(struct mmu_gather *tlb)
-> >>
-> >>   #ifndef CONFIG_MMU_GATHER_NO_GATHER
-> >>          tlb_batch_list_free(tlb);
-> >> +       __tlb_batch_swap_finish(tlb);
-> >>   #endif
-> >>          dec_tlb_flush_pending(tlb->mm);
-> >>   }
-> >> --
-> >> 2.39.0
-> >>
+  found in RX path by Taehee (thanks!)
+- Address a few comments around page_pool_check_memory_provider() from
+  Pavel & Jakub.
+- Removed some unnecessary includes across various patches in the
+  series.
+- Removed unnecessary EXPORT_SYMBOL(page_pool_mem_providers) (Jakub).
+- Fix regression caused by incorrect dev_get_max_mp_channel check, along
+  with rename (Jakub).
 
-Thanks
-Barry
+Full devmem TCP changes including the full GVE driver implementation is
+here:
+
+https://github.com/mina/linux/commits/tcpdevmem-v20/
+
+v19: https://patchwork.kernel.org/project/netdevbpf/list/?series=3D876852&s=
+tate=3D*
+=3D=3D=3D=3D
+
+v18 got a thorough review (thanks!), and this iteration addresses the
+feedback.
+
+Major changes:
+- Prevent deactivating mp bound queues.
+- Prevent installing xdp on mp bound netdevs, or installing mps on xdp
+  installed netdevs.
+- Fix corner cases in netlink API vis-a-vis missing attributes.
+- Iron out the unreadable netmem driver support story. To be honest, the
+  conversation with Jakub & Pavel got a bit confusing for me. I've
+  implemented an approach in this set that makes sense to me, and
+  AFAICT, addresses the requirements. It may be good as-is, or it
+  may be a conversation starter/continuer. To be honest IMO there
+  are many ways to skin this cat and I don't see an extremely strong
+  reason to go for one approach over another. Here is one approach you
+  may like.
+- Don't reset niov dma_addr on allocation & free.
+- Add some tests to the selftest that catches some of the issues around
+  missing netlink attributes or deactivating mp-bound queues.
+
+Full devmem TCP changes including the full GVE driver implementation is
+here:
+
+https://github.com/mina/linux/commits/tcpdevmem-v19/
+
+v18: https://patchwork.kernel.org/project/netdevbpf/list/?series=3D874848&s=
+tate=3D*
+=3D=3D=3D=3D
+
+v17 got minor feedback: (a) to beef up the description on patch 1 and (b)
+to remove the leading underscores in the header definition.
+
+I applied (a). (b) seems to be against current conventions so I did not
+apply before further discussion.
+
+Full devmem TCP changes including the full GVE driver implementation is
+here:
+
+https://github.com/mina/linux/commits/tcpdevmem-v17/
+
+v17: https://patchwork.kernel.org/project/netdevbpf/list/?series=3D869900&s=
+tate=3D*
+=3D=3D=3D=3D
+
+v16 also got a very thorough review and some testing (thanks again!).
+Thes version addresses all the concerns reported on v15, in terms of
+feedback and issues reported.
+
+Major changes:
+- Use ASSERT_RTNL.
+- Moved around some of the page_pool helpers definitions so I can hide
+  some netmem helpers in private files as Jakub suggested.
+- Don't make every net_iov hold a ref on the binding as Jakub suggested.
+- Fix issue reported by Taehee where we access queues after they have
+  been freed.
+
+Full devmem TCP changes including the full GVE driver implementation is
+here:
+
+https://github.com/mina/linux/commits/tcpdevmem-v17/
+
+v16: https://patchwork.kernel.org/project/netdevbpf/list/?series=3D866353&s=
+tate=3D*
+=3D=3D=3D=3D
+
+v15 got a thorough review and some testing, and this version addresses almo=
+st
+all the feedback. Some more minor comments where the authors said it
+could be done later, I left out.
+
+Major changes:
+- Addition of dma-buf introspection to page-pool-get and queue-get.
+- Fixes to selftests suggested by Taehee.
+- Fixes to documentation suggested by Donald.
+- A couple of suggestions and fixes to TCP patches by Eric and David.
+- Fixes to number assignements suggested by Arnd.
+- Use rtnl_lock()ing to guard against queue reconfiguration while the
+  page_pool initialization is happening. (Jakub).
+- Fixes to a few warnings reproduced by Taehee.
+- Fixes to dma-buf binding suggested by Taehee and Jakub.
+- Fixes to netlink UAPI suggested by Jakub
+- Applied a number of Reviewed-bys and Acked-bys (including ones I lost
+  from v13+).
+
+Full devmem TCP changes including the full GVE driver implementation is
+here:
+
+https://github.com/mina/linux/commits/tcpdevmem-v16/
+
+One caveat: Taehee reproduced a KASAN warning and reported it here:
+
+https://lore.kernel.org/netdev/CAMArcTUdCxOBYGF3vpbq=3DeBvqZfnc44KBaQTN7H-w=
+qdUxZdziw@mail.gmail.com/
+
+I estimate the issue to be minor and easily fixable:
+
+https://lore.kernel.org/netdev/CAHS8izNgaqC--GGE2xd85QB=3DutUnOHmioCsDd1TNx=
+JWKemaD_g@mail.gmail.com/
+
+I hope to be able to follow up with a fix to net tree as net-next closes
+imminently, but if this iteration doesn't make it in, I will repost with
+a fix squashed after net-next reopens, no problem.
+
+v15: https://patchwork.kernel.org/project/netdevbpf/list/?series=3D865481&s=
+tate=3D*
+=3D=3D=3D=3D
+
+No material changes in this version, only a fix to linking against
+libynl.a from the last version. Per Jakub's instructions I've pulled one
+of his patches into this series, and now use the new libynl.a correctly,
+I hope.
+
+As usual, the full devmem TCP changes including the full GVE driver
+implementation is here:
+
+https://github.com/mina/linux/commits/tcpdevmem-v15/
+
+v14: https://patchwork.kernel.org/project/netdevbpf/list/?series=3D865135&a=
+rchive=3Dboth&state=3D*
+=3D=3D=3D=3D
+
+No material changes in this version. Only rebase and re-verification on
+top of net-next. v13, I think, raced with commit ebad6d0334793
+("net/ipv4: Use nested-BH locking for ipv4_tcp_sk.") being merged to
+net-next that caused a patchwork failure to apply. This series should
+apply cleanly on commit c4532232fa2a4 ("selftests: net: remove unneeded
+IP_GRE config").
+
+I did not wait the customary 24hr as Jakub said it's OK to repost as soon
+as I build test the rebased version:
+
+https://lore.kernel.org/netdev/20240625075926.146d769d@kernel.org/
+
+v13: https://patchwork.kernel.org/project/netdevbpf/list/?series=3D861406&a=
+rchive=3Dboth&state=3D*
+=3D=3D=3D=3D
+
+Major changes:
+--------------
+
+This iteration addresses Pavel's review comments, applies his
+reviewed-by's, and seeks to fix the patchwork build error (sorry!).
+
+As usual, the full devmem TCP changes including the full GVE driver
+implementation is here:
+
+https://github.com/mina/linux/commits/tcpdevmem-v13/
+
+v12: https://patchwork.kernel.org/project/netdevbpf/list/?series=3D859747&s=
+tate=3D*
+=3D=3D=3D=3D
+
+Major changes:
+--------------
+
+This iteration only addresses one minor comment from Pavel with regards
+to the trace printing of netmem, and the patchwork build error
+introduced in v11 because I missed doing an allmodconfig build, sorry.
+
+Other than that v11, AFAICT, received no feedback. There is one
+discussion about how the specifics of  plugging io uring memory through
+the page pool, but not relevant to content in this particular patchset,
+AFAICT.
+
+As usual, the full devmem TCP changes including the full GVE driver
+implementation is here:
+
+https://github.com/mina/linux/commits/tcpdevmem-v12/
+
+v11: https://patchwork.kernel.org/project/netdevbpf/list/?series=3D857457&s=
+tate=3D*
+=3D=3D=3D=3D
+
+Major Changes:
+--------------
+
+v11 addresses feedback received in v10. The major change is the removal
+of the memory provider ops as requested by Christoph. We still
+accomplish the same thing, but utilizing direct function calls with if
+statements rather than generic ops.
+
+Additionally address sparse warnings, bugs and review comments from
+folks that reviewed.
+
+As usual, the full devmem TCP changes including the full GVE driver
+implementation is here:
+
+https://github.com/mina/linux/commits/tcpdevmem-v11/
+
+Detailed changelog:
+-------------------
+
+- Fixes in netdev_rx_queue_restart() from Pavel & David.
+- Remove commit e650e8c3a36f5 ("net: page_pool: create hooks for
+custom page providers") from the series to address Christoph's
+feedback and rebased other patches on the series on this change.
+- Fixed build errors with CONFIG_DMA_SHARED_BUFFER &&
+  !CONFIG_GENERIC_ALLOCATOR build.
+- Fixed sparse warnings pointed out by Paolo.
+- Drop unnecessary gro_pull_from_frag0 checks.
+- Added Bagas reviewed-by to docs.
+
+v10: https://patchwork.kernel.org/project/netdevbpf/list/?series=3D852422&s=
+tate=3D*
+=3D=3D=3D=3D
+
+Major Changes:
+--------------
+
+v9 was sent right before the merge window closed (sorry!). v10 is almost
+a re-send of the series now that the merge window re-opened. Only
+rebased to latest net-next and addressed some minor iterative comments
+received on v9.
+
+As usual, the full devmem TCP changes including the full GVE driver
+implementation is here:
+
+https://github.com/mina/linux/commits/tcpdevmem-v10/
+
+Detailed changelog:
+-------------------
+
+- Fixed tokens leaking in DONTNEED setsockopt (Nikolay).
+- Moved net_iov_dma_addr() to devmem.c and made it a devmem specific
+  helpers (David).
+- Rename hook alloc_pages to alloc_netmems as alloc_pages is now
+  preprocessor macro defined and causes a build error.
+
+v9:
+=3D=3D=3D
+
+Major Changes:
+--------------
+
+GVE queue API has been merged. Submitting this version as non-RFC after
+rebasing on top of the merged API, and dropped the out of tree queue API
+I was carrying on github. Addressed the little feedback v8 has received.
+
+Detailed changelog:
+------------------
+- Added new patch from David Wei to this series for
+  netdev_rx_queue_restart()
+  - Fixed sparse error.
+  - Removed CONFIG_ checks in netmem_is_net_iov()
+  - Flipped skb->readable to skb->unreadable
+  - Minor fixes to selftests & docs.
+
+RFC v8:
+=3D=3D=3D=3D=3D=3D=3D
+
+Major Changes:
+--------------
+
+- Fixed build error generated by patch-by-patch build.
+- Applied docs suggestions from Randy.
+
+RFC v7:
+=3D=3D=3D=3D=3D=3D=3D
+
+Major Changes:
+--------------
+
+This revision largely rebases on top of net-next and addresses the feedback
+RFCv6 received from folks, namely Jakub, Yunsheng, Arnd, David, & Pavel.
+
+The series remains in RFC because the queue-API ndos defined in this
+series are not yet implemented. I have a GVE implementation I carry out
+of tree for my testing. A upstreamable GVE implementation is in the
+works. Aside from that, in my estimation all the patches are ready for
+review/merge. Please do take a look.
+
+As usual the full devmem TCP changes including the full GVE driver
+implementation is here:
+
+https://github.com/mina/linux/commits/tcpdevmem-v7/
+
+Detailed changelog:
+
+- Use admin-perm in netlink API.
+- Addressed feedback from Jakub with regards to netlink API
+  implementation.
+- Renamed devmem.c functions to something more appropriate for that
+  file.
+- Improve the performance seen through the page_pool benchmark.
+- Fix the value definition of all the SO_DEVMEM_* uapi.
+- Various fixes to documentation.
+
+Perf - page-pool benchmark:
+---------------------------
+
+Improved performance of bench_page_pool_simple.ko tests compared to v6:
+
+https://pastebin.com/raw/v5dYRg8L
+
+      net-next base: 8 cycle fast path.
+      RFC v6: 10 cycle fast path.
+      RFC v7: 9 cycle fast path.
+      RFC v7 with CONFIG_DMA_SHARED_BUFFER disabled: 8 cycle fast path,
+                                                     same as baseline.
+
+Perf - Devmem TCP benchmark:
+---------------------
+
+Perf is about the same regardless of the changes in v7, namely the
+removal of the static_branch_unlikely to improve the page_pool benchmark
+performance:
+
+189/200gbps bi-directional throughput with RX devmem TCP and regular TCP
+TX i.e. ~95% line rate.
+
+RFC v6:
+=3D=3D=3D=3D=3D=3D=3D
+
+Major Changes:
+--------------
+
+This revision largely rebases on top of net-next and addresses the little
+feedback RFCv5 received.
+
+The series remains in RFC because the queue-API ndos defined in this
+series are not yet implemented. I have a GVE implementation I carry out
+of tree for my testing. A upstreamable GVE implementation is in the
+works. Aside from that, in my estimation all the patches are ready for
+review/merge. Please do take a look.
+
+As usual the full devmem TCP changes including the full GVE driver
+implementation is here:
+
+https://github.com/mina/linux/commits/tcpdevmem-v6/
+
+This version also comes with some performance data recorded in the cover
+letter (see below changelog).
+
+Detailed changelog:
+
+- Rebased on top of the merged netmem_ref changes.
+
+- Converted skb->dmabuf to skb->readable (Pavel). Pavel's original
+  suggestion was to remove the skb->dmabuf flag entirely, but when I
+  looked into it closely, I found the issue that if we remove the flag
+  we have to dereference the shinfo(skb) pointer to obtain the first
+  frag to tell whether an skb is readable or not. This can cause a
+  performance regression if it dirties the cache line when the
+  shinfo(skb) was not really needed. Instead, I converted the skb->dmabuf
+  flag into a generic skb->readable flag which can be re-used by io_uring
+  0-copy RX.
+
+- Squashed a few locking optimizations from Eric Dumazet in the RX path
+  and the DEVMEM_DONTNEED setsockopt.
+
+- Expanded the tests a bit. Added validation for invalid scenarios and
+  added some more coverage.
+
+Perf - page-pool benchmark:
+---------------------------
+
+bench_page_pool_simple.ko tests with and without these changes:
+https://pastebin.com/raw/ncHDwAbn
+
+AFAIK the number that really matters in the perf tests is the
+'tasklet_page_pool01_fast_path Per elem'. This one measures at about 8
+cycles without the changes but there is some 1 cycle noise in some
+results.
+
+With the patches this regresses to 9 cycles with the changes but there
+is 1 cycle noise occasionally running this test repeatedly.
+
+Lastly I tried disable the static_branch_unlikely() in
+netmem_is_net_iov() check. To my surprise disabling the
+static_branch_unlikely() check reduces the fast path back to 8 cycles,
+but the 1 cycle noise remains.
+
+Perf - Devmem TCP benchmark:
+---------------------
+
+189/200gbps bi-directional throughput with RX devmem TCP and regular TCP
+TX i.e. ~95% line rate.
+
+Major changes in RFC v5:
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+1. Rebased on top of 'Abstract page from net stack' series and used the
+   new netmem type to refer to LSB set pointers instead of re-using
+   struct page.
+
+2. Downgraded this series back to RFC and called it RFC v5. This is
+   because this series is now dependent on 'Abstract page from net
+   stack'[1] and the queue API. Both are removed from the series to
+   reduce the patch # and those bits are fairly independent or
+   pre-requisite work.
+
+3. Reworked the page_pool devmem support to use netmem and for some
+   more unified handling.
+
+4. Reworked the reference counting of net_iov (renamed from
+   page_pool_iov) to use pp_ref_count for refcounting.
+
+The full changes including the dependent series and GVE page pool
+support is here:
+
+https://github.com/mina/linux/commits/tcpdevmem-rfcv5/
+
+[1] https://patchwork.kernel.org/project/netdevbpf/list/?series=3D810774
+
+Major changes in v1:
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+1. Implemented MVP queue API ndos to remove the userspace-visible
+   driver reset.
+
+2. Fixed issues in the napi_pp_put_page() devmem frag unref path.
+
+3. Removed RFC tag.
+
+Many smaller addressed comments across all the patches (patches have
+individual change log).
+
+Full tree including the rest of the GVE driver changes:
+https://github.com/mina/linux/commits/tcpdevmem-v1
+
+Changes in RFC v3:
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+1. Pulled in the memory-provider dependency from Jakub's RFC[1] to make the
+   series reviewable and mergeable.
+
+2. Implemented multi-rx-queue binding which was a todo in v2.
+
+3. Fix to cmsg handling.
+
+The sticking point in RFC v2[2] was the device reset required to refill
+the device rx-queues after the dmabuf bind/unbind. The solution
+suggested as I understand is a subset of the per-queue management ops
+Jakub suggested or similar:
+
+https://lore.kernel.org/netdev/20230815171638.4c057dcd@kernel.org/
+
+This is not addressed in this revision, because:
+
+1. This point was discussed at netconf & netdev and there is openness to
+   using the current approach of requiring a device reset.
+
+2. Implementing individual queue resetting seems to be difficult for my
+   test bed with GVE. My prototype to test this ran into issues with the
+   rx-queues not coming back up properly if reset individually. At the
+   moment I'm unsure if it's a mistake in the POC or a genuine issue in
+   the virtualization stack behind GVE, which currently doesn't test
+   individual rx-queue restart.
+
+3. Our usecases are not bothered by requiring a device reset to refill
+   the buffer queues, and we'd like to support NICs that run into this
+   limitation with resetting individual queues.
+
+My thought is that drivers that have trouble with per-queue configs can
+use the support in this series, while drivers that support new netdev
+ops to reset individual queues can automatically reset the queue as
+part of the dma-buf bind/unbind.
+
+The same approach with device resets is presented again for consideration
+with other sticking points addressed.
+
+This proposal includes the rx devmem path only proposed for merge. For a
+snapshot of my entire tree which includes the GVE POC page pool support &
+device memory support:
+
+https://github.com/torvalds/linux/compare/master...mina:linux:tcpdevmem-v3
+
+[1] https://lore.kernel.org/netdev/f8270765-a27b-6ccf-33ea-cda097168d79@red=
+hat.com/T/
+[2] https://lore.kernel.org/netdev/CAHS8izOVJGJH5WF68OsRWFKJid1_huzzUK+hpKb=
+LcL4pSOD1Jw@mail.gmail.com/T/
+
+Changes in RFC v2:
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+The sticking point in RFC v1[1] was the dma-buf pages approach we used to
+deliver the device memory to the TCP stack. RFC v2 is a proof-of-concept
+that attempts to resolve this by implementing scatterlist support in the
+networking stack, such that we can import the dma-buf scatterlist
+directly. This is the approach proposed at a high level here[2].
+
+Detailed changes:
+1. Replaced dma-buf pages approach with importing scatterlist into the
+   page pool.
+2. Replace the dma-buf pages centric API with a netlink API.
+3. Removed the TX path implementation - there is no issue with
+   implementing the TX path with scatterlist approach, but leaving
+   out the TX path makes it easier to review.
+4. Functionality is tested with this proposal, but I have not conducted
+   perf testing yet. I'm not sure there are regressions, but I removed
+   perf claims from the cover letter until they can be re-confirmed.
+5. Added Signed-off-by: contributors to the implementation.
+6. Fixed some bugs with the RX path since RFC v1.
+
+Any feedback welcome, but specifically the biggest pending questions
+needing feedback IMO are:
+
+1. Feedback on the scatterlist-based approach in general.
+2. Netlink API (Patch 1 & 2).
+3. Approach to handle all the drivers that expect to receive pages from
+   the page pool (Patch 6).
+
+[1] https://lore.kernel.org/netdev/dfe4bae7-13a0-3c5d-d671-f61b375cb0b4@gma=
+il.com/T/
+[2] https://lore.kernel.org/netdev/CAHS8izPm6XRS54LdCDZVd0C75tA1zHSu6jLVO8n=
+zTLXCc=3DH7Nw@mail.gmail.com/
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+* TL;DR:
+
+Device memory TCP (devmem TCP) is a proposal for transferring data to and/o=
+r
+from device memory efficiently, without bouncing the data to a host memory
+buffer.
+
+* Problem:
+
+A large amount of data transfers have device memory as the source and/or
+destination. Accelerators drastically increased the volume of such transfer=
+s.
+Some examples include:
+- ML accelerators transferring large amounts of training data from storage =
+into
+  GPU/TPU memory. In some cases ML training setup time can be as long as 50=
+% of
+  TPU compute time, improving data transfer throughput & efficiency can hel=
+p
+  improving GPU/TPU utilization.
+
+- Distributed training, where ML accelerators, such as GPUs on different ho=
+sts,
+  exchange data among them.
+
+- Distributed raw block storage applications transfer large amounts of data=
+ with
+  remote SSDs, much of this data does not require host processing.
+
+Today, the majority of the Device-to-Device data transfers the network are
+implemented as the following low level operations: Device-to-Host copy,
+Host-to-Host network transfer, and Host-to-Device copy.
+
+The implementation is suboptimal, especially for bulk data transfers, and c=
+an
+put significant strains on system resources, such as host memory bandwidth,
+PCIe bandwidth, etc. One important reason behind the current state is the
+kernel=E2=80=99s lack of semantics to express device to network transfers.
+
+* Proposal:
+
+In this patch series we attempt to optimize this use case by implementing
+socket APIs that enable the user to:
+
+1. send device memory across the network directly, and
+2. receive incoming network packets directly into device memory.
+
+Packet _payloads_ go directly from the NIC to device memory for receive and=
+ from
+device memory to NIC for transmit.
+Packet _headers_ go to/from host memory and are processed by the TCP/IP sta=
+ck
+normally. The NIC _must_ support header split to achieve this.
+
+Advantages:
+
+- Alleviate host memory bandwidth pressure, compared to existing
+ network-transfer + device-copy semantics.
+
+- Alleviate PCIe BW pressure, by limiting data transfer to the lowest level
+  of the PCIe tree, compared to traditional path which sends data through t=
+he
+  root complex.
+
+* Patch overview:
+
+** Part 1: netlink API
+
+Gives user ability to bind dma-buf to an RX queue.
+
+** Part 2: scatterlist support
+
+Currently the standard for device memory sharing is DMABUF, which doesn't
+generate struct pages. On the other hand, networking stack (skbs, drivers, =
+and
+page pool) operate on pages. We have 2 options:
+
+1. Generate struct pages for dmabuf device memory, or,
+2. Modify the networking stack to process scatterlist.
+
+Approach #1 was attempted in RFC v1. RFC v2 implements approach #2.
+
+** part 3: page pool support
+
+We piggy back on page pool memory providers proposal:
+https://github.com/kuba-moo/linux/tree/pp-providers
+
+It allows the page pool to define a memory provider that provides the
+page allocation and freeing. It helps abstract most of the device memory
+TCP changes from the driver.
+
+** part 4: support for unreadable skb frags
+
+Page pool iovs are not accessible by the host; we implement changes
+throughput the networking stack to correctly handle skbs with unreadable
+frags.
+
+** Part 5: recvmsg() APIs
+
+We define user APIs for the user to send and receive device memory.
+
+Not included with this series is the GVE devmem TCP support, just to
+simplify the review. Code available here if desired:
+https://github.com/mina/linux/tree/tcpdevmem
+
+This series is built on top of net-next with Jakub's pp-providers changes
+cherry-picked.
+
+* NIC dependencies:
+
+1. (strict) Devmem TCP require the NIC to support header split, i.e. the
+   capability to split incoming packets into a header + payload and to put
+   each into a separate buffer. Devmem TCP works by using device memory
+   for the packet payload, and host memory for the packet headers.
+
+2. (optional) Devmem TCP works better with flow steering support & RSS supp=
+ort,
+   i.e. the NIC's ability to steer flows into certain rx queues. This allow=
+s the
+   sysadmin to enable devmem TCP on a subset of the rx queues, and steer
+   devmem TCP traffic onto these queues and non devmem TCP elsewhere.
+
+The NIC I have access to with these properties is the GVE with DQO support
+running in Google Cloud, but any NIC that supports these features would suf=
+fice.
+I may be able to help reviewers bring up devmem TCP on their NICs.
+
+* Testing:
+
+The series includes a udmabuf kselftest that show a simple use case of
+devmem TCP and validates the entire data path end to end without
+a dependency on a specific dmabuf provider.
+
+** Test Setup
+
+Kernel: net-next with this series and memory provider API cherry-picked
+locally.
+
+Hardware: Google Cloud A3 VMs.
+
+NIC: GVE with header split & RSS & flow steering support.
+
+Cc: Pavel Begunkov <asml.silence@gmail.com>
+Cc: David Wei <dw@davidwei.uk>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Yunsheng Lin <linyunsheng@huawei.com>
+Cc: Shailend Chand <shailend@google.com>
+Cc: Harshitha Ramamurthy <hramamurthy@google.com>
+Cc: Shakeel Butt <shakeel.butt@linux.dev>
+Cc: Jeroen de Borst <jeroendb@google.com>
+Cc: Praveen Kaligineedi <pkaligineedi@google.com>
+Cc: Bagas Sanjaya <bagasdotme@gmail.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Christoph Hellwig <hch@infradead.org>
+Cc: Nikolay Aleksandrov <razor@blackwall.org>
+Cc: Taehee Yoo <ap420073@gmail.com>
+Cc: Donald Hunter <donald.hunter@gmail.com>
+
+
+
+Mina Almasry (13):
+  netdev: add netdev_rx_queue_restart()
+  net: netdev netlink api to bind dma-buf to a net device
+  netdev: support binding dma-buf to netdevice
+  netdev: netdevice devmem allocator
+  page_pool: devmem support
+  memory-provider: dmabuf devmem memory provider
+  net: support non paged skb frags
+  net: add support for skbs with unreadable frags
+  tcp: RX path for devmem TCP
+  net: add SO_DEVMEM_DONTNEED setsockopt to release RX frags
+  net: add devmem TCP documentation
+  selftests: add ncdevmem, netcat for devmem TCP
+  netdev: add dmabuf introspection
+
+ Documentation/netlink/specs/netdev.yaml |  61 +++
+ Documentation/networking/devmem.rst     | 269 +++++++++++
+ Documentation/networking/index.rst      |   1 +
+ arch/alpha/include/uapi/asm/socket.h    |   6 +
+ arch/mips/include/uapi/asm/socket.h     |   6 +
+ arch/parisc/include/uapi/asm/socket.h   |   6 +
+ arch/sparc/include/uapi/asm/socket.h    |   6 +
+ include/linux/netdevice.h               |   2 +
+ include/linux/skbuff.h                  |  61 ++-
+ include/linux/skbuff_ref.h              |   9 +-
+ include/linux/socket.h                  |   1 +
+ include/net/netdev_rx_queue.h           |   5 +
+ include/net/netmem.h                    | 132 +++++-
+ include/net/page_pool/helpers.h         |  39 +-
+ include/net/page_pool/types.h           |  23 +-
+ include/net/sock.h                      |   2 +
+ include/net/tcp.h                       |   3 +-
+ include/trace/events/page_pool.h        |  12 +-
+ include/uapi/asm-generic/socket.h       |   6 +
+ include/uapi/linux/netdev.h             |  13 +
+ include/uapi/linux/uio.h                |  17 +
+ net/Kconfig                             |   5 +
+ net/core/Makefile                       |   2 +
+ net/core/datagram.c                     |   6 +
+ net/core/dev.c                          |  33 +-
+ net/core/devmem.c                       | 389 ++++++++++++++++
+ net/core/devmem.h                       | 180 ++++++++
+ net/core/gro.c                          |   3 +-
+ net/core/mp_dmabuf_devmem.h             |  44 ++
+ net/core/netdev-genl-gen.c              |  23 +
+ net/core/netdev-genl-gen.h              |   6 +
+ net/core/netdev-genl.c                  | 139 +++++-
+ net/core/netdev_rx_queue.c              |  81 ++++
+ net/core/netmem_priv.h                  |  31 ++
+ net/core/page_pool.c                    | 120 +++--
+ net/core/page_pool_priv.h               |  46 ++
+ net/core/page_pool_user.c               |  32 +-
+ net/core/skbuff.c                       |  77 +++-
+ net/core/sock.c                         |  68 +++
+ net/ethtool/common.c                    |   8 +
+ net/ipv4/esp4.c                         |   3 +-
+ net/ipv4/tcp.c                          | 263 ++++++++++-
+ net/ipv4/tcp_input.c                    |  13 +-
+ net/ipv4/tcp_ipv4.c                     |  16 +
+ net/ipv4/tcp_minisocks.c                |   2 +
+ net/ipv4/tcp_output.c                   |   5 +-
+ net/ipv6/esp6.c                         |   3 +-
+ net/packet/af_packet.c                  |   4 +-
+ net/xdp/xsk_buff_pool.c                 |   5 +
+ tools/include/uapi/linux/netdev.h       |  13 +
+ tools/net/ynl/lib/.gitignore            |   1 +
+ tools/testing/selftests/net/.gitignore  |   1 +
+ tools/testing/selftests/net/Makefile    |   9 +
+ tools/testing/selftests/net/ncdevmem.c  | 570 ++++++++++++++++++++++++
+ 54 files changed, 2757 insertions(+), 124 deletions(-)
+ create mode 100644 Documentation/networking/devmem.rst
+ create mode 100644 net/core/devmem.c
+ create mode 100644 net/core/devmem.h
+ create mode 100644 net/core/mp_dmabuf_devmem.h
+ create mode 100644 net/core/netdev_rx_queue.c
+ create mode 100644 net/core/netmem_priv.h
+ create mode 100644 tools/testing/selftests/net/ncdevmem.c
+
+--=20
+2.46.0.469.g59c65b2a67-goog
+
 
