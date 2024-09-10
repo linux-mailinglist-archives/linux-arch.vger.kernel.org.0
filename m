@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-7163-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7164-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C86EC9726D1
-	for <lists+linux-arch@lfdr.de>; Tue, 10 Sep 2024 03:57:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBA959726E9
+	for <lists+linux-arch@lfdr.de>; Tue, 10 Sep 2024 04:05:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7FE111F247CB
-	for <lists+linux-arch@lfdr.de>; Tue, 10 Sep 2024 01:57:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6DE142855CE
+	for <lists+linux-arch@lfdr.de>; Tue, 10 Sep 2024 02:05:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 568CB13E02C;
-	Tue, 10 Sep 2024 01:57:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98D7E13CFAB;
+	Tue, 10 Sep 2024 02:05:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A4/ZBQtc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dtXDOkDr"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B7FF26ADD;
-	Tue, 10 Sep 2024 01:57:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DB221804F;
+	Tue, 10 Sep 2024 02:05:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725933472; cv=none; b=kXL2SR1Azn2HTkiQeJ/b/qvdgt5AQT09nQ0g9KdjaZ8E9Nzc2bPjJZQC2v7AAH5+buTorM/rHnlWAtW61ZbugQZYvRspjfv6OyfGgbTnO3IxjydQevd97A85tU4qpwGrGm/+1LzRJRU9JkStZSp8mbd15ylwLdYkLo5vmaHZO58=
+	t=1725933939; cv=none; b=eU+jwSTOAX2Bi3xEU+zXvlk1dQAEerx3o9gRJofPtC9LRGjHjlmOOJATLwzi0RGW7FvgVk+OE2A/M4TFlm+fo5fHvFFaernAv8MqlF7MP01wTsv6fF/E9OseDxits+I+P9EGuBtbKNsl/JCabuD1fW/vnNEkJaJ5W3Hrgk/q8kk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725933472; c=relaxed/simple;
-	bh=Mpc367Qq2KgjGSWneG8t1t7ylvaiUYfcTC1evuPCSo0=;
+	s=arc-20240116; t=1725933939; c=relaxed/simple;
+	bh=dYb9IcUg68I7MWLN85WuKlqFZWT/n2b1zWgUXnGNwiA=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TRXlptImRrVVmeceyp7ilBwK9KCrN29Je/fakWzQpMimUZGCL6adUx/uK+NTxcyybbhobic+dh7uA6PX1l/8AybD8ae7bOZBID9ITBJ37k3cZGVD41Qy1ZmXbp7B+nL8x90UZqj6Occuo48x9QJEDR8IqywQUtv+GxLSv8nZ8Dg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A4/ZBQtc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F36CC4CEC5;
-	Tue, 10 Sep 2024 01:57:49 +0000 (UTC)
+	 MIME-Version:Content-Type; b=RMY4A5DRcVRmzvOu/MdCT+IR0ZPNQ8Nff7NJCBZlknITAne361bstHgi1muZt6Sk0PW9ctnVES7I85TPh4fpNaMSTyyKjM9fwBHXUv9quove/GID9isI6GyrW6WJrXd23c/9AhhVIdslRf7r20/BKJtyDtQKPnu5kgAsVrNkiDI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dtXDOkDr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6B71C4CEC6;
+	Tue, 10 Sep 2024 02:05:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725933471;
-	bh=Mpc367Qq2KgjGSWneG8t1t7ylvaiUYfcTC1evuPCSo0=;
+	s=k20201202; t=1725933938;
+	bh=dYb9IcUg68I7MWLN85WuKlqFZWT/n2b1zWgUXnGNwiA=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=A4/ZBQtcLIVb6iJZdngcey0BUW2zuO3KEn6O5mQs+NSHCdaQh93+fSfs+dgmnhku8
-	 w5t+tKZKrGWg4mG1LanrIl+K/MzOHj1TaUy02KZpXCIv2VcTQWCjZp/THeUSS+BriL
-	 Chv4kikV2OgmKAFg8mkArn+YqHk2DUbnMrQ5AacoQXJzNZma9akXcs16C7z9hxlJEZ
-	 5Srv0B7MY5lD3KerRnih5ibEHCZtSXAQVJJIVEOewhIq32CUfjES6fhrQTG5rWjVyE
-	 bncyE1+MM6CNLsmeO51LG0Ng53/ZcyW+bA113+7RFtBT0ry4kFbQ5QTmr3qm3SAMBe
-	 n1+sOElpSPkQw==
-Date: Mon, 9 Sep 2024 18:57:48 -0700
+	b=dtXDOkDrpc7TH9tMpJARjQom+m7/Q5mrWmDooMGHgVG2J725H3Zh0S1kGxK0MUNeV
+	 DCUFZld+P55IPiBxXO2iKAeDMYdIp74rQfnzFuKYm0DIXnrguAGoPtmxDH6zvfxtw0
+	 XJwiS1IA2N7WeP7d6Skj1Qm1y5jm979/Cfupfy2KvA1vPwdEQ0J2GNst4f5JHlM37w
+	 ePESO8mp4tj9LDqAcWvJs8XizjEdrs7fl2chB/wDM1OTrSSxGxPFzZdH1/oNMXr78f
+	 Yd0SZCptMXgo3Nq/CtDC1gi1eM7Es1G0/dObRwE1Q8bNgBDwbDNGbUNbFPi1Wp7Zhs
+	 TrTCAN996cwKQ==
+Date: Mon, 9 Sep 2024 19:05:35 -0700
 From: Jakub Kicinski <kuba@kernel.org>
 To: Mina Almasry <almasrymina@google.com>
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -79,12 +79,12 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>,
  Taehee Yoo <ap420073@gmail.com>, Willem de Bruijn <willemb@google.com>,
  Kaiyuan Zhang <kaiyuanz@google.com>
-Subject: Re: [PATCH net-next v25 08/13] net: add support for skbs with
- unreadable frags
-Message-ID: <20240909185748.0ac082fd@kernel.org>
-In-Reply-To: <20240909054318.1809580-9-almasrymina@google.com>
+Subject: Re: [PATCH net-next v25 10/13] net: add SO_DEVMEM_DONTNEED
+ setsockopt to release RX frags
+Message-ID: <20240909190535.01611ae1@kernel.org>
+In-Reply-To: <20240909054318.1809580-11-almasrymina@google.com>
 References: <20240909054318.1809580-1-almasrymina@google.com>
-	<20240909054318.1809580-9-almasrymina@google.com>
+	<20240909054318.1809580-11-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -94,29 +94,18 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Mon,  9 Sep 2024 05:43:13 +0000 Mina Almasry wrote:
-> For device memory TCP, we expect the skb headers to be available in host
-> memory for access, and we expect the skb frags to be in device memory
-> and unaccessible to the host. We expect there to be no mixing and
-> matching of device memory frags (unaccessible) with host memory frags
-> (accessible) in the same skb.
-> 
-> Add a skb->devmem flag which indicates whether the frags in this skb
-> are device memory frags or not.
-> 
-> __skb_fill_netmem_desc() now checks frags added to skbs for net_iov,
-> and marks the skb as skb->devmem accordingly.
-> 
-> Add checks through the network stack to avoid accessing the frags of
-> devmem skbs and avoid coalescing devmem skbs with non devmem skbs.
-> 
-> Signed-off-by: Willem de Bruijn <willemb@google.com>
-> Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
-> Signed-off-by: Mina Almasry <almasrymina@google.com>
-> Reviewed-by: Eric Dumazet <edumazet@google.com>
+On Mon,  9 Sep 2024 05:43:15 +0000 Mina Almasry wrote:
+> --- a/include/uapi/linux/uio.h
+> +++ b/include/uapi/linux/uio.h
+> @@ -33,6 +33,10 @@ struct dmabuf_cmsg {
+>  				 */
+>  };
+>  
+> +struct dmabuf_token {
+> +	__u32 token_start;
+> +	__u32 token_count;
+> +};
+>  /*
 
-I'm sure we'll find more cases which need a check but I can't think 
-of any now, so:
-
-Reviewed-by: Jakub Kicinski <kuba@kernel.org>
+nit: missing new line
 
