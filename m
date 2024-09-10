@@ -1,46 +1,56 @@
-Return-Path: <linux-arch+bounces-7177-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7178-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90A48973527
-	for <lists+linux-arch@lfdr.de>; Tue, 10 Sep 2024 12:46:04 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 253BB97374F
+	for <lists+linux-arch@lfdr.de>; Tue, 10 Sep 2024 14:29:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1324C1F2471E
-	for <lists+linux-arch@lfdr.de>; Tue, 10 Sep 2024 10:46:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 901B7B24E08
+	for <lists+linux-arch@lfdr.de>; Tue, 10 Sep 2024 12:29:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09019190499;
-	Tue, 10 Sep 2024 10:44:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B9DE19067A;
+	Tue, 10 Sep 2024 12:28:58 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F07BA46444;
-	Tue, 10 Sep 2024 10:44:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CF401917DD;
+	Tue, 10 Sep 2024 12:28:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725965098; cv=none; b=f6eTPSoq/hD6tfkwTr1X7WCnDipoHQWfdmtV7+ue9txRJ+QnQf3uo93r7tUpxrI4PYsH1hndNlHs+GI47cKtRuychri0Mi4xDzhMTF301PZghgPEOegMqdia3WsFAk/wzMcIIf95OsOw5cTrLe23TmRepmvVrOPaaKUrXc7qRRc=
+	t=1725971338; cv=none; b=BLrbkM4FzQzfKx95UPXjz/8i+x+qLvrFBuIV3xoqVekTLXRb9E0GbtlESlPGArztLuoZED7l/09Ia8LBpn+lpxdM7QUNgQch3zj6f7gWTxUwb+Iq0kYnX7K/pOw4k16Se60tWPgf59ELpfj9eNNnfZcaaNNkmBNB7GPrabCDBOA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725965098; c=relaxed/simple;
-	bh=F8sISKqp3IEU8uMytKNoaGuZbOEzp2sNMpq+JwuhFk0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=bXaAl3vj0bYxyro30eMtw23Q5OWsK/b1uKsFlOFf+WftW4NJvViiEWPyAybVOrJU3g6MyjGOm086QRoGxKKThnYzjQ98U+JiCKwNuhxgZ91PhspCZHdp4g1WqdM8iOvv8oDwKe66DTNAbvU+uHqR9pG66wKYbB36O8MhK7G52Fw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.234])
-	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4X30gr3F0jz2Dc4S;
-	Tue, 10 Sep 2024 18:44:24 +0800 (CST)
-Received: from dggpemf200006.china.huawei.com (unknown [7.185.36.61])
-	by mail.maildlp.com (Postfix) with ESMTPS id 7AD5E1402E0;
-	Tue, 10 Sep 2024 18:44:52 +0800 (CST)
-Received: from [10.67.120.129] (10.67.120.129) by
- dggpemf200006.china.huawei.com (7.185.36.61) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Tue, 10 Sep 2024 18:44:51 +0800
-Message-ID: <95e6c282-1e4f-458b-9e40-9b626d64b3bd@huawei.com>
-Date: Tue, 10 Sep 2024 18:44:51 +0800
+	s=arc-20240116; t=1725971338; c=relaxed/simple;
+	bh=n34LZR4/qpKiZct0K9lqzEzS5dlXP8p0VQpr2dubN1s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hXU/gLYvZAk85RaTBknyFXEQ4hZvcRgsF6Ib0zTKqgVV96lFVoxRIT/5GgTs7bfYkYrRLWZBGUocIAhSpNoNCssU7DZlfXxIT8DpfBiFxh3s03gMtZdlP4EU6g9j4003MHEhxWWFQTtVGioCYO0pYt6sVFkjOVD4+FvMzZbtbmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4X330Q0FPrz9sPd;
+	Tue, 10 Sep 2024 14:28:54 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id g4B1QPtPZwoU; Tue, 10 Sep 2024 14:28:53 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4X330P6NX8z9rvV;
+	Tue, 10 Sep 2024 14:28:53 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id C726F8B770;
+	Tue, 10 Sep 2024 14:28:53 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id r9qBl1ofIMM4; Tue, 10 Sep 2024 14:28:53 +0200 (CEST)
+Received: from [192.168.232.177] (unknown [192.168.232.177])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id EBF1B8B766;
+	Tue, 10 Sep 2024 14:28:52 +0200 (CEST)
+Message-ID: <2234a5e1-5926-4b2d-a8f2-c780bf374a27@csgroup.eu>
+Date: Tue, 10 Sep 2024 14:28:52 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -48,122 +58,130 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v25 00/13] Device Memory TCP
-To: Mina Almasry <almasrymina@google.com>
-CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-alpha@vger.kernel.org>,
-	<linux-mips@vger.kernel.org>, <linux-parisc@vger.kernel.org>,
-	<sparclinux@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
-	<linux-arch@vger.kernel.org>, <bpf@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <linux-media@vger.kernel.org>,
-	<dri-devel@lists.freedesktop.org>, Donald Hunter <donald.hunter@gmail.com>,
-	Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Jonathan
- Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
-	<James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>,
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
-	<hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
- Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
-	<arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, Herbert Xu
-	<herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, Willem de
- Bruijn <willemdebruijn.kernel@gmail.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
-	<bjorn@kernel.org>, Magnus Karlsson <magnus.karlsson@intel.com>, Maciej
- Fijalkowski <maciej.fijalkowski@intel.com>, Jonathan Lemon
-	<jonathan.lemon@gmail.com>, Shuah Khan <shuah@kernel.org>, Alexei Starovoitov
-	<ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, John Fastabend
-	<john.fastabend@gmail.com>, Sumit Semwal <sumit.semwal@linaro.org>,
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, Pavel Begunkov
-	<asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe
-	<jgg@ziepe.ca>, Shailend Chand <shailend@google.com>, Harshitha Ramamurthy
-	<hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de
- Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
-	Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>,
-	Nikolay Aleksandrov <razor@blackwall.org>, Taehee Yoo <ap420073@gmail.com>
-References: <20240909054318.1809580-1-almasrymina@google.com>
- <42c202e6-8c4c-494f-8c28-17d66ed75880@huawei.com>
- <CAHS8izMX+9F1NngbPx6w7ikKR9TgPvm+jMwZ8168NJYhFC7sVQ@mail.gmail.com>
-Content-Language: en-US
-From: Yunsheng Lin <linyunsheng@huawei.com>
-In-Reply-To: <CAHS8izMX+9F1NngbPx6w7ikKR9TgPvm+jMwZ8168NJYhFC7sVQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH 3/9] x86: vdso: Introduce asm/vdso/page.h
+To: Arnd Bergmann <arnd@arndb.de>,
+ Vincenzo Frascino <vincenzo.frascino@arm.com>, linux-kernel@vger.kernel.org,
+ Linux-Arch <linux-arch@vger.kernel.org>, linux-mm@kvack.org
+Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+ "Jason A . Donenfeld" <Jason@zx2c4.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Naveen N Rao <naveen@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, Theodore Ts'o <tytso@mit.edu>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+References: <20240903151437.1002990-1-vincenzo.frascino@arm.com>
+ <20240903151437.1002990-4-vincenzo.frascino@arm.com>
+ <cfb5ea05-0322-492b-815d-17a4aad4da99@app.fastmail.com>
+ <e28e1974-cced-462c-8f57-ca1474272e73@arm.com>
+ <11527a80-7453-4624-b406-e88c5692b015@app.fastmail.com>
+ <ccaac82f-0c43-491e-ab8a-1da8bf8c7477@csgroup.eu>
+ <8868ef2c-6bfb-4ab7-ac5e-640e05658ee1@app.fastmail.com>
+Content-Language: fr-FR
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <8868ef2c-6bfb-4ab7-ac5e-640e05658ee1@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemf200006.china.huawei.com (7.185.36.61)
 
-On 2024/9/10 0:54, Mina Almasry wrote:
-> On Mon, Sep 9, 2024 at 4:21 AM Yunsheng Lin <linyunsheng@huawei.com> wrote:
+
+
+Le 08/09/2024 à 22:48, Arnd Bergmann a écrit :
+> On Fri, Sep 6, 2024, at 18:40, Christophe Leroy wrote:
+>> Le 06/09/2024 à 21:19, Arnd Bergmann a écrit :
+>>> On Fri, Sep 6, 2024, at 11:20, Vincenzo Frascino wrote:
+> 
+>>>> Looking at the definition of PAGE_SIZE and PAGE_MASK for each architecture they
+>>>> all depend on CONFIG_PAGE_SHIFT but they are slightly different, e.g.:
+>>>>
+>>>> x86:
+>>>> #define PAGE_SIZE        (_AC(1,UL) << PAGE_SHIFT)
+>>>>
+>>>> powerpc:
+>>>> #define PAGE_SIZE        (ASM_CONST(1) << PAGE_SHIFT)
+>>>>
+>>>> hence I left to the architecture the responsibility of redefining the constants
+>>>> for the VSDO.
+>>>
+>>> ASM_CONST() is a powerpc-specific macro that is defined the
+>>> same way as _AC(). We could probably just replace all ASM_CONST()
+>>> as a cleanup, but for this purpose, just remove the custom PAGE_SIZE
+>>> and PAGE_SHIFT macros. This can be a single patch fro all
+>>> architectures.
+>>>
 >>
->> On 2024/9/9 13:43, Mina Almasry wrote:
+>> I'm not worried about _AC versus ASM_CONST, but I am by the 1UL versus 1.
 >>
->>>
->>> Perf - page-pool benchmark:
->>> ---------------------------
->>>
->>> bench_page_pool_simple.ko tests with and without these changes:
->>> https://pastebin.com/raw/ncHDwAbn
->>>
->>> AFAIK the number that really matters in the perf tests is the
->>> 'tasklet_page_pool01_fast_path Per elem'. This one measures at about 8
->>> cycles without the changes but there is some 1 cycle noise in some
->>> results.
->>>
->>> With the patches this regresses to 9 cycles with the changes but there
->>> is 1 cycle noise occasionally running this test repeatedly.
->>>
->>> Lastly I tried disable the static_branch_unlikely() in
->>> netmem_is_net_iov() check. To my surprise disabling the
->>> static_branch_unlikely() check reduces the fast path back to 8 cycles,
->>> but the 1 cycle noise remains.
 >>
->> Sorry for the late report, as I was adding a testing page_pool ko basing
->> on [1] to avoid introducing performance regression when fixing the bug in
->> [2].
->> I used it to test the performance impact of devmem patchset for page_pool
->> too, it seems there might be some noticable performance impact quite stably
->> for the below testcases, about 5%~16% performance degradation as below in
->> the arm64 system:
->>
+>> This can be a problem on 32 bits platforms with 64 bits phys_addr_t
 > 
-> Correct me if I'm wrong here, but on the surface here it seems that
-> you're re-reporting a known issue. Consensus seems to be that it's a
-> non-issue.
+> But that would already be a bug if anything used this, however
+> none of them do. The only instance of an open-coded
 > 
-> In v6 I reported that the bench_page_pool_simple.ko test reports a 1
-> cycle regression with these patches, from 8->9 cycles. That is roughly
-> consistent with the 5-15% you're reporting.
-
-From the description above in the cover letter, I thought the performance
-data using the out of tree testing ko is not stable enough to justify the
-performance impact.
-
+> #define PAGE_SIZE       (1 << PAGE_SHIFT)
 > 
-> I root caused the reason for the regression to be the
-> netmem_is_net_iov() check in the fast path. I removed this regression
-> in v7 (see the change log) by conditionally compiling the check in
-> that function.
-> 
-> In v8, Pavel/Jens/David pushed back on the ifdef check. See this
-> entire thread, but in particular this response from Jens:
+> is from openrisc, but that is only used inside of __ASSEMBLY__, for
+> the same effect as _AC().
 
-It seemed the main objection is about how to enable this feature
-for the io_uring?
+Maybe I was not clear enough. The problem is not with PAGE_SHIFT but 
+with PAGE_MASK, and that's what I show with my exemple.
 
-And it seemed that you had added the CONFIG_NET_DEVMEM for this
-devmem thing, why not use it for that?
+If take the definition from ARM64 (which is the same as several other 
+artchitectures):
 
-> 
-> https://lore.kernel.org/lkml/11f52113-7b67-4b45-ba1d-29b070050cec@kernel.dk/
-> 
-> Seems consensus that it's 'not really worth it in this scenario'.
+#define PAGE_SIZE		(_AC(1, UL) << PAGE_SHIFT)
+#define PAGE_MASK		(~(PAGE_SIZE-1))
 
-I was only reading through the above thread, it didn't seemed to
-reach to consensus as Jesper pointed out the performance impact
-for the XDP DROP case in the same thread.
+PAGE_SHIFT is 12
+PAGE_SIZE is then 4096 UL
+PAGE_MASK is then 0xfffff000 UL
 
-https://lore.kernel.org/lkml/779b9542-4170-483a-af54-ca0dd471f774@kernel.org/
+So if I take the probe() in drivers/uio/uio_pci_generic.c, it has:
 
-> 
+	uiomem->addr = r->start & PAGE_MASK;
+
+uiomem->addr is a phys_addr_t
+r->start is a ressource_size_t hence a phys_addr_t
+
+And phys_addr_t is defined as:
+
+	#ifdef CONFIG_PHYS_ADDR_T_64BIT
+	typedef u64 phys_addr_t;
+	#else
+	typedef u32 phys_addr_t;
+	#endif
+
+On a 32 bits platform, UL is unsigned 32 bits, so the r->start & 
+PAGE_MASK will and r->start with 0x00000000fffff000
+
+That is wrong.
+
+
+That's the reason why powerpc does not define PAGE_MASK like ARM64 but 
+defines PAGE_MASK as:
+
+	(~((1 << PAGE_SHIFT) - 1))
+
+When using 1 instead of 1UL, PAGE_MASK is still 0xfffff000 but it is a 
+signed constant, so when it is anded with an u64, it gets 
+signed-extended to 0xfffffffffffff000 which gives the expected result.
+
+That's what I wanted to illustrate with the exemple in my previous 
+message. The function f() was using the signed PAGE_MASK while function 
+g() was using the unsigned PAGE_MASK:
+
+00000000 <f>:
+    0:    54 84 00 26     clrrwi  r4,r4,12
+    4:    4e 80 00 20     blr
+
+00000008 <g>:
+    8:    54 84 00 26     clrrwi  r4,r4,12
+    c:    38 60 00 00     li      r3,0
+   10:    4e 80 00 20     blr
+
+Function f() returns the given u64 value with the 12 lowest bits cleared
+Function g() returns the given u64 value with the 12 lowest bits cleared 
+and the 32 highest bits cleared as well, which is unexpected.
+
+Christophe
 
