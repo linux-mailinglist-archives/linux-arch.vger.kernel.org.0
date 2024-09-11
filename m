@@ -1,121 +1,183 @@
-Return-Path: <linux-arch+bounces-7217-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7218-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 427B8975C28
-	for <lists+linux-arch@lfdr.de>; Wed, 11 Sep 2024 23:06:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BB2E5975C2D
+	for <lists+linux-arch@lfdr.de>; Wed, 11 Sep 2024 23:07:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E5AA1281D17
-	for <lists+linux-arch@lfdr.de>; Wed, 11 Sep 2024 21:06:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 79D7A282186
+	for <lists+linux-arch@lfdr.de>; Wed, 11 Sep 2024 21:07:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8216A143C6C;
-	Wed, 11 Sep 2024 21:05:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D276145B00;
+	Wed, 11 Sep 2024 21:07:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GSMbUBCV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g0WO7YUi"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17CEB5337F;
-	Wed, 11 Sep 2024 21:05:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 821EC5337F;
+	Wed, 11 Sep 2024 21:07:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726088756; cv=none; b=NO02FXEkQ6fNJV21A5NOkEg39szQODf3KlAYCvj5BfRDVM8MzlEzFCfVjUsI9KgHpKYJnPEega3gPLUOC6nvF28V0gYMpVX0ONs/k+7CheFwecPrjWC0mmU3ih8jpe1iujYHw9QYK/yloMd/GkNDZqGF/lCvq2LYWAxYeYsVDXE=
+	t=1726088867; cv=none; b=BirXDFMxIg5phxos4qu1tPy3ctlMZU90Y0bhrmtmUp8y0igzpvJsPuW7AYoOedYf3hPl3DzwCYKUwYFAWpP3DMJ4okO0aOEQQ0KYC1h4OjNw/IS2RQpMhMW0F6LdYlgDzZaVbEbMN3IO3N6oUoI6GJwiv41FSlA4qv64UPi4hQQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726088756; c=relaxed/simple;
-	bh=j9bVDpdHTr/1FohU2bEAGVdU9wt0NXPDQcAD3KGyF5Y=;
+	s=arc-20240116; t=1726088867; c=relaxed/simple;
+	bh=bVbGtxGuWI4Z1fkzT2AsweByfrIJXRgaPe01VRr9Jzs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qnkuyBXWRb9k6SKu81rJ4UVCqQ5UDqzeLjKlAS07KxsxKO/mU8k6xNY1jGNUVcihGbJaozNO1OhgAhFTSaJTsjm/RLCB6pei2NMz7v3muuAVq7CL2tFi82NtqZiOvO5ASvHA6i1hozCjTPfGyTzbAtCVE+58BGYCFuRw5225530=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GSMbUBCV; arc=none smtp.client-ip=209.85.215.180
+	 To:Cc:Content-Type; b=L6jIn4KqcSv8cy4AyYDle0khhl3kk238CuieTDbkIq9CBvpUGGcImoHZG5QK+PfnCygvSRUR2i+RgMoWGbkYE05XOQAVbaYhdwQ5+xTkJZ3lbs6VK1BNc1jZICctT0+xW0LpbNxWWb/HtRh33tR/PJKLb4usoPcnf95q/8n33hE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g0WO7YUi; arc=none smtp.client-ip=209.85.214.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-7d5119d6fedso991753a12.0;
-        Wed, 11 Sep 2024 14:05:54 -0700 (PDT)
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-20570b42f24so3492375ad.1;
+        Wed, 11 Sep 2024 14:07:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726088754; x=1726693554; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1726088866; x=1726693666; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4DHLF4MY6pVr9Kzo+6gRF8kyn4T6UnEAKjrilBjTMSw=;
-        b=GSMbUBCVpUB84HfBhYlz17uadzl1Hls9YcKrPYwGckxR/9vmsmAIEZdswxTc3O4qAz
-         X8k6zMXMXjDNBK3MvLFmFGqh6N9Pfkbo4xklb160VJJHdxMUQAJSneM7YTdRKeHCdTjm
-         UDb6TkrHgSI+HE+7SM5MIJbiPPqfr5QuQWKp89bpFGHRVvU3TTSqJDr7rUFY24ycXaDZ
-         JNGByMRUAXAXPofNN7dgstdjFfHb7BXkQYRYzIH3S1xOv5TYf8zBQAnBTlUXmltU0fEB
-         nYojrez2KLCvAi+iPCBKpUc5yhbskDdOabhv7w3slCXSKb/CZXQxQ7yVwWc+nGxdExpk
-         9F+Q==
+        bh=TmSVp3V+cDwfdxKteKgPEolOk0B0IUNuuO5wfRUxw0g=;
+        b=g0WO7YUisD59cPlsdFFXZVTEOZraLPPmw57cJ25Q7/exul96nGqkVzBzemqkureP9Z
+         qVtGgYjG+Elgh6UseGf6dSIi+NbBhZGuEyt6ji1o04B54i1+zk2B/bMM++4QSSlQVEtP
+         BrGj8JOb7B5Zn2jomQU890wTY+/Ikc6VqrXapoxfKa9UcIovxdvDfDiJRNJfpEjE93lc
+         y9u2Gz9cDoMx/it8i09fajPN9LrQUQEh8+7Em++ItnQixZ1sjoxFD6oCxesUFXElwVFU
+         Jf3cXxWo+gU4NKqsEn5uelgQzNhm9WbyiQiGq5RNqIdz/nHk1S+nWZMHZ0kYLk9VHzSh
+         zp+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726088754; x=1726693554;
+        d=1e100.net; s=20230601; t=1726088866; x=1726693666;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4DHLF4MY6pVr9Kzo+6gRF8kyn4T6UnEAKjrilBjTMSw=;
-        b=nChUFEfnkDDKepdpGhKWLreAk3hyrf0L7yIX/EzyzlIAVkpRKxyHoxqQIJtjr3xboo
-         9s/tTEzTHHqCDnyS1LaZ251lZFQQp7E91B8uhyYWv5GFdkrhWulgO2sCXjPzFFUGPWvo
-         HM/XEEoHOU9E7RERn1gDulWP2bCHa9mFMeW5rzl6OfC1qM7r271Pup42JQt/QUez9SM5
-         lO+RNSyfjhmRgr6BWtn2OmHS93KU8Hmw7a5EK9/AIjvtWpimVt5CKzhYwXNynor+Wj8A
-         hVsxicec8Jp1gaVVtdJGlnwNVVQxbD0DwZJ7rslE3E+czZrK8zdSo+dnf1Bv/IOavhQE
-         9slg==
-X-Forwarded-Encrypted: i=1; AJvYcCWcdT+sthDDobW+9FyCb7YjWqZN+1GJdzClIZRF7D+XbuWmjviDtHL35KZuAvYZJgWiti5Y86kK4t9DcCDO@vger.kernel.org, AJvYcCX7bFlnfZDJo+8UzJpZ4oupPO5QkX8iIcV19ZG83Jy3Y4PjLLqqR1jO/UJze0yvzmui3uI=@vger.kernel.org, AJvYcCXC0Ad13bt53Sa6QTG04RJ9JHRBhjjsZpTEU4sQidOSxlfejF0ceKlDmX0efiRsc91/LNYquPkbZcoRaw==@vger.kernel.org, AJvYcCXtb5w2s29tdv1mTqlA7BC9FyYwy9ZsLl8FdiVqcH/v8ztFnwcLMV7ckeEZeq4eozePII+hZSskXUlFYdMv@vger.kernel.org
-X-Gm-Message-State: AOJu0YxEsf0k4hkKSpLI4VYeAViGAKWiezHxAt3O675JPZGrWwyvzlAa
-	+wsEc3nwHL/mKFn43dKFTChyHw/q4uEYjLZ7BB51iPxz5E4muAL6uMbgS6kZVQB+AhHRemeqOKi
-	yzU7QFboIVbt4bABaeJTIqU/ijchPH1Hy
-X-Google-Smtp-Source: AGHT+IG9FN2L9J1WPB82uOhxRbi0vhpRNmO6zSO+AgTDIVSplvohYBiTKJRbgJ3+Zi4SFQGrVqjt+8RmoBj1E2LP96o=
-X-Received: by 2002:a17:90a:6447:b0:2da:50e6:5ab with SMTP id
- 98e67ed59e1d1-2db67226181mr12233286a91.18.1726088754328; Wed, 11 Sep 2024
- 14:05:54 -0700 (PDT)
+        bh=TmSVp3V+cDwfdxKteKgPEolOk0B0IUNuuO5wfRUxw0g=;
+        b=lf6v3LnG4UquK+j4ZyXNJtz4xkO/AxPNZZkDEnZGQopvc7SpwHstiRviiHUSvi9Ba3
+         vq7ExGv4mrA2F4htqUfPI14Glgvo1Ur7vDuhHRGaXvBMJBmxDIRKerFtVoTFiGAv4rPZ
+         3bUG2ZpW936XC/KKjvSlmVMtY7eTRVKNs4XZZ1vUECQSKY4DjVxhC3bE9pF2ZXTG/3ca
+         jJAhlgRbUjF6tRoGM8pLm63rCnErcy/M3mBlya66F8dh5LF1WiVpwh258a2ScsKK9MGu
+         q2fu8v+Ii6qd4wAiNN9gOgJiObNhuMnotYgd8VR6DhCeU1uHPROiqekSndhnPvIWxUgZ
+         O8MA==
+X-Forwarded-Encrypted: i=1; AJvYcCVt3QDFvluSJrhoXy35Hz6Kw5DxW0ylOqPk5jYNmY2AS+9T7MfPLo3DQXpLPTWRWQiwhkcYdSLAU3YRknMw@vger.kernel.org, AJvYcCWX1dFe2kUHAKDwu8f+79UDIGaDXBzhXXn0qD17sgV3KQHPcJPtfyEr3F1NiFziJwwRBb7Q/V8wlbBZtYa9@vger.kernel.org, AJvYcCWdIRhJSFknCepXvAPSuxQrn+t5HQSN/vPPig+88B9RD65JJz/TCptFUmCta9dZPg0Gj69zuNHF6kMVlw==@vger.kernel.org, AJvYcCWzijSpZgUCSMD9DYhYT+L0VuzbT3TUca8ysuxYQRJbnxgjlggBQS+LnVnmOZy6ZQ/mWD0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YweQj8a+9piMLtjpyvPHjoXaEFe31zGxNLCVjel4FIxQykCbSlb
+	A/IJDxVlntZLfsLgwNUQOTHnwQ4zbp0o52TswCxBc4gamca0KfSS1eOmYwqg3q07CDM6WOa/iof
+	e7NK0QicnaobOs6wUeg5+m1eUpDs6Aysr
+X-Google-Smtp-Source: AGHT+IE9dQgSG0i6FgqWJll/BTQUgaH6pcRhMEwm6Bbm7RzobzCVqpXqphOC1MwbfwUA0ZKOXBO5Dc1esgP+gqi9GIk=
+X-Received: by 2002:a17:90a:d791:b0:2cb:5112:740 with SMTP id
+ 98e67ed59e1d1-2dba0062abemr513816a91.26.1726088865608; Wed, 11 Sep 2024
+ 14:07:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240911110401.598586-1-masahiroy@kernel.org>
-In-Reply-To: <20240911110401.598586-1-masahiroy@kernel.org>
+References: <20240911110401.598586-1-masahiroy@kernel.org> <20240911110401.598586-2-masahiroy@kernel.org>
+In-Reply-To: <20240911110401.598586-2-masahiroy@kernel.org>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 11 Sep 2024 14:05:42 -0700
-Message-ID: <CAEf4BzZHuCERKRub+8HoWYR=SHj-MAkhmbdC1eUJaMrkbLaqCQ@mail.gmail.com>
-Subject: Re: [PATCH 1/3] btf: remove redundant CONFIG_BPF test in scripts/link-vmlinux.sh
+Date: Wed, 11 Sep 2024 14:07:33 -0700
+Message-ID: <CAEf4BzaMAj06RSAyVeaK-fWMEFJjEf6XDXZGzkk7K3k+n1q-nQ@mail.gmail.com>
+Subject: Re: [PATCH 2/3] btf: move pahole check in scripts/link-vmlinux.sh to lib/Kconfig.debug
 To: Masahiro Yamada <masahiroy@kernel.org>
 Cc: Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org, linux-arch@vger.kernel.org, 
 	Andrii Nakryiko <andrii@kernel.org>, linux-kernel@vger.kernel.org, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, linux-kbuild@vger.kernel.org
+	Nathan Chancellor <nathan@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Nicolas Schier <nicolas@fjasle.eu>, linux-kbuild@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 On Wed, Sep 11, 2024 at 4:04=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.o=
 rg> wrote:
 >
-> CONFIG_DEBUG_INFO_BTF depends on CONFIG_BPF_SYSCALL, which in turn
-> selects CONFIG_BPF.
+> When DEBUG_INFO_DWARF5 is selected, pahole 1.21+ is required to enable
+> DEBUG_INFO_BTF.
 >
-> When CONFIG_DEBUG_INFO_BTF=3Dy, CONFIG_BPF=3Dy is always met.
+> When DEBUG_INFO_DWARF4 or DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT is selected,
+> DEBUG_INFO_BTF can be enabled without pahole installed, but a build error
+> will occur in scripts/link-vmlinux.sh:
+>
+>     LD      .tmp_vmlinux1
+>   BTF: .tmp_vmlinux1: pahole (pahole) is not available
+>   Failed to generate BTF for vmlinux
+>   Try to disable CONFIG_DEBUG_INFO_BTF
+>
+> We did not guard DEBUG_INFO_BTF by PAHOLE_VERSION when previously
+> discussed [1].
+>
+> However, commit 613fe1692377 ("kbuild: Add CONFIG_PAHOLE_VERSION")
+> added CONFIG_PAHOLE_VERSION at all. Now several CONFIG options, as
+> well as the combination of DEBUG_INFO_BTF and DEBUG_INFO_DWARF5, are
+> guarded by PAHOLE_VERSION.
+>
+> The remaining compile-time check in scripts/link-vmlinux.sh now appears
+> to be an awkward inconsistency.
+>
+> This commit adopts Nathan's original work.
+>
+> [1]: https://lore.kernel.org/lkml/20210111180609.713998-1-natechancellor@=
+gmail.com/
 >
 > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 > ---
->
->  scripts/link-vmlinux.sh | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 >
 
 LGTM
 
 Acked-by: Andrii Nakryiko <andrii@kernel.org>
 
+>  lib/Kconfig.debug       |  3 ++-
+>  scripts/link-vmlinux.sh | 12 ------------
+>  2 files changed, 2 insertions(+), 13 deletions(-)
+>
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index 5e2f30921cb2..eff408a88dfd 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -379,12 +379,13 @@ config DEBUG_INFO_BTF
+>         depends on !DEBUG_INFO_SPLIT && !DEBUG_INFO_REDUCED
+>         depends on !GCC_PLUGIN_RANDSTRUCT || COMPILE_TEST
+>         depends on BPF_SYSCALL
+> +       depends on PAHOLE_VERSION >=3D 116
+>         depends on !DEBUG_INFO_DWARF5 || PAHOLE_VERSION >=3D 121
+>         # pahole uses elfutils, which does not have support for Hexagon r=
+elocations
+>         depends on !HEXAGON
+>         help
+>           Generate deduplicated BTF type information from DWARF debug inf=
+o.
+> -         Turning this on expects presence of pahole tool, which will con=
+vert
+> +         Turning this on requires presence of pahole tool, which will co=
+nvert
+>           DWARF type info into equivalent deduplicated BTF type info.
+>
+>  config PAHOLE_HAS_SPLIT_BTF
 > diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-> index bd196944e350..cfffc41e20ed 100755
+> index cfffc41e20ed..53bd4b727e21 100755
 > --- a/scripts/link-vmlinux.sh
 > +++ b/scripts/link-vmlinux.sh
-> @@ -288,7 +288,7 @@ strip_debug=3D
->  vmlinux_link vmlinux
+> @@ -111,20 +111,8 @@ vmlinux_link()
+>  # ${1} - vmlinux image
+>  gen_btf()
+>  {
+> -       local pahole_ver
+>         local btf_data=3D${1}.btf.o
 >
->  # fill in BTF IDs
-> -if is_enabled CONFIG_DEBUG_INFO_BTF && is_enabled CONFIG_BPF; then
-> +if is_enabled CONFIG_DEBUG_INFO_BTF; then
->         info BTFIDS vmlinux
->         ${RESOLVE_BTFIDS} vmlinux
->  fi
+> -       if ! [ -x "$(command -v ${PAHOLE})" ]; then
+> -               echo >&2 "BTF: ${1}: pahole (${PAHOLE}) is not available"
+> -               return 1
+> -       fi
+> -
+> -       pahole_ver=3D$(${PAHOLE} --version | sed -E 's/v([0-9]+)\.([0-9]+=
+)/\1\2/')
+> -       if [ "${pahole_ver}" -lt "116" ]; then
+> -               echo >&2 "BTF: ${1}: pahole version $(${PAHOLE} --version=
+) is too old, need at least v1.16"
+> -               return 1
+> -       fi
+> -
+>         info BTF "${btf_data}"
+>         LLVM_OBJCOPY=3D"${OBJCOPY}" ${PAHOLE} -J ${PAHOLE_FLAGS} ${1}
+>
 > --
 > 2.43.0
 >
