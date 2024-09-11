@@ -1,136 +1,129 @@
-Return-Path: <linux-arch+bounces-7211-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7212-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB21A975482
-	for <lists+linux-arch@lfdr.de>; Wed, 11 Sep 2024 15:51:01 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id ACFC197579F
+	for <lists+linux-arch@lfdr.de>; Wed, 11 Sep 2024 17:53:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5FFDA1F277BD
-	for <lists+linux-arch@lfdr.de>; Wed, 11 Sep 2024 13:51:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 07A5BB298F4
+	for <lists+linux-arch@lfdr.de>; Wed, 11 Sep 2024 15:52:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4275619E987;
-	Wed, 11 Sep 2024 13:50:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C95751AC8A3;
+	Wed, 11 Sep 2024 15:49:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="b6rCWOCp"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=syndicat.com header.i=@syndicat.com header.b="n/nWhaAY"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from mail.syndicat.com (mail.syndicat.com [62.146.89.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F20A019C563;
-	Wed, 11 Sep 2024 13:50:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8213A1ABEB8;
+	Wed, 11 Sep 2024 15:49:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.146.89.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726062613; cv=none; b=uX14mTqLDF79qFU3SK8PlNr8IVfTmHTGbhORtarw0S6rbmxXqipBFb1KDxTFuXwFVFNizbWKrCoy+FEzni8MVfKIN7VtnE+WKHS2XnAgPWmH723dyyNkJI6e2/aNW/2MjWAn6cecadMIqcnprACPYlOdvjMeEDhuz1JLnzHkGzM=
+	t=1726069798; cv=none; b=fIcxhRA+JMWxD7KPDUFtbop3dSxseFvQJs84Yuaa1CRWqZzmBIfO5cGBjp6INIm+K4KGsSHTqOWT+C1QDMsmnLIlaI4xTLeMa0Z9fGUYX0UIduwGXZtcENAAN2NTT6n102CzxO/w2PKVLWoe8WgSpZ0ZsA43aM3njUKfK11WOLg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726062613; c=relaxed/simple;
-	bh=PrFjse7wa9r7BLbYlfJSIri5+7sSsF6OSOZIIGlgpL0=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=il02RxYHdtQw38fKeurReB7ft2prSarjmtvpLfPI7cXnUnURCZ6/vONv4YN2QKKtNvXEegjlT+b6IlPCZLIun0GvmnkAsH4EW72o87Coj0cz2W3GlnpIQ+DZWTQSMYh/LKzctbjHwPKxdmktZSLfYa2rgmUctwjdHo68arD9z74=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=b6rCWOCp; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-	s=201909; t=1726062608;
-	bh=lpBzbgWttHYkkQ41sscZ0OOoe2UyQs048+I1EnGEnbs=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=b6rCWOCpsR6QTZU68icEH6ah28jcqnXyKEGoUH0ohvJRhp/Mm3QMMNf7cz1PRZVJk
-	 qZnhrbEZQSdtE52b5m7L8yLtR87aHqZ9Y3U05UdXnLFYWT6W/Gva4cteQod4+pDscF
-	 iq9WFey+WYHFyzKGuoKHndEZ0KUL/iVZ82dFsXKNk1jKIZA3FOkaV87mvcYAUlbhmC
-	 QSm0f+2sovoKzmv6FOXBVgqAL9iWpzg6XychwCtrVghD79R/XByY5tXAMuIaTpHV5g
-	 0oMsPLM4pI21UqirAlt8h43LH7OPXzxNCN5RDMbPbQlnnQRUFay141JPyB1XvhsCzO
-	 l8YWjW9+O5+hg==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4X3hlf1JyWz4x8D;
-	Wed, 11 Sep 2024 23:50:06 +1000 (AEST)
-From: Michael Ellerman <mpe@ellerman.id.au>
-To: Arnd Bergmann <arnd@arndb.de>, Charlie Jenkins <charlie@rivosinc.com>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky
- <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, Vineet Gupta
- <vgupta@kernel.org>, Russell King <linux@armlinux.org.uk>, guoren
- <guoren@kernel.org>, Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui
- <kernel@xen0n.name>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, Helge
- Deller <deller@gmx.de>, Nicholas Piggin <npiggin@gmail.com>, Christophe
- Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>,
- Alexander Gordeev <agordeev@linux.ibm.com>, Gerald Schaefer
- <gerald.schaefer@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>,
- Vasily Gorbik <gor@linux.ibm.com>, Christian Borntraeger
- <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>,
- Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker
- <dalias@libc.org>, John Paul Adrian Glaubitz
- <glaubitz@physik.fu-berlin.de>, "David S . Miller" <davem@davemloft.net>,
- Andreas Larsson <andreas@gaisler.com>, Thomas Gleixner
- <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
- <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, Peter
- Zijlstra <peterz@infradead.org>, Muchun Song <muchun.song@linux.dev>,
- Andrew Morton <akpm@linux-foundation.org>, "Liam R. Howlett"
- <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, shuah
- <shuah@kernel.org>, Christoph Hellwig <hch@infradead.org>, Michal Hocko
- <mhocko@suse.com>, "Kirill A. Shutemov" <kirill@shutemov.name>, Chris
- Torek <chris.torek@gmail.com>, Linux-Arch <linux-arch@vger.kernel.org>,
- linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
- loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-abi-devel@lists.sourceforge.net
-Subject: Re: [PATCH RFC v3 1/2] mm: Add personality flag to limit address to
- 47 bits
-In-Reply-To: <89d21669-8daa-4225-b6d2-33d439ebd746@app.fastmail.com>
-References: <20240905-patches-below_hint_mmap-v3-0-3cd5564efbbb@rivosinc.com>
- <20240905-patches-below_hint_mmap-v3-1-3cd5564efbbb@rivosinc.com>
- <9fc4746b-8e9d-4a75-b966-e0906187e6b7@app.fastmail.com>
- <58f39d58-579e-4dd3-8084-baebf86f1ae0@lucifer.local>
- <7be08ea9-f343-42da-805f-e5f0d61bde26@app.fastmail.com>
- <016c7857-9ea8-4333-96e6-3ae3870f375f@lucifer.local>
- <Zt+DGHZrHFxfq7xo@ghost>
- <89d21669-8daa-4225-b6d2-33d439ebd746@app.fastmail.com>
-Date: Wed, 11 Sep 2024 23:50:05 +1000
-Message-ID: <87zfoeqoz6.fsf@mail.lhotse>
+	s=arc-20240116; t=1726069798; c=relaxed/simple;
+	bh=rsDjtUbs6FEUozaeUr5ELGw2oV4jRVnMxSabRL/2HgY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=hjaMvqtGRR53Qn9q8iySMd/PspomoOJbC4d14IerC/aMTu6Nicy06NiPrwgSmUPvr6xD2l/4DLykhAMHPzxt+7u6CrvH5qoQK9h0x4TRPZMRul0ZHO+LbwA3C7YTfDk9YfL/PNdvn9TeXDxGsQto2iebqsJnlJ65x41EPU4RNN8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=syndicat.com; spf=pass smtp.mailfrom=syndicat.com; dkim=pass (1024-bit key) header.d=syndicat.com header.i=@syndicat.com header.b=n/nWhaAY; arc=none smtp.client-ip=62.146.89.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=syndicat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=syndicat.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=syndicat.com; s=x; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=fzIXo3yyzydPZssY8Emq0ERM7FiN4ixdZ6PRUNbHpxU=; b=n/nWhaAYBBuf3nzNnd7Sqg7jbe
+	2+Fmmi494pA1/npuLQeAVIeBTOimjs5oJuV4GdO3BBowfzJrOz1vFOFAfqcmC5TRBFhSLMQGFfn02
+	XIOWKcCvGhGQmY9VvnEpuyLLRNEuokHtithLAuCK9+PnE2NGdiyUh7y9bbJkPeoVQOqo=;
+Received: from localhost.syndicat.com ([127.0.0.1]:51771 helo=localhost)
+	by mail.syndicat.com with esmtp (Syndicat PostHamster 12.2 4.96.1)
+	(envelope-from <nd@syndicat.com>)
+	id 1soPbM-0007FZ-0h;
+	Wed, 11 Sep 2024 17:49:52 +0200
+X-Virus-Scanned: amavisd-new at syndicat.com
+Received: from mail.syndicat.com ([127.0.0.1])
+	by localhost (mail.syndicat.com [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0ONhiC24LKMG; Wed, 11 Sep 2024 17:49:51 +0200 (CEST)
+Received: from p579493d3.dip0.t-ipconnect.de ([87.148.147.211]:57025 helo=gongov.localnet)
+	by mail.syndicat.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Syndicat PostHamster 12.2 4.96.1)
+	(envelope-from <nd@syndicat.com>)
+	id 1soPbL-0002M7-23;
+	Wed, 11 Sep 2024 17:49:51 +0200
+From: Niels Dettenbach <nd@syndicat.com>
+To: linux-arch@vger.kernel.org
+Cc: stable@vger.kernel.org, trivial@kernel.org
+Subject: Re: [PATCH 1/1] x86: SMT broken on Xen PV DomU since 6.9 (updated)
+Date: Wed, 11 Sep 2024 17:49:46 +0200
+Message-ID: <3301863.oiGErgHkdL@gongov>
+Organization: Syndicat IT&Internet
+In-Reply-To: <4242435.1IzOArtZ34@gongov>
+References: <4242435.1IzOArtZ34@gongov>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
+X-Report-Abuse-To: abuse@syndicat.com (see https://www.syndicat.com/kontakt/kontakte/)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - mail.syndicat.com
+X-AntiAbuse: Original Domain - 
+X-AntiAbuse: Sender Address Domain - syndicat.com
 
-"Arnd Bergmann" <arnd@arndb.de> writes:
-> On Mon, Sep 9, 2024, at 23:22, Charlie Jenkins wrote:
->> On Fri, Sep 06, 2024 at 10:52:34AM +0100, Lorenzo Stoakes wrote:
->>> On Fri, Sep 06, 2024 at 09:14:08AM GMT, Arnd Bergmann wrote:
->>> The intent is to optionally be able to run a process that keeps higher bits
->>> free for tagging and to be sure no memory mapping in the process will
->>> clobber these (correct me if I'm wrong Charlie! :)
-...
-> Let's see what the other architectures do and then come up with
-> a way that fixes the pointer tagging case first on those that are
-> broken. We can see if there needs to be an extra flag after that.
-> Here is what I found:
->
-> - x86_64 uses DEFAULT_MAP_WINDOW of BIT(47), uses a 57 bit
->   address space when an addr hint is passed.
-> - arm64 uses DEFAULT_MAP_WINDOW of BIT(47) or BIT(48), returns
->   higher 52-bit addresses when either a hint is passed or
->   CONFIG_EXPERT and CONFIG_ARM64_FORCE_52BIT is set (this
->   is a debugging option)
-> - ppc64 uses a DEFAULT_MAP_WINDOW of BIT(47) or BIT(48),
->   returns 52 bit address when an addr hint is passed
-   
-It's 46 or 47 depending on PAGE_SIZE (4K or 64K):
+Am Mittwoch, 11. September 2024, 10:53:30  schrieb Niels Dettenbach:
+> virtual machines under Xen Hypervisor (DomU) running in Xen PV mode use a
+> special, nonstandard synthetized CPU topology which "just works" under
+> kernels 6.9.x while newer kernels assuming a "crash kernel" and disable
+> SMT (reducing to one CPU core) because the newer topology implementation
+> produces a wrong error "[Firmware Bug]: APIC enumeration order not
+> specification compliant" after new topology checks which are improper for
+> Xen PV platform. As a result, the kernel disables SMT and activates just
+> one CPU core within the VM (DomU).
+> 
+> The patch disables the regarding checks if it is running in Xen PV
+> mode (only) and bring back SMT / all CPUs as in the past to such DomU
+> VMs.
+> 
+> Signed-off-by: Niels Dettenbach <nd@syndicat.com>
+> 
 
-  $ git grep "define DEFAULT_MAP_WINDOW_USER64" arch/powerpc/include/asm/task_size_64.h
-  arch/powerpc/include/asm/task_size_64.h:#define DEFAULT_MAP_WINDOW_USER64        TASK_SIZE_128TB
-  arch/powerpc/include/asm/task_size_64.h:#define DEFAULT_MAP_WINDOW_USER64        TASK_SIZE_64TB
+Signed-off-by: Niels Dettenbach <nd@syndicat.com>
+---
 
-cheers
+A reworked proposal patch which substitutes my initial proposed patch:
+
+
+--- linux/arch/x86/kernel/cpu/topology.c        2024-09-11 17:42:42.699278317 +0200
++++ linux/arch/x86/kernel/cpu/topology.c.orig   2024-09-11 09:53:16.194095250 +0200
+@@ -132,14 +132,6 @@
+        u64 msr;
+
+        /*
+-        * assume Xen PV has a working (special) topology
+-        */
+-       if (xen_pv_domain()) {
+-               topo_info.real_bsp_apic_id = topo_info.boot_cpu_apic_id;
+-               return false;
+-       }
+-
+-       /*
+         * There is no real good way to detect whether this a kdump()
+         * kernel, but except on the Voyager SMP monstrosity which is not
+         * longer supported, the real BSP APIC ID is the first one which is
+
+ 
+
+
+
+
+
+
 
