@@ -1,174 +1,137 @@
-Return-Path: <linux-arch+bounces-7222-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7223-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 321D1975E12
-	for <lists+linux-arch@lfdr.de>; Thu, 12 Sep 2024 02:46:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6CD9976004
+	for <lists+linux-arch@lfdr.de>; Thu, 12 Sep 2024 06:40:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DB2181F22BFC
-	for <lists+linux-arch@lfdr.de>; Thu, 12 Sep 2024 00:46:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 26598285258
+	for <lists+linux-arch@lfdr.de>; Thu, 12 Sep 2024 04:40:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E10B7257B;
-	Thu, 12 Sep 2024 00:46:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 155DF17D372;
+	Thu, 12 Sep 2024 04:40:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VB1NSZDL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f9a/ZSq5"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A40CA4C85;
-	Thu, 12 Sep 2024 00:46:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D73F5126BFF;
+	Thu, 12 Sep 2024 04:40:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726101977; cv=none; b=ZEPIqnXh1B8fMuyRhjywsuNcA45uhYD+5EVuWqkDluR+E4EdrX04TPaq94A1VyjWd157OyEn7HQTEL2p1kIqGY1fVM/JMMJeL9bpjtlw6t0jwHNOtNIAFm65dvDPyQO6mVPQJjJLIoPmvzRVe1hpcW/iZaAWsX+9PEYRvB/aI8I=
+	t=1726116040; cv=none; b=XVaeMHH1LmFeCUWgn7TEkzgj0CxulECW6acPr0UtB0jGWIR4uLfNqhM+HfhIJzSdEeY5xt/i+aBkBlp2Vnbfh9I2jVny3Aw3eNkutKioBfyQ1r2gKXQC93DnNK7S8pKTud+udG+uj16h2spz//pVlzC2oqVkIrqV3sX6J6NpqkI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726101977; c=relaxed/simple;
-	bh=rCTip0z8RW4T9O3sL3tYawuQAxSVn1R+UDt8fG0rfBM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XLKrYU6Np6wbimi0KCvgB6J77UqdYNFUoQZFV731eqo2T2rbWeDTj3laelTWJv9FgV6h01f67SoODBuHxVrpgPTyJ6syAc72EVAQX3T9EMHv+4HcFsdCKhuSqIeNb2H1nQDqv0AYK89KbD6znXTIUqFC+09BgTY0FJ5M5EHtE3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VB1NSZDL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33C5AC4CECD;
-	Thu, 12 Sep 2024 00:46:17 +0000 (UTC)
+	s=arc-20240116; t=1726116040; c=relaxed/simple;
+	bh=atZ4KPNKSjb83Uge3zpflsYcUJEL/us60I8XWzukpe0=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=UWDVL6KbFt/8F6TKkHEL3e2YBaXpJyIGtQRatymZd1qsy8IiDE/xsooS4ueSdC0R4epLSNNHCPw09iseRz+SxBTJaYK6xy4tu/d0lzRNNed2VLj5Tzfs4jwZa6CiDRnJSOD+0yh9doPqxl1NbS1R8s+u1a8iFnR1zTxhyt9/Xtk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f9a/ZSq5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 621D0C4CEC3;
+	Thu, 12 Sep 2024 04:40:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726101977;
-	bh=rCTip0z8RW4T9O3sL3tYawuQAxSVn1R+UDt8fG0rfBM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=VB1NSZDLmJLYXgjMhVZp4X3/D8q938fh8TJ5msMRVPPG5e8YqL60zl/PejZumuLbu
-	 RLc65k5MW8ZAy4W9nYGaYJQXW1OiU5S+d6OH474cQNXeeIPsTTIWyQrvovzhQi7VqP
-	 4tPcCzhmnm9W7TR7kJNrScdYf+FAtI6dR9ZxfpPHkG1xX3izdOE4Q/defk2834m0n5
-	 HgPCh5NjuhKo0f7ddA85wxt/Iu8LZi2xb5PV16fGYBbI9+4J2Onj3GlEUqh9/zh/Fm
-	 DivkyvEI4BVw6mBGozAPvcDmN/+COz8kL766rw794WiXljC3BgDAjCzVZBORMe62w8
-	 tp/RZEiZsq/rQ==
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5365928acd0so472637e87.2;
-        Wed, 11 Sep 2024 17:46:17 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCV+mNaCdb6cQTnUamMrey1OmReXvmVvW+pwElE/AOAxorX6WH9TJ+QAje2lBHRAUKZiMUA=@vger.kernel.org, AJvYcCVzlLGGakm6wDcr+TX9uVBpA/3J46/L7Uv23azIehXwUDJXUewrcpXiLp70q+f6jlFosqGzqp8wEYKzBi/b@vger.kernel.org, AJvYcCWuyNAOJX/CxK31sUmP8gs1e65mr/I+SUVQTs0oMFwaX4VIM5Q8Hyov/4bZK9kvSAApMN4JgRfjJDVUhg==@vger.kernel.org, AJvYcCX6doiXNKabbKRDuPiHtXVWHehtkN+sn5bHfAsdr4DXMasrCjH0G0WyDYWhwSqnBGnOSe2DYnH7Tdsq3A2R@vger.kernel.org
-X-Gm-Message-State: AOJu0YxhDYzsX3oOxPE/ArifJJPNp7ipe/yNlZ3oVz8WUokhwyN8ccwA
-	QCTHf65Jr0Yb5Z23Hnfsgna2YjDJFzvjhJIg6EMnC/immZqg5cinddajTDORcfsK37FWfwlRRP7
-	JYcsgiiEABwqU95YznkaD7UDNN7s=
-X-Google-Smtp-Source: AGHT+IFW/U6JzNS0Bm4hp70ip1Ry319HSUQjP/Bsw523ptagVoYpWZ/J3vEQMKjpxaZJeWMPwLKyr+a8IXL/eVQilwo=
-X-Received: by 2002:a05:6512:3b0e:b0:533:4656:d4cd with SMTP id
- 2adb3069b0e04-53678fc1816mr607644e87.33.1726101975865; Wed, 11 Sep 2024
- 17:46:15 -0700 (PDT)
+	s=k20201202; t=1726116039;
+	bh=atZ4KPNKSjb83Uge3zpflsYcUJEL/us60I8XWzukpe0=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=f9a/ZSq5MjAJpdiUDHoVavctM5HOoilo2YhcN45JiEfgJYuD+evoGy3GTwFy3dWNK
+	 MCcZexV/mRsbKVhAIikQXE7layOfhJ3sIvPU5XZi6xuLqnLkHkdE/Qx+MQdf+g1ZYB
+	 gce1dGWnviJLx6aL4O8iqydw5+DCEJVlzFx2Q4DVfqfcYtCglZ0a3zjxo4FLA5531c
+	 BDOtc/uZ1bzZ/QMAIY/iMLCh/H1rCZm7mMteXHfen+24mVBLqbsIC2bNyatAA+Kt/j
+	 RB4GjdEViDywOWSDVtOg00irITukuSvO9eccISaYhdBZr0Vmo/BFTcf9+Idkdg7vhE
+	 pfG55SGZsz4KA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE1073806656;
+	Thu, 12 Sep 2024 04:40:41 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240911110401.598586-1-masahiroy@kernel.org> <20240911110401.598586-2-masahiroy@kernel.org>
- <56fbf243-8e50-4760-9ed0-8d1f0f7e5ed3@oracle.com>
-In-Reply-To: <56fbf243-8e50-4760-9ed0-8d1f0f7e5ed3@oracle.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Thu, 12 Sep 2024 09:45:39 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAS3XKeeQwKNMnnXDpMK+T2Df9UNoMVQtajuwr6cUR4EzQ@mail.gmail.com>
-Message-ID: <CAK7LNAS3XKeeQwKNMnnXDpMK+T2Df9UNoMVQtajuwr6cUR4EzQ@mail.gmail.com>
-Subject: Re: [PATCH 2/3] btf: move pahole check in scripts/link-vmlinux.sh to lib/Kconfig.debug
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org, linux-arch@vger.kernel.org, 
-	Andrii Nakryiko <andrii@kernel.org>, linux-kernel@vger.kernel.org, 
-	Nathan Chancellor <nathan@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Nicolas Schier <nicolas@fjasle.eu>, linux-kbuild@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v26 00/13] Device Memory TCP
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <172611604053.1162260.14936560637203902304.git-patchwork-notify@kernel.org>
+Date: Thu, 12 Sep 2024 04:40:40 +0000
+References: <20240910171458.219195-1-almasrymina@google.com>
+In-Reply-To: <20240910171458.219195-1-almasrymina@google.com>
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, donald.hunter@gmail.com, corbet@lwn.net,
+ richard.henderson@linaro.org, ink@jurassic.park.msu.ru, mattst88@gmail.com,
+ tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
+ deller@gmx.de, andreas@gaisler.com, hawk@kernel.org,
+ ilias.apalodimas@linaro.org, rostedt@goodmis.org, mhiramat@kernel.org,
+ mathieu.desnoyers@efficios.com, arnd@arndb.de, steffen.klassert@secunet.com,
+ herbert@gondor.apana.org.au, dsahern@kernel.org,
+ willemdebruijn.kernel@gmail.com, bjorn@kernel.org, magnus.karlsson@intel.com,
+ maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com, shuah@kernel.org,
+ ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+ sumit.semwal@linaro.org, christian.koenig@amd.com, asml.silence@gmail.com,
+ dw@davidwei.uk, jgg@ziepe.ca, linyunsheng@huawei.com, shailend@google.com,
+ hramamurthy@google.com, shakeel.butt@linux.dev, jeroendb@google.com,
+ pkaligineedi@google.com, bagasdotme@gmail.com, hch@infradead.org,
+ razor@blackwall.org, ap420073@gmail.com
 
-On Thu, Sep 12, 2024 at 2:25=E2=80=AFAM Alan Maguire <alan.maguire@oracle.c=
-om> wrote:
->
-> On 11/09/2024 12:03, Masahiro Yamada wrote:
-> > When DEBUG_INFO_DWARF5 is selected, pahole 1.21+ is required to enable
-> > DEBUG_INFO_BTF.
-> >
-> > When DEBUG_INFO_DWARF4 or DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT is selecte=
-d,
-> > DEBUG_INFO_BTF can be enabled without pahole installed, but a build err=
-or
-> > will occur in scripts/link-vmlinux.sh:
-> >
-> >     LD      .tmp_vmlinux1
-> >   BTF: .tmp_vmlinux1: pahole (pahole) is not available
-> >   Failed to generate BTF for vmlinux
-> >   Try to disable CONFIG_DEBUG_INFO_BTF
-> >
-> > We did not guard DEBUG_INFO_BTF by PAHOLE_VERSION when previously
-> > discussed [1].
-> >
-> > However, commit 613fe1692377 ("kbuild: Add CONFIG_PAHOLE_VERSION")
-> > added CONFIG_PAHOLE_VERSION at all. Now several CONFIG options, as
-> > well as the combination of DEBUG_INFO_BTF and DEBUG_INFO_DWARF5, are
-> > guarded by PAHOLE_VERSION.
-> >
-> > The remaining compile-time check in scripts/link-vmlinux.sh now appears
-> > to be an awkward inconsistency.
-> >
-> > This commit adopts Nathan's original work.
-> >
-> > [1]: https://lore.kernel.org/lkml/20210111180609.713998-1-natechancello=
-r@gmail.com/
-> >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
->
-> Nice cleanup! For the series
->
-> Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
->
-> One small thing below..
->
-> > ---
-> >
-> >  lib/Kconfig.debug       |  3 ++-
-> >  scripts/link-vmlinux.sh | 12 ------------
-> >  2 files changed, 2 insertions(+), 13 deletions(-)
-> >
-> > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> > index 5e2f30921cb2..eff408a88dfd 100644
-> > --- a/lib/Kconfig.debug
-> > +++ b/lib/Kconfig.debug
-> > @@ -379,12 +379,13 @@ config DEBUG_INFO_BTF
-> >       depends on !DEBUG_INFO_SPLIT && !DEBUG_INFO_REDUCED
-> >       depends on !GCC_PLUGIN_RANDSTRUCT || COMPILE_TEST
-> >       depends on BPF_SYSCALL
-> > +     depends on PAHOLE_VERSION >=3D 116
-> >       depends on !DEBUG_INFO_DWARF5 || PAHOLE_VERSION >=3D 121
-> >       # pahole uses elfutils, which does not have support for Hexagon r=
-elocations
-> >       depends on !HEXAGON
-> >       help
-> >         Generate deduplicated BTF type information from DWARF debug inf=
-o.
-> > -       Turning this on expects presence of pahole tool, which will con=
-vert
-> > +       Turning this on requires presence of pahole tool, which will co=
-nvert
-> >         DWARF type info into equivalent deduplicated BTF type info.
-> >
->
-> One thing we lose from the change below is an explicit message about the
-> minimal pahole version required. While it is codified in the
-> dependendencies, given that we used to loudly warn about this,
-> would it make sense to note it in the help text here; just a sentence
-> like "BTF generation requires pahole v1.16 or later."? Thanks!
+Hello:
+
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Tue, 10 Sep 2024 17:14:44 +0000 you wrote:
+> v26: https://patchwork.kernel.org/project/netdevbpf/list/?series=888227&state=*
+> ====
+> 
+> No major changes. Only applied Reviewed-by tags from Jakub and addressed
+> reported nits.
+> 
+> v25: https://patchwork.kernel.org/project/netdevbpf/list/?series=885396&state=*
+> ===
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,v26,01/13] netdev: add netdev_rx_queue_restart()
+    https://git.kernel.org/netdev/net-next/c/7c88f86576f3
+  - [net-next,v26,02/13] net: netdev netlink api to bind dma-buf to a net device
+    https://git.kernel.org/netdev/net-next/c/3efd7ab46d0a
+  - [net-next,v26,03/13] netdev: support binding dma-buf to netdevice
+    https://git.kernel.org/netdev/net-next/c/170aafe35cb9
+  - [net-next,v26,04/13] netdev: netdevice devmem allocator
+    https://git.kernel.org/netdev/net-next/c/28c5c74eeaa0
+  - [net-next,v26,05/13] page_pool: devmem support
+    https://git.kernel.org/netdev/net-next/c/8ab79ed50cf1
+  - [net-next,v26,06/13] memory-provider: dmabuf devmem memory provider
+    https://git.kernel.org/netdev/net-next/c/0f9214046893
+  - [net-next,v26,07/13] net: support non paged skb frags
+    https://git.kernel.org/netdev/net-next/c/9f6b619edf2e
+  - [net-next,v26,08/13] net: add support for skbs with unreadable frags
+    https://git.kernel.org/netdev/net-next/c/65249feb6b3d
+  - [net-next,v26,09/13] tcp: RX path for devmem TCP
+    https://git.kernel.org/netdev/net-next/c/8f0b3cc9a4c1
+  - [net-next,v26,10/13] net: add SO_DEVMEM_DONTNEED setsockopt to release RX frags
+    https://git.kernel.org/netdev/net-next/c/678f6e28b5f6
+  - [net-next,v26,11/13] net: add devmem TCP documentation
+    https://git.kernel.org/netdev/net-next/c/09d1db26b5e5
+  - [net-next,v26,12/13] selftests: add ncdevmem, netcat for devmem TCP
+    https://git.kernel.org/netdev/net-next/c/85585b4bc8d8
+  - [net-next,v26,13/13] netdev: add dmabuf introspection
+    https://git.kernel.org/netdev/net-next/c/d0caf9876a1c
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-How about this help message?
-
-
-
-help
-  Generate deduplicated BTF type information from DWARF debug info.
-  Turning this on requires pahole v1.16 or later (v1.21 or later
-  for DWARF 5), which will convert DWARF type info into equivalent
-  deduplicated BTF type info.
-
-
-
-
-
-
-
-
---=20
-Best Regards
-Masahiro Yamada
 
