@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-7238-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7239-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78E46976D25
-	for <lists+linux-arch@lfdr.de>; Thu, 12 Sep 2024 17:10:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BDBF976D2C
+	for <lists+linux-arch@lfdr.de>; Thu, 12 Sep 2024 17:11:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E773DB217EF
-	for <lists+linux-arch@lfdr.de>; Thu, 12 Sep 2024 15:10:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4F1F7289326
+	for <lists+linux-arch@lfdr.de>; Thu, 12 Sep 2024 15:11:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B10741BA868;
-	Thu, 12 Sep 2024 15:09:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96F021BB68F;
+	Thu, 12 Sep 2024 15:09:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aZosUZo+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fuaDHqPK"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85C171AD245;
-	Thu, 12 Sep 2024 15:09:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6697E1B1D60;
+	Thu, 12 Sep 2024 15:09:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726153782; cv=none; b=lwP65c19hdxoggasvOq1uYdddFd9MlNDnvYMol5KuIkAW1pTL+3l/ACtSAQ2j4MBmzscEOg7bkWUPTia7Cn0X0qQZw21VOGO9pKkLup5DVYFEX3XQy9xgKNGEQ6mKE8gNch1ohGyOSZ7U+b7SHST9JbZG6cDRoCdJ5RCaSG/RYU=
+	t=1726153793; cv=none; b=lOC20kpDOv/QWlj+VFlR8q6FURTz9x4gyzBD/BNGgZ+TjFn2NwEliDy3RxXGJ75sZIpdE6nj6zxs6o8hzWeiLX112iA3boKbVreTYvz53v2ZLxYtDP7tMRMGnYGOBiXSEhUA51o7+0nHkPjmtSx2+YXcEE0J1LbZBDoQUBV9O74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726153782; c=relaxed/simple;
-	bh=Q4hXcXNt3n/tPL7yqMlb2L8eUR76I6dupDqzich+MVM=;
+	s=arc-20240116; t=1726153793; c=relaxed/simple;
+	bh=oM/kSUbxch3kFN7tAWfFFjXUCrxI3kpMjYUsuujPY5Q=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dqYZR4Iswzw6RcrRkcawvpy784vUdCFZ02c5oKpz4259QqDtiILxJt2onlVW9kOwYG6ErLhmuBhe9F7H+p14HiuitYUbgi7MiXsyPWa6N03UoIO4tLpFFjmIXGinsEjxDUEmVbIMR+H/ZWGLmkFMS9Q7wLVgCLb+/0+LJd/HVRo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aZosUZo+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B047C4CEC5;
-	Thu, 12 Sep 2024 15:09:38 +0000 (UTC)
+	 MIME-Version:Content-Type; b=pawsPKBguZVEA7WVQ20Z9jZKET5YSs7PiqrKgn49cOWwk4UVgRKD6cRE7v3j6m5rqFiUfgh4GGgEfcZgv7ZTL3gFR8F5fMXrZGhd+vehz74W9hihIInUqHJ91cUp0kwRXVP0nJPyfMLesejfuzyY1PnrLcqHs2P2LOSbadnoKWo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fuaDHqPK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B172C4CEC3;
+	Thu, 12 Sep 2024 15:09:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726153782;
-	bh=Q4hXcXNt3n/tPL7yqMlb2L8eUR76I6dupDqzich+MVM=;
+	s=k20201202; t=1726153793;
+	bh=oM/kSUbxch3kFN7tAWfFFjXUCrxI3kpMjYUsuujPY5Q=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=aZosUZo+YvULTK9yYt/nimu77TH50vzsaFTbLl0YEjNhQ+iEe1uHlYsrBgUvONcGG
-	 2sH92FJ0MxA9zKeYXnt/gzM7GP7ezUY1hgj8yLz0EAcaDM8LtWdFDp/nEax9IXMFkx
-	 TbRLyhygQEniSEeojRHQyqmL4BM/KyAZ/IW5/ny1FGvzUo/6fDGUmrMbkTH9xUZva5
-	 FFdX+A1aLZZ2NogORWS9I9fCMCd1W7lf0umpK+5bnZEMe/+pD7shv6rtmipXjCng3k
-	 n7L9vk7AqmYksk8iu1YL1HU4FlpmjyHbOznzeWP8pKjHILNnQC2TgY3Q48drFvhTbp
-	 UlMVIYvkfWFCQ==
+	b=fuaDHqPKncdgkc8FaGKCeDoQV3HwqCSeCH2W1t1/AgquSqjJmwymNAcfvK23iWVNp
+	 /hhqxFEIrmnSbhz9bpJcOVH2767KYnvW3TETMq71t1GbL8Ay91eq6ZbGi0i4K+cKyC
+	 P5FpJLT0GraG+Y9G7TBrNJDtYrPG+LEZl4MY1wSuTogGAUkmYwWYeq0MqS5GupRhzz
+	 EmA1m40NgU1ITS2yEuOI/HlHDX9azBdTFdsRqi7HXs4R/mYJZOdVtJcOwI99XTIGrX
+	 lPC5dFM6nLj+Lh7qp22HTjmQCycOyKxecrqGqDFZY+Y/SxwmlA2Jwf0JuxGcqbWIPp
+	 34svXkvWFnbnA==
 From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
 To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
 	Steven Rostedt <rostedt@goodmis.org>,
@@ -60,9 +60,9 @@ Cc: linux-trace-kernel@vger.kernel.org,
 	Thomas Gleixner <tglx@linutronix.de>,
 	Guo Ren <guoren@kernel.org>,
 	linux-arch@vger.kernel.org
-Subject: [PATCH v14 08/19] tracing: Add ftrace_partial_regs() for converting ftrace_regs to pt_regs
-Date: Fri, 13 Sep 2024 00:09:35 +0900
-Message-Id: <172615377576.133222.5911358383330497277.stgit@devnote2>
+Subject: [PATCH v14 09/19] tracing: Add ftrace_fill_perf_regs() for perf event
+Date: Fri, 13 Sep 2024 00:09:47 +0900
+Message-Id: <172615378702.133222.3149457339191866610.stgit@devnote2>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <172615368656.133222.2336770908714920670.stgit@devnote2>
 References: <172615368656.133222.2336770908714920670.stgit@devnote2>
@@ -78,99 +78,130 @@ Content-Transfer-Encoding: 8bit
 
 From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Add ftrace_partial_regs() which converts the ftrace_regs to pt_regs.
-This is for the eBPF which needs this to keep the same pt_regs interface
-to access registers.
-Thus when replacing the pt_regs with ftrace_regs in fprobes (which is
-used by kprobe_multi eBPF event), this will be used.
-
-If the architecture defines its own ftrace_regs, this copies partial
-registers to pt_regs and returns it. If not, ftrace_regs is the same as
-pt_regs and ftrace_partial_regs() will return ftrace_regs::regs.
+Add ftrace_fill_perf_regs() which should be compatible with the
+perf_fetch_caller_regs(). In other words, the pt_regs returned from the
+ftrace_fill_perf_regs() must satisfy 'user_mode(regs) == false' and can be
+used for stack tracing.
 
 Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Acked-by: Florent Revest <revest@chromium.org>
 ---
- Changes in v14:
-  - Add riscv change.
- Changes in v8:
-  - Add the reason why this required in changelog.
- Changes from previous series: NOTHING, just forward ported.
+  Changes from previous series: NOTHING, just forward ported.
 ---
- arch/arm64/include/asm/ftrace.h |   11 +++++++++++
- arch/riscv/include/asm/ftrace.h |   12 ++++++++++++
- include/linux/ftrace.h          |   17 +++++++++++++++++
- 3 files changed, 40 insertions(+)
+ arch/arm64/include/asm/ftrace.h   |    7 +++++++
+ arch/powerpc/include/asm/ftrace.h |    7 +++++++
+ arch/s390/include/asm/ftrace.h    |    5 +++++
+ arch/x86/include/asm/ftrace.h     |    7 +++++++
+ include/linux/ftrace.h            |   31 +++++++++++++++++++++++++++++++
+ 5 files changed, 57 insertions(+)
 
 diff --git a/arch/arm64/include/asm/ftrace.h b/arch/arm64/include/asm/ftrace.h
-index dffaab3dd1f1..5cd587afab6d 100644
+index 5cd587afab6d..14ecb9a418d9 100644
 --- a/arch/arm64/include/asm/ftrace.h
 +++ b/arch/arm64/include/asm/ftrace.h
-@@ -132,6 +132,17 @@ ftrace_regs_get_frame_pointer(const struct ftrace_regs *fregs)
- 	return fregs->fp;
+@@ -143,6 +143,13 @@ ftrace_partial_regs(const struct ftrace_regs *fregs, struct pt_regs *regs)
+ 	return regs;
  }
  
-+static __always_inline struct pt_regs *
-+ftrace_partial_regs(const struct ftrace_regs *fregs, struct pt_regs *regs)
-+{
-+	memcpy(regs->regs, fregs->regs, sizeof(u64) * 9);
-+	regs->sp = fregs->sp;
-+	regs->pc = fregs->pc;
-+	regs->regs[29] = fregs->fp;
-+	regs->regs[30] = fregs->lr;
-+	return regs;
-+}
++#define arch_ftrace_fill_perf_regs(fregs, _regs) do {		\
++		(_regs)->pc = (fregs)->pc;			\
++		(_regs)->regs[29] = (fregs)->fp;		\
++		(_regs)->sp = (fregs)->sp;			\
++		(_regs)->pstate = PSR_MODE_EL1h;		\
++	} while (0)
 +
  int ftrace_regs_query_register_offset(const char *name);
  
  int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec);
-diff --git a/arch/riscv/include/asm/ftrace.h b/arch/riscv/include/asm/ftrace.h
-index e9f364ce9fe8..897779dec402 100644
---- a/arch/riscv/include/asm/ftrace.h
-+++ b/arch/riscv/include/asm/ftrace.h
-@@ -193,6 +193,18 @@ static __always_inline void ftrace_override_function_with_return(struct ftrace_r
- 	fregs->epc = fregs->ra;
+diff --git a/arch/powerpc/include/asm/ftrace.h b/arch/powerpc/include/asm/ftrace.h
+index 23d26f3afae4..e6ff6834bf7e 100644
+--- a/arch/powerpc/include/asm/ftrace.h
++++ b/arch/powerpc/include/asm/ftrace.h
+@@ -42,6 +42,13 @@ static __always_inline struct pt_regs *arch_ftrace_get_regs(struct ftrace_regs *
+ 	return fregs->regs.msr ? &fregs->regs : NULL;
  }
  
++#define arch_ftrace_fill_perf_regs(fregs, _regs) do {		\
++		(_regs)->result = 0;				\
++		(_regs)->nip = (fregs)->regs.nip;		\
++		(_regs)->gpr[1] = (fregs)->regs.gpr[1];		\
++		asm volatile("mfmsr %0" : "=r" ((_regs)->msr));	\
++	} while (0)
++
+ static __always_inline void
+ ftrace_regs_set_instruction_pointer(struct ftrace_regs *fregs,
+ 				    unsigned long ip)
+diff --git a/arch/s390/include/asm/ftrace.h b/arch/s390/include/asm/ftrace.h
+index 9cdd48a46bf7..0d9f6df21f81 100644
+--- a/arch/s390/include/asm/ftrace.h
++++ b/arch/s390/include/asm/ftrace.h
+@@ -84,6 +84,11 @@ ftrace_regs_get_frame_pointer(struct ftrace_regs *fregs)
+ 	return sp[0];	/* return backchain */
+ }
+ 
++#define arch_ftrace_fill_perf_regs(fregs, _regs)	 do {		\
++		(_regs)->psw.addr = (fregs)->regs.psw.addr;		\
++		(_regs)->gprs[15] = (fregs)->regs.gprs[15];		\
++	} while (0)
++
+ #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+ /*
+  * When an ftrace registered caller is tracing a function that is
+diff --git a/arch/x86/include/asm/ftrace.h b/arch/x86/include/asm/ftrace.h
+index 669771ef3b5b..1f4d1f7b19ed 100644
+--- a/arch/x86/include/asm/ftrace.h
++++ b/arch/x86/include/asm/ftrace.h
+@@ -46,6 +46,13 @@ arch_ftrace_get_regs(struct ftrace_regs *fregs)
+ 	return &fregs->regs;
+ }
+ 
++#define arch_ftrace_fill_perf_regs(fregs, _regs) do {	\
++		(_regs)->ip = (fregs)->regs.ip;		\
++		(_regs)->sp = (fregs)->regs.sp;		\
++		(_regs)->cs = __KERNEL_CS;		\
++		(_regs)->flags = 0;			\
++	} while (0)
++
+ #define ftrace_regs_set_instruction_pointer(fregs, _ip)	\
+ 	do { (fregs)->regs.ip = (_ip); } while (0)
+ 
+diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
+index bd9a26bdf660..3edf2427ae73 100644
+--- a/include/linux/ftrace.h
++++ b/include/linux/ftrace.h
+@@ -193,6 +193,37 @@ ftrace_partial_regs(struct ftrace_regs *fregs, struct pt_regs *regs)
+ 
+ #endif /* !CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS || CONFIG_HAVE_PT_REGS_TO_FTRACE_REGS_CAST */
+ 
++#ifdef CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS
++
++/*
++ * Please define arch dependent pt_regs which compatible to the
++ * perf_arch_fetch_caller_regs() but based on ftrace_regs.
++ * This requires
++ *   - user_mode(_regs) returns false (always kernel mode).
++ *   - able to use the _regs for stack trace.
++ */
++#ifndef arch_ftrace_fill_perf_regs
++/* As same as perf_arch_fetch_caller_regs(), do nothing by default */
++#define arch_ftrace_fill_perf_regs(fregs, _regs) do {} while (0)
++#endif
++
 +static __always_inline struct pt_regs *
-+ftrace_partial_regs(const struct ftrace_regs *fregs, struct pt_regs *regs)
++ftrace_fill_perf_regs(struct ftrace_regs *fregs, struct pt_regs *regs)
 +{
-+	memcpy(&regs->a0, fregs->args, sizeof(u64) * 8);
-+	regs->epc = fregs->epc;
-+	regs->ra = fregs->ra;
-+	regs->sp = fregs->sp;
-+	regs->s0 = fregs->s0;
-+	regs->t1 = fregs->t1;
++	arch_ftrace_fill_perf_regs(fregs, regs);
 +	return regs;
 +}
 +
- int ftrace_regs_query_register_offset(const char *name);
- 
- void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
-diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-index a1b2ef492c7f..bd9a26bdf660 100644
---- a/include/linux/ftrace.h
-+++ b/include/linux/ftrace.h
-@@ -176,6 +176,23 @@ static __always_inline struct pt_regs *ftrace_get_regs(struct ftrace_regs *fregs
- 	return arch_ftrace_get_regs(fregs);
- }
- 
-+#if !defined(CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS) || \
-+	defined(CONFIG_HAVE_PT_REGS_TO_FTRACE_REGS_CAST)
++#else /* !CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS */
 +
 +static __always_inline struct pt_regs *
-+ftrace_partial_regs(struct ftrace_regs *fregs, struct pt_regs *regs)
++ftrace_fill_perf_regs(struct ftrace_regs *fregs, struct pt_regs *regs)
 +{
-+	/*
-+	 * If CONFIG_HAVE_PT_REGS_TO_FTRACE_REGS_CAST=y, ftrace_regs memory
-+	 * layout is the same as pt_regs. So always returns that address.
-+	 * Since arch_ftrace_get_regs() will check some members and may return
-+	 * NULL, we can not use it.
-+	 */
 +	return &fregs->regs;
 +}
 +
-+#endif /* !CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS || CONFIG_HAVE_PT_REGS_TO_FTRACE_REGS_CAST */
++#endif
 +
  /*
   * When true, the ftrace_regs_{get,set}_*() functions may be used on fregs.
