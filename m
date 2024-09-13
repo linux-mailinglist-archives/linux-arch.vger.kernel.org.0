@@ -1,257 +1,193 @@
-Return-Path: <linux-arch+bounces-7301-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7302-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97A92978906
-	for <lists+linux-arch@lfdr.de>; Fri, 13 Sep 2024 21:36:12 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01EFD9789C5
+	for <lists+linux-arch@lfdr.de>; Fri, 13 Sep 2024 22:16:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CB158B21F38
-	for <lists+linux-arch@lfdr.de>; Fri, 13 Sep 2024 19:36:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5D50EB26186
+	for <lists+linux-arch@lfdr.de>; Fri, 13 Sep 2024 20:16:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79BBC1465A0;
-	Fri, 13 Sep 2024 19:36:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB4F1148FF7;
+	Fri, 13 Sep 2024 20:15:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EfnARFIH"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="NclhStDM"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C383C12FB0A;
-	Fri, 13 Sep 2024 19:36:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD559145A03
+	for <linux-arch@vger.kernel.org>; Fri, 13 Sep 2024 20:15:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726256164; cv=none; b=UOGkN2yo1THla/N+qcNQNwwGc0H3loQFTUHgfUzpeK/1WodwmD7BJeFGJKUEJcLDQhv02p2Bpexkg/t/Dj7RFpbJbJwcOPLZ0qaRRieISYSrCkL3G52eUDYfzJJh0TJxL8lm31M48piz+RdGk/3KlVmem1ynhyeOw+dTWWW8nH8=
+	t=1726258544; cv=none; b=ikQdBT0QMSKcxRcza+Onra9e7uNzFDYUSRzc4fgU4RNe+AGba+BxTziey9DejOKP4wgdmHhxQzyQMB14YyOahb6CWZtnGN7FQg2qpA7hUnQpFQeokToi8JGhI/j5ezuOJ7CW/871E0Z7lzaf2uORT3oy565/oFmOU/5rUUdHj/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726256164; c=relaxed/simple;
-	bh=UdHQBWDMc71bE8Iy55dArrd3rCWm3VHJo00yp68l710=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HC+7sItT6v/mkekRbGkXsB6wDSOWawRMJ1PBpeB7STqvhMa/gQHq5ask2OTbn8v/W0lO6GRGthzhod2YKo4iy+SxPAuMOgW5UpBz7Vu7oFZmzkZ50YDf4W+goFj3f/P7Qax++lYqQmilduuorGPdVY+bhcEQCC7xq49BIop1ibI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EfnARFIH; arc=none smtp.client-ip=209.85.219.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-e1a9dc3efc1so1455916276.2;
-        Fri, 13 Sep 2024 12:36:02 -0700 (PDT)
+	s=arc-20240116; t=1726258544; c=relaxed/simple;
+	bh=wfj+NyO2O/69MLo77jEarnaBvuUhTtqSf9r0p1hDvRY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cCBEK+FEicS4WMAzNYAihz6FNfCgLSuCrmYrDNl+Ye2rM9eUPv5/iLX+0HFVNfvEM9wTsMkxjrfpj15Z2TzJUyT67MtdK9JCXf6DSpeENygoj/llpgVg0pFlRFk5gBugVl31Dqye+aCjVBd072IM5N1fbgXTDQucmP/85+daZ1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=NclhStDM; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-20551e2f1f8so14944145ad.2
+        for <linux-arch@vger.kernel.org>; Fri, 13 Sep 2024 13:15:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726256162; x=1726860962; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3U+IHR6pDMRbfhHaDLoFAFxaYoo4zOVYQxFvK1iMreQ=;
-        b=EfnARFIHcg+YhL+Q8aiMFlzxhgiKN3Cc/f0qBcwh99IumqFRWTDN9uWw9nIfUg0LHv
-         Py6p/zmdrEo/aJuEalbxUqZGo2cU4Fdn278Sh8Xs5553tPUQ9ok+bYjxGttv6yogcQgq
-         9BrtoX8DbsqclI4PoZJ/LGOGLiRD9ZxCEx5I7ZeZXfhjpqZvJMjEH2laurGYKtr9KWCx
-         HUmQmn7Gh7vRS4RzBT3ildYVDOLylLL5QhM5ZYdyOw15LqnXWZIabTatfPju6R1ulJN3
-         4pQFn3Todz7MHCxncAzcVF9WufMSNX9umnbGxGZJK28ny7T+kCiVkVOjUnjcfCpRowfU
-         EulA==
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1726258542; x=1726863342; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=w1FIyAVC28uVndIDT9MHoNGdB/uDnM+DRyhrjJeTBk0=;
+        b=NclhStDMADg+8rXY3zMnZpgklTfAa14ssn3kbwcunDGIz8h6cP2BZtmssaHCmo+XOJ
+         afFH5gBp913WPHfI2fXDd/ETRIKFQ2E+mhYvWTOvQlNDtgWxTG/luQK68hxQAeRIi0Yp
+         3pLKyaSHb3rzRtbDj2Jhk8wgo81Y3Sg0bzWuQ6FR0l9TD95Esg0P/FPoBQwntMo27yP1
+         upGpiwNQurnnkLkQpHmNZaTtbC0Pfyuwny6dPEuUbkIOzqlsayMfGeVb5jjH/nCu8+Cx
+         Kw35OleCdW3SI017ABWPNVRfPB5EWupJtrF2RjuRb7jru2tnCpndmJ1x9Y1EOLLYXcHw
+         il8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726256162; x=1726860962;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3U+IHR6pDMRbfhHaDLoFAFxaYoo4zOVYQxFvK1iMreQ=;
-        b=tHVgwenVRZfN0Xxk2M85iR4ucR0NCLBwl21S2sSGBu7HAj0dB3F2JaW6J+NBUWydP4
-         qzsU3c5AAuTgLpvhQzq+4cOJRCj0dOp6LvFsOREUb36b0Cc1xRfrPXyeY9MLziE6FB2r
-         uTltXYPaOF4UIIb+W4QleVL3tAs6jExn6r9bLKKRLAu8PzPxuioPC0Y1QAxdIPg/85Zw
-         Q4Z2A09Cu/gPJaiJjT1Va1JDBM6K6IGnVIDEwDDO6mTGhsoIfv4SCuYrNjINGIu3d0s3
-         hn2gGtPR3rDkmzT3YVFMeWuGQWVGEl7TFlmy7WdWdeM07jmKqzsr4EoEs2/tgn7oAihT
-         +DHg==
-X-Forwarded-Encrypted: i=1; AJvYcCU1KfSzRJCaQqOAcuLaNjRU/3y/1TgARWy53Dbwoj17oBk93iwuTpFgNwrM7/8rzV58ZkmW6DZfIX733ykYl4Al@vger.kernel.org, AJvYcCU6iTHy6GB4N4uFsyhJsBbicpn60jF4str2BrnN/lGTb8y196rPMRw0xnSoCPbIk+XOb8pxHkYRzZII8XSBSQ==@vger.kernel.org, AJvYcCUXPc8lc3/TRXo7SZ1DUVGHwH/ZVTcesuS3yMUNe17u3+cPh4BFE+hkBPVGPfB1DKslpiMkBZuF7pMV62eW@vger.kernel.org, AJvYcCVFS/2tDU7FCSt1S2vYaAp8esAX57JAtXZ7w66Fdu6Y+E2vIlKFgQJCeUl6xPy9tj6pBuwG3gheID4Mog==@vger.kernel.org, AJvYcCW81wrYJkdYqIj2k9IolEkLDcHYdnGAkDYvbzAnyJKFmdYP5+M2Ucadp9b1YeTJprUtPiu4UgkRed5s@vger.kernel.org, AJvYcCW9nvZ956xzeYuD/h1qtg980ZQ73vDi4X2PNG6/hycSYeZb3fTkPVzj9EpAzRpEsNmHNJxFZpObQBXk@vger.kernel.org
-X-Gm-Message-State: AOJu0YypdvwQIPGYoD1o2e5F4QioDOkvouiRIvVwDHesTgqThWBFGx0N
-	F0kJ5PbN9ria22WQ16m0+9J+ohZaMi4X0kpZSDQMi2rE4RADQNw46aNGb3MRVk7njENXgbmNnv4
-	CyaxXOgBdtbuVWLZpSa4h50sABIo=
-X-Google-Smtp-Source: AGHT+IGt2176DfmuLWxLHRhUxP0ghtikgtAQtBs9a9ck/J1CfxjCxtNDV3zRVrMU5j3a8AABIjT1IH6bzLR1lWVcy+0=
-X-Received: by 2002:a05:6902:15c7:b0:e1d:1dee:eeeb with SMTP id
- 3f1490d57ef6-e1daff7cac4mr2967353276.22.1726256161483; Fri, 13 Sep 2024
- 12:36:01 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1726258542; x=1726863342;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=w1FIyAVC28uVndIDT9MHoNGdB/uDnM+DRyhrjJeTBk0=;
+        b=JRKXBAgLvuHpVDvsjG0N8uN1Y0UYBhGwBwVYELeKOdoAOwhm6kfCnq+kSGsdXnLJxI
+         2+wlAi4YaeIx8m0IG/l9gRhYWonV9EX8c1JMQdnrmyp7DL0Cde01TnJpc9GS/tOGGPRJ
+         l64lMoPKtpHZffAHGnhcCf4pa3Gwsis0Q3tiaKkBzS4f5r5tvK9HDn/0TAQPKSlAtSPk
+         HOxFAnpkwNVgqk2RvBfFx74GuTm0T+LQXvhXwjhGnzf/5hzYHoMaLXugjFBD+G1C6WGX
+         UzeddEwT1gU1LpiWzIH0w+tQCgwXfie3peB+f0sSuF/hj7ocVBX7VO/mLzGQhSpHfSDz
+         aVnw==
+X-Forwarded-Encrypted: i=1; AJvYcCWDdp6iprKNISyFsaLSCRdUqBUKNH/+1ySx/m32JPaKaN9w/wzykRfp3eSiqcrJhq+HTHFnrumJC0SH@vger.kernel.org
+X-Gm-Message-State: AOJu0YxbqYdwe7B5sEVwNlTMqoc21rEDkO8A3uXe4IrGyLeUY4+BA1LZ
+	NUkig1vuK30Z5XYrKmR4vmaWLG3nuuD9xFPoOvrLo0TGH469xJS95StrQf8+A/8=
+X-Google-Smtp-Source: AGHT+IF+aNQZr3gdahRoQqk9W7f54mB5JjUQKc3RHBzDdb3qrFRnfek72JEtbqkZMIR2o3KSJzgpeA==
+X-Received: by 2002:a17:902:dad1:b0:205:8407:6321 with SMTP id d9443c01a7336-20781b4740dmr63844425ad.9.1726258541784;
+        Fri, 13 Sep 2024 13:15:41 -0700 (PDT)
+Received: from ghost ([50.145.13.30])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-207945db10csm315195ad.53.2024.09.13.13.15.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Sep 2024 13:15:41 -0700 (PDT)
+Date: Fri, 13 Sep 2024 13:15:35 -0700
+From: Charlie Jenkins <charlie@rivosinc.com>
+To: Catalin Marinas <catalin.marinas@arm.com>
+Cc: "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Arnd Bergmann <arnd@arndb.de>, guoren <guoren@kernel.org>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+	Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	Rich Felker <dalias@libc.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	"David S . Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Muchun Song <muchun.song@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	shuah <shuah@kernel.org>, Christoph Hellwig <hch@infradead.org>,
+	Michal Hocko <mhocko@suse.com>,
+	"Kirill A. Shutemov" <kirill@shutemov.name>,
+	Chris Torek <chris.torek@gmail.com>,
+	Linux-Arch <linux-arch@vger.kernel.org>,
+	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-snps-arc@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-abi-devel@lists.sourceforge.net
+Subject: Re: [PATCH RFC v3 1/2] mm: Add personality flag to limit address to
+ 47 bits
+Message-ID: <ZuSdZ2bi1JvLJVYe@ghost>
+References: <CAJF2gTTVX9CFM3oRZZP3hGExwVwA_=n1Lrq_0DQKWA+-ZbOekg@mail.gmail.com>
+ <f23b18c6-1856-4b59-9ba3-59809b425c81@app.fastmail.com>
+ <Ztrq8PBLJ3QuFJz7@arm.com>
+ <oshwto46wbbgneiayj63umllyozm3c4267rvpszqzaopwnt2l7@6mxl5vydtons>
+ <ZuDoExckq21fePoe@ghost>
+ <ZuHfp0_tAQhaymdy@arm.com>
+ <ZuKHpFB+uWuJe2xm@ghost>
+ <ZuLIPZId9aHcAY2j@arm.com>
+ <ZuNaD+zAXiAulc0n@ghost>
+ <ZuQPF7Gbcqzq0U6N@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240912231650.3740732-1-debug@rivosinc.com> <20240912231650.3740732-22-debug@rivosinc.com>
-In-Reply-To: <20240912231650.3740732-22-debug@rivosinc.com>
-From: Andy Chiu <andybnac@gmail.com>
-Date: Fri, 13 Sep 2024 21:35:50 +0200
-Message-ID: <CAFTtA3NA+OwZv5hJU3EWjuNHNjA3fQzPC+sX84Nb9YyJXdENSA@mail.gmail.com>
-Subject: Re: [PATCH v4 21/30] riscv/traps: Introduce software check exception
-To: Deepak Gupta <debug@rivosinc.com>
-Cc: paul.walmsley@sifive.com, palmer@sifive.com, conor@kernel.org, 
-	linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, linux-arch@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, quic_zhonhan@quicinc.com, zong.li@sifive.com, 
-	zev@bewilderbeest.net, david@redhat.com, peterz@infradead.org, 
-	catalin.marinas@arm.com, broonie@kernel.org, dave.hansen@linux.intel.com, 
-	atishp@rivosinc.com, bjorn@rivosinc.com, namcaov@gmail.com, 
-	usama.anjum@collabora.com, guoren@kernel.org, alx@kernel.org, 
-	jszhang@kernel.org, hpa@zytor.com, puranjay@kernel.org, shuah@kernel.org, 
-	sorear@fastmail.com, costa.shul@redhat.com, robh@kernel.org, 
-	antonb@tenstorrent.com, quic_bjorande@quicinc.com, lorenzo.stoakes@oracle.com, 
-	corbet@lwn.net, dawei.li@shingroup.cn, anup@brainfault.org, deller@gmx.de, 
-	x86@kernel.org, andrii@kernel.org, willy@infradead.org, kees@kernel.org, 
-	mingo@redhat.com, libang.li@antgroup.com, samitolvanen@google.com, 
-	greentime.hu@sifive.com, osalvador@suse.de, ajones@ventanamicro.com, 
-	revest@chromium.org, ancientmodern4@gmail.com, aou@eecs.berkeley.edu, 
-	jerry.shih@sifive.com, alexghiti@rivosinc.com, arnd@arndb.de, 
-	yang.lee@linux.alibaba.com, charlie@rivosinc.com, bgray@linux.ibm.com, 
-	Liam.Howlett@oracle.com, leobras@redhat.com, songshuaishuai@tinylab.org, 
-	xiao.w.wang@intel.com, bp@alien8.de, cuiyunhui@bytedance.com, 
-	mchitale@ventanamicro.com, cleger@rivosinc.com, tglx@linutronix.de, 
-	krzk+dt@kernel.org, vbabka@suse.cz, brauner@kernel.org, bhe@redhat.com, 
-	ke.zhao@shingroup.cn, oleg@redhat.com, samuel.holland@sifive.com, 
-	ben.dooks@codethink.co.uk, evan@rivosinc.com, palmer@dabbelt.com, 
-	ebiederm@xmission.com, andy.chiu@sifive.com, schwab@suse.de, 
-	akpm@linux-foundation.org, sameo@rivosinc.com, tanzhasanwork@gmail.com, 
-	rppt@kernel.org, ryan.roberts@arm.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZuQPF7Gbcqzq0U6N@arm.com>
 
-Hi Deepak
+On Fri, Sep 13, 2024 at 11:08:23AM +0100, Catalin Marinas wrote:
+> On Thu, Sep 12, 2024 at 02:15:59PM -0700, Charlie Jenkins wrote:
+> > On Thu, Sep 12, 2024 at 11:53:49AM +0100, Catalin Marinas wrote:
+> > > On Wed, Sep 11, 2024 at 11:18:12PM -0700, Charlie Jenkins wrote:
+> > > > Opting-in to the higher address space is reasonable. However, it is not
+> > > > my preference, because the purpose of this flag is to ensure that
+> > > > allocations do not exceed 47-bits, so it is a clearer ABI to have the
+> > > > applications that want this guarantee to be the ones setting the flag,
+> > > > rather than the applications that want the higher bits setting the flag.
+> > > 
+> > > Yes, this would be ideal. Unfortunately those applications don't know
+> > > they need to set a flag in order to work.
+> > 
+> > It's not a regression, the applications never worked (on platforms that
+> > do not have this default). The 47-bit default would allow applications
+> > that didn't work to start working at the cost of a non-ideal ABI. That
+> > doesn't seem like a reasonable tradeoff to me.  If applications want to
+> > run on new hardware that has different requirements, shouldn't they be
+> > required to update rather than expect the kernel will solve their
+> > problems for them?
+> 
+> That's a valid point but it depends on the application and how much you
+> want to spend updating user-space. OpenJDK is fine, if you need a JIT
+> you'll have to add support for that architecture anyway. But others are
+> arch-agnostic, you just recompile to your target. It's not an ABI
+> problem, more of an API one.
 
-Deepak Gupta <debug@rivosinc.com> =E6=96=BC 2024=E5=B9=B49=E6=9C=8813=E6=97=
-=A5 =E9=80=B1=E4=BA=94 =E4=B8=8A=E5=8D=882:32=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> zicfiss / zicfilp introduces a new exception to priv isa `software check
-> exception` with cause code =3D 18. This patch implements software check
-> exception.
->
-> Additionally it implements a cfi violation handler which checks for code
-> in xtval. If xtval=3D2, it means that sw check exception happened because=
- of
-> an indirect branch not landing on 4 byte aligned PC or not landing on
-> `lpad` instruction or label value embedded in `lpad` not matching label
-> value setup in `x7`. If xtval=3D3, it means that sw check exception happe=
-ned
-> because of mismatch between link register (x1 or x5) and top of shadow
-> stack (on execution of `sspopchk`).
->
-> In case of cfi violation, SIGSEGV is raised with code=3DSEGV_CPERR.
-> SEGV_CPERR was introduced by x86 shadow stack patches.
->
-> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
-> ---
->  arch/riscv/include/asm/asm-prototypes.h |  1 +
->  arch/riscv/include/asm/entry-common.h   |  2 ++
->  arch/riscv/kernel/entry.S               |  3 ++
->  arch/riscv/kernel/traps.c               | 38 +++++++++++++++++++++++++
->  4 files changed, 44 insertions(+)
->
-> diff --git a/arch/riscv/include/asm/asm-prototypes.h b/arch/riscv/include=
-/asm/asm-prototypes.h
-> index cd627ec289f1..5a27cefd7805 100644
-> --- a/arch/riscv/include/asm/asm-prototypes.h
-> +++ b/arch/riscv/include/asm/asm-prototypes.h
-> @@ -51,6 +51,7 @@ DECLARE_DO_ERROR_INFO(do_trap_ecall_u);
->  DECLARE_DO_ERROR_INFO(do_trap_ecall_s);
->  DECLARE_DO_ERROR_INFO(do_trap_ecall_m);
->  DECLARE_DO_ERROR_INFO(do_trap_break);
-> +DECLARE_DO_ERROR_INFO(do_trap_software_check);
->
->  asmlinkage void handle_bad_stack(struct pt_regs *regs);
->  asmlinkage void do_page_fault(struct pt_regs *regs);
-> diff --git a/arch/riscv/include/asm/entry-common.h b/arch/riscv/include/a=
-sm/entry-common.h
-> index 2293e535f865..4068c7e5452a 100644
-> --- a/arch/riscv/include/asm/entry-common.h
-> +++ b/arch/riscv/include/asm/entry-common.h
-> @@ -39,4 +39,6 @@ static inline int handle_misaligned_store(struct pt_reg=
-s *regs)
->  }
->  #endif
->
-> +bool handle_user_cfi_violation(struct pt_regs *regs);
-> +
->  #endif /* _ASM_RISCV_ENTRY_COMMON_H */
-> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-> index ca9203e6d76d..2ec75ba864a8 100644
-> --- a/arch/riscv/kernel/entry.S
-> +++ b/arch/riscv/kernel/entry.S
-> @@ -384,6 +384,9 @@ SYM_DATA_START_LOCAL(excp_vect_table)
->         RISCV_PTR do_page_fault   /* load page fault */
->         RISCV_PTR do_trap_unknown
->         RISCV_PTR do_page_fault   /* store page fault */
-> +       RISCV_PTR do_trap_unknown /* cause=3D16 */
-> +       RISCV_PTR do_trap_unknown /* cause=3D17 */
-> +       RISCV_PTR do_trap_software_check /* cause=3D18 is sw check except=
-ion */
->  SYM_DATA_END_LABEL(excp_vect_table, SYM_L_LOCAL, excp_vect_table_end)
->
->  #ifndef CONFIG_MMU
-> diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-> index 51ebfd23e007..32d1453bed72 100644
-> --- a/arch/riscv/kernel/traps.c
-> +++ b/arch/riscv/kernel/traps.c
-> @@ -354,6 +354,44 @@ void do_trap_ecall_u(struct pt_regs *regs)
->
->  }
->
-> +#define CFI_TVAL_FCFI_CODE     2
-> +#define CFI_TVAL_BCFI_CODE     3
-> +/* handle cfi violations */
-> +bool handle_user_cfi_violation(struct pt_regs *regs)
-> +{
-> +       bool ret =3D false;
-> +       unsigned long tval =3D csr_read(CSR_TVAL);
-> +
-> +       if (((tval =3D=3D CFI_TVAL_FCFI_CODE) && cpu_supports_indirect_br=
-_lp_instr()) ||
-> +               ((tval =3D=3D CFI_TVAL_BCFI_CODE) && cpu_supports_shadow_=
-stack())) {
-> +               do_trap_error(regs, SIGSEGV, SEGV_CPERR, regs->epc,
-> +                                         "Oops - control flow violation"=
-);
-> +               ret =3D true;
-> +       }
-> +
-> +       return ret;
-> +}
-> +/*
-> + * software check exception is defined with risc-v cfi spec. Software ch=
-eck
-> + * exception is raised when:-
-> + * a) An indirect branch doesn't land on 4 byte aligned PC or `lpad`
-> + *    instruction or `label` value programmed in `lpad` instr doesn't
-> + *    match with value setup in `x7`. reported code in `xtval` is 2.
-> + * b) `sspopchk` instruction finds a mismatch between top of shadow stac=
-k (ssp)
-> + *    and x1/x5. reported code in `xtval` is 3.
-> + */
+The arch-agnosticism is my hope with this personality flag, it can be
+added arch-agnostic userspace code and allow the application to work
+everywhere, but it does have the downside of requiring that change to
+user-space code.
 
-It seems like this trap handler does not follow generic entry. This
-can cause problems as signal delivery is done in
-irqentry_exit_to_user_mode(). Please reference the commit f0bddf50586d
-("riscv: entry: Convert to generic entry") for more information.
+> 
+> The x86 case (and powerpc/arm64) was different, the 47-bit worked for a
+> long time before expanding it. So it made a lot of sense to keep the
+> same default.
 
-> +asmlinkage __visible __trap_section void do_trap_software_check(struct p=
-t_regs *regs)
-> +{
-> +       if (user_mode(regs)) {
-> +               /* not a cfi violation, then merge into flow of unknown t=
-rap handler */
-> +               if (!handle_user_cfi_violation(regs))
-> +                       do_trap_unknown(regs);
-> +       } else {
-> +               /* sw check exception coming from kernel is a bug in kern=
-el */
-> +               die(regs, "Kernel BUG");
-> +       }
-> +}
-> +
->  #ifdef CONFIG_MMU
->  asmlinkage __visible noinstr void do_page_fault(struct pt_regs *regs)
->  {
-> --
-> 2.45.0
->
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+Yes it is very reasonable that this solution was selected for those
+architectures since the support for higher address spaces evolved in the
+manner that it did!
 
-Cheers,
-Andy
+- Charlie
+
+> 
+> Anyway, the prctl() can go both ways, either expanding or limiting the
+> default address space. So I'd be fine with such interface.
+> 
+> -- 
+> Catalin
 
