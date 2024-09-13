@@ -1,147 +1,227 @@
-Return-Path: <linux-arch+bounces-7287-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7289-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25704978162
-	for <lists+linux-arch@lfdr.de>; Fri, 13 Sep 2024 15:42:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C486978320
+	for <lists+linux-arch@lfdr.de>; Fri, 13 Sep 2024 17:01:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DF0222835DD
-	for <lists+linux-arch@lfdr.de>; Fri, 13 Sep 2024 13:42:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A49321C22950
+	for <lists+linux-arch@lfdr.de>; Fri, 13 Sep 2024 15:01:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFAB21DB923;
-	Fri, 13 Sep 2024 13:42:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD36D1A276;
+	Fri, 13 Sep 2024 15:00:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bagh5QGG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YAJMkQFc"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0600B1DB53F;
-	Fri, 13 Sep 2024 13:42:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C42728366;
+	Fri, 13 Sep 2024 15:00:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726234922; cv=none; b=is53ILfn+4PYbE2Gcj7rmE5Wj4jrqI7AeUD9jsTJcsDr76WqU+iy/ubMiwlMr/iimNoPlKTTDf8PENfFB3KcGT8+UVawF6WyfMuinkV9ancEkFJMUSkFd+v0MFce1d8xCRKkFW4jb87+6BTdDHKMOYfqRtzeSAwgTUyr6Kb29Os=
+	t=1726239656; cv=none; b=sUKX2K7Dpzqa/W3KGt2R/KXYqSn3fCI6UMijHIen9hj7Vhkq6oHD9chYicPGpna+A1GcuGxBaaWJM/DO+VH77ziFKalEYfHGlBxoWz1NxflOnV9HUCksCBHblHnXIHQDGmpf6mbu+NzvT7jRdv+c83zcY+kyZzil8mrq4JgwFGQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726234922; c=relaxed/simple;
-	bh=bf8Xv7o4YwxmyAHF0D2eb3sZJQ30HdDrCz7p377435A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hkCRDE60i0dhpvYwh1cRTc8SYXyTmwNEJ1iNXQMSFQnCNqIKrIZJth8LKBEfu4fPNH3ztXrmZ5r8zAAeuETOqCY7iU0EzM/dLOhG5iLl24bxroouwsF7RJAuYeMY3QvglRn7d7wV7BH1aIf1M4a1dn2/c0d1FMxhfljAiG3PKcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bagh5QGG; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726234921; x=1757770921;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bf8Xv7o4YwxmyAHF0D2eb3sZJQ30HdDrCz7p377435A=;
-  b=bagh5QGGWVQWZrDgCR0CDp/0p2eDTzHrcyvJRqgDAkLMdsRAV7RBeKU4
-   hhZ6O2SF/U+4PasUiKQZWUzqoJ0BRCDc9DI+FvUw4CJVsAyOZfUuYv/OJ
-   w40N7MwOUl2C+XNRK24zmxFottAgImAdWFuKsvyhDuVi4MQv4/vyZtMYS
-   8n6E8yKFTrp86iwcEmKY2uMFz/ucbvmT1rfa5Y1PLCCT5T6+mJVyZ9k5U
-   2/Jfohe2oZScluWD1cuQbrNXfnmi9LaSN5fu/JwbyrjCnNkgs5MDeCSCJ
-   /6XuX1lx2H6gZOkVSFGzBos8eYO7MkMhmMxXf9YMk8s4Gn9Ga3C/mpV2C
-   A==;
-X-CSE-ConnectionGUID: mJQozP7UQtivWBuewVcrSw==
-X-CSE-MsgGUID: 0f978c5ITDi5PH0XtZXEjw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11194"; a="36269353"
-X-IronPort-AV: E=Sophos;i="6.10,226,1719903600"; 
-   d="scan'208";a="36269353"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2024 06:42:01 -0700
-X-CSE-ConnectionGUID: kHf73TM5RIylPLXj+wk35Q==
-X-CSE-MsgGUID: tskWT6C9TR6TDti5ucK13g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,226,1719903600"; 
-   d="scan'208";a="98890502"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 13 Sep 2024 06:41:57 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sp6Yc-0006Xq-2m;
-	Fri, 13 Sep 2024 13:41:54 +0000
-Date: Fri, 13 Sep 2024 21:41:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Christoph Lameter via B4 Relay <devnull+cl.gentwo.org@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Waiman Long <longman@redhat.com>,
-	Boqun Feng <boqun.feng@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-arch@vger.kernel.org,
-	"Christoph Lameter (Ampere)" <cl@gentwo.org>
-Subject: Re: [PATCH v3] Avoid memory barrier in read_seqcount() through load
- acquire
-Message-ID: <202409132145.0UdNx9kr-lkp@intel.com>
-References: <20240912-seq_optimize-v3-1-8ee25e04dffa@gentwo.org>
+	s=arc-20240116; t=1726239656; c=relaxed/simple;
+	bh=BA0ANnltDBBfuoBltj9aaFdaXEL//Iks38XJnB02U/g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=co7cmp9Uu7WupKwSJaX6VxtjpoYw4H0P0ZNW5kprOfFR6Eo/5yoCYsQtsiB0hOm+5ff8UvkTig6mE+lPtTZRwfpA9JyVBHZUiC2u7h/UUFPYpFb1k9xCj+S6TaXnUIRiCUiktbwdvTjxXGWIEJHhsqKVCC4yKI5MopNfb50WT1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YAJMkQFc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E81CBC4CEDB;
+	Fri, 13 Sep 2024 15:00:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726239656;
+	bh=BA0ANnltDBBfuoBltj9aaFdaXEL//Iks38XJnB02U/g=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=YAJMkQFcS9yQrD3CD9uf2YDAnPedZRu2sdG3Uq7zy8+8g4fHsdnaV9YMu/zLJ/1tj
+	 EDiCdYnV0pGG/cGSGCoqzc1yz3NAQwdRBBLRfL0AaT5mhRSd5SqOtQjToavlsk96bb
+	 oKdYkALvWRv8THfAoHVYOAKmMboDnCW5qhSOfsTXSAkiRSZcMGaGh7XxCBtwPbd5yo
+	 iYcY5nqsZThg8+lFTkl4wHHIxP84VsBur9fkHWLMiLx+uY355fMP3Bd0gFRq3KpUT4
+	 TIJSScKe0wBqYY1i+xFQfTmvYKL4lkyD4Paj6wDyvXKCliGwP8nsVtdZV47PWrdook
+	 qWRlseRXwzJPA==
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2f759688444so20775241fa.1;
+        Fri, 13 Sep 2024 08:00:55 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCULir8RU8+P9W/UUHicJGDrkLQQQZokBhHGLCgoRNfZP5TViqAqbSAXmiHiCpE3I4KmoIht3k9rS+Siils=@vger.kernel.org, AJvYcCUw1AyxawrWxc/j7v03nO2ad+l8y8OsrCz5pbPc/VzKwI9EJJmUUtSCFw0eA/l6pJGyb5/cDl5DKnQ=@vger.kernel.org, AJvYcCUxvSkjTNBJJDMNVxAvXbjdUHZ/3Nt+B2q46ZDB04fOYwaKARUBkey1NT4qRYE9nxdmslUPtXBA1/HAyspyqQ==@vger.kernel.org, AJvYcCVdAG1QR7P19Qz6OOO+svTOKlqL+qfFD5IncHKX6ncPJbq3+KSig5TlZG63fEGm4XAcPKOk0F/jiJxTrA==@vger.kernel.org, AJvYcCVtsDg+0MZeHZXjkKJB5t4vEgnbgBgcaPpdxY0ymQIWPxqZZrQFJbmrMc3znAsWgGxYQLbhegaDEB2DqCfD@vger.kernel.org, AJvYcCWDfqc+xc5hMcP3JG9ctERZe79q8aNyXVE+E5pCvWB6KlMThkVtFs6UlosHUd/t1hU19VNmxptRYCVDkFsxW/X0eFcr@vger.kernel.org, AJvYcCWGtaY1eP2j7izTOEJFsnrMSzpYhaPwr0exKMiB5O+/mq76CXmOgUZrjpuOASxh6x3VE9HbMkNCD04D+lUd@vger.kernel.org, AJvYcCXcxpURX017fZYRq9h+F8GTJvPfaCx7MZElPErCIf64gAItKFh63Cs2rLul+y7fgZ/ocONgNGudDyNUv3S5G8Q=@vger.kernel.org, AJvYcCXfiy1yV18uLg4r+FuZM20TQHKTVUAaAE0RKHt/zmpwyWmOGY0zCJSxp68VCO3nyNEoMSEpB4mG0K+msQ==@vger.kernel.org, AJvY
+ cCXk2/tlXIAd3IMCDQYvMLnknHPNku9g3pNxzJ9w0sAAw/5/winZpdHmdwqfzRJ2WZiakDZYLL+WjFLOVs2zAw==@vger.kernel.org, AJvYcCXlfdVgjN27YkAH2elz+3KHzyWh9zIYQyR1021lTaYvwcmrngYb4QAxxoL68i57hLLldJARGZIYJ+OUhA==@vger.kernel.org, AJvYcCXtJH5o/uZ+9iGulxzcMyKL/DTTv+fLQUgrVZrR4ONsJetKnUkp/9U3yVe/rIK7yPgKy/gbycUfKwTMZQ==@vger.kernel.org, AJvYcCXutrGseycTn/cGyeHK5TPzQZ/a3JPOl811M6oAlencO81EUw8g2O1/Z6+kdY+Jd+mE5kQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzmKtUy3CnOCc7qGHJ4H+Fk8HiVo4sszEh3tjAp6mLuMyCeG757
+	p10UIAD88ar0TpjeZDZmqeFbJMqDiIYc+Mc/p65ZtHPq05vDROGYbZDZFwUdm23eNAfLJ10hUuL
+	Ge96rXQf6wDtaqAEFP4xJCU8WZmY=
+X-Google-Smtp-Source: AGHT+IEIp2MygUsW5Tc1gnqrEXhSi4Y5LfaJ7pDs2t1FcVSY61BEs2pVKMYAU/+O+nJIsawLe6NqpBRTPpsi7cWLSzQ=
+X-Received: by 2002:a05:651c:1a0c:b0:2f0:1e0a:4696 with SMTP id
+ 38308e7fff4ca-2f787dabe7emr39035411fa.7.1726239653924; Fri, 13 Sep 2024
+ 08:00:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240912-seq_optimize-v3-1-8ee25e04dffa@gentwo.org>
+References: <20240909064730.3290724-1-rppt@kernel.org> <20240909064730.3290724-8-rppt@kernel.org>
+In-Reply-To: <20240909064730.3290724-8-rppt@kernel.org>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Fri, 13 Sep 2024 17:00:42 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXG_Z=7B_eDAk3vhtDjfcnka3AoSKNzvFQDzpvYY2EyVfg@mail.gmail.com>
+Message-ID: <CAMj1kXG_Z=7B_eDAk3vhtDjfcnka3AoSKNzvFQDzpvYY2EyVfg@mail.gmail.com>
+Subject: Re: [PATCH v3 7/8] execmem: add support for cache of large ROX pages
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Andreas Larsson <andreas@gaisler.com>, 
+	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>, 
+	Brian Cain <bcain@quicinc.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Christoph Hellwig <hch@infradead.org>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Dinh Nguyen <dinguyen@kernel.org>, 
+	Geert Uytterhoeven <geert@linux-m68k.org>, Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>, 
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Johannes Berg <johannes@sipsolutions.net>, 
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Kent Overstreet <kent.overstreet@linux.dev>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Richard Weinberger <richard@nod.at>, Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>, 
+	Stafford Horne <shorne@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Thomas Gleixner <tglx@linutronix.de>, 
+	Uladzislau Rezki <urezki@gmail.com>, Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>, 
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org, 
+	linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
+	linux-mm@kvack.org, linux-modules@vger.kernel.org, 
+	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org, 
+	linux-snps-arc@lists.infradead.org, linux-trace-kernel@vger.kernel.org, 
+	linux-um@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, 
+	loongarch@lists.linux.dev, sparclinux@vger.kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Christoph,
+Hi Mike,
 
-kernel test robot noticed the following build errors:
+On Mon, 9 Sept 2024 at 08:51, Mike Rapoport <rppt@kernel.org> wrote:
+>
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+>
+> Using large pages to map text areas reduces iTLB pressure and improves
+> performance.
+>
+> Extend execmem_alloc() with an ability to use huge pages with ROX
+> permissions as a cache for smaller allocations.
+>
+> To populate the cache, a writable large page is allocated from vmalloc with
+> VM_ALLOW_HUGE_VMAP, filled with invalid instructions and then remapped as
+> ROX.
+>
+> Portions of that large page are handed out to execmem_alloc() callers
+> without any changes to the permissions.
+>
+> When the memory is freed with execmem_free() it is invalidated again so
+> that it won't contain stale instructions.
+>
+> The cache is enabled when an architecture sets EXECMEM_ROX_CACHE flag in
+> definition of an execmem_range.
+>
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> ---
+>  include/linux/execmem.h |   2 +
+>  mm/execmem.c            | 289 +++++++++++++++++++++++++++++++++++++++-
+>  2 files changed, 286 insertions(+), 5 deletions(-)
+>
+> diff --git a/include/linux/execmem.h b/include/linux/execmem.h
+> index dfdf19f8a5e8..7436aa547818 100644
+> --- a/include/linux/execmem.h
+> +++ b/include/linux/execmem.h
+> @@ -77,12 +77,14 @@ struct execmem_range {
+>
+>  /**
+>   * struct execmem_info - architecture parameters for code allocations
+> + * @fill_trapping_insns: set memory to contain instructions that will trap
+>   * @ranges: array of parameter sets defining architecture specific
+>   * parameters for executable memory allocations. The ranges that are not
+>   * explicitly initialized by an architecture use parameters defined for
+>   * @EXECMEM_DEFAULT.
+>   */
+>  struct execmem_info {
+> +       void (*fill_trapping_insns)(void *ptr, size_t size, bool writable);
+>         struct execmem_range    ranges[EXECMEM_TYPE_MAX];
+>  };
+>
+> diff --git a/mm/execmem.c b/mm/execmem.c
+> index 0f6691e9ffe6..f547c1f3c93d 100644
+> --- a/mm/execmem.c
+> +++ b/mm/execmem.c
+> @@ -7,28 +7,88 @@
+>   */
+>
+>  #include <linux/mm.h>
+> +#include <linux/mutex.h>
+>  #include <linux/vmalloc.h>
+>  #include <linux/execmem.h>
+> +#include <linux/maple_tree.h>
+>  #include <linux/moduleloader.h>
+>  #include <linux/text-patching.h>
+>
+> +#include <asm/tlbflush.h>
+> +
+> +#include "internal.h"
+> +
+>  static struct execmem_info *execmem_info __ro_after_init;
+>  static struct execmem_info default_execmem_info __ro_after_init;
+>
+> -static void *__execmem_alloc(struct execmem_range *range, size_t size)
+> +#ifdef CONFIG_MMU
+> +struct execmem_cache {
+> +       struct mutex mutex;
+> +       struct maple_tree busy_areas;
+> +       struct maple_tree free_areas;
+> +};
+> +
+> +static struct execmem_cache execmem_cache = {
+> +       .mutex = __MUTEX_INITIALIZER(execmem_cache.mutex),
+> +       .busy_areas = MTREE_INIT_EXT(busy_areas, MT_FLAGS_LOCK_EXTERN,
+> +                                    execmem_cache.mutex),
+> +       .free_areas = MTREE_INIT_EXT(free_areas, MT_FLAGS_LOCK_EXTERN,
+> +                                    execmem_cache.mutex),
+> +};
+> +
+> +static void execmem_cache_clean(struct work_struct *work)
+> +{
+> +       struct maple_tree *free_areas = &execmem_cache.free_areas;
+> +       struct mutex *mutex = &execmem_cache.mutex;
+> +       MA_STATE(mas, free_areas, 0, ULONG_MAX);
+> +       void *area;
+> +
+> +       mutex_lock(mutex);
+> +       mas_for_each(&mas, area, ULONG_MAX) {
+> +               size_t size;
+> +
+> +               if (!xa_is_value(area))
+> +                       continue;
+> +
+> +               size = xa_to_value(area);
+> +
+> +               if (IS_ALIGNED(size, PMD_SIZE) &&
+> +                   IS_ALIGNED(mas.index, PMD_SIZE)) {
+> +                       void *ptr = (void *)mas.index;
+> +
+> +                       mas_erase(&mas);
+> +                       vfree(ptr);
+> +               }
+> +       }
+> +       mutex_unlock(mutex);
+> +}
+> +
+> +static DECLARE_WORK(execmem_cache_clean_work, execmem_cache_clean);
+> +
+> +static void execmem_fill_trapping_insns(void *ptr, size_t size, bool writable)
+> +{
+> +       if (execmem_info->fill_trapping_insns)
+> +               execmem_info->fill_trapping_insns(ptr, size, writable);
+> +       else
+> +               memset(ptr, 0, size);
 
-[auto build test ERROR on 77f587896757708780a7e8792efe62939f25a5ab]
+Does this really have to be a function pointer with a runtime check?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Christoph-Lameter-via-B4-Relay/Avoid-memory-barrier-in-read_seqcount-through-load-acquire/20240913-064557
-base:   77f587896757708780a7e8792efe62939f25a5ab
-patch link:    https://lore.kernel.org/r/20240912-seq_optimize-v3-1-8ee25e04dffa%40gentwo.org
-patch subject: [PATCH v3] Avoid memory barrier in read_seqcount() through load acquire
-config: i386-buildonly-randconfig-001-20240913 (https://download.01.org/0day-ci/archive/20240913/202409132145.0UdNx9kr-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240913/202409132145.0UdNx9kr-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409132145.0UdNx9kr-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/gpu/drm/i915/gem/i915_gem_pages.c:11:
->> drivers/gpu/drm/i915/gt/intel_tlb.h:21:40: error: too few arguments provided to function-like macro invocation
-      21 |         return seqprop_sequence(&gt->tlb.seqno);
-         |                                               ^
-   include/linux/seqlock.h:280:9: note: macro 'seqprop_sequence' defined here
-     280 | #define seqprop_sequence(s, a)          __seqprop(s, sequence)(s, a)
-         |         ^
-   In file included from drivers/gpu/drm/i915/gem/i915_gem_pages.c:11:
->> drivers/gpu/drm/i915/gt/intel_tlb.h:21:9: error: use of undeclared identifier 'seqprop_sequence'; did you mean '__seqprop_sequence'?
-      21 |         return seqprop_sequence(&gt->tlb.seqno);
-         |                ^~~~~~~~~~~~~~~~
-         |                __seqprop_sequence
-   include/linux/seqlock.h:228:24: note: '__seqprop_sequence' declared here
-     228 | static inline unsigned __seqprop_sequence(const seqcount_t *s, bool acquire)
-         |                        ^
-   In file included from drivers/gpu/drm/i915/gem/i915_gem_pages.c:11:
->> drivers/gpu/drm/i915/gt/intel_tlb.h:21:9: error: incompatible pointer to integer conversion returning 'unsigned int (const seqcount_t *, bool)' (aka 'unsigned int (const struct seqcount *, _Bool)') from a function with result type 'u32' (aka 'unsigned int') [-Wint-conversion]
-      21 |         return seqprop_sequence(&gt->tlb.seqno);
-         |                ^~~~~~~~~~~~~~~~
-   3 errors generated.
-
-
-vim +21 drivers/gpu/drm/i915/gt/intel_tlb.h
-
-568a2e6f0b12ee Chris Wilson 2023-08-01  18  
-568a2e6f0b12ee Chris Wilson 2023-08-01  19  static inline u32 intel_gt_tlb_seqno(const struct intel_gt *gt)
-568a2e6f0b12ee Chris Wilson 2023-08-01  20  {
-568a2e6f0b12ee Chris Wilson 2023-08-01 @21  	return seqprop_sequence(&gt->tlb.seqno);
-568a2e6f0b12ee Chris Wilson 2023-08-01  22  }
-568a2e6f0b12ee Chris Wilson 2023-08-01  23  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+This could just be a __weak definition, with the arch providing an
+override if the memset() is not appropriate.
 
