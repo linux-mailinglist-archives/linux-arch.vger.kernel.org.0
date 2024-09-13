@@ -1,128 +1,204 @@
-Return-Path: <linux-arch+bounces-7290-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7291-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 042799784D0
-	for <lists+linux-arch@lfdr.de>; Fri, 13 Sep 2024 17:26:50 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63851978526
+	for <lists+linux-arch@lfdr.de>; Fri, 13 Sep 2024 17:51:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AFD751F28431
-	for <lists+linux-arch@lfdr.de>; Fri, 13 Sep 2024 15:26:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 992B8B25565
+	for <lists+linux-arch@lfdr.de>; Fri, 13 Sep 2024 15:51:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1885543ABD;
-	Fri, 13 Sep 2024 15:26:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC43058ABC;
+	Fri, 13 Sep 2024 15:51:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KYIsiGg6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZSnZEqbf"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2E0B3C485;
-	Fri, 13 Sep 2024 15:26:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55A2B2EB02;
+	Fri, 13 Sep 2024 15:51:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726241199; cv=none; b=KtGQxC29cI2Bk84V+oS3Txxr/bSIIH0pJ9n2RfgcvOEm4GTIA5AqO7uQjik+Vu0yBRj4YQd7v4LkF1e1bwoRDuewT5yyYh8lNTydFplqZRIPVP0uElg6/4QbVGLZrzqkWVN3DGnmEhRo/l7A8IHOm7Eto8rGrKfgc2PjrYni29Y=
+	t=1726242672; cv=none; b=ZD8tsaWok+Mv3iWiGuyMiFOujPLElB0tXbVXl9V5MkUsvQQ0WkQgk4ZkLRR3Dre7GrT+4qEi2+d+AsPPEczmoHXSZhyjJ1PM8AJO0gpfYkPc3fdqrFnl5RUgYd0QDPmaDBFbAaGDgo/bOPsf7GeEYwgHAqX9apSKa6qlsP5xeZo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726241199; c=relaxed/simple;
-	bh=ztIFbvcKHrPQ+NfdDu5k6kNg3CZWEYi5RfxBXDsqDZI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HknUXWmcTVacbuDYRTfvVSM+2Zhj1b8ymVvoWPi5GJfCl0gWAU0mBLGuayGG1rxytksSrln4zdWjkKEJah7/EsFL3xPkERTnI8darglEf/S3jMen2nsWDmgDBrgE7SjU26IOzLadjlRLxAJQI+YtuuLcu9zchEGzSwYIVXQiaDk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KYIsiGg6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15DC8C4CEC0;
-	Fri, 13 Sep 2024 15:26:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726241198;
-	bh=ztIFbvcKHrPQ+NfdDu5k6kNg3CZWEYi5RfxBXDsqDZI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KYIsiGg67ZSEYjI+/JpS8X4W0kcxPK+UzDAXAdG1PyIFs3rv2bEQPuAySqIBGc5Xv
-	 p5zQiVmUqbRLyMQhk8u2Bg3NCQSYyiwpzHo8fnQoBM34PTLUJC0Gx6Sy5Z2hzqm9tj
-	 iD4M7OLvOn/wM9WR66B/vcjCLdmOKn/onYUTW5yrNFYeNUyw78v6GCFu1EYnoH3aJk
-	 te0ADuUj45E/VLOfSrJgqCuQPaiJ7sWZcMKLgMdfWGEqshfI7ZLMuockf6xIq9InNR
-	 H5RPCmR5HVOAo9q3mCoBMXa5xfX+NPl4SgRRlDcVr5OcbDKBHSWvotFUKFDpmMof6w
-	 To7i5QdUXP0qg==
-Date: Fri, 13 Sep 2024 16:26:20 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Deepak Gupta <debug@rivosinc.com>
-Cc: paul.walmsley@sifive.com, palmer@sifive.com, conor@kernel.org,
-	linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	corbet@lwn.net, palmer@dabbelt.com, aou@eecs.berkeley.edu,
-	robh@kernel.org, krzk+dt@kernel.org, oleg@redhat.com,
-	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-	peterz@infradead.org, akpm@linux-foundation.org, arnd@arndb.de,
-	ebiederm@xmission.com, kees@kernel.org, Liam.Howlett@oracle.com,
-	vbabka@suse.cz, lorenzo.stoakes@oracle.com, shuah@kernel.org,
-	brauner@kernel.org, samuel.holland@sifive.com, andy.chiu@sifive.com,
-	jerry.shih@sifive.com, greentime.hu@sifive.com,
-	charlie@rivosinc.com, evan@rivosinc.com, cleger@rivosinc.com,
-	xiao.w.wang@intel.com, ajones@ventanamicro.com, anup@brainfault.org,
-	mchitale@ventanamicro.com, atishp@rivosinc.com, sameo@rivosinc.com,
-	bjorn@rivosinc.com, alexghiti@rivosinc.com, david@redhat.com,
-	libang.li@antgroup.com, jszhang@kernel.org, leobras@redhat.com,
-	guoren@kernel.org, samitolvanen@google.com,
-	songshuaishuai@tinylab.org, costa.shul@redhat.com, bhe@redhat.com,
-	zong.li@sifive.com, puranjay@kernel.org, namcaov@gmail.com,
-	antonb@tenstorrent.com, sorear@fastmail.com,
-	quic_bjorande@quicinc.com, ancientmodern4@gmail.com,
-	ben.dooks@codethink.co.uk, quic_zhonhan@quicinc.com,
-	cuiyunhui@bytedance.com, yang.lee@linux.alibaba.com,
-	ke.zhao@shingroup.cn, sunilvl@ventanamicro.com,
-	tanzhasanwork@gmail.com, schwab@suse.de, dawei.li@shingroup.cn,
-	rppt@kernel.org, willy@infradead.org, usama.anjum@collabora.com,
-	osalvador@suse.de, ryan.roberts@arm.com, andrii@kernel.org,
-	alx@kernel.org, catalin.marinas@arm.com, revest@chromium.org,
-	bgray@linux.ibm.com, deller@gmx.de, zev@bewilderbeest.net
-Subject: Re: [PATCH v4 15/30] riscv/mm: Implement map_shadow_stack() syscall
-Message-ID: <8904b159-7798-454e-a615-34566c088fda@sirena.org.uk>
-References: <20240912231650.3740732-1-debug@rivosinc.com>
- <20240912231650.3740732-16-debug@rivosinc.com>
+	s=arc-20240116; t=1726242672; c=relaxed/simple;
+	bh=ecz4eJEVPDt26YmFuv0POtj0jecJSvSuFAGuu1dxlPs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lw/QD0HiBcoYfZJs8/hWFb/fMcMVUebqHRkw1vYVg7T3txSRQImy89sAWAOYimQRe6S7pG9azp6458Jua/GtiyVMwaWaZKWScnR4kmQidW1vhR5XfJMoAJAzkJShqTjvV3WHhC+oEZucjKfkM3adABg7GoX77CYcYAweIgCm2bQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZSnZEqbf; arc=none smtp.client-ip=209.85.160.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-277cfd3f07aso1038165fac.3;
+        Fri, 13 Sep 2024 08:51:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1726242670; x=1726847470; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ehs9yLbkVlOBEgkAu8IxC2ecxN3bEC7UNanNZJEoFLs=;
+        b=ZSnZEqbfrsKroStwuSqiYqz5TPdo8h9torfCDIwj+Z1sfF9ZjJAYvGLa/Yq+LfYw5n
+         9YoTLFa1FrjXGfbznkXST5UoHom9ykmhXDn0NQ8ZG6lQUdkchiY7hf6GRmXnzTD1/3Cs
+         knjqpWRuM8wxrAIBHwkyQcsWjAls9reT6hDtU/mO+wpt/+VYsePJZPwO3oLbxSvHeUSl
+         RahBPIcH5x4Zq30P4x6CKErjVpW7hn/b0qTgxWAWrRo/hxdGfPqy2FfjbohMMZHQ9Bdr
+         mHw/inct6gmUqMljmmoUh5WM4ghh9Fj87ZZ9I64Ix85GAYU43ijdYyPXTOfDr8YuHC/X
+         Lk4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726242670; x=1726847470;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ehs9yLbkVlOBEgkAu8IxC2ecxN3bEC7UNanNZJEoFLs=;
+        b=TyYhK24END3FFGMCIRvfDBTkIuG4YyINv7xv6vUIwEFTQGEUxrjdpowog1vmSfE22P
+         H2gxTug/ITPggqygH477AgtAUCPdcDf+BOzVmd05w5AMf2d3eljGgXWOjQEMA4p5zKVx
+         4xb6dA7h2/muSAFDArIJiQOTUvpi0oYjaOOJWL1chahQpSvWCehR7JrIkB8nta+R1i73
+         496MJdux/VyRxEzYAGwb6cTctktSLcc7yhstiShMhCpr88CSxD9NkfQ0m48Fv+v7hJn5
+         7UIihCoMJ3kAVcH76oGAz73zUbd17E2UgAvgI6pctojmamzadou82NlO8l5uoW57kuGs
+         4Fkg==
+X-Forwarded-Encrypted: i=1; AJvYcCUTwpmJB64/HCIJ+1xNP5wjZc5UM4I7+AlBqu/+jZa6E8GB+zDmGKfwx9H3lo1/Cx10BpGGeUJGF5oq@vger.kernel.org, AJvYcCUcLPCEi1BOFK1LIqn0KF+YyFR2dOT5kbX0WcBVba1PKldkht8W1GuSEfUzmkBfeP7gLpOTIku+PbN+tqtt@vger.kernel.org, AJvYcCUfv3VH0N7KiarGtYPITjZnWZBiRLpnQ2n3ZrxlyRW5//c09gbWyJSKfwbv79uN7lhwFRjv7h1pkjlTRg==@vger.kernel.org, AJvYcCV5DtwEPDWFMtAwPKSmz804u6jXcwBCrpWI6hz4NkU2y7UYEGF0olO4eTYyhTus9ONCVNB6+wFSHIce@vger.kernel.org, AJvYcCW571Lk7l6h9rfhktMmfOBonDcaqacZfAz9s3Tle3/qCZ4sYOVhAtwbUgKgqwzLfpXdMzp5tDXmp+6p/4nEJufq@vger.kernel.org, AJvYcCXDJDCPxGmrJwvLd19BQxIWQb03CKpQ5jz/twNmol8+rTTYx6L9+VxtQU0LySLjQwTzHLmx9NxzTUmGwdLStQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwK/w07WkEaNhHiAYtURq8sJWDbUYY18b06ocnwUgRMcnfwpTWl
+	cnQ3qJCFSc5/QAw86FNK/2cfUFyfiA3Azw88g9vLTTfrMkGtLBuH
+X-Google-Smtp-Source: AGHT+IGwspwIdcxizms74BUEV11s0x25xQw3otEtykkXT6P5qLAwtjFU5Aef8TBprXa84EXBrlG8AA==
+X-Received: by 2002:a05:6870:df92:b0:27c:475c:ab2c with SMTP id 586e51a60fabf-27c475cad93mr3175704fac.43.1726242670341;
+        Fri, 13 Sep 2024 08:51:10 -0700 (PDT)
+Received: from ?IPV6:2603:8080:7400:36da:dff5:4180:2562:4c1e? ([2603:8080:7400:36da:dff5:4180:2562:4c1e])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-27ba40b0bb0sm3632948fac.41.2024.09.13.08.51.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Sep 2024 08:51:09 -0700 (PDT)
+Message-ID: <5cc36aa7-e064-42b3-b52e-fb471d99d338@gmail.com>
+Date: Fri, 13 Sep 2024 10:51:04 -0500
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="EXdCC84RfjoEE1iq"
-Content-Disposition: inline
-In-Reply-To: <20240912231650.3740732-16-debug@rivosinc.com>
-X-Cookie: In space, no one can hear you fart.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 01/30] mm: Introduce ARCH_HAS_USER_SHADOW_STACK
+To: Deepak Gupta <debug@rivosinc.com>, paul.walmsley@sifive.com,
+ palmer@sifive.com, conor@kernel.org, linux-doc@vger.kernel.org,
+ linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-mm@kvack.org, linux-arch@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Cc: corbet@lwn.net, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+ robh@kernel.org, krzk+dt@kernel.org, oleg@redhat.com, tglx@linutronix.de,
+ mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+ hpa@zytor.com, peterz@infradead.org, akpm@linux-foundation.org,
+ arnd@arndb.de, ebiederm@xmission.com, kees@kernel.org,
+ Liam.Howlett@oracle.com, vbabka@suse.cz, lorenzo.stoakes@oracle.com,
+ shuah@kernel.org, brauner@kernel.org, samuel.holland@sifive.com,
+ andy.chiu@sifive.com, jerry.shih@sifive.com, greentime.hu@sifive.com,
+ charlie@rivosinc.com, evan@rivosinc.com, cleger@rivosinc.com,
+ xiao.w.wang@intel.com, ajones@ventanamicro.com, anup@brainfault.org,
+ mchitale@ventanamicro.com, atishp@rivosinc.com, sameo@rivosinc.com,
+ bjorn@rivosinc.com, alexghiti@rivosinc.com, david@redhat.com,
+ libang.li@antgroup.com, jszhang@kernel.org, leobras@redhat.com,
+ guoren@kernel.org, samitolvanen@google.com, songshuaishuai@tinylab.org,
+ costa.shul@redhat.com, bhe@redhat.com, zong.li@sifive.com,
+ puranjay@kernel.org, namcaov@gmail.com, antonb@tenstorrent.com,
+ sorear@fastmail.com, quic_bjorande@quicinc.com, ancientmodern4@gmail.com,
+ ben.dooks@codethink.co.uk, quic_zhonhan@quicinc.com,
+ cuiyunhui@bytedance.com, yang.lee@linux.alibaba.com, ke.zhao@shingroup.cn,
+ sunilvl@ventanamicro.com, tanzhasanwork@gmail.com, schwab@suse.de,
+ dawei.li@shingroup.cn, rppt@kernel.org, willy@infradead.org,
+ usama.anjum@collabora.com, osalvador@suse.de, ryan.roberts@arm.com,
+ andrii@kernel.org, alx@kernel.org, catalin.marinas@arm.com,
+ broonie@kernel.org, revest@chromium.org, bgray@linux.ibm.com, deller@gmx.de,
+ zev@bewilderbeest.net, Rick Edgecombe <rick.p.edgecombe@intel.com>
+References: <20240912231650.3740732-1-debug@rivosinc.com>
+ <20240912231650.3740732-2-debug@rivosinc.com>
+Content-Language: en-US
+From: Carlos Bilbao <carlos.bilbao.osdev@gmail.com>
+In-Reply-To: <20240912231650.3740732-2-debug@rivosinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+On 9/12/24 18:16, Deepak Gupta wrote:
+
+> From: Mark Brown <broonie@kernel.org>
+>
+> Since multiple architectures have support for shadow stacks and we need to
+> select support for this feature in several places in the generic code
+> provide a generic config option that the architectures can select.
+>
+> Suggested-by: David Hildenbrand <david@redhat.com>
+> Acked-by: David Hildenbrand <david@redhat.com>
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> Reviewed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> Reviewed-by: Deepak Gupta <debug@rivosinc.com>
+> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+> ---
+>  arch/x86/Kconfig   | 1 +
+>  fs/proc/task_mmu.c | 2 +-
+>  include/linux/mm.h | 2 +-
+>  mm/Kconfig         | 6 ++++++
+>  4 files changed, 9 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index 007bab9f2a0e..320e1f411163 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -1957,6 +1957,7 @@ config X86_USER_SHADOW_STACK
+>  	depends on AS_WRUSS
+>  	depends on X86_64
+>  	select ARCH_USES_HIGH_VMA_FLAGS
+> +	select ARCH_HAS_USER_SHADOW_STACK
+>  	select X86_CET
+>  	help
+>  	  Shadow stack protection is a hardware feature that detects function
+> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+> index 5f171ad7b436..0ea49725f524 100644
+> --- a/fs/proc/task_mmu.c
+> +++ b/fs/proc/task_mmu.c
+> @@ -984,7 +984,7 @@ static void show_smap_vma_flags(struct seq_file *m, struct vm_area_struct *vma)
+>  #ifdef CONFIG_HAVE_ARCH_USERFAULTFD_MINOR
+>  		[ilog2(VM_UFFD_MINOR)]	= "ui",
+>  #endif /* CONFIG_HAVE_ARCH_USERFAULTFD_MINOR */
+> -#ifdef CONFIG_X86_USER_SHADOW_STACK
+> +#ifdef CONFIG_ARCH_HAS_USER_SHADOW_STACK
+>  		[ilog2(VM_SHADOW_STACK)] = "ss",
+>  #endif
+>  #ifdef CONFIG_64BIT
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 147073601716..e39796ea17db 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -346,7 +346,7 @@ extern unsigned int kobjsize(const void *objp);
+>  #endif
+>  #endif /* CONFIG_ARCH_HAS_PKEYS */
+>  
+> -#ifdef CONFIG_X86_USER_SHADOW_STACK
+> +#ifdef CONFIG_ARCH_HAS_USER_SHADOW_STACK
+>  /*
+>   * VM_SHADOW_STACK should not be set with VM_SHARED because of lack of
+>   * support core mm.
+> diff --git a/mm/Kconfig b/mm/Kconfig
+> index b72e7d040f78..3167be663bca 100644
+> --- a/mm/Kconfig
+> +++ b/mm/Kconfig
+> @@ -1263,6 +1263,12 @@ config IOMMU_MM_DATA
+>  config EXECMEM
+>  	bool
+>  
+> +config ARCH_HAS_USER_SHADOW_STACK
+> +	bool
+> +	help
+> +	  The architecture has hardware support for userspace shadow call
+> +          stacks (eg, x86 CET, arm64 GCS or RISC-V Zicfiss).
+> +
+>  source "mm/damon/Kconfig"
 
 
---EXdCC84RfjoEE1iq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Reviewed-by: Carlos Bilbao <carlos.bilbao.osdev@gmail.com>
 
-On Thu, Sep 12, 2024 at 04:16:34PM -0700, Deepak Gupta wrote:
 
-> This patch implements this syscall for riscv. riscv doesn't require token
-> to be setup by kernel because user mode can do that by itself. However to
-> provide compatibility and portability with other architectues, user mode
-> can specify token set flag.
+>  
+>  endmenu
 
-The arm64 series also adds SHADOW_STACK_SET_MARKER for a top of stack
-marker, if this is only being done for compatibility it might be good to
-pick that up as well.  I don't know what the thoughts are on using them
-for RISC-V.  On arm64 the top of stack marker is just all bits 0.
 
---EXdCC84RfjoEE1iq
-Content-Type: application/pgp-signature; name="signature.asc"
+Thanks, Carlos
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmbkWZsACgkQJNaLcl1U
-h9BxgAf+PzUH92Qd8Gx84qFgdXuCpqKnDddOVzhJ/1HXiYtm3Yst508zBxwr03E0
-oP3VhAC469mn8uOctrOJqdGHEFcC2/i3SXoyOMIp2gE+YkhdZxatybrRoCF+oNAT
-AW4y0dPMgjW0i9h1kbiw/MjiHQgVoxdgULs0eZOFLl2zr+QVAD6PYLIAh/3y/lzl
-e4xv7Bdh51DfKjKr7WwnKYJRGG12WjMxyOjHmy37b09h7THnjSTrg+Y/B7uQ6IpD
-xS8TYwFAAn9veTqu5LuGRrKm5zBfJ+xSs78Ee/F/MZ+JgzW4ZpDbmQxuBnk33TRe
-bsixBm+3DOUSeFsCCg21dGBeFYR0JQ==
-=Y+Cs
------END PGP SIGNATURE-----
-
---EXdCC84RfjoEE1iq--
 
