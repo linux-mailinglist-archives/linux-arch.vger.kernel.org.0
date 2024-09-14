@@ -1,96 +1,97 @@
-Return-Path: <linux-arch+bounces-7307-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7308-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88D0A978EE3
-	for <lists+linux-arch@lfdr.de>; Sat, 14 Sep 2024 09:30:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C95B2979368
+	for <lists+linux-arch@lfdr.de>; Sat, 14 Sep 2024 23:53:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5306C2861AD
-	for <lists+linux-arch@lfdr.de>; Sat, 14 Sep 2024 07:30:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7F16C1F22145
+	for <lists+linux-arch@lfdr.de>; Sat, 14 Sep 2024 21:53:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 568FF7A15A;
-	Sat, 14 Sep 2024 07:30:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Uh8JOugt"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1BDA13A888;
+	Sat, 14 Sep 2024 21:53:34 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EA0E57CA7;
-	Sat, 14 Sep 2024 07:30:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92281129A78;
+	Sat, 14 Sep 2024 21:53:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726299051; cv=none; b=MP9Ud0CnBSFTiCjyO49cjHbEcKg9du7t1FPYaZdfrdEZ9xH4XTiUWQGcHW7efBOA11aPepNU1wuMj02fPZLqJeciuklOspHTkAVL/cv/KQkHdpKvIyu3pTUsTifoS1Okec9dQHLlwhr3wQaM1LoU48Q5z30KGT03+UmmZmo6M/E=
+	t=1726350814; cv=none; b=M1+kn88YT7MAvqV8gr97draISwcmEC31lalvNlWoahLKym0j/t8Uoo5EZzgZcK6i/E4RjyRrfIlAqkqlrak7fgEwV2Vyho1yvKQeFAbEdw8vqXq/FHcjqbRYsdZjSgg9GwySI0y496mbcwYIXliH2iRhEv5Ggs/SvEbC9mTc6DE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726299051; c=relaxed/simple;
-	bh=lIeKmaLoCOmVme4H3Fn1x8hNoYV7+LCeW9p0eyUY2Wo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=MjPtbs7fv5KeFNWy8tyxrQzjdt7mvH8TjD1YI/T0sSpS86IM1rgp41f320ggiKhgQcNE3hHpHPiFKw3kpjheYaIZN5b82Fg2eouTvY9DXFMdQgdvCbyv63sYrAcLD/15aB7/qTsCGVdKekJl4UXXjtmRBpPhTYFNZgamdBWA5Mc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Uh8JOugt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85A5DC4CEC0;
-	Sat, 14 Sep 2024 07:30:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726299050;
-	bh=lIeKmaLoCOmVme4H3Fn1x8hNoYV7+LCeW9p0eyUY2Wo=;
-	h=Date:From:To:Cc:Subject:Reply-To:From;
-	b=Uh8JOugtH46vjvYJ1roy8tS2KgMjujfju3oo3nJOMysN9yIEeHgT8HF7kd6VqrJcX
-	 8/JyMvMPnIOZ7F/L4sFxceJuLVNRJXcMjRIufYdmmBhF74jMtA2Sov4biB5vYf6hXn
-	 fqF1Id73rwyOJPb2ghXr4lF8Qu3Oz1d13RmkXwYktIV0XsbUZnwIJ9KIBiTwUnjm93
-	 vKs128b8karEY4rltGEtvO2uXrczREHOKD5UX/nYBi3vO53YCOnZpCDygKQfntd3HX
-	 geglAKFuEC0TeWqmPYJZbBMV6Q8Y1toszq/hxSB5QPIzi/k8eyHhYlx3L0ys8trVD5
-	 GCXi7N3E8NtlQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 3F18CCE0E7A; Sat, 14 Sep 2024 00:30:48 -0700 (PDT)
-Date: Sat, 14 Sep 2024 00:30:48 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: torvalds@linux-foundation.org, linux-kernel@vger.kernel.org
-Cc: linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	kernel-team@meta.com, elver@google.com, akpm@linux-foundation.org,
-	tglx@linutronix.de, peterz@infradead.org, arnd@arndb.de,
-	broonie@kernel.org, naresh.kamboju@linaro.org, nathan@kernel.org,
-	linus.walleij@linaro.org, rmk+kernel@armlinux.org.uk, afd@ti.com,
-	eric.devolder@oracle.com, robh@kernel.org, mark.rutland@arm.com
-Subject: [GIT PULL] Emulated one-byte cmpxchg() for ARC and sh
-Message-ID: <c22df1ae-42b4-4a57-91f7-a02e50176ad0@paulmck-laptop>
-Reply-To: paulmck@kernel.org
+	s=arc-20240116; t=1726350814; c=relaxed/simple;
+	bh=KcvOUuH7U/6mCdw/qFZw6N/Cn5GUTv466T+YcGHTvZw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=sUu6byQhwwZXjE6VncZMaK2yasnNywmzzLTG8heEHWSsOF/hwnUCNy5DvaKRANujLlATsg4mXpCkI1RRJ+2I5eQejEGwXnH5zOTIXAnEJVuBrvxYFfm9/jig53DQTWduvHa0IYcPPkyHKFAlOKaUsMUuEjj8uLD4Bv+2PTp1OFA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCEE5C4CEC0;
+	Sat, 14 Sep 2024 21:53:28 +0000 (UTC)
+Date: Sat, 14 Sep 2024 17:53:23 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Florent Revest
+ <revest@chromium.org>, linux-trace-kernel@vger.kernel.org, LKML
+ <linux-kernel@vger.kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,
+ bpf <bpf@vger.kernel.org>, Sven Schnelle <svens@linux.ibm.com>, Alexei
+ Starovoitov <ast@kernel.org>, Jiri Olsa <jolsa@kernel.org>, Arnaldo
+ Carvalho de Melo <acme@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Alan Maguire <alan.maguire@oracle.com>, Mark Rutland
+ <mark.rutland@arm.com>, Peter Zijlstra <peterz@infradead.org>, Thomas
+ Gleixner <tglx@linutronix.de>, Guo Ren <guoren@kernel.org>,
+ linux-arch@vger.kernel.org
+Subject: Re: [PATCH v14 19/19] fgraph: Skip recording calltime/rettime if it
+ is not nneeded
+Message-ID: <20240914175323.16206416@rorschach.local.home>
+In-Reply-To: <172615389864.133222.14452329708227900626.stgit@devnote2>
+References: <172615368656.133222.2336770908714920670.stgit@devnote2>
+	<172615389864.133222.14452329708227900626.stgit@devnote2>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Hello, Linux,
+On Fri, 13 Sep 2024 00:11:38 +0900
+"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
 
-Please pull the following cmpxchg()-related changes:
+> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+>=20
+> Skip recording calltime and rettime if the fgraph_ops does not need it.
+> This is a kind of performance optimization for fprobe. Since the fprobe
+> user does not use these entries, recording timestamp in fgraph is just
+> a overhead (e.g. eBPF, ftrace). So introduce the skip_timestamp flag,
+> and all fgraph_ops sets this flag, skip recording calltime and rettime.
+>=20
+> Here is the performance results measured by
+>  tools/testing/selftests/bpf/benchs/run_bench_trigger.sh
+>=20
+> Without this:
+> kprobe-multi   :    5.700 =C2=B1 0.065M/s
+> kretprobe-multi:    4.239 =C2=B1 0.006M/s
+>=20
+> With skip-timestamp:
+> kprobe-multi   :    6.265 =C2=B1 0.033M/s	+9.91%
+> kretprobe-multi:    4.758 =C2=B1 0.009M/s	+12.24%
+>=20
+> Suggested-by: Jiri Olsa <olsajiri@gmail.com>
+> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/cmpxchg.2024.09.14a
-  # HEAD: c81a748edefd098ea21dd35d4bba03f69412fc26: sh: Emulate one-byte cmpxchg (2024-09-13 07:10:38 -0700)
+Can you try this series instead:
 
-----------------------------------------------------------------
-ARC/sh: Provide one-byte cmpxchg emulation
+ https://lore.kernel.org/all/20240914214805.779822616@goodmis.org/
 
-This series provides emulated one-byte cmpxchg() support for ARM and
-sh using the cmpxchg_emu_u8() function that uses a four-byte cmpxchg()
-to emulate the one-byte variant.
+I rather get rid of the calltime completely from the generic logic, and
+that series does just that.
 
-A similar patch for emulation of one-byte cmpxchg() for xtensa has not yet
-received a maintainer ack, so it is slated for the v6.13 merge window.
-If you are not that patient, there is another signed tag covering all
-three (ARC, sh, and xtensa) named cmpxchg.2024.09.15a.
+That series only replaces this patch and can be applied before this
+series (or after).
 
-----------------------------------------------------------------
-Paul E. McKenney (2):
-      ARC: Emulate one-byte cmpxchg
-      sh: Emulate one-byte cmpxchg
-
- arch/arc/Kconfig               | 1 +
- arch/arc/include/asm/cmpxchg.h | 6 ++++--
- arch/sh/Kconfig                | 1 +
- arch/sh/include/asm/cmpxchg.h  | 3 +++
- 4 files changed, 9 insertions(+), 2 deletions(-)
+-- Steve
 
