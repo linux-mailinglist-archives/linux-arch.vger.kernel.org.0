@@ -1,279 +1,203 @@
-Return-Path: <linux-arch+bounces-7303-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7304-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E71D8978A62
-	for <lists+linux-arch@lfdr.de>; Fri, 13 Sep 2024 23:04:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7181E978C7A
+	for <lists+linux-arch@lfdr.de>; Sat, 14 Sep 2024 03:54:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A2764287C77
-	for <lists+linux-arch@lfdr.de>; Fri, 13 Sep 2024 21:04:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F9341C2543D
+	for <lists+linux-arch@lfdr.de>; Sat, 14 Sep 2024 01:54:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43681154445;
-	Fri, 13 Sep 2024 21:04:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2A698C1A;
+	Sat, 14 Sep 2024 01:54:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="mGJQhVia"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iC1SMSZg"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 328C81527AC
-	for <linux-arch@vger.kernel.org>; Fri, 13 Sep 2024 21:04:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 888FC8831;
+	Sat, 14 Sep 2024 01:54:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726261455; cv=none; b=M28NgO7cPbs0dPn9sS1AOQXZNVYCs71ffXEvBFs1zD79hbly7zEa1vGG4WMgd4i9eiuJUfGAOtnyloZMMAAdECDjaF5eO9RMuWC2+rMac4M1K0FiKJ34lTeu5kBOYsrLgXhfdcxRsKtrnua4U2BXsBnxc0Y1NnOWW2GvU2yjPwA=
+	t=1726278885; cv=none; b=kv5nVEldfpTF2nLDCDi0gPz0Put8dJrSh850GOsE/5GeGcw6P/l4dxV5RomRT56qHReThiH/FujWtKXDbZckPL56MXjClfE5SgHAJ+2QlLNFRNEnxY2eGZUOEZ8TQvqZxkIhq60AHJnaTEeosQ1CqDDnPV5idqdC1sVTmmxg93Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726261455; c=relaxed/simple;
-	bh=UTbmMbiOdPh2p8MAam907C+8IKVqjc0gQ8Sb2U1VqF0=;
+	s=arc-20240116; t=1726278885; c=relaxed/simple;
+	bh=TLXeBUebCUeA7FDBNQ7Y62aN1d7vguuNY9Dg5smqFKw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mn2n54pDHm9ObPSS8yE5RYCRhYhoCOe1DLBMSo9/jn+BcJVoXfXrrLPas5TD/SgQZEl7UVedKEwZx5at4y4nqeS6BxDhnRd+adPgdYgZK/xfIAgjPjW6LN2kyqpA33SzmMZ7OsZJsdeYJNKUcoryh9tu9T9OQ5swKhzi/aK8e78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=mGJQhVia; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2059112f0a7so13127875ad.3
-        for <linux-arch@vger.kernel.org>; Fri, 13 Sep 2024 14:04:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1726261452; x=1726866252; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=pGN098PfFZ1p39RZKtno/bb1iGOxyKkQDSILC8HyAbs=;
-        b=mGJQhViaeBP8boO4Z3ZlrGQg2Ou1nzmYaw9yb7rukospMvx2utfJB3ZJC/iHXR1zY5
-         OHHUQ7APm78lvjgaMAUf8nqLxbwPfkCE6Z5e7ZNILJdFYZ+iil46N6YJi7qrukHgrCj/
-         52MTbKyKy529xeaqzrRTzLPQwJPpgli/uI+0fNxnWN+NS2DfW/BXySToSEAivdhd/b1E
-         0bhUlMQ9VwSyt4VT3AbPh30kaAP0/NOhpzlX6MgqnmsEjeE/PQpON963yaauaSMSSEog
-         9Z7w+mZFQjHElQBLBsbH+wO7gdp/BUvodGBjrviEku9NhDQC1RpY/imscbGB4lWvqiQI
-         Jydg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726261452; x=1726866252;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pGN098PfFZ1p39RZKtno/bb1iGOxyKkQDSILC8HyAbs=;
-        b=QW2o9o4q/jMCuhmjnvMbLF9xO4FI6Cf0goDPnUVVZX7f2P7HYE8X5Cv+YG6lskdEob
-         pyU8b0FIGgzvD1G/M3LHBsQqAkOH39iD1mhs7HhJwGziULX7Qxu+onD4HNm+K67Onr4k
-         i1YlMrYtacCzQIfvEZtDaM49CJSzH0KtVKt3KEQR8EQApoq6A/L1MdetWY3WjgB9z1mF
-         jxmqp5MimuCWTAA/EWoQrkAbRDTKiK9oUhZahaMB/33ybZC8/8VWWH5KQbg9BLJYvOlm
-         auxLsno8wIkJna/9jTH5eaYP17MvrPf1CZtiJb0cS9pfAxDuhiU2fDLu2fNPoGTkwrSm
-         Xx1w==
-X-Forwarded-Encrypted: i=1; AJvYcCXnH8KpnlEQFkMS7XgK70aW7Cpf5pQ/9mRlpN1N5UzQ6B1Ym/EjPaqe0HNfeEC1OYXRfwLV/LWKiFWd@vger.kernel.org
-X-Gm-Message-State: AOJu0YwEv3spoIe6iTQ2izFijsDyZd5kUv4uA7FofnYfVDr41Lk/dd9v
-	+dID1yyxxvynGv6lyQdvTD+SaeVloQahbHatjKRlAd4Sc9iMbZtwgju+ZWbXMm8=
-X-Google-Smtp-Source: AGHT+IHQy68+7/4em5wfAX0phJQ7a7VsNC8xlp5lvUp2N1zpKPOlth6aUECbhTSHxYBYBN7icOc/wA==
-X-Received: by 2002:a17:902:f54f:b0:207:457f:b8a6 with SMTP id d9443c01a7336-2078262ccc1mr54571405ad.12.1726261452005;
-        Fri, 13 Sep 2024 14:04:12 -0700 (PDT)
-Received: from ghost ([50.145.13.30])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-207945da8c9sm608475ad.17.2024.09.13.14.04.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Sep 2024 14:04:11 -0700 (PDT)
-Date: Fri, 13 Sep 2024 14:04:06 -0700
-From: Charlie Jenkins <charlie@rivosinc.com>
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Arnd Bergmann <arnd@arndb.de>, guoren <guoren@kernel.org>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	"David S . Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Vlastimil Babka <vbabka@suse.cz>, shuah <shuah@kernel.org>,
-	Christoph Hellwig <hch@infradead.org>,
-	Michal Hocko <mhocko@suse.com>,
-	"Kirill A. Shutemov" <kirill@shutemov.name>,
-	Chris Torek <chris.torek@gmail.com>,
-	Linux-Arch <linux-arch@vger.kernel.org>,
-	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-abi-devel@lists.sourceforge.net
-Subject: Re: [PATCH RFC v3 1/2] mm: Add personality flag to limit address to
- 47 bits
-Message-ID: <ZuSoxh5U3Kj1XgGq@ghost>
-References: <20240905-patches-below_hint_mmap-v3-1-3cd5564efbbb@rivosinc.com>
- <9fc4746b-8e9d-4a75-b966-e0906187e6b7@app.fastmail.com>
- <CAJF2gTTVX9CFM3oRZZP3hGExwVwA_=n1Lrq_0DQKWA+-ZbOekg@mail.gmail.com>
- <f23b18c6-1856-4b59-9ba3-59809b425c81@app.fastmail.com>
- <Ztrq8PBLJ3QuFJz7@arm.com>
- <oshwto46wbbgneiayj63umllyozm3c4267rvpszqzaopwnt2l7@6mxl5vydtons>
- <ZuDoExckq21fePoe@ghost>
- <ZuHfp0_tAQhaymdy@arm.com>
- <ZuKHpFB+uWuJe2xm@ghost>
- <d873a994-4efa-4d3a-bdae-5d9a3eff29f2@lucifer.local>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Vf6j/9hDU9Wils1i+gnr3e+06dTBfEhU5klVzfjbAGL1c6WWHemPCuMgc1YVyRUIpCfPXcaMBsE/TaiOTdfaP5mt6s1GDcCglkkGcCB0gJoFbP6eHIAUeekoAZ+oP7t1vD9gzuOtbLGb8+gB9V9aO/Cr1Du6F73nN0MZuuBBaS0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iC1SMSZg; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1726278883; x=1757814883;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TLXeBUebCUeA7FDBNQ7Y62aN1d7vguuNY9Dg5smqFKw=;
+  b=iC1SMSZgdTYS74S2jZF/JMBSqTmam9t/3GowyHLIlo2320k77tgoS55c
+   RcQPnOjND0CCjccScVkbxtvDUPV+w+dZk2CGfNAloPbjxoMLXuQuNOC2I
+   SriMuKI7dLkfULM2eD4rHoCrand4uXmTLISYNpxSmLLbzLTG8k7trkob9
+   nHG6o3PRqbEB9ZugGv84hsOeTYzKzQxHYT8HsSyGk86UlZwdBNQiIhTAs
+   rLulAQMARBSrKPqejtxvc019bdBBqEGSxztrqEICcw+XG7XbVSTmYUM07
+   C/XuaWomrpNqCgvvvTfuI/ZHe15R72YIIc7mVDS8SbGFdqQq+vGr0wm6L
+   A==;
+X-CSE-ConnectionGUID: S58WrIBpSYq6GuzfB8cOnw==
+X-CSE-MsgGUID: /GTPAQsvScqjnTtbTf5hhQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11194"; a="25392356"
+X-IronPort-AV: E=Sophos;i="6.10,227,1719903600"; 
+   d="scan'208";a="25392356"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2024 18:54:42 -0700
+X-CSE-ConnectionGUID: 8/RVo9fwTHKmd/RxSkbmmA==
+X-CSE-MsgGUID: 6noWOEqXTIaiVBZhuyPnbQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,227,1719903600"; 
+   d="scan'208";a="72381126"
+Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 13 Sep 2024 18:54:35 -0700
+Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1spHzc-0007Eu-2R;
+	Sat, 14 Sep 2024 01:54:32 +0000
+Date: Sat, 14 Sep 2024 09:54:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Deepak Gupta <debug@rivosinc.com>, paul.walmsley@sifive.com,
+	palmer@sifive.com, conor@kernel.org, linux-doc@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org, linux-arch@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, corbet@lwn.net,
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, robh@kernel.org,
+	krzk+dt@kernel.org, oleg@redhat.com, tglx@linutronix.de,
+	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+	x86@kernel.org, hpa@zytor.com, akpm@linux-foundation.org,
+	arnd@arndb.de, ebiederm@xmission.com, kees@kernel.org,
+	Liam.Howlett@oracle.com, vbabka@suse.cz
+Subject: Re: [PATCH v4 16/30] riscv/shstk: If needed allocate a new shadow
+ stack on clone
+Message-ID: <202409140913.73qFCOmB-lkp@intel.com>
+References: <20240912231650.3740732-17-debug@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d873a994-4efa-4d3a-bdae-5d9a3eff29f2@lucifer.local>
+In-Reply-To: <20240912231650.3740732-17-debug@rivosinc.com>
 
-On Fri, Sep 13, 2024 at 08:41:34AM +0100, Lorenzo Stoakes wrote:
-> On Wed, Sep 11, 2024 at 11:18:12PM GMT, Charlie Jenkins wrote:
-> > On Wed, Sep 11, 2024 at 07:21:27PM +0100, Catalin Marinas wrote:
-> > > On Tue, Sep 10, 2024 at 05:45:07PM -0700, Charlie Jenkins wrote:
-> > > > On Tue, Sep 10, 2024 at 03:08:14PM -0400, Liam R. Howlett wrote:
-> > > > > * Catalin Marinas <catalin.marinas@arm.com> [240906 07:44]:
-> > > > > > On Fri, Sep 06, 2024 at 09:55:42AM +0000, Arnd Bergmann wrote:
-> > > > > > > On Fri, Sep 6, 2024, at 09:14, Guo Ren wrote:
-> > > > > > > > On Fri, Sep 6, 2024 at 3:18 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> > > > > > > >> It's also unclear to me how we want this flag to interact with
-> > > > > > > >> the existing logic in arch_get_mmap_end(), which attempts to
-> > > > > > > >> limit the default mapping to a 47-bit address space already.
-> > > > > > > >
-> > > > > > > > To optimize RISC-V progress, I recommend:
-> > > > > > > >
-> > > > > > > > Step 1: Approve the patch.
-> > > > > > > > Step 2: Update Go and OpenJDK's RISC-V backend to utilize it.
-> > > > > > > > Step 3: Wait approximately several iterations for Go & OpenJDK
-> > > > > > > > Step 4: Remove the 47-bit constraint in arch_get_mmap_end()
-> > >
-> > > Point 4 is an ABI change. What guarantees that there isn't still
-> > > software out there that relies on the old behaviour?
-> >
-> > Yeah I don't think it would be desirable to remove the 47 bit
-> > constraint in architectures that already have it.
-> >
-> > >
-> > > > > > > I really want to first see a plausible explanation about why
-> > > > > > > RISC-V can't just implement this using a 47-bit DEFAULT_MAP_WINDOW
-> > > > > > > like all the other major architectures (x86, arm64, powerpc64),
-> > > > > >
-> > > > > > FWIW arm64 actually limits DEFAULT_MAP_WINDOW to 48-bit in the default
-> > > > > > configuration. We end up with a 47-bit with 16K pages but for a
-> > > > > > different reason that has to do with LPA2 support (I doubt we need this
-> > > > > > for the user mapping but we need to untangle some of the macros there;
-> > > > > > that's for a separate discussion).
-> > > > > >
-> > > > > > That said, we haven't encountered any user space problems with a 48-bit
-> > > > > > DEFAULT_MAP_WINDOW. So I also think RISC-V should follow a similar
-> > > > > > approach (47 or 48 bit default limit). Better to have some ABI
-> > > > > > consistency between architectures. One can still ask for addresses above
-> > > > > > this default limit via mmap().
-> > > > >
-> > > > > I think that is best as well.
-> > > > >
-> > > > > Can we please just do what x86 and arm64 does?
-> > > >
-> > > > I responded to Arnd in the other thread, but I am still not convinced
-> > > > that the solution that x86 and arm64 have selected is the best solution.
-> > > > The solution of defaulting to 47 bits does allow applications the
-> > > > ability to get addresses that are below 47 bits. However, due to
-> > > > differences across architectures it doesn't seem possible to have all
-> > > > architectures default to the same value. Additionally, this flag will be
-> > > > able to help users avoid potential bugs where a hint address is passed
-> > > > that causes upper bits of a VA to be used.
-> > >
-> > > The reason we added this limit on arm64 is that we noticed programs
-> > > using the top 8 bits of a 64-bit pointer for additional information.
-> > > IIRC, it wasn't even openJDK but some JavaScript JIT. We could have
-> > > taught those programs of a new flag but since we couldn't tell how many
-> > > are out there, it was the safest to default to a smaller limit and opt
-> > > in to the higher one. Such opt-in is via mmap() but if you prefer a
-> > > prctl() flag, that's fine by me as well (though I think this should be
-> > > opt-in to higher addresses rather than opt-out of the higher addresses).
-> >
-> > The mmap() flag was used in previous versions but was decided against
-> > because this feature is more useful if it is process-wide. A
-> > personality() flag was chosen instead of a prctl() flag because there
-> > existed other flags in personality() that were similar. I am tempted to
-> > use prctl() however because then we could have an additional arg to
-> > select the exact number of bits that should be reserved (rather than
-> > being fixed at 47 bits).
-> 
-> I am very much not in favour of a prctl(), it would require us to add state
-> limiting the address space and the timing of it becomes critical. Then we
-> have the same issue we do with the other proposals as to - what happens if
-> this is too low?
-> 
-> What is 'too low' varies by architecture, and for 32-bit architectures
-> could get quite... problematic.
-> 
-> And again, wha is the RoI here - we introducing maintenance burden and edge
-> cases vs. the x86 solution in order to... accommodate things that need more
-> than 128 TiB of address space? A problem that does not appear to exist in
-> reality?
-> 
-> I suggested the personality approach as the least impactful compromise way
-> of this series working, but I think after what Arnd has said (and please
-> forgive me if I've missed further discussion have been dipping in and out
-> of this!) - adapting risc v to the approach we take elsewhere seems the
-> most sensible solution to me.
->
-> This remains something we can revisit in future if this turns out to be
-> egregious.
->
+Hi Deepak,
 
-I appreciate Arnd's comments, but I do not think that making 47-bit the
-default is the best solution for riscv. On riscv, support for 48-bit
-address spaces was merged in 5.17 and support for 57-bit address spaces
-was merged in 5.18 without changing the default addresses provided by
-mmap(). It could be argued that this was a mistake, however since at the
-time there didn't exist hardware with larger address spaces it wasn't an
-issue. The applications that existed at the time that relied on the
-smaller address spaces have not been able to move to larger address
-spaces. Making a 47-bit user-space address space default solves the
-problem, but that is not arch agnostic, and can't be since of the
-varying differences in page table sizes across architectures, which is
-the other part of the problem I am trying to solve.
+kernel test robot noticed the following build warnings:
 
-> >
-> > Opting-in to the higher address space is reasonable. However, it is not
-> > my preference, because the purpose of this flag is to ensure that
-> > allocations do not exceed 47-bits, so it is a clearer ABI to have the
-> > applications that want this guarantee to be the ones setting the flag,
-> > rather than the applications that want the higher bits setting the flag.
-> 
-> Perfect is the enemy of the good :) and an idealised solution may not end
-> up being something everybody can agree on.
+[auto build test WARNING on shuah-kselftest/next]
+[also build test WARNING on shuah-kselftest/fixes tip/x86/core robh/for-next tip/smp/core kees/for-next/execve linus/master v6.11-rc7]
+[cannot apply to akpm-mm/mm-everything next-20240913]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Yes you are totally right! Although this is not my ideal solution, it
-sufficiently accomplishes the goal so I think it is reasonable to
-implement this as a personality flag.
+url:    https://github.com/intel-lab-lkp/linux/commits/Deepak-Gupta/mm-Introduce-ARCH_HAS_USER_SHADOW_STACK/20240913-072124
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git next
+patch link:    https://lore.kernel.org/r/20240912231650.3740732-17-debug%40rivosinc.com
+patch subject: [PATCH v4 16/30] riscv/shstk: If needed allocate a new shadow stack on clone
+config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240914/202409140913.73qFCOmB-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project bf684034844c660b778f0eba103582f582b710c9)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240914/202409140913.73qFCOmB-lkp@intel.com/reproduce)
 
-> 
-> >
-> > - Charlie
-> >
-> > >
-> > > --
-> > > Catalin
-> >
-> >
-> >
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409140913.73qFCOmB-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/mm.h:7:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:8:
+   In file included from include/linux/spinlock.h:56:
+   In file included from include/linux/preempt.h:79:
+   In file included from ./arch/riscv/include/generated/asm/preempt.h:1:
+   In file included from include/asm-generic/preempt.h:5:
+   In file included from include/linux/thread_info.h:60:
+   In file included from arch/riscv/include/asm/thread_info.h:37:
+   In file included from arch/riscv/include/asm/processor.h:17:
+>> arch/riscv/include/asm/usercfi.h:44:15: warning: no previous prototype for function 'get_shstk_base' [-Wmissing-prototypes]
+      44 | unsigned long get_shstk_base(struct task_struct *task, unsigned long *size)
+         |               ^
+   arch/riscv/include/asm/usercfi.h:44:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      44 | unsigned long get_shstk_base(struct task_struct *task, unsigned long *size)
+         | ^
+         | static 
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/mm.h:2233:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   2 warnings generated.
+--
+   In file included from arch/riscv/kernel/soc.c:7:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/riscv/include/asm/pgtable.h:9:
+   In file included from include/linux/mmzone.h:8:
+   In file included from include/linux/spinlock.h:56:
+   In file included from include/linux/preempt.h:79:
+   In file included from ./arch/riscv/include/generated/asm/preempt.h:1:
+   In file included from include/asm-generic/preempt.h:5:
+   In file included from include/linux/thread_info.h:60:
+   In file included from arch/riscv/include/asm/thread_info.h:37:
+   In file included from arch/riscv/include/asm/processor.h:17:
+>> arch/riscv/include/asm/usercfi.h:44:15: warning: no previous prototype for function 'get_shstk_base' [-Wmissing-prototypes]
+      44 | unsigned long get_shstk_base(struct task_struct *task, unsigned long *size)
+         |               ^
+   arch/riscv/include/asm/usercfi.h:44:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      44 | unsigned long get_shstk_base(struct task_struct *task, unsigned long *size)
+         | ^
+         | static 
+   1 warning generated.
+--
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/mm.h:7:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:8:
+   In file included from include/linux/spinlock.h:56:
+   In file included from include/linux/preempt.h:79:
+   In file included from ./arch/riscv/include/generated/asm/preempt.h:1:
+   In file included from include/asm-generic/preempt.h:5:
+   In file included from include/linux/thread_info.h:60:
+   In file included from arch/riscv/include/asm/thread_info.h:37:
+   In file included from arch/riscv/include/asm/processor.h:17:
+>> arch/riscv/include/asm/usercfi.h:44:15: warning: no previous prototype for function 'get_shstk_base' [-Wmissing-prototypes]
+      44 | unsigned long get_shstk_base(struct task_struct *task, unsigned long *size)
+         |               ^
+   arch/riscv/include/asm/usercfi.h:44:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+      44 | unsigned long get_shstk_base(struct task_struct *task, unsigned long *size)
+         | ^
+         | static 
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/mm.h:2233:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   2 warnings generated.
+
+
+vim +/get_shstk_base +44 arch/riscv/include/asm/usercfi.h
+
+    43	
+  > 44	unsigned long get_shstk_base(struct task_struct *task, unsigned long *size)
+    45	{
+    46		return 0;
+    47	}
+    48	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
