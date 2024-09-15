@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-7327-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7328-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF81E979613
-	for <lists+linux-arch@lfdr.de>; Sun, 15 Sep 2024 11:14:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5336F979617
+	for <lists+linux-arch@lfdr.de>; Sun, 15 Sep 2024 11:15:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A4F451F2113E
-	for <lists+linux-arch@lfdr.de>; Sun, 15 Sep 2024 09:14:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D72B81F229B1
+	for <lists+linux-arch@lfdr.de>; Sun, 15 Sep 2024 09:15:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 895621C68A4;
-	Sun, 15 Sep 2024 09:13:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1792C1C7B61;
+	Sun, 15 Sep 2024 09:13:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TC0mu35T"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="msfUnc3F"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5493514263;
-	Sun, 15 Sep 2024 09:13:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCAFC1C6F76;
+	Sun, 15 Sep 2024 09:13:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726391584; cv=none; b=MNJvK9xMPhnkQKVXXYm5GXA7bEUap9lziIwHDD5WjzmCQyffLBhwWRjfAs1mYAW3VmcBLRXO3jN5zS3oxHrr3NBXcyYlZ3Sd4q5JP6AyznPGE6lg0XlU9UsjtVz1M2et/NGsDdRWjtKg+h6vpc2WhjHZVXU/gPM+zf+EKv6lWZo=
+	t=1726391597; cv=none; b=cAiZt7WMlKONEKGOI9te4UscyK//l+1z62C7CF6yrBE9mP8Q7yu0gCEf388TjcLeZ+YeLjl5pLcf13seAPLoFNwTAz/IcvlJHNTGHQQ8LWUDarkNBCO3icj4LMceSVwbqdhudAWsmhB7RczIw0E08wSPco8/R51qXcH8E1BAkws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726391584; c=relaxed/simple;
-	bh=8t7YVZmoVUR7dCk/2nFP4SmQbrkuMwJVZH30PnGw0sc=;
+	s=arc-20240116; t=1726391597; c=relaxed/simple;
+	bh=JV1GgN6T0Zh2KuKA5Xe9GKQ+DqDxKyu3Jh2ePZpyuHY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=flng05yuCHIzTEtHJ3LvZasOmEEkmbaR2oOAIvDgBN6WKp4vKkwQ2Vs2JSYEn/knyza71P7lnbsQ6FQbIrXkyIOiBufVOqAGRGcKZs6ApuRyzcxeOE+DOE4m6HjnQVgXadfq3Zbfb2J5aevnjz83Wpi0Wl8OsuXtp2gm9d/hlrI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TC0mu35T; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C40B8C4CEC3;
-	Sun, 15 Sep 2024 09:12:59 +0000 (UTC)
+	 MIME-Version:Content-Type; b=WaIX31hZZQs1BqRNGQFXOf4fn4JlsFclzOjK1QXa/w15GlRAKUduDyjURNEI9KHh6SI3/f+4ci52CVg/Ys3cVQ2VihheMM5ObskyFZffaCXDnZ5sIkIC+3GCSKCcuLqbG4B8XLNSuRiImkyPTJAQCf3cUDRpUBk+QnRWg9OlYUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=msfUnc3F; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCCE7C4CECF;
+	Sun, 15 Sep 2024 09:13:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726391583;
-	bh=8t7YVZmoVUR7dCk/2nFP4SmQbrkuMwJVZH30PnGw0sc=;
+	s=k20201202; t=1726391596;
+	bh=JV1GgN6T0Zh2KuKA5Xe9GKQ+DqDxKyu3Jh2ePZpyuHY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=TC0mu35TnpMJhaO2wwSi+ftE4H4ZlC8FdCKcJEe00P4p+D7KmTiDY3yFYy+IXmwvg
-	 7e+GanCUVWgo+oqZ0LYWMiL9pQD7l4HRLinvVJy1EZUADBBTUI6qzz8RSFwyvS00dO
-	 2uIziK02jVxVb7Amg3uyCF+HFYjMawI5ws2h1LJ3s6mU0qy/GbSRcy1oXqqLt3Sx1d
-	 FsMGXmh/OpQ+LuCjZhYAXA0GgxfQ1kiwvOkJevmRq8mVBcXP2iVd6LJ6VNwkd5VV0Q
-	 4PY5e50g6Yln4ePLUl6kINWM7kKZEwgHaOI2ldAb4swav5hGJmV+AKCJ9bBkCLdU6Q
-	 fKqxv8U+K3/IA==
+	b=msfUnc3FSomoITt9e/DIor3966RWa3UpOYczhmVcK53q7F09ZoNLD6+QC2mLd+Sh2
+	 G+8zCn/dGDah3USf4qAkwEt30QfNs+p8PCHcQQvsn7Kif+GyKYS1TefRJaIcpWCmKJ
+	 c8gyYMCAQPxP+rKc/fct+EF2SMzL2tbkOhiEIxUvgHju0IX3GIbh3CSZJW8WPkCAmy
+	 vlOWGyUXmXLNYPIRuJkOvk0Tse3RDb6HNgrjiZXOoC5ENtMy/i7GkYbisqJIvSpAQO
+	 qBy9f7ejk5C3Cql5yPmCUn323coBvVGSGRjjsS7ETtLgrQhbMSn3A5JxzTpbggQA77
+	 ScZSg48nw3v3w==
 From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
 To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
 	Steven Rostedt <rostedt@goodmis.org>,
@@ -60,9 +60,9 @@ Cc: linux-trace-kernel@vger.kernel.org,
 	Thomas Gleixner <tglx@linutronix.de>,
 	Guo Ren <guoren@kernel.org>,
 	linux-arch@vger.kernel.org
-Subject: [PATCH v15 18/19] Documentation: probes: Update fprobe on function-graph tracer
-Date: Sun, 15 Sep 2024 18:12:57 +0900
-Message-Id: <172639157767.366111.868622924240824319.stgit@devnote2>
+Subject: [PATCH v15 19/19] bpf: Add get_entry_ip() for arm64
+Date: Sun, 15 Sep 2024 18:13:09 +0900
+Message-Id: <172639158914.366111.5959423373874301115.stgit@devnote2>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <172639136989.366111.11359590127009702129.stgit@devnote2>
 References: <172639136989.366111.11359590127009702129.stgit@devnote2>
@@ -78,100 +78,90 @@ Content-Transfer-Encoding: 8bit
 
 From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Update fprobe documentation for the new fprobe on function-graph
-tracer. This includes some bahvior changes and pt_regs to
-ftrace_regs interface change.
+Add get_entry_ip() implementation for arm64. This is based on the
+information in ftrace_call_adjust() on arm64. Basically function entry
+address = ftrace call entry_ip - 4, but when there is a BTI at the first
+instruction, we need one more instruction back (entry_ip - 8.)
 
 Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 ---
- Changes in v2:
-  - Update @fregs parameter explanation.
----
- Documentation/trace/fprobe.rst |   42 ++++++++++++++++++++++++++--------------
- 1 file changed, 27 insertions(+), 15 deletions(-)
+ kernel/trace/bpf_trace.c |   64 ++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 64 insertions(+)
 
-diff --git a/Documentation/trace/fprobe.rst b/Documentation/trace/fprobe.rst
-index 196f52386aaa..f58bdc64504f 100644
---- a/Documentation/trace/fprobe.rst
-+++ b/Documentation/trace/fprobe.rst
-@@ -9,9 +9,10 @@ Fprobe - Function entry/exit probe
- Introduction
- ============
- 
--Fprobe is a function entry/exit probe mechanism based on ftrace.
--Instead of using ftrace full feature, if you only want to attach callbacks
--on function entry and exit, similar to the kprobes and kretprobes, you can
-+Fprobe is a function entry/exit probe mechanism based on the function-graph
-+tracer.
-+Instead of tracing all functions, if you want to attach callbacks on specific
-+function entry and exit, similar to the kprobes and kretprobes, you can
- use fprobe. Compared with kprobes and kretprobes, fprobe gives faster
- instrumentation for multiple functions with single handler. This document
- describes how to use fprobe.
-@@ -91,12 +92,14 @@ The prototype of the entry/exit callback function are as follows:
- 
- .. code-block:: c
- 
-- int entry_callback(struct fprobe *fp, unsigned long entry_ip, unsigned long ret_ip, struct pt_regs *regs, void *entry_data);
-+ int entry_callback(struct fprobe *fp, unsigned long entry_ip, unsigned long ret_ip, struct ftrace_regs *fregs, void *entry_data);
- 
-- void exit_callback(struct fprobe *fp, unsigned long entry_ip, unsigned long ret_ip, struct pt_regs *regs, void *entry_data);
-+ void exit_callback(struct fprobe *fp, unsigned long entry_ip, unsigned long ret_ip, struct ftrace_regs *fregs, void *entry_data);
- 
--Note that the @entry_ip is saved at function entry and passed to exit handler.
--If the entry callback function returns !0, the corresponding exit callback will be cancelled.
-+Note that the @entry_ip is saved at function entry and passed to exit
-+handler.
-+If the entry callback function returns !0, the corresponding exit callback
-+will be cancelled.
- 
- @fp
-         This is the address of `fprobe` data structure related to this handler.
-@@ -112,12 +115,10 @@ If the entry callback function returns !0, the corresponding exit callback will
-         This is the return address that the traced function will return to,
-         somewhere in the caller. This can be used at both entry and exit.
- 
--@regs
--        This is the `pt_regs` data structure at the entry and exit. Note that
--        the instruction pointer of @regs may be different from the @entry_ip
--        in the entry_handler. If you need traced instruction pointer, you need
--        to use @entry_ip. On the other hand, in the exit_handler, the instruction
--        pointer of @regs is set to the current return address.
-+@fregs
-+        This is the `ftrace_regs` data structure at the entry and exit. This
-+        includes the function parameters, or the return values. So user can
-+        access thos values via appropriate `ftrace_regs_*` APIs.
- 
- @entry_data
-         This is a local storage to share the data between entry and exit handlers.
-@@ -125,6 +126,17 @@ If the entry callback function returns !0, the corresponding exit callback will
-         and `entry_data_size` field when registering the fprobe, the storage is
-         allocated and passed to both `entry_handler` and `exit_handler`.
- 
-+Entry data size and exit handlers on the same function
-+======================================================
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index deb629f4a510..60e7ff16f56f 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1066,6 +1066,70 @@ static unsigned long get_entry_ip(unsigned long fentry_ip)
+ 		fentry_ip -= ENDBR_INSN_SIZE;
+ 	return fentry_ip;
+ }
++#elif defined(CONFIG_ARM64)
++#include <asm/insn.h>
 +
-+Since the entry data is passed via per-task stack and it is has limited size,
-+the entry data size per probe is limited to `15 * sizeof(long)`. You also need
-+to take care that the different fprobes are probing on the same function, this
-+limit becomes smaller. The entry data size is aligned to `sizeof(long)` and
-+each fprobe which has exit handler uses a `sizeof(long)` space on the stack,
-+you should keep the number of fprobes on the same function as small as
-+possible.
++static unsigned long get_entry_ip(unsigned long fentry_ip)
++{
++	u32 insn;
 +
- Share the callbacks with kprobes
- ================================
- 
-@@ -165,8 +177,8 @@ This counter counts up when;
-  - fprobe fails to take ftrace_recursion lock. This usually means that a function
-    which is traced by other ftrace users is called from the entry_handler.
- 
-- - fprobe fails to setup the function exit because of the shortage of rethook
--   (the shadow stack for hooking the function return.)
-+ - fprobe fails to setup the function exit because of failing to allocate the
-+   data buffer from the per-task shadow stack.
- 
- The `fprobe::nmissed` field counts up in both cases. Therefore, the former
- skips both of entry and exit callback and the latter skips the exit
++	/*
++	 * When using patchable-function-entry without pre-function NOPS, ftrace
++	 * entry is the address of the first NOP after the function entry point.
++	 *
++	 * The compiler has either generated:
++	 *
++	 * func+00:	func:	NOP		// To be patched to MOV X9, LR
++	 * func+04:		NOP		// To be patched to BL <caller>
++	 *
++	 * Or:
++	 *
++	 * func-04:		BTI	C
++	 * func+00:	func:	NOP		// To be patched to MOV X9, LR
++	 * func+04:		NOP		// To be patched to BL <caller>
++	 *
++	 * The fentry_ip is the address of `BL <caller>` which is at `func + 4`
++	 * bytes in either case.
++	 */
++	if (!IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS))
++		return fentry_ip - AARCH64_INSN_SIZE;
++
++	/*
++	 * When using patchable-function-entry with pre-function NOPs, BTI is
++	 * a bit different.
++	 *
++	 * func+00:	func:	NOP		// To be patched to MOV X9, LR
++	 * func+04:		NOP		// To be patched to BL <caller>
++	 *
++	 * Or:
++	 *
++	 * func+00:	func:	BTI	C
++	 * func+04:		NOP		// To be patched to MOV X9, LR
++	 * func+08:		NOP		// To be patched to BL <caller>
++	 *
++	 * The fentry_ip is the address of `BL <caller>` which is at either
++	 * `func + 4` or `func + 8` depends on whether there is a BTI.
++	 */
++
++	/* If there is no BTI, the func address should be one instruction before. */
++	if (!IS_ENABLED(CONFIG_ARM64_BTI_KERNEL))
++		return fentry_ip - AARCH64_INSN_SIZE;
++
++	/* We want to be extra safe in case entry ip is on the page edge,
++	 * but otherwise we need to avoid get_kernel_nofault()'s overhead.
++	 */
++	if ((fentry_ip & ~PAGE_MASK) < AARCH64_INSN_SIZE * 2) {
++		if (get_kernel_nofault(insn, (u32 *)(fentry_ip - AARCH64_INSN_SIZE * 2)))
++			return fentry_ip - AARCH64_INSN_SIZE;
++	} else {
++		insn = *(u32 *)(fentry_ip - AARCH64_INSN_SIZE * 2);
++	}
++
++	if (aarch64_insn_is_bti(le32_to_cpu((__le32)insn)))
++		return fentry_ip - AARCH64_INSN_SIZE * 2;
++
++	return fentry_ip - AARCH64_INSN_SIZE;
++}
+ #else
+ #define get_entry_ip(fentry_ip) fentry_ip
+ #endif
 
 
