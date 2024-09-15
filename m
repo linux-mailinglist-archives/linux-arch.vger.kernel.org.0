@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-7320-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7321-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 831F49795FD
-	for <lists+linux-arch@lfdr.de>; Sun, 15 Sep 2024 11:12:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 709E7979601
+	for <lists+linux-arch@lfdr.de>; Sun, 15 Sep 2024 11:13:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D73A3B21B72
-	for <lists+linux-arch@lfdr.de>; Sun, 15 Sep 2024 09:12:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 90D9EB225AF
+	for <lists+linux-arch@lfdr.de>; Sun, 15 Sep 2024 09:13:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60A751C462B;
-	Sun, 15 Sep 2024 09:11:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7794B1C6F7E;
+	Sun, 15 Sep 2024 09:11:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hWGypAWD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="INs5a7mM"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 340AB6EB4A;
-	Sun, 15 Sep 2024 09:11:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43F061C68B4;
+	Sun, 15 Sep 2024 09:11:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726391504; cv=none; b=BRc6sVhFWJTZiCcvFVMlDiliLqVYbnhecQBlsXQYdj78YkfwnAemSuEDR0Enc8duyiMKNIt9mfqAeCGKpOgqgM3MdVCNW+Gh9mMjdgLPwM17A9UsrjnHbH0wv/G0H1xtH2x3VQVqc0wPtT+ukuBhru6tYsz4AM93LsNtzXEVZHY=
+	t=1726391516; cv=none; b=Rq2qvx9Uc0ESoQdvS8iydHJrmuasqCeg++4BdoQP+Y0zZFj/5wCz+hO3X/vxLki7CfjnXfRb6WIp4ePslIf+8jgUUG9GKT1nCLtDoe677AQGGAj99bl/1rSDQa9TKtIeI1oXRmO1vEHZbPd7ebmtXEskZ4AhSbjsYKaNu5HIdKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726391504; c=relaxed/simple;
-	bh=JYaRKeJmGRnsdkv3DZQuO4sB8FqXsYsH2vHflN4Nz3A=;
+	s=arc-20240116; t=1726391516; c=relaxed/simple;
+	bh=6HA0IpASV2lPjSE8jsT/ioqYyUxQJEQgO8Ncm+pPfI4=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=D396gT9FQbIgkJLhI/wVq+PQm7hKGegVkChJeOUSebl/kjCrK8yFO4oQjyrHD/ovGetFOe8AFZcn5AQfSRG98Fxbz42oFNTtTH9agSDP5C+aeV/3rARC9J0yd87Hf7QO4lnBYBiRKVbE0SrQ2WFeKtMIqyWyuJZ6/hOtUkHKuYk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hWGypAWD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA0D1C4CEC3;
-	Sun, 15 Sep 2024 09:11:39 +0000 (UTC)
+	 MIME-Version:Content-Type; b=DNtRS8G9+Jphs0QhQdpXBE4ZCKLpU93dISG155Dq5X2Jgr56BpAVgd+e4IN2TveLS30FxeF1Hy9FX79GJMNDzEF7ySKw++DiVo9Bm3zbonBuzJ+NcOmjfzxkWlREvO4Bonvr6QWJNtx0jM4E8zut4xG5vzKHXX2Txk7BlG/0KA0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=INs5a7mM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C876BC4CEC4;
+	Sun, 15 Sep 2024 09:11:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726391503;
-	bh=JYaRKeJmGRnsdkv3DZQuO4sB8FqXsYsH2vHflN4Nz3A=;
+	s=k20201202; t=1726391515;
+	bh=6HA0IpASV2lPjSE8jsT/ioqYyUxQJEQgO8Ncm+pPfI4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=hWGypAWDW+Kyaa3nqaT45/ZhnD7um6Wf6Mlv/2fcrjvglXOWAmuQd448Q33wt1rXT
-	 MON8e9xQ4+epqycByfMnXjBDK4slGv+zuGdE3yGi+RCiJFIjgmdsgdwNjeoVxiHixF
-	 R0E7paY6tN1EI3CIEWtS0EPnyyyHhE0XM1XgLG8cKQ0L/wpEP8QcTg2UrLkt8ghXWZ
-	 VM0IH4bZufVo2Y5IAZX+2Mc6Dc6/V2YEc0hgWYRwfC5HlZ/yRs1f0TlC4n6saOpqe9
-	 UtgJwvbYw9t3PcG3bkfujLOmUrG/eIGflo/qofLFxDUy3yoeyqO+JhMHFictW6Imi7
-	 4qedu+nDhd26w==
+	b=INs5a7mMzWGu+UtNlzn1LTdCzmnBETllCiFUfRjzxUirQjMneLtNIFSkRm0lXyLaI
+	 5YqttKlTXjohDK1FWEyH6XN14rHlS4ap6H1M/pRf0Gj5YIP5YLf5/FFrS534A3eyY0
+	 2nH0J6wS6bEasfy0HMCX9oB0zb/rf1hLqOnMB9AcuO5GtYrT0CD8xHW+8Zr3kX/m4j
+	 8GbqmUEZTiYX1eth4tuTxhEna30o3itZ6ywjY8ctRVux05zR0og1eTidtVQfSnMWTk
+	 HGnWRAHUzHvWdU9xR+9O4B6KFW/+2+5cCOnRW6g8HUAMCyNhFiZ8o0Q4XjIYcvQULh
+	 wsbnFttC7ngww==
 From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
 To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
 	Steven Rostedt <rostedt@goodmis.org>,
@@ -60,9 +60,9 @@ Cc: linux-trace-kernel@vger.kernel.org,
 	Thomas Gleixner <tglx@linutronix.de>,
 	Guo Ren <guoren@kernel.org>,
 	linux-arch@vger.kernel.org
-Subject: [PATCH v15 11/19] bpf: Enable kprobe_multi feature if CONFIG_FPROBE is enabled
-Date: Sun, 15 Sep 2024 18:11:37 +0900
-Message-Id: <172639149759.366111.10395655630392797633.stgit@devnote2>
+Subject: [PATCH v15 12/19] ftrace: Add CONFIG_HAVE_FTRACE_GRAPH_FUNC
+Date: Sun, 15 Sep 2024 18:11:49 +0900
+Message-Id: <172639150909.366111.8501429537914101062.stgit@devnote2>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <172639136989.366111.11359590127009702129.stgit@devnote2>
 References: <172639136989.366111.11359590127009702129.stgit@devnote2>
@@ -78,113 +78,99 @@ Content-Transfer-Encoding: 8bit
 
 From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Enable kprobe_multi feature if CONFIG_FPROBE is enabled. The pt_regs is
-converted from ftrace_regs by ftrace_partial_regs(), thus some registers
-may always returns 0. But it should be enough for function entry (access
-arguments) and exit (access return value).
+Add CONFIG_HAVE_FTRACE_GRAPH_FUNC kconfig in addition to ftrace_graph_func
+macro check. This is for the other feature (e.g. FPROBE) which requires to
+access ftrace_regs from fgraph_ops::entryfunc() can avoid compiling if
+the fgraph can not pass the valid ftrace_regs.
 
 Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Acked-by: Florent Revest <revest@chromium.org>
 ---
- Changes in v9:
-  - Avoid wasting memory for bpf_kprobe_multi_pt_regs when
-    CONFIG_HAVE_PT_REGS_TO_FTRACE_REGS_CAST=y
+ Changes in v8:
+  - Newly added.
 ---
- kernel/trace/bpf_trace.c |   27 ++++++++++++++-------------
- 1 file changed, 14 insertions(+), 13 deletions(-)
+ arch/arm64/Kconfig     |    1 +
+ arch/loongarch/Kconfig |    1 +
+ arch/powerpc/Kconfig   |    1 +
+ arch/riscv/Kconfig     |    1 +
+ arch/x86/Kconfig       |    1 +
+ kernel/trace/Kconfig   |    5 +++++
+ 6 files changed, 10 insertions(+)
 
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index cdba9981b048..deb629f4a510 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -2605,7 +2605,7 @@ struct bpf_session_run_ctx {
- 	void *data;
- };
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 17947f625b06..53eb9f36842d 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -208,6 +208,7 @@ config ARM64
+ 	select HAVE_SAMPLE_FTRACE_DIRECT_MULTI
+ 	select HAVE_EFFICIENT_UNALIGNED_ACCESS
+ 	select HAVE_GUP_FAST
++	select HAVE_FTRACE_GRAPH_FUNC
+ 	select HAVE_FTRACE_MCOUNT_RECORD
+ 	select HAVE_FUNCTION_TRACER
+ 	select HAVE_FUNCTION_ERROR_INJECTION
+diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+index 73cb657496c8..9f7adca388ec 100644
+--- a/arch/loongarch/Kconfig
++++ b/arch/loongarch/Kconfig
+@@ -129,6 +129,7 @@ config LOONGARCH
+ 	select HAVE_EFFICIENT_UNALIGNED_ACCESS if !ARCH_STRICT_ALIGN
+ 	select HAVE_EXIT_THREAD
+ 	select HAVE_GUP_FAST
++	select HAVE_FTRACE_GRAPH_FUNC
+ 	select HAVE_FTRACE_MCOUNT_RECORD
+ 	select HAVE_FUNCTION_ARG_ACCESS_API
+ 	select HAVE_FUNCTION_ERROR_INJECTION
+diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+index d7b09b064a8a..aa2669f5b314 100644
+--- a/arch/powerpc/Kconfig
++++ b/arch/powerpc/Kconfig
+@@ -238,6 +238,7 @@ config PPC
+ 	select HAVE_EBPF_JIT
+ 	select HAVE_EFFICIENT_UNALIGNED_ACCESS
+ 	select HAVE_GUP_FAST
++	select HAVE_FTRACE_GRAPH_FUNC
+ 	select HAVE_FTRACE_MCOUNT_RECORD
+ 	select HAVE_FUNCTION_ARG_ACCESS_API
+ 	select HAVE_FUNCTION_DESCRIPTORS	if PPC64_ELF_ABI_V1
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index 6e8422269ba4..8f05e9fb7803 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -138,6 +138,7 @@ config RISCV
+ 	select HAVE_DYNAMIC_FTRACE if !XIP_KERNEL && MMU && (CLANG_SUPPORTS_DYNAMIC_FTRACE || GCC_SUPPORTS_DYNAMIC_FTRACE)
+ 	select HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+ 	select HAVE_DYNAMIC_FTRACE_WITH_ARGS if HAVE_DYNAMIC_FTRACE
++	select HAVE_FTRACE_GRAPH_FUNC
+ 	select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
+ 	select HAVE_FUNCTION_GRAPH_TRACER
+ 	select HAVE_FUNCTION_GRAPH_FREGS
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 59788d8b220e..02863509ebd1 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -228,6 +228,7 @@ config X86
+ 	select HAVE_EXIT_THREAD
+ 	select HAVE_GUP_FAST
+ 	select HAVE_FENTRY			if X86_64 || DYNAMIC_FTRACE
++	select HAVE_FTRACE_GRAPH_FUNC		if HAVE_FUNCTION_GRAPH_TRACER
+ 	select HAVE_FTRACE_MCOUNT_RECORD
+ 	select HAVE_FUNCTION_GRAPH_FREGS	if HAVE_FUNCTION_GRAPH_TRACER
+ 	select HAVE_FUNCTION_GRAPH_TRACER	if X86_32 || (X86_64 && DYNAMIC_FTRACE)
+diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
+index 0fc4c3129c19..c8dfd3a233c6 100644
+--- a/kernel/trace/Kconfig
++++ b/kernel/trace/Kconfig
+@@ -34,6 +34,11 @@ config HAVE_FUNCTION_GRAPH_TRACER
+ config HAVE_FUNCTION_GRAPH_FREGS
+ 	bool
  
--#if defined(CONFIG_FPROBE) && defined(CONFIG_DYNAMIC_FTRACE_WITH_REGS)
-+#ifdef CONFIG_FPROBE
- struct bpf_kprobe_multi_link {
- 	struct bpf_link link;
- 	struct fprobe fp;
-@@ -2628,6 +2628,13 @@ struct user_syms {
- 	char *buf;
- };
- 
-+#ifndef CONFIG_HAVE_PT_REGS_TO_FTRACE_REGS_CAST
-+static DEFINE_PER_CPU(struct pt_regs, bpf_kprobe_multi_pt_regs);
-+#define bpf_kprobe_multi_pt_regs_ptr()	this_cpu_ptr(&bpf_kprobe_multi_pt_regs)
-+#else
-+#define bpf_kprobe_multi_pt_regs_ptr()	(NULL)
-+#endif
++config HAVE_FTRACE_GRAPH_FUNC
++	bool
++	help
++	  True if ftrace_graph_func() is defined.
 +
- static int copy_user_syms(struct user_syms *us, unsigned long __user *usyms, u32 cnt)
- {
- 	unsigned long __user usymbol;
-@@ -2822,7 +2829,7 @@ static u64 bpf_kprobe_multi_entry_ip(struct bpf_run_ctx *ctx)
- 
- static int
- kprobe_multi_link_prog_run(struct bpf_kprobe_multi_link *link,
--			   unsigned long entry_ip, struct pt_regs *regs,
-+			   unsigned long entry_ip, struct ftrace_regs *fregs,
- 			   bool is_return, void *data)
- {
- 	struct bpf_kprobe_multi_run_ctx run_ctx = {
-@@ -2834,6 +2841,7 @@ kprobe_multi_link_prog_run(struct bpf_kprobe_multi_link *link,
- 		.entry_ip = entry_ip,
- 	};
- 	struct bpf_run_ctx *old_run_ctx;
-+	struct pt_regs *regs;
- 	int err;
- 
- 	if (unlikely(__this_cpu_inc_return(bpf_prog_active) != 1)) {
-@@ -2844,6 +2852,7 @@ kprobe_multi_link_prog_run(struct bpf_kprobe_multi_link *link,
- 
- 	migrate_disable();
- 	rcu_read_lock();
-+	regs = ftrace_partial_regs(fregs, bpf_kprobe_multi_pt_regs_ptr());
- 	old_run_ctx = bpf_set_run_ctx(&run_ctx.session_ctx.run_ctx);
- 	err = bpf_prog_run(link->link.prog, regs);
- 	bpf_reset_run_ctx(old_run_ctx);
-@@ -2860,15 +2869,11 @@ kprobe_multi_link_handler(struct fprobe *fp, unsigned long fentry_ip,
- 			  unsigned long ret_ip, struct ftrace_regs *fregs,
- 			  void *data)
- {
--	struct pt_regs *regs = ftrace_get_regs(fregs);
- 	struct bpf_kprobe_multi_link *link;
- 	int err;
- 
--	if (!regs)
--		return 0;
--
- 	link = container_of(fp, struct bpf_kprobe_multi_link, fp);
--	err = kprobe_multi_link_prog_run(link, get_entry_ip(fentry_ip), regs, false, data);
-+	err = kprobe_multi_link_prog_run(link, get_entry_ip(fentry_ip), fregs, false, data);
- 	return is_kprobe_session(link->link.prog) ? err : 0;
- }
- 
-@@ -2878,13 +2883,9 @@ kprobe_multi_link_exit_handler(struct fprobe *fp, unsigned long fentry_ip,
- 			       void *data)
- {
- 	struct bpf_kprobe_multi_link *link;
--	struct pt_regs *regs = ftrace_get_regs(fregs);
--
--	if (!regs)
--		return;
- 
- 	link = container_of(fp, struct bpf_kprobe_multi_link, fp);
--	kprobe_multi_link_prog_run(link, get_entry_ip(fentry_ip), regs, true, data);
-+	kprobe_multi_link_prog_run(link, get_entry_ip(fentry_ip), fregs, true, data);
- }
- 
- static int symbols_cmp_r(const void *a, const void *b, const void *priv)
-@@ -3145,7 +3146,7 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
- 	kvfree(cookies);
- 	return err;
- }
--#else /* !CONFIG_FPROBE || !CONFIG_DYNAMIC_FTRACE_WITH_REGS */
-+#else /* !CONFIG_FPROBE */
- int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
- {
- 	return -EOPNOTSUPP;
+ config HAVE_DYNAMIC_FTRACE
+ 	bool
+ 	help
 
 
