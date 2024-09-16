@@ -1,63 +1,64 @@
-Return-Path: <linux-arch+bounces-7334-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7335-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6EAB97A55F
-	for <lists+linux-arch@lfdr.de>; Mon, 16 Sep 2024 17:34:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C15497A591
+	for <lists+linux-arch@lfdr.de>; Mon, 16 Sep 2024 17:54:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DBC5B1C25420
-	for <lists+linux-arch@lfdr.de>; Mon, 16 Sep 2024 15:34:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A68FD1F28D5B
+	for <lists+linux-arch@lfdr.de>; Mon, 16 Sep 2024 15:54:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B84D158A1F;
-	Mon, 16 Sep 2024 15:33:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A546714A4E1;
+	Mon, 16 Sep 2024 15:53:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="kdRYpM8s"
+	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="sHtQeF5k"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp-fw-52003.amazon.com (smtp-fw-52003.amazon.com [52.119.213.152])
+Received: from smtp-fw-80009.amazon.com (smtp-fw-80009.amazon.com [99.78.197.220])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBFF4158550;
-	Mon, 16 Sep 2024 15:33:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.119.213.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3AD82B9AA;
+	Mon, 16 Sep 2024 15:53:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=99.78.197.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726500834; cv=none; b=uhAJY+n/Q5k+Yh35NQgJFc2VDZLLeYkzOgOXY+Xv6D0aQgzNct+v3T7WJHEecTVBNVmTugf/uilmJi/Xhx4bWKJmAZiPMsn4uUjTFLvPDBdIkMOl6rtjV6+L/hpmYOUcxb49Vm9pdL1eKzeNIRH1lTTjWo45oip18CK3/dhh7Fc=
+	t=1726502034; cv=none; b=LTbYDXZwIw19xSh7qqxdYGSiQgsH+EJXP/NaMq+XCUuXmuAESdHXq/Mo5JJOgba/MSX9F78ytuz2zkVRzrnb7wBd7LzaI03KdxJGTz0u6ueFauCq4LTQIGJRVCxWLDnMX2SvkHtVA8IsREG6cR0gqqHvatOkhYlBWr3HuoC4XgY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726500834; c=relaxed/simple;
-	bh=IY8C+StfjFJHJtqw4O3q5t4JZ6R26AYxgS+dshF64Y8=;
-	h=Subject:MIME-Version:Content-Type:Date:Message-ID:From:To:CC:
-	 References:In-Reply-To; b=np8Ays1Rywe5EWMAWEaCf58M/my84IY9VZZOVJCbrQ/yJw8Vl/wx6xFElNpRS99CGak7FNQ1PxhhQJQNVi/a++i9zy5MYqCFi//6X1pTV+RWYSMmV4pW7d9ED5rjK8Ab4IpascCutIBCXdjz8G9UAHDHAbJg4qe3YIn7X1iUAUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.es; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=kdRYpM8s; arc=none smtp.client-ip=52.119.213.152
+	s=arc-20240116; t=1726502034; c=relaxed/simple;
+	bh=uw0Xybb7UQONV7AUP+zdNBOTaZYJ9vHM92tdymSzwgg=;
+	h=Subject:MIME-Version:Content-Type:Date:Message-ID:To:CC:From:
+	 References:In-Reply-To; b=HA7fPKbcg+qZMb+3P0IISagbJf5Oi5IjK0LON8VajcTxgHuS35Z+TC1LDN7dl9dIvq0b5L9+pKQPJ1/bFS+C4/XNS5jXUnz7PgJiWKQOOAdEDfoiI1wutcg5JkwBgt2q4TRlMaMGiVOjGpIm0QuRHlyu4CVshhXYLdHOnqV0g+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.es; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=sHtQeF5k; arc=none smtp.client-ip=99.78.197.220
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.es
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1726500833; x=1758036833;
+  t=1726502033; x=1758038033;
   h=mime-version:content-transfer-encoding:date:message-id:
-   from:to:cc:references:in-reply-to:subject;
-  bh=EEwEknCR7gPqewEKfA7AQyWhoTIg8MMivyoECSmpsEI=;
-  b=kdRYpM8slLpP1+mbE98ePb1MrORmSx6TZzULdNMAqdyuZc8ehl2plGhw
-   MUnQcVhNZvLmkItwz2bz8JnWXc7lj0NccZQk17epiH20PQXgIw3OgFGVq
-   JD8W7Uj5PtT3EYxDSK61E9NsEQ4SEGi1xSEQ9mAaKbKVkkbC1wP+Va8iB
-   w=;
+   to:cc:from:references:in-reply-to:subject;
+  bh=uw0Xybb7UQONV7AUP+zdNBOTaZYJ9vHM92tdymSzwgg=;
+  b=sHtQeF5kndNn+pIlBdjos1k+Q5FzIBWC/HXSDqk59+xK5xHEk8eA4reJ
+   8jXuSq/cmG/KWq4iIO1EBLBlXtvwMDfKu11Jtzs2X8uWSfljTlJ4fAqoE
+   Aq6yT+nPeU0b1rMtczJ+2hwScH3qfu3k8p7ZFOxLBfnqGBRrZ0Zg0vu9L
+   g=;
 X-IronPort-AV: E=Sophos;i="6.10,233,1719878400"; 
-   d="scan'208";a="25953235"
-Subject: Re: [PATCH 05/18] KVM: x86: hyper-v: Introduce MP_STATE_HV_INACTIVE_VTL
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.43.8.6])
-  by smtp-border-fw-52003.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2024 15:33:48 +0000
-Received: from EX19MTAEUB002.ant.amazon.com [10.0.10.100:51984]
- by smtpin.naws.eu-west-1.prod.farcaster.email.amazon.dev [10.0.1.23:2525] with esmtp (Farcaster)
- id f0c8e00d-30a9-4cd0-acb9-4acbebf05106; Mon, 16 Sep 2024 15:33:46 +0000 (UTC)
-X-Farcaster-Flow-ID: f0c8e00d-30a9-4cd0-acb9-4acbebf05106
+   d="scan'208";a="126308750"
+Subject: Re: [PATCH 11/18] KVM: x86: Pass the instruction length on memory fault
+ user-space exits
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.25.36.210])
+  by smtp-border-fw-80009.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2024 15:53:49 +0000
+Received: from EX19MTAEUA001.ant.amazon.com [10.0.10.100:54655]
+ by smtpin.naws.eu-west-1.prod.farcaster.email.amazon.dev [10.0.43.112:2525] with esmtp (Farcaster)
+ id 2d162f68-8f74-48a2-9420-8f12008a1ef2; Mon, 16 Sep 2024 15:53:48 +0000 (UTC)
+X-Farcaster-Flow-ID: 2d162f68-8f74-48a2-9420-8f12008a1ef2
 Received: from EX19D004EUC001.ant.amazon.com (10.252.51.190) by
- EX19MTAEUB002.ant.amazon.com (10.252.51.59) with Microsoft SMTP Server
+ EX19MTAEUA001.ant.amazon.com (10.252.50.192) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
- Mon, 16 Sep 2024 15:33:45 +0000
+ Mon, 16 Sep 2024 15:53:48 +0000
 Received: from localhost (10.13.235.138) by EX19D004EUC001.ant.amazon.com
  (10.252.51.190) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34; Mon, 16 Sep 2024
- 15:33:39 +0000
+ 15:53:42 +0000
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -66,9 +67,8 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="UTF-8"
-Date: Mon, 16 Sep 2024 15:33:36 +0000
-Message-ID: <D47TGLMWFTN2.2VCKLFM1K4GM8@amazon.com>
-From: Nicolas Saenz Julienne <nsaenz@amazon.com>
+Date: Mon, 16 Sep 2024 15:53:39 +0000
+Message-ID: <D47TVY7H7E3C.3V3RA9GPJGT6E@amazon.com>
 To: Sean Christopherson <seanjc@google.com>
 CC: <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
 	<pbonzini@redhat.com>, <vkuznets@redhat.com>, <linux-doc@vger.kernel.org>,
@@ -78,145 +78,33 @@ CC: <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
 	<corbet@lwn.net>, <decui@microsoft.com>, <tglx@linutronix.de>,
 	<mingo@redhat.com>, <bp@alien8.de>, <dave.hansen@linux.intel.com>,
 	<x86@kernel.org>, <amoorthy@google.com>
+From: Nicolas Saenz Julienne <nsaenz@amazon.com>
 X-Mailer: aerc 0.18.2-0-ge037c095a049-dirty
 References: <20240609154945.55332-1-nsaenz@amazon.com>
- <20240609154945.55332-6-nsaenz@amazon.com> <ZuSL_FCfvVywCPxm@google.com>
-In-Reply-To: <ZuSL_FCfvVywCPxm@google.com>
-X-ClientProxiedBy: EX19D039UWA003.ant.amazon.com (10.13.139.49) To
+ <20240609154945.55332-12-nsaenz@amazon.com> <ZuSOaTw1vgwquqTE@google.com>
+In-Reply-To: <ZuSOaTw1vgwquqTE@google.com>
+X-ClientProxiedBy: EX19D045UWC002.ant.amazon.com (10.13.139.230) To
  EX19D004EUC001.ant.amazon.com (10.252.51.190)
 
-On Fri Sep 13, 2024 at 7:01 PM UTC, Sean Christopherson wrote:
+On Fri Sep 13, 2024 at 7:11 PM UTC, Sean Christopherson wrote:
 > On Sun, Jun 09, 2024, Nicolas Saenz Julienne wrote:
-> > Model inactive VTL vCPUs' behaviour with a new MP state.
-> >
-> > Inactive VTLs are in an artificial halt state. They enter into this
-> > state in response to invoking HvCallVtlCall, HvCallVtlReturn.
-> > User-space, which is VTL aware, can processes the hypercall, and set th=
-e
-> > vCPU in MP_STATE_HV_INACTIVE_VTL. When a vCPU is run in this state it'l=
-l
-> > block until a wakeup event is received. The rules of what constitutes a=
-n
-> > event are analogous to halt's except that VTL's ignore RFLAGS.IF.
-> >
-> > When a wakeup event is registered, KVM will exit to user-space with a
-> > KVM_SYSTEM_EVENT exit, and KVM_SYSTEM_EVENT_WAKEUP event type.
-> > User-space is responsible of deciding whether the event has precedence
-> > over the active VTL and will switch the vCPU to KVM_MP_STATE_RUNNABLE
-> > before resuming execution on it.
-> >
-> > Running a KVM_MP_STATE_HV_INACTIVE_VTL vCPU with pending events will
-> > return immediately to user-space.
-> >
-> > Note that by re-using the readily available halt infrastructure in
-> > KVM_RUN, MP_STATE_HV_INACTIVE_VTL correctly handles (or disables)
-> > virtualisation features like the VMX preemption timer or APICv before
-> > blocking.
+> > In order to simplify Hyper-V VSM secure memory intercept generation in
+> > user-space (it avoids the need of implementing an x86 instruction
+> > decoder and the actual decoding). Pass the instruction length being run
+> > at the time of the guest exit as part of the memory fault exit
+> > information.
 >
-> IIUC, this is a convoluted and roundabout way to let userspace check if a=
- vCPU
-> has a wake event, correct?  Even by the end of the series, KVM never sets
-> MP_STATE_HV_INACTIVE_VTL, i.e. the only use for this is to combine it as:
->
->   KVM_SET_MP_STATE =3D> KVM_RUN =3D> KVM_SET_MP_STATE =3D> KVM_RUN
+> Why does userspace need the instruction length, but not the associated co=
+de stream?
 
-Correct.
+Since the fault already provides the GPA it's trivial to read it from
+the VMM. Then again, now that I've dug deeper into the RWX memory
+attributes's edge cases, this doesn't always work. For example when
+getting a fault during a page walk (the CPU being unable to access the
+page that contains the next GPTE due to it being marked non-readable by
+a memattr). The fault exit GPA will not point to the code stream.
 
-> The upside to this approach is that it requires minimal uAPI and very few=
- KVM
-> changes, but that's about it AFAICT.  On the other hand, making this so p=
-ainfully
-> specific feels like a missed opportunity, and unnecessarily bleeds VTL de=
-tails
-> into KVM.
->
-> Bringing halt-polling into the picture (by going down kvm_vcpu_halt()) is=
- also
-> rather bizarre since quite a bit of time has already elapsed since the vC=
-PU first
-> did HvCallVtlCall/HvCallVtlReturn.  But that doesn't really have anything=
- to do
-> with MP_STATE_HV_INACTIVE_VTL, e.g. it'd be just as easy to go to kvm_vcp=
-u_block().
->
-> Why not add an ioctl() to very explicitly block until a wake event is rea=
-dy?
-> Or probably better, a generic "wait" ioctl() that takes the wait type as =
-an
-> argument.
->
-> Kinda like your idea of supporting .poll() on the vCPU FD[*], except it's=
- very
-> specifically restricted to a single caller (takes vcpu->mutex).  We could=
- probably
-> actually implement it via .poll(), but I suspect that would be more confu=
-sing than
-> helpful.
->
-> E.g. extract the guts of vcpu_block() to a separate helper, and then wire=
- that
-> up to an ioctl().
->
-> As for the RFLAGS.IF quirk, maybe handle that via a kvm_run flag?  That w=
-ay,
-> userspace doesn't need to do a round-trip just to set a single bit.  E.g.=
- I think
-> we should be able to squeeze it into "struct kvm_hyperv_exit".
-
-It's things like the RFLAG.IF exemption that deterred me from building a
-generic interface. We might find out that the generic blocking logic
-doesn't match the expected VTL semantics and be stuck with a uAPI that
-isn't enough for VSM, nor useful for any other use-case. We can always
-introduce 'flags' I guess.
-
-Note that I'm just being cautious here, AFAICT the generic approach
-works, and I'm fine with going the "wait" ioctl.
-
-> Actually, speaking of kvm_hyperv_exit, is there a reason we can't simply =
-wire up
-> HVCALL_VTL_CALL and/or HVCALL_VTL_RETURN to a dedicated complete_userspac=
-e_io()
-> callback that blocks if some flag is set?  That would make it _much_ clea=
-ner to
-> scope the RFLAGS.IF check to kvm_hyperv_exit, and would require little to=
- no new
-> uAPI.
-
-So IIUC, the approach is to have complete_userspace_io() block after
-re-entering HVCALL_VTL_RETURN. Then, have it exit back onto user-space
-whenever an event is made available (maybe re-using
-KVM_SYSTEM_EVENT_WAKEUP?). That would work, but will need something
-extra to be compatible with migration/live-update.
-
-> > @@ -3797,6 +3798,10 @@ bool svm_interrupt_blocked(struct kvm_vcpu *vcpu=
-)
-> >         if (!gif_set(svm))
-> >                 return true;
-> >
-> > +       /*
-> > +        * The Hyper-V TLFS states that RFLAGS.IF is ignored when decid=
-ing
-> > +        * whether to block interrupts targeted at inactive VTLs.
-> > +        */
-> >         if (is_guest_mode(vcpu)) {
-> >                 /* As long as interrupts are being delivered...  */
-> >                 if ((svm->nested.ctl.int_ctl & V_INTR_MASKING_MASK)
-> > @@ -3808,7 +3813,7 @@ bool svm_interrupt_blocked(struct kvm_vcpu *vcpu)
-> >                 if (nested_exit_on_intr(svm))
-> >                         return false;
-> >         } else {
-> > -               if (!svm_get_if_flag(vcpu))
-> > +               if (!svm_get_if_flag(vcpu) && !kvm_hv_vcpu_is_idle_vtl(=
-vcpu))
->
-> Speaking of RFLAGS.IF, I think it makes sense to add a common x86 helper =
-to handle
-> the RFLAGS.IF vs. idle VTL logic.  Naming will be annoying, but that's ab=
-out it.
->
-> E.g. kvm_is_irq_blocked_by_rflags_if() or so.
-
-Noted.
+I will rework/rethink this once I have the complete memattrs story.
 
 Thanks,
 Nicolas
