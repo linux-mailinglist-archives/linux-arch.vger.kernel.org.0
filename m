@@ -1,154 +1,146 @@
-Return-Path: <linux-arch+bounces-7342-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7343-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8331697AAF7
-	for <lists+linux-arch@lfdr.de>; Tue, 17 Sep 2024 07:22:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D01FB97ABDC
+	for <lists+linux-arch@lfdr.de>; Tue, 17 Sep 2024 09:12:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 32C9D1F24127
-	for <lists+linux-arch@lfdr.de>; Tue, 17 Sep 2024 05:22:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 467F41F22CAE
+	for <lists+linux-arch@lfdr.de>; Tue, 17 Sep 2024 07:12:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9F1D7BB15;
-	Tue, 17 Sep 2024 05:22:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E67E814A4C7;
+	Tue, 17 Sep 2024 07:12:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="uE7YHFnc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rbt1g37N"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from msa.smtpout.orange.fr (msa-210.smtpout.orange.fr [193.252.23.210])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF8124F20C
-	for <linux-arch@vger.kernel.org>; Tue, 17 Sep 2024 05:22:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.23.210
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD35E149C7A;
+	Tue, 17 Sep 2024 07:12:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726550538; cv=none; b=MZdUbXWbP3CBXQPp8DuXSu48ZCMrHJzKwc6o7HUCAPbgbejQTaL3KX5PC9F3K9EajFWN37O3EZEih3u2FREVfITddsbhJZ7QQ8vOp/wQV85nydKvinvcc/MsGQ7fkac0nxFJ016oWlVnNiKLQlNxxxtNf+uo04Xx1p4b/jbI7C4=
+	t=1726557172; cv=none; b=ukcsIcUyb5QhxLvmCuapL3TNL4FRtwgaQZ12LXln7/dweM4UZ00vhKml3EkJcvxG4F2nSL0GHEMjTQQ96hPsELe1eoioIB6ZPrxjFe10qjrYSPmxLrZ62kdJ52QyVxnnUkqsgt1ORzSiWUHcr3H+EKe+9I2f3vpZGKkw4YNYW28=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726550538; c=relaxed/simple;
-	bh=FROrw0IXlzItQSfhHRHUvjIOTBu4ABMZqIMKJtQffAE=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=BtadYQCUYOYGqWlTYn9BGxpKuog4ezH7ZAgJuJ+6FRpzumlmM1FKQCyXilUmlr6HgthRiUZwcOEdRBvtWvk242+7isv8VYBkja4FzH8hv5Xf1tFyY+8uTZej6QKkZbxbG6ELCrR725UsnlaOd/Bxlg1vwmr2ZEXrGkJzAslsGq0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=uE7YHFnc; arc=none smtp.client-ip=193.252.23.210
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [192.168.1.37] ([90.11.132.44])
-	by smtp.orange.fr with ESMTPA
-	id qQf2sEuii3ZMyqQf2s4PfP; Tue, 17 Sep 2024 07:22:08 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1726550528;
-	bh=ox/BUEVjGvecYqicoCV10v4Q9kXMIsRKDm9TgbacwPA=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To;
-	b=uE7YHFncSbIkns75ceMLvKBWR2lLESwDluJGLQhQBCQV5lrcOaRwCaTNTSOfcQpVq
-	 HJm+j7e1uOEsx+GUZ7TkF+WOOqssb6mQ20ALFlGIaRf9KYFvSjIxmC0ctChK9RKjkP
-	 VHegYqJfxnmpTt+hhya69OXSYxRcdh4NY3Nx4ludydVSWdFFHnCuY48Vq5d4BGuFHH
-	 iIBCrqPhkEWoNiBUDqoomBPmojMFvpSGzksiXevYTJzesiUhHvUmNIIDj1if0WR1dK
-	 bCJHsDM4ZJQSKYDiq97zSpNKRY9B+XwVjxgT8qhAE/jWfxA728uT22uHSOZu+Yfgmr
-	 KFRvY0tmnJyeg==
-X-ME-Helo: [192.168.1.37]
-X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
-X-ME-Date: Tue, 17 Sep 2024 07:22:08 +0200
-X-ME-IP: 90.11.132.44
-Message-ID: <6cbedd50-c2d5-4ad7-8133-774eebd9d2f1@wanadoo.fr>
-Date: Tue, 17 Sep 2024 07:22:00 +0200
+	s=arc-20240116; t=1726557172; c=relaxed/simple;
+	bh=hgacHKFfwOa5El2HeDetZQZ0AkxJ6nRNh6t/Xie2Pm4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZeDnxHvVaUreZWWE1UnRRBYJTuxrh3kaVUBVZ6I2Ri4LZMuS2ujfM3P4+UjvdP+hkcgnrrlO+MvVNrjfWVtyqOrP7hMlUSGazYj9FzhliVx2MPCzOau7Lqh8nhvE7nPpSFMSScqCfLwQZYdQ9uw9wTqX1wX6scT6EbC9y4BysnI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rbt1g37N; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 264AAC4CEC6;
+	Tue, 17 Sep 2024 07:12:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726557172;
+	bh=hgacHKFfwOa5El2HeDetZQZ0AkxJ6nRNh6t/Xie2Pm4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rbt1g37NEqrGSbdmS1XbUHYbqBqU8BT+ANrGbMK5ko2XPfVxK/AbAsiTK4WCHnX8I
+	 slITtFPqjcN3zcvVWRJOU5TY17zyHnNsXcsacXSJB3J7Q5yGt+Xnt9wK6QzAUyTLmS
+	 XDt+VDn/DIur7Uh5jwt4Sz/Zg+6/6ZvL3HezmTBfgyc0GEIupf1nr7SvTV7CrWDJWt
+	 sOOdSj13f4xKEkb4hYDqMhx8QNDFMNPVM+PvhAUDkXXJILKsxYT6sK9YEldGNQ8blX
+	 mjGH9gNVk/2uuFF+sd9UWKqw+oDH2ix6OOK8KhBybNaT5vr6HSYELs5obuU85NCz+m
+	 a70eJoZIVHogg==
+Date: Tue, 17 Sep 2024 08:12:46 +0100
+From: Will Deacon <will@kernel.org>
+To: cl@gentwo.org
+Cc: Thomas Gleixner <tglx@linutronix.de>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Waiman Long <longman@redhat.com>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-arch@vger.kernel.org
+Subject: Re: [PATCH v3] Avoid memory barrier in read_seqcount() through load
+ acquire
+Message-ID: <20240917071246.GA27290@willie-the-truck>
+References: <20240912-seq_optimize-v3-1-8ee25e04dffa@gentwo.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: Re: [PATCH v2 00/15] timers: Cleanup delay/sleep related mess
-To: Anna-Maria Behnsen <anna-maria@linutronix.de>
-Cc: linux-kernel@vger.kernel.org, Len Brown <len.brown@intel.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, damon@lists.linux.dev,
- linux-mm@kvack.org, SeongJae Park <sj@kernel.org>,
- Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
- Heiner Kallweit <hkallweit1@gmail.com>, "David S. Miller"
- <davem@davemloft.net>, Andy Whitcroft <apw@canonical.com>,
- Joe Perches <joe@perches.com>, Dwaipayan Ray <dwaipayanray1@gmail.com>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Andrew Lunn <andrew@lunn.ch>, Jaroslav Kysela <perex@perex.cz>,
- Takashi Iwai <tiwai@suse.com>, netdev@vger.kernel.org,
- linux-sound@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
- Nathan Lynch <nathanl@linux.ibm.com>, linuxppc-dev@lists.ozlabs.org,
- Mauro Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org,
- Frederic Weisbecker <frederic@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>, Jonathan Corbet <corbet@lwn.net>
-References: <20240911-devel-anna-maria-b4-timers-flseep-v2-0-b0d3f33ccfe0@linutronix.de>
- <c794b4a6-468d-4552-a6d6-8185f49339d3@wanadoo.fr>
-Content-Language: en-US, fr-FR
-In-Reply-To: <c794b4a6-468d-4552-a6d6-8185f49339d3@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240912-seq_optimize-v3-1-8ee25e04dffa@gentwo.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
+Hi Christoph,
 
+On Thu, Sep 12, 2024 at 03:44:08PM -0700, Christoph Lameter via B4 Relay wrote:
+> diff --git a/arch/Kconfig b/arch/Kconfig
+> index 975dd22a2dbd..3c270f496231 100644
+> --- a/arch/Kconfig
+> +++ b/arch/Kconfig
+> @@ -1600,6 +1600,14 @@ config ARCH_HAS_KERNEL_FPU_SUPPORT
+>  	  Architectures that select this option can run floating-point code in
+>  	  the kernel, as described in Documentation/core-api/floating-point.rst.
+>  
+> +config ARCH_HAS_ACQUIRE_RELEASE
+> +	bool
+> +	help
+> +	  Setting ARCH_HAS_ACQUIRE_RELEASE indicates that the architecture
+> +	  supports load acquire and release. Typically these are more effective
+> +	  than memory barriers. Code will prefer the use of load acquire and
+> +	  store release over memory barriers if this option is enabled.
+> +
 
-Le 16/09/2024 à 22:20, Christophe JAILLET a écrit :
-> Le 11/09/2024 à 07:13, Anna-Maria Behnsen a écrit :
->> Hi,
->>
->> a question about which sleeping function should be used in 
->> acpi_os_sleep()
->> started a discussion and examination about the existing documentation and
->> implementation of functions which insert a sleep/delay.
->>
->> The result of the discussion was, that the documentation is outdated and
->> the implemented fsleep() reflects the outdated documentation but doesn't
->> help to reflect reality which in turns leads to the queue which covers 
->> the
->> following things:
->>
->> - Split out all timeout and sleep related functions from hrtimer.c and 
->> timer.c
->>    into a separate file
->>
->> - Update function descriptions of sleep related functions
->>
->> - Change fsleep() to reflect reality
->>
->> - Rework all comments or users which obviously rely on the outdated
->>    documentation as they reference "Documentation/timers/timers- 
->> howto.rst"
->>
->> - Last but not least (as there are no more references): Update the 
->> outdated
->>    documentation and move it into a file with a self explaining file name
->>
->> The queue is available here and applies on top of tip/timers/core:
->>
->>    git://git.kernel.org/pub/scm/linux/kernel/git/anna-maria/linux- 
->> devel.git timers/misc
->>
->> Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
-> 
-> Hi,
-> 
-> not directly related to your serie, but some time ago I sent a patch to 
-> micro-optimize Optimize usleep_range(). (See [1])
-> 
-> The idea is that the 2 parameters of usleep_range() are usually 
-> constants and some code reordering could easily let the compiler compute 
-> a few things at compilation time.
-> 
-> There was consensus on the value of the change (see [2]), but as you are 
+Unsurprisingly, I'd be in favour of making this unconditional rather than
+adding a new Kconfig option. Would that actually hurt any architectures
+where we care about the last few shreds of performance?
 
-Typo: there was *no* consensus...
+>  source "kernel/gcov/Kconfig"
+>  
+>  source "scripts/gcc-plugins/Kconfig"
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index a2f8ff354ca6..19e34fff145f 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -39,6 +39,7 @@ config ARM64
+>  	select ARCH_HAS_PTE_DEVMAP
+>  	select ARCH_HAS_PTE_SPECIAL
+>  	select ARCH_HAS_HW_PTE_YOUNG
+> +	select ARCH_HAS_ACQUIRE_RELEASE
+>  	select ARCH_HAS_SETUP_DMA_OPS
+>  	select ARCH_HAS_SET_DIRECT_MAP
+>  	select ARCH_HAS_SET_MEMORY
+> diff --git a/include/linux/seqlock.h b/include/linux/seqlock.h
+> index d90d8ee29d81..a3fe9ee8edef 100644
+> --- a/include/linux/seqlock.h
+> +++ b/include/linux/seqlock.h
+> @@ -23,6 +23,13 @@
+>  
+>  #include <asm/processor.h>
+>  
+> +#ifdef CONFIG_ARCH_HAS_ACQUIRE_RELEASE
+> +# define USE_LOAD_ACQUIRE	true
+> +# define USE_COND_LOAD_ACQUIRE	!IS_ENABLED(CONFIG_PREEMPT_RT)
+> +#else
+> +# define USE_LOAD_ACQUIRE	false
+> +# define USE_COND_LOAD_ACQUIRE	false
+> +#endif
+>  /*
+>   * The seqlock seqcount_t interface does not prescribe a precise sequence of
+>   * read begin/retry/end. For readers, typically there is a call to
+> @@ -132,6 +139,17 @@ static inline void seqcount_lockdep_reader_access(const seqcount_t *s)
+>  #define seqcount_rwlock_init(s, lock)		seqcount_LOCKNAME_init(s, lock, rwlock)
+>  #define seqcount_mutex_init(s, lock)		seqcount_LOCKNAME_init(s, lock, mutex)
+>  
+> +static __always_inline unsigned __seqprop_load_sequence(const seqcount_t *s, bool acquire)
+> +{
+> +	if (!acquire || !USE_LOAD_ACQUIRE)
+> +		return READ_ONCE(s->sequence);
+> +
+> +	if (USE_COND_LOAD_ACQUIRE)
+> +		return smp_cond_load_acquire((unsigned int *)&s->sequence, (s->sequence & 1) == 0);
 
-> touching things here, maybe it makes sense now to save a few cycles at 
-> runtime and a few bytes of code?
-> 
-> CJ
-> 
-> [1]: https://lore.kernel.org/all/ 
-> f0361b83a0a0b549f8ec5ab8134905001a6f2509.1659126514.git.christophe.jaillet@wanadoo.fr/
-> 
-> [2]: https://lore.kernel.org/ 
-> all/03c2bbe795fe4ddcab66eb852bae3715@AcuMS.aculab.com/
-> 
-> 
-> 
-> 
+This looks wrong to me.
 
+The conditional expression passed to smp_cond_load_acquire() should be
+written in terms of 'VAL', otherwise you're introducing an additional
+non-atomic access to the sequence counter.
+
+Will
 
