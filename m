@@ -1,255 +1,154 @@
-Return-Path: <linux-arch+bounces-7341-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7342-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4B5D97A9D3
-	for <lists+linux-arch@lfdr.de>; Tue, 17 Sep 2024 02:00:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8331697AAF7
+	for <lists+linux-arch@lfdr.de>; Tue, 17 Sep 2024 07:22:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 565F028B9AD
-	for <lists+linux-arch@lfdr.de>; Tue, 17 Sep 2024 00:00:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 32C9D1F24127
+	for <lists+linux-arch@lfdr.de>; Tue, 17 Sep 2024 05:22:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31C7B56B8C;
-	Tue, 17 Sep 2024 00:00:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9F1D7BB15;
+	Tue, 17 Sep 2024 05:22:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="RhRoQT49"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="uE7YHFnc"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from msa.smtpout.orange.fr (msa-210.smtpout.orange.fr [193.252.23.210])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C579D450F2
-	for <linux-arch@vger.kernel.org>; Tue, 17 Sep 2024 00:00:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF8124F20C
+	for <linux-arch@vger.kernel.org>; Tue, 17 Sep 2024 05:22:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.23.210
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726531249; cv=none; b=TVA3FnnldR60xfPp/3x5muGLNoROKzoIS1dJsGtZ0AP61WGjsEIID5yYJRdk/RLRXfLvVP+0NwOjMPfgBS7sZzgDkpsNapO8A+MyczZ6QmU6NQH8rC8ZkSw7vbatw7xiPe2uutNJny5vwQp/oxScwiyP+oP+dMyavFJWjR5mnNo=
+	t=1726550538; cv=none; b=MZdUbXWbP3CBXQPp8DuXSu48ZCMrHJzKwc6o7HUCAPbgbejQTaL3KX5PC9F3K9EajFWN37O3EZEih3u2FREVfITddsbhJZ7QQ8vOp/wQV85nydKvinvcc/MsGQ7fkac0nxFJ016oWlVnNiKLQlNxxxtNf+uo04Xx1p4b/jbI7C4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726531249; c=relaxed/simple;
-	bh=Ee17siRqBFROuZr/thXBuY61Xxnn7brpn1HX2BS79j4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ei6c1dU1vhsmjtpkV5NgY/YkDxBq4gMrTCR+ke+UmwmoMxYm6jDjGJYRwvuc6hjFCxuN2wL/5SCGRwnfuBhEP3w0oUeDX4nY7FTGzvyjbuKDQueLjh7VNF+EId5Z/4WDwxRrVl6NiuT4u/XSv7o5RD9gZebTmEDGmX84uPUUJd4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=RhRoQT49; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2053a0bd0a6so51896185ad.3
-        for <linux-arch@vger.kernel.org>; Mon, 16 Sep 2024 17:00:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1726531246; x=1727136046; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=eup1ahvLxbk3GqS/ZMeUjwBFH9cE8D+Ggr+WJlLQMOk=;
-        b=RhRoQT49oLiMTKeVDt3o35EPTFrI9VTfyuiHCpYg0jF/Ir0+3X6JtB37avwfLK/pOo
-         xtUz4MGUJ6UkuCuX+7d1d7AMVsLkDNoHDX5K14QrtR8CNaDZkDZUC2CwcyvDqi99H8k0
-         SGt7yw9X814xthl4fj/4VQFD6VQjlbyrxxw5EkJUNfr4kfrfC5MEl7zwcFJMbhfvCeaM
-         EKmNXMThZdV2mD32PkwhtCa0LrlHqz+etI5OcLU2psrqL/OE6ymC6jTgvp9xbONqSMP8
-         BUTnOj2lJLTz9/RK58pKcXsMfwkOfq6yQ9Y6hgKizhG7G6mYHOPDm4WIYfihyE0f8IYh
-         PjXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726531246; x=1727136046;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eup1ahvLxbk3GqS/ZMeUjwBFH9cE8D+Ggr+WJlLQMOk=;
-        b=OPVvwqlxHoj/EM0uzkJS3h8RFsETR2qh2xrAn8a/6GmXYlekEGTAEVJ1gPpzxa7Yyh
-         S8YBsczn1ZoFIMPzTtiw+7NxR6GoE6CZ4NDjfj6w8ZRBHR9C8uuWPN7ffJ/XDzqaJ1Lu
-         z2iY3gnPnqzGF/XuePulgpJvPAzYUG8UkJvSTVio3z+K9lhGs2zwsffVQgqLfpLeJKB3
-         Qwtk06lSf/ZC2LjFW4irSIDortlnHwWZrWyRHzC2EtT9T1ZlXwbfiSEpx9M8mFkExa1Y
-         exodGbdI0FfQfRmJ45VDnBDYr6ys+VOIgdp5Q0JqzWIGzim2YpXuj34AANBvPvd99llz
-         C5wQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXZgnwYyxVuKmgVrEp6UgMr/o++SbfJSaJdjfAOvsreeskNFYVVqFsaafjEr9CMBhZiekzo2KIv8TiG@vger.kernel.org
-X-Gm-Message-State: AOJu0YxSA0sC1bVWh0LovBDsS8EhgGFZ/edWbvoyWV7ONbY4yaPOgRo2
-	Vy1mChyVQHN8NkJh+sw2Sw6+k2JDF3gtBaokoYvqgyiOXNP/l6cR05D4g8Omt+s=
-X-Google-Smtp-Source: AGHT+IH64YpGkOt6sdEnN70vzwbW5vOexKApQ3tQQA6MC8BwStmIPrrAyTwaRSTJo5R11SP51oTbHQ==
-X-Received: by 2002:a17:902:ea0d:b0:205:7c76:4b2c with SMTP id d9443c01a7336-2076e412882mr247960785ad.48.1726531245442;
-        Mon, 16 Sep 2024 17:00:45 -0700 (PDT)
-Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20794601384sm41311685ad.94.2024.09.16.17.00.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Sep 2024 17:00:45 -0700 (PDT)
-Date: Mon, 16 Sep 2024 17:00:40 -0700
-From: Deepak Gupta <debug@rivosinc.com>
-To: Andy Chiu <andybnac@gmail.com>
-Cc: paul.walmsley@sifive.com, palmer@sifive.com, conor@kernel.org,
-	linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	quic_zhonhan@quicinc.com, zong.li@sifive.com, zev@bewilderbeest.net,
-	david@redhat.com, peterz@infradead.org, catalin.marinas@arm.com,
-	broonie@kernel.org, dave.hansen@linux.intel.com,
-	atishp@rivosinc.com, bjorn@rivosinc.com, namcaov@gmail.com,
-	usama.anjum@collabora.com, guoren@kernel.org, alx@kernel.org,
-	jszhang@kernel.org, hpa@zytor.com, puranjay@kernel.org,
-	shuah@kernel.org, sorear@fastmail.com, costa.shul@redhat.com,
-	robh@kernel.org, antonb@tenstorrent.com, quic_bjorande@quicinc.com,
-	lorenzo.stoakes@oracle.com, corbet@lwn.net, dawei.li@shingroup.cn,
-	anup@brainfault.org, deller@gmx.de, x86@kernel.org,
-	andrii@kernel.org, willy@infradead.org, kees@kernel.org,
-	mingo@redhat.com, libang.li@antgroup.com, samitolvanen@google.com,
-	greentime.hu@sifive.com, osalvador@suse.de, ajones@ventanamicro.com,
-	revest@chromium.org, ancientmodern4@gmail.com,
-	aou@eecs.berkeley.edu, jerry.shih@sifive.com,
-	alexghiti@rivosinc.com, arnd@arndb.de, yang.lee@linux.alibaba.com,
-	charlie@rivosinc.com, bgray@linux.ibm.com, Liam.Howlett@oracle.com,
-	leobras@redhat.com, songshuaishuai@tinylab.org,
-	xiao.w.wang@intel.com, bp@alien8.de, cuiyunhui@bytedance.com,
-	mchitale@ventanamicro.com, cleger@rivosinc.com, tglx@linutronix.de,
-	krzk+dt@kernel.org, vbabka@suse.cz, brauner@kernel.org,
-	bhe@redhat.com, ke.zhao@shingroup.cn, oleg@redhat.com,
-	samuel.holland@sifive.com, ben.dooks@codethink.co.uk,
-	evan@rivosinc.com, palmer@dabbelt.com, ebiederm@xmission.com,
-	andy.chiu@sifive.com, schwab@suse.de, akpm@linux-foundation.org,
-	sameo@rivosinc.com, tanzhasanwork@gmail.com, rppt@kernel.org,
-	ryan.roberts@arm.com
-Subject: Re: [PATCH v4 21/30] riscv/traps: Introduce software check exception
-Message-ID: <ZujGqOVbYZ8+8XPu@debug.ba.rivosinc.com>
-References: <20240912231650.3740732-1-debug@rivosinc.com>
- <20240912231650.3740732-22-debug@rivosinc.com>
- <CAFTtA3NA+OwZv5hJU3EWjuNHNjA3fQzPC+sX84Nb9YyJXdENSA@mail.gmail.com>
+	s=arc-20240116; t=1726550538; c=relaxed/simple;
+	bh=FROrw0IXlzItQSfhHRHUvjIOTBu4ABMZqIMKJtQffAE=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=BtadYQCUYOYGqWlTYn9BGxpKuog4ezH7ZAgJuJ+6FRpzumlmM1FKQCyXilUmlr6HgthRiUZwcOEdRBvtWvk242+7isv8VYBkja4FzH8hv5Xf1tFyY+8uTZej6QKkZbxbG6ELCrR725UsnlaOd/Bxlg1vwmr2ZEXrGkJzAslsGq0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=uE7YHFnc; arc=none smtp.client-ip=193.252.23.210
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [192.168.1.37] ([90.11.132.44])
+	by smtp.orange.fr with ESMTPA
+	id qQf2sEuii3ZMyqQf2s4PfP; Tue, 17 Sep 2024 07:22:08 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1726550528;
+	bh=ox/BUEVjGvecYqicoCV10v4Q9kXMIsRKDm9TgbacwPA=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To;
+	b=uE7YHFncSbIkns75ceMLvKBWR2lLESwDluJGLQhQBCQV5lrcOaRwCaTNTSOfcQpVq
+	 HJm+j7e1uOEsx+GUZ7TkF+WOOqssb6mQ20ALFlGIaRf9KYFvSjIxmC0ctChK9RKjkP
+	 VHegYqJfxnmpTt+hhya69OXSYxRcdh4NY3Nx4ludydVSWdFFHnCuY48Vq5d4BGuFHH
+	 iIBCrqPhkEWoNiBUDqoomBPmojMFvpSGzksiXevYTJzesiUhHvUmNIIDj1if0WR1dK
+	 bCJHsDM4ZJQSKYDiq97zSpNKRY9B+XwVjxgT8qhAE/jWfxA728uT22uHSOZu+Yfgmr
+	 KFRvY0tmnJyeg==
+X-ME-Helo: [192.168.1.37]
+X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
+X-ME-Date: Tue, 17 Sep 2024 07:22:08 +0200
+X-ME-IP: 90.11.132.44
+Message-ID: <6cbedd50-c2d5-4ad7-8133-774eebd9d2f1@wanadoo.fr>
+Date: Tue, 17 Sep 2024 07:22:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH v2 00/15] timers: Cleanup delay/sleep related mess
+To: Anna-Maria Behnsen <anna-maria@linutronix.de>
+Cc: linux-kernel@vger.kernel.org, Len Brown <len.brown@intel.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, damon@lists.linux.dev,
+ linux-mm@kvack.org, SeongJae Park <sj@kernel.org>,
+ Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+ Heiner Kallweit <hkallweit1@gmail.com>, "David S. Miller"
+ <davem@davemloft.net>, Andy Whitcroft <apw@canonical.com>,
+ Joe Perches <joe@perches.com>, Dwaipayan Ray <dwaipayanray1@gmail.com>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Andrew Lunn <andrew@lunn.ch>, Jaroslav Kysela <perex@perex.cz>,
+ Takashi Iwai <tiwai@suse.com>, netdev@vger.kernel.org,
+ linux-sound@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
+ Nathan Lynch <nathanl@linux.ibm.com>, linuxppc-dev@lists.ozlabs.org,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Jonathan Corbet <corbet@lwn.net>
+References: <20240911-devel-anna-maria-b4-timers-flseep-v2-0-b0d3f33ccfe0@linutronix.de>
+ <c794b4a6-468d-4552-a6d6-8185f49339d3@wanadoo.fr>
+Content-Language: en-US, fr-FR
+In-Reply-To: <c794b4a6-468d-4552-a6d6-8185f49339d3@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFTtA3NA+OwZv5hJU3EWjuNHNjA3fQzPC+sX84Nb9YyJXdENSA@mail.gmail.com>
 
-On Fri, Sep 13, 2024 at 09:35:50PM +0200, Andy Chiu wrote:
->Hi Deepak
->
->Deepak Gupta <debug@rivosinc.com> 於 2024年9月13日 週五 上午2:32寫道：
->>
->> zicfiss / zicfilp introduces a new exception to priv isa `software check
->> exception` with cause code = 18. This patch implements software check
->> exception.
->>
->> Additionally it implements a cfi violation handler which checks for code
->> in xtval. If xtval=2, it means that sw check exception happened because of
->> an indirect branch not landing on 4 byte aligned PC or not landing on
->> `lpad` instruction or label value embedded in `lpad` not matching label
->> value setup in `x7`. If xtval=3, it means that sw check exception happened
->> because of mismatch between link register (x1 or x5) and top of shadow
->> stack (on execution of `sspopchk`).
->>
->> In case of cfi violation, SIGSEGV is raised with code=SEGV_CPERR.
->> SEGV_CPERR was introduced by x86 shadow stack patches.
->>
->> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
->> ---
->>  arch/riscv/include/asm/asm-prototypes.h |  1 +
->>  arch/riscv/include/asm/entry-common.h   |  2 ++
->>  arch/riscv/kernel/entry.S               |  3 ++
->>  arch/riscv/kernel/traps.c               | 38 +++++++++++++++++++++++++
->>  4 files changed, 44 insertions(+)
->>
->> diff --git a/arch/riscv/include/asm/asm-prototypes.h b/arch/riscv/include/asm/asm-prototypes.h
->> index cd627ec289f1..5a27cefd7805 100644
->> --- a/arch/riscv/include/asm/asm-prototypes.h
->> +++ b/arch/riscv/include/asm/asm-prototypes.h
->> @@ -51,6 +51,7 @@ DECLARE_DO_ERROR_INFO(do_trap_ecall_u);
->>  DECLARE_DO_ERROR_INFO(do_trap_ecall_s);
->>  DECLARE_DO_ERROR_INFO(do_trap_ecall_m);
->>  DECLARE_DO_ERROR_INFO(do_trap_break);
->> +DECLARE_DO_ERROR_INFO(do_trap_software_check);
->>
->>  asmlinkage void handle_bad_stack(struct pt_regs *regs);
->>  asmlinkage void do_page_fault(struct pt_regs *regs);
->> diff --git a/arch/riscv/include/asm/entry-common.h b/arch/riscv/include/asm/entry-common.h
->> index 2293e535f865..4068c7e5452a 100644
->> --- a/arch/riscv/include/asm/entry-common.h
->> +++ b/arch/riscv/include/asm/entry-common.h
->> @@ -39,4 +39,6 @@ static inline int handle_misaligned_store(struct pt_regs *regs)
->>  }
->>  #endif
->>
->> +bool handle_user_cfi_violation(struct pt_regs *regs);
->> +
->>  #endif /* _ASM_RISCV_ENTRY_COMMON_H */
->> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
->> index ca9203e6d76d..2ec75ba864a8 100644
->> --- a/arch/riscv/kernel/entry.S
->> +++ b/arch/riscv/kernel/entry.S
->> @@ -384,6 +384,9 @@ SYM_DATA_START_LOCAL(excp_vect_table)
->>         RISCV_PTR do_page_fault   /* load page fault */
->>         RISCV_PTR do_trap_unknown
->>         RISCV_PTR do_page_fault   /* store page fault */
->> +       RISCV_PTR do_trap_unknown /* cause=16 */
->> +       RISCV_PTR do_trap_unknown /* cause=17 */
->> +       RISCV_PTR do_trap_software_check /* cause=18 is sw check exception */
->>  SYM_DATA_END_LABEL(excp_vect_table, SYM_L_LOCAL, excp_vect_table_end)
->>
->>  #ifndef CONFIG_MMU
->> diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
->> index 51ebfd23e007..32d1453bed72 100644
->> --- a/arch/riscv/kernel/traps.c
->> +++ b/arch/riscv/kernel/traps.c
->> @@ -354,6 +354,44 @@ void do_trap_ecall_u(struct pt_regs *regs)
->>
->>  }
->>
->> +#define CFI_TVAL_FCFI_CODE     2
->> +#define CFI_TVAL_BCFI_CODE     3
->> +/* handle cfi violations */
->> +bool handle_user_cfi_violation(struct pt_regs *regs)
->> +{
->> +       bool ret = false;
->> +       unsigned long tval = csr_read(CSR_TVAL);
->> +
->> +       if (((tval == CFI_TVAL_FCFI_CODE) && cpu_supports_indirect_br_lp_instr()) ||
->> +               ((tval == CFI_TVAL_BCFI_CODE) && cpu_supports_shadow_stack())) {
->> +               do_trap_error(regs, SIGSEGV, SEGV_CPERR, regs->epc,
->> +                                         "Oops - control flow violation");
->> +               ret = true;
->> +       }
->> +
->> +       return ret;
->> +}
->> +/*
->> + * software check exception is defined with risc-v cfi spec. Software check
->> + * exception is raised when:-
->> + * a) An indirect branch doesn't land on 4 byte aligned PC or `lpad`
->> + *    instruction or `label` value programmed in `lpad` instr doesn't
->> + *    match with value setup in `x7`. reported code in `xtval` is 2.
->> + * b) `sspopchk` instruction finds a mismatch between top of shadow stack (ssp)
->> + *    and x1/x5. reported code in `xtval` is 3.
->> + */
->
->It seems like this trap handler does not follow generic entry. This
->can cause problems as signal delivery is done in
->irqentry_exit_to_user_mode(). Please reference the commit f0bddf50586d
->("riscv: entry: Convert to generic entry") for more information.
 
-Ack. will fix it.
 
->
->> +asmlinkage __visible __trap_section void do_trap_software_check(struct pt_regs *regs)
->> +{
->> +       if (user_mode(regs)) {
->> +               /* not a cfi violation, then merge into flow of unknown trap handler */
->> +               if (!handle_user_cfi_violation(regs))
->> +                       do_trap_unknown(regs);
->> +       } else {
->> +               /* sw check exception coming from kernel is a bug in kernel */
->> +               die(regs, "Kernel BUG");
->> +       }
->> +}
->> +
->>  #ifdef CONFIG_MMU
->>  asmlinkage __visible noinstr void do_page_fault(struct pt_regs *regs)
->>  {
->> --
->> 2.45.0
+Le 16/09/2024 à 22:20, Christophe JAILLET a écrit :
+> Le 11/09/2024 à 07:13, Anna-Maria Behnsen a écrit :
+>> Hi,
 >>
+>> a question about which sleeping function should be used in 
+>> acpi_os_sleep()
+>> started a discussion and examination about the existing documentation and
+>> implementation of functions which insert a sleep/delay.
 >>
->> _______________________________________________
->> linux-riscv mailing list
->> linux-riscv@lists.infradead.org
->> http://lists.infradead.org/mailman/listinfo/linux-riscv
->
->Cheers,
->Andy
+>> The result of the discussion was, that the documentation is outdated and
+>> the implemented fsleep() reflects the outdated documentation but doesn't
+>> help to reflect reality which in turns leads to the queue which covers 
+>> the
+>> following things:
+>>
+>> - Split out all timeout and sleep related functions from hrtimer.c and 
+>> timer.c
+>>    into a separate file
+>>
+>> - Update function descriptions of sleep related functions
+>>
+>> - Change fsleep() to reflect reality
+>>
+>> - Rework all comments or users which obviously rely on the outdated
+>>    documentation as they reference "Documentation/timers/timers- 
+>> howto.rst"
+>>
+>> - Last but not least (as there are no more references): Update the 
+>> outdated
+>>    documentation and move it into a file with a self explaining file name
+>>
+>> The queue is available here and applies on top of tip/timers/core:
+>>
+>>    git://git.kernel.org/pub/scm/linux/kernel/git/anna-maria/linux- 
+>> devel.git timers/misc
+>>
+>> Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
+> 
+> Hi,
+> 
+> not directly related to your serie, but some time ago I sent a patch to 
+> micro-optimize Optimize usleep_range(). (See [1])
+> 
+> The idea is that the 2 parameters of usleep_range() are usually 
+> constants and some code reordering could easily let the compiler compute 
+> a few things at compilation time.
+> 
+> There was consensus on the value of the change (see [2]), but as you are 
+
+Typo: there was *no* consensus...
+
+> touching things here, maybe it makes sense now to save a few cycles at 
+> runtime and a few bytes of code?
+> 
+> CJ
+> 
+> [1]: https://lore.kernel.org/all/ 
+> f0361b83a0a0b549f8ec5ab8134905001a6f2509.1659126514.git.christophe.jaillet@wanadoo.fr/
+> 
+> [2]: https://lore.kernel.org/ 
+> all/03c2bbe795fe4ddcab66eb852bae3715@AcuMS.aculab.com/
+> 
+> 
+> 
+> 
+
 
