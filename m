@@ -1,135 +1,163 @@
-Return-Path: <linux-arch+bounces-7350-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7351-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75B2597B8D2
-	for <lists+linux-arch@lfdr.de>; Wed, 18 Sep 2024 09:56:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B425697BB3E
+	for <lists+linux-arch@lfdr.de>; Wed, 18 Sep 2024 13:02:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1B28B1F22B5C
-	for <lists+linux-arch@lfdr.de>; Wed, 18 Sep 2024 07:56:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D6F8D1C21A73
+	for <lists+linux-arch@lfdr.de>; Wed, 18 Sep 2024 11:02:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09A9174C08;
-	Wed, 18 Sep 2024 07:56:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AB2717AE0C;
+	Wed, 18 Sep 2024 11:02:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gPk6lIPO"
+	dkim=pass (2048-bit key) header.d=web.de header.i=frank.scheiner@web.de header.b="JAA/tC3/"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.web.de (mout.web.de [217.72.192.78])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FEA017085C
-	for <linux-arch@vger.kernel.org>; Wed, 18 Sep 2024 07:56:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C94D291E;
+	Wed, 18 Sep 2024 11:02:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726646180; cv=none; b=OueSRX9/W4cH9T7uYEd6HK3B3cG9I5A9+L9quOmNCjLK5GaRKAvMO+YwSlbj4scKFs3iWg1lapqDk3f9yM7QQtR//oyOIUoiXw/+RSMR5ZdJKCX5ek2n0+9IrV4Qw7UQJu+yZY/Nk/DnEOYUq0f4TbiAiBOmq0EZWQdCZnk3rlc=
+	t=1726657331; cv=none; b=Od5tkUPqgPCwP706GfjCOBUcNACRdWek6CIBMsnD1hSihF9h4DrJpHFH8MFWUe3L5DxqOuzpdC1nfbouoqqLVeWQ+Y5ut2cmnkPIB6JEnF5S1xMuZAbMkCBWSRK7aC01jOFFc3KHndKQWRw2TrKwCMbX06LkFjI+De7d1sKk6h0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726646180; c=relaxed/simple;
-	bh=E6sYje1FTSCQR6Phn3zxl12MQWQkG0ia5UJs7jeqW10=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=mZXFiSBThSkoexN6X8Us8Pkyim8IANvOTBEkkzxvzmP6zHnZCMnzLdnBOHiwgRP9AGF6UGe7Vg6JwIUaIdg14fmQAL9Iond2TGg3aUW5/AaJU1pMvyy733iPnNkz9ps6lxdbO2RVftbJ39na4fSYMES9I1Jgk99Gg/6IgYR8gak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gPk6lIPO; arc=none smtp.client-ip=209.85.128.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-6ddcb18b13cso52284557b3.1
-        for <linux-arch@vger.kernel.org>; Wed, 18 Sep 2024 00:56:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1726646178; x=1727250978; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GlQ4Yaq6kY+TAD4XQKPrVKTHn9jUpmIJO7M7toxIG6M=;
-        b=gPk6lIPOsqP16q1fdb3o6WNodLbzsTyU1ysSFXMqsaG/P4g2Pf2cvHCo/X2K140idI
-         wssA+PpidHLMZTG/qqroSwuJtLeKpLA+gZGSdEa8xkJKpFB0lfaFA3vzYLkmb0SvmhmA
-         CRaNDFR8DaNavU+EXZQI0r9gVBKBUdSAC/LNI9yKuAUa/sQ8/ddkfLDLqQ2UCMfGTCnG
-         XsuOtTMxW2IG+40XdrGiLCheMBtfp40Y7fVqW4EFJFF5jXdhNGCGawy5tmLTkAS+XnQA
-         eRwsLyFeTrG2ThfQwOOGOsICyhCtFoNFPrQj39CMeFqXzo1VJtMZDbZoccNmN8L3Yt3b
-         EfsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726646178; x=1727250978;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GlQ4Yaq6kY+TAD4XQKPrVKTHn9jUpmIJO7M7toxIG6M=;
-        b=pgnIIlfhSnUUwAuXHteJJRh6s6Y5YnZJr/+Rk4O4WT/n9yold9vYMJY1WFr6ZwkfE2
-         8hbvZXBzK7m/MK8JKU5a7sxdKvVlFN0NJD2htiv8QTVuf2K47lnUhF7h+pKI6Sax6+X0
-         tPs2dlDIzJxcf33iflvJEzYLHkiCOqLoxIl/oq6uY6vtMb1DPcOKD/bwIysku7ihZnvj
-         5FQ2d/l/kN3kKlxsHPcu1ThFbdnta7hBaedr1pkzNvfjyuhYSDZn67QRig1ogr+S2nvo
-         5JxTrOAjjN3Sva7S+l7ogwK8HH/b+TDhwq04lVicViCZ2n9VJFt4O5OICWGAJ3RykK2p
-         dWlg==
-X-Forwarded-Encrypted: i=1; AJvYcCWPiNz0qvSUcdV1bGzi2G0rHNNS/XukFmlUD1YbufqhpDZnarZ3+VxdFLcJ536hEnhSTnm0gXNEIj+S@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy8PYCPE4HEY8h05zj8ziKfXHchcM/SFSi1pqPjXuc6Ol373upS
-	/x7q313MvuKGp4CUWO8S0YWRPMFNXqJU3Jo4YyLFopvbj2j3+mneVkLxAMArMVonEyAvyGSX3ih
-	hBg==
-X-Google-Smtp-Source: AGHT+IG5J5++nWPV0aFihORTlQmC2H/Ah9MYQoDGjE3lVKqRoNKbWt/ZoG4m7Y5ovFCNYdEeJv75pFhcNIA=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a0d:e947:0:b0:6ae:d83e:9172 with SMTP id
- 00721157ae682-6dbb6b865b6mr3800587b3.5.1726646178348; Wed, 18 Sep 2024
- 00:56:18 -0700 (PDT)
-Date: Wed, 18 Sep 2024 00:56:16 -0700
-In-Reply-To: <D47TGLMWFTN2.2VCKLFM1K4GM8@amazon.com>
+	s=arc-20240116; t=1726657331; c=relaxed/simple;
+	bh=fTEocBYZ1+d+G2Kb2hcI97mXIzn4E/wx1Xt4FJfCMuE=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=EX7jIYCw4PZ0B1HKEtp63XsxJzxvaKIKaroQmE2Z2End4sdAnWOsCFuq8SBd1y8CKnEXjhDrIUK9flKfgbaL2J4xxzr+zaVpQXwhq6dH9tEEuf95fvdngPycGB3D78jnE+7RXotS2aeUsh+LjzeumcMMy9lOUnELCose8Jtrdkc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=frank.scheiner@web.de header.b=JAA/tC3/; arc=none smtp.client-ip=217.72.192.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1726657297; x=1727262097; i=frank.scheiner@web.de;
+	bh=fTEocBYZ1+d+G2Kb2hcI97mXIzn4E/wx1Xt4FJfCMuE=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:From:Subject:To:
+	 Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=JAA/tC3/CxC2ujJR4yBVDx+rWTwtinZJ8xzeLeW4xgcmBT5XVtD4gW0+wnA6hbi1
+	 iYJ05jiE0OxzlzmmapyfkEMQGZ5jamUp8N/iIr7bm2UCTY5UA9hSCDUc/bAZUec+R
+	 5mr6mlLI1pmd0i/WVbhYJ7ds3wRS8NDwv6BQuaK6IapnLI813rhDm2KXdFjBmAWSB
+	 slshGJkvxiO4kXPqSE49WeIa7k9KOjj3RLbmrEbvgRJn/8+GqcUNujgHeB/cZB0cA
+	 cDegEKmegdISrSw7rBF9/x3xC+Ixi767WdJ7vx5MTWR7k6bdPD3iQJSuNXk3PLhZR
+	 JPpcyxtBjqiHDunpig==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.30] ([84.152.254.122]) by smtp.web.de (mrweb106
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1N45xz-1rrS893hQ1-00wJKa; Wed, 18
+ Sep 2024 13:01:36 +0200
+Message-ID: <5d1b5880-9bdc-4b04-81dc-341df7b02177@web.de>
+Date: Wed, 18 Sep 2024 13:01:35 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240609154945.55332-1-nsaenz@amazon.com> <20240609154945.55332-6-nsaenz@amazon.com>
- <ZuSL_FCfvVywCPxm@google.com> <D47TGLMWFTN2.2VCKLFM1K4GM8@amazon.com>
-Message-ID: <ZuqHoK1E8gyMC6Ew@google.com>
-Subject: Re: [PATCH 05/18] KVM: x86: hyper-v: Introduce MP_STATE_HV_INACTIVE_VTL
-From: Sean Christopherson <seanjc@google.com>
-To: Nicolas Saenz Julienne <nsaenz@amazon.com>
-Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org, pbonzini@redhat.com, 
-	vkuznets@redhat.com, linux-doc@vger.kernel.org, linux-hyperv@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	graf@amazon.de, dwmw2@infradead.org, mlevitsk@redhat.com, jgowans@amazon.com, 
-	corbet@lwn.net, decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com, 
-	bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, 
-	amoorthy@google.com
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+From: Frank Scheiner <frank.scheiner@web.de>
+Subject: Re: Linux 6.11
+To: torvalds@linux-foundation.org
+Cc: =?UTF-8?B?VG9tw6HFoSBHbG96YXI=?= <tglozar@gmail.com>,
+ linux-kernel@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>,
+ linux-ia64@vger.kernel.org, t2@t2sde.org, gentoo-dev@lists.gentoo.org
+References: <CAHk-=whVpSHw9+4ov=oLevfv8sPYbh59T_9VKif-6Vqkr41jQA@mail.gmail.com>
+Content-Language: en-US
+In-Reply-To: <CAHk-=whVpSHw9+4ov=oLevfv8sPYbh59T_9VKif-6Vqkr41jQA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:3E5Aj6H9d3VPyWgoj4x5IHO85ao+A1Zb0ZwoJIrecu97rh8kp6s
+ ImvaKcZa8iFds07lwbaVUp/7o9ScEhuzqibOEy1BFuS+tx7cM09guITJbl/63fJsP4ZlIWC
+ ws6CZtoFOxtb3AuqqI1rxT4+R2cjDjaTgaHc9m1Wwr+rhri7dtBcc4updhsac6ThW71D0+y
+ WcLerPiEt52Yw/b5u6qVg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:qXt5DoX+nJU=;DCTmcOzuvrb5ZcdB9XgT2Wwg+tG
+ NXaNYquG42guKh1w3hBOacizN1K2SbyzRVXdfbQzNrxhmUCe+xp2Bpt2lpY6KaWehicyhVvXK
+ ev2HelK/DqjN6NsufiXJYNl93vje1g//Z6XjSGTtUgWnSNMCeZ1LzUySaaX9Gf25lFCr7b1jr
+ uglHRv4G8aMGyVNfI0h2eNq+sgNK/nXCsS6CCHaVhG073Hdhm5jZpivbxxCJkwKpH7v3xVh61
+ GEbxdKtW3Rcx/eY+bMl+nug9zXH+gQ1OD4ddtapm8gubBO7+jw9BN5ba94PWwOZ4RxC5Opxm8
+ fhgu8H43jspb+LKFYe0RczjJ35xWVIvVaE/fhCbyW0aUkjj6w6ECGMiQ1jILMz93/UhxuMrZ+
+ TRX92Jg18Ab+2mB6sbrBar4bhmnF0yYC5e4qOw4geODakNxH4lM9dP5NNn4f1J9IEX8q317uO
+ gPVZwWyzASRMgEVLDuQ+SDmpdbAFBHtxQzP0RkgYG5maElhdpN3PmfOvA9C0aT81OCcw1RLb0
+ AfBNQioaeXdLAibo2qfXchfnn2eW6oZxhDriuIskSaHYf5af5zixmTgasYRgsKd20g0hnKYue
+ OvBHd/ygBhFFy8MZ5SEbmxApak+q1vwyZzBtO744+J19ghSoTgy4KM2Scv7PYlQt0GuHCut7B
+ ZUGbbV0V+xUA8n+tLYfBdSOIfIN7BRzSKctlI8s6lQcgpS+I9/aMHWxpVa5nzxCdJk2iO0jOY
+ XuojynQS9EzaWLuPiMlW+Ft8eMW9A/EERmmqYV2KNpSAIwhsbY9K2XOMCQohrkPkUrh8H9A9z
+ HIa2FcH5m3Ln21+7cVrvPoCfBuh3v8uqz9/SaH3TgyulI=
 
-On Mon, Sep 16, 2024, Nicolas Saenz Julienne wrote:
-> On Fri Sep 13, 2024 at 7:01 PM UTC, Sean Christopherson wrote:
-> > On Sun, Jun 09, 2024, Nicolas Saenz Julienne wrote:
-> > E.g. extract the guts of vcpu_block() to a separate helper, and then wire that
-> > up to an ioctl().
-> >
-> > As for the RFLAGS.IF quirk, maybe handle that via a kvm_run flag?  That way,
-> > userspace doesn't need to do a round-trip just to set a single bit.  E.g. I think
-> > we should be able to squeeze it into "struct kvm_hyperv_exit".
-> 
-> It's things like the RFLAG.IF exemption that deterred me from building a
-> generic interface. We might find out that the generic blocking logic
-> doesn't match the expected VTL semantics and be stuck with a uAPI that
-> isn't enough for VSM, nor useful for any other use-case.
+Dear all,
 
-That's only motivation for ensuring that we are as confident as we can reasonably
-be that the uAPI we merge will work for VSM, e.g. by building out userspace and
-proving that a generic ioctl() provides the necessary functionality.  If there's
-no other immediate use case, then there's no reason to merge a generic ioctl()
-until VSM support is imminent.  And if there is another use case, then the concern
-that a generic ioctl() isn't useful obviously goes away.
+here comes the usual update on Linux/ia64 for v6.11:
 
-> We can always introduce 'flags' I guess.
->
-> Note that I'm just being cautious here, AFAICT the generic approach
-> works, and I'm fine with going the "wait" ioctl.
-> 
-> > Actually, speaking of kvm_hyperv_exit, is there a reason we can't simply wire up
-> > HVCALL_VTL_CALL and/or HVCALL_VTL_RETURN to a dedicated complete_userspace_io()
-> > callback that blocks if some flag is set?  That would make it _much_ cleaner to
-> > scope the RFLAGS.IF check to kvm_hyperv_exit, and would require little to no new
-> > uAPI.
-> 
-> So IIUC, the approach is to have complete_userspace_io() block after
-> re-entering HVCALL_VTL_RETURN. Then, have it exit back onto user-space
-> whenever an event is made available (maybe re-using KVM_SYSTEM_EVENT_WAKEUP?).
+The v6.11 cycle was cut short by vacation, which thankfully didn't
+create problems and the test results looked good for all tested machines
+(up to and including v6.11-rc7 - more on that later). This cycle also
+saw the switch from Binutils 2.42 to 2.43.1. And like for the v6.10
+cycle (see last update on [1] for details) each release candidate and
+release in this cycle was always built with the latest gcc-15 snapshot
+(w/LRA enabled) available.
 
-Mostly out of curiosity, why does control need to return to userspace?
+[1]:
+https://lore.kernel.org/lkml/8dcb5d36-fc38-46f3-bb97-0e4e335c313b@online.d=
+e/
 
-> That would work, but will need something extra to be compatible with
-> migration/live-update.
+Unfortunately I was a little too optimistic at the end and changed my
+used kernel config at the last minute (i.e. for the v6.11 release) to
+help with testing on Tomas' rx2620 and OS installation with btrfs
+support and 64 KB page size. But that change must have somehow broken
+successful operation inside the initrd on my rx4640. Well, the rx4640 is
+not technically broken with v6.11, because it continues to work when
+using a kernel based on Tomas' tree ([2]) on top of v6.11 with the very
+same config. And my per-release (candidate) branches also showed no
+regressions for the other machines (rx2620. rx2660, rx6600, rx2800 i2,
+not to forget hp-sim, but uses a different config) with the exact same
+initrd and v6.11. So maybe I should retest all real machines with a
+kernel made with my older kernel config to be sure.
 
-Gah, right, because KVM's generic ABI is that userspace must complete I/O exits
-before saving/restoring state.  Yeah, having KVM automatically enter a blocking
-state is probably a bad idea.
+[2]: https://github.com/linux-ia64/linux-ia64/
+
+[3]: https://github.com/johnny-mnemonic/linux-ia64/
+
+****
+
+Again no new additions to the selection of Linux distributions for ia64
+this time - or at least I'm not aware of any. In the meantime Gentoo
+dropped support for ia64, too, which honestly came as a surprise. I used
+Gentoo some years ago for some time starting on a rx2660. I later also
+used it on a rx2800 i2, because their ia64 kernel was the only one that
+could run on the latter back then. I never found out exactly what was
+responsible for this oddity, but fortunately it was somehow solved in
+mainline some time later. So, farewell Gentoo/ia64. You were very useful
+in times, thanks for that and to all people involved to make that happen
+in the past.
+
+This leaves T2/SDE and EPIC Slack as possibly the last remaining active
+Linux distributions supporting ia64 machines for the time being. But
+that can change easily, like it happened for MIPS and Alpha, if we look
+at the latest headline over at gentoo.org:
+
+https://www.gentoo.org/news/2024/09/11/Improved-MIPS-and-Alpha-support.htm=
+l
+
+****
+
+One more thing:
+
+So far we missed a public place were people can find current information
+about Linux/ia64. This gap is now closed by epic-linux.org ([4]). There
+you'll find a collection of resources around ia64, including news,
+current code, our CIs, our testing effort, Linux distributions
+supporting ia64, supported machines and links to other sites related to
+ia64. And possibly even more in the future.
+
+[4]: http://epic-linux.org/
+
+****
+
+Thank you all for your hard work on Linux!
+
+Cheers,
+Frank et al
 
