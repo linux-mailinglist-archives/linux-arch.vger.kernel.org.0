@@ -1,114 +1,146 @@
-Return-Path: <linux-arch+bounces-7360-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7361-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7DD397DABC
-	for <lists+linux-arch@lfdr.de>; Sat, 21 Sep 2024 01:13:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF7D997DED9
+	for <lists+linux-arch@lfdr.de>; Sat, 21 Sep 2024 22:47:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 888A4B2160C
-	for <lists+linux-arch@lfdr.de>; Fri, 20 Sep 2024 23:13:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 728572811DF
+	for <lists+linux-arch@lfdr.de>; Sat, 21 Sep 2024 20:47:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1596018D63B;
-	Fri, 20 Sep 2024 23:13:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36D9351C3E;
+	Sat, 21 Sep 2024 20:47:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kiVeK4hj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hKg+nXU1"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3D751C693;
-	Fri, 20 Sep 2024 23:13:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4C7963B9;
+	Sat, 21 Sep 2024 20:47:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726873991; cv=none; b=SvwB7bl9bMX0mSNMfo4vvSgrZMQtDNID0MKQE2B1BLYj/r5tpa2bFlwY8Jmdy7f+UpTi5I/AxbCWji5nwSeTtlv12DJRwiF3yOsQSDLs1NcJh/WLO8F7TCBnOEHdKrFA7rxrG8gxl1gZMWN+ymSqoOYXMzLFwhLgvwnK/azH28g=
+	t=1726951672; cv=none; b=ALvg/0ER+gVokWnq42VYW95imXBU5ONyfSN26u2cfnBr7c/ni2tKlGXMrkR3owQB/N7QZETqu71ws6BZJPTnssKIXdeUd6P4r6pFSoBSULiVYuWUoMTJVHTlMXTr8keAiTge6+9ckB0MfhoTPNJLgeUEMS02CmjdTl4NYoKjEXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726873991; c=relaxed/simple;
-	bh=+CbtnYI/5ORGbbRU1OhnMdiA6deltgQ52qYdl/OS+Ok=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=tXOty0ZfUUeuE0dJxuNqWS0ppQY0IV4tzWdIPD10nVZtr3h4f/JxgpOVZUkph6CKRRJ3dkeNjUiqGbjthDQrvu9T1dYYU+x7WxQpRgZi476E+jcvqa447fQ2JgZkY6QrYrTtSYaD7BSCPEvXCbHwNl62c8FH9K5ft5Vn1pvfJp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kiVeK4hj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02F1DC4CEC3;
-	Fri, 20 Sep 2024 23:13:08 +0000 (UTC)
+	s=arc-20240116; t=1726951672; c=relaxed/simple;
+	bh=rH7Dd3F/dN69MjOyihHAnz5rb6ZghANW3/Yr+QCK5vc=;
+	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
+	 Subject:From:Cc:To:Date; b=YqzpRQeoUUzQQmlbFzEKSvSaXJ2jYCI0+sya/ESKeZ1QINjmjXk5f+/4MHdiDaxiQcjajn7A8sJOl+Nm4Luwp/ftu8A/YdjLY2kW9yp5jC6W8tLZ7pH/3n2pTg5fEkJPwRlyatFhfcBGx09RN77mP7E0rDEcUBEWtMb7AwdHTvc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hKg+nXU1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50464C4CEC2;
+	Sat, 21 Sep 2024 20:47:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726873989;
-	bh=+CbtnYI/5ORGbbRU1OhnMdiA6deltgQ52qYdl/OS+Ok=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=kiVeK4hjoJc9Eu0ncckqydFSpzyBITFhQViNa96hU8zj303xNGFlP5l/AVb7YUrW/
-	 MMYZmViZSBnoL8LJf9qET6QugL0EZ06S1Q362GvIhgI+Ztf0HBFwagdh6B2697zFfC
-	 JH7vqgUw6v8Ym+KYOpW+8mXSPj5ee6M87jdDVRQaFxr+kce6dCfRxRdmBJdhIKFtiX
-	 vAMBJdm9mMoWusz0drX9SKUtl3+xqeAuDZY5oWKan0anGqC4fLVvk6rnAOLSXB7p1Q
-	 Ev+LIz5XEw7DoW2dMADqySR+8NJ6uRPDzC9l8+P/mBUoz/J5Do3KZ6ZXUwPWoSLUGm
-	 /XPnIUTB6M2gw==
-Date: Fri, 20 Sep 2024 18:13:07 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: mhklinux@outlook.com
-Cc: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-	decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
-	bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-	hpa@zytor.com, lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
-	bhelgaas@google.com, James.Bottomley@hansenpartnership.com,
-	martin.petersen@oracle.com, arnd@arndb.de,
-	linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-scsi@vger.kernel.org,
-	linux-arch@vger.kernel.org, maz@kernel.org, den@valinux.co.jp,
-	jgowans@amazon.com, dawei.li@shingroup.cn
-Subject: Re: [RFC 04/12] PCI: hv: Annotate the VMBus channel IRQ name
-Message-ID: <20240920231307.GA1073064@bhelgaas>
+	s=k20201202; t=1726951671;
+	bh=rH7Dd3F/dN69MjOyihHAnz5rb6ZghANW3/Yr+QCK5vc=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=hKg+nXU1aYxGePNWhTIE8dsBsIfsAqTtDNnuthtmAZE5rUruPkUtzAK/P7Y3jQpuQ
+	 0iGCWRteM1b38mWRKlI34PpfmUlGmdTSd7QlDzcgjq9JZdFvvxOEAd+jdR3dMVBd1P
+	 wPl8X5jzLfN06q+FcQjH+qv7C0dZeZ2AYlhyqfqbbCZ/vFNhnoMFNHYPfpfWiqUdgs
+	 UFkeDAV5K358rvaQRFHISVEuA2fvulH7az9mxmh854UFfTCXoQnDa6qvW6Z0lwSB6M
+	 IxSoNEPk488RziMwMnaB5dfkgmKSPJiJRz4qg76SVbMLimGtlmNT27GradvHf7Da9k
+	 S857xSA9cfrFg==
+Message-ID: <d87530b846d0dc9e78789234cfcb602a.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240604050940.859909-5-mhklinux@outlook.com>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <ZtcBHvI9JxgH9iFT@apocalypse>
+References: <cover.1724159867.git.andrea.porta@suse.com> <12d0909b1612fb6d2caa42b4fda5e5ae63d623a3.1724159867.git.andrea.porta@suse.com> <2113b8df52164733a0ee3860bb793d6e.sboyd@kernel.org> <ZtcBHvI9JxgH9iFT@apocalypse>
+Subject: Re: [PATCH 05/11] vmlinux.lds.h: Preserve DTB sections from being discarded after init
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: Andrea della Porta <andrea.porta@suse.com>, Andrew Lunn <andrew@lunn.ch>, Arnd Bergmann <arnd@arndb.de>, Bjorn Helgaas <bhelgaas@google.com>, Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Catalin Marinas <catalin.marinas@arm.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, Conor Dooley <conor+dt@kernel.org>, David S. Miller <davem@davemloft.net>, Derek Kiernan <derek.kiernan@amd.com>, Dragan Cvetic <dragan.cvetic@amd.com>, Eric Dumazet <edumazet@google.com>, Florian Fainelli <florian.fainelli@broadcom.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jakub Kicinski <kuba@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Lee Jones <lee@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, Michael Turquette <mturquette@baylibre.com>, Nicolas Ferre <nicolas.ferre@microchip.com>, Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, Stefan Wahren <wahrenst@gmx.net>, Will Deacon <will@kernel.o
+ rg>, devicetree@vger.kernel.org, linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, linux-rpi-kernel@lists.infradead.org, netdev@vger.kernel.org, linux-kbuild@vger.kernel.org
+To: Andrea della Porta <andrea.porta@suse.com>, Masahiro Yamada <masahiroy@kernel.org>
+Date: Sat, 21 Sep 2024 13:47:49 -0700
+User-Agent: alot/0.10
 
-On Mon, Jun 03, 2024 at 10:09:32PM -0700, mhkelley58@gmail.com wrote:
-> From: Michael Kelley <mhklinux@outlook.com>
-> 
-> In preparation for assigning Linux IRQs to VMBus channels, annotate
-> the IRQ name in the single VMBus channel used for setup and teardown
-> of a virtual PCI device in a Hyper-V guest. The annotation adds the
-> 16-bit PCI domain ID that the Hyper-V vPCI driver assigns to the
-> virtual PCI bus for the device.
-> 
-> Signed-off-by: Michael Kelley <mhklinux@outlook.com>
+Quoting Andrea della Porta (2024-09-03 05:29:18)
+> On 12:46 Fri 30 Aug     , Stephen Boyd wrote:
+> > Quoting Andrea della Porta (2024-08-20 07:36:07)
+> > > diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/=
+vmlinux.lds.h
+> > > index ad6afc5c4918..3ae9097774b0 100644
+> > > --- a/include/asm-generic/vmlinux.lds.h
+> > > +++ b/include/asm-generic/vmlinux.lds.h
+> >=20
+> > It would be nice to keep the initdata properties when this isn't used
+> > after init as well. Perhaps we need another macro and/or filename to
+> > indicate that the DTB{O} can be thrown away after init/module init.
+>=20
+> We can certainly add some more filename extension that would place the
+> relevant data in a droppable section.=20
+> Throwing away the dtb/o after init is like the actual KERNEL_DTB macro th=
+at
+> is adding teh data to section .init.data, but this would mean t would be
+> useful only at very early init stage, just like for CONFIG_OF_UNITTEST.
+> Throwing after module init could be more difficult though, I think,
+> for example we're not sure when to discard the section in case of deferred
+> modules probe.
+>=20
 
-Seems fine to me.
+This patch can fix a modpost warning seen in linux-next because I have
+added DT overlays from KUnit tests while kbuild has properly marked the
+overlay as initdata that is discarded. See [1] for details. In KUnit I
+doubt this really matters because most everything runs from __init code
+(even if it isn't marked that way).
 
-Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+I'm thinking that we need to make dtbo Makefile target put the blob in
+the rodata section so it doesn't get thrown away and leave the builtin
+DTB as part of init.rodata. Did you already do that? I see the kbuild
+tree has removed the commit that caused the warning, but I suspect this
+may still be a problem. See [2] for the next series where overlays
+applied in the test happen from driver probe so __ref is added.
 
-> ---
->  drivers/pci/controller/pci-hyperv.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
-> index 5992280e8110..4f70cddb61dc 100644
-> --- a/drivers/pci/controller/pci-hyperv.c
-> +++ b/drivers/pci/controller/pci-hyperv.c
-> @@ -3705,6 +3705,9 @@ static int hv_pci_probe(struct hv_device *hdev,
->  	hdev->channel->request_addr_callback = vmbus_request_addr;
->  	hdev->channel->rqstor_size = HV_PCI_RQSTOR_SIZE;
->  
-> +	snprintf(hdev->channel->irq_name, VMBUS_CHAN_IRQ_NAME_MAX,
-> +				"vpci:%04x", dom);
-> +
->  	ret = vmbus_open(hdev->channel, pci_ring_size, pci_ring_size, NULL, 0,
->  			 hv_pci_onchannelcallback, hbus);
->  	if (ret)
-> @@ -4018,6 +4021,8 @@ static int hv_pci_resume(struct hv_device *hdev)
->  	hdev->channel->next_request_id_callback = vmbus_next_request_id;
->  	hdev->channel->request_addr_callback = vmbus_request_addr;
->  	hdev->channel->rqstor_size = HV_PCI_RQSTOR_SIZE;
-> +	snprintf(hdev->channel->irq_name, VMBUS_CHAN_IRQ_NAME_MAX,
-> +				"vpci:%04x", hbus->bridge->domain_nr);
->  
->  	ret = vmbus_open(hdev->channel, pci_ring_size, pci_ring_size, NULL, 0,
->  			 hv_pci_onchannelcallback, hbus);
-> -- 
-> 2.25.1
-> 
+If we simply copy the wrap command and make it so that overlays always
+go to the .rodata section we should be good. Maybe there's some way to
+figure out what is being wrapped so we don't have to copy the whole
+thing.
+
+Finally, it's unfortunate that the DTBO is copied when an overlay is
+applied. We'll waste memory after this patch, so of_overlay_fdt_apply()
+could be taught to reuse the blob passed in instead of copying it.
+
+-----8<----
+diff --git a/scripts/Makefile.dtbs b/scripts/Makefile.dtbs
+index 55998b878e54..070e08082cd3 100644
+--- a/scripts/Makefile.dtbs
++++ b/scripts/Makefile.dtbs
+@@ -51,11 +51,25 @@ quiet_cmd_wrap_S_dtb =3D WRAP    $@
+ 		echo '.balign STRUCT_ALIGNMENT';					\
+ 	} > $@
+=20
++quiet_cmd_wrap_S_dtbo =3D WRAP    $@
++      cmd_wrap_S_dtbo =3D {								\
++		symbase=3D__$(patsubst .%,%,$(suffix $<))_$(subst -,_,$(notdir $*));	\
++		echo '\#include <asm-generic/vmlinux.lds.h>';				\
++		echo '.section .rodata,"a"';						\
++		echo '.balign STRUCT_ALIGNMENT';					\
++		echo ".global $${symbase}_begin";					\
++		echo "$${symbase}_begin:";						\
++		echo '.incbin "$<" ';							\
++		echo ".global $${symbase}_end";						\
++		echo "$${symbase}_end:";						\
++		echo '.balign STRUCT_ALIGNMENT';					\
++	} > $@
++
+ $(obj)/%.dtb.S: $(obj)/%.dtb FORCE
+ 	$(call if_changed,wrap_S_dtb)
+=20
+ $(obj)/%.dtbo.S: $(obj)/%.dtbo FORCE
+-	$(call if_changed,wrap_S_dtb)
++	$(call if_changed,wrap_S_dtbo)
+=20
+ # Schema check
+ # ------------------------------------------------------------------------=
+---
+
+[1] https://lore.kernel.org/all/20240909112728.30a9bd35@canb.auug.org.au/
+[2] https://lore.kernel.org/all/20240910094459.352572-1-masahiroy@kernel.or=
+g/
 
