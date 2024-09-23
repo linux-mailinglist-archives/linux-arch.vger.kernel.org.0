@@ -1,165 +1,86 @@
-Return-Path: <linux-arch+bounces-7376-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7377-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B168497EFA2
-	for <lists+linux-arch@lfdr.de>; Mon, 23 Sep 2024 18:54:56 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1BDB97F03A
+	for <lists+linux-arch@lfdr.de>; Mon, 23 Sep 2024 20:13:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1B890B20B07
-	for <lists+linux-arch@lfdr.de>; Mon, 23 Sep 2024 16:54:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 494D0B21858
+	for <lists+linux-arch@lfdr.de>; Mon, 23 Sep 2024 18:13:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B166E1991D9;
-	Mon, 23 Sep 2024 16:54:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4E4219F416;
+	Mon, 23 Sep 2024 18:13:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="qUUNPVBI";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ChdCSZLl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G4/ZLxs9"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fout-a8-smtp.messagingengine.com (fout-a8-smtp.messagingengine.com [103.168.172.151])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBA2413D625;
-	Mon, 23 Sep 2024 16:54:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 903AA8C1A;
+	Mon, 23 Sep 2024 18:13:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727110488; cv=none; b=msOzBHD8TG0+ahbNAjMc8h7V4eKTPySSPEaN+mUcnR+Szg8MITi2S8/x3jd5ns9fZSC0TFTKKYXBa5c0sS+6RGNMIIFx/CAJL5dUhEGvrLLk3nwuMUF1oPrYLN2a+3diFro4BuES/0YUVxGSviNPnzevYROovBe0Bz0ha2dagj0=
+	t=1727115230; cv=none; b=V6NZzzDzaI0kqBBdSnq6pPGfTnnt4hNoUUEy5f/fCjthnvuPVHSoacw3P35sLATCHBQ0z4aGcjWLVbb52I7QsM3jvBlYofby66Q59kPGjLLOvhR6IabB1+UUZjI8yIEsj5g5EmJK+RbaxqWyd0lYmQM0HR9YKnm8MtyeHkEidkc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727110488; c=relaxed/simple;
-	bh=y/i2B1l4hOzXHp53pn4yoonYuXALZbLQj1+kIUT+vqc=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=E/pxnkgVMpVDaYeZ2mrKPAntflrd6/FC2/2/CkoJo7AWHF9gac5gO4zD6sZh30RAi+4ucQJ2y7+AzSvHywwxItj+nXFTfdONXZjw7/0d+N2BIo4SnlXT2g1bvy5bFl7belMiWkM0WsYuWpd0DAcKeXEx7/DQB1X4xEVH7fX0iaw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=qUUNPVBI; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ChdCSZLl; arc=none smtp.client-ip=103.168.172.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfout.phl.internal (Postfix) with ESMTP id CFFC71380245;
-	Mon, 23 Sep 2024 12:54:44 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-10.internal (MEProxy); Mon, 23 Sep 2024 12:54:44 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1727110484;
-	 x=1727196884; bh=kR6thF4mL5TK/tahzSYtD/0ZIm7FZeNAgdWnaPLLR6o=; b=
-	qUUNPVBI9mFPBCOSguUktHvjsdT8BY7n0jAdIZ0kOHkkPQEeyWzbHrR6BqDbGwOb
-	dy9cuUrnVFMr1OqueC5F2NWuvjMfX6ifm/M6rrUQIZcCvxDCFraGQKTUu+Xgtt7E
-	vbPxt0i9oYBGANmO48vMGlLFurn2BL8dBS7a7Mo2Dpn7arMRdfNkQDS+v0vS515P
-	Sl1Ofajg0dPZQaup9tc8u1FESR6yaCruxX84Oi394F9vqN6h8LYoJ+VT20s88OY6
-	LAZHrgUmu8BTSgBE0MFv8Gpoyt3FBtvyA7PmhVzWuIecetV9Q17oCj0VYUNU2dwP
-	TWbDLmy6Wwx75Zbzxi19cw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1727110484; x=
-	1727196884; bh=kR6thF4mL5TK/tahzSYtD/0ZIm7FZeNAgdWnaPLLR6o=; b=C
-	hdCSZLl2aZhq7L29NuYRMd+ymOY1Gh9MtMw4atgeDTAMi6/Ggu+KQIPl7sncv7Na
-	30JjwJWsLlfl4MELF+2JFVOQapzcWGp11VpYpXBIDdJahtYbPmf8pSVIsdxT8Put
-	YmqrxKF220y3X8ddvuLAo0s98/UhXLVm6BS3/TQP/otW+IL1WIu+yRordXNWdQ3O
-	7ZA13Z/U7z3PW6DWKuoVM1rLPtoQ+SJbYokPrsmbRzdtBcXiVLjAVJQGkIDhb36+
-	0FfMI5x+PNuklgmKAHbu/NaFiLaNvJwReXSMp/J9dNRL94QJL918+OcSx/UcW6oC
-	e/4xsiZVFnns8FiMEFlaA==
-X-ME-Sender: <xms:U53xZm3PpXgvnZ1vkH7RzXIu0gA0SusAfFmY7Ct2ZoMjEBjEoQxdKw>
-    <xme:U53xZpFbZ125MCGq54XOIaeKDp_xiYBFtQHP0qSB9mswwQVKasWmHW5eteA1oC5PN
-    wYCL2IcvszR2msg_fc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudelledguddtjecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
-    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
-    druggvqeenucggtffrrghtthgvrhhnpefhtdfhvddtfeehudekteeggffghfejgeegteef
-    gffgvedugeduveelvdekhfdvieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopedv
-    tddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepsghpsegrlhhivghnkedruggvpd
-    hrtghpthhtohepvhhinhgtvghniihordhfrhgrshgtihhnohesrghrmhdrtghomhdprhgt
-    phhtthhopegthhhrihhsthhophhhvgdrlhgvrhhohiestghsghhrohhuphdrvghupdhrtg
-    hpthhtohepmhgrthhhihgvuhdruggvshhnohihvghrshesvghffhhitghiohhsrdgtohhm
-    pdhrtghpthhtohepmhhpvgesvghllhgvrhhmrghnrdhiugdrrghupdhrtghpthhtohepnh
-    hpihhgghhinhesghhmrghilhdrtghomhdprhgtphhtthhopehrohhsthgvughtsehgohho
-    ughmihhsrdhorhhgpdhrtghpthhtoheplhhuthhosehkvghrnhgvlhdrohhrghdprhgtph
-    htthhopehmhhhirhgrmhgrtheskhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:U53xZu6aUsDlOm8aNIJMFYlxJXdWgF8Aq6TjPn5Sj0NJWamRNQ2DWg>
-    <xmx:U53xZn03qZbMJOu5yZ9-zeHMd4G7i4-IRxlfG4Kb6pVEaNXkbDRFTA>
-    <xmx:U53xZpGyZvdVPTzKv5F1VbgFiEroYN_sfEFx02DI9hsuIPho53Atdw>
-    <xmx:U53xZg_qunc9ygzi29TV6Nb1jioAsajLN-CI8Y1wkO_7NHFyypRmEQ>
-    <xmx:VJ3xZtISnmFwYEIk0OFl3w6tqGyDH_QgnIl6xRkOweoKS0NW7nmG1S5C>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 2F95A2220071; Mon, 23 Sep 2024 12:54:43 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1727115230; c=relaxed/simple;
+	bh=1WyhULVRVV/rtdeWwTQ2M9+nk7WPwcxLgUiEtp966xs=;
+	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
+	 Subject:From:Cc:To:Date; b=CyT7WovSano8luJSnKcMFl/ShOd7t2IRz0+H4xK2jI0SK4cnvwIIDj5r+lXitUty+QCoMc+dEWri4qJy8wDpNGpWtJpghI7EIUszQzlr3eeItMzSrKhzUUGNLxTWVXfH1Dh+RzNAdfUuEdo83exrKoF+iNpMS166TaI+gsqbYno=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G4/ZLxs9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 028FBC4CEC4;
+	Mon, 23 Sep 2024 18:13:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727115230;
+	bh=1WyhULVRVV/rtdeWwTQ2M9+nk7WPwcxLgUiEtp966xs=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=G4/ZLxs9Q4D9kEnETKRLoXRmkGqSdWz+iEY0I8D29Y4fabg07BpYqGOhriher+Mng
+	 U+fIDfjEsaZayJijn1WSK8tqgfLBt4AmkijpC7CBOoOxRd3b0KeDpSTafSii3pPPDZ
+	 QuUDEXmpBiY7A+Admls8DVdsTim1Xhf0318L5l2f1bv+lPtBzrseo385Y5DguGwap/
+	 dGUePuLxl8uU02UjtfmXxS51GXMAPXuNEHtATnFMc2CWvn+YFDhD3xr2VpopC8VV9B
+	 csiSC1riXKdxRUJ2pAdITGNdUMp4KPSi4qBhVNOPw53swFV9itIbBINfHLcUgQ0XHE
+	 ouCDS8uDHFRhA==
+Message-ID: <146d3866ec57e963713cd07b9eaf5a71.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Mon, 23 Sep 2024 16:54:22 +0000
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Vincenzo Frascino" <vincenzo.frascino@arm.com>,
- linux-kernel@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>,
- linux-mm@kvack.org
-Cc: "Andy Lutomirski" <luto@kernel.org>,
- "Thomas Gleixner" <tglx@linutronix.de>,
- "Jason A . Donenfeld" <Jason@zx2c4.com>,
- "Christophe Leroy" <christophe.leroy@csgroup.eu>,
- "Michael Ellerman" <mpe@ellerman.id.au>,
- "Nicholas Piggin" <npiggin@gmail.com>, "Naveen N Rao" <naveen@kernel.org>,
- "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
- "Dave Hansen" <dave.hansen@linux.intel.com>,
- "H. Peter Anvin" <hpa@zytor.com>, "Theodore Ts'o" <tytso@mit.edu>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Steven Rostedt" <rostedt@goodmis.org>,
- "Masami Hiramatsu" <mhiramat@kernel.org>,
- "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-Message-Id: <f8256ade-c17f-46d1-bd4a-4d01235be5a0@app.fastmail.com>
-In-Reply-To: <20240923141943.133551-5-vincenzo.frascino@arm.com>
-References: <20240923141943.133551-1-vincenzo.frascino@arm.com>
- <20240923141943.133551-5-vincenzo.frascino@arm.com>
-Subject: Re: [PATCH v2 4/8] vdso: Introduce vdso/page.h
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAK7LNAQEx52BYMYfNu+xj8sNmdtH9XfPapdhJDrsbDo43aD3Dg@mail.gmail.com>
+References: <cover.1724159867.git.andrea.porta@suse.com> <12d0909b1612fb6d2caa42b4fda5e5ae63d623a3.1724159867.git.andrea.porta@suse.com> <2113b8df52164733a0ee3860bb793d6e.sboyd@kernel.org> <ZtcBHvI9JxgH9iFT@apocalypse> <d87530b846d0dc9e78789234cfcb602a.sboyd@kernel.org> <CAK7LNAQEx52BYMYfNu+xj8sNmdtH9XfPapdhJDrsbDo43aD3Dg@mail.gmail.com>
+Subject: Re: [PATCH 05/11] vmlinux.lds.h: Preserve DTB sections from being discarded after init
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: Andrea della Porta <andrea.porta@suse.com>, Andrew Lunn <andrew@lunn.ch>, Arnd Bergmann <arnd@arndb.de>, Bjorn Helgaas <bhelgaas@google.com>, Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Catalin Marinas <catalin.marinas@arm.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, Conor Dooley <conor+dt@kernel.org>, David S. Miller <davem@davemloft.net>, Derek Kiernan <derek.kiernan@amd.com>, Dragan Cvetic <dragan.cvetic@amd.com>, Eric Dumazet <edumazet@google.com>, Florian Fainelli <florian.fainelli@broadcom.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jakub Kicinski <kuba@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Lee Jones <lee@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, Michael Turquette <mturquette@baylibre.com>, Nicolas Ferre <nicolas.ferre@microchip.com>, Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, Stefan Wahren <wahrenst@gmx.net>, Will Deacon <will@kernel.o
+ rg>, devicetree@vger.kernel.org, linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, linux-rpi-kernel@lists.infradead.org, netdev@vger.kernel.org, linux-kbuild@vger.kernel.org
+To: Masahiro Yamada <masahiroy@kernel.org>
+Date: Mon, 23 Sep 2024 11:13:47 -0700
+User-Agent: alot/0.10
 
-On Mon, Sep 23, 2024, at 14:19, Vincenzo Frascino wrote:
-> The VDSO implementation includes headers from outside of the
-> vdso/ namespace.
->
-> Introduce vdso/page.h to make sure that the generic library
-> uses only the allowed namespace.
->
-> Cc: Andy Lutomirski <luto@kernel.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Jason A. Donenfeld <Jason@zx2c4.com>
-> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+Quoting Masahiro Yamada (2024-09-22 01:14:12)
+>=20
+> Rather, I'd modify my patch as follows:
+>=20
+> --- a/scripts/Makefile.dtbs
+> +++ b/scripts/Makefile.dtbs
+> @@ -34,12 +34,14 @@ $(obj)/dtbs-list: $(dtb-y) FORCE
+>  # Assembly file to wrap dtb(o)
+>  # ----------------------------------------------------------------------=
+-----
+>=20
+> +builtin-dtb-section =3D $(if $(filter arch/%, $(obj)),.dtb.init.rodata,.=
+rodata)
 
-Thanks for the new version. This looks all good, just some
-very minor ideas for how to possibly improve the new version:
+I think we want to free the empty root dtb that's always builtin. That
+is in drivers/of/ right? And I worry that an overlay could be in arch/
+and then this breaks again. That's why it feels more correct to treat
+dtbo.o vs. dtb.o differently. Perhaps we can check $(obj) for dtbo vs
+dtb?
 
-> +/* PAGE_SHIFT determines the page size */
-> +#define PAGE_SHIFT      CONFIG_PAGE_SHIFT
-> +
-> +#define PAGE_SIZE	(_AC(1,UL) << PAGE_SHIFT)
-> +
-> +#if defined(CONFIG_PHYS_ADDR_T_64BIT) && !defined(CONFIG_X86_64)
-> +#define PAGE_MASK	(~((1 << PAGE_SHIFT) - 1))
-> +#else
-> +#define PAGE_MASK	(~(PAGE_SIZE-1))
-> +#endif
-
-I would open-code the CONFIG_PAGE_SHIFT in PAGE_SIZE
-and PAGE_MASK, just to avoid the extra indirection in the
-preprocessor. This mainly has the benefit of slightly
-shorter compiler warnings when all the macros get
-traced back but can also slightly improve compile speed
-in case this is used in deeply nested macros.
-
-Without a comment, the special case for CONFIG_X86_64
-not very clear, and probably not needed. If you are
-worried about introducing an architecture specific
-regression, I would suggest instead explaining the
-possible issue in the patch description but using the
-more generic and simpler #ifdef check.
-
-      Arnd
+Also, modpost code looks for .init* named sections and treats them as
+initdata already. Can we rename .dtb.init.rodata to .init.dtb.rodata so
+that modpost can find that?
 
