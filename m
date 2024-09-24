@@ -1,94 +1,159 @@
-Return-Path: <linux-arch+bounces-7380-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7381-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 304A9983A29
-	for <lists+linux-arch@lfdr.de>; Tue, 24 Sep 2024 01:12:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A775983B4C
+	for <lists+linux-arch@lfdr.de>; Tue, 24 Sep 2024 04:46:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B6B6FB225A6
-	for <lists+linux-arch@lfdr.de>; Mon, 23 Sep 2024 23:12:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 004861F233DF
+	for <lists+linux-arch@lfdr.de>; Tue, 24 Sep 2024 02:46:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2889137750;
-	Mon, 23 Sep 2024 23:11:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E425DDDDC;
+	Tue, 24 Sep 2024 02:46:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="TWtx4cCo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CXbc8IZr"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A7A5136E0E;
-	Mon, 23 Sep 2024 23:11:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EE0D1B85DA;
+	Tue, 24 Sep 2024 02:46:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727133108; cv=none; b=IB6BUJebLMcq3bLEtAzTvr0j4ajwW94TbEGd5nfW0S4gb25pErlaI9V/OZiEyu6oyX9Oe3+T2O2Mx8nvNTV4BMoaVAQ3jMHm1NRmVAEk/sGq9Gw6yLsCrsYcYr4nTltvrFIz/oKri3OJFFVoOQ239SQ8WQOSMAKgMHeRxfD9Zbw=
+	t=1727145997; cv=none; b=JWd7GHHyXM7HWInQJYVy02vFhAgitTQ/q9YcTus3ga77f/JO2v5Z9zVgUCFCkihi4fdAiJxU+GDxxcCJfS8rgjD+6SWfGrT/ltyr+yrApKM6/b9X326kdXlRshXB8HrFXxpX+vIrZTWg1NfSSPJ2ki9EPElOpERKYG2skW09PRA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727133108; c=relaxed/simple;
-	bh=4sdqK7hdyku3hb89hVpNtD2lfhHg+rJAV64nqLVzxcc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tgfjL/lBtIJSvqiAI+2ebowrY4OBkPkVOyJqiBtE7CvuuGUCfXcZpk/LTchYXHWpd8o+bxmsSeFria8xjoEA3KF+P29mjFDij0Tfk0TvdAOXeiJdEV5ykRqYnDFcf5V0er2wJsfi2ZZyj1ANdsntWNmOQSqGzAax7OSojTJwnAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=TWtx4cCo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A7B1C4CECE;
-	Mon, 23 Sep 2024 23:11:46 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="TWtx4cCo"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-	t=1727133104;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=k3C/OUt0U6Ap2O+4553rXu/pe49KxPnBMUvMSIZ+6eM=;
-	b=TWtx4cCoYUxLqtztKAfcfNHTvYS/lEKvry/0Fvlvxwmc0sCdO0YkL4c3rbUHH4Mb48DUEf
-	sLYbJpIZo+lXQ+n7gyqA7N8qbWv/e1Q/UMOyfLBnPQPWag7imZXLrDYYUxW2crCUS8vGzF
-	l6SGGjmXH00dTgVTt6Hl73vdO3BEAMk=
-Received: 
-	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id c29f048e (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-	Mon, 23 Sep 2024 23:11:44 +0000 (UTC)
-Date: Tue, 24 Sep 2024 01:11:41 +0200
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
-To: Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-mm@kvack.org, Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Naveen N Rao <naveen@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H . Peter Anvin" <hpa@zytor.com>, Theodore Ts'o <tytso@mit.edu>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH v2 8/8] vdso: Modify getrandom to include the correct
- namespace.
-Message-ID: <ZvH1rVYy0iNCTpds@zx2c4.com>
-References: <20240923141943.133551-1-vincenzo.frascino@arm.com>
- <20240923141943.133551-9-vincenzo.frascino@arm.com>
+	s=arc-20240116; t=1727145997; c=relaxed/simple;
+	bh=saapds3Tco5OXwRJK6gEwmbqTm5hd9R5EEGQWhxcueg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qyOAfFgzCYU8EisbdYa8/H+uNkLE9RJ+tyILs9HjHHJityjhj5nH7XcCG5kQgzCGiiEDui9ckqzRUG+2WixUTpe2FYDI5vo3BjvVo6SAq6kLOTWihNK8eGFoX5mZieBsK9EBpsEPlTDYC30dMgC6uDJ9tLVsNLI/FsaDreMDfmc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CXbc8IZr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34100C4CEDA;
+	Tue, 24 Sep 2024 02:46:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727145997;
+	bh=saapds3Tco5OXwRJK6gEwmbqTm5hd9R5EEGQWhxcueg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=CXbc8IZrs+le1x6K8gPklyx59P7UO2MaFH+aBs6qULAOOByQjWz2EwDcFxVQwMXR8
+	 uDC4rvtiiFp1YHSpIIi29Vyf5Xk9vyunyVGL0G9cl9ifmzROQ7XhuRrCY9E2V8NhBk
+	 NDzmD2DsOyPUjbix144H2Z24mARaXizk1TP49VwMXmKKfHfmAtmYD4+5Ro9/+walcc
+	 8e/UpjKbHbslIF1BtWRTkehIxG8ySOToyaah2hOXVz/SmYL/DEtbJVH0X1Y9bKwZHm
+	 s2J769cmRTcYSDwtMzoQbzlIuCXMMyW1wQ6anVZgK2E+vY6MsMycmVCSN0RP/pMgWi
+	 nHBBJxy7ma/AQ==
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-53660856a21so4826564e87.2;
+        Mon, 23 Sep 2024 19:46:37 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUVJXZ8o2fiFRGN34OFI7v4marGFjwMO4b9/YdDkndTX1SJR9PrrDV/uupJfNVvInOYbBwlbnxISIRTKw==@vger.kernel.org, AJvYcCV4qnhlXmd/pNtynF6EoKBLlofyH2WNGeaWZdYcDMDWO1rP70Yx44MSZYDcQ3wPWrQp0HxUNUcLswtD@vger.kernel.org, AJvYcCV8sJpN9/p5r1bthDfvVl05PMAS5ortaswtv0Lv6ySiT324sU8rj4O7XAdtFU4qxR6/EvYetQtSXzsQy/HF@vger.kernel.org, AJvYcCVe0322POMCrVO5cX7/fFNKZseqmP/a2N+6gAG+uknz6i7yxpWtloHo+ctB+ZZBjp5nFJgb7tui/PVY@vger.kernel.org, AJvYcCWc3DP4gCs7l9SHGJDIMKfQ6kLqkhxjKjtfqhi1o7n7uZ7XiIX6gRcd8ZwaammH7u2h8NNCHU2T5TJzkQ==@vger.kernel.org, AJvYcCX7hS7NeoYQHliRuUPyPgSliNiX06FLRz4PI13Lw7xjMxnxKIGE3bafucD8zeR0X953ufD2xYCZsbBG9ODX@vger.kernel.org, AJvYcCXIX6+z9AYMUrgZA6PSF5cAdZFktVUAvNR6vrvu1/Je4+icsqo/glaHp87I9w17aG9e+vQ6QtyS@vger.kernel.org, AJvYcCXTMkWqeZ8UBi7wEXPSjzraiuobgkP94FtHaoXaRSU/x6cw4Wd9uIheSsi4IrIioFs57vDjv8RH7Edx@vger.kernel.org
+X-Gm-Message-State: AOJu0YwIjQmszHN58JgXnSDBpAbIiugia5Jx9c+tkCI5yRRHl9Fdr/JH
+	Daai9wOchvMNlFc/5QCY8QBv4NMu0pG2xrrg0B/nv7QZ1OJKvPAE4D1NEgbSBjh8Bon5vtGZ1tl
+	Tyv8yAHTYU6fZrCR2YvbbDmsFKng=
+X-Google-Smtp-Source: AGHT+IGbFPw/bTRm+UErpcrDrhXiYrSHOwzSiG4p3e4jUUEDfOTfASqMN5Pcr7Ww2ei18DiP8qOt5I2z7sBy9E6rsKI=
+X-Received: by 2002:a05:6512:158e:b0:533:d3e:16f5 with SMTP id
+ 2adb3069b0e04-536ac334255mr7477512e87.38.1727145995657; Mon, 23 Sep 2024
+ 19:46:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240923141943.133551-9-vincenzo.frascino@arm.com>
+References: <cover.1724159867.git.andrea.porta@suse.com> <12d0909b1612fb6d2caa42b4fda5e5ae63d623a3.1724159867.git.andrea.porta@suse.com>
+ <2113b8df52164733a0ee3860bb793d6e.sboyd@kernel.org> <ZtcBHvI9JxgH9iFT@apocalypse>
+ <d87530b846d0dc9e78789234cfcb602a.sboyd@kernel.org> <CAK7LNAQEx52BYMYfNu+xj8sNmdtH9XfPapdhJDrsbDo43aD3Dg@mail.gmail.com>
+ <146d3866ec57e963713cd07b9eaf5a71.sboyd@kernel.org>
+In-Reply-To: <146d3866ec57e963713cd07b9eaf5a71.sboyd@kernel.org>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Tue, 24 Sep 2024 11:45:58 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQ1oUvuMcHs-idZcPxE-c4fJgMDt-cURATsrVkjjFPNWg@mail.gmail.com>
+Message-ID: <CAK7LNAQ1oUvuMcHs-idZcPxE-c4fJgMDt-cURATsrVkjjFPNWg@mail.gmail.com>
+Subject: Re: [PATCH 05/11] vmlinux.lds.h: Preserve DTB sections from being
+ discarded after init
+To: Stephen Boyd <sboyd@kernel.org>
+Cc: Andrea della Porta <andrea.porta@suse.com>, Andrew Lunn <andrew@lunn.ch>, Arnd Bergmann <arnd@arndb.de>, 
+	Bjorn Helgaas <bhelgaas@google.com>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
+	Conor Dooley <conor+dt@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+	Derek Kiernan <derek.kiernan@amd.com>, Dragan Cvetic <dragan.cvetic@amd.com>, 
+	Eric Dumazet <edumazet@google.com>, Florian Fainelli <florian.fainelli@broadcom.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jakub Kicinski <kuba@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Lee Jones <lee@kernel.org>, 
+	Linus Walleij <linus.walleij@linaro.org>, Michael Turquette <mturquette@baylibre.com>, 
+	Nicolas Ferre <nicolas.ferre@microchip.com>, Paolo Abeni <pabeni@redhat.com>, 
+	Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, Stefan Wahren <wahrenst@gmx.net>, 
+	Will Deacon <will@kernel.org>, devicetree@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pci@vger.kernel.org, linux-rpi-kernel@lists.infradead.org, 
+	netdev@vger.kernel.org, linux-kbuild@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 23, 2024 at 03:19:43PM +0100, Vincenzo Frascino wrote:
-> -		params->mmap_prot = PROT_READ | PROT_WRITE;
-> -		params->mmap_flags = MAP_DROPPABLE | MAP_ANONYMOUS;
-> +		params->mmap_prot = VDSO_MMAP_PROT;
-> +		params->mmap_flags = VDSO_MMAP_FLAGS;
+On Tue, Sep 24, 2024 at 3:13=E2=80=AFAM Stephen Boyd <sboyd@kernel.org> wro=
+te:
+>
+> Quoting Masahiro Yamada (2024-09-22 01:14:12)
+> >
+> > Rather, I'd modify my patch as follows:
+> >
+> > --- a/scripts/Makefile.dtbs
+> > +++ b/scripts/Makefile.dtbs
+> > @@ -34,12 +34,14 @@ $(obj)/dtbs-list: $(dtb-y) FORCE
+> >  # Assembly file to wrap dtb(o)
+> >  # --------------------------------------------------------------------=
+-------
+> >
+> > +builtin-dtb-section =3D $(if $(filter arch/%, $(obj)),.dtb.init.rodata=
+,.rodata)
+>
+> I think we want to free the empty root dtb that's always builtin. That
+> is in drivers/of/ right?
 
-The code that's being deleted is meaningful and descriptive. The code
-that's being added is confusing. What on earth is a vdso mmap flag? Not
-only is it indirection, which makes it harder to understand, but its
-indirection through a meaninglessly generic name that suggests to the
-user there's some additional property of the vdso or mmap or both that
-would imply a specific flag for these general things. In reality, the
-thing in question is about what getrandom.c uses.
+
+drivers/of/empty_root.dts is really small.
+
+That is not a big deal even if empty_root.dtb
+remains in the .rodata section.
+
+
+
+> And I worry that an overlay could be in arch/
+> and then this breaks again. That's why it feels more correct to treat
+> dtbo.o vs. dtb.o differently. Perhaps we can check $(obj) for dtbo vs
+> dtb?
+
+
+This is not a problem either.
+
+
+Checking $(obj)/ is temporary.
+
+See this later patch:
+
+https://lore.kernel.org/linux-kbuild/20240904234803.698424-16-masahiroy@ker=
+nel.org/T/#u
+
+After my work is completed, DTB and DTBO will go
+to the .rodata section unconditionally.
+
+
+
+> Also, modpost code looks for .init* named sections and treats them as
+> initdata already. Can we rename .dtb.init.rodata to .init.dtb.rodata so
+> that modpost can find that?
+
+
+My previous patch checked .dtb.init.rodata.
+
+I do not mind renaming it to .init.dtb.rodata.
+
+
+
+
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
 
