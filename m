@@ -1,201 +1,186 @@
-Return-Path: <linux-arch+bounces-7448-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7449-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E66BA98682E
-	for <lists+linux-arch@lfdr.de>; Wed, 25 Sep 2024 23:13:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE148986843
+	for <lists+linux-arch@lfdr.de>; Wed, 25 Sep 2024 23:23:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9EC872850A2
-	for <lists+linux-arch@lfdr.de>; Wed, 25 Sep 2024 21:13:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 74AAD28426A
+	for <lists+linux-arch@lfdr.de>; Wed, 25 Sep 2024 21:23:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 354CF15383F;
-	Wed, 25 Sep 2024 21:13:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B05714A635;
+	Wed, 25 Sep 2024 21:23:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="2a9RFKZc"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="ca1tJi6p";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="EC+Mms89"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2069.outbound.protection.outlook.com [40.107.94.69])
+Received: from fout-a8-smtp.messagingengine.com (fout-a8-smtp.messagingengine.com [103.168.172.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 893E21D5AD5;
-	Wed, 25 Sep 2024 21:12:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.69
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727298780; cv=fail; b=cdwyecU0qn+ldPh6NtovnkRVjShQp+KjJD/Dh5Na25BaqpUaxh0myHBdW17WjNcqJ9fuaXW1GENDQ3Vlxfe/P3JOhWisK0Rut48WtbK4H+b7YyZpbELapAMKyMJ55wLY0cp8qxGT6lODqfT2z73553UOVPts7laa6WPtbhW7paU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727298780; c=relaxed/simple;
-	bh=MRuvYRKDuThrJoBb+1lZ4jkgQ3/784bKkbAI2wm0/Vo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=Dag4mShxckhRhQjJLRrgbBoEvKPKvhOie0IOt+LSERee0goXJjTzH0zz6n9IWsXq0l7Gv0bwyrJpRpNqW0bDlCHJi/S3rahM7982A1D01wLrv/FFpyk/6t1vUKc4hUcfPY3s0fb355RessxxqSn+ewGyYURb67rQ8Jqb0TtSPjQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=2a9RFKZc; arc=fail smtp.client-ip=40.107.94.69
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=r1CyvXCUjXqbEgAD4/VZRask0GCIyWRXPX8KMa9dRa1X0wZbsbM7N1VKSDFgbR/qrwoNDycBljk0q7/Aw7OTsKV1aSWgnkfAN5D9FdTa+Bna55q5b2f/+kFelBDFnwVdntfikLH3n1o5I6bp/+K/P4/lfP/3tyUEXPC3+/RYsXppZHlTva3ElZT3AJC/ztwppWsTyw62b+gf4dfW5CgMuZ5L0JrdUTuNnZSHb5pGLCKUdh1rGNPXSwsgvB1BayxZgor9mLkb+Hj0jvYXb3E9Su6HEDDYWXliExfo7rBvUDmdQskgRnrQEtVbPqSzGtHKaANp5ddM/hcAsJndpFe31g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=o27dxBRXuZ+4jCUFs4ZeVgNjzLT5Saz5jMSaDeWCRf8=;
- b=pgrs/TWjc+ozl3mZ8El55t+SYeNu9Cu5IVr1JH9g9x2oSmeaBRjh8jiAyIn2ykphOU58oD6+lF45rW27j/QSg8MQ1ut74cbCLcn5sAusun89oSqeUCoa0M6bxzcZFJ4ZRfSepfSk4DLpK2cbjsX5L1kP8SPp0Q5hPmvkg8XVc2B+/CkS6+A4AGkG/PlXPV/QTDSF1+nnsJ4vVgAxqINq95PSEMxeKGlykynmHoKYLKnrjEotOmRRTK10ZyZrG2v3WITfrufpXpdOMGYV/c1Qlj7rf4OWm8Cb9j0mJvZ8hK1gvRJFMJMAPw9q7C/QcK115T6W/uYO62j6zZujNTLtlA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=o27dxBRXuZ+4jCUFs4ZeVgNjzLT5Saz5jMSaDeWCRf8=;
- b=2a9RFKZcHtoJY+0jmlCh6qTgIDHBQz+heojripxsqzKlld/FPT2J1lhmmNPem73qIUGZ7796Jj4oghp8dPF3PeXoNQEupd0nl1V7pqsQ51IpNrRYIQY6hB4N7TSAwv3B3nBfT0YhyfmXyLpQMD/8rl2pIF0Eg9H4slLQr1XpWJU=
-Received: from BN9P221CA0028.NAMP221.PROD.OUTLOOK.COM (2603:10b6:408:10a::10)
- by LV8PR12MB9360.namprd12.prod.outlook.com (2603:10b6:408:205::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7982.25; Wed, 25 Sep
- 2024 21:12:55 +0000
-Received: from BN2PEPF000055DC.namprd21.prod.outlook.com
- (2603:10b6:408:10a:cafe::3e) by BN9P221CA0028.outlook.office365.com
- (2603:10b6:408:10a::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7982.26 via Frontend
- Transport; Wed, 25 Sep 2024 21:12:55 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN2PEPF000055DC.mail.protection.outlook.com (10.167.245.6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8026.0 via Frontend Transport; Wed, 25 Sep 2024 21:12:55 +0000
-Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 25 Sep
- 2024 16:12:54 -0500
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB05.amd.com
- (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 25 Sep
- 2024 16:12:54 -0500
-Received: from [172.18.112.153] (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Wed, 25 Sep 2024 16:12:51 -0500
-Message-ID: <1258d32d-ee54-4a5d-bc92-6c1f8179235a@amd.com>
-Date: Wed, 25 Sep 2024 17:12:51 -0400
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EFF01CF93;
+	Wed, 25 Sep 2024 21:23:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.151
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1727299429; cv=none; b=usfVugreHmLrdqEST+4flM6Ujvf1an4DOy6ovpfubElypaiObYTLwXqQmKf8R7wJHFR+mQF1in5mXpM8DIJUhQfD3vm3/QccfCpzMx0F9HeoB6K0cXlYrvP2NKmJQGDJakdqmTajlaQWYFFPB0WSh0gEx9bO1JWLqbPODLEF6RQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1727299429; c=relaxed/simple;
+	bh=EEL+scH5ZfQFllkr9VaYxN2Axjp7W8KsmHEsJ9I9jI0=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=tWOx0S8nS98rMZCRjPA03fvzNCviWf/L1QUZnVPiqZUKSMxGrGmchBcOS4858ojD/THsBd3eJWdiOSrk0nh4uE8bLlCwEvQCAa7xkPVIhI0cmyGqUTLp/eZR5q6PkE/ACMBelxXgylJ+UkUJ5jvxVDKfpBPnlAYnISSux+mqa4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=ca1tJi6p; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=EC+Mms89; arc=none smtp.client-ip=103.168.172.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
+	by mailfout.phl.internal (Postfix) with ESMTP id 49B2313801A0;
+	Wed, 25 Sep 2024 17:23:46 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-10.internal (MEProxy); Wed, 25 Sep 2024 17:23:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1727299426;
+	 x=1727385826; bh=J4rpxeCJhm3KEquxWD8v+82nmx/qaZF3d61PNtHrW8w=; b=
+	ca1tJi6pDZvE5CPs/r8S9UQTH3C1ga5zv48dC7UC9YMKaHGXQa4887dbwmf1O9BB
+	CGFNEK6yigIqj/UprPTj7035JvNyCzdd+BfU51/GEfZDTknC6cyXzaDTjP+02cZ8
+	bTsu5TEPwZ7/RFrgZj5v0K2QIyNwCyK1Mn2C9IzFSgnq9EO52M0dWs3BNoV8udin
+	Y1dz6T27a6nD+jrurpbXVaXhRGkvMtWw9g9RXvUaEWm09Sc1iL8jbEmzEBAcu6SE
+	pkfiKLVCMILNjZwAgQoL3V6E/OA/DnjfGx2BqjnL1Ka8/QsGTodIhjVXV2w7pSB7
+	iiRMwt+tAwENKL6xj3EMNA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1727299426; x=
+	1727385826; bh=J4rpxeCJhm3KEquxWD8v+82nmx/qaZF3d61PNtHrW8w=; b=E
+	C+Mms89jGN6AKKsB98qBSQUb2LTRlF+nN5PIZUJouqwYf6sRqwuC5sXCEGgr3jtt
+	Wjp2yN28INCOUO8iYFA5LI0UvTYPrOhoy3VLBBbQYxsY1PP8tZSZHDKCuT6VoSz1
+	+YR+rcG3bJ18n2Wpfd64MV5sz7eHHPNmd6puRkcWN9MqfxObsiAh1lQ/venbzmss
+	obzm43j4Bfpcp1/PRL4SiORI7RSP6TxBrfZMvpUQzGW4QH9vdCa1qhvpTeQs1l8B
+	fETX5iIRgkLtyDl1xWB86vxELeU5TCAQwWTPXqrYVw8arvbOZ92afFS7m4zjEXE4
+	QZ9RLkrQE0cCjJqtCyj7A==
+X-ME-Sender: <xms:X3_0ZjtOIsZAz-eKDVLdNJixcMQ3ybrZeLxiJzIJhy-rkGgPN6dvBg>
+    <xme:X3_0ZkdtPr962fWykHR1sbrz0BjrkX-CISEo9KYos7D6bvDA9uykaPZrpQPahM_fT
+    NURWIMQlXXTTx10hWk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvddthedgudeitdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthhqredtredt
+    jeenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
+    druggvqeenucggtffrrghtthgvrhhnpeekvdeuhfeitdeuieejvedtieeijeefleevffef
+    leekieetjeffvdekgfetuefhgfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuve
+    hluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegr
+    rhhnuggsrdguvgdpnhgspghrtghpthhtohepvddtpdhmohguvgepshhmthhpohhuthdprh
+    gtphhtthhopegsphesrghlihgvnhekrdguvgdprhgtphhtthhopehvihhntggvnhiiohdr
+    fhhrrghstghinhhosegrrhhmrdgtohhmpdhrtghpthhtoheptghhrhhishhtohhphhgvrd
+    hlvghrohihsegtshhgrhhouhhprdgvuhdprhgtphhtthhopehmrghthhhivghurdguvghs
+    nhhohigvrhhssegvfhhfihgtihhoshdrtghomhdprhgtphhtthhopehmphgvsegvlhhlvg
+    hrmhgrnhdrihgurdgruhdprhgtphhtthhopehnphhighhgihhnsehgmhgrihhlrdgtohhm
+    pdhrtghpthhtoheprhhoshhtvgguthesghhoohgumhhishdrohhrghdprhgtphhtthhope
+    hluhhtoheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhhhihhrrghmrghtsehkvghr
+    nhgvlhdrohhrgh
+X-ME-Proxy: <xmx:X3_0Zmyplsoa0R38XU90zqhjX74ZIEn-GQuxFnr-Y3LYHr6Zve3ruA>
+    <xmx:YH_0ZiOX0LrIpMVAw7ZYSHU0ccayJWdMBvdTShp_7GURFWA9_cIZfw>
+    <xmx:YH_0Zj-QId14L5bbDWkneDKnXBv7Hinzq-1h51TXqFAC81HQOLm-ew>
+    <xmx:YH_0ZiWh3Wufc2uyWRAMgxXvdVKiaCr_cRwgfPCDmnlciZmDVqEw5g>
+    <xmx:Yn_0Zij4DFt3bj7487Zto9EgLR63k6j6yjjYxNUUaC4GEUcYzji6Y1Ob>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id D92022220071; Wed, 25 Sep 2024 17:23:43 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 01/28] x86/pvh: Call C code via the kernel virtual
- mapping
-To: Ard Biesheuvel <ardb+git@google.com>, <linux-kernel@vger.kernel.org>
-CC: Ard Biesheuvel <ardb@kernel.org>, <x86@kernel.org>, "H. Peter Anvin"
-	<hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra
-	<peterz@infradead.org>, Uros Bizjak <ubizjak@gmail.com>, Dennis Zhou
-	<dennis@kernel.org>, Tejun Heo <tj@kernel.org>, Christoph Lameter
-	<cl@linux.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, "Paolo
- Bonzini" <pbonzini@redhat.com>, Vitaly Kuznetsov <vkuznets@redhat.com>,
-	Juergen Gross <jgross@suse.com>, Boris Ostrovsky
-	<boris.ostrovsky@oracle.com>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, Masahiro Yamada
-	<masahiroy@kernel.org>, Kees Cook <kees@kernel.org>, Nathan Chancellor
-	<nathan@kernel.org>, Keith Packard <keithp@keithp.com>, Justin Stitt
-	<justinstitt@google.com>, Josh Poimboeuf <jpoimboe@kernel.org>, "Arnaldo
- Carvalho de Melo" <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
-	"Jiri Olsa" <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, Adrian
- Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>,
-	<linux-doc@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-	<kvm@vger.kernel.org>, <xen-devel@lists.xenproject.org>,
-	<linux-efi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-	<linux-sparse@vger.kernel.org>, <linux-kbuild@vger.kernel.org>,
-	<linux-perf-users@vger.kernel.org>, <rust-for-linux@vger.kernel.org>,
-	<llvm@lists.linux.dev>
-References: <20240925150059.3955569-30-ardb+git@google.com>
- <20240925150059.3955569-31-ardb+git@google.com>
-Content-Language: en-US
-From: Jason Andryuk <jason.andryuk@amd.com>
-In-Reply-To: <20240925150059.3955569-31-ardb+git@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Received-SPF: None (SATLEXMB05.amd.com: jason.andryuk@amd.com does not
- designate permitted sender hosts)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN2PEPF000055DC:EE_|LV8PR12MB9360:EE_
-X-MS-Office365-Filtering-Correlation-Id: f2ea1ed0-686e-47fc-1992-08dcdda6d310
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|36860700013|1800799024|82310400026;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?MHh0aS9xdXBOWkNYSmRtcUEvWUYyanpaQi9sTFNreTBnMmJFUC8yRld0SnlN?=
- =?utf-8?B?RUVrekREVWR3cllESzZHZTVnM21qZVlGWER1dTdTZEt6d1JUU2ZBQ1JxcWE4?=
- =?utf-8?B?aW5XbDJzM3NZRUN6anRYR2xIZkI4R29QSXdmTmRKb0U4ZGRpS0NqZVd5Ny9T?=
- =?utf-8?B?dnZxaVI5dmFaeXRORmc1YzhncWllZDZJcWNpQmpPSkc3aGUzeVV1UnBoemxE?=
- =?utf-8?B?RTNaSjNESStZV011TE1aRTluUjNjMHNzeWlOdG12VXF2dUJEUS9KUEFHM2Ex?=
- =?utf-8?B?WkJ5M2pud1RsdGE5UXVXRndXK2NyT1I3U0xJR016VHRCWkU0cmM0OVdhTVJO?=
- =?utf-8?B?U1hIRWtSMFZ4R29MbTlOT2c2aXZqWDk1V2hUTkNuZlBSMVVsTFZWemo4c3dx?=
- =?utf-8?B?VFV2SWJlRnBJWUY5aFJtMzJmZDVISVJwUlBEaTE1TDlEb0dwdEdpeDZ2b3Rq?=
- =?utf-8?B?aDdzeU5CTWYxYytEWGVFNkx5SlRDN3BHOE9wV2VHZ3lOTENtOVAyQ0FTNWgr?=
- =?utf-8?B?ekVxMjZ0TllDOVBTaHRjTFE3V3VlSHJyWVRDSkI5R1A5elBESm8rZGFsWkE3?=
- =?utf-8?B?SG5IWmFJZ1dJVXlNMStvVnFKZnA0alVxVitHOWhhOWVFL3Y4M1BsSkV3UW1k?=
- =?utf-8?B?QWxRNWdZZjhIbE1yTzE5ZGFTNy9EcjZOS083cWVmTllSV09yWUZWZTZvWEYy?=
- =?utf-8?B?WTZibGFiMXNrQVY0UTA4SGhRVDlqemV4SjlNd2JSYnNMdHo0VnRlczhNd3ZE?=
- =?utf-8?B?Tlh1b3htTTg1d2JtMDhVejRDYWJnbThTUHRycEFCWlJmb2drcS9YbGtQL0c3?=
- =?utf-8?B?MldyTHVYMUZwQ0FBaGw4TlYrL0dDQVhSdnVwYVBIUHltYXhSUnFvem1EQ055?=
- =?utf-8?B?bG04RlBiaXMwNGMzR1lrRURPK2UwYjV4ZHZIVXMrenBtS29rR094Qk5sS2Vl?=
- =?utf-8?B?eWlWLzQxZHlFcnlVY3gyRXZNSGVSODlwSzF4alM1eFRWeFBrOUJBOXc1QTBB?=
- =?utf-8?B?MEs1SWQwc1NjRmFuSHFRa0ZiVkpnVDJiRVBwRlNrTDl1bVcyRFpaT3U5b3pm?=
- =?utf-8?B?SzR4ZTl5WFRmZngrRUFxRHdwQkExK1AxaG9sNkQ2L0NJNGJ5NXhkSzNSNGR4?=
- =?utf-8?B?d1dkNVd0NjQ1eTVlTWE0dHkveDRBZi9LQmR6dkpTZU1JNjAzOXNjR3dpT0NI?=
- =?utf-8?B?b05Pcmw5ZXVWaGdPcWpzV1NONXN6bzROekF0UnVxbEFSTmRrZFowK2U5QSts?=
- =?utf-8?B?ZVlUR2R4SEJGUVgyODg1WlN3U0ltSnNFVWZWcnY2OXcyODhweWlsc3cwVFFw?=
- =?utf-8?B?K1RlZ3hrUzRST2VnUDJoMTYxT0VCODlTN0dwenFMV0V3R21ndzBNOU5ZNEh5?=
- =?utf-8?B?YjlyaHIvTXZraXo0S3o0WStzd3VyeElsRGJiVExkU1Jyc3REK29Va25aUVhy?=
- =?utf-8?B?UTVpYjhkQkRJTy9hNnA4SHQzSlFzSkwrd21SUndaVVJNNmFjVWhRR2tNb0FT?=
- =?utf-8?B?a2FzWnRXT1BvbUVtUkljVGxXMlJVd0pkTWtITFZKMXFCdHJFWE5lcGE4ZGtG?=
- =?utf-8?B?QTAvWTRrVjNCVTY1bFFtcE1ialpvRCsvVUNPTG4yQTc1T1BKRXNqeWNJTEZI?=
- =?utf-8?B?QkswK0VGWEh1cUk3WGFKTmJ0eG5jWFNQbFk2R1NlUXFDOEJueW9YT2lmUVht?=
- =?utf-8?B?NHNIYlJtTjZUcndCMnJ6NVpjb283b1RpTXJkcU5yNGw5TE53SnJjbjNXSnVX?=
- =?utf-8?B?Y1lYdlpacVFEdE9DSmxSam53d3dzYWpOK2didlptL0p2YTF3V3ZwQlg0MmJD?=
- =?utf-8?Q?mAG5gbbmFUCO6ntA+6BmX721jACkTf9uoy1CE=3D?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(7416014)(36860700013)(1800799024)(82310400026);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Sep 2024 21:12:55.4187
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f2ea1ed0-686e-47fc-1992-08dcdda6d310
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BN2PEPF000055DC.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR12MB9360
+Date: Wed, 25 Sep 2024 21:23:21 +0000
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+ "Vincenzo Frascino" <vincenzo.frascino@arm.com>,
+ linux-kernel@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>,
+ linux-mm@kvack.org
+Cc: "Andy Lutomirski" <luto@kernel.org>,
+ "Thomas Gleixner" <tglx@linutronix.de>,
+ "Jason A . Donenfeld" <Jason@zx2c4.com>,
+ "Michael Ellerman" <mpe@ellerman.id.au>,
+ "Nicholas Piggin" <npiggin@gmail.com>, "Naveen N Rao" <naveen@kernel.org>,
+ "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+ "Dave Hansen" <dave.hansen@linux.intel.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, "Theodore Ts'o" <tytso@mit.edu>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Steven Rostedt" <rostedt@goodmis.org>,
+ "Masami Hiramatsu" <mhiramat@kernel.org>,
+ "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+Message-Id: <fe23745e-a965-4b74-863d-9479fdef239f@app.fastmail.com>
+In-Reply-To: <626baa55-ca84-49ba-9131-c1657e0c0454@csgroup.eu>
+References: <20240923141943.133551-1-vincenzo.frascino@arm.com>
+ <20240923141943.133551-2-vincenzo.frascino@arm.com>
+ <626baa55-ca84-49ba-9131-c1657e0c0454@csgroup.eu>
+Subject: Re: [PATCH v2 1/8] x86: vdso: Introduce asm/vdso/mman.h
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On 2024-09-25 11:01, Ard Biesheuvel wrote:
-> From: Ard Biesheuvel <ardb@kernel.org>
-> 
-> Calling C code via a different mapping than it was linked at is
-> problematic, because the compiler assumes that RIP-relative and absolute
-> symbol references are interchangeable. GCC in particular may use
-> RIP-relative per-CPU variable references even when not using -fpic.
-> 
-> So call xen_prepare_pvh() via its kernel virtual mapping on x86_64, so
-> that those RIP-relative references produce the correct values. This
-> matches the pre-existing behavior for i386, which also invokes
-> xen_prepare_pvh() via the kernel virtual mapping before invoking
-> startup_32 with paging disabled again.
-> 
-> Fixes: 7243b93345f7 ("xen/pvh: Bootstrap PVH guest")
-> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+On Wed, Sep 25, 2024, at 06:51, Christophe Leroy wrote:
+> Le 23/09/2024 =C3=A0 16:19, Vincenzo Frascino a =C3=A9crit=C2=A0:
+>> @@ -0,0 +1,15 @@
+>> +
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +#ifndef __ASM_VDSO_MMAN_H
+>> +#define __ASM_VDSO_MMAN_H
+>> +
+>> +#ifndef __ASSEMBLY__
+>> +
+>> +#include <uapi/linux/mman.h>
+>> +
+>> +#define VDSO_MMAP_PROT	PROT_READ | PROT_WRITE
+>> +#define VDSO_MMAP_FLAGS	MAP_DROPPABLE | MAP_ANONYMOUS
+>
+> I still can't see the point with that change.
+>
+> Today 4 architectures implement getrandom and none of them require tha=
+t=20
+> indirection. Please leave prot and flags as they are in the code.
+>
+> Then this file is totally pointless, VDSO code can include=20
+> uapi/linux/mman.h directly.
+>
+> VDSO is userland code, it should be safe to include any UAPI file ther=
+e.
 
-Tested-by: Jason Andryuk <jason.andryuk@amd.com>
-Reviewed-by: Jason Andryuk <jason.andryuk@amd.com>
+I think we are hitting an unfortunate corner case in the build
+system here, based on the way we handle the uapi/ file namespace
+in the kernel:
 
-I found that before this change xen_prepare_pvh() would call through 
-some pv_ops function pointers into the kernel virtual mapping.
+include/uapi/linux/mman.h includes three headers: asm/mman.h,
+asm-generic/hugetlb_encode.h and linux/types.h. Two of these
+exist in both include/uapi/ and include/, so while building
+kernel code we end up picking up the non-uapi version which
+on some architectures includes many other headers.
 
-Regards,
-Jason
+I agree that moving the contents out of uapi/ into vdso/ namespace
+is not a solution here because that removes the contents from
+the installed user headers, but we still need to do something
+to solve the issue.
+
+The easiest workaround I see for this particular file is to
+move the contents of arch/{arm,arm64,parisc,powerpc,sparc,x86}/\
+include/asm/mman.h into a different file to ensure that the
+only existing file is the uapi/ one. Unfortunately this does
+not help to avoid it regressing again in the future.
+
+To go a little step further I would also move
+uapi/asm-generic/hugetlb_encode.h to uapi/linux/hugetlb_encode.h
+or merge it into uapi/linux/mman.h. This file has no business
+in asm-generic/* since there is only one copy.
+
+After looking at this file for way too long, I somehow
+ended up with a (completely unrelated) cleanup series that
+I now posted at
+https://lore.kernel.org/lkml/20240925210615.2572360-1-arnd@kernel.org/T/=
+#t
+
+     Arnd
 
