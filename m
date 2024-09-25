@@ -1,71 +1,57 @@
-Return-Path: <linux-arch+bounces-7437-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7438-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56A9C986710
-	for <lists+linux-arch@lfdr.de>; Wed, 25 Sep 2024 21:40:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 226A1986750
+	for <lists+linux-arch@lfdr.de>; Wed, 25 Sep 2024 22:01:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 759B11C2139D
-	for <lists+linux-arch@lfdr.de>; Wed, 25 Sep 2024 19:40:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6F352871AE
+	for <lists+linux-arch@lfdr.de>; Wed, 25 Sep 2024 20:01:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C8A31465A2;
-	Wed, 25 Sep 2024 19:39:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 504F8132114;
+	Wed, 25 Sep 2024 20:01:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jZkUu8R5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KTR+c/jJ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CC5C145B3F;
-	Wed, 25 Sep 2024 19:39:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 012241F94C;
+	Wed, 25 Sep 2024 20:01:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727293189; cv=none; b=gBn0HcoeidukmcoIqUYxw+GwLpJGoklFrzhzjz6nerB6dCgEsNc8jMReiQJ9HgvXwxdrtZMU4loG3Nm+bAjcExTlMQbPjFOdHe11jdNPteB/0TfNg8fbw9AneUxVoNlHOzuXJ1rX4FxJ8Q9povRXGECmCujGVkcVafYv7FhsLMo=
+	t=1727294474; cv=none; b=Chf2E8caTF8xwxyNH7IyGupJwIiDUg/JF4PthJmpT6DSA+3Mw+eBFkvENssrU2KkChTeTr2Zfr+9gzU6+09xxjvmMDxknoMA2xPNPsdnVt5/j5V2BlGd9gxQOmNIQVGv4MVDSZW8CAxILIgb16Omr2PfRWG5+luclbAgXX+RORQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727293189; c=relaxed/simple;
-	bh=yp4KiWnI55kflWfEV5sb0zGnBH7ciSvhguN8q9bReGk=;
+	s=arc-20240116; t=1727294474; c=relaxed/simple;
+	bh=hhUZIlacRl/vnMEKcyfWg9tD49NT/MnhWz9itBFRH/Q=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sVAJxKoVwIKwQEsxCG4GjsH2YVPIstRGEIUQf/OOMK+x5iO/0wGWh6GJMfLfo4IdOKjLuv0kk8/CRguQyICd7QlZWLuhZfKohr8+QOPdRY5A2JDZrOWToKmSQqZVujP3nEo8/B+Mf7vLBg/wzPEPUMoibLhCFIX+j3DN4g4iRxs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jZkUu8R5; arc=none smtp.client-ip=209.85.208.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2f763e9e759so2184221fa.3;
-        Wed, 25 Sep 2024 12:39:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727293186; x=1727897986; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yp4KiWnI55kflWfEV5sb0zGnBH7ciSvhguN8q9bReGk=;
-        b=jZkUu8R5ll+DFw2avT8d4Di1w119iptUGIghf+ne52PC9QNpnD/YBnV3xDsfoOahSH
-         rSTRQVTGcXqKpolYy57QYjcvQOzHUMBtYgY4MuLRyo1atTevlnl6xnA7vQGJu5oQJezJ
-         4QyrzOM3w2VjZdaJXARptVvQj3EtFyww98h9Bbt4WD0WIQA3IeGACEkUyv/vaI2VbwpS
-         SnBKgo05WKiyB4iRGP2Jl4rtPlZLbStQ3WsGOMHivEXDD0rEhu9/QZTqMgNgenwFcuS4
-         Iuu9JSnptaFH6zG773uDBOi9tINZrQ1Q+ztNqWuCUaEjoMeDxpwUCc/sin2k1iUG0wQN
-         Rbwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727293186; x=1727897986;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yp4KiWnI55kflWfEV5sb0zGnBH7ciSvhguN8q9bReGk=;
-        b=YcNjovCnddQBoypp3Nvspuqj7lVK+ld1v+GzlvDidabdVRgCkiQwqabLKaFMjbSZMs
-         BV/ffGXbdzoUtcXNmg3j4DGrBeneZgdH6EXDCNk1yqDOAZ+NzUDm2vBmxKptQrrh6PUB
-         7dHBxCVcVJ0BxVP4lrWhwtTF3joU9QsVfu4dFyVSNRnKBQj84mrThU0pqaLyRxvaCbzE
-         gooSwPWsKx46tZoWAtiW+I3A0AcLgPFeBZHevGoJv5YZDMNqtl2HbjyhBMr6Myo9VghU
-         dPTUSauzi3dJVsfasWhJebrk71oWNOiX1frCUaB0YHYkVdXFPRsfGCWFyo37pcEpJYO9
-         lyoA==
-X-Forwarded-Encrypted: i=1; AJvYcCUGTgBHGZ1j8QyAVfZ2kR/+BL15iS0H9cvaCsEUu5K97lS64jCt/DBNnAmYt67uT/LwQURkS9nE4407@vger.kernel.org, AJvYcCUqVfvzIX8qxSiNqzGc6ocwth1yblNVZWNWux0ELlhYyVzptUDZ/7OA3+sU5exbXW9nb6wvjDI5/5v1Dm74@vger.kernel.org, AJvYcCVCDqHCwBl7JUwkq9SkZD3tZf4JfVy4YYWmnDW+bI20IOq8VZX4ATz3QWiQ+AHKT/7USHkdSF3VxFAiWChp7TztRw==@vger.kernel.org, AJvYcCVESRRuGkuQj3U1Sp39n3158tQ5rKzjQAJ2sTfxdy0pql0yVv6M0wIlU3/qO3igxEz1Efmxj2pU8oYlX/0Gs5w=@vger.kernel.org, AJvYcCWAVl/P95x+qVhXzFOF1T4esrAK1PuIWwMfYEkgOvRpuXf0Aaz+PXbt84FPk3sQTGyZ+7Brns8cjYQnm7u+@vger.kernel.org, AJvYcCWLYaTaHrNlUif0o24MM8w3u5RqrQY0+ohc4P8UCQMmKAFnjeq9M04yc40/Sf8hdkvSh5rlyG3gha5v@vger.kernel.org, AJvYcCWaHDR2rU6WLmS8Zlk6542MxaoPYiCxlGv2SR7TwOVVtnhUvuaAxVHCIjZzIAAjzWCFPtnWXl1qoWw=@vger.kernel.org, AJvYcCWkCegGcUgSI4ZhaUeefpSqGrzjX9vd9fBK4YQVSHBXXDmTwBG602FcZCVr/DBijqPvRfE6Y8GkM0jXhteQ@vger.kernel.org, AJvYcCXH8vQMeHxTKBy3MgDm195IDBcI+ZPBPS36wJBfO2YCX3CZYHD13+GL9ZxWCjKGOKgmAUiVBLPhMSTgMQ==@vger.kernel.org, AJvYcCXkfViL/zWM
- ANsr0DbWeuHpI4NFKZAwTAFr0WViUDc4SHZoYUbS6157+L5RahTRjS08IJg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz6Rp2gNJxDM3Hvv3OV4RbI01YZEULB6WbzBGMaOQfWruBFSdLr
-	exoy8pb681XOR8/kaMy5gSwE0+sxhuCGVmUqI2BilL9AOct/gsPndymBjVO5A6mexoKcfTHvs/X
-	18v7tugmzvs3bt/mEfSKimZh0DCA=
-X-Google-Smtp-Source: AGHT+IGDMO+ONSKS8XitoA0ITEi5U77wfWogthP7KZ5PTbGU9A+6a8gl715c2Sg7nQwKl7GBJXFXdPzETY/KKnoKxqg=
-X-Received: by 2002:a2e:a553:0:b0:2ef:2e8f:f3b3 with SMTP id
- 38308e7fff4ca-2f915ff665cmr27096641fa.21.1727293185428; Wed, 25 Sep 2024
- 12:39:45 -0700 (PDT)
+	 To:Cc:Content-Type; b=azI0jPN5B4LVvfsIayFhqKJ8nPcobFAWwjvm48OQqUJmmvjP/zGq2uV+0BsHvODf9zwIT/npQY76dMZ/muZRo9gc4w7ElZcEwWHvDnlK18cDPzB6GdXITGeGkHupMnshASKalgCeSlmcgn+H9RNL7cKLeSq7jP08BE7eP/abTbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KTR+c/jJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A66A0C4CED2;
+	Wed, 25 Sep 2024 20:01:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727294473;
+	bh=hhUZIlacRl/vnMEKcyfWg9tD49NT/MnhWz9itBFRH/Q=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=KTR+c/jJpox6lNTwZnur9ylGmJ8SNnMLBqE2bVDeKktdg6DiGi1EfTbK4p/QLfrsg
+	 62cQ8Xp4g29Hc7A3FUqmxI+kwfZ2doQI9xGt7TSqSAX7TIfCIOG+mYse38LPl3BQWZ
+	 l2iF8SThxm63ZjDF5HLI5C21pBaJ962vsnPsoOdMvYtcSZtRE66YpjivKriiies7Co
+	 LaxrXpNgSSEEqxTDyY1RyJvKdmUcWWka/8YN0bSo2GO5HoqpEe+qDcQXm8LBLK0D94
+	 8ydW6VYJrwsZMAlDTHl93avEh1VQTy7peDTyg6QRgD3UXHuTo3whNIgc1mG6jaSwpr
+	 A7tc3n4LvYVlA==
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2f761cfa5e6so2789911fa.0;
+        Wed, 25 Sep 2024 13:01:13 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU4dTpIA5NOcrnkM/L0fsvwHd1USRpPkb1NuZvL481WBPV99WHq2Je0TrBX/0b7TKL8PdIZweM86iJjnC2PIPBV1A==@vger.kernel.org, AJvYcCU7A4OYWWVuIaCnYE0mRzr2JHUIS+s5KFqMPnd7ipG1UEwr9zsF/8OJL48XAJMrzb3DvSXfj5MmVCvVvqWC@vger.kernel.org, AJvYcCUjGhddAq/npKGbS0eSB2RtZJ1B5cJmurlwGD0lzWtWw40bSGgVFB2D+jwZ5/23v0revu4+WtZas84FSKLq@vger.kernel.org, AJvYcCV1q7a/k0G9TWyUr/F04Z+/uYM28qGe8tYNwIlrj/yx5ZLaYocM2Vn9CpF3D4QfyCcaBVU=@vger.kernel.org, AJvYcCVlLbZz1ZrbY1O/PpMdp7Nng3RT9iTUhhUW8BUFUkVxTWkySxkD0x2sadHHfgLqU5DRjv4jRvkTgewd@vger.kernel.org, AJvYcCW+anu23ORbljXkZJ3TKkB4uCuLDXoN+HWJyrqY7N8rgWt5ziE9cg4ROwF6N9k/4hwyfYQnXemuLUxt@vger.kernel.org, AJvYcCW77FEeuH7XLTCybPp8SyzYeMPOpXviQKGdRfUuksL5QQnLGs/Gaza1X3RnUXRnOV9+JlajpvuLQOQLRbwO@vger.kernel.org, AJvYcCWNOdNxifeI3ecd27y1DAYo+DoKzNN1F8UVwD3NwxUmXzxht78olzCRZX4ultOZK9EKE2WBG6S9Lcw=@vger.kernel.org, AJvYcCWWqek8ooX5XeA/sdEWvJOl9NVQ9q9VV7LZTGpSrJZQ3ApDkNEDgPBc22e1lvmAgfhlxx+eDJuw/iscFA==@vger.kernel.org, AJvYcCXK7rLveMThERg+CtNRdrLLU/G1
+ x1KdJkTt12K8/2A3RuSSm8xIjfVR/nAKZ8nFuoZhahq4/F4VSTexbaShMMU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy2h4Wp/qW3FAvQAVD3lM9hdOfJ6nR1ro0amn52xxgwurnIE7O0
+	DfF1pjxIJh1cyZYWcgmuTLtrtQhk90N9lsfXanaqgL8/+W3DG26eWZ9rOYIk2WFYxuLEDn8i4uZ
+	oAFOg2673weEGBjnWVnSKv1PkAGo=
+X-Google-Smtp-Source: AGHT+IEY1YYkhERqv1Guf/9KJxOHKzNT9jpbgg+x9EdmvWSPTNvmnHPEwdJSiqJFazSq6NN7k+EJ+tpT15NwNECytIk=
+X-Received: by 2002:a2e:be24:0:b0:2f7:baac:fad7 with SMTP id
+ 38308e7fff4ca-2f91ca5b318mr26781181fa.39.1727294471846; Wed, 25 Sep 2024
+ 13:01:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -74,13 +60,14 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20240925150059.3955569-30-ardb+git@google.com>
  <20240925150059.3955569-57-ardb+git@google.com> <CAFULd4YnvhnUvq8epLqFs3hXLMCCrEi=HTRtRkLm4fg9YbP10g@mail.gmail.com>
- <CAMj1kXEL+BBTpaYzw_vkPdo18gF0-gjxBMbZyuaNhmWZC8=6tw@mail.gmail.com>
-In-Reply-To: <CAMj1kXEL+BBTpaYzw_vkPdo18gF0-gjxBMbZyuaNhmWZC8=6tw@mail.gmail.com>
-From: Uros Bizjak <ubizjak@gmail.com>
-Date: Wed, 25 Sep 2024 21:39:33 +0200
-Message-ID: <CAFULd4bLuHQvHNaoLJ4DoEQQZZF0yz=uD27m49M+AbYnh=+NzQ@mail.gmail.com>
+ <CAMj1kXEL+BBTpaYzw_vkPdo18gF0-gjxBMbZyuaNhmWZC8=6tw@mail.gmail.com> <CAFULd4bLuHQvHNaoLJ4DoEQQZZF0yz=uD27m49M+AbYnh=+NzQ@mail.gmail.com>
+In-Reply-To: <CAFULd4bLuHQvHNaoLJ4DoEQQZZF0yz=uD27m49M+AbYnh=+NzQ@mail.gmail.com>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Wed, 25 Sep 2024 22:01:00 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXFJHGuxvEgZik_YnrUjoQZCDFaMsTd6BZU=dFe1UcUUNQ@mail.gmail.com>
+Message-ID: <CAMj1kXFJHGuxvEgZik_YnrUjoQZCDFaMsTd6BZU=dFe1UcUUNQ@mail.gmail.com>
 Subject: Re: [RFC PATCH 27/28] x86/kernel: Switch to PIE linking for the core kernel
-To: Ard Biesheuvel <ardb@kernel.org>
+To: Uros Bizjak <ubizjak@gmail.com>
 Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, x86@kernel.org, 
 	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
 	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>, 
@@ -102,76 +89,99 @@ Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, x86@kern
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 25, 2024 at 9:14=E2=80=AFPM Ard Biesheuvel <ardb@kernel.org> wr=
-ote:
+On Wed, 25 Sept 2024 at 21:39, Uros Bizjak <ubizjak@gmail.com> wrote:
 >
-> On Wed, 25 Sept 2024 at 20:54, Uros Bizjak <ubizjak@gmail.com> wrote:
+> On Wed, Sep 25, 2024 at 9:14=E2=80=AFPM Ard Biesheuvel <ardb@kernel.org> =
+wrote:
 > >
-> > On Wed, Sep 25, 2024 at 5:02=E2=80=AFPM Ard Biesheuvel <ardb+git@google=
-.com> wrote:
+> > On Wed, 25 Sept 2024 at 20:54, Uros Bizjak <ubizjak@gmail.com> wrote:
 > > >
-> > > From: Ard Biesheuvel <ardb@kernel.org>
+> > > On Wed, Sep 25, 2024 at 5:02=E2=80=AFPM Ard Biesheuvel <ardb+git@goog=
+le.com> wrote:
+> > > >
+> > > > From: Ard Biesheuvel <ardb@kernel.org>
+> > > >
+> > > > Build the kernel as a Position Independent Executable (PIE). This
+> > > > results in more efficient relocation processing for the virtual
+> > > > displacement of the kernel (for KASLR). More importantly, it instru=
+cts
+> > > > the linker to generate what is actually needed (a program that can =
+be
+> > > > moved around in memory before execution), which is better than havi=
+ng to
+> > > > rely on the linker to create a position dependent binary that happe=
+ns to
+> > > > tolerate being moved around after poking it in exactly the right ma=
+nner.
+> > > >
+> > > > Note that this means that all codegen should be compatible with PIE=
+,
+> > > > including Rust objects, so this needs to switch to the small code m=
+odel
+> > > > with the PIE relocation model as well.
 > > >
-> > > Build the kernel as a Position Independent Executable (PIE). This
-> > > results in more efficient relocation processing for the virtual
-> > > displacement of the kernel (for KASLR). More importantly, it instruct=
+> > > I think that related to this work is the patch series [1] that
+> > > introduces the changes necessary to build the kernel as Position
+> > > Independent Executable (PIE) on x86_64 [1]. There are some more place=
 s
-> > > the linker to generate what is actually needed (a program that can be
-> > > moved around in memory before execution), which is better than having=
- to
-> > > rely on the linker to create a position dependent binary that happens=
- to
-> > > tolerate being moved around after poking it in exactly the right mann=
-er.
+> > > that need to be adapted for PIE. The patch series also introduces
+> > > objtool functionality to add validation for x86 PIE.
 > > >
-> > > Note that this means that all codegen should be compatible with PIE,
-> > > including Rust objects, so this needs to switch to the small code mod=
-el
-> > > with the PIE relocation model as well.
+> > > [1] "[PATCH RFC 00/43] x86/pie: Make kernel image's virtual address f=
+lexible"
+> > > https://lore.kernel.org/lkml/cover.1682673542.git.houwenlong.hwl@antg=
+roup.com/
+> > >
 > >
-> > I think that related to this work is the patch series [1] that
-> > introduces the changes necessary to build the kernel as Position
-> > Independent Executable (PIE) on x86_64 [1]. There are some more places
-> > that need to be adapted for PIE. The patch series also introduces
-> > objtool functionality to add validation for x86 PIE.
+> > Hi Uros,
 > >
-> > [1] "[PATCH RFC 00/43] x86/pie: Make kernel image's virtual address fle=
-xible"
-> > https://lore.kernel.org/lkml/cover.1682673542.git.houwenlong.hwl@antgro=
-up.com/
+> > I am aware of that discussion, as I took part in it as well.
 > >
+> > I don't think any of those changes are actually needed now - did you
+> > notice anything in particular that is missing?
 >
-> Hi Uros,
+> Some time ago I went through the kernel sources and proposed several
+> patches that changed all trivial occurrences of non-RIP addresses to
+> RIP ones. The work was partially based on the mentioned patch series,
+> and I remember, I left some of them out [e.g. 1], because they
+> required a temporary variable.
+
+I have a similar patch in my series, but the DEBUG_ENTRY code just uses
+
+pushf 1f@GOTPCREL(%rip)
+
+so no temporaries are needed.
+
+> Also, there was discussion about ftrace
+> [2], where no solution was found.
 >
-> I am aware of that discussion, as I took part in it as well.
+
+When linking with -z call-nop=3Dsuffix-nop, the __fentry__ call via the
+GOT will be relaxed by the linker into a 5 byte call followed by a 1
+byte NOP, so I don't think we need to do anything special here. It
+might mean we currently lose -mnop-mcount until we find a solution for
+that in the compiler. In case you remember, I contributed and you
+merged a GCC patch that makes the __fentry__ emission logic honour
+-fdirect-access-external-data which should help here. This landed in
+GCC 14.
+
+> Looking through your series, I didn't find some of the non-RIP -> RIP
+> changes proposed by the original series (especially the ftrace part),
+> and noticed that there is no objtool validator proposed to ensure that
+> all generated code is indeed PIE compatible.
 >
-> I don't think any of those changes are actually needed now - did you
-> notice anything in particular that is missing?
 
-Some time ago I went through the kernel sources and proposed several
-patches that changed all trivial occurrences of non-RIP addresses to
-RIP ones. The work was partially based on the mentioned patch series,
-and I remember, I left some of them out [e.g. 1], because they
-required a temporary variable. Also, there was discussion about ftrace
-[2], where no solution was found.
+What would be the point of that? The linker will complain and throw an
+error if the code cannot be converted into a PIE executable, so I
+don't think we need objtool's help for that.
 
-Looking through your series, I didn't find some of the non-RIP -> RIP
-changes proposed by the original series (especially the ftrace part),
-and noticed that there is no objtool validator proposed to ensure that
-all generated code is indeed PIE compatible.
+> Speaking of non-RIP -> RIP changes that require a temporary - would it
+> be beneficial to make a macro that would use the RIP form only when
+> #ifdef CONFIG_X86_PIE? That would avoid code size increase when PIE is
+> not needed.
+>
 
-Speaking of non-RIP -> RIP changes that require a temporary - would it
-be beneficial to make a macro that would use the RIP form only when
-#ifdef CONFIG_X86_PIE? That would avoid code size increase when PIE is
-not needed.
-
-[1] https://lore.kernel.org/lkml/a0b69f3fac1834c05f960b916cc6eb0004cdffbf.1=
-682673543.git.houwenlong.hwl@antgroup.com/
-[2] https://lore.kernel.org/lkml/20230428094454.0f2f5049@gandalf.local.home=
-/
-[3] https://lore.kernel.org/lkml/226af8c63c5bfa361763dd041a997ee84fe926cf.1=
-682673543.git.houwenlong.hwl@antgroup.com/
-
-Thanks and best regards,
-Uros.
+This series does not make the PIE support configurable. Do you think
+the code size increase is a concern if all GOT based symbol references
+are elided, e.g, via -fdirect-access-external-data?
 
