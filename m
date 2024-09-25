@@ -1,378 +1,211 @@
-Return-Path: <linux-arch+bounces-7446-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7447-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE821986818
-	for <lists+linux-arch@lfdr.de>; Wed, 25 Sep 2024 23:08:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DF9898681D
+	for <lists+linux-arch@lfdr.de>; Wed, 25 Sep 2024 23:11:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 807DD285206
-	for <lists+linux-arch@lfdr.de>; Wed, 25 Sep 2024 21:08:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2FE461F257FD
+	for <lists+linux-arch@lfdr.de>; Wed, 25 Sep 2024 21:11:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4ABF517D378;
-	Wed, 25 Sep 2024 21:07:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77DB414D430;
+	Wed, 25 Sep 2024 21:11:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UqUeN44x"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="h6Z48oLx"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2073.outbound.protection.outlook.com [40.107.94.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1953117CA19;
-	Wed, 25 Sep 2024 21:07:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727298439; cv=none; b=nBS/nO/X89/aU1Ko5lX+biC/big0sRQPycnYQ2NUrPgfNmEnbSp/DjX2M1+bxtaYJ8Kj9LKmTSGVhxgcfatBvhCiT8ndhSmAH4QVa2pEFusBjkpnQQ/8sMTQDj9f/vqGRcmRA1p1Uf9yvR1Pumg4AMbmHxHQti5WibGlrFXSGoU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727298439; c=relaxed/simple;
-	bh=ODTKCHXxIZE3eYSHvfpmzYWSeBfhCgyCnxo8sL2fUHU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=YEQ+D/HCZCKPiLT1yFnug4ix259hkY/FR9TiTnuel0p213KxE2YvA22sJf/NfFi05AlX/xOSoHh9tmwybIQZScWaMHMjJFvMCoQXC6jn3GkrQ2n1myfPgWE1GN1a7+bLEVdRZXqyf9he81ESY48R/7xI7dd+Xjy4R9dwz/0S9Ro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UqUeN44x; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E93BAC4CEC3;
-	Wed, 25 Sep 2024 21:07:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727298438;
-	bh=ODTKCHXxIZE3eYSHvfpmzYWSeBfhCgyCnxo8sL2fUHU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=UqUeN44x2CyaBUPaNDkT98k6QN3VewzS7CUSKeQCD7Er05TZWE0qz2tzTPJ5xFD/o
-	 SZdsfPJBUcVK4dRlnz8/NqnIbj/TOm7FASPiv+Zps96TFrJjYpEVq4XxK0nqdTGty8
-	 cVz2cOJxhyz6vRclrGlh3FDM1KAMq5JWGh1Z3LYFBAgcqBisNYyEg6kxvm+G+h1/34
-	 AKFLgqXcNy+hn1N/9l0tNjYChvvNXi0fQ3/AHQvp7aGYCZu8vedTaYrNErzVdPI0aH
-	 yTvTayfqA+sFZUYQ+NLii51HXTvqMUHW975iSPHKFjGcwkF95HyatEteJJwpOUEYZt
-	 xQwPkqnb9dgXw==
-From: Arnd Bergmann <arnd@kernel.org>
-To: linux-mm@kvack.org
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Christoph Hellwig <hch@lst.de>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	David Hildenbrand <david@redhat.com>,
-	Greg Ungerer <gerg@linux-m68k.org>,
-	Helge Deller <deller@gmx.de>,
-	Kees Cook <kees@kernel.org>,
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Matt Turner <mattst88@gmail.com>,
-	Max Filippov <jcmvbkbc@gmail.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Michal Hocko <mhocko@suse.com>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Vladimir Murzin <vladimir.murzin@arm.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-arch@vger.kernel.org
-Subject: [PATCH 5/5] [RFC] mm: Remove MAP_UNINITIALIZED support
-Date: Wed, 25 Sep 2024 21:06:15 +0000
-Message-Id: <20240925210615.2572360-6-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240925210615.2572360-1-arnd@kernel.org>
-References: <20240925210615.2572360-1-arnd@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A417B22EE4;
+	Wed, 25 Sep 2024 21:11:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.73
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1727298668; cv=fail; b=Am4+LQmF5FKO2G6qDd3ZFcc9e0L767CLY+37zUIDkKcQPMbMIhN3/0Wi+SAa+ALmNF2ecBQEYgPr1AIXW9e75frIirR8xZzukDQIyl7FzfXfqRkIOCYWN5S0JZPG4ntPrhzjtR1MoGNQgJSWSl2zxiZIMw/Sv39eDGEMqOuMctg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1727298668; c=relaxed/simple;
+	bh=ssIs9WtPLkYu01Dj+z1Mc0lHQSYIPGLQzn3LK0r2/QY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=nmZubnjtzeo37Vd0oyCEeADQhdp7jZcYPsplNXarjctQjsSfiTAN053gDItAUxlL2MGWEp65jgbWO8anyWR2QXWdh94wBvIikBukvO8Vstuv2S7XLkgMJc2ndLtG/vX6ge36KxNAIj8eBB7rOS3RgEXwjGL6Pc9ktxBv5ccRQP4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=h6Z48oLx; arc=fail smtp.client-ip=40.107.94.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=cqT95vw/VV8DqM7+q5RQ6kDVcqMAiEwJReRSupa/k+gLdONpBQdJ2y/3AW7axB8SHameZOsfWdjlVxIYzNAqaHreHmaY9F9tzniJ9wnXWAF+NaLP3JHsCBXkyzHHy1jkmekYqo1N/P2yPFozWn5j1L+uVxF/LdoiBzgh3auZ9vEeImmmXhPvIFpbqIezwOfyjlYfCN7OIiQxAJHxS7szfrt0/ZmQwbnylt6y6+fFwGiGI75GSVBwz13RxfGcgZ22H1N/SYMHL7NjtMJVcE5Bf5QmjtWEXv05+HQH8XGuQi3N3MSEsW1tEvpl/Y7/biiR6Xl+udnyb2sxoX4Dba8ryg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=G0seTHlNHKQRCkaKgJf0QsO+AMWS+fi600xH0eeDjsI=;
+ b=VS5xwu3RXucPSM5uqoxfFbbVTpKUyM9XXS179XfKTfjvz61gR88GBCEkvycxDmVJQ3pyOJkxFSXgVqzTzoA8b/z5wZHyZHR09xUU2JkcB0aHrhpWxM9exJhz4ryCF2cRrTbD3lk792bx5lEfgehNxJtq97Giskga75h5UPWdsWeURwf1DziEkpaOvwQCiboUxPnsVSitPD+klPLSXDKUjx6GK0z6UZUC6a4Ez0AnFFME3mmeO+SSsleGm9iEyCcUJElA8lKYor8nQYdAmCwcJZcob50HvTQTH4TW9NaZ5VNOkBYEQCMWYXy3ekKXuyJCKzG/DirZhxPD9s/y9swvig==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=G0seTHlNHKQRCkaKgJf0QsO+AMWS+fi600xH0eeDjsI=;
+ b=h6Z48oLxyTskg8BvMmpDA2Eomh1ZNb0XlNtkZW9UttutjmeSvHlMuO41N/vpI4bAu+2QspT6lYEOmybH4l/+K+E6ekA4vKGZyIoHda+WMm/d/w4LWhSY18YifIqOHyerA2eBy8YhFqt25NEiVzW9bIv7JRmi2aLL0jtb2ZzwKDM=
+Received: from BN9P221CA0014.NAMP221.PROD.OUTLOOK.COM (2603:10b6:408:10a::19)
+ by SA0PR12MB4430.namprd12.prod.outlook.com (2603:10b6:806:70::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7982.28; Wed, 25 Sep
+ 2024 21:11:03 +0000
+Received: from BN2PEPF000055DC.namprd21.prod.outlook.com
+ (2603:10b6:408:10a:cafe::3a) by BN9P221CA0014.outlook.office365.com
+ (2603:10b6:408:10a::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7982.26 via Frontend
+ Transport; Wed, 25 Sep 2024 21:11:03 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN2PEPF000055DC.mail.protection.outlook.com (10.167.245.6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8026.0 via Frontend Transport; Wed, 25 Sep 2024 21:11:03 +0000
+Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 25 Sep
+ 2024 16:11:03 -0500
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB05.amd.com
+ (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 25 Sep
+ 2024 16:11:02 -0500
+Received: from [172.18.112.153] (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
+ Transport; Wed, 25 Sep 2024 16:10:59 -0500
+Message-ID: <81fb3f6b-4ded-41d1-be66-d86af4f22171@amd.com>
+Date: Wed, 25 Sep 2024 17:10:56 -0400
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 11/28] x86/pvh: Avoid absolute symbol references in
+ .head.text
+To: Ard Biesheuvel <ardb+git@google.com>, <linux-kernel@vger.kernel.org>
+CC: Ard Biesheuvel <ardb@kernel.org>, <x86@kernel.org>, "H. Peter Anvin"
+	<hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra
+	<peterz@infradead.org>, Uros Bizjak <ubizjak@gmail.com>, Dennis Zhou
+	<dennis@kernel.org>, Tejun Heo <tj@kernel.org>, Christoph Lameter
+	<cl@linux.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, "Paolo
+ Bonzini" <pbonzini@redhat.com>, Vitaly Kuznetsov <vkuznets@redhat.com>,
+	Juergen Gross <jgross@suse.com>, Boris Ostrovsky
+	<boris.ostrovsky@oracle.com>, Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, Masahiro Yamada
+	<masahiroy@kernel.org>, Kees Cook <kees@kernel.org>, Nathan Chancellor
+	<nathan@kernel.org>, Keith Packard <keithp@keithp.com>, Justin Stitt
+	<justinstitt@google.com>, Josh Poimboeuf <jpoimboe@kernel.org>, "Arnaldo
+ Carvalho de Melo" <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+	"Jiri Olsa" <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, Adrian
+ Hunter <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>,
+	<linux-doc@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+	<kvm@vger.kernel.org>, <xen-devel@lists.xenproject.org>,
+	<linux-efi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+	<linux-sparse@vger.kernel.org>, <linux-kbuild@vger.kernel.org>,
+	<linux-perf-users@vger.kernel.org>, <rust-for-linux@vger.kernel.org>,
+	<llvm@lists.linux.dev>
+References: <20240925150059.3955569-30-ardb+git@google.com>
+ <20240925150059.3955569-41-ardb+git@google.com>
+Content-Language: en-US
+From: Jason Andryuk <jason.andryuk@amd.com>
+In-Reply-To: <20240925150059.3955569-41-ardb+git@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Received-SPF: None (SATLEXMB05.amd.com: jason.andryuk@amd.com does not
+ designate permitted sender hosts)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN2PEPF000055DC:EE_|SA0PR12MB4430:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2a8b3ce5-d2b6-407b-9a44-08dcdda69057
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|82310400026|36860700013|7416014|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?OEJwb29wcWhNT2x0SDFYTTlrdFNpeXNaNG1QcnFKM2hsMDlQS2RMOHNXSWNw?=
+ =?utf-8?B?QTZrKzVTaytRaWk2WFU0Z1RHWjJxNkJ3ZGNoeTNtYVBGQXU5TkxNZDJPZWtO?=
+ =?utf-8?B?ZXFSNm5xQm50blV0UGpWaUlXQy9XZC9wZXAzL3Avd09mdHZ5MjFGTEZ5czlU?=
+ =?utf-8?B?Tmtidk93YjdEc0xScG1qYXJtcUNTNjI5NDlCbmZZWHM2TUxZVE9NK3ZmWFZk?=
+ =?utf-8?B?b2crQlBOOFdJa3VUWkZXQkd6T2Yyb2wzTThLbDUxVTJMN205azNmWEQzUzlS?=
+ =?utf-8?B?UVluRmtYNXp5eEYwL0c1TXVJb2RXSDAvdjNmTC8ramFpVmVNZGdqY1Nma2RT?=
+ =?utf-8?B?WFB5ZExVdDdYd0pJTGtGNGdra2lJMkE4emxBdk9HZTNRR3BwQk5pdk83L1Rl?=
+ =?utf-8?B?UVNTNE9Nakc0SDZQZ3crVFNoZjFKZkhjRVoydStBQmQxeDl3RnN3MDFQVXlP?=
+ =?utf-8?B?ZEpxbndkZDlqMjY0VzBhUENpQWFlMTlGcTFxNzV4aEJHV1Jnai9jelpOMGRR?=
+ =?utf-8?B?eFk2WWh5c3pOTmpYN2ZhVVg5aWhoTVV4Sm5BcWhod3RVOEROWVcwaHcrYWxQ?=
+ =?utf-8?B?WGdLZEovZFRjSWx2NFlRdlorclQwdUg5TG9KS3pxTEhkbUFPMGFNeUhhb3d3?=
+ =?utf-8?B?bkxxYUpZbkMxcnpJby9hTGpkNnRyVEdHSDczeUlYNUgwYU9HYnF1OHE2emZU?=
+ =?utf-8?B?OXpNMEZnVXJjNmpKY3hQbVhMT3Awc3lzVmE0andMbVU4Sld1d2Rqa3VSZGp3?=
+ =?utf-8?B?MS9jTk8yVW5NbGVkZU1yZ1BIVTE1UVZ2UlRlL0EwN0VwZ2lySEdqbktHK2M2?=
+ =?utf-8?B?bExaZ0pIcHR1OTlIcGNDYTE4ZnFoTGFiR2dqOW1JWXVhdWl3YVNJZDJTeWpR?=
+ =?utf-8?B?YzlpaEk3UEszMWw5cUd0RmpOb1ZuMU41N3pHQ28zRVdDNVhaTGFFeS9MbVI1?=
+ =?utf-8?B?Z2ZyVTJsYU43cUlkT21scHN5OHVFWUlraSs4OHVFWnRLVzhNL1lxVEJDNTZm?=
+ =?utf-8?B?OEdKTmk1dmw0eHM1U0c3QzkxT0ZRL0Y4Uks0T21mc1RsNXB0WjMxdCtnN2ZN?=
+ =?utf-8?B?OEpxZU43c2F0UVhnSXlaSGYwZjFrWkNzQ0tOMzFCQnhZYnJYY1VqVmVsN2Ex?=
+ =?utf-8?B?ZG9xajlZU0ZpNndCWHI5Z2gyOFF6M3pNODNKcGE4blgrYzA4Wk55eFViN1RT?=
+ =?utf-8?B?WndIZ3RGTDhDSWNBYnM3S0toOVd5OWdzY3JlODhFdTFHaGF0RUp5RkcwWVk5?=
+ =?utf-8?B?NTNjL3laaFNBUDVFd3hPYVZTajZ2Ykk3OUJBM1I2aHl4bzdYZGlieUp0NDdi?=
+ =?utf-8?B?T3dTT25XNHBZbnBsTlMwNzZzWFdUNkVkWWxrTWJCbDFvUkZ4VVNtTzc4cXB4?=
+ =?utf-8?B?VUFuVmh0b2FsbzY5dlhXWTBCMS9IMzY4TjVZSTNpZjU1c2NFRVNBUC9OdTFQ?=
+ =?utf-8?B?NzFvRjYrTDlrbjFRWWIrTzFvYTVvN2pBOEJacnQ0UkYrQUczUWRONVc1eVp0?=
+ =?utf-8?B?aHVwQW5sOU9uWWtJeExZSFlKQU9hVE8rT2dxbUVuRCt4bVFjNmF5VHlGTEhZ?=
+ =?utf-8?B?bjQxY0tadnlMb0hYVUlBOG5PZTBMSEdCdDdmTUVSRmRDRXVqamNxRVpjYkRp?=
+ =?utf-8?B?aC9BQ0RuUWJ1VzRwTmpmamtNWVJocUxnRkxGajQyZ3M4THl0cUJOQVhtaEFI?=
+ =?utf-8?B?UHJ0bWs1bkluR0xVOWJMUnJBMDRibXcwVFN5S05kajZJdE43aWtQS1Qwa2J5?=
+ =?utf-8?B?c2JsblY3Um5TY1g3SUgrTWN5bStOdkVpSmxjK3RRaStBUS9XL3ArR3NVcndr?=
+ =?utf-8?B?cVp5S0pZTHNBd0lZM2oxOHVRVkFiS2FUWXY1YzFJVnkvOFRCUmhhZjhNdXpJ?=
+ =?utf-8?Q?quEuBNmFiQ/hN?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(36860700013)(7416014)(376014);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Sep 2024 21:11:03.4956
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2a8b3ce5-d2b6-407b-9a44-08dcdda69057
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BN2PEPF000055DC.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4430
 
-From: Arnd Bergmann <arnd@arndb.de>
+Hi Ard,
 
-MAP_UNINITIALIZED was added back in 2009 for NOMMU kernels, specifically
-for blackfin, which is long gone. MAP_HUGE_SHIFT/MAP_HUGE_MASK were
-added in 2012 for architectures supporting hugepages, which at the time
-did not overlap with the ones supporting NOMMU.
+On 2024-09-25 11:01, Ard Biesheuvel wrote:
+> From: Ard Biesheuvel <ardb@kernel.org>
+> 
+> The .head.text section contains code that may execute from a different
+> address than it was linked at. This is fragile, given that the x86 ABI
+> can refer to global symbols via absolute or relative references, and the
+> toolchain assumes that these are interchangeable, which they are not in
+> this particular case.
+> 
+> In the case of the PVH code, there are some additional complications:
+> - the absolute references are in 32-bit code, which get emitted with
+>    R_X86_64_32 relocations, and these are not permitted in PIE code;
+> - the code in question is not actually relocatable: it can only run
+>    correctly from the physical load address specified in the ELF note.
+> 
+> So rewrite the code to only rely on relative symbol references: these
+> are always 32-bits wide, even in 64-bit code, and are resolved by the
+> linker at build time.
+> 
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 
-Adding the macro under an #ifdef was obviously a mistake, which
-Christoph Hellwig tried to address by making it unconditionally defined
-to 0x4000000 as part of the series to support RISC-V NOMMU kernels. At
-this point linux/mman.h contained two conflicting definitions for bit 26,
-though the two are still mutually exclusive at runtime in all supported
-configurations.
+Juergen queued up my patches to make the PVH entry point position 
+independent (5 commits):
+https://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git/log/?h=linux-next
 
-According to the commit 854e9ed09ded ("mm: support madvise(MADV_FREE)")
-description, it was previously used internally by facebook, which
-would have resulted in MAP_HUGE_1MB turning into MAP_HUGE_2MB
-with MAP_UNINITIALIZED enabled, and every other page size implying
-MAP_UNINITIALIZED. I assume there are no remaining out of tree users
-on MMU-enabled kernels today.
+My commit that corresponds to this patch of yours is:
+https://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git/commit/?h=linux-next&id=1db29f99edb056d8445876292f53a63459142309
 
-I do not see any sensible way to redefine the macros for the ABI in
-a way avoids breaking something. The only ideas so far are:
+(There are more changes to handle adjusting the page tables.)
 
- - do nothing, try to document the bug, hope for the best
-
- - remove the kernel implementation and redefine MAP_UNINITIALIZED to
-   zero in the header to silently turn it off for everyone. There are
-   few NOMMU users left, and the ones that do use NOMMU usually turn
-   off MMAP_ALLOW_UNINITIALIZED, as it still has the potential to cause
-   bugs and even security issues on systems with a memory protection
-   unit.
-
- - remove both the implementation and the macro to force a build
-   failure for anyone trying to use the feature. This way we can
-   see who complains and whether we need to put it back in some
-   form or change the userspace sources to no longer pass the flag.
-
-Implement the third option here for the sake of discussion.
-
-Link: https://git.uclibc.org/uClibc/commit/libc/stdlib/malloc/malloc.c?id=00673f93826bf1f
-Link: https://lore.kernel.org/lkml/20190610221621.10938-4-hch@lst.de/
-Link: https://lore.kernel.org/lkml/1352157848-29473-1-git-send-email-andi@firstfloor.org/
-Link: https://lore.kernel.org/lkml/1448865583-2446-2-git-send-email-minchan@kernel.org/
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Damien Le Moal <dlemoal@kernel.org>
-Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc: linux-stm32@st-md-mailman.stormreply.com
-Cc: Greg Ungerer <gerg@linux-m68k.org>
-Cc: Vladimir Murzin <vladimir.murzin@arm.com>
-Cc: Max Filippov <jcmvbkbc@gmail.com>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- Documentation/admin-guide/mm/nommu-mmap.rst | 10 ++--------
- arch/alpha/include/uapi/asm/mman.h          |  2 --
- arch/mips/include/uapi/asm/mman.h           |  2 --
- arch/parisc/include/uapi/asm/mman.h         |  2 --
- arch/powerpc/include/uapi/asm/mman.h        |  5 -----
- arch/sh/configs/rsk7264_defconfig           |  1 -
- arch/sparc/include/uapi/asm/mman.h          |  3 ---
- arch/xtensa/include/uapi/asm/mman.h         |  3 ---
- fs/binfmt_elf_fdpic.c                       |  3 +--
- include/linux/mman.h                        |  4 ----
- include/uapi/asm-generic/mman.h             |  4 ----
- mm/Kconfig                                  | 22 ---------------------
- mm/nommu.c                                  |  4 +---
- 13 files changed, 4 insertions(+), 61 deletions(-)
-
-diff --git a/Documentation/admin-guide/mm/nommu-mmap.rst b/Documentation/admin-guide/mm/nommu-mmap.rst
-index 530fed08de2c..9434c2fa99ae 100644
---- a/Documentation/admin-guide/mm/nommu-mmap.rst
-+++ b/Documentation/admin-guide/mm/nommu-mmap.rst
-@@ -135,14 +135,8 @@ Further notes on no-MMU MMAP
-      significant delays during a userspace malloc() as the C library does an
-      anonymous mapping and the kernel then does a memset for the entire map.
- 
--     However, for memory that isn't required to be precleared - such as that
--     returned by malloc() - mmap() can take a MAP_UNINITIALIZED flag to
--     indicate to the kernel that it shouldn't bother clearing the memory before
--     returning it.  Note that CONFIG_MMAP_ALLOW_UNINITIALIZED must be enabled
--     to permit this, otherwise the flag will be ignored.
--
--     uClibc uses this to speed up malloc(), and the ELF-FDPIC binfmt uses this
--     to allocate the brk and stack region.
-+     Previously, Linux also supported a MAP_UNINITIALIZED flag to allocate
-+     memory without clearing it, this is no longer support.
- 
-  (#) A list of all the private copy and anonymous mappings on the system is
-      visible through /proc/maps in no-MMU mode.
-diff --git a/arch/alpha/include/uapi/asm/mman.h b/arch/alpha/include/uapi/asm/mman.h
-index fc8b74aa3f89..1099b17a4003 100644
---- a/arch/alpha/include/uapi/asm/mman.h
-+++ b/arch/alpha/include/uapi/asm/mman.h
-@@ -21,8 +21,6 @@
- /* MAP_SYNC not supported */
- #define MAP_FIXED_NOREPLACE	0x200000/* MAP_FIXED which doesn't unmap underlying mapping */
- 
--/* MAP_UNINITIALIZED not supported */
--
- /*
-  * Flags for mlockall
-  */
-diff --git a/arch/mips/include/uapi/asm/mman.h b/arch/mips/include/uapi/asm/mman.h
-index 6deb62db90de..9463c9071268 100644
---- a/arch/mips/include/uapi/asm/mman.h
-+++ b/arch/mips/include/uapi/asm/mman.h
-@@ -31,8 +31,6 @@
- /* MAP_SYNC not supported */
- #define MAP_FIXED_NOREPLACE	0x100000	/* MAP_FIXED which doesn't unmap underlying mapping */
- 
--/* MAP_UNINITIALIZED not supported */
--
- /*
-  * Flags for mlockall
-  */
-diff --git a/arch/parisc/include/uapi/asm/mman.h b/arch/parisc/include/uapi/asm/mman.h
-index 3732950a5cd8..8d7f3a8912b3 100644
---- a/arch/parisc/include/uapi/asm/mman.h
-+++ b/arch/parisc/include/uapi/asm/mman.h
-@@ -20,8 +20,6 @@
- /* MAP_SYNC not supported */
- #define MAP_FIXED_NOREPLACE	0x100000	/* MAP_FIXED which doesn't unmap underlying mapping */
- 
--/* MAP_UNINITIALIZED not supported */
--
- /*
-  * Flags for mlockall
-  */
-diff --git a/arch/powerpc/include/uapi/asm/mman.h b/arch/powerpc/include/uapi/asm/mman.h
-index d57b347c37fe..48c734b4d201 100644
---- a/arch/powerpc/include/uapi/asm/mman.h
-+++ b/arch/powerpc/include/uapi/asm/mman.h
-@@ -33,11 +33,6 @@
- #define MAP_SYNC		0x080000 /* perform synchronous page faults for the mapping */
- #define MAP_FIXED_NOREPLACE	0x100000	/* MAP_FIXED which doesn't unmap underlying mapping */
- 
--#define MAP_UNINITIALIZED 0x4000000	/* For anonymous mmap, memory could be
--					 * uninitialized */
--
--
--
- #define MCL_CURRENT     0x2000          /* lock all currently mapped pages */
- #define MCL_FUTURE      0x4000          /* lock all additions to address space */
- #define MCL_ONFAULT	0x8000		/* lock all pages that are faulted in */
-diff --git a/arch/sh/configs/rsk7264_defconfig b/arch/sh/configs/rsk7264_defconfig
-index e4ef259425c4..86421e2fec10 100644
---- a/arch/sh/configs/rsk7264_defconfig
-+++ b/arch/sh/configs/rsk7264_defconfig
-@@ -12,7 +12,6 @@ CONFIG_KALLSYMS_ALL=y
- CONFIG_EXPERT=y
- CONFIG_PERF_COUNTERS=y
- # CONFIG_VM_EVENT_COUNTERS is not set
--CONFIG_MMAP_ALLOW_UNINITIALIZED=y
- CONFIG_PROFILING=y
- # CONFIG_BLK_DEV_BSG is not set
- CONFIG_PARTITION_ADVANCED=y
-diff --git a/arch/sparc/include/uapi/asm/mman.h b/arch/sparc/include/uapi/asm/mman.h
-index afb86698cdb1..e05ac492f9a8 100644
---- a/arch/sparc/include/uapi/asm/mman.h
-+++ b/arch/sparc/include/uapi/asm/mman.h
-@@ -30,9 +30,6 @@
- #define MAP_SYNC		0x080000 /* perform synchronous page faults for the mapping */
- #define MAP_FIXED_NOREPLACE	0x100000	/* MAP_FIXED which doesn't unmap underlying mapping */
- 
--#define MAP_UNINITIALIZED 0x4000000	/* For anonymous mmap, memory could be
--					 * uninitialized */
--
- #define MCL_CURRENT     0x2000          /* lock all currently mapped pages */
- #define MCL_FUTURE      0x4000          /* lock all additions to address space */
- #define MCL_ONFAULT	0x8000		/* lock all pages that are faulted in */
-diff --git a/arch/xtensa/include/uapi/asm/mman.h b/arch/xtensa/include/uapi/asm/mman.h
-index e713b8dc8587..6fdf9f3e587a 100644
---- a/arch/xtensa/include/uapi/asm/mman.h
-+++ b/arch/xtensa/include/uapi/asm/mman.h
-@@ -36,9 +36,6 @@
- /* MAP_SYNC not supported */
- #define MAP_FIXED_NOREPLACE	0x100000	/* MAP_FIXED which doesn't unmap underlying mapping */
- 
--#define MAP_UNINITIALIZED 0x4000000	/* For anonymous mmap, memory could be
--					 * uninitialized */
--
- /*
-  * Flags for mlockall
-  */
-diff --git a/fs/binfmt_elf_fdpic.c b/fs/binfmt_elf_fdpic.c
-index 4fe5bb9f1b1f..82ba92d28ddf 100644
---- a/fs/binfmt_elf_fdpic.c
-+++ b/fs/binfmt_elf_fdpic.c
-@@ -418,8 +418,7 @@ static int load_elf_fdpic_binary(struct linux_binprm *bprm)
- 
- 	current->mm->start_brk = vm_mmap(NULL, 0, stack_size, stack_prot,
- 					 MAP_PRIVATE | MAP_ANONYMOUS |
--					 MAP_UNINITIALIZED | MAP_GROWSDOWN,
--					 0);
-+					 MAP_GROWSDOWN, 0);
- 
- 	if (IS_ERR_VALUE(current->mm->start_brk)) {
- 		retval = current->mm->start_brk;
-diff --git a/include/linux/mman.h b/include/linux/mman.h
-index bcb201ab7a41..f606b2264cc0 100644
---- a/include/linux/mman.h
-+++ b/include/linux/mman.h
-@@ -24,9 +24,6 @@
- #ifndef MAP_HUGE_1GB
- #define MAP_HUGE_1GB 0
- #endif
--#ifndef MAP_UNINITIALIZED
--#define MAP_UNINITIALIZED 0
--#endif
- #ifndef MAP_SYNC
- #define MAP_SYNC 0
- #endif
-@@ -44,7 +41,6 @@
- 		| MAP_ANONYMOUS \
- 		| MAP_DENYWRITE \
- 		| MAP_EXECUTABLE \
--		| MAP_UNINITIALIZED \
- 		| MAP_GROWSDOWN \
- 		| MAP_LOCKED \
- 		| MAP_NORESERVE \
-diff --git a/include/uapi/asm-generic/mman.h b/include/uapi/asm-generic/mman.h
-index f26f9b4c03e1..541be26ad947 100644
---- a/include/uapi/asm-generic/mman.h
-+++ b/include/uapi/asm-generic/mman.h
-@@ -27,10 +27,6 @@
- #define MAP_SYNC		0x080000 /* perform synchronous page faults for the mapping */
- #define MAP_FIXED_NOREPLACE	0x100000	/* MAP_FIXED which doesn't unmap underlying mapping */
- 
--#define MAP_UNINITIALIZED 0x4000000	/* For anonymous mmap, memory could be
--					 * uninitialized */
--
--
- /*
-  * Bits [26:31] are reserved, see asm-generic/hugetlb_encode.h
-  * for MAP_HUGETLB usage
-diff --git a/mm/Kconfig b/mm/Kconfig
-index 09aebca1cae3..7326820ba200 100644
---- a/mm/Kconfig
-+++ b/mm/Kconfig
-@@ -381,28 +381,6 @@ config COMPAT_BRK
- 
- 	  On non-ancient distros (post-2000 ones) N is usually a safe choice.
- 
--config MMAP_ALLOW_UNINITIALIZED
--	bool "Allow mmapped anonymous memory to be uninitialized"
--	depends on EXPERT && !MMU
--	default n
--	help
--	  Normally, and according to the Linux spec, anonymous memory obtained
--	  from mmap() has its contents cleared before it is passed to
--	  userspace.  Enabling this config option allows you to request that
--	  mmap() skip that if it is given an MAP_UNINITIALIZED flag, thus
--	  providing a huge performance boost.  If this option is not enabled,
--	  then the flag will be ignored.
--
--	  This is taken advantage of by uClibc's malloc(), and also by
--	  ELF-FDPIC binfmt's brk and stack allocator.
--
--	  Because of the obvious security issues, this option should only be
--	  enabled on embedded devices where you control what is run in
--	  userspace.  Since that isn't generally a problem on no-MMU systems,
--	  it is normally safe to say Y here.
--
--	  See Documentation/admin-guide/mm/nommu-mmap.rst for more information.
--
- config SELECT_MEMORY_MODEL
- 	def_bool y
- 	depends on ARCH_SELECT_MEMORY_MODEL
-diff --git a/mm/nommu.c b/mm/nommu.c
-index 385b0c15add8..793fa7303065 100644
---- a/mm/nommu.c
-+++ b/mm/nommu.c
-@@ -1172,9 +1172,7 @@ unsigned long do_mmap(struct file *file,
- 	add_nommu_region(region);
- 
- 	/* clear anonymous mappings that don't ask for uninitialized data */
--	if (!vma->vm_file &&
--	    (!IS_ENABLED(CONFIG_MMAP_ALLOW_UNINITIALIZED) ||
--	     !(flags & MAP_UNINITIALIZED)))
-+	if (!vma->vm_file)
- 		memset((void *)region->vm_start, 0,
- 		       region->vm_end - region->vm_start);
- 
--- 
-2.39.2
-
+Regards,
+Jason
 
