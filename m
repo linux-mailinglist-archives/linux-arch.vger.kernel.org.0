@@ -1,69 +1,69 @@
-Return-Path: <linux-arch+bounces-7402-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7403-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD03898625A
-	for <lists+linux-arch@lfdr.de>; Wed, 25 Sep 2024 17:11:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44777986260
+	for <lists+linux-arch@lfdr.de>; Wed, 25 Sep 2024 17:11:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DEEEC1C27501
-	for <lists+linux-arch@lfdr.de>; Wed, 25 Sep 2024 15:11:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0518D28D787
+	for <lists+linux-arch@lfdr.de>; Wed, 25 Sep 2024 15:11:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A03391898FF;
-	Wed, 25 Sep 2024 15:02:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90FA017C9B3;
+	Wed, 25 Sep 2024 15:02:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fD083jGZ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fzK7lDY/"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F345176FA5
-	for <linux-arch@vger.kernel.org>; Wed, 25 Sep 2024 15:02:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87FA518593F
+	for <linux-arch@vger.kernel.org>; Wed, 25 Sep 2024 15:02:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727276524; cv=none; b=KXyv9Erz0NWTH/1KyTz0n9vh2roB84iFH9cHrC5SQFuTauYWQ00fXWoo7NrIsXf1bWi8qVNFamby4wIp3k69p7R6ToEmR3XNgnZzcEt/xDPt12SjTa8iRyHnSUk1fLpztutmeJzcCtMoKXNhXJDC5AuC52piJSCexJZzjmhAaSQ=
+	t=1727276526; cv=none; b=rQWTE+qdG/JwvSFYINZ/8lNfiTC3vjGs/mlqjWL2YSiyP/LM6zBBMs5q5zkfA3e+yOwBJrkgdHjfV0uPWKUkQvyIC14TxGMOC6hYiSRtrL2eRKu9JG+CSQG/aB2CyQlU7kghhhzry0/u3AEz4nSxC18hJ0Vnnbp+W6qrk5AaZeY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727276524; c=relaxed/simple;
-	bh=9IeQ5D389OP3YsIvppVdXgRHsSH2R2gh2yLL82bpmwU=;
+	s=arc-20240116; t=1727276526; c=relaxed/simple;
+	bh=E/ekk1rehkbBpUh1L7h/NGwV62IOjSTKuZGPf/08C+4=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=bAVQaI3iWfEhjrCLFBMlw/FtcDt01ZT+FkVsZxch4OIry9y09iLJT9sLGA6CjE6SWz5Kpt7G1igAxwqijwRFdYiMdY8BmmelVz0qN75rS9NB2ceb03I3vUSkXYVD3QhD4CHR8eZPEZuSWPzA7irswb5XcVRcSiL05cbeh/oyPEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fD083jGZ; arc=none smtp.client-ip=209.85.128.202
+	 To:Cc:Content-Type; b=OfJhHnin7uEAyBuOQbvwQ4GgkDgVq202YwRmJzLFGS//ee9DjRLp7OLSeVlbRK3QoDLwVC56AVedRL+F38lolRwNnIh4fSkHePu87I9IiwSx1gAqLJNZa98RgbLGzXHPlIWXl7mz6wXXsWrp0skwIalxJkdqoCYTkrFhlMrQTrY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fzK7lDY/; arc=none smtp.client-ip=209.85.128.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-6d4f52a4069so118664987b3.3
-        for <linux-arch@vger.kernel.org>; Wed, 25 Sep 2024 08:02:00 -0700 (PDT)
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-6d5235d1bcaso99142037b3.2
+        for <linux-arch@vger.kernel.org>; Wed, 25 Sep 2024 08:02:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1727276520; x=1727881320; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1727276522; x=1727881322; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DA1xJ7QlyinRe20ykWBw1TGfZPAZZ2L4ow9I41mAh9Y=;
-        b=fD083jGZz5kclsqEGn0PeXYqDSpGLWOYSTCBb8UAAsRPYt9jF3ZHXRYkabS7r5p0PA
-         zvrYXsm1ABv3UhphJZ73GbBTQBMwKVmgv/xaOswaVzaJTp74idKtxPJPUhWKfkdVD1V4
-         5H3BVHpyBN2A2YOhjdjT5bTCZaHh2WTossr029pVLDkZoqCc5HoWGkkG9/UqdRcwQCAP
-         Q4nvwkc+Yk9pRZO9zVsotNFXOCQsvyRQykfBSqsjR6lMT/WpX0ZyIiiD7H1qshH3klIC
-         h91KxOdk5sAPFbd3CDMEvK76txrNKLWUkhQlfQsgCEfv6NPfOuy+mJHCnxs9POxEdn3c
-         83OQ==
+        bh=hcBJaG4CjYcevMfAnFyKwMdAr3oBLta0TuXom4JmDi8=;
+        b=fzK7lDY/T6qPwo1r7GQEYwhSXVfvWqdperrVUsFRMT/3la27zD4W4ba937y/+GWeDt
+         8JpngM4iRo/c4yMyIn9mHwNiucOLHRqSrPuk8iA/zC3LNjnbWM+Bi1aaxW3IshnN3Ri3
+         BvmpMhPh3S0NyUZvw/Ex6NkkdCp1p6fuGS5ptoGcEtbOzxt9V2i02Td09h9LXmQbP3/b
+         iJ19pHtN4Z/lRz5Zp1irRecr1YrXL01NkRQLLc0nQz7CA17O2ux1kLDicjO/8vFyTmGz
+         x0aOiAzX4h38PTDOx28g+6E6RVcgpUly4u2XdWbrXvyVEmXSA+RoL6R29jQJc/XfcJod
+         hN0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727276520; x=1727881320;
+        d=1e100.net; s=20230601; t=1727276522; x=1727881322;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DA1xJ7QlyinRe20ykWBw1TGfZPAZZ2L4ow9I41mAh9Y=;
-        b=VRMfPXBq3L6G3xjCuGNrTZA1CR2JEFeOZJsOgyVXlQN1/7oYVe6DiGBSewmD8Mf3AJ
-         BGBLc6cBTPmmE2U3biTpaZBCHxuZgcptXVT4h1QGd9asuYymFUfKCoJQMHOVEoCEG+lQ
-         ENQJsSklgeN8LD5xRDRak9DX4exUkOxG0u8IQwiZF9chQpUl/wnQ6vi0DvdpEuwsydP2
-         JIZVJFyLTIqkbsgOX+ZV32NV3f2eSRh1qed92+WudgcD1C+SfNTirBPKCEtaJmG23r1S
-         bk0XkKkdJfR4aR1VB+b56Ad0eQrfUC1bzN2JVQd2eK8peO5dkTNmxGvMcAR0wtjaEat6
-         HRtw==
-X-Forwarded-Encrypted: i=1; AJvYcCXWxtBNk7bX/NiG7fyxVxEAoagqHFdiSQQX1mpdPYNoHfER+VtKsC2mKo3M+eZ9WzCqBG53hXpSni0B@vger.kernel.org
-X-Gm-Message-State: AOJu0YyB1DquJ4JcFXd6VtLlToLqA4dNaKa324SqovjHtm9H22AqzCok
-	0f9pj8nJMblGw8P1jnfk2UBPXhcxJSxy/qHyoVNCMoRW4Ly5/YhzPMshwBmeUSU+YFiyBg==
-X-Google-Smtp-Source: AGHT+IEVIf0RcL61TjfNJbSKcMrFRGT1L5gz2hG55UguzadiqCTtHCs2NniTQT5w6cgRQkWXw9cPp9k2
+        bh=hcBJaG4CjYcevMfAnFyKwMdAr3oBLta0TuXom4JmDi8=;
+        b=K8jHIEG44AfnMvE9CcO7sjsI3grjaRDrXCNfzG8oxa/0RC111IGkQIdMD+Yyvzzs65
+         vQ3g0PqiqTZ66pAX4bCQeddpRZHA/Id5N8H+bFHV5qhnq489TzXMvOmQbvp6+nnYkFti
+         hD/aa22N2ZaEGvzeJ9qhSoc+dhVbzOvfG6J7taXTQXbZiOrPLWC9rkBwnBKFsRESB2IG
+         jCdniCJpWbAJKJBNYtCszFM6B1vo8uQ3SXfJvP3f07i+HGi+stElsZQyy2Dtvzoz+w3b
+         HjpNZXtSf97NTpZxQO3eKZcGhLxvenBkvuZ8u3U4GHXCZbj+jx1HM3Iu7O5Lxd1EmCZ/
+         uHwQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXaRBc1/KMKqITF8+bUlUuaM27StV9S3C0eyxd+IMMOFDvtscvR6o7ArgU5ZA1fUKMCBP3acUVROipn@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx1LYBX9zy2ny5iUCe+ycW8KTs2DHP5X78Cv5707ky3/Cb72qVM
+	1YJ2P/L00NRYaFIVe0kEVkdbzWkqV9WFZnekV8FoQOixcuxM+ZerVWSHeokuz2jQb8FqPg==
+X-Google-Smtp-Source: AGHT+IHVPP/hq0VdoG8mz8zZDpKENYQvppd12tQOBs96+ky0ZuGKlW9zxaw1GBiDRtGEwfqJMJeN7cfB
 X-Received: from palermo.c.googlers.com ([fda3:e722:ac3:cc00:7b:198d:ac11:8138])
- (user=ardb job=sendgmr) by 2002:a81:77c4:0:b0:61c:89a4:dd5f with SMTP id
- 00721157ae682-6e21d0e8b05mr227547b3.0.1727276519796; Wed, 25 Sep 2024
- 08:01:59 -0700 (PDT)
-Date: Wed, 25 Sep 2024 17:01:04 +0200
+ (user=ardb job=sendgmr) by 2002:a25:d695:0:b0:e1a:70ed:6ec9 with SMTP id
+ 3f1490d57ef6-e24d7352785mr29529276.2.1727276522332; Wed, 25 Sep 2024 08:02:02
+ -0700 (PDT)
+Date: Wed, 25 Sep 2024 17:01:05 +0200
 In-Reply-To: <20240925150059.3955569-30-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -73,14 +73,14 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240925150059.3955569-30-ardb+git@google.com>
 X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6485; i=ardb@kernel.org;
- h=from:subject; bh=xSyMofrsI8W/QeJfcidSH2VUWxFZ3VEJOcPkUtiBlzY=;
- b=owGbwMvMwCFmkMcZplerG8N4Wi2JIe2L6sYKk4m5xZLyVelenm+8zuTMnXPA0faQXMTl3XV33
- iYnS2/oKGVhEONgkBVTZBGY/ffdztMTpWqdZ8nCzGFlAhnCwMUpABMRz2b4p2z7TbK64+yiCfEm
- LE6n5/75udhiw87M0k896bfk2oo/BTL8U20uvRe5bfeVZc9kGMJfb1kvfTNqJu/W1Zs+sddu+hR pywYA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4340; i=ardb@kernel.org;
+ h=from:subject; bh=I7lWAHThqqqqnrpiqIQsu32XeIcDrKE8EBFU/14ypJ4=;
+ b=owGbwMvMwCFmkMcZplerG8N4Wi2JIe2L6manxvx6ho28axaYV4atC9wvG5Igfbri2+G3gWYqn
+ maGuz52lLIwiHEwyIopsgjM/vtu5+mJUrXOs2Rh5rAygQxh4OIUgIl4nmVkaA1czF6Uafzbsi92
+ efGhdw7lev3pD99ze/Rc9uE4U+u6lZHhb2nzhL8Z7seME5YcX8rFdHZX6uJJe7jF87S7K1vP1Mh zAQA=
 X-Mailer: git-send-email 2.46.0.792.g87dc391469-goog
-Message-ID: <20240925150059.3955569-34-ardb+git@google.com>
-Subject: [RFC PATCH 04/28] x86/boot: Permit GOTPCREL relocations for x86_64 builds
+Message-ID: <20240925150059.3955569-35-ardb+git@google.com>
+Subject: [RFC PATCH 05/28] x86: Define the stack protector guard symbol explicitly
 From: Ard Biesheuvel <ardb+git@google.com>
 To: linux-kernel@vger.kernel.org
 Cc: Ard Biesheuvel <ardb@kernel.org>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
@@ -105,179 +105,116 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Ard Biesheuvel <ardb@kernel.org>
 
-Some of the early x86_64 startup code is written in C, and executes in
-the early 1:1 mapping of the kernel, which is not the address it was
-linked at, and this requires special care when accessing global
-variables. This is currently being dealt with on an ad-hoc basis,
-primarily in head64.c, using explicit pointer fixups, but it would be
-better to rely on the compiler for this, by using -fPIE to generate code
-that can run at any address, and uses RIP-relative accesses to refer to
-global variables.
+Specify the guard symbol for the stack cookie explicitly, rather than
+positioning it exactly 40 bytes into the per-CPU area. Doing so removes
+the need for the per-CPU region to be absolute rather than relative to
+the placement of the per-CPU template region in the kernel image, and
+this allows the special handling for absolute per-CPU symbols to be
+removed entirely.
 
-While it is possible to avoid most GOT based symbol references that the
-compiler typically emits when running in -fPIE mode, by using 'hidden'
-visibility, there are cases where the compiler will always rely on the
-GOT, for instance, for weak external references (which may remain
-unsatisfied at link time).
-
-This means the build may produce a small number of GOT entries
-nonetheless. So update the reloc processing host tool to add support for
-this, and place the GOT in the .text section rather than discard it.
-
-Note that multiple GOT based references to the same symbol will share a
-single GOT entry, and so naively emitting a relocation for the GOT entry
-each time a reference to it is encountered could result in duplicates.
-Work around this by relying on the fact that the relocation lists are
-sorted, and deduplicate 64-bit relocations as they are emitted by
-comparing each entry with the previous one.
+This is a worthwhile cleanup in itself, but it is also a prerequisite
+for PIE codegen and PIE linking, which can replace our bespoke and
+rather clunky runtime relocation handling.
 
 Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 ---
- arch/x86/Makefile                 |  4 +++
- arch/x86/kernel/vmlinux.lds.S     |  5 +++
- arch/x86/tools/relocs.c           | 33 ++++++++++++++++++--
- include/asm-generic/vmlinux.lds.h |  7 +++++
- 4 files changed, 47 insertions(+), 2 deletions(-)
+ arch/x86/Makefile                     |  4 ++++
+ arch/x86/include/asm/init.h           |  2 +-
+ arch/x86/include/asm/processor.h      | 11 +++--------
+ arch/x86/include/asm/stackprotector.h |  4 ----
+ tools/perf/util/annotate.c            |  4 ++--
+ 5 files changed, 10 insertions(+), 15 deletions(-)
 
 diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-index 801fd85c3ef6..6b3fe6e2aadd 100644
+index 6b3fe6e2aadd..b78b7623a4a9 100644
 --- a/arch/x86/Makefile
 +++ b/arch/x86/Makefile
-@@ -192,6 +192,10 @@ else
-         KBUILD_CFLAGS += -mcmodel=kernel
+@@ -193,6 +193,10 @@ else
          KBUILD_RUSTFLAGS += -Cno-redzone=y
          KBUILD_RUSTFLAGS += -Ccode-model=kernel
+ 
++        ifeq ($(CONFIG_STACKPROTECTOR),y)
++                KBUILD_CFLAGS += -mstack-protector-guard-symbol=fixed_percpu_data
++        endif
 +
-+        # Don't emit relaxable GOTPCREL relocations
-+        KBUILD_AFLAGS_KERNEL += -Wa,-mrelax-relocations=no
-+        KBUILD_CFLAGS_KERNEL += -Wa,-mrelax-relocations=no
- endif
+         # Don't emit relaxable GOTPCREL relocations
+         KBUILD_AFLAGS_KERNEL += -Wa,-mrelax-relocations=no
+         KBUILD_CFLAGS_KERNEL += -Wa,-mrelax-relocations=no
+diff --git a/arch/x86/include/asm/init.h b/arch/x86/include/asm/init.h
+index 14d72727d7ee..3ed0e8ec973f 100644
+--- a/arch/x86/include/asm/init.h
++++ b/arch/x86/include/asm/init.h
+@@ -2,7 +2,7 @@
+ #ifndef _ASM_X86_INIT_H
+ #define _ASM_X86_INIT_H
  
- #
-diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
-index 6e73403e874f..7f060d873f75 100644
---- a/arch/x86/kernel/vmlinux.lds.S
-+++ b/arch/x86/kernel/vmlinux.lds.S
-@@ -20,6 +20,9 @@
- #define RUNTIME_DISCARD_EXIT
- #define EMITS_PT_NOTE
- #define RO_EXCEPTION_TABLE_ALIGN	16
-+#ifdef CONFIG_X86_64
-+#define GOT_IN_RODATA
-+#endif
+-#define __head	__section(".head.text")
++#define __head	__section(".head.text") __no_stack_protector
  
- #include <asm-generic/vmlinux.lds.h>
- #include <asm/asm-offsets.h>
-@@ -464,10 +467,12 @@ SECTIONS
- 	 * Sections that should stay zero sized, which is safer to
- 	 * explicitly check instead of blindly discarding.
+ struct x86_mapping_info {
+ 	void *(*alloc_pgt_page)(void *); /* allocate buf for page table */
+diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
+index 4a686f0e5dbf..56bc36116814 100644
+--- a/arch/x86/include/asm/processor.h
++++ b/arch/x86/include/asm/processor.h
+@@ -402,14 +402,9 @@ struct irq_stack {
+ #ifdef CONFIG_X86_64
+ struct fixed_percpu_data {
+ 	/*
+-	 * GCC hardcodes the stack canary as %gs:40.  Since the
+-	 * irq_stack is the object at %gs:0, we reserve the bottom
+-	 * 48 bytes of the irq stack for the canary.
+-	 *
+-	 * Once we are willing to require -mstack-protector-guard-symbol=
+-	 * support for x86_64 stackprotector, we can get rid of this.
++	 * Since the irq_stack is the object at %gs:0, the bottom 8 bytes of
++	 * the irq stack are reserved for the canary.
  	 */
-+#ifdef CONFIG_X86_32
- 	.got : {
- 		*(.got) *(.igot.*)
+-	char		gs_base[40];
+ 	unsigned long	stack_canary;
+ };
+ 
+@@ -418,7 +413,7 @@ DECLARE_INIT_PER_CPU(fixed_percpu_data);
+ 
+ static inline unsigned long cpu_kernelmode_gs_base(int cpu)
+ {
+-	return (unsigned long)per_cpu(fixed_percpu_data.gs_base, cpu);
++	return (unsigned long)&per_cpu(fixed_percpu_data, cpu);
+ }
+ 
+ extern asmlinkage void entry_SYSCALL32_ignore(void);
+diff --git a/arch/x86/include/asm/stackprotector.h b/arch/x86/include/asm/stackprotector.h
+index 00473a650f51..d1dcd22a0a4c 100644
+--- a/arch/x86/include/asm/stackprotector.h
++++ b/arch/x86/include/asm/stackprotector.h
+@@ -51,10 +51,6 @@ static __always_inline void boot_init_stack_canary(void)
+ {
+ 	unsigned long canary = get_random_canary();
+ 
+-#ifdef CONFIG_X86_64
+-	BUILD_BUG_ON(offsetof(struct fixed_percpu_data, stack_canary) != 40);
+-#endif
+-
+ 	current->stack_canary = canary;
+ #ifdef CONFIG_X86_64
+ 	this_cpu_write(fixed_percpu_data.stack_canary, canary);
+diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
+index 37ce43c4eb8f..7ecfedf5edb9 100644
+--- a/tools/perf/util/annotate.c
++++ b/tools/perf/util/annotate.c
+@@ -2485,10 +2485,10 @@ static bool is_stack_operation(struct arch *arch, struct disasm_line *dl)
+ 
+ static bool is_stack_canary(struct arch *arch, struct annotated_op_loc *loc)
+ {
+-	/* On x86_64, %gs:40 is used for stack canary */
++	/* On x86_64, %gs:0 is used for stack canary */
+ 	if (arch__is(arch, "x86")) {
+ 		if (loc->segment == INSN_SEG_X86_GS && loc->imm &&
+-		    loc->offset == 40)
++		    loc->offset == 0)
+ 			return true;
  	}
- 	ASSERT(SIZEOF(.got) == 0, "Unexpected GOT entries detected!")
-+#endif
  
- 	.plt : {
- 		*(.plt) *(.plt.*) *(.iplt)
-diff --git a/arch/x86/tools/relocs.c b/arch/x86/tools/relocs.c
-index 35a73e4aa74d..880f0f2e465e 100644
---- a/arch/x86/tools/relocs.c
-+++ b/arch/x86/tools/relocs.c
-@@ -223,6 +223,8 @@ static const char *rel_type(unsigned type)
- 		REL_TYPE(R_X86_64_JUMP_SLOT),
- 		REL_TYPE(R_X86_64_RELATIVE),
- 		REL_TYPE(R_X86_64_GOTPCREL),
-+		REL_TYPE(R_X86_64_GOTPCRELX),
-+		REL_TYPE(R_X86_64_REX_GOTPCRELX),
- 		REL_TYPE(R_X86_64_32),
- 		REL_TYPE(R_X86_64_32S),
- 		REL_TYPE(R_X86_64_16),
-@@ -843,6 +845,7 @@ static int do_reloc64(struct section *sec, Elf_Rel *rel, ElfW(Sym) *sym,
- 	case R_X86_64_32:
- 	case R_X86_64_32S:
- 	case R_X86_64_64:
-+	case R_X86_64_GOTPCREL:
- 		/*
- 		 * References to the percpu area don't need to be adjusted.
- 		 */
-@@ -861,6 +864,31 @@ static int do_reloc64(struct section *sec, Elf_Rel *rel, ElfW(Sym) *sym,
- 			break;
- 		}
- 
-+		if (r_type == R_X86_64_GOTPCREL) {
-+			Elf_Shdr *s = &secs[sec->shdr.sh_info].shdr;
-+			unsigned file_off = offset - s->sh_addr + s->sh_offset;
-+
-+			/*
-+			 * GOTPCREL relocations refer to instructions that load
-+			 * a 64-bit address via a 32-bit relative reference to
-+			 * the GOT.  In this case, it is the GOT entry that
-+			 * needs to be fixed up, not the immediate offset in
-+			 * the opcode. Note that the linker will have applied an
-+			 * addend of -4 to compensate for the delta between the
-+			 * relocation offset and the value of RIP when the
-+			 * instruction executes, and this needs to be backed out
-+			 * again. (Addends other than -4 are permitted in
-+			 * principle, but make no sense in practice so they are
-+			 * not supported.)
-+                         */
-+			if (rel->r_addend != -4) {
-+				die("invalid addend (%ld) for %s relocation: %s\n",
-+				    rel->r_addend, rel_type(r_type), symname);
-+				break;
-+			}
-+			offset += 4 + (int32_t)get_unaligned_le32(elf_image + file_off);
-+		}
-+
- 		/*
- 		 * Relocation offsets for 64 bit kernels are output
- 		 * as 32 bits and sign extended back to 64 bits when
-@@ -870,7 +898,7 @@ static int do_reloc64(struct section *sec, Elf_Rel *rel, ElfW(Sym) *sym,
- 		if ((int32_t)offset != (int64_t)offset)
- 			die("Relocation offset doesn't fit in 32 bits\n");
- 
--		if (r_type == R_X86_64_64)
-+		if (r_type == R_X86_64_64 || r_type == R_X86_64_GOTPCREL)
- 			add_reloc(&relocs64, offset);
- 		else
- 			add_reloc(&relocs32, offset);
-@@ -1085,7 +1113,8 @@ static void emit_relocs(int as_text, int use_real_mode)
- 
- 		/* Now print each relocation */
- 		for (i = 0; i < relocs64.count; i++)
--			write_reloc(relocs64.offset[i], stdout);
-+			if (!i || relocs64.offset[i] != relocs64.offset[i - 1])
-+				write_reloc(relocs64.offset[i], stdout);
- 
- 		/* Print a stop */
- 		write_reloc(0, stdout);
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index 19ec49a9179b..cc14d780c70d 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -443,6 +443,12 @@
- #endif
- #endif
- 
-+#ifdef GOT_IN_RODATA
-+#define GOT_RODATA	*(.got .igot*)
-+#else
-+#define GOT_RODATA
-+#endif
-+
- /*
-  * Read only Data
-  */
-@@ -454,6 +460,7 @@
- 		SCHED_DATA						\
- 		RO_AFTER_INIT_DATA	/* Read only after init */	\
- 		. = ALIGN(8);						\
-+		GOT_RODATA						\
- 		BOUNDED_SECTION_BY(__tracepoints_ptrs, ___tracepoints_ptrs) \
- 		*(__tracepoints_strings)/* Tracepoints: strings */	\
- 	}								\
 -- 
 2.46.0.792.g87dc391469-goog
 
