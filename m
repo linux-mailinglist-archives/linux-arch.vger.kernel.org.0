@@ -1,69 +1,69 @@
-Return-Path: <linux-arch+bounces-7406-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7407-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A59B986277
-	for <lists+linux-arch@lfdr.de>; Wed, 25 Sep 2024 17:13:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4015F986280
+	for <lists+linux-arch@lfdr.de>; Wed, 25 Sep 2024 17:13:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3CD181C24C3D
-	for <lists+linux-arch@lfdr.de>; Wed, 25 Sep 2024 15:13:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 00086289143
+	for <lists+linux-arch@lfdr.de>; Wed, 25 Sep 2024 15:13:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED8B118C32C;
-	Wed, 25 Sep 2024 15:02:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 731DD18C93A;
+	Wed, 25 Sep 2024 15:02:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MW6uUn+Z"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Gj5dJdjV"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 220AF18BC23
-	for <linux-arch@vger.kernel.org>; Wed, 25 Sep 2024 15:02:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3294A18C335
+	for <linux-arch@vger.kernel.org>; Wed, 25 Sep 2024 15:02:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727276533; cv=none; b=RvB3lFeKBTtz8nrGPvdv5Seuzh7rojSjGbGwB/SKVRfcFf15Wg9HycvV2SHJwq0R0QtltnEXrKHcq6Xp1wwFZWlZoUGIqCXLSjL9xrGtLbDcB/iu+vyPtAXMG5IsqBbAk/iDynyLsL/j05/60UJlY+5Sg0qmf70ypJEmldZvgs8=
+	t=1727276537; cv=none; b=Pphl7KDHan4JUm+VGoceOgMajCXVELnCs5zwbiTXf10UybgGDSnnHSb/zle+L10qe5x8Fu89BAo0heTLomhF9H9cGHKkHu8nYWZPfjpHJBGk6qQU/zCpGflqBH7NQxyIHIGXVH5prwnHEFdC8cpadSh2MuOOlEKCoR7KsJGF3+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727276533; c=relaxed/simple;
-	bh=uNZCRc4hsOOw5KhJ4tKlrDfm3UOmHFTj64isJZp8vsM=;
+	s=arc-20240116; t=1727276537; c=relaxed/simple;
+	bh=YEhtCMnlAL7XzGF/XPf7I5bMm2iUu7a6ID53CAvxp54=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=EEQ1FmR9Rkbp+dT4nriXl/QUkz+e5CYMJXjWkrtcNiIEkYX8609gS1j4aH5EZK8K35qKeUWvHZFuYA1WPrH59mOWoCH7EgQzQJ7+2ePL1ogX3f8yh65gxjT2PqNmmcPOqY5Ubzhd4Vi+IqNOtvDw5wQk5uYQ49uDHLRj+tb4vqA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MW6uUn+Z; arc=none smtp.client-ip=209.85.128.201
+	 To:Cc:Content-Type; b=L5F9AA0gRwaIK+OgFSEm2sPzLx9bgQox4oUoG83LUilCAbCaPfIOaTC2QtBa9lxiro/zs4KhNGxddDqVsFSzMf0JKnAq6s2XAYoCSHuxhMm6jzh45kydrhy8ftvIurq7qZQ9O2qdTRJ5OizHvKN7NzR6IaKWSwLXqrWhQAzwB1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Gj5dJdjV; arc=none smtp.client-ip=209.85.128.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6d683cfa528so87583057b3.0
-        for <linux-arch@vger.kernel.org>; Wed, 25 Sep 2024 08:02:11 -0700 (PDT)
+Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-42cb857fc7dso52573465e9.0
+        for <linux-arch@vger.kernel.org>; Wed, 25 Sep 2024 08:02:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1727276530; x=1727881330; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1727276533; x=1727881333; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lvBkJLcu5Sh3tnaE09NAZ6RZ9jqQeWc/oMvpiTXt3OQ=;
-        b=MW6uUn+ZkZmLYEiLpaElXr/beisIKf4BBTfjJogoXH37rHomkt2A4B7qCm+Kiwfe8i
-         FAqZas4anHYnFdXfVuHp2PvwmUi7ACiKyFFllm2+Z7yRRdclrUYTvUA4tQUPeMShD8LY
-         ZlqhyR7ImxJxRIV9h0l72S+BLqNBA/NpY5xzPQfn4O4hKt/jCRIr3jBlqfjocnzMcaHJ
-         Bpv1ps4IrEFACOyXPoBaXnoQAOR4VLwaJSCtUt+qWWFLIgC2NW6G0QTsvGprB9LCOqBx
-         gmh8TYa5MGBI5H44V6/wqzoDLuiCSDzoe5P5loSjctWpvVH/Z+rmtLwou5SmGz/KPBHe
-         knIw==
+        bh=lbdYNYYjAy1sBuzi5nxjXTZJl29neWIaYfW2XPgVAg0=;
+        b=Gj5dJdjVsPjXxyOtWycvi8g71uQt/m9D48QHQP9xImYEkU3ClzH3UEAjj1k4wAZ3Ut
+         2W1hhqYUsGvPkCUiigrOhNz5HSo6qSnzJQ0nDKGtAmUob6SpDEMh9Z//MfzuL4iNTDIk
+         d6flNQoX/2WMTm3Lvn7x7djDhT4r+jQia3PjRbtC+BFoxPrdLIx4pIeYBUNV3vFhiJ0E
+         TBGLVwaG7Vb1lBu+ZOXzoGxyA+ZpZeKDwt3/RhToS981eJputQUogR69DbmrtNYVbN+a
+         umFvtrqbCgnJrItX0sDaQ2Oz617qud9Inv9aG6kfDoKyWGK4g2M+KRBn52+WvQFqECdV
+         3NbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727276530; x=1727881330;
+        d=1e100.net; s=20230601; t=1727276533; x=1727881333;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lvBkJLcu5Sh3tnaE09NAZ6RZ9jqQeWc/oMvpiTXt3OQ=;
-        b=Xdf4QRnGblgx/Oec1FuHO0gb3VrdnxbJRVS0BALxMEhpOhhHHFjRSqqMRHbxxLHG7F
-         gDV1TISVq+M3tj/DcXptjjOLq8NHbBTgLTfAjwxDS27UehT4CxV5n11iRGWvE8zBilOC
-         Gtnzj3yNvO8x0Iix4JVbdF33Ymt+tG13suq8iulIUZyxFBKENjhTJ20zVPw/i8SSpFFd
-         hM66fBe2Wf3mGr/EKC/HjLhgNSDekWhp4lKRdXoskX5n/wn/OhBkoZqqeX6r6Otk+l0d
-         d74wC20kP9vTptlVZc7wOkzcRpvfwFO40uKVZWcvG770sNZI3ZfHSG82Bn9KdVm8Obnd
-         ji2g==
-X-Forwarded-Encrypted: i=1; AJvYcCXSEr4+CeJH4CktayaT4xXFVhV2hQZ1GdUipOuvXkTI6T8LW0PsmPaB1XVZgJ/0V/u48ddXUH+jWhjJ@vger.kernel.org
-X-Gm-Message-State: AOJu0YxDg43BHX33Kh6wBsg4Jk/5vRAoKfaKFv45YguLboSbbza98Vsw
-	RxmMuZkzd6vH8QLpqdEVWuN3mLmELGfzcKn8qU8r23Bcvf1RQunOynWHfuXploi2mcW/zw==
-X-Google-Smtp-Source: AGHT+IENPFDDE4RBTdISjbf4G4pk2mGOjzo8FmXYzCFJ7WDt9ZFnIbiw80yVnuCNeltTBlMkQAqf4tvt
+        bh=lbdYNYYjAy1sBuzi5nxjXTZJl29neWIaYfW2XPgVAg0=;
+        b=FerbchFHlMj6KilBj7fEefie4aWqIDncoH4FzjMcyhh7Tg4zfTf/CjI7JI3KGhDTs8
+         1VQdlixe5We9gT2wpbVuFDU64I9sA4J06eSgEAbdQHiRe4AP1guuU1lr6Qq2b/55AycL
+         ++HKUHBa3rIPU5G8u7ymizGSOmsL/TPRSfqG1QFbYL6xGdAGwDT+5ll/m9V24QdfiBie
+         GYsCSSTD7wFi3xfob3HoS6Esgth4aXyuk4O9cW5N9O3/nT0ojwZlMe2UxYlyGC/MEtcP
+         ++UI76umOXMmlDEfusKLq6MgKR31WXK2DMvuXula6i6ucEBOTU/RwjM5RlNH2UEYRDlp
+         ZrQg==
+X-Forwarded-Encrypted: i=1; AJvYcCVgg1Eb8t8U8k13jPEmxQkplWCb6OCRRpZ/l084wmODjPCltgZlvEpd+aweShdi0NMHIoFf1sqMlHED@vger.kernel.org
+X-Gm-Message-State: AOJu0YwM0y3pAXj7k7lSZdTTMmgq90z4JwPT3RNILlk8TIhIp4iB+0Vf
+	bOmIRbsm34lpZoG7DCpKdSs8gQKM8lc1y69ALzTm2G1JDAzDlDzku2N+soU+Oj1tWe+U+A==
+X-Google-Smtp-Source: AGHT+IFnkqBxjgA6y6VoEKdvu8v/U0MfKMiOBhmPl2wzAg6akAfpHBzng9kRstyeb7SA5yNN5ghxNG0E
 X-Received: from palermo.c.googlers.com ([fda3:e722:ac3:cc00:7b:198d:ac11:8138])
- (user=ardb job=sendgmr) by 2002:a05:690c:c9c:b0:6b0:d571:3540 with SMTP id
- 00721157ae682-6e21da796e6mr255067b3.6.1727276529787; Wed, 25 Sep 2024
- 08:02:09 -0700 (PDT)
-Date: Wed, 25 Sep 2024 17:01:08 +0200
+ (user=ardb job=sendgmr) by 2002:a05:600c:5709:b0:42c:a879:3d0f with SMTP id
+ 5b1f17b1804b1-42e960af3c0mr226155e9.0.1727276532377; Wed, 25 Sep 2024
+ 08:02:12 -0700 (PDT)
+Date: Wed, 25 Sep 2024 17:01:09 +0200
 In-Reply-To: <20240925150059.3955569-30-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -73,14 +73,14 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240925150059.3955569-30-ardb+git@google.com>
 X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6334; i=ardb@kernel.org;
- h=from:subject; bh=rOkV7b1W8gqAvLsLoQ2i9zRn35wAefNGZsd9tIotAWg=;
- b=owGbwMvMwCFmkMcZplerG8N4Wi2JIe2L6vYGW5mupTcMu0+/lmvg/R+5wEt4Wbk5z8ydQtZqX
- U8bN7/vKGVhEONgkBVTZBGY/ffdztMTpWqdZ8nCzGFlAhnCwMUpABO5Lc3wP3L7HcnzmyvvZR1M
- rS85onToQ4R+5Y7wJefSbJaqGNxXYmVkaHXklA3NNHruJrHYtjJMvdzeSUx0wZXnutnTlvEcNXD iBAA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8267; i=ardb@kernel.org;
+ h=from:subject; bh=shvywZQQiQz7Xv2EgZXJycFhGuSPaFO7HVAh5zMbRYk=;
+ b=owGbwMvMwCFmkMcZplerG8N4Wi2JIe2L6o42nf3njrQ8av3JMd/3S06Rasbd1hMzGC0+MS4UY
+ uxSiOjvKGVhEONgkBVTZBGY/ffdztMTpWqdZ8nCzGFlAhnCwMUpABP5Jcbwz0iltm/h1Ke2pf/a
+ nXTOnbRVCO637fRRuzetQ4Xl5cn2bIb/Lutep90WfOBcvpZFhO10i1thpKiD2UTd0wxh9l82pHa zAAA=
 X-Mailer: git-send-email 2.46.0.792.g87dc391469-goog
-Message-ID: <20240925150059.3955569-38-ardb+git@google.com>
-Subject: [RFC PATCH 08/28] scripts/kallsyms: Remove support for absolute
+Message-ID: <20240925150059.3955569-39-ardb+git@google.com>
+Subject: [RFC PATCH 09/28] x86/tools: Remove special relocation handling for
  per-CPU variables
 From: Ard Biesheuvel <ardb+git@google.com>
 To: linux-kernel@vger.kernel.org
@@ -106,205 +106,270 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Ard Biesheuvel <ardb@kernel.org>
 
-SMP on x86_64 no longer needs absolute per-CPU variables, so this
-support can be dropped from kallsyms as well, as no other architectures
-rely on this functionality.
+Due to the placement of per-CPU variables in a special, 0x0 based
+disjoint memory segment in the ELF binary, the KASLR relocation tool
+needed to perform special processing for references to such variables,
+as they were not affected by KASLR displacement.
+
+This meant that absolute references could be ignored, and RIP-relative
+references had to be compensated for KASLR, by applying the same offset
+but negated.
+
+None of this is necessary any longer, so remove this handling from the
+relocation host tool.
 
 Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 ---
- init/Kconfig            |  4 --
- kernel/kallsyms.c       | 12 +----
- scripts/kallsyms.c      | 51 +++-----------------
- scripts/link-vmlinux.sh |  4 --
- 4 files changed, 9 insertions(+), 62 deletions(-)
+ arch/x86/boot/compressed/misc.c |  14 +--
+ arch/x86/tools/relocs.c         | 130 +-------------------
+ 2 files changed, 2 insertions(+), 142 deletions(-)
 
-diff --git a/init/Kconfig b/init/Kconfig
-index be8a9a786d3c..f6eeba81282d 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -1835,10 +1835,6 @@ config KALLSYMS_ALL
+diff --git a/arch/x86/boot/compressed/misc.c b/arch/x86/boot/compressed/misc.c
+index 04a35b2c26e9..89f01375cdb7 100644
+--- a/arch/x86/boot/compressed/misc.c
++++ b/arch/x86/boot/compressed/misc.c
+@@ -235,7 +235,7 @@ static void handle_relocations(void *output, unsigned long output_len,
  
- 	  Say N unless you really need all symbols, or kernel live patching.
+ 	/*
+ 	 * Process relocations: 32 bit relocations first then 64 bit after.
+-	 * Three sets of binary relocations are added to the end of the kernel
++	 * Two sets of binary relocations are added to the end of the kernel
+ 	 * before compression. Each relocation table entry is the kernel
+ 	 * address of the location which needs to be updated stored as a
+ 	 * 32-bit value which is sign extended to 64 bits.
+@@ -245,8 +245,6 @@ static void handle_relocations(void *output, unsigned long output_len,
+ 	 * kernel bits...
+ 	 * 0 - zero terminator for 64 bit relocations
+ 	 * 64 bit relocation repeated
+-	 * 0 - zero terminator for inverse 32 bit relocations
+-	 * 32 bit inverse relocation repeated
+ 	 * 0 - zero terminator for 32 bit relocations
+ 	 * 32 bit relocation repeated
+ 	 *
+@@ -267,16 +265,6 @@ static void handle_relocations(void *output, unsigned long output_len,
+ 		long extended = *reloc;
+ 		extended += map;
  
--config KALLSYMS_ABSOLUTE_PERCPU
--	bool
--	depends on KALLSYMS
+-		ptr = (unsigned long)extended;
+-		if (ptr < min_addr || ptr > max_addr)
+-			error("inverse 32-bit relocation outside of kernel!\n");
 -
- # end of the "standard kernel features (expert users)" menu
- 
- config ARCH_HAS_MEMBARRIER_CALLBACKS
-diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-index a9a0ca605d4a..4198f30aac3c 100644
---- a/kernel/kallsyms.c
-+++ b/kernel/kallsyms.c
-@@ -148,16 +148,8 @@ static unsigned int get_symbol_offset(unsigned long pos)
- 
- unsigned long kallsyms_sym_address(int idx)
- {
--	/* values are unsigned offsets if --absolute-percpu is not in effect */
--	if (!IS_ENABLED(CONFIG_KALLSYMS_ABSOLUTE_PERCPU))
--		return kallsyms_relative_base + (u32)kallsyms_offsets[idx];
+-		*(int32_t *)ptr -= delta;
+-	}
+-	for (reloc--; *reloc; reloc--) {
+-		long extended = *reloc;
+-		extended += map;
 -
--	/* ...otherwise, positive offsets are absolute values */
--	if (kallsyms_offsets[idx] >= 0)
--		return kallsyms_offsets[idx];
--
--	/* ...and negative offsets are relative to kallsyms_relative_base - 1 */
--	return kallsyms_relative_base - 1 - kallsyms_offsets[idx];
-+	/* values are unsigned offsets */
-+	return kallsyms_relative_base + (u32)kallsyms_offsets[idx];
+ 		ptr = (unsigned long)extended;
+ 		if (ptr < min_addr || ptr > max_addr)
+ 			error("64-bit relocation outside of kernel!\n");
+diff --git a/arch/x86/tools/relocs.c b/arch/x86/tools/relocs.c
+index 10add45b99f1..942c029a5067 100644
+--- a/arch/x86/tools/relocs.c
++++ b/arch/x86/tools/relocs.c
+@@ -29,7 +29,6 @@ static struct relocs		relocs16;
+ static struct relocs		relocs32;
+ 
+ #if ELF_BITS == 64
+-static struct relocs		relocs32neg;
+ static struct relocs		relocs64;
+ # define FMT PRIu64
+ #else
+@@ -287,34 +286,6 @@ static const char *sym_name(const char *sym_strtab, Elf_Sym *sym)
+ 	return name;
  }
  
- static unsigned int get_symbol_seq(int index)
-diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-index 09757d300a05..9c34b9397872 100644
---- a/scripts/kallsyms.c
-+++ b/scripts/kallsyms.c
-@@ -5,7 +5,7 @@
-  * This software may be used and distributed according to the terms
-  * of the GNU General Public License, incorporated herein by reference.
-  *
-- * Usage: kallsyms [--all-symbols] [--absolute-percpu]  in.map > out.S
-+ * Usage: kallsyms [--all-symbols]  in.map > out.S
-  *
-  *      Table compression uses all the unused char codes on the symbols and
-  *  maps these to the most used substrings (tokens). For instance, it might
-@@ -37,7 +37,6 @@ struct sym_entry {
- 	unsigned long long addr;
- 	unsigned int len;
- 	unsigned int seq;
--	bool percpu_absolute;
- 	unsigned char sym[];
- };
- 
-@@ -62,7 +61,6 @@ static struct addr_range percpu_range = {
- static struct sym_entry **table;
- static unsigned int table_size, table_cnt;
- static int all_symbols;
--static int absolute_percpu;
- 
- static int token_profit[0x10000];
- 
-@@ -73,7 +71,7 @@ static unsigned char best_table_len[256];
- 
- static void usage(void)
- {
--	fprintf(stderr, "Usage: kallsyms [--all-symbols] [--absolute-percpu] in.map > out.S\n");
-+	fprintf(stderr, "Usage: kallsyms [--all-symbols] in.map > out.S\n");
- 	exit(1);
- }
- 
-@@ -175,7 +173,6 @@ static struct sym_entry *read_symbol(FILE *in, char **buf, size_t *buf_len)
- 	sym->len = len;
- 	sym->sym[0] = type;
- 	strcpy(sym_name(sym), name);
--	sym->percpu_absolute = false;
- 
- 	return sym;
- }
-@@ -319,11 +316,6 @@ static int expand_symbol(const unsigned char *data, int len, char *result)
- 	return total;
- }
- 
--static bool symbol_absolute(const struct sym_entry *s)
+-static Elf_Sym *sym_lookup(const char *symname)
 -{
--	return s->percpu_absolute;
+-	int i;
+-
+-	for (i = 0; i < shnum; i++) {
+-		struct section *sec = &secs[i];
+-		long nsyms;
+-		const char *strtab;
+-		Elf_Sym *symtab;
+-		Elf_Sym *sym;
+-
+-		if (sec->shdr.sh_type != SHT_SYMTAB)
+-			continue;
+-
+-		nsyms = sec->shdr.sh_size/sizeof(Elf_Sym);
+-		symtab = sec->symtab;
+-		strtab = sec->link->strtab;
+-
+-		for (sym = symtab; --nsyms >= 0; sym++) {
+-			if (!sym->st_name)
+-				continue;
+-			if (strcmp(symname, strtab + sym->st_name) == 0)
+-				return sym;
+-		}
+-	}
+-	return 0;
 -}
 -
- static int compare_names(const void *a, const void *b)
- {
- 	int ret;
-@@ -457,20 +449,10 @@ static void write_src(void)
- 		long long offset;
- 		bool overflow;
- 
--		if (!absolute_percpu) {
--			offset = table[i]->addr - relative_base;
--			overflow = offset < 0 || offset > UINT_MAX;
--		} else if (symbol_absolute(table[i])) {
--			offset = table[i]->addr;
--			overflow = offset < 0 || offset > INT_MAX;
--		} else {
--			offset = relative_base - table[i]->addr - 1;
--			overflow = offset < INT_MIN || offset >= 0;
--		}
-+		offset = table[i]->addr - relative_base;
-+		overflow = (offset < 0 || offset > UINT_MAX);
- 		if (overflow) {
--			fprintf(stderr, "kallsyms failure: "
--				"%s symbol value %#llx out of range in relative mode\n",
--				symbol_absolute(table[i]) ? "absolute" : "relative",
-+			fprintf(stderr, "kallsyms failure: symbol value %#llx out of range\n",
- 				table[i]->addr);
- 			exit(EXIT_FAILURE);
- 		}
-@@ -725,32 +707,16 @@ static void sort_symbols(void)
- 	qsort(table, table_cnt, sizeof(table[0]), compare_symbols);
+ #if BYTE_ORDER == LITTLE_ENDIAN
+ # define le16_to_cpu(val)	(val)
+ # define le32_to_cpu(val)	(val)
+@@ -722,79 +693,8 @@ static void walk_relocs(int (*process)(struct section *sec, Elf_Rel *rel,
+ 	}
  }
  
--static void make_percpus_absolute(void)
--{
--	unsigned int i;
+-/*
+- * The .data..percpu section is a special case for x86_64 SMP kernels.
+- * It is used to initialize the actual per_cpu areas and to provide
+- * definitions for the per_cpu variables that correspond to their offsets
+- * within the percpu area. Since the values of all of the symbols need
+- * to be offsets from the start of the per_cpu area the virtual address
+- * (sh_addr) of .data..percpu is 0 in SMP kernels.
+- *
+- * This means that:
+- *
+- *	Relocations that reference symbols in the per_cpu area do not
+- *	need further relocation (since the value is an offset relative
+- *	to the start of the per_cpu area that does not change).
+- *
+- *	Relocations that apply to the per_cpu area need to have their
+- *	offset adjusted by by the value of __per_cpu_load to make them
+- *	point to the correct place in the loaded image (because the
+- *	virtual address of .data..percpu is 0).
+- *
+- * For non SMP kernels .data..percpu is linked as part of the normal
+- * kernel data and does not require special treatment.
+- *
+- */
+-static int per_cpu_shndx = -1;
+-static Elf_Addr per_cpu_load_addr;
 -
--	for (i = 0; i < table_cnt; i++)
--		if (symbol_in_range(table[i], &percpu_range, 1)) {
--			/*
--			 * Keep the 'A' override for percpu symbols to
--			 * ensure consistent behavior compared to older
--			 * versions of this tool.
--			 */
--			table[i]->sym[0] = 'A';
--			table[i]->percpu_absolute = true;
--		}
+-static void percpu_init(void)
+-{
+-	int i;
+-
+-	for (i = 0; i < shnum; i++) {
+-		ElfW(Sym) *sym;
+-
+-		if (strcmp(sec_name(i), ".data..percpu"))
+-			continue;
+-
+-		if (secs[i].shdr.sh_addr != 0)	/* non SMP kernel */
+-			return;
+-
+-		sym = sym_lookup("__per_cpu_load");
+-		if (!sym)
+-			die("can't find __per_cpu_load\n");
+-
+-		per_cpu_shndx = i;
+-		per_cpu_load_addr = sym->st_value;
+-
+-		return;
+-	}
 -}
 -
- /* find the minimum non-absolute symbol address */
- static void record_relative_base(void)
- {
- 	unsigned int i;
+ #if ELF_BITS == 64
  
- 	for (i = 0; i < table_cnt; i++)
--		if (table[i]->addr && !symbol_absolute(table[i])) {
-+		if (table[i]->addr) {
+-/*
+- * Check to see if a symbol lies in the .data..percpu section.
+- *
+- * The linker incorrectly associates some symbols with the
+- * .data..percpu section so we also need to check the symbol
+- * name to make sure that we classify the symbol correctly.
+- *
+- * The GNU linker incorrectly associates:
+- *	__init_begin
+- *	__per_cpu_load
+- */
+-static int is_percpu_sym(ElfW(Sym) *sym, const char *symname)
+-{
+-	int shndx = sym_index(sym);
+-
+-	return (shndx == per_cpu_shndx) &&
+-		strcmp(symname, "__init_begin") &&
+-		strcmp(symname, "__per_cpu_load");
+-}
+-
+-
+ static int do_reloc64(struct section *sec, Elf_Rel *rel, ElfW(Sym) *sym,
+ 		      const char *symname)
+ {
+@@ -805,12 +705,6 @@ static int do_reloc64(struct section *sec, Elf_Rel *rel, ElfW(Sym) *sym,
+ 	if (sym->st_shndx == SHN_UNDEF)
+ 		return 0;
+ 
+-	/*
+-	 * Adjust the offset if this reloc applies to the percpu section.
+-	 */
+-	if (sec->shdr.sh_info == per_cpu_shndx)
+-		offset += per_cpu_load_addr;
+-
+ 	switch (r_type) {
+ 	case R_X86_64_NONE:
+ 		/* NONE can be ignored. */
+@@ -819,33 +713,22 @@ static int do_reloc64(struct section *sec, Elf_Rel *rel, ElfW(Sym) *sym,
+ 	case R_X86_64_PC32:
+ 	case R_X86_64_PLT32:
+ 		/*
+-		 * PC relative relocations don't need to be adjusted unless
+-		 * referencing a percpu symbol.
++		 * PC relative relocations don't need to be adjusted.
+ 		 *
+ 		 * NB: R_X86_64_PLT32 can be treated as R_X86_64_PC32.
+ 		 */
+-		if (is_percpu_sym(sym, symname))
+-			add_reloc(&relocs32neg, offset);
+ 		break;
+ 
+ 	case R_X86_64_PC64:
+ 		/*
+ 		 * Only used by jump labels
+ 		 */
+-		if (is_percpu_sym(sym, symname))
+-			die("Invalid R_X86_64_PC64 relocation against per-CPU symbol %s\n", symname);
+ 		break;
+ 
+ 	case R_X86_64_32:
+ 	case R_X86_64_32S:
+ 	case R_X86_64_64:
+ 	case R_X86_64_GOTPCREL:
+-		/*
+-		 * References to the percpu area don't need to be adjusted.
+-		 */
+-		if (is_percpu_sym(sym, symname))
+-			break;
+-
+ 		if (shn_abs) {
  			/*
- 			 * The table is sorted by address.
--			 * Take the first non-absolute symbol value.
-+			 * Take the first non-zero symbol value.
- 			 */
- 			relative_base = table[i]->addr;
- 			return;
-@@ -762,7 +728,6 @@ int main(int argc, char **argv)
- 	while (1) {
- 		static const struct option long_options[] = {
- 			{"all-symbols",     no_argument, &all_symbols,     1},
--			{"absolute-percpu", no_argument, &absolute_percpu, 1},
- 			{},
- 		};
- 
-@@ -779,8 +744,6 @@ int main(int argc, char **argv)
- 
- 	read_map(argv[optind]);
- 	shrink_table();
--	if (absolute_percpu)
--		make_percpus_absolute();
- 	sort_symbols();
- 	record_relative_base();
- 	optimize_token_table();
-diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-index a9b3f34a78d2..df5f3fbb46f3 100755
---- a/scripts/link-vmlinux.sh
-+++ b/scripts/link-vmlinux.sh
-@@ -140,10 +140,6 @@ kallsyms()
- 		kallsymopt="${kallsymopt} --all-symbols"
- 	fi
- 
--	if is_enabled CONFIG_KALLSYMS_ABSOLUTE_PERCPU; then
--		kallsymopt="${kallsymopt} --absolute-percpu"
--	fi
+ 			 * Whitelisted absolute symbols do not require
+@@ -1076,7 +959,6 @@ static void emit_relocs(int as_text, int use_real_mode)
+ 	/* Order the relocations for more efficient processing */
+ 	sort_relocs(&relocs32);
+ #if ELF_BITS == 64
+-	sort_relocs(&relocs32neg);
+ 	sort_relocs(&relocs64);
+ #else
+ 	sort_relocs(&relocs16);
+@@ -1109,13 +991,6 @@ static void emit_relocs(int as_text, int use_real_mode)
+ 		for (i = 0; i < relocs64.count; i++)
+ 			if (!i || relocs64.offset[i] != relocs64.offset[i - 1])
+ 				write_reloc(relocs64.offset[i], stdout);
 -
- 	info KSYMS "${2}.S"
- 	scripts/kallsyms ${kallsymopt} "${1}" > "${2}.S"
+-		/* Print a stop */
+-		write_reloc(0, stdout);
+-
+-		/* Now print each inverse 32-bit relocation */
+-		for (i = 0; i < relocs32neg.count; i++)
+-			write_reloc(relocs32neg.offset[i], stdout);
+ #endif
  
+ 		/* Print a stop */
+@@ -1180,9 +1055,6 @@ void process(FILE *fp, int use_real_mode, int as_text,
+ 	read_symtabs();
+ 	read_relocs();
+ 
+-	if (ELF_BITS == 64)
+-		percpu_init();
+-
+ 	if (show_absolute_syms) {
+ 		print_absolute_symbols();
+ 		return;
 -- 
 2.46.0.792.g87dc391469-goog
 
