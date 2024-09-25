@@ -1,177 +1,295 @@
-Return-Path: <linux-arch+bounces-7397-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7398-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDA18985369
-	for <lists+linux-arch@lfdr.de>; Wed, 25 Sep 2024 09:09:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7289E986239
+	for <lists+linux-arch@lfdr.de>; Wed, 25 Sep 2024 17:09:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A492C1F21ED7
-	for <lists+linux-arch@lfdr.de>; Wed, 25 Sep 2024 07:09:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E7ED51F28B23
+	for <lists+linux-arch@lfdr.de>; Wed, 25 Sep 2024 15:09:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCB6C155300;
-	Wed, 25 Sep 2024 07:09:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FFAE4965B;
+	Wed, 25 Sep 2024 15:01:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HBWrXLE+"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FA68132103;
-	Wed, 25 Sep 2024 07:09:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 799C53B295
+	for <linux-arch@vger.kernel.org>; Wed, 25 Sep 2024 15:01:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727248144; cv=none; b=YPek7LcFzmhhu9rJo1tGpuY6peNZ7VMZthNT1CjBsnwM40iqrS7CKjk8TxNiDMUkn2nB1OSHFA7SSZV2jC7G9wAED+SxAD9SOIJOC5cBpn3FS34v04NfTvxZR4rNWAyBLOhLS+iTX/sPuoMMU8km2a/dkAUkh0pPJQngM7QDbMQ=
+	t=1727276513; cv=none; b=LQ/euDO4cRrkLip92KXervoLTlUpJwrthnbzWf2gL5f8oV1OPkXSCc6/QJShDnoQ1jhmRRttbyQ0A/TrcrQL9l9JMv4rt+/6cg8q+OghZqfBsLampC5HK/vjpZqE7PkfavjLUNv49PEyFbWNS8QG7kzAYUR+9pPxChbfCLEjXJk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727248144; c=relaxed/simple;
-	bh=1VRMxsV1T0yeplH6qQsbT5SNdj7O1rTqbm5gQDChpfs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AI6Dv+71Nsq1HvamJ8C46x4aTLSCbuFuBmYjASDgKTQyXjdF5KQXr9MIjFn8P4dZsP3znrzii+Cqy6jTRR3vuVBeGHpeQ35xketMvBzbaw3rDGR326w4kuByJnSQ7wCrwTPEY4kX7qcRV83GinyT9a4YbPL+KgB+DnqQKjdPLi0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4XD7BP385Pz9sSt;
-	Wed, 25 Sep 2024 09:09:01 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ofayadwilK7M; Wed, 25 Sep 2024 09:09:01 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4XD7BP28JFz9sSp;
-	Wed, 25 Sep 2024 09:09:01 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 355CF8B76E;
-	Wed, 25 Sep 2024 09:09:01 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id zc9XJ1vndXU7; Wed, 25 Sep 2024 09:09:01 +0200 (CEST)
-Received: from [192.168.232.90] (PO27091.IDSI0.si.c-s.fr [192.168.232.90])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 4F6388B763;
-	Wed, 25 Sep 2024 09:09:00 +0200 (CEST)
-Message-ID: <7c3bfb87-40e8-45ef-86a7-53f02053d9b3@csgroup.eu>
-Date: Wed, 25 Sep 2024 09:09:00 +0200
+	s=arc-20240116; t=1727276513; c=relaxed/simple;
+	bh=GyK5LYy4hT2Mza2Xl9rezrZ2kXob9EVtau0/Aicjkyk=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=eXZtcrZHMQKKJ9CPZ5+CzI5DScUZ1R1q7G6QwrKeoG85AkjSdYpz+7rQlTmriIU/HnPuFSTciSA7OJIA0IMgXJayHetUps5pS7OtHW13uLGVjoWkxvlpWbUQ7kwsMv67DIEzqZSJljS0wLykO8yXQjiDqF2yO6fkUoGdfO63r90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HBWrXLE+; arc=none smtp.client-ip=209.85.219.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-e24a0daf98eso1853215276.1
+        for <linux-arch@vger.kernel.org>; Wed, 25 Sep 2024 08:01:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1727276509; x=1727881309; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=6z7k17OsGZKMVFB80yPIaoy18RpZ7zGlccSFIk096uA=;
+        b=HBWrXLE+RxrFNPpG2yxPXm0QKtrpPQwtZYwyUTWmsAgybBjgE+ZkiheCe+wEK2qhIC
+         d/OwUrHaR7BnsDQ13NmYMQ/T/Wxi2ngNY5h8VPXXWaJHhYbetQqkeu8aq1hjPTj5c9PW
+         F12qtXfhVCgQvbKpGGLwXP3lVR+FS4RxBTRCl4juHGkPeUJSzdGXWNveVg8EvVuJ4N0b
+         n4j2jj9BHczdrpbNCNb7o8/n3xibw3CH9qigfds7ZpiBeSfkGorPGe2XFwqB9V8/L7xS
+         WpgVQZn1xoY3UU0VM6Rs1+gNKrmFDLnP0OE/Gjp0Wlkz6a4YqIRuRZD34s3EH2vnC4ok
+         KCnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727276509; x=1727881309;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6z7k17OsGZKMVFB80yPIaoy18RpZ7zGlccSFIk096uA=;
+        b=HhmVRLpB9f5276TF8aJXloR/H1LE5eC/s296mq6HDx7g58HM/i33xbV1v8qQJ9qE44
+         kerM+TyINeixdm0m8XGhi66aBg1swaZlkowWzr0yWnTyEbmZjD6Xm3pv6RuHkUESNpQV
+         aj5OoTUtyzIjXLZLXqOhUKGJxqVkU24qdcGl+2Jsp72Lku5eQd9cv5czlNa64s4YN8Ma
+         /9WkfwA9WyfEXNRJ/EsF/hwlmbrUlDiq72X8vOapV+1usAZHIxueFkvxGXR2y72T2E3E
+         f/XZ0U6oS+0JgpWxEuEq0LNFMA/vKusdtjsxi4M5f0pStcWkHbwZVFV8osDIxb6QI0z+
+         kbNw==
+X-Forwarded-Encrypted: i=1; AJvYcCVMD6mYHmhi7sBCCyknt8ilGh3H7QCQJTo7V9HeUzW1UPZfYt18y71HOYvXMwMY95qkOxcLan+9Kf0G@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx5s/slB8oYaq3yEWQN9QqtFie8rnufysteIjl6krEd7BAKWlo9
+	e1tHbgGoChxNgZA6rG4bLF7GCtQSr7fuedG3besAqs61efnY9PfjcDjCoSrBgcY3+44y0g==
+X-Google-Smtp-Source: AGHT+IGRJUFrs1DoPRrR5c+MJEZ6tG0DheITTu8FPFLiXZOk+NGplm3eXqMcHGaqBYVKwyJOtED+Rs3U
+X-Received: from palermo.c.googlers.com ([fda3:e722:ac3:cc00:7b:198d:ac11:8138])
+ (user=ardb job=sendgmr) by 2002:a25:d695:0:b0:e24:9ec4:7297 with SMTP id
+ 3f1490d57ef6-e24da58666emr14424276.11.1727276509248; Wed, 25 Sep 2024
+ 08:01:49 -0700 (PDT)
+Date: Wed, 25 Sep 2024 17:01:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 8/8] vdso: Modify getrandom to include the correct
- namespace.
-To: Vincenzo Frascino <vincenzo.frascino@arm.com>,
- linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, linux-mm@kvack.org
-Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- "Jason A . Donenfeld" <Jason@zx2c4.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- Naveen N Rao <naveen@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- "H . Peter Anvin" <hpa@zytor.com>, Theodore Ts'o <tytso@mit.edu>,
- Arnd Bergmann <arnd@arndb.de>, Andrew Morton <akpm@linux-foundation.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-References: <20240923141943.133551-1-vincenzo.frascino@arm.com>
- <20240923141943.133551-9-vincenzo.frascino@arm.com>
-Content-Language: fr-FR
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-In-Reply-To: <20240923141943.133551-9-vincenzo.frascino@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
+X-Developer-Signature: v=1; a=openpgp-sha256; l=9188; i=ardb@kernel.org;
+ h=from:subject; bh=vMX7ogGZLEc8VPljv97RuDVJFn/JAzUBXeH6mBcebRA=;
+ b=owGbwMvMwCFmkMcZplerG8N4Wi2JIe2L6pr9k37ZPn8uK8IvcW92T9PETT9Xrz4h19DckCOrf
+ uS7om11RykLgxgHg6yYIovA7L/vdp6eKFXrPEsWZg4rE8gQBi5OAZiIeBIjQ8cjt/vNFnlpcQoK
+ wSbqqaeUo8XjLsnZ2/zNu6XorPO9luG/9+LkrdV5d/tnvdg2VzHvwaxNexRvHney2v1TP02udn4 IIwA=
+X-Mailer: git-send-email 2.46.0.792.g87dc391469-goog
+Message-ID: <20240925150059.3955569-30-ardb+git@google.com>
+Subject: [RFC PATCH 00/28] x86: Rely on toolchain for relocatable code
+From: Ard Biesheuvel <ardb+git@google.com>
+To: linux-kernel@vger.kernel.org
+Cc: Ard Biesheuvel <ardb@kernel.org>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+	Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Uros Bizjak <ubizjak@gmail.com>, 
+	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Vitaly Kuznetsov <vkuznets@redhat.com>, Juergen Gross <jgross@suse.com>, 
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Kees Cook <kees@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Keith Packard <keithp@keithp.com>, 
+	Justin Stitt <justinstitt@google.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	Kan Liang <kan.liang@linux.intel.com>, linux-doc@vger.kernel.org, 
+	linux-pm@vger.kernel.org, kvm@vger.kernel.org, xen-devel@lists.xenproject.org, 
+	linux-efi@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-sparse@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
+From: Ard Biesheuvel <ardb@kernel.org>
 
+The x86_64 port has a number of historical quirks that result in a
+reliance on toolchain features that are either poorly specified or
+basically implementation details of the toolchain:
 
-Le 23/09/2024 à 16:19, Vincenzo Frascino a écrit :
-> The VDSO implementation includes headers from outside of the
-> vdso/ namespace.
-> 
-> Modify getrandom to take advantage of the refactoring done in the
-> previous patches and to include only the vdso/ namespace.
-> 
-> Cc: Andy Lutomirski <luto@kernel.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Jason A. Donenfeld <Jason@zx2c4.com>
-> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> ---
->   include/vdso/datapage.h |  1 +
->   lib/vdso/getrandom.c    | 22 +++++++++++-----------
->   2 files changed, 12 insertions(+), 11 deletions(-)
-> 
-> diff --git a/include/vdso/datapage.h b/include/vdso/datapage.h
-> index b7d6c71f20c1..127f0c51bf01 100644
-> --- a/include/vdso/datapage.h
-> +++ b/include/vdso/datapage.h
-> @@ -5,6 +5,7 @@
->   #ifndef __ASSEMBLY__
->   
->   #include <linux/compiler.h>
-> +#include <linux/build_bug.h>
+- the 'kernel' C model implemented by the compiler is intended for
+  position dependent code residing in the 'negative' 2 GiB of the
+  virtual address space, but is used to create a position independent
+  executable (for virtual KASLR);
 
-What in this datapage.h requires this build_bug header ?
+- the 'kernel' C model has other properties that are not written down
+  anywhere, and may therefore deviate between compilers and versions,
+  which now includes the Rust compilers too (e.g., use %gs not %fs for
+  per-CPU references); 
 
->   #include <uapi/linux/time.h>
->   #include <uapi/linux/types.h>
->   #include <uapi/asm-generic/errno-base.h>
-> diff --git a/lib/vdso/getrandom.c b/lib/vdso/getrandom.c
-> index 938ca539aaa6..e15d3cf768c9 100644
-> --- a/lib/vdso/getrandom.c
-> +++ b/lib/vdso/getrandom.c
-> @@ -3,19 +3,19 @@
->    * Copyright (C) 2022-2024 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
->    */
->   
-> -#include <linux/array_size.h>
-> -#include <linux/minmax.h>
->   #include <vdso/datapage.h>
->   #include <vdso/getrandom.h>
->   #include <vdso/unaligned.h>
-> -#include <asm/vdso/getrandom.h>
-> -#include <uapi/linux/mman.h>
-> -#include <uapi/linux/random.h>
-> +#include <vdso/mman.h>
+- the relocation format used to perform the PIE relocation at boot is
+  complicated and non-standard, as it deals with 3 types of
+  displacements, including 32-bit negative displacements for
+  RIP-relative per-CPU references that are not subject to relocation
+  fixups (as they are places in a separate, disjoint address space);
 
-This change is not needed, asm/vdso/getrandom.h is in VDSO namespace, 
-and the other two are UAPI headers which must be safe to include in VDSO 
-code as VDSO code in userland code.
+- the relocation table is generated from static relocation metadata
+  taken from the ELF input objects into the linker, and these describe
+  the input not the output - relaxations or other linker tweaks may
+  result in a mismatch between the two, and GNU ld and LLD display
+  different behavior here;
 
-> +#include <vdso/page.h>
->   
-> -#undef PAGE_SIZE
-> -#undef PAGE_MASK
-> -#define PAGE_SIZE (1UL << CONFIG_PAGE_SHIFT)
-> -#define PAGE_MASK (~(PAGE_SIZE - 1))
-> +#ifndef ARRAY_SIZE
-> +#define ARRAY_SIZE(x)	(sizeof(x) / sizeof(*x))
-> +#endif
-> +
-> +#ifndef min_t
-> +#define min_t(type,a,b)	((type)(a) < (type)(b) ? (type)(a) : (type)(b))
-> +#endif
+- this disjoint per-CPU address space requires elaborate hacks in the
+  linker script and the startup code;
 
-Would be better to force undefine/redefine ARRAY_SIZE and min_t instead 
-of defining them only when they don't exist already.
+- some of the startup code executes from a 1:1 mapping of memory, where
+  RIP-relative references are mandatory, whereas RIP-relative per-CPU
+  variable references can only work correctly from the kernel virtual
+  mapping (as they need to wrap around from the negative 2 GiB space
+  into the 0x0 based per-CPU region);
 
->   
->   #define MEMCPY_AND_ZERO_SRC(type, dst, src, len) do {				\
->   	while (len >= sizeof(type)) {						\
-> @@ -79,8 +79,8 @@ __cvdso_getrandom_data(const struct vdso_rng_data *rng_info, void *buffer, size_
->   	if (unlikely(opaque_len == ~0UL && !buffer && !len && !flags)) {
->   		struct vgetrandom_opaque_params *params = opaque_state;
->   		params->size_of_opaque_state = sizeof(*state);
-> -		params->mmap_prot = PROT_READ | PROT_WRITE;
-> -		params->mmap_flags = MAP_DROPPABLE | MAP_ANONYMOUS;
-> +		params->mmap_prot = VDSO_MMAP_PROT;
-> +		params->mmap_flags = VDSO_MMAP_FLAGS;
+The reason for this odd situation wrt per-CPU variable addressing is the
+fact that we rely on the user-space TLS arrangement for per-task stack
+cookies, and this was implemented using a fixed offset of 40 bytes from
+%GS. If we bump the minimum GCC version to 8.1, we can switch to symbol
+based stack cookie references, allowing the same arrangement to be
+adopted as on other architectures, i.e., where the CPU register carries
+the per-CPU offset, and UP or boot-time per-CPU references point into
+the per-CPU load area directly (using an offset of 0x0).
 
-At the time being the flags and prot are the same for all architectures, 
-there is no point in introducing VDSO_MMAP_PROT and VDSO_MMAP_FLAGS. 
-Maybe one day that may be needed, but until that day nothing should be 
-changed, unless you already have in mind and describe an architecture 
-that will need that.
+With that out of the way, we can untangle this whole thing, and replace
+the bespoke tooling and relocation formats with ordinary, linker
+generated relocation tables, using the RELR format that reduces the
+memory footprint of the relocation table by 20x. The compilers can
+efficiently generate position independent code these days, without
+unnecessary indirections via the Global Object Table (GOT) except for a
+handful of special cases (see the KVM patch for an example where a
+GOT-based indirection is the best choice for pushing the absolute
+address of a symbol onto the stack in a position independent manner when
+there are no free GPRs)
 
-Christophe
+It also brings us much closer to the ordinary PIE relocation model used
+for most of user space, which is therefore much better supported and
+less likely to create problems as we increase the range of compilers and
+linkers that need to be supported.
 
->   		for (size_t i = 0; i < ARRAY_SIZE(params->reserved); ++i)
->   			params->reserved[i] = 0;
->   		return 0;
+Tested on GCC 8 - 14 and Clang 15 - 17, using EFI and bare metal boot
+using a variety of entry points (decompressor, EFI stub, XenPV, PVH)
+ 
+Cc: x86@kernel.org
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Uros Bizjak <ubizjak@gmail.com>
+Cc: Dennis Zhou <dennis@kernel.org>
+Cc: Tejun Heo <tj@kernel.org>
+Cc: Christoph Lameter <cl@linux.com>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc: Juergen Gross <jgross@suse.com>
+Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Kees Cook <kees@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Keith Packard <keithp@keithp.com>
+Cc: Justin Stitt <justinstitt@google.com>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Kan Liang  <kan.liang@linux.intel.com>
+Cc: linux-doc@vger.kernel.org
+Cc: linux-pm@vger.kernel.org
+Cc: kvm@vger.kernel.org
+Cc: xen-devel@lists.xenproject.org
+Cc: linux-efi@vger.kernel.org
+Cc: linux-arch@vger.kernel.org
+Cc: linux-sparse@vger.kernel.org
+Cc: linux-kbuild@vger.kernel.org
+Cc: linux-perf-users@vger.kernel.org
+Cc: rust-for-linux@vger.kernel.org
+Cc: llvm@lists.linux.dev
+
+Ard Biesheuvel (28):
+  x86/pvh: Call C code via the kernel virtual mapping
+  Documentation: Bump minimum GCC version to 8.1
+  x86/tools: Use mmap() to simplify relocs host tool
+  x86/boot: Permit GOTPCREL relocations for x86_64 builds
+  x86: Define the stack protector guard symbol explicitly
+  x86/percpu: Get rid of absolute per-CPU variable placement
+  scripts/kallsyms: Avoid 0x0 as the relative base
+  scripts/kallsyms: Remove support for absolute per-CPU variables
+  x86/tools: Remove special relocation handling for per-CPU variables
+  x86/xen: Avoid relocatable quantities in Xen ELF notes
+  x86/pvh: Avoid absolute symbol references in .head.text
+  x86/pm-trace: Use RIP-relative accesses for .tracedata
+  x86/kvm: Use RIP-relative addressing
+  x86/rethook: Use RIP-relative reference for return address
+  x86/sync_core: Use RIP-relative addressing
+  x86/entry_64: Use RIP-relative addressing
+  x86/hibernate: Prefer RIP-relative accesses
+  x86/boot/64: Determine VA/PA offset before entering C code
+  x86/boot/64: Avoid intentional absolute symbol references in
+    .head.text
+  x64/acpi: Use PIC-compatible references in wakeup_64.S
+  x86/head: Use PIC-compatible symbol references in startup code
+  asm-generic: Treat PIC .data.rel.ro sections as .rodata
+  tools/objtool: Mark generated sections as writable
+  tools/objtool: Treat indirect ftrace calls as direct calls
+  x86: Use PIE codegen for the core kernel
+  x86/boot: Implement support for ELF RELA/RELR relocations
+  x86/kernel: Switch to PIE linking for the core kernel
+  x86/tools: Drop x86_64 support from 'relocs' tool
+
+ Documentation/admin-guide/README.rst    |   2 +-
+ Documentation/arch/x86/zero-page.rst    |   3 +-
+ Documentation/process/changes.rst       |   2 +-
+ arch/x86/Kconfig                        |   3 +-
+ arch/x86/Makefile                       |  22 +-
+ arch/x86/boot/Makefile                  |   1 +
+ arch/x86/boot/compressed/Makefile       |   2 +-
+ arch/x86/boot/compressed/misc.c         |  16 +-
+ arch/x86/entry/calling.h                |   9 +-
+ arch/x86/entry/entry_64.S               |  12 +-
+ arch/x86/entry/vdso/Makefile            |   1 +
+ arch/x86/include/asm/desc.h             |   1 -
+ arch/x86/include/asm/init.h             |   2 +-
+ arch/x86/include/asm/percpu.h           |  22 -
+ arch/x86/include/asm/pm-trace.h         |   4 +-
+ arch/x86/include/asm/processor.h        |  14 +-
+ arch/x86/include/asm/setup.h            |   3 +-
+ arch/x86/include/asm/stackprotector.h   |   4 -
+ arch/x86/include/asm/sync_core.h        |   3 +-
+ arch/x86/include/uapi/asm/bootparam.h   |   2 +-
+ arch/x86/kernel/acpi/wakeup_64.S        |  11 +-
+ arch/x86/kernel/head64.c                |  76 +++-
+ arch/x86/kernel/head_64.S               |  40 +-
+ arch/x86/kernel/irq_64.c                |   1 -
+ arch/x86/kernel/kvm.c                   |   8 +-
+ arch/x86/kernel/relocate_kernel_64.S    |   6 +-
+ arch/x86/kernel/rethook.c               |   3 +-
+ arch/x86/kernel/setup_percpu.c          |   9 +-
+ arch/x86/kernel/vmlinux.lds.S           |  75 ++--
+ arch/x86/platform/pvh/head.S            |  57 ++-
+ arch/x86/power/hibernate_asm_64.S       |   4 +-
+ arch/x86/realmode/rm/Makefile           |   1 +
+ arch/x86/tools/Makefile                 |   2 +-
+ arch/x86/tools/relocs.c                 | 425 +++-----------------
+ arch/x86/tools/relocs.h                 |  11 +-
+ arch/x86/tools/relocs_64.c              |  18 -
+ arch/x86/tools/relocs_common.c          |  11 +-
+ arch/x86/xen/xen-head.S                 |  16 +-
+ drivers/base/power/trace.c              |   6 +-
+ drivers/firmware/efi/libstub/x86-stub.c |   2 +
+ include/asm-generic/vmlinux.lds.h       |  10 +-
+ include/linux/compiler.h                |   2 +-
+ init/Kconfig                            |   5 -
+ kernel/kallsyms.c                       |  12 +-
+ scripts/kallsyms.c                      |  53 +--
+ scripts/link-vmlinux.sh                 |   4 -
+ tools/objtool/check.c                   |  43 +-
+ tools/objtool/elf.c                     |   2 +-
+ tools/objtool/include/objtool/special.h |   2 +-
+ tools/perf/util/annotate.c              |   4 +-
+ 50 files changed, 380 insertions(+), 667 deletions(-)
+ delete mode 100644 arch/x86/tools/relocs_64.c
+
+-- 
+2.46.0.792.g87dc391469-goog
+
 
