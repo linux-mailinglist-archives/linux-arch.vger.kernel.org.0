@@ -1,185 +1,170 @@
-Return-Path: <linux-arch+bounces-7457-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7458-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AEDA4987078
-	for <lists+linux-arch@lfdr.de>; Thu, 26 Sep 2024 11:42:21 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8219698748A
+	for <lists+linux-arch@lfdr.de>; Thu, 26 Sep 2024 15:38:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1B29E1F2924E
-	for <lists+linux-arch@lfdr.de>; Thu, 26 Sep 2024 09:42:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BD234B270F5
+	for <lists+linux-arch@lfdr.de>; Thu, 26 Sep 2024 13:38:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEBEA1AB6D0;
-	Thu, 26 Sep 2024 09:42:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A46F2446A1;
+	Thu, 26 Sep 2024 13:38:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="m5CWey+7";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="IHE1jY+h"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tFpkbNET"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fhigh-a6-smtp.messagingengine.com (fhigh-a6-smtp.messagingengine.com [103.168.172.157])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 652941D5AB0;
-	Thu, 26 Sep 2024 09:42:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DC353B7A8;
+	Thu, 26 Sep 2024 13:38:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727343734; cv=none; b=S6ukqdqrtBUTp73cffluvcHlXAaf7b1QCz7vlXAG7tSZkk8EyaAmyD/LhFX327gredvMZoK//SBf8ZBxTry3fKvvyivZwrxuLDGeZ+8rPQX9u5flZ46Aqt0dGbt0rOogfczFXmRvEw/lFrs9CjWuza2xF3ttUadGY/ssN3KRcTU=
+	t=1727357922; cv=none; b=WCQQi4vbwCkxQDml/CRvbeQDevm6pzMmgT8GZOr8FtNxmS4QoTRACLUN8ABTytP+SI/n91zc4zDvMyOCHunldtQdzoegVou12BwJv9jFH9HHg03FtbeEGrc6rMr9wO3QA3Px6cOLB0P2qSy2beFv8GAckQ/uvjjiI8sYPkzAL2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727343734; c=relaxed/simple;
-	bh=nBrTsd6U6ryig1qB0in/czytk47gYLOayKDOMxrwbBo=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=J44JCrr3h5vyVoBS8PN+r2/8erWv+21hfG3P5OzLCxdKrcIiJhT3xQ7DCNwQu6/ph5szR0eVly9NlcfDGk1OP3tCUj7fA17bOYTm2TE0jFB36f2f5eO1DdFtzLve+xMoStUogltCc8yWw+HPIDdGPZ308LLli/TkhWaaC7OC4t0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=m5CWey+7; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=IHE1jY+h; arc=none smtp.client-ip=103.168.172.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 3DB5811401E9;
-	Thu, 26 Sep 2024 05:42:11 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-10.internal (MEProxy); Thu, 26 Sep 2024 05:42:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1727343731;
-	 x=1727430131; bh=Iz/f4ZHWxcDHUsU3hchNxxVI0CA6JwJ/25nEB88OEYc=; b=
-	m5CWey+73vWL67jCVJR3EmjZDDiNiCw6MO+Ot1XUWYv5UfyjS8s3pN8TAbLQff25
-	Sg6lrqUj15QUnRMNC9xx+OWfhvgvgrksQWBj9T71HyGavK79/2CaQa0kUPqTh7DC
-	Fvt6VTvqyu15O2wq2P1yNKc9kYs1KYLNWqvusXnHo+loaICAWCuREXIa0dAhwayW
-	dzUsDVdiFBIkIpUPDYOS+MBbIfIgIpzznF12mOowuL5GFdjCASs+wKfoomMiWhwN
-	5YOjy90Pt4UmI8r1l6CNvouZkNU3ehNp/5NfSx7fSEgs+Nxpdha1xWTGdlfviajT
-	usv+4HhF6PYFGOYEoLiD5Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1727343731; x=
-	1727430131; bh=Iz/f4ZHWxcDHUsU3hchNxxVI0CA6JwJ/25nEB88OEYc=; b=I
-	HE1jY+hK5ssV7obuCeyf3Vdk60sSKieOqkFdb5lrwkWZHYABR3YVlRs6krmSEFhR
-	q4sSUNNhZbsHn6M2VmRhDf3Z5+MPJKHd8mkW26jIvRkhlwzFTTY1jlGq2olCFpoK
-	aWSBwihRg70fnc1s9rjayXphF2frGbXouJWg09xfG7mEc+Kdy8K1gHZyo+ZSTt5r
-	e86m+2uanNC+DEvI+o3C3DXeF84aBM79rZ4i/0Fy/t+h3XW/Hv6bhrdLmj7F1BTU
-	oewFEEcmhImsDH8zdXehWqQCIFsGSoo53UAFQiHEJkZykxgQK5fdC4c48kS6PUzp
-	LswjblX5lMItVKprSRK1Q==
-X-ME-Sender: <xms:cSz1Zhtw1sfZrN0_xZrFwtJRo2ly2-IIkoRYRf9XSecslFFW1Yf4Tw>
-    <xme:cSz1ZqcZ4Mn_-B479ffF-LvgWpgZ28YanTE9yczZDJSgIjZuifQSHXPL-CQJDm_Ml
-    BRD_QTArWMmc59cnzA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvddtjedgudelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddt
-    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
-    guvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefg
-    gfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepfeef
-    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehtshgsohhgvghnugesrghlphhhrg
-    drfhhrrghnkhgvnhdruggvpdhrtghpthhtohepvhhlrgguihhmihhrrdhmuhhriihinhes
-    rghrmhdrtghomhdprhgtphhtthhopegthhhrihhsthhophhhvgdrlhgvrhhohiestghsgh
-    hrohhuphdrvghupdhrtghpthhtohepmhhpvgesvghllhgvrhhmrghnrdhiugdrrghupdhr
-    tghpthhtoheprghlvgigrghnughrvgdrthhorhhguhgvsehfohhsshdrshhtrdgtohhmpd
-    hrtghpthhtoheprghnughrvggrshesghgrihhslhgvrhdrtghomhdprhgtphhtthhopehj
-    tghmvhgskhgstgesghhmrghilhdrtghomhdprhgtphhtthhopehmrghtthhsthekkeesgh
-    hmrghilhdrtghomhdprhgtphhtthhopehnphhighhgihhnsehgmhgrihhlrdgtohhm
-X-ME-Proxy: <xmx:cSz1ZkxOy7rSDphLVTS9LNfuz-xZ0DcXkD6LyC43AmZN667_3xHB2A>
-    <xmx:cSz1ZoMK3Ivf8CmyIKLE6hKsYKr-YNbjQG7uuStVPR-pjZccy0tKbQ>
-    <xmx:cSz1Zh_wKcXgopX3k4tdeJ6efe46wxmqzIDVda7tQ8Fy8BZtjp_XKA>
-    <xmx:cSz1ZoWzEWCkfV0KRcfMRcpDM2Bi9GmS53CNCbQ-fY7gzvdDbHuemw>
-    <xmx:cyz1Zi1TkI4jfNUeOagyzusT7o8TNSwRW2Vz9A5SbAkc5TgSR8JAE3m1>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 333EE2220071; Thu, 26 Sep 2024 05:42:09 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1727357922; c=relaxed/simple;
+	bh=OPIQS2t62p13UwMnk1FiF+unfRr5Zwe9MubLOeGiJyM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SWI4Ov3/hPpmp4ekefjXgITt1acMdx2JHaai2YW3K++Jlnhk++5i0P+tQeLR5cckoEm+Y8I8qPrbkPzhS/p3c9jXKyw8/v7oh6LfGDbNLRoKKEc5idpk11WTZtEEigmpwQj72fMED3moCd6l+C2DMO5b5F5TLYKA1fRV81s9rYw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tFpkbNET; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D596EC4CECE;
+	Thu, 26 Sep 2024 13:38:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727357921;
+	bh=OPIQS2t62p13UwMnk1FiF+unfRr5Zwe9MubLOeGiJyM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=tFpkbNET0czPRtMPovfI/tw3gSCaREnEFLqAxcDb3uZoTaN1MUsL6oFQbeAJWaXFI
+	 CeZWZV2EQC3jkUVUyeFkJ+3vTNfdldDlcwSemGpaMMeK9dMpCn+eo3NwP7qHalae2l
+	 VkYErS8T+eLlgBYIpVtrHU2I5PcdP6mhLc1DUl1KUsQKtRR5hqOVwbYWqQHd51bOSc
+	 0RXX9eQm9K7Euav9Ek8BEAPCErl0m7IiVuV8uXmMnTrDNFw9GHP2lFmVOsqkL2L43u
+	 cjWMgiSR1KtLVxjFC81BklSOZDD2JwvftlNBn0/eOD6Pyn0J+4KRnR0e//rfp7F508
+	 d7FbSWxfvv7MQ==
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2f75aaaade6so11868661fa.1;
+        Thu, 26 Sep 2024 06:38:41 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUXGse6vbc6FpYz4lgSlKDQJ3qHeN8YH1qg4ceNUpAOgf2a3chMjIK0ENodL3waku7Y6v9btiPZYwo=@vger.kernel.org, AJvYcCVHSf69uGrWCz6BRS1+JmcB0WwHMJusjUz5DzJz6OyyNCwKaGdkiV6aC7dllcXHLJDaeF58Iu+R6pkWfkE5@vger.kernel.org, AJvYcCVTuIuwxeKYKbgD/ed5IBfUTO7U1Ejx7RhUMhftttnafsBMVSpnvTc9K/Q5OeTJhgPJkdtAzjFih+qoU3yY@vger.kernel.org, AJvYcCVtRQGxusNOZWYtaUh1loOVtMx1E0c7HHDguIWYo9ealgtYxuWTRpJmBSWUo7f5zHlNPOM1Gw8mgXFiZ8mY@vger.kernel.org, AJvYcCWnzRX1k3MUWDUeu7WRrtNXnuRWLBPxMs1hH9mzwU5NkneQMn6dD/qskBYd2ZFzC5TMylmYyoNk3rnPXw==@vger.kernel.org, AJvYcCWwRwkLEtUjeqDHvxaVwTFatpqwvjxPRnP0dO3vppSWiwK189Ows6GwGumhRSpTmyH4CWEalcL0gdCD@vger.kernel.org, AJvYcCX2LMIhQ6EVmnkECm5H1xOqA26099cMKqZHDLb3snQOaHAII2I5pbbgC2ScvY2UAJCHWL9K3nvrFknz1qONp+CPMw==@vger.kernel.org, AJvYcCXc6rBX4B7tDEFX89zlzTTdnMaKavPMzO6FCLF0Fp51dWzHpePLktp9KpDsTPBEb2azHKHXUxYL49arAuSU2bQ=@vger.kernel.org, AJvYcCXgB42XCutcroFoVKxqmQ3xVd06k4oIAcHRUvkIUAQRtVdVKECbH9h9M9zw29dh6Av1J9g=@vger.kernel.org, AJvYcCXvi5cxeCUvrafei1Um
+ rndmyryPFc3Yjd/XjPlDWE8wKBKBqfauz/iR5f6TXTsiAmqgA/04JIOBiM57@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywss9HWQbBVgJHtvIqk1Wu4DkB/i43GOJbJ7pSBIffBAxWqmqfp
+	RPSo3fNJedto7dlLNTrd34VBZVBaW6YphvSAysX7nCs1Y6E5lZVzu/a9j9jwmABqE2Bgu0nLqyB
+	6em3OiiG3xXVqSuX9z1jAxXZ5Yl4=
+X-Google-Smtp-Source: AGHT+IGDysp0zVaI/G56jPcUmenrli6iDQ7ZCklZUQ9W3MAWEI6d8p2NALI8I7dIlWV2Pg4Oztsl5Tqp++gl5gafuuo=
+X-Received: by 2002:a2e:4a0a:0:b0:2ef:1784:a20 with SMTP id
+ 38308e7fff4ca-2f91ca68786mr32564001fa.38.1727357920170; Thu, 26 Sep 2024
+ 06:38:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Thu, 26 Sep 2024 09:41:48 +0000
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Helge Deller" <deller@gmx.de>, "Arnd Bergmann" <arnd@kernel.org>,
- linux-mm@kvack.org
-Cc: "Jason A . Donenfeld" <Jason@zx2c4.com>,
- "Alexander Viro" <viro@zeniv.linux.org.uk>,
- "Alexandre Torgue" <alexandre.torgue@foss.st.com>,
- "Andreas Larsson" <andreas@gaisler.com>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Ard Biesheuvel" <ardb@kernel.org>,
- "Christian Brauner" <brauner@kernel.org>,
- "Christoph Hellwig" <hch@lst.de>,
- "Christophe Leroy" <christophe.leroy@csgroup.eu>,
- "Damien Le Moal" <dlemoal@kernel.org>,
- "David Hildenbrand" <david@redhat.com>,
- "Greg Ungerer" <gerg@linux-m68k.org>, "Kees Cook" <kees@kernel.org>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- "Lorenzo Stoakes" <lorenzo.stoakes@oracle.com>,
- "Matt Turner" <mattst88@gmail.com>, "Max Filippov" <jcmvbkbc@gmail.com>,
- "Michael Ellerman" <mpe@ellerman.id.au>,
- "Michal Hocko" <mhocko@suse.com>, "Nicholas Piggin" <npiggin@gmail.com>,
- "Richard Henderson" <richard.henderson@linaro.org>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "Vladimir Murzin" <vladimir.murzin@arm.com>,
- "Vlastimil Babka" <vbabka@suse.cz>,
- linux-stm32@st-md-mailman.stormreply.com, linux-kernel@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, Linux-Arch <linux-arch@vger.kernel.org>
-Message-Id: <a44eb23a-97cf-4920-8cee-5197754d28f6@app.fastmail.com>
-In-Reply-To: <b27eb97b-cb76-4fa8-8b8a-66d3bec655ae@gmx.de>
-References: <20240925210615.2572360-1-arnd@kernel.org>
- <20240925210615.2572360-2-arnd@kernel.org>
- <b27eb97b-cb76-4fa8-8b8a-66d3bec655ae@gmx.de>
-Subject: Re: [PATCH 1/5] asm-generic: cosmetic updates to uapi/asm/mman.h
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+References: <20240925150059.3955569-30-ardb+git@google.com>
+ <20240925150059.3955569-57-ardb+git@google.com> <4eca972d-a462-4cc5-9238-5d63485e1af4@oracle.com>
+In-Reply-To: <4eca972d-a462-4cc5-9238-5d63485e1af4@oracle.com>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Thu, 26 Sep 2024 15:38:27 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXEOFDwoYrLH9f-d46HRPMw7HjWRQGNdMu5_D_Ny3UtPxg@mail.gmail.com>
+Message-ID: <CAMj1kXEOFDwoYrLH9f-d46HRPMw7HjWRQGNdMu5_D_Ny3UtPxg@mail.gmail.com>
+Subject: Re: [RFC PATCH 27/28] x86/kernel: Switch to PIE linking for the core kernel
+To: Vegard Nossum <vegard.nossum@oracle.com>
+Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Uros Bizjak <ubizjak@gmail.com>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
+	Christoph Lameter <cl@linux.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, 
+	Juergen Gross <jgross@suse.com>, Boris Ostrovsky <boris.ostrovsky@oracle.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Kees Cook <kees@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Keith Packard <keithp@keithp.com>, 
+	Justin Stitt <justinstitt@google.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	Kan Liang <kan.liang@linux.intel.com>, linux-doc@vger.kernel.org, 
+	linux-pm@vger.kernel.org, kvm@vger.kernel.org, xen-devel@lists.xenproject.org, 
+	linux-efi@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-sparse@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Sep 26, 2024, at 09:21, Helge Deller wrote:
-> On 9/25/24 23:06, Arnd Bergmann wrote:
-
->> -/* not used by linux, but here to make sure we don't clash with OSF/1 defines */
->> -#define _MAP_HASSEMAPHORE 0x0200
->> -#define _MAP_INHERIT	0x0400
->> -#define _MAP_UNALIGNED	0x0800
+On Wed, 25 Sept 2024 at 22:25, Vegard Nossum <vegard.nossum@oracle.com> wrote:
 >
-> I suggest to keep ^^ those. It's useful information which isn't
-> easily visible otherwise.
-
-Fair enough. I removed them in order to bring the differences
-between files to an absolute minimum, but since at the end
-of the series the files only contain the map values, there is
-no real harm in keeping them, and they may help.
-
->> -/* not used by linux, but here to make sure we don't clash with ABI defines */
->> -#define MAP_RENAME	0x020		/* Assign page to file */
->> -#define MAP_AUTOGROW	0x040		/* File may grow by writing */
->> -#define MAP_LOCAL	0x080		/* Copy on fork/sproc */
->> -#define MAP_AUTORSRV	0x100		/* Logical swap reserved on demand */
 >
-> same here. I think they should be preserved.
-
-Right.
-
->>   /* 0x01 - 0x03 are defined in linux/mman.h */
->> -#define MAP_TYPE	0x00f		/* Mask for type of mapping */
->> -#define MAP_FIXED	0x010		/* Interpret addr exactly */
->> +#define MAP_TYPE	0x0f		/* Mask for type of mapping */
->> +#define MAP_FIXED	0x10		/* Interpret addr exactly */
->>
->> -/* not used by linux, but here to make sure we don't clash with ABI defines */
->> -#define MAP_RENAME	0x020		/* Assign page to file */
->> -#define MAP_AUTOGROW	0x040		/* File may grow by writing */
->> -#define MAP_LOCAL	0x080		/* Copy on fork/sproc */
->> -#define MAP_AUTORSRV	0x100		/* Logical swap reserved on demand */
+> On 25/09/2024 17:01, Ard Biesheuvel wrote:
+> > From: Ard Biesheuvel <ardb@kernel.org>
+> >
+> > Build the kernel as a Position Independent Executable (PIE). This
+> > results in more efficient relocation processing for the virtual
+> > displacement of the kernel (for KASLR). More importantly, it instructs
+> > the linker to generate what is actually needed (a program that can be
+> > moved around in memory before execution), which is better than having to
+> > rely on the linker to create a position dependent binary that happens to
+> > tolerate being moved around after poking it in exactly the right manner.
+> >
+> > Note that this means that all codegen should be compatible with PIE,
+> > including Rust objects, so this needs to switch to the small code model
+> > with the PIE relocation model as well.
+> >
+> > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> > ---
+> >   arch/x86/Kconfig                        |  2 +-
+> >   arch/x86/Makefile                       | 11 +++++++----
+> >   arch/x86/boot/compressed/misc.c         |  2 ++
+> >   arch/x86/kernel/vmlinux.lds.S           |  5 +++++
+> >   drivers/firmware/efi/libstub/x86-stub.c |  2 ++
+> >   5 files changed, 17 insertions(+), 5 deletions(-)
+> >
+...
 >
-> If xtensa had those, those should be kept as well IMHO.
+> This patch causes a build failure here (on 64-bit):
+>
+>    LD      .tmp_vmlinux2
+>    NM      .tmp_vmlinux2.syms
+>    KSYMS   .tmp_vmlinux2.kallsyms.S
+>    AS      .tmp_vmlinux2.kallsyms.o
+>    LD      vmlinux
+>    BTFIDS  vmlinux
+> WARN: resolve_btfids: unresolved symbol bpf_lsm_key_free
+> FAILED elf_update(WRITE): invalid section entry size
+> make[5]: *** [scripts/Makefile.vmlinux:34: vmlinux] Error 255
+> make[5]: *** Deleting file 'vmlinux'
+> make[4]: *** [Makefile:1153: vmlinux] Error 2
+> make[3]: *** [debian/rules:74: build-arch] Error 2
+> dpkg-buildpackage: error: make -f debian/rules binary subprocess
+> returned exit status 2
+> make[2]: *** [scripts/Makefile.package:121: bindeb-pkg] Error 2
+> make[1]: *** [/home/opc/linux-mainline-worktree2/Makefile:1544:
+> bindeb-pkg] Error 2
+> make: *** [Makefile:224: __sub-make] Error 2
+>
+> The parent commit builds fine. With V=1:
+>
+> + ldflags='-m elf_x86_64 -z noexecstack --pie -z text -z
+> call-nop=suffix-nop -z max-page-size=0x200000 --build-id=sha1
+> --orphan-handling=warn --script=./arch/x86/kernel/vmlinux.lds
+> -Map=vmlinux.map'
+> + ld -m elf_x86_64 -z noexecstack --pie -z text -z call-nop=suffix-nop
+> -z max-page-size=0x200000 --build-id=sha1 --orphan-handling=warn
+> --script=./arch/x86/kernel/vmlinux.lds -Map=vmlinux.map -o vmlinux
+> --whole-archive vmlinux.a .vmlinux.export.o init/version-timestamp.o
+> --no-whole-archive --start-group --end-group .tmp_vmlinux2.kallsyms.o
+> .tmp_vmlinux1.btf.o
+> + is_enabled CONFIG_DEBUG_INFO_BTF
+> + grep -q '^CONFIG_DEBUG_INFO_BTF=y' include/config/auto.conf
+> + info BTFIDS vmlinux
+> + printf '  %-7s %s\n' BTFIDS vmlinux
+>    BTFIDS  vmlinux
+> + ./tools/bpf/resolve_btfids/resolve_btfids vmlinux
+> WARN: resolve_btfids: unresolved symbol bpf_lsm_key_free
+> FAILED elf_update(WRITE): invalid section entry size
+>
+> I can send the full config off-list if necessary, but looks like it
+> might be enough to set CONFIG_DEBUG_INFO_BTF=y.
+>
 
-The thing with xtensa is that the file was blindly copied from
-mips, so I'm sure it never had these, but there may be value
-in keeping the two files in sync anyway. The only difference
-at the moment is MAP_UNINITIALIZED, which is potentially
-used on xtensa-nommu.
+Thanks for the report. Turns out that adding the GOT to .rodata bumps
+the section's sh_entsize to 8, and libelf complains if the section
+size is not a multiple of the entry size.
 
-Let's see if Max Filippov has an opinion on this, otherwise I'd
-keep it the same as mips.
-
-      Arnd
+I'll include a fix in the next revision.
 
