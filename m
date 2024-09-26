@@ -1,170 +1,182 @@
-Return-Path: <linux-arch+bounces-7458-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7459-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8219698748A
-	for <lists+linux-arch@lfdr.de>; Thu, 26 Sep 2024 15:38:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6ACBD9874D4
+	for <lists+linux-arch@lfdr.de>; Thu, 26 Sep 2024 15:54:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BD234B270F5
-	for <lists+linux-arch@lfdr.de>; Thu, 26 Sep 2024 13:38:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 887E61C23280
+	for <lists+linux-arch@lfdr.de>; Thu, 26 Sep 2024 13:54:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A46F2446A1;
-	Thu, 26 Sep 2024 13:38:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 861B95FEED;
+	Thu, 26 Sep 2024 13:54:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tFpkbNET"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Ed82I70M";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="R3y/KsXa"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fout-a2-smtp.messagingengine.com (fout-a2-smtp.messagingengine.com [103.168.172.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DC353B7A8;
-	Thu, 26 Sep 2024 13:38:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 203FD1C687;
+	Thu, 26 Sep 2024 13:54:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727357922; cv=none; b=WCQQi4vbwCkxQDml/CRvbeQDevm6pzMmgT8GZOr8FtNxmS4QoTRACLUN8ABTytP+SI/n91zc4zDvMyOCHunldtQdzoegVou12BwJv9jFH9HHg03FtbeEGrc6rMr9wO3QA3Px6cOLB0P2qSy2beFv8GAckQ/uvjjiI8sYPkzAL2A=
+	t=1727358885; cv=none; b=dn4lN0B/8an9QS4KqtF85mlnm1GxH0UtpJplkLsRbdy6OwLVlpVU7lqeBDwuIiOLK6gMrab3R8/NovXaxJim0Z5oHycFInl9r1TMBDO28AXldB6KYTj5bF1HIo18H2T8sWJxIbvzYKXooyohITigh9WJG8bXgK7L1lT8m5iItXY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727357922; c=relaxed/simple;
-	bh=OPIQS2t62p13UwMnk1FiF+unfRr5Zwe9MubLOeGiJyM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SWI4Ov3/hPpmp4ekefjXgITt1acMdx2JHaai2YW3K++Jlnhk++5i0P+tQeLR5cckoEm+Y8I8qPrbkPzhS/p3c9jXKyw8/v7oh6LfGDbNLRoKKEc5idpk11WTZtEEigmpwQj72fMED3moCd6l+C2DMO5b5F5TLYKA1fRV81s9rYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tFpkbNET; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D596EC4CECE;
-	Thu, 26 Sep 2024 13:38:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727357921;
-	bh=OPIQS2t62p13UwMnk1FiF+unfRr5Zwe9MubLOeGiJyM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=tFpkbNET0czPRtMPovfI/tw3gSCaREnEFLqAxcDb3uZoTaN1MUsL6oFQbeAJWaXFI
-	 CeZWZV2EQC3jkUVUyeFkJ+3vTNfdldDlcwSemGpaMMeK9dMpCn+eo3NwP7qHalae2l
-	 VkYErS8T+eLlgBYIpVtrHU2I5PcdP6mhLc1DUl1KUsQKtRR5hqOVwbYWqQHd51bOSc
-	 0RXX9eQm9K7Euav9Ek8BEAPCErl0m7IiVuV8uXmMnTrDNFw9GHP2lFmVOsqkL2L43u
-	 cjWMgiSR1KtLVxjFC81BklSOZDD2JwvftlNBn0/eOD6Pyn0J+4KRnR0e//rfp7F508
-	 d7FbSWxfvv7MQ==
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2f75aaaade6so11868661fa.1;
-        Thu, 26 Sep 2024 06:38:41 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUXGse6vbc6FpYz4lgSlKDQJ3qHeN8YH1qg4ceNUpAOgf2a3chMjIK0ENodL3waku7Y6v9btiPZYwo=@vger.kernel.org, AJvYcCVHSf69uGrWCz6BRS1+JmcB0WwHMJusjUz5DzJz6OyyNCwKaGdkiV6aC7dllcXHLJDaeF58Iu+R6pkWfkE5@vger.kernel.org, AJvYcCVTuIuwxeKYKbgD/ed5IBfUTO7U1Ejx7RhUMhftttnafsBMVSpnvTc9K/Q5OeTJhgPJkdtAzjFih+qoU3yY@vger.kernel.org, AJvYcCVtRQGxusNOZWYtaUh1loOVtMx1E0c7HHDguIWYo9ealgtYxuWTRpJmBSWUo7f5zHlNPOM1Gw8mgXFiZ8mY@vger.kernel.org, AJvYcCWnzRX1k3MUWDUeu7WRrtNXnuRWLBPxMs1hH9mzwU5NkneQMn6dD/qskBYd2ZFzC5TMylmYyoNk3rnPXw==@vger.kernel.org, AJvYcCWwRwkLEtUjeqDHvxaVwTFatpqwvjxPRnP0dO3vppSWiwK189Ows6GwGumhRSpTmyH4CWEalcL0gdCD@vger.kernel.org, AJvYcCX2LMIhQ6EVmnkECm5H1xOqA26099cMKqZHDLb3snQOaHAII2I5pbbgC2ScvY2UAJCHWL9K3nvrFknz1qONp+CPMw==@vger.kernel.org, AJvYcCXc6rBX4B7tDEFX89zlzTTdnMaKavPMzO6FCLF0Fp51dWzHpePLktp9KpDsTPBEb2azHKHXUxYL49arAuSU2bQ=@vger.kernel.org, AJvYcCXgB42XCutcroFoVKxqmQ3xVd06k4oIAcHRUvkIUAQRtVdVKECbH9h9M9zw29dh6Av1J9g=@vger.kernel.org, AJvYcCXvi5cxeCUvrafei1Um
- rndmyryPFc3Yjd/XjPlDWE8wKBKBqfauz/iR5f6TXTsiAmqgA/04JIOBiM57@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywss9HWQbBVgJHtvIqk1Wu4DkB/i43GOJbJ7pSBIffBAxWqmqfp
-	RPSo3fNJedto7dlLNTrd34VBZVBaW6YphvSAysX7nCs1Y6E5lZVzu/a9j9jwmABqE2Bgu0nLqyB
-	6em3OiiG3xXVqSuX9z1jAxXZ5Yl4=
-X-Google-Smtp-Source: AGHT+IGDysp0zVaI/G56jPcUmenrli6iDQ7ZCklZUQ9W3MAWEI6d8p2NALI8I7dIlWV2Pg4Oztsl5Tqp++gl5gafuuo=
-X-Received: by 2002:a2e:4a0a:0:b0:2ef:1784:a20 with SMTP id
- 38308e7fff4ca-2f91ca68786mr32564001fa.38.1727357920170; Thu, 26 Sep 2024
- 06:38:40 -0700 (PDT)
+	s=arc-20240116; t=1727358885; c=relaxed/simple;
+	bh=7eIAWn4HpDT6t3amyzW8vh7qQm7VIGks7ZlN9Zx8MHg=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=HzL4x71H+/f6YBvhydGkdEPzJnnGxm1UhE5mWe43U9LiN/rdB83HGHOHEPzP3B8X6ICrBFCuBpurlvAN7+I4kOwRZqJvOF8qAU9H/1tL1Cy9yYYN7RkvOQ00Ojbf+XiI+Wjryf0NXCxJVch0CDt8400PEmjqiCeXof9K8zlasnU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Ed82I70M; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=R3y/KsXa; arc=none smtp.client-ip=103.168.172.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
+	by mailfout.phl.internal (Postfix) with ESMTP id 152F51380297;
+	Thu, 26 Sep 2024 09:54:42 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-10.internal (MEProxy); Thu, 26 Sep 2024 09:54:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1727358882;
+	 x=1727445282; bh=6riDWHgJboduwD6LaSFNyFPLRcRPaab9kSUcfli2BKY=; b=
+	Ed82I70M0gRdT9TOoYaLzrvfHoLQ2RkVw5BljDBCWBHW5/YtKj816v3sAP+b7ZSm
+	cZoIFqIaVwq5PHBT/e35Wg4s5vbFREFevM//daefmaW6kP+XYxepPCYyTXHw3QZ0
+	9Za1MYRn7T98NbA5SZfsbPsmZzSiI7SC3tSrSXiBBKVyfj2pBH6mBaNrjOxrFaHE
+	j49q0/22DpSKg/bsY3mml7j9HF3n4sLnbkfP6PQILPBqWhYIc1DlKnqtFgxhz20J
+	3kccxBEvmwm7gelOqzjUi/OyBkCJJShdYOKtnleaeWdN5njs6O1xbn4nIFM65Yhm
+	YmauC2QVmPVGgRo9SrBwFg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1727358882; x=
+	1727445282; bh=6riDWHgJboduwD6LaSFNyFPLRcRPaab9kSUcfli2BKY=; b=R
+	3y/KsXabibaJ2Z/XkVysWRaZOs8MTtsGNxYTlNWKe7wzJP2qTTNiBsy3MdawjKzW
+	0c/i8g4NVXfzSmdWt87jP66p8OWqjCS2WourGpBGTP2iwOVQgH79FH+EE3gQR0m0
+	rheDEpOt7B7Dso+6iT/5xT59DHUYbAseI3FJ7vd9kVI6eGyd+dD6sxD56OuQ1Mgw
+	4YU0P7chz9BoVPa9xYbZWK0T1egLvkjZunHNa98cjf8dNOsPcURxW/lkhDQYd9uT
+	5YVDeZSGlPl3GmQQIK38QWLQjVwddi8BnzWgbhpeLRrZuKjZEtasvdnzWAy3mCM/
+	WuF3u9Im8+31VwBTNF1PQ==
+X-ME-Sender: <xms:oGf1ZkqdmIpA7o2_QzgaN1fdtEYURj_XJL8PbUipRTKbPtqfIWADNA>
+    <xme:oGf1ZqqQeZTrmeBKpSvohuYmfbNnevz71Ar_g3IYdL_mHSretB_U6oJUuZO9-jznk
+    16KkdMa_LQIOvQaVog>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvddtjedgjedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddt
+    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
+    guvgeqnecuggftrfgrthhtvghrnhepgeehveefleethefhudfhjeeutedvtedttdejieff
+    feeuieevhfehgeekieffgfeunecuffhomhgrihhnpehutghlihgstgdrohhrghdpuggvsg
+    hirghnrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhf
+    rhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepfeefpdhmohguvg
+    epshhmthhpohhuthdprhgtphhtthhopehtshgsohhgvghnugesrghlphhhrgdrfhhrrghn
+    khgvnhdruggvpdhrtghpthhtohepvhhlrgguihhmihhrrdhmuhhriihinhesrghrmhdrtg
+    homhdprhgtphhtthhopegthhhrihhsthhophhhvgdrlhgvrhhohiestghsghhrohhuphdr
+    vghupdhrtghpthhtohepmhhpvgesvghllhgvrhhmrghnrdhiugdrrghupdhrtghpthhtoh
+    eprghlvgigrghnughrvgdrthhorhhguhgvsehfohhsshdrshhtrdgtohhmpdhrtghpthht
+    oheprghnughrvggrshesghgrihhslhgvrhdrtghomhdprhgtphhtthhopehjtghmvhgskh
+    gstgesghhmrghilhdrtghomhdprhgtphhtthhopehmrghtthhsthekkeesghhmrghilhdr
+    tghomhdprhgtphhtthhopehnphhighhgihhnsehgmhgrihhlrdgtohhm
+X-ME-Proxy: <xmx:oGf1ZpOs0y-FbPti-OKl6xR1ZY2dhie4YLDkmurMdwnfxHpHtJYoFA>
+    <xmx:oGf1Zr74k2DXoCSjpcxnYW6z-HhZzsyJVBY7ImllYBvWSFNv1qkDIA>
+    <xmx:oGf1Zj5h518sYyyR-7X7t9gpI0zata-tw922AwVZ1WhK4IinxbpVLQ>
+    <xmx:oGf1Zri38KCr4FELnXbIKGVGM8vn4Dn5Mz07V6elrrKyLhz_X1BznA>
+    <xmx:omf1ZtSyM5YH_Y3K6L2LepXVBPOPk7t-GP7MIFO1kTmF_iVRLYo_xwlZ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id E77A02220071; Thu, 26 Sep 2024 09:54:39 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240925150059.3955569-30-ardb+git@google.com>
- <20240925150059.3955569-57-ardb+git@google.com> <4eca972d-a462-4cc5-9238-5d63485e1af4@oracle.com>
-In-Reply-To: <4eca972d-a462-4cc5-9238-5d63485e1af4@oracle.com>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Thu, 26 Sep 2024 15:38:27 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXEOFDwoYrLH9f-d46HRPMw7HjWRQGNdMu5_D_Ny3UtPxg@mail.gmail.com>
-Message-ID: <CAMj1kXEOFDwoYrLH9f-d46HRPMw7HjWRQGNdMu5_D_Ny3UtPxg@mail.gmail.com>
-Subject: Re: [RFC PATCH 27/28] x86/kernel: Switch to PIE linking for the core kernel
-To: Vegard Nossum <vegard.nossum@oracle.com>
-Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Uros Bizjak <ubizjak@gmail.com>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
-	Christoph Lameter <cl@linux.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, 
-	Juergen Gross <jgross@suse.com>, Boris Ostrovsky <boris.ostrovsky@oracle.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Keith Packard <keithp@keithp.com>, 
-	Justin Stitt <justinstitt@google.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Kan Liang <kan.liang@linux.intel.com>, linux-doc@vger.kernel.org, 
-	linux-pm@vger.kernel.org, kvm@vger.kernel.org, xen-devel@lists.xenproject.org, 
-	linux-efi@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-sparse@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Date: Thu, 26 Sep 2024 13:54:09 +0000
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "David Hildenbrand" <david@redhat.com>, "Arnd Bergmann" <arnd@kernel.org>,
+ linux-mm@kvack.org
+Cc: "Jason A . Donenfeld" <Jason@zx2c4.com>,
+ "Alexander Viro" <viro@zeniv.linux.org.uk>,
+ "Alexandre Torgue" <alexandre.torgue@foss.st.com>,
+ "Andreas Larsson" <andreas@gaisler.com>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Ard Biesheuvel" <ardb@kernel.org>,
+ "Christian Brauner" <brauner@kernel.org>,
+ "Christoph Hellwig" <hch@lst.de>,
+ "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+ "Damien Le Moal" <dlemoal@kernel.org>,
+ "Greg Ungerer" <gerg@linux-m68k.org>, "Helge Deller" <deller@gmx.de>,
+ "Kees Cook" <kees@kernel.org>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ "Lorenzo Stoakes" <lorenzo.stoakes@oracle.com>,
+ "Matt Turner" <mattst88@gmail.com>, "Max Filippov" <jcmvbkbc@gmail.com>,
+ "Michael Ellerman" <mpe@ellerman.id.au>,
+ "Michal Hocko" <mhocko@suse.com>, "Nicholas Piggin" <npiggin@gmail.com>,
+ "Richard Henderson" <richard.henderson@linaro.org>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "Vladimir Murzin" <vladimir.murzin@arm.com>,
+ "Vlastimil Babka" <vbabka@suse.cz>,
+ linux-stm32@st-md-mailman.stormreply.com, linux-kernel@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, Linux-Arch <linux-arch@vger.kernel.org>
+Message-Id: <1a1f118e-9a7c-4c66-b956-d21eb36fce48@app.fastmail.com>
+In-Reply-To: <b7f7f849-00d1-49e5-8455-94eb9b45e273@redhat.com>
+References: <20240925210615.2572360-1-arnd@kernel.org>
+ <20240925210615.2572360-6-arnd@kernel.org>
+ <b7f7f849-00d1-49e5-8455-94eb9b45e273@redhat.com>
+Subject: Re: [PATCH 5/5] [RFC] mm: Remove MAP_UNINITIALIZED support
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Wed, 25 Sept 2024 at 22:25, Vegard Nossum <vegard.nossum@oracle.com> wrote:
+On Thu, Sep 26, 2024, at 08:46, David Hildenbrand wrote:
+> On 25.09.24 23:06, Arnd Bergmann wrote:
 >
+> The first, uncontroversial step could indeed be to make 
+> MAP_UNINITIALIZED a nop, but still leave the definitions in mman.h etc 
+> around.
 >
-> On 25/09/2024 17:01, Ard Biesheuvel wrote:
-> > From: Ard Biesheuvel <ardb@kernel.org>
-> >
-> > Build the kernel as a Position Independent Executable (PIE). This
-> > results in more efficient relocation processing for the virtual
-> > displacement of the kernel (for KASLR). More importantly, it instructs
-> > the linker to generate what is actually needed (a program that can be
-> > moved around in memory before execution), which is better than having to
-> > rely on the linker to create a position dependent binary that happens to
-> > tolerate being moved around after poking it in exactly the right manner.
-> >
-> > Note that this means that all codegen should be compatible with PIE,
-> > including Rust objects, so this needs to switch to the small code model
-> > with the PIE relocation model as well.
-> >
-> > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> > ---
-> >   arch/x86/Kconfig                        |  2 +-
-> >   arch/x86/Makefile                       | 11 +++++++----
-> >   arch/x86/boot/compressed/misc.c         |  2 ++
-> >   arch/x86/kernel/vmlinux.lds.S           |  5 +++++
-> >   drivers/firmware/efi/libstub/x86-stub.c |  2 ++
-> >   5 files changed, 17 insertions(+), 5 deletions(-)
-> >
-...
+> This is the same we did with MAP_DENYWRITE. There might be some weird 
+> user out there, and carelessly reusing the bit could result in trouble. 
+> (people might argue that they are not using it with MAP_HUGETLB, so it 
+> would work)
 >
-> This patch causes a build failure here (on 64-bit):
+> Going forward and removing MAP_UNINITIALIZED is a bit more 
+> controversial, but maybe there really isn't any other user around. 
+> Software that is not getting recompiled cannot be really identified by 
+> letting it rest in -next only.
 >
->    LD      .tmp_vmlinux2
->    NM      .tmp_vmlinux2.syms
->    KSYMS   .tmp_vmlinux2.kallsyms.S
->    AS      .tmp_vmlinux2.kallsyms.o
->    LD      vmlinux
->    BTFIDS  vmlinux
-> WARN: resolve_btfids: unresolved symbol bpf_lsm_key_free
-> FAILED elf_update(WRITE): invalid section entry size
-> make[5]: *** [scripts/Makefile.vmlinux:34: vmlinux] Error 255
-> make[5]: *** Deleting file 'vmlinux'
-> make[4]: *** [Makefile:1153: vmlinux] Error 2
-> make[3]: *** [debian/rules:74: build-arch] Error 2
-> dpkg-buildpackage: error: make -f debian/rules binary subprocess
-> returned exit status 2
-> make[2]: *** [scripts/Makefile.package:121: bindeb-pkg] Error 2
-> make[1]: *** [/home/opc/linux-mainline-worktree2/Makefile:1544:
-> bindeb-pkg] Error 2
-> make: *** [Makefile:224: __sub-make] Error 2
->
-> The parent commit builds fine. With V=1:
->
-> + ldflags='-m elf_x86_64 -z noexecstack --pie -z text -z
-> call-nop=suffix-nop -z max-page-size=0x200000 --build-id=sha1
-> --orphan-handling=warn --script=./arch/x86/kernel/vmlinux.lds
-> -Map=vmlinux.map'
-> + ld -m elf_x86_64 -z noexecstack --pie -z text -z call-nop=suffix-nop
-> -z max-page-size=0x200000 --build-id=sha1 --orphan-handling=warn
-> --script=./arch/x86/kernel/vmlinux.lds -Map=vmlinux.map -o vmlinux
-> --whole-archive vmlinux.a .vmlinux.export.o init/version-timestamp.o
-> --no-whole-archive --start-group --end-group .tmp_vmlinux2.kallsyms.o
-> .tmp_vmlinux1.btf.o
-> + is_enabled CONFIG_DEBUG_INFO_BTF
-> + grep -q '^CONFIG_DEBUG_INFO_BTF=y' include/config/auto.conf
-> + info BTFIDS vmlinux
-> + printf '  %-7s %s\n' BTFIDS vmlinux
->    BTFIDS  vmlinux
-> + ./tools/bpf/resolve_btfids/resolve_btfids vmlinux
-> WARN: resolve_btfids: unresolved symbol bpf_lsm_key_free
-> FAILED elf_update(WRITE): invalid section entry size
->
-> I can send the full config off-list if necessary, but looks like it
-> might be enough to set CONFIG_DEBUG_INFO_BTF=y.
->
+> My take would be to leave MAP_UNINITIALIZED in the headers in some form 
+> for documentation purposes.
 
-Thanks for the report. Turns out that adding the GOT to .rodata bumps
-the section's sh_entsize to 8, and libelf complains if the section
-size is not a multiple of the entry size.
+I don't think there is much point in doing this in multiple
+steps, either we want to break it at compile time or leave
+it silently doing nothing. There is also very little
+difference in practice because applications almost always
+use sys/mman.h instead of linux/mman.h.
 
-I'll include a fix in the next revision.
+FWIW, the main user appears to be the uClibc and uclibc-ng
+malloc() implementation for NOMMU targets:
+
+https://git.uclibc.org/uClibc/commit/libc/stdlib/malloc/malloc.c?id=00673f93826bf1f
+
+Both of these also define this constant itself as 0x4000000
+for all architectures.
+
+There are a few others that I could find with Debian codesearch:
+
+https://sources.debian.org/src/monado/21.0.0+git2905.e26a272c1~dfsg1-2/src/external/tracy/client/tracy_rpmalloc.cpp/?hl=890#L889
+https://sources.debian.org/src/systemtap/5.1-4/testsuite/systemtap.syscall/mmap.c/?hl=224#L224
+https://sources.debian.org/src/fuzzel/1.11.1+ds-1/shm.c/?hl=488#L488
+https://sources.debian.org/src/notcurses/3.0.7+dfsg.1-1/src/lib/fbuf.h/?hl=35#L35
+https://sources.debian.org/src/lmms/1.2.2+dfsg1-6/src/3rdparty/rpmalloc/rpmalloc/rpmalloc/rpmalloc.c/?hl=1753#L1753
+
+All of these will fall back to not passing MAP_UNINITIALIZED
+if it's not defined, which is what happens on glibc and musl.
+
+       Arnd
 
