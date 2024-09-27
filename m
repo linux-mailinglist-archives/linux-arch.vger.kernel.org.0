@@ -1,116 +1,213 @@
-Return-Path: <linux-arch+bounces-7462-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7463-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B6C3987AB4
-	for <lists+linux-arch@lfdr.de>; Thu, 26 Sep 2024 23:35:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2763D987DE9
+	for <lists+linux-arch@lfdr.de>; Fri, 27 Sep 2024 07:42:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5392C28447F
-	for <lists+linux-arch@lfdr.de>; Thu, 26 Sep 2024 21:35:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9937B1F21AE3
+	for <lists+linux-arch@lfdr.de>; Fri, 27 Sep 2024 05:42:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6860118871A;
-	Thu, 26 Sep 2024 21:35:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9C01157E87;
+	Fri, 27 Sep 2024 05:42:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ntYvYQ3V"
+	dkim=pass (1024-bit key) header.d=aosc.io header.i=@aosc.io header.b="STIgCIvA"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay-us1.mymailcheap.com (relay-us1.mymailcheap.com [51.81.35.219])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7CC418870F;
-	Thu, 26 Sep 2024 21:35:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBB6A1482E2;
+	Fri, 27 Sep 2024 05:42:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.81.35.219
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727386525; cv=none; b=goQJBRrRmkqgtyjkuhqlNcfmLj145m638QfMynP66R43xq6hJqSxjzhA8mNlnbjBMWTuMILU4IVk3/QPtjSrXfnqFiq2HMebgSRVsQUs3mGhHBrNS4jgvbvo/xy4oBf2W2O2Td1+LceQFE4HnFVUeN2lwoBYmSqXToaT/Dy9xvI=
+	t=1727415734; cv=none; b=lXo+zkYRfce3Kfvzw5L1sDzCCyxoy7+x/IaydlCsdTnSUtODdQJgMFcwT1+V+/Q+F7BkUzxce2IN+VeA+AAeTVZp7Y9UoNvK2gTOlqnVWsiq3v2s3m9J3vcfjyUEQ7RY3jeNDVr4YmO+KCoJQpnJGzuPlqV24Ljb8wPZ+HuYlJI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727386525; c=relaxed/simple;
-	bh=1/AF0ye1aEDqbRIMOiqu2UP5rEYyIqLBgduhnkT/Gq8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HBJfh/5Z7VEQxAgZ34fM/Fcum9KV9uRA4YIPjdwVhv1SKHj5FlBKtaFrY9UklpOXb6tj9a24Ppj0UNskaOvLs1phEpW4M0T3GA05X3E3GzoES+ZHys+EPON/W5TX4FRw1SnZ4EYkHV1ZwW9wX5nfulw3klh0rZgUbhtG3nAQFJ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ntYvYQ3V; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2e0b467da03so91493a91.2;
-        Thu, 26 Sep 2024 14:35:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727386523; x=1727991323; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YN3ZIl0AHdW2Pc3ccHhFRbQ1ihSm5IEdT9WChsNSY6k=;
-        b=ntYvYQ3VzjrPQRjO0RTjOTbXP7/4NP5rjwPgNkr9vH/XeTJuyjkJQ6j8P1Q5+uxnST
-         F3wPdxptRRuXH4IYlyP+1oLBMPEpsloYKCpFimcgj0k4lN/GD1KdZTGRrH/xAwUoC1V3
-         rJPs6Qhurc32eEX7Nw6W0yg9ypx4H8Kn2SL2FF0rDnTsbAewQk6cqpJ0OzCNZ9fG7s2K
-         jkChH3VAIV2ScpQ7p6vD/ekIMTj99jeg/1W8R/4uC1LACZ3XKgZEkEjh99yXfdBqpnAL
-         uIKAImU9QAzLmdcHL1trZc/BPKjgl7Z0W/ek20wLJnfUeFDbJ/kOre9Cpwh2jgN/OLHt
-         egVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727386523; x=1727991323;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YN3ZIl0AHdW2Pc3ccHhFRbQ1ihSm5IEdT9WChsNSY6k=;
-        b=nnmJKkgcACozVDSpFBzUMkQb5Y3qgChkkOHFmpcaO+WyoEmG2yQ/DJaaT+0E6OKhbL
-         4edl7pBfS0KSuCN4J17TXsxaCijX0wFOl1McewxcYnkjHlppDaDtIlmk7BeLqo9spMzd
-         GvQfWJWmckzL3ysFqmQAywMzd6OfMCvStz6XrMLPgqsx9qF7zAWvuUCxyMl7I4LO5asF
-         tY2iqMCX1KyOtyQXSAx70zzQ3QgQ3QFPJnt3mvVfTYp7DTTgIKuR5JjAdUGM1vIhG5rn
-         wAdcVhSIglqIO2ATJ+gekoA6j5ux3+Xp6qrTXWyeWX5Hr9kk6/60rCGS1ehKqpiZANFI
-         G0JA==
-X-Forwarded-Encrypted: i=1; AJvYcCUDJ8RvVdvqtHN3lX1txbKSEmzjS+sQLqz6QZbKSBcpkEsBUAeUwf4nTqbN03vw4GXyiD9iQZArXil9IuPBiXw=@vger.kernel.org, AJvYcCUh1EnD+hD2C3vzqWv60QHnERNsPDZPvtTXZIO5sRiraXir9igXESaPEYdxkZd9i9XAYroDQMEZrC9cLvE6@vger.kernel.org, AJvYcCUidN0lHrF9iOqSPJ8IctwwAfwAs07OQfJTDdO/ZULHyFNBpvg0hyVrQCV6KMoggxOswxI=@vger.kernel.org, AJvYcCV5D5TsQSXjcHuycgk/6XXYltPQlUyoOj0RhDcW5nuV2PC/tj/Q2JUE4o2CUQJvBvD97N7k7sFVZCk9WEHGDPyghQ==@vger.kernel.org, AJvYcCVOLC6+65mOqcNjHRp1+tV/XssjpTX8h+9F4YBiY8/h9aWXzBKFdg2eK7772upIEAdFSiQJEmnzVgkk6g==@vger.kernel.org, AJvYcCVsqpEA1X34JgSSy+zWUs7+fSAIlED2wx+FoF0zXBxfBa0ReVabMdfI1p7J84be8lizTJ6y/uqbQToD@vger.kernel.org, AJvYcCVyOHlVKllui6A90Q42IfKbLrvLtdZnjC+4kVdVZSOG4aRB5tquRkPsdIouUdZ5cjLcKniIJa85fW8=@vger.kernel.org, AJvYcCWIeHXSn79E1pba2uaZgabrN6egSq3hKQJvvQyqA0ncZ3poR1endScJFmYMlQD9tOmBDQRNsnt7bGe0@vger.kernel.org, AJvYcCXTmNdlSb1QBFTlgk2/mbOW9A2NT3p8kXvs3x58YZP4/N+DnfQhUq/gJiG6xW7mj8KHqe8jHlQq55VTo3hn@vger.kernel.org
-X-Gm-Message-State: AOJu0YzCTZ3zsxEiGOsdmhyvylg0pTMM/FgSGOmCyMfxDfM9CSVwTjhW
-	AAPO1FdxgZ+AUbsMCKMSJLJBPk64IXPEa9Zxwq805/7NayLOfWOsl5gSodJeflPB/OilgtRCS/O
-	Gj38jwHBTYzU7aYb/AVVUkzDXAIw=
-X-Google-Smtp-Source: AGHT+IFP+qclc+DwNk0VcbiLZGtyseD1sfEmeyqBVla3e/ZDfuly9waYm3g7wRqfrKuy03nGqriwsOXLp8FvWSa4ibk=
-X-Received: by 2002:a17:90b:3698:b0:2db:60b:eee with SMTP id
- 98e67ed59e1d1-2e0b8ed348emr498104a91.9.1727386523117; Thu, 26 Sep 2024
- 14:35:23 -0700 (PDT)
+	s=arc-20240116; t=1727415734; c=relaxed/simple;
+	bh=T/fL2yq9tBoba5IhlMXnsNngOGBBV8VhjaWX89GHVYo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tHfCRhFrsNcng4M55Sqpuwg6o/p/OhWuzzZYwULubTOiRoByVKO8MyCdA+HcjBvsCD6fyzOWJUKL8iEf2yrNL3KXdUOot55I7Rf5v2j4hCh/ksg3iRHFMKLK5X+wXEysCI30p+SMTTysN+9+qTsMVu2trZUMmqh86ZvVH2Bmzys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=aosc.io; spf=pass smtp.mailfrom=aosc.io; dkim=pass (1024-bit key) header.d=aosc.io header.i=@aosc.io header.b=STIgCIvA; arc=none smtp.client-ip=51.81.35.219
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=aosc.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aosc.io
+Received: from relay5.mymailcheap.com (relay5.mymailcheap.com [159.100.248.207])
+	by relay-us1.mymailcheap.com (Postfix) with ESMTPS id 0415A202B2;
+	Fri, 27 Sep 2024 05:32:09 +0000 (UTC)
+Received: from relay1.mymailcheap.com (relay1.mymailcheap.com [144.217.248.100])
+	by relay5.mymailcheap.com (Postfix) with ESMTPS id BEA1126042;
+	Fri, 27 Sep 2024 05:31:59 +0000 (UTC)
+Received: from nf1.mymailcheap.com (nf1.mymailcheap.com [51.75.14.91])
+	by relay1.mymailcheap.com (Postfix) with ESMTPS id 24F283E88C;
+	Fri, 27 Sep 2024 05:31:52 +0000 (UTC)
+Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
+	by nf1.mymailcheap.com (Postfix) with ESMTPSA id 131E14075D;
+	Fri, 27 Sep 2024 05:31:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=aosc.io; s=default;
+	t=1727415110; bh=T/fL2yq9tBoba5IhlMXnsNngOGBBV8VhjaWX89GHVYo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=STIgCIvA+HNIleeMnxogPV7Y/eBejpRUBf/lJ+UGP170entokzgyEyn9z2lABHYAn
+	 KzwhOhY3JEB14sH0hULBulktG54E1NUni3HcFF5I+u6DuInHwK/V19uU01wMyCZgYA
+	 AbH1BRkG71+hV9MQ81RPyWU3udwCjA7p1PxGD4j4=
+Received: from [198.18.0.1] (unknown [58.32.43.121])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail20.mymailcheap.com (Postfix) with ESMTPSA id 23CBE401D1;
+	Fri, 27 Sep 2024 05:31:41 +0000 (UTC)
+Message-ID: <a45f1209-ff29-4010-b035-921cb136d58d@aosc.io>
+Date: Fri, 27 Sep 2024 13:31:38 +0800
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240925150059.3955569-30-ardb+git@google.com> <20240925150059.3955569-32-ardb+git@google.com>
-In-Reply-To: <20240925150059.3955569-32-ardb+git@google.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Thu, 26 Sep 2024 23:35:10 +0200
-Message-ID: <CANiq72=z6A=50QO3V0S3Kgx6XQT93GxbB_LN6PFAQCmNgy370A@mail.gmail.com>
-Subject: Re: [RFC PATCH 02/28] Documentation: Bump minimum GCC version to 8.1
-To: Ard Biesheuvel <ardb+git@google.com>
-Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Uros Bizjak <ubizjak@gmail.com>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
-	Christoph Lameter <cl@linux.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, 
-	Juergen Gross <jgross@suse.com>, Boris Ostrovsky <boris.ostrovsky@oracle.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Keith Packard <keithp@keithp.com>, 
-	Justin Stitt <justinstitt@google.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Kan Liang <kan.liang@linux.intel.com>, linux-doc@vger.kernel.org, 
-	linux-pm@vger.kernel.org, kvm@vger.kernel.org, xen-devel@lists.xenproject.org, 
-	linux-efi@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-sparse@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Thunderbird Daily
+Subject: Re: [PATCH V2 3/3] SH: cpuinfo: Fix a warning for
+ CONFIG_CPUMASK_OFFSTACK
+To: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+ Huacai Chen <chenhuacai@gmail.com>
+Cc: Huacai Chen <chenhuacai@loongson.cn>, Arnd Bergmann <arnd@arndb.de>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>,
+ loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>,
+ Xuerui Wang <kernel@xen0n.name>, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+ linux-mips@vger.kernel.org, linux-sh@vger.kernel.org, stable@vger.kernel.org
+References: <20220714084136.570176-1-chenhuacai@loongson.cn>
+ <20220714084136.570176-3-chenhuacai@loongson.cn>
+ <3a5a4bee5c0739a3b988a328376a6eed3c385fda.camel@physik.fu-berlin.de>
+ <CAAhV-H5bw3xcym2-GpyntQEad1h2eB8xDQGwVr_bRRKAOakzoQ@mail.gmail.com>
+ <8947f91ba1a10f98723a5982f0fc13ee589d3bf7.camel@physik.fu-berlin.de>
+Content-Language: en-US
+From: Kexy Biscuit <kexybiscuit@aosc.io>
+In-Reply-To: <8947f91ba1a10f98723a5982f0fc13ee589d3bf7.camel@physik.fu-berlin.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Server: nf1.mymailcheap.com
+X-Rspamd-Queue-Id: 131E14075D
+X-Rspamd-Action: no action
+X-Spamd-Result: default: False [-1.46 / 10.00];
+	BAYES_HAM(-1.37)[90.69%];
+	MIME_GOOD(-0.10)[text/plain];
+	XM_UA_NO_VERSION(0.01)[];
+	ARC_NA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_COUNT_ONE(0.00)[1];
+	ASN(0.00)[asn:16276, ipnet:51.83.0.0/16, country:FR];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[physik.fu-berlin.de,gmail.com];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[16];
+	FROM_EQ_ENVFROM(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	TO_DN_SOME(0.00)[]
 
-On Wed, Sep 25, 2024 at 5:10=E2=80=AFPM Ard Biesheuvel <ardb+git@google.com=
-> wrote:
->
->  Documentation/admin-guide/README.rst | 2 +-
->  Documentation/process/changes.rst    | 2 +-
+On 3/19/2024 1:12 AM, John Paul Adrian Glaubitz wrote:
+> Hi Hucai,
+> 
+> On Mon, 2024-03-18 at 22:21 +0800, Huacai Chen wrote:
+>> Hi, SuperH maintainers,
+>>
+>> On Wed, Feb 8, 2023 at 8:59 PM John Paul Adrian Glaubitz
+>> <glaubitz@physik.fu-berlin.de> wrote:
+>>>
+>>> On Thu, 2022-07-14 at 16:41 +0800, Huacai Chen wrote:
+>>>> When CONFIG_CPUMASK_OFFSTACK and CONFIG_DEBUG_PER_CPU_MAPS is selected,
+>>>> cpu_max_bits_warn() generates a runtime warning similar as below while
+>>>> we show /proc/cpuinfo. Fix this by using nr_cpu_ids (the runtime limit)
+>>>> instead of NR_CPUS to iterate CPUs.
+>>>>
+>>>> [    3.052463] ------------[ cut here ]------------
+>>>> [    3.059679] WARNING: CPU: 3 PID: 1 at include/linux/cpumask.h:108 show_cpuinfo+0x5e8/0x5f0
+>>>> [    3.070072] Modules linked in: efivarfs autofs4
+>>>> [    3.076257] CPU: 0 PID: 1 Comm: systemd Not tainted 5.19-rc5+ #1052
+>>>> [    3.099465] Stack : 9000000100157b08 9000000000f18530 9000000000cf846c 9000000100154000
+>>>> [    3.109127]         9000000100157a50 0000000000000000 9000000100157a58 9000000000ef7430
+>>>> [    3.118774]         90000001001578e8 0000000000000040 0000000000000020 ffffffffffffffff
+>>>> [    3.128412]         0000000000aaaaaa 1ab25f00eec96a37 900000010021de80 900000000101c890
+>>>> [    3.138056]         0000000000000000 0000000000000000 0000000000000000 0000000000aaaaaa
+>>>> [    3.147711]         ffff8000339dc220 0000000000000001 0000000006ab4000 0000000000000000
+>>>> [    3.157364]         900000000101c998 0000000000000004 9000000000ef7430 0000000000000000
+>>>> [    3.167012]         0000000000000009 000000000000006c 0000000000000000 0000000000000000
+>>>> [    3.176641]         9000000000d3de08 9000000001639390 90000000002086d8 00007ffff0080286
+>>>> [    3.186260]         00000000000000b0 0000000000000004 0000000000000000 0000000000071c1c
+>>>> [    3.195868]         ...
+>>>> [    3.199917] Call Trace:
+>>>> [    3.203941] [<90000000002086d8>] show_stack+0x38/0x14c
+>>>> [    3.210666] [<9000000000cf846c>] dump_stack_lvl+0x60/0x88
+>>>> [    3.217625] [<900000000023d268>] __warn+0xd0/0x100
+>>>> [    3.223958] [<9000000000cf3c90>] warn_slowpath_fmt+0x7c/0xcc
+>>>> [    3.231150] [<9000000000210220>] show_cpuinfo+0x5e8/0x5f0
+>>>> [    3.238080] [<90000000004f578c>] seq_read_iter+0x354/0x4b4
+>>>> [    3.245098] [<90000000004c2e90>] new_sync_read+0x17c/0x1c4
+>>>> [    3.252114] [<90000000004c5174>] vfs_read+0x138/0x1d0
+>>>> [    3.258694] [<90000000004c55f8>] ksys_read+0x70/0x100
+>>>> [    3.265265] [<9000000000cfde9c>] do_syscall+0x7c/0x94
+>>>> [    3.271820] [<9000000000202fe4>] handle_syscall+0xc4/0x160
+>>>> [    3.281824] ---[ end trace 8b484262b4b8c24c ]---
+>>>>
+>>>> Cc: stable@vger.kernel.org
+>>>> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+>>>> ---
+>>>>   arch/sh/kernel/cpu/proc.c | 2 +-
+>>>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/arch/sh/kernel/cpu/proc.c b/arch/sh/kernel/cpu/proc.c
+>>>> index a306bcd6b341..5f6d0e827bae 100644
+>>>> --- a/arch/sh/kernel/cpu/proc.c
+>>>> +++ b/arch/sh/kernel/cpu/proc.c
+>>>> @@ -132,7 +132,7 @@ static int show_cpuinfo(struct seq_file *m, void *v)
+>>>>
+>>>>   static void *c_start(struct seq_file *m, loff_t *pos)
+>>>>   {
+>>>> -     return *pos < NR_CPUS ? cpu_data + *pos : NULL;
+>>>> +     return *pos < nr_cpu_ids ? cpu_data + *pos : NULL;
+>>>>   }
+>>>>   static void *c_next(struct seq_file *m, void *v, loff_t *pos)
+>>>>   {
+>>>
+>>> I build-tested the patch and also booted the patched kernel successfully
+>>> on my SH-7785LCR board.
+>>>
+>>> Showing the contents of /proc/cpuinfo works fine, too:
+>>>
+>>> root@tirpitz:~> cat /proc/cpuinfo
+>>> machine         : SH7785LCR
+>>> processor       : 0
+>>> cpu family      : sh4a
+>>> cpu type        : SH7785
+>>> cut             : 7.x
+>>> cpu flags       : fpu perfctr llsc
+>>> cache type      : split (harvard)
+>>> icache size     : 32KiB (4-way)
+>>> dcache size     : 32KiB (4-way)
+>>> address sizes   : 32 bits physical
+>>> bogomips        : 599.99
+>>> root@tirpitz:~>
+>>>
+>>> Tested-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+>>>
+>>> I am not sure yet whether the change is also correct as I don't know whether
+>>> it's possible to change the number of CPUs at runtime on SuperH.
+>> Can this patch be merged? This is the only one still unmerged in the
+>> whole series.
+> 
+> Thanks for the reminder. I will pick it up for 6.10.
+> 
+> Got sick this week, so I can't pick up anymore patches for 6.9 and will just
+> send Linus a PR later this week.
+> 
+> Adrian
+> 
 
-This should update scripts/min-tool-version.sh too. With that:
+Gentle ping on this, can we get this patch merged into 6.12?
 
-Acked-by: Miguel Ojeda <ojeda@kernel.org>
-
-As Arnd says, the cleanups can be done afterwards.
-
-Cheers,
-Miguel
+-- 
+Best Regards,
+Kexy Biscuit
 
