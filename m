@@ -1,77 +1,77 @@
-Return-Path: <linux-arch+bounces-7501-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7500-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 182B798AB67
-	for <lists+linux-arch@lfdr.de>; Mon, 30 Sep 2024 19:51:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3824A98AB60
+	for <lists+linux-arch@lfdr.de>; Mon, 30 Sep 2024 19:51:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 410B41C21A7D
-	for <lists+linux-arch@lfdr.de>; Mon, 30 Sep 2024 17:51:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E7EA91F235A4
+	for <lists+linux-arch@lfdr.de>; Mon, 30 Sep 2024 17:51:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FA1C198A2F;
-	Mon, 30 Sep 2024 17:51:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28D22198A0D;
+	Mon, 30 Sep 2024 17:51:10 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEFA818C31;
-	Mon, 30 Sep 2024 17:51:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DC6F18C31;
+	Mon, 30 Sep 2024 17:51:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727718702; cv=none; b=p5SPQp3lxUAEgb2nliLjt6waF4Xt1n7e70iJ7oPDUziP4U+Jnyxmi/zSFwADsbr1nIVHHZO08LGauUKmWDkSjmyqpTUwQ7++rbgFdXmTJ7M+qEOsUUdJ7SOr7cM0p3ZSG1HRmuMjX5BCd3JCK3qZhPmQH229W5Vjthh9WTj/8LA=
+	t=1727718670; cv=none; b=VPyM5Q/atKRjXyPn0ToCKyyM8QwSWQlRBlzZ1ZAw0tPjaM05GoJ4hK/3E4cp77NysvSOtD4ObwicXLw3GlhDg/kdXqGOnGHGIMsaas24mg3EmRvUez2pJw+lIadzLpjcEGwCSsrFvlaCulep3AYlehZPH8GD/lgRqFozA6BHC78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727718702; c=relaxed/simple;
-	bh=PQ2VgHYe0Ngojxr8nNlQI/+nPbwGo4g+HQCTJc64GP8=;
+	s=arc-20240116; t=1727718670; c=relaxed/simple;
+	bh=x0pDw+4SzE1MkSrrBfzhcseWxrldz0hn0pxuu1IaAPA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CDh0bt9QIXwTqywyh9FOZzhpYeosZ+35wVVUcVKTyA0zwvCH6A7t2DjFK4q7c8Kgl4ujNDHdCCvBbEn/uo1FTgSuoevHsTgy+V/ntqM3ZatolbBXtVaitUx2s5i2iwb2uIt/ITOdALe0PIUxYnNkD3PjOUtYkOg+PKgQ++uldcs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.180
+	 To:Cc:Content-Type; b=gq120dC7DIduTuIz4ogWfNCPDlG0MR59qv7DTupf5xMyLMfmYt4kHawrYyGKz9DIRbFf9/skmf7n1zMu59PPMMJIEgQwjZxX2K8ISuu4um6wi1YnYp0I186eWMkwONhSUTG+uy5PunFvkbwt8h2l821j9UGICjoeaD+GiaH9qBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-7a99eee4a5bso417475885a.0;
-        Mon, 30 Sep 2024 10:51:38 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-6ddfdeed0c9so36307877b3.2;
+        Mon, 30 Sep 2024 10:51:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727718697; x=1728323497;
+        d=1e100.net; s=20230601; t=1727718667; x=1728323467;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ZoyzlnnLRNj4i2u5Dgn44nDbhn4MB5fS72eP0TVQdtc=;
-        b=O81Ppus9t8REbPpGcEtyXeb8y/xbWZk2CkPsqqsCGawxWH7Ddj6P0SSMdxjlOXh1N/
-         RM3sUSnRqz/LwJgxjUMlwYjLXE7COf+ogR9qXFnzdO+MGQCy9Xofm/2p8p3f+/Z046Ev
-         xCKy1Re+SXo17ZnX75KkEPzpBfsyOENXQTtJnf3XxWrBw6Jr8SG1mkX/5twuypZ5/Ncy
-         3kA6CBVzf39W0v5XlPgcRE5ABzkQx94UPu5bvM1cofCEYqVBpizX+InR3dN2IU4T5g2g
-         S23avZIP1DYaaONer6e0S0YhmAPLIizZlYDYRQ4tcsRPjxPaBh/1sg7176PJFdIjVwRs
-         ouoQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUFs9Ik8AEiQB0iL4H5nmNncPPA+kd/F3NV3G6Co0gc++oOPNVBA78O1ZgJy3HxXcdnvojZY9xRYT36jQ==@vger.kernel.org, AJvYcCUiRdmrNtNGrTFZ4+SQae7Ig9CNQkvu42USZNLBkbiJ1cSWNJNDvhYgi99WdlZYjb8For2/Sgfgw0xJAQ==@vger.kernel.org, AJvYcCVr0iKjeZ7ujCr47hGQjEVR32yVBCjzR9/Y3pTQjDtxyaXAPTPeOOzzXjQVfiQ5H83qJufSggnyoxu+uOpA@vger.kernel.org, AJvYcCWXB+uM2TZkNG5Tot0CcREWJJfNZlTRkKe9+2D1UTCryH71Xx//oO+FK116SjCCtBayrxGL/s/KWgc=@vger.kernel.org, AJvYcCWb3mTL4edSQhE11aOrgEBCRNxxdJzfXKAYdqSjfKtPs7vrL7mWOsdoSLQcBwFAjT/xDDQiH/gLxNSaW2vX@vger.kernel.org, AJvYcCWr9ZafmlfD8tlXIHKaVFxBweKKNmqxrR4Br0Xw4cjeWXn884plcPwe58sQd8cecVcTtXxxHCGFnvuooA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy6R3eRsYOufpOaO+ySb0WTWagO+wJschVEwRxjJbhdzC9CVAYq
-	Sh0gNP+SEbQWvvmZOQGyBnx4AeetEVbdeoQ4YNHth625e/wOD5cdCrp/EboQ
-X-Google-Smtp-Source: AGHT+IFrQXnUt9rGHYGl09CM7yMs469aVfJQ+cgoyxYWZ1x7U+9n59mLCbQBoUAY1g6J7P9AmAqIOQ==
-X-Received: by 2002:a05:620a:28c5:b0:7ac:9c44:dde1 with SMTP id af79cd13be357-7ae3785615bmr2009444585a.28.1727718697333;
-        Mon, 30 Sep 2024 10:51:37 -0700 (PDT)
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com. [209.85.222.174])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-45c9f2e0cfasm38500391cf.43.2024.09.30.10.51.37
+        bh=ERWUip0Hd+3xSPGc5KF+LIvmSrz8p98q0i+WVSFZa2o=;
+        b=p7Aqwcvtq57p9vfgE4tPN3TuNn2ex3OXgaFUSgkpaDvHWaYBB96GctEZHfK85dNmb9
+         QCRV958TudcF0K+oA1Wfn29hcAB/reO+kqOMacxeWjQ15oXPmgK2PN8rd98gZSdDiLMi
+         eZn5Oo/nB0+e5uwcu3tQeLeq72apFjSDnmHR0Wv4lQg0OXUa4vtivopt5KoxlLB5LCFr
+         wqjkO1m/RjQNNlKY/Orr+Ejb5feTTVyfUltJVY/QxwZ55iofO6cC3PaJo0DnvUkFuEAo
+         KYzYB6vt72svkmHYnFI2DGZVE7kJpb7yyWDeNrbdz549xNR8SA+q2JV8sM8B3FaMdIeP
+         OXcQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU2xMbojouJPYbmWf/LzHa5gzdgcvXCBm2sBcBAnnlY1vfq8UeIMKuiQK6dV7olxelR9Qd7o7qxgkB4EQ==@vger.kernel.org, AJvYcCUkNc10IU1/cNpJeKvNteYIyDUPV/KrUi/9IqfhvxVtKo6yg4xq2SQHhCt3njRWJ716OcapJ9BiJOU9IA==@vger.kernel.org, AJvYcCVVJTnSqRvM5XHiK1qD4FvOnwCKV7bW3uzNULNCEJ2ay8Q5uUCYfjf/oSMFQIaikHCghgYOCIJsB5ShCG4R@vger.kernel.org, AJvYcCXOUJNeYTxA+Ji4anNBppkRLASiq3iy1TDV7l7qoCQpoWCE7mzncO2vmygw4zTPSvbQH6qauwd5q9w=@vger.kernel.org, AJvYcCXVpV8wVG5sU1GkAPTccXm+8C5akyrh1h59uiSXva/qBbmkgpIRuqWNiP8FzfuqXEeRhT5HBuT1nncZMQ==@vger.kernel.org, AJvYcCXk1WrfU56Vh3LkX/eH3H/XlvAdv0ziPSzzucloflBpFweJ6lUSlPsp3uN46FpqVLt3kpQyxuQzMFHgooCo@vger.kernel.org
+X-Gm-Message-State: AOJu0YzCJKv66ivHGticXtBIr0Zt840NUjVV1TEv1fOswuUdMb/9SMEC
+	B8/+iCAOqHG3c2mY/wr3b2goQTq2oIK1F2MOELUW0ksBXyDlJ4eJwrhQ1cI2
+X-Google-Smtp-Source: AGHT+IGhI3xA3cIv039jfiaPXUaypRnJS+EgpF8JI6aXodMaOUUnC76Ea3hLfuXu5U9hzxiNEsrILg==
+X-Received: by 2002:a05:690c:89:b0:6e2:50a:f436 with SMTP id 00721157ae682-6e2475e2fa0mr89233007b3.36.1727718667090;
+        Mon, 30 Sep 2024 10:51:07 -0700 (PDT)
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com. [209.85.128.170])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-6e2452f7c57sm14992637b3.2.2024.09.30.10.51.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Sep 2024 10:51:37 -0700 (PDT)
-Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-7a99eee4a5bso417474485a.0;
-        Mon, 30 Sep 2024 10:51:37 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUEVLRRqha2O1w1YOdq5YuGCYiw90qa3lUMoCIcGWOsmEZ9LnTrsNcsfVnKOEhNmgntrbJdgGJpqn+N0Wt/@vger.kernel.org, AJvYcCV3dEN6g+yN82R2wRAH9whin4y6QpEm5NRugt9uOvB4qKI/LYoyFBwIAq0/j3vi8CY8Zm7dvKG1eDjiOw==@vger.kernel.org, AJvYcCVIiD9Gvhpmg69fciM0PrBLv1KFPqV+fFUGmWVUAGZJW8qu5AkdaFm37Qf/ZBV8zdCtml49h7BTAT0=@vger.kernel.org, AJvYcCVmUrGeFtSlHc7FxMKS+Z/fOgUmBjXx5YEKkU4mVbBij9F82D/09gm1UkeUuFh2RWKCMkqD8n2wWVGDUQ==@vger.kernel.org, AJvYcCVw50OSr+HSXw7eSZMyzB+52cVEmWxyopjM90WUlOa3T03n/7+tsVdjGGxlIxwedAEnSOc9/DAUprPojQ==@vger.kernel.org, AJvYcCXYyWgfX86i/saQCZwASwKX+Om/zPtd/3ajAIsvTYnCkfolcUDMVGUCi2Oy83k+3DCQb163xiqBL8fj2uda@vger.kernel.org
-X-Received: by 2002:a05:690c:60c3:b0:6dd:bbb4:bcc7 with SMTP id
- 00721157ae682-6e2476334f2mr105898897b3.44.1727718393293; Mon, 30 Sep 2024
- 10:46:33 -0700 (PDT)
+        Mon, 30 Sep 2024 10:51:07 -0700 (PDT)
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-6d9f65f9e3eso39744247b3.3;
+        Mon, 30 Sep 2024 10:51:06 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU1EEN8COv+QD4dqKTC2Y8oArj9kyuGIGCl3Alvof4LWwbEd5gGSqoVQgs40X7BpjYCYg9UCTS6dUM=@vger.kernel.org, AJvYcCUEf9/HYpJPVH7jSyulvETno10N7/rxbYQbEa7599nsa80qsXK01LG+/aA7xAZigv9V1l4r4QkiwZBvUw6+@vger.kernel.org, AJvYcCVI1pEJEY1WY/uC9xNp4sEc3mJRRpPcnzvOTz6lIQP7peFNKI7uLRPKaLNbdYcH7gySMC3KhdyfXAWH5A==@vger.kernel.org, AJvYcCVKo71wgRZCGcTe/XZKzkO/KyTiCZiBpjsHoOggYN8HbPT0AZMdtbUNcGRAPYP+jkHkPwNAYHwQg1a1v3Gy@vger.kernel.org, AJvYcCWFr/jteD0p8zyR2J2uRavgRt7Mia0BoUg1Rt7nkk+G1zo4Go9fg2gfwl/IKLBTIt+Pslav93DZBQB6rw==@vger.kernel.org, AJvYcCXl/8kHvfw2XbUU7X83Kc/vNghIoZRSygY9CJ6PEYfK9BXwPs3TbewyfGB3LCarnsM3Bl0qQ50cK7Q6tQ==@vger.kernel.org
+X-Received: by 2002:a05:690c:c0f:b0:6d3:d842:5733 with SMTP id
+ 00721157ae682-6e2475e3050mr104508727b3.35.1727718666765; Mon, 30 Sep 2024
+ 10:51:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240930132321.2785718-1-jvetter@kalrayinc.com> <20240930132321.2785718-6-jvetter@kalrayinc.com>
-In-Reply-To: <20240930132321.2785718-6-jvetter@kalrayinc.com>
+References: <20240930132321.2785718-1-jvetter@kalrayinc.com> <20240930132321.2785718-11-jvetter@kalrayinc.com>
+In-Reply-To: <20240930132321.2785718-11-jvetter@kalrayinc.com>
 From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 30 Sep 2024 19:46:21 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVnb-fo2MP7ERwSj-sPNU3-QyikNinfhvgVa2DnR9jJrQ@mail.gmail.com>
-Message-ID: <CAMuHMdVnb-fo2MP7ERwSj-sPNU3-QyikNinfhvgVa2DnR9jJrQ@mail.gmail.com>
-Subject: Re: [PATCH v7 05/10] m68k: Align prototypes of IO memcpy/memset
+Date: Mon, 30 Sep 2024 19:50:55 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdX03ornwefrTfSYfH-XoEE4CHN+u5m7ay5_LrTq8XHOJA@mail.gmail.com>
+Message-ID: <CAMuHMdX03ornwefrTfSYfH-XoEE4CHN+u5m7ay5_LrTq8XHOJA@mail.gmail.com>
+Subject: Re: [PATCH v7 10/10] arm: Align prototype of IO memset
 To: Julian Vetter <jvetter@kalrayinc.com>
 Cc: Arnd Bergmann <arnd@arndb.de>, Russell King <linux@armlinux.org.uk>, 
 	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>, 
@@ -94,8 +94,8 @@ Content-Transfer-Encoding: quoted-printable
 
 On Mon, Sep 30, 2024 at 3:25=E2=80=AFPM Julian Vetter <jvetter@kalrayinc.co=
 m> wrote:
-> Align the prototypes of the memcpy_{from,to}io and memset_io functions
-> with the new ones from iomap_copy.c.
+> Align prototype of the memset_io function with the new one from
+> iomap_copy.c
 >
 > Reviewed-by: Yann Sionneau <ysionneau@kalrayinc.com>
 > Signed-off-by: Julian Vetter <jvetter@kalrayinc.com>
@@ -103,8 +103,7 @@ m> wrote:
 > Changes for v7:
 > - New patch
 
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
 Gr{oetje,eeting}s,
 
