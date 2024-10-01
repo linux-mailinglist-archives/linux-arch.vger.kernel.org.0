@@ -1,89 +1,88 @@
-Return-Path: <linux-arch+bounces-7559-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7560-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B65398C347
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Oct 2024 18:23:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 017DE98C649
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Oct 2024 21:51:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0C7D61F23530
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Oct 2024 16:23:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 336271C219BF
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Oct 2024 19:51:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C25611CB508;
-	Tue,  1 Oct 2024 16:19:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 760731CCB45;
+	Tue,  1 Oct 2024 19:51:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="KEeIkkB7"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98BBB1C9EA3;
-	Tue,  1 Oct 2024 16:19:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 685731CBEB8;
+	Tue,  1 Oct 2024 19:51:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727799586; cv=none; b=NWEj/yZ/5UC9koeS78YxIQIyBciQQCuNqeR8vqpXanOS56pn7cvwQiXpuVLa+CgNK8Me1desDAr4pya/lx5dJ4kKaeq+rU34h14mAE0OA/sELfhdCCC3FyoofV+RgV/JzO6LlhAD02Q9sgRK2xFSBCiIksi+dDzSRiUj9OSdh8s=
+	t=1727812272; cv=none; b=gqZtcVxYQtsg2M6lydghhFaWYI2XBeTYuSzpsOCSoot4rqv/BKirwdVUGvNjk2/vQdjh7oOhM0HNM95UjlONodu0HQqtyYkd+mW+6ZRk3oQjqKY2fIPXGfoHTQINAnubU5iQO9th7C6BWOa9R5s6ai2FiK1FTVg12T7WuKEnRiU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727799586; c=relaxed/simple;
-	bh=+dSQbuCtxGx+1cqCxLPHWfgLoYVU9uIXvkb4qVifEOc=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NyVQf3mLR2N2MKDyxN4aCn1C3x2rhQVtooKJSmJakBnN5doqBeaTLYyhuks0Q6rL7nsz8S9E2CJ8jz9xwcgL7dvHHDsaTd3xEL98A8k+CAmczhe3ON5CjnenfIPT+woCcutwfbPm8uGbWrr2EK5Ex+G0nEtN+LzveBcSt6n9DpQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D994C4CEC6;
-	Tue,  1 Oct 2024 16:19:40 +0000 (UTC)
-Date: Tue, 1 Oct 2024 12:20:29 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Alice Ryhl <aliceryhl@google.com>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf
- <jpoimboe@kernel.org>, Jason Baron <jbaron@akamai.com>, Ard Biesheuvel
- <ardb@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor
- <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun
- Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, =?UTF-8?B?Qmo=?=
- =?UTF-8?B?w7Zybg==?= Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin
- <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>,
- linux-trace-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
- linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
- linux-arch@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>, Ingo
- Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
- <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin"
- <hpa@zytor.com>, Sean Christopherson <seanjc@google.com>, Uros Bizjak
- <ubizjak@gmail.com>, Will Deacon <will@kernel.org>, Marc Zyngier
- <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, Mark Rutland
- <mark.rutland@arm.com>, Ryan Roberts <ryan.roberts@arm.com>, Fuad Tabba
- <tabba@google.com>, linux-arm-kernel@lists.infradead.org, Paul Walmsley
- <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
- <aou@eecs.berkeley.edu>, Anup Patel <apatel@ventanamicro.com>, Andrew Jones
- <ajones@ventanamicro.com>, Alexandre Ghiti <alexghiti@rivosinc.com>, Conor
- Dooley <conor.dooley@microchip.com>, Samuel Holland
- <samuel.holland@sifive.com>, linux-riscv@lists.infradead.org, Huacai Chen
- <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, Bibo Mao
- <maobibo@loongson.cn>, Tiezhu Yang <yangtiezhu@loongson.cn>, Andrew Morton
- <akpm@linux-foundation.org>, Tianrui Zhao <zhaotianrui@loongson.cn>,
- loongarch@lists.linux.dev
-Subject: Re: [PATCH v9 4/5] jump_label: adjust inline asm to be consistent
-Message-ID: <20241001122029.399eedde@gandalf.local.home>
-In-Reply-To: <ZvwgcBzLwYkgsJ2u@arm.com>
-References: <20241001-tracepoint-v9-0-1ad3b7d78acb@google.com>
-	<20241001-tracepoint-v9-4-1ad3b7d78acb@google.com>
-	<ZvwgcBzLwYkgsJ2u@arm.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1727812272; c=relaxed/simple;
+	bh=tPlRi4Bi87jX1gVbhtJhD3MayckC/4ReanlEE9xh84I=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Lh7Uqpl3LX4spUlaaEoTux+1gjka09+2Dnvz/JCPKOyzJVUNxFWXQf5gZItNGoiF6gujjkSDJEPW5JjTgoRWBGqbohfoqQgx/mm6Lb0qmYGM5Iv+jeINXXnxw7v4M0MevuoKRE1gm/Tx/DTuuY6h+jpkuvq078rvHjEhry+VCDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=KEeIkkB7; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Type:MIME-Version:
+	Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=+lt7Yca3Kr9BEe3h8nZXT9g7vBymkVobPcv5hVKD+qY=; b=KEeIkkB7fN1QETdeiHperh9II3
+	Tiq7nUdIopTElXofL9lnm0mX2ZLoqWxEG33mI81bB3UrE76cZXz49oDM0c5CbN+GXdPtkRCv0aHtZ
+	ZKNQF5nl1Q0ouBBXOZI6aLuwxldm+rVEaGtT2A4Ls8WsXBGamaE2C/TqYWlx8cRyNqD2JfY298f1r
+	EgID1QIsY2jGBsm+B6gWvQR/U7XlEcLbWnp7ZO0URbcMzPTCx/4pwKuoBc32TO8pmWdzEF9Bcjk5Z
+	6sOaHLsqdipzgZUIvGvyEsQ3ribGHG/z7ySbMqPpWwLSCUxbM4I8I7a25bwvEH+i06pd0t0iAxD6l
+	wvGDySKA==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.98 #2 (Red Hat Linux))
+	id 1svitn-0000000HLsL-1PEF;
+	Tue, 01 Oct 2024 19:51:07 +0000
+Date: Tue, 1 Oct 2024 20:51:07 +0100
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: linux-arch@vger.kernel.org
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-parisc@vger.kernel.org, Vineet Gupta <vgupta@kernel.org>
+Subject: [RFC][PATCHES] asm/unaligned.h removal
+Message-ID: <20241001195107.GA4017910@ZenIV>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-On Tue, 1 Oct 2024 17:16:48 +0100
-Catalin Marinas <catalin.marinas@arm.com> wrote:
+	There are only two instances of asm/unaligned.h in the tree -
+arc and parisc.  Everything else picks it from asm-generic/unaligned.h
+and if not these two, we could just move asm-generic/unaligned.h into
+include/linux/unaligned.h and do a tree-wide search-and-replace that
+would kill the largest class of asm/*.h includes in the entire kernel.
 
-> For the arm64 changes:
-> 
-> Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+	Turns out, arc and parisc asm/unaligned.h are very close to
+being straight #include <asm-generic/unaligned.h> themselves.  The
+following series massages them away.
 
-Thanks Catalin!
+	It can be found in
+git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git #work.headers.unaligned
+Three commits - dealing with parisc, dealing with arc and autogenerated
+search-and-replace job (that would obviously be better off done by
+Linus at the next -rc1).
 
--- Steve
+	Individual patches in followups (the last one - just the commit
+message with script for reproducing the damn thing; the diff itself is
+just under 12K lines, <asm/unaligned.h> being the most widely include
+asm/*.h in the entire tree).
+
+	Please, review.  I don't really care which tree(s) does that stuff
+go through; I can put the first two in my #for-next, as long as nobody
+has objections to the patches themselves.
 
