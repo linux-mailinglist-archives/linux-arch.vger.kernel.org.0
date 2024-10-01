@@ -1,373 +1,364 @@
-Return-Path: <linux-arch+bounces-7521-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7523-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCF7098BF88
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Oct 2024 16:17:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A071198C249
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Oct 2024 18:07:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1927BB239A9
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Oct 2024 14:17:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 343271F2630C
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Oct 2024 16:07:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 815851CC88A;
-	Tue,  1 Oct 2024 14:13:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFC951CB520;
+	Tue,  1 Oct 2024 16:07:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="EATPRsyy"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 526371C6F67;
-	Tue,  1 Oct 2024 14:13:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5252A1CB506
+	for <linux-arch@vger.kernel.org>; Tue,  1 Oct 2024 16:06:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727792001; cv=none; b=WyMXZNPM72KVQ8y3YqqW3gu3R0SS/pkDFtD3B9c7EOCMXPSzVgPbzHX9eRt6ZcADwDQ3eRH9ykZK3+J0G8uXq44QZy/CM+KlF4GRSgheNALH/vUjwxwjVcvW1v3tvM1V/YH+sfA7WC3ZqGTp4LpR9yxW7qrPP8P7JCg+TZQnJxE=
+	t=1727798821; cv=none; b=mJCaJB3C5hwdhTdUaYUiCUnzb7t1oSux3apL5ms0AlrXwu7FrC7/AK+jCzPED2qnH7sMCWztxQWOfwS/LP4eFQ6dms+ZWqrm/XXJ2JWGAGAZQabx1usEyvVOwzDJnR7fjjWHPTytRjoz9GlFYJOAbN/pydYATFZyNR3fS7iEZ8Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727792001; c=relaxed/simple;
-	bh=3igbjCvuJ0YDGAR0DQ9ZtPlULJXsd8VFMK0uyZUChfA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FZ5jTugGZD4gL1GJ3BmLy450hKeG3zEAOsx5NJ8cyLJMJplif7z9CrW3mdYMMwx+jNoFzOQ9G0FJqAFqAi4nHk9AwvP188IRSubHjErNAlqk+5LCU4NwFfM0m1RSCpLGi0E52w52W2KdvvC7szQgQS0BEa2y+XsCFZsf/YvwbQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6668DC4CECD;
-	Tue,  1 Oct 2024 14:13:15 +0000 (UTC)
-Date: Tue, 1 Oct 2024 10:14:04 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Alice Ryhl <aliceryhl@google.com>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Peter Zijlstra <peterz@infradead.org>,
- Josh Poimboeuf <jpoimboe@kernel.org>, Jason Baron <jbaron@akamai.com>, Ard
- Biesheuvel <ardb@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor
- <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun
- Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, "=?UTF-8?B?Qmo=?=
- =?UTF-8?B?w7Zybg==?= Roy Baron" <bjorn3_gh@protonmail.com>, Benno Lossin
- <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>,
- linux-trace-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
- linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
- linux-arch@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>, Ingo
- Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
- <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin"
- <hpa@zytor.com>, Sean Christopherson <seanjc@google.com>, Uros Bizjak
- <ubizjak@gmail.com>, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon
- <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton
- <oliver.upton@linux.dev>, Mark Rutland <mark.rutland@arm.com>, Ryan Roberts
- <ryan.roberts@arm.com>, Fuad Tabba <tabba@google.com>,
- linux-arm-kernel@lists.infradead.org, Paul Walmsley
- <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
- <aou@eecs.berkeley.edu>, Anup Patel <apatel@ventanamicro.com>, Andrew Jones
- <ajones@ventanamicro.com>, Alexandre Ghiti <alexghiti@rivosinc.com>, Conor
- Dooley <conor.dooley@microchip.com>, Samuel Holland
- <samuel.holland@sifive.com>, linux-riscv@lists.infradead.org, Huacai Chen
- <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, Bibo Mao
- <maobibo@loongson.cn>, Tiezhu Yang <yangtiezhu@loongson.cn>, Andrew Morton
- <akpm@linux-foundation.org>, Tianrui Zhao <zhaotianrui@loongson.cn>,
- loongarch@lists.linux.dev
-Subject: Re: [PATCH v9 4/5] jump_label: adjust inline asm to be consistent
-Message-ID: <20241001101404.29388dd0@gandalf.local.home>
-In-Reply-To: <20241001-tracepoint-v9-4-1ad3b7d78acb@google.com>
-References: <20241001-tracepoint-v9-0-1ad3b7d78acb@google.com>
-	<20241001-tracepoint-v9-4-1ad3b7d78acb@google.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1727798821; c=relaxed/simple;
+	bh=m0FIsgogONUZNmfchDshFIQ0w4NVb3xrsAQwcxIIjy4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=LewZ8Fd6NxfHFvIsLDdQFIPvMA/ZnPgz20OLceGem+doMRWZggdUSb9gX7k74YT8ez5IfwiM6zF8ojvOoHqDfW8+AzeK3CDtl65sSI9iIlo4LldX9/Ujr64le5auNaN1B/+ZSvd1mlUrCDvPguau6HR4qyJ5A5/5z34Yr+xEsA4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=EATPRsyy; arc=none smtp.client-ip=209.85.216.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2e078d28fe9so4160395a91.2
+        for <linux-arch@vger.kernel.org>; Tue, 01 Oct 2024 09:06:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1727798819; x=1728403619; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=p/+CAfw719K7trKUOdaKnGov4VX+rClpCqrk7kv+YBo=;
+        b=EATPRsyyj2q81GehYdkE/ZPRkVpxUhaGQPNLwl5bQNm46SaY8JdKO1nQfezQO+L3C+
+         pa1hJX2R2MlKtDJ8uycgj5oUbZagsgL9ik0quQ5TyaHiBwDr1iJ000m/+gZ7H1TeQcm1
+         4XtRyWCv1JFRn8dIHkUj6nD1kPc9NZUKyt8CDWDAOtT8mWcyLa0lwwR37CkZ16DXZxgS
+         wIdN6osroeGGZhncvNLCOVFHDdtI9DjVw5KW2QVC2QeIBNxQ+QCMErY1LExVTkbAh9rl
+         /nGEHP5WAy2wd1a0YoKs9111yc/4//iwyjdkXwnn24JDzdJm6FefeSiTWOGweXFrRmGk
+         QBig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727798819; x=1728403619;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=p/+CAfw719K7trKUOdaKnGov4VX+rClpCqrk7kv+YBo=;
+        b=bldhPiaGIACM07e5yh3qOLEBDJ3s2RzBSaH2VAze/uV/5k3e9lcbfqmONjA7AiTQCn
+         Fj392tvSOvUigHRdVH8zkBkUyNFCTw/NCSDwkvz/KwxaXVLBqJafEVCj+94cxmh4/LPR
+         EJ1jGmVdq8O3Mx3g2idrkByPWkBDYqNVfnBXRqAcuPnbnzRzOSmyw/qqIagIcpNqEKER
+         rE0olThuAA7luqHYx5dtHToWeUqD5C98ETKPWNMQeLCU7v6qPkfeUSzZT/QwPl7eHMvB
+         Q1jLZywNRp0l0YaVLkMkHY0kK+waIA7VRDJOGPxMXWpMfzAWdT9mCbBzP+XyYtxtCE/R
+         FdCQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUygdnORmodchJWcttWIfDZwyTHXWfqReAmwGC58PiTjVAvDWFHXS6RyYcQXQ6kbeHsGYH8lLMbOIX7@vger.kernel.org
+X-Gm-Message-State: AOJu0YzVQK/yqtifLrtmONk+2sEXDuHR1WnonLCatrjKIFTTSSomyBR9
+	XxsNR4zyPBaN7XYjZ+hWl0sfgo33Q2SFzm5aHhmNshGMG40WNWWhjcsbhiW3pR0=
+X-Google-Smtp-Source: AGHT+IEN2dus5eCDv3FJ6JG+o53WejlfJ1X7DX0j+cv1B0CFXJtJs/0I33VncpmVbaQmMUBwG53XiQ==
+X-Received: by 2002:a17:90b:46cd:b0:2d3:ba42:775c with SMTP id 98e67ed59e1d1-2e184521a79mr281772a91.1.1727798818585;
+        Tue, 01 Oct 2024 09:06:58 -0700 (PDT)
+Received: from debug.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e06e1d7d47sm13843973a91.28.2024.10.01.09.06.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Oct 2024 09:06:58 -0700 (PDT)
+From: Deepak Gupta <debug@rivosinc.com>
+Subject: [PATCH 00/33] riscv control-flow integrity for usermode
+Date: Tue, 01 Oct 2024 09:06:05 -0700
+Message-Id: <20241001-v5_user_cfi_series-v1-0-3ba65b6e550f@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAO0d/GYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDS2MD3TLT+FKgnvjktMx4iF5d45RkY2OjNIs00yQjJaDGgqLUtMwKsKH
+ RsbW1ALWj2ONkAAAA
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+ Andrew Morton <akpm@linux-foundation.org>, 
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+ Vlastimil Babka <vbabka@suse.cz>, 
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+ Paul Walmsley <paul.walmsley@sifive.com>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+ Christian Brauner <brauner@kernel.org>, 
+ Peter Zijlstra <peterz@infradead.org>, Oleg Nesterov <oleg@redhat.com>, 
+ Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>, 
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+ linux-mm@kvack.org, linux-riscv@lists.infradead.org, 
+ devicetree@vger.kernel.org, linux-arch@vger.kernel.org, 
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ alistair.francis@wdc.com, richard.henderson@linaro.org, jim.shu@sifive.com, 
+ andybnac@gmail.com, kito.cheng@sifive.com, charlie@rivosinc.com, 
+ atishp@rivosinc.com, evan@rivosinc.com, cleger@rivosinc.com, 
+ alexghiti@rivosinc.com, samitolvanen@google.com, broonie@kernel.org, 
+ rick.p.edgecombe@intel.com, Deepak Gupta <debug@rivosinc.com>, 
+ David Hildenbrand <david@redhat.com>, 
+ Carlos Bilbao <carlos.bilbao.osdev@gmail.com>, 
+ Samuel Holland <samuel.holland@sifive.com>, 
+ Andrew Jones <ajones@ventanamicro.com>, 
+ Conor Dooley <conor.dooley@microchip.com>, Andy Chiu <andy.chiu@sifive.com>
+X-Mailer: b4 0.14.0
 
+v5 for cpu assisted riscv user mode control flow integrity.
+zicfiss and zicfilp [1] are ratified riscv CPU extensions.
 
-Can I get some more acks from the arch maintainers? So far there's only one
-ack from Peter Zijlstra for x86. But this touches arm, arm64, loongarch and
-riscv too.
+Changes in this version are
+- rebased on v6.12-rc1
+- Fixed schema related issues in device tree file
+- Fixed some of the documentation related issues in zicfilp/ss.rst
+  (style issues and added index)
+- added `SHADOW_STACK_SET_MARKER` so that implementation can define base
+  of shadow stack.
+- Fixed warnings on definitions added in usercfi.h when
+  CONFIG_RISCV_USER_CFI is not selected.
+- Adopted context header based signal handling as proposed by Andy Chiu
+- Added support for enabling kernel mode access to shadow stack using
+  FWFT [4]
 
--- Steve
+v4 [3] and v3 [2] are earlier versions of patch series.
 
+To get more information on kernel interactions with respect to
+zicfilp and zicfiss, patch series adds documentation for
+`zicfilp` and `zicfiss`
 
-On Tue, 01 Oct 2024 13:30:01 +0000
-Alice Ryhl <aliceryhl@google.com> wrote:
+Documentation/arch/riscv/zicfiss.rst
+Documentation/arch/riscv/zicfilp.rst
 
-> To avoid duplication of inline asm between C and Rust, we need to
-> import the inline asm from the relevant `jump_label.h` header into Rust.
-> To make that easier, this patch updates the header files to expose the
-> inline asm via a new ARCH_STATIC_BRANCH_ASM macro.
-> 
-> The header files are all updated to define a ARCH_STATIC_BRANCH_ASM that
-> takes the same arguments in a consistent order so that Rust can use the
-> same logic for every architecture.
-> 
-> Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
-> ---
->  arch/arm/include/asm/jump_label.h       | 14 +++++----
->  arch/arm64/include/asm/jump_label.h     | 20 ++++++++-----
->  arch/loongarch/include/asm/jump_label.h | 16 +++++++----
->  arch/riscv/include/asm/jump_label.h     | 50 ++++++++++++++++++---------------
->  arch/x86/include/asm/jump_label.h       | 38 ++++++++++---------------
->  5 files changed, 75 insertions(+), 63 deletions(-)
-> 
-> diff --git a/arch/arm/include/asm/jump_label.h b/arch/arm/include/asm/jump_label.h
-> index e4eb54f6cd9f..a35aba7f548c 100644
-> --- a/arch/arm/include/asm/jump_label.h
-> +++ b/arch/arm/include/asm/jump_label.h
-> @@ -9,13 +9,17 @@
->  
->  #define JUMP_LABEL_NOP_SIZE 4
->  
-> +/* This macro is also expanded on the Rust side. */
-> +#define ARCH_STATIC_BRANCH_ASM(key, label)		\
-> +	"1:\n\t"					\
-> +	WASM(nop) "\n\t"				\
-> +	".pushsection __jump_table,  \"aw\"\n\t"	\
-> +	".word 1b, " label ", " key "\n\t"		\
-> +	".popsection\n\t"				\
-> +
->  static __always_inline bool arch_static_branch(struct static_key *key, bool branch)
->  {
-> -	asm goto("1:\n\t"
-> -		 WASM(nop) "\n\t"
-> -		 ".pushsection __jump_table,  \"aw\"\n\t"
-> -		 ".word 1b, %l[l_yes], %c0\n\t"
-> -		 ".popsection\n\t"
-> +	asm goto(ARCH_STATIC_BRANCH_ASM("%c0", "%l[l_yes]")
->  		 : :  "i" (&((char *)key)[branch]) :  : l_yes);
->  
->  	return false;
-> diff --git a/arch/arm64/include/asm/jump_label.h b/arch/arm64/include/asm/jump_label.h
-> index a0a5bbae7229..424ed421cd97 100644
-> --- a/arch/arm64/include/asm/jump_label.h
-> +++ b/arch/arm64/include/asm/jump_label.h
-> @@ -19,10 +19,14 @@
->  #define JUMP_TABLE_ENTRY(key, label)			\
->  	".pushsection	__jump_table, \"aw\"\n\t"	\
->  	".align		3\n\t"				\
-> -	".long		1b - ., %l["#label"] - .\n\t"	\
-> -	".quad		%c0 - .\n\t"			\
-> -	".popsection\n\t"				\
-> -	:  :  "i"(key) :  : label
-> +	".long		1b - ., " label " - .\n\t"	\
-> +	".quad		" key " - .\n\t"		\
-> +	".popsection\n\t"
-> +
-> +/* This macro is also expanded on the Rust side. */
-> +#define ARCH_STATIC_BRANCH_ASM(key, label)		\
-> +	"1:	nop\n\t"				\
-> +	JUMP_TABLE_ENTRY(key, label)
->  
->  static __always_inline bool arch_static_branch(struct static_key * const key,
->  					       const bool branch)
-> @@ -30,8 +34,8 @@ static __always_inline bool arch_static_branch(struct static_key * const key,
->  	char *k = &((char *)key)[branch];
->  
->  	asm goto(
-> -		"1:	nop					\n\t"
-> -		JUMP_TABLE_ENTRY(k, l_yes)
-> +		ARCH_STATIC_BRANCH_ASM("%c0", "%l[l_yes]")
-> +		:  :  "i"(k) :  : l_yes
->  		);
->  
->  	return false;
-> @@ -43,9 +47,11 @@ static __always_inline bool arch_static_branch_jump(struct static_key * const ke
->  						    const bool branch)
->  {
->  	char *k = &((char *)key)[branch];
-> +
->  	asm goto(
->  		"1:	b		%l[l_yes]		\n\t"
-> -		JUMP_TABLE_ENTRY(k, l_yes)
-> +		JUMP_TABLE_ENTRY("%c0", "%l[l_yes]")
-> +		:  :  "i"(k) :  : l_yes
->  		);
->  	return false;
->  l_yes:
-> diff --git a/arch/loongarch/include/asm/jump_label.h b/arch/loongarch/include/asm/jump_label.h
-> index 29acfe3de3fa..8a924bd69d19 100644
-> --- a/arch/loongarch/include/asm/jump_label.h
-> +++ b/arch/loongarch/include/asm/jump_label.h
-> @@ -13,18 +13,22 @@
->  
->  #define JUMP_LABEL_NOP_SIZE	4
->  
-> -#define JUMP_TABLE_ENTRY				\
-> +/* This macro is also expanded on the Rust side. */
-> +#define JUMP_TABLE_ENTRY(key, label)			\
->  	 ".pushsection	__jump_table, \"aw\"	\n\t"	\
->  	 ".align	3			\n\t"	\
-> -	 ".long		1b - ., %l[l_yes] - .	\n\t"	\
-> -	 ".quad		%0 - .			\n\t"	\
-> +	 ".long		1b - ., " label " - .	\n\t"	\
-> +	 ".quad		" key " - .		\n\t"	\
->  	 ".popsection				\n\t"
->  
-> +#define ARCH_STATIC_BRANCH_ASM(key, label)		\
-> +	"1:	nop				\n\t"	\
-> +	JUMP_TABLE_ENTRY(key, label)
-> +
->  static __always_inline bool arch_static_branch(struct static_key * const key, const bool branch)
->  {
->  	asm goto(
-> -		"1:	nop			\n\t"
-> -		JUMP_TABLE_ENTRY
-> +		ARCH_STATIC_BRANCH_ASM("%0", "%l[l_yes]")
->  		:  :  "i"(&((char *)key)[branch]) :  : l_yes);
->  
->  	return false;
-> @@ -37,7 +41,7 @@ static __always_inline bool arch_static_branch_jump(struct static_key * const ke
->  {
->  	asm goto(
->  		"1:	b	%l[l_yes]	\n\t"
-> -		JUMP_TABLE_ENTRY
-> +		JUMP_TABLE_ENTRY("%0", "%l[l_yes]")
->  		:  :  "i"(&((char *)key)[branch]) :  : l_yes);
->  
->  	return false;
-> diff --git a/arch/riscv/include/asm/jump_label.h b/arch/riscv/include/asm/jump_label.h
-> index 1c768d02bd0c..87a71cc6d146 100644
-> --- a/arch/riscv/include/asm/jump_label.h
-> +++ b/arch/riscv/include/asm/jump_label.h
-> @@ -16,21 +16,28 @@
->  
->  #define JUMP_LABEL_NOP_SIZE 4
->  
-> +#define JUMP_TABLE_ENTRY(key, label)			\
-> +	".pushsection	__jump_table, \"aw\"	\n\t"	\
-> +	".align		" RISCV_LGPTR "		\n\t"	\
-> +	".long		1b - ., " label " - .	\n\t"	\
-> +	"" RISCV_PTR "	" key " - .		\n\t"	\
-> +	".popsection				\n\t"
-> +
-> +/* This macro is also expanded on the Rust side. */
-> +#define ARCH_STATIC_BRANCH_ASM(key, label)		\
-> +	"	.align		2		\n\t"	\
-> +	"	.option push			\n\t"	\
-> +	"	.option norelax			\n\t"	\
-> +	"	.option norvc			\n\t"	\
-> +	"1:	nop				\n\t"	\
-> +	"	.option pop			\n\t"	\
-> +	JUMP_TABLE_ENTRY(key, label)
-> +
->  static __always_inline bool arch_static_branch(struct static_key * const key,
->  					       const bool branch)
->  {
->  	asm goto(
-> -		"	.align		2			\n\t"
-> -		"	.option push				\n\t"
-> -		"	.option norelax				\n\t"
-> -		"	.option norvc				\n\t"
-> -		"1:	nop					\n\t"
-> -		"	.option pop				\n\t"
-> -		"	.pushsection	__jump_table, \"aw\"	\n\t"
-> -		"	.align		" RISCV_LGPTR "		\n\t"
-> -		"	.long		1b - ., %l[label] - .	\n\t"
-> -		"	" RISCV_PTR "	%0 - .			\n\t"
-> -		"	.popsection				\n\t"
-> +		ARCH_STATIC_BRANCH_ASM("%0", "%l[label]")
->  		:  :  "i"(&((char *)key)[branch]) :  : label);
->  
->  	return false;
-> @@ -38,21 +45,20 @@ static __always_inline bool arch_static_branch(struct static_key * const key,
->  	return true;
->  }
->  
-> +#define ARCH_STATIC_BRANCH_JUMP_ASM(key, label)		\
-> +	"	.align		2		\n\t"	\
-> +	"	.option push			\n\t"	\
-> +	"	.option norelax			\n\t"	\
-> +	"	.option norvc			\n\t"	\
-> +	"1:	j	" label "		\n\t" \
-> +	"	.option pop			\n\t"	\
-> +	JUMP_TABLE_ENTRY(key, label)
-> +
->  static __always_inline bool arch_static_branch_jump(struct static_key * const key,
->  						    const bool branch)
->  {
->  	asm goto(
-> -		"	.align		2			\n\t"
-> -		"	.option push				\n\t"
-> -		"	.option norelax				\n\t"
-> -		"	.option norvc				\n\t"
-> -		"1:	j		%l[label]		\n\t"
-> -		"	.option pop				\n\t"
-> -		"	.pushsection	__jump_table, \"aw\"	\n\t"
-> -		"	.align		" RISCV_LGPTR "		\n\t"
-> -		"	.long		1b - ., %l[label] - .	\n\t"
-> -		"	" RISCV_PTR "	%0 - .			\n\t"
-> -		"	.popsection				\n\t"
-> +		ARCH_STATIC_BRANCH_JUMP_ASM("%0", "%l[label]")
->  		:  :  "i"(&((char *)key)[branch]) :  : label);
->  
->  	return false;
-> diff --git a/arch/x86/include/asm/jump_label.h b/arch/x86/include/asm/jump_label.h
-> index cbbef32517f0..fb79fa1cf70a 100644
-> --- a/arch/x86/include/asm/jump_label.h
-> +++ b/arch/x86/include/asm/jump_label.h
-> @@ -12,49 +12,41 @@
->  #include <linux/stringify.h>
->  #include <linux/types.h>
->  
-> -#define JUMP_TABLE_ENTRY				\
-> +#define JUMP_TABLE_ENTRY(key, label)			\
->  	".pushsection __jump_table,  \"aw\" \n\t"	\
->  	_ASM_ALIGN "\n\t"				\
->  	".long 1b - . \n\t"				\
-> -	".long %l[l_yes] - . \n\t"			\
-> -	_ASM_PTR "%c0 + %c1 - .\n\t"			\
-> +	".long " label " - . \n\t"			\
-> +	_ASM_PTR " " key " - . \n\t"			\
->  	".popsection \n\t"
->  
-> +/* This macro is also expanded on the Rust side. */
->  #ifdef CONFIG_HAVE_JUMP_LABEL_HACK
-> -
-> -static __always_inline bool arch_static_branch(struct static_key *key, bool branch)
-> -{
-> -	asm goto("1:"
-> -		"jmp %l[l_yes] # objtool NOPs this \n\t"
-> -		JUMP_TABLE_ENTRY
-> -		: :  "i" (key), "i" (2 | branch) : : l_yes);
-> -
-> -	return false;
-> -l_yes:
-> -	return true;
-> -}
-> -
-> +#define ARCH_STATIC_BRANCH_ASM(key, label)		\
-> +	"1: jmp " label " # objtool NOPs this \n\t"	\
-> +	JUMP_TABLE_ENTRY(key, label)
->  #else /* !CONFIG_HAVE_JUMP_LABEL_HACK */
-> +#define ARCH_STATIC_BRANCH_ASM(key, label)		\
-> +	"1: .byte " __stringify(BYTES_NOP5) "\n\t"	\
-> +	JUMP_TABLE_ENTRY(key, label)
-> +#endif /* CONFIG_HAVE_JUMP_LABEL_HACK */
->  
->  static __always_inline bool arch_static_branch(struct static_key * const key, const bool branch)
->  {
-> -	asm goto("1:"
-> -		".byte " __stringify(BYTES_NOP5) "\n\t"
-> -		JUMP_TABLE_ENTRY
-> -		: :  "i" (key), "i" (branch) : : l_yes);
-> +	int hack_bit = IS_ENABLED(CONFIG_HAVE_JUMP_LABEL_HACK) ? 2 : 0;
-> +	asm goto(ARCH_STATIC_BRANCH_ASM("%c0 + %c1", "%l[l_yes]")
-> +		: :  "i" (key), "i" (hack_bit | branch) : : l_yes);
->  
->  	return false;
->  l_yes:
->  	return true;
->  }
->  
-> -#endif /* CONFIG_HAVE_JUMP_LABEL_HACK */
-> -
->  static __always_inline bool arch_static_branch_jump(struct static_key * const key, const bool branch)
->  {
->  	asm goto("1:"
->  		"jmp %l[l_yes]\n\t"
-> -		JUMP_TABLE_ENTRY
-> +		JUMP_TABLE_ENTRY("%c0 + %c1", "%l[l_yes]")
->  		: :  "i" (key), "i" (branch) : : l_yes);
->  
->  	return false;
-> 
+How to test this series
+=======================
+
+Toolchain
+---------
+$ git clone git@github.com:sifive/riscv-gnu-toolchain.git -b cfi-dev
+$ riscv-gnu-toolchain/configure --prefix=<path-to-where-to-build> --with-arch=rv64gc_zicfilp_zicfiss --enable-linux --disable-gdb  --with-extra-multilib-test="rv64gc_zicfilp_zicfiss-lp64d:-static"
+$ make -j$(nproc)
+
+Qemu
+----
+$ git clone git@github.com:deepak0414/qemu.git -b zicfilp_zicfiss_ratified_master_july11
+$ cd qemu
+$ mkdir build
+$ cd build
+$ ../configure --target-list=riscv64-softmmu
+$ make -j$(nproc)
+
+Opensbi
+-------
+$ git clone git@github.com:deepak0414/opensbi.git -b v6_cfi_spec_split_opensbi
+$ make CROSS_COMPILE=<your riscv toolchain> -j$(nproc) PLATFORM=generic
+
+Linux
+-----
+Running defconfig is fine. CFI is enabled by default if the toolchain
+supports it.
+
+$ make ARCH=riscv CROSS_COMPILE=<path-to-cfi-riscv-gnu-toolchain>/build/bin/riscv64-unknown-linux-gnu- -j$(nproc) defconfig
+$ make ARCH=riscv CROSS_COMPILE=<path-to-cfi-riscv-gnu-toolchain>/build/bin/riscv64-unknown-linux-gnu- -j$(nproc)
+
+Running
+-------
+
+Modify your qemu command to have:
+-bios <path-to-cfi-opensbi>/build/platform/generic/firmware/fw_dynamic.bin
+-cpu rv64,zicfilp=true,zicfiss=true,zimop=true,zcmop=true
+
+vDSO related Opens (in the flux)
+=================================
+
+I am listing these opens for laying out plan and what to expect in future
+patch sets. And of course for the sake of discussion.
+
+Shadow stack and landing pad enabling in vDSO
+----------------------------------------------
+vDSO must have shadow stack and landing pad support compiled in for task
+to have shadow stack and landing pad support. This patch series doesn't
+enable that (yet). Enabling shadow stack support in vDSO should be
+straight forward (intend to do that in next versions of patch set). Enabling
+landing pad support in vDSO requires some collaboration with toolchain folks
+to follow a single label scheme for all object binaries. This is necessary to
+ensure that all indirect call-sites are setting correct label and target landing
+pads are decorated with same label scheme.
+
+How many vDSOs
+---------------
+Shadow stack instructions are carved out of zimop (may be operations) and if CPU
+doesn't implement zimop, they're illegal instructions. Kernel could be running on
+a CPU which may or may not implement zimop. And thus kernel will have to carry 2
+different vDSOs and expose the appropriate one depending on whether CPU implements
+zimop or not.
+
+[1] - https://github.com/riscv/riscv-cfi
+[2] - https://lore.kernel.org/lkml/20240403234054.2020347-1-debug@rivosinc.com/
+[3] - https://lore.kernel.org/all/20240912231650.3740732-1-debug@rivosinc.com/
+[4] - https://github.com/riscv-non-isa/riscv-sbi-doc/blob/master/src/ext-firmware-features.adoc
+
+---
+changelog
+---------
+
+v4
+--
+- rebased on 6.11-rc6
+- envcfg: Converged with Samuel Holland's patches for envcfg management on per-
+thread basis.
+- vma_is_shadow_stack is renamed to is_vma_shadow_stack
+- picked up Mark Brown's `ARCH_HAS_USER_SHADOW_STACK` patch
+- signal context: using extended context management to maintain compatibility.
+- fixed `-Wmissing-prototypes` compiler warnings for prctl functions
+- Documentation fixes and amending typos.
+
+v3
+--
+envcfg:
+logic to pick up base envcfg had a bug where `ENVCFG_CBZE` could have been
+picked on per task basis, even though CPU didn't implement it. Fixed in
+this series.
+
+dt-bindings:
+As suggested, split into separate commit. fixed the messaging that spec is
+in public review
+
+arch_is_shadow_stack change:
+arch_is_shadow_stack changed to vma_is_shadow_stack
+
+hwprobe:
+zicfiss / zicfilp if present will get enumerated in hwprobe
+
+selftests:
+As suggested, added object and binary filenames to .gitignore
+Selftest binary anyways need to be compiled with cfi enabled compiler which
+will make sure that landing pad and shadow stack are enabled. Thus removed
+separate enable/disable tests. Cleaned up tests a bit.
+
+v2
+--
+
+- Using config `CONFIG_RISCV_USER_CFI`, kernel support for riscv control flow
+integrity for user mode programs can be compiled in the kernel.
+
+- Enabling of control flow integrity for user programs is left to user runtime
+
+- This patch series introduces arch agnostic `prctls` to enable shadow stack
+and indirect branch tracking. And implements them on riscv.
+
+Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+
+---
+Andy Chiu (1):
+      riscv: signal: abstract header saving for setup_sigcontext
+
+Clément Léger (1):
+      riscv: Add Firmware Feature SBI extensions definitions
+
+Deepak Gupta (26):
+      mm: helper `is_shadow_stack_vma` to check shadow stack vma
+      riscv/Kconfig: enable HAVE_EXIT_THREAD for riscv
+      riscv: zicfilp / zicfiss in dt-bindings (extensions.yaml)
+      riscv: zicfiss / zicfilp enumeration
+      riscv: zicfiss / zicfilp extension csr and bit definitions
+      riscv: usercfi state for task and save/restore of CSR_SSP on trap entry/exit
+      riscv/mm : ensure PROT_WRITE leads to VM_READ | VM_WRITE
+      riscv mm: manufacture shadow stack pte
+      riscv mmu: teach pte_mkwrite to manufacture shadow stack PTEs
+      riscv mmu: write protect and shadow stack
+      riscv/mm: Implement map_shadow_stack() syscall
+      riscv/shstk: If needed allocate a new shadow stack on clone
+      prctl: arch-agnostic prctl for indirect branch tracking
+      riscv: Implements arch agnostic shadow stack prctls
+      riscv: Implements arch agnostic indirect branch tracking prctls
+      riscv/traps: Introduce software check exception
+      riscv signal: save and restore of shadow stack for signal
+      riscv/kernel: update __show_regs to print shadow stack register
+      riscv/ptrace: riscv cfi status and state via ptrace and in core files
+      riscv/hwprobe: zicfilp / zicfiss enumeration in hwprobe
+      riscv: enable kernel access to shadow stack memory via FWFT sbi call
+      riscv: kernel command line option to opt out of user cfi
+      riscv: create a config for shadow stack and landing pad instr support
+      riscv: Documentation for landing pad / indirect branch tracking
+      riscv: Documentation for shadow stack on riscv
+      kselftest/riscv: kselftest for user mode cfi
+
+Mark Brown (2):
+      mm: Introduce ARCH_HAS_USER_SHADOW_STACK
+      prctl: arch-agnostic prctl for shadow stack
+
+Samuel Holland (3):
+      riscv: Enable cbo.zero only when all harts support Zicboz
+      riscv: Add support for per-thread envcfg CSR values
+      riscv: Call riscv_user_isa_enable() only on the boot hart
+
+ Documentation/arch/riscv/index.rst                 |   2 +
+ Documentation/arch/riscv/zicfilp.rst               | 115 +++++
+ Documentation/arch/riscv/zicfiss.rst               | 176 +++++++
+ .../devicetree/bindings/riscv/extensions.yaml      |  14 +
+ arch/riscv/Kconfig                                 |  20 +
+ arch/riscv/include/asm/asm-prototypes.h            |   1 +
+ arch/riscv/include/asm/cpufeature.h                |  15 +-
+ arch/riscv/include/asm/csr.h                       |  16 +
+ arch/riscv/include/asm/entry-common.h              |   2 +
+ arch/riscv/include/asm/hwcap.h                     |   2 +
+ arch/riscv/include/asm/mman.h                      |  24 +
+ arch/riscv/include/asm/pgtable.h                   |  30 +-
+ arch/riscv/include/asm/processor.h                 |   2 +
+ arch/riscv/include/asm/sbi.h                       |  27 ++
+ arch/riscv/include/asm/switch_to.h                 |   8 +
+ arch/riscv/include/asm/thread_info.h               |   4 +
+ arch/riscv/include/asm/usercfi.h                   |  89 ++++
+ arch/riscv/include/uapi/asm/hwprobe.h              |   2 +
+ arch/riscv/include/uapi/asm/ptrace.h               |  22 +
+ arch/riscv/include/uapi/asm/sigcontext.h           |   1 +
+ arch/riscv/kernel/Makefile                         |   2 +
+ arch/riscv/kernel/asm-offsets.c                    |   8 +
+ arch/riscv/kernel/cpufeature.c                     |  13 +-
+ arch/riscv/kernel/entry.S                          |  31 +-
+ arch/riscv/kernel/head.S                           |  12 +
+ arch/riscv/kernel/process.c                        |  31 +-
+ arch/riscv/kernel/ptrace.c                         |  83 ++++
+ arch/riscv/kernel/signal.c                         | 140 +++++-
+ arch/riscv/kernel/smpboot.c                        |   2 -
+ arch/riscv/kernel/suspend.c                        |   4 +-
+ arch/riscv/kernel/sys_hwprobe.c                    |   2 +
+ arch/riscv/kernel/sys_riscv.c                      |  10 +
+ arch/riscv/kernel/traps.c                          |  42 ++
+ arch/riscv/kernel/usercfi.c                        | 526 +++++++++++++++++++++
+ arch/riscv/mm/init.c                               |   2 +-
+ arch/riscv/mm/pgtable.c                            |  17 +
+ arch/x86/Kconfig                                   |   1 +
+ fs/proc/task_mmu.c                                 |   2 +-
+ include/linux/cpu.h                                |   4 +
+ include/linux/mm.h                                 |   5 +-
+ include/uapi/asm-generic/mman.h                    |   4 +
+ include/uapi/linux/elf.h                           |   1 +
+ include/uapi/linux/prctl.h                         |  48 ++
+ kernel/sys.c                                       |  60 +++
+ mm/Kconfig                                         |   6 +
+ mm/gup.c                                           |   2 +-
+ mm/mmap.c                                          |   1 +
+ mm/vma.h                                           |  10 +-
+ tools/testing/selftests/riscv/Makefile             |   2 +-
+ tools/testing/selftests/riscv/cfi/.gitignore       |   3 +
+ tools/testing/selftests/riscv/cfi/Makefile         |  10 +
+ tools/testing/selftests/riscv/cfi/cfi_rv_test.h    |  83 ++++
+ tools/testing/selftests/riscv/cfi/riscv_cfi_test.c |  82 ++++
+ tools/testing/selftests/riscv/cfi/shadowstack.c    | 362 ++++++++++++++
+ tools/testing/selftests/riscv/cfi/shadowstack.h    |  37 ++
+ 55 files changed, 2178 insertions(+), 42 deletions(-)
+---
+base-commit: 9852d85ec9d492ebef56dc5f229416c925758edc
+change-id: 20240930-v5_user_cfi_series-3dc332f8f5b2
+--
+- debug
 
 
