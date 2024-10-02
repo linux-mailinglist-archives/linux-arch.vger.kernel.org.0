@@ -1,60 +1,58 @@
-Return-Path: <linux-arch+bounces-7634-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7635-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD6EB98E4D8
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Oct 2024 23:24:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 48B1B98E603
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Oct 2024 00:17:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EC3A01C21C6F
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Oct 2024 21:24:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 66AD71C2368D
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Oct 2024 22:17:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FABA216A3D;
-	Wed,  2 Oct 2024 21:24:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DC218F40;
+	Wed,  2 Oct 2024 22:17:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="fCuUIFcn"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="PQN2UE1T"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CE391946B9;
-	Wed,  2 Oct 2024 21:24:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17BC12F22;
+	Wed,  2 Oct 2024 22:17:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727904282; cv=none; b=W6hBt8tA/QwZ9w8XjRLrarhBdgqTaqa7+0LcYh7dsd+FVigx0FScqWEUZp7xNgaWkO0OpuGcINRtz6sKxiEbM8BtpPNM2palC9IwxVc9MmFxiAxjCz7kNw4fzDB31v4axbtUJpS0S0/3W0YXzUrfSVWKHkVxcgjlWJrxkcsG8k0=
+	t=1727907474; cv=none; b=R4btILSgevxPnQ2EU0ftDR7RaI0STs33JVNOEvqwoZAqVKv3MJLCRbnoLEZFVrOi/y3Owk2fTW8QWE16TafVcZjvgR26cTgA+s36kn5knZFme+vdQKJVRGahhmPnxR/SL+fiS4r9b2ekTzXDvkiIPK9SsR7sus8B2f92CFdicJs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727904282; c=relaxed/simple;
-	bh=Olm/UfX5pvQOEYSTJrVoiU4BvfCepDmmVDZA5VNYg0c=;
+	s=arc-20240116; t=1727907474; c=relaxed/simple;
+	bh=bYCBCkT4PJzCuW+fDiNi8g0Gg+6zsF+SMWzGKuWhqjw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LS989M0GmQ1iNQ0qqAKjmKpxOOY2ffJmClAE++h8umbQiPsdfNqn3aDLU814ksgijobZQwF+6IwLCcWVYzZ2oTxCj2gj/lqrJ1r8iR3w9oOIF5gksWU2GxPhioHTxVg8Q9XjU9/Zf2wDFGsi8FCDBIjE72wzIngujjbkP2G0xHA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=fCuUIFcn; arc=none smtp.client-ip=62.89.141.173
+	 Content-Type:Content-Disposition:In-Reply-To; b=ER5IU+ow4EpMAWQM2LDq6W59hBYlb62ukqChiBgajfUuZYdBykntr79OkL+U2h2Cwbv8jkxbn3D+YZOCK3+ibZyhql78MPnvJSj1y/LoVeQiZwkG89CL9OETUkBKz4ER8cZr7G9NyYDEqN8xOR09IbN4kl5WWCgyCKSgyjGkWs8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=PQN2UE1T; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
 	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=iLTAakP6KaTQCvlhDHZzbsJqOUGPxhWT30ppfemZxiY=; b=fCuUIFcnvb2E1qKpYJlZ2wbubH
-	SP08d0EjlToOmr7julhwjkhOos6FJF+gwmDr+ZeFjrtQHWkVlmT5PMCWsCLsptf6suogUwLMmxpzq
-	MA1aO5fMWLj/3Ru8MIaI78bZife9uahnov+MamFv+h0TPwy4BQ6I5Vmc7U79BYt3Ebi/yQK+UGznS
-	iFsvIHJYJ4od7QiAu1bDJh45H1Jlargany8wN4iDxqkaowqpyvDks5PWwxK/c4uMjTaA0wm8c6PHl
-	1tSTqPFHncLTdIYGRneS+PbmdbUQGUN2md0doiPYNZo18q9VnfHFOtq7MNFK9PL7Av6yOoQF0/nlz
-	DGupUv9w==;
+	bh=Tsf7yJh/hDC2wPxb5Vt52AhhkS56Hjy9G/gnj7UOuWs=; b=PQN2UE1TtJTdfVhI+34vXd+sgT
+	YZ5JVIJIbThqQ3d8KW17/etcV63Gffw4BzIrGdWhx+iJlwTh5cfnaycK4vg2tXYCrFbiz2GxI7rOG
+	RyPCe0sfABee+ZXER1SK+sbsthreXAVk1/FucdCFZviz+LIlV1qSXbthYTb5m4jrJrAtUP/nx+X84
+	yBMdBIug2dZyJxp8weWWIvImkpkn/9tJHcuL1YFi5YdaKRo5M1UJaV5HnMMJTwBam1tLk98H40v1k
+	aXsZ3GkBtN3JYvFcLQoMaZnQCNL5sNYks6RUFDdDSP7Y6J+Lvawy/GXpy2ueNNM7Wi3EAbmZmwaI1
+	+CRUDaKg==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.98 #2 (Red Hat Linux))
-	id 1sw6pp-00000000JzQ-48t3;
-	Wed, 02 Oct 2024 21:24:38 +0000
-Date: Wed, 2 Oct 2024 22:24:37 +0100
+	id 1sw7fJ-00000000KWw-3iJn;
+	Wed, 02 Oct 2024 22:17:49 +0000
+Date: Wed, 2 Oct 2024 23:17:49 +0100
 From: Al Viro <viro@zeniv.linux.org.uk>
-To: Vineet Gupta <vgupta@kernel.org>
-Cc: linux-arch@vger.kernel.org,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-parisc@vger.kernel.org
-Subject: Re: [PATCH 2/3] arc: get rid of private asm/unaligned.h
-Message-ID: <20241002212437.GF4017910@ZenIV>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-arch@vger.kernel.org, linux-parisc@vger.kernel.org,
+	Vineet Gupta <vgupta@kernel.org>
+Subject: Re: [RFC][PATCHES] asm/unaligned.h removal
+Message-ID: <20241002221749.GI4017910@ZenIV>
 References: <20241001195107.GA4017910@ZenIV>
- <20241001195300.GB4135693@ZenIV>
- <374574a7-7060-48d5-b395-8a6d2c9f84a5@kernel.org>
+ <CAHk-=wj7f32w8p1OrN4fahaF+44zWfTAD+3ucd=XETM_Pt-=6A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -63,41 +61,35 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <374574a7-7060-48d5-b395-8a6d2c9f84a5@kernel.org>
+In-Reply-To: <CAHk-=wj7f32w8p1OrN4fahaF+44zWfTAD+3ucd=XETM_Pt-=6A@mail.gmail.com>
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-On Wed, Oct 02, 2024 at 02:03:30PM -0700, Vineet Gupta wrote:
-> On 10/1/24 12:53, Al Viro wrote:
-> > Declarations local to arch/*/kernel/*.c are better off *not* in a public
-> > header - arch/arc/kernel/unaligned.h is just fine for those
-> > bits.
+On Wed, Oct 02, 2024 at 11:33:23AM -0700, Linus Torvalds wrote:
+> On Tue, 1 Oct 2024 at 12:51, Al Viro <viro@zeniv.linux.org.uk> wrote:
 > >
-> > Unlike the parisc case, here we have an extra twist - asm/mmu.h
-> > has an implicit dependency on struct pt_regs, and in some users
-> > that used to be satisfied by include of asm/ptrace.h from
-> > asm/unaligned.h (note that asm/mmu.h itself did _not_ pull asm/unaligned.h
-> > - it relied upon the users having pulled asm/unaligned.h before asm/mmu.h
-> > got there).
-> >
-> > Seeing that asm/mmu.h only wants struct pt_regs * arguments in
-> > an extern, just pre-declare it there - less brittle that way.
-> >
-> > With that done _all_ asm/unaligned.h instances are reduced to include
-> > of asm-generic/unaligned.h and can be removed - unaligned.h is in
-> > mandatory-y in include/asm-generic/Kbuild.
-> >
-> > What's more, we can move asm-generic/unaligned.h to linux/unaligned.h
-> > and switch includes of <asm/unaligned.h> to <linux/unaligned.h>; that's
-> > better off as an auto-generated commit, though, to be done by Linus
-> > at -rc1 time next cycle.
-> >
-> > Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+> >         Please, review.  I don't really care which tree(s) does that stuff
+> > go through; I can put the first two in my #for-next, as long as nobody
+> > has objections to the patches themselves.
 > 
-> Acked-by: Vineet Gupta <vgupta@kernel.org>
-> 
-> LGTM. And by your next tree is fine/preferred.
+> Please just add the whole series to your tree. I see you already got
+> the ack for the parisc side, the arc side looks fine too.
 
-Done.  It's in #for-next, and if nobody introduces arch/*/include/asm/unaligned.h
-this cycle, the pull request will be followed by request to run the conversion
-script at -rc1...
+Both parisc and arc are already in my tree; do you really want the
+autogenerated patch to be there as well?  Would be a recurring headache
+through the cycle - anyone adding an include of that sucker in their
+branch would have to do an explicit merge from that branch first, or
+deal with the silent conflicts on merge to -next (well, silent as in
+"git doesn't warn you"; build breakage will be there).
+
+I suppose I could do that autogenerated commit + replacement of
+asm-generic/unaligned.h with #include <linux/unaligned.h>,
+then take the newly added includes of <asm{,-generic}/unaligned.h> after -rc1,
+with asm-generic/unaligned.h taken out once all strays are gone, but that
+feels too convoluted...
+
+Or am I misparsing you?
+
+> And even if there is some further fixup required, I'd rather just have
+> this done and do any possible fixups later than have some kind of
+> "wait for everybody to ack it".
 
