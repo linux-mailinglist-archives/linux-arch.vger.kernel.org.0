@@ -1,634 +1,957 @@
-Return-Path: <linux-arch+bounces-7644-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7645-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DB3D98E710
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Oct 2024 01:36:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D2D698E716
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Oct 2024 01:36:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 03B70B24498
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Oct 2024 23:36:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 72BF41C23B93
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Oct 2024 23:36:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BD4D1C6F48;
-	Wed,  2 Oct 2024 23:34:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4E6E199932;
+	Wed,  2 Oct 2024 23:36:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ggBXxGlH"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="vg5zKsVg"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CED091C1746
-	for <linux-arch@vger.kernel.org>; Wed,  2 Oct 2024 23:34:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02A8319E99B;
+	Wed,  2 Oct 2024 23:36:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727912072; cv=none; b=rPYPF5bTybbLM3ysKABVCel7FPk4oW4aGIV6npUPSAIUVdXBHSpTNnicaztMy/HlzF/yYELBXkUkngOtMwwTVecxwNFVD0495l4kch2uU6EsRV8a8miozkgd8z66HeWcRa1sTzC2Lb9phZQegZKwxeEnLy94s6NMInLZfQIvyDQ=
+	t=1727912180; cv=none; b=kt679tjhnw1cHqvYItBbn2BfFBsHnj1RbMN5iGRmiTFYRFdyn7OZuHiEK+QBjFDOtBENSSX4nQwQr6o1uM+jsxxXR8FoGNrnscMIfkpJq3WN0b2Zdw+Cw0k+YPWS8/kJZpbCKX8Pj5ExY4ZE3/Fz7b/Xb2nXVcNwny7PW5lZra8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727912072; c=relaxed/simple;
-	bh=OQm6RAZeRj4Yx9LpxhsmUNFRCuuVq5yGHzJTKTrNKOQ=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=IGWKM0h7AihPpLBcJu+LtCm6spRzd1tuE1zG/TQQ+RjZOMzIrOvpxMwzqxSP58+yWzdwfYNsKorS/2XBhp63qoSO99ww6m0eNvHuR1DqAsJ4S2zjG3CHTq7etGfsnllnAQZad3btDYUqtKKdEhPPjJR7Kj7Y71mx1b5OBJ/1+Bg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--xur.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ggBXxGlH; arc=none smtp.client-ip=209.85.219.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--xur.bounces.google.com
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-e2605ce4276so659763276.3
-        for <linux-arch@vger.kernel.org>; Wed, 02 Oct 2024 16:34:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1727912069; x=1728516869; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=d5mPGGI6nJcINmThpk3lfdMaj44SKUiEp9a/Jwua2D0=;
-        b=ggBXxGlHdJ792+ZWhFniD9Z2+SZym9ob8qzrgWUkE65PQdvut+3wYyWpSGV6tDRBNF
-         xQa+Sx5HcghVrY60Uo25dlOOvfss0FB4xzOvWu7NXWErltOTWUUnYLpigWjgZXp54iDL
-         C8DP6DCLsROqPbznU3tnAf375qmvxJI3OaMiAqpNha+erK07vYpw4+cueBiwWLQ05cFq
-         KFp/EKFH7klCP+MTcoAoWK5U3nUTvNQ8exhBsfFfz9gXEAlFCKfsrWUKcKNkEt1sJ5Xt
-         v5MOHsujz6OBa8ov26JJh1agIGUmU+IPc/4vRaY3PQKO77H3t5pwx81yiyrpIxECALOv
-         jLlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727912069; x=1728516869;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=d5mPGGI6nJcINmThpk3lfdMaj44SKUiEp9a/Jwua2D0=;
-        b=AfHSKFOXsLwzcxzY4kyR21H1XEN1rMFaAYXLHh9LTzwq6c97yfr4S9a7FKXw9TaeYP
-         sJDKf4k4ewOq0aVF/Yi6rrdEU1bLWBI7Gcse9HyOxiNnTW1M3fwbmXwFxAW+vF7YvwLf
-         T4iSq1FPSKKPTZ68HpomRpn4/XCGuDmqxVSsvEKs2NHYmLQfalYRv/cmsjHw02pM9DEW
-         gogdThtQVrIO8DqHauLJTupqPjd8OTz9s7eqR9HbSOm8xgm1CLl5IRaBAZhJnxE2wPkJ
-         dIF9YW/U+ApBWbopvL1ENr5RlsW9/KKlzL4gRS6F/fOKHFRzFfcm60R72gU+nDQDQIaH
-         3Bqw==
-X-Forwarded-Encrypted: i=1; AJvYcCWcv1oCtoXBjUuXNtxlmgwMYUtovb7w2AJqL19cGFThhUC+tdCVgCpsjlowNM+ubatslYEIcWm/OwGj@vger.kernel.org
-X-Gm-Message-State: AOJu0YymxZ+BJrE6e7iDUvKmVYojgN+wzl5dGoygEKMD2hHbfCzKCpNT
-	Qi+G2Q4qDWYMHEsJ8lb9JtmQ301bHgp3lPq6O6Q/H6+vzAuig/BTSIybuDkONlWf+w==
-X-Google-Smtp-Source: AGHT+IF+mAPY4LibeWBJRMIdzPlSyxqSqzg+0QS0NDbPnukpCpSDfwTQlNvfAx4GBuW+Ui8deXdOOaA=
-X-Received: from xur.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:2330])
- (user=xur job=sendgmr) by 2002:a25:904:0:b0:e16:6771:a299 with SMTP id
- 3f1490d57ef6-e26384478f9mr3244276.11.1727912068774; Wed, 02 Oct 2024 16:34:28
- -0700 (PDT)
-Date: Wed,  2 Oct 2024 16:34:05 -0700
-In-Reply-To: <20241002233409.2857999-1-xur@google.com>
+	s=arc-20240116; t=1727912180; c=relaxed/simple;
+	bh=ab/F+ICTtrVM7Tu9S/8TIKGSuh90VrP1tG3q5akaQ0s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dA2VoZMLqqVuejKfbbSDuyeZb2mWb74rpoFliSlwyi2U2zygAl1x9Ws2YEphYdbO90U2wrqDskTUAIHBIaTjwqoKYuO2TzH9GCRL5DecukBNT1wBKF+iHvl0M/GYpiBRfNjAIW7dmTXYxs8YX2EwdlDyce7aidIw2pcRxPMBYjM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=vg5zKsVg; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=pXzHwI3gehmIDOM8QmJRufNKdHRnqCi8LE3gawsfFCI=; b=vg5zKsVgaeuZFBbaof7LDF/WoE
+	cQohRD7TcE7XnkJOaTSyKuPB/WUMYEfPlrQNrsg7jG8Iq0TFqPRdaFIQPZKWdCt4d/v+HEl/BP1iK
+	wrbM7KxQsGmYnkgG34lmv/kAoKrg6JUxTreq3n/sM+j4XkHzifhU0i1dThilrGYEjZnPUhgG0+q5x
+	YSpBPfg4IdANfQKAhJK+ZDs8FguETKNihJirOHRLhgaqckJuIaCFC9AwAGIzDKRhHLhAHcHMLNXv8
+	bmEpzbdIHNQ50WfEQb4dC8nSRL+Gvr5B+V1LCbR7cVSAbm2pxvRQ5Xzs2+4H+yL+SAepul8qxb4sN
+	eq+grePw==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.98 #2 (Red Hat Linux))
+	id 1sw8tC-00000000LM4-317l;
+	Wed, 02 Oct 2024 23:36:14 +0000
+Date: Thu, 3 Oct 2024 00:36:14 +0100
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-arch@vger.kernel.org, linux-parisc@vger.kernel.org,
+	Vineet Gupta <vgupta@kernel.org>
+Subject: [git pull] asm/unaligned.h removal
+Message-ID: <20241002233614.GA81817@ZenIV>
+References: <20241001195107.GA4017910@ZenIV>
+ <CAHk-=wj7f32w8p1OrN4fahaF+44zWfTAD+3ucd=XETM_Pt-=6A@mail.gmail.com>
+ <20241002221749.GI4017910@ZenIV>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20241002233409.2857999-1-xur@google.com>
-X-Mailer: git-send-email 2.46.1.824.gd892dcdcdd-goog
-Message-ID: <20241002233409.2857999-7-xur@google.com>
-Subject: [PATCH v2 6/6] Add Propeller configuration for kernel build.
-From: Rong Xu <xur@google.com>
-To: Rong Xu <xur@google.com>, Han Shen <shenhan@google.com>, 
-	Sriraman Tallam <tmsriram@google.com>, David Li <davidxl@google.com>, 
-	Krzysztof Pszeniczny <kpszeniczny@google.com>, Alice Ryhl <aliceryhl@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>, Breno Leitao <leitao@debian.org>, 
-	Brian Gerst <brgerst@gmail.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	Heiko Carstens <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>, 
-	Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Juergen Gross <jgross@suse.com>, Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
-	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, Masahiro Yamada <masahiroy@kernel.org>, 
-	"Mike Rapoport (IBM)" <rppt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, 
-	"Paul E. McKenney" <paulmck@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Samuel Holland <samuel.holland@sifive.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Wei Yang <richard.weiyang@gmail.com>, workflows@vger.kernel.org, x86@kernel.org, 
-	"Xin Li (Intel)" <xin@zytor.com>
-Cc: Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241002221749.GI4017910@ZenIV>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-Add the build support for using Clang's Propeller optimizer. Like
-AutoFDO, Propeller uses hardware sampling to gather information
-about the frequency of execution of different code paths within a
-binary. This information is then used to guide the compiler's
-optimization decisions, resulting in a more efficient binary.
+[if it's early enough in the cycle...]
 
-The support requires a Clang compiler LLVM 19 or later, and the
-create_llvm_prof tool
-(https://github.com/google/autofdo/releases/tag/v0.30.1). This
-submission is limited to x86 platforms that support PMU features
-like LBR on Intel machines and AMD Zen3 BRS.
+That's the second largest (after asm/io.h) class of asm/* includes,
+and all but two architectures actually end up using exact same file.
+Massage the remaining two (arc and parisc) to do the same and just move
+the damn thing to from asm-generic/unaligned.h to linux/unaligned.h.
 
-For Arm, we plan to send patches for SPE-based Propeller when
-AutoFDO for Arm is ready.
+The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
 
-Here is an example workflow for building an AutoFDO+Propeller
-optimized kernel:
+  Linux 6.12-rc1 (2024-09-29 15:06:19 -0700)
 
-1) Build the kernel on the HOST machine, with AutoFDO and Propeller
-   build config
-      CONFIG_AUTOFDO_CLANG=3Dy
-      CONFIG_PROPELLER_CLANG=3Dy
-   then
-      $ make LLVM=3D1 CLANG_AUTOFDO_PROFILE=3D<autofdo_profile>
+are available in the Git repository at:
 
-=E2=80=9C<autofdo_profile>=E2=80=9D is the profile collected when doing a n=
-on-Propeller
-AutoFDO build. This step builds a kernel that has the same optimization
-level as AutoFDO, plus a metadata section that records basic block
-information. This kernel image runs as fast as an AutoFDO optimized
-kernel.
+  git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git tags/pull-work.unaligned
 
-2) Install the kernel on test/production machines.
+for you to fetch changes up to 5f60d5f6bbc12e782fac78110b0ee62698f3b576:
 
-3) Run the load tests. The '-c' option in perf specifies the sample
-   event period. We suggest using a suitable prime number,
-   like 500009, for this purpose.
-   For Intel platforms:
-      $ perf record -e BR_INST_RETIRED.NEAR_TAKEN:k -a -N -b -c <count> \
-        -o <perf_file> -- <loadtest>
-   For AMD platforms:
-      The supported system are: Zen3 with BRS, or Zen4 with amd_lbr_v2
-      # To see if Zen3 support LBR:
-      $ cat proc/cpuinfo | grep " brs"
-      # To see if Zen4 support LBR:
-      $ cat proc/cpuinfo | grep amd_lbr_v2
-      # If the result is yes, then collect the profile using:
-      $ perf record --pfm-events RETIRED_TAKEN_BRANCH_INSTRUCTIONS:k -a \
-        -N -b -c <count> -o <perf_file> -- <loadtest>
+  move asm/unaligned.h to linux/unaligned.h (2024-10-02 17:23:23 -0400)
 
-4) (Optional) Download the raw perf file to the HOST machine.
+----------------------------------------------------------------
+	Getting rid of asm/unaligned.h includes
 
-5) Generate Propeller profile:
-   $ create_llvm_prof --binary=3D<vmlinux> --profile=3D<perf_file> \
-     --format=3Dpropeller --propeller_output_module_name \
-     --out=3D<propeller_profile_prefix>_cc_profile.txt \
-     --propeller_symorder=3D<propeller_profile_prefix>_ld_profile.txt
+----------------------------------------------------------------
+Al Viro (3):
+      parisc: get rid of private asm/unaligned.h
+      arc: get rid of private asm/unaligned.h
+      move asm/unaligned.h to linux/unaligned.h
 
-   =E2=80=9Ccreate_llvm_prof=E2=80=9D is the profile conversion tool, and a=
- prebuilt
-   binary for linux can be found on
-   https://github.com/google/autofdo/releases/tag/v0.30.1 (can also build
-   from source).
-
-   "<propeller_profile_prefix>" can be something like
-   "/home/user/dir/any_string".
-
-   This command generates a pair of Propeller profiles:
-   "<propeller_profile_prefix>_cc_profile.txt" and
-   "<propeller_profile_prefix>_ld_profile.txt".
-
-6) Rebuild the kernel using the AutoFDO and Propeller profile files.
-      CONFIG_AUTOFDO_CLANG=3Dy
-      CONFIG_PROPELLER_CLANG=3Dy
-   and
-      $ make LLVM=3D1 CLANG_AUTOFDO_PROFILE=3D<autofdo_profile> \
-        CLANG_PROPELLER_PROFILE_PREFIX=3D<propeller_profile_prefix>
-
-Co-developed-by: Han Shen <shenhan@google.com>
-Signed-off-by: Han Shen <shenhan@google.com>
-Signed-off-by: Rong Xu <xur@google.com>
-Suggested-by: Sriraman Tallam <tmsriram@google.com>
-Suggested-by: Krzysztof Pszeniczny <kpszeniczny@google.com>
-Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-Suggested-by: Stephane Eranian <eranian@google.com>
----
- Documentation/dev-tools/index.rst     |   1 +
- Documentation/dev-tools/propeller.rst | 188 ++++++++++++++++++++++++++
- MAINTAINERS                           |   7 +
- Makefile                              |   1 +
- arch/Kconfig                          |  22 +++
- arch/x86/Kconfig                      |   1 +
- arch/x86/kernel/vmlinux.lds.S         |   4 +
- include/asm-generic/vmlinux.lds.h     |  10 +-
- scripts/Makefile.lib                  |  10 ++
- scripts/Makefile.propeller            |  28 ++++
- tools/objtool/check.c                 |   1 +
- 11 files changed, 268 insertions(+), 5 deletions(-)
- create mode 100644 Documentation/dev-tools/propeller.rst
- create mode 100644 scripts/Makefile.propeller
-
-diff --git a/Documentation/dev-tools/index.rst b/Documentation/dev-tools/in=
-dex.rst
-index 6945644f7008..3c0ac08b2709 100644
---- a/Documentation/dev-tools/index.rst
-+++ b/Documentation/dev-tools/index.rst
-@@ -35,6 +35,7 @@ Documentation/dev-tools/testing-overview.rst
-    checkuapi
-    gpio-sloppy-logic-analyzer
-    autofdo
-+   propeller
-=20
-=20
- .. only::  subproject and html
-diff --git a/Documentation/dev-tools/propeller.rst b/Documentation/dev-tool=
-s/propeller.rst
-new file mode 100644
-index 000000000000..15ef0e6d973e
---- /dev/null
-+++ b/Documentation/dev-tools/propeller.rst
-@@ -0,0 +1,188 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+Using Propeller with the Linux kernel
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+
-+This enables Propeller build support for the kernel when using Clang
-+compiler. Propeller is a profile-guided optimization (PGO) method used
-+to optimize binary executables. Like AutoFDO, it utilizes hardware
-+sampling to gather information about the frequency of execution of
-+different code paths within a binary. Unlike AutoFDO, this information
-+is then used right before linking phase to optimize (among others)
-+block layout within and across functions.
-+
-+A few important notes about adopting Propeller optimization:
-+
-+#. Although it can be used as a standalone optimization step, it is
-+   strongly recommended to apply Propeller on top of AutoFDO,
-+   AutoFDO+ThinLTO or Instrument FDO. The rest of this document
-+   assumes this paradigm.
-+
-+#. Propeller uses another round of profiling on top of
-+   AutoFDO/AutoFDO+ThinLTO/iFDO. The whole build process involves
-+   "build-afdo - train-afdo - build-propeller - train-propeller -
-+   build-optimized".
-+
-+#. Propeller requires LLVM 19 release or later for Clang/Clang++
-+   and the linker(ld.lld).
-+
-+#. In addition to LLVM toolchain, Propeller requires a profiling
-+   conversion tool: https://github.com/google/autofdo with a release
-+   after v0.30.1: https://github.com/google/autofdo/releases/tag/v0.30.1.
-+
-+The Propeller optimization process involves the following steps:
-+
-+#. Initial building: Build the AutoFDO or AutoFDO+ThinLTO binary as
-+   you would normally do, but with a set of compile-time / link-time
-+   flags, so that a special metadata section is created within the
-+   kernel binary. The special section is only intend to be used by the
-+   profiling tool, it is not part of the runtime image, nor does it
-+   change kernel run time text sections.
-+
-+#. Profiling: The above kernel is then run with a representative
-+   workload to gather execution frequency data. This data is collected
-+   using hardware sampling, via perf. Propeller is most effective on
-+   platforms supporting advanced PMU features like LBR on Intel
-+   machines. This step is the same as profiling the kernel for AutoFDO
-+   (the exact perf parameters can be different).
-+
-+#. Propeller profile generation: Perf output file is converted to a
-+   pair of Propeller profiles via an offline tool.
-+
-+#. Optimized build: Build the AutoFDO or AutoFDO+ThinLTO optimized
-+   binary as you would normally do, but with a compile-time /
-+   link-time flag to pick up the Propeller compile time and link time
-+   profiles. This build step uses 3 profiles - the AutoFDO profile,
-+   the Propeller compile-time profile and the Propeller link-time
-+   profile.
-+
-+#. Deployment: The optimized kernel binary is deployed and used
-+   in production environments, providing improved performance
-+   and reduced latency.
-+
-+Preparation
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+
-+Configure the kernel with:
-+
-+   .. code-block:: make
-+
-+      CONFIG_AUTOFDO_CLANG=3Dy
-+      CONFIG_PROPELLER_CLANG=3Dy
-+
-+Customization
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+
-+You can enable or disable Propeller build for individual file and
-+directories by adding a line similar to the following to the
-+respective kernel Makefile:
-+
-+- For enabling a single file (e.g. foo.o)
-+
-+     .. code-block:: make
-+
-+        PROPELLER_PROFILE_foo.o :=3D y
-+
-+- For enabling all files in one directory
-+
-+     .. code-block:: make
-+
-+        PROPELLER_PROFILE :=3D y
-+
-+- For disabling one file
-+
-+     .. code-block:: make
-+
-+        PROPELLER_PROFILE_foo.o :=3D n
-+
-+- For disabling all files in one directory
-+
-+     .. code-block:: make
-+
-+        PROPELLER__PROFILE :=3D n
-+
-+
-+Workflow
-+=3D=3D=3D=3D=3D=3D=3D=3D
-+
-+Here is an example workflow for building an AutoFDO+Propeller kernel:
-+
-+1) Assuming an AutoFDO profile is already collected following
-+   instructions in the AutoFDO document, build the kernel on the HOST
-+   machine, with AutoFDO and Propeller build configs:
-+
-+      .. code-block:: make
-+
-+         CONFIG_AUTOFDO_CLANG=3Dy
-+         CONFIG_PROPELLER_CLANG=3Dy
-+
-+   and
-+
-+      .. code-block:: sh
-+
-+         $ make LLVM=3D1 CLANG_AUTOFDO_PROFILE=3D<autofdo-profile-name>
-+
-+2) Install the kernel on the TEST machine.
-+
-+3) Run the load tests. The '-c' option in perf specifies the sample
-+   event period. We suggest using a suitable prime number, like 500009,
-+   for this purpose.
-+
-+   - For Intel platforms:
-+
-+      .. code-block:: sh
-+
-+         $ perf record -e BR_INST_RETIRED.NEAR_TAKEN:k -a -N -b -c \
-+           <count> -o <perf_file> -- <loadtest>
-+
-+   - For AMD platforms:
-+
-+      .. code-block:: sh
-+
-+         $ perf record --pfm-event RETIRED_TAKEN_BRANCH_INSTRUCTIONS:k \
-+           -a -N -b -c <count> -o <perf_file> -- <loadtest>
-+
-+   Note you can repeat the above steps to collect multiple <perf_file>s.
-+
-+4) (Optional) Download the raw perf file(s) to the HOST machine.
-+
-+5) Use the create_llvm_prof tool (https://github.com/google/autofdo) to Ge=
-nerate Propeller profile.
-+
-+      .. code-block:: sh
-+
-+         $ create_llvm_prof --binary=3D<vmlinux> --profile=3D<perf_file> \
-+                            --format=3Dpropeller --propeller_output_module=
-_name \
-+                            --out=3D<propeller_profile_prefix>_cc_profile.=
-txt \
-+                            --propeller_symorder=3D<propeller_profile_pref=
-ix>_ld_profile.txt
-+
-+   "<propeller_profile_prefix>" can be something like
-+   "/home/user/dir/any_string".
-+
-+   This command generates a pair of Propeller profiles:
-+   "<propeller_profile_prefix>_cc_profile.txt" and
-+   "<propeller_profile_prefix>_ld_profile.txt".
-+
-+   If there are more than 1 perf_file collected in the previous step,
-+   you can create a temp list file "<perf_file_list>" with each line
-+   containing one perf file name and run:
-+
-+      .. code-block:: sh
-+
-+         $ create_llvm_prof --binary=3D<vmlinux> --profile=3D@<perf_file_l=
-ist> \
-+                            --format=3Dpropeller --propeller_output_module=
-_name \
-+                            --out=3D<propeller_profile_prefix>_cc_profile.=
-txt \
-+                            --propeller_symorder=3D<propeller_profile_pref=
-ix>_ld_profile.txt
-+
-+6) Rebuild the kernel using the AutoFDO and Propeller profiles.
-+
-+      .. code-block:: make
-+
-+         CONFIG_AUTOFDO_CLANG=3Dy
-+         CONFIG_PROPELLER_CLANG=3Dy
-+
-+   and
-+
-+      .. code-block:: sh
-+
-+         $ make LLVM=3D1 CLANG_AUTOFDO_PROFILE=3D<profile_file> CLANG_PROP=
-ELLER_PROFILE_PREFIX=3D<propeller_profile_prefix>
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 62b798c20128..022b8d233558 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -18556,6 +18556,13 @@ S:	Maintained
- F:	include/linux/psi*
- F:	kernel/sched/psi.c
-=20
-+PROPELLER BUILD
-+M:	Rong Xu <xur@google.com>
-+M:	Han Shen <shenhan@google.com>
-+S:	Supported
-+F:	Documentation/dev-tools/propeller.rst
-+F:	scripts/Makefile.propeller
-+
- PRINTK
- M:	Petr Mladek <pmladek@suse.com>
- R:	Steven Rostedt <rostedt@goodmis.org>
-diff --git a/Makefile b/Makefile
-index 55d19c81b382..0fa6d35602a4 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1019,6 +1019,7 @@ include-$(CONFIG_UBSAN)		+=3D scripts/Makefile.ubsan
- include-$(CONFIG_KCOV)		+=3D scripts/Makefile.kcov
- include-$(CONFIG_RANDSTRUCT)	+=3D scripts/Makefile.randstruct
- include-$(CONFIG_AUTOFDO_CLANG)	+=3D scripts/Makefile.autofdo
-+include-$(CONFIG_PROPELLER_CLANG)	+=3D scripts/Makefile.propeller
- include-$(CONFIG_GCC_PLUGINS)	+=3D scripts/Makefile.gcc-plugins
-=20
- include $(addprefix $(srctree)/, $(include-y))
-diff --git a/arch/Kconfig b/arch/Kconfig
-index 106d09fc42ce..5aacd9c8a0d2 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -831,6 +831,28 @@ config AUTOFDO_CLANG
-=20
- 	  If unsure, say N.
-=20
-+config ARCH_SUPPORTS_PROPELLER_CLANG
-+	bool
-+
-+config PROPELLER_CLANG
-+	bool "Enable Clang's Propeller build"
-+	depends on ARCH_SUPPORTS_PROPELLER_CLANG
-+	depends on AUTOFDO_CLANG
-+	depends on CC_IS_CLANG && CLANG_VERSION >=3D 190000
-+	help
-+	  This option enables Clang=E2=80=99s Propeller build which
-+	  is on top of AutoFDO build. When the Propeller profiles
-+	  is specified in variable CLANG_PROPELLER_PROFILE_PREFIX
-+	  during the build process, Clang uses the profiles to
-+	  optimize the kernel.
-+
-+	  If no profile is specified, Proepller options are
-+	  still passed to Clang to facilitate the collection
-+	  of perf data for creating the Propeller profiles in
-+	  subsequent builds.
-+
-+	  If unsure, say N.
-+
- config ARCH_SUPPORTS_CFI_CLANG
- 	bool
- 	help
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 503a0268155a..da47164bfddc 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -127,6 +127,7 @@ config X86
- 	select ARCH_SUPPORTS_LTO_CLANG_THIN
- 	select ARCH_SUPPORTS_RT
- 	select ARCH_SUPPORTS_AUTOFDO_CLANG
-+	select ARCH_SUPPORTS_PROPELLER_CLANG    if X86_64
- 	select ARCH_USE_BUILTIN_BSWAP
- 	select ARCH_USE_CMPXCHG_LOCKREF		if X86_CMPXCHG64
- 	select ARCH_USE_MEMTEST
-diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
-index 6726be89b7a6..7ecc21c569be 100644
---- a/arch/x86/kernel/vmlinux.lds.S
-+++ b/arch/x86/kernel/vmlinux.lds.S
-@@ -442,6 +442,10 @@ SECTIONS
-=20
- 	STABS_DEBUG
- 	DWARF_DEBUG
-+#ifdef CONFIG_PROPELLER_CLANG
-+	.llvm_bb_addr_map : { *(.llvm_bb_addr_map) }
-+#endif
-+
- 	ELF_DETAILS
-=20
- 	DISCARDS
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinu=
-x.lds.h
-index 20e46c0917db..5986dd4cfb14 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -95,14 +95,14 @@
-  * With LTO_CLANG, the linker also splits sections by default, so we need
-  * these macros to combine the sections during the final link.
-  *
-- * With LTO_CLANG, the linker also splits sections by default, so we need
-- * these macros to combine the sections during the final link.
-+ * CONFIG_AUTOFD_CLANG and CONFIG_PROPELLER_CLANG will also split text sec=
-tions
-+ * and cluster them in the linking time.
-  *
-  * RODATA_MAIN is not used because existing code already defines .rodata.x
-  * sections to be brought in with rodata.
-  */
- #if defined(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION) || defined(CONFIG_LTO_CL=
-ANG) || \
--defined(CONFIG_AUTOFDO_CLANG)
-+defined(CONFIG_AUTOFDO_CLANG) || defined(CONFIG_PROPELLER_CLANG)
- #define TEXT_MAIN .text .text.[0-9a-zA-Z_]*
- #else
- #define TEXT_MAIN .text
-@@ -556,7 +556,7 @@ defined(CONFIG_AUTOFDO_CLANG)
- 		__cpuidle_text_end =3D .;					\
- 		__noinstr_text_end =3D .;
-=20
--#ifdef CONFIG_AUTOFDO_CLANG
-+#if defined(CONFIG_AUTOFDO_CLANG) || defined(CONFIG_PROPELLER_CLANG)
- #define TEXT_HOT							\
- 		__hot_text_start =3D .;					\
- 		*(.text.hot .text.hot.*)				\
-@@ -584,7 +584,7 @@ defined(CONFIG_AUTOFDO_CLANG)
-  * first when in these builds.
-  */
- #if defined(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION) || defined(CONFIG_LTO_CL=
-ANG) || \
--defined(CONFIG_AUTOFDO_CLANG)
-+defined(CONFIG_AUTOFDO_CLANG) || defined(CONFIG_PROPELLER_CLANG)
- #define TEXT_TEXT							\
- 		ALIGN_FUNCTION();					\
- 		*(.text.asan.* .text.tsan.*)				\
-diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-index e85d6ac31bd9..60354c476956 100644
---- a/scripts/Makefile.lib
-+++ b/scripts/Makefile.lib
-@@ -201,6 +201,16 @@ _c_flags +=3D $(if $(patsubst n%,, \
- 	$(CFLAGS_AUTOFDO_CLANG))
- endif
-=20
-+#
-+# Enable Clang's Propeller build flags for a file or directory depending o=
-n
-+# variables AUTOFDO_PROPELLER_obj.o and PROPELLER_PROFILE.
-+#
-+ifeq ($(CONFIG_PROPELLER_CLANG),y)
-+_c_flags +=3D $(if $(patsubst n%,, \
-+	$(AUTOFDO_PROFILE_$(target-stem).o)$(AUTOFDO_PROFILE)$(PROPELLER_PROFILE)=
-)$(is-kernel-object), \
-+	$(CFLAGS_PROPELLER_CLANG))
-+endif
-+
- # $(src) for including checkin headers from generated source files
- # $(obj) for including generated headers from checkin source files
- ifeq ($(KBUILD_EXTMOD),)
-diff --git a/scripts/Makefile.propeller b/scripts/Makefile.propeller
-new file mode 100644
-index 000000000000..344190717e47
---- /dev/null
-+++ b/scripts/Makefile.propeller
-@@ -0,0 +1,28 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+# Enable available and selected Clang Propeller features.
-+ifdef CLANG_PROPELLER_PROFILE_PREFIX
-+  CFLAGS_PROPELLER_CLANG :=3D -fbasic-block-sections=3Dlist=3D$(CLANG_PROP=
-ELLER_PROFILE_PREFIX)_cc_profile.txt -ffunction-sections
-+  KBUILD_LDFLAGS +=3D --symbol-ordering-file=3D$(CLANG_PROPELLER_PROFILE_P=
-REFIX)_ld_profile.txt --no-warn-symbol-ordering
-+else
-+  CFLAGS_PROPELLER_CLANG :=3D -fbasic-block-sections=3Dlabels
-+endif
-+
-+# Propeller requires debug information to embed module names in the profil=
-es.
-+# If CONFIG_DEBUG_INFO is not enabled, set -gmlt option. Skip this for Aut=
-oFDO,
-+# as the option should already be set.
-+ifndef CONFIG_DEBUG_INFO
-+  ifndef CONFIG_AUTOFDO_CLANG
-+    CFLAGS_PROPELLER_CLANG +=3D -gmlt
-+  endif
-+endif
-+
-+ifdef CONFIG_LTO_CLANG_THIN
-+  ifdef CLANG_PROPELLER_PROFILE_PREFIX
-+    KBUILD_LDFLAGS +=3D --lto-basic-block-sections=3D$(CLANG_PROPELLER_PRO=
-FILE_PREFIX)_cc_profile.txt
-+  else
-+    KBUILD_LDFLAGS +=3D --lto-basic-block-sections=3Dlabels
-+  endif
-+endif
-+
-+export CFLAGS_PROPELLER_CLANG
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 4c5229991e1e..05a0fb4a3d1a 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -4558,6 +4558,7 @@ static int validate_ibt(struct objtool_file *file)
- 		    !strcmp(sec->name, "__mcount_loc")			||
- 		    !strcmp(sec->name, ".kcfi_traps")			||
- 		    !strcmp(sec->name, ".llvm.call-graph-profile")	||
-+		    !strcmp(sec->name, ".llvm_bb_addr_map")		||
- 		    strstr(sec->name, "__patchable_function_entries"))
- 			continue;
-=20
---=20
-2.46.1.824.gd892dcdcdd-goog
-
+ Documentation/arch/arm/mem_alignment.rst           |  2 +-
+ Documentation/core-api/unaligned-memory-access.rst |  2 +-
+ .../zh_CN/core-api/unaligned-memory-access.rst     |  2 +-
+ arch/alpha/kernel/traps.c                          |  2 +-
+ arch/arc/include/asm/io.h                          |  2 +-
+ arch/arc/include/asm/mmu.h                         |  1 +
+ arch/arc/include/asm/unaligned.h                   | 27 ----------------------
+ arch/arc/kernel/traps.c                            |  3 ++-
+ arch/arc/kernel/unaligned.c                        |  1 +
+ arch/arc/kernel/unaligned.h                        | 16 +++++++++++++
+ arch/arc/kernel/unwind.c                           |  2 +-
+ arch/arm/crypto/aes-ce-glue.c                      |  2 +-
+ arch/arm/crypto/crc32-ce-glue.c                    |  2 +-
+ arch/arm/crypto/ghash-ce-glue.c                    |  2 +-
+ arch/arm/crypto/poly1305-glue.c                    |  2 +-
+ arch/arm/crypto/sha2-ce-glue.c                     |  2 +-
+ arch/arm/include/asm/uaccess.h                     |  2 +-
+ arch/arm/mm/alignment.c                            |  2 +-
+ arch/arm64/crypto/aes-ce-ccm-glue.c                |  2 +-
+ arch/arm64/crypto/aes-ce-glue.c                    |  2 +-
+ arch/arm64/crypto/ghash-ce-glue.c                  |  2 +-
+ arch/arm64/crypto/poly1305-glue.c                  |  2 +-
+ arch/arm64/crypto/sha1-ce-glue.c                   |  2 +-
+ arch/arm64/crypto/sha2-ce-glue.c                   |  2 +-
+ arch/arm64/crypto/sha3-ce-glue.c                   |  2 +-
+ arch/arm64/crypto/sha512-ce-glue.c                 |  2 +-
+ arch/arm64/crypto/sm3-ce-glue.c                    |  2 +-
+ arch/arm64/crypto/sm3-neon-glue.c                  |  2 +-
+ arch/loongarch/crypto/crc32-loongarch.c            |  2 +-
+ arch/microblaze/include/asm/flat.h                 |  2 +-
+ arch/mips/boot/compressed/decompress.c             |  2 +-
+ arch/mips/crypto/crc32-mips.c                      |  2 +-
+ arch/mips/crypto/poly1305-glue.c                   |  2 +-
+ arch/nios2/kernel/misaligned.c                     |  2 +-
+ arch/parisc/boot/compressed/misc.c                 |  2 +-
+ arch/parisc/include/asm/unaligned.h                | 11 ---------
+ arch/parisc/kernel/traps.c                         |  4 +++-
+ arch/parisc/kernel/unaligned.c                     |  3 ++-
+ arch/parisc/kernel/unaligned.h                     |  3 +++
+ arch/powerpc/crypto/aes-gcm-p10-glue.c             |  2 +-
+ arch/powerpc/crypto/poly1305-p10-glue.c            |  2 +-
+ arch/powerpc/platforms/pseries/papr_scm.c          |  2 +-
+ arch/sh/include/asm/flat.h                         |  2 +-
+ arch/sh/kernel/dwarf.c                             |  2 +-
+ arch/sh/kernel/module.c                            |  2 +-
+ arch/sparc/crypto/crc32c_glue.c                    |  2 +-
+ arch/um/drivers/virt-pci.c                         |  2 +-
+ arch/um/include/asm/uaccess.h                      |  2 +-
+ arch/x86/crypto/camellia_glue.c                    |  2 +-
+ arch/x86/crypto/ghash-clmulni-intel_glue.c         |  2 +-
+ arch/x86/lib/insn.c                                |  2 +-
+ arch/xtensa/include/asm/flat.h                     |  2 +-
+ block/partitions/ldm.h                             |  2 +-
+ block/partitions/msdos.c                           |  2 +-
+ block/t10-pi.c                                     |  2 +-
+ crypto/aes_generic.c                               |  2 +-
+ crypto/blake2b_generic.c                           |  2 +-
+ crypto/blowfish_generic.c                          |  2 +-
+ crypto/camellia_generic.c                          |  2 +-
+ crypto/cast5_generic.c                             |  2 +-
+ crypto/cast6_generic.c                             |  2 +-
+ crypto/chacha_generic.c                            |  2 +-
+ crypto/crc32_generic.c                             |  2 +-
+ crypto/crc32c_generic.c                            |  2 +-
+ crypto/crc64_rocksoft_generic.c                    |  2 +-
+ crypto/ecc.c                                       |  2 +-
+ crypto/michael_mic.c                               |  2 +-
+ crypto/nhpoly1305.c                                |  2 +-
+ crypto/poly1305_generic.c                          |  2 +-
+ crypto/polyval-generic.c                           |  2 +-
+ crypto/serpent_generic.c                           |  2 +-
+ crypto/sha256_generic.c                            |  2 +-
+ crypto/sha3_generic.c                              |  2 +-
+ crypto/sha512_generic.c                            |  2 +-
+ crypto/sm3.c                                       |  2 +-
+ crypto/sm3_generic.c                               |  2 +-
+ crypto/sm4.c                                       |  2 +-
+ crypto/sm4_generic.c                               |  2 +-
+ crypto/twofish_generic.c                           |  2 +-
+ crypto/vmac.c                                      |  2 +-
+ crypto/xxhash_generic.c                            |  2 +-
+ drivers/acpi/apei/apei-base.c                      |  2 +-
+ drivers/acpi/apei/einj-core.c                      |  2 +-
+ drivers/acpi/battery.c                             |  2 +-
+ drivers/acpi/cppc_acpi.c                           |  2 +-
+ drivers/ata/libata-core.c                          |  2 +-
+ drivers/ata/libata-sata.c                          |  2 +-
+ drivers/ata/libata-scsi.c                          |  2 +-
+ drivers/auxdisplay/ht16k33.c                       |  2 +-
+ drivers/base/regmap/regmap.c                       |  2 +-
+ drivers/block/aoe/aoecmd.c                         |  2 +-
+ drivers/block/aoe/aoenet.c                         |  2 +-
+ drivers/block/drbd/drbd_nl.c                       |  2 +-
+ drivers/block/pktcdvd.c                            |  2 +-
+ drivers/bluetooth/ath3k.c                          |  2 +-
+ drivers/bluetooth/btbcm.c                          |  2 +-
+ drivers/bluetooth/btintel.c                        |  2 +-
+ drivers/bluetooth/btintel_pcie.c                   |  2 +-
+ drivers/bluetooth/btmtk.c                          |  2 +-
+ drivers/bluetooth/btmtksdio.c                      |  2 +-
+ drivers/bluetooth/btmtkuart.c                      |  2 +-
+ drivers/bluetooth/btnxpuart.c                      |  2 +-
+ drivers/bluetooth/btrsi.c                          |  2 +-
+ drivers/bluetooth/btrtl.c                          |  2 +-
+ drivers/bluetooth/btusb.c                          |  2 +-
+ drivers/bluetooth/h4_recv.h                        |  2 +-
+ drivers/bluetooth/hci_bcm4377.c                    |  2 +-
+ drivers/bluetooth/hci_bcsp.c                       |  2 +-
+ drivers/bluetooth/hci_h4.c                         |  2 +-
+ drivers/bluetooth/hci_nokia.c                      |  2 +-
+ drivers/bluetooth/hci_qca.c                        |  2 +-
+ drivers/bluetooth/hci_vhci.c                       |  2 +-
+ drivers/char/tpm/tpm2-sessions.c                   |  2 +-
+ drivers/char/tpm/tpm2-space.c                      |  2 +-
+ drivers/clk/clk-si5341.c                           |  2 +-
+ drivers/comedi/drivers/usbduxsigma.c               |  2 +-
+ drivers/counter/104-quad-8.c                       |  2 +-
+ drivers/counter/i8254.c                            |  2 +-
+ drivers/cpufreq/cppc_cpufreq.c                     |  2 +-
+ drivers/crypto/allwinner/sun4i-ss/sun4i-ss-hash.c  |  2 +-
+ drivers/crypto/caam/caamalg.c                      |  2 +-
+ drivers/crypto/caam/caamalg_qi.c                   |  2 +-
+ drivers/crypto/caam/caamalg_qi2.c                  |  2 +-
+ drivers/crypto/inside-secure/safexcel_cipher.c     |  2 +-
+ drivers/crypto/rockchip/rk3288_crypto_ahash.c      |  2 +-
+ drivers/crypto/stm32/stm32-crc32.c                 |  2 +-
+ drivers/cxl/core/mbox.c                            |  2 +-
+ drivers/cxl/core/trace.h                           |  2 +-
+ drivers/cxl/pci.c                                  |  2 +-
+ drivers/cxl/pmem.c                                 |  2 +-
+ drivers/cxl/security.c                             |  2 +-
+ drivers/firewire/net.c                             |  2 +-
+ drivers/firmware/arm_scmi/common.h                 |  2 +-
+ drivers/firmware/arm_scmi/protocols.h              |  2 +-
+ drivers/firmware/dmi_scan.c                        |  2 +-
+ drivers/firmware/efi/fdtparams.c                   |  2 +-
+ drivers/firmware/efi/libstub/riscv-stub.c          |  2 +-
+ drivers/firmware/efi/libstub/riscv.c               |  2 +-
+ drivers/firmware/efi/libstub/zboot.c               |  2 +-
+ drivers/fpga/microchip-spi.c                       |  2 +-
+ drivers/fsi/fsi-occ.c                              |  2 +-
+ drivers/gpu/drm/amd/amdgpu/atom.c                  |  2 +-
+ .../gpu/drm/bridge/cadence/cdns-mhdp8546-core.c    |  2 +-
+ .../gpu/drm/bridge/cadence/cdns-mhdp8546-hdcp.c    |  2 +-
+ drivers/gpu/drm/bridge/samsung-dsim.c              |  2 +-
+ drivers/gpu/drm/bridge/sil-sii8620.c               |  2 +-
+ drivers/gpu/drm/bridge/tc358775.c                  |  2 +-
+ drivers/gpu/drm/bridge/ti-sn65dsi86.c              |  2 +-
+ drivers/gpu/drm/i915/display/intel_dsi_vbt.c       |  2 +-
+ drivers/gpu/drm/nouveau/include/nvif/os.h          |  2 +-
+ drivers/gpu/drm/radeon/atom.c                      |  2 +-
+ drivers/gpu/drm/udl/udl_transfer.c                 |  2 +-
+ drivers/greybus/es2.c                              |  2 +-
+ drivers/greybus/gb-beagleplay.c                    |  2 +-
+ drivers/hid/hid-alps.c                             |  2 +-
+ drivers/hid/hid-core.c                             |  2 +-
+ drivers/hid/hid-generic.c                          |  2 +-
+ drivers/hid/hid-goodix-spi.c                       |  2 +-
+ drivers/hid/hid-google-hammer.c                    |  2 +-
+ drivers/hid/hid-kye.c                              |  2 +-
+ drivers/hid/hid-letsketch.c                        |  2 +-
+ drivers/hid/hid-logitech-dj.c                      |  2 +-
+ drivers/hid/hid-logitech-hidpp.c                   |  2 +-
+ drivers/hid/hid-nintendo.c                         |  2 +-
+ drivers/hid/hid-playstation.c                      |  2 +-
+ drivers/hid/hid-sony.c                             |  2 +-
+ drivers/hid/hid-uclogic-params.c                   |  2 +-
+ drivers/hid/hid-uclogic-rdesc.c                    |  2 +-
+ drivers/hid/i2c-hid/i2c-hid-core.c                 |  2 +-
+ drivers/hid/surface-hid/surface_hid.c              |  2 +-
+ drivers/hid/surface-hid/surface_hid_core.c         |  2 +-
+ drivers/hid/surface-hid/surface_kbd.c              |  2 +-
+ drivers/hid/usbhid/hid-core.c                      |  2 +-
+ drivers/hid/wacom.h                                |  2 +-
+ drivers/hwmon/adt7310.c                            |  2 +-
+ drivers/hwmon/aquacomputer_d5next.c                |  2 +-
+ drivers/hwmon/asus-ec-sensors.c                    |  2 +-
+ drivers/hwmon/asus_rog_ryujin.c                    |  2 +-
+ drivers/hwmon/dell-smm-hwmon.c                     |  2 +-
+ drivers/hwmon/gigabyte_waterforce.c                |  2 +-
+ drivers/hwmon/nzxt-kraken2.c                       |  2 +-
+ drivers/hwmon/nzxt-kraken3.c                       |  2 +-
+ drivers/hwmon/nzxt-smart2.c                        |  2 +-
+ drivers/hwmon/occ/common.c                         |  2 +-
+ drivers/hwmon/occ/p8_i2c.c                         |  2 +-
+ drivers/i2c/busses/i2c-nvidia-gpu.c                |  2 +-
+ drivers/iio/accel/adxl355_core.c                   |  2 +-
+ drivers/iio/accel/adxl367.c                        |  2 +-
+ drivers/iio/accel/adxl380.c                        |  2 +-
+ drivers/iio/accel/bma400_core.c                    |  2 +-
+ drivers/iio/accel/bmi088-accel-core.c              |  2 +-
+ drivers/iio/accel/dmard09.c                        |  2 +-
+ drivers/iio/accel/sca3300.c                        |  2 +-
+ drivers/iio/adc/ad4130.c                           |  2 +-
+ drivers/iio/adc/ad_sigma_delta.c                   |  2 +-
+ drivers/iio/adc/axp20x_adc.c                       |  2 +-
+ drivers/iio/adc/intel_mrfld_adc.c                  |  2 +-
+ drivers/iio/adc/ltc2497.c                          |  2 +-
+ drivers/iio/adc/max11100.c                         |  2 +-
+ drivers/iio/adc/max11410.c                         |  2 +-
+ drivers/iio/adc/mcp3422.c                          |  2 +-
+ drivers/iio/adc/mcp3911.c                          |  2 +-
+ drivers/iio/adc/mt6360-adc.c                       |  2 +-
+ drivers/iio/adc/pac1921.c                          |  2 +-
+ drivers/iio/adc/pac1934.c                          |  2 +-
+ drivers/iio/adc/qcom-spmi-rradc.c                  |  2 +-
+ drivers/iio/adc/ti-ads124s08.c                     |  2 +-
+ drivers/iio/adc/ti-ads1298.c                       |  2 +-
+ drivers/iio/adc/ti-ads131e08.c                     |  2 +-
+ drivers/iio/adc/ti-tsc2046.c                       |  2 +-
+ drivers/iio/addac/ad74115.c                        |  2 +-
+ drivers/iio/addac/ad74413r.c                       |  2 +-
+ drivers/iio/amplifiers/ada4250.c                   |  2 +-
+ drivers/iio/cdc/ad7746.c                           |  2 +-
+ drivers/iio/chemical/bme680_core.c                 |  2 +-
+ drivers/iio/chemical/pms7003.c                     |  2 +-
+ drivers/iio/chemical/scd30_i2c.c                   |  2 +-
+ drivers/iio/chemical/scd30_serial.c                |  2 +-
+ drivers/iio/chemical/scd4x.c                       |  2 +-
+ drivers/iio/chemical/sps30_i2c.c                   |  2 +-
+ drivers/iio/common/st_sensors/st_sensors_core.c    |  2 +-
+ drivers/iio/dac/ad3552r.c                          |  2 +-
+ drivers/iio/dac/ad5064.c                           |  2 +-
+ drivers/iio/dac/ad5446.c                           |  2 +-
+ drivers/iio/dac/ad5449.c                           |  2 +-
+ drivers/iio/dac/ad5593r.c                          |  2 +-
+ drivers/iio/dac/ad5624r_spi.c                      |  2 +-
+ drivers/iio/dac/ad5766.c                           |  2 +-
+ drivers/iio/dac/ad7293.c                           |  2 +-
+ drivers/iio/dac/ltc2632.c                          |  2 +-
+ drivers/iio/dac/mcp4821.c                          |  2 +-
+ drivers/iio/frequency/adf4377.c                    |  2 +-
+ drivers/iio/frequency/admv1013.c                   |  2 +-
+ drivers/iio/frequency/admv1014.c                   |  2 +-
+ drivers/iio/frequency/admv4420.c                   |  2 +-
+ drivers/iio/frequency/adrf6780.c                   |  2 +-
+ drivers/iio/gyro/adis16130.c                       |  2 +-
+ drivers/iio/health/afe4403.c                       |  2 +-
+ drivers/iio/humidity/ens210.c                      |  2 +-
+ drivers/iio/humidity/hdc3020.c                     |  2 +-
+ drivers/iio/imu/adis.c                             |  2 +-
+ drivers/iio/imu/bmi323/bmi323_core.c               |  2 +-
+ drivers/iio/light/apds9306.c                       |  2 +-
+ drivers/iio/light/gp2ap020a00f.c                   |  2 +-
+ drivers/iio/light/ltr390.c                         |  2 +-
+ drivers/iio/light/ltrf216a.c                       |  2 +-
+ drivers/iio/light/si1133.c                         |  2 +-
+ drivers/iio/light/tsl2591.c                        |  2 +-
+ drivers/iio/light/zopt2201.c                       |  2 +-
+ drivers/iio/magnetometer/rm3100-core.c             |  2 +-
+ drivers/iio/magnetometer/yamaha-yas530.c           |  2 +-
+ drivers/iio/pressure/bmp280-core.c                 |  2 +-
+ drivers/iio/pressure/dlhl60d.c                     |  2 +-
+ drivers/iio/pressure/hp206c.c                      |  2 +-
+ drivers/iio/pressure/hsc030pa.c                    |  2 +-
+ drivers/iio/pressure/mprls0025pa.c                 |  2 +-
+ drivers/iio/pressure/ms5611_i2c.c                  |  2 +-
+ drivers/iio/pressure/ms5611_spi.c                  |  2 +-
+ drivers/iio/pressure/sdp500.c                      |  2 +-
+ drivers/iio/pressure/st_pressure_core.c            |  2 +-
+ drivers/iio/pressure/zpa2326.c                     |  2 +-
+ drivers/iio/proximity/aw96103.c                    |  2 +-
+ drivers/iio/proximity/cros_ec_mkbp_proximity.c     |  2 +-
+ drivers/iio/proximity/hx9023s.c                    |  2 +-
+ drivers/iio/proximity/irsd200.c                    |  2 +-
+ drivers/iio/temperature/ltc2983.c                  |  2 +-
+ drivers/iio/temperature/max31856.c                 |  2 +-
+ drivers/iio/temperature/max31865.c                 |  2 +-
+ drivers/input/joystick/adafruit-seesaw.c           |  2 +-
+ drivers/input/joystick/adc-joystick.c              |  2 +-
+ drivers/input/joystick/iforce/iforce-main.c        |  2 +-
+ drivers/input/joystick/iforce/iforce-packets.c     |  2 +-
+ drivers/input/joystick/spaceball.c                 |  2 +-
+ drivers/input/keyboard/applespi.c                  |  2 +-
+ drivers/input/keyboard/cros_ec_keyb.c              |  2 +-
+ drivers/input/misc/ims-pcu.c                       |  2 +-
+ drivers/input/misc/iqs7222.c                       |  2 +-
+ drivers/input/mouse/cyapa_gen3.c                   |  2 +-
+ drivers/input/mouse/cyapa_gen5.c                   |  2 +-
+ drivers/input/mouse/cyapa_gen6.c                   |  2 +-
+ drivers/input/mouse/elan_i2c_core.c                |  2 +-
+ drivers/input/mouse/elan_i2c_i2c.c                 |  2 +-
+ drivers/input/mouse/elantech.c                     |  2 +-
+ drivers/input/rmi4/rmi_f01.c                       |  2 +-
+ drivers/input/rmi4/rmi_f34.c                       |  2 +-
+ drivers/input/rmi4/rmi_f34v7.c                     |  2 +-
+ drivers/input/tablet/aiptek.c                      |  2 +-
+ drivers/input/tablet/kbtab.c                       |  2 +-
+ drivers/input/touchscreen/ads7846.c                |  2 +-
+ drivers/input/touchscreen/atmel_mxt_ts.c           |  2 +-
+ drivers/input/touchscreen/chipone_icn8505.c        |  2 +-
+ drivers/input/touchscreen/cy8ctma140.c             |  2 +-
+ drivers/input/touchscreen/cyttsp5.c                |  2 +-
+ drivers/input/touchscreen/edt-ft5x06.c             |  2 +-
+ drivers/input/touchscreen/eeti_ts.c                |  2 +-
+ drivers/input/touchscreen/elants_i2c.c             |  2 +-
+ drivers/input/touchscreen/exc3000.c                |  2 +-
+ drivers/input/touchscreen/goodix.c                 |  2 +-
+ drivers/input/touchscreen/goodix_berlin_core.c     |  2 +-
+ drivers/input/touchscreen/goodix_berlin_spi.c      |  2 +-
+ drivers/input/touchscreen/hideep.c                 |  2 +-
+ drivers/input/touchscreen/hycon-hy46xx.c           |  2 +-
+ drivers/input/touchscreen/hynitron_cstxxx.c        |  2 +-
+ drivers/input/touchscreen/ili210x.c                |  2 +-
+ drivers/input/touchscreen/ilitek_ts_i2c.c          |  2 +-
+ drivers/input/touchscreen/iqs5xx.c                 |  2 +-
+ drivers/input/touchscreen/iqs7211.c                |  2 +-
+ drivers/input/touchscreen/melfas_mip4.c            |  2 +-
+ drivers/input/touchscreen/novatek-nvt-ts.c         |  2 +-
+ drivers/input/touchscreen/pixcir_i2c_ts.c          |  2 +-
+ drivers/input/touchscreen/raydium_i2c_ts.c         |  2 +-
+ drivers/input/touchscreen/s6sy761.c                |  2 +-
+ drivers/input/touchscreen/silead.c                 |  2 +-
+ drivers/input/touchscreen/sis_i2c.c                |  2 +-
+ drivers/input/touchscreen/surface3_spi.c           |  2 +-
+ drivers/input/touchscreen/wacom_i2c.c              |  2 +-
+ drivers/input/touchscreen/wdt87xx_i2c.c            |  2 +-
+ drivers/input/touchscreen/zet6223.c                |  2 +-
+ drivers/input/touchscreen/zforce_ts.c              |  2 +-
+ drivers/isdn/hardware/mISDN/avmfritz.c             |  2 +-
+ drivers/leds/rgb/leds-mt6370-rgb.c                 |  2 +-
+ drivers/macintosh/adb-iop.c                        |  2 +-
+ drivers/md/dm-crypt.c                              |  2 +-
+ drivers/md/dm-vdo/murmurhash3.c                    |  2 +-
+ drivers/md/dm-vdo/numeric.h                        |  2 +-
+ drivers/media/dvb-frontends/mxl5xx.c               |  2 +-
+ drivers/media/i2c/ccs/ccs-reg-access.c             |  2 +-
+ drivers/media/i2c/hi556.c                          |  2 +-
+ drivers/media/i2c/hi846.c                          |  2 +-
+ drivers/media/i2c/hi847.c                          |  2 +-
+ drivers/media/i2c/imx208.c                         |  2 +-
+ drivers/media/i2c/imx258.c                         |  2 +-
+ drivers/media/i2c/imx290.c                         |  2 +-
+ drivers/media/i2c/imx319.c                         |  2 +-
+ drivers/media/i2c/imx334.c                         |  2 +-
+ drivers/media/i2c/imx335.c                         |  2 +-
+ drivers/media/i2c/imx355.c                         |  2 +-
+ drivers/media/i2c/imx412.c                         |  2 +-
+ drivers/media/i2c/ir-kbd-i2c.c                     |  2 +-
+ drivers/media/i2c/og01a1b.c                        |  2 +-
+ drivers/media/i2c/ov01a10.c                        |  2 +-
+ drivers/media/i2c/ov08x40.c                        |  2 +-
+ drivers/media/i2c/ov2740.c                         |  2 +-
+ drivers/media/i2c/ov5670.c                         |  2 +-
+ drivers/media/i2c/ov5675.c                         |  2 +-
+ drivers/media/i2c/ov8856.c                         |  2 +-
+ drivers/media/i2c/ov8858.c                         |  2 +-
+ drivers/media/i2c/ov9282.c                         |  2 +-
+ drivers/media/i2c/ov9734.c                         |  2 +-
+ drivers/media/i2c/thp7312.c                        |  2 +-
+ drivers/media/i2c/vgxy61.c                         |  2 +-
+ drivers/media/pci/bt8xx/bttv-cards.c               |  2 +-
+ .../media/platform/chips-media/coda/coda-jpeg.c    |  2 +-
+ drivers/media/platform/renesas/rcar_jpu.c          |  2 +-
+ .../platform/verisilicon/hantro_g1_mpeg2_dec.c     |  2 +-
+ .../platform/verisilicon/hantro_h1_jpeg_enc.c      |  2 +-
+ .../verisilicon/rockchip_vpu2_hw_jpeg_enc.c        |  2 +-
+ .../verisilicon/rockchip_vpu2_hw_mpeg2_dec.c       |  2 +-
+ drivers/media/radio/radio-raremono.c               |  2 +-
+ drivers/media/radio/si470x/radio-si470x.h          |  2 +-
+ drivers/media/rc/ir_toy.c                          |  2 +-
+ drivers/media/rc/redrat3.c                         |  2 +-
+ drivers/media/tuners/xc2028.c                      |  2 +-
+ drivers/media/tuners/xc4000.c                      |  2 +-
+ drivers/media/usb/dvb-usb/m920x.c                  |  2 +-
+ drivers/media/usb/uvc/uvc_driver.c                 |  2 +-
+ drivers/media/usb/uvc/uvc_video.c                  |  2 +-
+ drivers/media/v4l2-core/v4l2-cci.c                 |  2 +-
+ drivers/media/v4l2-core/v4l2-jpeg.c                |  2 +-
+ drivers/memstick/host/rtsx_usb_ms.c                |  2 +-
+ drivers/mfd/gateworks-gsc.c                        |  2 +-
+ drivers/mfd/iqs62x.c                               |  2 +-
+ drivers/mfd/ntxec.c                                |  2 +-
+ drivers/mfd/rave-sp.c                              |  2 +-
+ drivers/mfd/si476x-cmd.c                           |  2 +-
+ drivers/misc/altera-stapl/altera.c                 |  2 +-
+ drivers/misc/bcm-vk/bcm_vk_sg.c                    |  2 +-
+ drivers/misc/cardreader/rtsx_pcr.c                 |  2 +-
+ drivers/misc/lattice-ecp3-config.c                 |  2 +-
+ drivers/misc/mei/platform-vsc.c                    |  2 +-
+ drivers/misc/mei/vsc-fw-loader.c                   |  2 +-
+ drivers/mmc/host/atmel-mci.c                       |  2 +-
+ drivers/mmc/host/mmc_spi.c                         |  2 +-
+ drivers/mmc/host/mvsdio.c                          |  2 +-
+ drivers/mmc/host/rtsx_pci_sdmmc.c                  |  2 +-
+ drivers/mmc/host/rtsx_usb_sdmmc.c                  |  2 +-
+ drivers/mtd/nand/raw/intel-nand-controller.c       |  2 +-
+ drivers/mtd/nand/raw/marvell_nand.c                |  2 +-
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c     |  2 +-
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c   |  2 +-
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-ring.c     |  2 +-
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-tx.c       |  2 +-
+ drivers/net/can/usb/etas_es58x/es581_4.c           |  2 +-
+ drivers/net/can/usb/etas_es58x/es58x_core.c        |  2 +-
+ drivers/net/can/usb/etas_es58x/es58x_fd.c          |  2 +-
+ drivers/net/can/usb/f81604.c                       |  2 +-
+ drivers/net/can/usb/mcba_usb.c                     |  2 +-
+ drivers/net/can/usb/peak_usb/pcan_usb.c            |  2 +-
+ drivers/net/dsa/b53/b53_spi.c                      |  2 +-
+ drivers/net/dsa/microchip/ksz_spi.c                |  2 +-
+ drivers/net/ethernet/adi/adin1110.c                |  2 +-
+ .../net/ethernet/broadcom/asp2/bcmasp_ethtool.c    |  2 +-
+ drivers/net/ethernet/broadcom/genet/bcmgenet.c     |  2 +-
+ drivers/net/ethernet/dec/tulip/de2104x.c           |  2 +-
+ drivers/net/ethernet/dec/tulip/eeprom.c            |  2 +-
+ drivers/net/ethernet/dec/tulip/tulip.h             |  2 +-
+ drivers/net/ethernet/dec/tulip/tulip_core.c        |  2 +-
+ drivers/net/ethernet/freescale/enetc/enetc_pf.c    |  2 +-
+ drivers/net/ethernet/intel/e100.c                  |  2 +-
+ drivers/net/ethernet/intel/ice/ice_fw_update.c     |  2 +-
+ drivers/net/ethernet/mediatek/mtk_wed_mcu.c        |  2 +-
+ drivers/net/ethernet/meta/fbnic/fbnic_devlink.c    |  2 +-
+ drivers/net/ethernet/netronome/nfp/crypto/ipsec.c  |  2 +-
+ .../ethernet/netronome/nfp/nfpcore/nfp6000_pcie.c  |  2 +-
+ .../ethernet/netronome/nfp/nfpcore/nfp_cppcore.c   |  2 +-
+ .../ethernet/netronome/nfp/nfpcore/nfp_cpplib.c    |  2 +-
+ .../ethernet/netronome/nfp/nfpcore/nfp_hwinfo.c    |  2 +-
+ .../net/ethernet/netronome/nfp/nfpcore/nfp_nsp.c   |  2 +-
+ .../net/ethernet/netronome/nfp/nfpcore/nfp_rtsym.c |  2 +-
+ drivers/net/ethernet/packetengines/hamachi.c       |  2 +-
+ drivers/net/ethernet/packetengines/yellowfin.c     |  2 +-
+ drivers/net/ethernet/realtek/r8169_main.c          |  2 +-
+ drivers/net/ethernet/smsc/smsc9420.c               |  2 +-
+ drivers/net/ieee802154/cc2520.c                    |  2 +-
+ drivers/net/mctp/mctp-i3c.c                        |  2 +-
+ drivers/net/phy/air_en8811h.c                      |  2 +-
+ drivers/net/phy/aquantia/aquantia_firmware.c       |  2 +-
+ drivers/net/phy/bcm-phy-ptp.c                      |  2 +-
+ drivers/net/phy/mscc/mscc_ptp.c                    |  2 +-
+ drivers/net/ppp/ppp_async.c                        |  2 +-
+ drivers/net/ppp/ppp_deflate.c                      |  2 +-
+ drivers/net/ppp/ppp_generic.c                      |  2 +-
+ drivers/net/ppp/ppp_mppe.c                         |  2 +-
+ drivers/net/ppp/ppp_synctty.c                      |  2 +-
+ drivers/net/slip/slhc.c                            |  2 +-
+ drivers/net/usb/net1080.c                          |  2 +-
+ drivers/net/usb/sierra_net.c                       |  2 +-
+ drivers/net/wireless/ath/ath5k/base.c              |  2 +-
+ drivers/net/wireless/ath/ath5k/mac80211-ops.c      |  2 +-
+ drivers/net/wireless/ath/ath5k/pcu.c               |  2 +-
+ drivers/net/wireless/ath/ath5k/phy.c               |  2 +-
+ drivers/net/wireless/ath/ath5k/reset.c             |  2 +-
+ drivers/net/wireless/ath/ath6kl/htc_mbox.c         |  2 +-
+ drivers/net/wireless/ath/ath9k/ar9003_eeprom.c     |  2 +-
+ drivers/net/wireless/ath/ath9k/debug.c             |  2 +-
+ drivers/net/wireless/ath/ath9k/eeprom_4k.c         |  2 +-
+ drivers/net/wireless/ath/ath9k/eeprom_9287.c       |  2 +-
+ drivers/net/wireless/ath/ath9k/eeprom_def.c        |  2 +-
+ drivers/net/wireless/ath/ath9k/hif_usb.c           |  2 +-
+ drivers/net/wireless/ath/ath9k/hw.c                |  2 +-
+ drivers/net/wireless/ath/carl9170/mac.c            |  2 +-
+ drivers/net/wireless/ath/hw.c                      |  2 +-
+ drivers/net/wireless/ath/key.c                     |  2 +-
+ drivers/net/wireless/broadcom/b43/main.c           |  2 +-
+ drivers/net/wireless/broadcom/b43legacy/main.c     |  2 +-
+ .../wireless/broadcom/brcm80211/brcmfmac/fweh.h    |  2 +-
+ .../wireless/broadcom/brcm80211/brcmfmac/pcie.c    |  2 +-
+ .../wireless/broadcom/brcm80211/brcmfmac/sdio.c    |  2 +-
+ .../wireless/broadcom/brcm80211/brcmfmac/xtlv.c    |  2 +-
+ drivers/net/wireless/intel/iwlegacy/3945.c         |  2 +-
+ drivers/net/wireless/intel/iwlegacy/4965.c         |  2 +-
+ drivers/net/wireless/intel/iwlwifi/dvm/led.c       |  2 +-
+ drivers/net/wireless/intel/iwlwifi/dvm/rx.c        |  2 +-
+ drivers/net/wireless/intel/iwlwifi/mvm/rx.c        |  2 +-
+ drivers/net/wireless/marvell/libertas/cfg.c        |  2 +-
+ drivers/net/wireless/marvell/libertas/cmdresp.c    |  2 +-
+ drivers/net/wireless/marvell/mwifiex/cmdevt.c      |  2 +-
+ drivers/net/wireless/mediatek/mt76/mt76x0/eeprom.c |  2 +-
+ .../net/wireless/mediatek/mt76/mt76x02_eeprom.c    |  2 +-
+ drivers/net/wireless/mediatek/mt76/mt76x2/eeprom.c |  2 +-
+ drivers/net/wireless/mediatek/mt7601u/dma.h        |  2 +-
+ drivers/net/wireless/mediatek/mt7601u/eeprom.c     |  2 +-
+ drivers/net/wireless/purelifi/plfxlc/usb.c         |  2 +-
+ drivers/net/wireless/zydas/zd1211rw/zd_usb.c       |  2 +-
+ drivers/nfc/nfcmrvl/fw_dnld.c                      |  2 +-
+ drivers/nfc/nxp-nci/firmware.c                     |  2 +-
+ drivers/nfc/nxp-nci/i2c.c                          |  2 +-
+ drivers/nfc/pn544/i2c.c                            |  2 +-
+ drivers/nvme/common/auth.c                         |  2 +-
+ drivers/nvme/host/auth.c                           |  2 +-
+ drivers/nvme/host/core.c                           |  2 +-
+ drivers/nvme/host/hwmon.c                          |  2 +-
+ drivers/nvme/host/pr.c                             |  2 +-
+ drivers/nvme/host/rdma.c                           |  2 +-
+ drivers/nvme/host/trace.c                          |  2 +-
+ drivers/nvme/target/admin-cmd.c                    |  2 +-
+ drivers/nvme/target/auth.c                         |  2 +-
+ drivers/nvme/target/rdma.c                         |  2 +-
+ drivers/nvme/target/trace.c                        |  2 +-
+ drivers/pci/vpd.c                                  |  2 +-
+ drivers/pcmcia/cistpl.c                            |  2 +-
+ drivers/peci/controller/peci-aspeed.c              |  2 +-
+ drivers/peci/request.c                             |  2 +-
+ drivers/platform/arm64/acer-aspire1-ec.c           |  2 +-
+ drivers/platform/chrome/cros_ec_proto.c            |  2 +-
+ drivers/platform/chrome/cros_ec_proto_test.c       |  2 +-
+ drivers/platform/chrome/wilco_ec/properties.c      |  2 +-
+ drivers/platform/cznic/turris-omnia-mcu-gpio.c     |  2 +-
+ drivers/platform/cznic/turris-omnia-mcu.h          |  2 +-
+ drivers/platform/surface/aggregator/ssh_msgb.h     |  2 +-
+ .../platform/surface/aggregator/ssh_packet_layer.c |  2 +-
+ drivers/platform/surface/aggregator/ssh_parser.c   |  2 +-
+ .../surface/aggregator/ssh_request_layer.c         |  2 +-
+ drivers/platform/surface/aggregator/trace.h        |  2 +-
+ drivers/platform/surface/surface3_power.c          |  2 +-
+ drivers/platform/surface/surface_acpi_notify.c     |  2 +-
+ .../platform/surface/surface_aggregator_tabletsw.c |  2 +-
+ .../platform/surface/surface_platform_profile.c    |  2 +-
+ drivers/platform/x86/asus-tf103c-dock.c            |  2 +-
+ drivers/platform/x86/dell/dell-wmi-ddv.c           |  2 +-
+ drivers/platform/x86/msi-wmi-platform.c            |  2 +-
+ drivers/platform/x86/quickstart.c                  |  2 +-
+ drivers/power/supply/axp288_fuel_gauge.c           |  2 +-
+ drivers/power/supply/bq27xxx_battery_i2c.c         |  2 +-
+ drivers/power/supply/cros_peripheral_charger.c     |  2 +-
+ drivers/power/supply/max1720x_battery.c            |  2 +-
+ drivers/power/supply/rk817_charger.c               |  2 +-
+ drivers/power/supply/surface_battery.c             |  2 +-
+ drivers/power/supply/surface_charger.c             |  2 +-
+ drivers/ptp/ptp_clockmatrix.c                      |  2 +-
+ drivers/ptp/ptp_fc3.c                              |  2 +-
+ drivers/rtc/rtc-max31335.c                         |  2 +-
+ drivers/rtc/rtc-pm8xxx.c                           |  2 +-
+ drivers/scsi/aacraid/aachba.c                      |  2 +-
+ drivers/scsi/csiostor/csio_lnode.c                 |  2 +-
+ drivers/scsi/csiostor/csio_scsi.c                  |  2 +-
+ drivers/scsi/cxlflash/lunmgt.c                     |  2 +-
+ drivers/scsi/cxlflash/main.c                       |  2 +-
+ drivers/scsi/cxlflash/superpipe.c                  |  2 +-
+ drivers/scsi/cxlflash/vlun.c                       |  2 +-
+ drivers/scsi/device_handler/scsi_dh_alua.c         |  2 +-
+ drivers/scsi/hpsa.c                                |  2 +-
+ drivers/scsi/ipr.h                                 |  2 +-
+ drivers/scsi/libfc/fc_disc.c                       |  2 +-
+ drivers/scsi/libfc/fc_elsct.c                      |  2 +-
+ drivers/scsi/libfc/fc_encode.h                     |  2 +-
+ drivers/scsi/libfc/fc_lport.c                      |  2 +-
+ drivers/scsi/libfc/fc_rport.c                      |  2 +-
+ drivers/scsi/libiscsi.c                            |  2 +-
+ drivers/scsi/libsas/sas_expander.c                 |  2 +-
+ drivers/scsi/lpfc/lpfc_nvme.c                      |  2 +-
+ drivers/scsi/lpfc/lpfc_nvmet.c                     |  2 +-
+ drivers/scsi/lpfc/lpfc_scsi.c                      |  2 +-
+ drivers/scsi/megaraid/megaraid_sas_base.c          |  2 +-
+ drivers/scsi/mpi3mr/mpi3mr.h                       |  2 +-
+ drivers/scsi/mpt3sas/mpt3sas_scsih.c               |  2 +-
+ drivers/scsi/mpt3sas/mpt3sas_warpdrive.c           |  2 +-
+ drivers/scsi/mvsas/mv_sas.h                        |  2 +-
+ drivers/scsi/myrb.c                                |  2 +-
+ drivers/scsi/myrs.c                                |  2 +-
+ drivers/scsi/qla2xxx/qla_dsd.h                     |  2 +-
+ drivers/scsi/qla2xxx/qla_target.c                  |  2 +-
+ drivers/scsi/qla2xxx/tcm_qla2xxx.c                 |  2 +-
+ drivers/scsi/scsi.c                                |  2 +-
+ drivers/scsi/scsi_common.c                         |  2 +-
+ drivers/scsi/scsi_debug.c                          |  2 +-
+ drivers/scsi/scsi_error.c                          |  2 +-
+ drivers/scsi/scsi_lib.c                            |  2 +-
+ drivers/scsi/scsi_proto_test.c                     |  2 +-
+ drivers/scsi/scsi_scan.c                           |  2 +-
+ drivers/scsi/scsi_trace.c                          |  2 +-
+ drivers/scsi/scsicam.c                             |  2 +-
+ drivers/scsi/sd.c                                  |  2 +-
+ drivers/scsi/sd_zbc.c                              |  2 +-
+ drivers/scsi/ses.c                                 |  2 +-
+ drivers/scsi/smartpqi/smartpqi_init.c              |  2 +-
+ drivers/scsi/smartpqi/smartpqi_sas_transport.c     |  2 +-
+ drivers/scsi/smartpqi/smartpqi_sis.c               |  2 +-
+ drivers/scsi/sr.c                                  |  2 +-
+ drivers/scsi/st.c                                  |  2 +-
+ drivers/soc/qcom/socinfo.c                         |  2 +-
+ drivers/spi/spi-airoha-snfi.c                      |  2 +-
+ drivers/spi/spi-dln2.c                             |  2 +-
+ drivers/spi/spi-npcm-pspi.c                        |  2 +-
+ drivers/spi/spi-orion.c                            |  2 +-
+ drivers/spi/spi-rpc-if.c                           |  2 +-
+ drivers/spi/spi-sh-msiof.c                         |  2 +-
+ drivers/spi/spi-uniphier.c                         |  2 +-
+ drivers/spi/spi-xcomm.c                            |  2 +-
+ drivers/staging/media/av7110/av7110.c              |  2 +-
+ drivers/staging/rtl8192e/rtl819x_BAProc.c          |  2 +-
+ drivers/staging/rtl8723bs/core/rtw_ap.c            |  2 +-
+ drivers/staging/rtl8723bs/core/rtw_ieee80211.c     |  2 +-
+ drivers/staging/rtl8723bs/core/rtw_mlme_ext.c      |  2 +-
+ drivers/staging/rtl8723bs/core/rtw_recv.c          |  2 +-
+ drivers/staging/rtl8723bs/os_dep/recv_linux.c      |  2 +-
+ drivers/target/iscsi/cxgbit/cxgbit_target.c        |  2 +-
+ drivers/target/iscsi/iscsi_target.c                |  2 +-
+ drivers/target/iscsi/iscsi_target_tmr.c            |  2 +-
+ drivers/target/sbp/sbp_target.c                    |  2 +-
+ drivers/target/target_core_alua.c                  |  2 +-
+ drivers/target/target_core_device.c                |  2 +-
+ drivers/target/target_core_fabric_lib.c            |  2 +-
+ drivers/target/target_core_file.c                  |  2 +-
+ drivers/target/target_core_iblock.c                |  2 +-
+ drivers/target/target_core_pr.c                    |  2 +-
+ drivers/target/target_core_pscsi.c                 |  2 +-
+ drivers/target/target_core_sbc.c                   |  2 +-
+ drivers/target/target_core_spc.c                   |  2 +-
+ drivers/target/target_core_transport.c             |  2 +-
+ drivers/target/target_core_xcopy.c                 |  2 +-
+ drivers/target/tcm_fc/tfc_cmd.c                    |  2 +-
+ drivers/target/tcm_fc/tfc_conf.c                   |  2 +-
+ drivers/target/tcm_fc/tfc_io.c                     |  2 +-
+ drivers/target/tcm_fc/tfc_sess.c                   |  2 +-
+ drivers/thermal/qcom/qcom-spmi-adc-tm5.c           |  2 +-
+ drivers/tty/serial/max3100.c                       |  2 +-
+ drivers/tty/vt/vc_screen.c                         |  2 +-
+ drivers/ufs/core/ufs-mcq.c                         |  2 +-
+ drivers/ufs/core/ufs-sysfs.c                       |  2 +-
+ drivers/ufs/core/ufshcd.c                          |  2 +-
+ drivers/ufs/host/ufs-exynos.c                      |  2 +-
+ drivers/usb/atm/cxacru.c                           |  2 +-
+ drivers/usb/atm/ueagle-atm.c                       |  2 +-
+ drivers/usb/class/cdc-acm.c                        |  2 +-
+ drivers/usb/class/cdc-wdm.c                        |  2 +-
+ drivers/usb/core/hcd.c                             |  2 +-
+ drivers/usb/fotg210/fotg210-hcd.c                  |  2 +-
+ drivers/usb/gadget/composite.c                     |  2 +-
+ drivers/usb/gadget/function/f_fs.c                 |  2 +-
+ drivers/usb/gadget/function/f_mass_storage.c       |  2 +-
+ drivers/usb/gadget/function/f_printer.c            |  2 +-
+ drivers/usb/gadget/function/f_tcm.c                |  2 +-
+ drivers/usb/gadget/function/rndis.c                |  2 +-
+ drivers/usb/gadget/function/storage_common.h       |  2 +-
+ drivers/usb/gadget/function/uvc_video.c            |  2 +-
+ drivers/usb/gadget/legacy/tcm_usb_gadget.c         |  2 +-
+ drivers/usb/gadget/u_os_desc.h                     |  2 +-
+ drivers/usb/gadget/udc/bdc/bdc.h                   |  2 +-
+ drivers/usb/gadget/udc/bdc/bdc_ep.c                |  2 +-
+ drivers/usb/gadget/udc/bdc/bdc_udc.c               |  2 +-
+ drivers/usb/gadget/udc/cdns2/cdns2-ep0.c           |  2 +-
+ drivers/usb/gadget/udc/dummy_hcd.c                 |  2 +-
+ drivers/usb/gadget/udc/fsl_udc_core.c              |  2 +-
+ drivers/usb/gadget/udc/goku_udc.c                  |  2 +-
+ drivers/usb/gadget/udc/mv_udc_core.c               |  2 +-
+ drivers/usb/gadget/udc/net2272.c                   |  2 +-
+ drivers/usb/gadget/udc/net2280.c                   |  2 +-
+ drivers/usb/gadget/udc/omap_udc.c                  |  2 +-
+ drivers/usb/gadget/udc/pxa25x_udc.c                |  2 +-
+ drivers/usb/gadget/udc/snps_udc_core.c             |  2 +-
+ drivers/usb/host/ehci-hcd.c                        |  2 +-
+ drivers/usb/host/isp1362-hcd.c                     |  2 +-
+ drivers/usb/host/ohci-da8xx.c                      |  2 +-
+ drivers/usb/host/ohci-hcd.c                        |  2 +-
+ drivers/usb/host/oxu210hp-hcd.c                    |  2 +-
+ drivers/usb/host/sl811-hcd.c                       |  2 +-
+ drivers/usb/host/xhci-hub.c                        |  2 +-
+ drivers/usb/host/xhci-pci-renesas.c                |  2 +-
+ drivers/usb/isp1760/isp1760-hcd.c                  |  2 +-
+ drivers/usb/misc/usb-ljca.c                        |  2 +-
+ drivers/usb/musb/musb_virthub.c                    |  2 +-
+ drivers/usb/phy/phy-fsl-usb.c                      |  2 +-
+ drivers/usb/serial/aircable.c                      |  2 +-
+ drivers/usb/serial/ch341.c                         |  2 +-
+ drivers/usb/serial/cypress_m8.c                    |  2 +-
+ drivers/usb/serial/kl5kusb105.c                    |  2 +-
+ drivers/usb/serial/mct_u232.c                      |  2 +-
+ drivers/usb/serial/mxuport.c                       |  2 +-
+ drivers/usb/serial/pl2303.c                        |  2 +-
+ drivers/usb/serial/quatech2.c                      |  2 +-
+ drivers/usb/typec/ucsi/ucsi.h                      |  2 +-
+ drivers/usb/typec/ucsi/ucsi_ccg.c                  |  2 +-
+ drivers/usb/typec/ucsi/ucsi_stm32g0.c              |  2 +-
+ drivers/vhost/scsi.c                               |  2 +-
+ drivers/video/fbdev/aty/mach64_accel.c             |  2 +-
+ drivers/video/fbdev/c2p_iplan2.c                   |  2 +-
+ drivers/video/fbdev/c2p_planar.c                   |  2 +-
+ drivers/video/fbdev/matrox/matroxfb_base.h         |  2 +-
+ drivers/video/fbdev/metronomefb.c                  |  2 +-
+ drivers/video/fbdev/udlfb.c                        |  2 +-
+ drivers/watchdog/ziirave_wdt.c                     |  2 +-
+ fs/adfs/map.c                                      |  2 +-
+ fs/bcachefs/bset.c                                 |  2 +-
+ fs/bcachefs/inode.c                                |  2 +-
+ fs/bcachefs/siphash.c                              |  2 +-
+ fs/bcachefs/varint.c                               |  2 +-
+ fs/binfmt_flat.c                                   |  2 +-
+ fs/btrfs/accessors.c                               |  2 +-
+ fs/btrfs/accessors.h                               |  2 +-
+ fs/btrfs/disk-io.c                                 |  2 +-
+ fs/btrfs/inode.c                                   |  2 +-
+ fs/btrfs/uuid-tree.c                               |  2 +-
+ fs/ceph/export.c                                   |  2 +-
+ fs/ceph/super.h                                    |  2 +-
+ fs/crypto/keyring.c                                |  2 +-
+ fs/ecryptfs/crypto.c                               |  2 +-
+ fs/ecryptfs/inode.c                                |  2 +-
+ fs/ecryptfs/mmap.c                                 |  2 +-
+ fs/erofs/zmap.c                                    |  2 +-
+ fs/exfat/cache.c                                   |  2 +-
+ fs/exfat/fatent.c                                  |  2 +-
+ fs/exfat/nls.c                                     |  2 +-
+ fs/f2fs/dir.c                                      |  2 +-
+ fs/f2fs/recovery.c                                 |  2 +-
+ fs/fat/inode.c                                     |  2 +-
+ fs/hfsplus/wrapper.c                               |  2 +-
+ fs/hpfs/hpfs_fn.h                                  |  2 +-
+ fs/isofs/isofs.h                                   |  2 +-
+ fs/lockd/mon.c                                     |  2 +-
+ fs/nls/nls_ucs2_utils.c                            |  2 +-
+ fs/ntfs3/lib/decompress_common.h                   |  2 +-
+ fs/orangefs/orangefs-kernel.h                      |  2 +-
+ fs/reiserfs/inode.c                                |  2 +-
+ fs/reiserfs/reiserfs.h                             |  2 +-
+ fs/smb/client/cifspdu.h                            |  2 +-
+ fs/smb/client/compress/lz77.c                      |  2 +-
+ fs/smb/server/unicode.c                            |  2 +-
+ fs/xfs/xfs_linux.h                                 |  2 +-
+ include/asm-generic/Kbuild                         |  1 -
+ include/asm-generic/uaccess.h                      |  2 +-
+ include/crypto/chacha.h                            |  2 +-
+ include/crypto/internal/ecc.h                      |  2 +-
+ include/crypto/internal/poly1305.h                 |  2 +-
+ include/crypto/sha1_base.h                         |  2 +-
+ include/crypto/sha256_base.h                       |  2 +-
+ include/crypto/sha512_base.h                       |  2 +-
+ include/crypto/sm3_base.h                          |  2 +-
+ include/crypto/utils.h                             |  2 +-
+ include/linux/ceph/decode.h                        |  2 +-
+ include/linux/ceph/libceph.h                       |  2 +-
+ include/linux/etherdevice.h                        |  2 +-
+ include/linux/ieee80211.h                          |  2 +-
+ include/linux/mtd/map.h                            |  2 +-
+ include/linux/ptp_classify.h                       |  2 +-
+ include/linux/sunrpc/xdr.h                         |  2 +-
+ include/linux/tpm.h                                |  2 +-
+ include/{asm-generic => linux}/unaligned.h         |  6 ++---
+ include/net/bluetooth/l2cap.h                      |  2 +-
+ include/net/calipso.h                              |  2 +-
+ include/net/cipso_ipv4.h                           |  2 +-
+ include/net/ieee80211_radiotap.h                   |  2 +-
+ include/net/mac80211.h                             |  2 +-
+ include/net/mac802154.h                            |  2 +-
+ include/net/netfilter/nf_tables.h                  |  2 +-
+ include/rdma/ib_hdrs.h                             |  2 +-
+ include/rdma/iba.h                                 |  2 +-
+ include/scsi/scsi_transport_fc.h                   |  2 +-
+ include/target/target_core_backend.h               |  2 +-
+ kernel/bpf/core.c                                  |  2 +-
+ kernel/debug/gdbstub.c                             |  2 +-
+ lib/842/842.h                                      |  2 +-
+ lib/crypto/aes.c                                   |  2 +-
+ lib/crypto/blake2s-generic.c                       |  2 +-
+ lib/crypto/chacha.c                                |  2 +-
+ lib/crypto/chacha20poly1305-selftest.c             |  2 +-
+ lib/crypto/chacha20poly1305.c                      |  2 +-
+ lib/crypto/curve25519-fiat32.c                     |  2 +-
+ lib/crypto/curve25519-hacl64.c                     |  2 +-
+ lib/crypto/des.c                                   |  2 +-
+ lib/crypto/memneq.c                                |  2 +-
+ lib/crypto/poly1305-donna32.c                      |  2 +-
+ lib/crypto/poly1305-donna64.c                      |  2 +-
+ lib/crypto/poly1305.c                              |  2 +-
+ lib/crypto/sha1.c                                  |  2 +-
+ lib/crypto/sha256.c                                |  2 +-
+ lib/crypto/utils.c                                 |  2 +-
+ lib/decompress_unlz4.c                             |  2 +-
+ lib/decompress_unlzo.c                             |  2 +-
+ lib/hexdump.c                                      |  2 +-
+ lib/lz4/lz4_compress.c                             |  2 +-
+ lib/lz4/lz4_decompress.c                           |  2 +-
+ lib/lz4/lz4defs.h                                  |  2 +-
+ lib/lzo/lzo1x_compress.c                           |  2 +-
+ lib/lzo/lzo1x_decompress_safe.c                    |  2 +-
+ lib/pldmfw/pldmfw.c                                |  2 +-
+ lib/random32.c                                     |  2 +-
+ lib/siphash.c                                      |  2 +-
+ lib/string.c                                       |  2 +-
+ lib/vsprintf.c                                     |  2 +-
+ lib/xxhash.c                                       |  2 +-
+ lib/xz/xz_private.h                                |  2 +-
+ lib/zstd/common/mem.h                              |  2 +-
+ net/802/garp.c                                     |  2 +-
+ net/802/mrp.c                                      |  2 +-
+ net/batman-adv/distributed-arp-table.c             |  2 +-
+ net/bluetooth/bnep/core.c                          |  2 +-
+ net/bluetooth/coredump.c                           |  2 +-
+ net/bluetooth/eir.h                                |  2 +-
+ net/bluetooth/hci_core.c                           |  2 +-
+ net/bluetooth/hci_event.c                          |  2 +-
+ net/bluetooth/hci_sock.c                           |  2 +-
+ net/bluetooth/mgmt.c                               |  2 +-
+ net/bluetooth/mgmt_util.c                          |  2 +-
+ net/bluetooth/rfcomm/core.c                        |  2 +-
+ net/bridge/br_fdb.c                                |  2 +-
+ net/bridge/br_stp_bpdu.c                           |  2 +-
+ net/caif/cfrfml.c                                  |  2 +-
+ net/core/drop_monitor.c                            |  2 +-
+ net/core/filter.c                                  |  2 +-
+ net/core/net-traces.c                              |  2 +-
+ net/core/netpoll.c                                 |  2 +-
+ net/core/sock.c                                    |  2 +-
+ net/core/tso.c                                     |  2 +-
+ net/dccp/ccids/ccid3.c                             |  2 +-
+ net/dccp/options.c                                 |  2 +-
+ net/ipv4/cipso_ipv4.c                              |  2 +-
+ net/ipv4/ip_options.c                              |  2 +-
+ net/ipv4/tcp_input.c                               |  2 +-
+ net/ipv6/addrconf.c                                |  2 +-
+ net/ipv6/calipso.c                                 |  2 +-
+ net/mac80211/key.c                                 |  2 +-
+ net/mac80211/mesh.c                                |  2 +-
+ net/mac80211/mesh_hwmp.c                           |  2 +-
+ net/mac80211/michael.c                             |  2 +-
+ net/mac80211/mlme.c                                |  2 +-
+ net/mac80211/ocb.c                                 |  2 +-
+ net/mac80211/rx.c                                  |  2 +-
+ net/mac80211/status.c                              |  2 +-
+ net/mac80211/tkip.c                                |  2 +-
+ net/mac80211/tx.c                                  |  2 +-
+ net/mac80211/wep.c                                 |  2 +-
+ net/mac80211/wpa.c                                 |  2 +-
+ net/mac802154/rx.c                                 |  2 +-
+ net/mac802154/tx.c                                 |  2 +-
+ net/mptcp/crypto.c                                 |  2 +-
+ net/netfilter/ipvs/ip_vs_ftp.c                     |  2 +-
+ net/netfilter/ipvs/ip_vs_sync.c                    |  2 +-
+ net/netfilter/nf_conntrack_proto_tcp.c             |  2 +-
+ net/netfilter/nf_synproxy_core.c                   |  2 +-
+ net/netfilter/nft_byteorder.c                      |  2 +-
+ net/netfilter/nft_exthdr.c                         |  2 +-
+ net/phonet/af_phonet.c                             |  2 +-
+ net/sched/em_cmp.c                                 |  2 +-
+ net/sunrpc/xprtrdma/svc_rdma_recvfrom.c            |  2 +-
+ net/sunrpc/xprtrdma/svc_rdma_sendto.c              |  2 +-
+ net/tls/trace.h                                    |  2 +-
+ net/wireless/radiotap.c                            |  2 +-
+ net/xfrm/xfrm_user.c                               |  2 +-
+ security/apparmor/policy_unpack.c                  |  2 +-
+ security/keys/trusted-keys/trusted_tpm2.c          |  2 +-
+ sound/i2c/cs8427.c                                 |  2 +-
+ sound/pci/hda/hda_eld.c                            |  2 +-
+ sound/pci/hda/tas2781_hda_i2c.c                    |  2 +-
+ sound/soc/codecs/adau1701.c                        |  2 +-
+ sound/soc/codecs/adau17x1.c                        |  2 +-
+ sound/soc/codecs/pcm6240.c                         |  2 +-
+ sound/soc/codecs/peb2466.c                         |  2 +-
+ sound/soc/codecs/sigmadsp-i2c.c                    |  2 +-
+ sound/soc/codecs/tas2781-fmwlib.c                  |  2 +-
+ sound/soc/codecs/tas2781-i2c.c                     |  2 +-
+ sound/soc/codecs/tas571x.c                         |  2 +-
+ sound/soc/codecs/tlv320aic31xx.c                   |  2 +-
+ sound/soc/codecs/wm5102.c                          |  2 +-
+ sound/soc/codecs/wm8958-dsp2.c                     |  2 +-
+ sound/soc/sof/iomem-utils.c                        |  2 +-
+ sound/soc/sof/sof-utils.c                          |  2 +-
+ tools/arch/x86/lib/insn.c                          |  2 +-
+ tools/include/{asm-generic => linux}/unaligned.h   |  6 ++---
+ tools/perf/check-headers.sh                        |  2 +-
+ .../util/arm-spe-decoder/arm-spe-pkt-decoder.c     |  2 +-
+ .../util/intel-pt-decoder/intel-pt-pkt-decoder.c   |  2 +-
+ tools/testing/cxl/test/mem.c                       |  2 +-
+ .../bpf/progs/test_tcp_custom_syncookie.h          |  2 +-
+ 854 files changed, 876 insertions(+), 890 deletions(-)
+ delete mode 100644 arch/arc/include/asm/unaligned.h
+ create mode 100644 arch/arc/kernel/unaligned.h
+ delete mode 100644 arch/parisc/include/asm/unaligned.h
+ create mode 100644 arch/parisc/kernel/unaligned.h
+ rename include/{asm-generic => linux}/unaligned.h (96%)
+ rename tools/include/{asm-generic => linux}/unaligned.h (97%)
 
