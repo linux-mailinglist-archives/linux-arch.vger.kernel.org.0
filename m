@@ -1,73 +1,60 @@
-Return-Path: <linux-arch+bounces-7617-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7618-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9550F98CA99
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Oct 2024 03:19:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 259BB98CB82
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Oct 2024 05:24:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 16D59B238A7
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Oct 2024 01:19:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 564991C21937
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Oct 2024 03:24:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B42E1FC8;
-	Wed,  2 Oct 2024 01:19:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 634F32F22;
+	Wed,  2 Oct 2024 03:23:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qZrB0rAt"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="D75FSPtC"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 622BA567D;
-	Wed,  2 Oct 2024 01:19:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D9F2DF59;
+	Wed,  2 Oct 2024 03:23:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727831942; cv=none; b=PXuxc6+3eRkCcLtxnBN0a8ZU2p0nBEqxHANnim4GREVBnvNr34pwOrUm+s9acoJhxjx3sYQd23m+b8JiNA4ecSxCjSQ4xdDXSAn4Gs4hNqxo+eMavB4UqkWDhCnfZOBen45XsQtf5jrEQ2seM4dQUIHHlmOG41lWaAd4CXyCF6k=
+	t=1727839427; cv=none; b=FX3/9jxOAvmz4j2GNh7E96iozJxmaQzKsQe0eYY+iR9Lm4KOAOqkGdFaX4Y1E20Q4MuTgyEr81hPPHFdfpOA3whGOBrIuj2dVync+akdMM5XFtIjNtVh2M3a+tt8ytYLwLl0MJlXPDERTkd7c7K/brsPi0/wIqxXcbcbO4v6rE4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727831942; c=relaxed/simple;
-	bh=z31U8u7Saetd9Yh86iw2djS1AiJmkXhk8gUFFgbOklo=;
+	s=arc-20240116; t=1727839427; c=relaxed/simple;
+	bh=rxd0x/69N9j1RO08S9L0U0LL0WsLv4aEHYIOTfnjuyk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a8hFMhXcEo5lddmBUCiKG4ZNUmhjIhZggC3nC2sE2GkkZCLfg8N59VN7tVWWdC8dEQvoByIego8uG17orPcMByJXe8tsa3WbuCHgTPDDxNP3hgNDltKoAIE1fYq14UX9HO+9vNjXedzkYJqjgSu04+0FVRvUUI6L3i5Thclstb0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qZrB0rAt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9690BC4CEC6;
-	Wed,  2 Oct 2024 01:18:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727831942;
-	bh=z31U8u7Saetd9Yh86iw2djS1AiJmkXhk8gUFFgbOklo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qZrB0rAteuEIVVZH0mMb3PsniT3C5p5hMCdpGmD1l63d1VJnq+tHzzVGhZt+LE48c
-	 tgkULQ4U/nNcebkdhObCHGtO2MnETeQzx1mfkN66t+tFejs9SN0NaQXejFMSLZc5XR
-	 hFMq07gRUIIN1ZUveDzNKEf8w6849Bse3NZngil87XKkl02Izr5BWVkXnJHXlaLuyP
-	 tdWFgqLtz5h5R94CQfiNVfT3cbHtpDi3trI9QkfOTJrGItQ5ocTmOoU1/8JQf6ynRn
-	 gJC01fd6253tQcb0lF2Ge+R5u1VCC24QeB+8S99cpPoR6OopmwS6zE8IoLKVU7LS7k
-	 vDcfFB7h2gD3A==
-Date: Tue, 1 Oct 2024 18:18:58 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Wentao Zhang <wentaoz5@illinois.edu>
-Cc: Matt.Kelly2@boeing.com, akpm@linux-foundation.org,
-	andrew.j.oppelt@boeing.com, anton.ivanov@cambridgegreys.com,
-	ardb@kernel.org, arnd@arndb.de, bhelgaas@google.com, bp@alien8.de,
-	chuck.wolber@boeing.com, dave.hansen@linux.intel.com,
-	dvyukov@google.com, hpa@zytor.com, jinghao7@illinois.edu,
-	johannes@sipsolutions.net, jpoimboe@kernel.org,
-	justinstitt@google.com, kees@kernel.org, kent.overstreet@linux.dev,
-	linux-arch@vger.kernel.org, linux-efi@vger.kernel.org,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
-	llvm@lists.linux.dev, luto@kernel.org, marinov@illinois.edu,
-	masahiroy@kernel.org, maskray@google.com,
-	mathieu.desnoyers@efficios.com, matthew.l.weber3@boeing.com,
-	mhiramat@kernel.org, mingo@redhat.com, morbo@google.com,
-	ndesaulniers@google.com, oberpar@linux.ibm.com, paulmck@kernel.org,
-	peterz@infradead.org, richard@nod.at, rostedt@goodmis.org,
-	samitolvanen@google.com, samuel.sarkisian@boeing.com,
-	steven.h.vanderleest@boeing.com, tglx@linutronix.de,
-	tingxur@illinois.edu, tyxu@illinois.edu, x86@kernel.org
-Subject: Re: [PATCH v2 4/4] x86: enable llvm-cov support
-Message-ID: <20241002011858.GD555609@thelio-3990X>
-References: <20240824230641.385839-1-wentaoz5@illinois.edu>
- <20240905043245.1389509-1-wentaoz5@illinois.edu>
- <20240905043245.1389509-5-wentaoz5@illinois.edu>
+	 Content-Type:Content-Disposition:In-Reply-To; b=m0g2wtnt3BippRGp6mgTQpUB+JfjmVAUL/iGsE8JhnH/zxd3AmmXydo7kgMpXc1ZkTlLmmpFScwfY4b1zRi3iKGdKKv0jKuj3Rlop35+CtAl+yw/GwiiLNkfh1xh6CswF0VALnrNM97QePle5nsbl/IO+Tv/QJPULuGccUobMYw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=D75FSPtC; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=v22S1wy+8+mstC2IdfqvhGcg9lttAnvty2xj+9m6TX0=; b=D75FSPtC/pmXkEbzPPpGfhjCCW
+	vtIR4awwndzdAAwihfjNKxsWKuXrkjoGCPtSDKPHDkk1cFiRlnMsCR2KvW6P2In9FgM6zk5G1+Ag2
+	6pxn9w6zay5ve0GeE2xtpgsMezcV3/aH6E+Jl2MF+MjfMNYXXvrclgMQpoxy9vNyXkjYhKtyb+KvV
+	y4CaB27TD9Ng45Dx6BYIzZhNvL8Q7jlO9IVS2POR0zfOW5rK/F3UTH03Yjr5ujYMDkedIRmVWs2Sk
+	h9mtQeFxrXULGJT0dn1QjrLolm4otTS2Urz0iK5b0UqxVnGidxj5A78JfxnePHN6LYr3TFtrAvqw+
+	jXmn7WOg==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.98 #2 (Red Hat Linux))
+	id 1svpxm-0000000HZ4M-0WPg;
+	Wed, 02 Oct 2024 03:23:42 +0000
+Date: Wed, 2 Oct 2024 04:23:42 +0100
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Helge Deller <deller@gmx.de>
+Cc: linux-arch@vger.kernel.org,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-parisc@vger.kernel.org, Vineet Gupta <vgupta@kernel.org>
+Subject: Re: [PATCH 1/3] parisc: get rid of private asm/unaligned.h
+Message-ID: <20241002032342.GD4017910@ZenIV>
+References: <20241001195107.GA4017910@ZenIV>
+ <20241001195158.GA4135693@ZenIV>
+ <9e7fa2c6-ae0b-458a-a4ae-a216a3b11a77@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -76,54 +63,26 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240905043245.1389509-5-wentaoz5@illinois.edu>
+In-Reply-To: <9e7fa2c6-ae0b-458a-a4ae-a216a3b11a77@gmx.de>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-On Wed, Sep 04, 2024 at 11:32:45PM -0500, Wentao Zhang wrote:
-> Set ARCH_HAS_* options to "y" in kconfig and include section description in
-
-Is description the right word here? Maybe "include the compiler generated
-sections"? Open to other suggestions.
-
-> linker script.
+On Wed, Oct 02, 2024 at 02:57:48AM +0200, Helge Deller wrote:
+> On 10/1/24 21:51, Al Viro wrote:
+> > Declarations local to arch/*/kernel/*.c are better off *not* in a public
+> > header - arch/parisc/kernel/unaligned.h is just fine for those
+> > bits.
+> > 
+> > With that done parisc asm/unaligned.h is reduced to include
+> > of asm-generic/unaligned.h and can be removed - unaligned.h is in
+> > mandatory-y in include/asm-generic/Kbuild.
+> > 
+> > Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 > 
-> Signed-off-by: Wentao Zhang <wentaoz5@illinois.edu>
-> Reviewed-by: Chuck Wolber <chuck.wolber@boeing.com>
-> Tested-by: Chuck Wolber <chuck.wolber@boeing.com>
-
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-
-> ---
->  arch/x86/Kconfig              | 2 ++
->  arch/x86/kernel/vmlinux.lds.S | 2 ++
->  2 files changed, 4 insertions(+)
+> Acked-by: Helge Deller <deller@gmx.de>
 > 
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index 007bab9f2..e0a8f7b42 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -85,6 +85,8 @@ config X86
->  	select ARCH_HAS_FORTIFY_SOURCE
->  	select ARCH_HAS_GCOV_PROFILE_ALL
->  	select ARCH_HAS_KCOV			if X86_64
-> +	select ARCH_HAS_LLVM_COV		if X86_64
-> +	select ARCH_HAS_LLVM_COV_PROFILE_ALL	if X86_64
->  	select ARCH_HAS_KERNEL_FPU_SUPPORT
->  	select ARCH_HAS_MEM_ENCRYPT
->  	select ARCH_HAS_MEMBARRIER_SYNC_CORE
-> diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
-> index 6e73403e8..904337722 100644
-> --- a/arch/x86/kernel/vmlinux.lds.S
-> +++ b/arch/x86/kernel/vmlinux.lds.S
-> @@ -191,6 +191,8 @@ SECTIONS
->  
->  	BUG_TABLE
->  
-> +	LLVM_COV_DATA
-> +
->  	ORC_UNWIND_TABLE
->  
->  	. = ALIGN(PAGE_SIZE);
-> -- 
-> 2.45.2
-> 
+> Al, I prefer if you could take it through your "for-next"
+> tree, as you offered in your header mail.
+
+Done; that commit (with your Acked-by) is in #for-next (via #next-unaligned).
+If Vineet is OK with the arc one, it'll also go there...
 
