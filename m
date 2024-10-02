@@ -1,60 +1,73 @@
-Return-Path: <linux-arch+bounces-7618-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7619-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 259BB98CB82
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Oct 2024 05:24:09 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C58798CC3A
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Oct 2024 06:53:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 564991C21937
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Oct 2024 03:24:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 160F8B2203F
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Oct 2024 04:53:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 634F32F22;
-	Wed,  2 Oct 2024 03:23:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84703171AF;
+	Wed,  2 Oct 2024 04:53:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="D75FSPtC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CEkKxegf"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D9F2DF59;
-	Wed,  2 Oct 2024 03:23:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 453EC11187;
+	Wed,  2 Oct 2024 04:53:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727839427; cv=none; b=FX3/9jxOAvmz4j2GNh7E96iozJxmaQzKsQe0eYY+iR9Lm4KOAOqkGdFaX4Y1E20Q4MuTgyEr81hPPHFdfpOA3whGOBrIuj2dVync+akdMM5XFtIjNtVh2M3a+tt8ytYLwLl0MJlXPDERTkd7c7K/brsPi0/wIqxXcbcbO4v6rE4=
+	t=1727844832; cv=none; b=nqioNcvCzatyIGqCGChqycNpkyOdH4LQY4mAST6gZsWbyAnDdiGAs5JeH75FWg/H2BuoZyrQaKub7Mp27Uv1+g08OLsatM03VEyicA5ylBbMX5gbGFiL6UF6rbkGC6DdROarjsIj0hHoxWWo4BCDqu30ha4rN+BlXPgE9cv5U+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727839427; c=relaxed/simple;
-	bh=rxd0x/69N9j1RO08S9L0U0LL0WsLv4aEHYIOTfnjuyk=;
+	s=arc-20240116; t=1727844832; c=relaxed/simple;
+	bh=B2ZAQKodtjVu7cBwU2oU+uI8JVPYDT8FSzV0LYMamag=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m0g2wtnt3BippRGp6mgTQpUB+JfjmVAUL/iGsE8JhnH/zxd3AmmXydo7kgMpXc1ZkTlLmmpFScwfY4b1zRi3iKGdKKv0jKuj3Rlop35+CtAl+yw/GwiiLNkfh1xh6CswF0VALnrNM97QePle5nsbl/IO+Tv/QJPULuGccUobMYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=D75FSPtC; arc=none smtp.client-ip=62.89.141.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=v22S1wy+8+mstC2IdfqvhGcg9lttAnvty2xj+9m6TX0=; b=D75FSPtC/pmXkEbzPPpGfhjCCW
-	vtIR4awwndzdAAwihfjNKxsWKuXrkjoGCPtSDKPHDkk1cFiRlnMsCR2KvW6P2In9FgM6zk5G1+Ag2
-	6pxn9w6zay5ve0GeE2xtpgsMezcV3/aH6E+Jl2MF+MjfMNYXXvrclgMQpoxy9vNyXkjYhKtyb+KvV
-	y4CaB27TD9Ng45Dx6BYIzZhNvL8Q7jlO9IVS2POR0zfOW5rK/F3UTH03Yjr5ujYMDkedIRmVWs2Sk
-	h9mtQeFxrXULGJT0dn1QjrLolm4otTS2Urz0iK5b0UqxVnGidxj5A78JfxnePHN6LYr3TFtrAvqw+
-	jXmn7WOg==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.98 #2 (Red Hat Linux))
-	id 1svpxm-0000000HZ4M-0WPg;
-	Wed, 02 Oct 2024 03:23:42 +0000
-Date: Wed, 2 Oct 2024 04:23:42 +0100
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: Helge Deller <deller@gmx.de>
-Cc: linux-arch@vger.kernel.org,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-parisc@vger.kernel.org, Vineet Gupta <vgupta@kernel.org>
-Subject: Re: [PATCH 1/3] parisc: get rid of private asm/unaligned.h
-Message-ID: <20241002032342.GD4017910@ZenIV>
-References: <20241001195107.GA4017910@ZenIV>
- <20241001195158.GA4135693@ZenIV>
- <9e7fa2c6-ae0b-458a-a4ae-a216a3b11a77@gmx.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=V6y8he0t4VGMI2so2t1iMOKkO0dfm5gQ5DLjmxm1hILqwm+wUWDcYGhlfiN0W1hFJoSPEVH96mNJPCbo2O0eXq94N3mxFhkKJdF2pVIhKg5MhzZCi0vW2YcX1VFMLydjIluhp4LmgHlk1Oh+X7LUFTs1XlI+uEK4vl1XduCNzk4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CEkKxegf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31909C4CEC5;
+	Wed,  2 Oct 2024 04:53:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727844831;
+	bh=B2ZAQKodtjVu7cBwU2oU+uI8JVPYDT8FSzV0LYMamag=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CEkKxegfpkX4Zw2CaHm5skQNLmPRJhWvRWrfwNVlh+TFSz9BPuRZdgUJT+gZ23vFJ
+	 IxhXfrAdi/5Tzs2K9tvjU3gGZB7VVKI4WK6iDn0vYP8Or/TvoXD3w3WnjkCdL7pIqo
+	 yAvyTAGmv5OmjrtPe8R7vrLNoxKPxUOfc15RGQ+nZr1J+I99IYLiEMGzK5HchaL0Rb
+	 fCgXSnWAkdoQPpNtPUVza5lz7aLWm5cSFY86HH4WWW1emta+IbTxS2QRhxf7N54ops
+	 vKi+l2ymUNL9BK54SZfzJOyLLVNlGP4C8ThAbAA+5rGKWDt7DLBpJn9rzmHQgg9i3o
+	 dEWzEr1A+63LQ==
+Date: Tue, 1 Oct 2024 21:53:47 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Wentao Zhang <wentaoz5@illinois.edu>
+Cc: Matt.Kelly2@boeing.com, akpm@linux-foundation.org,
+	andrew.j.oppelt@boeing.com, anton.ivanov@cambridgegreys.com,
+	ardb@kernel.org, arnd@arndb.de, bhelgaas@google.com, bp@alien8.de,
+	chuck.wolber@boeing.com, dave.hansen@linux.intel.com,
+	dvyukov@google.com, hpa@zytor.com, jinghao7@illinois.edu,
+	johannes@sipsolutions.net, jpoimboe@kernel.org,
+	justinstitt@google.com, kees@kernel.org, kent.overstreet@linux.dev,
+	linux-arch@vger.kernel.org, linux-efi@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+	llvm@lists.linux.dev, luto@kernel.org, marinov@illinois.edu,
+	masahiroy@kernel.org, maskray@google.com,
+	mathieu.desnoyers@efficios.com, matthew.l.weber3@boeing.com,
+	mhiramat@kernel.org, mingo@redhat.com, morbo@google.com,
+	ndesaulniers@google.com, oberpar@linux.ibm.com, paulmck@kernel.org,
+	peterz@infradead.org, richard@nod.at, rostedt@goodmis.org,
+	samitolvanen@google.com, samuel.sarkisian@boeing.com,
+	steven.h.vanderleest@boeing.com, tglx@linutronix.de,
+	tingxur@illinois.edu, tyxu@illinois.edu, x86@kernel.org
+Subject: Re: [PATCH v2 0/4] Enable measuring the kernel's Source-based Code
+ Coverage and MC/DC with Clang
+Message-ID: <20241002045347.GE555609@thelio-3990X>
+References: <20240824230641.385839-1-wentaoz5@illinois.edu>
+ <20240905043245.1389509-1-wentaoz5@illinois.edu>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -63,26 +76,44 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9e7fa2c6-ae0b-458a-a4ae-a216a3b11a77@gmx.de>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+In-Reply-To: <20240905043245.1389509-1-wentaoz5@illinois.edu>
 
-On Wed, Oct 02, 2024 at 02:57:48AM +0200, Helge Deller wrote:
-> On 10/1/24 21:51, Al Viro wrote:
-> > Declarations local to arch/*/kernel/*.c are better off *not* in a public
-> > header - arch/parisc/kernel/unaligned.h is just fine for those
-> > bits.
-> > 
-> > With that done parisc asm/unaligned.h is reduced to include
-> > of asm-generic/unaligned.h and can be removed - unaligned.h is in
-> > mandatory-y in include/asm-generic/Kbuild.
-> > 
-> > Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-> 
-> Acked-by: Helge Deller <deller@gmx.de>
-> 
-> Al, I prefer if you could take it through your "for-next"
-> tree, as you offered in your header mail.
+Hi Wentao,
 
-Done; that commit (with your Acked-by) is in #for-next (via #next-unaligned).
-If Vineet is OK with the arc one, it'll also go there...
+I took this series for a spin on next-20241001 with LLVM 19.1.0 using a
+distribution configuration tailored for a local development VM using
+QEMU. You'll notice on the rebase for 6.12-rc1 but there is a small
+conflict in kernel/Makefile due to commit 0e8b67982b48 ("mm: move
+kernel/numa.c to mm/").
+
+I initially did the build on one of my test machines which has 16
+threads with 32GB of RAM and ld.lld got killed while linking vmlinux.o.
+Is your comment in the MC/DC patch "more memory is consumed if larger
+decisions are getting counted" relevant here or is that talking about
+runtime memory on the target device? I assume the latter but I figured I
+would make sure. If not, it might be worth a comment somewhere that this
+can also require some heftier build resources possibly? If that is not
+expected, I am happy to help look into why it is happening.
+
+I was able to successfully build that same configuration and setup with
+my primary workstation, which is much beefier. Unfortunately, the
+resulting kernel did not boot with my usual VM testing setup. I will see
+if I can narrow down a particular configuration option that causes this
+tomorrow because I did a test with defconfig +
+CONFIG_LLVM_COV_PROFILE_ALL and it booted fine. Perhaps some other
+option that is not compatible with this? I'll follow up with more
+information as I have it.
+
+On the integration front, I think the -mm tree, run by Andrew Morton,
+would probably be the best place to land this with Acks from the -tip
+folks for the x86 bits? Once the issue above has been understood, I
+think you can send v3 with any of the comments I made addressed and a
+potential fix for the above issue if necessary directly to him, instead
+of just on cc, so that it gets his attention. Other maintainers are free
+to argue that it should go through their trees instead but I think it
+would be good to decide on that sooner rather than later so this
+patchset is not stuck in limbo.
+
+Cheers,
+Nathan
 
