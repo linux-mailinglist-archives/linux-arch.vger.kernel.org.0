@@ -1,113 +1,196 @@
-Return-Path: <linux-arch+bounces-7623-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7624-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE53098DE39
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Oct 2024 17:02:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F96598DF19
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Oct 2024 17:28:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5D9471F26B1D
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Oct 2024 15:02:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1FC3B286A77
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Oct 2024 15:28:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B47CB1CF7D4;
-	Wed,  2 Oct 2024 15:02:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 596B81D1754;
+	Wed,  2 Oct 2024 15:26:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ftkGpiO2";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="66EOsvZj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KFl7hH8b"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B6FC1EEE6;
-	Wed,  2 Oct 2024 15:02:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E94A1D1747;
+	Wed,  2 Oct 2024 15:26:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727881324; cv=none; b=eQTD/n1ZfeNUwZPCBktYN9tVRVlGpdlyFt6AXI8ABc0fUxT8ZryxyNDcOjn41+ekgf2IFMwSQXiPfCEYqTGiS31MAmTZXnpk1Iy2ZmanI4C6SnglcooR1wErHN0GnAdiSOiioTRHapZdAr4TSiS0y3+/+m2nU0mTwSDIOK5g4B8=
+	t=1727882769; cv=none; b=pxdDcpYNhQzaFrbfWWTdoAy5T2lzBk36UAcJylwYNZnzgz7oIZa7yGEWrRWsjEwQzjF52DDfE+54Ep3V2sLxCV8QzOStNvcLerPGyXrJQpH4arJcbCIpoevP+hCUt5ZXKrPR91XS8nhrlsR1O3NqvuUjcZs+ky9x/HauWjGL0E0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727881324; c=relaxed/simple;
-	bh=kHPrgvuXQnFDt4DC9o2RoZFRavHHbItmknfMXeNGOgM=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=XTkydji5xL9N1NtlOyoxOTKItNdi44qno+Bz6cmrvkHEMSzYcQQ7fFCAxpXKBssiEcBAmsT7qYzHOSl4XNjtVTzaTeI1Y0hNyGaXQTRG42ut4FdfUeWsU6KQhTawFI75cfx5ozkUp1uTr07dFjuK5TNMYmB819ulgg16USsU5wo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ftkGpiO2; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=66EOsvZj; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1727881320;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zTt9TS57bBm1l7LQiiCDKRjlEdSZZZ3DNQMytk52ARU=;
-	b=ftkGpiO2tQC3XBHrw0qujIV1hNeH8PfnQMQ9VwuLCIjxOCO4+RIEAn9I80jccRGLuUfOSk
-	qXDh4sI7V1MWbCrSHSvJfBEk8auCJI7R8ToxkbfDQSDW3bm1jTqVibdG24MrR1GkrAzUv7
-	Nglg5c6UKJD0HkpjdmTN43ERgM4RzKphWDH/FzS7rAkB6mBTwRcgr3It2HD85k6P6AksaL
-	TKjMavUpYwVbOYdL7WX09DxO+A6FMPf31BDuSzqfaSYwbj/UxUygslhbSgNLXtVjaN8iVG
-	f8x+SSD8udWBVY6NiUPl5wAkEiUQIWiCAFA2kEwDfY+0UziV4DdNXPHQvjrFJg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1727881320;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zTt9TS57bBm1l7LQiiCDKRjlEdSZZZ3DNQMytk52ARU=;
-	b=66EOsvZjXy/H8TUUFSCmjovMyk1OBLtQIimAE8qOVHy7xmFexHyu16tDAVzVdvfGB0RUNK
-	FPjKICAnWvLC8OCQ==
-To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>, Frederic Weisbecker
- <frederic@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Anna-Maria
- Behnsen <anna-maria@linutronix.de>
-Cc: linux-kernel@vger.kernel.org, Len Brown <len.brown@intel.com>, "Rafael
- J. Wysocki" <rafael@kernel.org>, Anna-Maria Behnsen
- <anna-maria@linutronix.de>, Andrew Morton <akpm@linux-foundation.org>,
- damon@lists.linux.dev, linux-mm@kvack.org, SeongJae Park <sj@kernel.org>,
- Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org, Heiner Kallweit
- <hkallweit1@gmail.com>, "David S. Miller" <davem@davemloft.net>, Andy
- Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>, Dwaipayan
- Ray <dwaipayanray1@gmail.com>, Liam Girdwood <lgirdwood@gmail.com>, Mark
- Brown <broonie@kernel.org>, Andrew Lunn <andrew@lunn.ch>, Jaroslav Kysela
- <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, netdev@vger.kernel.org,
- linux-sound@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>, Nathan
- Lynch <nathanl@linux.ibm.com>, linuxppc-dev@lists.ozlabs.org, Mauro
- Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org
-Subject: Re: [PATCH v2 00/15] timers: Cleanup delay/sleep related mess
-In-Reply-To: <c794b4a6-468d-4552-a6d6-8185f49339d3@wanadoo.fr>
-References: <20240911-devel-anna-maria-b4-timers-flseep-v2-0-b0d3f33ccfe0@linutronix.de>
- <c794b4a6-468d-4552-a6d6-8185f49339d3@wanadoo.fr>
-Date: Wed, 02 Oct 2024 17:02:00 +0200
-Message-ID: <87ttduwntj.ffs@tglx>
+	s=arc-20240116; t=1727882769; c=relaxed/simple;
+	bh=h4ubFnE46xeI8wN9+4BYkWAbARBnOtNFKXLTjQ3iYxs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=N/0WAUaW4NJwGkxGX5009XaAeckcRtfkKx7gfzvlM4Gkocb9cmCxHF2L5lWCj2rn8N47J8Ez/zcF4zlL7sQk5DftsnBlzSLAPnXoBKB3bV6fVlicf+0qdaeNWh/SNlS5TqYjVvRDSPp01RUfzGD+aUF3fkVbuDTOpd9YXrdSw1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KFl7hH8b; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E446C4CEDA;
+	Wed,  2 Oct 2024 15:26:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727882768;
+	bh=h4ubFnE46xeI8wN9+4BYkWAbARBnOtNFKXLTjQ3iYxs=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=KFl7hH8baEyBXLc9YdutCabBIIsebd7h0c09OkpKue3HyYk0dPbzyKEPIAYZw8EA0
+	 OSqK38e9b/ZQqENWs+TnswX2GzFQqN2nL0SRR4IVxtTfVUlSFGfffBS7Jg4BMNQIz8
+	 HMkEBAAndduR9nNbwqZIze+PTqfQzCMnCy8hpJdW/BS84scv9IwY4mniaBcqBDDZua
+	 ZBd9lUJThYLwrBMX2si1+483PfVcboCG4r+GJNcdiKhotGYBsctAy1Sareu7r1J5jh
+	 Wd6eNnpiy5IQorN76AsuNn8HDWHvuwIblRMKj84P4HPuwkx+3e6SIsEVpTzuDrCbzg
+	 6kBiHvv5uu5wg==
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2fad15b3eeeso33591821fa.2;
+        Wed, 02 Oct 2024 08:26:08 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU922GEKNn6LZhgnjGS2QUeFmjo+wnFmMpy6eLQ9G1fz3j8xjPAdP4x+bgpZT5yNeZM2iOTOyrEr9RVWLOG+10PUA==@vger.kernel.org, AJvYcCU9kYaw7wsEzF4tsjQJLxFZNX25xxykStLPwqRBfhbVTHZNmKJWrxmuoRjTCmpm/SYJBL410TQPDCI=@vger.kernel.org, AJvYcCUB2rkMUyu2bNGeO8wBtIsMLvKa7lZydMJbMW4Bxxwrpvbko+jXVLVm2TFB0QhNmbJHDKztlSMs/CZ30cgq@vger.kernel.org, AJvYcCUZR7aY4XoONkPxt8Jcbz94wfoixa6beFi/SKdvhW7JfaTkMo+dA8QeVnzzRB5vcawoSZcsEB7cPdnK@vger.kernel.org, AJvYcCUsoQRScStowdXVQtBdYa3HvUL9e5/dG45q/I83H+AQW+ho8c2SudVrPnoxlEqbjKOzkRKnKqbYV+2wvw==@vger.kernel.org, AJvYcCUu9InXWCk13ff5Oj0NQcOKHn/6NTaWalcta+coZJmsqYAmPcPyeYAGEbtRQ29JyUuzbHLhyV7UKeL3FHlz@vger.kernel.org, AJvYcCVKr38Oz3ZFNutXiDquBZrOwm5m+8wRi5xnsOrR3kLvhzLszjawCfumBbNc4Hkj69L2ZIDl7sJh7y3w@vger.kernel.org, AJvYcCVaaUroALnYz6xKiYm88LhCZuu19l96wAufzFzsmH8wIIBp7TwOoNoO9e8g4ik/Djm/1/3TnAZWfUre3Xnp@vger.kernel.org, AJvYcCWMHAODt0YnDCyNxv3MmFkzwUecMJydYA4sVjLanfncSGmSDC4moqSDxZeT7+1o3gYbqfvm5u4FvRGKla64Vfk=@vger.kernel.org, AJvYcCWtQclJEh22
+ PR9XC9EWOF4gjdoQ+uWRmSHmaZk6bVROo408of0WP2MKFvMJme9Xz6p/6zw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwTwyEdmFi8ER46JM4uTfUuPkVftZSGfO7CrZlzB1Ow2LT9BTD/
+	fAjRiNVRf70MN79/xoOJN3u9o0V2lTeXhQaRKLB3vAKfNVN5zkxRRzHU94c0OhveBmDUZK8frAK
+	GxV187uqGsHmJFwQqHvVvZJw05Xg=
+X-Google-Smtp-Source: AGHT+IFjphesp/WsGS3U0PINOY0QAoUmw2aq4caedP0chVHCCyNa6a0rrCXQNZVU8wv2cCgEaQKnFwQhCH9Io7gBKbI=
+X-Received: by 2002:a05:651c:1502:b0:2fa:d84a:bd83 with SMTP id
+ 38308e7fff4ca-2fae106e266mr23266981fa.24.1727882766692; Wed, 02 Oct 2024
+ 08:26:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+References: <20240925150059.3955569-30-ardb+git@google.com>
+ <20240925150059.3955569-55-ardb+git@google.com> <99446363-152f-43a8-8b74-26f0d883a364@zytor.com>
+In-Reply-To: <99446363-152f-43a8-8b74-26f0d883a364@zytor.com>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Wed, 2 Oct 2024 17:25:54 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXG7ZELM8D7Ft3H+dD5BHqENjY9eQ9kzsq2FzTgP5+2W3A@mail.gmail.com>
+Message-ID: <CAMj1kXG7ZELM8D7Ft3H+dD5BHqENjY9eQ9kzsq2FzTgP5+2W3A@mail.gmail.com>
+Subject: Re: [RFC PATCH 25/28] x86: Use PIE codegen for the core kernel
+To: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, x86@kernel.org, 
+	Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Uros Bizjak <ubizjak@gmail.com>, 
+	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Vitaly Kuznetsov <vkuznets@redhat.com>, Juergen Gross <jgross@suse.com>, 
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Kees Cook <kees@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Keith Packard <keithp@keithp.com>, 
+	Justin Stitt <justinstitt@google.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	Kan Liang <kan.liang@linux.intel.com>, linux-doc@vger.kernel.org, 
+	linux-pm@vger.kernel.org, kvm@vger.kernel.org, xen-devel@lists.xenproject.org, 
+	linux-efi@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-sparse@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Sep 16 2024 at 22:20, Christophe JAILLET wrote:
-> Le 11/09/2024 =C3=A0 07:13, Anna-Maria Behnsen a =C3=A9crit=C2=A0:
+Hi Peter,
+
+Thanks for taking a look.
+
+On Tue, 1 Oct 2024 at 23:13, H. Peter Anvin <hpa@zytor.com> wrote:
 >
-> not directly related to your serie, but some time ago I sent a patch to=20
-> micro-optimize Optimize usleep_range(). (See [1])
+> On 9/25/24 08:01, Ard Biesheuvel wrote:
+> > From: Ard Biesheuvel <ardb@kernel.org>
+> >
+> > As an intermediate step towards enabling PIE linking for the 64-bit x86
+> > kernel, enable PIE codegen for all objects that are linked into the
+> > kernel proper.
+> >
+> > This substantially reduces the number of relocations that need to be
+> > processed when booting a relocatable KASLR kernel.
+> >
 >
-> The idea is that the 2 parameters of usleep_range() are usually=20
-> constants and some code reordering could easily let the compiler compute=
-=20
-> a few things at compilation time.
+> This really seems like going completely backwards to me.
 >
-> There was consensus on the value of the change (see [2]), but as you are=
-=20
-> touching things here, maybe it makes sense now to save a few cycles at=20
-> runtime and a few bytes of code?
+> You are imposing a more restrictive code model on the kernel, optimizing
+> for boot time in a way that will exert a permanent cost on the running
+> kernel.
+>
 
-For the price of yet another ugly interface and pushing the
-multiplication into the non-constant call sites.
+Fair point about the boot time. This is not the only concern, though,
+and arguably the least important one.
 
-Seriously usleep() is not a hotpath operation and the multiplication is
-not even measurable except in micro benchmarks.
+As I responded to Andi before, it is also about using a code model and
+relocation model that matches the reality of how the code is executed:
+- the early C code runs from the 1:1 mapping, and needs special hacks
+to accommodate this
+- KASLR runs the kernel from a different virtual address than the one
+we told the linker about
 
-Thanks,
+> There is a *huge* difference between the kernel and user space here:
+>
+> KERNEL MEMORY IS PERMANENTLY ALLOCATED, AND IS NEVER SHARED.
+>
 
-        tglx
+No need to shout.
+
+> Dirtying user pages requires them to be unshared and dirty, which is
+> undesirable. Kernel pages are *always* unshared and dirty.
+>
+
+I guess you are referring to the use of a GOT? That is a valid
+concern, but it does not apply here. With hidden visibility and
+compiler command line options like -mdirect-access-extern, all emitted
+symbol references are direct. Disallowing text relocations could be
+trivially enabled with this series if desired, and actually helps
+avoid the tricky bugs we keep fixing in the early startup code that
+executes from the 1:1 mapping (the C code in .head.text)
+
+So it mostly comes down to minor differences in addressing modes, e.g.,
+
+  movq $sym, %reg
+
+actually uses more bytes than
+
+  leaq sym(%rip), %reg
+
+whereas
+
+  movq sym, %reg
+
+and
+
+  movq sym(%rip), %reg
+
+are the same length.
+
+OTOH, indexing a statically allocated global array like
+
+  movl array(,%reg1,4), %reg2
+
+will be converted into
+
+  leaq array(%rip), %reg2
+  movl (%reg2,%reg1,4), %reg2
+
+and is therefore less efficient in terms of code footprint. But in
+general, the x86_64 ISA and psABI are quite flexible in this regard,
+and extrapolating from past experiences with PIC code on i386 is not
+really justified here.
+
+As Andi also pointed out, what ultimately matters is the performance,
+as well as code size where it impacts performance, through the I-cache
+footprint. I'll do some testing before reposting, and maybe not bother
+if the impact is negative.
+
+> > It also brings us much closer to the ordinary PIE relocation model used
+> > for most of user space, which is therefore much better supported and
+> > less likely to create problems as we increase the range of compilers and
+> > linkers that need to be supported.
+>
+> We have been resisting *for ages* making the kernel worse to accomodate
+> broken compilers. We don't "need" to support more compilers -- we need
+> the compilers to support us. We have working compilers; any new compiler
+> that wants to play should be expected to work correctly.
+>
+
+We are in a much better place now than we were before in that regard,
+which is actually how this effort came about: instead of lying to the
+compiler, and maintaining our own pile of scripts and relocation
+tools, we can just do what other arches are doing in Linux, and let
+the toolchain do it for us.
 
