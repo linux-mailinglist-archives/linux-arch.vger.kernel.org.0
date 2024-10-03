@@ -1,212 +1,223 @@
-Return-Path: <linux-arch+bounces-7648-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7649-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D7D198E888
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Oct 2024 04:48:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FC4698E8BE
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Oct 2024 05:14:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CAB14286C99
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Oct 2024 02:47:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C3C8B1C234AA
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Oct 2024 03:14:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0157E1FB4;
-	Thu,  3 Oct 2024 02:47:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BFF6208DA;
+	Thu,  3 Oct 2024 03:14:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R98EI8w5"
+	dkim=pass (2048-bit key) header.d=illinois-edu.20230601.gappssmtp.com header.i=@illinois-edu.20230601.gappssmtp.com header.b="RyXLRa78"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f194.google.com (mail-qk1-f194.google.com [209.85.222.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6123317BA3
-	for <linux-arch@vger.kernel.org>; Thu,  3 Oct 2024 02:47:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D1491E864
+	for <linux-arch@vger.kernel.org>; Thu,  3 Oct 2024 03:14:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727923676; cv=none; b=o927qL15lVubeOMxttNi08siCuoqSSmkjJHHxX0IEXPe4tUiTjUDJLirk9MhBWJKfdMbRgN5/1r01q2u4NQ1agZnGBoY+LGDVVXXpamyG0K7YLPd1DCq7DXmR6ZypFixSxYRhVDV9/VFfltKaJwG/jFAfvWXITAUX7MKccNBJTs=
+	t=1727925276; cv=none; b=uYbM7IfaIkwtUn3xoRDH3vbHYoNZy3eBM95Usb2PtLHIEdqgbsgVTVplnkuQiEKD/f70CVw7YHDjmJgid3Of1sksgRVjaO7PHJN8pEPur7iwyxVyQbNseSQkLGdeC2mrgeX7nv1Y8tOlldd40rxQ9qALGls6mfUwi3ciSRb5zaE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727923676; c=relaxed/simple;
-	bh=K71L9do+WGN4SZJdRdkW2HZ4+LS4Mr+VcoVrOsb086s=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=EM8SWy4UTtoZ+j79yi9wFFqBu2+z1snnWSccIiSZaQMY6IdjUALYR+41pJjbJyR+fhNUP5N6ALbpyP4YEdh4zoFMKTadYYJhY78d8iZ01oDGAs+ix8FNEsV67xP13S+E6fX8TDTokf4dtEw6UuGLnKbdOq9ympcXlR6lC0X7wxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R98EI8w5; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727923672; x=1759459672;
-  h=date:from:to:cc:subject:message-id;
-  bh=K71L9do+WGN4SZJdRdkW2HZ4+LS4Mr+VcoVrOsb086s=;
-  b=R98EI8w5y5OZcIK8+5NFNNTvzLCyakXT4X+xyMDqbaN2UnUPPgw5rSTz
-   oRuvvsba6S4vAK9HlG7xNSIs/g+Xk6ffBD9k4976EaQtFyTBQ2W0ruEK3
-   bCmurim10bBHjfLBdNt5jWJeQ10MOu4Usc4iJsTxmejzn2yqVUUSGOA9H
-   Xx3EmBQFckqYAsPoVzeokLflOPONk1Eah0AP/ufXuC01EK/YrVLjXJ1sL
-   B8EoC60safiNYDPbjU3Gm/376fKi1OulWQ+k+d+qHIcjiLw3TpTq2PoA5
-   NZ/M7+wptUApJkQbwlItPkuWk4/LRzAJiVrXGmeZpOzisalN/WZZQqd+e
-   w==;
-X-CSE-ConnectionGUID: HOgAV1VkSwSBKlgja5/RIg==
-X-CSE-MsgGUID: dnlNvK2WRZiYxtbC2YJK9g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11213"; a="38466175"
-X-IronPort-AV: E=Sophos;i="6.11,173,1725346800"; 
-   d="scan'208";a="38466175"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2024 19:47:52 -0700
-X-CSE-ConnectionGUID: Ox/u3J3ARnmOyuYH5mszXA==
-X-CSE-MsgGUID: GV9CnEi4SDSb7ZQRd895CQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,173,1725346800"; 
-   d="scan'208";a="74207133"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 02 Oct 2024 19:47:51 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1swBsa-000Uqp-27;
-	Thu, 03 Oct 2024 02:47:48 +0000
-Date: Thu, 03 Oct 2024 10:47:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: linux-arch@vger.kernel.org
-Subject: [arnd-asm-generic:asm-generic] BUILD SUCCESS
- f822712a2c69154f9a0a009f8e18fe394eb7766f
-Message-ID: <202410031057.D3b3YkPJ-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1727925276; c=relaxed/simple;
+	bh=jKTsXBcNO/miLEA0jRPsm6kZWhLrFZu0gIUjdZSMDbU=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=UlNhib4g1KHc/EUbMESWyk5+INjzMuTrIR6osfhD0qkERiTDZ+rjXE5y/1QSLNyRPBrC2jrYrj9LQ9KEmF+zrwOYJDm6UyzziULjcHLVDEIN03Ub3ooFShSnJD9jbIV2fDh4SBIqp4qcOb6N2dwsiQ6hTpHdvXrjMGvSlnzUqKY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=illinois.edu; spf=pass smtp.mailfrom=illinois.edu; dkim=pass (2048-bit key) header.d=illinois-edu.20230601.gappssmtp.com header.i=@illinois-edu.20230601.gappssmtp.com header.b=RyXLRa78; arc=none smtp.client-ip=209.85.222.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=illinois.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=illinois.edu
+Received: by mail-qk1-f194.google.com with SMTP id af79cd13be357-7ae3d9a93c0so50365085a.3
+        for <linux-arch@vger.kernel.org>; Wed, 02 Oct 2024 20:14:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=illinois-edu.20230601.gappssmtp.com; s=20230601; t=1727925273; x=1728530073; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bVmdUELTDUmyOs2T634ZSBxOSroRBta42gzygmF21tA=;
+        b=RyXLRa78Q/eUKVFYaCd/tclyx2QoGYtdKAWCcsWRR6dzm7b41l2xPTm5P7T956sBBF
+         nomdJJTM2c2cWkzgx7H2BuSC53CfNHXb5mU8Du/PI0eWQcQmUEPGKHbPnVozxK8EpL2V
+         l8SmMhBnEoX7M1G93ie3ItkT35qaElp6afhfiw2doDr/beM8PfMU4ZmHBWDkN1GW/BL1
+         Xf50p5mctT7HynzQ3AHeDwz6k9g1IANORPLevVN6wF+0bey0nN0m43kSNgPLiSVDTJQY
+         5IU0fjKtSfW+Tgz09cKaAi5/0+JEkES1Hfjf8uoX/UZ21aIWEDGwcZnt7RVlcH57WjH3
+         lzOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727925273; x=1728530073;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bVmdUELTDUmyOs2T634ZSBxOSroRBta42gzygmF21tA=;
+        b=AQqQWRfpgZpane/fqX0DzPLbKjcLLEvaHrNR2E/usE8z2TyolrRVTw1rzorgwxyYcv
+         dorY3Vto8Y9VNsE6axD2l7OpKbJXjNWQt1WsnY+xpH96MSSlYxg0siUwAwNRC2iowYlG
+         fBLq42M/jyAQ9TUQcFdGDaQlVYK44CKpm2Ag6KUNIF3E4Hh1fgew1JT9prw9JPO/XaNo
+         tMktPxPQIPE44cDHslqICMWcqmSGC2NiGuu/C/5RXvJa6I5B5+aQldJx75vskmdI+KCo
+         O+yfvgWkrKxKyXYzhWXbwl/0H4aVPxXDWYXcakgdaOJ5OLFa4jldIDqptXPePrqvLdOb
+         dLvw==
+X-Forwarded-Encrypted: i=1; AJvYcCXziPXGi9yz5vco+40+ZJB1mxf7ILzNoAzfhs8cnWdxLMKLWHyZmDG+ofv82DROLz+Dq6xvv9QWlzXv@vger.kernel.org
+X-Gm-Message-State: AOJu0YxRPi/2FEJbPdjP+y9W1yxJ/M0OuW0qGZI0/Nsq6ONA4uD4Pyy3
+	rxwnyg6xpLYwuOAgtFYX0Sjs4/HF9NfPFwpl9PyaCcPOuFukJlgQdwyW3aMQdA==
+X-Google-Smtp-Source: AGHT+IHyjSRkhjgcIpyEOBBu1F4Ot9eDMUivzJG0kRwm+KN8Ac30ciJk502QH5kn26uBubpxXFT/Wg==
+X-Received: by 2002:a05:620a:1923:b0:7a9:a63a:9f48 with SMTP id af79cd13be357-7ae626ac34dmr793486485a.11.1727925273322;
+        Wed, 02 Oct 2024 20:14:33 -0700 (PDT)
+Received: from shizuku.. ([2620:0:e00:550a:6782:866c:334a:d5e9])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7ae6b29e2c9sm6901385a.15.2024.10.02.20.14.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Oct 2024 20:14:33 -0700 (PDT)
+From: Wentao Zhang <wentaoz5@illinois.edu>
+To: nathan@kernel.org
+Cc: Matt.Kelly2@boeing.com,
+	akpm@linux-foundation.org,
+	andrew.j.oppelt@boeing.com,
+	anton.ivanov@cambridgegreys.com,
+	ardb@kernel.org,
+	arnd@arndb.de,
+	bhelgaas@google.com,
+	bp@alien8.de,
+	chuck.wolber@boeing.com,
+	dave.hansen@linux.intel.com,
+	dvyukov@google.com,
+	hpa@zytor.com,
+	jinghao7@illinois.edu,
+	johannes@sipsolutions.net,
+	jpoimboe@kernel.org,
+	justinstitt@google.com,
+	kees@kernel.org,
+	kent.overstreet@linux.dev,
+	linux-arch@vger.kernel.org,
+	linux-efi@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-um@lists.infradead.org,
+	llvm@lists.linux.dev,
+	luto@kernel.org,
+	marinov@illinois.edu,
+	masahiroy@kernel.org,
+	maskray@google.com,
+	mathieu.desnoyers@efficios.com,
+	matthew.l.weber3@boeing.com,
+	mhiramat@kernel.org,
+	mingo@redhat.com,
+	morbo@google.com,
+	ndesaulniers@google.com,
+	oberpar@linux.ibm.com,
+	paulmck@kernel.org,
+	peterz@infradead.org,
+	richard@nod.at,
+	rostedt@goodmis.org,
+	samitolvanen@google.com,
+	samuel.sarkisian@boeing.com,
+	steven.h.vanderleest@boeing.com,
+	tglx@linutronix.de,
+	tingxur@illinois.edu,
+	tyxu@illinois.edu,
+	wentaoz5@illinois.edu,
+	x86@kernel.org
+Subject: Re: [PATCH v2 2/4] llvm-cov: add Clang's MC/DC support
+Date: Wed,  2 Oct 2024 22:14:29 -0500
+Message-Id: <20241003031429.46276-1-wentaoz5@illinois.edu>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20241002011030.GB555609@thelio-3990X>
+References: <20241002011030.GB555609@thelio-3990X>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic
-branch HEAD: f822712a2c69154f9a0a009f8e18fe394eb7766f  UAPI/ioctl: Improve parameter name of ioctl request definition helpers
+Hi Nathan,
 
-elapsed time: 1093m
+Thanks for your review! See some of my responses below inline. Other
+comments, including those to [1/4] and [4/4], are acknowledged and will be
+updated in v3.
 
-configs tested: 119
-configs skipped: 4
+On 2024-10-01 20:10, Nathan Chancellor wrote:
+> ...
+> > maximum value supported by Clang is 32767. According to local experiments,
+> > the working maximum for Linux kernel is 46, with the largest decisions in
+> > kernel codebase (with 47 conditions, as of v6.11) excluded, otherwise the
+> > kernel image size limit will be exceeded. The largest decisions in kernel
+> > are contributed for example by macros checking CPUID.
+> > 
+> > Code exceeding LLVM_COV_KERNEL_MCDC_MAX_CONDITIONS will produce compiler
+> > warnings.
+> > 
+> > As of LLVM 19, certain expressions are still not covered, and will produce
+> > build warnings when they are encountered:
+> > 
+> > "[...] if a boolean expression is embedded in the nest of another boolean
+> >  expression but separated by a non-logical operator, this is also not
+> >  supported. For example, in x = (a && b && c && func(d && f)), the d && f
+> >  case starts a new boolean expression that is separated from the other
+> >  conditions by the operator func(). When this is encountered, a warning
+> >  will be generated and the boolean expression will not be
+> >  instrumented." [4]
+> 
+> These two sets of warnings appear to be pretty noisy in my build
+> testing... Is there any way to shut them up? Perhaps it is good for
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+These two warnings are currently implemented as custom diagnostic in
+clang/lib/CodeGen/CodeGenPGO.cpp:dataTraverseStmtPost. So I'm afraid there
+is no corresponding "-W[no-]xxx" flag at this moment. I agree such switches
+would be desirable but we might have to nudge this in LLVM community.
 
-tested configs:
-alpha                             allnoconfig    gcc-14.1.0
-alpha                            allyesconfig    clang-20
-alpha                               defconfig    gcc-14.1.0
-arc                              allmodconfig    clang-20
-arc                               allnoconfig    gcc-14.1.0
-arc                              allyesconfig    clang-20
-arc                                 defconfig    gcc-14.1.0
-arm                              allmodconfig    clang-20
-arm                               allnoconfig    gcc-14.1.0
-arm                              allyesconfig    clang-20
-arm                                 defconfig    gcc-14.1.0
-arm64                            allmodconfig    clang-20
-arm64                             allnoconfig    gcc-14.1.0
-arm64                               defconfig    gcc-14.1.0
-csky                              allnoconfig    gcc-14.1.0
-csky                                defconfig    gcc-14.1.0
-hexagon                          allmodconfig    clang-20
-hexagon                           allnoconfig    gcc-14.1.0
-hexagon                          allyesconfig    clang-20
-hexagon                             defconfig    gcc-14.1.0
-i386                             allmodconfig    clang-18
-i386                              allnoconfig    clang-18
-i386                             allyesconfig    clang-18
-i386        buildonly-randconfig-001-20241003    gcc-12
-i386        buildonly-randconfig-002-20241003    gcc-12
-i386        buildonly-randconfig-003-20241003    gcc-12
-i386        buildonly-randconfig-004-20241003    gcc-12
-i386        buildonly-randconfig-005-20241003    gcc-12
-i386        buildonly-randconfig-006-20241003    gcc-12
-i386                                defconfig    clang-18
-i386                  randconfig-001-20241003    gcc-12
-i386                  randconfig-002-20241003    gcc-12
-i386                  randconfig-003-20241003    gcc-12
-i386                  randconfig-004-20241003    gcc-12
-i386                  randconfig-005-20241003    gcc-12
-i386                  randconfig-006-20241003    gcc-12
-i386                  randconfig-011-20241003    gcc-12
-i386                  randconfig-012-20241003    gcc-12
-i386                  randconfig-013-20241003    gcc-12
-i386                  randconfig-014-20241003    gcc-12
-i386                  randconfig-015-20241003    gcc-12
-i386                  randconfig-016-20241003    gcc-12
-loongarch                        allmodconfig    gcc-14.1.0
-loongarch                         allnoconfig    gcc-14.1.0
-loongarch                           defconfig    gcc-14.1.0
-m68k                             allmodconfig    gcc-14.1.0
-m68k                              allnoconfig    gcc-14.1.0
-m68k                             allyesconfig    gcc-14.1.0
-m68k                                defconfig    gcc-14.1.0
-microblaze                       allmodconfig    gcc-14.1.0
-microblaze                        allnoconfig    gcc-14.1.0
-microblaze                       allyesconfig    gcc-14.1.0
-microblaze                          defconfig    gcc-14.1.0
-mips                              allnoconfig    gcc-14.1.0
-nios2                             allnoconfig    gcc-14.1.0
-nios2                               defconfig    gcc-14.1.0
-openrisc                          allnoconfig    gcc-14.1.0
-openrisc                         allyesconfig    gcc-14.1.0
-openrisc                            defconfig    gcc-12
-parisc                           allmodconfig    gcc-14.1.0
-parisc                            allnoconfig    gcc-14.1.0
-parisc                           allyesconfig    gcc-14.1.0
-parisc                              defconfig    gcc-12
-parisc64                            defconfig    gcc-14.1.0
-powerpc                          allmodconfig    gcc-14.1.0
-powerpc                           allnoconfig    gcc-14.1.0
-powerpc                          allyesconfig    gcc-14.1.0
-riscv                            allmodconfig    gcc-14.1.0
-riscv                             allnoconfig    gcc-14.1.0
-riscv                            allyesconfig    gcc-14.1.0
-riscv                               defconfig    gcc-12
-s390                             allmodconfig    clang-20
-s390                              allnoconfig    clang-20
-s390                             allyesconfig    gcc-14.1.0
-s390                                defconfig    gcc-12
-sh                               allmodconfig    gcc-14.1.0
-sh                                allnoconfig    gcc-14.1.0
-sh                               allyesconfig    gcc-14.1.0
-sh                                  defconfig    gcc-12
-sparc                            allmodconfig    gcc-14.1.0
-sparc64                             defconfig    gcc-12
-um                               allmodconfig    clang-20
-um                                allnoconfig    clang-17
-um                               allyesconfig    clang-20
-um                                  defconfig    gcc-12
-um                             i386_defconfig    gcc-12
-um                           x86_64_defconfig    gcc-12
-x86_64                            allnoconfig    clang-18
-x86_64                           allyesconfig    clang-18
-x86_64      buildonly-randconfig-001-20241003    clang-18
-x86_64      buildonly-randconfig-002-20241003    clang-18
-x86_64      buildonly-randconfig-003-20241003    clang-18
-x86_64      buildonly-randconfig-004-20241003    clang-18
-x86_64      buildonly-randconfig-005-20241003    clang-18
-x86_64      buildonly-randconfig-006-20241003    clang-18
-x86_64                              defconfig    clang-18
-x86_64                                  kexec    clang-18
-x86_64                                  kexec    gcc-12
-x86_64                randconfig-001-20241003    clang-18
-x86_64                randconfig-002-20241003    clang-18
-x86_64                randconfig-003-20241003    clang-18
-x86_64                randconfig-004-20241003    clang-18
-x86_64                randconfig-005-20241003    clang-18
-x86_64                randconfig-006-20241003    clang-18
-x86_64                randconfig-011-20241003    clang-18
-x86_64                randconfig-012-20241003    clang-18
-x86_64                randconfig-013-20241003    clang-18
-x86_64                randconfig-014-20241003    clang-18
-x86_64                randconfig-015-20241003    clang-18
-x86_64                randconfig-016-20241003    clang-18
-x86_64                randconfig-071-20241003    clang-18
-x86_64                randconfig-072-20241003    clang-18
-x86_64                randconfig-073-20241003    clang-18
-x86_64                randconfig-074-20241003    clang-18
-x86_64                randconfig-075-20241003    clang-18
-x86_64                randconfig-076-20241003    clang-18
-x86_64                               rhel-8.3    gcc-12
-x86_64                          rhel-8.3-rust    clang-18
-xtensa                            allnoconfig    gcc-14.1.0
+> users to see these limitations but it basically makes the build output
+> useless. If there were switches, then they could be disabled in the
+> default case with a Kconfig option to turn them on if the user is
+> concerned with seeing which parts of their code are not instrumented. I
+> could see developers wanting to run this for writing tests and they
+> might not care about this as much as someone else might.
+> 
+> I did leave LLVM_COV_KERNEL_MCDC_MAX_CONDITIONS at its default value.
+> Perhaps there is a more reasonable default that would result in less
+> noisy build output but not run afoul of potential memory usage concerns?
+> I assume that mention means that memory usage may be a concern for the
+> type of deployments this technology would commonly be used with?
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+To my own experiences, enlarging this threshold won't really help with the
+issue, because the other type of warning ("nested boolean") is even more
+prevalent in kernel codebase. I once built the kernel serially and counted
+the number of instances from the gigantic log:
+
+  unsupported number of conditions (>6): 837
+  unsupported nested boolean:            8029
+
+So again we should probably improve this on the tool side. I can talk to
+developers there separately.
+
+> ...
+> > diff --git a/Makefile b/Makefile
+> > index 51498134c..1185b38d6 100644
+> > --- a/Makefile
+> > +++ b/Makefile
+> > @@ -740,6 +740,12 @@ all: vmlinux
+> >  CFLAGS_LLVM_COV := -fprofile-instr-generate -fcoverage-mapping
+> >  export CFLAGS_LLVM_COV
+> >  
+> > +CFLAGS_LLVM_COV_MCDC := -fcoverage-mcdc
+> > +ifdef CONFIG_LLVM_COV_KERNEL_MCDC_MAX_CONDITIONS
+> > +CFLAGS_LLVM_COV_MCDC += -Xclang -fmcdc-max-conditions=$(CONFIG_LLVM_COV_KERNEL_MCDC_MAX_CONDITIONS)
+> 
+> Why is -Xclang needed here? Is this not a full frontend flag?
+
+"-fmcdc-max-conditions" is a cc1 option only, while "-fcoverage-mcdc" is
+both a cc1 option and a clang option. See llvm/llvm-project#82448 and their
+changes to clang/include/clang/Driver/Options.td.
+
+Thanks,
+Wentao
+
+> 
+> > +endif
+> > +export CFLAGS_LLVM_COV_MCDC
+> > +
+> >  CFLAGS_GCOV	:= -fprofile-arcs -ftest-coverage
+> >  ifdef CONFIG_CC_IS_GCC
+> >  CFLAGS_GCOV	+= -fno-tree-loop-im
 
