@@ -1,128 +1,164 @@
-Return-Path: <linux-arch+bounces-7666-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7667-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C71298F465
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Oct 2024 18:47:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 460B898F5DD
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Oct 2024 20:12:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 24487282760
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Oct 2024 16:47:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6B5051F233CC
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Oct 2024 18:12:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1832A1A705F;
-	Thu,  3 Oct 2024 16:46:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B19C1AB510;
+	Thu,  3 Oct 2024 18:12:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="uatXi8xH"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2HsVzdta"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B79319D062
-	for <linux-arch@vger.kernel.org>; Thu,  3 Oct 2024 16:46:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 700F41AAE3A
+	for <linux-arch@vger.kernel.org>; Thu,  3 Oct 2024 18:12:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727974017; cv=none; b=GPlFuqEgG8PSZiQkrYRUcSJ6wjQwgJ+dolSL9ZnOCxn8zJQKkaYBVMffz7CLT3yejNQjelrwxKTx8aLjv4QAgxWRN7bkh6xQLwVyDmfY45sAArndrtAgZz96HdEfdhNFdwZTMbce9qF7BLwJVql1lF5fp7LiBIAQzFLClCzcl/w=
+	t=1727979146; cv=none; b=FPeZTF3FU+M535v+KZ1ZoahFnHWrSiGMnKrN1br9A3P6MAPGKmb0wQ97WnV8ftu8LGQoC+ZicTnc6R0tpEd1fcIiLwdIuoC5ynFHOek1Ti14xOrP/jIMQCQTd9lEMzwIZcLPWlNPMaV+0LbgCjnHKCPEYgyi2Kuxyug0ru579uk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727974017; c=relaxed/simple;
-	bh=EwT3q9EsnCa7yrZWUCyRNUjVCTNH45yR8vvcQYT/i1Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WacdB9RxNDrI5s8bxd7ZCO8fMk3AmmB93a27x1z7Ni3Wm8zOXzlL0SA85i7+KkDc2aBoghn1+opdjFLAzfrTIlbZJdvMeldQWo2wigyvr88zNNbLb+dShhvggR+HJwOIiVVgu4w0gmzg4sE2dL7FDqdyy+KLjaWeb8xG3VxYR8E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=uatXi8xH; arc=none smtp.client-ip=209.85.215.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-7e6afa8baeaso976941a12.3
-        for <linux-arch@vger.kernel.org>; Thu, 03 Oct 2024 09:46:55 -0700 (PDT)
+	s=arc-20240116; t=1727979146; c=relaxed/simple;
+	bh=5a2tijohiLVme4B81WJKwbCbxlmvbAe8DVOHQqZRmVk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iGitM2WoWS97ifHQygQKBiaFztM2mqWShlrW1E8k7xfktYvr58vzhSK79bnaS/QDVbcPjlSjGotNjQ3o0U3mMKSnHRSTGJlBKqR694gqGaMh1L/ZTnq9slhOOhPbhXACx8UuO73VsUGKrHeCIm5cUhcJRQ/4/Reg3ZGVXP/wcw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=2HsVzdta; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-20b40c7fd8eso25155ad.0
+        for <linux-arch@vger.kernel.org>; Thu, 03 Oct 2024 11:12:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1727974015; x=1728578815; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RW5P1Arx8XPYT/NPFqMkITFeiGycXbJcANO3qtPPvbA=;
-        b=uatXi8xHkUqeCRDr5Mlfvk0MQ7i+Nps7epYpKwfgqrQRySXt99qKBhbRaMqzKGY+tS
-         OIILTTs16rkouA4DCwtOCgugHYZ1rF2oUSWAOPqourYu+pstKMN50Zy6PbC5TnxhfXc8
-         H0P7LVQeSJlpJsVQ6k7sQKEiG+zt7wQAmyeC1x3aH2n4rdeOKOJ/FTSqCmN1aKpRN6VV
-         KfJ6kMjnomN0iZhMexd+6BBmqinzauQsPlsDnPUocmILborbu/Wn3eXu3N9HJhpQykQh
-         GWosPjT/vKjbFLkWvjARTDnbRXScsqHn9e8VnprsXgwtA+/X355H36ntcB+C2fELdeeJ
-         TUmg==
+        d=google.com; s=20230601; t=1727979145; x=1728583945; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=syNQyjz3hsStKfZP5tLeqIERuCdmwlRMJEaOyM/R5+k=;
+        b=2HsVzdtalQm463KtDqrTPgIaa/Gbl/w/KTlTyADp9NyEKSDLqXzU1+OloFQnKMjbze
+         l/rcXhl71sOAkYxGjydZIO/V3pbGTkwniD6VsH8EkWgrrr4LqCtlwBntH7k/pk4v8a4F
+         OLaiaWOgj6DfDis5EWthmt5fjk7qLVZ7BbdReZFdSCRqK6j1xFJznD3VYq5BmXSqU7bV
+         x0wXUqxUdoPtRh68oTIqXeyYilp6E2p6Nnbz0xpv/JCguU3X3YZUdV3k3ucFmOgAZQ9T
+         XjrCVFwdwF48BqD4guaUiCiTuOv2bQLfxN1q96PNVt88SNVHJH8yQlEHvMv5cdgFb3mC
+         allg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727974015; x=1728578815;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RW5P1Arx8XPYT/NPFqMkITFeiGycXbJcANO3qtPPvbA=;
-        b=RaHlacRB06dSswr+D81qTt53WsFHNzRDwB7k+sOiMhCczWJjWuRiWxFvQ5f5f9+55S
-         62YgKzNDFPPTO/s7FpWg2idbF9RuIPGLx74irgIeLt6pco0dH3FRA5Kute5AS7bFtApl
-         1KT5/2jV75+i8IoIf3ILnOlSJ16qgKwfo/NkJVO4Q6Dtdw+STZvTZnQrBCZNXov3WcEQ
-         D+Rvbt+3g67lSCJZJtouQuAFD16IQItXb4z7jVt5sy6aqYtHIFjbIPgn1rtyrt0QNYiw
-         LjUF38znYJPMwJegHRzApaphfrpI6HEBdXdqe0Vwpd78b95WQsRb0t1vzMmYkHzOPp/n
-         kGMg==
-X-Forwarded-Encrypted: i=1; AJvYcCUm0lA7dH6tzpN6sLRQuu7Eva8n868PEiPcGYMgTer0kWVSx1uDKZm7veE3NcRXnqmsWJPPpimRmfBv@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx49G2lDh5AwvaBULjQmejs/UL5Wsp2eiKgwZP7XB24wRKL/NYJ
-	v0GHbLvHy7p+MdEa2ylIdph/Pzlu5LIFLeiEi3M/B2nuz21VALeiSIp3IcrboBE=
-X-Google-Smtp-Source: AGHT+IHrNLnq312K7GVWKGT1Vo9Ff69i9ensfXAZGMY12ruPSu/BXqZiVZ26a2jiItIAw0CUa22nFw==
-X-Received: by 2002:a05:6a20:cf84:b0:1d2:e8f6:81e with SMTP id adf61e73a8af0-1d5db1bf932mr10105522637.24.1727974014772;
-        Thu, 03 Oct 2024 09:46:54 -0700 (PDT)
-Received: from [192.168.0.4] (174-21-81-121.tukw.qwest.net. [174.21.81.121])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7e9dbcf13b6sm1055380a12.8.2024.10.03.09.46.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Oct 2024 09:46:54 -0700 (PDT)
-Message-ID: <a4f85184-73d4-44e4-bddd-0c1775ed9f50@linaro.org>
-Date: Thu, 3 Oct 2024 09:46:50 -0700
+        d=1e100.net; s=20230601; t=1727979145; x=1728583945;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=syNQyjz3hsStKfZP5tLeqIERuCdmwlRMJEaOyM/R5+k=;
+        b=CP/mKjYGHiDjhAvqf/93Tal0P0scc+aYiJEgFRqs/qJcWpTivi6sJytTwfqaj9dr/t
+         xTXbpqvUUWpf9AIFRi/w74fNv6llDbpKh474BMAQ823k1hYFQ8T9oAmaWDqFLPYcpbDN
+         q/cqZ9j44RtO1ZBwAdmd3PvMl0krb/mhngxMV3TI32cPKchaYda13qoThwXc2sZf9U/2
+         fzzTY9KxsZP7Bn7EW85lMJkzz1orXjVtiwfC2phuupPBSBUJfd/zKsM9czB8otEIOJcY
+         ul0DE4BnG6uqvwrKEBeRkpNImz0prqHlyJ5Q+DvKMVHVNTH255YVeFJNS3WumdAjj/0V
+         5NKg==
+X-Forwarded-Encrypted: i=1; AJvYcCXzXbl1Hur1Ptd+SHkw8o3e0DXO5MAado3EsFmScMnE/Uqm+R8Jpi7GnYng72ZuvuFjtWtXD+npZMp8@vger.kernel.org
+X-Gm-Message-State: AOJu0YyP1OVxa8euHl1ytDUyQWFOHs+8sL4OU8qNHp9sFPe6sXTQf+en
+	VFJ8SiOPFAox51hjqczdDclB+iRsCyturep6yEqmGMebGIGPA6FOQD5ACy87A7TEDw61oVySQvt
+	BdNbGW8TrCRQFF8cPEl6+0CNGGb+KNPaSVFsZ
+X-Google-Smtp-Source: AGHT+IH5yghVliv8i5uMVnyYn/6sNZ6wwE1O58ua+GMRxVeV0bDpveNuEgjNhVoacK3O8EaGvYqh0OWpeboBBbQa/co=
+X-Received: by 2002:a17:902:f681:b0:20b:a6f5:2770 with SMTP id
+ d9443c01a7336-20bff35cf7amr46035ad.6.1727979144391; Thu, 03 Oct 2024 11:12:24
+ -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 01/10] Consolidate IO memcpy/memset into iomap_copy.c
-To: Julian Vetter <jvetter@kalrayinc.com>, Arnd Bergmann <arnd@arndb.de>,
- Russell King <linux@armlinux.org.uk>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Guo Ren <guoren@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
- WANG Xuerui <kernel@xen0n.name>, Andrew Morton <akpm@linux-foundation.org>,
- Geert Uytterhoeven <geert@linux-m68k.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>,
- "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
- Helge Deller <deller@gmx.de>, Yoshinori Sato <ysato@users.sourceforge.jp>,
- Rich Felker <dalias@libc.org>,
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
- Richard Weinberger <richard@nod.at>,
- Anton Ivanov <anton.ivanov@cambridgegreys.com>,
- Johannes Berg <johannes@sipsolutions.net>
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-csky@vger.kernel.org, loongarch@lists.linux.dev,
- linux-m68k@lists.linux-m68k.org, linux-alpha@vger.kernel.org,
- linux-parisc@vger.kernel.org, linux-sh@vger.kernel.org,
- linux-um@lists.infradead.org, linux-arch@vger.kernel.org,
- Yann Sionneau <ysionneau@kalrayinc.com>
-References: <20240930132321.2785718-1-jvetter@kalrayinc.com>
- <20240930132321.2785718-2-jvetter@kalrayinc.com>
-Content-Language: en-US
-From: Richard Henderson <richard.henderson@linaro.org>
-In-Reply-To: <20240930132321.2785718-2-jvetter@kalrayinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20241002233409.2857999-1-xur@google.com> <20241002233409.2857999-4-xur@google.com>
+ <20241003154320.GX5594@noisy.programming.kicks-ass.net>
+In-Reply-To: <20241003154320.GX5594@noisy.programming.kicks-ass.net>
+From: Rong Xu <xur@google.com>
+Date: Thu, 3 Oct 2024 11:12:10 -0700
+Message-ID: <CAF1bQ=TTfjh1UukJNZ2bbovagXFmS3i78=ALwDt+qfVe3wr7Vg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/6] Change the symbols order when --ffuntion-sections
+ is enabled
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Han Shen <shenhan@google.com>, Sriraman Tallam <tmsriram@google.com>, 
+	David Li <davidxl@google.com>, Krzysztof Pszeniczny <kpszeniczny@google.com>, 
+	Alice Ryhl <aliceryhl@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>, 
+	Breno Leitao <leitao@debian.org>, Brian Gerst <brgerst@gmail.com>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Heiko Carstens <hca@linux.ibm.com>, 
+	"H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>, Jann Horn <jannh@google.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Josh Poimboeuf <jpoimboe@kernel.org>, Juergen Gross <jgross@suse.com>, 
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, linux-arch@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Masahiro Yamada <masahiroy@kernel.org>, "Mike Rapoport (IBM)" <rppt@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Nicolas Schier <nicolas@fjasle.eu>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Samuel Holland <samuel.holland@sifive.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Wei Yang <richard.weiyang@gmail.com>, workflows@vger.kernel.org, x86@kernel.org, 
+	"Xin Li (Intel)" <xin@zytor.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 9/30/24 06:23, Julian Vetter wrote:
-> +void memset_io(volatile void __iomem *dst, int c, size_t count)
-> +{
-> +	uintptr_t qc = (u8)c;
+In principle, I don't see a problem using the new order unconditionally.
 
-Missed one change to 'long'
+This new ordering of sections (.text.unlikely, .text.hot, then .text)
+differs from the typical user-space ordering when no link-script is
+used. Usually, the order is .text, .text.hot, and then .text.unlikely
+(when -z keep-text-section-prefix is used).
 
-> +
-> +	qc |= qc << 8;
-> +	qc |= qc << 16;
-> +
-> +#ifdef CONFIG_64BIT
-> +	qc |= qc << 32;
-> +#endif
+However, for normal kernel builds that don't use FDO (iFDO and
+AutoFDO), this change has minimal impact. This is because the
+.text.unlikely section is very small, containing only functions
+specifically annotated as cold by the user.
 
-Could be 'qc *= -1ul / 0xff;'
+When using FDO, either with iFDO or AutoFDO, this new section ordering
+(.text.unlikely, .text.hot, then .text) should be used. These builds
+should enable -ffunction-sections and use the new order for
+function-level grouping.
 
+This new ordering also affects the placement of ASan and TSan code.
+While I expect that this change won't cause issues for them, sanitizer
+developers should confirm this.
 
-r~
+We've tested this new ordering with iFDO (PGO), AutoFDO, and standard
+non-FDO builds. But I think more extensive testing is needed before
+using it unconditionally.
+
+-Rong
+
+On Thu, Oct 3, 2024 at 8:43=E2=80=AFAM Peter Zijlstra <peterz@infradead.org=
+> wrote:
+>
+> On Wed, Oct 02, 2024 at 04:34:02PM -0700, Rong Xu wrote:
+> > When the -ffunction-sections compiler option is enabled, each function
+> > is placed in a separate section named .text.function_name rather than
+> > putting all functions in a single .text section.
+> >
+> > However, using -function-sections can cause problems with the
+> > linker script. The comments included in include/asm-generic/vmlinux.lds=
+.h
+> > note these issues.:
+> >   =E2=80=9CTEXT_MAIN here will match .text.fixup and .text.unlikely if =
+dead
+> >    code elimination is enabled, so these sections should be converted
+> >    to use ".." first.=E2=80=9D
+> >
+> > It is unclear whether there is a straightforward method for converting
+> > a suffix to "..". This patch modifies the order of subsections within t=
+he
+> > text output section when the -ffunction-sections flag is enabled.
+> > Specifically, it repositions sections with certain fixed patterns (for
+> > example .text.unlikely) before TEXT_MAIN, ensuring that they are groupe=
+d
+> > and matched together.
+> >
+> > Note that the limitation arises because the linker script employs glob
+> > patterns instead of regular expressions for string matching. While ther=
+e
+> > is a method to maintain the current order using complex patterns, this
+> > significantly complicates the pattern and increases the likelihood of
+> > errors.
+>
+> Is there a down-side to using the new order unconditionally?
 
