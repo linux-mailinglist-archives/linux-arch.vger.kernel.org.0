@@ -1,223 +1,132 @@
-Return-Path: <linux-arch+bounces-7649-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7650-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FC4698E8BE
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Oct 2024 05:14:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A8EB98ED86
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Oct 2024 13:03:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C3C8B1C234AA
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Oct 2024 03:14:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 866351C219E0
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Oct 2024 11:03:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BFF6208DA;
-	Thu,  3 Oct 2024 03:14:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51DBB14F9E7;
+	Thu,  3 Oct 2024 11:03:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=illinois-edu.20230601.gappssmtp.com header.i=@illinois-edu.20230601.gappssmtp.com header.b="RyXLRa78"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qi1kM4A+"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qk1-f194.google.com (mail-qk1-f194.google.com [209.85.222.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D1491E864
-	for <linux-arch@vger.kernel.org>; Thu,  3 Oct 2024 03:14:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F6C314F123;
+	Thu,  3 Oct 2024 11:03:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727925276; cv=none; b=uYbM7IfaIkwtUn3xoRDH3vbHYoNZy3eBM95Usb2PtLHIEdqgbsgVTVplnkuQiEKD/f70CVw7YHDjmJgid3Of1sksgRVjaO7PHJN8pEPur7iwyxVyQbNseSQkLGdeC2mrgeX7nv1Y8tOlldd40rxQ9qALGls6mfUwi3ciSRb5zaE=
+	t=1727953405; cv=none; b=cRA4VcIoaiRSdHELeib83Xqq31HN71vk/v1RWW5cV9Uk2t1pcG2ispktpPcwG/wImpNbB+rXUOa09wxXSkP73KVH9YeQkCnJG1VBjHrezEVHv/VUUjlvjAi81ZlCUapTMXlR4UPxZjqzlDFMIuIGMiOpT2OtPR9s9815TiQKFzc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727925276; c=relaxed/simple;
-	bh=jKTsXBcNO/miLEA0jRPsm6kZWhLrFZu0gIUjdZSMDbU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=UlNhib4g1KHc/EUbMESWyk5+INjzMuTrIR6osfhD0qkERiTDZ+rjXE5y/1QSLNyRPBrC2jrYrj9LQ9KEmF+zrwOYJDm6UyzziULjcHLVDEIN03Ub3ooFShSnJD9jbIV2fDh4SBIqp4qcOb6N2dwsiQ6hTpHdvXrjMGvSlnzUqKY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=illinois.edu; spf=pass smtp.mailfrom=illinois.edu; dkim=pass (2048-bit key) header.d=illinois-edu.20230601.gappssmtp.com header.i=@illinois-edu.20230601.gappssmtp.com header.b=RyXLRa78; arc=none smtp.client-ip=209.85.222.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=illinois.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=illinois.edu
-Received: by mail-qk1-f194.google.com with SMTP id af79cd13be357-7ae3d9a93c0so50365085a.3
-        for <linux-arch@vger.kernel.org>; Wed, 02 Oct 2024 20:14:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=illinois-edu.20230601.gappssmtp.com; s=20230601; t=1727925273; x=1728530073; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bVmdUELTDUmyOs2T634ZSBxOSroRBta42gzygmF21tA=;
-        b=RyXLRa78Q/eUKVFYaCd/tclyx2QoGYtdKAWCcsWRR6dzm7b41l2xPTm5P7T956sBBF
-         nomdJJTM2c2cWkzgx7H2BuSC53CfNHXb5mU8Du/PI0eWQcQmUEPGKHbPnVozxK8EpL2V
-         l8SmMhBnEoX7M1G93ie3ItkT35qaElp6afhfiw2doDr/beM8PfMU4ZmHBWDkN1GW/BL1
-         Xf50p5mctT7HynzQ3AHeDwz6k9g1IANORPLevVN6wF+0bey0nN0m43kSNgPLiSVDTJQY
-         5IU0fjKtSfW+Tgz09cKaAi5/0+JEkES1Hfjf8uoX/UZ21aIWEDGwcZnt7RVlcH57WjH3
-         lzOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727925273; x=1728530073;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bVmdUELTDUmyOs2T634ZSBxOSroRBta42gzygmF21tA=;
-        b=AQqQWRfpgZpane/fqX0DzPLbKjcLLEvaHrNR2E/usE8z2TyolrRVTw1rzorgwxyYcv
-         dorY3Vto8Y9VNsE6axD2l7OpKbJXjNWQt1WsnY+xpH96MSSlYxg0siUwAwNRC2iowYlG
-         fBLq42M/jyAQ9TUQcFdGDaQlVYK44CKpm2Ag6KUNIF3E4Hh1fgew1JT9prw9JPO/XaNo
-         tMktPxPQIPE44cDHslqICMWcqmSGC2NiGuu/C/5RXvJa6I5B5+aQldJx75vskmdI+KCo
-         O+yfvgWkrKxKyXYzhWXbwl/0H4aVPxXDWYXcakgdaOJ5OLFa4jldIDqptXPePrqvLdOb
-         dLvw==
-X-Forwarded-Encrypted: i=1; AJvYcCXziPXGi9yz5vco+40+ZJB1mxf7ILzNoAzfhs8cnWdxLMKLWHyZmDG+ofv82DROLz+Dq6xvv9QWlzXv@vger.kernel.org
-X-Gm-Message-State: AOJu0YxRPi/2FEJbPdjP+y9W1yxJ/M0OuW0qGZI0/Nsq6ONA4uD4Pyy3
-	rxwnyg6xpLYwuOAgtFYX0Sjs4/HF9NfPFwpl9PyaCcPOuFukJlgQdwyW3aMQdA==
-X-Google-Smtp-Source: AGHT+IHyjSRkhjgcIpyEOBBu1F4Ot9eDMUivzJG0kRwm+KN8Ac30ciJk502QH5kn26uBubpxXFT/Wg==
-X-Received: by 2002:a05:620a:1923:b0:7a9:a63a:9f48 with SMTP id af79cd13be357-7ae626ac34dmr793486485a.11.1727925273322;
-        Wed, 02 Oct 2024 20:14:33 -0700 (PDT)
-Received: from shizuku.. ([2620:0:e00:550a:6782:866c:334a:d5e9])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7ae6b29e2c9sm6901385a.15.2024.10.02.20.14.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Oct 2024 20:14:33 -0700 (PDT)
-From: Wentao Zhang <wentaoz5@illinois.edu>
-To: nathan@kernel.org
-Cc: Matt.Kelly2@boeing.com,
-	akpm@linux-foundation.org,
-	andrew.j.oppelt@boeing.com,
-	anton.ivanov@cambridgegreys.com,
-	ardb@kernel.org,
-	arnd@arndb.de,
-	bhelgaas@google.com,
-	bp@alien8.de,
-	chuck.wolber@boeing.com,
-	dave.hansen@linux.intel.com,
-	dvyukov@google.com,
-	hpa@zytor.com,
-	jinghao7@illinois.edu,
-	johannes@sipsolutions.net,
-	jpoimboe@kernel.org,
-	justinstitt@google.com,
-	kees@kernel.org,
-	kent.overstreet@linux.dev,
-	linux-arch@vger.kernel.org,
-	linux-efi@vger.kernel.org,
-	linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-um@lists.infradead.org,
-	llvm@lists.linux.dev,
-	luto@kernel.org,
-	marinov@illinois.edu,
-	masahiroy@kernel.org,
-	maskray@google.com,
-	mathieu.desnoyers@efficios.com,
-	matthew.l.weber3@boeing.com,
-	mhiramat@kernel.org,
-	mingo@redhat.com,
-	morbo@google.com,
-	ndesaulniers@google.com,
-	oberpar@linux.ibm.com,
-	paulmck@kernel.org,
-	peterz@infradead.org,
-	richard@nod.at,
-	rostedt@goodmis.org,
-	samitolvanen@google.com,
-	samuel.sarkisian@boeing.com,
-	steven.h.vanderleest@boeing.com,
-	tglx@linutronix.de,
-	tingxur@illinois.edu,
-	tyxu@illinois.edu,
-	wentaoz5@illinois.edu,
-	x86@kernel.org
-Subject: Re: [PATCH v2 2/4] llvm-cov: add Clang's MC/DC support
-Date: Wed,  2 Oct 2024 22:14:29 -0500
-Message-Id: <20241003031429.46276-1-wentaoz5@illinois.edu>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241002011030.GB555609@thelio-3990X>
-References: <20241002011030.GB555609@thelio-3990X>
+	s=arc-20240116; t=1727953405; c=relaxed/simple;
+	bh=df2Nbj/hqQVIrGa+4waYwuDbuQZWuWu1AE+VTeU/f70=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EJx7U6qEibMCwAGT8/2Saw8fTMs4oIrMQOKLeq18beVJZge/mzh9KMfV9YF3uFtIQaXZTm5pCGKqRiIiL6fwg/4AS3pj2SyxUjbP9pa+WE4MG2iMJn4vC0CPBrfnz29mOfT0wB/PSic/YXK3YanEF12bR9kuvPKc0kRLJsMba8k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qi1kM4A+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46EA9C4CEC5;
+	Thu,  3 Oct 2024 11:03:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727953404;
+	bh=df2Nbj/hqQVIrGa+4waYwuDbuQZWuWu1AE+VTeU/f70=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Qi1kM4A+RaAdIARpZ5o6qFW04lMQITGmFeI+Agv1TzuVt+oC5bw6dyO9QGVzZc+yA
+	 vHwVYzgRyMie6OKvDhY9mlziKIX0IQdHhu5SPfMBOAU5iC0/prGGR44vzImFHiTspW
+	 WygKX3YTf8TbnIRWhBnwzrHjnLX6yypHAYSaKPKODk0PVnasgSrvF0npsCFfObBbtB
+	 ZnkfcD738tVwS9ipJwD4mmvpU8YYs2+E7F1Z451dZR5iCIsvTp4dJLn7sGH752lEq8
+	 o5GOthWHPR7petJ9P1Kpbm1rovHNYXteZoZqcJpoKP4G2M6hKGZpmklHWwozfbuCOL
+	 8bGZhf0oO4skQ==
+Date: Thu, 3 Oct 2024 12:03:11 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Deepak Gupta <debug@rivosinc.com>, Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Christian Brauner <brauner@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+	devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	alistair.francis@wdc.com, richard.henderson@linaro.org,
+	jim.shu@sifive.com, andybnac@gmail.com, kito.cheng@sifive.com,
+	charlie@rivosinc.com, atishp@rivosinc.com, evan@rivosinc.com,
+	cleger@rivosinc.com, alexghiti@rivosinc.com,
+	samitolvanen@google.com, rick.p.edgecombe@intel.com
+Subject: Re: [PATCH 33/33] kselftest/riscv: kselftest for user mode cfi
+Message-ID: <b4347055-46f7-4e06-b484-bbf147b80fe4@sirena.org.uk>
+References: <20241001-v5_user_cfi_series-v1-0-3ba65b6e550f@rivosinc.com>
+ <20241001-v5_user_cfi_series-v1-33-3ba65b6e550f@rivosinc.com>
+ <fdf602e9-a8b1-4f62-9e26-bb62a7202d22@linuxfoundation.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="kAfVHLmbYIIytvqg"
+Content-Disposition: inline
+In-Reply-To: <fdf602e9-a8b1-4f62-9e26-bb62a7202d22@linuxfoundation.org>
+X-Cookie: I'm into SOFTWARE!
 
-Hi Nathan,
 
-Thanks for your review! See some of my responses below inline. Other
-comments, including those to [1/4] and [4/4], are acknowledged and will be
-updated in v3.
+--kAfVHLmbYIIytvqg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 2024-10-01 20:10, Nathan Chancellor wrote:
-> ...
-> > maximum value supported by Clang is 32767. According to local experiments,
-> > the working maximum for Linux kernel is 46, with the largest decisions in
-> > kernel codebase (with 47 conditions, as of v6.11) excluded, otherwise the
-> > kernel image size limit will be exceeded. The largest decisions in kernel
-> > are contributed for example by macros checking CPUID.
-> > 
-> > Code exceeding LLVM_COV_KERNEL_MCDC_MAX_CONDITIONS will produce compiler
-> > warnings.
-> > 
-> > As of LLVM 19, certain expressions are still not covered, and will produce
-> > build warnings when they are encountered:
-> > 
-> > "[...] if a boolean expression is embedded in the nest of another boolean
-> >  expression but separated by a non-logical operator, this is also not
-> >  supported. For example, in x = (a && b && c && func(d && f)), the d && f
-> >  case starts a new boolean expression that is separated from the other
-> >  conditions by the operator func(). When this is encountered, a warning
-> >  will be generated and the boolean expression will not be
-> >  instrumented." [4]
-> 
-> These two sets of warnings appear to be pretty noisy in my build
-> testing... Is there any way to shut them up? Perhaps it is good for
+On Wed, Oct 02, 2024 at 05:18:36PM -0600, Shuah Khan wrote:
+> On 10/1/24 10:06, Deepak Gupta wrote:
 
-These two warnings are currently implemented as custom diagnostic in
-clang/lib/CodeGen/CodeGenPGO.cpp:dataTraverseStmtPost. So I'm afraid there
-is no corresponding "-W[no-]xxx" flag at this moment. I agree such switches
-would be desirable but we might have to nudge this in LLVM community.
+> > +#ifndef __NR_prctl
+> > +#define __NR_prctl 167
+> > +#endif
 
-> users to see these limitations but it basically makes the build output
-> useless. If there were switches, then they could be disabled in the
-> default case with a Kconfig option to turn them on if the user is
-> concerned with seeing which parts of their code are not instrumented. I
-> could see developers wanting to run this for writing tests and they
-> might not care about this as much as someone else might.
-> 
-> I did leave LLVM_COV_KERNEL_MCDC_MAX_CONDITIONS at its default value.
-> Perhaps there is a more reasonable default that would result in less
-> noisy build output but not run afoul of potential memory usage concerns?
-> I assume that mention means that memory usage may be a concern for the
-> type of deployments this technology would commonly be used with?
+> > +#ifndef __NR_map_shadow_stack
+> > +#define __NR_map_shadow_stack 453
 
-To my own experiences, enlarging this threshold won't really help with the
-issue, because the other type of warning ("nested boolean") is even more
-prevalent in kernel codebase. I once built the kernel serially and counted
-the number of instances from the gigantic log:
+> Why do we need to define these? Shouldn't including
+> asm-generic/unistd.h sufficient?
 
-  unsupported number of conditions (>6): 837
-  unsupported nested boolean:            8029
+We have this issue on arm64 as well, there's some issue with directly
+pulling in the asm header interfering with libc in some situation (I
+can't immediately figure out which situation or which libc to remind
+myself what it is though...) so we've got local defines like we do for
+the NT_ defines for ptrace.  I see x86 is doing the same.
 
-So again we should probably improve this on the tool side. I can talk to
-developers there separately.
+--kAfVHLmbYIIytvqg
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> ...
-> > diff --git a/Makefile b/Makefile
-> > index 51498134c..1185b38d6 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -740,6 +740,12 @@ all: vmlinux
-> >  CFLAGS_LLVM_COV := -fprofile-instr-generate -fcoverage-mapping
-> >  export CFLAGS_LLVM_COV
-> >  
-> > +CFLAGS_LLVM_COV_MCDC := -fcoverage-mcdc
-> > +ifdef CONFIG_LLVM_COV_KERNEL_MCDC_MAX_CONDITIONS
-> > +CFLAGS_LLVM_COV_MCDC += -Xclang -fmcdc-max-conditions=$(CONFIG_LLVM_COV_KERNEL_MCDC_MAX_CONDITIONS)
-> 
-> Why is -Xclang needed here? Is this not a full frontend flag?
+-----BEGIN PGP SIGNATURE-----
 
-"-fmcdc-max-conditions" is a cc1 option only, while "-fcoverage-mcdc" is
-both a cc1 option and a clang option. See llvm/llvm-project#82448 and their
-changes to clang/include/clang/Driver/Options.td.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmb+ee4ACgkQJNaLcl1U
+h9CFRQf/ZisHmPhxTo4GA9gvOyCclGJtTt5XbyRTnPd3KzS/hDF/0q+VpUbmWm+Y
+SmcaycdcESUg9VOXQZorDB8+tK3kaP7Sg2JmpaLB8yoKfuO3t/rVL6pt/vCKLlgX
+qwzZD6zQUDZlBt0SteGmZnXzHDKpjNrYf1MQdFSHYVkJSQCCnvPV0u2FXZVYj9Bb
+Jz/PNuyt9uexrRqPrBsbIKJcJUHREFq6SR1NYDMReO+lyYD8xLkKmXPH0K55C870
+FHSWZIUGQB5Lt80AJmT/FQrXn62k7+91Nalz/CyYtaqH/RdFHTD+mBkJtSs+c1gC
+i/L5TsJAiSLGEZl9I4rSRniStmUSlg==
+=2Xkh
+-----END PGP SIGNATURE-----
 
-Thanks,
-Wentao
-
-> 
-> > +endif
-> > +export CFLAGS_LLVM_COV_MCDC
-> > +
-> >  CFLAGS_GCOV	:= -fprofile-arcs -ftest-coverage
-> >  ifdef CONFIG_CC_IS_GCC
-> >  CFLAGS_GCOV	+= -fno-tree-loop-im
+--kAfVHLmbYIIytvqg--
 
