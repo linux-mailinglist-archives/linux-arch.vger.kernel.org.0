@@ -1,124 +1,196 @@
-Return-Path: <linux-arch+bounces-7695-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7696-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DF9E990444
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Oct 2024 15:28:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 871D29904DF
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Oct 2024 15:52:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4E9641C2130B
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Oct 2024 13:28:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 490DB283637
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Oct 2024 13:52:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F337217916;
-	Fri,  4 Oct 2024 13:25:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="PpkGJL3C";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Drtxg1i/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93DDB212EF3;
+	Fri,  4 Oct 2024 13:52:29 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fhigh-a5-smtp.messagingengine.com (fhigh-a5-smtp.messagingengine.com [103.168.172.156])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76B6B217907;
-	Fri,  4 Oct 2024 13:25:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.156
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69D0B212EEE;
+	Fri,  4 Oct 2024 13:52:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728048334; cv=none; b=MGhuiriDuUln6Te+vNOk/oXVfLpGutvYF5sD9hZ5Nw6lXi2baP7nRIeNmnAfrri2DhFQbM0z7soXcusmO00c72ofoAa3j8MnnQrIHIShYpAzZqBTjEkhZT8MB6u43Npt2bzQsi71p/C29qX6JRG53NVxJXmZnH2liblo0uXuSr4=
+	t=1728049949; cv=none; b=S+2ZB1/9HsoURbtcaIYbyiC2clZn3iIIWDOYQEz92gOxHD/6Dzld5MnsE+h7pIFG9Ia/kXK3owQ1rFHJ4J/NTGzdgzP79YCPyDzET/52jlzC0F6H3e097zhFxUKtGmVbJX4w1omxI3bhBCeynIMyzjVxZZiH951ChNcKtQrf5nA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728048334; c=relaxed/simple;
-	bh=7ClJ3sAN7SIcD7DktMGV2qyfk2KhaTbquYwInl+3V7s=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=VA0piUGV8IGrcTRnHql9mlb2mP7krWSdq+VcDooSHFVGyFL0r1WTt0FhHz68DXfUNpO5go0+WGuloFL2+CKd31bO7lSSi9jePQ+JCm4xIIV7K1R2jReDGAaFcveraKyJNcTof7wk06XOLetuAKBqtFN/8YMcYiEbq8XbakGw1Y8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=PpkGJL3C; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Drtxg1i/; arc=none smtp.client-ip=103.168.172.156
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 8C501114017E;
-	Fri,  4 Oct 2024 09:25:32 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-10.internal (MEProxy); Fri, 04 Oct 2024 09:25:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1728048332;
-	 x=1728134732; bh=cc9La4QN0dfEV0HU2X84WhVbfANEZU3wSpI2fa6yTmQ=; b=
-	PpkGJL3CidFRPjlvZwqHd7zdsoiQl4sEGdtOAYkyZ0R9SbbGH+eVah+JsY9HiU0U
-	OklNJkvBxVCwph+0pYC0w9iuK/LCUOkZK4I9OCeeubQis0m+cmKoMsUgIKWpE2f5
-	C4H9pQjOxhJWwHKe2xiMh8GYZmvB4ck4SFW6IQtpbyLORaawQBxYV5hFFwofLrb/
-	ocqhfoAh9dxxWYhB1CqGzUmEjuoTEQakRiBqDTeV5bUcaeS2EMidVK4xEvf5wm+A
-	an00sO+8vLMrxi2CpElSqAfXsNRbYwEdyneLe9lULl/aPtjS1HiFyzE+rebxcNMz
-	/sp2u3jjwsmFrEKJkr51bQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1728048332; x=
-	1728134732; bh=cc9La4QN0dfEV0HU2X84WhVbfANEZU3wSpI2fa6yTmQ=; b=D
-	rtxg1i/tASW+l3oYRbh/8ueRvssV6lhZxGdPd3rXUHvBDUf/Ai+PM5j7V9u7CgFU
-	f9atrwZlKqn39ry0T7qy3V+baJxGTQKk/jduvfv8EgPZa7hDGIK3zdBikgo16uRS
-	IwTr40n+P6Bes25gvG+iE9b/oy6/cpZW3DXlnb0N5s8YOskGk4E1o+KN8FrWsQwE
-	ETOVR3/ppR7aF4fALq68YS7OZRAY4rTdKSN6c7YxursoNeLPXJ86OtFPIVTphALB
-	9bGuSYT3Gzp/spKZWIBajDqQfsWDFUk//n2c2GnjG4tYxWWEj5hnRvydgNhNbI49
-	9uE3NxH7kWlZDtuUc7GWw==
-X-ME-Sender: <xms:y-z_ZknBC-5FtoE0YNff0pUkjzbq3xI67nwmWtZCnZonM0u2VJvbcw>
-    <xme:y-z_Zj3-6q8eMMKr9S3MKsEO5Cs2RBLll39dIAmtgqWbN6EVZBLkMaZvhABWvm9cH
-    nHzvuo_FIM0-bS_SwA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvddvfedgieegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddt
-    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
-    guvgeqnecuggftrfgrthhtvghrnhepfefhheetffduvdfgieeghfejtedvkeetkeejfeek
-    keelffejteevvdeghffhiefhnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlh
-    hushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghr
-    nhgusgdruggvpdhnsggprhgtphhtthhopeehpdhmohguvgepshhmthhpohhuthdprhgtph
-    htthhopehlihhnuhigsegrrhhmlhhinhhugidrohhrghdruhhkpdhrtghpthhtohepnhhp
-    ihhtrhgvsegsrgihlhhisghrvgdrtghomhdprhgtphhtthhopehnihgtohesfhhluhignh
-    hitgdrnhgvthdprhgtphhtthhopehlihhnuhigqdgrrhgthhesvhhgvghrrdhkvghrnhgv
-    lhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnh
-    gvlhdrohhrgh
-X-ME-Proxy: <xmx:y-z_ZipmFUXJw9HbAlPHTjOh1Wj0HG-kb__sCvPpSsPfYfi5fr6Xtg>
-    <xmx:y-z_ZgmogYMiezizZB5XQ2ljzvatL7KT4oRvddxKiFj32KZKaiYmvA>
-    <xmx:y-z_Zi1mvG3PRQ1WdrFWxOy6bpn7VIJWvhxH0qTHk87KU7O4B6dP0Q>
-    <xmx:y-z_ZnuLZrW57WHox-7BEOJOnjwF5EXwGuSABr_ErVKnjf6wkCB3SQ>
-    <xmx:zOz_ZlQdTf3rPCcaxcgZGxygOi0QrMJapDJnhnK_-b0a2sHyr_66Rii5>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id C999F2220071; Fri,  4 Oct 2024 09:25:31 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1728049949; c=relaxed/simple;
+	bh=CgGaF1WPSG5Fi8uzeesZWuMpwpxItmoNQIqnngNVELo=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=sljDY5+XXEMXzWYrpiDuD5MNo9CB6aHrJiF11d72/VJgWTljhoGn1CCFdhMR2TY7mulIsBsBaWhbKTVcWq4YkAN21wG1YQ9KQgW/tRAH9H6in90/Yk7SU844WzmZTZu4yP6KIxQivp7j4c6FRaXYtuZqvyh7BKLeoZEBooN9VbQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96531C4CEC6;
+	Fri,  4 Oct 2024 13:52:22 +0000 (UTC)
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Will Deacon <will@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+	Kees Cook <kees@kernel.org>,
+	Mark Brown <broonie@kernel.org>
+Cc: "H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	Ross Burton <ross.burton@arm.com>,
+	David Spickett <david.spickett@arm.com>,
+	Yury Khrustalev <yury.khrustalev@arm.com>,
+	Wilco Dijkstra <wilco.dijkstra@arm.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	David Hildenbrand <david@redhat.com>,
+	"Mike Rapoport (IBM)" <rppt@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: (subset) [PATCH v13 00/40] arm64/gcs: Provide support for GCS in userspace
+Date: Fri,  4 Oct 2024 14:52:20 +0100
+Message-Id: <172804948348.2705006.18010706949544079891.b4-ty@arm.com>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20241001-arm64-gcs-v13-0-222b78d87eee@kernel.org>
+References: <20241001-arm64-gcs-v13-0-222b78d87eee@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Fri, 04 Oct 2024 13:25:11 +0000
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Nicolas Pitre" <nico@fluxnic.net>, "Russell King" <linux@armlinux.org.uk>
-Cc: "Nicolas Pitre" <npitre@baylibre.com>,
- Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org
-Message-Id: <75c272ce-b4dd-4360-9489-b9af33b87a33@app.fastmail.com>
-In-Reply-To: <20241003211829.2750436-1-nico@fluxnic.net>
-References: <20241003211829.2750436-1-nico@fluxnic.net>
-Subject: Re: [PATCH v4 0/4] simplify do_div() with constant divisor
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Thu, Oct 3, 2024, at 21:16, Nicolas Pitre wrote:
-> While working on mul_u64_u64_div_u64() improvements I realized that there
-> is a better way to perform a 64x64->128 bits multiplication with overflow
-> handling.
->
-> Change from v3:
->
-> - Added timings to commit log of patch #4.
->
-> Link to v3: 
-> https://lore.kernel.org/lkml/20240708012749.2098373-2-nico@fluxnic.net/T/
+On Tue, 01 Oct 2024 23:58:39 +0100, Mark Brown wrote:
+> The arm64 Guarded Control Stack (GCS) feature provides support for
+> hardware protected stacks of return addresses, intended to provide
+> hardening against return oriented programming (ROP) attacks and to make
+> it easier to gather call stacks for applications such as profiling.
+> 
+> When GCS is active a secondary stack called the Guarded Control Stack is
+> maintained, protected with a memory attribute which means that it can
+> only be written with specific GCS operations.  The current GCS pointer
+> can not be directly written to by userspace.  When a BL is executed the
+> value stored in LR is also pushed onto the GCS, and when a RET is
+> executed the top of the GCS is popped and compared to LR with a fault
+> being raised if the values do not match.  GCS operations may only be
+> performed on GCS pages, a data abort is generated if they are not.
+> 
+> [...]
 
-Looks good to me. There are no other comments, I would apply this
-in the asm-generic tree for 6.13.
+I applied most of the series to arm64 (for-next/gcs), apart from two KVM
+patches - 16 and 40 (the latter is the kselftest). I usually start
+picking patches at -rc3 but the glibc folk are waiting for these patches
+to at least end up in a maintainer's branch. Of course, these patches
+are subject to change until the final 6.13 release.
 
-       Arnd
+The KVM patches can go on top once agreed (or they can go in via the KVM
+tree, I don't mind either way).
+
+Thanks!
+
+[01/40] mm: Introduce ARCH_HAS_USER_SHADOW_STACK
+        https://git.kernel.org/arm64/c/bcc9d04e749a
+[02/40] mm: Define VM_HIGH_ARCH_6
+        https://git.kernel.org/arm64/c/9ab515b18f84
+[03/40] arm64/mm: Restructure arch_validate_flags() for extensibility
+        https://git.kernel.org/arm64/c/f645e888b1a6
+[04/40] prctl: arch-agnostic prctl for shadow stack
+        https://git.kernel.org/arm64/c/91e102e79740
+[05/40] mman: Add map_shadow_stack() flags
+        https://git.kernel.org/arm64/c/3630e82ab6bd
+[06/40] arm64: Document boot requirements for Guarded Control Stacks
+        https://git.kernel.org/arm64/c/830ae8a39685
+[07/40] arm64/gcs: Document the ABI for Guarded Control Stacks
+        https://git.kernel.org/arm64/c/7058bf87cd59
+[08/40] arm64/sysreg: Add definitions for architected GCS caps
+        https://git.kernel.org/arm64/c/ce0641d48ddd
+[09/40] arm64/gcs: Add manual encodings of GCS instructions
+        https://git.kernel.org/arm64/c/dad947cc22cf
+[10/40] arm64/gcs: Provide put_user_gcs()
+        https://git.kernel.org/arm64/c/d0aa2b435186
+[11/40] arm64/gcs: Provide basic EL2 setup to allow GCS usage at EL0 and EL1
+        https://git.kernel.org/arm64/c/ff5181d8a2a8
+[12/40] arm64/cpufeature: Runtime detection of Guarded Control Stack (GCS)
+        https://git.kernel.org/arm64/c/6487c963083c
+[13/40] arm64/mm: Allocate PIE slots for EL0 guarded control stack
+        https://git.kernel.org/arm64/c/092055f1508c
+[14/40] mm: Define VM_SHADOW_STACK for arm64 when we support GCS
+        https://git.kernel.org/arm64/c/ae80e1629aea
+[15/40] arm64/mm: Map pages for guarded control stack
+        https://git.kernel.org/arm64/c/6497b66ba694
+[17/40] arm64/idreg: Add overrride for GCS
+        https://git.kernel.org/arm64/c/a94452112ce4
+[18/40] arm64/hwcap: Add hwcap for GCS
+        https://git.kernel.org/arm64/c/eefc98711f84
+[19/40] arm64/traps: Handle GCS exceptions
+        https://git.kernel.org/arm64/c/8ce71d270536
+[20/40] arm64/mm: Handle GCS data aborts
+        https://git.kernel.org/arm64/c/cfad706e8f6d
+[21/40] arm64/gcs: Context switch GCS state for EL0
+        https://git.kernel.org/arm64/c/fc84bc5378a8
+[22/40] arm64/gcs: Ensure that new threads have a GCS
+        https://git.kernel.org/arm64/c/506496bcbb42
+[23/40] arm64/gcs: Implement shadow stack prctl() interface
+        https://git.kernel.org/arm64/c/b57180c75c7e
+[24/40] arm64/mm: Implement map_shadow_stack()
+        https://git.kernel.org/arm64/c/8f3e750673b2
+[25/40] arm64/signal: Set up and restore the GCS context for signal handlers
+        https://git.kernel.org/arm64/c/eaf62ce1563b
+[26/40] arm64/signal: Expose GCS state in signal frames
+        https://git.kernel.org/arm64/c/16f47bb9ac8a
+[27/40] arm64/ptrace: Expose GCS via ptrace and core files
+        https://git.kernel.org/arm64/c/7ec3b57cb29f
+[28/40] arm64: Add Kconfig for Guarded Control Stack (GCS)
+        https://git.kernel.org/arm64/c/5d8b172e7005
+[29/40] kselftest/arm64: Verify the GCS hwcap
+        https://git.kernel.org/arm64/c/7a2f671db61f
+[30/40] kselftest/arm64: Add GCS as a detected feature in the signal tests
+        https://git.kernel.org/arm64/c/b2d2f11ff5d6
+[31/40] kselftest/arm64: Add framework support for GCS to signal handling tests
+        https://git.kernel.org/arm64/c/0d426f7dd9a0
+[32/40] kselftest/arm64: Allow signals tests to specify an expected si_code
+        https://git.kernel.org/arm64/c/956573ac1890
+[33/40] kselftest/arm64: Always run signals tests with GCS enabled
+        https://git.kernel.org/arm64/c/42155a8eb0f6
+[34/40] kselftest/arm64: Add very basic GCS test program
+        https://git.kernel.org/arm64/c/3d37d4307e0f
+[35/40] kselftest/arm64: Add a GCS test program built with the system libc
+        https://git.kernel.org/arm64/c/a505a52b4e29
+[36/40] kselftest/arm64: Add test coverage for GCS mode locking
+        https://git.kernel.org/arm64/c/58d69a3e3582
+[37/40] kselftest/arm64: Add GCS signal tests
+        https://git.kernel.org/arm64/c/794b64ca5665
+[38/40] kselftest/arm64: Add a GCS stress test
+        https://git.kernel.org/arm64/c/05e6cfff58c4
+[39/40] kselftest/arm64: Enable GCS for the FP stress tests
+        https://git.kernel.org/arm64/c/bb9ae1a66c85
+
+-- 
+Catalin
+
 
