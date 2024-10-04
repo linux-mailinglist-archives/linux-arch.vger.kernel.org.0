@@ -1,160 +1,107 @@
-Return-Path: <linux-arch+bounces-7689-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7690-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5475990172
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Oct 2024 12:36:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A54D09901EE
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Oct 2024 13:19:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E3EC01C22156
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Oct 2024 10:36:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BB7A21C229AC
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Oct 2024 11:18:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB76514A60F;
-	Fri,  4 Oct 2024 10:36:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=syndicat.com header.i=@syndicat.com header.b="NTzg6eCi"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19D39155C98;
+	Fri,  4 Oct 2024 11:18:56 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail.syndicat.com (mail.syndicat.com [62.146.89.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCC911369BB;
-	Fri,  4 Oct 2024 10:36:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.146.89.62
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6CF1224D1;
+	Fri,  4 Oct 2024 11:18:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728038195; cv=none; b=ql3Sfevd8iyTysK6uvu5gEABSyxKMX3N05FI4+Hx5HsTF0MalbCMQa6Nkj8DpfqvC0FKdXNwr52t4pnYdLUpZWqAMaCNfhNZCWahIJsgUCPyPNaYFJtJBzc1+GDrrxwFbRjoTZRWq22GNzF+oa1s8Gbdl/5IhqWfBd0Xn7M1wUE=
+	t=1728040736; cv=none; b=VW7Knnu9G5xdq2hOvPhZdf5wFpQ4ZYtiqqW7ZsXreZgFgUvmvUIJ3OneaVbGXkGbba8VE7IN9F12Q26vQvtXyOzbO42ATL2Y9X2gIgl1+4WCUnBegCChwcT6FiUo5Hker+iekPhxAM8zkQk4Ct9jTQXnV1JzQxSe++lXdGKUPnE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728038195; c=relaxed/simple;
-	bh=GrbPeAK5qkQQQwjlzw5HoXFZHBNyvLny9Hy3BfR+P00=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=B7UM5j5KXvqwjLdW5rQ/RLNnB4GBbOdkOaw6qWPOnGivLT1BZYTi8fn1rhmLrIHoy8ZhXM9NltHmBEz/hymsV8qArnU/K5x0AzpiVJ4Ya0pdQWaQGl9Vr/IfyeBOohnVoImnfGGI992JTb87Z4XsjCbAdMuUFXUsKhzhR/PHIX4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=syndicat.com; spf=pass smtp.mailfrom=syndicat.com; dkim=pass (1024-bit key) header.d=syndicat.com header.i=@syndicat.com header.b=NTzg6eCi; arc=none smtp.client-ip=62.146.89.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=syndicat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=syndicat.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=syndicat.com; s=x; h=Content-Type:MIME-Version:References:In-Reply-To:
-	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=/QkDROfGDvJqG3hdiAViZ9A3NRJn+vKEY02ZDZuWBAs=; b=NTzg6eCip1bXj4b+mJrtsVSKkG
-	brkV800C7iWdYj9nQZOiN9GF1wqVl54fU3p0Wu0Yf821ssjmHMCtrH2QrbT6sN395/Mmo+gXkU1QU
-	1h8d2eG9N6Iv5FVjJx+aTEiqb2cYcvp5F4bC7eexjmRPrQhPvCkKN76xU3pDHnxTtPnc=;
-Received: from localhost.syndicat.com ([127.0.0.1]:54665 helo=localhost)
-	by mail.syndicat.com with esmtp (Syndicat PostHamster 12.2 4.96.1)
-	(envelope-from <nd@syndicat.com>)
-	id 1swffQ-0005tE-0T;
-	Fri, 04 Oct 2024 12:36:12 +0200
-X-Virus-Scanned: amavisd-new at syndicat.com
-Received: from mail.syndicat.com ([127.0.0.1])
-	by localhost (mail.syndicat.com [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id Yx5r5LuOo7ZZ; Fri,  4 Oct 2024 12:36:11 +0200 (CEST)
-Received: from [62.89.4.53] (port=48282 helo=gongov.localnet)
-	by mail.syndicat.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Syndicat PostHamster 12.2 4.96.1)
-	(envelope-from <nd@syndicat.com>)
-	id 1swffP-0003ug-1l;
-	Fri, 04 Oct 2024 12:36:11 +0200
-From: Niels Dettenbach <nd@syndicat.com>
-To: x86@kernel.org, Borislav Petkov <bp@alien8.de>,
- =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>,
- "H. Peter Anvin" <hpa@zytor.com>,
- "Peter Zijlstra (Intel)" <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Thomas Gleixner <tglx@linutronix.de>,
- linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH 1/1] x86: SMP broken on Xen PV DomU since 6.9
-Date: Fri, 04 Oct 2024 12:36:09 +0200
-Message-ID: <14053472.RDIVbhacDa@gongov>
-Organization: Syndicat IT&Internet
-Disposition-Notification-To: Niels Dettenbach <nd@syndicat.com>
-In-Reply-To: <45f3a10c-8695-42cb-abb8-8c13ce1a476b@suse.com>
-References:
- <2210883.Icojqenx9y@gongov> <864022534.0ifERbkFSE@gongov>
- <45f3a10c-8695-42cb-abb8-8c13ce1a476b@suse.com>
+	s=arc-20240116; t=1728040736; c=relaxed/simple;
+	bh=pZHox8K1Nmvgt3lxsApWtJFu8tZf+W8GEvc4spiFT0A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o3kjrljMSxvGGSKBmubQjma5vGj/0PH5b2OTKTPnb38LSrJXXp1rzelLuNM4O4KLwDJ1xbO5VoKcbuhTq0IBgtgfEqfZOHXuzG6M8SHwOJqxuZHNMDGUglk95mEY79PInsCOd+UDFA6B9EauP/xyLSDavspP6vyDyioJ5sToypg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8DEE0339;
+	Fri,  4 Oct 2024 04:19:23 -0700 (PDT)
+Received: from arm.com (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0DE1F3F640;
+	Fri,  4 Oct 2024 04:18:47 -0700 (PDT)
+Date: Fri, 4 Oct 2024 14:18:45 +0300
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	Ross Burton <ross.burton@arm.com>,
+	David Spickett <david.spickett@arm.com>,
+	Yury Khrustalev <yury.khrustalev@arm.com>,
+	Wilco Dijkstra <wilco.dijkstra@arm.com>,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v13 22/40] arm64/gcs: Ensure that new threads have a GCS
+Message-ID: <Zv_PFVffwIkKevzE@arm.com>
+References: <20241001-arm64-gcs-v13-0-222b78d87eee@kernel.org>
+ <20241001-arm64-gcs-v13-22-222b78d87eee@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart13610981.dW097sEU6C";
- micalg="pgp-sha512"; protocol="application/pgp-signature"
-X-Report-Abuse-To: abuse@syndicat.com (see https://www.syndicat.com/kontakt/kontakte/)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - mail.syndicat.com
-X-AntiAbuse: Original Domain - 
-X-AntiAbuse: Sender Address Domain - syndicat.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241001-arm64-gcs-v13-22-222b78d87eee@kernel.org>
 
---nextPart13610981.dW097sEU6C
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"; protected-headers="v1"
-From: Niels Dettenbach <nd@syndicat.com>
-Subject: Re: [PATCH 1/1] x86: SMP broken on Xen PV DomU since 6.9
-Date: Fri, 04 Oct 2024 12:36:09 +0200
-Message-ID: <14053472.RDIVbhacDa@gongov>
-Organization: Syndicat IT&Internet
-Disposition-Notification-To: Niels Dettenbach <nd@syndicat.com>
-In-Reply-To: <45f3a10c-8695-42cb-abb8-8c13ce1a476b@suse.com>
-MIME-Version: 1.0
+On Tue, Oct 01, 2024 at 11:59:01PM +0100, Mark Brown wrote:
+> When a new thread is created by a thread with GCS enabled the GCS needs
+> to be specified along with the regular stack.
+> 
+> Unfortunately plain clone() is not extensible and existing clone3()
+> users will not specify a stack so all existing code would be broken if
+> we mandated specifying the stack explicitly.  For compatibility with
+> these cases and also x86 (which did not initially implement clone3()
+> support for shadow stacks) if no GCS is specified we will allocate one
+> so when a thread is created which has GCS enabled allocate one for it.
+> We follow the extensively discussed x86 implementation and allocate
+> min(RLIMIT_STACK/2, 2G).  Since the GCS only stores the call stack and not
+> any variables this should be more than sufficient for most applications.
+> 
+> GCSs allocated via this mechanism will be freed when the thread exits.
 
-Am Freitag, 4. Oktober 2024, 12:29:57  schrieben Sie:
-> On 04.10.24 12:05, Niels Dettenbach wrote:
-> > Virtual machines under Xen Hypervisor (DomU) running in Xen PV mode use=
- a
-> > special, nonstandard synthetized CPU topology which "just works" under
-> > kernels 6.9.x while newer kernels wrongly assuming a "crash kernel" and
-> > disable SMP (reducing to one CPU core) because the newer topology
-> > implementation produces a wrong error "[Firmware Bug]: APIC enumeration
-> > order not specification compliant" after new topology checks which are
-> > improper for Xen PV platform. As a result, the kernel disables SMP and
-> > activates just one CPU core within the PV DomU "VM" (DomU in PV mode).
-> >=20
-> > The patch disables the regarding checks if it is running in Xen PV
-> > mode (only) and bring back SMP / all CPUs as in the past to such DomU
-> > VMs. The Xen subsystem takes care of the proper interaction between
-> > "guest" (DomU) and the "host" (Dom0).
-> >=20
-> > Signed-off-by: Niels Dettenbach <nd@syndicat.com>
->=20
-> Does the attached patch instead of yours help?
->=20
-> Compile tested only.
+I think Szabolcs mentioned a GCS leak with v12:
 
-Thanks J=C3=BCrgen - will try until monday...
+https://lore.kernel.org/r/ZtrihWQFyb2/XrQV@arm.com
 
+(and in some private messages IIRC)
 
-niels.
+Has this been identified? The changelog only mentions a leak in v8.
 
-
-
-
-
-
---nextPart13610981.dW097sEU6C
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEen+3H2N8RDyGzUZnDbtaiEWSKkQFAmb/xRkACgkQDbtaiEWS
-KkRfZA//XvrnCNs6eEXQKRO7D+ih4l5qYPj4xxrC3yP2Kf6syfIVEHPmC+wCSTZF
-qGS11tqp7ePVeyWGvmjJ1M28XDY0tKXM32v937OpqN4L6ynohlEa/zk6ibaKUvg7
-eEQpMOQ9aDeKMH0MUvdB4YWewmHvV/a3zv3rEiUHvFFsaEQBGwv32+t8ShuiCm+p
-e430u+L0fDcLbkLjmGpW3zyehkRImVY/gvQ05LM7/JR6C49HzXSSB/juqfmQimf4
-y9PkbmbzxRqwUjSGxHF1dj6c/ypak+kdS+/J8ht39kcVk4vOOmTuaj3xp7cGU7O1
-WSLvDzB+YA2cB0xeLBq+tJi6AVdS9iCVfUcz4yopq3U5V4uju1qTubUP3K9VfUs9
-Blsvfk79Gf5eaBAp78dZFPiJ0f5ZujHpg4e99wL7F2HLa0XQJjIGCw/jeQuYNFxe
-WfpM7Lv+RTFt8xkBMTZWE13J69yd+6GIibEsupt1A3017uhltNXtnQdIzbhtcQkZ
-wNnHqR4n+T0UJArieDQ/wxhPW25o6+3xcrZEWZHWQgmfOpmybyRlTLX/Sukd6N0W
-uxMjchWf6+jTvMTFipjKHGIWs37svWEvcj563ufgIe8/qSV/FDHoo/DZvcIgBxdl
-Es4tYKVHUu6iqAOHsiTuHvjXUJ8tk/nTXE8TA58c1XhF/7IjhmQ=
-=JRW+
------END PGP SIGNATURE-----
-
---nextPart13610981.dW097sEU6C--
-
-
-
+-- 
+Catalin
 
