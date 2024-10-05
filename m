@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-7711-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7712-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C89499131E
-	for <lists+linux-arch@lfdr.de>; Sat,  5 Oct 2024 01:36:39 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF7EE991363
+	for <lists+linux-arch@lfdr.de>; Sat,  5 Oct 2024 02:08:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D1ADC283C16
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Oct 2024 23:36:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AEBBEB2270A
+	for <lists+linux-arch@lfdr.de>; Sat,  5 Oct 2024 00:08:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA5491553AB;
-	Fri,  4 Oct 2024 23:36:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D1177F6;
+	Sat,  5 Oct 2024 00:08:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="VFMWUCaI"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="QwXm5TQI"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D710154C0D;
-	Fri,  4 Oct 2024 23:36:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BABC64C9F;
+	Sat,  5 Oct 2024 00:07:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728084978; cv=none; b=bbe9fc6RdmkWL9P1rFA0Xj+JvcrVN8E/v0edkkkEAFJR3LxoVNplMcMHlcRidesCx58tBLdiF8AWCl6yDuZmksueOijB3a+e0ht0SZnap4Fths8xuVI7Cf52xk21dZQDrZM5p8FeRi57uPWom6fCnQkvo+jVROejpsgZWiCmrm8=
+	t=1728086880; cv=none; b=RFwVyn2+p2RSv3lZ/+NiQ7AKwKMnYoytW9G46KnB9jCdDbNTrSRq1ZemoM+LxP5a/FKr+kyOWHJML9s0MVu4oFDM6jIHQfGs91alfHQwbyS2f/LTGSDcLT2h766z5SmsCP4zuD9Qxb+qErqoMmNX4DkxFrcCD1he//KJ7/8OXP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728084978; c=relaxed/simple;
-	bh=iQeWTsGfFnfHDK7LMNoqjyhkjqdxiz1+pWQDmHMP8bU=;
+	s=arc-20240116; t=1728086880; c=relaxed/simple;
+	bh=+MfI7OYcWAd2dMDXZEx5YG70J88IUHYEYwpDpb4OTfw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AoOYocW7kxO1W/FXX+FLNd7DDYXB3JIAalFmKQJyR4JjDUdE+uhI1gQA33oC2i19t6CFx0C/WinKTajO0v9GwgRkJyRni4SNV5XxqP2j9zzVQVDTlVG9qeflgS+BWOa5NVurk7AtpFR/wuenQbnLJNa6NSIeP+Owu6mi9jW8ikU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=VFMWUCaI; arc=none smtp.client-ip=13.77.154.182
+	 In-Reply-To:Content-Type; b=jOUs5mkGm58iKzfJ322IAndukiF9r2Dgvg/1GJcvuzRq30r5onNK2jH0Vq7O9MqWTH15ed1IrWlT5UsRq7QWLM0UKp3SmoSm3DRWQLaHKTTzBMLwElmXUhqoBSw8AqVqVral3ujQO0UJ51kATM05QGc6lvmoYAEKdp0uE8mJHik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=QwXm5TQI; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from [10.0.0.114] (c-67-182-156-199.hsd1.wa.comcast.net [67.182.156.199])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 2A53520DB378;
-	Fri,  4 Oct 2024 16:36:10 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2A53520DB378
+	by linux.microsoft.com (Postfix) with ESMTPSA id 6066F20DB37A;
+	Fri,  4 Oct 2024 17:07:57 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6066F20DB37A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1728084971;
-	bh=12axO/5wR11TqDYAjMUHSrOD2AfHvidYKZrZQKRTf6A=;
+	s=default; t=1728086878;
+	bh=LBnzr8OIIg6knuVrAj3ZPsyJbh5bMJgu1ZuS7jAuHyU=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=VFMWUCaIBQ8EPngTdqNePaLPH2kkoNqFcBK/p9OaD+RiCdUGSPby/3CpF48CZYHaY
-	 eY/NnzTien9H0BMtpRrMbaLJvgp4vqtsKvnLlAgaJ8zjpzojV8LzZ/bwvHv8uwKT4B
-	 kWIeP6x8lWVWbV3kya4o+mW+YLB+SThKWXYXNOSo=
-Message-ID: <17d5a6fd-9f4e-4987-a9fd-dff45cae10a2@linux.microsoft.com>
-Date: Fri, 4 Oct 2024 16:36:06 -0700
+	b=QwXm5TQI+PpevcOJwLiQCmf2iHFL2kqrYd0jPp70SOf4xm+OCFOAqJbgR3wBT8CJp
+	 R/gJF6q6xzALLspZdmutH4Q3khZWgia3ohn/0g5Qh3Q/lC0UNfd1K1IdM1Y6f4Suuk
+	 LDBu/TrXOY7jsq6vFSeig5g6GL1r0TQ5r0DbxDSU=
+Message-ID: <3b2e7170-1229-4981-8905-02b16bd2a85d@linux.microsoft.com>
+Date: Fri, 4 Oct 2024 17:07:53 -0700
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -51,7 +51,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 5/5] hyperv: Use hvhdk.h instead of hyperv-tlfs.h in
  Hyper-V code
-To: Simon Horman <horms@kernel.org>
+To: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
 Cc: linux-hyperv@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-kernel@vger.kernel.org, kvm@vger.kernel.org, iommu@lists.linux.dev,
  netdev@vger.kernel.org, linux-pci@vger.kernel.org,
@@ -66,113 +66,59 @@ Cc: linux-hyperv@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  pabeni@redhat.com, lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
  bhelgaas@google.com, arnd@arndb.de, sgarzare@redhat.com,
  jinankjain@linux.microsoft.com, muminulrussell@gmail.com,
- skinsburskii@linux.microsoft.com, mukeshrathor@microsoft.com
+ mukeshrathor@microsoft.com
 References: <1727985064-18362-1-git-send-email-nunodasneves@linux.microsoft.com>
  <1727985064-18362-6-git-send-email-nunodasneves@linux.microsoft.com>
- <20241004191104.GI1310185@kernel.org>
+ <20241004155810.GA15304@skinsburskii.>
 Content-Language: en-US
 From: Nuno Das Neves <nunodasneves@linux.microsoft.com>
-In-Reply-To: <20241004191104.GI1310185@kernel.org>
+In-Reply-To: <20241004155810.GA15304@skinsburskii.>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 10/4/2024 12:11 PM, Simon Horman wrote:
-> Hi,
+On 10/4/2024 8:58 AM, Stanislav Kinsburskii wrote:
+> Hi Nuno,
 > 
-> With this change in place I see allmodconfig x86_64 builds reporting that
-> HV_REGISTER_FEATURES is undeclared.
+> On Thu, Oct 03, 2024 at 12:51:04PM -0700, Nuno Das Neves wrote:
+>> diff --git a/arch/arm64/hyperv/hv_core.c b/arch/arm64/hyperv/hv_core.c
+>> index 9d1969b875e9..bb7f28f74bf4 100644
+>> --- a/arch/arm64/hyperv/hv_core.c
+>> +++ b/arch/arm64/hyperv/hv_core.c
+>> @@ -14,6 +14,7 @@
+>>  #include <linux/arm-smccc.h>
+>>  #include <linux/module.h>
+>>  #include <asm-generic/bug.h>
+>> +#define HYPERV_NONTLFS_HEADERS
+>>  #include <asm/mshyperv.h>
+>>  
 > 
-> arch/arm64/hyperv/mshyperv.c: In function 'hyperv_init':
-> arch/arm64/hyperv/mshyperv.c:53:26: error: 'HV_REGISTER_FEATURES' undeclared (first use in this function); did you mean 'HV_REGISTER_FEATURES_INFO'?
->    53 |         hv_get_vpreg_128(HV_REGISTER_FEATURES, &result);
->       |                          ^~~~~~~~~~~~~~~~~~~~
->       |                          HV_REGISTER_FEATURES_INFO
-> arch/arm64/hyperv/mshyperv.c:53:26: note: each undeclared identifier is reported only once for each function it appears in
-> arch/arm64/hyperv/mshyperv.c:58:26: error: 'HV_REGISTER_ENLIGHTENMENTS' undeclared (first use in this function); did you mean 'HV_ACCESS_REENLIGHTENMENT'?
->    58 |         hv_get_vpreg_128(HV_REGISTER_ENLIGHTENMENTS, &result);
->       |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~
->       |                          HV_ACCESS_REENLIGHTENMENT
+> Perhaps it would be cleaner to introduce a new header file to be
+> included, containing the new define and including <asm/mshyperv.h> instead.
 > 
+> Stas
 
-Ah, I did forgot to check arm64. Thanks for the catch, I'll be sure to
-fix it for v2.
+If I understand correctly, you're suggesting adding another stub named e.g.
+"hv_mshyperv.h", containing:
 
-> 
-> And here too, with x86_64 allmodconfig.
-> 
-> In file included from ./include/linux/string.h:390,
->                  from ./include/linux/efi.h:16,
->                  from arch/x86/hyperv/hv_init.c:12:
-> arch/x86/hyperv/hv_init.c: In function 'get_vtl':
-> ./include/linux/overflow.h:372:23: error: invalid application of 'sizeof' to incomplete type 'struct hv_get_vp_registers_input'
->   372 |                 sizeof(*(p)) + flex_array_size(p, member, count),       \
->       |                       ^
-> ./include/linux/fortify-string.h:502:42: note: in definition of macro '__fortify_memset_chk'
->   502 |         size_t __fortify_size = (size_t)(size);                         \
->       |                                          ^~~~
-> arch/x86/hyperv/hv_init.c:427:9: note: in expansion of macro 'memset'
->   427 |         memset(input, 0, struct_size(input, element, 1));
->       |         ^~~~~~
-> arch/x86/hyperv/hv_init.c:427:26: note: in expansion of macro 'struct_size'
->   427 |         memset(input, 0, struct_size(input, element, 1));
->       |                          ^~~~~~~~~~~
-> 
-> [errors trimmed for the sake of brevity]
-> 
-> ...
-> 
+#define HYPERV_NONTLFS_HEADERS
+#include<asm/mshyperv.h>
 
-Thanks
+Then in the roughly 24 places in this patch where we have:
 
-> 
-> And, likewise, with this patch applied I see a number of errors when
-> compiling this file. This is with allmodconfig on x86_64 with:
-> 
-> Modified: CONFIG_HYPERV=y (instead of m)
-> Added: CONFIG_HYPERV_VTL_MODE=y
-> 
++#define HYPERV_NONTLFS_HEADERS
 
-Thanks again,
-Ah, I wish there was a way to check these different combinations of y/m
-more easily.
+Instead, we'd have:
 
-> arch/x86/hyperv/hv_vtl.c: In function 'hv_vtl_bringup_vcpu':
-> arch/x86/hyperv/hv_vtl.c:154:34: error: 'HVCALL_ENABLE_VP_VTL' undeclared (first use in this function)
->   154 |         status = hv_do_hypercall(HVCALL_ENABLE_VP_VTL, input, NULL);
->       |                                  ^~~~~~~~~~~~~~~~~~~~
-> arch/x86/hyperv/hv_vtl.c:154:34: note: each undeclared identifier is reported only once for each function it appears in
-> In file included from ./include/linux/string.h:390,
->                  from ./include/linux/bitmap.h:13,
->                  from ./include/linux/cpumask.h:12,
->                  from ./arch/x86/include/asm/apic.h:5,
->                  from arch/x86/hyperv/hv_vtl.c:9:
-> arch/x86/hyperv/hv_vtl.c: In function 'hv_vtl_apicid_to_vp_id':
-> arch/x86/hyperv/hv_vtl.c:189:32: error: invalid application of 'sizeof' to incomplete type 'struct hv_get_vp_from_apic_id_in'
->   189 |         memset(input, 0, sizeof(*input));
->       |                                ^
-> ./include/linux/fortify-string.h:502:42: note: in definition of macro '__fortify_memset_chk'
->   502 |         size_t __fortify_size = (size_t)(size);                         \
->       |                                          ^~~~
-> arch/x86/hyperv/hv_vtl.c:189:9: note: in expansion of macro 'memset'
->   189 |         memset(input, 0, sizeof(*input));
->       |         ^~~~~~
-> arch/x86/hyperv/hv_vtl.c:190:14: error: invalid use of undefined type 'struct hv_get_vp_from_apic_id_in'
->   190 |         input->partition_id = HV_PARTITION_ID_SELF;
->       |              ^~
-> arch/x86/hyperv/hv_vtl.c:191:14: error: invalid use of undefined type 'struct hv_get_vp_from_apic_id_in'
->   191 |         input->apic_ids[0] = apic_id;
->       |              ^~
-> arch/x86/hyperv/hv_vtl.c:195:45: error: 'HVCALL_GET_VP_ID_FROM_APIC_ID' undeclared (first use in this function)
->   195 |         control = HV_HYPERCALL_REP_COMP_1 | HVCALL_GET_VP_ID_FROM_APIC_ID;
->       |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> ...
+-#include <asm/mshyperv.h>
++#include <hyperv/hv_mshyperv.h>
 
-Looks like I'm missing a one or two definitions in the new headers, and the
-names have changed slightly in couple of cases. I'll do some more thorough
-checking and have it all fixed for v2.
+I suppose the current version is a bit opaque - it's not immediately clear
+why HYPERV_NONTLFs_HEADERS is defined, and that it must be defined before
+including asm/mshyperv.h - someone reading the code would have to go find
+hv_defs.h to puzzle that out.
 
-I didn't know about this allmodconfig target, that will make it a bit easier!
+This improves the situation slightly by associating the #define with
+asm/mshyperv.h. I'll consider it for v2, thanks!
 
 Nuno
 
