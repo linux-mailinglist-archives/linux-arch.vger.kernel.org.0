@@ -1,124 +1,221 @@
-Return-Path: <linux-arch+bounces-7712-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7713-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF7EE991363
-	for <lists+linux-arch@lfdr.de>; Sat,  5 Oct 2024 02:08:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A06E09913D8
+	for <lists+linux-arch@lfdr.de>; Sat,  5 Oct 2024 03:55:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AEBBEB2270A
-	for <lists+linux-arch@lfdr.de>; Sat,  5 Oct 2024 00:08:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1BE131F23C27
+	for <lists+linux-arch@lfdr.de>; Sat,  5 Oct 2024 01:55:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D1177F6;
-	Sat,  5 Oct 2024 00:08:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19C5B1798F;
+	Sat,  5 Oct 2024 01:55:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="QwXm5TQI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ao9Py+r1"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BABC64C9F;
-	Sat,  5 Oct 2024 00:07:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2799D322B;
+	Sat,  5 Oct 2024 01:54:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728086880; cv=none; b=RFwVyn2+p2RSv3lZ/+NiQ7AKwKMnYoytW9G46KnB9jCdDbNTrSRq1ZemoM+LxP5a/FKr+kyOWHJML9s0MVu4oFDM6jIHQfGs91alfHQwbyS2f/LTGSDcLT2h766z5SmsCP4zuD9Qxb+qErqoMmNX4DkxFrcCD1he//KJ7/8OXP8=
+	t=1728093300; cv=none; b=Kyf2Kz+0c6mjJmSZcCLeWL+zoe0Aj+wx0thBtSt2jz+HN4dOzvC5ZjH6V841r86M13+wnhOqVZHn+8BaoXiAIb9EGvurZkK5Uk0FIit8Hi4yyCPz52IsOrNmv4eFu+CYYFhUS9BTyekxIAKOPMikAorF53rZts74gUIvgI9LbXE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728086880; c=relaxed/simple;
-	bh=+MfI7OYcWAd2dMDXZEx5YG70J88IUHYEYwpDpb4OTfw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jOUs5mkGm58iKzfJ322IAndukiF9r2Dgvg/1GJcvuzRq30r5onNK2jH0Vq7O9MqWTH15ed1IrWlT5UsRq7QWLM0UKp3SmoSm3DRWQLaHKTTzBMLwElmXUhqoBSw8AqVqVral3ujQO0UJ51kATM05QGc6lvmoYAEKdp0uE8mJHik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=QwXm5TQI; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [10.0.0.114] (c-67-182-156-199.hsd1.wa.comcast.net [67.182.156.199])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 6066F20DB37A;
-	Fri,  4 Oct 2024 17:07:57 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6066F20DB37A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1728086878;
-	bh=LBnzr8OIIg6knuVrAj3ZPsyJbh5bMJgu1ZuS7jAuHyU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=QwXm5TQI+PpevcOJwLiQCmf2iHFL2kqrYd0jPp70SOf4xm+OCFOAqJbgR3wBT8CJp
-	 R/gJF6q6xzALLspZdmutH4Q3khZWgia3ohn/0g5Qh3Q/lC0UNfd1K1IdM1Y6f4Suuk
-	 LDBu/TrXOY7jsq6vFSeig5g6GL1r0TQ5r0DbxDSU=
-Message-ID: <3b2e7170-1229-4981-8905-02b16bd2a85d@linux.microsoft.com>
-Date: Fri, 4 Oct 2024 17:07:53 -0700
+	s=arc-20240116; t=1728093300; c=relaxed/simple;
+	bh=uXRVWVG114f3/9yWUkqrx/Xg92Pkui3oaEXL/RgQMY0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AT5vbHRdk5aMLReESBncPhzpJISpE0mK83YWlV2C/Kn4jtQBRmhvjhu6rHrd1Rd6KVUF7S7ia+ueRzLAuzwoS9GTTw3x2KYtq37PLrU3WyX6P7AMsoNmaAs3lKqNJweHrIdP8wd/sr/5kwTCI5EfXOn43Nv2zQr9t5FtcWMuRU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ao9Py+r1; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728093297; x=1759629297;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uXRVWVG114f3/9yWUkqrx/Xg92Pkui3oaEXL/RgQMY0=;
+  b=Ao9Py+r1zsvQ36BTg4jeQNu1LdJdPrT9tLQw0sa09Nx2hfY9SfFXFztf
+   3lnpkUGczFQWXuV6b7zUfAR5Q8nmp+1IzGnKfaSLKYhB0Q3YWY9wi3uK9
+   7/9EFM6xvBKZVspMXIQVTdg2gXbvZvYKaUpPpqe9UDLKSDH6k9qM1XesU
+   cW0B888mANCNAOVxkuOwZajP7AHlMYKUHVyUPXKo8uuJUjRn3xepwxhbr
+   oiJl0S/C1QJsqZn8PxfRylVFnGKiWuU1Hg+zVR2ApXRuZxE1KlOYmfzBD
+   cDgT3tfjBDKbuRBGqfnU/IaVIHi+vY9jQf29WIb2myVLO5cI+YBuFIc4d
+   w==;
+X-CSE-ConnectionGUID: pT5H4Li2S6eMNXxq3wAOxA==
+X-CSE-MsgGUID: ymvFZxSAQiWyx9sk6lW+kQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11215"; a="30209802"
+X-IronPort-AV: E=Sophos;i="6.11,179,1725346800"; 
+   d="scan'208";a="30209802"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2024 18:54:56 -0700
+X-CSE-ConnectionGUID: dq26sFVKRNOHr4dJL9jIYA==
+X-CSE-MsgGUID: pHBLfBJjQk2TiDi2g3fVEA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,179,1725346800"; 
+   d="scan'208";a="75214238"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 04 Oct 2024 18:54:49 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1swu0N-0002RI-13;
+	Sat, 05 Oct 2024 01:54:47 +0000
+Date: Sat, 5 Oct 2024 09:54:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nuno Das Neves <nunodasneves@linux.microsoft.com>,
+	linux-hyperv@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	iommu@lists.linux.dev, netdev@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+	virtualization@lists.linux.dev
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, kys@microsoft.com,
+	haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+	catalin.marinas@arm.com, will@kernel.org, luto@kernel.org,
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+	seanjc@google.com, pbonzini@redhat.com, peterz@infradead.org,
+	daniel.lezcano@linaro.org, joro@8bytes.org, robin.murphy@arm.com,
+	davem@davemloft.net, edumazet@google.com
+Subject: Re: [PATCH 5/5] hyperv: Use hvhdk.h instead of hyperv-tlfs.h in
+ Hyper-V code
+Message-ID: <202410050921.0o9FH5Ai-lkp@intel.com>
+References: <1727985064-18362-6-git-send-email-nunodasneves@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 5/5] hyperv: Use hvhdk.h instead of hyperv-tlfs.h in
- Hyper-V code
-To: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
-Cc: linux-hyperv@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, kvm@vger.kernel.org, iommu@lists.linux.dev,
- netdev@vger.kernel.org, linux-pci@vger.kernel.org,
- linux-arch@vger.kernel.org, virtualization@lists.linux.dev,
- kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
- decui@microsoft.com, catalin.marinas@arm.com, will@kernel.org,
- luto@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
- dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
- seanjc@google.com, pbonzini@redhat.com, peterz@infradead.org,
- daniel.lezcano@linaro.org, joro@8bytes.org, robin.murphy@arm.com,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
- bhelgaas@google.com, arnd@arndb.de, sgarzare@redhat.com,
- jinankjain@linux.microsoft.com, muminulrussell@gmail.com,
- mukeshrathor@microsoft.com
-References: <1727985064-18362-1-git-send-email-nunodasneves@linux.microsoft.com>
- <1727985064-18362-6-git-send-email-nunodasneves@linux.microsoft.com>
- <20241004155810.GA15304@skinsburskii.>
-Content-Language: en-US
-From: Nuno Das Neves <nunodasneves@linux.microsoft.com>
-In-Reply-To: <20241004155810.GA15304@skinsburskii.>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1727985064-18362-6-git-send-email-nunodasneves@linux.microsoft.com>
 
-On 10/4/2024 8:58 AM, Stanislav Kinsburskii wrote:
-> Hi Nuno,
-> 
-> On Thu, Oct 03, 2024 at 12:51:04PM -0700, Nuno Das Neves wrote:
->> diff --git a/arch/arm64/hyperv/hv_core.c b/arch/arm64/hyperv/hv_core.c
->> index 9d1969b875e9..bb7f28f74bf4 100644
->> --- a/arch/arm64/hyperv/hv_core.c
->> +++ b/arch/arm64/hyperv/hv_core.c
->> @@ -14,6 +14,7 @@
->>  #include <linux/arm-smccc.h>
->>  #include <linux/module.h>
->>  #include <asm-generic/bug.h>
->> +#define HYPERV_NONTLFS_HEADERS
->>  #include <asm/mshyperv.h>
->>  
-> 
-> Perhaps it would be cleaner to introduce a new header file to be
-> included, containing the new define and including <asm/mshyperv.h> instead.
-> 
-> Stas
+Hi Nuno,
 
-If I understand correctly, you're suggesting adding another stub named e.g.
-"hv_mshyperv.h", containing:
+kernel test robot noticed the following build errors:
 
-#define HYPERV_NONTLFS_HEADERS
-#include<asm/mshyperv.h>
+[auto build test ERROR on tip/x86/core]
+[also build test ERROR on arm64/for-next/core kvm/queue linus/master v6.12-rc1 next-20241004]
+[cannot apply to kvm/linux-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Then in the roughly 24 places in this patch where we have:
+url:    https://github.com/intel-lab-lkp/linux/commits/Nuno-Das-Neves/hyperv-Move-hv_connection_id-to-hyperv-tlfs-h/20241004-035418
+base:   tip/x86/core
+patch link:    https://lore.kernel.org/r/1727985064-18362-6-git-send-email-nunodasneves%40linux.microsoft.com
+patch subject: [PATCH 5/5] hyperv: Use hvhdk.h instead of hyperv-tlfs.h in Hyper-V code
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20241005/202410050921.0o9FH5Ai-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project fef3566a25ff0e34fb87339ba5e13eca17cec00f)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241005/202410050921.0o9FH5Ai-lkp@intel.com/reproduce)
 
-+#define HYPERV_NONTLFS_HEADERS
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410050921.0o9FH5Ai-lkp@intel.com/
 
-Instead, we'd have:
+All errors (new ones prefixed by >>):
 
--#include <asm/mshyperv.h>
-+#include <hyperv/hv_mshyperv.h>
+   In file included from arch/arm64/hyperv/mshyperv.c:13:
+   In file included from include/linux/acpi.h:39:
+   In file included from include/acpi/acpi_io.h:7:
+   In file included from arch/arm64/include/asm/acpi.h:14:
+   In file included from include/linux/memblock.h:12:
+   In file included from include/linux/mm.h:2228:
+   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     501 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     508 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     520 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     529 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> arch/arm64/hyperv/mshyperv.c:53:19: error: use of undeclared identifier 'HV_REGISTER_FEATURES'; did you mean 'HV_REGISTER_FEATURES_INFO'?
+      53 |         hv_get_vpreg_128(HV_REGISTER_FEATURES, &result);
+         |                          ^~~~~~~~~~~~~~~~~~~~
+         |                          HV_REGISTER_FEATURES_INFO
+   include/hyperv/hvgdk_mini.h:807:2: note: 'HV_REGISTER_FEATURES_INFO' declared here
+     807 |         HV_REGISTER_FEATURES_INFO                               = 0x00000201,
+         |         ^
+>> arch/arm64/hyperv/mshyperv.c:58:19: error: use of undeclared identifier 'HV_REGISTER_ENLIGHTENMENTS'
+      58 |         hv_get_vpreg_128(HV_REGISTER_ENLIGHTENMENTS, &result);
+         |                          ^
+   5 warnings and 2 errors generated.
 
-I suppose the current version is a bit opaque - it's not immediately clear
-why HYPERV_NONTLFs_HEADERS is defined, and that it must be defined before
-including asm/mshyperv.h - someone reading the code would have to go find
-hv_defs.h to puzzle that out.
 
-This improves the situation slightly by associating the #define with
-asm/mshyperv.h. I'll consider it for v2, thanks!
+vim +53 arch/arm64/hyperv/mshyperv.c
 
-Nuno
+410779d8d81fcf Nuno Das Neves 2024-03-07  30  
+9bbb888824e38c Michael Kelley 2021-08-04  31  static int __init hyperv_init(void)
+9bbb888824e38c Michael Kelley 2021-08-04  32  {
+9bbb888824e38c Michael Kelley 2021-08-04  33  	struct hv_get_vp_registers_output	result;
+9bbb888824e38c Michael Kelley 2021-08-04  34  	u64	guest_id;
+9bbb888824e38c Michael Kelley 2021-08-04  35  	int	ret;
+9bbb888824e38c Michael Kelley 2021-08-04  36  
+9bbb888824e38c Michael Kelley 2021-08-04  37  	/*
+9bbb888824e38c Michael Kelley 2021-08-04  38  	 * Allow for a kernel built with CONFIG_HYPERV to be running in
+9bbb888824e38c Michael Kelley 2021-08-04  39  	 * a non-Hyper-V environment, including on DT instead of ACPI.
+9bbb888824e38c Michael Kelley 2021-08-04  40  	 * In such cases, do nothing and return success.
+9bbb888824e38c Michael Kelley 2021-08-04  41  	 */
+9bbb888824e38c Michael Kelley 2021-08-04  42  	if (acpi_disabled)
+9bbb888824e38c Michael Kelley 2021-08-04  43  		return 0;
+9bbb888824e38c Michael Kelley 2021-08-04  44  
+9bbb888824e38c Michael Kelley 2021-08-04  45  	if (strncmp((char *)&acpi_gbl_FADT.hypervisor_id, "MsHyperV", 8))
+9bbb888824e38c Michael Kelley 2021-08-04  46  		return 0;
+9bbb888824e38c Michael Kelley 2021-08-04  47  
+9bbb888824e38c Michael Kelley 2021-08-04  48  	/* Setup the guest ID */
+d5ebde1e2b4615 Li kunyu       2022-09-28  49  	guest_id = hv_generate_guest_id(LINUX_VERSION_CODE);
+b967df6293510b Nuno Das Neves 2024-03-12  50  	hv_set_vpreg(HV_REGISTER_GUEST_OS_ID, guest_id);
+9bbb888824e38c Michael Kelley 2021-08-04  51  
+9bbb888824e38c Michael Kelley 2021-08-04  52  	/* Get the features and hints from Hyper-V */
+9bbb888824e38c Michael Kelley 2021-08-04 @53  	hv_get_vpreg_128(HV_REGISTER_FEATURES, &result);
+9bbb888824e38c Michael Kelley 2021-08-04  54  	ms_hyperv.features = result.as32.a;
+9bbb888824e38c Michael Kelley 2021-08-04  55  	ms_hyperv.priv_high = result.as32.b;
+9bbb888824e38c Michael Kelley 2021-08-04  56  	ms_hyperv.misc_features = result.as32.c;
+9bbb888824e38c Michael Kelley 2021-08-04  57  
+9bbb888824e38c Michael Kelley 2021-08-04 @58  	hv_get_vpreg_128(HV_REGISTER_ENLIGHTENMENTS, &result);
+9bbb888824e38c Michael Kelley 2021-08-04  59  	ms_hyperv.hints = result.as32.a;
+9bbb888824e38c Michael Kelley 2021-08-04  60  
+9bbb888824e38c Michael Kelley 2021-08-04  61  	pr_info("Hyper-V: privilege flags low 0x%x, high 0x%x, hints 0x%x, misc 0x%x\n",
+9bbb888824e38c Michael Kelley 2021-08-04  62  		ms_hyperv.features, ms_hyperv.priv_high, ms_hyperv.hints,
+9bbb888824e38c Michael Kelley 2021-08-04  63  		ms_hyperv.misc_features);
+9bbb888824e38c Michael Kelley 2021-08-04  64  
+9bbb888824e38c Michael Kelley 2021-08-04  65  	ret = hv_common_init();
+9bbb888824e38c Michael Kelley 2021-08-04  66  	if (ret)
+9bbb888824e38c Michael Kelley 2021-08-04  67  		return ret;
+9bbb888824e38c Michael Kelley 2021-08-04  68  
+52ae076c3a9b36 Michael Kelley 2023-05-23  69  	ret = cpuhp_setup_state(CPUHP_AP_HYPERV_ONLINE, "arm64/hyperv_init:online",
+9bbb888824e38c Michael Kelley 2021-08-04  70  				hv_common_cpu_init, hv_common_cpu_die);
+9bbb888824e38c Michael Kelley 2021-08-04  71  	if (ret < 0) {
+9bbb888824e38c Michael Kelley 2021-08-04  72  		hv_common_free();
+9bbb888824e38c Michael Kelley 2021-08-04  73  		return ret;
+9bbb888824e38c Michael Kelley 2021-08-04  74  	}
+9bbb888824e38c Michael Kelley 2021-08-04  75  
+f2580a907e5c0e Michael Kelley 2024-03-18  76  	ms_hyperv_late_init();
+f2580a907e5c0e Michael Kelley 2024-03-18  77  
+9bbb888824e38c Michael Kelley 2021-08-04  78  	hyperv_initialized = true;
+9bbb888824e38c Michael Kelley 2021-08-04  79  	return 0;
+9bbb888824e38c Michael Kelley 2021-08-04  80  }
+9bbb888824e38c Michael Kelley 2021-08-04  81  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
