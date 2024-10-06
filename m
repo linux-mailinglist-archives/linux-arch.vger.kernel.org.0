@@ -1,254 +1,179 @@
-Return-Path: <linux-arch+bounces-7723-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7724-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BCBD991E0F
-	for <lists+linux-arch@lfdr.de>; Sun,  6 Oct 2024 13:20:46 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D03C6991E83
+	for <lists+linux-arch@lfdr.de>; Sun,  6 Oct 2024 15:29:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CF51B1F21BAD
-	for <lists+linux-arch@lfdr.de>; Sun,  6 Oct 2024 11:20:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 41609B2177B
+	for <lists+linux-arch@lfdr.de>; Sun,  6 Oct 2024 13:29:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5DF8175D38;
-	Sun,  6 Oct 2024 11:20:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C23F5178367;
+	Sun,  6 Oct 2024 13:29:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="KMPf2RQ2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BLb7Bqd5"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ed1-f66.google.com (mail-ed1-f66.google.com [209.85.208.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4BB414D2B9
-	for <linux-arch@vger.kernel.org>; Sun,  6 Oct 2024 11:20:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8927A1779AB;
+	Sun,  6 Oct 2024 13:29:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728213639; cv=none; b=HitVNlrjeI24Mm5nkIPIvIZAOHoXZxjatGm8wL6QE2czebbSutA4ierupIf7YjeyLZX/RKyc5mDCczSd9kkh+XdAIvhDkMUEH0KAFO61TdJNSC7S3ObLUzKYpRY52OVN/uQaDzkpSiA7xMRaPwrkoKgs4raR0127Ij5a9kbomck=
+	t=1728221356; cv=none; b=jUAw4TZVJdUuvUGgrtjhj5KhkNgaSviwa5Pr4j82KN/5MQjTNG+g5ycsNlfo8os0u66DqGdzj/7/3R+QsoW8wSVPSiiDA6B9vk6fAzntar9RrGlalHc/UEoFIeyFCURaSqCYuI4mGhaGVHmIn3kkWTO5r09QvuxxvLdO/sLs/k4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728213639; c=relaxed/simple;
-	bh=xwtqRkymQbWLyrHFQs3l8k1xM6HJQbYROF9P9jVE/4Q=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dOqsvua/I9K4kPMtiufduxj2pny5jJJYBmX0d+gp3vvDaKi4+lz0hoWP7qsxcxtjMqWDUCOIrJozlWm2xbBG76aV+AcZT/zlyXcljTiQMU0DXEQyhB8zz5EDajgmyqWjz6a3NMMLmJFwFy+yBQTq/LxDLZuZ1K7YMlyv54lhGqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=KMPf2RQ2; arc=none smtp.client-ip=209.85.208.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ed1-f66.google.com with SMTP id 4fb4d7f45d1cf-5c8af23a4fcso4348831a12.0
-        for <linux-arch@vger.kernel.org>; Sun, 06 Oct 2024 04:20:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1728213636; x=1728818436; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rPsiLERRYU7D4j4sUXncuZrtdOCgoc8Hb9DOFm6I+ts=;
-        b=KMPf2RQ2S80PWikuJAszy5ChAGaZ3wfgUaxRHVPphN2a4+mzYYDhJyskVxY63NEli+
-         fKc+45p+rrDk3Uj2IVirwYWG3HB0VYaB5ez10VsEfKW0CH/D9FqenB63qpYmHPC9p7X8
-         q7S+Ok+nPWKcklc+PRAmch99W4iIskS/24qg4OIDxK9+7A0zH8lnTLH/mDf62amT/5bm
-         nxQnC3xStf3uZwvd2urCAGgWZGNSSOfu1RzOOaZ1jNVCRvhhsFIOKfzdQNEq4K2syw7R
-         zKQ8WuSpdgSRSwdwkgtDDp37upC4bsrdSNh9m4niu/+3j6Yyc3oqRP8ZgEOcDTrDiWd7
-         WExw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728213636; x=1728818436;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rPsiLERRYU7D4j4sUXncuZrtdOCgoc8Hb9DOFm6I+ts=;
-        b=fwnLZ8eYkMDxzwom/fZ7xfm3upZZO3UcNmu4CwM9lCVpsMkrWsz4E70IFJQMNIFKzJ
-         l2FhnYiHCpqt1WxbukGh68qGM+ZtpLTa3BCsubSZRidLXNDmLgBlkFiuTdxeSyl70Qr5
-         vqrkjaNeSHPJb+nVn7EEiT/8FPNa2bNMQr5qZxJGCftJ2JgoDgKI1ZsoruHOkgIJblS8
-         KdFOTPUOAm4k1eIMe2o5tA8PW/od2GUP6QYQ80dVjP2me8NDVQsLXt2LNppFo6MXpnPv
-         gHp9gto0dkeGqon1Y35PWJHzyzSSDdn/6R1ofRzgmL42PCEbZNni4KJC3rSBMuzqnipQ
-         z4jw==
-X-Forwarded-Encrypted: i=1; AJvYcCUVtr3X39NiXCkmlNoSb2/sm1BRl4mBLu3nDxMeMzurate3HfU8xVpwAS4cddNlB1F4Kq63SGrHBmo6@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7LRE4/660VfZSkqvyqHrkMN+a0WCR/X2jnzM6MAxYMxQjP2MH
-	zpKBxoRMvZtUu0kiNBNnzQfKZjAEZ62YcIn9U/QhGcU/pw9MdSk6jD4Qk0OXIj8=
-X-Google-Smtp-Source: AGHT+IG48id+lRY4xtL1ujqx4VpcR8QxySGV9q44wlS56hapCTBDQPNEacp1RsUNT7MPHUN2ohWifQ==
-X-Received: by 2002:a17:907:7f89:b0:a99:435c:89f2 with SMTP id a640c23a62f3a-a99435c8ce0mr357354766b.63.1728213635990;
-        Sun, 06 Oct 2024 04:20:35 -0700 (PDT)
-Received: from localhost (host-79-32-222-228.retail.telecomitalia.it. [79.32.222.228])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a993d92ed5dsm185689766b.63.2024.10.06.04.20.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Oct 2024 04:20:35 -0700 (PDT)
-From: Andrea della Porta <andrea.porta@suse.com>
-X-Google-Original-From: Andrea della Porta <aporta@suse.de>
-Date: Sun, 6 Oct 2024 13:20:51 +0200
-To: Bjorn Helgaas <helgaas@kernel.org>
-Cc: Andrea della Porta <andrea.porta@suse.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Derek Kiernan <derek.kiernan@amd.com>,
-	Dragan Cvetic <dragan.cvetic@amd.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Saravana Kannan <saravanak@google.com>,
-	Bjorn Helgaas <bhelgaas@google.com>, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, netdev@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
-	Lee Jones <lee@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-	Stefan Wahren <wahrenst@gmx.net>, Lizhi Hou <lizhi.hou@amd.com>
-Subject: Re: [PATCH 03/11] PCI: of_property: Sanitize 32 bit PCI address
- parsed from DT
-Message-ID: <ZwJyk9XouLfd24VG@apocalypse>
-References: <ZvZVPA6ov5XgScpz@apocalypse>
- <20240928201717.GA99402@bhelgaas>
+	s=arc-20240116; t=1728221356; c=relaxed/simple;
+	bh=BtD6uQeKcar4gJLuDMrO7gB7cz+l9whS8y4o3WOSc8I=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=KctZKa+RNQINljSe6O/7DScjUpIV77ujLyzSdnY3hRSL2WwAvM48YwR/hFpLh+UJ1NZMyh1pXqu/7SFDFmRZ/6AJSgW8kOuC99QdICAak8RXXKEiOrFmXxBAAwlTLMOs5poiMH6y3op3HqxKeqkRCerI07xeGEHCM8R7g6swPlM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BLb7Bqd5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 593B9C4CED1;
+	Sun,  6 Oct 2024 13:29:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728221356;
+	bh=BtD6uQeKcar4gJLuDMrO7gB7cz+l9whS8y4o3WOSc8I=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=BLb7Bqd5DUL9igAN334n3NBJRh+b0UM6zZbgFYtlnE72Ov0F1vp+7NrtaTRNv6341
+	 49y9XNEFPTgSVrodwUyQtm5isKzB7G1puJcxHBsciFGgw6Gd1qeOvbgUTI9WaJDy7M
+	 emG6kYcGhR+RCnlhgJyuqQegLUgpp+dDYLXCPvVr8UeZxgVtbhMVt5AyPFhJwUDuqx
+	 6jHUfcyw/vtcfEyZ1dMi/Iu899d3TW220Y/GYvP1qOOoB2XqlJ6z0cDx5EssEd7PHn
+	 aR5OXHf7RFeXQshB6Pyx5yFxztobnz5WNspC+ZNiOcA4XPXdX4D+Pqj2aNuuzDpb6c
+	 p0Anm5boOhHdQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70DB03806656;
+	Sun,  6 Oct 2024 13:29:21 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240928201717.GA99402@bhelgaas>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 00/33] riscv control-flow integrity for usermode
+From: patchwork-bot+linux-riscv@kernel.org
+Message-Id: 
+ <172822135999.3395169.2185051958968934926.git-patchwork-notify@kernel.org>
+Date: Sun, 06 Oct 2024 13:29:19 +0000
+References: <20241001-v5_user_cfi_series-v1-0-3ba65b6e550f@rivosinc.com>
+In-Reply-To: <20241001-v5_user_cfi_series-v1-0-3ba65b6e550f@rivosinc.com>
+To: Deepak Gupta <debug@rivosinc.com>
+Cc: linux-riscv@lists.infradead.org, tglx@linutronix.de, mingo@redhat.com,
+ bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+ akpm@linux-foundation.org, Liam.Howlett@oracle.com, vbabka@suse.cz,
+ lorenzo.stoakes@oracle.com, paul.walmsley@sifive.com, palmer@dabbelt.com,
+ aou@eecs.berkeley.edu, conor@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+ arnd@arndb.de, brauner@kernel.org, peterz@infradead.org, oleg@redhat.com,
+ ebiederm@xmission.com, kees@kernel.org, corbet@lwn.net, shuah@kernel.org,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-mm@kvack.org, devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ alistair.francis@wdc.com, richard.henderson@linaro.org, jim.shu@sifive.com,
+ andybnac@gmail.com, kito.cheng@sifive.com, charlie@rivosinc.com,
+ atishp@rivosinc.com, evan@rivosinc.com, cleger@rivosinc.com,
+ alexghiti@rivosinc.com, samitolvanen@google.com, broonie@kernel.org,
+ rick.p.edgecombe@intel.com, david@redhat.com, carlos.bilbao.osdev@gmail.com,
+ samuel.holland@sifive.com, ajones@ventanamicro.com,
+ conor.dooley@microchip.com, andy.chiu@sifive.com
 
-Hi Bjorn,
+Hello:
 
-On 15:17 Sat 28 Sep     , Bjorn Helgaas wrote:
-...
-> From your earlier email
-> (https://lore.kernel.org/r/Zszcps6bnCcdFa54@apocalypse):
+This series was applied to riscv/linux.git (for-next)
+by Palmer Dabbelt <palmer@rivosinc.com>:
+
+On Tue, 01 Oct 2024 09:06:05 -0700 you wrote:
+> v5 for cpu assisted riscv user mode control flow integrity.
+> zicfiss and zicfilp [1] are ratified riscv CPU extensions.
 > 
-> > Without this patch the range translation chain is broken, like this:
+> Changes in this version are
+> - rebased on v6.12-rc1
+> - Fixed schema related issues in device tree file
+> - Fixed some of the documentation related issues in zicfilp/ss.rst
+>   (style issues and added index)
+> - added `SHADOW_STACK_SET_MARKER` so that implementation can define base
+>   of shadow stack.
+> - Fixed warnings on definitions added in usercfi.h when
+>   CONFIG_RISCV_USER_CFI is not selected.
+> - Adopted context header based signal handling as proposed by Andy Chiu
+> - Added support for enabling kernel mode access to shadow stack using
+>   FWFT [4]
 > 
-> > pcie@120000: <0x2000000 0x00 0x00    0x1f 0x00                0x00 0xfffffffc>;
-> > ~~~ chain breaks here ~~~
-> > pci@0      : <0x82000000 0x1f 0x00   0x82000000 0x1f 0x00     0x00 0x600000>;
-> > dev@0,0    : <0x01 0x00 0x00         0x82010000 0x1f 0x00     0x00 0x400000>;
-> > rp1@0      : <0xc0 0x40000000        0x01 0x00 0x00           0x00 0x400000>;
-> 
-> The cover letter said "RP1 is an MFD chipset that acts as a
-> south-bridge PCIe endpoint .. the RP1 as an endpoint itself is
-> discoverable via usual PCI enumeration".
-> 
-> I assume pcie@120000 is the PCI host bridge and is already in the
-> original DT describing the platform.  I assume pci@0 is a Root Port
-> and dev@0,0 is the RP1 Endpoint, and the existing code already adds
-> them as they are enumerated when pci_bus_add_device() calls
-> of_pci_make_dev_node(), and I think this series adds the rp1@0
-> description.
+> [...]
 
-Correct.
+Here is the summary with links:
+  - [01/33] mm: Introduce ARCH_HAS_USER_SHADOW_STACK
+    (no matching commit)
+  - [02/33] mm: helper `is_shadow_stack_vma` to check shadow stack vma
+    (no matching commit)
+  - [03/33] riscv: Enable cbo.zero only when all harts support Zicboz
+    https://git.kernel.org/riscv/c/1b57747e978f
+  - [04/33] riscv: Add support for per-thread envcfg CSR values
+    (no matching commit)
+  - [05/33] riscv: Call riscv_user_isa_enable() only on the boot hart
+    (no matching commit)
+  - [06/33] riscv/Kconfig: enable HAVE_EXIT_THREAD for riscv
+    (no matching commit)
+  - [07/33] riscv: zicfilp / zicfiss in dt-bindings (extensions.yaml)
+    (no matching commit)
+  - [08/33] riscv: zicfiss / zicfilp enumeration
+    (no matching commit)
+  - [09/33] riscv: zicfiss / zicfilp extension csr and bit definitions
+    (no matching commit)
+  - [10/33] riscv: usercfi state for task and save/restore of CSR_SSP on trap entry/exit
+    (no matching commit)
+  - [11/33] riscv/mm : ensure PROT_WRITE leads to VM_READ | VM_WRITE
+    (no matching commit)
+  - [12/33] riscv mm: manufacture shadow stack pte
+    (no matching commit)
+  - [13/33] riscv mmu: teach pte_mkwrite to manufacture shadow stack PTEs
+    (no matching commit)
+  - [14/33] riscv mmu: write protect and shadow stack
+    (no matching commit)
+  - [15/33] riscv/mm: Implement map_shadow_stack() syscall
+    (no matching commit)
+  - [16/33] riscv/shstk: If needed allocate a new shadow stack on clone
+    (no matching commit)
+  - [17/33] prctl: arch-agnostic prctl for shadow stack
+    (no matching commit)
+  - [18/33] prctl: arch-agnostic prctl for indirect branch tracking
+    (no matching commit)
+  - [19/33] riscv: Implements arch agnostic shadow stack prctls
+    (no matching commit)
+  - [20/33] riscv: Implements arch agnostic indirect branch tracking prctls
+    (no matching commit)
+  - [21/33] riscv/traps: Introduce software check exception
+    (no matching commit)
+  - [22/33] riscv: signal: abstract header saving for setup_sigcontext
+    (no matching commit)
+  - [23/33] riscv signal: save and restore of shadow stack for signal
+    (no matching commit)
+  - [24/33] riscv/kernel: update __show_regs to print shadow stack register
+    (no matching commit)
+  - [25/33] riscv/ptrace: riscv cfi status and state via ptrace and in core files
+    (no matching commit)
+  - [26/33] riscv/hwprobe: zicfilp / zicfiss enumeration in hwprobe
+    (no matching commit)
+  - [27/33] riscv: Add Firmware Feature SBI extensions definitions
+    (no matching commit)
+  - [28/33] riscv: enable kernel access to shadow stack memory via FWFT sbi call
+    (no matching commit)
+  - [29/33] riscv: kernel command line option to opt out of user cfi
+    (no matching commit)
+  - [30/33] riscv: create a config for shadow stack and landing pad instr support
+    (no matching commit)
+  - [31/33] riscv: Documentation for landing pad / indirect branch tracking
+    (no matching commit)
+  - [32/33] riscv: Documentation for shadow stack on riscv
+    (no matching commit)
+  - [33/33] kselftest/riscv: kselftest for user mode cfi
+    (no matching commit)
 
-> 
-> And the "ranges" properties are built when of_pci_make_dev_node()
-> eventually calls of_pci_prop_ranges().  With reference to sec 2.2.1.1
-> of https://www.devicetree.org/open-firmware/bindings/pci/pci2_1.pdf
-> and
-> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#ranges,
-> I *think* your example says:
-> 
-> pcie@120000 has:
->   child phys.hi	      0x02000000    n=0 p=0 t=0 ss=10b
->   child phys.mid,lo   0x00000000_00000000
->   parent phys.hi,lo   0x0000001f_00000000
->   length hi,lo        0x00000000_fffffffc
-> 
-> which would make it a bridge where the child (PCI) address space is
-> relocatable non-prefetchable 32-bit memory space at
-> 0x00000000-0xfffffffc, and the corresponding parent address space is
-> 0x1f_00000000-0x1f_fffffffc.  That means the host bridge applies an
-> address translation of "child_addr = parent_addr - 0x1f_00000000".
-> 
-> pci@0 has:
->   child phys.hi	      0x82000000    n=1 p=0 t=0 ss=10b
->   child phys.mid,lo   0x0000001f_00000000
->   parent phys.hi      0x82000000    n=1 p=0 t=0 ss=10b
->   parent phys.mid,lo  0x0000001f_00000000
->   length hi,lo        0x00000000_00600000
-> 
-> which would make it a PCI-to-PCI bridge (I assume a PCIe Root Port),
-> where the child (secondary bus) address space is the non-relocatable
-> non-prefetchable 32-bit memory space 0x1f_00000000-0x1f_005fffff and
-> the parent (primary bus) address space is also non-relocatable
-> non-prefetchable 32-bit memory space at 0x1f_00000000-0x1f_005fffff.
-> 
-> This looks wrong to me because the pci@0 parent address space
-> (0x1f_00000000-0x1f_005fffff) should be inside the pcie@120000 child
-> address space (0x00000000-0xfffffffc), but it's not.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Exactly, that example refers to the 'uncorrected' case, i.e. without the
-patch applied.
 
-> 
-> IIUC, this patch clears the upper 32 bits in the pci@0 parent address
-> space.  That would make things work correctly in this case because
-> that happens to be the exact translation of pcie@120000, so it results
-> in pci@0 parent address space of 0x00000000-0x005fffff.
-
-Right. I think we sould split it into two issues:
-
-[1] RP1 acknowledges a 32 bit BAR address from its config space while the
-device must be accessed using a 64 bit address (that is cpu address
-0x1f_00000000), which sounds strange to me but I guess that is how
-the hw interconnect has been designed, so we need to cope with it.
-
-[2] I still think that the of_pci_set_address() function should be amended
-to avoid generating invalid 64 address when 32 bit flag is set.
-
-As you noted, fixing [2] will incidentally also let [1] work: I think
-we can try to solve [1] the proper way and maybe defer [2] for a separate
-patch.
-To solve [1] I've dropped this patch and tried to solve it from devicetree,
-modifying the following mapping:
-
-pcie@120000: <0x3000000 0x1f 0x00    0x1f 0x00                0x00 0xfffffffc>;
-
-so we now have a 1:1 64 bit mapping from 0x1f_00000000 to 0x1f_00000000.
-I thought it would result in something like this:
-
-pcie@120000: <0x3000000 0x1f 0x00    0x1f 0x00                0x00 0xfffffffc>;
-pci@0      : <0x82000000 0x1f 0x00   0x82000000 0x1f 0x00     0x00 0x600000>;
-dev@0,0    : <0x01 0x00 0x00         0x82010000 0x1f 0x00     0x00 0x400000>;
-rp1@0      : <0xc0 0x40000000        0x01 0x00 0x00           0x00 0x400000>;
-
-but it fails instead (err: "can't assign; no space") in pci_assign_resource()
-function trying to match the size using pci_clip_resource_to_region(). It turned
-out that the clipping is done against 32 bit memory region 'pci_32_bit',and
-this is failing because the original region addresses to be clipped wxxiereas 64
-bit wide. The 'culprit' seems to be the function devm_of_pci_get_host_bridge_resources()
-dropping IORESOURCE_MEM_64 on any memory resource, which seems to be a change
-somewhat specific to a RK3399 case (see commit 3bd6b8271ee66), but I'm not sure
-whether it can be considered generic.
-
-So, I'm actually at an empasse here.
-
-Also, while taking a look at the resulting devicetree, I'm a bit confused by the
-fact that the parent address generated by of_pci_prop_ranges() for the pci@0,0
-bridge seems to be taken from the parent address of the pcie@120000 node. Shouldn't
-it be taken from the child address of pcie@120000, instead?
-
-> 
-> But I don't think it works in general because there's no requirement
-> that the host bridge address translation be that simple.  For example,
-> if we have two host bridges, and we want each to have 2GB of 32-bit
-> PCI address space starting at 0x0, it might look like this:
-> 
->   0x00000002_00000000 -> PCI 0x00000000 (subtract 0x00000002_00000000)
->   0x00000002_80000000 -> PCI 0x00000000 (subtract 0x00000002_80000000)
-> 
-> In this case simply ignoring the high 32 bits of the CPU address isn't
-> the correct translation for the second host bridge.  I think we should
-> look at each host bridge's "ranges", find the difference between its
-> parent and child addresses, and apply the same difference to
-> everything below that bridge.
-
-Not sure I've got this scenario straight: can you please provide the topology
-and the bit setting (32/64 bit) for those ranges? Also, is this scenario coming
-from a real use case or is it hypothetical?
-
-Many thanks,
-Andrea
-
-...
 
