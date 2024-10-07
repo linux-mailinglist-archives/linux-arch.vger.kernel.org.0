@@ -1,263 +1,129 @@
-Return-Path: <linux-arch+bounces-7731-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7732-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A9369921C2
-	for <lists+linux-arch@lfdr.de>; Sun,  6 Oct 2024 23:50:00 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5703E99243D
+	for <lists+linux-arch@lfdr.de>; Mon,  7 Oct 2024 08:11:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DB9141F214C2
-	for <lists+linux-arch@lfdr.de>; Sun,  6 Oct 2024 21:49:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 00981B22EA9
+	for <lists+linux-arch@lfdr.de>; Mon,  7 Oct 2024 06:11:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 759FF18A934;
-	Sun,  6 Oct 2024 21:49:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hzu0ANxj"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58BC413C807;
+	Mon,  7 Oct 2024 06:10:41 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47DF6D520;
-	Sun,  6 Oct 2024 21:49:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25259143736;
+	Mon,  7 Oct 2024 06:10:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728251395; cv=none; b=RNFRDLTDRI2vZBjsP6aY1fJ1yaD/VYysVNGXYJ2seJHkk6qIibXtEyHoBE57lp+aW6/iWjtsQTTK74aR4ka6gcp1PbZgVxLZDFK24Ph/y7zQkAcpzLVdLrFZvR4FP73d7yKGf0TUnbZY4SMK37hvwQf1uVl84AHnP5azUn9aoQI=
+	t=1728281441; cv=none; b=hmuJPK6EDs7Fhk1Tcl7uHmHoY/CPjJGZ+jYRg85n1SNz4oZA00d0+i1BGfyM/DWfvZLisiMeduCP3zCv5LatZq0XT0RuSRiggrcuhJrEbZl2VnDGA+GF7gGaWWnJ4XJSgknYkP3Y1HavV5i//wS2sxAfC1LOYrkZUSPlzbfWqC8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728251395; c=relaxed/simple;
-	bh=8jp7Ne+0hZvfThEFXdytXZSN0GP34oer6XoG1C4BwuY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qAZCjLtCam6emy+3qlRwYKFcsI8eW5T7r7ubg0bVRGnRD8Vm1UOdMGMA+GKpnSGTD7xE+sn8nXSk4rTAP34f9uip8gZzJ7794wNS3bs1mNud7MWkO4vSi6q+QVzhxsdWwifz8tMjUs+yn2ckzLfX6Nw/yfHhyu4m3z2iYgXXkqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hzu0ANxj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54A11C4CEC5;
-	Sun,  6 Oct 2024 21:49:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728251394;
-	bh=8jp7Ne+0hZvfThEFXdytXZSN0GP34oer6XoG1C4BwuY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Hzu0ANxjEcyo4R9USphwNx/THRK3QIqUIImkROQaYMX0LiliKzGZNNpaHjrGyBdFZ
-	 kwc1ShZ6+m964XhB52ioTlIv0Err90gWst8Gg5U9HcA5dp10nqZA8rgMrYSisI4dNB
-	 feCzw6x4avmCuvg+Y8yjQL9wEPiRvEKgAh7828N9yfJEtVYMU8bosC5tJ2cQIyWrpO
-	 7cm83PYtPsDnWAfMUqRWPqizIBoJUcLdfKBuodjIk4jVm6raAOjusoLS6ZWrcv6EXO
-	 n8TnQaI7Eq6gaaYZDZe9/UHXI6iHiHrlFnX/yrRAMMDfsYS3ruxlMjRevp5zlbnbI7
-	 RpATL3oyYdzbw==
-Date: Sun, 6 Oct 2024 23:49:51 +0200
-From: Frederic Weisbecker <frederic@kernel.org>
-To: Anna-Maria Behnsen <anna-maria@linutronix.de>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Jonathan Corbet <corbet@lwn.net>,
-	linux-kernel@vger.kernel.org, Len Brown <len.brown@intel.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org
-Subject: Re: [PATCH v2 05/15] timers: Update function descriptions of
- sleep/delay related functions
-Message-ID: <ZwMF_y62yJ-bmNL9@pavilion.home>
-References: <20240911-devel-anna-maria-b4-timers-flseep-v2-0-b0d3f33ccfe0@linutronix.de>
- <20240911-devel-anna-maria-b4-timers-flseep-v2-5-b0d3f33ccfe0@linutronix.de>
+	s=arc-20240116; t=1728281441; c=relaxed/simple;
+	bh=Pz7YAkecEWI4lLC/CsyGcJiYbFNUqdqlEpWHPvlDfPw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=J3DvBtZ1dPm83Aj9xOCZvIb5MQupNVEEiMmXw6Ia81KaBsSdK+zsosMOIRHRDXauH+nyVTRXS0SDdwBOrHXLomcC5ja8GfKJk9QfL89TFuQQ98sbb0jIypWBqliGdVV10xPkn3dvO5fTTc0zQtWCO2uId7vr6tgo3XlJGR0WzVA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4XMTKS6Q7Rz9sPd;
+	Mon,  7 Oct 2024 08:10:36 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id DIML3QXE3sOd; Mon,  7 Oct 2024 08:10:36 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4XMTKS5XC8z9rvV;
+	Mon,  7 Oct 2024 08:10:36 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id AB1AD8B765;
+	Mon,  7 Oct 2024 08:10:36 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id XZVaR_2kVu_W; Mon,  7 Oct 2024 08:10:36 +0200 (CEST)
+Received: from [172.25.230.108] (unknown [172.25.230.108])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 556AB8B764;
+	Mon,  7 Oct 2024 08:10:36 +0200 (CEST)
+Message-ID: <0a419a1d-6124-411c-bcae-a8dac87f73d0@csgroup.eu>
+Date: Mon, 7 Oct 2024 08:10:36 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/2] drm: Fix fault format
+To: Arnd Bergmann <arnd@arndb.de>,
+ Vincenzo Frascino <vincenzo.frascino@arm.com>, linux-kernel@vger.kernel.org,
+ Linux-Arch <linux-arch@vger.kernel.org>, linux-mm@kvack.org
+Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+ "Jason A . Donenfeld" <Jason@zx2c4.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Naveen N Rao <naveen@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, Theodore Ts'o <tytso@mit.edu>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+References: <20241003152910.3287259-1-vincenzo.frascino@arm.com>
+ <20241003152910.3287259-2-vincenzo.frascino@arm.com>
+ <5b52dfcf-7b4c-4715-b1b2-6e41062302bd@app.fastmail.com>
+Content-Language: fr-FR
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <5b52dfcf-7b4c-4715-b1b2-6e41062302bd@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240911-devel-anna-maria-b4-timers-flseep-v2-5-b0d3f33ccfe0@linutronix.de>
 
-Le Wed, Sep 11, 2024 at 07:13:31AM +0200, Anna-Maria Behnsen a �crit :
-> A lot of commonly used functions for inserting a sleep or delay lack a
-> proper function description. Add function descriptions to all of them to
-> have important information in a central place close to the code.
+
+
+Le 04/10/2024 à 15:21, Arnd Bergmann a écrit :
+> On Thu, Oct 3, 2024, at 15:29, Vincenzo Frascino wrote:
+>> diff --git a/drivers/gpu/drm/i915/gt/intel_gt.c
+>> b/drivers/gpu/drm/i915/gt/intel_gt.c
+>> index a6c69a706fd7..352ef5e1c615 100644
+>> --- a/drivers/gpu/drm/i915/gt/intel_gt.c
+>> +++ b/drivers/gpu/drm/i915/gt/intel_gt.c
+>> @@ -308,7 +308,7 @@ static void gen6_check_faults(struct intel_gt *gt)
+>>   		fault = GEN6_RING_FAULT_REG_READ(engine);
+>>   		if (fault & RING_FAULT_VALID) {
+>>   			gt_dbg(gt, "Unexpected fault\n"
+>> -			       "\tAddr: 0x%08lx\n"
+>> +			       "\tAddr: 0x%08x\n"
+>>   			       "\tAddress space: %s\n"
+>>   			       "\tSource ID: %d\n"
+>>   			       "\tType: %d\n",
 > 
-> No functional change.
+> Isn't the type of PAGE_MASK still architecture dependent?
+
+Indeed when I commented that PAGE_MASK was type agnostic I was thinking 
+about the powerpc PAGE_MASK:
+
+#define PAGE_MASK      (~((1 << PAGE_SHIFT) - 1))
+
+It should probably be possible to generalise it to all architectures.
+
+But if you keep some PAGE_MASK with forced UL type just like:
+
+#define PAGE_SIZE		(_AC(1, UL) << PAGE_SHIFT)
+#define PAGE_MASK		(~(PAGE_SIZE-1))
+
+Then that version of PAGE_MASK isn't agnostic and ANDing an int with 
+that mask makes a long result.
+
+> I think you need a cast to either 'int' or 'long' here to
+> make the corresponding format string work across all
+> architectures. With the current version of your patch 2/2,
+> it looks like it has to be %x for architectures with
+> 64-bit phys_addr_t, but %lx for the other ones.
 > 
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: linux-arch@vger.kernel.org
-> Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
-> ---
-> v2:
->  - Fix typos
->  - Fix proper usage of kernel-doc return formatting
-> ---
->  include/asm-generic/delay.h | 41 +++++++++++++++++++++++++++++++----
->  include/linux/delay.h       | 48 ++++++++++++++++++++++++++++++----------
->  kernel/time/sleep_timeout.c | 53 ++++++++++++++++++++++++++++++++++++++++-----
->  3 files changed, 120 insertions(+), 22 deletions(-)
+> Changing the 'u32 fault' variable to 'unsigned long'
+> would also work here.
 > 
-> diff --git a/include/asm-generic/delay.h b/include/asm-generic/delay.h
-> index e448ac61430c..70a1b20f3e1a 100644
-> --- a/include/asm-generic/delay.h
-> +++ b/include/asm-generic/delay.h
-> @@ -12,11 +12,39 @@ extern void __const_udelay(unsigned long xloops);
->  extern void __delay(unsigned long loops);
->  
->  /*
-> - * The weird n/20000 thing suppresses a "comparison is always false due to
-> - * limited range of data type" warning with non-const 8-bit arguments.
-> + * Implementation details:
-> + *
-> + * * The weird n/20000 thing suppresses a "comparison is always false due to
-> + *   limited range of data type" warning with non-const 8-bit arguments.
-> + * * 0x10c7 is 2**32 / 1000000 (rounded up) -> udelay
-> + * * 0x5 is 2**32 / 1000000000 (rounded up) -> ndelay
-
-I can't say I'm less confused about these values but at least it
-brings a bit of light in the horizon...
-
->   */
->  
-> -/* 0x10c7 is 2**32 / 1000000 (rounded up) */
-> +/**
-> + * udelay - Inserting a delay based on microseconds with busy waiting
-> + * @usec:	requested delay in microseconds
-> + *
-> + * When delaying in an atomic context ndelay(), udelay() and mdelay() are the
-> + * only valid variants of delaying/sleeping to go with.
-> + *
-> + * When inserting delays in non atomic context which are shorter than the time
-> + * which is required to queue e.g. an hrtimer and to enter then the scheduler,
-> + * it is also valuable to use udelay(). But is not simple to specify a generic
-
-But it is*
-
-> + * threshold for this which will fit for all systems, but an approximation would
-
-But but?
-
-> + * be a threshold for all delays up to 10 microseconds.
-> + *
-> + * When having a delay which is larger than the architecture specific
-> + * %MAX_UDELAY_MS value, please make sure mdelay() is used. Otherwise a overflow
-> + * risk is given.
-> + *
-> + * Please note that ndelay(), udelay() and mdelay() may return early for several
-> + * reasons (https://lists.openwall.net/linux-kernel/2011/01/09/56):
-> + *
-> + * #. computed loops_per_jiffy too low (due to the time taken to execute the
-> + *    timer interrupt.)
-> + * #. cache behaviour affecting the time it takes to execute the loop function.
-> + * #. CPU clock rate changes.
-> + */
->  #define udelay(n)							\
->  	({								\
->  		if (__builtin_constant_p(n)) {				\
-> @@ -35,12 +25,21 @@ extern unsigned long loops_per_jiffy;
->   * The 2nd mdelay() definition ensures GCC will optimize away the 
->   * while loop for the common cases where n <= MAX_UDELAY_MS  --  Paul G.
->   */
-> -
->  #ifndef MAX_UDELAY_MS
->  #define MAX_UDELAY_MS	5
->  #endif
->  
->  #ifndef mdelay
-> +/**
-> + * mdelay - Inserting a delay based on microseconds with busy waiting
-
-Milliseconds?
-
-> + * @n:	requested delay in microseconds
-
-Ditto
-
-> + *
-> + * See udelay() for basic information about mdelay() and it's variants.
-> + *
-> + * Please double check, whether mdelay() is the right way to go or whether a
-> + * refactoring of the code is the better variant to be able to use msleep()
-> + * instead.
-> + */
->  #define mdelay(n) (\
->  	(__builtin_constant_p(n) && (n)<=MAX_UDELAY_MS) ? udelay((n)*1000) : \
->  	({unsigned long __ms=(n); while (__ms--) udelay(1000);}))
-> @@ -63,16 +62,41 @@ unsigned long msleep_interruptible(unsigned int msecs);
->  void usleep_range_state(unsigned long min, unsigned long max,
->  			unsigned int state);
->  
-> +/**
-> + * usleep_range - Sleep for an approximate time
-> + * @min:	Minimum time in microseconds to sleep
-> + * @max:	Maximum time in microseconds to sleep
-> + *
-> + * For basic information please refere to usleep_range_state().
-> + *
-> + * The task will be in the state TASK_UNINTERRUPTIBLE during the sleep.
-> + */
->  static inline void usleep_range(unsigned long min, unsigned long max)
->  {
->  	usleep_range_state(min, max, TASK_UNINTERRUPTIBLE);
->  }
->  
-> +/**
-> + * usleep_range_idle - Sleep for an approximate time with idle time accounting
-> + * @min:	Minimum time in microseconds to sleep
-> + * @max:	Maximum time in microseconds to sleep
-> + *
-> + * For basic information please refere to usleep_range_state().
-> + *
-> + * The sleeping task has the state TASK_IDLE during the sleep to prevent
-> + * contribution to the load avarage.
-> + */
->  static inline void usleep_range_idle(unsigned long min, unsigned long max)
->  {
->  	usleep_range_state(min, max, TASK_IDLE);
->  }
->  
-> +/**
-> + * ssleep - wrapper for seconds arount msleep
-
-around
-
-> + * @seconds:	Requested sleep duration in seconds
-> + *
-> + * Please refere to msleep() for detailed information.
-> + */
->  static inline void ssleep(unsigned int seconds)
->  {
->  	msleep(seconds * 1000);
-> diff --git a/kernel/time/sleep_timeout.c b/kernel/time/sleep_timeout.c
-> index 560d17c30aa5..21f412350b15 100644
-> --- a/kernel/time/sleep_timeout.c
-> +++ b/kernel/time/sleep_timeout.c
-> @@ -281,7 +281,34 @@ EXPORT_SYMBOL_GPL(schedule_hrtimeout);
->  
->  /**
->   * msleep - sleep safely even with waitqueue interruptions
-> - * @msecs: Time in milliseconds to sleep for
-> + * @msecs:	Requested sleep duration in milliseconds
-> + *
-> + * msleep() uses jiffy based timeouts for the sleep duration. The accuracy of
-> + * the resulting sleep duration depends on:
-> + *
-> + * * HZ configuration
-> + * * sleep duration (as granularity of a bucket which collects timers increases
-> + *   with the timer wheel levels)
-> + *
-> + * When the timer is queued into the second level of the timer wheel the maximum
-> + * additional delay will be 12.5%. For explanation please check the detailed
-> + * description about the basics of the timer wheel. In case this is accurate
-> + * enough check which sleep length is selected to make sure required accuracy is
-> + * given. Please use therefore the following simple steps:
-> + *
-> + * #. Decide which slack is fine for the requested sleep duration - but do not
-> + *    use values shorter than 1/8
-
-I'm confused, what means 1/x for a slack value? 1/8 means 125 msecs? I'm not
-even I understand what you mean by slack. Is it the bucket_expiry - expiry?
-
-> + * #. Check whether your sleep duration is equal or greater than the following
-> + *    result: ``TICK_NSEC / slack / NSEC_PER_MSEC``
-> + *
-> + * Examples:
-> + *
-> + * * ``HZ=1000`` with `slack=1/4``: all sleep durations greater or equal 4ms will meet
-> + *   the constrains.
-> + * * ``HZ=250`` with ``slack=1/4``: all sleep durations greater or equal 16ms will meet
-> + *   the constrains.
-
-constraints.
-
-But I'm still lost...
-
-Thanks.
+>        Arnd
 
