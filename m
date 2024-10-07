@@ -1,81 +1,81 @@
-Return-Path: <linux-arch+bounces-7747-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7748-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6AEDC99275D
-	for <lists+linux-arch@lfdr.de>; Mon,  7 Oct 2024 10:44:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B015992776
+	for <lists+linux-arch@lfdr.de>; Mon,  7 Oct 2024 10:48:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9CF2B1C20BC0
-	for <lists+linux-arch@lfdr.de>; Mon,  7 Oct 2024 08:44:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4A96A1C229C1
+	for <lists+linux-arch@lfdr.de>; Mon,  7 Oct 2024 08:48:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14CF118C021;
-	Mon,  7 Oct 2024 08:44:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7903187353;
+	Mon,  7 Oct 2024 08:48:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dXT/EznR"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WDEX098M"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5149518C003
-	for <linux-arch@vger.kernel.org>; Mon,  7 Oct 2024 08:44:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 389DE13C9B3
+	for <linux-arch@vger.kernel.org>; Mon,  7 Oct 2024 08:48:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728290662; cv=none; b=cZGfJN1gMhPzFwvsILnF2ls2RW9Acl7cMIcTtyUxSPvFshi+uU5qTs/omtkEA7SFZQFYTCn4V0gGZiuuUD85JZTB1TJ+oh7bimtvycToE2g55+Wx5PH9EtB91wUBZScIclNZlubZ1xFOEPhblYlqIl/tn7DModz/JdTXNpyNJnA=
+	t=1728290891; cv=none; b=gvZMR4JmU4469ehx14T2jDJEGxBT0OcrT+kWn5GOV0qGVTqca8oK1qjPi+ok77sPA/oOTRSyj13D+25+T3+BSTJkLcNGG4Yzrt07L4n5+rSInT7maVT9evNmAQ83bwfQS5xiJlyT5KTQoc7II783SWdk4vOsVY7VfcIKfZaUiHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728290662; c=relaxed/simple;
-	bh=tAClxRaBJPv5eyWcIfMg9YB2BkxVVz3tgyeIh/4fQlA=;
+	s=arc-20240116; t=1728290891; c=relaxed/simple;
+	bh=6Ryk55P/ZxwhvTmz2rvcNGmMVLmsXPwyEfGUDmZigHc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=c8Y7eLECbkseP7YApE/n0BbP7stWt96BeFHN/Lfy80OMUQ1lCTWKeYYefts9irCxw8ZdNcGnHP26SL80xsP2Z+OQF9bD8guZgclEadM5JhnXTE+A4BvJL6MX0tstJF0cEAXs6uLFfeM91kJEIi8lYwrjwnABGUksqBw6JoZENQc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dXT/EznR; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:Content-Type; b=E56ENveVEEwvyrD43R8PM44IPdacZIg2dbngjjwL4tVa1O0Xi/SAqJCw6Wf8kZUrfN8Mbu9+DuDt6aFq4QtCzC+PgPpVW6irwRhs513uDoFCQ/3dayhNleM+e2j46UORUrU8tlKAd/VSojXr/WFeRKSsjuvfGm8DgZsLXWHqHUE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WDEX098M; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1728290659;
+	s=mimecast20190719; t=1728290889;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=ISoSaol0yhnJNCBfnz14JQTrUy040gnzhzeH5X60flo=;
-	b=dXT/EznRpHPRmMZVgStD/+l3/QknEB+gjyYQvm28kwhoAfeRbu83eC20Rwl45RISJ+3wQK
-	HwgeLxm8N2e1+Oouwmn+vBwimNe+jfQcpW/li4VKsT5ydtsYRUIPmKvqdTUtOzD9UBXRZL
-	8qJ6v01DvbXgpxP6OcKlCY1p/oeB3N8=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=ye3b3jDj+gVu6tf7ycFgsi/ORu7X0wqxMcaQMdkv+o4=;
+	b=WDEX098M6CSQKh/XO3NjyKACoy26JyzNDjhbPKfX1R2gs47jOcV0YYD6bzqCDmCmoWPbG1
+	9QYeY5coxn0UQEOrMrsa743MxNMAF4xywn5/CJEyVjAQ1pbhs+eSuIG02KmOqKkuAhazMq
+	mlwjvzxfyqw/82xYJU2hVNDnaVSx0lQ=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-82-TWcMRAJQPpKefwIq8UBdgw-1; Mon, 07 Oct 2024 04:44:17 -0400
-X-MC-Unique: TWcMRAJQPpKefwIq8UBdgw-1
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-37cd282fb39so2670476f8f.2
-        for <linux-arch@vger.kernel.org>; Mon, 07 Oct 2024 01:44:17 -0700 (PDT)
+ us-mta-586-_MjYLJmaNKSgBXmTnLkksA-1; Mon, 07 Oct 2024 04:48:08 -0400
+X-MC-Unique: _MjYLJmaNKSgBXmTnLkksA-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-37ccc96d3e6so1530146f8f.1
+        for <linux-arch@vger.kernel.org>; Mon, 07 Oct 2024 01:48:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728290656; x=1728895456;
+        d=1e100.net; s=20230601; t=1728290887; x=1728895687;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
          :content-language:from:references:cc:to:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=ISoSaol0yhnJNCBfnz14JQTrUy040gnzhzeH5X60flo=;
-        b=psNsd6RX5AT+9mtBuoOySKozTSE87kJAkpAHE72Br5t/morIBUxBgcIYc+7FBMiTDx
-         LFWIJisL/5xPPT+KmlGXotvtvvVBiRTOJ98aX2vqdNx5qP506yeQNF7t/+axenJ2W13A
-         xJqNaSUOSasqxICM/SZyRhSPH+OMaauFp1jlKZCjBuPBl9snb2UQ7nlMGOHTV6DVNKRd
-         nq6VIW57/lfQt0Ma4jkXYz5HP9Jp28HVPi47psBquBu7mA5NbP0NAu2RRCt4Nv9rgN61
-         LB3P+/iK8b8EZHC/0Eprkr+Cg5AQnW4yA7q2c0AIDjkV3arMbnIy3tcVff6/4CDiKx17
-         cRZw==
-X-Forwarded-Encrypted: i=1; AJvYcCWWYXsmnH3YONwVGiUAB8lexf405+KGfKL7yoW6CRnW8tdNjsX5ZVUrwAoVxLDFKGuUl20JVLbWKGMe@vger.kernel.org
-X-Gm-Message-State: AOJu0YwBkCEGKzRZu0OOHo1SF/B0YfoYe2lpDZtkhRGFGXGk7j+NNsti
-	BpcrOINwk8DMLSRKMx9Y3mxFcksZeluFOiGGtxupoFI7ZLodQoKPFSROfyfbuUyN/zj+Yk6B2ez
-	2glXXWuqLIW/EbiZrWvxNVF9B47xWw/MNU6pRZ+7056qE4c0RU32/3FvNvb0=
-X-Received: by 2002:a5d:6d8a:0:b0:37c:cc96:d1ce with SMTP id ffacd0b85a97d-37d0e76692bmr8296048f8f.24.1728290656094;
-        Mon, 07 Oct 2024 01:44:16 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IH9n9/Tce+6YujBOglRtvpsa302FQJRjjqFUgcCMnVpyDNnDXLmdOaMtm35K34jGrYxc8KM9Q==
-X-Received: by 2002:a5d:6d8a:0:b0:37c:cc96:d1ce with SMTP id ffacd0b85a97d-37d0e76692bmr8296017f8f.24.1728290655725;
-        Mon, 07 Oct 2024 01:44:15 -0700 (PDT)
+        bh=ye3b3jDj+gVu6tf7ycFgsi/ORu7X0wqxMcaQMdkv+o4=;
+        b=NJOT9Pp3SVxcGMfd3xc9Uffr5mrPKb9P4qhCCjtQIs13zKiY1CpoGmjPyoN9K2t91g
+         hDBugRlRhc6bvHbZeeSfd1qJipOCO/Ilewn64Snd/NkMVOxz/LQw291zYLg5JTJjKrgK
+         5EGtHnR1kfd+vOoJi8vNhEiKgfae/TBvOXVKjjjrKQYoEoQn+lKBBCHjJvF2IYYgYr6A
+         Vcisa7a7QMrrgJlYcNHfq+aMK7zjTG+VUfVn6cDeCB4N7fiLH3Mr7J+HayxJJnGjPEEM
+         gK07DWu/uSm8uu0fVA4WTk0Z6ktdr+8segTB73OOfeANqyLjH2uc6qvH/O3VscxrOYnQ
+         ekiQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUppJMEFdpQHSQQa5gIpzAjnLb9Md19RM9GgmXPUwoz04BKhkFQC1ao1yfcQflyCHdVAKGpFqgAEUEw@vger.kernel.org
+X-Gm-Message-State: AOJu0YwlFXoW7/J2i6Gnta3oMqZTodxqWTGZixntrbACW4JdSIZnhMCi
+	obNWPi0c1IWV8vYhyORzKqAYgOhBd51uJq0ONXXWiKnu+je2SBrBDal/oGueH0rio0pXBrXnhra
+	+LrQ1S/bixiT1M/MUiZU9aOaqgdfFGA51JM+aaMuDMhH8v8vdTTLUA/Rt0Rk=
+X-Received: by 2002:a5d:6d4f:0:b0:371:8dbf:8c1b with SMTP id ffacd0b85a97d-37d0e79149fmr4991489f8f.34.1728290886804;
+        Mon, 07 Oct 2024 01:48:06 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEeZ/w3D+q+nMdjdIGuUJr/i0qPxXp9GNxuINQsc/xoiQ71kZjMwPf5lmhFEeKdWC8FO8B6XA==
+X-Received: by 2002:a5d:6d4f:0:b0:371:8dbf:8c1b with SMTP id ffacd0b85a97d-37d0e79149fmr4991478f8f.34.1728290886425;
+        Mon, 07 Oct 2024 01:48:06 -0700 (PDT)
 Received: from ?IPV6:2003:cb:c725:8700:77c7:bde:9446:8d34? (p200300cbc725870077c70bde94468d34.dip0.t-ipconnect.de. [2003:cb:c725:8700:77c7:bde:9446:8d34])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37d1690f0b2sm5213418f8f.9.2024.10.07.01.44.14
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37d16970520sm5190945f8f.96.2024.10.07.01.48.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Oct 2024 01:44:15 -0700 (PDT)
-Message-ID: <8c7fbaf1-61a0-4f55-8466-1ab40464d9db@redhat.com>
-Date: Mon, 7 Oct 2024 10:44:14 +0200
+        Mon, 07 Oct 2024 01:48:05 -0700 (PDT)
+Message-ID: <2c392f07-1363-4306-a1cc-ac89decdd7bc@redhat.com>
+Date: Mon, 7 Oct 2024 10:48:04 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -149,10 +149,6 @@ Content-Transfer-Encoding: 7bit
 
 On 02.10.24 19:35, Dave Hansen wrote:
 > We were just chatting about this on David Rientjes's MM alignment call.
-
-Unfortunately I was not able to attend this time, my body decided it's a 
-good idea to stay in bed for a couple of days.
-
 > I thought I'd try to give a little brain
 > 
 > Let's start by thinking about KVM and secondary MMUs.  KVM has a primary
@@ -169,29 +165,6 @@ good idea to stay in bed for a couple of days.
 > what makes it so confusing: we have lots of infrastructure for dealing
 > with that "stuff" (CPU page tables and TLB), but msharefs has
 > short-circuited the infrastructure and it doesn't work any more.
-
-It's quite different IMHO, to a degree that I believe they are different 
-beasts:
-
-Secondary MMUs:
-* "Belongs" to same MM context and the primary MMU (process page tables)
-* Maintains separate tables/PTEs, in completely separate page table
-   hierarchy
-* Notifiers make sure the secondary structure stays in sync (update
-   PTEs, flush TLB)
-
-mshare:
-* Possibly mapped by many different MMs. Likely nothing stops us from
-   having on MM map multiple different mshare fds/
-* Updating the PTEs directly affects all other MM page table structures
-   (and possibly any secondary MMUs! scary)
-
-
-I better not think about the complexity of seconary MMUs + mshare (e.g., 
-KVM with mshare in guest memory): MMU notifiers for all MMs must be 
-called ...
-
-
 > 
 > Basically, I think it makes a lot of sense to check what KVM (or another
 > mmu_notifier user) is doing and make sure that msharefs is following its
@@ -199,17 +172,13 @@ called ...
 > flushing issue where it gets the MMU notifier call but the page may
 > still be in the secondary MMU.  I _think_ KVM fixes it with an extra
 > page refcount that it takes when it first walks the primary page tables.
-> 
-> But the short of it is that the msharefs host mm represents a "secondary
-> MMU".  I don't think it is really that special of an MMU other than the
-> fact that it has an mm_struct.
 
-Not sure I agree ... IMHO these are two orthogonal things. Unless we 
-want MMU notifiers to "update" MM primary MMUs (there is not really 
-anything to update ...), but not sure if that is what we are looking for.
+Forgot to comment on this (brain still recovering ...).
 
-What you note about TLB flushing in the other mail makes sense, not sure 
-how this interacts with any secondary MMUs ....
+KVM only grabs a temporary reference, and drops that reference once the 
+secondary MMU PTE was updated (present PTE installed). The notifiers on 
+primary MMU changes (e.g., unmap) take care of any TLB invalidation 
+before the primary MMU let's go of the page and the refcount is dropped.
 
 -- 
 Cheers,
