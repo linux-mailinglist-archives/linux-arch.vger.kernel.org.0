@@ -1,341 +1,161 @@
-Return-Path: <linux-arch+bounces-7839-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7840-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2411B994B5D
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Oct 2024 14:43:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1641994E0C
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Oct 2024 15:12:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 78B7DB23FBB
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Oct 2024 12:43:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6685628336D
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Oct 2024 13:12:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 534411DEFEC;
-	Tue,  8 Oct 2024 12:41:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 174A91DEFE6;
+	Tue,  8 Oct 2024 13:12:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="WiIVuAXi"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="no/6/4gP";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="E9/6lKMd"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from fhigh-a8-smtp.messagingengine.com (fhigh-a8-smtp.messagingengine.com [103.168.172.159])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E5191DE4CB;
-	Tue,  8 Oct 2024 12:41:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF2B81DED6F;
+	Tue,  8 Oct 2024 13:12:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728391293; cv=none; b=t/DqEu1hQbS6KzRYwQMDNOMm1x2aa2FZwSUw+dhLaA7XHfcUA+8bAPZ+YaN9KEmPNASB4lSKll0PbbtU3s7giRC/rJqO4N0SHOn8Cmz4tMLV0Wdz0JcWA1yLV/BBD+pH5IqHOdTpxKVrbz/9sNRSUj0etcBGESYSAob1jxErshY=
+	t=1728393125; cv=none; b=doYq6XOKTtmWttDNxwr4qykeTocXgTUVzRkc/xxQC9GNfPyVHxTCUL/Y798Vu7FgBjWUqG4j2Q1blZLutHuOJslyvXZDuRmO/kNGtKhcg31LnzLGeJr29eqHJUGKTv9crUksM5NBmUlFxMq3J3rCyeYqY+5ML3fpM4kUVF1n5kU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728391293; c=relaxed/simple;
-	bh=j7KaGUsyaLEUfGtXkukiFzIvWKJHDMnnZRqJknyuK2M=;
-	h=From:Date:Subject:Content-Type:Message-Id:References:In-Reply-To:
-	 To:Cc:MIME-Version; b=nesT8sn1N/Qg8t+Em/FpGz2xbulHBymfRRAqmcD/+ZkRMBTglOkKBE09EcrkbVa0giQXGHanKK8r2AswDOaZlGnyhFjcQfBYdnD+6oarhFOSsLD4q45ItB3NpVCOLD2hAHEmI3uzf4w8oCgDYaRpxGCCZ2Xg5rthjJOSZ8dpeOk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=WiIVuAXi; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 498BsMpS006194;
-	Tue, 8 Oct 2024 12:40:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from
-	:date:subject:content-type:message-id:references:in-reply-to:to
-	:cc:content-transfer-encoding:mime-version; s=pp1; bh=gJGd5/wr8D
-	cxtqBm0AFwiAsWUR/rh1W6zfn73uIs31M=; b=WiIVuAXi//XTK+GAvS53FesISF
-	AEcXXbY57tr/ItEJeGg2zH0XgEu8CDF8jbUsxvbCgl1R8rG5uTyl5008CqprqWb/
-	7DH1KymenTA8aQITz/kojV7/oWg9Pmq8hOZD/DrCkMtQRYr+/Hx1Xc7VKvPaCqg4
-	2jGBDpD3R6p9ZHjCMxl17A5FRWy5oDZy3EHEHRNRrcvkrpozqs3coDOOo+EcOOW8
-	1JNs7sP7RaLe8I2s7/eAbvsatYXmqXx80ZgyLLEQ09626fGhO/1bZKVn7MMiLJiV
-	SRqw9hS6BIWYjoTn38AUyMRYndeBdmr8WocshnCYr6ZnuKXi87jfrvgsrx2A==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42549908pf-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 08 Oct 2024 12:40:58 +0000 (GMT)
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 498Ca5Ne023011;
-	Tue, 8 Oct 2024 12:40:58 GMT
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42549908p5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 08 Oct 2024 12:40:58 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 498APkGC010715;
-	Tue, 8 Oct 2024 12:40:57 GMT
-Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 423j0jc124-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 08 Oct 2024 12:40:57 +0000
-Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
-	by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 498CetU627001508
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 8 Oct 2024 12:40:55 GMT
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 7BD8058054;
-	Tue,  8 Oct 2024 12:40:55 +0000 (GMT)
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8AC4F58066;
-	Tue,  8 Oct 2024 12:40:50 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-	by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Tue,  8 Oct 2024 12:40:50 +0000 (GMT)
-From: Niklas Schnelle <schnelle@linux.ibm.com>
-Date: Tue, 08 Oct 2024 14:39:46 +0200
-Subject: [PATCH v8 5/5] asm-generic/io.h: Remove I/O port accessors for
- HAS_IOPORT=n
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <20241008-b4-has_ioport-v8-5-793e68aeadda@linux.ibm.com>
-References: <20241008-b4-has_ioport-v8-0-793e68aeadda@linux.ibm.com>
-In-Reply-To: <20241008-b4-has_ioport-v8-0-793e68aeadda@linux.ibm.com>
-To: Brian Cain <bcain@quicinc.com>, Marcel Holtmann <marcel@holtmann.org>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-        Dave Airlie <airlied@redhat.com>, Gerd Hoffmann <kraxel@redhat.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        =?utf-8?q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Heiko Carstens <hca@linux.ibm.com>
-Cc: linux-kernel@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-bluetooth@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        virtualization@lists.linux.dev, spice-devel@lists.freedesktop.org,
-        intel-xe@lists.freedesktop.org, linux-serial@vger.kernel.org,
-        linux-arch@vger.kernel.org, Niklas Schnelle <schnelle@linux.ibm.com>,
-        Arnd Bergmann <arnd@kernel.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5763;
- i=schnelle@linux.ibm.com; h=from:subject:message-id;
- bh=j7KaGUsyaLEUfGtXkukiFzIvWKJHDMnnZRqJknyuK2M=;
- b=owGbwMvMwCX2Wz534YHOJ2GMp9WSGNJZNQzXGM6a7CKhPjMv48StB+W1vKk2+zfa73tq8F3Ch
- Zlh+/t1HaUsDGJcDLJiiiyLupz91hVMMd0T1N8BM4eVCWQIAxenAEzkYj3DP/VVKno+F2SXiM5L
- /LnePUmH+2RMuGLmLp17u3OFnDrV1jEyzHW/f+uGsRTDg67md8Vn9boW+/jNmC26ysZjy47kVS8
- cWAE=
-X-Developer-Key: i=schnelle@linux.ibm.com; a=openpgp;
- fpr=9DB000B2D2752030A5F72DDCAFE43F15E8C26090
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 5qJmzXVUXu_PPGWzienVGSvZhaeyctpR
-X-Proofpoint-ORIG-GUID: RHnEoljeT0f3lG_stDyffoOEyw6MUwE3
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	s=arc-20240116; t=1728393125; c=relaxed/simple;
+	bh=bIg7dNjnnJrDPE9cQexGYZbgwrER5395ETWAldvQNOY=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=M+Qjk3i2vbvoZ55vpWRMJhGhxk5yAaKfu0vWVhIDf8bQPyYp4uZZOu+uzPnop6Tz4tMiQsSdPQqZK3XxmVnAfvKD1DapvC5iaEP+Uc82h1czizw9o/ZgzmB113/QI8VlFyyE5u/zjkkY2eA387lmlgemoc7N3/qFWXFwPYuUtMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=no/6/4gP; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=E9/6lKMd; arc=none smtp.client-ip=103.168.172.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 0B24E1140174;
+	Tue,  8 Oct 2024 09:12:02 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-10.internal (MEProxy); Tue, 08 Oct 2024 09:12:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1728393122;
+	 x=1728479522; bh=GQL6iG91BDYw7iUJiG2qYtNJaU0dzlAyjz84zK1b03w=; b=
+	no/6/4gPM4Bzg4fRgeqQHakXIGgmDGJkY1y5WB5cfHCmSqXhKkKdiiOaBvu0pdFr
+	wvA6lPLeuf2chZ4odaMzqFb9y3duAV9AjLJidcfh1wH4Lf/V0SfXBru7F3eJYeZ9
+	HCLESWzVbwtKWb8sJRlwP8OYx24oX1kRJS0X9xxmEKJtIEF55YuV11lnGH9QJHkv
+	wEvkkzdtK+MMpWYr7PURc0i6DsgA0nvyjgrcKOzaZfGm7GgMOviJGb154yuDsnDO
+	otSvXXqoCtfJiKsHCSG1LAs34DOm00MqqYZFkLDmUlIbvNjJHkYXUhw2XOBgv/Bd
+	aNb21NuXPqcKPeSNDPN2vg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1728393122; x=
+	1728479522; bh=GQL6iG91BDYw7iUJiG2qYtNJaU0dzlAyjz84zK1b03w=; b=E
+	9/6lKMdlP05iZ0fRcxt3VMNk/SV+4kJagSyQH6n7B9KZjNH61WMSdnlMfEiyclXr
+	CTF4V43dvbqfDqbS7fSI7rvcBGhTcUOlfz8zuVVzvnEzQ5uJtHtgJQjKXQZ0hfPH
+	97P1WelnO273CIRQsPb5p1VH7YDqX22nU0rocHYVt1o+bSm8uwhcnTFzEQ6tys65
+	mTCs5KsNDc/nVv98vhB0hmBIL8Q6GaB/CR63UazUw0Rekqgu8JV27sTcYISYik2l
+	Q72sZofwxwErAFW8WOrHTPgdXPDlBMpjfQVJM3O9Icy0+MtK4ztfYZ5kfWQOzeXq
+	QUb3F7KgHKAiRH7iBeYwg==
+X-ME-Sender: <xms:oC8FZ5NtfgksWvnk4Tp2uQstm156eXBXx4wNqmqek_HB285VGJeW0g>
+    <xme:oC8FZ7_VwGZGzUzf7gzmAFTfI4Tl8DiYYV7pTP8q8OWErNUnrdgvjEqVMaRvwLf0Z
+    cUKr5rbu8Sd4zLlSHg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdefuddgiedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddt
+    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
+    guvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefg
+    gfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepvddt
+    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegsphesrghlihgvnhekrdguvgdprh
+    gtphhtthhopehvihhntggvnhiiohdrfhhrrghstghinhhosegrrhhmrdgtohhmpdhrtghp
+    thhtoheptghhrhhishhtohhphhgvrdhlvghrohihsegtshhgrhhouhhprdgvuhdprhgtph
+    htthhopehmrghthhhivghurdguvghsnhhohigvrhhssegvfhhfihgtihhoshdrtghomhdp
+    rhgtphhtthhopehmphgvsegvlhhlvghrmhgrnhdrihgurdgruhdprhgtphhtthhopehnph
+    highhgihhnsehgmhgrihhlrdgtohhmpdhrtghpthhtoheprhhoshhtvgguthesghhoohgu
+    mhhishdrohhrghdprhgtphhtthhopehluhhtoheskhgvrhhnvghlrdhorhhgpdhrtghpth
+    htohepmhhhihhrrghmrghtsehkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:oC8FZ4T0mKVDOUAPr0Sv-UydK8dyAFViBrqGbFAOrCZe_XSQHqreuA>
+    <xmx:oC8FZ1sgYhS2wHWPNKpPs8BrwfX78thruS0LXJdoKnfMAdlFFR8dgw>
+    <xmx:oC8FZxdNAdGqGIF42LgB8U97LZxJL2U-Es5DbiMwdNhHcLUjJbELyA>
+    <xmx:oC8FZx0Z66x9p7y5-zIZ0a1TOtsFH1mmNX_oSrE9YdXTxEPDFLvRsQ>
+    <xmx:oS8FZyAlYvdqc1Wh5udpTJQE7aMLK7ZF9mprAfohhiKR9sxf8yK-P4z_>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 1BE0A2220072; Tue,  8 Oct 2024 09:12:00 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-08_10,2024-10-08_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
- priorityscore=1501 impostorscore=0 spamscore=0 malwarescore=0
- lowpriorityscore=0 suspectscore=0 phishscore=0 adultscore=0 clxscore=1015
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2410080078
+Date: Tue, 08 Oct 2024 13:11:29 +0000
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Thomas Gleixner" <tglx@linutronix.de>,
+ "Vincenzo Frascino" <vincenzo.frascino@arm.com>,
+ linux-kernel@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>,
+ linux-mm@kvack.org
+Cc: "Andy Lutomirski" <luto@kernel.org>,
+ "Jason A . Donenfeld" <Jason@zx2c4.com>,
+ "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+ "Michael Ellerman" <mpe@ellerman.id.au>,
+ "Nicholas Piggin" <npiggin@gmail.com>, "Naveen N Rao" <naveen@kernel.org>,
+ "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+ "Dave Hansen" <dave.hansen@linux.intel.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, "Theodore Ts'o" <tytso@mit.edu>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Steven Rostedt" <rostedt@goodmis.org>,
+ "Masami Hiramatsu" <mhiramat@kernel.org>,
+ "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+Message-Id: <acfd8173-9ee5-460c-92d3-1cb48f8d3fc9@app.fastmail.com>
+In-Reply-To: <87ldyzubk4.ffs@tglx>
+References: <20241003152910.3287259-1-vincenzo.frascino@arm.com>
+ <20241003152910.3287259-3-vincenzo.frascino@arm.com>
+ <423e571b-3ef6-4e80-ba81-bf42589a4ba8@app.fastmail.com> <87ldyzubk4.ffs@tglx>
+Subject: Re: [PATCH v3 2/2] vdso: Introduce vdso/page.h
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-With all subsystems and drivers either declaring their dependence on
-HAS_IOPORT or fencing I/O port specific code sections we can finally
-make inb()/outb() and friends compile-time dependent on HAS_IOPORT as
-suggested by Linus in the linked mail. The main benefit of this is that
-on platforms such as s390 which have no meaningful way of implementing
-inb()/outb() their use without the proper HAS_IOPORT dependency will
-result in easy to catch and fix compile-time errors instead of compiling
-code that can never work.
+On Mon, Oct 7, 2024, at 16:23, Thomas Gleixner wrote:
+> On Fri, Oct 04 2024 at 13:13, Arnd Bergmann wrote:
+>> On Thu, Oct 3, 2024, at 15:29, Vincenzo Frascino wrote:
+>>> The VDSO implementation includes headers from outside of the
+>>> vdso/ namespace.
+>>>
+>>> Introduce vdso/page.h to make sure that the generic library
+>>> uses only the allowed namespace.
+>>>
+>>> Note: on a 32-bit architecture UL is an unsigned 32 bit long. Hence when
+>>> it supports 64-bit phys_addr_t we might end up in situation in which the
+>>> top 32 bit are cleared. To prevent this issue this patch provides
+>>> separate macros for PAGE_MASK.
+>>>
+>>> Cc: Arnd Bergmann <arnd@arndb.de>
+>>> Cc: Andy Lutomirski <luto@kernel.org>
+>>> Cc: Thomas Gleixner <tglx@linutronix.de>
+>>> Cc: Jason A. Donenfeld <Jason@zx2c4.com>
+>>> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+>>
+>> Looks good to me. I would apply this to the asm-generic
+>> tree for 6.13, but there is one small detail I'm unsure
+>> about:
+>
+> Please don't. We have related changes upcoming for VDSO which would
+> heavily conflict. I rather take it through my tree.
 
-Link: https://lore.kernel.org/lkml/CAHk-=wg80je=K7madF4e7WrRNp37e3qh6y10Svhdc7O8SZ_-8g@mail.gmail.com/
-Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
----
- include/asm-generic/io.h | 60 ++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 60 insertions(+)
+Ok.
 
-diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-index 80de699bf6af4b7b77f582c0469c43e978f67a43..1027be6a62bcbcd5f6797e0fa42035208d0ca79f 100644
---- a/include/asm-generic/io.h
-+++ b/include/asm-generic/io.h
-@@ -540,6 +540,7 @@ static inline void writesq(volatile void __iomem *addr, const void *buffer,
- 
- #if !defined(inb) && !defined(_inb)
- #define _inb _inb
-+#ifdef CONFIG_HAS_IOPORT
- static inline u8 _inb(unsigned long addr)
- {
- 	u8 val;
-@@ -549,10 +550,15 @@ static inline u8 _inb(unsigned long addr)
- 	__io_par(val);
- 	return val;
- }
-+#else
-+u8 _inb(unsigned long addr)
-+	__compiletime_error("inb()) requires CONFIG_HAS_IOPORT");
-+#endif
- #endif
- 
- #if !defined(inw) && !defined(_inw)
- #define _inw _inw
-+#ifdef CONFIG_HAS_IOPORT
- static inline u16 _inw(unsigned long addr)
- {
- 	u16 val;
-@@ -562,10 +568,15 @@ static inline u16 _inw(unsigned long addr)
- 	__io_par(val);
- 	return val;
- }
-+#else
-+u16 _inw(unsigned long addr)
-+	__compiletime_error("inw() requires CONFIG_HAS_IOPORT");
-+#endif
- #endif
- 
- #if !defined(inl) && !defined(_inl)
- #define _inl _inl
-+#ifdef CONFIG_HAS_IOPORT
- static inline u32 _inl(unsigned long addr)
- {
- 	u32 val;
-@@ -575,36 +586,55 @@ static inline u32 _inl(unsigned long addr)
- 	__io_par(val);
- 	return val;
- }
-+#else
-+u32 _inl(unsigned long addr)
-+	__compiletime_error("inl() requires CONFIG_HAS_IOPORT");
-+#endif
- #endif
- 
- #if !defined(outb) && !defined(_outb)
- #define _outb _outb
-+#ifdef CONFIG_HAS_IOPORT
- static inline void _outb(u8 value, unsigned long addr)
- {
- 	__io_pbw();
- 	__raw_writeb(value, PCI_IOBASE + addr);
- 	__io_paw();
- }
-+#else
-+void _outb(u8 value, unsigned long addr)
-+	__compiletime_error("outb() requires CONFIG_HAS_IOPORT");
-+#endif
- #endif
- 
- #if !defined(outw) && !defined(_outw)
- #define _outw _outw
-+#ifdef CONFIG_HAS_IOPORT
- static inline void _outw(u16 value, unsigned long addr)
- {
- 	__io_pbw();
- 	__raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
- 	__io_paw();
- }
-+#else
-+void _outw(u16 value, unsigned long addr)
-+	__compiletime_error("outw() requires CONFIG_HAS_IOPORT");
-+#endif
- #endif
- 
- #if !defined(outl) && !defined(_outl)
- #define _outl _outl
-+#ifdef CONFIG_HAS_IOPORT
- static inline void _outl(u32 value, unsigned long addr)
- {
- 	__io_pbw();
- 	__raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
- 	__io_paw();
- }
-+#else
-+void _outl(u32 value, unsigned long addr)
-+	__compiletime_error("outl() requires CONFIG_HAS_IOPORT");
-+#endif
- #endif
- 
- #include <linux/logic_pio.h>
-@@ -688,53 +718,83 @@ static inline void outl_p(u32 value, unsigned long addr)
- 
- #ifndef insb
- #define insb insb
-+#ifdef CONFIG_HAS_IOPORT
- static inline void insb(unsigned long addr, void *buffer, unsigned int count)
- {
- 	readsb(PCI_IOBASE + addr, buffer, count);
- }
-+#else
-+void insb(unsigned long addr, void *buffer, unsigned int count)
-+	__compiletime_error("insb() requires HAS_IOPORT");
-+#endif
- #endif
- 
- #ifndef insw
- #define insw insw
-+#ifdef CONFIG_HAS_IOPORT
- static inline void insw(unsigned long addr, void *buffer, unsigned int count)
- {
- 	readsw(PCI_IOBASE + addr, buffer, count);
- }
-+#else
-+void insw(unsigned long addr, void *buffer, unsigned int count)
-+	__compiletime_error("insw() requires HAS_IOPORT");
-+#endif
- #endif
- 
- #ifndef insl
- #define insl insl
-+#ifdef CONFIG_HAS_IOPORT
- static inline void insl(unsigned long addr, void *buffer, unsigned int count)
- {
- 	readsl(PCI_IOBASE + addr, buffer, count);
- }
-+#else
-+void insl(unsigned long addr, void *buffer, unsigned int count)
-+	__compiletime_error("insl() requires HAS_IOPORT");
-+#endif
- #endif
- 
- #ifndef outsb
- #define outsb outsb
-+#ifdef CONFIG_HAS_IOPORT
- static inline void outsb(unsigned long addr, const void *buffer,
- 			 unsigned int count)
- {
- 	writesb(PCI_IOBASE + addr, buffer, count);
- }
-+#else
-+void outsb(unsigned long addr, const void *buffer, unsigned int count)
-+	__compiletime_error("outsb() requires HAS_IOPORT");
-+#endif
- #endif
- 
- #ifndef outsw
- #define outsw outsw
-+#ifdef CONFIG_HAS_IOPORT
- static inline void outsw(unsigned long addr, const void *buffer,
- 			 unsigned int count)
- {
- 	writesw(PCI_IOBASE + addr, buffer, count);
- }
-+#else
-+void outsw(unsigned long addr, const void *buffer, unsigned int count)
-+	__compiletime_error("outsw() requires HAS_IOPORT");
-+#endif
- #endif
- 
- #ifndef outsl
- #define outsl outsl
-+#ifdef CONFIG_HAS_IOPORT
- static inline void outsl(unsigned long addr, const void *buffer,
- 			 unsigned int count)
- {
- 	writesl(PCI_IOBASE + addr, buffer, count);
- }
-+#else
-+void outsl(unsigned long addr, const void *buffer, unsigned int count)
-+	__compiletime_error("outsl() requires HAS_IOPORT");
-+#endif
- #endif
- 
- #ifndef insb_p
+Vincenzo, in that case please add 
 
--- 
-2.43.0
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 
+to the two paches when you send v4 to Thomas.
+
+     Arnd
 
