@@ -1,116 +1,183 @@
-Return-Path: <linux-arch+bounces-7842-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7843-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA15D995174
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Oct 2024 16:23:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A63E09951DD
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Oct 2024 16:36:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E9B6EB20E35
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Oct 2024 14:20:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3736D1F25769
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Oct 2024 14:36:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FC821DE3AE;
-	Tue,  8 Oct 2024 14:20:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D172B1DFE36;
+	Tue,  8 Oct 2024 14:36:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nmUog/XW"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 796CD14EC59;
-	Tue,  8 Oct 2024 14:20:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F33BA1DFE17;
+	Tue,  8 Oct 2024 14:36:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728397241; cv=none; b=M31xqDzxgGFd4WSBA3LF5Uome2jBL4ge/jnC1vBE2VhLm4riTKuKvHaK3SN7KUmVwWf4FWJkXwjDzkbhSuy0QDtcviQCnEIlfmEFA+R6xd/8cbiLnZKuWozLshk/zX/UY5NJXj/vh21wUcZY4I1vI33/FlGhmGP4IZ0U3T7KJ3Q=
+	t=1728398179; cv=none; b=nWL4YamAYOBUMnVel+vkt2OycmsrM6gfmDlH2MbpFl2FLspuMV3NuJE2XJdkQ7LtK5GSI7sjcBMsOtRY7gvHqtU/sjKqiBg5Wa4yVKd+HnzoP3qvqklI3ixi0GqDU70YSG9JLtSPUlWxetsufsAFYWbnMEfhRPqmLnOXOLScy1A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728397241; c=relaxed/simple;
-	bh=Q1rVwS8443I896s0/Zl20azyLBs17oSGuNZsryEPaVU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cV/g/A25Z2j1SF0avXTSqa6V2xKSvSx3J6XdEhy13TaP9zWyvp6/5xJsQGZ6rIsdM0gR+A5upKBXnqDpVwrgJ/vfg/qy7ttUzQHXniLLhLs37SOyOrYW9ZIe1Q/obeaT2Ff70+PlFhQ3iqMNO063OTkcMj7UEpVEkQjokah1Q70=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 24311DA7;
-	Tue,  8 Oct 2024 07:21:08 -0700 (PDT)
-Received: from [10.1.196.72] (e119884-lin.cambridge.arm.com [10.1.196.72])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7510B3F64C;
-	Tue,  8 Oct 2024 07:20:35 -0700 (PDT)
-Message-ID: <db160fbd-ba7a-4cd0-88ed-2970a90c209b@arm.com>
-Date: Tue, 8 Oct 2024 15:20:33 +0100
+	s=arc-20240116; t=1728398179; c=relaxed/simple;
+	bh=gxxx5O9eecv163qWQ61f/5In0s1MkC0h2hYsYBgpd4o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=S/zO1Y80mmqXqTMlScSxEJVGhXux7CI3+0h3l1ITSR0pAxNutZWEtYPlD1L1ILqXY4Obv1k3kDD/b0fs47HVIWiJ+KR5gxwzJvwngpKZV88XMLkADWzqKt4dbEa4UHxZDAO+MsCJysGykz8ZvJ6j3ZtlKUC9Gu0oF4qBFkqm5KY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nmUog/XW; arc=none smtp.client-ip=209.85.167.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5398df2c871so6110679e87.1;
+        Tue, 08 Oct 2024 07:36:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1728398176; x=1729002976; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RAzASSCUQ2aUVsiLqBLU+OR2T2BBF/GKBA/6/Hrht2Y=;
+        b=nmUog/XWxHE98vP1aRBWOdqqiTdra1AWS575jFpoHyM53Y6e7zQN/FcquPeBMs14bf
+         aPuy8kgYFX4JqI1OEv6cuEYAJkv41Tv58BA3MLW378DfwBfALhXp0zSiXBDrK6w7hoW3
+         SG9RMRTkD8IVJ42W+dtP+a6tAMQEg1rJYKi/saiMrSfX5FJsZrQrmOEKrYBQV59PGzpI
+         IgXkUWLLJ3LOEIu4wlQNrUJEkpUiZ7oLKlMCMO5E3EhblLMHa1t47qP28WXxD19DHR4I
+         rTKc3hWJ5y8llNFRd5BhofZh2BWz/9wUnCLGFOznXC6rfN+BioUMPiQDaJZ7Ke4/hRW4
+         NwVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728398176; x=1729002976;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RAzASSCUQ2aUVsiLqBLU+OR2T2BBF/GKBA/6/Hrht2Y=;
+        b=cYrnuD6RbOItIqsgKi4Co2aWslD+EwsN3jUQhNiAtOp6qvExTX6N9+ftVK+/AZGwiH
+         JxTsDcZhuTt+TMDo2KtZsyRGE6t6Bto6S4ayh9f47KEolDx1AVBt2hYdXjWNsFGdVY8G
+         +6HtqRc7CWHDRV6iq1c0e+aLo/dS3rthVgz3OLWpP0xe3ME93FK+H67o0MNpAIqiQ2mP
+         3EY3L+6H9cWtEnM4/hw3HSRIBRgXupPWhFZhnEBgzymHGSDH5MxhWC8ByX3HiUEKa0/4
+         BPEu3CoBjRl3COPCGOinc3kVND830H7LjlrvpDM/jCSBPiG1GXFF9v6aduIhwNK6R6mR
+         jjvA==
+X-Forwarded-Encrypted: i=1; AJvYcCUJtH3awfDZ/nC626VnAxYOHkTfVIoH3kIfaoPqDVOK+deP8D57oWriGhIVI7f1VE1Nc88=@vger.kernel.org, AJvYcCUbgGK+kyLacPBfXwZh6DEUgiTVHXLqk+aXtuYMPOhFH+/s+wGhu0dOB7i0wxyaju3rnxRqg/5J97wWBAJ+OeU=@vger.kernel.org, AJvYcCV2rCp5g1JppC/inIrPY76DYPlOaZ2xdBwksr4sgPt/Jd/MlJKupA6Ss8yv/s7PmIv0dqsyysSJTTA=@vger.kernel.org, AJvYcCV9IJ38l6X5LroDzXttFFINdkD3yzgOGnA1lfHoX1xiWG07l8nircOfoo/CsvDyIKP8qCEoSAbLz9hRx0Fi@vger.kernel.org, AJvYcCVWn6u/U1hLaeP8nOPLa/UO6ryUAre4UzB1KTNdeCyAeBTsUrbB955DjqJ/0egzzQSkzPZFeRObE6bh@vger.kernel.org, AJvYcCVZr08z2eEiFB9qZZQPQKg8EQQs1YfSFER4TatCiaj9fipOsjvktYDR35dyW9iYDSkA8vsM9JAdwBB0i5AJ@vger.kernel.org, AJvYcCVzdyFAcpZ+cokUng73bgS8Mm6UjHR1k2FuWrlvxUoysZiXou+QER3OJJFz/rCqDionXvoGGH39/cyMTa34HNMNVA==@vger.kernel.org, AJvYcCW2ura4tB0AkWNuocgWJ/GET8txWB1PrLflKqFDMyIXRUY+r7qInkWU7DBBDWFKZ3mASs4deA9mHlQuCU4b@vger.kernel.org, AJvYcCXOwPz5SHzaAEeTdRy4S8wp0rdekZ+too4VPiu6TVIcNiu1UZgMWkMEqQIw9/6EEkH6qPERZIuOt1AOmQ==@vger.kernel.org, AJvYcCXRdDe3dubXYb9lSLHe
+ HJulIH3EjKyZ63P0AScc+aR+KbyToGrF5T8LxAHKUceMsS0bCo0zyrlwIn5B@vger.kernel.org
+X-Gm-Message-State: AOJu0YzliAqJ64I6yuE+5ZCA/YTG3cGnD2sjQRftKzH5Y0Ebmv6K1Sl/
+	C4xahBG5gp7Vs51HXDV0eE5S8WzB4cq5Df6LvATxzE6KbikHc3Na75TCB4u8MbFmIeHdl+CRyiR
+	6oNV9T++a/Dw7Kxvp+mbzH/8JrA==
+X-Google-Smtp-Source: AGHT+IFk7uSGpMKxSJMgul6omDcmQyMQl5Zy1l8C5NVTbpCgjnnjxrxdxyhpPaT355keXYtQRCu422aiN8olYIcP4XU=
+X-Received: by 2002:a05:6512:3085:b0:539:8a9a:4e56 with SMTP id
+ 2adb3069b0e04-539ab8c6fb8mr8574397e87.53.1728398175714; Tue, 08 Oct 2024
+ 07:36:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/2] vdso: Introduce vdso/page.h
-To: Arnd Bergmann <arnd@arndb.de>, Thomas Gleixner <tglx@linutronix.de>,
- linux-kernel@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>,
- linux-mm@kvack.org
-Cc: Andy Lutomirski <luto@kernel.org>, "Jason A . Donenfeld"
- <Jason@zx2c4.com>, Christophe Leroy <christophe.leroy@csgroup.eu>,
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- Naveen N Rao <naveen@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- "H. Peter Anvin" <hpa@zytor.com>, Theodore Ts'o <tytso@mit.edu>,
- Andrew Morton <akpm@linux-foundation.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-References: <20241003152910.3287259-1-vincenzo.frascino@arm.com>
- <20241003152910.3287259-3-vincenzo.frascino@arm.com>
- <423e571b-3ef6-4e80-ba81-bf42589a4ba8@app.fastmail.com> <87ldyzubk4.ffs@tglx>
- <acfd8173-9ee5-460c-92d3-1cb48f8d3fc9@app.fastmail.com>
-Content-Language: en-US
-From: Vincenzo Frascino <vincenzo.frascino@arm.com>
-In-Reply-To: <acfd8173-9ee5-460c-92d3-1cb48f8d3fc9@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20240925150059.3955569-30-ardb+git@google.com>
+ <20240925150059.3955569-35-ardb+git@google.com> <CAFULd4ZNwfPZO-yDjrtT2ANV509HeeYgR80b9AFachaVW5zqrg@mail.gmail.com>
+ <CAMzpN2j4uj=mhdi7QHaA7y_NLtaHuRpnit38quK6RjvxdUYQew@mail.gmail.com> <CAMj1kXF3_Hj9j2f_cBtwTFWvEmB0UoEs_cGkRiWc4AErDx0ftQ@mail.gmail.com>
+In-Reply-To: <CAMj1kXF3_Hj9j2f_cBtwTFWvEmB0UoEs_cGkRiWc4AErDx0ftQ@mail.gmail.com>
+From: Brian Gerst <brgerst@gmail.com>
+Date: Tue, 8 Oct 2024 10:36:03 -0400
+Message-ID: <CAMzpN2jWRV8-JzM2FjSvSz+VoDrNVeEJPgF7N5ksLaADHpnHsA@mail.gmail.com>
+Subject: Re: [RFC PATCH 05/28] x86: Define the stack protector guard symbol explicitly
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Uros Bizjak <ubizjak@gmail.com>, Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, 
+	x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
+	Christoph Lameter <cl@linux.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, 
+	Juergen Gross <jgross@suse.com>, Boris Ostrovsky <boris.ostrovsky@oracle.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Kees Cook <kees@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Keith Packard <keithp@keithp.com>, 
+	Justin Stitt <justinstitt@google.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	Kan Liang <kan.liang@linux.intel.com>, linux-doc@vger.kernel.org, 
+	linux-pm@vger.kernel.org, kvm@vger.kernel.org, xen-devel@lists.xenproject.org, 
+	linux-efi@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-sparse@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-
-On 08/10/2024 14:11, Arnd Bergmann wrote:
-> On Mon, Oct 7, 2024, at 16:23, Thomas Gleixner wrote:
->> On Fri, Oct 04 2024 at 13:13, Arnd Bergmann wrote:
->>> On Thu, Oct 3, 2024, at 15:29, Vincenzo Frascino wrote:
->>>> The VDSO implementation includes headers from outside of the
->>>> vdso/ namespace.
->>>>
->>>> Introduce vdso/page.h to make sure that the generic library
->>>> uses only the allowed namespace.
->>>>
->>>> Note: on a 32-bit architecture UL is an unsigned 32 bit long. Hence when
->>>> it supports 64-bit phys_addr_t we might end up in situation in which the
->>>> top 32 bit are cleared. To prevent this issue this patch provides
->>>> separate macros for PAGE_MASK.
->>>>
->>>> Cc: Arnd Bergmann <arnd@arndb.de>
->>>> Cc: Andy Lutomirski <luto@kernel.org>
->>>> Cc: Thomas Gleixner <tglx@linutronix.de>
->>>> Cc: Jason A. Donenfeld <Jason@zx2c4.com>
->>>> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
->>>
->>> Looks good to me. I would apply this to the asm-generic
->>> tree for 6.13, but there is one small detail I'm unsure
->>> about:
->>
->> Please don't. We have related changes upcoming for VDSO which would
->> heavily conflict. I rather take it through my tree.
-> 
-> Ok.
-> 
-> Vincenzo, in that case please add 
-> 
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-> 
-> to the two paches when you send v4 to Thomas.
+On Fri, Oct 4, 2024 at 9:15=E2=80=AFAM Ard Biesheuvel <ardb@kernel.org> wro=
+te:
 >
+> On Sat, 28 Sept 2024 at 15:41, Brian Gerst <brgerst@gmail.com> wrote:
+> >
+> > On Wed, Sep 25, 2024 at 2:33=E2=80=AFPM Uros Bizjak <ubizjak@gmail.com>=
+ wrote:
+> > >
+> > > On Wed, Sep 25, 2024 at 5:02=E2=80=AFPM Ard Biesheuvel <ardb+git@goog=
+le.com> wrote:
+> > > >
+> > > > From: Ard Biesheuvel <ardb@kernel.org>
+> > > >
+> > > > Specify the guard symbol for the stack cookie explicitly, rather th=
+an
+> > > > positioning it exactly 40 bytes into the per-CPU area. Doing so rem=
+oves
+> > > > the need for the per-CPU region to be absolute rather than relative=
+ to
+> > > > the placement of the per-CPU template region in the kernel image, a=
+nd
+> > > > this allows the special handling for absolute per-CPU symbols to be
+> > > > removed entirely.
+> > > >
+> > > > This is a worthwhile cleanup in itself, but it is also a prerequisi=
+te
+> > > > for PIE codegen and PIE linking, which can replace our bespoke and
+> > > > rather clunky runtime relocation handling.
+> > >
+> > > I would like to point out a series that converted the stack protector
+> > > guard symbol to a normal percpu variable [1], so there was no need to
+> > > assume anything about the location of the guard symbol.
+> > >
+> > > [1] "[PATCH v4 00/16] x86-64: Stack protector and percpu improvements=
+"
+> > > https://lore.kernel.org/lkml/20240322165233.71698-1-brgerst@gmail.com=
+/
+> > >
+> > > Uros.
+> >
+> > I plan on resubmitting that series sometime after the 6.12 merge
+> > window closes.  As I recall from the last version, it was decided to
+> > wait until after the next LTS release to raise the minimum GCC version
+> > to 8.1 and avoid the need to be compatible with the old stack
+> > protector layout.
+> >
+>
+> Hi Brian,
+>
+> I'd be more than happy to compare notes on that - I wasn't aware of
+> your intentions here, or I would have reached out before sending this
+> RFC.
+>
+> There are two things that you would need to address for Clang support
+> to work correctly:
+> - the workaround I cc'ed you on the other day [0],
+> - a workaround for the module loader so it tolerates the GOTPCRELX
+> relocations that Clang emits [1]
+>
+>
+>
+> [0] https://lore.kernel.org/all/20241002092534.3163838-2-ardb+git@google.=
+com/
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit=
+/?id=3Da18121aabbdd
 
-Thank you Arnd and Thomas,
+The first patch should be applied independently as a bug fix, since it
+already affects the 32-bit build with clang.
 
-I am completing the testing and will do that.
+I don't have an environment with an older clang compiler to test the
+second patch, but I'll assume it will be necessary.  I did run into an
+issue with the GOTPCRELX relocations before [1], but I thought it was
+just an objtool issue and didn't do more testing to know if modules
+were broken or not.
 
->      Arnd
+Brian Gerst
 
--- 
-Regards,
-Vincenzo
+[1] https://lore.kernel.org/all/20231026160100.195099-6-brgerst@gmail.com/
 
