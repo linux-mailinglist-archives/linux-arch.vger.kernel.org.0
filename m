@@ -1,341 +1,220 @@
-Return-Path: <linux-arch+bounces-7830-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7831-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD8E0994732
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Oct 2024 13:35:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 026C199477F
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Oct 2024 13:43:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 03BCC1C2627D
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Oct 2024 11:35:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 261931C23C76
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Oct 2024 11:43:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D35F1DED75;
-	Tue,  8 Oct 2024 11:33:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 460D01D61AC;
+	Tue,  8 Oct 2024 11:42:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Z+cpsbRm"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="kXJ24ZIK"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 682071DE2C7;
-	Tue,  8 Oct 2024 11:33:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C79E21D4166;
+	Tue,  8 Oct 2024 11:42:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728387213; cv=none; b=M5EqFtChESbSHpzdge1soqu9P4J24P4GkG9+UsvajCKa3Aodva8V0midGoNBj5838zj+zlNL/jQ0Vb5SncTtrfi8gX+gnBqwk0MIgdpXz+0dmutqFj+NX1QeYRO+U4xng1ocoJ22+x0fziwR+ReI9yABf47+YcJG70C4AIcpzN8=
+	t=1728387731; cv=none; b=Eugyp/oT1xBiGrZMN9X9Ttz03/k+3cunMp2Gdz/jqrX5936reU1QycphPWGvwuSFsz2fmVN2zMILQjiG/zqo4IiNZIAGPrifL2slRGc9+V9WcLVSgrXUSWf3wAG9mSvEuEIZRHUCnH8LtAJXYNOFmUmeHFUeKhgYLLWqhszBa4g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728387213; c=relaxed/simple;
-	bh=j7KaGUsyaLEUfGtXkukiFzIvWKJHDMnnZRqJknyuK2M=;
-	h=From:Date:Subject:Content-Type:Message-Id:References:In-Reply-To:
-	 To:Cc:MIME-Version; b=nbxPM49nmAWKg8yqpkQWYvYjPdHtSWGo87/Pi6Iq15V+e5ChjHbOKr9XBmm5MJreWxbq7/7gQMsZCpjpX2S5bV/LOXpA2IDyVO2SlqOPyRkVP6P88+p1zMyxJdl+vWWX2qGdmrLZfWhGpueuD4WT1fqMj4HSoczGhPH3N8KQSZk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Z+cpsbRm; arc=none smtp.client-ip=148.163.156.1
+	s=arc-20240116; t=1728387731; c=relaxed/simple;
+	bh=Lp9AYVVZM+PFlgt76Gj2Nvii36acf4wAsaA0HWrpl9I=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=AFfYKwKQY18ZTaYuWjXxs14TvTdpqAzhC73GMD7PxfhqdZTHPFw929ZkRmBXxfsxnVly6fa1m6izhSVt8qzVKPuLfXuZrAZLrciK8u6nwXZX2F6LUFFSGpwoboI3gxpE8XjYpA1vXDVuxbuoiRN+NQRA1ikmqHS+E4UlUt5/zCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=kXJ24ZIK; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 498ARMbw023040;
-	Tue, 8 Oct 2024 11:33:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from
-	:date:subject:content-type:message-id:references:in-reply-to:to
-	:cc:content-transfer-encoding:mime-version; s=pp1; bh=gJGd5/wr8D
-	cxtqBm0AFwiAsWUR/rh1W6zfn73uIs31M=; b=Z+cpsbRmH9MdZ61lvkxpv7bgXT
-	v0RWVmtXrvis5IvNBlZypfw7jqxeq3VRc2lAp8L4OrfaLN1RcW/i6XMx9jNFHyow
-	uInJ81ZXy+UALnKor7qHImqILyFHLCWAt1nRzJdwusOjJ65cnjWajZa2FSR3Uerk
-	lumEjEOBctTF1kd8MNbJsHeZ219/V5Rki24D/3dEOjwQ4Fg7+X0kIn8uHV/QPM0H
-	/ildfZgQkzIzbsb1tlmWErOBIXakSO9XDFa3y7idn7mpTYMDgLUflR4jaOIKF+GQ
-	SsQmemVb3LWEMX9uxROVL9ftM3tng+Xf3oWiAIA4k1jcUL8wpM9ul1ah12lg==
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 498Anine003729;
+	Tue, 8 Oct 2024 11:41:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
+	message-id:subject:from:to:cc:date:in-reply-to:references
+	:content-type:content-transfer-encoding:mime-version; s=pp1; bh=
+	2OdK9xOOrXHKiIckvX1X8hc/wi2jrlp68qipKHgyVS4=; b=kXJ24ZIKCZm0HYt7
+	sJPu46G3bXa/Zq5/EptztOlmXuobZreQmGGh2YyILWU0nU7NGYOLSiWnQYyZm3+Z
+	E5SwFYhSWNSdun4IF2Gyuq08H2/Xo8si6yEbgKR9lr1jhnBuwXZzSSJlndGYXYMm
+	PYg5ktXQHhDGg5yay+uyvIVaiQ+5aDKeWlpBOX4MBo7Itl8e5VdXRdWGibnKxtnJ
+	l4go0/njyZxcyLmJi8rsCzUqjCQuznaF2MkG+EVgNPOqQBJuOjN0LZfDyFge+pbU
+	lsD4OHv0Px5qM7j1gg0DZe8qDEFZch9/v3lsUQ2VoLVac2VsY5Q9sLtau4uN+OLY
+	8zy7zA==
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 425309ga5b-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4253axr7vy-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 08 Oct 2024 11:33:14 +0000 (GMT)
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 498BUEto029972;
-	Tue, 8 Oct 2024 11:33:13 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 425309ga55-1
+	Tue, 08 Oct 2024 11:41:51 +0000 (GMT)
+Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 498BfoTr014847;
+	Tue, 8 Oct 2024 11:41:50 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4253axr7vu-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 08 Oct 2024 11:33:13 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4989MUEq030168;
-	Tue, 8 Oct 2024 11:33:12 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 423gsmkxq4-1
+	Tue, 08 Oct 2024 11:41:50 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 498AVNBh022867;
+	Tue, 8 Oct 2024 11:41:49 GMT
+Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 423jg0umsx-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 08 Oct 2024 11:33:12 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-	by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 498BXBkt24314614
+	Tue, 08 Oct 2024 11:41:49 +0000
+Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
+	by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 498BfmSq23528050
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 8 Oct 2024 11:33:11 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E879C58059;
-	Tue,  8 Oct 2024 11:33:10 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B137458053;
-	Tue,  8 Oct 2024 11:33:05 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Tue,  8 Oct 2024 11:33:05 +0000 (GMT)
+	Tue, 8 Oct 2024 11:41:48 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id EE18158059;
+	Tue,  8 Oct 2024 11:41:47 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D895C58043;
+	Tue,  8 Oct 2024 11:41:43 +0000 (GMT)
+Received: from oc-fedora.boeblingen.de.ibm.com (unknown [9.152.212.119])
+	by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Tue,  8 Oct 2024 11:41:43 +0000 (GMT)
+Message-ID: <e45757daee03bdc68e00753513342ba21b375d8d.camel@linux.ibm.com>
+Subject: Re: [PATCH v7 4/5] tty: serial: handle HAS_IOPORT dependencies
 From: Niklas Schnelle <schnelle@linux.ibm.com>
-Date: Tue, 08 Oct 2024 13:32:05 +0200
-Subject: [PATCH v7 5/5] asm-generic/io.h: Remove I/O port accessors for
- HAS_IOPORT=n
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <20241008-b4-has_ioport-v7-5-8624c09a4d77@linux.ibm.com>
-References: <20241008-b4-has_ioport-v7-0-8624c09a4d77@linux.ibm.com>
-In-Reply-To: <20241008-b4-has_ioport-v7-0-8624c09a4d77@linux.ibm.com>
 To: Brian Cain <bcain@quicinc.com>, Marcel Holtmann <marcel@holtmann.org>,
         Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Patrik Jakobsson
+ <patrik.r.jakobsson@gmail.com>,
+        Maarten Lankhorst
+ <maarten.lankhorst@linux.intel.com>,
         Maxime Ripard <mripard@kernel.org>,
         Thomas Zimmermann <tzimmermann@suse.de>,
         David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-        Dave Airlie <airlied@redhat.com>, Gerd Hoffmann <kraxel@redhat.com>,
+        Dave Airlie <airlied@redhat.com>, Gerd
+ Hoffmann <kraxel@redhat.com>,
         Lucas De Marchi <lucas.demarchi@intel.com>,
-        =?utf-8?q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
+        Thomas =?ISO-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
         Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, Arnd
+ Bergmann <arnd@arndb.de>,
         "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Heiko Carstens <hca@linux.ibm.com>
+        Heiko
+ Carstens <hca@linux.ibm.com>
 Cc: linux-kernel@vger.kernel.org, linux-hexagon@vger.kernel.org,
         linux-bluetooth@vger.kernel.org, dri-devel@lists.freedesktop.org,
         virtualization@lists.linux.dev, spice-devel@lists.freedesktop.org,
         intel-xe@lists.freedesktop.org, linux-serial@vger.kernel.org,
-        linux-arch@vger.kernel.org, Niklas Schnelle <schnelle@linux.ibm.com>,
-        Arnd Bergmann <arnd@kernel.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5763;
- i=schnelle@linux.ibm.com; h=from:subject:message-id;
- bh=j7KaGUsyaLEUfGtXkukiFzIvWKJHDMnnZRqJknyuK2M=;
- b=owGbwMvMwCX2Wz534YHOJ2GMp9WSGNJZJQKcd74uvPkwU5TH009quVS60Nnlje/2azPJnK5ye
- LBr+ov+jlIWBjEuBlkxRZZFXc5+6wqmmO4J6u+AmcPKBDKEgYtTACayTJbhD29UTM3GYzsYvx16
- dmnL9yM/zhaf8Ofw4WO78WDqnI9M16oYGWYnTWg9z7Znzh+frfMmODMLXvZdUhn3yKf42qvD3lf
- jGvkB
-X-Developer-Key: i=schnelle@linux.ibm.com; a=openpgp;
- fpr=9DB000B2D2752030A5F72DDCAFE43F15E8C26090
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: j963C7hg_va3UzGaH-IIbWizxGCOj-bw
-X-Proofpoint-ORIG-GUID: 7CEvGhYvuz6_kpeSosvf8xTJAGAqQeuz
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        linux-arch@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>
+Date: Tue, 08 Oct 2024 13:41:43 +0200
+In-Reply-To: <20241008-b4-has_ioport-v7-4-8624c09a4d77@linux.ibm.com>
+References: <20241008-b4-has_ioport-v7-0-8624c09a4d77@linux.ibm.com>
+	 <20241008-b4-has_ioport-v7-4-8624c09a4d77@linux.ibm.com>
+Autocrypt: addr=schnelle@linux.ibm.com; prefer-encrypt=mutual;
+ keydata=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
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 8zcBE5puYyjXZffsQTbCTNDIgNY-U6Oc
+X-Proofpoint-GUID: 5WdjQqqVyboLtik2AWhLZE5Z_zhPUTD_
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
  definitions=2024-10-08_10,2024-10-08_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- spamscore=0 suspectscore=0 mlxlogscore=999 impostorscore=0
- lowpriorityscore=0 malwarescore=0 adultscore=0 clxscore=1015
- priorityscore=1501 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2409260000 definitions=main-2410080072
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
+ phishscore=0 adultscore=0 bulkscore=0 mlxscore=0 priorityscore=1501
+ impostorscore=0 spamscore=0 mlxlogscore=999 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2410080072
 
-With all subsystems and drivers either declaring their dependence on
-HAS_IOPORT or fencing I/O port specific code sections we can finally
-make inb()/outb() and friends compile-time dependent on HAS_IOPORT as
-suggested by Linus in the linked mail. The main benefit of this is that
-on platforms such as s390 which have no meaningful way of implementing
-inb()/outb() their use without the proper HAS_IOPORT dependency will
-result in easy to catch and fix compile-time errors instead of compiling
-code that can never work.
+On Tue, 2024-10-08 at 13:32 +0200, Niklas Schnelle wrote:
+> In a future patch HAS_IOPORT=3Dn will disable inb()/outb() and friends at
+> compile time. We thus need to add HAS_IOPORT as dependency for those
+> drivers using them unconditionally. Some 8250 serial drivers support
+> MMIO only use, so fence only the parts requiring I/O ports and print an
+> error message if a device can't be supported with the current
+> configuration.
+>=20
+> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> ---
+>=20
+---8<---
+> diff --git a/drivers/tty/serial/8250/Kconfig b/drivers/tty/serial/8250/Kc=
+onfig
+> index 47ff50763c048c89b19b7c9f13f462bc5368ab43..afa75020d132de2210545fbe5=
+4e0d03df4b72a41 100644
+> --- a/drivers/tty/serial/8250/Kconfig
+> +++ b/drivers/tty/serial/8250/Kconfig
+> @@ -6,7 +6,6 @@
+> =20
+>  config SERIAL_8250
+>  	tristate "8250/16550 and compatible serial support"
+> -	depends on !S390
+>  	select SERIAL_CORE
+>  	select SERIAL_MCTRL_GPIO if GPIOLIB
+>  	help
 
-Link: https://lore.kernel.org/lkml/CAHk-=wg80je=K7madF4e7WrRNp37e3qh6y10Svhdc7O8SZ_-8g@mail.gmail.com/
-Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
----
- include/asm-generic/io.h | 60 ++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 60 insertions(+)
-
-diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-index 80de699bf6af4b7b77f582c0469c43e978f67a43..1027be6a62bcbcd5f6797e0fa42035208d0ca79f 100644
---- a/include/asm-generic/io.h
-+++ b/include/asm-generic/io.h
-@@ -540,6 +540,7 @@ static inline void writesq(volatile void __iomem *addr, const void *buffer,
- 
- #if !defined(inb) && !defined(_inb)
- #define _inb _inb
-+#ifdef CONFIG_HAS_IOPORT
- static inline u8 _inb(unsigned long addr)
- {
- 	u8 val;
-@@ -549,10 +550,15 @@ static inline u8 _inb(unsigned long addr)
- 	__io_par(val);
- 	return val;
- }
-+#else
-+u8 _inb(unsigned long addr)
-+	__compiletime_error("inb()) requires CONFIG_HAS_IOPORT");
-+#endif
- #endif
- 
- #if !defined(inw) && !defined(_inw)
- #define _inw _inw
-+#ifdef CONFIG_HAS_IOPORT
- static inline u16 _inw(unsigned long addr)
- {
- 	u16 val;
-@@ -562,10 +568,15 @@ static inline u16 _inw(unsigned long addr)
- 	__io_par(val);
- 	return val;
- }
-+#else
-+u16 _inw(unsigned long addr)
-+	__compiletime_error("inw() requires CONFIG_HAS_IOPORT");
-+#endif
- #endif
- 
- #if !defined(inl) && !defined(_inl)
- #define _inl _inl
-+#ifdef CONFIG_HAS_IOPORT
- static inline u32 _inl(unsigned long addr)
- {
- 	u32 val;
-@@ -575,36 +586,55 @@ static inline u32 _inl(unsigned long addr)
- 	__io_par(val);
- 	return val;
- }
-+#else
-+u32 _inl(unsigned long addr)
-+	__compiletime_error("inl() requires CONFIG_HAS_IOPORT");
-+#endif
- #endif
- 
- #if !defined(outb) && !defined(_outb)
- #define _outb _outb
-+#ifdef CONFIG_HAS_IOPORT
- static inline void _outb(u8 value, unsigned long addr)
- {
- 	__io_pbw();
- 	__raw_writeb(value, PCI_IOBASE + addr);
- 	__io_paw();
- }
-+#else
-+void _outb(u8 value, unsigned long addr)
-+	__compiletime_error("outb() requires CONFIG_HAS_IOPORT");
-+#endif
- #endif
- 
- #if !defined(outw) && !defined(_outw)
- #define _outw _outw
-+#ifdef CONFIG_HAS_IOPORT
- static inline void _outw(u16 value, unsigned long addr)
- {
- 	__io_pbw();
- 	__raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
- 	__io_paw();
- }
-+#else
-+void _outw(u16 value, unsigned long addr)
-+	__compiletime_error("outw() requires CONFIG_HAS_IOPORT");
-+#endif
- #endif
- 
- #if !defined(outl) && !defined(_outl)
- #define _outl _outl
-+#ifdef CONFIG_HAS_IOPORT
- static inline void _outl(u32 value, unsigned long addr)
- {
- 	__io_pbw();
- 	__raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
- 	__io_paw();
- }
-+#else
-+void _outl(u32 value, unsigned long addr)
-+	__compiletime_error("outl() requires CONFIG_HAS_IOPORT");
-+#endif
- #endif
- 
- #include <linux/logic_pio.h>
-@@ -688,53 +718,83 @@ static inline void outl_p(u32 value, unsigned long addr)
- 
- #ifndef insb
- #define insb insb
-+#ifdef CONFIG_HAS_IOPORT
- static inline void insb(unsigned long addr, void *buffer, unsigned int count)
- {
- 	readsb(PCI_IOBASE + addr, buffer, count);
- }
-+#else
-+void insb(unsigned long addr, void *buffer, unsigned int count)
-+	__compiletime_error("insb() requires HAS_IOPORT");
-+#endif
- #endif
- 
- #ifndef insw
- #define insw insw
-+#ifdef CONFIG_HAS_IOPORT
- static inline void insw(unsigned long addr, void *buffer, unsigned int count)
- {
- 	readsw(PCI_IOBASE + addr, buffer, count);
- }
-+#else
-+void insw(unsigned long addr, void *buffer, unsigned int count)
-+	__compiletime_error("insw() requires HAS_IOPORT");
-+#endif
- #endif
- 
- #ifndef insl
- #define insl insl
-+#ifdef CONFIG_HAS_IOPORT
- static inline void insl(unsigned long addr, void *buffer, unsigned int count)
- {
- 	readsl(PCI_IOBASE + addr, buffer, count);
- }
-+#else
-+void insl(unsigned long addr, void *buffer, unsigned int count)
-+	__compiletime_error("insl() requires HAS_IOPORT");
-+#endif
- #endif
- 
- #ifndef outsb
- #define outsb outsb
-+#ifdef CONFIG_HAS_IOPORT
- static inline void outsb(unsigned long addr, const void *buffer,
- 			 unsigned int count)
- {
- 	writesb(PCI_IOBASE + addr, buffer, count);
- }
-+#else
-+void outsb(unsigned long addr, const void *buffer, unsigned int count)
-+	__compiletime_error("outsb() requires HAS_IOPORT");
-+#endif
- #endif
- 
- #ifndef outsw
- #define outsw outsw
-+#ifdef CONFIG_HAS_IOPORT
- static inline void outsw(unsigned long addr, const void *buffer,
- 			 unsigned int count)
- {
- 	writesw(PCI_IOBASE + addr, buffer, count);
- }
-+#else
-+void outsw(unsigned long addr, const void *buffer, unsigned int count)
-+	__compiletime_error("outsw() requires HAS_IOPORT");
-+#endif
- #endif
- 
- #ifndef outsl
- #define outsl outsl
-+#ifdef CONFIG_HAS_IOPORT
- static inline void outsl(unsigned long addr, const void *buffer,
- 			 unsigned int count)
- {
- 	writesl(PCI_IOBASE + addr, buffer, count);
- }
-+#else
-+void outsl(unsigned long addr, const void *buffer, unsigned int count)
-+	__compiletime_error("outsl() requires HAS_IOPORT");
-+#endif
- #endif
- 
- #ifndef insb_p
-
--- 
-2.43.0
-
+Sorry ;-( I didn't mean to commit the above hunk. I always need to
+change this for my test compiles and it slipped in. With this series it
+all builds but we previously decided we don't want this as part of this
+patch. I'll send a v8.
 
