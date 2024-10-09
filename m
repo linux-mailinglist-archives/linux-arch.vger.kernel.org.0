@@ -1,162 +1,142 @@
-Return-Path: <linux-arch+bounces-7898-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7899-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F03299666A
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Oct 2024 12:05:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFAAA996731
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Oct 2024 12:25:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ECAD9B25BFF
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Oct 2024 10:05:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1CCCB1C22E2D
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Oct 2024 10:25:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD4F718DF7D;
-	Wed,  9 Oct 2024 10:05:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 708F418E76E;
+	Wed,  9 Oct 2024 10:25:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="BBNBuvqE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CU/Syyph"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E71C17E012;
-	Wed,  9 Oct 2024 10:05:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33FB618C008;
+	Wed,  9 Oct 2024 10:25:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728468343; cv=none; b=pt9fQpYLP9OSSHrqQeJLmCGo7jSE0CCI307zJoUfv75s3lyEG/XVnFN0TjY4Z5NC4ClJ81VGvdX7lgUXNw9X3jbdxGJhp8Dz5kX3d7lm3deOtzonoF6C6ub8ZtR8RRJVvIXKNnTDs6n2d7OmEQ3KfEkHoP0UoLwBTyG+0kbe62Y=
+	t=1728469535; cv=none; b=gH4odi6BhEEuFqNJZ4IW6xn3xzga9Hf5toy4KC0BBlYvRQoj/TvoxJSJYyY+QHrzvAniLekMfoSnm2A8Hav/snPI8HRUilzpMICKX2diJa6WDXutY0A3cgbrn2QV0jKCYX0oxRfavAxMtoPXoc1pY45ZanDLKwjyJD8oWp1rTa8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728468343; c=relaxed/simple;
-	bh=XTWDFFN0K/4CnanN15KfWFAABgOA1DcvEox26LpRj/w=;
+	s=arc-20240116; t=1728469535; c=relaxed/simple;
+	bh=E98w9taq8sn2oCFo6PyCyTLfRrjriLoSIyE58uTuJiw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e3Lw2l1txpdHAhcR022nHdQfbrabV05VnCb7co/1r5UQOcN+0KHasQVjdGdA28c2w6Js3aJMSdp8Yp4spk1C0hgu5NFCKntscLLLPthRjijSUBXK2vg6MNvrqqeeC7bQJI6s95sAKgKBBlxGzbVD+kV6YFqJLC9+o3W+jaJsEhs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=BBNBuvqE; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4998t1Wr001951;
-	Wed, 9 Oct 2024 10:05:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date
-	:from:to:cc:subject:message-id:references:mime-version
-	:content-type:in-reply-to; s=pp1; bh=nVMC8hWUl3VGZIi+W4/90+yYg49
-	AVX/ZNYZZyeu1uvw=; b=BBNBuvqEM7vLCJOWfbdID2sz5eKqLmDhlh698K+Y1r0
-	amEBjvn1xK8YcAeryzZfpXgWNCtPpxBwlsldn4OXzT9SysVaPRdtCo7EI8XH+V3A
-	rHBjPWUpcMhcq1vqh0yUvY12/fEgA9HvnyYUkIELd05TALN/8r97/33ciKUkMx6c
-	h4/R1Bs9CUmsVHbfCann5YncukcPLtwYOEI7BhqhYr6+dAUJC1X0QNrZ/DunGPi2
-	0QRgewxjYn3bbp6nDswA39EvtnPEqYqoLnJgB0ogISv+IDXTJWEFzt0g83ZhS5rh
-	dWv/fMWNimKUYgLPMX8I+RcVo7SUZMlIhtHfEwXCVUQ==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 425pqw89c0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 09 Oct 2024 10:05:08 +0000 (GMT)
-Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 499A58Wh000664;
-	Wed, 9 Oct 2024 10:05:08 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 425pqw89bv-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 09 Oct 2024 10:05:08 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 49982aEu030179;
-	Wed, 9 Oct 2024 10:05:07 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 423gsms47w-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 09 Oct 2024 10:05:07 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 499A55Xj41157058
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 9 Oct 2024 10:05:05 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 55D2B2004E;
-	Wed,  9 Oct 2024 10:05:05 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id D4DAA2004B;
-	Wed,  9 Oct 2024 10:05:04 +0000 (GMT)
-Received: from osiris (unknown [9.152.212.60])
-	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Wed,  9 Oct 2024 10:05:04 +0000 (GMT)
-Date: Wed, 9 Oct 2024 12:05:02 +0200
-From: Heiko Carstens <hca@linux.ibm.com>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Florent Revest <revest@chromium.org>,
-        linux-trace-kernel@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>, bpf <bpf@vger.kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Alexei Starovoitov <ast@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>, Guo Ren <guoren@kernel.org>,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH v15 09/19] tracing: Add ftrace_fill_perf_regs() for perf
- event
-Message-ID: <20241009100502.8007-E-hca@linux.ibm.com>
-References: <172639136989.366111.11359590127009702129.stgit@devnote2>
- <172639147435.366111.834128908630424679.stgit@devnote2>
+	 Content-Type:Content-Disposition:In-Reply-To; b=MMOuAz3yas3TvRM0NpkUWutt3q4tUgp6zK/V2/GZ5qsFygPBoRpxxClS1wHswLY5U2SN+4Wz55IVawV63sGYSjPGiXAnUY+F3h8wXqfRT4DeVnJQnV9xnb4uYuPKlURD12V6bQ64rGOEArsJM39fazTzQKQ8b2YJwVpz2MYFHIY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CU/Syyph; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39F86C4CEC5;
+	Wed,  9 Oct 2024 10:25:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728469534;
+	bh=E98w9taq8sn2oCFo6PyCyTLfRrjriLoSIyE58uTuJiw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CU/SyyphBFW7CION5UzN5ZaM2s9B2KaWUYjQIE24jNpQiaaNBcPZ/JBx43vZR9RIm
+	 dKAuev96gZiqv3cQzmnlNpHZGs9yUnbcbXXoet9w9Wkw11upiEbCgMxXNsdL4ezFdY
+	 +p5Tmy9zeIo8mmLnp1544+X/5q23ssqCYC9uPdMTUlybp9F8xH4e8D5xzIK9/AHeT4
+	 VM8+SYp7oWGh1v48rq/tPnXUE9W2Y0QAcFjQlkkDsy7TNbdxWPifO6On6S6nNdb6x/
+	 +Q0hlFwhivhYuLDaOGJFcmJB/380AQV7gmfUOo5/8+ukhcjeDEpd9KT8HTxCDfwmeH
+	 x2vMMvQe1JdeA==
+Date: Wed, 9 Oct 2024 11:25:31 +0100
+From: Mark Brown <broonie@kernel.org>
+To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc: "corbet@lwn.net" <corbet@lwn.net>, "robh@kernel.org" <robh@kernel.org>,
+	"lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"debug@rivosinc.com" <debug@rivosinc.com>,
+	"vbabka@suse.cz" <vbabka@suse.cz>,
+	"brauner@kernel.org" <brauner@kernel.org>,
+	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+	"palmer@dabbelt.com" <palmer@dabbelt.com>,
+	"mingo@redhat.com" <mingo@redhat.com>,
+	"paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
+	"tglx@linutronix.de" <tglx@linutronix.de>,
+	"aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+	"oleg@redhat.com" <oleg@redhat.com>,
+	"krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+	"conor@kernel.org" <conor@kernel.org>,
+	"ebiederm@xmission.com" <ebiederm@xmission.com>,
+	"hpa@zytor.com" <hpa@zytor.com>,
+	"peterz@infradead.org" <peterz@infradead.org>,
+	"arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
+	"kees@kernel.org" <kees@kernel.org>,
+	"x86@kernel.org" <x86@kernel.org>,
+	"shuah@kernel.org" <shuah@kernel.org>,
+	"jim.shu@sifive.com" <jim.shu@sifive.com>,
+	"alistair.francis@wdc.com" <alistair.francis@wdc.com>,
+	"cleger@rivosinc.com" <cleger@rivosinc.com>,
+	"kito.cheng@sifive.com" <kito.cheng@sifive.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"samitolvanen@google.com" <samitolvanen@google.com>,
+	"evan@rivosinc.com" <evan@rivosinc.com>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+	"atishp@rivosinc.com" <atishp@rivosinc.com>,
+	"andybnac@gmail.com" <andybnac@gmail.com>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"charlie@rivosinc.com" <charlie@rivosinc.com>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"richard.henderson@linaro.org" <richard.henderson@linaro.org>,
+	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+	"alexghiti@rivosinc.com" <alexghiti@rivosinc.com>
+Subject: Re: [PATCH v6 16/33] riscv/shstk: If needed allocate a new shadow
+ stack on clone
+Message-ID: <ZwZaG3NT72BwYxJO@finisterre.sirena.org.uk>
+References: <20241008-v5_user_cfi_series-v6-0-60d9fe073f37@rivosinc.com>
+ <20241008-v5_user_cfi_series-v6-16-60d9fe073f37@rivosinc.com>
+ <aa75cbd142c51b996423f18769d8b8d7ecc39081.camel@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="pV5KnxhmLMXWkQIN"
+Content-Disposition: inline
+In-Reply-To: <aa75cbd142c51b996423f18769d8b8d7ecc39081.camel@intel.com>
+X-Cookie: Editing is a rewording activity.
+
+
+--pV5KnxhmLMXWkQIN
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <172639147435.366111.834128908630424679.stgit@devnote2>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Bm4H5rA_QgZ7Sc9h873tvvfylZD7pSVb
-X-Proofpoint-GUID: 1nlkCiRZbXhaiNpfV4GBRo2mRiRcpGM-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-09_08,2024-10-08_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- impostorscore=0 suspectscore=0 spamscore=0 phishscore=0 bulkscore=0
- clxscore=1011 malwarescore=0 mlxlogscore=590 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2410090064
 
-On Sun, Sep 15, 2024 at 06:11:14PM +0900, Masami Hiramatsu (Google) wrote:
-> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> 
-> Add ftrace_fill_perf_regs() which should be compatible with the
-> perf_fetch_caller_regs(). In other words, the pt_regs returned from the
-> ftrace_fill_perf_regs() must satisfy 'user_mode(regs) == false' and can be
-> used for stack tracing.
-> 
-> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-...
->  arch/s390/include/asm/ftrace.h    |    5 +++++
-...
-> diff --git a/arch/s390/include/asm/ftrace.h b/arch/s390/include/asm/ftrace.h
-> index 9cdd48a46bf7..0d9f6df21f81 100644
-> --- a/arch/s390/include/asm/ftrace.h
-> +++ b/arch/s390/include/asm/ftrace.h
-> @@ -84,6 +84,11 @@ ftrace_regs_get_frame_pointer(struct ftrace_regs *fregs)
->  	return sp[0];	/* return backchain */
->  }
->  
-> +#define arch_ftrace_fill_perf_regs(fregs, _regs)	 do {		\
-> +		(_regs)->psw.addr = (fregs)->regs.psw.addr;		\
-> +		(_regs)->gprs[15] = (fregs)->regs.gprs[15];		\
-> +	} while (0)
+On Tue, Oct 08, 2024 at 10:55:29PM +0000, Edgecombe, Rick P wrote:
 
-After reading your commit description and looking at the code I think the
-s390 implementation of perf_arch_fetch_caller_regs() is at least
-suboptimal: it is not possible to tell if an address belongs to user or
-kernel space by looking only at the address (psw.addr); this also requires
-to look at psw.mask. It _looks_ like all current callers of
-perf_arch_fetch_caller_regs() initialize the passed in pt_regs to zero,
-which of course also sets psw.mask to zero, and therefore
-user_mode(regs) == false is satisfied.
+> A lot of this patch and the previous one is similar to x86's and arm's. It great
+> that we can have consistency around this behavior.
 
-However I'd rather make that explicit and don't want to rely on
-callers. Therefore the above arch_ftrace_fill_perf_regs() should
-set the mask to zero
+> There might be enough consistency to refactor some of the arch code into a
+> kernel/shstk.c.
 
-		(_regs)->psw.mask = 0;
+> Should we try?
 
-I will change perf_arch_fetch_caller_regs() accordingly.
+I think so - I think we discussed it before.  I was thinking of looking
+at it once the clone3() stuff settles down, I don't want to trigger any
+unneeded refectorings there and cause further delays.
+
+--pV5KnxhmLMXWkQIN
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmcGWhUACgkQJNaLcl1U
+h9CV8Qf+Ph9QxNDXCUSDZQA7lOMJTS+c3a+WdGbveXt6JMb2hP4Udd4ELfDvQVsP
+2vwWUtByxmDax2qjADTJn56IYnJp+1yB9YBfBuwEGHGP67KgKDpcUHieu4xPemue
+2pid1MtBjTUsviljsva6rAoewc+MO3Z5AAICoplF1wXYwW8JWpgKpALzehjsUnOG
+xGgEXqiS5ycjWc0ikmHyeOQRK13/4EVaiJr+pklcIbhhggLbnNIB7jvKTKnBr/ds
+fkXQZeW9aA6kQUAetPKjlkvwxOhyxix4xDR3tCncJjA/emX+9fze/UwLrBDs75JO
+eMHp4p8ZUDqVuxPu6ZNF8wGk8VJChA==
+=EDL3
+-----END PGP SIGNATURE-----
+
+--pV5KnxhmLMXWkQIN--
 
