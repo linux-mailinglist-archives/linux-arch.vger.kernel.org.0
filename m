@@ -1,313 +1,149 @@
-Return-Path: <linux-arch+bounces-7938-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7939-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E1C29976C8
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Oct 2024 22:47:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C0EEF9976E0
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Oct 2024 22:49:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 51E3A1C22D20
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Oct 2024 20:47:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2376C1F212E7
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Oct 2024 20:49:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09CFE1E7C3E;
-	Wed,  9 Oct 2024 20:42:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4D8D1E2313;
+	Wed,  9 Oct 2024 20:49:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b="qwi4ma0s"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jwwzqOcs"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD5B11E2855;
-	Wed,  9 Oct 2024 20:42:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97EDD191473;
+	Wed,  9 Oct 2024 20:49:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728506561; cv=none; b=HW6h1Gj0YInAwlil6c3lSpQqFZT5HJsT/uOdZCo2uVxUR8Rr04ZxB9v+UeTiNTEOBN2J0RGkXx6To50HdUcxXtn2eeDSVrjTJlVbeIPsARsAd9dyITW/26YCac68lVL86wRAsJdc2TNWRV2L5bIJO9Q6Omf40xpn7Ijms7XAGBk=
+	t=1728506947; cv=none; b=AMQi7SVMrcf+KNrvZoW7l5ukbdxjexC0vmGBtlxp8JYGntGXKRU72l/Z8jn25s1pmexgsrNVWaA5pIMro0D9a588NFpcp+qY7S5e/v+73N2GYzy+EUkhyJfrKBepotRToo8ijBjOQYooDmLcdWDjvQ0DdrBzkAmAWpwt7QqpNMs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728506561; c=relaxed/simple;
-	bh=bqTMmhf8qrPFVj65H2ybVQSoLCqAb/vZq4GN2tCr55c=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=egQkBtA+W7eS6BT/hfkZCPENk/GRA5yREJfXbw3N7f0MLARGsvOFOkKVyTVYmJf6il5RJPJKk61kzgFtRRl/5vS6ff1kv+c6XYZBj5q+BS52iFgx/k3F5xcahBdCeZFfMl4X5tDq08YK81E9xBUHkDSTpRMyEgPLqZfh2BjwysI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com; spf=pass smtp.mailfrom=cyphar.com; dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b=qwi4ma0s; arc=none smtp.client-ip=80.241.56.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cyphar.com
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4XP4Zh1bXQz9sxv;
-	Wed,  9 Oct 2024 22:42:36 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cyphar.com; s=MBO0001;
-	t=1728506556;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=fL5eft/0SEqgXy8IyhgJaBCjETWOZ9/n50x90uqdKGE=;
-	b=qwi4ma0sVjfL983232CndOb2Fdyuw72EPEifNfjns9iNqyZrmOyN/W5dOMy0X2DSquavK4
-	2okrRqQqahZXZGlbi59PvPjYL3DVjpaJZ6X0IMPqwXiTPd++xyCkxpYRHIIZfZ/2v+QI9S
-	BiKkJzKNenauPj0NqsOQ3KcfwZlDrG0eCxMVM6/RWoxiGguZJi/OMgBemjq6IRzQhECHzD
-	E+TqPZumX2so1n6Sl1H3VzXrPJ1sY++0YThpQAf7Q8ru5/fa2pLHsT3IY2t+pvIRwT8vRI
-	B0GGefbonDVP8CrU2vxIA4DG8fwPLPJMaLGCiV/JQd3a7iwK2AP6J2P73gL5GA==
-From: Aleksa Sarai <cyphar@cyphar.com>
-Date: Thu, 10 Oct 2024 07:40:43 +1100
-Subject: [PATCH RFC v3 10/10] selftests: mount_setattr: add CHECK_FIELDS
- selftest
+	s=arc-20240116; t=1728506947; c=relaxed/simple;
+	bh=OFXVpQgisC9iUKGKv5IwiYtmzwJhlFDr4RbKRl3vukg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=idFqj2QqDMAk3J1S6HW7Bk9lpvbnwKBbI6GA6QF0I+/ILjCYfNitnr/hhaojdBQ9o/uzaUlsIu+B9s3ZKfM1iRzILZHx0xy1mlkDoIgAg7iRjODqfGEBwScJodIEnQO1Zxl09lQg49QK84jjAY/pmu1OW4AN+YweG4cCLai0aJw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jwwzqOcs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 265F0C4CEC3;
+	Wed,  9 Oct 2024 20:49:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728506947;
+	bh=OFXVpQgisC9iUKGKv5IwiYtmzwJhlFDr4RbKRl3vukg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jwwzqOcsIgLrThOk8MIptc37fnC8WhDVG/Ifwy2LQsuL0Z4HqID9q3xo5GmNvlMWw
+	 eNl92ym/ChcRd1xr8+UyxVIbPr10zOFe2v1P26pHi8j4KqfQyFTCtdCTtFkYDvoNCn
+	 88RqmptFKK8mFSlpJ/NIdqjRbl+D0uHhq6eywBIxXm9OdZjAQYAt25M4X1nG2Vsv2K
+	 iLRcywG3rMMJHxFwy+hAioNwJTf5J1HHiOHMA8h9kEwkXiiZg8fdreE92CqvaoCeOu
+	 aIqJ9lyhQQPATY+NFOgQp6C5iagTBhJ3J8KAevnqDwaRN2s7JeRpB7lhsFX2JgZc0M
+	 kTUhwSaWl5MMA==
+Date: Wed, 9 Oct 2024 13:49:03 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	Ross Burton <ross.burton@arm.com>,
+	David Spickett <david.spickett@arm.com>,
+	Yury Khrustalev <yury.khrustalev@arm.com>,
+	Wilco Dijkstra <wilco.dijkstra@arm.com>,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v13 11/40] arm64/gcs: Provide basic EL2 setup to allow
+ GCS usage at EL0 and EL1
+Message-ID: <20241009204903.GA3353168@thelio-3990X>
+References: <20241001-arm64-gcs-v13-0-222b78d87eee@kernel.org>
+ <20241001-arm64-gcs-v13-11-222b78d87eee@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241010-extensible-structs-check_fields-v3-10-d2833dfe6edd@cyphar.com>
-References: <20241010-extensible-structs-check_fields-v3-0-d2833dfe6edd@cyphar.com>
-In-Reply-To: <20241010-extensible-structs-check_fields-v3-0-d2833dfe6edd@cyphar.com>
-To: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
- Juri Lelli <juri.lelli@redhat.com>, 
- Vincent Guittot <vincent.guittot@linaro.org>, 
- Dietmar Eggemann <dietmar.eggemann@arm.com>, 
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, 
- Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, 
- Alexander Viro <viro@zeniv.linux.org.uk>, 
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
- Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>
-Cc: Kees Cook <kees@kernel.org>, Florian Weimer <fweimer@redhat.com>, 
- Arnd Bergmann <arnd@arndb.de>, Mark Rutland <mark.rutland@arm.com>, 
- linux-kernel@vger.kernel.org, linux-api@vger.kernel.org, 
- linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Aleksa Sarai <cyphar@cyphar.com>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7253; i=cyphar@cyphar.com;
- h=from:subject:message-id; bh=bqTMmhf8qrPFVj65H2ybVQSoLCqAb/vZq4GN2tCr55c=;
- b=owGbwMvMwCWmMf3Xpe0vXfIZT6slMaSzvQq6rlcTWGQ8fVFgcf/xvdEbNAv4Hc+dYfmx9foVb
- hG9pEsnO0pZGMS4GGTFFFm2+XmGbpq/+Eryp5VsMHNYmUCGMHBxCsBEXmkzMlycnLia72ZG7/uz
- CbKBke5rnU8ef/VnxeHVB6S+LVvJqGbE8L/qxP2C/lfPovb3rH+ndOjKkdsRO9zceDb+ujqFffl
- nhpn8AA==
-X-Developer-Key: i=cyphar@cyphar.com; a=openpgp;
- fpr=C9C370B246B09F6DBCFC744C34401015D1D2D386
-X-Rspamd-Queue-Id: 4XP4Zh1bXQz9sxv
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241001-arm64-gcs-v13-11-222b78d87eee@kernel.org>
 
-While we're at it -- to make testing for error codes with ASSERT_*
-easier, make the sys_* wrappers return -errno in case of an error.
+Hi Mark,
 
-For some reason, the <sys/sysinfo.h> include doesn't correct import
-<asm/posix_types.h>, leading to compilation errors -- so just import
-<asm/posix_types.h> manually.
+On Tue, Oct 01, 2024 at 11:58:50PM +0100, Mark Brown wrote:
+> There is a control HCRX_EL2.GCSEn which must be set to allow GCS
+> features to take effect at lower ELs and also fine grained traps for GCS
+> usage at EL0 and EL1.  Configure all these to allow GCS usage by EL0 and
+> EL1.
+> 
+> We also initialise GCSCR_EL1 and GCSCRE0_EL1 to ensure that we can
+> execute function call instructions without faulting regardless of the
+> state when the kernel is started.
+> 
+> Reviewed-by: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
+> Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 
-Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
----
- tools/include/uapi/asm-generic/posix_types.h       | 101 +++++++++++++++++++++
- tools/testing/selftests/mount_setattr/Makefile     |   2 +-
- .../selftests/mount_setattr/mount_setattr_test.c   |  53 ++++++++++-
- 3 files changed, 153 insertions(+), 3 deletions(-)
+I just bisected a build failure from a failed linker script assertion
+that I see with allmodconfig to this change in -next as commit
+ff5181d8a2a8 ("arm64/gcs: Provide basic EL2 setup to allow GCS usage at
+EL0 and EL1"):
 
-diff --git a/tools/include/uapi/asm-generic/posix_types.h b/tools/include/uapi/asm-generic/posix_types.h
-new file mode 100644
-index 000000000000..b5f7594eee7a
---- /dev/null
-+++ b/tools/include/uapi/asm-generic/posix_types.h
-@@ -0,0 +1,101 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+#ifndef __ASM_GENERIC_POSIX_TYPES_H
-+#define __ASM_GENERIC_POSIX_TYPES_H
-+
-+#include <asm/bitsperlong.h>
-+/*
-+ * This file is generally used by user-level software, so you need to
-+ * be a little careful about namespace pollution etc.
-+ *
-+ * First the types that are often defined in different ways across
-+ * architectures, so that you can override them.
-+ */
-+
-+#ifndef __kernel_long_t
-+typedef long		__kernel_long_t;
-+typedef unsigned long	__kernel_ulong_t;
-+#endif
-+
-+#ifndef __kernel_ino_t
-+typedef __kernel_ulong_t __kernel_ino_t;
-+#endif
-+
-+#ifndef __kernel_mode_t
-+typedef unsigned int	__kernel_mode_t;
-+#endif
-+
-+#ifndef __kernel_pid_t
-+typedef int		__kernel_pid_t;
-+#endif
-+
-+#ifndef __kernel_ipc_pid_t
-+typedef int		__kernel_ipc_pid_t;
-+#endif
-+
-+#ifndef __kernel_uid_t
-+typedef unsigned int	__kernel_uid_t;
-+typedef unsigned int	__kernel_gid_t;
-+#endif
-+
-+#ifndef __kernel_suseconds_t
-+typedef __kernel_long_t		__kernel_suseconds_t;
-+#endif
-+
-+#ifndef __kernel_daddr_t
-+typedef int		__kernel_daddr_t;
-+#endif
-+
-+#ifndef __kernel_uid32_t
-+typedef unsigned int	__kernel_uid32_t;
-+typedef unsigned int	__kernel_gid32_t;
-+#endif
-+
-+#ifndef __kernel_old_uid_t
-+typedef __kernel_uid_t	__kernel_old_uid_t;
-+typedef __kernel_gid_t	__kernel_old_gid_t;
-+#endif
-+
-+#ifndef __kernel_old_dev_t
-+typedef unsigned int	__kernel_old_dev_t;
-+#endif
-+
-+/*
-+ * Most 32 bit architectures use "unsigned int" size_t,
-+ * and all 64 bit architectures use "unsigned long" size_t.
-+ */
-+#ifndef __kernel_size_t
-+#if __BITS_PER_LONG != 64
-+typedef unsigned int	__kernel_size_t;
-+typedef int		__kernel_ssize_t;
-+typedef int		__kernel_ptrdiff_t;
-+#else
-+typedef __kernel_ulong_t __kernel_size_t;
-+typedef __kernel_long_t	__kernel_ssize_t;
-+typedef __kernel_long_t	__kernel_ptrdiff_t;
-+#endif
-+#endif
-+
-+#ifndef __kernel_fsid_t
-+typedef struct {
-+	int	val[2];
-+} __kernel_fsid_t;
-+#endif
-+
-+/*
-+ * anything below here should be completely generic
-+ */
-+typedef __kernel_long_t	__kernel_off_t;
-+typedef long long	__kernel_loff_t;
-+typedef __kernel_long_t	__kernel_old_time_t;
-+#ifndef __KERNEL__
-+typedef __kernel_long_t	__kernel_time_t;
-+#endif
-+typedef long long __kernel_time64_t;
-+typedef __kernel_long_t	__kernel_clock_t;
-+typedef int		__kernel_timer_t;
-+typedef int		__kernel_clockid_t;
-+typedef char *		__kernel_caddr_t;
-+typedef unsigned short	__kernel_uid16_t;
-+typedef unsigned short	__kernel_gid16_t;
-+
-+#endif /* __ASM_GENERIC_POSIX_TYPES_H */
-diff --git a/tools/testing/selftests/mount_setattr/Makefile b/tools/testing/selftests/mount_setattr/Makefile
-index 0c0d7b1234c1..3f260506fe60 100644
---- a/tools/testing/selftests/mount_setattr/Makefile
-+++ b/tools/testing/selftests/mount_setattr/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- # Makefile for mount selftests.
--CFLAGS = -g $(KHDR_INCLUDES) -Wall -O2 -pthread
-+CFLAGS = -g $(KHDR_INCLUDES) $(TOOLS_INCLUDES) -Wall -O2 -pthread
- 
- TEST_GEN_PROGS := mount_setattr_test
- 
-diff --git a/tools/testing/selftests/mount_setattr/mount_setattr_test.c b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
-index c6a8c732b802..36b8286e5f43 100644
---- a/tools/testing/selftests/mount_setattr/mount_setattr_test.c
-+++ b/tools/testing/selftests/mount_setattr/mount_setattr_test.c
-@@ -11,6 +11,7 @@
- #include <sys/wait.h>
- #include <sys/vfs.h>
- #include <sys/statvfs.h>
-+#include <asm/posix_types.h> /* get __kernel_* typedefs */
- #include <sys/sysinfo.h>
- #include <stdlib.h>
- #include <unistd.h>
-@@ -137,7 +138,8 @@
- static inline int sys_mount_setattr(int dfd, const char *path, unsigned int flags,
- 				    struct mount_attr *attr, size_t size)
- {
--	return syscall(__NR_mount_setattr, dfd, path, flags, attr, size);
-+	int ret = syscall(__NR_mount_setattr, dfd, path, flags, attr, size);
-+	return ret >= 0 ? ret : -errno;
- }
- 
- #ifndef OPEN_TREE_CLONE
-@@ -152,9 +154,24 @@ static inline int sys_mount_setattr(int dfd, const char *path, unsigned int flag
- #define AT_RECURSIVE 0x8000 /* Apply to the entire subtree */
- #endif
- 
-+#define FSMOUNT_VALID_FLAGS                                                    \
-+	(MOUNT_ATTR_RDONLY | MOUNT_ATTR_NOSUID | MOUNT_ATTR_NODEV |            \
-+	 MOUNT_ATTR_NOEXEC | MOUNT_ATTR__ATIME | MOUNT_ATTR_NODIRATIME |       \
-+	 MOUNT_ATTR_NOSYMFOLLOW)
-+
-+#define MOUNT_SETATTR_VALID_FLAGS (FSMOUNT_VALID_FLAGS | MOUNT_ATTR_IDMAP)
-+
-+#define MOUNT_SETATTR_PROPAGATION_FLAGS \
-+	(MS_UNBINDABLE | MS_PRIVATE | MS_SLAVE | MS_SHARED)
-+
-+#ifndef CHECK_FIELDS
-+#define CHECK_FIELDS (1ULL << 63)
-+#endif
-+
- static inline int sys_open_tree(int dfd, const char *filename, unsigned int flags)
- {
--	return syscall(__NR_open_tree, dfd, filename, flags);
-+	int ret = syscall(__NR_open_tree, dfd, filename, flags);
-+	return ret >= 0 ? ret : -errno;
- }
- 
- static ssize_t write_nointr(int fd, const void *buf, size_t count)
-@@ -1497,4 +1514,36 @@ TEST_F(mount_setattr, mount_attr_nosymfollow)
- 	ASSERT_EQ(close(fd), 0);
- }
- 
-+TEST_F(mount_setattr, check_fields)
-+{
-+	struct mount_attr_ext {
-+		struct mount_attr inner;
-+		uint64_t extra1;
-+		uint64_t extra2;
-+		uint64_t extra3;
-+	} attr;
-+
-+	/* Set the structure to dummy values. */
-+	memset(&attr, 0xAB, sizeof(attr));
-+
-+	if (!mount_setattr_supported())
-+		SKIP(return, "mount_setattr syscall not supported");
-+
-+	/* Make sure that invalid sizes are detected even with CHECK_FIELDS. */
-+	EXPECT_EQ(sys_mount_setattr(-1, "", 0, (struct mount_attr *) &attr, CHECK_FIELDS), -EINVAL);
-+	EXPECT_EQ(sys_mount_setattr(-1, "", 0, (struct mount_attr *) &attr, CHECK_FIELDS | 0xF000), -E2BIG);
-+
-+	/* Actually get the CHECK_FIELDS results. */
-+	ASSERT_EQ(sys_mount_setattr(-1, "", 0, (struct mount_attr *) &attr, CHECK_FIELDS | sizeof(attr)), -EEXTSYS_NOOP);
-+
-+	EXPECT_EQ(attr.inner.attr_set, MOUNT_SETATTR_VALID_FLAGS);
-+	EXPECT_EQ(attr.inner.attr_clr, MOUNT_SETATTR_VALID_FLAGS);
-+	EXPECT_EQ(attr.inner.propagation, MOUNT_SETATTR_PROPAGATION_FLAGS);
-+	EXPECT_EQ(attr.inner.userns_fd, 0xFFFFFFFFFFFFFFFF);
-+	/* Trailing fields outside ksize must be zeroed. */
-+	EXPECT_EQ(attr.extra1, 0);
-+	EXPECT_EQ(attr.extra2, 0);
-+	EXPECT_EQ(attr.extra3, 0);
-+}
-+
- TEST_HARNESS_MAIN
+  $ make -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux- mrproper allmodconfig vmlinux
+  aarch64-linux-ld: HYP init code too big
+  make[4]: *** [scripts/Makefile.vmlinux:34: vmlinux] Error 1
+  ...
 
--- 
-2.46.1
+I see this with both GCC 14 and clang 19, in case toolchain version
+matters. Bisect log included as well.
 
+Cheers,
+Nathan
+
+# bad: [b6270c3bca987530eafc6a15f9d54ecd0033e0e3] Add linux-next specific files for 20241009
+# good: [75b607fab38d149f232f01eae5e6392b394dd659] Merge tag 'sched_ext-for-6.12-rc2-fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/tj/sched_ext
+git bisect start 'b6270c3bca987530eafc6a15f9d54ecd0033e0e3' '75b607fab38d149f232f01eae5e6392b394dd659'
+# bad: [76d36603db22f0f0774c19147b25f5a0bcac64e6] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git
+git bisect bad 76d36603db22f0f0774c19147b25f5a0bcac64e6
+# bad: [e90a3e76b4b8080f633a167179f3a76b93077270] Merge branch 'renesas-clk' of git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git
+git bisect bad e90a3e76b4b8080f633a167179f3a76b93077270
+# good: [dd60a5d8b8ac2e7dc6810182a6dbc251a746f09e] Merge branch 'perf-tools-next' of git://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git
+git bisect good dd60a5d8b8ac2e7dc6810182a6dbc251a746f09e
+# bad: [fa74fd4773673726bfa8f89d15805d8a1b26f855] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap.git
+git bisect bad fa74fd4773673726bfa8f89d15805d8a1b26f855
+# bad: [a7833d5793f83512f1fb6f36fa7588ea03da6b1b] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
+git bisect bad a7833d5793f83512f1fb6f36fa7588ea03da6b1b
+# bad: [c9c0de66c9b5f295f09a116f15401465bdd13263] Merge branch 'for-next/core' of git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux
+git bisect bad c9c0de66c9b5f295f09a116f15401465bdd13263
+# bad: [506496bcbb4204c9ff5cfe82b1b90e1f14366992] arm64/gcs: Ensure that new threads have a GCS
+git bisect bad 506496bcbb4204c9ff5cfe82b1b90e1f14366992
+# good: [d0aa2b4351862cc2ce8d97e00c96bffc02ea16af] arm64/gcs: Provide put_user_gcs()
+git bisect good d0aa2b4351862cc2ce8d97e00c96bffc02ea16af
+# bad: [6497b66ba6945f142902c7e8fce86e47016ead1c] arm64/mm: Map pages for guarded control stack
+git bisect bad 6497b66ba6945f142902c7e8fce86e47016ead1c
+# bad: [6487c963083c24ede289d4267ffa60a9db668cd4] arm64/cpufeature: Runtime detection of Guarded Control Stack (GCS)
+git bisect bad 6487c963083c24ede289d4267ffa60a9db668cd4
+# bad: [ff5181d8a2a82c982276a7e035896185c390e856] arm64/gcs: Provide basic EL2 setup to allow GCS usage at EL0 and EL1
+git bisect bad ff5181d8a2a82c982276a7e035896185c390e856
+# first bad commit: [ff5181d8a2a82c982276a7e035896185c390e856] arm64/gcs: Provide basic EL2 setup to allow GCS usage at EL0 and EL1
 
