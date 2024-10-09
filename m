@@ -1,122 +1,124 @@
-Return-Path: <linux-arch+bounces-7913-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7912-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BF17996E01
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Oct 2024 16:33:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29851996DE3
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Oct 2024 16:32:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC9B22838EF
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Oct 2024 14:33:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A5F641F22237
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Oct 2024 14:32:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8195D192D8E;
-	Wed,  9 Oct 2024 14:32:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A68B19995E;
+	Wed,  9 Oct 2024 14:31:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="etBYyOkj";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="ca6OtwPp"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WDs8TxD7"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C5C219C560;
-	Wed,  9 Oct 2024 14:32:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6480318EAD;
+	Wed,  9 Oct 2024 14:31:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.19
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728484374; cv=fail; b=TfwWkZH2Bi2hDVZXQS78m+Hc2rxHx4Jz6f1m+uE5yisEgzBS8rIrbl2XWDoPpM9SvJu2odMIqFxSeB9TImfd/VP6rUCm1n3oP4npXS+RDhjIIRDXHVEC+g+OUz3GjOEOvlmlufFoloarqconoY91CJQwvI3RjcAeud/aCxO08m0=
+	t=1728484306; cv=fail; b=Q8LF+D7yvNq+/xomLphSVgV1/BV07wk8sqdFskQWAAMNgWD9hPKPI1ECwOkqfo1I96VA5gFFggUamGkH2bcpL+zII7qXInHZYIFzOhMDlz7eq/DgA5z8larDOvNNdRu6owzAesCqFqajqlZwZ2iXsklLjiXf14wp28AeCtNdAv8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728484374; c=relaxed/simple;
-	bh=p4C1WSQTElut8GnhgsTUV/2kTYb2YNKVVa2cFVyBD5Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=jqqvTHYtK93YUu4trhCtQgiKXBYS2A8VqL3CuObB1DqiJxnNHzUHdK7SR6h5nHAYXn9dxL4E3qMNPL69zZa8quopKo0HS9OmEsfNUj5ap21iaVoJs9qb5MALcadlyQZZqbVJ9v4PaJwdbmdGczm1+7veTp+fq+pt5KWg96h3LZc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=etBYyOkj; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=ca6OtwPp; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 499Dfmvj030873;
-	Wed, 9 Oct 2024 14:31:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=corp-2023-11-20; bh=2lDuO5UY9Anp/5LG1O
-	v6PAPu35ofnxeUr7EgSPtM1gw=; b=etBYyOkj0SctZT8qAwlwml3Uro+3nYpud/
-	v07qmSrdk5XrT+DQ5nZfZMMTJFK/PqsU3s2CbqAPqJR+ROXq+k1fjseC4YJ3IKsc
-	WJmdxOVAr1xLgCRjNj6YfiDo2UXvCtc/1UdkZfH8rEYP8ZAcYKdZsVoWtOCxOsOj
-	OlPuzEoCvxtEbXOOvYi+g8XFJHuXB3yluD7bXXWfLJm324nMuGLxqKvf4YOmSw3R
-	4//ju+/xhz459kejIXgHj551AdK3KEKPBkFMtFq+arqSD1yqf1i5KezKKLwbLzHm
-	ykfAVV6gefS3NinQwfHIfhnsK2ck+/7+kAdaFfKdk236FTHlRwDQ==
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 42306egebj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 09 Oct 2024 14:31:30 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 499DjYPx038363;
-	Wed, 9 Oct 2024 14:31:12 GMT
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2177.outbound.protection.outlook.com [104.47.55.177])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 422uw8qt0e-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 09 Oct 2024 14:31:12 +0000
+	s=arc-20240116; t=1728484306; c=relaxed/simple;
+	bh=730jVH0FodWnhgtAC+I7xNcaUM0aFn252aonbqoKOr0=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=qxMLqvfcyERnkhwcPR2AMi9jkuNAxOvhquKCjG5gtcx5kTNRqhHrE8s94z1V6WlmflaC8bdCBJk55be1fKqnCIZeleK5fzL6OZMlPC1kS0v3qx+Tf5tXBs5CkG4/kigFpCopmj3sOXM/DfuSAsmlQMNl62FLOm4u8Te2nzppn+I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WDs8TxD7; arc=fail smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728484304; x=1760020304;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=730jVH0FodWnhgtAC+I7xNcaUM0aFn252aonbqoKOr0=;
+  b=WDs8TxD7ALlrJFjgiJc6cxYi+DHIstbE1f7Io1jUY/mJIq0cS93TdjVd
+   UNSZJcqC3TybMn6GaH4OQbCKy9HvrA8ZtuLjHGuLdG94uRUC7DHRFoYQK
+   rdjBcX0AiJdOh71Wkvqjs7qbPi6PL3ylXL8QsoIz96/IoOUDymr71gx2d
+   8O/yMSBm7gxWREstH2B8D/hjoDWZKq0noiqaeZt6IIBelFy1rUHh2RhCm
+   wY3p4KISZQCc8VMLLP1dkFx2N9BW7qne9vZXsS+35GZP0yZkjZgugpc/q
+   ewJSwwlaLsTJslPsA0CxGoyOG3eCn7r3wZLNCsjyEaEFIqeuQ6GJsj8hH
+   Q==;
+X-CSE-ConnectionGUID: 1FkjY+vVTHyi3mH66mvZ4w==
+X-CSE-MsgGUID: coK6WZ1GT+CqDhvw6iHUpg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11220"; a="27263747"
+X-IronPort-AV: E=Sophos;i="6.11,190,1725346800"; 
+   d="scan'208";a="27263747"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2024 07:31:42 -0700
+X-CSE-ConnectionGUID: pS2rXekfTRa/XC6JsYqW9A==
+X-CSE-MsgGUID: bwgJjIGmR7eTJN3UxI1VmA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,190,1725346800"; 
+   d="scan'208";a="81078523"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orviesa005.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 09 Oct 2024 07:31:42 -0700
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Wed, 9 Oct 2024 07:31:42 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Wed, 9 Oct 2024 07:31:42 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39 via Frontend Transport; Wed, 9 Oct 2024 07:31:42 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.44) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Wed, 9 Oct 2024 07:31:41 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=hcz6EJhPsS19pr6NyiMvXGvJw7cLpXVhU4cefYl2nYIu5XVpxrnvUuVT1lyvrCKfkxyrjo9z7ORwun1PZqukveUk1gAjibl3ZuJSKN7SmF41qsf1n2dDCF79UWhwqExXIFcmGR4YzqeN/5Y/2QQk/L8dCbN0pFlwyfAsh9dc0CtHg94mLQEjAaRfz3wDUmLqkJKDrhdx9VacznIafvuuqf08yR559/zcwH0gmMpvQHEYZi0jYni49uQpabJuAhNRlGOypD1iWaPnOIddwHPDAOVuieThfMGZLaWhWuTYEDnbgLCWk0h1KZcLYMFPuwd1kfEwiSSzTTCx9A95HDwMag==
+ b=uz9sOVHO3/rf0uMHsP24jijwtxQc93rHFfCFZTm7vwqPTGwGJIOAbmTGTSzYbF8eNta1JXBgobRL4IyygWpAx8rD1Oma8zj/7BD7vS+IFcHRJkm5FufEvo+nKIFTjGTdFfbZkKurV+zaJgxxaaV6oUW/62QFx08aHqLMVi/wCU4arm4+C/xYIzlJOfrvx4Pzr5xkPPglVY95RIx8D7iFda0svRD4LrB1zuhaaXVuyeQSqQGW3cKlAk8/sCYoWjvrZLQEesXNe8C+A3voD6V5/bt2k60OCm82dZESEMBlj16sh/hUMlpisu1pbDkQsV/FP8Gnk8/z276WHcn7z2W44w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2lDuO5UY9Anp/5LG1Ov6PAPu35ofnxeUr7EgSPtM1gw=;
- b=V8xFhhiqcxEDEYibaKkBjmZPEtezaSp2NN4F2oDa+FL0Qk5U6QT96P2J7HGJgIV2MPQrcojTooKYyLSDDEMFgTIylto+WHM5lUtt+hRLp+x+Cb5UShI7BliA7mqlOKIM0fSqmNd80lCo5ltG9dV7aA2wJ9MS2NwaDrH3RRT+RURZmVzz4a/8uGhGzkFPPZO3t5ApOooGxGwCskvY+NmM71hyioqX4tWkbflvT8KeJVJR7NFKiiPsvS79icaSyr3xPMIUYTaUckzCxrOuoeK4QcBPbIK8G5rJaj4c2BeaVLuPsCV5XBnHBhIMOX2ubTuktRswC351/Kxhlewbac/pEw==
+ bh=VVP8qtqOLzWI4/OVu186y7hDM2J8kWGfew1kTzmQW8E=;
+ b=olIfbGLI1Kqyn20GIcL/BDsy2+qYCsgZ4MdYifgXw7x6WuzE2g1fADkEGcqdDZsnp+qke62rDSM0nsCbi3/1cK8ALcNcS5ZQbO4ene9FVL/hBurMkwICNHlM2AGGvTd9DJxEvw0SkbzsMUyQGepuVZ95l5Ykc6eUHmlH1KGErBIghA4lMWEpuMlRXRjGZ+I7WL/up6gBFMnfcXL9XdfbCt8NkBJpp9Xi8w9sK63mXw3Qnq9GS9ogxWIm9hJDT8wWRytY05PEnhsVXPuQ/INUGXfuBd1/O5YYOBpUA06ToE+etQbLvaivRr8NoMIjraerwW6JZHb8T9+JE3dazs7PWw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2lDuO5UY9Anp/5LG1Ov6PAPu35ofnxeUr7EgSPtM1gw=;
- b=ca6OtwPplicRPxq+g9Zw0asbx3jUkG637vTp+wqWdOoK4buTpZxoPorM00e0rxx6+Eo9N0OR38SQSHw9jEvRVjxZAo4/4Ku/EK2daC471kaPx76Yro/GePYIQqy4NqoErELObqCUZiniIuDstULejkwck61mPvyQ5JGXvpHf9FI=
-Received: from SJ0PR10MB5613.namprd10.prod.outlook.com (2603:10b6:a03:3d0::5)
- by MN2PR10MB4349.namprd10.prod.outlook.com (2603:10b6:208:1d4::9) with
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from LV3PR11MB8603.namprd11.prod.outlook.com (2603:10b6:408:1b6::9)
+ by IA0PR11MB7936.namprd11.prod.outlook.com (2603:10b6:208:3dd::20) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8048.16; Wed, 9 Oct
- 2024 14:31:05 +0000
-Received: from SJ0PR10MB5613.namprd10.prod.outlook.com
- ([fe80::4239:cf6f:9caa:940e]) by SJ0PR10MB5613.namprd10.prod.outlook.com
- ([fe80::4239:cf6f:9caa:940e%5]) with mapi id 15.20.8026.020; Wed, 9 Oct 2024
- 14:31:04 +0000
-Date: Wed, 9 Oct 2024 15:31:01 +0100
-From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: linux-mm@kvack.org, Arnd Bergmann <arnd@arndb.de>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Andreas Larsson <andreas@gaisler.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Christian Brauner <brauner@kernel.org>, Christoph Hellwig <hch@lst.de>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Greg Ungerer <gerg@linux-m68k.org>, Helge Deller <deller@gmx.de>,
-        Kees Cook <kees@kernel.org>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>, Michal Hocko <mhocko@suse.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Vladimir Murzin <vladimir.murzin@arm.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        linux-stm32@st-md-mailman.stormreply.com, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH 4/5] asm-generic: use asm-generic/mman-common.h on parisc
- and alpha
-Message-ID: <1cf8c09f-6b36-4650-a017-707f4bc41ca7@lucifer.local>
-References: <20240925210615.2572360-1-arnd@kernel.org>
- <20240925210615.2572360-5-arnd@kernel.org>
-Content-Type: text/plain; charset=us-ascii
+ 2024 14:31:37 +0000
+Received: from LV3PR11MB8603.namprd11.prod.outlook.com
+ ([fe80::4622:29cf:32b:7e5c]) by LV3PR11MB8603.namprd11.prod.outlook.com
+ ([fe80::4622:29cf:32b:7e5c%5]) with mapi id 15.20.8048.013; Wed, 9 Oct 2024
+ 14:31:37 +0000
+Date: Wed, 9 Oct 2024 22:31:26 +0800
+From: Oliver Sang <oliver.sang@intel.com>
+To: Al Viro <viro@zeniv.linux.org.uk>
+CC: Christian =?iso-8859-1?Q?G=F6ttsche?= <cgzones@googlemail.com>,
+	<oe-lkp@lists.linux.dev>, <lkp@intel.com>, <linux-fsdevel@vger.kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Christian Brauner <brauner@kernel.org>,
+	<linux-alpha@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-m68k@lists.linux-m68k.org>, <linux-kernel@vger.kernel.org>,
+	<linux-mips@vger.kernel.org>, <linux-parisc@vger.kernel.org>,
+	<linuxppc-dev@lists.ozlabs.org>, <linux-s390@vger.kernel.org>,
+	<linux-sh@vger.kernel.org>, <sparclinux@vger.kernel.org>,
+	<audit@vger.kernel.org>, <linux-api@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>, <oliver.sang@intel.com>
+Subject: Re: [viro-vfs:work.xattr2] [fs/xattr]  64d47e878a:
+ xfstests.xfs.046.fail
+Message-ID: <ZwaTvubyvE0cAj6P@xsang-OptiPlex-9020>
+References: <202410062250.ee92fca7-oliver.sang@intel.com>
+ <20241006145904.GE4017910@ZenIV>
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20240925210615.2572360-5-arnd@kernel.org>
-X-ClientProxiedBy: LO4P123CA0200.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:1a5::7) To SJ0PR10MB5613.namprd10.prod.outlook.com
- (2603:10b6:a03:3d0::5)
+In-Reply-To: <20241006145904.GE4017910@ZenIV>
+X-ClientProxiedBy: TYAPR01CA0070.jpnprd01.prod.outlook.com
+ (2603:1096:404:2b::34) To LV3PR11MB8603.namprd11.prod.outlook.com
+ (2603:10b6:408:1b6::9)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -124,324 +126,144 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ0PR10MB5613:EE_|MN2PR10MB4349:EE_
-X-MS-Office365-Filtering-Correlation-Id: e0cd4e5a-224d-405e-96de-08dce86f015d
+X-MS-TrafficTypeDiagnostic: LV3PR11MB8603:EE_|IA0PR11MB7936:EE_
+X-MS-Office365-Filtering-Correlation-Id: ebdcaee0-bb50-4f80-c782-08dce86f14d9
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|366016|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?C9nFDa2T6TiBxa1Yu8MTXrQ2L4Rc8mkR4FUmLUiF6zfpy9cRYIOUKjnJa9bC?=
- =?us-ascii?Q?coFWO3gvSjsJc0bGeMiwFOtXIydVERnj2eBRxKNgJulj3szFYW1y8KBcj3iP?=
- =?us-ascii?Q?wqXOuIss8Spb49U2FZIU2nSvxHBt6cZJLPd+7IhvX3rge/ncMtfarJK/WYnh?=
- =?us-ascii?Q?wRzFD3S+roU6zKpdW6MY43vXLTkPBD3GvpGfuOKGOOP6zuNmFXxvoV53yzY4?=
- =?us-ascii?Q?DJWXqj4aqipc4nCadIz/u/PLZUZycxQyLvXQ8yLZsj1evW0/kWfMY/A/k71g?=
- =?us-ascii?Q?81iuozCItrt6l8m4z+RWs8/Z3gkrOzpQNPDaW787KpRxpFZWE10ioQAtQMwz?=
- =?us-ascii?Q?2RYA9kMk7UkgO7v4r0XJNIZwvLEpRbwSM4OxOif9RRaUyaxghx0C7qPfB9nU?=
- =?us-ascii?Q?5HjH0DPa+RJE5YC7Ztb0J5cOTb2UQeLsiyYLzrEyIvZpG6dtfjbL2/AnbrS1?=
- =?us-ascii?Q?iXkRGfLDWLFh94XMjUfXT7WlbG+EaCBAyEOqrJSZwTK2D2qrpJWnucMsL0TL?=
- =?us-ascii?Q?SmDXEI4ke9TIW0lS1htCCtV9K8gu1k3NmC2nLFpacmnL4eu1epJbRcRaeXc2?=
- =?us-ascii?Q?XCLuCTQEKXGmZMyPa90VWVL/XnfaFJW+bBthUVCpOxSlcq2+ToYDpvb7RgyW?=
- =?us-ascii?Q?TN3crXzOiw7cYAbq+kpM9OwlNWGUK6gebwFyEO9dXwEkOch2o4hbLuBrw8w0?=
- =?us-ascii?Q?PX5kL6yJ9wKbCkPtZHXqK7p7yznBkcDnbyhfvK7EsTmfRat9R/HEBNASZtfh?=
- =?us-ascii?Q?grr6FIJu2IRkHeytg+EkhwmnIeCWzgWD00MeqdF6p0y3S/pvPxRllAC43cz8?=
- =?us-ascii?Q?MPsfKId2guvVRdm89lZb17jHmeqVAFPNFUFiDcAt9Eo4qx2GmqkHzC3LluFT?=
- =?us-ascii?Q?HmhFcnjOz3CQZTfhlyogIDwtY8Xp7xfR0eQJhis5nsWlHRlzh9ISigTab9QH?=
- =?us-ascii?Q?QpwLbR90OUV5oxIKA/PFzWuI2FhifgnH1o5xp2NVbYCr+fdnBUynL39SWi3K?=
- =?us-ascii?Q?tQ71CErxhQmU9YUyBANuU6NVajO1yiHl3h/MkgpMVxB/2zA4jjHQO+8nCyJD?=
- =?us-ascii?Q?Ytg5es+Dt/fKcDBe1ll9U+0bXQc+Ld8Ngy7bUndFyzHjcIwIj6nivFjzotCT?=
- =?us-ascii?Q?/Nwo12lNv7Z/9E7TviDnsqzoxbOJruZz8NbDqdtuHfXz2NbAqfbYf/VXE/B6?=
- =?us-ascii?Q?jSNPnGZkFfa8BKJ2drc5Es1J6qPnQfU24Th8n/Lpv7H4pK4hxVEWQHPhlvhf?=
- =?us-ascii?Q?Qp9bSySaS26Bcj3yj3ZTlzI4VGUKz5FNz7UKYogZ+g=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR10MB5613.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|1800799024|366016|376014;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?QP8HWs6BBKsX38DaGg+Oamx5IQ27gS3a8dQVHJTLj3jFGJyv9rtJiohyqoMt?=
+ =?us-ascii?Q?WOV80dPPfcwjTeIJa97DMA4WMQn7tPEdC3wf4v7QK7xXCMM/rqEfzkxP/sbi?=
+ =?us-ascii?Q?u/FMSsE7zXhqCoc6S0YFAu9MKBltKWwyFbUpsQLQYKEyMlJOaANsT/GhzjbH?=
+ =?us-ascii?Q?ONpmfM10u2oXUVrKweLIIlhGENc3U+qfKy2EWagpm9oKYzCddL1w+fdAM9+i?=
+ =?us-ascii?Q?hrpBRxCSUph2nI3csHJhPztPwZuyv1EOykwFxzpsgLO6yCh9fB+uzC8L3I6x?=
+ =?us-ascii?Q?DjRF+ks9Qp0ipNWghKMRJSkQ5OqTjDwCOfIaLu3t5O3a13O0DX9tsFUP8QKn?=
+ =?us-ascii?Q?BnC25o7HiX3W8uyGjZPgDtU/t/TZXTC07IkvhbrUinBoJcBgD3TFd+ZYQpE/?=
+ =?us-ascii?Q?PnnjsnsHruq34/lagRFlsjdQYuWJ7nETC9eGvsFW0GDqVsiLwcxONYSJdI7v?=
+ =?us-ascii?Q?Wz3wwVS7UXK5lKkcMsxYD8ILxfHkxrwWEmfbHT4k2AtMH5bv1JzyCdqiF6OM?=
+ =?us-ascii?Q?0kjX4AwA/mIITxqq+mKw8mBmdmcqWjXAMbYjicw7hhxUsDA0i/DqxyND+MuT?=
+ =?us-ascii?Q?OJHiDStI9T5mGdC7QI8xjb/wB6+tSDdGDzYaoXKsrfZm8jH5V+C/CryVWatc?=
+ =?us-ascii?Q?QrJPNv/dxh2r8utTHO8NFc+7Md+kU+f5N7R4gSfTGq51EF7jrxwrnjWL38oM?=
+ =?us-ascii?Q?IfDQl3pisow2ybdr7/DrIoCucaCTJTCByWLWeR63Hz9D3itT/HkgigSlZmDs?=
+ =?us-ascii?Q?d26SHsAssRQoXoWDybXxspLZOYxcEigtdj9fayLgxlWMNs2BnamMfrXOmkOB?=
+ =?us-ascii?Q?e2jgpmPO90OpMOSYaF4VgDNWdvxfIRdzORYXaAdthdch29MzE9vh80Nj0zMi?=
+ =?us-ascii?Q?hnoTRCD79MoA6XVD3wbN767k06jm6PWmiZpKOeycsx4T+IPHkZ+0oYhau9dl?=
+ =?us-ascii?Q?4xdFoo9muVTqNYADlcVmGmpleL1aNLO4yhToIil6WeYm4ydb9feAVW0/+404?=
+ =?us-ascii?Q?ZDUPQZ/VgPOXKi9Hdje2Zk40DYBF0sUxWmAXU7heDU1TU+ZEk8K1irW5Zd3i?=
+ =?us-ascii?Q?Ju7Om5C2nHJUQpgXaWSLEF10APnhYxK6gveKUCUpgtSz/vbmHx2XCf3a8xOq?=
+ =?us-ascii?Q?5/U86/DzaGxIvnx4HgKw7NqCVnMPDziwHHFOZFtLV4Dvwey0uq2QUeXREGwd?=
+ =?us-ascii?Q?To+Bd4lRhj3EfsAMMRwNU34YS3Wq33KJDQVRBQjj/fETkb4Tl8HZkp5oVenz?=
+ =?us-ascii?Q?HVPhFfWo8H6hPIA7IsjQ+/DjojNDmAoEnIVBxGq4dA=3D=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV3PR11MB8603.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(1800799024)(366016)(376014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?w07tJl8W4ojbuOOb73wRLuArjlQ106xgKfQHO9y+ACS3zFCWjKiwceajCPAQ?=
- =?us-ascii?Q?JBA/DfM7ERzjGc65/H6ZoOo6J8nBrYjtKhPsRIdl0QkKCs7Q3R6x6dOpUnVq?=
- =?us-ascii?Q?Tk+kXkK2SeRVJS1MWTURWa5V4uoICTCM5L0c52Bvxpsi5atNylSYyd93nw6n?=
- =?us-ascii?Q?DXzXv6Klj4QcmBSz4ouigmIK9YvQJ8miCwtO2FCijTshZAOCbAvJRZ0lcfai?=
- =?us-ascii?Q?N+BaggNHTp3IRwm34m6cCVdbpmv/6/NDm0VeK3mf7Ecc4p3lLDQGbYef1fMY?=
- =?us-ascii?Q?4LeRI73QRonWlDyEFyh4CE2fPgbcTifbfzphVwlmYz72PmKjnWjVoNyUMu3v?=
- =?us-ascii?Q?jGwpFaBvw8AX6Wgjv5HGWz+43vnID/1Hnf4CJBf0IPbzPRaa0EwH+orH/dyi?=
- =?us-ascii?Q?hxuy6uaBXDodoFp8fOFbciwepI1VlJN1IejZvZidrr1zjqYVZI12Vk0xobeZ?=
- =?us-ascii?Q?mY74zjZX/Q0gAOdDut23Z6FAboDvo2aGRuh/b9MRn13ScBRQhqRYO+z+/6VQ?=
- =?us-ascii?Q?DoXaGOhn3WO599nIPQihG7ikqtDyFDHoJMY9Gx4bcp/wIPj1xlm1UHKovIbq?=
- =?us-ascii?Q?u/xbNRQ4uZ4QZuWldvdYMJRnRJ8grHHugcvKRcwusymWakVESe6nZLeQPliw?=
- =?us-ascii?Q?a06Xzf1lcqCumNFxmcb4IFLnwE+XINet1nxyx0keWRKHYvgECzL4BZC2hVdM?=
- =?us-ascii?Q?x5qFZOTD4N2DTFuAsvgqCiyu4EXqEhKoi17pWXdWhJq4JzLRLQIpkfzGdy46?=
- =?us-ascii?Q?ZxNSbmkdDoRH6nHDDO92JEz/caykLjIPCLyEzaaYBZGHoFei79nE5tYHC3xj?=
- =?us-ascii?Q?2Z7C3S85lXL6ZfvFx1hKWZFJP7YI+veCyKMEYeX0zIEKpsY6eddQ9IMlK4hV?=
- =?us-ascii?Q?RdU8oje9iqtkd6Q9kUbnTObWvzxKytthMNM+zcgoH7ZMusZljbWQMa0pAfQ/?=
- =?us-ascii?Q?Rft2OGY5Np9RGnwV5Mbg6cIOxCxmA+Ze+t81ie20vcffoypKOTF7iq3DdwAu?=
- =?us-ascii?Q?399D8kq8iljQlwVlKJaeZQ6gGmppp8mJG4pkSOSD0PxMvgbaPbbtIQ30Ep40?=
- =?us-ascii?Q?O/r1OMOl+/zDPNimuzAwo2Z3KJ4WGckxTRcNq0Qa2GBsboaC3FA1rG9PNSle?=
- =?us-ascii?Q?sKqN9x1QNZADovjMZfwuyfhobaYr4Y+q6HYKR7fAX2a6OfCF5VwU2SFJCbSC?=
- =?us-ascii?Q?jJz7oAw8bmdUfhoRCdaI86jy3/g6NpqRzhyT4k5WieHChhxsHWwDxCzkXr/w?=
- =?us-ascii?Q?bGeUZpguA18mvocnKGuiZPwUzeMZGf+iSDmFfQmelDc0ekJSvXndGLOPAnRL?=
- =?us-ascii?Q?/n17mB1i7WZW7ksxnill19ijCUtqIjQUg5+jnkoCBuB2pwBxECl9JtqZR6Ok?=
- =?us-ascii?Q?vYVqSNaNJ5PUG53O/+imnaBF6IkrF7ev4S7+l3Z3sXL1OmpXo9xafkXRjOIu?=
- =?us-ascii?Q?EDG9cGBQw+MPSmouxfDdfxRv53aFCrt6ppJoJvSCvjmiUO11AkoUlgW2QfgF?=
- =?us-ascii?Q?MU4e5H1ECPDvyMR+JfHeJpNUQf3ajKnibds7+PX2i1VM2SFwSsZCvcVI8BO1?=
- =?us-ascii?Q?l2Vgy1mw6j9veME+IkkliO3ew4bsS2sGp+qwF/ymKLZw6C3KcsU6482Qn5H5?=
- =?us-ascii?Q?CA=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	eZTI+fVRnAI2vznILZqA0ZrSi2pffz+mpKyUWkWrpu03K+6rB8zhz74Eb2i9XLHyssMUPk424TCilW0Dkmfy57hbyF7+NmBeyBp6TLiqa121MoFmAkcn3WJDyvvaUMlCQs0PPw0fKnQP9C/bmnu0d4UafDtP61TlPWTrke+JTIT3B/c+I36o9hbyo794oiYM8Rd62zpjBDcBmPSmMoFHbuAqBHduoOBk3DP9xYbLh6Tgap//mhaq4w8SS9bSP0OMSwDbEC0TuLanoRG3fICdtSvZpiDvBhFLin7lYuRkXryLMlbIWgRZejeNL8Z51lc/qstIYB0lGOPITyxGRLu9KzX1HnXgl1tCfjjqQ6SXCVrgX0HJEgKQ9WjhtkQrqPjZy/b6vghLt6N87RW6jWAGoo+SjikpXdO9YE6FdETBrA8L1G0Yz60KkS6VIQju7BnLctK1GbVNk7pNhYgmTWXoe4zfLsXwsWszxTEdlpq5acCc8R7qTIqiv5VTvP9Y3GunORfCOb5NfSSV5ZurBZSl1xWTv21EEvhu+IxJHuUU9HM9t1uwW5gwWXLzlVigo+CwvI3Ch3g8wZfIwifZ8HXJr4Y6k4Z9DVT2oWdrvkVuAzQ=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e0cd4e5a-224d-405e-96de-08dce86f015d
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR10MB5613.namprd10.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8Gdg3gmvIcJDkVwt4VGChBY17dRgJG9eV3nqH+c2YtZbKegB2fSfTK/6P8BU?=
+ =?us-ascii?Q?qzVjD7QZUyeFRjmim8w/Ees7O69CIniCF8k9Kngoae7W+Nk4vrHMwa7/0OTh?=
+ =?us-ascii?Q?iRMQ8fn9c4n7G9OkD/Y96MUo6LFroZF5jOPU1UckMXe4LfPk7HfB7HsJeXWQ?=
+ =?us-ascii?Q?Gsb/QekSz0PIEWCHWVhsUGzPKW+7Sgk+13dQ5SMDWNGoKNoVaa4hMWBA1B6B?=
+ =?us-ascii?Q?784JsHS7t/0zyVeuSpYVDcLNlQTu/tzGwfBd8bAm4X0j/yUORoHr207Rygny?=
+ =?us-ascii?Q?D8lhF34z/CXra5RW+05tBywqYkjvs6qU7Icz5pruox7XlRuGCLhQ3amLxOUA?=
+ =?us-ascii?Q?nEFbPJNFOyMjnXdYA4PnrBlSkXHmy8kSDwo7Nk00lTaKEvKYVbpeTmzNeKzX?=
+ =?us-ascii?Q?EsG7iSo9zrQRbaopa6VKLmWKCfkF4uuVTz+GCzquMFk1ZnH9o2JLQ0u3c2g+?=
+ =?us-ascii?Q?VS/sulF18X7WBA5+caqrc0PCVwhpfcafRSd5jfri7EIDhdU5jACRzb9Kn3E6?=
+ =?us-ascii?Q?6pkOeK7Iutlfr3SaAyT72y/C2hRslTv3no9GBOKwnhj29ZrWlD+6Hl/PHThH?=
+ =?us-ascii?Q?7e5dN2Vq334rJlwjGxV/R2sWrnMRRQtvjw5LJeDUXHsEXZSf9UZV4uv29XV5?=
+ =?us-ascii?Q?SufBvB+nVmdH9Ar8zKRhqKi+AqnL8TDBQNM8mIkZhGPtcjXxCB0EuOIotpiP?=
+ =?us-ascii?Q?aTLvfvHsuNo7wcMJW/PzWwBf/lWfPV9JDtnZo+9sNy9RrIcw8kFWcoJqPxPy?=
+ =?us-ascii?Q?0NT1aBIIwALFJIOQSeiMP5A/vt38rhkarIV00YjchoUBkLNIZC4V8YSsiXZi?=
+ =?us-ascii?Q?knTMw1qE7EeLUei603WB0UZ6UirFH6tXwn+TZNe4qr+KLARFW2k1K4BQ1H/y?=
+ =?us-ascii?Q?4CDgStglvHfdGyjQybCchY79w77HEJ6Tg4P2O2rqCO21O7U2R0PbyiJ3cL26?=
+ =?us-ascii?Q?N8Hrtra2Gfn6P6QBSSIT41LAKfzzI//WqkfGnsaYYOB85kdyGB/st6Nr9Dmu?=
+ =?us-ascii?Q?3gScbzusgqPBud4boLxD/wn7QBZmLlhNOGzCkbO9A6mq7GZAh6fkFGFZ7VO0?=
+ =?us-ascii?Q?Z1hHfQJIz8jgUrLI235MRBq8m/Zud/KeZEDNWaqpOWemaiG7zBKfpClscX1W?=
+ =?us-ascii?Q?JQioOuh5e5ob0xaCYFQ6iGU5R7XyWnb8V6hgvw7OjNEzWRAgiQvNjDkP0ZOy?=
+ =?us-ascii?Q?VUj0PgnBgldJYPqsaGKw6PsFsUE+tvz4Y+8qQ8g3GoymY3zK4addfPiZ/bWN?=
+ =?us-ascii?Q?I2sVIW8TfIvgFXesSFPJQCfC13AVjyfb82juwq6KD3dogAEymYglZaaHQwZo?=
+ =?us-ascii?Q?03QK13Ng42YTwXFVByL1gFBry4Lz2vH/uhLVFxGtil2DX/PV7BqRARPlD6N9?=
+ =?us-ascii?Q?Dha1xPvfrzcwrEw+Vp/XTBv5rPK2FM1pnj6Nn9ULq9fRY4ygWDxPNuSqdVnn?=
+ =?us-ascii?Q?BFJd5hRN/wZanxRuRaOb+9A2WtfE0G/ioU4MMlVV5BpU1tYEQIXkOSrzou3o?=
+ =?us-ascii?Q?19rp5Rh8d2FUl6mW1TinBB/IR76B9yNgfTIRks9wt3C8klBl20Z/1lMEk1IE?=
+ =?us-ascii?Q?oGfxlLTfDa1/areKov7L3xb0PH5y3/PIkEhlKWsWQHqX/ETWGbRKQe+o0D3W?=
+ =?us-ascii?Q?Vw=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: ebdcaee0-bb50-4f80-c782-08dce86f14d9
+X-MS-Exchange-CrossTenant-AuthSource: LV3PR11MB8603.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Oct 2024 14:31:04.4136
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Oct 2024 14:31:37.1288
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: QwmnExWKXmnHivWGgmGe11XZdsMvUYeFdDh4NP1Ba5dWaa9scmkjOOmN9++cHD4BHilLBE+zHp1ypvZEiM04YJOrYgUN9cH5GPg9jgSH3/c=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR10MB4349
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-09_12,2024-10-09_02,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 malwarescore=0
- suspectscore=0 mlxscore=0 phishscore=0 adultscore=0 spamscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2409260000 definitions=main-2410090089
-X-Proofpoint-GUID: ghh5LZgEx122beEUFDqOSeMdfE2G7w6-
-X-Proofpoint-ORIG-GUID: ghh5LZgEx122beEUFDqOSeMdfE2G7w6-
+X-MS-Exchange-CrossTenant-UserPrincipalName: LDNAVVXMC6o11plRdKKBUrf6yi0dwmLvdpxLduCr+pXoYxxnpKhHRyUkoTSYFFjimUSrPYlI210H7Vwmblmkjg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR11MB7936
+X-OriginatorOrg: intel.com
 
-On Wed, Sep 25, 2024 at 09:06:14PM +0000, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> These two architectures each have their own set of MAP_* flags, like
-> powerpc, mips and others do. In addition, the msync() flags are also
-> different, here both define the same flags but in a different order.
-> Finally, alpha also has a custom MADV_DONTNEED flag for madvise.
->
-> Make the generic MADV_DONTNEED and MS_* definitions conditional on
-> them already being defined and then include the common header
-> header from both architectures, to remove the bulk of the contents.
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+hi, Al Viro,
 
-Lovely! Look at all that red :) Great work!
+On Sun, Oct 06, 2024 at 03:59:04PM +0100, Al Viro wrote:
+> On Sun, Oct 06, 2024 at 10:20:57PM +0800, kernel test robot wrote:
+> 
+> > xfs/046       - output mismatch (see /lkp/benchmarks/xfstests/results//xfs/046.out.bad)
+> >     --- tests/xfs/046.out	2024-09-30 21:13:44.000000000 +0000
+> >     +++ /lkp/benchmarks/xfstests/results//xfs/046.out.bad	2024-10-06 05:31:50.379495110 +0000
+> >     @@ -34,4 +34,8 @@
+> >      xfsrestore: restore complete: SECS seconds elapsed
+> >      xfsrestore: Restore Status: SUCCESS
+> >      Comparing listing of dump directory with restore directory
+> >     +ls: /fs/scratch/dumpdir/sub/a-link: No such file or directory
+> >     +ls: /fs/scratch/dumpdir/sub/b-link: No such file or directory
+> >     +ls: /fs/scratch/restoredir/dumpdir/sub/a-link: No such file or directory
+> >     +ls: /fs/scratch/restoredir/dumpdir/sub/b-link: No such file or directory
+> >     ...
+> >     (Run 'diff -u /lkp/benchmarks/xfstests/tests/xfs/046.out /lkp/benchmarks/xfstests/results//xfs/046.out.bad'  to see the entire diff)
+> > Ran: xfs/046
+> > Failures: xfs/046
+> > Failed 1 of 1 tests
+> 
+> *stares*
+> 
+> D'oh...  Inverted sense for AT_SYMLINK_NOFOLLOW => LOOKUP_FLAGS...
+> 
+> Try this:
 
-Reviewed-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+we confirm below patch can fix the issue
 
-> ---
->  arch/alpha/include/uapi/asm/mman.h     | 68 +++-----------------------
->  arch/parisc/include/uapi/asm/mman.h    | 66 +------------------------
->  include/uapi/asm-generic/mman-common.h |  5 ++
->  3 files changed, 13 insertions(+), 126 deletions(-)
->
-> diff --git a/arch/alpha/include/uapi/asm/mman.h b/arch/alpha/include/uapi/asm/mman.h
-> index 1f1c03c047ce..fc8b74aa3f89 100644
-> --- a/arch/alpha/include/uapi/asm/mman.h
-> +++ b/arch/alpha/include/uapi/asm/mman.h
-> @@ -2,18 +2,6 @@
->  #ifndef __ALPHA_MMAN_H__
->  #define __ALPHA_MMAN_H__
->
-> -#define PROT_READ	0x1		/* page can be read */
-> -#define PROT_WRITE	0x2		/* page can be written */
-> -#define PROT_EXEC	0x4		/* page can be executed */
-> -#ifndef PROT_SEM /* different on mips and xtensa */
-> -#define PROT_SEM	0x8		/* page may be used for atomic ops */
-> -#endif
-> -/*			0x10		   reserved for arch-specific use */
-> -/*			0x20		   reserved for arch-specific use */
-> -#define PROT_NONE	0x0		/* page can not be accessed */
-> -#define PROT_GROWSDOWN	0x01000000	/* mprotect flag: extend change to start of growsdown vma */
-> -#define PROT_GROWSUP	0x02000000	/* mprotect flag: extend change to end of growsup vma */
-> -
->  /* 0x01 - 0x03 are defined in linux/mman.h */
->  #define MAP_TYPE	0x0f		/* Mask for type of mapping (OSF/1 is _wrong_) */
->  #define MAP_FIXED	0x100		/* Interpret addr exactly */
-> @@ -43,62 +31,18 @@
->  #define MCL_ONFAULT	32768		/* lock all pages that are faulted in */
->
->  /*
-> - * Flags for mlock
-> - */
-> -#define MLOCK_ONFAULT	0x01		/* Lock pages in range after they are faulted in, do not prefault */
-> -
-> -/*
-> - * Flags for msync
-> + * Flags for msync, order is different from all others
->   */
->  #define MS_ASYNC	1		/* sync memory asynchronously */
->  #define MS_SYNC		2		/* synchronous memory sync */
->  #define MS_INVALIDATE	4		/* invalidate the caches */
->
-> -#define MADV_NORMAL	0		/* no further special treatment */
-> -#define MADV_RANDOM	1		/* expect random page references */
-> -#define MADV_SEQUENTIAL	2		/* expect sequential page references */
-> -#define MADV_WILLNEED	3		/* will need these pages */
-> -#define MADV_DONTNEED	6		/* don't need these pages */
-> +/*
-> + * Flags for madvise, 1 through 3 are normal
-> + */
->  /* originally MADV_SPACEAVAIL 5 */
-> +#define MADV_DONTNEED	6		/* don't need these pages */
->
-> -/* common parameters: try to keep these consistent across architectures */
-> -#define MADV_FREE	8		/* free pages only if memory pressure */
-> -#define MADV_REMOVE	9		/* remove these pages & resources */
-> -#define MADV_DONTFORK	10		/* don't inherit across fork */
-> -#define MADV_DOFORK	11		/* do inherit across fork */
-> -
-> -#define MADV_MERGEABLE   12		/* KSM may merge identical pages */
-> -#define MADV_UNMERGEABLE 13		/* KSM may not merge identical pages */
-> -
-> -#define MADV_HUGEPAGE	14		/* Worth backing with hugepages */
-> -#define MADV_NOHUGEPAGE	15		/* Not worth backing with hugepages */
-> -
-> -#define MADV_DONTDUMP   16		/* Explicity exclude from the core dump,
-> -					   overrides the coredump filter bits */
-> -#define MADV_DODUMP	17		/* Clear the MADV_DONTDUMP flag */
-> -
-> -#define MADV_WIPEONFORK 18		/* Zero memory on fork, child only */
-> -#define MADV_KEEPONFORK 19		/* Undo MADV_WIPEONFORK */
-> -
-> -#define MADV_COLD	20		/* deactivate these pages */
-> -#define MADV_PAGEOUT	21		/* reclaim these pages */
-> -
-> -#define MADV_POPULATE_READ	22	/* populate (prefault) page tables readable */
-> -#define MADV_POPULATE_WRITE	23	/* populate (prefault) page tables writable */
-> -
-> -#define MADV_DONTNEED_LOCKED	24	/* like DONTNEED, but drop locked pages too */
-> -
-> -#define MADV_COLLAPSE	25		/* Synchronous hugepage collapse */
-> -
-> -#define MADV_HWPOISON	100		/* poison a page for testing */
-> -#define MADV_SOFT_OFFLINE 101		/* soft offline page for testing */
-> -
-> -/* compatibility flags */
-> -#define MAP_FILE	0
-> -
-> -#define PKEY_DISABLE_ACCESS	0x1
-> -#define PKEY_DISABLE_WRITE	0x2
-> -#define PKEY_ACCESS_MASK	(PKEY_DISABLE_ACCESS |\
-> -				 PKEY_DISABLE_WRITE)
-> +#include <asm-generic/mman-common.h>
->
->  #endif /* __ALPHA_MMAN_H__ */
-> diff --git a/arch/parisc/include/uapi/asm/mman.h b/arch/parisc/include/uapi/asm/mman.h
-> index 1cd5d816d4cf..3732950a5cd8 100644
-> --- a/arch/parisc/include/uapi/asm/mman.h
-> +++ b/arch/parisc/include/uapi/asm/mman.h
-> @@ -2,19 +2,6 @@
->  #ifndef __PARISC_MMAN_H__
->  #define __PARISC_MMAN_H__
->
-> -
-> -#define PROT_READ	0x1		/* page can be read */
-> -#define PROT_WRITE	0x2		/* page can be written */
-> -#define PROT_EXEC	0x4		/* page can be executed */
-> -#ifndef PROT_SEM /* different on mips and xtensa */
-> -#define PROT_SEM	0x8		/* page may be used for atomic ops */
-> -#endif
-> -/*			0x10		   reserved for arch-specific use */
-> -/*			0x20		   reserved for arch-specific use */
-> -#define PROT_NONE	0x0		/* page can not be accessed */
-> -#define PROT_GROWSDOWN	0x01000000	/* mprotect flag: extend change to start of growsdown vma */
-> -#define PROT_GROWSUP	0x02000000	/* mprotect flag: extend change to end of growsup vma */
-> -
->  /* 0x01 - 0x03 are defined in linux/mman.h */
->  #define MAP_TYPE	0x2b		/* Mask for type of mapping, includes bits 0x08 and 0x20 */
->  #define MAP_FIXED	0x04		/* Interpret addr exactly */
-> @@ -43,61 +30,12 @@
->  #define MCL_ONFAULT	4		/* lock all pages that are faulted in */
->
->  /*
-> - * Flags for mlock
-> - */
-> -#define MLOCK_ONFAULT	0x01		/* Lock pages in range after they are faulted in, do not prefault */
-> -
-> -/*
-> - * Flags for msync
-> + * Flags for msync, order is different from all others
->   */
->  #define MS_SYNC		1		/* synchronous memory sync */
->  #define MS_ASYNC	2		/* sync memory asynchronously */
->  #define MS_INVALIDATE	4		/* invalidate the caches */
->
-> -#define MADV_NORMAL	0		/* no further special treatment */
-> -#define MADV_RANDOM	1		/* expect random page references */
-> -#define MADV_SEQUENTIAL	2		/* expect sequential page references */
-> -#define MADV_WILLNEED	3		/* will need these pages */
-> -#define MADV_DONTNEED	4		/* don't need these pages */
-> -
-> -/* common parameters: try to keep these consistent across architectures */
-> -#define MADV_FREE	8		/* free pages only if memory pressure */
-> -#define MADV_REMOVE	9		/* remove these pages & resources */
-> -#define MADV_DONTFORK	10		/* don't inherit across fork */
-> -#define MADV_DOFORK	11		/* do inherit across fork */
-> -
-> -#define MADV_MERGEABLE   12		/* KSM may merge identical pages */
-> -#define MADV_UNMERGEABLE 13		/* KSM may not merge identical pages */
-> -
-> -#define MADV_HUGEPAGE	14		/* Worth backing with hugepages */
-> -#define MADV_NOHUGEPAGE	15		/* Not worth backing with hugepages */
-> -
-> -#define MADV_DONTDUMP   16		/* Explicity exclude from the core dump,
-> -					   overrides the coredump filter bits */
-> -#define MADV_DODUMP	17		/* Clear the MADV_DONTDUMP flag */
-> -
-> -#define MADV_WIPEONFORK 18		/* Zero memory on fork, child only */
-> -#define MADV_KEEPONFORK 19		/* Undo MADV_WIPEONFORK */
-> -
-> -#define MADV_COLD	20		/* deactivate these pages */
-> -#define MADV_PAGEOUT	21		/* reclaim these pages */
-> -
-> -#define MADV_POPULATE_READ	22	/* populate (prefault) page tables readable */
-> -#define MADV_POPULATE_WRITE	23	/* populate (prefault) page tables writable */
-> -
-> -#define MADV_DONTNEED_LOCKED	24	/* like DONTNEED, but drop locked pages too */
-> -
-> -#define MADV_COLLAPSE	25		/* Synchronous hugepage collapse */
-> -
-> -#define MADV_HWPOISON	100		/* poison a page for testing */
-> -#define MADV_SOFT_OFFLINE 101		/* soft offline page for testing */
-> -
-> -/* compatibility flags */
-> -#define MAP_FILE	0
-> -
-> -#define PKEY_DISABLE_ACCESS	0x1
-> -#define PKEY_DISABLE_WRITE	0x2
-> -#define PKEY_ACCESS_MASK	(PKEY_DISABLE_ACCESS |\
-> -				 PKEY_DISABLE_WRITE)
-> +#include <asm-generic/mman-common.h>
->
->  #endif /* __PARISC_MMAN_H__ */
-> diff --git a/include/uapi/asm-generic/mman-common.h b/include/uapi/asm-generic/mman-common.h
-> index 2911dd14ef2a..81a14ed99197 100644
-> --- a/include/uapi/asm-generic/mman-common.h
-> +++ b/include/uapi/asm-generic/mman-common.h
-> @@ -27,15 +27,20 @@
->  /*
->   * Flags for msync
->   */
-> +#ifndef MS_ASYNC /* different order on alpha and parisc */
->  #define MS_ASYNC	1		/* sync memory asynchronously */
->  #define MS_INVALIDATE	2		/* invalidate the caches */
->  #define MS_SYNC		4		/* synchronous memory sync */
-> +#endif
->
->  #define MADV_NORMAL	0		/* no further special treatment */
->  #define MADV_RANDOM	1		/* expect random page references */
->  #define MADV_SEQUENTIAL	2		/* expect sequential page references */
->  #define MADV_WILLNEED	3		/* will need these pages */
-> +/* 4 through 6 are different on alpha */
-> +#ifndef MADV_DONTNEED
->  #define MADV_DONTNEED	4		/* don't need these pages */
-> +#endif
+Tested-by: kernel test robot <oliver.sang@intel.com>
 
-Rather nice to have these differences both de-duplicated and documented
-here...
+=========================================================================================
+compiler/disk/fs/kconfig/rootfs/tbox_group/test/testcase:
+  gcc-12/4HDD/xfs/x86_64-rhel-8.3-func/debian-12-x86_64-20240206.cgz/lkp-skl-d06/xfs-046/xfstests
 
->
->  /* common parameters: try to keep these consistent across architectures */
->  #define MADV_FREE	8		/* free pages only if memory pressure */
-> --
-> 2.39.2
->
+commit:
+  4b7d06e4b7a1c ("new helpers: file_removexattr(), filename_removexattr()")
+  64d47e878a819 ("fs/xattr: add *at family syscalls")
+  6f4ccbcfda377  <--- your patch
+
+4b7d06e4b7a1c647 64d47e878a8196f374879bfdd0e 6f4ccbcfda377af1167d1b7fd48
+---------------- --------------------------- ---------------------------
+       fail:runs  %reproduction    fail:runs  %reproduction    fail:runs
+           |             |             |             |             |
+           :6          100%           6:6            0%            :10    xfstests.xfs.046.fail
+
+
+> 
+> diff --git a/fs/xattr.c b/fs/xattr.c
+> index 0b506b6565b7..b96cca3f4bf8 100644
+> --- a/fs/xattr.c
+> +++ b/fs/xattr.c
+> @@ -721,7 +721,7 @@ static int path_setxattrat(int dfd, const char __user *pathname,
+>  	if ((at_flags & ~(AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH)) != 0)
+>  		return -EINVAL;
+>  
+> -	if (at_flags & AT_SYMLINK_NOFOLLOW)
+> +	if (!(at_flags & AT_SYMLINK_NOFOLLOW))
+>  		lookup_flags = LOOKUP_FOLLOW;
+>  
+>  	error = setxattr_copy(name, &ctx);
+> @@ -880,7 +880,7 @@ static ssize_t path_getxattrat(int dfd, const char __user *pathname,
+>  		return file_getxattr(fd_file(f), &ctx);
+>  	} else {
+>  		int lookup_flags = 0;
+> -		if (at_flags & AT_SYMLINK_NOFOLLOW)
+> +		if (!(at_flags & AT_SYMLINK_NOFOLLOW))
+>  			lookup_flags = LOOKUP_FOLLOW;
+>  		return filename_getxattr(dfd, filename, lookup_flags, &ctx);
+>  	}
 
