@@ -1,97 +1,82 @@
-Return-Path: <linux-arch+bounces-7899-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7900-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFAAA996731
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Oct 2024 12:25:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F87E9967F0
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Oct 2024 13:03:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1CCCB1C22E2D
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Oct 2024 10:25:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 22B9A1F21472
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Oct 2024 11:03:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 708F418E76E;
-	Wed,  9 Oct 2024 10:25:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4B0F188737;
+	Wed,  9 Oct 2024 11:03:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CU/Syyph"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DLepzEsh"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33FB618C008;
-	Wed,  9 Oct 2024 10:25:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79F861C68F;
+	Wed,  9 Oct 2024 11:03:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728469535; cv=none; b=gH4odi6BhEEuFqNJZ4IW6xn3xzga9Hf5toy4KC0BBlYvRQoj/TvoxJSJYyY+QHrzvAniLekMfoSnm2A8Hav/snPI8HRUilzpMICKX2diJa6WDXutY0A3cgbrn2QV0jKCYX0oxRfavAxMtoPXoc1pY45ZanDLKwjyJD8oWp1rTa8=
+	t=1728471816; cv=none; b=fWDXJo471xbLcPfbgFzhiJZ4GrGwGHgbl5Mfatl5V7pQsPm6X4t7IFCk7z/hrkBZfoU2hEjTTtpdduvh4IvjLoMXlg/MEIQCJniZzNId4JMCRVEY3VkuZZ3I8qmws3xaSWhRxPKlwiub5m80NDqsla0GL2nppjoCLzwEP8KtvkM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728469535; c=relaxed/simple;
-	bh=E98w9taq8sn2oCFo6PyCyTLfRrjriLoSIyE58uTuJiw=;
+	s=arc-20240116; t=1728471816; c=relaxed/simple;
+	bh=f/EoNW04y2Nr6yAWUDCYj/76s4oDbPK3TY0FW8YOVV4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MMOuAz3yas3TvRM0NpkUWutt3q4tUgp6zK/V2/GZ5qsFygPBoRpxxClS1wHswLY5U2SN+4Wz55IVawV63sGYSjPGiXAnUY+F3h8wXqfRT4DeVnJQnV9xnb4uYuPKlURD12V6bQ64rGOEArsJM39fazTzQKQ8b2YJwVpz2MYFHIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CU/Syyph; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39F86C4CEC5;
-	Wed,  9 Oct 2024 10:25:34 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=FsDGa01oEtVOzFVkqh7mKe4WIBmZviuOz5pE5p2gVmYAykxjo87sU/cSfmt/0kHtI/QGcl/uYBxhnaixUzBVHl80f2eFUv110gnJKp8gRyGk3KOWOlMhQBKtkvhCRG69VvYls1RQ+xU6enDeOPzqW+5IhBPVsWu0e9xlPYN/W7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DLepzEsh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F023C4CEC5;
+	Wed,  9 Oct 2024 11:03:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728469534;
-	bh=E98w9taq8sn2oCFo6PyCyTLfRrjriLoSIyE58uTuJiw=;
+	s=k20201202; t=1728471816;
+	bh=f/EoNW04y2Nr6yAWUDCYj/76s4oDbPK3TY0FW8YOVV4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CU/SyyphBFW7CION5UzN5ZaM2s9B2KaWUYjQIE24jNpQiaaNBcPZ/JBx43vZR9RIm
-	 dKAuev96gZiqv3cQzmnlNpHZGs9yUnbcbXXoet9w9Wkw11upiEbCgMxXNsdL4ezFdY
-	 +p5Tmy9zeIo8mmLnp1544+X/5q23ssqCYC9uPdMTUlybp9F8xH4e8D5xzIK9/AHeT4
-	 VM8+SYp7oWGh1v48rq/tPnXUE9W2Y0QAcFjQlkkDsy7TNbdxWPifO6On6S6nNdb6x/
-	 +Q0hlFwhivhYuLDaOGJFcmJB/380AQV7gmfUOo5/8+ukhcjeDEpd9KT8HTxCDfwmeH
-	 x2vMMvQe1JdeA==
-Date: Wed, 9 Oct 2024 11:25:31 +0100
+	b=DLepzEshP/4mXQsl2XJpjT73NbBGz9G2agwEEd6tQYz9lO+eqYxMzaMcj24H4GW81
+	 Le1KkXnjJBC8MW7FflTwf5k8u62yR275mQzbLM2Xnkksng7BBXCCu3I2IsilKKuh9C
+	 tn5I9gMoOPl9IR/07Z7LrDEOfMozP8crg0Ejm1/cMpecXWaC7fqbOpYoml4pkqT6KZ
+	 8ErbCjP7yR0hITlFP8nBM9WRgd/ZKkYKCpiRE0HjmkZfh/VszZtHEOhp3fV+YeRcul
+	 Wbp42jCJn48Au8WODEcR3T6WeTkaJD6W4x+KhVfOQYXHADlrjbnU7K+GGkOQQF13Wm
+	 yEtogMwRguJXA==
+Date: Wed, 9 Oct 2024 12:03:32 +0100
 From: Mark Brown <broonie@kernel.org>
-To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc: "corbet@lwn.net" <corbet@lwn.net>, "robh@kernel.org" <robh@kernel.org>,
-	"lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"debug@rivosinc.com" <debug@rivosinc.com>,
-	"vbabka@suse.cz" <vbabka@suse.cz>,
-	"brauner@kernel.org" <brauner@kernel.org>,
-	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-	"palmer@dabbelt.com" <palmer@dabbelt.com>,
-	"mingo@redhat.com" <mingo@redhat.com>,
-	"paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
-	"tglx@linutronix.de" <tglx@linutronix.de>,
-	"aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-	"oleg@redhat.com" <oleg@redhat.com>,
-	"krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-	"conor@kernel.org" <conor@kernel.org>,
-	"ebiederm@xmission.com" <ebiederm@xmission.com>,
-	"hpa@zytor.com" <hpa@zytor.com>,
-	"peterz@infradead.org" <peterz@infradead.org>,
-	"arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
-	"kees@kernel.org" <kees@kernel.org>,
-	"x86@kernel.org" <x86@kernel.org>,
-	"shuah@kernel.org" <shuah@kernel.org>,
-	"jim.shu@sifive.com" <jim.shu@sifive.com>,
-	"alistair.francis@wdc.com" <alistair.francis@wdc.com>,
-	"cleger@rivosinc.com" <cleger@rivosinc.com>,
-	"kito.cheng@sifive.com" <kito.cheng@sifive.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"samitolvanen@google.com" <samitolvanen@google.com>,
-	"evan@rivosinc.com" <evan@rivosinc.com>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-	"atishp@rivosinc.com" <atishp@rivosinc.com>,
-	"andybnac@gmail.com" <andybnac@gmail.com>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"charlie@rivosinc.com" <charlie@rivosinc.com>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"richard.henderson@linaro.org" <richard.henderson@linaro.org>,
-	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-	"alexghiti@rivosinc.com" <alexghiti@rivosinc.com>
-Subject: Re: [PATCH v6 16/33] riscv/shstk: If needed allocate a new shadow
- stack on clone
-Message-ID: <ZwZaG3NT72BwYxJO@finisterre.sirena.org.uk>
+To: Deepak Gupta <debug@rivosinc.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Christian Brauner <brauner@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+	devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	alistair.francis@wdc.com, richard.henderson@linaro.org,
+	jim.shu@sifive.com, andybnac@gmail.com, kito.cheng@sifive.com,
+	charlie@rivosinc.com, atishp@rivosinc.com, evan@rivosinc.com,
+	cleger@rivosinc.com, alexghiti@rivosinc.com,
+	samitolvanen@google.com, rick.p.edgecombe@intel.com
+Subject: Re: [PATCH v6 18/33] prctl: arch-agnostic prctl for indirect branch
+ tracking
+Message-ID: <ZwZjBO_7d2-Qq8bF@finisterre.sirena.org.uk>
 References: <20241008-v5_user_cfi_series-v6-0-60d9fe073f37@rivosinc.com>
- <20241008-v5_user_cfi_series-v6-16-60d9fe073f37@rivosinc.com>
- <aa75cbd142c51b996423f18769d8b8d7ecc39081.camel@intel.com>
+ <20241008-v5_user_cfi_series-v6-18-60d9fe073f37@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -99,44 +84,41 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="pV5KnxhmLMXWkQIN"
+	protocol="application/pgp-signature"; boundary="FXfO/TwhQ+C7Uak4"
 Content-Disposition: inline
-In-Reply-To: <aa75cbd142c51b996423f18769d8b8d7ecc39081.camel@intel.com>
+In-Reply-To: <20241008-v5_user_cfi_series-v6-18-60d9fe073f37@rivosinc.com>
 X-Cookie: Editing is a rewording activity.
 
 
---pV5KnxhmLMXWkQIN
+--FXfO/TwhQ+C7Uak4
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Tue, Oct 08, 2024 at 10:55:29PM +0000, Edgecombe, Rick P wrote:
+On Tue, Oct 08, 2024 at 03:37:00PM -0700, Deepak Gupta wrote:
+> Three architectures (x86, aarch64, riscv) have support for indirect branch
+> tracking feature in a very similar fashion. On a very high level, indirect
+> branch tracking is a CPU feature where CPU tracks branches which uses
+> memory operand to perform control transfer in program. As part of this
+> tracking on indirect branches, CPU goes in a state where it expects a
+> landing pad instr on target and if not found then CPU raises some fault
+> (architecture dependent)
 
-> A lot of this patch and the previous one is similar to x86's and arm's. It great
-> that we can have consistency around this behavior.
+Reviewed-by: Mark Brown <broonie@kernel.org>
 
-> There might be enough consistency to refactor some of the arch code into a
-> kernel/shstk.c.
-
-> Should we try?
-
-I think so - I think we discussed it before.  I was thinking of looking
-at it once the clone3() stuff settles down, I don't want to trigger any
-unneeded refectorings there and cause further delays.
-
---pV5KnxhmLMXWkQIN
+--FXfO/TwhQ+C7Uak4
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmcGWhUACgkQJNaLcl1U
-h9CV8Qf+Ph9QxNDXCUSDZQA7lOMJTS+c3a+WdGbveXt6JMb2hP4Udd4ELfDvQVsP
-2vwWUtByxmDax2qjADTJn56IYnJp+1yB9YBfBuwEGHGP67KgKDpcUHieu4xPemue
-2pid1MtBjTUsviljsva6rAoewc+MO3Z5AAICoplF1wXYwW8JWpgKpALzehjsUnOG
-xGgEXqiS5ycjWc0ikmHyeOQRK13/4EVaiJr+pklcIbhhggLbnNIB7jvKTKnBr/ds
-fkXQZeW9aA6kQUAetPKjlkvwxOhyxix4xDR3tCncJjA/emX+9fze/UwLrBDs75JO
-eMHp4p8ZUDqVuxPu6ZNF8wGk8VJChA==
-=EDL3
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmcGYwQACgkQJNaLcl1U
+h9AHsQf9H04XFe+wNJxLZrv59pAwdvHe6MP+LVVOFndbjBmbHFTN6qmAISZyqktF
+SRfj1/m4yG/TwuwLWuBmwzNCYhtdu6T7NxMLpAffd830l1MTkdrF7wQ9gl7ZGRAW
+hwjTCOjqQG+RiCf8msgkCaHpmTaxQyaaXKijwQLlpjse8yXFagVbB7KFfLnU3SdH
+EU1KXwsGKBILqKMesYtkE6OZOORH7YEXvvPcvZD2E/I/6ZVodlxghrEiw+L2z358
+AVd82hg9g4z+W4RfgoHAuzE0DM7w1omjJCy8JvknSzesQFWBmnyDm/chs8uVbfBH
+GWu/B4b4XqB14HIbfiwUtTrT1OMnCw==
+=cHVw
 -----END PGP SIGNATURE-----
 
---pV5KnxhmLMXWkQIN--
+--FXfO/TwhQ+C7Uak4--
 
