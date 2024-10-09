@@ -1,85 +1,85 @@
-Return-Path: <linux-arch+bounces-7910-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7911-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4032E996D78
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Oct 2024 16:18:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82281996DAD
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Oct 2024 16:26:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F1496285AF7
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Oct 2024 14:18:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 082D41F21D84
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Oct 2024 14:26:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A64CF198E96;
-	Wed,  9 Oct 2024 14:18:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7305719C569;
+	Wed,  9 Oct 2024 14:26:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="nzpqeRC9";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="d49mpuXt"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="YQT3KI1a";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="TqMBCTkl"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DA85224DC;
-	Wed,  9 Oct 2024 14:18:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A2D3199FB4;
+	Wed,  9 Oct 2024 14:26:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728483513; cv=fail; b=m2geUN7/C3hyUmYF8Ws4DN26vYoL7I4ow+VkwlTlyNJ1bjS5YkRpjyLJcK4gTteGskZGxhZlSjtM+vcrS/vSLTozPxm2KKi4BFwdiK6Q1+JhXMO8m6kDUz2o7zUkWnghdvhfa7WzwvjhyMFdb1EV5FFlR1u023k2EOXAgyfLTjA=
+	t=1728483991; cv=fail; b=eKHlkRN2PJ/W1Sb0e+/KJjndhNRWI2E7NJDGNJYqIJNGwU/tjQg4Q4k2B5Z8CsM53w2hRaEiTPYmIGm+ZXIQq1n1+NDO7LvOpgGlWmXD3NUE5RoXYM6N53pU3mX28YM6XwX7EWdl3FQ+kEE3IflU2jEagaS35drQOgQnuEHAB7c=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728483513; c=relaxed/simple;
-	bh=LAb1sw6pEutunwmYOw3tFB2p+HFfGPKP6jtvltTIiCw=;
+	s=arc-20240116; t=1728483991; c=relaxed/simple;
+	bh=JYvZ/SmQGZ6KfrivLdaeZnSHVc0ime0vHgPcdJFPtJ8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=m7h9FYBLYxlfuaxnqAos2ZeeXgpDJpmh0/pQldvJKaOvoZ3EoPvG9L5z/Q0B3xQtWDGqmHjuB9aOwikUfUqzio+1xLn2CdQKaiWkjgplcQ9N6Zdmp11BFMhTat8Tf43LGvnleXCDnSr1cQA2sIil7VMelIm42lnc64u5xbb71IA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=nzpqeRC9; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=d49mpuXt; arc=fail smtp.client-ip=205.220.177.32
+	 Content-Disposition:In-Reply-To:MIME-Version; b=gxNZoprrePVn4q3+QKGia/qVb9l4/5gVyzQxhf3bp5zI/OOy2f0wli4LCCN0Ee5/nIrh7IcnKoGw36fS0hjMfKhz1A2gjldKI/QoVSQH+HEgIqDXWWppuSNnwm5rJrpz+KFNyKM5J9Lg26cI/ZWtzmy7F6j0KVy45JV95l45tF4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=YQT3KI1a; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=TqMBCTkl; arc=fail smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 499Dfd6A029985;
-	Wed, 9 Oct 2024 14:16:46 GMT
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 499Dfjae004474;
+	Wed, 9 Oct 2024 14:25:35 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=corp-2023-11-20; bh=KTmOUboFPTFO9lERt5
-	nsEuRXwwX3Yzdtzq9Ij64Xk30=; b=nzpqeRC9hGiJJrHeNT9QIrECc8K0PuHtXL
-	fzu0iAfwA76Egum34Kz8xW7j/7322+aHWbcZbWxscmmKCVBBAu6RECIWCGFP4r+d
-	3RV0EGkjmP4CpWG3p8JoS1epLJKZPiEcZP4jDjfXfZ7JUKJOSr8ywo/gye9/lU7F
-	m9qAjU4rDO9JRWVvLFfdBkwcfsTBOIIoX2vn4k/eBQP8O99AQnDHcp5Dw7E40nLc
-	zggkpP69tFRfyebJYVo6HK4QFlxR+f1z8Vh+qzPb8P+TOBWGuHc6zMrzYoEHCRWG
-	MH/58I75IMjgdT8/wMea9magll5YKUSKv3UpkjlZeruQ+0wSFKXw==
+	:references:subject:to; s=corp-2023-11-20; bh=yxXgFJuEc2NXPdyMHQ
+	X1aG86Qb/FZ1pEkCL4qsjkTwQ=; b=YQT3KI1aRWImGNXsh6YgS8fD78l93hMV9j
+	JJTSb3iEjHEeNdgK4K7Us64vMHWZi2w5AEZ9uustKlm/wMmP4FhcBI5kRS7/clFx
+	jbEfPvNNh7CmnsmtEFV2dnY9sJXPypibvqKZs1u/injGBf/u8N2ggeSLyMcIZ7ac
+	DidHHIESyKrtT08zdUg4QcoizDT+mFVo99KXDjJA/zZMStqQlDgS99bSrc3gdc1/
+	1/1DMs/aYdcTr85pzSFNu41nuxTEmFvpFuFB97H6sPaqoAn+8tqFBTPiYfTLoa1T
+	EX50sRm34T9sE+UHEoVAzDYQqSIDzMXmDWK8mZTekQfPC3c8diPg==
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 423063rc3j-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 422yyv8f18-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 09 Oct 2024 14:16:45 +0000 (GMT)
+	Wed, 09 Oct 2024 14:25:34 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 499E6sVB015343;
-	Wed, 9 Oct 2024 14:16:45 GMT
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2175.outbound.protection.outlook.com [104.47.58.175])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 422uw8n2e3-1
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 499E1r7u015344;
+	Wed, 9 Oct 2024 14:25:33 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2101.outbound.protection.outlook.com [104.47.58.101])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 422uw8neyg-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 09 Oct 2024 14:16:44 +0000
+	Wed, 09 Oct 2024 14:25:33 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=NFlISMIYouRNcVeYXISFwryjdzaknShlk1l6zSVAFV4Jewt1qi6DMjbpL7GRbh3l9WSRfPgLZIRGBsxRomTb+7aibIXlSwqnm/zYSl/I2gstQrt95PtEHv17Gjy2j2c7OuYPSRIpp2yasp5iEWx16sVAoUavulJbGXDXN1kZyxy8AOiOpMZ7T6xodJ6BvGVXvJTNkAy3+jTXt4aP7N9zO/t8WcIJnXAX/G1Y4uDxCYSyo8QkzMLVu3p8bH/Iu/CA19HPWkAADr4Feazx3y/FU707hqGySGuJb+7pjkJ7mTcVaGLV4YhmujWgQ312nC7XY7u0kqCRrvaxxCFGFy+HbA==
+ b=mJ4u3P9Jud89BCAy1O57hrfeUapsjMi8QunXkeblEvKFUDdaQwIVmxMd9wsPewA8Ht2yKImmx075D1a9bILDp8F1CeHs21+W4DOfNy41Xb8GMIP5Sipl2BlJirSWyqpocF/JMMGE9LPkvb6rJNVGjLKCB2cKTXMM/aU2oBI5fIZMhPkx7jlUOWHU+NwEMIU4DvkVZvFELFBB1eyhYgSBsCz45rccqZav4DC+LVX/zDu2QnWO9RojeTY7JGOWCfqYxm6qwAjzb5bW2R+Ljrb07uDkiAWZa3OlIs3S7S7WLvREgQVGmOBi08oI0U4DKH/y1mKvzlPeetOEalOXhCBLyw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KTmOUboFPTFO9lERt5nsEuRXwwX3Yzdtzq9Ij64Xk30=;
- b=ysMpsd8DqeUFi7GtjaS4353RnJtGDFc9mDhOAhrWlDv7G83ggh2FRBjiFOxRBGcI1DK8rQu70EX8sPo8VdnG2+698v8P40D02woiExDhFSESE36TgS4LzgSvdlPSfAHjINWQaqNQjxYYb9xt/LtiUxkV633DUDpq23AHEO6tUdBB/9Y8hiVi0PGvnCwtaKeM4HUmCk42aVRb04rvDQ0qG8uzf4+l6hhRfp4AryBa/auQE0TkEOAYFEd4m5PQNS6iG6RXF3Divl/nfYUghKWnVThG/cQ4+wTSBGm85Tm1wQEPCvrH5iCyIdaa7RG1faxm4z2xsNsnO0exCCGbKBKduA==
+ bh=yxXgFJuEc2NXPdyMHQX1aG86Qb/FZ1pEkCL4qsjkTwQ=;
+ b=RdKGVCwLjXGhdkuf7qRZHZXmciNBv+O1WeRRnSuX5GZnYLowj1ge7CnE8b6zn3kGOlWD/rsq7AmLnwVMmRLGLaaaqkZa7OuKr1bFpPCqgVGm33bM9PUaXk/xeV71tGVe/vXZ7ON2hwplE+NwYxS8GdNMIcgBOyoha/8HR4Q+0RSU73ICrbymN+wbpM/I/zCrbyNr8utc9iSwzsNf57iBP5wVF6y132lblff0O+fyPQSWvvSbyfYpmGMy3jAg+/7pRl+Fj5oso7IT6hIq3NWI7Cuu76wc+9MgC8Gi7R/8ffxBp1k+NLt+3VYyGbu9/Mves9tGib5CoSmJvnOW1jKrDQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KTmOUboFPTFO9lERt5nsEuRXwwX3Yzdtzq9Ij64Xk30=;
- b=d49mpuXtSBUmiyNwTX4KKuvjUUEXur/4PgtJKUTggoMA8KdkgGg8/KVXYzOCkEjHi2iEZLErbfkoYVf7H+SYVS4f0o2tqfdrtqf9K4lyDGggYVH5EQ4I9XVfmEfekciLwAkhj6lwXO9QI8FVZeruaGsDT5BjfhtL8ziiqjKkyZQ=
+ bh=yxXgFJuEc2NXPdyMHQX1aG86Qb/FZ1pEkCL4qsjkTwQ=;
+ b=TqMBCTklPSIHZoFr9alWDwPb2AGjiVzVYlT16gEKghbYTvBn/yV0BpCgX4v7aoWo8DWwuEdV/tUBVbFWzb70hURCqXilgJiyDVPzvvcNMUjKP8h2GRcaDwAZcohC30N1DX0cJtIPaq/QWW/+seaxFvWm9X3L4h4/Hd5c3D++nOM=
 Received: from SJ0PR10MB5613.namprd10.prod.outlook.com (2603:10b6:a03:3d0::5)
- by SN7PR10MB6569.namprd10.prod.outlook.com (2603:10b6:806:2a8::20) with
+ by PH7PR10MB5771.namprd10.prod.outlook.com (2603:10b6:510:127::15) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8048.16; Wed, 9 Oct
- 2024 14:16:36 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8026.23; Wed, 9 Oct
+ 2024 14:25:29 +0000
 Received: from SJ0PR10MB5613.namprd10.prod.outlook.com
  ([fe80::4239:cf6f:9caa:940e]) by SJ0PR10MB5613.namprd10.prod.outlook.com
  ([fe80::4239:cf6f:9caa:940e%5]) with mapi id 15.20.8026.020; Wed, 9 Oct 2024
- 14:16:36 +0000
-Date: Wed, 9 Oct 2024 15:16:32 +0100
+ 14:25:29 +0000
+Date: Wed, 9 Oct 2024 15:25:25 +0100
 From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
 To: Arnd Bergmann <arnd@kernel.org>
 Cc: linux-mm@kvack.org, Arnd Bergmann <arnd@arndb.de>,
@@ -106,15 +106,16 @@ Cc: linux-mm@kvack.org, Arnd Bergmann <arnd@arndb.de>,
         linux-stm32@st-md-mailman.stormreply.com, linux-kernel@vger.kernel.org,
         linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH 1/5] asm-generic: cosmetic updates to uapi/asm/mman.h
-Message-ID: <71b8817f-c779-4612-be65-c665a42c44b1@lucifer.local>
+Subject: Re: [PATCH 2/5] asm-generic: move MAP_* flags from mman-common.h to
+ mman.h
+Message-ID: <84f626ba-6abf-42f0-b520-8b622c21bb73@lucifer.local>
 References: <20240925210615.2572360-1-arnd@kernel.org>
- <20240925210615.2572360-2-arnd@kernel.org>
+ <20240925210615.2572360-3-arnd@kernel.org>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240925210615.2572360-2-arnd@kernel.org>
-X-ClientProxiedBy: LO4P123CA0381.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:18f::8) To SJ0PR10MB5613.namprd10.prod.outlook.com
+In-Reply-To: <20240925210615.2572360-3-arnd@kernel.org>
+X-ClientProxiedBy: LO4P265CA0234.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:315::11) To SJ0PR10MB5613.namprd10.prod.outlook.com
  (2603:10b6:a03:3d0::5)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -123,589 +124,264 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ0PR10MB5613:EE_|SN7PR10MB6569:EE_
-X-MS-Office365-Filtering-Correlation-Id: ca6d164a-173f-41fa-ea94-08dce86cfbb7
+X-MS-TrafficTypeDiagnostic: SJ0PR10MB5613:EE_|PH7PR10MB5771:EE_
+X-MS-Office365-Filtering-Correlation-Id: 15ed22de-99c8-4c71-872f-08dce86e39f0
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|1800799024|366016;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014|7416014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?4iQh+1Em4bUF4tmdg3epcPUs6a/C29GibIYRdQxx3s/KJ2eyNSocP6/QgBJx?=
- =?us-ascii?Q?9MOV+aQ1v+Dv5nFrc6W3i0MIJmk/TFAIagV+BkPFabVvWwIzDFXppNZDfpZ5?=
- =?us-ascii?Q?ZQcNNxB6gJi0In6tKSuttb5eS+mbAXUsmQyjnb9cPW+HwVsTNVFI/3Zjms8e?=
- =?us-ascii?Q?uJH8DXe1sLyJYjAWusVx2FLJ/MRC3YY30UWO4nJrLx8A/bQ47ImXQ0/GkRHQ?=
- =?us-ascii?Q?EGZPkNjqCk/Dc0yqml8rf9empp1DHBgbAL67iEdrHLhmESlUl1wE1VbXLwJD?=
- =?us-ascii?Q?nQARKSbcKeLWlPRiR3CJI5oE0fiIwDC/IXnRW1A5xkOZedwixE9NtSiA8YJM?=
- =?us-ascii?Q?d9pwvxoujBiy8zNR8Iv9gKrOi4PlwuuMAOpSVLpc/5xVb3GOBK785vlrxvcU?=
- =?us-ascii?Q?TfTUzpXqnT3Irw5qJKSD2eZdEKGWG23bU/o+N+JkB0jkLoftSfdVSVZZer8Q?=
- =?us-ascii?Q?5ccfw0wpYZ7bccZsI0Ye8ppDJm5FWg7pKKjPJAugXxFNSIndYriu6YvzUiBv?=
- =?us-ascii?Q?v/Tv9Olo2E5d+wP7NNhXwblM4p6VTI35iITVqeF4S1EgzhHrCR66QgWUvVjy?=
- =?us-ascii?Q?vLCAY3Cp8iQtpWQGkNeyVGEMKiklMuonZ8hkbIrBVsoafBBVuGJl+r8pRDCN?=
- =?us-ascii?Q?6MIy6tmQbkoZb7jWclwnOzmlU+7S6kNN8j2Thko4Nzd0s7C8P2kQ0sGlW8Rv?=
- =?us-ascii?Q?wdeoxlpkn8ocTnfjMw8Uft4HnVdF3Ji/OFSBCKJ/fxH+6ogOYLEjg3v9lay3?=
- =?us-ascii?Q?j/CvPDVO9PLKl25pTP/7m5wmYnunB1iSnU3Rihwh4jloC620caCTROPWEJiF?=
- =?us-ascii?Q?ekeJISaJn7ygn8HGBzKNKzA+Tnre2bl/5U1AM6i/VmN90EAJWfIA3JGMBZqm?=
- =?us-ascii?Q?GvB10FNgrh9zramLe3rhFo4vgA0BNRABMWj5jZ7pzMSFENRHaR5HWEYUJ/J6?=
- =?us-ascii?Q?wNbPS5fgX6o62sb5ebCmtw6ycfQlmXzEtEGSEkkLPLVIOuzOLwKwsK72eyhB?=
- =?us-ascii?Q?k+fl5kOY3XTKO0PbVUvZZfK1jtJzZgH+vlYLa3fC6p43dRiRA5UoPyju0mE/?=
- =?us-ascii?Q?rwFptrM6EeglJCWwVEPHZomSFx6lh5ByZYNN7sjthK69zf3fhq1vavBRr+w4?=
- =?us-ascii?Q?/pAEBMV/GnGVhVPqghaRoErct/ezDALvN1jOu1H2XbqsMQ7Oy4ZvcOFtghtk?=
- =?us-ascii?Q?jCoIGIQlbTKNGYG4rija8OPsOF1HjYWnL9BkOrY9gyj4juUko45gQVeIalQK?=
- =?us-ascii?Q?Q3L2HdQ9qbSSfTVQl/OqC+4uClUeB7dKZhvqxPlyKw=3D=3D?=
+	=?us-ascii?Q?aCx9w7Q8z45WH6HcSi9CbYKJNM8qbyLFT6O8FAnHj9hrtFk0Ogr0Q6yRob2v?=
+ =?us-ascii?Q?ei9O+Q6fOkOEF6r5Q8P7bZx3v/2MsWVWJMjsiS0J+jexi13vbph3wsBLnmO4?=
+ =?us-ascii?Q?0vfN36rPWahenH5o5jg0V7sAOPmXQHUiuPDNgDwOSayxW049MgsnkgsMlvn7?=
+ =?us-ascii?Q?u2BK9Yv+kQ1XttIQwm/9eHi/mhAvGW1huefomyIqodkcQUDlYlJquhzpgcW1?=
+ =?us-ascii?Q?25x+y0CKNrM6/GIbuETi4km3i+zyTy+roB0HCSXbwlOaE8LxqplFrur5PC+u?=
+ =?us-ascii?Q?AWH2CF9RpnW8sCq8G3s2actutEplAdbbJFxCe3mnNOflUEw33RhSi9FB0osq?=
+ =?us-ascii?Q?oOvwfLVo2B99hzPVCU5cgtl48ftp1otXIjmZJj2++rwz46u2bcNlyFitQKSZ?=
+ =?us-ascii?Q?Pg4BYRjG389oaNMdH6UEcWMFrBlO8cM+rrGFa8aWpfxuQ1QAlFmIKMrNoTsm?=
+ =?us-ascii?Q?N5a2eCgMrgOa3uMtAAnyTLX3XtQvBBoeY+Pm4ddUDszqaGrszq4IySxjd37t?=
+ =?us-ascii?Q?XHXjZEQe4Z326vaZ+0BzXbj6mjBtRrYhURpUUMvgb8ihatLFqGdobvcjDz6C?=
+ =?us-ascii?Q?9sjAH7DDJQDwBiF3OlfRSEZ4iNolX6vbv8pH01C8q2M4FiMH8oenAdqrcOi5?=
+ =?us-ascii?Q?L2agE1baE+gyvXL1fXkBpt1+8bHdLtmYFv6lfhuWz5hU9utgT+96A6CJkz/G?=
+ =?us-ascii?Q?/9dsUL34yroEZWBR5MENyCCrqWiLcrKYHQ3Zffy2Ty9Yz2nvQNw/JwOW8Cuj?=
+ =?us-ascii?Q?VwQqcBUc4tfU5D5Sgablg/Agg0/mGFpcG6ECoEFc/FxpJsaIHLAbePGSSD0E?=
+ =?us-ascii?Q?CHjTPPOtjlzIFAE4xyCMumwNASG86zhnimN4STCckbupKyXflM5zLdGsFBsS?=
+ =?us-ascii?Q?6XstO7Kmzsf4xgUHkZ+HfSTcGfnpSgTrURX24Bsjn6N2/TmQQ+4Sq0AlRplH?=
+ =?us-ascii?Q?9v/HxVkkUrFaNmi36N8u+/91R0lwv0zFn4AhT05u6S2fuzY7SF/8qSLSW6VM?=
+ =?us-ascii?Q?sdyiTe3O1t0czCMzY9vKFQKS23sX0t8MQkm9fkbjJGzeM8r/qOqF4ukjKSaq?=
+ =?us-ascii?Q?xc+nRgJoD9oj7mYV3eI5R3X0wGCDzqoRigyBzFdoUtJr1OkEn7rxcy6Kcv+A?=
+ =?us-ascii?Q?eRDtO2O5+HTIcsVjpA/g7S1OY/anWs5y+n25WMs44m3lZxBgwm49OmtiOU14?=
+ =?us-ascii?Q?PH6F6nZUD3fZhnkdJzT6nlEpeGYcT2DluAELaKtv4Q1RetIKd0S+WS5HTHj/?=
+ =?us-ascii?Q?vU4NZnUJ/pp3AGNME08pm5KEt92qyZ7rkVJjy2QOHw=3D=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR10MB5613.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR10MB5613.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?Gy0V71JScLxcSwwiUZJbf/vZ/OmR5XXFNrI+rr6OkAUjdgTktIOwEXBFC/ce?=
- =?us-ascii?Q?FY7LFPY72U42CZ4xD/DYiT2H0SDptfCrpxa4IhVAHu3y6y3OuWAWutPqkEkp?=
- =?us-ascii?Q?abSAoev+wAhFSwyAygQZ62LWwFSePWsJc37nNug0yORcBFhO2RGXNc28jSjf?=
- =?us-ascii?Q?UsovEsM6z5w/GLv8Sv5KXHvazYjwK8oSKoMXeWj7FTEQEjBwjNJE4g3tkorS?=
- =?us-ascii?Q?1idBQhZ8hecLkQmB72yT1vP8EHbsSKZqyvAIeL1kwa3I7OzhuXIxJ+ChlifR?=
- =?us-ascii?Q?aJZX+K/wV+8opImbb2zPHJJLuYBF4it2G6GK5ViQuJMoAbCsjAopxZ+1A7Rs?=
- =?us-ascii?Q?YiaNS5NApTuzJklZ/nBDRBEU8EvHzc6MEYlP2rHRgF6LwnzSmJ0hL1hP84UG?=
- =?us-ascii?Q?hCTTeeFT+55MNqSYhM7Q2W5+7w+G+0JI10euDf1npODhurVLzPu4J3Be+6kf?=
- =?us-ascii?Q?fuXwVrrf5CH9jzL1Nb8Ebojteo8bNNd7LXRwYCCflYCOxXSnxMJBkYRsHHWC?=
- =?us-ascii?Q?Irt97sMAm2dsDAvFjDyvEjAztuMWfaQS9UAIKGBrRYnZmLLmr1BTsN/LihE3?=
- =?us-ascii?Q?OAYrdLmpttBU41ZC+1ytEDa0n39GTRx7UAA9uaemgPl57BVLVdUBpF45E4Lk?=
- =?us-ascii?Q?REk3cfhYwzz6JPmHojwA/24+9kcuJKLZPKC2wNSTV8R6eK9snbPyxkTj4HN2?=
- =?us-ascii?Q?4MySjpKI/hsVnHHinQHM/f+bfIv2CHEVm4Cvfe62I2mgXhMlntB7FNmcjwL7?=
- =?us-ascii?Q?78Hcl2rxy7BeqrTJ8PQ1hroTxCz4411qoEj7Am/TrFAiS/lHXVjnDR3YDlwB?=
- =?us-ascii?Q?+Mwf32ZO13U6DJEYppV0iQGd30j03lPDjy9J3GO8GckRFpfIETHfSvWeyIP9?=
- =?us-ascii?Q?/IJxxKB1d/HR2lZ6BlwCCZ17a8RE/A86DUF7jJ2xQmC+umbJZw+NVkxkOI38?=
- =?us-ascii?Q?0EsiV/46snn2lT7/OlJ3KFg4Xvv+ziuPUbGm1hW/WG5j0WMu1uSYfd6BZXfb?=
- =?us-ascii?Q?Dev5U5cOTxqb646Q35dSIFjK0WFz7LsOD9ElcgyHVkVRjraA1KME7XNrWpiq?=
- =?us-ascii?Q?r8LFLwLimTlPnORHrFHqd83zGlJyzLOwNrvoeknVh2xNp7vmDYVUtTvL3DJf?=
- =?us-ascii?Q?nxw7CVzEOYTQdQOhDez9UcHi/5REa4BnDhr2APEbC/Y+3a+HyNP5+cKvPPJA?=
- =?us-ascii?Q?/HXHfYmwjlmx9H1FL59rDMTSli/juujV+uNEve57qMHK3RgZnbEYljA3lOME?=
- =?us-ascii?Q?NltJUvUCnmiGqqt/7xKXZIxDiweg0IRuSmKwigXi8CbszelCy8TAWurGZktD?=
- =?us-ascii?Q?NY37jquiIqv9+3EvLf98d8KINHaGxoSVlQ3i4xPB2LyIqNwfqn3/3riDf1sv?=
- =?us-ascii?Q?vgYJHEBVCJ4Z3W1ZckSjAhNL3t6Js4Gh2ihggukH6Qr1KPyZyHhGyWzmSmtO?=
- =?us-ascii?Q?DPgOOxkIkNJmpoQZSnyDi7cg3Dhp2yOzg6AXdc9ROfg4x2Fd/g/4rhz7VJLz?=
- =?us-ascii?Q?Ey5t8851N9UpO6LbB0qSuFbTeFVTOkdUyNct25e8g6SL9+wLEi/Ciy9UQBxK?=
- =?us-ascii?Q?/P94SwrsfeEe1f6sN9pbdZS/ZgEAdhbMRl9IUm0B8Qm8DCcDK7WUoZbG65WU?=
- =?us-ascii?Q?uw=3D=3D?=
+	=?us-ascii?Q?nlcDoBxO9kXz41J1gARLgFraSgxHRnp5YY9WEnM+IpQK8iFtnkwh41P1DveF?=
+ =?us-ascii?Q?8CVLeobzIJHtPKmL06objKXiuSA6eEEtPFOF/3+53IybTmlmtJBXSQ5yrUf3?=
+ =?us-ascii?Q?613DbzAukADn2QagQJrjTZccilRS1E3LFPKsX1le16uUYphWWDC2G2PqNAVB?=
+ =?us-ascii?Q?hI558hvnbseDYk1nTDytY8NuenpwpTFK+RNrDTapVYIOdCZjJb81hyg91bWR?=
+ =?us-ascii?Q?+IMbtvF0jQ6Y2/27BpZustZFYLC+h1KD2J2SVfl8NZGZshPe6Q3e33YnZAaV?=
+ =?us-ascii?Q?A96xbmDYSfzD50bOmBDA3i3maQu9/hY/A6E1hish6COfjoRg8OiKWPaGI0o2?=
+ =?us-ascii?Q?M2X1WqJVVSZMSg+LTVR7XGmmrh/EpS/jTxM2IeQLkTfYtoXGnKLoCngC8+Y3?=
+ =?us-ascii?Q?PxRxXrGQAi6Cvgj+tCmsN9hya+PoZhze94Vx8r6ITCPrunAI9R/O5rXuTVJ9?=
+ =?us-ascii?Q?TBe8WSoyYMrE8VTNzJIzH+JoODHAqtFxSfvD8ZLWhS16R/aMtIwFlo4l6AON?=
+ =?us-ascii?Q?spHZBJfzSF6mvQfM5EHYG20G3m7tNPcSDFGeRa42Zvl/YWKUiWM4CBbc/IwV?=
+ =?us-ascii?Q?SdnOG6DC3TgbODsCsy0pJwoCiRoKNJGPOE7Q34rM5QXaB/0L1gOpKjNk7kTx?=
+ =?us-ascii?Q?TX+CRs/QuKbcBALfaa7L1gkDA2D23+C23l05N4tyq3aqHJOEJBI8mbOvG9Lw?=
+ =?us-ascii?Q?y52Z5jAV+Fqj0zWUm0zx7ETysXipDsavtPAjxgvTPAHGzKMdXIywXt6/O943?=
+ =?us-ascii?Q?jdChPSuGR/fy4jGCC4YiF9VnuJq9cMu5nvXw97XSbR26XHdYrTHHhgNUAijo?=
+ =?us-ascii?Q?hsYq9B99cZcSwrlKDH87NXWCZv7VQky6OnuqhgZNjPF/uGEZXTeDXVyvu8xp?=
+ =?us-ascii?Q?ULuQT7gvYDeTBfmTXZ8Z53HoNSzkZaYgf8IebkuhTdOMBhoco6qQQrBf9j5T?=
+ =?us-ascii?Q?wRuwlTtxOEpH8TvknLVW7pSvoXj1HmxX+D/6L0cRCTn3FntMDXY5mV+N4zYT?=
+ =?us-ascii?Q?bjh2EYH66NA0kxt9neSmpiFnh19BRxyEqc5W5JhTEQEeVli0neGY4X69nInC?=
+ =?us-ascii?Q?Pr1raZQse3jDnY5/5v7xPd3sPfkKpyR6fbjJ8VXbxVaNIDIwxQPkdeS8de5i?=
+ =?us-ascii?Q?NLw/9iCZ+vjDOCsSJHhVgxDAfuELjOham4fkiL5fE57GSIifRwASmWuP2dDn?=
+ =?us-ascii?Q?TrtCrOBh4vcBgSqF2hE2VSGX5Wo4+cUdkxmkl8nOcNtOoko+aEITGDkRc4Zw?=
+ =?us-ascii?Q?RkFgRtYXV6UXVvnIkOPFV/QA7mzCuQOyiz/CktzQCJGgcOrInel6P9I8i9Sn?=
+ =?us-ascii?Q?uUOiu2IzfHEruQDOGXKcoVLn+qcfIBUQSxIuYCY6JZR6+vcRdLuua9+wSumC?=
+ =?us-ascii?Q?ulokSm6u9KbkjkDY2Bym4fLlhFIOiGwuPepKyminlcSB/sOjnl/XdC3l3ide?=
+ =?us-ascii?Q?ECbHxo9AjW0aLxWopxsUbkwXz0ZV/pqWkI0ygP/CO5DLdwRRuxquYZECJGyV?=
+ =?us-ascii?Q?NZylN8XBHlckvX8RfI2Bz/rqIvKEg6W/2FL4CO0PyG4OGHVySkMBbFVb0dX+?=
+ =?us-ascii?Q?V7O2hPD6TcYJvwJ9+jbcqtztP86WaGiJZ516WZMlfj0KFl1ADfEOOvbX2ba5?=
+ =?us-ascii?Q?dQ=3D=3D?=
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	1Hfd+0yfgywExEjvjXP978LbXjNu7kkEI7zhkOzmChEff4rRrBawNhcEH69R1fRl3GIrXeq0mN1rEuTYVhkdPhLu67eO01gsFnEnR6YCf/Useu+ORCm8DxR2zzk4JTYKPGRCVtvIuvh1Sk9BYre+s4WmZW/zzqBdyezs3m3xZwFxNZlVpw3f26a2iII0c21GA4DLJISrAlwVBMYi79xRhvVqlsvg6VYxDq9y7AWMKET35b5JYwvjcwAq3LBKuiVZAvf/IwxZeKMlLcQhkSVg5VcGgSmSPUaHn4ebFitJm7x5jeLNF5dCzbrMQIVF8rwpQy8smKlf9Rz6ADF6LDltF6GVzELcbsdpOePm8wTejEILyo7EFZ2H6rRJiUe8nGqgzKLkeWei9p3aLR0BLfNpPF8uGbGOoX5dyx1D6EZcmhR4vXSyAfMAiGMG2Bl1+rF3VooKAMYkfdMKmDfm3eUZqSq4NFJEMKRZA/mHwmAAdF/iP7uvHfx8vkJkBzf/9fL4BYOw6t8kimsbt1CD04IRtkPwRJoeIlHISDybaYQssdcXnWvmuD2SAJILr9/sI4z+QCa6itS5fLsN+ALdisA3wkQ85TXamT27T0qFELuxcY4=
+	L19mtXHRqh2yDerAu5rwfzPoI6Kgc5e+vDeXlo3atxZYkUViVV6q5Qi4QevbxbT1VcuC9kY8uhy+o78CkSKP6V7B4xmzecOZfc/09bMKGTIIMHhhZRPID4jpgv6iCGe75XLkPwECwz4U9HRTK9I2DoquYJtPiyWn0OV2TPAy7vB/W6uW3jLvKMmGgX2ZtvBVpC56GQiad7qT8RwbleYk1cwELFwPDXjE0Kn1aS3lBA35gA4q/dKkz2/1mydv/oBWj6OyGUh8b6HU9wg4IaVLipPAL+cCSFBHYIAqrVvhGR98qf47tzuaB9OGPJ4gBT+XFpGUYaWIH6B5cP9WYjpA+azE8wNJhmipQ2iXia9WSW95PAAaLTmlbJbp7h0WGpkU0kZ66N4ZhwXQwEcEVYU7V9dXbVQe9dw/lmkz7r3fP6bFZGM6nMnJnR0PDzDklme7eyHy04UfQltDERmm3cZLj683zNkZm2CcEhCxnYognBrPTcXeFAUrN8LgKGHY1J2xiQOAiuMplKTNmJCm3aJJ8Q/eEaGziRHX6QybSfndBGEHX4IZTprRu0Ld9/684+uC+VstjLDd+q+EwXfKE/f7tvH/HEeJJ/eFLX+cRXgzXW4=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ca6d164a-173f-41fa-ea94-08dce86cfbb7
+X-MS-Exchange-CrossTenant-Network-Message-Id: 15ed22de-99c8-4c71-872f-08dce86e39f0
 X-MS-Exchange-CrossTenant-AuthSource: SJ0PR10MB5613.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Oct 2024 14:16:36.0397
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Oct 2024 14:25:29.7536
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tLj5dLruFWUJfhAVKzvWjeMEx4L2w07io3+LDs61C49F1qV1L3UrKD1G1qQNilbn3FmkW0fQljm/SH7PTxJaZIUjddR4mSx3TSU1Os+DoFo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR10MB6569
+X-MS-Exchange-CrossTenant-UserPrincipalName: /JxlGYP4ZDCSMb2ieVFxVQpUEn3AikVQaJun8ihoVhpt8mCPXy3/DQ+peC9XELW6jxkS4sWUlqI18HMZ/DZO2gd5wTAL75R1t46z6aYT5hQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB5771
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
  definitions=2024-10-09_12,2024-10-09_02,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 adultscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=879 adultscore=0
  phishscore=0 mlxscore=0 suspectscore=0 bulkscore=0 spamscore=0
  malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2409260000 definitions=main-2410090088
-X-Proofpoint-ORIG-GUID: sdo_sOfipP00xAQBtSu0xtYAjyl8PlMU
-X-Proofpoint-GUID: sdo_sOfipP00xAQBtSu0xtYAjyl8PlMU
+ engine=8.12.0-2409260000 definitions=main-2410090089
+X-Proofpoint-GUID: SPts1QMBDMdtQDY2bSWqV8rDgY3cl6a_
+X-Proofpoint-ORIG-GUID: SPts1QMBDMdtQDY2bSWqV8rDgY3cl6a_
 
-On Wed, Sep 25, 2024 at 09:06:11PM +0000, Arnd Bergmann wrote:
+On Wed, Sep 25, 2024 at 09:06:12PM +0000, Arnd Bergmann wrote:
 > From: Arnd Bergmann <arnd@arndb.de>
 >
-> All but four architectures use asm-generic/mman-common.h, and the
-> differences between these are mostly accidental. Rearrange them
-> slightly to make it possible to 'vimdiff' them to see the actual
-> relevant differences:
+> powerpc and sparc include asm-generic/mman-common.h to get the MAP_* flags
+> 0x008000 through 0x4000000, but those flags are all different on alpha,
+> mips, parisc and xtensa.
 >
->  - Move MADV_HWPOISON/MADV_SOFT_OFFLINE to the end of the list
->    and ensure that all architectures include definitions
->
->  - Use the exact same amount of whitespace and leading digits
->    in each architecture
->
->  - Synchronize comments, replacing historic defines that were
->    never used with appropriate comments
->
->  - explicitly point out MAP_SYNC and MAP_UNINITIALIZED as
->    unsupported
+> Add duplicate definitions for these along with the MAP_* flags for 0x100
+> through 0x4000 that are already different on powerpc and sparc, as a
+> preparation for actually sharing mman-common.h with all architectures.
 >
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-
-(Apologies for delay in response!)
-
-Notwithstanding Helge's comments, this looks good to me - thanks very much
-for taking a look at this!)
-
-Acked-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-
 > ---
->  arch/alpha/include/uapi/asm/mman.h     | 53 ++++++++++++-------
->  arch/mips/include/uapi/asm/mman.h      | 72 ++++++++++++--------------
->  arch/parisc/include/uapi/asm/mman.h    | 50 +++++++++++-------
->  arch/xtensa/include/uapi/asm/mman.h    | 61 ++++++++++------------
->  include/uapi/asm-generic/mman-common.h |  8 ++-
->  5 files changed, 129 insertions(+), 115 deletions(-)
+>  arch/powerpc/include/uapi/asm/mman.h   | 16 ++++++++++++++++
+>  arch/sparc/include/uapi/asm/mman.h     | 15 +++++++++++++++
+>  include/uapi/asm-generic/mman-common.h | 16 ----------------
+>  include/uapi/asm-generic/mman.h        | 21 +++++++++++++++++++++
+>  include/uapi/linux/mman.h              |  5 +++++
+>  5 files changed, 57 insertions(+), 16 deletions(-)
 >
-> diff --git a/arch/alpha/include/uapi/asm/mman.h b/arch/alpha/include/uapi/asm/mman.h
-> index 763929e814e9..8946a13ce858 100644
-> --- a/arch/alpha/include/uapi/asm/mman.h
-> +++ b/arch/alpha/include/uapi/asm/mman.h
-> @@ -6,6 +6,8 @@
->  #define PROT_WRITE	0x2		/* page can be written */
->  #define PROT_EXEC	0x4		/* page can be executed */
->  #define PROT_SEM	0x8		/* page may be used for atomic ops */
-> +/*			0x10		   reserved for arch-specific use */
-> +/*			0x20		   reserved for arch-specific use */
->  #define PROT_NONE	0x0		/* page can not be accessed */
->  #define PROT_GROWSDOWN	0x01000000	/* mprotect flag: extend change to start of growsdown vma */
->  #define PROT_GROWSUP	0x02000000	/* mprotect flag: extend change to end of growsup vma */
-> @@ -15,41 +17,49 @@
->  #define MAP_FIXED	0x100		/* Interpret addr exactly */
->  #define MAP_ANONYMOUS	0x10		/* don't use a file */
+> diff --git a/arch/powerpc/include/uapi/asm/mman.h b/arch/powerpc/include/uapi/asm/mman.h
+> index c0c737215b00..d57b347c37fe 100644
+> --- a/arch/powerpc/include/uapi/asm/mman.h
+> +++ b/arch/powerpc/include/uapi/asm/mman.h
+> @@ -13,6 +13,11 @@
 >
-> -/* not used by linux, but here to make sure we don't clash with OSF/1 defines */
-> -#define _MAP_HASSEMAPHORE 0x0200
-> -#define _MAP_INHERIT	0x0400
-> -#define _MAP_UNALIGNED	0x0800
-> -
-> -/* These are linux-specific */
-> -#define MAP_GROWSDOWN	0x01000		/* stack-like segment */
-> -#define MAP_DENYWRITE	0x02000		/* ETXTBSY */
-> -#define MAP_EXECUTABLE	0x04000		/* mark it as an executable */
-> -#define MAP_LOCKED	0x08000		/* lock the mapping */
-> +/* 0x200 through 0x800 originally for OSF-1 compat */
-> +#define MAP_GROWSDOWN	0x1000		/* stack-like segment */
-> +#define MAP_DENYWRITE	0x2000		/* ETXTBSY */
-> +#define MAP_EXECUTABLE	0x4000		/* mark it as an executable */
-> +#define MAP_LOCKED	0x8000		/* pages are locked */
->  #define MAP_NORESERVE	0x10000		/* don't check for reservations */
-> -#define MAP_POPULATE	0x20000		/* populate (prefault) pagetables */
-> -#define MAP_NONBLOCK	0x40000		/* do not block on IO */
-> -#define MAP_STACK	0x80000		/* give out an address that is best suited for process/thread stacks */
-> -#define MAP_HUGETLB	0x100000	/* create a huge page mapping */
-> +
-> +#define MAP_POPULATE		0x020000	/* populate (prefault) pagetables */
-> +#define MAP_NONBLOCK		0x040000	/* do not block on IO */
-> +#define MAP_STACK		0x080000	/* give out an address that is best suited for process/thread stacks */
-> +#define MAP_HUGETLB		0x100000	/* create a huge page mapping */
-> +/* MAP_SYNC not supported */
->  #define MAP_FIXED_NOREPLACE	0x200000/* MAP_FIXED which doesn't unmap underlying mapping */
+>  #define PROT_SAO	0x10		/* Strong Access Ordering */
 >
-> -#define MS_ASYNC	1		/* sync memory asynchronously */
-> -#define MS_SYNC		2		/* synchronous memory sync */
-> -#define MS_INVALIDATE	4		/* invalidate the caches */
-> +/* MAP_UNINITIALIZED not supported */
->
-> +/*
-> + * Flags for mlockall
-> + */
->  #define MCL_CURRENT	 8192		/* lock all currently mapped pages */
->  #define MCL_FUTURE	16384		/* lock all additions to address space */
->  #define MCL_ONFAULT	32768		/* lock all pages that are faulted in */
->
-> +/*
-> + * Flags for mlock
-> + */
->  #define MLOCK_ONFAULT	0x01		/* Lock pages in range after they are faulted in, do not prefault */
->
-> +/*
-> + * Flags for msync
-> + */
-> +#define MS_ASYNC	1		/* sync memory asynchronously */
-> +#define MS_SYNC		2		/* synchronous memory sync */
-> +#define MS_INVALIDATE	4		/* invalidate the caches */
-> +
->  #define MADV_NORMAL	0		/* no further special treatment */
->  #define MADV_RANDOM	1		/* expect random page references */
->  #define MADV_SEQUENTIAL	2		/* expect sequential page references */
->  #define MADV_WILLNEED	3		/* will need these pages */
-> -#define	MADV_SPACEAVAIL	5		/* ensure resources are available */
->  #define MADV_DONTNEED	6		/* don't need these pages */
-> +/* originally MADV_SPACEAVAIL 5 */
->
-> -/* common/generic parameters */
-> +/* common parameters: try to keep these consistent across architectures */
->  #define MADV_FREE	8		/* free pages only if memory pressure */
->  #define MADV_REMOVE	9		/* remove these pages & resources */
->  #define MADV_DONTFORK	10		/* don't inherit across fork */
-> @@ -63,7 +73,7 @@
->
->  #define MADV_DONTDUMP   16		/* Explicity exclude from the core dump,
->  					   overrides the coredump filter bits */
-> -#define MADV_DODUMP	17		/* Clear the MADV_NODUMP flag */
-> +#define MADV_DODUMP	17		/* Clear the MADV_DONTDUMP flag */
->
->  #define MADV_WIPEONFORK 18		/* Zero memory on fork, child only */
->  #define MADV_KEEPONFORK 19		/* Undo MADV_WIPEONFORK */
-> @@ -78,6 +88,9 @@
->
->  #define MADV_COLLAPSE	25		/* Synchronous hugepage collapse */
->
-> +#define MADV_HWPOISON	100		/* poison a page for testing */
-> +#define MADV_SOFT_OFFLINE 101		/* soft offline page for testing */
-> +
->  /* compatibility flags */
->  #define MAP_FILE	0
->
-> diff --git a/arch/mips/include/uapi/asm/mman.h b/arch/mips/include/uapi/asm/mman.h
-> index 9c48d9a21aa0..399937cefaa6 100644
-> --- a/arch/mips/include/uapi/asm/mman.h
-> +++ b/arch/mips/include/uapi/asm/mman.h
-> @@ -9,53 +9,36 @@
->  #ifndef _ASM_MMAN_H
->  #define _ASM_MMAN_H
->
-> -/*
-> - * Protections are chosen from these bits, OR'd together.  The
-> - * implementation does not necessarily support PROT_EXEC or PROT_WRITE
-> - * without PROT_READ.  The only guarantees are that no writing will be
-> - * allowed without PROT_WRITE and no access will be allowed for PROT_NONE.
-> - */
-> -#define PROT_NONE	0x00		/* page can not be accessed */
-> -#define PROT_READ	0x01		/* page can be read */
-> -#define PROT_WRITE	0x02		/* page can be written */
-> -#define PROT_EXEC	0x04		/* page can be executed */
-> -/*			0x08		   reserved for PROT_EXEC_NOFLUSH */
-> +#define PROT_READ	0x1		/* page can be read */
-> +#define PROT_WRITE	0x2		/* page can be written */
-> +#define PROT_EXEC	0x4		/* page can be executed */
-> +/*			0x8		   reserved for PROT_EXEC_NOFLUSH */
->  #define PROT_SEM	0x10		/* page may be used for atomic ops */
-> +/*			0x20		   reserved for arch-specific use */
-> +#define PROT_NONE	0x0		/* page can not be accessed */
->  #define PROT_GROWSDOWN	0x01000000	/* mprotect flag: extend change to start of growsdown vma */
->  #define PROT_GROWSUP	0x02000000	/* mprotect flag: extend change to end of growsup vma */
->
-> -/*
-> - * Flags for mmap
-> - */
->  /* 0x01 - 0x03 are defined in linux/mman.h */
-> -#define MAP_TYPE	0x00f		/* Mask for type of mapping */
-> -#define MAP_FIXED	0x010		/* Interpret addr exactly */
+> +/* 0x01 - 0x03 are defined in linux/mman.h */
 > +#define MAP_TYPE	0x0f		/* Mask for type of mapping */
 > +#define MAP_FIXED	0x10		/* Interpret addr exactly */
+> +#define MAP_ANONYMOUS	0x20		/* don't use a file */
+> +
+>  #define MAP_RENAME      MAP_ANONYMOUS   /* In SunOS terminology */
+>  #define MAP_NORESERVE   0x40            /* don't reserve swap pages */
+>  #define MAP_LOCKED	0x80
+> @@ -21,6 +26,17 @@
+>  #define MAP_DENYWRITE	0x0800		/* ETXTBSY */
+>  #define MAP_EXECUTABLE	0x1000		/* mark it as an executable */
 >
-> -/* not used by linux, but here to make sure we don't clash with ABI defines */
-> -#define MAP_RENAME	0x020		/* Assign page to file */
-> -#define MAP_AUTOGROW	0x040		/* File may grow by writing */
-> -#define MAP_LOCAL	0x080		/* Copy on fork/sproc */
-> -#define MAP_AUTORSRV	0x100		/* Logical swap reserved on demand */
-> -
-> -/* These are linux-specific */
-> +/* 0x20 through 0x100 originally reserved for other unix compat */
->  #define MAP_NORESERVE	0x0400		/* don't check for reservations */
->  #define MAP_ANONYMOUS	0x0800		/* don't use a file */
->  #define MAP_GROWSDOWN	0x1000		/* stack-like segment */
->  #define MAP_DENYWRITE	0x2000		/* ETXTBSY */
->  #define MAP_EXECUTABLE	0x4000		/* mark it as an executable */
->  #define MAP_LOCKED	0x8000		/* pages are locked */
-> -#define MAP_POPULATE	0x10000		/* populate (prefault) pagetables */
-> -#define MAP_NONBLOCK	0x20000		/* do not block on IO */
-> -#define MAP_STACK	0x40000		/* give out an address that is best suited for process/thread stacks */
-> -#define MAP_HUGETLB	0x80000		/* create a huge page mapping */
-> -#define MAP_FIXED_NOREPLACE 0x100000	/* MAP_FIXED which doesn't unmap underlying mapping */
->
-> -/*
-> - * Flags for msync
-> - */
-> -#define MS_ASYNC	0x0001		/* sync memory asynchronously */
-> -#define MS_INVALIDATE	0x0002		/* invalidate mappings & caches */
-> -#define MS_SYNC		0x0004		/* synchronous memory sync */
-> +#define MAP_POPULATE		0x010000	/* populate (prefault) pagetables */
-> +#define MAP_NONBLOCK		0x020000	/* do not block on IO */
-> +#define MAP_STACK		0x040000	/* give out an address that is best suited for process/thread stacks */
-> +#define MAP_HUGETLB		0x080000	/* create a huge page mapping */
-> +/* MAP_SYNC not supported */
+> +#define MAP_POPULATE		0x008000	/* populate (prefault) pagetables */
+> +#define MAP_NONBLOCK		0x010000	/* do not block on IO */
+> +#define MAP_STACK		0x020000	/* give out an address that is best suited for process/thread stacks */
+> +#define MAP_HUGETLB		0x040000	/* create a huge page mapping */
+> +#define MAP_SYNC		0x080000 /* perform synchronous page faults for the mapping */
 > +#define MAP_FIXED_NOREPLACE	0x100000	/* MAP_FIXED which doesn't unmap underlying mapping */
 > +
-> +/* MAP_UNINITIALIZED not supported */
->
->  /*
->   * Flags for mlockall
-> @@ -69,9 +52,16 @@
->   */
->  #define MLOCK_ONFAULT	0x01		/* Lock pages in range after they are faulted in, do not prefault */
->
-> +/*
-> + * Flags for msync
-> + */
-> +#define MS_ASYNC	1		/* sync memory asynchronously */
-> +#define MS_INVALIDATE	2		/* invalidate the caches */
-> +#define MS_SYNC		4		/* synchronous memory sync */
+> +#define MAP_UNINITIALIZED 0x4000000	/* For anonymous mmap, memory could be
+> +					 * uninitialized */
 > +
->  #define MADV_NORMAL	0		/* no further special treatment */
->  #define MADV_RANDOM	1		/* expect random page references */
-> -#define MADV_SEQUENTIAL 2		/* expect sequential page references */
-> +#define MADV_SEQUENTIAL	2		/* expect sequential page references */
->  #define MADV_WILLNEED	3		/* will need these pages */
->  #define MADV_DONTNEED	4		/* don't need these pages */
->
-> @@ -81,16 +71,15 @@
->  #define MADV_DONTFORK	10		/* don't inherit across fork */
->  #define MADV_DOFORK	11		/* do inherit across fork */
->
-> -#define MADV_MERGEABLE	 12		/* KSM may merge identical pages */
-> +#define MADV_MERGEABLE   12		/* KSM may merge identical pages */
->  #define MADV_UNMERGEABLE 13		/* KSM may not merge identical pages */
-> -#define MADV_HWPOISON	 100		/* poison a page for testing */
->
->  #define MADV_HUGEPAGE	14		/* Worth backing with hugepages */
-> -#define MADV_NOHUGEPAGE 15		/* Not worth backing with hugepages */
-> +#define MADV_NOHUGEPAGE	15		/* Not worth backing with hugepages */
->
-> -#define MADV_DONTDUMP	16		/* Explicitly exclude from core dump,
-> +#define MADV_DONTDUMP   16		/* Explicity exclude from the core dump,
->  					   overrides the coredump filter bits */
-> -#define MADV_DODUMP	17		/* Clear the MADV_NODUMP flag */
-> +#define MADV_DODUMP	17		/* Clear the MADV_DONTDUMP flag */
->
->  #define MADV_WIPEONFORK 18		/* Zero memory on fork, child only */
->  #define MADV_KEEPONFORK 19		/* Undo MADV_WIPEONFORK */
-> @@ -105,6 +94,9 @@
->
->  #define MADV_COLLAPSE	25		/* Synchronous hugepage collapse */
->
-> +#define MADV_HWPOISON	100		/* poison a page for testing */
-> +#define MADV_SOFT_OFFLINE 101		/* soft offline page for testing */
 > +
->  /* compatibility flags */
->  #define MAP_FILE	0
 >
-> diff --git a/arch/parisc/include/uapi/asm/mman.h b/arch/parisc/include/uapi/asm/mman.h
-> index 68c44f99bc93..80f4a55763a0 100644
-> --- a/arch/parisc/include/uapi/asm/mman.h
-> +++ b/arch/parisc/include/uapi/asm/mman.h
-> @@ -6,6 +6,8 @@
->  #define PROT_WRITE	0x2		/* page can be written */
->  #define PROT_EXEC	0x4		/* page can be executed */
->  #define PROT_SEM	0x8		/* page may be used for atomic ops */
-> +/*			0x10		   reserved for arch-specific use */
-> +/*			0x20		   reserved for arch-specific use */
->  #define PROT_NONE	0x0		/* page can not be accessed */
->  #define PROT_GROWSDOWN	0x01000000	/* mprotect flag: extend change to start of growsdown vma */
->  #define PROT_GROWSUP	0x02000000	/* mprotect flag: extend change to end of growsup vma */
-> @@ -20,30 +22,42 @@
->  #define MAP_LOCKED	0x2000		/* pages are locked */
->  #define MAP_NORESERVE	0x4000		/* don't check for reservations */
->  #define MAP_GROWSDOWN	0x8000		/* stack-like segment */
-> -#define MAP_POPULATE	0x10000		/* populate (prefault) pagetables */
-> -#define MAP_NONBLOCK	0x20000		/* do not block on IO */
-> -#define MAP_STACK	0x40000		/* give out an address that is best suited for process/thread stacks */
-> -#define MAP_HUGETLB	0x80000		/* create a huge page mapping */
-> -#define MAP_FIXED_NOREPLACE 0x100000	/* MAP_FIXED which doesn't unmap underlying mapping */
-> -#define MAP_UNINITIALIZED 0		/* uninitialized anonymous mmap */
+>  #define MCL_CURRENT     0x2000          /* lock all currently mapped pages */
+>  #define MCL_FUTURE      0x4000          /* lock all additions to address space */
+> diff --git a/arch/sparc/include/uapi/asm/mman.h b/arch/sparc/include/uapi/asm/mman.h
+> index cec9f4109687..afb86698cdb1 100644
+> --- a/arch/sparc/include/uapi/asm/mman.h
+> +++ b/arch/sparc/include/uapi/asm/mman.h
+> @@ -8,6 +8,11 @@
 >
-> -#define MS_SYNC		1		/* synchronous memory sync */
-> -#define MS_ASYNC	2		/* sync memory asynchronously */
-> -#define MS_INVALIDATE	4		/* invalidate the caches */
-> +#define MAP_POPULATE		0x010000	/* populate (prefault) pagetables */
-> +#define MAP_NONBLOCK		0x020000	/* do not block on IO */
-> +#define MAP_STACK		0x040000	/* give out an address that is best suited for process/thread stacks */
-> +#define MAP_HUGETLB		0x080000	/* create a huge page mapping */
-> +/* MAP_SYNC not supported */
-> +#define MAP_FIXED_NOREPLACE	0x100000	/* MAP_FIXED which doesn't unmap underlying mapping */
-> +
-> +/* MAP_UNINITIALIZED not supported */
+>  #define PROT_ADI	0x10		/* ADI enabled */
 >
-> +/*
-> + * Flags for mlockall
-> + */
->  #define MCL_CURRENT	1		/* lock all current mappings */
->  #define MCL_FUTURE	2		/* lock all future mappings */
->  #define MCL_ONFAULT	4		/* lock all pages that are faulted in */
->
-> +/*
-> + * Flags for mlock
-> + */
->  #define MLOCK_ONFAULT	0x01		/* Lock pages in range after they are faulted in, do not prefault */
->
-> -#define MADV_NORMAL     0               /* no further special treatment */
-> -#define MADV_RANDOM     1               /* expect random page references */
-> -#define MADV_SEQUENTIAL 2               /* expect sequential page references */
-> -#define MADV_WILLNEED   3               /* will need these pages */
-> -#define MADV_DONTNEED   4               /* don't need these pages */
-> +/*
-> + * Flags for msync
-> + */
-> +#define MS_SYNC		1		/* synchronous memory sync */
-> +#define MS_ASYNC	2		/* sync memory asynchronously */
-> +#define MS_INVALIDATE	4		/* invalidate the caches */
-> +
-> +#define MADV_NORMAL	0		/* no further special treatment */
-> +#define MADV_RANDOM	1		/* expect random page references */
-> +#define MADV_SEQUENTIAL	2		/* expect sequential page references */
-> +#define MADV_WILLNEED	3		/* will need these pages */
-> +#define MADV_DONTNEED	4		/* don't need these pages */
->
-> -/* common/generic parameters */
-> +/* common parameters: try to keep these consistent across architectures */
->  #define MADV_FREE	8		/* free pages only if memory pressure */
->  #define MADV_REMOVE	9		/* remove these pages & resources */
->  #define MADV_DONTFORK	10		/* don't inherit across fork */
-> @@ -53,11 +67,11 @@
->  #define MADV_UNMERGEABLE 13		/* KSM may not merge identical pages */
->
->  #define MADV_HUGEPAGE	14		/* Worth backing with hugepages */
-> -#define MADV_NOHUGEPAGE 15		/* Not worth backing with hugepages */
-> +#define MADV_NOHUGEPAGE	15		/* Not worth backing with hugepages */
->
->  #define MADV_DONTDUMP   16		/* Explicity exclude from the core dump,
->  					   overrides the coredump filter bits */
-> -#define MADV_DODUMP	17		/* Clear the MADV_NODUMP flag */
-> +#define MADV_DODUMP	17		/* Clear the MADV_DONTDUMP flag */
->
->  #define MADV_WIPEONFORK 18		/* Zero memory on fork, child only */
->  #define MADV_KEEPONFORK 19		/* Undo MADV_WIPEONFORK */
-> @@ -72,7 +86,7 @@
->
->  #define MADV_COLLAPSE	25		/* Synchronous hugepage collapse */
->
-> -#define MADV_HWPOISON     100		/* poison a page for testing */
-> +#define MADV_HWPOISON	100		/* poison a page for testing */
->  #define MADV_SOFT_OFFLINE 101		/* soft offline page for testing */
->
->  /* compatibility flags */
-> diff --git a/arch/xtensa/include/uapi/asm/mman.h b/arch/xtensa/include/uapi/asm/mman.h
-> index 1ff0c858544f..ad6bc56a7aef 100644
-> --- a/arch/xtensa/include/uapi/asm/mman.h
-> +++ b/arch/xtensa/include/uapi/asm/mman.h
-> @@ -15,57 +15,38 @@
->  #ifndef _XTENSA_MMAN_H
->  #define _XTENSA_MMAN_H
->
-> -/*
-> - * Protections are chosen from these bits, OR'd together.  The
-> - * implementation does not necessarily support PROT_EXEC or PROT_WRITE
-> - * without PROT_READ.  The only guarantees are that no writing will be
-> - * allowed without PROT_WRITE and no access will be allowed for PROT_NONE.
-> - */
-> -
-> -#define PROT_NONE	0x0		/* page can not be accessed */
->  #define PROT_READ	0x1		/* page can be read */
->  #define PROT_WRITE	0x2		/* page can be written */
->  #define PROT_EXEC	0x4		/* page can be executed */
-> -
-> +/*			0x8		   reserved for arch-specific use */
->  #define PROT_SEM	0x10		/* page may be used for atomic ops */
-> +/*			0x20		   reserved for arch-specific use */
-> +#define PROT_NONE	0x0		/* page can not be accessed */
->  #define PROT_GROWSDOWN	0x01000000	/* mprotect flag: extend change to start of growsdown vma */
-> -#define PROT_GROWSUP	0x02000000	/* mprotect flag: extend change to end fo growsup vma */
-> +#define PROT_GROWSUP	0x02000000	/* mprotect flag: extend change to end of growsup vma */
->
-> -/*
-> - * Flags for mmap
-> - */
->  /* 0x01 - 0x03 are defined in linux/mman.h */
-> -#define MAP_TYPE	0x00f		/* Mask for type of mapping */
-> -#define MAP_FIXED	0x010		/* Interpret addr exactly */
+> +/* 0x01 - 0x03 are defined in linux/mman.h */
 > +#define MAP_TYPE	0x0f		/* Mask for type of mapping */
 > +#define MAP_FIXED	0x10		/* Interpret addr exactly */
->
-> -/* not used by linux, but here to make sure we don't clash with ABI defines */
-> -#define MAP_RENAME	0x020		/* Assign page to file */
-> -#define MAP_AUTOGROW	0x040		/* File may grow by writing */
-> -#define MAP_LOCAL	0x080		/* Copy on fork/sproc */
-> -#define MAP_AUTORSRV	0x100		/* Logical swap reserved on demand */
-> -
-> -/* These are linux-specific */
-> +/* 0x20 through 0x100 originally reserved for other unix compat */
->  #define MAP_NORESERVE	0x0400		/* don't check for reservations */
->  #define MAP_ANONYMOUS	0x0800		/* don't use a file */
->  #define MAP_GROWSDOWN	0x1000		/* stack-like segment */
->  #define MAP_DENYWRITE	0x2000		/* ETXTBSY */
->  #define MAP_EXECUTABLE	0x4000		/* mark it as an executable */
->  #define MAP_LOCKED	0x8000		/* pages are locked */
-> -#define MAP_POPULATE	0x10000		/* populate (prefault) pagetables */
-> -#define MAP_NONBLOCK	0x20000		/* do not block on IO */
-> -#define MAP_STACK	0x40000		/* give out an address that is best suited for process/thread stacks */
-> -#define MAP_HUGETLB	0x80000		/* create a huge page mapping */
-> -#define MAP_FIXED_NOREPLACE 0x100000	/* MAP_FIXED which doesn't unmap underlying mapping */
+> +#define MAP_ANONYMOUS	0x20		/* don't use a file */
 > +
-> +#define MAP_POPULATE		0x010000	/* populate (prefault) pagetables */
-> +#define MAP_NONBLOCK		0x020000	/* do not block on IO */
-> +#define MAP_STACK		0x040000	/* give out an address that is best suited for process/thread stacks */
-> +#define MAP_HUGETLB		0x080000	/* create a huge page mapping */
-> +/* MAP_SYNC not supported */
+>  #define MAP_RENAME      MAP_ANONYMOUS   /* In SunOS terminology */
+>  #define MAP_NORESERVE   0x40            /* don't reserve swap pages */
+>  #define MAP_INHERIT     0x80            /* SunOS doesn't do this, but... */
+> @@ -18,6 +23,16 @@
+>  #define MAP_DENYWRITE	0x0800		/* ETXTBSY */
+>  #define MAP_EXECUTABLE	0x1000		/* mark it as an executable */
+>
+> +#define MAP_POPULATE		0x008000	/* populate (prefault) pagetables */
+> +#define MAP_NONBLOCK		0x010000	/* do not block on IO */
+> +#define MAP_STACK		0x020000	/* give out an address that is best suited for process/thread stacks */
+> +#define MAP_HUGETLB		0x040000	/* create a huge page mapping */
+> +#define MAP_SYNC		0x080000 /* perform synchronous page faults for the mapping */
 > +#define MAP_FIXED_NOREPLACE	0x100000	/* MAP_FIXED which doesn't unmap underlying mapping */
 > +
->  #define MAP_UNINITIALIZED 0x4000000	/* For anonymous mmap, memory could be
->  					 * uninitialized */
->
-> -/*
-> - * Flags for msync
-> - */
-> -#define MS_ASYNC	0x0001		/* sync memory asynchronously */
-> -#define MS_INVALIDATE	0x0002		/* invalidate mappings & caches */
-> -#define MS_SYNC		0x0004		/* synchronous memory sync */
-> -
->  /*
->   * Flags for mlockall
->   */
-> @@ -78,6 +59,13 @@
->   */
->  #define MLOCK_ONFAULT	0x01		/* Lock pages in range after they are faulted in, do not prefault */
->
-> +/*
-> + * Flags for msync
-> + */
-> +#define MS_ASYNC	1		/* sync memory asynchronously */
-> +#define MS_INVALIDATE	2		/* invalidate the caches */
-> +#define MS_SYNC		4		/* synchronous memory sync */
+> +#define MAP_UNINITIALIZED 0x4000000	/* For anonymous mmap, memory could be
+> +					 * uninitialized */
 > +
->  #define MADV_NORMAL	0		/* no further special treatment */
->  #define MADV_RANDOM	1		/* expect random page references */
->  #define MADV_SEQUENTIAL	2		/* expect sequential page references */
-> @@ -98,7 +86,7 @@
->
->  #define MADV_DONTDUMP   16		/* Explicity exclude from the core dump,
->  					   overrides the coredump filter bits */
-> -#define MADV_DODUMP	17		/* Clear the MADV_NODUMP flag */
-> +#define MADV_DODUMP	17		/* Clear the MADV_DONTDUMP flag */
->
->  #define MADV_WIPEONFORK 18		/* Zero memory on fork, child only */
->  #define MADV_KEEPONFORK 19		/* Undo MADV_WIPEONFORK */
-> @@ -113,6 +101,9 @@
->
->  #define MADV_COLLAPSE	25		/* Synchronous hugepage collapse */
->
-> +#define MADV_HWPOISON	100		/* poison a page for testing */
-> +#define MADV_SOFT_OFFLINE 101		/* soft offline page for testing */
-> +
->  /* compatibility flags */
->  #define MAP_FILE	0
->
+>  #define MCL_CURRENT     0x2000          /* lock all currently mapped pages */
+>  #define MCL_FUTURE      0x4000          /* lock all additions to address space */
+>  #define MCL_ONFAULT	0x8000		/* lock all pages that are faulted in */
 > diff --git a/include/uapi/asm-generic/mman-common.h b/include/uapi/asm-generic/mman-common.h
-> index 6ce1f1ceb432..792ad5599d9c 100644
+> index 792ad5599d9c..8d66d2dabaa8 100644
 > --- a/include/uapi/asm-generic/mman-common.h
 > +++ b/include/uapi/asm-generic/mman-common.h
-> @@ -38,6 +38,9 @@
+> @@ -17,22 +17,6 @@
+>  #define PROT_GROWSDOWN	0x01000000	/* mprotect flag: extend change to start of growsdown vma */
+>  #define PROT_GROWSUP	0x02000000	/* mprotect flag: extend change to end of growsup vma */
+>
+> -/* 0x01 - 0x03 are defined in linux/mman.h */
+> -#define MAP_TYPE	0x0f		/* Mask for type of mapping */
+> -#define MAP_FIXED	0x10		/* Interpret addr exactly */
+> -#define MAP_ANONYMOUS	0x20		/* don't use a file */
+> -
+
+Hm, maybe I'm missing something, but why are we duplicating these?
+
+> -/* 0x0100 - 0x4000 flags are defined in asm-generic/mman.h */
+> -#define MAP_POPULATE		0x008000	/* populate (prefault) pagetables */
+> -#define MAP_NONBLOCK		0x010000	/* do not block on IO */
+> -#define MAP_STACK		0x020000	/* give out an address that is best suited for process/thread stacks */
+> -#define MAP_HUGETLB		0x040000	/* create a huge page mapping */
+> -#define MAP_SYNC		0x080000 /* perform synchronous page faults for the mapping */
+> -#define MAP_FIXED_NOREPLACE	0x100000	/* MAP_FIXED which doesn't unmap underlying mapping */
+> -
+> -#define MAP_UNINITIALIZED 0x4000000	/* For anonymous mmap, memory could be
+> -					 * uninitialized */
+> -
+>  /*
+>   * Flags for mlock
 >   */
->  #define MLOCK_ONFAULT	0x01		/* Lock pages in range after they are faulted in, do not prefault */
+> diff --git a/include/uapi/asm-generic/mman.h b/include/uapi/asm-generic/mman.h
+> index 57e8195d0b53..f26f9b4c03e1 100644
+> --- a/include/uapi/asm-generic/mman.h
+> +++ b/include/uapi/asm-generic/mman.h
+> @@ -4,12 +4,33 @@
+>
+>  #include <asm-generic/mman-common.h>
 >
 > +/*
-> + * Flags for msync
+> + * 0x01 - 0x03 are defined in linux/mman.h
+> + * 0x04 - 0x200000 are architecture specific
+> + * 0x200000 - 0x2000000 are available for common assignments in linux/mman.h
+> + * 0x4000000 - 0x80000000 are used for hugepage encodings
 > + */
->  #define MS_ASYNC	1		/* sync memory asynchronously */
->  #define MS_INVALIDATE	2		/* invalidate the caches */
->  #define MS_SYNC		4		/* synchronous memory sync */
-> @@ -53,8 +56,6 @@
->  #define MADV_REMOVE	9		/* remove these pages & resources */
->  #define MADV_DONTFORK	10		/* don't inherit across fork */
->  #define MADV_DOFORK	11		/* do inherit across fork */
-> -#define MADV_HWPOISON	100		/* poison a page for testing */
-> -#define MADV_SOFT_OFFLINE 101		/* soft offline page for testing */
->
->  #define MADV_MERGEABLE   12		/* KSM may merge identical pages */
->  #define MADV_UNMERGEABLE 13		/* KSM may not merge identical pages */
-> @@ -79,6 +80,9 @@
->
->  #define MADV_COLLAPSE	25		/* Synchronous hugepage collapse */
->
-> +#define MADV_HWPOISON	100		/* poison a page for testing */
-> +#define MADV_SOFT_OFFLINE 101		/* soft offline page for testing */
+> +#define MAP_TYPE	0x0f		/* Mask for type of mapping */
+> +#define MAP_FIXED	0x10		/* Interpret addr exactly */
+> +#define MAP_ANONYMOUS	0x20		/* don't use a file */
 > +
->  /* compatibility flags */
->  #define MAP_FILE	0
+>  #define MAP_GROWSDOWN	0x0100		/* stack-like segment */
+>  #define MAP_DENYWRITE	0x0800		/* ETXTBSY */
+>  #define MAP_EXECUTABLE	0x1000		/* mark it as an executable */
+>  #define MAP_LOCKED	0x2000		/* pages are locked */
+>  #define MAP_NORESERVE	0x4000		/* don't check for reservations */
 >
+> +#define MAP_POPULATE		0x008000	/* populate (prefault) pagetables */
+> +#define MAP_NONBLOCK		0x010000	/* do not block on IO */
+> +#define MAP_STACK		0x020000	/* give out an address that is best suited for process/thread stacks */
+> +#define MAP_HUGETLB		0x040000	/* create a huge page mapping */
+> +#define MAP_SYNC		0x080000 /* perform synchronous page faults for the mapping */
+> +#define MAP_FIXED_NOREPLACE	0x100000	/* MAP_FIXED which doesn't unmap underlying mapping */
+> +
+> +#define MAP_UNINITIALIZED 0x4000000	/* For anonymous mmap, memory could be
+> +					 * uninitialized */
+> +
+> +
+>  /*
+>   * Bits [26:31] are reserved, see asm-generic/hugetlb_encode.h
+>   * for MAP_HUGETLB usage
+> diff --git a/include/uapi/linux/mman.h b/include/uapi/linux/mman.h
+> index e89d00528f2f..b70cb06dd7ef 100644
+> --- a/include/uapi/linux/mman.h
+> +++ b/include/uapi/linux/mman.h
+> @@ -18,6 +18,11 @@
+>  #define MAP_PRIVATE	0x02		/* Changes are private */
+>  #define MAP_SHARED_VALIDATE 0x03	/* share + validate extension flags */
+>  #define MAP_DROPPABLE	0x08		/* Zero memory under memory pressure. */
+> +/*
+> + * 0x10 through 0x200000 are used for architecture specific definitions
+> + * in asm/mman.h, numbers 0x400000 through 0x2000000 are currently
+> + * available on all architectures.
+> + */
+
+Nice to add this documentation!
+
+>
+>  /*
+>   * Huge page size encoding when MAP_HUGETLB is specified, and a huge page
 > --
 > 2.39.2
 >
