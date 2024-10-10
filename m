@@ -1,528 +1,300 @@
-Return-Path: <linux-arch+bounces-7973-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7974-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E630F99885D
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Oct 2024 15:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DA8B7998B36
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Oct 2024 17:18:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EA1081C21040
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Oct 2024 13:52:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DE31F1C20E91
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Oct 2024 15:18:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BE5C1CB50B;
-	Thu, 10 Oct 2024 13:51:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 517471CBEBE;
+	Thu, 10 Oct 2024 15:18:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JJJWVitm"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EC9F1BE245;
-	Thu, 10 Oct 2024 13:51:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13EAE1CBEB4;
+	Thu, 10 Oct 2024 15:18:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728568317; cv=none; b=g9OR3PolLI6qXW81gNvgaph6DqVF4pNexp7V1FQJfZfoYRiVOiOWppBQgrkeQM4kXIwZWLJT2n+/F6IcwBeEPnk7nPQOYRkRCE6yKNZQcnVT0jgyvaN+PUWBbTxrJCxEi5TAVRLE4m1JDLLWUWq/qzlAL2+sc4RAjJXo1xDApTs=
+	t=1728573500; cv=none; b=dL9sUzoGJDvfjmOwHBBte6bHZ1RJYkxcIfhH1gYUMpkSznuYd2RIOqo7FutAVllcnm0u3ymIsgblAsBUaTltmwulxukUckDIHG+GbbpcXvUWellETCyzG/QI33KiQmmaWg2cEpgArvJo83rIkSYfp2rBaFphgqEHHfJVMtycQXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728568317; c=relaxed/simple;
-	bh=5PQUJUVEqf47zw2TaOjHRuy5BnekDUMUpJV1jjkjMkg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=fgr6tsSNHfgWHLsEf182P/oYi/rxZ/WmYD51Wq4sH3lo7rhcrfKa6nuH7GrTSxQIDi4GaEyMaNgyeOwg/x/GmLyzHOMjLgrRl7yQ5Xs2k+zb/elAVY9Ag04uoo5RSGdYnKxCxpe5ZGWIher6ojsZChtq8at6dCux6AV4dW4Pm2A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A49CD139F;
-	Thu, 10 Oct 2024 06:52:23 -0700 (PDT)
-Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C8FAC3F64C;
-	Thu, 10 Oct 2024 06:51:52 -0700 (PDT)
-From: Vincenzo Frascino <vincenzo.frascino@arm.com>
-To: linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	linux-mm@kvack.org
-Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	s=arc-20240116; t=1728573500; c=relaxed/simple;
+	bh=6dvKTY2cy/sodJ8sieN7BO/TIIO+P82VgqdOgk5UcTA=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=t7ggdgHGKuJAsAZgdMRHhpBQZA9bbNX3EB6HfypLuzJxpXMM5BtZmHGw0KIUzclVxuU6GsMk2qVgnrKLpiZIpRHRHLHp3BAlBvqIqkTwSw+b4lfCAl2GDJ7cqjWYp5ShzXCdNSjqehX88jkeZ/0QTS2v7Qeoggjo7MIPfMMRwI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JJJWVitm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D004C4CEC5;
+	Thu, 10 Oct 2024 15:18:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728573497;
+	bh=6dvKTY2cy/sodJ8sieN7BO/TIIO+P82VgqdOgk5UcTA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=JJJWVitmpvLvarMUPZUkuoB8gP29XOw0sXNcXNa5kByyDAx7zTpXCXE3HAPvwucIc
+	 nqKSjxxqVqe/grf/6yTnmqZ60aylmorsMhYnLl/p7veN8L+6Z6UpBle4GJuML4f7xb
+	 i4kReeFAE20WpHLaj8KfSAKT2u3eSPxMo5z1CNQJcQfr/ga40kbvqrkDBDHrIhHoXF
+	 Fx9jWKSkz74XO4oqeZAS85rWP/9HC/v2M1aUJUQw6PW1C+qyBOnY/aeVO+soSpZuga
+	 63WABLS/bqHPf7/DMKi/vZmUVhEJ5IYzs9ZH3gGYScj5D1kIistrSeFfZCohaujqqN
+	 f91Lx8662bKcA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1syuve-002Eqs-J7;
+	Thu, 10 Oct 2024 16:18:14 +0100
+Date: Thu, 10 Oct 2024 16:18:13 +0100
+Message-ID: <86msjc56mi.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Mark Brown <broonie@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
 	Arnd Bergmann <arnd@arndb.de>,
-	Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	"Jason A . Donenfeld" <Jason@zx2c4.com>,
-	Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [PATCH v4 2/2] vdso: Introduce vdso/page.h
-Date: Thu, 10 Oct 2024 14:51:46 +0100
-Message-Id: <20241010135146.181175-3-vincenzo.frascino@arm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241010135146.181175-1-vincenzo.frascino@arm.com>
-References: <20241010135146.181175-1-vincenzo.frascino@arm.com>
+	Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+	Kees Cook <kees@kernel.org>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	Ross Burton <ross.burton@arm.com>,
+	David Spickett <david.spickett@arm.com>,
+	Yury Khrustalev <yury.khrustalev@arm.com>,
+	Wilco Dijkstra <wilco.dijkstra@arm.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v13 11/40] arm64/gcs: Provide basic EL2 setup to allow GCS usage at EL0 and EL1
+In-Reply-To: <20241009204903.GA3353168@thelio-3990X>
+References: <20241001-arm64-gcs-v13-0-222b78d87eee@kernel.org>
+	<20241001-arm64-gcs-v13-11-222b78d87eee@kernel.org>
+	<20241009204903.GA3353168@thelio-3990X>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: nathan@kernel.org, broonie@kernel.org, catalin.marinas@arm.com, will@kernel.org, corbet@lwn.net, akpm@linux-foundation.org, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, arnd@arndb.de, oleg@redhat.com, ebiederm@xmission.com, shuah@kernel.org, rick.p.edgecombe@intel.com, debug@rivosinc.com, ardb@kernel.org, Szabolcs.Nagy@arm.com, kees@kernel.org, hjl.tools@gmail.com, paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, fweimer@redhat.com, brauner@kernel.org, thiago.bauermann@linaro.org, ross.burton@arm.com, david.spickett@arm.com, yury.khrustalev@arm.com, wilco.dijkstra@arm.com, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-The VDSO implementation includes headers from outside of the
-vdso/ namespace.
+On Wed, 09 Oct 2024 21:49:03 +0100,
+Nathan Chancellor <nathan@kernel.org> wrote:
+>=20
+> Hi Mark,
+>=20
+> On Tue, Oct 01, 2024 at 11:58:50PM +0100, Mark Brown wrote:
+> > There is a control HCRX_EL2.GCSEn which must be set to allow GCS
+> > features to take effect at lower ELs and also fine grained traps for GCS
+> > usage at EL0 and EL1.  Configure all these to allow GCS usage by EL0 and
+> > EL1.
+> >=20
+> > We also initialise GCSCR_EL1 and GCSCRE0_EL1 to ensure that we can
+> > execute function call instructions without faulting regardless of the
+> > state when the kernel is started.
+> >=20
+> > Reviewed-by: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
+> > Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+> > Signed-off-by: Mark Brown <broonie@kernel.org>
+>=20
+> I just bisected a build failure from a failed linker script assertion
+> that I see with allmodconfig to this change in -next as commit
+> ff5181d8a2a8 ("arm64/gcs: Provide basic EL2 setup to allow GCS usage at
+> EL0 and EL1"):
+>=20
+>   $ make -skj"$(nproc)" ARCH=3Darm64 CROSS_COMPILE=3Daarch64-linux- mrpro=
+per allmodconfig vmlinux
+>   aarch64-linux-ld: HYP init code too big
+>   make[4]: *** [scripts/Makefile.vmlinux:34: vmlinux] Error 1
+>   ...
+>=20
+> I see this with both GCC 14 and clang 19, in case toolchain version
+> matters. Bisect log included as well.
 
-Introduce vdso/page.h to make sure that the generic library
-uses only the allowed namespace.
+Grmbl... 16 bytes too big. The hack below buys us about ~600 bytes by
+removing some duplication, but we're losing half of the space to the
+vectors.
 
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Jason A. Donenfeld <Jason@zx2c4.com>
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org> # m68k
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+Anyway, this is very lightly tested and it may eat your box.
+
+Thanks,
+
+	M.
+
+=46rom 20c98d2647c11db1e40768f92c5998ff5d764a3a Mon Sep 17 00:00:00 2001
+From: Marc Zyngier <maz@kernel.org>
+Date: Thu, 10 Oct 2024 16:13:26 +0100
+Subject: [PATCH] KVM: arm64: Shave a few bytes from the EL2 idmap code
+
+Our idmap is becoming too big, to the point where it doesn't fit in
+a 4kB page anymore.
+
+There are some low-hanging fruits though, such as the el2_init_state
+horror that is expanded 3 times in the kernel. Let's at least limit
+ourselves to two copies, which makes the kernel link again.
+
+At some point, we'll have to have a better way of doing this.
+
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20241009204903.GA3353168@thelio-3990X
 ---
- arch/alpha/include/asm/page.h      |  6 +-----
- arch/arc/include/uapi/asm/page.h   |  7 +++----
- arch/arm/include/asm/page.h        |  5 +----
- arch/arm64/include/asm/page-def.h  |  5 +----
- arch/csky/include/asm/page.h       |  8 ++------
- arch/hexagon/include/asm/page.h    |  4 +---
- arch/loongarch/include/asm/page.h  |  7 +------
- arch/m68k/include/asm/page.h       |  6 ++----
- arch/microblaze/include/asm/page.h |  5 +----
- arch/mips/include/asm/page.h       |  7 +------
- arch/nios2/include/asm/page.h      |  7 +------
- arch/openrisc/include/asm/page.h   | 11 +----------
- arch/parisc/include/asm/page.h     |  4 +---
- arch/powerpc/include/asm/page.h    | 10 +---------
- arch/riscv/include/asm/page.h      |  4 +---
- arch/s390/include/asm/page.h       |  4 +---
- arch/sh/include/asm/page.h         |  6 ++----
- arch/sparc/include/asm/page_32.h   |  4 +---
- arch/sparc/include/asm/page_64.h   |  4 +---
- arch/um/include/asm/page.h         |  5 +----
- arch/x86/include/asm/page_types.h  |  5 +----
- arch/xtensa/include/asm/page.h     |  8 +-------
- include/vdso/page.h                | 30 ++++++++++++++++++++++++++++++
- 23 files changed, 57 insertions(+), 105 deletions(-)
- create mode 100644 include/vdso/page.h
+ arch/arm64/include/asm/kvm_asm.h   |  1 +
+ arch/arm64/kernel/asm-offsets.c    |  1 +
+ arch/arm64/kvm/hyp/nvhe/hyp-init.S | 52 +++++++++++++++++-------------
+ 3 files changed, 31 insertions(+), 23 deletions(-)
 
-diff --git a/arch/alpha/include/asm/page.h b/arch/alpha/include/asm/page.h
-index 70419e6be1a3..261af54fd601 100644
---- a/arch/alpha/include/asm/page.h
-+++ b/arch/alpha/include/asm/page.h
-@@ -4,11 +4,7 @@
- 
- #include <linux/const.h>
- #include <asm/pal.h>
--
--/* PAGE_SHIFT determines the page size */
--#define PAGE_SHIFT	CONFIG_PAGE_SHIFT
--#define PAGE_SIZE	(_AC(1,UL) << PAGE_SHIFT)
--#define PAGE_MASK	(~(PAGE_SIZE-1))
-+#include <vdso/page.h>
- 
- #ifndef __ASSEMBLY__
- 
-diff --git a/arch/arc/include/uapi/asm/page.h b/arch/arc/include/uapi/asm/page.h
-index 7fd9e741b527..4606a326af5c 100644
---- a/arch/arc/include/uapi/asm/page.h
-+++ b/arch/arc/include/uapi/asm/page.h
-@@ -14,7 +14,7 @@
- 
- /* PAGE_SHIFT determines the page size */
- #ifdef __KERNEL__
--#define PAGE_SHIFT CONFIG_PAGE_SHIFT
-+#include <vdso/page.h>
- #else
+diff --git a/arch/arm64/include/asm/kvm_asm.h b/arch/arm64/include/asm/kvm_=
+asm.h
+index b36a3b6cc0116..67afac659231e 100644
+--- a/arch/arm64/include/asm/kvm_asm.h
++++ b/arch/arm64/include/asm/kvm_asm.h
+@@ -178,6 +178,7 @@ struct kvm_nvhe_init_params {
+ 	unsigned long hcr_el2;
+ 	unsigned long vttbr;
+ 	unsigned long vtcr;
++	unsigned long tmp;
+ };
+=20
  /*
-  * Default 8k
-@@ -24,11 +24,10 @@
-  * not available
-  */
- #define PAGE_SHIFT 13
-+#define PAGE_SIZE	_BITUL(PAGE_SHIFT)	/* Default 8K */
-+#define PAGE_MASK	(~(PAGE_SIZE-1))
+diff --git a/arch/arm64/kernel/asm-offsets.c b/arch/arm64/kernel/asm-offset=
+s.c
+index 27de1dddb0abe..b21dd24b8efc3 100644
+--- a/arch/arm64/kernel/asm-offsets.c
++++ b/arch/arm64/kernel/asm-offsets.c
+@@ -146,6 +146,7 @@ int main(void)
+   DEFINE(NVHE_INIT_HCR_EL2,	offsetof(struct kvm_nvhe_init_params, hcr_el2)=
+);
+   DEFINE(NVHE_INIT_VTTBR,	offsetof(struct kvm_nvhe_init_params, vttbr));
+   DEFINE(NVHE_INIT_VTCR,	offsetof(struct kvm_nvhe_init_params, vtcr));
++  DEFINE(NVHE_INIT_TMP,		offsetof(struct kvm_nvhe_init_params, tmp));
  #endif
- 
--#define PAGE_SIZE	_BITUL(PAGE_SHIFT)	/* Default 8K */
- #define PAGE_OFFSET	_AC(0x80000000, UL)	/* Kernel starts at 2G onwrds */
- 
--#define PAGE_MASK	(~(PAGE_SIZE-1))
+ #ifdef CONFIG_CPU_PM
+   DEFINE(CPU_CTX_SP,		offsetof(struct cpu_suspend_ctx, sp));
+diff --git a/arch/arm64/kvm/hyp/nvhe/hyp-init.S b/arch/arm64/kvm/hyp/nvhe/h=
+yp-init.S
+index 401af1835be6b..fc18662260676 100644
+--- a/arch/arm64/kvm/hyp/nvhe/hyp-init.S
++++ b/arch/arm64/kvm/hyp/nvhe/hyp-init.S
+@@ -24,28 +24,25 @@
+ 	.align	11
+=20
+ SYM_CODE_START(__kvm_hyp_init)
+-	ventry	__invalid		// Synchronous EL2t
+-	ventry	__invalid		// IRQ EL2t
+-	ventry	__invalid		// FIQ EL2t
+-	ventry	__invalid		// Error EL2t
++	ventry	.			// Synchronous EL2t
++	ventry	.			// IRQ EL2t
++	ventry	.			// FIQ EL2t
++	ventry	.			// Error EL2t
+=20
+-	ventry	__invalid		// Synchronous EL2h
+-	ventry	__invalid		// IRQ EL2h
+-	ventry	__invalid		// FIQ EL2h
+-	ventry	__invalid		// Error EL2h
++	ventry	.			// Synchronous EL2h
++	ventry	.			// IRQ EL2h
++	ventry	.			// FIQ EL2h
++	ventry	.			// Error EL2h
+=20
+ 	ventry	__do_hyp_init		// Synchronous 64-bit EL1
+-	ventry	__invalid		// IRQ 64-bit EL1
+-	ventry	__invalid		// FIQ 64-bit EL1
+-	ventry	__invalid		// Error 64-bit EL1
++	ventry	.			// IRQ 64-bit EL1
++	ventry	.			// FIQ 64-bit EL1
++	ventry	.			// Error 64-bit EL1
+=20
+-	ventry	__invalid		// Synchronous 32-bit EL1
+-	ventry	__invalid		// IRQ 32-bit EL1
+-	ventry	__invalid		// FIQ 32-bit EL1
+-	ventry	__invalid		// Error 32-bit EL1
 -
- #endif /* _UAPI__ASM_ARC_PAGE_H */
-diff --git a/arch/arm/include/asm/page.h b/arch/arm/include/asm/page.h
-index 62af9f7f9e96..ef11b721230e 100644
---- a/arch/arm/include/asm/page.h
-+++ b/arch/arm/include/asm/page.h
-@@ -7,10 +7,7 @@
- #ifndef _ASMARM_PAGE_H
- #define _ASMARM_PAGE_H
- 
--/* PAGE_SHIFT determines the page size */
--#define PAGE_SHIFT		CONFIG_PAGE_SHIFT
--#define PAGE_SIZE		(_AC(1,UL) << PAGE_SHIFT)
--#define PAGE_MASK		(~((1 << PAGE_SHIFT) - 1))
-+#include <vdso/page.h>
- 
- #ifndef __ASSEMBLY__
- 
-diff --git a/arch/arm64/include/asm/page-def.h b/arch/arm64/include/asm/page-def.h
-index 792e9fe881dc..d402e08442ee 100644
---- a/arch/arm64/include/asm/page-def.h
-+++ b/arch/arm64/include/asm/page-def.h
-@@ -10,9 +10,6 @@
- 
- #include <linux/const.h>
- 
--/* PAGE_SHIFT determines the page size */
--#define PAGE_SHIFT		CONFIG_PAGE_SHIFT
--#define PAGE_SIZE		(_AC(1, UL) << PAGE_SHIFT)
--#define PAGE_MASK		(~(PAGE_SIZE-1))
-+#include <vdso/page.h>
- 
- #endif /* __ASM_PAGE_DEF_H */
-diff --git a/arch/csky/include/asm/page.h b/arch/csky/include/asm/page.h
-index 0ca6c408c07f..f8beae295afb 100644
---- a/arch/csky/include/asm/page.h
-+++ b/arch/csky/include/asm/page.h
-@@ -7,12 +7,8 @@
- #include <asm/cache.h>
- #include <linux/const.h>
- 
--/*
-- * PAGE_SHIFT determines the page size: 4KB
-- */
--#define PAGE_SHIFT	CONFIG_PAGE_SHIFT
--#define PAGE_SIZE	(_AC(1, UL) << PAGE_SHIFT)
--#define PAGE_MASK	(~(PAGE_SIZE - 1))
-+#include <vdso/page.h>
+-__invalid:
+-	b	.
++	ventry	.			// Synchronous 32-bit EL1
++	ventry	.			// IRQ 32-bit EL1
++	ventry	.			// FIQ 32-bit EL1
++	ventry	.			// Error 32-bit EL1
+=20
+ 	/*
+ 	 * Only uses x0..x3 so as to not clobber callee-saved SMCCC registers.
+@@ -76,6 +73,13 @@ __do_hyp_init:
+ 	eret
+ SYM_CODE_END(__kvm_hyp_init)
+=20
++SYM_CODE_START_LOCAL(__kvm_init_el2_state)
++	/* Initialize EL2 CPU state to sane values. */
++	init_el2_state				// Clobbers x0..x2
++	finalise_el2_state
++	ret
++SYM_CODE_END(__kvm_init_el2_state)
 +
- #define THREAD_SIZE	(PAGE_SIZE * 2)
- #define THREAD_MASK	(~(THREAD_SIZE - 1))
- #define THREAD_SHIFT	(PAGE_SHIFT + 1)
-diff --git a/arch/hexagon/include/asm/page.h b/arch/hexagon/include/asm/page.h
-index 8a6af57274c2..b01f8df69dd4 100644
---- a/arch/hexagon/include/asm/page.h
-+++ b/arch/hexagon/include/asm/page.h
-@@ -45,9 +45,7 @@
- #define HVM_HUGEPAGE_SIZE 0x5
- #endif
- 
--#define PAGE_SHIFT CONFIG_PAGE_SHIFT
--#define PAGE_SIZE  (1UL << PAGE_SHIFT)
--#define PAGE_MASK  (~((1 << PAGE_SHIFT) - 1))
-+#include <vdso/page.h>
- 
- #ifdef __KERNEL__
- #ifndef __ASSEMBLY__
-diff --git a/arch/loongarch/include/asm/page.h b/arch/loongarch/include/asm/page.h
-index e85df33f11c7..83f3533e31a4 100644
---- a/arch/loongarch/include/asm/page.h
-+++ b/arch/loongarch/include/asm/page.h
-@@ -8,12 +8,7 @@
- #include <linux/const.h>
- #include <asm/addrspace.h>
- 
--/*
-- * PAGE_SHIFT determines the page size
-- */
--#define PAGE_SHIFT	CONFIG_PAGE_SHIFT
--#define PAGE_SIZE	(_AC(1, UL) << PAGE_SHIFT)
--#define PAGE_MASK	(~(PAGE_SIZE - 1))
-+#include <vdso/page.h>
- 
- #define HPAGE_SHIFT	(PAGE_SHIFT + PAGE_SHIFT - 3)
- #define HPAGE_SIZE	(_AC(1, UL) << HPAGE_SHIFT)
-diff --git a/arch/m68k/include/asm/page.h b/arch/m68k/include/asm/page.h
-index 8cfb84b49975..b173ba27d36f 100644
---- a/arch/m68k/include/asm/page.h
-+++ b/arch/m68k/include/asm/page.h
-@@ -6,10 +6,8 @@
- #include <asm/setup.h>
- #include <asm/page_offset.h>
- 
--/* PAGE_SHIFT determines the page size */
--#define PAGE_SHIFT	CONFIG_PAGE_SHIFT
--#define PAGE_SIZE	(_AC(1, UL) << PAGE_SHIFT)
--#define PAGE_MASK	(~(PAGE_SIZE-1))
-+#include <vdso/page.h>
-+
- #define PAGE_OFFSET	(PAGE_OFFSET_RAW)
- 
- #ifndef __ASSEMBLY__
-diff --git a/arch/microblaze/include/asm/page.h b/arch/microblaze/include/asm/page.h
-index 8810f4f1c3b0..d1ec3806edab 100644
---- a/arch/microblaze/include/asm/page.h
-+++ b/arch/microblaze/include/asm/page.h
-@@ -19,10 +19,7 @@
- 
- #ifdef __KERNEL__
- 
--/* PAGE_SHIFT determines the page size */
--#define PAGE_SHIFT	CONFIG_PAGE_SHIFT
--#define PAGE_SIZE	(ASM_CONST(1) << PAGE_SHIFT)
--#define PAGE_MASK	(~(PAGE_SIZE-1))
-+#include <vdso/page.h>
- 
- #define LOAD_OFFSET	ASM_CONST((CONFIG_KERNEL_START-CONFIG_KERNEL_BASE_ADDR))
- 
-diff --git a/arch/mips/include/asm/page.h b/arch/mips/include/asm/page.h
-index 4609cb0326cf..bc3e3484c1bf 100644
---- a/arch/mips/include/asm/page.h
-+++ b/arch/mips/include/asm/page.h
-@@ -14,12 +14,7 @@
- #include <linux/kernel.h>
- #include <asm/mipsregs.h>
- 
--/*
-- * PAGE_SHIFT determines the page size
-- */
--#define PAGE_SHIFT	CONFIG_PAGE_SHIFT
--#define PAGE_SIZE	(_AC(1,UL) << PAGE_SHIFT)
--#define PAGE_MASK	(~((1 << PAGE_SHIFT) - 1))
-+#include <vdso/page.h>
- 
  /*
-  * This is used for calculating the real page sizes
-diff --git a/arch/nios2/include/asm/page.h b/arch/nios2/include/asm/page.h
-index 0722f88e63cc..2897ec1b74f6 100644
---- a/arch/nios2/include/asm/page.h
-+++ b/arch/nios2/include/asm/page.h
-@@ -18,12 +18,7 @@
- #include <linux/pfn.h>
- #include <linux/const.h>
- 
--/*
-- * PAGE_SHIFT determines the page size
-- */
--#define PAGE_SHIFT	CONFIG_PAGE_SHIFT
--#define PAGE_SIZE	(_AC(1, UL) << PAGE_SHIFT)
--#define PAGE_MASK	(~(PAGE_SIZE - 1))
-+#include <vdso/page.h>
- 
- /*
-  * PAGE_OFFSET -- the first address of the first page of memory.
-diff --git a/arch/openrisc/include/asm/page.h b/arch/openrisc/include/asm/page.h
-index 1d5913f67c31..124a2db4b160 100644
---- a/arch/openrisc/include/asm/page.h
-+++ b/arch/openrisc/include/asm/page.h
-@@ -15,16 +15,7 @@
- #ifndef __ASM_OPENRISC_PAGE_H
- #define __ASM_OPENRISC_PAGE_H
- 
--
--/* PAGE_SHIFT determines the page size */
--
--#define PAGE_SHIFT      CONFIG_PAGE_SHIFT
--#ifdef __ASSEMBLY__
--#define PAGE_SIZE       (1 << PAGE_SHIFT)
--#else
--#define PAGE_SIZE       (1UL << PAGE_SHIFT)
--#endif
--#define PAGE_MASK       (~(PAGE_SIZE-1))
-+#include <vdso/page.h>
- 
- #define PAGE_OFFSET	0xc0000000
- #define KERNELBASE	PAGE_OFFSET
-diff --git a/arch/parisc/include/asm/page.h b/arch/parisc/include/asm/page.h
-index 4bea2e95798f..6c4836fb5407 100644
---- a/arch/parisc/include/asm/page.h
-+++ b/arch/parisc/include/asm/page.h
-@@ -4,9 +4,7 @@
- 
- #include <linux/const.h>
- 
--#define PAGE_SHIFT	CONFIG_PAGE_SHIFT
--#define PAGE_SIZE	(_AC(1,UL) << PAGE_SHIFT)
--#define PAGE_MASK	(~(PAGE_SIZE-1))
-+#include <vdso/page.h>
- 
- #define HAVE_ARCH_HUGETLB_UNMAPPED_AREA
- 
-diff --git a/arch/powerpc/include/asm/page.h b/arch/powerpc/include/asm/page.h
-index 83d0a4fc5f75..af9a2628d1df 100644
---- a/arch/powerpc/include/asm/page.h
-+++ b/arch/powerpc/include/asm/page.h
-@@ -21,8 +21,7 @@
-  * page size. When using 64K pages however, whether we are really supporting
-  * 64K pages in HW or not is irrelevant to those definitions.
-  */
--#define PAGE_SHIFT		CONFIG_PAGE_SHIFT
--#define PAGE_SIZE		(ASM_CONST(1) << PAGE_SHIFT)
-+#include <vdso/page.h>
- 
- #ifndef __ASSEMBLY__
- #ifndef CONFIG_HUGETLB_PAGE
-@@ -41,13 +40,6 @@ extern unsigned int hpage_shift;
- #define HUGE_MAX_HSTATE		(MMU_PAGE_COUNT-1)
- #endif
- 
--/*
-- * Subtle: (1 << PAGE_SHIFT) is an int, not an unsigned long. So if we
-- * assign PAGE_MASK to a larger type it gets extended the way we want
-- * (i.e. with 1s in the high bits)
-- */
--#define PAGE_MASK      (~((1 << PAGE_SHIFT) - 1))
--
- /*
-  * KERNELBASE is the virtual address of the start of the kernel, it's often
-  * the same as PAGE_OFFSET, but _might not be_.
-diff --git a/arch/riscv/include/asm/page.h b/arch/riscv/include/asm/page.h
-index 32d308a3355f..9875399827c7 100644
---- a/arch/riscv/include/asm/page.h
-+++ b/arch/riscv/include/asm/page.h
-@@ -12,9 +12,7 @@
- #include <linux/pfn.h>
- #include <linux/const.h>
- 
--#define PAGE_SHIFT	CONFIG_PAGE_SHIFT
--#define PAGE_SIZE	(_AC(1, UL) << PAGE_SHIFT)
--#define PAGE_MASK	(~(PAGE_SIZE - 1))
-+#include <vdso/page.h>
- 
- #define HPAGE_SHIFT		PMD_SHIFT
- #define HPAGE_SIZE		(_AC(1, UL) << HPAGE_SHIFT)
-diff --git a/arch/s390/include/asm/page.h b/arch/s390/include/asm/page.h
-index 73e1e03317b4..c949fe7736b9 100644
---- a/arch/s390/include/asm/page.h
-+++ b/arch/s390/include/asm/page.h
-@@ -11,9 +11,7 @@
- #include <linux/const.h>
- #include <asm/types.h>
- 
--#define _PAGE_SHIFT	CONFIG_PAGE_SHIFT
--#define _PAGE_SIZE	(_AC(1, UL) << _PAGE_SHIFT)
--#define _PAGE_MASK	(~(_PAGE_SIZE - 1))
-+#include <vdso/page.h>
- 
- /* PAGE_SHIFT determines the page size */
- #define PAGE_SHIFT	_PAGE_SHIFT
-diff --git a/arch/sh/include/asm/page.h b/arch/sh/include/asm/page.h
-index f780b467e75d..fc39b8171bfb 100644
---- a/arch/sh/include/asm/page.h
-+++ b/arch/sh/include/asm/page.h
-@@ -8,10 +8,8 @@
- 
- #include <linux/const.h>
- 
--/* PAGE_SHIFT determines the page size */
--#define PAGE_SHIFT	CONFIG_PAGE_SHIFT
--#define PAGE_SIZE	(_AC(1, UL) << PAGE_SHIFT)
--#define PAGE_MASK	(~(PAGE_SIZE-1))
-+#include <vdso/page.h>
+  * Initialize the hypervisor in EL2.
+  *
+@@ -102,9 +106,12 @@ SYM_CODE_START_LOCAL(___kvm_hyp_init)
+ 	// TPIDR_EL2 is used to preserve x0 across the macro maze...
+ 	isb
+ 	msr	tpidr_el2, x0
+-	init_el2_state
+-	finalise_el2_state
++	str	lr, [x0, #NVHE_INIT_TMP]
 +
- #define PTE_MASK	PAGE_MASK
- 
- #if defined(CONFIG_HUGETLB_PAGE_SIZE_64K)
-diff --git a/arch/sparc/include/asm/page_32.h b/arch/sparc/include/asm/page_32.h
-index 9977c77374cd..9954254ea569 100644
---- a/arch/sparc/include/asm/page_32.h
-+++ b/arch/sparc/include/asm/page_32.h
-@@ -11,9 +11,7 @@
- 
- #include <linux/const.h>
- 
--#define PAGE_SHIFT   CONFIG_PAGE_SHIFT
--#define PAGE_SIZE    (_AC(1, UL) << PAGE_SHIFT)
--#define PAGE_MASK    (~(PAGE_SIZE-1))
-+#include <vdso/page.h>
- 
- #ifndef __ASSEMBLY__
- 
-diff --git a/arch/sparc/include/asm/page_64.h b/arch/sparc/include/asm/page_64.h
-index e9bd24821c93..2a68ff5b6eab 100644
---- a/arch/sparc/include/asm/page_64.h
-+++ b/arch/sparc/include/asm/page_64.h
-@@ -4,9 +4,7 @@
- 
- #include <linux/const.h>
- 
--#define PAGE_SHIFT   CONFIG_PAGE_SHIFT
--#define PAGE_SIZE    (_AC(1,UL) << PAGE_SHIFT)
--#define PAGE_MASK    (~(PAGE_SIZE-1))
-+#include <vdso/page.h>
- 
- /* Flushing for D-cache alias handling is only needed if
-  * the page size is smaller than 16K.
-diff --git a/arch/um/include/asm/page.h b/arch/um/include/asm/page.h
-index 9ef9a8aedfa6..834313ecd3d6 100644
---- a/arch/um/include/asm/page.h
-+++ b/arch/um/include/asm/page.h
-@@ -9,10 +9,7 @@
- 
- #include <linux/const.h>
- 
--/* PAGE_SHIFT determines the page size */
--#define PAGE_SHIFT	CONFIG_PAGE_SHIFT
--#define PAGE_SIZE	(_AC(1, UL) << PAGE_SHIFT)
--#define PAGE_MASK	(~(PAGE_SIZE-1))
-+#include <vdso/page.h>
- 
- #ifndef __ASSEMBLY__
- 
-diff --git a/arch/x86/include/asm/page_types.h b/arch/x86/include/asm/page_types.h
-index 52f1b4ff0cc1..974688973cf6 100644
---- a/arch/x86/include/asm/page_types.h
-+++ b/arch/x86/include/asm/page_types.h
-@@ -6,10 +6,7 @@
- #include <linux/types.h>
- #include <linux/mem_encrypt.h>
- 
--/* PAGE_SHIFT determines the page size */
--#define PAGE_SHIFT		CONFIG_PAGE_SHIFT
--#define PAGE_SIZE		(_AC(1,UL) << PAGE_SHIFT)
--#define PAGE_MASK		(~(PAGE_SIZE-1))
-+#include <vdso/page.h>
- 
- #define __VIRTUAL_MASK		((1UL << __VIRTUAL_MASK_SHIFT) - 1)
- 
-diff --git a/arch/xtensa/include/asm/page.h b/arch/xtensa/include/asm/page.h
-index 4db56ef052d2..595c1037b738 100644
---- a/arch/xtensa/include/asm/page.h
-+++ b/arch/xtensa/include/asm/page.h
-@@ -18,13 +18,7 @@
- #include <asm/cache.h>
- #include <asm/kmem_layout.h>
- 
--/*
-- * PAGE_SHIFT determines the page size
-- */
--
--#define PAGE_SHIFT	CONFIG_PAGE_SHIFT
--#define PAGE_SIZE	(__XTENSA_UL_CONST(1) << PAGE_SHIFT)
--#define PAGE_MASK	(~(PAGE_SIZE-1))
-+#include <vdso/page.h>
- 
- #ifdef CONFIG_MMU
- #define PAGE_OFFSET	XCHAL_KSEG_CACHED_VADDR
-diff --git a/include/vdso/page.h b/include/vdso/page.h
-new file mode 100644
-index 000000000000..4ada1ba6bd1f
---- /dev/null
-+++ b/include/vdso/page.h
-@@ -0,0 +1,30 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __VDSO_PAGE_H
-+#define __VDSO_PAGE_H
++	bl	__kvm_init_el2_state
 +
-+#include <uapi/linux/const.h>
+ 	mrs	x0, tpidr_el2
++	ldr	lr, [x0, #NVHE_INIT_TMP]
+=20
+ 1:
+ 	ldr	x1, [x0, #NVHE_INIT_TPIDR_EL2]
+@@ -199,9 +206,8 @@ SYM_CODE_START_LOCAL(__kvm_hyp_init_cpu)
+=20
+ 2:	msr	SPsel, #1			// We want to use SP_EL{1,2}
+=20
+-	/* Initialize EL2 CPU state to sane values. */
+-	init_el2_state				// Clobbers x0..x2
+-	finalise_el2_state
++	bl	__kvm_init_el2_state
 +
-+/*
-+ * PAGE_SHIFT determines the page size.
-+ *
-+ * Note: This definition is required because PAGE_SHIFT is used
-+ * in several places throuout the codebase.
-+ */
-+#define PAGE_SHIFT      CONFIG_PAGE_SHIFT
-+
-+#define PAGE_SIZE	(_AC(1,UL) << CONFIG_PAGE_SHIFT)
-+
-+#if defined(CONFIG_PHYS_ADDR_T_64BIT) && !defined(CONFIG_64BIT)
-+/*
-+ * Applies only to 32-bit architectures with a 64-bit phys_addr_t.
-+ *
-+ * Subtle: (1 << CONFIG_PAGE_SHIFT) is an int, not an unsigned long.
-+ * So if we assign PAGE_MASK to a larger type it gets extended the
-+ * way we want (i.e. with 1s in the high bits)
-+ */
-+#define PAGE_MASK	(~((1 << CONFIG_PAGE_SHIFT) - 1))
-+#else
-+#define PAGE_MASK	(~(PAGE_SIZE - 1))
-+#endif
-+
-+#endif	/* __VDSO_PAGE_H */
--- 
-2.34.1
+ 	__init_el2_nvhe_prepare_eret
+=20
+ 	/* Enable MMU, set vectors and stack. */
+--=20
+2.39.2
 
+--=20
+Without deviation from the norm, progress is not possible.
 
