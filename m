@@ -1,127 +1,106 @@
-Return-Path: <linux-arch+bounces-7978-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7987-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B215998D55
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Oct 2024 18:27:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BD6B998E28
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Oct 2024 19:17:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BB736B36509
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Oct 2024 15:45:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C7254283679
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Oct 2024 17:17:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF2DA1CDFB4;
-	Thu, 10 Oct 2024 15:44:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="dpPnWgCG";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="yPC6uHm4"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97B8D19AA6B;
+	Thu, 10 Oct 2024 17:17:01 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 276F31CCB3B;
-	Thu, 10 Oct 2024 15:44:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BD9C199FBB;
+	Thu, 10 Oct 2024 17:17:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728575097; cv=none; b=Gt6cJAktbF1SoRwONLfOiX0OKaZK1MVn52j2B/s3zTgpNlIPhReEcL+QlP8h24waLBgsgHE5lTnwHrVXTlpd9x+Y2A23WQ7cx187CACNL/DRmLkjRmB2ip7sUfKt51PVuMvKRt6vHcd4RV42UyYYhSai3lX3sAXemAttU3E0sRI=
+	t=1728580621; cv=none; b=D5IrMZJ3CZDesLiFueZWmqo5r7i9pPNxXkeg93EFK9moYHdkaq/dQoS7lsFELIS93nd8O8Ieqh/fIR8gznZXjY8g4tq0biTI43JUdxXk7yypsq6VRZCbO7oyq0vZz/TUOy5IEvNsUMxjJMAXUtSv15nycfVYMr0fLQV36OYsBzE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728575097; c=relaxed/simple;
-	bh=bvh1jJWpx42LXX2Lx1XPkC92g2mUzF72aNPhVvbLrZk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=G1dDHO4QloS/0KN+UUpuibNIwuTf0xzvZDl/NhPifwH65QCGYnC7axj+n285nIbeylJQ9VSgX0gwYdMcbojDUKZKttUnXFWgz5jNBe6VrS+/RprbLWxR6KFqgQQaY6nrw7PU8yOBsSPsA7CMHR14F9Ew8Sa3BVRGOoc2iJdxRYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=dpPnWgCG; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=yPC6uHm4; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1728575094;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=U/XG6DQ3PsHd/P8r1A05s25oqNbuRg7CSOZvJqQ2RQY=;
-	b=dpPnWgCGSIyojR8YOPIODHalfROtG8LEH56sRq5mxfbjyLOjCbAUcmwaMEXu2cZKvV/k45
-	TqCsVhu9RjkkmSOOJHJuqXZYoGPFsnkOmbDlhYNvgEwJazOCAwr7sFuf/q/XCr4AxLc7LI
-	dGsxxC8lKbH5MGgIEHmr9FLo/VCp+48X0ADki3jRqZ/GrQ8GTJ5MvsMbi/3zfKTl9GhNeF
-	/N7gQZM/KxB9RCxX8j9UYsUadv+fsFOCt06p+0Ld11JPrc7spDgGOZClIoMnEmkNtFpvTn
-	qiejVdTPUtzvFiteYKw1WjMoVONiwOUIOPbvghvXF0iSUCKHrMeOEpRwaBMY/A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1728575094;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=U/XG6DQ3PsHd/P8r1A05s25oqNbuRg7CSOZvJqQ2RQY=;
-	b=yPC6uHm4/dZnVaE4EHlAEdw716wEYkItVZ5dtEr3RPr0fP8aCnTfCm4qYZzbKZLqlRrUy4
-	YQ6+oBRsFvnQKADA==
-Date: Thu, 10 Oct 2024 17:44:46 +0200
-Subject: [PATCH 3/9] arm64: vdso: Remove timekeeper include
+	s=arc-20240116; t=1728580621; c=relaxed/simple;
+	bh=X46B2QK1MPZh8d3qZPYljUKiES7FvVColdxPmLupi7M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bm7MWdAEJNUe+uF0L/HNMqLwcqyUFWrwmOV1s6DVQ/Cx3bzfoPNPGxQcIfNm1zqL44utlIxnE+oTsy9U6w/ZF8jShX9qa3SzgPLMSSWCu/X0qij3eCazdjjoak/JqI8oFOy7bmBXbbxIpkeXCzKjkKyrIErGJOPOXR+bVbTAvLE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBCEAC4CEC5;
+	Thu, 10 Oct 2024 17:16:54 +0000 (UTC)
+Date: Thu, 10 Oct 2024 18:16:52 +0100
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Marc Zyngier <maz@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Mark Brown <broonie@kernel.org>,
+	Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	Ross Burton <ross.burton@arm.com>,
+	David Spickett <david.spickett@arm.com>,
+	Yury Khrustalev <yury.khrustalev@arm.com>,
+	Wilco Dijkstra <wilco.dijkstra@arm.com>,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v13 11/40] arm64/gcs: Provide basic EL2 setup to allow
+ GCS usage at EL0 and EL1
+Message-ID: <ZwgMBAhR5-5R5EYC@arm.com>
+References: <20241001-arm64-gcs-v13-0-222b78d87eee@kernel.org>
+ <20241001-arm64-gcs-v13-11-222b78d87eee@kernel.org>
+ <20241009204903.GA3353168@thelio-3990X>
+ <86msjc56mi.wl-maz@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20241010-vdso-generic-arch_update_vsyscall-v1-3-7fe5a3ea4382@linutronix.de>
-References: <20241010-vdso-generic-arch_update_vsyscall-v1-0-7fe5a3ea4382@linutronix.de>
-In-Reply-To: <20241010-vdso-generic-arch_update_vsyscall-v1-0-7fe5a3ea4382@linutronix.de>
-To: Catalin Marinas <catalin.marinas@arm.com>, 
- Will Deacon <will@kernel.org>, Andy Lutomirski <luto@kernel.org>, 
- Thomas Gleixner <tglx@linutronix.de>, 
- Vincenzo Frascino <vincenzo.frascino@arm.com>, 
- Arnd Bergmann <arnd@arndb.de>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
- "H. Peter Anvin" <hpa@zytor.com>, Heiko Carstens <hca@linux.ibm.com>, 
- Vasily Gorbik <gor@linux.ibm.com>, 
- Alexander Gordeev <agordeev@linux.ibm.com>, 
- Christian Borntraeger <borntraeger@linux.ibm.com>, 
- Sven Schnelle <svens@linux.ibm.com>, Huacai Chen <chenhuacai@kernel.org>, 
- WANG Xuerui <kernel@xen0n.name>, Michael Ellerman <mpe@ellerman.id.au>, 
- Nicholas Piggin <npiggin@gmail.com>, 
- Christophe Leroy <christophe.leroy@csgroup.eu>, 
- Naveen N Rao <naveen@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
- Paul Walmsley <paul.walmsley@sifive.com>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
- Russell King <linux@armlinux.org.uk>
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
- linux-arch@vger.kernel.org, linux-mips@vger.kernel.org, 
- linux-s390@vger.kernel.org, loongarch@lists.linux.dev, 
- linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1728575090; l=720;
- i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=bvh1jJWpx42LXX2Lx1XPkC92g2mUzF72aNPhVvbLrZk=;
- b=YGgVa8cvZKIl5iidwiNogphb+kk0LhZ+d6YHOWerWO8c9r/x3PAzZfBvmQFoMG57QQRIjERP8
- AcrvpsLRlIwDMa7tDFUUIPvzlus1/YLClhqc8iu++BgbyiMoYVBpqbz
-X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
- pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <86msjc56mi.wl-maz@kernel.org>
 
-Since the generic VDSO clock mode storage is used, this header file is
-unused and can be removed.
+On Thu, Oct 10, 2024 at 04:18:13PM +0100, Marc Zyngier wrote:
+> From 20c98d2647c11db1e40768f92c5998ff5d764a3a Mon Sep 17 00:00:00 2001
+> From: Marc Zyngier <maz@kernel.org>
+> Date: Thu, 10 Oct 2024 16:13:26 +0100
+> Subject: [PATCH] KVM: arm64: Shave a few bytes from the EL2 idmap code
+> 
+> Our idmap is becoming too big, to the point where it doesn't fit in
+> a 4kB page anymore.
+> 
+> There are some low-hanging fruits though, such as the el2_init_state
+> horror that is expanded 3 times in the kernel. Let's at least limit
+> ourselves to two copies, which makes the kernel link again.
+> 
+> At some point, we'll have to have a better way of doing this.
+> 
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Marc Zyngier <maz@kernel.org>
+> Link: https://lore.kernel.org/r/20241009204903.GA3353168@thelio-3990X
 
-Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
----
- arch/arm64/kernel/vdso.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/arch/arm64/kernel/vdso.c b/arch/arm64/kernel/vdso.c
-index 706c9c3a7a50a4574e77da296e9c83e1e2a9f5ab..8ef20c16bc482e92de8098d55000c9999b89830e 100644
---- a/arch/arm64/kernel/vdso.c
-+++ b/arch/arm64/kernel/vdso.c
-@@ -19,7 +19,6 @@
- #include <linux/signal.h>
- #include <linux/slab.h>
- #include <linux/time_namespace.h>
--#include <linux/timekeeper_internal.h>
- #include <linux/vmalloc.h>
- #include <vdso/datapage.h>
- #include <vdso/helpers.h>
+Thanks Marc for the quick fix. It looks fine to me, it will keep the
+linker quiet for a while. I pushed it to arm64 for-kernelci for the time
+being, see if anything falls apart. I'll apply it properly once it gets
+a bit more testing.
 
 -- 
-2.47.0
-
+Catalin
 
