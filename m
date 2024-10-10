@@ -1,112 +1,199 @@
-Return-Path: <linux-arch+bounces-7961-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7962-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 851A4998623
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Oct 2024 14:35:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73C23998625
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Oct 2024 14:36:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B4C911C21022
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Oct 2024 12:35:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 30221281102
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Oct 2024 12:36:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 797021C0DFB;
-	Thu, 10 Oct 2024 12:35:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB64E1C1ACF;
+	Thu, 10 Oct 2024 12:36:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uQj4vusl"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3F6D29AF;
-	Thu, 10 Oct 2024 12:35:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 921B51BD00B;
+	Thu, 10 Oct 2024 12:36:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728563732; cv=none; b=mm14egS6IT1gUdNwKqHseAe3NOq/CoPSQAnoDLuhznaOxaYNyVRkC8prVPsSc7mda5OKpIOA3lWI1tz2vzyuwVedgFx9fTsQpBcVChqfiQFQzb4FuZSHIaxEyQW2T3YQu2a3plpVTbu+O+ee4lcbpdUWqqJwXKhnNq09urYiVPY=
+	t=1728563768; cv=none; b=QyK02dfPoVn35DTWvIXjUwrAQO1ZJ0JfYUcs/QaPEokUU9p6OMJNINsh2n3nEvnzCCkox1VNWdFg7I6Gf44E/PCo6uoINMm3oNgmQG5vZh1kTLBOKxrvTSZmCmApIrVgMNFeodeZSPP519YYxSC0864WVeTodQb8V73ePd+aeMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728563732; c=relaxed/simple;
-	bh=fIsd+POJH173emuvnI8MGIWiD+VNJKbD0DF57uz2rTg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZZnQreEmcpef5Adn+CnQilFedXYWo3CBYt7HlTz+sV3SWp/6Amtw2pmgygC3ui7IeS65G81DTJz8GO35ZHWJEUrqJrzUVAI/rOHIkJw5SRUiv4sHaCZ5eAIbbZI227ChJpAh2eYNDCDxoIM7p+aUp7L6PsjauH9dSOVhDXircdo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 777A6497;
-	Thu, 10 Oct 2024 05:35:58 -0700 (PDT)
-Received: from [10.1.196.72] (e119884-lin.cambridge.arm.com [10.1.196.72])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C41903F58B;
-	Thu, 10 Oct 2024 05:35:25 -0700 (PDT)
-Message-ID: <c9360dce-559c-4523-b98c-041fc748ce61@arm.com>
-Date: Thu, 10 Oct 2024 13:35:24 +0100
+	s=arc-20240116; t=1728563768; c=relaxed/simple;
+	bh=Mrfex9PaX8qsirzDCOIMidvr+l1VhKsLmb0RG30fKrY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WVfGm4IGOWLCb9YAApE5FICzZzon8F26XM/mi4YXFKfRARv+twWV0xUXHDzB0iQTWDABMmdjjiH763MRIwHSPnTpcbB3aqzHGhvMB4TOZV4u594X+W/xd4Yxh33FtIBVOXy/3UESw81ingKA7Z0nnNNvYQIuVnkHmvoFjTa2ga4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uQj4vusl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98F8CC4CECE;
+	Thu, 10 Oct 2024 12:36:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728563768;
+	bh=Mrfex9PaX8qsirzDCOIMidvr+l1VhKsLmb0RG30fKrY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=uQj4vusl2xZyU2s6eZMzP0ufrrKpBG9qlyuhuQvJ9sjoTaOMo1QIul8EGCr2tkuE4
+	 xSeSNrVwS6M44XVcCdw8+Y353IY4YTBCQl0ln9Eef9gYiXUyzZnjln4i3ZOSMNVC2u
+	 r0SyEDUGUCCRqQU84Yq7imAHb4+QYJPyqriUcNZVWnammTp2GztTTqqN/CgxHfSaqG
+	 2YeO0tHDt33FN9ORsPKpdqwe/V+C2dWp41X/bdpWSEUfWMf4jyrfONbX2T2SaRsrin
+	 00Nye82TLAU5B4EBsJEhUg/7z9M7qOwh2vQtPWESHijBvm8Nm12HzcsvyqBAa9MTUq
+	 aXToxtxSMxk7A==
+Date: Thu, 10 Oct 2024 14:36:04 +0200
+From: Frederic Weisbecker <frederic@kernel.org>
+To: Anna-Maria Behnsen <anna-maria@linutronix.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Jonathan Corbet <corbet@lwn.net>,
+	linux-kernel@vger.kernel.org, Len Brown <len.brown@intel.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org
+Subject: Re: [PATCH v2 05/15] timers: Update function descriptions of
+ sleep/delay related functions
+Message-ID: <ZwfKNNpjYnn2OGWG@localhost.localdomain>
+References: <ZwMF_y62yJ-bmNL9@pavilion.home>
+ <87wmig9wj4.fsf@somnus>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/2] vdso: Introduce vdso/page.h
-To: Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-mm@kvack.org
-Cc: Andy Lutomirski <luto@kernel.org>, "Jason A . Donenfeld"
- <Jason@zx2c4.com>, Christophe Leroy <christophe.leroy@csgroup.eu>,
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- Naveen N Rao <naveen@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- "H . Peter Anvin" <hpa@zytor.com>, Theodore Ts'o <tytso@mit.edu>,
- Arnd Bergmann <arnd@arndb.de>, Andrew Morton <akpm@linux-foundation.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-References: <20241003152910.3287259-1-vincenzo.frascino@arm.com>
- <20241003152910.3287259-3-vincenzo.frascino@arm.com> <87wmihr49g.ffs@tglx>
-Content-Language: en-US
-From: Vincenzo Frascino <vincenzo.frascino@arm.com>
-In-Reply-To: <87wmihr49g.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87wmig9wj4.fsf@somnus>
 
-
-
-On 09/10/2024 10:53, Thomas Gleixner wrote:
-> On Thu, Oct 03 2024 at 16:29, Vincenzo Frascino wrote:
->> The VDSO implementation includes headers from outside of the
->> vdso/ namespace.
->>
->> Introduce vdso/page.h to make sure that the generic library
->> uses only the allowed namespace.
->>
->> Note: on a 32-bit architecture UL is an unsigned 32 bit long. Hence when
->> it supports 64-bit phys_addr_t we might end up in situation in which
->> the
+Le Thu, Oct 10, 2024 at 10:45:03AM +0200, Anna-Maria Behnsen a écrit :
+> Frederic Weisbecker <frederic@kernel.org> writes:
+> > I can't say I'm less confused about these values but at least it
+> > brings a bit of light in the horizon...
 > 
-> We end up with nothing.
-> 
->> top 32 bit are cleared. To prevent this issue this patch provides
->> separate macros for PAGE_MASK.
-> 
-> 'this patch' is redundant information.
-> 
-> git grep 'This patch' Documentation/process/
-> 
+> :) This will be cleaned up in a second step all over the place as
+> suggested by Thomas already in v1. But for now, the aim is only to fix
+> fsleep and especially the outdated documentation of delay and sleep
+> related functions.
 
-My bad, I thought that Documentation/process/submitting-patches.rst referred
-only to the proposed change which is in imperative mood.
+Sure.
 
-I will rephrase it accordingly.
-
-...
-
->> +#define PAGE_MASK	(~(PAGE_SIZE-1))
 > 
-> #define PAGE_MASK	(~(PAGE_SIZE - 1))
+> >>   */
+> >>  
+> >> -/* 0x10c7 is 2**32 / 1000000 (rounded up) */
+> >> +/**
+> >> + * udelay - Inserting a delay based on microseconds with busy waiting
+> >> + * @usec:	requested delay in microseconds
+> >> + *
+> >> + * When delaying in an atomic context ndelay(), udelay() and mdelay() are the
+> >> + * only valid variants of delaying/sleeping to go with.
+> >> + *
+> >> + * When inserting delays in non atomic context which are shorter than the time
+> >> + * which is required to queue e.g. an hrtimer and to enter then the scheduler,
+> >> + * it is also valuable to use udelay(). But is not simple to specify a generic
+> >
+> > But it is*
+> >
+> >> + * threshold for this which will fit for all systems, but an approximation would
+> >
+> > But but?
 > 
-> please.
->
+> change those two sentences into: But it is not simple to specify a
+> generic threshold for this which will fit for all systems. An
+> approximation is a threshold for all delays up to 10 microseconds.
 
-Will change it in v4.
+Very good!
+
+> >> @@ -281,7 +281,34 @@ EXPORT_SYMBOL_GPL(schedule_hrtimeout);
+> >>  
+> >>  /**
+> >>   * msleep - sleep safely even with waitqueue interruptions
+> >> - * @msecs: Time in milliseconds to sleep for
+> >> + * @msecs:	Requested sleep duration in milliseconds
+> >> + *
+> >> + * msleep() uses jiffy based timeouts for the sleep duration. The accuracy of
+> >> + * the resulting sleep duration depends on:
+> >> + *
+> >> + * * HZ configuration
+> >> + * * sleep duration (as granularity of a bucket which collects timers increases
+> >> + *   with the timer wheel levels)
+> >> + *
+> >> + * When the timer is queued into the second level of the timer wheel the maximum
+> >> + * additional delay will be 12.5%. For explanation please check the detailed
+> >> + * description about the basics of the timer wheel. In case this is accurate
+> >> + * enough check which sleep length is selected to make sure required accuracy is
+> >> + * given. Please use therefore the following simple steps:
+> >> + *
+> >> + * #. Decide which slack is fine for the requested sleep duration - but do not
+> >> + *    use values shorter than 1/8
+> >
+> > I'm confused, what means 1/x for a slack value? 1/8 means 125 msecs? I'm not
+> > even I understand what you mean by slack. Is it the bucket_expiry - expiry?
+> 
+> I was confused as well and had to read it twice... I would propose to
+> rephrase the whole function description:
+> 
+> 
+> /**
+>  * msleep - sleep safely even with waitqueue interruptions
+>  * @msecs:	Requested sleep duration in milliseconds
+>  *
+>  * msleep() uses jiffy based timeouts for the sleep duration. Because of the
+>  * design of the timer wheel, the maximum additional percentage delay (slack) is
+>  * 12.5%. This is only valid for timers which will end up in the second or a
+>  * higher level of the timer wheel. For explanation of those 12.5% please check
+>  * the detailed description about the basics of the timer wheel.
+
+I've never realized this constant worst percentage of slack. Would be nice to mention
+that somewhere in kernel/time/timer.c
+
+However this doesn't need a second to apply. It only takes crossing levels above
+0. Or am I missing something?
+
+>  *
+>  * The slack of timers which will end up in the first level depends on:
+>  *
+>  * * sleep duration (msecs)
+>  * * HZ configuration
+>  *
+>  * To make sure the sleep duration with the slack is accurate enough, a slack
+>  * value is required (because of the design of the timer wheel it is not
+
+But where is it required?
+
+>  * possible to define a value smaller than 12.5%). The following check makes
+>  * clear, whether the sleep duration with the defined slack and with the HZ
+>  * configuration will meet the constraints:
+>  *
+>  *  ``msecs >= (MSECS_PER_TICK / slack)``
+>  *
+>  * Examples:
+>  *
+>  * * ``HZ=1000`` with ``slack=25%``: ``MSECS_PER_TICK / slack = 1 / (1/4) = 4``:
+>  *   all sleep durations greater or equal 4ms will meet the constraints.
+>  * * ``HZ=1000`` with ``slack=12.5%``: ``MSECS_PER_TICK / slack = 1 / (1/8) = 8``:
+>  *   all sleep durations greater or equal 8ms will meet the constraints.
+>  * * ``HZ=250`` with ``slack=25%``: ``MSECS_PER_TICK / slack = 4 / (1/4) = 16``:
+>  *   all sleep durations greater or equal 16ms will meet the constraints.
+>  * * ``HZ=250`` with ``slack=12.5%``: ``MSECS_PER_TICK / slack = 4 / (1/8) = 32``:
+>  *   all sleep durations greater or equal 32ms will meet the constraints.
+
+But who defines those slacks and where? I'm even more confused now...
+
+>  *
+>  * See also the signal aware variant msleep_interruptible().
+>  */
+> 
+> >
+> > But I'm still lost...
+> >
+> 
+> Hopefully no longer :)
+
+Well...
 
 > Thanks,
 > 
->         tglx
-
--- 
-Regards,
-Vincenzo
+> 	Anna-Maria
+> 
+> 
 
