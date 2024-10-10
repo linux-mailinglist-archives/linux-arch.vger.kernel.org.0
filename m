@@ -1,97 +1,125 @@
-Return-Path: <linux-arch+bounces-7945-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7946-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78188997D3C
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Oct 2024 08:32:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1495997DB1
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Oct 2024 08:54:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A86BE1C23C07
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Oct 2024 06:32:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 493F91F22A65
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Oct 2024 06:54:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CF4A1A264C;
-	Thu, 10 Oct 2024 06:32:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 794371A42D8;
+	Thu, 10 Oct 2024 06:54:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Pkikn0l9"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from cygnus.enyo.de (cygnus.enyo.de [79.140.189.114])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 054DF18DF81;
-	Thu, 10 Oct 2024 06:32:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.140.189.114
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E63F71A304A;
+	Thu, 10 Oct 2024 06:54:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728541935; cv=none; b=dvD2fByHQwqo8htTHM5eTSsoIMpywWbVbxKsXV4sm41NX+9z0+1Ezt7TEqh5Shygd+alLJkScsbmGlX7Sz9i1R5TcJQX1bc6579zYkF2EZJxvkAJzO8UADhds0sjnLypOtnB4fw8sqPOirXih+JuDZUMGv1MtaVzgx3OiBfIZ3E=
+	t=1728543278; cv=none; b=iMvNaFF8ND0bgz9noAMf/4zIpvXZ/Wen7jAJKqgUjFDdupPmR4X3nvzNx6c4XCBDmHln5YhPUwl8IB9UpmK28nccAiuG0h6iyZmheDN0phz2lpU+xv+UjJ1ddClb/4VTnwIhqAmsPiTek/GVWBj/5bc16MPC8PNh9GdLaRrqf0w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728541935; c=relaxed/simple;
-	bh=V2kO13Sp536cUh/fcCKZAzX5GRu3GPW5Wblh2HA5ICE=;
-	h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=tzuuO5VJdPxmuwg2lcq2CKhey/1RipXgloXf+ICAdi2TEIxUXQq8PguBuEp1njHUxw+K8/FIc2yO7BRP9YVT7vprLxlpj2IhqGi4KSbPKJx2zNA8CeDqEoNiEvZOyqB8BzX39hog5bfCJrW5MTNRD/5vuKxaTWzUOjuWH3DMsew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=deneb.enyo.de; spf=pass smtp.mailfrom=deneb.enyo.de; arc=none smtp.client-ip=79.140.189.114
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=deneb.enyo.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=deneb.enyo.de
-Received: from [172.17.203.2] (port=37769 helo=deneb.enyo.de)
-	by albireo.enyo.de ([172.17.140.2]) with esmtps (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	id 1symcq-0005LL-2t;
-	Thu, 10 Oct 2024 06:26:16 +0000
-Received: from fw by deneb.enyo.de with local (Exim 4.96)
-	(envelope-from <fw@deneb.enyo.de>)
-	id 1symcq-00142n-11;
-	Thu, 10 Oct 2024 08:26:16 +0200
-From: Florian Weimer <fw@deneb.enyo.de>
-To: Aleksa Sarai <cyphar@cyphar.com>
-Cc: Ingo Molnar <mingo@redhat.com>,  Peter Zijlstra <peterz@infradead.org>,
-  Juri Lelli <juri.lelli@redhat.com>,  Vincent Guittot
- <vincent.guittot@linaro.org>,  Dietmar Eggemann
- <dietmar.eggemann@arm.com>,  Steven Rostedt <rostedt@goodmis.org>,  Ben
- Segall <bsegall@google.com>,  Mel Gorman <mgorman@suse.de>,  Valentin
- Schneider <vschneid@redhat.com>,  Alexander Viro
- <viro@zeniv.linux.org.uk>,  Christian Brauner <brauner@kernel.org>,  Jan
- Kara <jack@suse.cz>,  Arnd Bergmann <arnd@arndb.de>,  Shuah Khan
- <shuah@kernel.org>,  Kees Cook <kees@kernel.org>,  Florian Weimer
- <fweimer@redhat.com>,  Mark Rutland <mark.rutland@arm.com>,
-  linux-kernel@vger.kernel.org,  linux-api@vger.kernel.org,
-  linux-fsdevel@vger.kernel.org,  linux-arch@vger.kernel.org,
-  linux-kselftest@vger.kernel.org,  stable@vger.kernel.org
-Subject: Re: [PATCH RFC v3 00/10] extensible syscalls: CHECK_FIELDS to allow
- for easier feature detection
-References: <20241010-extensible-structs-check_fields-v3-0-d2833dfe6edd@cyphar.com>
-Date: Thu, 10 Oct 2024 08:26:16 +0200
-In-Reply-To: <20241010-extensible-structs-check_fields-v3-0-d2833dfe6edd@cyphar.com>
-	(Aleksa Sarai's message of "Thu, 10 Oct 2024 07:40:33 +1100")
-Message-ID: <87jzegfp87.fsf@mid.deneb.enyo.de>
+	s=arc-20240116; t=1728543278; c=relaxed/simple;
+	bh=YQimVMZqPQ8HeavdLfQUBaFM7vHD1wKidCLf9+Spd54=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kaS/c2YhsmVTtmomqXvq/VaPFsQHr6SJQjqlFG+QgoLllwb6ko8y60uG1ZjAUcNtH2QVWd7R8s91kwCvoLdwXM+HMBk8Lo3Ul33opxYPY/GgY6g1oavmT+YQLTOKZ0Krb+Mle8Xm0OC46Q0dZvN83x3M8Iq7QtyTR/jWdOwY1/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Pkikn0l9; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=l9uqvIs7KaBM8jKZiiP+47rSYlM+HcdGDx8MG0uieP0=; b=Pkikn0l9YV6IbkwdMYYYCh7NS0
+	+bbHbF45MU5mE1Rb3r9FII7FXayka1iyxVG7DxF8G4bp4UvbmBPvBXdRuLXOELz0YXQIDC8U5Vn/Z
+	p9TLWCXHDeIkv9jMspqGVrsh6ZAZflPmbSh+0Buo8JVPN3NtIEsSbcNt5fO4pYKDvwm0BaYhbAo+N
+	oNRfxee9fN9eH5HZGZktQTD2xofG2NZkmjD02X0R0ddOsfVe32xN+q0mOP5NTLyXNDy/F9gYSQgQ6
+	a6T7FZrz/gQpO3gePE4DR+RzB3Q5ElwqokanAq8dbu2GoF4JKzdy2n24Yyu3ivAljHZfXKQHFYvVQ
+	fygr48vQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.98 #2 (Red Hat Linux))
+	id 1syn3r-0000000BkI0-1JPh;
+	Thu, 10 Oct 2024 06:54:11 +0000
+Date: Wed, 9 Oct 2024 23:54:11 -0700
+From: Christoph Hellwig <hch@infradead.org>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+	Brian Cain <bcain@quicinc.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christoph Hellwig <hch@infradead.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Stafford Horne <shorne@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v5 1/8] mm: vmalloc: group declarations depending on
+ CONFIG_MMU together
+Message-ID: <Zwd6EwZ67lC3oxZ2@infradead.org>
+References: <20241009180816.83591-1-rppt@kernel.org>
+ <20241009180816.83591-2-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241009180816.83591-2-rppt@kernel.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-* Aleksa Sarai:
+On Wed, Oct 09, 2024 at 09:08:09PM +0300, Mike Rapoport wrote:
+> +/* for /proc/kcore */
+> +extern long vread_iter(struct iov_iter *iter, const char *addr, size_t count);
+> +
+> +/*
+> + *	Internals.  Don't use..
+> + */
+> +extern __init void vm_area_add_early(struct vm_struct *vm);
+> +extern __init void vm_area_register_early(struct vm_struct *vm, size_t align);
 
-> This is something that I've been thinking about for a while. We had a
-> discussion at LPC 2020 about this[1] but the proposals suggested there
-> never materialised.
->
-> In short, it is quite difficult for userspace to detect the feature
-> capability of syscalls at runtime. This is something a lot of programs
-> want to do, but they are forced to create elaborate scenarios to try to
-> figure out if a feature is supported without causing damage to the
-> system. For the vast majority of cases, each individual feature also
-> needs to be tested individually (because syscall results are
-> all-or-nothing), so testing even a single syscall's feature set can
-> easily inflate the startup time of programs.
->
-> This patchset implements the fairly minimal design I proposed in this
-> talk[2] and in some old LKML threads (though I can't find the exact
-> references ATM). The general flow looks like:
+Please drop the externs while you're at it. (one more down below)
 
-By the way, I have recently tried to document things from a glibc
-perspective (which is a bit broader because we also have purely
-userspace types):
+Otherwise looks good:
 
-  [PATCH RFC] manual: Document how types change
-  <https://inbox.sourceware.org/libc-alpha/8734m4n1ij.fsf@oldenburg3.str.redhat.com/>
-
-(This patch has not yet been reviewed.)
+Reviewed-by: Christoph Hellwig <hch@lst.de>
 
