@@ -1,168 +1,196 @@
-Return-Path: <linux-arch+bounces-7954-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7955-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0683C998007
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Oct 2024 10:36:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FEDB99809B
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Oct 2024 10:48:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 28EFD1C241EF
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Oct 2024 08:36:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF6141F2889C
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Oct 2024 08:48:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6806206E64;
-	Thu, 10 Oct 2024 08:04:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 293361E8853;
+	Thu, 10 Oct 2024 08:30:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="qUwWDZgm";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="YKVFY9ru"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="V6GGARyi"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fhigh-a2-smtp.messagingengine.com (fhigh-a2-smtp.messagingengine.com [103.168.172.153])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AADC206972;
-	Thu, 10 Oct 2024 08:04:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.153
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 351281E882E
+	for <linux-arch@vger.kernel.org>; Thu, 10 Oct 2024 08:30:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728547485; cv=none; b=EHyy9BYRpjToh3Qb59S5zew1d1qYdkRt/Ijr4LPgws+n5F8sMuKyekcCcg9rsKF/p74rz6WmmEpNluZOk1k0RngCH40jCt8nrTs7+ju59/TKDfYrYErRNYyvD+kk7asNoTMrDwU7hElHLPRjsjSk9gtgzE4F8lN7P7Qy4lRI9F8=
+	t=1728549051; cv=none; b=u/opAZy+dPTgHVlc5azvkPM4FHEaM2HyYkv7+Kfo7prQBSpXup+K7wXu4YBZlLVw/9hk6n1bOVrytdM6VLuYO2NpD59towg9k6T9Wf6rfmBGaKcTJWRhyCwUN+KDbz4UW2o680X3hPXsefphMOXkYIcp684mzBlABHcDhsQM4m0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728547485; c=relaxed/simple;
-	bh=NOnTXEDf/afk98+qld6jjp5+THx/CJ1WRioKL/FDWFo=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=MRVnYAoHoenjrfhIoAGrGBM4oe2ofBruaYZNILTXmFvBsEywcMgEFOa/y8zUJfT+69oYrdNLcgOAyZicwEOaCzvCWmeUMn1iB5lcx32GsGYs3G9xmiBwLrB8fIV9YxD5tSwqfBLUX908w7zzJ7jNGZWqxsDOqS+S1/6/lupc/F4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=qUwWDZgm; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=YKVFY9ru; arc=none smtp.client-ip=103.168.172.153
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 36D3E11401D9;
-	Thu, 10 Oct 2024 04:04:41 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-10.internal (MEProxy); Thu, 10 Oct 2024 04:04:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1728547481;
-	 x=1728633881; bh=NOnTXEDf/afk98+qld6jjp5+THx/CJ1WRioKL/FDWFo=; b=
-	qUwWDZgmoFSc2bvCLEkOL58hDVYZTrXcWqA1r8Cm2RvEFx5gUkRYopFuSPQ3amGK
-	A75AnB60O0tNSjpd6qb4sOHfavqwBuHErQVjVa8XNdYjdZheAewMWD81oqp5grVF
-	OMyHEJ3EtyhTGHXEhPd56/rpTE8Os9ZcKFpOiuCDpJ0WFjtvtQv24Ut5jJoTHnYd
-	aFsDvyOZRC8f1Zd8Ggv9tLbENlgXMnhXw4fjpTepep99VYTMAzRQ02ssu1RFUoY3
-	g2Q/l1BksGyyAC49oDIHgf037BwdnufA/EmmDjUOvMxnh4dx4RBbboyuyOd840NT
-	xuqFLD+Nws1CIVcuTITmHg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1728547481; x=
-	1728633881; bh=NOnTXEDf/afk98+qld6jjp5+THx/CJ1WRioKL/FDWFo=; b=Y
-	KVFY9ruZTwjCXaru75A1LYIRzB9hNonTtp+VnwOuUDc00DfM6Q58QBkP6xvTdp45
-	5KRX9ad0rBSJypNyLeRiaImyE0+6VyqMZel3jXqgaXrTtoIYd8as+0tpJgI4+Rwy
-	XFY3m+TuzIDj8+4xOE9H/ir6Bpc93KNZM9vqBvrYFGayrfXvHSClTBdE5Y51ymOD
-	CBmzaZCAlBE7NBw0EKGEjQ/m7G/CH5ceK628BoC5sGH6eY/a3dskoTF5R7ilaei7
-	0OZJ/HycrEwomf3gFDs9UzNX1vf9aG49RHy276/+i4YF/m+QWD5HGfVUe1MczrPH
-	EnyTMmojm4/cNsD1aIH0Q==
-X-ME-Sender: <xms:mIoHZ4klWhimXUj0T6QpcTwiYXJRsoU5LdDufDqDOomjiAXzPU1DeQ>
-    <xme:mIoHZ30tXQyn4xrtPUssnTi-kdfuHuz3J0caWpTGpMt2leGiFPK0R6BThxrSwX69m
-    nH-QCqJpajtXht5q6M>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdefgedguddvkecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
-    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
-    druggvqeenucggtffrrghtthgvrhhnpefhtdfhvddtfeehudekteeggffghfejgeegteef
-    gffgvedugeduveelvdekhfdvieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopedu
-    fedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepsghpfhesvhhgvghrrdhkvghrnh
-    gvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrlhhphhgrsehvghgvrhdrkhgvrhhn
-    vghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrghrtghhsehvghgvrhdrkhgvrhhnvg
-    hlrdhorhhgpdhrtghpthhtoheplhhinhhugidqtghskhihsehvghgvrhdrkhgvrhhnvghl
-    rdhorhhgpdhrtghpthhtoheplhhinhhugidqhhgvgigrghhonhesvhhgvghrrdhkvghrnh
-    gvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghr
-    nhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhmihhpshesvhhgvghrrdhkvghrnh
-    gvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhmohguuhhlvghssehvghgvrhdrkhgv
-    rhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqohhpvghnrhhishgtsehvghgvrh
-    drkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:mIoHZ2oEJ0fbuiaD8xkujPJKuAgfTVFVgkQ1MaKFzQJpFSIpGzfDAg>
-    <xmx:mIoHZ0mJL5zhDflICU5OnCxj5xD-lNh7hszg2y7w_jG0SosfB6v4TA>
-    <xmx:mIoHZ23OJE-QCT7HdDHaNJq2YoxMQsePqKr1PpcugeuoE58nHC1iew>
-    <xmx:mIoHZ7tuhBf_WSccVXoM3lkeeX0DDoNl6mMcyPN5JCQqsonWnM8tzw>
-    <xmx:mYoHZ8NM8dSyfUFOSROsLFZvsdyCyDiUWAXTgcQSDhI-SDaU9fYoh5C4>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id D17622220071; Thu, 10 Oct 2024 04:04:40 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1728549051; c=relaxed/simple;
+	bh=ciGEzLPrN7XbFB5cK/viPY+fgmysJA4dkt9WpJTF0yc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ISu8AjmhNLXM7JYr249B8z6B1ukBZltBZxh8pdA/YTVQ6IdAp0I9uILSDvtrnaeV+mxu8yt2ew8L6Cz/lPmaGG3wzW+Y0Id5/HWa+/J5iNxdf+FoLos8um5Pxddbme8fZrlQECu3UtDIByiTasJGofVEdR25mQS2AGJlBq7lf0Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=V6GGARyi; arc=none smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-2e0d9b70455so562550a91.3
+        for <linux-arch@vger.kernel.org>; Thu, 10 Oct 2024 01:30:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1728549047; x=1729153847; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xjRgM2erkgK9qh8AbT3u9Jz1xqlQ+SHokymxxsnkwPs=;
+        b=V6GGARyi90X+B17khH8hgRXfkBE9ec0tP9aPBognNcsNGhdlAyv2TpWda74Rrygr43
+         wm/TFHucQh7st1/A3E0U/wGDw06wEopcR47DAwsyoGCllaHrH5KtzktV31CtVJ2punOw
+         q/WMnORmUlcaLeudv40KSjAkX+bc+k5zSVRLU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728549047; x=1729153847;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xjRgM2erkgK9qh8AbT3u9Jz1xqlQ+SHokymxxsnkwPs=;
+        b=MWX+CkRbYGbF7LwSVAuMaqLwxlb3nz4cyBRoT1eCZ9SZon1t57ZnDe23BLm7nbT64u
+         Qg5+Qi3i2FQJAIP1NPDSEsf1b91aWxmcLGLfsjbFzObOTd+nAoV6UFCmJZgPz84Bn8bg
+         uM6h6kHmqJToiilVImuEED0pDl5tnZBAdzwhU7NCXCypPtF1lJR/OHCHAcJxXykFLAPv
+         H9IjONFXtwceFEqids4/sw4m/UfKyjUUzQicnh3Mc/yJ1kGC0UsSRGtfjhObjaf0+ELv
+         sGqN5zY0FMVBKnyi52HQjzpScHouKluK3FMi5rkqzBLlmArthfyVxPqu+1r4/BaDiCzu
+         FCpg==
+X-Forwarded-Encrypted: i=1; AJvYcCWJtkj7SGoxfDtZYZULBlDbCt5qVPBhilNGIgF90wimbieazqHQPlF45v1Ek9OHgyRZHTiaw8bhkPvh@vger.kernel.org
+X-Gm-Message-State: AOJu0YzIDfCKGJO+NS+jerYfitlG7tWcktV97MiliI0p+nZ8wzJyprhT
+	/S3xNDKueC6dkV/bcXD8deZSAzayNlXDqpOKcg8xGT1VnefgCZKU4SnK35TvAQ==
+X-Google-Smtp-Source: AGHT+IGiHJLVn7EEJZoiHDg1IHJwEmo5BKI2W3X+EqMqHJDA19Xi8bq+M3epyy60EICvZVegJa7iQQ==
+X-Received: by 2002:a17:90a:178e:b0:2e2:cc47:ce1a with SMTP id 98e67ed59e1d1-2e2cc47ce65mr2245610a91.1.1728549047177;
+        Thu, 10 Oct 2024 01:30:47 -0700 (PDT)
+Received: from google.com ([2401:fa00:8f:203:c13a:abb0:1c8:a3c3])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e2d5f0a424sm730808a91.28.2024.10.10.01.30.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Oct 2024 01:30:46 -0700 (PDT)
+Date: Thu, 10 Oct 2024 17:30:33 +0900
+From: Sergey Senozhatsky <senozhatsky@chromium.org>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+	Brian Cain <bcain@quicinc.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christoph Hellwig <hch@infradead.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Stafford Horne <shorne@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Bisected: [PATCH v5 8/8] x86/module: enable ROX caches for module
+ text
+Message-ID: <20241010083033.GA1279924@google.com>
+References: <20241009180816.83591-1-rppt@kernel.org>
+ <20241009180816.83591-9-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Thu, 10 Oct 2024 08:04:19 +0000
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Mike Rapoport" <rppt@kernel.org>,
- "Andrew Morton" <akpm@linux-foundation.org>
-Cc: "Andreas Larsson" <andreas@gaisler.com>,
- "Andy Lutomirski" <luto@kernel.org>, "Ard Biesheuvel" <ardb@kernel.org>,
- "Borislav Petkov" <bp@alien8.de>, "Brian Cain" <bcain@quicinc.com>,
- "Catalin Marinas" <catalin.marinas@arm.com>,
- "Christoph Hellwig" <hch@infradead.org>,
- "Christophe Leroy" <christophe.leroy@csgroup.eu>,
- "Dave Hansen" <dave.hansen@linux.intel.com>,
- "Dinh Nguyen" <dinguyen@kernel.org>,
- "Geert Uytterhoeven" <geert@linux-m68k.org>, guoren <guoren@kernel.org>,
- "Helge Deller" <deller@gmx.de>, "Huacai Chen" <chenhuacai@kernel.org>,
- "Ingo Molnar" <mingo@redhat.com>,
- "Johannes Berg" <johannes@sipsolutions.net>,
- "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
- "Kent Overstreet" <kent.overstreet@linux.dev>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- "Luis Chamberlain" <mcgrof@kernel.org>,
- "Mark Rutland" <mark.rutland@arm.com>,
- "Masami Hiramatsu" <mhiramat@kernel.org>,
- "Matt Turner" <mattst88@gmail.com>, "Max Filippov" <jcmvbkbc@gmail.com>,
- "Michael Ellerman" <mpe@ellerman.id.au>,
- "Michal Simek" <monstr@monstr.eu>, "Oleg Nesterov" <oleg@redhat.com>,
- "Palmer Dabbelt" <palmer@dabbelt.com>,
- "Peter Zijlstra" <peterz@infradead.org>,
- "Richard Weinberger" <richard@nod.at>,
- "Russell King" <linux@armlinux.org.uk>, "Song Liu" <song@kernel.org>,
- "Stafford Horne" <shorne@gmail.com>,
- "Steven Rostedt" <rostedt@goodmis.org>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "Thomas Gleixner" <tglx@linutronix.de>,
- "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
- "Vineet Gupta" <vgupta@kernel.org>, "Will Deacon" <will@kernel.org>,
- bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
- Linux-Arch <linux-arch@vger.kernel.org>,
- linux-arm-kernel@lists.infradead.org,
- "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
- linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
- linux-mm@kvack.org, linux-modules@vger.kernel.org,
- "linux-openrisc@vger.kernel.org" <linux-openrisc@vger.kernel.org>,
- linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
- linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
- linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
- sparclinux@vger.kernel.org, x86@kernel.org
-Message-Id: <e1ba5ab2-a7e2-4f2c-8e2d-4788656ef695@app.fastmail.com>
-In-Reply-To: <20241009180816.83591-4-rppt@kernel.org>
-References: <20241009180816.83591-1-rppt@kernel.org>
- <20241009180816.83591-4-rppt@kernel.org>
-Subject: Re: [PATCH v5 3/8] asm-generic: introduce text-patching.h
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241009180816.83591-9-rppt@kernel.org>
 
-On Wed, Oct 9, 2024, at 18:08, Mike Rapoport wrote:
+On (24/10/09 21:08), Mike Rapoport wrote:
 > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
->
-> Several architectures support text patching, but they name the header
-> files that declare patching functions differently.
->
-> Make all such headers consistently named text-patching.h and add an empty
-> header in asm-generic for architectures that do not support text patching.
->
-> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> 
+> Enable execmem's cache of PMD_SIZE'ed pages mapped as ROX for module
+> text allocations.
+> 
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+With this modprobe disappoints kmemleak
+
+[   12.700128] kmemleak: Found object by alias at 0xffffffffa000a000
+[   12.702179] CPU: 5 UID: 0 PID: 410 Comm: modprobe Tainted: G                 N 6.12.0-rc2+ #760
+[   12.704656] Tainted: [N]=TEST
+[   12.705526] Call Trace:
+[   12.706250]  <TASK>
+[   12.706888]  dump_stack_lvl+0x3e/0xdb
+[   12.707961]  __find_and_get_object+0x100/0x110
+[   12.709256]  kmemleak_no_scan+0x2e/0xb0
+[   12.710354]  kmemleak_load_module+0xad/0xe0
+[   12.711557]  load_module+0x2391/0x45a0
+[   12.712507]  __se_sys_finit_module+0x4e0/0x7a0
+[   12.713599]  do_syscall_64+0x54/0xf0
+[   12.714477]  ? irqentry_exit_to_user_mode+0x33/0x100
+[   12.715696]  entry_SYSCALL_64_after_hwframe+0x4b/0x53
+[   12.716931] RIP: 0033:0x7fc7af51f059
+[   12.717816] Code: 08 89 e8 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 8f 1d 0d 00 f7 d8 64 89 01 48
+[   12.722324] RSP: 002b:00007ffc1d0b0c18 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
+[   12.724173] RAX: ffffffffffffffda RBX: 00005618a9439b20 RCX: 00007fc7af51f059
+[   12.725884] RDX: 0000000000000000 RSI: 000056187aea098b RDI: 0000000000000003
+[   12.727617] RBP: 0000000000000000 R08: 0000000000000060 R09: 00005618a943af60
+[   12.729361] R10: 0000000000000038 R11: 0000000000000246 R12: 000056187aea098b
+[   12.731101] R13: 0000000000040000 R14: 00005618a9439ac0 R15: 0000000000000000
+[   12.732814]  </TASK>
+[   12.733362] kmemleak: Object 0xffffffffa0000000 (size 2097152):
+[   12.734800] kmemleak:   comm "modprobe", pid 410, jiffies 4294880489
+[   12.736334] kmemleak:   min_count = 2
+[   12.737228] kmemleak:   count = 0
+[   12.738043] kmemleak:   flags = 0x5
+[   12.738917] kmemleak:   checksum = 0
+[   12.739783] kmemleak:   backtrace:
+[   12.740606]  kmemleak_vmalloc+0x29/0xc0
+[   12.741532]  kasan_alloc_module_shadow+0xbe/0xe0
+[   12.742649]  execmem_vmalloc+0x116/0x220
+[   12.743596]  execmem_alloc+0xfb/0x3d0
+[   12.744479]  load_module+0x1e84/0x45a0
+[   12.745383]  __se_sys_finit_module+0x4e0/0x7a0
+[   12.746452]  do_syscall_64+0x54/0xf0
+[   12.747319]  entry_SYSCALL_64_after_hwframe+0x4b/0x53
+[   12.748772] kmemleak: Not scanning unknown object at 0xffffffffa000a000
+[   12.750364] CPU: 5 UID: 0 PID: 410 Comm: modprobe Tainted: G                 N 6.12.0-rc2+ #760
+[   12.752441] Tainted: [N]=TEST
+[   12.753165] Call Trace:
+[   12.753760]  <TASK>
+[   12.754279]  dump_stack_lvl+0x3e/0xdb
+[   12.755165]  kmemleak_load_module+0xad/0xe0
+[   12.756165]  load_module+0x2391/0x45a0
+[   12.757068]  __se_sys_finit_module+0x4e0/0x7a0
+[   12.758135]  do_syscall_64+0x54/0xf0
+[   12.759099]  ? irqentry_exit_to_user_mode+0x33/0x100
+[   12.760292]  entry_SYSCALL_64_after_hwframe+0x4b/0x53
+[   12.761508] RIP: 0033:0x7fc7af51f059
+[   12.762372] Code: 08 89 e8 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 8f 1d 0d 00 f7 d8 64 89 01 48
+[   12.772361] RSP: 002b:00007ffc1d0b0c18 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
+[   12.774957] RAX: ffffffffffffffda RBX: 00005618a9439b20 RCX: 00007fc7af51f059
+[   12.776635] RDX: 0000000000000000 RSI: 000056187aea098b RDI: 0000000000000003
+[   12.778283] RBP: 0000000000000000 R08: 0000000000000060 R09: 00005618a943af60
+[   12.779949] R10: 0000000000000038 R11: 0000000000000246 R12: 000056187aea098b
+[   12.781619] R13: 0000000000040000 R14: 00005618a9439ac0 R15: 0000000000000000
+[   12.783319]  </TASK>
 
