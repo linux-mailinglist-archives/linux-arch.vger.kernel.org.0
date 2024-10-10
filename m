@@ -1,128 +1,110 @@
-Return-Path: <linux-arch+bounces-7970-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-7971-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 550CE9986F4
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Oct 2024 15:01:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BDFC998859
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Oct 2024 15:52:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D5970288382
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Oct 2024 13:01:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D669B1F22CAA
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Oct 2024 13:52:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C8D11C8FBD;
-	Thu, 10 Oct 2024 13:01:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i15xpEq/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E01651C8FD6;
+	Thu, 10 Oct 2024 13:51:54 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E410F1C7B8F;
-	Thu, 10 Oct 2024 13:01:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2759E1BB6BA;
+	Thu, 10 Oct 2024 13:51:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728565284; cv=none; b=DcyQ2lBwhdjZpkOtJ0PVBCmjCGD1FVEdtBoY+Vt9YOPmefsw6xtUGEpcUQcKlY/F1m1LCJ42gQTfWMLWkVo3ylensI4c5KES77YOTlZs/JBfFqhWp+FaARZRjeerXjRxiyenDdvjG8bSTRX6jYFCdXBg/b9QZ2geR0losu8w+RE=
+	t=1728568314; cv=none; b=bGiIxfADFPpzdSrP7W8AteDxEoY3mBSlNcI8IL10jRJVGqJ7kn65Ha+j0QTNci985Ymu6bPDtWp/ereX/2R36k948LH829yL9HCPwtqwGokMcbnxX2TQU4wUBtG/XFGnnNmFo+25v7lolAT6jORxkqiljErdRJen83ijU7lIAb8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728565284; c=relaxed/simple;
-	bh=0gFND+MAHX6q3fPU9Dm7aa3AX+VkNdk2ZdK9663ePGM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rPeAz5Ni8C8daLh6FKYFhAMiYN0TD/1HqsU8wbKvJe0Z96mlV4S/cQ4aA9JGIWhDCQX+fFSmqLW1kHLjy1Cmhn4zUraIWN9+Brw1aE5Qxw1vW6bJpPnhVMnzUg/0rvwT+mhs8pNzO7S5K0Em/Lmvh+wR4pwb5oeMN9aCafu4rkc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i15xpEq/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3F0EC4CEC5;
-	Thu, 10 Oct 2024 13:01:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728565283;
-	bh=0gFND+MAHX6q3fPU9Dm7aa3AX+VkNdk2ZdK9663ePGM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=i15xpEq/kuFAv6DlXG15A1e80Zkeyfpm7KcH2z/4b7LHy0huNtJIfhTPl8l4m2Thz
-	 DrC+EerzAtj77QkSwvdLuoM9HsdVcSXAYblfY52ni7z3rWCwNvYecLnzzamyv05TxQ
-	 MvyRQw4iBhqZGVncP0l5I4u44ZK9GkUbVv2NjZJ1KmbX6KkRkPzCVKd/P5aEdD5W04
-	 r/juMpxct8TYbYtPQygo8mwFvlF95PkeOYNJV8aiyjpOL0HlbI0t0P6KYVnwxFYXRs
-	 bP4FdthxlHe3zfpEHTln3UXCWui5XHPdWaBkcJjwrkqkqBVwNb4EXbX5FI3Wx8W6oT
-	 ueyyZehAwF8+A==
-Date: Thu, 10 Oct 2024 15:57:33 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Christoph Hellwig <hch@infradead.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-	Brian Cain <bcain@quicinc.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
-	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Richard Weinberger <richard@nod.at>,
-	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
-	Stafford Horne <shorne@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
-	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org, linux-mm@kvack.org,
-	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-	sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v5 7/8] execmem: add support for cache of large ROX pages
-Message-ID: <ZwfPPZrxHzQgYfx7@kernel.org>
-References: <20241009180816.83591-1-rppt@kernel.org>
- <20241009180816.83591-8-rppt@kernel.org>
- <Zwd7GRyBtCwiAv1v@infradead.org>
+	s=arc-20240116; t=1728568314; c=relaxed/simple;
+	bh=mRtrGkPd689g5waexZeiYE7/3BJ2k4D5+lZTRRKWfAo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=VbaptZv9VQs9xI82WsHH0g2u97Yz2c8OH6WkhS5DZTcnl4AxYJcPj44GM24opix2JWrxu9iGtpf7aMS+8I9YL3RJPpS2qSgkuAg5ObYgJ+l9EFK3EcnZHR79ssdRcUOQkhdBMjxiIuc0Cwl6KoXv6C/391rZh23FNrIZpVr+JbY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D3F44497;
+	Thu, 10 Oct 2024 06:52:20 -0700 (PDT)
+Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9F4C33F64C;
+	Thu, 10 Oct 2024 06:51:50 -0700 (PDT)
+From: Vincenzo Frascino <vincenzo.frascino@arm.com>
+To: linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	linux-mm@kvack.org
+Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
+Subject: [PATCH v4 0/2] vdso: Use only headers from the vdso/ namespace
+Date: Thu, 10 Oct 2024 14:51:44 +0100
+Message-Id: <20241010135146.181175-1-vincenzo.frascino@arm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Zwd7GRyBtCwiAv1v@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, Oct 09, 2024 at 11:58:33PM -0700, Christoph Hellwig wrote:
-> On Wed, Oct 09, 2024 at 09:08:15PM +0300, Mike Rapoport wrote:
-> >  /**
-> >   * struct execmem_info - architecture parameters for code allocations
-> > + * @fill_trapping_insns: set memory to contain instructions that will trap
-> >   * @ranges: array of parameter sets defining architecture specific
-> >   * parameters for executable memory allocations. The ranges that are not
-> >   * explicitly initialized by an architecture use parameters defined for
-> >   * @EXECMEM_DEFAULT.
-> >   */
-> >  struct execmem_info {
-> > +	void (*fill_trapping_insns)(void *ptr, size_t size, bool writable);
-> >  	struct execmem_range	ranges[EXECMEM_TYPE_MAX];
-> 
-> Why is the filler an indirect function call and not an architecture
-> hook?
+The recent implementation of getrandom in the generic vdso library,
+includes headers from outside of the vdso/ namespace.
 
-The idea is to keep everything together and have execmem_info describe all
-that architecture needs. 
+The purpose of this series is to refactor the code to make sure
+that the library uses only the allowed namespace.
+
+Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+
+Changes:
+--------
+v4:
+  - Address review comments.
+v3:
+  - Discard vdso/mman.h changes in favor of [1].
+  - Refactor vdso/page.h.
+  - Add a fix to drm/intel_gt.
+v2:
+  - Added common PAGE_SIZE and PAGE_MASK definitions.
+  - Added opencoded macros where not defined.
+  - Dropped VDSO_PAGE_* redefinitions.
+
+[1] https://lore.kernel.org/lkml/20240925210615.2572360-1-arnd@kernel.org
+
+Vincenzo Frascino (2):
+  drm: i915: Change fault type to unsigned long
+  vdso: Introduce vdso/page.h
+
+ arch/alpha/include/asm/page.h      |  6 +-----
+ arch/arc/include/uapi/asm/page.h   |  7 +++----
+ arch/arm/include/asm/page.h        |  5 +----
+ arch/arm64/include/asm/page-def.h  |  5 +----
+ arch/csky/include/asm/page.h       |  8 ++------
+ arch/hexagon/include/asm/page.h    |  4 +---
+ arch/loongarch/include/asm/page.h  |  7 +------
+ arch/m68k/include/asm/page.h       |  6 ++----
+ arch/microblaze/include/asm/page.h |  5 +----
+ arch/mips/include/asm/page.h       |  7 +------
+ arch/nios2/include/asm/page.h      |  7 +------
+ arch/openrisc/include/asm/page.h   | 11 +----------
+ arch/parisc/include/asm/page.h     |  4 +---
+ arch/powerpc/include/asm/page.h    | 10 +---------
+ arch/riscv/include/asm/page.h      |  4 +---
+ arch/s390/include/asm/page.h       |  4 +---
+ arch/sh/include/asm/page.h         |  6 ++----
+ arch/sparc/include/asm/page_32.h   |  4 +---
+ arch/sparc/include/asm/page_64.h   |  4 +---
+ arch/um/include/asm/page.h         |  5 +----
+ arch/x86/include/asm/page_types.h  |  5 +----
+ arch/xtensa/include/asm/page.h     |  8 +-------
+ drivers/gpu/drm/i915/gt/intel_gt.c |  6 +++---
+ include/vdso/page.h                | 30 ++++++++++++++++++++++++++++++
+ 24 files changed, 60 insertions(+), 108 deletions(-)
+ create mode 100644 include/vdso/page.h
 
 -- 
-Sincerely yours,
-Mike.
+2.34.1
+
 
