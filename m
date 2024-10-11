@@ -1,95 +1,199 @@
-Return-Path: <linux-arch+bounces-8018-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8019-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F90E999E86
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2024 09:50:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 056FC999EF1
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2024 10:24:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C59791F22A57
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2024 07:50:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 886FD1F2304D
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2024 08:24:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D48F720ADD5;
-	Fri, 11 Oct 2024 07:49:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2605720ADE8;
+	Fri, 11 Oct 2024 08:24:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="FOUI0sx1"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="SWkP/aJm";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="R19x8WHf"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from fhigh-a1-smtp.messagingengine.com (fhigh-a1-smtp.messagingengine.com [103.168.172.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 842A720A5F0;
-	Fri, 11 Oct 2024 07:49:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D9DC1CB334;
+	Fri, 11 Oct 2024 08:24:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728632964; cv=none; b=bsD4tWQcagemxPGOgEDRH2WS+sRaBYV8eWOZ9kfeXkW7St5oU85onQlrpsD910OxHw3BCmEU6yFqgogMXsKuEKY5XclR5Fg+cRtyzZSvEGx3caKC0SkBKHFOLysNa6Qv1PEW7+Jg4P15OGlc0xD7AayoW1mG4HPAraV3beLGHa4=
+	t=1728635053; cv=none; b=oZ2lKJSS+7rGSMeeafYorkJQUsEv08qPp6IzLOE+/GtWOZanL2RK241XPHwJdvAxv5wiuXp4t9bEZmRTms/S17CHSX4FJosEP6FaK3Sr6ekHLI2FtgcKfNMK/aFD3Rsd9ExKqtk8d3YEeM3i1IFQ3ov35I1TMV83JW5d2jh2dc8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728632964; c=relaxed/simple;
-	bh=lAlGhwACTRPPIfz6ZBEdhegdAHWo1BlhgB4ROXVis3I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tw+54RB9QY8inXtdJMPijB1HxPYjvHXC3YXmY1BAvDe04vO8wT3eEcgUcxlMAT33P54Mh2DktdEFGHFPQct+gGm8unVE4kNzA3y6TNmEsrCZnHm7Dwu0pm20vkY66VTVlGuHPZbOxBu0C6UDDLeNQRW4e6XPOWncYKDjcF8WwJM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=FOUI0sx1; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=oppw89lW+K9OohLBYEY/BfZDmAvR7NJuGMECnznnan0=; b=FOUI0sx1mdI/DOKOmLrWJxvPyN
-	CpXE3cQO8YpeSFBoG+B0wx95OmbVdU+6WGEXlAUbJUUhLoCkxeee2W4iTsfy69F5mw1nTKYrs3pDj
-	hfHS4rbOI6TdISMbtlersRooAWvMdWm1bZs0jLikYH0xzTf4FGeKsYo2n02tgwBN/yKY21NsTyCnF
-	WZNOrZfynMwUhpLdXHyGVvwBAbPajWWwRoDcAoTvCIkot2E7t7pfYUJ8Y07vkr0IQmpmNYUJjPVC+
-	kAUg4pof8D4/9muR14TthcgmiAkKYk7MxMIGuUkkiJkywUQD/cmy05cgpPG/WQAzEuEModMMAKTlx
-	XIpN81Kw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.98 #2 (Red Hat Linux))
-	id 1szAOj-0000000Fbgx-0FbT;
-	Fri, 11 Oct 2024 07:49:17 +0000
-Date: Fri, 11 Oct 2024 00:49:17 -0700
-From: Christoph Hellwig <hch@infradead.org>
-To: Julian Vetter <jvetter@kalrayinc.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Niklas Schnelle <schnelle@linux.ibm.com>,
-	Takashi Iwai <tiwai@suse.com>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	David Laight <David.Laight@aculab.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Christoph Hellwig <hch@infradead.org>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-csky@vger.kernel.org, loongarch@lists.linux.dev,
-	linux-arch@vger.kernel.org, Yann Sionneau <ysionneau@kalrayinc.com>
-Subject: Re: [PATCH v9 1/4] Consolidate IO memcpy/memset into iomem_copy.c
-Message-ID: <ZwjYfUrHfZlxBVxQ@infradead.org>
-References: <20241010123627.695191-1-jvetter@kalrayinc.com>
- <20241010123627.695191-2-jvetter@kalrayinc.com>
+	s=arc-20240116; t=1728635053; c=relaxed/simple;
+	bh=8EUqwvVY7/NZVo1qP3E37S4ZJrjC+XzHgmrKAQgTsL4=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=a+0aLFGwfqyz3OPBBMI4To+bW/q11GZNYX/R/O2WYZfHx1CqbiuNIgC4Afao437SV9RqPiwnKDKoxk7H5ncid4tLcgU1IxJtMUi++xv36BnQpZ2yyg38taqShblfR/c+m8JquPsMbkDl8QroinEdv7p2K2SgHAKOr7Ow9OG5jQ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=SWkP/aJm; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=R19x8WHf; arc=none smtp.client-ip=103.168.172.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 437161140112;
+	Fri, 11 Oct 2024 04:24:09 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-10.internal (MEProxy); Fri, 11 Oct 2024 04:24:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1728635049;
+	 x=1728721449; bh=UyL+mCcJFkad+Eo1GO8YfBJSki2GXtgM/kCxpSj0AKk=; b=
+	SWkP/aJm/pV3SqODnIlySdfirz1D7can3fMoAIZZ0UBAqQzyE1l7rKpm3JcSTj3B
+	SNT+w6wDA0QRjlJNDjwN4Y4+9MQ20bCm+tqR+S55jmuYEB9Ms5GtPxkgDpSGkSPh
+	TZf11sAkUxwMvUG0VxkRR4O5dBv00BRF4mqzGt1A9WJ/w6VPTQKL1teoXWHbB+0s
+	8Y4gzG1k+DK1ptS5jHfZVUnnSr3yJD0iL8oG/TecQk65E/fwHBwJirVEOKmTfB0e
+	z78S/YthYlQavNwPWQry+OchUdMojKjJzSSuJMEPQS+iFSjwyWVNKEDdgNytDId4
+	zdyhR9l4cATznL92Hh0M/w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1728635049; x=
+	1728721449; bh=UyL+mCcJFkad+Eo1GO8YfBJSki2GXtgM/kCxpSj0AKk=; b=R
+	19x8WHfJtBQUdyWvNwYDX2IifYZwIwnsXeY7LhBWre0BjTdfWnhvDo7AJ7FCH8f9
+	rTntw46ZPNoNrqh57vL+awtosa8a9GfEIdmv8ZyaU+Qjpmxpa6AoSfOWaO3BiQ1x
+	2BeuqvMea8ii5j98RZs5ET5VeV6UQUbQ/AiFmcHPL94oSHDesrYOxsKewEwBbq4J
+	vVZ0cLlkyiJqF00Asc5MN40QWFPi6TYNwWVueb/8nMFPwQ8C3dPLgtkSU6utwA7j
+	judfccDurlemaARwbgCmqkhSCroTaFbDWWxOjKAUkHh0vF6bk9NQrnsyPd9KEZAt
+	z8mxGgUj4Oga2wI1vgDnA==
+X-ME-Sender: <xms:qOAIZzkwl7WBdDJ1zHKuEZLDEH8ZZ2M73TqLqkobJWlfCyRaMjI_cw>
+    <xme:qOAIZ23aNFE0z4JCS6t8ZebZ0uNzIqGipLjI4pvQczVrT9JV8gXa1alM-DAGJGopv
+    S1YMLY2fVbsnXN2ZtM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdefkedgtdefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddt
+    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
+    guvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefg
+    gfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepvddu
+    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegurghvihgurdhlrghighhhthesrg
+    gtuhhlrggsrdgtohhmpdhrtghpthhtoheptggrthgrlhhinhdrmhgrrhhinhgrshesrghr
+    mhdrtghomhdprhgtphhtthhopehmihhquhgvlhdrrhgrhihnrghlsegsohhothhlihhnrd
+    gtohhmpdhrtghpthhtohephhgthhesihhnfhhrrgguvggrugdrohhrghdprhgtphhtthho
+    pehjvhgvthhtvghrsehkrghlrhgrhihinhgtrdgtohhmpdhrtghpthhtohephihsihhonh
+    hnvggruheskhgrlhhrrgihihhntgdrtghomhdprhgtphhtthhopegthhgvnhhhuhgrtggr
+    iheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepghhuohhrvghnsehkvghrnhgvlhdroh
+    hrghdprhgtphhtthhopeifihhllheskhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:qOAIZ5pGm-mwttjOsXR_R05EgkpPfKGoasgvfI-vFcs_cSd2J7CLnw>
+    <xmx:qOAIZ7nXZt_KlwURdKGjvEcW5yfmuXNlmieKtbZUWQogGJQefNwLBg>
+    <xmx:qOAIZx3UaQ0Zr_ZCzNdQaOzDsyrbrvGS2QUmR-28JY4y3y7a_Y_D4A>
+    <xmx:qOAIZ6v6Q_y-mJwMAI8jh5rCVhKsLNTFRkXaYqrPNG4xYquCt9aUzw>
+    <xmx:qeAIZzVsuKpsvUWzdBiUJdNTF4R4Vh65TXEMHmrvTxVT8usO5-wg-_rF>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 19560222006F; Fri, 11 Oct 2024 04:24:08 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Date: Fri, 11 Oct 2024 08:23:18 +0000
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Julian Vetter" <jvetter@kalrayinc.com>,
+ "Catalin Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>,
+ guoren <guoren@kernel.org>, "Huacai Chen" <chenhuacai@kernel.org>,
+ "WANG Xuerui" <kernel@xen0n.name>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Geert Uytterhoeven" <geert@linux-m68k.org>,
+ "Richard Henderson" <richard.henderson@linaro.org>,
+ "Niklas Schnelle" <schnelle@linux.ibm.com>, "Takashi Iwai" <tiwai@suse.com>,
+ "Miquel Raynal" <miquel.raynal@bootlin.com>,
+ "David Laight" <David.Laight@aculab.com>,
+ "Johannes Berg" <johannes@sipsolutions.net>,
+ "Christoph Hellwig" <hch@infradead.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+ loongarch@lists.linux.dev, Linux-Arch <linux-arch@vger.kernel.org>,
+ "Yann Sionneau" <ysionneau@kalrayinc.com>
+Message-Id: <3e6d420e-5e81-4325-b5fd-a1746ff6216f@app.fastmail.com>
 In-Reply-To: <20241010123627.695191-2-jvetter@kalrayinc.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+References: <20241010123627.695191-1-jvetter@kalrayinc.com>
+ <20241010123627.695191-2-jvetter@kalrayinc.com>
+Subject: Re: [PATCH v9 1/4] Consolidate IO memcpy/memset into iomem_copy.c
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Thu, Oct 10, 2024 at 02:36:24PM +0200, Julian Vetter wrote:
+On Thu, Oct 10, 2024, at 12:36, Julian Vetter wrote:
 > Various architectures have almost the same implementations for
 > memcpy_{to,from}io and memset_io functions. So, consolidate them
 > into a common lib/iomem_copy.c.
+>
+> Reviewed-by: Yann Sionneau <ysionneau@kalrayinc.com>
+> Signed-off-by: Julian Vetter <jvetter@kalrayinc.com>
+> ---
+> Changes for v9:
+> - Moved all functions to iomem_copy.c
+> - Build the new iomem_copy.c unconditionally
+> - Guard prototypes in asm-generic/io.h with ifdefs
 
-That might be the final intent of this seris, but what this patch does is
-to replace the trivial memset/memcpy inline implementations with a more 
-complex one that actually use the accessors.
+I'm happy with the patch contents, but it looks like you forgot
+to update the description as this is not what this version of the
+patch does: Instead of consolidating the identical versions (which
+you do in patches 2-4), this changes the ones that use the
+memcpy/memset fallback: arc, microblaze, mips, nios2, openrisc,
+riscv, and xtensa.
 
-So this actually changes behavior for those architectures that did not
-provide them before quite a lot.  You'll need to explain in more
-detail why that is safe and desireable.
+> --- a/include/asm-generic/io.h
+> +++ b/include/asm-generic/io.h
+> @@ -102,6 +102,16 @@ static inline void log_post_read_mmio(u64 val, u8 
+> width, const volatile void __i
+> 
+>  #endif /* CONFIG_TRACE_MMIO_ACCESS */
+> 
+> +#ifndef memcpy_fromio
+> +void memcpy_fromio(void *to, const volatile void __iomem *from, size_t 
+> count);
+> +#endif
+> +#ifndef memcpy_toio
+> +void memcpy_toio(volatile void __iomem *to, const void *from, size_t 
+> count);
+> +#endif
+> +#ifndef memset_io
+> +void memset_io(volatile void __iomem *dst, int c, size_t count);
+> +#endif
+> +
+>  /*
+>   * __raw_{read,write}{b,w,l,q}() access memory in native endianness.
+>   *
+> @@ -1150,58 +1160,6 @@ static inline void 
+> unxlate_dev_mem_ptr(phys_addr_t phys, void *addr)
+>  }
+>  #endif
+> 
+> -#ifndef memset_io
+> -#define memset_io memset_io
+> -/**
+> - * memset_io	Set a range of I/O memory to a constant value
+> - * @addr:	The beginning of the I/O-memory range to set
+> - * @val:	The value to set the memory to
+> - * @count:	The number of bytes to set
+> - *
+> - * Set a range of I/O memory to a given value.
+> - */
+> -static inline void memset_io(volatile void __iomem *addr, int value,
+> -			     size_t size)
+> -{
+> -	memset(__io_virt(addr), value, size);
+> -}
+> -#endif
 
+Unless there is a technical reason to move the location of
+these I think it would be clearer to change it in place
+and keep the three #ifdef but replace the contents.
+
+You can also choose to add the definition in one patch
+and then change the header in the next patch, which would
+let you have more descriptive changelog texts for the
+new common implementation and the second patch that changes
+the fallback.
+
+     Arnd
 
