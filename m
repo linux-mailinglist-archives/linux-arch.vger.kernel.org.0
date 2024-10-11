@@ -1,134 +1,134 @@
-Return-Path: <linux-arch+bounces-8043-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8045-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2ECE099A776
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2024 17:24:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6772999A78A
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2024 17:27:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8D211B210EA
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2024 15:24:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 96E6D1C24824
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2024 15:27:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D1591946D0;
-	Fri, 11 Oct 2024 15:24:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10B84194A65;
+	Fri, 11 Oct 2024 15:27:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0ZwkN+mh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I8L75zVt"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B72B91946DF
-	for <linux-arch@vger.kernel.org>; Fri, 11 Oct 2024 15:23:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B32CF178372;
+	Fri, 11 Oct 2024 15:27:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728660240; cv=none; b=AVT4sSBVGZ6B0gmheIJYieCFRCxebequddrShH22/9Ba45vUCFHzaQxeguNTdr+NAfOefyHJzjeY7ry2tmusZ8Wue9aC6QeSwyUBq5KtP0hrIKLLBkW2Tw0QJu9a4lskvJ+xKbhhAWtqSOwdRN72EZygIydpAztPO2Wr3xvhQQY=
+	t=1728660432; cv=none; b=PjIrseXp/GEemARWjszBYmEXkyHh2uKyTwJBBE8gVmAFP54qrRNfDG5mxsHu2nvNEiRu5zq7b9+czPjiQPXsfgluKd/o6tAdBD42ZEDN4qX0BbubHHtFzFP9h3KE+pki8EI/pk9/OjTd9l8VVguRDSnR1muLmli7wmg92ZN/rxs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728660240; c=relaxed/simple;
-	bh=rSznrDKSY4WrxXDZ8t7gM3RFnJVuejTr6MEOcAB6fmg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Yy2HW4vF+hmK87aAh8C1ZFyiJ6zshFBhCPQVd30+BpSbUjHsA9lft2aKP8lgBEfTbpEV/8NBeV43hXpl6WTMn2i6zQVKexVhYATNMX0LiY7tz2dLfGuxyZzph0k3U0tjQnYhixgcKA6UIM4qsmVFA1tmI870scarfRJOSsyOeQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0ZwkN+mh; arc=none smtp.client-ip=209.85.160.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-4601a471aecso244871cf.1
-        for <linux-arch@vger.kernel.org>; Fri, 11 Oct 2024 08:23:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1728660238; x=1729265038; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rJyLD+5sCaVL1I/s6JcwhAzF4bt83zRxkYYkYug2NjQ=;
-        b=0ZwkN+mhKvCPoqKU7gQXN4FwHUul3KbBPwzynky9Mb71XGEHBPFgDEUT3Ffyh3ctHU
-         djlWQHkPlbFjSVQjVf5LfAwyNhoEQmPGXdr0iQB63b4u2qPKH/J6BSuOycZXscLBKmFB
-         s049UsZT9aLOA+T49P8IOen3FNgz3npnnt80UlENyu2KnpTEyS6h73hzCKVrAHYU2lak
-         WasREDXUYcPf33yA4S903GqZWzlQFTuSDKOvHHtEPbkxX6UW7R7+mPv6YlE8b3nGeeSe
-         ntT+iBDn5U9yEdYN1BZcZ3YGBUp1YAhhf1q1US3wY/2WkjW2BzYBE2TvCNsIuYTObWOR
-         CBMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728660238; x=1729265038;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rJyLD+5sCaVL1I/s6JcwhAzF4bt83zRxkYYkYug2NjQ=;
-        b=RDLan9NKpGvjMo1etOUJsMihE7E9IHWvao+9gvQA0y6vgXpsd33GwCkjmqsCiE34XV
-         4CMurhI66wfD1cT5pt6l156U2jpSEIQQLFT5RqAdKiWVz93Oql3ECeqLtuffvBMP7pUx
-         2eRHAPJOdCL0ZOKdt08UHD36vTN5F/H91o/4gKNc5bVzUCJZzU0R/GNIXkrBxFc9pCG+
-         i3VG2h90BbKyfHCwIhY9CMfdJSgoqIiVU0OG6PFytrykQkoTQCt9E1KrLy5o4vM7sItC
-         HAQ9k4VXkFQPsMYHUHzdPEHIXxxDzw4pbMNhCfBAzRk8XaO+jqAqdX0kS8TzjWWI7O6K
-         hsAw==
-X-Forwarded-Encrypted: i=1; AJvYcCVlSyq1cznshS2LpbMUfRPut4vQ3davbt04tSbtBW1NQKj/I94RrxxoMDjwIINUr0VCKOcNZt3hfRrT@vger.kernel.org
-X-Gm-Message-State: AOJu0YxY+xcK0MvzDusV6vUf3mGrfT+P3er7s0eMNiiWMbmNivWCC28N
-	LORwg/j3Z88gRkRzy3usreshGqw0zqPpVz0YEV1MChsXyuPPM65XguzjoTj1EFwMc+3FNgid8SU
-	e8LgUsNjHuzVQ036UHiytJT8reQDZB/XfeVf3
-X-Google-Smtp-Source: AGHT+IHfcllIoreLPh5LQZRi63Z9gY+SjozCRNWADZolB8YwBJ2VdlJgtHx4ZWrWYxemGDRWFvy4vQZfgGpiBJs66xM=
-X-Received: by 2002:ac8:7e4c:0:b0:45f:68d:f0e2 with SMTP id
- d75a77b69052e-4604ac3181amr4086721cf.2.1728660237401; Fri, 11 Oct 2024
- 08:23:57 -0700 (PDT)
+	s=arc-20240116; t=1728660432; c=relaxed/simple;
+	bh=sGWntrz3wIyVB8alp9rpncuZ1V1KDuURy3H+JpEcM7M=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=CAa0u1VNwrXu4AWZKa13D8IITkTYNjEqaH/NVcKmmUp4I8fo5VYBtH0NIRHn8EulJiUcpFARmVHXVfHwDHiDR88PG4O+8ffdm77bO6mNkpm0Mvg3O88kRLeQp+F1jx60uFQgATfnAX4GBglRAvAZhLwNq+p6eV29V/43Jrk2lDw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I8L75zVt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64E81C4CEC7;
+	Fri, 11 Oct 2024 15:27:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728660431;
+	bh=sGWntrz3wIyVB8alp9rpncuZ1V1KDuURy3H+JpEcM7M=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=I8L75zVtrZx7w5SpRULZ/piL2MAHcg+XRpGLvOSuuaq79SJWN4Fma1eeimZ3TTbVB
+	 s3Tj07SktC4NyMlxdWrHxkP9B09QxKjTACbn46Lcb7EZmhdJiFuU6u5LM0LB+VOnwB
+	 ipxmM/V1tJE/lNo+oR0h67Z16lt34GSW47dbcRsA2Rcnm7hvFzitsQaVu0tDTBL7I1
+	 XrWK27pP7SdJ/JUMi4LEQxyVwYXTQYUn1hmQM2ozZex/gG6pI4W/jWyE7zsMYDHYlF
+	 b7b0dB6+vFHNuxfWZal17srhcGgebXOevLR69yA//3wjEvgTu0P9zbH1pTrGNR4W9m
+	 VsL6bpzNsWhgg==
+Date: Fri, 11 Oct 2024 08:27:07 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Mina Almasry <almasrymina@google.com>
+Cc: "Lai, Yi" <yi1.lai@linux.intel.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, Donald Hunter
+ <donald.hunter@gmail.com>, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Jonathan
+ Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
+ <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge
+ Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>, Jesper
+ Dangaard Brouer <hawk@kernel.org>, Ilias Apalodimas
+ <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, Masami
+ Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Arnd Bergmann <arnd@arndb.de>, Steffen
+ Klassert <steffen.klassert@secunet.com>, Herbert Xu
+ <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, Willem de
+ Bruijn <willemdebruijn.kernel@gmail.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
+ <bjorn@kernel.org>, Magnus Karlsson <magnus.karlsson@intel.com>, Maciej
+ Fijalkowski <maciej.fijalkowski@intel.com>, Jonathan Lemon
+ <jonathan.lemon@gmail.com>, Shuah Khan <shuah@kernel.org>, Alexei
+ Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, John
+ Fastabend <john.fastabend@gmail.com>, Sumit Semwal
+ <sumit.semwal@linaro.org>, Christian =?UTF-8?B?S8O2bmln?=
+ <christian.koenig@amd.com>, Pavel Begunkov <asml.silence@gmail.com>, David
+ Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin
+ <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, Harshitha
+ Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
+ <pkaligineedi@google.com>, Bagas Sanjaya <bagasdotme@gmail.com>, Christoph
+ Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>,
+ Taehee Yoo <ap420073@gmail.com>, Willem de Bruijn <willemb@google.com>,
+ Kaiyuan Zhang <kaiyuanz@google.com>, yi1.lai@intel.com
+Subject: Re: [PATCH net-next v25 10/13] net: add SO_DEVMEM_DONTNEED
+ setsockopt to release RX frags
+Message-ID: <20241011082707.5de66f15@kernel.org>
+In-Reply-To: <CAHS8izPuEUA20BDXvwq2vW-24ez36YFJFMQok-oBDbgk6bajSA@mail.gmail.com>
+References: <20240909054318.1809580-1-almasrymina@google.com>
+	<20240909054318.1809580-11-almasrymina@google.com>
+	<Zwe3lWTN36IUaIdd@ly-workstation>
+	<CAHS8izPuEUA20BDXvwq2vW-24ez36YFJFMQok-oBDbgk6bajSA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241011-tracepoint-v10-0-7fbde4d6b525@google.com>
- <20241011-tracepoint-v10-1-7fbde4d6b525@google.com> <20241011131316.5d6e5d10@eugeo>
-In-Reply-To: <20241011131316.5d6e5d10@eugeo>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Fri, 11 Oct 2024 08:23:18 -0700
-Message-ID: <CABCJKuesYQWvfScFaqv_rW5ZqAJNn4zK9iOFAmyTaYKO3S5hgw@mail.gmail.com>
-Subject: Re: [PATCH v10 1/5] rust: add static_branch_unlikely for static_key_false
-To: Gary Guo <gary@garyguo.net>
-Cc: Alice Ryhl <aliceryhl@google.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Jason Baron <jbaron@akamai.com>, Ard Biesheuvel <ardb@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	linux-trace-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Sean Christopherson <seanjc@google.com>, Uros Bizjak <ubizjak@gmail.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, 
-	Oliver Upton <oliver.upton@linux.dev>, Mark Rutland <mark.rutland@arm.com>, 
-	Ryan Roberts <ryan.roberts@arm.com>, Fuad Tabba <tabba@google.com>, 
-	linux-arm-kernel@lists.infradead.org, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Anup Patel <apatel@ventanamicro.com>, 
-	Andrew Jones <ajones@ventanamicro.com>, Alexandre Ghiti <alexghiti@rivosinc.com>, 
-	Conor Dooley <conor.dooley@microchip.com>, Samuel Holland <samuel.holland@sifive.com>, 
-	linux-riscv@lists.infradead.org, Huacai Chen <chenhuacai@kernel.org>, 
-	WANG Xuerui <kernel@xen0n.name>, Bibo Mao <maobibo@loongson.cn>, 
-	Tiezhu Yang <yangtiezhu@loongson.cn>, Andrew Morton <akpm@linux-foundation.org>, 
-	Tianrui Zhao <zhaotianrui@loongson.cn>, loongarch@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Fri, Oct 11, 2024 at 5:13=E2=80=AFAM Gary Guo <gary@garyguo.net> wrote:
->
-> On Fri, 11 Oct 2024 10:13:34 +0000
-> Alice Ryhl <aliceryhl@google.com> wrote:
->
-> > +#ifndef CONFIG_JUMP_LABEL
-> > +int rust_helper_static_key_count(struct static_key *key)
-> > +{
-> > +     return static_key_count(key);
-> > +}
-> > +EXPORT_SYMBOL_GPL(rust_helper_static_key_count);
->
-> ^ Explicit export should be removed. This only works because we didn't
-> remove export.h from all helpers.c yet, but there's a patch to do
-> that and this will stop working.
+On Thu, 10 Oct 2024 12:05:38 -0700 Mina Almasry wrote:
+> diff --git a/net/core/sock.c b/net/core/sock.c
+> index 083d438d8b6f..cb3d8b19de14 100644
+> --- a/net/core/sock.c
+> +++ b/net/core/sock.c
+> @@ -1071,11 +1071,11 @@ sock_devmem_dontneed(struct sock *sk,
+> sockptr_t optval, unsigned int optlen)
+>             optlen > sizeof(*tokens) * MAX_DONTNEED_TOKENS)
+>                 return -EINVAL;
+> 
+> -       tokens = kvmalloc_array(optlen, sizeof(*tokens), GFP_KERNEL);
+> +       num_tokens = optlen / sizeof(struct dmabuf_token);
+> +       tokens = kvmalloc_array(num_tokens, sizeof(*tokens), GFP_KERNEL);
+>         if (!tokens)
+>                 return -ENOMEM;
+> 
+> -       num_tokens = optlen / sizeof(struct dmabuf_token);
+>         if (copy_from_sockptr(tokens, optval, optlen)) {
+>                 kvfree(tokens);
+>                 return -EFAULT;
+> @@ -1083,6 +1083,10 @@ sock_devmem_dontneed(struct sock *sk, sockptr_t
+> optval, unsigned int optlen)
+> 
+>         xa_lock_bh(&sk->sk_user_frags);
+>         for (i = 0; i < num_tokens; i++) {
+> +
+> +               if (tokens[i].token_count > MAX_DONTNEED_TOKENS)
+> +                       continue;
 
-What's the benefit of removing explicit exports from the Rust helper C
-code? It requires special casing things like modversions for these
-files, so I assume there's a reason for this. I asked about it here,
-but never got a response:
+For the real fix let's scan the tokens before we take the xa lock
+and return an error rather than silently skipping?
 
-https://lore.kernel.org/rust-for-linux/CABCJKudqAEvLcdqTqyfE2+iW+jeqBpnTGgY=
-JvrZ0by6hGdfevQ@mail.gmail.com/
+>                 for (j = 0; j < tokens[i].token_count; j++) {
 
-Sami
 
