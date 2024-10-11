@@ -1,852 +1,268 @@
-Return-Path: <linux-arch+bounces-8011-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8012-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D7589997F8
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2024 02:35:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A36D999979
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2024 03:35:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BCDF7B25522
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2024 00:35:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AD068B20F87
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2024 01:34:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC125199BC;
-	Fri, 11 Oct 2024 00:32:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF6389450;
+	Fri, 11 Oct 2024 01:34:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="G0spaA2i"
+	dkim=pass (1024-bit key) header.d=microsoft.com header.i=@microsoft.com header.b="hjNRFRFU"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CY4PR02CU008.outbound.protection.outlook.com (mail-westcentralusazon11021114.outbound.protection.outlook.com [40.93.199.114])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A561101E6
-	for <linux-arch@vger.kernel.org>; Fri, 11 Oct 2024 00:32:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728606747; cv=none; b=mNwPqBiC6yzSm2Y4vH0RqxUy2Im0ihtABguCKgNOV/ovYfbVQHKhiX97KYI2CwtIAL/oX+eX/LDRe5sqZb8Xe4dtPD6LpPJKrjJkegN/m/gXI39ss+yyNeGU/IjHIkQ6msxxafN/1d3V4E47MosEq4oadUwYZwrPTmSiqLTtKIE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728606747; c=relaxed/simple;
-	bh=6vXMNEXgKS6x6arhnFZmYZ8DfGHVLedY/y0T1pAEr1s=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Mx19s+vULtRyw7V9sW/erMIpdV5+SrC2VcUIyRH3hiGiP/1mb2Ei3n3oUFV9KgmJb1jtzQ/JByRL68LwaVy/HCZheeXZMKryRcyBrLFHTvbDQ8S8yTiokPvQNBlpAISQyfcxP2lY9lTVoQMVXE3pJ0eg2MaWrwnCeWaA5V/tYH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=G0spaA2i; arc=none smtp.client-ip=209.85.210.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-718e9c8bd83so1665830b3a.1
-        for <linux-arch@vger.kernel.org>; Thu, 10 Oct 2024 17:32:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1728606745; x=1729211545; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7LsajkhEjibBVidc/N9UXu/T/kPuUFNE9m11+ozaBUc=;
-        b=G0spaA2iZq0wzXZrR1sHjRh4XE66iY+ItUoANWdfGZ4eBwgV9UIRg3w1RB+S21VYYb
-         d9Qcgill7Kru6Y9VY9E+M8Ro4/z0VHDNc1MO9euAEvVHeY5kL/TO6ak9N9GASu1J54TE
-         R59w1i5yI04pXj9qhJ86FkCSTisXHSEeGeRnCRWUHldjNt2GmWFU1TOxVkoRo9Z+vojg
-         R8ufMf/TQpKRTe5O7tgXBjUbMj7Se+UQvM2WM9ett27sNYQZZYFNLIIlL0hFSSsD6QU0
-         ApeTOAXsjPQb9UvBqzjv2YqWImg995tVGtTjAxkDnzin6yxpVfULYqBmWMGndMLCwX8F
-         Z9Ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728606745; x=1729211545;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7LsajkhEjibBVidc/N9UXu/T/kPuUFNE9m11+ozaBUc=;
-        b=tOgLWvKNX3NyGYGD/MyzNZajO15CaXEK0eG68EDJYNB185xHuU8jPJzek035fm2sNB
-         JlHsOhhBMehzM+YS43QB8PPyw8nohhSHRXuL6uPktPNlvtnCErIT8OVHPKV/L6CaFspn
-         P96GPuGApvpNCivfJrvt5Yo0DyxH5swLyOjUr7o7f5Xiww4gkGGOCxWAWAIVu07urlrT
-         91lEpW7NSTuVghHV8RxJnmiZuPwuwn7WRooQgyunyCmVeVaPWkf03KNdqY64ahldpC5R
-         tCJedBeKlwGqRUQYVwFFpq+ldG04sil4P1jd/+qjUSqbQZVJ+b4FrNlH+1oiqVYenQEw
-         s35A==
-X-Forwarded-Encrypted: i=1; AJvYcCWh9XbykMDungF+xI0Wi+IKxeQOHSsaEL4iQU1c7VcJWp1BS3jXYoVUD8nh5jHTR5aMU7sOCjDqahB0@vger.kernel.org
-X-Gm-Message-State: AOJu0YzXEe148s0VBvdVA/9hWSNUJitwDCstq/R/QounF+ugWaGwr3yB
-	1FGa7jgMxbgF4PFf3PVEZjV66VawnddsNxF9NC1chcoc7ptg9+xQnsF+vzAGLUA=
-X-Google-Smtp-Source: AGHT+IFOFivpf2dfihVtShzwf9FEEOMn7Ved5zOgRCjh+YWjJ0yTlvWa3kaJvmwenVIm58jaUJ+ALA==
-X-Received: by 2002:a05:6a00:17a8:b0:71d:fc8c:348a with SMTP id d2e1a72fcca58-71e26eecc42mr9331967b3a.9.1728606744583;
-        Thu, 10 Oct 2024 17:32:24 -0700 (PDT)
-Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7ea4496b1afsm1545600a12.94.2024.10.10.17.32.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Oct 2024 17:32:24 -0700 (PDT)
-From: Deepak Gupta <debug@rivosinc.com>
-Date: Thu, 10 Oct 2024 17:32:05 -0700
-Subject: [PATCH RFC/RFT 3/3] kernel: converge common shadow stack flow
- agnostic to arch
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D8068BE8;
+	Fri, 11 Oct 2024 01:34:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.199.114
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1728610494; cv=fail; b=qGtKSb2bjKd1xPAWBO0Wd/2du+cqIoXvKwB9sGZDKGv8M/cJAezf/nhZaEK5wz36Y4fMgNjiLT6LxQxFXWM5HnrMUeX8+4C24i4KMBwm38+fqIyLDMQn+Xba2v4kD7ZNNYBepdsmenZ6kNpnZ13ZYktbFNM4Pq6aoPaHhqaoVrc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1728610494; c=relaxed/simple;
+	bh=y78aC1MOJO1KgVzKLNy0pdE4j5F2xRW40CAPLjNwurg=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=FVWT0csRBhSB5QROqZ8JkPo1eW/apbYc7eYdyuVZBqjKuGvUUzJj0Xan/gm0P18TT7kt+AeDZIxyBzLo8dGIzYkoQLdAI6TxlQ/6NNxp6n5bp+ovoYIL7rSAqC3JoNCPygsIeMiF6GnK5TxcxxzNldA5aVQenjVwEwJHbTZFMWY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microsoft.com; spf=pass smtp.mailfrom=microsoft.com; dkim=pass (1024-bit key) header.d=microsoft.com header.i=@microsoft.com header.b=hjNRFRFU; arc=fail smtp.client-ip=40.93.199.114
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microsoft.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=EKbHILYloUvJkW/zB8bm5KlZ5y9RHtGmkcOk/o8FUPd9kbNU3wVD3P6bx5sx9QjaL3OhM7IuG64GA/fya+SOeaM5FegS/AFhGKqz0RUpymFUd65vaS1y1zovX4Zc2IjRGJATwlqvQWVYjSgXjkmFfbeIk+EtatuIAu1wlQG75l3ectu5EVC18kTyaBs1mY2Fw8HXRqOd63YP1aiGZgMGZuMuI1y1wHCJkNOO2Xssym4Br+nFVdM9eN/x2slC2cWk3m67gIrXA1sXgiRjO21GXF8cvFhKZbtuAwaUjIAKcmIXxImK4nUAbtfP+3dH0JmsUkVUjjlULYifGL9pNGplxQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=y78aC1MOJO1KgVzKLNy0pdE4j5F2xRW40CAPLjNwurg=;
+ b=cad9cFzOfE2xNq7p1Etq0DN+FfhLOw3OtZgodnvq1AFeTRXP8fgiA3u2WX0aIhbQyv3O/M36Tibp+dVZwv3Rd8m6W2qiT9NunHGqOc7h2jlpRvG7S6XMNFXnAqZRHCDQVb+wvtHM2UYKMxhJAC3XzmgUq5X97AlBh6yw5ObKhY1OvBoVJHcXW17Skqde3/pwTZOPjwaSyKkdIT3Bo8jlR6xMb/Y0pDPvmkjJ+0PJ36obPJVAbmJ6JdblbYMHxKitUPOYEo7ixzUUndyqA13gd52zJMZOr9ZYLvEix52ZyH2nRUdeOFCD1N8l+CZ1su3b7roWwwij4R7XXAFFpkomAA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=y78aC1MOJO1KgVzKLNy0pdE4j5F2xRW40CAPLjNwurg=;
+ b=hjNRFRFUwIQK5bVT8alckIuyutzt0g6/GDPmcA5i5dzyHIpeqP0ee2rz7EggUQ3jDbAI87a2imX4Ve3EykCZldQfthquadwKq3SosPXaijpARLl3CmZBGdDaAM3Nl0l7uxyj6VspwJshAbpNWfMte9UPvfhbANXu3B04uQ8knpo=
+Received: from DM6PR21MB1434.namprd21.prod.outlook.com (2603:10b6:5:25a::10)
+ by DM4PR21MB4542.namprd21.prod.outlook.com (2603:10b6:8:66::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.6; Fri, 11 Oct
+ 2024 01:34:50 +0000
+Received: from DM6PR21MB1434.namprd21.prod.outlook.com
+ ([fe80::790a:4e07:a440:55cd]) by DM6PR21MB1434.namprd21.prod.outlook.com
+ ([fe80::790a:4e07:a440:55cd%6]) with mapi id 15.20.8069.001; Fri, 11 Oct 2024
+ 01:34:50 +0000
+From: MUKESH RATHOR <mukeshrathor@microsoft.com>
+To: Michael Kelley <mhklinux@outlook.com>, Nuno Das Neves
+	<nunodasneves@linux.microsoft.com>, "linux-hyperv@vger.kernel.org"
+	<linux-hyperv@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+	"iommu@lists.linux.dev" <iommu@lists.linux.dev>, "netdev@vger.kernel.org"
+	<netdev@vger.kernel.org>, "linux-pci@vger.kernel.org"
+	<linux-pci@vger.kernel.org>, "linux-arch@vger.kernel.org"
+	<linux-arch@vger.kernel.org>, "virtualization@lists.linux.dev"
+	<virtualization@lists.linux.dev>
+CC: KY Srinivasan <kys@microsoft.com>, Haiyang Zhang <haiyangz@microsoft.com>,
+	"wei.liu@kernel.org" <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	"catalin.marinas@arm.com" <catalin.marinas@arm.com>, "will@kernel.org"
+	<will@kernel.org>, "luto@kernel.org" <luto@kernel.org>, "tglx@linutronix.de"
+	<tglx@linutronix.de>, "mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de"
+	<bp@alien8.de>, "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+	"seanjc@google.com" <seanjc@google.com>, "pbonzini@redhat.com"
+	<pbonzini@redhat.com>, "peterz@infradead.org" <peterz@infradead.org>,
+	"daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>, "joro@8bytes.org"
+	<joro@8bytes.org>, "robin.murphy@arm.com" <robin.murphy@arm.com>,
+	"davem@davemloft.net" <davem@davemloft.net>, "edumazet@google.com"
+	<edumazet@google.com>, "kuba@kernel.org" <kuba@kernel.org>,
+	"pabeni@redhat.com" <pabeni@redhat.com>, "lpieralisi@kernel.org"
+	<lpieralisi@kernel.org>, "kw@linux.com" <kw@linux.com>, "robh@kernel.org"
+	<robh@kernel.org>, "bhelgaas@google.com" <bhelgaas@google.com>,
+	"arnd@arndb.de" <arnd@arndb.de>, "sgarzare@redhat.com" <sgarzare@redhat.com>,
+	"jinankjain@linux.microsoft.com" <jinankjain@linux.microsoft.com>,
+	"muminulrussell@gmail.com" <muminulrussell@gmail.com>,
+	"skinsburskii@linux.microsoft.com" <skinsburskii@linux.microsoft.com>
+Subject: Re: [EXTERNAL] RE: [PATCH 3/5] hyperv: Add new Hyper-V headers
+Thread-Topic: [EXTERNAL] RE: [PATCH 3/5] hyperv: Add new Hyper-V headers
+Thread-Index: AQHbFc2fpELizClC20+KdB1By4J6TbKAVvmAgAB48YA=
+Date: Fri, 11 Oct 2024 01:34:50 +0000
+Message-ID: <3432a47a-0936-9d1a-896f-d1e019905131@microsoft.com>
+References:
+ <1727985064-18362-1-git-send-email-nunodasneves@linux.microsoft.com>
+ <1727985064-18362-4-git-send-email-nunodasneves@linux.microsoft.com>
+ <SN6PR02MB415716A55D46E5D4F37D7DD2D4782@SN6PR02MB4157.namprd02.prod.outlook.com>
+In-Reply-To:
+ <SN6PR02MB415716A55D46E5D4F37D7DD2D4782@SN6PR02MB4157.namprd02.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM6PR21MB1434:EE_|DM4PR21MB4542:EE_
+x-ms-office365-filtering-correlation-id: f1a4eb0c-2ce5-455e-92e3-08dce994e5da
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|7416014|376014|366016|1800799024|921020|38070700018;
+x-microsoft-antispam-message-info:
+ =?utf-8?B?MnFZZDNPNFlxK0hDTzIvZ3F2YVNwbXoydzI0Q0VqL1h6Z2FlUUliYmgzZ3JU?=
+ =?utf-8?B?V0Nhb1BLZmxLS0k3TjN1S0YxcFdScFJSaHYvR3hmNlhqSzN3L2FpNE9xK1Z1?=
+ =?utf-8?B?b1ZRa00vSk5ISy93K0xTSHFNZC84N2o3SCswSnJVWXpkelJMZE8vcFg0S1J5?=
+ =?utf-8?B?d0RJdStBaE56SFdKdlV5MzliMTByS0JDOUlIeG81UUlvQkZ3cTdGQjZKTnow?=
+ =?utf-8?B?UDY3ZDJ4eVVDV3R4VDZSaGtFK0JndU8rb0dVUng1SGZ0VzlwWTVoS0lxQ3hw?=
+ =?utf-8?B?ck9UaDhIQXpZdUtNRXJHWW1LdGVMNlpsOG90bWJ5czVJaTdrL1ArMCtaRkU3?=
+ =?utf-8?B?SGhlT09wVkd1WXZ2aUZ3V0lhRFV4V0lTMmJ0Mk1US25LNmsxaHNXMEN3eVZz?=
+ =?utf-8?B?NmJjWHFVaFMyNmFtMjdqTXZlckVzZ21FYjk1RkhPUVVIcFpLNyt3ZlRSWGJK?=
+ =?utf-8?B?cVJ2MXJYSDlHcmFEMEZIUGFoYUMwWlZUN0RoUElkUVBCYVhoMjdpbnZsZVQy?=
+ =?utf-8?B?QzJQeXN0bmtyaEVjRC9UbEhaTE9Jbkw3TGlJYjZveGNaUk5QVUVDcHF3WGRF?=
+ =?utf-8?B?M1kySGQ0bXl2clBZOXBTMmtrMGxMZktmS25NQ1M5U1lPYVFSMGhQMlJmc3hI?=
+ =?utf-8?B?d1Raa1M1QUQrOVpKUW1nZ3lMNkZ1dWhlSis2UHpvMFA2Wm9Zak9pN2NwNm9u?=
+ =?utf-8?B?anFpMTFzUi9QMG1HaXJNa0Zua0c0MmREaHV1Y3VlR29HQjRFdUMya2ZPc2h2?=
+ =?utf-8?B?NHhYWi9UWnFEdjhZbzlDY0RUMTlra3c1U0RGclVrNlZEdUVXd0ZVSGp2SU5k?=
+ =?utf-8?B?cWRFT3dPaWNSajhReHhvRjVNb05LYW8xOGl0cC93RDdPSFVBRTNHNW5GdCtH?=
+ =?utf-8?B?bmR4RW0rTUhuRjNPTGNjTWIwYi8xenROM29tdDNoc1c2dWYzMldXTWtSR2c1?=
+ =?utf-8?B?UHd1bkNIZGRyTHFMOCtVVFIyNXp2UWd0UFQ3c0RQY1YxTHV3d3RObkhPNlhS?=
+ =?utf-8?B?QlhkQXZQdXlyc1pheG5PZ2NqQXpUODFLQ0xyWU5QQk9pWU92eDhQUTU3cWJJ?=
+ =?utf-8?B?NUpPNEk0eDNHb0U1L1U1WTlHa09FYUk3Y3RDWFQyRFcrNFdWY25XNVMrWWxT?=
+ =?utf-8?B?VGE5Z0pwUVY2MDdRdGp0ZHQ4QVhkaUo2Q3JLc1RCdkNhNHRiZjVUUzR2emtQ?=
+ =?utf-8?B?VmlPczROVkNXTFY1bCtrZmhQa0wxTnJvV09NUnY2VURtMHhLNnY5d2hySE50?=
+ =?utf-8?B?emdySVM5V2VDVzBya0RHYlBtaGVzSjRPYjhJQWdSWGsya2NyNHNPYXBRcHd5?=
+ =?utf-8?B?UnJQdmpFQUhGZmYvc3E4bEV0cHp6TFpBODFWampOQWR2V3JBWFRsQ0UxckRz?=
+ =?utf-8?B?RmlQcGhGUHNpUWxnblpTS25DOHR6L2Uwb0RRSEFjWWQxeStjeXlDYkZnME1Z?=
+ =?utf-8?B?SklpSG1WSVdpS0M1NlF2VE5KTTBkSUFadkFVYWlRT2lXcWxrZmZod0M4NDBD?=
+ =?utf-8?B?NnYyYUsxNDFDZ05qTjBXdGFwWDN3cndlclRpNUczWXFFWnQyNVd2OFJCTXhC?=
+ =?utf-8?B?TitVb2ZaRDVmSDFDK1RJWTdRa2hkRG1CUnh0UzVTQU0zMkY0c0k2cnZualhj?=
+ =?utf-8?B?SmhNMUNPM0t4QlBpdFZZWmJQeDQ2dzhEaUlaQnFkSkRlYkc3SVJ1cVNWOHpI?=
+ =?utf-8?B?U1UxNDY4VVhsZTJUK2R5Sm1nT1FpNnBYaW5KRGM3eCtuRDhMUm0vcUVSL2dB?=
+ =?utf-8?B?cFhHekwwcjF0bk1kaUlBV1BzMHZXWTNmNWVBOGpSQWtjWHdBK2loeE85OUNy?=
+ =?utf-8?B?SXc2UzhYY3UrTEx4d3REdz09?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR21MB1434.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(921020)(38070700018);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?K05pTmpDSWVLNlJmT3dPaWZpQlBKTjdQYzgrUU9BRE02OHpLWlZFU1UrZlNH?=
+ =?utf-8?B?YVRtNXh4dnVuWTQrZi93WERXeGJSWGs4UGl6Q1d6dkZGQ0MwdzE3aHBnMWtN?=
+ =?utf-8?B?OVlMZWwrRnZ2UjJKQTgyWGUyUEt3bGQ2Y3Q5OVhZL3A5elpYQllhTmxtWjBq?=
+ =?utf-8?B?UVhRdmFaY3JHcWlZL0JESTF4R3VrQzBORnhjQzNqUkdMUkYwNFFlTzVTODZi?=
+ =?utf-8?B?bGdlMVFMNGhSRHJZVlI4QXc2eklKQmIxSEpVTndvYldxRFJvT0dEQTJyenFt?=
+ =?utf-8?B?eTB1SGFmTFkrVTdzUEExdkpvSFVXOG1kaVkvd0puK1pLZWlWeVdBeDNSVXND?=
+ =?utf-8?B?VHJFVHFMd3lOUGJFSEx5NzBaV2RjRExEVzFRT2tJVnF1ZUFyUjhnbXI0V2cx?=
+ =?utf-8?B?cTRhcUFUTDlrTFpGcU01SlFEK2JmcEZSVnZ6c01iaXp3bDhiT3pFKzFEQThm?=
+ =?utf-8?B?eC9URllqb1B3Nkx6TkNhK3BGdHI0S3Q2SDdpZmhIaTAyRFZGTUhZQngxMkw3?=
+ =?utf-8?B?ZjUxZ1dPRlZ2djlPYmg4TG9wNjg1OGtvRU42YnNoUkRqZTA4bDd1eVNNNHBO?=
+ =?utf-8?B?bUp5Z1FVNElCVk8wTkloYWhRUzI1Z242bjA2L1VpK25rSGpaRjIranl2MVdX?=
+ =?utf-8?B?ckpmbHorVTJRSlhoZ3FEc3RKTmtwMVV6UGZLVktUNk1GankxaTZndEZtWC96?=
+ =?utf-8?B?OW5IK3puUUl1VDVkMjY2bFdVUXJkRFl5cyt4YUhSRzhvbzlvd2JhV2F5QlBV?=
+ =?utf-8?B?aFROZTliaDRKa2RJVktFWGxvTjZicjk2UWlGbk0vQ0lPTnAvNnF0YjQ3ZDZK?=
+ =?utf-8?B?TXR4OVU4L0VKMXJYNTFUMFkvU0wxYmNZREsxaUdQamdrYVhnWFpyWWlqYnpi?=
+ =?utf-8?B?ejEydmUyYzNGd2tEbnJTL3QvRkhoc3QyMUh4UTJhQzZTRUZzZnBDcUVIU2Z3?=
+ =?utf-8?B?L0VVaC9DYlVBWW9jZ2JuQzJ0WUNPMmNuREYxeTd3V3dlYVRPR2ZSeHNGaUFx?=
+ =?utf-8?B?VjZvTjJKVTRGWkorM2dXNEFGZzRjVHArOWlScko4UU1heDllaUMwVFF6TVFk?=
+ =?utf-8?B?czBsUldIWWZFZWVIek5ycmNQejhHeHVkajB5WDBKT0RqV1ltb0JjZzY3eXRs?=
+ =?utf-8?B?dXo3NW5CSTB5THRNWVVwS29EKy8vcXlVTXdjdnZBbXBnWlpqNnNrTnRmVldO?=
+ =?utf-8?B?NnBqRGJMNnVZZUhEUmhvMTM5b0w0ckY2VkJoUERSd3BueitmdnBENVRySW5o?=
+ =?utf-8?B?RU9Fcnk4TTUwTW1vYjUxcnJGdWZKMm5xcm81ZXR5R2NmeG02VGRRalZjcmdq?=
+ =?utf-8?B?akhIRFc1S2V1eWgvVlVlNnZJUERoSjd3aTE5ZmVOZ3drTjRlMlRMUFMzdFhP?=
+ =?utf-8?B?WmljbDhOdkZ0KzlhQWpDaWdXVUY0TktWQTc1b3FiQWFUQU5WWkl1ejR5aVpm?=
+ =?utf-8?B?K2NKdGVOYzFjS2wvY09vZ2F0K0tSSmVhZlkyRFRGaWh1dWYvRDNzS2duVkU0?=
+ =?utf-8?B?S05aaGEyeEFKaHdqckgxZ3ZtVjc5VFlqSzQyRW9lWVVqSmF6YzkzN0x4K2lm?=
+ =?utf-8?B?bkF0ZHJKTG9Ob2h0Y3R3UXBCMmZmSjBEVTNpZ3R3eko3UnBwT09qRDQzbGtv?=
+ =?utf-8?B?RGVHbGkvUUZZU3IrRkE5UnY4cGszZFdLMkxTbDJGcVE1dWZnM0w2em9rdytL?=
+ =?utf-8?B?b3I2Z0UwQjBwb1NCK1dkS1lTUHFpNXZxRDZ6cEJLR1JNQlpEOXk1NkRlcDd5?=
+ =?utf-8?B?SXdVenF3bWltMHZ4U1dtMjUwQ2F2bVJxTThudzZBb3lwK05HVWZXWkFoVFlN?=
+ =?utf-8?B?VzA3NW9hbHhva29WR0ZoZXczNWlGM21aUkFtVWFvay9MWkNoR3FKdGRHeHZl?=
+ =?utf-8?B?enVkSjdidFRHdk43c0k2UWhxUHhha2s5MEIxM1JoU1VJVGRkN3ZVV1Z3MnRn?=
+ =?utf-8?B?a0NuUEl3YUpkcjFNU3dOdUcyRHVtOGNaTWkwR3h5QmVBS1g1bGYySVRQbzQr?=
+ =?utf-8?B?eGZGQmx4blpwajd3c2NRNXQyRFZobmQ4MGIwdmpTblUvYVg1NTY1MHBGcGV6?=
+ =?utf-8?Q?qx+FW4?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <5803F32AA60C3D46A97C6CC53BDD2CDC@namprd21.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241010-shstk_converge-v1-3-631beca676e7@rivosinc.com>
-References: <20241010-shstk_converge-v1-0-631beca676e7@rivosinc.com>
-In-Reply-To: <20241010-shstk_converge-v1-0-631beca676e7@rivosinc.com>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
- Andrew Morton <akpm@linux-foundation.org>, 
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
- Vlastimil Babka <vbabka@suse.cz>, 
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Arnd Bergmann <arnd@arndb.de>
-Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
- linux-mm@kvack.org, linux-arch@vger.kernel.org, 
- Rick Edgecombe <rick.p.edgecombe@intel.com>, 
- Mark Brown <broonie@kernel.org>, Deepak Gupta <debug@rivosinc.com>
-X-Mailer: b4 0.14.0
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR21MB1434.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f1a4eb0c-2ce5-455e-92e3-08dce994e5da
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Oct 2024 01:34:50.0426
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: JuDshbOl4a9qA/5W0ypo+eYvUqVrNVbmCNbU62c+vQuplPcSbAP6XHnni/YUJ6ztmQ3J5W4f4Bd0FJNTDdPKQI9GX5QRMb87oRWIFE1zR5E=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR21MB4542
 
-CPU assisted shadow stack are supported by x86, arm64 and risc-v. In
-terms of enabling shadow stack feature for usermode code in kernel,
-they have following commonalities
-
-- Expose a user ABI (via a prctl) to allow user mode to explicitly
-  ask for enabling shadow stack instead of by default enabling it.
-  x86 series pre-dates arm64 or risc-v announcment of support, so it
-  ended up doing a arch specific prctl instead of generic one. arm64
-  and risc-v have converged on using generic prctl and each of them
-  can handle it appropriatley.
-
-- On fork or clone, shadow stack has to be COWed or not COWed depending
-  on CLONE_VM was passed or not. Additionally if CLONE_VFORK was passed
-  then same (parent one) shadow stack should be used.
-
-- To create shadow stack mappings, implement `map_shadow_stack` system
-  call.
-
-This patch picks up Mark Brown's `ARCH_HAS_USER_SHADOW_STACK` config
-introduction and incorproate most of the common flows between different
-architectures.
-
-On a high level, shadow stack allocation and shadow stack de-allocation
-are base operations on virtual memory and common between architectures.
-Similarly shadow stack setup on prctl (arch specific or otherwise) is a
-common flow. Treatment of shadow stack virtual memory on `clone/fork` and
-implementaiton of `map_shadow_stack` is also converged into common flow.
-
-To implement these common flows, each architecture have arch-specific
-enabling mechanism as well as arch-specific data structures in task/
-thread struct. So additionally this patch tries to abstract certain
-operation/helpers and allowing each architecture to have their arch_*
-implementation to implement the abstractions.
-
-Signed-off-by: Deepak Gupta <debug@rivosinc.com>
----
- arch/x86/include/asm/shstk.h           |   9 +
- arch/x86/include/uapi/asm/mman.h       |   3 -
- arch/x86/kernel/shstk.c                | 270 ++++++------------------------
- include/linux/usershstk.h              |  25 +++
- include/uapi/asm-generic/mman-common.h |   3 +
- kernel/Makefile                        |   2 +
- kernel/usershstk.c                     | 289 +++++++++++++++++++++++++++++++++
- 7 files changed, 375 insertions(+), 226 deletions(-)
-
-diff --git a/arch/x86/include/asm/shstk.h b/arch/x86/include/asm/shstk.h
-index 4cb77e004615..4bb20af6cf7b 100644
---- a/arch/x86/include/asm/shstk.h
-+++ b/arch/x86/include/asm/shstk.h
-@@ -37,6 +37,15 @@ static inline int shstk_update_last_frame(unsigned long val) { return 0; }
- static inline bool shstk_is_enabled(void) { return false; }
- #endif /* CONFIG_X86_USER_SHADOW_STACK */
- 
-+int arch_create_rstor_token(unsigned long ssp, unsigned long *token_addr);
-+bool arch_cpu_supports_shadow_stack(void);
-+bool arch_is_shstk_enabled(struct task_struct *task);
-+void arch_set_shstk_base_size(struct task_struct *task, unsigned long base,
-+			unsigned long size);
-+void arch_get_shstk_base_size(struct task_struct *task, unsigned long *base,
-+			unsigned long *size);
-+void arch_set_shstk_ptr_and_enable(unsigned long ssp);
-+void arch_set_thread_shstk_status(bool enable);
- #endif /* __ASSEMBLY__ */
- 
- #endif /* _ASM_X86_SHSTK_H */
-diff --git a/arch/x86/include/uapi/asm/mman.h b/arch/x86/include/uapi/asm/mman.h
-index 46cdc941f958..ac1e6277212b 100644
---- a/arch/x86/include/uapi/asm/mman.h
-+++ b/arch/x86/include/uapi/asm/mman.h
-@@ -5,9 +5,6 @@
- #define MAP_32BIT	0x40		/* only give out 32bit addresses */
- #define MAP_ABOVE4G	0x80		/* only map above 4GB */
- 
--/* Flags for map_shadow_stack(2) */
--#define SHADOW_STACK_SET_TOKEN	(1ULL << 0)	/* Set up a restore token in the shadow stack */
--
- #include <asm-generic/mman.h>
- 
- #endif /* _ASM_X86_MMAN_H */
-diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
-index 059685612362..512339b271e1 100644
---- a/arch/x86/kernel/shstk.c
-+++ b/arch/x86/kernel/shstk.c
-@@ -25,6 +25,7 @@
- #include <asm/special_insns.h>
- #include <asm/fpu/api.h>
- #include <asm/prctl.h>
-+#include <linux/usershstk.h>
- 
- #define SS_FRAME_SIZE 8
- 
-@@ -43,11 +44,56 @@ static void features_clr(unsigned long features)
- 	current->thread.features &= ~features;
- }
- 
-+bool arch_cpu_supports_shadow_stack(void)
-+{
-+	return cpu_feature_enabled(X86_FEATURE_USER_SHSTK);
-+}
-+
-+bool arch_is_shstk_enabled(struct task_struct *task)
-+{
-+	return features_enabled(ARCH_SHSTK_SHSTK);
-+}
-+
-+void arch_set_shstk_base_size(struct task_struct *task, unsigned long base,
-+			unsigned long size)
-+{
-+	struct thread_shstk *shstk = &task->thread.shstk;
-+
-+	shstk->base = base;
-+	shstk->size = size;
-+}
-+
-+void arch_get_shstk_base_size(struct task_struct *task, unsigned long *base,
-+			unsigned long *size)
-+{
-+	struct thread_shstk *shstk = &task->thread.shstk;
-+
-+	*base = shstk->base;
-+	*size = shstk->size;
-+}
-+
-+
-+void arch_set_shstk_ptr_and_enable(unsigned long ssp)
-+{
-+	fpregs_lock_and_load();
-+	wrmsrl(MSR_IA32_PL3_SSP, ssp);
-+	wrmsrl(MSR_IA32_U_CET, CET_SHSTK_EN);
-+	fpregs_unlock();
-+}
-+
-+void arch_set_thread_shstk_status(bool enable)
-+{
-+	if (enable)
-+		features_set(ARCH_SHSTK_SHSTK);
-+	else
-+		features_clr(ARCH_SHSTK_SHSTK);
-+}
-+
- /*
-  * Create a restore token on the shadow stack.  A token is always 8-byte
-  * and aligned to 8.
-  */
--static int create_rstor_token(unsigned long ssp, unsigned long *token_addr)
-+int arch_create_rstor_token(unsigned long ssp, unsigned long *token_addr)
- {
- 	unsigned long addr;
- 
-@@ -72,118 +118,6 @@ static int create_rstor_token(unsigned long ssp, unsigned long *token_addr)
- 	return 0;
- }
- 
--/*
-- * VM_SHADOW_STACK will have a guard page. This helps userspace protect
-- * itself from attacks. The reasoning is as follows:
-- *
-- * The shadow stack pointer(SSP) is moved by CALL, RET, and INCSSPQ. The
-- * INCSSP instruction can increment the shadow stack pointer. It is the
-- * shadow stack analog of an instruction like:
-- *
-- *   addq $0x80, %rsp
-- *
-- * However, there is one important difference between an ADD on %rsp
-- * and INCSSP. In addition to modifying SSP, INCSSP also reads from the
-- * memory of the first and last elements that were "popped". It can be
-- * thought of as acting like this:
-- *
-- * READ_ONCE(ssp);       // read+discard top element on stack
-- * ssp += nr_to_pop * 8; // move the shadow stack
-- * READ_ONCE(ssp-8);     // read+discard last popped stack element
-- *
-- * The maximum distance INCSSP can move the SSP is 2040 bytes, before
-- * it would read the memory. Therefore a single page gap will be enough
-- * to prevent any operation from shifting the SSP to an adjacent stack,
-- * since it would have to land in the gap at least once, causing a
-- * fault.
-- */
--static unsigned long alloc_shstk(unsigned long addr, unsigned long size,
--				 unsigned long token_offset, bool set_res_tok)
--{
--	int flags = MAP_ANONYMOUS | MAP_PRIVATE | MAP_ABOVE4G;
--	struct mm_struct *mm = current->mm;
--	unsigned long mapped_addr, unused;
--
--	if (addr)
--		flags |= MAP_FIXED_NOREPLACE;
--
--	mmap_write_lock(mm);
--	mapped_addr = do_mmap(NULL, addr, size, PROT_READ, flags,
--			      VM_SHADOW_STACK | VM_WRITE, 0, &unused, NULL);
--	mmap_write_unlock(mm);
--
--	if (!set_res_tok || IS_ERR_VALUE(mapped_addr))
--		goto out;
--
--	if (create_rstor_token(mapped_addr + token_offset, NULL)) {
--		vm_munmap(mapped_addr, size);
--		return -EINVAL;
--	}
--
--out:
--	return mapped_addr;
--}
--
--static unsigned long adjust_shstk_size(unsigned long size)
--{
--	if (size)
--		return PAGE_ALIGN(size);
--
--	return PAGE_ALIGN(min_t(unsigned long long, rlimit(RLIMIT_STACK), SZ_4G));
--}
--
--static void unmap_shadow_stack(u64 base, u64 size)
--{
--	int r;
--
--	r = vm_munmap(base, size);
--
--	/*
--	 * mmap_write_lock_killable() failed with -EINTR. This means
--	 * the process is about to die and have it's MM cleaned up.
--	 * This task shouldn't ever make it back to userspace. In this
--	 * case it is ok to leak a shadow stack, so just exit out.
--	 */
--	if (r == -EINTR)
--		return;
--
--	/*
--	 * For all other types of vm_munmap() failure, either the
--	 * system is out of memory or there is bug.
--	 */
--	WARN_ON_ONCE(r);
--}
--
--static int shstk_setup(void)
--{
--	struct thread_shstk *shstk = &current->thread.shstk;
--	unsigned long addr, size;
--
--	/* Already enabled */
--	if (features_enabled(ARCH_SHSTK_SHSTK))
--		return 0;
--
--	/* Also not supported for 32 bit */
--	if (!cpu_feature_enabled(X86_FEATURE_USER_SHSTK) || in_ia32_syscall())
--		return -EOPNOTSUPP;
--
--	size = adjust_shstk_size(0);
--	addr = alloc_shstk(0, size, 0, false);
--	if (IS_ERR_VALUE(addr))
--		return PTR_ERR((void *)addr);
--
--	fpregs_lock_and_load();
--	wrmsrl(MSR_IA32_PL3_SSP, addr + size);
--	wrmsrl(MSR_IA32_U_CET, CET_SHSTK_EN);
--	fpregs_unlock();
--
--	shstk->base = addr;
--	shstk->size = size;
--	features_set(ARCH_SHSTK_SHSTK);
--
--	return 0;
--}
--
- void reset_thread_features(void)
- {
- 	memset(&current->thread.shstk, 0, sizeof(struct thread_shstk));
-@@ -191,48 +125,6 @@ void reset_thread_features(void)
- 	current->thread.features_locked = 0;
- }
- 
--unsigned long shstk_alloc_thread_stack(struct task_struct *tsk, unsigned long clone_flags,
--				       unsigned long stack_size)
--{
--	struct thread_shstk *shstk = &tsk->thread.shstk;
--	unsigned long addr, size;
--
--	/*
--	 * If shadow stack is not enabled on the new thread, skip any
--	 * switch to a new shadow stack.
--	 */
--	if (!features_enabled(ARCH_SHSTK_SHSTK))
--		return 0;
--
--	/*
--	 * For CLONE_VFORK the child will share the parents shadow stack.
--	 * Make sure to clear the internal tracking of the thread shadow
--	 * stack so the freeing logic run for child knows to leave it alone.
--	 */
--	if (clone_flags & CLONE_VFORK) {
--		shstk->base = 0;
--		shstk->size = 0;
--		return 0;
--	}
--
--	/*
--	 * For !CLONE_VM the child will use a copy of the parents shadow
--	 * stack.
--	 */
--	if (!(clone_flags & CLONE_VM))
--		return 0;
--
--	size = adjust_shstk_size(stack_size);
--	addr = alloc_shstk(0, size, 0, false);
--	if (IS_ERR_VALUE(addr))
--		return addr;
--
--	shstk->base = addr;
--	shstk->size = size;
--
--	return addr + size;
--}
--
- static unsigned long get_user_shstk_addr(void)
- {
- 	unsigned long long ssp;
-@@ -402,44 +294,6 @@ int restore_signal_shadow_stack(void)
- 	return 0;
- }
- 
--void shstk_free(struct task_struct *tsk)
--{
--	struct thread_shstk *shstk = &tsk->thread.shstk;
--
--	if (!cpu_feature_enabled(X86_FEATURE_USER_SHSTK) ||
--	    !features_enabled(ARCH_SHSTK_SHSTK))
--		return;
--
--	/*
--	 * When fork() with CLONE_VM fails, the child (tsk) already has a
--	 * shadow stack allocated, and exit_thread() calls this function to
--	 * free it.  In this case the parent (current) and the child share
--	 * the same mm struct.
--	 */
--	if (!tsk->mm || tsk->mm != current->mm)
--		return;
--
--	/*
--	 * If shstk->base is NULL, then this task is not managing its
--	 * own shadow stack (CLONE_VFORK). So skip freeing it.
--	 */
--	if (!shstk->base)
--		return;
--
--	/*
--	 * shstk->base is NULL for CLONE_VFORK child tasks, and so is
--	 * normal. But size = 0 on a shstk->base is not normal and
--	 * indicated an attempt to free the thread shadow stack twice.
--	 * Warn about it.
--	 */
--	if (WARN_ON(!shstk->size))
--		return;
--
--	unmap_shadow_stack(shstk->base, shstk->size);
--
--	shstk->size = 0;
--}
--
- static int wrss_control(bool enable)
- {
- 	u64 msrval;
-@@ -502,36 +356,6 @@ static int shstk_disable(void)
- 	return 0;
- }
- 
--SYSCALL_DEFINE3(map_shadow_stack, unsigned long, addr, unsigned long, size, unsigned int, flags)
--{
--	bool set_tok = flags & SHADOW_STACK_SET_TOKEN;
--	unsigned long aligned_size;
--
--	if (!cpu_feature_enabled(X86_FEATURE_USER_SHSTK))
--		return -EOPNOTSUPP;
--
--	if (flags & ~SHADOW_STACK_SET_TOKEN)
--		return -EINVAL;
--
--	/* If there isn't space for a token */
--	if (set_tok && size < 8)
--		return -ENOSPC;
--
--	if (addr && addr < SZ_4G)
--		return -ERANGE;
--
--	/*
--	 * An overflow would result in attempting to write the restore token
--	 * to the wrong location. Not catastrophic, but just return the right
--	 * error code and block it.
--	 */
--	aligned_size = PAGE_ALIGN(size);
--	if (aligned_size < size)
--		return -EOVERFLOW;
--
--	return alloc_shstk(addr, aligned_size, size, set_tok);
--}
--
- long shstk_prctl(struct task_struct *task, int option, unsigned long arg2)
- {
- 	unsigned long features = arg2;
-diff --git a/include/linux/usershstk.h b/include/linux/usershstk.h
-new file mode 100644
-index 000000000000..68d751948e35
---- /dev/null
-+++ b/include/linux/usershstk.h
-@@ -0,0 +1,25 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _SHSTK_H
-+#define _SHSTK_H
-+
-+#ifndef __ASSEMBLY__
-+#include <linux/types.h>
-+
-+unsigned long alloc_shstk(unsigned long addr, unsigned long size,
-+				 unsigned long token_offset, bool set_res_tok);
-+int shstk_setup(void);
-+int create_rstor_token(unsigned long ssp, unsigned long *token_addr);
-+bool cpu_supports_shadow_stack(void);
-+bool is_shstk_enabled(struct task_struct *task);
-+void set_shstk_base_size(struct task_struct *task, unsigned long base,
-+			unsigned long size);
-+void get_shstk_base_size(struct task_struct *task, unsigned long *base,
-+			unsigned long *size);
-+void set_shstk_ptr_and_enable(unsigned long ssp);
-+void set_thread_shstk_status(bool enable);
-+unsigned long adjust_shstk_size(unsigned long size);
-+void unmap_shadow_stack(u64 base, u64 size);
-+
-+#endif /* __ASSEMBLY__ */
-+
-+#endif /* _SHSTK_H */
-diff --git a/include/uapi/asm-generic/mman-common.h b/include/uapi/asm-generic/mman-common.h
-index 6ce1f1ceb432..2c36e4c7b6ec 100644
---- a/include/uapi/asm-generic/mman-common.h
-+++ b/include/uapi/asm-generic/mman-common.h
-@@ -87,4 +87,7 @@
- #define PKEY_ACCESS_MASK	(PKEY_DISABLE_ACCESS |\
- 				 PKEY_DISABLE_WRITE)
- 
-+/* Flags for map_shadow_stack(2) */
-+#define SHADOW_STACK_SET_TOKEN	(1ULL << 0)	/* Set up a restore token in the shadow stack */
-+
- #endif /* __ASM_GENERIC_MMAN_COMMON_H */
-diff --git a/kernel/Makefile b/kernel/Makefile
-index 87866b037fbe..1922c456b954 100644
---- a/kernel/Makefile
-+++ b/kernel/Makefile
-@@ -140,6 +140,8 @@ KCOV_INSTRUMENT_stackleak.o := n
- 
- obj-$(CONFIG_SCF_TORTURE_TEST) += scftorture.o
- 
-+obj-$(CONFIG_ARCH_HAS_USER_SHADOW_STACK) += usershstk.o
-+
- $(obj)/configs.o: $(obj)/config_data.gz
- 
- targets += config_data config_data.gz
-diff --git a/kernel/usershstk.c b/kernel/usershstk.c
-new file mode 100644
-index 000000000000..055d70b99893
---- /dev/null
-+++ b/kernel/usershstk.c
-@@ -0,0 +1,289 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * shstk.c - Intel shadow stack support
-+ *
-+ * Copyright (c) 2021, Intel Corporation.
-+ * Yu-cheng Yu <yu-cheng.yu@intel.com>
-+ */
-+
-+#include <linux/sched.h>
-+#include <linux/bitops.h>
-+#include <linux/types.h>
-+#include <linux/mm.h>
-+#include <linux/mman.h>
-+#include <linux/slab.h>
-+#include <linux/uaccess.h>
-+#include <linux/sched/signal.h>
-+#include <linux/compat.h>
-+#include <linux/sizes.h>
-+#include <linux/user.h>
-+#include <linux/syscalls.h>
-+#include <asm/shstk.h>
-+#include <linux/usershstk.h>
-+
-+#define SHSTK_ENTRY_SIZE sizeof(void *)
-+
-+bool cpu_supports_shadow_stack(void)
-+{
-+	return arch_cpu_supports_shadow_stack();
-+}
-+
-+bool is_shstk_enabled(struct task_struct *task)
-+{
-+	return arch_is_shstk_enabled(task);
-+}
-+
-+void set_shstk_base_size(struct task_struct *task, unsigned long base,
-+			unsigned long size)
-+{
-+	arch_set_shstk_base_size(task, base, size);
-+}
-+
-+void get_shstk_base_size(struct task_struct *task, unsigned long *base,
-+			unsigned long *size)
-+{
-+	arch_get_shstk_base_size(task, base, size);
-+}
-+
-+void set_shstk_ptr_and_enable(unsigned long ssp)
-+{
-+	arch_set_shstk_ptr_and_enable(ssp);
-+}
-+
-+void set_thread_shstk_status(bool enable)
-+{
-+	arch_set_thread_shstk_status(enable);
-+}
-+
-+int create_rstor_token(unsigned long ssp, unsigned long *token_addr)
-+{
-+	return arch_create_rstor_token(ssp, token_addr);
-+}
-+
-+unsigned long adjust_shstk_size(unsigned long size)
-+{
-+	if (size)
-+		return PAGE_ALIGN(size);
-+
-+	return PAGE_ALIGN(min_t(unsigned long long, rlimit(RLIMIT_STACK), SZ_4G));
-+}
-+
-+void unmap_shadow_stack(u64 base, u64 size)
-+{
-+	int r;
-+
-+	r = vm_munmap(base, size);
-+
-+	/*
-+	 * mmap_write_lock_killable() failed with -EINTR. This means
-+	 * the process is about to die and have it's MM cleaned up.
-+	 * This task shouldn't ever make it back to userspace. In this
-+	 * case it is ok to leak a shadow stack, so just exit out.
-+	 */
-+	if (r == -EINTR)
-+		return;
-+
-+	/*
-+	 * For all other types of vm_munmap() failure, either the
-+	 * system is out of memory or there is bug.
-+	 */
-+	WARN_ON_ONCE(r);
-+}
-+
-+/*
-+ * VM_SHADOW_STACK will have a guard page. This helps userspace protect
-+ * itself from attacks. The reasoning is as follows:
-+ *
-+ * The shadow stack pointer(SSP) is moved by CALL, RET, and INCSSPQ. The
-+ * INCSSP instruction can increment the shadow stack pointer. It is the
-+ * shadow stack analog of an instruction like:
-+ *
-+ *   addq $0x80, %rsp
-+ *
-+ * However, there is one important difference between an ADD on %rsp
-+ * and INCSSP. In addition to modifying SSP, INCSSP also reads from the
-+ * memory of the first and last elements that were "popped". It can be
-+ * thought of as acting like this:
-+ *
-+ * READ_ONCE(ssp);       // read+discard top element on stack
-+ * ssp += nr_to_pop * 8; // move the shadow stack
-+ * READ_ONCE(ssp-8);     // read+discard last popped stack element
-+ *
-+ * The maximum distance INCSSP can move the SSP is 2040 bytes, before
-+ * it would read the memory. Therefore a single page gap will be enough
-+ * to prevent any operation from shifting the SSP to an adjacent stack,
-+ * since it would have to land in the gap at least once, causing a
-+ * fault.
-+ */
-+unsigned long alloc_shstk(unsigned long addr, unsigned long size,
-+				 unsigned long token_offset, bool set_res_tok)
-+{
-+	int flags = MAP_ANONYMOUS | MAP_PRIVATE;
-+
-+	flags |= IS_ENABLED(CONFIG_X86_64) ? MAP_ABOVE4G : 0;
-+
-+	struct mm_struct *mm = current->mm;
-+	unsigned long mapped_addr, unused;
-+
-+	if (addr)
-+		flags |= MAP_FIXED_NOREPLACE;
-+
-+	mmap_write_lock(mm);
-+	mapped_addr = do_mmap(NULL, addr, size, PROT_READ, flags,
-+			      VM_SHADOW_STACK | VM_WRITE, 0, &unused, NULL);
-+	mmap_write_unlock(mm);
-+
-+	if (!set_res_tok || IS_ERR_VALUE(mapped_addr))
-+		goto out;
-+
-+	if (create_rstor_token(mapped_addr + token_offset, NULL)) {
-+		vm_munmap(mapped_addr, size);
-+		return -EINVAL;
-+	}
-+
-+out:
-+	return mapped_addr;
-+}
-+
-+void shstk_free(struct task_struct *tsk)
-+{
-+	unsigned long base, size;
-+
-+	if (!cpu_supports_shadow_stack() ||
-+	    !is_shstk_enabled(current))
-+		return;
-+
-+	/*
-+	 * When fork() with CLONE_VM fails, the child (tsk) already has a
-+	 * shadow stack allocated, and exit_thread() calls this function to
-+	 * free it.  In this case the parent (current) and the child share
-+	 * the same mm struct.
-+	 */
-+	if (!tsk->mm || tsk->mm != current->mm)
-+		return;
-+
-+	get_shstk_base_size(tsk, &base, &size);
-+	/*
-+	 * If shstk->base is NULL, then this task is not managing its
-+	 * own shadow stack (CLONE_VFORK). So skip freeing it.
-+	 */
-+	if (!base)
-+		return;
-+
-+	/*
-+	 * shstk->base is NULL for CLONE_VFORK child tasks, and so is
-+	 * normal. But size = 0 on a shstk->base is not normal and
-+	 * indicated an attempt to free the thread shadow stack twice.
-+	 * Warn about it.
-+	 */
-+	if (WARN_ON(!size))
-+		return;
-+
-+	unmap_shadow_stack(base, size);
-+
-+	set_shstk_base_size(tsk, 0, 0);
-+}
-+
-+SYSCALL_DEFINE3(map_shadow_stack, unsigned long, addr, unsigned long, size, unsigned int, flags)
-+{
-+	bool set_tok = flags & SHADOW_STACK_SET_TOKEN;
-+	unsigned long aligned_size;
-+
-+	if (!cpu_supports_shadow_stack())
-+		return -EOPNOTSUPP;
-+
-+	if (flags & ~SHADOW_STACK_SET_TOKEN)
-+		return -EINVAL;
-+
-+	/* If there isn't space for a token */
-+	if (set_tok && size < SHSTK_ENTRY_SIZE)
-+		return -ENOSPC;
-+
-+	if (addr && (addr & (PAGE_SIZE - 1)))
-+		return -EINVAL;
-+
-+	if (IS_ENABLED(CONFIG_X86_64) &&
-+		addr && addr < SZ_4G)
-+		return -ERANGE;
-+
-+	/*
-+	 * An overflow would result in attempting to write the restore token
-+	 * to the wrong location. Not catastrophic, but just return the right
-+	 * error code and block it.
-+	 */
-+	aligned_size = PAGE_ALIGN(size);
-+	if (aligned_size < size)
-+		return -EOVERFLOW;
-+
-+	return alloc_shstk(addr, aligned_size, size, set_tok);
-+}
-+
-+int shstk_setup(void)
-+{
-+	struct thread_shstk *shstk = &current->thread.shstk;
-+	unsigned long addr, size;
-+
-+	/* Already enabled */
-+	if (is_shstk_enabled(current))
-+		return 0;
-+
-+	/* Also not supported for 32 bit */
-+	if (!cpu_supports_shadow_stack() ||
-+		(IS_ENABLED(CONFIG_X86_64) && in_ia32_syscall()))
-+		return -EOPNOTSUPP;
-+
-+	size = adjust_shstk_size(0);
-+	addr = alloc_shstk(0, size, 0, false);
-+	if (IS_ERR_VALUE(addr))
-+		return PTR_ERR((void *)addr);
-+
-+	set_shstk_ptr_and_enable(addr + size);
-+	set_shstk_base_size(current, addr, size);
-+
-+	set_thread_shstk_status(true);
-+
-+	return 0;
-+}
-+
-+unsigned long shstk_alloc_thread_stack(struct task_struct *tsk, unsigned long clone_flags,
-+				       unsigned long stack_size)
-+{
-+	struct thread_shstk *shstk = &tsk->thread.shstk;
-+	unsigned long addr, size;
-+
-+	if (!cpu_supports_shadow_stack())
-+		return -EOPNOTSUPP;
-+
-+	/*
-+	 * If shadow stack is not enabled on the new thread, skip any
-+	 * switch to a new shadow stack.
-+	 */
-+	if (!is_shstk_enabled(tsk))
-+		return 0;
-+
-+	/*
-+	 * For CLONE_VFORK the child will share the parents shadow stack.
-+	 * Make sure to clear the internal tracking of the thread shadow
-+	 * stack so the freeing logic run for child knows to leave it alone.
-+	 */
-+	if (clone_flags & CLONE_VFORK) {
-+		set_shstk_base_size(tsk, 0, 0);
-+		return 0;
-+	}
-+
-+	/*
-+	 * For !CLONE_VM the child will use a copy of the parents shadow
-+	 * stack.
-+	 */
-+	if (!(clone_flags & CLONE_VM))
-+		return 0;
-+
-+	size = adjust_shstk_size(stack_size);
-+	addr = alloc_shstk(0, size, 0, false);
-+	if (IS_ERR_VALUE(addr))
-+		return addr;
-+
-+	set_shstk_base_size(tsk, addr, size);
-+
-+	return addr + size;
-+}
-
--- 
-2.45.0
-
+SGkgTWljaGFlbCwNCg0KSSBjYW4gYW5zd2VyIHNvbWUgb2YgdGhlIHF1ZXN0aW9ucyBzaW5jZSBJ
+IGluc3RpZ2F0ZWQgdGhpcyBlZmZvcnQNCndoaWxlIGFnbyAoeW91IG1pZ2h0IGZpbmQgb2xkIGVt
+YWlsIGNoYWluL3MpLg0KDQoNCk9uIDEwLzEwLzI0IDExOjIxLCBNaWNoYWVsIEtlbGxleSB3cm90
+ZToNCiA+IEZyb206IE51bm8gRGFzIE5ldmVzIDxudW5vZGFzbmV2ZXNAbGludXgubWljcm9zb2Z0
+LmNvbT4gU2VudDogDQpUaHVyc2RheSwgT2N0b2JlciAzLCAyMDI0IDEyOjUxIFBNDQogPj4NCiA+
+PiBBZGQgZGVmaW5pdGlvbnMgbmVlZGVkIGZvciBwcml2aWxlZ2VkIEh5cGVyLVYgcGFydGl0aW9u
+cy4NCiA+Pg0KID4+IFRoZXNlIGZpbGVzIGFyZSBkZXJpdmVkIGZyb20gaGVhZGVycyBleHBvcnRl
+ZCBmcm9tIHRoZSBoeXBlcnZpc29yIGNvZGUuDQogPg0KID4gQ291bGQgeW91IGVsYWJvcmF0ZSBv
+biB0aGUgbmFtaW5nIGNvbnZlbnRpb25zIGZvciB0aGUgbmV3IGZpbGVzLA0KID4gYW5kIHRoZSBy
+dWxlcyB0aGF0IGdvdmVybiB3aGF0IGdvZXMgaW4gd2hhdCBmaWxlcz8gU3BlY2lmaWNhbGx5LA0K
+ID4gd2hhdCBpcyAiaHZnZGsiIHZzLiAiaHZoZGsiLCBhbmQgd2hhdCBhcmUgdGhlIF9leHQgYW5k
+IF9taW5pDQogPiBzdWZmaXhlcz8gRXZlbiBpZiB0aGUgZmlsZW5hbWVzIGFyZSBkZXJpdmVkIGZy
+b20gV2luZG93cw0KDQogICBodmhkayA6IGh5cCBob3N0IGRldmVsb3BtZW50IGtpdA0KICAgaHZn
+ZGsgOiBoeXAgZ3Vlc3QgZGV2ZWxvcG1lbnQga2l0DQoNCklPVywgaGRrIGZpbGVzIGluY2x1ZGUg
+ZGF0YSBzdHJ1Y3R1cmVzIGZvciBhIHByaXZpbGVnZWQgVk0sIGFrYQ0KZG9tMC9yb290L2hvc3Qs
+IGFuZCBnZGsgdGFyZ2V0cyBhbiB1bnByaXZpbGVnZWQgVk1zLCBpZSwgZ3Vlc3RzLg0KDQpUaGUg
+X21pbmkgaW1wbGllcyB0YXJnZXQgaXMgaG9zdC9ndWVzdCBrZXJuZWwsIGFuZCBub24tbWluaQ0K
+dGFyZ2V0cyBWTU1zLCBidXQgdGhhdCBhcHBlYXJzIG1vcmUgaGlzdG9yaWMgYXMgb3ZlciB0aW1l
+DQp0aGluZ3MgbW92ZWQgZnJvbSBrZXJuZWwgdG8gdXNlciBzcGFjZS4NCg0KVGhlIGh2Z2RrX2V4
+dCB3YXMgY3JlYXRlZCBmb3IgZXh0ZW5kZWQgaHlwZXJjYWxscy4NCg0KUGxlYXNlIG5vdGUsIHRo
+ZXNlIGhlYWRlcnMgYXJlIHB1YmxpY2x5IGV4cG9ydGVkIGJ5IHRoZSBoeXBlcnZpc29yDQphbmQg
+Y29uc3VtZWQgYXMgaXMgYnkgV2luZG93cyB0b2RheSAobm90IHN1cmUgYWJvdXQgQlNEIGFuZCBv
+dGhlcnMpLA0Kc28gY2hhbmdpbmcgdGhlbSBpcyBwcm9iIG5vdCBmZWFzaWJsZS4NCg0KLi4uDQog
+Pj4gVGhpcyBpcyBhIHN0ZXAgdG93YXJkIGltcG9ydGluZyBoZWFkZXJzIGRpcmVjdGx5LCBzaW1p
+bGFyIHRvIFhlbiBwdWJsaWMNCiA+PiBmaWxlcyBpbiBpbmNsdWRlL3hlbi9pbnRlcmZhY2UvLg0K
+ID4NCiA+IEknbSBub3QgdW5kZXJzdGFuZGluZyB0aGlzIHN0YXRlbWVudC4gVGhlIG5ldyBmaWxl
+cyBpbiB0aGlzIHBhdGNoDQogPiBhcmUgb2J2aW91c2x5IGZvbGxvd2luZyBMaW51eCBrZXJuZWwg
+Y29kaW5nIHN0eWxlLCB3aXRoIExpbnV4IGtlcm5lbA0KID4gdHlwZXMsIGV0Yy4gSSdtIGd1ZXNz
+aW5nIHRoZXJlIHdhcyBhIGxvdCBvZiAiYnVzeSB3b3JrIiB0byB0YWtlDQogPiBXaW5kb3dzIEh5
+cGVyLVYgY29kZSBhbmQgbWFrZSBpdCBsb29rIGxpa2UgTGludXgga2VybmVsIGNvZGUuIDotKA0K
+ID4gV2hhdCB3b3VsZCAiaW1wb3J0aW5nIGhlYWRlcnMgZGlyZWN0bHkiIGxvb2sgbGlrZSwgYW5k
+IGhvdyBpcyB0aGlzDQogPiBhbiBpbnRlcmltIHN0ZXA/DQoNCkNvcnJlY3QsIHRoZXkgYXJlIGN1
+cnJlbnRseSBub3QgZGlyZWN0bHkgaW1wb3J0ZWQuIFRoZSBjb2Rpbmcgc3R5bGUNCmlzIGRpZmZl
+cmVudCBhbmQgYWxzbyB0aGUgaHlwIGlzIG5vdCBidWlsdCB1c2luZyBnY2MvY2xhbmcuIFNvLCB3
+ZSd2ZQ0Kc29tZSB3b3JrIHRvIGRvIGJlZm9yZSB3ZSBjYW4gdXNlIHRoZW0gYXMgaXMuIEZvciBu
+b3csIHdlIGhhdmUNCiJtaXJyb3JlZCIgdGhlbSBtYW51YWxseSBlbmZvcmNpbmcgTGludXggc3R5
+bGUuIEdvaW5nIGZvcndhcmQsIHdlDQpoYXZlIHRvIGRlY2lkZSBpZiB3ZSBjYW4gdXNlIHRoZW0g
+YXMgaXMgKHRoZXJlIGlzIHNvbWUgcHJlY2VkZW50IGluDQpsaW51eCBmb3IgZHJpdmVycyBpbmNs
+dWRpbmcgaGVhZGVycyB3aXRoIGRpZmZlcmVudCBjb2Rpbmcgc3R5bGUpIG9yDQp3ZSBjYW4gYXV0
+byBjb252ZXJ0IHRoZW0gdmlhIHNvbWUgdG9vbCBvciB3ZSBjYW4ga2VlcCB0aGVtIG1hbnVhbA0K
+YW5kIG1vZGlmeSB0aGVtIGluIHN5bmMgd2l0aCBoeXAgbW9kaWZ5aW5nIHRoZW0uIEluIGFueSBj
+YXNlLCBpdA0Kc2hvdWxkIGJlIHJhcmUgb3BlcmF0aW9uLiBNYXRjaGluZyB0aGVtIG5vdyBhbGxv
+d3MgdXMgdG8gZ2V0IHRoZXJlLg0KDQpZb3UgYXJlIGNvcnJlY3QsIGl0IHdhcyAiYnVzeSB3b3Jr
+IiwgdG9vayBtZSBtb3JlIHRoYW4gdHdvIHdlZWtzIGluDQphZGRpdGlvbiB0byB0aW1lIE51bm8g
+YWxzbyBzcGVudC4NCg0KID4gQWxzbywgaXQgbG9va3MgbGlrZSB0aGVzZSBuZXcgZmlsZXMgdGFr
+ZSBhIGRpZmZlcmVudCBhcHByb2FjaCBmb3INCiA+IGluc3RydWN0aW9uIHNldCBhcmNoaXRlY3R1
+cmUgZGlmZmVyZW5jZXMuIFRoZXJlIGFyZSBpbmxpbmUgI2lmZGVmJ3MNCiA+IGluc3RlYWQgb2Yg
+dGhlIGN1cnJlbnQgbWV0aG9kIG9mIGhhdmluZyBhIGNvbW1vbiBmaWxlLCBhbmQgdGhlbg0KID4g
+YXJjaGl0ZWN0dXJlIHNwZWNpZmljIHZlcnNpb25zIHRoYXQgaW5jbHVkZSB0aGUgY29tbW9uIGZp
+bGUuIE15DQogPiBzZW5zZSBpcyB0aGF0IExpbnV4IGtlcm5lbCBjb2RlIHByZWZlcnMgdGhlIGN1
+cnJlbnQgYXBwcm9hY2ggaW4NCiA+IG9yZGVyIHRvIGF2b2lkICNpZmRlZidlcnksIGJ1dCBtYXli
+ZSB0aGF0J3MgbGVzcyBwcmFjdGljYWwgd2hlbiB0aGUNCiA+IGRlZmluaXRpb25zIGFyZSBkZXJp
+dmVkIGZyb20gV2luZG93cyBIeXBlci1WIGNvZGUuIEFuZCB3aXRoDQogPiBvbmx5IHR3byBhcmNo
+aXRlY3R1cmVzIHRvIGRlYWwgd2l0aCwgdGhlICNpZmRlZidzIGRvbid0IGdldA0KID4gd2lsZC1h
+bmQtY3JhenksIHdoaWNoIGlzIGdvb2QuDQoNCldlbGwsIHdlIGFyZSB0cnlpbmcgdG8ga2VlcCB0
+aGVtIGFzIGNsb3NlIHRvIHRoZSBvcmlnaW5hbHMgYXMNCnBvc3NpYmxlLiBCdXQgbm93IHRoYXQg
+bGludXggc3VwcG9ydCBpcyBoZXJlLCB3ZSB3aWxsIHdvcmsgd2l0aA0KdGhlIHByb2R1Y2VycyBv
+ZiB0aGVzZSBoZWFkZXJzLCBpZSwgdGhlIGh5cCB0ZWFtLCB0byBtYWtlIHRoZW0NCm1vcmUgbGlu
+dXggZnJpZW5kbHkgZ29pbmcgZm9yd2FyZC4gR2l2ZW4gdGhlcmUgYXJlIG90aGVyIGRpcmVjdA0K
+Y29uc3VtZXJzIG9mIHRoZSBoZWFkZXJzLCBXaW5kb3dzL0JTRC8uLiwgaXQgd29uJ3QgYmUgcmln
+aHQgYXdheSwNCmFzIHdlJ2QgaGF2ZSB0byBjb29yZGluYXRlIGFuZCBtYWtlIHN1cmUgYWxsIGFy
+ZSBoYXBweS4NCg0KSG9wZSB0aGF0IG1ha2VzIHNlbnNlLg0KDQpUaGFua3MsDQotTXVrZXNoDQoN
+Cg==
 
