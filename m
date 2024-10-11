@@ -1,104 +1,93 @@
-Return-Path: <linux-arch+bounces-8025-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8026-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A6DD99A104
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2024 12:15:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D8CE99A112
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2024 12:16:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C4EC1C23183
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2024 10:15:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D0180285579
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2024 10:16:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2827A21501B;
-	Fri, 11 Oct 2024 10:14:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F25AA210C0E;
+	Fri, 11 Oct 2024 10:16:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="egA9DfFj"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dHsPmUvu"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ej1-f74.google.com (mail-ej1-f74.google.com [209.85.218.74])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EC6321501D
-	for <linux-arch@vger.kernel.org>; Fri, 11 Oct 2024 10:14:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82A7E19B5B2
+	for <linux-arch@vger.kernel.org>; Fri, 11 Oct 2024 10:16:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728641669; cv=none; b=kHbwcfAYPlnK8RlUOoOBni0g8S/nk27jtkU0I3xqJjFQ8tqZRKz+8mC7Iq9qSmijmbg8X/vH99jmwCEkD0qWT9t8wh008tbYQedCsnweGZb8SlUR9/M0ZeS2VhYv2tjAr2J9MempUiHnqCOeLvSD+Zz+CislaSyu/ELR/eQA7ew=
+	t=1728641788; cv=none; b=U6lI2G4PiKf5G7/HN1EZhNNiGtfzMEGx7ktMT2SzK1Pb9FUwm5EIup1p88rzmNPf6lFLtw4Of543sY68shJ4QoMdIF9BTGPZooskEKl2DBKAKIP44JJDiixV6OBBgJRjDQB+hC6aCOp6XbYUndW4bqv4jptTo1wqkOwzNKdcYZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728641669; c=relaxed/simple;
-	bh=OvzSr4VFrX1KtK2UXFthBCdVxqArCAH6SA7+jizJ+V0=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=QvfqVIL8wYN9xwxNzD1pg6eFRnxn+URrx90/0VDoTqTr2IoebRN1hgO8naHPno83ufhQ5jLg7GQ4vvPfNQrFoQ886HG4KUuaOaI9nNhTG+UiMoYDI9/eKOofNKRK0LWaUG1aIEGbI5NpqJNCG/1oxUZ1Sx0BeQKlwI7TZem8Ugs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=egA9DfFj; arc=none smtp.client-ip=209.85.218.74
+	s=arc-20240116; t=1728641788; c=relaxed/simple;
+	bh=VnRcOvG00eDk9unXV1hgFBknglSVE5O1qDH//99Y1Rw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mOkqWDO3JI5p3QteQSZpNoCiYyG/v1sPeFSY6Ou5q+djKThKu1t7c1zli/fCSdVVDzwMBOa4QRGUrZ0tkx8kgvzVbJOBY7qcjFd5EIOhTEHTdTULzU2tCKLCKirPpYzUkvpOVSEPwJGYGQX+amDFLerMYC3lLEI0Xmt3ME6/2OU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dHsPmUvu; arc=none smtp.client-ip=209.85.128.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
-Received: by mail-ej1-f74.google.com with SMTP id a640c23a62f3a-a996c29edabso119233566b.1
-        for <linux-arch@vger.kernel.org>; Fri, 11 Oct 2024 03:14:26 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-42cbbb1727eso16030995e9.2
+        for <linux-arch@vger.kernel.org>; Fri, 11 Oct 2024 03:16:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1728641665; x=1729246465; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dXlYt/oa+7NEzDWWVPyKVNY96AVLFROe93mGWbsR7r0=;
-        b=egA9DfFjuYqG4OjbDW7n0FqIBWgDiXG3mluYtahjo+wrjQg3sxwQnN317fw5KimA72
-         TPQzI/96Y/iRXShWMdHtExoaxaXlB8Aro/RbRRyW23lwoWLOXoInzQMZ2fiSjcj9PBR0
-         bWhiG1sqkp2a9do1/+yEg+8nhh8aUG0g+WLqkSj0781UYm4KlQuti2nA+Vji2oQRZANW
-         8Mud4z2E03aA44mDkBKGdaBHGbjn5MRV6RSQly9DLOkTC7ZJYTlSE9HqqaR+NTwwQi5T
-         VFj2HWNDPHRFnPjz1YBeQ4xDfdHVsfDRqVzaxsHtOHQbqRO1SVKrXOo88Vwp5b0tPTxV
-         m+Rg==
+        d=google.com; s=20230601; t=1728641785; x=1729246585; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VnRcOvG00eDk9unXV1hgFBknglSVE5O1qDH//99Y1Rw=;
+        b=dHsPmUvuEGrSeb222HJsh48e4OS2YwbZb/ba8QgQO7B+sRVD80Wae8KSrCv6aINT1E
+         Lm4HaARgBoTn5D8OknLykrc+bhqpWw95UzgkYxte1Ff2ILb6rNdUqywO7hKDwJVfHv2q
+         T49+2eMAvdisJQtEEq/NrhRk7MNuZCekZdGEI3L45SLUvpx6DTG4D6vMMgb7GJP+gYU5
+         MVqqldBidARWrQgDAiP3XcPMlLfW0/lhSu3eAESosLArMXgKJ9HfH7qRtb9V7v9Ojxmu
+         HN1/qrnzRFz+NsbiH3BEjCcW8VccLaunw6h2ELn7XWy8yKbvmNhs2RztkBf8Um/3/KdG
+         npCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728641665; x=1729246465;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dXlYt/oa+7NEzDWWVPyKVNY96AVLFROe93mGWbsR7r0=;
-        b=s5qwBWwE+odFtUyO+GyBnYL+KKpka9O1F3RcFWD+qWHvnhkAohizA0ayduDoW/UKJP
-         k7qTZUv5ns79uOiq6y/SxBNU0yfGnzs0PUhGSaPi9o7DrZZAKal0y7ikDNaSAbnAe28/
-         LMR+yWnbFoAwXy5djF4/MZFlqlQJ84HNqO6qYeYgQHXNfDFP358xxAp0ddYojBFqiQda
-         r3zChI1kAHqpZwtOL4ByCKs7T5f1wg1l9GrCapZ1TLIMOwqwUnFn9Vf2lZ08433Rzdja
-         lrwIc87VY1mJQ6qndDLyP8NaipqQkLgVk9dGyQlFH/v6kipTy0wrEVvSiW986REf2Qzo
-         C+2A==
-X-Forwarded-Encrypted: i=1; AJvYcCWLVvMEnfbbStam1cz6IwyL3HZ/4PzsLZYwysOJMtGycX42ffN7YWpHwGdnGfBIx5VY1dsXzuEEkH9N@vger.kernel.org
-X-Gm-Message-State: AOJu0YxVb43ormhb5mfMvFs5LqYv82j7KO29ancL+tCm+OegoVHhJ0a9
-	GL1e8xJa8mL4tjlOj6qYgoP2BOX6XKBxsz9G/rQ/5yjGr4YJEKwBCY/Q49/SrObTAEPE8KdCUHR
-	G4rrzsuqpXXhNbQ==
-X-Google-Smtp-Source: AGHT+IFUZk2XvsvMj6Wc3yCHDL1hoT/VWhngxWmpV68U6xzKMORLk/rDkjmoUsncuiuiUYkc5ZtZnBPBoMLMN2Q=
-X-Received: from aliceryhl.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:35bd])
- (user=aliceryhl job=sendgmr) by 2002:a17:907:7e8e:b0:a99:3a34:5cae with SMTP
- id a640c23a62f3a-a99b92d148emr46766b.2.1728641665077; Fri, 11 Oct 2024
- 03:14:25 -0700 (PDT)
-Date: Fri, 11 Oct 2024 10:13:38 +0000
-In-Reply-To: <20241011-tracepoint-v10-0-7fbde4d6b525@google.com>
+        d=1e100.net; s=20230601; t=1728641785; x=1729246585;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VnRcOvG00eDk9unXV1hgFBknglSVE5O1qDH//99Y1Rw=;
+        b=UPCeAVbhVJRse5ZHVP+v/qMplhJMv9o0ZwBu5FtJxZZs4NmJmm/LquA0D3CylbufS5
+         eq5BTtWt2X6H1PoWAw2voEj3LGOXIWmcK09Vgu1IyFC1JAvwdVEc0wLPhcUwvWBm3TnO
+         VODiBFq85nEMGHANMVHSNcCdqoIUWqPFVCScj7WVu53A9rhBU9tqWsiF5nXn7rORKUmS
+         RebEF+nYJbVvospZxPNnP6EjGf1ETjk1lMKTjQHxhUe9GQbn6DrRNY3ejIuAykyFrKz0
+         c10GjZLjvk6X3QODne3tvhx6PlaobGMoiOFKwe4k+4iIHrUWqvOtG35Yh5o9BRs2TfFH
+         fyZw==
+X-Forwarded-Encrypted: i=1; AJvYcCXWoPmikO/FYs6GKlxhMMwk5oPPPxTY0dCytNAlhKvQvKL6nrB0HEp+7Fi3ZrWU6hRCRzvWTuh9QAGl@vger.kernel.org
+X-Gm-Message-State: AOJu0YyDGOMj3xzjC4iZWL000492i3kAItA8mj0J73UJ5NvBEslGEdK2
+	VlqQf91C71eothGYtO+VLbVGoMOn+aGwLCwJWw+kgzs/d3F5egvgmMmG/6NS89TU/9sUpZN/05y
+	b2C3vMzyejVtrserTTs3xVj11iQuEr5tHC/Os
+X-Google-Smtp-Source: AGHT+IGMNjtCG9rpECyAAco9DzsrUijuUFkuK2ogFVx/VRCgWggYYygWbJym2kgBDSGBNFLXnFb7cUmfBa/gllnaBLs=
+X-Received: by 2002:a05:600c:4e8a:b0:42c:af06:718 with SMTP id
+ 5b1f17b1804b1-4311df435e7mr16515715e9.28.1728641784578; Fri, 11 Oct 2024
+ 03:16:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20241011-tracepoint-v10-0-7fbde4d6b525@google.com>
-X-Developer-Key: i=aliceryhl@google.com; a=openpgp; fpr=49F6C1FAA74960F43A5B86A1EE7A392FDE96209F
-X-Developer-Signature: v=1; a=openpgp-sha256; l=8525; i=aliceryhl@google.com;
- h=from:subject:message-id; bh=OvzSr4VFrX1KtK2UXFthBCdVxqArCAH6SA7+jizJ+V0=;
- b=owEBbQKS/ZANAwAKAQRYvu5YxjlGAcsmYgBnCPpx+Q1CTMK1zq1TvBDRV65hgxAf2+JhbNWSq
- 9VSnEym5kWJAjMEAAEKAB0WIQSDkqKUTWQHCvFIvbIEWL7uWMY5RgUCZwj6cQAKCRAEWL7uWMY5
- RqAlEACRKcilZAk3daKUNVB69XPd0ba36+SjExxjWIeNqFcCXa/txKr36QlmH0UAaoHDzHjqlVh
- xQTBWY9Iey+UMsJ9H78It7nCP53ylbcZd5YV2U2QZMxAdmKiP6ZF4aG0GZGx9MmlcCxtFsD+B1x
- X72KQi90T94oyyMiyTWI0i7vEx5FWYljYDU7OVCvEtVrHqdqxEa/XVGGmzt0xGM6HZ0R6Fqle7h
- uaHZyn5XOwLJ9jlfpdVCpold8x1IJDwx1NzokTVEWLPIISmdsKw76UumqYFiMth9FELCCH5h9zd
- ZiDQACwvtCFi4UShoCsTNEdmkg7KQPYbu9ZWYTeAgi1bnEHkzDh6iNHrhM2kydaC155iwO0QEu+
- zfOZUWbqiH2+a6TCzPHdOuQCzmxmfY+FkA+OeIVQKREERe92SXetc2I1QRcKEheJ+Rl79bjqvGI
- Dc4DiMB/QxGOxKVe3WpJHHGZWKnf/+sYEr8a78usmQqkrgCx2mToZQLvkWKgVM/laa5oag1bAkZ
- rqwH/jNzMoaVXsfbEGVByX+kwbZmBtPcAWr9/guV1Y9/jHEKYONhQTkudCU2/gSBAuYym/Xf2S/
- v4+uEtlf0wCnoKx5eSSu8WciQvPYrAHT8dpj2PYinx13xVhv/4c9sGWGN+tfIiFrZ0Ylc5Ck25p PXXvORodchFSF4A==
-X-Mailer: b4 0.13.0
-Message-ID: <20241011-tracepoint-v10-5-7fbde4d6b525@google.com>
-Subject: [PATCH v10 5/5] rust: add arch_static_branch
+MIME-Version: 1.0
+References: <20241001-tracepoint-v9-0-1ad3b7d78acb@google.com>
+ <20241001-tracepoint-v9-1-1ad3b7d78acb@google.com> <20241001211543.qdjl4pyfhehxqfk7@treble>
+ <20241010154320.6d17ba69@gandalf.local.home>
+In-Reply-To: <20241010154320.6d17ba69@gandalf.local.home>
 From: Alice Ryhl <aliceryhl@google.com>
-To: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+Date: Fri, 11 Oct 2024 12:16:10 +0200
+Message-ID: <CAH5fLgiW-AEN-YN3YoW66hV2w6eEP03OC4oefg0N-tdwyLx8cA@mail.gmail.com>
+Subject: Re: [PATCH v9 1/5] rust: add generic static_key_false
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
 	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Jason Baron <jbaron@akamai.com>, 
-	Ard Biesheuvel <ardb@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	"=?utf-8?q?Bj=C3=B6rn_Roy_Baron?=" <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, 
-	Andreas Hindborg <a.hindborg@kernel.org>
-Cc: linux-trace-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	Jason Baron <jbaron@akamai.com>, Ard Biesheuvel <ardb@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	linux-trace-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org, 
 	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
 	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
@@ -114,235 +103,44 @@ Cc: linux-trace-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
 	linux-riscv@lists.infradead.org, Huacai Chen <chenhuacai@kernel.org>, 
 	WANG Xuerui <kernel@xen0n.name>, Bibo Mao <maobibo@loongson.cn>, 
 	Tiezhu Yang <yangtiezhu@loongson.cn>, Andrew Morton <akpm@linux-foundation.org>, 
-	Tianrui Zhao <zhaotianrui@loongson.cn>, loongarch@lists.linux.dev, 
-	Alice Ryhl <aliceryhl@google.com>
-Content-Type: text/plain; charset="utf-8"
+	Tianrui Zhao <zhaotianrui@loongson.cn>, loongarch@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-To allow the Rust implementation of static_key_false to use runtime code
-patching instead of the generic implementation, pull in the relevant
-inline assembly from the jump_label.h header by running the C
-preprocessor on a .rs.S file. Build rules are added for .rs.S files.
+On Thu, Oct 10, 2024 at 9:43=E2=80=AFPM Steven Rostedt <rostedt@goodmis.org=
+> wrote:
+>
+> On Tue, 1 Oct 2024 14:15:43 -0700
+> Josh Poimboeuf <jpoimboe@kernel.org> wrote:
+>
+> > On Tue, Oct 01, 2024 at 01:29:58PM +0000, Alice Ryhl wrote:
+> > > Add just enough support for static key so that we can use it from
+> > > tracepoints. Tracepoints rely on `static_key_false` even though it is
+> > > deprecated, so we add the same functionality to Rust.
+> >
+> > Instead of extending the old deprecated static key interface into Rust,
+> > can we just change tracepoints to use the new one?
+> >
+> > /me makes a note to go convert the other users...
+> >
+> > From: Josh Poimboeuf <jpoimboe@kernel.org>
+> > Subject: [PATCH] tracepoints: Use new static branch API
+> >
+> > The old static key API based on 'struct static_key' is deprecated.
+> > Convert tracepoints to use the new API.
+> >
+> > Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+>
+> Alice,
+>
+> Can you send a v10 with the added acks and whitespace fixes as well as
+> using static_branch_unlikely(), and I'll pull it into my tree.
+>
+> Base it off of v6.12-rc2.
 
-Since the relevant inline asm has been adjusted to export the inline asm
-via the ARCH_STATIC_BRANCH_ASM macro in a consistent way, the Rust side
-does not need architecture specific code to pull in the asm.
+Here you go:
+https://lore.kernel.org/all/20241011-tracepoint-v10-0-7fbde4d6b525@google.c=
+om/
 
-It is not possible to use the existing C implementation of
-arch_static_branch via a Rust helper because it passes the argument
-`key` to inline assembly as an 'i' parameter. Any attempt to add a C
-helper for this function will fail to compile because the value of `key`
-must be known at compile-time.
-
-Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
-Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-Signed-off-by: Alice Ryhl <aliceryhl@google.com>
----
- rust/Makefile                           |  5 ++-
- rust/kernel/.gitignore                  |  3 ++
- rust/kernel/arch_static_branch_asm.rs.S |  7 ++++
- rust/kernel/jump_label.rs               | 64 ++++++++++++++++++++++++++++++++-
- rust/kernel/lib.rs                      | 35 ++++++++++++++++++
- scripts/Makefile.build                  |  9 ++++-
- 6 files changed, 120 insertions(+), 3 deletions(-)
-
-diff --git a/rust/Makefile b/rust/Makefile
-index b5e0a73b78f3..09ea07cc4001 100644
---- a/rust/Makefile
-+++ b/rust/Makefile
-@@ -36,6 +36,8 @@ always-$(CONFIG_RUST_KERNEL_DOCTESTS) += doctests_kernel_generated_kunit.c
- obj-$(CONFIG_RUST_KERNEL_DOCTESTS) += doctests_kernel_generated.o
- obj-$(CONFIG_RUST_KERNEL_DOCTESTS) += doctests_kernel_generated_kunit.o
- 
-+always-$(subst y,$(CONFIG_RUST),$(CONFIG_JUMP_LABEL)) += kernel/arch_static_branch_asm.rs
-+
- # Avoids running `$(RUSTC)` for the sysroot when it may not be available.
- ifdef CONFIG_RUST
- 
-@@ -421,7 +423,8 @@ $(obj)/uapi.o: $(src)/uapi/lib.rs \
- $(obj)/kernel.o: private rustc_target_flags = --extern alloc \
-     --extern build_error --extern macros --extern bindings --extern uapi
- $(obj)/kernel.o: $(src)/kernel/lib.rs $(obj)/alloc.o $(obj)/build_error.o \
--    $(obj)/libmacros.so $(obj)/bindings.o $(obj)/uapi.o FORCE
-+    $(obj)/libmacros.so $(obj)/bindings.o $(obj)/uapi.o \
-+	$(obj)/kernel/arch_static_branch_asm.rs FORCE
- 	+$(call if_changed_rule,rustc_library)
- 
- endif # CONFIG_RUST
-diff --git a/rust/kernel/.gitignore b/rust/kernel/.gitignore
-new file mode 100644
-index 000000000000..d082731007c6
---- /dev/null
-+++ b/rust/kernel/.gitignore
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+/arch_static_branch_asm.rs
-diff --git a/rust/kernel/arch_static_branch_asm.rs.S b/rust/kernel/arch_static_branch_asm.rs.S
-new file mode 100644
-index 000000000000..2afb638708db
---- /dev/null
-+++ b/rust/kernel/arch_static_branch_asm.rs.S
-@@ -0,0 +1,7 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#include <linux/jump_label.h>
-+
-+// Cut here.
-+
-+::kernel::concat_literals!(ARCH_STATIC_BRANCH_ASM("{symb} + {off} + {branch}", "{l_yes}"))
-diff --git a/rust/kernel/jump_label.rs b/rust/kernel/jump_label.rs
-index 4b7655b2a022..cbd0ec00f0c5 100644
---- a/rust/kernel/jump_label.rs
-+++ b/rust/kernel/jump_label.rs
-@@ -24,7 +24,69 @@ macro_rules! static_branch_unlikely {
-         let _key: *const $crate::bindings::static_key_false = ::core::ptr::addr_of!((*_key).$field);
-         let _key: *const $crate::bindings::static_key = _key.cast();
- 
--        $crate::bindings::static_key_count(_key.cast_mut()) > 0
-+        #[cfg(not(CONFIG_JUMP_LABEL))]
-+        {
-+            $crate::bindings::static_key_count(_key) > 0
-+        }
-+
-+        #[cfg(CONFIG_JUMP_LABEL)]
-+        $crate::jump_label::arch_static_branch! { $key, $keytyp, $field, false }
-     }};
- }
- pub use static_branch_unlikely;
-+
-+/// Assert that the assembly block evaluates to a string literal.
-+#[cfg(CONFIG_JUMP_LABEL)]
-+const _: &str = include!(concat!(env!("OBJTREE"), "/rust/kernel/arch_static_branch_asm.rs"));
-+
-+#[macro_export]
-+#[doc(hidden)]
-+#[cfg(CONFIG_JUMP_LABEL)]
-+#[cfg(not(CONFIG_HAVE_JUMP_LABEL_HACK))]
-+macro_rules! arch_static_branch {
-+    ($key:path, $keytyp:ty, $field:ident, $branch:expr) => {'my_label: {
-+        $crate::asm!(
-+            include!(concat!(env!("OBJTREE"), "/rust/kernel/arch_static_branch_asm.rs"));
-+            l_yes = label {
-+                break 'my_label true;
-+            },
-+            symb = sym $key,
-+            off = const ::core::mem::offset_of!($keytyp, $field),
-+            branch = const $crate::jump_label::bool_to_int($branch),
-+        );
-+
-+        break 'my_label false;
-+    }};
-+}
-+
-+#[macro_export]
-+#[doc(hidden)]
-+#[cfg(CONFIG_JUMP_LABEL)]
-+#[cfg(CONFIG_HAVE_JUMP_LABEL_HACK)]
-+macro_rules! arch_static_branch {
-+    ($key:path, $keytyp:ty, $field:ident, $branch:expr) => {'my_label: {
-+        $crate::asm!(
-+            include!(concat!(env!("OBJTREE"), "/rust/kernel/arch_static_branch_asm.rs"));
-+            l_yes = label {
-+                break 'my_label true;
-+            },
-+            symb = sym $key,
-+            off = const ::core::mem::offset_of!($keytyp, $field),
-+            branch = const 2 | $crate::jump_label::bool_to_int($branch),
-+        );
-+
-+        break 'my_label false;
-+    }};
-+}
-+
-+#[cfg(CONFIG_JUMP_LABEL)]
-+pub use arch_static_branch;
-+
-+/// A helper used by inline assembly to pass a boolean to as a `const` parameter.
-+///
-+/// Using this function instead of a cast lets you assert that the input is a boolean, and not some
-+/// other type that can also be cast to an integer.
-+#[doc(hidden)]
-+pub const fn bool_to_int(b: bool) -> i32 {
-+    b as i32
-+}
-diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-index 55f81f49024e..c0ae9ddd9468 100644
---- a/rust/kernel/lib.rs
-+++ b/rust/kernel/lib.rs
-@@ -148,3 +148,38 @@ macro_rules! container_of {
-         ptr.sub(offset) as *const $type
-     }}
- }
-+
-+/// Helper for `.rs.S` files.
-+#[doc(hidden)]
-+#[macro_export]
-+macro_rules! concat_literals {
-+    ($( $asm:literal )* ) => {
-+        ::core::concat!($($asm),*)
-+    };
-+}
-+
-+/// Wrapper around `asm!` configured for use in the kernel.
-+///
-+/// Uses a semicolon to avoid parsing ambiguities, even though this does not match native `asm!`
-+/// syntax.
-+// For x86, `asm!` uses intel syntax by default, but we want to use at&t syntax in the kernel.
-+#[cfg(target_arch = "x86_64")]
-+#[macro_export]
-+macro_rules! asm {
-+    ($($asm:expr),* ; $($rest:tt)*) => {
-+        ::core::arch::asm!( $($asm)*, options(att_syntax), $($rest)* )
-+    };
-+}
-+
-+/// Wrapper around `asm!` configured for use in the kernel.
-+///
-+/// Uses a semicolon to avoid parsing ambiguities, even though this does not match native `asm!`
-+/// syntax.
-+// For non-x86 arches we just pass through to `asm!`.
-+#[cfg(not(target_arch = "x86_64"))]
-+#[macro_export]
-+macro_rules! asm {
-+    ($($asm:expr),* ; $($rest:tt)*) => {
-+        ::core::arch::asm!( $($asm)*, $($rest)* )
-+    };
-+}
-diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index 8f423a1faf50..03ee558fcd4d 100644
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -248,12 +248,13 @@ $(obj)/%.lst: $(obj)/%.c FORCE
- # Compile Rust sources (.rs)
- # ---------------------------------------------------------------------------
- 
--rust_allowed_features := new_uninit
-+rust_allowed_features := asm_const,asm_goto,new_uninit
- 
- # `--out-dir` is required to avoid temporaries being created by `rustc` in the
- # current working directory, which may be not accessible in the out-of-tree
- # modules case.
- rust_common_cmd = \
-+	OBJTREE=$(abspath $(objtree)) \
- 	RUST_MODFILE=$(modfile) $(RUSTC_OR_CLIPPY) $(rust_flags) \
- 	-Zallow-features=$(rust_allowed_features) \
- 	-Zcrate-attr=no_std \
-@@ -303,6 +304,12 @@ quiet_cmd_rustc_ll_rs = $(RUSTC_OR_CLIPPY_QUIET) $(quiet_modtag) $@
- $(obj)/%.ll: $(obj)/%.rs FORCE
- 	+$(call if_changed_dep,rustc_ll_rs)
- 
-+quiet_cmd_rustc_rs_rs_S = RSCPP $(quiet_modtag) $@
-+      cmd_rustc_rs_rs_S = $(CPP) $(c_flags) -xc -C -P $< | sed '1,/^\/\/ Cut here.$$/d' >$@
-+
-+$(obj)/%.rs: $(obj)/%.rs.S FORCE
-+	+$(call if_changed_dep,rustc_rs_rs_S)
-+
- # Compile assembler sources (.S)
- # ---------------------------------------------------------------------------
- 
-
--- 
-2.47.0.rc1.288.g06298d1525-goog
-
+Alice
 
