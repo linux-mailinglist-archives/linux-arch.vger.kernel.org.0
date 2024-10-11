@@ -1,456 +1,255 @@
-Return-Path: <linux-arch+bounces-8036-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8037-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7750099A3D6
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2024 14:27:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5097099A3F0
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2024 14:33:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BFE6E1F25888
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2024 12:27:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15B3E281804
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2024 12:33:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 898E2216A3B;
-	Fri, 11 Oct 2024 12:27:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0CBE2178EA;
+	Fri, 11 Oct 2024 12:33:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VIMsPHZt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XBuRTnFB"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2538A209662;
-	Fri, 11 Oct 2024 12:27:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1A6720CCC5;
+	Fri, 11 Oct 2024 12:33:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728649641; cv=none; b=iuJ3WDMpWB5fjQ3tiduWQ5bljszSNem25++opNeP89XqttDBY5pkLW13/hTB/1MB8wFn0C+TwDuJFtww/+HR873GZIv4MlBsxRO/gq5nNIWSKkT+NwVuXXQFzVdGgERgdNHNiesiJIY2c0VhjeCdrR4DywQRuXRFroSlcEXiBS4=
+	t=1728649988; cv=none; b=DihE5o4aBvH3VOQCF0jdLiR6aM8fJWbcqbFlh34IsUiYoqiVbHdwlHPq9WWlpwEEq/JeWur1M5aYrL7SCIUA/vcBeNQD9oIjfEdQ3yLCfJf9/gO+e1VCUzeIzWA1T19QNgZWXtfTg9hiCYXmPfrEPtExTVqFzWLJrdjWP8ulDDg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728649641; c=relaxed/simple;
-	bh=7e++66M02WFRNHfXld6AhxF3W044qoc43KGtBc0hdAg=;
+	s=arc-20240116; t=1728649988; c=relaxed/simple;
+	bh=6WlLSqQl5UgDYGtPwPNUpV33/lVuWnuZFTN12+K3zSQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KgDZj+A1yBmC4Ok2ICcTWx3odb7pdJojLZydc5XCG1CXZ9bT9bw1Yyu6FmWmHuQvRDv9pN5FhM16MvwaYWFCmwIgdkQ6atMarJb/eOgVq14jnrNraA6TdHx4jJZpc1BBoM0SdptJ1RJXVOWg4UFb7El6tCzVaECeI2OgQFZyAeg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VIMsPHZt; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728649639; x=1760185639;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7e++66M02WFRNHfXld6AhxF3W044qoc43KGtBc0hdAg=;
-  b=VIMsPHZtBV8BuvdmIENRlmSqonUIg7kMMyHFRUMOk0KkA2UUcORSWsQv
-   j+UMwxT42bT2FI3yowNiKZisqJe2NbMm2J08jnRWTfK0LUoDSeC/qgJAQ
-   lAMGJis4qCW630nx/DlyakqpXQitn/gcjuBlBge38oUCH5TWznU/RcXJl
-   xYrcF70XicJkERVAkt1idcP40fJX3TXKl/Y7uisclR74xQJo7FxhCJ4OG
-   Q2HqEJ7HfoB8BCDGqso//94fEKLhSvPbGXqUUiaNk/fBdEGSR5zVxRf52
-   92R6lHAcJMFAvV0h1X2BgrXsduJhaTcE9LK4tGzMcob9Mqy7/yCzjcwod
-   g==;
-X-CSE-ConnectionGUID: g6Vkz6ahRcWmL4JkopIB8A==
-X-CSE-MsgGUID: wqvGoLv5SM2MwgmVTLZA+g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11221"; a="38629539"
-X-IronPort-AV: E=Sophos;i="6.11,195,1725346800"; 
-   d="scan'208";a="38629539"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2024 05:27:18 -0700
-X-CSE-ConnectionGUID: v/C/7JSvRcCYDkl/gmPAZw==
-X-CSE-MsgGUID: 3/T2zYwITDu384Bdn5xe2Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,195,1725346800"; 
-   d="scan'208";a="81901400"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 11 Oct 2024 05:27:15 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1szEjg-000CID-2e;
-	Fri, 11 Oct 2024 12:27:12 +0000
-Date: Fri, 11 Oct 2024 20:26:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-mm@kvack.org
-Cc: oe-kbuild-all@lists.linux.dev,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	"Jason A . Donenfeld" <Jason@zx2c4.com>,
-	Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: [PATCH v4 2/2] vdso: Introduce vdso/page.h
-Message-ID: <202410112014.ugeJ1luU-lkp@intel.com>
-References: <20241010135146.181175-3-vincenzo.frascino@arm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=HoCBpf6yhfKy2KV+4cHiWiuOHupLgoTZGUQ1t+0CWkr0xEdg8Omzqs2a574+REkYtCDWREOEVifcp1QpnAVZ6yBcgLjKDvBKzGv6gpTWCE8MkaVc0HJQP+pryzgcGrdOHavfTF99D2/qqsBkreW59jPW7j/OqB4D5KH6iPSxZbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XBuRTnFB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D14D3C4CEC3;
+	Fri, 11 Oct 2024 12:33:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728649988;
+	bh=6WlLSqQl5UgDYGtPwPNUpV33/lVuWnuZFTN12+K3zSQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XBuRTnFB7tRS+B52FfbK+aqz5vqrJKQLgUY6D1lgVXevJiQ9aOQiQ7jw7p8TXy9dY
+	 a1JCpat1nH+oXyqCfZw1iSqjWRr4ISWRY/YY+0oEBhSxGWvQYLYaUuGPxiw0p25Nfq
+	 +KL1EeZV2hifOBDc5TXTne7ReQ4gx8SyOoII2RaQoDc2guXhjhuWJ9+vcnTT4y02na
+	 AndbSZ5lS+HRdx00pBh8feOWAF4CjGXByFgEPFTAjNWvxGztY5t7Q3p1RCRpXV6V49
+	 yT4xjlGPyPucYd8zjCAX7+3OB9kLw7PC0p74wr9yLfcqjG+un85hRpgeHMWRU5vjsv
+	 +4CMr6EyOHNFw==
+Date: Fri, 11 Oct 2024 13:33:05 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Deepak Gupta <debug@rivosinc.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+	linux-arch@vger.kernel.org,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>
+Subject: Re: [PATCH RFC/RFT 3/3] kernel: converge common shadow stack flow
+ agnostic to arch
+Message-ID: <ZwkbAauYGhtldtW6@finisterre.sirena.org.uk>
+References: <20241010-shstk_converge-v1-0-631beca676e7@rivosinc.com>
+ <20241010-shstk_converge-v1-3-631beca676e7@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="SJuq1KBFwUpX1bg5"
+Content-Disposition: inline
+In-Reply-To: <20241010-shstk_converge-v1-3-631beca676e7@rivosinc.com>
+X-Cookie: Editing is a rewording activity.
+
+
+--SJuq1KBFwUpX1bg5
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241010135146.181175-3-vincenzo.frascino@arm.com>
+Content-Transfer-Encoding: quoted-printable
 
-Hi Vincenzo,
+On Thu, Oct 10, 2024 at 05:32:05PM -0700, Deepak Gupta wrote:
 
-kernel test robot noticed the following build errors:
+> +unsigned long alloc_shstk(unsigned long addr, unsigned long size,
+> +				 unsigned long token_offset, bool set_res_tok);
+> +int shstk_setup(void);
+> +int create_rstor_token(unsigned long ssp, unsigned long *token_addr);
+> +bool cpu_supports_shadow_stack(void);
 
-[auto build test ERROR on vgupta-arc/for-curr]
-[also build test ERROR on arm64/for-next/core geert-m68k/for-next geert-m68k/for-linus deller-parisc/for-next powerpc/next powerpc/fixes s390/features uml/next tip/x86/core linus/master openrisc/for-next v6.12-rc2 next-20241011]
-[cannot apply to vgupta-arc/for-next uml/fixes]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+The cpu_ naming is confusing in an arm64 context, we use cpu_ for
+functions that report if a feature is supported on the current CPU and
+system_ for functions that report if a feature is enabled on the system.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vincenzo-Frascino/drm-i915-Change-fault-type-to-unsigned-long/20241010-215325
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vgupta/arc.git for-curr
-patch link:    https://lore.kernel.org/r/20241010135146.181175-3-vincenzo.frascino%40arm.com
-patch subject: [PATCH v4 2/2] vdso: Introduce vdso/page.h
-config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20241011/202410112014.ugeJ1luU-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 14.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241011/202410112014.ugeJ1luU-lkp@intel.com/reproduce)
+> +void set_thread_shstk_status(bool enable);
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410112014.ugeJ1luU-lkp@intel.com/
+It might be better if this took the flags that the prctl() takes?  It
+feels like=20
 
-All error/warnings (new ones prefixed by >>):
+> +/* Flags for map_shadow_stack(2) */
+> +#define SHADOW_STACK_SET_TOKEN	(1ULL << 0)	/* Set up a restore token in =
+the shadow stack */
+> +
 
-   In file included from arch/s390/include/asm/thread_info.h:31,
-                    from include/linux/thread_info.h:60,
-                    from arch/s390/include/asm/preempt.h:6,
-                    from include/linux/preempt.h:79,
-                    from include/linux/alloc_tag.h:11,
-                    from include/linux/percpu.h:5,
-                    from include/linux/context_tracking_state.h:5,
-                    from include/linux/hardirq.h:5,
-                    from include/linux/kvm_host.h:7,
-                    from arch/s390/kernel/asm-offsets.c:11:
->> arch/s390/include/asm/page.h:17:9: warning: "PAGE_SHIFT" redefined
-      17 | #define PAGE_SHIFT      _PAGE_SHIFT
-         |         ^~~~~~~~~~
-   In file included from arch/s390/include/asm/page.h:14:
-   include/vdso/page.h:13:9: note: this is the location of the previous definition
-      13 | #define PAGE_SHIFT      CONFIG_PAGE_SHIFT
-         |         ^~~~~~~~~~
->> arch/s390/include/asm/page.h:18:9: warning: "PAGE_SIZE" redefined
-      18 | #define PAGE_SIZE       _PAGE_SIZE
-         |         ^~~~~~~~~
-   include/vdso/page.h:15:9: note: this is the location of the previous definition
-      15 | #define PAGE_SIZE       (_AC(1,UL) << CONFIG_PAGE_SHIFT)
-         |         ^~~~~~~~~
->> arch/s390/include/asm/page.h:19:9: warning: "PAGE_MASK" redefined
-      19 | #define PAGE_MASK       _PAGE_MASK
-         |         ^~~~~~~~~
-   include/vdso/page.h:27:9: note: this is the location of the previous definition
-      27 | #define PAGE_MASK       (~(PAGE_SIZE - 1))
-         |         ^~~~~~~~~
-   arch/s390/include/asm/page.h: In function 'pfn_to_virt':
->> arch/s390/include/asm/page.h:17:25: error: '_PAGE_SHIFT' undeclared (first use in this function); did you mean 'HPAGE_SHIFT'?
-      17 | #define PAGE_SHIFT      _PAGE_SHIFT
-         |                         ^~~~~~~~~~~
-   arch/s390/include/asm/page.h:239:59: note: in definition of macro '__va'
-     239 | #define __va(x)                 ((void *)((unsigned long)(x) + __identity_base))
-         |                                                           ^
-   arch/s390/include/asm/page.h:244:43: note: in expansion of macro 'PAGE_SHIFT'
-     244 | #define pfn_to_phys(pfn)        ((pfn) << PAGE_SHIFT)
-         |                                           ^~~~~~~~~~
-   arch/s390/include/asm/page.h:253:21: note: in expansion of macro 'pfn_to_phys'
-     253 |         return __va(pfn_to_phys(pfn));
-         |                     ^~~~~~~~~~~
-   arch/s390/include/asm/page.h:17:25: note: each undeclared identifier is reported only once for each function it appears in
-      17 | #define PAGE_SHIFT      _PAGE_SHIFT
-         |                         ^~~~~~~~~~~
-   arch/s390/include/asm/page.h:239:59: note: in definition of macro '__va'
-     239 | #define __va(x)                 ((void *)((unsigned long)(x) + __identity_base))
-         |                                                           ^
-   arch/s390/include/asm/page.h:244:43: note: in expansion of macro 'PAGE_SHIFT'
-     244 | #define pfn_to_phys(pfn)        ((pfn) << PAGE_SHIFT)
-         |                                           ^~~~~~~~~~
-   arch/s390/include/asm/page.h:253:21: note: in expansion of macro 'pfn_to_phys'
-     253 |         return __va(pfn_to_phys(pfn));
-         |                     ^~~~~~~~~~~
-   arch/s390/include/asm/page.h: In function 'virt_to_pfn':
->> arch/s390/include/asm/page.h:17:25: error: '_PAGE_SHIFT' undeclared (first use in this function); did you mean 'HPAGE_SHIFT'?
-      17 | #define PAGE_SHIFT      _PAGE_SHIFT
-         |                         ^~~~~~~~~~~
-   arch/s390/include/asm/page.h:243:44: note: in expansion of macro 'PAGE_SHIFT'
-     243 | #define phys_to_pfn(phys)       ((phys) >> PAGE_SHIFT)
-         |                                            ^~~~~~~~~~
-   arch/s390/include/asm/page.h:258:16: note: in expansion of macro 'phys_to_pfn'
-     258 |         return phys_to_pfn(__pa(kaddr));
-         |                ^~~~~~~~~~~
-   include/asm-generic/getorder.h: In function 'get_order':
->> arch/s390/include/asm/page.h:17:25: error: '_PAGE_SHIFT' undeclared (first use in this function); did you mean 'HPAGE_SHIFT'?
-      17 | #define PAGE_SHIFT      _PAGE_SHIFT
-         |                         ^~~~~~~~~~~
-   include/asm-generic/getorder.h:33:48: note: in expansion of macro 'PAGE_SHIFT'
-      33 |                         return BITS_PER_LONG - PAGE_SHIFT;
-         |                                                ^~~~~~~~~~
-   arch/s390/include/asm/processor.h: In function 'on_thread_stack':
->> arch/s390/include/asm/page.h:18:25: error: '_PAGE_SIZE' undeclared (first use in this function); did you mean 'HPAGE_SIZE'?
-      18 | #define PAGE_SIZE       _PAGE_SIZE
-         |                         ^~~~~~~~~~
-   arch/s390/include/asm/thread_info.h:25:22: note: in expansion of macro 'PAGE_SIZE'
-      25 | #define THREAD_SIZE (PAGE_SIZE << THREAD_SIZE_ORDER)
-         |                      ^~~~~~~~~
-   arch/s390/include/asm/processor.h:287:52: note: in expansion of macro 'THREAD_SIZE'
-     287 |         return !((ksp ^ current_stack_pointer) & ~(THREAD_SIZE - 1));
-         |                                                    ^~~~~~~~~~~
-   include/linux/sched.h: At top level:
->> arch/s390/include/asm/page.h:18:25: error: '_PAGE_SIZE' undeclared here (not in a function); did you mean 'HPAGE_SIZE'?
-      18 | #define PAGE_SIZE       _PAGE_SIZE
-         |                         ^~~~~~~~~~
-   arch/s390/include/asm/thread_info.h:25:22: note: in expansion of macro 'PAGE_SIZE'
-      25 | #define THREAD_SIZE (PAGE_SIZE << THREAD_SIZE_ORDER)
-         |                      ^~~~~~~~~
-   include/linux/sched.h:1890:29: note: in expansion of macro 'THREAD_SIZE'
-    1890 |         unsigned long stack[THREAD_SIZE/sizeof(long)];
-         |                             ^~~~~~~~~~~
->> arch/s390/include/asm/page.h:18:25: warning: "_PAGE_SIZE" is not defined, evaluates to 0 [-Wundef]
-      18 | #define PAGE_SIZE       _PAGE_SIZE
-         |                         ^~~~~~~~~~
-   include/linux/mm_types.h:547:6: note: in expansion of macro 'PAGE_SIZE'
-     547 | #if (PAGE_SIZE < PAGE_FRAG_CACHE_MAX_SIZE)
-         |      ^~~~~~~~~
-   In file included from include/vdso/const.h:5,
-                    from include/linux/const.h:4,
-                    from include/linux/bits.h:5,
-                    from include/linux/ratelimit_types.h:5,
-                    from include/linux/printk.h:9,
-                    from include/asm-generic/bug.h:22,
-                    from arch/s390/include/asm/bug.h:69,
-                    from include/linux/bug.h:5,
-                    from include/linux/alloc_tag.h:8:
->> arch/s390/include/asm/page.h:19:25: warning: "_PAGE_MASK" is not defined, evaluates to 0 [-Wundef]
-      19 | #define PAGE_MASK       _PAGE_MASK
-         |                         ^~~~~~~~~~
-   include/uapi/linux/const.h:49:50: note: in definition of macro '__ALIGN_KERNEL_MASK'
-      49 | #define __ALIGN_KERNEL_MASK(x, mask)    (((x) + (mask)) & ~(mask))
-         |                                                  ^~~~
-   include/linux/mm_types.h:524:41: note: in expansion of macro '__ALIGN_MASK'
-     524 | #define PAGE_FRAG_CACHE_MAX_SIZE        __ALIGN_MASK(32768, ~PAGE_MASK)
-         |                                         ^~~~~~~~~~~~
-   include/linux/mm_types.h:524:62: note: in expansion of macro 'PAGE_MASK'
-     524 | #define PAGE_FRAG_CACHE_MAX_SIZE        __ALIGN_MASK(32768, ~PAGE_MASK)
-         |                                                              ^~~~~~~~~
-   include/linux/mm_types.h:547:18: note: in expansion of macro 'PAGE_FRAG_CACHE_MAX_SIZE'
-     547 | #if (PAGE_SIZE < PAGE_FRAG_CACHE_MAX_SIZE)
-         |                  ^~~~~~~~~~~~~~~~~~~~~~~~
->> arch/s390/include/asm/page.h:19:25: warning: "_PAGE_MASK" is not defined, evaluates to 0 [-Wundef]
-      19 | #define PAGE_MASK       _PAGE_MASK
-         |                         ^~~~~~~~~~
-   include/uapi/linux/const.h:49:61: note: in definition of macro '__ALIGN_KERNEL_MASK'
-      49 | #define __ALIGN_KERNEL_MASK(x, mask)    (((x) + (mask)) & ~(mask))
-         |                                                             ^~~~
-   include/linux/mm_types.h:524:41: note: in expansion of macro '__ALIGN_MASK'
-     524 | #define PAGE_FRAG_CACHE_MAX_SIZE        __ALIGN_MASK(32768, ~PAGE_MASK)
-         |                                         ^~~~~~~~~~~~
-   include/linux/mm_types.h:524:62: note: in expansion of macro 'PAGE_MASK'
-     524 | #define PAGE_FRAG_CACHE_MAX_SIZE        __ALIGN_MASK(32768, ~PAGE_MASK)
-         |                                                              ^~~~~~~~~
-   include/linux/mm_types.h:547:18: note: in expansion of macro 'PAGE_FRAG_CACHE_MAX_SIZE'
-     547 | #if (PAGE_SIZE < PAGE_FRAG_CACHE_MAX_SIZE)
-         |                  ^~~~~~~~~~~~~~~~~~~~~~~~
->> arch/s390/include/asm/page.h:17:25: warning: "_PAGE_SHIFT" is not defined, evaluates to 0 [-Wundef]
-      17 | #define PAGE_SHIFT      _PAGE_SHIFT
-         |                         ^~~~~~~~~~~
-   include/linux/mmzone.h:1777:23: note: in expansion of macro 'PAGE_SHIFT'
-    1777 | #if (MAX_PAGE_ORDER + PAGE_SHIFT) > SECTION_SIZE_BITS
-         |                       ^~~~~~~~~~
-   include/linux/mmzone.h: In function 'pfn_to_section_nr':
->> arch/s390/include/asm/page.h:17:25: error: '_PAGE_SHIFT' undeclared (first use in this function); did you mean 'HPAGE_SHIFT'?
-      17 | #define PAGE_SHIFT      _PAGE_SHIFT
-         |                         ^~~~~~~~~~~
-   include/linux/mmzone.h:1767:54: note: in expansion of macro 'PAGE_SHIFT'
-    1767 | #define PFN_SECTION_SHIFT       (SECTION_SIZE_BITS - PAGE_SHIFT)
-         |                                                      ^~~~~~~~~~
-   include/linux/mmzone.h:1783:23: note: in expansion of macro 'PFN_SECTION_SHIFT'
-    1783 |         return pfn >> PFN_SECTION_SHIFT;
-         |                       ^~~~~~~~~~~~~~~~~
-   include/linux/mmzone.h: In function 'section_nr_to_pfn':
->> arch/s390/include/asm/page.h:17:25: error: '_PAGE_SHIFT' undeclared (first use in this function); did you mean 'HPAGE_SHIFT'?
-      17 | #define PAGE_SHIFT      _PAGE_SHIFT
-         |                         ^~~~~~~~~~~
-   include/linux/mmzone.h:1767:54: note: in expansion of macro 'PAGE_SHIFT'
-    1767 | #define PFN_SECTION_SHIFT       (SECTION_SIZE_BITS - PAGE_SHIFT)
-         |                                                      ^~~~~~~~~~
-   include/linux/mmzone.h:1787:23: note: in expansion of macro 'PFN_SECTION_SHIFT'
-    1787 |         return sec << PFN_SECTION_SHIFT;
-         |                       ^~~~~~~~~~~~~~~~~
-   include/linux/mmzone.h: In function 'subsection_map_index':
->> arch/s390/include/asm/page.h:17:25: error: '_PAGE_SHIFT' undeclared (first use in this function); did you mean 'HPAGE_SHIFT'?
-      17 | #define PAGE_SHIFT      _PAGE_SHIFT
-         |                         ^~~~~~~~~~~
-   include/linux/mmzone.h:1767:54: note: in expansion of macro 'PAGE_SHIFT'
-    1767 | #define PFN_SECTION_SHIFT       (SECTION_SIZE_BITS - PAGE_SHIFT)
-         |                                                      ^~~~~~~~~~
-   include/linux/mmzone.h:1771:41: note: in expansion of macro 'PFN_SECTION_SHIFT'
-    1771 | #define PAGES_PER_SECTION       (1UL << PFN_SECTION_SHIFT)
-         |                                         ^~~~~~~~~~~~~~~~~
-   include/linux/mmzone.h:1772:36: note: in expansion of macro 'PAGES_PER_SECTION'
-    1772 | #define PAGE_SECTION_MASK       (~(PAGES_PER_SECTION-1))
-         |                                    ^~~~~~~~~~~~~~~~~
-   include/linux/mmzone.h:1996:25: note: in expansion of macro 'PAGE_SECTION_MASK'
-    1996 |         return (pfn & ~(PAGE_SECTION_MASK)) / PAGES_PER_SUBSECTION;
-         |                         ^~~~~~~~~~~~~~~~~
-   In file included from include/asm-generic/memory_model.h:5,
-                    from arch/s390/include/asm/page.h:272:
-   include/linux/mmzone.h: In function 'pfn_valid':
->> arch/s390/include/asm/page.h:17:25: error: '_PAGE_SHIFT' undeclared (first use in this function); did you mean 'HPAGE_SHIFT'?
-      17 | #define PAGE_SHIFT      _PAGE_SHIFT
-         |                         ^~~~~~~~~~~
-   include/linux/pfn.h:22:43: note: in definition of macro 'PHYS_PFN'
-      22 | #define PHYS_PFN(x)     ((unsigned long)((x) >> PAGE_SHIFT))
-         |                                           ^
-   include/linux/pfn.h:21:46: note: in expansion of macro 'PAGE_SHIFT'
-      21 | #define PFN_PHYS(x)     ((phys_addr_t)(x) << PAGE_SHIFT)
-         |                                              ^~~~~~~~~~
-   include/linux/mmzone.h:2037:22: note: in expansion of macro 'PFN_PHYS'
-    2037 |         if (PHYS_PFN(PFN_PHYS(pfn)) != pfn)
-         |                      ^~~~~~~~
-   In file included from arch/s390/include/asm/bug.h:5:
-   arch/s390/include/asm/uv.h: In function 'share':
->> arch/s390/include/asm/page.h:19:25: error: '_PAGE_MASK' undeclared (first use in this function); did you mean 'HPAGE_MASK'?
-      19 | #define PAGE_MASK       _PAGE_MASK
-         |                         ^~~~~~~~~~
-   include/linux/compiler.h:77:45: note: in definition of macro 'unlikely'
-      77 | # define unlikely(x)    __builtin_expect(!!(x), 0)
-         |                                             ^
-   arch/s390/include/asm/uv.h:440:9: note: in expansion of macro 'BUG_ON'
-     440 |         BUG_ON(addr & ~PAGE_MASK);
-         |         ^~~~~~
-   arch/s390/include/asm/uv.h:440:24: note: in expansion of macro 'PAGE_MASK'
-     440 |         BUG_ON(addr & ~PAGE_MASK);
-         |                        ^~~~~~~~~
-   arch/s390/include/asm/pgtable.h: In function 'pgd_pfn':
->> arch/s390/include/asm/page.h:17:25: error: '_PAGE_SHIFT' undeclared (first use in this function); did you mean 'HPAGE_SHIFT'?
-      17 | #define PAGE_SHIFT      _PAGE_SHIFT
-         |                         ^~~~~~~~~~~
-   arch/s390/include/asm/pgtable.h:710:48: note: in expansion of macro 'PAGE_SHIFT'
-     710 |         return (pgd_val(pgd) & origin_mask) >> PAGE_SHIFT;
-         |                                                ^~~~~~~~~~
-   arch/s390/include/asm/pgtable.h: In function 'p4d_pfn':
->> arch/s390/include/asm/page.h:17:25: error: '_PAGE_SHIFT' undeclared (first use in this function); did you mean 'HPAGE_SHIFT'?
-      17 | #define PAGE_SHIFT      _PAGE_SHIFT
-         |                         ^~~~~~~~~~~
-   arch/s390/include/asm/pgtable.h:737:48: note: in expansion of macro 'PAGE_SHIFT'
-     737 |         return (p4d_val(p4d) & origin_mask) >> PAGE_SHIFT;
-         |                                                ^~~~~~~~~~
-   arch/s390/include/asm/pgtable.h: In function 'pte_pgprot':
->> arch/s390/include/asm/page.h:19:25: error: '_PAGE_MASK' undeclared (first use in this function); did you mean 'HPAGE_MASK'?
-      19 | #define PAGE_MASK       _PAGE_MASK
-         |                         ^~~~~~~~~~
-   arch/s390/include/asm/pgtable.h:205:34: note: in expansion of macro 'PAGE_MASK'
-     205 | #define _PAGE_CHG_MASK          (PAGE_MASK | _PAGE_SPECIAL | _PAGE_DIRTY | \
-         |                                  ^~~~~~~~~
-   arch/s390/include/asm/pgtable.h:961:50: note: in expansion of macro '_PAGE_CHG_MASK'
-     961 |         unsigned long pte_flags = pte_val(pte) & _PAGE_CHG_MASK;
-         |                                                  ^~~~~~~~~~~~~~
-   arch/s390/include/asm/pgtable.h: In function 'pte_modify':
-   arch/s390/include/asm/page.h:19:25: error: '_PAGE_MASK' undeclared (first use in this function); did you mean 'HPAGE_MASK'?
-      19 | #define PAGE_MASK       _PAGE_MASK
-         |                         ^~~~~~~~~~
-   arch/s390/include/asm/page.h:124:40: note: in definition of macro '__pgprot'
-     124 | #define __pgprot(x)     ((pgprot_t) { (x) } )
-         |                                        ^
-   arch/s390/include/asm/pgtable.h:205:34: note: in expansion of macro 'PAGE_MASK'
-     205 | #define _PAGE_CHG_MASK          (PAGE_MASK | _PAGE_SPECIAL | _PAGE_DIRTY | \
-         |                                  ^~~~~~~~~
-   arch/s390/include/asm/pgtable.h:1035:44: note: in expansion of macro '_PAGE_CHG_MASK'
-    1035 |         pte = clear_pte_bit(pte, __pgprot(~_PAGE_CHG_MASK));
-         |                                            ^~~~~~~~~~~~~~
-   arch/s390/include/asm/pgtable.h: In function '__ptep_rdp':
-   arch/s390/include/asm/page.h:19:25: error: '_PAGE_MASK' undeclared (first use in this function); did you mean 'HPAGE_MASK'?
-      19 | #define PAGE_MASK       _PAGE_MASK
-         |                         ^~~~~~~~~~
-   arch/s390/include/asm/pgtable.h:1121:58: note: in expansion of macro 'PAGE_MASK'
-    1121 |                      : [r1] "a" (pto), [r2] "a" ((addr & PAGE_MASK) | opt),
-         |                                                          ^~~~~~~~~
-   arch/s390/include/asm/pgtable.h: In function 'mk_pte':
-   arch/s390/include/asm/page.h:17:25: error: '_PAGE_SHIFT' undeclared (first use in this function); did you mean 'HPAGE_SHIFT'?
-      17 | #define PAGE_SHIFT      _PAGE_SHIFT
-         |                         ^~~~~~~~~~~
-   arch/s390/include/asm/page.h:244:43: note: in expansion of macro 'PAGE_SHIFT'
-     244 | #define pfn_to_phys(pfn)        ((pfn) << PAGE_SHIFT)
-         |                                           ^~~~~~~~~~
-   arch/s390/include/asm/page.h:248:33: note: in expansion of macro 'pfn_to_phys'
-     248 | #define page_to_phys(page)      pfn_to_phys(page_to_pfn(page))
-         |                                 ^~~~~~~~~~~
-   arch/s390/include/asm/pgtable.h:1419:34: note: in expansion of macro 'page_to_phys'
-    1419 |         unsigned long physpage = page_to_phys(page);
-         |                                  ^~~~~~~~~~~~
-   arch/s390/include/asm/pgtable.h: In function 'pmd_pfn':
-   arch/s390/include/asm/page.h:17:25: error: '_PAGE_SHIFT' undeclared (first use in this function); did you mean 'HPAGE_SHIFT'?
-      17 | #define PAGE_SHIFT      _PAGE_SHIFT
-         |                         ^~~~~~~~~~~
-   arch/s390/include/asm/pgtable.h:1447:40: note: in expansion of macro 'PAGE_SHIFT'
-    1447 |         return __pa(pmd_deref(pmd)) >> PAGE_SHIFT;
-         |                                        ^~~~~~~~~~
-   arch/s390/include/asm/pgtable.h: In function 'pud_pfn':
-   arch/s390/include/asm/page.h:17:25: error: '_PAGE_SHIFT' undeclared (first use in this function); did you mean 'HPAGE_SHIFT'?
-      17 | #define PAGE_SHIFT      _PAGE_SHIFT
-         |                         ^~~~~~~~~~~
-   arch/s390/include/asm/pgtable.h:1463:40: note: in expansion of macro 'PAGE_SHIFT'
-    1463 |         return __pa(pud_deref(pud)) >> PAGE_SHIFT;
-         |                                        ^~~~~~~~~~
-   include/linux/pgtable.h: In function 'pte_index':
-   arch/s390/include/asm/page.h:17:25: error: '_PAGE_SHIFT' undeclared (first use in this function); did you mean 'HPAGE_SHIFT'?
-      17 | #define PAGE_SHIFT      _PAGE_SHIFT
-         |                         ^~~~~~~~~~~
-   include/linux/pgtable.h:69:28: note: in expansion of macro 'PAGE_SHIFT'
-      69 |         return (address >> PAGE_SHIFT) & (PTRS_PER_PTE - 1);
-         |                            ^~~~~~~~~~
-   include/linux/pgtable.h: In function 'pte_advance_pfn':
-   arch/s390/include/asm/page.h:17:25: error: '_PAGE_SHIFT' undeclared (first use in this function); did you mean 'HPAGE_SHIFT'?
-      17 | #define PAGE_SHIFT      _PAGE_SHIFT
-         |                         ^~~~~~~~~~~
-   arch/s390/include/asm/page.h:119:37: note: in definition of macro '__pte'
-     119 | #define __pte(x)        ((pte_t) { (x) } )
-         |                                     ^
-   arch/s390/include/asm/pgtable.h:1371:33: note: in expansion of macro 'PAGE_SHIFT'
-    1371 | #define PFN_PTE_SHIFT           PAGE_SHIFT
-         |                                 ^~~~~~~~~~
-   include/linux/pgtable.h:239:44: note: in expansion of macro 'PFN_PTE_SHIFT'
-     239 |         return __pte(pte_val(pte) + (nr << PFN_PTE_SHIFT));
-         |                                            ^~~~~~~~~~~~~
-   include/linux/pgtable.h: In function 'is_zero_pfn':
-   arch/s390/include/asm/page.h:17:25: error: '_PAGE_SHIFT' undeclared (first use in this function); did you mean 'HPAGE_SHIFT'?
-      17 | #define PAGE_SHIFT      _PAGE_SHIFT
-         |                         ^~~~~~~~~~~
-   include/linux/pgtable.h:1565:59: note: in expansion of macro 'PAGE_SHIFT'
-    1565 |         return offset_from_zero_pfn <= (zero_page_mask >> PAGE_SHIFT);
-         |                                                           ^~~~~~~~~~
-   include/linux/slab.h: At top level:
-   arch/s390/include/asm/page.h:17:25: error: '_PAGE_SHIFT' undeclared here (not in a function); did you mean 'HPAGE_SHIFT'?
-      17 | #define PAGE_SHIFT      _PAGE_SHIFT
-         |                         ^~~~~~~~~~~
-   include/linux/slab.h:528:34: note: in expansion of macro 'PAGE_SHIFT'
-     528 | #define KMALLOC_SHIFT_HIGH      (PAGE_SHIFT + 1)
-         |                                  ^~~~~~~~~~
-   include/linux/slab.h:597:42: note: in expansion of macro 'KMALLOC_SHIFT_HIGH'
-     597 | typedef struct kmem_cache * kmem_buckets[KMALLOC_SHIFT_HIGH + 1];
-         |                                          ^~~~~~~~~~~~~~~~~~
-   In file included from include/linux/init.h:5,
-                    from include/linux/printk.h:6:
-   arch/s390/include/asm/page.h:17:25: error: expression in static assertion is not an integer
-      17 | #define PAGE_SHIFT      _PAGE_SHIFT
-         |                         ^~~~~~~~~~~
-   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
+We've also got SHADOW_STACK_SET_MARKER now.
 
+> +bool cpu_supports_shadow_stack(void)
+> +{
+> +	return arch_cpu_supports_shadow_stack();
+> +}
+> +
+> +bool is_shstk_enabled(struct task_struct *task)
+> +{
+> +	return arch_is_shstk_enabled(task);
+> +}
 
-vim +17 arch/s390/include/asm/page.h
+Do we need these wrappers (or could they just be static inlines in the
+header)?
 
-c67da7c7c5d4c0 arch/s390/include/asm/page.h Heiko Carstens           2017-06-16  15  
-^1da177e4c3f41 include/asm-s390/page.h      Linus Torvalds           2005-04-16  16  /* PAGE_SHIFT determines the page size */
-c67da7c7c5d4c0 arch/s390/include/asm/page.h Heiko Carstens           2017-06-16 @17  #define PAGE_SHIFT	_PAGE_SHIFT
-c67da7c7c5d4c0 arch/s390/include/asm/page.h Heiko Carstens           2017-06-16 @18  #define PAGE_SIZE	_PAGE_SIZE
-c67da7c7c5d4c0 arch/s390/include/asm/page.h Heiko Carstens           2017-06-16 @19  #define PAGE_MASK	_PAGE_MASK
-6376402841e1fa arch/s390/include/asm/page.h Heiko Carstens           2023-06-21  20  #define PAGE_DEFAULT_ACC	_AC(0, UL)
-e613d83454d7da arch/s390/include/asm/page.h Janis Schoetterl-Glausch 2022-02-11  21  /* storage-protection override */
-e613d83454d7da arch/s390/include/asm/page.h Janis Schoetterl-Glausch 2022-02-11  22  #define PAGE_SPO_ACC		9
-0b642ede47969d include/asm-s390/page.h      Peter Oberparleiter      2005-05-01  23  #define PAGE_DEFAULT_KEY	(PAGE_DEFAULT_ACC << 4)
-^1da177e4c3f41 include/asm-s390/page.h      Linus Torvalds           2005-04-16  24  
+> +void set_thread_shstk_status(bool enable)
+> +{
+> +	arch_set_thread_shstk_status(enable);
+> +}
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+arm64 can return an error here, we reject a bunch of conditions like 32
+bit threads and locked enable status.
+
+> +unsigned long adjust_shstk_size(unsigned long size)
+> +{
+> +	if (size)
+> +		return PAGE_ALIGN(size);
+> +
+> +	return PAGE_ALIGN(min_t(unsigned long long, rlimit(RLIMIT_STACK), SZ_4G=
+));
+> +}
+
+static?
+
+> +/*
+> + * VM_SHADOW_STACK will have a guard page. This helps userspace protect
+> + * itself from attacks. The reasoning is as follows:
+> + *
+> + * The shadow stack pointer(SSP) is moved by CALL, RET, and INCSSPQ. The
+> + * INCSSP instruction can increment the shadow stack pointer. It is the
+> + * shadow stack analog of an instruction like:
+> + *
+> + *   addq $0x80, %rsp
+> + *
+> + * However, there is one important difference between an ADD on %rsp
+> + * and INCSSP. In addition to modifying SSP, INCSSP also reads from the
+> + * memory of the first and last elements that were "popped". It can be
+> + * thought of as acting like this:
+> + *
+> + * READ_ONCE(ssp);       // read+discard top element on stack
+> + * ssp +=3D nr_to_pop * 8; // move the shadow stack
+> + * READ_ONCE(ssp-8);     // read+discard last popped stack element
+> + *
+> + * The maximum distance INCSSP can move the SSP is 2040 bytes, before
+> + * it would read the memory. Therefore a single page gap will be enough
+> + * to prevent any operation from shifting the SSP to an adjacent stack,
+> + * since it would have to land in the gap at least once, causing a
+> + * fault.
+
+This is all very x86 centric...
+
+> +	if (create_rstor_token(mapped_addr + token_offset, NULL)) {
+> +		vm_munmap(mapped_addr, size);
+> +		return -EINVAL;
+> +	}
+
+Bikeshedding but can we call the function create_shstk_token() instead?
+The rstor means absolutely nothing in an arm64 context.
+
+> +SYSCALL_DEFINE3(map_shadow_stack, unsigned long, addr, unsigned long, si=
+ze, unsigned int, flags)
+> +{
+> +	bool set_tok =3D flags & SHADOW_STACK_SET_TOKEN;
+> +	unsigned long aligned_size;
+> +
+> +	if (!cpu_supports_shadow_stack())
+> +		return -EOPNOTSUPP;
+> +
+> +	if (flags & ~SHADOW_STACK_SET_TOKEN)
+> +		return -EINVAL;
+
+This needs SHADOW_STACK_SET_MARKER for arm64.
+
+> +	if (addr && (addr & (PAGE_SIZE - 1)))
+> +		return -EINVAL;
+
+	if (!PAGE_ALIGNED(addr))
+
+> +int shstk_setup(void)
+> +{
+
+This is half of the implementation of the prctl() for enabling shadow
+stacks.  Looking at the arm64 implementation this rafactoring feels a
+bit awkward, we don't have the one flag at a time requiremet that x86
+has and we structure things rather differently.  I'm not sure that the
+arch_prctl() and prctl() are going to line up comfortably...
+
+> +	struct thread_shstk *shstk =3D &current->thread.shstk;
+> +	unsigned long addr, size;
+> +
+> +	/* Already enabled */
+> +	if (is_shstk_enabled(current))
+> +		return 0;
+> +
+> +	/* Also not supported for 32 bit */
+> +	if (!cpu_supports_shadow_stack() ||
+> +		(IS_ENABLED(CONFIG_X86_64) && in_ia32_syscall()))
+> +		return -EOPNOTSUPP;
+
+We probably need a thread_supports_shstk(), arm64 has a similar check
+for not 32 bit threads and I noted an issue with needing this check
+elsewhere.
+
+> +	/*
+> +	 * For CLONE_VFORK the child will share the parents shadow stack.
+> +	 * Make sure to clear the internal tracking of the thread shadow
+> +	 * stack so the freeing logic run for child knows to leave it alone.
+> +	 */
+> +	if (clone_flags & CLONE_VFORK) {
+> +		set_shstk_base_size(tsk, 0, 0);
+> +		return 0;
+> +	}
+
+On arm64 we set the new thread's shadow stack pointer here, the logic
+around that can probably also be usefully factored out.
+
+> +	/*
+> +	 * For !CLONE_VM the child will use a copy of the parents shadow
+> +	 * stack.
+> +	 */
+> +	if (!(clone_flags & CLONE_VM))
+> +		return 0;
+
+Here also.
+
+--SJuq1KBFwUpX1bg5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmcJGwAACgkQJNaLcl1U
+h9CbtAf8DH3tQWEmB0fJgCHXSmvsgdU8Z/4z+OUKw5cYTHGo1EsEBpfrOQCevbwL
+LFr5TnnmBv5ZeYYXdjvi/jrtNJot6dN3s2PMHNoVk1HmIwWRKAnkqcwKnw2XJ2IY
+65RBT1iAQHHPMw6IV5l6J9ipayRIXPrjuFQG+n9tj9CEprTMhRE13FpjagOk3Ncl
+xpoyKXjjxJqu2rI3VKBoMnzjzs/5El7ru0de+ALqZOUvQDKdVt3fGERJQm0TrSeG
+Y1rPvBCbqg6+J8+xIsPS7Ba/QJfgC1ZUj2eYEAJyVOJvwQ/C9NKHokV/vYlQZ1uD
+0zR4iOT0Xj19R0+4TrBaAwdtbmXOgQ==
+=z0Cu
+-----END PGP SIGNATURE-----
+
+--SJuq1KBFwUpX1bg5--
 
