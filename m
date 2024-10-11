@@ -1,135 +1,241 @@
-Return-Path: <linux-arch+bounces-8027-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8028-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C193199A125
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2024 12:18:44 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7073A99A12F
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2024 12:20:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5066F284ED7
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2024 10:18:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8561EB221A1
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2024 10:20:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1D83210C0A;
-	Fri, 11 Oct 2024 10:18:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7924220FA8A;
+	Fri, 11 Oct 2024 10:20:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YjoopDs5"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="cmF1IqQn";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="oFbJuqFM"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9862719B5B2;
-	Fri, 11 Oct 2024 10:18:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90BB028EB;
+	Fri, 11 Oct 2024 10:20:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728641901; cv=none; b=jG+RIeiBIAImGyFG3KSq0pF8odphxZz/lmB2nJT/Uc2wcVvc0FB2dkCKttWLt9ixwPwK5y/gRbzfUdUzFBJrdfHNajoFGIEkh48HbSw4G4k9Y6RBYs3Pf3m5wQFsuH7B+FXkwtc6x671ExuNLCN8ydx1DAgnWaUBeKg4AsqqRM0=
+	t=1728642025; cv=none; b=CEjHSEzD4Lvlt7INNarrtl8Wqqr3JQMIwzx0yG9t3pfACfFSXynoPDUVRbRyHtLrhpheSFS8Wmszfr6xiNWU36Pl3P+Ggkv2V1m7HmSsudznktVB7yA0Jzwb+OU9CKtAuGIBbrd67rQ108RyTiEXCnp0iQGaP15xvg0rgyry2+E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728641901; c=relaxed/simple;
-	bh=lyKMdlipHmMYKqMilFlbZUHsLyqahWCluuNLI0NJiGg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CpXvlosEOc5xunGafY5A8FcDOF7npdipjxOKqzL4iwhzJANXPBc1svqHGzEFuO5+a+Qyrby0pgO8AX8axWe6v7K4k4aJwafWF5vRTk1HqQm/52C+ptoNQNjFyl/epAFm/HND2bBAJrEkYu40k/K8RMe8gEKJ4CCbwg+CfoYGBmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YjoopDs5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 954F2C4CEC3;
-	Fri, 11 Oct 2024 10:18:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728641901;
-	bh=lyKMdlipHmMYKqMilFlbZUHsLyqahWCluuNLI0NJiGg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YjoopDs5/omBheGfRb9ZQ450SmBtY6HZjHLk4F2wc6F5woXclnTMZFIsICX42AkUS
-	 ZyIsYdj91w3FXWFEdw6JaShqxjF+G18Q5Ff6R2GjLaO0qDAxP9R6VpiUU3pmwhN7QW
-	 xiyBUuSLUibdBek6wdxoqqZj+MagtJde/r8jEaXDCqt1YsFuQO96bMYBrC3XPuIsM1
-	 uWTW6FwjVT6eVldfcoe3NSxxoOTaDSTUD/Su513PPSelESY+nugqM/+rQ9p4p2cB3h
-	 zDNAcVH0E7YJsJu7hJk0J4XD95ImgZuz9BE7bsUTnYJ5PgSSQ3LpOvFvhvi7bSk30S
-	 C/FSjlpgfro+g==
-Date: Fri, 11 Oct 2024 11:18:17 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Zong Li <zong.li@sifive.com>
-Cc: Deepak Gupta <debug@rivosinc.com>, Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Christian Brauner <brauner@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	alistair.francis@wdc.com, richard.henderson@linaro.org,
-	jim.shu@sifive.com, andybnac@gmail.com, kito.cheng@sifive.com,
-	charlie@rivosinc.com, atishp@rivosinc.com, evan@rivosinc.com,
-	cleger@rivosinc.com, alexghiti@rivosinc.com,
-	samitolvanen@google.com, rick.p.edgecombe@intel.com
-Subject: Re: [PATCH v6 33/33] kselftest/riscv: kselftest for user mode cfi
-Message-ID: <Zwj7aZj36TBGzpZa@finisterre.sirena.org.uk>
-References: <20241008-v5_user_cfi_series-v6-0-60d9fe073f37@rivosinc.com>
- <20241008-v5_user_cfi_series-v6-33-60d9fe073f37@rivosinc.com>
- <CANXhq0pXVS2s-hZNusPLoQ4qPkyi1S2BTQ-FyAvcz=cDctKQng@mail.gmail.com>
+	s=arc-20240116; t=1728642025; c=relaxed/simple;
+	bh=0O1MS/Ua/m0+5WKWzH2CdOiGk5PfgHdhplaLIDTDzhU=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=GmWkZe5+pjTlA6aTVpDE6Qa9Er4DTQTWYWzc9OlXztxXj+zHNnPFJsRK3ErHchoPwJa35d3z48PWZXElMNhVZ93YqE91eDo62JeteFsOvcEJS3Nu2gXfMOi9sXgxi13uon3n5XwKW8Ruh5GQR/yxIV7mctTS6EybB6hjf32d0Sg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=cmF1IqQn; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=oFbJuqFM; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Anna-Maria Behnsen <anna-maria@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1728642021;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=oodZ5BUT0swgpoEj0E73/1KWpBNCNQiVFaoHa8h8MzY=;
+	b=cmF1IqQnlLgkwUeMhQDR84FmE3UdJqv8fwBPpMadxrH1/YN4x/Qa+a6FLQjL0YzuQCfqL0
+	dZsidzEe2o7X4B2TewsBM4Y3Ec+d8mXblgrGhdtxVcgDEZfYLFCl4UklA5ywCJUqK8M+5n
+	4KWjsk7vkgkKo8zP0tQ3DUw9PoFI9Ee/Bnwr7ySr5bjmhj0Tl71mBDL9ryBGW1tHymUwrA
+	6N9up5Lv9rGr7N20PNNOhvK26yXOKuE8uprHxdV8TQNqacXF6GMjawhJge93ROmEkXe3mk
+	tJ24kF/WyNjgAAOywKwgkYgvdIIihNVnkFJ/niCUJAR8GfW8GpeogO9bpmttdA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1728642021;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=oodZ5BUT0swgpoEj0E73/1KWpBNCNQiVFaoHa8h8MzY=;
+	b=oFbJuqFMU46RZWroKP/1/DHEpiYx5cHKNzgTfLKJHDctOTsOf+uRmHPni7H5/IiK7kWwFy
+	zSJGyYWOzuBIGZBw==
+To: Frederic Weisbecker <frederic@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Jonathan Corbet <corbet@lwn.net>,
+ linux-kernel@vger.kernel.org, Len Brown <len.brown@intel.com>, "Rafael J.
+ Wysocki" <rafael@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ linux-arch@vger.kernel.org
+Subject: Re: [PATCH v2 05/15] timers: Update function descriptions of
+ sleep/delay related functions
+In-Reply-To: <ZwfKNNpjYnn2OGWG@localhost.localdomain>
+References: <ZwMF_y62yJ-bmNL9@pavilion.home> <87wmig9wj4.fsf@somnus>
+ <ZwfKNNpjYnn2OGWG@localhost.localdomain>
+Date: Fri, 11 Oct 2024 12:20:20 +0200
+Message-ID: <875xpzvt3v.fsf@somnus>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="PJjNqwWWqyWbjeHL"
-Content-Disposition: inline
-In-Reply-To: <CANXhq0pXVS2s-hZNusPLoQ4qPkyi1S2BTQ-FyAvcz=cDctKQng@mail.gmail.com>
-X-Cookie: Editing is a rewording activity.
-
-
---PJjNqwWWqyWbjeHL
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 11, 2024 at 01:44:55PM +0800, Zong Li wrote:
-> On Wed, Oct 9, 2024 at 7:46=E2=80=AFAM Deepak Gupta <debug@rivosinc.com> =
-wrote:
+Frederic Weisbecker <frederic@kernel.org> writes:
 
-> > +       if (si->si_code =3D=3D SEGV_CPERR) {
+> Le Thu, Oct 10, 2024 at 10:45:03AM +0200, Anna-Maria Behnsen a =C3=A9crit=
+ :
+>> Frederic Weisbecker <frederic@kernel.org> writes:
+>> >> @@ -281,7 +281,34 @@ EXPORT_SYMBOL_GPL(schedule_hrtimeout);
+>> >>=20=20
+>> >>  /**
+>> >>   * msleep - sleep safely even with waitqueue interruptions
+>> >> - * @msecs: Time in milliseconds to sleep for
+>> >> + * @msecs:	Requested sleep duration in milliseconds
+>> >> + *
+>> >> + * msleep() uses jiffy based timeouts for the sleep duration. The ac=
+curacy of
+>> >> + * the resulting sleep duration depends on:
+>> >> + *
+>> >> + * * HZ configuration
+>> >> + * * sleep duration (as granularity of a bucket which collects timer=
+s increases
+>> >> + *   with the timer wheel levels)
+>> >> + *
+>> >> + * When the timer is queued into the second level of the timer wheel=
+ the maximum
+>> >> + * additional delay will be 12.5%. For explanation please check the =
+detailed
+>> >> + * description about the basics of the timer wheel. In case this is =
+accurate
+>> >> + * enough check which sleep length is selected to make sure required=
+ accuracy is
+>> >> + * given. Please use therefore the following simple steps:
+>> >> + *
+>> >> + * #. Decide which slack is fine for the requested sleep duration - =
+but do not
+>> >> + *    use values shorter than 1/8
+>> >
+>> > I'm confused, what means 1/x for a slack value? 1/8 means 125 msecs? I=
+'m not
+>> > even I understand what you mean by slack. Is it the bucket_expiry - ex=
+piry?
+>>=20
+>> I was confused as well and had to read it twice... I would propose to
+>> rephrase the whole function description:
+>>=20
+>>=20
+>> /**
+>>  * msleep - sleep safely even with waitqueue interruptions
+>>  * @msecs:	Requested sleep duration in milliseconds
+>>  *
+>>  * msleep() uses jiffy based timeouts for the sleep duration. Because of=
+ the
+>>  * design of the timer wheel, the maximum additional percentage delay (s=
+lack) is
+>>  * 12.5%. This is only valid for timers which will end up in the second =
+or a
+>>  * higher level of the timer wheel. For explanation of those 12.5% pleas=
+e check
+>>  * the detailed description about the basics of the timer wheel.
+>
+> I've never realized this constant worst percentage of slack. Would be nic=
+e to mention
+> that somewhere in kernel/time/timer.c
 
-> Hi Deepak,
-> I got some errors when building this test, I suppose they should be
-> fixed in the next version.
+Yes, we can explicitly add it (I will put it on the TODO list). It's
+possible to calculate it on your own with the overview of levels and
+granularity,...
 
-> riscv_cfi_test.c: In function 'sigsegv_handler':
-> riscv_cfi_test.c:17:28: error: 'SEGV_CPERR' undeclared (first use in
-> this function); did you mean 'SEGV_ACCERR'?
->    17 |         if (si->si_code =3D=3D SEGV_CPERR) {
->       |                            ^~~~~~~~~~
->       |                            SEGV_ACCERR
->=20
+> However this doesn't need a second to apply. It only takes crossing level=
+s above
+> 0. Or am I missing something?
 
-Did you run "make headers_install" prior to building kselftest to get
-the current kernel's headers available for userspace builds?
+s/the second/level 1/
 
---PJjNqwWWqyWbjeHL
-Content-Type: application/pgp-signature; name="signature.asc"
+more clear? Then it's the same number as used in the timer wheel
+documentation.
 
------BEGIN PGP SIGNATURE-----
+>>  *
+>>  * The slack of timers which will end up in the first level depends on:
+>>  *
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmcI+2gACgkQJNaLcl1U
-h9D6tQf8Cbjh+ZCxTHzNMvyIkuab9pqHuHnVUB/sDN7eeBJp3Yem3v9BmF2lUAdA
-E2WU54VgKuAaJJ+3nvouHfzMeZ9bT+OaDgwDVtgDkF8agaj9mRM2tKmsMWpAb4aF
-eORi9++qQz7h7OvKTPSZCVB8o6jVRhOFEFcyv/gXXg5WvNb8UIf0cPkwhS8hh61e
-GIAT7UE2o+e0/BzYHIAVrMB8F8YHSkEYi/fAFy4rcIHrru8aL3dATtRMKpxGDX20
-VlJ9IYA/nNuODeLJSt10auIsA2z3GF73b4fWqhQ7h0/ga7SACr050BxNq3SBkfJ2
-NaDmcT4DAf+mI549FZMM61qSvllFEg==
-=La7c
------END PGP SIGNATURE-----
+Same here: s/the first level/level 0/
 
---PJjNqwWWqyWbjeHL--
+>>  * * sleep duration (msecs)
+>>  * * HZ configuration
+>>  *
+>>  * To make sure the sleep duration with the slack is accurate enough, a =
+slack
+>>  * value is required (because of the design of the timer wheel it is not
+>
+> But where is it required?
+
+The callsite has to decide which accuracy/slack is required for their
+use case (this was also part of the discussion which leads to this
+queue).
+
+>>  * possible to define a value smaller than 12.5%). The following check m=
+akes
+>>  * clear, whether the sleep duration with the defined slack and with the=
+ HZ
+>>  * configuration will meet the constraints:
+>>  *
+>>  *  ``msecs >=3D (MSECS_PER_TICK / slack)``
+>>  *
+>>  * Examples:
+>>  *
+>>  * * ``HZ=3D1000`` with ``slack=3D25%``: ``MSECS_PER_TICK / slack =3D 1 =
+/ (1/4) =3D 4``:
+>>  *   all sleep durations greater or equal 4ms will meet the constraints.
+>>  * * ``HZ=3D1000`` with ``slack=3D12.5%``: ``MSECS_PER_TICK / slack =3D =
+1 / (1/8) =3D 8``:
+>>  *   all sleep durations greater or equal 8ms will meet the constraints.
+>>  * * ``HZ=3D250`` with ``slack=3D25%``: ``MSECS_PER_TICK / slack =3D 4 /=
+ (1/4) =3D 16``:
+>>  *   all sleep durations greater or equal 16ms will meet the constraints.
+>>  * * ``HZ=3D250`` with ``slack=3D12.5%``: ``MSECS_PER_TICK / slack =3D 4=
+ / (1/8) =3D 32``:
+>>  *   all sleep durations greater or equal 32ms will meet the constraints.
+>
+> But who defines those slacks and where? I'm even more confused now...
+
+I think I know where the confusion comes from. I rephrase it once more
+and turned around the calculation:
+
+/**
+ * msleep - sleep safely even with waitqueue interruptions
+ * @msecs:	Requested sleep duration in milliseconds
+ *
+ * msleep() uses jiffy based timeouts for the sleep duration. Because of the
+ * design of the timer wheel, the maximum additional percentage delay (slac=
+k) is
+ * 12.5%. This is only valid for timers which will end up in level 1 or a
+ * higher level of the timer wheel. For explanation of those 12.5% please c=
+heck
+ * the detailed description about the basics of the timer wheel.
+ *
+ * The slack of timers which will end up in level 0 depends on sleep
+ * duration (msecs) and HZ configuration and can be calculated in the
+ * following way (with the timer wheel design restriction that the slack
+ * is not less than 12.5%):
+ *
+ *   ``slack =3D MSECS_PER_TICK / msecs``
+ *
+ * When the allowed slack of the callsite is known, the calculation
+ * could be turned around to find the minimal allowed sleep duration to meet
+ * the constraints. For example:
+ *
+ * * ``HZ=3D1000`` with ``slack=3D25%``: ``MSECS_PER_TICK / slack =3D 1 / (=
+1/4) =3D 4``:
+ *   all sleep durations greater or equal 4ms will meet the constraints.
+ * * ``HZ=3D1000`` with ``slack=3D12.5%``: ``MSECS_PER_TICK / slack =3D 1 /=
+ (1/8) =3D 8``:
+ *   all sleep durations greater or equal 8ms will meet the constraints.
+ * * ``HZ=3D250`` with ``slack=3D25%``: ``MSECS_PER_TICK / slack =3D 4 / (1=
+/4) =3D 16``:
+ *   all sleep durations greater or equal 16ms will meet the constraints.
+ * * ``HZ=3D250`` with ``slack=3D12.5%``: ``MSECS_PER_TICK / slack =3D 4 / =
+(1/8) =3D 32``:
+ *   all sleep durations greater or equal 32ms will meet the constraints.
+ *
+ * See also the signal aware variant msleep_interruptible().
+ */
+
+Hopefully this attempt clarifies the confusion?
+
 
