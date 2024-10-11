@@ -1,123 +1,175 @@
-Return-Path: <linux-arch+bounces-8049-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8050-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 949BA99A97D
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2024 19:09:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 68F1599AAB2
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2024 19:52:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C3D351C22C5E
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2024 17:09:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7E9F31C21548
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Oct 2024 17:52:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 746451BCA0A;
-	Fri, 11 Oct 2024 17:08:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC6E71C7B6F;
+	Fri, 11 Oct 2024 17:52:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="cpwoAR9Q"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zcHkz36s"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F404E1BBBC5
-	for <linux-arch@vger.kernel.org>; Fri, 11 Oct 2024 17:08:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E20091C3314
+	for <linux-arch@vger.kernel.org>; Fri, 11 Oct 2024 17:52:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728666533; cv=none; b=JQhowDc6WfjAsUg01As0Fk8F2vXsGDucqTOBX2t+beFOC96C01kSh2ocCUMwwS5V+Lg/Sr3NDdcO9p0BkjI7X1PhrCOB4enScHk7fsxeFb04dTWQ0GVxExgk6YvzdZky3D07ucKn4Z3THRlJy/skzQvM007cefCtalD89CFm6U8=
+	t=1728669140; cv=none; b=Ui/OcKkwvpqOGfiyGct+fKgcRiZySGMrmF2z3ywMWG1RNm8ZEPC/D9AN9lpb2NZ2PR6zXdygaItdRybuhfc7R44nI2NdylQSKpvGJZlzLsJUfA1I/sfJgebE/JjN29QD8PPuRGYJNo54q/LI/2UjYPYR00cHHe+d45pBf+zhnVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728666533; c=relaxed/simple;
-	bh=ncF6gYHPE8hGPaZtXbZXNrrpGh+MR6/nIzvYV+HXO9k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ULXFBJqShXWxoW3Zou08vFkszHZwQUkWh8fgkFhoV9LueQkjDfw10cDyteK0dybxkRuABuNIcWiRDn/y4kUcgkKK1zk+gY8q+gB3t9yc/TeAYMG8gn/aT7oc7ALJhviV5GTCFckD30IjK7TIIWaaQkN7cnx689CyybzEXJmLrV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=cpwoAR9Q; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-20c77459558so18050005ad.0
-        for <linux-arch@vger.kernel.org>; Fri, 11 Oct 2024 10:08:51 -0700 (PDT)
+	s=arc-20240116; t=1728669140; c=relaxed/simple;
+	bh=UbA/iFDHRQ6qK3Ht4X9Feltcke5IsxxCQungku19kWY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FOUymO2g/cmCV1kajxg/SccA5VWDGP7at+NpOiG/UqthXdSq7EuIUSPfLZTeUA/uPV0BafeQk+nrjkChT3iQLXp9bmeJFl+n/R1qpA1oGspYCw3Jb3LRrTPWqgGRmf9xlZw31ktkqXw6xU3F+arsbfPoVeqWSowoHEQF7Ho7UJI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zcHkz36s; arc=none smtp.client-ip=209.85.160.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-4603d3e0547so11801cf.0
+        for <linux-arch@vger.kernel.org>; Fri, 11 Oct 2024 10:52:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1728666531; x=1729271331; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ncF6gYHPE8hGPaZtXbZXNrrpGh+MR6/nIzvYV+HXO9k=;
-        b=cpwoAR9Q+GepwCG3WO9s1TznEjXQ2zG5qjnnsAiaDgeMf6Cb90GP7IPMKSjLA3FCIs
-         WKpOmmkCJ6LjSpxVD040xB6Tcj1aYmsFQ5Hon/MoVSB9Ne7+VHsUXxX3PXPv2d2mOCBP
-         047jx1Vc+02Hy2h/bD2GrZvouKLnstQabkQVLZ8QUWQPd7eibCzsZHiv5+ASBrX9grqe
-         wMyW17Fsvr7LPNVKliHl+LCtUXMl3TJV7RnhMIbBcKkbqFWBL5GOrjdSaeiCkJn0xGaa
-         aWSEz0NllfrdAGVeQSwjFrAZWzsjiy5fv+WoeyD63HgktLUIY5ipQwSIx9t6xLmxhZ6t
-         jxag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728666531; x=1729271331;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1728669137; x=1729273937; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ncF6gYHPE8hGPaZtXbZXNrrpGh+MR6/nIzvYV+HXO9k=;
-        b=lPZF2qsg0oP/kza+/1Ka1QIrQKtL9w4LMkDpAAZHEFz1YWGFSNLw29ILEF1Rmxz+lq
-         /RsjUB+gjoTXPwMksaqZvbVxS5A6GSPbzsYxnQCPKOFmGS9Lv4IfscirnMuclnzJBThE
-         bl3dDBSIc7DECrQ1cFVLL006Ywv3wQ//ljdpGL1Y3sPSZVfc1/j2i/ZNYCos6wLu12hK
-         0L94DTNC0TjeD0Bk5ZGBA2JIDkKLUVk3sg2QCO+RZpu0gxZqvBM1FxkQxNKPTIzcxED8
-         QQbSbORPfEF0E9hKM/eIGmisOA7IifMZI7EO8NgPOlY1D6aHxtF2CTfywg+rp8pv/0EO
-         IqGg==
-X-Forwarded-Encrypted: i=1; AJvYcCWg69qltOl9kKkfetod0Z0t8IkvVzvS3gSjvOn0N2OBpYIiDDXrq/EtyufF5n5vvScDCsL/DNBmxY0y@vger.kernel.org
-X-Gm-Message-State: AOJu0YzLQEoFFNfzf70w8lVF+zHYcSZW6DzSlvEXvcUvrdU957ZxXrRs
-	NaRxuWTwaLNuL41435Mzlts5qnHBrjPSGjwpHgLbdXqJOOdccz492759zRgtJ90=
-X-Google-Smtp-Source: AGHT+IEtBNrWBuSpgwFuugAc2ZJBDhi6LopCWUrt6Pnl6e2xeIOTuojzMNY64aV7gsKF9NBQ4b+NJQ==
-X-Received: by 2002:a17:903:1cf:b0:20b:4f95:932d with SMTP id d9443c01a7336-20ca144753emr36735675ad.3.1728666531268;
-        Fri, 11 Oct 2024 10:08:51 -0700 (PDT)
-Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20c8c0eb470sm25410115ad.126.2024.10.11.10.08.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Oct 2024 10:08:50 -0700 (PDT)
-Date: Fri, 11 Oct 2024 10:08:48 -0700
-From: Deepak Gupta <debug@rivosinc.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linux-arch@vger.kernel.org,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	David Hildenbrand <david@redhat.com>,
-	Carlos Bilbao <carlos.bilbao.osdev@gmail.com>
-Subject: Re: [PATCH RFC/RFT 1/3] mm: Introduce ARCH_HAS_USER_SHADOW_STACK
-Message-ID: <ZwlboA9JCgLJrOG2@debug.ba.rivosinc.com>
-References: <20241010-shstk_converge-v1-0-631beca676e7@rivosinc.com>
- <20241010-shstk_converge-v1-1-631beca676e7@rivosinc.com>
- <Zwj-9Dg3onEHnbDq@finisterre.sirena.org.uk>
+        bh=nFVu/0Ci5Drk+gHVAbW8VDcAFM6IjgK0BzGcAxp3FVw=;
+        b=zcHkz36sijyfW6L3+oqPlDl3WZgl0pIx4cWL3ismpt0KhOIp9FYNmOvDw3QRfdbfhB
+         wjJqwIB39R7OKQLgc14nmTS5w9ZaOB0uwXWDP/8oKdDUUom0oB0l6tdT4nW4OEuhIusO
+         QiN8UQqlOeEEBa/6+D1OGpci8N6eqEGTt1Htv5b8GymqG23U/ELZ2min8H2RpfLDvXVv
+         FtRAy3F7W0IlSAHvoGmubITdjrASOhQnzMmyX22+8HpIsgjbJXkAsWu1wvbKogrHkZcF
+         p5+oqa++lDFyPLN8zc0nHTOXYuU7BSz9eKjMmVLZAxzDy1/oHNwtoR/9HuX713KDHujN
+         b0xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728669137; x=1729273937;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nFVu/0Ci5Drk+gHVAbW8VDcAFM6IjgK0BzGcAxp3FVw=;
+        b=HODSKjgk47Jb2n7qEctAGWJ5MwrcqU28mwkeM5Se9HCGWTK6ttRpIlnXGrdGNbNrs4
+         n/MmvVTpkgzUVkurVU2mAUZHT0PUPB6+9CdTIzEKJRvoLSWYuUuHKG2F4670BZQW3O7s
+         /xf89eAjQuMr2kUd56etfX4z6DzQsB041ZB8NSCaNilsGki2klj2BZpgpGWQB8bJoB4N
+         o7vGMmV5Ioy/OI8yqIibwxrqgLo2Zc7bAHWcjc22anSk/rWlmKhf5755P4l1RQrYPqA0
+         tsz0xcSiRfQ3hS9BxJuxhd3oaAT456Wi3MULJi+Zdo+4jy+mUz3jCpXCTPjDCE+Wuolq
+         wDSg==
+X-Forwarded-Encrypted: i=1; AJvYcCUSipE95aDt1cUiakm183P8bQGcATalEmt1+oqe4cuQLavTl/D6DCfzYBTC6AM/+/ADRv29irEPm/Uw@vger.kernel.org
+X-Gm-Message-State: AOJu0YymXEFGzRDghEupi5cYde7aV4XiIA6mmJmXD2BE+d3DdPctAu+p
+	wEYuLjwYvz3ORE0HmmDWqWSmuC/BaBjOSWYQBSc61r7ZQZojfMVJ+X6GUURxUVmnlMHFW91XZ6Y
+	m22PgUIugjvr+956dozH/fUDX58RASNf2V0nY
+X-Google-Smtp-Source: AGHT+IEEPPLA8HdfmHuDQ6n+ZWN9VIwgJKQNohNKF/6PyZg/dJQ0X34S6H6r+67M6aytOK48Tol7C6iHV8tyTZjxViQ=
+X-Received: by 2002:a05:622a:2d11:b0:447:f108:f80e with SMTP id
+ d75a77b69052e-46058edff6amr144611cf.16.1728669136519; Fri, 11 Oct 2024
+ 10:52:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <Zwj-9Dg3onEHnbDq@finisterre.sirena.org.uk>
+References: <20241011-tracepoint-v10-0-7fbde4d6b525@google.com>
+ <20241011-tracepoint-v10-1-7fbde4d6b525@google.com> <20241011131316.5d6e5d10@eugeo>
+ <CABCJKuesYQWvfScFaqv_rW5ZqAJNn4zK9iOFAmyTaYKO3S5hgw@mail.gmail.com> <20241011171251.0bd53f01@eugeo>
+In-Reply-To: <20241011171251.0bd53f01@eugeo>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Fri, 11 Oct 2024 10:51:37 -0700
+Message-ID: <CABCJKue7qT9drhgrXPEjBO=gPw79vYELAZxz747Z8WMF=vj2MQ@mail.gmail.com>
+Subject: Re: [PATCH v10 1/5] rust: add static_branch_unlikely for static_key_false
+To: Gary Guo <gary@garyguo.net>
+Cc: Alice Ryhl <aliceryhl@google.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Jason Baron <jbaron@akamai.com>, Ard Biesheuvel <ardb@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	linux-trace-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Sean Christopherson <seanjc@google.com>, Uros Bizjak <ubizjak@gmail.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, 
+	Oliver Upton <oliver.upton@linux.dev>, Mark Rutland <mark.rutland@arm.com>, 
+	Ryan Roberts <ryan.roberts@arm.com>, Fuad Tabba <tabba@google.com>, 
+	linux-arm-kernel@lists.infradead.org, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Anup Patel <apatel@ventanamicro.com>, 
+	Andrew Jones <ajones@ventanamicro.com>, Alexandre Ghiti <alexghiti@rivosinc.com>, 
+	Conor Dooley <conor.dooley@microchip.com>, Samuel Holland <samuel.holland@sifive.com>, 
+	linux-riscv@lists.infradead.org, Huacai Chen <chenhuacai@kernel.org>, 
+	WANG Xuerui <kernel@xen0n.name>, Bibo Mao <maobibo@loongson.cn>, 
+	Tiezhu Yang <yangtiezhu@loongson.cn>, Andrew Morton <akpm@linux-foundation.org>, 
+	Tianrui Zhao <zhaotianrui@loongson.cn>, loongarch@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 11, 2024 at 11:33:24AM +0100, Mark Brown wrote:
->On Thu, Oct 10, 2024 at 05:32:03PM -0700, Deepak Gupta wrote:
->> From: Mark Brown <broonie@kernel.org>
->>
->> Since multiple architectures have support for shadow stacks and we need to
->> select support for this feature in several places in the generic code
->> provide a generic config option that the architectures can select.
->>
->> Suggested-by: David Hildenbrand <david@redhat.com>
->> Acked-by: David Hildenbrand <david@redhat.com>
->> Signed-off-by: Mark Brown <broonie@kernel.org>
->> Reviewed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
->> Reviewed-by: Deepak Gupta <debug@rivosinc.com>
->> Reviewed-by: Carlos Bilbao <carlos.bilbao.osdev@gmail.com>
->> ---
+Hi Gary,
+
+On Fri, Oct 11, 2024 at 9:12=E2=80=AFAM Gary Guo <gary@garyguo.net> wrote:
 >
->You need to add your own signoff when resending things (though I guess
->this is likely to get applied to a tree that already contains this
->patch so it likely doesn't matter in the end).
+> On Fri, 11 Oct 2024 08:23:18 -0700
+> Sami Tolvanen <samitolvanen@google.com> wrote:
+>
+> > On Fri, Oct 11, 2024 at 5:13=E2=80=AFAM Gary Guo <gary@garyguo.net> wro=
+te:
+> > >
+> > > On Fri, 11 Oct 2024 10:13:34 +0000
+> > > Alice Ryhl <aliceryhl@google.com> wrote:
+> > >
+> > > > +#ifndef CONFIG_JUMP_LABEL
+> > > > +int rust_helper_static_key_count(struct static_key *key)
+> > > > +{
+> > > > +     return static_key_count(key);
+> > > > +}
+> > > > +EXPORT_SYMBOL_GPL(rust_helper_static_key_count);
+> > >
+> > > ^ Explicit export should be removed. This only works because we didn'=
+t
+> > > remove export.h from all helpers.c yet, but there's a patch to do
+> > > that and this will stop working.
+> >
+> > What's the benefit of removing explicit exports from the Rust helper C
+> > code? It requires special casing things like modversions for these
+> > files, so I assume there's a reason for this. I asked about it here,
+> > but never got a response:
+> >
+> > https://lore.kernel.org/rust-for-linux/CABCJKudqAEvLcdqTqyfE2+iW+jeqBpn=
+TGgYJvrZ0by6hGdfevQ@mail.gmail.com/
+> >
+> > Sami
+>
+> Ah, I didn't saw that email, probably because I archived the mails after
+> the patch is applied.
 
-oops :(
+Sometimes you might get pings about patches that are already applied too. :=
+)
 
+> We're working towards having an option that enables inlining these
+> helpers into Rust; when that option is enabled, the helpers must not be
+> exported. See
+> https://lore.kernel.org/rust-for-linux/20240529202817.3641974-1-gary@gary=
+guo.net/
+> and https://lwn.net/Articles/993163/.
+
+Interesting, thanks for the links. It would have been helpful to
+explain the motivation for the change also in the patch that was
+applied.
+
+Did you consider using the preprocessor to simply skip exporting the
+helpers when cross-language LTO inlining is used? This would allow us
+to use the existing C build rules for the code instead of adding a
+separate rule to handle Rust-style exports, like I'm doing here:
+
+https://github.com/samitolvanen/linux/commit/545277e4d0432dafc530b1618f0152=
+aed82af2f5
+
+> It's also quite tedious for every helper to carry this export.
+
+It's just one line per helper, but sure, I do see your point.
+
+Sami
 
