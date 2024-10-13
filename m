@@ -1,137 +1,152 @@
-Return-Path: <linux-arch+bounces-8061-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8062-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3BF099B8D5
-	for <lists+linux-arch@lfdr.de>; Sun, 13 Oct 2024 10:47:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6AFCB99B9D1
+	for <lists+linux-arch@lfdr.de>; Sun, 13 Oct 2024 16:53:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D994D2822DF
-	for <lists+linux-arch@lfdr.de>; Sun, 13 Oct 2024 08:47:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9063B1C21775
+	for <lists+linux-arch@lfdr.de>; Sun, 13 Oct 2024 14:53:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D818212D20D;
-	Sun, 13 Oct 2024 08:47:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E8OMxiME"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 363AA14659C;
+	Sun, 13 Oct 2024 14:53:31 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C3BB2AD18;
-	Sun, 13 Oct 2024 08:47:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F869143C5D;
+	Sun, 13 Oct 2024 14:53:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728809253; cv=none; b=ZBP2jS1zWUwdHFhlOMpJiE8y8fDIwDkgpTLiP6bjZTNSdsmxh0XI4nBiKcYdkQhdnXt1XH66Tyz8gZclfA1onLz11IcZ6nSPXjJwVVtbkWWlqDH9+KdboqfvvU4NEzlEZY5+ygVqLqmXWn5M9RdKGIDwjE0taVUCsfDaxhgXLaA=
+	t=1728831211; cv=none; b=cbUNlTSAPvH7MQJ3dYh49oE5m+xPdZQ7suoKqlG57BUPXQavl6I0yyhjjs8ZypltenbzCnhvfplRLrq+y1rgRlMB3GMhmYOM21fhsSefo+R/g68p4RVsFw+thutfLpbcM998mC7pAy2y3iyJvoYYVI9xNPZZbRYEnwr4mtTqL20=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728809253; c=relaxed/simple;
-	bh=oCkJ2115ozRiZPDG4YoFw9nArbpLGJybX01Iv//69uE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ygnui3j1dp0vTwYL36AbZ8rQMm94Kb5QuV/3bce/6xN+todAZtzBWtCG7/n24nYsXbPsldBGWLiNWMecdojowQG9shqma41CUyUmjrMlwESL38BzRn/sNmW5e/3KEvOlWDQ26kh2r5r3NX7L+Q7pQ8XYZYpGMjIBuOKPzvdD3r8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E8OMxiME; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00D61C4CECD;
-	Sun, 13 Oct 2024 08:47:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728809253;
-	bh=oCkJ2115ozRiZPDG4YoFw9nArbpLGJybX01Iv//69uE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=E8OMxiMEktF+GQmyT4EDIYDJPag5y6VDyo/Ga7wsRXJJ99cwzji7jLF1sUHlppQrC
-	 kfjLbesywWMnxfXjdxF/ttfJW0S6OCnAeNyYzQJk2u4D3I/IHI9w4eKpfc6/PVtfuE
-	 WndRqsL5ofKVGyFE9G/gSdQ0nGfWKHlQ3BhJP58mfPjvLaZMFmHfTrH7D6YY90Mj1Y
-	 Bf6s6/XciGtUwI6Emh7Lkdsn+ce052geMCuH5U+Tb+yPiRy+C2Qz+9+N2Qx0N42A/1
-	 /daXS+24OOYM/5Gk5f/vkwwYyUK7ykCQAd22G6E+/Xf2yKVuhiVY41QpTSBy6H62Ks
-	 p+MyUT+rRu6SQ==
-Date: Sun, 13 Oct 2024 11:43:41 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Christoph Hellwig <hch@infradead.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-	Brian Cain <bcain@quicinc.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
-	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Richard Weinberger <richard@nod.at>,
-	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
-	Stafford Horne <shorne@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
-	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org, linux-mm@kvack.org,
-	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-	sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v5 7/8] execmem: add support for cache of large ROX pages
-Message-ID: <ZwuIPZkjX0CfzhjS@kernel.org>
-References: <20241009180816.83591-1-rppt@kernel.org>
- <20241009180816.83591-8-rppt@kernel.org>
- <Zwd7GRyBtCwiAv1v@infradead.org>
- <ZwfPPZrxHzQgYfx7@kernel.org>
- <ZwjXz0dz-RldVNx0@infradead.org>
+	s=arc-20240116; t=1728831211; c=relaxed/simple;
+	bh=rBhr3YEB0lNOJfF03W35HV8jztKMVPnLGNDZbrm4Ci0=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=Cac7vzXlnRZKCFQDgqG3+kQwVjBK1kPZDMiZU7gXM7t6R8MLQEzrXBVe/+LnTLv1uT6RYYlSKd0S2wn5cc2WxPfraXjflphEnnn4Lqu/kLyqgrYr5SHBFOl/mRdO2EaIH+Fg1B6riB28klGWtuzO4k2fE4ZzmfDtU/NNWh9RluI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+	id 4DC4292009C; Sun, 13 Oct 2024 16:53:21 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by angie.orcam.me.uk (Postfix) with ESMTP id 45D3F92009B;
+	Sun, 13 Oct 2024 15:53:21 +0100 (BST)
+Date: Sun, 13 Oct 2024 15:53:21 +0100 (BST)
+From: "Maciej W. Rozycki" <macro@orcam.me.uk>
+To: Niklas Schnelle <schnelle@linux.ibm.com>
+cc: Brian Cain <bcain@quicinc.com>, Marcel Holtmann <marcel@holtmann.org>, 
+    Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
+    Patrik Jakobsson <patrik.r.jakobsson@gmail.com>, 
+    Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+    Maxime Ripard <mripard@kernel.org>, 
+    Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
+    Simona Vetter <simona@ffwll.ch>, Dave Airlie <airlied@redhat.com>, 
+    Gerd Hoffmann <kraxel@redhat.com>, 
+    Lucas De Marchi <lucas.demarchi@intel.com>, 
+    =?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
+    Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+    Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+    Jiri Slaby <jirislaby@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+    Heiko Carstens <hca@linux.ibm.com>, linux-kernel@vger.kernel.org, 
+    linux-hexagon@vger.kernel.org, linux-bluetooth@vger.kernel.org, 
+    dri-devel@lists.freedesktop.org, virtualization@lists.linux.dev, 
+    spice-devel@lists.freedesktop.org, intel-xe@lists.freedesktop.org, 
+    linux-serial@vger.kernel.org, linux-arch@vger.kernel.org, 
+    Arnd Bergmann <arnd@kernel.org>
+Subject: Re: [PATCH v6 4/5] tty: serial: handle HAS_IOPORT dependencies
+In-Reply-To: <46d81b40dda20ada3b5847353a866172b419c811.camel@linux.ibm.com>
+Message-ID: <alpine.DEB.2.21.2410081606420.30973@angie.orcam.me.uk>
+References: <20241007-b4-has_ioport-v6-0-03f7240da6e5@linux.ibm.com>  <20241007-b4-has_ioport-v6-4-03f7240da6e5@linux.ibm.com>  <alpine.DEB.2.21.2410072109130.30973@angie.orcam.me.uk> <46d81b40dda20ada3b5847353a866172b419c811.camel@linux.ibm.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZwjXz0dz-RldVNx0@infradead.org>
+Content-Type: text/plain; charset=US-ASCII
 
-On Fri, Oct 11, 2024 at 12:46:23AM -0700, Christoph Hellwig wrote:
-> On Thu, Oct 10, 2024 at 03:57:33PM +0300, Mike Rapoport wrote:
-> > On Wed, Oct 09, 2024 at 11:58:33PM -0700, Christoph Hellwig wrote:
-> > > On Wed, Oct 09, 2024 at 09:08:15PM +0300, Mike Rapoport wrote:
-> > > >  /**
-> > > >   * struct execmem_info - architecture parameters for code allocations
-> > > > + * @fill_trapping_insns: set memory to contain instructions that will trap
-> > > >   * @ranges: array of parameter sets defining architecture specific
-> > > >   * parameters for executable memory allocations. The ranges that are not
-> > > >   * explicitly initialized by an architecture use parameters defined for
-> > > >   * @EXECMEM_DEFAULT.
-> > > >   */
-> > > >  struct execmem_info {
-> > > > +	void (*fill_trapping_insns)(void *ptr, size_t size, bool writable);
-> > > >  	struct execmem_range	ranges[EXECMEM_TYPE_MAX];
-> > > 
-> > > Why is the filler an indirect function call and not an architecture
-> > > hook?
+On Tue, 8 Oct 2024, Niklas Schnelle wrote:
+
+> > > +static __always_inline bool is_upf_fourport(struct uart_port *port)
+> > > +{
+> > > +	if (!IS_ENABLED(CONFIG_HAS_IOPORT))
+> > > +		return false;
+> > > +
+> > > +	return port->flags & UPF_FOURPORT;
+> > > +}
 > > 
-> > The idea is to keep everything together and have execmem_info describe all
-> > that architecture needs. 
+> >  Can we perhaps avoid adding this helper and then tweaking code throughout 
+> > by having:
+> > 
+> > #ifdef CONFIG_SERIAL_8250_FOURPORT
+> > #define UPF_FOURPORT		((__force upf_t) ASYNC_FOURPORT       /* 1  */ )
+> > #else
+> > #define UPF_FOURPORT		0
+> > #endif
+> > 
+> > in include/linux/serial_core.h instead?  I can see the flag is reused by 
+> > drivers/tty/serial/sunsu.c, but from a glance over it seems rubbish to me 
+> > and such a change won't hurt the driver anyway.
 > 
-> But why?  That's pretty different from our normal style of arch hooks,
-> and introduces an indirect call in a security sensitive area.
+> I'll look at this, do you think this is okay regarding matching the
+> user-space definitions in include/uapi/linux/tty_flags.h?
 
-Will change to __weak hook. 
+ With this change UAPI stays the same and setting ASYNC_FOURPORT (with 
+`setserial', etc.) will just do nothing with non-port-I/O platforms, as 
+expected.  Arguably being able to set it for any serial port and cause the 
+driver to poke at random I/O locations is already asking for trouble, but 
+that the price of legacy.
 
--- 
-Sincerely yours,
-Mike.
+> > > @@ -1174,7 +1201,7 @@ static void autoconfig(struct uart_8250_port *up)
+> > >  		 */
+> > >  		scratch = serial_in(up, UART_IER);
+> > >  		serial_out(up, UART_IER, 0);
+> > > -#ifdef __i386__
+> > > +#if defined(__i386__) && defined(CONFIG_HAS_IOPORT)
+> > >  		outb(0xff, 0x080);
+> > >  #endif
+> > >  		/*
+> > > @@ -1183,7 +1210,7 @@ static void autoconfig(struct uart_8250_port *up)
+> > >  		 */
+> > >  		scratch2 = serial_in(up, UART_IER) & UART_IER_ALL_INTR;
+> > >  		serial_out(up, UART_IER, UART_IER_ALL_INTR);
+> > > -#ifdef __i386__
+> > > +#if defined(__i386__) && defined(CONFIG_HAS_IOPORT)
+> > >  		outb(0, 0x080);
+> > >  #endif
+> > >  		scratch3 = serial_in(up, UART_IER) & UART_IER_ALL_INTR;
+> > 
+> >  Nah, i386 does have machine OUTB instructions, it has the port I/O 
+> > address space in the ISA, so these two changes make no sense to me.  
+> > 
+> >  Though this #ifdef should likely be converted to CONFIG_X86_32 via a 
+> > separate change.
+> 
+> This is needed for Usermode Linux (UM) which sets __i386__ but also
+> doesn't have CONFIG_HAS_IOPORT. This was spotted by the kernel test bot
+> here: https://lore.kernel.org/all/202410031712.BwfGjrQY-lkp@intel.com/
+
+ Odd, but I'm not into UML so I need to accept your justification.  My 
+reservation about relying on compiler's __i386__ predefine rather than our 
+CONFIG_X86_32 setting still stands, but that's beyond the scope of your 
+change (as is switching from `#if ...' to `if (...)').  Thanks for your 
+attention to such details.
+
+ NB these `outb' calls look to me remarkably like remains of `outb_p' and 
+I wonder if they could be abstracted somehow.  For those who don't know: 
+the port I/O location 0x80 in the IBM PC address space was reserved for 
+use as a diagnostic port.  Despite being in the mainboard's address space 
+its chip select line was left floating and one could obtain an ISA option 
+card that decoded this location and showed data values written to it on a 
+hex display.  As it was a location known to cause no side effect (beyond 
+that optional hex display) it was commonly used to incur a small delay in 
+execution.  It was also used by BIOS POST to indicate progress.
+
+ I've skimmed over v8 and it seems good to go as far as I'm concerned.  
+Any fallout can be dealt with on a case-by-case basis.  Thank you for 
+working on these improvements.
+
+  Maciej
 
