@@ -1,82 +1,82 @@
-Return-Path: <linux-arch+bounces-8106-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8107-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FE2A99D7E3
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Oct 2024 22:08:39 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5136099D7E6
+	for <lists+linux-arch@lfdr.de>; Mon, 14 Oct 2024 22:09:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CF7FB1F22331
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Oct 2024 20:08:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A0923B212FE
+	for <lists+linux-arch@lfdr.de>; Mon, 14 Oct 2024 20:09:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D8F71CF5CF;
-	Mon, 14 Oct 2024 20:08:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23A311CF7B4;
+	Mon, 14 Oct 2024 20:09:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Q6DGqB7J"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ag9bTncm"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A53A31CEACD
-	for <linux-arch@vger.kernel.org>; Mon, 14 Oct 2024 20:08:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C80E1CF5EE
+	for <linux-arch@vger.kernel.org>; Mon, 14 Oct 2024 20:09:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728936514; cv=none; b=a2JQVhHrKboKl56msqeTpxZid1Yxn/mRZ3VGucIIycMaWZpUN2Oysf1DWEyR1JcgvY3dQKOFoA0ktVmCRQw9AgBf5S+eQntGJ0x3kYau6r0VYYIuh3E5O62OLLx812IVHMZ4i0lYua8KadvNi1SVTTy9Jr7fsxvgcBrn9maJ9Qs=
+	t=1728936559; cv=none; b=dnIM33PqSikiE0Sy4RgMwrYyQXCPRfd9yBIlc8UBeR3TfAVMjUT/1aMyG9xyxxnRuJN3SJQygloHJLACIOjx8+1saHM+qt8xcUgM2wsiv2MgR0vGrIfpBm7mUJbYKdg3cLK5vPCTPirK90QTFFCB4dbQvrkdJ2ngLe7iom0rtx4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728936514; c=relaxed/simple;
-	bh=WJ0VNcaIc86VSheN53nKaNiPzg3nD5Htkqzr0j33dvg=;
+	s=arc-20240116; t=1728936559; c=relaxed/simple;
+	bh=pNaDbRzoZ/ch2sXe8zWNqwjvHPWMDpOqULepUTLUdEc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=k4rlbRBYEgym86Gm6YKEzvA1i3BtwY7lRjV5YqvCm1+Av+oqjrutNXbJYPkP5sY12Ptl2MEIB5gcD103sanC1Iwrux7150do1PBx4aNeED05FMyDzkqorFnFuhnBpVw2kbWWBm1W6GC/MGZADSPD2ETj1FAChQbJS1TcE1ZWDSk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Q6DGqB7J; arc=none smtp.client-ip=209.85.208.44
+	 To:Cc:Content-Type; b=s69IpYUK3vN0Kp+SYo/htmvlEbAUNunTy6N715r8+bzG6jqMUgAX3fAeUnJJlYSVtIjqPgVRvgh+HS+VCogxIMsTQ1BeDEbUBr8wcEb4X3natz1+6QrpinNeSqXjSPuueg1Tc71V9j3d/XbMp6/P7unGKcq7V6UcEhiaJ1dPQ7c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ag9bTncm; arc=none smtp.client-ip=209.85.208.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5c93e9e701fso25648a12.1
-        for <linux-arch@vger.kernel.org>; Mon, 14 Oct 2024 13:08:32 -0700 (PDT)
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5c932b47552so28253a12.0
+        for <linux-arch@vger.kernel.org>; Mon, 14 Oct 2024 13:09:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1728936511; x=1729541311; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1728936555; x=1729541355; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WJ0VNcaIc86VSheN53nKaNiPzg3nD5Htkqzr0j33dvg=;
-        b=Q6DGqB7JajqCq8CaRLnnfsqrbPL2xad2Xek6z9bts+DgKIB5MAklE1x+TStSxLrPZ0
-         Wn/kOHPj7ikNbfJzESPIfDjUck0tH4oonQ9XP62UDTohClvkH5LJK2sPq9xHDma4DIZW
-         hFJe1Gdhi7m/NhljUXMIwSga1MejHmrtNqvtEtOtubv4trmLtvzr4ts+XcPbLTdTfFOP
-         jbg2jPSUQgujFJUolAGIxzVHKzHcal+eK6oZWxiIBNAXEtOnfJosxOiJggh2wvTKtmmU
-         mLZ4koIxtIIKo7l86rscM6+380tBm4a2UJPhMEpGDjSivjuPZEH5IatLdOGdA/evRiJ8
-         sZbA==
+        bh=r0zqaAbHeI1jkohxhnn3/eoqtBWz6fWnFImTtGcQALM=;
+        b=ag9bTncm5vPI/p17T9CR/FjmPdlcay/2/rb3nfUlYq/36+rNK2PIlUvno5LwH03mNH
+         E9FJZG/XRh30d9CUWj6DZahwOFcGvNrQMOEkDJNhjMab9LHrliLOd3FRXY/2JqKAl8+V
+         vvaRfyXtUALsqKCmANzBdB76veE7mxEVJxNoYQ/aAoDmBzDXyLE5FpX1FjlJYL1pA1Co
+         0VqAPiAIZ9DuNoc1VjSpoNUthXSp0wtJK/stVXucRg0h1Ha5OcRpnT28eJo3fgJLO6c9
+         8+ntktLZdY3/CwzTs2S3B3Cx1Er8JlO05v3D38ct7sl6waYQFd0wu7jc0Ax13RTNAEHM
+         zyng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728936511; x=1729541311;
+        d=1e100.net; s=20230601; t=1728936555; x=1729541355;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WJ0VNcaIc86VSheN53nKaNiPzg3nD5Htkqzr0j33dvg=;
-        b=NyRXViY0S7K0EyF9p6Ac9ElIosJZTd2ybrJZs4TsyGjnVTswOPQpS7vCSTaEuNC9p+
-         bHIOLnfhYzJTkiL9bBpNWV1bXK5hqMD5/g+e0GkNnjV6MHsv0rVlWWBulidOrKpOe7Hd
-         b44gGPDWmH+v8BBkQtW/P9nloG+a+JqsphwC5hYcHEmU209sIlaS4ZCeqt0Aalkys4nL
-         r9IKI3MnFGiV1f2wfGkxQ8mNs8x0GXBTedWeFF3dxvEVqlOs0lrQrqVZbs0IOS3Pw1sx
-         KY/mIUX80N+MlHPA2w5cY1U+fOk+xP3QMMLT3ojiIQJ5s7SG8uygruHGlc94YeU7Uc8L
-         O5UA==
-X-Forwarded-Encrypted: i=1; AJvYcCWq9dY6+8m5yk/v5UHpqWXvnAkJ4i/GmF0euoBauidtl5u9/uxoABTAR9YvLkHUVZ9WLa4Xssi6qH5V@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywk+Ou9FOY5O5+Pt9IkgjBJA519FI1DxGbv7+Uv8HnyMyCzYwii
-	bLLVleySt0Ud8Ox3r80tobhQL5Sh9BZwYxrpIzZTOJJ6KJ06jABYT5+A2PJK9z56om3Im1t6ubu
-	ktKu4fwhLFpxZ+nuPRlkuyQIroemi/YJ/Ir+5
-X-Google-Smtp-Source: AGHT+IHzauMJXMRWtRoTmHGHhtdjUN1w4lIpDgvaCBZQpjqAMMmCxNje0X9NX0J+wmSkhigBY3I88y6VohWuT5HtooQ=
-X-Received: by 2002:a05:6402:234c:b0:5c8:a0fd:64f0 with SMTP id
- 4fb4d7f45d1cf-5c95b2c9139mr637583a12.2.1728936510371; Mon, 14 Oct 2024
- 13:08:30 -0700 (PDT)
+        bh=r0zqaAbHeI1jkohxhnn3/eoqtBWz6fWnFImTtGcQALM=;
+        b=lGfwLE+FHsKXRMkUZV8kNy3asfKE0i8U7n3Mdi0rZ7qJ5ivkrY7os1q5ryWxlpxEK+
+         3u89goSXRUVHzFuObJy3bWKlogiNUzuSVGL2uivp/pYqDPDTNQSH+Am+oty+QkonVtOJ
+         yOasPnxAwioK3D71yx3/j/ZqEBqdGPwfpge2cmI9k2QhxM5GMnZtSnDwF0oRdwke8kru
+         T8Ta+1DK7e6QApvUpAh4OEFmu5eTzocuo+hTLaahdsWO37IsrYJLXohy36lPSxCfuIXA
+         w/B6hnHErurEjaKrp2OFrZ/EEkdNWq5U4A54dscbc51KqqclD5NYzrm9B3FT1C33rOph
+         ZLxA==
+X-Forwarded-Encrypted: i=1; AJvYcCWOeUHcLEMqa7tYl09RhUgJVEKZ4ADuoUXmlL9KVKhudM3SzNB0S+oeKxXNSu2shwns4ZDPAUkWMBL7@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy87NkGCaqS3sXC9BiIJPh+qQw6ird13K8muXTCw8RytAGaGdgg
+	bSBQRiYltiQivWOAKKeJYlCBRaeAG222rgyY3KdkHZG1aQnQ63jyVkiNQSSEU7mfXBNXdwkCG24
+	oawbmnAher19IsnRKSG4vXiUfDOEtFU0QyKnS
+X-Google-Smtp-Source: AGHT+IFe+18jaYfQr+21B0WFTGQIwcQex+WsgK+bAeIFw8v1CVPL3tiWr1CxsaBhl5XE5hKvMkCXjZhdZbiCyhqn9EA=
+X-Received: by 2002:a05:6402:3495:b0:5c4:2e9f:4cfc with SMTP id
+ 4fb4d7f45d1cf-5c95b38b9a3mr532129a12.6.1728936554221; Mon, 14 Oct 2024
+ 13:09:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240903232241.43995-1-anthony.yznaga@oracle.com>
-In-Reply-To: <20240903232241.43995-1-anthony.yznaga@oracle.com>
+References: <20240903232241.43995-1-anthony.yznaga@oracle.com> <20240903232241.43995-6-anthony.yznaga@oracle.com>
+In-Reply-To: <20240903232241.43995-6-anthony.yznaga@oracle.com>
 From: Jann Horn <jannh@google.com>
-Date: Mon, 14 Oct 2024 22:07:52 +0200
-Message-ID: <CAG48ez0=9O-V0V6v_LUgRcF46BooJdk3eqb6xgDpKpNZuW1L2A@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 00/10] Add support for shared PTEs across processes
+Date: Mon, 14 Oct 2024 22:08:38 +0200
+Message-ID: <CAG48ez0OOpw17d73wB_HC55FVLeKOz0D9+teEHe7YAsY_00=kw@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 05/10] mm/mshare: Add ioctl support
 To: Anthony Yznaga <anthony.yznaga@oracle.com>
 Cc: akpm@linux-foundation.org, willy@infradead.org, markhemm@googlemail.com, 
 	viro@zeniv.linux.org.uk, david@redhat.com, khalid@kernel.org, 
@@ -91,37 +91,81 @@ Content-Transfer-Encoding: quoted-printable
 
 On Wed, Sep 4, 2024 at 1:22=E2=80=AFAM Anthony Yznaga <anthony.yznaga@oracl=
 e.com> wrote:
-> One major issue to address for this series to function correctly
-> is how to ensure proper TLB flushing when a page in a shared
-> region is unmapped. For example, since the rmaps for pages in a
-> shared region map back to host vmas which point to a host mm, TLB
-> flushes won't be directed to the CPUs the sharing processes have
-> run on. I am by no means an expert in this area. One idea is to
-> install a mmu_notifier on the host mm that can gather the necessary
-> data and do flushes similar to the batch flushing.
+> Reserve a range of ioctls for msharefs and add the first two ioctls
+> to get and set the start address and size of an mshare region.
+[...]
+> +static long
+> +msharefs_set_size(struct mm_struct *mm, struct mshare_data *m_data,
+> +                       struct mshare_info *minfo)
+> +{
+> +       unsigned long end =3D minfo->start + minfo->size;
+> +
+> +       /*
+> +        * Validate alignment for start address, and size
+> +        */
+> +       if ((minfo->start | end) & (PGDIR_SIZE - 1)) {
+> +               spin_unlock(&m_data->m_lock);
+> +               return -EINVAL;
+> +       }
+> +
+> +       mm->mmap_base =3D minfo->start;
+> +       mm->task_size =3D minfo->size;
+> +       if (!mm->task_size)
+> +               mm->task_size--;
+> +
+> +       m_data->minfo.start =3D mm->mmap_base;
+> +       m_data->minfo.size =3D mm->task_size;
+> +       spin_unlock(&m_data->m_lock);
+> +
+> +       return 0;
+> +}
+> +
+> +static long
+> +msharefs_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+> +{
+> +       struct mshare_data *m_data =3D filp->private_data;
+> +       struct mm_struct *mm =3D m_data->mm;
+> +       struct mshare_info minfo;
+> +
+> +       switch (cmd) {
+> +       case MSHAREFS_GET_SIZE:
+> +               spin_lock(&m_data->m_lock);
+> +               minfo =3D m_data->minfo;
+> +               spin_unlock(&m_data->m_lock);
+> +
+> +               if (copy_to_user((void __user *)arg, &minfo, sizeof(minfo=
+)))
+> +                       return -EFAULT;
+> +
+> +               return 0;
+> +
+> +       case MSHAREFS_SET_SIZE:
+> +               if (copy_from_user(&minfo, (struct mshare_info __user *)a=
+rg,
+> +                       sizeof(minfo)))
+> +                       return -EFAULT;
+> +
+> +               /*
+> +                * If this mshare region has been set up once already, ba=
+il out
+> +                */
+> +               spin_lock(&m_data->m_lock);
+> +               if (m_data->minfo.start !=3D 0) {
 
-The mmu_notifier API has two ways you can use it:
+Is there actually anything that prevents msharefs_set_size() from
+setting up m_data with ->minfo.start=3D=3D0, so that a second
+MSHAREFS_SET_SIZE invocation will succeed? It would probably be more
+reliable to have a separate flag for "has this thing been set up yet".
 
-First, there is the classic mode, where before you start modifying
-PTEs in some range, you remove mirrored PTEs from some other context,
-and until you're done with your PTE modification, you don't allow
-creation of new mirrored PTEs. This is intended for cases where
-individual PTE entries are copied over to some other context (such as
-EPT tables for virtualization). When I last looked at that code, it
-looked fine, and this is what KVM uses. But it probably doesn't match
-your usecase, since you wouldn't want removal of a single page to
-cause the entire page table containing it to be temporarily unmapped
-from the processes that use it?
 
-Second, there is a newer mode for IOMMUv2 stuff (using the
-mmu_notifier_ops::invalidate_range callback), where the idea is that
-you have secondary MMUs that share the normal page tables, and so you
-basically send them invalidations at the same time you invalidate the
-primary MMU for the process. I think that's the right fit for this
-usecase; however, last I looked, this code was extremely broken (see
-https://lore.kernel.org/lkml/CAG48ez2NQKVbv=3DyG_fq_jtZjf8Q=3D+Wy54FxcFrK_O=
-ujFg5BwSQ@mail.gmail.com/
-for context). Unless that's changed in the meantime, I think someone
-would have to fix that code before it can be relied on for new
-usecases.
+> +                       spin_unlock(&m_data->m_lock);
+> +                       return -EINVAL;
+> +               }
+> +
+> +               return msharefs_set_size(mm, m_data, &minfo);
+> +
+> +       default:
+> +               return -ENOTTY;
+> +       }
+> +}
 
