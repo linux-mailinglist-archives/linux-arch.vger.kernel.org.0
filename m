@@ -1,59 +1,62 @@
-Return-Path: <linux-arch+bounces-8067-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8068-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8345F99C2FC
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Oct 2024 10:23:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87A0399C303
+	for <lists+linux-arch@lfdr.de>; Mon, 14 Oct 2024 10:24:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B42DF1C2267C
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Oct 2024 08:23:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 46971284635
+	for <lists+linux-arch@lfdr.de>; Mon, 14 Oct 2024 08:24:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CB041547F3;
-	Mon, 14 Oct 2024 08:22:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 224AE157481;
+	Mon, 14 Oct 2024 08:22:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="KFExR3Z0";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="slvvGPaA"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="0vO0Nh6O";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Z/ZvZF07"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6509212C54B;
-	Mon, 14 Oct 2024 08:22:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D61415575B;
+	Mon, 14 Oct 2024 08:22:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728894167; cv=none; b=fWWxn82eszQFuckO1FwMP4L8UdehI/8dH5QW5Hej5H+VL3CGCNVHXRYds8L71MdFNg7KU1UVZAe76vt+qzpOJECPvHpySpFs+nXycYTdYqGwO6lVrQ3qMJ+9SO3wzatoV1trt17je6+ArcdskJVl77kiwVH/z3+UdIxSPO1a1PI=
+	t=1728894171; cv=none; b=JMWl+UF4e5RceH1PghJu17Ie1uPGFLyXUUtLmNhu7lyHty2yFjexjSXzsiAk0sTss3ntJ25J5quqaNf6Tc0442wxuSfDobzzqiwldk+aQl0zlpAeSFoofyftVrVSoLCPYTMMCtP2cawwuaUnSQIFw6aDpCE75/K/HdS4iJvrrxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728894167; c=relaxed/simple;
-	bh=dGqCqRwAyi62E3GAk8CVKrqzGtDT7u4rKx7rTPZQFko=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ihe/xUc3owLcuGkDQgS88GmHQl3AsxGgLkEtpE7GNVTWVspRymU/OEoWRxL19XM3Y4oqmez0cr/mZsfuzJV66n1spafByBWMOfAz/cemPmOEV+KyFInH8mU+KGnNA+VDQVdL2WZCcHw69ug2iGuD+OCgAqc/3qUxHI4g5xJdoYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=KFExR3Z0; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=slvvGPaA; arc=none smtp.client-ip=193.142.43.55
+	s=arc-20240116; t=1728894171; c=relaxed/simple;
+	bh=u8QJ5+veB/42sFjbq73Nx90Rwi8dxtfPYberW/kuDhE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=EDgZ5Ycz7lTg1wVtYP8aZAmFr82kPsv0u78DMHLtVFQADrPCSkcox13cTbXVLLuKmewzkrYK4mBWMrObS3EXB65xmAWesButiGq6qYePowyHQUYglEtysIQFmhu4BSJqeCO0nH3SbTcU8vX0kpCLqeq++fM6Oa0Lbb1QVg0T3iU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=0vO0Nh6O; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Z/ZvZF07; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: Anna-Maria Behnsen <anna-maria@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1728894163;
+	s=2020; t=1728894165;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=6HOwNsVm5tP1AF7YCvIKWbMDqeHpS3lPwmHnkUywq/Y=;
-	b=KFExR3Z0ch2CGjb8uZF385NycoNtXWJ52MR/i19uWkoHR73ejXuX4GOFPDZJchSNKxN0YH
-	9H09dQgIFLN0XYA0sRa7f+Jg744VoU+FWRipA2zenwRVFWf0noRuToPCIoq/ePHjxWarJ9
-	SqjMIQ2OJJIQc/JlGoQcr7qn+Ztcb5Wog63TpXuR+uMIcDwA7z6B2gog9Q3SVmAY2bikFt
-	mRj2dJa9yDAlHsRKp62fLCoRoJ4uho0BgHGrPNhLu+s/+D79MQkDsckRZ1I3/nd5V/0BHs
-	FuKX3H4yatjIlK09dEr8+nGf1DKjJ0qQxyhRK9NozUQLqHSQ76Lx7voiR0M2tA==
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=y6f9ANd86VKUTjMkX0jmN2iyxtAUU2JdpNcLRkkFjFA=;
+	b=0vO0Nh6OCzktv2f7aCX4RjoGIE23b0ST65q/DfxZySwBMbLepYEwkTRBKEOOLOzMUCN3Gf
+	3bbFyh7wMqdnUzws4nfHzI48rwtOIPc/Gz9oJYEWwEvuNFQZl0WKxT3/sEI1l0Vq2aXVBw
+	zgkb+qXhXRKkEh1lUaxWA9LTlQMU3QZcCjLCMwNuxN1dHXnskGdwMR0ZAZy+WfLWdlj0LD
+	9RoA7XIbI4gz1ZZxtOpJ0Vd/uiA6ZLoJYSWhWgQmLj2l6Fyrv1lILuYLDXzJtIX/fpBw0s
+	4a5WXaVZ02LkS8gJ+xghUhVJtKvrbp7BsHp+MDlYqbUkkdl/Aa0YJNqo4BtO+g==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1728894163;
+	s=2020e; t=1728894165;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=6HOwNsVm5tP1AF7YCvIKWbMDqeHpS3lPwmHnkUywq/Y=;
-	b=slvvGPaAqPFHoRdnXnb5CSGotI1RmGRgBCGz97ighCehiyEF+E9aEDo3bB0d+pbkk/R91i
-	aaXfQVNhvqPTH6BA==
-Subject: [PATCH v3 00/16] timers: Cleanup delay/sleep related mess
-Date: Mon, 14 Oct 2024 10:22:17 +0200
-Message-Id: <20241014-devel-anna-maria-b4-timers-flseep-v3-0-dc8b907cb62f@linutronix.de>
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=y6f9ANd86VKUTjMkX0jmN2iyxtAUU2JdpNcLRkkFjFA=;
+	b=Z/ZvZF07hN8kzJsgK9euX4QKIb5o2S7c5/Chk7jBhLk5eAVOdYpsfxhlir+aTs1a4C2Ypp
+	fVxfgK829fCHoWAw==
+Date: Mon, 14 Oct 2024 10:22:22 +0200
+Subject: [PATCH v3 05/16] timers: Update function descriptions of
+ sleep/delay related functions
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -62,10 +65,9 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIALnUDGcC/5XNSw6CMBSF4a2Qjr2mD1515D6MgwIXuQkU0mKDI
- ezdwsjEiQ7/M/jOyjw6Qs8uycocBvI02hjqlLC6M/aBQE1sJrlMueYpNBiwB2OtgcE4MlClMNO
- AzkPbe8QJSlVmWshK57pk0ZkctrQcH7d77I78PLrXcRnEvv6jBwEcUJdFzmWWq4Jfe7LP2Y2Wl
- nODbH8I8kMV4hdVRrXijWqVqusWv9Rt295y1hsLLAEAAA==
+Message-Id: <20241014-devel-anna-maria-b4-timers-flseep-v3-5-dc8b907cb62f@linutronix.de>
+References: <20241014-devel-anna-maria-b4-timers-flseep-v3-0-dc8b907cb62f@linutronix.de>
+In-Reply-To: <20241014-devel-anna-maria-b4-timers-flseep-v3-0-dc8b907cb62f@linutronix.de>
 To: Frederic Weisbecker <frederic@kernel.org>, 
  Thomas Gleixner <tglx@linutronix.de>, Jonathan Corbet <corbet@lwn.net>
 Cc: linux-kernel@vger.kernel.org, Len Brown <len.brown@intel.com>, 
@@ -73,106 +75,262 @@ Cc: linux-kernel@vger.kernel.org, Len Brown <len.brown@intel.com>,
  Alice Ryhl <aliceryhl@google.com>, 
  FUJITA Tomonori <fujita.tomonori@gmail.com>, Andrew Lunn <andrew@lunn.ch>, 
  Anna-Maria Behnsen <anna-maria@linutronix.de>, 
- Miguel Ojeda <ojeda@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
- damon@lists.linux.dev, linux-mm@kvack.org, SeongJae Park <sj@kernel.org>, 
- Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org, 
- Heiner Kallweit <hkallweit1@gmail.com>, 
- "David S. Miller" <davem@davemloft.net>, Andy Whitcroft <apw@canonical.com>, 
- Joe Perches <joe@perches.com>, Dwaipayan Ray <dwaipayanray1@gmail.com>, 
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
- netdev@vger.kernel.org, linux-sound@vger.kernel.org, 
- Michael Ellerman <mpe@ellerman.id.au>, Nathan Lynch <nathanl@linux.ibm.com>, 
- linuxppc-dev@lists.ozlabs.org, Mauro Carvalho Chehab <mchehab@kernel.org>, 
- linux-media@vger.kernel.org, 
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+ Miguel Ojeda <ojeda@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+ linux-arch@vger.kernel.org
 
-Hi,
+A lot of commonly used functions for inserting a sleep or delay lack a
+proper function description. Add function descriptions to all of them to
+have important information in a central place close to the code.
 
-a question about which sleeping function should be used in acpi_os_sleep()
-started a discussion and examination about the existing documentation and
-implementation of functions which insert a sleep/delay.
+No functional change.
 
-The result of the discussion was, that the documentation is outdated and
-the implemented fsleep() reflects the outdated documentation but doesn't
-help to reflect reality which in turns leads to the queue which covers the
-following things:
-
-- Split out all timeout and sleep related functions from hrtimer.c and timer.c
-  into a separate file
-
-- Update function descriptions of sleep related functions
-
-- Change fsleep() to reflect reality
-
-- Rework all comments or users which obviously rely on the outdated
-  documentation as they reference "Documentation/timers/timers-howto.rst"
-
-- Update the outdated documentation and move it into a file with a self
-  explaining file name (as there are no more references)
-
-- Remove checkpatch checks which also rely on the outdated documentation
-
-The queue is available here:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/anna-maria/linux-devel.git timers/misc
-
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-arch@vger.kernel.org
 Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
+Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
 ---
-Changes in v3:
-- Add review remarks
-- Split checkpatch patch: 1. Remove links to outdated documentation,
-  2. Remove checks in checkpatch which rely on outdated documentation
-- Link to v2: https://lore.kernel.org/r/20240911-devel-anna-maria-b4-timers-flseep-v2-0-b0d3f33ccfe0@linutronix.de
+v3:
+ - Rephrase msleep function description to make it clear
 
-Changes in v2:
-- change udelay() and ndelay() as suggested by Thomas
-- Update some formatting in the new sleep_timeout.c file
-- minor typo changes and other small review remarks
-
-Thanks,
-
-        Anna-Maria
-
+v2:
+ - Fix typos
+ - Fix proper usage of kernel-doc return formatting
 ---
-Anna-Maria Behnsen (16):
-      MAINTAINERS: Add missing file include/linux/delay.h
-      timers: Move *sleep*() and timeout functions into a separate file
-      timers: Update schedule_[hr]timeout*() related function descriptions
-      timers: Rename usleep_idle_range() to usleep_range_idle()
-      timers: Update function descriptions of sleep/delay related functions
-      delay: Rework udelay and ndelay
-      timers: Adjust flseep() to reflect reality
-      mm/damon/core: Use generic upper bound recommondation for usleep_range()
-      timers: Add a warning to usleep_range_state() for wrong order of arguments
-      checkpatch: Remove links to outdated documentation
-      regulator: core: Use fsleep() to get best sleep mechanism
-      iopoll/regmap/phy/snd: Fix comment referencing outdated timer documentation
-      powerpc/rtas: Use fsleep() to minimize additional sleep duration
-      media: anysee: Fix and remove outdated comment
-      timers/Documentation: Cleanup delay/sleep documentation
-      checkpatch: Remove broken sleep/delay related checks
+ include/asm-generic/delay.h | 41 +++++++++++++++++++++++++++++++----
+ include/linux/delay.h       | 48 ++++++++++++++++++++++++++++++----------
+ kernel/time/sleep_timeout.c | 53 ++++++++++++++++++++++++++++++++++++++++-----
+ 3 files changed, 120 insertions(+), 22 deletions(-)
 
- Documentation/dev-tools/checkpatch.rst         |   6 -
- Documentation/timers/delay_sleep_functions.rst | 121 ++++++++
- Documentation/timers/index.rst                 |   2 +-
- Documentation/timers/timers-howto.rst          | 115 --------
- MAINTAINERS                                    |   2 +
- arch/powerpc/kernel/rtas.c                     |  21 +-
- drivers/media/usb/dvb-usb-v2/anysee.c          |  17 +-
- drivers/regulator/core.c                       |  47 +--
- include/asm-generic/delay.h                    |  96 +++++--
- include/linux/delay.h                          |  79 ++++--
- include/linux/iopoll.h                         |  52 ++--
- include/linux/phy.h                            |   9 +-
- include/linux/regmap.h                         |  38 +--
- kernel/time/Makefile                           |   2 +-
- kernel/time/hrtimer.c                          | 120 --------
- kernel/time/sleep_timeout.c                    | 377 +++++++++++++++++++++++++
- kernel/time/timer.c                            | 192 -------------
- mm/damon/core.c                                |   5 +-
- scripts/checkpatch.pl                          |  38 ---
- sound/soc/sof/ops.h                            |   8 +-
- 20 files changed, 704 insertions(+), 643 deletions(-)
+diff --git a/include/asm-generic/delay.h b/include/asm-generic/delay.h
+index e448ac61430c..a8cee41cc51b 100644
+--- a/include/asm-generic/delay.h
++++ b/include/asm-generic/delay.h
+@@ -12,11 +12,39 @@ extern void __const_udelay(unsigned long xloops);
+ extern void __delay(unsigned long loops);
+ 
+ /*
+- * The weird n/20000 thing suppresses a "comparison is always false due to
+- * limited range of data type" warning with non-const 8-bit arguments.
++ * Implementation details:
++ *
++ * * The weird n/20000 thing suppresses a "comparison is always false due to
++ *   limited range of data type" warning with non-const 8-bit arguments.
++ * * 0x10c7 is 2**32 / 1000000 (rounded up) -> udelay
++ * * 0x5 is 2**32 / 1000000000 (rounded up) -> ndelay
+  */
+ 
+-/* 0x10c7 is 2**32 / 1000000 (rounded up) */
++/**
++ * udelay - Inserting a delay based on microseconds with busy waiting
++ * @usec:	requested delay in microseconds
++ *
++ * When delaying in an atomic context ndelay(), udelay() and mdelay() are the
++ * only valid variants of delaying/sleeping to go with.
++ *
++ * When inserting delays in non atomic context which are shorter than the time
++ * which is required to queue e.g. an hrtimer and to enter then the scheduler,
++ * it is also valuable to use udelay(). But it is not simple to specify a
++ * generic threshold for this which will fit for all systems. An approximation
++ * is a threshold for all delays up to 10 microseconds.
++ *
++ * When having a delay which is larger than the architecture specific
++ * %MAX_UDELAY_MS value, please make sure mdelay() is used. Otherwise a overflow
++ * risk is given.
++ *
++ * Please note that ndelay(), udelay() and mdelay() may return early for several
++ * reasons (https://lists.openwall.net/linux-kernel/2011/01/09/56):
++ *
++ * #. computed loops_per_jiffy too low (due to the time taken to execute the
++ *    timer interrupt.)
++ * #. cache behaviour affecting the time it takes to execute the loop function.
++ * #. CPU clock rate changes.
++ */
+ #define udelay(n)							\
+ 	({								\
+ 		if (__builtin_constant_p(n)) {				\
+@@ -29,7 +57,12 @@ extern void __delay(unsigned long loops);
+ 		}							\
+ 	})
+ 
+-/* 0x5 is 2**32 / 1000000000 (rounded up) */
++/**
++ * ndelay - Inserting a delay based on nanoseconds with busy waiting
++ * @nsec:	requested delay in nanoseconds
++ *
++ * See udelay() for basic information about ndelay() and it's variants.
++ */
+ #define ndelay(n)							\
+ 	({								\
+ 		if (__builtin_constant_p(n)) {				\
+diff --git a/include/linux/delay.h b/include/linux/delay.h
+index 2bc586aa2068..2de509e4adce 100644
+--- a/include/linux/delay.h
++++ b/include/linux/delay.h
+@@ -6,17 +6,7 @@
+  * Copyright (C) 1993 Linus Torvalds
+  *
+  * Delay routines, using a pre-computed "loops_per_jiffy" value.
+- *
+- * Please note that ndelay(), udelay() and mdelay() may return early for
+- * several reasons:
+- *  1. computed loops_per_jiffy too low (due to the time taken to
+- *     execute the timer interrupt.)
+- *  2. cache behaviour affecting the time it takes to execute the
+- *     loop function.
+- *  3. CPU clock rate changes.
+- *
+- * Please see this thread:
+- *   https://lists.openwall.net/linux-kernel/2011/01/09/56
++ * Sleep routines using timer list timers or hrtimers.
+  */
+ 
+ #include <linux/math.h>
+@@ -35,12 +25,21 @@ extern unsigned long loops_per_jiffy;
+  * The 2nd mdelay() definition ensures GCC will optimize away the 
+  * while loop for the common cases where n <= MAX_UDELAY_MS  --  Paul G.
+  */
+-
+ #ifndef MAX_UDELAY_MS
+ #define MAX_UDELAY_MS	5
+ #endif
+ 
+ #ifndef mdelay
++/**
++ * mdelay - Inserting a delay based on milliseconds with busy waiting
++ * @n:	requested delay in milliseconds
++ *
++ * See udelay() for basic information about mdelay() and it's variants.
++ *
++ * Please double check, whether mdelay() is the right way to go or whether a
++ * refactoring of the code is the better variant to be able to use msleep()
++ * instead.
++ */
+ #define mdelay(n) (\
+ 	(__builtin_constant_p(n) && (n)<=MAX_UDELAY_MS) ? udelay((n)*1000) : \
+ 	({unsigned long __ms=(n); while (__ms--) udelay(1000);}))
+@@ -63,16 +62,41 @@ unsigned long msleep_interruptible(unsigned int msecs);
+ void usleep_range_state(unsigned long min, unsigned long max,
+ 			unsigned int state);
+ 
++/**
++ * usleep_range - Sleep for an approximate time
++ * @min:	Minimum time in microseconds to sleep
++ * @max:	Maximum time in microseconds to sleep
++ *
++ * For basic information please refere to usleep_range_state().
++ *
++ * The task will be in the state TASK_UNINTERRUPTIBLE during the sleep.
++ */
+ static inline void usleep_range(unsigned long min, unsigned long max)
+ {
+ 	usleep_range_state(min, max, TASK_UNINTERRUPTIBLE);
+ }
+ 
++/**
++ * usleep_range_idle - Sleep for an approximate time with idle time accounting
++ * @min:	Minimum time in microseconds to sleep
++ * @max:	Maximum time in microseconds to sleep
++ *
++ * For basic information please refere to usleep_range_state().
++ *
++ * The sleeping task has the state TASK_IDLE during the sleep to prevent
++ * contribution to the load avarage.
++ */
+ static inline void usleep_range_idle(unsigned long min, unsigned long max)
+ {
+ 	usleep_range_state(min, max, TASK_IDLE);
+ }
+ 
++/**
++ * ssleep - wrapper for seconds around msleep
++ * @seconds:	Requested sleep duration in seconds
++ *
++ * Please refere to msleep() for detailed information.
++ */
+ static inline void ssleep(unsigned int seconds)
+ {
+ 	msleep(seconds * 1000);
+diff --git a/kernel/time/sleep_timeout.c b/kernel/time/sleep_timeout.c
+index 560d17c30aa5..f3f246e4c8d1 100644
+--- a/kernel/time/sleep_timeout.c
++++ b/kernel/time/sleep_timeout.c
+@@ -281,7 +281,34 @@ EXPORT_SYMBOL_GPL(schedule_hrtimeout);
+ 
+ /**
+  * msleep - sleep safely even with waitqueue interruptions
+- * @msecs: Time in milliseconds to sleep for
++ * @msecs:	Requested sleep duration in milliseconds
++ *
++ * msleep() uses jiffy based timeouts for the sleep duration. Because of the
++ * design of the timer wheel, the maximum additional percentage delay (slack) is
++ * 12.5%. This is only valid for timers which will end up in level 1 or a higher
++ * level of the timer wheel. For explanation of those 12.5% please check the
++ * detailed description about the basics of the timer wheel.
++ *
++ * The slack of timers which will end up in level 0 depends on sleep duration
++ * (msecs) and HZ configuration and can be calculated in the following way (with
++ * the timer wheel design restriction that the slack is not less than 12.5%):
++ *
++ *   ``slack = MSECS_PER_TICK / msecs``
++ *
++ * When the allowed slack of the callsite is known, the calculation could be
++ * turned around to find the minimal allowed sleep duration to meet the
++ * constraints. For example:
++ *
++ * * ``HZ=1000`` with ``slack=25%``: ``MSECS_PER_TICK / slack = 1 / (1/4) = 4``:
++ *   all sleep durations greater or equal 4ms will meet the constraints.
++ * * ``HZ=1000`` with ``slack=12.5%``: ``MSECS_PER_TICK / slack = 1 / (1/8) = 8``:
++ *   all sleep durations greater or equal 8ms will meet the constraints.
++ * * ``HZ=250`` with ``slack=25%``: ``MSECS_PER_TICK / slack = 4 / (1/4) = 16``:
++ *   all sleep durations greater or equal 16ms will meet the constraints.
++ * * ``HZ=250`` with ``slack=12.5%``: ``MSECS_PER_TICK / slack = 4 / (1/8) = 32``:
++ *   all sleep durations greater or equal 32ms will meet the constraints.
++ *
++ * See also the signal aware variant msleep_interruptible().
+  */
+ void msleep(unsigned int msecs)
+ {
+@@ -294,7 +321,15 @@ EXPORT_SYMBOL(msleep);
+ 
+ /**
+  * msleep_interruptible - sleep waiting for signals
+- * @msecs: Time in milliseconds to sleep for
++ * @msecs:	Requested sleep duration in milliseconds
++ *
++ * See msleep() for some basic information.
++ *
++ * The difference between msleep() and msleep_interruptible() is that the sleep
++ * could be interrupted by a signal delivery and then returns early.
++ *
++ * Returns: The remaining time of the sleep duration transformed to msecs (see
++ * schedule_timeout() for details).
+  */
+ unsigned long msleep_interruptible(unsigned int msecs)
+ {
+@@ -312,11 +347,17 @@ EXPORT_SYMBOL(msleep_interruptible);
+  * @max:	Maximum time in usecs to sleep
+  * @state:	State of the current task that will be while sleeping
+  *
++ * usleep_range_state() sleeps at least for the minimum specified time but not
++ * longer than the maximum specified amount of time. The range might reduce
++ * power usage by allowing hrtimers to coalesce an already scheduled interrupt
++ * with this hrtimer. In the worst case, an interrupt is scheduled for the upper
++ * bound.
++ *
++ * The sleeping task is set to the specified state before starting the sleep.
++ *
+  * In non-atomic context where the exact wakeup time is flexible, use
+- * usleep_range_state() instead of udelay().  The sleep improves responsiveness
+- * by avoiding the CPU-hogging busy-wait of udelay(), and the range reduces
+- * power usage by allowing hrtimers to take advantage of an already-
+- * scheduled interrupt instead of scheduling a new one just for this sleep.
++ * usleep_range() or its variants instead of udelay(). The sleep improves
++ * responsiveness by avoiding the CPU-hogging busy-wait of udelay().
+  */
+ void __sched usleep_range_state(unsigned long min, unsigned long max, unsigned int state)
+ {
+
+-- 
+2.39.5
 
 
