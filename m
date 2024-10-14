@@ -1,120 +1,117 @@
-Return-Path: <linux-arch+bounces-8089-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8090-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA94499CEBC
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Oct 2024 16:46:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FB4B99D170
+	for <lists+linux-arch@lfdr.de>; Mon, 14 Oct 2024 17:16:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DB4B11C23225
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Oct 2024 14:46:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 39C681F244D0
+	for <lists+linux-arch@lfdr.de>; Mon, 14 Oct 2024 15:16:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA5BE1B4F2A;
-	Mon, 14 Oct 2024 14:45:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="zmmr+87Y"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89A9F1AD3E1;
+	Mon, 14 Oct 2024 15:13:49 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 217951B4F25;
-	Mon, 14 Oct 2024 14:45:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2476D1AC8A6;
+	Mon, 14 Oct 2024 15:13:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728917123; cv=none; b=eCjBR532hTs1ll+mMo3soaOspIONuQdyidCnpOyhOM5uNKfelGs/vuj2aiLA9GzD/uxQSQkEAK5xZDd53fEFyei9WOYFG14h8MzVyZejzseiUaYgCDdb2iziYeCLbxNMUezTsdg5AAuv7xH+TO8Q+hyz9fViKwVnTjO029cTYUg=
+	t=1728918829; cv=none; b=QIo1A8VyXkRmjPPu+IqKkhsYx3ID360zhHM6RxAKb1gkBbkqWC3wKFebzl+80W98l9S1a+yJt1eomWN5wfTkwDgzFfV+PITEv5NFAWDajuK27Edo1V63cx/12ArsIOyl/6x0mbhoFOALj3scyRmsFKB+GGojdJpOYYxaLdenLk4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728917123; c=relaxed/simple;
-	bh=y26+r13pUk6qsz13PsTCyN9nVWaOY2WbcrNpyxtSjdE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oIgC0T+/7pWsPChGcf/f94hUj3xxFgpN5CNwD5IN0AfhK3JUoqs3ItqxG95wHdKjfWL4yPqwptacKs2YuQ9xo+sy99nc3FoIB4B1Tkm96YXaoEojQSVkIq9517fX6DAacuRTunKcBzH0AJlKEYPdhxO6c6SVTfDxfs720cq2msE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=zmmr+87Y; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender
-	:Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=CBx8oOZP7muTRFWdnTWIX1ck/8Je7EEbolhZOJL2Cgo=; b=zmmr+87Y9fBB2htyIn2LwLkL5/
-	hsChFqRyxCtK8dSibrcQ8PEvXM7QOaRtaKrym2h6jMMzO77s3lS2hn7Ds42Hha1klRD3lM+Hh+Ouy
-	6aq3QvpikKtFJ2F/rq0qXxEEGv112EOwBW14QmpkYktJfsn/t/8gKm0+NOK8hkF/781sbpX7DAr9e
-	Wy9jviDzgvwT73cOdJu8yjmFDmQnePjJFT32ESCWmE2e+osAYE3e1CM3IpLuxXfIkRN1+7xy2ntbq
-	J2YK67lQQmwotM1BaSYABBbzL+B1EFNJ+UJM7BuNOq5VinAEx1k3YZ+nFmu6LbSobVuhQIjj3RpVT
-	JuhE5rtw==;
-Received: from 2a02-8389-2341-5b80-350d-7b06-b28a-173d.cable.dynamic.v6.surfer.at ([2a02:8389:2341:5b80:350d:7b06:b28a:173d] helo=localhost)
-	by bombadil.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1t0MJz-00000005Wzd-3wyi;
-	Mon, 14 Oct 2024 14:45:20 +0000
-From: Christoph Hellwig <hch@lst.de>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: linux-alpha@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-csky@vger.kernel.org,
-	linux-hexagon@vger.kernel.org,
-	loongarch@lists.linux.dev,
-	linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org,
-	linux-openrisc@vger.kernel.org,
-	linux-parisc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org,
-	linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org,
-	linux-um@lists.infradead.org,
-	linux-arch@vger.kernel.org
-Subject: [PATCH 2/2] asm-generic: add an optional pfn_valid check to pfn_valid
-Date: Mon, 14 Oct 2024 16:44:59 +0200
-Message-ID: <20241014144506.51754-3-hch@lst.de>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20241014144506.51754-1-hch@lst.de>
-References: <20241014144506.51754-1-hch@lst.de>
+	s=arc-20240116; t=1728918829; c=relaxed/simple;
+	bh=OvZk82LA6CB05B05R4XyE/T2XEgdPmG31eU4hosSKjc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=RcutNTsu1xCRPcNXS6A+7dFJ3SY0KPnusOMmQfkokKyxgtgFHHR1iTlvQ3QVoZDTwowebOyNAlkRxRStwUmffcFVnQDOVLeGSuM34RVfIzfDr73t4Q5diNFhvM4df51qbA87+vfF0ENie428YtE2Fq4igJ9//iASweNMk+mmQms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 81DB21007;
+	Mon, 14 Oct 2024 08:14:15 -0700 (PDT)
+Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2A2B83F51B;
+	Mon, 14 Oct 2024 08:13:45 -0700 (PDT)
+From: Vincenzo Frascino <vincenzo.frascino@arm.com>
+To: linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	linux-mm@kvack.org
+Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
+Subject: [PATCH v5 0/3] vdso: Use only headers from the vdso/ namespace
+Date: Mon, 14 Oct 2024 16:13:37 +0100
+Message-Id: <20241014151340.1639555-1-vincenzo.frascino@arm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-page_to_pfn is usually implemented by pointer arithmetics on the memory
-map, which means that bogus input can lead to even more bogus output.
+The recent implementation of getrandom in the generic vdso library,
+includes headers from outside of the vdso/ namespace.
 
-Powerpc had a pfn_valid check on the regult to it's page_to_phys
-implementation when CONFIG_DEBUG_VIRTUAL is defined, which seems
-generally useful, so add that to the generic version.
+The purpose of this series is to refactor the code to make sure
+that the library uses only the allowed namespace.
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- include/asm-generic/memory_model.h | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
 
-diff --git a/include/asm-generic/memory_model.h b/include/asm-generic/memory_model.h
-index a73a140cbecdd7..6d1fb6162ac1a6 100644
---- a/include/asm-generic/memory_model.h
-+++ b/include/asm-generic/memory_model.h
-@@ -64,7 +64,17 @@ static inline int pfn_valid(unsigned long pfn)
- #define page_to_pfn __page_to_pfn
- #define pfn_to_page __pfn_to_page
- 
-+#ifdef CONFIG_DEBUG_VIRTUAL
-+#define page_to_phys(page)						\
-+({									\
-+	unsigned long __pfn = page_to_pfn(page);			\
-+									\
-+	WARN_ON_ONCE(!pfn_valid(__pfn));				\
-+	PFN_PHYS(__pfn);						\
-+})
-+#else
- #define page_to_phys(page)	PFN_PHYS(page_to_pfn(page))
-+#endif /* CONFIG_DEBUG_VIRTUAL */
- #define phys_to_page(phys)	pfn_to_page(PHYS_PFN(phys))
- 
- #endif /* __ASSEMBLY__ */
+Changes:
+--------
+v5:
+  - Fix an issue on s390 reported by kernel test robot.
+v4:
+  - Address review comments.
+v3:
+  - Discard vdso/mman.h changes in favor of [1].
+  - Refactor vdso/page.h.
+  - Add a fix to drm/intel_gt.
+v2:
+  - Added common PAGE_SIZE and PAGE_MASK definitions.
+  - Added opencoded macros where not defined.
+  - Dropped VDSO_PAGE_* redefinitions.
+
+[1] https://lore.kernel.org/lkml/20240925210615.2572360-1-arnd@kernel.org
+
+Vincenzo Frascino (3):
+  drm: i915: Change fault type to unsigned long
+  vdso: Introduce vdso/page.h
+  s390: Remove remaining _PAGE_* macros
+
+ arch/alpha/include/asm/page.h      |  6 +-----
+ arch/arc/include/uapi/asm/page.h   |  7 +++----
+ arch/arm/include/asm/page.h        |  5 +----
+ arch/arm64/include/asm/page-def.h  |  5 +----
+ arch/csky/include/asm/page.h       |  8 ++------
+ arch/hexagon/include/asm/page.h    |  4 +---
+ arch/loongarch/include/asm/page.h  |  7 +------
+ arch/m68k/include/asm/page.h       |  6 ++----
+ arch/microblaze/include/asm/page.h |  5 +----
+ arch/mips/include/asm/page.h       |  7 +------
+ arch/nios2/include/asm/page.h      |  7 +------
+ arch/openrisc/include/asm/page.h   | 11 +----------
+ arch/parisc/include/asm/page.h     |  4 +---
+ arch/powerpc/include/asm/page.h    | 10 +---------
+ arch/riscv/include/asm/page.h      |  4 +---
+ arch/s390/include/asm/page.h       | 10 ++--------
+ arch/s390/include/asm/pgtable.h    |  2 +-
+ arch/s390/mm/fault.c               |  2 +-
+ arch/s390/mm/gmap.c                |  6 +++---
+ arch/s390/mm/pgalloc.c             |  4 ++--
+ arch/sh/include/asm/page.h         |  6 ++----
+ arch/sparc/include/asm/page_32.h   |  4 +---
+ arch/sparc/include/asm/page_64.h   |  4 +---
+ arch/um/include/asm/page.h         |  5 +----
+ arch/x86/include/asm/page_types.h  |  5 +----
+ arch/xtensa/include/asm/page.h     |  8 +-------
+ drivers/gpu/drm/i915/gt/intel_gt.c |  6 +++---
+ include/vdso/page.h                | 30 ++++++++++++++++++++++++++++++
+ 28 files changed, 68 insertions(+), 120 deletions(-)
+ create mode 100644 include/vdso/page.h
+
 -- 
-2.45.2
+2.34.1
 
 
