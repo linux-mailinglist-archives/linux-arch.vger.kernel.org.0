@@ -1,120 +1,118 @@
-Return-Path: <linux-arch+bounces-8095-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8096-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42CFF99D486
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Oct 2024 18:22:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5046399D4B5
+	for <lists+linux-arch@lfdr.de>; Mon, 14 Oct 2024 18:32:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5E4751C22F2F
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Oct 2024 16:22:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 07CDD1F23446
+	for <lists+linux-arch@lfdr.de>; Mon, 14 Oct 2024 16:32:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74D681AD3F6;
-	Mon, 14 Oct 2024 16:22:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RjvASecr"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44A621ABEC9;
+	Mon, 14 Oct 2024 16:31:56 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3226C28FC;
-	Mon, 14 Oct 2024 16:22:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 132CE219FC;
+	Mon, 14 Oct 2024 16:31:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728922969; cv=none; b=IRAS71gf3qvxOBzQ69rz568bl1v9YF1qYiZdTDH/Zqd0uiSVt0aiCkZO9iplI6NdkWE3hfqzEAAaI+4uWeJetEcQhIgWUF7NImMbmToAEIwwvr0LAfSOdkwU0YsKRWR9u4K2LBxR10nqgkBxcogDf83tYrXa196s4ks3OY7lMAs=
+	t=1728923516; cv=none; b=jwv3MZTVgs1/xEkbinyq6Xc0JqXhPsgQD4fJ+ousJoQ6XBFwh3etBFwyIUFsSjVfDeR+xIk2h/RpDKSSXmVAPv7S4D1l31CqRFa2iZz5aVzF5R1lrcVHBylVsK9X3y//nF4PxWNjT4WYPIe2IMypiID3HByWxw1qnZi66KmLbKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728922969; c=relaxed/simple;
-	bh=bOmZl1NspXLcp+g5lMmcQ+7bUkVBQAQpj9wx9QBEe50=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=m86DeGKPH0LdBmi/G5IAqYFFew+nqzsVW9It8kNaVtCMFVpM0+pN/p4vgOgaU5R2nEj7hEIBZG/tKFY5/P9QFGTfSY2LAfuXE/fFZLaZ5cN2c3/FSY4jLsikUna34+xVSkXsNFsCHA4odXXYO72FMhqykU4NZDQoZB2i3zRO4o0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RjvASecr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98083C4CEC3;
-	Mon, 14 Oct 2024 16:22:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728922968;
-	bh=bOmZl1NspXLcp+g5lMmcQ+7bUkVBQAQpj9wx9QBEe50=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=RjvASecrxZpOpjKcvFG+IN8xFnp2LLI7I/RQfDEumNR/fQ3dS3+ADtMMRqHsQLGWi
-	 EiXcmJWG9MDl8SGDSw1DA484/IMjM+uzu5CzVDAq1/IZ1dfy10hZAX9QXRftnPsrA6
-	 v7nW9WsF7Me3GHVXmVVLGWhDBdcmlR96zubbrpQBmVXykyz0gLJxLv+tGOX0yPBgaW
-	 wNNbKikiZGTeIOLxImqJAKhdV5na4sITHxDQQ+sWwUK9V8CsgLugxk6mMLUctaJkSS
-	 rhI/oQh4z6V+zVrzmrZ5VVbpUJF+CUwKegliRYJmKRWN42rdZBaGoSPWbfHa9aKxxF
-	 ZN7b3RxDizdUQ==
-From: Mark Brown <broonie@kernel.org>
-To: Frederic Weisbecker <frederic@kernel.org>, 
- Thomas Gleixner <tglx@linutronix.de>, Jonathan Corbet <corbet@lwn.net>, 
- Anna-Maria Behnsen <anna-maria@linutronix.de>
-Cc: linux-kernel@vger.kernel.org, Len Brown <len.brown@intel.com>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, rust-for-linux@vger.kernel.org, 
- Alice Ryhl <aliceryhl@google.com>, 
- FUJITA Tomonori <fujita.tomonori@gmail.com>, Andrew Lunn <andrew@lunn.ch>, 
- Miguel Ojeda <ojeda@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
- damon@lists.linux.dev, linux-mm@kvack.org, SeongJae Park <sj@kernel.org>, 
- Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org, 
- Heiner Kallweit <hkallweit1@gmail.com>, 
- "David S. Miller" <davem@davemloft.net>, Andy Whitcroft <apw@canonical.com>, 
- Joe Perches <joe@perches.com>, Dwaipayan Ray <dwaipayanray1@gmail.com>, 
- Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>, 
- Takashi Iwai <tiwai@suse.com>, netdev@vger.kernel.org, 
- linux-sound@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>, 
- Nathan Lynch <nathanl@linux.ibm.com>, linuxppc-dev@lists.ozlabs.org, 
- Mauro Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org, 
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-In-Reply-To: <20241014-devel-anna-maria-b4-timers-flseep-v3-0-dc8b907cb62f@linutronix.de>
-References: <20241014-devel-anna-maria-b4-timers-flseep-v3-0-dc8b907cb62f@linutronix.de>
-Subject: Re: (subset) [PATCH v3 00/16] timers: Cleanup delay/sleep related
- mess
-Message-Id: <172892295715.1548.770734377772758528.b4-ty@kernel.org>
-Date: Mon, 14 Oct 2024 17:22:37 +0100
+	s=arc-20240116; t=1728923516; c=relaxed/simple;
+	bh=J4RYJQdbHZ8u/a1Vqi8q8LZYmuKpwmhzcaKo3jaJF0Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=r4XBHie9NIDQmOKi5fidbWMsGHiUzHZqkdlercUI9p9oGybtQwqAgMC6+SZ4gSl+MDQrCI/oMEQdSwrlwdHWik0tDtPMPDrMHjZyf+VoASoV4IxfqzU0NzICHOf49KY9c5dWlb6lZKcFtsBDpToCfR8u9WdUbM88LyFdlhCPLLM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92EACC4CEC3;
+	Mon, 14 Oct 2024 16:31:49 +0000 (UTC)
+Date: Mon, 14 Oct 2024 17:31:47 +0100
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Marc Zyngier <maz@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Mark Brown <broonie@kernel.org>,
+	Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	Ross Burton <ross.burton@arm.com>,
+	David Spickett <david.spickett@arm.com>,
+	Yury Khrustalev <yury.khrustalev@arm.com>,
+	Wilco Dijkstra <wilco.dijkstra@arm.com>,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v13 11/40] arm64/gcs: Provide basic EL2 setup to allow
+ GCS usage at EL0 and EL1
+Message-ID: <Zw1Hc38CwFS2XE6c@arm.com>
+References: <20241001-arm64-gcs-v13-0-222b78d87eee@kernel.org>
+ <20241001-arm64-gcs-v13-11-222b78d87eee@kernel.org>
+ <20241009204903.GA3353168@thelio-3990X>
+ <86msjc56mi.wl-maz@kernel.org>
+ <ZwgMBAhR5-5R5EYC@arm.com>
+ <86h69i6bpy.wl-maz@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-99b12
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <86h69i6bpy.wl-maz@kernel.org>
 
-On Mon, 14 Oct 2024 10:22:17 +0200, Anna-Maria Behnsen wrote:
-> a question about which sleeping function should be used in acpi_os_sleep()
-> started a discussion and examination about the existing documentation and
-> implementation of functions which insert a sleep/delay.
+On Fri, Oct 11, 2024 at 01:55:05PM +0100, Marc Zyngier wrote:
+> On Thu, 10 Oct 2024 18:16:52 +0100,
+> Catalin Marinas <catalin.marinas@arm.com> wrote:
+> > 
+> > On Thu, Oct 10, 2024 at 04:18:13PM +0100, Marc Zyngier wrote:
+> > > From 20c98d2647c11db1e40768f92c5998ff5d764a3a Mon Sep 17 00:00:00 2001
+> > > From: Marc Zyngier <maz@kernel.org>
+> > > Date: Thu, 10 Oct 2024 16:13:26 +0100
+> > > Subject: [PATCH] KVM: arm64: Shave a few bytes from the EL2 idmap code
+> > > 
+> > > Our idmap is becoming too big, to the point where it doesn't fit in
+> > > a 4kB page anymore.
+> > > 
+> > > There are some low-hanging fruits though, such as the el2_init_state
+> > > horror that is expanded 3 times in the kernel. Let's at least limit
+> > > ourselves to two copies, which makes the kernel link again.
+> > > 
+> > > At some point, we'll have to have a better way of doing this.
+> > > 
+> > > Reported-by: Nathan Chancellor <nathan@kernel.org>
+> > > Signed-off-by: Marc Zyngier <maz@kernel.org>
+> > > Link: https://lore.kernel.org/r/20241009204903.GA3353168@thelio-3990X
+> > 
+> > Thanks Marc for the quick fix. It looks fine to me, it will keep the
+> > linker quiet for a while. I pushed it to arm64 for-kernelci for the time
+> > being, see if anything falls apart. I'll apply it properly once it gets
+> > a bit more testing.
 > 
-> The result of the discussion was, that the documentation is outdated and
-> the implemented fsleep() reflects the outdated documentation but doesn't
-> help to reflect reality which in turns leads to the queue which covers the
-> following things:
-> 
-> [...]
+> Works for me. But if that helps, I can also queue it as a KVM fix for
+> 6.12, leaving the GCS branch unencumbered. Just let me know.
 
-Applied to
+That would help, thanks. The for-kernelci branch merges the latest mainline
+rc anyway, so it will no longer blow up allmodconfig tests.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
-
-Thanks!
-
-[11/16] regulator: core: Use fsleep() to get best sleep mechanism
-        commit: f20669fbcf99d0e15e94fb50929bb1c41618e197
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+-- 
+Catalin
 
