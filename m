@@ -1,137 +1,227 @@
-Return-Path: <linux-arch+bounces-8101-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8102-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0681699D62D
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Oct 2024 20:11:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4172A99D637
+	for <lists+linux-arch@lfdr.de>; Mon, 14 Oct 2024 20:15:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7870D1F23167
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Oct 2024 18:11:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C46B11F21ECD
+	for <lists+linux-arch@lfdr.de>; Mon, 14 Oct 2024 18:15:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F79A1C82F3;
-	Mon, 14 Oct 2024 18:10:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A1731C830B;
+	Mon, 14 Oct 2024 18:15:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Fzxm98e7"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YH7gdCz0"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45CB51C3051
-	for <linux-arch@vger.kernel.org>; Mon, 14 Oct 2024 18:10:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D167C1C0DE2
+	for <linux-arch@vger.kernel.org>; Mon, 14 Oct 2024 18:15:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728929456; cv=none; b=AuWjXE9gLTET8/Qhw0urh200AxPe8ZY6wmZRWYaDJl4o67HmYCZk3ZEi6+6KypN+nyFn9mpfW+WZF5yLpnfKxHdiml7amQZnR2Ncq0BxzUTvlG2jsp0xXWFs50+mBlsPdv49hKhX2s7OKREE4o/ajaY33upa30hkvO1GV9f3fWU=
+	t=1728929709; cv=none; b=Vt0yYS7yyQY0sm6B37/M4owaqwCo2rOusw/Hg7eC8S6o1WHSwx8yhcV8aEO2W9fydm0mY5td8ymwBZ17/Wmi7B+4yBrCIaIMSHcN21KOwiLskRUa8pHhFqcd6S2o7QLpjkhd4Y67+xFdimWwi6RYUOUPzjrkehiWSGFyuGQh/Oo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728929456; c=relaxed/simple;
-	bh=VypHTcUVue86TxJAIpJGKBY4Q20cHX/mFiRLyRntN9w=;
+	s=arc-20240116; t=1728929709; c=relaxed/simple;
+	bh=psGXUzJuH/L2z1/iTd15xLLLmgcDkiy//BOohqm6suo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EErC4snsYDe8xNTC5oTo5YMMTCWCF6tP7e3PaZrH8bj8/VfU5SSL4vbjD0l/w99U9ryU+sCjBhZ7aa8PLV41YtE1vHGz6HSnDdymmdU4YBY2Sk/fjbm408wtaNVEno2oIzknkXsItrUuytT+GQXKX+6hsR2UTbHjhlAJgzIqAeE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Fzxm98e7; arc=none smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a99c0beaaa2so567123666b.1
-        for <linux-arch@vger.kernel.org>; Mon, 14 Oct 2024 11:10:53 -0700 (PDT)
+	 To:Cc:Content-Type; b=biRT6kGLfnRIYcmBuC1aEduspJ4f9FKrNlnrPOWJcDUlAIIwNf9t2gN5npkDcvU50LGajnq+DKWc7ZyeeJdylXmIUuFXvopInPqGdTD9vx5TypIqxPgpbwgt/KvOS5Xisg9IF3O0BpYi/cubZvOKHGXECWLnXCHjGfQiO4EKxG8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YH7gdCz0; arc=none smtp.client-ip=209.85.208.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5c932b47552so25421a12.0
+        for <linux-arch@vger.kernel.org>; Mon, 14 Oct 2024 11:15:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1728929452; x=1729534252; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pHeyIJea3ALM6cFmjzsfw35tNiBlMHJavKPAe3QhB+o=;
-        b=Fzxm98e7W84vZExoLW9yGRcb5j/rZtMnd0NN8S7bavWsli2U5hD99JxoX6ikmckbl3
-         eKU4aWGviqnkgW8uz+4kPetG5wFlGAtybbmGsTNarlgcVWSPHgZV4uEfGc2qea7cKluk
-         o1BjmmidfdTMNgsJ3M7oiKmkHgmOhxW6HN5k0=
+        d=google.com; s=20230601; t=1728929705; x=1729534505; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mNEJX4kqr9odUybTaFkTf23XVWJozLbeDB372EuR6j4=;
+        b=YH7gdCz0u4YI7kKWrwOV7823Ry8mfVTaUBgfPXEYBaTHPRQVL4alo8053TNv7BmVcI
+         O/ZhyIYjT4oh0Z8SEpTUgW/RikaUwDAmlJbt39BpAypJ4Ac5lzEtEdKf7H4e9aXEoLoo
+         xSPNnR5rK27S2rV86xpMuay0ksO6lHTdMM1qXQ3B8I3gpc3pfbKwHfTQ7LLLGdGGRQ+M
+         m3tjbAOTqBBSSWZk7WSddcJ+ZpLXT7GzleWVLp93/OtO4jNzr0cYvHH9jtKaM2oTUNZO
+         t4cUK2w5vTPHg4bm8oOypZIf3QV9IASfaoWuZB8D6AKOp93KCXidIUGsi9R5J9uInIof
+         eBDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728929452; x=1729534252;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pHeyIJea3ALM6cFmjzsfw35tNiBlMHJavKPAe3QhB+o=;
-        b=YA5UAjdhlB/ReNk2SK7ilv/CFwdaL5PxTDuLD+KO3bvPV94byH8110Dp7mUU7BXNPA
-         PhCg9zXVEcHT2KF/TtrzvYCqgJYinC1jT6ye/uqFe4mETagUK6taTOhtCmnkre30Mrul
-         kyaZjtqoJOu9wfic5+TfC3Vd/2DGY52lMOD71ky8ExpSDztCehLUL2XiEQFRRXPfeTIH
-         RfLNrotjOReUFfRbmscoVOMLuvEYrmW9vCCh277h+RFdJKmM187NJ9TfWX/bmq3B0iCb
-         fRI39pjWi3rWbTXMKhZqaI9MXWXI4Rurd19I6sc7jYURa7qmwypdkzoot1e6z5H5JNv2
-         QFuQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUQmyhh2OYhfR1MZvCcYD/U3diCc0rME6cqvcvS2P2nOsJ9U1elB7wrCmlRqfoeSWX9MGHr6GvTtgaZ@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7r91CGItNt+EOVC1s4FKmWdwA8B4kO7r2uJuTk0m83ZLFebLf
-	K3f5TQ1vaAlUMje+sucPaB4AXW3ahgrx/217tjIlbrAaYr99WWw1tK/mJ5f8mpgwBEbwuiFfiEg
-	LgHXJ2g==
-X-Google-Smtp-Source: AGHT+IGcoh5T3FmfdIBbHTkNQ6B97tJWN764alG439+RsJrM4JPOXn5syHuvWIBjebBouWNtUrPvNQ==
-X-Received: by 2002:a17:906:c10c:b0:a99:5f2a:444d with SMTP id a640c23a62f3a-a99b966b13dmr1134028966b.56.1728929452369;
-        Mon, 14 Oct 2024 11:10:52 -0700 (PDT)
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com. [209.85.218.41])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9a23f41ff4sm8370166b.49.2024.10.14.11.10.51
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Oct 2024 11:10:51 -0700 (PDT)
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a9a2209bd7fso42483666b.2
-        for <linux-arch@vger.kernel.org>; Mon, 14 Oct 2024 11:10:51 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCV2IuxWKDA3jJ6LrCOwB0yq4sRVu0tXR9dt8oF7pKAxrHYrsqsDJDAp/lwP8GqoHBiuNjfE+B0TdMYB@vger.kernel.org
-X-Received: by 2002:a17:906:df46:b0:a9a:daa:ef3c with SMTP id
- a640c23a62f3a-a9a0daaf058mr273908566b.14.1728929451045; Mon, 14 Oct 2024
- 11:10:51 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1728929705; x=1729534505;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mNEJX4kqr9odUybTaFkTf23XVWJozLbeDB372EuR6j4=;
+        b=cErd892ZQmRJ3XsVUm3ZwGWoEfkXFkWA5dpbMBFn7voWojvMcST+mSEoazUvpuddyc
+         Xsx1z/canSdjtHgd8285AHOzymGoTtVaeHDFiFB7te+lo37/KuTe39y7GRXqYxvfAaKB
+         s8dtNz/UXesSrQmMwg+/5mKHnZZLY9x90Sfg4TP8oQr53JOYQtuTQvHrLzisaFnL+G1H
+         +dd/E5HpnJ47smvDL9Gg26tFNI2pY7cm3ICAg6o8kvBreojxg0ZZwJ/34e85kQBvzyC3
+         juC1QvLTF2rdWXzp4N9NC9+tIRS6O1nwvXSabDOUdivf42WpfIgphUqqxOtd9oSRGgPe
+         lkBw==
+X-Forwarded-Encrypted: i=1; AJvYcCVCQqJ1wYBUN3S05HYK/zjdnYfEGDjAaK1tPxuMZ9vDiiuJ+FC4sSLXClzkDfiDRP9laZ8reK16NdnI@vger.kernel.org
+X-Gm-Message-State: AOJu0YwuMIFtjagN3hdGhyb1TVAJmSEAqsyfF/WTzSLa3aJcbBbd3ZJR
+	QFDG2oPkNIOne8Pf94bX2UH62ADpdEy62yd7Q28ZmChaG8++yGJ3X6De+aQPmpUKS20wUSvcXah
+	X0pm1USD5re59F72POzZutIeIfv4cJaigUQiH
+X-Google-Smtp-Source: AGHT+IEbkDzR+ThZoGvgYtCS7Y5gwEV3PkXHeMMP5MKP0m0Oi8H/8Bb2XOPnZQdihqJsksuw7ZM7VJ44A8HdzyHg+Ps=
+X-Received: by 2002:a05:6402:26c1:b0:5c2:5641:af79 with SMTP id
+ 4fb4d7f45d1cf-5c95b0bd39amr402722a12.0.1728929704710; Mon, 14 Oct 2024
+ 11:15:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241014125703.2287936-4-ardb+git@google.com> <CAHk-=wit+BLbbLPYOdoODvUYcZX_Gv8o-H7_usyEoAVO1YSJdg@mail.gmail.com>
- <CAMj1kXFu=fABi+d=A5PL2yNx2b70toT9KtDfnvU=8mmUBHMutg@mail.gmail.com>
-In-Reply-To: <CAMj1kXFu=fABi+d=A5PL2yNx2b70toT9KtDfnvU=8mmUBHMutg@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Mon, 14 Oct 2024 11:10:35 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjk3ynjomNvFN8jf9A1k=qSc=JFF591W00uXj-qqNUxPQ@mail.gmail.com>
-Message-ID: <CAHk-=wjk3ynjomNvFN8jf9A1k=qSc=JFF591W00uXj-qqNUxPQ@mail.gmail.com>
-Subject: Re: [PATCH 0/2] Use dot prefixes for section names
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: Ard Biesheuvel <ardb+git@google.com>, linux-kernel@vger.kernel.org, 
-	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Kent Overstreet <kent.overstreet@linux.dev>, 
-	Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kbuild@vger.kernel.org
+References: <cover.1727440966.git.lorenzo.stoakes@oracle.com>
+ <a578ee9bb656234d3a19bf9e97c3012378d31a19.1727440966.git.lorenzo.stoakes@oracle.com>
+ <CAG48ez3ursoL-f=mYpV79Do18XPPt+MPPHNUBv6uFE1GhpOwSA@mail.gmail.com>
+ <868739d2-0869-462f-ac86-1a8d1dccb0a4@lucifer.local> <CAG48ez3vqbqyWb4bLdpqSUnhwqGo2OQetecNhEGPdCGDr94nbQ@mail.gmail.com>
+ <b483187b-5caa-4581-86b1-895184301cbb@lucifer.local>
+In-Reply-To: <b483187b-5caa-4581-86b1-895184301cbb@lucifer.local>
+From: Jann Horn <jannh@google.com>
+Date: Mon, 14 Oct 2024 20:14:26 +0200
+Message-ID: <CAG48ez0pCasCQ_=ALog7nseKnGci0o0LyQehV42J==gNAiXBVg@mail.gmail.com>
+Subject: Re: [RFC PATCH 3/4] mm: madvise: implement lightweight guard page mechanism
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Suren Baghdasaryan <surenb@google.com>, 
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>, Matthew Wilcox <willy@infradead.org>, 
+	Vlastimil Babka <vbabka@suse.cz>, "Paul E . McKenney" <paulmck@kernel.org>, 
+	David Hildenbrand <david@redhat.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	Muchun Song <muchun.song@linux.dev>, Richard Henderson <richard.henderson@linaro.org>, 
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
+	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, linux-arch@vger.kernel.org, 
+	Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>, linux-kselftest@vger.kernel.org, 
+	Sidhartha Kumar <sidhartha.kumar@oracle.com>, Vlastimil Babka <vbabka@suze.cz>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 14 Oct 2024 at 10:44, Ard Biesheuvel <ardb@kernel.org> wrote:
+On Mon, Oct 14, 2024 at 7:02=E2=80=AFPM Lorenzo Stoakes
+<lorenzo.stoakes@oracle.com> wrote:
+> On Mon, Oct 14, 2024 at 05:56:50PM +0200, Jann Horn wrote:
+> > On Mon, Oct 14, 2024 at 1:09=E2=80=AFPM Lorenzo Stoakes <lorenzo.stoake=
+s@oracle.com> wrote:
+> > > On Fri, Oct 11, 2024 at 08:11:36PM +0200, Jann Horn wrote:
+> > > > On Fri, Sep 27, 2024 at 2:51=E2=80=AFPM Lorenzo Stoakes <lorenzo.st=
+oakes@oracle.com> wrote:
+> > > By being optimistic and simply having the user having to handle loopi=
+ng
+> > > which seems reasonable (again, it's weird if you're installing poison
+> > > markers and another thread could be racing you) we avoid all of that.
+> >
+> > I guess one case in which that could happen legitimately is if you
+> > race a MADV_POISON on the area 0x1ff000-0x200100 (first page is
+> > populated, second page is not, pmd entry corresponding to 0x200000 is
+> > clear) with a page fault at 0x200200? So you could have a scenario
+> > like:
+> >
+> > 1. MADV_POISON starts walk_page_range()
+> > 2. MADV_POISON sees non-zero, non-poison PTE at 0x1ff000, stops the wal=
+k
+> > 3. MADV_POISON does zap_page_range_single()
+> > 4. pagefault at 0x200200 happens and populates with a hugepage
+> > 5. MADV_POISON enters walk_page_range()
+> > 6. MADV_POISON splits the THP
+> > 7. MADV_POISON sees a populated PTE
 >
-> We have this code in arch/x86/Makefile.postlink:
+> You really shouldn't be seeing page faults in the range you are setting u=
+p
+> poison markers for _at all_ :) it's something you'd do ahead of time.
+
+But that's not what happens in my example - the address where the
+fault happens (0x200200) *is not* in the address range that
+MADV_POISON is called on (0x1ff000-0x200100). The fault and the
+MADV_POISON are in different 4KiB pages. What causes the conflict is
+that the fault and the MADV_POISON overlap the same *2MiB region*
+(both are in the region 0x200000-0x400000), and so THP stuff can
+effectively cause "page faults in the range you are setting up poison
+markers for".
+
+> But of course it's possible some scenario could arise like that, that's
+> what the EAGAIN is for.
 >
-> quiet_cmd_strip_relocs = RSTRIP  $@
->       cmd_strip_relocs = \
->         $(OBJCOPY) --remove-section='.rel.*' --remove-section='.rel__*' \
->                    --remove-section='.rela.*' --remove-section='.rela__*' $@
+> I just really don't want to get into a realm of trying to prove absolutel=
+y
+> under all circumstances that we can't go on forever in a loop like that.
+
+We can have a bailout on signal_pending() or something like that, and
+a cond_resched(). Then as far as I know, it won't really make a
+difference in behavior whether the loop is in the kernel or in
+userspace code that's following what the manpage tells it to do -
+either way, the program will loop until it either finishes its work or
+is interrupted by a signal, and either way it can get preempted.
+(Well, except under PREEMPT_NONE, but that is basically asking for
+long scheduling delays.)
+
+And we do have other codepaths that have to loop endlessly if they
+keep racing with page table updates the wrong way, though I guess
+those loops are not going to always scan over a large address range
+over and over again...
+
+Maybe something like this would be good enough, and mirror what you'd
+otherwise tell userspace to do?
+
+
+@@ -1598,6 +1598,7 @@ int do_madvise(struct mm_struct *mm, unsigned
+long start, size_t len_in, int beh
+                return madvise_inject_error(behavior, start, start + len_in=
+);
+ #endif
+
++retry:
+        write =3D madvise_need_mmap_write(behavior);
+        if (write) {
+                if (mmap_write_lock_killable(mm))
+@@ -1627,6 +1628,12 @@ int do_madvise(struct mm_struct *mm, unsigned
+long start, size_t len_in, int beh
+        else
+                mmap_read_unlock(mm);
+
++       if (error =3D=3D <<<some special value>>>) {
++               if (!signal_pending(current))
++                       goto retry;
++               error =3D -ERESTARTNOINTR;
++       }
++
+        return error;
+ }
+
+Buuut, heh, actually, I just realized: You could even omit this and
+simply replace -EINTR with -ERESTARTNOINTR in your code as the error
+value, and then the kernel would automatically go back into the
+syscall for you after going through signal handing and such, without
+userspace noticing.
+https://lore.kernel.org/all/20121206220955.GZ4939@ZenIV.linux.org.uk/
+has some explanation on how this works. Basically it tells the
+architecture's syscall entry code to move the userspace instruction
+pointer back to the syscall instruction, so as soon as execution
+returns to userspace, the first userspace instruction that executes
+will immediately re-do the syscall. That might be the easiest way,
+even if it is maybe a *little* bit of an API abuse to use this thing
+without having a pending signal...
+
+
+> If you drop the lock for contention then you up the risk of that, it just
+> feels dangerous.
 >
-> Of course, that could easily be fixed, I was just being cautious in
-> case there is other, out-of-tree tooling for live patch or kexec etc
-> that has similar assumptions wrt section names.
+> A userland program can however live with a 'if EAGAIN try again' situatio=
+n.
+>
+> An alternative approach to this might be to try to take the VMA lock, but
+> given the fraught situation with locking elsewhere I wonder if we should.
+>
+> Also, you have to be realy unlucky with timing for this to happen, even i=
+n
+> the scenario you mention (where you'd have to be unlucky with alignment
+> too), unless you're _heavily_ page faulting in the range, either way a
+> userland loop checking EAGAIN doesn't seem unreasonable.
 
-I'd actually much rather just make strip_relocs not have that "." and
-"__" pattern at all, and just say "we strip all sections that start
-with '.rel'".
-
-And then we make the rule that we do *not* create sections named ".rel*".
-
-That seems like a much simpler rule, and would seem to simplify
-strip_relocs too, which would just become
-
-        $(OBJCOPY) --remove-section='.rel*' $@
-
-(We seem to have three different copies of that complex pattern with
-.rel vs .rela and "." vs "__" - it's in s390, riscv, and x86. So we'd
-do that simplification in three places)
-
-IOW, I'd much rather make our section rules simpler rather than more complex.
-
-Of course, if there is some active and acute problem report with this
-thing, we might not have that option, but in the absence of any
-*known* issue with just simplifying things, I'd rather do that.
-
-I feel that our linker scripts - and linking rules in general - are
-already quite complicated, which is why I'd really like to take this
-as a time to try to simplify the rules.
-
-              Linus
-
-              Linus
+Yes, we could do -EINTR and document that for userspace, and as long
+as everyone using this properly reads the documentation, it will be
+fine. Though I imagine that from the userspace programmer perspective
+that's a weird API design - as in, if this error code always means I
+have to try again, why can't the kernel do that internally. It's kind
+of leaking an implementation detail into the UAPI.
 
