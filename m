@@ -1,626 +1,182 @@
-Return-Path: <linux-arch+bounces-8113-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8114-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56FEA99D869
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Oct 2024 22:38:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72D0199D8E3
+	for <lists+linux-arch@lfdr.de>; Mon, 14 Oct 2024 23:17:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B9D53B2178D
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Oct 2024 20:38:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 95D831C21375
+	for <lists+linux-arch@lfdr.de>; Mon, 14 Oct 2024 21:17:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65A251D89E4;
-	Mon, 14 Oct 2024 20:37:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 415A21CFEC7;
+	Mon, 14 Oct 2024 21:17:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DoCvWsQU"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VNDBMS6n"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4FB11D0159
-	for <linux-arch@vger.kernel.org>; Mon, 14 Oct 2024 20:37:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F119156F44
+	for <linux-arch@vger.kernel.org>; Mon, 14 Oct 2024 21:17:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728938225; cv=none; b=APbui6SGrb52ukDLkvrOtAXsO8gGUE8ZEll6o0zezGmbfrDfv0KGdIcvAP/s8T26S431GlnOQQYNqCygqO3OO++aaJX83gXDoyOa+mM7zDxUi+rQiD4QE5X9jNNWwPlJ4DRePdiJGQKCVJxSKzHrBBQCXturoBO4baRTm1UVADg=
+	t=1728940626; cv=none; b=uzn2hD0tSEPPeGje1Is+YBstshrn9OMfHfgUyk2VbsW/BaoJj9TDuZ2suf2pHhtRQbzWGXmHjn0x5W7yGVhh8YV9TV9oZ0LPzwNMKkH2Gyz8N1LdBWraT16GKxfshgTev/LWwOisy7Q326L2VXKZzR/UYFLp1m6r06iNFGcGCok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728938225; c=relaxed/simple;
-	bh=PpJpwll108+Kq61j5T43UFyRUVz4XXDNu8oqzIkCAiU=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=DuNWyG+JgVj59LvqEHQcECmWhDjmlQcYHqDy575cWq1rF22wZF2e4879KRyS6vPFvQWRnYUuafv6fPkDX8pvXbzQvcfNMN/wdzLzw5DxibPIVkOgifRrFxNl2tZp3bjIXDt3b3B2GMOq42a6m4d4FqhCKdvsAxpl64GlHkDOeck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DoCvWsQU; arc=none smtp.client-ip=209.85.128.202
+	s=arc-20240116; t=1728940626; c=relaxed/simple;
+	bh=ZI3U8sCOJ726YZ30gGwRvvoQ5UXBS01WMq3brNnRKuk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LIzWSa+twU3OJHVTAqmGHslfblIao++1+DY2I7kaLOVT9z+Y0CkWFyp6c5G0Mx4c+Uht48NswCOY0eA0k+BvORumwc2/Wk3JvtOykX8sTmBeZ5mjXOLsidCSs6EcXcKjstMoJhwycC83Z0H7yIwfBoB8f5fz2n159txvwXwcAbU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VNDBMS6n; arc=none smtp.client-ip=209.85.160.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-6e35a643200so48789987b3.0
-        for <linux-arch@vger.kernel.org>; Mon, 14 Oct 2024 13:37:01 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-4603d3e0547so493521cf.0
+        for <linux-arch@vger.kernel.org>; Mon, 14 Oct 2024 14:17:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1728938221; x=1729543021; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3awKuOd0YJMzv+83YLmL6cC1+LaUmoopuJw+yqAMR2w=;
-        b=DoCvWsQUlsJORvxmYsG8nOvRa/wWKtIhQUsYNea985BSaC9URvWtRAK2ElfUPgbrsv
-         /TPQOCQbxtVzKqKyamFSE65EJ41TE7rCfgElO9eTyN7nt8FDe0k+h4xMqiRV63w9zPZ6
-         kH6ypm3go9apODgImEEUfnVJPrJTjZOOVhJYX4nV/0QoaxmNh3y4CbwbUfRg/D8l5Bog
-         1fumj1k4M/WqkWMbr/2ho/yjxuCqbe0JilTS13xPQM/N2OhE2SqgT4oPNtRGK+HEkNUJ
-         ulGObx91aaEZa7G6W7oY4uKsvgv++gjyF8+sT0ts4xwE7cdUTuvcV3RlCsoOGRDudXb6
-         XQTQ==
+        d=google.com; s=20230601; t=1728940623; x=1729545423; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rHb7NtoAh9gjfT6eZG97rGp2AF3tFOHSjIj6ouJz5Jk=;
+        b=VNDBMS6nJtQsXHg1tmol9WWSGlyG+8HKOyLI3+5ffjrN0BuVhvNyw8W57qRjsgDuie
+         8W6vjW23IftYn7I8a8LzjOa/akFZTBugmgNeGM1Jn6lEoxG1Fe9ATRBiVF1nOQgYIuzw
+         3Dea06z1BLeZFjjMzm2ie1veuhaCx1tvfweUzK0Ww6auubTgSDYvE28zjfsZod/8WeWh
+         2i0KOk8cm9ov3KEJlsTEgIWJHhXJ7ev35dB1HQZpNUx6ixf4ZCLQKpm9m9v2CEGQEyYK
+         VgFD70ezaM4HV5lFjJ6mZtdeU47CQZ+ZG3AzdlL2Qtp3x/WSZJXQtkwwE/3Z9aZI6GNu
+         +7eA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728938221; x=1729543021;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3awKuOd0YJMzv+83YLmL6cC1+LaUmoopuJw+yqAMR2w=;
-        b=ET1IEg5R2zO424Qh/cj9CrrO8McKBcjZ698H7+DEeTpOxh6sNs4XoXtvSQZw/ZROsZ
-         l09FFR94e8k4RFv8kPIBf2zlce+Rzkm13CCAFe0BFYeNKSlkiLqNQmVM/arWra2AQwgC
-         iTy0l9z8l45j5lFLyzN29zn1dttOn0XLL926bes4Pzth1xjE328StXY3gLzWEjM6+8Gv
-         1eBi/tPXhAEYLapgkb2y//TH6HiyOd2Um7xbi5mj5dbAWlqNu4FZ3b6gWGwm34UXtqvs
-         bMoT5MTqyDjwUs7+w0AS35G+9HOPZZm8+2pWlAY+xxBjRKXintQ+zwWn1bGMB+4I0Hpx
-         klPw==
-X-Forwarded-Encrypted: i=1; AJvYcCWPsXyCAfnKhc9qVZN/4nZr6bpi38Gn1Zy661HHmPAxTJG57jx0aq64+/O3B1g/bPVjMB0AmfAzW78C@vger.kernel.org
-X-Gm-Message-State: AOJu0YzAl6loLPvoUSo95pY6z9hwUMQu1SNC2x5pEztJm/shN+wnbMOA
-	K//WhYD3OxXV3Y+KlKN5WjKh+0wj1uUwuJWUncY9K+wokca1iO/l6ZMX6n2IMVEikygQugvrsFP
-	AhQ==
-X-Google-Smtp-Source: AGHT+IFg9tfmO7bztO2On8XBGLSENOaX0zqwxf4uBCk3a2PGQpcqPZvt7HPa1I/o1H4N1GNxRLUB/lu7jhs=
-X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:915:bdd7:e08a:7997])
- (user=surenb job=sendgmr) by 2002:a05:690c:7446:b0:62c:f6fd:5401 with SMTP id
- 00721157ae682-6e347b4b2edmr460177b3.6.1728938220715; Mon, 14 Oct 2024
- 13:37:00 -0700 (PDT)
-Date: Mon, 14 Oct 2024 13:36:46 -0700
-In-Reply-To: <20241014203646.1952505-1-surenb@google.com>
+        d=1e100.net; s=20230601; t=1728940623; x=1729545423;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rHb7NtoAh9gjfT6eZG97rGp2AF3tFOHSjIj6ouJz5Jk=;
+        b=MuNCFuuGhvtPx8zyuiztAolZ4eTNNLcE5cZNIZdmNBkn8YLyEIkcP4nC/mjcLjPCm7
+         Gbu0nFAHG9NrQA0XgZfBmISZs/lReOdyKNmY37BWIHMMQHhu2bMoLOvXLcxZQyjbarqO
+         36xcg3iBc+V9kOxpa+5h5gBGyJowH5AZ263kOVXlcVQMhJQvDzkjKbh1cvTK6WBJW7/q
+         Ii6hlMuUlZKFyQgRmM2IWQeX5ak6ArDQRyvMs5v34DTuwm49j/e5YVwG4espkal+CUwX
+         wMFCtgCRujSRIa2Ydc1MjTeAMfK/6CJUrpXJM3qfMAgIHqOmJIbwKbhY1L496v2I5bMl
+         xAxA==
+X-Forwarded-Encrypted: i=1; AJvYcCWdjxHN0C3AEXiEnd4BzIrHDyu/ErQp8lP3V0bAkrcANFtgrKTZ2tgetJdaQxZOwuDFfkaz4ZsxzDpi@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx8SK7WLDC1jGuYZ7bUCFWXNrJ7qQNPUR9pfGbj68XUAw1H0ls7
+	4wRXj51/jPmV4i/PEeshz+PMO3ydT/dpIm/HaybRHWnVpywZN0gEJto+WTrzLMab2ef5NJkCNq5
+	aICfhgbObosiAMhIPeEAO5kHwKicBrdCoz2d/
+X-Google-Smtp-Source: AGHT+IG1b7oU0kZLAEWD5hgOJFQGchfVhmH4qbX+aT93IIjRDuRwkmmDWWwjoBxrsP4yYyMAPebwXvZWRqMK+tLF+yE=
+X-Received: by 2002:a05:622a:7d0b:b0:45e:fea6:a3b1 with SMTP id
+ d75a77b69052e-46059c78199mr5347011cf.19.1728940623190; Mon, 14 Oct 2024
+ 14:17:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20241014203646.1952505-1-surenb@google.com>
-X-Mailer: git-send-email 2.47.0.rc1.288.g06298d1525-goog
-Message-ID: <20241014203646.1952505-6-surenb@google.com>
-Subject: [PATCH v3 5/5] alloc_tag: config to store page allocation tag refs in
- page flags
+MIME-Version: 1.0
+References: <20241014125703.2287936-4-ardb+git@google.com> <20241014125703.2287936-5-ardb+git@google.com>
+In-Reply-To: <20241014125703.2287936-5-ardb+git@google.com>
 From: Suren Baghdasaryan <surenb@google.com>
-To: akpm@linux-foundation.org
-Cc: kent.overstreet@linux.dev, corbet@lwn.net, arnd@arndb.de, 
-	mcgrof@kernel.org, rppt@kernel.org, paulmck@kernel.org, thuth@redhat.com, 
-	tglx@linutronix.de, bp@alien8.de, xiongwei.song@windriver.com, 
-	ardb@kernel.org, david@redhat.com, vbabka@suse.cz, mhocko@suse.com, 
-	hannes@cmpxchg.org, roman.gushchin@linux.dev, dave@stgolabs.net, 
-	willy@infradead.org, liam.howlett@oracle.com, pasha.tatashin@soleen.com, 
-	souravpanda@google.com, keescook@chromium.org, dennis@kernel.org, 
-	jhubbard@nvidia.com, yuzhao@google.com, vvvvvv@google.com, 
-	rostedt@goodmis.org, iamjoonsoo.kim@lge.com, rientjes@google.com, 
-	minchan@google.com, kaleshsingh@google.com, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, linux-mm@kvack.org, 
-	linux-modules@vger.kernel.org, kernel-team@android.com, surenb@google.com
+Date: Mon, 14 Oct 2024 14:16:52 -0700
+Message-ID: <CAJuCfpGXBH0FQppLppSkCLeRwCJsAGUMWL6F+G1TdqU4d=q4og@mail.gmail.com>
+Subject: Re: [PATCH 1/2] codetag: Use dot prefix for section name
+To: Ard Biesheuvel <ardb+git@google.com>
+Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>, 
+	Linus Torvalds <torvalds@linux-foundation.org>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Kent Overstreet <kent.overstreet@linux.dev>, 
+	Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kbuild@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add CONFIG_PGALLOC_TAG_USE_PAGEFLAGS to store allocation tag
-references directly in the page flags. This eliminates memory
-overhead caused by page_ext and results in better performance
-for page allocations.
-If the number of available page flag bits is insufficient to
-address all kernel allocations, profiling falls back to using
-page extensions with an appropriate warning to disable this
-config.
-If dynamically loaded modules add enough tags that they can't
-be addressed anymore with available page flag bits, memory
-profiling gets disabled and a warning is issued.
+On Mon, Oct 14, 2024 at 5:57=E2=80=AFAM Ard Biesheuvel <ardb+git@google.com=
+> wrote:
+>
+> From: Ard Biesheuvel <ardb@kernel.org>
+>
+> Sections typically use leading dots in their names, and deviating from
+> this breaks some assumptions in the existing code, e.g., in strip_relocs
+> on x86, which filters out .rela.* and .rela__* sections.
+>
+>   [65] alloc_tags        PROGBITS         0000000000000000  03a57958
+>        0000000000026340  0000000000000000  WA       0     0     8
+>   [66] .relaalloc_tags   RELA             0000000000000000  08dbb868
+>        0000000000044c40  0000000000000018   I      280    65     8
+>
+> So use a leading dot for the alloc_tags sections.
 
-Signed-off-by: Suren Baghdasaryan <surenb@google.com>
----
- include/linux/alloc_tag.h         |  10 +-
- include/linux/codetag.h           |   3 +
- include/linux/page-flags-layout.h |   7 ++
- include/linux/pgalloc_tag.h       | 184 +++++++++++++++++++++++++++++-
- lib/Kconfig.debug                 |  19 +++
- lib/alloc_tag.c                   |  90 ++++++++++++++-
- lib/codetag.c                     |   4 +-
- mm/mm_init.c                      |   5 +-
- 8 files changed, 310 insertions(+), 12 deletions(-)
+No issues with renaming the section but please note that I posted a
+patch [1] today that will have conflicts with this renaming.
 
-diff --git a/include/linux/alloc_tag.h b/include/linux/alloc_tag.h
-index 7431757999c5..4f811ec0ffe0 100644
---- a/include/linux/alloc_tag.h
-+++ b/include/linux/alloc_tag.h
-@@ -30,8 +30,16 @@ struct alloc_tag {
- 	struct alloc_tag_counters __percpu	*counters;
- } __aligned(8);
- 
-+struct alloc_tag_kernel_section {
-+	struct alloc_tag *first_tag;
-+	unsigned long count;
-+};
-+
- struct alloc_tag_module_section {
--	unsigned long start_addr;
-+	union {
-+		unsigned long start_addr;
-+		struct alloc_tag *first_tag;
-+	};
- 	unsigned long end_addr;
- 	/* used size */
- 	unsigned long size;
-diff --git a/include/linux/codetag.h b/include/linux/codetag.h
-index fb4e7adfa746..401fc297eeda 100644
---- a/include/linux/codetag.h
-+++ b/include/linux/codetag.h
-@@ -13,6 +13,9 @@ struct codetag_module;
- struct seq_buf;
- struct module;
- 
-+#define CODETAG_SECTION_START_PREFIX	"__start_"
-+#define CODETAG_SECTION_STOP_PREFIX	"__stop_"
-+
- /*
-  * An instance of this structure is created in a special ELF section at every
-  * code location being tagged.  At runtime, the special section is treated as
-diff --git a/include/linux/page-flags-layout.h b/include/linux/page-flags-layout.h
-index 7d79818dc065..4f5c9e979bb9 100644
---- a/include/linux/page-flags-layout.h
-+++ b/include/linux/page-flags-layout.h
-@@ -111,5 +111,12 @@
- 			    ZONES_WIDTH - LRU_GEN_WIDTH - SECTIONS_WIDTH - \
- 			    NODES_WIDTH - KASAN_TAG_WIDTH - LAST_CPUPID_WIDTH)
- 
-+#define NR_NON_PAGEFLAG_BITS	(SECTIONS_WIDTH + NODES_WIDTH + ZONES_WIDTH + \
-+				LAST_CPUPID_SHIFT + KASAN_TAG_WIDTH + \
-+				LRU_GEN_WIDTH + LRU_REFS_WIDTH)
-+
-+#define NR_UNUSED_PAGEFLAG_BITS	(BITS_PER_LONG - \
-+				(NR_NON_PAGEFLAG_BITS + NR_PAGEFLAGS))
-+
- #endif
- #endif /* _LINUX_PAGE_FLAGS_LAYOUT */
-diff --git a/include/linux/pgalloc_tag.h b/include/linux/pgalloc_tag.h
-index bc65710ee1f9..69976cf747a6 100644
---- a/include/linux/pgalloc_tag.h
-+++ b/include/linux/pgalloc_tag.h
-@@ -9,6 +9,93 @@
- 
- #ifdef CONFIG_MEM_ALLOC_PROFILING
- 
-+#ifdef CONFIG_PGALLOC_TAG_USE_PAGEFLAGS
-+
-+typedef u16	pgalloc_tag_ref;
-+
-+extern struct alloc_tag_kernel_section kernel_tags;
-+
-+#define CODETAG_ID_NULL		0
-+#define CODETAG_ID_EMPTY	1
-+#define CODETAG_ID_FIRST	2
-+
-+#ifdef CONFIG_MODULES
-+
-+extern struct alloc_tag_module_section module_tags;
-+
-+static inline struct codetag *get_module_ct(pgalloc_tag_ref pgref)
-+{
-+	return &module_tags.first_tag[pgref - kernel_tags.count].ct;
-+}
-+
-+static inline pgalloc_tag_ref get_module_pgref(struct alloc_tag *tag)
-+{
-+	return CODETAG_ID_FIRST + kernel_tags.count + (tag - module_tags.first_tag);
-+}
-+
-+#else /* CONFIG_MODULES */
-+
-+static inline struct codetag *get_module_ct(pgalloc_tag_ref pgref)
-+{
-+	pr_warn("invalid page tag reference %lu\n", (unsigned long)pgref);
-+	return NULL;
-+}
-+
-+static inline pgalloc_tag_ref get_module_pgref(struct alloc_tag *tag)
-+{
-+	pr_warn("invalid page tag 0x%lx\n", (unsigned long)tag);
-+	return CODETAG_ID_NULL;
-+}
-+
-+#endif /* CONFIG_MODULES */
-+
-+static inline void read_pgref(pgalloc_tag_ref *pgref, union codetag_ref *ref)
-+{
-+	pgalloc_tag_ref pgref_val = *pgref;
-+
-+	switch (pgref_val) {
-+	case (CODETAG_ID_NULL):
-+		ref->ct = NULL;
-+		break;
-+	case (CODETAG_ID_EMPTY):
-+		set_codetag_empty(ref);
-+		break;
-+	default:
-+		pgref_val -= CODETAG_ID_FIRST;
-+		ref->ct = pgref_val < kernel_tags.count ?
-+			&kernel_tags.first_tag[pgref_val].ct :
-+			get_module_ct(pgref_val);
-+		break;
-+	}
-+}
-+
-+static inline void write_pgref(pgalloc_tag_ref *pgref, union codetag_ref *ref)
-+{
-+	struct alloc_tag *tag;
-+
-+	if (!ref->ct) {
-+		*pgref = CODETAG_ID_NULL;
-+		return;
-+	}
-+
-+	if (is_codetag_empty(ref)) {
-+		*pgref = CODETAG_ID_EMPTY;
-+		return;
-+	}
-+
-+	tag = ct_to_alloc_tag(ref->ct);
-+	if (tag >= kernel_tags.first_tag && tag < kernel_tags.first_tag + kernel_tags.count) {
-+		*pgref = CODETAG_ID_FIRST + (tag - kernel_tags.first_tag);
-+		return;
-+	}
-+
-+	*pgref = get_module_pgref(tag);
-+}
-+
-+void __init alloc_tag_sec_init(void);
-+
-+#else /* CONFIG_PGALLOC_TAG_USE_PAGEFLAGS */
-+
- typedef union codetag_ref	pgalloc_tag_ref;
- 
- static inline void read_pgref(pgalloc_tag_ref *pgref, union codetag_ref *ref)
-@@ -21,8 +108,13 @@ static inline void write_pgref(pgalloc_tag_ref *pgref, union codetag_ref *ref)
- 	pgref->ct = ref->ct;
- }
- 
-+static inline void alloc_tag_sec_init(void) {}
-+
-+#endif /* CONFIG_PGALLOC_TAG_USE_PAGEFLAGS */
-+
- union pgtag_ref_handle {
- 	pgalloc_tag_ref *pgref;	/* reference in page extension */
-+	struct page *page;	/* reference in page flags */
- };
- 
- #include <linux/page_ext.h>
-@@ -40,8 +132,8 @@ static inline struct page_ext *page_ext_from_pgref(pgalloc_tag_ref *pgref)
- }
- 
- /* Should be called only if mem_alloc_profiling_enabled() */
--static inline bool get_page_tag_ref(struct page *page, union codetag_ref *ref,
--				    union pgtag_ref_handle *handle)
-+static inline bool page_ext_get_page_tag_ref(struct page *page, union codetag_ref *ref,
-+					     union pgtag_ref_handle *handle)
- {
- 	struct page_ext *page_ext;
- 	pgalloc_tag_ref *pgref;
-@@ -59,7 +151,7 @@ static inline bool get_page_tag_ref(struct page *page, union codetag_ref *ref,
- 	return true;
- }
- 
--static inline void put_page_tag_ref(union pgtag_ref_handle handle)
-+static inline void page_ext_put_page_tag_ref(union pgtag_ref_handle handle)
- {
- 	if (WARN_ON(!handle.pgref))
- 		return;
-@@ -67,8 +159,8 @@ static inline void put_page_tag_ref(union pgtag_ref_handle handle)
- 	page_ext_put(page_ext_from_pgref(handle.pgref));
- }
- 
--static inline void update_page_tag_ref(union pgtag_ref_handle handle,
--				       union codetag_ref *ref)
-+static inline void page_ext_update_page_tag_ref(union pgtag_ref_handle handle,
-+						union codetag_ref *ref)
- {
- 	if (WARN_ON(!handle.pgref || !ref))
- 		return;
-@@ -76,6 +168,87 @@ static inline void update_page_tag_ref(union pgtag_ref_handle handle,
- 	write_pgref(handle.pgref, ref);
- }
- 
-+#ifdef CONFIG_PGALLOC_TAG_USE_PAGEFLAGS
-+
-+DECLARE_STATIC_KEY_TRUE(mem_profiling_use_pageflags);
-+extern unsigned long alloc_tag_ref_mask;
-+extern int alloc_tag_ref_offs;
-+
-+/* Should be called only if mem_alloc_profiling_enabled() */
-+static inline bool get_page_tag_ref(struct page *page, union codetag_ref *ref,
-+				    union pgtag_ref_handle *handle)
-+{
-+	pgalloc_tag_ref pgref;
-+
-+	if (!static_key_enabled(&mem_profiling_use_pageflags))
-+		return page_ext_get_page_tag_ref(page, ref, handle);
-+
-+	if (!page)
-+		return false;
-+
-+	pgref = (page->flags >> alloc_tag_ref_offs) & alloc_tag_ref_mask;
-+	read_pgref(&pgref, ref);
-+	handle->page = page;
-+	return true;
-+}
-+
-+static inline void put_page_tag_ref(union pgtag_ref_handle handle)
-+{
-+	if (!static_key_enabled(&mem_profiling_use_pageflags)) {
-+		page_ext_put_page_tag_ref(handle);
-+		return;
-+	}
-+
-+	WARN_ON(!handle.page);
-+}
-+
-+static inline void update_page_tag_ref(union pgtag_ref_handle handle, union codetag_ref *ref)
-+{
-+	unsigned long old_flags, flags, val;
-+	struct page *page = handle.page;
-+	pgalloc_tag_ref pgref;
-+
-+	if (!static_key_enabled(&mem_profiling_use_pageflags)) {
-+		page_ext_update_page_tag_ref(handle, ref);
-+		return;
-+	}
-+
-+	if (WARN_ON(!page || !ref))
-+		return;
-+
-+	write_pgref(&pgref, ref);
-+	val = (unsigned long)pgref;
-+	val = (val & alloc_tag_ref_mask) << alloc_tag_ref_offs;
-+	do {
-+		old_flags = READ_ONCE(page->flags);
-+		flags = old_flags;
-+		flags &= ~(alloc_tag_ref_mask << alloc_tag_ref_offs);
-+		flags |= val;
-+	} while (unlikely(!try_cmpxchg(&page->flags, &old_flags, flags)));
-+}
-+
-+#else /* CONFIG_PGALLOC_TAG_USE_PAGEFLAGS */
-+
-+/* Should be called only if mem_alloc_profiling_enabled() */
-+static inline bool get_page_tag_ref(struct page *page, union codetag_ref *ref,
-+				    union pgtag_ref_handle *handle)
-+{
-+	return page_ext_get_page_tag_ref(page, ref, handle);
-+}
-+
-+static inline void put_page_tag_ref(union pgtag_ref_handle handle)
-+{
-+	page_ext_put_page_tag_ref(handle);
-+}
-+
-+static inline void update_page_tag_ref(union pgtag_ref_handle handle,
-+				       union codetag_ref *ref)
-+{
-+	page_ext_update_page_tag_ref(handle, ref);
-+}
-+
-+#endif /* CONFIG_PGALLOC_TAG_USE_PAGEFLAGS */
-+
- static inline void clear_page_tag_ref(struct page *page)
- {
- 	if (mem_alloc_profiling_enabled()) {
-@@ -152,6 +325,7 @@ static inline void pgalloc_tag_add(struct page *page, struct task_struct *task,
- static inline void pgalloc_tag_sub(struct page *page, unsigned int nr) {}
- static inline struct alloc_tag *pgalloc_tag_get(struct page *page) { return NULL; }
- static inline void pgalloc_tag_sub_pages(struct alloc_tag *tag, unsigned int nr) {}
-+static inline void alloc_tag_sec_init(void) {}
- 
- #endif /* CONFIG_MEM_ALLOC_PROFILING */
- 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 7315f643817a..f4c272c30719 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -1017,6 +1017,25 @@ config MEM_ALLOC_PROFILING_DEBUG
- 	  Adds warnings with helpful error messages for memory allocation
- 	  profiling.
- 
-+config PGALLOC_TAG_USE_PAGEFLAGS
-+	bool "Use pageflags to encode page allocation tag reference"
-+	default n
-+	depends on MEM_ALLOC_PROFILING
-+	help
-+	  When set, page allocation tag references are encoded inside page
-+	  flags if they fit, otherwise they are encoded in page extensions.
-+
-+	  Setting this flag reduces memory and performance overhead of memory
-+	  allocation profiling but it requires enough unused page flag bits to
-+	  address all kernel allocations. If enabled but there are not enough
-+	  unused page flag bits, profiling will fall back to using page
-+	  extensions and a warning will be issued to disable this config.
-+	  If dynamically loaded modules add enough tags that they can't be
-+	  addressed anymore with available page flag bits, profiling for such
-+	  modules will be disabled and a warning will be issued.
-+
-+	  Say N if unsure.
-+
- source "lib/Kconfig.kasan"
- source "lib/Kconfig.kfence"
- source "lib/Kconfig.kmsan"
-diff --git a/lib/alloc_tag.c b/lib/alloc_tag.c
-index 2ef762acc203..341a5c826449 100644
---- a/lib/alloc_tag.c
-+++ b/lib/alloc_tag.c
-@@ -3,6 +3,7 @@
- #include <linux/execmem.h>
- #include <linux/fs.h>
- #include <linux/gfp.h>
-+#include <linux/kallsyms.h>
- #include <linux/module.h>
- #include <linux/page_ext.h>
- #include <linux/pgalloc_tag.h>
-@@ -152,6 +153,42 @@ static void __init procfs_init(void)
- 	proc_create_seq("allocinfo", 0400, NULL, &allocinfo_seq_op);
- }
- 
-+#ifdef CONFIG_PGALLOC_TAG_USE_PAGEFLAGS
-+
-+DEFINE_STATIC_KEY_TRUE(mem_profiling_use_pageflags);
-+unsigned long alloc_tag_ref_mask;
-+int alloc_tag_ref_offs;
-+
-+#define SECTION_START(NAME)	(CODETAG_SECTION_START_PREFIX NAME)
-+#define SECTION_STOP(NAME)	(CODETAG_SECTION_STOP_PREFIX NAME)
-+
-+struct alloc_tag_kernel_section kernel_tags = { NULL, 0 };
-+
-+void __init alloc_tag_sec_init(void)
-+{
-+	struct alloc_tag *last_codetag;
-+
-+	kernel_tags.first_tag = (struct alloc_tag *)kallsyms_lookup_name(
-+					SECTION_START(ALLOC_TAG_SECTION_NAME));
-+	last_codetag = (struct alloc_tag *)kallsyms_lookup_name(
-+					SECTION_STOP(ALLOC_TAG_SECTION_NAME));
-+	kernel_tags.count = last_codetag - kernel_tags.first_tag;
-+
-+	/* Check if kernel tags fit into page flags */
-+	if (kernel_tags.count > (1UL << NR_UNUSED_PAGEFLAG_BITS)) {
-+		static_branch_disable(&mem_profiling_use_pageflags);
-+		pr_warn("%lu kernel tags do not fit into %d available page flag bits, page extensions will be used instead!\n",
-+			kernel_tags.count, NR_UNUSED_PAGEFLAG_BITS);
-+	} else {
-+		alloc_tag_ref_offs = (LRU_REFS_PGOFF - NR_UNUSED_PAGEFLAG_BITS);
-+		alloc_tag_ref_mask = ((1UL << NR_UNUSED_PAGEFLAG_BITS) - 1);
-+		pr_info("All unused page flags (%d bits) are used to store page tag references!\n",
-+			NR_UNUSED_PAGEFLAG_BITS);
-+	}
-+}
-+
-+#endif /* CONFIG_PGALLOC_TAG_USE_PAGEFLAGS */
-+
- #ifdef CONFIG_MODULES
- 
- static struct maple_tree mod_area_mt = MTREE_INIT(mod_area_mt, MT_FLAGS_ALLOC_RANGE);
-@@ -161,7 +198,29 @@ static struct module unloaded_mod;
- /* A dummy object used to indicate a module prepended area */
- static struct module prepend_mod;
- 
--static struct alloc_tag_module_section module_tags;
-+struct alloc_tag_module_section module_tags;
-+
-+#ifdef CONFIG_PGALLOC_TAG_USE_PAGEFLAGS
-+static inline unsigned long alloc_tag_align(unsigned long val)
-+{
-+	if (val % sizeof(struct alloc_tag) == 0)
-+		return val;
-+	return ((val / sizeof(struct alloc_tag)) + 1) * sizeof(struct alloc_tag);
-+}
-+
-+static inline bool tags_addressable(void)
-+{
-+	unsigned long tag_idx_count = CODETAG_ID_FIRST + kernel_tags.count +
-+					module_tags.size / sizeof(struct alloc_tag);
-+
-+	return tag_idx_count < (1UL << NR_UNUSED_PAGEFLAG_BITS);
-+}
-+
-+#else /* CONFIG_PGALLOC_TAG_USE_PAGEFLAGS */
-+
-+static inline bool tags_addressable(void) { return true; }
-+
-+#endif /* CONFIG_PGALLOC_TAG_USE_PAGEFLAGS */
- 
- static bool needs_section_mem(struct module *mod, unsigned long size)
- {
-@@ -237,6 +296,21 @@ static void *reserve_module_tags(struct module *mod, unsigned long size,
- 	if (!align)
- 		align = 1;
- 
-+#ifdef CONFIG_PGALLOC_TAG_USE_PAGEFLAGS
-+	/*
-+	 * If alloc_tag size is not a multiple of required alignment tag
-+	 * indexing does not work.
-+	 */
-+	if (!IS_ALIGNED(sizeof(struct alloc_tag), align)) {
-+		pr_err("%s: alignment %lu is incompatible with allocation tag indexing, disable CONFIG_PGALLOC_TAG_USE_PAGEFLAGS",
-+			mod->name, align);
-+		return ERR_PTR(-EINVAL);
-+	}
-+
-+	/* Ensure prepend consumes multiple of alloc_tag-sized blocks */
-+	if (prepend)
-+		prepend = alloc_tag_align(prepend);
-+#endif /* CONFIG_PGALLOC_TAG_USE_PAGEFLAGS */
- 	mas_lock(&mas);
- repeat:
- 	/* Try finding exact size and hope the start is aligned */
-@@ -305,6 +379,12 @@ static void *reserve_module_tags(struct module *mod, unsigned long size,
- 		unsigned long phys_size = vm_module_tags->nr_pages << PAGE_SHIFT;
- 
- 		module_tags.size = offset + size;
-+		if (!tags_addressable() && mem_alloc_profiling_enabled()) {
-+			static_branch_disable(&mem_alloc_profiling_key);
-+			pr_warn("With module %s there are too many tags to fit in %d page flag bits. Memory profiling is disabled!\n",
-+				mod->name, NR_UNUSED_PAGEFLAG_BITS);
-+		}
-+
- 		if (phys_size < module_tags.size) {
- 			int grow_res;
- 
-@@ -406,6 +486,10 @@ static int __init alloc_mod_tags_mem(void)
- 
- 	module_tags.start_addr = (unsigned long)vm_module_tags->addr;
- 	module_tags.end_addr = module_tags.start_addr + MODULE_ALLOC_TAG_VMAP_SIZE;
-+#ifdef CONFIG_PGALLOC_TAG_USE_PAGEFLAGS
-+	/* Ensure the base is alloc_tag aligned */
-+	module_tags.start_addr = alloc_tag_align(module_tags.start_addr);
-+#endif
- 
- 	return 0;
- }
-@@ -467,6 +551,10 @@ early_param("sysctl.vm.mem_profiling", setup_early_mem_profiling);
- 
- static __init bool need_page_alloc_tagging(void)
- {
-+#ifdef CONFIG_PGALLOC_TAG_USE_PAGEFLAGS
-+	if (static_key_enabled(&mem_profiling_use_pageflags))
-+		return false;
-+#endif
- 	return mem_profiling_support;
- }
- 
-diff --git a/lib/codetag.c b/lib/codetag.c
-index 3f3a4f4ca72d..cda5a852ef30 100644
---- a/lib/codetag.c
-+++ b/lib/codetag.c
-@@ -149,8 +149,8 @@ static struct codetag_range get_section_range(struct module *mod,
- 					      const char *section)
- {
- 	return (struct codetag_range) {
--		get_symbol(mod, "__start_", section),
--		get_symbol(mod, "__stop_", section),
-+		get_symbol(mod, CODETAG_SECTION_START_PREFIX, section),
-+		get_symbol(mod, CODETAG_SECTION_STOP_PREFIX, section),
- 	};
- }
- 
-diff --git a/mm/mm_init.c b/mm/mm_init.c
-index 4ba5607aaf19..1c205b0a86ed 100644
---- a/mm/mm_init.c
-+++ b/mm/mm_init.c
-@@ -83,8 +83,7 @@ void __init mminit_verify_pageflags_layout(void)
- 	unsigned long or_mask, add_mask;
- 
- 	shift = BITS_PER_LONG;
--	width = shift - SECTIONS_WIDTH - NODES_WIDTH - ZONES_WIDTH
--		- LAST_CPUPID_SHIFT - KASAN_TAG_WIDTH - LRU_GEN_WIDTH - LRU_REFS_WIDTH;
-+	width = shift - NR_NON_PAGEFLAG_BITS;
- 	mminit_dprintk(MMINIT_TRACE, "pageflags_layout_widths",
- 		"Section %d Node %d Zone %d Lastcpupid %d Kasantag %d Gen %d Tier %d Flags %d\n",
- 		SECTIONS_WIDTH,
-@@ -2639,7 +2638,7 @@ void __init mm_core_init(void)
- 	BUILD_BUG_ON(MAX_ZONELISTS > 2);
- 	build_all_zonelists(NULL);
- 	page_alloc_init_cpuhp();
--
-+	alloc_tag_sec_init();
- 	/*
- 	 * page_ext requires contiguous pages,
- 	 * bigger than MAX_PAGE_ORDER unless SPARSEMEM.
--- 
-2.47.0.rc1.288.g06298d1525-goog
+[1] https://lore.kernel.org/all/20241014203646.1952505-3-surenb@google.com/
 
+>
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> ---
+>  include/asm-generic/codetag.lds.h | 2 +-
+>  include/linux/alloc_tag.h         | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/include/asm-generic/codetag.lds.h b/include/asm-generic/code=
+tag.lds.h
+> index 64f536b80380..dcd18351ba2f 100644
+> --- a/include/asm-generic/codetag.lds.h
+> +++ b/include/asm-generic/codetag.lds.h
+> @@ -5,7 +5,7 @@
+>  #define SECTION_WITH_BOUNDARIES(_name) \
+>         . =3D ALIGN(8);                   \
+>         __start_##_name =3D .;            \
+> -       KEEP(*(_name))                  \
+> +       KEEP(*(. ## _name))             \
+>         __stop_##_name =3D .;
+
+I think leaving the SECTION_WITH_BOUNDARIES() definition as is and
+changing its users to pass the name with the dot would be more
+explicit and more flexible.
+The only user today is CODETAG_SECTIONS() at [2], so I would add the
+dot in there instead.
+
+[2] https://elixir.bootlin.com/linux/v6.12-rc2/source/include/asm-generic/c=
+odetag.lds.h#L12
+
+Thanks,
+Suren.
+
+>
+>  #define CODETAG_SECTIONS()             \
+> diff --git a/include/linux/alloc_tag.h b/include/linux/alloc_tag.h
+> index 1f0a9ff23a2c..d45a8a582970 100644
+> --- a/include/linux/alloc_tag.h
+> +++ b/include/linux/alloc_tag.h
+> @@ -76,7 +76,7 @@ DECLARE_PER_CPU(struct alloc_tag_counters, _shared_allo=
+c_tag);
+>
+>  #define DEFINE_ALLOC_TAG(_alloc_tag)                                    =
+       \
+>         static struct alloc_tag _alloc_tag __used __aligned(8)           =
+       \
+> -       __section("alloc_tags") =3D {                                    =
+         \
+> +       __section(".alloc_tags") =3D {                                   =
+         \
+>                 .ct =3D CODE_TAG_INIT,                                   =
+         \
+>                 .counters =3D &_shared_alloc_tag };
+>
+> @@ -85,7 +85,7 @@ DECLARE_PER_CPU(struct alloc_tag_counters, _shared_allo=
+c_tag);
+>  #define DEFINE_ALLOC_TAG(_alloc_tag)                                    =
+       \
+>         static DEFINE_PER_CPU(struct alloc_tag_counters, _alloc_tag_cntr)=
+;      \
+>         static struct alloc_tag _alloc_tag __used __aligned(8)           =
+       \
+> -       __section("alloc_tags") =3D {                                    =
+         \
+> +       __section(".alloc_tags") =3D {                                   =
+         \
+>                 .ct =3D CODE_TAG_INIT,                                   =
+         \
+>                 .counters =3D &_alloc_tag_cntr };
+>
+> --
+> 2.47.0.rc1.288.g06298d1525-goog
+>
 
