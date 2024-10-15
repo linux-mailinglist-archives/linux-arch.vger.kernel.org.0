@@ -1,188 +1,111 @@
-Return-Path: <linux-arch+bounces-8181-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8182-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4D8399F0A7
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2024 17:06:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EA6C99F13F
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2024 17:32:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E78931C2166E
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2024 15:06:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 547561F22DC1
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2024 15:32:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E16C1CB9FC;
-	Tue, 15 Oct 2024 15:06:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94E281DD0FB;
+	Tue, 15 Oct 2024 15:31:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rFrdZQBU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GuK9DjVk"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFD511CB9F6
-	for <linux-arch@vger.kernel.org>; Tue, 15 Oct 2024 15:06:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20BB51DD0DF;
+	Tue, 15 Oct 2024 15:31:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729004810; cv=none; b=DXoc3qGlqqBhUE4e0ZoCjEEVlhE0cKq7eWwV2FARPKuDHAMDSURhaWZjSc4wBwg5bzDKF4D/sZBYD3AmTSSh4JS6RCgqoVxbCnDoG00Xmd/8q0FpoFQ2T4qh+scgoC6Q/3/xDtc7AYiulK5noQHudoYDE2N4NNE/7ncDkzg5HUI=
+	t=1729006285; cv=none; b=JFpXNSRGiFGeEbJhvKN9Uzl1CbwZmrmfQhSmHZJldznLIp40zTegr7GTP1PXhkkoN+b+FfB76/dM5i4mhpiCn8c8vNJ36g36nduu/F+r45R1zWxlecFLIka6QGyDTB2REK2W58QHTcJ+F+f6EOx482UN1U4KMPRg+/KnAMRJr8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729004810; c=relaxed/simple;
-	bh=ZQl9UHMbS2zpthn3YlCftCta2N9I8PKzHq+fgsLN3WU=;
+	s=arc-20240116; t=1729006285; c=relaxed/simple;
+	bh=XYJf7hrcLT7Ow0dgGMK3ItjJvo1qX/WLHMjBflskpp8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rT3pS0DI+9Hql57iGc/WP4lRCwN9/Y1LP0JOz+2OwksqKXdWTxn/NReZ7zwOh7+meEym72qgj2EDSEH0ZghTxbd+d0RRZlDDGQYBEhjjwEWoKnMjNLlUC2ggZYJ2uTbGhgzDyR8yaC7icJQq4pKV4AK/cfe8Q/54qw8txeSoxGQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rFrdZQBU; arc=none smtp.client-ip=209.85.160.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-460395fb1acso761621cf.0
-        for <linux-arch@vger.kernel.org>; Tue, 15 Oct 2024 08:06:48 -0700 (PDT)
+	 To:Cc:Content-Type; b=TQ3goPXzUCyoi7KG8YZhEarDQcKguEsyyYR25mAXMqDGZigHr/1SZns1zqOV5Q1e5QIYrVC6ZjsJpGsnHnJBUJ82hWzkQ5G/IQYGWLeDxA6Lu5Y+JXFrHuDW0854vlTJGumWlSnJ6CevEb/zGGk7aD0lkmFY2huOFct0NeTH57g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GuK9DjVk; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-20c83c2e967so4569645ad.1;
+        Tue, 15 Oct 2024 08:31:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1729004808; x=1729609608; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1729006283; x=1729611083; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZQl9UHMbS2zpthn3YlCftCta2N9I8PKzHq+fgsLN3WU=;
-        b=rFrdZQBUwK7/8NHpvnye4lKlnZjtShFi8/CGdGyDUgsw9iBJbNYqowB2MYXZMyuYNs
-         DXeayvOWXYxm1UK1zGyecFMNZXpowo4dQstkyZboIiMzvB6BGTLuNAPnVEAJzNn1kdRz
-         aV0ERoMyWi71ULYetk8d62Tg0R4QlrgaPk4iZ1TDdon5dxzoxlrjk03aSESlIDti5RSP
-         OJjQolWHPY+QIqDm+4Msr4Ve+Upcr4Yf43JqYR7o9uiK0nxZXTNOIUEhVRC5Eeu+1VUs
-         gzH52tuJU6ZR8qoDb/R8Zmj16ORnbMA/bsLyDkjtIpKG4HXkaDNRGExOhdWBh77AtbFa
-         I01w==
+        bh=XYJf7hrcLT7Ow0dgGMK3ItjJvo1qX/WLHMjBflskpp8=;
+        b=GuK9DjVk64kafU2trISty/DJmJ6dlByLrc/IqM4E4aJeI+yh2M7hN3GJcVNrIYzmDd
+         zO/bBcjX2bFQxpnBoTsMTIQgBRQ3lqWDRTuqhx+BE1X2msmjFTxuF2moBAoSQKgeMifh
+         71I+d94Lykl6gzxwHrvj/TL3kTA7wauv2QIdjEYCHq7iuBOoLgbw7U73e8Ia1sllAjSd
+         73ZvY4xGyKnfw1RhnhfRidSNpTeC/g78TZ7/SPperExO3Yhq6SbI9qS/Q7x4R3+zwJ23
+         a7O5b2HhU2iV8moc2BVwKrStd+88mztUqt8t0iu5ELdWCTJgWugTo/yOurpR80yEypl0
+         Y7+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729004808; x=1729609608;
+        d=1e100.net; s=20230601; t=1729006283; x=1729611083;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ZQl9UHMbS2zpthn3YlCftCta2N9I8PKzHq+fgsLN3WU=;
-        b=iWGI4GnvEFVNCAIsQkZMvTLp1ZUiYi7MkwiieR6HXEAzJd7kcy4hJVdG3vO9rh3LXx
-         /UP2uC8gyAmaEspv+6+1xsU2RgvCxnquIW+gSG8NJsCbgdZ/wmCbS+6sfjbuU3VwQsAt
-         acPR6xlE7bDQf57MrAawwhoWg98UOV9AryqsXVu5h7m9b4SCqo/avqNvLyt6/hAWLy72
-         fEY2A8r3WJSWgRPPgzl8DYrv46Vrs7Q9BMCPfuq0yhyQkBvxFhzVkIoYowCAaVo0U1U/
-         Ohd1gWOviJbGSVidnSQEIilzdlLCkuVabl0FEvpyp4Jrp4GszBYAvsT+APLW/u7H9aCV
-         /sVg==
-X-Forwarded-Encrypted: i=1; AJvYcCW3Ndwd21MHrj457hUVd0a/8xoqmqnNCofsUMqDN0gfTTEopGk2+Tmi1X9VzBaxHo6UFqAJCfVLC0dU@vger.kernel.org
-X-Gm-Message-State: AOJu0YzhkjxQgOxm3Mw0pMMDk2BDqW4eHVVLiWGEx/mNk4IduPjabh9M
-	WF6lZGINic5qAsAfzcK3eRoqh/bjf/vpHglcLHHFOjktgIC2DW4bzh9z+3LqpJdvBnVOltYUJcq
-	Q8TErS4nZ3U4eYyGzQrXHwCOkCS70mEdbpbNM
-X-Google-Smtp-Source: AGHT+IFz49w7sJh5aAv5suX/gv44ZHvixIsfk7pLi4CHMT74qdTtREKObwESHWojwr9bWtWWKSGe9xN21xl8GKoggmw=
-X-Received: by 2002:ac8:648d:0:b0:460:8406:2c2c with SMTP id
- d75a77b69052e-46084062ef6mr1391331cf.25.1729004807352; Tue, 15 Oct 2024
- 08:06:47 -0700 (PDT)
+        bh=XYJf7hrcLT7Ow0dgGMK3ItjJvo1qX/WLHMjBflskpp8=;
+        b=MU4TAbvn7sHns2txCtHflhXQkvsNTRmoRYPSxiBzopNLU86SDufsa4PZh7NyyKXDEE
+         nrWtNR/P8VVjBkda/4z3FAQU+yEZD4sqEH8AWBm8Cud15ygpRF+WoZ6ctfwqNpdnuDtc
+         faSkRLNLsK/pst08mfEdhc+8mvwd/R5erO9B2mAAjZO5SnA/2iCtsATrWX7ROgrQ2woX
+         S4kApeysAPf17/O9LP1YKdW2AJ0EqMA7sQdvvemXY3mLsJYhsVLMUIW46rozXtyCbT9/
+         D2MZYstQsdJPOJ6fH1pR5Tu5+53f08Tbz5YaWF4M111FRNIbuqrenNndD+VH7isHLbBK
+         qLvA==
+X-Forwarded-Encrypted: i=1; AJvYcCUiq0/7u1auK6zczJ0h1/B1iEWy7HuGmDRPKfnawqWlndtkc9SJ0GZpPwyQtkSWlS+HZnsz5BS/T4c7U3PVt5I=@vger.kernel.org, AJvYcCVBQKPnJfpePCp1lEhnE1mbYy1w0q3oWhY3GNKu0OZ5KWl5SSic4IEAdjXwUpbJZGN3dyAFuHVn1mfwcx+2@vger.kernel.org, AJvYcCXCpE1Sj/4TuQ09NSHz7iAwKyavQGPOTMeVx2qi2J3d6fW/r+hFe13ey+4GS0m3pSMW5uQ0yLxiwaw3mavyBvyY0IgK@vger.kernel.org, AJvYcCXRbrPILczxCpYJ/Xza7bCX9toOsM5wYQtsPUC3WdEBcqmZwK/Y0uf+7EoqGD8tw1EmsWc6lphjc7Il@vger.kernel.org
+X-Gm-Message-State: AOJu0YzDfPfAZEngGHbbhmR06AA9GVxwkGC+cZTjVeqHFBZAYIXyHN5g
+	E5eI/y/pNVPh3EnMIycgjqRXx4Qln0SsBuSfaNMvTSjL8tJn0jlnvmRBxPYG7jCPiQdZlO42+PS
+	KNvp/nA3YAuDhs1ajE4hgNfBY92c=
+X-Google-Smtp-Source: AGHT+IFgGW52eztBAkDuewDmtmXhOGFk9GZOZdh7DbttGzN3ZkEhOvpiLgnEe8CkavcbYb8B+mBuvtNrTixMpXJBb9s=
+X-Received: by 2002:a17:902:c402:b0:20b:99cd:c27e with SMTP id
+ d9443c01a7336-20ca1425487mr86305455ad.3.1729006283310; Tue, 15 Oct 2024
+ 08:31:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241014203646.1952505-1-surenb@google.com> <20241014203646.1952505-6-surenb@google.com>
- <CAJD7tkY0zzwX1BCbayKSXSxwKEGiEJzzKggP8dJccdajsr_bKw@mail.gmail.com>
- <cd848c5f-50cd-4834-a6dc-dff16c586e49@nvidia.com> <CAJD7tkY8LKVGN5QNy9q2UkRLnoOEd7Wcu_fKtxKqV7SN43QgrA@mail.gmail.com>
- <ba888da6-cd45-41b6-9d97-8292474d3ce6@nvidia.com> <CAJuCfpE4eOH+HN8dQAavwUaMDfX5Fdyx7zft6TKcT33TiiDbXQ@mail.gmail.com>
- <CAJD7tkb7UTpNWwJ84TZqB7SyZ2eyQrraOJ0g2qDmxS6C6Y1AtQ@mail.gmail.com>
-In-Reply-To: <CAJD7tkb7UTpNWwJ84TZqB7SyZ2eyQrraOJ0g2qDmxS6C6Y1AtQ@mail.gmail.com>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Tue, 15 Oct 2024 08:06:36 -0700
-Message-ID: <CAJuCfpF=EJ2CZRdg-JEdzkRCp_TtSXduB_hxqdEu379Z0OKAKg@mail.gmail.com>
-Subject: Re: [PATCH v3 5/5] alloc_tag: config to store page allocation tag
- refs in page flags
-To: Yosry Ahmed <yosryahmed@google.com>
-Cc: John Hubbard <jhubbard@nvidia.com>, akpm@linux-foundation.org, 
-	kent.overstreet@linux.dev, corbet@lwn.net, arnd@arndb.de, mcgrof@kernel.org, 
-	rppt@kernel.org, paulmck@kernel.org, thuth@redhat.com, tglx@linutronix.de, 
-	bp@alien8.de, xiongwei.song@windriver.com, ardb@kernel.org, david@redhat.com, 
-	vbabka@suse.cz, mhocko@suse.com, hannes@cmpxchg.org, roman.gushchin@linux.dev, 
-	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com, 
-	pasha.tatashin@soleen.com, souravpanda@google.com, keescook@chromium.org, 
-	dennis@kernel.org, yuzhao@google.com, vvvvvv@google.com, rostedt@goodmis.org, 
-	iamjoonsoo.kim@lge.com, rientjes@google.com, minchan@google.com, 
-	kaleshsingh@google.com, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, linux-mm@kvack.org, 
-	linux-modules@vger.kernel.org, kernel-team@android.com
+References: <20241011-tracepoint-v10-5-7fbde4d6b525@google.com>
+ <202410151814.WmLlAkCq-lkp@intel.com> <CANiq72nn6zv9MOD2ifTXbWV3W1AgiXL=6zTX_-eGL5ggLj4fbw@mail.gmail.com>
+ <CAH5fLghJrrq2nJu7S08bBg2sAjdibkZ4D14K9cqETafnr4CR4w@mail.gmail.com>
+ <CANiq72kRiQvw3xWbMGRxcVJhHN0LMRa0RewxnkofVr=71KQvEA@mail.gmail.com> <CAH5fLgjFFmm-m8=4Qbad6X-EOjKfCytE3ncevO1u-sSn-jJF9w@mail.gmail.com>
+In-Reply-To: <CAH5fLgjFFmm-m8=4Qbad6X-EOjKfCytE3ncevO1u-sSn-jJF9w@mail.gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Tue, 15 Oct 2024 17:31:11 +0200
+Message-ID: <CANiq72nHnecUS1H2t8AMx1oyY8j35HcEzMxeZDTp2aqjv+qksg@mail.gmail.com>
+Subject: Re: [PATCH v10 5/5] rust: add arch_static_branch
+To: Alice Ryhl <aliceryhl@google.com>
+Cc: kernel test robot <lkp@intel.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Jason Baron <jbaron@akamai.com>, Ard Biesheuvel <ardb@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	oe-kbuild-all@lists.linux.dev, linux-trace-kernel@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Sean Christopherson <seanjc@google.com>, Uros Bizjak <ubizjak@gmail.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 15, 2024 at 1:10=E2=80=AFAM Yosry Ahmed <yosryahmed@google.com>=
- wrote:
+On Tue, Oct 15, 2024 at 4:46=E2=80=AFPM Alice Ryhl <aliceryhl@google.com> w=
+rote:
 >
-> On Mon, Oct 14, 2024 at 6:58=E2=80=AFPM Suren Baghdasaryan <surenb@google=
-.com> wrote:
-> >
-> > On Mon, Oct 14, 2024 at 5:03=E2=80=AFPM 'John Hubbard' via kernel-team
-> > <kernel-team@android.com> wrote:
-> > >
-> > > On 10/14/24 4:56 PM, Yosry Ahmed wrote:
-> > > > On Mon, Oct 14, 2024 at 4:53=E2=80=AFPM John Hubbard <jhubbard@nvid=
-ia.com> wrote:
-> > > >>
-> > > >> On 10/14/24 4:48 PM, Yosry Ahmed wrote:
-> > > >>> On Mon, Oct 14, 2024 at 1:37=E2=80=AFPM Suren Baghdasaryan <suren=
-b@google.com> wrote:
-> > > >>>>
-> > > >>>> Add CONFIG_PGALLOC_TAG_USE_PAGEFLAGS to store allocation tag
-> > > >>>> references directly in the page flags. This eliminates memory
-> > > >>>> overhead caused by page_ext and results in better performance
-> > > >>>> for page allocations.
-> > > >>>> If the number of available page flag bits is insufficient to
-> > > >>>> address all kernel allocations, profiling falls back to using
-> > > >>>> page extensions with an appropriate warning to disable this
-> > > >>>> config.
-> > > >>>> If dynamically loaded modules add enough tags that they can't
-> > > >>>> be addressed anymore with available page flag bits, memory
-> > > >>>> profiling gets disabled and a warning is issued.
-> > > >>>
-> > > >>> Just curious, why do we need a config option? If there are enough=
- bits
-> > > >>> in page flags, why not use them automatically or fallback to page=
-_ext
-> > > >>> otherwise?
-> > > >>
-> > > >> Or better yet, *always* fall back to page_ext, thus leaving the
-> > > >> scarce and valuable page flags available for other features?
-> > > >>
-> > > >> Sorry Suren, to keep coming back to this suggestion, I know
-> > > >> I'm driving you crazy here! But I just keep thinking it through
-> > > >> and failing to see why this feature deserves to consume so
-> > > >> many page flags.
-> > > >
-> > > > I think we already always use page_ext today. My understanding is t=
-hat
-> > > > the purpose of this series is to give the option to avoid using
-> > > > page_ext if there are enough unused page flags anyway, which reduce=
-s
-> > > > memory waste and improves performance.
-> > > >
-> > > > My question is just why not have that be the default behavior with =
-a
-> > > > config option, use page flags if there are enough unused bits,
-> > > > otherwise use page_ext.
-> > >
-> > > I agree that if you're going to implement this feature at all, then
-> > > keying off of CONFIG_MEM_ALLOC_PROFILING seems sufficient, and no
-> > > need to add CONFIG_PGALLOC_TAG_USE_PAGEFLAGS on top of that.
-> >
-> > Yosry's original guess was correct. If not for loadable modules we
-> > could get away with having no CONFIG_PGALLOC_TAG_USE_PAGEFLAGS. We
-> > could try to fit codetag references into page flags and if they do not
-> > fit we could fall back to page_ext. That works fine when we have a
-> > predetermined number of tags. But loadable modules make this number
-> > variable at runtime and there is a possibility we run out of page flag
-> > bits at runtime. In that case, the current patchset disables memory
-> > profiling and issues a warning that the user should disable
-> > CONFIG_PGALLOC_TAG_USE_PAGEFLAGS to avoid this situation. I expect
-> > this to be a rare case but it can happen and we have to provide a way
-> > for a user to avoid running out of bits, which is where
-> > CONFIG_PGALLOC_TAG_USE_PAGEFLAGS would be used.
->
-> If this is in fact a rare case, I think it may make more sense for the
-> config to be on by default, and the config description would clearly
-> state that it is intended to be turned off only if the loadable
-> modules warning fires.
+> Too late! But I can do that if I send yet another version.
 
-Just to be clear, I think running out of pageflag bits at runtime (as
-a result of module loading) will be a rare case. That's because the
-core kernel has many more allocations than a typical module. Not
-having enough bits for the core kernel might be the most prevalent
-case, at least for large systems.
-That said, your suggestion makes sense. Since we have to keep
-CONFIG_PAGE_EXTENSION dependency (for the cases when we have to fall
-back to page_ext), there is no advantage of keeping
-CONFIG_PGALLOC_TAG_USE_PAGEFLAGS disabled. I'll change the default in
-the next version. Thanks for the suggestion!
+Yeah, I meant after the one you already sent :)
+
+Cheers,
+Miguel
 
