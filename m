@@ -1,219 +1,248 @@
-Return-Path: <linux-arch+bounces-8128-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8129-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 516EE99DA7F
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2024 02:04:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8030799DB4D
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2024 03:28:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BFB961F2357B
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2024 00:03:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 023DE1F219A4
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2024 01:28:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EB9D23CB;
-	Tue, 15 Oct 2024 00:03:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5767B154420;
+	Tue, 15 Oct 2024 01:28:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Ym7xCBY/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gYG/aoMb"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2077.outbound.protection.outlook.com [40.107.94.77])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3E9E28EC;
-	Tue, 15 Oct 2024 00:03:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.77
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728950628; cv=fail; b=umMU6RrqAkawZwzG7T3DbnzBU+txK6XfJa6cBMoUi4KBRZcxu69IgchFS4XsFswVOUw5uWQRfY4vbjpUfM5ArsTqTfQA+yApA/ff5tbuPrw4ZGlfYT+epuydvb1ikbWAghl3ASFXMp4AAdOVixS6x7+JMs/4FALNk3FyQt3NHTE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728950628; c=relaxed/simple;
-	bh=xVsJVE9+icPcQITqNMIHHRDeHpurkBQfNXyJ+/tPbOk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=NADI3T7XDF6zritsVWeu+zo1PwHofpF0tuOIa8Hcw9BL0P5hpFjzuJ0hAztBtPCXZvjDkkRaxNGE47nExll0oBflGbtpHZbVzqdJ4qM7Lk7ZTlmp8V1DIQIHxi+lZA73YUhp/w05bcHdo+2KquJN7Vx0tQ79oXS5gFCu1rotyqU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Ym7xCBY/; arc=fail smtp.client-ip=40.107.94.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=baaVS2BrVA0dDCrUTkQS3yAmQ1/Swc752/5D1srQ/bG4EvHvdUr5QOvG9HLJ+KAiYUPoVYq5eSriH8vpWobQuVAL/6QVPiWDTnQqXDtIOoVQUG+IlqY53S6ScLHWu/6SFsveku8kIfd7rAuCJKVwcSik/Wwd2lWhhSj6zMGeKTp9Pp5zhqRmhnw7WhGbqXVZoxd/XNpJ3Noa0ukBOOb3Fjk+KJc6o7tt+G+M8i5IJjbef/Y/HwPbX927W5BhKeGPJBJz8LoxeKLYP9/dhXD6+U8UaNDrCtfeGY4ss7OUteGPRCnVz8z3YK9LB+Vtlzes7teDHb2xvdHN3hl5qETtOw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DOYk+A0yxMFrElprFSHo5TYz662LnvMMrfhmUsW0Ng4=;
- b=Xx3Ak9sLER8JJzLUCTsikTKCPPtOzjKBf7zRbX05RHVpCZKj7Dfq8QMvrQZt902C0cwT8+v8ypayjXuGfXI2oVdQdrLLNzgY/f3E6DoczWnEOi2uD8/+5zZ1F7JhBbTLgS2NxhTNyanX/nUzqIwAVELNJPof99jLP3onnGlsdhMwxOgsiyK29sZRI4pNO1tIReD2e0d+gUcxsfiQk3x+aKjcqzpAuex0u+WBNOPeKG4/yika0v6NX1KYWKM3Afp7MEaQ7/xqqVzrdznAiBseWQk+KSLZEL1o7EatcGBz90WuyVGlIglI03ovD+P8lWkbe99uPlsDnclbdDRS9aQqFg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=google.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DOYk+A0yxMFrElprFSHo5TYz662LnvMMrfhmUsW0Ng4=;
- b=Ym7xCBY/Bat9IFIy0FHtTaFx1+E/3HaJFrRxem5czFjhHFsN+EQFMk41n0NOnW/jTq0TLAZswJdr+FBv3BphEoPHjiyMt5zcm7a7y6M9zfJMQ24BUkDwEnhpR9MOOE0NFLajEaE3Rgzbb/myLhh3jy3eFVheZIvUkQ0P8MRFRsDK0BwpCEhBrTPKi2R+SNcpehgcmHL5lWRSQOlhAUbyTNgfGQufrY2irTTXedIouowjmXfFrQN0QTxanvvM+oQ4Rqo3hIGBZ7V/2NM7c6OrQGggCCtXHnIuqnhm/ek47WO0uIzrA2sekXmzxLaAQ80j9P6lZ31DuAhqS/4N2JoiBg==
-Received: from MW4P222CA0010.NAMP222.PROD.OUTLOOK.COM (2603:10b6:303:114::15)
- by DS7PR12MB5909.namprd12.prod.outlook.com (2603:10b6:8:7a::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8048.27; Tue, 15 Oct
- 2024 00:03:43 +0000
-Received: from MWH0EPF000A6733.namprd04.prod.outlook.com
- (2603:10b6:303:114:cafe::5e) by MW4P222CA0010.outlook.office365.com
- (2603:10b6:303:114::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8048.27 via Frontend
- Transport; Tue, 15 Oct 2024 00:03:42 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- MWH0EPF000A6733.mail.protection.outlook.com (10.167.249.25) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8069.17 via Frontend Transport; Tue, 15 Oct 2024 00:03:42 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Mon, 14 Oct
- 2024 17:03:34 -0700
-Received: from [10.110.48.28] (10.126.231.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Mon, 14 Oct
- 2024 17:03:32 -0700
-Message-ID: <ba888da6-cd45-41b6-9d97-8292474d3ce6@nvidia.com>
-Date: Mon, 14 Oct 2024 17:03:32 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24C7815380A;
+	Tue, 15 Oct 2024 01:28:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1728955718; cv=none; b=ZAh1tJyJ21ReDqvX9thMV4+znLQEfBPgG24HBUjWlj0iqFlJZmvxN4JmBG4clocKTIku6erRdfYH4C6iL10BC9UjOS0FoK9pWF6uDQfpN3wWxiqM7rAf7Nf1LZDLpCzozezMsAe9vA8QH5YEO00yETtoWfJtHJ0Fq+iPK2tCJD4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1728955718; c=relaxed/simple;
+	bh=Oj3xSE23iCGMT76Tv93Pnx4Nkruws3NLTRwRWzAiW4E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=r6KdsTmFs4p7ycMhOYmAxsv/V7lf4biy9wt8iCfLR96yDjCGrBEoZpwlVH7UHF9+EvUqcP/dROekfVdMNVsB/bcfb12Y6p8JT61cXfqCuU6tYIJ5h3IWuNgr9BmymikIpCFGYtIY7yjahkdGrXKw/js3aZzr5s5ZbVCQYN383s8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gYG/aoMb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68573C4CEC6;
+	Tue, 15 Oct 2024 01:28:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728955717;
+	bh=Oj3xSE23iCGMT76Tv93Pnx4Nkruws3NLTRwRWzAiW4E=;
+	h=From:To:Cc:Subject:Date:From;
+	b=gYG/aoMbLj/2TBlxIXwStjGkay/hqy43Lq7jYApsPrUYM2X/dVIE3GkJvDq3RIW6B
+	 Uw1nUgmaAUIDy8Lpc5x+sq5E6XE6Ssmc1fcan019BN8Qb3/9YP9q9s+n7BjzWSdMbE
+	 +3NVAOo4lBFfpQiqfxgv0zalp7gRbuPYnQyO9lf6vDbNwYa7QoHM41l7NFKLFN82P2
+	 nK9zpxxuogSbzeZinnwS3hIHGUDW1c7F7ZDVX2Rk/o4ffTNeCPIp+1C44ghOWK7v1U
+	 ieAkxx5utlojFijqw5u7emet8BxYres6l3Jy30hMCji9NiEkNNomAC7PLfUN6oPGf3
+	 7fGtoStKFJrww==
+From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Florent Revest <revest@chromium.org>
+Cc: linux-trace-kernel@vger.kernel.org,
+	LKML <linux-kernel@vger.kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	bpf <bpf@vger.kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Alan Maguire <alan.maguire@oracle.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	linux-arch@vger.kernel.org
+Subject: [PATCH v16 00/18] tracing: fprobe: function_graph: Multi-function graph and fprobe on fgraph
+Date: Tue, 15 Oct 2024 10:28:33 +0900
+Message-ID: <172895571278.107311.14000164546881236558.stgit@devnote2>
+X-Mailer: git-send-email 2.43.0
+User-Agent: StGit/0.19
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 5/5] alloc_tag: config to store page allocation tag
- refs in page flags
-To: Yosry Ahmed <yosryahmed@google.com>
-CC: Suren Baghdasaryan <surenb@google.com>, <akpm@linux-foundation.org>,
-	<kent.overstreet@linux.dev>, <corbet@lwn.net>, <arnd@arndb.de>,
-	<mcgrof@kernel.org>, <rppt@kernel.org>, <paulmck@kernel.org>,
-	<thuth@redhat.com>, <tglx@linutronix.de>, <bp@alien8.de>,
-	<xiongwei.song@windriver.com>, <ardb@kernel.org>, <david@redhat.com>,
-	<vbabka@suse.cz>, <mhocko@suse.com>, <hannes@cmpxchg.org>,
-	<roman.gushchin@linux.dev>, <dave@stgolabs.net>, <willy@infradead.org>,
-	<liam.howlett@oracle.com>, <pasha.tatashin@soleen.com>,
-	<souravpanda@google.com>, <keescook@chromium.org>, <dennis@kernel.org>,
-	<yuzhao@google.com>, <vvvvvv@google.com>, <rostedt@goodmis.org>,
-	<iamjoonsoo.kim@lge.com>, <rientjes@google.com>, <minchan@google.com>,
-	<kaleshsingh@google.com>, <linux-doc@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-	<linux-mm@kvack.org>, <linux-modules@vger.kernel.org>,
-	<kernel-team@android.com>
-References: <20241014203646.1952505-1-surenb@google.com>
- <20241014203646.1952505-6-surenb@google.com>
- <CAJD7tkY0zzwX1BCbayKSXSxwKEGiEJzzKggP8dJccdajsr_bKw@mail.gmail.com>
- <cd848c5f-50cd-4834-a6dc-dff16c586e49@nvidia.com>
- <CAJD7tkY8LKVGN5QNy9q2UkRLnoOEd7Wcu_fKtxKqV7SN43QgrA@mail.gmail.com>
-Content-Language: en-US
-From: John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <CAJD7tkY8LKVGN5QNy9q2UkRLnoOEd7Wcu_fKtxKqV7SN43QgrA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWH0EPF000A6733:EE_|DS7PR12MB5909:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0e7735e6-5132-48d5-bd42-08dcecacd4bf
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|7416014|36860700013|82310400026;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?TEJtTjJkMTMrRE9kczhIb2M0dEhEUmpCRU01Vks3eFRlZG04dk9QTzZybnMy?=
- =?utf-8?B?WjdicThqWUhRWEhyUlNVSWdBREZKT1lUcnNDRGM0RkVkNkpFTUk0UlMvdjdr?=
- =?utf-8?B?SWJxb292THFjdG1mdVVDazVLQ3BxRS9HamFiRmk3SXY3TWtTUjZpcEcwSGZN?=
- =?utf-8?B?SHdzRkswaHFrYTdsM01CK2ZmS0N5eFJ1N1pTWktwaXBkT2FCTWxqWlptdWQr?=
- =?utf-8?B?RjZra0dKZnNvSExhTGpVekVrTyt1eHhTbjlndXpkNnI1YUMxdVlySklua1By?=
- =?utf-8?B?TG1uZ2VCK0RjY29ZU0o4dzhid1MyTXJESmZEeFFCZ0JheHJwMFJ6eE1DVVJM?=
- =?utf-8?B?QTQvR0UxZnhqN1EvNnY4NXlIRW1uMFFnZmFmak9VOHhHTnlmbkdUalI4TlEx?=
- =?utf-8?B?NE4xYlpOMGNqdzZpWG1ORUdiV3BMNDEvellsblE0L2JwVHRjeityNlZTcXQ3?=
- =?utf-8?B?cnYveitCZ1pyOE1BMWk2eG5qVi9SK0lKL1pzUStZb2JiTVQzRDk2WnRUc1pK?=
- =?utf-8?B?VnN1MjI5bjd1UFVDLzVZN0R3STBYbVU0bkNEZjBvZTVvYldiVi96TEplNmpU?=
- =?utf-8?B?Sk9WazErUEt4UkZiMFE3NHFOeDRGMGFkWEcxdmZmdWZrK292c3pDQjR5YzV0?=
- =?utf-8?B?RHBnay90V1BpUWJRR054NzhQaW5PWjFTenQxYm5KZkl3eThjMVV1U2JUMDVM?=
- =?utf-8?B?UnFTMnBFSW1yZkFOOHVML3JDNk5VZTAvL2VCZDBqMXJldGhpQkhORXp1b3VS?=
- =?utf-8?B?ckhuWjE3Yk9WY2tTZVhKTkEzYVM4dlJMdm9mSHczNDNMT0VydStjeGdWQ3Rj?=
- =?utf-8?B?YkF5QzZITnB3RFYvQkc2VGo5SXF4a1VZNFdybStwcTNVTVFKaHlOQzZiZ3ZP?=
- =?utf-8?B?RUF4QmhYZTlFYTNZWnBnajlXTmFoTHkyaDArUmlmY3Y5TE94ZFFRNkN5QXNw?=
- =?utf-8?B?SXVQakVJVXBZY1c5Y0w0UmtZSWtpUkR6VmNVRkg3enN1QkpQMGlrS1pMMGl5?=
- =?utf-8?B?QzBwZ1N3VVlJYXRHZklpWE9IbmlUNXlMVHp0Y3Z1Y1g1cjlyZUJETHFtNXU3?=
- =?utf-8?B?MWl6Mm1nTElSM3EyLzhteDk3WnM1dml4RnpraGtSUVVoQ3FOOCtJd1o3dHJF?=
- =?utf-8?B?b1hoMmxnRG5TYzQwc3dsUXREeEU3VU5vVGtZUlFXSjY3eTZ1aWp5dWVTdWdn?=
- =?utf-8?B?T09pVU9kMGhqck43UGhLa1ZzenZSYkRZck9pN2RZZmdBQnhseWpxekRRNUVU?=
- =?utf-8?B?SW82NXh6V2J5MzUvOVNzekJ2QjJmQUZ3ZXFTY0R1VGlVUU52ZVo2NEVJY09H?=
- =?utf-8?B?M3hBRFI2b2gxZ2Vwd1VMd2dTMWd3MGtyRDE1YXJOVzNOWUxHS1JZa0hlUTRo?=
- =?utf-8?B?MWlHbXRsOE9jdFJoQXN5OHBVZTdINTNSa2d4cEkvWHlyaUFPaUpWNzRWeVI0?=
- =?utf-8?B?SzZWZURmY0ZOZVRXdlpnOUtmQ3hGUWJSajF1bkUvb3NaSDNUdlZRcEN3M3g5?=
- =?utf-8?B?Y1ZBcCtwUUUwZjNiL01pL3lIcHJGNm53TGF0eEtMeGxQSnFEd1VNWHN2bjY2?=
- =?utf-8?B?SExzZnJaZHh0eFNKalZOSU8zOXhIMHE1Z2lGSE1URlpTNTZ2UFIyMHpCekZO?=
- =?utf-8?B?QXRCbHVKQkxxdnMwQ2kzMkkwY29sUVZsbC9QaHVtc25jSWlHa011RDlOTE9I?=
- =?utf-8?B?Uk02UWtJMjRHYW96N3lWc2s2ZFZUazlSYmdxbk1JbDA4Yk0zSDB4akpNTnh5?=
- =?utf-8?B?cWJidUdjTERxc2RXTThkNVBrNjI3bE1qQ29JR3BxQ0FQamVyenowNVFYN0lN?=
- =?utf-8?B?eFNZQ0oxaEVhQklDc1RDc1ZXWjZpQURkSi9WWmJPSW9lRE9laGVsbFhpczR5?=
- =?utf-8?Q?eIEU59puheoEl?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(36860700013)(82310400026);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Oct 2024 00:03:42.7008
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0e7735e6-5132-48d5-bd42-08dcecacd4bf
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	MWH0EPF000A6733.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5909
 
-On 10/14/24 4:56 PM, Yosry Ahmed wrote:
-> On Mon, Oct 14, 2024 at 4:53 PM John Hubbard <jhubbard@nvidia.com> wrote:
->>
->> On 10/14/24 4:48 PM, Yosry Ahmed wrote:
->>> On Mon, Oct 14, 2024 at 1:37 PM Suren Baghdasaryan <surenb@google.com> wrote:
->>>>
->>>> Add CONFIG_PGALLOC_TAG_USE_PAGEFLAGS to store allocation tag
->>>> references directly in the page flags. This eliminates memory
->>>> overhead caused by page_ext and results in better performance
->>>> for page allocations.
->>>> If the number of available page flag bits is insufficient to
->>>> address all kernel allocations, profiling falls back to using
->>>> page extensions with an appropriate warning to disable this
->>>> config.
->>>> If dynamically loaded modules add enough tags that they can't
->>>> be addressed anymore with available page flag bits, memory
->>>> profiling gets disabled and a warning is issued.
->>>
->>> Just curious, why do we need a config option? If there are enough bits
->>> in page flags, why not use them automatically or fallback to page_ext
->>> otherwise?
->>
->> Or better yet, *always* fall back to page_ext, thus leaving the
->> scarce and valuable page flags available for other features?
->>
->> Sorry Suren, to keep coming back to this suggestion, I know
->> I'm driving you crazy here! But I just keep thinking it through
->> and failing to see why this feature deserves to consume so
->> many page flags.
-> 
-> I think we already always use page_ext today. My understanding is that
-> the purpose of this series is to give the option to avoid using
-> page_ext if there are enough unused page flags anyway, which reduces
-> memory waste and improves performance.
-> 
-> My question is just why not have that be the default behavior with a
-> config option, use page flags if there are enough unused bits,
-> otherwise use page_ext.
+Hi,
 
-I agree that if you're going to implement this feature at all, then
-keying off of CONFIG_MEM_ALLOC_PROFILING seems sufficient, and no
-need to add CONFIG_PGALLOC_TAG_USE_PAGEFLAGS on top of that.
+Here is the 16th version of the series to re-implement the fprobe on
+function-graph tracer. The previous version is;
 
-thanks,
--- 
-John Hubbard
+https://lore.kernel.org/all/172639136989.366111.11359590127009702129.stgit@devnote2/T/#u
 
+This version rebased on for-next branch on linux-trace tree (thus
+it is rebased on ftrace_regs API integration), add a fix for 
+ftrace_regs_*() macros [1/18], update s390 return_to_handler [3/18]
+and rename HAVE_PT_REGS_TO_FTRACE_REGS_CAST to
+HAVE_FTRACE_REGS_HAVING_PT_REGS macro.
+Also, Cc to arch maintainers for the patches which touch the
+architecture dependent files.
+
+I've simply build for arm, arm64, loongarch, powerpc, riscv,
+and s390. And run tests on qemu for x86-64.
+
+Overview
+--------
+This series rewrites the fprobe on this function-graph.
+The purposes of this change are;
+
+ 1) Remove dependency of the rethook from fprobe so that we can reduce
+   the return hook code and shadow stack.
+
+ 2) Make 'ftrace_regs' the common trace interface for the function
+   boundary.
+
+1) Currently we have 2(or 3) different function return hook codes,
+ the function-graph tracer and rethook (and legacy kretprobe).
+ But since this  is redundant and needs double maintenance cost,
+ I would like to unify those. From the user's viewpoint, function-
+ graph tracer is very useful to grasp the execution path. For this
+ purpose, it is hard to use the rethook in the function-graph
+ tracer, but the opposite is possible. (Strictly speaking, kretprobe
+ can not use it because it requires 'pt_regs' for historical reasons.)
+
+2) Now the fprobe provides the 'pt_regs' for its handler, but that is
+ wrong for the function entry and exit. Moreover, depending on the
+ architecture, there is no way to accurately reproduce 'pt_regs'
+ outside of interrupt or exception handlers. This means fprobe should
+ not use 'pt_regs' because it does not use such exceptions.
+ (Conversely, kprobe should use 'pt_regs' because it is an abstract
+  interface of the software breakpoint exception.)
+
+This series changes fprobe to use function-graph tracer for tracing
+function entry and exit, instead of mixture of ftrace and rethook.
+Unlike the rethook which is a per-task list of system-wide allocated
+nodes, the function graph's ret_stack is a per-task shadow stack.
+Thus it does not need to set 'nr_maxactive' (which is the number of
+pre-allocated nodes).
+Also the handlers will get the 'ftrace_regs' instead of 'pt_regs'.
+Since eBPF mulit_kprobe/multi_kretprobe events still use 'pt_regs' as
+their register interface, this changes it to convert 'ftrace_regs' to
+'pt_regs'. Of course this conversion makes an incomplete 'pt_regs',
+so users must access only registers for function parameters or
+return value. 
+
+Design
+------
+Instead of using ftrace's function entry hook directly, the new fprobe
+is built on top of the function-graph's entry and return callbacks
+with 'ftrace_regs'.
+
+Since the fprobe requires access to 'ftrace_regs', the architecture
+must support CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS and
+CONFIG_HAVE_FTRACE_GRAPH_FUNC, which enables to call function-graph
+entry callback with 'ftrace_regs', and also
+CONFIG_HAVE_FUNCTION_GRAPH_FREGS, which passes the ftrace_regs to
+return_to_handler.
+
+All fprobes share a single function-graph ops (means shares a common
+ftrace filter) similar to the kprobe-on-ftrace. This needs another
+layer to find corresponding fprobe in the common function-graph
+callbacks, but has much better scalability, since the number of
+registered function-graph ops is limited.
+
+In the entry callback, the fprobe runs its entry_handler and saves the
+address of 'fprobe' on the function-graph's shadow stack as data. The
+return callback decodes the data to get the 'fprobe' address, and runs
+the exit_handler.
+
+The fprobe introduces two hash-tables, one is for entry callback which
+searches fprobes related to the given function address passed by entry
+callback. The other is for a return callback which checks if the given
+'fprobe' data structure pointer is still valid. Note that it is
+possible to unregister fprobe before the return callback runs. Thus
+the address validation must be done before using it in the return
+callback.
+
+Download
+--------
+This series can be applied against the ftrace/for-next branch in
+linux-trace tree.
+
+This series can also be found below branch.
+
+https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git/log/?h=topic/fprobe-on-fgraph
+
+Thank you,
+
+---
+
+Masami Hiramatsu (Google) (18):
+      tracing: Use arch_ftrace_regs() for ftrace_regs_*() macros
+      tracing: Rename ftrace_regs_return_value to ftrace_regs_get_return_value
+      function_graph: Pass ftrace_regs to entryfunc
+      function_graph: Replace fgraph_ret_regs with ftrace_regs
+      function_graph: Pass ftrace_regs to retfunc
+      fprobe: Use ftrace_regs in fprobe entry handler
+      fprobe: Use ftrace_regs in fprobe exit handler
+      tracing: Add ftrace_partial_regs() for converting ftrace_regs to pt_regs
+      tracing: Add ftrace_fill_perf_regs() for perf event
+      tracing/fprobe: Enable fprobe events with CONFIG_DYNAMIC_FTRACE_WITH_ARGS
+      bpf: Enable kprobe_multi feature if CONFIG_FPROBE is enabled
+      ftrace: Add CONFIG_HAVE_FTRACE_GRAPH_FUNC
+      fprobe: Rewrite fprobe on function-graph tracer
+      tracing/fprobe: Remove nr_maxactive from fprobe
+      selftests: ftrace: Remove obsolate maxactive syntax check
+      selftests/ftrace: Add a test case for repeating register/unregister fprobe
+      Documentation: probes: Update fprobe on function-graph tracer
+      bpf: Add get_entry_ip() for arm64
+
+
+ Documentation/trace/fprobe.rst                     |   42 +
+ arch/arm64/Kconfig                                 |    2 
+ arch/arm64/include/asm/ftrace.h                    |   47 +
+ arch/arm64/kernel/asm-offsets.c                    |   12 
+ arch/arm64/kernel/entry-ftrace.S                   |   32 +
+ arch/arm64/kernel/ftrace.c                         |   20 +
+ arch/loongarch/Kconfig                             |    4 
+ arch/loongarch/include/asm/ftrace.h                |   32 -
+ arch/loongarch/kernel/asm-offsets.c                |   12 
+ arch/loongarch/kernel/ftrace_dyn.c                 |   10 
+ arch/loongarch/kernel/mcount.S                     |   17 -
+ arch/loongarch/kernel/mcount_dyn.S                 |   14 
+ arch/powerpc/Kconfig                               |    1 
+ arch/powerpc/include/asm/ftrace.h                  |   13 
+ arch/powerpc/kernel/trace/ftrace.c                 |    2 
+ arch/powerpc/kernel/trace/ftrace_64_pg.c           |   10 
+ arch/riscv/Kconfig                                 |    3 
+ arch/riscv/include/asm/ftrace.h                    |   45 +
+ arch/riscv/kernel/ftrace.c                         |   17 +
+ arch/riscv/kernel/mcount.S                         |   24 -
+ arch/s390/Kconfig                                  |    3 
+ arch/s390/include/asm/ftrace.h                     |   31 +
+ arch/s390/kernel/asm-offsets.c                     |    6 
+ arch/s390/kernel/mcount.S                          |   13 
+ arch/x86/Kconfig                                   |    4 
+ arch/x86/include/asm/ftrace.h                      |   33 -
+ arch/x86/kernel/ftrace.c                           |   50 +-
+ arch/x86/kernel/ftrace_32.S                        |   15 
+ arch/x86/kernel/ftrace_64.S                        |   17 -
+ include/linux/fprobe.h                             |   57 +-
+ include/linux/ftrace.h                             |  103 +++
+ include/linux/ftrace_regs.h                        |   16 -
+ kernel/trace/Kconfig                               |   22 +
+ kernel/trace/bpf_trace.c                           |   83 ++-
+ kernel/trace/fgraph.c                              |   62 +-
+ kernel/trace/fprobe.c                              |  637 ++++++++++++++------
+ kernel/trace/ftrace.c                              |    6 
+ kernel/trace/trace.h                               |    6 
+ kernel/trace/trace_fprobe.c                        |  146 ++---
+ kernel/trace/trace_functions_graph.c               |   10 
+ kernel/trace/trace_irqsoff.c                       |    6 
+ kernel/trace/trace_probe_tmpl.h                    |    2 
+ kernel/trace/trace_sched_wakeup.c                  |    6 
+ kernel/trace/trace_selftest.c                      |   11 
+ lib/test_fprobe.c                                  |   51 --
+ samples/fprobe/fprobe_example.c                    |    4 
+ .../test.d/dynevent/add_remove_fprobe_repeat.tc    |   19 +
+ .../ftrace/test.d/dynevent/fprobe_syntax_errors.tc |    4 
+ 48 files changed, 1167 insertions(+), 615 deletions(-)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_fprobe_repeat.tc
+
+--
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
