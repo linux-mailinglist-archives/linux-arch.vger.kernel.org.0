@@ -1,144 +1,132 @@
-Return-Path: <linux-arch+bounces-8188-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8189-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2ED4299F7ED
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2024 22:12:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 955DF99F8BC
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2024 23:10:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BA74CB22753
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2024 20:12:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59E2E2850C8
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2024 21:10:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 259F31F76D7;
-	Tue, 15 Oct 2024 20:12:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21E3F1FBF5C;
+	Tue, 15 Oct 2024 21:08:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NeA6yj5h"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="XZ2uVbbq"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC27D1B3936;
-	Tue, 15 Oct 2024 20:11:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E629B1FBF47
+	for <linux-arch@vger.kernel.org>; Tue, 15 Oct 2024 21:08:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729023120; cv=none; b=flCsEz+TU8eycGVeQoWJkRTr17a7UmKJZislmuBLfNA6sjQytuSJx6B3nGQUtgkdN+hfwDAWid6sszyIMUBwUYClyMFrF42Fyhu1byCCiPDAHKSXeCWx+8G8kEdXu9tryTz0c6KxW+OLVzyyxWiiACa2569OXbdYWfVyZ+ywkfI=
+	t=1729026536; cv=none; b=WW5TwVsmqaZ+n+438NPQNCT0pP2Ne+1LZunIsKPO/FfEy4VlXKTuTcfV0fJZC5DlNaFHGYgBbDyAjWKOnkXEel0nzN6ugZvv2YC3sOzqJ5Zz1SUbcsCe8bCDG4cTnVjzUAuf1mW41Yt+zZiirhxkUYTDhTbAZgxJ+7C/cIj3DnE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729023120; c=relaxed/simple;
-	bh=Y6PhmBa/nN+iDUxTFqcR/Mb33RbOlJl9A4RsS6bV0b4=;
+	s=arc-20240116; t=1729026536; c=relaxed/simple;
+	bh=kGiBdQ5J5H7gRrebhKiFtxxwc8DYEtmcnydecYzxn5k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Vh7lmVVpJqvfT2SuyTn01QJQPSrNqOINo1fmqe0P++7LKpc+a7oe7d2sBQw0SCHjpZfwrGDP+Vqtlu6EVwfKHSZN3mGjoCyaqag5LelnjsPyKKzYBJcSPjHWwBpPiy/sZZb8tMw7v2E3jk9A0vxXbRHdO0Jjadx65pR0YDiQrNM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NeA6yj5h; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAB4EC4CEC6;
-	Tue, 15 Oct 2024 20:11:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729023118;
-	bh=Y6PhmBa/nN+iDUxTFqcR/Mb33RbOlJl9A4RsS6bV0b4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NeA6yj5hajfLYEdkGLWG8XB5N4aid73nUjDZb/ugsyZ3AQoALVnXt8x2U69teh7bp
-	 +Jxn6eME2rpnC6+5s7BU9sn0TueSyVekqQmYatz9jkvCTO794aSB0wivMugKOyBQcF
-	 f12fUI4D7cG8AqwuNBz90ooW8BLJGSzfYerkziVJS4gVWwzpr6llRoBCSoxKz8d+Fs
-	 0rPGTZgvQEw9IByGG03TdQUKWcviEE7gexwsotoi1Pu3fbgseCJrzYVZZZHzQHsDOS
-	 xg878mky4sIBNDtU8Y7CZD0UtD4jLkQQWx+cO7Oq3WKQ8DmXAZc3hC28g+NG7SbCgU
-	 uBbk2RUOwLABQ==
-Date: Tue, 15 Oct 2024 13:11:54 -0700
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Christoph Hellwig <hch@infradead.org>, Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-	Brian Cain <bcain@quicinc.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
-	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Richard Weinberger <richard@nod.at>,
-	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
-	Stafford Horne <shorne@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
-	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org, linux-mm@kvack.org,
-	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-	sparclinux@vger.kernel.org, x86@kernel.org, kdevops@lists.linux.dev
-Subject: Re: [PATCH v5 7/8] execmem: add support for cache of large ROX pages
-Message-ID: <Zw7MirnsHnhRveBB@bombadil.infradead.org>
-References: <20241009180816.83591-1-rppt@kernel.org>
- <20241009180816.83591-8-rppt@kernel.org>
- <Zwd7GRyBtCwiAv1v@infradead.org>
- <ZwfPPZrxHzQgYfx7@kernel.org>
- <ZwjXz0dz-RldVNx0@infradead.org>
- <ZwuIPZkjX0CfzhjS@kernel.org>
- <20241013202626.81f430a16750af0d2f40d683@linux-foundation.org>
- <Zw1uBBcG-jAgxF_t@bombadil.infradead.org>
- <Zw3rDS3GRWZe4CBu@bombadil.infradead.org>
- <Zw4DlTTbz4QwhOvU@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=HqAcgAcg02przzIEZWqZ6COhlIdlv/DD4GbJ6RzN1skINu6fXj0LTrPUip6RR6/Zo5Q3uTzEcTSnBxy50p24h0Ka/lZhHuuPFLudc+x/3FxdEWTdUT7cNYDYf9lBnLf9OjAvlVS+oi675/CYzxpORjaqH20A7YBDx+s1fH4cU80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=XZ2uVbbq; arc=none smtp.client-ip=91.218.175.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Tue, 15 Oct 2024 14:08:39 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1729026530;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=eSynVCGUx/bo0b2uALTE+vNPBiF1i+qQIdLst2WgqkE=;
+	b=XZ2uVbbqJA7f6oIYdyRA5IQCTZBHNtxCKfVwUW+gGGJfh9UwP4wYoTAMO2wzcCxYKZ/UTZ
+	TqXufj4xQgoGWWrVNAiLVaOi9ZUUGpGPRe360Wt+GJHPz9foOFziZzPW2LgDB1gmWtG1Wp
+	OFWOS5TLcg1WIfDTJLPlkPjCZrOGd5Y=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Shakeel Butt <shakeel.butt@linux.dev>
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, kent.overstreet@linux.dev, 
+	corbet@lwn.net, arnd@arndb.de, mcgrof@kernel.org, rppt@kernel.org, 
+	paulmck@kernel.org, thuth@redhat.com, tglx@linutronix.de, bp@alien8.de, 
+	xiongwei.song@windriver.com, ardb@kernel.org, david@redhat.com, vbabka@suse.cz, 
+	mhocko@suse.com, hannes@cmpxchg.org, roman.gushchin@linux.dev, dave@stgolabs.net, 
+	willy@infradead.org, liam.howlett@oracle.com, pasha.tatashin@soleen.com, 
+	souravpanda@google.com, keescook@chromium.org, dennis@kernel.org, jhubbard@nvidia.com, 
+	yuzhao@google.com, vvvvvv@google.com, rostedt@goodmis.org, iamjoonsoo.kim@lge.com, 
+	rientjes@google.com, minchan@google.com, kaleshsingh@google.com, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-mm@kvack.org, linux-modules@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v3 2/5] alloc_tag: load module tags into separate
+ contiguous memory
+Message-ID: <k4uejpziyyhcuozdpm6x6iy5zuugfhozilmgmjvo574yuq2oen@zvdoiqmk2mii>
+References: <20241014203646.1952505-1-surenb@google.com>
+ <20241014203646.1952505-3-surenb@google.com>
+ <20241014165149.6adebbf38fdc0a1f79ded66b@linux-foundation.org>
+ <CAJuCfpETusPzdjEg01zahF7NOStQJZmoM5Jabqd5tJpCCQrj2g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Zw4DlTTbz4QwhOvU@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJuCfpETusPzdjEg01zahF7NOStQJZmoM5Jabqd5tJpCCQrj2g@mail.gmail.com>
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, Oct 15, 2024 at 08:54:29AM +0300, Mike Rapoport wrote:
-> On Mon, Oct 14, 2024 at 09:09:49PM -0700, Luis Chamberlain wrote:
-> > Mike, please run this with kmemleak enabled and running, and also try to get
-> > tools/testing/selftests/kmod/kmod.sh to pass.
+On Mon, Oct 14, 2024 at 07:10:56PM GMT, Suren Baghdasaryan wrote:
+> On Mon, Oct 14, 2024 at 4:51 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+> >
+> > On Mon, 14 Oct 2024 13:36:43 -0700 Suren Baghdasaryan <surenb@google.com> wrote:
+> >
+> > > When a module gets unloaded there is a possibility that some of the
+> > > allocations it made are still used and therefore the allocation tags
+> > > corresponding to these allocations are still referenced. As such, the
+> > > memory for these tags can't be freed. This is currently handled as an
+> > > abnormal situation and module's data section is not being unloaded.
+> > > To handle this situation without keeping module's data in memory,
+> > > allow codetags with longer lifespan than the module to be loaded into
+> > > their own separate memory. The in-use memory areas and gaps after
+> > > module unloading in this separate memory are tracked using maple trees.
+> > > Allocation tags arrange their separate memory so that it is virtually
+> > > contiguous and that will allow simple allocation tag indexing later on
+> > > in this patchset. The size of this virtually contiguous memory is set
+> > > to store up to 100000 allocation tags.
+> > >
+> > > ...
+> > >
+> > > --- a/kernel/module/main.c
+> > > +++ b/kernel/module/main.c
+> > > @@ -1254,22 +1254,17 @@ static int module_memory_alloc(struct module *mod, enum mod_mem_type type)
+> > >       return 0;
+> > >  }
+> > >
+> > > -static void module_memory_free(struct module *mod, enum mod_mem_type type,
+> > > -                            bool unload_codetags)
+> > > +static void module_memory_free(struct module *mod, enum mod_mem_type type)
+> > >  {
+> > >       struct module_memory *mem = &mod->mem[type];
+> > > -     void *ptr = mem->base;
+> > >
+> > >       if (mem->is_rox)
+> > >               vfree(mem->rw_copy);
+> > >
+> > > -     if (!unload_codetags && mod_mem_type_is_core_data(type))
+> > > -             return;
+> > > -
+> > > -     execmem_free(ptr);
+> > > +     execmem_free(mem->base);
+> > >  }
+> >
+> > The changes around here are dependent upon Mike's "module: make
+> > module_memory_{alloc,free} more self-contained", which is no longer in
+> > mm-unstable.  I assume Mike is working on a v2 so I'll park this series
+> > for now.
 > 
-> There was an issue with kmemleak, I fixed it here:
-> 
-> https://lore.kernel.org/linux-mm/20241009180816.83591-1-rppt@kernel.org/T/#m020884c1795218cc2be245e8091fead1cda3f3e4
+> Looks like the last update on Mike's patchset was back in May. Let me
+> check with Mike if he is planning to get it out soon. I would like my
+> patchset to get into 6.12 if possible.
 
-Ah, so this was a side fix, not part of this series, thanks.
-
-> > I run into silly boot issues with just a guest.
-> 
-> Was it kmemleak or something else?
-
-Both kmemleak and the kmod selftest failed, here is a run of the test
-with this patch series:
-
-https://github.com/linux-kdevops/linux-modules-kpd/actions/runs/11352286624/job/31574722735
-
-We now have automated tests generated when people post patches to
-linux-modules, but if you give me your github username you can push
-onto the linux-kdevops/linux-modules-kpd [0] repo a random branch once you
-have it ready, just cp -a the linux-ci-modules/.github [1] directory onto
-your branch before a push and that'll trigger a test run (you need to
-git add -f .github on your Linux branch) with our self-hosted runners.
-
-[0] https://github.com/linux-kdevops/linux-modules-kpd
-[1] https://github.com/linux-kdevops/kdevops-ci-modules
-
-  Luis
+6.12 or 6.13?
 
