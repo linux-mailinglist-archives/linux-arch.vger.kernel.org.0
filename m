@@ -1,161 +1,111 @@
-Return-Path: <linux-arch+bounces-8147-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8148-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A88299DBA0
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2024 03:34:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64F5399DBCA
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2024 03:40:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 01A651F23459
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2024 01:34:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8FF101C237B9
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2024 01:40:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 940FE1714CD;
-	Tue, 15 Oct 2024 01:32:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2108136E3F;
+	Tue, 15 Oct 2024 01:40:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P3j/OZbs"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="SeEYUOzS"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6878015884A;
-	Tue, 15 Oct 2024 01:32:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB390231C83;
+	Tue, 15 Oct 2024 01:40:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728955923; cv=none; b=b+C2nsAm61sR5mJUiS1tY/0gSuJuPgn0DT7MdooPi+dxrzdsQxapb71QMOqzrKFqBz8DjwyDYNK4t4G7VH8Mwhpdys79fbI9XbxLMtYw7dLbJpwndbeWhOsibqtCATUSdiWre+oUaqkHF1dvAC+nqMIu4Iugjgk2BFN2NFYlGxc=
+	t=1728956446; cv=none; b=a7KP1Ptt9PeFh7kTVcuCNq0X2SD2kegc+nMJ8QshiwCS/ebUi1x7c8hg7Osqhkh02KBHX6uA0LIl7kam4UqxGbMviyfa2koplQ6f6Av0U51Ty2FOdbJ+Vxj0hJlLhv5MDcNQ71bKs6vNHSHlNi0L657SVmoazuw78TLFsNgD7kI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728955923; c=relaxed/simple;
-	bh=5zoBkzFaOJl7tH9L4LSZfLmjahc28XB6pBP4WeEvYWM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=iEikaKlMTHJsNaTNXnL7xvMIZr1JB7Uc44JaqCgfsbaiJLLvRN5GJuUWCouTMtKn1zJaeOLIoFipWCF+O7XgFmwEcc3K57knxo8DsiEY/M+Uizl0i45qWT4yZeVqL5mS4Ip3WDibNPgPZjN7uWFsKEbjGQFvobnvMdVqk5ZlzH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P3j/OZbs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FD49C4CEC3;
-	Tue, 15 Oct 2024 01:32:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728955923;
-	bh=5zoBkzFaOJl7tH9L4LSZfLmjahc28XB6pBP4WeEvYWM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=P3j/OZbsTW7NGO3C4WQ7+hH4wsDVTjNL6Dz6qUJ4nOtEmHRhSy9HuhowMF/8CmEo+
-	 YfHmrVr7ann0yulBxFPco5f8jdM34Tsao+HRtjwmipkvyvbDo7S+iaSnNMAZSwixGK
-	 LMLQ68EJZtar9RXphg6Dz0jqXHu6OET/IbL5qNaxN9Hfw8zUlB4JW4QrCFQ1xs6elY
-	 Ej8anf7M83puFmleN2Wcf2LNIoFmwDftdSpAGa6PCPiLZ5okpHotUQrsLTp7SToJwO
-	 FZRBYzXdrmHtHdBb7avCOqHlf3LNsslhHAz1Bo8h10zGNfBx+ydhsIKeGsXYrO5Yqf
-	 pPJIEILRzmbUg==
-From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Florent Revest <revest@chromium.org>
-Cc: linux-trace-kernel@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	bpf <bpf@vger.kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Alan Maguire <alan.maguire@oracle.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	linux-arch@vger.kernel.org
-Subject: [PATCH v16 18/18] bpf: Add get_entry_ip() for arm64
-Date: Tue, 15 Oct 2024 10:31:58 +0900
-Message-ID: <172895591858.107311.3214711054345114072.stgit@devnote2>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <172895571278.107311.14000164546881236558.stgit@devnote2>
-References: <172895571278.107311.14000164546881236558.stgit@devnote2>
-User-Agent: StGit/0.19
+	s=arc-20240116; t=1728956446; c=relaxed/simple;
+	bh=5Y6P3r7lGQ0FUFEUbLl6wZzzcLKJ72EWtvdXrw4jLNU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RyPAMi7ifI1Im2yQ2seRKMIS2InmALuxBnuLmP8t8+d4aBuFBm+5UvkmgSE1CWnQfyDf/DOiNm3E6Z4cWWj2mP42lY3Jn8iyNxhh4nP7sSv3+Wal0re9GcQFC2f/2Lee10QgFuQpEAxbpk9qkZpnZDCa3YUzooiQIO7kYLU47RA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=SeEYUOzS; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=gL9eg7AaSPXqzlXNIhBfZZxk+kS0I3YiOjFS+/uT7A8=; b=SeEYUOzSZyOqn7LIjB4X9+wHY5
+	YIzZrSCOQkjE+WyPlKKBnGsEZvyVSoAkqYO6CHYoJp6rJI7ild63hVYGcQjvH2EeUEckgfuKHj6bQ
+	EA8LnAU1v6aT56qTf+iIJhuVEve5OodtWcYWMrvSRRh38aJH811muk7lakYjsir1UjQJayTVmFE0f
+	8ja8caoySLSqXyGTK2uoW5LwwIyM8PaJubNm3SE4NQH2gLYIpbDP+PJbedEZMQbCdssa7OF95EpBw
+	NEcRO7I1CijWlAzjBzQVqXMHYw8VbE1KH5bpXaOWMtP2/ZLBDckOgKxFA9yBRLAw5/D3b3iJ7um06
+	rdWHUA0g==;
+Received: from willy by casper.infradead.org with local (Exim 4.98 #2 (Red Hat Linux))
+	id 1t0WXn-00000003Oqq-1E82;
+	Tue, 15 Oct 2024 01:40:15 +0000
+Date: Tue, 15 Oct 2024 02:40:15 +0100
+From: Matthew Wilcox <willy@infradead.org>
+To: John Hubbard <jhubbard@nvidia.com>
+Cc: Yosry Ahmed <yosryahmed@google.com>,
+	Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
+	kent.overstreet@linux.dev, corbet@lwn.net, arnd@arndb.de,
+	mcgrof@kernel.org, rppt@kernel.org, paulmck@kernel.org,
+	thuth@redhat.com, tglx@linutronix.de, bp@alien8.de,
+	xiongwei.song@windriver.com, ardb@kernel.org, david@redhat.com,
+	vbabka@suse.cz, mhocko@suse.com, hannes@cmpxchg.org,
+	roman.gushchin@linux.dev, dave@stgolabs.net,
+	liam.howlett@oracle.com, pasha.tatashin@soleen.com,
+	souravpanda@google.com, keescook@chromium.org, dennis@kernel.org,
+	yuzhao@google.com, vvvvvv@google.com, rostedt@goodmis.org,
+	iamjoonsoo.kim@lge.com, rientjes@google.com, minchan@google.com,
+	kaleshsingh@google.com, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-mm@kvack.org, linux-modules@vger.kernel.org,
+	kernel-team@android.com
+Subject: Re: [PATCH v3 5/5] alloc_tag: config to store page allocation tag
+ refs in page flags
+Message-ID: <Zw3H_7mlrqxRwz_H@casper.infradead.org>
+References: <20241014203646.1952505-1-surenb@google.com>
+ <20241014203646.1952505-6-surenb@google.com>
+ <CAJD7tkY0zzwX1BCbayKSXSxwKEGiEJzzKggP8dJccdajsr_bKw@mail.gmail.com>
+ <cd848c5f-50cd-4834-a6dc-dff16c586e49@nvidia.com>
+ <CAJD7tkY8LKVGN5QNy9q2UkRLnoOEd7Wcu_fKtxKqV7SN43QgrA@mail.gmail.com>
+ <ba888da6-cd45-41b6-9d97-8292474d3ce6@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ba888da6-cd45-41b6-9d97-8292474d3ce6@nvidia.com>
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+On Mon, Oct 14, 2024 at 05:03:32PM -0700, John Hubbard wrote:
+> > > Or better yet, *always* fall back to page_ext, thus leaving the
+> > > scarce and valuable page flags available for other features?
+> > > 
+> > > Sorry Suren, to keep coming back to this suggestion, I know
+> > > I'm driving you crazy here! But I just keep thinking it through
+> > > and failing to see why this feature deserves to consume so
+> > > many page flags.
+> > 
+> > I think we already always use page_ext today. My understanding is that
+> > the purpose of this series is to give the option to avoid using
+> > page_ext if there are enough unused page flags anyway, which reduces
+> > memory waste and improves performance.
+> > 
+> > My question is just why not have that be the default behavior with a
+> > config option, use page flags if there are enough unused bits,
+> > otherwise use page_ext.
+> 
+> I agree that if you're going to implement this feature at all, then
+> keying off of CONFIG_MEM_ALLOC_PROFILING seems sufficient, and no
+> need to add CONFIG_PGALLOC_TAG_USE_PAGEFLAGS on top of that.
 
-Add get_entry_ip() implementation for arm64. This is based on the
-information in ftrace_call_adjust() on arm64. Basically function entry
-address = ftrace call entry_ip - 4, but when there is a BTI at the first
-instruction, we need one more instruction back (entry_ip - 8.)
-
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
----
- kernel/trace/bpf_trace.c |   64 ++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 64 insertions(+)
-
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index edd577297dc2..a7827a0a6d81 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1042,6 +1042,70 @@ static unsigned long get_entry_ip(unsigned long fentry_ip)
- 		fentry_ip -= ENDBR_INSN_SIZE;
- 	return fentry_ip;
- }
-+#elif defined(CONFIG_ARM64)
-+#include <asm/insn.h>
-+
-+static unsigned long get_entry_ip(unsigned long fentry_ip)
-+{
-+	u32 insn;
-+
-+	/*
-+	 * When using patchable-function-entry without pre-function NOPS, ftrace
-+	 * entry is the address of the first NOP after the function entry point.
-+	 *
-+	 * The compiler has either generated:
-+	 *
-+	 * func+00:	func:	NOP		// To be patched to MOV X9, LR
-+	 * func+04:		NOP		// To be patched to BL <caller>
-+	 *
-+	 * Or:
-+	 *
-+	 * func-04:		BTI	C
-+	 * func+00:	func:	NOP		// To be patched to MOV X9, LR
-+	 * func+04:		NOP		// To be patched to BL <caller>
-+	 *
-+	 * The fentry_ip is the address of `BL <caller>` which is at `func + 4`
-+	 * bytes in either case.
-+	 */
-+	if (!IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS))
-+		return fentry_ip - AARCH64_INSN_SIZE;
-+
-+	/*
-+	 * When using patchable-function-entry with pre-function NOPs, BTI is
-+	 * a bit different.
-+	 *
-+	 * func+00:	func:	NOP		// To be patched to MOV X9, LR
-+	 * func+04:		NOP		// To be patched to BL <caller>
-+	 *
-+	 * Or:
-+	 *
-+	 * func+00:	func:	BTI	C
-+	 * func+04:		NOP		// To be patched to MOV X9, LR
-+	 * func+08:		NOP		// To be patched to BL <caller>
-+	 *
-+	 * The fentry_ip is the address of `BL <caller>` which is at either
-+	 * `func + 4` or `func + 8` depends on whether there is a BTI.
-+	 */
-+
-+	/* If there is no BTI, the func address should be one instruction before. */
-+	if (!IS_ENABLED(CONFIG_ARM64_BTI_KERNEL))
-+		return fentry_ip - AARCH64_INSN_SIZE;
-+
-+	/* We want to be extra safe in case entry ip is on the page edge,
-+	 * but otherwise we need to avoid get_kernel_nofault()'s overhead.
-+	 */
-+	if ((fentry_ip & ~PAGE_MASK) < AARCH64_INSN_SIZE * 2) {
-+		if (get_kernel_nofault(insn, (u32 *)(fentry_ip - AARCH64_INSN_SIZE * 2)))
-+			return fentry_ip - AARCH64_INSN_SIZE;
-+	} else {
-+		insn = *(u32 *)(fentry_ip - AARCH64_INSN_SIZE * 2);
-+	}
-+
-+	if (aarch64_insn_is_bti(le32_to_cpu((__le32)insn)))
-+		return fentry_ip - AARCH64_INSN_SIZE * 2;
-+
-+	return fentry_ip - AARCH64_INSN_SIZE;
-+}
- #else
- #define get_entry_ip(fentry_ip) fentry_ip
- #endif
-
+Maybe the right idea is to use all the bits which are unused in this
+configuration for the first N callsites, then use page_ext for all the
+ones larger than N.  It doesn't save any memory, but it does have the
+performance improvement.
 
