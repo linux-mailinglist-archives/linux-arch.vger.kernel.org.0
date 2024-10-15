@@ -1,123 +1,277 @@
-Return-Path: <linux-arch+bounces-8166-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8167-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3F7B99E90E
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2024 14:12:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C126999E994
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2024 14:20:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5927A1F24013
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2024 12:12:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 851142825C2
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2024 12:20:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3B581EF958;
-	Tue, 15 Oct 2024 12:11:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 578B41EF93E;
+	Tue, 15 Oct 2024 12:19:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E8K/+ZdF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bbKbeUOf"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BF0E1EBA14;
-	Tue, 15 Oct 2024 12:11:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25C651EF934;
+	Tue, 15 Oct 2024 12:19:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728994280; cv=none; b=bCOaN0qEMvOC1hW71tby8tAKAFqPn5VTrRtRuV99/67X97crlEAe609y9twSkv3tQAaKIGDA4VQr7t4LyoRptaoRJGW8rkw+wUFbEqb/zDt5pdI3Kgdo9L0aDsfxMsNRPvZHXwcfE4yMoQ8tjsNf/2UkyyHTgQZEYGNkbJXf9YE=
+	t=1728994754; cv=none; b=hZcFlURz83U4KycokIihpQC6oQkIO6JJbI3PSVq5aL3tCBUdG3be+s6HNMLusSUyhF1mjoyZfa6X6bCfTI/MXQ3gZjDK5hpGdH+IZvLLFIBnjbm97dDIezrQpoXMBoi8TCmZA4AsLT1Evh8YhcVodm761LwsrVmNwhsWRVdEUq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728994280; c=relaxed/simple;
-	bh=dnnZUgzCwws9KYXi6ot0s1d3Fp6NN+N4r5wRaq6PAzs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mMaUpFmXuNZjgfhcgTyelzspAZq3pibdtf4U3dTExwz5cdEw0qQ40/gGHmMWlVjSt/MJmmxHcwfOgewgFYCqiR5zuSm3BzHwIEIX6y5r1x9dyWiytS9JkqrlhXGFIkt1mXh+5ZZQUVjCakdbd2HhT4NNgozQFVUnNhAIikLvMJs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E8K/+ZdF; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2e2b71fd16fso933923a91.3;
-        Tue, 15 Oct 2024 05:11:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728994278; x=1729599078; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yV8FOLSLhwtyiWp+lk7vSGC6JLIndGdKNovPdihlpN4=;
-        b=E8K/+ZdF86VVS6vFSt1cUiTKmfbzevFKsTpPZftMWpD/qphneyrxP1mhKv46QX0WL0
-         FXn8JATRSOS85AGScHWbnndB8TKmBUIxgsihiKSEFr8GRtaPaTvw7V6RkvGk7ygvSz6B
-         SHWyNiiIjk5jHZGyLQ7lPU9A0zAk63Hvcxx97Pu8KLyGhEAtCUWWp3qmJfZ2L3j9o2IX
-         1ozRz3GscpDoMD2vHXzzhU6keiWLtjAv96P+t4kkwFP7XQ5E7c6n8d4Ps73HbTxeq6ir
-         ILpCCGj8ZPYa+6p75kO0lckavdwWz5FrWFi6L219JcMnpWM64tjEAg6YUdBzk+suUost
-         CTsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728994278; x=1729599078;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yV8FOLSLhwtyiWp+lk7vSGC6JLIndGdKNovPdihlpN4=;
-        b=Oqo658pyfTq8ToyXsu3iGRhYYpsLbkrk/wIS8HdUXXL1x4UBWgdemcTf/+3+bFO+f5
-         o3Rksw8HUZoljEXFIXyZufcCelFj+l3dMm1LLM6SIXTrblYROXpZMrLuuf+7n8l0ajyd
-         GHmELexQC1EV8CdFO0UOeyk585kHwTOfoOU38a6D7sTikUqC7/abfOhCLeNudKHkg4H+
-         DfuoVxVCuUzEH6l+Y52NGzk63MLC1OvKpmdPnOJ5idkg86hlNanATZKeWGAILMJlEEB8
-         Y7Pg8IZyWAfHY4deqazoezrcpZeMd0f3IzUCGGxaE5MHuvJ7cgVRPJ4AGU+xfTHZUCj1
-         NghA==
-X-Forwarded-Encrypted: i=1; AJvYcCUaTO04ctzz0E+bIWNV/clAaxRyyaixHmI676eos2nzd0OerHP0fRPazWPfI8zi0a9lRqTnII3UQ1pcv7MggaI=@vger.kernel.org, AJvYcCVFyvxPL/i/cIH32k1BDaQdH6w1f34lvf3jYNIQRo1NwxHSVxm7Etw3OsjpMJH3f8PUDch9G8DOkp95bZip@vger.kernel.org, AJvYcCW2LUcxpeoGUUsc+pZVFSwijsOebugQRzJkQLibC1BfgmZJenLj3MSqUEl6FTVFme5AyUI5J10v33yQpn0+iwgjRZ0N@vger.kernel.org, AJvYcCXoLKqraPdjsXc6zMH59BVIe0lo75TbR1Di+I7aLHqktYBak7xExbgIhKp2maBIYlkaVYALkGhL4f5o@vger.kernel.org
-X-Gm-Message-State: AOJu0YzGuTkObTV9j0ECMr+72ZW493sXyP2CJnMndN1p0pI/jyr1Yu0U
-	dcq0NhohoJfoZrtpMQh8FoNkIjXz4Qb9kV+O5P9ARFKi8QO5OlF6BbfyRnd+Cupoqt4XtOomuPk
-	8q2U30Bluk9HvyITpD+uyuu5/OgI=
-X-Google-Smtp-Source: AGHT+IFSfFq5YCrErjt8c8UA+f+PBcvIWdJRqe/AN44rKjjupOA/NWpgra6o1nxcyv+5NZeBZYXbe5CQMWH68x1Ky44=
-X-Received: by 2002:a17:90a:bf91:b0:2e2:e860:f69d with SMTP id
- 98e67ed59e1d1-2e2f0d788cbmr7356172a91.7.1728994278289; Tue, 15 Oct 2024
- 05:11:18 -0700 (PDT)
+	s=arc-20240116; t=1728994754; c=relaxed/simple;
+	bh=h4+7by0rAf1o7D24l+y+0PKeuIiAXm/n19ReSlgbZAA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=S7qIKT2jDM08UGP2TqZu8lv2lQL+tyC1Oh1uybYVQNjN0lgIfOlHx7XDJhEdX56Kn9lfDeK00xrkbUnYlLdoODUg9xujeRSvepTzlL8Rk3Pud+GFaGQbzQcEwSW2BlwFCVusYa8nyWvODCCjxebs08V/Uj4/P3kdlIlV38UglmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bbKbeUOf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0037C4CEC6;
+	Tue, 15 Oct 2024 12:19:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728994753;
+	bh=h4+7by0rAf1o7D24l+y+0PKeuIiAXm/n19ReSlgbZAA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bbKbeUOfn9nyDXrtBn7g19Dpfjiiw77gfgeY76w/MQudeJ+b61eaCe1lNNUr/wZsx
+	 NPYYUCCNZqjY+e0FpiMV0ssGHtIM4kTnGCLC/d7Nkj7MozDRcNrxTwPsujBUIQd6dh
+	 I7iGN20nS0P09TvQqbm0ZYkIwkbZECUW+yKmPcegYF8REA5wenOFpRoO2SVolOkynd
+	 nTd0FKRDimQvqjAtQjL34RYpNOxdkS2f+FMd4CvvRoEYfynQsvPeYauSwnLRHBt0id
+	 XBJTOVhu64U/+vudH7ZYapQVuQFYm6Y/c5zlyGCODMyTrwKlF3NtvOZ9lcr+LvwugG
+	 ChpqrAC7oGC8A==
+Date: Tue, 15 Oct 2024 15:15:27 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, corbet@lwn.net,
+	arnd@arndb.de, mcgrof@kernel.org, paulmck@kernel.org,
+	thuth@redhat.com, tglx@linutronix.de, bp@alien8.de,
+	xiongwei.song@windriver.com, ardb@kernel.org, david@redhat.com,
+	vbabka@suse.cz, mhocko@suse.com, hannes@cmpxchg.org,
+	roman.gushchin@linux.dev, dave@stgolabs.net, willy@infradead.org,
+	liam.howlett@oracle.com, pasha.tatashin@soleen.com,
+	souravpanda@google.com, keescook@chromium.org, dennis@kernel.org,
+	jhubbard@nvidia.com, yuzhao@google.com, vvvvvv@google.com,
+	rostedt@goodmis.org, iamjoonsoo.kim@lge.com, rientjes@google.com,
+	minchan@google.com, kaleshsingh@google.com,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v3 3/5] alloc_tag: populate memory for module tags as
+ needed
+Message-ID: <Zw5c3zjW4sUUmont@kernel.org>
+References: <20241014203646.1952505-1-surenb@google.com>
+ <20241014203646.1952505-4-surenb@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241011-tracepoint-v10-5-7fbde4d6b525@google.com> <202410151814.WmLlAkCq-lkp@intel.com>
-In-Reply-To: <202410151814.WmLlAkCq-lkp@intel.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 15 Oct 2024 14:11:05 +0200
-Message-ID: <CANiq72nn6zv9MOD2ifTXbWV3W1AgiXL=6zTX_-eGL5ggLj4fbw@mail.gmail.com>
-Subject: Re: [PATCH v10 5/5] rust: add arch_static_branch
-To: kernel test robot <lkp@intel.com>
-Cc: Alice Ryhl <aliceryhl@google.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Jason Baron <jbaron@akamai.com>, Ard Biesheuvel <ardb@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	oe-kbuild-all@lists.linux.dev, linux-trace-kernel@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Sean Christopherson <seanjc@google.com>, Uros Bizjak <ubizjak@gmail.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241014203646.1952505-4-surenb@google.com>
 
-On Tue, Oct 15, 2024 at 1:06=E2=80=AFPM kernel test robot <lkp@intel.com> w=
-rote:
+On Mon, Oct 14, 2024 at 01:36:44PM -0700, Suren Baghdasaryan wrote:
+> The memory reserved for module tags does not need to be backed by
+> physical pages until there are tags to store there. Change the way
+> we reserve this memory to allocate only virtual area for the tags
+> and populate it with physical pages as needed when we load a module.
+> 
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> ---
+>  include/linux/execmem.h | 11 ++++++
+>  include/linux/vmalloc.h |  9 +++++
+>  lib/alloc_tag.c         | 84 +++++++++++++++++++++++++++++++++--------
+>  mm/execmem.c            | 16 ++++++++
+>  mm/vmalloc.c            |  4 +-
+>  5 files changed, 106 insertions(+), 18 deletions(-)
+> 
+> diff --git a/include/linux/execmem.h b/include/linux/execmem.h
+> index 7436aa547818..a159a073270a 100644
+> --- a/include/linux/execmem.h
+> +++ b/include/linux/execmem.h
+> @@ -127,6 +127,17 @@ void *execmem_alloc(enum execmem_type type, size_t size);
+>   */
+>  void execmem_free(void *ptr);
+>  
+> +/**
+> + * execmem_vmap - create virtual mapping for executable memory
+> + * @type: type of the allocation
+> + * @size: size of the virtual mapping in bytes
+> + *
+> + * Maps virtually contiguous area that can be populated with executable code.
+> + *
+> + * Return: the area descriptor on success or %NULL on failure.
+> + */
+> +struct vm_struct *execmem_vmap(enum execmem_type type, size_t size);
+> +
+
+I think it's better limit it to EXECMEM_MODULE_DATA
+
+>  /**
+>   * execmem_update_copy - copy an update to executable memory
+>   * @dst:  destination address to update
+> diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
+> index 9a012cd4fad2..9d64cc6f24d1 100644
+> --- a/include/linux/vmalloc.h
+> +++ b/include/linux/vmalloc.h
+> @@ -202,6 +202,9 @@ extern int remap_vmalloc_range_partial(struct vm_area_struct *vma,
+>  extern int remap_vmalloc_range(struct vm_area_struct *vma, void *addr,
+>  							unsigned long pgoff);
+>  
+> +int vmap_pages_range(unsigned long addr, unsigned long end,
+> +		pgprot_t prot, struct page **pages, unsigned int page_shift);
+> +
 >
-> >> /bin/sh: 1: cannot create rust/kernel/arch_static_branch_asm.rs: Direc=
-tory nonexistent
+>  /*
+>   * Architectures can set this mask to a combination of PGTBL_P?D_MODIFIED values
+>   * and let generic vmalloc and ioremap code know when arch_sync_kernel_mappings()
+> @@ -239,6 +242,12 @@ extern struct vm_struct *__get_vm_area_caller(unsigned long size,
+>  					unsigned long flags,
+>  					unsigned long start, unsigned long end,
+>  					const void *caller);
+> +struct vm_struct *__get_vm_area_node(unsigned long size,
+> +				     unsigned long align, unsigned long shift,
+> +				     unsigned long flags, unsigned long start,
+> +				     unsigned long end, int node, gfp_t gfp_mask,
+> +				     const void *caller);
+> +
 
-This happens because we run `RSCPP` even when it is not a target. We
-can add the dependency conditionally:
+This is not used outside mm/, let's put it into mm/internal.h
 
-@@ -423,8 +425,10 @@ $(obj)/uapi.o: $(src)/uapi/lib.rs \
- $(obj)/kernel.o: private rustc_target_flags =3D --extern alloc \
-     --extern build_error --extern macros --extern bindings --extern uapi
- $(obj)/kernel.o: $(src)/kernel/lib.rs $(obj)/alloc.o $(obj)/build_error.o =
-\
--    $(obj)/libmacros.so $(obj)/bindings.o $(obj)/uapi.o \
--       $(obj)/kernel/arch_static_branch_asm.rs FORCE
-+    $(obj)/libmacros.so $(obj)/bindings.o $(obj)/uapi.o FORCE
-        +$(call if_changed_rule,rustc_library)
-+ifneq ($(CONFIG_JUMP_LABEL),)
-+$(obj)/kernel.o: $(obj)/kernel/arch_static_branch_asm.rs
-+endif
+>  void free_vm_area(struct vm_struct *area);
+>  extern struct vm_struct *remove_vm_area(const void *addr);
+>  extern struct vm_struct *find_vm_area(const void *addr);
+> diff --git a/lib/alloc_tag.c b/lib/alloc_tag.c
+> index b10e7f17eeda..648f32d52b8d 100644
+> --- a/lib/alloc_tag.c
+> +++ b/lib/alloc_tag.c
+> @@ -8,6 +8,7 @@
+>  #include <linux/proc_fs.h>
+>  #include <linux/seq_buf.h>
+>  #include <linux/seq_file.h>
+> +#include <linux/vmalloc.h>
+>  
+>  static struct codetag_type *alloc_tag_cttype;
+>  
+> @@ -153,6 +154,7 @@ static void __init procfs_init(void)
+>  #ifdef CONFIG_MODULES
+>  
+>  static struct maple_tree mod_area_mt = MTREE_INIT(mod_area_mt, MT_FLAGS_ALLOC_RANGE);
+> +static struct vm_struct *vm_module_tags;
+>  /* A dummy object used to indicate an unloaded module */
+>  static struct module unloaded_mod;
+>  /* A dummy object used to indicate a module prepended area */
+> @@ -195,6 +197,25 @@ static void clean_unused_module_areas_locked(void)
+>  	}
+>  }
+>  
+> +static int vm_module_tags_grow(unsigned long addr, unsigned long bytes)
+> +{
+> +	struct page **next_page = vm_module_tags->pages + vm_module_tags->nr_pages;
+> +	unsigned long more_pages = ALIGN(bytes, PAGE_SIZE) >> PAGE_SHIFT;
+> +	unsigned long nr;
+> +
+> +	nr = alloc_pages_bulk_array_node(GFP_KERNEL | __GFP_NOWARN,
+> +					 NUMA_NO_NODE, more_pages, next_page);
+> +	if (nr != more_pages)
+> +		return -ENOMEM;
+> +
+> +	vm_module_tags->nr_pages += nr;
+> +	if (vmap_pages_range(addr, addr + (nr << PAGE_SHIFT),
+> +			     PAGE_KERNEL, next_page, PAGE_SHIFT) < 0)
+> +		return -ENOMEM;
+> +
+> +	return 0;
+> +}
+> +
+>  static void *reserve_module_tags(struct module *mod, unsigned long size,
+>  				 unsigned int prepend, unsigned long align)
+>  {
+> @@ -202,7 +223,7 @@ static void *reserve_module_tags(struct module *mod, unsigned long size,
+>  	MA_STATE(mas, &mod_area_mt, 0, section_size - 1);
+>  	bool cleanup_done = false;
+>  	unsigned long offset;
+> -	void *ret;
+> +	void *ret = NULL;
+>  
+>  	/* If no tags return NULL */
+>  	if (size < sizeof(struct alloc_tag))
+> @@ -239,7 +260,7 @@ static void *reserve_module_tags(struct module *mod, unsigned long size,
+>  		goto repeat;
+>  	} else {
+>  		ret = ERR_PTR(-ENOMEM);
+> -		goto out;
+> +		goto unlock;
+>  	}
+>  
+>  found:
+> @@ -254,7 +275,7 @@ static void *reserve_module_tags(struct module *mod, unsigned long size,
+>  		mas_store(&mas, &prepend_mod);
+>  		if (mas_is_err(&mas)) {
+>  			ret = ERR_PTR(xa_err(mas.node));
+> -			goto out;
+> +			goto unlock;
+>  		}
+>  		mas.index = offset;
+>  		mas.last = offset + size - 1;
+> @@ -263,7 +284,7 @@ static void *reserve_module_tags(struct module *mod, unsigned long size,
+>  			ret = ERR_PTR(xa_err(mas.node));
+>  			mas.index = pad_start;
+>  			mas_erase(&mas);
+> -			goto out;
+> +			goto unlock;
+>  		}
+>  
+>  	} else {
+> @@ -271,18 +292,33 @@ static void *reserve_module_tags(struct module *mod, unsigned long size,
+>  		mas_store(&mas, mod);
+>  		if (mas_is_err(&mas)) {
+>  			ret = ERR_PTR(xa_err(mas.node));
+> -			goto out;
+> +			goto unlock;
+>  		}
+>  	}
+> +unlock:
+> +	mas_unlock(&mas);
+> +	if (IS_ERR(ret))
+> +		return ret;
+>  
+> -	if (module_tags.size < offset + size)
+> -		module_tags.size = offset + size;
+> +	if (module_tags.size < offset + size) {
+> +		unsigned long phys_size = vm_module_tags->nr_pages << PAGE_SHIFT;
+>  
+> -	ret = (struct alloc_tag *)(module_tags.start_addr + offset);
+> -out:
+> -	mas_unlock(&mas);
+> +		module_tags.size = offset + size;
+> +		if (phys_size < module_tags.size) {
+> +			int grow_res;
+> +
+> +			grow_res = vm_module_tags_grow(module_tags.start_addr + phys_size,
+> +						       module_tags.size - phys_size);
+> +			if (grow_res) {
+> +				static_branch_disable(&mem_alloc_profiling_key);
+> +				pr_warn("Failed to allocate tags memory for module %s. Memory profiling is disabled!\n",
+> +					mod->name);
+> +				return ERR_PTR(grow_res);
+> +			}
+> +		}
+> +	}
 
-Cheers,
-Miguel
+The diff for reserve_module_tags() is hard to read, and the function itself
+becomes really complex to follow with all the gotos back and forth.
+Maybe it's possible to split out some parts of it as helpers?
+
+> -	return ret;
+> +	return (struct alloc_tag *)(module_tags.start_addr + offset);
+>  }
+>  
+
+-- 
+Sincerely yours,
+Mike.
 
