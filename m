@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-8138-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8139-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE9F499DB68
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2024 03:31:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29A5199DB6C
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2024 03:31:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 87BAB285882
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2024 01:31:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DCB5328602D
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2024 01:31:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8773016087B;
-	Tue, 15 Oct 2024 01:30:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DBAA1714B0;
+	Tue, 15 Oct 2024 01:30:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oK0G9kgP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gitV2VE6"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 584581581E1;
-	Tue, 15 Oct 2024 01:30:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3404167271;
+	Tue, 15 Oct 2024 01:30:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728955824; cv=none; b=q2C7eYirzsy4vnI0ed0g5cfeU5nvdE878BUMIfDPXy+Yv7IfNhPC57/kALrSyJg/wPmaNiSS3fuy6q6LWIxODwgSvt/HTEyERlHpo9GDsIur8KlzdYV4SHc3tD8zWOZ1JnzSzxjkibuzkfUDuZJU7VwfMc1rIKhgrZrWw8HiAMg=
+	t=1728955834; cv=none; b=BAwofTsTWXiPGoVlC92IISVyEJuyB5l6TLDSbvvTPLLDLsHObZd+S/U9DtaT5MjcW24AwIVpaCyxSKtMIy9kZcQYzqEfs3/xXzOEuMWE7Dh0nIYaJhZtDCNXJuAmzRbM9X9zN/2DwuoB6qZslA0vlAaPkmKNqNGodSOUaeJg22M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728955824; c=relaxed/simple;
-	bh=1oI2zf5XPLgAWlZPAhZ/w6xpDJPKJUd0FuZJ2aFNpdI=;
+	s=arc-20240116; t=1728955834; c=relaxed/simple;
+	bh=XOmB0ULOHupz4kFjwpmxxMW5DZpDImZiDmErO/2b6yk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BK0N4ksBI7m42yYJsloXP6qFFddBwbRlhyJ8gOyeBGf+dCOefmIVc7SzYOFrcERBSef2WnnnYe0thk/9CQXedX8+/7cgVMWliseH2eucor58yHjKeLAKB00p12fKUApiWkBjm3O8aiyJhsv3S3c37jI8iI70blZdhpc2jcAvs3U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oK0G9kgP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DE76C4CEC7;
-	Tue, 15 Oct 2024 01:30:17 +0000 (UTC)
+	 MIME-Version:Content-Type; b=AARI7J9XQtQG1OOyRJejM5DPOLViJTaOr6eckLzXnrqPmQjUclZZ+JpBYwKB3HU5CrHJlQxQCl40nFSQQpwBxS6yKecGOefOUfOyi16B4wmdgGkkE8TnALLHplsoArEZfkXS07V4s+7zYIOYGRRHEpUry5MCupDHuTCPvgUzvF4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gitV2VE6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4276BC4CEC6;
+	Tue, 15 Oct 2024 01:30:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728955823;
-	bh=1oI2zf5XPLgAWlZPAhZ/w6xpDJPKJUd0FuZJ2aFNpdI=;
+	s=k20201202; t=1728955833;
+	bh=XOmB0ULOHupz4kFjwpmxxMW5DZpDImZiDmErO/2b6yk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=oK0G9kgPdzZ1t7sm2NTNEw7Tj0kNTR3nW0Mmo4API1gn7mb4z57brCGf3EfBduebI
-	 LYfDoXJ+KWOnGjKAqRGdGqxxsjxiTls8i4hkcmHapI6hEUEz5iBtKYJTmGtkqrWLqC
-	 QtH5nh4pwhBc77pCMDW8/qUpa3z5sunMsFrjUvo7G8LjeuEF+15D1mJapqTwwc63cH
-	 VciS5hX9eqt87gSWdP67wCgkDPo2L684iNxZj0EpINhoTtVkcDI97BVA1aVzGtHyqu
-	 VfNSL7iIDqD1PZXUyHOIW7ydCCqX/0galY0AzSqUvUW9LKiqK0gSjKKFYzBp+JAIQ9
-	 PMVNZvl9ZAxFg==
+	b=gitV2VE6jLSvoivalCQ91Mu16cA90nYu9JcUKwDribZPvsyCAg7hhfondsMzizjeu
+	 kY67IdLTKqLu64cp+SKATDqDYTtMgivvz/z5nFrP2RNhda7K2nWZ/vHBGpu/nUVBCS
+	 SlgCA2T4FMoe+XMGTuEGyDhQqWH9AFUS8B/qYOUXyq2zuUllWyHrdfIOBTj+7ELGkX
+	 XQZxEcPFdPn50Na84u9nUs6ivUd/hp3w4uwG7OuMWz0o/in1HqT2POrbN+Yb4Pq4jg
+	 IaYtH0+B7gF1TlXqs+Jv7EVKz1XkAFcb6oFAMq5CvlA9iAyLMGt5odZixIIHShYBI1
+	 jVcxex9uYQuCQ==
 From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
 To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
 	Steven Rostedt <rostedt@goodmis.org>,
@@ -53,28 +53,10 @@ Cc: linux-trace-kernel@vger.kernel.org,
 	Jiri Olsa <jolsa@kernel.org>,
 	Alan Maguire <alan.maguire@oracle.com>,
 	Mark Rutland <mark.rutland@arm.com>,
-	linux-arch@vger.kernel.org,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>
-Subject: [PATCH v16 09/18] tracing: Add ftrace_fill_perf_regs() for perf event
-Date: Tue, 15 Oct 2024 10:30:15 +0900
-Message-ID: <172895581574.107311.17609909207681074574.stgit@devnote2>
+	linux-arch@vger.kernel.org
+Subject: [PATCH v16 10/18] tracing/fprobe: Enable fprobe events with CONFIG_DYNAMIC_FTRACE_WITH_ARGS
+Date: Tue, 15 Oct 2024 10:30:29 +0900
+Message-ID: <172895582922.107311.919792374218338228.stgit@devnote2>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <172895571278.107311.14000164546881236558.stgit@devnote2>
 References: <172895571278.107311.14000164546881236558.stgit@devnote2>
@@ -90,154 +72,365 @@ Content-Transfer-Encoding: 8bit
 
 From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Add ftrace_fill_perf_regs() which should be compatible with the
-perf_fetch_caller_regs(). In other words, the pt_regs returned from the
-ftrace_fill_perf_regs() must satisfy 'user_mode(regs) == false' and can be
-used for stack tracing.
+Allow fprobe events to be enabled with CONFIG_DYNAMIC_FTRACE_WITH_ARGS.
+With this change, fprobe events mostly use ftrace_regs instead of pt_regs.
+Note that if the arch doesn't enable HAVE_FTRACE_REGS_HAVING_PT_REGS,
+fprobe events will not be able to be used from perf.
 
 Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Nicholas Piggin <npiggin@gmail.com>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: Naveen N Rao <naveen@kernel.org>
-Cc: Madhavan Srinivasan <maddy@linux.ibm.com>
-Cc: Heiko Carstens <hca@linux.ibm.com>
-Cc: Vasily Gorbik <gor@linux.ibm.com>
-Cc: Alexander Gordeev <agordeev@linux.ibm.com>
-Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
-Cc: Sven Schnelle <svens@linux.ibm.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: x86@kernel.org
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-
 ---
-  Changes from previous series: NOTHING, just forward ported.
+ Changes in v9:
+  - Copy store_trace_entry_data() as store_fprobe_entry_data() for
+    fprobe.
+ Chagnes in v3:
+  - Use ftrace_regs_get_return_value().
+ Changes in v2:
+  - Define ftrace_regs_get_kernel_stack_nth() for
+    !CONFIG_HAVE_REGS_AND_STACK_ACCESS_API.
+ Changes from previous series: Update against the new series.
 ---
- arch/arm64/include/asm/ftrace.h   |    7 +++++++
- arch/powerpc/include/asm/ftrace.h |    7 +++++++
- arch/s390/include/asm/ftrace.h    |    5 +++++
- arch/x86/include/asm/ftrace.h     |    7 +++++++
- include/linux/ftrace.h            |   31 +++++++++++++++++++++++++++++++
- 5 files changed, 57 insertions(+)
+ include/linux/ftrace.h          |   17 ++++++
+ kernel/trace/Kconfig            |    1 
+ kernel/trace/trace_fprobe.c     |  107 +++++++++++++++++++++++++--------------
+ kernel/trace/trace_probe_tmpl.h |    2 -
+ 4 files changed, 86 insertions(+), 41 deletions(-)
 
-diff --git a/arch/arm64/include/asm/ftrace.h b/arch/arm64/include/asm/ftrace.h
-index d344c69eb01e..6493a575664f 100644
---- a/arch/arm64/include/asm/ftrace.h
-+++ b/arch/arm64/include/asm/ftrace.h
-@@ -146,6 +146,13 @@ ftrace_partial_regs(const struct ftrace_regs *fregs, struct pt_regs *regs)
- 	return regs;
- }
- 
-+#define arch_ftrace_fill_perf_regs(fregs, _regs) do {		\
-+		(_regs)->pc = arch_ftrace_regs(fregs)->pc;			\
-+		(_regs)->regs[29] = arch_ftrace_regs(fregs)->fp;		\
-+		(_regs)->sp = arch_ftrace_regs(fregs)->sp;			\
-+		(_regs)->pstate = PSR_MODE_EL1h;		\
-+	} while (0)
-+
- int ftrace_regs_query_register_offset(const char *name);
- 
- int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec);
-diff --git a/arch/powerpc/include/asm/ftrace.h b/arch/powerpc/include/asm/ftrace.h
-index 0edfb874eb02..407ce6eccc04 100644
---- a/arch/powerpc/include/asm/ftrace.h
-+++ b/arch/powerpc/include/asm/ftrace.h
-@@ -40,6 +40,13 @@ static __always_inline struct pt_regs *arch_ftrace_get_regs(struct ftrace_regs *
- 	return arch_ftrace_regs(fregs)->regs.msr ? &arch_ftrace_regs(fregs)->regs : NULL;
- }
- 
-+#define arch_ftrace_fill_perf_regs(fregs, _regs) do {		\
-+		(_regs)->result = 0;				\
-+		(_regs)->nip = arch_ftrace_regs(fregs)->regs.nip;		\
-+		(_regs)->gpr[1] = arch_ftrace_regs(fregs)->regs.gpr[1];		\
-+		asm volatile("mfmsr %0" : "=r" ((_regs)->msr));	\
-+	} while (0)
-+
- static __always_inline void
- ftrace_regs_set_instruction_pointer(struct ftrace_regs *fregs,
- 				    unsigned long ip)
-diff --git a/arch/s390/include/asm/ftrace.h b/arch/s390/include/asm/ftrace.h
-index 5c94c1fc1bc1..f1c0e677a325 100644
---- a/arch/s390/include/asm/ftrace.h
-+++ b/arch/s390/include/asm/ftrace.h
-@@ -76,6 +76,11 @@ ftrace_regs_get_frame_pointer(struct ftrace_regs *fregs)
- 	return ftrace_regs_get_stack_pointer(fregs);
- }
- 
-+#define arch_ftrace_fill_perf_regs(fregs, _regs)	 do {		\
-+		(_regs)->psw.addr = arch_ftrace_regs(fregs)->regs.psw.addr;		\
-+		(_regs)->gprs[15] = arch_ftrace_regs(fregs)->regs.gprs[15];		\
-+	} while (0)
-+
- #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
- /*
-  * When an ftrace registered caller is tracing a function that is
-diff --git a/arch/x86/include/asm/ftrace.h b/arch/x86/include/asm/ftrace.h
-index d61407c680c2..7e06f8c7937a 100644
---- a/arch/x86/include/asm/ftrace.h
-+++ b/arch/x86/include/asm/ftrace.h
-@@ -47,6 +47,13 @@ arch_ftrace_get_regs(struct ftrace_regs *fregs)
- 	return &arch_ftrace_regs(fregs)->regs;
- }
- 
-+#define arch_ftrace_fill_perf_regs(fregs, _regs) do {	\
-+		(_regs)->ip = arch_ftrace_regs(fregs)->regs.ip;		\
-+		(_regs)->sp = arch_ftrace_regs(fregs)->regs.sp;		\
-+		(_regs)->cs = __KERNEL_CS;		\
-+		(_regs)->flags = 0;			\
-+	} while (0)
-+
- #define ftrace_regs_set_instruction_pointer(fregs, _ip)	\
- 	do { arch_ftrace_regs(fregs)->regs.ip = (_ip); } while (0)
- 
 diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-index ad2b46e1d5b0..6d29c640697c 100644
+index 6d29c640697c..4c553fe9c026 100644
 --- a/include/linux/ftrace.h
 +++ b/include/linux/ftrace.h
-@@ -207,6 +207,37 @@ ftrace_partial_regs(struct ftrace_regs *fregs, struct pt_regs *regs)
+@@ -250,6 +250,23 @@ static __always_inline bool ftrace_regs_has_args(struct ftrace_regs *fregs)
+ 	return ftrace_get_regs(fregs) != NULL;
+ }
  
- #endif /* !CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS || CONFIG_HAVE_FTRACE_REGS_HAVING_PT_REGS */
- 
-+#ifdef CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS
-+
-+/*
-+ * Please define arch dependent pt_regs which compatible to the
-+ * perf_arch_fetch_caller_regs() but based on ftrace_regs.
-+ * This requires
-+ *   - user_mode(_regs) returns false (always kernel mode).
-+ *   - able to use the _regs for stack trace.
-+ */
-+#ifndef arch_ftrace_fill_perf_regs
-+/* As same as perf_arch_fetch_caller_regs(), do nothing by default */
-+#define arch_ftrace_fill_perf_regs(fregs, _regs) do {} while (0)
-+#endif
-+
-+static __always_inline struct pt_regs *
-+ftrace_fill_perf_regs(struct ftrace_regs *fregs, struct pt_regs *regs)
++#ifdef CONFIG_HAVE_REGS_AND_STACK_ACCESS_API
++static __always_inline unsigned long
++ftrace_regs_get_kernel_stack_nth(struct ftrace_regs *fregs, unsigned int nth)
 +{
-+	arch_ftrace_fill_perf_regs(fregs, regs);
-+	return regs;
++	unsigned long *stackp;
++
++	stackp = (unsigned long *)ftrace_regs_get_stack_pointer(fregs);
++	if (((unsigned long)(stackp + nth) & ~(THREAD_SIZE - 1)) ==
++	    ((unsigned long)stackp & ~(THREAD_SIZE - 1)))
++		return *(stackp + nth);
++
++	return 0;
++}
++#else /* !CONFIG_HAVE_REGS_AND_STACK_ACCESS_API */
++#define ftrace_regs_get_kernel_stack_nth(fregs, nth)	(0L)
++#endif /* CONFIG_HAVE_REGS_AND_STACK_ACCESS_API */
++
+ typedef void (*ftrace_func_t)(unsigned long ip, unsigned long parent_ip,
+ 			      struct ftrace_ops *op, struct ftrace_regs *fregs);
+ 
+diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
+index 7f8165f2049a..82654bbfad9a 100644
+--- a/kernel/trace/Kconfig
++++ b/kernel/trace/Kconfig
+@@ -689,7 +689,6 @@ config FPROBE_EVENTS
+ 	select TRACING
+ 	select PROBE_EVENTS
+ 	select DYNAMIC_EVENTS
+-	depends on DYNAMIC_FTRACE_WITH_REGS
+ 	default y
+ 	help
+ 	  This allows user to add tracing events on the function entry and
+diff --git a/kernel/trace/trace_fprobe.c b/kernel/trace/trace_fprobe.c
+index b68d0aa26097..41595e38fea5 100644
+--- a/kernel/trace/trace_fprobe.c
++++ b/kernel/trace/trace_fprobe.c
+@@ -134,7 +134,7 @@ static int
+ process_fetch_insn(struct fetch_insn *code, void *rec, void *edata,
+ 		   void *dest, void *base)
+ {
+-	struct pt_regs *regs = rec;
++	struct ftrace_regs *fregs = rec;
+ 	unsigned long val;
+ 	int ret;
+ 
+@@ -142,17 +142,17 @@ process_fetch_insn(struct fetch_insn *code, void *rec, void *edata,
+ 	/* 1st stage: get value from context */
+ 	switch (code->op) {
+ 	case FETCH_OP_STACK:
+-		val = regs_get_kernel_stack_nth(regs, code->param);
++		val = ftrace_regs_get_kernel_stack_nth(fregs, code->param);
+ 		break;
+ 	case FETCH_OP_STACKP:
+-		val = kernel_stack_pointer(regs);
++		val = ftrace_regs_get_stack_pointer(fregs);
+ 		break;
+ 	case FETCH_OP_RETVAL:
+-		val = regs_return_value(regs);
++		val = ftrace_regs_get_return_value(fregs);
+ 		break;
+ #ifdef CONFIG_HAVE_FUNCTION_ARG_ACCESS_API
+ 	case FETCH_OP_ARG:
+-		val = regs_get_kernel_argument(regs, code->param);
++		val = ftrace_regs_get_argument(fregs, code->param);
+ 		break;
+ 	case FETCH_OP_EDATA:
+ 		val = *(unsigned long *)((unsigned long)edata + code->offset);
+@@ -175,7 +175,7 @@ NOKPROBE_SYMBOL(process_fetch_insn)
+ /* function entry handler */
+ static nokprobe_inline void
+ __fentry_trace_func(struct trace_fprobe *tf, unsigned long entry_ip,
+-		    struct pt_regs *regs,
++		    struct ftrace_regs *fregs,
+ 		    struct trace_event_file *trace_file)
+ {
+ 	struct fentry_trace_entry_head *entry;
+@@ -189,41 +189,71 @@ __fentry_trace_func(struct trace_fprobe *tf, unsigned long entry_ip,
+ 	if (trace_trigger_soft_disabled(trace_file))
+ 		return;
+ 
+-	dsize = __get_data_size(&tf->tp, regs, NULL);
++	dsize = __get_data_size(&tf->tp, fregs, NULL);
+ 
+ 	entry = trace_event_buffer_reserve(&fbuffer, trace_file,
+ 					   sizeof(*entry) + tf->tp.size + dsize);
+ 	if (!entry)
+ 		return;
+ 
+-	fbuffer.regs = regs;
++	fbuffer.regs = ftrace_get_regs(fregs);
+ 	entry = fbuffer.entry = ring_buffer_event_data(fbuffer.event);
+ 	entry->ip = entry_ip;
+-	store_trace_args(&entry[1], &tf->tp, regs, NULL, sizeof(*entry), dsize);
++	store_trace_args(&entry[1], &tf->tp, fregs, NULL, sizeof(*entry), dsize);
+ 
+ 	trace_event_buffer_commit(&fbuffer);
+ }
+ 
+ static void
+ fentry_trace_func(struct trace_fprobe *tf, unsigned long entry_ip,
+-		  struct pt_regs *regs)
++		  struct ftrace_regs *fregs)
+ {
+ 	struct event_file_link *link;
+ 
+ 	trace_probe_for_each_link_rcu(link, &tf->tp)
+-		__fentry_trace_func(tf, entry_ip, regs, link->file);
++		__fentry_trace_func(tf, entry_ip, fregs, link->file);
+ }
+ NOKPROBE_SYMBOL(fentry_trace_func);
+ 
++static nokprobe_inline
++void store_fprobe_entry_data(void *edata, struct trace_probe *tp, struct ftrace_regs *fregs)
++{
++	struct probe_entry_arg *earg = tp->entry_arg;
++	unsigned long val = 0;
++	int i;
++
++	if (!earg)
++		return;
++
++	for (i = 0; i < earg->size; i++) {
++		struct fetch_insn *code = &earg->code[i];
++
++		switch (code->op) {
++		case FETCH_OP_ARG:
++			val = ftrace_regs_get_argument(fregs, code->param);
++			break;
++		case FETCH_OP_ST_EDATA:
++			*(unsigned long *)((unsigned long)edata + code->offset) = val;
++			break;
++		case FETCH_OP_END:
++			goto end;
++		default:
++			break;
++		}
++	}
++end:
++	return;
 +}
 +
-+#else /* !CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS */
+ /* function exit handler */
+ static int trace_fprobe_entry_handler(struct fprobe *fp, unsigned long entry_ip,
+-				unsigned long ret_ip, struct pt_regs *regs,
++				unsigned long ret_ip, struct ftrace_regs *fregs,
+ 				void *entry_data)
+ {
+ 	struct trace_fprobe *tf = container_of(fp, struct trace_fprobe, fp);
+ 
+ 	if (tf->tp.entry_arg)
+-		store_trace_entry_data(entry_data, &tf->tp, regs);
++		store_fprobe_entry_data(entry_data, &tf->tp, fregs);
+ 
+ 	return 0;
+ }
+@@ -231,7 +261,7 @@ NOKPROBE_SYMBOL(trace_fprobe_entry_handler)
+ 
+ static nokprobe_inline void
+ __fexit_trace_func(struct trace_fprobe *tf, unsigned long entry_ip,
+-		   unsigned long ret_ip, struct pt_regs *regs,
++		   unsigned long ret_ip, struct ftrace_regs *fregs,
+ 		   void *entry_data, struct trace_event_file *trace_file)
+ {
+ 	struct fexit_trace_entry_head *entry;
+@@ -245,60 +275,63 @@ __fexit_trace_func(struct trace_fprobe *tf, unsigned long entry_ip,
+ 	if (trace_trigger_soft_disabled(trace_file))
+ 		return;
+ 
+-	dsize = __get_data_size(&tf->tp, regs, entry_data);
++	dsize = __get_data_size(&tf->tp, fregs, entry_data);
+ 
+ 	entry = trace_event_buffer_reserve(&fbuffer, trace_file,
+ 					   sizeof(*entry) + tf->tp.size + dsize);
+ 	if (!entry)
+ 		return;
+ 
+-	fbuffer.regs = regs;
++	fbuffer.regs = ftrace_get_regs(fregs);
+ 	entry = fbuffer.entry = ring_buffer_event_data(fbuffer.event);
+ 	entry->func = entry_ip;
+ 	entry->ret_ip = ret_ip;
+-	store_trace_args(&entry[1], &tf->tp, regs, entry_data, sizeof(*entry), dsize);
++	store_trace_args(&entry[1], &tf->tp, fregs, entry_data, sizeof(*entry), dsize);
+ 
+ 	trace_event_buffer_commit(&fbuffer);
+ }
+ 
+ static void
+ fexit_trace_func(struct trace_fprobe *tf, unsigned long entry_ip,
+-		 unsigned long ret_ip, struct pt_regs *regs, void *entry_data)
++		 unsigned long ret_ip, struct ftrace_regs *fregs, void *entry_data)
+ {
+ 	struct event_file_link *link;
+ 
+ 	trace_probe_for_each_link_rcu(link, &tf->tp)
+-		__fexit_trace_func(tf, entry_ip, ret_ip, regs, entry_data, link->file);
++		__fexit_trace_func(tf, entry_ip, ret_ip, fregs, entry_data, link->file);
+ }
+ NOKPROBE_SYMBOL(fexit_trace_func);
+ 
+ #ifdef CONFIG_PERF_EVENTS
+ 
+ static int fentry_perf_func(struct trace_fprobe *tf, unsigned long entry_ip,
+-			    struct pt_regs *regs)
++			    struct ftrace_regs *fregs)
+ {
+ 	struct trace_event_call *call = trace_probe_event_call(&tf->tp);
+ 	struct fentry_trace_entry_head *entry;
+ 	struct hlist_head *head;
+ 	int size, __size, dsize;
++	struct pt_regs *regs;
+ 	int rctx;
+ 
+ 	head = this_cpu_ptr(call->perf_events);
+ 	if (hlist_empty(head))
+ 		return 0;
+ 
+-	dsize = __get_data_size(&tf->tp, regs, NULL);
++	dsize = __get_data_size(&tf->tp, fregs, NULL);
+ 	__size = sizeof(*entry) + tf->tp.size + dsize;
+ 	size = ALIGN(__size + sizeof(u32), sizeof(u64));
+ 	size -= sizeof(u32);
+ 
+-	entry = perf_trace_buf_alloc(size, NULL, &rctx);
++	entry = perf_trace_buf_alloc(size, &regs, &rctx);
+ 	if (!entry)
+ 		return 0;
+ 
++	regs = ftrace_fill_perf_regs(fregs, regs);
 +
-+static __always_inline struct pt_regs *
-+ftrace_fill_perf_regs(struct ftrace_regs *fregs, struct pt_regs *regs)
-+{
-+	return &arch_ftrace_regs(fregs)->regs;
-+}
+ 	entry->ip = entry_ip;
+ 	memset(&entry[1], 0, dsize);
+-	store_trace_args(&entry[1], &tf->tp, regs, NULL, sizeof(*entry), dsize);
++	store_trace_args(&entry[1], &tf->tp, fregs, NULL, sizeof(*entry), dsize);
+ 	perf_trace_buf_submit(entry, size, rctx, call->event.type, 1, regs,
+ 			      head, NULL);
+ 	return 0;
+@@ -307,31 +340,34 @@ NOKPROBE_SYMBOL(fentry_perf_func);
+ 
+ static void
+ fexit_perf_func(struct trace_fprobe *tf, unsigned long entry_ip,
+-		unsigned long ret_ip, struct pt_regs *regs,
++		unsigned long ret_ip, struct ftrace_regs *fregs,
+ 		void *entry_data)
+ {
+ 	struct trace_event_call *call = trace_probe_event_call(&tf->tp);
+ 	struct fexit_trace_entry_head *entry;
+ 	struct hlist_head *head;
+ 	int size, __size, dsize;
++	struct pt_regs *regs;
+ 	int rctx;
+ 
+ 	head = this_cpu_ptr(call->perf_events);
+ 	if (hlist_empty(head))
+ 		return;
+ 
+-	dsize = __get_data_size(&tf->tp, regs, entry_data);
++	dsize = __get_data_size(&tf->tp, fregs, entry_data);
+ 	__size = sizeof(*entry) + tf->tp.size + dsize;
+ 	size = ALIGN(__size + sizeof(u32), sizeof(u64));
+ 	size -= sizeof(u32);
+ 
+-	entry = perf_trace_buf_alloc(size, NULL, &rctx);
++	entry = perf_trace_buf_alloc(size, &regs, &rctx);
+ 	if (!entry)
+ 		return;
+ 
++	regs = ftrace_fill_perf_regs(fregs, regs);
 +
-+#endif
+ 	entry->func = entry_ip;
+ 	entry->ret_ip = ret_ip;
+-	store_trace_args(&entry[1], &tf->tp, regs, entry_data, sizeof(*entry), dsize);
++	store_trace_args(&entry[1], &tf->tp, fregs, entry_data, sizeof(*entry), dsize);
+ 	perf_trace_buf_submit(entry, size, rctx, call->event.type, 1, regs,
+ 			      head, NULL);
+ }
+@@ -343,17 +379,14 @@ static int fentry_dispatcher(struct fprobe *fp, unsigned long entry_ip,
+ 			     void *entry_data)
+ {
+ 	struct trace_fprobe *tf = container_of(fp, struct trace_fprobe, fp);
+-	struct pt_regs *regs = ftrace_get_regs(fregs);
+ 	int ret = 0;
+ 
+-	if (!regs)
+-		return 0;
+-
+ 	if (trace_probe_test_flag(&tf->tp, TP_FLAG_TRACE))
+-		fentry_trace_func(tf, entry_ip, regs);
++		fentry_trace_func(tf, entry_ip, fregs);
 +
- /*
-  * When true, the ftrace_regs_{get,set}_*() functions may be used on fregs.
-  * Note: this can be true even when ftrace_get_regs() cannot provide a pt_regs.
+ #ifdef CONFIG_PERF_EVENTS
+ 	if (trace_probe_test_flag(&tf->tp, TP_FLAG_PROFILE))
+-		ret = fentry_perf_func(tf, entry_ip, regs);
++		ret = fentry_perf_func(tf, entry_ip, fregs);
+ #endif
+ 	return ret;
+ }
+@@ -364,16 +397,12 @@ static void fexit_dispatcher(struct fprobe *fp, unsigned long entry_ip,
+ 			     void *entry_data)
+ {
+ 	struct trace_fprobe *tf = container_of(fp, struct trace_fprobe, fp);
+-	struct pt_regs *regs = ftrace_get_regs(fregs);
+-
+-	if (!regs)
+-		return;
+ 
+ 	if (trace_probe_test_flag(&tf->tp, TP_FLAG_TRACE))
+-		fexit_trace_func(tf, entry_ip, ret_ip, regs, entry_data);
++		fexit_trace_func(tf, entry_ip, ret_ip, fregs, entry_data);
+ #ifdef CONFIG_PERF_EVENTS
+ 	if (trace_probe_test_flag(&tf->tp, TP_FLAG_PROFILE))
+-		fexit_perf_func(tf, entry_ip, ret_ip, regs, entry_data);
++		fexit_perf_func(tf, entry_ip, ret_ip, fregs, entry_data);
+ #endif
+ }
+ NOKPROBE_SYMBOL(fexit_dispatcher);
+diff --git a/kernel/trace/trace_probe_tmpl.h b/kernel/trace/trace_probe_tmpl.h
+index 2caf0d2afb32..f39b37fcdb3b 100644
+--- a/kernel/trace/trace_probe_tmpl.h
++++ b/kernel/trace/trace_probe_tmpl.h
+@@ -232,7 +232,7 @@ process_fetch_insn_bottom(struct fetch_insn *code, unsigned long val,
+ 
+ /* Sum up total data length for dynamic arrays (strings) */
+ static nokprobe_inline int
+-__get_data_size(struct trace_probe *tp, struct pt_regs *regs, void *edata)
++__get_data_size(struct trace_probe *tp, void *regs, void *edata)
+ {
+ 	struct probe_arg *arg;
+ 	int i, len, ret = 0;
 
 
