@@ -1,177 +1,144 @@
-Return-Path: <linux-arch+bounces-8187-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8188-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B9DF99F5CA
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2024 20:39:55 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2ED4299F7ED
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2024 22:12:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3BAE6281E38
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2024 18:39:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BA74CB22753
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Oct 2024 20:12:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D62DB2036EE;
-	Tue, 15 Oct 2024 18:39:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 259F31F76D7;
+	Tue, 15 Oct 2024 20:12:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="XyI0MA00"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NeA6yj5h"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 182892036E3;
-	Tue, 15 Oct 2024 18:39:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC27D1B3936;
+	Tue, 15 Oct 2024 20:11:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729017590; cv=none; b=BkE/ohC8iUPe2VGNnmZTEAVFfhUIYb+D3C1mHvyunJjOkdKdppPAisWuFqz6ypxO55k4m3bauPxnXRxfQp0M15KbW5wSL9IEctkWKRyLwwwSA1Sb+7x6v8RGuDq3IK++U6r4v8KU3G7S0sDT8g4l36l33uXhUY/rUNoHS/uqkog=
+	t=1729023120; cv=none; b=flCsEz+TU8eycGVeQoWJkRTr17a7UmKJZislmuBLfNA6sjQytuSJx6B3nGQUtgkdN+hfwDAWid6sszyIMUBwUYClyMFrF42Fyhu1byCCiPDAHKSXeCWx+8G8kEdXu9tryTz0c6KxW+OLVzyyxWiiACa2569OXbdYWfVyZ+ywkfI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729017590; c=relaxed/simple;
-	bh=WMMPQa5nz5uL37eLh4HB6ilkOBqJrEE/WBB+kf3KXjQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=Oh6SBobCdvaphX0iKbl01/z3L2kyhh87Id63u14+hbR896G5QvtFIhAATeSfwGVxG1yGxOeny8F8Jk6RdDxn377oR5Wo8KGh6Hd1BEl+Pt1+ohm7r5WGzHnWB1xeoUKN/ZkSRBK4fFU90PnOxsHWL8ecLzR75JyFUJrGeFX+kds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=XyI0MA00; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49FIPV6N007905;
-	Tue, 15 Oct 2024 18:39:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=Ss7iI6bkPoaS+Y+L8y+5qkCxYznDSP
-	pd817IDjqbwYo=; b=XyI0MA00kTyqok4qAWlHaEIUQRmdKlb93lIjXp0Sn8rI91
-	+l0yxe24Gq+aBHH6tOFskudaQjNdrTCAmULM03pTIdub2mi65s4soT8xoUm1uxEw
-	bbi+u7sLAskNl2IohMUHugtClZKgx/suz/ND7Mydqe+ZugkX8PbYoEZmsxPE/slR
-	cc7RI7FiYPswK1JAeKB+FJ1U6n5gCFxtA77dg51V21HpSUMO+ZFWDikFm3nAttqj
-	Fq+THFSZRTpL94XWGg4MUuA8zimgIBycx8Hn/sCobDx+G9Mam+pfVfkOGpf0pmjq
-	6IVqEzNg2D5wtCClUvavSz4QzpjV2knZKAfuy14A==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 429wng82fx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 15 Oct 2024 18:39:15 +0000 (GMT)
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 49FIdELe007012;
-	Tue, 15 Oct 2024 18:39:14 GMT
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 429wng82fk-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 15 Oct 2024 18:39:14 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 49FH1m8v027452;
-	Tue, 15 Oct 2024 18:39:12 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4283txnfs6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 15 Oct 2024 18:39:12 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 49FId8Q952035914
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 15 Oct 2024 18:39:08 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B5F6020043;
-	Tue, 15 Oct 2024 18:39:08 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9394C20040;
-	Tue, 15 Oct 2024 18:39:07 +0000 (GMT)
-Received: from osiris (unknown [9.171.70.29])
-	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Tue, 15 Oct 2024 18:39:07 +0000 (GMT)
-Date: Tue, 15 Oct 2024 20:39:06 +0200
-From: Heiko Carstens <hca@linux.ibm.com>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Florent Revest <revest@chromium.org>,
-        linux-trace-kernel@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>, bpf <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Mark Rutland <mark.rutland@arm.com>, linux-arch@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH v16 04/18] function_graph: Replace fgraph_ret_regs with
- ftrace_regs
-Message-ID: <20241015183906.19678-B-hca@linux.ibm.com>
-References: <172895571278.107311.14000164546881236558.stgit@devnote2>
- <172895575716.107311.6784997045170009035.stgit@devnote2>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <172895575716.107311.6784997045170009035.stgit@devnote2>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Us35ezRVuJAVPgZnL8yf-hXVmLe3f8Pi
-X-Proofpoint-ORIG-GUID: I6MloaO0jd-bMySZ7vuHW5gMDDRmrOF9
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	s=arc-20240116; t=1729023120; c=relaxed/simple;
+	bh=Y6PhmBa/nN+iDUxTFqcR/Mb33RbOlJl9A4RsS6bV0b4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Vh7lmVVpJqvfT2SuyTn01QJQPSrNqOINo1fmqe0P++7LKpc+a7oe7d2sBQw0SCHjpZfwrGDP+Vqtlu6EVwfKHSZN3mGjoCyaqag5LelnjsPyKKzYBJcSPjHWwBpPiy/sZZb8tMw7v2E3jk9A0vxXbRHdO0Jjadx65pR0YDiQrNM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NeA6yj5h; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAB4EC4CEC6;
+	Tue, 15 Oct 2024 20:11:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729023118;
+	bh=Y6PhmBa/nN+iDUxTFqcR/Mb33RbOlJl9A4RsS6bV0b4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NeA6yj5hajfLYEdkGLWG8XB5N4aid73nUjDZb/ugsyZ3AQoALVnXt8x2U69teh7bp
+	 +Jxn6eME2rpnC6+5s7BU9sn0TueSyVekqQmYatz9jkvCTO794aSB0wivMugKOyBQcF
+	 f12fUI4D7cG8AqwuNBz90ooW8BLJGSzfYerkziVJS4gVWwzpr6llRoBCSoxKz8d+Fs
+	 0rPGTZgvQEw9IByGG03TdQUKWcviEE7gexwsotoi1Pu3fbgseCJrzYVZZZHzQHsDOS
+	 xg878mky4sIBNDtU8Y7CZD0UtD4jLkQQWx+cO7Oq3WKQ8DmXAZc3hC28g+NG7SbCgU
+	 uBbk2RUOwLABQ==
+Date: Tue, 15 Oct 2024 13:11:54 -0700
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Christoph Hellwig <hch@infradead.org>, Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+	Brian Cain <bcain@quicinc.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Stafford Horne <shorne@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org, x86@kernel.org, kdevops@lists.linux.dev
+Subject: Re: [PATCH v5 7/8] execmem: add support for cache of large ROX pages
+Message-ID: <Zw7MirnsHnhRveBB@bombadil.infradead.org>
+References: <20241009180816.83591-1-rppt@kernel.org>
+ <20241009180816.83591-8-rppt@kernel.org>
+ <Zwd7GRyBtCwiAv1v@infradead.org>
+ <ZwfPPZrxHzQgYfx7@kernel.org>
+ <ZwjXz0dz-RldVNx0@infradead.org>
+ <ZwuIPZkjX0CfzhjS@kernel.org>
+ <20241013202626.81f430a16750af0d2f40d683@linux-foundation.org>
+ <Zw1uBBcG-jAgxF_t@bombadil.infradead.org>
+ <Zw3rDS3GRWZe4CBu@bombadil.infradead.org>
+ <Zw4DlTTbz4QwhOvU@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=351 phishscore=0
- malwarescore=0 lowpriorityscore=0 bulkscore=0 mlxscore=0 impostorscore=0
- adultscore=0 suspectscore=0 priorityscore=1501 spamscore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2409260000
- definitions=main-2410150126
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Zw4DlTTbz4QwhOvU@kernel.org>
 
-On Tue, Oct 15, 2024 at 10:29:17AM +0900, Masami Hiramatsu (Google) wrote:
-> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+On Tue, Oct 15, 2024 at 08:54:29AM +0300, Mike Rapoport wrote:
+> On Mon, Oct 14, 2024 at 09:09:49PM -0700, Luis Chamberlain wrote:
+> > Mike, please run this with kmemleak enabled and running, and also try to get
+> > tools/testing/selftests/kmod/kmod.sh to pass.
 > 
-> Use ftrace_regs instead of fgraph_ret_regs for tracing return value
-> on function_graph tracer because of simplifying the callback interface.
+> There was an issue with kmemleak, I fixed it here:
 > 
-> The CONFIG_HAVE_FUNCTION_GRAPH_RETVAL is also replaced by
-> CONFIG_HAVE_FUNCTION_GRAPH_FREGS.
+> https://lore.kernel.org/linux-mm/20241009180816.83591-1-rppt@kernel.org/T/#m020884c1795218cc2be245e8091fead1cda3f3e4
+
+Ah, so this was a side fix, not part of this series, thanks.
+
+> > I run into silly boot issues with just a guest.
 > 
-> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> Was it kmemleak or something else?
 
-...
+Both kmemleak and the kmod selftest failed, here is a run of the test
+with this patch series:
 
-> diff --git a/arch/s390/kernel/mcount.S b/arch/s390/kernel/mcount.S
-> index 7e267ef63a7f..a9ca56ea0858 100644
-> --- a/arch/s390/kernel/mcount.S
-> +++ b/arch/s390/kernel/mcount.S
-> @@ -134,14 +134,15 @@ SYM_CODE_END(ftrace_common)
->  SYM_FUNC_START(return_to_handler)
->  	stmg	%r2,%r5,32(%r15)
->  	lgr	%r1,%r15
-> -	aghi	%r15,-(STACK_FRAME_OVERHEAD+__FGRAPH_RET_SIZE)
-> +	aghi	%r15,-(STACK_FRAME_OVERHEAD+STACK_FRAME_SIZE_FREGS)
->  	stg	%r1,__SF_BACKCHAIN(%r15)
-> -	la	%r3,STACK_FRAME_OVERHEAD(%r15)
-> -	stg	%r1,__FGRAPH_RET_FP(%r3)
-> -	stg	%r2,__FGRAPH_RET_GPR2(%r3)
-> -	lgr	%r2,%r3
-> +	la	%r4,STACK_FRAME_OVERHEAD(%r15)
-> +	stg	%r2,__PT_R2(%r4)
-> +	stg	%r3,__PT_R3(%r4)
-> +	stg	%r1,__PT_R15(%r4)
-> +	lgr	%r2,%r4
->  	brasl	%r14,ftrace_return_to_handler
-> -	aghi	%r15,STACK_FRAME_OVERHEAD+__FGRAPH_RET_SIZE
-> +	aghi	%r15,STACK_FRAME_SIZE_FREGS
->  	lgr	%r14,%r2
->  	lmg	%r2,%r5,32(%r15)
->  	BR_EX	%r14
+https://github.com/linux-kdevops/linux-modules-kpd/actions/runs/11352286624/job/31574722735
 
-Why didn't you simply merge the addon patch which I provided, and
-which I tested?
-https://lore.kernel.org/all/20240916121656.20933-B-hca@linux.ibm.com
+We now have automated tests generated when people post patches to
+linux-modules, but if you give me your github username you can push
+onto the linux-kdevops/linux-modules-kpd [0] repo a random branch once you
+have it ready, just cp -a the linux-ci-modules/.github [1] directory onto
+your branch before a push and that'll trigger a test run (you need to
+git add -f .github on your Linux branch) with our self-hosted runners.
 
-That would make things much simpler... e.g. your new patch is also
-writing r3 to fregs, why? The stackframe allocation is also wrong.
-I didn't try, but I guess the above code would crash instantly.
+[0] https://github.com/linux-kdevops/linux-modules-kpd
+[1] https://github.com/linux-kdevops/kdevops-ci-modules
+
+  Luis
 
