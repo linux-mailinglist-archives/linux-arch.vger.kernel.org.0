@@ -1,209 +1,117 @@
-Return-Path: <linux-arch+bounces-8230-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8231-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01E5F9A09C1
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Oct 2024 14:28:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 851799A0B66
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Oct 2024 15:26:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 252E51C21168
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Oct 2024 12:28:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 09DFF1F263DC
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Oct 2024 13:26:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D06B20C03E;
-	Wed, 16 Oct 2024 12:27:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B02DA208D7A;
+	Wed, 16 Oct 2024 13:26:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ewgSS7JQ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nGX/pFJh"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C1FD20821C;
-	Wed, 16 Oct 2024 12:27:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14AFB20720B
+	for <linux-arch@vger.kernel.org>; Wed, 16 Oct 2024 13:26:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729081625; cv=none; b=s38+MPhnutUqUtm0FqgK7HuElUjrN3z/XJYpnGkenQMOPVAb+8cucCTVvG2oV34ixVp9h6FD1LdHM++3A7+PGdkwlnQjodM/5lOpcrrM4CI6tTnUVzqtsvdzpS9wNf0WYeM4DK8b7FJYVmwsLyjPAuskVBXjgULupFYEp+J04ME=
+	t=1729085176; cv=none; b=HnbOeaZ4jiS7wN8Q0wKsLSXYO2Jzj01nUo/M+2WIR8br5UCqnK9aN9lsOnCh2CM6HVMsdhBKL41Gsc3HB8Lfc53hWWyY9u841OJa6Iorke2lPoUnxVbdR1Uh6r/KxC2VC7gZBArgQ9nJz8N1ziFKhDx5hUiu2DrF/LDDw6R4DpY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729081625; c=relaxed/simple;
-	bh=eY6kLN8OlN+AhPSjfqE9l5XEI+8YBmb961qfGDylvwo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AsXymXiubOq2IXvnyu0Yr9ixv0wQBG5QA74AwF064eBSsVSagv3o/B/N/i8zUZN+ztAOY2SNdNuXtQO7boiCqt0izGETpatR+l3wTHFsr4fcJCOEWD2FG1khESIXBR34hzAbsR2cjO+P5BvGN3HrMhlayBnoNyIiE8OiIYp8CZw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ewgSS7JQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4677BC4CECF;
-	Wed, 16 Oct 2024 12:26:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729081624;
-	bh=eY6kLN8OlN+AhPSjfqE9l5XEI+8YBmb961qfGDylvwo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ewgSS7JQnctq7Hgrv3uuVnVef5NJ6/W1nB36pkS9n4SMtyIyVrElKtKyFF1q0jkpP
-	 EsFcTPX0SKB8iugJZ8fG/3GbaKQ9JTTxiSf0x8Je0VGHSki/f8KCPFSVhlw3IAbCgq
-	 dHZxxLb3XDQt5YWY63oWKwfSJfIRrZ4ETnxR7W4suuZEwzrS9kg5Y5qEjXIsmjEAIc
-	 d+qNLfS/dkDTekE3774d/xn4huY0MjrfXRLRM5fT0pICnGA4BMmSBqBpOwDvhxDH7h
-	 lEAtUAvDJvuqN4dGETbbq15U4XHTm20JcFbizm6eRWYoC4wDxNk9mafVHZRkNrpKww
-	 GhffryNbJ3RBQ==
-From: Mike Rapoport <rppt@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	Luis Chamberlain <mcgrof@kernel.org>
-Cc: Andreas Larsson <andreas@gaisler.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Borislav Petkov <bp@alien8.de>,
-	Brian Cain <bcain@quicinc.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christoph Hellwig <hch@infradead.org>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Guo Ren <guoren@kernel.org>,
-	Helge Deller <deller@gmx.de>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Matt Turner <mattst88@gmail.com>,
-	Max Filippov <jcmvbkbc@gmail.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Michal Simek <monstr@monstr.eu>,
-	Mike Rapoport <rppt@kernel.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Richard Weinberger <richard@nod.at>,
-	Russell King <linux@armlinux.org.uk>,
-	Song Liu <song@kernel.org>,
-	Stafford Horne <shorne@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Vineet Gupta <vgupta@kernel.org>,
-	Will Deacon <will@kernel.org>,
-	bpf@vger.kernel.org,
-	linux-alpha@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-csky@vger.kernel.org,
-	linux-hexagon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-modules@vger.kernel.org,
-	linux-openrisc@vger.kernel.org,
-	linux-parisc@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-sh@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-um@lists.infradead.org,
-	linuxppc-dev@lists.ozlabs.org,
-	loongarch@lists.linux.dev,
-	sparclinux@vger.kernel.org,
-	x86@kernel.org
-Subject: [PATCH v6 8/8] x86/module: enable ROX caches for module text on 64 bit
-Date: Wed, 16 Oct 2024 15:24:24 +0300
-Message-ID: <20241016122424.1655560-9-rppt@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241016122424.1655560-1-rppt@kernel.org>
-References: <20241016122424.1655560-1-rppt@kernel.org>
+	s=arc-20240116; t=1729085176; c=relaxed/simple;
+	bh=O7EgR5OSjoWSs3q+41nfNzDZd6mbVvdVr2357ZxksYQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FvWWbX5n5sQ/6o5NggxIzmAIhVsaLknZv4lVCAfBDbszlqhE53AaA243zZuYxq+HLC4Pk+MwVBXj/r9uEAA3bTO4hEBi/Dp2AksvHAiGiBFdYPA5B2XnOoQpmryh6YdXvMNUasDxJAtjmbkx/a51WsSwOPiQJGSefQX3wilmo1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nGX/pFJh; arc=none smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5c932b47552so18733a12.0
+        for <linux-arch@vger.kernel.org>; Wed, 16 Oct 2024 06:26:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1729085173; x=1729689973; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=O7EgR5OSjoWSs3q+41nfNzDZd6mbVvdVr2357ZxksYQ=;
+        b=nGX/pFJh+wzH1/diPW9LoH78Xy/4/Gs8GVJAwGrsr43WqGcuVcqH0F2jt+GjeGRjzV
+         ykB+Cgp8AN/rtf16UBaw+mhmVfpVGV6jtbWiPExeGYhiXxZDV/OXhz3B+jbU8YN9Xrbx
+         L7E2HHK+TXPo9e2QSU3Cd9S/XzV4kI5s3pSVLEIOsqlV3KytlY4BgJs8Ppuo6aQMmUyM
+         S5bFHWrPpjne+vYkante4qsk+ZGMfbLwEoHDJuZvQO0X3//C0ojB57ncawVQdlMzADId
+         A9aEDrfQkNPbraQEeHSrSRlnizylfZ4nKDubqXMgd4dFXfeMI6OmwZzo04hkMv86wcKa
+         1kMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729085173; x=1729689973;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=O7EgR5OSjoWSs3q+41nfNzDZd6mbVvdVr2357ZxksYQ=;
+        b=vR52yPUtcNtC5sO0rr6B0Z1LvqrpzcC6NE1+iwtP2x1Ped9tSFDEAhOfg6XV5elMia
+         xaaGf2tZpg1uuaM6Y6Dvl5eIPXzEp4SxRYS8PIBysC7m/PoNO6lpQDqbqSCRrBdJLg+5
+         2pttxyfcbuxKvaOojgslATjbbF3GvhEijfFiY3KSeyy8BjJv0azoIOTdOPm6yhjyuYKO
+         MUd+ZMkgJCF3RBizhk/h0Z3t5FLxFsTuY7b/cNbePOdfJRgB/IvVRfajDZrsUN8QGORu
+         SBDnKMwVvQgdx3YDBnizq7/MB9TN8utvqW+nh/47dcnj5z4RGzql9+g3f2ne7o0Wv8Ey
+         XkbQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVxbiZwCKMHZnCQr0WskgxoE5Mly+jteG7aY6uuWX+kMW9a9Z4izMoXDG14ECzGR2m8cowDkJ/rv0nK@vger.kernel.org
+X-Gm-Message-State: AOJu0YwyfhNbEkHU1rX0MV6GrDqmfgclOat2W4G/RN3n64y9cGJf9dds
+	nyjNDA1kaGcGJXOFRMzNvIuFEXr6L+IOuFSE3hOnwyQoK+/p04Xe7oRI94DDuzUZ/JLPlIP+IJy
+	PN5zYe1IXspj2Wz0TFB5b8wP9OX9OjHpAggBZ
+X-Google-Smtp-Source: AGHT+IHm4uAnm6x4gqyE8JxaDYdv12A+djBdgtqoCDD2tCHeA1XFE3cLD3QA0GXWVVrvkSNF4Qk2pPtyOLiHFomBKfc=
+X-Received: by 2002:a05:6402:234a:b0:5c8:a0fd:64f0 with SMTP id
+ 4fb4d7f45d1cf-5c9979d0b81mr492682a12.2.1729085172800; Wed, 16 Oct 2024
+ 06:26:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240903232241.43995-1-anthony.yznaga@oracle.com>
+ <CAG48ez0=9O-V0V6v_LUgRcF46BooJdk3eqb6xgDpKpNZuW1L2A@mail.gmail.com> <a185df19-c8a5-4b2f-8bed-19770744a944@oracle.com>
+In-Reply-To: <a185df19-c8a5-4b2f-8bed-19770744a944@oracle.com>
+From: Jann Horn <jannh@google.com>
+Date: Wed, 16 Oct 2024 15:25:34 +0200
+Message-ID: <CAG48ez33CQmWnQR13WvuP+eiX=MEXch2s6n2+Ck+zT5Tgi5fEg@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 00/10] Add support for shared PTEs across processes
+To: Anthony Yznaga <anthony.yznaga@oracle.com>
+Cc: akpm@linux-foundation.org, willy@infradead.org, markhemm@googlemail.com, 
+	viro@zeniv.linux.org.uk, david@redhat.com, khalid@kernel.org, 
+	andreyknvl@gmail.com, dave.hansen@intel.com, luto@kernel.org, 
+	brauner@kernel.org, arnd@arndb.de, ebiederm@xmission.com, 
+	catalin.marinas@arm.com, linux-arch@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, mhiramat@kernel.org, 
+	rostedt@goodmis.org, vasily.averin@linux.dev, xhao@linux.alibaba.com, 
+	pcc@google.com, neilb@suse.de, maz@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+On Wed, Oct 16, 2024 at 2:59=E2=80=AFAM Anthony Yznaga
+<anthony.yznaga@oracle.com> wrote:
+> On 10/14/24 1:07 PM, Jann Horn wrote:
+> > Second, there is a newer mode for IOMMUv2 stuff (using the
+> > mmu_notifier_ops::invalidate_range callback), where the idea is that
+> > you have secondary MMUs that share the normal page tables, and so you
+> > basically send them invalidations at the same time you invalidate the
+> > primary MMU for the process. I think that's the right fit for this
+> > usecase; however, last I looked, this code was extremely broken (see
+> > https://lore.kernel.org/lkml/CAG48ez2NQKVbv=3DyG_fq_jtZjf8Q=3D+Wy54FxcF=
+rK_OujFg5BwSQ@mail.gmail.com/
+> > for context). Unless that's changed in the meantime, I think someone
+> > would have to fix that code before it can be relied on for new
+> > usecases.
+>
+> Thank you for this background! Looks like there have since been some
+> changes to the mmu notifiers, and the invalidate_range callback became
+> arch_invalidate_secondary_tlbs. I'm currently looking into using it to
+> flush all TLBs.
 
-Enable execmem's cache of PMD_SIZE'ed pages mapped as ROX for module
-text allocations on 64 bit.
-
-Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
----
- arch/x86/Kconfig   |  1 +
- arch/x86/mm/init.c | 37 ++++++++++++++++++++++++++++++++++++-
- 2 files changed, 37 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 2852fcd82cbd..ff71d18253ba 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -83,6 +83,7 @@ config X86
- 	select ARCH_HAS_DMA_OPS			if GART_IOMMU || XEN
- 	select ARCH_HAS_EARLY_DEBUG		if KGDB
- 	select ARCH_HAS_ELF_RANDOMIZE
-+	select ARCH_HAS_EXECMEM_ROX		if X86_64
- 	select ARCH_HAS_FAST_MULTIPLIER
- 	select ARCH_HAS_FORTIFY_SOURCE
- 	select ARCH_HAS_GCOV_PROFILE_ALL
-diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
-index eb503f53c319..c2e4f389f47f 100644
---- a/arch/x86/mm/init.c
-+++ b/arch/x86/mm/init.c
-@@ -1053,18 +1053,53 @@ unsigned long arch_max_swapfile_size(void)
- #ifdef CONFIG_EXECMEM
- static struct execmem_info execmem_info __ro_after_init;
- 
-+#ifdef CONFIG_ARCH_HAS_EXECMEM_ROX
-+void execmem_fill_trapping_insns(void *ptr, size_t size, bool writeable)
-+{
-+	/* fill memory with INT3 instructions */
-+	if (writeable)
-+		memset(ptr, INT3_INSN_OPCODE, size);
-+	else
-+		text_poke_set(ptr, INT3_INSN_OPCODE, size);
-+}
-+#endif
-+
- struct execmem_info __init *execmem_arch_setup(void)
- {
- 	unsigned long start, offset = 0;
-+	enum execmem_range_flags flags;
-+	pgprot_t pgprot;
- 
- 	if (kaslr_enabled())
- 		offset = get_random_u32_inclusive(1, 1024) * PAGE_SIZE;
- 
- 	start = MODULES_VADDR + offset;
- 
-+	if (IS_ENABLED(CONFIG_ARCH_HAS_EXECMEM_ROX)) {
-+		pgprot = PAGE_KERNEL_ROX;
-+		flags = EXECMEM_KASAN_SHADOW | EXECMEM_ROX_CACHE;
-+	} else {
-+		pgprot = PAGE_KERNEL;
-+		flags = EXECMEM_KASAN_SHADOW;
-+	}
-+
- 	execmem_info = (struct execmem_info){
- 		.ranges = {
--			[EXECMEM_DEFAULT] = {
-+			[EXECMEM_MODULE_TEXT] = {
-+				.flags	= flags,
-+				.start	= start,
-+				.end	= MODULES_END,
-+				.pgprot	= pgprot,
-+				.alignment = MODULE_ALIGN,
-+			},
-+			[EXECMEM_KPROBES ... EXECMEM_BPF] = {
-+				.flags	= EXECMEM_KASAN_SHADOW,
-+				.start	= start,
-+				.end	= MODULES_END,
-+				.pgprot	= PAGE_KERNEL,
-+				.alignment = MODULE_ALIGN,
-+			},
-+			[EXECMEM_MODULE_DATA] = {
- 				.flags	= EXECMEM_KASAN_SHADOW,
- 				.start	= start,
- 				.end	= MODULES_END,
--- 
-2.43.0
-
+Ah, nice, that looks much better now. With the caveat that, from what
+I can tell, the notifiers only work on x86/arm64/powerpc - I guess
+maybe that infrastructure should be gated on a HAVE_... arch config
+flag...
 
