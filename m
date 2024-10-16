@@ -1,151 +1,161 @@
-Return-Path: <linux-arch+bounces-8218-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8219-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A433B9A00C4
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Oct 2024 07:33:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27A129A045F
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Oct 2024 10:34:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EDE0CB2150E
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Oct 2024 05:33:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AB97C1F28F76
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Oct 2024 08:34:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1698118BB9F;
-	Wed, 16 Oct 2024 05:33:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD8EA1F8185;
+	Wed, 16 Oct 2024 08:34:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pDGBBC4h"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="d6XodqGe"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F868172777
-	for <linux-arch@vger.kernel.org>; Wed, 16 Oct 2024 05:33:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B97DF1BE871;
+	Wed, 16 Oct 2024 08:34:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729056811; cv=none; b=RGXRTh+R9yTiJxEkqNw9BmyygWBR704xAtCusrop0JgnJzJPSuF3t/A7sg9v3tjvDmGg68Sae2wX7f02f/kyvGKPdS6T0zTG3IUXYp/Q5d9cyU524QnJRljOvhqTXwnzfkMwSllViEKRTjhKCQo97G//w+D2DC69Ws71lCyG4Ao=
+	t=1729067657; cv=none; b=amsI4IAzZzCeYwTBD4YNf6VlScB8YmvxibQLs+FO+niHxOc2bg8upsQurABCDTIlMruePXzO4nejxD1T4FMoKlb4EpgTNv19cA5SfFAeMuC5SX6n+uXf8n5JZlMyrKQ3aw31iiLcJsccTIJWpTfpG7nafN1BwfwqX/VWN5pXOsg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729056811; c=relaxed/simple;
-	bh=a8AHrour6y3gtSVQgfuTGwKhI4oiODFOIV0RsJ1H81I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Content-Type; b=n177vJOXHD51gMObkn8V8/PmkrTGSCVYBw0nC+7yVDTFmRbH+vur/44fO7LGOrMEvsTlICvR3xDAejeDg40jFVbxLiHEHr7dSWEiQJcCRMOr99RpffGvlPeg0iPWrVew0unC89pwoL5Zgb889zlT4poKdxfFSUmWWzY7BMO+C28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pDGBBC4h; arc=none smtp.client-ip=209.85.166.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-il1-f179.google.com with SMTP id e9e14a558f8ab-3a3b3f4b2afso107825ab.0
-        for <linux-arch@vger.kernel.org>; Tue, 15 Oct 2024 22:33:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1729056808; x=1729661608; darn=vger.kernel.org;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IE3n7neBCFO0QX3SRz3T65QnhWq2c+d+oC2i4MBN32E=;
-        b=pDGBBC4hEwg1iPsMzi9bQ3+KMqgaINZMNpjYEUFDC3VR82QnxUUZoMvO/8F6zNk1LD
-         e3dcK48akf0KDNzBL4LUsa9kV6eeyWXDUqIeXZQIccgYaqOwLFqg9Ys7jmC6QoSis3Mf
-         d6wbPyWC5OsB5X5D31sx0BZLd0Rc/XMFnY5IjE2QP3c+VcXKXe9rSBK05vy2Qk88BeNd
-         HfzR0FLKzr7pnXFhjLgqTlIA4orch8vOyfmcOvai8k83rVQoIuiFpjqqIoF/UNUoR3OF
-         IGZEzBnbg1v959oHOOEdXrADN+pb23RtW69+KcNQzrlIPA59tLW9gliSRzLTDXdLiX1R
-         k+nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729056808; x=1729661608;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IE3n7neBCFO0QX3SRz3T65QnhWq2c+d+oC2i4MBN32E=;
-        b=mObvOOO9iUCYGdpPwpLM0W5w7NDZCY1WsOR4C43cgejY+RXcsVA6lxW4SEbHayBMYV
-         yfGqzlribs77EQYvm5nke28ddtG3lcty126Ot3SULcMOqz/it3BsoNLzxS+2fZzCJGqs
-         lZTVZLM+QRPIvBNhojkcxUe7C6vCh9NGuCx3lXhdIkliF6aKq9whulldgSxPqPBtczHy
-         RFlSc9VCe5u+zjFkVbMwdCd31ge082j+8lQUx3wU0XGOdO/Obyv2U5N4Hv4l0Qv0fRU/
-         yLNESTwxx1t8wWw2tYDNNUSzwfs3i8PxRVgY0Jcpd9JMktzVpXMAbvpvIk2/gjcgw2dG
-         mR5w==
-X-Forwarded-Encrypted: i=1; AJvYcCULG+SScnGEMRdSn2wtktBLH+10S7xGOztH9IvCgcETMHq+aQoFLphPXsdBqkDyZwfD+RmSG0ckeSP5@vger.kernel.org
-X-Gm-Message-State: AOJu0YzR9SdeH1snL+ue7iAtJOha7J9iikzUMsiqm5t3DM0QzsdzugWj
-	Jwfk+DXHKv8B1w4qOxTNMmCSRr2RVTac16QzFdZTsey4I6EEk3GJHxi4FbXwMMuvwpRJjJY4n7o
-	a0xNbvTcZuc7NskT55r9u7XJU1DHBd2Mkfzp7
-X-Google-Smtp-Source: AGHT+IHVny0OObU929AfXGoqJehfn3ed3sWMkp/JKdrStFJ+P9YrlgLxFcEP8zDxPHDtQik/xhI9gZNftcG09QqbV38=
-X-Received: by 2002:a92:cd81:0:b0:3a0:a233:caf8 with SMTP id
- e9e14a558f8ab-3a3ddecf747mr2346255ab.26.1729056808205; Tue, 15 Oct 2024
- 22:33:28 -0700 (PDT)
+	s=arc-20240116; t=1729067657; c=relaxed/simple;
+	bh=3ixjSPj57/3HkHGg+1AgHR7Q4xBBgsWAjhtgab4RGGg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=HQcBba1EN8JiTmmstF8gQvXIIf2qJt71egDVBuGAJhWBlY2kCmDK31jDagzsxQ7PxDOJPwXfnA6RvGkYWmSYjejQQXeXbaMsrqCxmBAArJgrUKZMDFbbCzkvbJthtNYGMNFQtSX6k+czNpIPDPf06u613WJCsRVjKW9q9yON5UA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=d6XodqGe; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49G4tSLM013571;
+	Wed, 16 Oct 2024 08:33:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pp1; bh=s1ClHwECgAqvw8fo7bgayDaexlCa/k
+	jzSj/hte/BsI0=; b=d6XodqGefVZ2Oo3pY6raHP+3dLv8SsY/LOAnt0i62dmXK1
+	hU5uCifU8RLSuMzcw7Q5Pk/rHp5A54/luTfmeDzJ2Wkz12ODQ63nc+5m/oH/W6Vr
+	sZIYpxscfjlLGMYYEQVAeqTgFPU9gMTsvQxLIfDzfn5cunyKXwh3VQn7xStqQlOn
+	qvpQc26z8BAlzizP4VlTtu57IeBeShr4sg4Um3MgVhCERbYdvT5aZwUNFPsreabI
+	nS9u9vdoZYwPRgtF9QOgD5ms1OclAbjK8+2feiPWyyN9A06TnXWk45+hGe1rV6IT
+	cUgNSaTJY9MVuirzexgTvfqg9/zz8BOOYPSmL6Gw==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42a6vm0x57-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 16 Oct 2024 08:33:32 +0000 (GMT)
+Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 49G8XVG1020697;
+	Wed, 16 Oct 2024 08:33:31 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42a6vm0x54-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 16 Oct 2024 08:33:31 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 49G7Y1Ui006761;
+	Wed, 16 Oct 2024 08:33:30 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4284xk85e8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 16 Oct 2024 08:33:30 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 49G8XQlq54198614
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 16 Oct 2024 08:33:26 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7003720040;
+	Wed, 16 Oct 2024 08:33:26 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1E7DB2004B;
+	Wed, 16 Oct 2024 08:33:25 +0000 (GMT)
+Received: from osiris (unknown [9.179.27.227])
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Wed, 16 Oct 2024 08:33:25 +0000 (GMT)
+Date: Wed, 16 Oct 2024 10:33:23 +0200
+From: Heiko Carstens <hca@linux.ibm.com>
+To: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Florent Revest <revest@chromium.org>,
+        linux-trace-kernel@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Mark Rutland <mark.rutland@arm.com>, linux-arch@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH v16 04/18] function_graph: Replace fgraph_ret_regs with
+ ftrace_regs
+Message-ID: <20241016083323.16801-A-hca@linux.ibm.com>
+References: <172895571278.107311.14000164546881236558.stgit@devnote2>
+ <172895575716.107311.6784997045170009035.stgit@devnote2>
+ <20241015183906.19678-B-hca@linux.ibm.com>
+ <20241016084720.828fefb791af4bcf386aac91@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241016084720.828fefb791af4bcf386aac91@kernel.org>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: THvSImdZT7cNTKydum66qvZm3KuHppMe
+X-Proofpoint-GUID: Ti8WhGAnHe5v38r1fomyzE9dHOz0LqKQ
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241014203646.1952505-1-surenb@google.com> <20241014203646.1952505-2-surenb@google.com>
- <o3jak2i7ohhxi53xlthv7yy3oop62qpfscel36szn4sctg67ip@ctrntnrcauav>
-In-Reply-To: <o3jak2i7ohhxi53xlthv7yy3oop62qpfscel36szn4sctg67ip@ctrntnrcauav>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Tue, 15 Oct 2024 22:33:15 -0700
-Message-ID: <CAJuCfpF2Xe4XcvruJe7evZpbYY71W7SVjbXQ_+XgzJvcLtVuuw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/5] maple_tree: add mas_for_each_rev() helper
-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>, Suren Baghdasaryan <surenb@google.com>, 
-	akpm@linux-foundation.org, kent.overstreet@linux.dev, corbet@lwn.net, 
-	arnd@arndb.de, mcgrof@kernel.org, rppt@kernel.org, paulmck@kernel.org, 
-	thuth@redhat.com, tglx@linutronix.de, bp@alien8.de, 
-	xiongwei.song@windriver.com, ardb@kernel.org, david@redhat.com, 
-	vbabka@suse.cz, mhocko@suse.com, hannes@cmpxchg.org, roman.gushchin@linux.dev, 
-	dave@stgolabs.net, willy@infradead.org, pasha.tatashin@soleen.com, 
-	souravpanda@google.com, keescook@chromium.org, dennis@kernel.org, 
-	jhubbard@nvidia.com, yuzhao@google.com, vvvvvv@google.com, 
-	rostedt@goodmis.org, iamjoonsoo.kim@lge.com, rientjes@google.com, 
-	minchan@google.com, kaleshsingh@google.com, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, linux-mm@kvack.org, 
-	linux-modules@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ impostorscore=0 priorityscore=1501 bulkscore=0 mlxscore=0 clxscore=1015
+ malwarescore=0 lowpriorityscore=0 phishscore=0 mlxlogscore=539 spamscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2410160056
 
-On Tue, Oct 15, 2024 at 6:48=E2=80=AFPM 'Liam R. Howlett' via kernel-team
-<kernel-team@android.com> wrote:
->
-> * Suren Baghdasaryan <surenb@google.com> [241014 16:36]:
-> > Add mas_for_each_rev() function to iterate maple tree nodes in reverse
-> > order.
-> >
-> > Suggested-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
-> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
->
-> I am now sure I added a R-B in a reply to this :)
+On Wed, Oct 16, 2024 at 08:47:20AM +0900, Masami Hiramatsu wrote:
+> On Tue, 15 Oct 2024 20:39:06 +0200
+> Heiko Carstens <hca@linux.ibm.com> wrote:
+> 
+> > That would make things much simpler... e.g. your new patch is also
+> > writing r3 to fregs, why? 
+> 
+> BTW, according to the document [1], r3 is for "return value 1", isn't it
+> used usually?
+> 
+> [1] https://www.kernel.org/doc/Documentation/s390/Debugging390.txt
 
-Sorry, I missed it. Will add in the next version. Thanks!
+That is true for the 32 bit ABI, but not for the 64 bit ABI which we
+care about. Besides other this is also the reason why I removed the
+above file five years ago: f62f7dcbf023 ("Documentation/s390: remove
+outdated debugging390 documentation").
 
->
-> > ---
-> >  include/linux/maple_tree.h | 14 ++++++++++++++
-> >  1 file changed, 14 insertions(+)
-> >
-> > diff --git a/include/linux/maple_tree.h b/include/linux/maple_tree.h
-> > index c2c11004085e..e7e2caa1a95a 100644
-> > --- a/include/linux/maple_tree.h
-> > +++ b/include/linux/maple_tree.h
-> > @@ -592,6 +592,20 @@ static __always_inline void mas_reset(struct ma_st=
-ate *mas)
-> >  #define mas_for_each(__mas, __entry, __max) \
-> >       while (((__entry) =3D mas_find((__mas), (__max))) !=3D NULL)
-> >
-> > +/**
-> > + * mas_for_each_rev() - Iterate over a range of the maple tree in reve=
-rse order.
-> > + * @__mas: Maple Tree operation state (maple_state)
-> > + * @__entry: Entry retrieved from the tree
-> > + * @__min: minimum index to retrieve from the tree
-> > + *
-> > + * When returned, mas->index and mas->last will hold the entire range =
-for the
-> > + * entry.
-> > + *
-> > + * Note: may return the zero entry.
-> > + */
-> > +#define mas_for_each_rev(__mas, __entry, __min) \
-> > +     while (((__entry) =3D mas_find_rev((__mas), (__min))) !=3D NULL)
-> > +
-> >  #ifdef CONFIG_DEBUG_MAPLE_TREE
-> >  enum mt_dump_format {
-> >       mt_dump_dec,
-> > --
-> > 2.47.0.rc1.288.g06298d1525-goog
-> >
->
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kernel-team+unsubscribe@android.com.
->
+If you really want to understand the 64 bit s390 ABI then you need to
+look at https://github.com/IBM/s390x-abi .
+
+A PDF file of the latest release is available at
+https://github.com/IBM/s390x-abi/releases/download/v1.6.1/lzsabi_s390x.pdf
+
+See section "1.2.5. Return Values" for return value handling.
+
+All of that said, I would appreciate if you would just merge the
+provided patch, unless there is a reason for not doing that. Chances
+are that I missed something with all the recent fregs vs ptregs
+changes.
 
