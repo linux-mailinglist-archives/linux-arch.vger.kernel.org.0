@@ -1,186 +1,217 @@
-Return-Path: <linux-arch+bounces-8237-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8238-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21C4A9A0D25
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Oct 2024 16:46:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F32E9A107A
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Oct 2024 19:21:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 53EE01C24B90
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Oct 2024 14:46:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0D7771F230EC
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Oct 2024 17:21:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C43E209F41;
-	Wed, 16 Oct 2024 14:46:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7398208208;
+	Wed, 16 Oct 2024 17:21:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qIdv5kx5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F4Y5pPBe"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C809107A0;
-	Wed, 16 Oct 2024 14:46:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F18D3188580;
+	Wed, 16 Oct 2024 17:21:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729089998; cv=none; b=sLNmRzZ1Fs643vT33+rXWbmWP97aL6Ox+/7/JZ3NpqwbTqqtB+DSwtTayt4giuMHIlyxLw0aQw7GAxjDDP1JfkTjrj0VCq36V8+P2OVXm6rM9BYZhuG9+0HapGxeWINVg8EQUSpUB/m5rCyJUQb8n4c2PVAWA26zUV6pubBLvHU=
+	t=1729099272; cv=none; b=e5LGcAC1NLbMqWv2o9nVIfWNUoO3wW2sBPsLXFoG77BC5RS6o230cZLcYio1NkNCGkFzeOUMt5IhovWrNL+Db85id8c3pp8h1RCLOrmA1vmwhdcJZRsi31aZWXm9np+6qUo+IDcB2w7dKbtNCoeG0A7scCcjnMOwunMneLEsQ6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729089998; c=relaxed/simple;
-	bh=mljYCOrfn5VQtElax+itf5albGe4NataoyAA9ei5XS0=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=oUTZRCOJ2IVtylNk2rEGMScadddQxgx09X8eWVEIA5nD1Tf6Z3bVpqOWUY3ZIk8Komcaah3iDAkQHMhs4xu/5FqwDaYguCqLB6kN/lZvhpv45eX10ffrlVhkhlhnMbDLqr7joulDAOjBu/pA2mdCGpcncfhWrgQvsy0YF+Y9qdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qIdv5kx5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CEA2C4CEC5;
-	Wed, 16 Oct 2024 14:46:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729089997;
-	bh=mljYCOrfn5VQtElax+itf5albGe4NataoyAA9ei5XS0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=qIdv5kx5nL1uiUMFTWI4/g1kr2RmcIUz2PWR2nPj5ad9+BcYPT7FFYjgrplSiTegr
-	 uDlQmEFKE4fB0/2dM1exBAkFhNxEFqJuefV5ak9q9//SjvXC71Ftc47f255bdLeaFI
-	 /FDhrTCCXPJNtt6sWam8Ub0lknZDrpWmt9inpfqypdT4kcQZvdmmdtqhO7Qs/n/2Sl
-	 3c0OvvYyTp8VFqN6PdbwWzjgIuNkRLaxD+RlpVULp+uCtmWU6o0eO6pFe6OEoXATtz
-	 vhc2500888Fsi//9NZI/NyNGDrlyfZjtIhFS9jm6xdruRLUqXTTWuzX6EEjfg7jpNl
-	 9gx958sT8Jqig==
-Date: Wed, 16 Oct 2024 23:46:28 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Sven Schnelle <svens@linux.ibm.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Steven Rostedt
- <rostedt@goodmis.org>, Florent Revest <revest@chromium.org>,
- linux-trace-kernel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, bpf <bpf@vger.kernel.org>, Alexei
- Starovoitov <ast@kernel.org>, Jiri Olsa <jolsa@kernel.org>, Alan Maguire
- <alan.maguire@oracle.com>, Mark Rutland <mark.rutland@arm.com>,
- linux-arch@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>, Will
- Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui
- <kernel@xen0n.name>, Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin
- <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen
- N Rao <naveen@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, Paul
- Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>, Heiko Carstens <hca@linux.ibm.com>,
- Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev
- <agordeev@linux.ibm.com>, Christian Borntraeger
- <borntraeger@linux.ibm.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo
- Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
- <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin"
- <hpa@zytor.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Andrew
- Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v17 11/16] fprobe: Rewrite fprobe on function-graph
- tracer
-Message-Id: <20241016234628.b7eba1db0db39d2197a2ea4f@kernel.org>
-In-Reply-To: <yt9ded4gfdz0.fsf@linux.ibm.com>
-References: <172904026427.36809.516716204730117800.stgit@devnote2>
-	<172904040206.36809.2263909331707439743.stgit@devnote2>
-	<yt9ded4gfdz0.fsf@linux.ibm.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1729099272; c=relaxed/simple;
+	bh=pE67RiyjvIOKtyfw/S0Zs4qanipSNG01XM8veQFduUg=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DG9YSijjlSYBoVSVG8vDp6A09v12ImH1ftelLudQR9kFxdiCnJdCgcGczEKu3OEIhDbVqmWFMhFsvvf2fu8waqZcfOsCY4H91cwyKMcwVOoVja4OaCpusovWd7B1mkzc50OGufndOyB7gWCTeE2zsf+Y0ZPpDyM/OAQL0GI+qlU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F4Y5pPBe; arc=none smtp.client-ip=209.85.208.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2fb3c3d5513so940301fa.1;
+        Wed, 16 Oct 2024 10:21:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729099269; x=1729704069; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1GP0B75uZXvlMdPMs8sxWFWqOcAn6bbZYSntM7zvNeg=;
+        b=F4Y5pPBe9APpbwYadbXbku8Zf1SvfCcTmpFqH2tcxBpfRem46aWpcnOIjcpfdTVrN0
+         hzmZ2TuPFtm8hWNkxzARRhEZRw5FtvjDv+uj9w4MQpH6aSvnuRIwetc2fvow8d/aLRBN
+         Hg6xpCrgjG/b8Ogohu74shFj/p9Lnb3B9GwgXT/GHzIj0CLZEkxLpeuUbqQ5RL1ZO2I8
+         m+3qnWn+4zPi14XbOeGsEd/XTefl6wZEm4bPAAak2lQrZP+1G1L33lw49JDPP89Ll2gS
+         9JPZm/U795oK278WSn+m6iBXipACNaPO3j8wL8HiS0xAcMOTtov05U6PyendIRFHuxj5
+         /1wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729099269; x=1729704069;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1GP0B75uZXvlMdPMs8sxWFWqOcAn6bbZYSntM7zvNeg=;
+        b=p9XjJm6t+Ryl7OFH/cCZcrEQm41BDGmWT8ZMsspzarHEPuBCpL1Glv2xSD1v8skAwo
+         otVEcuJ7N7l9CjAZlQUPm31TQhgY0YP7E1baUYsFzzv6QtJ81jngptHq1LA20KjxYK8P
+         ex9dPxT5M0/CeKtCLW7MHsLmmMdDIi3OyPCOHlimVfzgh2YlhnPhWGI0bZmZOZiC/DJ/
+         to3WgckRfemCU6uy08AvGyfoQcYvBhmFtfIFwTAPbpDeKhUYDCuUNeqUZFxxnEzY2iaj
+         Y6zn0LDtdHXKLbB/8tiwzrcnBltxzrjksarZtaHA6n5WLHAjgD919dnXiNRUv3YLb8Ec
+         OYcw==
+X-Forwarded-Encrypted: i=1; AJvYcCU0+az4LC9NsanuNVaHlZCitnEN73vQE8FTkKJi/QgedsM2G49plalUhcKwVGWsLCK2Sd3VMUaK/VEyyA32@vger.kernel.org, AJvYcCUDu1z5n9G7nGSWnIZppTG6y5mXYu4LexWH3f4xPYcFBiClXWyTHxkSxcLcfWvypfNEHQ3vmk5KUhjuj8v/Ww==@vger.kernel.org, AJvYcCVAQXrQL/YABB+w06V3V7wLB0Hqy0g9v+P3sek8vWNLeLfk+wJsm942CdsockYa5N9B+xQDF1UVRnkYsQ==@vger.kernel.org, AJvYcCVfbQO3y3Kokwx81IH+QwekX1tCHtnXtohJaKS7ILW0zobeyX6PcmZwh6NmEFcRJOahFKjUANfrpvJt38ANTLGjM3P7@vger.kernel.org, AJvYcCVh2due35+hEMlw83F2XsUgZyrfNOFnrXkHuZ6XXgPJJqBBqPYHPHUoK5qBteJitfHBx1u7FlYkQpTI3m8=@vger.kernel.org, AJvYcCVoOxQkCwWhWLqmH3Y9vLX+jTobEXcpab3cLcCcSeugOdv0lCpUsTfwrR839aj5XghGPGs+A+WhzgEO0+a6MA==@vger.kernel.org, AJvYcCW1GcjJUk9VdB7ffqyUUYx3Cm6xbaOl+AttCo9/Z7BuhqF2glUDANNL5kA3Abjjw021zw+NpK2JpzDsrA==@vger.kernel.org, AJvYcCWi2Y8h4TfBsjD9Ow2LIYQSQ9ifrixYlEZ+H59wt7d9NEa9o/eWTFeGSsvZhR2gBg/mx2E=@vger.kernel.org, AJvYcCX6+3x/O5DqvAdjhc2WoHNHQPZkjiUH8SdXIuZyq+67E/NWl6bXo7pFoMbycpJtCUDwjQOGBKOo5BZQeAIC@vger.kernel.org, AJvYcCXSSS7c
+ R8tZjUtHjlQDBL+VhMqDq+WKoGVkj8MjcrX8wxCatb+9diPm0DBBPoS2vq12PJU1TysjGogFNg==@vger.kernel.org, AJvYcCXU2RhPV/PiBSp29rYchoRB20kVZ/U1VnIsA5GZqVYG2l8ix0kU9lFokTuwVLI/sW5WmCeXZ+jIGUsLJlL6770=@vger.kernel.org, AJvYcCXjPZqekd9b9imA7W1+YoYaO2XyAu1PEIMcYkV1qerhaHcDoMor6oY1dGkL2rjOnDWjRj7UoHA6NGQMcg==@vger.kernel.org, AJvYcCXs50Ra7As3Fl/iXT9krRlcBnjXFpoQJ/5vo3Ahi+JIRN7YXJI7NCRcz5V/jbMptEETMF7gSmuHj+E=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8xoNQAol8JL6PXC1Fsh/rXK5LlLpSXgL607GcYQXDVvITp3+i
+	vP8dNqdtp6bZVRyFE/Ex+WV+Gg0aN/NBxbWUTaXarLj7k0t7LF5C
+X-Google-Smtp-Source: AGHT+IE3BOIzolDg/ircoXlrXALD+U8X6mjirKNd/VoSdJ8ZQKv3Aj0k5T5yFcByNzOByKxATFiOdw==
+X-Received: by 2002:a05:6512:402a:b0:539:f619:b458 with SMTP id 2adb3069b0e04-539f619b4cbmr6540423e87.22.1729099268652;
+        Wed, 16 Oct 2024 10:21:08 -0700 (PDT)
+Received: from pc636 (host-95-203-1-67.mobileonline.telia.com. [95.203.1.67])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-539fffa8a5fsm512819e87.26.2024.10.16.10.21.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Oct 2024 10:21:08 -0700 (PDT)
+From: Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date: Wed, 16 Oct 2024 19:21:02 +0200
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+	Brian Cain <bcain@quicinc.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christoph Hellwig <hch@infradead.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Stafford Horne <shorne@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org, x86@kernel.org,
+	Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH v6 2/8] mm: vmalloc: don't account for number of nodes
+ for HUGE_VMAP allocations
+Message-ID: <Zw_1_ln440eHTjGt@pc636>
+References: <20241016122424.1655560-1-rppt@kernel.org>
+ <20241016122424.1655560-3-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241016122424.1655560-3-rppt@kernel.org>
 
-On Wed, 16 Oct 2024 14:07:31 +0200
-Sven Schnelle <svens@linux.ibm.com> wrote:
-
-> "Masami Hiramatsu (Google)" <mhiramat@kernel.org> writes:
+On Wed, Oct 16, 2024 at 03:24:18PM +0300, Mike Rapoport wrote:
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 > 
-> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> >
-> > Rewrite fprobe implementation on function-graph tracer.
-> > Major API changes are:
-> >  -  'nr_maxactive' field is deprecated.
-> >  -  This depends on CONFIG_DYNAMIC_FTRACE_WITH_ARGS or
-> >     !CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS, and
-> >     CONFIG_HAVE_FUNCTION_GRAPH_FREGS. So currently works only
-> >     on x86_64.
-> >  -  Currently the entry size is limited in 15 * sizeof(long).
-> >  -  If there is too many fprobe exit handler set on the same
-> >     function, it will fail to probe.
-> >
-> > Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > Cc: Steven Rostedt <rostedt@goodmis.org>
-> > Cc: Mark Rutland <mark.rutland@arm.com>
-> > Cc: Catalin Marinas <catalin.marinas@arm.com>
-> > Cc: Will Deacon <will@kernel.org>
-> > Cc: Huacai Chen <chenhuacai@kernel.org>
-> > Cc: WANG Xuerui <kernel@xen0n.name>
-> > Cc: Michael Ellerman <mpe@ellerman.id.au>
-> > Cc: Nicholas Piggin <npiggin@gmail.com>
-> > Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-> > Cc: Naveen N Rao <naveen@kernel.org>
-> > Cc: Madhavan Srinivasan <maddy@linux.ibm.com>
-> > Cc: Paul Walmsley <paul.walmsley@sifive.com>
-> > Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> > Cc: Albert Ou <aou@eecs.berkeley.edu>
-> > Cc: Heiko Carstens <hca@linux.ibm.com>
-> > Cc: Vasily Gorbik <gor@linux.ibm.com>
-> > Cc: Alexander Gordeev <agordeev@linux.ibm.com>
-> > Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
-> > Cc: Sven Schnelle <svens@linux.ibm.com>
-> > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > Cc: Ingo Molnar <mingo@redhat.com>
-> > Cc: Borislav Petkov <bp@alien8.de>
-> > Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> > Cc: x86@kernel.org
-> > Cc: "H. Peter Anvin" <hpa@zytor.com>
-> > Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> > Cc: Andrew Morton <akpm@linux-foundation.org>
-> >
-> [..]
+> vmalloc allocations with VM_ALLOW_HUGE_VMAP that do not explicitly
+> specify node ID will use huge pages only if size_per_node is larger than
+> a huge page.
+> Still the actual allocated memory is not distributed between nodes and
+> there is no advantage in such approach.
+> On the contrary, BPF allocates SZ_2M * num_possible_nodes() for each
+> new bpf_prog_pack, while it could do with a single huge page per pack.
 > 
-> > diff --git a/include/linux/fprobe.h b/include/linux/fprobe.h
-> > index ef609bcca0f9..2d06bbd99601 100644
-> > --- a/include/linux/fprobe.h
-> > +++ b/include/linux/fprobe.h
-> > @@ -5,10 +5,11 @@
-> [..]
-> > +static inline unsigned long encode_fprobe_header(struct fprobe *fp, int size_words)
-> > +{
-> > +	if (WARN_ON_ONCE(size_words > MAX_FPROBE_DATA_SIZE_WORD ||
-> > +	    ((unsigned long)fp & ~FPROBE_HEADER_PTR_MASK) !=
-> > +	    ~FPROBE_HEADER_PTR_MASK)) {
-> > +		return 0;
-> >  	}
-> > +	return ((unsigned long)size_words << FPROBE_HEADER_PTR_BITS) |
-> > +		((unsigned long)fp & FPROBE_HEADER_PTR_MASK);
-> > +}
-> > +
-> > +/* Return reserved data size in words */
-> > +static inline int decode_fprobe_header(unsigned long val, struct fprobe **fp)
-> > +{
-> > +	unsigned long ptr;
-> > +
-> > +	ptr = (val & FPROBE_HEADER_PTR_MASK) | ~FPROBE_HEADER_PTR_MASK;
-> > +	if (fp)
-> > +		*fp = (struct fprobe *)ptr;
-> > +	return val >> FPROBE_HEADER_PTR_BITS;
-> > +}
+> Don't account for number of nodes for VM_ALLOW_HUGE_VMAP with
+> NUMA_NO_NODE and use huge pages whenever the requested allocation size
+> is larger than a huge page.
 > 
-> I think that still has the issue that the size is encoded in the
-> leftmost fields of the pointer, which doesn't work on all
-> architectures. I reported this already in v15
-> (https://lore.kernel.org/all/yt9dmsjyx067.fsf@linux.ibm.com/)
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  mm/vmalloc.c | 9 ++-------
+>  1 file changed, 2 insertions(+), 7 deletions(-)
+> 
+> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> index 634162271c00..86b2344d7461 100644
+> --- a/mm/vmalloc.c
+> +++ b/mm/vmalloc.c
+> @@ -3763,8 +3763,6 @@ void *__vmalloc_node_range_noprof(unsigned long size, unsigned long align,
+>  	}
+>  
+>  	if (vmap_allow_huge && (vm_flags & VM_ALLOW_HUGE_VMAP)) {
+> -		unsigned long size_per_node;
+> -
+>  		/*
+>  		 * Try huge pages. Only try for PAGE_KERNEL allocations,
+>  		 * others like modules don't yet expect huge pages in
+> @@ -3772,13 +3770,10 @@ void *__vmalloc_node_range_noprof(unsigned long size, unsigned long align,
+>  		 * supporting them.
+>  		 */
+>  
+> -		size_per_node = size;
+> -		if (node == NUMA_NO_NODE)
+> -			size_per_node /= num_online_nodes();
+> -		if (arch_vmap_pmd_supported(prot) && size_per_node >= PMD_SIZE)
+> +		if (arch_vmap_pmd_supported(prot) && size >= PMD_SIZE)
+>  			shift = PMD_SHIFT;
+>  		else
+> -			shift = arch_vmap_pte_supported_shift(size_per_node);
+> +			shift = arch_vmap_pte_supported_shift(size);
+>  
+>  		align = max(real_align, 1UL << shift);
+>  		size = ALIGN(real_size, 1UL << shift);
+>
+Looking at this place, i see that an overwriting a "size" approach seems as
+something that is a bit hard to follow. Below we have following code:
 
-Oops, thanks for reporting. I should missed that.
+<snip>
+...
+again:
+	area = __get_vm_area_node(real_size, align, shift, VM_ALLOC |
+	  VM_UNINITIALIZED | vm_flags, start, end, node,
+	  gfp_mask, caller);
+...
+<snip>
 
-> I haven't yet fully understood why this logic is needed, but the
-> WARN_ON_ONCE triggers on s390. I'm assuming this fails because fp always
-> has the upper bits of the address set on x86 (and likely others). As an
-> example, in my test setup, fp is 0x8feec218 on s390, while it is
-> 0xffff888100add118 in x86-kvm.
+where we pass a "real_size", whereas there is only one place in the
+__vmalloc_node_range_noprof() function where a "size" is used. It is
+in the end of function:
 
-Ah, so s390 kernel/user memory layout is something like 4G/4G?
-Hmm, this encode expects the leftmost 4bit is filled. For the
-architecture which has 32bit address space, we may be possible to
-use "unsigned long long" for 'val' on shadow stack (and use the
-first 32bit for fp and another 32bit for size).
+<snip>
+...
+	size = PAGE_ALIGN(size);
+	if (!(vm_flags & VM_DEFER_KMEMLEAK))
+		kmemleak_vmalloc(area, size, gfp_mask);
 
-Anyway, I need to redesign it depending on architecture.
+	return area->addr;
+<snip>
 
-Thank you!
+As fro this patch:
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Reviewed-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+
+--
+Uladzislau Rezki
 
