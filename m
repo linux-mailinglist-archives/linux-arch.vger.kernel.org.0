@@ -1,121 +1,167 @@
-Return-Path: <linux-arch+bounces-8248-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8249-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79D5C9A20D1
-	for <lists+linux-arch@lfdr.de>; Thu, 17 Oct 2024 13:22:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E2179A20F1
+	for <lists+linux-arch@lfdr.de>; Thu, 17 Oct 2024 13:29:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 02056B24F18
-	for <lists+linux-arch@lfdr.de>; Thu, 17 Oct 2024 11:22:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 92DD5B20E6D
+	for <lists+linux-arch@lfdr.de>; Thu, 17 Oct 2024 11:29:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25FD71DB34E;
-	Thu, 17 Oct 2024 11:22:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B3491DBB3A;
+	Thu, 17 Oct 2024 11:29:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rK6wZKGy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ot+aEOLg"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB0201DA612;
-	Thu, 17 Oct 2024 11:22:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 115811DAC86;
+	Thu, 17 Oct 2024 11:29:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729164129; cv=none; b=s32xFJU6PCkR6wh6k+IHt0DpAwJsljTDlU7mjC5mIe1BrcDLe5dTYaP+QurMsQrezm9SfWskkk1ViArvwIuGJEJBlqiakRbvqnUvSAuX92BhnvQzrZ3QcsyEESBbuSL7KffFhsYdivYjXnKKCjcGSHP/4capN50gZkgLZygElCQ=
+	t=1729164542; cv=none; b=jWcw6PfYoSDRIP1R2WwQRasmqv7xDS6dVFMsZXeQW412EuBar+UGIpG934Uraipe0RIqIUVmCNAC3Um5FF2nBCsYSpsvBm/4gNlBS3obd4YkMr9eUkLVIR+krbKCK7Rav82OC26hrADwh58beUY4XGM1IkCT7f09emaFaaGDLnc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729164129; c=relaxed/simple;
-	bh=Z4LR3CRnxCq5BQ9I7QAYlCCccUdbY5cPtdO7aItqP6M=;
+	s=arc-20240116; t=1729164542; c=relaxed/simple;
+	bh=rt80HNwYvry4F4GclVQlY1veJ+krWpXQVKReUpcl890=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pixJYq43teGCfOhNvBEKqMaLcMEbSUsED+LMPlvryyGq9WuH7NPIhTW1Xk+qy3bVLe4qSTrBcMza6J6G4NSjEDHo2C7W69VC7K7hWvKFFOa4vUjKvkm+E2bIbkbvm5VtVhm6a2TmQIUWWuEZjf6KrUlzWRr6hxDm0tgZL16XmIA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rK6wZKGy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C2E8C4CEC5;
-	Thu, 17 Oct 2024 11:22:04 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=kvSqamfqiXnn9xRBzSs/+y+27ipmtsgY3LqQRfpskcXziMiKqve8k+gGC6BUN0U1gTPpzFqlekUrFtPPqahPUQ00NZ8aJDnOLqsZTXLefpgbe11WjH2KpJbGypQoKOOmBEvTi2UdDcU9+gKYQaYo8TdMdLuZH86pt5O5jDTxqUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ot+aEOLg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A51E6C4CEC3;
+	Thu, 17 Oct 2024 11:28:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729164128;
-	bh=Z4LR3CRnxCq5BQ9I7QAYlCCccUdbY5cPtdO7aItqP6M=;
+	s=k20201202; t=1729164541;
+	bh=rt80HNwYvry4F4GclVQlY1veJ+krWpXQVKReUpcl890=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rK6wZKGylGdhEKFKYYKm5FhubKKCvW2LX8PfnXDspi4lWRNoyBmX/Hu4ee0TnO5tQ
-	 Vjy4lPwdN2N1sVMtpGj8qGxaJylgPWwVDWcxxk3BEvKai++DnDecXqOY3HItFQTp7U
-	 pNJiI7FSAvVviyzvJOYyNROVPPx90/cD5/Hiz/A1HIY1I2MRYZasWmAdKuS77OSUn8
-	 UWPW1l3WlLtc3/knuylT5vc6lJhJnKtHC6zkSOLIe2m2UcbuYCXFc4IeWdNptANeu4
-	 aHfgsSXAXrcC5XIgUV8Zx+I4M3lZctG/VfemAeUjlJdgxuPksU8T7O4NT6y5Y91oN4
-	 EewoF5bfUtWCA==
-Date: Thu, 17 Oct 2024 12:22:02 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Deepak Gupta <debug@rivosinc.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
+	b=ot+aEOLgX5JjytFWTSP6bvwXMFkowa3+f8eQ2nWquiQ2RAv0bCvly8HaX5AltuwSG
+	 MSL87zIBHWGLQnCmCdiEfFC7X5ejkFjDqsJRxmUPBDOphZUPBuoh9vgoceix8Psav5
+	 Yvn0UgFKrQvx/wSoy69QgTtp5NCCSdTL6QB1vx3PWWPTlokB4+yqFBJYWypC9U2bHQ
+	 nQtmXd5x7H21VQL4AHHLnM8nJNg1uOm2mWoaE2bjtRwnQ1e9g0HZLSZljRpX0WRG/I
+	 j7Jg7Czseip6435Tp950cr2IcSkIthwfZaEljLp7+y1XWJYi+AU0xcha6M5b6FnQGJ
+	 4UYbNkR0gIbzA==
+Date: Thu, 17 Oct 2024 14:25:05 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
 	Andrew Morton <akpm@linux-foundation.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+	Brian Cain <bcain@quicinc.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christoph Hellwig <hch@infradead.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
 	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linux-arch@vger.kernel.org,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>
-Subject: Re: [PATCH RFC/RFT v2 1/2] mm: helper `is_shadow_stack_vma` to check
- shadow stack vma
-Message-ID: <2b24849e-3595-414a-b11e-eb03cd3c3b28@sirena.org.uk>
-References: <20241016-shstk_converge-v2-0-c41536eb5c3b@rivosinc.com>
- <20241016-shstk_converge-v2-1-c41536eb5c3b@rivosinc.com>
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Stafford Horne <shorne@gmail.com>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v6 6/8] x86/module: prepare module loading for ROX
+ allocations of text
+Message-ID: <ZxD0EVBoO-jcxEGE@kernel.org>
+References: <20241016122424.1655560-1-rppt@kernel.org>
+ <20241016122424.1655560-7-rppt@kernel.org>
+ <20241016170128.7afeb8b0@gandalf.local.home>
+ <20241017093515.GU16066@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="muUhb7tZMOd3DMds"
-Content-Disposition: inline
-In-Reply-To: <20241016-shstk_converge-v2-1-c41536eb5c3b@rivosinc.com>
-X-Cookie: One picture is worth 128K words.
-
-
---muUhb7tZMOd3DMds
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20241017093515.GU16066@noisy.programming.kicks-ass.net>
 
-On Wed, Oct 16, 2024 at 02:57:33PM -0700, Deepak Gupta wrote:
-> VM_SHADOW_STACK (alias to VM_HIGH_ARCH_5) is used to encode shadow stack
-> VMA on three architectures (x86 shadow stack, arm GCS and RISC-V shadow
-> stack). In case architecture doesn't implement shadow stack, it's VM_NONE
-> Introducing a helper `is_shadow_stack_vma` to determine shadow stack vma
-> or not.
+On Thu, Oct 17, 2024 at 11:35:15AM +0200, Peter Zijlstra wrote:
+> On Wed, Oct 16, 2024 at 05:01:28PM -0400, Steven Rostedt wrote:
+> > On Wed, 16 Oct 2024 15:24:22 +0300
+> > Mike Rapoport <rppt@kernel.org> wrote:
+> > 
+> > > diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
+> > > index 8da0e66ca22d..b498897b213c 100644
+> > > --- a/arch/x86/kernel/ftrace.c
+> > > +++ b/arch/x86/kernel/ftrace.c
+> > > @@ -118,10 +118,13 @@ ftrace_modify_code_direct(unsigned long ip, const char *old_code,
+> > >  		return ret;
+> > >  
+> > >  	/* replace the text with the new text */
+> > > -	if (ftrace_poke_late)
+> > > +	if (ftrace_poke_late) {
+> > >  		text_poke_queue((void *)ip, new_code, MCOUNT_INSN_SIZE, NULL);
+> > > -	else
+> > > -		text_poke_early((void *)ip, new_code, MCOUNT_INSN_SIZE);
+> > > +	} else {
+> > > +		mutex_lock(&text_mutex);
+> > > +		text_poke((void *)ip, new_code, MCOUNT_INSN_SIZE);
+> > > +		mutex_unlock(&text_mutex);
+> > > +	}
+> > >  	return 0;
+> > >  }
+> > 
+> > So this slows down the boot by over 30ms. That may not sound like much, but
+> > we care very much about boot times. This code is serialized with boot and
+> > runs whenever ftrace is configured in the kernel. The way I measured this,
+> > was that I added:
+> > 
+> 
+> > If this is only needed for module load, can we at least still use the
+> > text_poke_early() at boot up?
+> 
+> Right, so I don't understand why this is needed at all.
+> ftrace_module_init() runs before complete_formation() which normally
+> switches to ROX, as such ftrace should be able to continue to do direct
+> modifications here.
 
-Reviewed-by: Mark Brown <broonie@kernel.org>
+With this series the module text is allocated as ROX at the first place, so
+the modifications ftrace does to module text have to either use text poking
+even before complete_formation() or deal with a writable copy like I did
+for relocations and alternatives.
 
-though
+I've been carrying the ftrace changes from a very old prototype and
+didn't pay enough attention to them them until Steve's complaint.
 
-> @@ -387,7 +392,6 @@ static inline bool is_data_mapping(vm_flags_t flags)
->  	return (flags & (VM_WRITE | VM_SHARED | VM_STACK)) =3D=3D VM_WRITE;
->  }
-> =20
-> -
->  static inline void vma_iter_config(struct vma_iterator *vmi,
->  		unsigned long index, unsigned long last)
->  {
->=20
+I'll look into it.
+ 
+> Which reminds me, at some point I did patches adding a
+> MODULE_STATE_UNFORMED callback in order for static_call / jump_label to
+> be able to avoid the expensive patching on module load as well (arguably
+> ftrace should be using that too, instead of a custom callback).
+> 
 
-Unrelated (but reasonable) whitespace change.
-
---muUhb7tZMOd3DMds
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmcQ81kACgkQJNaLcl1U
-h9CQUQf+JD018dyJIN7oFahuVrCr4JxvO/kwj3Bwd5KXTc+C4NvzP4V9NwC9RYKh
-G+wqnGlQWOikoDJCPjXJ4zR6eipO4Svgrxa+rtmM5x6Tp11gTF11GBUdSdXB79+1
-8eyIIDM7gb70YdEbNFRRIXc83XmpOJpekDhtcmEB7mt3HOSUY4ss/UPyfQ6MpBUU
-9m4qvm31pDeNnVxR186xVUWYP9h+7P54JY4ijrA4NXMOSsJP3/mkyCAwRrSIzvUw
-rZOiuOE22hHihqQ72tnCdTTERhQBJHdVGkQNLb+lPP4KrVVG+OK31wpdgZXVLgPl
-HaI+lM+gTYDPBta6eEXKbTDgs+irEg==
-=LfV7
------END PGP SIGNATURE-----
-
---muUhb7tZMOd3DMds--
+-- 
+Sincerely yours,
+Mike.
 
