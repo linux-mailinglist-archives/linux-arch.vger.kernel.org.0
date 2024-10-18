@@ -1,181 +1,137 @@
-Return-Path: <linux-arch+bounces-8266-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8267-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FC8F9A3ED7
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Oct 2024 14:52:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 48E179A3F18
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Oct 2024 15:03:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C22DC1F266DA
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Oct 2024 12:52:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DF343282830
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Oct 2024 13:03:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C353D43AB0;
-	Fri, 18 Oct 2024 12:50:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CB3918E351;
+	Fri, 18 Oct 2024 13:03:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="gyaRwtGS"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="MLe0m+Yw"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71E172032A;
-	Fri, 18 Oct 2024 12:50:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FA05433B5
+	for <linux-arch@vger.kernel.org>; Fri, 18 Oct 2024 13:03:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729255849; cv=none; b=RsGm3fSrQyafPi9GMK7o1PkLu+nxUCB6hJ03jkPlJ2LFQ5hczyQnAITe5a2zgQqQGVJmgeQgTmuUNdTIsOpG12FyV2CmLA5ur5Zz2lmusMg+qxnfje2XEP7hgi5IZ2dDZJYK5DK5vYVqKHSMoIn7M5CWsG4xDu0OgSRTqHJOLB0=
+	t=1729256629; cv=none; b=st4p6096VXcLEoPh1zbPsDzvQLzTeE8llfLOkgMDnEwXcv2164N7oWaX79pzUydPUUTSso5+Sale1V6Rh+ZfEj3tcifP5p42O0xaS7BZEh09o45XWRn3GWXkxUjYn4eCyhWKTZHkLjujCnmdDNB5uURd4ZMq1JMbZqfSs8DlwnQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729255849; c=relaxed/simple;
-	bh=UiEODK30WMf6c99as8tczI3ce9+36ip9+CEDUbshnfI=;
+	s=arc-20240116; t=1729256629; c=relaxed/simple;
+	bh=DOTTWquBNd8l+IUT7seOntP4YwH3dQlJJjlVuG2vkoY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hKUtXmvkorPFgGREtm7TqOaTyqynmPrA/61w8XVMrsCvO6SFTTV5s8Wv2kd+PeumDxmHOp8hQ/3Bekad8HMoWnuXI7Lz2p2f9lH6yyRlLF1aUsUOLKyqs932RQ9BUVK2KSXSC7e11hPgJafGBpDF/Yq3UlNc1i9x7fS4g9ZN7kI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=gyaRwtGS; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49I5ZBjP011784;
-	Fri, 18 Oct 2024 12:50:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=XSncqozF5VzTrwK4gClpEKpFn30dbM
-	DgMlseiEjUKOw=; b=gyaRwtGS8IXzLTpHXi1MIwbH2HRW0uhbOjq6lah7+Vgwrj
-	JXmSH45vch0H7zx3Vt/t8kk1jeAGl/MZUSxUxEO/ks9Q8U0jEJi9PXhwuHJK6LgU
-	/QTOTzvtFAk8mfKAghAsj8VoDoFaq2KVcB8yTBq3B+Q7KcVDCIhi8F9ETP/7O4G9
-	fmgr047Z2/63WLno4XVb2NMil6PbGOVVtyv7UyAzo4Jrolf6pAA8aUaNnhU1bf6N
-	nm/LT1j1xhSm5aSLFJMCMn11izW5Q2J25nS5klYNjp9BUEt0dstfx5Do0qxADcvW
-	sTA0oCAB+0SOolzPb18747QthL8XeuqoKgUCcfPA==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42bhnfa77a-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 18 Oct 2024 12:50:02 +0000 (GMT)
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 49ICn7pa023203;
-	Fri, 18 Oct 2024 12:50:01 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42bhnfa776-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 18 Oct 2024 12:50:01 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 49IBnIhL006415;
-	Fri, 18 Oct 2024 12:50:00 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4284xkmfcx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 18 Oct 2024 12:49:59 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 49ICnu1B17105376
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 18 Oct 2024 12:49:56 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id EA0782004B;
-	Fri, 18 Oct 2024 12:49:55 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5EAC920043;
-	Fri, 18 Oct 2024 12:49:54 +0000 (GMT)
-Received: from osiris (unknown [9.171.52.217])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Fri, 18 Oct 2024 12:49:54 +0000 (GMT)
-Date: Fri, 18 Oct 2024 14:49:52 +0200
-From: Heiko Carstens <hca@linux.ibm.com>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Sven Schnelle <svens@linux.ibm.com>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Florent Revest <revest@chromium.org>,
-        linux-trace-kernel@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>, bpf <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Mark Rutland <mark.rutland@arm.com>, linux-arch@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>, Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Naveen N Rao <naveen@kernel.org>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v17 11/16] fprobe: Rewrite fprobe on function-graph tracer
-Message-ID: <20241018124952.17670-E-hca@linux.ibm.com>
-References: <172904026427.36809.516716204730117800.stgit@devnote2>
- <172904040206.36809.2263909331707439743.stgit@devnote2>
- <yt9ded4gfdz0.fsf@linux.ibm.com>
- <20241016101022.185f741b@gandalf.local.home>
+	 Content-Type:Content-Disposition:In-Reply-To; b=STTCz7uDZqSEQaUYaYmAwk+5HA002wLAEBObh053vNoAJC7t0CrfDN/igcqjPdJfweg8gAvKYOIlZOkoeWZuGVWCfx5daBGmpAVbOxmJ0aysztW7s8R4RVs0Lblhlvbiy/cW90KEZqDYau9f/ZfE7anNEOOTFQPlMDq3YC9CSKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=MLe0m+Yw; arc=none smtp.client-ip=209.85.167.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-539f2b95775so2662888e87.1
+        for <linux-arch@vger.kernel.org>; Fri, 18 Oct 2024 06:03:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1729256624; x=1729861424; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=sODVftRiJEB/0R5ZKHQ3MqkxJS24ttUXB9G8dSmRS9Y=;
+        b=MLe0m+YwOZw5T3i7E7vshUSIdYq8vzl5BWKB/pMavPMbzsJWkMBxEpkmwpbXT1lBLv
+         VOCe7bKuVRTE5yHfs2YWM94kfljeKj8aIhGKYVjNZ29yVmuXEsIKDKuigpVZ3P2gqxPa
+         wRn42l6M5hdxnJjHueVdKGalKaZv+X6qJ9qAcvJOPSyQ2Do/yeySv/4CPMG2yDjxMLZf
+         E7rlIpzXxv0bPKzBdZMDUSH7gewESdQz06HVMX+LH7MrL9RPOyIjfeNFj/38l1vhg89q
+         /usswJaZrsnk8GZaoqElSM+EynFrXnlLaPdhE+RdA436HsudnqKUGNvvFu5xEi0CNQFU
+         SyEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729256624; x=1729861424;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sODVftRiJEB/0R5ZKHQ3MqkxJS24ttUXB9G8dSmRS9Y=;
+        b=hh4aGXnIrViEog9Ub9jcXV7R+C9gq+5nEdN9dNcrR0IBkSq99+z1cy2HlfLGU4+VG/
+         WbiqDo358LLdQTtsvI08wnjByUXA2XBXzzqD6tXzZuf5D7rd7tJ/dR9glKyLH2WSu34o
+         Sh8iIisq3BRJ5TRLcLRtq+rBUaiRHL0NOPmCVyPNGq6LioBDyax1C4FwnQNkQ0Blh0UP
+         thhcDonB5miHDA+S4OzL8VtNPmjUY4oRNWPt7j3wpAkA/cpZi06joBSLFRvLSgGthpCJ
+         a6sHn0bLBO/RZhsSEC9jE8pZyHkdRaGcKtK2K5KYdV1Il7G9UQrIDw9UKbX8N4ISWD4P
+         KCsA==
+X-Forwarded-Encrypted: i=1; AJvYcCU/mCtncR0H0trIoGsqFsY37ZsThweyh55gAM0EygBHl1KT22/n7DBH0KdXhExEgWFF0yfS6n9ONl2k@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzpc3admhDLNY7WgJYjFJs7Q0j9rjhkQMoQOVlLiDA/+Ll7akx+
+	fkNRY8zAx58q1LhlcPnqCK7SLuztfNCFAA4NE006RUF7uokTEDwa3FBoqkKLDMU=
+X-Google-Smtp-Source: AGHT+IEkARo88tz9Es4BK+YT+IflxGdlBCDgKhTnNhRNnTwvn1zSXl9sNOjA8rduKHJn/2Ffh9OhwA==
+X-Received: by 2002:a05:6512:3d24:b0:539:89a8:600f with SMTP id 2adb3069b0e04-53a15452b7dmr2496478e87.23.1729256624502;
+        Fri, 18 Oct 2024 06:03:44 -0700 (PDT)
+Received: from localhost (109-81-89-238.rct.o2.cz. [109.81.89.238])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9a68c27893sm93408266b.195.2024.10.18.06.03.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Oct 2024 06:03:43 -0700 (PDT)
+Date: Fri, 18 Oct 2024 15:03:43 +0200
+From: Michal Hocko <mhocko@suse.com>
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: David Hildenbrand <david@redhat.com>,
+	John Hubbard <jhubbard@nvidia.com>,
+	Yosry Ahmed <yosryahmed@google.com>, akpm@linux-foundation.org,
+	kent.overstreet@linux.dev, corbet@lwn.net, arnd@arndb.de,
+	mcgrof@kernel.org, rppt@kernel.org, paulmck@kernel.org,
+	thuth@redhat.com, tglx@linutronix.de, bp@alien8.de,
+	xiongwei.song@windriver.com, ardb@kernel.org, vbabka@suse.cz,
+	hannes@cmpxchg.org, roman.gushchin@linux.dev, dave@stgolabs.net,
+	willy@infradead.org, liam.howlett@oracle.com,
+	pasha.tatashin@soleen.com, souravpanda@google.com,
+	keescook@chromium.org, dennis@kernel.org, yuzhao@google.com,
+	vvvvvv@google.com, rostedt@goodmis.org, iamjoonsoo.kim@lge.com,
+	rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v3 5/5] alloc_tag: config to store page allocation tag
+ refs in page flags
+Message-ID: <ZxJcryjDUk_LzOuj@tiehlicka>
+References: <20241014203646.1952505-1-surenb@google.com>
+ <20241014203646.1952505-6-surenb@google.com>
+ <CAJD7tkY0zzwX1BCbayKSXSxwKEGiEJzzKggP8dJccdajsr_bKw@mail.gmail.com>
+ <cd848c5f-50cd-4834-a6dc-dff16c586e49@nvidia.com>
+ <6a2a84f5-8474-432f-b97e-18552a9d993c@redhat.com>
+ <CAJuCfpGkuaCh+PxKbzMbu-81oeEdzcfjFThoRk+-Cezf0oJWZg@mail.gmail.com>
+ <9c81a8bb-18e5-4851-9925-769bf8535e46@redhat.com>
+ <CAJuCfpH-YqwEi1aqUAF3rCZGByFpvKVSfDckATtCFm=J_4+QOw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241016101022.185f741b@gandalf.local.home>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: UUW38Z9rXO76MvRYA0XJsM_S28KlnPP_
-X-Proofpoint-ORIG-GUID: VuHSGxc_ruZFY61dIrF2n3tsSHHcNP1E
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 lowpriorityscore=0 impostorscore=0 mlxlogscore=610
- malwarescore=0 bulkscore=0 adultscore=0 spamscore=0 phishscore=0
- clxscore=1011 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2410180080
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJuCfpH-YqwEi1aqUAF3rCZGByFpvKVSfDckATtCFm=J_4+QOw@mail.gmail.com>
 
-On Wed, Oct 16, 2024 at 10:10:22AM -0400, Steven Rostedt wrote:
-> On Wed, 16 Oct 2024 14:07:31 +0200
-> Sven Schnelle <svens@linux.ibm.com> wrote:
-> > I haven't yet fully understood why this logic is needed, but the
-> > WARN_ON_ONCE triggers on s390. I'm assuming this fails because fp always
-> > has the upper bits of the address set on x86 (and likely others). As an
-> > example, in my test setup, fp is 0x8feec218 on s390, while it is
-> > 0xffff888100add118 in x86-kvm.
+On Tue 15-10-24 08:58:59, Suren Baghdasaryan wrote:
+> On Tue, Oct 15, 2024 at 8:42 AM David Hildenbrand <david@redhat.com> wrote:
+[...]
+> > Right, I think what John is concerned about (and me as well) is that
+> > once a new feature really needs a page flag, there will be objection
+> > like "no you can't, we need them for allocation tags otherwise that
+> > feature will be degraded".
 > 
-> Since we only need to save 4 bits for size, we could have what it is
-> replacing always be zero or always be f, depending on the arch. The
-> question then is, is s390's 4 MSBs always zero?
-> 
-> Thus we could make it be:
-> 
-> static inline int decode_fprobe_header(unsigned long val, struct fprobe **fp)
-> {
-> 	unsigned long ptr;
-> 
-> 	ptr = (val & FPROBE_HEADER_PTR_MASK) | FPROBE_HEADER_MSB_MASK;
-> 	if (fp)
-> 		*fp = (struct fprobe *)ptr;
-> 	return val >> FPROBE_HEADER_PTR_BITS;
-> }
-> 
-> And define FPROBE_HEADER_MSB_MASK to be either:
-> 
-> For most archs:
-> 
-> #define FPROBE_HEADER_MSB_MASK	(0xf << FPROBE_HEADER_PTR_BITS)
-> 
-> or on s390:
-> 
-> #define FPROBE_HEADER_MSB_MASK	(0x0)
-> 
-> Would this work?
+> I do understand your concern but IMHO the possibility of degrading a
+> feature should not be a reason to always operate at degraded capacity
+> (which is what we have today). If one is really concerned about
+> possible future regression they can set
+> CONFIG_PGALLOC_TAG_USE_PAGEFLAGS=n and keep what we have today. That's
+> why I'm strongly advocating that we do need
+> CONFIG_PGALLOC_TAG_USE_PAGEFLAGS so that the user has control over how
+> this scarce resource is used.
 
-This would work for s390. Right now we don't make any use of the four
-MSBs, and they are always zero. If for some reason this would ever
-change, we would need to come up with a different solution.
+I really do not think users will know how/why to setup this and I wouldn't
+even bother them thinking about that at all TBH. 
 
-Please note that this only works for addresses in the kernel address
-space. For user space the full 64 bit address range (minus the top
-page) can be used for user space applications. I'm just writing this
-here, just in case something like this comes up for uprobes or
-something similar as well.
+This is an implementation detail. It is fine to reuse unused flags space
+as a storage as a performance optimization but why do you want users to
+bother with that? Why would they ever want to say N here?
+-- 
+Michal Hocko
+SUSE Labs
 
