@@ -1,135 +1,138 @@
-Return-Path: <linux-arch+bounces-8261-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8262-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F7959A31C1
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Oct 2024 02:46:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CF5B9A35EC
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Oct 2024 08:47:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9FB20B21A7A
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Oct 2024 00:46:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2792FB23198
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Oct 2024 06:47:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 167C72A1D1;
-	Fri, 18 Oct 2024 00:46:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0D0317C219;
+	Fri, 18 Oct 2024 06:47:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SZgSZEye"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="aPHeWZRc"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6FB920E313;
-	Fri, 18 Oct 2024 00:46:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A98B72BAEF;
+	Fri, 18 Oct 2024 06:47:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729212362; cv=none; b=pNillFMMcAtGnlFGir8UxUmKJjF4BoO1bre0BRdfCO3ScM3v+8zyly8kFVNATJiMRJJexpN8neReMrHgVn3iYwDCfN3NVMw1VZgnjCALgFao/QHcrcYpMJj+0DTqOhSE7afyxpqS2sCXtnMXO+wLGfGJXob8z7Mg9xgAR2C+ZpI=
+	t=1729234046; cv=none; b=KG3697smJ2bDmd2hxgSFAz0ECY7Z/0uX9WT73rttXoMWlO/Cbw5gxTTdAJjQy1uzWIwdOwH+7rc1ne2mhEIYULqFWCK3Xezbo1Of3eWQGTgJRhuRaxSzbDjWEUY0dMJP8DZSkUQT5QOtqiTbWAh12N+rp3RfAcsz2E/DcsdTmiY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729212362; c=relaxed/simple;
-	bh=UuU1D4ZoMYwCo3FaOUKYe9aNpKCvXsi0ygQ+g1tksnw=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=S8V0ya1z3mb4GKa7lAyI2hUtDIhxvGJW4nEWnsBex7kJnjf4s8P817j+L32KePRZJFf0yyfyDpQf0WGwKm5Uybq266YfMra66DG2/ka6DfamttQu066WRHN6YKygNpIsCAKewO34WepKP1fuAEKVU5yDoRcTLcgf4ocmvq/NxjU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SZgSZEye; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DB77C4CEC3;
-	Fri, 18 Oct 2024 00:45:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729212361;
-	bh=UuU1D4ZoMYwCo3FaOUKYe9aNpKCvXsi0ygQ+g1tksnw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=SZgSZEyeLeDjdg+a3yDy4ijjwEMTCURbIgWJjUahT1DsKQ6Q5LgHxuo1vt2qEfMRT
-	 SmnTjEetvqT/hIDqBPfjHuJNOlvYMtfv13cBsMGouBUGePOoT9E2WdfJJiGJXGWxJ2
-	 y1zP01dkxAykdBPGUho2gD7sMLc3fAghEFzegeBtqss7Mpd2+n1W2Rup8slKnESU6L
-	 n/AyawZhiA/OZ92Z3Ux6rq8KkgC/PKIHnjeujCP6DJjZK3t7S6xg8++DjwJogSKzca
-	 JqQrPbomenBEeM/5PFpA/kQHVR9Y3To5WHMLGLO9HI5v/xjIYvsuYDdE4TdL2WVulj
-	 pnirejbBXWrjA==
-Date: Fri, 18 Oct 2024 09:45:51 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Sven Schnelle <svens@linux.ibm.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Steven Rostedt
- <rostedt@goodmis.org>, Florent Revest <revest@chromium.org>,
- linux-trace-kernel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, bpf <bpf@vger.kernel.org>, Alexei
- Starovoitov <ast@kernel.org>, Jiri Olsa <jolsa@kernel.org>, Alan Maguire
- <alan.maguire@oracle.com>, Mark Rutland <mark.rutland@arm.com>,
- linux-arch@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>, Will
- Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui
- <kernel@xen0n.name>, Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin
- <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen
- N Rao <naveen@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, Paul
- Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>, Heiko Carstens <hca@linux.ibm.com>,
- Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev
- <agordeev@linux.ibm.com>, Christian Borntraeger
- <borntraeger@linux.ibm.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo
- Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
- <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin"
- <hpa@zytor.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Andrew
- Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v17 11/16] fprobe: Rewrite fprobe on function-graph
- tracer
-Message-Id: <20241018094551.b7fd8a75964545bf72eb335c@kernel.org>
-In-Reply-To: <yt9d5xprgbj5.fsf@linux.ibm.com>
-References: <172904026427.36809.516716204730117800.stgit@devnote2>
-	<172904040206.36809.2263909331707439743.stgit@devnote2>
-	<yt9ded4gfdz0.fsf@linux.ibm.com>
-	<20241016234628.b7eba1db0db39d2197a2ea4f@kernel.org>
-	<yt9d5xprgbj5.fsf@linux.ibm.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1729234046; c=relaxed/simple;
+	bh=lMoys8CVcZ9w+7WoG4jXN4U1xi+wLOY7h39zghriRTc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=Ld11gJ+/qo2RSP0Nk/fVfec5AAarSmG6JRHq16LLwM4ohs7uUl55jIW6SZFxqh1LI4eOsyRzuIlHWbsewD5RWsZR9veOvAb5YktqtZkFZEZNjrbY+G7TSy+jWi2I2azq4QQOugePL+8N2101kAhx7ZUHtD585E3XOhLdk5xRwxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=aPHeWZRc; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49HJS9cs013958;
+	Fri, 18 Oct 2024 06:46:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pp1; bh=ZtZwrtsbjyP5G3OvZokw/afS3L0zNj
+	beT125e38cN9M=; b=aPHeWZRcRdKDkBYcAG4N8tBJlnutL8kZsaHBixgTJBhsvX
+	f18mar9lnvweNd7DFeAhKiwad0d00gOx5wj7E6VUK5ZunZaGn9RSmMbRgwzFmHmh
+	FN+1ZzZrCXj+Il7uaIV0d8rEqfd6rIFyypEJXg3MgEZRtmbbv8vLiTGPlbFVEEsx
+	5PHVa4fEN7Dv7f48HORFqRkk+GNUVNrFsGdhezW1CyVFmBk2pyfuN5r8PGgZLOmF
+	f2SRhJgx12+chSjdFaT10CST/gfM2caWMK6ptxj7JfwgVhkKUD1XknPEir+igGVi
+	yOq2SLkl2CO0hi8KcLYgneiMsV50hvu5sEnzIgNA==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42aqk2qpew-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 18 Oct 2024 06:46:55 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 49I61TgH006338;
+	Fri, 18 Oct 2024 06:46:54 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 428651ak3p-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 18 Oct 2024 06:46:54 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 49I6kp8x57475340
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 18 Oct 2024 06:46:51 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 05A1F20049;
+	Fri, 18 Oct 2024 06:46:51 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 6D3A520040;
+	Fri, 18 Oct 2024 06:46:50 +0000 (GMT)
+Received: from li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com (unknown [9.171.16.203])
+	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Fri, 18 Oct 2024 06:46:50 +0000 (GMT)
+Date: Fri, 18 Oct 2024 08:46:48 +0200
+From: Alexander Gordeev <agordeev@linux.ibm.com>
+To: Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>, Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v5 3/3] s390: Remove remaining _PAGE_* macros
+Message-ID: <ZxIEWLKWF8SMnQSU@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
+References: <20241014151340.1639555-1-vincenzo.frascino@arm.com>
+ <20241014151340.1639555-4-vincenzo.frascino@arm.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241014151340.1639555-4-vincenzo.frascino@arm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 9nrIevi-JtxqmYYBmh6jnPv6L3gfJPns
+X-Proofpoint-ORIG-GUID: 9nrIevi-JtxqmYYBmh6jnPv6L3gfJPns
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
+ spamscore=0 priorityscore=1501 phishscore=0 clxscore=1011 mlxlogscore=374
+ impostorscore=0 bulkscore=0 malwarescore=0 lowpriorityscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2410180039
 
-On Wed, 16 Oct 2024 20:14:54 +0200
-Sven Schnelle <svens@linux.ibm.com> wrote:
+On Mon, Oct 14, 2024 at 04:13:40PM +0100, Vincenzo Frascino wrote:
 
-> Masami Hiramatsu (Google) <mhiramat@kernel.org> writes:
+Hi Vincenzo,
+
+> The introduction of vdso/page.h made redundant the definition of
+> _PAGE_SHIFT, _PAGE_SIZE, _PAGE_MASK.
 > 
-> > On Wed, 16 Oct 2024 14:07:31 +0200
-> > Sven Schnelle <svens@linux.ibm.com> wrote:
-> >> "Masami Hiramatsu (Google)" <mhiramat@kernel.org> writes:
-> >> I think that still has the issue that the size is encoded in the
-> >> leftmost fields of the pointer, which doesn't work on all
-> >> architectures. I reported this already in v15
-> >> (https://lore.kernel.org/all/yt9dmsjyx067.fsf@linux.ibm.com/)
-> >
-> > Oops, thanks for reporting. I should missed that.
-> >
-> >> I haven't yet fully understood why this logic is needed, but the
-> >> WARN_ON_ONCE triggers on s390. I'm assuming this fails because fp always
-> >> has the upper bits of the address set on x86 (and likely others). As an
-> >> example, in my test setup, fp is 0x8feec218 on s390, while it is
-> >> 0xffff888100add118 in x86-kvm.
-> >
-> > Ah, so s390 kernel/user memory layout is something like 4G/4G?
-> > Hmm, this encode expects the leftmost 4bit is filled. For the
-> > architecture which has 32bit address space, we may be possible to
-> > use "unsigned long long" for 'val' on shadow stack (and use the
-> > first 32bit for fp and another 32bit for size).
-> >
-> > Anyway, I need to redesign it depending on architecture.
+> Refactor the code to remove the macros.
 > 
-> Could you explain a bit more what redesign means? Thanks!
+> Cc: Heiko Carstens <hca@linux.ibm.com>
+> Cc: Vasily Gorbik <gor@linux.ibm.com>
+> Cc: Alexander Gordeev <agordeev@linux.ibm.com>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Andy Lutomirski <luto@kernel.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Jason A. Donenfeld <Jason@zx2c4.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202410112106.mvc2U2p0-lkp@intel.com/
 
-This "encoded" data is for recording the *fp (the address of fprobe)
-and its data size into one value and storing it on the shadow stack.
+Is my understanding correct that with patch 3/3 you fix an issue
+introduced with patch 2/3?
 
-On x86-64, the kernel objects are puts on the highest memory address,
-thus the highest bits are always same. So it uses 4bits for recording
-the data size. Most of other 64bit architecture are similar memory
-layout, so we can use the highest bits. Note that the data size must
-be a multiplier of u64 (== 8byte), so 4bits is enough since shadow
-stack size is limited.
+> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> ---
+>  arch/s390/include/asm/page.h    | 3 ---
+>  arch/s390/include/asm/pgtable.h | 2 +-
+>  arch/s390/mm/fault.c            | 2 +-
+>  arch/s390/mm/gmap.c             | 6 +++---
+>  arch/s390/mm/pgalloc.c          | 4 ++--
+>  5 files changed, 7 insertions(+), 10 deletions(-)
 
-The s390 and other 32bit address space architectures need special
-care for it. Thus I think we can use 2 slots (= 2 * u32) for saving
-data in this case.
-
-Thank you,
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Thanks!
 
