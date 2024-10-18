@@ -1,137 +1,295 @@
-Return-Path: <linux-arch+bounces-8267-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8268-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48E179A3F18
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Oct 2024 15:03:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0221D9A426D
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Oct 2024 17:32:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DF343282830
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Oct 2024 13:03:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 797481F21E59
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Oct 2024 15:32:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CB3918E351;
-	Fri, 18 Oct 2024 13:03:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA84C2022E2;
+	Fri, 18 Oct 2024 15:32:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="MLe0m+Yw"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="SpDs95IU"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FA05433B5
-	for <linux-arch@vger.kernel.org>; Fri, 18 Oct 2024 13:03:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB28F2022E0
+	for <linux-arch@vger.kernel.org>; Fri, 18 Oct 2024 15:32:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729256629; cv=none; b=st4p6096VXcLEoPh1zbPsDzvQLzTeE8llfLOkgMDnEwXcv2164N7oWaX79pzUydPUUTSso5+Sale1V6Rh+ZfEj3tcifP5p42O0xaS7BZEh09o45XWRn3GWXkxUjYn4eCyhWKTZHkLjujCnmdDNB5uURd4ZMq1JMbZqfSs8DlwnQ=
+	t=1729265543; cv=none; b=S+F4hL5oRI+VS6CbQEtJOS7/tTFKUTM1TkgfpmB1wuAICN/oUfd8e1O47dcn1GwsVCcgfkqfnAuckwL5MQYPN04iNQw6MF7L67f1NUcnNXKZtrQrosLDtrFPG43RueZ61gessv9c77MRhs5zT7hTkSHpyKr8D2hFBq5FdpChEYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729256629; c=relaxed/simple;
-	bh=DOTTWquBNd8l+IUT7seOntP4YwH3dQlJJjlVuG2vkoY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=STTCz7uDZqSEQaUYaYmAwk+5HA002wLAEBObh053vNoAJC7t0CrfDN/igcqjPdJfweg8gAvKYOIlZOkoeWZuGVWCfx5daBGmpAVbOxmJ0aysztW7s8R4RVs0Lblhlvbiy/cW90KEZqDYau9f/ZfE7anNEOOTFQPlMDq3YC9CSKA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=MLe0m+Yw; arc=none smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-539f2b95775so2662888e87.1
-        for <linux-arch@vger.kernel.org>; Fri, 18 Oct 2024 06:03:46 -0700 (PDT)
+	s=arc-20240116; t=1729265543; c=relaxed/simple;
+	bh=BmVpdD0jRxsiIbfsqjgxnbZ7lslKne0rx0q7CxIOU5Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=go+jygNmJImrpryDxBZX1nmtCJ5KuSVje2n5Oj7R9yPgVDagJuwWe0xxUHhX8ssXc8z9RPG/G0YYyxLGfu05YNIK9pkQikN8R1a7IUeZSFqkgjBchvV7dQPH4Lt96G7X+nlH98Wp70vhcz35S8l3VDF6AUQ+SeEWh62OdZuiPGI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=SpDs95IU; arc=none smtp.client-ip=209.85.160.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-28896d9d9deso967624fac.2
+        for <linux-arch@vger.kernel.org>; Fri, 18 Oct 2024 08:32:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1729256624; x=1729861424; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=sODVftRiJEB/0R5ZKHQ3MqkxJS24ttUXB9G8dSmRS9Y=;
-        b=MLe0m+YwOZw5T3i7E7vshUSIdYq8vzl5BWKB/pMavPMbzsJWkMBxEpkmwpbXT1lBLv
-         VOCe7bKuVRTE5yHfs2YWM94kfljeKj8aIhGKYVjNZ29yVmuXEsIKDKuigpVZ3P2gqxPa
-         wRn42l6M5hdxnJjHueVdKGalKaZv+X6qJ9qAcvJOPSyQ2Do/yeySv/4CPMG2yDjxMLZf
-         E7rlIpzXxv0bPKzBdZMDUSH7gewESdQz06HVMX+LH7MrL9RPOyIjfeNFj/38l1vhg89q
-         /usswJaZrsnk8GZaoqElSM+EynFrXnlLaPdhE+RdA436HsudnqKUGNvvFu5xEi0CNQFU
-         SyEg==
+        d=linuxfoundation.org; s=google; t=1729265540; x=1729870340; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZC7IXrCg0YuAvn8GUXeJqu+LI8owpl5cfwS2jfkhEf0=;
+        b=SpDs95IU6ADOtqD4JdP5p1dTyQTopYQLVNRnWlt2kjYro2JEnufBTR7CTwP0ifGDJ9
+         YkYRuuqaZ2ZPbpIxOq96OM36svuSmbQCnAxqMXqd/jgR5Lg12HZlouRwOeFLz5/P+h2r
+         6ElHdsE/A28f7aB0ika9tOiqmUlbafPLz3AxY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729256624; x=1729861424;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20230601; t=1729265540; x=1729870340;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sODVftRiJEB/0R5ZKHQ3MqkxJS24ttUXB9G8dSmRS9Y=;
-        b=hh4aGXnIrViEog9Ub9jcXV7R+C9gq+5nEdN9dNcrR0IBkSq99+z1cy2HlfLGU4+VG/
-         WbiqDo358LLdQTtsvI08wnjByUXA2XBXzzqD6tXzZuf5D7rd7tJ/dR9glKyLH2WSu34o
-         Sh8iIisq3BRJ5TRLcLRtq+rBUaiRHL0NOPmCVyPNGq6LioBDyax1C4FwnQNkQ0Blh0UP
-         thhcDonB5miHDA+S4OzL8VtNPmjUY4oRNWPt7j3wpAkA/cpZi06joBSLFRvLSgGthpCJ
-         a6sHn0bLBO/RZhsSEC9jE8pZyHkdRaGcKtK2K5KYdV1Il7G9UQrIDw9UKbX8N4ISWD4P
-         KCsA==
-X-Forwarded-Encrypted: i=1; AJvYcCU/mCtncR0H0trIoGsqFsY37ZsThweyh55gAM0EygBHl1KT22/n7DBH0KdXhExEgWFF0yfS6n9ONl2k@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzpc3admhDLNY7WgJYjFJs7Q0j9rjhkQMoQOVlLiDA/+Ll7akx+
-	fkNRY8zAx58q1LhlcPnqCK7SLuztfNCFAA4NE006RUF7uokTEDwa3FBoqkKLDMU=
-X-Google-Smtp-Source: AGHT+IEkARo88tz9Es4BK+YT+IflxGdlBCDgKhTnNhRNnTwvn1zSXl9sNOjA8rduKHJn/2Ffh9OhwA==
-X-Received: by 2002:a05:6512:3d24:b0:539:89a8:600f with SMTP id 2adb3069b0e04-53a15452b7dmr2496478e87.23.1729256624502;
-        Fri, 18 Oct 2024 06:03:44 -0700 (PDT)
-Received: from localhost (109-81-89-238.rct.o2.cz. [109.81.89.238])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9a68c27893sm93408266b.195.2024.10.18.06.03.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Oct 2024 06:03:43 -0700 (PDT)
-Date: Fri, 18 Oct 2024 15:03:43 +0200
-From: Michal Hocko <mhocko@suse.com>
-To: Suren Baghdasaryan <surenb@google.com>
-Cc: David Hildenbrand <david@redhat.com>,
-	John Hubbard <jhubbard@nvidia.com>,
-	Yosry Ahmed <yosryahmed@google.com>, akpm@linux-foundation.org,
-	kent.overstreet@linux.dev, corbet@lwn.net, arnd@arndb.de,
-	mcgrof@kernel.org, rppt@kernel.org, paulmck@kernel.org,
-	thuth@redhat.com, tglx@linutronix.de, bp@alien8.de,
-	xiongwei.song@windriver.com, ardb@kernel.org, vbabka@suse.cz,
-	hannes@cmpxchg.org, roman.gushchin@linux.dev, dave@stgolabs.net,
-	willy@infradead.org, liam.howlett@oracle.com,
-	pasha.tatashin@soleen.com, souravpanda@google.com,
-	keescook@chromium.org, dennis@kernel.org, yuzhao@google.com,
-	vvvvvv@google.com, rostedt@goodmis.org, iamjoonsoo.kim@lge.com,
-	rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-mm@kvack.org,
-	linux-modules@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH v3 5/5] alloc_tag: config to store page allocation tag
- refs in page flags
-Message-ID: <ZxJcryjDUk_LzOuj@tiehlicka>
-References: <20241014203646.1952505-1-surenb@google.com>
- <20241014203646.1952505-6-surenb@google.com>
- <CAJD7tkY0zzwX1BCbayKSXSxwKEGiEJzzKggP8dJccdajsr_bKw@mail.gmail.com>
- <cd848c5f-50cd-4834-a6dc-dff16c586e49@nvidia.com>
- <6a2a84f5-8474-432f-b97e-18552a9d993c@redhat.com>
- <CAJuCfpGkuaCh+PxKbzMbu-81oeEdzcfjFThoRk+-Cezf0oJWZg@mail.gmail.com>
- <9c81a8bb-18e5-4851-9925-769bf8535e46@redhat.com>
- <CAJuCfpH-YqwEi1aqUAF3rCZGByFpvKVSfDckATtCFm=J_4+QOw@mail.gmail.com>
+        bh=ZC7IXrCg0YuAvn8GUXeJqu+LI8owpl5cfwS2jfkhEf0=;
+        b=j0DLXmx6So+AYhQFSOwR8CHkfBLDhpokh9K3xboEoz8xqoCQr2aITXqv4qJJv3OCn4
+         bkwYtzIPL4Us3W8l5JL5+qKoxhxuK686+tOsZxOqv0AMv5HUSH//xIhhWcsr7zRUZ/br
+         rzL7yzvRRhRASuoyb0a5/mN6B73Y9bK9EBF7qMjdfqQ8qYIH0i4c+6uNNPt/LCX1isjb
+         Ke9X0hJvNkVxvWF7WKDNHy2Nv6IxD+9A55otPxkyDjqU9AXttiF6Wz3iTXMmZ/dGV18y
+         qqUJksxvbTbx1Qx+NvAz74ESWuPKaeTGBPilZNtU56exn1dsv/S8DtiOfuGMDsgoJV2A
+         ubMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWcMyrA4fhWn/GVpv4k6ap3ev6btAIAJUBXA3e9iG1Z96eBVGLAbRqF2i0BBZz0lIh9UJcrmM9shXtB@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx0cJfwqBrg3ap17zcuI+IGqCH8lUpPguRH2tm9U1sX8kDfaPKA
+	QSFsktlDBo5+pToNmYQ13JBN/ofa1wh8hnSUfckBpiL3EIzgmaSIZUV9LyEol0A=
+X-Google-Smtp-Source: AGHT+IFVILzQC3xLfv6R4AbCBfFL0IO4Vwr3Q+ju2/Ycfjj5wO6b5XNWyVkiIkvrRdK6DAeUYrsI+g==
+X-Received: by 2002:a05:6870:89a9:b0:277:f5d8:b77b with SMTP id 586e51a60fabf-2892c4a62edmr2658526fac.32.1729265539765;
+        Fri, 18 Oct 2024 08:32:19 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-2892ad9f036sm493443fac.34.2024.10.18.08.32.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Oct 2024 08:32:19 -0700 (PDT)
+Message-ID: <22d386cd-e62f-43f9-905e-2d0881781abe@linuxfoundation.org>
+Date: Fri, 18 Oct 2024 09:32:17 -0600
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJuCfpH-YqwEi1aqUAF3rCZGByFpvKVSfDckATtCFm=J_4+QOw@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 4/4] selftests/mm: add self tests for guard page feature
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ Suren Baghdasaryan <surenb@google.com>,
+ "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+ Matthew Wilcox <willy@infradead.org>, Vlastimil Babka <vbabka@suse.cz>,
+ "Paul E . McKenney" <paulmck@kernel.org>, Jann Horn <jannh@google.com>,
+ David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, Muchun Song <muchun.song@linux.dev>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
+ <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+ Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
+ Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+ linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linux-arch@vger.kernel.org,
+ Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
+ linux-kselftest@vger.kernel.org, Sidhartha Kumar
+ <sidhartha.kumar@oracle.com>, Jeff Xu <jeffxu@chromium.org>,
+ Christoph Hellwig <hch@infradead.org>, Shuah Khan <skhan@linuxfoundation.org>
+References: <cover.1729196871.git.lorenzo.stoakes@oracle.com>
+ <8b1add3c511effb62d68183cae8a954d8339286c.1729196871.git.lorenzo.stoakes@oracle.com>
+ <1d0bbc60-fda7-4c14-bf02-948bdbf8f029@linuxfoundation.org>
+ <dfbf9ccb-6834-4181-a382-35c9c9af8064@lucifer.local>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <dfbf9ccb-6834-4181-a382-35c9c9af8064@lucifer.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue 15-10-24 08:58:59, Suren Baghdasaryan wrote:
-> On Tue, Oct 15, 2024 at 8:42 AM David Hildenbrand <david@redhat.com> wrote:
-[...]
-> > Right, I think what John is concerned about (and me as well) is that
-> > once a new feature really needs a page flag, there will be objection
-> > like "no you can't, we need them for allocation tags otherwise that
-> > feature will be degraded".
+On 10/18/24 01:12, Lorenzo Stoakes wrote:
+> On Thu, Oct 17, 2024 at 03:24:49PM -0600, Shuah Khan wrote:
+>> On 10/17/24 14:42, Lorenzo Stoakes wrote:
+>>> Utilise the kselftest harmness to implement tests for the guard page
+>>
+>> Splleing NIT - harmness -> harness
+>>
+>>> implementation.
+>>>
+>>> We start by implement basic tests asserting that guard pages can be
+>>
+>> implmenting? By the way checkpatch will catch spelling stuuf.
+>> Please see comments about warnings below.
 > 
-> I do understand your concern but IMHO the possibility of degrading a
-> feature should not be a reason to always operate at degraded capacity
-> (which is what we have today). If one is really concerned about
-> possible future regression they can set
-> CONFIG_PGALLOC_TAG_USE_PAGEFLAGS=n and keep what we have today. That's
-> why I'm strongly advocating that we do need
-> CONFIG_PGALLOC_TAG_USE_PAGEFLAGS so that the user has control over how
-> this scarce resource is used.
+> Thanks. The majority of the checkpatch warnings are invalid so I missed
+> this. Will fix on respin.
+> 
+>>
+>>> established (poisoned), cleared (remedied) and that touching poisoned pages
+>>> result in SIGSEGV. We also assert that, in remedying a range, non-poison
+>>> pages remain intact.
+>>>
+>>> We then examine different operations on regions containing poison markers
+>>> behave to ensure correct behaviour:
+>>>
+>>> * Operations over multiple VMAs operate as expected.
+>>> * Invoking MADV_GUARD_POISION / MADV_GUARD_REMEDY via process_madvise() in
+>>>     batches works correctly.
+>>> * Ensuring that munmap() correctly tears down poison markers.
+>>> * Using mprotect() to adjust protection bits does not in any way override
+>>>     or cause issues with poison markers.
+>>> * Ensuring that splitting and merging VMAs around poison markers causes no
+>>>     issue - i.e. that a marker which 'belongs' to one VMA can function just
+>>>     as well 'belonging' to another.
+>>> * Ensuring that madvise(..., MADV_DONTNEED) does not remove poison markers.
+>>> * Ensuring that mlock()'ing a range containing poison markers does not
+>>>     cause issues.
+>>> * Ensuring that mremap() can move a poisoned range and retain poison
+>>>     markers.
+>>> * Ensuring that mremap() can expand a poisoned range and retain poison
+>>>     markers (perhaps moving the range).
+>>> * Ensuring that mremap() can shrink a poisoned range and retain poison
+>>>     markers.
+>>> * Ensuring that forking a process correctly retains poison markers.
+>>> * Ensuring that forking a VMA with VM_WIPEONFORK set behaves sanely.
+>>> * Ensuring that lazyfree simply clears poison markers.
+>>> * Ensuring that userfaultfd can co-exist with guard pages.
+>>> * Ensuring that madvise(..., MADV_POPULATE_READ) and
+>>>     madvise(..., MADV_POPULATE_WRITE) error out when encountering
+>>>     poison markers.
+>>> * Ensuring that madvise(..., MADV_COLD) and madvise(..., MADV_PAGEOUT) do
+>>>     not remove poison markers.
+>>
+>> Good summary of test. Does the test require root access?
+>> If so does it check and skip appropriately?
+> 
+> Thanks and some do, in those cases we skip.
+> 
+>>
+>>>
+>>> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+>>> ---
+>>>    tools/testing/selftests/mm/.gitignore    |    1 +
+>>>    tools/testing/selftests/mm/Makefile      |    1 +
+>>>    tools/testing/selftests/mm/guard-pages.c | 1168 ++++++++++++++++++++++
+>>>    3 files changed, 1170 insertions(+)
+>>>    create mode 100644 tools/testing/selftests/mm/guard-pages.c
+>>>
+>>> diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selftests/mm/.gitignore
+>>> index 689bbd520296..8f01f4da1c0d 100644
+>>> --- a/tools/testing/selftests/mm/.gitignore
+>>> +++ b/tools/testing/selftests/mm/.gitignore
+>>> @@ -54,3 +54,4 @@ droppable
+>>>    hugetlb_dio
+>>>    pkey_sighandler_tests_32
+>>>    pkey_sighandler_tests_64
+>>> +guard-pages
+>>> diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+>>> index 02e1204971b0..15c734d6cfec 100644
+>>> --- a/tools/testing/selftests/mm/Makefile
+>>> +++ b/tools/testing/selftests/mm/Makefile
+>>> @@ -79,6 +79,7 @@ TEST_GEN_FILES += hugetlb_fault_after_madv
+>>>    TEST_GEN_FILES += hugetlb_madv_vs_map
+>>>    TEST_GEN_FILES += hugetlb_dio
+>>>    TEST_GEN_FILES += droppable
+>>> +TEST_GEN_FILES += guard-pages
+>>>    ifneq ($(ARCH),arm64)
+>>>    TEST_GEN_FILES += soft-dirty
+>>> diff --git a/tools/testing/selftests/mm/guard-pages.c b/tools/testing/selftests/mm/guard-pages.c
+>>> new file mode 100644
+>>> index 000000000000..2ab0ff3ba5a0
+>>> --- /dev/null
+>>> +++ b/tools/testing/selftests/mm/guard-pages.c
+>>> @@ -0,0 +1,1168 @@
+>>> +// SPDX-License-Identifier: GPL-2.0-or-later
+>>> +
+>>> +#define _GNU_SOURCE
+>>> +#include "../kselftest_harness.h"
+>>> +#include <assert.h>
+>>> +#include <fcntl.h>
+>>> +#include <setjmp.h>
+>>> +#include <errno.h>
+>>> +#include <linux/userfaultfd.h>
+>>> +#include <signal.h>
+>>> +#include <stdbool.h>
+>>> +#include <stdio.h>
+>>> +#include <stdlib.h>
+>>> +#include <string.h>
+>>> +#include <sys/ioctl.h>
+>>> +#include <sys/mman.h>
+>>> +#include <sys/syscall.h>
+>>> +#include <sys/uio.h>
+>>> +#include <unistd.h>
+>>> +
+>>> +/* These may not yet be available in the uAPI so define if not. */
+>>> +
+>>> +#ifndef MADV_GUARD_POISON
+>>> +#define MADV_GUARD_POISON	102
+>>> +#endif
+>>> +
+>>> +#ifndef MADV_GUARD_UNPOISON
+>>> +#define MADV_GUARD_UNPOISON	103
+>>> +#endif
+>>> +
+>>> +volatile bool signal_jump_set;
+>>
+>> Can you add a comment about why volatile is needed.
+> 
+> I'm not sure it's really necessary, it's completely standard to do this
+> with signal handling and is one of the exceptions to the 'volatile
+> considered harmful' rule.
+> 
+>> By the way did you happen to run checkpatck on this. There are
+>> several instances where single statement blocks with braces {}
+>>
+>> I noticed a few and ran checkpatch on your patch. There are
+>> 45 warnings regarding codeing style.
+>>
+>> Please run checkpatch and clean them up so we can avoid followup
+>> checkpatch cleanup patches.
+> 
+> No sorry I won't, checkpatch isn't infallible and series trying to 'clean
+> up' things that aren't issues will be a waste of everybody's time.
+> 
 
-I really do not think users will know how/why to setup this and I wouldn't
-even bother them thinking about that at all TBH. 
+Sorry - this violates the coding styles and makes it hard to read.
 
-This is an implementation detail. It is fine to reuse unused flags space
-as a storage as a performance optimization but why do you want users to
-bother with that? Why would they ever want to say N here?
--- 
-Michal Hocko
-SUSE Labs
+See process/coding-style.rst:
+
+Do not unnecessarily use braces where a single statement will do.
+
+.. code-block:: c
+
+         if (condition)
+                 action();
+
+and
+
+.. code-block:: c
+
+         if (condition)
+                 do_this();
+         else
+                 do_that();
+
+This does not apply if only one branch of a conditional statement is a single
+statement; in the latter case use braces in both branches:
+
+.. code-block:: c
+
+         if (condition) {
+                 do_this();
+                 do_that();
+         } else {
+                 otherwise();
+         }
+
+Also, use braces when a loop contains more than a single simple statement:
+
+.. code-block:: c
+
+         while (condition) {
+                 if (test)
+                         do_something();
+         }
+
+thanks,
+-- Shuah
 
