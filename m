@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-8289-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8290-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC2FD9A514D
-	for <lists+linux-arch@lfdr.de>; Sun, 20 Oct 2024 00:19:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8F469A5157
+	for <lists+linux-arch@lfdr.de>; Sun, 20 Oct 2024 00:21:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B153E1C21A73
-	for <lists+linux-arch@lfdr.de>; Sat, 19 Oct 2024 22:19:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6CDBC1F215B5
+	for <lists+linux-arch@lfdr.de>; Sat, 19 Oct 2024 22:21:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38F86192D60;
-	Sat, 19 Oct 2024 22:19:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20481192D69;
+	Sat, 19 Oct 2024 22:21:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vNM1wyZQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d9THhAss"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC57B19258E;
-	Sat, 19 Oct 2024 22:19:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D0F11F937;
+	Sat, 19 Oct 2024 22:21:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729376369; cv=none; b=sUBCeUSNzoSlVbJCupLYefThBrCQ9Bc1gbU9bPojhYKPurp5QGvZv00Mv172muSYp6OchuGRp1RxSoi7aVTMFPrzhx6S9qLz2lvdtFKOFIGqfL5VKVnzstvSVnPbMB+T4PHNGChltQ9QRLKdDC55ZrQ9tS4xrzlA3hRxpexgI8o=
+	t=1729376464; cv=none; b=KtjN/bZnua7/yIsH9s5CqKxji7af6upHJ0FbAGgNKezL8uAuk2Si0oe3tRV+pq5w3gHaNt4RkswLFeWIJcWrHy0DOxDbhl9BAKyjNmzvzycl8mySAMF7ieYxbt3MJcSu2piE1dnM1xhK94ZCvFxSCKs+Dg2uzdjalwrE03E1mR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729376369; c=relaxed/simple;
-	bh=daUc5xecu7xI5c+UkC320lN7WO6Pv9zdDCfjUjy8L1U=;
+	s=arc-20240116; t=1729376464; c=relaxed/simple;
+	bh=5gQmz1RIfovnudLGPoWTTrhu31GiNk6o17nNTgx35kU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=D3Z4LhLxa1zY0ozplyFw9ACUh4Mi+SCmQaIjc8hhjye5JOSBp/AjMAW/fm9QFcOb75ZRZu29VkyLdw8nU0+MyhdXzJlL4SRYgp7gXOQ+ZT1jK4g84BgNW7EfCEFVngYdK88iJIw0pKgquhXDL2rLcxPNNEcrcqpQ62F4FJqRVZc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vNM1wyZQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B925C4CEC5;
-	Sat, 19 Oct 2024 22:19:26 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=pgHbf1OP4F2ziBSKV3UVKCBS4TH/ncfLGEjGN/lDUzMXOwcJJ1T16Y4LMIzOEste83El5jqbH+BMtPl0ja8R1iEpjTclaFoE7PFkhlHIMZBBFhfciGBIJXt2+QoqJFQO5s1fUBsVdpANQDWTbrkmcGrTXQMUW5N4Nee1KtRMp58=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d9THhAss; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C8C7C4CEC5;
+	Sat, 19 Oct 2024 22:21:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729376368;
-	bh=daUc5xecu7xI5c+UkC320lN7WO6Pv9zdDCfjUjy8L1U=;
+	s=k20201202; t=1729376463;
+	bh=5gQmz1RIfovnudLGPoWTTrhu31GiNk6o17nNTgx35kU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=vNM1wyZQW4Fo3UYmtYtZPgjiHgu/H4XI/+27SeHDRGuyHhrsjIEj389botXDz7xzU
-	 oRoliDromsIEdrwgMdf3d6+NrBy7bXYMTE2T/8I1/d4kB9gjHsLS/MIoIKs8EASeaT
-	 aBxIiobIWyjFiwv9/poZDmy2HqvjFhixH+91U8zwdcdRhqXgTkEFbn2iL08Ol1J7ou
-	 HP420DfIrrmCeqEBftQC/r/u9iEdCqnooHwASpRmuOZ6oVBWARW5PE0Gis4BiiIMsJ
-	 95hjSW/bv4/gU/7p/7MsytMe7tkh0nWplVzjhpV678uD6QoJdFyqaGyiUG8CRghoje
-	 30qArBjHZQnlg==
-Date: Sat, 19 Oct 2024 15:19:25 -0700
+	b=d9THhAssNHC3TkkEIP32NhnxtjGCvkrF8IMK7gfPE5R73nlCYNjpfi7UU/mvrzeyk
+	 GvKGSqwp9shJLliIAKLLtja9DuBkQWG41Cw78nVYptDdzjOkl5S/+ZSbL0Y5Qrfcp3
+	 W83fHGgimj3quObRBksH/QbuKViyT7Wt1OnrHbP2p+yA26C8rFrD3HPgtYKX1j+BmS
+	 WCIL91KqYeCu/6mSc7J/+nGvIGlsG5mBPltfJujjx4oyzw3GBHjVE21Kxk+4M79bKm
+	 MFk4YVLCYLYdXNDHKLddhtWdWe08pTL2h0q7BLwFmfcTBDoJzrjAafMJK9hPJYq33V
+	 1krzp7/nDUHgw==
+Date: Sat, 19 Oct 2024 15:21:00 -0700
 From: Luis Chamberlain <mcgrof@kernel.org>
 To: Mike Rapoport <rppt@kernel.org>
 Cc: Andrew Morton <akpm@linux-foundation.org>,
@@ -89,11 +89,10 @@ Cc: Andrew Morton <akpm@linux-foundation.org>,
 	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
 	sparclinux@vger.kernel.org, x86@kernel.org,
 	Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH v6 2/8] mm: vmalloc: don't account for number of nodes
- for HUGE_VMAP allocations
-Message-ID: <ZxQwbXh5v7eJmuyh@bombadil.infradead.org>
+Subject: Re: [PATCH v6 3/8] asm-generic: introduce text-patching.h
+Message-ID: <ZxQwzGlyJOC2-DcG@bombadil.infradead.org>
 References: <20241016122424.1655560-1-rppt@kernel.org>
- <20241016122424.1655560-3-rppt@kernel.org>
+ <20241016122424.1655560-4-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -102,25 +101,21 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241016122424.1655560-3-rppt@kernel.org>
+In-Reply-To: <20241016122424.1655560-4-rppt@kernel.org>
 
-On Wed, Oct 16, 2024 at 03:24:18PM +0300, Mike Rapoport wrote:
+On Wed, Oct 16, 2024 at 03:24:19PM +0300, Mike Rapoport wrote:
 > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 > 
-> vmalloc allocations with VM_ALLOW_HUGE_VMAP that do not explicitly
-> specify node ID will use huge pages only if size_per_node is larger than
-> a huge page.
-> Still the actual allocated memory is not distributed between nodes and
-> there is no advantage in such approach.
-> On the contrary, BPF allocates SZ_2M * num_possible_nodes() for each
-> new bpf_prog_pack, while it could do with a single huge page per pack.
+> Several architectures support text patching, but they name the header
+> files that declare patching functions differently.
 > 
-> Don't account for number of nodes for VM_ALLOW_HUGE_VMAP with
-> NUMA_NO_NODE and use huge pages whenever the requested allocation size
-> is larger than a huge page.
+> Make all such headers consistently named text-patching.h and add an empty
+> header in asm-generic for architectures that do not support text patching.
 > 
 > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 > Reviewed-by: Christoph Hellwig <hch@lst.de>
+> Acked-by: Geert Uytterhoeven <geert@linux-m68k.org> # m68k
+> Acked-by: Arnd Bergmann <arnd@arndb.de>
 
 Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
 
