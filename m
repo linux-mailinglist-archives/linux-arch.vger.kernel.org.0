@@ -1,323 +1,210 @@
-Return-Path: <linux-arch+bounces-8285-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8286-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39C969A4B80
-	for <lists+linux-arch@lfdr.de>; Sat, 19 Oct 2024 08:20:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A693B9A4C1D
+	for <lists+linux-arch@lfdr.de>; Sat, 19 Oct 2024 10:46:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D8D6D284A13
-	for <lists+linux-arch@lfdr.de>; Sat, 19 Oct 2024 06:20:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2A11E1F22F7D
+	for <lists+linux-arch@lfdr.de>; Sat, 19 Oct 2024 08:46:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74D3C1D5CF5;
-	Sat, 19 Oct 2024 06:20:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FBA01DE8AA;
+	Sat, 19 Oct 2024 08:46:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1XCrySxO"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="CfZ/vSMV"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B0501CC8B0
-	for <linux-arch@vger.kernel.org>; Sat, 19 Oct 2024 06:20:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5416D1D2F73
+	for <linux-arch@vger.kernel.org>; Sat, 19 Oct 2024 08:46:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729318819; cv=none; b=hYh80REWziytz/crr0+76SQXOZm3usChO+CyKIQT6CgTQUaiUiJmq/itB0yo7Pxne1tqyL3rraIEbHW5vNg3Gs4IfLDvqDhYewwj5z+0IFS0a00hMuQr1dbtYDS4yVWDVhwKQT7ilsOVKmFDv+gr1NOWCMU5RR8b0bceRO/bLVo=
+	t=1729327603; cv=none; b=Xug78bdR9h1dxCEfOWC8+aDzjPuwsdHds/+dwbGMOBlNzaM9VQZBNqnT896xopsK+cJu+2NK2idIOamOwpizMgLgu3gwdK/EzCm/Q/XKkguR3c3A+TfgcwyakBg8E8dA9sFoKBZs6PJT1Tvd6NZ+0wIj3icRhXfx9tlTVnwIQ50=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729318819; c=relaxed/simple;
-	bh=j8X+5Qa3BA6yYydwwDfAN46CjuG+Ig56cU764oIme4g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rzeRxPTXb1bG+duk97pl7yozqO6R9bLgcXUDk308hvBm4YD8vVpJfB6HchX7QEAAWV2NR9YB4y9L/gG03ZV+3/h60lqri2tkgAEjvnC2oeKx/4UN2RGUeYjbbGgEYP002JCvYVhrF8zzfv/O41/BZSZ6QFcfX4EpZGAEFZWzfFo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1XCrySxO; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-20c87b0332cso57365ad.1
-        for <linux-arch@vger.kernel.org>; Fri, 18 Oct 2024 23:20:17 -0700 (PDT)
+	s=arc-20240116; t=1729327603; c=relaxed/simple;
+	bh=gNbr23i1Y7tru0e0VyGj6/FwF2Lx5ttC9gneh6Z0QG0=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WIajDfJrl5sRR/pWnL9cLcerrUOG+JWRSfPscHmF1kUuBC4dRBDDvxxLqYyAndMkxqnouiqoS9h1j9TLIcs9T6y95s/33dk4/QAKn/oeAEAVOVyNFhAtnnPxaVA3tBH/vMEZRrY9YXdXJQW/H47ppVODmntDYH4QqQ8beIIkVFc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=CfZ/vSMV; arc=none smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a9a1b71d7ffso409461566b.1
+        for <linux-arch@vger.kernel.org>; Sat, 19 Oct 2024 01:46:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1729318816; x=1729923616; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kG5Ji9yk+5OB5vhrjsIZYD53kBt4ULitiVGV3je8U3M=;
-        b=1XCrySxOmkKDtJ1yidN84o7Bs1yzU5v4OdygOFAGsJ5jzXQwz7M1wiFqFYF9yTA/A2
-         zWuCTuLvDFK3aC+A8DRwlS1xPC2HsKxG7Rys1i6Je5JBhbJgXGH3vKqc93Y+/xN0qrzG
-         D3MLvt0U1Sh6atBjfYJe61Zw/HuBpFRrH0VsnxQuKUBJQgzwUeptk5X3gOOZNRbA26Ai
-         2eMr0O8OLS9089MF6kbroiHaRYwdprvROPjY7EnSU0piQflg3NXB05Ho55SIzFHQKZVP
-         H70Oy/0e9nUQA30X0cPvKNAk5PbfSzpEtXwaIi74gelQys1YYb11ZGTSO7K5EFHz09t7
-         wu/Q==
+        d=suse.com; s=google; t=1729327598; x=1729932398; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=goIM8l9m337Jc/qmGgmMN6cGaQgYnCJzJED4V8yFMUM=;
+        b=CfZ/vSMVPZo5AOU7tR2WJsdndqZveDhhHDl8Sp3gAcT3KjLdU3NAGex8ZSl+j9E1ZW
+         eNw3cpBh6HGxBM9O5oFJTvLWdG8C5D4sZEqpE9gZOtyAGvjTTNg5xwsXa07fhOxM1r5C
+         NRW2EGJjiony3JqOHYSe0kazfJu4Jh3kdV3QRswniXXZB6F5j61hwixdpZcAwyXyI6D7
+         cyDZt/A5L/mEqB3bqd+XBI1OvpYDIA+yfBV5qbxlxTzx3ixEYn/jP54tn8TU+0pGnTBQ
+         GyTlnoY/veeg2tiSnUZYHMP7zuZRZs9c8U+QM4lElzJ5QHGHkQ0Zw+WZQajLOtlOWzQ6
+         HWgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729318816; x=1729923616;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kG5Ji9yk+5OB5vhrjsIZYD53kBt4ULitiVGV3je8U3M=;
-        b=faXw0RIWZM4grqJnh3+xS8ylrKyLJvaWfIizImO5L8VTtJFaGS2HXBOnr+TIiawfZJ
-         Y+PrV6bOktxWTf6CjhCfiNxYv6K7Vrvv3DvRtI6Ro1sWFWlpQGmTCSavS7SZgiC6+ghu
-         hLTKA669jCnNYyO159SStCdvSSpaSzeXHqrDC5yOeVZ78pcDKWg77n9jSlKCKN+fLyVY
-         RQHLEY/XgKFFdTOAyk9iKrdnaO2dvqfWGQ/ll6OCgURzigIggAmYOiY89NDTfnXBJJ3W
-         11+jyD8IZ/z3j1wyVuGmsLcoXXDi6B84QcdWe47E7EG53qpgT0khvCv737X4bufY1oN4
-         oLEA==
-X-Forwarded-Encrypted: i=1; AJvYcCXKjXGuPzSrDKaw/jFaDGpMi5pfdM/9uPoBbVSV1K2jsNHgrsMJ9GxhRyO2cQm+N1Ygs1xrvnFpd9/K@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx3AE3Z04eSjWPKD7T+AlZjk4uE15ai1SENJHJqA4b2Z2b2UJEN
-	KlA2Oim2ceaqdKryRt+1GCrZIVKJwHOfd/di3Udji3Vb5EvLMOpDVWqAN57FCuH0Ff9HQe5jKyG
-	gsfmJ7QlJ4REJUYxi6mLSdqKoCLCiFLFfJXRY
-X-Google-Smtp-Source: AGHT+IG/g1ICUcu3rMMFd5HdtPGKTgkMSGD7b99oCotrAl3M1kzzZpBn3dX2gQQlRRZDdwAveuHP6VBuhszFxOLUudA=
-X-Received: by 2002:a17:902:d484:b0:20c:e262:2570 with SMTP id
- d9443c01a7336-20e72b77977mr1489885ad.8.1729318815966; Fri, 18 Oct 2024
- 23:20:15 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1729327598; x=1729932398;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=goIM8l9m337Jc/qmGgmMN6cGaQgYnCJzJED4V8yFMUM=;
+        b=mEiC+ys0B7tARU6pmlbzhNDjgiNKY0/GwZEXefXFKcUHeCG8WYkQdPiLHKQZagAgS7
+         MvMJI322M6dYoyFvCGOwiwkHulqs6qPBYQvemZQSsMpmQE8ArTaiufjqbnwnOSJtrdqE
+         OP45c5A/zWJRTgtnTycUkGxoT9KNEUnSjRauiAzplnHFcQ063XLt5b6G8x7MQ5pL7ggg
+         6Ba0RrOmUAb3kR9twTQemw+XJ4/QYQr+txlzR3COmsADP6oYTtOzzCwjNlQPuszUYRqP
+         9EiLjPhBfi3fBX28RydxA1NAtdKOxN0YXbaieC/ZO6P4zejgNzo6d33ujGjkmfRIs30M
+         jlRA==
+X-Forwarded-Encrypted: i=1; AJvYcCX5m22NBU82Q9mVGjtWuqiz5+dkwaWQhKac89rEwRbDX20rnrPZMWArnyWgYwU867KLEb/P2yTBRdM2@vger.kernel.org
+X-Gm-Message-State: AOJu0YwNsYjSm3fxojHw0IY3qy1zSvnmLqlFlrm45DBp3BXVo0MDqW1a
+	8scH+V34KLJwAk6l46lAmN2y/XnKdrmaD8AK6Kq/VoP3mq9K1cehgcBOoBbQx5c=
+X-Google-Smtp-Source: AGHT+IE6LjBSGzuHopccP4572hv/igYqTjW1d9uem80OwOh8YbiNrdYIuLnJQku+pZ2TZlmLJ4YdEQ==
+X-Received: by 2002:a17:907:705:b0:a99:36ab:d843 with SMTP id a640c23a62f3a-a9a69baadbbmr400539166b.38.1729327598506;
+        Sat, 19 Oct 2024 01:46:38 -0700 (PDT)
+Received: from localhost (host-95-234-228-50.retail.telecomitalia.it. [95.234.228.50])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9a68bf7a19sm190806966b.168.2024.10.19.01.46.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 19 Oct 2024 01:46:37 -0700 (PDT)
+From: Andrea della Porta <andrea.porta@suse.com>
+X-Google-Original-From: Andrea della Porta <aporta@suse.de>
+Date: Sat, 19 Oct 2024 10:46:58 +0200
+To: Bjorn Helgaas <helgaas@kernel.org>
+Cc: Andrea della Porta <andrea.porta@suse.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Derek Kiernan <derek.kiernan@amd.com>,
+	Dragan Cvetic <dragan.cvetic@amd.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Saravana Kannan <saravanak@google.com>,
+	Bjorn Helgaas <bhelgaas@google.com>, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org, netdev@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+	Lee Jones <lee@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+	Stefan Wahren <wahrenst@gmx.net>, Lizhi Hou <lizhi.hou@amd.com>
+Subject: Re: [PATCH 03/11] PCI: of_property: Sanitize 32 bit PCI address
+ parsed from DT
+Message-ID: <ZxNyAuaOy6DE8sH-@apocalypse>
+References: <ZxJXZ9R-Qp9CNmJk@apocalypse>
+ <20241018222850.GA766393@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241014213342.1480681-1-xur@google.com>
-In-Reply-To: <20241014213342.1480681-1-xur@google.com>
-From: Rong Xu <xur@google.com>
-Date: Fri, 18 Oct 2024 23:20:02 -0700
-Message-ID: <CAF1bQ=SQ9rFdwRk_waQvn4PW7x6T1uJmJ8qNqj04oRKmujkCQw@mail.gmail.com>
-Subject: Re: [PATCH v4 0/6] Add AutoFDO and Propeller support for Clang build
-To: Alice Ryhl <aliceryhl@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>, 
-	Breno Leitao <leitao@debian.org>, Brian Gerst <brgerst@gmail.com>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, David Li <davidxl@google.com>, 
-	Han Shen <shenhan@google.com>, Heiko Carstens <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>, 
-	Ingo Molnar <mingo@redhat.com>, Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Juergen Gross <jgross@suse.com>, 
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
-	Masahiro Yamada <masahiroy@kernel.org>, "Mike Rapoport (IBM)" <rppt@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Nicolas Schier <nicolas@fjasle.eu>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Rong Xu <xur@google.com>, 
-	Sami Tolvanen <samitolvanen@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Wei Yang <richard.weiyang@gmail.com>, workflows@vger.kernel.org, 
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Maksim Panchenko <max4bolt@gmail.com>, 
-	Yonghong Song <yonghong.song@linux.dev>, Yabin Cui <yabinc@google.com>
-Cc: x86@kernel.org, linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241018222850.GA766393@bhelgaas>
 
-Thanks to all for the feedback and suggestions! We are ready to make any fu=
-rther
-changes needed. Is there anything else we can address for this patch?
+Hi Bjorn,
 
-Also, we know it's not easy to test this patch, but if anyone has had a cha=
-nce
-to try building AutoFDO/Propeller kernels with it, we'd really appreciate y=
-our
-input here. Any confirmation that it works as expected would be very helpfu=
-l.
+On 17:28 Fri 18 Oct     , Bjorn Helgaas wrote:
+> On Fri, Oct 18, 2024 at 02:41:11PM +0200, Andrea della Porta wrote:
+> > On 20:08 Mon 07 Oct     , Bjorn Helgaas wrote:
+> > ... 
+> 
+> > > Yes, this is exactly the problem.  The pci@0 parent and child
+> > > addresses in "ranges" are both in the PCI address space.  But we
+> > > start with pdev->resource[N], which is a CPU address.  To get the PCI
+> > > address, we need to apply pci_bus_address().  If the host bridge
+> > > windows are set up correctly, the window->offset used in
+> > > pcibios_resource_to_bus() should yield the PCI bus address.
+> > 
+> > You mean something like this, I think:
+> > 
+> > @@ -129,7 +129,7 @@ static int of_pci_prop_ranges(struct pci_dev *pdev, struct of_changeset *ocs,
+> >                 if (of_pci_get_addr_flags(&res[j], &flags))
+> >                         continue;
+> >  
+> > -               val64 = res[j].start;
+> > +               val64 = pci_bus_address(pdev, &res[j] - pdev->resource);
+> >                 of_pci_set_address(pdev, rp[i].parent_addr, val64, 0, flags,
+> >                                    false);
+> >                 if (pci_is_bridge(pdev)) {
+> 
+> Yes.
+> 
+> > > I think it should look like this:
+> > > 
+> > >   pci@0: <0x82000000 0x0 0x00000000 0x82000000 0x0 0x00000000 0x0 0x600000>;
+> > 
+> > indeed, with the above patch applied, the result is exactly as you expected.
+> > ...
+> 
+> > > > > But I don't think it works in general because there's no
+> > > > > requirement that the host bridge address translation be that
+> > > > > simple.  For example, if we have two host bridges, and we want
+> > > > > each to have 2GB of 32-bit PCI address space starting at 0x0,
+> > > > > it might look like this:
+> > > > > 
+> > > > >   0x00000002_00000000 -> PCI 0x00000000 (subtract 0x00000002_00000000)
+> > > > >   0x00000002_80000000 -> PCI 0x00000000 (subtract 0x00000002_80000000)
+> > > > > 
+> > > > > In this case simply ignoring the high 32 bits of the CPU
+> > > > > address isn't the correct translation for the second host
+> > > > > bridge.  I think we should look at each host bridge's
+> > > > > "ranges", find the difference between its parent and child
+> > > > > addresses, and apply the same difference to everything below
+> > > > > that bridge.
+> > > > 
+> > > > Not sure I've got this scenario straight: can you please provide
+> > > > the topology and the bit setting (32/64 bit) for those ranges?
+> > > > Also, is this scenario coming from a real use case or is it
+> > > > hypothetical?
+> > > 
+> > > This scenario is purely hypothetical, but it's a legal topology
+> > > that we should handle correctly.  It's two host bridges, with
+> > > independent PCI hierarchies below them:
+> > > 
+> > >   Host bridge A: [mem 0x2_00000000-0x2_7fffffff window] (bus address 0x00000000-0x7fffffff)
+> > >   Host bridge B: [mem 0x2_80000000-0x2_ffffffff window] (bus address 0x00000000-0x7fffffff)
+> > > 
+> > > Bridge A has an MMIO aperture at CPU addresses
+> > > 0x2_00000000-0x2_7fffffff, and when it initiates PCI transactions on
+> > > its secondary side, the PCI address is CPU_addr - 0x2_00000000.
+> > > 
+> > > Similarly, bridge B has an MMIO aperture at CPU addresses 
+> > > 0x2_80000000-0x2_ffffffff, and when it initiates PCI transactions on 
+> > > its secondary side, the PCI address is CPU_addr - 0x2_80000000.
+> > > 
+> > > Both hierarchies use PCI bus addresses in the 0x00000000-0x7fffffff
+> > > range.  In a topology like this, you can't convert a bus address back
+> > > to a CPU address unless you know which hierarchy it's in.
+> > > pcibios_bus_to_resource() takes a pci_bus pointer, which tells you
+> > > which hierarchy (and which host bridge address translation) to use.
+> > 
+> > Agreed. While I think about how to adjust that specific patch,i
+> > let's drop it from this patchset since the aforementioned change is
+> > properly fixing the translation issue.
+> 
+> OK.  I assume you mean to drop the "PCI: of_property: Sanitize 32 bit
+> PCI address parsed from DT" patch?  Or replace it with the
+> pci_bus_address() addition above?
 
--Rong
+I'm planning to replace that patch with the above mentioned pci_bus_address()
+addition. However, I think the 32 bit sanitization is still useful to prevent
+wrongly encoded address to linger around, but I defer it to a subsequent standalone
+patch, after figuring out the dual bridge scenario that you proposed.
 
-On Mon, Oct 14, 2024 at 2:33=E2=80=AFPM Rong Xu <xur@google.com> wrote:
->
-> Hi,
->
-> This patch series is to integrate AutoFDO and Propeller support into
-> the Linux kernel. AutoFDO is a profile-guided optimization technique
-> that leverages hardware sampling to enhance binary performance.
-> Unlike Instrumentation-based FDO (iFDO), AutoFDO offers a user-friendly
-> and straightforward application process. While iFDO generally yields
-> superior profile quality and performance, our findings reveal that
-> AutoFDO achieves remarkable effectiveness, bringing performance close
-> to iFDO for benchmark applications.
->
-> Propeller is a profile-guided, post-link optimizer that improves
-> the performance of large-scale applications compiled with LLVM. It
-> operates by relinking the binary based on an additional round of runtime
-> profiles, enabling precise optimizations that are not possible at
-> compile time.  Similar to AutoFDO, Propeller too utilizes hardware
-> sampling to collect profiles and apply post-link optimizations to improve
-> the benchmark=E2=80=99s performance over and above AutoFDO.
->
-> Our empirical data demonstrates significant performance improvements
-> with AutoFDO and Propeller, up to 10% on microbenchmarks and up to 5%
-> on large warehouse-scale benchmarks. This makes a strong case for their
-> inclusion as supported features in the upstream kernel.
->
-> Background
->
-> A significant fraction of fleet processing cycles (excluding idle time)
-> from data center workloads are attributable to the kernel. Ware-house
-> scale workloads maximize performance by optimizing the production kernel
-> using iFDO (a.k.a instrumented PGO, Profile Guided Optimization).
->
-> iFDO can significantly enhance application performance but its use
-> within the kernel has raised concerns. AutoFDO is a variant of FDO that
-> uses the hardware=E2=80=99s Performance Monitoring Unit (PMU) to collect
-> profiling data. While AutoFDO typically yields smaller performance
-> gains than iFDO, it presents unique benefits for optimizing kernels.
->
-> AutoFDO eliminates the need for instrumented kernels, allowing a single
-> optimized kernel to serve both execution and profile collection. It also
-> minimizes slowdown during profile collection, potentially yielding
-> higher-fidelity profiling, especially for time-sensitive code, compared
-> to iFDO. Additionally, AutoFDO profiles can be obtained from production
-> environments via the hardware=E2=80=99s PMU whereas iFDO profiles require
-> carefully curated load tests that are representative of real-world
-> traffic.
->
-> AutoFDO facilitates profile collection across diverse targets.
-> Preliminary studies indicate significant variation in kernel hot spots
-> within Google=E2=80=99s infrastructure, suggesting potential performance =
-gains
-> through target-specific kernel customization.
->
-> Furthermore, other advanced compiler optimization techniques, including
-> ThinLTO and Propeller can be stacked on top of AutoFDO, similar to iFDO.
-> ThinLTO achieves better runtime performance through whole-program
-> analysis and cross module optimizations. The main difference between
-> traditional LTO and ThinLTO is that the latter is scalable in time and
-> memory.
->
-> This patch series adds AutoFDO and Propeller support to the kernel. The
-> actual solution comes in six parts:
->
-> [P 1] Add the build support for using AutoFDO in Clang
->
->       Add the basic support for AutoFDO build and provide the
->       instructions for using AutoFDO.
->
-> [P 2] Fix objtool for bogus warnings when -ffunction-sections is enabled
->
-> [P 3] Change the subsection ordering when -ffunction-sections is enabled
->
-> [P 4] Enable =E2=80=93ffunction-sections for the AutoFDO build
->
-> [P 5] Enable Machine Function Split (MFS) optimization for AutoFDO
->
-> [P 6] Add Propeller configuration to the kernel build
->
-> Patch 1 provides basic AutoFDO build support. Patches 2 to 5 further
-> enhance the performance of AutoFDO builds and are functionally dependent
-> on Patch 1. Patch 6 enables support for Propeller and is dependent on
-> patch 2 and patch 3.
->
-> Caveats
->
-> AutoFDO is compatible with both GCC and Clang, but the patches in this
-> series are exclusively applicable to LLVM 17 or newer for AutoFDO and
-> LLVM 19 or newer for Propeller. For profile conversion, two different
-> tools could be used, llvm_profgen or create_llvm_prof. llvm_profgen
-> needs to be the LLVM 19 or newer, or just the LLVM trunk. Alternatively,
-> create_llvm_prof v0.30.1 or newer can be used instead of llvm-profgen.
->
-> Additionally, the build is only supported on x86 platforms equipped
-> with PMU capabilities, such as LBR on Intel machines. More
-> specifically:
->  * Intel platforms: works on every platform that supports LBR;
->    we have tested on Skylake.
->  * AMD platforms: tested on AMD Zen3 with the BRS feature. The kernel
->    needs to be configured with =E2=80=9CCONFIG_PERF_EVENTS_AMD_BRS=3Dy", =
-To
->    check, use
->    $ cat /proc/cpuinfo | grep =E2=80=9C brs=E2=80=9D
->    For the AMD Zen4, AMD LBRV2 is supported, but we suspect a bug with
->    AMD LBRv2 implementation in Genoa which blocks the usage.
->
-> Experiments and Results
->
-> Experiments were conducted to compare the performance of AutoFDO-optimize=
-d
-> kernel images (version 6.9.x) against default builds.. The evaluation
-> encompassed both open source microbenchmarks and real-world production
-> services from Google and Meta. The selected microbenchmarks included Nepe=
-r,
-> a network subsystem benchmark, and UnixBench which is a comprehensive sui=
-te
-> for assessing various kernel operations.
->
-> For Neper, AutoFDO optimization resulted in a 6.1% increase in throughput
-> and a 10.6% reduction in latency. Unixbench saw a 2.2% improvement in its
-> index score under low system load and a 2.6% improvement under high syste=
-m
-> load.
->
-> For further details on the improvements observed in Google and Meta's
-> production services, please refer to the LLVM discourse post:
-> https://discourse.llvm.org/t/optimizing-the-linux-kernel-with-autofdo-inc=
-luding-thinlto-and-propeller/79108
->
-> Thanks,
->
-> Rong Xu and Han Shen
->
-> Change-Logs in V2:
-> Rebased the source to e32cde8d2bd7 (Merge tag 'sched_ext-for-6.12-rc1-fix=
-es-1')
-> 1. Cover-letter: moved the Propeller description to the top (Peter Zijlst=
-ra)
-> 2. [P 1]: (1) Makefile: fixed file order (Masahiro Yamada)
->           (2) scripts/Makefile.lib: used is-kernel-object to exclude
->               files (Masahiro Yamada)
->           (3) scripts/Makefile.autofdo: improved the code (Masahiro Yamad=
-a)
->           (4) scripts/Makefile.autofdo: handled when DEBUG_INFO disabled =
-(Nick Desaulniers)
-> 3. [P 2]: tools/objtool/elf.c: updated the comments (Peter Zijlstra)
-> 4. [P 3]: include/asm-generic/vmlinux.lds.h:
->           (1) explicit set cold text function aligned (Peter Zijlstra and=
- Peter Anvin)
->           (2) set hot-text page aligned
-> 5. [P 6]: (1) include/asm-generic/vmlinux.lds.h: made Propeller not depen=
-ding
->               on AutoFDO
->           (2) Makefile: fixed file order (Masahiro Yamada)
->           (3) scripts/Makefile.lib: used is-kernel-object to exclude
->               files (Masahiro Yamada). This removed the change in
->               arch/x86/platform/efi/Makefile,
->               drivers/firmware/efi/libstub/Makefile, and
->               arch/x86/boot/compressed/Makefile.
->               And this also addressed the comment from Arnd Bergmann rega=
-rding
->               arch/x86/purgatory/Makefile.
->           (4) scripts/Makefile.propeller: improved the code (Masahiro Yam=
-ada)
->
-> Change-Logs in V3:
-> Rebased the source to eb952c47d154 (Merge tag 'for-6.12-rc2-tag').
-> 1. [P 1]: autofdo.rst: removed code-block directives and used "::" (Mike =
-Rapoport)
-> 2. [P 6]: propeller.rst: removed code-block directives and use "::" (Mike=
- Rapoport)
->
-> Change-Logs in V4:
-> 1. [P 1]: autofdo.rst: fixed a typo for create_llvm_prof commmand.
->
-> Rong Xu (6):
->   Add AutoFDO support for Clang build
->   objtool: Fix unreachable instruction warnings for weak funcitons
->   Change the symbols order when --ffuntion-sections is enabled
->   AutoFDO: Enable -ffunction-sections for the AutoFDO build
->   AutoFDO: Enable machine function split optimization for AutoFDO
->   Add Propeller configuration for kernel build.
->
->  Documentation/dev-tools/autofdo.rst   | 165 ++++++++++++++++++++++++++
->  Documentation/dev-tools/index.rst     |   2 +
->  Documentation/dev-tools/propeller.rst | 161 +++++++++++++++++++++++++
->  MAINTAINERS                           |  14 +++
->  Makefile                              |   2 +
->  arch/Kconfig                          |  42 +++++++
->  arch/x86/Kconfig                      |   2 +
->  arch/x86/kernel/vmlinux.lds.S         |   4 +
->  include/asm-generic/vmlinux.lds.h     |  54 +++++++--
->  scripts/Makefile.autofdo              |  25 ++++
->  scripts/Makefile.lib                  |  20 ++++
->  scripts/Makefile.propeller            |  28 +++++
->  tools/objtool/check.c                 |   2 +
->  tools/objtool/elf.c                   |  15 ++-
->  14 files changed, 524 insertions(+), 12 deletions(-)
->  create mode 100644 Documentation/dev-tools/autofdo.rst
->  create mode 100644 Documentation/dev-tools/propeller.rst
->  create mode 100644 scripts/Makefile.autofdo
->  create mode 100644 scripts/Makefile.propeller
->
->
-> base-commit: eb952c47d154ba2aac794b99c66c3c45eb4cc4ec
-> --
-> 2.47.0.rc1.288.g06298d1525-goog
->
+> 
+> Bjorn
+
+Many thanks,
+Andrea
 
