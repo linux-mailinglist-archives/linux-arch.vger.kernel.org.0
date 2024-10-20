@@ -1,83 +1,85 @@
-Return-Path: <linux-arch+bounces-8301-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8304-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A0389A550E
-	for <lists+linux-arch@lfdr.de>; Sun, 20 Oct 2024 18:21:26 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E58519A5525
+	for <lists+linux-arch@lfdr.de>; Sun, 20 Oct 2024 18:21:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D76A71F21DC0
-	for <lists+linux-arch@lfdr.de>; Sun, 20 Oct 2024 16:21:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3957DB22724
+	for <lists+linux-arch@lfdr.de>; Sun, 20 Oct 2024 16:21:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CDD5194A70;
-	Sun, 20 Oct 2024 16:21:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 850C41953B9;
+	Sun, 20 Oct 2024 16:21:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="O5DTn7lp";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="bBfrPe3F"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="DqtvXDzy";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="YAsb/lpQ"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF304194A43;
-	Sun, 20 Oct 2024 16:21:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98A63194AD5;
+	Sun, 20 Oct 2024 16:21:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729441272; cv=fail; b=Vgib3pFWufXs46rc8IEuZ+DLMEHlAHlvNSBbpHWft26wSIY5GNoHtTQM0JItrYAp/1CbHPmvZN9gDtPb1MYGgWwXsuFx8GyLDXBe/hQ4YZ/Y03LWN0ZPAUOq2Eax4uXuVGbJ0f2Z9/mcRfJLuLR6bM46aemtXlqh5akxtIRt/Jg=
+	t=1729441275; cv=fail; b=KHldr/YL42X4LNYTBAulnWI/IkVgp7R8xXzyPFZBEB/QjqP2yCrjjLP/ayfaDsqcSAj00hxhA5bCwWRIfr10wNuPBM1Ow2uLpkZvwx5s2Su9eD+jcIuvaXXa53UWeg6TA4NeGrvjF9X2gYlQ8WBVs+w2GatGl2AaQ1NtA3FondA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729441272; c=relaxed/simple;
-	bh=byyDknJIjXZlSl3WVNl4q0dawoW++M+678YQZqQBunE=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=oWiCwBwqmsgZTaft90s8s5LawnUrI8epV5vS1WaD9NzKZ8Nj4SlB8eDgBMvfqdUBYx8x1/CoeFy9OVGRxSYE+5jZ0p5z/3fl/cCIyOfiwC2gAs153l82tHptWx+VxIKREMszIei53qzGJdzJaCN8UbUJP1hr0gG2AoGI9sjzAPQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=O5DTn7lp; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=bBfrPe3F; arc=fail smtp.client-ip=205.220.177.32
+	s=arc-20240116; t=1729441275; c=relaxed/simple;
+	bh=imwnoMZ5P2Wy2dxWIQWvxWeGPLqzt7jcTPr4NJQozaE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=lI8T9m+2GTOwMFKHV4+C+g9cIotoS19MN6o3LbE0arcghXTqTiER0VD5Cok9afgYKGiqJI+GLseYSytHJVNlRtdAUSDsdbdbH5wm5hLCno418dwHKXuJWgLToxxIzUdu+cri9wB8+VFere8NWzWzBcwYZMLnYmOYWVbkUTrYZIc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=DqtvXDzy; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=YAsb/lpQ; arc=fail smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49KDBlIK010994;
-	Sun, 20 Oct 2024 16:20:18 GMT
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49KDC9IH011703;
+	Sun, 20 Oct 2024 16:20:23 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=corp-2023-11-20; bh=O8hJeffTehHXTsGL
-	aORJom5Afz+X1YAv18lGNZrcb7c=; b=O5DTn7lp4OMWaTrckFK7kpua8Pig9x7t
-	5OqGQOXRPslJRAMwulZ4zTIkolotEts1PXmgg7R52ZVb+Is7+mQ2uiCH8ChiHVwC
-	DpxdbU82EDmmR2aQcKs1PG/m9fdNcBZB82xnrC8cMMONMm02GhUKAlKp8uSWpwBA
-	HlPlUv9Rh5i9TGktJ/5th78omIucTMMFKKZKBH/M0iujuhJB1RcJAy/UYNtZv5cf
-	Tn/ayWvR9ZQtE5Q3IVrO16MglWVoAD0Q3+PP06nTm4DIP9P8O6aGAkIXwS21grB0
-	a5cnv1uER8p62LTUbsw+JYbdNMVxazbX/DVTrw+h3AE8Muvk3MVTHg==
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 42ckkqs3hw-1
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2023-11-20; bh=Vd2Vp6szhFvYTVsLkfnXlXF7Mkv+sqGaCcSK4gFh5M0=; b=
+	DqtvXDzyMJdNvzJ4/b3t1NxBm4DvIcwh/RoDYAIoaT+46dhVBg+FN1JjkGp5IxJw
+	q6sp3+h+4cqfkKFmyV4V1PIMPL25TdJh0gmOM4qq0CNTrsGJ4lFWuhm7jewiEnNG
+	wio4cMxabRrvdxjpqeS6OwV54dAL8xtbmk7mDpGrVFhVk6NrKEjQ8+9WozJZGIO8
+	jU8m7uupHBpE/27Kl3agE78ZkQ9jUQ6mHS36GxmfMAQOMQRGsyIMyOW4cWxRRXLm
+	mXTBP1fTQMtPvMii1q4Ixx9gf5rEvYckzEIE3Ut0xlfckdod86Vbp6NrQMBX/vtK
+	XuUBDOTb8Nf6Rrx1yBBriQ==
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 42ckkqs3hx-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sun, 20 Oct 2024 16:20:18 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49KD3tcf019698;
-	Sun, 20 Oct 2024 16:20:17 GMT
-Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam02lp2045.outbound.protection.outlook.com [104.47.51.45])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 42c37bjgg8-1
+	Sun, 20 Oct 2024 16:20:22 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49KCurTG008250;
+	Sun, 20 Oct 2024 16:20:21 GMT
+Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam02lp2049.outbound.protection.outlook.com [104.47.51.49])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 42c375gqxp-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sun, 20 Oct 2024 16:20:17 +0000
+	Sun, 20 Oct 2024 16:20:21 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=EpQZCzFpQC5a7wqvpizHESLAZhv713TxZ6AshHDGlNn88I6903HUzDTxNrhwqDqTEQwag6M6ri9MshJIs/NKcNFHfXR+0lDELwY/NxAtymdQnEg/8oo25wW1Dehefeq3x3XwLffaT/E2+AnK9EOfBrgFuzh96xccyOvVcJE6H0sCjQ3ToUGrTgdY3fCRuL51LiFD3SNiCqgTDnjgnyjU5aoKP8iZyqrviEFn2TYLstywzLL/VD2f4vy46nIu4MBGm2u+onEPp2YVgf6igqQQT+nm7GX6QSWBZ5PivY7AWcymL3tF/8GOn92Au8gRnGCO+HdHWcasgitik9xtDdsLoA==
+ b=mYoLplVzSpO1o10TNFaxPXS+D8m1zRgxemO+lvE5JPqirTIPVdoH4wyZ5QIZaDuGwOan00PhhDFGZxlcjWeWIEl3PymCNxZH1p/FsJxPdUuTrX+cyTC2TAW6pouCNgr6sqPH8NOZZQM1KyFwD8cfhuebx+/6GecwWVomY2P+Etu0lJaYOCWupYDD6zI6x1b5Z/WEIn4fIXR8du/1xziWvScn37QnCvPGtqUMDiXvmDSR7CqdD6NPwQa4xPKfvOTmy2RiPAnwg74WLTMvqqUcKmzeciFDcKxupGV5FfYfhnfcgLGe2ELHTqyonpSrhhL2isIX/THGZrJI+WhK6D6wIw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=O8hJeffTehHXTsGLaORJom5Afz+X1YAv18lGNZrcb7c=;
- b=s1NRFPNrDUNBKiJo36ftmUbXg4UhNoqzzJZc1TE760KZiEfP6ssFdRtiMBGHFOp+DAaKcvMzjgnokmFRY0W48hiGKe9lAkUaCRGcSXfLUGS6SUpbckaH6IEjJpLuFrc4CULhwTTAhJVomuQaQS+wtqRnkUItnuBZB1rN+Ia6cG9W3GgEHYt5xXM14FFAdNfrp7dfvTyuwHAJ/NfaFIhbeYnPmuAEpXe7Hws8tYVgIz77r7gwiz0OphCZKHjMZ9hpdSo5EoOMHhTPwlqKNYj1HotHykoPAtQJBcYSD+rxuGIpghecSUaH/+BjSAjqTeTxiTNqoFwbcsy+35YRRZqaTA==
+ bh=Vd2Vp6szhFvYTVsLkfnXlXF7Mkv+sqGaCcSK4gFh5M0=;
+ b=a4W3fatYAQQlRNnxJsAL2ou8HEGJXtDYJY1vjbaBnOazcfldDR4kVjrEtIBk93alyvKgJiL2cKbyJE4mIna+2Ap6wy3gNShs7qxrj+S07DtfX6daNwZw5k93kKcMAtTmNr6vrB7nVZa16u9XExiDTwMarzbCrOOm8p4FhfkjJlO7HeiQcBn9s+MnOqFZkyG6mVHsB1acA6DyKBDNkF4UFmWHWZ3Zgc7zuKTWihMtIuF/uY9/O4QRKYDTHgT4wqmKHcFyu9hdqTSr1gdpjBnWiI2CyZbJnhIaYeTmTRJyWhtfp3SDunnXhQMthSwq6vj7lYmVHoy9WKMjnPNTLhjA1w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=O8hJeffTehHXTsGLaORJom5Afz+X1YAv18lGNZrcb7c=;
- b=bBfrPe3FqQ4DKLsnUowrA3n8X/npZHDbh+lCxefZZPG+GFG92NXfHsNt9BSDrJw5ifdNwXzN/zOkAZtw9Vp1+sfBzMPvj3HRkXSy3C18AwC3LrBM3elWsNkPTFbLxHi7wCMJrc42Clj+55sueLtn1QI8UjagRI95NkoOCAHqBo8=
+ bh=Vd2Vp6szhFvYTVsLkfnXlXF7Mkv+sqGaCcSK4gFh5M0=;
+ b=YAsb/lpQN/ahO/phof+4aullfY+YQgXQPO6xj90GNLqkRehvUsmjdXM1HsNjASYl7nHlzL7ikxJ/S1mzayBzQu/WhxLIXwr+Zxwo+MD4if8gCvGhL1WOneELYK43g+Kk0/gAVd3bxhQhccxbdUBOlgAeR57aAqb2ErudUVSdAFI=
 Received: from BYAPR10MB3366.namprd10.prod.outlook.com (2603:10b6:a03:14f::25)
  by DS0PR10MB6703.namprd10.prod.outlook.com (2603:10b6:8:139::12) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.27; Sun, 20 Oct
- 2024 16:20:14 +0000
+ 2024 16:20:17 +0000
 Received: from BYAPR10MB3366.namprd10.prod.outlook.com
  ([fe80::baf2:dff1:d471:1c9]) by BYAPR10MB3366.namprd10.prod.outlook.com
  ([fe80::baf2:dff1:d471:1c9%6]) with mapi id 15.20.8069.024; Sun, 20 Oct 2024
- 16:20:13 +0000
+ 16:20:17 +0000
 From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: Suren Baghdasaryan <surenb@google.com>,
@@ -100,14 +102,16 @@ Cc: Suren Baghdasaryan <surenb@google.com>,
         Sidhartha Kumar <sidhartha.kumar@oracle.com>,
         Jeff Xu <jeffxu@chromium.org>, Christoph Hellwig <hch@infradead.org>,
         linux-api@vger.kernel.org, John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v2 0/5] implement lightweight guard pages
-Date: Sun, 20 Oct 2024 17:20:00 +0100
-Message-ID: <cover.1729440856.git.lorenzo.stoakes@oracle.com>
+Subject: [PATCH v2 1/5] mm: pagewalk: add the ability to install PTEs
+Date: Sun, 20 Oct 2024 17:20:01 +0100
+Message-ID: <cf91e3936c2dee42aa8ac15af3e76c90c098d570.1729440856.git.lorenzo.stoakes@oracle.com>
 X-Mailer: git-send-email 2.47.0
+In-Reply-To: <cover.1729440856.git.lorenzo.stoakes@oracle.com>
+References: <cover.1729440856.git.lorenzo.stoakes@oracle.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: LO0P265CA0011.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:355::19) To BYAPR10MB3366.namprd10.prod.outlook.com
+X-ClientProxiedBy: LO4P302CA0015.GBRP302.PROD.OUTLOOK.COM
+ (2603:10a6:600:2c2::11) To BYAPR10MB3366.namprd10.prod.outlook.com
  (2603:10b6:a03:14f::25)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -117,265 +121,566 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: BYAPR10MB3366:EE_|DS0PR10MB6703:EE_
-X-MS-Office365-Filtering-Correlation-Id: 32c3fd17-a14e-4a77-0d6c-08dcf12313af
+X-MS-Office365-Filtering-Correlation-Id: 14c616a0-58cb-4ceb-14c6-08dcf12315b0
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|10070799003|1800799024|7416014|376014|366016;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?qxJ77VFX2dva4EFVc5vaz4wXm0BWFCFAz/AYhn6DfFpUyx832JZZ7Z1jFLWK?=
- =?us-ascii?Q?cQEoPsf5hv8fKWwui9m1HUfKmQnFN+dV/9P3xhtYpK5P/VlfsjF4blEeajch?=
- =?us-ascii?Q?RzkEC0sEIZf+eXL7ueCpN4CjuN5zmuzgXqI308BCpI92zUkE3bbukee7Gq3D?=
- =?us-ascii?Q?/bSI71/CXvt8nXRLkY5CgOZXtPKpCeydwmiOCWjSbDUiCM78ilTx4maHvXaF?=
- =?us-ascii?Q?K/FpOUs/KC6ZvclUvXYLDjtvrF7cSf+gHAgg+tg5/HD0SPJZDlCm7uzQH0z5?=
- =?us-ascii?Q?6mcOawolpRzqb8pIdleYhZBwf4RSzIDdQeQZe2Xf0Mhu45rX0DW+eglp7OQJ?=
- =?us-ascii?Q?RZYAcEcoAv2Lt5aVSAwKKPS0/uW+ZnCcV4E1JRk+GBjPeQfNAjkdvjUSxW2W?=
- =?us-ascii?Q?hzeHfZBzvuguXF2xd0KEO38NCtNCWALiL7QpLCx2keeNjuETS61CsaniBvBh?=
- =?us-ascii?Q?rn8vZlM/7zCaGxV+wFvynvZvY3nfpnFBQmGmYDs0jKSmi0TEmMY86TeB1vOZ?=
- =?us-ascii?Q?nD5gPJvG7YUuXgfZTq7FwLSny9M/aA0T2/QUIxYO0Ey05z0z7P37M6vcp/48?=
- =?us-ascii?Q?kNvKCd6qB711RryoaOw63qML6bIOxnZ52kKUnSv5YQ/2Jqh/EslPwG809hgQ?=
- =?us-ascii?Q?t7PcD0dT5keVdd7IaWv81uGn+jzceeIdjcP3ZYmKKmqF+nIq8inSXx/Ygn65?=
- =?us-ascii?Q?66WTkxMYO4PbIiHJEWuRw4D+22uQBLXbKEokA+UOZFz9IU4GZXd+HKvWkQEJ?=
- =?us-ascii?Q?OqbE3P4ZdpVyS/16lKHkHlrBeTgBWZTGrQ2Qgly8u/jB1vCXC4YC57p77NMF?=
- =?us-ascii?Q?3kdDHGyJNDrsEj/QEb941673XpYPjW6WzP1OUdkyBBMZULQoIk3B1mn5IyPs?=
- =?us-ascii?Q?fX5ULaRvl8yVA8E4mGrffA98Cz+vGg1+Icl6+PqDA/6YaZ8P6aTGJcnwJhN0?=
- =?us-ascii?Q?AvO7Me2am7tdfLvwlZIhnWV4uLTK7H0Fpai0nFblzs7kNtfrMY+xe3rTPtdP?=
- =?us-ascii?Q?Dyi7fsnaFxeEI9Yz6jfwQBS8r/kVEUqBZuHzyQMnBZyCeZgIPWuxwttAO2iy?=
- =?us-ascii?Q?DmF+Fdh9BsWwECOJG4NZM+Ii/4/JsX0Q5TkUZ+PXaeCUVcJ8K4o0GDZ9JifG?=
- =?us-ascii?Q?Y8p1K/0Qmg+W60cK6VEcLxDex5FmuwRlVJNbBnBRNjGyF0STRSUegEdtaI2G?=
- =?us-ascii?Q?heFsF2lrkoKb7kJw+T7rEHuPh4DvewnF+6Qw+0GoCCXUDOtBxnF7ed8o2EAw?=
- =?us-ascii?Q?n6frbzCsCUwhxLpegkN20K8Ak19mWv1Wa5ssAnPJffjJg2MwFm99JMzTcgRh?=
- =?us-ascii?Q?Wwv6vnVJBv9VSS3Qy3mqcnec?=
+	=?us-ascii?Q?MOmAdZP7Y8NQ/oELA0qq6nwlDUCJKJQfCYqsDS7dPorHa9ZeNkxD6hhXMpe9?=
+ =?us-ascii?Q?PJhtP5V6bRBRu9fpLzuzo1Ceh3wSCZxqST2XT/0qJBjaRPBQjz85wRDdwj14?=
+ =?us-ascii?Q?V+mMwCx+hqIC948SmMqLQxepZbm1RP2Fqwg45jObYK9TmsoEBEhvindqQ6sP?=
+ =?us-ascii?Q?GWugCfGi6O7puIKr4qu7R++D8U2NVMH3kXYryW+e0Ru+3qzBgYM3sUa4j8wu?=
+ =?us-ascii?Q?HGu1dzAHyRvr4k/V9zYHJxEMu/1GxA3GZfyYNgNmphGfG2dVzho7C6v5qdgV?=
+ =?us-ascii?Q?6aYDqz6SnbchK5Bcx+0BLWPAGGe5t1FHJoGN+Tb1hLnej75Zaux69etdCCYt?=
+ =?us-ascii?Q?75kzLS1kuuoWyPY3bgpfsugvE19BGD/IM7RTbjYMcLSsbGcpK/FStQkWF4jG?=
+ =?us-ascii?Q?5H/h9+XL8zcitqSmmH/MghGM775rK+Cy3uI2Qu2iTXUQoSisOJRKq+KIhuJ7?=
+ =?us-ascii?Q?33P9Gci21Xw9fNrIIcYkHU05BIZsuBPWXtNymkDWGUP03oEgZir2tYlrSliO?=
+ =?us-ascii?Q?0D7qRPD2asTu3EJLSnNpS4d6bAoJwT28FRElMpf/1Hvj4LVxq1fxB/tiG6MY?=
+ =?us-ascii?Q?L3/lbQinAwwUsqxZIi2ehzmPyGMLcgkeqqfHiSkBvViutVpwME3FF8tsOFDD?=
+ =?us-ascii?Q?UPT7I9KtB/YH2aCKrrTNVJmUl0z5ZzXKDhGgYs3z3luObGhb5mwfisgjuFsp?=
+ =?us-ascii?Q?vxNp+iJegPA/9TY556GCLDmIcZe+QPhwRiiw16m3RinOG1HZW5oReMXI1dFA?=
+ =?us-ascii?Q?sSrJaXScoU7ZhQ0oK5y5k9r18KEMKNeRTfdff/74CI3UZOqLXOhb0ErG9bgy?=
+ =?us-ascii?Q?qXZlQL+LsvqF6ycwN5uayr8CWylB75vy9DfMqCQiP13yR44l1VxdiToYSTpq?=
+ =?us-ascii?Q?y2QxH0+cKrZVK6IV2LG7xyrAxhdxdFSsacRD+RPacTn789knTFGHid3MEEO/?=
+ =?us-ascii?Q?oB4FcQuKITp2ziSty4ghKOiIfKhw5cEmRoMuZzFPxImAi1wlW96r+NhXZdZQ?=
+ =?us-ascii?Q?0yA07Hn6R1mJA9/lT7OvrZZQujSBwdKxQIULtQ6UuvX4syMtFRWLrfJwkrh9?=
+ =?us-ascii?Q?ZYuQ9kFC3i8mhSUv7ve0nt0zliaD0wqfqKQ3MvnA4jagDGOFgF3ORZv6yRdZ?=
+ =?us-ascii?Q?nZ/jGy9twdoIdZDrcm1yTY1YTr8sXi8I5ZGMxUH64zji8Ptmo9SOWaquWukF?=
+ =?us-ascii?Q?imDQ84IKaEQyi1ggSPhg4DlgTbq/lh+dp8pswFWPKQBk6BLBj+U498kdAAJh?=
+ =?us-ascii?Q?0mOPfzptDER0U1sF1xIxUF/FG9mCIc7PXOwyzisPfKuBLGlRfdSYOPGPefzv?=
+ =?us-ascii?Q?kNhqVaEQA4a4Iyhm+Qy1DXmy?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB3366.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(1800799024)(7416014)(376014)(366016);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?I+wzes16wR/Y6aRyInWvXXy3NLxvVbGW+aAxR26bfGYytRzv+ZxxgGbPuysc?=
- =?us-ascii?Q?2UICWRgNc8T3rgreHEx77UPGkzlNwJAhMufbQoUWxvSPkO97YiwAk/+I2nD9?=
- =?us-ascii?Q?XIo5pnwZyowF4JXfNa/03tx+e9/MukSveWfx7jEaNw7kke3/7atzLnQDLRPf?=
- =?us-ascii?Q?6z9lCCg63vmKhK7l3+dwHWUFaPux0J4MY7RkQ6PDiGT4BXV0wOf8SltPtacs?=
- =?us-ascii?Q?FFf6hqJhtSpv0wtYMUza2vQPEwAi808Z3gATx9/GrqBGGVKWSvM7Ehr35mLu?=
- =?us-ascii?Q?iLeY+4FZdBTJ03rfhsQ9uw3X4GJyEzI3uSELoar4Tk5Mi3LNwceot2TvBZOp?=
- =?us-ascii?Q?Iuy+VFdy9hsfZc9ilzCQOts4PiLF5CcRr+9REK7zd4oskDk39/Wh6o+MV4RD?=
- =?us-ascii?Q?1CdHP/UP5D4OEb77B3s65K7OnPVzZqpf00D4fvVPuhxY1TT65el55FDcc0DJ?=
- =?us-ascii?Q?MsLlFoia+8erEqVbup21MWoVPVrwjrKNW3vkPAJm33fAWXN7Zukym/zicCte?=
- =?us-ascii?Q?M3Etwb2nFeSNqGvaezCQWdCalM3MRcseNlZjoBHZqhOOVsCgeuxI/OJA/S+f?=
- =?us-ascii?Q?4n7ENDD8HDnlfi7llEA0a6NueHFNqDEYoS9rqbGfAda+0aIEPps3WgnwvEFj?=
- =?us-ascii?Q?GwLMTtpImdRdQ6h2LRQKm4OtNA1cwr9U8T/TT7xJFBTwmOG19Dgr4KSkpVfG?=
- =?us-ascii?Q?VgFLzXEi6iFbx8RMUHSpcljUr0fsKESA8RPnfNajfA4WRpuiwT3TnQsSqW0T?=
- =?us-ascii?Q?hbirsw9+xzzf0drBjK6F02OUMC7mQzg6aP+Zh24qILp8L3AmnWtQ7i51bPo7?=
- =?us-ascii?Q?6WgDjz5S3m1n4Nk1tBQv2b7/b+s/+VgVhCZD6WhrjOTe6ID2BgfOazWJKqCG?=
- =?us-ascii?Q?hVvQDjyW689L9Pthe10/8JrVLqHfnVmAeL2XGMuwohY4Xbf4Pq8aiIfX0HYg?=
- =?us-ascii?Q?mL7n1lsDxV7i3ZiMPFkorD9JFk2JD585hOoh3BZlsBS1lY9plrPdvkg2UAjH?=
- =?us-ascii?Q?7eT5rgcCc3bwd2RYtES6MtGPQ182DhGSBD3c3lvMn2QKpdAFIYxCkQBbKBF0?=
- =?us-ascii?Q?bfFKP3EehXFKiAqGAtfD0kasPBdhI8yhr42DjkZ8Ds+LVvVxhmQdQrGyS6JA?=
- =?us-ascii?Q?8eIcymC7gR3RIPT0j+M7q4bZjzEcQqzNR3k5PgozpjRCBd54mT/6Hs0Cz2PT?=
- =?us-ascii?Q?rFTJIon5pxB8i632zvubfr16t68btV0RwR+Yd2hr97SVGLkRlz0IhN2CO0Vc?=
- =?us-ascii?Q?o27StVDUu9JlqQrB/6Tm7jggugW7LSy/Y79EUar4+gl39TfYaR+ESt5luV9I?=
- =?us-ascii?Q?4jJwqmHQPnx4zrAOh9DCLalxfD63irrr1FwW7VqX9938axJSmDpUv6X7qrlN?=
- =?us-ascii?Q?HVUO5k+HK6EnIF11sSHW514wMSRCLVm6vqeoCyFTKwcsfL3QiisK+OpuzeAv?=
- =?us-ascii?Q?DPDFPxew1AhdNteDFLdeMbAywCxjQt2SSNz6mQEfbaS5Ed57Eev/rYsGt1BI?=
- =?us-ascii?Q?MLTFZoBUMibN1sRlDwYl0fT6GE972ksuudKv5T0WMprlurto3Zgt97HFAE+v?=
- =?us-ascii?Q?xakAtmQMj4jzlQzljUE4fJdu1S41jEqROBoX9+NmjESM4Yk3gvCg2iIGYO/s?=
- =?us-ascii?Q?+AXybFOycXjjr96bJT3tJLyJkXWFw/5JGl+bnqOlG+n9E2pymPqjcYJnLJuM?=
- =?us-ascii?Q?AZKI8g=3D=3D?=
+	=?us-ascii?Q?nebTmjShqgiYO/+uWbrynKS6nR5LQiqSLHJAwMGJ9cNzSri6w2rFImEKnD9Y?=
+ =?us-ascii?Q?0upS6KQtnYokErpCtwfT/rum5cjV1+mTK76ZI5Q1tixFSpgK6PX3I7cg/xpK?=
+ =?us-ascii?Q?Vxiy+XrVaQrkZ9UJa+BW+vO8xmNbsoxLGJLcPE/chdif2on3pimkDe9EwYEy?=
+ =?us-ascii?Q?RxbFLyiJ7UGFpzGAlMp0i7zw/FGAuOV13o2jE6nRcVN2lcgXFxAruTtZhmxg?=
+ =?us-ascii?Q?/JtO8BasPfJRDmoexcS0zAk1sCv/UliwpS8C6ITYDmf7FR5zveUudR3WxVGb?=
+ =?us-ascii?Q?t3vfofwaxj17kXVgD+pCUojCQ9lW5naxHEUgZh6CzTRfYNT2+bEI+an/TRDH?=
+ =?us-ascii?Q?GIQzL+zJ7r3dWMSEbBid2718crBVAdp7Yr346uAvJISl6YU+mLQXhI6x/Ma4?=
+ =?us-ascii?Q?9cq7ymBISIPRPhLK4wG8+KpFywzInn2XO6mlX3mNGWMRphTgtdzssNHTW1uK?=
+ =?us-ascii?Q?9vmSDJ7MidlVC8dRCWnlUQYYekq9K42tAKfSM9FQS65C+IskNIHMAIVie7YI?=
+ =?us-ascii?Q?2DKBfCeeMGSgCXaP2h4Btnu6gWRfrLm8TJFW4AHo8amODTfcgC4wADpq+Nos?=
+ =?us-ascii?Q?FoTloTySXSuE390vSn2ZRDhsux6cg4/TfGIq7o4sqKcnfOvyT4FdjRmidRsu?=
+ =?us-ascii?Q?b8fQd4nSilxQSaRhn08fSu5sHZiH93Juhgn+wLfC6fVV/iA/B3DRKdDDfIMl?=
+ =?us-ascii?Q?eO1nBoORhA0yE6I3oa8MP547aZcp2vu7tgheuBUdCPxXrZE29Ls20l8bumSx?=
+ =?us-ascii?Q?n6jk/97vYbDKRFzX8Ao0x8Z+ioi0VRo0ajI7bBjtfyNcy6HqtDq/7MdRAhx8?=
+ =?us-ascii?Q?0wUR4rGRXG6QhfdHCKEUmmOnWJxbX2DFGwU2e1ji9uiePeelxt3PZsQuEaHr?=
+ =?us-ascii?Q?Gs7UtyfxVKoPvWp5wZ48PK5kWiLB9dhhIzBnfaaAZrW9j9UBr5tIuUGjPom6?=
+ =?us-ascii?Q?G+Zdwv2xmKoW1sv9a3UMAFT9wEzG+O+yPWqdFObOOKqLj7d0hiy6qxYFZEQu?=
+ =?us-ascii?Q?4PXlUBHq9vBa9M5HPzVSPLZdBJxehJwZckMBCVRFDUEJUlSkY1AI0b6k4pxX?=
+ =?us-ascii?Q?XUOcaHNVJH+tXyymcDF9FiRTAJqb6otzEPUjVKDBDVr4Zk1LSz1h3bMVSs8f?=
+ =?us-ascii?Q?i6/CuZ5W7D0YmxMWCfvAmIOVhxkQre/PtnBEsfoWLOcoxe59q0etfmOalP5Q?=
+ =?us-ascii?Q?FWZr/BWA8GtBbweJ7468i78aGVv4v8mlngSMDBGk+ffYobOPDfh1jXtMOvM1?=
+ =?us-ascii?Q?djnY2OHj/hjkZk//ugZgd+jLGyZaVExGsjQqYDVTVwneSK2h8zYu9QBwivPI?=
+ =?us-ascii?Q?imn6bEP6mdPbmvkEVKRBxlBsgbPzj1ylWacDne2tLdEt5aCUcgSo2h5DHxM2?=
+ =?us-ascii?Q?68UHzwUckrZbtDitzQF+JQxwt8iIHKidz+09/cJgqXuZxze2jlmfhiHvXniv?=
+ =?us-ascii?Q?YGuyEg5cBSqbkUowu1YD0OCMvBDpYAhWuUK6QyPzvigPFxvTYi8yE3wiDF//?=
+ =?us-ascii?Q?HBT94eYhphJkflJf/hjj4gaLocBa25Mnbw9TWmVIpsA18SS0h70V6sRWyo5i?=
+ =?us-ascii?Q?XlhQgApbP/5Hc6CsBPOh8q8JrXY9yb4e6BtPgaBrCgcyQOUoxs9nZzO6E18X?=
+ =?us-ascii?Q?HIZfGhN2oMFrGvbyFWzYSgJ/AlmlTNmUXmJx9zdUWtFCrRhn/MSdSnbGh8Lb?=
+ =?us-ascii?Q?iBUqWQ=3D=3D?=
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	rP0TmBMVJEIlSbCkWJA6K3+/WmUPZHKmgA2PUlG9/3FNz93MQfY7UgB3ZTZGMz6UwY5Sa2HPexhzuGKWhPBlPc7aSHEtf3vvvZmM2b1Tr76+uPoALGe3lcGkjBkL1iz4YV5Eq6wlgmIRoowBU/Ogp7WM0Qg1LYpZDVbmLb1dc62B10muMRf4DGgtXGXL4Rmaeu96AFvQa3RjwZzpqmEC4xT/z2Vnw80gntLe1pP8icMxX2QAqs87FlH9EKFPNauHAQWuErZCk2gqbTDgPm9nxasp42SxRcg7dPDRlcaopXl+I51sRLEwu2exF7n7O+86Iygws+zcUEuEEix7K98zHkG3/+E7HMfP71G5ciNhKH+LBnS8bsIFmGR8KVxfx+/0YcBVdd8l21OpqBhc+HXKYmyBTvjf2YSH3TvgUyqRT2h8RRKhuUBJ1ou49LvEk6fcOu5D7nuz1f6w6NFmnDQYdIwzs+YRgVP/msBjxnM/bpNOfK1aYyJhsP51eZWegj28BAKRQFUKItgCfBPjpiCkLeLZvPdteBzj/09EkRsh8eCGtbOSToCwFQBRF2MuwwzqaajQGat5UEj3DkhVGBpWqebq1EX6gAao4klbVaNDvAY=
+	EgRw2whUAFm7JaubURTEQ+d8Kj6yhN0gYE8gxFZCTw+hsjUfJzjfd3FClHSPAQw9YuXV0UrR5UNqNSJg2Z/kIiYV2jDNtQRtp0BCwGDbjbx+KGgxvBmqG19JbfemucsctpPIaf0Y9iE/8GouZy0sdEmtXmSlcv5wtCB6uFmve7AswYisM/H2smtKz8RpM9njDfKHbqegwR+21fixi3romGEpSPVYmAoz9yh/VtEFJSL3ybw6Vy776+ctglGiXK3d+MRW2prONdXroCa8sxtCLo5kLLyAoPeBksnQVgon24tu1+ILWYxwjhKuBDNFqHqX6xqhMhUvabkE2PJpbYWyb9pdxRSR1uTcRVb6XPg/vChSdHdK8QqjKHU7anVe7P+atNJSZS3lMpJ98ZPaRc466em7vt9V0s78fkR40Xetg8Akw7EBD5jySlrGC/anIEeSodvfP9Rh5sgyxv9mTZF+f8zabVwfhFzgOJp+FigM3k5uZ1dudVEap035CWceAhSFxCFkm8DYIaOov3Kn7jPKs5NNDcC2+av4udMYuQn1azF658tAqq2U12TOLjNX+QSMY/q4k2KI8odEy8vM8xLHxctl3eb4Z2LqX2qgJHSNCvM=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 32c3fd17-a14e-4a77-0d6c-08dcf12313af
+X-MS-Exchange-CrossTenant-Network-Message-Id: 14c616a0-58cb-4ceb-14c6-08dcf12315b0
 X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB3366.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2024 16:20:13.7833
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2024 16:20:17.2575
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hoH3Tbm5a5eMBQOAcUabwwjGmZnck6R+4wPIF9yjzMgfnMK22XpxiuppvZBPRO89gjJMVha4wD74EaypsATxgPHMnA6ek0CgRFEwJ171J/A=
+X-MS-Exchange-CrossTenant-UserPrincipalName: iGZPNNcP8FLmLgt6xP49Rp7VNzyn8G7YCzUo/cRCzMZH7gTg4NL8XgGYpUeyy+B/EykAUCKsOU/AYc2Ul7TDGOF9DI7/XyL3xbxUQN58pZY=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR10MB6703
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
  definitions=2024-10-20_14,2024-10-17_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0
- mlxlogscore=999 spamscore=0 malwarescore=0 mlxscore=0 adultscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2409260000 definitions=main-2410200114
-X-Proofpoint-GUID: smzS4JAnZBTa-SVAqYzRIYA2ihRYzQIG
-X-Proofpoint-ORIG-GUID: smzS4JAnZBTa-SVAqYzRIYA2ihRYzQIG
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 adultscore=0 bulkscore=0
+ malwarescore=0 spamscore=0 mlxlogscore=999 phishscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2409260000
+ definitions=main-2410200114
+X-Proofpoint-GUID: TFpztYeXN_of0AZF1ycRAlRL_b9_wfDa
+X-Proofpoint-ORIG-GUID: TFpztYeXN_of0AZF1ycRAlRL_b9_wfDa
 
-Userland library functions such as allocators and threading implementations
-often require regions of memory to act as 'guard pages' - mappings which,
-when accessed, result in a fatal signal being sent to the accessing
-process.
+The existing generic pagewalk logic permits the walking of page tables,
+invoking callbacks at individual page table levels via user-provided
+mm_walk_ops callbacks.
 
-The current means by which these are implemented is via a PROT_NONE mmap()
-mapping, which provides the required semantics however incur an overhead of
-a VMA for each such region.
+This is useful for traversing existing page table entries, but precludes
+the ability to establish new ones.
 
-With a great many processes and threads, this can rapidly add up and incur
-a significant memory penalty. It also has the added problem of preventing
-merges that might otherwise be permitted.
+Existing mechanism for performing a walk which also installs page table
+entries if necessary are heavily duplicated throughout the kernel, each
+with semantic differences from one another and largely unavailable for use
+elsewhere.
 
-This series takes a different approach - an idea suggested by Vlasimil
-Babka (and before him David Hildenbrand and Jann Horn - perhaps more - the
-provenance becomes a little tricky to ascertain after this - please forgive
-any omissions!)  - rather than locating the guard pages at the VMA layer,
-instead placing them in page tables mapping the required ranges.
+Rather than add yet another implementation, we extend the generic pagewalk
+logic to enable the installation of page table entries by adding a new
+install_pte() callback in mm_walk_ops. If this is specified, then upon
+encountering a missing page table entry, we allocate and install a new one
+and continue the traversal.
 
-Early testing of the prototype version of this code suggests a 5 times
-speed up in memory mapping invocations (in conjunction with use of
-process_madvise()) and a 13% reduction in VMAs on an entirely idle android
-system and unoptimised code.
+If a THP huge page is encountered, we make use of existing logic to split
+it. Then once we reach the PTE level, we invoke the install_pte() callback
+which provides a PTE entry to install. We do not support hugetlb at this
+stage.
 
-We expect with optimisation and a loaded system with a larger number of
-guard pages this could significantly increase, but in any case these
-numbers are encouraging.
+If this function returns an error, or an allocation fails during the
+operation, we abort the operation altogether. It is up to the caller to
+deal appropriately with partially populated page table ranges.
 
-This way, rather than having separate VMAs specifying which parts of a
-range are guard pages, instead we have a VMA spanning the entire range of
-memory a user is permitted to access and including ranges which are to be
-'guarded'.
+If install_pte() is defined, the semantics of pte_entry() change - this
+callback is then only invoked if the entry already exists. This is a useful
+property, as it allows a caller to handle existing PTEs while installing
+new ones where necessary in the specified range.
 
-After mapping this, a user can specify which parts of the range should
-result in a fatal signal when accessed.
+If install_pte() is not defined, then there is no functional difference to
+this patch, so all existing logic will work precisely as it did before.
 
-By restricting the ability to specify guard pages to memory mapped by
-existing VMAs, we can rely on the mappings being torn down when the
-mappings are ultimately unmapped and everything works simply as if the
-memory were not faulted in, from the point of view of the containing VMAs.
+As we only permit the installation of PTEs where a mapping does not already
+exist there is no need for TLB management, however we do invoke
+update_mmu_cache() for architectures which require manual maintenance of
+mappings for other CPUs.
 
-This mechanism in effect poisons memory ranges similar to hardware memory
-poisoning, only it is an entirely software-controlled form of poisoning.
+We explicitly do not allow the existing page walk API to expose this
+feature as it is dangerous and intended for internal mm use only. Therefore
+we provide a new walk_page_range_mm() function exposed only to
+mm/internal.h.
 
-Any poisoned region of memory is also able to 'unpoisoned', that is, to
-have its poison markers removed.
+Reviewed-by: Jann Horn <jannh@google.com>
+Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+---
+ include/linux/pagewalk.h |  18 +++-
+ mm/internal.h            |   6 ++
+ mm/pagewalk.c            | 200 ++++++++++++++++++++++++++++-----------
+ 3 files changed, 165 insertions(+), 59 deletions(-)
 
-The mechanism is implemented via madvise() behaviour - MADV_GUARD_POISON
-which simply poisons ranges - and MADV_GUARD_UNPOISON - which clears this
-poisoning.
-
-Poisoning can be performed across multiple VMAs and any existing mappings
-will be cleared, that is zapped, before installing the poisoned page table
-mappings.
-
-There is no concept of 'nested' poisoning, multiple attempts to poison a
-range will, after the first poisoning, have no effect.
-
-Importantly, unpoisoning of poisoned ranges has no effect on non-poisoned
-memory, so a user can safely unpoison a range of memory and clear only
-poison page table mappings leaving the rest intact.
-
-The actual mechanism by which the page table entries are specified makes
-use of existing logic - PTE markers, which are used for the userfaultfd
-UFFDIO_POISON mechanism.
-
-Unfortunately PTE_MARKER_POISONED is not suited for the guard page
-mechanism as it results in VM_FAULT_HWPOISON semantics in the fault
-handler, so we add our own specific PTE_MARKER_GUARD and adapt existing
-logic to handle it.
-
-We also extend the generic page walk mechanism to allow for installation of
-PTEs (carefully restricted to memory management logic only to prevent
-unwanted abuse).
-
-We ensure that zapping performed by, for instance, MADV_DONTNEED, does not
-remove guard poison markers, nor does forking (except when VM_WIPEONFORK is
-specified for a VMA which implies a total removal of memory
-characteristics).
-
-It's important to note that the guard page implementation is emphatically
-NOT a security feature, so a user can remove the poisoning if they wish. We
-simply implement it in such a way as to provide the least surprising
-behaviour.
-
-An extensive set of self-tests are provided which ensure behaviour is as
-expected and additionally self-documents expected behaviour of poisoned
-ranges.
-
-Suggested-by: Vlastimil Babka <vbabka@suse.cz>
-Suggested-by: Jann Horn <jannh@google.com>
-Suggested-by: David Hildenbrand <david@redhat.com>
-
-v2
-* The macros in kselftest_harness.h seem to be broken - __EXPECT() is
-  terminated by '} while (0); OPTIONAL_HANDLER(_assert)' meaning it is not
-  safe in single line if / else or for /which blocks, however working
-  around this results in checkpatch producing invalid warnings, as reported
-  by Shuah.
-* Fixing these macros is out of scope for this series, so compromise and
-  instead rewrite test blocks so as to use multiple lines by separating out
-  a decl in most cases. This has the side effect of, for the most part,
-  making things more readable.
-* Heavily document the use of the volatile keyword - we can't avoid
-  checkpatch complaining about this, so we explain it, as reported by
-  Shuah.
-* Updated commit message to highlight that we skip tests we lack
-  permissions for, as reported by Shuah.
-* Replaced a perror() with ksft_exit_fail_perror(), as reported by Shuah.
-* Added user friendly messages to cases where tests are skipped due to lack
-  of permissions, as reported by Shuah.
-* Update the tool header to include the new MADV_GUARD_POISON/UNPOISON
-  defines and directly include asm-generic/mman.h to get the
-  platform-neutral versions to ensure we import them.
-* Finally fixed Vlastimil's email address in Suggested-by tags from suze to
-  suse, as reported by Vlastimil.
-* Added linux-api to cc list, as reported by Vlastimil.
-
-v1
-* Un-RFC'd as appears no major objections to approach but rather debate on
-  implementation.
-* Fixed issue with arches which need mmu_context.h and
-  tlbfush.h. header imports in pagewalker logic to be able to use
-  update_mmu_cache() as reported by the kernel test bot.
-* Added comments in page walker logic to clarify who can use
-  ops->install_pte and why as well as adding a check_ops_valid() helper
-  function, as suggested by Christoph.
-* Pass false in full parameter in pte_clear_not_present_full() as suggested
-  by Jann.
-* Stopped erroneously requiring a write lock for the poison operation as
-  suggested by Jann and Suren.
-* Moved anon_vma_prepare() to the start of madvise_guard_poison() to be
-  consistent with how this is used elsewhere in the kernel as suggested by
-  Jann.
-* Avoid returning -EAGAIN if we are raced on page faults, just keep looping
-  and duck out if a fatal signal is pending or a conditional reschedule is
-  needed, as suggested by Jann.
-* Avoid needlessly splitting huge PUDs and PMDs by specifying
-  ACTION_CONTINUE, as suggested by Jann.
-https://lore.kernel.org/all/cover.1729196871.git.lorenzo.stoakes@oracle.com/
-
-RFC
-https://lore.kernel.org/all/cover.1727440966.git.lorenzo.stoakes@oracle.com/
-
-Lorenzo Stoakes (5):
-  mm: pagewalk: add the ability to install PTEs
-  mm: add PTE_MARKER_GUARD PTE marker
-  mm: madvise: implement lightweight guard page mechanism
-  tools: testing: update tools UAPI header for mman-common.h
-  selftests/mm: add self tests for guard page feature
-
- arch/alpha/include/uapi/asm/mman.h           |    3 +
- arch/mips/include/uapi/asm/mman.h            |    3 +
- arch/parisc/include/uapi/asm/mman.h          |    3 +
- arch/xtensa/include/uapi/asm/mman.h          |    3 +
- include/linux/mm_inline.h                    |    2 +-
- include/linux/pagewalk.h                     |   18 +-
- include/linux/swapops.h                      |   26 +-
- include/uapi/asm-generic/mman-common.h       |    3 +
- mm/hugetlb.c                                 |    3 +
- mm/internal.h                                |    6 +
- mm/madvise.c                                 |  168 +++
- mm/memory.c                                  |   18 +-
- mm/mprotect.c                                |    3 +-
- mm/mseal.c                                   |    1 +
- mm/pagewalk.c                                |  200 ++-
- tools/include/uapi/asm-generic/mman-common.h |    3 +
- tools/testing/selftests/mm/.gitignore        |    1 +
- tools/testing/selftests/mm/Makefile          |    1 +
- tools/testing/selftests/mm/guard-pages.c     | 1228 ++++++++++++++++++
- 19 files changed, 1627 insertions(+), 66 deletions(-)
- create mode 100644 tools/testing/selftests/mm/guard-pages.c
-
---
+diff --git a/include/linux/pagewalk.h b/include/linux/pagewalk.h
+index f5eb5a32aeed..9700a29f8afb 100644
+--- a/include/linux/pagewalk.h
++++ b/include/linux/pagewalk.h
+@@ -25,12 +25,15 @@ enum page_walk_lock {
+  *			this handler is required to be able to handle
+  *			pmd_trans_huge() pmds.  They may simply choose to
+  *			split_huge_page() instead of handling it explicitly.
+- * @pte_entry:		if set, called for each PTE (lowest-level) entry,
+- *			including empty ones
++ * @pte_entry:		if set, called for each PTE (lowest-level) entry
++ *			including empty ones, except if @install_pte is set.
++ *			If @install_pte is set, @pte_entry is called only for
++ *			existing PTEs.
+  * @pte_hole:		if set, called for each hole at all levels,
+  *			depth is -1 if not known, 0:PGD, 1:P4D, 2:PUD, 3:PMD.
+  *			Any folded depths (where PTRS_PER_P?D is equal to 1)
+- *			are skipped.
++ *			are skipped. If @install_pte is specified, this will
++ *			not trigger for any populated ranges.
+  * @hugetlb_entry:	if set, called for each hugetlb entry. This hook
+  *			function is called with the vma lock held, in order to
+  *			protect against a concurrent freeing of the pte_t* or
+@@ -51,6 +54,13 @@ enum page_walk_lock {
+  * @pre_vma:            if set, called before starting walk on a non-null vma.
+  * @post_vma:           if set, called after a walk on a non-null vma, provided
+  *                      that @pre_vma and the vma walk succeeded.
++ * @install_pte:        if set, missing page table entries are installed and
++ *                      thus all levels are always walked in the specified
++ *                      range. This callback is then invoked at the PTE level
++ *                      (having split any THP pages prior), providing the PTE to
++ *                      install. If allocations fail, the walk is aborted. This
++ *                      operation is only available for userland memory. Not
++ *                      usable for hugetlb ranges.
+  *
+  * p?d_entry callbacks are called even if those levels are folded on a
+  * particular architecture/configuration.
+@@ -76,6 +86,8 @@ struct mm_walk_ops {
+ 	int (*pre_vma)(unsigned long start, unsigned long end,
+ 		       struct mm_walk *walk);
+ 	void (*post_vma)(struct mm_walk *walk);
++	int (*install_pte)(unsigned long addr, unsigned long next,
++			   pte_t *ptep, struct mm_walk *walk);
+ 	enum page_walk_lock walk_lock;
+ };
+ 
+diff --git a/mm/internal.h b/mm/internal.h
+index 508f7802dd2b..fb1fb0c984e4 100644
+--- a/mm/internal.h
++++ b/mm/internal.h
+@@ -12,6 +12,7 @@
+ #include <linux/mm.h>
+ #include <linux/mm_inline.h>
+ #include <linux/pagemap.h>
++#include <linux/pagewalk.h>
+ #include <linux/rmap.h>
+ #include <linux/swap.h>
+ #include <linux/swapops.h>
+@@ -1451,4 +1452,9 @@ static inline void accept_page(struct page *page)
+ }
+ #endif /* CONFIG_UNACCEPTED_MEMORY */
+ 
++/* pagewalk.c */
++int walk_page_range_mm(struct mm_struct *mm, unsigned long start,
++		unsigned long end, const struct mm_walk_ops *ops,
++		void *private);
++
+ #endif	/* __MM_INTERNAL_H */
+diff --git a/mm/pagewalk.c b/mm/pagewalk.c
+index 5f9f01532e67..261cd5f2de38 100644
+--- a/mm/pagewalk.c
++++ b/mm/pagewalk.c
+@@ -3,9 +3,14 @@
+ #include <linux/highmem.h>
+ #include <linux/sched.h>
+ #include <linux/hugetlb.h>
++#include <linux/mmu_context.h>
+ #include <linux/swap.h>
+ #include <linux/swapops.h>
+ 
++#include <asm/tlbflush.h>
++
++#include "internal.h"
++
+ /*
+  * We want to know the real level where a entry is located ignoring any
+  * folding of levels which may be happening. For example if p4d is folded then
+@@ -29,9 +34,23 @@ static int walk_pte_range_inner(pte_t *pte, unsigned long addr,
+ 	int err = 0;
+ 
+ 	for (;;) {
+-		err = ops->pte_entry(pte, addr, addr + PAGE_SIZE, walk);
+-		if (err)
+-		       break;
++		if (ops->install_pte && pte_none(ptep_get(pte))) {
++			pte_t new_pte;
++
++			err = ops->install_pte(addr, addr + PAGE_SIZE, &new_pte,
++					       walk);
++			if (err)
++				break;
++
++			set_pte_at(walk->mm, addr, pte, new_pte);
++			/* Non-present before, so for arches that need it. */
++			if (!WARN_ON_ONCE(walk->no_vma))
++				update_mmu_cache(walk->vma, addr, pte);
++		} else {
++			err = ops->pte_entry(pte, addr, addr + PAGE_SIZE, walk);
++			if (err)
++				break;
++		}
+ 		if (addr >= end - PAGE_SIZE)
+ 			break;
+ 		addr += PAGE_SIZE;
+@@ -89,11 +108,14 @@ static int walk_pmd_range(pud_t *pud, unsigned long addr, unsigned long end,
+ again:
+ 		next = pmd_addr_end(addr, end);
+ 		if (pmd_none(*pmd)) {
+-			if (ops->pte_hole)
++			if (ops->install_pte)
++				err = __pte_alloc(walk->mm, pmd);
++			else if (ops->pte_hole)
+ 				err = ops->pte_hole(addr, next, depth, walk);
+ 			if (err)
+ 				break;
+-			continue;
++			if (!ops->install_pte)
++				continue;
+ 		}
+ 
+ 		walk->action = ACTION_SUBTREE;
+@@ -116,7 +138,7 @@ static int walk_pmd_range(pud_t *pud, unsigned long addr, unsigned long end,
+ 		 */
+ 		if ((!walk->vma && (pmd_leaf(*pmd) || !pmd_present(*pmd))) ||
+ 		    walk->action == ACTION_CONTINUE ||
+-		    !(ops->pte_entry))
++		    !(ops->pte_entry || ops->install_pte))
+ 			continue;
+ 
+ 		if (walk->vma)
+@@ -148,11 +170,14 @@ static int walk_pud_range(p4d_t *p4d, unsigned long addr, unsigned long end,
+  again:
+ 		next = pud_addr_end(addr, end);
+ 		if (pud_none(*pud)) {
+-			if (ops->pte_hole)
++			if (ops->install_pte)
++				err = __pmd_alloc(walk->mm, pud, addr);
++			else if (ops->pte_hole)
+ 				err = ops->pte_hole(addr, next, depth, walk);
+ 			if (err)
+ 				break;
+-			continue;
++			if (!ops->install_pte)
++				continue;
+ 		}
+ 
+ 		walk->action = ACTION_SUBTREE;
+@@ -167,7 +192,7 @@ static int walk_pud_range(p4d_t *p4d, unsigned long addr, unsigned long end,
+ 
+ 		if ((!walk->vma && (pud_leaf(*pud) || !pud_present(*pud))) ||
+ 		    walk->action == ACTION_CONTINUE ||
+-		    !(ops->pmd_entry || ops->pte_entry))
++		    !(ops->pmd_entry || ops->pte_entry || ops->install_pte))
+ 			continue;
+ 
+ 		if (walk->vma)
+@@ -196,18 +221,22 @@ static int walk_p4d_range(pgd_t *pgd, unsigned long addr, unsigned long end,
+ 	do {
+ 		next = p4d_addr_end(addr, end);
+ 		if (p4d_none_or_clear_bad(p4d)) {
+-			if (ops->pte_hole)
++			if (ops->install_pte)
++				err = __pud_alloc(walk->mm, p4d, addr);
++			else if (ops->pte_hole)
+ 				err = ops->pte_hole(addr, next, depth, walk);
+ 			if (err)
+ 				break;
+-			continue;
++			if (!ops->install_pte)
++				continue;
+ 		}
+ 		if (ops->p4d_entry) {
+ 			err = ops->p4d_entry(p4d, addr, next, walk);
+ 			if (err)
+ 				break;
+ 		}
+-		if (ops->pud_entry || ops->pmd_entry || ops->pte_entry)
++		if (ops->pud_entry || ops->pmd_entry || ops->pte_entry ||
++		    ops->install_pte)
+ 			err = walk_pud_range(p4d, addr, next, walk);
+ 		if (err)
+ 			break;
+@@ -231,18 +260,22 @@ static int walk_pgd_range(unsigned long addr, unsigned long end,
+ 	do {
+ 		next = pgd_addr_end(addr, end);
+ 		if (pgd_none_or_clear_bad(pgd)) {
+-			if (ops->pte_hole)
++			if (ops->install_pte)
++				err = __p4d_alloc(walk->mm, pgd, addr);
++			else if (ops->pte_hole)
+ 				err = ops->pte_hole(addr, next, 0, walk);
+ 			if (err)
+ 				break;
+-			continue;
++			if (!ops->install_pte)
++				continue;
+ 		}
+ 		if (ops->pgd_entry) {
+ 			err = ops->pgd_entry(pgd, addr, next, walk);
+ 			if (err)
+ 				break;
+ 		}
+-		if (ops->p4d_entry || ops->pud_entry || ops->pmd_entry || ops->pte_entry)
++		if (ops->p4d_entry || ops->pud_entry || ops->pmd_entry ||
++		    ops->pte_entry || ops->install_pte)
+ 			err = walk_p4d_range(pgd, addr, next, walk);
+ 		if (err)
+ 			break;
+@@ -334,6 +367,11 @@ static int __walk_page_range(unsigned long start, unsigned long end,
+ 	int err = 0;
+ 	struct vm_area_struct *vma = walk->vma;
+ 	const struct mm_walk_ops *ops = walk->ops;
++	bool is_hugetlb = is_vm_hugetlb_page(vma);
++
++	/* We do not support hugetlb PTE installation. */
++	if (ops->install_pte && is_hugetlb)
++		return -EINVAL;
+ 
+ 	if (ops->pre_vma) {
+ 		err = ops->pre_vma(start, end, walk);
+@@ -341,7 +379,7 @@ static int __walk_page_range(unsigned long start, unsigned long end,
+ 			return err;
+ 	}
+ 
+-	if (is_vm_hugetlb_page(vma)) {
++	if (is_hugetlb) {
+ 		if (ops->hugetlb_entry)
+ 			err = walk_hugetlb_range(start, end, walk);
+ 	} else
+@@ -380,47 +418,14 @@ static inline void process_vma_walk_lock(struct vm_area_struct *vma,
+ #endif
+ }
+ 
+-/**
+- * walk_page_range - walk page table with caller specific callbacks
+- * @mm:		mm_struct representing the target process of page table walk
+- * @start:	start address of the virtual address range
+- * @end:	end address of the virtual address range
+- * @ops:	operation to call during the walk
+- * @private:	private data for callbacks' usage
+- *
+- * Recursively walk the page table tree of the process represented by @mm
+- * within the virtual address range [@start, @end). During walking, we can do
+- * some caller-specific works for each entry, by setting up pmd_entry(),
+- * pte_entry(), and/or hugetlb_entry(). If you don't set up for some of these
+- * callbacks, the associated entries/pages are just ignored.
+- * The return values of these callbacks are commonly defined like below:
+- *
+- *  - 0  : succeeded to handle the current entry, and if you don't reach the
+- *         end address yet, continue to walk.
+- *  - >0 : succeeded to handle the current entry, and return to the caller
+- *         with caller specific value.
+- *  - <0 : failed to handle the current entry, and return to the caller
+- *         with error code.
+- *
+- * Before starting to walk page table, some callers want to check whether
+- * they really want to walk over the current vma, typically by checking
+- * its vm_flags. walk_page_test() and @ops->test_walk() are used for this
+- * purpose.
+- *
+- * If operations need to be staged before and committed after a vma is walked,
+- * there are two callbacks, pre_vma() and post_vma(). Note that post_vma(),
+- * since it is intended to handle commit-type operations, can't return any
+- * errors.
+- *
+- * struct mm_walk keeps current values of some common data like vma and pmd,
+- * which are useful for the access from callbacks. If you want to pass some
+- * caller-specific data to callbacks, @private should be helpful.
++/*
++ * See the comment for walk_page_range(), this performs the heavy lifting of the
++ * operation, only sets no restrictions on how the walk proceeds.
+  *
+- * Locking:
+- *   Callers of walk_page_range() and walk_page_vma() should hold @mm->mmap_lock,
+- *   because these function traverse vma list and/or access to vma's data.
++ * We usually restrict the ability to install PTEs, but this functionality is
++ * available to internal memory management code and provided in mm/internal.h.
+  */
+-int walk_page_range(struct mm_struct *mm, unsigned long start,
++int walk_page_range_mm(struct mm_struct *mm, unsigned long start,
+ 		unsigned long end, const struct mm_walk_ops *ops,
+ 		void *private)
+ {
+@@ -479,6 +484,80 @@ int walk_page_range(struct mm_struct *mm, unsigned long start,
+ 	return err;
+ }
+ 
++/*
++ * Determine if the walk operations specified are permitted to be used for a
++ * page table walk.
++ *
++ * This check is performed on all functions which are parameterised by walk
++ * operations and exposed in include/linux/pagewalk.h.
++ *
++ * Internal memory management code can use the walk_page_range_mm() function to
++ * be able to use all page walking operations.
++ */
++static bool check_ops_valid(const struct mm_walk_ops *ops)
++{
++	/*
++	 * The installation of PTEs is solely under the control of memory
++	 * management logic and subject to many subtle locking, security and
++	 * cache considerations so we cannot permit other users to do so, and
++	 * certainly not for exported symbols.
++	 */
++	if (ops->install_pte)
++		return false;
++
++	return true;
++}
++
++/**
++ * walk_page_range - walk page table with caller specific callbacks
++ * @mm:		mm_struct representing the target process of page table walk
++ * @start:	start address of the virtual address range
++ * @end:	end address of the virtual address range
++ * @ops:	operation to call during the walk
++ * @private:	private data for callbacks' usage
++ *
++ * Recursively walk the page table tree of the process represented by @mm
++ * within the virtual address range [@start, @end). During walking, we can do
++ * some caller-specific works for each entry, by setting up pmd_entry(),
++ * pte_entry(), and/or hugetlb_entry(). If you don't set up for some of these
++ * callbacks, the associated entries/pages are just ignored.
++ * The return values of these callbacks are commonly defined like below:
++ *
++ *  - 0  : succeeded to handle the current entry, and if you don't reach the
++ *         end address yet, continue to walk.
++ *  - >0 : succeeded to handle the current entry, and return to the caller
++ *         with caller specific value.
++ *  - <0 : failed to handle the current entry, and return to the caller
++ *         with error code.
++ *
++ * Before starting to walk page table, some callers want to check whether
++ * they really want to walk over the current vma, typically by checking
++ * its vm_flags. walk_page_test() and @ops->test_walk() are used for this
++ * purpose.
++ *
++ * If operations need to be staged before and committed after a vma is walked,
++ * there are two callbacks, pre_vma() and post_vma(). Note that post_vma(),
++ * since it is intended to handle commit-type operations, can't return any
++ * errors.
++ *
++ * struct mm_walk keeps current values of some common data like vma and pmd,
++ * which are useful for the access from callbacks. If you want to pass some
++ * caller-specific data to callbacks, @private should be helpful.
++ *
++ * Locking:
++ *   Callers of walk_page_range() and walk_page_vma() should hold @mm->mmap_lock,
++ *   because these function traverse vma list and/or access to vma's data.
++ */
++int walk_page_range(struct mm_struct *mm, unsigned long start,
++		unsigned long end, const struct mm_walk_ops *ops,
++		void *private)
++{
++	if (!check_ops_valid(ops))
++		return -EINVAL;
++
++	return walk_page_range_mm(mm, start, end, ops, private);
++}
++
+ /**
+  * walk_page_range_novma - walk a range of pagetables not backed by a vma
+  * @mm:		mm_struct representing the target process of page table walk
+@@ -494,7 +573,7 @@ int walk_page_range(struct mm_struct *mm, unsigned long start,
+  * walking the kernel pages tables or page tables for firmware.
+  *
+  * Note: Be careful to walk the kernel pages tables, the caller may be need to
+- * take other effective approache (mmap lock may be insufficient) to prevent
++ * take other effective approaches (mmap lock may be insufficient) to prevent
+  * the intermediate kernel page tables belonging to the specified address range
+  * from being freed (e.g. memory hot-remove).
+  */
+@@ -513,6 +592,8 @@ int walk_page_range_novma(struct mm_struct *mm, unsigned long start,
+ 
+ 	if (start >= end || !walk.mm)
+ 		return -EINVAL;
++	if (!check_ops_valid(ops))
++		return -EINVAL;
+ 
+ 	/*
+ 	 * 1) For walking the user virtual address space:
+@@ -556,6 +637,8 @@ int walk_page_range_vma(struct vm_area_struct *vma, unsigned long start,
+ 		return -EINVAL;
+ 	if (start < vma->vm_start || end > vma->vm_end)
+ 		return -EINVAL;
++	if (!check_ops_valid(ops))
++		return -EINVAL;
+ 
+ 	process_mm_walk_lock(walk.mm, ops->walk_lock);
+ 	process_vma_walk_lock(vma, ops->walk_lock);
+@@ -574,6 +657,8 @@ int walk_page_vma(struct vm_area_struct *vma, const struct mm_walk_ops *ops,
+ 
+ 	if (!walk.mm)
+ 		return -EINVAL;
++	if (!check_ops_valid(ops))
++		return -EINVAL;
+ 
+ 	process_mm_walk_lock(walk.mm, ops->walk_lock);
+ 	process_vma_walk_lock(vma, ops->walk_lock);
+@@ -623,6 +708,9 @@ int walk_page_mapping(struct address_space *mapping, pgoff_t first_index,
+ 	unsigned long start_addr, end_addr;
+ 	int err = 0;
+ 
++	if (!check_ops_valid(ops))
++		return -EINVAL;
++
+ 	lockdep_assert_held(&mapping->i_mmap_rwsem);
+ 	vma_interval_tree_foreach(vma, &mapping->i_mmap, first_index,
+ 				  first_index + nr - 1) {
+-- 
 2.47.0
+
 
