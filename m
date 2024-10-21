@@ -1,271 +1,569 @@
-Return-Path: <linux-arch+bounces-8384-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8385-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A82B9A8EC5
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Oct 2024 21:26:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 392CB9A8FE2
+	for <lists+linux-arch@lfdr.de>; Mon, 21 Oct 2024 21:33:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B5DF5B21A68
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Oct 2024 19:26:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD3711F22E53
+	for <lists+linux-arch@lfdr.de>; Mon, 21 Oct 2024 19:33:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2608F1FC7D0;
-	Mon, 21 Oct 2024 19:25:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FE0B1FB3F6;
+	Mon, 21 Oct 2024 19:33:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="iHV3Np99"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ygoqSzaA"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2049.outbound.protection.outlook.com [40.107.236.49])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD8061FBCAA;
-	Mon, 21 Oct 2024 19:25:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729538743; cv=fail; b=f9jItBON85XCQP2VumtK0Q9ACKkWd6EvXXGwlMHjV16DyJD1MNfg/8NwD21mcoc3IDvOs7mBQD1s7dvWUdWjKyv0WvhTKY/L6FHqbz5tuSqdNoEsnSr3aIp1mAP9zAKn+Qawv4QfMDzd09JXd7iwoWVXEPbxfteNJhwPxuaeo4I=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729538743; c=relaxed/simple;
-	bh=yl/f6nmrj4bJkC2hnoSW2W3moUZceUgClX1Y0P+anE8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=S1s5rw/XoMpCiSOyN8AwwKYQ1f3TbmGVCTi3PkeaJynlxnDO1pBa3AXa6hmyq9ax+lnKpUzjE9sdlmfDU6z6AmqomDgcK7G52kyhOuEq5xBaJoSqlmV8hsUwam3rxjMr+RYJyIcpXZNwWgaAMnqQjXZldHlKS06gXCnYh+OED9E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=iHV3Np99; arc=fail smtp.client-ip=40.107.236.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=rM9A2xv4lXe3pS1W8l+eT7kAoNxzlaZGko85Kv1km5EMUekHPX0b+SPW7skdo3jW/+3bLneOvtDS6mMmRk+vRuj/eqfVBRSlQ/xH1rccUDENTc8Q80LhQWBE3IsHW4msmR8anFn7ir8QgBU9hLVKKktiQokRIOfFR1qrxGrqOTV4wHgK32tpAzuD528YIppoOoxSPqJ0+6ZvcigUnW97pzR0MS2Jq3Y0jiaS8+57YJfXLXxDtG142SB52rnFbkFlQX5jFHP4K4bGv2v5K0jO6gqUlpIziIpcqHgDw0PsmN4UM/Jxip2bUhHTmEiui1Oqco411QjTWzuSLaSVznCZYw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+O0+SiJoFRHBTL1jfFln/M7VElXY4xPBomcz20IIpYE=;
- b=F1Ic3Gm/qB9aXMeT6hzOy4u5yCvgnZKoCKXJcBoiM26MkLz7h5ojesy0bWKj5laHK4heYUW3EJUMoxqlyumFNZl9Ko1yUqWICqLE+2/m/s/Wf1U7LxddC4YVSlBdcTSZrdTpIiVwI7t4ZtxcWazo9pGW6RrfYnYI9Hc+z3kqpRzQAKbbn1q8FvpAF4n8oS/bB4enS7XYS0c2tJk/mCFV17LicqeNmGF8hSLlBM9namDFIk9cabaiymsUE6jJAc2qthzTEcS7AngHhVLU7n8VvPnTphvWXXtpNJ5Nm02DItNJkj6wmJ+XvC0fYNpobURPs1xWrmywSUPb+1dFbCWYPA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+O0+SiJoFRHBTL1jfFln/M7VElXY4xPBomcz20IIpYE=;
- b=iHV3Np99axxdZ5k3OKkrCHoH7w3C+5HtyY2+5dwiNsy/JC0rr0WBDJl1uQTpWsJA5APd3S9Qi5O/ir7w/9JZBetducUCtf7gL4w2IxopRhkoqZJ25+rxbysHyy50k8Lhs8HXQwiZUM70US2g9dWHnjTRenyYiuSWyRMWofryYg9v4BTxeFExcho2+GbfwQ6F+Gm+osUpgsTgsbsEOclpc9Di3ZX8zYCxvJzJUFxQDpviwSp6DpLxRsA/ChWPoNgJjg181Vpn9soeVo8hVamkUvLt4jKfSfVtqQFqyX6wv/xDxWq0gbLSfcfONJubwaDDLXzidQpKVwCK/5VDUrj2wQ==
-Received: from BN9PR03CA0944.namprd03.prod.outlook.com (2603:10b6:408:108::19)
- by PH0PR12MB8800.namprd12.prod.outlook.com (2603:10b6:510:26f::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.28; Mon, 21 Oct
- 2024 19:25:36 +0000
-Received: from BL02EPF0001A103.namprd05.prod.outlook.com
- (2603:10b6:408:108:cafe::42) by BN9PR03CA0944.outlook.office365.com
- (2603:10b6:408:108::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.28 via Frontend
- Transport; Mon, 21 Oct 2024 19:25:36 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- BL02EPF0001A103.mail.protection.outlook.com (10.167.241.133) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8093.14 via Frontend Transport; Mon, 21 Oct 2024 19:25:36 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Mon, 21 Oct
- 2024 12:25:14 -0700
-Received: from [10.110.48.28] (10.126.230.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Mon, 21 Oct
- 2024 12:25:14 -0700
-Message-ID: <3baf8814-0a9a-4de0-b568-62d241dbba0e@nvidia.com>
-Date: Mon, 21 Oct 2024 12:25:08 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44AF018EFDE;
+	Mon, 21 Oct 2024 19:33:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729539197; cv=none; b=JTR1MmraWHpbKDu4KJHbsjA4bJMtPjcoZM0VtYsjpGfjFN+b2bmLSfP5MD06AmI+ce1HN7CV0I8ywmBveddhZrk508/gQ6EC2zlm215g3slXP5LL7AdSXXdSL186g013Y4CCAL9zq1JCPLLUMBHOtGprs6Es+cyycQzpfnrbVrY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729539197; c=relaxed/simple;
+	bh=OvmVR6cprMKB3lT6lchdqPwO03Bv4SYRJ4yN+4ldTaw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KyBRszTy8QCgZIt5RAyxfgVBs7CQU7s9NWZyVlp35jN2KEBHb6Zj+r/2ZT7jhxxZoefelaJnoNK2kmX0ayZnykygG7ZiLR8xZfQ3F8UFsjQ85e76f2QnHvYDWgHkLM8uJzLwCBU50hyCeV4DKZMFigKfJZC1z2j/FPGVMU8Ac2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ygoqSzaA; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=/lx6K+gpmr4RO9T8tXSWVND3Vh2EDJHeeQdTmu+yz88=; b=ygoqSzaAYalS4NdOpBN/P0fbem
+	MhHCJKPH8HMSu5cFWk6mREkQ9PalLgVih2Xdsi9mYVo5EsBCTDYbj0X+Iyka162UYAy4s1Timj02W
+	i/kyFPsOz7V/wpkbJSGOWr99q1VX1fvf143XkTficyawrxJZtgMyRy+G1cq0uuPZCTosukEvJxpHH
+	Z8Bvxd2bmQmhoWya8n2642o3myATlgrkHb3vWPjkp3lvjDd1RR+1qd9Y/AQh9ZKOV2cgGdxKkCZRm
+	EWbApErCGVb5wc7KiQpV/Fp3DxA/1pCSeWF0H1MxYzScSsv9z1pu3DtfXQFpK954xJ8XbDhnrgqHI
+	rg5oOP2A==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.98 #2 (Red Hat Linux))
+	id 1t2y9O-00000008RyP-3Nk6;
+	Mon, 21 Oct 2024 19:33:10 +0000
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	petr.pavlu@suse.com,
+	samitolvanen@google.com,
+	da.gomez@samsung.com
+Cc: masahiroy@kernel.org,
+	deller@gmx.de,
+	linux-arch@vger.kernel.org,
+	live-patching@vger.kernel.org,
+	mcgrof@kernel.org,
+	kris.van.hees@oracle.com
+Subject: [PATCH v3] selftests: add new kallsyms selftests
+Date: Mon, 21 Oct 2024 12:33:10 -0700
+Message-ID: <20241021193310.2014131-1-mcgrof@kernel.org>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/5] mm: madvise: implement lightweight guard page
- mechanism
-To: David Hildenbrand <david@redhat.com>, Lorenzo Stoakes
-	<lorenzo.stoakes@oracle.com>
-CC: Andrew Morton <akpm@linux-foundation.org>, Suren Baghdasaryan
-	<surenb@google.com>, "Liam R . Howlett" <Liam.Howlett@oracle.com>, "Matthew
- Wilcox" <willy@infradead.org>, Vlastimil Babka <vbabka@suse.cz>, "Paul E .
- McKenney" <paulmck@kernel.org>, Jann Horn <jannh@google.com>,
-	<linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>, Muchun Song
-	<muchun.song@linux.dev>, Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, "James E . J . Bottomley"
-	<James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, "Chris
- Zankel" <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann
-	<arnd@arndb.de>, <linux-alpha@vger.kernel.org>, <linux-mips@vger.kernel.org>,
-	<linux-parisc@vger.kernel.org>, <linux-arch@vger.kernel.org>, Shuah Khan
-	<shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
-	<linux-kselftest@vger.kernel.org>, Sidhartha Kumar
-	<sidhartha.kumar@oracle.com>, Jeff Xu <jeffxu@chromium.org>, "Christoph
- Hellwig" <hch@infradead.org>, <linux-api@vger.kernel.org>
-References: <cover.1729440856.git.lorenzo.stoakes@oracle.com>
- <fce49bbbfe41b82161a37b022c8eb1e6c20e1d85.1729440856.git.lorenzo.stoakes@oracle.com>
- <b13a83f4-c31c-441d-b18e-d63d78c4b2fb@redhat.com>
- <b2bca752-77f3-4b63-abe9-348a5fc2a5cc@lucifer.local>
- <c8272b9d-5c33-4b44-9d6d-1d25c7ac23dd@redhat.com>
-Content-Language: en-US
-From: John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <c8272b9d-5c33-4b44-9d6d-1d25c7ac23dd@redhat.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF0001A103:EE_|PH0PR12MB8800:EE_
-X-MS-Office365-Filtering-Correlation-Id: d57fb43c-a333-4362-5f61-08dcf20623d4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|1800799024|36860700013|7416014|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?dFZ2dm1BcTMreWtpZGFXSnZUNXlpZGZURjd3cTNKQnBYZkhEMWx1d1BkS2Vr?=
- =?utf-8?B?VElFd25abHZ3Mys5MWVoNFQ5SHRkTEJkYXlnMnlBSGo0K0JRNVYyRGc3VVRa?=
- =?utf-8?B?MHh0bUFKdDZSZWVSYy9iQk9EdlVObXBpYWY0WEt3RGR5RWxyQXpUTnVuZVFq?=
- =?utf-8?B?aUN0TFFVaWh3bUdXdHZNQVJiaDJjRG8vRUs1NXEvRVFVcTkzL2lTTE5BOVhp?=
- =?utf-8?B?dzNRclRkV2xtZStDVDNIUmZJeitGWDZlUXhOekFDd09PVFFsSk9DbTZoMDdH?=
- =?utf-8?B?TExVVThLMFh4WnlEczdKRzErQytWSllsUE1NbEhLNndnT2ZxeDBValAvYldi?=
- =?utf-8?B?NzRsaEd1N2dWKytHRGRuTFBEVG4wOXFvYVZDVEFzejQwNERFd2s0RFhCVlpK?=
- =?utf-8?B?dHpFUHlaS3BsRkJyaUl1RlZHVnRlcFR2WmFTRGNsWDRjUXgrbUZjcTVhWTJj?=
- =?utf-8?B?dUZVN1JxcmFVZTg1anpqWnQvblBFclU5T2w3Y0ZqSWxvNlJTUk9heFhkQmhE?=
- =?utf-8?B?ZHR1UWZLVlBjVHlFSlpUa1lZaWNMY0FKNmNTM0FXelJnbDlsbi9rak9xeEg3?=
- =?utf-8?B?Vm5MaEdNZjZzemJkQ0tIa2dvL0JuZlJMSmJ6WE1Rc3RDWkxKU1NyS3pxZVRO?=
- =?utf-8?B?TTc3aHdIWFAzVDB3alpvWkRaU3o1Q3d4UTRKL2g3dXF1N25TSkxtNWZlWWtu?=
- =?utf-8?B?c0VENUZFNzJxRUNpZkVKR05hdmdGbkd0TTdrODlCQnpiOFlQdlJjZnkxaWpM?=
- =?utf-8?B?Wk43ZTRWaEZHb0pibUZ4RWdGMloyenBHV2JFbEQzNjBJbHZiZ3BRNVZyTHFs?=
- =?utf-8?B?ZzcyRTJpd2dhb21zTkd6QVlza0w2TzJmTHVzb1dDR3YrVVFLemtWSUliT00y?=
- =?utf-8?B?bFJDZHhkN1FLRG5zdmkydVBtdHJ1NVUxRXBnd25qVVllRytScHZnbnV1M0ZF?=
- =?utf-8?B?T1lXQ1JlOWVUU2JMSk5ON3FuM0UrUS93cDYxaVRveFdSU1FCMzhLenBCWEhU?=
- =?utf-8?B?a0FNdTNwcnNrUzlrWlJaK1NFMWx3ZjlIemZWU0owT3BBUStDUjh0UnhrWCtL?=
- =?utf-8?B?MVNJaWdKdGpXcU1nbFJncDNDaG1FaUVFSGdLdW8rcy9QalR0RUxpeXI2YXph?=
- =?utf-8?B?MFdrMzFUV3JES2RFdktjMXU2MkxSNG5MTXJVaWpGY3Q2U2dKM29LUlc4V2d2?=
- =?utf-8?B?bElxckVtK2MxWUtWNkI2YkZRM0c4S3liRGFreEc1dENLQVEyVG0xdHduYkow?=
- =?utf-8?B?VEYvSzZIUnFZcFc4MnFreVpBdDFLeHVUT01OOEtTM1pxQzY4eEFnc0JBNnZx?=
- =?utf-8?B?TzhjQmsyYUdKMSswckZkMDVNY3d6ZlR4ZHBQeklRS0ZJL2pWUkdxNEwrUXB6?=
- =?utf-8?B?VXJydTJmOU8zUzZxTmhwbitKSTdGL3JySHlPL2h6UUtWUmd3cW1TOTgzczdj?=
- =?utf-8?B?OTQ3M1l0RFBLVEthNHkyK0twVTBXazk5SHhhakRzbklPWHo1dVJHVlVNRS9z?=
- =?utf-8?B?V0ZVRDNURlB2L3FheVRKdkl4c2JIOUZXdEI0Mjc1QldCMXJBS21KeFg1V3hu?=
- =?utf-8?B?NnJYSVIxVTlpMVE4MStaTStqZTlPanFyQnRMZGYrY1ZMOFVEbnVBTjlLT09h?=
- =?utf-8?B?dXY5TWc1ZWF3d21aMUtkUFIxbFk5YnllenNHeitVc1d6dEI0dVJOa0IzMTFM?=
- =?utf-8?B?RFk1LzFnMUlpa0wzaVFkekVHVW0xZndSVUQzMHV3enNNTXUzamc5aDdlbmN3?=
- =?utf-8?B?R2hZQmpMZWVsZy9ocVFHYjhmSGRSeUZqa2h1STZna3pid2FIOVJSb1p5N3Zm?=
- =?utf-8?B?Q2dGNTZmNlkxZFUvd1pzVis0L2xtbG54UlhBM1VpWlpZeFh2L0FsOW53Qytp?=
- =?utf-8?B?TjFObHJnR05sSi9oMEJwcE1xTkxkVzNpQVhlZVNqU3pDWUE9PQ==?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(36860700013)(7416014)(376014);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Oct 2024 19:25:36.2738
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d57fb43c-a333-4362-5f61-08dcf20623d4
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL02EPF0001A103.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB8800
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 
-On 10/21/24 10:23 AM, David Hildenbrand wrote:
-> On 21.10.24 19:15, Lorenzo Stoakes wrote:
->> On Mon, Oct 21, 2024 at 07:05:27PM +0200, David Hildenbrand wrote:
->>> On 20.10.24 18:20, Lorenzo Stoakes wrote:
->>>> Implement a new lightweight guard page feature, that is regions of userland
->>>> virtual memory that, when accessed, cause a fatal signal to arise.
->>>>
->>>> Currently users must establish PROT_NONE ranges to achieve this.
->>>>
->>>> However this is very costly memory-wise - we need a VMA for each and every
->>>> one of these regions AND they become unmergeable with surrounding VMAs.
->>>>
->>>> In addition repeated mmap() calls require repeated kernel context switches
->>>> and contention of the mmap lock to install these ranges, potentially also
->>>> having to unmap memory if installed over existing ranges.
->>>>
->>>> The lightweight guard approach eliminates the VMA cost altogether - rather
->>>> than establishing a PROT_NONE VMA, it operates at the level of page table
->>>> entries - poisoning PTEs such that accesses to them cause a fault followed
->>>> by a SIGSGEV signal being raised.
->>>>
->>>> This is achieved through the PTE marker mechanism, which a previous commit
->>>> in this series extended to permit this to be done, installed via the
->>>> generic page walking logic, also extended by a prior commit for this
->>>> purpose.
->>>>
->>>> These poison ranges are established with MADV_GUARD_POISON, and if the
->>>> range in which they are installed contain any existing mappings, they will
->>>> be zapped, i.e. free the range and unmap memory (thus mimicking the
->>>> behaviour of MADV_DONTNEED in this respect).
->>>>
->>>> Any existing poison entries will be left untouched. There is no nesting of
->>>> poisoned pages.
->>>>
->>>> Poisoned ranges are NOT cleared by MADV_DONTNEED, as this would be rather
->>>> unexpected behaviour, but are cleared on process teardown or unmapping of
->>>> memory ranges.
->>>>
->>>> Ranges can have the poison property removed by MADV_GUARD_UNPOISON -
->>>> 'remedying' the poisoning. The ranges over which this is applied, should
->>>> they contain non-poison entries, will be untouched, only poison entries
->>>> will be cleared.
->>>>
->>>> We permit this operation on anonymous memory only, and only VMAs which are
->>>> non-special, non-huge and not mlock()'d (if we permitted this we'd have to
->>>> drop locked pages which would be rather counterintuitive).
->>>>
->>>> Suggested-by: Vlastimil Babka <vbabka@suse.cz>
->>>> Suggested-by: Jann Horn <jannh@google.com>
->>>> Suggested-by: David Hildenbrand <david@redhat.com>
->>>> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
->>>> ---
->>>>    arch/alpha/include/uapi/asm/mman.h     |   3 +
->>>>    arch/mips/include/uapi/asm/mman.h      |   3 +
->>>>    arch/parisc/include/uapi/asm/mman.h    |   3 +
->>>>    arch/xtensa/include/uapi/asm/mman.h    |   3 +
->>>>    include/uapi/asm-generic/mman-common.h |   3 +
->>>>    mm/madvise.c                           | 168 +++++++++++++++++++++++++
->>>>    mm/mprotect.c                          |   3 +-
->>>>    mm/mseal.c                             |   1 +
->>>>    8 files changed, 186 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/arch/alpha/include/uapi/asm/mman.h b/arch/alpha/include/uapi/asm/mman.h
->>>> index 763929e814e9..71e13f27742d 100644
->>>> --- a/arch/alpha/include/uapi/asm/mman.h
->>>> +++ b/arch/alpha/include/uapi/asm/mman.h
->>>> @@ -78,6 +78,9 @@
->>>>    #define MADV_COLLAPSE    25        /* Synchronous hugepage collapse */
->>>> +#define MADV_GUARD_POISON 102        /* fatal signal on access to range */
->>>> +#define MADV_GUARD_UNPOISON 103        /* revoke guard poisoning */
->>>
->>> Just to raise it here: MADV_GUARD_INSTALL / MADV_GUARD_REMOVE or sth. like
->>> that would have been even clearer, at least to me.
+We lack find_symbol() selftests, so add one. This let's us stress test
+improvements easily on find_symbol() or optimizations. It also inherently
+allows us to test the limits of kallsyms on Linux today.
 
-Yes, I think so.
+We test a pathalogical use case for kallsyms by introducing modules
+which are automatically written for us with a larger number of symbols.
+We have 4 kallsyms test modules:
 
->>
->> :)
->>
->> It still feels like poisoning to me because we're explicitly putting
->> something in the page tables to make a range have different fault behaviour
->> like a HW poisoning, and 'installing' suggests backing or something like
->> this, I think that's more confusing.
-> 
-> I connect "poison" to "SIGBUS" and "corrupt memory state", not to "there is nothing and there must not be anything". Thus my thinking. But again, not the end of the world, just wanted to raise it ...
+A: has KALLSYSMS_NUMSYMS exported symbols
+B: uses one of A's symbols
+C: adds KALLSYMS_SCALE_FACTOR * KALLSYSMS_NUMSYMS exported
+D: adds 2 * the symbols than C
 
-"Poison" is used so far for fairly distinct things, and I'd very much like
-to avoid extending its meaning to guard pages. It makes the other things
-less unique, and it misses a naming and classification opportunity.
+By using anything much larger than KALLSYSMS_NUMSYMS as 10,000 and
+KALLSYMS_SCALE_FACTOR of 8 we segfault today. So we're capped at
+around 160000 symbols somehow today. We can inpsect that issue at
+our leasure later, but for now the real value to this test is that
+this will easily allow us to test improvements on find_symbol().
 
-"Guard" and "guard page" are fairly unique names. That's valuable.
+We want to enable this test on allyesmodconfig builds so we can't
+use this combination, so instead just use a safe value for now and
+be informative on the Kconfig symbol documentation about where our
+thresholds are for testers. We default then to KALLSYSMS_NUMSYMS of
+just 100 and KALLSYMS_SCALE_FACTOR of 8.
 
+On x86_64 we can use perf, for other architectures we just use 'time'
+and allow for customizations. For example a future enhancements could
+be done for parisc to check for unaligned accesses which triggers a
+special special exception handler assembler code inside the kernel.
+The negative impact on performance is so large on parisc that it
+keeps track of its accesses on /proc/cpuinfo as UAH:
 
-thanks,
+IRQ:       CPU0       CPU1
+3:       1332          0         SuperIO  ttyS0
+7:    1270013          0         SuperIO  pata_ns87415
+64:  320023012  320021431             CPU  timer
+65:   17080507   20624423             CPU  IPI
+UAH:   10948640      58104   Unaligned access handler traps
+
+While at it, this tidies up lib/ test modules to allow us to have
+a new directory for them. The amount of test modules under lib/
+is insane.
+
+This should also hopefully showcase how to start doing basic
+self module writing code, which may be more useful for more complex
+cases later in the future.
+
+Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+---
+
+I posted the v2 [0] a long time ago to account for some Helge's patches
+and provide a vehicle for testing but Masahiro noted this should be
+addressed on the asm code, not the linker script. This test still
+is useful so I am posting it separately.
+
+[0] https://lkml.kernel.org/r/20240129192644.3359978-1-mcgrof@kernel.org
+
+Changes on v3:
+
+- Drop Helge's patches
+- Adjust to allow safe build tests for now with sane settings, otherwise
+  we'd fail allmodconfig build tests.
+
+ lib/Kconfig.debug                             | 105 ++++++++++++++
+ lib/Makefile                                  |   1 +
+ lib/tests/Makefile                            |   1 +
+ lib/tests/module/.gitignore                   |   4 +
+ lib/tests/module/Makefile                     |  15 ++
+ lib/tests/module/gen_test_kallsyms.sh         | 128 ++++++++++++++++++
+ tools/testing/selftests/module/Makefile       |  12 ++
+ tools/testing/selftests/module/config         |   3 +
+ tools/testing/selftests/module/find_symbol.sh |  81 +++++++++++
+ 9 files changed, 350 insertions(+)
+ create mode 100644 lib/tests/Makefile
+ create mode 100644 lib/tests/module/.gitignore
+ create mode 100644 lib/tests/module/Makefile
+ create mode 100755 lib/tests/module/gen_test_kallsyms.sh
+ create mode 100644 tools/testing/selftests/module/Makefile
+ create mode 100644 tools/testing/selftests/module/config
+ create mode 100755 tools/testing/selftests/module/find_symbol.sh
+
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 7315f643817a..b5929721fc63 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2903,6 +2903,111 @@ config TEST_KMOD
+ 
+ 	  If unsure, say N.
+ 
++config TEST_RUNTIME
++	bool
++
++config TEST_RUNTIME_MODULE
++	bool
++
++config TEST_KALLSYMS
++	tristate "module kallsyms find_symbol() test"
++	depends on m
++	select TEST_RUNTIME
++	select TEST_RUNTIME_MODULE
++	select TEST_KALLSYMS_A
++	select TEST_KALLSYMS_B
++	select TEST_KALLSYMS_C
++	select TEST_KALLSYMS_D
++	help
++	  This allows us to stress test find_symbol() through the kallsyms
++	  used to place symbols on the kernel ELF kallsyms and modules kallsyms
++	  where we place kernel symbols such as exported symbols.
++
++	  We have four test modules:
++
++	  A: has KALLSYSMS_NUMSYMS exported symbols
++	  B: uses one of A's symbols
++	  C: adds KALLSYMS_SCALE_FACTOR * KALLSYSMS_NUMSYMS exported
++	  D: adds 2 * the symbols than C
++
++	  We stress test find_symbol() through two means:
++
++	  1) Upon load of B it will trigger simplify_symbols() to look for the
++	  one symbol it uses from the module A with tons of symbols. This is an
++	  indirect way for us to have B call resolve_symbol_wait() upon module
++	  load. This will eventually call find_symbol() which will eventually
++	  try to find the symbols used with find_exported_symbol_in_section().
++	  find_exported_symbol_in_section() uses bsearch() so a binary search
++	  for each symbol. Binary search will at worst be O(log(n)) so the
++	  larger TEST_MODULE_KALLSYSMS the worse the search.
++
++	  2) The selftests should load C first, before B. Upon B's load towards
++	  the end right before we call module B's init routine we get
++	  complete_formation() called on the module. That will first check
++	  for duplicate symbols with the call to verify_exported_symbols().
++	  That is when we'll force iteration on module C's insane symbol list.
++	  Since it has 10 * KALLSYMS_NUMSYMS it means we can first test
++	  just loading B without C. The amount of time it takes to load C Vs
++	  B can give us an idea of the impact growth of the symbol space and
++	  give us projection. Module A only uses one symbol from B so to allow
++	  this scaling in module C to be proportional, if it used more symbols
++	  then the first test would be doing more and increasing just the
++	  search space would be slightly different. The last module, module D
++	  will just increase the search space by twice the number of symbols in
++	  C so to allow for full projects.
++
++	  tools/testing/selftests/module/find_symbol.sh
++
++	  The current defaults will incur a build delay of about 7 minutes
++	  on an x86_64 with only 8 cores. Enable this only if you want to
++	  stress test find_symbol() with thousands of symbols. At the same
++	  time this is also useful to test building modules with thousands of
++	  symbols, and if BTF is enabled this also stress tests adding BTF
++	  information for each module. Currently enabling many more symbols
++	  will segfault the build system.
++
++	  If unsure, say N.
++
++if TEST_KALLSYMS
++
++config TEST_KALLSYMS_A
++	tristate
++	depends on m
++
++config TEST_KALLSYMS_B
++	tristate
++	depends on m
++
++config TEST_KALLSYMS_C
++	tristate
++	depends on m
++
++config TEST_KALLSYMS_D
++	tristate
++	depends on m
++
++config TEST_KALLSYMS_NUMSYMS
++	int "test kallsyms number of symbols"
++	default 100
++	help
++	  The number of symbols to create on TEST_KALLSYMS_A, only one of which
++	  module TEST_KALLSYMS_B will use. This also will be used
++	  for how many symbols TEST_KALLSYMS_C will have, scaled up by
++	  TEST_KALLSYMS_SCALE_FACTOR. Note that setting this to 10,000 will
++	  trigger a segfault today, don't use anything close to it unless
++	  you are aware that this should not be used for automated build tests.
++
++config TEST_KALLSYMS_SCALE_FACTOR
++	int "test kallsyms scale factor"
++	default 8
++	help
++	  How many more unusued symbols will TEST_KALLSYSMS_C have than
++	  TEST_KALLSYMS_A. If 8, then module C will have 8 * syms
++	  than module A. Then TEST_KALLSYMS_D will have double the amount
++	  of symbols than C so to allow projections.
++
++endif # TEST_KALLSYMS
++
+ config TEST_DEBUG_VIRTUAL
+ 	tristate "Test CONFIG_DEBUG_VIRTUAL feature"
+ 	depends on DEBUG_VIRTUAL
+diff --git a/lib/Makefile b/lib/Makefile
+index 773adf88af41..ae720c7eb996 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -96,6 +96,7 @@ obj-$(CONFIG_TEST_XARRAY) += test_xarray.o
+ obj-$(CONFIG_TEST_MAPLE_TREE) += test_maple_tree.o
+ obj-$(CONFIG_TEST_PARMAN) += test_parman.o
+ obj-$(CONFIG_TEST_KMOD) += test_kmod.o
++obj-$(CONFIG_TEST_RUNTIME) += tests/
+ obj-$(CONFIG_TEST_DEBUG_VIRTUAL) += test_debug_virtual.o
+ obj-$(CONFIG_TEST_MEMCAT_P) += test_memcat_p.o
+ obj-$(CONFIG_TEST_OBJAGG) += test_objagg.o
+diff --git a/lib/tests/Makefile b/lib/tests/Makefile
+new file mode 100644
+index 000000000000..8e4f42cb9c54
+--- /dev/null
++++ b/lib/tests/Makefile
+@@ -0,0 +1 @@
++obj-$(CONFIG_TEST_RUNTIME_MODULE)		+= module/
+diff --git a/lib/tests/module/.gitignore b/lib/tests/module/.gitignore
+new file mode 100644
+index 000000000000..8be7891b250f
+--- /dev/null
++++ b/lib/tests/module/.gitignore
+@@ -0,0 +1,4 @@
++test_kallsyms_a.c
++test_kallsyms_b.c
++test_kallsyms_c.c
++test_kallsyms_d.c
+diff --git a/lib/tests/module/Makefile b/lib/tests/module/Makefile
+new file mode 100644
+index 000000000000..af5c27b996cb
+--- /dev/null
++++ b/lib/tests/module/Makefile
+@@ -0,0 +1,15 @@
++obj-$(CONFIG_TEST_KALLSYMS_A) += test_kallsyms_a.o
++obj-$(CONFIG_TEST_KALLSYMS_B) += test_kallsyms_b.o
++obj-$(CONFIG_TEST_KALLSYMS_C) += test_kallsyms_c.o
++obj-$(CONFIG_TEST_KALLSYMS_D) += test_kallsyms_d.o
++
++$(obj)/%.c: FORCE
++	@$(kecho) "  GEN     $@"
++	$(Q)$(srctree)/lib/tests/module/gen_test_kallsyms.sh $@\
++		$(CONFIG_TEST_KALLSYMS_NUMSYMS) \
++		$(CONFIG_TEST_KALLSYMS_SCALE_FACTOR)
++
++clean-files += test_kallsyms_a.c
++clean-files += test_kallsyms_b.c
++clean-files += test_kallsyms_c.c
++clean-files += test_kallsyms_d.c
+diff --git a/lib/tests/module/gen_test_kallsyms.sh b/lib/tests/module/gen_test_kallsyms.sh
+new file mode 100755
+index 000000000000..e85f10dc11bd
+--- /dev/null
++++ b/lib/tests/module/gen_test_kallsyms.sh
+@@ -0,0 +1,128 @@
++#!/bin/bash
++
++TARGET=$(basename $1)
++DIR=lib/tests/module
++TARGET="$DIR/$TARGET"
++NUM_SYMS=$2
++SCALE_FACTOR=$3
++TEST_TYPE=$(echo $TARGET | sed -e 's|lib/tests/module/test_kallsyms_||g')
++TEST_TYPE=$(echo $TEST_TYPE | sed -e 's|.c||g')
++
++gen_template_module_header()
++{
++	cat <<____END_MODULE
++// SPDX-License-Identifier: GPL-2.0-or-later OR copyleft-next-0.3.1
++/*
++ * Copyright (C) 2023 Luis Chamberlain <mcgrof@kernel.org>
++ *
++ * Automatically generated code for testing, do not edit manually.
++ */
++
++#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
++
++#include <linux/init.h>
++#include <linux/module.h>
++#include <linux/printk.h>
++
++____END_MODULE
++}
++
++gen_num_syms()
++{
++	PREFIX=$1
++	NUM=$2
++	for i in $(seq 1 $NUM); do
++		printf "int auto_test_%s_%010d = 0xff;\n" $PREFIX $i
++		printf "EXPORT_SYMBOL_GPL(auto_test_%s_%010d);\n" $PREFIX $i
++	done
++	echo
++}
++
++gen_template_module_data_a()
++{
++	gen_num_syms a $1
++	cat <<____END_MODULE
++static int auto_runtime_test(void)
++{
++	return 0;
++}
++
++____END_MODULE
++}
++
++gen_template_module_data_b()
++{
++	printf "\nextern int auto_test_a_%010d;\n\n" 28
++	echo "static int auto_runtime_test(void)"
++	echo "{"
++	printf "\nreturn auto_test_a_%010d;\n" 28
++	echo "}"
++}
++
++gen_template_module_data_c()
++{
++	gen_num_syms c $1
++	cat <<____END_MODULE
++static int auto_runtime_test(void)
++{
++	return 0;
++}
++
++____END_MODULE
++}
++
++gen_template_module_data_d()
++{
++	gen_num_syms d $1
++	cat <<____END_MODULE
++static int auto_runtime_test(void)
++{
++	return 0;
++}
++
++____END_MODULE
++}
++
++gen_template_module_exit()
++{
++	cat <<____END_MODULE
++static int __init auto_test_module_init(void)
++{
++	return auto_runtime_test();
++}
++module_init(auto_test_module_init);
++
++static void __exit auto_test_module_exit(void)
++{
++}
++module_exit(auto_test_module_exit);
++
++MODULE_AUTHOR("Luis Chamberlain <mcgrof@kernel.org>");
++MODULE_LICENSE("GPL");
++____END_MODULE
++}
++
++case $TEST_TYPE in
++	a)
++		gen_template_module_header > $TARGET
++		gen_template_module_data_a $NUM_SYMS >> $TARGET
++		gen_template_module_exit >> $TARGET
++		;;
++	b)
++		gen_template_module_header > $TARGET
++		gen_template_module_data_b >> $TARGET
++		gen_template_module_exit >> $TARGET
++		;;
++	c)
++		gen_template_module_header > $TARGET
++		gen_template_module_data_c $((NUM_SYMS * SCALE_FACTOR)) >> $TARGET
++		gen_template_module_exit >> $TARGET
++		;;
++	d)
++		gen_template_module_header > $TARGET
++		gen_template_module_data_d $((NUM_SYMS * SCALE_FACTOR * 2)) >> $TARGET
++		gen_template_module_exit >> $TARGET
++		;;
++	*)
++		;;
++esac
+diff --git a/tools/testing/selftests/module/Makefile b/tools/testing/selftests/module/Makefile
+new file mode 100644
+index 000000000000..6132d7ddb08b
+--- /dev/null
++++ b/tools/testing/selftests/module/Makefile
+@@ -0,0 +1,12 @@
++# SPDX-License-Identifier: GPL-2.0-only
++# Makefile for module loading selftests
++
++# No binaries, but make sure arg-less "make" doesn't trigger "run_tests"
++all:
++
++TEST_PROGS := find_symbol.sh
++
++include ../lib.mk
++
++# Nothing to clean up.
++clean:
+diff --git a/tools/testing/selftests/module/config b/tools/testing/selftests/module/config
+new file mode 100644
+index 000000000000..b0c206b1ad47
+--- /dev/null
++++ b/tools/testing/selftests/module/config
+@@ -0,0 +1,3 @@
++CONFIG_TEST_RUNTIME=y
++CONFIG_TEST_RUNTIME_MODULE=y
++CONFIG_TEST_KALLSYMS=m
+diff --git a/tools/testing/selftests/module/find_symbol.sh b/tools/testing/selftests/module/find_symbol.sh
+new file mode 100755
+index 000000000000..140364d3c49f
+--- /dev/null
++++ b/tools/testing/selftests/module/find_symbol.sh
+@@ -0,0 +1,81 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0-or-later OR copyleft-next-0.3.1
++# Copyright (C) 2023 Luis Chamberlain <mcgrof@kernel.org>
++#
++# This is a stress test script for kallsyms through find_symbol()
++
++set -e
++
++# Kselftest framework requirement - SKIP code is 4.
++ksft_skip=4
++
++test_reqs()
++{
++	if ! which modprobe 2> /dev/null > /dev/null; then
++		echo "$0: You need modprobe installed" >&2
++		exit $ksft_skip
++	fi
++
++	if ! which kmod 2> /dev/null > /dev/null; then
++		echo "$0: You need kmod installed" >&2
++		exit $ksft_skip
++	fi
++
++	if ! which perf 2> /dev/null > /dev/null; then
++		echo "$0: You need perf installed" >&2
++		exit $ksft_skip
++	fi
++
++	uid=$(id -u)
++	if [ $uid -ne 0 ]; then
++		echo $msg must be run as root >&2
++		exit $ksft_skip
++	fi
++}
++
++load_mod()
++{
++	local STATS="-e duration_time"
++	STATS="$STATS -e user_time"
++	STATS="$STATS -e system_time"
++	STATS="$STATS -e page-faults"
++	local MOD=$1
++
++	local ARCH="$(uname -m)"
++	case "${ARCH}" in
++	x86_64)
++		perf stat $STATS $MODPROBE test_kallsyms_b
++		;;
++	*)
++		time $MODPROBE test_kallsyms_b
++		exit 1
++		;;
++	esac
++}
++
++remove_all()
++{
++	$MODPROBE -r test_kallsyms_b
++	for i in a b c d; do
++		$MODPROBE -r test_kallsyms_$i
++	done
++}
++test_reqs
++
++MODPROBE=$(</proc/sys/kernel/modprobe)
++
++remove_all
++load_mod test_kallsyms_b
++remove_all
++
++# Now pollute the namespace
++$MODPROBE test_kallsyms_c
++load_mod test_kallsyms_b
++
++# Now pollute the namespace with twice the number of symbols than the last time
++remove_all
++$MODPROBE test_kallsyms_c
++$MODPROBE test_kallsyms_d
++load_mod test_kallsyms_b
++
++exit 0
 -- 
-John Hubbard
+2.43.0
 
 
