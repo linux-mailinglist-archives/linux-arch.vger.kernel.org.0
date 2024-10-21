@@ -1,200 +1,171 @@
-Return-Path: <linux-arch+bounces-8354-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8355-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D51659A6D9E
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Oct 2024 17:05:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 624259A6DDA
+	for <lists+linux-arch@lfdr.de>; Mon, 21 Oct 2024 17:16:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 876011F21B2F
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Oct 2024 15:05:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 072F21F223DC
+	for <lists+linux-arch@lfdr.de>; Mon, 21 Oct 2024 15:16:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B35F1E884B;
-	Mon, 21 Oct 2024 15:05:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 621C478C8B;
+	Mon, 21 Oct 2024 15:15:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="o2obhUQE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O6hB2/iB"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71F9A1F472F
-	for <linux-arch@vger.kernel.org>; Mon, 21 Oct 2024 15:05:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 224576A8D2;
+	Mon, 21 Oct 2024 15:15:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729523133; cv=none; b=GurK3MnV/L8X75VKGsCDR8xsMIY3o6xVfvskzCt3Seg0ZzjtJ39UP8pOFtpWwTq8xczXR5HzxSkx8Eku15AATVZU6bj9elLe2velLWNX5WxLmE/NUGFNVB2+pjk0goJ3+qMEn4Gur8zqRLqSO5BrBGZv4i6enwABQif+2H4JNNI=
+	t=1729523744; cv=none; b=QMgPg1DLETwUtOj7lF7xkqdhCDihBlL81bntJkzLscoKEih1/p44fONu+XTQWEz7XL1k/7qIgMIzmjckCZI1wY792GLxnQCDsVm2g05EZFR+fwtOqgO/Tf21NIayuGPBVuc+ColHzteJECKKM8Sv+PHC/DHPLnefE1j29k/Ogsg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729523133; c=relaxed/simple;
-	bh=50bzoL0E5RW9jtb3/55tHhkokdpjPWuz5iPr4mnKF78=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RxYL6A4Vh+ZxEsOAkePdtKs8jFkcksmkRxF2enIJ8PiGJLYN93aXT4K5AKBuo5+JRXyJeyXdOo7Org01cXMDV3V7L8Ys5jL3WwuhIjeADiSi5SUwZopIi1HOFdSBVeJ59mEPhflpY/fQWsots1P86qrfx7AZLd+ARuBwys/xXK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=o2obhUQE; arc=none smtp.client-ip=209.85.160.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-460b295b9eeso307321cf.1
-        for <linux-arch@vger.kernel.org>; Mon, 21 Oct 2024 08:05:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1729523130; x=1730127930; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=50bzoL0E5RW9jtb3/55tHhkokdpjPWuz5iPr4mnKF78=;
-        b=o2obhUQEUvs2nzyOdKmj3of+1dlQjQTUWPlAwVpHDjAu7Unq3D9QVRoQZEZ4/Zk+sN
-         QqumoSpKaFvLgROIuzbxLa82XmziYtcJt6u7rcj9Da0llP6UZDmKFZmHtEUDYTf0Fm6Z
-         t549V37XDPzTzWMTbvStFbayTnLSwrpjrQslmMqSyTXgn5RpBYSjuLOujFIzb80FEsYc
-         xGw+KFsImIKUeBVLXmlcwOYrqMdvaXG/FlGY3RYzUE4ffxytkKfLfEo90KjvFZplaqJG
-         S6s4Ofxgka5fhSql3Naihcsl7OSYxGeD+2P1nPa+LAKXyDEqbwnSaa3iin5S+NG0b5ky
-         T4ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729523130; x=1730127930;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=50bzoL0E5RW9jtb3/55tHhkokdpjPWuz5iPr4mnKF78=;
-        b=Rjeb4xMUhhXRCJXLWvW4Hdmwq33FHCLuOe1O+utFRFsizV0rtUr7XGDEhy+jJBdK8m
-         tY+50NytFKKA5pAU0FaVdKh0fc327BniUTulIUCHYvEqPCkLjTF6zHZ/KMwNQaGZ2SrE
-         FW1YmGbxOVOCTsuErXmnoJJwlqjBFbpomU21d+gGNl5uYa/coXUiIWdvLP4snk1W5s1u
-         tWYq0QrlS+W/993toXoX7Z/YOba7AF0l4joq2+8r4Bw//qavO7ClC2iZTcZ5SeAvWQJe
-         hBDP9MDQ/CG2fr6pH8pQqwtKJJ/Wa96VuVS0q/4RdfYRdfupOvFPt7HSHFSex2pdOIbE
-         542w==
-X-Forwarded-Encrypted: i=1; AJvYcCXvhbyZp0bm5KNTFuGAZvOW1XJ5RdEsKaMvYvxH+/HX6JXThcUa3iIYVSz+8ynI3bahh5MNDvNn6naA@vger.kernel.org
-X-Gm-Message-State: AOJu0YwdO1u7a5MYpSCa2uUKEoz7GsZ94Q1ilyDc9LAom3PY9BMeybBg
-	oJe8GC+FuPUCW1hCvemjHhd5rJhajm6zBe35lp5DzsnV/EqQz/lYmiI558wyJNrIPTVZIIKyZVJ
-	4Asp0FtNKtPBPfR3QDxdneVPnnOyCXZRgXe8D
-X-Google-Smtp-Source: AGHT+IEOXV+Q7vMIloFDPvxSVsyITVEcRe5763BxgPsFvYZ2aNgQJzPh1q4g46HKK2Ge4bEfemTrl3UiZHhHOGQk7cA=
-X-Received: by 2002:ac8:5a03:0:b0:45c:9d26:8f6e with SMTP id
- d75a77b69052e-460be5cce66mr3744761cf.21.1729523129971; Mon, 21 Oct 2024
- 08:05:29 -0700 (PDT)
+	s=arc-20240116; t=1729523744; c=relaxed/simple;
+	bh=3Ie81PJaB3Z2D/AicTp4yUNXRV46tqz0pVjMH/bKZBU=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=Dunf1B/pOdTRN1DOPbliJ02XjZDBUJ/sNJWYIU7Wbfr69MyHCzvZE3GqPfynXH5ezPLOTnHYnMWUCsSKx3vMhuJNucQCqtz16X8x3lg8ezNZ9w0GvXI2nIwY1tbcg5uTd2iMnjwQvYp63DvLZgFZYtiiNAZICRsTI50h9RWTDYo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O6hB2/iB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93016C4CECD;
+	Mon, 21 Oct 2024 15:15:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729523743;
+	bh=3Ie81PJaB3Z2D/AicTp4yUNXRV46tqz0pVjMH/bKZBU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=O6hB2/iB4wLSkH+h4kqg9A82MI6C6IV/Jv5g90mM8cP4PlUevnewputwtJBeguYBB
+	 ltrz1sjQxRpcFOYGuHOL+ughjbvCW5qRRlIMGoY4EPHgHL1Qo8XZZIV1jlQuaY52rb
+	 p2NjWr0hYlHUeJinima3br77dEtuQysAuE4hhjcgNJWKraMq83QbOSNYYFcK+Es1D4
+	 OuwPPrE5Dp0Y7rba+PMbIYfJRQ+I2XEfIgX8mwI+09jxh7MW62PR3NBhgnoDqRcAaL
+	 V1WlHRu/ywpY2YElacTzveP2eCaR6BS0b5dinhgMAnhkpRhkcGdqZei7LtAua/+j9p
+	 GZwVnrgH2NZrA==
+Date: Tue, 22 Oct 2024 00:15:34 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Heiko Carstens <hca@linux.ibm.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Sven Schnelle
+ <svens@linux.ibm.com>, "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>, Florent Revest
+ <revest@chromium.org>, linux-trace-kernel@vger.kernel.org, LKML
+ <linux-kernel@vger.kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,
+ bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, Jiri Olsa
+ <jolsa@kernel.org>, Alan Maguire <alan.maguire@oracle.com>, Mark Rutland
+ <mark.rutland@arm.com>, linux-arch@vger.kernel.org, Catalin Marinas
+ <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Huacai Chen
+ <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, Michael Ellerman
+ <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy
+ <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, Madhavan
+ Srinivasan <maddy@linux.ibm.com>, Paul Walmsley <paul.walmsley@sifive.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev
+ <agordeev@linux.ibm.com>, Christian Borntraeger
+ <borntraeger@linux.ibm.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo
+ Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+ <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin"
+ <hpa@zytor.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Andrew
+ Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v17 11/16] fprobe: Rewrite fprobe on function-graph
+ tracer
+Message-Id: <20241022001534.96c0d1813d8f4a26563d4663@kernel.org>
+In-Reply-To: <20241018124952.17670-E-hca@linux.ibm.com>
+References: <172904026427.36809.516716204730117800.stgit@devnote2>
+	<172904040206.36809.2263909331707439743.stgit@devnote2>
+	<yt9ded4gfdz0.fsf@linux.ibm.com>
+	<20241016101022.185f741b@gandalf.local.home>
+	<20241018124952.17670-E-hca@linux.ibm.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <cd848c5f-50cd-4834-a6dc-dff16c586e49@nvidia.com>
- <6a2a84f5-8474-432f-b97e-18552a9d993c@redhat.com> <CAJuCfpGkuaCh+PxKbzMbu-81oeEdzcfjFThoRk+-Cezf0oJWZg@mail.gmail.com>
- <9c81a8bb-18e5-4851-9925-769bf8535e46@redhat.com> <CAJuCfpH-YqwEi1aqUAF3rCZGByFpvKVSfDckATtCFm=J_4+QOw@mail.gmail.com>
- <ZxJcryjDUk_LzOuj@tiehlicka> <CAJuCfpGV3hwCRJj6D-SnSOc+VEe5=_045R1aGJEuYCL7WESsrg@mail.gmail.com>
- <ZxKWBfQ_Lps93fY1@tiehlicka> <CAJuCfpHa9qjugR+a3cs6Cud4PUcPWdvc+OgKTJ1qnryyJ9+WXA@mail.gmail.com>
- <CAJuCfpHFmmZhSrWo0iWST9+DGbwJZYdZx7zjHSHJLs_QY-7UbA@mail.gmail.com>
- <ZxYCK0jZVmKSksA4@tiehlicka> <62a7eb3f-fb27-43f4-8365-0fa0456c2f01@redhat.com>
-In-Reply-To: <62a7eb3f-fb27-43f4-8365-0fa0456c2f01@redhat.com>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Mon, 21 Oct 2024 08:05:16 -0700
-Message-ID: <CAJuCfpE_aSyjokF=xuwXvq9-jpjDfC+OH0etspK=G6PS7SvMFg@mail.gmail.com>
-Subject: Re: [PATCH v3 5/5] alloc_tag: config to store page allocation tag
- refs in page flags
-To: David Hildenbrand <david@redhat.com>
-Cc: Michal Hocko <mhocko@suse.com>, John Hubbard <jhubbard@nvidia.com>, 
-	Yosry Ahmed <yosryahmed@google.com>, akpm@linux-foundation.org, 
-	kent.overstreet@linux.dev, corbet@lwn.net, arnd@arndb.de, mcgrof@kernel.org, 
-	rppt@kernel.org, paulmck@kernel.org, thuth@redhat.com, tglx@linutronix.de, 
-	bp@alien8.de, xiongwei.song@windriver.com, ardb@kernel.org, vbabka@suse.cz, 
-	hannes@cmpxchg.org, roman.gushchin@linux.dev, dave@stgolabs.net, 
-	willy@infradead.org, liam.howlett@oracle.com, pasha.tatashin@soleen.com, 
-	souravpanda@google.com, keescook@chromium.org, dennis@kernel.org, 
-	yuzhao@google.com, vvvvvv@google.com, rostedt@goodmis.org, 
-	iamjoonsoo.kim@lge.com, rientjes@google.com, minchan@google.com, 
-	kaleshsingh@google.com, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, linux-mm@kvack.org, 
-	linux-modules@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Mon, Oct 21, 2024 at 2:13=E2=80=AFAM David Hildenbrand <david@redhat.com=
-> wrote:
->
->
->
-> Am 21.10.24 um 09:26 schrieb Michal Hocko:
-> > On Fri 18-10-24 14:57:26, Suren Baghdasaryan wrote:
-> >> On Fri, Oct 18, 2024 at 10:45=E2=80=AFAM Suren Baghdasaryan <surenb@go=
-ogle.com> wrote:
-> >>>
-> >>> On Fri, Oct 18, 2024 at 10:08=E2=80=AFAM Michal Hocko <mhocko@suse.co=
-m> wrote:
-> >>>
-> >>> Automatic fallback is possible during boot, when we decide whether to
-> >>> enable page extensions or not. So, if during boot we decide to disabl=
-e
-> >>> page extensions and use page flags, we can't go back and re-enable
-> >>> page extensions after boot is complete. Since there is a possibility
-> >>> that we run out of page flags at runtime when we load a new module,
-> >>> this leaves this case when we can't reference the module tags and we
-> >>> can't fall back to page extensions, so we have to disable memory
-> >>> profiling.
-> >>> I could keep page extensions always on just in case this happens but
-> >>> that's a lot of memory waste to handle a rare case...
-> >>
-> >> After thinking more about this, I suggest a couple of changes that
-> >> IMHO would make configuration simpler:
-> >> 1. Change the CONFIG_PGALLOC_TAG_USE_PAGEFLAGS to an early boot
-> >> parameter.
-> >
-> > This makes much more sense!
-> >
-> >> Today we have a "mem_profiling" parameter to enable/disable
-> >> memory profiling. I suggest adding "mem_profiling_use_pgflags" to
-> >> switch the current behavior of using page extensions to use page
-> >> flags.
-> >
-> > I do not want to bikeshed about this but to me it would make more sense
-> > to have an extension paramater to mem_profiling and call it something
-> > like compress or similar so that page flags are not really carved into
-> > naming. The docuemntation then can explain that the copression cannot b=
-e
-> > always guaranteed and it might fail so this is more of a optimistic and
-> > potentially failing optimization that might need to be dropped in some
-> > usege scenarios.
->
-> Maybe we can reuse the existing parameter (e.g., tristate). Only makes se=
-nse if
-> we don't expect too many other modes though :)
+On Fri, 18 Oct 2024 14:49:52 +0200
+Heiko Carstens <hca@linux.ibm.com> wrote:
 
-Yeah, I thought about adding new values to "mem_profiling" but it's a
-bit complicated. Today it's a tristate:
+> On Wed, Oct 16, 2024 at 10:10:22AM -0400, Steven Rostedt wrote:
+> > On Wed, 16 Oct 2024 14:07:31 +0200
+> > Sven Schnelle <svens@linux.ibm.com> wrote:
+> > > I haven't yet fully understood why this logic is needed, but the
+> > > WARN_ON_ONCE triggers on s390. I'm assuming this fails because fp always
+> > > has the upper bits of the address set on x86 (and likely others). As an
+> > > example, in my test setup, fp is 0x8feec218 on s390, while it is
+> > > 0xffff888100add118 in x86-kvm.
+> > 
+> > Since we only need to save 4 bits for size, we could have what it is
+> > replacing always be zero or always be f, depending on the arch. The
+> > question then is, is s390's 4 MSBs always zero?
+> > 
+> > Thus we could make it be:
+> > 
+> > static inline int decode_fprobe_header(unsigned long val, struct fprobe **fp)
+> > {
+> > 	unsigned long ptr;
+> > 
+> > 	ptr = (val & FPROBE_HEADER_PTR_MASK) | FPROBE_HEADER_MSB_MASK;
+> > 	if (fp)
+> > 		*fp = (struct fprobe *)ptr;
+> > 	return val >> FPROBE_HEADER_PTR_BITS;
+> > }
+> > 
+> > And define FPROBE_HEADER_MSB_MASK to be either:
+> > 
+> > For most archs:
+> > 
+> > #define FPROBE_HEADER_MSB_MASK	(0xf << FPROBE_HEADER_PTR_BITS)
+> > 
+> > or on s390:
+> > 
+> > #define FPROBE_HEADER_MSB_MASK	(0x0)
+> > 
+> > Would this work?
+> 
+> This would work for s390. Right now we don't make any use of the four
+> MSBs, and they are always zero. If for some reason this would ever
+> change, we would need to come up with a different solution.
 
-mem_profiling=3D0|1|never
+Ah, so fill with zero works for s390 kernel. Thanks for the info.
 
-0/1 means we disable/enable memory profiling by default but the user
-can enable it at runtime using a sysctl. This means that we enable
-page_ext at boot even when it's set to 0.
-"never" means we do not enable page_ext, memory profiling is disabled
-and sysctl to enable it will not be exposed. Used when a distribution
-has CONFIG_MEM_ALLOC_PROFILING=3Dy but the user does not use it and does
-not want to waste memory on enabling page_ext.
+> Please note that this only works for addresses in the kernel address
+> space. For user space the full 64 bit address range (minus the top
+> page) can be used for user space applications.
 
-I can add another option like "pgflags" but then it also needs to
-specify whether we should enable or disable profiling by default
-(similar to 0|1 for page_ext mode). IOW we will need to encode also
-the default state we want. Something like this:
+I wonder what is the unsigned long size (stack entry size) of the
+s390? is it 64bit?
 
-mem_profiling=3D0|1|never|pgflags_on|pgflags_off
+> I'm just writing this
+> here, just in case something like this comes up for uprobes or
+> something similar as well.
 
-Would this be acceptable?
+I'm considering another solution if it doesn't work. Of course if
+above works, it is the best compression ratio.
 
+This is only if it doesn't work, we can consolidate a set of
+fprobe header in N + 1 entries as
 
->
-> >
-> >> We keep the current behavior of using page extensions as
-> >> default (mem_profiling_use_pgflags=3D0) because it always works even
-> >> though it has higher overhead.
-> >
-> > Yes this seems to be a safe default.
->
-> Agreed.
->
-> >
-> >> 2. No auto-fallback. If mem_profiling_use_pgflags=3D1 and we don't hav=
-e
-> >> enough page flags (at boot time or later when we load a module), we
-> >> simply disable memory profiling with a warning.
->
-> Sounds reasonable to me.
->
-> --
-> Cheers,
->
-> David / dhildenb
->
+0: [# of fprobes(4bit)|4bit array of sizes]
+1: [fp 1]
+2: [fp 1 data]
+...
+
+So if we have 3 fprobes on the same entry and has 0, 3, 2 data size, then
+
+0:[3|0|3|2|0...0]
+1:[fp1]
+2:[fp2]
+3:[fp2 data 1]
+4:[fp2 data 2]
+5:[fp2 data 3]
+6:[fp3]
+7:[fp3 data 1]
+8:[fp3 data 2]
+
+Thank you,
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
