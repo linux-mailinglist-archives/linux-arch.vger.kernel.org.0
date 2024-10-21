@@ -1,125 +1,181 @@
-Return-Path: <linux-arch+bounces-8329-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8330-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FB839A5976
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Oct 2024 06:23:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A05919A5C9B
+	for <lists+linux-arch@lfdr.de>; Mon, 21 Oct 2024 09:21:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DEFA81F221A3
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Oct 2024 04:22:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C06B51C21794
+	for <lists+linux-arch@lfdr.de>; Mon, 21 Oct 2024 07:21:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D7AA1D04BB;
-	Mon, 21 Oct 2024 04:22:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6EEF1D14F0;
+	Mon, 21 Oct 2024 07:21:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nc/PwCKq"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="B1DB5bC5"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCEDD1D0142;
-	Mon, 21 Oct 2024 04:22:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 135791D12F9
+	for <linux-arch@vger.kernel.org>; Mon, 21 Oct 2024 07:21:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729484552; cv=none; b=cVdwQIN+0jsrSh3lrtR3EdZF6H5NRNt7s+hIOPXYSZereBG5sGVrKB+P+QYXNbumkXH3kbUsGbjvOgrHfU2WH908jC8p5RnSfjqZ85EK7oea57vdjyxk2q8d41c3g3LnkGfiJcVKF8PtBazUmfz+F2+lzZHAO3ALJi1zg5IM9Is=
+	t=1729495297; cv=none; b=T1Dsloc0E3zHxCFJKrgftH2sywzbT1mrYrM8lyXOwHtxEu57CkctDF50jde9hKbFxhp1F5K8TEqU3X077S6mrN6FahawA831FDDro9VSuT8CA+jFIrkXUg4SvLhy3b90tdRG9jr5nbjQKVsh9u6wnRXs4Th1x0RFlPX6iUlJBpk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729484552; c=relaxed/simple;
-	bh=LB2z4HMXwMmYKC+HwmBhthY2Mn1M9U06se3PysQOCJE=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=O/8bLRA52ugyNegADGoVxmeFszGRtDqf9iJtg87ePE9VJb4xNiHxuA9jXWueSUWs2NX3S4b0lyq3NJ3jnR9zXTl7sJi5FbkcPnCfKPLYFRU0ukFFVxHnz9dQuHAqJWJwaTatGJxAQ1R+9mNP1UGu3a4S1lm3m+pKy7uRgxTzlf0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nc/PwCKq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A01AFC4CEE4;
-	Mon, 21 Oct 2024 04:22:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729484551;
-	bh=LB2z4HMXwMmYKC+HwmBhthY2Mn1M9U06se3PysQOCJE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=nc/PwCKqezna/K1PyI2O98zbl11kb7aY2a2lXE8AD/pSA+hvTBWUf+s3bogyLoopN
-	 0k/AOWo7c7qDqd8vCf85RcbpOyxLDA9JEh8JyTGO/K0SZTbLofPMbWcMYu9aM8jx6j
-	 XTNbZ446vzzH2o09b9fR4Iqmj/1XPNf9fBUNofOT2NImKrVmCgnjHWWIljgbRRp/W0
-	 FqglQuy4NaN+vNdWaOVxsfrOSaHTBV7E2jDODk+XLb26S0a2AdGyIGv+YdmvvZHfrv
-	 8HZE9cjWmVjfMMzRRqjYT2IMgDAFPTJqkbbVXK11afEC7h1yZ/CUOghwYNtACEXeUk
-	 g/q7yb2LcNeIg==
-Date: Mon, 21 Oct 2024 13:22:23 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Heiko Carstens <hca@linux.ibm.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Steven Rostedt
- <rostedt@goodmis.org>, Florent Revest <revest@chromium.org>,
- linux-trace-kernel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, bpf <bpf@vger.kernel.org>, Alexei
- Starovoitov <ast@kernel.org>, Jiri Olsa <jolsa@kernel.org>, Alan Maguire
- <alan.maguire@oracle.com>, Mark Rutland <mark.rutland@arm.com>,
- linux-arch@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>, Will
- Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui
- <kernel@xen0n.name>, Paul Walmsley <paul.walmsley@sifive.com>, Palmer
- Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Vasily
- Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>,
- Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle
- <svens@linux.ibm.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar
- <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
- <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin"
- <hpa@zytor.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH v16 04/18] function_graph: Replace fgraph_ret_regs with
- ftrace_regs
-Message-Id: <20241021132223.e3841b01cb8b449b66ebbb44@kernel.org>
-In-Reply-To: <20241016083323.16801-A-hca@linux.ibm.com>
-References: <172895571278.107311.14000164546881236558.stgit@devnote2>
-	<172895575716.107311.6784997045170009035.stgit@devnote2>
-	<20241015183906.19678-B-hca@linux.ibm.com>
-	<20241016084720.828fefb791af4bcf386aac91@kernel.org>
-	<20241016083323.16801-A-hca@linux.ibm.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1729495297; c=relaxed/simple;
+	bh=u7mbkFbLccM2lr1dpHGOrtIFIX6zwELH/gCl+41CUSE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Jj/aFzz+NIL/2atkIKa/ydmU+1Z08f+phLrl1XUFqTcbWtiIP7zEn/EAoGBuXgWRp3Rv/MIE3odlbr/vS/ZXioEuvV6m1y6kmGj1+Th/92VCx7q6czLoEafJzC/Pc14niionrOqRbGzlG8jGun9j9grOYTE3zcVPEnC8+06KbdQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=B1DB5bC5; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a7aa086b077so463255366b.0
+        for <linux-arch@vger.kernel.org>; Mon, 21 Oct 2024 00:21:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1729495293; x=1730100093; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=sM4ACN0kxcjfg5UR2mRm8TYbMyjtVqVwofUPN7ArdNY=;
+        b=B1DB5bC5U2viQQ3ofI3XE2foauUP3xDOk706VJU+4PpHE/G0cTqm0su7f9KC9xS4AY
+         vuwYCwW5F9DZrdyblTloeJZl7s8g53rwI+i8T2XjIXPFBOtoBVjM5kxe0laU1aN7ljjz
+         cD7PHfGfHMv7E8B8TNRr5YXEBPRX5x1fs9RzPXgSOXt380I1KAzJkqUmZRvlGwUDdQQg
+         Jk0LbQMtdzeHPLU1p4b30CO+N3I+0AbtQ28H38CySVeqzmi+T7Ftz79vHapasHpbABJs
+         yldrCvts8sK676By1QzThRqx0U0/J6YbxIF0AZYfWKw67hTBZwHndCkCC+7OKmnUfA32
+         mSVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729495293; x=1730100093;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sM4ACN0kxcjfg5UR2mRm8TYbMyjtVqVwofUPN7ArdNY=;
+        b=CQr6ZGij5VnR0ZReT8XhHHWeS7QSNBOvlbCbWSdKTzVp9e3xVQGYQQOV9Yq1u/WUMX
+         aUCjzMRpv9NxlHEMrowmA3M6V4mtPSK5tQ1XZtXlulHYFkuFhFl0cf75o/rSQch/LaGs
+         oBRsRkONJrGsImYvx7s8wmfvA9PEUOZgeNmyt1buHwxApZDjwY13IK+3ZNd8JUrIYfwE
+         5ZBm5o9l9po1suFS1N/RaXtLV6Pkxj0WIFqf7DJcRKjC2PSaGcloRug/Gi2okjJmIaCG
+         7ooTWZz6YlupUEcZo7hnKCv/1poRFae7FMsmGs0T1/K2ZnYsJo7s0orurDpXDsiKP261
+         Q6mw==
+X-Forwarded-Encrypted: i=1; AJvYcCVGQRsG5UmFmZ8XhK7YyeTocowfkmbelWRyQ0TJwyADaMSQ6d6W2hLzHfTVSulvxp1GYSpegXLUhRaW@vger.kernel.org
+X-Gm-Message-State: AOJu0YxeAFTuosNHq2b2xFdk/OySsGsKVMzcqCmwpQCB82BTs6+deFKo
+	MDfif3OThu08ucMkDtCKdRXqo6p4COuQgmNi2rKukstxtNkmsCdiXlldvwPNaFw=
+X-Google-Smtp-Source: AGHT+IH7c0NP6cQiTSwyl//5zHrNCLOmGdFL9dCgtDAoFWr5dtBuuJz0loN2CEAZ3ZOL1zVScXIQ/Q==
+X-Received: by 2002:a17:906:c10b:b0:a9a:1792:f05 with SMTP id a640c23a62f3a-a9a69ba907cmr1161713466b.31.1729495293159;
+        Mon, 21 Oct 2024 00:21:33 -0700 (PDT)
+Received: from localhost (109-81-89-238.rct.o2.cz. [109.81.89.238])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9a91559dfcsm167515166b.132.2024.10.21.00.21.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Oct 2024 00:21:32 -0700 (PDT)
+Date: Mon, 21 Oct 2024 09:21:32 +0200
+From: Michal Hocko <mhocko@suse.com>
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: David Hildenbrand <david@redhat.com>,
+	John Hubbard <jhubbard@nvidia.com>,
+	Yosry Ahmed <yosryahmed@google.com>, akpm@linux-foundation.org,
+	kent.overstreet@linux.dev, corbet@lwn.net, arnd@arndb.de,
+	mcgrof@kernel.org, rppt@kernel.org, paulmck@kernel.org,
+	thuth@redhat.com, tglx@linutronix.de, bp@alien8.de,
+	xiongwei.song@windriver.com, ardb@kernel.org, vbabka@suse.cz,
+	hannes@cmpxchg.org, roman.gushchin@linux.dev, dave@stgolabs.net,
+	willy@infradead.org, liam.howlett@oracle.com,
+	pasha.tatashin@soleen.com, souravpanda@google.com,
+	keescook@chromium.org, dennis@kernel.org, yuzhao@google.com,
+	vvvvvv@google.com, rostedt@goodmis.org, iamjoonsoo.kim@lge.com,
+	rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v3 5/5] alloc_tag: config to store page allocation tag
+ refs in page flags
+Message-ID: <ZxYA_CHt8tVjowPQ@tiehlicka>
+References: <CAJD7tkY0zzwX1BCbayKSXSxwKEGiEJzzKggP8dJccdajsr_bKw@mail.gmail.com>
+ <cd848c5f-50cd-4834-a6dc-dff16c586e49@nvidia.com>
+ <6a2a84f5-8474-432f-b97e-18552a9d993c@redhat.com>
+ <CAJuCfpGkuaCh+PxKbzMbu-81oeEdzcfjFThoRk+-Cezf0oJWZg@mail.gmail.com>
+ <9c81a8bb-18e5-4851-9925-769bf8535e46@redhat.com>
+ <CAJuCfpH-YqwEi1aqUAF3rCZGByFpvKVSfDckATtCFm=J_4+QOw@mail.gmail.com>
+ <ZxJcryjDUk_LzOuj@tiehlicka>
+ <CAJuCfpGV3hwCRJj6D-SnSOc+VEe5=_045R1aGJEuYCL7WESsrg@mail.gmail.com>
+ <ZxKWBfQ_Lps93fY1@tiehlicka>
+ <CAJuCfpHa9qjugR+a3cs6Cud4PUcPWdvc+OgKTJ1qnryyJ9+WXA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJuCfpHa9qjugR+a3cs6Cud4PUcPWdvc+OgKTJ1qnryyJ9+WXA@mail.gmail.com>
 
-On Wed, 16 Oct 2024 10:33:23 +0200
-Heiko Carstens <hca@linux.ibm.com> wrote:
-
-> On Wed, Oct 16, 2024 at 08:47:20AM +0900, Masami Hiramatsu wrote:
-> > On Tue, 15 Oct 2024 20:39:06 +0200
-> > Heiko Carstens <hca@linux.ibm.com> wrote:
-> > 
-> > > That would make things much simpler... e.g. your new patch is also
-> > > writing r3 to fregs, why? 
-> > 
-> > BTW, according to the document [1], r3 is for "return value 1", isn't it
-> > used usually?
-> > 
-> > [1] https://www.kernel.org/doc/Documentation/s390/Debugging390.txt
+On Fri 18-10-24 10:45:39, Suren Baghdasaryan wrote:
+> On Fri, Oct 18, 2024 at 10:08 AM Michal Hocko <mhocko@suse.com> wrote:
+> >
+> > On Fri 18-10-24 09:04:24, Suren Baghdasaryan wrote:
+> > > On Fri, Oct 18, 2024 at 6:03 AM Michal Hocko <mhocko@suse.com> wrote:
+> > > >
+> > > > On Tue 15-10-24 08:58:59, Suren Baghdasaryan wrote:
+> > > > > On Tue, Oct 15, 2024 at 8:42 AM David Hildenbrand <david@redhat.com> wrote:
+> > > > [...]
+> > > > > > Right, I think what John is concerned about (and me as well) is that
+> > > > > > once a new feature really needs a page flag, there will be objection
+> > > > > > like "no you can't, we need them for allocation tags otherwise that
+> > > > > > feature will be degraded".
+> > > > >
+> > > > > I do understand your concern but IMHO the possibility of degrading a
+> > > > > feature should not be a reason to always operate at degraded capacity
+> > > > > (which is what we have today). If one is really concerned about
+> > > > > possible future regression they can set
+> > > > > CONFIG_PGALLOC_TAG_USE_PAGEFLAGS=n and keep what we have today. That's
+> > > > > why I'm strongly advocating that we do need
+> > > > > CONFIG_PGALLOC_TAG_USE_PAGEFLAGS so that the user has control over how
+> > > > > this scarce resource is used.
+> > > >
+> > > > I really do not think users will know how/why to setup this and I wouldn't
+> > > > even bother them thinking about that at all TBH.
+> > > >
+> > > > This is an implementation detail. It is fine to reuse unused flags space
+> > > > as a storage as a performance optimization but why do you want users to
+> > > > bother with that? Why would they ever want to say N here?
+> > >
+> > > In this patch you can find a couple of warnings that look like this:
+> > >
+> > > pr_warn("With module %s there are too many tags to fit in %d page flag
+> > > bits. Memory profiling is disabled!\n", mod->name,
+> > > NR_UNUSED_PAGEFLAG_BITS);
+> > > emitted when we run out of page flag bits during a module loading,
+> > >
+> > > pr_err("%s: alignment %lu is incompatible with allocation tag
+> > > indexing, disable CONFIG_PGALLOC_TAG_USE_PAGEFLAGS",  mod->name,
+> > > align);
+> > > emitted when the arch-specific section alignment is incompatible with
+> > > alloc_tag indexing.
+> >
+> > You are asking users to workaround implementation issue by configuration
+> > which sounds like a really bad idea. Why cannot you make the fallback
+> > automatic?
 > 
-> That is true for the 32 bit ABI, but not for the 64 bit ABI which we
-> care about. Besides other this is also the reason why I removed the
-> above file five years ago: f62f7dcbf023 ("Documentation/s390: remove
-> outdated debugging390 documentation").
-> 
-> If you really want to understand the 64 bit s390 ABI then you need to
-> look at https://github.com/IBM/s390x-abi .
-> 
-> A PDF file of the latest release is available at
-> https://github.com/IBM/s390x-abi/releases/download/v1.6.1/lzsabi_s390x.pdf
-> 
-> See section "1.2.5. Return Values" for return value handling.
+> Automatic fallback is possible during boot, when we decide whether to
+> enable page extensions or not. So, if during boot we decide to disable
+> page extensions and use page flags, we can't go back and re-enable
+> page extensions after boot is complete. Since there is a possibility
+> that we run out of page flags at runtime when we load a new module,
+> this leaves this case when we can't reference the module tags and we
+> can't fall back to page extensions, so we have to disable memory
+> profiling.
 
-Ah, these are the info what I searched!
+Right, I do understand (I guess) the challenge. I am just arguing that
+it makes really no sense to tell user to recompile the kernel with a
+CONFIG_FOO to workaround this limitation. Please note that many users of
+this feature will simply use a precompiled (e.g. distribution) kernels.
+Once you force somebody to recompile with
+CONFIG_PGALLOC_TAG_USE_PAGEFLAGS=n they are not going back to a more
+memory optimal implementation.
 
-> 
-> All of that said, I would appreciate if you would just merge the
-> provided patch, unless there is a reason for not doing that. Chances
-> are that I missed something with all the recent fregs vs ptregs
-> changes.
-
-OK
-
-Thanks!
-
-
+Just my 2cents
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Michal Hocko
+SUSE Labs
 
