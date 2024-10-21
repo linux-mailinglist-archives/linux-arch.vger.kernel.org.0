@@ -1,40 +1,96 @@
-Return-Path: <linux-arch+bounces-8340-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8341-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDA9E9A6A01
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Oct 2024 15:23:30 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 323799A6A45
+	for <lists+linux-arch@lfdr.de>; Mon, 21 Oct 2024 15:29:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DE0271C22792
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Oct 2024 13:23:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A928DB23D02
+	for <lists+linux-arch@lfdr.de>; Mon, 21 Oct 2024 13:28:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 212021F80AE;
-	Mon, 21 Oct 2024 13:23:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAF2E1F707B;
+	Mon, 21 Oct 2024 13:28:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="OKvvnKP0";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="qnEnoj8r";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="OKvvnKP0";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="qnEnoj8r"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03B481EC01E;
-	Mon, 21 Oct 2024 13:23:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BDBC1E0DD7;
+	Mon, 21 Oct 2024 13:27:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729516995; cv=none; b=lpZJ/Bo9Ev/NPQOpEJ5aB1O+mKrVKwFpDqgDJDGY5MXphjf6Bx/FCuSWLg+qgfvNXKRAihK71f2Lk1ELAreJHVSngXvXNgpt1Qi+sr16A+miSV747zYPHSaLe9CVZZj/jQa4siodZWpT2L1MxcKQStPPNl9tRhAz4gbtEwsesgM=
+	t=1729517280; cv=none; b=CZJEn/H6qiDsUYW650D5YnqBgaIzTsS6a1DQ6vxT07G9+fqb2yjoXWjs7FtGFbEE1pm680Gp2s9ybPDqQHPkeTYq0HaJCaf4dZZTEub+A+5gj7KWGCvlmyVCRj7+3GS5rqiY4HmGU54s22NRxu2mtAx1HgE8LlVQIedbznT5TJs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729516995; c=relaxed/simple;
-	bh=sZVT35tPktjswObqMzDeNjpp8MfKEIT8nIy1KCQbxUQ=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=sF/oF9SKWLwPVFcclItM4nMbFAO+AMKWGk0Cg1481KQTRa2KgXkDhQ2Axxfc5QcrPJlPt9+4+zIz3Z3Y9VD+cJupxbNu4tAmYv1UWJChrCI/hy5UJCt72VQa8D/OYQ62nm6iOv2vz3I2qntAMXZjJpQF6himc2gtRkRsuuDKiqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D1B4ADA7;
-	Mon, 21 Oct 2024 06:23:40 -0700 (PDT)
-Received: from [10.57.24.27] (unknown [10.57.24.27])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E8DCB3F73B;
-	Mon, 21 Oct 2024 06:22:59 -0700 (PDT)
-Message-ID: <b6ca55b7-4de2-4085-97bd-619f91d9fcb8@arm.com>
-Date: Mon, 21 Oct 2024 14:22:56 +0100
+	s=arc-20240116; t=1729517280; c=relaxed/simple;
+	bh=AfJi5rgjCrX5UFWo0ajeRVUsxWJrEWm3syXMmqCQFy8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sTYAZ1tJvkYvxppb9N6quaCPaHfa2fTdYJOjyYTEqiCcOKWUjbxB7LLCEprpfcvo+/kPle6wYaaWCVD/4caDjC8nzRMGWX7rCsf3uh+GawIS1xZJiK/olOlnDZJq2fPhzIfOLW0O309m+YKrZKRAyH3ExbxPUNQz5mv5sEycF6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=OKvvnKP0; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=qnEnoj8r; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=OKvvnKP0; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=qnEnoj8r; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 2F27121C5E;
+	Mon, 21 Oct 2024 13:27:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1729517276; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=G7gAfTqe8Y6GkQHJQt0MI1Q6FEh0/QLzoAxcXHddb+A=;
+	b=OKvvnKP0sW12DzMi+RdBLuzZl/Is5e0RSf7dEWkp82OR03vobm/3RnnF23M+8TY7fvxSWq
+	a+ImbwmEI76AyNI+jhum5qZ6oazLmWVwjpPDlWb+ApfXulM2Quyaa27H1IR87ogIfeCQnh
+	7kZ1iUJtBImedS2DwsRWm3RASnhIOHo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1729517276;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=G7gAfTqe8Y6GkQHJQt0MI1Q6FEh0/QLzoAxcXHddb+A=;
+	b=qnEnoj8rj4o/C1l+47nBYHehDfdOTo3sRt8FfZrFalIAuCMhnA9+SbI0RbZ1u6zyHNG+aX
+	31ex0uimjoVrJlBg==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=OKvvnKP0;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=qnEnoj8r
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1729517276; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=G7gAfTqe8Y6GkQHJQt0MI1Q6FEh0/QLzoAxcXHddb+A=;
+	b=OKvvnKP0sW12DzMi+RdBLuzZl/Is5e0RSf7dEWkp82OR03vobm/3RnnF23M+8TY7fvxSWq
+	a+ImbwmEI76AyNI+jhum5qZ6oazLmWVwjpPDlWb+ApfXulM2Quyaa27H1IR87ogIfeCQnh
+	7kZ1iUJtBImedS2DwsRWm3RASnhIOHo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1729517276;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=G7gAfTqe8Y6GkQHJQt0MI1Q6FEh0/QLzoAxcXHddb+A=;
+	b=qnEnoj8rj4o/C1l+47nBYHehDfdOTo3sRt8FfZrFalIAuCMhnA9+SbI0RbZ1u6zyHNG+aX
+	31ex0uimjoVrJlBg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id C0265136DC;
+	Mon, 21 Oct 2024 13:27:55 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id VmYXLttWFmfLQQAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Mon, 21 Oct 2024 13:27:55 +0000
+Message-ID: <fdd2be0a-cae9-4508-ba20-eb04c9a1e7f9@suse.cz>
+Date: Mon, 21 Oct 2024 15:27:55 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -42,147 +98,251 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-From: Steven Price <steven.price@arm.com>
-Subject: Re: [PATCH RFC v2 0/4] mm: Introduce MAP_BELOW_HINT
-To: "Kirill A. Shutemov" <kirill@shutemov.name>,
- Charlie Jenkins <charlie@rivosinc.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
+Subject: Re: [PATCH v2 1/5] mm: pagewalk: add the ability to install PTEs
+Content-Language: en-US
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: Suren Baghdasaryan <surenb@google.com>,
+ "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+ Matthew Wilcox <willy@infradead.org>, "Paul E . McKenney"
+ <paulmck@kernel.org>, Jann Horn <jannh@google.com>,
+ David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, Muchun Song <muchun.song@linux.dev>,
  Richard Henderson <richard.henderson@linaro.org>,
  Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
- Russell King <linux@armlinux.org.uk>, Guo Ren <guoren@kernel.org>,
- Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
- Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
- Nicholas Piggin <npiggin@gmail.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>,
- Naveen N Rao <naveen@kernel.org>, Alexander Gordeev
- <agordeev@linux.ibm.com>, Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Sven Schnelle <svens@linux.ibm.com>,
- Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>,
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
- "David S. Miller" <davem@davemloft.net>,
- Andreas Larsson <andreas@gaisler.com>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, Muchun Song <muchun.song@linux.dev>,
- Andrew Morton <akpm@linux-foundation.org>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
- <vbabka@suse.cz>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Shuah Khan <shuah@kernel.org>, linux-arch@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- linux-csky@vger.kernel.org, loongarch@lists.linux.dev,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
- linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org
-References: <20240829-patches-below_hint_mmap-v2-0-638a28d9eae0@rivosinc.com>
- <yu7um2tcxg2apoz372rmzpkrfgbb42ndvabvrsp4usb2e3bkrf@huaucjsp5vlj>
- <Ztnp3OAIRz/daj7s@ghost>
- <pbotlphw77fkfacldtpxfjcs2w5nhb2uvxszv5rmlrhjm42akd@4pvcqb7ojq4v>
-Content-Language: en-GB
-In-Reply-To: <pbotlphw77fkfacldtpxfjcs2w5nhb2uvxszv5rmlrhjm42akd@4pvcqb7ojq4v>
+ <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+ Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
+ Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+ linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linux-arch@vger.kernel.org,
+ Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
+ linux-kselftest@vger.kernel.org, Sidhartha Kumar
+ <sidhartha.kumar@oracle.com>, Jeff Xu <jeffxu@chromium.org>,
+ Christoph Hellwig <hch@infradead.org>, linux-api@vger.kernel.org,
+ John Hubbard <jhubbard@nvidia.com>
+References: <cover.1729440856.git.lorenzo.stoakes@oracle.com>
+ <cf91e3936c2dee42aa8ac15af3e76c90c098d570.1729440856.git.lorenzo.stoakes@oracle.com>
+From: Vlastimil Babka <vbabka@suse.cz>
+Autocrypt: addr=vbabka@suse.cz; keydata=
+ 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
+ EP+ylKVEKb0Q2A==
+In-Reply-To: <cf91e3936c2dee42aa8ac15af3e76c90c098d570.1729440856.git.lorenzo.stoakes@oracle.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 2F27121C5E
+X-Spam-Score: -4.51
+X-Rspamd-Action: no action
+X-Spamd-Result: default: False [-4.51 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	ASN(0.00)[asn:25478, ipnet:::/0, country:RU];
+	TO_DN_SOME(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[32];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com,gmx.de];
+	MID_RHS_MATCH_FROM(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[google.com,oracle.com,infradead.org,kernel.org,redhat.com,kvack.org,vger.kernel.org,linux.dev,linaro.org,jurassic.park.msu.ru,gmail.com,alpha.franken.de,HansenPartnership.com,gmx.de,zankel.net,arndb.de,chromium.org,nvidia.com];
+	R_RATELIMIT(0.00)[to_ip_from(RLz1534diqmneu69wx1fp4cing)];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.cz:mid,suse.cz:dkim];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	DKIM_TRACE(0.00)[suse.cz:+]
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Flag: NO
+X-Spam-Level: 
 
-On 09/09/2024 10:46, Kirill A. Shutemov wrote:
-> On Thu, Sep 05, 2024 at 10:26:52AM -0700, Charlie Jenkins wrote:
->> On Thu, Sep 05, 2024 at 09:47:47AM +0300, Kirill A. Shutemov wrote:
->>> On Thu, Aug 29, 2024 at 12:15:57AM -0700, Charlie Jenkins wrote:
->>>> Some applications rely on placing data in free bits addresses allocated
->>>> by mmap. Various architectures (eg. x86, arm64, powerpc) restrict the
->>>> address returned by mmap to be less than the 48-bit address space,
->>>> unless the hint address uses more than 47 bits (the 48th bit is reserved
->>>> for the kernel address space).
->>>>
->>>> The riscv architecture needs a way to similarly restrict the virtual
->>>> address space. On the riscv port of OpenJDK an error is thrown if
->>>> attempted to run on the 57-bit address space, called sv57 [1].  golang
->>>> has a comment that sv57 support is not complete, but there are some
->>>> workarounds to get it to mostly work [2].
+On 10/20/24 18:20, Lorenzo Stoakes wrote:
+> The existing generic pagewalk logic permits the walking of page tables,
+> invoking callbacks at individual page table levels via user-provided
+> mm_walk_ops callbacks.
 > 
-> I also saw libmozjs crashing with 57-bit address space on x86.
+> This is useful for traversing existing page table entries, but precludes
+> the ability to establish new ones.
 > 
->>>> These applications work on x86 because x86 does an implicit 47-bit
->>>> restriction of mmap() address that contain a hint address that is less
->>>> than 48 bits.
->>>>
->>>> Instead of implicitly restricting the address space on riscv (or any
->>>> current/future architecture), a flag would allow users to opt-in to this
->>>> behavior rather than opt-out as is done on other architectures. This is
->>>> desirable because it is a small class of applications that do pointer
->>>> masking.
+> Existing mechanism for performing a walk which also installs page table
+> entries if necessary are heavily duplicated throughout the kernel, each
+> with semantic differences from one another and largely unavailable for use
+> elsewhere.
 > 
-> You reiterate the argument about "small class of applications". But it
-> makes no sense to me.
-
-Sorry to chime in late on this - I had been considering implementing
-something like MAP_BELOW_HINT and found this thread.
-
-While the examples of applications that want to use high VA bits and get
-bitten by future upgrades is not very persuasive. It's worth pointing
-out that there are a variety of somewhat horrid hacks out there to work
-around this feature not existing.
-
-E.g. from my brief research into other code:
-
-  * Box64 seems to have a custom allocator based on reading 
-    /proc/self/maps to allocate a block of VA space with a low enough 
-    address [1]
-
-  * PHP has code reading /proc/self/maps - I think this is to find a 
-    segment which is close enough to the text segment [2]
-
-  * FEX-Emu mmap()s the upper 128TB of VA on Arm to avoid full 48 bit
-    addresses [3][4]
-
-  * pmdk has some funky code to find the lowest address that meets 
-    certain requirements - this does look like an ALSR alternative and 
-    probably couldn't directly use MAP_BELOW_HINT, although maybe this 
-    suggests we need a mechanism to map without a VA-range? [5]
-
-  * MIT-Scheme parses /proc/self/maps to find the lowest mapping within 
-    a range [6]
-
-  * LuaJIT uses an approach to 'probe' to find a suitable low address 
-    for allocation [7]
-
-The biggest benefit I see of MAP_BELOW_HINT is that it would allow a
-library to get low addresses without causing any problems for the rest
-of the application. The use case I'm looking at is in a library and 
-therefore a personality mode wouldn't be appropriate (because I don't 
-want to affect the rest of the application). Reading /proc/self/maps
-is also problematic because other threads could be allocating/freeing
-at the same time.
-
-Thanks,
-Steve
-
-
-[1] https://sources.debian.org/src/box64/0.3.0+dfsg-1/src/custommem.c/
-[2] https://sources.debian.org/src/php8.2/8.2.24-1/ext/opcache/shared_alloc_mmap.c/#L62
-[3] https://github.com/FEX-Emu/FEX/blob/main/FEXCore/Source/Utils/Allocator.cpp
-[4] https://github.com/FEX-Emu/FEX/commit/df2f1ad074e5cdfb19a0bd4639b7604f777fb05c
-[5] https://sources.debian.org/src/pmdk/1.13.1-1.1/src/common/mmap_posix.c/?hl=29#L29
-[6] https://sources.debian.org/src/mit-scheme/12.1-3/src/microcode/ux.c/#L826
-[7] https://sources.debian.org/src/luajit/2.1.0+openresty20240815-1/src/lj_alloc.c/
-
-> With full address space by default, this small class of applications is
-> going to *broken* unless they would handle RISC-V case specifically.
+> Rather than add yet another implementation, we extend the generic pagewalk
+> logic to enable the installation of page table entries by adding a new
+> install_pte() callback in mm_walk_ops. If this is specified, then upon
+> encountering a missing page table entry, we allocate and install a new one
+> and continue the traversal.
 > 
-> On other hand, if you limit VA to 128TiB by default (like many
-> architectures do[1]) everything would work without intervention.
-> And if an app needs wider address space it would get it with hint opt-in,
-> because it is required on x86-64 anyway. Again, no RISC-V-specific code.
+> If a THP huge page is encountered, we make use of existing logic to split
+> it. Then once we reach the PTE level, we invoke the install_pte() callback
+> which provides a PTE entry to install. We do not support hugetlb at this
+> stage.
 > 
-> I see no upside with your approach. Just worse user experience.
+> If this function returns an error, or an allocation fails during the
+> operation, we abort the operation altogether. It is up to the caller to
+> deal appropriately with partially populated page table ranges.
 > 
-> [1] See va_high_addr_switch test case in https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/testing/selftests/mm/Makefile#n115
+> If install_pte() is defined, the semantics of pte_entry() change - this
+> callback is then only invoked if the entry already exists. This is a useful
+> property, as it allows a caller to handle existing PTEs while installing
+> new ones where necessary in the specified range.
 > 
+> If install_pte() is not defined, then there is no functional difference to
+> this patch, so all existing logic will work precisely as it did before.
+> 
+> As we only permit the installation of PTEs where a mapping does not already
+> exist there is no need for TLB management, however we do invoke
+> update_mmu_cache() for architectures which require manual maintenance of
+> mappings for other CPUs.
+> 
+> We explicitly do not allow the existing page walk API to expose this
+> feature as it is dangerous and intended for internal mm use only. Therefore
+> we provide a new walk_page_range_mm() function exposed only to
+> mm/internal.h.
+> 
+> Reviewed-by: Jann Horn <jannh@google.com>
+> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+
+<snip>
+
+>  /*
+>   * We want to know the real level where a entry is located ignoring any
+>   * folding of levels which may be happening. For example if p4d is folded then
+> @@ -29,9 +34,23 @@ static int walk_pte_range_inner(pte_t *pte, unsigned long addr,
+>  	int err = 0;
+>  
+>  	for (;;) {
+> -		err = ops->pte_entry(pte, addr, addr + PAGE_SIZE, walk);
+> -		if (err)
+> -		       break;
+> +		if (ops->install_pte && pte_none(ptep_get(pte))) {
+> +			pte_t new_pte;
+> +
+> +			err = ops->install_pte(addr, addr + PAGE_SIZE, &new_pte,
+> +					       walk);
+> +			if (err)
+> +				break;
+> +
+> +			set_pte_at(walk->mm, addr, pte, new_pte);
+
+While the guard pages install ptes unconditionally, maybe some install_pte
+handler implementation would sometimes want to skip, should ve define an
+error code that means its skipped and just continue instead of set_pte_at()?
+Or leave it until such handler appears.
+
+> +			/* Non-present before, so for arches that need it. */
+> +			if (!WARN_ON_ONCE(walk->no_vma))
+> +				update_mmu_cache(walk->vma, addr, pte);
+> +		} else {
+> +			err = ops->pte_entry(pte, addr, addr + PAGE_SIZE, walk);
+> +			if (err)
+> +				break;
+> +		}
+>  		if (addr >= end - PAGE_SIZE)
+>  			break;
+>  		addr += PAGE_SIZE;
+> @@ -89,11 +108,14 @@ static int walk_pmd_range(pud_t *pud, unsigned long addr, unsigned long end,
+>  again:
+>  		next = pmd_addr_end(addr, end);
+>  		if (pmd_none(*pmd)) {
+> -			if (ops->pte_hole)
+> +			if (ops->install_pte)
+> +				err = __pte_alloc(walk->mm, pmd);
+> +			else if (ops->pte_hole)
+>  				err = ops->pte_hole(addr, next, depth, walk);
+>  			if (err)
+>  				break;
+> -			continue;
+> +			if (!ops->install_pte)
+> +				continue;
+>  		}
+>  
+>  		walk->action = ACTION_SUBTREE;
+> @@ -116,7 +138,7 @@ static int walk_pmd_range(pud_t *pud, unsigned long addr, unsigned long end,
+>  		 */
+>  		if ((!walk->vma && (pmd_leaf(*pmd) || !pmd_present(*pmd))) ||
+>  		    walk->action == ACTION_CONTINUE ||
+> -		    !(ops->pte_entry))
+> +		    !(ops->pte_entry || ops->install_pte))
+>  			continue;
+
+BTW, I find it hard to read this condition even before your patch, oh well.
+But if I read it correctly, does it mean we're going to split a pmd-mapped
+THP if we have a install_pte handler? But is that really necessary if the
+pmd splitting results in all ptes populated, and thus the install_pte
+handler can't do anything with any pte anyway?
+
+>  		if (walk->vma)
+> @@ -148,11 +170,14 @@ static int walk_pud_range(p4d_t *p4d, unsigned long addr, unsigned long end,
+>   again:
+>  		next = pud_addr_end(addr, end);
+>  		if (pud_none(*pud)) {
+> -			if (ops->pte_hole)
+> +			if (ops->install_pte)
+> +				err = __pmd_alloc(walk->mm, pud, addr);
+> +			else if (ops->pte_hole)
+>  				err = ops->pte_hole(addr, next, depth, walk);
+>  			if (err)
+>  				break;
+> -			continue;
+> +			if (!ops->install_pte)
+> +				continue;
+>  		}
+>  
+>  		walk->action = ACTION_SUBTREE;
+> @@ -167,7 +192,7 @@ static int walk_pud_range(p4d_t *p4d, unsigned long addr, unsigned long end,
+>  
+>  		if ((!walk->vma && (pud_leaf(*pud) || !pud_present(*pud))) ||
+>  		    walk->action == ACTION_CONTINUE ||
+> -		    !(ops->pmd_entry || ops->pte_entry))
+> +		    !(ops->pmd_entry || ops->pte_entry || ops->install_pte))
+>  			continue;
+
+Ditto?
 
 
