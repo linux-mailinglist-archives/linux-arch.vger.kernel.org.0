@@ -1,96 +1,80 @@
-Return-Path: <linux-arch+bounces-8332-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8333-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A31B89A5DA5
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Oct 2024 09:52:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 837F69A5FC0
+	for <lists+linux-arch@lfdr.de>; Mon, 21 Oct 2024 11:14:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C4D081C2127B
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Oct 2024 07:52:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F9F8281D1F
+	for <lists+linux-arch@lfdr.de>; Mon, 21 Oct 2024 09:14:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B96301E0E0C;
-	Mon, 21 Oct 2024 07:52:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13E821E285E;
+	Mon, 21 Oct 2024 09:14:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="gu3P+rke";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="BsbbZXLH";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="gu3P+rke";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="BsbbZXLH"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="f0tb2U6p"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 578221D12F0;
-	Mon, 21 Oct 2024 07:52:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 189E01E2826
+	for <linux-arch@vger.kernel.org>; Mon, 21 Oct 2024 09:13:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729497168; cv=none; b=eaH+y9FqR+Wauyl2vSeXNPOOOs7A7bNiVNNGtV44vMp9lWLY3R5SvWUr/qHFPD9m8PzNb8hymrByAJS9j5Ogj9syEEuuRh4EHE2RfoQhxsIMMpDlW27LjYGZH+Yhe0uad2FBbq2WwhOv/n9kzPgLeRbb1sONdVO0uBWnflCOLTw=
+	t=1729502040; cv=none; b=WUJh9he9durXxV5siYobiUWxRT7gg3JjTXkbtJuuZ2JN2RqMHBhE+2/23PCjWktujH+q+ut7e/xj3UVmqrUFF/sw9npRWOZ0Yo/4OPB8ioxGJJ647+ufxCnUqblwkJa7d533go8Vj0hi3Fh7bsy8OTIivwPckP1r6nWgvV+KM4s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729497168; c=relaxed/simple;
-	bh=pHF/oNXziLvw1gVrt+PZXgx884BvfRhHiXxgowYHu8o=;
+	s=arc-20240116; t=1729502040; c=relaxed/simple;
+	bh=Qpok900RIq0lalZ/bvNPZcgfy2eFsV4ECXKYjvsFsZ0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=idptleOnJSvLlyFtktQ4GxKxy3Pr2qEU/b02v4GaQsTfGxUTN33rs0X/EShjiSfRyJ3BrZbxJpMahoF8jVk9KBfokzRVVdE0ddXMo+OGZ7KqWJIf6jgLVkf6SMB/ksouUV9e9WymlmHvIh5wBEh6sV/Mc1RUaH7mqE8/RuktHBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=gu3P+rke; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=BsbbZXLH; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=gu3P+rke; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=BsbbZXLH; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 8E71D21C8B;
-	Mon, 21 Oct 2024 07:52:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1729497164; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
+	 In-Reply-To:Content-Type; b=ZN1V2jXYNlQ9BYjY+Lk7kF8S7jcokJO9QlsoRjf/J2qyk21xwrjv9ADAXWc7dRP7WdzpeieGwRTypdWOOcF0EhiE5M37xtZEB8xlRvkHgM/NApPM2jQq8d1RicrIT+P9+fAomgc/lizMwT2f/Gaba7G1wx2xFrxqqQ1cBG3x2yw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=f0tb2U6p; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1729502037;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=bXWhUoNB23Y9fn9mmx7c9jTXn4fLCljjY288raDMPls=;
-	b=gu3P+rke6FChZ+iL9iQ+lLmlJ6Ea+1DKxZ09E0WYsi+YXzqU2jfPvc8nepMXe7WlQkEHb/
-	cRWORXyGWetASL/F+MRr05w8KEsH+sOeZM00efOJXI2E+uYLptGTsEm0aBKdtVv/Q2FwRw
-	Pe2UlWBaX1U78BEfeKWx3mkspGFO3Q0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1729497164;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=bXWhUoNB23Y9fn9mmx7c9jTXn4fLCljjY288raDMPls=;
-	b=BsbbZXLHFFBenHj04BVjnKQqAydVYkEXeRJZraeFiS0+UAY9sFs7MSQRVxTpTyCCP4J0cr
-	r0nVCkV8dS9dXkDw==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=gu3P+rke;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=BsbbZXLH
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1729497164; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=bXWhUoNB23Y9fn9mmx7c9jTXn4fLCljjY288raDMPls=;
-	b=gu3P+rke6FChZ+iL9iQ+lLmlJ6Ea+1DKxZ09E0WYsi+YXzqU2jfPvc8nepMXe7WlQkEHb/
-	cRWORXyGWetASL/F+MRr05w8KEsH+sOeZM00efOJXI2E+uYLptGTsEm0aBKdtVv/Q2FwRw
-	Pe2UlWBaX1U78BEfeKWx3mkspGFO3Q0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1729497164;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=bXWhUoNB23Y9fn9mmx7c9jTXn4fLCljjY288raDMPls=;
-	b=BsbbZXLHFFBenHj04BVjnKQqAydVYkEXeRJZraeFiS0+UAY9sFs7MSQRVxTpTyCCP4J0cr
-	r0nVCkV8dS9dXkDw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id CE3FD139E0;
-	Mon, 21 Oct 2024 07:52:43 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id qnn/MEsIFmdPVwAAD6G6ig
-	(envelope-from <tzimmermann@suse.de>); Mon, 21 Oct 2024 07:52:43 +0000
-Message-ID: <64cc9c8f-fff3-4845-bb32-d7f1046ef619@suse.de>
-Date: Mon, 21 Oct 2024 09:52:43 +0200
+	 in-reply-to:in-reply-to:references:references;
+	bh=laNZkwIbOwCUsbOEzRR8/YU1OhJt9JdhAA++t+a3gVA=;
+	b=f0tb2U6pc/0AbXetj9cCU/Vv8vR4iDQBhbe8A2o+FqR5LqK8xvXlAcoAYpT0Fmw1K3j2TB
+	kyobQ69Q33lImMaW1ydAdMqAnvJmqifhlYco7TUYEuiA8xggnYAe9FGJMOxibQeklWz89G
+	NfAWnIIErlZ0LVmQaMETTqF+e21u+68=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-6-qSnocz17PuqRLoHFgRr55g-1; Mon, 21 Oct 2024 05:13:52 -0400
+X-MC-Unique: qSnocz17PuqRLoHFgRr55g-1
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-37d589138a9so2314940f8f.1
+        for <linux-arch@vger.kernel.org>; Mon, 21 Oct 2024 02:13:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729502031; x=1730106831;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=laNZkwIbOwCUsbOEzRR8/YU1OhJt9JdhAA++t+a3gVA=;
+        b=R8biM2OL2OpgUQ7HNMMzzhxQW35YZNtz4Ei5cW7Fh5GxRYpWyiS9VU6YCDA+l2m/fM
+         alNDaOKDNAO7ww58KFZSnV/oYdPYmui79ExHMrmp6WUrXbwteb0srkGyiwZkXeqp1b7L
+         gTogI6Bs0GbRDmba1iqRaYKLdFbr5dy0VKlSDSiA2ODm9sbYff7U3i862RakCIf0q0vD
+         yIQwaGsk3dT7xXdpZb01ENI1gUtG7L3CuU/ZbTIa08lPnHAaLX4VIvFycZZNyhSerPH3
+         JFHhnOzfsOJj/d7ThhuHoDKi1+vrxQ6Z/p/UlpULhIdAm8puTsWlDv+pmCMmxnNXLnMX
+         XHBg==
+X-Forwarded-Encrypted: i=1; AJvYcCXl4AR+EuFbPEaDmHMbIy2z0S1v1UKkWMHfv7XjX+jA8hIyhZeJyfOtbhsvebEi7ltA9/8ccsUqAry7@vger.kernel.org
+X-Gm-Message-State: AOJu0YwSE4PIt7GlgqYOumynKR/ss+8zlpkEpFQjqAvXn2x+2f2yp2b4
+	+bt4aZoYOXnyWK5FmrqTL4r7gNcr2w1RMm7cUJEbP7QoBsi8PHfMu/lAUvbMK1gDQnFGnn95voc
+	H6iXA2HTWzPNRLFlFvx+X1RMz29ow7GRvX0khTM2b7CaOfhMPQj2npjztnBE=
+X-Received: by 2002:a5d:60cd:0:b0:37d:52d0:a59d with SMTP id ffacd0b85a97d-37eab72732cmr6823865f8f.10.1729502031067;
+        Mon, 21 Oct 2024 02:13:51 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGf2q3ct7vDUcpXfTgq4f/Ogs1pSXSIZFsokW+/dUVWCwOUrBI/1w/NWhFvrEEHU/F3TQLS9Q==
+X-Received: by 2002:a5d:60cd:0:b0:37d:52d0:a59d with SMTP id ffacd0b85a97d-37eab72732cmr6823825f8f.10.1729502030651;
+        Mon, 21 Oct 2024 02:13:50 -0700 (PDT)
+Received: from ?IPV6:2a09:80c0:192:0:36d3:2b96:a142:a05b? ([2a09:80c0:192:0:36d3:2b96:a142:a05b])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37ee0b944fbsm3841034f8f.72.2024.10.21.02.13.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Oct 2024 02:13:50 -0700 (PDT)
+Message-ID: <62a7eb3f-fb27-43f4-8365-0fa0456c2f01@redhat.com>
+Date: Mon, 21 Oct 2024 11:13:48 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -98,281 +82,100 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 3/5] drm: handle HAS_IOPORT dependencies
-To: Niklas Schnelle <schnelle@linux.ibm.com>, Brian Cain <bcain@quicinc.com>,
- Marcel Holtmann <marcel@holtmann.org>,
- Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
- Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>, Dave Airlie <airlied@redhat.com>,
- Gerd Hoffmann <kraxel@redhat.com>, Lucas De Marchi
- <lucas.demarchi@intel.com>,
- =?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
- Rodrigo Vivi <rodrigo.vivi@intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Jiri Slaby <jirislaby@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- "Maciej W. Rozycki" <macro@orcam.me.uk>, Heiko Carstens <hca@linux.ibm.com>
-Cc: linux-kernel@vger.kernel.org, linux-hexagon@vger.kernel.org,
- linux-bluetooth@vger.kernel.org, dri-devel@lists.freedesktop.org,
- virtualization@lists.linux.dev, spice-devel@lists.freedesktop.org,
- intel-xe@lists.freedesktop.org, linux-serial@vger.kernel.org,
- linux-arch@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>
-References: <20241008-b4-has_ioport-v8-0-793e68aeadda@linux.ibm.com>
- <20241008-b4-has_ioport-v8-3-793e68aeadda@linux.ibm.com>
+Subject: Re: [PATCH v3 5/5] alloc_tag: config to store page allocation tag
+ refs in page flags
+To: Michal Hocko <mhocko@suse.com>, Suren Baghdasaryan <surenb@google.com>
+Cc: John Hubbard <jhubbard@nvidia.com>, Yosry Ahmed <yosryahmed@google.com>,
+ akpm@linux-foundation.org, kent.overstreet@linux.dev, corbet@lwn.net,
+ arnd@arndb.de, mcgrof@kernel.org, rppt@kernel.org, paulmck@kernel.org,
+ thuth@redhat.com, tglx@linutronix.de, bp@alien8.de,
+ xiongwei.song@windriver.com, ardb@kernel.org, vbabka@suse.cz,
+ hannes@cmpxchg.org, roman.gushchin@linux.dev, dave@stgolabs.net,
+ willy@infradead.org, liam.howlett@oracle.com, pasha.tatashin@soleen.com,
+ souravpanda@google.com, keescook@chromium.org, dennis@kernel.org,
+ yuzhao@google.com, vvvvvv@google.com, rostedt@goodmis.org,
+ iamjoonsoo.kim@lge.com, rientjes@google.com, minchan@google.com,
+ kaleshsingh@google.com, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-mm@kvack.org, linux-modules@vger.kernel.org, kernel-team@android.com
+References: <cd848c5f-50cd-4834-a6dc-dff16c586e49@nvidia.com>
+ <6a2a84f5-8474-432f-b97e-18552a9d993c@redhat.com>
+ <CAJuCfpGkuaCh+PxKbzMbu-81oeEdzcfjFThoRk+-Cezf0oJWZg@mail.gmail.com>
+ <9c81a8bb-18e5-4851-9925-769bf8535e46@redhat.com>
+ <CAJuCfpH-YqwEi1aqUAF3rCZGByFpvKVSfDckATtCFm=J_4+QOw@mail.gmail.com>
+ <ZxJcryjDUk_LzOuj@tiehlicka>
+ <CAJuCfpGV3hwCRJj6D-SnSOc+VEe5=_045R1aGJEuYCL7WESsrg@mail.gmail.com>
+ <ZxKWBfQ_Lps93fY1@tiehlicka>
+ <CAJuCfpHa9qjugR+a3cs6Cud4PUcPWdvc+OgKTJ1qnryyJ9+WXA@mail.gmail.com>
+ <CAJuCfpHFmmZhSrWo0iWST9+DGbwJZYdZx7zjHSHJLs_QY-7UbA@mail.gmail.com>
+ <ZxYCK0jZVmKSksA4@tiehlicka>
+From: David Hildenbrand <david@redhat.com>
 Content-Language: en-US
-From: Thomas Zimmermann <tzimmermann@suse.de>
-Autocrypt: addr=tzimmermann@suse.de; keydata=
- xsBNBFs50uABCADEHPidWt974CaxBVbrIBwqcq/WURinJ3+2WlIrKWspiP83vfZKaXhFYsdg
- XH47fDVbPPj+d6tQrw5lPQCyqjwrCPYnq3WlIBnGPJ4/jreTL6V+qfKRDlGLWFjZcsrPJGE0
- BeB5BbqP5erN1qylK9i3gPoQjXGhpBpQYwRrEyQyjuvk+Ev0K1Jc5tVDeJAuau3TGNgah4Yc
- hdHm3bkPjz9EErV85RwvImQ1dptvx6s7xzwXTgGAsaYZsL8WCwDaTuqFa1d1jjlaxg6+tZsB
- 9GluwvIhSezPgnEmimZDkGnZRRSFiGP8yjqTjjWuf0bSj5rUnTGiyLyRZRNGcXmu6hjlABEB
- AAHNJ1Rob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPsLAjgQTAQgAOAIb
- AwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftODH
- AAoJEGgNwR1TC3ojx1wH/0hKGWugiqDgLNXLRD/4TfHBEKmxIrmfu9Z5t7vwUKfwhFL6hqvo
- lXPJJKQpQ2z8+X2vZm/slsLn7J1yjrOsoJhKABDi+3QWWSGkaGwRJAdPVVyJMfJRNNNIKwVb
- U6B1BkX2XDKDGffF4TxlOpSQzdtNI/9gleOoUA8+jy8knnDYzjBNOZqLG2FuTdicBXblz0Mf
- vg41gd9kCwYXDnD91rJU8tzylXv03E75NCaTxTM+FBXPmsAVYQ4GYhhgFt8S2UWMoaaABLDe
- 7l5FdnLdDEcbmd8uLU2CaG4W2cLrUaI4jz2XbkcPQkqTQ3EB67hYkjiEE6Zy3ggOitiQGcqp
- j//OwE0EWznS4AEIAMYmP4M/V+T5RY5at/g7rUdNsLhWv1APYrh9RQefODYHrNRHUE9eosYb
- T6XMryR9hT8XlGOYRwKWwiQBoWSDiTMo/Xi29jUnn4BXfI2px2DTXwc22LKtLAgTRjP+qbU6
- 3Y0xnQN29UGDbYgyyK51DW3H0If2a3JNsheAAK+Xc9baj0LGIc8T9uiEWHBnCH+RdhgATnWW
- GKdDegUR5BkDfDg5O/FISymJBHx2Dyoklv5g4BzkgqTqwmaYzsl8UxZKvbaxq0zbehDda8lv
- hFXodNFMAgTLJlLuDYOGLK2AwbrS3Sp0AEbkpdJBb44qVlGm5bApZouHeJ/+n+7r12+lqdsA
- EQEAAcLAdgQYAQgAIAIbDBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftOH6AAoJEGgNwR1T
- C3ojVSkIALpAPkIJPQoURPb1VWjh34l0HlglmYHvZszJWTXYwavHR8+k6Baa6H7ufXNQtThR
- yIxJrQLW6rV5lm7TjhffEhxVCn37+cg0zZ3j7zIsSS0rx/aMwi6VhFJA5hfn3T0TtrijKP4A
- SAQO9xD1Zk9/61JWk8OysuIh7MXkl0fxbRKWE93XeQBhIJHQfnc+YBLprdnxR446Sh8Wn/2D
- Ya8cavuWf2zrB6cZurs048xe0UbSW5AOSo4V9M0jzYI4nZqTmPxYyXbm30Kvmz0rYVRaitYJ
- 4kyYYMhuULvrJDMjZRvaNe52tkKAvMevcGdt38H4KSVXAylqyQOW5zvPc4/sq9c=
-In-Reply-To: <20241008-b4-has_ioport-v8-3-793e68aeadda@linux.ibm.com>
+In-Reply-To: <ZxYCK0jZVmKSksA4@tiehlicka>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 8E71D21C8B
-X-Spam-Level: 
-X-Spamd-Result: default: False [-3.01 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-0.996];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	FREEMAIL_TO(0.00)[linux.ibm.com,quicinc.com,holtmann.org,gmail.com,linux.intel.com,kernel.org,ffwll.ch,redhat.com,intel.com,linuxfoundation.org,arndb.de,orcam.me.uk];
-	ARC_NA(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[29];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	MIME_TRACE(0.00)[0:+];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_TRACE(0.00)[suse.de:+];
-	RCVD_COUNT_TWO(0.00)[2];
-	MID_RHS_MATCH_FROM(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[];
-	R_RATELIMIT(0.00)[to_ip_from(RLtfyjk8sg4x43ngtem9djprcp)];
-	ASN(0.00)[asn:25478, ipnet:::/0, country:RU];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Rspamd-Action: no action
-X-Spam-Score: -3.01
-X-Spam-Flag: NO
+Content-Transfer-Encoding: 8bit
 
-Hi
 
-Am 08.10.24 um 14:39 schrieb Niklas Schnelle:
-> In a future patch HAS_IOPORT=n will disable inb()/outb() and friends at
-> compile time. We thus need to add HAS_IOPORT as dependency for those
-> drivers using them. In the bochs driver there is optional MMIO support
-> detected at runtime, warn if this isn't taken when HAS_IOPORT is not
-> defined.
->
-> There is also a direct and hard coded use in cirrus.c which according to
-> the comment is only necessary during resume.  Let's just skip this as
-> for example s390 which doesn't have I/O port support also doesen't
-> support suspend/resume.
->
-> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 
-I feel like I reviewed this before, but can't find it.
+Am 21.10.24 um 09:26 schrieb Michal Hocko:
+> On Fri 18-10-24 14:57:26, Suren Baghdasaryan wrote:
+>> On Fri, Oct 18, 2024 at 10:45 AM Suren Baghdasaryan <surenb@google.com> wrote:
+>>>
+>>> On Fri, Oct 18, 2024 at 10:08 AM Michal Hocko <mhocko@suse.com> wrote:
+>>>
+>>> Automatic fallback is possible during boot, when we decide whether to
+>>> enable page extensions or not. So, if during boot we decide to disable
+>>> page extensions and use page flags, we can't go back and re-enable
+>>> page extensions after boot is complete. Since there is a possibility
+>>> that we run out of page flags at runtime when we load a new module,
+>>> this leaves this case when we can't reference the module tags and we
+>>> can't fall back to page extensions, so we have to disable memory
+>>> profiling.
+>>> I could keep page extensions always on just in case this happens but
+>>> that's a lot of memory waste to handle a rare case...
+>>
+>> After thinking more about this, I suggest a couple of changes that
+>> IMHO would make configuration simpler:
+>> 1. Change the CONFIG_PGALLOC_TAG_USE_PAGEFLAGS to an early boot
+>> parameter.
+> 
+> This makes much more sense!
+> 
+>> Today we have a "mem_profiling" parameter to enable/disable
+>> memory profiling. I suggest adding "mem_profiling_use_pgflags" to
+>> switch the current behavior of using page extensions to use page
+>> flags.
+> 
+> I do not want to bikeshed about this but to me it would make more sense
+> to have an extension paramater to mem_profiling and call it something
+> like compress or similar so that page flags are not really carved into
+> naming. The docuemntation then can explain that the copression cannot be
+> always guaranteed and it might fail so this is more of a optimistic and
+> potentially failing optimization that might need to be dropped in some
+> usege scenarios.
 
-> ---
->   drivers/gpu/drm/gma500/Kconfig |  2 +-
->   drivers/gpu/drm/qxl/Kconfig    |  1 +
->   drivers/gpu/drm/tiny/bochs.c   | 17 +++++++++++++++++
->   drivers/gpu/drm/tiny/cirrus.c  |  2 ++
->   drivers/gpu/drm/xe/Kconfig     |  2 +-
->   5 files changed, 22 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/gpu/drm/gma500/Kconfig b/drivers/gpu/drm/gma500/Kconfig
-> index efb4a2dd2f80885cb59c925d09401002278d7d61..23b7c14de5e29238ece939d5822d8a9ffc4675cc 100644
-> --- a/drivers/gpu/drm/gma500/Kconfig
-> +++ b/drivers/gpu/drm/gma500/Kconfig
-> @@ -1,7 +1,7 @@
->   # SPDX-License-Identifier: GPL-2.0-only
->   config DRM_GMA500
->   	tristate "Intel GMA500/600/3600/3650 KMS Framebuffer"
-> -	depends on DRM && PCI && X86 && MMU
-> +	depends on DRM && PCI && X86 && MMU && HAS_IOPORT
->   	select DRM_KMS_HELPER
->   	select FB_IOMEM_HELPERS if DRM_FBDEV_EMULATION
->   	select I2C
-> diff --git a/drivers/gpu/drm/qxl/Kconfig b/drivers/gpu/drm/qxl/Kconfig
-> index ca3f51c2a8fe1a383f8a2479f04b5c0b3fb14e44..d0e0d440c8d96564cb7b8ffd2385c44fc43f873d 100644
-> --- a/drivers/gpu/drm/qxl/Kconfig
-> +++ b/drivers/gpu/drm/qxl/Kconfig
-> @@ -2,6 +2,7 @@
->   config DRM_QXL
->   	tristate "QXL virtual GPU"
->   	depends on DRM && PCI && MMU
-> +	depends on HAS_IOPORT
+Maybe we can reuse the existing parameter (e.g., tristate). Only makes sense if 
+we don't expect too many other modes though :)
 
-Is there a difference between this style (multiple 'depends on') and the 
-one used for gma500 (&& && &&)?
+> 
+>> We keep the current behavior of using page extensions as
+>> default (mem_profiling_use_pgflags=0) because it always works even
+>> though it has higher overhead.
+> 
+> Yes this seems to be a safe default.
 
->   	select DRM_KMS_HELPER
->   	select DRM_TTM
->   	select DRM_TTM_HELPER
-> diff --git a/drivers/gpu/drm/tiny/bochs.c b/drivers/gpu/drm/tiny/bochs.c
-> index 31fc5d839e106ea4d5c8fe42d1bfc3c70291e3fb..0ed78d3d5774778f91de972ac27056938036e722 100644
-> --- a/drivers/gpu/drm/tiny/bochs.c
-> +++ b/drivers/gpu/drm/tiny/bochs.c
-> @@ -2,6 +2,7 @@
->   
->   #include <linux/module.h>
->   #include <linux/pci.h>
-> +#include <linux/bug.h>
+Agreed.
 
-Alphabetic sorting please.
+> 
+>> 2. No auto-fallback. If mem_profiling_use_pgflags=1 and we don't have
+>> enough page flags (at boot time or later when we load a module), we
+>> simply disable memory profiling with a warning.
 
->   
->   #include <drm/drm_aperture.h>
->   #include <drm/drm_atomic_helper.h>
-> @@ -105,7 +106,9 @@ static void bochs_vga_writeb(struct bochs_device *bochs, u16 ioport, u8 val)
->   
->   		writeb(val, bochs->mmio + offset);
->   	} else {
-> +#ifdef CONFIG_HAS_IOPORT
->   		outb(val, ioport);
-> +#endif
-
-Could you provide empty defines for the out() interfaces at the top of 
-the file?
-
->   	}
->   }
->   
-> @@ -119,7 +122,11 @@ static u8 bochs_vga_readb(struct bochs_device *bochs, u16 ioport)
->   
->   		return readb(bochs->mmio + offset);
->   	} else {
-> +#ifdef CONFIG_HAS_IOPORT
->   		return inb(ioport);
-> +#else
-> +		return 0xff;
-> +#endif
-
-And the in() interfaces could be defined to 0xff[ff].
-
-I assume that you don't want to provide such empty macros in the 
-kernel's io.h header?
-
->   	}
->   }
->   
-> @@ -132,8 +139,12 @@ static u16 bochs_dispi_read(struct bochs_device *bochs, u16 reg)
->   
->   		ret = readw(bochs->mmio + offset);
->   	} else {
-> +#ifdef CONFIG_HAS_IOPORT
->   		outw(reg, VBE_DISPI_IOPORT_INDEX);
->   		ret = inw(VBE_DISPI_IOPORT_DATA);
-> +#else
-> +		ret = 0xffff;
-> +#endif
->   	}
->   	return ret;
->   }
-> @@ -145,8 +156,10 @@ static void bochs_dispi_write(struct bochs_device *bochs, u16 reg, u16 val)
->   
->   		writew(val, bochs->mmio + offset);
->   	} else {
-> +#ifdef CONFIG_HAS_IOPORT
->   		outw(reg, VBE_DISPI_IOPORT_INDEX);
->   		outw(val, VBE_DISPI_IOPORT_DATA);
-> +#endif
->   	}
->   }
->   
-> @@ -229,6 +242,10 @@ static int bochs_hw_init(struct drm_device *dev)
->   			return -ENOMEM;
->   		}
->   	} else {
-> +		if (!IS_ENABLED(CONFIG_HAS_IOPORT)) {
-> +			DRM_ERROR("I/O ports are not supported\n");
-> +			return -EIO;
-> +		}
-
-It would be nicer to use an "} else if(IOPORT) {" here and put the 
-"return -EIO" into a trailing else branch.
-
-If you want to add an error message, please don't use DRM_ERROR(). In 
-this case, dev_err(dev->dev, "...\n") seems appropriate.
-
-Best regards
-Thomas
-
->   		ioaddr = VBE_DISPI_IOPORT_INDEX;
->   		iosize = 2;
->   		if (!request_region(ioaddr, iosize, "bochs-drm")) {
-> diff --git a/drivers/gpu/drm/tiny/cirrus.c b/drivers/gpu/drm/tiny/cirrus.c
-> index 751326e3d9c374baf72115492aeefff2b73869f0..e31e1df029ab0272c4a1ff0ab3eb026ca679b560 100644
-> --- a/drivers/gpu/drm/tiny/cirrus.c
-> +++ b/drivers/gpu/drm/tiny/cirrus.c
-> @@ -509,8 +509,10 @@ static void cirrus_crtc_helper_atomic_enable(struct drm_crtc *crtc,
->   
->   	cirrus_mode_set(cirrus, &crtc_state->mode);
->   
-> +#ifdef CONFIG_HAS_IOPORT
->   	/* Unblank (needed on S3 resume, vgabios doesn't do it then) */
->   	outb(VGA_AR_ENABLE_DISPLAY, VGA_ATT_W);
-> +#endif
->   
->   	drm_dev_exit(idx);
->   }
-> diff --git a/drivers/gpu/drm/xe/Kconfig b/drivers/gpu/drm/xe/Kconfig
-> index 7bbe46a98ff1f449bc2af30686585a00e9e8af93..116f58774135fc3a9f37d6d72d41340f5c812297 100644
-> --- a/drivers/gpu/drm/xe/Kconfig
-> +++ b/drivers/gpu/drm/xe/Kconfig
-> @@ -49,7 +49,7 @@ config DRM_XE
->   
->   config DRM_XE_DISPLAY
->   	bool "Enable display support"
-> -	depends on DRM_XE && DRM_XE=m
-> +	depends on DRM_XE && DRM_XE=m && HAS_IOPORT
->   	select FB_IOMEM_HELPERS
->   	select I2C
->   	select I2C_ALGOBIT
->
+Sounds reasonable to me.
 
 -- 
---
-Thomas Zimmermann
-Graphics Driver Developer
-SUSE Software Solutions Germany GmbH
-Frankenstrasse 146, 90461 Nuernberg, Germany
-GF: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
-HRB 36809 (AG Nuernberg)
+Cheers,
+
+David / dhildenb
 
 
