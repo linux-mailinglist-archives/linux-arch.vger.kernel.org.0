@@ -1,95 +1,95 @@
-Return-Path: <linux-arch+bounces-8336-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8337-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D4199A65A3
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Oct 2024 13:00:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 080D49A65B6
+	for <lists+linux-arch@lfdr.de>; Mon, 21 Oct 2024 13:02:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A1D571F23E2E
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Oct 2024 11:00:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B94C52843FC
+	for <lists+linux-arch@lfdr.de>; Mon, 21 Oct 2024 11:01:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66E3F1E571E;
-	Mon, 21 Oct 2024 10:58:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C89751990A1;
+	Mon, 21 Oct 2024 11:01:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="sky3yooi";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="HTpNCtRV";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="sky3yooi";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="HTpNCtRV"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="0zY4SADx";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="pGLFkVZO";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="r+K3Yuud";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="IsJP6oUJ"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0884C1E25E3;
-	Mon, 21 Oct 2024 10:58:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAB9B433A8;
+	Mon, 21 Oct 2024 11:01:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729508322; cv=none; b=NkTtnVoiJN4h//urLc1rMgyifhVKrzwG1e5aPgu+bE0gO17EkO512LgcM7dpoN0M95ADWEOUOJe+X8jYPFTcrTOjGanCH+pefAnj8AqA+uwWeTRYPCz9K22G6sdFTwApWdaO8k7gg4mdfQVUj8TFa1EgeM5Uwxf7EvIh4Nu4//Q=
+	t=1729508514; cv=none; b=UirBtaXiFcX1ws0hDz19d4ikb9PCg8SiGxEtUxrV+ZpIZet7A6yL6wglZ/r4BUsNGiTH1OeRrU/4HVScVqGcwIkdyhkpSYfQBPPcwWjQ5Idna79vMrVfLvUte//Z2WrPR+yM1R3FYtQ9NA0cHrADfnHyqbUALZNTIJGUcFQ4Cok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729508322; c=relaxed/simple;
-	bh=Sc2DVuRGcnxAdq5yOlajYBFosbVzYoKWRwSe7XRAG3E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=o3e79906zjDwg/GqQnBPOOtUW+i/j1sYS+W7tkHQiLa1Dhv9mRMTHRKuxAmS0z7WKZ3ASWNNqnwhD7Rc1aZJO+6X6L1SSOFiC8W8T6Z85oPO8YcMluI0NjZMvgWgG1YpefTr+LVFkCgFc9z8iqSg6QWAqXp1wG3jHSX8mExsFTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=sky3yooi; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=HTpNCtRV; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=sky3yooi; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=HTpNCtRV; arc=none smtp.client-ip=195.135.223.131
+	s=arc-20240116; t=1729508514; c=relaxed/simple;
+	bh=jorGozgVpW4u1CaRniCglpQMWBa1SRn8DmG0l5OqEqA=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=IIk1ry2pLNsb0B8mHXkG2We/xYAJKnwBhNZ6zi9UEoO39cVWgLQacMCB3hF/7xrU33qaktHG5WXLdgvMXktoVFOJqg/jf+X2MaWEAjnbCSjPGb/j0ltEzgmDD8QivceyYAnnjb9ZeoXAT1i5m8Cy4MD/wUfG2dYWhGZGiQ5uMkU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=0zY4SADx; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=pGLFkVZO; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=r+K3Yuud; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=IsJP6oUJ; arc=none smtp.client-ip=195.135.223.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 270431FC04;
-	Mon, 21 Oct 2024 10:58:38 +0000 (UTC)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 346D81FC0B;
+	Mon, 21 Oct 2024 11:01:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1729508318; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1729508511; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=F2uxdBA13vMIyxe5igUJesTE6g/+Q8UD52ks2NuJBT8=;
-	b=sky3yooix9pei98sjqsbnb9VhFMHsFiYNYrfdc0oBXeNx8hkpKvMDzCstDdDQUtCAig1YP
-	OH8i1xU9gPJ1dUlR+f/Mtg8pNy9IgNAuvGnV8XlPFfCCpbU49zDLqkxsydYAVtvdaG49cd
-	+HoJgnbC8immIaBGrFdmacVvbBRa7jE=
+	bh=/uzAZqwrffz0GfZcbbFJAi1Cc8srHYcy5A6w/IXR620=;
+	b=0zY4SADxy8Xl2DRUgszXaCfSqWj6xnjnzF9DAqaAVfSWLO5EYVxYVUJx8hjqCu9RHrYbb1
+	0w7M5ccDUXdU4xbK0kBqffMaInGVFQY0Ez+h7+0Xn/b9KJuQZEJzhnEzzHyR8rhMf/wgUR
+	IVSdUz44ejRGNo/MH09pzIDsef0huYE=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1729508318;
+	s=susede2_ed25519; t=1729508511;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=F2uxdBA13vMIyxe5igUJesTE6g/+Q8UD52ks2NuJBT8=;
-	b=HTpNCtRVeJesYMVqdNnLNRVCkJQiB/mxFNMCpvRYP7C351KhEscxJLQmVL/Q/JkR1c5uZa
-	PGb17uIM7/7+6UAw==
+	bh=/uzAZqwrffz0GfZcbbFJAi1Cc8srHYcy5A6w/IXR620=;
+	b=pGLFkVZOGNXKIQPKd+V8yRm6RRCPuvFkAs1n5vM/DXIoyEhyvIynLhEQJiQDabiUe/eRuK
+	zRhWD+9cf5iAbPCQ==
 Authentication-Results: smtp-out2.suse.de;
 	none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1729508318; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1729508509; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=F2uxdBA13vMIyxe5igUJesTE6g/+Q8UD52ks2NuJBT8=;
-	b=sky3yooix9pei98sjqsbnb9VhFMHsFiYNYrfdc0oBXeNx8hkpKvMDzCstDdDQUtCAig1YP
-	OH8i1xU9gPJ1dUlR+f/Mtg8pNy9IgNAuvGnV8XlPFfCCpbU49zDLqkxsydYAVtvdaG49cd
-	+HoJgnbC8immIaBGrFdmacVvbBRa7jE=
+	bh=/uzAZqwrffz0GfZcbbFJAi1Cc8srHYcy5A6w/IXR620=;
+	b=r+K3YuudzUMt4JgnchyCyrcuhbE18OcY5kvB2g9TiLZCdZBQxn/Gc+Ih2B5tIfLBFY2cTZ
+	Gi0OmMPYPcuHt4FUgEEv33cnYiHhh+J2DnKbwSjO7UTHtro88S9aRnSqW331+K+vcTBFei
+	QAkSOVP20DNgmymOqKgAFgfsrEUUA5c=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1729508318;
+	s=susede2_ed25519; t=1729508509;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=F2uxdBA13vMIyxe5igUJesTE6g/+Q8UD52ks2NuJBT8=;
-	b=HTpNCtRVeJesYMVqdNnLNRVCkJQiB/mxFNMCpvRYP7C351KhEscxJLQmVL/Q/JkR1c5uZa
-	PGb17uIM7/7+6UAw==
+	bh=/uzAZqwrffz0GfZcbbFJAi1Cc8srHYcy5A6w/IXR620=;
+	b=IsJP6oUJOuIp7I+7Ixaj+8Bh1Pqr3PG47+MQGKUqhJt0NynYDd9cuPLUD7hbq5tzBmoSNi
+	Ct4qTwbGF3e8v1Cg==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 6476A136DC;
-	Mon, 21 Oct 2024 10:58:37 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 717AC13A8F;
+	Mon, 21 Oct 2024 11:01:48 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id a1/OFt0zFmf6EgAAD6G6ig
-	(envelope-from <tzimmermann@suse.de>); Mon, 21 Oct 2024 10:58:37 +0000
-Message-ID: <aa679655-290e-4d19-9195-1a581431b9e6@suse.de>
-Date: Mon, 21 Oct 2024 12:58:36 +0200
+	id o8pkGpw0FmcnFAAAD6G6ig
+	(envelope-from <tzimmermann@suse.de>); Mon, 21 Oct 2024 11:01:48 +0000
+Message-ID: <d7ed9074-449c-4f63-8d65-167a83b8b03b@suse.de>
+Date: Mon, 21 Oct 2024 13:01:48 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -98,6 +98,7 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v8 3/5] drm: handle HAS_IOPORT dependencies
+From: Thomas Zimmermann <tzimmermann@suse.de>
 To: Arnd Bergmann <arnd@arndb.de>, Niklas Schnelle <schnelle@linux.ibm.com>,
  Brian Cain <bcain@quicinc.com>, Marcel Holtmann <marcel@holtmann.org>,
  Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
@@ -121,8 +122,8 @@ References: <20241008-b4-has_ioport-v8-0-793e68aeadda@linux.ibm.com>
  <20241008-b4-has_ioport-v8-3-793e68aeadda@linux.ibm.com>
  <64cc9c8f-fff3-4845-bb32-d7f1046ef619@suse.de>
  <a25086c4-e2fc-4ffc-bc20-afa50e560d96@app.fastmail.com>
+ <aa679655-290e-4d19-9195-1a581431b9e6@suse.de>
 Content-Language: en-US
-From: Thomas Zimmermann <tzimmermann@suse.de>
 Autocrypt: addr=tzimmermann@suse.de; keydata=
  xsBNBFs50uABCADEHPidWt974CaxBVbrIBwqcq/WURinJ3+2WlIrKWspiP83vfZKaXhFYsdg
  XH47fDVbPPj+d6tQrw5lPQCyqjwrCPYnq3WlIBnGPJ4/jreTL6V+qfKRDlGLWFjZcsrPJGE0
@@ -147,15 +148,15 @@ Autocrypt: addr=tzimmermann@suse.de; keydata=
  SAQO9xD1Zk9/61JWk8OysuIh7MXkl0fxbRKWE93XeQBhIJHQfnc+YBLprdnxR446Sh8Wn/2D
  Ya8cavuWf2zrB6cZurs048xe0UbSW5AOSo4V9M0jzYI4nZqTmPxYyXbm30Kvmz0rYVRaitYJ
  4kyYYMhuULvrJDMjZRvaNe52tkKAvMevcGdt38H4KSVXAylqyQOW5zvPc4/sq9c=
-In-Reply-To: <a25086c4-e2fc-4ffc-bc20-afa50e560d96@app.fastmail.com>
+In-Reply-To: <aa679655-290e-4d19-9195-1a581431b9e6@suse.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Level: 
+Content-Transfer-Encoding: 7bit
+X-Spam-Score: -2.80
 X-Spamd-Result: default: False [-2.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
+	BAYES_HAM(-3.00)[99.99%];
 	SUSPICIOUS_RECIPS(1.50)[];
 	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-0.997];
+	NEURAL_HAM_SHORT(-0.20)[-0.996];
 	MIME_GOOD(-0.10)[text/plain];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	ARC_NA(0.00)[];
@@ -174,167 +175,17 @@ X-Spamd-Result: default: False [-2.80 / 50.00];
 	RCVD_COUNT_TWO(0.00)[2];
 	TO_MATCH_ENVRCPT_ALL(0.00)[];
 	FUZZY_BLOCKED(0.00)[rspamd.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,imap1.dmz-prg2.suse.org:helo]
-X-Spam-Score: -2.80
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.de:mid]
 X-Spam-Flag: NO
+X-Spam-Level: 
 
-Hi
-
-Am 21.10.24 um 12:08 schrieb Arnd Bergmann:
-> On Mon, Oct 21, 2024, at 07:52, Thomas Zimmermann wrote:
->> Am 08.10.24 um 14:39 schrieb Niklas Schnelle:
-> d 100644
->>> --- a/drivers/gpu/drm/qxl/Kconfig
->>> +++ b/drivers/gpu/drm/qxl/Kconfig
->>> @@ -2,6 +2,7 @@
->>>    config DRM_QXL
->>>    	tristate "QXL virtual GPU"
->>>    	depends on DRM && PCI && MMU
->>> +	depends on HAS_IOPORT
->> Is there a difference between this style (multiple 'depends on') and the
->> one used for gma500 (&& && &&)?
-> No, it's the same. Doing it in one line is mainly useful
-> if you have some '||' as well.
->
->>> @@ -105,7 +106,9 @@ static void bochs_vga_writeb(struct bochs_device *bochs, u16 ioport, u8 val)
->>>    
->>>    		writeb(val, bochs->mmio + offset);
->>>    	} else {
->>> +#ifdef CONFIG_HAS_IOPORT
->>>    		outb(val, ioport);
->>> +#endif
->> Could you provide empty defines for the out() interfaces at the top of
->> the file?
-> That no longer works since there are now __compiletime_error()
-> versions of these funcitons. However we can do it more nicely like:
->
-> diff --git a/drivers/gpu/drm/tiny/bochs.c b/drivers/gpu/drm/tiny/bochs.c
-> index 9b337f948434..034af6e32200 100644
-> --- a/drivers/gpu/drm/tiny/bochs.c
-> +++ b/drivers/gpu/drm/tiny/bochs.c
-> @@ -112,14 +112,12 @@ static void bochs_vga_writeb(struct bochs_device *bochs, u16 ioport, u8 val)
->   	if (WARN_ON(ioport < 0x3c0 || ioport > 0x3df))
->   		return;
->   
-> -	if (bochs->mmio) {
-> +	if (!IS_DEFINED(CONFIG_HAS_IOPORT) || bochs->mmio) {
->   		int offset = ioport - 0x3c0 + 0x400;
->   
->   		writeb(val, bochs->mmio + offset);
->   	} else {
-> -#ifdef CONFIG_HAS_IOPORT
->   		outb(val, ioport);
-> -#endif
->   	}
-
-For all functions with such a pattern, could we use:
-
-bool bochs_uses_mmio(bochs)
-{
-     return !IS_DEFINED(CONFIG_HAS_IOPORT) || bochs->mmio
-}
-
-void writeb_func()
-{
-     if (bochs_uses_mmio()) {
-       writeb()
-#if CONFIG_HAS_IOPORT
-     } else {
-       outb()
-#endif
-     }
-}
-
-u8 readb_func()
-{
-     u8 ret = 0xff
-     if (bochs_uses_mmio()) {
-       ret = readb()
-#if CONFIG_HAS_IOPORT
-     } else {
-       ret = inb()
-#endif
-     }
-     return ret;
-}
-
-?
-
-The code in bochs_uses_mmio() could then also print a drm_warn_once if 
-we have neither MMIO nor I/O ports.
-
-I'd review a separate series for such a change.
-
->   }
->   
-> @@ -128,16 +126,12 @@ static u8 bochs_vga_readb(struct bochs_device *bochs, u16 ioport)
->   	if (WARN_ON(ioport < 0x3c0 || ioport > 0x3df))
->   		return 0xff;
->   
-> -	if (bochs->mmio) {
-> +	if (!IS_DEFINED(CONFIG_HAS_IOPORT) || bochs->mmio) {
->   		int offset = ioport - 0x3c0 + 0x400;
->   
->   		return readb(bochs->mmio + offset);
->   	} else {
-> -#ifdef CONFIG_HAS_IOPORT
->   		return inb(ioport);
-> -#else
-> -		return 0xff;
-> -#endif
->   	}
->   }
->   
-> @@ -145,32 +139,26 @@ static u16 bochs_dispi_read(struct bochs_device *bochs, u16 reg)
->   {
->   	u16 ret = 0;
->   
-> -	if (bochs->mmio) {
-> +	if (!IS_DEFINED(CONFIG_HAS_IOPORT) || bochs->mmio) {
->   		int offset = 0x500 + (reg << 1);
->   
->   		ret = readw(bochs->mmio + offset);
->   	} else {
-> -#ifdef CONFIG_HAS_IOPORT
->   		outw(reg, VBE_DISPI_IOPORT_INDEX);
->   		ret = inw(VBE_DISPI_IOPORT_DATA);
-> -#else
-> -		ret = 0xffff;
-> -#endif
->   	}
->   	return ret;
->   }
->   
->   static void bochs_dispi_write(struct bochs_device *bochs, u16 reg, u16 val)
->   {
-> -	if (bochs->mmio) {
-> +	if (!IS_DEFINED(CONFIG_HAS_IOPORT) || bochs->mmio) {
->   		int offset = 0x500 + (reg << 1);
->   
->   		writew(val, bochs->mmio + offset);
->   	} else {
-> -#ifdef CONFIG_HAS_IOPORT
->   		outw(reg, VBE_DISPI_IOPORT_INDEX);
->   		outw(val, VBE_DISPI_IOPORT_DATA);
-> -#endif
->   	}
->   }
->   
->> And the in() interfaces could be defined to 0xff[ff].
->>
->> I assume that you don't want to provide such empty macros in the
->> kernel's io.h header?
-> That was the original idea many years ago, but Linus rejected
-> my pull request for it, so Niklas worked through all drivers
-> individually to add the dependencies instead.
-
-I see.
-
-Best regards
-Thomas
 
 >
->       Arnd
+> I'd review a separate series for such a change.
+
+Could also be a single patch here, of course.
+
+
 
 -- 
 --
