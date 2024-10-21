@@ -1,185 +1,247 @@
-Return-Path: <linux-arch+bounces-8374-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8375-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E0B59A707F
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Oct 2024 19:03:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9F419A7094
+	for <lists+linux-arch@lfdr.de>; Mon, 21 Oct 2024 19:05:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 928381C21BE6
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Oct 2024 17:03:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 75EE0281D50
+	for <lists+linux-arch@lfdr.de>; Mon, 21 Oct 2024 17:05:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09D601CBE89;
-	Mon, 21 Oct 2024 17:03:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 143891EF095;
+	Mon, 21 Oct 2024 17:05:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LC8uPiyS"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Lviy4j23"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDBC85FEE4;
-	Mon, 21 Oct 2024 17:03:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40FF41EBA1E
+	for <linux-arch@vger.kernel.org>; Mon, 21 Oct 2024 17:05:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729530229; cv=none; b=F6HgPG4CyZ87unCDIwqH/c/HiAO/U2yKxtQ+GKEVxNtAE9pQSmlcYC741t6/bWROLCTurZJPvBQSFTul8Bgw4zq1H2PTR27NtK7DuZIrWF+my1QUIYtD6+QjaVe4RUEfj/QZEmUk2GZv7O3TxEDyQR4MrlXfOZIGs6riFJQ1niU=
+	t=1729530337; cv=none; b=Or37JJYha6X7XX6hmcqevStQFvAWBKKuLSe5USLWPn+loYtU98N1JvTzZ92xKbQW9/PFY36tGpjyikH//w0PiB7ppWy1Njn0crpP3mqGxN82eoYbKOllrhQnhYYnm4WiIXfbqThhTrqu6SJJ1eb0LoGDuMHO9QTREeitTrWhPcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729530229; c=relaxed/simple;
-	bh=qdcSsG7Nspv31rTgsMv20FyoyQtpL2Xr9wmtuOxBRN4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A6SMytHjEMSNi8Bk/J29lkORR1Hl4m7JcHEycBINakxSbS19M4VNaqIOVRbSVb7+qagi5t2XNbf3Lmqtjbg1X+odR11734P8zhqwHorFd9dp6ws6+5wAW/tjGd6Yyj2PzCoVHBbEaiAri1O0CXyexBjEz0WRuRwCSVFnZSSt8cA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LC8uPiyS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A1C1C4CEC3;
-	Mon, 21 Oct 2024 17:03:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729530229;
-	bh=qdcSsG7Nspv31rTgsMv20FyoyQtpL2Xr9wmtuOxBRN4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LC8uPiySrQaRFZJIDB2IOKCB4vuVK2UJIJkz3gPsFl3Hib2WR31pyl2vr0ko1qsYk
-	 hq2fPYHmEl+U+1IG5STcsIjYdCZcPKybq10blz0FrKKjTb8fx6cimfH9wMe3g7peDs
-	 lIY6KL2koKuX+o68+PkETwZe2LqAgsWiYPVnY2ibZ4c7sAyRp5273WNKVXmCtQ5FzQ
-	 /ulnvd4++x273hj6xevQvr3GSEJLqHh9c17KZKkZRZEvtkdHMjhk+M4TolD1clkb/4
-	 o2gDcmMNFORTcG17MN6CqUPybpiQoCDqewOEJ4tpQK8DYsAbmParKZi+7yfs9Yx0/y
-	 IrA+1lDE0jGow==
-Date: Mon, 21 Oct 2024 18:03:40 +0100
-From: Will Deacon <will@kernel.org>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Florent Revest <revest@chromium.org>,
-	linux-trace-kernel@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>, bpf <bpf@vger.kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-	Alan Maguire <alan.maguire@oracle.com>,
-	Mark Rutland <mark.rutland@arm.com>, linux-arch@vger.kernel.org,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH v17 01/16] function_graph: Pass ftrace_regs to entryfunc
-Message-ID: <20241021170340.GB26122@willie-the-truck>
-References: <172904026427.36809.516716204730117800.stgit@devnote2>
- <172904027515.36809.1961937054923520469.stgit@devnote2>
+	s=arc-20240116; t=1729530337; c=relaxed/simple;
+	bh=BomtKaAPp6iAz+DjK4Ovy8TY3LXZVC4CilUm6HW8a7k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XSdyXwbVVG/riF0gL6Q/xxnDbEH1mgFzU871NOj3gU6YCK3b7SBGyYZtDIVOSTGw2ZjX0U1Z0ifkqKqKknWbuUezDvjekt8/ePLltEcgL+EyyvfCsBRXZbY/ucinXlKgD2veD3BbaKrXMMQQZqCOFo4f7n8g447KjBrSZlVG1Q0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Lviy4j23; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1729530332;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=ODNFoAFliz5OgzyG0IVB5Hkf8p1AwS86NAZGmNqXWvA=;
+	b=Lviy4j23J23jvJtSeIaPQnx6tdAaf5ZBdBYoiE/QVW3J18tXh4EW3AWik4aFkfDa0E+iOG
+	KD1PN1e8dy73c7lnIwPA+YCXVOK5I4Fqlr7UF1Z2r9b3VZoJ6UVnFyIIJWuPe7fXnqCi5y
+	iwn57PTtyG0tcuOOuwKnD/oKWmE8AXg=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-427-5h9jCVn5NW-Ha8xLeLH5cg-1; Mon, 21 Oct 2024 13:05:30 -0400
+X-MC-Unique: 5h9jCVn5NW-Ha8xLeLH5cg-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-43151a9ea95so27571225e9.1
+        for <linux-arch@vger.kernel.org>; Mon, 21 Oct 2024 10:05:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729530330; x=1730135130;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ODNFoAFliz5OgzyG0IVB5Hkf8p1AwS86NAZGmNqXWvA=;
+        b=JbsUGQn+qw4nTQ7Ir/DHaUTL+dCQb6Ym3EzV5+9bIcft5QqicMRbtm4rrtnblg0umf
+         ZAsT4ZAV49PrFVp5bkUJOKBFuGOg7AqlGMczFL0oA9DjJWGxGbfMIF/gF/l7NRGEqM/s
+         1HUjeERI+4NBz7tPXIbfflOSv59EPNCVmTBDDNUGcDqpulsl70qf1NZJrRAyjO1HREYt
+         IlPdAd1r/r7tsTj8RIbqmB3pGrqINZr/UoinvCty3TNISYyWYoDZG4FTVco7fuxYV4o8
+         ON8J/FAI0rM62+2cEjNfSSt6i8gVH32hIqjdwhNwXyCR6SeNtHsBD7/SQVPoHzBa3E/P
+         aP5w==
+X-Forwarded-Encrypted: i=1; AJvYcCVkuuDwFbu6sCHmttjK/cOknVDpcIC6KQUfAiR2wHbEXxyN/0XsGc8Lx1JxWStvsPMS/YWXClhxOQmP@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZzhdPqkmo0H0tC8p7NVVNoOH26drTF+TBZ/gLPP+VPj7vgR5F
+	WhMAYAcqAR232KemIU9aCUOW6Tk/2za+2tn8Fr1aR81Ry6crS9ZqgkNo13NhMPa8qGuzAV9xcPD
+	MW3DCslKla1J1CROR2X+PeZOpsABIp/4jyAtCBqGElhV/cPZ1nFJ5jUpOsT8=
+X-Received: by 2002:adf:ebcc:0:b0:37d:5251:e5ad with SMTP id ffacd0b85a97d-37ef12592f2mr219272f8f.2.1729530329678;
+        Mon, 21 Oct 2024 10:05:29 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGUTnwrLPg/73ylsRI4bN+xpIrLXb6FnuLzamY0QaA1YpeEYZTdOBb6wYzS9gKLu1Yn5Y7vhQ==
+X-Received: by 2002:adf:ebcc:0:b0:37d:5251:e5ad with SMTP id ffacd0b85a97d-37ef12592f2mr219239f8f.2.1729530329187;
+        Mon, 21 Oct 2024 10:05:29 -0700 (PDT)
+Received: from [192.168.3.141] (p5b0c6747.dip0.t-ipconnect.de. [91.12.103.71])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4316f50b176sm63467975e9.0.2024.10.21.10.05.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Oct 2024 10:05:28 -0700 (PDT)
+Message-ID: <b13a83f4-c31c-441d-b18e-d63d78c4b2fb@redhat.com>
+Date: Mon, 21 Oct 2024 19:05:27 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <172904027515.36809.1961937054923520469.stgit@devnote2>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 3/5] mm: madvise: implement lightweight guard page
+ mechanism
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: Suren Baghdasaryan <surenb@google.com>,
+ "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+ Matthew Wilcox <willy@infradead.org>, Vlastimil Babka <vbabka@suse.cz>,
+ "Paul E . McKenney" <paulmck@kernel.org>, Jann Horn <jannh@google.com>,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ Muchun Song <muchun.song@linux.dev>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
+ <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+ Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
+ Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+ linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linux-arch@vger.kernel.org,
+ Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
+ linux-kselftest@vger.kernel.org, Sidhartha Kumar
+ <sidhartha.kumar@oracle.com>, Jeff Xu <jeffxu@chromium.org>,
+ Christoph Hellwig <hch@infradead.org>, linux-api@vger.kernel.org,
+ John Hubbard <jhubbard@nvidia.com>
+References: <cover.1729440856.git.lorenzo.stoakes@oracle.com>
+ <fce49bbbfe41b82161a37b022c8eb1e6c20e1d85.1729440856.git.lorenzo.stoakes@oracle.com>
+From: David Hildenbrand <david@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <fce49bbbfe41b82161a37b022c8eb1e6c20e1d85.1729440856.git.lorenzo.stoakes@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Oct 16, 2024 at 09:57:55AM +0900, Masami Hiramatsu (Google) wrote:
-> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+On 20.10.24 18:20, Lorenzo Stoakes wrote:
+> Implement a new lightweight guard page feature, that is regions of userland
+> virtual memory that, when accessed, cause a fatal signal to arise.
 > 
-> Pass ftrace_regs to the fgraph_ops::entryfunc(). If ftrace_regs is not
-> available, it passes a NULL instead. User callback function can access
-> some registers (including return address) via this ftrace_regs.
+> Currently users must establish PROT_NONE ranges to achieve this.
 > 
-> Note that the ftrace_regs can be NULL when the arch does NOT define:
-> HAVE_DYNAMIC_FTRACE_WITH_ARGS or HAVE_DYNAMIC_FTRACE_WITH_REGS.
-> More specifically, if HAVE_DYNAMIC_FTRACE_WITH_REGS is defined but
-> not the HAVE_DYNAMIC_FTRACE_WITH_ARGS, and the ftrace ops used to
-> register the function callback does not set FTRACE_OPS_FL_SAVE_REGS.
-> In this case, ftrace_regs can be NULL in user callback.
+> However this is very costly memory-wise - we need a VMA for each and every
+> one of these regions AND they become unmergeable with surrounding VMAs.
 > 
-> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Huacai Chen <chenhuacai@kernel.org>
-> Cc: WANG Xuerui <kernel@xen0n.name>
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Cc: Nicholas Piggin <npiggin@gmail.com>
-> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-> Cc: Naveen N Rao <naveen@kernel.org>
-> Cc: Madhavan Srinivasan <maddy@linux.ibm.com>
-> Cc: Paul Walmsley <paul.walmsley@sifive.com>
-> Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> Cc: Albert Ou <aou@eecs.berkeley.edu>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: x86@kernel.org
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> In addition repeated mmap() calls require repeated kernel context switches
+> and contention of the mmap lock to install these ranges, potentially also
+> having to unmap memory if installed over existing ranges.
 > 
+> The lightweight guard approach eliminates the VMA cost altogether - rather
+> than establishing a PROT_NONE VMA, it operates at the level of page table
+> entries - poisoning PTEs such that accesses to them cause a fault followed
+> by a SIGSGEV signal being raised.
+> 
+> This is achieved through the PTE marker mechanism, which a previous commit
+> in this series extended to permit this to be done, installed via the
+> generic page walking logic, also extended by a prior commit for this
+> purpose.
+> 
+> These poison ranges are established with MADV_GUARD_POISON, and if the
+> range in which they are installed contain any existing mappings, they will
+> be zapped, i.e. free the range and unmap memory (thus mimicking the
+> behaviour of MADV_DONTNEED in this respect).
+> 
+> Any existing poison entries will be left untouched. There is no nesting of
+> poisoned pages.
+> 
+> Poisoned ranges are NOT cleared by MADV_DONTNEED, as this would be rather
+> unexpected behaviour, but are cleared on process teardown or unmapping of
+> memory ranges.
+> 
+> Ranges can have the poison property removed by MADV_GUARD_UNPOISON -
+> 'remedying' the poisoning. The ranges over which this is applied, should
+> they contain non-poison entries, will be untouched, only poison entries
+> will be cleared.
+> 
+> We permit this operation on anonymous memory only, and only VMAs which are
+> non-special, non-huge and not mlock()'d (if we permitted this we'd have to
+> drop locked pages which would be rather counterintuitive).
+> 
+> Suggested-by: Vlastimil Babka <vbabka@suse.cz>
+> Suggested-by: Jann Horn <jannh@google.com>
+> Suggested-by: David Hildenbrand <david@redhat.com>
+> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
 > ---
->  Changes in v16:
->   - Add a note when the ftrace_regs can be NULL.
->   - Update against for the latest kernel.
->  Changes in v11:
->   - Update for the latest for-next branch.
->  Changes in v8:
->   - Just pass ftrace_regs to the handler instead of adding a new
->     entryregfunc.
->   - Update riscv ftrace_graph_func().
->  Changes in v3:
->   - Update for new multiple fgraph.
-> ---
->  arch/arm64/kernel/ftrace.c               |   20 +++++++++++-
->  arch/loongarch/kernel/ftrace_dyn.c       |   10 +++++-
->  arch/powerpc/kernel/trace/ftrace.c       |    2 +
->  arch/powerpc/kernel/trace/ftrace_64_pg.c |   10 ++++--
->  arch/riscv/kernel/ftrace.c               |   17 ++++++++++
->  arch/x86/kernel/ftrace.c                 |   50 +++++++++++++++++++++---------
->  include/linux/ftrace.h                   |   17 ++++++++--
->  kernel/trace/fgraph.c                    |   25 +++++++++------
->  kernel/trace/ftrace.c                    |    3 +-
->  kernel/trace/trace.h                     |    3 +-
->  kernel/trace/trace_functions_graph.c     |    3 +-
->  kernel/trace/trace_irqsoff.c             |    3 +-
->  kernel/trace/trace_sched_wakeup.c        |    3 +-
->  kernel/trace/trace_selftest.c            |    8 +++--
->  14 files changed, 129 insertions(+), 45 deletions(-)
+>   arch/alpha/include/uapi/asm/mman.h     |   3 +
+>   arch/mips/include/uapi/asm/mman.h      |   3 +
+>   arch/parisc/include/uapi/asm/mman.h    |   3 +
+>   arch/xtensa/include/uapi/asm/mman.h    |   3 +
+>   include/uapi/asm-generic/mman-common.h |   3 +
+>   mm/madvise.c                           | 168 +++++++++++++++++++++++++
+>   mm/mprotect.c                          |   3 +-
+>   mm/mseal.c                             |   1 +
+>   8 files changed, 186 insertions(+), 1 deletion(-)
 > 
-> diff --git a/arch/arm64/kernel/ftrace.c b/arch/arm64/kernel/ftrace.c
-> index b2d947175cbe..a5a285f8a7ef 100644
-> --- a/arch/arm64/kernel/ftrace.c
-> +++ b/arch/arm64/kernel/ftrace.c
-> @@ -481,7 +481,25 @@ void prepare_ftrace_return(unsigned long self_addr, unsigned long *parent,
->  void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
->  		       struct ftrace_ops *op, struct ftrace_regs *fregs)
->  {
-> -	prepare_ftrace_return(ip, &arch_ftrace_regs(fregs)->lr, arch_ftrace_regs(fregs)->fp);
-> +	unsigned long return_hooker = (unsigned long)&return_to_handler;
-> +	unsigned long frame_pointer = arch_ftrace_regs(fregs)->fp;
-> +	unsigned long *parent = &arch_ftrace_regs(fregs)->lr;
-> +	unsigned long old;
-> +
-> +	if (unlikely(atomic_read(&current->tracing_graph_pause)))
-> +		return;
-> +
-> +	/*
-> +	 * Note:
-> +	 * No protection against faulting at *parent, which may be seen
-> +	 * on other archs. It's unlikely on AArch64.
-> +	 */
-> +	old = *parent;
+> diff --git a/arch/alpha/include/uapi/asm/mman.h b/arch/alpha/include/uapi/asm/mman.h
+> index 763929e814e9..71e13f27742d 100644
+> --- a/arch/alpha/include/uapi/asm/mman.h
+> +++ b/arch/alpha/include/uapi/asm/mman.h
+> @@ -78,6 +78,9 @@
+>   
+>   #define MADV_COLLAPSE	25		/* Synchronous hugepage collapse */
+>   
+> +#define MADV_GUARD_POISON 102		/* fatal signal on access to range */
+> +#define MADV_GUARD_UNPOISON 103		/* revoke guard poisoning */
 
-Sorry to pick on this line again, but the comment is very non-committal]
-and I think this is something on which we need to be definitive.
+Just to raise it here: MADV_GUARD_INSTALL / MADV_GUARD_REMOVE or sth. 
+like that would have been even clearer, at least to me.
 
-Either the access can fault, and we should handle it, or it will never
-fault and we don't need to handle it. Saying it's unlikely means we
-need to handle it :)
+But no strong opinion, just if somebody else reading along was wondering 
+about the same.
 
-Will
+
+I'm hoping to find more time to have a closer look at this this week, 
+but in general, the concept sounds reasonable to me.
+
+-- 
+Cheers,
+
+David / dhildenb
+
 
