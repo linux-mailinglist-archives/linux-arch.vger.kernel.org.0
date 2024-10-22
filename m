@@ -1,81 +1,81 @@
-Return-Path: <linux-arch+bounces-8426-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8427-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CCB69AB687
-	for <lists+linux-arch@lfdr.de>; Tue, 22 Oct 2024 21:13:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39AF49AB69B
+	for <lists+linux-arch@lfdr.de>; Tue, 22 Oct 2024 21:18:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 526F3B22DA1
-	for <lists+linux-arch@lfdr.de>; Tue, 22 Oct 2024 19:13:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E1104281CD4
+	for <lists+linux-arch@lfdr.de>; Tue, 22 Oct 2024 19:18:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CFF91CB315;
-	Tue, 22 Oct 2024 19:13:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 234F01CB324;
+	Tue, 22 Oct 2024 19:18:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JjDKrhjU"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MMnBV/x6"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97ACE1C9ED9
-	for <linux-arch@vger.kernel.org>; Tue, 22 Oct 2024 19:13:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 889391C9ED8
+	for <linux-arch@vger.kernel.org>; Tue, 22 Oct 2024 19:18:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729624418; cv=none; b=hoA42dq78DXEB5MmrJOcmwHyDxR2KzcG2gByrcbywvyMHw+Z4BE7/XcGZNd0ABBXOh1gcj9E3LSe59uVs5LjiqGcHsvCckooO4LO2sb5ZIrjVRmlnp2f7wBJsrJeD5flX3vUeZAV4wF5OU4p7lqo+RDXP7EurhEzig3AwGHn5c8=
+	t=1729624703; cv=none; b=ILjq8xPnuc1+MChTvH15MvsXpbdzNiczy+NbiNJs+xEJIIRuUlVjSJuezaxKwpFu1wHtAf8oSEBvHehihcdKFiBH4gB0TAZgSADL1QjP24wdUhXnEYciHNdfn9RIQADbOVp47mkyKFvXKzi6NGE9p6HC9tjZTDoZT3R039exE/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729624418; c=relaxed/simple;
-	bh=juVarUPviZ3Y9dv25YqG6HrLREtLnb9dxD9qz28UjWw=;
+	s=arc-20240116; t=1729624703; c=relaxed/simple;
+	bh=ktGBOrU2ibyKA1CLQpoQeK9t4bLhf2yY7EYFTFIdFqM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZUoWtwLS5PhWO4803NbBldIZ0yibQvn3qRzZY1uuj98S5nlq6Vs+VXQSkGdEpI+gNvPdbAj93btsCyr2cuf4gsXTkyf/cnYrBE7UsAGH2f+BJiD1J8PNDzJBM0LHHRhNOxXuILuiXP9x37eeGwyoJ9h+wm8rVA0NTUoJldxIc8M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JjDKrhjU; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:Content-Type; b=BvAdxsFEpjfwxt34WSf765uK9ZABjU1XM0nvIV0i5OAO3MzqZbm1DX7/vaBYxDn9scl9Jm6UIOPQR/e7oeY9QnYGl1tPkm1qBrNeNe4zlWDiRG/mLMPGZ9LDo4uA0kP8nedIuTQA9C3VVtt1zyooHQ0rc1RyeBzIjoUc8tr26T8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MMnBV/x6; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1729624415;
+	s=mimecast20190719; t=1729624700;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=JQB1D++mgBq6rqJS2wjNPRobEh+Vi2Q7sndX1MLqJFc=;
-	b=JjDKrhjUVUl88TWLiW76PyQp75QH21IoocwoinJ1C1jGEkopRZCC+GziA16MJR0NEZpI8G
-	IFNQf5mO9zydJU4J/8WsxUM9hydmByvZ6ftnZNGOlIeJiGkf1NYgCrrqACKNIbB7E3lelK
-	zEr1HLDJG6QmnitW5o87NOZCtFbp/NA=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=nMzc8QHGqocB61rX5XoKNwKEs55suX3e2g56nFdKa9s=;
+	b=MMnBV/x6QVhw71zKf2GIslaFB0eiZwy8cbZFQH8MZr7/ulbqVVY8EcCxOJtbYTurnHKox6
+	h0RMRZRJ34Sklr92KwUNKJaAMTIRdfFhufV7WDeYIF89ZtPV2Fzsvcfk1EWDVlwk/Zw6nE
+	X/wEgY8epgqaD/jhjTlwAVRT2nhtqIM=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-616-Pmn7xXo9P5qIi3Lij9UbMw-1; Tue, 22 Oct 2024 15:13:33 -0400
-X-MC-Unique: Pmn7xXo9P5qIi3Lij9UbMw-1
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-431673032e6so29611765e9.0
-        for <linux-arch@vger.kernel.org>; Tue, 22 Oct 2024 12:13:32 -0700 (PDT)
+ us-mta-627-ie7arWsYNvOSEAbIKr9pRA-1; Tue, 22 Oct 2024 15:18:18 -0400
+X-MC-Unique: ie7arWsYNvOSEAbIKr9pRA-1
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-37d52ca258eso2958888f8f.3
+        for <linux-arch@vger.kernel.org>; Tue, 22 Oct 2024 12:18:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729624412; x=1730229212;
+        d=1e100.net; s=20230601; t=1729624697; x=1730229497;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
          :content-language:from:references:cc:to:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=JQB1D++mgBq6rqJS2wjNPRobEh+Vi2Q7sndX1MLqJFc=;
-        b=OobYTFc8pWsWXiRYnfT8AGEtj07/NS83gm8ZxSSYj2Urc0jIBQvvdKheCevbqT8j8B
-         N+e7r2reL0yF8jT8ynC6fof1qZ6QdpU1TYWLnkNX5wBMVQStnn5/NhmsQbG0H138bSXe
-         7whjP54GsUWbDzSqNW2e/9ppdwhwsRzqTOszHKV3zOkMFyfQIHUKU3PKBdd9fAheANfA
-         eesoyZFiiPPI2qhbtPtEX6DEITpu8tPqLEyfu9jzuPnorxRnwgk22BFx1JTD1MfsIYlf
-         bH2o0zbc3vTS2U5Mj6KaUslhJYcNLejEMEQrAvl8eHEgbqxwI5yT+sK9VAeYxi8vYO8w
-         1Jqw==
-X-Forwarded-Encrypted: i=1; AJvYcCXqdy45+8Os5OgxXysaQknu0Zv+rVFxf6ekSqe//GX+lb4qekDiwXQV/sVQkar0REoabOVoUwK0l3+D@vger.kernel.org
-X-Gm-Message-State: AOJu0YyhvlajQdgQ1N/NBBGVAA9iJ/RNBi8ehaZk3sOBMfE1g0M6qpAY
-	CJhOtoLQb2VSNMabdrnDh6ycglDcyfhk5erSoC6Gjo/ltmz5drMAjWbbr4uKihqmtEK+2UoaqJp
-	DNlW7NrAkaJ8gYlltEU+FB65jTTEQGtcFNUiWTCbqYzzSOa695OxNZ0VjvOM=
-X-Received: by 2002:a05:600c:3146:b0:431:52b7:a485 with SMTP id 5b1f17b1804b1-4318415c3f8mr1814345e9.19.1729624411960;
-        Tue, 22 Oct 2024 12:13:31 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHjMkppZQE3e+ZHbFlzdfNT2/fELgudA1DzF43wqQgxALikNjAl1XCDoSkp15Ycvqa/1uALew==
-X-Received: by 2002:a05:600c:3146:b0:431:52b7:a485 with SMTP id 5b1f17b1804b1-4318415c3f8mr1814025e9.19.1729624411508;
-        Tue, 22 Oct 2024 12:13:31 -0700 (PDT)
+        bh=nMzc8QHGqocB61rX5XoKNwKEs55suX3e2g56nFdKa9s=;
+        b=gKiKO5WnM+xqWBK6k+gbKFmps5YftnNhXywKTEaZyuNmXoBib2njA+YvM5r9UWWNWS
+         5YY6Z0V/Mzsn/JkBUUupagFfw6HvFhvRqjih185hxVRk5y9mJEpKOztl0K0mMZ18nEz/
+         TObUm2qHiqIoMRAs8c8UP4/UPa1ZzuApDlbLIrx8nfa9TWPNxPH1iGDhYPS1HU+1WFfh
+         ngdTxjM/P9lAMfph8MN59t3H4arTfjMQsNLxvw5OMlx7VQA11L29YP0Yq2Ca0ouU/Jhu
+         OlNht1r/291TED4MJybEKLiypb8123u6f4AXWTA6od6ZPOWVydPfvQiZP69qTBbCLVxS
+         IV+A==
+X-Forwarded-Encrypted: i=1; AJvYcCVfnqRYkYCI09VWKFZdHiol5W3PHYufB6Vynd2SiL6/uSj92V33inUI3fPGSbmovv4jXblJi5Sj2xPp@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywmoo5YmctLyx4YujcbltpFqYaL/muv1RNippHs7wV8kr4jHjCm
+	R61xxL6FaEZ8/F6BnAJcMJMHFuer8JZHTh2fiNC+fGtZet5mlKD35sZMaaY+byK1Kk+O6tsXIJ1
+	/35HdUieSJts/WL9e6zJOdmDlnzboSSLfTo7J9aFuo9lA/yShobb3Bg+9mm4=
+X-Received: by 2002:adf:e5ce:0:b0:37c:d11e:949 with SMTP id ffacd0b85a97d-37efcf1af60mr18278f8f.28.1729624697267;
+        Tue, 22 Oct 2024 12:18:17 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEoPK9FsuMMcR3vFXuE14B+EV27LkHnlyKqvIJrsQXoZ6JmxepIiPSXUkeIqXtkohYh9SxL/g==
+X-Received: by 2002:adf:e5ce:0:b0:37c:d11e:949 with SMTP id ffacd0b85a97d-37efcf1af60mr18238f8f.28.1729624696851;
+        Tue, 22 Oct 2024 12:18:16 -0700 (PDT)
 Received: from ?IPV6:2003:cb:c705:f700:352b:d857:b95d:9072? (p200300cbc705f700352bd857b95d9072.dip0.t-ipconnect.de. [2003:cb:c705:f700:352b:d857:b95d:9072])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4316f57102asm95608155e9.1.2024.10.22.12.13.29
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37ee0b93dfesm7173437f8f.66.2024.10.22.12.18.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Oct 2024 12:13:31 -0700 (PDT)
-Message-ID: <43dc4de2-1838-45dd-8d8f-3e5b95624c74@redhat.com>
-Date: Tue, 22 Oct 2024 21:13:28 +0200
+        Tue, 22 Oct 2024 12:18:16 -0700 (PDT)
+Message-ID: <2eaaff77-ec6e-405a-825a-168fe49c0884@redhat.com>
+Date: Tue, 22 Oct 2024 21:18:14 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -83,7 +83,8 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/5] mm: add PTE_MARKER_GUARD PTE marker
+Subject: Re: [PATCH v2 3/5] mm: madvise: implement lightweight guard page
+ mechanism
 To: Vlastimil Babka <vbabka@suse.cz>,
  Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
 Cc: Andrew Morton <akpm@linux-foundation.org>,
@@ -105,18 +106,15 @@ Cc: Andrew Morton <akpm@linux-foundation.org>,
  <sidhartha.kumar@oracle.com>, Jeff Xu <jeffxu@chromium.org>,
  Christoph Hellwig <hch@infradead.org>, linux-api@vger.kernel.org,
  John Hubbard <jhubbard@nvidia.com>
-References: <081837b697a98c7fa5832542b20f603d49e0b557.1729440856.git.lorenzo.stoakes@oracle.com>
- <470886d2-9f6f-4486-a935-daea4c5bea09@suse.cz>
- <434a440a-d6a4-4144-b4fb-8e0d8535f03f@lucifer.local>
- <caf95a99-e975-4f3d-a94b-298a5fc88b5a@suse.cz>
- <4f4e41f1-531c-4686-b44d-dacdf034c241@lucifer.local>
- <cb0e49be-7b4e-4760-884c-8f4bf74ec1e1@redhat.com>
- <ea771edf-0e38-440f-b264-3cbe285a628b@lucifer.local>
- <49afa956-21e1-4b3d-9dde-82a6891f2902@redhat.com>
- <cbf17dc3-01eb-4416-8ec5-cac05e50d663@lucifer.local>
- <ef0e11c5-13cf-4d47-a277-41da317be165@redhat.com>
- <acf358a4-c503-4347-8156-9269c43bf796@lucifer.local>
- <8329667f-73b6-48fe-8f3c-07c741462fee@suse.cz>
+References: <cover.1729440856.git.lorenzo.stoakes@oracle.com>
+ <fce49bbbfe41b82161a37b022c8eb1e6c20e1d85.1729440856.git.lorenzo.stoakes@oracle.com>
+ <c37ada68-5bf5-4ca5-9de8-c0838160c443@suse.cz>
+ <6c282299-506f-45c9-9ddc-9ef4de582394@redhat.com>
+ <fedd19ce-ea15-4ded-a1b5-ff050de15bba@suse.cz>
+ <9727ada4-0048-499b-a43f-ac0a625bae5d@redhat.com>
+ <73134e10-19eb-4e52-b87f-5fbfd322b575@lucifer.local>
+ <0f7a6b69-5706-4010-ba7a-68a071922c80@redhat.com>
+ <b92c58da-ec94-409b-8cdf-46eb3d2c7870@suse.cz>
 From: David Hildenbrand <david@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
@@ -164,58 +162,57 @@ Autocrypt: addr=david@redhat.com; keydata=
  jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
  WNyWQQ==
 Organization: Red Hat
-In-Reply-To: <8329667f-73b6-48fe-8f3c-07c741462fee@suse.cz>
+In-Reply-To: <b92c58da-ec94-409b-8cdf-46eb3d2c7870@suse.cz>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 21.10.24 19:26, Vlastimil Babka wrote:
-> On 10/21/24 19:14, Lorenzo Stoakes wrote:
->> On Mon, Oct 21, 2024 at 07:00:53PM +0200, David Hildenbrand wrote:
->>>
->>>>
->>>>>
->>>>>>
->>>>>> Also the existing logic is that existing markers (HW poison, uffd-simulated HW
->>>>>> poison, uffd wp marker) are retained and no error raised on MADV_DONTNEED, and
->>>>>> no error on MADV_FREE either, so it'd be consistent with existing behaviour.
->>>>>
->>>>>
->>>>> HW poison / uffd-simulated HW poison are expected to be zapped: it's just
->>>>> like a mapped page with HWPOISON. So that is correct.
->>>>
->>>> Well, poison is _not_ zapped on MADV_DONTNEED but _is_ on MADV_FREE :) anyway, I
->>>
->>> Huh?
->>>
->>> madvise_dontneed_single_vma()->zap_page_range_single(details=NULL)->unmap_single_vma(details=NULL)
->>> ... zap_pte_range()
->>>
->>> } else if (is_hwpoison_entry(entry) ||
->>> 	   is_poisoned_swp_entry(entry)) {
->>> 	if (!should_zap_cows(details))
->>> 		continue;
->>> 	...
->>>
->>> Should just zap them.
->>>
->>> What am I missing?
+On 21.10.24 23:35, Vlastimil Babka wrote:
+> On 10/21/24 23:20, David Hildenbrand wrote:
+>>> I don't think there's really any value in that. There's just no sensible
+>>> situation in which a user would care about this I don't think.
 >>
->> Yeah ok it's me who's missing something here, I hadn't noticed details == NULL
->> so should_zap_cows() is true, my mistake!
+>> Making sure nobody touches an area, and wile doing that somebody already
+>> touched that area? I guess it could be worked around by
+>> mprotect(PROT_NONE),madvise(GUARD),mprotect(PROT_READ|PROT_WRITE) ...
+>> which is not particularly nice :)
+>>
+>>>
+>>> And if you're saying 'hey do MADV_DONTNEED if this fails and keep trying!'
+>>> then why not just do that in the kernel?
+>>
+>> Heh, no!
+>>
+>> If user space doesn't expect there to be something, it should *fail*.
+>> That's likely going to be the majority of use cases for guard pages
+>> (happy to be told otherwise). No retry.
+>>
+>> And if user space expects there to be something it should zap ahead of
+>> time (which some allocators maybe already do to free up memory after
+>> free()) to then install the guard. No retry.
+>>
+>> There is this case where user space might be unsure. There, it might
+>> make sense to retry exactly once.
 > 
-> Well, good to know it's consistent then. As I've explained I see why zapping
-> actual hwpoison makes sense for MADV_DONTNEED/MADV_FREE. That it's done also
-> for uffd poison is not completely clear, but maybe it was just easier to
-> implement. 
+> I've thought so too and the RFC was implemented like this, but Jann came up
+> with a scenario where a THP can cause the range including our
+> to-be-installed guard pte to be populated even if the userspace is not
+> trying to access that exact address, see here:
+> 
+> https://lore.kernel.org/all/CAG48ez3vqbqyWb4bLdpqSUnhwqGo2OQetecNhEGPdCGDr94nbQ@mail.gmail.com/
 
-Note that in VM context "uffd poison" really just is "this was hwpoison 
-on the source VM, so we mimic that on the destination VM, because the 
-data *is* lost" -- so you want the exact same behavior.
+Ah, THP, I should have realized that myself. Yes indeed, in some cases 
+we'll have to zap because something was already populated. Not sure how 
+often it will happen in practice, will depend on the use case.
 
-For example, when a VM reboots you might just want to ZAP these hwpoison 
-entries, and get fresh pages on next access.
+For use cases like one "one static guard page every 2MiB", I would 
+assume we install the guard pages early, before expecting any page 
+faults in that area. Likely there are other ones where it might happen 
+more frequently.
 
-So to me it makes sense that they are treated equally.
+For uffd that does not apply, because khugepaged backs off with uffd 
+enabled and the only way to resolve a fault is using uffd -- which 
+places exactly what was requested by user space. So, no populated PTEs 
+without actual page faults on the corresponding virtual addresses.
 
 -- 
 Cheers,
