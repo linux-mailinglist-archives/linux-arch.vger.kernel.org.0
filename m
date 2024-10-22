@@ -1,81 +1,81 @@
-Return-Path: <linux-arch+bounces-8423-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8424-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 997FC9AB5D5
-	for <lists+linux-arch@lfdr.de>; Tue, 22 Oct 2024 20:14:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 828249AB60B
+	for <lists+linux-arch@lfdr.de>; Tue, 22 Oct 2024 20:43:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B4B3C1C231AE
-	for <lists+linux-arch@lfdr.de>; Tue, 22 Oct 2024 18:14:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3DE4728140C
+	for <lists+linux-arch@lfdr.de>; Tue, 22 Oct 2024 18:43:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B98C81C9DFC;
-	Tue, 22 Oct 2024 18:14:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 238DB1C9DFF;
+	Tue, 22 Oct 2024 18:43:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="K7CofaKZ"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QaOjtgbv"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E18B71C9B8C
-	for <linux-arch@vger.kernel.org>; Tue, 22 Oct 2024 18:14:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 733241BDA87
+	for <linux-arch@vger.kernel.org>; Tue, 22 Oct 2024 18:43:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729620843; cv=none; b=d5rgyRsvj4/QS20eNNkq4jhKqjizUHvkzRKHmxJtZGo0lkKx0NXNZAGkudQ8LD5FO557QC3/X5XkLBDj5/xc+7BurHoF+NA+ZKaV2HmPciuxta0rRjWiCR62tex78hDfKD4c4f+oVJ2N1zxbQy/nse54TAykj+LrEY3vZZfr5x8=
+	t=1729622626; cv=none; b=RNVoI1eDW0kOEh56HYHQSEFqEnIhjSui4iwZh6nKgVtmJS37qbtkrLRuKEekUtqFYkFsw4C7aXF+yF1Z8CBpW5zFJrwFLuzHp7RVJjZXrbYsVwt8KluTskALG0lGV060edAJq2CmT4zJNyFK8YNbI/nfviqEkCDDMz6iEUUHdXo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729620843; c=relaxed/simple;
-	bh=R1ADCcmYY8bcO+znJxrVQjEFw/yCprdH8NZua8vsz8I=;
+	s=arc-20240116; t=1729622626; c=relaxed/simple;
+	bh=RH2Ku6mP7nFuCD6W4uDKjQlzj/bGbQJSMLTCqceTPJg=;
 	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=qq4ifulRI6t9Id/HkTGY95DZ8mpkQIg6F0U5l45LcaIfqoxZXVIWA0RABpmPKudTl5knuAnqrBpWZ6hP1V7KopzylpOZ77IkqiSbuOpnYIScfgU/0FoRysHb+8eGk2mwL1RDL1JkuVIAt6zqjzpsZ+GZ7UtBnS0W0+A+n9/nm/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=K7CofaKZ; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:Content-Type; b=UV4c0w37ak+SSa1oQBAG0KQTaXMWCGTJzA0Dt6/zKRAFwWkvsG89PxPu4SvIIeDjUBAA6nFIWMh7v7VWtVH2SfZZOdjMjYEDZr7SYg2fVu7lLHV+McmEoAhTW7EGdvjIufJ9R7trC/QSE2/waNS8LTZk75RK1NcLTefplUXULyA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QaOjtgbv; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1729620840;
+	s=mimecast20190719; t=1729622623;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=nmEAuKJ1898rv/iT7aiiwZ8w/gvt2Ka8z3DW8Hbnbus=;
-	b=K7CofaKZDsTm5BlTl3NMriU3pw5To+YyuOKN8hyzMunUs8UzK1xins4On1Td7F+B848Awn
-	exGlCPeSZ/IAV/vDKwqp2AVol5u0S5W/Djv8xk/NuPkW/32DQjfTJKrltC+avfBPYygd9e
-	+VHbxYPdP/wWgeEpjiuqPk2ulecDvGY=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=9AEvrlOO5dp2WqlHWZRSpco8mcCd4ymRTcjk9/3f/Ok=;
+	b=QaOjtgbvhKZDUMbqxh6bBTH5wHQ8xoKAH8BeXfQF3/4ZdGkE9+liSy5DZvPjvCv+8yd5Ge
+	8lWeMneEqlJLzRO1rSAranipVZXK8JQP5P53NQRSjnaWRcAQT8LnGDc1Gbw238d33gzi4L
+	7wVGJYwcrkal1tXWnzIwskiDo55OQYg=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-220-v98EjHj5MM-UQ_unZzechg-1; Tue, 22 Oct 2024 14:13:57 -0400
-X-MC-Unique: v98EjHj5MM-UQ_unZzechg-1
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-4316e350d6aso22625375e9.3
-        for <linux-arch@vger.kernel.org>; Tue, 22 Oct 2024 11:13:57 -0700 (PDT)
+ us-mta-601-MJVHFbNJNGaU8a4Nt-1xsg-1; Tue, 22 Oct 2024 14:43:42 -0400
+X-MC-Unique: MJVHFbNJNGaU8a4Nt-1xsg-1
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-43157e3521dso42871335e9.1
+        for <linux-arch@vger.kernel.org>; Tue, 22 Oct 2024 11:43:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729620836; x=1730225636;
+        d=1e100.net; s=20230601; t=1729622621; x=1730227421;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :references:cc:to:from:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=nmEAuKJ1898rv/iT7aiiwZ8w/gvt2Ka8z3DW8Hbnbus=;
-        b=Hw8E7sHeu2rDh7v5w8JKZYc+vSDVaVOZD5bVST24qnZh0r1z7EWiivTjPX1j+fFHKk
-         xzTLJ/sbFt1hIyyj09UDBcFgxT7o5qzF1KHMnl6CeEEvzGZjlfXVoks5M514PjAmeQzW
-         0yUKvDA5jzFBD8zM1FSBggS5bgpbAB4jEUWMaaLVowVRIzUHKeMhP5dAjJoQ3/h5V4vR
-         6Ym5j5FzRM9m90DidArSKvUtlKAb4BVm4UvFLzHz7sYSVEMk/ZCAWvB5BdAvbFUC4k4C
-         55cQck8kX+xVS/bZw2A7VGvsYlCgUvA1MD5FkGj5QTzpw+DG9j6pLBd+f88k2nwyPLUI
-         OkmQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX51K1s+bXFLZuoT0May9AuyKmoO3V2ZzIDVmMpumypX+Tldkj/jGusZLYF57SOLFG8iXi0O+mZIl8Z@vger.kernel.org
-X-Gm-Message-State: AOJu0YyboCNqben/JGqa0X6XfV4Viw3USDAR5BkKS7pw/t4H+yjwTOab
-	k6U5UiqraIg+wdkIOh+qtGvHCk5Qib56hoDXme3Z5DiIWsSmaDI+WNrXyJ1HeJrPi+9QsEiI6tk
-	7tgig1MFH+AUdccf4doZ+wCqoHRACXG9g/v81YcPw7+Nk2B4RaAi0gbQ9Jx8=
-X-Received: by 2002:a05:600c:46c8:b0:431:44fe:fd9a with SMTP id 5b1f17b1804b1-43184209b20mr589205e9.19.1729620836188;
-        Tue, 22 Oct 2024 11:13:56 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGgVuJF3tNyoKR0ZpMUyC1gfyUykk6LdqiHXZPy71+bi7Q8XRE563mRg53z0FisKX5Op4RymA==
-X-Received: by 2002:a05:600c:46c8:b0:431:44fe:fd9a with SMTP id 5b1f17b1804b1-43184209b20mr589135e9.19.1729620835815;
-        Tue, 22 Oct 2024 11:13:55 -0700 (PDT)
+        bh=9AEvrlOO5dp2WqlHWZRSpco8mcCd4ymRTcjk9/3f/Ok=;
+        b=T16JpoKDBcLbfI4XFt2HIb2lBG3KZOl+73nO/moaujRt9ag0GWzu1HUYpL2QlSbbme
+         SFESMImhOwaHF67HBSsDs1C6dsp696NDo2EPtk6txbJJRLUdrFTcU6R6Dhg5KSuDO86u
+         h3LTIZ6HgotqqyBdiEqKXO9j5220i1S2f3Km02eucomM2VRPb4CTTFQA3V8J7IzE5w+7
+         ydXFxfEZoMQb6a4KcoKWdMGiDbOe//icUCZICx2hHmbaWQEootAV392RzWQEXKuFqRIJ
+         64MbDL51HtS98IUeXEdqiy88WESEGqsZOrzRoFZ4PGdl9VNyHP1L+t6+UuRBeXRBGqno
+         k+FQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW6yScp0yky/Qs7ql6gv+4U4MWpKKVgrXu9sKIsXcTknzTeiGMd1NIJcIa1rvQDQSefH3HhTs3jPqdW@vger.kernel.org
+X-Gm-Message-State: AOJu0Yymk2ezBUCYG44saykV5w2gw9fqfCFcgQp1N2G5c/CAwWlus/5Q
+	sRE8FWFugW5s0iTcKVSMbIM8WySObSFFeNzkSMrfwQZrAo2Rs4zDnfz8f77jU3qjfJ+TxBSUoFh
+	/pCrUggIQgWg7UjzFY8wAT0H7tMi48WFhysopMUzuEfu3JoL9be2iIxiEUzY=
+X-Received: by 2002:a05:600c:46d0:b0:431:57e5:b251 with SMTP id 5b1f17b1804b1-4318424ea03mr1093075e9.28.1729622620968;
+        Tue, 22 Oct 2024 11:43:40 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHSwRO3kXDdah/XTLL3po6/+T5YX6LneczxVS1SqFXwRJeZWJFqERrHWHyJw/nPnXTkTa+KTQ==
+X-Received: by 2002:a05:600c:46d0:b0:431:57e5:b251 with SMTP id 5b1f17b1804b1-4318424ea03mr1092955e9.28.1729622620596;
+        Tue, 22 Oct 2024 11:43:40 -0700 (PDT)
 Received: from [192.168.0.7] (ip-109-40-241-30.web.vodafone.de. [109.40.241.30])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4316f5c2b46sm94231575e9.36.2024.10.22.11.13.54
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4316f58f0efsm96392775e9.26.2024.10.22.11.43.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Oct 2024 11:13:54 -0700 (PDT)
-Message-ID: <834e8e07-b77b-4921-ab42-87cc434f50e9@redhat.com>
-Date: Tue, 22 Oct 2024 20:13:53 +0200
+        Tue, 22 Oct 2024 11:43:40 -0700 (PDT)
+Message-ID: <3e80f240-e95c-47ed-80a5-18a722dbb2c6@redhat.com>
+Date: Tue, 22 Oct 2024 20:43:38 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -83,11 +83,13 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] microblaze: Remove empty #ifndef __ASSEMBLY__ statement
+Subject: Re: [PATCH] hexagon: Move kernel prototypes out of uapi/asm/setup.h
+ header
 From: Thomas Huth <thuth@redhat.com>
-To: Michal Simek <monstr@monstr.eu>, Arnd Bergmann <arnd@arndb.de>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-References: <20240502173132.57098-1-thuth@redhat.com>
+To: Brian Cain <bcain@quicinc.com>
+Cc: linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+ linux-arch@vger.kernel.org, linux-hexagon@vger.kernel.org
+References: <20240502173818.58152-1-thuth@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=thuth@redhat.com; keydata=
  xsFNBFH7eUwBEACzyOXKU+5Pcs6wNpKzrlJwzRl3VGZt95VCdb+FgoU9g11m7FWcOafrVRwU
@@ -131,31 +133,74 @@ Autocrypt: addr=thuth@redhat.com; keydata=
  oiT+z+/E59qj/EKfyce3sbC9XLjXv3mHMrq1tKX4G7IJGnS989E/fg6crv6NHae9Ckm7+lSs
  IQu4bBP2GxiRQ+NV3iV/KU3ebMRzqIC//DCOxzQNFNJAKldPe/bKZMCxEqtVoRkuJtNdp/5a
  yXFZ6TfE1hGKrDBYAm4vrnZ4CXFSBDllL59cFFOJCkn4Xboj/aVxxJxF30bn
-In-Reply-To: <20240502173132.57098-1-thuth@redhat.com>
+In-Reply-To: <20240502173818.58152-1-thuth@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 02/05/2024 19.31, Thomas Huth wrote:
-> Likely an unnecessary remainder of the scripted UAPI cleanup that
-> happened long ago...
+On 02/05/2024 19.38, Thomas Huth wrote:
+> The kernel function prototypes are of no use for userspace and
+> shouldn't get exposed in an uapi header, so let's move them into
+> an internal header instead.
 > 
 > Signed-off-by: Thomas Huth <thuth@redhat.com>
 > ---
->   arch/microblaze/include/uapi/asm/setup.h | 3 ---
->   1 file changed, 3 deletions(-)
+>   arch/hexagon/include/asm/setup.h      | 20 ++++++++++++++++++++
+>   arch/hexagon/include/uapi/asm/setup.h | 14 ++------------
+>   2 files changed, 22 insertions(+), 12 deletions(-)
+>   create mode 100644 arch/hexagon/include/asm/setup.h
 > 
-> diff --git a/arch/microblaze/include/uapi/asm/setup.h b/arch/microblaze/include/uapi/asm/setup.h
-> index 6831794e6f2c..16c56807f86a 100644
-> --- a/arch/microblaze/include/uapi/asm/setup.h
-> +++ b/arch/microblaze/include/uapi/asm/setup.h
-> @@ -14,7 +14,4 @@
+> diff --git a/arch/hexagon/include/asm/setup.h b/arch/hexagon/include/asm/setup.h
+> new file mode 100644
+> index 000000000000..9f2749cd4052
+> --- /dev/null
+> +++ b/arch/hexagon/include/asm/setup.h
+> @@ -0,0 +1,20 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (c) 2010-2011, The Linux Foundation. All rights reserved.
+> + *
+> + * This program is free software; you can redistribute it and/or modify
+> + * it under the terms of the GNU General Public License version 2 and
+> + * only version 2 as published by the Free Software Foundation.
+> + */
+> +
+> +#ifndef _ASM_HEXAGON_SETUP_H
+> +#define _ASM_HEXAGON_SETUP_H
+> +
+> +#include <linux/init.h>
+> +#include <uapi/asm/setup.h>
+> +
+> +extern char external_cmdline_buffer;
+> +
+> +void __init setup_arch_memory(void);
+> +
+> +#endif
+> diff --git a/arch/hexagon/include/uapi/asm/setup.h b/arch/hexagon/include/uapi/asm/setup.h
+> index 8ce9428b1583..598f74f671f6 100644
+> --- a/arch/hexagon/include/uapi/asm/setup.h
+> +++ b/arch/hexagon/include/uapi/asm/setup.h
+> @@ -17,19 +17,9 @@
+>    * 02110-1301, USA.
+>    */
 >   
->   #define COMMAND_LINE_SIZE	256
->   
-> -# ifndef __ASSEMBLY__
+> -#ifndef _ASM_SETUP_H
+> -#define _ASM_SETUP_H
 > -
-> -# endif /* __ASSEMBLY__ */
->   #endif /* _UAPI_ASM_MICROBLAZE_SETUP_H */
+> -#ifdef __KERNEL__
+> -#include <linux/init.h>
+> -#else
+> -#define __init
+> -#endif
+> +#ifndef _UAPI_ASM_HEXAGON_SETUP_H
+> +#define _UAPI_ASM_HEXAGON_SETUP_H
+>   
+>   #include <asm-generic/setup.h>
+>   
+> -extern char external_cmdline_buffer;
+> -
+> -void __init setup_arch_memory(void);
+> -
+>   #endif
 
 Ping?
 
