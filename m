@@ -1,209 +1,183 @@
-Return-Path: <linux-arch+bounces-8424-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8425-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 828249AB60B
-	for <lists+linux-arch@lfdr.de>; Tue, 22 Oct 2024 20:43:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE0349AB671
+	for <lists+linux-arch@lfdr.de>; Tue, 22 Oct 2024 21:09:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3DE4728140C
-	for <lists+linux-arch@lfdr.de>; Tue, 22 Oct 2024 18:43:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 621311F243BE
+	for <lists+linux-arch@lfdr.de>; Tue, 22 Oct 2024 19:09:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 238DB1C9DFF;
-	Tue, 22 Oct 2024 18:43:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28F7F1C9ED9;
+	Tue, 22 Oct 2024 19:09:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QaOjtgbv"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cT3PdKAC"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 733241BDA87
-	for <linux-arch@vger.kernel.org>; Tue, 22 Oct 2024 18:43:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00D7C1CB30C
+	for <linux-arch@vger.kernel.org>; Tue, 22 Oct 2024 19:09:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729622626; cv=none; b=RNVoI1eDW0kOEh56HYHQSEFqEnIhjSui4iwZh6nKgVtmJS37qbtkrLRuKEekUtqFYkFsw4C7aXF+yF1Z8CBpW5zFJrwFLuzHp7RVJjZXrbYsVwt8KluTskALG0lGV060edAJq2CmT4zJNyFK8YNbI/nfviqEkCDDMz6iEUUHdXo=
+	t=1729624175; cv=none; b=QnAOc7EHzAR1bjviEUrF3vTvW2vVF4te0/yFpF5APyolKi4M5L5vaLRUAfbUVwTIlSTll8bml31vUc/dhVWoAVTDiW4ExyaM2qV9raATMC2cUAn0gA72i4tBPPOxsqKckiY2H2c/vpEPYbtIgj3jV0fGWhnLgSNYrmOt5OlJtKM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729622626; c=relaxed/simple;
-	bh=RH2Ku6mP7nFuCD6W4uDKjQlzj/bGbQJSMLTCqceTPJg=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=UV4c0w37ak+SSa1oQBAG0KQTaXMWCGTJzA0Dt6/zKRAFwWkvsG89PxPu4SvIIeDjUBAA6nFIWMh7v7VWtVH2SfZZOdjMjYEDZr7SYg2fVu7lLHV+McmEoAhTW7EGdvjIufJ9R7trC/QSE2/waNS8LTZk75RK1NcLTefplUXULyA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QaOjtgbv; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1729622623;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=9AEvrlOO5dp2WqlHWZRSpco8mcCd4ymRTcjk9/3f/Ok=;
-	b=QaOjtgbvhKZDUMbqxh6bBTH5wHQ8xoKAH8BeXfQF3/4ZdGkE9+liSy5DZvPjvCv+8yd5Ge
-	8lWeMneEqlJLzRO1rSAranipVZXK8JQP5P53NQRSjnaWRcAQT8LnGDc1Gbw238d33gzi4L
-	7wVGJYwcrkal1tXWnzIwskiDo55OQYg=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-601-MJVHFbNJNGaU8a4Nt-1xsg-1; Tue, 22 Oct 2024 14:43:42 -0400
-X-MC-Unique: MJVHFbNJNGaU8a4Nt-1xsg-1
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-43157e3521dso42871335e9.1
-        for <linux-arch@vger.kernel.org>; Tue, 22 Oct 2024 11:43:41 -0700 (PDT)
+	s=arc-20240116; t=1729624175; c=relaxed/simple;
+	bh=81gvCdvEgpB04Nn2JKObvXqoAtKSBk/mWn/H596JZbk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uZ8y2FE2PiB6lwebEgeTGjaTxINjQ5nvGGsY384svFsJnXZROYiHcmyJWQwmF1a9qlHFkf0t4+zVvDeCFALjDcIAMjhLb2X8ap0x1Z2IWQmW8T3AKBrdi/PM1cW0vDUyEdQvs9aW+OG8lcDX2CihTdp5mBx6DEWZKxiGzTvNlpU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=cT3PdKAC; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4315ee633dcso45515e9.1
+        for <linux-arch@vger.kernel.org>; Tue, 22 Oct 2024 12:09:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1729624171; x=1730228971; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Aq7vYlKYjVUJ2Hf6UjPLePUAsgsPK2CPSZGZYNK3ODQ=;
+        b=cT3PdKAC9zr7KhODAieNwfi1GsU1GaLjVuEDvtqZRytv1glu3lU4RXsOt2X4qNhR2r
+         nNcIv208OnoUIcxQB8CuGhDUAaBfyv6wT+TNtRhoKVR3CKKS0RljahwhBdSiR/mqDkiV
+         5BwRPsUBFnDjt9gfVfetUjjo5/e+GUlLypFF3DIn1UBTX9p4twDG24peMq9FOFioUKEG
+         2UCrVGRQJPgDNgFFaj1TCbVJhdbZELl3K6at2cvfYQwKUkDCOlAJhANJx2jirXPneKh3
+         lbWJuoelrNVcisv4nodkxXpV+foJPUqa5B5QZb+F5X5O3C7q2UCUCPDo3O9W48fBzVwu
+         uZYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729622621; x=1730227421;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :references:cc:to:from:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9AEvrlOO5dp2WqlHWZRSpco8mcCd4ymRTcjk9/3f/Ok=;
-        b=T16JpoKDBcLbfI4XFt2HIb2lBG3KZOl+73nO/moaujRt9ag0GWzu1HUYpL2QlSbbme
-         SFESMImhOwaHF67HBSsDs1C6dsp696NDo2EPtk6txbJJRLUdrFTcU6R6Dhg5KSuDO86u
-         h3LTIZ6HgotqqyBdiEqKXO9j5220i1S2f3Km02eucomM2VRPb4CTTFQA3V8J7IzE5w+7
-         ydXFxfEZoMQb6a4KcoKWdMGiDbOe//icUCZICx2hHmbaWQEootAV392RzWQEXKuFqRIJ
-         64MbDL51HtS98IUeXEdqiy88WESEGqsZOrzRoFZ4PGdl9VNyHP1L+t6+UuRBeXRBGqno
-         k+FQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW6yScp0yky/Qs7ql6gv+4U4MWpKKVgrXu9sKIsXcTknzTeiGMd1NIJcIa1rvQDQSefH3HhTs3jPqdW@vger.kernel.org
-X-Gm-Message-State: AOJu0Yymk2ezBUCYG44saykV5w2gw9fqfCFcgQp1N2G5c/CAwWlus/5Q
-	sRE8FWFugW5s0iTcKVSMbIM8WySObSFFeNzkSMrfwQZrAo2Rs4zDnfz8f77jU3qjfJ+TxBSUoFh
-	/pCrUggIQgWg7UjzFY8wAT0H7tMi48WFhysopMUzuEfu3JoL9be2iIxiEUzY=
-X-Received: by 2002:a05:600c:46d0:b0:431:57e5:b251 with SMTP id 5b1f17b1804b1-4318424ea03mr1093075e9.28.1729622620968;
-        Tue, 22 Oct 2024 11:43:40 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHSwRO3kXDdah/XTLL3po6/+T5YX6LneczxVS1SqFXwRJeZWJFqERrHWHyJw/nPnXTkTa+KTQ==
-X-Received: by 2002:a05:600c:46d0:b0:431:57e5:b251 with SMTP id 5b1f17b1804b1-4318424ea03mr1092955e9.28.1729622620596;
-        Tue, 22 Oct 2024 11:43:40 -0700 (PDT)
-Received: from [192.168.0.7] (ip-109-40-241-30.web.vodafone.de. [109.40.241.30])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4316f58f0efsm96392775e9.26.2024.10.22.11.43.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Oct 2024 11:43:40 -0700 (PDT)
-Message-ID: <3e80f240-e95c-47ed-80a5-18a722dbb2c6@redhat.com>
-Date: Tue, 22 Oct 2024 20:43:38 +0200
+        d=1e100.net; s=20230601; t=1729624171; x=1730228971;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Aq7vYlKYjVUJ2Hf6UjPLePUAsgsPK2CPSZGZYNK3ODQ=;
+        b=sgkQ9ysHA6ry9Jmxdxb6GAbbuI2q56oRyB5MR7XHhh1FMFzx37bREbyGH4DgGWp5U6
+         ydmy86+y7y6+Vu01yuB/IbJTY/IUovAdGy9obUy513qm/SfjROK0dlCrmgx9oT5Ur8AB
+         rBxtM3tOSnBimjBAmvlks+ejI65XToMy8eyIf6QQFjBcNOIBChpKdId/XpJyfsjFQLz4
+         FbaqUBnkfoEPjxQkwx60j58Oio38LF5gQ4uXvSohf1Nz805SXGKNM5HwOyLg8duhRBVK
+         VD94t9Rc4BpyIsSoMfW6z1Qktw0PG5TpTFyuCsvvf+Pe/ePzdjRzdn+1OE9LmbPcfF1o
+         ASfQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXLi/teVTKKw7pFEINyhVh7fL9bxCFUsOaf4q67VRpiVnHHmv5C11yvBXdDHFf9Rr62QxVZWg6FQzM5@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyll/SeVFjqy2fP35X2Gl2htTxQqhev95VnTrMeEzUxQBlxZDDi
+	enUdotUyg6C6E7XKqiGttQmn1luuI81ZnNe3sAnYzW9MtgnpB9ypvwl+vnM+jtjD1R22/8yLOBI
+	s397YOEVEXn7ZVY5K9nrS0Wz1M1OVzmrqopIz
+X-Google-Smtp-Source: AGHT+IHdTaQMVD7gfS71JCtoKNqFlL+ZH6CTrJ3WUvE3tBmxfLe5eVJcaVuq9zPzDtwFl3aO3H7IuCLtAGxl1WBUDSc=
+X-Received: by 2002:a05:600c:3d91:b0:426:7018:2e2f with SMTP id
+ 5b1f17b1804b1-43184628822mr181375e9.5.1729624170899; Tue, 22 Oct 2024
+ 12:09:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hexagon: Move kernel prototypes out of uapi/asm/setup.h
- header
-From: Thomas Huth <thuth@redhat.com>
-To: Brian Cain <bcain@quicinc.com>
-Cc: linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
- linux-arch@vger.kernel.org, linux-hexagon@vger.kernel.org
-References: <20240502173818.58152-1-thuth@redhat.com>
-Content-Language: en-US
-Autocrypt: addr=thuth@redhat.com; keydata=
- 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
-In-Reply-To: <20240502173818.58152-1-thuth@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <cover.1729440856.git.lorenzo.stoakes@oracle.com>
+ <fce49bbbfe41b82161a37b022c8eb1e6c20e1d85.1729440856.git.lorenzo.stoakes@oracle.com>
+ <c37ada68-5bf5-4ca5-9de8-c0838160c443@suse.cz> <393b0932-1c52-4d59-9466-e5e6184a7daf@lucifer.local>
+ <f2448c59-0456-49e8-9676-609629227808@suse.cz>
+In-Reply-To: <f2448c59-0456-49e8-9676-609629227808@suse.cz>
+From: Jann Horn <jannh@google.com>
+Date: Tue, 22 Oct 2024 21:08:53 +0200
+Message-ID: <CAG48ez3WS3EH9DuhE1b+7AX3+1=dVtd1M7y_5Ev4Shp2YxiYWg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/5] mm: madvise: implement lightweight guard page mechanism
+To: Vlastimil Babka <vbabka@suse.cz>
+Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Suren Baghdasaryan <surenb@google.com>, "Liam R . Howlett" <Liam.Howlett@oracle.com>, 
+	Matthew Wilcox <willy@infradead.org>, "Paul E . McKenney" <paulmck@kernel.org>, 
+	David Hildenbrand <david@redhat.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	Muchun Song <muchun.song@linux.dev>, Richard Henderson <richard.henderson@linaro.org>, 
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
+	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, linux-arch@vger.kernel.org, 
+	Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>, linux-kselftest@vger.kernel.org, 
+	Sidhartha Kumar <sidhartha.kumar@oracle.com>, Jeff Xu <jeffxu@chromium.org>, 
+	Christoph Hellwig <hch@infradead.org>, linux-api@vger.kernel.org, 
+	John Hubbard <jhubbard@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 02/05/2024 19.38, Thomas Huth wrote:
-> The kernel function prototypes are of no use for userspace and
-> shouldn't get exposed in an uapi header, so let's move them into
-> an internal header instead.
-> 
-> Signed-off-by: Thomas Huth <thuth@redhat.com>
-> ---
->   arch/hexagon/include/asm/setup.h      | 20 ++++++++++++++++++++
->   arch/hexagon/include/uapi/asm/setup.h | 14 ++------------
->   2 files changed, 22 insertions(+), 12 deletions(-)
->   create mode 100644 arch/hexagon/include/asm/setup.h
-> 
-> diff --git a/arch/hexagon/include/asm/setup.h b/arch/hexagon/include/asm/setup.h
-> new file mode 100644
-> index 000000000000..9f2749cd4052
-> --- /dev/null
-> +++ b/arch/hexagon/include/asm/setup.h
-> @@ -0,0 +1,20 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (c) 2010-2011, The Linux Foundation. All rights reserved.
-> + *
-> + * This program is free software; you can redistribute it and/or modify
-> + * it under the terms of the GNU General Public License version 2 and
-> + * only version 2 as published by the Free Software Foundation.
-> + */
-> +
-> +#ifndef _ASM_HEXAGON_SETUP_H
-> +#define _ASM_HEXAGON_SETUP_H
-> +
-> +#include <linux/init.h>
-> +#include <uapi/asm/setup.h>
-> +
-> +extern char external_cmdline_buffer;
-> +
-> +void __init setup_arch_memory(void);
-> +
-> +#endif
-> diff --git a/arch/hexagon/include/uapi/asm/setup.h b/arch/hexagon/include/uapi/asm/setup.h
-> index 8ce9428b1583..598f74f671f6 100644
-> --- a/arch/hexagon/include/uapi/asm/setup.h
-> +++ b/arch/hexagon/include/uapi/asm/setup.h
-> @@ -17,19 +17,9 @@
->    * 02110-1301, USA.
->    */
->   
-> -#ifndef _ASM_SETUP_H
-> -#define _ASM_SETUP_H
-> -
-> -#ifdef __KERNEL__
-> -#include <linux/init.h>
-> -#else
-> -#define __init
-> -#endif
-> +#ifndef _UAPI_ASM_HEXAGON_SETUP_H
-> +#define _UAPI_ASM_HEXAGON_SETUP_H
->   
->   #include <asm-generic/setup.h>
->   
-> -extern char external_cmdline_buffer;
-> -
-> -void __init setup_arch_memory(void);
-> -
->   #endif
+On Mon, Oct 21, 2024 at 10:46=E2=80=AFPM Vlastimil Babka <vbabka@suse.cz> w=
+rote:
+> On 10/21/24 22:27, Lorenzo Stoakes wrote:
+> > On Mon, Oct 21, 2024 at 10:11:29PM +0200, Vlastimil Babka wrote:
+> >> On 10/20/24 18:20, Lorenzo Stoakes wrote:
+> >> > +  while (true) {
+> >> > +          /* Returns < 0 on error, =3D=3D 0 if success, > 0 if zap =
+needed. */
+> >> > +          err =3D walk_page_range_mm(vma->vm_mm, start, end,
+> >> > +                                   &guard_poison_walk_ops, NULL);
+> >> > +          if (err <=3D 0)
+> >> > +                  return err;
+> >> > +
+> >> > +          /*
+> >> > +           * OK some of the range have non-guard pages mapped, zap
+> >> > +           * them. This leaves existing guard pages in place.
+> >> > +           */
+> >> > +          zap_page_range_single(vma, start, end - start, NULL);
+> >>
+> >> ... however the potentially endless loop doesn't seem great. Could a
+> >> malicious program keep refaulting the range (ignoring any segfaults if=
+ it
+> >> loses a race) with one thread while failing to make progress here with
+> >> another thread? Is that ok because it would only punish itself?
+> >
+> > Sigh. Again, I don't think you've read the previous series have you? Or
+> > even the changelog... I added this as Jann asked for it. Originally we'=
+d
+> > -EAGAIN if we got raced. See the discussion over in v1 for details.
+> >
+> > I did it that way specifically to avoid such things, but Jann didn't ap=
+pear
+> > to think it was a problem.
+>
+> If Jann is fine with this then it must be secure enough.
 
-Ping?
+My thinking there was:
 
-  Thomas
+We can legitimately race with adjacent faults populating the area
+we're operating on with THP pages; as long as the zapping and
+poison-marker-setting are separate, *someone* will have to do the
+retry. Either we do it in the kernel, or we tell userspace to handle
+it, but having the kernel take care of it is preferable because it
+makes the stable UAPI less messy.
 
+One easy way to do it in the kernel would be to return -ERESTARTNOINTR
+after the zap_page_range_single() instead of jumping back up, which in
+terms of locking and signal handling and such would be equivalent to
+looping in userspace (because really that's what -ERESTARTNOINTR does
+- it returns out to userspace and moves the instruction pointer back
+to restart the syscall). Though if we do that immediately, it might
+make MADV_POISON unnecessarily slow, so we should probably retry once
+before doing that. The other easy way is to just loop here.
+
+The cond_resched() and pending fatal signal check mean that (except on
+CONFIG_PREEMPT_NONE) the only differences between the current
+implementation and looping in userspace are that we don't handle
+non-fatal signals in between iterations and that we keep hogging the
+mmap_lock in read mode. We do already have a bunch of codepaths that
+retry on concurrent page table changes, like when zap_pte_range()
+encounters a pte_offset_map_lock() failure; though I guess the
+difference is that the retry on those is just a couple instructions,
+which would be harder to race consistently, while here we redo walks
+across the entire range, which should be fairly easy to race
+repeatedly.
+
+So I guess you have a point that this might be the easiest way to
+stall other tasks that are trying to take mmap_lock for an extended
+amount of time, I did not fully consider that... and then I guess you
+could use that to slow down usercopy fault handling (once the lock
+switches to handoff mode because of a stalled writer?) or slow down
+other processes trying to read /proc/$pid/cmdline?
+
+You can already indefinitely hog the mmap_lock with FUSE, though that
+requires that you can mount a FUSE filesystem (which you wouldn't be
+able in reasonably sandboxed code) and that you can find something
+like a pin_user_pages() call that can't drop the mmap lock in between,
+and there aren't actually that many of those...
+
+So I guess you have a point and the -ERESTARTNOINTR approach would be
+a little bit nicer, as long as it's easy to implement.
 
