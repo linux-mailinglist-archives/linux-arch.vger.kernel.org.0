@@ -1,81 +1,40 @@
-Return-Path: <linux-arch+bounces-8458-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8459-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC7159AC690
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2024 11:30:12 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F3CD9AC698
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2024 11:31:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6BD96282DFD
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2024 09:30:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E2758B22D47
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2024 09:31:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C870E199934;
-	Wed, 23 Oct 2024 09:30:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aEh9j9mh"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96BD21714B9;
+	Wed, 23 Oct 2024 09:31:19 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CB9819C578
-	for <linux-arch@vger.kernel.org>; Wed, 23 Oct 2024 09:29:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E269145323;
+	Wed, 23 Oct 2024 09:31:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729675800; cv=none; b=YXyUBA82lzAxMz8cVe8FyQqj50DZBaji2nWOdCy+1r0o/HN0FkVRLzorm5q2vA6e60rY9oP8NcluMbfAv7sEx7cgwjqcTb7+65bSTHa1bMH78Ie9TWBiJCm+46q5rjZKOjFr5BqoZQtTHYIlwA6ETK9HO5LklQvNUPAb89QwZq8=
+	t=1729675879; cv=none; b=CqjlgWA0fjbuHlaBWGrk1gtNExBjTIRFGodtcjH2jCpGOMEuq0S21FSMEqIUN1Qs9vS5nJaGCBuAVB5R8gj6YO/qh2bUYL6S0OFXZo/a0Lb1C/BxaDyULVJSJhmY7aOvW/5u9LEtnxqoBnVeBXuDKQNRseCafbYOTv1VdqqK2QM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729675800; c=relaxed/simple;
-	bh=5ZBamS1Ea597xMRWnxUmpWUHfW/ju3MyCBHyH44X3Cg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rgN4qSOdH765DrGhbf6iE7M2I8e3hl6n+4pL4PnTV3ddsoG0HXRai9YSo6ykIdOBHPNXqFkSuf5SJN2tk2BWnEi+YJPs2ciC3ixWryqHAkYaLlXF+tTfpSDFIeiLZyqR07QdzihqxeCbB7ZQ2Xm1Jady2H9LxXi2cmY1r2BG5QI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aEh9j9mh; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1729675798;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=NglIqu+VxUNes8wq3KeSCbvotAenvubJqH0EIAV9xBE=;
-	b=aEh9j9mhUp2qMMTlVwhJYVMMkohL/u04RsoHccSoPd6yEP3nRvpvK74u22f+NsA3GUyeZV
-	5zYO3ZnFqbgDY53nRUUSVrwN+AChpzLluepQvv/lrrYEZTdv3skQ+BbUxkmSfL/dg4xiDX
-	Vz+QhMEW2gGw4Y8B/xYfhOyVKrTFbMA=
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
- [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-252-al5uo2XVO9-frgauV5CNAA-1; Wed, 23 Oct 2024 05:29:56 -0400
-X-MC-Unique: al5uo2XVO9-frgauV5CNAA-1
-Received: by mail-lf1-f71.google.com with SMTP id 2adb3069b0e04-539eb3416cdso5517777e87.1
-        for <linux-arch@vger.kernel.org>; Wed, 23 Oct 2024 02:29:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729675795; x=1730280595;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:from:references:cc:to:subject:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=NglIqu+VxUNes8wq3KeSCbvotAenvubJqH0EIAV9xBE=;
-        b=EB9Gl71eWaYrnR+QfYTNUb5KBaMSqV4nzQrfH6cMcGu27nXL0s776G4PVUvpyFRTQC
-         EeCcgaEAB5gH8F6cfJWKzy5DhDCn86qaKrXiIUsA7cihHCOja6cLiKH01k95ZadlqBmG
-         oqmxoZ5tdbs7/vVtaqiMqOmiYE2ooYB0uEOnUlthUSn1tDKfv/bLm6lzbJmQenSViTMi
-         n7ujwL8II20DNKn6nQaBKDWnKoPZSoG3SOHLpCiEdgTeSVRIbme169gADYcor8OwRz3v
-         HXl+noiUvTWqHi8mgYlNzP7hL1T8AYvUi2qNeuhAmjIgD/ZtlsUrctZAt4RZubVsD1WL
-         4MRA==
-X-Forwarded-Encrypted: i=1; AJvYcCUG7UAoY46id0T6dUS1u2zexok/GdytTxDWrwNMrGbColUjrnOPp4vzud3zxCdl9ROqEav8hsSHSDbH@vger.kernel.org
-X-Gm-Message-State: AOJu0YzcG6D3pZtYerVrdMN1IvZa8ecsS237iqaMSEEjJXL1YEqsqsOf
-	Cpzi5TaAAhKW4TnWV0KkCZLXpalslqAtdN8YkrcuS+OP5FNQgK4yxHe3HbgTLmyw38DeO6udNeA
-	sgbcZACBPc7hve4szLQGux0xCThbu4NubfzT4KJaRpOdqhBuVMEOIsfNddA0=
-X-Received: by 2002:a05:6512:2355:b0:539:fa43:fc36 with SMTP id 2adb3069b0e04-53b1a2f42abmr790938e87.12.1729675794933;
-        Wed, 23 Oct 2024 02:29:54 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGiYyj6F7YDQSLG2wAFhIUANmvWJj0aVgSUN/OMCnMStsfisyFRCfqYCP13y+F3bTLBHAWAWA==
-X-Received: by 2002:a05:6512:2355:b0:539:fa43:fc36 with SMTP id 2adb3069b0e04-53b1a2f42abmr790923e87.12.1729675794470;
-        Wed, 23 Oct 2024 02:29:54 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c70c:cd00:c139:924e:3595:3b5? (p200300cbc70ccd00c139924e359503b5.dip0.t-ipconnect.de. [2003:cb:c70c:cd00:c139:924e:3595:3b5])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43186bdbb01sm10999135e9.20.2024.10.23.02.29.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Oct 2024 02:29:53 -0700 (PDT)
-Message-ID: <1768ef5d-7289-4d2b-ae02-f5d2a20d5320@redhat.com>
-Date: Wed, 23 Oct 2024 11:29:51 +0200
+	s=arc-20240116; t=1729675879; c=relaxed/simple;
+	bh=S9K6wNzJGw4A+THlYZqFDhx8sGOqGKN5/nuUKyP6Xe4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=rMDjDyMlvWuSai7I6XXU9l6eX+H2Mw+FBLoeP2GoICSMm6O3zqBX8sgReShdWjTMWYc4nkA/cZrpikQqchwAVgSWABsL4kQlUx1bvJUdr4DXPc26eR0/OAjgk6O5Kg7v4P/NKgKKlwJLPdIg5GR23fXyXDSk+HXoB5WYN3ZkibE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2FB5B339;
+	Wed, 23 Oct 2024 02:31:45 -0700 (PDT)
+Received: from [10.57.23.17] (unknown [10.57.23.17])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 199163F73B;
+	Wed, 23 Oct 2024 02:31:05 -0700 (PDT)
+Message-ID: <07c5e292-5218-43ee-a167-da09d108a663@arm.com>
+Date: Wed, 23 Oct 2024 10:31:03 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -83,136 +42,221 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/5] implement lightweight guard pages
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Vlastimil Babka <vbabka@suse.cz>, Dmitry Vyukov <dvyukov@google.com>,
- fw@deneb.enyo.de, James.Bottomley@hansenpartnership.com,
- Liam.Howlett@oracle.com, akpm@linux-foundation.org, arnd@arndb.de,
- brauner@kernel.org, chris@zankel.net, deller@gmx.de, hch@infradead.org,
- ink@jurassic.park.msu.ru, jannh@google.com, jcmvbkbc@gmail.com,
- jeffxu@chromium.org, jhubbard@nvidia.com, linux-alpha@vger.kernel.org,
- linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-mm@kvack.org,
- linux-parisc@vger.kernel.org, mattst88@gmail.com, muchun.song@linux.dev,
- paulmck@kernel.org, richard.henderson@linaro.org, shuah@kernel.org,
- sidhartha.kumar@oracle.com, surenb@google.com, tsbogend@alpha.franken.de,
- willy@infradead.org, elver@google.com,
- Linus Torvalds <torvalds@linux-foundation.org>
-References: <87a5eysmj1.fsf@mid.deneb.enyo.de>
- <20241023062417.3862170-1-dvyukov@google.com>
- <8471d7b1-576b-41a6-91fb-1c9baae8c540@redhat.com>
- <5a3d3bc8-60db-46d0-b689-9aeabcdb8eab@lucifer.local>
- <CACT4Y+ZE9Zco7KaQoT50aooXCHxhz2N_psTAFtT+ZrH14Si7aw@mail.gmail.com>
- <b1df934e-7012-4523-a513-d3d1536b7f72@suse.cz>
- <f000d21f-dd04-462a-9d34-d0e7f0f7dc2e@redhat.com>
- <b5792b5f-298b-499f-abc2-db773ceeed36@lucifer.local>
-From: David Hildenbrand <david@redhat.com>
-Content-Language: en-US
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <b5792b5f-298b-499f-abc2-db773ceeed36@lucifer.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH RFC v2 0/4] mm: Introduce MAP_BELOW_HINT
+To: "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ "Kirill A. Shutemov" <kirill@shutemov.name>,
+ Charlie Jenkins <charlie@rivosinc.com>, Arnd Bergmann <arnd@arndb.de>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
+ <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
+ Russell King <linux@armlinux.org.uk>, Guo Ren <guoren@kernel.org>,
+ Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+ Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
+ Nicholas Piggin <npiggin@gmail.com>,
+ Christophe Leroy <christophe.leroy@csgroup.eu>,
+ Naveen N Rao <naveen@kernel.org>, Alexander Gordeev
+ <agordeev@linux.ibm.com>, Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Sven Schnelle <svens@linux.ibm.com>,
+ Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>,
+ John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+ "David S. Miller" <davem@davemloft.net>,
+ Andreas Larsson <andreas@gaisler.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>, Muchun Song <muchun.song@linux.dev>,
+ Andrew Morton <akpm@linux-foundation.org>, Vlastimil Babka <vbabka@suse.cz>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Shuah Khan <shuah@kernel.org>,
+ linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+ loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org
+References: <20240829-patches-below_hint_mmap-v2-0-638a28d9eae0@rivosinc.com>
+ <yu7um2tcxg2apoz372rmzpkrfgbb42ndvabvrsp4usb2e3bkrf@huaucjsp5vlj>
+ <Ztnp3OAIRz/daj7s@ghost>
+ <pbotlphw77fkfacldtpxfjcs2w5nhb2uvxszv5rmlrhjm42akd@4pvcqb7ojq4v>
+ <b6ca55b7-4de2-4085-97bd-619f91d9fcb8@arm.com>
+ <5u7xntjdye5ejjmkgpp7m3ogpzblxcztrwngulejdft63fzuwf@xcxfcbaccqtw>
+From: Steven Price <steven.price@arm.com>
+Content-Language: en-GB
+In-Reply-To: <5u7xntjdye5ejjmkgpp7m3ogpzblxcztrwngulejdft63fzuwf@xcxfcbaccqtw>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 23.10.24 11:18, Lorenzo Stoakes wrote:
-> On Wed, Oct 23, 2024 at 11:13:47AM +0200, David Hildenbrand wrote:
->> On 23.10.24 11:06, Vlastimil Babka wrote:
->>> On 10/23/24 10:56, Dmitry Vyukov wrote:
->>>>>
->>>>> Overall while I sympathise with this, it feels dangerous and a pretty major
->>>>> change, because there'll be something somewhere that will break because it
->>>>> expects faults to be swallowed that we no longer do swallow.
->>>>>
->>>>> So I'd say it'd be something we should defer, but of course it's a highly
->>>>> user-facing change so how easy that would be I don't know.
->>>>>
->>>>> But I definitely don't think a 'introduce the ability to do cheap PROT_NONE
->>>>> guards' series is the place to also fundmentally change how user access
->>>>> page faults are handled within the kernel :)
->>>>
->>>> Will delivering signals on kernel access be a backwards compatible
->>>> change? Or will we need a different API? MADV_GUARD_POISON_KERNEL?
->>>> It's just somewhat painful to detect/update all userspace if we add
->>>> this feature in future. Can we say signal delivery on kernel accesses
->>>> is unspecified?
+Hi Liam,
+
+On 21/10/2024 20:48, Liam R. Howlett wrote:
+> * Steven Price <steven.price@arm.com> [241021 09:23]:
+>> On 09/09/2024 10:46, Kirill A. Shutemov wrote:
+>>> On Thu, Sep 05, 2024 at 10:26:52AM -0700, Charlie Jenkins wrote:
+>>>> On Thu, Sep 05, 2024 at 09:47:47AM +0300, Kirill A. Shutemov wrote:
+>>>>> On Thu, Aug 29, 2024 at 12:15:57AM -0700, Charlie Jenkins wrote:
+>>>>>> Some applications rely on placing data in free bits addresses allocated
+>>>>>> by mmap. Various architectures (eg. x86, arm64, powerpc) restrict the
+>>>>>> address returned by mmap to be less than the 48-bit address space,
+>>>>>> unless the hint address uses more than 47 bits (the 48th bit is reserved
+>>>>>> for the kernel address space).
+>>>>>>
+>>>>>> The riscv architecture needs a way to similarly restrict the virtual
+>>>>>> address space. On the riscv port of OpenJDK an error is thrown if
+>>>>>> attempted to run on the 57-bit address space, called sv57 [1].  golang
+>>>>>> has a comment that sv57 support is not complete, but there are some
+>>>>>> workarounds to get it to mostly work [2].
 >>>
->>> Would adding signal delivery to guard PTEs only help enough the ASAN etc
->>> usecase? Wouldn't it be instead possible to add some prctl to opt-in the
->>> whole ASANized process to deliver all existing segfaults as signals instead
->>> of -EFAULT ?
+>>> I also saw libmozjs crashing with 57-bit address space on x86.
+>>>
+>>>>>> These applications work on x86 because x86 does an implicit 47-bit
+>>>>>> restriction of mmap() address that contain a hint address that is less
+>>>>>> than 48 bits.
+>>>>>>
+>>>>>> Instead of implicitly restricting the address space on riscv (or any
+>>>>>> current/future architecture), a flag would allow users to opt-in to this
+>>>>>> behavior rather than opt-out as is done on other architectures. This is
+>>>>>> desirable because it is a small class of applications that do pointer
+>>>>>> masking.
+>>>
+>>> You reiterate the argument about "small class of applications". But it
+>>> makes no sense to me.
 >>
->> Not sure if it is an "instead", you might have to deliver the signal in
->> addition to letting the syscall fail (not that I would be an expert on
->> signal delivery :D ).
+>> Sorry to chime in late on this - I had been considering implementing
+>> something like MAP_BELOW_HINT and found this thread.
 >>
->> prctl sounds better, or some way to configure the behavior on VMA ranges;
->> otherwise we would need yet another marker, which is not the end of the
->> world but would make it slightly more confusing.
+>> While the examples of applications that want to use high VA bits and get
+>> bitten by future upgrades is not very persuasive. It's worth pointing
+>> out that there are a variety of somewhat horrid hacks out there to work
+>> around this feature not existing.
+>>
+>> E.g. from my brief research into other code:
+>>
+>>   * Box64 seems to have a custom allocator based on reading 
+>>     /proc/self/maps to allocate a block of VA space with a low enough 
+>>     address [1]
+>>
+>>   * PHP has code reading /proc/self/maps - I think this is to find a 
+>>     segment which is close enough to the text segment [2]
+>>
+>>   * FEX-Emu mmap()s the upper 128TB of VA on Arm to avoid full 48 bit
+>>     addresses [3][4]
+> 
+> Can't the limited number of applications that need to restrict the upper
+> bound use an LD_PRELOAD compatible library to do this?
+
+I'm not entirely sure what point you are making here. Yes an LD_PRELOAD
+approach could be used instead of a personality type as a 'hack' to
+preallocate the upper address space. The obvious disadvantage is that
+you can't (easily) layer LD_PRELOAD so it won't work in the general case.
+
+>>
+>>   * pmdk has some funky code to find the lowest address that meets 
+>>     certain requirements - this does look like an ALSR alternative and 
+>>     probably couldn't directly use MAP_BELOW_HINT, although maybe this 
+>>     suggests we need a mechanism to map without a VA-range? [5]
+>>
+>>   * MIT-Scheme parses /proc/self/maps to find the lowest mapping within 
+>>     a range [6]
+>>
+>>   * LuaJIT uses an approach to 'probe' to find a suitable low address 
+>>     for allocation [7]
 >>
 > 
-> Yeah prctl() sounds sensible, and since we are explicitly adding a marker
-> for guard pages here we can do this as a follow up too without breaking any
-> userland expectations, i.e. 'new feature to make guard pages signal' is not
-> going to contradict the default behaviour.
+> Although I did not take a deep dive into each example above, there are
+> some very odd things being done, we will never cover all the use cases
+> with an exact API match.  What we have today can be made to work for
+> these users as they have figured ways to do it.
 > 
-> So all makes sense to me, but I do think best as a follow up! :)
+> Are they pretty? no.  Are they common? no.  I'm not sure it's worth
+> plumbing in new MM code in for these users.
 
-Yeah, fully agreed. And my gut feeling is that it might not be that easy 
-... :)
+My issue with the existing 'solutions' is that they all seem to be fragile:
 
-In the end, what we want is *some* notification that a guard PTE was 
-accessed. Likely the notification must not necessarily completely 
-synchronous (although it would be ideal) and it must not be a signal.
+ * Using /proc/self/maps is inherently racy if there could be any other
+code running in the process at the same time.
 
-Maybe having a different way to obtain that information from user space 
-would work.
--- 
-Cheers,
+ * Attempting to map the upper part of the address space only works if
+done early enough - once an allocation arrives there, there's very
+little you can robustly do (because the stray allocation might be freed).
 
-David / dhildenb
+ * LuaJIT's probing mechanism is probably robust, but it's inefficient -
+LuaJIT has a fallback of linear probing, following by no hint (ASLR),
+followed by pseudo-random probing. I don't know the history of the code
+but it looks like it's probably been tweaked to try to avoid performance
+issues.
+
+>> The biggest benefit I see of MAP_BELOW_HINT is that it would allow a
+>> library to get low addresses without causing any problems for the rest
+>> of the application. The use case I'm looking at is in a library and 
+>> therefore a personality mode wouldn't be appropriate (because I don't 
+>> want to affect the rest of the application). Reading /proc/self/maps
+>> is also problematic because other threads could be allocating/freeing
+>> at the same time.
+> 
+> As long as you don't exhaust the lower limit you are trying to allocate
+> within - which is exactly the issue riscv is hitting.
+
+Obviously if you actually exhaust the lower limit then any
+MAP_BELOW_HINT API would also fail - there's really not much that can be
+done in that case.
+
+> I understand that you are providing examples to prove that this is
+> needed, but I feel like you are better demonstrating the flexibility
+> exists to implement solutions in different ways using todays API.
+
+My intention is to show that today's API doesn't provide a robust way of
+doing this. Although I'm quite happy if you can point me at a robust way
+with the current API. As I mentioned my goal is to be able to map memory
+in a (multithreaded) library with a (ideally configurable) number of VA
+bits. I don't particularly want to restrict the whole process, just
+specific allocations.
+
+I had typed up a series similar to this one as a MAP_BELOW flag would
+fit my use-case well.
+
+> I think it would be best to use the existing methods and work around the
+> issue that was created in riscv while future changes could mirror amd64
+> and arm64.
+
+The riscv issue is a different issue to the one I'm trying to solve. I
+agree MAP_BELOW_HINT isn't a great fix for that because we already have
+differences between amd64 and arm64 and obviously no software currently
+out there uses this new flag.
+
+However, if we had introduced this flag in the past (e.g. if MAP_32BIT
+had been implemented more generically, across architectures and with a
+hint value, like this new flag) then we probably wouldn't be in this
+situation. Applications that want to restrict the VA space would be able
+to opt-in and be portable across architectures.
+
+Another potential option is a mmap3() which actually allows the caller
+to place constraints on the VA space (e.g. minimum, maximum and
+alignment). There's plenty of code out there that has to over-allocate
+and munmap() the unneeded part for alignment reasons. But I don't have a
+specific need for that, and I'm guessing you wouldn't be in favour.
+
+Thanks,
+Steve
+
+> ...
+>>
+>>
+>> [1] https://sources.debian.org/src/box64/0.3.0+dfsg-1/src/custommem.c/
+>> [2] https://sources.debian.org/src/php8.2/8.2.24-1/ext/opcache/shared_alloc_mmap.c/#L62
+>> [3] https://github.com/FEX-Emu/FEX/blob/main/FEXCore/Source/Utils/Allocator.cpp
+>> [4] https://github.com/FEX-Emu/FEX/commit/df2f1ad074e5cdfb19a0bd4639b7604f777fb05c
+>> [5] https://sources.debian.org/src/pmdk/1.13.1-1.1/src/common/mmap_posix.c/?hl=29#L29
+>> [6] https://sources.debian.org/src/mit-scheme/12.1-3/src/microcode/ux.c/#L826
+>> [7] https://sources.debian.org/src/luajit/2.1.0+openresty20240815-1/src/lj_alloc.c/
+>>
+> ...
+> 
+> Thanks,
+> Liam
 
 
