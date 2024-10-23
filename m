@@ -1,122 +1,110 @@
-Return-Path: <linux-arch+bounces-8490-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8491-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D1259AD2ED
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2024 19:29:10 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 459729AD2FE
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2024 19:36:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC5B31C21A31
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2024 17:29:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BB84DB23208
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2024 17:36:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 900D91CCB31;
-	Wed, 23 Oct 2024 17:29:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 331C71CF7D9;
+	Wed, 23 Oct 2024 17:36:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="a1i4A9yg"
+	dkim=pass (2048-bit key) header.d=soleen-com.20230601.gappssmtp.com header.i=@soleen-com.20230601.gappssmtp.com header.b="p3TvOeW6"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0177C1E51D;
-	Wed, 23 Oct 2024 17:29:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE0FF1CEE80
+	for <linux-arch@vger.kernel.org>; Wed, 23 Oct 2024 17:36:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729704545; cv=none; b=FKGcoOhPH5jAXur/gvFtzlfZ6c5GNKmy1NN71oKzg4un23S/iPI9dXClWBqeRWZH1AKtEaMwrLy4rUwIfEJlTVQRHZZmS5mJuBoSihEdA0TWjut17Pcu/W6T2O5cTKk/mrOKqjfLfISuc+nZMsDcHn4ohJytxPcHSJFPiTbb8RE=
+	t=1729704965; cv=none; b=p8Je0AsOaFQKdXkmHxLC9QW5MHO1jzaZpjFK1QgpA4tVnGfHiPTgkztIkXq3v9hfdnD7A6CqYxDs1ZwwBQ56PMF7qf7t9m/rXkxtbfJul8WgRbAkGtM3kKKGfKMzGX4X+eAOZryBmXc8Jw1ZJ48DnOyViZSgotHxgaKGF9+n7UQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729704545; c=relaxed/simple;
-	bh=k2Bj3VXPR0ZuBfvyPjLK8zR/CYVAAN8k3ytdAnEmoWw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=c0omQgSM19gFIBg+gWI/vS7YSzh19ac/DcqQrUTJl7TMIrzGLQNdnNMgQd/z3TDL28y4ZTd2exTxfviinXYOm2/qS6So/oZqP4UfwkaZ9pRvNV3Jc1GbNj2u/Fm27u65PEW87Qb3+EjgJrbfrLT8cBWGy89ms3WFtjbW8XeYkNw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=a1i4A9yg; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49N9xkfL025452;
-	Wed, 23 Oct 2024 17:28:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	3fD3aX3zs17RkkSDvbOeJ48quwFT5oEexv/xr8A200k=; b=a1i4A9ygluEtdPU8
-	j5d1F9tWSvBP2gnqPt7x2SrbEZDnVD3noHOF86qM2xlgYRlFspks/ewRHORBF1cg
-	8fvzZUeCM3xK8io/++eai+HQ8+xmKFIf5vaDr+VgmU7pFSazOjFzjTiwMSqKtsN6
-	JsBYs17BPyo8kLyxIFM4xwHSVpOq/z6ALTtWEErB47w8Lbz7E69zm61sDXJIPuDK
-	1M+69Nl85oUL8t3eZVeG1niMoH5X67fS6g8pJPue19ctEozw4DGoc0YahQ6fJ77t
-	OWV3C0hdmYY/+4l6Bf5dRAyRyQa1Ngg3vAmVTctDQH3YSIxEsoo6V8G/BStIhNwv
-	qfU/hw==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42em41tyn8-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 23 Oct 2024 17:28:51 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49NHSnVG008769
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 23 Oct 2024 17:28:49 GMT
-Received: from [10.81.24.74] (10.49.16.6) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 23 Oct
- 2024 10:28:49 -0700
-Message-ID: <368aa911-7a88-4a00-8830-4a183fd6f352@quicinc.com>
-Date: Wed, 23 Oct 2024 10:28:49 -0700
+	s=arc-20240116; t=1729704965; c=relaxed/simple;
+	bh=spFboIypgyk3XWp5kghVBAFFeZk1pIkBkrhK+B/w9NQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=d+D/m6KvjYsCdmow1PEi6tyzsft29y/apXRnRoCydAmIT9xLFUcEkaT9LRUAIkv3aZsjyWgWEEInInHoyb8yQ8kNHLcF/XYXAXx6nx88Gx/x/XNY+3kDo6E9+JQLGZlay3466Y3fMdQ4z3RGkVaIHZTi9i0FTfBOXZLk9YSR12c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen-com.20230601.gappssmtp.com header.i=@soleen-com.20230601.gappssmtp.com header.b=p3TvOeW6; arc=none smtp.client-ip=209.85.160.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
+Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-460da5a39fdso326241cf.1
+        for <linux-arch@vger.kernel.org>; Wed, 23 Oct 2024 10:36:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen-com.20230601.gappssmtp.com; s=20230601; t=1729704962; x=1730309762; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=spFboIypgyk3XWp5kghVBAFFeZk1pIkBkrhK+B/w9NQ=;
+        b=p3TvOeW6Jz9kyt/cda8b0kWu3Fs+uT+KJ3GUAjhhWHNjGVFqGrc5a3aILIlGpoILXm
+         CQBK+0WGb+mwINNG+hKDM60Pz71iKsu59smtEdd2LvJywWGzgoe5asg1Cohvl6RCJ5hw
+         f5GAuaDTGnsKzVaQNwO4pGW/2YYLJ5WLBkG1vYKiHwH70W4m6VEyzqBH10EXpLN4tXHO
+         1iOv7WYpl+2RQ00RUbq7XU0IiuUYeB37oi2BHpO27TVbzaMYGHyzpIbY+OUsPlUzm0Gc
+         +2q/r4NEfJWZHa1TfWLSMM4/DvEIzSoouR3gARLrJxzOG/1laanLF+4c+pbIqpvLLyah
+         dTvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729704962; x=1730309762;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=spFboIypgyk3XWp5kghVBAFFeZk1pIkBkrhK+B/w9NQ=;
+        b=ORg6fJTlxvM+wqLgb5Z7EWySF3pHhyrjMzcA20DOBTGjTJQOv6LSZxwJqSDRxkskpS
+         Jq61YhpwCgPJyCAbpLvlODJPmtIghMQVGovVWxwyxsY5y2NdgPFMf+rYJIdriBOG7YpN
+         B9EhJ3iBRUIGyj9D2ehmpV/Xo+1O4aVhN3vq6x+jMtCVlvmXvs0jGi88Zh5a+URJ+CNj
+         W0NFmHRVjWqdVS+6GdamYwGGN2o4nJFeb6m9P+/6FVSdk9XAJVW9AYYr7aWWAfqPaQ7J
+         xVwPZgNkQr23PkAo+b/LjxT5V1drvf0XEFRzrSJCjJlDx+vTL8FIIo8t8hS4dKOTEdND
+         Ya5A==
+X-Forwarded-Encrypted: i=1; AJvYcCVUIHztWE+LSzuUEsQbdKhtJCnz5zCbIIF2+li061edoeRq5C7Xn2Hh/MXlL6nrJxMcyTUV8owvB7h+@vger.kernel.org
+X-Gm-Message-State: AOJu0YwV6UvoPpY+VU0GTdCMqf9/QBaPDobIzH1UW5FHZ6SRNRQOPDwR
+	ym40zIPq52C8g68S7D/wg19DCMgdIkFmSaSNKk1OAehfHVXMM8eYluGPj2X6cKm+r/jzT0Y6hik
+	pFWBZCrEQjuRVWBl6gc+8xrixQE1Dl2LA/oWg7A==
+X-Google-Smtp-Source: AGHT+IFV+lf1cZYVfoZTKRitSaDBfAqj+KRGY17augig5JAjskqsVjHe3OvS9TISaOCa0dNfmisxyapMIUhj1oFRM3E=
+X-Received: by 2002:ac8:5e0a:0:b0:460:a942:e8be with SMTP id
+ d75a77b69052e-46114714d4cmr43850111cf.37.1729704961651; Wed, 23 Oct 2024
+ 10:36:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] selftests: add new kallsyms selftests
-To: Luis Chamberlain <mcgrof@kernel.org>, <linux-modules@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <petr.pavlu@suse.com>,
-        <samitolvanen@google.com>, <da.gomez@samsung.com>
-CC: <masahiroy@kernel.org>, <deller@gmx.de>, <linux-arch@vger.kernel.org>,
-        <live-patching@vger.kernel.org>, <kris.van.hees@oracle.com>
-References: <20241021193310.2014131-1-mcgrof@kernel.org>
-From: Jeff Johnson <quic_jjohnson@quicinc.com>
-Content-Language: en-US
-In-Reply-To: <20241021193310.2014131-1-mcgrof@kernel.org>
+References: <20241023170759.999909-1-surenb@google.com> <20241023170759.999909-6-surenb@google.com>
+In-Reply-To: <20241023170759.999909-6-surenb@google.com>
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+Date: Wed, 23 Oct 2024 13:35:24 -0400
+Message-ID: <CA+CK2bCUqFeJdWqMiKRNEjWc15vUsk9YAbaLqgL5nAXM8ZkdBA@mail.gmail.com>
+Subject: Re: [PATCH v4 5/6] alloc_tag: introduce pgtag_ref_handle to abstract
+ page tag references
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, corbet@lwn.net, 
+	arnd@arndb.de, mcgrof@kernel.org, rppt@kernel.org, paulmck@kernel.org, 
+	thuth@redhat.com, tglx@linutronix.de, bp@alien8.de, 
+	xiongwei.song@windriver.com, ardb@kernel.org, david@redhat.com, 
+	vbabka@suse.cz, mhocko@suse.com, hannes@cmpxchg.org, roman.gushchin@linux.dev, 
+	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com, 
+	souravpanda@google.com, keescook@chromium.org, dennis@kernel.org, 
+	jhubbard@nvidia.com, urezki@gmail.com, hch@infradead.org, petr.pavlu@suse.com, 
+	samitolvanen@google.com, da.gomez@samsung.com, yuzhao@google.com, 
+	vvvvvv@google.com, rostedt@goodmis.org, iamjoonsoo.kim@lge.com, 
+	rientjes@google.com, minchan@google.com, kaleshsingh@google.com, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-mm@kvack.org, 
+	maple-tree@lists.infradead.org, linux-modules@vger.kernel.org, 
+	kernel-team@android.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: hOul45tTK3b2ScIrQNG3txmXPHvd1B2q
-X-Proofpoint-ORIG-GUID: hOul45tTK3b2ScIrQNG3txmXPHvd1B2q
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 clxscore=1011 mlxscore=0 suspectscore=0 phishscore=0
- mlxlogscore=900 bulkscore=0 adultscore=0 lowpriorityscore=0 spamscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2410230109
+Content-Transfer-Encoding: quoted-printable
 
-On 10/21/24 12:33, Luis Chamberlain wrote:
-...
-> +gen_template_module_exit()
-> +{
-> +	cat <<____END_MODULE
-> +static int __init auto_test_module_init(void)
-> +{
-> +	return auto_runtime_test();
-> +}
-> +module_init(auto_test_module_init);
-> +
-> +static void __exit auto_test_module_exit(void)
-> +{
-> +}
-> +module_exit(auto_test_module_exit);
-> +
-> +MODULE_AUTHOR("Luis Chamberlain <mcgrof@kernel.org>");
-> +MODULE_LICENSE("GPL");
-> +____END_MODULE
-> +}
+On Wed, Oct 23, 2024 at 1:08=E2=80=AFPM Suren Baghdasaryan <surenb@google.c=
+om> wrote:
+>
+> To simplify later changes to page tag references, introduce new
+> pgtag_ref_handle type. This allows easy replacement of page_ext
+> as a storage of page allocation tags.
+>
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 
-Since commit 1fffe7a34c89 ("script: modpost: emit a warning when the
-description is missing"), a module without a MODULE_DESCRIPTION() will
-result in a warning when built with make W=1. Is that a concern here?
-Should we add a MODULE_DESCRIPTION()?
-
-/jeff
+Reviewed-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 
