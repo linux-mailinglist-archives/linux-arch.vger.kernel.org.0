@@ -1,82 +1,82 @@
-Return-Path: <linux-arch+bounces-8488-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8489-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A06B9AD2DF
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2024 19:27:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B2269AD2E6
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2024 19:28:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D7B221F20F4B
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2024 17:27:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 71DCC1C212B1
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2024 17:28:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CD771E5731;
-	Wed, 23 Oct 2024 17:25:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 010CF1CF7D2;
+	Wed, 23 Oct 2024 17:26:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen-com.20230601.gappssmtp.com header.i=@soleen-com.20230601.gappssmtp.com header.b="D9qdrumr"
+	dkim=pass (2048-bit key) header.d=soleen-com.20230601.gappssmtp.com header.i=@soleen-com.20230601.gappssmtp.com header.b="EnZu6QES"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C81591CFEA6
-	for <linux-arch@vger.kernel.org>; Wed, 23 Oct 2024 17:25:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F3F31CEEB2
+	for <linux-arch@vger.kernel.org>; Wed, 23 Oct 2024 17:26:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729704313; cv=none; b=JBos1zEjNNoU4PbMtPvdtNvj6mfH2ZXB70rShX2VSrNlDhP1QvH2fWBtIDCxmBrlel3g8gdG34K79BEiVwWgwdQZFZSDP2GGIxPg668YYyw5ztCpE+YP0R0mmixj3O34Lnme1oP1XwdFgRdZrtuYGuo02Nf/Ek0j43a+hfHJIfg=
+	t=1729704400; cv=none; b=JODHZOapCKAxH5MwD7OmXOgiOH5cDUofe85R3tZ0kvi5SI+sUlW86gmwtKDtHNcHfnYvb67P7HcSW4twSOf/f7MHajjWvny5U/7cMJQSbLbw+H5NQ7HoA0Fs3Ydj3ABhrjAyACYrcXlojpCHZuN28US61X5vEFQKN243Li2UMZ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729704313; c=relaxed/simple;
-	bh=6gR1I1LvwAMsteYigGWYyjEEUkOdE5Bt/RXXDASsatk=;
+	s=arc-20240116; t=1729704400; c=relaxed/simple;
+	bh=AWFBW7FfgrM+D0zC+8M4nTbfzWykLXKE0+MpT5ILXww=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HZwJHw1x+5Fgb1h4Is2acgMIQNIn9OyFgMa0phpuydcMFtyJ316N0kSOnYFrQ5aR5Qy5k0uhZtbhPF3t4VPXZa80a1bLakISmscYpBLNnSZARL0ST24NNUl3QKg+tAAdzDZQEqYllPO1hJrpIhYAOX3BE45CRxv4FCf3kEeU13o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen-com.20230601.gappssmtp.com header.i=@soleen-com.20230601.gappssmtp.com header.b=D9qdrumr; arc=none smtp.client-ip=209.85.161.43
+	 To:Cc:Content-Type; b=bf7qmx8TVFUbrWeoYbTUXHHEXuDmAMedPhMYJxTd5kXE48K69LPxTAjBz90kCqCzXFnjtGSS0xCnQTVsdcAIHeRRvoLtNkDMjWcri9fieMTrx3vZEafQVyHZsiz8pbfFheB0L+T0moA3k23dDRcS0RqBfDDTVpF2IYoVuhKISRQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen-com.20230601.gappssmtp.com header.i=@soleen-com.20230601.gappssmtp.com header.b=EnZu6QES; arc=none smtp.client-ip=209.85.167.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=soleen.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
-Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-5ebc0e13d25so1482806eaf.1
-        for <linux-arch@vger.kernel.org>; Wed, 23 Oct 2024 10:25:10 -0700 (PDT)
+Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-3e6005781c0so72327b6e.3
+        for <linux-arch@vger.kernel.org>; Wed, 23 Oct 2024 10:26:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen-com.20230601.gappssmtp.com; s=20230601; t=1729704310; x=1730309110; darn=vger.kernel.org;
+        d=soleen-com.20230601.gappssmtp.com; s=20230601; t=1729704398; x=1730309198; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zM/akXkdjXuT6ZqXjE8A6PnOFDaDeCP+im+ym1kT218=;
-        b=D9qdrumrjypGHIRkdXDAXGf3hyOB/NC3DGA2k/EOwBc0rFWulKjfT9LMfU/9rMDhHG
-         lC0u8VZOCxN+gJZqjW9zMNEPihtwAhYDUffnRlxN5y7bsJA0ObZPzkwVO+yafbqlA/z2
-         pfBkfDG87lPajf0FztIqLYvvc9nGtVgDnVclScUC/TdbmTj2dLhQa9g07us/Z9ZNgDzU
-         O3xe/WVz4EAC1SCWWOMTIL/gPMjY9Us1ubmdFPh2pFFU25wfmUS8fj507t6dE18lVCbr
-         e1XBOB5utt2MNVXu7q85kC6kjVYr4VGAzLi2JvcNn5YEfwwj08W6has66P1On5phN5PV
-         h5VQ==
+        bh=AWFBW7FfgrM+D0zC+8M4nTbfzWykLXKE0+MpT5ILXww=;
+        b=EnZu6QESoIdhW8vlu4RqzQbCSGfT6mqSvKiUVX/7AbTn/7Qn7jmPyu2tR65YwQiZ0n
+         vpxclIUM5l6EpwBi8OM6lAaJ59EzLVTJmhwUhdNTUtXovMg/6k9uK1ODp68YEdnMLH94
+         e1J1Nw98Svz6TUev/GE0LX/rUcLlErJ0kZ5FU6xvsARVRb8z0zDhEDD8+HFw73lXdaQ7
+         BzlMdN6VCfaOrxWGUWdu58cHikN3Rd9EpfzZ6jIo1cPV3mN6e26bEymqFleDDdAQTCRX
+         ggUOaNqw3z7XO0eC8hzToHqUTdqAsCXhkSlKZ94E7guFlVlrMASXmklyjUcl7SYUDDie
+         0h+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729704310; x=1730309110;
+        d=1e100.net; s=20230601; t=1729704398; x=1730309198;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zM/akXkdjXuT6ZqXjE8A6PnOFDaDeCP+im+ym1kT218=;
-        b=lyvXpFNjr/ooR56dQplDRPVRtfGGh329U2tWEWoePP6zRv0cn7pr6G0W0bIEx9+Aq+
-         68qrwIH8GK1wkYWz3GjuWnPeX/uW6udVL+t3c0crfPMJOkrDw3/2/L5jf1D6lB+rn3eX
-         5Q41qNpsLHCrD/h735xWc2qnWEJ3QxVtFu9ieYhO6VX1M8tKKALYjfjNZ+6wdNB0GoIR
-         0VfStSPxBN/3nL9ocKpfM2jsoHoBe68R48KihD0t7xWnAoHZ3+kMP9KmU9QW9T4z1aB8
-         A0/93do/B2OkEF4pq9AzbKbjvl3Zbvhd6TBbaxNLopIc/tj/wr2GSqAoxL7yyU2soNxh
-         ftXg==
-X-Forwarded-Encrypted: i=1; AJvYcCV9rK77pdTz+frBBikSc3phYIzSUOfnTaZzFMIaBixAeHXyws5HmmfLDZOwdfgHx0tRjLFPLHTV1Mmd@vger.kernel.org
-X-Gm-Message-State: AOJu0YyuHlHdYnkSHakoFMiJhayiZyO79KLBjYYDHQbK5Qwt1TqumK5t
-	MipqwZ0F4YLQZ8FKGvVEOD2J6Kl0AKfSHkaF5TyLvOeGWCkCu0WH3ByvvparpCEUSsG7/JyBPFN
-	Um/y2y+/niYYWiusXTtwz5drcyRWGb1yz4tXRHg==
-X-Google-Smtp-Source: AGHT+IHOKeQDqmSvBrYDnsglKy26BaaQQbUE678ST1VqdV3bPBQaK7JOsMSHrB6pAmfeSP2FMHTadEDapACxrqo90YQ=
-X-Received: by 2002:a05:6358:7301:b0:1b5:a38c:11d1 with SMTP id
- e5c5f4694b2df-1c3d81b1c55mr235501155d.26.1729704309824; Wed, 23 Oct 2024
- 10:25:09 -0700 (PDT)
+        bh=AWFBW7FfgrM+D0zC+8M4nTbfzWykLXKE0+MpT5ILXww=;
+        b=QtFv2/LIafAccIwJ4URSaONIxckqEcW3h6Bw6iGvxiJS+MqnLGUkAri8T/OF1TYhIZ
+         ntVhWV8mZwHiRF6tpkKKWclyHLBT2pHBUlpkL6SPZeNOPxhYRsJk/eObMOpwGPf8l4vw
+         JzOAvmaHVVyIbWIMhkJZPtgldtwznCXfLfbhScEG138zPCj4PraSb+1+v8RMSyOV4r9F
+         Vt11daM7KqVxwn2Iry7FY3AiGLlVhkI+htclaMcTPIx0w10/vStg2hulCX+DJ+ng4uDt
+         r8QFOr1LlXhFN9iY50yX+nNs/Fbm91YF2lfb6OYv8CidzJ7743xUtxX5J94JDAivKo5i
+         huHA==
+X-Forwarded-Encrypted: i=1; AJvYcCUcbaUrX5Sl6uCnoR9ZmtHimzsb6n6K7skwQrRRLrji92WlXGw8p4QJJUcVc+PBr9Qv8evuQBd63+xI@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw88sj/jdjdia3AIOWR68tRYJdURpCEKfqvP+BMOCafGB9u3mos
+	OvNTqpjzFgrWH61qiUr/UgiWaoDx2peSlnZ48zrm0FwukhL02dXxfOfNnwzniYoU7uSMhMGl3Ef
+	zcQ3cvZmjPRzr0Tnm/Z51JLbGhZdKvyzlu+LOJQ==
+X-Google-Smtp-Source: AGHT+IGckBdU29o3tk+wYPFoKwsMk5i6ERT8sORHYNIiU6+p/6iCZVXQYympbyvyWVcQV7nCYD9zoCsM5F2gZ83otEQ=
+X-Received: by 2002:a05:6808:3991:b0:3e6:23fb:b391 with SMTP id
+ 5614622812f47-3e6244eb667mr3799063b6e.2.1729704398543; Wed, 23 Oct 2024
+ 10:26:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241023170759.999909-1-surenb@google.com> <20241023170759.999909-2-surenb@google.com>
-In-Reply-To: <20241023170759.999909-2-surenb@google.com>
+References: <20241023170759.999909-1-surenb@google.com> <20241023170759.999909-3-surenb@google.com>
+In-Reply-To: <20241023170759.999909-3-surenb@google.com>
 From: Pasha Tatashin <pasha.tatashin@soleen.com>
-Date: Wed, 23 Oct 2024 13:24:31 -0400
-Message-ID: <CA+CK2bDgfmwwNReGeCj18aYT-DUabYXugDdBAwQ3d02cCT7S+g@mail.gmail.com>
-Subject: Re: [PATCH v4 1/6] maple_tree: add mas_for_each_rev() helper
+Date: Wed, 23 Oct 2024 13:26:01 -0400
+Message-ID: <CA+CK2bAZ4K+1ZZyFwwZ43Q9SMPzSr=9r=OvqjNK16Ai3E92jtg@mail.gmail.com>
+Subject: Re: [PATCH v4 2/6] alloc_tag: introduce shutdown_mem_profiling helper function
 To: Suren Baghdasaryan <surenb@google.com>
 Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, corbet@lwn.net, 
 	arnd@arndb.de, mcgrof@kernel.org, rppt@kernel.org, paulmck@kernel.org, 
@@ -99,48 +99,12 @@ Content-Transfer-Encoding: quoted-printable
 On Wed, Oct 23, 2024 at 1:08=E2=80=AFPM Suren Baghdasaryan <surenb@google.c=
 om> wrote:
 >
-> Add mas_for_each_rev() function to iterate maple tree nodes in reverse
-> order.
+> Implement a helper function to disable memory allocation profiling and
+> use it when creation of /proc/allocinfo fails.
+> Ensure /proc/allocinfo does not get created when memory allocation
+> profiling is disabled.
 >
-> Suggested-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
 > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> Reviewed-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
 
 Reviewed-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-
-> ---
->  include/linux/maple_tree.h | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
->
-> diff --git a/include/linux/maple_tree.h b/include/linux/maple_tree.h
-> index 61c236850ca8..cbbcd18d4186 100644
-> --- a/include/linux/maple_tree.h
-> +++ b/include/linux/maple_tree.h
-> @@ -592,6 +592,20 @@ static __always_inline void mas_reset(struct ma_stat=
-e *mas)
->  #define mas_for_each(__mas, __entry, __max) \
->         while (((__entry) =3D mas_find((__mas), (__max))) !=3D NULL)
->
-> +/**
-> + * mas_for_each_rev() - Iterate over a range of the maple tree in revers=
-e order.
-> + * @__mas: Maple Tree operation state (maple_state)
-> + * @__entry: Entry retrieved from the tree
-> + * @__min: minimum index to retrieve from the tree
-> + *
-> + * When returned, mas->index and mas->last will hold the entire range fo=
-r the
-> + * entry.
-> + *
-> + * Note: may return the zero entry.
-> + */
-> +#define mas_for_each_rev(__mas, __entry, __min) \
-> +       while (((__entry) =3D mas_find_rev((__mas), (__min))) !=3D NULL)
-> +
->  #ifdef CONFIG_DEBUG_MAPLE_TREE
->  enum mt_dump_format {
->         mt_dump_dec,
-> --
-> 2.47.0.105.g07ac214952-goog
->
 
