@@ -1,70 +1,70 @@
-Return-Path: <linux-arch+bounces-8482-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8483-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E2199AD224
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2024 19:08:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F29969AD226
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2024 19:08:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2C744B24A90
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2024 17:08:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A6C7C1F272EE
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2024 17:08:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F182D1CF7A8;
-	Wed, 23 Oct 2024 17:08:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF9831ADFF7;
+	Wed, 23 Oct 2024 17:08:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Qx652BjR"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="H9VJE0Ix"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2F7E1CC8AA
-	for <linux-arch@vger.kernel.org>; Wed, 23 Oct 2024 17:08:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 283551CEEAC
+	for <linux-arch@vger.kernel.org>; Wed, 23 Oct 2024 17:08:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729703287; cv=none; b=QAbPRdJ79/sigdZblimYMjgFD6nZIg+szanlSJfJabQtE0R5S0CIzroJfR5tNrZX/ezOTWqTzHqE4IMvhcYgz+pBA/mtDFHoiUjwQJh1n+tBrUUAYr1CSawHOT8FHqXRGGi+qO/8oVrzpm6LBkVJzd14YB5uS0O8uYvDTGANuAI=
+	t=1729703288; cv=none; b=qnz/lWWyiIRt7kxad2PlBwZvtTQ2FRfoEx9fvuedCW+u4SjuJrtq4TiTsYmoIApuqPk8sbsmW8jtmhRrtRz6S56/cp9VhDg1FKRNW9LRoJ0be0bYDBfKxx4zR1GCHuTKrTuIMDwb94AYA1Cr6xe8rUhvah4p9LlIxa5opbwzMs8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729703287; c=relaxed/simple;
-	bh=oPiAZk7sAUwyc2ZRzUfKOKHVYouPvs61/fhZTZAzOCM=;
+	s=arc-20240116; t=1729703288; c=relaxed/simple;
+	bh=ZiQDRmQrDQydODmBhplTHGUqS5BFAUWK779ZQGEAgqA=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=JNYvNSIdTZ5WSp6P6z1A3fKvEDsf29d8ebZne5kREDCx8MtNcIeCz3rXiv9b4bDG0YIzqG1kJ8w+PzbJjOJ9H6SLmwbDr4xBLkLx8mQf9G8E/qTJnyseSbq6CHnkVcusipzO9NhaWegRgXRkvNHQGee7weNPY+axJpjqMqWS79s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Qx652BjR; arc=none smtp.client-ip=209.85.128.201
+	 To:Cc:Content-Type; b=rT3rlM/oC6OjJhodH2U2Y5PhZmCBvlXINLfNr463d1d4Ndo4JYiHdfaNaQDuvxnaREK8kVE/XF0/86zgySDxQV5eRE7QDWmoJ1Y8EMBgs7996TOUl2tPXVJTf15ZaQPwkQZ4JLLldYpIdxi1PIyf/2i/AaLLE5F2gzBuQXj9OLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=H9VJE0Ix; arc=none smtp.client-ip=209.85.219.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6e35d1d8c82so112215337b3.3
-        for <linux-arch@vger.kernel.org>; Wed, 23 Oct 2024 10:08:04 -0700 (PDT)
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-e2bd3e0a26cso69787276.0
+        for <linux-arch@vger.kernel.org>; Wed, 23 Oct 2024 10:08:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1729703284; x=1730308084; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1729703286; x=1730308086; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cy4VkAGTnueEjEvw1TSjR77Zk0lX1faSNj+Oljrwa2Y=;
-        b=Qx652BjRJlLBDhiwtgP7rFltqcVCeOz64AMfJMi1lfmNwRT3W6yJF2h66vz/NOdKvE
-         iZX2r/6r71iZd3H6wP+kW3t8a0HXMP2YOsXTg3tOJAbvPBlyVSndmovQp59wBX4nnbV8
-         jejqeBwwjT7qIeRe08oGq0Cp83lM1+FOvt43wByN6sfYVEa14DIljwjJONrccZ7wFFHv
-         fZNNV++nuuSoZIeX9NJpihOasG9IF1MQ4QIyGQFQJs0TmnWguyVWNAywiZshv+JiuOUm
-         SH/lNNTmYiapZtyvrkKBGRczlN8UQ2w9m85DNYwABykAZaiWY/T+pOmFff90ZJdc96hQ
-         4Vlg==
+        bh=qzUZQuDC5qa2V/vpTubJjhmN2aD40kQ8oHuQLi+u1Z4=;
+        b=H9VJE0IxnL+nTpuDEfsO0joE5Y4h/z1jDdQWH90pxx78iQW0+5bC8VfzuKV24bUIYs
+         JsgRVJHzYRaU4yx6NTIfs/fAgAnNj7fSlc/35MqQINhe8/EqMqbbaEH62DQmNMmE6gnL
+         DaB95933+EXSIGWDW+BGhswMHRZvrC+TTIq6nrsH8ZbcjWCcNKR5lmKJM+IE4k3c6PW/
+         aEv4xTCJOGgygaMJmnwWlmD0NYZVx9Vh19W3WDDgy/NpHuctojMwISl4M/GdPUjTxgSw
+         vHXGz8+HaWxNq0oFjvVSSStkHGbOT3S2lwkPCsjCOQPWkTzZ8ZXH3TMK6atlhFefzaSZ
+         9ZNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729703284; x=1730308084;
+        d=1e100.net; s=20230601; t=1729703286; x=1730308086;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cy4VkAGTnueEjEvw1TSjR77Zk0lX1faSNj+Oljrwa2Y=;
-        b=JYGaoZSr7w13VNYzzJQ3S8xk2CzlT0jYZklQAJJiDcsKB+PhMoZTMtvXCBtJlzkZy1
-         00twTDf97GD/nZFbs+C1Na+z6NLIuZzt4qhRpZ5YLkpij4uxIKY0F0w+gUk+954iktJz
-         BBdRbls7Uz34mclKRsdet4ma9fiOrBZHO6rvv87pZHKM/RuEe5KBAeB1MPnBHOae7MjT
-         T3jk8C48LpyzqniQU99VTnCwJI4ED1jP4of5s/uX3ADnXyVrQzVb/1J0bl1lPMBWtrol
-         7ZVeTUPiKBpgkbQ8oP78kcpXrbegdNeUTYRIUhxmYqB3j2lYNmAGRZYplgfma8vtIWKV
-         b4CA==
-X-Forwarded-Encrypted: i=1; AJvYcCXYtJ7dV1akFKP5+Vwq18mxmU1N1CSxXZGMqocUN7ffGU7IRy8B8bnz3BLJY3PVyEXWPLV5SzdBhjiz@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzx7o/HFTE08Zbj2a3iMFyWv9SMN0NbvwIfdV5fk0C58q4Olu+a
-	+ReuxS5V8gL1N8Jr5S4JPse0JU3IDdYMAP72OoFxKCkTEjb8/H1pWSdw4ZnXk73LIBM51lGjpwk
-	cdg==
-X-Google-Smtp-Source: AGHT+IG5P3EOBq94xAhs93OihXu6fn1+vh8Hj0b9Xh0nro0ohDjLm9Tm7P85Bm8yXiSBBXuIOUCegUy3OSE=
+        bh=qzUZQuDC5qa2V/vpTubJjhmN2aD40kQ8oHuQLi+u1Z4=;
+        b=wsEI6GSC5O2FV6ekdJBWaUzSaXUfQUfwMpcL93OsC/ymsSDHBobqaA5tYoJKmHZZlY
+         G7JYcVijJAhyHuSio62zDTne3vtAe4VZnBzbQtmdb0fbcmyAmEAXWcGnEbsHNYvDHL57
+         HgLPlKKBbGa4R/XZcpiNtt+LDyXCHwKKGFAntlPXuDCgwVDVd63dWmgSrBUizrqVG8DF
+         BS4HbJXMUoYvu/1kd80+mO33lCjZmjFOyEnL/I3FFsLUVKeWp9b0MlgZhxuExOqnKXnq
+         /4g69Yi8/Mk6tXnrgeK9RK0eRfcdtOX6GoMF3Zea9gZViG07IcPzkcfd4CCCIHmNmDTt
+         vU9A==
+X-Forwarded-Encrypted: i=1; AJvYcCVUPlh1i3TqzMs8V/59Cry0zkUaTSjUoUsIzqKWUAAiKSPNI/irlF1E5C3+3a6VldGl0PM3iIarPQRj@vger.kernel.org
+X-Gm-Message-State: AOJu0YzYWSH7aWHHJlTp2O+IAOwPW4925WY9j2h8KV08yGfFG37+T+76
+	YlthyafWlPYE5UEfpw+biCa5l3CjMJdLV+/kqv6y8ztUyf2iXD0hOgHA3pJgnFC9gZxhhlVJnK4
+	Jqg==
+X-Google-Smtp-Source: AGHT+IEf9XVjhAQxbJksRoGGus3EwGVaSTpLfWlLEYi7zdwXtn6qn+dayeJKMPCmDwrDuVs0NH6hwtuuxI8=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2a00:79e0:2e3f:8:a087:59b9:198a:c44c])
- (user=surenb job=sendgmr) by 2002:a25:7241:0:b0:e2e:2b0f:19fc with SMTP id
- 3f1490d57ef6-e2e3a631bf2mr3476276.4.1729703283882; Wed, 23 Oct 2024 10:08:03
+ (user=surenb job=sendgmr) by 2002:a25:8289:0:b0:e2e:3401:ea0f with SMTP id
+ 3f1490d57ef6-e2e3a6bbdffmr7278276.7.1729703286023; Wed, 23 Oct 2024 10:08:06
  -0700 (PDT)
-Date: Wed, 23 Oct 2024 10:07:54 -0700
+Date: Wed, 23 Oct 2024 10:07:55 -0700
 In-Reply-To: <20241023170759.999909-1-surenb@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -74,8 +74,8 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20241023170759.999909-1-surenb@google.com>
 X-Mailer: git-send-email 2.47.0.105.g07ac214952-goog
-Message-ID: <20241023170759.999909-2-surenb@google.com>
-Subject: [PATCH v4 1/6] maple_tree: add mas_for_each_rev() helper
+Message-ID: <20241023170759.999909-3-surenb@google.com>
+Subject: [PATCH v4 2/6] alloc_tag: introduce shutdown_mem_profiling helper function
 From: Suren Baghdasaryan <surenb@google.com>
 To: akpm@linux-foundation.org
 Cc: kent.overstreet@linux.dev, corbet@lwn.net, arnd@arndb.de, 
@@ -92,45 +92,79 @@ Cc: kent.overstreet@linux.dev, corbet@lwn.net, arnd@arndb.de,
 	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-arch@vger.kernel.org, linux-mm@kvack.org, 
 	maple-tree@lists.infradead.org, linux-modules@vger.kernel.org, 
-	kernel-team@android.com, surenb@google.com, 
-	"Liam R. Howlett" <Liam.Howlett@Oracle.com>
+	kernel-team@android.com, surenb@google.com
 Content-Type: text/plain; charset="UTF-8"
 
-Add mas_for_each_rev() function to iterate maple tree nodes in reverse
-order.
+Implement a helper function to disable memory allocation profiling and
+use it when creation of /proc/allocinfo fails.
+Ensure /proc/allocinfo does not get created when memory allocation
+profiling is disabled.
 
-Suggested-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-Reviewed-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
 ---
- include/linux/maple_tree.h | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ lib/alloc_tag.c | 33 ++++++++++++++++++++++++++-------
+ 1 file changed, 26 insertions(+), 7 deletions(-)
 
-diff --git a/include/linux/maple_tree.h b/include/linux/maple_tree.h
-index 61c236850ca8..cbbcd18d4186 100644
---- a/include/linux/maple_tree.h
-+++ b/include/linux/maple_tree.h
-@@ -592,6 +592,20 @@ static __always_inline void mas_reset(struct ma_state *mas)
- #define mas_for_each(__mas, __entry, __max) \
- 	while (((__entry) = mas_find((__mas), (__max))) != NULL)
+diff --git a/lib/alloc_tag.c b/lib/alloc_tag.c
+index 81e5f9a70f22..435aa837e550 100644
+--- a/lib/alloc_tag.c
++++ b/lib/alloc_tag.c
+@@ -8,6 +8,14 @@
+ #include <linux/seq_buf.h>
+ #include <linux/seq_file.h>
  
-+/**
-+ * mas_for_each_rev() - Iterate over a range of the maple tree in reverse order.
-+ * @__mas: Maple Tree operation state (maple_state)
-+ * @__entry: Entry retrieved from the tree
-+ * @__min: minimum index to retrieve from the tree
-+ *
-+ * When returned, mas->index and mas->last will hold the entire range for the
-+ * entry.
-+ *
-+ * Note: may return the zero entry.
-+ */
-+#define mas_for_each_rev(__mas, __entry, __min) \
-+	while (((__entry) = mas_find_rev((__mas), (__min))) != NULL)
++#define ALLOCINFO_FILE_NAME		"allocinfo"
 +
- #ifdef CONFIG_DEBUG_MAPLE_TREE
- enum mt_dump_format {
- 	mt_dump_dec,
++#ifdef CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT
++static bool mem_profiling_support __meminitdata = true;
++#else
++static bool mem_profiling_support __meminitdata;
++#endif
++
+ static struct codetag_type *alloc_tag_cttype;
+ 
+ DEFINE_PER_CPU(struct alloc_tag_counters, _shared_alloc_tag);
+@@ -144,9 +152,26 @@ size_t alloc_tag_top_users(struct codetag_bytes *tags, size_t count, bool can_sl
+ 	return nr;
+ }
+ 
++static void __init shutdown_mem_profiling(void)
++{
++	if (mem_alloc_profiling_enabled())
++		static_branch_disable(&mem_alloc_profiling_key);
++
++	if (!mem_profiling_support)
++		return;
++
++	mem_profiling_support = false;
++}
++
+ static void __init procfs_init(void)
+ {
+-	proc_create_seq("allocinfo", 0400, NULL, &allocinfo_seq_op);
++	if (!mem_profiling_support)
++		return;
++
++	if (!proc_create_seq(ALLOCINFO_FILE_NAME, 0400, NULL, &allocinfo_seq_op)) {
++		pr_err("Failed to create %s file\n", ALLOCINFO_FILE_NAME);
++		shutdown_mem_profiling();
++	}
+ }
+ 
+ static bool alloc_tag_module_unload(struct codetag_type *cttype,
+@@ -174,12 +199,6 @@ static bool alloc_tag_module_unload(struct codetag_type *cttype,
+ 	return module_unused;
+ }
+ 
+-#ifdef CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT
+-static bool mem_profiling_support __meminitdata = true;
+-#else
+-static bool mem_profiling_support __meminitdata;
+-#endif
+-
+ static int __init setup_early_mem_profiling(char *str)
+ {
+ 	bool enable;
 -- 
 2.47.0.105.g07ac214952-goog
 
