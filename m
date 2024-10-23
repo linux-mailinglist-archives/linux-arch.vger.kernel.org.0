@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-8451-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8452-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 267F19AC269
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2024 10:58:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C73939AC26D
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2024 10:58:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8F112B257D2
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2024 08:58:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 01CFA1C20845
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2024 08:58:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 383B1166F16;
-	Wed, 23 Oct 2024 08:58:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46DC616A930;
+	Wed, 23 Oct 2024 08:58:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lp1KvIgv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BKoFw8up"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06A0C16130B;
-	Wed, 23 Oct 2024 08:58:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13E1C161311;
+	Wed, 23 Oct 2024 08:58:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729673881; cv=none; b=oInmV/zSfwJxGLusnETdVSGs56dcsgfmuboDpk7UkKKd0v1sPWfn7XlJa5J12v3WgBa10IskqL1Lq1gN3SlT90SzwRdYSFrcLx2Lx0SN7XVIoFRewARtvYpUrgH8szZVmDAP5+ZB6YfmC5vDXxgTRPQgLnbye1zHN1cm15DBN/I=
+	t=1729673911; cv=none; b=BsM/E4XU9gWHHz750IBRrrYyb4qlxT8U9lksG1wNKmexY840F2PYGIQpwqfuMktCIfVnkLyIfYCZZ7iT8Q9WP/RTaZ6LzJfvJKnrTTGypTq28r4DqmuBPP1vZ33YyP6F8T78nWaHV5E3sggdNnIb0MFBPgvHf6XOeZBO5VhmajE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729673881; c=relaxed/simple;
-	bh=VXUL0OcM4+MvIg0hKX2tHVp6D78yAed1n0F8G8f0kVM=;
+	s=arc-20240116; t=1729673911; c=relaxed/simple;
+	bh=ZHUuyIo+LdaBGMKfmTuSwB2eVOTFinDEnOjlYscMntQ=;
 	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=T/YmL8AxJzH9L47Uddkb83tjIbS3pMBOnIaVcOX3lcoDRqCVCKrcDCf6z4Mr5uPPnRK5sy67TWGcX59xNzriLaAbBlMzWjmU2KPKW4EKGWVXNiwzBhG/i5aEP4tylvVow6f3Q0COG7hGjw9MSaBtWK5Z0b/wvcTzofPqV+w0qLc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lp1KvIgv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BAE4C4CEE7;
-	Wed, 23 Oct 2024 08:57:58 +0000 (UTC)
+	 Mime-Version:Content-Type; b=p4ZO1A14hfngvBUxQKyjC9W/fQjt8vPsu10kVik0wqBbdyFpdckh7wg68VmZfxEJah7yOEemQCCWC/uzH0oHv5zzf3tZC6uHxg8+Z+44slGHfhlkxPVqlcMYMCY7In6Sit0oNP56PxGyZ1IJ+tAaIwgP/uaxxGtS6HqBJXUQI8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BKoFw8up; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0720C4CEC6;
+	Wed, 23 Oct 2024 08:58:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729673880;
-	bh=VXUL0OcM4+MvIg0hKX2tHVp6D78yAed1n0F8G8f0kVM=;
+	s=k20201202; t=1729673910;
+	bh=ZHUuyIo+LdaBGMKfmTuSwB2eVOTFinDEnOjlYscMntQ=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=lp1KvIgv+7tN1FxJbtK7i0ZSIUA2XcKaVtNO/BmohJaZnUQFcL2d9YslaGbpHtVYn
-	 XqW8UiQkA53mkDL1mwVcU5B0RTrmVRbqOFspUmgKo/C3BaZeY2itBnvL3Dk+mIv+tJ
-	 eguh734eX+gqKslZLUCqH8rjE/AdkpFEnD1rfASCWr6VocAaI6Uz0c3sWonRGjuUf/
-	 TUeLZeA95Xox5QH/VVHCrkytBc9W+hvXA22wGCJSwPfasQc92QB54edb8hbrOF3mzS
-	 AsZjGzN2BSioUXkbZjC6LdgJYwsDJubVUfCaozWYlTR4cBHI7H/loR6wE2iSvHRiWN
-	 c5QxzmirSOzXw==
-Date: Wed, 23 Oct 2024 17:57:56 +0900
+	b=BKoFw8uppSxVl6lmayYfFZAfaUTJ93dWVIZfBt08fvZCCzGBrzt5PKI/j/azmRd/+
+	 9Fa/2LB7/HjrVA6tkeGpUiwYuF7FZmLCQ2boZGa9gacSakzmiJG/EjNzIRTBVj7WJg
+	 fZ+3YFgAaZn8zHrGVKtMBCT5WNQHn9uEQIJARj2KGcG5+AzdR2IysYoIQZy8BEh+HV
+	 hOmmYL2EliM/CD5Kz01HJDlGLEvG6VwjQM5FvfB9vv8Go0/3OZJ6127vIHLn/1OTSN
+	 0j1zaoWo7kW8zIqoC+bM118HxSep9RULHViYjP1KZMCwRC58GqxguAeTW4/G0mlAPL
+	 SnmqtxHLH8JMw==
+Date: Wed, 23 Oct 2024 17:58:25 +0900
 From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 To: Will Deacon <will@kernel.org>
 Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Steven Rostedt
@@ -50,16 +50,23 @@ Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Steven Rostedt
  Martin KaFai Lau <martin.lau@linux.dev>, bpf <bpf@vger.kernel.org>, Alexei
  Starovoitov <ast@kernel.org>, Jiri Olsa <jolsa@kernel.org>, Alan Maguire
  <alan.maguire@oracle.com>, Mark Rutland <mark.rutland@arm.com>,
- linux-arch@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>, Paul
- Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>
-Subject: Re: [PATCH v17 06/16] tracing: Add ftrace_partial_regs() for
- converting ftrace_regs to pt_regs
-Message-Id: <20241023175756.eb42bcec858f6ac1c852de0c@kernel.org>
-In-Reply-To: <20241021164619.GA26073@willie-the-truck>
+ linux-arch@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao
+ <naveen@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, Heiko
+ Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, Alexander
+ Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger
+ <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, Thomas
+ Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav
+ Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH v17 07/16] tracing: Add ftrace_fill_perf_regs() for perf
+ event
+Message-Id: <20241023175825.45040316e4b4c146de4bcece@kernel.org>
+In-Reply-To: <20241021170121.GA26122@willie-the-truck>
 References: <172904026427.36809.516716204730117800.stgit@devnote2>
-	<172904034052.36809.10990962223606196850.stgit@devnote2>
-	<20241021164619.GA26073@willie-the-truck>
+	<172904035199.36809.9900108557809424653.stgit@devnote2>
+	<20241021170121.GA26122@willie-the-truck>
 X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -70,61 +77,68 @@ Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Mon, 21 Oct 2024 17:46:19 +0100
+On Mon, 21 Oct 2024 18:01:21 +0100
 Will Deacon <will@kernel.org> wrote:
 
-> On Wed, Oct 16, 2024 at 09:59:00AM +0900, Masami Hiramatsu (Google) wrote:
+> On Wed, Oct 16, 2024 at 09:59:12AM +0900, Masami Hiramatsu (Google) wrote:
 > > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 > > 
-> > Add ftrace_partial_regs() which converts the ftrace_regs to pt_regs.
-> > This is for the eBPF which needs this to keep the same pt_regs interface
-> > to access registers.
-> > Thus when replacing the pt_regs with ftrace_regs in fprobes (which is
-> > used by kprobe_multi eBPF event), this will be used.
-> > 
-> > If the architecture defines its own ftrace_regs, this copies partial
-> > registers to pt_regs and returns it. If not, ftrace_regs is the same as
-> > pt_regs and ftrace_partial_regs() will return ftrace_regs::regs.
+> > Add ftrace_fill_perf_regs() which should be compatible with the
+> > perf_fetch_caller_regs(). In other words, the pt_regs returned from the
+> > ftrace_fill_perf_regs() must satisfy 'user_mode(regs) == false' and can be
+> > used for stack tracing.
 > > 
 > > Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > Acked-by: Florent Revest <revest@chromium.org>
 > > Cc: Steven Rostedt <rostedt@goodmis.org>
 > > Cc: Mark Rutland <mark.rutland@arm.com>
 > > Cc: Catalin Marinas <catalin.marinas@arm.com>
 > > Cc: Will Deacon <will@kernel.org>
-> > Cc: Paul Walmsley <paul.walmsley@sifive.com>
-> > Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> > Cc: Albert Ou <aou@eecs.berkeley.edu>
+> > Cc: Michael Ellerman <mpe@ellerman.id.au>
+> > Cc: Nicholas Piggin <npiggin@gmail.com>
+> > Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+> > Cc: Naveen N Rao <naveen@kernel.org>
+> > Cc: Madhavan Srinivasan <maddy@linux.ibm.com>
+> > Cc: Heiko Carstens <hca@linux.ibm.com>
+> > Cc: Vasily Gorbik <gor@linux.ibm.com>
+> > Cc: Alexander Gordeev <agordeev@linux.ibm.com>
+> > Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
+> > Cc: Sven Schnelle <svens@linux.ibm.com>
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Ingo Molnar <mingo@redhat.com>
+> > Cc: Borislav Petkov <bp@alien8.de>
+> > Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> > Cc: x86@kernel.org
+> > Cc: "H. Peter Anvin" <hpa@zytor.com>
 > > 
 > > ---
-> >  Changes in v14:
-> >   - Add riscv change.
-> >  Changes in v8:
-> >   - Add the reason why this required in changelog.
-> >  Changes from previous series: NOTHING, just forward ported.
+> >   Changes in v16:
+> >    - Fix s390 to clear psw.mask according to Heiko's suggestion.
 > > ---
-> >  arch/arm64/include/asm/ftrace.h |   11 +++++++++++
-> >  arch/riscv/include/asm/ftrace.h |   14 ++++++++++++++
-> >  include/linux/ftrace.h          |   17 +++++++++++++++++
-> >  3 files changed, 42 insertions(+)
+> >  arch/arm64/include/asm/ftrace.h   |    7 +++++++
+> >  arch/powerpc/include/asm/ftrace.h |    7 +++++++
+> >  arch/s390/include/asm/ftrace.h    |    6 ++++++
+> >  arch/x86/include/asm/ftrace.h     |    7 +++++++
+> >  include/linux/ftrace.h            |   31 +++++++++++++++++++++++++++++++
+> >  5 files changed, 58 insertions(+)
 > > 
 > > diff --git a/arch/arm64/include/asm/ftrace.h b/arch/arm64/include/asm/ftrace.h
-> > index b5fa57b61378..d344c69eb01e 100644
+> > index d344c69eb01e..6493a575664f 100644
 > > --- a/arch/arm64/include/asm/ftrace.h
 > > +++ b/arch/arm64/include/asm/ftrace.h
-> > @@ -135,6 +135,17 @@ ftrace_regs_get_frame_pointer(const struct ftrace_regs *fregs)
-> >  	return arch_ftrace_regs(fregs)->fp;
+> > @@ -146,6 +146,13 @@ ftrace_partial_regs(const struct ftrace_regs *fregs, struct pt_regs *regs)
+> >  	return regs;
 > >  }
 > >  
-> > +static __always_inline struct pt_regs *
-> > +ftrace_partial_regs(const struct ftrace_regs *fregs, struct pt_regs *regs)
-> > +{
-> > +	memcpy(regs->regs, arch_ftrace_regs(fregs)->regs, sizeof(u64) * 9);
+> > +#define arch_ftrace_fill_perf_regs(fregs, _regs) do {		\
+> > +		(_regs)->pc = arch_ftrace_regs(fregs)->pc;			\
+> > +		(_regs)->regs[29] = arch_ftrace_regs(fregs)->fp;		\
+> > +		(_regs)->sp = arch_ftrace_regs(fregs)->sp;			\
+> > +		(_regs)->pstate = PSR_MODE_EL1h;		\
+> > +	} while (0)
 > 
-> Since ftrace_regs::regs is an 'unsigned long regs[9]' can we just use
-> sizeof() on that instead of hard-coding the length of the array here?
-
-Good catch! I will update it.
+> arm64 bit looks correct to me:
+> 
+> Acked-by: Will Deacon <will@kernel.org>
 
 Thank you!
 
