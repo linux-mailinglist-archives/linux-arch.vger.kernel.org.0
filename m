@@ -1,218 +1,124 @@
-Return-Path: <linux-arch+bounces-8434-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8435-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0804C9ABAB3
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2024 02:51:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 940239ABD91
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2024 06:56:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 267CF1C22D5A
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2024 00:51:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 42811284C03
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2024 04:56:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF87C18E20;
-	Wed, 23 Oct 2024 00:51:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 321BA13AD05;
+	Wed, 23 Oct 2024 04:56:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="Ptq/Asv6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B/wLRcYq"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23C2E1C6A3;
-	Wed, 23 Oct 2024 00:51:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 027124C7C;
+	Wed, 23 Oct 2024 04:56:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729644668; cv=none; b=sImg5hSQ9ZGCzSDmmiK6WLThYWdW9r7Ktf5I6sQ8PYYZ8mvzsqO4RsMIyV3CdB0nAice+r5ffCfuj/6KNJQ4/r54NvO4ZvqTVAqTyrJ79ypxEV3RnKG4/60UUMaCT5gb8R/lLd25W+yncH0so9eVp1Vxxwun9J5lUTE6GFZPYvI=
+	t=1729659373; cv=none; b=tX76QJdTkEVZd7EhRQFqMQ8/ye1Btac1GYtobAKT6wZTM0tUptmauB55nDVza9+VTnDxUJAUHakIBMHy3BClaLcj+I8OjJIz0VAvAs5/9H1Izbzh+lc3+Z4PqoZ4DC/qQ8ghgHAsg07m1UwWRSAm69Udl3DKKDnSa42Wgl4LrkQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729644668; c=relaxed/simple;
-	bh=2CicPGy2glP1mUqm5CAPj05xgBoGuI0XdTJxJxXKrDo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=M8mfOGrSL+Cyp0D+wTbJLEL2Z8k1WE35Gar1ofxumN6D8VA8EP6Bs2xK1TJedCWyfuoQ8i8KdbZVAm4ubIfwjoOW649jL8Pmbkp+mGjMA0ll/QwZwDYm837+N83YGFoa58fyl+3X/En34BFVLHGp3Q3u72bBtGWgBH4unkbvrDo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=Ptq/Asv6; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [10.0.0.114] (c-67-182-156-199.hsd1.wa.comcast.net [67.182.156.199])
-	by linux.microsoft.com (Postfix) with ESMTPSA id E31B820FC5F2;
-	Tue, 22 Oct 2024 17:51:05 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E31B820FC5F2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1729644666;
-	bh=zjZeWP3Fn8idOep3PQVo7QwCf4WCY+6296943aRWrJo=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Ptq/Asv6NOd+j2FY/cwnF8Hu8cTmgTkCKNGmUO8vaWOmDGr2W5C3tiAUiJjUCJHpp
-	 D3lFoU5kHF/38OOU7fNrQytJFQx60+KYnIi8VDrVVrWD1Sh/M95SHve4tCkxvaOjyU
-	 8mjWFYlVmGMrtAatziaIPXazv+vB8cutE+AlXvbQ=
-Message-ID: <725bac7d-5758-44fd-82cc-29fb85d8c53f@linux.microsoft.com>
-Date: Tue, 22 Oct 2024 17:51:05 -0700
+	s=arc-20240116; t=1729659373; c=relaxed/simple;
+	bh=AY8Zp2haauObwpX/UvHbw6SC+bgAY17isTJb8nygQ7o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cxbo4xUkuVFie93RzUBvY2pdBaQQA7eoKMRB65QdVaZOuJE+tZ7+FRcVQIXDs3o0S8AviwrstqzBT0Xh06P7YtG+MAWBzsR9YpMeRKY0ppA63A2nHl81mc8Z2H6eeSGGQFidZDD4l+aYP1Wx4Y7/KD9awwrrQBiakoFRR2DQUxM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B/wLRcYq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EA15C4CEE5;
+	Wed, 23 Oct 2024 04:56:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729659372;
+	bh=AY8Zp2haauObwpX/UvHbw6SC+bgAY17isTJb8nygQ7o=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=B/wLRcYqNvmH9rKOUlk+DslyRamaqLgwQTL6/KJVgEcnszZzVyKKfCyI2AHRJgTp5
+	 dOYApRfE9wZH8Kmf+E/2e8ZicbHgYn8OCU3muwWu2w7D6lCaGXSnbiCoYotqdeyirU
+	 XbsYTsyJPNNuVpoqs97dqeLr4aTc4CrWHGcMurBP/jtQ67bkS+Dy3jIP7OSC5mCV9z
+	 96PAv81sfiwa71YOqspUtVJdezDakaEiM2nAdb/Imas2QlcZwD//sSvlikHLQfAbMd
+	 dgD99JcV0OmbXLw2c7yHTyze3fmAJmfrDONepeEouQPw5GCexbS5BMkz4dg/M2Hqyn
+	 ajAa+5UHitSMw==
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-539e3f35268so4916653e87.3;
+        Tue, 22 Oct 2024 21:56:12 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWMLAIFAHs8cWQCbZdOs4uGTQN35Fg6SBHlEgkAGp56yu4T0YetGdhcfgrBbhk5TNDpePsdDV7lvdOC@vger.kernel.org, AJvYcCWehxvkJMgwDe9Sr+vs0fg7Iq0uMnarCFfVu6aK8EZ3Ja9dKEqW4pzceUhCjj9ZMy6NuSadw8BRuApnpN/Grg==@vger.kernel.org, AJvYcCX/f+tkdKB9oxFisSDdYnBC8Lu558K6ybiDV+i6yL0Pt8MwGKi2o/JebeTVrzboEvsDss+21O4Rf16B484I@vger.kernel.org
+X-Gm-Message-State: AOJu0YxcLKPRHqSl/hWolUR0lJaGp3YoyRjco5g67qZGGNVlgKTDYAHI
+	3cjs2ftBkniO5gZs4b0EP1oh0vFK/NjL4Mgr26WjvMUOv2xBXmxX6TM29gEPrOKZFBtM/8xohTg
+	KuIaokcGP7mVXDZ371Sjv28mkHiU=
+X-Google-Smtp-Source: AGHT+IH2WKaFs7NPh26+cmobMHBnnTIDPrdXMLtM0gbtf4eQ0HRop6c5o0FiEKJcPuU668AFQL/9XuP68s+wZZoy4VA=
+X-Received: by 2002:a05:6512:238f:b0:539:9594:b226 with SMTP id
+ 2adb3069b0e04-53b1a31f6a1mr440383e87.34.1729659371194; Tue, 22 Oct 2024
+ 21:56:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/5] Add new headers for Hyper-V Dom0
-To: Michael Kelley <mhklinux@outlook.com>,
- "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
- "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
- "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
- "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
- "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
- "virtualization@lists.linux.dev" <virtualization@lists.linux.dev>
-Cc: "kys@microsoft.com" <kys@microsoft.com>,
- "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
- "wei.liu@kernel.org" <wei.liu@kernel.org>,
- "decui@microsoft.com" <decui@microsoft.com>,
- "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
- "will@kernel.org" <will@kernel.org>, "luto@kernel.org" <luto@kernel.org>,
- "tglx@linutronix.de" <tglx@linutronix.de>,
- "mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
- "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
- "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
- "seanjc@google.com" <seanjc@google.com>,
- "pbonzini@redhat.com" <pbonzini@redhat.com>,
- "peterz@infradead.org" <peterz@infradead.org>,
- "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
- "joro@8bytes.org" <joro@8bytes.org>,
- "robin.murphy@arm.com" <robin.murphy@arm.com>,
- "davem@davemloft.net" <davem@davemloft.net>,
- "edumazet@google.com" <edumazet@google.com>,
- "kuba@kernel.org" <kuba@kernel.org>, "pabeni@redhat.com"
- <pabeni@redhat.com>, "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
- "kw@linux.com" <kw@linux.com>, "robh@kernel.org" <robh@kernel.org>,
- "bhelgaas@google.com" <bhelgaas@google.com>, "arnd@arndb.de"
- <arnd@arndb.de>, "sgarzare@redhat.com" <sgarzare@redhat.com>,
- "jinankjain@linux.microsoft.com" <jinankjain@linux.microsoft.com>,
- "muminulrussell@gmail.com" <muminulrussell@gmail.com>,
- "skinsburskii@linux.microsoft.com" <skinsburskii@linux.microsoft.com>,
- "mukeshrathor@microsoft.com" <mukeshrathor@microsoft.com>
-References: <1727985064-18362-1-git-send-email-nunodasneves@linux.microsoft.com>
- <SN6PR02MB4157F6EA7B2454D2F6CBF2ECD4782@SN6PR02MB4157.namprd02.prod.outlook.com>
-Content-Language: en-US
-From: Nuno Das Neves <nunodasneves@linux.microsoft.com>
-In-Reply-To: <SN6PR02MB4157F6EA7B2454D2F6CBF2ECD4782@SN6PR02MB4157.namprd02.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20240129192644.3359978-1-mcgrof@kernel.org> <ZbrFoKUJQ8MIdzXD@bombadil.infradead.org>
+ <ZbvdbdxOKZ9FUQuC@bombadil.infradead.org> <CAK7LNATjKzUVR7DbJqb=yAinJ1YZo8tzwiXA79E9-VrDn11wwg@mail.gmail.com>
+ <Zb0zGZrotuWyhsFd@bombadil.infradead.org> <Zxap5hbcXw36rRWW@bombadil.infradead.org>
+ <7d0ce4fc-c9ab-4c67-8666-d5bd56dc970d@gmx.de>
+In-Reply-To: <7d0ce4fc-c9ab-4c67-8666-d5bd56dc970d@gmx.de>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Wed, 23 Oct 2024 13:55:33 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASPm8zo2y2vZfeX+LC=xuF+s_bAjkmzTSaT-nmcYoSkKw@mail.gmail.com>
+Message-ID: <CAK7LNASPm8zo2y2vZfeX+LC=xuF+s_bAjkmzTSaT-nmcYoSkKw@mail.gmail.com>
+Subject: Re: [PATCH v2 0/3] modules: few of alignment fixes
+To: Helge Deller <deller@gmx.de>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, arnd@arndb.de, linux-arch@vger.kernel.org, 
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 10/10/2024 11:21 AM, Michael Kelley wrote:
-> From: Nuno Das Neves <nunodasneves@linux.microsoft.com> Sent: Thursday, October 3, 2024 12:51 PM
->>>> An intermediary header "hv_defs.h" is introduced to conditionally
->> include either hyperv-tlfs.h or hvhdk.h. This is required because
->> several headers which today include hyperv-tlfs.h, are shared
->> between Hyper-V and KVM code (e.g. mshyperv.h).
-> 
-> Have you considered user space code that uses
-> include/linux/hyperv.h? Which of the two schemes will it use? That code
-> needs to compile correctly on x86 and ARM64 after your changes.
-> User space code includes the separate DPDK project, and some of the
-> tools in the kernel tree under tools/hv. Anything that uses the
-> uio_hv_generic.c driver falls into this category.
-> 
-Unless I misunderstand something, the uapi code isn't affected at all
-by this patch set. e.g. the code in tools/hv uses include/uapi/linux/hyperv.h,
-which doesn't include any other Hyper-V headers.
+On Tue, Oct 22, 2024 at 5:07=E2=80=AFAM Helge Deller <deller@gmx.de> wrote:
+>
+> On 10/21/24 21:22, Luis Chamberlain wrote:
+> > On Fri, Feb 02, 2024 at 10:23:21AM -0800, Luis Chamberlain wrote:
+> >> On Sat, Feb 03, 2024 at 12:20:38AM +0900, Masahiro Yamada wrote:
+> >>> On Fri, Feb 2, 2024 at 3:05=E2=80=AFAM Luis Chamberlain <mcgrof@kerne=
+l.org> wrote:
+> >>>>
+> >>>> On Wed, Jan 31, 2024 at 02:11:44PM -0800, Luis Chamberlain wrote:
+> >>>>> On Mon, Jan 29, 2024 at 11:26:39AM -0800, Luis Chamberlain wrote:
+> >>>>>> Masahiro, if there no issues feel free to take this or I can take =
+them in
+> >>>>>> too via the modules-next tree. Lemme know!
+> >>>>>
+> >>>>> I've queued this onto modules-testing to get winder testing [0]
+> >>>>
+> >>>> I've moved it to modules-next as I've found no issues.
+> >>>>
+> >>>>    Luis
+> >>>
+> >>>
+> >>> I believe this patch series is wrong.
+> >>>
+> >>> I thought we agreed that the alignment must be added to
+> >>> individual asm code, not to the linker script.
+> >>>
+> >>> I am surprised that you came back to this.
+> >>
+> >> I misseed the dialog on the old cover letter, sorry. I've yanked these=
+ patches
+> >> out. I'd expect a respin from Helge.
+> >
+> > Just goind down memory lane -- Helge, the work here pending was to move
+> > this to the linker script. Were you going to follow up on this?
+>
+> Masahiro mentions above, that the alignment should be added
+> to the individual asm code. This happened in the meantime for parisc, but
+> I'm not sure if all platforms get this right.
+> So in addition, I still believe that adding the alignment to the linker
+> script too is another right thing to do.
+>
+> Helge
 
-I'm not aware of how the DPDK project uses the Hyper-V definitions, but if it
-is getting headers from uapi it should also be unaffected.
+Yes, I believe the proper alignment should be specified in asm code.
 
-> I think there's also user space code that is built for vDSO that might pull
-> in the .h files you are modifying. There are in-progress patches dealing
-> with vDSO include files, such as [1]. My general comment on vDSO
-> is to be careful in making #include file changes that it uses, but I'm
-> not knowledgeable enough on how vDSO is built to give specific
-> guidance. :-(
-> 
-Hmm, interesting, looks like it does get used by userspace. The tsc page
-is mapped into userspace in vdso.vma.c, and read in vdso/gettimeofday.h.
-
-That is unexpected for me, since these things aren't in uapi. However I don't
-anticipate a problem. The definitions used haven't changed, just the headers
-they are included from.
-
-Thanks
-Nuno
-
-> Michael
-> 
-> [1] https://lore.kernel.org/lkml/20241010135146.181175-1-vincenzo.frascino@arm.com/
-> 
->>
->> Summary:
->> Patch 1-2: Cleanup patches
->> Patch 3: Add the new headers (hvhdk.h, etc..) in include/hyperv/
->> Patch 4: Add hv_defs.h and use it in mshyperv.h, svm.h,
->>          hyperv_timer.h
->> Patch 5: Switch to the new headers, only in Hyper-V code
->>
->> Nuno Das Neves (5):
->>   hyperv: Move hv_connection_id to hyperv-tlfs.h
->>   hyperv: Remove unnecessary #includes
->>   hyperv: Add new Hyper-V headers
->>   hyperv: Add hv_defs.h to conditionally include hyperv-tlfs.h or
->>     hvhdk.h
->>   hyperv: Use hvhdk.h instead of hyperv-tlfs.h in Hyper-V code
->>
->>  arch/arm64/hyperv/hv_core.c              |    3 +-
->>  arch/arm64/hyperv/mshyperv.c             |    1 +
->>  arch/arm64/include/asm/mshyperv.h        |    2 +-
->>  arch/x86/entry/vdso/vma.c                |    1 +
->>  arch/x86/hyperv/hv_apic.c                |    2 +-
->>  arch/x86/hyperv/hv_init.c                |    3 +-
->>  arch/x86/hyperv/hv_proc.c                |    4 +-
->>  arch/x86/hyperv/hv_spinlock.c            |    1 +
->>  arch/x86/hyperv/hv_vtl.c                 |    1 +
->>  arch/x86/hyperv/irqdomain.c              |    1 +
->>  arch/x86/hyperv/ivm.c                    |    2 +-
->>  arch/x86/hyperv/mmu.c                    |    2 +-
->>  arch/x86/hyperv/nested.c                 |    2 +-
->>  arch/x86/include/asm/kvm_host.h          |    1 -
->>  arch/x86/include/asm/mshyperv.h          |    3 +-
->>  arch/x86/include/asm/svm.h               |    2 +-
->>  arch/x86/include/asm/vdso/gettimeofday.h |    1 +
->>  arch/x86/kernel/cpu/mshyperv.c           |    2 +-
->>  arch/x86/kernel/cpu/mtrr/generic.c       |    1 +
->>  arch/x86/kvm/vmx/vmx_onhyperv.h          |    1 -
->>  arch/x86/mm/pat/set_memory.c             |    2 -
->>  drivers/clocksource/hyperv_timer.c       |    2 +-
->>  drivers/hv/channel.c                     |    1 +
->>  drivers/hv/channel_mgmt.c                |    1 +
->>  drivers/hv/connection.c                  |    1 +
->>  drivers/hv/hv.c                          |    1 +
->>  drivers/hv/hv_balloon.c                  |    5 +-
->>  drivers/hv/hv_common.c                   |    2 +-
->>  drivers/hv/hv_kvp.c                      |    1 -
->>  drivers/hv/hv_snapshot.c                 |    1 -
->>  drivers/hv/hv_util.c                     |    1 +
->>  drivers/hv/hyperv_vmbus.h                |    1 -
->>  drivers/hv/ring_buffer.c                 |    1 +
->>  drivers/hv/vmbus_drv.c                   |    1 +
->>  drivers/iommu/hyperv-iommu.c             |    1 +
->>  drivers/net/hyperv/netvsc.c              |    1 +
->>  drivers/pci/controller/pci-hyperv.c      |    1 +
->>  include/asm-generic/hyperv-tlfs.h        |    9 +
->>  include/asm-generic/mshyperv.h           |    2 +-
->>  include/clocksource/hyperv_timer.h       |    2 +-
->>  include/hyperv/hv_defs.h                 |   29 +
->>  include/hyperv/hvgdk.h                   |   66 ++
->>  include/hyperv/hvgdk_ext.h               |   46 +
->>  include/hyperv/hvgdk_mini.h              | 1212 ++++++++++++++++++++++
->>  include/hyperv/hvhdk.h                   |  733 +++++++++++++
->>  include/hyperv/hvhdk_mini.h              |  310 ++++++
->>  include/linux/hyperv.h                   |   12 +-
->>  net/vmw_vsock/hyperv_transport.c         |    1 -
->>  48 files changed, 2442 insertions(+), 40 deletions(-)
->>  create mode 100644 include/hyperv/hv_defs.h
->>  create mode 100644 include/hyperv/hvgdk.h
->>  create mode 100644 include/hyperv/hvgdk_ext.h
->>  create mode 100644 include/hyperv/hvgdk_mini.h
->>  create mode 100644 include/hyperv/hvhdk.h
->>  create mode 100644 include/hyperv/hvhdk_mini.h
->>
->> --
->> 2.34.1
->>
-> 
-
+--=20
+Best Regards
+Masahiro Yamada
 
