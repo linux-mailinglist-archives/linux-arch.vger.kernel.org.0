@@ -1,211 +1,184 @@
-Return-Path: <linux-arch+bounces-8480-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8481-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F3449AD0F8
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2024 18:31:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58F999AD21D
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2024 19:08:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E4C802825F4
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2024 16:31:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7A2001C232DB
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2024 17:08:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FE671CDFB9;
-	Wed, 23 Oct 2024 16:29:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEB5A79C4;
+	Wed, 23 Oct 2024 17:08:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CdMzqkFo"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="aBk6JgKB"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CC961C831A;
-	Wed, 23 Oct 2024 16:29:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02F361C9EAC
+	for <linux-arch@vger.kernel.org>; Wed, 23 Oct 2024 17:08:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729700988; cv=none; b=VRi6oPYSx3/84tnI8RGXj8AApKPO98CW1OWtVkQznMOAlX41uYtA4W53yGTkWHtuJzUg9NADnD8Q7gVcYTR+KFy4RapNpFF+l/xFnyKONPzKUDZzPqKIllssXMujWIYc6HuaGGszteYTc0NQ2pOfrdLfFLb228J/ddCTbTeiwxI=
+	t=1729703284; cv=none; b=f7EAG5TvMJYESlvabZy5X8qjchFdE9uE3Q05KvEd6al1mLEVB06Dv03W8L03N/HS+hG5UhJTJPTIt7/XCyspVOHCFJr+L0HP+VbT2+5SMuvOzzqYCs/bfaV3cLt1M82ojaICCH3l4+MSpkLUVsZ3TFrNkuIvBjiwbURBaAcVAl4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729700988; c=relaxed/simple;
-	bh=nyFGHJdxaOJGfMON4ADcqNZmm4B8ZcjCFybfUwv2QVo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=G/+N/KANHtRXodB6IgA+5n0Z7BdAdOrqKJyJF2FMmvgDdXpdr23hhycyMNPxyE2x84A5Ny83C03hi241Ea0TTcu1p/f3vcP9MBr7jb+7eM0OZPQC85Af1mFOdKxg+aSVUeYhOpSdPZoiB1pgHRg1xY2vZFNlwW/wFg6rtUNzJnQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CdMzqkFo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 049B0C4CEE4;
-	Wed, 23 Oct 2024 16:29:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729700987;
-	bh=nyFGHJdxaOJGfMON4ADcqNZmm4B8ZcjCFybfUwv2QVo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=CdMzqkFoGWX2b7PqUYjaOLgPsSgx3plKCU2vqNIX57DWGYdA1jQq4ksX86hcp0Ugv
-	 TTVaihtq3olFqvVRmH4ux8HQokYedngI7cAAhfPrCPYYsXHZZoiN6pzJ3nAylPiH7K
-	 bb3YEyoMAywWZl5IK4NAIOnByYJRe15tMtAbd8c35ogVw5e7dfuIjpFNGGCC1fiF6J
-	 /n44T1S2NIJoA2evc0gIvR+SyqVMDPqyfLYX2YcniiVUZMFhNwBT2CtJTAHhahGj3z
-	 RBCgFt12Z6rRkFTgodgEgYga72XUQsWs+/9cBfVknah4t5l6IuPX9VAK7YH01aas8U
-	 j3vCYJbVvZIxQ==
-From: Mike Rapoport <rppt@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	Luis Chamberlain <mcgrof@kernel.org>
-Cc: Andreas Larsson <andreas@gaisler.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Borislav Petkov <bp@alien8.de>,
-	Brian Cain <bcain@quicinc.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christoph Hellwig <hch@infradead.org>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Guo Ren <guoren@kernel.org>,
-	Helge Deller <deller@gmx.de>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Matt Turner <mattst88@gmail.com>,
-	Max Filippov <jcmvbkbc@gmail.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Michal Simek <monstr@monstr.eu>,
-	Mike Rapoport <rppt@kernel.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Richard Weinberger <richard@nod.at>,
-	Russell King <linux@armlinux.org.uk>,
-	Song Liu <song@kernel.org>,
-	Stafford Horne <shorne@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Vineet Gupta <vgupta@kernel.org>,
-	Will Deacon <will@kernel.org>,
-	bpf@vger.kernel.org,
-	linux-alpha@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-csky@vger.kernel.org,
-	linux-hexagon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-modules@vger.kernel.org,
-	linux-openrisc@vger.kernel.org,
-	linux-parisc@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-sh@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-um@lists.infradead.org,
-	linuxppc-dev@lists.ozlabs.org,
-	loongarch@lists.linux.dev,
-	sparclinux@vger.kernel.org,
-	x86@kernel.org
-Subject: [PATCH v7 8/8] x86/module: enable ROX caches for module text on 64 bit
-Date: Wed, 23 Oct 2024 19:27:11 +0300
-Message-ID: <20241023162711.2579610-9-rppt@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241023162711.2579610-1-rppt@kernel.org>
-References: <20241023162711.2579610-1-rppt@kernel.org>
+	s=arc-20240116; t=1729703284; c=relaxed/simple;
+	bh=bwji3KM0kI7ZVL1Hq5Xm6xTu/GMixHRkt08MlaQijgk=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=gGFQJINDEpHpdtmPWPMIXUES7lxWyZYWsHXk6aep1Wtc/IS2G4ENabtMRW4M0+v941MVydaT6o/ulAuIGaos/KUAJrceYRHAez6pL4+AC0/p4pPEzeKAfVuHnbZVubmwmWlwzhQU8A2tXswMqef9sUnj6GarJi7yi11L2LkldrQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=aBk6JgKB; arc=none smtp.client-ip=209.85.219.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-e2605ce4276so28800276.3
+        for <linux-arch@vger.kernel.org>; Wed, 23 Oct 2024 10:08:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1729703282; x=1730308082; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=p/SgywtZx7rb7/mEn3XyHfH3Cb2SyryihrWMC3ba6F8=;
+        b=aBk6JgKBLRIbloH5t8udpkgM8XsADpg/M/lM//rLpP7vydui9YMr2ThLHOsxkhKSPu
+         FKUDRjmACnDVOhDb4tThKoCW31YIlLJUNSNHdYKwWSfBMd+rtj2QBP+DIQdwLgN2ULZC
+         etZcvBR0DjIDi5GAj/E5WOPTkz2F/z2b/RWoqzOo+gY2RdwT8/vEUoh5SAYcoh91TNse
+         BzBPhFQvn7BMkIeLRBRslz6pXrnsVxM+m/r2g9SrrIgjN8yvgcMgk4ArtuTn1332L2FR
+         tXgOOfksdAI9QuUmEOSCGZT4phb7bKx6MOLDOjyB65kqboAx1QMPnVp+t/9O+AO6H188
+         zXHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729703282; x=1730308082;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=p/SgywtZx7rb7/mEn3XyHfH3Cb2SyryihrWMC3ba6F8=;
+        b=sLWeYOyPdWqeUIAnGLHI/KEp84brz8c1HGXKKFN+CG1KodoNEYqeAK38TiWPZrU1p6
+         0Ejj/x6YcvT4MTATAYXWdncM5BC/oDdgrjxaMRsvaQezeLoz/kBcjZ5PhdTbzbVkm5aG
+         C4rom992ZkEXFLw+hMYX0HvT+xMXuozaj7/h34HN1jJthE0fbExU90jECrQQHHCHZjRv
+         ec/4BPcT0H2RvkO6NzE79COC/KYB7dG+CM3q6bhZhtRxpxg5nxQUrKEQPDfx4dGWGpBt
+         utgP5WH1tLA5/t+sB8ihESBgwaVPjiRz2urE23+4WJdP+G+3J+qxVnCBctFPp9UFUhRk
+         JtIQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUWK5Wzmthb7ps6gEkkwbxPqYgyXPjHEqTKUxen/3Vj6e4CcTzrddSbIVSXh3OtiephKbrtSNcwE9yI@vger.kernel.org
+X-Gm-Message-State: AOJu0YymnBmSMZnYSYzdP47NK1R+0GSQHMu2aIiQSGE2hGPqNIub9map
+	odXGb0pxpvGOzC8YJT9E/yhjVbi1ZgNKZGtXEbECavbNKLQY2fFLjACm+6H7RGuPW5S1iPINOmb
+	WxA==
+X-Google-Smtp-Source: AGHT+IEsK5kZcuCRBJ2lcZigYshTAvQXhOVGbGNjlRgIh/suKcwgOyvPk5eRcakI/OtXpbirCYYTcQ44vPI=
+X-Received: from surenb-desktop.mtv.corp.google.com ([2a00:79e0:2e3f:8:a087:59b9:198a:c44c])
+ (user=surenb job=sendgmr) by 2002:a05:6902:50d:b0:e2e:44ae:111a with SMTP id
+ 3f1490d57ef6-e2e44ae12f1mr899276.8.1729703281826; Wed, 23 Oct 2024 10:08:01
+ -0700 (PDT)
+Date: Wed, 23 Oct 2024 10:07:53 -0700
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.47.0.105.g07ac214952-goog
+Message-ID: <20241023170759.999909-1-surenb@google.com>
+Subject: [PATCH v4 0/6] page allocation tag compression
+From: Suren Baghdasaryan <surenb@google.com>
+To: akpm@linux-foundation.org
+Cc: kent.overstreet@linux.dev, corbet@lwn.net, arnd@arndb.de, 
+	mcgrof@kernel.org, rppt@kernel.org, paulmck@kernel.org, thuth@redhat.com, 
+	tglx@linutronix.de, bp@alien8.de, xiongwei.song@windriver.com, 
+	ardb@kernel.org, david@redhat.com, vbabka@suse.cz, mhocko@suse.com, 
+	hannes@cmpxchg.org, roman.gushchin@linux.dev, dave@stgolabs.net, 
+	willy@infradead.org, liam.howlett@oracle.com, pasha.tatashin@soleen.com, 
+	souravpanda@google.com, keescook@chromium.org, dennis@kernel.org, 
+	jhubbard@nvidia.com, urezki@gmail.com, hch@infradead.org, petr.pavlu@suse.com, 
+	samitolvanen@google.com, da.gomez@samsung.com, yuzhao@google.com, 
+	vvvvvv@google.com, rostedt@goodmis.org, iamjoonsoo.kim@lge.com, 
+	rientjes@google.com, minchan@google.com, kaleshsingh@google.com, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-mm@kvack.org, 
+	maple-tree@lists.infradead.org, linux-modules@vger.kernel.org, 
+	kernel-team@android.com, surenb@google.com
+Content-Type: text/plain; charset="UTF-8"
 
-From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+This patchset implements several improvements:
+1. Gracefully handles module unloading while there are used allocations
+allocated from that module;
+2. Provides an option to store page allocation tag references in the
+page flags, removing dependency on page extensions and eliminating the
+memory overhead from storing page allocation references (~0.2% of total
+system memory). This also improves page allocation performance when
+CONFIG_MEM_ALLOC_PROFILING is enabled by eliminating page extension
+lookup. Page allocation performance overhead is reduced from 41% to 5.5%.
 
-Enable execmem's cache of PMD_SIZE'ed pages mapped as ROX for module
-text allocations on 64 bit.
+Patch #1 introduces mas_for_each_rev() helper function.
 
-Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-Tested-by: kdevops <kdevops@lists.linux.dev>
----
- arch/x86/Kconfig   |  1 +
- arch/x86/mm/init.c | 37 ++++++++++++++++++++++++++++++++++++-
- 2 files changed, 37 insertions(+), 1 deletion(-)
+Patch #2 introduces shutdown_mem_profiling() helper function to be used
+when disabling memory allocation profiling.
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 2852fcd82cbd..ff71d18253ba 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -83,6 +83,7 @@ config X86
- 	select ARCH_HAS_DMA_OPS			if GART_IOMMU || XEN
- 	select ARCH_HAS_EARLY_DEBUG		if KGDB
- 	select ARCH_HAS_ELF_RANDOMIZE
-+	select ARCH_HAS_EXECMEM_ROX		if X86_64
- 	select ARCH_HAS_FAST_MULTIPLIER
- 	select ARCH_HAS_FORTIFY_SOURCE
- 	select ARCH_HAS_GCOV_PROFILE_ALL
-diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
-index eb503f53c319..c2e4f389f47f 100644
---- a/arch/x86/mm/init.c
-+++ b/arch/x86/mm/init.c
-@@ -1053,18 +1053,53 @@ unsigned long arch_max_swapfile_size(void)
- #ifdef CONFIG_EXECMEM
- static struct execmem_info execmem_info __ro_after_init;
- 
-+#ifdef CONFIG_ARCH_HAS_EXECMEM_ROX
-+void execmem_fill_trapping_insns(void *ptr, size_t size, bool writeable)
-+{
-+	/* fill memory with INT3 instructions */
-+	if (writeable)
-+		memset(ptr, INT3_INSN_OPCODE, size);
-+	else
-+		text_poke_set(ptr, INT3_INSN_OPCODE, size);
-+}
-+#endif
-+
- struct execmem_info __init *execmem_arch_setup(void)
- {
- 	unsigned long start, offset = 0;
-+	enum execmem_range_flags flags;
-+	pgprot_t pgprot;
- 
- 	if (kaslr_enabled())
- 		offset = get_random_u32_inclusive(1, 1024) * PAGE_SIZE;
- 
- 	start = MODULES_VADDR + offset;
- 
-+	if (IS_ENABLED(CONFIG_ARCH_HAS_EXECMEM_ROX)) {
-+		pgprot = PAGE_KERNEL_ROX;
-+		flags = EXECMEM_KASAN_SHADOW | EXECMEM_ROX_CACHE;
-+	} else {
-+		pgprot = PAGE_KERNEL;
-+		flags = EXECMEM_KASAN_SHADOW;
-+	}
-+
- 	execmem_info = (struct execmem_info){
- 		.ranges = {
--			[EXECMEM_DEFAULT] = {
-+			[EXECMEM_MODULE_TEXT] = {
-+				.flags	= flags,
-+				.start	= start,
-+				.end	= MODULES_END,
-+				.pgprot	= pgprot,
-+				.alignment = MODULE_ALIGN,
-+			},
-+			[EXECMEM_KPROBES ... EXECMEM_BPF] = {
-+				.flags	= EXECMEM_KASAN_SHADOW,
-+				.start	= start,
-+				.end	= MODULES_END,
-+				.pgprot	= PAGE_KERNEL,
-+				.alignment = MODULE_ALIGN,
-+			},
-+			[EXECMEM_MODULE_DATA] = {
- 				.flags	= EXECMEM_KASAN_SHADOW,
- 				.start	= start,
- 				.end	= MODULES_END,
+Patch #3 copies module tags into virtually contiguous memory which
+serves two purposes:
+- Lets us deal with the situation when module is unloaded while there
+are still live allocations from that module. Since we are using a copy
+version of the tags we can safely unload the module. Space and gaps in
+this contiguous memory are managed using a maple tree.
+- Enables simple indexing of the tags in the later patches.
+
+Patch #4 changes the way we allocate virtually contiguous memory for
+module tags to reserve only vitrual area and populate physical pages
+only as needed at module load time.
+
+Patch #5 abstracts page allocation tag reference to simplify later
+changes.
+
+Patch #6 adds compression option to the sysctl.vm.mem_profiling boot
+parameter for storing page allocation tag references inside page flags
+if they fit. If the number of available page flag bits is insufficient
+to address all kernel allocations, memory allocation profiling gets
+disabled with an appropriate warning.
+
+Patchset applies to mm-unstable.
+
+Changes since v3 [1]:
+- rebased over Mike's patchset in mm-unstable
+- added Reviewed-by, per Liam Howlett
+- limited execmem_vmap to work with EXECMEM_MODULE_DATA only,
+per Mike Rapoport
+- moved __get_vm_area_node() declaration into mm/internal.h,
+per Mike Rapoport
+- split parts of reserve_module_tags() into helper functions to make it
+more readable, per Mike Rapoport
+- introduced shutdown_mem_profiling() to be used when disabling memory
+allocation profiling
+- replaced CONFIG_PGALLOC_TAG_USE_PAGEFLAGS with a new boot parameter
+option, per Michal Hocko
+- minor code cleanups and refactoring to make the code more readable
+- added VMALLOC and MODULE SUPPORT reviewers I missed before
+
+[1] https://lore.kernel.org/all/20241014203646.1952505-1-surenb@google.com/
+
+Suren Baghdasaryan (6):
+  maple_tree: add mas_for_each_rev() helper
+  alloc_tag: introduce shutdown_mem_profiling helper function
+  alloc_tag: load module tags into separate contiguous memory
+  alloc_tag: populate memory for module tags as needed
+  alloc_tag: introduce pgtag_ref_handle to abstract page tag references
+  alloc_tag: support for page allocation tag compression
+
+ Documentation/mm/allocation-profiling.rst |   7 +-
+ include/asm-generic/codetag.lds.h         |  19 +
+ include/linux/alloc_tag.h                 |  21 +-
+ include/linux/codetag.h                   |  40 +-
+ include/linux/execmem.h                   |  10 +
+ include/linux/maple_tree.h                |  14 +
+ include/linux/mm.h                        |  25 +-
+ include/linux/page-flags-layout.h         |   7 +
+ include/linux/pgalloc_tag.h               | 197 +++++++--
+ include/linux/vmalloc.h                   |   3 +
+ kernel/module/main.c                      |  80 ++--
+ lib/alloc_tag.c                           | 467 ++++++++++++++++++++--
+ lib/codetag.c                             | 104 ++++-
+ mm/execmem.c                              |  16 +
+ mm/internal.h                             |   6 +
+ mm/mm_init.c                              |   5 +-
+ mm/vmalloc.c                              |   4 +-
+ scripts/module.lds.S                      |   5 +-
+ 18 files changed, 903 insertions(+), 127 deletions(-)
+
+
+base-commit: b5d43fad926a3f542cd06f3c9d286f6f489f7129
 -- 
-2.43.0
+2.47.0.105.g07ac214952-goog
 
 
