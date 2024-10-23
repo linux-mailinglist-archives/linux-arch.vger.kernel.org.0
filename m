@@ -1,124 +1,120 @@
-Return-Path: <linux-arch+bounces-8435-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8436-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 940239ABD91
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2024 06:56:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40D609ABDEF
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2024 07:36:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 42811284C03
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2024 04:56:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 02594284489
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2024 05:36:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 321BA13AD05;
-	Wed, 23 Oct 2024 04:56:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 433CF13D8B0;
+	Wed, 23 Oct 2024 05:36:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B/wLRcYq"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="e3yKJui3"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 027124C7C;
-	Wed, 23 Oct 2024 04:56:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FD8E20323;
+	Wed, 23 Oct 2024 05:36:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729659373; cv=none; b=tX76QJdTkEVZd7EhRQFqMQ8/ye1Btac1GYtobAKT6wZTM0tUptmauB55nDVza9+VTnDxUJAUHakIBMHy3BClaLcj+I8OjJIz0VAvAs5/9H1Izbzh+lc3+Z4PqoZ4DC/qQ8ghgHAsg07m1UwWRSAm69Udl3DKKDnSa42Wgl4LrkQ=
+	t=1729661810; cv=none; b=WXm+XzVgq1WHtMhe/z9UCSYR/dOgC64z8kzAVySfy7ANjhfIR7QBibyQ8Q45TFMMNWxNnQpM++e/WPLEYhbYKJ+OlMRDajKWp/sEtVIkvTybbag/tNnaRrCkhgq/mL8RXVsqR+eM21ZZAxUZxmvYDVUkMRqkP/0NZ3wWCoonRJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729659373; c=relaxed/simple;
-	bh=AY8Zp2haauObwpX/UvHbw6SC+bgAY17isTJb8nygQ7o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cxbo4xUkuVFie93RzUBvY2pdBaQQA7eoKMRB65QdVaZOuJE+tZ7+FRcVQIXDs3o0S8AviwrstqzBT0Xh06P7YtG+MAWBzsR9YpMeRKY0ppA63A2nHl81mc8Z2H6eeSGGQFidZDD4l+aYP1Wx4Y7/KD9awwrrQBiakoFRR2DQUxM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B/wLRcYq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EA15C4CEE5;
-	Wed, 23 Oct 2024 04:56:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729659372;
-	bh=AY8Zp2haauObwpX/UvHbw6SC+bgAY17isTJb8nygQ7o=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=B/wLRcYqNvmH9rKOUlk+DslyRamaqLgwQTL6/KJVgEcnszZzVyKKfCyI2AHRJgTp5
-	 dOYApRfE9wZH8Kmf+E/2e8ZicbHgYn8OCU3muwWu2w7D6lCaGXSnbiCoYotqdeyirU
-	 XbsYTsyJPNNuVpoqs97dqeLr4aTc4CrWHGcMurBP/jtQ67bkS+Dy3jIP7OSC5mCV9z
-	 96PAv81sfiwa71YOqspUtVJdezDakaEiM2nAdb/Imas2QlcZwD//sSvlikHLQfAbMd
-	 dgD99JcV0OmbXLw2c7yHTyze3fmAJmfrDONepeEouQPw5GCexbS5BMkz4dg/M2Hqyn
-	 ajAa+5UHitSMw==
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-539e3f35268so4916653e87.3;
-        Tue, 22 Oct 2024 21:56:12 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWMLAIFAHs8cWQCbZdOs4uGTQN35Fg6SBHlEgkAGp56yu4T0YetGdhcfgrBbhk5TNDpePsdDV7lvdOC@vger.kernel.org, AJvYcCWehxvkJMgwDe9Sr+vs0fg7Iq0uMnarCFfVu6aK8EZ3Ja9dKEqW4pzceUhCjj9ZMy6NuSadw8BRuApnpN/Grg==@vger.kernel.org, AJvYcCX/f+tkdKB9oxFisSDdYnBC8Lu558K6ybiDV+i6yL0Pt8MwGKi2o/JebeTVrzboEvsDss+21O4Rf16B484I@vger.kernel.org
-X-Gm-Message-State: AOJu0YxcLKPRHqSl/hWolUR0lJaGp3YoyRjco5g67qZGGNVlgKTDYAHI
-	3cjs2ftBkniO5gZs4b0EP1oh0vFK/NjL4Mgr26WjvMUOv2xBXmxX6TM29gEPrOKZFBtM/8xohTg
-	KuIaokcGP7mVXDZ371Sjv28mkHiU=
-X-Google-Smtp-Source: AGHT+IH2WKaFs7NPh26+cmobMHBnnTIDPrdXMLtM0gbtf4eQ0HRop6c5o0FiEKJcPuU668AFQL/9XuP68s+wZZoy4VA=
-X-Received: by 2002:a05:6512:238f:b0:539:9594:b226 with SMTP id
- 2adb3069b0e04-53b1a31f6a1mr440383e87.34.1729659371194; Tue, 22 Oct 2024
- 21:56:11 -0700 (PDT)
+	s=arc-20240116; t=1729661810; c=relaxed/simple;
+	bh=yyqjrNra2qrWk/SlCt8CsJRxIaNpgya75gxtX8qBAdw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VqSddQ+vg3a1tbXKgGnJSmYLFQ7MQTkNa6OfDUEeAS9JtH49EQIZXKXAs5FlB9z6zhfp8v6EmpDdWbtq+tIerOcSd/51z6CKa+h4c66E99fDu9Akjb8M1UhrRxw3sp4XctqbwOxUG+BE3hxwLcBaA/6NlYmxV+Y3dJmojq7HkCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=e3yKJui3; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=fLRpNAyXDIDQIA7HSndcO831t3mGv6BkJWEZG/+8nHM=; b=e3yKJui3E1F31NYxpyaXDU9W7H
+	+UGx5mo0sIV2J4IRe3S0lKmAIwjnMnBQslhfMHmdi/AtNvCPQq8jOwp/ruOtXaFiw4c3pJcP7Slky
+	PbaGDyP3HGNONuiaY/ACmdbI+BgedQmkkMQaSH4AioQhoJ7QRjxFz7MjTi/c01vFbTn9sHdxiMohI
+	6JbxnMeER1pWyG8JXPtFYAEvUzIpMbKe30FHv1KAJDyxneeYpqjBh8LWHkoC5Ijd6IeGCCS15Sz8z
+	Nj2X7+iDJITPMDsaPbrq7AWNeuDcMxHMRhSoEw7840C58hpQ3F3tqw//Ij4z5zduWot2M0oEg5VbW
+	cuU3mdNA==;
+Received: from 2a02-8389-2341-5b80-8c6c-e123-fc47-94a5.cable.dynamic.v6.surfer.at ([2a02:8389:2341:5b80:8c6c:e123:fc47:94a5] helo=localhost)
+	by bombadil.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1t3U34-0000000D4Ir-2Mk1;
+	Wed, 23 Oct 2024 05:36:47 +0000
+From: Christoph Hellwig <hch@lst.de>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-alpha@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-snps-arc@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org,
+	linux-hexagon@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org,
+	linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org,
+	linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org,
+	linux-um@lists.infradead.org,
+	linux-arch@vger.kernel.org
+Subject: provide generic page_to_phys and phys_to_page implementations v3
+Date: Wed, 23 Oct 2024 07:36:35 +0200
+Message-ID: <20241023053644.311692-1-hch@lst.de>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240129192644.3359978-1-mcgrof@kernel.org> <ZbrFoKUJQ8MIdzXD@bombadil.infradead.org>
- <ZbvdbdxOKZ9FUQuC@bombadil.infradead.org> <CAK7LNATjKzUVR7DbJqb=yAinJ1YZo8tzwiXA79E9-VrDn11wwg@mail.gmail.com>
- <Zb0zGZrotuWyhsFd@bombadil.infradead.org> <Zxap5hbcXw36rRWW@bombadil.infradead.org>
- <7d0ce4fc-c9ab-4c67-8666-d5bd56dc970d@gmx.de>
-In-Reply-To: <7d0ce4fc-c9ab-4c67-8666-d5bd56dc970d@gmx.de>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Wed, 23 Oct 2024 13:55:33 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASPm8zo2y2vZfeX+LC=xuF+s_bAjkmzTSaT-nmcYoSkKw@mail.gmail.com>
-Message-ID: <CAK7LNASPm8zo2y2vZfeX+LC=xuF+s_bAjkmzTSaT-nmcYoSkKw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] modules: few of alignment fixes
-To: Helge Deller <deller@gmx.de>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, arnd@arndb.de, linux-arch@vger.kernel.org, 
-	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-On Tue, Oct 22, 2024 at 5:07=E2=80=AFAM Helge Deller <deller@gmx.de> wrote:
->
-> On 10/21/24 21:22, Luis Chamberlain wrote:
-> > On Fri, Feb 02, 2024 at 10:23:21AM -0800, Luis Chamberlain wrote:
-> >> On Sat, Feb 03, 2024 at 12:20:38AM +0900, Masahiro Yamada wrote:
-> >>> On Fri, Feb 2, 2024 at 3:05=E2=80=AFAM Luis Chamberlain <mcgrof@kerne=
-l.org> wrote:
-> >>>>
-> >>>> On Wed, Jan 31, 2024 at 02:11:44PM -0800, Luis Chamberlain wrote:
-> >>>>> On Mon, Jan 29, 2024 at 11:26:39AM -0800, Luis Chamberlain wrote:
-> >>>>>> Masahiro, if there no issues feel free to take this or I can take =
-them in
-> >>>>>> too via the modules-next tree. Lemme know!
-> >>>>>
-> >>>>> I've queued this onto modules-testing to get winder testing [0]
-> >>>>
-> >>>> I've moved it to modules-next as I've found no issues.
-> >>>>
-> >>>>    Luis
-> >>>
-> >>>
-> >>> I believe this patch series is wrong.
-> >>>
-> >>> I thought we agreed that the alignment must be added to
-> >>> individual asm code, not to the linker script.
-> >>>
-> >>> I am surprised that you came back to this.
-> >>
-> >> I misseed the dialog on the old cover letter, sorry. I've yanked these=
- patches
-> >> out. I'd expect a respin from Helge.
-> >
-> > Just goind down memory lane -- Helge, the work here pending was to move
-> > this to the linker script. Were you going to follow up on this?
->
-> Masahiro mentions above, that the alignment should be added
-> to the individual asm code. This happened in the meantime for parisc, but
-> I'm not sure if all platforms get this right.
-> So in addition, I still believe that adding the alignment to the linker
-> script too is another right thing to do.
->
-> Helge
+page_to_phys is duplicated by all architectures, and from some strange
+reason placed in <asm/io.h> where it doesn't fit at all.  
 
-Yes, I believe the proper alignment should be specified in asm code.
+phys_to_page is only provided by a few architectures despite having a lot 
+of open coded users.
 
---=20
-Best Regards
-Masahiro Yamada
+Provide generic versions in <asm-generic/memory_model.h> to make these
+helpers more easily usable.
+
+Changes since v2:
+ - spelling fixes
+
+Changes since v1:
+ - use slightly less nested macros
+ - port a debug check from the old powerpc version to the generic code
+
+Diffstat:
+ arch/alpha/include/asm/io.h         |    1 -
+ arch/arc/include/asm/io.h           |    3 ---
+ arch/arm/include/asm/memory.h       |    6 ------
+ arch/arm64/include/asm/memory.h     |    6 ------
+ arch/csky/include/asm/page.h        |    3 ---
+ arch/hexagon/include/asm/page.h     |    6 ------
+ arch/loongarch/include/asm/page.h   |    3 ---
+ arch/m68k/include/asm/virtconvert.h |    3 ---
+ arch/microblaze/include/asm/page.h  |    1 -
+ arch/mips/include/asm/io.h          |    5 -----
+ arch/nios2/include/asm/io.h         |    3 ---
+ arch/openrisc/include/asm/page.h    |    2 --
+ arch/parisc/include/asm/page.h      |    1 -
+ arch/powerpc/include/asm/io.h       |   12 ------------
+ arch/riscv/include/asm/page.h       |    3 ---
+ arch/s390/include/asm/page.h        |    2 --
+ arch/sh/include/asm/page.h          |    1 -
+ arch/sparc/include/asm/page.h       |    2 --
+ arch/um/include/asm/pgtable.h       |    2 --
+ arch/x86/include/asm/io.h           |    5 -----
+ arch/xtensa/include/asm/page.h      |    1 -
+ include/asm-generic/memory_model.h  |   13 +++++++++++++
+ 22 files changed, 13 insertions(+), 71 deletions(-)
 
