@@ -1,145 +1,225 @@
-Return-Path: <linux-arch+bounces-8453-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8454-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B1519AC270
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2024 10:58:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E88D9AC2E1
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2024 11:06:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1CA1D284551
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2024 08:58:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BEA201C24F52
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Oct 2024 09:06:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5397D16F0F0;
-	Wed, 23 Oct 2024 08:58:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BBA7145323;
+	Wed, 23 Oct 2024 09:06:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F1UE5WdM"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="djyr7m6+";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="TliXn90L";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="fEvg9e+p";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="BwlGEJB9"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25A5B15C15F;
-	Wed, 23 Oct 2024 08:58:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B71B0381BA;
+	Wed, 23 Oct 2024 09:06:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729673929; cv=none; b=Tyi8/6HZUXG6cuwqEeqLxIx3sxT8VxZ6pBQAZ1qXn+7ml5mHYXVGuypBC70nESxKH58Mt8Vghdi2Gb/Mq5poHMfoQfKBlARJE7pgc6zw2fnbOQ1FhYlhFZ94Q6Cd9Rc0wMmD3noPDFV8QNa5Zq9g1GgAlqIlrv6QQwUK0ro0AsI=
+	t=1729674397; cv=none; b=fTUSxnzhV4h+f6xTitdwCeGlmeQ+F+9Fc2fbjMOv1kDdsKs3UQA1W6p20LpJ+jApOazUQfnBBBAVfikp7G5IU2+qgcp1KGYV0+Sk3Kv7o9l2kjpEevlP8j5S8jSjmMXqwpKf+HW6f+BiUCcrxHmLvmwuBuOEMXJftkrORn4bDZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729673929; c=relaxed/simple;
-	bh=3ohT1rTcrcAg928IYFQmdlYqJAvLX7jh6yLC37ict58=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=WPynIBZ3fYJzt0rxLcWIrg2ufBGk7ppbO7iYUob1iLbiprKULj89mqEQBj0Jx5oxH+NA4Yw2jr86uFcfibXjyeiHikW8CwMU1igEb0mAFqcFQbbozmrFPBItQmc45EA7ErO0NW7Z4iIJEKrAQNXlCxMo+Vv0T8R5+C+YEaa+qhw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F1UE5WdM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAA56C4CEC6;
-	Wed, 23 Oct 2024 08:58:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729673929;
-	bh=3ohT1rTcrcAg928IYFQmdlYqJAvLX7jh6yLC37ict58=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=F1UE5WdMGvk8miZhYlOlaAXT29njINa1OJiFJwyxJUvlkvrnFGT047wxTDvEZbzjy
-	 vC6WNCi69yTMx2BmCgGSmUogqYZoXe7qHNas5FaEswNqPpMbTbc69acxaz2pAiMwQz
-	 tpcwU6qT/tTm1DHVXy+J3Dhx+UA6VRm8JlqAM8jielAtqKyV6KWDjDzJJ+NG0rKpXS
-	 n86PQ2ZmjtkMrQVAJr0nbswK0JyvF16Ho7uVPDBhISJMJB7p1k9zHNouZ+vI+bDwLu
-	 1fmofMiIPITPLr3QvZCg0JtFqGcbBuC31EnKcEZE0rrsr5RqV7/jz6fZXdnW5smrLT
-	 ucIOXeTwjXEZQ==
-Date: Wed, 23 Oct 2024 17:58:43 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Will Deacon <will@kernel.org>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Steven Rostedt
- <rostedt@goodmis.org>, Florent Revest <revest@chromium.org>,
- linux-trace-kernel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, bpf <bpf@vger.kernel.org>, Alexei
- Starovoitov <ast@kernel.org>, Jiri Olsa <jolsa@kernel.org>, Alan Maguire
- <alan.maguire@oracle.com>, Mark Rutland <mark.rutland@arm.com>,
- linux-arch@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>, Catalin
- Marinas <catalin.marinas@arm.com>, Huacai Chen <chenhuacai@kernel.org>,
- WANG Xuerui <kernel@xen0n.name>, Paul Walmsley <paul.walmsley@sifive.com>,
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev
- <agordeev@linux.ibm.com>, Christian Borntraeger
- <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, Thomas
- Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav
- Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH v17 02/16] function_graph: Replace fgraph_ret_regs with
- ftrace_regs
-Message-Id: <20241023175843.e1f92bb25e9f65a4e3ff2861@kernel.org>
-In-Reply-To: <20241021164658.GB26073@willie-the-truck>
-References: <172904026427.36809.516716204730117800.stgit@devnote2>
-	<172904028952.36809.12123402713602405457.stgit@devnote2>
-	<20241021164658.GB26073@willie-the-truck>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1729674397; c=relaxed/simple;
+	bh=QJut336e0+U746jbeaWQuLxGqczRgtu9chjbuHg7ECM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=l0Zr4uCqXTgpxKsG0MgnjED+5vZbKQkrFEjIPN0ao4oqkni0ounqWQhFAaGzKF1kPWZ3mmcVATXKFqMTGo6ZVc9J2tgF9Q68FCKmTsd4YKYajWi48liSRDDzAiuySg7gAHBAdNg28Und/k+HmP5xZMY4uVcoFttPFrjT1M+zLqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=djyr7m6+; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=TliXn90L; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=fEvg9e+p; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=BwlGEJB9; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id CDDBE1F8B5;
+	Wed, 23 Oct 2024 09:06:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1729674393; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=HGIm/dX57sFo3NMmIvic4IKu0V6L4O2B9C4lg9R0CME=;
+	b=djyr7m6+4hfrTMd+U7XDbo3KB5cyX/VngrZYLwJ9TxpfFdm5tDVElcbXMXh/SaR4n9nq0v
+	iV7T85aDOsfhnv++136ows4AWqO/bFYmVmN12os+/J2/G1JUvPVMp7mK2mTzDbUgeN/m7W
+	wxrppQ8bbL3+90lcBAUrWqs0LEJ9QcM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1729674393;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=HGIm/dX57sFo3NMmIvic4IKu0V6L4O2B9C4lg9R0CME=;
+	b=TliXn90LXlNabCdAQqQn4P4iumowMlwKb70eCEfn7fUw+9QUAsmebQlK6KWoN7j98ais5W
+	hlbbFCzFKU+7HMDQ==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=fEvg9e+p;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=BwlGEJB9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1729674392; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=HGIm/dX57sFo3NMmIvic4IKu0V6L4O2B9C4lg9R0CME=;
+	b=fEvg9e+pziYlcJvktedRboES7/Oks5kymMyS0eRUmdlruqkrRoH38fdfZOcnY1n7yCRo3j
+	mAM7Dapj3OrLKWgFFKs9XcmhoEprk6we29PykxO77dp6OXFRnmfYXcFrALuBGy9qwgF2MO
+	q5paVgY477106RYKNUch5NWQ7f4/CDk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1729674392;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=HGIm/dX57sFo3NMmIvic4IKu0V6L4O2B9C4lg9R0CME=;
+	b=BwlGEJB95C90rXLnhTJ6xU/DZZeYCbvC5ApR0XMwIi2z6l6UF0tqPJ5ZIjpbM+vxQSzPoq
+	aWeUgfuqjqmkAvCA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 86F1013A63;
+	Wed, 23 Oct 2024 09:06:32 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id m0t+IJi8GGcIJQAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Wed, 23 Oct 2024 09:06:32 +0000
+Message-ID: <b1df934e-7012-4523-a513-d3d1536b7f72@suse.cz>
+Date: Wed, 23 Oct 2024 11:06:32 +0200
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/5] implement lightweight guard pages
+Content-Language: en-US
+To: Dmitry Vyukov <dvyukov@google.com>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: David Hildenbrand <david@redhat.com>, fw@deneb.enyo.de,
+ James.Bottomley@hansenpartnership.com, Liam.Howlett@oracle.com,
+ akpm@linux-foundation.org, arnd@arndb.de, brauner@kernel.org,
+ chris@zankel.net, deller@gmx.de, hch@infradead.org,
+ ink@jurassic.park.msu.ru, jannh@google.com, jcmvbkbc@gmail.com,
+ jeffxu@chromium.org, jhubbard@nvidia.com, linux-alpha@vger.kernel.org,
+ linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-mm@kvack.org,
+ linux-parisc@vger.kernel.org, mattst88@gmail.com, muchun.song@linux.dev,
+ paulmck@kernel.org, richard.henderson@linaro.org, shuah@kernel.org,
+ sidhartha.kumar@oracle.com, surenb@google.com, tsbogend@alpha.franken.de,
+ willy@infradead.org, elver@google.com,
+ Linus Torvalds <torvalds@linux-foundation.org>
+References: <87a5eysmj1.fsf@mid.deneb.enyo.de>
+ <20241023062417.3862170-1-dvyukov@google.com>
+ <8471d7b1-576b-41a6-91fb-1c9baae8c540@redhat.com>
+ <5a3d3bc8-60db-46d0-b689-9aeabcdb8eab@lucifer.local>
+ <CACT4Y+ZE9Zco7KaQoT50aooXCHxhz2N_psTAFtT+ZrH14Si7aw@mail.gmail.com>
+From: Vlastimil Babka <vbabka@suse.cz>
+Autocrypt: addr=vbabka@suse.cz; keydata=
+ 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
+ EP+ylKVEKb0Q2A==
+In-Reply-To: <CACT4Y+ZE9Zco7KaQoT50aooXCHxhz2N_psTAFtT+ZrH14Si7aw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: CDDBE1F8B5
+X-Spam-Level: 
+X-Spamd-Result: default: False [-4.51 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	ARC_NA(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[36];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com,gmx.de];
+	FREEMAIL_CC(0.00)[redhat.com,deneb.enyo.de,hansenpartnership.com,oracle.com,linux-foundation.org,arndb.de,kernel.org,zankel.net,gmx.de,infradead.org,jurassic.park.msu.ru,google.com,gmail.com,chromium.org,nvidia.com,vger.kernel.org,kvack.org,linux.dev,linaro.org,alpha.franken.de];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	R_RATELIMIT(0.00)[to_ip_from(RLz1534diqmneu69wx1fp4cing)];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:dkim,suse.cz:mid,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Score: -4.51
+X-Spam-Flag: NO
 
-On Mon, 21 Oct 2024 17:46:58 +0100
-Will Deacon <will@kernel.org> wrote:
-
-> On Wed, Oct 16, 2024 at 09:58:09AM +0900, Masami Hiramatsu (Google) wrote:
-> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > 
-> > Use ftrace_regs instead of fgraph_ret_regs for tracing return value
-> > on function_graph tracer because of simplifying the callback interface.
-> > 
-> > The CONFIG_HAVE_FUNCTION_GRAPH_RETVAL is also replaced by
-> > CONFIG_HAVE_FUNCTION_GRAPH_FREGS.
-> > 
-> > Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > Acked-by: Heiko Carstens <hca@linux.ibm.com>
-> > Cc: Catalin Marinas <catalin.marinas@arm.com>
-> > Cc: Will Deacon <will@kernel.org>
-> > Cc: Steven Rostedt <rostedt@goodmis.org>
-> > Cc: Mark Rutland <mark.rutland@arm.com>
-> > Cc: Huacai Chen <chenhuacai@kernel.org>
-> > Cc: WANG Xuerui <kernel@xen0n.name>
-> > Cc: Paul Walmsley <paul.walmsley@sifive.com>
-> > Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> > Cc: Albert Ou <aou@eecs.berkeley.edu>
-> > Cc: Vasily Gorbik <gor@linux.ibm.com>
-> > Cc: Alexander Gordeev <agordeev@linux.ibm.com>
-> > Cc: Heiko Carstens <hca@linux.ibm.com>
-> > Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
-> > Cc: Sven Schnelle <svens@linux.ibm.com>
-> > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > Cc: Ingo Molnar <mingo@redhat.com>
-> > Cc: Borislav Petkov <bp@alien8.de>
-> > Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> > Cc: x86@kernel.org
-> > Cc: "H. Peter Anvin" <hpa@zytor.com>
-> > Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> > 
-> > ---
-> >  Changes in v17:
-> >   - Fixes s390 return_to_handler according to Heiko's advice.
-> >  Changes in v16:
-> >   - According to the recent ftrace_regs.h change, override
-> >     ftrace_regs_get_frame_pointer() if needed.
-> >   - s390: keep stack_frame on stack, just replace fgraph_ret_regs
-> >     with ftrace_regs.
-> >  Changes in v8:
-> >   - Newly added.
-> > ---
-> >  arch/arm64/Kconfig                  |    1 +
-> >  arch/arm64/include/asm/ftrace.h     |   23 ++++++-----------------
-> >  arch/arm64/kernel/asm-offsets.c     |   12 ------------
-> >  arch/arm64/kernel/entry-ftrace.S    |   32 ++++++++++++++++++--------------
+On 10/23/24 10:56, Dmitry Vyukov wrote:
+>>
+>> Overall while I sympathise with this, it feels dangerous and a pretty major
+>> change, because there'll be something somewhere that will break because it
+>> expects faults to be swallowed that we no longer do swallow.
+>>
+>> So I'd say it'd be something we should defer, but of course it's a highly
+>> user-facing change so how easy that would be I don't know.
+>>
+>> But I definitely don't think a 'introduce the ability to do cheap PROT_NONE
+>> guards' series is the place to also fundmentally change how user access
+>> page faults are handled within the kernel :)
 > 
-> For the arm64 parts:
-> 
-> Acked-by: Will Deacon <will@kernel.org>
+> Will delivering signals on kernel access be a backwards compatible
+> change? Or will we need a different API? MADV_GUARD_POISON_KERNEL?
+> It's just somewhat painful to detect/update all userspace if we add
+> this feature in future. Can we say signal delivery on kernel accesses
+> is unspecified?
 
-Thank you!
-
-> 
-> Will
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Would adding signal delivery to guard PTEs only help enough the ASAN etc
+usecase? Wouldn't it be instead possible to add some prctl to opt-in the
+whole ASANized process to deliver all existing segfaults as signals instead
+of -EFAULT ?
 
