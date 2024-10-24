@@ -1,96 +1,79 @@
-Return-Path: <linux-arch+bounces-8528-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8529-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 970619AF393
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Oct 2024 22:21:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D48379AF4AC
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Oct 2024 23:29:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 41DC81F22924
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Oct 2024 20:21:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7DDB01F21F6B
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Oct 2024 21:29:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC6F51AD3E5;
-	Thu, 24 Oct 2024 20:21:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1ADEC2003AA;
+	Thu, 24 Oct 2024 21:29:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KKWqUJrS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pCBIwF+C"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A813184101;
-	Thu, 24 Oct 2024 20:21:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E50D818784C;
+	Thu, 24 Oct 2024 21:29:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729801295; cv=none; b=MIhgXThPCj6/1lSyEDmmWcQMxenCrrfdURR+Es6JsLxk6nuwJ6aXwh2VP0hCShlIgox03YBzZ9eEbfHO/CnKJCwNMOoGipOapEykpNu9ed+aXzwzZ3mUBq2T/WJDEbJW9NpTShnGLKe2LUwdg7FJHcIi4H1CLqOqZasb+QFk3KY=
+	t=1729805368; cv=none; b=mEd7gTPKhJXTdbJhMT9okU76auVlenEQDfC/2DiBV1/wNo/19v4HOKgOC/1WKJ/D0CNTjnERHvbUTsgd2h1vdIgF+sghuxGkCX5RUWu4lLEyQEJfb33Ht5VfWL52NuwLFWfV+S1Tln61TpDvPE1xAlbb4kBS/hRBMGK8NwUnOWo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729801295; c=relaxed/simple;
-	bh=RI8YS+uvg/qHub00mkdvWpCj6/uZUUM7Tt05ZynxN24=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oYmBlAlqETAEnsXp6f1Nd9idEYK94JIW+BKLWnk+Z5Eb8SUy/KU4j+X0nKfpkYEWR1mnxehCjo+xLjrdt8an+8LrtqG/Ic259CQiwJsROTH1pnS3OVFWYb4QZiXSBi971msOr0cCTaqwy2IxAnH5XIPgH+8LFRy5B7zPEgnHBug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KKWqUJrS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFA25C4CEC7;
-	Thu, 24 Oct 2024 20:21:33 +0000 (UTC)
+	s=arc-20240116; t=1729805368; c=relaxed/simple;
+	bh=oGxJ++nc9UR0DAtOlk9jDcvkLlastwtVUMjr5qeUJF8=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=hNQkfjQndLYPphRUM1+Aeh+1hoPQIPlnpbzGRNWC5rd0Syizu6wqW7Ux7/H9DTVOe6gnzWSWIfyNsf6CHTYxkk8xonZOXSUD4HSzeB72Za6cZZlBlKipQXGZQNXTFXRqIELrtiPBSXrq/ABTVKxH3ajFS342V+vu3kkEY3M06Rw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pCBIwF+C; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C29DC4CEC7;
+	Thu, 24 Oct 2024 21:29:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729801295;
-	bh=RI8YS+uvg/qHub00mkdvWpCj6/uZUUM7Tt05ZynxN24=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KKWqUJrSM6Ii/Rgk2s0A0A/8FsLXOTIYxiEWl3+3HYMDYwFrghZ5u7OsAL1n6L1mN
-	 qD8WRO8Fad3cA9pnK8TOIqJWad+QPkBHrftWldraX0PrRU/CDOyirruOs18Bu5JzHC
-	 3lnUjSAor3kfgvjev7X/hx0Uj9MjV9XeWv4GA1OsLZ9NyKaK6FChbZpVrcGCvp8MLo
-	 9AqavICpVfR6qfxAWF/M3HYbIKLsl6bEiKu7YitaIpYnKPG54+sRNjMwGABFzfDHGD
-	 wiP9/JdFkDyWNhBtjRAEOT2P4wZNiDTDMmIvaUxzGEEh0/VtVSJHltZwuCsX7AFa9m
-	 pCllT2LysCfKw==
-Date: Thu, 24 Oct 2024 13:21:32 -0700
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: Jeff Johnson <quic_jjohnson@quicinc.com>
-Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-	petr.pavlu@suse.com, samitolvanen@google.com, da.gomez@samsung.com,
-	masahiroy@kernel.org, deller@gmx.de, linux-arch@vger.kernel.org,
-	live-patching@vger.kernel.org, kris.van.hees@oracle.com
-Subject: Re: [PATCH v3] selftests: add new kallsyms selftests
-Message-ID: <ZxqsTO0BAQLPJDJL@bombadil.infradead.org>
-References: <20241021193310.2014131-1-mcgrof@kernel.org>
- <368aa911-7a88-4a00-8830-4a183fd6f352@quicinc.com>
+	s=k20201202; t=1729805366;
+	bh=oGxJ++nc9UR0DAtOlk9jDcvkLlastwtVUMjr5qeUJF8=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=pCBIwF+CIKRDmLxywl6kxq7Z+e8fDtNJlXnu7fDrBNH/tpAEQuq3TOQkwub/X1y63
+	 rc7+om/SCYxe19QkiZtnvuFL60DAGKHS8+A5EQQKlAy5YWzHbfz5RmCL3YeFKG8hyh
+	 o6GctBRaMAH+8TSJksix1j1aonetEGv/BhwZrobdpBp8J6N3sPclB4Q1vgxJyiVSLF
+	 uKa/kIbfjIxdzZ1JcHug5sM67hyqkoSbnZQGj8s8XlcKljsmi9xoWYBK7luUg8Tmf1
+	 PXh4dv/AQr+HnAvVgCuupgzTmgNx1hb7GnFpIKPEVGBn9zat/QBlz2Ih5Ir4W5HB01
+	 HJPc4+MBClOwA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 34A79380DBDC;
+	Thu, 24 Oct 2024 21:29:34 +0000 (UTC)
+Subject: Re: [GIT PULL] LoongArch fixes for v6.12-rc5
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <20241023145214.2559236-1-chenhuacai@loongson.cn>
+References: <20241023145214.2559236-1-chenhuacai@loongson.cn>
+X-PR-Tracked-List-Id: <loongarch.lists.linux.dev>
+X-PR-Tracked-Message-Id: <20241023145214.2559236-1-chenhuacai@loongson.cn>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-fixes-6.12-1
+X-PR-Tracked-Commit-Id: 73adbd92f3223dc0c3506822b71c6b259d5d537b
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 3964f82a4dfc7e4bd4055fdc2a42250f71449f54
+Message-Id: <172980537280.2393082.1249830047006691647.pr-tracker-bot@kernel.org>
+Date: Thu, 24 Oct 2024 21:29:32 +0000
+To: Huacai Chen <chenhuacai@loongson.cn>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev, linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>, Jiaxun Yang <jiaxun.yang@flygoat.com>, Huacai Chen <chenhuacai@loongson.cn>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <368aa911-7a88-4a00-8830-4a183fd6f352@quicinc.com>
 
-On Wed, Oct 23, 2024 at 10:28:49AM -0700, Jeff Johnson wrote:
-> On 10/21/24 12:33, Luis Chamberlain wrote:
-> ...
-> > +gen_template_module_exit()
-> > +{
-> > +	cat <<____END_MODULE
-> > +static int __init auto_test_module_init(void)
-> > +{
-> > +	return auto_runtime_test();
-> > +}
-> > +module_init(auto_test_module_init);
-> > +
-> > +static void __exit auto_test_module_exit(void)
-> > +{
-> > +}
-> > +module_exit(auto_test_module_exit);
-> > +
-> > +MODULE_AUTHOR("Luis Chamberlain <mcgrof@kernel.org>");
-> > +MODULE_LICENSE("GPL");
-> > +____END_MODULE
-> > +}
-> 
-> Since commit 1fffe7a34c89 ("script: modpost: emit a warning when the
-> description is missing"), a module without a MODULE_DESCRIPTION() will
-> result in a warning when built with make W=1. Is that a concern here?
-> Should we add a MODULE_DESCRIPTION()?
+The pull request you sent on Wed, 23 Oct 2024 22:52:12 +0800:
 
-News to me, I'll send a follup patch with just that alone as I already
-merged this onto modules-next.
+> git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-fixes-6.12-1
 
-  Luis
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/3964f82a4dfc7e4bd4055fdc2a42250f71449f54
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
