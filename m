@@ -1,204 +1,282 @@
-Return-Path: <linux-arch+bounces-8516-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8517-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BE5A9ADE1D
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Oct 2024 09:45:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45D939ADE7D
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Oct 2024 10:08:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4D97F1C25F4C
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Oct 2024 07:45:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F152C28406F
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Oct 2024 08:08:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F8FC1AE005;
-	Thu, 24 Oct 2024 07:45:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 638DF1AE01E;
+	Thu, 24 Oct 2024 08:08:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aJSZBMrP"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="CK9eC6v5";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="nuofanYU"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FFFC1AC887
-	for <linux-arch@vger.kernel.org>; Thu, 24 Oct 2024 07:45:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729755947; cv=none; b=HXCDQfu/CBpzKLCNFjvT9Q2eXWYel7WOkehC7smRX+3qDfkrhjP5f3JUIWLRR5+POBF0NLiRKr6vOSDILzlxF8UTSgm71bRA6Ob2Q/5uUMPCU+8SwNZiKDPsS1IzrKXIiUokSfluxrK7qQ2+WvL8DLHX2iUTq1BlShL9SDTBwlU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729755947; c=relaxed/simple;
-	bh=75GuJM3z3gUbgm6OR9oVr6rTeKxgv65kR3/ItrpYIO0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EZapiE4uDXM3KS2pp9rGmASKpPvRklg8k9i0b2Wf2pd6DKwgvo7Y3wrEsscSykSSWL95DBwv7TgXpSSNMNH3+jIkqWfQUS5GxfXO/QpNoNuMSMXD2baiGLqe7jdkR+75bV5HnsVgRrQzEzHbNYrmy74kuaeSz3egOMSsDCcDZ4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aJSZBMrP; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1729755943;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=hPYuDToRpBPGSedDH6WO/E6lGGRZMoEslalgqhpMqfY=;
-	b=aJSZBMrPC0VkKp3lTrPnr2x9cehcLZMv5L1SGAk22m4FiASPIztda8QOOftNC32Mbqr0o3
-	aNEX2Lnn2IMiSIAJRKLsqAw+ZKSgETdmaIABlo9yw81iF1zhG4Zo8uKDSLIbaxj5ZFCpL4
-	7Y0s3ZpibbRy9Pzcy2AkvzV2eVQI+p0=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-298-yJM-ZNUEPkGF3zj_DCVHxw-1; Thu, 24 Oct 2024 03:45:41 -0400
-X-MC-Unique: yJM-ZNUEPkGF3zj_DCVHxw-1
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-37d533a484aso875229f8f.0
-        for <linux-arch@vger.kernel.org>; Thu, 24 Oct 2024 00:45:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729755940; x=1730360740;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:from:references:cc:to:subject:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=hPYuDToRpBPGSedDH6WO/E6lGGRZMoEslalgqhpMqfY=;
-        b=HYETQEeF6zpYYG8xgA4iuf5nmhaz2zzM6+NrdfX5+RIqwKevcWRCBGepno+w/FNMDt
-         F7dYrwo1jlQ6lp6vjblTZ7cHCnN5Xafe4poatRSlMTdNRpKg9HFyb2JbzcAYj2ruWOa3
-         XxgSActT+tRU8gxc3dNqYG+/5EFK5urXZQMSbqY7FJnJ7AH4LFGwaP5NloO9/CK2B/t8
-         JPjuraZUhVx3Ywfm6lPaC6jBkSdDRlBzUpGxglvkxYgHQkNfp9GLiBRkIuwGENe3+fnr
-         UXJ8uAq3eWt3IABKK6/bGpRVrRjmuLkCE1l43fGmFO6/zyneO2jxkCSC2V0IMWkS0lE2
-         qbIA==
-X-Forwarded-Encrypted: i=1; AJvYcCV6x1QCk5EphwsRAXMb4SMt0g+2WlOTjS6uHDstqEqiIUIu+ejlRmxDFRx5WKYN1ylJmEFXAPP4Q7QW@vger.kernel.org
-X-Gm-Message-State: AOJu0YwwHo22iV6H/2ybIqmkbpTWB3vsSoTUj8H36IIU1X4cqeV6ftob
-	NR6YLyBOhmS6QDIWA5m95Ry2aMhGqvtjZOChJmLuCgzWsiQ6UDztEXAqiVYXfjSx3ymt41T1ar1
-	86Z/MtTVMMoabeWTBjkReZLFm4I4CKHXfCjOBFyNOatAHCspvE1eCwAuWBXE=
-X-Received: by 2002:a05:6000:c6:b0:37d:3f81:153f with SMTP id ffacd0b85a97d-3803ac0670fmr638379f8f.17.1729755939785;
-        Thu, 24 Oct 2024 00:45:39 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IELvXhEEh4kEkFbK5TioBTnFzdEpPS7Pp3lgM2sA9dD3bmQAPUom4l+fRdVw7hX/9kDiQSn1w==
-X-Received: by 2002:a05:6000:c6:b0:37d:3f81:153f with SMTP id ffacd0b85a97d-3803ac0670fmr638363f8f.17.1729755939386;
-        Thu, 24 Oct 2024 00:45:39 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c704:4f00:9949:9757:8f9a:e10? (p200300cbc7044f00994997578f9a0e10.dip0.t-ipconnect.de. [2003:cb:c704:4f00:9949:9757:8f9a:e10])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37ee0b9442bsm10632960f8f.78.2024.10.24.00.45.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Oct 2024 00:45:39 -0700 (PDT)
-Message-ID: <a089ff3b-119e-44a0-a780-3abca01886f7@redhat.com>
-Date: Thu, 24 Oct 2024 09:45:37 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E83571AC445;
+	Thu, 24 Oct 2024 08:08:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729757311; cv=fail; b=ESwBpLOsU4imYTN2ueUY4D70eOf2xxb+vv/HHFWoluXSeunWEvHGMk82Ez/dwruona+xRhnKo+l58x2uZKt1DqcoeOtnFt1LNeJJmrmUjYmwdkLVpYyZrf+xJ4yR27oXTiSXQ0dIliyQ6Pmqi5NW+EwVRROmlAA5YLO+ihR42Hs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729757311; c=relaxed/simple;
+	bh=2YRnRRJEvVq8NKhIBhv4E0O0Jd9oviMhqb9j2fltgzA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=HZLB9T2u8Yf003pj3xB2kZGKXmpe21NleWl9tUUWobIuCNlZlUUBPzA16CdfDnM4hYSa+QhQeENBKVtvTuV1r9sr8kIGzWy0UMSHxwqDMjKXVE5rNCcUTLjufqQTsNOyexbR/2JGnbAGPbMfSVufLHgAIw6xO2whOZEGEt1p4Ys=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=CK9eC6v5; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=nuofanYU; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49O2fgOT021675;
+	Thu, 24 Oct 2024 08:07:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=corp-2023-11-20; bh=2YRnRRJEvVq8NKhIBh
+	v4E0O0Jd9oviMhqb9j2fltgzA=; b=CK9eC6v5xvqC8TA9xas4ilTR7n8I5eMTdE
+	IoOMRst306jXXA6C1DnwsP64SIyarKu1F4tdUu41vcXNGmghxv9tMP7zSB2Jy6Hl
+	OQeF7laycAp7izKFFYoaI1CfclniQ1mZWHog+ymhqm2a6mTbXTF7beNGMBkGhp/K
+	GuSCl8UqzexjHULbQJ7Mza2Z5QTAUtwl7yFeNP1anAod6CwxPzhFGKPQnavK6j3+
+	RVvBxT7B/q3DHNEpsD332ylxOihsR+54kX7C8pyA8Lf7QyfVW+6ebpXozQDiDeao
+	lL+v+SbOpLJ3u2j2R2H0JJe5njsDw4miaVAdKij79tRNi+cBmWlA==
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 42ckkr18ge-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 24 Oct 2024 08:07:42 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49O6ipkg025332;
+	Thu, 24 Oct 2024 08:07:41 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2170.outbound.protection.outlook.com [104.47.56.170])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 42emhajt3d-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 24 Oct 2024 08:07:41 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=pkioMkyY3rGjaOwsKfCWnJO7iDNSMg4xp53Ov0f3XTB9hffzD4WpZBzGg0t5COtSgIA5HM6QH9AFYUyGHrKlYzPepePLQ5CgeqLfzi060tgop76mc2h/R20bT/E5H1rus9ZeFlCsIPbZpZRpI80G51vlsoNeZtXaF/si7Vny93035J612oklmqiBsPL/arPBOSnKQEYqCDhAK62UxCT9mdSLhT1ffWmeSH5MMVPKhSLDKGza4IvE0ERlZy1qGDwj1yW9i0zQ0D8oTs/pG9LAuJR8eGbCIW/lTa7co5xYjMt971FYumxYDeJnQZOT69ta1BkC0klxdm3OTgQcIGSbmA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2YRnRRJEvVq8NKhIBhv4E0O0Jd9oviMhqb9j2fltgzA=;
+ b=vAP270MkylQKbPTEv9tYO9u+PpDlqqKRXJzyryBI5VC7WtkW39Xi6BmJo0OTEjFugSNKHPabQNC6Mj7iEuWBJX2nQKc5XCPDeOpDMKHs7u/gTB4NzC8/VVxtJPtfovUCA1UFIQaLaH/ekPb2Td0WbceuAOTDikF2hFacD+z95N3nm3lVNlxPCre/8GKbJ+s/u8iUXOmwBG6lG3tH05NJMEiCBJurFbVtZEPrbpCNLZ/xwN0gLw16UGdxVJjL0S1jTPLRh5cbXLGVsDhWEcXe+IUfykIAnnDYU0f5+3Y4Un44zE63HYW9ckemQtDaF/ctNPykwTokwqkimUhe9ACfSw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2YRnRRJEvVq8NKhIBhv4E0O0Jd9oviMhqb9j2fltgzA=;
+ b=nuofanYUOjW6Mde2P++kIzz9ThaPsmkVfKZ94QkhM6reGUQmA4pdhUwZSwEQ1cWo+aKhvLDwu/YWSfuPG7Hx2hKzINwyfzs1M74Z0aqiOLKZEkFepE5D5RmCEQ561ubNXWO1+386ngL2XtC/4hBUeO860b8GpRods2jxfPuKcqc=
+Received: from BYAPR10MB3366.namprd10.prod.outlook.com (2603:10b6:a03:14f::25)
+ by SJ0PR10MB4560.namprd10.prod.outlook.com (2603:10b6:a03:2d3::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.16; Thu, 24 Oct
+ 2024 08:07:38 +0000
+Received: from BYAPR10MB3366.namprd10.prod.outlook.com
+ ([fe80::baf2:dff1:d471:1c9]) by BYAPR10MB3366.namprd10.prod.outlook.com
+ ([fe80::baf2:dff1:d471:1c9%6]) with mapi id 15.20.8093.014; Thu, 24 Oct 2024
+ 08:07:38 +0000
+Date: Thu, 24 Oct 2024 09:07:34 +0100
+From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+To: David Hildenbrand <david@redhat.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Matthew Wilcox <willy@infradead.org>, Vlastimil Babka <vbabka@suse.cz>,
+        "Paul E . McKenney" <paulmck@kernel.org>, Jann Horn <jannh@google.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Muchun Song <muchun.song@linux.dev>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Matt Turner <mattst88@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@kernel.org>,
+        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-arch@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
+        Jeff Xu <jeffxu@chromium.org>, Christoph Hellwig <hch@infradead.org>,
+        linux-api@vger.kernel.org, John Hubbard <jhubbard@nvidia.com>
+Subject: Re: [PATCH v3 1/5] mm: pagewalk: add the ability to install PTEs
+Message-ID: <e62ef664-1c71-48e0-a695-6a53b6d46922@lucifer.local>
+References: <cover.1729699916.git.lorenzo.stoakes@oracle.com>
+ <9be732fd0e897453116b433fe2f468ef7795602e.1729699916.git.lorenzo.stoakes@oracle.com>
+ <20241023160405.33995c68f20c141325a8fadb@linux-foundation.org>
+ <635de052-35a6-40e0-82ea-4349f3aecc06@lucifer.local>
+ <a089ff3b-119e-44a0-a780-3abca01886f7@redhat.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a089ff3b-119e-44a0-a780-3abca01886f7@redhat.com>
+X-ClientProxiedBy: LO4P123CA0629.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:294::10) To BYAPR10MB3366.namprd10.prod.outlook.com
+ (2603:10b6:a03:14f::25)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/5] mm: pagewalk: add the ability to install PTEs
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: Suren Baghdasaryan <surenb@google.com>,
- "Liam R . Howlett" <Liam.Howlett@oracle.com>,
- Matthew Wilcox <willy@infradead.org>, Vlastimil Babka <vbabka@suse.cz>,
- "Paul E . McKenney" <paulmck@kernel.org>, Jann Horn <jannh@google.com>,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- Muchun Song <muchun.song@linux.dev>,
- Richard Henderson <richard.henderson@linaro.org>,
- Matt Turner <mattst88@gmail.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
- Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
- Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@kernel.org>,
- linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, linux-arch@vger.kernel.org,
- Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
- linux-kselftest@vger.kernel.org, Sidhartha Kumar
- <sidhartha.kumar@oracle.com>, Jeff Xu <jeffxu@chromium.org>,
- Christoph Hellwig <hch@infradead.org>, linux-api@vger.kernel.org,
- John Hubbard <jhubbard@nvidia.com>
-References: <cover.1729699916.git.lorenzo.stoakes@oracle.com>
- <9be732fd0e897453116b433fe2f468ef7795602e.1729699916.git.lorenzo.stoakes@oracle.com>
- <20241023160405.33995c68f20c141325a8fadb@linux-foundation.org>
- <635de052-35a6-40e0-82ea-4349f3aecc06@lucifer.local>
-From: David Hildenbrand <david@redhat.com>
-Content-Language: en-US
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <635de052-35a6-40e0-82ea-4349f3aecc06@lucifer.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR10MB3366:EE_|SJ0PR10MB4560:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6475a5ec-3ccd-48ae-af70-08dcf402ece0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|1800799024|366016|10070799003;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?wAv+uc26nUr2xTBxhNv9DTCsEhlkTV9JSvf3PoY3PANx4gdhnEaEHRZYyI+/?=
+ =?us-ascii?Q?LLjD6oMv7vuqh4wZmV90a1gFyFUDwO2/IOXtlW1RMsyYr7Txt+xqqRGMpbRh?=
+ =?us-ascii?Q?sCiYBw6qXpOapWS4AzG9T48aHskzO1DQU91oDDlbpUDWeXSbeaFUXhyLADT6?=
+ =?us-ascii?Q?WGhymaGsO5o4McvDEQZWFQb8+vo4d8PE6YLM8OAhjG63mRuBehdhlhSA1u0c?=
+ =?us-ascii?Q?tb47AVEJ/bA+kaFNUBRCFNfSSGB4kpGjT99i3msk0ZrgDx48DAnPv0VCMXSJ?=
+ =?us-ascii?Q?a1RqX/CCrubHMUiewMJ4qaJFa0jLAXYdWpaorlym8lLdZwuzaZ3l56VAUxOT?=
+ =?us-ascii?Q?sVI/PbBTUqq2d5OVQsL345ld4vVc+boY8L6Oib9btd+Iyl/tRdN75KEBE5m9?=
+ =?us-ascii?Q?/T7upxQtTPyI8oYST/LvXV250piiKJLQLzATiJemWZvBps8ML29vqirIJXut?=
+ =?us-ascii?Q?IBx5gqZnw6aEUb3a5LDOmlRTrVC6UCXyMPGc9CbigxN2fMcr5KQHMUiXfSRt?=
+ =?us-ascii?Q?UZ8nCxVDYEMb/GhpkLIOEykjV4UtjAu8D3GyGkxaHEXKAoA7qMt2NwsVbe7A?=
+ =?us-ascii?Q?9MvA0YHbUHuyIu1pOUtp6Ek/tFcCuZnDWBmNCgz+bpWPbeYFEWxeN50sdkW+?=
+ =?us-ascii?Q?jioYTyA8cXdiztQjfYpLT/AO8Mnrw5PQoo9Isto68Cerd1rt1lK0RdoHvmQH?=
+ =?us-ascii?Q?YfNzIAE+JYuuUmAuhrYojHfAnXR6T9E+ASzWSzP/9GQhIgOGN17aFPRJjFSw?=
+ =?us-ascii?Q?KjGGgt4oT6zfwZw7PzMzxiRCibLkxAbEze7yKc/mHUw3FzMobt9kFJb8IKxe?=
+ =?us-ascii?Q?fvayCN3bfBgpDEBObOCCBVxzWHBpBnX5Klzl4OQglxxmLyEI2JE8hEq1Txow?=
+ =?us-ascii?Q?lpGqwpETH1lDb24bG28/4lJJsLaxpXlK0ShL7JPSPyxngxjmxaQW09IyMjDQ?=
+ =?us-ascii?Q?VVEHtlmzIfylYmyYv+zX+YHrzSD8zr9W6mHmIpwbpQnMeMdrhTQyB5lOHtKK?=
+ =?us-ascii?Q?+1t11z0r0uOTLn3RaZi5mSTPGQ3pk0udw51ovXUlRB/q1QunXr4Y2tjG0LKy?=
+ =?us-ascii?Q?Bp6h+li/4rxMRiHKb+6byYo10khlyjIQzqhNDhs1eBizNo1kHFTjlLaM+eWx?=
+ =?us-ascii?Q?ovTJXGeYeMQnYXA+uGVg9D03wYDNwE4loKXfpVJgPBZxqpyUa2DrHK89JKss?=
+ =?us-ascii?Q?AD7Qnq+EYdRZIkxhuW1A3LzsVVZ94UHnO4Eo6la+22AEG4nYs7UqvWnSO5rd?=
+ =?us-ascii?Q?vvHDQAW+NSmkYr+P8ysRVPAGx0bTBfBae+fXJ73dxj9GZLNA8Msbrqb1xFcM?=
+ =?us-ascii?Q?5YAXbhWpwe64m9o9N4/SRVQW?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB3366.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(10070799003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?Z6Cj21HTtNyAQz2Cd4ZP7/CWLuzPDHKgJieb9R2OZE75SggTSwqfy7KJs6MN?=
+ =?us-ascii?Q?63Qdi0ItVrpzWAnDvhkWy03mRPyQS+W8e9esS3t9KCVf/nHPnuMWuM61i7Nq?=
+ =?us-ascii?Q?CI+J3A+6e/AeXbEAJBwFuwrqaDoTOdJIRhI2fSj7Ep7YbDFfXfYlK8eh+bXi?=
+ =?us-ascii?Q?ivHQzSlzvncgJ+n9DMk5hvOEu4E82+rjADmbeO65tRAXy5Wg2AbtczOlU3nr?=
+ =?us-ascii?Q?lDbjKhf/b9HKD+RpMysitnAyHrKC3D8/H9QYtLXPBMRtl9mFBt4tDw6/GR8x?=
+ =?us-ascii?Q?+6fNlkaQaWjlgCDb6v4X5ulZVWHy4xPTBIA43VLWk2dvUc8w+dB1bLm3N199?=
+ =?us-ascii?Q?28t7/nIxN2Tks6dyRicVdC37is4/gYD3jQ2ThtRaY9sNliOAaTbHDYMTYW7/?=
+ =?us-ascii?Q?U/3VG0DJDID5k3qMCxSQQj++UAjmGZD3vgtPpZkxlwBomn6K0f4oMs+MCu7X?=
+ =?us-ascii?Q?AaLXjBSv5S7DQGYNaAsKzKKctX9SVxxZJuePSj+UhKE/MQN1AwJY9AMfauwJ?=
+ =?us-ascii?Q?uJ/HWIZJ4Dc5Em1V7PKgH6ybXOMhjEcEHJyAR5bwOmdUiraiVXy7lR5EcT4S?=
+ =?us-ascii?Q?wWXiHXKVBQeXROmJ6L+LPoWEbAxFaQ2Dw5M3nwnWNLEYA/OCuzKM9tLCtQ6h?=
+ =?us-ascii?Q?ljWpZn+4+e86ln92nLeBKaL/VMFvJPcwmCx/Kn/31/09BrqaBWuuToG9M9np?=
+ =?us-ascii?Q?RM3yyeXqjhZnT9k4o8GMB/LxAZi2l9wqHfXgOLdtelClTkMhJZF6ud8J67jm?=
+ =?us-ascii?Q?kT8apJBly0InQo7y3lYYRwZJwXuUZoAsu7wsbjkPtS22cYRXDJ2iMKlB9EKJ?=
+ =?us-ascii?Q?PHaoat3oY/+Nci2e5iW/b8CgssVlnXY/GzGeMI/LYfZxHAwm2Vif07+iFVWz?=
+ =?us-ascii?Q?iG4Vyz6kkckAbXLd7heZdaHAVGEY4DNYUf034cxl1Evt2q0O0vN1P18pOylU?=
+ =?us-ascii?Q?QEMyfBPJsmeNCbHqQuNs2ptVr1nj5x8pl7gdTA1FYI4Q0M2SIx6YMchJ/Iuk?=
+ =?us-ascii?Q?8P8eSGtMnr+7SYhY2ZteAf1mxKLwwtytNT7j3p+ISomzSjqBH8RzsmPhTt+K?=
+ =?us-ascii?Q?NtsI2JraEwuO6o1lZJld/YJpaRDnbAcJq0JJMnTFYrcTQLA/WVm/YaZ370AU?=
+ =?us-ascii?Q?DkLQBPMoifjT/8AmUN7B5xnePAP1xLsw6aCprWNN4rwBIpIqaJxboRlnpdA/?=
+ =?us-ascii?Q?cGnzhnnxXlMuXsUnI6fUWLdOsUmkuoqmVU3PczjbtY2paHhpFK6tY6RYg0H5?=
+ =?us-ascii?Q?AoHb2uw/SXI5g9nu6wPcyBR6gITksrO5nF56dqN867OLPDqBE5xziEehjVs1?=
+ =?us-ascii?Q?37PxpQC5/OPySZfzwe8WzsqMcW8nN/qZ4Aqn1GCuTQngBUSJiDWRbJER54D5?=
+ =?us-ascii?Q?bXfO4eXJ0Y8B4A4ZFnGTo3YTNtkiDe/MuhnDg/CpMf+VeYJTYsLl7zjHN/Vt?=
+ =?us-ascii?Q?tmuM0ei/vqZFKYbeACw4ebJ7b8KuWo17i7gnwN3qXZM7luCONS/W0BTgcCBI?=
+ =?us-ascii?Q?32VaZ45UIj+s70g9UmD4mhVol3Z4VxLZs5J86AK7ii1ZL3ofZF3JrQabbZvq?=
+ =?us-ascii?Q?j3U5JaNiK1uYxtxrXOLolRyeqonKN7M4O2kmnIGNgi1UnTjKnj/1MSHmv5aG?=
+ =?us-ascii?Q?Qnmw4PvSPeOxSP5Y8ObzTEAvXhFlCoTHcqG9aAlVsq7zY39isgMxQarHw9HS?=
+ =?us-ascii?Q?2X39fg=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	RNw0vM+x4VWYkYHzTFePwlEcRhLC4lUm8I1yRfCX0Zyhw9iFXiHRFNpBDkaAc3QQH6OsKcNIIaLgso5xC8/RT0dscyoTFdaVs4El7sM9SSEQQOakYGYPbTJMQC4uOE0+feTnrWVz5jqQb96Y+z26fNsO2EFrwig91vozo0CM7tCs00rIfpBTzbxVTRQqllb/fgYFwxUhP82p3pXn9ImxsKpcXeTKipqtQFyXcdtzln19osvLnNJTmuyn2nDr/HVk8CxXV9hPvj9xZq2IvVd8nqUvt+4TP1Bnauqr4F5DhdPPVcqvRu6G5pkULSvWG2/+5xAFh9XYgEb0/3AfHXs2yCUfzK4OLrCTUzYTzc2OPbwm4WxCHEOh5eNq74liWbYzuNLGrohhYxhIv3IKmxAEXWeDD0qTzQod12rpdVMjcMS+Ex4tbtiLFiVXNHeI/HoIU+c6ZgaoSu3CwSGG6uiNKY0UNWcnTwaRtB5U8BFCd1KlZv1ulYTtmtEQBKo3aZ14rc8Mo8Ek/Q5GUb93Dgx118S6sv0eLSym6590ZOjddlvMgowBUU0+e0wOSnM7Isc/IbCNH3O/7m9dZ7l2qXwJcZRmV9zVwPY3YAhemxcPJME=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6475a5ec-3ccd-48ae-af70-08dcf402ece0
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB3366.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2024 08:07:38.3411
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: myd8OAd/Vq5++OscT8kMgxs1Ud3d2ET7O74ywftOzFvdbBy7OijR4PxuBOArx+u/jvuLx/pQuABYfHE9ssvh383BVVcw5vOtCta0slVv5fM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB4560
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-24_07,2024-10-24_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 spamscore=0 adultscore=0
+ suspectscore=0 mlxscore=0 bulkscore=0 mlxlogscore=902 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2409260000
+ definitions=main-2410240062
+X-Proofpoint-GUID: b8LlskUT9rJgHOjJDMCnkcblSudLLPn5
+X-Proofpoint-ORIG-GUID: b8LlskUT9rJgHOjJDMCnkcblSudLLPn5
 
-On 24.10.24 09:34, Lorenzo Stoakes wrote:
-> On Wed, Oct 23, 2024 at 04:04:05PM -0700, Andrew Morton wrote:
->> On Wed, 23 Oct 2024 17:24:38 +0100 Lorenzo Stoakes <lorenzo.stoakes@oracle.com> wrote:
->>
->>>
->>> ...
->>>
->>> Existing mechanism for performing a walk which also installs page table
->>> entries if necessary are heavily duplicated throughout the kernel,
->>
->> How complicated is it to migrate those to use this?
-> 
-> I would say probably somewhat difficult as very often people are doing quite
-> custom things, but I will take a look at seeing if we can't make things a little
-> more generic.
-> 
-> I am also mildly motivated to look at trying to find a generic way to do
-> replaces...
-> 
-> Both on the TODO!
+On Thu, Oct 24, 2024 at 09:45:37AM +0200, David Hildenbrand wrote:
+> On 24.10.24 09:34, Lorenzo Stoakes wrote:
+> > On Wed, Oct 23, 2024 at 04:04:05PM -0700, Andrew Morton wrote:
+> > > On Wed, 23 Oct 2024 17:24:38 +0100 Lorenzo Stoakes <lorenzo.stoakes@oracle.com> wrote:
+> > >
+> > > >
+> > > > ...
+> > > >
+> > > > Existing mechanism for performing a walk which also installs page table
+> > > > entries if necessary are heavily duplicated throughout the kernel,
+> > >
+> > > How complicated is it to migrate those to use this?
+> >
+> > I would say probably somewhat difficult as very often people are doing quite
+> > custom things, but I will take a look at seeing if we can't make things a little
+> > more generic.
+> >
+> > I am also mildly motivated to look at trying to find a generic way to do
+> > replaces...
+> >
+> > Both on the TODO!
+>
+> I'm not super happy about extending the rusty old pagewalk API, because it's
+> inefficient (indirect calls) and not future proof (batching, large folios).
 
-I'm not super happy about extending the rusty old pagewalk API, because 
-it's inefficient (indirect calls) and not future proof (batching, large 
-folios).
+Yeah it could be improved, but I think the ideal way would be to genericise as
+much as we can and 'upgrade' this logic.
 
-But I see how we ended up with this patch, and it will be easy to 
-convert to something better once we have it.
+>
+> But I see how we ended up with this patch, and it will be easy to convert to
+> something better once we have it.
 
-We already discussed in the past that we need a better and more 
-efficient way to walk page tables. I have part of that on my TODO list, 
-but I'm getting distracted.
+Yes, I was quite happy with what an ultimately small delta this all ended up
+being vs. the various other alternatives (change zap logic, introduce custom
+page fault mechanism, duplicating page walk code _yet again_, porting uffd
+logic, etc. etc.)
 
-*Inserting* (not walking/modifying existing things as most users to) as 
-done in this patch is slightly different though, likely "on thing that 
-fits all" will not apply to all page table walker user cases.
+But in an ideal world we'd have _one_ place that does this.
 
--- 
-Cheers,
+>
+> We already discussed in the past that we need a better and more efficient
+> way to walk page tables. I have part of that on my TODO list, but I'm
+> getting distracted.
 
-David / dhildenb
+Yes I remember an LSF session on this, it's a really obvious area of improvement
+that stands out at the moment for sure.
 
+Having worked several 12+ hour days in a row though recently I can relate to
+workload making this difficult though :)
+
+>
+> *Inserting* (not walking/modifying existing things as most users to) as done
+> in this patch is slightly different though, likely "on thing that fits all"
+> will not apply to all page table walker user cases.
+
+Yeah, there's also replace scenarios which then have to do egregious amounts of
+work to make sure we do everything right, in fact there's duplicates of this in
+mm/madvise.c *grumble grumble*.
+
+>
+> --
+> Cheers,
+>
+> David / dhildenb
+>
+
+OK so I guess I'll hold off my TODOs on this as you are looking in this area and
+I trust you :)
+
+Cheers!
 
