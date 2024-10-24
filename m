@@ -1,161 +1,231 @@
-Return-Path: <linux-arch+bounces-8521-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8523-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B6499AEBF2
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Oct 2024 18:26:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BF8E9AEECC
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Oct 2024 19:56:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C7B2D1F23A22
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Oct 2024 16:26:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F06B0286C64
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Oct 2024 17:56:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 525791F943C;
-	Thu, 24 Oct 2024 16:25:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9966B1FF05F;
+	Thu, 24 Oct 2024 17:56:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CdcXpgXe"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="D5Lv+pQ7"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12FEF1F8911
-	for <linux-arch@vger.kernel.org>; Thu, 24 Oct 2024 16:25:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 695B41FC7F6;
+	Thu, 24 Oct 2024 17:56:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729787142; cv=none; b=LJBUtVi72RhB8I3xPVUfWHwB9l+yspYq1zGkaX28STMzJ0gLF3J9wiLhMjgH7b2BbgCMsF5es5CeTkIgqyEGxs8jmoAtX1s52rp8tPkp7J54c0spZqZAm6HEiqqFCqPx0qRMBMpbkGRGyYubtkksZ/XAQbh+oSA6UKiV9ykQBLE=
+	t=1729792587; cv=none; b=gF+cZ5YlGtY/rqXb0mlC8BP1lrZlF1uAoEPrNkGJ0YLcAEX4dnTd9TTOivZu9R1sWApdvQTp0BSfg9f/hwRY1cV+B+l6PVoQBGVSl/gtT8fNkzWeo83NkHdl62CjHdMCcmqRNhVRnfmNf8spTlk7wKoy2S07kreHx9unXiI0dg0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729787142; c=relaxed/simple;
-	bh=1JvgRGt6u8l7WaG5wCwCD/6HMQh2wO5p+FLLwIZukeo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=brVAELKVqvmCFB/jgSVfrsVqzJNC8Z30Y9Mh+P6DFAVUkDoKs3Qgi0T0tAPWZFTX8e6OZMUcNR1Lm0dkLXm/tzsSjrKwjEmRWfv4lCUNKFbnuU0iyRYLYrXh6Uq307r/uIxqpdG68Wzx4FgAa0fFqa00rDgJ7K/lbgC0sTWe5+o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CdcXpgXe; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-43150ea2db6so230555e9.0
-        for <linux-arch@vger.kernel.org>; Thu, 24 Oct 2024 09:25:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1729787138; x=1730391938; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PsKck1YTKCCMRyW5+ku5wUHxij3yPa9weScPb3/oZQY=;
-        b=CdcXpgXeZoRj3O733DKfkDZFj4JvXK7RHeKnEFthVC6ViyIcWq9Qm8e5TmuBarCYSc
-         ItzjWWx+vs2RpeI/LGeaHtlV6ZrKqzSqUP7FYYwKLa+ivglDmVpIOoqDZ/EBfVk8GSoL
-         ohe3UbxboTzZDbS1zXFxU5ox2yZnqE8IBb3Op0eUuGeIKL2qrJMvpfVwraXzOfHjhc0F
-         qsgg/EIdjiLYM7DbYBR1FFYdvxNYVzSqimdDTx4Sav0JWFoIfKemwd001DlhxpA95pDT
-         Tnz1Sda0Wtusr2yMgpzBWPY+waFpmnV+CA/Kf2V9AulCiaH8o3K4c3OPckI5ksyfGGuH
-         sKNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729787138; x=1730391938;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PsKck1YTKCCMRyW5+ku5wUHxij3yPa9weScPb3/oZQY=;
-        b=P2ZgjzSqDg9ngz63cUDsfKLSEtUOn3GKABacN6EoIFbLujH7nGQFar58nBZPd/WdUT
-         A8nlwH8tqKKOMt8dFAxt7oFzq6o4dv2h/lN2OKMwuU5ifZKxO1D1n8SU8Qms4QjrA4KJ
-         4IQFlcz/J6h0nWwA9z5lj2scnjKQfu/L+dE5DxIs23Rr4L2tSlCYoeNhV2kSr9Ll2UIl
-         +zYpZSqma4DPtqH7qxDuah8ZNzzgl2oHZ1PSi3O9gQO9weMt1a+v3sggE4Tq7L1P7nxq
-         lxZz+1EjfFzzL+sT9LkqyUKS12bnFjw2hEF+DSDqkrNqP4JElv2LMCky+JtP0L2HpR5q
-         e6ng==
-X-Forwarded-Encrypted: i=1; AJvYcCW6jk+Mqn4I6cYZB2Am+r6kxMrp/xJ5sn3wSN4ooOgYxFIUrlPmCYmCjmLVVeuk+78Z9mrhs9xcFwYj@vger.kernel.org
-X-Gm-Message-State: AOJu0YyFRyXsQE9t40+Z0dC9p+lsWKQpe+hA/NUD6wDu+VEFdHD3c+Ev
-	HyBxAU1YGqWERyb7Ij6FoIGZRUHIvj1QjtlmHHNJiYNbBsjQgwMYzG83ijQOGdb4USi2e9FQlZr
-	FDwSshZripioYUFavV2GOH7RBxqd9WtHet4yM
-X-Google-Smtp-Source: AGHT+IGLBq2yNokN7929g0eN3iBE3/2qdA2DRQWdC4E2LpDfi93QPPEgbNRjYQqJ+XQ+mG7d0keQ7uvVD5LffkbY/lk=
-X-Received: by 2002:a05:600c:5023:b0:42c:b0b0:513a with SMTP id
- 5b1f17b1804b1-4318a50525emr5577505e9.2.1729787137882; Thu, 24 Oct 2024
- 09:25:37 -0700 (PDT)
+	s=arc-20240116; t=1729792587; c=relaxed/simple;
+	bh=dwa97Zv3mMxp89DjOwcC74hl8WXFjK0hXQS5Qkk1N/M=;
+	h=From:Subject:Date:Message-Id:Content-Type:To:Cc:MIME-Version; b=hzFcrNdPY9S0zswUr4s7/XduTW3PkpULFWwXvVFPY3MbgAnMNKpiwv8GdJnCC8MXCxzWS+7wHZJ6UvFgY+40a9dDJvmcuVMKoGAyEmSlrxseL0c/uX+rw00nPCa1Ds0ECabuqLFt+OUDVj7B+bTaluA12H+LPcKQ4c/dz7Bv1ew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=D5Lv+pQ7; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49OEUgn4025218;
+	Thu, 24 Oct 2024 17:55:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=pp1; bh=xnEGdyTnpg4xM+QjkDVMi2R9voLU
+	vQJVrDKuSvjiRtc=; b=D5Lv+pQ7rewYUy72gB3EE0/NM8xN1S8kqgsBD2M8c31t
+	X4AoKRl21BtN5j3SlHYHcpT7CtZwlwaiOJOuLr4XTp3jrsNnqH7Ail+31H2LWEpz
+	OggWto5gr21gA6ajFGQzOWurjCsQOB/vdhdl8wn6OOoCiOc5lVhc+kFTxVhjBSrz
+	LKJdnDSZDw2DV8YtrTMWhVrdJTXnQvZyf18YGkwWvPmf2VWSmQhKdlI9Dfy54X8E
+	xC5GryC4OijXnJprAGkdQThVUXQoQjcm+17uoT8ZyAI0caUfbYru5XNUTA6P4g1r
+	40jG/xK1b/56EbWF6KcC+P6rvSchWr6eQOKL60mt+Q==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42emaf21r2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 24 Oct 2024 17:55:56 +0000 (GMT)
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 49OHttc3019270;
+	Thu, 24 Oct 2024 17:55:55 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42emaf21qw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 24 Oct 2024 17:55:55 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 49OHsDxE014565;
+	Thu, 24 Oct 2024 17:55:55 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 42emk81pbp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 24 Oct 2024 17:55:55 +0000
+Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
+	by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 49OHtrAN49021382
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 24 Oct 2024 17:55:53 GMT
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A12885805D;
+	Thu, 24 Oct 2024 17:55:53 +0000 (GMT)
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id ECE5A5805C;
+	Thu, 24 Oct 2024 17:55:48 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+	by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 24 Oct 2024 17:55:48 +0000 (GMT)
+From: Niklas Schnelle <schnelle@linux.ibm.com>
+Subject: [PATCH v9 0/5] treewide: Remove I/O port accessors for
+ HAS_IOPORT=n
+Date: Thu, 24 Oct 2024 19:54:39 +0200
+Message-Id: <20241024-b4-has_ioport-v9-0-6a6668593f71@linux.ibm.com>
+Content-Type: text/plain; charset="utf-8"
+X-B4-Tracking: v=1; b=H4sIAN+JGmcC/33M0QqCMBiG4VuRHTeZurbZUfcREXP7zR/SyWZii
+ PfeFIKQ6PD94HtmEsAjBHJKZuJhxICui1EeEmIa3d2Boo1NcpbzjDFOK04bHW7oeucHKpg2wkB
+ moRIkfnoPNU6bd7nGbjAMzr82fhTr+pHkThoFZZQVtcw5s1rA8fzA7jmlWLWpcS1ZtVF+C2ovy
+ CgokXPDSs2tlL8E9VdQUZBlAUJp0NbqvbAsyxuhkJDsMgEAAA==
+X-Change-ID: 20241004-b4-has_ioport-60ac6ce1deb6
+To: Brian Cain <bcain@quicinc.com>, Marcel Holtmann <marcel@holtmann.org>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+        Dave Airlie <airlied@redhat.com>, Gerd Hoffmann <kraxel@redhat.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        =?utf-8?q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Heiko Carstens <hca@linux.ibm.com>
+Cc: linux-kernel@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-bluetooth@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux.dev, spice-devel@lists.freedesktop.org,
+        intel-xe@lists.freedesktop.org, linux-serial@vger.kernel.org,
+        linux-arch@vger.kernel.org, Niklas Schnelle <schnelle@linux.ibm.com>,
+        Arnd Bergmann <arnd@kernel.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3956;
+ i=schnelle@linux.ibm.com; h=from:subject:message-id;
+ bh=dwa97Zv3mMxp89DjOwcC74hl8WXFjK0hXQS5Qkk1N/M=;
+ b=owGbwMvMwCX2Wz534YHOJ2GMp9WSGNKlOn/9Tc23s9+Ytnn2beaQUpMX53o17DdMPuE2uUGgZ
+ bHY3IvNHaUsDGJcDLJiiiyLupz91hVMMd0T1N8BM4eVCWQIAxenAEzEXIThf/Zd8bd1jy8tTfGt
+ P9MY+cfvW5DanO1/VpzuKCkyE/JMSWJkmKYevFJimtD5l0cvW2x349jvJy1859+vPwUzL3xxElx
+ 1hAsA
+X-Developer-Key: i=schnelle@linux.ibm.com; a=openpgp;
+ fpr=9DB000B2D2752030A5F72DDCAFE43F15E8C26090
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: ZzK5_Bh6ZhzA52n2zOUZDhguzOYUudTo
+X-Proofpoint-ORIG-GUID: oNqOtwFfRbanHLYgT_LLYcqw484r7CU5
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241023170759.999909-1-surenb@google.com> <20241023170759.999909-6-surenb@google.com>
- <20241023140017.e165544bf20bcb0c79bfee57@linux-foundation.org> <CAJuCfpH9yc2kYGZqYjYPWbApy05yqiONqziBQ+qF+R3nZRL56w@mail.gmail.com>
-In-Reply-To: <CAJuCfpH9yc2kYGZqYjYPWbApy05yqiONqziBQ+qF+R3nZRL56w@mail.gmail.com>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Thu, 24 Oct 2024 09:25:22 -0700
-Message-ID: <CAJuCfpFEYm-YT7AS6TzOMdLNtuS1E7KJuWJ8YeL9ro2L+3Wb9g@mail.gmail.com>
-Subject: Re: [PATCH v4 5/6] alloc_tag: introduce pgtag_ref_handle to abstract
- page tag references
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: kent.overstreet@linux.dev, corbet@lwn.net, arnd@arndb.de, 
-	mcgrof@kernel.org, rppt@kernel.org, paulmck@kernel.org, thuth@redhat.com, 
-	tglx@linutronix.de, bp@alien8.de, xiongwei.song@windriver.com, 
-	ardb@kernel.org, david@redhat.com, vbabka@suse.cz, mhocko@suse.com, 
-	hannes@cmpxchg.org, roman.gushchin@linux.dev, dave@stgolabs.net, 
-	willy@infradead.org, liam.howlett@oracle.com, pasha.tatashin@soleen.com, 
-	souravpanda@google.com, keescook@chromium.org, dennis@kernel.org, 
-	jhubbard@nvidia.com, urezki@gmail.com, hch@infradead.org, petr.pavlu@suse.com, 
-	samitolvanen@google.com, da.gomez@samsung.com, yuzhao@google.com, 
-	vvvvvv@google.com, rostedt@goodmis.org, iamjoonsoo.kim@lge.com, 
-	rientjes@google.com, minchan@google.com, kaleshsingh@google.com, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-mm@kvack.org, 
-	maple-tree@lists.infradead.org, linux-modules@vger.kernel.org, 
-	kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ lowpriorityscore=0 phishscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ priorityscore=1501 suspectscore=0 clxscore=1011 impostorscore=0
+ bulkscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2410240145
 
-On Wed, Oct 23, 2024 at 2:09=E2=80=AFPM Suren Baghdasaryan <surenb@google.c=
-om> wrote:
->
-> On Wed, Oct 23, 2024 at 2:00=E2=80=AFPM Andrew Morton <akpm@linux-foundat=
-ion.org> wrote:
-> >
-> > On Wed, 23 Oct 2024 10:07:58 -0700 Suren Baghdasaryan <surenb@google.co=
-m> wrote:
-> >
-> > > To simplify later changes to page tag references, introduce new
-> > > pgtag_ref_handle type. This allows easy replacement of page_ext
-> > > as a storage of page allocation tags.
-> > >
-> > > ...
-> > >
-> > >  static inline void pgalloc_tag_copy(struct folio *new, struct folio =
-*old)
-> > >  {
-> > > +     union pgtag_ref_handle handle;
-> > > +     union codetag_ref ref;
-> > >       struct alloc_tag *tag;
-> > > -     union codetag_ref *ref;
-> > >
-> > >       tag =3D pgalloc_tag_get(&old->page);
-> > >       if (!tag)
-> > >               return;
-> > >
-> > > -     ref =3D get_page_tag_ref(&new->page);
-> > > -     if (!ref)
-> > > +     if (!get_page_tag_ref(&new->page, &ref, &handle))
-> > >               return;
-> > >
-> > >       /* Clear the old ref to the original allocation tag. */
-> > >       clear_page_tag_ref(&old->page);
-> > >       /* Decrement the counters of the tag on get_new_folio. */
-> > > -     alloc_tag_sub(ref, folio_nr_pages(new));
-> > > -
-> > > -     __alloc_tag_ref_set(ref, tag);
-> > > -
-> > > -     put_page_tag_ref(ref);
-> > > +     alloc_tag_sub(&ref, folio_nr_pages(new));
-> >
-> > mm-stable has folio_size(new) here, fixed up.
->
-> Oh, right. You merged that patch tonight and I formatted my patchset
-> yesterday :)
-> Thanks for the fixup.
->
-> >
-> > I think we aleady discussed this, but there's a crazy amount of
-> > inlining here.  pgalloc_tag_split() is huge, and has four callsites.
->
-> I must have missed that discussion but I am happy to unline this
-> function. I think splitting is heavy enough operation that this
-> uninlining would not have be noticeable.
+Hi All,
 
-Posted requested uninlining at
-https://lore.kernel.org/all/20241024162318.1640781-1-surenb@google.com/
+This is a follow up in my long running effort of making inb()/outb() and
+similar I/O port accessors compile-time optional. After initially
+sending this as a treewide series with the latest revision at[0]
+we switched to per subsystem series. Now though as we're left with only
+5 patches left I'm going back to a single series with Arnd planning
+to take this via the the asm-generic tree.
 
-> Thanks!
+This series may also be viewed for your convenience on my git.kernel.org
+tree[1] under the b4/has_ioport branch. As for compile-time vs runtime
+see Linus' reply to my first attempt[2].
+
+Thanks,
+Niklas
+
+[0] https://lore.kernel.org/all/20230522105049.1467313-1-schnelle@linux.ibm.com/
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/niks/linux.git
+[2] https://lore.kernel.org/lkml/CAHk-=wg80je=K7madF4e7WrRNp37e3qh6y10Svhdc7O8SZ_-8g@mail.gmail.com/
+
+Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+---
+Changes in v9:
+- In drm patch sort includes and reformat if (Thomas). Use IS_ENABELD()
+  and add a helper instead of #ifdef (Arnd, Thomas)
+- Rebased on v6.12-rc4
+- Compile tested applied to next. There are a few conflicts with drm
+  next but they're all just context changes
+- Link to v8: https://lore.kernel.org/r/20241008-b4-has_ioport-v8-0-793e68aeadda@linux.ibm.com
+
+Changes in v8:
+- Don't remove "depends on !S390" for SERIAL_8250
+- Link to v7: https://lore.kernel.org/r/20241008-b4-has_ioport-v7-0-8624c09a4d77@linux.ibm.com
+
+Changes in v7:
+- Renamed serial_8250_need_ioport() helper to
+  serial_8250_warn_need_ioport() and move it to 8250_pcilib.c so it can
+  be used in serial8250_pci_setup_port()
+- Flattened if in serial8250_pci_setup_port() (Maciej)
+- Removed gratuituous changes (Maciej)
+- Removed is_upf_fourport() helper in favor of zeroing UPF_FOURPORT
+  if CONFIG_HAS_IOPORT is not set (Maciej)
+- Link to v6: https://lore.kernel.org/r/20241007-b4-has_ioport-v6-0-03f7240da6e5@linux.ibm.com
+
+Changes since v5 / per subsystem patches:
+
+drm:
+- Add HAS_IOPORT dependency for GMA500
+tty: serial:
+- Make 8250 PCI driver emit an error message when trying to use devices
+  which require I/O ports without CONFIG_HAS_IOPORT (Maciej)
+- Use early returns + dead code elimination to skip inb()/outb() uses
+  in quirks (Arnd)
+- In 8250 PCI driver also handle fintek and moxi quirks
+- In 8250 ports code handle um's defined(__i385__) &&
+  defined(CONFIG_HAS_IOPORT) case
+- Use IS_ENABLED() early return also in is_upf_fourport()
+  __always_inline to force constant folding
+
+---
+Niklas Schnelle (5):
+      hexagon: Don't select GENERIC_IOMAP without HAS_IOPORT support
+      Bluetooth: add HAS_IOPORT dependencies
+      drm: handle HAS_IOPORT dependencies
+      tty: serial: handle HAS_IOPORT dependencies
+      asm-generic/io.h: Remove I/O port accessors for HAS_IOPORT=n
+
+ arch/hexagon/Kconfig                  |  1 -
+ drivers/bluetooth/Kconfig             |  6 ++--
+ drivers/gpu/drm/gma500/Kconfig        |  2 +-
+ drivers/gpu/drm/qxl/Kconfig           |  2 +-
+ drivers/gpu/drm/tiny/bochs.c          | 19 ++++++++---
+ drivers/gpu/drm/tiny/cirrus.c         |  2 ++
+ drivers/gpu/drm/xe/Kconfig            |  2 +-
+ drivers/tty/Kconfig                   |  4 +--
+ drivers/tty/serial/8250/8250_early.c  |  4 +++
+ drivers/tty/serial/8250/8250_pci.c    | 40 +++++++++++++++++++++++
+ drivers/tty/serial/8250/8250_pcilib.c | 12 ++++++-
+ drivers/tty/serial/8250/8250_pcilib.h |  2 ++
+ drivers/tty/serial/8250/8250_port.c   | 27 +++++++++++++---
+ drivers/tty/serial/8250/Kconfig       |  4 +--
+ drivers/tty/serial/Kconfig            |  2 +-
+ include/asm-generic/io.h              | 60 +++++++++++++++++++++++++++++++++++
+ include/linux/serial_core.h           |  4 +++
+ 17 files changed, 171 insertions(+), 22 deletions(-)
+---
+base-commit: 42f7652d3eb527d03665b09edac47f85fb600924
+change-id: 20241004-b4-has_ioport-60ac6ce1deb6
+
+Best regards,
+-- 
+Niklas Schnelle
+
 
