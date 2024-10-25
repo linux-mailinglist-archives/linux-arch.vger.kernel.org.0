@@ -1,81 +1,118 @@
-Return-Path: <linux-arch+bounces-8532-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8533-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AB1D9AFC78
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Oct 2024 10:26:26 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16EF79AFD64
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Oct 2024 10:58:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CC5641C20D3F
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Oct 2024 08:26:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 99807B225BA
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Oct 2024 08:58:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 510401CFECE;
-	Fri, 25 Oct 2024 08:26:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E18A81D3628;
+	Fri, 25 Oct 2024 08:58:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="VfbUIXQ1"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46F531D0F5F
-	for <linux-arch@vger.kernel.org>; Fri, 25 Oct 2024 08:26:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 948691D363F;
+	Fri, 25 Oct 2024 08:58:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729844783; cv=none; b=X99GhdFpNeWwzt6xlKQ+KmddA5yB/TWdomTaI600rklPDhXO/ngFHMt5Jwy4c2tKUDU3wweOVhCyCe3kvfG+FOrKZhNOAtIaixki0LnIIF1MREbtfccCzywdjBt9ggjttlkAZIg+DiBnhnKhBrSvnUYfw5l6TT9CUZ2PYMaZCcU=
+	t=1729846712; cv=none; b=mhVUGdOJ8snZlDkUQqyS5wospRzs0vH92sTXrjfmoWfPb+uOTx3xLRARL6gjisP1ZnMAMNB49Cd73Gtc7vHYaYGLDm6FFaHMp0RwlAE3OuKs9ob3sASOaxGgn2zD2LtTQcZIAtMgLXxWRk37G9YZmpBDEyuRmZAKRBGLMr8maxI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729844783; c=relaxed/simple;
-	bh=GzpJh/AclxSqPzK2qy5RJr745reWxONjM4NlfhLsSoE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qvJo/gADoGPiGRDIdWPPTfYx3LgHcJk1ETR1jufGr51REQjv2CJiUeqhxAvMZc3T5VjZQNyqqX8HieSJCExgxKGxdlJowUNMfq4mIvUNndU4Dlcg+Ky+RoH4UH9dRg15ExpAAwpep3N6SMukIVJryIzpmmEK4wu/+qVFmRhP6uo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 34DD8339;
-	Fri, 25 Oct 2024 01:26:50 -0700 (PDT)
-Received: from [10.57.66.80] (unknown [10.57.66.80])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DD2FD3F73B;
-	Fri, 25 Oct 2024 01:26:18 -0700 (PDT)
-Message-ID: <4da06814-1846-47f1-87f9-f8d38fe2ef33@arm.com>
-Date: Fri, 25 Oct 2024 10:26:16 +0200
+	s=arc-20240116; t=1729846712; c=relaxed/simple;
+	bh=+uq/niLfEtYf/c6Xlkg9qgvnUOeY+Bos5cq4UWrEjjU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bTMxMQwUPX5q1e+PQTkwh2Cas4xPA7fh1ca5ohC+OLX6gdovFlyZ2uRyf6xWzafW3Xcy96SMq+jI248/FzU2eBTWmHUmBTyzu41E01bO1vmsZX4oYt8Xth4cWg/YMorQm4KS55ql+y02ySL8cjUqrXkMJdQnXqd1agLl3R16owQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=VfbUIXQ1; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=fM1f2YxrgQ2sEgdNsgOBt8r5ECNfwt7LRPGzmtJRH9U=; b=VfbUIXQ13vdAbkhGHISFVV7/6/
+	6xcxH5uE1V4/NNyqD1rm1AA0zKhmTceBIrcHgEkmBVPH+Uq7JqKGMCu4q+avhIP2fDg+5nZPI3RrQ
+	bqIPoKqOW5QhP5G4AH+/6JzhQ4LLlwjr93m0Fwi9upbNunph5ZAA4YWZn53KXsAEVLTldlRUFw94n
+	7EoH37g9NB4bod4Sa48l67V0LRohtd2g7U5om3/Bbw9FQIw69pbFwOnnyvrwBJ0v0qGmr7lZ+VG1F
+	mkcDhSW/s7VwgOeNIdfoKtRz7ieJnk/DWKB91nu86H6biJTsNZrFTwBigDHk8WQiwWeORnyoheue5
+	ueCM+3XA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1t4G9A-00000008sII-3S1k;
+	Fri, 25 Oct 2024 08:58:17 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 0CE20300ABE; Fri, 25 Oct 2024 10:58:16 +0200 (CEST)
+Date: Fri, 25 Oct 2024 10:58:15 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: "Christoph Lameter (Ampere)" <cl@linux.com>
+Cc: tglx@linutronix.de, axboe@kernel.dk, linux-kernel@vger.kernel.org,
+	mingo@redhat.com, dvhart@infradead.org, dave@stgolabs.net,
+	andrealmeid@igalia.com, Andrew Morton <akpm@linux-foundation.org>,
+	urezki@gmail.com, hch@infradead.org, lstoakes@gmail.com,
+	Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org,
+	linux-mm@kvack.org, linux-arch@vger.kernel.org,
+	malteskarupke@web.de
+Subject: Re: [PATCH v1 11/14] futex: Implement FUTEX2_NUMA
+Message-ID: <20241025085815.GG14555@noisy.programming.kicks-ass.net>
+References: <20230721102237.268073801@infradead.org>
+ <20230721105744.434742902@infradead.org>
+ <9dc04e4c-2adc-5084-4ea1-b200d82be29f@linux.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] mm/pkey: Add PKEY_UNRESTRICTED macro
-To: Dave Hansen <dave.hansen@intel.com>,
- Yury Khrustalev <yury.khrustalev@arm.com>, linux-arch@vger.kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>, Joey Gouly <joey.gouly@arm.com>,
- Dave Hansen <dave.hansen@linux.intel.com>, nd@arm.com
-References: <20241022120128.359652-1-yury.khrustalev@arm.com>
- <d8c2ff4a-a7b3-409f-aa3c-5ee97ba4c540@intel.com>
- <04426b9c-2686-470b-977e-d6890312d49b@arm.com>
- <585b56ef-6e89-4d1e-be6f-715c0f38b56d@intel.com>
-Content-Language: en-GB
-From: Kevin Brodsky <kevin.brodsky@arm.com>
-In-Reply-To: <585b56ef-6e89-4d1e-be6f-715c0f38b56d@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9dc04e4c-2adc-5084-4ea1-b200d82be29f@linux.com>
 
-On 22/10/2024 19:15, Dave Hansen wrote:
-> On 10/22/24 08:11, Kevin Brodsky wrote:
->>>> +#define PKEY_UNRESTRICTED	0x0
->>>>  #define PKEY_DISABLE_ACCESS	0x1
->>>>  #define PKEY_DISABLE_WRITE	0x2
->>>>  #define PKEY_ACCESS_MASK	(PKEY_DISABLE_ACCESS |\
->>> It seems sane, but it would be nice to have at least site or two use it
->>> in the kernel so show that it's useful in practice.  Is there any kernel
->>> code or anything in selftests/ that would be improved with this?
->> As a matter of fact this would improve the readability of [1] quite a
->> bit: all those set_pkey_bits(..., 0) calls would become
->> set_pkey_bits(..., PKEY_UNRESTRICTED). I'm sure other pkey-related
->> kselftests could benefit too.
-> It would be much appreciated if someone could make a pass over kernel
-> code and fix up the places where PKEY_UNRESTRICTED makes things more clear.
+On Wed, Jun 12, 2024 at 10:23:00AM -0700, Christoph Lameter (Ampere) wrote:
 
-It doesn't look like kernel code would have a use for it at the moment,
-but I have found a few places in kselftests (mm, ppc) where 0 could be
-replaced with PKEY_UNRESTRICTED. I can send a follow-up series.
+> > When FUTEX2_NUMA is not set, the node is simply an extention of the
+> > hash, such that traditional futexes are still interleaved over the
+> > nodes.
+> 
+> Could we follow NUMA policies like with other metadata allocations during
+> systen call processing? 
 
-Kevin
+I had a quick look at this, and since the mempolicy stuff is per vma,
+and we don't have the vma, this is going to be terribly expensive --
+mmap_lock and all that.
+
+Once lockless vma lookups land (soonish, perhaps), this could be
+reconsidered. But for now there just isn't a sane way to do this.
+
+Using memory policies is probably okay -- but still risky, since you get
+the extra failure case where if you change the mempolicy between WAIT
+and WAKE things will not match and sadness happens, but that *SHOULD*
+hopefully not happen a lot. Mempolicies are typically fairly static.
+
+> If there is no NUMA task policy then the futex
+> should be placed on the local NUMA node.
+
+> That way the placement of the futex can be controlled by the tasks memory
+> policy. We could skip the FUTEX2_NUMA option.
+
+That doesn't work. If we don't have storage for the node across
+WAIT/WAKE, then the node must be deterministic per futex_hash().
+Otherwise wake has no chance of finding the entry.
+
+Consider our random unbound task with no policies etc. (default state)
+doing FUTEX_WAIT and going to sleep while on node-0, it's sibling
+thread, that happens to run on node-1 issues FUTEX_WAKE.
+
+If they disagree on determining 'node', then they will not find match
+and the wakeup doesn't happen and userspace gets really sad.
+
+
+The current scheme where we determine node based on hash bits is fully
+deterministic and WAIT/WAKE will agree on which node-hash to use. The
+interleave is no worse than the global hash today -- OTOH it also isn't
+better.
 
