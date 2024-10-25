@@ -1,327 +1,148 @@
-Return-Path: <linux-arch+bounces-8550-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8551-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C13F9B0CE5
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Oct 2024 20:14:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC51C9B0D64
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Oct 2024 20:33:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3EFC21C223AF
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Oct 2024 18:14:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 606AB2859C7
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Oct 2024 18:33:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DA1720A5DE;
-	Fri, 25 Oct 2024 18:13:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2338A1C07FC;
+	Fri, 25 Oct 2024 18:33:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Jnrff6cZ";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="3NgZMXIE";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Jnrff6cZ";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="3NgZMXIE"
+	dkim=pass (2048-bit key) header.d=stgolabs.net header.i=@stgolabs.net header.b="Vsk/NPxE"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cornsilk.maple.relay.mailchannels.net (cornsilk.maple.relay.mailchannels.net [23.83.214.40])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31C7320BB3C;
-	Fri, 25 Oct 2024 18:13:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729880011; cv=none; b=GfhM+IuwHtthdYlHhPWRByy0m4VNlnESb0nN1phVkchiohmxrNsPGNrtXPl0yCIiBJi4IERvfzlzShqmkS4MeV/RiBSLkpJmZLNQA1V31ZjNoPesZpbu9gHBeNoSbOeqx5rLHsU6IAOwWATy1pYBQjzFvPlODqKjb57IRAM/In4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729880011; c=relaxed/simple;
-	bh=/PDztJNHx/avwMtJDa4GSCL4ZVfxliImRbrp3B3rzL8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Z+P85JE1LG8Rx56PoaB3cBxo9+PsF9DL13XKw1kfLYYSH9Z/KIRkqQ53cC7NToQlv5QgyFTPMcUteeubCi52DfGU/8l5lxzDj7hpEKtmCG66GXc2VQ9UDrfrzt1eOxme5X28DNYPE+tQiBPf8bjfYmOKLZEoYMC3VDOodrpavxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Jnrff6cZ; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=3NgZMXIE; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Jnrff6cZ; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=3NgZMXIE; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEBB61534E9;
+	Fri, 25 Oct 2024 18:33:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=23.83.214.40
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729881211; cv=pass; b=ljLMA9Gh5kBKPrs7IwiyTDswaeyplawVzo3aeeyQGP/9nBzMMPSDQDXZOvTEum7IgVN4qyl84oOKPDY+IJWufmXyi2XRUwat456nisabDnH7DvHBY6S5OalcLlUZuFOyE/U0icj3dMqIFFZY1yMA7VTsOssqwH4gebDzjp0uDaA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729881211; c=relaxed/simple;
+	bh=dwVze2IoN4lNX6/VE+wDa6/jdnBd4wpGu126gCkhqsA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fS/wR5jUXSEu3U2IpVXRlJH5XhW+w3CgJ+Msh+UcP1Dsc29kMChRwhU2yZVfoEgD/Sql/tk9Op7TBmUvVJoHAzjnu6ZLSDRKiSSjcNfRmSW/AlLxYfWBf1lRNlN9pl7jBqcwyuAGUaPhjYpx9wcSPf37m5gsgw0DwPC8KuDMu6g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=stgolabs.net; spf=pass smtp.mailfrom=stgolabs.net; dkim=pass (2048-bit key) header.d=stgolabs.net header.i=@stgolabs.net header.b=Vsk/NPxE; arc=pass smtp.client-ip=23.83.214.40
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=stgolabs.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+	by relay.mailchannels.net (Postfix) with ESMTP id 0AFF32C1B84;
+	Fri, 25 Oct 2024 18:33:21 +0000 (UTC)
+Received: from pdx1-sub0-mail-a292.dreamhost.com (trex-13.trex.outbound.svc.cluster.local [100.102.223.228])
+	(Authenticated sender: dreamhost)
+	by relay.mailchannels.net (Postfix) with ESMTPA id 6B0102C37D4;
+	Fri, 25 Oct 2024 18:33:20 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1729881200; a=rsa-sha256;
+	cv=none;
+	b=j5P5Z6nwn7aUtQdqVV7veKxoLLw7vBdLodEdHWQdp1LHoWolNUAlXqqrctcTwvZhHFHXiw
+	TkgquVIsGBgDuKxUuiLvGKpl2XUuhUYnWi0YTTvFzMLOHucI/V/l4rCWtJbcha+BqRz6Z2
+	t0/uikYaCtc/CJFjIe8gi+8a6q5oJRpHVWbiWXnfQH+5njbFy9ajA0mPbgveqpc9+mJ5EY
+	v5Y3mxrChNoiplMMLt6uher97meKD+p5/ikXlchwz+yNezS/ciJT3UlmHr4neCMidepgNd
+	KY7dJotH7L+XHldYRchMPS9Snlq1WLwIc4iECQjS8zQV4lh+FKHFgZQccDF61g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+	s=arc-2022; t=1729881200;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=CT4I2WNs8+lv4enGsXMLmXV5yqvMUhh47eXWE7/RKS4=;
+	b=6DCSBlT2DFrC8tksm9jKSdTODKtWHI374gECEVPYRRl+2wAQvL+SxplT4unaTdgZ1TXOBk
+	7R55ocCqK//NFlFWJECZAirZt3peZo0pB0gb2dB2TeubXw2oipuy+WFPZ9roOx6Qa1WyGm
+	ygvd7VsZlRaQwWh11lRjm5IksaEPjGMYbXqyR2nPRIoJHcr2OKkOdNLXX+N7NfA0Q/VK99
+	qOQ/8AdUNKKG2Mw7AGxkXygIJJ3yOfoBhfGSS2fM8y4hwVhcmQkX978x02DIO9raR4cUW/
+	8TY4zmTo7D+4LFUvqWX6KyB56Db81DUptNqKKfS+pB2wVqYa8S7aWDHIl5jM1Q==
+ARC-Authentication-Results: i=1;
+	rspamd-cdbbc7585-hgvf8;
+	auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Industry-Reign: 7245a16350dd8199_1729881200793_2943900534
+X-MC-Loop-Signature: 1729881200793:2559233038
+X-MC-Ingress-Time: 1729881200792
+Received: from pdx1-sub0-mail-a292.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+	by 100.102.223.228 (trex/7.0.2);
+	Fri, 25 Oct 2024 18:33:20 +0000
+Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 011E31FE29;
-	Fri, 25 Oct 2024 18:13:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1729880007; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=zKXJJEviamphxC/DA/8mSG5DEJnMjhmEflprXxZTXok=;
-	b=Jnrff6cZgnegSXi9fKCBaBsAV7wjOxbBywa2Yrbp1Nc5KJ/20qOogMfdqgaUtE2nJye/H0
-	vHmQm2sPJgy9stbr1gTKHyF9ii3nypSNfDCQV+A8eC+chXVx42hP3AVoMa6/on5+EkBsqP
-	ICKmUybNlTRppjoOCXYCLEtgUtFpHms=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1729880007;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=zKXJJEviamphxC/DA/8mSG5DEJnMjhmEflprXxZTXok=;
-	b=3NgZMXIE3ZBeAqZQyJ3SQbfDyHo/PPltA0sQ3+akKvPcFgWPIOzY2jRut8HKSvH97pGqSI
-	IZTwamiefcKK7LCw==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1729880007; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=zKXJJEviamphxC/DA/8mSG5DEJnMjhmEflprXxZTXok=;
-	b=Jnrff6cZgnegSXi9fKCBaBsAV7wjOxbBywa2Yrbp1Nc5KJ/20qOogMfdqgaUtE2nJye/H0
-	vHmQm2sPJgy9stbr1gTKHyF9ii3nypSNfDCQV+A8eC+chXVx42hP3AVoMa6/on5+EkBsqP
-	ICKmUybNlTRppjoOCXYCLEtgUtFpHms=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1729880007;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=zKXJJEviamphxC/DA/8mSG5DEJnMjhmEflprXxZTXok=;
-	b=3NgZMXIE3ZBeAqZQyJ3SQbfDyHo/PPltA0sQ3+akKvPcFgWPIOzY2jRut8HKSvH97pGqSI
-	IZTwamiefcKK7LCw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 7D347132D3;
-	Fri, 25 Oct 2024 18:13:26 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id HFLaG8bfG2edIQAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Fri, 25 Oct 2024 18:13:26 +0000
-Message-ID: <8b1854b5-5c0a-43b1-aed7-aa4e8b8e8a1a@suse.cz>
-Date: Fri, 25 Oct 2024 20:13:26 +0200
+	(Authenticated sender: dave@stgolabs.net)
+	by pdx1-sub0-mail-a292.dreamhost.com (Postfix) with ESMTPSA id 4XZry72Y0xz9p;
+	Fri, 25 Oct 2024 11:33:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+	s=dreamhost; t=1729881200;
+	bh=CT4I2WNs8+lv4enGsXMLmXV5yqvMUhh47eXWE7/RKS4=;
+	h=Date:From:To:Cc:Subject:Content-Type;
+	b=Vsk/NPxEuhRtgVp5TlB3DwcWvnMqm9mythIDgEulakohCN5GOnlLxeEj2sBHVMjBf
+	 yG9Bu7FazgHrrluyfbxugoCb9rr3UvgdX4LlVPfGjXWTWHmNm6RefJ9mqv8bpA8tDc
+	 PqLrL7jRRiGN7Uqqujeyoq50jPKnOnq8TQLgodb1+fMrIEyojUzChIc9q4Eh2qC60Y
+	 Fh4a7snuTbazI0oXvixGNjBhKecifSz4wqaixS6K2FueL3Ycx6SZh4ISUbip8YsMzC
+	 vrJBA2HPdby+MLKD0onAqWL/uJRi9eMAIG/mT089ImWGi2y/gXVBdSjtOYwdjToBX8
+	 RWmnThY43TYow==
+Date: Fri, 25 Oct 2024 11:30:26 -0700
+From: Davidlohr Bueso <dave@stgolabs.net>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: tglx@linutronix.de, linux-kernel@vger.kernel.org, mingo@redhat.com, 
+	dvhart@infradead.org, andrealmeid@igalia.com, 
+	Andrew Morton <akpm@linux-foundation.org>, urezki@gmail.com, hch@infradead.org, lstoakes@gmail.com, 
+	Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org, linux-mm@kvack.org, 
+	linux-arch@vger.kernel.org, malteskarupke@web.de, cl@linux.com, llong@redhat.com
+Subject: Re: [PATCH 2/6] futex: Implement FUTEX2_NUMA
+Message-ID: <i4ljhfndmqrdg5zevd4gf2chmzesfieflxvfj2io2qfhfj4vb7@nicvpjmcdtyu>
+Mail-Followup-To: Peter Zijlstra <peterz@infradead.org>, 
+	tglx@linutronix.de, linux-kernel@vger.kernel.org, mingo@redhat.com, 
+	dvhart@infradead.org, andrealmeid@igalia.com, 
+	Andrew Morton <akpm@linux-foundation.org>, urezki@gmail.com, hch@infradead.org, lstoakes@gmail.com, 
+	Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org, linux-mm@kvack.org, 
+	linux-arch@vger.kernel.org, malteskarupke@web.de, cl@linux.com, llong@redhat.com
+References: <20241025090347.244183920@infradead.org>
+ <20241025093944.485691531@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/5] mm: pagewalk: add the ability to install PTEs
-Content-Language: en-US
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: Suren Baghdasaryan <surenb@google.com>,
- "Liam R . Howlett" <Liam.Howlett@oracle.com>,
- Matthew Wilcox <willy@infradead.org>, "Paul E . McKenney"
- <paulmck@kernel.org>, Jann Horn <jannh@google.com>,
- David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, Muchun Song <muchun.song@linux.dev>,
- Richard Henderson <richard.henderson@linaro.org>,
- Matt Turner <mattst88@gmail.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
- Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
- Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@kernel.org>,
- linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, linux-arch@vger.kernel.org,
- Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
- linux-kselftest@vger.kernel.org, Sidhartha Kumar
- <sidhartha.kumar@oracle.com>, Jeff Xu <jeffxu@chromium.org>,
- Christoph Hellwig <hch@infradead.org>, linux-api@vger.kernel.org,
- John Hubbard <jhubbard@nvidia.com>
-References: <cover.1729699916.git.lorenzo.stoakes@oracle.com>
- <9be732fd0e897453116b433fe2f468ef7795602e.1729699916.git.lorenzo.stoakes@oracle.com>
-From: Vlastimil Babka <vbabka@suse.cz>
-Autocrypt: addr=vbabka@suse.cz; keydata=
- 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
- EP+ylKVEKb0Q2A==
-In-Reply-To: <9be732fd0e897453116b433fe2f468ef7795602e.1729699916.git.lorenzo.stoakes@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Score: -4.30
-X-Spamd-Result: default: False [-4.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_ALL(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[31];
-	MID_RHS_MATCH_FROM(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com,gmx.de];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[google.com,oracle.com,infradead.org,kernel.org,redhat.com,kvack.org,vger.kernel.org,linux.dev,linaro.org,gmail.com,alpha.franken.de,HansenPartnership.com,gmx.de,zankel.net,chromium.org,nvidia.com];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	R_RATELIMIT(0.00)[to_ip_from(RL3py1j7x8bxoj6nr7eaeb97sq)]
-X-Spam-Flag: NO
-X-Spam-Level: 
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20241025093944.485691531@infradead.org>
+User-Agent: NeoMutt/20240425
 
-On 10/23/24 18:24, Lorenzo Stoakes wrote:
-> The existing generic pagewalk logic permits the walking of page tables,
-> invoking callbacks at individual page table levels via user-provided
-> mm_walk_ops callbacks.
-> 
-> This is useful for traversing existing page table entries, but precludes
-> the ability to establish new ones.
-> 
-> Existing mechanism for performing a walk which also installs page table
-> entries if necessary are heavily duplicated throughout the kernel, each
-> with semantic differences from one another and largely unavailable for use
-> elsewhere.
-> 
-> Rather than add yet another implementation, we extend the generic pagewalk
-> logic to enable the installation of page table entries by adding a new
-> install_pte() callback in mm_walk_ops. If this is specified, then upon
-> encountering a missing page table entry, we allocate and install a new one
-> and continue the traversal.
-> 
-> If a THP huge page is encountered at either the PMD or PUD level we split
-> it only if there are ops->pte_entry() (or ops->pmd_entry at PUD level),
-> otherwise if there is only an ops->install_pte(), we avoid the unnecessary
-> split.
-> 
-> We do not support hugetlb at this stage.
-> 
-> If this function returns an error, or an allocation fails during the
-> operation, we abort the operation altogether. It is up to the caller to
-> deal appropriately with partially populated page table ranges.
-> 
-> If install_pte() is defined, the semantics of pte_entry() change - this
-> callback is then only invoked if the entry already exists. This is a useful
-> property, as it allows a caller to handle existing PTEs while installing
-> new ones where necessary in the specified range.
-> 
-> If install_pte() is not defined, then there is no functional difference to
-> this patch, so all existing logic will work precisely as it did before.
-> 
-> As we only permit the installation of PTEs where a mapping does not already
-> exist there is no need for TLB management, however we do invoke
-> update_mmu_cache() for architectures which require manual maintenance of
-> mappings for other CPUs.
-> 
-> We explicitly do not allow the existing page walk API to expose this
-> feature as it is dangerous and intended for internal mm use only. Therefore
-> we provide a new walk_page_range_mm() function exposed only to
-> mm/internal.h.
-> 
-> Reviewed-by: Jann Horn <jannh@google.com>
-> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+On Fri, 25 Oct 2024, Peter Zijlstra wrote:\n
 
-Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+> static int __init futex_init(void)
+> {
+>-	unsigned int futex_shift;
+>-	unsigned long i;
+>+	unsigned int order, n;
+>+	unsigned long size, i;
+>
+> #ifdef CONFIG_BASE_SMALL
+> 	futex_hashsize = 16;
+> #else
+>-	futex_hashsize = roundup_pow_of_two(256 * num_possible_cpus());
+>+	futex_hashsize = 256 * num_possible_cpus();
+>+	futex_hashsize /= num_possible_nodes();
+>+	futex_hashsize = roundup_pow_of_two(futex_hashsize);
+> #endif
+>+	futex_hashshift = ilog2(futex_hashsize);
+>+	size = sizeof(struct futex_hash_bucket) * futex_hashsize;
+>+	order = get_order(size);
+>+
+>+	for_each_node(n) {
 
-Just a small subjective suggestion in case you agree and there's a respin or
-followups:
-
-> @@ -109,18 +131,19 @@ static int walk_pmd_range(pud_t *pud, unsigned long addr, unsigned long end,
->  
->  		if (walk->action == ACTION_AGAIN)
->  			goto again;
-> -
-> -		/*
-> -		 * Check this here so we only break down trans_huge
-> -		 * pages when we _need_ to
-> -		 */
-> -		if ((!walk->vma && (pmd_leaf(*pmd) || !pmd_present(*pmd))) ||
-> -		    walk->action == ACTION_CONTINUE ||
-> -		    !(ops->pte_entry))
-> +		if (walk->action == ACTION_CONTINUE)
->  			continue;
-> +		if (!ops->install_pte && !ops->pte_entry)
-> +			continue; /* Nothing to do. */
-> +		if (!ops->pte_entry && ops->install_pte &&
-> +		    pmd_present(*pmd) &&
-> +		    (pmd_trans_huge(*pmd) || pmd_devmap(*pmd)))
-> +			continue; /* Avoid unnecessary split. */
-
-Much better now, thanks, but maybe the last 2 parts could be:
-
-if (!ops->pte_entry) {
-	if (!ops->install_pte)
-		continue; /* Nothing to do. */
-	else if (pmd_present(*pmd)
-		 && (pmd_trans_huge(*pmd) || pmd_devmap(*pmd)))
-		continue; /* Avoid unnecessary split. */
-}
-
-Or at least put !ops->pte_entry first in both conditions?
-
->  		if (walk->vma)
->  			split_huge_pmd(walk->vma, pmd, addr);
-> +		else if (pmd_leaf(*pmd) || !pmd_present(*pmd))
-> +			continue; /* Nothing to do. */
->  
->  		err = walk_pte_range(pmd, addr, next, walk);
->  		if (err)
-> @@ -148,11 +171,14 @@ static int walk_pud_range(p4d_t *p4d, unsigned long addr, unsigned long end,
->   again:
->  		next = pud_addr_end(addr, end);
->  		if (pud_none(*pud)) {
-> -			if (ops->pte_hole)
-> +			if (ops->install_pte)
-> +				err = __pmd_alloc(walk->mm, pud, addr);
-> +			else if (ops->pte_hole)
->  				err = ops->pte_hole(addr, next, depth, walk);
->  			if (err)
->  				break;
-> -			continue;
-> +			if (!ops->install_pte)
-> +				continue;
->  		}
->  
->  		walk->action = ACTION_SUBTREE;
-> @@ -164,14 +190,20 @@ static int walk_pud_range(p4d_t *p4d, unsigned long addr, unsigned long end,
->  
->  		if (walk->action == ACTION_AGAIN)
->  			goto again;
-> -
-> -		if ((!walk->vma && (pud_leaf(*pud) || !pud_present(*pud))) ||
-> -		    walk->action == ACTION_CONTINUE ||
-> -		    !(ops->pmd_entry || ops->pte_entry))
-> +		if (walk->action == ACTION_CONTINUE)
->  			continue;
-> +		if (!ops->install_pte && !ops->pte_entry && !ops->pmd_entry)
-> +			continue;  /* Nothing to do. */
-> +		if (!ops->pmd_entry && !ops->pte_entry && ops->install_pte &&
-> +		    pud_present(*pud) &&
-> +		    (pud_trans_huge(*pud) || pud_devmap(*pud)))
-> +			continue; /* Avoid unnecessary split. */
-
-Ditto.
-
-Thanks!
+Probably want to skip nodes that don't have CPUs, those will never
+have the remote for .node value.
 
 
