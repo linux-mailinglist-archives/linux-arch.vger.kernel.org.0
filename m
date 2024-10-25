@@ -1,55 +1,55 @@
-Return-Path: <linux-arch+bounces-8535-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8540-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F19329AFE75
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Oct 2024 11:41:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E04C09AFE83
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Oct 2024 11:42:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B194F2839F6
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Oct 2024 09:41:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A4E65285885
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Oct 2024 09:42:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A4751D5159;
-	Fri, 25 Oct 2024 09:41:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEAC11DE2C2;
+	Fri, 25 Oct 2024 09:41:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Y2cyR1HP"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="mHf3VaB+"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0EC9175A6;
-	Fri, 25 Oct 2024 09:41:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B1B51D90B4;
+	Fri, 25 Oct 2024 09:41:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729849273; cv=none; b=CWAVcvW2SJ85Ej4m+86GgWn+Ro9uZlQctcp/2/pwXYe19qNBeK94rAINw3NVUZzJ75WFQ+3lZ04DTbPKNd+o3YS41Yw24CN1eiq7elM/EtJcf51TI/2UhI8ME07rnZxJd2IdPZZXN/wBxBs9GB+kZnUGrJgsZH9ezJut3xk/xco=
+	t=1729849279; cv=none; b=fbdrSYqf4iiGeW3vi6NGAsWoQ4QPLuK9S8I2qPen0sT32MxmKh6ApGOyS75Dx/Y8PgBF4YRPTRG3B85k7LiZA4EEd0lxtELL6MnQGD3/RvNp69+TSX78sUd9mq5jxp96g/8Zvjbi4mQJ97a1/77aj8oyhFdclB9+n6jbnSekE9o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729849273; c=relaxed/simple;
-	bh=KDCxAA2t4R126zWcHSt54xfK4tfXCDSdh3BN1NDkNf0=;
+	s=arc-20240116; t=1729849279; c=relaxed/simple;
+	bh=WKchFVXnj6SKM18yijVrqOA+u2bmi/cCI+xywo0KwFk=;
 	h=Message-Id:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=ZwpKNAknv3mNsMMGZLIv8ngzUwUyXX5hUcg9qrQmOEK85/t4DrLAeQrn0A1l0+0dExBq3ftLzzizYiQ+2O+PlukoTM22ZTyTqbKkolJTyF6P8cZO5UmGBjpcyF4kXPKOhwbonHpsgEnJ9yhiNeBMnjIpImVYhL5LJUz7N68iX/Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Y2cyR1HP; arc=none smtp.client-ip=90.155.50.34
+	 Content-Type; b=URTjYbtGYGr/TxY6vKJqLq9U3ysXyfjcSaWFWw/9Tdl11Hgmlas7Zt9OCJyFbLq/tTOJ48ot10zXLPQnwhWFsGdM7ptpBRZ9qlQcaTZc6lREhtDb2hxok45pdqNeDIXqwsHmJ4xJ11WB/qwWqTadQJMCQ6GJ60rPJNrZw+eGLx8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=mHf3VaB+; arc=none smtp.client-ip=90.155.92.199
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
+	d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
 	Subject:Cc:To:From:Date:Message-Id:Sender:Reply-To:Content-Transfer-Encoding:
 	Content-ID:Content-Description:In-Reply-To;
-	bh=RZyeqL/sDawSYArfjik+bzTHUaH0yRhT/D7WDZYPYBA=; b=Y2cyR1HPqEIEF7pPOyzphBJXKY
-	5m6VIXPj2PJRcDkKRF8+NVUBugBJk6WNVYlLYSmQQ8F33FYEpW4Sqh1ioL5UUNbrSkDCQCbIt/mbU
-	C/qEC6Q4O77K8rlLfhA2cwul6CNsYEDCKf+19iOiRxXrJKjsKXtCfJQ0V6j0mI8qWRPvGZrutb1gE
-	zagsCUxVojU8zDApLn4H/SbdldGgPTcoKed5Jc0C4QZBFaI3hUx6A7I7jJKSX4MyKbb19A9SlktQ6
-	RSeJ9D7aHgah0fGVuSgl3kyVxp1uzgnGQjtHjauc7Fqsg12U6Wwvi0k8UOmvnJUXnhpMSDBg3E45S
-	vRnXCBzQ==;
+	bh=U0D/97Jan/1h5/mHQt4BdsZRHtXtzjdUFE/GVa1R21M=; b=mHf3VaB+HmQHmxesCbnKkAMi2d
+	sZG3k9IRWCQW3O2HIyPWhAEPdZw/T3W1b/yG1wTuewo6QaSkAYvR++sMpfAZVuGx3gAFXcYqQzSQT
+	j4xVtIecla88uLIdFVu1LiFvwB4Cq782IvCH+uJzMi+7MndvdPq+OAGDQKLipcXDSxxMKBmDn/vdg
+	hZG4GTC4vYB7tQPNZKR62OMPaydbPwqbxB3+jfYTpnV+ZwwlH3kRgwWBYGKfLduwn6uwoNeHSNsHi
+	bSqf1vVyNKE51O8hMxkxgID8XJZpxqWOz/FjDNFHXb7tgBbBOe6zscEWeuaj1ox6NMer/4J3zvV/9
+	pd4m9big==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1t4GoU-000000054PO-00xQ;
-	Fri, 25 Oct 2024 09:40:58 +0000
+	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1t4GoU-00000008sa8-1mSU;
+	Fri, 25 Oct 2024 09:40:59 +0000
 Received: by noisy.programming.kicks-ass.net (Postfix, from userid 0)
-	id D1B7C300B40; Fri, 25 Oct 2024 11:40:57 +0200 (CEST)
-Message-Id: <20241025093944.485691531@infradead.org>
+	id D5DAD301171; Fri, 25 Oct 2024 11:40:57 +0200 (CEST)
+Message-Id: <20241025093944.598921704@infradead.org>
 User-Agent: quilt/0.65
-Date: Fri, 25 Oct 2024 11:03:49 +0200
+Date: Fri, 25 Oct 2024 11:03:50 +0200
 From: Peter Zijlstra <peterz@infradead.org>
 To: tglx@linutronix.de
 Cc: linux-kernel@vger.kernel.org,
@@ -69,7 +69,7 @@ Cc: linux-kernel@vger.kernel.org,
  malteskarupke@web.de,
  cl@linux.com,
  llong@redhat.com
-Subject: [PATCH 2/6] futex: Implement FUTEX2_NUMA
+Subject: [PATCH 3/6] futex: Propagate flags into futex_get_value_locked()
 References: <20241025090347.244183920@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -79,324 +79,127 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 
-Extend the futex2 interface to be numa aware.
+In order to facilitate variable sized futexes propagate the flags into
+futex_get_value_locked().
 
-When FUTEX2_NUMA is specified for a futex, the user value is extended
-to two words (of the same size). The first is the user value we all
-know, the second one will be the node to place this futex on.
-
-  struct futex_numa_32 {
-	u32 val;
-	u32 node;
-  };
-
-When node is set to ~0, WAIT will set it to the current node_id such
-that WAKE knows where to find it. If userspace corrupts the node value
-between WAIT and WAKE, the futex will not be found and no wakeup will
-happen.
-
-When FUTEX2_NUMA is not set, the node is simply an extention of the
-hash, such that traditional futexes are still interleaved over the
-nodes.
-
-This is done to avoid having to have a separate !numa hash-table.
+No functional change intended.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
 ---
- include/linux/futex.h      |    3 +
- include/uapi/linux/futex.h |    8 ++
- kernel/futex/core.c        |  128 ++++++++++++++++++++++++++++++++++++---------
- kernel/futex/futex.h       |   17 +++++
- 4 files changed, 131 insertions(+), 25 deletions(-)
+ kernel/futex/core.c     |    4 ++--
+ kernel/futex/futex.h    |    2 +-
+ kernel/futex/pi.c       |    8 ++++----
+ kernel/futex/requeue.c  |    4 ++--
+ kernel/futex/waitwake.c |    4 ++--
+ 5 files changed, 11 insertions(+), 11 deletions(-)
 
---- a/include/linux/futex.h
-+++ b/include/linux/futex.h
-@@ -34,6 +34,7 @@ union futex_key {
- 		u64 i_seq;
- 		unsigned long pgoff;
- 		unsigned int offset;
-+		/* unsigned int node; */
- 	} shared;
- 	struct {
- 		union {
-@@ -42,11 +43,13 @@ union futex_key {
- 		};
- 		unsigned long address;
- 		unsigned int offset;
-+		/* unsigned int node; */
- 	} private;
- 	struct {
- 		u64 ptr;
- 		unsigned long word;
- 		unsigned int offset;
-+		unsigned int node;	/* NOT hashed! */
- 	} both;
- };
- 
---- a/include/uapi/linux/futex.h
-+++ b/include/uapi/linux/futex.h
-@@ -74,6 +74,14 @@
- /* do not use */
- #define FUTEX_32		FUTEX2_SIZE_U32 /* historical accident :-( */
- 
-+
-+/*
-+ * When FUTEX2_NUMA doubles the futex word, the second word is a node value.
-+ * The special value -1 indicates no-node. This is the same value as
-+ * NUMA_NO_NODE, except that value is not ABI, this is.
-+ */
-+#define FUTEX_NO_NODE		(-1)
-+
- /*
-  * Max numbers of elements in a futex_waitv array
-  */
 --- a/kernel/futex/core.c
 +++ b/kernel/futex/core.c
-@@ -36,7 +36,8 @@
- #include <linux/pagemap.h>
- #include <linux/debugfs.h>
- #include <linux/plist.h>
--#include <linux/memblock.h>
-+#include <linux/gfp.h>
-+#include <linux/vmalloc.h>
- #include <linux/fault-inject.h>
- #include <linux/slab.h>
- 
-@@ -49,12 +50,14 @@
-  * reside in the same cacheline.
-  */
- static struct {
--	struct futex_hash_bucket *queues;
- 	unsigned long            hashsize;
-+	unsigned int		 hashshift;
-+	struct futex_hash_bucket *queues[MAX_NUMNODES];
- } __futex_data __read_mostly __aligned(2*sizeof(long));
--#define futex_queues   (__futex_data.queues)
--#define futex_hashsize (__futex_data.hashsize)
- 
-+#define futex_hashsize	(__futex_data.hashsize)
-+#define futex_hashshift	(__futex_data.hashshift)
-+#define futex_queues	(__futex_data.queues)
- 
- /*
-  * Fault injections for futexes.
-@@ -107,6 +110,26 @@ late_initcall(fail_futex_debugfs);
- 
- #endif /* CONFIG_FAIL_FUTEX */
- 
-+static int futex_get_value(u32 *val, u32 __user *from, unsigned int flags)
-+{
-+	switch (futex_size(flags)) {
-+	case 1: return __get_user(*val, (u8 __user *)from);
-+	case 2: return __get_user(*val, (u16 __user *)from);
-+	case 4: return __get_user(*val, (u32 __user *)from);
-+	default: BUG();
-+	}
-+}
-+
-+static int futex_put_value(u32 val, u32 __user *to, unsigned int flags)
-+{
-+	switch (futex_size(flags)) {
-+	case 1: return __put_user(val, (u8 __user *)to);
-+	case 2: return __put_user(val, (u16 __user *)to);
-+	case 4: return __put_user(val, (u32 __user *)to);
-+	default: BUG();
-+	}
-+}
-+
- /**
-  * futex_hash - Return the hash bucket in the global hash
-  * @key:	Pointer to the futex key for which the hash is calculated
-@@ -116,10 +139,29 @@ late_initcall(fail_futex_debugfs);
-  */
- struct futex_hash_bucket *futex_hash(union futex_key *key)
- {
--	u32 hash = jhash2((u32 *)key, offsetof(typeof(*key), both.offset) / 4,
-+	u32 hash = jhash2((u32 *)key,
-+			  offsetof(typeof(*key), both.offset) / sizeof(u32),
- 			  key->both.offset);
-+	int node = key->both.node;
- 
--	return &futex_queues[hash & (futex_hashsize - 1)];
-+	if (node == FUTEX_NO_NODE) {
-+		/*
-+		 * In case of !FLAGS_NUMA, use some unused hash bits to pick a
-+		 * node -- this ensures regular futexes are interleaved across
-+		 * the nodes and avoids having to allocate multiple
-+		 * hash-tables.
-+		 *
-+		 * NOTE: this isn't perfectly uniform, but it is fast and
-+		 * handles sparse node masks.
-+		 */
-+		node = (hash >> futex_hashshift) % nr_node_ids;
-+		if (!node_possible(node)) {
-+			node = find_next_bit_wrap(node_possible_map.bits,
-+						  nr_node_ids, node);
-+		}
-+	}
-+
-+	return &futex_queues[node][hash & (futex_hashsize - 1)];
+@@ -528,12 +528,12 @@ int futex_cmpxchg_value_locked(u32 *curv
+ 	return ret;
  }
  
- 
-@@ -219,7 +261,7 @@ static u64 get_inode_sequence_number(str
-  *
-  * lock_page() might sleep, the caller should not hold a spinlock.
-  */
--int get_futex_key(u32 __user *uaddr, unsigned int flags, union futex_key *key,
-+int get_futex_key(void __user *uaddr, unsigned int flags, union futex_key *key,
- 		  enum futex_access rw)
+-int futex_get_value_locked(u32 *dest, u32 __user *from)
++int futex_get_value_locked(u32 *dest, u32 __user *from, unsigned int flags)
  {
- 	unsigned long address = (unsigned long)uaddr;
-@@ -227,25 +269,49 @@ int get_futex_key(u32 __user *uaddr, uns
- 	struct page *page;
- 	struct folio *folio;
- 	struct address_space *mapping;
--	int err, ro = 0;
-+	int node, err, size, ro = 0;
- 	bool fshared;
+ 	int ret;
  
- 	fshared = flags & FLAGS_SHARED;
-+	size = futex_size(flags);
-+	if (flags & FLAGS_NUMA)
-+		size *= 2;
+ 	pagefault_disable();
+-	ret = __get_user(*dest, from);
++	ret = futex_get_value(dest, from, flags);
+ 	pagefault_enable();
  
- 	/*
- 	 * The futex address must be "naturally" aligned.
- 	 */
- 	key->both.offset = address % PAGE_SIZE;
--	if (unlikely((address % sizeof(u32)) != 0))
-+	if (unlikely((address % size) != 0))
- 		return -EINVAL;
- 	address -= key->both.offset;
- 
--	if (unlikely(!access_ok(uaddr, sizeof(u32))))
-+	if (unlikely(!access_ok(uaddr, size)))
- 		return -EFAULT;
- 
- 	if (unlikely(should_fail_futex(fshared)))
- 		return -EFAULT;
- 
-+	if (flags & FLAGS_NUMA) {
-+		void __user *naddr = uaddr + size / 2;
-+
-+		if (futex_get_value(&node, naddr, flags))
-+			return -EFAULT;
-+
-+		if (node == FUTEX_NO_NODE) {
-+			node = numa_node_id();
-+			if (futex_put_value(node, naddr, flags))
-+				return -EFAULT;
-+
-+		} else if (node >= MAX_NUMNODES || !node_possible(node)) {
-+			return -EINVAL;
-+		}
-+
-+		key->both.node = node;
-+
-+	} else {
-+		key->both.node = FUTEX_NO_NODE;
-+	}
-+
- 	/*
- 	 * PROCESS_PRIVATE futexes are fast.
- 	 * As the mm cannot disappear under us and the 'key' only needs
-@@ -1148,26 +1214,42 @@ void futex_exit_release(struct task_stru
- 
- static int __init futex_init(void)
- {
--	unsigned int futex_shift;
--	unsigned long i;
-+	unsigned int order, n;
-+	unsigned long size, i;
- 
- #ifdef CONFIG_BASE_SMALL
- 	futex_hashsize = 16;
- #else
--	futex_hashsize = roundup_pow_of_two(256 * num_possible_cpus());
-+	futex_hashsize = 256 * num_possible_cpus();
-+	futex_hashsize /= num_possible_nodes();
-+	futex_hashsize = roundup_pow_of_two(futex_hashsize);
- #endif
-+	futex_hashshift = ilog2(futex_hashsize);
-+	size = sizeof(struct futex_hash_bucket) * futex_hashsize;
-+	order = get_order(size);
-+
-+	for_each_node(n) {
-+		struct futex_hash_bucket *table;
-+
-+		if (order > MAX_ORDER)
-+			table = vmalloc_huge_node(size, GFP_KERNEL, n);
-+		else
-+			table = alloc_pages_exact_nid(n, size, GFP_KERNEL);
-+
-+		BUG_ON(!table);
-+
-+		for (i = 0; i < futex_hashsize; i++) {
-+			atomic_set(&table[i].waiters, 0);
-+			spin_lock_init(&table[i].lock);
-+			plist_head_init(&table[i].chain);
-+		}
- 
--	futex_queues = alloc_large_system_hash("futex", sizeof(*futex_queues),
--					       futex_hashsize, 0, 0,
--					       &futex_shift, NULL,
--					       futex_hashsize, futex_hashsize);
--	futex_hashsize = 1UL << futex_shift;
--
--	for (i = 0; i < futex_hashsize; i++) {
--		atomic_set(&futex_queues[i].waiters, 0);
--		plist_head_init(&futex_queues[i].chain);
--		spin_lock_init(&futex_queues[i].lock);
-+		futex_queues[n] = table;
- 	}
-+	pr_info("futex hash table, %d nodes, %ld entries (order: %d, %lu bytes)\n",
-+		num_possible_nodes(),
-+		futex_hashsize, order,
-+		sizeof(struct futex_hash_bucket) * futex_hashsize);
- 
- 	return 0;
- }
+ 	return ret ? -EFAULT : 0;
 --- a/kernel/futex/futex.h
 +++ b/kernel/futex/futex.h
-@@ -52,7 +52,7 @@ static inline unsigned int futex_to_flag
- 	return flags;
- }
+@@ -239,7 +239,7 @@ extern void futex_wake_mark(struct wake_
  
--#define FUTEX2_VALID_MASK (FUTEX2_SIZE_MASK | FUTEX2_PRIVATE)
-+#define FUTEX2_VALID_MASK (FUTEX2_SIZE_MASK | FUTEX2_NUMA | FUTEX2_PRIVATE)
+ extern int fault_in_user_writeable(u32 __user *uaddr);
+ extern int futex_cmpxchg_value_locked(u32 *curval, u32 __user *uaddr, u32 uval, u32 newval);
+-extern int futex_get_value_locked(u32 *dest, u32 __user *from);
++extern int futex_get_value_locked(u32 *dest, u32 __user *from, unsigned int flags);
+ extern struct futex_q *futex_top_waiter(struct futex_hash_bucket *hb, union futex_key *key);
  
- /* FUTEX2_ to FLAGS_ */
- static inline unsigned int futex2_to_flags(unsigned int flags2)
-@@ -85,6 +85,19 @@ static inline bool futex_flags_valid(uns
- 	if ((flags & FLAGS_SIZE_MASK) != FLAGS_SIZE_32)
- 		return false;
+ extern void __futex_unqueue(struct futex_q *q);
+--- a/kernel/futex/pi.c
++++ b/kernel/futex/pi.c
+@@ -240,7 +240,7 @@ static int attach_to_pi_state(u32 __user
+ 	 * still is what we expect it to be, otherwise retry the entire
+ 	 * operation.
+ 	 */
+-	if (futex_get_value_locked(&uval2, uaddr))
++	if (futex_get_value_locked(&uval2, uaddr, FLAGS_SIZE_32))
+ 		goto out_efault;
  
-+	/*
-+	 * Must be able to represent both FUTEX_NO_NODE and every valid nodeid
-+	 * in a futex word.
-+	 */
-+	if (flags & FLAGS_NUMA) {
-+		int bits = 8 * futex_size(flags);
-+		u64 max = ~0ULL;
-+
-+		max >>= 64 - bits;
-+		if (nr_node_ids >= max)
-+			return false;
-+	}
-+
- 	return true;
- }
+ 	if (uval != uval2)
+@@ -359,7 +359,7 @@ static int handle_exit_race(u32 __user *
+ 	 * The same logic applies to the case where the exiting task is
+ 	 * already gone.
+ 	 */
+-	if (futex_get_value_locked(&uval2, uaddr))
++	if (futex_get_value_locked(&uval2, uaddr, FLAGS_SIZE_32))
+ 		return -EFAULT;
  
-@@ -193,7 +206,7 @@ enum futex_access {
- 	FUTEX_WRITE
- };
+ 	/* If the user space value has changed, try again. */
+@@ -527,7 +527,7 @@ int futex_lock_pi_atomic(u32 __user *uad
+ 	 * Read the user space value first so we can validate a few
+ 	 * things before proceeding further.
+ 	 */
+-	if (futex_get_value_locked(&uval, uaddr))
++	if (futex_get_value_locked(&uval, uaddr, FLAGS_SIZE_32))
+ 		return -EFAULT;
  
--extern int get_futex_key(u32 __user *uaddr, unsigned int flags, union futex_key *key,
-+extern int get_futex_key(void __user *uaddr, unsigned int flags, union futex_key *key,
- 			 enum futex_access rw);
+ 	if (unlikely(should_fail_futex(true)))
+@@ -750,7 +750,7 @@ static int __fixup_pi_state_owner(u32 __
+ 	if (!pi_state->owner)
+ 		newtid |= FUTEX_OWNER_DIED;
  
- extern struct hrtimer_sleeper *
+-	err = futex_get_value_locked(&uval, uaddr);
++	err = futex_get_value_locked(&uval, uaddr, FLAGS_SIZE_32);
+ 	if (err)
+ 		goto handle_err;
+ 
+--- a/kernel/futex/requeue.c
++++ b/kernel/futex/requeue.c
+@@ -275,7 +275,7 @@ futex_proxy_trylock_atomic(u32 __user *p
+ 	u32 curval;
+ 	int ret;
+ 
+-	if (futex_get_value_locked(&curval, pifutex))
++	if (futex_get_value_locked(&curval, pifutex, FLAGS_SIZE_32))
+ 		return -EFAULT;
+ 
+ 	if (unlikely(should_fail_futex(true)))
+@@ -453,7 +453,7 @@ int futex_requeue(u32 __user *uaddr1, un
+ 	if (likely(cmpval != NULL)) {
+ 		u32 curval;
+ 
+-		ret = futex_get_value_locked(&curval, uaddr1);
++		ret = futex_get_value_locked(&curval, uaddr1, FLAGS_SIZE_32);
+ 
+ 		if (unlikely(ret)) {
+ 			double_unlock_hb(hb1, hb2);
+--- a/kernel/futex/waitwake.c
++++ b/kernel/futex/waitwake.c
+@@ -453,7 +453,7 @@ int futex_wait_multiple_setup(struct fut
+ 		u32 val = vs[i].w.val;
+ 
+ 		hb = futex_q_lock(q);
+-		ret = futex_get_value_locked(&uval, uaddr);
++		ret = futex_get_value_locked(&uval, uaddr, FLAGS_SIZE_32);
+ 
+ 		if (!ret && uval == val) {
+ 			/*
+@@ -621,7 +621,7 @@ int futex_wait_setup(u32 __user *uaddr,
+ retry_private:
+ 	*hb = futex_q_lock(q);
+ 
+-	ret = futex_get_value_locked(&uval, uaddr);
++	ret = futex_get_value_locked(&uval, uaddr, FLAGS_SIZE_32);
+ 
+ 	if (ret) {
+ 		futex_q_unlock(*hb);
 
 
 
