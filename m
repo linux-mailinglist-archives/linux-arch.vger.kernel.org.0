@@ -1,55 +1,55 @@
-Return-Path: <linux-arch+bounces-8540-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8538-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E04C09AFE83
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Oct 2024 11:42:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D75A49AFE7D
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Oct 2024 11:41:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A4E65285885
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Oct 2024 09:42:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B0B5285183
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Oct 2024 09:41:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEAC11DE2C2;
-	Fri, 25 Oct 2024 09:41:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D76A1DD0C3;
+	Fri, 25 Oct 2024 09:41:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="mHf3VaB+"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="oToK9ZTc"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B1B51D90B4;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4297C1D3633;
 	Fri, 25 Oct 2024 09:41:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729849279; cv=none; b=fbdrSYqf4iiGeW3vi6NGAsWoQ4QPLuK9S8I2qPen0sT32MxmKh6ApGOyS75Dx/Y8PgBF4YRPTRG3B85k7LiZA4EEd0lxtELL6MnQGD3/RvNp69+TSX78sUd9mq5jxp96g/8Zvjbi4mQJ97a1/77aj8oyhFdclB9+n6jbnSekE9o=
+	t=1729849278; cv=none; b=eNp/6kIeYXIPt8IvBRnminlSrw5TRnvPau+jLwiMwDa9Aix/WpldB35vy/Bq+uw8upMnVIokkgewTi0enwcxGRq6Z4qSZvrnih31IAgfK688sjwMZWCPuNaXRzju9F69B2LJtfiiAVHmwY0CbG2//PsqGr4blKBb6qCcRO64IoY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729849279; c=relaxed/simple;
-	bh=WKchFVXnj6SKM18yijVrqOA+u2bmi/cCI+xywo0KwFk=;
+	s=arc-20240116; t=1729849278; c=relaxed/simple;
+	bh=sXXkT7pRvKDIBsE6m3hBBKOdqF8sUJ05K7oWBaA6SwI=;
 	h=Message-Id:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=URTjYbtGYGr/TxY6vKJqLq9U3ysXyfjcSaWFWw/9Tdl11Hgmlas7Zt9OCJyFbLq/tTOJ48ot10zXLPQnwhWFsGdM7ptpBRZ9qlQcaTZc6lREhtDb2hxok45pdqNeDIXqwsHmJ4xJ11WB/qwWqTadQJMCQ6GJ60rPJNrZw+eGLx8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=mHf3VaB+; arc=none smtp.client-ip=90.155.92.199
+	 Content-Type; b=EqQxQP8rHC+bBBrG2AypXsQjZlU/tM8lkwIbH+XklkSZexsMcNVdzD4QkK5DgikVCs8+AyDek96v6Wg0rxQbZ4VSCiSlMjOdF0ca4JHqOWrFAM198tG9N64PGjcuNMhGtdtFCxEJMAAB/hqz545W9zcugAsbF+HoyicB/3ZaFMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=oToK9ZTc; arc=none smtp.client-ip=90.155.92.199
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
 	Subject:Cc:To:From:Date:Message-Id:Sender:Reply-To:Content-Transfer-Encoding:
 	Content-ID:Content-Description:In-Reply-To;
-	bh=U0D/97Jan/1h5/mHQt4BdsZRHtXtzjdUFE/GVa1R21M=; b=mHf3VaB+HmQHmxesCbnKkAMi2d
-	sZG3k9IRWCQW3O2HIyPWhAEPdZw/T3W1b/yG1wTuewo6QaSkAYvR++sMpfAZVuGx3gAFXcYqQzSQT
-	j4xVtIecla88uLIdFVu1LiFvwB4Cq782IvCH+uJzMi+7MndvdPq+OAGDQKLipcXDSxxMKBmDn/vdg
-	hZG4GTC4vYB7tQPNZKR62OMPaydbPwqbxB3+jfYTpnV+ZwwlH3kRgwWBYGKfLduwn6uwoNeHSNsHi
-	bSqf1vVyNKE51O8hMxkxgID8XJZpxqWOz/FjDNFHXb7tgBbBOe6zscEWeuaj1ox6NMer/4J3zvV/9
-	pd4m9big==;
+	bh=dbMjdL9P+u2qdFG5YZQzJ7hdT9tBr5pG921aWEix044=; b=oToK9ZTcwKqnYN5RC0kkFefevU
+	u8/ilYOenOsPM+FVeWvDHPVxcg4GGhL6k6STW5NP7C9ct6oVDyUl76zIlqlnzLWUBUkJwh89WFj7Q
+	5XoeELdhk1ILEt2BpbvKy9ZschyFkZsKVD1/SWt707/NGdhazJYXZP7lmTBDuBWBZX+dxZghMUjIu
+	soy3pCQ3Jo0kqETLQTyhcOX7TsZEFBb6dJhn04uR/LOTn/nyWxdHHxFlw8/P6zSIBS+wVR6aqZu6z
+	ReO4sVqRqBLg0ND9nBe1PXNugWLsBasiG0DRiZKxiKN/M5TGkEehurCM7uqSL5D9qs1MXVLEGrose
+	SG7oVy5w==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
 	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1t4GoU-00000008sa8-1mSU;
-	Fri, 25 Oct 2024 09:40:59 +0000
+	id 1t4GoU-00000008sa9-1l5D;
+	Fri, 25 Oct 2024 09:41:00 +0000
 Received: by noisy.programming.kicks-ass.net (Postfix, from userid 0)
-	id D5DAD301171; Fri, 25 Oct 2024 11:40:57 +0200 (CEST)
-Message-Id: <20241025093944.598921704@infradead.org>
+	id DA229301D03; Fri, 25 Oct 2024 11:40:57 +0200 (CEST)
+Message-Id: <20241025093944.707639534@infradead.org>
 User-Agent: quilt/0.65
-Date: Fri, 25 Oct 2024 11:03:50 +0200
+Date: Fri, 25 Oct 2024 11:03:51 +0200
 From: Peter Zijlstra <peterz@infradead.org>
 To: tglx@linutronix.de
 Cc: linux-kernel@vger.kernel.org,
@@ -69,7 +69,7 @@ Cc: linux-kernel@vger.kernel.org,
  malteskarupke@web.de,
  cl@linux.com,
  llong@redhat.com
-Subject: [PATCH 3/6] futex: Propagate flags into futex_get_value_locked()
+Subject: [PATCH 4/6] futex: Enable FUTEX2_{8,16}
 References: <20241025090347.244183920@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -79,124 +79,102 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 
-In order to facilitate variable sized futexes propagate the flags into
-futex_get_value_locked().
+When futexes are no longer u32 aligned, the lower offset bits are no
+longer available to put type info in. However, since offset is the
+offset within a page, there are plenty bits available on the top end.
 
-No functional change intended.
+After that, pass flags into futex_get_value_locked() for WAIT and
+disallow FUTEX2_SIZE_U64 instead of mandating FUTEX2_SIZE_U32.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
 ---
- kernel/futex/core.c     |    4 ++--
- kernel/futex/futex.h    |    2 +-
- kernel/futex/pi.c       |    8 ++++----
- kernel/futex/requeue.c  |    4 ++--
- kernel/futex/waitwake.c |    4 ++--
- 5 files changed, 11 insertions(+), 11 deletions(-)
+ include/linux/futex.h   |   11 ++++++-----
+ kernel/futex/core.c     |    9 +++++++++
+ kernel/futex/futex.h    |    4 ++--
+ kernel/futex/waitwake.c |    5 +++--
+ 4 files changed, 20 insertions(+), 9 deletions(-)
 
+--- a/include/linux/futex.h
++++ b/include/linux/futex.h
+@@ -16,18 +16,19 @@ struct task_struct;
+  * The key type depends on whether it's a shared or private mapping.
+  * Don't rearrange members without looking at hash_futex().
+  *
+- * offset is aligned to a multiple of sizeof(u32) (== 4) by definition.
+- * We use the two low order bits of offset to tell what is the kind of key :
++ * offset is the position within a page and is in the range [0, PAGE_SIZE).
++ * The high bits of the offset indicate what kind of key this is:
+  *  00 : Private process futex (PTHREAD_PROCESS_PRIVATE)
+  *       (no reference on an inode or mm)
+  *  01 : Shared futex (PTHREAD_PROCESS_SHARED)
+  *	mapped on a file (reference on the underlying inode)
+  *  10 : Shared futex (PTHREAD_PROCESS_SHARED)
+  *       (but private mapping on an mm, and reference taken on it)
+-*/
++ */
+ 
+-#define FUT_OFF_INODE    1 /* We set bit 0 if key has a reference on inode */
+-#define FUT_OFF_MMSHARED 2 /* We set bit 1 if key has a reference on mm */
++#define FUT_OFF_INODE    (PAGE_SIZE << 0)
++#define FUT_OFF_MMSHARED (PAGE_SIZE << 1)
++#define FUT_OFF_SIZE	 (PAGE_SIZE << 2)
+ 
+ union futex_key {
+ 	struct {
 --- a/kernel/futex/core.c
 +++ b/kernel/futex/core.c
-@@ -528,12 +528,12 @@ int futex_cmpxchg_value_locked(u32 *curv
- 	return ret;
- }
+@@ -313,6 +313,15 @@ int get_futex_key(void __user *uaddr, un
+ 	}
  
--int futex_get_value_locked(u32 *dest, u32 __user *from)
-+int futex_get_value_locked(u32 *dest, u32 __user *from, unsigned int flags)
- {
- 	int ret;
- 
- 	pagefault_disable();
--	ret = __get_user(*dest, from);
-+	ret = futex_get_value(dest, from, flags);
- 	pagefault_enable();
- 
- 	return ret ? -EFAULT : 0;
+ 	/*
++	 * Encode the futex size in the offset. This makes cross-size
++	 * wake-wait fail -- see futex_match().
++	 *
++	 * NOTE that cross-size wake-wait is fundamentally broken wrt
++	 * FLAGS_NUMA.
++	 */
++	key->both.offset |= FUT_OFF_SIZE * (flags & FLAGS_SIZE_MASK);
++
++	/*
+ 	 * PROCESS_PRIVATE futexes are fast.
+ 	 * As the mm cannot disappear under us and the 'key' only needs
+ 	 * virtual address, we dont even have to find the underlying vma.
 --- a/kernel/futex/futex.h
 +++ b/kernel/futex/futex.h
-@@ -239,7 +239,7 @@ extern void futex_wake_mark(struct wake_
+@@ -81,8 +81,8 @@ static inline bool futex_flags_valid(uns
+ 			return false;
+ 	}
  
- extern int fault_in_user_writeable(u32 __user *uaddr);
- extern int futex_cmpxchg_value_locked(u32 *curval, u32 __user *uaddr, u32 uval, u32 newval);
--extern int futex_get_value_locked(u32 *dest, u32 __user *from);
-+extern int futex_get_value_locked(u32 *dest, u32 __user *from, unsigned int flags);
- extern struct futex_q *futex_top_waiter(struct futex_hash_bucket *hb, union futex_key *key);
+-	/* Only 32bit futexes are implemented -- for now */
+-	if ((flags & FLAGS_SIZE_MASK) != FLAGS_SIZE_32)
++	/* 64bit futexes aren't implemented -- yet */
++	if ((flags & FLAGS_SIZE_MASK) == FLAGS_SIZE_64)
+ 		return false;
  
- extern void __futex_unqueue(struct futex_q *q);
---- a/kernel/futex/pi.c
-+++ b/kernel/futex/pi.c
-@@ -240,7 +240,7 @@ static int attach_to_pi_state(u32 __user
- 	 * still is what we expect it to be, otherwise retry the entire
- 	 * operation.
- 	 */
--	if (futex_get_value_locked(&uval2, uaddr))
-+	if (futex_get_value_locked(&uval2, uaddr, FLAGS_SIZE_32))
- 		goto out_efault;
- 
- 	if (uval != uval2)
-@@ -359,7 +359,7 @@ static int handle_exit_race(u32 __user *
- 	 * The same logic applies to the case where the exiting task is
- 	 * already gone.
- 	 */
--	if (futex_get_value_locked(&uval2, uaddr))
-+	if (futex_get_value_locked(&uval2, uaddr, FLAGS_SIZE_32))
- 		return -EFAULT;
- 
- 	/* If the user space value has changed, try again. */
-@@ -527,7 +527,7 @@ int futex_lock_pi_atomic(u32 __user *uad
- 	 * Read the user space value first so we can validate a few
- 	 * things before proceeding further.
- 	 */
--	if (futex_get_value_locked(&uval, uaddr))
-+	if (futex_get_value_locked(&uval, uaddr, FLAGS_SIZE_32))
- 		return -EFAULT;
- 
- 	if (unlikely(should_fail_futex(true)))
-@@ -750,7 +750,7 @@ static int __fixup_pi_state_owner(u32 __
- 	if (!pi_state->owner)
- 		newtid |= FUTEX_OWNER_DIED;
- 
--	err = futex_get_value_locked(&uval, uaddr);
-+	err = futex_get_value_locked(&uval, uaddr, FLAGS_SIZE_32);
- 	if (err)
- 		goto handle_err;
- 
---- a/kernel/futex/requeue.c
-+++ b/kernel/futex/requeue.c
-@@ -275,7 +275,7 @@ futex_proxy_trylock_atomic(u32 __user *p
- 	u32 curval;
- 	int ret;
- 
--	if (futex_get_value_locked(&curval, pifutex))
-+	if (futex_get_value_locked(&curval, pifutex, FLAGS_SIZE_32))
- 		return -EFAULT;
- 
- 	if (unlikely(should_fail_futex(true)))
-@@ -453,7 +453,7 @@ int futex_requeue(u32 __user *uaddr1, un
- 	if (likely(cmpval != NULL)) {
- 		u32 curval;
- 
--		ret = futex_get_value_locked(&curval, uaddr1);
-+		ret = futex_get_value_locked(&curval, uaddr1, FLAGS_SIZE_32);
- 
- 		if (unlikely(ret)) {
- 			double_unlock_hb(hb1, hb2);
+ 	/*
 --- a/kernel/futex/waitwake.c
 +++ b/kernel/futex/waitwake.c
-@@ -453,7 +453,7 @@ int futex_wait_multiple_setup(struct fut
+@@ -449,11 +449,12 @@ int futex_wait_multiple_setup(struct fut
+ 
+ 	for (i = 0; i < count; i++) {
+ 		u32 __user *uaddr = (u32 __user *)(unsigned long)vs[i].w.uaddr;
++		unsigned int flags = vs[i].w.flags;
+ 		struct futex_q *q = &vs[i].q;
  		u32 val = vs[i].w.val;
  
  		hb = futex_q_lock(q);
--		ret = futex_get_value_locked(&uval, uaddr);
-+		ret = futex_get_value_locked(&uval, uaddr, FLAGS_SIZE_32);
+-		ret = futex_get_value_locked(&uval, uaddr, FLAGS_SIZE_32);
++		ret = futex_get_value_locked(&uval, uaddr, flags);
  
  		if (!ret && uval == val) {
  			/*
-@@ -621,7 +621,7 @@ int futex_wait_setup(u32 __user *uaddr,
+@@ -621,7 +622,7 @@ int futex_wait_setup(u32 __user *uaddr,
  retry_private:
  	*hb = futex_q_lock(q);
  
--	ret = futex_get_value_locked(&uval, uaddr);
-+	ret = futex_get_value_locked(&uval, uaddr, FLAGS_SIZE_32);
+-	ret = futex_get_value_locked(&uval, uaddr, FLAGS_SIZE_32);
++	ret = futex_get_value_locked(&uval, uaddr, flags);
  
  	if (ret) {
  		futex_q_unlock(*hb);
