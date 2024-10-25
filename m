@@ -1,176 +1,100 @@
-Return-Path: <linux-arch+bounces-8530-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8531-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8DB49AFB46
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Oct 2024 09:40:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BFFD69AFB50
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Oct 2024 09:43:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8911028158B
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Oct 2024 07:40:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F098B1C21581
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Oct 2024 07:43:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D66091B6CF6;
-	Fri, 25 Oct 2024 07:40:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 798FC1B393B;
+	Fri, 25 Oct 2024 07:43:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bns4FpYE"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="V0NHcwcs"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92DDC1B6D00;
-	Fri, 25 Oct 2024 07:40:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B36C31B2185;
+	Fri, 25 Oct 2024 07:42:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729842028; cv=none; b=qLf9bmpvuzV8fzTR/ceCcJoUpy26QN9f2q8JZDpFXlmJjaaRGiO5xiaRm8+DCbEx4+1hFN3WyijFCdkBk/BtI1WlavGBAChvTm0ZNfpkeygv6jZfNCo2logiB93hOTr5m+468vgfHPV0qL3AbUzS8BG+1Xwc97Hub/ydNtUbzEA=
+	t=1729842181; cv=none; b=DUT7kpGKmFu8Eydc9V1oK1lAHvdP3o2U51Jtt59WtYXEVbGPEj7At8Nyh5sAjsZqRIVPnq3IN6OBdQIc6wG8S1XiXPbE67/neM+KKVcp4Az1xn+TsP76qC3rlTX7Uxv2stsz/B+QgsqMbQQ4xpAp6eAW9ZTPVxjqHLs/mDkxIQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729842028; c=relaxed/simple;
-	bh=MU0jg6+43zlNLQVd5aws5IUywfNhZ0pf6SBTcrSFP0A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=msrv8eVTgXLRaDR0K4ZaIOcLUg40meGpI4+l/Z97oBrW6wRqjcYy0ZZ7gb+lR1aeC2K71cdAjcK1Q8EnN6O/U3r8MKKAM1MyJsYo7dTxLwlWhNrxG8Z1D3GiVcQr8Ec6x3AxiLeJuYzHyvcUkXznDqHtxDVCD/H36EvvQPnXfpk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bns4FpYE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34AD1C4CEC3;
-	Fri, 25 Oct 2024 07:40:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729842028;
-	bh=MU0jg6+43zlNLQVd5aws5IUywfNhZ0pf6SBTcrSFP0A=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Bns4FpYEweNUDYPWIatTemxTcPXBriNtb6rjMCIGvpZQbQ7/qRGjK2NUk57EKd8ri
-	 Mk7HPhv+F7E7+ne72q/Ef8D3KErbLL714tyOI87uCXXzpqZPjXEj/i4/+9MWReDl8T
-	 31XCgHFlQsFjl2p95RIKGtfYYk1e4JVgIerVkCXXYdafVkZcg3QKpbq5FXjAqZ38fM
-	 DtIUhA6qC/BFjMOrnIVEq9dcd5psyxRFBFdvdxlZAU53TWdpVzWckgliF8es3kpb65
-	 T8IX9T0uVRiGneDDJjNiP5c9pbh4ac6m1We4OCbuxBE3WORWLtjtdEfr9QTbaV9H3L
-	 0RlKKzK9CtgkA==
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-539e59dadebso2249464e87.0;
-        Fri, 25 Oct 2024 00:40:28 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUAdcneLh/Jws74xknc45IZeTEe2oK6Y69+tVBiYoEj/qt+RcbmIb24PrS0Yk1dBAvk29QFalANx4ixXw==@vger.kernel.org, AJvYcCW80iP/cw78mwBoxiazcIaMp46Ss9ASatJB3w/3sU7Y98UMR3/4tQTIlcVmtbO/FNdxjEhxRc2zDbkITA==@vger.kernel.org, AJvYcCWPQSZCyhlvaeHuT9D6M1WAaY09cKDfSHPANOapyuIpYAEiD+i3pv2J3M0TMYewN6bJ5kQ4xm6RaFEKB3sW@vger.kernel.org, AJvYcCWUGbfqEO2I8386+2LsYl82NCyqnvpOA+iWbT1jCasE83dc1CGSKbsjGyWJYilhSp8Y00dNfDzQE1B8rA==@vger.kernel.org, AJvYcCWc1CJSV4iR81S8Ez/FWPtUfoS3wmWvrU3KC4Oy6D5DWeumUddqhIjoLtYwQbILekhJgwtEWPQ/8fx3@vger.kernel.org, AJvYcCWwnkYupm8hkTFzLR6MEIKC1LqDq5vgKx+LOXyDhZwKgYIUC71sM0qupPCZHqFx2etFbOY7ue93eLBJOA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxvxTD7Kmf8juWMyZ6YXDkR1k1FEJXcMc/72l+/3L15+sUXv57y
-	ScS/gjRt+63bb2+8EfcwtL2dsPQlkrX4SSgZ7ivXf9xLUGTOiLnXXe+Uz6kZo5ghdFVyJJwP2pU
-	Z1zzFD5dUVjukdsPbavc02vgWask=
-X-Google-Smtp-Source: AGHT+IEDAFlBfPHEymedMPiV9v2ocdpZeEcg/F0dpwJWqR1hIRTo+DXjnmCVJHCSWsx5j4Mh2CDnA31kbRPsOrauBps=
-X-Received: by 2002:a05:6512:3c8c:b0:539:8f3c:457c with SMTP id
- 2adb3069b0e04-53b23e9d130mr2447127e87.53.1729842026517; Fri, 25 Oct 2024
- 00:40:26 -0700 (PDT)
+	s=arc-20240116; t=1729842181; c=relaxed/simple;
+	bh=VRcbP3OAbFoSwSqNqfosv/0smAfY8fDeq48XQuD940Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=m3Yh/7Nisjbj7Lf68GoyMvvFdFCMnRAfRc0lA0aEe8qp6LPffwpCxvf1IwSnzXM+nXvHjiwmJpuvfiCdwknrHg8p4JRsNAQZdJqJ9x5siyDnGeg1aypmY9nOpVtC5zz3VyURw4xkkHi+VWqhfWHXQU+LiFRJ5Ozf41N/tVvD6PE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=V0NHcwcs; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=Oyz3AH73jsvhVuXMvukfXv65WS9wp+HqrXkM26N9vJA=; b=V0NHcwcsuxdvKzX6wLX6w2QjPl
+	hwQ9HeHnsPa5m5iToxLcJVUcjwqRu15DO9EAUV0QQzHoW3FWDTkDPB146XOSRbDixULZZdd+sQoB/
+	h759sk759Vnxe5iEa6rXDG93SYvAR49+cFxWSPGN+ca9AneGxFt/XCATxAuW/SaGe9WgUvJm0qvTk
+	aMF0lxHntpStWCNittH0792WL+K3Ce5zCswq7V2gj2gEyAGSPIKR1sTiU66iCQWBs+4T8fXkJnG1a
+	oztq3Xiu24GdhNPG+DtUtRRQvh3z/QNC3n9ZAsVeO6XEVqTjzAFvaraslBH0Il5ZSY30n5Q4UjhSx
+	GFrYWFHg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1t4Ey4-00000008r2u-41M1;
+	Fri, 25 Oct 2024 07:42:45 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 96CFE30083E; Fri, 25 Oct 2024 09:42:44 +0200 (CEST)
+Date: Fri, 25 Oct 2024 09:42:44 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: "Christoph Lameter (Ampere)" <cl@gentwo.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+	Will Deacon <will@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Ingo Molnar <mingo@redhat.com>, Waiman Long <longman@redhat.com>,
+	Boqun Feng <boqun.feng@gmail.com>, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-arch@vger.kernel.org
+Subject: Re: [PATCH v3] Avoid memory barrier in read_seqcount() through load
+ acquire
+Message-ID: <20241025074244.GB14555@noisy.programming.kicks-ass.net>
+References: <20240912-seq_optimize-v3-1-8ee25e04dffa@gentwo.org>
+ <20240917071246.GA27290@willie-the-truck>
+ <4b546151-d5e1-22a3-a6d5-167a82c5724d@gentwo.org>
+ <CAHk-=wgw3UErQuBuUOOfjzejGek6Cao1sSW4AosR9WPZ1dfyZg@mail.gmail.com>
+ <CAHk-=wjdOX0t45a7aHerVPv_WBM3AmMi3sEp8xb19jpLFnk0dA@mail.gmail.com>
+ <20241023194543.GD11151@noisy.programming.kicks-ass.net>
+ <e9fd5ba0-bd84-76a8-a96e-1378c66d0774@gentwo.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241021002935.325878-1-ebiggers@kernel.org>
-In-Reply-To: <20241021002935.325878-1-ebiggers@kernel.org>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Fri, 25 Oct 2024 09:40:15 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXHDo8dijRbSVuHzTddMhp4A+nc1t8AgvoENmS=DZ-kAOQ@mail.gmail.com>
-Message-ID: <CAMj1kXHDo8dijRbSVuHzTddMhp4A+nc1t8AgvoENmS=DZ-kAOQ@mail.gmail.com>
-Subject: Re: [PATCH 00/15] Wire up CRC32 library functions to arch-optimized code
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org, 
-	linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net, 
-	linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	loongarch@lists.linux.dev, sparclinux@vger.kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e9fd5ba0-bd84-76a8-a96e-1378c66d0774@gentwo.org>
 
-On Mon, 21 Oct 2024 at 02:29, Eric Biggers <ebiggers@kernel.org> wrote:
->
-> This patchset is also available in git via:
->
->     git fetch https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git crc32-lib-v1
->
-> CRC32 is a family of common non-cryptographic integrity check algorithms
-> that are fairly fast with a portable C implementation and become far
-> faster still with the CRC32 or carryless multiplication instructions
-> that most CPUs have.  9 architectures already have optimized code for at
-> least some CRC32 variants; however, except for arm64 this optimized code
-> was only accessible through the crypto API, not the library functions.
->
-> This patchset fixes that so that the CRC32 library functions use the
-> optimized code.  This allows users to just use the library instead of
-> the crypto API.  This is much simpler and also improves performance due
-> to eliminating the crypto API overhead including an indirect call.  Some
-> examples of updating users are included at the end of the patchset.
->
-> Note: crc32c() was a weird case.  It was a library function layered on
-> top of the crypto API, which in turn is layered on top of the real
-> library functions.  So while it was easy to use, it was still subject to
-> the crypto API overhead.  This patchset provides CRC32C acceleration in
-> the real library functions directly.
->
-> The updated CRC32 library design is:
->
-> - Each arch's CRC32 code (all variants) is in arch/$ARCH/lib/crc32*.
->   This adopts what arm64 and riscv already did.  Note, the crypto
->   directory is not used because CRC32 is not a cryptographic algorithm.
->
-> - Weak symbols are no longer used.  Instead there are crc32*_base() and
->   crc32*_arch(), and the appropriate ones are called based on the
->   kconfig.  This is similar to how the ChaCha20 library code works.
->
-> - Each arch's CRC32 code is enabled by default when CRC32 is enabled,
->   but it can now be disabled, controlled by the choice that previously
->   controlled the base implementation only.  It can also now be built as
->   a module if CRC32 is a module too.
->
-> - Instead of lots of pointless glue code that wires up each CRC32
->   variant to the crypto API for each architecture, we now just rely on
->   the existing shash algorithms that use the library functions.
->
-> - As before, the library functions don't provide access to off-CPU
->   crypto accelerators.  But these appear to have very little, if any,
->   real-world relevance for CRC32 which is very fast on CPUs.
->
-> Future work should apply a similar cleanup to crct10dif which is a
-> variant of CRC16.
->
-> I tested all arches in QEMU using CONFIG_CRC32_SELFTEST and the crypto
-> self-tests, except for mips which I couldn't figure out how to do.
->
-> This patchset has the following dependencies on recent patches:
->
-> - "crypto - move crypto_simd_disabled_for_test to lib"
->   (https://lore.kernel.org/linux-crypto/20241018235343.425758-1-ebiggers@kernel.org/)
-> - "crypto: x86/crc32c - jump table elimination and other cleanups"
->   (https://lore.kernel.org/linux-crypto/20241014042447.50197-1-ebiggers@kernel.org/)
-> - "arm64: Speed up CRC-32 using PMULL instructions"
->   (https://lore.kernel.org/linux-crypto/20241018075347.2821102-5-ardb+git@google.com/)
-> - "crypto: Enable fuzz testing for arch code"
->   (https://lore.kernel.org/linux-crypto/20241016185722.400643-4-ardb+git@google.com/)
-> - "crypto: mips/crc32 - fix the CRC32C implementation"
->   (https://lore.kernel.org/linux-crypto/20241020180258.8060-1-ebiggers@kernel.org/)
->
-> Everything can be retrieved from git using the command given earlier.
->
-> Since this patchset touches many areas, getting it merged may be
-> difficult.  One option is a pull request with the whole patchset
-> directly to Linus.  Another is to have at least patches 1-2 and the
-> above dependencies taken through the crypto tree in v6.13; then the arch
-> patches can land separately afterwards, followed by the rest.
->
-> Eric Biggers (15):
->   lib/crc32: drop leading underscores from __crc32c_le_base
->   lib/crc32: improve support for arch-specific overrides
->   arm/crc32: expose CRC32 functions through lib
->   loongarch/crc32: expose CRC32 functions through lib
->   mips/crc32: expose CRC32 functions through lib
->   powerpc/crc32: expose CRC32 functions through lib
->   s390/crc32: expose CRC32 functions through lib
->   sparc/crc32: expose CRC32 functions through lib
->   x86/crc32: update prototype for crc_pcl()
->   x86/crc32: update prototype for crc32_pclmul_le_16()
->   x86/crc32: expose CRC32 functions through lib
->   lib/crc32: make crc32c() go directly to lib
->   ext4: switch to using the crc32c library
->   jbd2: switch to using the crc32c library
->   f2fs: switch to using the crc32 library
->
-...
->  89 files changed, 1002 insertions(+), 2455 deletions(-)
+On Wed, Oct 23, 2024 at 04:42:36PM -0700, Christoph Lameter (Ampere) wrote:
+> On Wed, 23 Oct 2024, Peter Zijlstra wrote:
+> 
+> > > I doubt anybody will notice, and smp_load_acquire() is the future. Any
+> > > architecture that does badly on it just doesn't matter (and, as
+> > > mentioned, I don't think they even exist - "smp_rmb()" is generally at
+> > > least as expensive).
+> >
+> > Do we want to do the complementing patch and make write_seqcount_end()
+> > use smp_store_release() ?
+> >
+> > I think at least ARM (the 32bit thing) has wmb but uses mb for
+> > store_release. But I also think I don't really care about that.
+> 
+> The proper instruction would be something like
+> 
+> atomic_inc_release(&seqcount)
 
-Very nice cleanup!
-
-For the series:
-
-Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
+It would not be, making the increment itself atomic would make the whole
+thing far more expensive.
 
