@@ -1,330 +1,230 @@
-Return-Path: <linux-arch+bounces-8730-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8731-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFA5E9B68D7
-	for <lists+linux-arch@lfdr.de>; Wed, 30 Oct 2024 17:06:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8543C9B6AB3
+	for <lists+linux-arch@lfdr.de>; Wed, 30 Oct 2024 18:18:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 449D91F2155B
-	for <lists+linux-arch@lfdr.de>; Wed, 30 Oct 2024 16:06:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A8B2F1C212ED
+	for <lists+linux-arch@lfdr.de>; Wed, 30 Oct 2024 17:18:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7ECBD21744E;
-	Wed, 30 Oct 2024 16:05:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 700871BD9C3;
+	Wed, 30 Oct 2024 17:09:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mmZJWuPm"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MHsDD8Up"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7EA6215C42
-	for <linux-arch@vger.kernel.org>; Wed, 30 Oct 2024 16:05:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3DF32194B4
+	for <linux-arch@vger.kernel.org>; Wed, 30 Oct 2024 17:09:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730304311; cv=none; b=lUtvNGQ7hxwE/NuFNOJymYTTELr7ORMAqxWjT8AMQ7bkwB7cljbrbxrqDcoCw2LzSacwlcqnx2Tq1KjlgrjMpB0gAGjKDWZFEgFt6f3IcpBDMeI9PPbrlrovtlieP52raYI4iNoEOApNzHMbQ77v4sebsY7WwW+Rkyi2jKdSpdI=
+	t=1730308169; cv=none; b=e3Luzcqeal+Bf9OAZcFb1Dp5L47dw6YaJmh/MRdSd2cLVHB/jK7j4jmNGEqfaGDfhMrF20mkXJB8lb16bf7LvrqHkptJvx2FDjVlAhje/T+pQ76LrkUoz9NzOUGLmg5WPIZF738iXRmpHiqkQQsO2XPF9y7lX+e6VXEhLehdtEo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730304311; c=relaxed/simple;
-	bh=tEriRl1s5aMKzJQzUep/R+6Ah6Myzoilu5Gt/biRO6w=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=GUQEOQqfRFyjngLplUy09OEx7/GJnRQazF1aj44AzjUU/+xMkTG4DAT/dtJ8qaWoCnHTOCQZ+blCe/iw5SrLrV392QFPeW74TSpGyDcaKeVy78Og63CZJjdrEPAqbBHWnQUGt5uhaqjwqMvXX798BfAhkkL4AWCwg1BKKPyc7Ns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mmZJWuPm; arc=none smtp.client-ip=209.85.219.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-e30cf121024so2065732276.1
-        for <linux-arch@vger.kernel.org>; Wed, 30 Oct 2024 09:05:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1730304308; x=1730909108; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JqrmG66m6B1UCkhHvZIk418M17bGfpbVQcwN/mZmV/M=;
-        b=mmZJWuPmy0eZ3G5XAH7HhCgrqwGdjbFehO38Ynnok2hQJUIAT+0xbWmrYFG3SldMZi
-         4FfWOvJXZevf6zrB816MafunbmaMQemOkY/lMFJBiCVEwgxB4jBbl+hWpPdGgo7dRw7d
-         KLw4a65AfgVLkfOnKPRMTjh7Mi4+QmwtSUkcNUPx4CV11Kaz2PqS/ziwtm8m/3udiZ7u
-         fJl+c7oyqtO1RopSyFMHtcOFpsL/Wy8nTS8oIHU1MQ8ZiaWEopJvOMONXSLkIwa0ybAp
-         zvtkOoaN5/yXcTmbNmpKrR2MUDaSHdk2vW/bnxGnCI30H+nx6MyA65XwPdU1KNT0tHeb
-         zQBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730304308; x=1730909108;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JqrmG66m6B1UCkhHvZIk418M17bGfpbVQcwN/mZmV/M=;
-        b=mzT75IWesnHTX7Oft+Ne7HbLcz/HyhgV5T4syvyvFCFO4VDWJpVGTmuE23y5p5joWd
-         xS4oYX8655SOWUYUobrhFyTz0eAaZ/TYP2uXk2zKj/La8PgBMN5emYibWwi3tuKRy/Io
-         p6HRhT0NnGtWKEMV3c55j3I8WKFI5yDVsEgLJsgaP1p5A2jP002tn6UoYGKG+Y/5kDrH
-         BhUX4vsYbguOvYQlCfm09fUw/7vAgT/zVbvJ40tUqeaJojD4mpdUPwQ9+aQhrYJ5OqdO
-         VstxmcMsYV4Rd+v6WIc1eP5kJqr5qBOH/IBqu6S1DaVv2wrt0XQUHknzk/T+RrcTQgfA
-         ++GA==
-X-Forwarded-Encrypted: i=1; AJvYcCVDx2U8dmL2OsA4Srym+D6P6urKfLL86WryPgLgjT/UW4qSm9GexPpSODE8nR+VmZ31DjXVfKPX4XwA@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzno2R3WXaF1JigQhxj4YiP/5bst7cckd15hBezjBT4IP1mMZao
-	6Ee8j4zqRASm5a3yd3qEZc6lVX2C3DdUhOg4q1TfYCqfCTdBKCjsDPOByJnhIwF7Enk9lObPn0r
-	Ey2hNe/hzPV8prw==
-X-Google-Smtp-Source: AGHT+IFi/aR3eZmVoAL9Wz4p5EtnW6YunurLPIJuDUlAryYR3kFyV0YKLO6vsDSY51xhlGqCS1gC7bq434rMmfY=
-X-Received: from aliceryhl.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:35bd])
- (user=aliceryhl job=sendgmr) by 2002:a25:ed07:0:b0:e1d:912e:9350 with SMTP id
- 3f1490d57ef6-e3087bc765dmr51968276.6.1730304307760; Wed, 30 Oct 2024 09:05:07
- -0700 (PDT)
-Date: Wed, 30 Oct 2024 16:04:28 +0000
-In-Reply-To: <20241030-tracepoint-v12-0-eec7f0f8ad22@google.com>
+	s=arc-20240116; t=1730308169; c=relaxed/simple;
+	bh=nx7aMt9MSqzasNgvf0DIwg0+3eLt2zTTLr3Rk/nvCPk=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=DTjcFinhr6oGSQnScwLMa2mLSHAe+ioTBc31q+JnaMwOqqUAaOOlMunVqLYUrts0kyFwYWdk3BO3uMNEWj14JFQOloKyEHv/BiHIvG/5R43dYAEUZbPxaRTgkLVR/EJoLO1ZJrbKRM0qopmpjiJoP7hVfOl8xri43qPqMoQxVq8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MHsDD8Up; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730308166; x=1761844166;
+  h=date:from:to:cc:subject:message-id;
+  bh=nx7aMt9MSqzasNgvf0DIwg0+3eLt2zTTLr3Rk/nvCPk=;
+  b=MHsDD8UptBdGh/SQhHj1ixSuegAJiMZYxS0y8MybXIRTJNCJm8HPQODw
+   gkFDK+vpT+GnwvgX5utwP0ssTkl3d31KdM2TwXITLfJ7ABoGCRASwHMYG
+   kuU+zNhUzXvLMsaK6LgMxho9X5m2kDQGAClhZP2bnQ9tPRW4GaGXzNkVQ
+   vZVp2OhBLGiWZKXA8NOW0wlROEKOzImr8giqpNm/teXzHRGGfc20ZzUgY
+   CRsw30DOn4lpoGHe0epPti3sfTpskdGlF6zCugp0O2IpmFA3JjgSZ3uLG
+   JUsfDq2NMfLGsVYeq9KMcKC+ZULZymQr5WTfhTo46MlDuMsFjCoQbW/pw
+   g==;
+X-CSE-ConnectionGUID: y8hyiOLWQL2H3rFPc9RnFA==
+X-CSE-MsgGUID: 7tHHGUqCRPi9rktP+iOsFQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="47485258"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="47485258"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2024 10:09:25 -0700
+X-CSE-ConnectionGUID: oEZKr/zUSkqkyxiQN3efHA==
+X-CSE-MsgGUID: 0vVhAs0HSGm5Wa3Y7hJhDw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,245,1725346800"; 
+   d="scan'208";a="81926555"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 30 Oct 2024 10:09:24 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t6CCA-000f7A-0d;
+	Wed, 30 Oct 2024 17:09:22 +0000
+Date: Thu, 31 Oct 2024 01:08:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-arch@vger.kernel.org
+Subject: [arnd-asm-generic:asm-generic] BUILD SUCCESS
+ c0dc92144ba181cf7ba366a87909bbaa93d5b713
+Message-ID: <202410310122.eLXe1hGW-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20241030-tracepoint-v12-0-eec7f0f8ad22@google.com>
-X-Developer-Key: i=aliceryhl@google.com; a=openpgp; fpr=49F6C1FAA74960F43A5B86A1EE7A392FDE96209F
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7761; i=aliceryhl@google.com;
- h=from:subject:message-id; bh=tEriRl1s5aMKzJQzUep/R+6Ah6Myzoilu5Gt/biRO6w=;
- b=owEBbQKS/ZANAwAKAQRYvu5YxjlGAcsmYgBnIlkj+zi/ZeCsvvjAjU6Nb9xOSl6DubI5Y/Iwy
- 1JbUL9MEGmJAjMEAAEKAB0WIQSDkqKUTWQHCvFIvbIEWL7uWMY5RgUCZyJZIwAKCRAEWL7uWMY5
- RnMrD/9GOSq+2yFRe/8k8SIbCJosPtOngpcRFceZEKecE5pRUpUhsuGpdIulecGorZlT7tcfTF7
- yrDZPb5ueqeo9wHnC6xEW3CZNx87ladgXT8SQj1lNkcnP6KpD/alvOkTHSD/BnedRWQxGRVK9Li
- KHP0TINKG2hcDqPbkYkjlwdgZF7Ta5ggrweahQAMEnVTa7FcVsR1ZEVdVt+txPh8Zb9IJIsdph4
- STpTD9SIC/TLDzSC+1hjY48M72ZHuuabI5ePkc8rstSiDkDlkFgq/FUVeMEhCSlC2irnl91KtQT
- 6WDkAKn7sVk30GREem94CI7KAcp9b6i7T1vMhm4XEaru6w9wPARl1Gy/6IgJ3JCGGZU+edYb1u2
- POCxtK/YUwn1oGWe7DeODIBNXcD3mtVoqOLtwiVSI6pRIRsJALNDpWY3Mvj5uMsBDtXsL8GG1nD
- QxMhI85t3tzOpDcPvQhG8+6026MCkv1TRefxTfga0067dSW1G1owYNYkV02PndF26FrhYGnXCSb
- GrG/OGiQzLTKvkgCaePQiB9/qbWor/pEW3K2kT8dTceXB70qm1u9ENXA0wkUkMF72UB0+C3Jo9n
- aAvVHTvLeIEQgUuSurrni4jzoRe+diXRQH6uSIB8H38CHj2nIVPEDbQ0y3VyGQomV5QcHr7cMuq bDnNS7IMkNetjhw==
-X-Mailer: b4 0.13.0
-Message-ID: <20241030-tracepoint-v12-5-eec7f0f8ad22@google.com>
-Subject: [PATCH v12 5/5] rust: add arch_static_branch
-From: Alice Ryhl <aliceryhl@google.com>
-To: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Jason Baron <jbaron@akamai.com>, 
-	Ard Biesheuvel <ardb@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	"=?utf-8?q?Bj=C3=B6rn_Roy_Baron?=" <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, 
-	Andreas Hindborg <a.hindborg@kernel.org>
-Cc: linux-trace-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Sean Christopherson <seanjc@google.com>, Uros Bizjak <ubizjak@gmail.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, 
-	Oliver Upton <oliver.upton@linux.dev>, Mark Rutland <mark.rutland@arm.com>, 
-	Ryan Roberts <ryan.roberts@arm.com>, Fuad Tabba <tabba@google.com>, 
-	linux-arm-kernel@lists.infradead.org, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Anup Patel <apatel@ventanamicro.com>, 
-	Andrew Jones <ajones@ventanamicro.com>, Alexandre Ghiti <alexghiti@rivosinc.com>, 
-	Conor Dooley <conor.dooley@microchip.com>, Samuel Holland <samuel.holland@sifive.com>, 
-	linux-riscv@lists.infradead.org, Huacai Chen <chenhuacai@kernel.org>, 
-	WANG Xuerui <kernel@xen0n.name>, Bibo Mao <maobibo@loongson.cn>, 
-	Tiezhu Yang <yangtiezhu@loongson.cn>, Andrew Morton <akpm@linux-foundation.org>, 
-	Tianrui Zhao <zhaotianrui@loongson.cn>, loongarch@lists.linux.dev, 
-	Alice Ryhl <aliceryhl@google.com>
-Content-Type: text/plain; charset="utf-8"
 
-To allow the Rust implementation of static_key_false to use runtime code
-patching instead of the generic implementation, pull in the relevant
-inline assembly from the jump_label.h header by running the C
-preprocessor on a .rs.S file. Build rules are added for .rs.S files.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic
+branch HEAD: c0dc92144ba181cf7ba366a87909bbaa93d5b713  tty: serial: export serial_8250_warn_need_ioport
 
-Since the relevant inline asm has been adjusted to export the inline asm
-via the ARCH_STATIC_BRANCH_ASM macro in a consistent way, the Rust side
-does not need architecture specific code to pull in the asm.
+Unverified Warning (likely false positive, kindly check if interested):
 
-It is not possible to use the existing C implementation of
-arch_static_branch via a Rust helper because it passes the argument
-`key` to inline assembly as an 'i' parameter. Any attempt to add a C
-helper for this function will fail to compile because the value of `key`
-must be known at compile-time.
+    drivers/tty/serial/8250/8250_port.c:1333 autoconfig_irq() warn: bitwise AND condition is false here
+    drivers/tty/serial/8250/8250_port.c:2375 serial8250_do_startup() warn: bitwise AND condition is false here
+    drivers/tty/serial/8250/8250_port.c:2502 serial8250_do_shutdown() warn: bitwise AND condition is false here
 
-Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
-Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
-Signed-off-by: Alice Ryhl <aliceryhl@google.com>
----
- rust/Makefile                           |  6 +++++
- rust/kernel/.gitignore                  |  3 +++
- rust/kernel/arch_static_branch_asm.rs.S |  7 +++++
- rust/kernel/jump_label.rs               | 46 ++++++++++++++++++++++++++++++++-
- rust/kernel/lib.rs                      | 35 +++++++++++++++++++++++++
- scripts/Makefile.build                  |  9 ++++++-
- 6 files changed, 104 insertions(+), 2 deletions(-)
+Warning ids grouped by kconfigs:
 
-diff --git a/rust/Makefile b/rust/Makefile
-index b5e0a73b78f3..bc2a9071dd29 100644
---- a/rust/Makefile
-+++ b/rust/Makefile
-@@ -36,6 +36,8 @@ always-$(CONFIG_RUST_KERNEL_DOCTESTS) += doctests_kernel_generated_kunit.c
- obj-$(CONFIG_RUST_KERNEL_DOCTESTS) += doctests_kernel_generated.o
- obj-$(CONFIG_RUST_KERNEL_DOCTESTS) += doctests_kernel_generated_kunit.o
- 
-+always-$(subst y,$(CONFIG_RUST),$(CONFIG_JUMP_LABEL)) += kernel/arch_static_branch_asm.rs
-+
- # Avoids running `$(RUSTC)` for the sysroot when it may not be available.
- ifdef CONFIG_RUST
- 
-@@ -424,4 +426,8 @@ $(obj)/kernel.o: $(src)/kernel/lib.rs $(obj)/alloc.o $(obj)/build_error.o \
-     $(obj)/libmacros.so $(obj)/bindings.o $(obj)/uapi.o FORCE
- 	+$(call if_changed_rule,rustc_library)
- 
-+ifdef CONFIG_JUMP_LABEL
-+$(obj)/kernel.o: $(obj)/kernel/arch_static_branch_asm.rs
-+endif
-+
- endif # CONFIG_RUST
-diff --git a/rust/kernel/.gitignore b/rust/kernel/.gitignore
-new file mode 100644
-index 000000000000..d082731007c6
---- /dev/null
-+++ b/rust/kernel/.gitignore
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+/arch_static_branch_asm.rs
-diff --git a/rust/kernel/arch_static_branch_asm.rs.S b/rust/kernel/arch_static_branch_asm.rs.S
-new file mode 100644
-index 000000000000..2afb638708db
---- /dev/null
-+++ b/rust/kernel/arch_static_branch_asm.rs.S
-@@ -0,0 +1,7 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#include <linux/jump_label.h>
-+
-+// Cut here.
-+
-+::kernel::concat_literals!(ARCH_STATIC_BRANCH_ASM("{symb} + {off} + {branch}", "{l_yes}"))
-diff --git a/rust/kernel/jump_label.rs b/rust/kernel/jump_label.rs
-index 4b7655b2a022..2f2df03a3275 100644
---- a/rust/kernel/jump_label.rs
-+++ b/rust/kernel/jump_label.rs
-@@ -24,7 +24,51 @@ macro_rules! static_branch_unlikely {
-         let _key: *const $crate::bindings::static_key_false = ::core::ptr::addr_of!((*_key).$field);
-         let _key: *const $crate::bindings::static_key = _key.cast();
- 
--        $crate::bindings::static_key_count(_key.cast_mut()) > 0
-+        #[cfg(not(CONFIG_JUMP_LABEL))]
-+        {
-+            $crate::bindings::static_key_count(_key) > 0
-+        }
-+
-+        #[cfg(CONFIG_JUMP_LABEL)]
-+        $crate::jump_label::arch_static_branch! { $key, $keytyp, $field, false }
-     }};
- }
- pub use static_branch_unlikely;
-+
-+/// Assert that the assembly block evaluates to a string literal.
-+#[cfg(CONFIG_JUMP_LABEL)]
-+const _: &str = include!(concat!(
-+    env!("OBJTREE"),
-+    "/rust/kernel/arch_static_branch_asm.rs"
-+));
-+
-+#[macro_export]
-+#[doc(hidden)]
-+#[cfg(CONFIG_JUMP_LABEL)]
-+macro_rules! arch_static_branch {
-+    ($key:path, $keytyp:ty, $field:ident, $branch:expr) => {'my_label: {
-+        $crate::asm!(
-+            include!(concat!(env!("OBJTREE"), "/rust/kernel/arch_static_branch_asm.rs"));
-+            l_yes = label {
-+                break 'my_label true;
-+            },
-+            symb = sym $key,
-+            off = const ::core::mem::offset_of!($keytyp, $field),
-+            branch = const $crate::jump_label::bool_to_int($branch),
-+        );
-+
-+        break 'my_label false;
-+    }};
-+}
-+
-+#[cfg(CONFIG_JUMP_LABEL)]
-+pub use arch_static_branch;
-+
-+/// A helper used by inline assembly to pass a boolean to as a `const` parameter.
-+///
-+/// Using this function instead of a cast lets you assert that the input is a boolean, and not some
-+/// other type that can also be cast to an integer.
-+#[doc(hidden)]
-+pub const fn bool_to_int(b: bool) -> i32 {
-+    b as i32
-+}
-diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-index 55f81f49024e..97286b99270e 100644
---- a/rust/kernel/lib.rs
-+++ b/rust/kernel/lib.rs
-@@ -148,3 +148,38 @@ macro_rules! container_of {
-         ptr.sub(offset) as *const $type
-     }}
- }
-+
-+/// Helper for `.rs.S` files.
-+#[doc(hidden)]
-+#[macro_export]
-+macro_rules! concat_literals {
-+    ($( $asm:literal )* ) => {
-+        ::core::concat!($($asm),*)
-+    };
-+}
-+
-+/// Wrapper around `asm!` configured for use in the kernel.
-+///
-+/// Uses a semicolon to avoid parsing ambiguities, even though this does not match native `asm!`
-+/// syntax.
-+// For x86, `asm!` uses intel syntax by default, but we want to use at&t syntax in the kernel.
-+#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
-+#[macro_export]
-+macro_rules! asm {
-+    ($($asm:expr),* ; $($rest:tt)*) => {
-+        ::core::arch::asm!( $($asm)*, options(att_syntax), $($rest)* )
-+    };
-+}
-+
-+/// Wrapper around `asm!` configured for use in the kernel.
-+///
-+/// Uses a semicolon to avoid parsing ambiguities, even though this does not match native `asm!`
-+/// syntax.
-+// For non-x86 arches we just pass through to `asm!`.
-+#[cfg(not(any(target_arch = "x86", target_arch = "x86_64")))]
-+#[macro_export]
-+macro_rules! asm {
-+    ($($asm:expr),* ; $($rest:tt)*) => {
-+        ::core::arch::asm!( $($asm)*, $($rest)* )
-+    };
-+}
-diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index 8f423a1faf50..03ee558fcd4d 100644
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -248,12 +248,13 @@ $(obj)/%.lst: $(obj)/%.c FORCE
- # Compile Rust sources (.rs)
- # ---------------------------------------------------------------------------
- 
--rust_allowed_features := new_uninit
-+rust_allowed_features := asm_const,asm_goto,new_uninit
- 
- # `--out-dir` is required to avoid temporaries being created by `rustc` in the
- # current working directory, which may be not accessible in the out-of-tree
- # modules case.
- rust_common_cmd = \
-+	OBJTREE=$(abspath $(objtree)) \
- 	RUST_MODFILE=$(modfile) $(RUSTC_OR_CLIPPY) $(rust_flags) \
- 	-Zallow-features=$(rust_allowed_features) \
- 	-Zcrate-attr=no_std \
-@@ -303,6 +304,12 @@ quiet_cmd_rustc_ll_rs = $(RUSTC_OR_CLIPPY_QUIET) $(quiet_modtag) $@
- $(obj)/%.ll: $(obj)/%.rs FORCE
- 	+$(call if_changed_dep,rustc_ll_rs)
- 
-+quiet_cmd_rustc_rs_rs_S = RSCPP $(quiet_modtag) $@
-+      cmd_rustc_rs_rs_S = $(CPP) $(c_flags) -xc -C -P $< | sed '1,/^\/\/ Cut here.$$/d' >$@
-+
-+$(obj)/%.rs: $(obj)/%.rs.S FORCE
-+	+$(call if_changed_dep,rustc_rs_rs_S)
-+
- # Compile assembler sources (.S)
- # ---------------------------------------------------------------------------
- 
+recent_errors
+|-- csky-randconfig-r072-20241030
+|   |-- drivers-tty-serial-8250_port.c-autoconfig_irq()-warn:bitwise-AND-condition-is-false-here
+|   |-- drivers-tty-serial-8250_port.c-serial8250_do_shutdown()-warn:bitwise-AND-condition-is-false-here
+|   `-- drivers-tty-serial-8250_port.c-serial8250_do_startup()-warn:bitwise-AND-condition-is-false-here
+`-- nios2-randconfig-r131-20241029
+    `-- lib-iomem_copy.c:sparse:sparse:cast-removes-address-space-__iomem-of-expression
 
--- 
-2.47.0.163.g1226f6d8fa-goog
+elapsed time: 1410m
 
+configs tested: 121
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                             allnoconfig    gcc-14.1.0
+alpha                            allyesconfig    gcc-13.3.0
+arc                              allmodconfig    clang-20
+arc                              allmodconfig    gcc-13.2.0
+arc                               allnoconfig    gcc-14.1.0
+arc                              allyesconfig    clang-20
+arc                              allyesconfig    gcc-13.2.0
+arc                         haps_hs_defconfig    clang-20
+arc                     nsimosci_hs_defconfig    clang-20
+arm                              allmodconfig    clang-20
+arm                              allmodconfig    gcc-14.1.0
+arm                               allnoconfig    gcc-14.1.0
+arm                              allyesconfig    clang-20
+arm                              allyesconfig    gcc-14.1.0
+arm                     am200epdkit_defconfig    clang-20
+arm                         bcm2835_defconfig    clang-20
+arm                          collie_defconfig    clang-20
+arm                      jornada720_defconfig    clang-20
+arm                       netwinder_defconfig    clang-20
+arm                             rpc_defconfig    clang-20
+arm64                            allmodconfig    clang-20
+arm64                             allnoconfig    gcc-14.1.0
+csky                              allnoconfig    gcc-14.1.0
+hexagon                          allmodconfig    clang-20
+hexagon                           allnoconfig    gcc-14.1.0
+hexagon                          allyesconfig    clang-20
+i386                             allmodconfig    clang-19
+i386                             allmodconfig    gcc-12
+i386                              allnoconfig    clang-19
+i386                              allnoconfig    gcc-12
+i386                             allyesconfig    clang-19
+i386                             allyesconfig    gcc-12
+i386        buildonly-randconfig-001-20241030    gcc-12
+i386        buildonly-randconfig-002-20241030    gcc-12
+i386        buildonly-randconfig-003-20241030    gcc-12
+i386        buildonly-randconfig-004-20241030    gcc-12
+i386        buildonly-randconfig-005-20241030    gcc-12
+i386        buildonly-randconfig-006-20241030    gcc-12
+i386                                defconfig    clang-19
+i386                  randconfig-001-20241030    gcc-12
+i386                  randconfig-002-20241030    gcc-12
+i386                  randconfig-003-20241030    gcc-12
+i386                  randconfig-004-20241030    gcc-12
+i386                  randconfig-005-20241030    gcc-12
+i386                  randconfig-006-20241030    gcc-12
+i386                  randconfig-011-20241030    gcc-12
+i386                  randconfig-012-20241030    gcc-12
+i386                  randconfig-013-20241030    gcc-12
+i386                  randconfig-014-20241030    gcc-12
+i386                  randconfig-015-20241030    gcc-12
+i386                  randconfig-016-20241030    gcc-12
+loongarch                        allmodconfig    gcc-14.1.0
+loongarch                         allnoconfig    gcc-14.1.0
+m68k                             alldefconfig    clang-20
+m68k                             allmodconfig    gcc-14.1.0
+m68k                              allnoconfig    gcc-14.1.0
+m68k                             allyesconfig    gcc-14.1.0
+m68k                          amiga_defconfig    clang-20
+m68k                       m5475evb_defconfig    clang-20
+m68k                        mvme16x_defconfig    clang-20
+microblaze                       allmodconfig    gcc-14.1.0
+microblaze                        allnoconfig    gcc-14.1.0
+microblaze                       allyesconfig    gcc-14.1.0
+mips                              allnoconfig    gcc-14.1.0
+mips                         db1xxx_defconfig    clang-20
+nios2                             allnoconfig    gcc-14.1.0
+openrisc                          allnoconfig    clang-20
+openrisc                         allyesconfig    gcc-14.1.0
+parisc                           allmodconfig    gcc-14.1.0
+parisc                            allnoconfig    clang-20
+parisc                           allyesconfig    gcc-14.1.0
+powerpc                          allmodconfig    gcc-14.1.0
+powerpc                           allnoconfig    clang-20
+powerpc                          allyesconfig    clang-20
+powerpc                     kmeter1_defconfig    clang-20
+riscv                            allmodconfig    clang-20
+riscv                             allnoconfig    clang-20
+riscv                            allyesconfig    clang-20
+s390                             allmodconfig    clang-20
+s390                             allmodconfig    gcc-14.1.0
+s390                              allnoconfig    clang-20
+s390                             allyesconfig    gcc-14.1.0
+sh                               allmodconfig    gcc-14.1.0
+sh                                allnoconfig    gcc-14.1.0
+sh                               allyesconfig    gcc-14.1.0
+sparc                            allmodconfig    gcc-14.1.0
+um                               allmodconfig    clang-20
+um                                allnoconfig    clang-20
+um                               allyesconfig    gcc-12
+x86_64                            allnoconfig    clang-19
+x86_64                           allyesconfig    clang-19
+x86_64      buildonly-randconfig-001-20241030    gcc-12
+x86_64      buildonly-randconfig-002-20241030    gcc-12
+x86_64      buildonly-randconfig-003-20241030    gcc-12
+x86_64      buildonly-randconfig-004-20241030    gcc-12
+x86_64      buildonly-randconfig-005-20241030    gcc-12
+x86_64      buildonly-randconfig-006-20241030    gcc-12
+x86_64                              defconfig    clang-19
+x86_64                              defconfig    gcc-11
+x86_64                                  kexec    clang-19
+x86_64                randconfig-001-20241030    gcc-12
+x86_64                randconfig-002-20241030    gcc-12
+x86_64                randconfig-003-20241030    gcc-12
+x86_64                randconfig-004-20241030    gcc-12
+x86_64                randconfig-005-20241030    gcc-12
+x86_64                randconfig-006-20241030    gcc-12
+x86_64                randconfig-011-20241030    gcc-12
+x86_64                randconfig-012-20241030    gcc-12
+x86_64                randconfig-013-20241030    gcc-12
+x86_64                randconfig-014-20241030    gcc-12
+x86_64                randconfig-015-20241030    gcc-12
+x86_64                randconfig-016-20241030    gcc-12
+x86_64                randconfig-071-20241030    gcc-12
+x86_64                randconfig-072-20241030    gcc-12
+x86_64                randconfig-073-20241030    gcc-12
+x86_64                randconfig-074-20241030    gcc-12
+x86_64                randconfig-075-20241030    gcc-12
+x86_64                randconfig-076-20241030    gcc-12
+x86_64                               rhel-8.3    gcc-12
+x86_64                    rhel-8.3-kselftests    gcc-12
+xtensa                            allnoconfig    gcc-14.1.0
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
