@@ -1,72 +1,72 @@
-Return-Path: <linux-arch+bounces-8800-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8801-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29A369BA612
-	for <lists+linux-arch@lfdr.de>; Sun,  3 Nov 2024 15:57:10 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 660AE9BA61B
+	for <lists+linux-arch@lfdr.de>; Sun,  3 Nov 2024 15:58:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D0C3C281234
-	for <lists+linux-arch@lfdr.de>; Sun,  3 Nov 2024 14:57:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C4F2DB20BFE
+	for <lists+linux-arch@lfdr.de>; Sun,  3 Nov 2024 14:58:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3194170A16;
-	Sun,  3 Nov 2024 14:57:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C68C17C234;
+	Sun,  3 Nov 2024 14:58:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="L3Z0HiY2"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="SUV48zvU"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3967BE6C
-	for <linux-arch@vger.kernel.org>; Sun,  3 Nov 2024 14:57:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 953C01714C9
+	for <linux-arch@vger.kernel.org>; Sun,  3 Nov 2024 14:58:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730645825; cv=none; b=LHVARjm+TO7ciImZFn+lLMFRdu4hwe8GAy3/ZmReFoylc9nZj2xm4M8jm7SoSHIwN2AKxVZrrtHSnGkMAJlJcjKPZ3Sre+OrXL6wl7cPVD1jZDfovoLLT/o2MUynRTshazHJsP1bWtGGaGog+eXtL1tidlOGzcNzu+/Fw88S8dc=
+	t=1730645887; cv=none; b=Ug71Qqe6JZzvhp1z+NB4/7qowvhM4QCFMaf7keDmLuzewZcYGt9cDp5VD7cgceWVczuqQOuv2c9lM7MDipxjEdhvkmdrzHpoOOsqGBEMmcMK/d5WLTdKjyENmTcfK+ezwzHkyvDXa02iQL1zkQqdzv/DJybgbFaZdkz3ICf1xf0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730645825; c=relaxed/simple;
-	bh=87PCTNWJatXkOfxYdKhtjQ3mAAxm4VRDVMIU9aR65aw=;
+	s=arc-20240116; t=1730645887; c=relaxed/simple;
+	bh=AA0WiotsCMovaMp28+X0tg8CsoVA5Lev8Q+VorcC64k=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=NmbHo4JqlS9L4N5PmBrDZc9KSLfCxDz5K50Mpe1UVlstcEjCusQtU5Ps8bb6k9Xon3gvjNDY3EDcbFuwXNpJSI0BzSq8Gi6DQFiJ1UP4TLK20qiRqwRMF6x7VcbrGT1Kt3BqruckIB/0NjQMmhu0IzPn4QzXUQqZOfujLWixGFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=L3Z0HiY2; arc=none smtp.client-ip=209.85.221.44
+	 MIME-Version; b=KLzMfhpKJ1Psq4cibMBxUxPsMkVowbRdqOQDW4noQi0Dm60Umpv/56Nv+Bi3MU1xXhkFLubmi4n53BTmM95Qj83Z5CM1+nhQB1SNavOuf0IVdwK32m62OAmQDE8BnOGPEyb/aQ8d4tvsYtCLIN+TuRVFjZishIylFoMXFmgmB08=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=SUV48zvU; arc=none smtp.client-ip=209.85.128.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-37d447de11dso2752387f8f.1
-        for <linux-arch@vger.kernel.org>; Sun, 03 Nov 2024 06:57:03 -0800 (PST)
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-43158625112so29026745e9.3
+        for <linux-arch@vger.kernel.org>; Sun, 03 Nov 2024 06:58:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1730645822; x=1731250622; darn=vger.kernel.org;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1730645884; x=1731250684; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LcjpaetCkzwKl6qLE/ePzZTB5CzyEYuJ8vIVpAvXySA=;
-        b=L3Z0HiY2sXHGtPV6rqYourdnsce2lOJlNFPe4X9SBn8TVni0f2AJbR3F5hekkSo0L3
-         IngJeCjaKcBNpxZeMaifcIhAfFjROBZYqrj6PQkntp581sN4MWyTCDZqukooxkCdHgAK
-         Bk6PiLOCtnGkwQbNLGcbvfPNhZRfdZxWVOKVxeSGq1tQV//qO2luIxEP4bjAxGRFMHiL
-         QiOg93aLB/3bSKAZY7j+9dCtCJbtwwsURIoW2sC6wtqqEWlDqMnngk2u9WgQ7pVHHFmC
-         WDFCbfsXyLE1veWxQSvdlcPaIn1lKpgacYIgG2eIETwUdo9/82L95KhKypZIOTCLaPh2
-         QtYg==
+        bh=N5AV+nOoC/tuklQRoqzKvrTd6uHJ4OaRW4xZaKd3wLE=;
+        b=SUV48zvUYIzHcO2HQf0r+ojNeM5Vbt38AQAgwNt5+y3wrUVCYPiRGNk6RV3NxYc7gn
+         XzILqq/JFUOyNt30Nm2ZLXCLLTrfE6Z665EN8ju9KWVnBGRDlmMbKv//knBCj53pWLx+
+         lpNO8qXCeS2yKHxo9FGf45lI2wrxRwRoOTOhLnT+CQqV9F9lpQF2foNwXaPML8zn7+q8
+         yfQLQYm4DPBKEckk7SAPaYlrZvltWcjjpDtApEsed1HZxcniheT1xBBH9eQQqG7E9NcG
+         IN51SUm776Vuar/B1kJ7sz46vPKNQql5qWfLU5IiBjedKnLBMvwvg9IlhmscFAbhPh9F
+         1rVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730645822; x=1731250622;
+        d=1e100.net; s=20230601; t=1730645884; x=1731250684;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LcjpaetCkzwKl6qLE/ePzZTB5CzyEYuJ8vIVpAvXySA=;
-        b=Vj476ZZLV1YO81oq552b43ckc2dJ+qc+FWoryzmoMk4ULGlpUL7HyNAvT7cHc6Fgt3
-         RSMtpy5zvM/yphAmTkH/+IWvwDYBhk8G/4YXTNtGeqduGpWETwFD6wRHwdbWlQKOh6NB
-         BaUZSy8o5wQdHcSPr+OueS3JVLLcdJW0WqG10CeqWM+NX/IeK3FcLGNueQNzC7WFbok2
-         FWN10lPv/9ArQ6Y7uxeYyFRlh4WVzkZG6dIByPPXpT8WQHhpWJfLASI6L0/ri4VfExga
-         HeQn7UVldG1PV0gNzePYlAteR+O+i0395hknaTVm6trnYV8ulSiR7sNdZdMdOqsUKfQZ
-         NM5g==
-X-Forwarded-Encrypted: i=1; AJvYcCWxVcEwwNo5AC+Iorl5D1n2j59hgm8U2FcIMv1rS+MkETZhVT728Za7YvIXEFGC5z7vIAmAalFC1+uI@vger.kernel.org
-X-Gm-Message-State: AOJu0YwHEV2CwCD4Aogyc6G4YdkP2JC3qdm7ZZkL2Uv/pA+KbJ2wW2j1
-	U5WyVJ3Z3WdO2dRVwR3lQHh0piejXfQm2BmT3FOCH78zjss1kZL5l0B5tWndmUs=
-X-Google-Smtp-Source: AGHT+IEk9gKHRdbGlFKX3OCkRNc0X43TINOjb8HRMwojR0fr3EGR3rRYNjyJ35dWqeTb53PfklFgKw==
-X-Received: by 2002:a05:6000:2805:b0:37d:5173:7a54 with SMTP id ffacd0b85a97d-381bea27660mr7207035f8f.52.1730645822142;
-        Sun, 03 Nov 2024 06:57:02 -0800 (PST)
+        bh=N5AV+nOoC/tuklQRoqzKvrTd6uHJ4OaRW4xZaKd3wLE=;
+        b=Fml81J31gyky0BdrGcH1T7WGdg0mjcyc5vC14gIpiEhxRjS+Ou/bQJxsO+leSGImnU
+         51gT/M3cOPHVzL9pgcH3/l/O/UyRx6TwVBBs+OxWzKdmCNMTTHy1i9JgW04I4gLrdzpa
+         frfajJs3bQEmYU13F8uXa3pd12wZSPkEPlSSNcC1Kg+3eVclWLm82x668I4M0zjiLP2y
+         Eeu8lckqhCG/NMYdj81Va7qIJvmsxWVgVU33zeDNrrm/VW2fASzve9BZ/a28WHxBvVRj
+         +erbVS/d7ydDPfsBT++j0hZRRP25jtf3RUFTYL1oUeBQ9JvSSGrqgtGsGk5XZkHZl6ef
+         ofPQ==
+X-Forwarded-Encrypted: i=1; AJvYcCURYy7hjyjnVt0wNhCRHlPoHgDnlFJJsN79uKWf2ACMa77b1KEijbOA1Rpx5lBwQ0u6BgZySD7C8glF@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYqAPkkzGwlFudsiOYPqAxmJ8qGVFTC+bDh6b6Bln2psdillIe
+	0WYedboykmUOHfL20a8X0mTRErBZBONhEn0PmplB45VqyKmleyGYW9wTMjoUglM=
+X-Google-Smtp-Source: AGHT+IE55nBQ7rbTlkCqdHR3oJ0XymsMVwn2Z7Lo05//Ad0W+sZxb56nu4edxwe80UlQVGkf+GZkPg==
+X-Received: by 2002:a05:600c:22d3:b0:432:7c08:d121 with SMTP id 5b1f17b1804b1-432849fa03amr81532075e9.12.1730645883736;
+        Sun, 03 Nov 2024 06:58:03 -0800 (PST)
 Received: from alex-rivos.ba.rivosinc.com (lfbn-lyo-1-472-36.w2-7.abo.wanadoo.fr. [2.7.62.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-381c1168afcsm10825859f8f.91.2024.11.03.06.57.01
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4327d5c65b8sm124358355e9.18.2024.11.03.06.58.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Nov 2024 06:57:01 -0800 (PST)
+        Sun, 03 Nov 2024 06:58:03 -0800 (PST)
 From: Alexandre Ghiti <alexghiti@rivosinc.com>
 To: Jonathan Corbet <corbet@lwn.net>,
 	Paul Walmsley <paul.walmsley@sifive.com>,
@@ -91,10 +91,11 @@ To: Jonathan Corbet <corbet@lwn.net>,
 	linux-riscv@lists.infradead.org,
 	linux-arch@vger.kernel.org
 Cc: Alexandre Ghiti <alexghiti@rivosinc.com>,
+	Andrea Parri <andrea@rivosinc.com>,
 	Andrew Jones <ajones@ventanamicro.com>
-Subject: [PATCH v6 05/13] riscv: Implement cmpxchg8/16() using Zabha
-Date: Sun,  3 Nov 2024 15:51:45 +0100
-Message-Id: <20241103145153.105097-6-alexghiti@rivosinc.com>
+Subject: [PATCH v6 06/13] riscv: Improve zacas fully-ordered cmpxchg()
+Date: Sun,  3 Nov 2024 15:51:46 +0100
+Message-Id: <20241103145153.105097-7-alexghiti@rivosinc.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20241103145153.105097-1-alexghiti@rivosinc.com>
 References: <20241103145153.105097-1-alexghiti@rivosinc.com>
@@ -106,185 +107,205 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This adds runtime support for Zabha in cmpxchg8/16() operations.
+The current fully-ordered cmpxchgXX() implementation results in:
 
-Note that in the absence of Zacas support in the toolchain, CAS
-instructions from Zabha won't be used.
+  amocas.X.rl     a5,a4,(s1)
+  fence           rw,rw
 
+This provides enough sync but we can actually use the following better
+mapping instead:
+
+  amocas.X.aqrl   a5,a4,(s1)
+
+Suggested-by: Andrea Parri <andrea@rivosinc.com>
 Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
 Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 ---
- arch/riscv/Kconfig               | 18 ++++++++
- arch/riscv/Makefile              |  3 ++
- arch/riscv/include/asm/cmpxchg.h | 78 ++++++++++++++++++++------------
- arch/riscv/include/asm/hwcap.h   |  1 +
- arch/riscv/kernel/cpufeature.c   |  1 +
- 5 files changed, 72 insertions(+), 29 deletions(-)
+ arch/riscv/include/asm/cmpxchg.h | 92 ++++++++++++++++++++++----------
+ 1 file changed, 64 insertions(+), 28 deletions(-)
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 3542efe3088b..668be90a42e4 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -632,6 +632,24 @@ config RISCV_ISA_ZAWRS
- 	  use of these instructions in the kernel when the Zawrs extension is
- 	  detected at boot.
- 
-+config TOOLCHAIN_HAS_ZABHA
-+	bool
-+	default y
-+	depends on !64BIT || $(cc-option,-mabi=lp64 -march=rv64ima_zabha)
-+	depends on !32BIT || $(cc-option,-mabi=ilp32 -march=rv32ima_zabha)
-+	depends on AS_HAS_OPTION_ARCH
-+
-+config RISCV_ISA_ZABHA
-+	bool "Zabha extension support for atomic byte/halfword operations"
-+	depends on TOOLCHAIN_HAS_ZABHA
-+	depends on RISCV_ALTERNATIVE
-+	default y
-+	help
-+	  Enable the use of the Zabha ISA-extension to implement kernel
-+	  byte/halfword atomic memory operations when it is detected at boot.
-+
-+	  If you don't know what to do here, say Y.
-+
- config TOOLCHAIN_HAS_ZACAS
- 	bool
- 	default y
-diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-index 3700a1574413..9fe1ee740dda 100644
---- a/arch/riscv/Makefile
-+++ b/arch/riscv/Makefile
-@@ -85,6 +85,9 @@ endif
- # Check if the toolchain supports Zacas
- riscv-march-$(CONFIG_TOOLCHAIN_HAS_ZACAS) := $(riscv-march-y)_zacas
- 
-+# Check if the toolchain supports Zabha
-+riscv-march-$(CONFIG_TOOLCHAIN_HAS_ZABHA) := $(riscv-march-y)_zabha
-+
- # Remove F,D,V from isa string for all. Keep extensions between "fd" and "v" by
- # matching non-v and non-multi-letter extensions out with the filter ([^v_]*)
- KBUILD_CFLAGS += -march=$(shell echo $(riscv-march-y) | sed -E 's/(rv32ima|rv64ima)fd([^v_]*)v?/\1\2/')
 diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
-index 39c1daf39f6a..1f4cd12e4664 100644
+index 1f4cd12e4664..052418aba11a 100644
 --- a/arch/riscv/include/asm/cmpxchg.h
 +++ b/arch/riscv/include/asm/cmpxchg.h
-@@ -108,34 +108,49 @@
+@@ -107,8 +107,10 @@
+  * store NEW in MEM.  Return the initial value in MEM.  Success is
   * indicated by comparing RETURN with OLD.
   */
- 
--#define __arch_cmpxchg_masked(sc_sfx, prepend, append, r, p, o, n)	\
--({									\
--	u32 *__ptr32b = (u32 *)((ulong)(p) & ~0x3);			\
--	ulong __s = ((ulong)(p) & (0x4 - sizeof(*p))) * BITS_PER_BYTE;	\
--	ulong __mask = GENMASK(((sizeof(*p)) * BITS_PER_BYTE) - 1, 0)	\
--			<< __s;						\
--	ulong __newx = (ulong)(n) << __s;				\
--	ulong __oldx = (ulong)(o) << __s;				\
--	ulong __retx;							\
--	ulong __rc;							\
--									\
--	__asm__ __volatile__ (						\
--		prepend							\
--		"0:	lr.w %0, %2\n"					\
--		"	and  %1, %0, %z5\n"				\
--		"	bne  %1, %z3, 1f\n"				\
--		"	and  %1, %0, %z6\n"				\
--		"	or   %1, %1, %z4\n"				\
--		"	sc.w" sc_sfx " %1, %1, %2\n"			\
--		"	bnez %1, 0b\n"					\
--		append							\
--		"1:\n"							\
--		: "=&r" (__retx), "=&r" (__rc), "+A" (*(__ptr32b))	\
--		: "rJ" ((long)__oldx), "rJ" (__newx),			\
--		  "rJ" (__mask), "rJ" (~__mask)				\
--		: "memory");						\
--									\
--	r = (__typeof__(*(p)))((__retx & __mask) >> __s);		\
-+#define __arch_cmpxchg_masked(sc_sfx, cas_sfx, prepend, append, r, p, o, n)	\
-+({										\
-+	if (IS_ENABLED(CONFIG_RISCV_ISA_ZABHA) &&				\
-+	    IS_ENABLED(CONFIG_RISCV_ISA_ZACAS) &&				\
-+	    riscv_has_extension_unlikely(RISCV_ISA_EXT_ZABHA) &&		\
-+	    riscv_has_extension_unlikely(RISCV_ISA_EXT_ZACAS)) {		\
-+		r = o;								\
-+										\
-+		__asm__ __volatile__ (						\
-+			prepend							\
-+			"	amocas" cas_sfx " %0, %z2, %1\n"		\
-+			append							\
-+			: "+&r" (r), "+A" (*(p))				\
-+			: "rJ" (n)						\
-+			: "memory");						\
-+	} else {								\
-+		u32 *__ptr32b = (u32 *)((ulong)(p) & ~0x3);			\
-+		ulong __s = ((ulong)(p) & (0x4 - sizeof(*p))) * BITS_PER_BYTE;	\
-+		ulong __mask = GENMASK(((sizeof(*p)) * BITS_PER_BYTE) - 1, 0)	\
-+			       << __s;						\
-+		ulong __newx = (ulong)(n) << __s;				\
-+		ulong __oldx = (ulong)(o) << __s;				\
-+		ulong __retx;							\
-+		ulong __rc;							\
-+										\
-+		__asm__ __volatile__ (						\
-+			prepend							\
-+			"0:	lr.w %0, %2\n"					\
-+			"	and  %1, %0, %z5\n"				\
-+			"	bne  %1, %z3, 1f\n"				\
-+			"	and  %1, %0, %z6\n"				\
-+			"	or   %1, %1, %z4\n"				\
-+			"	sc.w" sc_sfx " %1, %1, %2\n"			\
-+			"	bnez %1, 0b\n"					\
-+			append							\
-+			"1:\n"							\
-+			: "=&r" (__retx), "=&r" (__rc), "+A" (*(__ptr32b))	\
-+			: "rJ" ((long)__oldx), "rJ" (__newx),			\
-+			  "rJ" (__mask), "rJ" (~__mask)				\
-+			: "memory");						\
-+										\
-+		r = (__typeof__(*(p)))((__retx & __mask) >> __s);		\
-+	}									\
+-
+-#define __arch_cmpxchg_masked(sc_sfx, cas_sfx, prepend, append, r, p, o, n)	\
++#define __arch_cmpxchg_masked(sc_sfx, cas_sfx,					\
++			      sc_prepend, sc_append,				\
++			      cas_prepend, cas_append,				\
++			      r, p, o, n)					\
+ ({										\
+ 	if (IS_ENABLED(CONFIG_RISCV_ISA_ZABHA) &&				\
+ 	    IS_ENABLED(CONFIG_RISCV_ISA_ZACAS) &&				\
+@@ -117,9 +119,9 @@
+ 		r = o;								\
+ 										\
+ 		__asm__ __volatile__ (						\
+-			prepend							\
++			cas_prepend							\
+ 			"	amocas" cas_sfx " %0, %z2, %1\n"		\
+-			append							\
++			cas_append							\
+ 			: "+&r" (r), "+A" (*(p))				\
+ 			: "rJ" (n)						\
+ 			: "memory");						\
+@@ -134,7 +136,7 @@
+ 		ulong __rc;							\
+ 										\
+ 		__asm__ __volatile__ (						\
+-			prepend							\
++			sc_prepend							\
+ 			"0:	lr.w %0, %2\n"					\
+ 			"	and  %1, %0, %z5\n"				\
+ 			"	bne  %1, %z3, 1f\n"				\
+@@ -142,7 +144,7 @@
+ 			"	or   %1, %1, %z4\n"				\
+ 			"	sc.w" sc_sfx " %1, %1, %2\n"			\
+ 			"	bnez %1, 0b\n"					\
+-			append							\
++			sc_append							\
+ 			"1:\n"							\
+ 			: "=&r" (__retx), "=&r" (__rc), "+A" (*(__ptr32b))	\
+ 			: "rJ" ((long)__oldx), "rJ" (__newx),			\
+@@ -153,16 +155,19 @@
+ 	}									\
  })
  
- #define __arch_cmpxchg(lr_sfx, sc_cas_sfx, prepend, append, r, p, co, o, n)	\
-@@ -177,8 +192,13 @@
+-#define __arch_cmpxchg(lr_sfx, sc_cas_sfx, prepend, append, r, p, co, o, n)	\
++#define __arch_cmpxchg(lr_sfx, sc_sfx, cas_sfx,				\
++		       sc_prepend, sc_append,				\
++		       cas_prepend, cas_append,				\
++		       r, p, co, o, n)					\
+ ({									\
+ 	if (IS_ENABLED(CONFIG_RISCV_ISA_ZACAS) &&			\
+ 	    riscv_has_extension_unlikely(RISCV_ISA_EXT_ZACAS)) {	\
+ 		r = o;							\
+ 									\
+ 		__asm__ __volatile__ (					\
+-			prepend						\
+-			"	amocas" sc_cas_sfx " %0, %z2, %1\n"	\
+-			append						\
++			cas_prepend					\
++			"	amocas" cas_sfx " %0, %z2, %1\n"	\
++			cas_append					\
+ 			: "+&r" (r), "+A" (*(p))			\
+ 			: "rJ" (n)					\
+ 			: "memory");					\
+@@ -170,12 +175,12 @@
+ 		register unsigned int __rc;				\
+ 									\
+ 		__asm__ __volatile__ (					\
+-			prepend						\
++			sc_prepend					\
+ 			"0:	lr" lr_sfx " %0, %2\n"			\
+ 			"	bne  %0, %z3, 1f\n"			\
+-			"	sc" sc_cas_sfx " %1, %z4, %2\n"		\
++			"	sc" sc_sfx " %1, %z4, %2\n"		\
+ 			"	bnez %1, 0b\n"				\
+-			append						\
++			sc_append					\
+ 			"1:\n"						\
+ 			: "=&r" (r), "=&r" (__rc), "+A" (*(p))		\
+ 			: "rJ" (co o), "rJ" (n)				\
+@@ -183,7 +188,9 @@
+ 	}								\
+ })
+ 
+-#define _arch_cmpxchg(ptr, old, new, sc_cas_sfx, prepend, append)	\
++#define _arch_cmpxchg(ptr, old, new, sc_sfx, cas_sfx,			\
++		      sc_prepend, sc_append,				\
++		      cas_prepend, cas_append)				\
+ ({									\
+ 	__typeof__(ptr) __ptr = (ptr);					\
+ 	__typeof__(*(__ptr)) __old = (old);				\
+@@ -192,22 +199,28 @@
  									\
  	switch (sizeof(*__ptr)) {					\
  	case 1:								\
-+		__arch_cmpxchg_masked(sc_cas_sfx, ".b" sc_cas_sfx,	\
-+					prepend, append,		\
-+					__ret, __ptr, __old, __new);    \
-+		break;							\
+-		__arch_cmpxchg_masked(sc_cas_sfx, ".b" sc_cas_sfx,	\
+-					prepend, append,		\
+-					__ret, __ptr, __old, __new);    \
++		__arch_cmpxchg_masked(sc_sfx, ".b" cas_sfx,		\
++				      sc_prepend, sc_append,		\
++				      cas_prepend, cas_append,		\
++				      __ret, __ptr, __old, __new);	\
+ 		break;							\
  	case 2:								\
--		__arch_cmpxchg_masked(sc_cas_sfx, prepend, append,	\
-+		__arch_cmpxchg_masked(sc_cas_sfx, ".h" sc_cas_sfx,	\
-+					prepend, append,		\
- 					__ret, __ptr, __old, __new);	\
+-		__arch_cmpxchg_masked(sc_cas_sfx, ".h" sc_cas_sfx,	\
+-					prepend, append,		\
+-					__ret, __ptr, __old, __new);	\
++		__arch_cmpxchg_masked(sc_sfx, ".h" cas_sfx,		\
++				      sc_prepend, sc_append,		\
++				      cas_prepend, cas_append,		\
++				      __ret, __ptr, __old, __new);	\
  		break;							\
  	case 4:								\
-diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
-index 46d9de54179e..74bcb0e2bd1f 100644
---- a/arch/riscv/include/asm/hwcap.h
-+++ b/arch/riscv/include/asm/hwcap.h
-@@ -93,6 +93,7 @@
- #define RISCV_ISA_EXT_ZCMOP		84
- #define RISCV_ISA_EXT_ZAWRS		85
- #define RISCV_ISA_EXT_SVVPTC		86
-+#define RISCV_ISA_EXT_ZABHA		87
+-		__arch_cmpxchg(".w", ".w" sc_cas_sfx, prepend, append,	\
+-				__ret, __ptr, (long), __old, __new);	\
++		__arch_cmpxchg(".w", ".w" sc_sfx, ".w" cas_sfx,		\
++			       sc_prepend, sc_append,			\
++			       cas_prepend, cas_append,			\
++			       __ret, __ptr, (long), __old, __new);	\
+ 		break;							\
+ 	case 8:								\
+-		__arch_cmpxchg(".d", ".d" sc_cas_sfx, prepend, append,	\
+-				__ret, __ptr, /**/, __old, __new);	\
++		__arch_cmpxchg(".d", ".d" sc_sfx, ".d" cas_sfx,		\
++			       sc_prepend, sc_append,			\
++			       cas_prepend, cas_append,			\
++			       __ret, __ptr, /**/, __old, __new);	\
+ 		break;							\
+ 	default:							\
+ 		BUILD_BUG();						\
+@@ -215,17 +228,40 @@
+ 	(__typeof__(*(__ptr)))__ret;					\
+ })
  
- #define RISCV_ISA_EXT_XLINUXENVCFG	127
++/*
++ * These macros are here to improve the readability of the arch_cmpxchg_XXX()
++ * macros.
++ */
++#define SC_SFX(x)	x
++#define CAS_SFX(x)	x
++#define SC_PREPEND(x)	x
++#define SC_APPEND(x)	x
++#define CAS_PREPEND(x)	x
++#define CAS_APPEND(x)	x
++
+ #define arch_cmpxchg_relaxed(ptr, o, n)					\
+-	_arch_cmpxchg((ptr), (o), (n), "", "", "")
++	_arch_cmpxchg((ptr), (o), (n),					\
++		      SC_SFX(""), CAS_SFX(""),				\
++		      SC_PREPEND(""), SC_APPEND(""),			\
++		      CAS_PREPEND(""), CAS_APPEND(""))
  
-diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-index 3a8eeaa9310c..5e743d8d34f5 100644
---- a/arch/riscv/kernel/cpufeature.c
-+++ b/arch/riscv/kernel/cpufeature.c
-@@ -322,6 +322,7 @@ const struct riscv_isa_ext_data riscv_isa_ext[] = {
- 	__RISCV_ISA_EXT_DATA(zihintpause, RISCV_ISA_EXT_ZIHINTPAUSE),
- 	__RISCV_ISA_EXT_DATA(zihpm, RISCV_ISA_EXT_ZIHPM),
- 	__RISCV_ISA_EXT_DATA(zimop, RISCV_ISA_EXT_ZIMOP),
-+	__RISCV_ISA_EXT_DATA(zabha, RISCV_ISA_EXT_ZABHA),
- 	__RISCV_ISA_EXT_DATA(zacas, RISCV_ISA_EXT_ZACAS),
- 	__RISCV_ISA_EXT_DATA(zawrs, RISCV_ISA_EXT_ZAWRS),
- 	__RISCV_ISA_EXT_DATA(zfa, RISCV_ISA_EXT_ZFA),
+ #define arch_cmpxchg_acquire(ptr, o, n)					\
+-	_arch_cmpxchg((ptr), (o), (n), "", "", RISCV_ACQUIRE_BARRIER)
++	_arch_cmpxchg((ptr), (o), (n),					\
++		      SC_SFX(""), CAS_SFX(""),				\
++		      SC_PREPEND(""), SC_APPEND(RISCV_ACQUIRE_BARRIER),	\
++		      CAS_PREPEND(""), CAS_APPEND(RISCV_ACQUIRE_BARRIER))
+ 
+ #define arch_cmpxchg_release(ptr, o, n)					\
+-	_arch_cmpxchg((ptr), (o), (n), "", RISCV_RELEASE_BARRIER, "")
++	_arch_cmpxchg((ptr), (o), (n),					\
++		      SC_SFX(""), CAS_SFX(""),				\
++		      SC_PREPEND(RISCV_RELEASE_BARRIER), SC_APPEND(""),	\
++		      CAS_PREPEND(RISCV_RELEASE_BARRIER), CAS_APPEND(""))
+ 
+ #define arch_cmpxchg(ptr, o, n)						\
+-	_arch_cmpxchg((ptr), (o), (n), ".rl", "", "	fence rw, rw\n")
++	_arch_cmpxchg((ptr), (o), (n),					\
++		      SC_SFX(".rl"), CAS_SFX(".aqrl"),			\
++		      SC_PREPEND(""), SC_APPEND(RISCV_FULL_BARRIER),	\
++		      CAS_PREPEND(""), CAS_APPEND(""))
+ 
+ #define arch_cmpxchg_local(ptr, o, n)					\
+ 	arch_cmpxchg_relaxed((ptr), (o), (n))
 -- 
 2.39.2
 
