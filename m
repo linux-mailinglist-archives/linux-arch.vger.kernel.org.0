@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-8816-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8812-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5921C9BA8E5
-	for <lists+linux-arch@lfdr.de>; Sun,  3 Nov 2024 23:34:29 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CCC89BA8BD
+	for <lists+linux-arch@lfdr.de>; Sun,  3 Nov 2024 23:33:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C93CAB21D70
-	for <lists+linux-arch@lfdr.de>; Sun,  3 Nov 2024 22:34:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E03381C20D9C
+	for <lists+linux-arch@lfdr.de>; Sun,  3 Nov 2024 22:33:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D81161ABEA9;
-	Sun,  3 Nov 2024 22:32:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A51ED19069B;
+	Sun,  3 Nov 2024 22:32:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TrX8vnYi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FLEXF5On"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99E0F1AB530;
-	Sun,  3 Nov 2024 22:32:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64F2718E055;
+	Sun,  3 Nov 2024 22:32:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730673148; cv=none; b=j9XJ6+ctG2y7BlaPb/5ck44/7ZcGr1EYWipdKTMNF9A5+R3xcyRFYfSfkBo+afbrfYSJBGG2749YGn1G/0NiRrAXxoin7kf65sBqE2/mq8sTxHDaEBRZTNhAixF16iVftTiHGWtJWkaDbjXPO5Sb/RupULs7Ap2rlPRSvM2RDF8=
+	t=1730673146; cv=none; b=WKlnxRrnG1+XulUDgmtOAP9iJv+/BcRKwvAm80PSmzwNiN/Yfr+UGMhx5sxa/aKUc+yGTuN8naUAOGIihKiN5Ebdocp46pmQOjZCKJe6Zog1Y3t+9jb1JVCsCGjm/zbWfK+al58kjP6bK5FurIkVhPhq+rrSCLKigSIlQXDGCak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730673148; c=relaxed/simple;
-	bh=R3RIsL1uK8EQAGi0SGqk7fPI8kAR8rBJM+i88HKwo+I=;
+	s=arc-20240116; t=1730673146; c=relaxed/simple;
+	bh=tFO0F6yNPt11cX0x9fLuUHzrKqGkpHig/cPtPasc7Zs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=X/oemhjuoosILHuteiZn9lxZ2FLdP77o+ECH74gHd4ypgRDi0qmxy1ZKOnU45KNmiIZsQTisUHaj3GajxTraouNioJJsMaBImwAmoHralytnaIWTtWN+LviECrl/DTtVIPh/E2zgAY2X+8uUHLqhFXZCo+uPdX2oxxxr+rTD8ec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TrX8vnYi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F0A3C4AF09;
+	 MIME-Version; b=lheSrq4TaYfcmJvCF3Yi7+AgndXiRu60TpsD1Oelzkb9l84i57mBwZ13oQf7n+iqVQqgretF8uoE/8CNMiS2H2TEN3ZATxMVSuX1gt9AX7P4r2nbAqCt8rYDAOaWRNYGMY1q0ktDv3WdJMZnQuTbQuu3/u+NWV5gQtCQAKnfTPo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FLEXF5On; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF3C1C4CED6;
 	Sun,  3 Nov 2024 22:32:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730673145;
-	bh=R3RIsL1uK8EQAGi0SGqk7fPI8kAR8rBJM+i88HKwo+I=;
+	s=k20201202; t=1730673146;
+	bh=tFO0F6yNPt11cX0x9fLuUHzrKqGkpHig/cPtPasc7Zs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=TrX8vnYi6RABnxqWW60rA5vLS2/aG1Tnc49VRVlwICi9yJ7QBnDWco/Yks+8wcuHa
-	 RJuv3uzU+Z6DTR7yfQGoDUX9bYZhQ8O6Hq7pMkhfl3QqRSKQV3ExIVZu2uhcpBKIjR
-	 fiwyAeVZAnX/xcIlgG4UBHb2UTaDQHawqpOvN2/n/J7uPYSvzXmIV9xhwyN2GFDagS
-	 H4ngn3Fodl7aHmeNPUSVT2tVlOXuaBpibrQaV+wveq6oJO8Y8WsWgddFxjNtz0h7QF
-	 GPGvqV/QcxpUiurjY8UUYUNlQ8oSIkZuJkJ/X9GpLLyNaLm2a8lC9ndMRajJMGOHq2
-	 j8og8QUJ6tDSg==
+	b=FLEXF5OnjtoHBLz2W1SudB1KfgQeNbVamfWQca0Lr3ls4Ajd6zui8pPZphDG8wGHi
+	 LMeOxQgpUfQZBOrr9Xxbh82UmIw4KF07FJGWQHV31qEzfhzAW4QITRvihj6T8dNJwD
+	 7VM4SISyDF+9nWY8v1TcdePZO8vlrUSxuR0C2sAycL5JfMzno08WrlDBIWB428LYwV
+	 H74oQ1WRR+qGqF2fzD79IPcenVru6oQPFG/aiSVpU1viylHUP1PVVW0SlpHWBah85+
+	 GLRmjZ4czJdS+k2WUI0O0AY7XjAnn6mserV11No6DhCIo1gKixC/7dgNgepAp/Vyod
+	 VKf8STCElVs0g==
 From: Eric Biggers <ebiggers@kernel.org>
 To: linux-kernel@vger.kernel.org
 Cc: linux-arch@vger.kernel.org,
@@ -56,9 +56,9 @@ Cc: linux-arch@vger.kernel.org,
 	loongarch@lists.linux.dev,
 	sparclinux@vger.kernel.org,
 	x86@kernel.org
-Subject: [PATCH v3 03/18] lib/crc32: expose whether the lib is really optimized at runtime
-Date: Sun,  3 Nov 2024 14:31:39 -0800
-Message-ID: <20241103223154.136127-4-ebiggers@kernel.org>
+Subject: [PATCH v3 04/18] crypto: crc32 - don't unnecessarily register arch algorithms
+Date: Sun,  3 Nov 2024 14:31:40 -0800
+Message-ID: <20241103223154.136127-5-ebiggers@kernel.org>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20241103223154.136127-1-ebiggers@kernel.org>
 References: <20241103223154.136127-1-ebiggers@kernel.org>
@@ -72,96 +72,83 @@ Content-Transfer-Encoding: 8bit
 
 From: Eric Biggers <ebiggers@google.com>
 
-Make the CRC32 library export a function crc32_optimizations() which
-returns flags that indicate which CRC32 functions are actually executing
-optimized code at runtime.
+Instead of registering the crc32-$arch and crc32c-$arch algorithms if
+the arch-specific code was built, only register them when that code was
+built *and* is not falling back to the base implementation at runtime.
 
-This will be used to determine whether the crc32[c]-$arch shash
-algorithms should be registered in the crypto API.  btrfs could also
-start using these flags instead of the hack that it currently uses where
-it parses the crypto_shash_driver_name.
+This avoids confusing users like btrfs which checks the shash driver
+name to determine whether it is crc32c-generic.
+
+(It would also make sense to change btrfs to test the crc32_optimization
+flags itself, so that it doesn't have to use the weird hack of parsing
+the driver name.  This change still makes sense either way though.)
 
 Signed-off-by: Eric Biggers <ebiggers@google.com>
 ---
- arch/arm64/lib/crc32-glue.c  | 10 ++++++++++
- arch/riscv/lib/crc32-riscv.c | 10 ++++++++++
- include/linux/crc32.h        | 15 +++++++++++++++
- 3 files changed, 35 insertions(+)
+ crypto/crc32_generic.c  | 8 ++++++--
+ crypto/crc32c_generic.c | 8 ++++++--
+ 2 files changed, 12 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm64/lib/crc32-glue.c b/arch/arm64/lib/crc32-glue.c
-index d7f6e1cbf0d2..15c4c9db573e 100644
---- a/arch/arm64/lib/crc32-glue.c
-+++ b/arch/arm64/lib/crc32-glue.c
-@@ -83,7 +83,17 @@ u32 __pure crc32_be_arch(u32 crc, const u8 *p, size_t len)
+diff --git a/crypto/crc32_generic.c b/crypto/crc32_generic.c
+index cc064ea8240e..783a30b27398 100644
+--- a/crypto/crc32_generic.c
++++ b/crypto/crc32_generic.c
+@@ -155,19 +155,23 @@ static struct shash_alg algs[] = {{
+ 	.base.cra_ctxsize	= sizeof(u32),
+ 	.base.cra_module	= THIS_MODULE,
+ 	.base.cra_init		= crc32_cra_init,
+ }};
  
- 	return crc32_be_arm64(crc, p, len);
- }
- EXPORT_SYMBOL(crc32_be_arch);
- 
-+u32 crc32_optimizations(void)
-+{
-+	if (alternative_has_cap_likely(ARM64_HAS_CRC32))
-+		return CRC32_LE_OPTIMIZATION |
-+		       CRC32_BE_OPTIMIZATION |
-+		       CRC32C_OPTIMIZATION;
-+	return 0;
-+}
-+EXPORT_SYMBOL(crc32_optimizations);
++static int num_algs;
 +
- MODULE_LICENSE("GPL");
- MODULE_DESCRIPTION("arm64-optimized CRC32 functions");
-diff --git a/arch/riscv/lib/crc32-riscv.c b/arch/riscv/lib/crc32-riscv.c
-index a3ff7db2a1ce..53d56ab422c7 100644
---- a/arch/riscv/lib/crc32-riscv.c
-+++ b/arch/riscv/lib/crc32-riscv.c
-@@ -295,7 +295,17 @@ u32 __pure crc32_be_arch(u32 crc, const u8 *p, size_t len)
- legacy:
- 	return crc32_be_base(crc, p, len);
- }
- EXPORT_SYMBOL(crc32_be_arch);
- 
-+u32 crc32_optimizations(void)
-+{
-+	if (riscv_has_extension_likely(RISCV_ISA_EXT_ZBC))
-+		return CRC32_LE_OPTIMIZATION |
-+		       CRC32_BE_OPTIMIZATION |
-+		       CRC32C_OPTIMIZATION;
-+	return 0;
-+}
-+EXPORT_SYMBOL(crc32_optimizations);
+ static int __init crc32_mod_init(void)
+ {
+ 	/* register the arch flavor only if it differs from the generic one */
+-	return crypto_register_shashes(algs, 1 + IS_ENABLED(CONFIG_CRC32_ARCH));
++	num_algs = 1 + ((crc32_optimizations() & CRC32_LE_OPTIMIZATION) != 0);
 +
- MODULE_LICENSE("GPL");
- MODULE_DESCRIPTION("Accelerated CRC32 implementation with Zbc extension");
-diff --git a/include/linux/crc32.h b/include/linux/crc32.h
-index 58c632533b08..e9bd40056687 100644
---- a/include/linux/crc32.h
-+++ b/include/linux/crc32.h
-@@ -35,10 +35,25 @@ static inline u32 __pure __crc32c_le(u32 crc, const u8 *p, size_t len)
- 	if (IS_ENABLED(CONFIG_CRC32_ARCH))
- 		return crc32c_le_arch(crc, p, len);
- 	return crc32c_le_base(crc, p, len);
++	return crypto_register_shashes(algs, num_algs);
  }
  
-+/*
-+ * crc32_optimizations() returns flags that indicate which CRC32 library
-+ * functions are using architecture-specific optimizations.  Unlike
-+ * IS_ENABLED(CONFIG_CRC32_ARCH) it takes into account the different CRC32
-+ * variants and also whether any needed CPU features are available at runtime.
-+ */
-+#define CRC32_LE_OPTIMIZATION	BIT(0) /* crc32_le() is optimized */
-+#define CRC32_BE_OPTIMIZATION	BIT(1) /* crc32_be() is optimized */
-+#define CRC32C_OPTIMIZATION	BIT(2) /* __crc32c_le() is optimized */
-+#if IS_ENABLED(CONFIG_CRC32_ARCH)
-+u32 crc32_optimizations(void);
-+#else
-+static inline u32 crc32_optimizations(void) { return 0; }
-+#endif
+ static void __exit crc32_mod_fini(void)
+ {
+-	crypto_unregister_shashes(algs, 1 + IS_ENABLED(CONFIG_CRC32_ARCH));
++	crypto_unregister_shashes(algs, num_algs);
+ }
+ 
+ subsys_initcall(crc32_mod_init);
+ module_exit(crc32_mod_fini);
+ 
+diff --git a/crypto/crc32c_generic.c b/crypto/crc32c_generic.c
+index 04b03d825cf4..985da981d6e2 100644
+--- a/crypto/crc32c_generic.c
++++ b/crypto/crc32c_generic.c
+@@ -195,19 +195,23 @@ static struct shash_alg algs[] = {{
+ 	.base.cra_ctxsize	= sizeof(struct chksum_ctx),
+ 	.base.cra_module	= THIS_MODULE,
+ 	.base.cra_init		= crc32c_cra_init,
+ }};
+ 
++static int num_algs;
 +
- /**
-  * crc32_le_combine - Combine two crc32 check values into one. For two
-  * 		      sequences of bytes, seq1 and seq2 with lengths len1
-  * 		      and len2, crc32_le() check values were calculated
-  * 		      for each, crc1 and crc2.
+ static int __init crc32c_mod_init(void)
+ {
+ 	/* register the arch flavor only if it differs from the generic one */
+-	return crypto_register_shashes(algs, 1 + IS_ENABLED(CONFIG_CRC32_ARCH));
++	num_algs = 1 + ((crc32_optimizations() & CRC32C_OPTIMIZATION) != 0);
++
++	return crypto_register_shashes(algs, num_algs);
+ }
+ 
+ static void __exit crc32c_mod_fini(void)
+ {
+-	crypto_unregister_shashes(algs, 1 + IS_ENABLED(CONFIG_CRC32_ARCH));
++	crypto_unregister_shashes(algs, num_algs);
+ }
+ 
+ subsys_initcall(crc32c_mod_init);
+ module_exit(crc32c_mod_fini);
+ 
 -- 
 2.47.0
 
