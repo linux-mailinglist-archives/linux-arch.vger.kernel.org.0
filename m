@@ -1,166 +1,258 @@
-Return-Path: <linux-arch+bounces-8835-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8836-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 979439BB2A4
-	for <lists+linux-arch@lfdr.de>; Mon,  4 Nov 2024 12:13:53 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC5879BB9A1
+	for <lists+linux-arch@lfdr.de>; Mon,  4 Nov 2024 16:59:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2940A1F22038
-	for <lists+linux-arch@lfdr.de>; Mon,  4 Nov 2024 11:13:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7AFE6282B34
+	for <lists+linux-arch@lfdr.de>; Mon,  4 Nov 2024 15:59:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD95D1B4F2B;
-	Mon,  4 Nov 2024 10:56:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 641731C07E2;
+	Mon,  4 Nov 2024 15:59:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EADOQrSt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L+r634Er"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9447E1B4F24;
-	Mon,  4 Nov 2024 10:56:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BAE670816;
+	Mon,  4 Nov 2024 15:59:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730717819; cv=none; b=oRBgYkOkFYPZng/LqDIa1f+L5+0QV9wFMfMUiPBu0oR46kfqZxIPOLN6JOr8yOEG8pO3CYL7Rl4+/gXMfV57WDgob+aOtUY/vAsXGztVyYc90wp7xOu9PF76eqXywR8wbOiUvGPd9HjsSx3GZlZVShIWWvuXSVmbb1FfE07BmGQ=
+	t=1730735942; cv=none; b=YUSkITEI5yVp0C3vD9K3CaZ6Wc42jhaWi1MSpnuxLux2D5BVC9e4Cb+Z4T7NTmkjgclxeIHZ2bK8v7gPWIS/ZmtGz4FzctB2PfuPZLApPQjVsj0Eps7BBEZLU6Fhp65bq65DkyRcu+GXqNdYRcuquZCgBmoNyIQgo2oHi1d6bvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730717819; c=relaxed/simple;
-	bh=6qFxuwoqjmsBXA5afiRPckV6EYzE55EhM//TIyBTrQ4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RX/u69nqfzdjM28rBltoLSiqtM+WNhwFa1UaRXLk267VbKeAio3z4s/dGLdF+zqX1nmEGx1mMQxOmj3ha2Ofg7v+iLy17B7oVfX3mHEJfbuvg1+aAu0NxC+Hvw/u3OgglnMeiWcfEg615atuQYbCXIJaW+2AVK4X2++UsMzf5aI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EADOQrSt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21EEAC4AF0B;
-	Mon,  4 Nov 2024 10:56:58 +0000 (UTC)
+	s=arc-20240116; t=1730735942; c=relaxed/simple;
+	bh=nfbYyjxKn/6I7KeeEZRpVU1jWeaAip9FWL9OkYwgvck=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DYa8muGXkI7K/f8Nx2E+bFKIWkUPPfpKxnp3q99I91dzvcm/tJjqrXHjWrI6t5Zd3t5/22hdolyul8EZHw6xYbYT9fhmHX1rQXr2HpujF6VrkuAngUmokXCfv3EEyC06KVwdcD4F6bsJUDGEzlemv3s41zD168ezRWmT7Lrcin8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L+r634Er; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93956C4CECE;
+	Mon,  4 Nov 2024 15:59:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730717818;
-	bh=6qFxuwoqjmsBXA5afiRPckV6EYzE55EhM//TIyBTrQ4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=EADOQrSt03YURgotEa0RPC+Q+iLgiLTpyDunuCSyI8JrnJ8j4YEhKIdjW/X9XmfJY
-	 sTCnqIY+Z2AkNeyzcvIvr+dGT6FfLBfZvlbrdb8z2SiV9hm+elSOB97O2rE7ro9EXq
-	 0i/CQC7v2klAcuIyDxn2pg7/smSOsw0dT4Hhws9swr3/XRUtzPo+CxQGrrBX7df8D/
-	 5J0t2oN4EkGyZAZoiEf4JRfD6nAiE3emF0OuGcBGMMWHNR23yXfKnSbJVb11OHm5BV
-	 KUm+3gkbO7B14khPoblQ7uBvr3V7hMm9Omm80Fu2OU58gX+loUjMi/2DNHEoGYci8U
-	 QgiPNae8TP/uQ==
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2fb5014e2daso35066781fa.0;
-        Mon, 04 Nov 2024 02:56:58 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCU7xoBdSw7WBFogoDHrvE/HqzdjwEOMmImfj5rv727+uNW/nWwMxb3aiB7GFtwozVTPQXy86AO1OXkOnA==@vger.kernel.org, AJvYcCVTNBsOqHLkgtJGigBa/isJCHgbsiNKmrI5+kvbgDZcJMeFzwkEWE8ebTXv9KJOhRQuLTjesgqi70UBQw==@vger.kernel.org, AJvYcCWhDBFSu3muOSQSSs5FLIsmxVvCuKCon8MkpgER6rPwM10QDNjNEyRL4fy7UB6uE1jQSxbEmD5xrN1k1Q==@vger.kernel.org, AJvYcCWmhuBs1pzG9bt5+VLjZi5DL2AB1zkrHH/DB9jywzV8yx+aa4/gkdW/FLE+qWNExzJp4VElgRen2cxA3g==@vger.kernel.org, AJvYcCXGlD8wbx/QOszbqxlvihfhb/O3PE1S70sQ7efuGiglxTzoFONrTZEvN3S9PVnXA2m5TMzVC/M/BgrAIgZw@vger.kernel.org, AJvYcCXY3zmKZULtzD2Qr1zBSDOYio63vSwOslNKHj+27/utSV9rOR3qtlx3vUvQunPMQJzsmsyZ+7+XTmLwAw==@vger.kernel.org, AJvYcCXYoWKKilKSRHmfTlQo4SNi/uvKlFp3wszbHnscl+4A/hvKqyecntMb+onVXOjIloFhiiooKJqfzczT@vger.kernel.org
-X-Gm-Message-State: AOJu0YxZv9/XWtQTI9Xl/GbxNVl6C/JDclJIDl6e10MIEY986QPphn4W
-	42vPreOs/bE68tplLb8Kx6uGt4UNZMTFJFzrF25lhdJXu53MTiejtzRWcsgi/hgiTtoaYuiP0zT
-	5igiVkkHpuBqsmNl8GzpBN9pUgZA=
-X-Google-Smtp-Source: AGHT+IGbnKnh4aAfaULtSCmiukLUpnKZU5MlHxJghtOAuKX/zIcXfbKXe/xSvudBsLa83HeLXpJgE1iAQVUbiw2PNrM=
-X-Received: by 2002:a05:651c:1508:b0:2fa:fc41:cf80 with SMTP id
- 38308e7fff4ca-2fedb7ecd4amr43930581fa.43.1730717816511; Mon, 04 Nov 2024
- 02:56:56 -0800 (PST)
+	s=k20201202; t=1730735941;
+	bh=nfbYyjxKn/6I7KeeEZRpVU1jWeaAip9FWL9OkYwgvck=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=L+r634Erl+WncXlEz4rsmMXCY8pHbVcHBzX48fyrMeKPL0TKRWGO+wiqFNNk2+bG3
+	 +EpXJQRdYvygLy9/3ELIAb/8ofnXplEM6wi31doRQhPpma9mFRpzKmtc8jteqnIuuQ
+	 y2hUCBnfM2JitLA7URtD/EpPbu2C3HrK6XK+ZsPGzQczgr5Ywo4JZ4LkH1xj3Rlsvd
+	 cnObx/9CHx2OljMMP4/ygK8PuiYs7OjnWWXkoHfXClw6C6fM35CEVlbxx3SdrDa+kG
+	 mKkn8iOJFfd3EOnWuF6R5QB2V6M0bDB2CQXbwqP5lD5+gYZVgejmFCy0JGPvPxHlu1
+	 YJOPQwrbsGUyg==
+Date: Mon, 4 Nov 2024 07:59:00 -0800
+From: "Darrick J. Wong" <djwong@kernel.org>
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+	linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+	linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org, x86@kernel.org,
+	Ard Biesheuvel <ardb@kernel.org>
+Subject: Re: [PATCH v3 15/18] ext4: switch to using the crc32c library
+Message-ID: <20241104155900.GH21832@frogsfrogsfrogs>
+References: <20241103223154.136127-1-ebiggers@kernel.org>
+ <20241103223154.136127-16-ebiggers@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241103223154.136127-1-ebiggers@kernel.org> <20241103223154.136127-5-ebiggers@kernel.org>
-In-Reply-To: <20241103223154.136127-5-ebiggers@kernel.org>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Mon, 4 Nov 2024 11:56:45 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXH3C1xP7865V-mJ+3=FDHTR-df909=7jift_Z6dmp58Gw@mail.gmail.com>
-Message-ID: <CAMj1kXH3C1xP7865V-mJ+3=FDHTR-df909=7jift_Z6dmp58Gw@mail.gmail.com>
-Subject: Re: [PATCH v3 04/18] crypto: crc32 - don't unnecessarily register
- arch algorithms
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org, 
-	linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net, 
-	linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, 
-	sparclinux@vger.kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241103223154.136127-16-ebiggers@kernel.org>
 
-On Sun, 3 Nov 2024 at 23:32, Eric Biggers <ebiggers@kernel.org> wrote:
->
+On Sun, Nov 03, 2024 at 02:31:51PM -0800, Eric Biggers wrote:
 > From: Eric Biggers <ebiggers@google.com>
->
-> Instead of registering the crc32-$arch and crc32c-$arch algorithms if
-> the arch-specific code was built, only register them when that code was
-> built *and* is not falling back to the base implementation at runtime.
->
-> This avoids confusing users like btrfs which checks the shash driver
-> name to determine whether it is crc32c-generic.
->
-> (It would also make sense to change btrfs to test the crc32_optimization
-> flags itself, so that it doesn't have to use the weird hack of parsing
-> the driver name.  This change still makes sense either way though.)
->
+> 
+> Now that the crc32c() library function directly takes advantage of
+> architecture-specific optimizations, it is unnecessary to go through the
+> crypto API.  Just use crc32c().  This is much simpler, and it improves
+> performance due to eliminating the crypto API overhead.
+> 
+> Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
 > Signed-off-by: Eric Biggers <ebiggers@google.com>
-
-Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
-
 > ---
->  crypto/crc32_generic.c  | 8 ++++++--
->  crypto/crc32c_generic.c | 8 ++++++--
->  2 files changed, 12 insertions(+), 4 deletions(-)
->
-> diff --git a/crypto/crc32_generic.c b/crypto/crc32_generic.c
-> index cc064ea8240e..783a30b27398 100644
-> --- a/crypto/crc32_generic.c
-> +++ b/crypto/crc32_generic.c
-> @@ -155,19 +155,23 @@ static struct shash_alg algs[] = {{
->         .base.cra_ctxsize       = sizeof(u32),
->         .base.cra_module        = THIS_MODULE,
->         .base.cra_init          = crc32_cra_init,
->  }};
->
-> +static int num_algs;
-> +
->  static int __init crc32_mod_init(void)
+>  fs/ext4/Kconfig |  3 +--
+>  fs/ext4/ext4.h  | 25 +++----------------------
+>  fs/ext4/super.c | 15 ---------------
+>  3 files changed, 4 insertions(+), 39 deletions(-)
+> 
+> diff --git a/fs/ext4/Kconfig b/fs/ext4/Kconfig
+> index e20d59221fc0..c9ca41d91a6c 100644
+> --- a/fs/ext4/Kconfig
+> +++ b/fs/ext4/Kconfig
+> @@ -29,12 +29,11 @@ config EXT3_FS_SECURITY
+>  config EXT4_FS
+>  	tristate "The Extended 4 (ext4) filesystem"
+>  	select BUFFER_HEAD
+>  	select JBD2
+>  	select CRC16
+> -	select CRYPTO
+> -	select CRYPTO_CRC32C
+> +	select CRC32
+
+Hmm.  Looking at your git branch (which was quite helpful to link to!) I
+think for XFS we don't need to change the crc32c() calls, and the only
+porting work that needs to be done is mirroring this Kconfig change?
+And that doesn't even need to be done until someone wants to get rid of
+CONFIG_LIBCRC32C, right?
+
+>  	select FS_IOMAP
+>  	select FS_ENCRYPTION_ALGS if FS_ENCRYPTION
+>  	help
+>  	  This is the next generation of the ext3 filesystem.
+>  
+> diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
+> index 44b0d418143c..99aa512a7de1 100644
+> --- a/fs/ext4/ext4.h
+> +++ b/fs/ext4/ext4.h
+> @@ -31,11 +31,11 @@
+>  #include <linux/wait.h>
+>  #include <linux/sched/signal.h>
+>  #include <linux/blockgroup_lock.h>
+>  #include <linux/percpu_counter.h>
+>  #include <linux/ratelimit.h>
+> -#include <crypto/hash.h>
+> +#include <linux/crc32c.h>
+>  #include <linux/falloc.h>
+>  #include <linux/percpu-rwsem.h>
+>  #include <linux/fiemap.h>
+>  #ifdef __KERNEL__
+>  #include <linux/compat.h>
+> @@ -1660,13 +1660,10 @@ struct ext4_sb_info {
+>  	struct task_struct *s_mmp_tsk;
+>  
+>  	/* record the last minlen when FITRIM is called. */
+>  	unsigned long s_last_trim_minblks;
+>  
+> -	/* Reference to checksum algorithm driver via cryptoapi */
+> -	struct crypto_shash *s_chksum_driver;
+> -
+>  	/* Precomputed FS UUID checksum for seeding other checksums */
+>  	__u32 s_csum_seed;
+>  
+>  	/* Reclaim extents from extent status tree */
+>  	struct shrinker *s_es_shrinker;
+> @@ -2465,23 +2462,11 @@ static inline __le16 ext4_rec_len_to_disk(unsigned len, unsigned blocksize)
+>  #define DX_HASH_LAST 			DX_HASH_SIPHASH
+>  
+>  static inline u32 ext4_chksum(struct ext4_sb_info *sbi, u32 crc,
+>  			      const void *address, unsigned int length)
 >  {
->         /* register the arch flavor only if it differs from the generic one */
-> -       return crypto_register_shashes(algs, 1 + IS_ENABLED(CONFIG_CRC32_ARCH));
-> +       num_algs = 1 + ((crc32_optimizations() & CRC32_LE_OPTIMIZATION) != 0);
-> +
-> +       return crypto_register_shashes(algs, num_algs);
+> -	struct {
+> -		struct shash_desc shash;
+> -		char ctx[4];
+> -	} desc;
+> -
+> -	BUG_ON(crypto_shash_descsize(sbi->s_chksum_driver)!=sizeof(desc.ctx));
+> -
+> -	desc.shash.tfm = sbi->s_chksum_driver;
+> -	*(u32 *)desc.ctx = crc;
+> -
+> -	BUG_ON(crypto_shash_update(&desc.shash, address, length));
+> -
+> -	return *(u32 *)desc.ctx;
+> +	return crc32c(crc, address, length);
 >  }
->
->  static void __exit crc32_mod_fini(void)
+>  
+>  #ifdef __KERNEL__
+>  
+>  /* hash info structure used by the directory hash */
+> @@ -3278,15 +3263,11 @@ extern void ext4_group_desc_csum_set(struct super_block *sb, __u32 group,
+>  extern int ext4_register_li_request(struct super_block *sb,
+>  				    ext4_group_t first_not_zeroed);
+>  
+>  static inline int ext4_has_metadata_csum(struct super_block *sb)
 >  {
-> -       crypto_unregister_shashes(algs, 1 + IS_ENABLED(CONFIG_CRC32_ARCH));
-> +       crypto_unregister_shashes(algs, num_algs);
+> -	WARN_ON_ONCE(ext4_has_feature_metadata_csum(sb) &&
+> -		     !EXT4_SB(sb)->s_chksum_driver);
+> -
+> -	return ext4_has_feature_metadata_csum(sb) &&
+> -	       (EXT4_SB(sb)->s_chksum_driver != NULL);
+> +	return ext4_has_feature_metadata_csum(sb);
 >  }
->
->  subsys_initcall(crc32_mod_init);
->  module_exit(crc32_mod_fini);
->
-> diff --git a/crypto/crc32c_generic.c b/crypto/crc32c_generic.c
-> index 04b03d825cf4..985da981d6e2 100644
-> --- a/crypto/crc32c_generic.c
-> +++ b/crypto/crc32c_generic.c
-> @@ -195,19 +195,23 @@ static struct shash_alg algs[] = {{
->         .base.cra_ctxsize       = sizeof(struct chksum_ctx),
->         .base.cra_module        = THIS_MODULE,
->         .base.cra_init          = crc32c_cra_init,
->  }};
->
-> +static int num_algs;
-> +
->  static int __init crc32c_mod_init(void)
+
+Nit: Someone might want to
+s/ext4_has_metadata_csum/ext4_has_feature_metadata_csum/ here to get rid
+of the confusingly named trivial helper.
+
+Otherwise this logic looks ok to me, so
+Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+
+--D
+
+
+>  
+>  static inline int ext4_has_group_desc_csum(struct super_block *sb)
 >  {
->         /* register the arch flavor only if it differs from the generic one */
-> -       return crypto_register_shashes(algs, 1 + IS_ENABLED(CONFIG_CRC32_ARCH));
-> +       num_algs = 1 + ((crc32_optimizations() & CRC32C_OPTIMIZATION) != 0);
-> +
-> +       return crypto_register_shashes(algs, num_algs);
+>  	return ext4_has_feature_gdt_csum(sb) || ext4_has_metadata_csum(sb);
+> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+> index 16a4ce704460..1a821093cc0d 100644
+> --- a/fs/ext4/super.c
+> +++ b/fs/ext4/super.c
+> @@ -1371,12 +1371,10 @@ static void ext4_put_super(struct super_block *sb)
+>  	 * Now that we are completely done shutting down the
+>  	 * superblock, we need to actually destroy the kobject.
+>  	 */
+>  	kobject_put(&sbi->s_kobj);
+>  	wait_for_completion(&sbi->s_kobj_unregister);
+> -	if (sbi->s_chksum_driver)
+> -		crypto_free_shash(sbi->s_chksum_driver);
+>  	kfree(sbi->s_blockgroup_lock);
+>  	fs_put_dax(sbi->s_daxdev, NULL);
+>  	fscrypt_free_dummy_policy(&sbi->s_dummy_enc_policy);
+>  #if IS_ENABLED(CONFIG_UNICODE)
+>  	utf8_unload(sb->s_encoding);
+> @@ -4586,19 +4584,10 @@ static int ext4_init_metadata_csum(struct super_block *sb, struct ext4_super_blo
+>  		return -EINVAL;
+>  	}
+>  	ext4_setup_csum_trigger(sb, EXT4_JTR_ORPHAN_FILE,
+>  				ext4_orphan_file_block_trigger);
+>  
+> -	/* Load the checksum driver */
+> -	sbi->s_chksum_driver = crypto_alloc_shash("crc32c", 0, 0);
+> -	if (IS_ERR(sbi->s_chksum_driver)) {
+> -		int ret = PTR_ERR(sbi->s_chksum_driver);
+> -		ext4_msg(sb, KERN_ERR, "Cannot load crc32c driver.");
+> -		sbi->s_chksum_driver = NULL;
+> -		return ret;
+> -	}
+> -
+>  	/* Check superblock checksum */
+>  	if (!ext4_superblock_csum_verify(sb, es)) {
+>  		ext4_msg(sb, KERN_ERR, "VFS: Found ext4 filesystem with "
+>  			 "invalid superblock checksum.  Run e2fsck?");
+>  		return -EFSBADCRC;
+> @@ -5638,13 +5627,10 @@ failed_mount8: __maybe_unused
+>  	flush_work(&sbi->s_sb_upd_work);
+>  	ext4_stop_mmpd(sbi);
+>  	del_timer_sync(&sbi->s_err_report);
+>  	ext4_group_desc_free(sbi);
+>  failed_mount:
+> -	if (sbi->s_chksum_driver)
+> -		crypto_free_shash(sbi->s_chksum_driver);
+> -
+>  #if IS_ENABLED(CONFIG_UNICODE)
+>  	utf8_unload(sb->s_encoding);
+>  #endif
+>  
+>  #ifdef CONFIG_QUOTA
+> @@ -7433,8 +7419,7 @@ static void __exit ext4_exit_fs(void)
 >  }
->
->  static void __exit crc32c_mod_fini(void)
->  {
-> -       crypto_unregister_shashes(algs, 1 + IS_ENABLED(CONFIG_CRC32_ARCH));
-> +       crypto_unregister_shashes(algs, num_algs);
->  }
->
->  subsys_initcall(crc32c_mod_init);
->  module_exit(crc32c_mod_fini);
->
-> --
+>  
+>  MODULE_AUTHOR("Remy Card, Stephen Tweedie, Andrew Morton, Andreas Dilger, Theodore Ts'o and others");
+>  MODULE_DESCRIPTION("Fourth Extended Filesystem");
+>  MODULE_LICENSE("GPL");
+> -MODULE_SOFTDEP("pre: crc32c");
+>  module_init(ext4_init_fs)
+>  module_exit(ext4_exit_fs)
+> -- 
 > 2.47.0
->
->
+> 
+> 
 
