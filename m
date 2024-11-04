@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-8842-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8843-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D3979BBC46
-	for <lists+linux-arch@lfdr.de>; Mon,  4 Nov 2024 18:48:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A32E79BBCC5
+	for <lists+linux-arch@lfdr.de>; Mon,  4 Nov 2024 19:02:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C177A282737
-	for <lists+linux-arch@lfdr.de>; Mon,  4 Nov 2024 17:48:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B5252830BD
+	for <lists+linux-arch@lfdr.de>; Mon,  4 Nov 2024 18:02:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6BBB1C2DA4;
-	Mon,  4 Nov 2024 17:48:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E2C21CB537;
+	Mon,  4 Nov 2024 18:02:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RG0ZZ45e"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nqfYcLrZ"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E972176FD2;
-	Mon,  4 Nov 2024 17:48:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE6571C9EAF;
+	Mon,  4 Nov 2024 18:02:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730742521; cv=none; b=iqxlTHlEq3Iwk1iMKdJ4RwPoKRq3AmVHkgG2YWx8hdoVccQoc1w7o1cWRRJiczfpzNG20pwHgJnlJ8rKVePT0gOk2gaGuYJiR6HcEynayHqGYYHby1Pe0gdebsG5yNER1Nb1JfAZMAgY8/2kJgTJBcvTAsFGpitZauYsd302jHM=
+	t=1730743358; cv=none; b=Z7u+IwoHCk//MFgJjfX3VDx4pAbCN9m9O2Bd+1K8JRNRImlKTHjNrt3AgFu5Wa15E8dBNydN9X5JYOxZNctpC5jjshNl3OrHNC6GrNse+UCKD3GTplTxctSVJIVMwYDoPFI5BKNDFo+rf4kYgFHA0qd8Kz4PiUQZiAFHTZX2oqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730742521; c=relaxed/simple;
-	bh=kyMZ9fV6X+51trgRY65w1AUDjMP2XEnEX7GkvQFyuQo=;
+	s=arc-20240116; t=1730743358; c=relaxed/simple;
+	bh=yP3AzGld8FzxH9tOKTTB2o68WwDina53uBS0weY4OLs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UF1vjMXa9R8x0dQ+lsdq0YSxTKo+D1X6+DOsvt/8ZK/06eITZtN2Yn3CW0q0sk5XAKLHfY7T4b7ssSc5jGmncfhdsSgIRJAWHwNEd3Ta3ZGfjLzjY8zNeX7sABTtLdaKcQ//MPap1vSCoNJJsWlUkopK038/kB7QAEiX+5fLdW8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RG0ZZ45e; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1421C4CECE;
-	Mon,  4 Nov 2024 17:48:40 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=ojbjernYbimiPw3mi+/5ahtY6ouGgOgLPDZFh02nycUVa55pM7bzuaztn5p4g3v8xYt89wyxJiL9yI12QCfqYuFYvG0l73OjW29sj4JImSFNa34LSH6N462QJqkYETp1fjMf92ryPz2PbOxbc9GnvHmeiYwH4Dc38OfUvoZmNBs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nqfYcLrZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39563C4CECE;
+	Mon,  4 Nov 2024 18:02:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730742520;
-	bh=kyMZ9fV6X+51trgRY65w1AUDjMP2XEnEX7GkvQFyuQo=;
+	s=k20201202; t=1730743357;
+	bh=yP3AzGld8FzxH9tOKTTB2o68WwDina53uBS0weY4OLs=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=RG0ZZ45eSLTeSuURvGHB3h65F9t7QbkI04hRi4PIn9RQya+KVuOq+cKYwcM7OIRag
-	 ftffa9p0RPzhxKxbKbO1phJPPDnrPKDiu3Z4Itvr9Wls0R3DzSPdYDwIWB6GC4b2Kn
-	 OEWSQb/cisXjv+NDzmcx6uuXNdVsmOSyH1jBzLk86RwIVvV7yoI0yJMI8N5O1tLxWZ
-	 sqPAibypRsiDduXZx2vz4SdLoEWaYuAYo/l7nO/C5PoaF6LQixrBB1eQNUAosrKHye
-	 /gCeCfoWgbjXS3QMM1TfccoGnuhihV/zkZVDdun5Dof7x1e0ZdWeQe1z6JZskIC3qV
-	 2uU8b6EJ5uv3w==
-Date: Mon, 4 Nov 2024 17:48:39 +0000
+	b=nqfYcLrZDS69ybYADumbTjdNmAfqdeBwuYAUOic1Rj/10q6ggUWZLiDYkaCPK5aEH
+	 zmu4eoFdrAUYUyqH09b4NU313JKh+C+MQEQsFnA5/S8o13oZAoiRFCI0ipBp/CIHrD
+	 YYR8+oHSwIc4iDVej/js9QR02RkzVmrsSiipqECclpGLHtQIVef7t26FeafViOEBdl
+	 g59QyyQs5LNimTKrFAcd2N9fUvHgiInhDc8gbGEok4vZSEw9RJzDsGauezslhgF4Jt
+	 Un3HrYzRz3V3ubZQNfJ91sOIdTj3MsTjyaJG0bnzVO3UlO5jzUNETVnJiGJm8JQFgg
+	 eaDC1K1A+1PYA==
+Date: Mon, 4 Nov 2024 18:02:35 +0000
 From: Eric Biggers <ebiggers@kernel.org>
 To: "Darrick J. Wong" <djwong@kernel.org>
 Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
@@ -52,11 +52,11 @@ Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
 	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
 	sparclinux@vger.kernel.org, x86@kernel.org,
 	Ard Biesheuvel <ardb@kernel.org>
-Subject: Re: [PATCH v3 15/18] ext4: switch to using the crc32c library
-Message-ID: <20241104174839.GA1049313@google.com>
+Subject: Re: [PATCH v3 16/18] jbd2: switch to using the crc32c library
+Message-ID: <20241104180235.GB1049313@google.com>
 References: <20241103223154.136127-1-ebiggers@kernel.org>
- <20241103223154.136127-16-ebiggers@kernel.org>
- <20241104155900.GH21832@frogsfrogsfrogs>
+ <20241103223154.136127-17-ebiggers@kernel.org>
+ <20241104160136.GI21832@frogsfrogsfrogs>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -65,45 +65,21 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241104155900.GH21832@frogsfrogsfrogs>
+In-Reply-To: <20241104160136.GI21832@frogsfrogsfrogs>
 
-On Mon, Nov 04, 2024 at 07:59:00AM -0800, Darrick J. Wong wrote:
-> Hmm.  Looking at your git branch (which was quite helpful to link to!) I
-> think for XFS we don't need to change the crc32c() calls, and the only
-> porting work that needs to be done is mirroring this Kconfig change?
-> And that doesn't even need to be done until someone wants to get rid of
-> CONFIG_LIBCRC32C, right?
-
-That's correct, no porting work is required now.  'select LIBCRC32C' should be
-replaced with 'select CRC32', but that can be done later.
-
-> > @@ -3278,15 +3263,11 @@ extern void ext4_group_desc_csum_set(struct super_block *sb, __u32 group,
-> >  extern int ext4_register_li_request(struct super_block *sb,
-> >  				    ext4_group_t first_not_zeroed);
-> >  
-> >  static inline int ext4_has_metadata_csum(struct super_block *sb)
-> >  {
-> > -	WARN_ON_ONCE(ext4_has_feature_metadata_csum(sb) &&
-> > -		     !EXT4_SB(sb)->s_chksum_driver);
-> > -
-> > -	return ext4_has_feature_metadata_csum(sb) &&
-> > -	       (EXT4_SB(sb)->s_chksum_driver != NULL);
-> > +	return ext4_has_feature_metadata_csum(sb);
-> >  }
-> 
-> Nit: Someone might want to
-> s/ext4_has_metadata_csum/ext4_has_feature_metadata_csum/ here to get rid
-> of the confusingly named trivial helper.
-> 
-
-Yes, that should be done as a follow-up patch.
-
-> Otherwise this logic looks ok to me, so
+On Mon, Nov 04, 2024 at 08:01:36AM -0800, Darrick J. Wong wrote:
+> Same comment as my last reply about removing trivial helpers, but
+> otherwise
 > Reviewed-by: Darrick J. Wong <djwong@kernel.org>
 > 
-> --D
+> If you push this for 6.13 I'd be happy that the shash junk finally went
+> away.  The onstack struct desc thing in the _chksum() functions was by
+> far the most sketchy part of the ext4/jbd2 metadata csum project. :)
 
-Thanks,
+It will take a bit longer I'm afraid, since this patchset depends on patches
+that are currently enqueued in three different trees for 6.13.  My current plan
+is to target 6.14, and get this series into into linux-next shortly after the
+6.13 merge window closes.
 
 - Eric
 
