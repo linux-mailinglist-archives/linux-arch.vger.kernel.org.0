@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-8836-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8837-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC5879BB9A1
-	for <lists+linux-arch@lfdr.de>; Mon,  4 Nov 2024 16:59:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CA2A9BB9B0
+	for <lists+linux-arch@lfdr.de>; Mon,  4 Nov 2024 17:01:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7AFE6282B34
-	for <lists+linux-arch@lfdr.de>; Mon,  4 Nov 2024 15:59:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 07EF328317A
+	for <lists+linux-arch@lfdr.de>; Mon,  4 Nov 2024 16:01:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 641731C07E2;
-	Mon,  4 Nov 2024 15:59:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6992E1C07F1;
+	Mon,  4 Nov 2024 16:01:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L+r634Er"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GF2YIuc4"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BAE670816;
-	Mon,  4 Nov 2024 15:59:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F01922092;
+	Mon,  4 Nov 2024 16:01:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730735942; cv=none; b=YUSkITEI5yVp0C3vD9K3CaZ6Wc42jhaWi1MSpnuxLux2D5BVC9e4Cb+Z4T7NTmkjgclxeIHZ2bK8v7gPWIS/ZmtGz4FzctB2PfuPZLApPQjVsj0Eps7BBEZLU6Fhp65bq65DkyRcu+GXqNdYRcuquZCgBmoNyIQgo2oHi1d6bvw=
+	t=1730736097; cv=none; b=tOOe0vUeTxrID3rJzgxiO4/nD259ovBCnbroFkRAOEQUUoO+xnRVeymxMgbKU2ETucCwehPTkxD4IshiEwYquwzICrBfQnZT9gbNYBqUPNwdZjfW09QoTqVcolGrwPKGYxXsJAj1JopQZnEVSo8KhdUxBl9HvZQwz07hMYg/Vu0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730735942; c=relaxed/simple;
-	bh=nfbYyjxKn/6I7KeeEZRpVU1jWeaAip9FWL9OkYwgvck=;
+	s=arc-20240116; t=1730736097; c=relaxed/simple;
+	bh=SQHYc4IyKu8mOjFqukKmu+jd++SJy0bOaTpjzH1zd48=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DYa8muGXkI7K/f8Nx2E+bFKIWkUPPfpKxnp3q99I91dzvcm/tJjqrXHjWrI6t5Zd3t5/22hdolyul8EZHw6xYbYT9fhmHX1rQXr2HpujF6VrkuAngUmokXCfv3EEyC06KVwdcD4F6bsJUDGEzlemv3s41zD168ezRWmT7Lrcin8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L+r634Er; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93956C4CECE;
-	Mon,  4 Nov 2024 15:59:01 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=RfLK/KSnCmZ/q1IgJToTTe65VNkXh0XRoWpRyMnX46N0jWKq/Qz4dVrEh/zo2fP5tyGHUvVg/cKYFF/YSkscjcgNTCvYQT4aHCU/osUvTcxvB/o4Z/DEAswFkazhf1m3nhWyoAMd4CIl2nxaooPPucRLtubZiqfNNTQIgu6Mchk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GF2YIuc4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B77D6C4CED5;
+	Mon,  4 Nov 2024 16:01:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730735941;
-	bh=nfbYyjxKn/6I7KeeEZRpVU1jWeaAip9FWL9OkYwgvck=;
+	s=k20201202; t=1730736096;
+	bh=SQHYc4IyKu8mOjFqukKmu+jd++SJy0bOaTpjzH1zd48=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=L+r634Erl+WncXlEz4rsmMXCY8pHbVcHBzX48fyrMeKPL0TKRWGO+wiqFNNk2+bG3
-	 +EpXJQRdYvygLy9/3ELIAb/8ofnXplEM6wi31doRQhPpma9mFRpzKmtc8jteqnIuuQ
-	 y2hUCBnfM2JitLA7URtD/EpPbu2C3HrK6XK+ZsPGzQczgr5Ywo4JZ4LkH1xj3Rlsvd
-	 cnObx/9CHx2OljMMP4/ygK8PuiYs7OjnWWXkoHfXClw6C6fM35CEVlbxx3SdrDa+kG
-	 mKkn8iOJFfd3EOnWuF6R5QB2V6M0bDB2CQXbwqP5lD5+gYZVgejmFCy0JGPvPxHlu1
-	 YJOPQwrbsGUyg==
-Date: Mon, 4 Nov 2024 07:59:00 -0800
+	b=GF2YIuc4CVA74hCEJRxNazy0ht2/f2uRSrMj2uuVlRr2+6bm9MHyMOxPgED5gWdfd
+	 vu/btCDpPKcR89gCE4boBa7J2FWpbAQKucuszoilTcpd5UqEHi33T6ME/J0vsprSzf
+	 0NpNP7g8Lf0u8I2Tp+IyHewzcvy5bMkfYKuB/Xdsg/e84RXsus/eIlJEp8GjkqeL5j
+	 5fqNWCa8VU2Mv2/RgFzjCgTISgsehTXVWzYy6ZXnFPpxAb3NlOlHfEu2nHn72iPu6S
+	 FWp0lFEOw27J/+6wKGPWbDh+8AzGKSxVQQw4nnlSj7QGkkzccsfYrt7HYY4CaOPaa1
+	 sXnIfXCpLXWpg==
+Date: Mon, 4 Nov 2024 08:01:36 -0800
 From: "Darrick J. Wong" <djwong@kernel.org>
 To: Eric Biggers <ebiggers@kernel.org>
 Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
@@ -52,10 +52,10 @@ Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
 	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
 	sparclinux@vger.kernel.org, x86@kernel.org,
 	Ard Biesheuvel <ardb@kernel.org>
-Subject: Re: [PATCH v3 15/18] ext4: switch to using the crc32c library
-Message-ID: <20241104155900.GH21832@frogsfrogsfrogs>
+Subject: Re: [PATCH v3 16/18] jbd2: switch to using the crc32c library
+Message-ID: <20241104160136.GI21832@frogsfrogsfrogs>
 References: <20241103223154.136127-1-ebiggers@kernel.org>
- <20241103223154.136127-16-ebiggers@kernel.org>
+ <20241103223154.136127-17-ebiggers@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -64,9 +64,9 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241103223154.136127-16-ebiggers@kernel.org>
+In-Reply-To: <20241103223154.136127-17-ebiggers@kernel.org>
 
-On Sun, Nov 03, 2024 at 02:31:51PM -0800, Eric Biggers wrote:
+On Sun, Nov 03, 2024 at 02:31:52PM -0800, Eric Biggers wrote:
 > From: Eric Biggers <ebiggers@google.com>
 > 
 > Now that the crc32c() library function directly takes advantage of
@@ -77,180 +77,198 @@ On Sun, Nov 03, 2024 at 02:31:51PM -0800, Eric Biggers wrote:
 > Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
 > Signed-off-by: Eric Biggers <ebiggers@google.com>
 > ---
->  fs/ext4/Kconfig |  3 +--
->  fs/ext4/ext4.h  | 25 +++----------------------
->  fs/ext4/super.c | 15 ---------------
->  3 files changed, 4 insertions(+), 39 deletions(-)
+>  fs/jbd2/Kconfig      |  2 --
+>  fs/jbd2/journal.c    | 25 ++-----------------------
+>  include/linux/jbd2.h | 31 +++----------------------------
+>  3 files changed, 5 insertions(+), 53 deletions(-)
 > 
-> diff --git a/fs/ext4/Kconfig b/fs/ext4/Kconfig
-> index e20d59221fc0..c9ca41d91a6c 100644
-> --- a/fs/ext4/Kconfig
-> +++ b/fs/ext4/Kconfig
-> @@ -29,12 +29,11 @@ config EXT3_FS_SECURITY
->  config EXT4_FS
->  	tristate "The Extended 4 (ext4) filesystem"
->  	select BUFFER_HEAD
->  	select JBD2
->  	select CRC16
+> diff --git a/fs/jbd2/Kconfig b/fs/jbd2/Kconfig
+> index 4ad2c67f93f1..9c19e1512101 100644
+> --- a/fs/jbd2/Kconfig
+> +++ b/fs/jbd2/Kconfig
+> @@ -1,11 +1,9 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  config JBD2
+>  	tristate
+>  	select CRC32
 > -	select CRYPTO
 > -	select CRYPTO_CRC32C
-> +	select CRC32
-
-Hmm.  Looking at your git branch (which was quite helpful to link to!) I
-think for XFS we don't need to change the crc32c() calls, and the only
-porting work that needs to be done is mirroring this Kconfig change?
-And that doesn't even need to be done until someone wants to get rid of
-CONFIG_LIBCRC32C, right?
-
->  	select FS_IOMAP
->  	select FS_ENCRYPTION_ALGS if FS_ENCRYPTION
 >  	help
->  	  This is the next generation of the ext3 filesystem.
+>  	  This is a generic journaling layer for block devices that support
+>  	  both 32-bit and 64-bit block numbers.  It is currently used by
+>  	  the ext4 and OCFS2 filesystems, but it could also be used to add
+>  	  journal support to other file systems or block devices such
+> diff --git a/fs/jbd2/journal.c b/fs/jbd2/journal.c
+> index 97f487c3d8fc..56cea5a738a7 100644
+> --- a/fs/jbd2/journal.c
+> +++ b/fs/jbd2/journal.c
+> @@ -1373,24 +1373,16 @@ static int journal_check_superblock(journal_t *journal)
+>  		printk(KERN_ERR "JBD2: Can't enable checksumming v1 and v2/3 "
+>  		       "at the same time!\n");
+>  		return err;
+>  	}
 >  
-> diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
-> index 44b0d418143c..99aa512a7de1 100644
-> --- a/fs/ext4/ext4.h
-> +++ b/fs/ext4/ext4.h
-> @@ -31,11 +31,11 @@
->  #include <linux/wait.h>
->  #include <linux/sched/signal.h>
->  #include <linux/blockgroup_lock.h>
->  #include <linux/percpu_counter.h>
->  #include <linux/ratelimit.h>
+> -	/* Load the checksum driver */
+>  	if (jbd2_journal_has_csum_v2or3_feature(journal)) {
+>  		if (sb->s_checksum_type != JBD2_CRC32C_CHKSUM) {
+>  			printk(KERN_ERR "JBD2: Unknown checksum type\n");
+>  			return err;
+>  		}
+>  
+> -		journal->j_chksum_driver = crypto_alloc_shash("crc32c", 0, 0);
+> -		if (IS_ERR(journal->j_chksum_driver)) {
+> -			printk(KERN_ERR "JBD2: Cannot load crc32c driver.\n");
+> -			err = PTR_ERR(journal->j_chksum_driver);
+> -			journal->j_chksum_driver = NULL;
+> -			return err;
+> -		}
+>  		/* Check superblock checksum */
+>  		if (sb->s_checksum != jbd2_superblock_csum(journal, sb)) {
+>  			printk(KERN_ERR "JBD2: journal checksum error\n");
+>  			err = -EFSBADCRC;
+>  			return err;
+> @@ -1611,12 +1603,10 @@ static journal_t *journal_init_common(struct block_device *bdev,
+>  
+>  	return journal;
+>  
+>  err_cleanup:
+>  	percpu_counter_destroy(&journal->j_checkpoint_jh_count);
+> -	if (journal->j_chksum_driver)
+> -		crypto_free_shash(journal->j_chksum_driver);
+>  	kfree(journal->j_wbuf);
+>  	jbd2_journal_destroy_revoke(journal);
+>  	journal_fail_superblock(journal);
+>  	kfree(journal);
+>  	return ERR_PTR(err);
+> @@ -2194,12 +2184,10 @@ int jbd2_journal_destroy(journal_t *journal)
+>  	if (journal->j_proc_entry)
+>  		jbd2_stats_proc_exit(journal);
+>  	iput(journal->j_inode);
+>  	if (journal->j_revoke)
+>  		jbd2_journal_destroy_revoke(journal);
+> -	if (journal->j_chksum_driver)
+> -		crypto_free_shash(journal->j_chksum_driver);
+>  	kfree(journal->j_fc_wbuf);
+>  	kfree(journal->j_wbuf);
+>  	kfree(journal);
+>  
+>  	return err;
+> @@ -2340,23 +2328,14 @@ int jbd2_journal_set_features(journal_t *journal, unsigned long compat,
+>  			pr_err("JBD2: Cannot enable fast commits.\n");
+>  			return 0;
+>  		}
+>  	}
+>  
+> -	/* Load the checksum driver if necessary */
+> -	if ((journal->j_chksum_driver == NULL) &&
+> -	    INCOMPAT_FEATURE_ON(JBD2_FEATURE_INCOMPAT_CSUM_V3)) {
+> -		journal->j_chksum_driver = crypto_alloc_shash("crc32c", 0, 0);
+> -		if (IS_ERR(journal->j_chksum_driver)) {
+> -			printk(KERN_ERR "JBD2: Cannot load crc32c driver.\n");
+> -			journal->j_chksum_driver = NULL;
+> -			return 0;
+> -		}
+> -		/* Precompute checksum seed for all metadata */
+> +	/* Precompute checksum seed for all metadata */
+> +	if (INCOMPAT_FEATURE_ON(JBD2_FEATURE_INCOMPAT_CSUM_V3))
+>  		journal->j_csum_seed = jbd2_chksum(journal, ~0, sb->s_uuid,
+>  						   sizeof(sb->s_uuid));
+> -	}
+>  
+>  	lock_buffer(journal->j_sb_buffer);
+>  
+>  	/* If enabling v3 checksums, update superblock */
+>  	if (INCOMPAT_FEATURE_ON(JBD2_FEATURE_INCOMPAT_CSUM_V3)) {
+> diff --git a/include/linux/jbd2.h b/include/linux/jbd2.h
+> index 8aef9bb6ad57..33d25a3d15f1 100644
+> --- a/include/linux/jbd2.h
+> +++ b/include/linux/jbd2.h
+> @@ -26,11 +26,11 @@
+>  #include <linux/mutex.h>
+>  #include <linux/timer.h>
+>  #include <linux/slab.h>
+>  #include <linux/bit_spinlock.h>
+>  #include <linux/blkdev.h>
 > -#include <crypto/hash.h>
 > +#include <linux/crc32c.h>
->  #include <linux/falloc.h>
->  #include <linux/percpu-rwsem.h>
->  #include <linux/fiemap.h>
->  #ifdef __KERNEL__
->  #include <linux/compat.h>
-> @@ -1660,13 +1660,10 @@ struct ext4_sb_info {
->  	struct task_struct *s_mmp_tsk;
+>  #endif
 >  
->  	/* record the last minlen when FITRIM is called. */
->  	unsigned long s_last_trim_minblks;
+>  #define journal_oom_retry 1
 >  
-> -	/* Reference to checksum algorithm driver via cryptoapi */
-> -	struct crypto_shash *s_chksum_driver;
+>  /*
+> @@ -1239,17 +1239,10 @@ struct journal_s
+>  	 * An opaque pointer to fs-private information.  ext3 puts its
+>  	 * superblock pointer here.
+>  	 */
+>  	void *j_private;
+>  
+> -	/**
+> -	 * @j_chksum_driver:
+> -	 *
+> -	 * Reference to checksum algorithm driver via cryptoapi.
+> -	 */
+> -	struct crypto_shash *j_chksum_driver;
 > -
->  	/* Precomputed FS UUID checksum for seeding other checksums */
->  	__u32 s_csum_seed;
+>  	/**
+>  	 * @j_csum_seed:
+>  	 *
+>  	 * Precomputed journal UUID checksum for seeding other checksums.
+>  	 */
+> @@ -1748,14 +1741,11 @@ static inline bool jbd2_journal_has_csum_v2or3_feature(journal_t *j)
+>  	return jbd2_has_feature_csum2(j) || jbd2_has_feature_csum3(j);
+>  }
 >  
->  	/* Reclaim extents from extent status tree */
->  	struct shrinker *s_es_shrinker;
-> @@ -2465,23 +2462,11 @@ static inline __le16 ext4_rec_len_to_disk(unsigned len, unsigned blocksize)
->  #define DX_HASH_LAST 			DX_HASH_SIPHASH
+>  static inline int jbd2_journal_has_csum_v2or3(journal_t *journal)
+>  {
+> -	WARN_ON_ONCE(jbd2_journal_has_csum_v2or3_feature(journal) &&
+> -		     journal->j_chksum_driver == NULL);
+> -
+> -	return journal->j_chksum_driver != NULL;
+> +	return jbd2_journal_has_csum_v2or3_feature(journal);
+
+Same comment as my last reply about removing trivial helpers, but
+otherwise
+Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+
+If you push this for 6.13 I'd be happy that the shash junk finally went
+away.  The onstack struct desc thing in the _chksum() functions was by
+far the most sketchy part of the ext4/jbd2 metadata csum project. :)
+
+--D
+
+>  }
 >  
->  static inline u32 ext4_chksum(struct ext4_sb_info *sbi, u32 crc,
+>  static inline int jbd2_journal_get_num_fc_blks(journal_superblock_t *jsb)
+>  {
+>  	int num_fc_blocks = be32_to_cpu(jsb->s_num_fc_blks);
+> @@ -1794,26 +1784,11 @@ static inline unsigned long jbd2_log_space_left(journal_t *journal)
+>  #define JBD_MAX_CHECKSUM_SIZE 4
+>  
+>  static inline u32 jbd2_chksum(journal_t *journal, u32 crc,
 >  			      const void *address, unsigned int length)
 >  {
 > -	struct {
 > -		struct shash_desc shash;
-> -		char ctx[4];
+> -		char ctx[JBD_MAX_CHECKSUM_SIZE];
 > -	} desc;
+> -	int err;
 > -
-> -	BUG_ON(crypto_shash_descsize(sbi->s_chksum_driver)!=sizeof(desc.ctx));
+> -	BUG_ON(crypto_shash_descsize(journal->j_chksum_driver) >
+> -		JBD_MAX_CHECKSUM_SIZE);
 > -
-> -	desc.shash.tfm = sbi->s_chksum_driver;
+> -	desc.shash.tfm = journal->j_chksum_driver;
 > -	*(u32 *)desc.ctx = crc;
 > -
-> -	BUG_ON(crypto_shash_update(&desc.shash, address, length));
+> -	err = crypto_shash_update(&desc.shash, address, length);
+> -	BUG_ON(err);
 > -
 > -	return *(u32 *)desc.ctx;
 > +	return crc32c(crc, address, length);
 >  }
 >  
->  #ifdef __KERNEL__
->  
->  /* hash info structure used by the directory hash */
-> @@ -3278,15 +3263,11 @@ extern void ext4_group_desc_csum_set(struct super_block *sb, __u32 group,
->  extern int ext4_register_li_request(struct super_block *sb,
->  				    ext4_group_t first_not_zeroed);
->  
->  static inline int ext4_has_metadata_csum(struct super_block *sb)
+>  /* Return most recent uncommitted transaction */
+>  static inline tid_t  jbd2_get_latest_transaction(journal_t *journal)
 >  {
-> -	WARN_ON_ONCE(ext4_has_feature_metadata_csum(sb) &&
-> -		     !EXT4_SB(sb)->s_chksum_driver);
-> -
-> -	return ext4_has_feature_metadata_csum(sb) &&
-> -	       (EXT4_SB(sb)->s_chksum_driver != NULL);
-> +	return ext4_has_feature_metadata_csum(sb);
->  }
-
-Nit: Someone might want to
-s/ext4_has_metadata_csum/ext4_has_feature_metadata_csum/ here to get rid
-of the confusingly named trivial helper.
-
-Otherwise this logic looks ok to me, so
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
-
---D
-
-
->  
->  static inline int ext4_has_group_desc_csum(struct super_block *sb)
->  {
->  	return ext4_has_feature_gdt_csum(sb) || ext4_has_metadata_csum(sb);
-> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-> index 16a4ce704460..1a821093cc0d 100644
-> --- a/fs/ext4/super.c
-> +++ b/fs/ext4/super.c
-> @@ -1371,12 +1371,10 @@ static void ext4_put_super(struct super_block *sb)
->  	 * Now that we are completely done shutting down the
->  	 * superblock, we need to actually destroy the kobject.
->  	 */
->  	kobject_put(&sbi->s_kobj);
->  	wait_for_completion(&sbi->s_kobj_unregister);
-> -	if (sbi->s_chksum_driver)
-> -		crypto_free_shash(sbi->s_chksum_driver);
->  	kfree(sbi->s_blockgroup_lock);
->  	fs_put_dax(sbi->s_daxdev, NULL);
->  	fscrypt_free_dummy_policy(&sbi->s_dummy_enc_policy);
->  #if IS_ENABLED(CONFIG_UNICODE)
->  	utf8_unload(sb->s_encoding);
-> @@ -4586,19 +4584,10 @@ static int ext4_init_metadata_csum(struct super_block *sb, struct ext4_super_blo
->  		return -EINVAL;
->  	}
->  	ext4_setup_csum_trigger(sb, EXT4_JTR_ORPHAN_FILE,
->  				ext4_orphan_file_block_trigger);
->  
-> -	/* Load the checksum driver */
-> -	sbi->s_chksum_driver = crypto_alloc_shash("crc32c", 0, 0);
-> -	if (IS_ERR(sbi->s_chksum_driver)) {
-> -		int ret = PTR_ERR(sbi->s_chksum_driver);
-> -		ext4_msg(sb, KERN_ERR, "Cannot load crc32c driver.");
-> -		sbi->s_chksum_driver = NULL;
-> -		return ret;
-> -	}
-> -
->  	/* Check superblock checksum */
->  	if (!ext4_superblock_csum_verify(sb, es)) {
->  		ext4_msg(sb, KERN_ERR, "VFS: Found ext4 filesystem with "
->  			 "invalid superblock checksum.  Run e2fsck?");
->  		return -EFSBADCRC;
-> @@ -5638,13 +5627,10 @@ failed_mount8: __maybe_unused
->  	flush_work(&sbi->s_sb_upd_work);
->  	ext4_stop_mmpd(sbi);
->  	del_timer_sync(&sbi->s_err_report);
->  	ext4_group_desc_free(sbi);
->  failed_mount:
-> -	if (sbi->s_chksum_driver)
-> -		crypto_free_shash(sbi->s_chksum_driver);
-> -
->  #if IS_ENABLED(CONFIG_UNICODE)
->  	utf8_unload(sb->s_encoding);
->  #endif
->  
->  #ifdef CONFIG_QUOTA
-> @@ -7433,8 +7419,7 @@ static void __exit ext4_exit_fs(void)
->  }
->  
->  MODULE_AUTHOR("Remy Card, Stephen Tweedie, Andrew Morton, Andreas Dilger, Theodore Ts'o and others");
->  MODULE_DESCRIPTION("Fourth Extended Filesystem");
->  MODULE_LICENSE("GPL");
-> -MODULE_SOFTDEP("pre: crc32c");
->  module_init(ext4_init_fs)
->  module_exit(ext4_exit_fs)
 > -- 
 > 2.47.0
 > 
