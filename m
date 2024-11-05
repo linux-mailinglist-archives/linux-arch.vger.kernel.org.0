@@ -1,378 +1,288 @@
-Return-Path: <linux-arch+bounces-8850-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8851-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6AC7A9BC6E3
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Nov 2024 08:25:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C8F439BC84D
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Nov 2024 09:47:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AB6F3B22AE2
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Nov 2024 07:25:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0B3DBB21E84
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Nov 2024 08:47:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE3291FDF99;
-	Tue,  5 Nov 2024 07:25:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AA7F1CCB44;
+	Tue,  5 Nov 2024 08:47:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="j2MHBcIm"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YDVmuZh2"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4423A1FCF71
-	for <linux-arch@vger.kernel.org>; Tue,  5 Nov 2024 07:25:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.176
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730791524; cv=none; b=rrtllkwUUQkklIxfcmGS/6IU1ULgs0teDQrksDLPtIvGajWMrOtcLBBXyMK13WI7plRE1scrAGbx3Uh+N/n8RGQi3QSFHhoWtZcqgAqRqlIGD0aqojROMYWOWywY0VBWQDt0I2Edm/8IZ1kMVAbAC45MtfNL7NFhwaHdVdnEckY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730791524; c=relaxed/simple;
-	bh=WN+NASy3IpEV2B7wkPn6kp1b3qcRTPWhuOmE1WJY1xg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BX8+wUnqAF7TE//iviysl4i5IOSN6SEAxqu8KDXSWG75pOxWG7+sGNxYNDBujUIXhX5nlekcpJ0rFz8t89IPb1B4U+5cr4uzgZqktoALWZjxUeqKwjY9NDcSRrE/QcGTW/vEMAlF/yLgJRbaIq8jUzWjF/CxgtriijkvVke3cQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=j2MHBcIm; arc=none smtp.client-ip=209.85.160.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-460b295b9eeso132821cf.1
-        for <linux-arch@vger.kernel.org>; Mon, 04 Nov 2024 23:25:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1730791521; x=1731396321; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M9aiPlSz0oe/dzRFaix1g1j0HY4/+rK9VwtU9LPnrfY=;
-        b=j2MHBcImfj4EjTADrtyCiLX9jd6DVwOQWQIEAPt19dhhNJbyWWRawQ6EEO7v4q/Awe
-         Vwz0drjvFyX4yfDZB2mpOV0Y6EwFQAGp/XooVNwe8UjMqNnSceAoTyMBNNye8i7Ha/lp
-         ZtLNdF6sJLHe6A1NHXID2RK/aioWog11bSOb7ecaC6kOCRXSnu51CL9vE4i/st5E0UwT
-         rTuvt4SwGNQNY2roq7KiSFd0tcwFB9lwEIJcI18EIcbFiFfuEclk/agpRlN57u2Roxes
-         /S9yfu0EBT6UJEupB5znHu4euzh6Wa43X6BvAWdHXKmgjRkz0KbDqMzaSiGG7dNZxrah
-         Hjyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730791521; x=1731396321;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=M9aiPlSz0oe/dzRFaix1g1j0HY4/+rK9VwtU9LPnrfY=;
-        b=gYFWKggQknqJTsS98hdXwiHxAN0iUvw06+wUYH6ya7uJYCH8ZXBLvVZeikt9iCXogN
-         rf+e+BY7lvkD0OkCEfCh1g2D51fGuh2Pxi8hKMe7oF9os/l24QNAGHKVzEUWBuOyi8YS
-         PV4GwNZNLJOR2C7g+tP4g8wcQeyoC6VRm+iEO6+XI+1PNZNC7s2qapkoFSA+ytv5aiTJ
-         E2yTZyxVObNwH8bMKdxXh1FYMMXwDTwMztt7lWfkEXF8gJUySCt0zWdffkKeYA2qiQgW
-         darTPTn5TM6FksvwIwhZKy6nP7cKzxG0w+U5QinllP9ZoMnElnjH12Klp7Sy7XDFimqA
-         31Ug==
-X-Forwarded-Encrypted: i=1; AJvYcCWmw0qH4RBDFJGNULFCRs4wdy+QB+E/xqpmphvMzEn7sLJQBz7RujXQlQhMBXGphstCvWf00w5z9vJK@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx6RqdQcgEczOqrWHGDDboVN0r+KPWhXtDcYt8a4DtrWM4TnMyC
-	csY7y0nCvkU5QFQ0ZoQbt5fxXCwBcNBE2R6G9094sSvKi6waAKk5BBWv9zyCPyxYM4qz82VyGiF
-	KC6ZQgcyCfR6AGvaOSfmX4hz1iWVqV23DV6ii
-X-Gm-Gg: ASbGncssecwsvJThlGdwaLYqyRpEd1yXqV0DQLmMMGgSyHhiyOSuKf02046/vRJzRXq
-	wMWawdlxwjmiYFkMvTxyTl/4WeX9p+uiHptanqsbjzqtPJb2V1KDiR2FqA+U=
-X-Google-Smtp-Source: AGHT+IEe3Z3KuJX1WYpW74XlcpJW8qiw3OVz6Qq6VD4oEpG492xI3LPqhfcNjrstqE+4NOOfNFojB5IM8KUedhNwXNk=
-X-Received: by 2002:ac8:5705:0:b0:461:5b0d:7aa5 with SMTP id
- d75a77b69052e-462e4eb7de9mr1559201cf.16.1730791520987; Mon, 04 Nov 2024
- 23:25:20 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 565FC1C1738;
+	Tue,  5 Nov 2024 08:47:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.17
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730796447; cv=fail; b=cer+CgFKCjWnhAcTmGw97BaCRQ/W5c9+tQjcwWBFibW80uLBpGm3UyfCA0dDdkougB/9iaUq3VH4igX2B011XvdBwBghpoY0VaRhKr+mkpwDTU4K0dQ70wt/zG5JH3iqdTGXjmLOypD9qGrZhT4AtKxHbt1ZExuRUbkr4GcdgLk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730796447; c=relaxed/simple;
+	bh=J885qS9ifUf4nvCmgAdAPy4C4Y+Q1TInz4ZrNi20ptE=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=neocBjYkXiHjOGdGvs8GEPR+WlVtCljToFcv2w42vQDO7h1VMoLRY8Jdhhcc5AWNNwNV4/Cnroh9otIPoelMZhnpyO129Pul+LOGTMy3Eqcb7IilBWCmlXzrQCOn9VjyO20jffxBW2x1C7yfXpookXAmz3r74G9bPRUHe5XAAIE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YDVmuZh2; arc=fail smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730796445; x=1762332445;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=J885qS9ifUf4nvCmgAdAPy4C4Y+Q1TInz4ZrNi20ptE=;
+  b=YDVmuZh2rzGQsFFsShEnpbAvNrLh/Da8U/Ug/4vCf9f5jcAncQ/mSmzY
+   U5HJfVOxNHmxWjx4eQuKMo3abg9LxW8EwqUuCabUZJXRucax0UCBJPQGu
+   +6CPyJwuKiB/FKGKNeJhmH6l2PFkdJfWj9V7ly0qA7ZxOsN+q3WoRmQ52
+   2Ru6EyMlzc31NcJUdPFn4TnRbbqwnKydyY82MszVlLhcmwMyvkyHICdzN
+   rSXRwIQQOA6NV5oiLdjvYTrKjn9Y5/mwUz6Q7KWE9gS9nxPKs5fMuup0x
+   OTZyoD/My9ugdaD1Genq0ooBqpE6F0xviczdv63BOtIz/NTViMnjacuuk
+   Q==;
+X-CSE-ConnectionGUID: ooX5NE7OQ3iwup6QUWP2JA==
+X-CSE-MsgGUID: CNzMtlnkTc+0NXNmoFs1+g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11246"; a="30409207"
+X-IronPort-AV: E=Sophos;i="6.11,259,1725346800"; 
+   d="scan'208";a="30409207"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2024 00:47:24 -0800
+X-CSE-ConnectionGUID: cFJvsXJnT9yr9/r6HK10SQ==
+X-CSE-MsgGUID: 2ZAWXvMWRXCzLdWQU6wDeg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,259,1725346800"; 
+   d="scan'208";a="83590043"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmviesa007.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 05 Nov 2024 00:47:24 -0800
+Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Tue, 5 Nov 2024 00:47:23 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39 via Frontend Transport; Tue, 5 Nov 2024 00:47:23 -0800
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.42) by
+ edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Tue, 5 Nov 2024 00:47:19 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=pzg5Iv1LCyc6LsSW6n4Ll7csEEvcnqrOo3WywFWyCYJxkalMgfv6UhYUvAY4RaNUZyprx7t8SacBzRDO6tBgHEMNcaPUMr9qql6ocakdof6OhsEaS5BFP0Jw+KPBehNBRS9MSyNeAoB8y9ZIj/HUI7JKMvfQceUgmrVTfqNt5M6wsMAZVmDtq1uXQIm0qtLKYpx83AvTBEh9WhN+XiBi61OmWGPvhsQSO4N8H92ZovzESrDi1yHOD5mpgYySo/h80UdyzpaeqeoiQJUsfZbgZs5ojOGC+c5AlY/RMXcMnZjO7GzfYLiOVZjdiFRSOBnwMq2ub8ri2udHJ3aWHzmBhQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dKvC2VLYYGmkddfvKt4tSDJe3h3T6ePcDHlS4z9qtJ0=;
+ b=kRVCDSLc8Mka5vp1Q8Tr0AkxCXXTVOSLXuzA5qpDoIFpUqA/Klauk+EhNhy6PcDHi5a62CaV7CjG8/tJqm9Wjxi10VgIFtSaVGCVwz9hULr+QWveuf465q+LHkjFpScmLZwaUiYWu5JRwuNv5XF129O/Aq8IfAVqyN4EnHaV0YyMroH7fbAQJTTVQK03hPspyLDfLEd4fMy83XrtU3EgkcrLEiNrw9EqNB2to+WmhYThALcZYCSiYV8hrpg6wWBW9WuG6cJ5RqATtln5kzapwL327zg5uZA5ulpGIoEjvtK4fNnZfkkdQy995SAPV4XTPnCK9DDcfctOQKy44497kQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB5423.namprd11.prod.outlook.com (2603:10b6:5:39b::20)
+ by BN9PR11MB5241.namprd11.prod.outlook.com (2603:10b6:408:132::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8114.31; Tue, 5 Nov
+ 2024 08:47:16 +0000
+Received: from DM4PR11MB5423.namprd11.prod.outlook.com
+ ([fe80::dffa:e0c8:dbf1:c82e]) by DM4PR11MB5423.namprd11.prod.outlook.com
+ ([fe80::dffa:e0c8:dbf1:c82e%6]) with mapi id 15.20.8137.018; Tue, 5 Nov 2024
+ 08:47:15 +0000
+Date: Tue, 5 Nov 2024 16:47:01 +0800
+From: Philip Li <philip.li@intel.com>
+To: Alexandre Ghiti <alexghiti@rivosinc.com>
+CC: kernel test robot <lkp@intel.com>, Jonathan Corbet <corbet@lwn.net>, "Paul
+ Walmsley" <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>, "Rob
+ Herring" <robh@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, "Andrea
+ Parri" <parri.andrea@gmail.com>, Nathan Chancellor <nathan@kernel.org>,
+	"Peter Zijlstra" <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Will
+ Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>, Boqun Feng
+	<boqun.feng@gmail.com>, Arnd Bergmann <arnd@arndb.de>, Leonardo Bras
+	<leobras@redhat.com>, Guo Ren <guoren@kernel.org>,
+	<linux-doc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+	<linux-arch@vger.kernel.org>, <oe-kbuild-all@lists.linux.dev>
+Subject: Re: [PATCH v6 13/13] riscv: Add qspinlock support
+Message-ID: <ZynbhcW864CHhpDL@rli9-mobl>
+References: <20241103145153.105097-14-alexghiti@rivosinc.com>
+ <202411041609.gxjI2dsw-lkp@intel.com>
+ <CAHVXubj8EXCXNPuJ+hqrHwyujjz3GDcqqMjQ4ZFC5VbmZurV3w@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHVXubj8EXCXNPuJ+hqrHwyujjz3GDcqqMjQ4ZFC5VbmZurV3w@mail.gmail.com>
+X-ClientProxiedBy: SG2PR04CA0157.apcprd04.prod.outlook.com (2603:1096:4::19)
+ To DM4PR11MB5423.namprd11.prod.outlook.com (2603:10b6:5:39b::20)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241102175115.1769468-1-xur@google.com> <20241102175115.1769468-2-xur@google.com>
- <09349180-027a-4b29-a40c-9dc3425e592c@cachyos.org> <3183ab86-8f1f-4624-9175-31e77d773699@cachyos.org>
- <CACkGtrgOw8inYCD96ot_w9VwzoFvvgCReAx0P-=Rxxqj2FT4_A@mail.gmail.com>
- <67c07d2f-fb1f-4b7d-96e2-fb5ceb8fc692@cachyos.org> <CACkGtrgJHtG5pXR1z=6G4XR6ffT5jEi3jZQo=UhYj091naBhsA@mail.gmail.com>
-In-Reply-To: <CACkGtrgJHtG5pXR1z=6G4XR6ffT5jEi3jZQo=UhYj091naBhsA@mail.gmail.com>
-From: Rong Xu <xur@google.com>
-Date: Mon, 4 Nov 2024 23:25:09 -0800
-Message-ID: <CAF1bQ=SbeR3XhFc7JYGOh69JZfAwQV8nupAQM+ZxpzNEFUFxJw@mail.gmail.com>
-Subject: Re: [PATCH v7 1/7] Add AutoFDO support for Clang build
-To: Han Shen <shenhan@google.com>
-Cc: Peter Jung <ptr1337@cachyos.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>, Breno Leitao <leitao@debian.org>, 
-	Brian Gerst <brgerst@gmail.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	David Li <davidxl@google.com>, Heiko Carstens <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>, 
-	Ingo Molnar <mingo@redhat.com>, Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Juergen Gross <jgross@suse.com>, 
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
-	Masahiro Yamada <masahiroy@kernel.org>, "Mike Rapoport (IBM)" <rppt@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Nicolas Schier <nicolas@fjasle.eu>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Wei Yang <richard.weiyang@gmail.com>, 
-	workflows@vger.kernel.org, Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, 
-	Maksim Panchenko <max4bolt@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
-	Andreas Larsson <andreas@gaisler.com>, Yonghong Song <yonghong.song@linux.dev>, 
-	Yabin Cui <yabinc@google.com>, Krzysztof Pszeniczny <kpszeniczny@google.com>, 
-	Sriraman Tallam <tmsriram@google.com>, Stephane Eranian <eranian@google.com>, x86@kernel.org, 
-	linux-arch@vger.kernel.org, sparclinux@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR11MB5423:EE_|BN9PR11MB5241:EE_
+X-MS-Office365-Filtering-Correlation-Id: 57a95f27-8439-44b0-1031-08dcfd7672ec
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|7416014|1800799024;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?U2Q2dG1qaUl0Rjc1c1FtdWhGcTBZYkdPc3A2Ymp6VjVGd0RWeFZtUTVDUndB?=
+ =?utf-8?B?ZjA3K1pSTDREejdNTklBTktDOERmZXdud1g2V04rMzdYWW4wd2d1cXVlNVBT?=
+ =?utf-8?B?eUFZaFhnUWl2TTNCT2hOTjhnUkU3UDROQTRWS2c1NzNoMkE3Y2tOQStrZjc2?=
+ =?utf-8?B?YisyWFJPZDJtUkdTMXZvQk9IY255QWRSWjhuazB0K3M0TUY3YnlCejFNeXI3?=
+ =?utf-8?B?cldsUGxjeHIrNlc5RUtwRU0wc2tIQXlqem9OdVFId3pFaTRVS0VYTUNlY0J4?=
+ =?utf-8?B?VXhidW96WmJXZ2JiV2x4MFhoVFluQlNPVmFJL2NqSUZZOXNJWEJKaGwvOGVS?=
+ =?utf-8?B?d0NNNzhpTUFnLzZjMWtQNFBLTVFiZmRGMW9yU1YrMDUrOS96dnVtQUpRV0V6?=
+ =?utf-8?B?WTAzSnpuemc0dFpSNTROd1FXUzhnd1VqYkNMcHFCUUkyZThselNJa1JWdEE5?=
+ =?utf-8?B?MU9TZnJDWTU4L0ZMT0hKb3RDSGh5WU4zaTUvU1loQnEwSnpsMHhxalhzdWxT?=
+ =?utf-8?B?a2g3MWREK3FNSnFVbGRmOGRjTTdIQklGWHhiSlZ5N2dhR1lUL3NuRi8vbVNz?=
+ =?utf-8?B?cUltbDlGTExiVUZUT1JaZ1U0cGRDS3BYMzhCYXl0R2JXRXJZVktlS2xIVHhC?=
+ =?utf-8?B?U2dkaDdmbEFFazAxcEhwcVlrRW5RNjI4aGNpVHNrKzBMS0p5S08vTDgybnow?=
+ =?utf-8?B?aUpya2ptZDVNdWF2aklWZEpZQUk2MnhCRkt3aFh0WlRSdU92dkU4bkZza0ts?=
+ =?utf-8?B?QUNzNzdkZk9VQzNiczdFWGlKd0VkRmh1TlN2NzJ6clhJNkQ0V3FObGs2M1l1?=
+ =?utf-8?B?Q01PWUJsQ1FKMWllY0NpcHpobnF2ZmtNOVVvYlUxVnlQZnR1NThPNTZvekZv?=
+ =?utf-8?B?akk0K3hya0ZjWHNKVFRHRitIQ1JibkgvOUlZTWIxUHc5aml5Z0VlV3RGUDhQ?=
+ =?utf-8?B?dmc5YndrVHJ5TzNjVjNmaGFpSW5lUFkxMEdrazQ4UytLWlRwbTFHZnFmSmw3?=
+ =?utf-8?B?ZlZmcVpGSkJET1kwQTl6T2NmeG1VdHhuSnN3RFZnaTJ4VEZMeVI2YUk3NEpG?=
+ =?utf-8?B?U1dRTGt1c0VCcndVQWpwQmFKS0NDMVNZNlJ0dk9PVzBHZVJxaG1ERkpqZThj?=
+ =?utf-8?B?TjZuQmxLY3BNN2ZVWDlaVzYvTVVWQXlPVUpzMWdLb2JqQnljbTNpd2hLOEN5?=
+ =?utf-8?B?TDBNVWhHQklNdEtIVjVtcG80aGZBbWkwa1JrRHdYSlpOMUZwUGFOM2JXeTVX?=
+ =?utf-8?B?NVNUUXUzU04xZUxWRTAwVkswZkhBV2J0cGF3Tkp5OWhjY25EM3NKUjZjdkJw?=
+ =?utf-8?B?NWlXTUpxZmtEaW0wenBiQXJPSHFNRm1TdkZrVkRMelFKWHQ3RzNSL21oQVJE?=
+ =?utf-8?B?YUJ3ZGlxS0d5cEJKOWZEZlgvOVRSQklKalp3NXFncjZGZWx1b0huZkthakQ1?=
+ =?utf-8?B?UnFVZno2M252MS9jbGFoTVhrS3RCV3AzVnVMaXB1anBoZHRkNHlEUW1nS1hD?=
+ =?utf-8?B?STFiKzNoM0JXYXRFcFdOUXBRUG5LdEV3NnllWTdlYWFUYk1QZUdIV01NZlhJ?=
+ =?utf-8?B?a0E3SUlaNS9WT0RTOU9mWG5rNGtXa01jUlk2ZGJFdzlTendTck1wZnY3N1cw?=
+ =?utf-8?B?eGczdG9UcGRDcmt4VFprRWRqZDI3SEQzQWYwa3hFZDlmRTlzbDVZRFZ3K1pm?=
+ =?utf-8?B?Z2FkeE0rb242QTh2Q3RFOVl0ZDUyc3RraGduWFduM2FqY0FNSjZWQ1JRPT0=?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5423.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?b2U5M1JJVHUzMWc1NTBUcGZPeTIzY3B6TUF4REtkZGNsbGpwUnZaYytCUC9I?=
+ =?utf-8?B?Z3ZCUUx6S05KL1BlS2RRc1I0NjdKd1RKODczMndyV29uamdVSStjaVFNaXAz?=
+ =?utf-8?B?YnBOUnRIWEhZYlE0QzNOM1JJMDcwRkVhbm1hemg5ZDh5OGxRenk1NmZ0N1Na?=
+ =?utf-8?B?NU1YWjdWNzFKUFdLc0RucGxqY2RMWUpjakk2VE1FZ05lTUNCWVFXUTRldTkz?=
+ =?utf-8?B?djlWS0QwT3h5L0J4RXNiemdUbzdoa2haL2FIN1d6VmtSeGxWbk01M0ZJZUtP?=
+ =?utf-8?B?WE1jT0ZZR2MzclVYUnRKaWZya1UvQThIdllNQS9sOVpPeEVtTlVzZmhGVVJI?=
+ =?utf-8?B?TWx1RmNsS2FmenFFVjE5aXdGK1lITEFSUjFubkRldkM2VC9jdGk2YitkYU96?=
+ =?utf-8?B?YnJCOGhKL2lVT1BVV3J1TEVIZ2RwM2JKVGt0aE1nSGlkN21uT3MwNEJHc0dM?=
+ =?utf-8?B?eVcwbmxKcUFVTXd4cE1DOVNpamtka1hzcXQyRFBFZXgrWXFwVnNvN3RaVVM1?=
+ =?utf-8?B?RU4rL09QM2l3QWdQZWNKZzMzQ0dGMG1LTndPTkdnSi9WbGVyckt1VElIYStr?=
+ =?utf-8?B?RStMVWExcndwWmYzd2V5aHB2c2NKbTdXSVNVUTNVQnVDWWxGZkdWaGRnNTVJ?=
+ =?utf-8?B?WG1CQWtpSXNQLzEvVERHV0dibDRLbEp1V2djM2p6aTVtUFU4Z25VTnJteHJR?=
+ =?utf-8?B?NzNnbkprMnREaGdvS3YxcFF4L0ltbkYyakxhMmNXUThwcXpybDBYY3B2SGJy?=
+ =?utf-8?B?WDN3Sk5KTmFxK2F5TkQ4VEJUY1JqK3l2V1VqeitoUHcrclVtdkpOUUpTcEJu?=
+ =?utf-8?B?QzlHcDRUa1gzMENmeXpSVjRudUIydFFLRTUvOEdEenlsVnlzUDk5U3VjYVBm?=
+ =?utf-8?B?N21ISTRUdHBOb0grL2poR0VvOFZDVHllTndtdG56bkh4S3lMMnFKdkxzb0Vk?=
+ =?utf-8?B?Um1RT1l2MVhZRlZnQXhjSHBtOUtNMGo3RW9kc05QT0ZaZzFYVU1YQlBrTkln?=
+ =?utf-8?B?bW9Ta2s3S2hJN01PL1JxVUdnTld4V1UweXpIN0EzS0w1ZFJBdFJOUU9nU0dj?=
+ =?utf-8?B?UU1sODNCMmlRTFhpYlpJTXJJVUhwTlJRdjFyQTFDZk80NjU0SlZ0NGZvWFBS?=
+ =?utf-8?B?akxobFhVMno5a3FhdGxSN1pXbVg2OGFwWTRSOXhDblZONlVFUGk0TUhkOXo3?=
+ =?utf-8?B?b0tVU1ZsZ1lWejZYbS9IRGpWRkcxaVdzMmpPZHdDRTZ3SzNXUmZOOTNxTkJt?=
+ =?utf-8?B?MGxXS01EMVdQZUQyOUk4VjNmN1BzcVdlWWFPSmp0MzluLzY2N2d4enFoMWp3?=
+ =?utf-8?B?eU9zTk5Fb0IwVVZNbktNWlM1TDZxdkVqZVRYN2FNRG5VenhCZXRhNmJVbW1O?=
+ =?utf-8?B?dzF2bUdEeDZBWjNIM24yakVhTzgyVWtTVDh4RERyT1g4azBFZ0I0QVJmVVVU?=
+ =?utf-8?B?MVpJM1RRNHhmaHNLUk1JOVp5VitoKzI3SWk5b1hYaVFoUTlMWlNMS2w3NFBO?=
+ =?utf-8?B?VlV2Y09TUkM3UEY2OEEzY1NXME53blQxWTlURXl4bXBwbHdRMlZvTmVCY2xK?=
+ =?utf-8?B?R0U4d2lHdDZSdFd3cHJqTnRMaXdnZFZSVzlocDU1bHZUY0NyMHUyODNHdUU0?=
+ =?utf-8?B?M0YvaW90SzRWbzIvWWw2Sk9MVXh2V3Rkeng4a2J5RjM3WU1zQ1A4M0EvSVg5?=
+ =?utf-8?B?U0VKbzdENHQzS1h5WVZtOWR5aFB1bkVvbkRPQWdsWHlXWmZwRExtQ21IcEc1?=
+ =?utf-8?B?U2ExOHJLUTdHRHEwMlB0VktvM1dFbGtuaTV4RHFnM2xtdjJXdlo2dUpoRXo3?=
+ =?utf-8?B?UTlTam1hc1hJb3BjNS92eFpiNjY2MmNnd2hjQTBncDhGVWZXeHd3S0dtYWZR?=
+ =?utf-8?B?NFR4bnZYSGVtbld4Y2tuQVJmbWQ0K293WlJqQTBmOHJNSnFFWi9wZTFtb3V5?=
+ =?utf-8?B?VFZHNmZuTjdLQXFnREZyQ0JFaEF3azNja1pKc0FEZEl2SzNoaTFmcGo4UHJO?=
+ =?utf-8?B?aUppZGFFN3RHT09DT2NQeS8zM1diSFBkTjlLdERkVENJZWxESVJMenpWSG1C?=
+ =?utf-8?B?eGhBYnVCdkdjaEUrWFV5ZHRKdzJJQ1Z2WVphSWhxTWwzZHcweUpGL3hoTFl4?=
+ =?utf-8?Q?Gs9QggXVLp+DApAg/1t7jswSe?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 57a95f27-8439-44b0-1031-08dcfd7672ec
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5423.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Nov 2024 08:47:15.8547
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tRvBpZWJmFQBrDGrVi1ibcjPWChNUCo6HeUX2s4sCIfpsGWOQWyZfY6edEadHMmU54G0K+RCMasktfkx19bZOg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5241
+X-OriginatorOrg: intel.com
 
-We debugged this issue and we found the failure seems to only happen
-with strip (version 2.43) in binutil.
-
-For a profile-use compilation, either with -fprofile-use (PGO or
-iFDO), or -fprofile-sample-use (AutoFDO),
-an ELF section of .llvm.call-graph-profile is created for the object.
-For some reasons (like to save space?),
-the relocations in this section are of type "rel', rather the more
-common "rela" type.
-
-In this case,
-$ readelf -r kvm.ko |grep llvm.call-graph-profile
-Relocation section '.rel.llvm.call-graph-profile' at offset 0xf62a00
-contains 4 entries:
-
-strip (v2.43.0) has difficulty handling the relocations in
-.rel.llvm.call-graph-profile -- it silently failed with --strip-debug.
-But strip (v.2.42) has no issue with kvm.ko. The strip in llvm (i.e.
-llvm-strip) also passes with kvm.ko
-
-I compared binutil/strip source code for version v2.43.0 and v2.42.
-The different is around here:
-In v2.42 of bfd/elfcode.h
-   1618       if ((entsize =3D=3D sizeof (Elf_External_Rela)
-   1619            && ebd->elf_info_to_howto !=3D NULL)
-   1620           || ebd->elf_info_to_howto_rel =3D=3D NULL)
-   1621         res =3D ebd->elf_info_to_howto (abfd, relent, &rela);
-   1622       else
-   1623         res =3D ebd->elf_info_to_howto_rel (abfd, relent, &rela);
-
-In v2.43.0 of bfd/elfcode.h
-   1618       if (entsize =3D=3D sizeof (Elf_External_Rela)
-   1619           && ebd->elf_info_to_howto !=3D NULL)
-   1620         res =3D ebd->elf_info_to_howto (abfd, relent, &rela);
-   1621       else if (ebd->elf_info_to_howto_rel !=3D NULL)
-   1622         res =3D ebd->elf_info_to_howto_rel (abfd, relent, &rela);
-
-In the 2.43 strip, line 1618 is false and line 1621 is also false.
-"res" is returned as false and the program exits with -1.
-
-While in 2.42, line 1620 is true and we get "res" from line 1621 and
-program functions correctly.
-
-I'm not familiar with binutil code base and don't know the reason for
-removing line 1620.
-I can file a bug for binutil for people to further investigate this.
-
-It seems to me that this issue should not be a blocker for our patch.
-
-Regards,
-
--Rong
-
-
-
-
-
-On Mon, Nov 4, 2024 at 12:24=E2=80=AFPM Han Shen <shenhan@google.com> wrote=
-:
->
-> Hi Peter,
-> Thanks for providing the detailed reproduce.
-> Now I can see the error (after I synced to 6.12.0-rc6, I was using rc5).
-> I'll look into that and report back.
->
-> > I have tested your provided method, but the AutoFDO profile (lld does
-> not get lto-sample-profile=3D$pathtoprofile passed)
->
-> I see. You also turned on ThinLTO, which I didn't, so the profile was
-> only used during compilation, not passed to lld.
->
-> Thanks,
-> Han
->
-> On Mon, Nov 4, 2024 at 9:31=E2=80=AFAM Peter Jung <ptr1337@cachyos.org> w=
-rote:
+On Mon, Nov 04, 2024 at 10:09:07AM +0100, Alexandre Ghiti wrote:
+> On Mon, Nov 4, 2024 at 10:05 AM kernel test robot <lkp@intel.com> wrote:
 > >
-> > Hi Han,
+> > Hi Alexandre,
 > >
-> > I have tested your provided method, but the AutoFDO profile (lld does
-> > not get lto-sample-profile=3D$pathtoprofile passed)  nor Clang as compi=
-ler
-> > gets used.
-> > Please replace following PKGBUILD and config from linux-mainline with
-> > the provided one in the gist. The patch is also included there.
+> > kernel test robot noticed the following build warnings:
 > >
-> > https://gist.github.com/ptr1337/c92728bb273f7dbc2817db75eedec9ed
+> > [auto build test WARNING on arnd-asm-generic/master]
+> > [also build test WARNING on robh/for-next tip/locking/core linus/master v6.12-rc6]
+> > [cannot apply to next-20241101]
+> > [If your patch is applied to the wrong git tree, kindly drop us a note.
+> > And when submitting patch, we suggest to use '--base' as documented in
+> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
 > >
-> > The main change I am doing here, is passing following to the build arra=
-y
-> > and replacing "make all":
+> > url:    https://github.com/intel-lab-lkp/linux/commits/Alexandre-Ghiti/riscv-Move-cpufeature-h-macros-into-their-own-header/20241103-230614
+> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git master
+> > patch link:    https://lore.kernel.org/r/20241103145153.105097-14-alexghiti%40rivosinc.com
+> > patch subject: [PATCH v6 13/13] riscv: Add qspinlock support
+> > compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
 > >
-> > make LLVM=3D1 LLVM_IAS=3D1 CLANG_AUTOFDO_PROFILE=3D${srcdir}/perf.afdo =
-all
+> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202411041609.gxjI2dsw-lkp@intel.com/
 > >
-> > When compiling the kernel with makepkg, this results at the packaging t=
-o
-> > following issue and can be reliable reproduced.
+> > includecheck warnings: (new ones prefixed by >>)
+> > >> arch/riscv/include/asm/spinlock.h: asm/ticket_spinlock.h is included more than once.
+> > >> arch/riscv/include/asm/spinlock.h: asm/qspinlock.h is included more than once.
+> 
+> Yes but that's in a #ifdef/#elif#else clause so nothing to do here!
+
+Thanks for the info, we will fix the bot. Sorry for the false positive report.
+
+> 
 > >
-> > Regards,
+> > vim +10 arch/riscv/include/asm/spinlock.h
 > >
-> > Peter
+> >      8
+> >      9  #define __no_arch_spinlock_redefine
+> >   > 10  #include <asm/ticket_spinlock.h>
+> >     11  #include <asm/qspinlock.h>
+> >     12  #include <asm/jump_label.h>
+> >     13
+> >     14  /*
+> >     15   * TODO: Use an alternative instead of a static key when we are able to parse
+> >     16   * the extensions string earlier in the boot process.
+> >     17   */
+> >     18  DECLARE_STATIC_KEY_TRUE(qspinlock_key);
+> >     19
+> >     20  #define SPINLOCK_BASE_DECLARE(op, type, type_lock)                      \
+> >     21  static __always_inline type arch_spin_##op(type_lock lock)              \
+> >     22  {                                                                       \
+> >     23          if (static_branch_unlikely(&qspinlock_key))                     \
+> >     24                  return queued_spin_##op(lock);                          \
+> >     25          return ticket_spin_##op(lock);                                  \
+> >     26  }
+> >     27
+> >     28  SPINLOCK_BASE_DECLARE(lock, void, arch_spinlock_t *)
+> >     29  SPINLOCK_BASE_DECLARE(unlock, void, arch_spinlock_t *)
+> >     30  SPINLOCK_BASE_DECLARE(is_locked, int, arch_spinlock_t *)
+> >     31  SPINLOCK_BASE_DECLARE(is_contended, int, arch_spinlock_t *)
+> >     32  SPINLOCK_BASE_DECLARE(trylock, bool, arch_spinlock_t *)
+> >     33  SPINLOCK_BASE_DECLARE(value_unlocked, int, arch_spinlock_t)
+> >     34
+> >     35  #elif defined(CONFIG_RISCV_QUEUED_SPINLOCKS)
+> >     36
+> >     37  #include <asm/qspinlock.h>
+> >     38
+> >     39  #else
+> >     40
+> >   > 41  #include <asm/ticket_spinlock.h>
+> >     42
 > >
-> >
-> > On 04.11.24 05:50, Han Shen wrote:
-> > > Hi Peter, thanks for reporting the issue. I am trying to reproduce it
-> > > in the up-to-date archlinux environment. Below is what I have:
-> > >    0. pacman -Syu
-> > >    1. cloned archlinux build files from
-> > > https://aur.archlinux.org/linux-mainline.git the newest mainline
-> > > version is 6.12rc5-1.
-> > >    2. changed the PKGBUILD file to include the patches series
-> > >    3. changed the "config" to turn on clang autofdo
-> > >    4. collected afdo profiles
-> > >    5. MAKEFLAGS=3D"-j48 V=3D1 LLVM=3D1 CLANG_AUTOFDO_PROFILE=3D$(pwd)=
-/perf.afdo" \
-> > >          makepkg -s --skipinteg --skippgp
-> > >    6. install and reboot
-> > > The above steps succeeded.
-> > > You mentioned the error happens at "module_install", can you instruct
-> > > me how to execute the "module_install" step?
-> > >
-> > > Thanks,
-> > > Han
-> > >
-> > > On Sat, Nov 2, 2024 at 12:53=E2=80=AFPM Peter Jung<ptr1337@cachyos.or=
-g> wrote:
-> > >>
-> > >>
-> > >> On 02.11.24 20:46, Peter Jung wrote:
-> > >>>
-> > >>> On 02.11.24 18:51, Rong Xu wrote:
-> > >>>> Add the build support for using Clang's AutoFDO. Building the kern=
-el
-> > >>>> with AutoFDO does not reduce the optimization level from the
-> > >>>> compiler. AutoFDO uses hardware sampling to gather information abo=
-ut
-> > >>>> the frequency of execution of different code paths within a binary=
-.
-> > >>>> This information is then used to guide the compiler's optimization
-> > >>>> decisions, resulting in a more efficient binary. Experiments
-> > >>>> showed that the kernel can improve up to 10% in latency.
-> > >>>>
-> > >>>> The support requires a Clang compiler after LLVM 17. This submissi=
-on
-> > >>>> is limited to x86 platforms that support PMU features like LBR on
-> > >>>> Intel machines and AMD Zen3 BRS. Support for SPE on ARM 1,
-> > >>>>    and BRBE on ARM 1 is part of planned future work.
-> > >>>>
-> > >>>> Here is an example workflow for AutoFDO kernel:
-> > >>>>
-> > >>>> 1) Build the kernel on the host machine with LLVM enabled, for exa=
-mple,
-> > >>>>          $ make menuconfig LLVM=3D1
-> > >>>>       Turn on AutoFDO build config:
-> > >>>>         CONFIG_AUTOFDO_CLANG=3Dy
-> > >>>>       With a configuration that has LLVM enabled, use the followin=
-g
-> > >>>>       command:
-> > >>>>          scripts/config -e AUTOFDO_CLANG
-> > >>>>       After getting the config, build with
-> > >>>>         $ make LLVM=3D1
-> > >>>>
-> > >>>> 2) Install the kernel on the test machine.
-> > >>>>
-> > >>>> 3) Run the load tests. The '-c' option in perf specifies the sampl=
-e
-> > >>>>      event period. We suggest     using a suitable prime number,
-> > >>>>      like 500009, for this purpose.
-> > >>>>      For Intel platforms:
-> > >>>>         $ perf record -e BR_INST_RETIRED.NEAR_TAKEN:k -a -N -b -c
-> > >>>> <count> \
-> > >>>>           -o <perf_file> -- <loadtest>
-> > >>>>      For AMD platforms:
-> > >>>>         The supported system are: Zen3 with BRS, or Zen4 with amd_=
-lbr_v2
-> > >>>>        For Zen3:
-> > >>>>         $ cat proc/cpuinfo | grep " brs"
-> > >>>>         For Zen4:
-> > >>>>         $ cat proc/cpuinfo | grep amd_lbr_v2
-> > >>>>         $ perf record --pfm-events RETIRED_TAKEN_BRANCH_INSTRUCTIO=
-NS:k
-> > >>>> -a \
-> > >>>>           -N -b -c <count> -o <perf_file> -- <loadtest>
-> > >>>>
-> > >>>> 4) (Optional) Download the raw perf file to the host machine.
-> > >>>>
-> > >>>> 5) To generate an AutoFDO profile, two offline tools are available=
-:
-> > >>>>      create_llvm_prof and llvm_profgen. The create_llvm_prof tool =
-is part
-> > >>>>      of the AutoFDO project and can be found on GitHub
-> > >>>>      (https://github.com/google/autofdo), version v0.30.1 or later=
-. The
-> > >>>>      llvm_profgen tool is included in the LLVM compiler itself. It=
-'s
-> > >>>>      important to note that the version of llvm_profgen doesn't ne=
-ed to
-> > >>>>      match the version of Clang. It needs to be the LLVM 19 releas=
-e or
-> > >>>>      later, or from the LLVM trunk.
-> > >>>>         $ llvm-profgen --kernel --binary=3D<vmlinux> --
-> > >>>> perfdata=3D<perf_file> \
-> > >>>>           -o <profile_file>
-> > >>>>      or
-> > >>>>         $ create_llvm_prof --binary=3D<vmlinux> --profile=3D<perf_=
-file> \
-> > >>>>           --format=3Dextbinary --out=3D<profile_file>
-> > >>>>
-> > >>>>      Note that multiple AutoFDO profile files can be merged into o=
-ne via:
-> > >>>>         $ llvm-profdata merge -o <profile_file>  <profile_1> ...
-> > >>>> <profile_n>
-> > >>>>
-> > >>>> 6) Rebuild the kernel using the AutoFDO profile file with the same=
- config
-> > >>>>      as step 1, (Note CONFIG_AUTOFDO_CLANG needs to be enabled):
-> > >>>>         $ make LLVM=3D1 CLANG_AUTOFDO_PROFILE=3D<profile_file>
-> > >>>>
-> > >>>> Co-developed-by: Han Shen<shenhan@google.com>
-> > >>>> Signed-off-by: Han Shen<shenhan@google.com>
-> > >>>> Signed-off-by: Rong Xu<xur@google.com>
-> > >>>> Suggested-by: Sriraman Tallam<tmsriram@google.com>
-> > >>>> Suggested-by: Krzysztof Pszeniczny<kpszeniczny@google.com>
-> > >>>> Suggested-by: Nick Desaulniers<ndesaulniers@google.com>
-> > >>>> Suggested-by: Stephane Eranian<eranian@google.com>
-> > >>>> Tested-by: Yonghong Song<yonghong.song@linux.dev>
-> > >>>> Tested-by: Yabin Cui<yabinc@google.com>
-> > >>>> Tested-by: Nathan Chancellor<nathan@kernel.org>
-> > >>>> Reviewed-by: Kees Cook<kees@kernel.org>
-> > >>> Tested-by: Peter Jung<ptr1337@cachyos.org>
-> > >>>
-> > >> The compilations and testing with the "make pacman-pkg" function fro=
-m
-> > >> the kernel worked fine.
-> > >>
-> > >> One problem I do face:
-> > >> When I apply a AutoFDO profile together with the PKGBUILD [1] from
-> > >> archlinux im running into issues at "module_install" at the packagin=
-g.
-> > >>
-> > >> See following log:
-> > >> ```
-> > >> make[2]: *** [scripts/Makefile.modinst:125:
-> > >> /tmp/makepkg/linux-cachyos-rc-autofdo/pkg/linux-cachyos-rc-autofdo/u=
-sr/lib/modules/6.12.0-rc5-5-cachyos-rc-autofdo/kernel/arch/x86/kvm/kvm.ko]
-> > >> Error 1
-> > >> make[2]: *** Deleting file
-> > >> '/tmp/makepkg/linux-cachyos-rc-autofdo/pkg/linux-cachyos-rc-autofdo/=
-usr/lib/modules/6.12.0-rc5-5-cachyos-rc-autofdo/kernel/arch/x86/kvm/kvm.ko'
-> > >>     INSTALL
-> > >> /tmp/makepkg/linux-cachyos-rc-autofdo/pkg/linux-cachyos-rc-autofdo/u=
-sr/lib/modules/6.12.0-rc5-5-cachyos-rc-autofdo/kernel/crypto/cryptd.ko
-> > >> make[2]: *** Waiting for unfinished jobs....
-> > >> ```
-> > >>
-> > >>
-> > >> This can be fixed with removed "INSTALL_MOD_STRIP=3D1" to the passed
-> > >> parameters of module_install.
-> > >>
-> > >> This explicitly only happens, if a profile is passed - otherwise the
-> > >> packaging works without problems.
-> > >>
-> > >> Regards,
-> > >>
-> > >> Peter Jung
-> > >>
-> >
+> > --
+> > 0-DAY CI Kernel Test Service
+> > https://github.com/intel/lkp-tests/wiki
+> 
 
