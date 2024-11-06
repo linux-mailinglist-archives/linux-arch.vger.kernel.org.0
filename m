@@ -1,272 +1,168 @@
-Return-Path: <linux-arch+bounces-8881-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8882-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26E6A9BF36A
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Nov 2024 17:40:37 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBF959BF593
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Nov 2024 19:47:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 654E2B24041
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Nov 2024 16:40:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C3CA1F22598
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Nov 2024 18:47:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A56EA206E86;
-	Wed,  6 Nov 2024 16:39:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 723FA20820D;
+	Wed,  6 Nov 2024 18:47:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dOJE2JWN"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SpP2b/+q"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73BBB20513F;
-	Wed,  6 Nov 2024 16:39:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE93A176AC8
+	for <linux-arch@vger.kernel.org>; Wed,  6 Nov 2024 18:47:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730911187; cv=none; b=heCZ5WCc+QB2Ay0W3k/IrZIcGQIT+sBSgCPwvzmVTQpIUBL9UugmgvGon40m2QT+4JmKi72rtpdvDoZPhHvFcSR8VTXNlEq1jj4ZbW0CBjE2AQbu9j813g4D44osdQVVQwGojH91rSsQwM10V8wO3oXULG2mLJpJwoPMlj9RTP4=
+	t=1730918851; cv=none; b=HPZkD3JLjjeGL4SyaKh/S6EQZz6OMjDWeLQ3iIqtQt/djgrhOgnvYjM4GEJ8Ht5TuPolKM2M6xDRjPElfS/argw3NJjJAbaw9ZYG776aHqWet9XHXZOI7qJ82ClWtjVlDgCKDlVLmGThl8qINZN/6VnsoUYmaB9DjGqYoIHBoMw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730911187; c=relaxed/simple;
-	bh=rOw1cNxmV5yTPdcWqbOutZVPQ5MsIKIqjCjabDSKhXE=;
+	s=arc-20240116; t=1730918851; c=relaxed/simple;
+	bh=Exqe8iAbGSGFmpY63vbdFYXXt5TTkypiNy6jnutfI7w=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=m3RCfW3mEijEkCdqMSO9Osv11vXcB9xZCCxcw8Ths+sZlNDNoklIW6v8ms3Gs5TMZydM6oS3aF4MIUFZO+R8ZpOgqgAA0cUSUWaPMQsPeZoeDEjwvK52eF5V9C9AxRJ8xY7ZYK2viCMwRNnQogk+myDHh/W79YEvSz8dum0QYUE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dOJE2JWN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4C3BC4CED3;
-	Wed,  6 Nov 2024 16:39:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730911187;
-	bh=rOw1cNxmV5yTPdcWqbOutZVPQ5MsIKIqjCjabDSKhXE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=dOJE2JWNU00uzXhi+LB+wCrqGUdVxslMiwlG0aSDLSQsdlhwI/QNcG33OSShSKNZh
-	 y9W6eZBqwPk9Pu95Seh+V/0AaAJpxiCBjWOLYiGz+HM3aFxSy0zdK9nKHlxAqmmbTz
-	 S0+9asjMtN+6oyDS23wFv9G8SFwCPQwGYS7v0ci/kwFY+HwKqYRp/HqKrZyQz87sh7
-	 qEMIZeOV+QYpWjz08xJQ0PXCCs7Ar9PX9KuLXgEGMuVFLE6OB84r8sd4JMG88Ihujg
-	 G5L/pyWQ3RYV4mvtaBT5j2rAldXL45X5beA8fFDPn41pzTJinMRxsGMLggXCKaosl9
-	 EGjezBzVP2cjQ==
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2fb6110c8faso65707981fa.1;
-        Wed, 06 Nov 2024 08:39:46 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVGth44KT4jIUWaBdcDwsP9BLAcipguniA1b7G3SmGrfOxdbDi0Lv8BX2hwAum/9F2w1UI4ck6HhE/eWsyD@vger.kernel.org, AJvYcCWRDS1qH9UmOCpaKoeMAmuw3/5BU2ne/s7u45S42GLDHMFw135P3r3Ljkm9aVbTCmY0v3jVp/Kq@vger.kernel.org, AJvYcCXe35LJ203uYzNN83px5iFZxAhMTJScQM2JH6bDGkzcPsdnq36RKX5T8gLLQsnIxF4OBXbQ2GlfxJ5E@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy3hDGH8zz5K5RElNo6NqHbh9oz3brEeIaZE7URpveqqegjbWZK
-	Z/5EM/vMvTn88UE3k3vdoVr3DBwDeUIinbOcl12SDwG4ReUGegSJpFNwoetRJIKML0D/ZT8BduQ
-	+GfrG/i4QVa/8FNGufSoUS4zYi6Q=
-X-Google-Smtp-Source: AGHT+IHzF2jJ4wq8spwQz69HDRPf0ScsSSWGAuM4RFIdZYEHToQmNs2IgK6UCutHxy6jUQXVXP2UuZmv6s+hozl6jR4=
-X-Received: by 2002:a2e:a0cd:0:b0:2f7:4c9d:7a83 with SMTP id
- 38308e7fff4ca-2fcbe078a64mr157857151fa.40.1730911185367; Wed, 06 Nov 2024
- 08:39:45 -0800 (PST)
+	 To:Cc:Content-Type; b=hk+OQMQD3fNI+H0MMeJpgFTrjOn1HGx7lApK9GzyjZ5ZjuxudWv9ojfUgqTmtJhida/ixoDI+EocvuITAT+UTZElxEdr5LG9YTD00E6C8OXHWefxXyg2WFw23a5HG3kvivoIuh6fCtYNLJxee1zgQ2uPC5GHal92UeQG4f8PZZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SpP2b/+q; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-43150ea2db6so25855e9.0
+        for <linux-arch@vger.kernel.org>; Wed, 06 Nov 2024 10:47:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1730918848; x=1731523648; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2dGrUXDC8J5pqSkCVeKC3N6enHQma720hZqyIMlE1hY=;
+        b=SpP2b/+qby5XWTbnicG3upZYrlXn4YDT6g4NTbcECe0GtoJrL3GuBllteEGEP8zXsl
+         Wpwi+MZ0zBRf+h0PpWRkKJLfZ4w3g9bbeoBiX4fGfziKM/n5Xw1ta+UDBDTXJgNysYWO
+         wWWS0d23hfAFqyvQWakhdUZf/qno2ZUIJwY/ZR+L1iCqa6MrkSRaXukrxJfoS4fsaaJt
+         fFZaX7zSY1TC5OpuPyr0QxN5yrlGTKn3GJxQIMJK+EvKSqZYece7me/m9ega4jfCqWiP
+         AGwRmID5eOuarhUKaU5qwrdkGZ6h7SF6CEFjhq66O/d7Fk5+uwZWZ10SUxNTzmSdEc2J
+         7BiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730918848; x=1731523648;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2dGrUXDC8J5pqSkCVeKC3N6enHQma720hZqyIMlE1hY=;
+        b=c+64QbnVu/4eyqYGByklgohp7qlCGmJibN4Rr0h8v+oR+fIo2pct9GC1zi7xf6uitM
+         uFHUZdzCmBzZT+r8EBXlDNkseXbemb52qLQQDiya+BZvjB5qaS/sWsRqtjDqnrsNt84B
+         0P4nqWhU8/hYuWh59zZXMLGdh34bgU/Ut1+R4fpe4S/gKFc2aIPITWh/1kf4EGotVh5w
+         +5xcdHB3KaE1zyGMicaUwcDeqycZU3bccRl0NqMqN6Y4MgL56y9SBx84BAuDvrwIToad
+         r4Uy+KEnK1O9s5On+rcI5DCNu0tjcXKt5REJRVF0dSpOR8yORCrASUQ/iVg5XkvJ+4t6
+         VfFg==
+X-Forwarded-Encrypted: i=1; AJvYcCXqkp0WQyx4LFf83MBWTID2TqJsUKGcAnfEml2dZ9evZ10JJ4PzG20cx4CT0EFmbQeJS38olEzpc7KW@vger.kernel.org
+X-Gm-Message-State: AOJu0YzeMw6ZTTjVBrznsNDRlaokKJ0SiZWm7oc3isAmZvB5nSmsw44Y
+	mYUTVPRytS1eq7gPZ1X6mDyuLtY1AGVrGe1QrXsS8D/vwqYVdm9TVJBP/PhSPVhzwXwHa/tZYJM
+	0M6bPOekoFdY2TdHuz3fu5CWLcPlHDctGqx1v
+X-Gm-Gg: ASbGnct3edC7R56xBAi0Eku1648teFs8RrleOktTpceimXiXq3OvDAqmZKiXUce3FjT
+	DO7nQyLZxZk4uQNpvEasBgDKEID16X9jImi8SuBTRcHhx1wElTP/C0L6UGWM=
+X-Google-Smtp-Source: AGHT+IEoEPmxnp0ZrudFR7joTbzlQj+R3HBGqdcNc8Wo/wQ4UlmCH/EpGH3i6KaycnwSNh8sQa+mrw9pRNPmOLCn904=
+X-Received: by 2002:a05:600c:a3a8:b0:42b:a8fc:3937 with SMTP id
+ 5b1f17b1804b1-432af2ed605mr633765e9.4.1730918847928; Wed, 06 Nov 2024
+ 10:47:27 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241106161445.189399-1-masahiroy@kernel.org> <20241106161445.189399-2-masahiroy@kernel.org>
-In-Reply-To: <20241106161445.189399-2-masahiroy@kernel.org>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Thu, 7 Nov 2024 01:39:09 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARKPGTbYdM5LxWD=_H6erPwxwb7XjTBBse3w28Yeb08vg@mail.gmail.com>
-Message-ID: <CAK7LNARKPGTbYdM5LxWD=_H6erPwxwb7XjTBBse3w28Yeb08vg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] Rename .data.once to .data..once to fix resetting WARN*_ONCE
-To: linux-kbuild@vger.kernel.org
-Cc: Nicholas Piggin <npiggin@gmail.com>, Andi Kleen <ak@linux.intel.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Bill Wendling <morbo@google.com>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Sami Tolvanen <samitolvanen@google.com>, 
-	Simon Horman <horms@kernel.org>, linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, llvm@lists.linux.dev, netdev@vger.kernel.org
+References: <20241106002401.283517-1-mcgrof@kernel.org>
+In-Reply-To: <20241106002401.283517-1-mcgrof@kernel.org>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Wed, 6 Nov 2024 18:46:48 +0000
+Message-ID: <CABCJKueDJuAz30=Wat5D1-V9eYzAbP7wAY61Fgzw_KZJcHWiSw@mail.gmail.com>
+Subject: Re: [PATCH] tests/module/gen_test_kallsyms.sh: use 0 value for variables
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	petr.pavlu@suse.com, da.gomez@samsung.com, masahiroy@kernel.org, 
+	deller@gmx.de, linux-arch@vger.kernel.org, live-patching@vger.kernel.org, 
+	kris.van.hees@oracle.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 7, 2024 at 1:15=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.or=
-g> wrote:
->
-> Commit b1fca27d384e ("kernel debug: support resetting WARN*_ONCE")
-> added support for clearing the state of once warnings. However,
-> it is not functional when CONFIG_LD_DEAD_CODE_DATA_ELIMINATION or
-> CONFIG_LTO_CLANG is enabled, because .data.unlikely matches the
+Hi Luis,
 
-This is a copy-paste error.
-
-  s/.data.unlikely/.data.once/
-
-
-> .data.[0-9a-zA-Z_]* pattern in the DATA_MAIN macro.
+On Wed, Nov 6, 2024 at 12:24=E2=80=AFAM Luis Chamberlain <mcgrof@kernel.org=
+> wrote:
 >
-> Commit cb87481ee89d ("kbuild: linker script do not match C names unless
-> LD_DEAD_CODE_DATA_ELIMINATION is configured") was introduced to suppress
-> the issue for the default CONFIG_LD_DEAD_CODE_DATA_ELIMINATION=3Dn case,
-> providing a minimal fix for stable backporting. We were aware this did
-> not address the issue for CONFIG_LD_DEAD_CODE_DATA_ELIMINATION=3Dy. The
-> plan was to apply correct fixes and then revert cb87481ee89d. [1]
+> Use 0 for the values as we use them for the return value on init
+> to keep the test modules simple. This fixes a splat reported
 >
-> Seven years have passed since then, yet the #ifdef workaround remains in
-> place. Meanwhile, commit b1fca27d384e introduced the .data.once section,
-> and commit dc5723b02e52 ("kbuild: add support for Clang LTO") extended
-> the #ifdef.
+> do_init_module: 'test_kallsyms_b'->init suspiciously returned 255, it sho=
+uld follow 0/-E convention
+> do_init_module: loading module anyway...
+> CPU: 5 UID: 0 PID: 1873 Comm: modprobe Not tainted 6.12.0-rc3+ #4
+> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 2024.08-1 09/18/=
+2024
+> Call Trace:
+>  <TASK>
+>  dump_stack_lvl+0x56/0x80
+>  do_init_module.cold+0x21/0x26
+>  init_module_from_file+0x88/0xf0
+>  idempotent_init_module+0x108/0x300
+>  __x64_sys_finit_module+0x5a/0xb0
+>  do_syscall_64+0x4b/0x110
+>  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+> RIP: 0033:0x7f4f3a718839
+> Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f=
+7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff=
+ ff>
+> RSP: 002b:00007fff97d1a9e8 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
+> RAX: ffffffffffffffda RBX: 000055b94001ab90 RCX: 00007f4f3a718839
+> RDX: 0000000000000000 RSI: 000055b910e68a10 RDI: 0000000000000004
+> RBP: 0000000000000000 R08: 00007f4f3a7f1b20 R09: 000055b94001c5b0
+> R10: 0000000000000040 R11: 0000000000000246 R12: 000055b910e68a10
+> R13: 0000000000040000 R14: 000055b94001ad60 R15: 0000000000000000
+>  </TASK>
+> do_init_module: 'test_kallsyms_b'->init suspiciously returned 255, it sho=
+uld follow 0/-E convention
+> do_init_module: loading module anyway...
+> CPU: 1 UID: 0 PID: 1884 Comm: modprobe Not tainted 6.12.0-rc3+ #4
+> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 2024.08-1 09/18/=
+2024
+> Call Trace:
+>  <TASK>
+>  dump_stack_lvl+0x56/0x80
+>  do_init_module.cold+0x21/0x26
+>  init_module_from_file+0x88/0xf0
+>  idempotent_init_module+0x108/0x300
+>  __x64_sys_finit_module+0x5a/0xb0
+>  do_syscall_64+0x4b/0x110
+>  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+> RIP: 0033:0x7ffaa5d18839
 >
-> Using a ".." separator in the section name fixes the issue for
-> CONFIG_LD_DEAD_CODE_DATA_ELIMINATION and CONFIG_LTO_CLANG.
->
-> [1]: https://lore.kernel.org/linux-kbuild/CAK7LNASck6BfdLnESxXUeECYL26yUD=
-m0cwRZuM4gmaWUkxjL5g@mail.gmail.com/
->
-> Fixes: b1fca27d384e ("kernel debug: support resetting WARN*_ONCE")
-> Fixes: dc5723b02e52 ("kbuild: add support for Clang LTO")
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> Reported-by: Sami Tolvanen <samitolvanen@google.com>
+> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 > ---
+>  lib/tests/module/gen_test_kallsyms.sh | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
->  include/asm-generic/vmlinux.lds.h | 2 +-
->  include/linux/mmdebug.h           | 6 +++---
->  include/linux/once.h              | 4 ++--
->  include/linux/once_lite.h         | 2 +-
->  include/net/net_debug.h           | 2 +-
->  mm/internal.h                     | 2 +-
->  6 files changed, 9 insertions(+), 9 deletions(-)
->
-> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmli=
-nux.lds.h
-> index 3c9dc1fd094d..54504013c749 100644
-> --- a/include/asm-generic/vmlinux.lds.h
-> +++ b/include/asm-generic/vmlinux.lds.h
-> @@ -359,7 +359,7 @@ defined(CONFIG_AUTOFDO_CLANG) || defined(CONFIG_PROPE=
-LLER_CLANG)
->         *(.data..shared_aligned) /* percpu related */                   \
->         *(.data..unlikely)                                              \
->         __start_once =3D .;                                              =
- \
-> -       *(.data.once)                                                   \
-> +       *(.data..once)                                                  \
->         __end_once =3D .;                                                =
- \
->         STRUCT_ALIGN();                                                 \
->         *(__tracepoints)                                                \
-> diff --git a/include/linux/mmdebug.h b/include/linux/mmdebug.h
-> index 39a7714605a7..d7cb1e5ecbda 100644
-> --- a/include/linux/mmdebug.h
-> +++ b/include/linux/mmdebug.h
-> @@ -46,7 +46,7 @@ void vma_iter_dump_tree(const struct vma_iterator *vmi)=
-;
->                 }                                                       \
->         } while (0)
->  #define VM_WARN_ON_ONCE_PAGE(cond, page)       ({                      \
-> -       static bool __section(".data.once") __warned;                   \
-> +       static bool __section(".data..once") __warned;                  \
->         int __ret_warn_once =3D !!(cond);                                =
- \
->                                                                         \
->         if (unlikely(__ret_warn_once && !__warned)) {                   \
-> @@ -66,7 +66,7 @@ void vma_iter_dump_tree(const struct vma_iterator *vmi)=
-;
->         unlikely(__ret_warn);                                           \
->  })
->  #define VM_WARN_ON_ONCE_FOLIO(cond, folio)     ({                      \
-> -       static bool __section(".data.once") __warned;                   \
-> +       static bool __section(".data..once") __warned;                  \
->         int __ret_warn_once =3D !!(cond);                                =
- \
->                                                                         \
->         if (unlikely(__ret_warn_once && !__warned)) {                   \
-> @@ -77,7 +77,7 @@ void vma_iter_dump_tree(const struct vma_iterator *vmi)=
-;
->         unlikely(__ret_warn_once);                                      \
->  })
->  #define VM_WARN_ON_ONCE_MM(cond, mm)           ({                      \
-> -       static bool __section(".data.once") __warned;                   \
-> +       static bool __section(".data..once") __warned;                  \
->         int __ret_warn_once =3D !!(cond);                                =
- \
->                                                                         \
->         if (unlikely(__ret_warn_once && !__warned)) {                   \
-> diff --git a/include/linux/once.h b/include/linux/once.h
-> index bc714d414448..30346fcdc799 100644
-> --- a/include/linux/once.h
-> +++ b/include/linux/once.h
-> @@ -46,7 +46,7 @@ void __do_once_sleepable_done(bool *done, struct static=
-_key_true *once_key,
->  #define DO_ONCE(func, ...)                                              =
-    \
->         ({                                                               =
-    \
->                 bool ___ret =3D false;                                   =
-      \
-> -               static bool __section(".data.once") ___done =3D false;   =
-      \
-> +               static bool __section(".data..once") ___done =3D false;  =
-      \
->                 static DEFINE_STATIC_KEY_TRUE(___once_key);              =
-    \
->                 if (static_branch_unlikely(&___once_key)) {              =
-    \
->                         unsigned long ___flags;                          =
-    \
-> @@ -64,7 +64,7 @@ void __do_once_sleepable_done(bool *done, struct static=
-_key_true *once_key,
->  #define DO_ONCE_SLEEPABLE(func, ...)                                    =
-       \
->         ({                                                               =
-       \
->                 bool ___ret =3D false;                                   =
-         \
-> -               static bool __section(".data.once") ___done =3D false;   =
-         \
-> +               static bool __section(".data..once") ___done =3D false;  =
-         \
->                 static DEFINE_STATIC_KEY_TRUE(___once_key);              =
-       \
->                 if (static_branch_unlikely(&___once_key)) {              =
-       \
->                         ___ret =3D __do_once_sleepable_start(&___done);  =
-         \
-> diff --git a/include/linux/once_lite.h b/include/linux/once_lite.h
-> index b7bce4983638..27de7bc32a06 100644
-> --- a/include/linux/once_lite.h
-> +++ b/include/linux/once_lite.h
-> @@ -12,7 +12,7 @@
->
->  #define __ONCE_LITE_IF(condition)                                      \
->         ({                                                              \
-> -               static bool __section(".data.once") __already_done;     \
-> +               static bool __section(".data..once") __already_done;    \
->                 bool __ret_cond =3D !!(condition);                       =
- \
->                 bool __ret_once =3D false;                               =
- \
->                                                                         \
-> diff --git a/include/net/net_debug.h b/include/net/net_debug.h
-> index 1e74684cbbdb..4a79204c8d30 100644
-> --- a/include/net/net_debug.h
-> +++ b/include/net/net_debug.h
-> @@ -27,7 +27,7 @@ void netdev_info(const struct net_device *dev, const ch=
-ar *format, ...);
->
->  #define netdev_level_once(level, dev, fmt, ...)                        \
->  do {                                                           \
-> -       static bool __section(".data.once") __print_once;       \
-> +       static bool __section(".data..once") __print_once;      \
->                                                                 \
->         if (!__print_once) {                                    \
->                 __print_once =3D true;                            \
-> diff --git a/mm/internal.h b/mm/internal.h
-> index 93083bbeeefa..a23f7b11b760 100644
-> --- a/mm/internal.h
-> +++ b/mm/internal.h
-> @@ -48,7 +48,7 @@ struct folio_batch;
->   * when we specify __GFP_NOWARN.
->   */
->  #define WARN_ON_ONCE_GFP(cond, gfp)    ({                              \
-> -       static bool __section(".data.once") __warned;                   \
-> +       static bool __section(".data..once") __warned;                  \
->         int __ret_warn_once =3D !!(cond);                                =
- \
->                                                                         \
->         if (unlikely(!(gfp & __GFP_NOWARN) && __ret_warn_once && !__warne=
-d)) { \
-> --
-> 2.43.0
->
+> diff --git a/lib/tests/module/gen_test_kallsyms.sh b/lib/tests/module/gen=
+_test_kallsyms.sh
+> index ae5966f1f904..3f2c626350ad 100755
+> --- a/lib/tests/module/gen_test_kallsyms.sh
+> +++ b/lib/tests/module/gen_test_kallsyms.sh
+> @@ -32,7 +32,7 @@ gen_num_syms()
+>         PREFIX=3D$1
+>         NUM=3D$2
+>         for i in $(seq 1 $NUM); do
+> -               printf "int auto_test_%s_%010d =3D 0xff;\n" $PREFIX $i
+> +               printf "int auto_test_%s_%010d =3D 0;\n" $PREFIX $i
+>                 printf "EXPORT_SYMBOL_GPL(auto_test_%s_%010d);\n" $PREFIX=
+ $i
+>         done
+>         echo
 
+Looks good to me. Thanks!
 
---=20
-Best Regards
-Masahiro Yamada
+Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
+
+Sami
 
