@@ -1,98 +1,72 @@
-Return-Path: <linux-arch+bounces-8867-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8868-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9216E9BDA3B
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Nov 2024 01:21:25 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 342EB9BDA3D
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Nov 2024 01:24:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 56198284675
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Nov 2024 00:21:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5E49A1C22A5A
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Nov 2024 00:24:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0C8E8BEC;
-	Wed,  6 Nov 2024 00:21:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1611E4A11;
+	Wed,  6 Nov 2024 00:24:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hi90Nqmi"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="MXBuRK3M"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDDA780B;
-	Wed,  6 Nov 2024 00:21:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4764480B;
+	Wed,  6 Nov 2024 00:24:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730852478; cv=none; b=VN3epaeSFnEur4HhFowND4Gc+Ak+YjBcgZj6GomMNNH+djZUipGuYlgBdeMjd38Zir/X/OvV8qOpJ4JycuykoCK9RegKmTaRP/4XB2ohInXPYKC7UTnt6SZPnBFrUSViADO0HvJThaHTghtdYq64r/o1CyEM0WZnR71yOwhZsEQ=
+	t=1730852645; cv=none; b=cpdiWxmpOL3IbVHxLk/6+ywpobHWnDlfIC1OiSSYLZbtACg96EtUTfIYkX6yveeoZzuDaJp0z1pgFAs1IUmxTYhFKxDmdTXA5vDG0de31tlW5kFogKeiJ8NjGkq02T2BbCkweudGoqEVCZ9pIrXdm4CF2DGvHFLhy5FXqopIIus=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730852478; c=relaxed/simple;
-	bh=mOpVnAHe4MqIKwl3ho4VzIbTh1rgs+rTfxjMO/1W1xU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ASuMkdd2Td4wLD3cdc5O5jztbNCCJqtCbC2FSRY5YXyy1qCf2wiVrRe3MHl4W9EC9jcWIrsz5LJHK5A52MTf8mnSQU8PsiK0KFrMUaITlPfJk5JI1ofwndMsL9GtV2Evh2ue1L81Hb0XxpRkj3b2h8/XC9jkiFH0Qn5q9QXT8go=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hi90Nqmi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 554FEC4CECF;
-	Wed,  6 Nov 2024 00:21:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730852478;
-	bh=mOpVnAHe4MqIKwl3ho4VzIbTh1rgs+rTfxjMO/1W1xU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Hi90NqmicUHl0bogT/HoDWBZfexn+CAxL/cDiDjsIfWTD35rRTdA0zrAYtOI2lHG4
-	 rJqaLlMBUQoaXhCBXT6dOWhRApkhGoCHkw5USQTuVoMoUcINuCYT/R9RTxBMhter9R
-	 7HbatxaZ2b1PrvMdoLu53zdRRbq60PU/tz5nLzoPoVzzJ4wghOxHTySL9FLzD5GuRd
-	 qaefBbQQ9+cpleJjAZPbvZ/JECZlIFpEORh0rZnyWY8w8ANDLdwcysj4Qr7QU6Z3Wb
-	 9ZNNAQvF4f8gNGMpcy6c31rSCmoxfJnwBQQ4q+Q1pL0EURpv3FMwu/kqHrJaJxCyDK
-	 k+Ql1amwfUHEQ==
-Date: Tue, 5 Nov 2024 16:21:16 -0800
+	s=arc-20240116; t=1730852645; c=relaxed/simple;
+	bh=G0k7IzF9dLPlR9PDUGCdsLOeHCsgQsAhWQwXJpt41Y8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DGg5f5rNFfdawc4YL4BXYPiH4k+9WnS7J7uFe+xGck35lWSFUM/rc3kRf8kaUvBhGzF83ECPWBhptQmyisEaCgASeZo3T5i692brqnaiUffzcOuddfV2OZdRmnU4O375ttWs1uYLwQV2ZPAFez5amqzPCcvkr1Fel4gmfCsU19E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=MXBuRK3M; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=wCXrHMalIEDrFVtUAawVAtx3gdISoe3nHLfr7A9qW8M=; b=MXBuRK3MCxQRrsvHkKyHSKbl9F
+	UxoR0sl/b2q67F0JygZBdHMgXuf5Fw22eicfrVYFapz9l2gA7xMs5XrdDTn1s2z+Z6bYa/cLz0fUm
+	v36U02GJPeDo9X4bW+XpZ4n2Teo40RD4MrfjfMZJ/uhWqcHLMtz19FqoEa5Mm6RM59oosHz00lC9W
+	spFRMAGwf7Zmbb5uf2ynFH4oXw9ZUtFO4O2ESEXyCA/0U+DZtr2YHcUDL5tJmzwqAbUhYrkCyoJ+k
+	8/xVkrWPsrQJyEdU3cUqQVE1PFETeiI07LS5EYrO8g84BLZUzGyFdHK3ow9mCZ3npZTYXwypToy1y
+	eqjtB5gA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.98 #2 (Red Hat Linux))
+	id 1t8Tq5-00000001Bl1-3Q88;
+	Wed, 06 Nov 2024 00:24:01 +0000
 From: Luis Chamberlain <mcgrof@kernel.org>
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-	petr.pavlu@suse.com, da.gomez@samsung.com, masahiroy@kernel.org,
-	deller@gmx.de, linux-arch@vger.kernel.org,
-	live-patching@vger.kernel.org, kris.van.hees@oracle.com
-Subject: Re: [PATCH v3] selftests: add new kallsyms selftests
-Message-ID: <Zyq2fMpMGy7SgeYE@bombadil.infradead.org>
-References: <20241021193310.2014131-1-mcgrof@kernel.org>
- <CABCJKudob+8GH2U_QLEngjqjOVmDfm8ZkEfn-Ya9ZG5OEOrRtQ@mail.gmail.com>
+To: linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	petr.pavlu@suse.com,
+	samitolvanen@google.com,
+	da.gomez@samsung.com
+Cc: masahiroy@kernel.org,
+	deller@gmx.de,
+	linux-arch@vger.kernel.org,
+	live-patching@vger.kernel.org,
+	mcgrof@kernel.org,
+	kris.van.hees@oracle.com
+Subject: [PATCH] tests/module/gen_test_kallsyms.sh: use 0 value for variables
+Date: Tue,  5 Nov 2024 16:24:00 -0800
+Message-ID: <20241106002401.283517-1-mcgrof@kernel.org>
+X-Mailer: git-send-email 2.46.2
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABCJKudob+8GH2U_QLEngjqjOVmDfm8ZkEfn-Ya9ZG5OEOrRtQ@mail.gmail.com>
-
-On Tue, Oct 29, 2024 at 09:24:30AM -0700, Sami Tolvanen wrote:
-> Hi Luis,
-> 
-> On Mon, Oct 21, 2024 at 12:33 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> >
-> > diff --git a/lib/tests/module/gen_test_kallsyms.sh b/lib/tests/module/gen_test_kallsyms.sh
-> > new file mode 100755
-> > index 000000000000..e85f10dc11bd
-> > --- /dev/null
-> > +++ b/lib/tests/module/gen_test_kallsyms.sh
-> > @@ -0,0 +1,128 @@
-> [..]
-> > +gen_template_module_data_b()
-> > +{
-> > +       printf "\nextern int auto_test_a_%010d;\n\n" 28
-> > +       echo "static int auto_runtime_test(void)"
-> > +       echo "{"
-> > +       printf "\nreturn auto_test_a_%010d;\n" 28
-> > +       echo "}"
-> > +}
-> 
-> FYI, I get a warning when loading test_kallsyms_b because the init
-> function return value is >0:
-
-This fixes it.
-
-From b776d662c8e05d67c7879d0f6f5208dd431d900a Mon Sep 17 00:00:00 2001
-From: Luis Chamberlain <mcgrof@kernel.org>
-Date: Wed, 6 Nov 2024 00:17:21 +0000
-Subject: [PATCH] tests/module/gen_test_kallsyms.sh: use 0 value for variables
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 
 Use 0 for the values as we use them for the return value on init
 to keep the test modules simple. This fixes a splat reported
