@@ -1,147 +1,153 @@
-Return-Path: <linux-arch+bounces-8875-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8876-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C47499BE168
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Nov 2024 09:56:49 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3AF659BE35F
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Nov 2024 11:01:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A2F22844AE
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Nov 2024 08:56:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A314EB20F91
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Nov 2024 10:01:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C13971922EF;
-	Wed,  6 Nov 2024 08:55:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB08B1D63D3;
+	Wed,  6 Nov 2024 10:01:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="KYpNkjVE";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="TctsgkwO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JK3VAb1Y"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fout-b2-smtp.messagingengine.com (fout-b2-smtp.messagingengine.com [202.12.124.145])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 091EC1D7E43;
-	Wed,  6 Nov 2024 08:55:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.145
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F7B41D358B;
+	Wed,  6 Nov 2024 10:01:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730883342; cv=none; b=XFu6+8jiPcHdF5NZ9K+w78bdCqsONNwvD4UggqfPbmQfv1rbKK7qdmahTwP8aRBfc3ii9cV70rSz4hjsFx0Q6br3dKfgW3BePiNgDEqvN4S0pG4lyBJg7reJ/8fb7oCRxj3Jf6lEwLs3LaGYkV4Bi7ZGmKD/eGjIDXhQm5pitg8=
+	t=1730887296; cv=none; b=oN5nx7fXA3GbpWPV8CG6FubapUM15BcvfPcfH2IPaatOf7jy5Ah922R0mvAeHTzW1jWzaMTJV/mrcMcxkneFsQ3xxpqgNldeJRH3gNprGI5pLESFjnKwurkN44Icini8B1+G/jw6eutHuj0aunMkAY0fDu67YLsjCH3HRfBjgjI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730883342; c=relaxed/simple;
-	bh=uoc4Nta1Ok0mhsU7WW3fUW4xjpp+b/2K0X+NjHyC1oo=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=nhdB+JXxKo92WndlR+lbKbzhimwR2brRIDAsrdJZg30cJpBG5WJ7fr1+YGcTm0sP3ihliQmiYHi31SgpPYof9cyR4kwUHfzRWQIwkKOnW49fAjyNQZDAilFv2xRVdR46777OmDjvU6/f5vyciPjzxGCzXo1yR+rt+ovgxJ/CntU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=KYpNkjVE; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=TctsgkwO; arc=none smtp.client-ip=202.12.124.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfout.stl.internal (Postfix) with ESMTP id B48421140175;
-	Wed,  6 Nov 2024 03:55:37 -0500 (EST)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-10.internal (MEProxy); Wed, 06 Nov 2024 03:55:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1730883337;
-	 x=1730969737; bh=rmf9ivMSLIWqrguJz/3/wM9+xDOvZJ7XRQipjjgHJlQ=; b=
-	KYpNkjVEU2Swxa0H/qawlYh9y51+gW/hxSAzXIMAnNlVtEMaGenFucQQpjq8X5dF
-	MVIxEtVbWhZEMwBOXFcqm8mGYCeNE5nB/kYzi1F5bH4H7wNCymZU/FYu+cDB8N7y
-	9ZGbEGzRJo2WWo8J4G4R89XLi/1kOLi962N0DIQGQqP5G12Rk+9hGtWkptJQ9Io7
-	icIuk0qcsZCAwkILlUF5FKuVKs3M6ZHf+eU87GWEbSnfOMoYjUa9Q/56b/6W2fiK
-	vrKegjNjp9/Ikp3EmGLJ5ohJzwpKx0xrszf7OFvqak/Y1qyqBjHsCTfkeiaOCNvF
-	N1NxKCN66sBf+X42/ZGX7A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1730883337; x=
-	1730969737; bh=rmf9ivMSLIWqrguJz/3/wM9+xDOvZJ7XRQipjjgHJlQ=; b=T
-	ctsgkwOLwI5QHgW6IaRpJyzPuhUo9MdShTs5bx6d+S5gCSTknZgSkENDHBYKJSMQ
-	MqbL1gDp0IE9cXvH2ap8vBeEziY98hgJh0So1QhDq3tmk1EeMYpbWjc90dRq6kOY
-	r1oZ91P7VRNoriWvRrhrfzv3Uhn8Nas3sNBbe7c3ArvFYWfxq9qzUKIhh1hzdPol
-	vs+kV/xYsp7QUxYAWd9/p6iKvZHXtE1nm9P36Q3ANAGeVfDgfXH/iSg5p3uu0zF2
-	bEcHHqDyXOLT0t9A0e5XkQVXPL+lKyWhL+2Y9/Tq16hbnGPf9nwKLQ+RMkBDcT4s
-	8x5yohCaextVjWyDlDWvA==
-X-ME-Sender: <xms:CS8rZ4mBx3PlWvm82La7NX3d2-nkdMljv0FmuakDQWv6G1o27DZIgA>
-    <xme:CS8rZ31ZlQrNOjsCvrZXjhGXNFLZ2SmWuaCXeJenuPRhX0yy0l3pW4D_4mzrFGsXT
-    ERUh5R5QiD4ir5CIaI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrtddugdduvdeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddt
-    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
-    guvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefg
-    gfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepudeg
-    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehjohhroheskegshihtvghsrdhorh
-    hgpdhrtghpthhtohepjhhonhdrghhrihhmmhesrghmugdrtghomhdprhgtphhtthhopehs
-    rghnthhoshhhrdhshhhukhhlrgesrghmugdrtghomhdprhgtphhtthhopehsuhhrrghvvg
-    gvrdhsuhhthhhikhhulhhprghnihhtsegrmhgurdgtohhmpdhrtghpthhtohepvhgrshgr
-    nhhtrdhhvghguggvsegrmhgurdgtohhmpdhrtghpthhtoheprhhosghinhdrmhhurhhphh
-    ihsegrrhhmrdgtohhmpdhrtghpthhtohepuhgsihiijhgrkhesghhmrghilhdrtghomhdp
-    rhgtphhtthhopehkuhhmrghrrghnrghnugesghhoohhglhgvrdgtohhmpdhrtghpthhtoh
-    epphgrnhguohhhsehgohhoghhlvgdrtghomh
-X-ME-Proxy: <xmx:CS8rZ2rAmYyph3aphEBuoxopRl9o6CG8tQ6R_LhEsvibdYMp01gq8w>
-    <xmx:CS8rZ0mV8ZKLtngf0fyH6dU68PQzinQk1onUaAvUOgvzVzNp8REgDw>
-    <xmx:CS8rZ23qi8bUwU51EzFJD2z_g-JVy1SP8zaBK7m_M_qHzbnOavatOQ>
-    <xmx:CS8rZ7tak2EL9fG-drc4A5meUzZyq2aVjh0iNSnALMxxyx1HedVkXg>
-    <xmx:CS8rZ50ofKZjEBYcH_pa0x8kyjrYGoBtj4rjb8yxLpXxTK_lqYoCLv6f>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 243F22220071; Wed,  6 Nov 2024 03:55:37 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1730887296; c=relaxed/simple;
+	bh=4KWvGlAzbnzzsBhuOFLrlVXpY/vqqdBCj7f8ApXp0Fo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GR0jwqxCAryWd4z/y813WLnqGaOiCQPanh1OV4ZZH6os4WylT9rKlSrTThsX+qkNkM4ClyhjB4LxAUJU8BRBlnbeqS/uLaKevvudPQ2fifDohyy/v00SgcZHI6C7AWeDRWsxeVleFYRhdPaaqaMaSIUCp0i1YiKJCaZH/ofgAUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JK3VAb1Y; arc=none smtp.client-ip=209.85.208.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2fb5111747cso61521761fa.2;
+        Wed, 06 Nov 2024 02:01:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730887293; x=1731492093; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VZhbpyVRfgvljLe/iXBQmcZBRcKpdXm1vY0T+Z7FP0I=;
+        b=JK3VAb1Y85RdBKMoP130JWrvrYJ2tqc2lZhYZRK/2UaItX/9su31lhPZRTiwlvclji
+         O3hyMRu6PqBBpagM7UP+TEs3I7eS96tIKeU0vGzOhTgmvGq6sXoC+26sK+o6+9njxtko
+         sU9e6eiw1pyAbg94IkJv+CwjiuSl36WpD2N9aeyFqN7m869dmqcWi5P3myp3XyHr60Oh
+         YmbA0aXXDIW9VII8u1I6BtreGPHkbaEU51UP9Etyny4Upy/fqc/Za/9LgfaorpPZDB4K
+         jvLsF+Dz6EdBvsSKQBHkn6+nFe3XDqKnaG9bHT5DgYDxqgjhsYOOwKAgBLVDX6TkQMWd
+         P1Rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730887293; x=1731492093;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VZhbpyVRfgvljLe/iXBQmcZBRcKpdXm1vY0T+Z7FP0I=;
+        b=gcafwhx2h2m1NvPazbPD1p39FLZtlWF3eDO1xHQBztKhisAlkrDNXNOTRKK4TzLbj1
+         FBmuylRC7I6C9ggbAIKUNDFpb0HHWzTY7vRuGkezfSkkG4RTsRpZ8N8H4npaNW8R2/FH
+         oSuTzqbpQA0i6p9uIpnMOXi+Wvrm56KLAD1aFB06fk/Ai8D0aICQf4KrmoIiXn56gjzz
+         P49uXwvs0MvDx+42t8kBdTRmNArACNncgyUD6zdXqJAMUoUmCHY6tydwcbtcORtjFa3J
+         vf8ubISN5jrv2ZCls80ztj1H9788Brd0Si4UJkxQGI7VhTe/EToyksCxQsPeaw++cPiH
+         leEQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUrgFkQ+QVOlAjrmBSpaVkoeefxj7obO41LImg+g0Kbv96OFNklysZ1De+zhjcFhDpiZMemZmxUdd895ciZ@vger.kernel.org, AJvYcCWAHnn/EGnoa9UhhFyxfLvR9d9GVRR+mJy4gC7IDeyiFHKYqd0xa2lr7kX53mm2ovzGvYR/pky/HgGc@vger.kernel.org
+X-Gm-Message-State: AOJu0YxNwlxOHZ1GIdFKgt2MsIroJsWUaTFrYIYdMz9IUXpg2S/eRHLh
+	YQvnbc8p3LaBL/f0GZu6Oe4XEeu0l+ZD3oMF8XznupWiz5veRBTSr5MqqiScAMHgnGTPTk92L0I
+	bLF2E42KnbLyLQ7pIKRp6a8y3lk8=
+X-Google-Smtp-Source: AGHT+IFUyr5bB92xtqyuMhGUSRHo8VYiCSwYRtD+4nnqc6tbqiR/8sRnGqGs/qpLapnaYDiiZdE8vFp+YOJXapC5Nv4=
+X-Received: by 2002:a2e:4c12:0:b0:2fc:97a8:48f9 with SMTP id
+ 38308e7fff4ca-2fdec83ab34mr82498691fa.19.1730887292875; Wed, 06 Nov 2024
+ 02:01:32 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Wed, 06 Nov 2024 09:55:06 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Joerg Roedel" <joro@8bytes.org>,
- "Suravee Suthikulpanit" <suravee.suthikulpanit@amd.com>
-Cc: linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
- "Robin Murphy" <robin.murphy@arm.com>, vasant.hegde@amd.com,
- "Jason Gunthorpe" <jgg@nvidia.com>, "Kevin Tian" <kevin.tian@intel.com>,
- jon.grimm@amd.com, santosh.shukla@amd.com, pandoh@google.com,
- kumaranand@google.com, "Uros Bizjak" <ubizjak@gmail.com>,
- Linux-Arch <linux-arch@vger.kernel.org>
-Message-Id: <323dcff2-6135-4b8a-85db-bccc315ddfdf@app.fastmail.com>
-In-Reply-To: <ZyoP0IKVmxfesRU8@8bytes.org>
 References: <20241101162304.4688-1-suravee.suthikulpanit@amd.com>
- <20241101162304.4688-4-suravee.suthikulpanit@amd.com>
- <ZyoP0IKVmxfesRU8@8bytes.org>
-Subject: Re: [PATCH v9 03/10] asm/rwonce: Introduce [READ|WRITE]_ONCE() support for
- __int128
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+ <20241101162304.4688-4-suravee.suthikulpanit@amd.com> <ZyoP0IKVmxfesRU8@8bytes.org>
+ <323dcff2-6135-4b8a-85db-bccc315ddfdf@app.fastmail.com>
+In-Reply-To: <323dcff2-6135-4b8a-85db-bccc315ddfdf@app.fastmail.com>
+From: Uros Bizjak <ubizjak@gmail.com>
+Date: Wed, 6 Nov 2024 11:01:20 +0100
+Message-ID: <CAFULd4Za4BQL+h9Xmra1TjB2oGGzPwru_y1xOrrAFSg==bfvgg@mail.gmail.com>
+Subject: Re: [PATCH v9 03/10] asm/rwonce: Introduce [READ|WRITE]_ONCE()
+ support for __int128
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Joerg Roedel <joro@8bytes.org>, Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>, 
+	linux-kernel@vger.kernel.org, iommu@lists.linux.dev, 
+	Robin Murphy <robin.murphy@arm.com>, vasant.hegde@amd.com, 
+	Jason Gunthorpe <jgg@nvidia.com>, Kevin Tian <kevin.tian@intel.com>, jon.grimm@amd.com, 
+	santosh.shukla@amd.com, pandoh@google.com, kumaranand@google.com, 
+	Linux-Arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 5, 2024, at 13:30, Joerg Roedel wrote:
-> On Fri, Nov 01, 2024 at 04:22:57PM +0000, Suravee Suthikulpanit wrote:
->>  include/asm-generic/rwonce.h   | 2 +-
->>  include/linux/compiler_types.h | 8 +++++++-
->>  2 files changed, 8 insertions(+), 2 deletions(-)
+On Wed, Nov 6, 2024 at 9:55=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> This patch needs Cc:
+> On Tue, Nov 5, 2024, at 13:30, Joerg Roedel wrote:
+> > On Fri, Nov 01, 2024 at 04:22:57PM +0000, Suravee Suthikulpanit wrote:
+> >>  include/asm-generic/rwonce.h   | 2 +-
+> >>  include/linux/compiler_types.h | 8 +++++++-
+> >>  2 files changed, 8 insertions(+), 2 deletions(-)
+> >
+> > This patch needs Cc:
+> >
+> >       Arnd Bergmann <arnd@arndb.de>
+> >       linux-arch@vger.kernel.org
+> >
 >
-> 	Arnd Bergmann <arnd@arndb.de>
-> 	linux-arch@vger.kernel.org
+> It also needs an update to the comment about why this is safe:
 >
+> >> +++ b/include/asm-generic/rwonce.h
+> >> @@ -33,7 +33,7 @@
+> >>   * (e.g. a virtual address) and a strong prevailing wind.
+> >>   */
+> >>  #define compiletime_assert_rwonce_type(t)                            =
+       \
+> >> -    compiletime_assert(__native_word(t) || sizeof(t) =3D=3D sizeof(lo=
+ng long),  \
+> >> +    compiletime_assert(__native_word(t) || sizeof(t) =3D=3D sizeof(__=
+dword_type), \
+> >>              "Unsupported access size for {READ,WRITE}_ONCE().")
+>
+> As far as I can tell, 128-but words don't get stored atomically on
+> any architecture, so this seems wrong, because it would remove
+> the assertion on someone incorrectly using WRITE_ONCE() on a
+> 128-bit variable.
 
-It also needs an update to the comment about why this is safe:
+READ_ONCE() and WRITE_ONCE() do not guarantee atomicity for double
+word types. They only guarantee (c.f. include/asm/generic/rwonce.h):
 
->> +++ b/include/asm-generic/rwonce.h
->> @@ -33,7 +33,7 @@
->>   * (e.g. a virtual address) and a strong prevailing wind.
->>   */
->>  #define compiletime_assert_rwonce_type(t)					\
->> -	compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),	\
->> +	compiletime_assert(__native_word(t) || sizeof(t) == sizeof(__dword_type), \
->>  		"Unsupported access size for {READ,WRITE}_ONCE().")
+ * Prevent the compiler from merging or refetching reads or writes. The
+ * compiler is also forbidden from reordering successive instances of
+ * READ_ONCE and WRITE_ONCE, but only when the compiler is aware of some
+ * particular ordering. ...
 
-As far as I can tell, 128-but words don't get stored atomically on
-any architecture, so this seems wrong, because it would remove
-the assertion on someone incorrectly using WRITE_ONCE() on a
-128-bit variable.
+and later:
 
-       Arnd
+ * Yes, this permits 64-bit accesses on 32-bit architectures. These will
+ * actually be atomic in some cases (namely Armv7 + LPAE), but for others w=
+e
+ * rely on the access being split into 2x32-bit accesses for a 32-bit quant=
+ity
+ * (e.g. a virtual address) and a strong prevailing wind.
+
+This is the "strong prevailing wind", mentioned in the patch review at [1].
+
+[1] https://lore.kernel.org/lkml/20241016130819.GJ3559746@nvidia.com/
+
+FYI, Processors with AVX guarantee 128bit atomic access with SSE
+128bit move instructions, see e.g. [2].
+
+[2] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D104688
+
+Uros.
 
