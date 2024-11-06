@@ -1,243 +1,240 @@
-Return-Path: <linux-arch+bounces-8877-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8878-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A6429BEF43
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Nov 2024 14:40:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 114D29BF2DC
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Nov 2024 17:10:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 66C5CB238CD
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Nov 2024 13:40:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 49525B25FF8
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Nov 2024 16:10:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE18F1F9EA7;
-	Wed,  6 Nov 2024 13:40:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B1082038DF;
+	Wed,  6 Nov 2024 16:09:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="hKqznDMK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JuQqFPlp"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2077.outbound.protection.outlook.com [40.107.92.77])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6F4138F82;
-	Wed,  6 Nov 2024 13:40:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.77
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730900440; cv=fail; b=BeoqZaawn/ZeTSylF/8gTGBlKA842L9NW2vma+a78+zHyhetWqEgCXQuLnBHg6LpTP8Len5TDCEVaCWvUwqt71J/ugv9uIyO763DP7oLqBhQWNnxXpM0cd5MnS4nK+PRMsRDx7KkH5fVJ+o7mQO2nn+xaItdth0E66TlLDfGSnU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730900440; c=relaxed/simple;
-	bh=sGtqxflkmtAodDk+k/2a4ooOuLoA8CV74V0WIJPx+14=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=Hfc3ulCUuTemGYK1+mKaEwv3CD1ZxnhoHW2iFETfsj7Hhu4iffEHfqrIwU7VzUQwxeCH88wmzFVrJT4O/Lu2bUi/3apA79LNyn1TRBkqzoJlm3U5f8ivv7Q3iv7ODuOxWUCK8dixLM9kg8hIS4dx7qSTUBa20xCPK3yOtc0lwOQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=hKqznDMK; arc=fail smtp.client-ip=40.107.92.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=d6TMTvZYY4pDfuTH6ktdfdoKlVBXs+J59AMdpI+lFvvOmPeUlChPM2bAO1cx2Ly+YY9p53HeMAdYtzGpg+g58o6mfyBoxuHRVVW7rcolrPLbBBrj/3+Y1uk0k0NKdstCrDxXU49fGeP9peLa9I4A/6zSN+VSsy7yDGfmIrdZthguU78mAVfXwalna1lHYYYj1c7yR5TF9BWM1jfe4phg9OQAw5NvvjM+oVAh9Cm9j0jdvcm3v6QZZJi544wN97o6/GhF4eQ81ug/shgnBb3Do07D+5dLDBBD7/GPyP3Gzel9yzCCyQJDUstGDPFnQCuX67rJ1ZByoI8idafUBWbX0Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=G/ecE0SC4iJj/H9jKRFF/DU2SwgiHBcMZC/pBHob6m8=;
- b=H0e4Elcnus4ostbc7PoHU+aKF7ETr+qt/109t3HWr0NwRhAGXzQcUa3fyasJToO4pKD7nUU79CVxDJGRxPHANEF1oWaPivMDySFdagXy3hY3leOTgzfMNJISIT3QCjmk8pmrxVzCdp4hbBzBXrxHkOal1kebmrqc2dhctq7k6YDKUQNPRzgcllsL5mDCinOEXzbcFl0p1AYn/IZls4JOj1a9+X+jvQrT+VYYrxoLpF1+u3vU1XTzqtWf/kGv9ozyxYnwp12VtVnEY7nJ4b/W2vV8zRSmmio1YEwIjgXfuqHO50d6TGqaG0oMF0ztvnCTmN/9g3ocAHLPF2dYNtOicQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=G/ecE0SC4iJj/H9jKRFF/DU2SwgiHBcMZC/pBHob6m8=;
- b=hKqznDMKlf2h1m1ia+3dRSF5Qif7v6vojqj6d6K1aebqWq9UNKSiulGPIpVigfYpYfNwW7W4Suk1j4tyEcaf+UfljeQIZtBhqUvIkB7PzpWtH6bOD1x1Xb4FlUAP2zYYe3Q3/NaHgWWB1UOHfZ67JKAyPd5apPjtaShqelR6UNwgZ+fl63NmbtgemaDa7/w4fPu4qG0YeufTVtY9fdVydNNwS0HULDZ+8wjMpqsThZAuztUdonqvtIgFcMFxxuoWtagQal2PuuVCy8klEiWJ3efJOcYtryzk4U6gJldOYiwAxAXcv9htyIOjbmn41+X06Wgbx5WN4VFViSHezTLFww==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com (2603:10b6:610:17c::13)
- by CY5PR12MB6645.namprd12.prod.outlook.com (2603:10b6:930:42::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8137.19; Wed, 6 Nov
- 2024 13:40:35 +0000
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732]) by CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732%4]) with mapi id 15.20.8137.018; Wed, 6 Nov 2024
- 13:40:35 +0000
-Date: Wed, 6 Nov 2024 09:40:34 -0400
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Uros Bizjak <ubizjak@gmail.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Joerg Roedel <joro@8bytes.org>,
-	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-	linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-	Robin Murphy <robin.murphy@arm.com>, vasant.hegde@amd.com,
-	Kevin Tian <kevin.tian@intel.com>, jon.grimm@amd.com,
-	santosh.shukla@amd.com, pandoh@google.com, kumaranand@google.com,
-	Linux-Arch <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH v9 03/10] asm/rwonce: Introduce [READ|WRITE]_ONCE()
- support for __int128
-Message-ID: <20241106134034.GN458827@nvidia.com>
-References: <20241101162304.4688-1-suravee.suthikulpanit@amd.com>
- <20241101162304.4688-4-suravee.suthikulpanit@amd.com>
- <ZyoP0IKVmxfesRU8@8bytes.org>
- <323dcff2-6135-4b8a-85db-bccc315ddfdf@app.fastmail.com>
- <CAFULd4Za4BQL+h9Xmra1TjB2oGGzPwru_y1xOrrAFSg==bfvgg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFULd4Za4BQL+h9Xmra1TjB2oGGzPwru_y1xOrrAFSg==bfvgg@mail.gmail.com>
-X-ClientProxiedBy: BN9PR03CA0886.namprd03.prod.outlook.com
- (2603:10b6:408:13c::21) To CH3PR12MB8659.namprd12.prod.outlook.com
- (2603:10b6:610:17c::13)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29D301DE8BA;
+	Wed,  6 Nov 2024 16:09:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730909360; cv=none; b=nLbNslz1fu0ijBQ2KS7GuzTWsBcpLoZ18BUl18wPAC04H4nJQJdqOCthVA6w1qhlMrtuq91bHCl9x10NCaMstkDvGusdhPmwG7E6sTbydeXhwoubydAWR5Pjf8mnPv2RvL+zgzzEkkEhRY3ErrNyelAJjHlgm3/zlPAWM6YyHAg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730909360; c=relaxed/simple;
+	bh=VOUAaO8tbrP/wOcy0Hm9JSPbINDxNuLU/AYW8Ip0Zd4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=oKKWfdqOmTWt8Movls78gWN3d5s/5DhsgghLU08uypOt6MhtyRPcPfAxnz7QdvSy8pT7trpiVk5/rBWVLOgUN8VhTzoFICtDVDNcM1u5Rrlo6V+i3zqerOyuQU6v+cGh+ZIAXT2TJAQB6qpy0FRkJWii2gn9P4AT7d0J5rorkTQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JuQqFPlp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B361C4CEDA;
+	Wed,  6 Nov 2024 16:09:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730909358;
+	bh=VOUAaO8tbrP/wOcy0Hm9JSPbINDxNuLU/AYW8Ip0Zd4=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=JuQqFPlpGiZAw7TILRMopCknbSMhoSbKx2jz2KR/Z4136chHTIJzi6bsn3gL0+hTS
+	 e2biPgPhKCa3qDTsZK3oGU9ag6yFsmSdHsyCuRlh6zqidBZaOF+DTVoqAZfMX++Uhv
+	 PSkA3uMU8U3BudOhRigGRcWHfPrAIWwmjbH+UwbaDidkQNTNe1X6FpdHr87lQu6nJF
+	 6F4qszR0GXujuSL0Hx1jvOjHS+69UHa30u7ijx0wDL2pGIVmwGiwsXm+6V/I/57AnB
+	 jSruAnH3iySsmiY0+fL2x/BG6YQI65Ewzv8CjSgnBAtbJSqhdPyawhvOWKnlvy+KFf
+	 YpFJa2r1JhqOA==
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-539e5c15fd3so6742744e87.3;
+        Wed, 06 Nov 2024 08:09:18 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUzjS5C2DmQinBTuGovT/ELyDAhpKA8Nq/xAsTgy3JJqaJ3JMbBhHLkLeGA6n5qXlgU/nmZsyJtu2+YQUT3@vger.kernel.org, AJvYcCVSeVafwucFK+nDjqW5Xe7r4xdrg1q4FjvyoFhbx5E85n8QhsLK3L5IY3cJgSGi1u1fCnG+h5xOFjfbH8Vo@vger.kernel.org, AJvYcCWFFEHQbbUcML/CGWhF9usw/ZSIXZRTa+XeAKa8GfKQEfkEC3GUd3LnAj80e6j4i2NePc7GSe0IwZSG@vger.kernel.org, AJvYcCWJ40qd+jfgSryCLd0KdEerEkp7FGyR/qdHZD5ZwMQe+D5qiUIcSidXToIcJKLq0oUT5U6U9OfFHxxg@vger.kernel.org, AJvYcCWLMcuZndJtEa7Gicvc83B+BtimMw4tWsWc3e5oUytgnDaM30V650VvrhEJkmjiv9nwe6aIMbrsn80/@vger.kernel.org, AJvYcCXWi4AYx9ocvpN1dIfBN2PcmtkruccbLd84+RYWsdwFnSpwCPBQ7xAjcPd8e3/XXC++IbDkeMKd/AN2Lg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzX6Q4XJmxYzh7/4uNSxHziSpjXx23K/H1UmrlMXi89IMOpLLhj
+	JSy6/V15L+ujJKUTEpXUWXpGt3zcBnwRxe9LsE8elnetsApxsUbK1qK+gU2tYLlzaLBLMEDKCkn
+	G0/nwAy1L0e69+o02h/Vw3Fp+7i8=
+X-Google-Smtp-Source: AGHT+IFe3LtQOU5rlt2uGICpXWpl9dXGIsyeiu98XXxTi7W/MgXwXeHBmA5AmnRcRDJ/VkMxQJyWrHuX629kG1Abv5I=
+X-Received: by 2002:a05:6512:398d:b0:533:711:35be with SMTP id
+ 2adb3069b0e04-53b348e154fmr20852753e87.26.1730909356944; Wed, 06 Nov 2024
+ 08:09:16 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PR12MB8659:EE_|CY5PR12MB6645:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6108b97f-c446-4141-09d7-08dcfe6897a8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|366016|376014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?K01UMGtqdWJpZHpvTUJGZkRVbU1RTGNXd09ZMzN0alJHV1M3U1IydjNITkZz?=
- =?utf-8?B?RHRQcDJpeE5xV1Q2WTdWelYrNUxuV1pyeGxDYjJURE9zUUE1T0NQSnNVYlZj?=
- =?utf-8?B?OU12SzN6ZGtVYTRLVC8xRlI1RjJyWjdoL3VNOXY0d2pvVk8vNndKTU5Gb0RZ?=
- =?utf-8?B?VHU0K0NDYXRiYlpDU0ZvS1hkZ21GTTdEcGRIRmlUSXIwMVNia2ZGbWx0cGxj?=
- =?utf-8?B?cDRxc25wY1hOU3l5MWZNczQzS3Z5NTlDLzNQbFlMbFN4cUpsYThxL1BKdXVJ?=
- =?utf-8?B?ajczd25jOHc1a05HQkVMcTFabVVYd0VEMFpBeWVsSHRmYjdndkQ1S2JpeUVH?=
- =?utf-8?B?ZUxkakYzb0E4UDA1SVFUSGlOcEYyYWVTalZPTkErejREYzVROCtLeE1FTDEw?=
- =?utf-8?B?RjdrM1JKSGhWRWtmTm9qemlsSElVK0pva2V0dUZoUDY4bWFRNWdEMG9HT3h3?=
- =?utf-8?B?c1VOdWZFaVhjQ1RxQXluOXFIMEd6UnU1QlR2b2pNT0hGQ1kzbGdYNDFFL3ds?=
- =?utf-8?B?Vk5ONklZNC93bFl2WFAzSHExMldiM2xmdExKdDZWN2tNeHVYWXk0QlVqWUJV?=
- =?utf-8?B?QjhMR0tLeEliancxcGFnYUw2NVlsb2RHb2FodWpHZGdDTHFjcnJMQ0VtRHlM?=
- =?utf-8?B?dWNsdUhuNUFQQ2VXeUw5M3JZRE5XMU45c2VUVzBUZWdiNmMwbXJhd1d1ZEJy?=
- =?utf-8?B?QVUvKzZFSDFJcUFDY1RVUUU3N0tqNGtsM3VXZGZDeVVaejVRRDJJeHYxT1Zo?=
- =?utf-8?B?WkhkdHpEUmpQeG9hZ09MSTRFMnF2SGZod0pGR0dqeTVqOHBHdkFjVGtVV2d6?=
- =?utf-8?B?b3U1bVVPenJpcUVnR2JPZEFGQ2VaUzhkQjJXVmJwbUpmQVhrOGVWR0VtWVBr?=
- =?utf-8?B?NUhKWFhzTTQvWWRFVUpkclNmYk9aMzhtbWVWaElnT0s1UnlXMnRjOTk0SEZx?=
- =?utf-8?B?eWxkaFNPSUkwUUNQazk3RHVkbVBzbEREV1hPcGtSTThXMGM0cmt5ZEEzQ0lD?=
- =?utf-8?B?eTFoNUJ0K0RieSsxR25Wa25sMng2akdpZ0k3MXo0NGc5WGc5ZjZHL3lPZTZW?=
- =?utf-8?B?N0N2cUlsdFBaNEt1SndtL3RDWVY3UTV3OWZOMHkxT0hOSWs0VCsxV2xjU1NU?=
- =?utf-8?B?THVJRWNMdjJMcHd3TXEzVkJla2tvaTJhU2RYSjVsdS9IYzFtSS9DTXZVeEhH?=
- =?utf-8?B?VVhUNzYvcGRydmJNbmVjMjJCMHVaWmlJVUJFTTBtYURkQ1Z3L25paW0raXor?=
- =?utf-8?B?VUN4ZlEvYWI3WWw3VkFmVHNhT2NvVFlqb3hOaWt6SDRuYm4vSkljZTlhMzhT?=
- =?utf-8?B?dDNmZjhKVGlINlVOOU10T0hwSVNjTXpZaTZkKzVhV0x0MmxhRkRlTFVjR2Nj?=
- =?utf-8?B?SkFVaFpBN0xSL3pRUVpiai9BcFNRSzY2WUhsVWkyN2t2T08wZGMzeDdpTnJs?=
- =?utf-8?B?YWhkT0MvMG9XNHh0d3ZWdmN6dXk1NmxFWEYzQ3ptcWdJNDRwTzZUSkN2NkRQ?=
- =?utf-8?B?ckUwaXo0bkpFSE5rVkN3dXc5NU1MSU9kRHlzTTZ0djYyUlRkb2JTTVJFVHpx?=
- =?utf-8?B?a0txSjdjT240UUNkdmo1MmJiT0JxUXFHU2lRbE13N1BmVGZpbmtQQUFNaldi?=
- =?utf-8?B?S0RJTmNlNmtzYW9DQU13aGxndGVLWnlwOU4wMzlUQUc3Yjk4QmNEdXE2WlVU?=
- =?utf-8?B?L2RlWmhlNG9nOENuTEFxRUE1bWx4VEZ1OW9YMUI3VC9KTjV0Z0RmK09naE5X?=
- =?utf-8?Q?38iJAZNSeJxzk6HLcb4QUAQf+4PfvmZIKsUj4t4?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(366016)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?ekZxWnNLM04waTJpYTB0clBYNnNoMnkxZ2lyTTZEVnhDOUc1WjU0N0szMHNs?=
- =?utf-8?B?bis5OEtKMldlRmVUR2Mzd2U3MGpmZ2xucFZUdEhMVWp5YmI0SUtJWVhLU2xK?=
- =?utf-8?B?QVNaeit3TkJhVTFwMGtCYVd4VHhia2lsV0FEYmpwVjVNWkVDRWh4Y01TbUk3?=
- =?utf-8?B?V0RBN3VyL0E0UERWZEpXL3djV2RXWVpuQ2lmam9jNEpTcldETDlMYVNkN2tn?=
- =?utf-8?B?WWxocklSRzRNVjNWUEdQdC9scEYwQTNoQ1lhakpNbktPZFZGS0U2d1hnalhH?=
- =?utf-8?B?cGNheGhnUkhjOHZWTGNHUG9nR0d6SjZXZGszeXYvMnI0b1VZQjdaNkkwd3Bi?=
- =?utf-8?B?Z0FUU3VJenFsME1Dak5tUXVRUUN6eE9zdWgzSUx1TG40Y0xhWHFPTjgrcXpa?=
- =?utf-8?B?ZjFZSWZZMkhvTnRlT1pUbDBYRXNaS1FqaHMyVGtMSVdvLzlMQUc2ZlRzNVV6?=
- =?utf-8?B?bVdtUHdMVnZoYk9IODUvdmwzdm9rZlRqTStPQ3BiZm9JcHZWOXo4SStEOGY4?=
- =?utf-8?B?UTViOVZjdVUzWVVNQnVJb2swRFR6MlJpUk1rbHh2b0l6ay9GN1VVNlc0cnBL?=
- =?utf-8?B?a1dKZEZBbUdtVHY0YVZEdjYvb09NNEFuVk94eEVJTVdRYzJUOEYwdStmVzJm?=
- =?utf-8?B?WnRUWmNhd1ZkamQwK1A2elVtSXp4N2ZqbkE1cUNZcXdmVHJjcGpHQmpVUWE5?=
- =?utf-8?B?Q2YxOVZRN2RqRlB3ZHZvaDYvd0Q0cnVDQldjRjhoV3p1YldxclluK0ZoOFF2?=
- =?utf-8?B?U0NkaXZzTnpUY2NobHNSam92dHZEczlBaGF2N29ldUIwZWo5dFYyaFY3eE1D?=
- =?utf-8?B?elE5d2ZPaE1GcTQ2eDZFbWJndVBUbndtK1drUDJPQ0FvWjRQUG9JUXppT0J2?=
- =?utf-8?B?TlZ3UWdWQkpXWDMxd0dYRjFHYzd0M1ozNFVRRlRvU1R0ZDdFRWVBSlVsKzZm?=
- =?utf-8?B?SFRvUlhNbDJLNmthd0hsS3VFeVIxTWNkWkxmS1dRRHFEQ1dHbjY4QVdISFRW?=
- =?utf-8?B?NkZqajYyaEtyNnNmK1pDQllaNER1S1VjVTg2VjhwdFVXdm5WM2tPT2ZPN0xq?=
- =?utf-8?B?TC91Q0JjWHhMUXpMaDdSYnpOMTlLQzM4RlpNRElLQmt4N2M3M2xWTWw4bldZ?=
- =?utf-8?B?QmVud1lZNldSZUpMRCsrWnAvV3dhTWxSLzdTWXg4VDRUWk1kN0pxNE5yTjYv?=
- =?utf-8?B?NGZWUGp5bzR4K0xZWitMTFFjVHpyZlpESDB4RkhIemhDRnA5cGQvU0FqWjRz?=
- =?utf-8?B?ZzMwaGxPZTBmdmJiM1RjMVlQU2VQZElUUHRCSmpIVytjOEZkS0NDR216L2dF?=
- =?utf-8?B?eWFraEVLdFZ3aVNvOHV0VEhxWlVYWFNQUS9uY3pNWkw3UXJ6QzRqZnQyOWRr?=
- =?utf-8?B?K3A5QzB1ekE1LytWWjkrZ0JZN2Z5NUlGUFN2dEZOaUxQazU1bmdQSkltcXpF?=
- =?utf-8?B?VHNMQTJNNlovWHVlVStBb3lTVHEwdGFPL1NUSEFZZ3B2KytkcG5ENHU2cVk5?=
- =?utf-8?B?dVZaUnFLWWpndHBzVVVWVUJaVDBVaEFvckFrcDN6RVlKeGNJK3VhanZMQmFl?=
- =?utf-8?B?QXpCUlRMTHZUZmtoSW5VazZxckxDcm1KdlQxemlGTUhIT01lTEZZdkNuVVQz?=
- =?utf-8?B?TFlCVXZ2NkFRcVRlWStyZFpUY0Y0Z3FtTEpJSy9uZ1RIeXdEeWJGMTAyWmRU?=
- =?utf-8?B?WjNXdEFZaFNCSGxjbGV2Qjh4SFV4dEpuK1VIYWFTYmdBQTE3Z0ZTaVJ2UUpn?=
- =?utf-8?B?WTJaa0FrVVB3eVlWZUJvY0pkeWhSOU9kZnlqRm9YeCtXMlFPbTQ0enlMSll4?=
- =?utf-8?B?NURYSDBOYlFxQ1VFbkYra0JodmRiTEZoZVRxajlwZTRJaUQ5Z3FXTmJEd3VU?=
- =?utf-8?B?djI4T3ZpNHV6ZkhYb054NlBrZWdON0FhUmFrR0xXOERhZ3ozbDVTUjkxVnRC?=
- =?utf-8?B?S2RIVnZtRWgxU2lBMnhVN2Y5Si9WOXkraUdTNnBWUGkzTGVDaGhYdjRPQzF6?=
- =?utf-8?B?dGp0YzIzZ0YrVFJwYnRYVnNkUFY2R2s0dmdjM1Zlb2FGSUZFR25HQkdYNm55?=
- =?utf-8?B?dFBtMkhhSXVXcEFLUXdER3VTbEdCY0lERSs0eVFBMFhNV1ZrRURhZVZwaXZW?=
- =?utf-8?Q?k0tPyNy450KnAYHzJQznbtSKm?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6108b97f-c446-4141-09d7-08dcfe6897a8
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8659.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Nov 2024 13:40:35.5561
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FUT90im2PDt9nHoxvgMCCzxLTG9/Oc01Iu70Y9mQZb5v/S10uWhdHG287+OJRZ8l
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6645
+References: <20241102175115.1769468-1-xur@google.com>
+In-Reply-To: <20241102175115.1769468-1-xur@google.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Thu, 7 Nov 2024 01:08:40 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASdBPtq4vaK0XZQvxicOY15qJFsnqkO2_us4AU4ppHw6A@mail.gmail.com>
+Message-ID: <CAK7LNASdBPtq4vaK0XZQvxicOY15qJFsnqkO2_us4AU4ppHw6A@mail.gmail.com>
+Subject: Re: [PATCH v7 0/7] Add AutoFDO and Propeller support for Clang build
+To: Rong Xu <xur@google.com>
+Cc: Alice Ryhl <aliceryhl@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>, 
+	Breno Leitao <leitao@debian.org>, Brian Gerst <brgerst@gmail.com>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, David Li <davidxl@google.com>, 
+	Han Shen <shenhan@google.com>, Heiko Carstens <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>, 
+	Ingo Molnar <mingo@redhat.com>, Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Juergen Gross <jgross@suse.com>, 
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
+	"Mike Rapoport (IBM)" <rppt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Wei Yang <richard.weiyang@gmail.com>, workflows@vger.kernel.org, 
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Maksim Panchenko <max4bolt@gmail.com>, 
+	"David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
+	Yonghong Song <yonghong.song@linux.dev>, Yabin Cui <yabinc@google.com>, 
+	Krzysztof Pszeniczny <kpszeniczny@google.com>, Sriraman Tallam <tmsriram@google.com>, 
+	Stephane Eranian <eranian@google.com>, x86@kernel.org, linux-arch@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 06, 2024 at 11:01:20AM +0100, Uros Bizjak wrote:
-> On Wed, Nov 6, 2024 at 9:55 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> >
-> > On Tue, Nov 5, 2024, at 13:30, Joerg Roedel wrote:
-> > > On Fri, Nov 01, 2024 at 04:22:57PM +0000, Suravee Suthikulpanit wrote:
-> > >>  include/asm-generic/rwonce.h   | 2 +-
-> > >>  include/linux/compiler_types.h | 8 +++++++-
-> > >>  2 files changed, 8 insertions(+), 2 deletions(-)
-> > >
-> > > This patch needs Cc:
-> > >
-> > >       Arnd Bergmann <arnd@arndb.de>
-> > >       linux-arch@vger.kernel.org
-> > >
-> >
-> > It also needs an update to the comment about why this is safe:
-> >
-> > >> +++ b/include/asm-generic/rwonce.h
-> > >> @@ -33,7 +33,7 @@
-> > >>   * (e.g. a virtual address) and a strong prevailing wind.
-> > >>   */
-> > >>  #define compiletime_assert_rwonce_type(t)                                   \
-> > >> -    compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
-> > >> +    compiletime_assert(__native_word(t) || sizeof(t) == sizeof(__dword_type), \
-> > >>              "Unsupported access size for {READ,WRITE}_ONCE().")
-> >
-> > As far as I can tell, 128-but words don't get stored atomically on
-> > any architecture, so this seems wrong, because it would remove
-> > the assertion on someone incorrectly using WRITE_ONCE() on a
-> > 128-bit variable.
-> 
-> READ_ONCE() and WRITE_ONCE() do not guarantee atomicity for double
-> word types. They only guarantee (c.f. include/asm/generic/rwonce.h):
-> 
->  * Prevent the compiler from merging or refetching reads or writes. The
->  * compiler is also forbidden from reordering successive instances of
->  * READ_ONCE and WRITE_ONCE, but only when the compiler is aware of some
->  * particular ordering. ...
-> 
-> and later:
-> 
->  * Yes, this permits 64-bit accesses on 32-bit architectures. These will
->  * actually be atomic in some cases (namely Armv7 + LPAE), but for others we
->  * rely on the access being split into 2x32-bit accesses for a 32-bit quantity
->  * (e.g. a virtual address) and a strong prevailing wind.
-> 
-> This is the "strong prevailing wind", mentioned in the patch review at [1].
-> 
-> [1] https://lore.kernel.org/lkml/20241016130819.GJ3559746@nvidia.com/
+On Sun, Nov 3, 2024 at 2:51=E2=80=AFAM Rong Xu <xur@google.com> wrote:
+>
+> Hi,
+>
+> This patch series is to integrate AutoFDO and Propeller support into
+> the Linux kernel. AutoFDO is a profile-guided optimization technique
+> that leverages hardware sampling to enhance binary performance.
+> Unlike Instrumentation-based FDO (iFDO), AutoFDO offers a user-friendly
+> and straightforward application process. While iFDO generally yields
+> superior profile quality and performance, our findings reveal that
+> AutoFDO achieves remarkable effectiveness, bringing performance close
+> to iFDO for benchmark applications.
+>
+> Propeller is a profile-guided, post-link optimizer that improves
+> the performance of large-scale applications compiled with LLVM. It
+> operates by relinking the binary based on an additional round of runtime
+> profiles, enabling precise optimizations that are not possible at
+> compile time.  Similar to AutoFDO, Propeller too utilizes hardware
+> sampling to collect profiles and apply post-link optimizations to improve
+> the benchmark=E2=80=99s performance over and above AutoFDO.
+>
+> Our empirical data demonstrates significant performance improvements
+> with AutoFDO and Propeller, up to 10% on microbenchmarks and up to 5%
+> on large warehouse-scale benchmarks. This makes a strong case for their
+> inclusion as supported features in the upstream kernel.
+>
+> Background
+>
+> A significant fraction of fleet processing cycles (excluding idle time)
+> from data center workloads are attributable to the kernel. Ware-house
+> scale workloads maximize performance by optimizing the production kernel
+> using iFDO (a.k.a instrumented PGO, Profile Guided Optimization).
+>
+> iFDO can significantly enhance application performance but its use
+> within the kernel has raised concerns. AutoFDO is a variant of FDO that
+> uses the hardware=E2=80=99s Performance Monitoring Unit (PMU) to collect
+> profiling data. While AutoFDO typically yields smaller performance
+> gains than iFDO, it presents unique benefits for optimizing kernels.
+>
+> AutoFDO eliminates the need for instrumented kernels, allowing a single
+> optimized kernel to serve both execution and profile collection. It also
+> minimizes slowdown during profile collection, potentially yielding
+> higher-fidelity profiling, especially for time-sensitive code, compared
+> to iFDO. Additionally, AutoFDO profiles can be obtained from production
+> environments via the hardware=E2=80=99s PMU whereas iFDO profiles require
+> carefully curated load tests that are representative of real-world
+> traffic.
+>
+> AutoFDO facilitates profile collection across diverse targets.
+> Preliminary studies indicate significant variation in kernel hot spots
+> within Google=E2=80=99s infrastructure, suggesting potential performance =
+gains
+> through target-specific kernel customization.
+>
+> Furthermore, other advanced compiler optimization techniques, including
+> ThinLTO and Propeller can be stacked on top of AutoFDO, similar to iFDO.
+> ThinLTO achieves better runtime performance through whole-program
+> analysis and cross module optimizations. The main difference between
+> traditional LTO and ThinLTO is that the latter is scalable in time and
+> memory.
+>
+> This patch series adds AutoFDO and Propeller support to the kernel. The
+> actual solution comes in six parts:
+>
+> [P 1] Add the build support for using AutoFDO in Clang
+>
+>       Add the basic support for AutoFDO build and provide the
+>       instructions for using AutoFDO.
+>
+> [P 2] Fix objtool for bogus warnings when -ffunction-sections is enabled
+>
+> [P 3] Adjust symbol ordering in text output sections
+>
+> [P 4] Add markers for text_unlikely and text_hot sections
+>
+> [P 5] Enable =E2=80=93ffunction-sections for the AutoFDO build
+>
+> [P 6] Enable Machine Function Split (MFS) optimization for AutoFDO
+>
+> [P 7] Add Propeller configuration to the kernel build
+>
+> Patch 1 provides basic AutoFDO build support. Patches 2 to 6 further
+> enhance the performance of AutoFDO builds and are functionally dependent
+> on Patch 1. Patch 7 enables support for Propeller and is dependent on
+> patch 2 to patch 4.
+>
+> Caveats
+>
+> AutoFDO is compatible with both GCC and Clang, but the patches in this
+> series are exclusively applicable to LLVM 17 or newer for AutoFDO and
+> LLVM 19 or newer for Propeller. For profile conversion, two different
+> tools could be used, llvm_profgen or create_llvm_prof. llvm_profgen
+> needs to be the LLVM 19 or newer, or just the LLVM trunk. Alternatively,
+> create_llvm_prof v0.30.1 or newer can be used instead of llvm-profgen.
+>
+> Additionally, the build is only supported on x86 platforms equipped
+> with PMU capabilities, such as LBR on Intel machines. More
+> specifically:
+>  * Intel platforms: works on every platform that supports LBR;
+>    we have tested on Skylake.
+>  * AMD platforms: tested on AMD Zen3 with the BRS feature. The kernel
+>    needs to be configured with =E2=80=9CCONFIG_PERF_EVENTS_AMD_BRS=3Dy", =
+To
+>    check, use
+>    $ cat /proc/cpuinfo | grep =E2=80=9C brs=E2=80=9D
+>    For the AMD Zen4, AMD LBRV2 is supported, but we suspect a bug with
+>    AMD LBRv2 implementation in Genoa which blocks the usage.
+>
+> For ARM, we plan to send patches for SPE-based Propeller when
+> AutoFDO for Arm is ready.
+>
+> Experiments and Results
+>
+> Experiments were conducted to compare the performance of AutoFDO-optimize=
+d
+> kernel images (version 6.9.x) against default builds.. The evaluation
+> encompassed both open source microbenchmarks and real-world production
+> services from Google and Meta. The selected microbenchmarks included Nepe=
+r,
+> a network subsystem benchmark, and UnixBench which is a comprehensive sui=
+te
+> for assessing various kernel operations.
+>
+> For Neper, AutoFDO optimization resulted in a 6.1% increase in throughput
+> and a 10.6% reduction in latency. UnixBench saw a 2.2% improvement in its
+> index score under low system load and a 2.6% improvement under high syste=
+m
+> load.
+>
+> For further details on the improvements observed in Google and Meta's
+> production services, please refer to the LLVM discourse post:
+> https://discourse.llvm.org/t/optimizing-the-linux-kernel-with-autofdo-inc=
+luding-thinlto-and-propeller/79108
+>
+> Thanks,
+>
+> Rong Xu and Han Shen
 
-Yes, there are two common uses for READ_ONCE, actually "read once" and
-prevent compiler double read "optimizations". It doesn't matter if
-things tear in this case because it would be used with cmpxchg or
-something like that.
 
-The other is an atomic relaxed memory order read, which would
-have to guarentee non-tearing.
+I applied this series to linux-kbuild.
 
-It is unfortunate the kernel has combined these two things, and we
-probably have exciting bugs on 32 bit from places using the atomic
-read variation on a u64..
+As I mentioned before, I do not like #ifdef because
+it hides (not fixes) issues only for default cases.
 
-Jason
+
+--=20
+Best Regards
+Masahiro Yamada
 
