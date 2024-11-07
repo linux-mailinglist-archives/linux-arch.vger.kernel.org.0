@@ -1,198 +1,185 @@
-Return-Path: <linux-arch+bounces-8909-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8910-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E012D9C115B
-	for <lists+linux-arch@lfdr.de>; Thu,  7 Nov 2024 22:54:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 317CB9C11B8
+	for <lists+linux-arch@lfdr.de>; Thu,  7 Nov 2024 23:33:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0F3891C214BD
-	for <lists+linux-arch@lfdr.de>; Thu,  7 Nov 2024 21:54:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C85CC2846D4
+	for <lists+linux-arch@lfdr.de>; Thu,  7 Nov 2024 22:33:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC35C21894A;
-	Thu,  7 Nov 2024 21:54:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B2D4219C96;
+	Thu,  7 Nov 2024 22:32:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BQ0ookEI"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="E85Vpx1X"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C47CC21892F
-	for <linux-arch@vger.kernel.org>; Thu,  7 Nov 2024 21:54:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34B832194A6;
+	Thu,  7 Nov 2024 22:32:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731016461; cv=none; b=UGEo8w35M4RCILEHx1dpcNDvdCzNmziVWKBIw9dDHmQ1poVQashajNOhI0GVANZRExgb3oI8pLhnYgdhO6twzxJRzaKM4w4UebG6bofAFt3IQCjZ0wyTjgGOuclsdQl7pwCKYfBLqW9nnC9e82uBniVcq68k7ca/TLmBr/ZaYCg=
+	t=1731018759; cv=none; b=HlLt9PNEcNkanV/ObtH5eiDtOtB8jt58aJkOof/Ohc1AoqIc6URtKUnM0UpIGzz5JOZOj7Y1HfeYbmwu49R0SJ5T/cKbfKYNrH7rwSvEpEctBqYUTyrS61zfC+g62WvuVN+R+KMN3/xl1t1SZyshsL0qqIkjyd8OiTfZKYHXnKg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731016461; c=relaxed/simple;
-	bh=L2z5Im7eApEYnSF6VAAS12BUcltczp7EaP9nsBPNtgU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HZf/zU/mscLrCsXz2zbk2Vjs8oSQNxmH2I3Jn6go2TH0X3b/kTPhvsDMsjk9WoSxwp9ZLhaU6kENSH5n2PltwNdNfmYUzD8kBC4jyZW6VW0BO7L70i+nGuKzdCVX4rfosL8qzVtADG2hxeSlo6QjRByVVkEHTm17L1v2FD71pcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BQ0ookEI; arc=none smtp.client-ip=209.85.160.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-4608dddaa35so88791cf.0
-        for <linux-arch@vger.kernel.org>; Thu, 07 Nov 2024 13:54:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1731016459; x=1731621259; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PXyRMpyA+Wotd0AmuT5vj1vIpPFJGkQFHScvE/Azn4Q=;
-        b=BQ0ookEIX3hz8qB0+WTx3crlIJ/BaR1qbqucW2T4SDddVR0ckxwtuNhYEXj563QkxY
-         AGaHJRubLcHlSvCoZjPI6zHAOkUP3jhieIyKyjUFXgCqckT4ClEVBUSbQnMOxe+CGNCQ
-         QO4esPxA09ImVMnrdQYrwiGQvtYXpWmy/sizV49Y5jo6lXIMIpApZiEPZJSrwOp74uLl
-         mYjrV3H/NDDWfOijAUFu2ZjtJJVp0eNQ31Umrysqcupo30+AN4pd4rQXLTUCup+0WtVG
-         AyTCph81uuGplCW2JqZftYaBnNksG2cQ03t9CGbDe5TYXxOYkNdQv+jtQYlne2TV0dUa
-         3KIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731016459; x=1731621259;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PXyRMpyA+Wotd0AmuT5vj1vIpPFJGkQFHScvE/Azn4Q=;
-        b=mix5jeStty5wmQ5SK0omKruKS8pTzSpQvGfWCKDuVHA1GOls1IFz9KBtgaKMFrcsXI
-         38U0fB9tK7QyByoA5TbqqkKU/h4KgnkidZIqrta0VkvpttJRVY4QZnvvCmNIzjmneMq+
-         yn6qwsVTrOkpWHzliDszy/++2XdE/yKwVJYghmEIb853QNCAyNsUXMlb6K/LnfGAvzCW
-         KxcmrN86IMp3vSuQD3rpgdU+g5JtslOt99Jul5WU8+7IbxDmFI7E0Y/Lqfb6TlQQKH6W
-         6HdlvhClf6lQRYMYThtmyobHVewhe9MYd7+GCRDyyy09xOR4zPBDPL2dyjYjJVb0+/FC
-         iDMQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXUThUHugLixSnbBq/fMu6E5KFrpUrgb4a7uDN/sYEo5pasD1MjHc5M7X3i4T0u49USbn+aA21v0KeT@vger.kernel.org
-X-Gm-Message-State: AOJu0YxPOxVg0Bmqz6qA6dQpVBWEFEvCfs5fpObbnU6lW1f/ilziDYW2
-	mVqjMghuNOBqiJjZz82MsIZU/sJpTWzHS6UM0LLcAN4XFusVcX7np/RfFH4H8cew03Zh0MZwdwF
-	iAO8wGUsNPFS3Wx/1JsDKrsmoNswJABHRGLAS
-X-Gm-Gg: ASbGncuGKyeP8G4WQJ46I16oaxyozaJgUHwfwC0uJwvLJNpU1xupDsHxmlQP5yYZYPm
-	AEMigGlRTBtwLMiaxAi4pMU9CG8xejPbFkGgNbMNl1EIYFUzCEE/b909DY9jE
-X-Google-Smtp-Source: AGHT+IFdkSoHyavqa/rWYWexCV5GeErWCgxte9R1lHiqNRFVJXCyk2W6mdtD7fnvhuSYzrquH11z1oepbqTe6XTTqdc=
-X-Received: by 2002:ac8:5f06:0:b0:462:ad94:3555 with SMTP id
- d75a77b69052e-462fa646403mr5858781cf.25.1731016458594; Thu, 07 Nov 2024
- 13:54:18 -0800 (PST)
+	s=arc-20240116; t=1731018759; c=relaxed/simple;
+	bh=3axHTgWvPaJXU6x/HwYNyCImPTdzE7DJqPuDZ6F6AzE=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=fXJr0IiAV0cpTIlsanSD2sh+/NW+SL9MLqf3Y+HxDssH74J2LWCiaq0vv7TojBwx3z0ZawPrjiuNjvxtEvd82K+HYPkDiPwETQ3tnfKnllAvu67wmRbpaiHjfH2t5CJLHbGnGo0rLKgQddLgYpdkT5hme3bowV+UjoX/8L64+Zo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=E85Vpx1X; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
+	by linux.microsoft.com (Postfix) with ESMTPSA id A7369212C4BF;
+	Thu,  7 Nov 2024 14:32:30 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A7369212C4BF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1731018750;
+	bh=dXEOtZcKhs1OyrLOGbwwuM7yb0GGsFy0HJU2nlATJVM=;
+	h=From:To:Cc:Subject:Date:From;
+	b=E85Vpx1XKF/7gIXBsoZOI6XnWD4pHDLIv62Hmm0sqgJpnOf8/Cgg8V/QCKee3Vppr
+	 ry4FPI40feJ1miQYl+Dx+/AvjsAcrxqUrJygt4jVjT3OJnYKE30CU4CoZ3KZny5GG9
+	 XD4lpSNQQEk/X8UUGLdqFqJ/fa8hg8d9V2jWrOLw=
+From: Nuno Das Neves <nunodasneves@linux.microsoft.com>
+To: linux-hyperv@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org,
+	iommu@lists.linux.dev,
+	netdev@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	virtualization@lists.linux.dev
+Cc: kys@microsoft.com,
+	haiyangz@microsoft.com,
+	wei.liu@kernel.org,
+	mhklinux@outlook.com,
+	decui@microsoft.com,
+	catalin.marinas@arm.com,
+	will@kernel.org,
+	luto@kernel.org,
+	tglx@linutronix.de,
+	mingo@redhat.com,
+	bp@alien8.de,
+	dave.hansen@linux.intel.com,
+	x86@kernel.org,
+	hpa@zytor.com,
+	seanjc@google.com,
+	pbonzini@redhat.com,
+	peterz@infradead.org,
+	daniel.lezcano@linaro.org,
+	joro@8bytes.org,
+	robin.murphy@arm.com,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	lpieralisi@kernel.org,
+	kw@linux.com,
+	robh@kernel.org,
+	bhelgaas@google.com,
+	arnd@arndb.de,
+	sgarzare@redhat.com,
+	jinankjain@linux.microsoft.com,
+	muminulrussell@gmail.com,
+	skinsburskii@linux.microsoft.com,
+	mukeshrathor@microsoft.com,
+	vkuznets@redhat.com,
+	ssengar@linux.microsoft.com,
+	apais@linux.microsoft.com
+Subject: [PATCH v2 0/4] Add new headers for Hyper-V Dom0
+Date: Thu,  7 Nov 2024 14:32:22 -0800
+Message-Id: <1731018746-25914-1-git-send-email-nunodasneves@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20241102175115.1769468-1-xur@google.com> <20241102175115.1769468-8-xur@google.com>
- <20241107204504.GA3432398@thelio-3990X>
-In-Reply-To: <20241107204504.GA3432398@thelio-3990X>
-From: Rong Xu <xur@google.com>
-Date: Thu, 7 Nov 2024 13:54:06 -0800
-Message-ID: <CAF1bQ=TNOs7shXMbgY3UYzDZyF3ge=6hUdfEJvHV4LOo--tqVA@mail.gmail.com>
-Subject: Re: [PATCH v7 7/7] Add Propeller configuration for kernel build
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Alice Ryhl <aliceryhl@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>, 
-	Breno Leitao <leitao@debian.org>, Brian Gerst <brgerst@gmail.com>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, David Li <davidxl@google.com>, 
-	Han Shen <shenhan@google.com>, Heiko Carstens <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>, 
-	Ingo Molnar <mingo@redhat.com>, Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Juergen Gross <jgross@suse.com>, 
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
-	Masahiro Yamada <masahiroy@kernel.org>, "Mike Rapoport (IBM)" <rppt@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, 
-	"Paul E. McKenney" <paulmck@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Wei Yang <richard.weiyang@gmail.com>, workflows@vger.kernel.org, 
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Maksim Panchenko <max4bolt@gmail.com>, 
-	"David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
-	Yonghong Song <yonghong.song@linux.dev>, Yabin Cui <yabinc@google.com>, 
-	Krzysztof Pszeniczny <kpszeniczny@google.com>, Sriraman Tallam <tmsriram@google.com>, 
-	Stephane Eranian <eranian@google.com>, x86@kernel.org, linux-arch@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Thanks Nathan for finding this out!
+To support Hyper-V Dom0 (aka Linux as root partition), many new
+definitions are required.
 
-We changed the propeller option with this patch:
-https://github.com/llvm/llvm-project/pull/110039
+The plan going forward is to directly import definitions from
+Hyper-V code without waiting for them to land in the TLFS document.
+This is a quicker and more maintainable way to import definitions,
+and is a step toward the eventual goal of exporting headers directly
+from Hyper-V for use in Linux.
 
-Currently, this patch is only in the ToT clang (v20) and not yet
-released in v19.
-I'll add a compiler version check to the patch: if the clang version >=3D 2=
-0,
-use the new option.
+This patch series introduces new headers (hvhdk.h, hvgdk.h, etc,
+see patch #3) derived directly from Hyper-V code. hyperv-tlfs.h is
+replaced with hvhdk.h (which includes the other new headers)
+everywhere.
 
-If this patch is later released in v19.x clang, I'll have to update the che=
-ck
-accordingly.
+No functional change is expected.
 
-If I don't hear objections, I'll send a fixup on top of Masahiro's branch.
+Summary:
+Patch 1-2: Minor cleanup patches
+Patch 3: Add the new headers (hvhdk.h, etc..) in include/hyperv/
+Patch 4: Switch to the new headers
 
-Thanks,
+Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
+---
+Changelog:
+v2:
+- Rework the series to simply use the new headers everywhere
+  instead of fiddling around to keep hyperv-tlfs.h used in some
+  places, suggested by Michael Kelley and Easwar Hariharan
+- Fix compilation errors with some configs by adding missing
+  definitions and changing some names, thanks to Simon Horman for
+  catching those
+- Add additional definitions to the new headers to support them now
+  replacing hyperv-tlfs.h everywhere
+- Add additional context in the commit messages for patches #3 and #4
+- In patch #2, don't remove indirect includes. Only remove includes
+  which truly aren't used, suggested by Michael Kelley
 
--Rong
+---
+Nuno Das Neves (4):
+  hyperv: Move hv_connection_id to hyperv-tlfs.h
+  hyperv: Clean up unnecessary #includes
+  hyperv: Add new Hyper-V headers in include/hyperv
+  hyperv: Switch from hyperv-tlfs.h to hyperv/hvhdk.h
 
-On Thu, Nov 7, 2024 at 12:45=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
->
-> Hi Rong,
->
-> On Sat, Nov 02, 2024 at 10:51:14AM -0700, Rong Xu wrote:
-> > diff --git a/scripts/Makefile.propeller b/scripts/Makefile.propeller
-> > new file mode 100644
-> > index 0000000000000..344190717e471
-> > --- /dev/null
-> > +++ b/scripts/Makefile.propeller
-> > @@ -0,0 +1,28 @@
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +
-> > +# Enable available and selected Clang Propeller features.
-> > +ifdef CLANG_PROPELLER_PROFILE_PREFIX
-> > +  CFLAGS_PROPELLER_CLANG :=3D -fbasic-block-sections=3Dlist=3D$(CLANG_=
-PROPELLER_PROFILE_PREFIX)_cc_profile.txt -ffunction-sections
-> > +  KBUILD_LDFLAGS +=3D --symbol-ordering-file=3D$(CLANG_PROPELLER_PROFI=
-LE_PREFIX)_ld_profile.txt --no-warn-symbol-ordering
-> > +else
-> > +  CFLAGS_PROPELLER_CLANG :=3D -fbasic-block-sections=3Dlabels
-> > +endif
->
-> It appears that '-fbasic-block-sections=3Dlabels' has been deprecated in
-> the main branch of LLVM, as I see a warning repeated over and over when
-> building allmodconfig:
->
->   clang: warning: argument '-fbasic-block-sections=3Dlabels' is deprecate=
-d, use '-fbasic-block-address-map' instead [-Wdeprecated]
->
-> https://github.com/llvm/llvm-project/commit/7b7747dc1d3da1a829503ea9505b4=
-cecce4f5bda
->
-> Sorry that I missed this during testing, as I was only using clang-19 at
-> the time.
->
-> I think you can send a fixup on top of Masahiro's branch:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.gi=
-t/log/?h=3Dkbuild
->
-> > +# Propeller requires debug information to embed module names in the pr=
-ofiles.
-> > +# If CONFIG_DEBUG_INFO is not enabled, set -gmlt option. Skip this for=
- AutoFDO,
-> > +# as the option should already be set.
-> > +ifndef CONFIG_DEBUG_INFO
-> > +  ifndef CONFIG_AUTOFDO_CLANG
-> > +    CFLAGS_PROPELLER_CLANG +=3D -gmlt
-> > +  endif
-> > +endif
-> > +
-> > +ifdef CONFIG_LTO_CLANG_THIN
-> > +  ifdef CLANG_PROPELLER_PROFILE_PREFIX
-> > +    KBUILD_LDFLAGS +=3D --lto-basic-block-sections=3D$(CLANG_PROPELLER=
-_PROFILE_PREFIX)_cc_profile.txt
-> > +  else
-> > +    KBUILD_LDFLAGS +=3D --lto-basic-block-sections=3Dlabels
->
-> I think this might have a similar problem but I have not tested.
->
-> > +  endif
-> > +endif
-> > +
-> > +export CFLAGS_PROPELLER_CLANG
->
-> Cheers,
-> Nathan
+ arch/arm64/hyperv/hv_core.c        |    3 +-
+ arch/arm64/hyperv/mshyperv.c       |    4 +-
+ arch/arm64/include/asm/mshyperv.h  |    2 +-
+ arch/x86/hyperv/hv_apic.c          |    1 -
+ arch/x86/hyperv/hv_init.c          |   21 +-
+ arch/x86/hyperv/hv_proc.c          |    3 +-
+ arch/x86/hyperv/ivm.c              |    1 -
+ arch/x86/hyperv/mmu.c              |    1 -
+ arch/x86/hyperv/nested.c           |    2 +-
+ arch/x86/include/asm/kvm_host.h    |    3 +-
+ arch/x86/include/asm/mshyperv.h    |    3 +-
+ arch/x86/include/asm/svm.h         |    2 +-
+ arch/x86/kernel/cpu/mshyperv.c     |    2 +-
+ arch/x86/kvm/vmx/hyperv_evmcs.h    |    2 +-
+ arch/x86/kvm/vmx/vmx_onhyperv.h    |    2 +-
+ arch/x86/mm/pat/set_memory.c       |    2 -
+ drivers/clocksource/hyperv_timer.c |    2 +-
+ drivers/hv/hv_balloon.c            |    4 +-
+ drivers/hv/hv_common.c             |    2 +-
+ drivers/hv/hv_kvp.c                |    2 +-
+ drivers/hv/hv_snapshot.c           |    2 +-
+ drivers/hv/hyperv_vmbus.h          |    2 +-
+ include/asm-generic/hyperv-tlfs.h  |    9 +
+ include/asm-generic/mshyperv.h     |    2 +-
+ include/clocksource/hyperv_timer.h |    2 +-
+ include/hyperv/hvgdk.h             |  303 +++++++
+ include/hyperv/hvgdk_ext.h         |   46 +
+ include/hyperv/hvgdk_mini.h        | 1295 ++++++++++++++++++++++++++++
+ include/hyperv/hvhdk.h             |  733 ++++++++++++++++
+ include/hyperv/hvhdk_mini.h        |  310 +++++++
+ include/linux/hyperv.h             |   11 +-
+ net/vmw_vsock/hyperv_transport.c   |    2 +-
+ 32 files changed, 2729 insertions(+), 52 deletions(-)
+ create mode 100644 include/hyperv/hvgdk.h
+ create mode 100644 include/hyperv/hvgdk_ext.h
+ create mode 100644 include/hyperv/hvgdk_mini.h
+ create mode 100644 include/hyperv/hvhdk.h
+ create mode 100644 include/hyperv/hvhdk_mini.h
+
+-- 
+2.34.1
+
 
