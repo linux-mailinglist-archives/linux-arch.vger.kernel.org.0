@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-8936-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8937-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E8019C2DEB
-	for <lists+linux-arch@lfdr.de>; Sat,  9 Nov 2024 15:56:04 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 873279C2E0B
+	for <lists+linux-arch@lfdr.de>; Sat,  9 Nov 2024 16:11:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 374BC282841
-	for <lists+linux-arch@lfdr.de>; Sat,  9 Nov 2024 14:55:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A681E1C20E27
+	for <lists+linux-arch@lfdr.de>; Sat,  9 Nov 2024 15:11:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABBF5197A9A;
-	Sat,  9 Nov 2024 14:55:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A31AC19AD94;
+	Sat,  9 Nov 2024 15:11:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NkECfv34"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UJiqpOOt"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72B9613DB99;
-	Sat,  9 Nov 2024 14:55:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D30F19ABD5;
+	Sat,  9 Nov 2024 15:11:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731164157; cv=none; b=AKZgl958wG7PtIpum93dlDKGtWv+mFr3fDv3gcJnzA6M2wRLkISRHUk2EEW5he0etThqp/KnpmoV7oquEy3ynS3s+SweOhtnkRbWpWktukvQO/NEWtN+d7K5nzW7rn3lsFbEISufM6OZgPHWgVYDGaTYXFYuHwps4f2DnosoATY=
+	t=1731165063; cv=none; b=R/G0ZSIvOhrRESsGWqjYmLA8djUF3KLOntMmXTl+QcUUY9977YfEJQf+/qVtPyP3t7r1zwdG3EE/wr8AUORM2UElPAUSWgw6uwXozqP3KzVYq5YhIsPVfGvZLqeuONzpDCR5dVG1EjUXiCDcY8MsjxPW7eXLUBxcgJWc07UGEBA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731164157; c=relaxed/simple;
-	bh=eUwvcN8zGzUKSnVGrOb7jRjjOHokBZqw7qBdYJmmLB8=;
+	s=arc-20240116; t=1731165063; c=relaxed/simple;
+	bh=TPwfAmDjNRlKpMlwR68ymGtPsQXE+Pd6kBFBv3CzJHA=;
 	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=f+1Qif4cSRSkgS5+0g0OAQ7RWpEpu1FWATWsdd9bo2ZeP37Yo1JeuOIqme6yWxBbcbPCuEhceGnFUwmP2o3aImstXRoI39y3G6nU7GxAQNomXOH4i5Wcw8hGHJV4HhCx30EDOmGqoJD2Ng5d+E3MwUrucg6J+UQ5olrgEQEcfHc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NkECfv34; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B43C5C4CECE;
-	Sat,  9 Nov 2024 14:55:49 +0000 (UTC)
+	 Mime-Version:Content-Type; b=pxPVxocBXuhskinBmS2nVA/t3pQ6CQlO0v5TqEjMTUeXhUucqqEaljfq3Wr9DyKvgvvDyH1puH+HlnJHLQP09WTlKCAB8rTqNDkF8t8eKb9suqoTbS/vP2HVlCxyzl9/lP0xx0b5UXmtJWdPYLM5n4gG/DD6H5+OyjsluP22fb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UJiqpOOt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4581EC4CECE;
+	Sat,  9 Nov 2024 15:10:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731164157;
-	bh=eUwvcN8zGzUKSnVGrOb7jRjjOHokBZqw7qBdYJmmLB8=;
+	s=k20201202; t=1731165063;
+	bh=TPwfAmDjNRlKpMlwR68ymGtPsQXE+Pd6kBFBv3CzJHA=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=NkECfv34cAC1JfcvfsKqsV/+G68HoaUfvbAWEE498nRm0Ly+YcByenX80hWlOWUe0
-	 R4Go9gA6mUsjSjja3jN3WRxbquwdwatwz0qujGya2BUYBfhO9B6OtpQmNx/JvSi57S
-	 ac3c6rrbpAtFzT3HQHWitWPp+4joGRsPnjlB1PThFmTEH2nbAm0Qx+ECY4xPWj76QM
-	 30DU6z3lSkB6scmBTIKWDA9qaD9xylxhvUAVueo55N6YEJH6SnH84visYQiWGkpgI7
-	 tzvEJDXkK077Wd/1ZfcEHpWSHlP4sSpJ1GOMEjEpj1LwSVI68638QTQLBpPsIuoWk8
-	 Z9KcelmJDH97A==
-Date: Sat, 9 Nov 2024 23:55:47 +0900
+	b=UJiqpOOt+j7i5PkxwN9LXvisxD5u3R5gQrHTaFbGO2MtaJn5yyxKcjpTd97YQTJWn
+	 hKvVc3DriUspWM4U3BuHIFwbsBoYKq0OTgiNluqZzBQEx3EbHXrfAyJVm64WEORgu8
+	 rutrWgzhMRmlBWhQ5Avo/M0m46AKmWM4ZjrgYB2tFjiIz8kxZsGQCqCmL3WHG1cah+
+	 4qinqK+JQKyWY5pbwEAab++Hgz+DdCVx0RWQnKlI48EPDfIaF71y37grcvRRAYFenP
+	 kzgaJY8aJ/pngbV1byl93jlWJU4RoxpJwnHPecclNHrBmKFc4vSNIiGR++s9rZwlO+
+	 Ymi7/UHiHV9Ow==
+Date: Sun, 10 Nov 2024 00:10:54 +0900
 From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 To: Steven Rostedt <rostedt@goodmis.org>
 Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Florent Revest
@@ -51,25 +51,22 @@ Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Florent Revest
  <jolsa@kernel.org>, Alan Maguire <alan.maguire@oracle.com>, Mark Rutland
  <mark.rutland@arm.com>, linux-arch@vger.kernel.org, Catalin Marinas
  <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Huacai Chen
- <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, Michael Ellerman
- <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy
- <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, Madhavan
- Srinivasan <maddy@linux.ibm.com>, Paul Walmsley <paul.walmsley@sifive.com>,
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger
- <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, Thomas
- Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav
- Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v18 11/17] fprobe: Rewrite fprobe on function-graph
- tracer
-Message-Id: <20241109235547.238b54e4f13a4706532b39a4@kernel.org>
-In-Reply-To: <20241101152844.3a589594@gandalf.local.home>
+ <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, Paul Walmsley
+ <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
+ <aou@eecs.berkeley.edu>, Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik
+ <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, Christian
+ Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle
+ <svens@linux.ibm.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar
+ <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+ <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin"
+ <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH v18 12/17] fprobe: Add fprobe_header encoding feature
+Message-Id: <20241110001054.b0a5afb2d7bb1c09b4bd6b0b@kernel.org>
+In-Reply-To: <20241101102212.5e9d74d9@gandalf.local.home>
 References: <172991731968.443985.4558065903004844780.stgit@devnote2>
-	<172991746318.443985.12713087979890519872.stgit@devnote2>
-	<20241101152844.3a589594@gandalf.local.home>
+	<172991747946.443985.11014834036464028393.stgit@devnote2>
+	<20241101102212.5e9d74d9@gandalf.local.home>
 X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -80,121 +77,168 @@ Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Fri, 1 Nov 2024 15:28:44 -0400
+On Fri, 1 Nov 2024 10:22:12 -0400
 Steven Rostedt <rostedt@goodmis.org> wrote:
 
-> On Sat, 26 Oct 2024 13:37:43 +0900
+> On Sat, 26 Oct 2024 13:37:59 +0900
 > "Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
 > 
-> > diff --git a/include/linux/fprobe.h b/include/linux/fprobe.h
-> > index ef609bcca0f9..686b30ce48b4 100644
-> > --- a/include/linux/fprobe.h
-> > +++ b/include/linux/fprobe.h
-> > @@ -5,10 +5,11 @@
-> >  
-> >  #include <linux/compiler.h>
-> >  #include <linux/ftrace.h>
-> > -#include <linux/rethook.h>
-> > +#include <linux/rcupdate.h>
-> > +#include <linux/refcount.h>
-> > +#include <linux/slab.h>
-> >  
-> >  struct fprobe;
-> > -
-> >  typedef int (*fprobe_entry_cb)(struct fprobe *fp, unsigned long entry_ip,
-> >  			       unsigned long ret_ip, struct ftrace_regs *regs,
-> >  			       void *entry_data);
-> > @@ -17,35 +18,57 @@ typedef void (*fprobe_exit_cb)(struct fprobe *fp, unsigned long entry_ip,
-> >  			       unsigned long ret_ip, struct ftrace_regs *regs,
-> >  			       void *entry_data);
-> >  
-> > +/**
-> > + * strcut fprobe_hlist_node - address based hash list node for fprobe.
-> 
->       struct
-> 
-
-oops, thanks.
-
-> > + *
-> > + * @hlist: The hlist node for address search hash table.
-> > + * @addr: The address represented by this.
-> 
->   What is "this" in the above?
-
-it should be `by this node.`
-
-> 
-> > + * @fp: The fprobe which owns this.
-> > + */
-> > +struct fprobe_hlist_node {
-> > +	struct hlist_node	hlist;
-> > +	unsigned long		addr;
-> > +	struct fprobe		*fp;
-> > +};
+> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > 
+> > Fprobe store its data structure address and size on the fgraph return stack
+> > by __fprobe_header. But most 64bit architecture can combine those to
+> > one unsigned long value because 4 MSB in the kernel address are the same.
+> > With this encoding, fprobe can consume less space on ret_stack.
+> > 
+> > This introduces asm/fprobe.h to define arch dependent encode/decode
+> > macros. Note that since fprobe depends on CONFIG_HAVE_FUNCTION_GRAPH_FREGS,
+> > currently only arm64, loongarch, riscv, s390 and x86 are supported.
+> > 
+> > Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > Cc: Catalin Marinas <catalin.marinas@arm.com>
+> > Cc: Will Deacon <will@kernel.org>
+> > Cc: Huacai Chen <chenhuacai@kernel.org>
+> > Cc: WANG Xuerui <kernel@xen0n.name>
+> > Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> > Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> > Cc: Albert Ou <aou@eecs.berkeley.edu>
+> > Cc: Heiko Carstens <hca@linux.ibm.com>
+> > Cc: Vasily Gorbik <gor@linux.ibm.com>
+> > Cc: Alexander Gordeev <agordeev@linux.ibm.com>
+> > Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
+> > Cc: Sven Schnelle <svens@linux.ibm.com>
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Ingo Molnar <mingo@redhat.com>
+> > Cc: Borislav Petkov <bp@alien8.de>
+> > Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> > Cc: x86@kernel.org
+> > Cc: "H. Peter Anvin" <hpa@zytor.com>
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Steven Rostedt <rostedt@goodmis.org>
+> > Cc: Masami Hiramatsu <mhiramat@kernel.org>
+> > Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> > ---
+> >  arch/arm64/include/asm/fprobe.h     |    7 +++++++
+> >  arch/loongarch/include/asm/fprobe.h |    5 +++++
+> >  arch/riscv/include/asm/fprobe.h     |    9 +++++++++
+> >  arch/s390/include/asm/fprobe.h      |   10 ++++++++++
+> >  arch/x86/include/asm/fprobe.h       |    9 +++++++++
+> >  include/asm-generic/fprobe.h        |   33 +++++++++++++++++++++++++++++++++
+> >  kernel/trace/fprobe.c               |   29 +++++++++++++++++++++++++++++
+> >  7 files changed, 102 insertions(+)
+> >  create mode 100644 arch/arm64/include/asm/fprobe.h
+> >  create mode 100644 arch/loongarch/include/asm/fprobe.h
+> >  create mode 100644 arch/riscv/include/asm/fprobe.h
+> >  create mode 100644 arch/s390/include/asm/fprobe.h
+> >  create mode 100644 arch/x86/include/asm/fprobe.h
+> >  create mode 100644 include/asm-generic/fprobe.h
+> > 
+> > diff --git a/arch/arm64/include/asm/fprobe.h b/arch/arm64/include/asm/fprobe.h
+> > new file mode 100644
+> > index 000000000000..bbf254db878d
+> > --- /dev/null
+> > +++ b/arch/arm64/include/asm/fprobe.h
+> > @@ -0,0 +1,7 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +#ifndef _ASM_ARM64_FPROBE_H
+> > +#define _ASM_ARM64_FPROBE_H
 > > +
-> > +/**
-> > + * struct fprobe_hlist - hash list nodes for fprobe.
-> > + *
-> > + * @hlist: The hlist node for existence checking hash table.
-> > + * @rcu: rcu_head for RCU deferred release.
-> > + * @fp: The fprobe which owns this fprobe_hlist.
-> > + * @size: The size of @array.
-> > + * @array: The fprobe_hlist_node for each address to probe.
-> > + */
-> > +struct fprobe_hlist {
-> > +	struct hlist_node		hlist;
-> > +	struct rcu_head			rcu;
-> > +	struct fprobe			*fp;
-> > +	int				size;
-> > +	struct fprobe_hlist_node	array[];
+> > +#include <asm-generic/fprobe.h>
+> > +
+> > +#endif /* _ASM_ARM64_FPROBE_H */
+> > \ No newline at end of file
 > 
-> Should the above have __counted_by(size) ?
+> This isn't the way to add asm-generic code to architectures. It needs to be
+> in the Kbuild file. Like this:
+> 
+> diff --git a/arch/arm64/include/asm/Kbuild b/arch/arm64/include/asm/Kbuild
+> index 4e350df9a02d..0d0a638d41a8 100644
+> --- a/arch/arm64/include/asm/Kbuild
+> +++ b/arch/arm64/include/asm/Kbuild
+> @@ -14,6 +14,7 @@ generic-y += qrwlock.h
+>  generic-y += qspinlock.h
+>  generic-y += parport.h
+>  generic-y += user.h
+> +generic-y += fprobe.h
+>  
+>  generated-y += cpucap-defs.h
+>  generated-y += sysreg-defs.h
 
-Yes. Thanks!
+OK.
 
+> 
+> 
+> > diff --git a/arch/loongarch/include/asm/fprobe.h b/arch/loongarch/include/asm/fprobe.h
+> > new file mode 100644
+> > index 000000000000..68156a66873c
+> > --- /dev/null
+> > +++ b/arch/loongarch/include/asm/fprobe.h
+> > @@ -0,0 +1,5 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +#ifndef _ASM_LOONGARCH_FPROBE_H
+> > +#define _ASM_LOONGARCH_FPROBE_H
+> > +
+> > +#endif /* _ASM_LOONGARCH_FPROBE_H */
+> > \ No newline at end of file
+> > diff --git a/arch/riscv/include/asm/fprobe.h b/arch/riscv/include/asm/fprobe.h
+> > new file mode 100644
+> > index 000000000000..51fc2ef3eda1
+> > --- /dev/null
+> > +++ b/arch/riscv/include/asm/fprobe.h
+> > @@ -0,0 +1,9 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +#ifndef _ASM_RISCV_FPROBE_H
+> > +#define _ASM_RISCV_FPROBE_H
+> > +
+> > +#ifdef CONFIG_64BIT
+> > +#include <asm-generic/fprobe.h>
+> > +#endif
+> > +
+> > +#endif /* _ASM_RISCV_FPROBE_H */
+> > \ No newline at end of file
+> > diff --git a/arch/s390/include/asm/fprobe.h b/arch/s390/include/asm/fprobe.h
+> > new file mode 100644
+> > index 000000000000..84b94ba6e3a4
+> > --- /dev/null
+> > +++ b/arch/s390/include/asm/fprobe.h
+> > @@ -0,0 +1,10 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +#ifndef _ASM_S390_FPROBE_H
+> > +#define _ASM_S390_FPROBE_H
+> > +
+> > +#include <asm-generic/fprobe.h>
+> > +
+> > +#undef FPROBE_HEADER_MSB_PATTERN
+> > +#define FPROBE_HEADER_MSB_PATTERN 0
+> > +
+> > +#endif /* _ASM_S390_FPROBE_H */
+> > \ No newline at end of file
+> > diff --git a/arch/x86/include/asm/fprobe.h b/arch/x86/include/asm/fprobe.h
+> > new file mode 100644
+> > index 000000000000..c863518bef90
+> > --- /dev/null
+> > +++ b/arch/x86/include/asm/fprobe.h
+> > @@ -0,0 +1,9 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +#ifndef _ASM_X86_FPROBE_H
+> > +#define _ASM_X86_FPROBE_H
+> > +
+> > +#ifdef CONFIG_64BIT
+> > +#include <asm-generic/fprobe.h>
+> > +#endif
+> > +
+> > +#endif /* _ASM_X86_FPROBE_H */
+> > \ No newline at end of file
+> 
+> Same for the above.
+
+OK, but x86 and riscv, we need this default template on 64bit only.
+So those may keep it, right?
+
+Thank you,
 
 > 
 > -- Steve
-> 
-> > +};
-> > +
-> >  /**
-> >   * struct fprobe - ftrace based probe.
-> > - * @ops: The ftrace_ops.
-> > + *
-> >   * @nmissed: The counter for missing events.
-> >   * @flags: The status flag.
-> > - * @rethook: The rethook data structure. (internal data)
-> >   * @entry_data_size: The private data storage size.
-> > - * @nr_maxactive: The max number of active functions.
-> > + * @nr_maxactive: The max number of active functions. (*deprecated)
-> >   * @entry_handler: The callback function for function entry.
-> >   * @exit_handler: The callback function for function exit.
-> > + * @hlist_array: The fprobe_hlist for fprobe search from IP hash table.
-> >   */
-> >  struct fprobe {
-> > -#ifdef CONFIG_FUNCTION_TRACER
-> > -	/*
-> > -	 * If CONFIG_FUNCTION_TRACER is not set, CONFIG_FPROBE is disabled too.
-> > -	 * But user of fprobe may keep embedding the struct fprobe on their own
-> > -	 * code. To avoid build error, this will keep the fprobe data structure
-> > -	 * defined here, but remove ftrace_ops data structure.
-> > -	 */
-> > -	struct ftrace_ops	ops;
-> > -#endif
-> >  	unsigned long		nmissed;
-> >  	unsigned int		flags;
-> > -	struct rethook		*rethook;
-> >  	size_t			entry_data_size;
-> >  	int			nr_maxactive;
-> >  
-> >  	fprobe_entry_cb entry_handler;
-> >  	fprobe_exit_cb  exit_handler;
-> > +
-> > +	struct fprobe_hlist	*hlist_array;
-> >  };
-> >  
 
 
 -- 
