@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-8935-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8936-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CAF79C2DDB
-	for <lists+linux-arch@lfdr.de>; Sat,  9 Nov 2024 15:47:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E8019C2DEB
+	for <lists+linux-arch@lfdr.de>; Sat,  9 Nov 2024 15:56:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 098002820BB
-	for <lists+linux-arch@lfdr.de>; Sat,  9 Nov 2024 14:47:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 374BC282841
+	for <lists+linux-arch@lfdr.de>; Sat,  9 Nov 2024 14:55:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B9E51957F8;
-	Sat,  9 Nov 2024 14:47:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABBF5197A9A;
+	Sat,  9 Nov 2024 14:55:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QdGst02j"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NkECfv34"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAE6D147C96;
-	Sat,  9 Nov 2024 14:47:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72B9613DB99;
+	Sat,  9 Nov 2024 14:55:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731163640; cv=none; b=dPajFZdcWOlOfC6xcCHmfCxZ0Ol1CC5GAoBCenK4igoiswBXqBhLnN8IquvybB/G/gzT8gek3/N0QxQioP/0K/jUMprw4G1kZ36+iZU2O1twuZmbVqXIMH8PI79YJBzWVoBiWBP4XUZKS7esS4mOIZm8OQ5xK3Yg2iEwSuJYpsQ=
+	t=1731164157; cv=none; b=AKZgl958wG7PtIpum93dlDKGtWv+mFr3fDv3gcJnzA6M2wRLkISRHUk2EEW5he0etThqp/KnpmoV7oquEy3ynS3s+SweOhtnkRbWpWktukvQO/NEWtN+d7K5nzW7rn3lsFbEISufM6OZgPHWgVYDGaTYXFYuHwps4f2DnosoATY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731163640; c=relaxed/simple;
-	bh=+pZ2o9F/kEox+nG25F5hXiP9+RbiboOoMx9pvyt77RM=;
+	s=arc-20240116; t=1731164157; c=relaxed/simple;
+	bh=eUwvcN8zGzUKSnVGrOb7jRjjOHokBZqw7qBdYJmmLB8=;
 	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=gENMVIjTbvx9dbtWy+kF3cMfJgKt3uRFinai2w2dYyK35VlNyrAEwwYWxrk1VuoahwTvHS31OjXpKcfP8abXmp/ouNRBQPgAwXi29QcnQE2JStj4i5dCOyS9d4R5DFDS4eSdNOplkIutKSPwupdlBhdiLZttELUa6/VG8LbtT94=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QdGst02j; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C71F2C4CECE;
-	Sat,  9 Nov 2024 14:47:12 +0000 (UTC)
+	 Mime-Version:Content-Type; b=f+1Qif4cSRSkgS5+0g0OAQ7RWpEpu1FWATWsdd9bo2ZeP37Yo1JeuOIqme6yWxBbcbPCuEhceGnFUwmP2o3aImstXRoI39y3G6nU7GxAQNomXOH4i5Wcw8hGHJV4HhCx30EDOmGqoJD2Ng5d+E3MwUrucg6J+UQ5olrgEQEcfHc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NkECfv34; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B43C5C4CECE;
+	Sat,  9 Nov 2024 14:55:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731163639;
-	bh=+pZ2o9F/kEox+nG25F5hXiP9+RbiboOoMx9pvyt77RM=;
+	s=k20201202; t=1731164157;
+	bh=eUwvcN8zGzUKSnVGrOb7jRjjOHokBZqw7qBdYJmmLB8=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=QdGst02jdoLM4SbtJixk8xBb8nzTPyiDboxAMaA2mzvgO1w1Sk/tsCf4i//W/2M95
-	 2RJy495QcUMoQa8pxRvP2wJcZ/k4iDt9FZ+i5bmcMBzEJhqAOVodcdcZJ2cBw9jZ6O
-	 Okv6JS7vJZfNvLrWNEBj3Hlcnpvlr+qPXU2xbIngw4AjGzI0Wql8liXZUDVwvPLa5J
-	 YrXC1Id7fGoEJAZZO4S2j67qlT3xtI3OkOwPPdw0jv9aq/IcZq2H2xys3q0kBe/8a5
-	 jwMOI3yR547Wm+xbSAdV4Per4L6A5DCBe1G4hahYePhkLxKocF8UB2OM88RWnzDtcf
-	 dFBFjKK6M+6hg==
-Date: Sat, 9 Nov 2024 23:47:10 +0900
+	b=NkECfv34cAC1JfcvfsKqsV/+G68HoaUfvbAWEE498nRm0Ly+YcByenX80hWlOWUe0
+	 R4Go9gA6mUsjSjja3jN3WRxbquwdwatwz0qujGya2BUYBfhO9B6OtpQmNx/JvSi57S
+	 ac3c6rrbpAtFzT3HQHWitWPp+4joGRsPnjlB1PThFmTEH2nbAm0Qx+ECY4xPWj76QM
+	 30DU6z3lSkB6scmBTIKWDA9qaD9xylxhvUAVueo55N6YEJH6SnH84visYQiWGkpgI7
+	 tzvEJDXkK077Wd/1ZfcEHpWSHlP4sSpJ1GOMEjEpj1LwSVI68638QTQLBpPsIuoWk8
+	 Z9KcelmJDH97A==
+Date: Sat, 9 Nov 2024 23:55:47 +0900
 From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 To: Steven Rostedt <rostedt@goodmis.org>
 Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Florent Revest
@@ -56,16 +56,20 @@ Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Florent Revest
  <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, Madhavan
  Srinivasan <maddy@linux.ibm.com>, Paul Walmsley <paul.walmsley@sifive.com>,
  Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+ Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger
+ <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, Thomas
+ Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav
+ Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
  x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH v18 01/17] fgraph: Pass ftrace_regs to entryfunc
-Message-Id: <20241109234710.818778fa74ca2ea5b883e0d1@kernel.org>
-In-Reply-To: <20241031155324.108ed8ef@gandalf.local.home>
+ <mathieu.desnoyers@efficios.com>, Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v18 11/17] fprobe: Rewrite fprobe on function-graph
+ tracer
+Message-Id: <20241109235547.238b54e4f13a4706532b39a4@kernel.org>
+In-Reply-To: <20241101152844.3a589594@gandalf.local.home>
 References: <172991731968.443985.4558065903004844780.stgit@devnote2>
-	<172991733069.443985.15154246733356205391.stgit@devnote2>
-	<20241031155324.108ed8ef@gandalf.local.home>
+	<172991746318.443985.12713087979890519872.stgit@devnote2>
+	<20241101152844.3a589594@gandalf.local.home>
 X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -76,64 +80,121 @@ Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Thu, 31 Oct 2024 15:53:24 -0400
+On Fri, 1 Nov 2024 15:28:44 -0400
 Steven Rostedt <rostedt@goodmis.org> wrote:
 
-> On Sat, 26 Oct 2024 13:35:30 +0900
+> On Sat, 26 Oct 2024 13:37:43 +0900
 > "Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
 > 
-> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > 
-> > Pass ftrace_regs to the fgraph_ops::entryfunc(). If ftrace_regs is not
-> > available, it passes a NULL instead. User callback function can access
-> > some registers (including return address) via this ftrace_regs.
-> > 
-> > Note that the ftrace_regs can be NULL when the arch does NOT define:
-> > HAVE_DYNAMIC_FTRACE_WITH_ARGS or HAVE_DYNAMIC_FTRACE_WITH_REGS.
-> > More specifically, if HAVE_DYNAMIC_FTRACE_WITH_REGS is defined but
-> > not the HAVE_DYNAMIC_FTRACE_WITH_ARGS, and the ftrace ops used to
-> > register the function callback does not set FTRACE_OPS_FL_SAVE_REGS.
-> > In this case, ftrace_regs can be NULL in user callback.
-> 
-> If HAVE_DYNAMIC_FTRACE_WITH_REGS is defined but not
-> HAVE_DYNAMIC_FTRACE_WITH_ARGS is not, then the callback will have regs defined.
-> 
-> > @@ -977,7 +980,7 @@ unsigned long ftrace_graph_ret_addr(struct task_struct *task, int *idx,
+> > diff --git a/include/linux/fprobe.h b/include/linux/fprobe.h
+> > index ef609bcca0f9..686b30ce48b4 100644
+> > --- a/include/linux/fprobe.h
+> > +++ b/include/linux/fprobe.h
+> > @@ -5,10 +5,11 @@
 > >  
-> >  static struct ftrace_ops graph_ops = {
-> >  	.func			= ftrace_graph_func,
-> > -	.flags			= FTRACE_OPS_GRAPH_STUB,
-> > +	.flags			= FTRACE_OPS_GRAPH_STUB | FTRACE_OPS_FL_SAVE_ARGS,
+> >  #include <linux/compiler.h>
+> >  #include <linux/ftrace.h>
+> > -#include <linux/rethook.h>
+> > +#include <linux/rcupdate.h>
+> > +#include <linux/refcount.h>
+> > +#include <linux/slab.h>
+> >  
+> >  struct fprobe;
+> > -
+> >  typedef int (*fprobe_entry_cb)(struct fprobe *fp, unsigned long entry_ip,
+> >  			       unsigned long ret_ip, struct ftrace_regs *regs,
+> >  			       void *entry_data);
+> > @@ -17,35 +18,57 @@ typedef void (*fprobe_exit_cb)(struct fprobe *fp, unsigned long entry_ip,
+> >  			       unsigned long ret_ip, struct ftrace_regs *regs,
+> >  			       void *entry_data);
+> >  
+> > +/**
+> > + * strcut fprobe_hlist_node - address based hash list node for fprobe.
 > 
-> Enabling FTRACE_OPS_FL_SAVE_ARGS will pass full regs in that case. Are you
-> just saying in the change log that this is what you did? As it currently
-> reads, it sounds like a fgraph user needs to add FTRACE_OPS_FL_SAVE_REGS??
+>       struct
+> 
 
-OK, I got it. I thought FTRACE_OPS_FL_SAVE_ARGS means it ensures to
-save ARGS(means ftrace_regs) so that ftrace_graph_func can access it.
-But anyway ftrace_regs is saved by *default*.
+oops, thanks.
 
-OK, I'll remove it.
+> > + *
+> > + * @hlist: The hlist node for address search hash table.
+> > + * @addr: The address represented by this.
+> 
+>   What is "this" in the above?
 
-Thanks,
+it should be `by this node.`
+
+> 
+> > + * @fp: The fprobe which owns this.
+> > + */
+> > +struct fprobe_hlist_node {
+> > +	struct hlist_node	hlist;
+> > +	unsigned long		addr;
+> > +	struct fprobe		*fp;
+> > +};
+> > +
+> > +/**
+> > + * struct fprobe_hlist - hash list nodes for fprobe.
+> > + *
+> > + * @hlist: The hlist node for existence checking hash table.
+> > + * @rcu: rcu_head for RCU deferred release.
+> > + * @fp: The fprobe which owns this fprobe_hlist.
+> > + * @size: The size of @array.
+> > + * @array: The fprobe_hlist_node for each address to probe.
+> > + */
+> > +struct fprobe_hlist {
+> > +	struct hlist_node		hlist;
+> > +	struct rcu_head			rcu;
+> > +	struct fprobe			*fp;
+> > +	int				size;
+> > +	struct fprobe_hlist_node	array[];
+> 
+> Should the above have __counted_by(size) ?
+
+Yes. Thanks!
+
 
 > 
 > -- Steve
 > 
-> 
-> >  #ifdef FTRACE_GRAPH_TRAMP_ADDR
-> >  	.trampoline		= FTRACE_GRAPH_TRAMP_ADDR,
-> >  	/* trampoline_size is only needed for dynamically allocated tramps */
-> > @@ -987,7 +990,8 @@ static struct ftrace_ops graph_ops = {
-> >  void fgraph_init_ops(struct ftrace_ops *dst_ops,
-> >  		     struct ftrace_ops *src_ops)
-> >  {
-> > -	dst_ops->flags = FTRACE_OPS_FL_PID | FTRACE_OPS_GRAPH_STUB;
-> > +	dst_ops->flags = FTRACE_OPS_FL_PID | FTRACE_OPS_GRAPH_STUB |
-> > +			 FTRACE_OPS_FL_SAVE_ARGS;
+> > +};
+> > +
+> >  /**
+> >   * struct fprobe - ftrace based probe.
+> > - * @ops: The ftrace_ops.
+> > + *
+> >   * @nmissed: The counter for missing events.
+> >   * @flags: The status flag.
+> > - * @rethook: The rethook data structure. (internal data)
+> >   * @entry_data_size: The private data storage size.
+> > - * @nr_maxactive: The max number of active functions.
+> > + * @nr_maxactive: The max number of active functions. (*deprecated)
+> >   * @entry_handler: The callback function for function entry.
+> >   * @exit_handler: The callback function for function exit.
+> > + * @hlist_array: The fprobe_hlist for fprobe search from IP hash table.
+> >   */
+> >  struct fprobe {
+> > -#ifdef CONFIG_FUNCTION_TRACER
+> > -	/*
+> > -	 * If CONFIG_FUNCTION_TRACER is not set, CONFIG_FPROBE is disabled too.
+> > -	 * But user of fprobe may keep embedding the struct fprobe on their own
+> > -	 * code. To avoid build error, this will keep the fprobe data structure
+> > -	 * defined here, but remove ftrace_ops data structure.
+> > -	 */
+> > -	struct ftrace_ops	ops;
+> > -#endif
+> >  	unsigned long		nmissed;
+> >  	unsigned int		flags;
+> > -	struct rethook		*rethook;
+> >  	size_t			entry_data_size;
+> >  	int			nr_maxactive;
 > >  
-> >  #ifdef CONFIG_DYNAMIC_FTRACE
-> >  	if (src_ops) {
+> >  	fprobe_entry_cb entry_handler;
+> >  	fprobe_exit_cb  exit_handler;
+> > +
+> > +	struct fprobe_hlist	*hlist_array;
+> >  };
+> >  
 
 
 -- 
