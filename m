@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-8956-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8957-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D8DB9C338E
-	for <lists+linux-arch@lfdr.de>; Sun, 10 Nov 2024 16:53:46 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C0699C3391
+	for <lists+linux-arch@lfdr.de>; Sun, 10 Nov 2024 16:54:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E40A61F2148D
-	for <lists+linux-arch@lfdr.de>; Sun, 10 Nov 2024 15:53:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B7EC7B2108E
+	for <lists+linux-arch@lfdr.de>; Sun, 10 Nov 2024 15:54:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50DB113B592;
-	Sun, 10 Nov 2024 15:52:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA1D613C3D3;
+	Sun, 10 Nov 2024 15:52:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tSbcIZyJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lin1a3x3"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 243D013AA53;
-	Sun, 10 Nov 2024 15:52:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FFDF13B2BB;
+	Sun, 10 Nov 2024 15:52:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731253936; cv=none; b=Q1Pwla719DKaaQ8/Y+pgKCpusHUlB7aq7AIaAmknoqsWcXjfy9TmXZHC/mCKM4IgI5zmYJBOtjGms8eG6BY2hPzywqOSbJiRMPATxUs6YFt71BEgywwlZTQuOvtW/UJkq52HwCNO5LOOMnp6VxOeb3qvJcD68FBhgMnuvNritXQ=
+	t=1731253946; cv=none; b=UwSlu+neKg0wu/UHJ+Np4eOncFbG0kN74MZ2Hai83i5q1hC4HkvMfNDdGG2a60jcp826iBmfhoZ1wVWktDH+5rfirdT5BMvzfsN4TES56LTrcAVH0xA7hggOHBUggWTnzzYVP+gJhQZcswU+XXvPvI+SnutPphmHdWo88I/Fpm4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731253936; c=relaxed/simple;
-	bh=8t7YVZmoVUR7dCk/2nFP4SmQbrkuMwJVZH30PnGw0sc=;
+	s=arc-20240116; t=1731253946; c=relaxed/simple;
+	bh=ljV+7i1gHE0GvTLzOVr5+Punuc1M73hF7pzOK4hFm44=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TDcBUO8T3oSBSaqrlSnROW3sCfSjA2H0i071kUzaedulcGF/NE1DSGJ3IOZIrDmbNbHJtCzUGpPzPZ9GQTLcsNjj002XfUQHGeOQuherN/ZnN4sOtU+9MxLEKywaROShzR7Qfzk+cxwVjdhCiEZD1zBycBsjt/M3S57vJODFVPY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tSbcIZyJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E75CEC4CECD;
-	Sun, 10 Nov 2024 15:52:12 +0000 (UTC)
+	 MIME-Version:Content-Type; b=Yl5XEHKXOi0M487ZPN+jCU81OR1FqwoduD6dXNEBlXZzPVAe4KRoJUt4dRXCUqkhr6Fjx+h2TMXpQkmg8E1MKCyHnjIZtFkHSLXjqhgd0vxyYonXkhVLO9qUN6FehUBG05LtuUe9Vua4b1IFUfAw5DmDH2ua1rW6mTGo/DPvVRM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lin1a3x3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 461D5C4CECD;
+	Sun, 10 Nov 2024 15:52:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731253935;
-	bh=8t7YVZmoVUR7dCk/2nFP4SmQbrkuMwJVZH30PnGw0sc=;
+	s=k20201202; t=1731253946;
+	bh=ljV+7i1gHE0GvTLzOVr5+Punuc1M73hF7pzOK4hFm44=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=tSbcIZyJLgARbAOdS+pJopHmvO+0dcvkSRcZouRStNw+dKYE2wHYe18Rm44DF2j3P
-	 VlS+btt2v8xiVdU2ueTP3MtTdYHl9fDXByRNiGIvUUGN8E8gjQwtxIDB9SRHSjPzSz
-	 uDSmSbopSKoIF7pO6g3kpSK6iGVPdW/mgVhrSRuELh2LJJd6+XfDvyrXlM4mMaaJ+h
-	 iZfwizIU/UteKqNr1v2QJjTEV1Nx7vRl17we3xte62TjHHTpqsit4bwXVjuT40uhrb
-	 Vg8Fk7++DYvcd+KH3XfvgP+BK/9wK7IqCYKn6vTQoUPh07z2OfuhMOWRxMffzo480d
-	 Z3kUNSe8rl0lA==
+	b=Lin1a3x3MSmgk9wJ/NIjgm7RnFE4+WmlXVL2U66a+fB0n5PeT0BwBbla/o28K+Boj
+	 yssTIfvtB2Ax6W8DL7uKoeIULorJTjpNp18r7bXvTFfpsUlBZ+llnka4fmKrqsAXam
+	 NAo+DzTU/+Z+/8b3Kl/RWcGSi1zvhIZ+3VgAEP3lSdtusLkO8hUNC+S5VQhJNZAOwQ
+	 O5NPICO5WFjg5BjJ73E9kd0dXY9WLl9MNNjNL7BUkKHdyR3gCp1ynSED4SqVhJWPNf
+	 3MwF3leOKIVisU4pmsCZ04IxXL1z+SDE3ztPs7Xa1WXg4/PznTKNePwPYA4kzeBnC7
+	 4KNK67sSPfL5w==
 From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
 To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
 	Steven Rostedt <rostedt@goodmis.org>,
@@ -54,9 +54,9 @@ Cc: linux-trace-kernel@vger.kernel.org,
 	Alan Maguire <alan.maguire@oracle.com>,
 	Mark Rutland <mark.rutland@arm.com>,
 	linux-arch@vger.kernel.org
-Subject: [PATCH v19 17/19] Documentation: probes: Update fprobe on function-graph tracer
-Date: Mon, 11 Nov 2024 00:52:10 +0900
-Message-ID: <173125393047.172790.8427492388173333634.stgit@devnote2>
+Subject: [PATCH v19 18/19] ftrace: Add ftrace_get_symaddr to convert fentry_ip to symaddr
+Date: Mon, 11 Nov 2024 00:52:21 +0900
+Message-ID: <173125394102.172790.7669548166614384865.stgit@devnote2>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <173125372214.172790.6929368952404083802.stgit@devnote2>
 References: <173125372214.172790.6929368952404083802.stgit@devnote2>
@@ -72,100 +72,164 @@ Content-Transfer-Encoding: 8bit
 
 From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Update fprobe documentation for the new fprobe on function-graph
-tracer. This includes some bahvior changes and pt_regs to
-ftrace_regs interface change.
+This introduces ftrace_get_symaddr() which tries to convert fentry_ip
+passed by ftrace or fgraph callback to symaddr without calling
+kallsyms API. It returns the symbol address or 0 if it fails to
+convert it.
 
 Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 ---
- Changes in v2:
-  - Update @fregs parameter explanation.
+ Changes in v19:
+  - Newly added.
 ---
- Documentation/trace/fprobe.rst |   42 ++++++++++++++++++++++++++--------------
- 1 file changed, 27 insertions(+), 15 deletions(-)
+ arch/arm64/include/asm/ftrace.h |    2 +
+ arch/arm64/kernel/ftrace.c      |   63 +++++++++++++++++++++++++++++++++++++++
+ arch/x86/include/asm/ftrace.h   |   21 +++++++++++++
+ include/linux/ftrace.h          |   13 ++++++++
+ 4 files changed, 99 insertions(+)
 
-diff --git a/Documentation/trace/fprobe.rst b/Documentation/trace/fprobe.rst
-index 196f52386aaa..f58bdc64504f 100644
---- a/Documentation/trace/fprobe.rst
-+++ b/Documentation/trace/fprobe.rst
-@@ -9,9 +9,10 @@ Fprobe - Function entry/exit probe
- Introduction
- ============
+diff --git a/arch/arm64/include/asm/ftrace.h b/arch/arm64/include/asm/ftrace.h
+index 876e88ad4119..f08e70bf09ea 100644
+--- a/arch/arm64/include/asm/ftrace.h
++++ b/arch/arm64/include/asm/ftrace.h
+@@ -52,6 +52,8 @@ extern unsigned long ftrace_graph_call;
+ extern void return_to_handler(void);
  
--Fprobe is a function entry/exit probe mechanism based on ftrace.
--Instead of using ftrace full feature, if you only want to attach callbacks
--on function entry and exit, similar to the kprobes and kretprobes, you can
-+Fprobe is a function entry/exit probe mechanism based on the function-graph
-+tracer.
-+Instead of tracing all functions, if you want to attach callbacks on specific
-+function entry and exit, similar to the kprobes and kretprobes, you can
- use fprobe. Compared with kprobes and kretprobes, fprobe gives faster
- instrumentation for multiple functions with single handler. This document
- describes how to use fprobe.
-@@ -91,12 +92,14 @@ The prototype of the entry/exit callback function are as follows:
+ unsigned long ftrace_call_adjust(unsigned long addr);
++unsigned long arch_ftrace_call_adjust(unsigned long fentry_ip);
++#define ftrace_call_adjust(fentry_ip) arch_ftrace_call_adjust(fentry_ip)
  
- .. code-block:: c
+ #ifdef CONFIG_DYNAMIC_FTRACE_WITH_ARGS
+ #define HAVE_ARCH_FTRACE_REGS
+diff --git a/arch/arm64/kernel/ftrace.c b/arch/arm64/kernel/ftrace.c
+index 606fd6994578..de1223669758 100644
+--- a/arch/arm64/kernel/ftrace.c
++++ b/arch/arm64/kernel/ftrace.c
+@@ -143,6 +143,69 @@ unsigned long ftrace_call_adjust(unsigned long addr)
+ 	return addr;
+ }
  
-- int entry_callback(struct fprobe *fp, unsigned long entry_ip, unsigned long ret_ip, struct pt_regs *regs, void *entry_data);
-+ int entry_callback(struct fprobe *fp, unsigned long entry_ip, unsigned long ret_ip, struct ftrace_regs *fregs, void *entry_data);
- 
-- void exit_callback(struct fprobe *fp, unsigned long entry_ip, unsigned long ret_ip, struct pt_regs *regs, void *entry_data);
-+ void exit_callback(struct fprobe *fp, unsigned long entry_ip, unsigned long ret_ip, struct ftrace_regs *fregs, void *entry_data);
- 
--Note that the @entry_ip is saved at function entry and passed to exit handler.
--If the entry callback function returns !0, the corresponding exit callback will be cancelled.
-+Note that the @entry_ip is saved at function entry and passed to exit
-+handler.
-+If the entry callback function returns !0, the corresponding exit callback
-+will be cancelled.
- 
- @fp
-         This is the address of `fprobe` data structure related to this handler.
-@@ -112,12 +115,10 @@ If the entry callback function returns !0, the corresponding exit callback will
-         This is the return address that the traced function will return to,
-         somewhere in the caller. This can be used at both entry and exit.
- 
--@regs
--        This is the `pt_regs` data structure at the entry and exit. Note that
--        the instruction pointer of @regs may be different from the @entry_ip
--        in the entry_handler. If you need traced instruction pointer, you need
--        to use @entry_ip. On the other hand, in the exit_handler, the instruction
--        pointer of @regs is set to the current return address.
-+@fregs
-+        This is the `ftrace_regs` data structure at the entry and exit. This
-+        includes the function parameters, or the return values. So user can
-+        access thos values via appropriate `ftrace_regs_*` APIs.
- 
- @entry_data
-         This is a local storage to share the data between entry and exit handlers.
-@@ -125,6 +126,17 @@ If the entry callback function returns !0, the corresponding exit callback will
-         and `entry_data_size` field when registering the fprobe, the storage is
-         allocated and passed to both `entry_handler` and `exit_handler`.
- 
-+Entry data size and exit handlers on the same function
-+======================================================
++/* Convert fentry_ip to the symbol address without kallsyms */
++unsigned long arch_ftrace_get_symaddr(unsigned long fentry_ip)
++{
++	u32 insn;
 +
-+Since the entry data is passed via per-task stack and it is has limited size,
-+the entry data size per probe is limited to `15 * sizeof(long)`. You also need
-+to take care that the different fprobes are probing on the same function, this
-+limit becomes smaller. The entry data size is aligned to `sizeof(long)` and
-+each fprobe which has exit handler uses a `sizeof(long)` space on the stack,
-+you should keep the number of fprobes on the same function as small as
-+possible.
++	/*
++	 * When using patchable-function-entry without pre-function NOPS, ftrace
++	 * entry is the address of the first NOP after the function entry point.
++	 *
++	 * The compiler has either generated:
++	 *
++	 * func+00:	func:	NOP		// To be patched to MOV X9, LR
++	 * func+04:		NOP		// To be patched to BL <caller>
++	 *
++	 * Or:
++	 *
++	 * func-04:		BTI	C
++	 * func+00:	func:	NOP		// To be patched to MOV X9, LR
++	 * func+04:		NOP		// To be patched to BL <caller>
++	 *
++	 * The fentry_ip is the address of `BL <caller>` which is at `func + 4`
++	 * bytes in either case.
++	 */
++	if (!IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS))
++		return fentry_ip - AARCH64_INSN_SIZE;
 +
- Share the callbacks with kprobes
- ================================
++	/*
++	 * When using patchable-function-entry with pre-function NOPs, BTI is
++	 * a bit different.
++	 *
++	 * func+00:	func:	NOP		// To be patched to MOV X9, LR
++	 * func+04:		NOP		// To be patched to BL <caller>
++	 *
++	 * Or:
++	 *
++	 * func+00:	func:	BTI	C
++	 * func+04:		NOP		// To be patched to MOV X9, LR
++	 * func+08:		NOP		// To be patched to BL <caller>
++	 *
++	 * The fentry_ip is the address of `BL <caller>` which is at either
++	 * `func + 4` or `func + 8` depends on whether there is a BTI.
++	 */
++
++	/* If there is no BTI, the func address should be one instruction before. */
++	if (!IS_ENABLED(CONFIG_ARM64_BTI_KERNEL))
++		return fentry_ip - AARCH64_INSN_SIZE;
++
++	/* We want to be extra safe in case entry ip is on the page edge,
++	 * but otherwise we need to avoid get_kernel_nofault()'s overhead.
++	 */
++	if ((fentry_ip & ~PAGE_MASK) < AARCH64_INSN_SIZE * 2) {
++		if (get_kernel_nofault(insn, (u32 *)(fentry_ip - AARCH64_INSN_SIZE * 2)))
++			return 0;
++	} else {
++		insn = *(u32 *)(fentry_ip - AARCH64_INSN_SIZE * 2);
++	}
++
++	if (aarch64_insn_is_bti(le32_to_cpu((__le32)insn)))
++		return fentry_ip - AARCH64_INSN_SIZE * 2;
++
++	return fentry_ip - AARCH64_INSN_SIZE;
++}
++
+ /*
+  * Replace a single instruction, which may be a branch or NOP.
+  * If @validate == true, a replaced instruction is checked against 'old'.
+diff --git a/arch/x86/include/asm/ftrace.h b/arch/x86/include/asm/ftrace.h
+index cc92c99ef276..f9cb4d07df58 100644
+--- a/arch/x86/include/asm/ftrace.h
++++ b/arch/x86/include/asm/ftrace.h
+@@ -34,6 +34,27 @@ static inline unsigned long ftrace_call_adjust(unsigned long addr)
+ 	return addr;
+ }
  
-@@ -165,8 +177,8 @@ This counter counts up when;
-  - fprobe fails to take ftrace_recursion lock. This usually means that a function
-    which is traced by other ftrace users is called from the entry_handler.
++static inline unsigned long arch_ftrace_get_symaddr(unsigned long fentry_ip)
++{
++#ifdef CONFIG_X86_KERNEL_IBT
++	u32 instr;
++
++	/* We want to be extra safe in case entry ip is on the page edge,
++	 * but otherwise we need to avoid get_kernel_nofault()'s overhead.
++	 */
++	if ((fentry_ip & ~PAGE_MASK) < ENDBR_INSN_SIZE) {
++		if (get_kernel_nofault(instr, (u32 *)(fentry_ip - ENDBR_INSN_SIZE)))
++			return fentry_ip;
++	} else {
++		instr = *(u32 *)(fentry_ip - ENDBR_INSN_SIZE);
++	}
++	if (is_endbr(instr))
++		fentry_ip -= ENDBR_INSN_SIZE;
++#endif
++	return fentry_ip;
++}
++#define ftrace_get_symaddr(fentry_ip)	arch_ftrace_get_symaddr(fentry_ip)
++
+ #ifdef CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS
  
-- - fprobe fails to setup the function exit because of the shortage of rethook
--   (the shadow stack for hooking the function return.)
-+ - fprobe fails to setup the function exit because of failing to allocate the
-+   data buffer from the per-task shadow stack.
+ #include <linux/ftrace_regs.h>
+diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
+index 4c553fe9c026..9659bb2cd76c 100644
+--- a/include/linux/ftrace.h
++++ b/include/linux/ftrace.h
+@@ -652,6 +652,19 @@ struct ftrace_ops *ftrace_ops_trampoline(unsigned long addr);
  
- The `fprobe::nmissed` field counts up in both cases. Therefore, the former
- skips both of entry and exit callback and the latter skips the exit
+ bool is_ftrace_trampoline(unsigned long addr);
+ 
++/* Arches can override ftrace_get_symaddr() to convert fentry_ip to symaddr. */
++#ifndef ftrace_get_symaddr
++/**
++ * ftrace_get_symaddr - return the symbol address from fentry_ip
++ * @fentry_ip: the address of ftrace location
++ *
++ * Get the symbol address from @fentry_ip (fast path). If there is no fast
++ * search path, this returns 0.
++ * User may need to use kallsyms API to find the symbol address.
++ */
++#define ftrace_get_symaddr(fentry_ip) (0)
++#endif
++
+ /*
+  * The dyn_ftrace record's flags field is split into two parts.
+  * the first part which is '0-FTRACE_REF_MAX' is a counter of
 
 
