@@ -1,122 +1,155 @@
-Return-Path: <linux-arch+bounces-8958-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8959-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C49E9C3395
-	for <lists+linux-arch@lfdr.de>; Sun, 10 Nov 2024 16:54:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 258409C33DF
+	for <lists+linux-arch@lfdr.de>; Sun, 10 Nov 2024 18:05:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4BCA828167C
-	for <lists+linux-arch@lfdr.de>; Sun, 10 Nov 2024 15:54:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D9D78280F6D
+	for <lists+linux-arch@lfdr.de>; Sun, 10 Nov 2024 17:05:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56925158DD4;
-	Sun, 10 Nov 2024 15:52:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E996D130A73;
+	Sun, 10 Nov 2024 17:05:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CBRu+jJa"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="VJsFhROb"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F4BA13DDDD;
-	Sun, 10 Nov 2024 15:52:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46A0D81749;
+	Sun, 10 Nov 2024 17:05:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731253957; cv=none; b=mXwXDY10EEnWx0KVm12d7RIjXTOBvtc0EvNxOXRfHKzwUyHs1DUjA2CUYEGtl2W7HQw06umAn85ocDe4hLmlfVlYPJEjJDWMPi8aJXNGvp7bf7Xyi1wy/QPTJ58E5PKEeoEKBl/bbfSUCagAH9qLwwLNP3Kwslfp6G8IYSJYZCY=
+	t=1731258326; cv=none; b=uuun5VY1qG+cs9+9k4QRQWCxiCScnOReZyuXnJYq3v0XbN67jd8pvPA6alZ9TSv13Lp7zPK14ob0k7g0Ywqfkl/rDJ1UwqYix8Kxj5BHC5mD+67tF71GWpR19f/3ki5qAUzr3Iahe6bLA5VJ6LiNvvAAHqaWwsCpOoHTLyQlIQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731253957; c=relaxed/simple;
-	bh=kzuMS+tyBQSahtSqkEji9Egz79KXjp5UmvcHMUaWrrg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gJvNcfERjNXr7W/RM5NdyR1zvZ6tj1d1meN4xNMb2HvV9In067SdGhDhyVTO3rFvCKJeC6nNhCaZFA2n+MRKa0zYYMXrQqf0F5sycgPRD7oo/PbTap5oZHp6OOkcExkzDM7SpzOpAK4Rh/a3DC7q5f4I6R9XGqMwaqr0/gATsHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CBRu+jJa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E562FC4CECF;
-	Sun, 10 Nov 2024 15:52:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731253956;
-	bh=kzuMS+tyBQSahtSqkEji9Egz79KXjp5UmvcHMUaWrrg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=CBRu+jJaXPo18SnMpvvYDfvy7jg5vEN6mgf0tmmvOXqbh3FCr7CQM0FhL48yUGbmv
-	 jOj8CfVIE0cmu8+WsD2inq5k/um9mUmZDb6s19oWyJvyHWlQxKaE5Fh8tbVXqBynJf
-	 zIBgUZB0Dbvdqeslp83y77m0Qk4lXD7vovZr8NAJv0B6BN/HXGNRRZpeuL2akGGSFu
-	 +4r+F/r9RGDwokJt6VtZhv3VLzX1oUvYBbcOsuQEkmvDSzKF6ymgYzTFYSHWrsQbyP
-	 4ZLwY80bgMqcXqOC5yyJMi9JrVx+hcTKvW22KYR+kEG7eBoQkGiF/6eZ+fiGYCJbj/
-	 FCPdNfXSqeU6w==
-From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Florent Revest <revest@chromium.org>
-Cc: linux-trace-kernel@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	bpf <bpf@vger.kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Alan Maguire <alan.maguire@oracle.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	linux-arch@vger.kernel.org
-Subject: [PATCH v19 19/19] bpf: Use ftrace_get_symaddr() in get_entry_ip()
-Date: Mon, 11 Nov 2024 00:52:31 +0900
-Message-ID: <173125395146.172790.15945895464150788842.stgit@devnote2>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <173125372214.172790.6929368952404083802.stgit@devnote2>
+	s=arc-20240116; t=1731258326; c=relaxed/simple;
+	bh=Pnh3433UtHsbIP9/dYZxTpk00g1+JZSbalZdN33ybvM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LggVJDnPWZDtKGzBWq0TY7hLbTq9RfCr321Epf6o2P7uF278lwYHZhVUfzpRKKoBCZCj0s9ieRGpjuP1gW9dRHz2Wrhl+NGHDaNdS5aFq8O0F81ppebNpHrT1Nzkpn4Z/GYnEFu54poIRWlJEmB1+GjLu32Vn4pW5xu3veuUAGE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=VJsFhROb; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AABQ85T024414;
+	Sun, 10 Nov 2024 17:04:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pp1; bh=frQ6QYtXz5tMjJ8Ox9swnqK1a1aNNK
+	cBTsSHw7pehXE=; b=VJsFhRObJYitThQEqjAIsMuoGRseEjDNnOJihVcv4iSAoH
+	lAO+DequcP6W2vm6+BrcQroo8jl3UD9noUUl0V0S+lCLFT7R6SpLYdaG6LsYkXGP
+	MVlnKtBlLoTWpjmtbFpiU8qydsZLw9oB+oqe86j0SS8lYPO4xaOl9BgP50SwVtE3
+	TLMHce9EjmzjbvbitbrqUIJUDTxoG8Vt4vbHQXwBpPuOXW6NFdWO4QZyi3B4OLVx
+	Wc+LsxmLeqJLMQNSl15mFllgen1i2CctWJ68Kox/+SnDmoLe/34dJ2iATUdGsNyd
+	TmkwwUSJZoaGV/q8wTFVx0n+OWoZTjng8RbRtopw==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42tqass9yj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sun, 10 Nov 2024 17:04:21 +0000 (GMT)
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 4AAH4K0E007951;
+	Sun, 10 Nov 2024 17:04:20 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42tqass9yf-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sun, 10 Nov 2024 17:04:20 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4AAGPktE018059;
+	Sun, 10 Nov 2024 17:04:19 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 42tk2mry51-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sun, 10 Nov 2024 17:04:19 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4AAH4FgP35324206
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sun, 10 Nov 2024 17:04:15 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 4020820043;
+	Sun, 10 Nov 2024 17:04:15 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id ACD6520040;
+	Sun, 10 Nov 2024 17:04:13 +0000 (GMT)
+Received: from osiris (unknown [9.171.74.231])
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Sun, 10 Nov 2024 17:04:13 +0000 (GMT)
+Date: Sun, 10 Nov 2024 18:04:12 +0100
+From: Heiko Carstens <hca@linux.ibm.com>
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Florent Revest <revest@chromium.org>,
+        linux-trace-kernel@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Mark Rutland <mark.rutland@arm.com>, linux-arch@vger.kernel.org,
+        Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Song Liu <song@kernel.org>, KP Singh <kpsingh@kernel.org>,
+        Matt Bobrowski <mattbobrowski@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Eduard Zingerman <eddyz87@gmail.com>,
+        Yonghong Song <yonghong.song@linux.dev>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v19 05/19] fprobe: Use ftrace_regs in fprobe exit handler
+Message-ID: <20241110170412.6661-A-hca@linux.ibm.com>
 References: <173125372214.172790.6929368952404083802.stgit@devnote2>
-User-Agent: StGit/0.19
+ <173125378270.172790.5407978814601760638.stgit@devnote2>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <173125378270.172790.5407978814601760638.stgit@devnote2>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Y4KkmDzv_RfQUUDzdkAuzUGlBSRvEsau
+X-Proofpoint-ORIG-GUID: lTz9pkfDChxrEnI8Wbh9YNbvhWacrVls
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=3 priorityscore=1501
+ spamscore=3 malwarescore=0 lowpriorityscore=0 phishscore=0 bulkscore=0
+ clxscore=1011 impostorscore=0 adultscore=0 mlxscore=3 mlxlogscore=147
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2411100151
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+On Mon, Nov 11, 2024 at 12:49:42AM +0900, Masami Hiramatsu (Google) wrote:
+> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 
+> Change the fprobe exit handler to use ftrace_regs structure instead of
+> pt_regs. This also introduce HAVE_FTRACE_REGS_HAVING_PT_REGS which
+> means the ftrace_regs is including the pt_regs so that ftrace_regs
+> can provide pt_regs without memory allocation.
+> Fprobe introduces a new dependency with that.
+> 
+> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> ---
+>   Changes in v16:
+>    - Rename HAVE_PT_REGS_TO_FTRACE_REGS_CAST to
+>      HAVE_FTRACE_REGS_HAVING_PT_REGS.
+>   Changes in v3:
+>    - Use ftrace_regs_get_return_value()
+>   Changes from previous series: NOTHING, just forward ported.
+> ---
+>  arch/loongarch/Kconfig          |    1 +
+>  arch/s390/Kconfig               |    1 +
 
-Rewrite get_entry_ip() to use ftrace_get_symaddr() macro.
-
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
----
- Changes in v19:
-  - Use ftrace_get_symaddr() instead of introducing new arch dependent code.
-  - Also, replace x86 code with ftrace_get_symaddr(), which does the same
-   thing.
----
- kernel/trace/bpf_trace.c |   19 ++-----------------
- 1 file changed, 2 insertions(+), 17 deletions(-)
-
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 1532e9172bf9..e848a782bc8d 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1024,27 +1024,12 @@ static const struct bpf_func_proto bpf_get_func_ip_proto_tracing = {
- 	.arg1_type	= ARG_PTR_TO_CTX,
- };
- 
--#ifdef CONFIG_X86_KERNEL_IBT
- static unsigned long get_entry_ip(unsigned long fentry_ip)
- {
--	u32 instr;
-+	unsigned long ret = ftrace_get_symaddr(fentry_ip);
- 
--	/* We want to be extra safe in case entry ip is on the page edge,
--	 * but otherwise we need to avoid get_kernel_nofault()'s overhead.
--	 */
--	if ((fentry_ip & ~PAGE_MASK) < ENDBR_INSN_SIZE) {
--		if (get_kernel_nofault(instr, (u32 *)(fentry_ip - ENDBR_INSN_SIZE)))
--			return fentry_ip;
--	} else {
--		instr = *(u32 *)(fentry_ip - ENDBR_INSN_SIZE);
--	}
--	if (is_endbr(instr))
--		fentry_ip -= ENDBR_INSN_SIZE;
--	return fentry_ip;
-+	return ret ? : fentry_ip;
- }
--#else
--#define get_entry_ip(fentry_ip) fentry_ip
--#endif
- 
- BPF_CALL_1(bpf_get_func_ip_kprobe, struct pt_regs *, regs)
- {
-
+Acked-by: Heiko Carstens <hca@linux.ibm.com> # s390
 
