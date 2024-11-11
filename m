@@ -1,317 +1,229 @@
-Return-Path: <linux-arch+bounces-9012-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9014-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BB219C47AB
-	for <lists+linux-arch@lfdr.de>; Mon, 11 Nov 2024 22:07:53 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82F729C47D7
+	for <lists+linux-arch@lfdr.de>; Mon, 11 Nov 2024 22:15:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 47D7A281365
-	for <lists+linux-arch@lfdr.de>; Mon, 11 Nov 2024 21:07:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 43F7B2834A4
+	for <lists+linux-arch@lfdr.de>; Mon, 11 Nov 2024 21:15:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A78C41F26EB;
-	Mon, 11 Nov 2024 20:55:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73C7019D09F;
+	Mon, 11 Nov 2024 21:15:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="T5lHeQga"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=freemail.hu header.i=@freemail.hu header.b="vluovjKt"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-out.freemail.hu (fmfe19.freemail.hu [46.107.16.212])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41FC81E885B
-	for <linux-arch@vger.kernel.org>; Mon, 11 Nov 2024 20:55:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1984A19F46D;
+	Mon, 11 Nov 2024 21:15:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.107.16.212
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731358515; cv=none; b=sCB4OsxN8tFcOPlB37U/35Pyg+e+Yvw16sSxwjSUGi/ojEjTJTZdC2YDeRaJW/Ub0rCSRyJo1SVaX7YXkQMCZCKE+Fs+Sj53ITyx6gIuNPtXR+wwMAIPeljFLulJEx08NxAqjc7IEe7oFm1+1l0KF9UP6wPHCmvVNIVfZpwBkLY=
+	t=1731359747; cv=none; b=L2RXomnlv27mmeIqxUNTUywVDPddXNNwiHc+ldNyDeavqV9Fa5yLDdMudhCOpXPIQFGMhqfRY2tcCsTdbG+Utz/I7tav8NXL12DYjxj1seQK/CViNK5jknRnfstd1T80v4RdZJ0jU99j9QRuv37UFqkwoDW7THly/XvAY5hQBZ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731358515; c=relaxed/simple;
-	bh=6Kpf3Jg7E+DUwQJuMhkUpYlGBvZwuWthU70dbXIzd3Q=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Z2oH273ncJFbfcHF9OXIcAL2MN9kqr2tbnOp69GNEfcw0bOVfDoCRx7DUt3xa5OAzisih4ZUmz9UaBdO2Tx7Q6CyI0DoEoKqvCPE9VIh7cQ/muheYQnJ0MQbwLH09UzLIu+5W3WtqOzSq/fBUlfqtBGM/eEQ2aB00SR72Cx9fs8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=T5lHeQga; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-20c714cd9c8so49964445ad.0
-        for <linux-arch@vger.kernel.org>; Mon, 11 Nov 2024 12:55:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1731358512; x=1731963312; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NYP5wvilXBl9e2AdD/12DI5Fd1eAjNDT/0JkZD4bKgk=;
-        b=T5lHeQgaUCs1kUpkZ1jnUWyswPlCIFdB0GelT9GqrQPirhSR77lAu33fbntxYHbCwe
-         qmxwTB0apGIIJORHnHRPMld6WRCLHYjEwsm97xyA8vl00AVXnGEtd4G847lV0jdyo81v
-         zD/QOXcdI+mHJTURt9QwOhoOZCAxJkRGXLHi/Ei5+oTjqF16fTl34CNR3JXCyraGk2bW
-         ZK0ZuByyXxsoH8CucrRsexGsPcEgUwIAcfy87ruGKje7EF68lkKGXfcxt4pkIF1/Apqy
-         kB/wjL4YvGdJTTV1GGjnbq8TfWUThOzQJdXji931YwjUvVGtEm5Ji+BRSgFDS5pHpkfP
-         1xVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731358512; x=1731963312;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NYP5wvilXBl9e2AdD/12DI5Fd1eAjNDT/0JkZD4bKgk=;
-        b=jJyctQJ+MUWHA9bWfYVhLXi17IcizoVRCFY7F1Jqlb/s+BibpclWR3gH5hFizrP9Kx
-         YjRkot090TNzelGp6MA9E1ZO9omirIYjzSSfiVo4or1RwvXeWn3BNX7m+ZFBD/5Ib9Ue
-         8GokMg7kTLaCCviRZ9KJ2vnZMCLVJmdul7KUc6tar+TIy/9auhWzo4vCWO5RTxhjIRgK
-         HxYG8owD07jcQroLfBaoyR81/DWIdvC8gW7R8q6b5XRmPr7sh4obq1evfRu6WlIzxYZK
-         sL9h9cJKXqupF8uzuzVHthXIka/y8rhfwvmuPEoj54miz0NA3L4CunLeM8OkfOB5gt4h
-         oLpg==
-X-Forwarded-Encrypted: i=1; AJvYcCV8lRBD96ylZ96ZFfI45vdOgCj/eW38FUe12CatXTR/psQkOG82829BUqVw5m49kFgUH+tOjvQRW9j4@vger.kernel.org
-X-Gm-Message-State: AOJu0YylgFNCrj59WMN0iB9ssZ0BC/89DjSgWTu+fuztP+Zoz7u51rOJ
-	w6w7MpHd2iwhQ3DEz5eruoUN9dwz/rIn15BZ2U7TWnb5D2lhpvgHrEa3mneyrCY=
-X-Google-Smtp-Source: AGHT+IGvZ1Qr8oDf21hnmw+UY/eeYz7wQwk8M8v9lcOAYNLAnYOjMSOnfptGUiFBUzt6eZ3xPP39jw==
-X-Received: by 2002:a17:902:db12:b0:211:6b25:d824 with SMTP id d9443c01a7336-21183e11eacmr202524465ad.35.1731358511517;
-        Mon, 11 Nov 2024 12:55:11 -0800 (PST)
-Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e9a5fd1534sm9059974a91.42.2024.11.11.12.55.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Nov 2024 12:55:11 -0800 (PST)
-From: Deepak Gupta <debug@rivosinc.com>
-Date: Mon, 11 Nov 2024 12:54:13 -0800
-Subject: [PATCH v8 28/29] riscv: Documentation for shadow stack on riscv
+	s=arc-20240116; t=1731359747; c=relaxed/simple;
+	bh=VvS6bsHJ4ioFbneyQh3LFJlSq7IvHI5vbFpJR991670=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WNlaP6m10NO3lMrWzDT+m4RRGELWDb4xoGT7lHxoiuxt9IT2DshzJ0zWd472fZmwgIiGITiOB3YgER6L4sVuOrq9KHfEjR6bvPpD2KSeN7puFnybxUeePdB/Mb4aVYlDmx7fpRyW4udpWFfSfEXBG9lLQs6ru9GOe+3vCj+J3S4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=freemail.hu; spf=pass smtp.mailfrom=freemail.hu; dkim=fail (2048-bit key) header.d=freemail.hu header.i=@freemail.hu header.b=vluovjKt reason="signature verification failed"; arc=none smtp.client-ip=46.107.16.212
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=freemail.hu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=freemail.hu
+Received: from [192.168.0.16] (catv-178-48-208-49.catv.fixed.vodafone.hu [178.48.208.49])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.freemail.hu (Postfix) with ESMTPSA id 4XnMlY00H9zPXD;
+	Mon, 11 Nov 2024 22:15:36 +0100 (CET)
+Message-ID: <a42da186-195c-40af-b4ee-0eaf6672cf2c@freemail.hu>
+Date: Mon, 11 Nov 2024 22:15:30 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241111-v5_user_cfi_series-v8-28-dce14aa30207@rivosinc.com>
-References: <20241111-v5_user_cfi_series-v8-0-dce14aa30207@rivosinc.com>
-In-Reply-To: <20241111-v5_user_cfi_series-v8-0-dce14aa30207@rivosinc.com>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
- Andrew Morton <akpm@linux-foundation.org>, 
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
- Vlastimil Babka <vbabka@suse.cz>, 
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
- Paul Walmsley <paul.walmsley@sifive.com>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
- Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
- Christian Brauner <brauner@kernel.org>, 
- Peter Zijlstra <peterz@infradead.org>, Oleg Nesterov <oleg@redhat.com>, 
- Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>, 
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
- linux-mm@kvack.org, linux-riscv@lists.infradead.org, 
- devicetree@vger.kernel.org, linux-arch@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- alistair.francis@wdc.com, richard.henderson@linaro.org, jim.shu@sifive.com, 
- andybnac@gmail.com, kito.cheng@sifive.com, charlie@rivosinc.com, 
- atishp@rivosinc.com, evan@rivosinc.com, cleger@rivosinc.com, 
- alexghiti@rivosinc.com, samitolvanen@google.com, broonie@kernel.org, 
- rick.p.edgecombe@intel.com, Deepak Gupta <debug@rivosinc.com>
-X-Mailer: b4 0.14.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] tools/memory-model: Fix litmus-tests's file names for
+ case-insensitive filesystem.
+To: paulmck@kernel.org
+Cc: stern@rowland.harvard.edu, parri.andrea@gmail.com, will@kernel.org,
+ peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
+ dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+ akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
+ linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ lkmm@lists.linux.dev, torvalds@linux-foundation.org
+References: <20241111164248.1060-1-egyszeregy@freemail.hu>
+ <69be42c9-331f-4fb5-a6ae-c2932ada0a47@paulmck-laptop>
+ <8925322d-1983-4e35-82f9-d8b86d32e6a6@freemail.hu>
+ <1a6342c9-e316-4c78-9a07-84f45cbebb54@paulmck-laptop>
+ <ec6e297b-02fb-4f57-9fc1-47751106a7d2@freemail.hu>
+ <5acaaaa0-7c17-4991-aff6-8ea293667654@paulmck-laptop>
+Content-Language: hu
+From: =?UTF-8?Q?Sz=C5=91ke_Benjamin?= <egyszeregy@freemail.hu>
+In-Reply-To: <5acaaaa0-7c17-4991-aff6-8ea293667654@paulmck-laptop>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=simple/relaxed; t=1731359737;
+	s=20181004; d=freemail.hu;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	l=7430; bh=nFDyjd8uugI8QHJs1eXdfvfTTmsjnykSy5kSaBq2CSw=;
+	b=vluovjKthxu0wEJUDLZHMDgrMbf5Zs7FRKbVQmj8WxIB7fu7n9u+JFBWmb21yw9h
+	TmPQvUnQfzhO8vLXTcqZDCJ9KNvjaghLjCtLdS2AIoImPhUyXFl9pn3O7uBErqjZMPA
+	DriGHAIld14neh/FGp11SoB1kgJh6kIhkctF2UDKXuZNNp7NMPHn2ZnXZ1a+5+PG8A1
+	xXqlAQElEHQ+4fuBgJ2sMqMTvuWZJTXhBoIiICrwa/w5bwfpJ009HI0ZawGqgyH5eUi
+	K1tSIQAnKuglZ67JEEEEoHIbz/Z/IyZXZ7X+RDmK4tTM4L1yEasAhAdOQScI//Pegu2
+	upb9gyo+UA==
 
-Adding documentation on shadow stack for user mode on riscv and kernel
-interfaces exposed so that user tasks can enable it.
+2024. 11. 11. 21:29 keltezéssel, Paul E. McKenney írta:
+> On Mon, Nov 11, 2024 at 08:56:34PM +0100, Szőke Benjamin wrote:
+>> 2024. 11. 11. 20:22 keltezéssel, Paul E. McKenney írta:
+>>> On Mon, Nov 11, 2024 at 07:52:50PM +0100, Szőke Benjamin wrote:
+>>>> 2024. 11. 11. 17:54 keltezéssel, Paul E. McKenney írta:
+>>>>> On Mon, Nov 11, 2024 at 05:42:47PM +0100, egyszeregy@freemail.hu wrote:
+>>>>>> From: Benjamin Szőke <egyszeregy@freemail.hu>
+>>>>>>
+>>>>>> The goal is to fix Linux repository for case-insensitive filesystem,
+>>>>>> to able to clone it and editable on any operating systems.
+>>>>>>
+>>>>>> Rename "Z6.0+pooncelock+poonceLock+pombonce.litmus" to
+>>>>>> "Z6.0+pooncelock+poonceLock+after_spinlock+pombonce.litmus".
+>>>>>>
+>>>>>> Signed-off-by: Benjamin Szőke <egyszeregy@freemail.hu>
+>>>>>
+>>>>> Ummm...  Really?
+>>>>>
+>>>>> Just out of curiosity, which operating-system/filesystem combination are
+>>>>> you working with?  And why not instead fix that combination to handle
+>>>>> mixed case?
+>>>>>
+>>>>> 							Thanx, Paul
+>>>>
+>>>> Windows and also MacOS is not case sensitive by default. My goal is to
+>>>> improve Linux kernel source-tree, to able to develop it in any operating
+>>>> systems for example via Visual Studio Code extensions/IntelliSense feature
+>>>> or any similar IDE which is usable in any OS.
+>>>
+>>> Why not simply enable case sensitivity on the file tree in which you
+>>> are processing Linux-kernel source code?
+>>>
+>>> For MacOS:  https://discussions.apple.com/thread/251191099?sortBy=rank
+>>> For Windows:  https://learn.microsoft.com/en-us/windows/wsl/case-sensitivity
+>>>
+>>> In some cases it might work better to simply run a Linux VM on top of
+>>> Windows or MacOS.
+>>>
+>>> They tell me that webservers already do this, so why not also for
+>>> Linux-kernel source code?
+>>
+>> Why we not solve it as simple as it can in the source code of the Linux
+>> kernel with renaming? It would be more robust and more durable to fix this
+>> issue/inconviniant in the source as an overal complete solution. Nobody like
+>> to figth with configuraition hell of Windows and MacOS, or build up a
+>> diskspace consumer Virtual Linux with crappy GUI capapilities for coding big
+>> things.
+>>
+>> Young developers will never be willing to join and contributing in Linux
+>> kernel in the future if Linux kernel code is not editable in a high-quality,
+>> easy-to-use IDE for, which is usable in any OS.
+> 
+> There are a great number of software projects out there that use mixed
+> case.  Therefore, can an IDE that does not gracefully handle mixed case
+> really be said to be either high quality or easy to use?
+> 
+> In other words, you have the option of making the IDE handle this.
+> 
+>> Need to improve this kind of things and simplify/modernize developing or
+>> never will be solved the following issues:
+>> https://www.youtube.com/watch?v=lJLw94pAcBY
+> 
+> Sorry, but that video does not support your point.  In fact, the presenter
+> clearly states that this sort of tooling issue is not a real problem
+> for the Linux kernel near the middle of that video.
+> 
+> 							Thanx, Paul
+> 
+>>>> There were some accepted patches which aim this same goal.
+>>>> https://gitlab.freedesktop.org/drm/kernel/-/commit/231bb9b4c42398db3114c087ba39ba00c4b7ac2c
+>>>> https://git.kernel.org/pub/scm/linux/kernel/git/vgupta/arc.git/commit/?h=for-curr&id=8bf275d61925cff45568438c73f114e46237ad7e
+>>>
+>>> Fair enough, as it is the maintainer's choice.  Which means that
+>>> their accepting these case-sensitivity changes does not require other
+>>> maintainers to do so.
+>>>
+>>> 							Thanx, Paul
+>>>
+>>>>>> ---
+>>>>>>     tools/memory-model/Documentation/locking.txt                    | 2 +-
+>>>>>>     tools/memory-model/Documentation/recipes.txt                    | 2 +-
+>>>>>>     tools/memory-model/litmus-tests/README                          | 2 +-
+>>>>>>     ...> Z6.0+pooncelock+poonceLock+after_spinlock+pombonce.litmus} | 0
+>>>>>>     4 files changed, 3 insertions(+), 3 deletions(-)
+>>>>>>     rename tools/memory-model/litmus-tests/{Z6.0+pooncelock+poonceLock+pombonce.litmus => Z6.0+pooncelock+poonceLock+after_spinlock+pombonce.litmus} (100%)
+>>>>>>
+>>>>>> diff --git a/tools/memory-model/Documentation/locking.txt b/tools/memory-model/Documentation/locking.txt
+>>>>>> index 65c898c64a93..42bc3efe2015 100644
+>>>>>> --- a/tools/memory-model/Documentation/locking.txt
+>>>>>> +++ b/tools/memory-model/Documentation/locking.txt
+>>>>>> @@ -184,7 +184,7 @@ ordering properties.
+>>>>>>     Ordering can be extended to CPUs not holding the lock by careful use
+>>>>>>     of smp_mb__after_spinlock():
+>>>>>> -	/* See Z6.0+pooncelock+poonceLock+pombonce.litmus. */
+>>>>>> +	/* See Z6.0+pooncelock+poonceLock+after_spinlock+pombonce.litmus. */
+>>>>>>     	void CPU0(void)
+>>>>>>     	{
+>>>>>>     		spin_lock(&mylock);
+>>>>>> diff --git a/tools/memory-model/Documentation/recipes.txt b/tools/memory-model/Documentation/recipes.txt
+>>>>>> index 03f58b11c252..35996eb1b690 100644
+>>>>>> --- a/tools/memory-model/Documentation/recipes.txt
+>>>>>> +++ b/tools/memory-model/Documentation/recipes.txt
+>>>>>> @@ -159,7 +159,7 @@ lock's ordering properties.
+>>>>>>     Ordering can be extended to CPUs not holding the lock by careful use
+>>>>>>     of smp_mb__after_spinlock():
+>>>>>> -	/* See Z6.0+pooncelock+poonceLock+pombonce.litmus. */
+>>>>>> +	/* See Z6.0+pooncelock+poonceLock+after_spinlock+pombonce.litmus. */
+>>>>>>     	void CPU0(void)
+>>>>>>     	{
+>>>>>>     		spin_lock(&mylock);
+>>>>>> diff --git a/tools/memory-model/litmus-tests/README b/tools/memory-model/litmus-tests/README
+>>>>>> index d311a0ff1ae6..e3d451346400 100644
+>>>>>> --- a/tools/memory-model/litmus-tests/README
+>>>>>> +++ b/tools/memory-model/litmus-tests/README
+>>>>>> @@ -149,7 +149,7 @@ Z6.0+pooncelock+pooncelock+pombonce.litmus
+>>>>>>     	spin_lock() sufficient to make ordering apparent to accesses
+>>>>>>     	by a process not holding the lock?
+>>>>>> -Z6.0+pooncelock+poonceLock+pombonce.litmus
+>>>>>> +Z6.0+pooncelock+poonceLock+after_spinlock+pombonce.litmus
+>>>>>>     	As above, but with smp_mb__after_spinlock() immediately
+>>>>>>     	following the spin_lock().
+>>>>>> diff --git a/tools/memory-model/litmus-tests/Z6.0+pooncelock+poonceLock+pombonce.litmus b/tools/memory-model/litmus-tests/Z6.0+pooncelock+poonceLock+after_spinlock+pombonce.litmus
+>>>>>> similarity index 100%
+>>>>>> rename from tools/memory-model/litmus-tests/Z6.0+pooncelock+poonceLock+pombonce.litmus
+>>>>>> rename to tools/memory-model/litmus-tests/Z6.0+pooncelock+poonceLock+after_spinlock+pombonce.litmus
+>>>>>> -- 
+>>>>>> 2.47.0.windows.2
+>>>>>>
+>>>>
+>>
 
-Signed-off-by: Deepak Gupta <debug@rivosinc.com>
----
- Documentation/arch/riscv/index.rst   |   1 +
- Documentation/arch/riscv/zicfiss.rst | 176 +++++++++++++++++++++++++++++++++++
- 2 files changed, 177 insertions(+)
+There is a technical issue in the Linux kernel source tree's file naming/styles 
+in git clone command on case-insensitive filesystem.
 
-diff --git a/Documentation/arch/riscv/index.rst b/Documentation/arch/riscv/index.rst
-index be7237b69682..e240eb0ceb70 100644
---- a/Documentation/arch/riscv/index.rst
-+++ b/Documentation/arch/riscv/index.rst
-@@ -15,6 +15,7 @@ RISC-V architecture
-     vector
-     cmodx
-     zicfilp
-+    zicfiss
- 
-     features
- 
-diff --git a/Documentation/arch/riscv/zicfiss.rst b/Documentation/arch/riscv/zicfiss.rst
-new file mode 100644
-index 000000000000..5ba389f15b3f
---- /dev/null
-+++ b/Documentation/arch/riscv/zicfiss.rst
-@@ -0,0 +1,176 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+:Author: Deepak Gupta <debug@rivosinc.com>
-+:Date:   12 January 2024
-+
-+=========================================================
-+Shadow stack to protect function returns on RISC-V Linux
-+=========================================================
-+
-+This document briefly describes the interface provided to userspace by Linux
-+to enable shadow stack for user mode applications on RISV-V
-+
-+1. Feature Overview
-+--------------------
-+
-+Memory corruption issues usually result in to crashes, however when in hands of
-+an adversary and if used creatively can result into variety security issues.
-+
-+One of those security issues can be code re-use attacks on program where
-+adversary can use corrupt return addresses present on stack and chain them
-+together to perform return oriented programming (ROP) and thus compromising
-+control flow integrity (CFI) of the program.
-+
-+Return addresses live on stack and thus in read-write memory and thus are
-+susceptible to corruption and allows an adversary to reach any program counter
-+(PC) in address space. On RISC-V ``zicfiss`` extension provides an alternate
-+stack termed as shadow stack on which return addresses can be safely placed in
-+prolog of the function and retrieved in epilog. ``zicfiss`` extension makes
-+following changes:
-+
-+- PTE encodings for shadow stack virtual memory
-+  An earlier reserved encoding in first stage translation i.e.
-+  PTE.R=0, PTE.W=1, PTE.X=0  becomes PTE encoding for shadow stack pages.
-+
-+- ``sspush x1/x5`` instruction pushes (stores) ``x1/x5`` to shadow stack.
-+
-+- ``sspopchk x1/x5`` instruction pops (loads) from shadow stack and compares
-+  with ``x1/x5`` and if un-equal, CPU raises ``software check exception`` with
-+  ``*tval = 3``
-+
-+Compiler toolchain makes sure that function prologue have ``sspush x1/x5`` to
-+save return address on shadow stack in addition to regular stack. Similarly
-+function epilogs have ``ld x5, offset(x2)`` followed by ``sspopchk x5`` to
-+ensure that popped value from regular stack matches with popped value from
-+shadow stack.
-+
-+2. Shadow stack protections and linux memory manager
-+-----------------------------------------------------
-+
-+As mentioned earlier, shadow stack get new page table encodings and thus have
-+some special properties assigned to them and instructions that operate on them
-+as below:
-+
-+- Regular stores to shadow stack memory raises access store faults. This way
-+  shadow stack memory is protected from stray inadvertant writes.
-+
-+- Regular loads to shadow stack memory are allowed. This allows stack trace
-+  utilities or backtrace functions to read true callstack (not tampered).
-+
-+- Only shadow stack instructions can generate shadow stack load or shadow stack
-+  store.
-+
-+- Shadow stack load / shadow stack store on read-only memory raises AMO/store
-+  page fault. Thus both ``sspush x1/x5`` and ``sspopchk x1/x5`` will raise AMO/
-+  store page fault. This simplies COW handling in kernel During fork, kernel
-+  can convert shadow stack pages into read-only memory (as it does for regular
-+  read-write memory) and as soon as subsequent ``sspush`` or ``sspopchk`` in
-+  userspace is encountered, then kernel can perform COW.
-+
-+- Shadow stack load / shadow stack store on read-write, read-write-execute
-+  memory raises an access fault. This is a fatal condition because shadow stack
-+  should never be operating on read-write, read-write-execute memory.
-+
-+3. ELF and psABI
-+-----------------
-+
-+Toolchain sets up :c:macro:`GNU_PROPERTY_RISCV_FEATURE_1_BCFI` for property
-+:c:macro:`GNU_PROPERTY_RISCV_FEATURE_1_AND` in notes section of the object file.
-+
-+4. Linux enabling
-+------------------
-+
-+User space programs can have multiple shared objects loaded in its address space
-+and it's a difficult task to make sure all the dependencies have been compiled
-+with support of shadow stack. Thus it's left to dynamic loader to enable
-+shadow stack for the program.
-+
-+5. prctl() enabling
-+--------------------
-+
-+:c:macro:`PR_SET_SHADOW_STACK_STATUS` / :c:macro:`PR_GET_SHADOW_STACK_STATUS` /
-+:c:macro:`PR_LOCK_SHADOW_STACK_STATUS` are three prctls added to manage shadow
-+stack enabling for tasks. prctls are arch agnostic and returns -EINVAL on other
-+arches.
-+
-+* prctl(PR_SET_SHADOW_STACK_STATUS, unsigned long arg)
-+
-+If arg1 :c:macro:`PR_SHADOW_STACK_ENABLE` and if CPU supports ``zicfiss`` then
-+kernel will enable shadow stack for the task. Dynamic loader can issue this
-+:c:macro:`prctl` once it has determined that all the objects loaded in address
-+space have support for shadow stack. Additionally if there is a
-+:c:macro:`dlopen` to an object which wasn't compiled with ``zicfiss``, dynamic
-+loader can issue this prctl with arg1 set to 0 (i.e.
-+:c:macro:`PR_SHADOW_STACK_ENABLE` being clear)
-+
-+* prctl(PR_GET_SHADOW_STACK_STATUS, unsigned long *arg)
-+
-+Returns current status of indirect branch tracking. If enabled it'll return
-+:c:macro:`PR_SHADOW_STACK_ENABLE`.
-+
-+* prctl(PR_LOCK_SHADOW_STACK_STATUS, unsigned long arg)
-+
-+Locks current status of shadow stack enabling on the task. User space may want
-+to run with strict security posture and wouldn't want loading of objects
-+without ``zicfiss`` support in it and thus would want to disallow disabling of
-+shadow stack on current task. In that case user space can use this prctl to
-+lock current settings.
-+
-+5. violations related to returns with shadow stack enabled
-+-----------------------------------------------------------
-+
-+Pertaining to shadow stack, CPU raises software check exception in following
-+condition:
-+
-+- On execution of ``sspopchk x1/x5``, ``x1/x5`` didn't match top of shadow
-+  stack. If mismatch happens then cpu does ``*tval = 3`` and raise software
-+  check exception.
-+
-+Linux kernel will treat this as :c:macro:`SIGSEV`` with code =
-+:c:macro:`SEGV_CPERR` and follow normal course of signal delivery.
-+
-+6. Shadow stack tokens
-+-----------------------
-+Regular stores on shadow stacks are not allowed and thus can't be tampered
-+with via arbitrary stray writes due to bugs. Method of pivoting / switching to
-+shadow stack is simply writing to csr ``CSR_SSP`` changes active shadow stack.
-+This can be problematic because usually value to be written to ``CSR_SSP`` will
-+be loaded somewhere in writeable memory and thus allows an adversary to
-+corruption bug in software to pivot to an any address in shadow stack range.
-+Shadow stack tokens can help mitigate this problem by making sure that:
-+
-+- When software is switching away from a shadow stack, shadow stack pointer
-+  should be saved on shadow stack itself and call it ``shadow stack token``
-+
-+- When software is switching to a shadow stack, it should read the
-+  ``shadow stack token`` from shadow stack pointer and verify that
-+  ``shadow stack token`` itself is pointer to shadow stack itself.
-+
-+- Once the token verification is done, software can perform the write to
-+  ``CSR_SSP`` to switch shadow stack.
-+
-+Here software can be user mode task runtime itself which is managing various
-+contexts as part of single thread. Software can be kernel as well when kernel
-+has to deliver a signal to user task and must save shadow stack pointer. Kernel
-+can perform similar procedure by saving a token on user shadow stack itself.
-+This way whenever :c:macro:`sigreturn` happens, kernel can read the token and
-+verify the token and then switch to shadow stack. Using this mechanism, kernel
-+helps user task so that any corruption issue in user task is not exploited by
-+adversary by arbitrarily using :c:macro:`sigreturn`. Adversary will have to
-+make sure that there is a ``shadow stack token`` in addition to invoking
-+:c:macro:`sigreturn`
-+
-+7. Signal shadow stack
-+-----------------------
-+Following structure has been added to sigcontext for RISC-V::
-+
-+    struct __sc_riscv_cfi_state {
-+        unsigned long ss_ptr;
-+    };
-+
-+As part of signal delivery, shadow stack token is saved on current shadow stack
-+itself and updated pointer is saved away in :c:macro:`ss_ptr` field in
-+:c:macro:`__sc_riscv_cfi_state` under :c:macro:`sigcontext`. Existing shadow
-+stack allocation is used for signal delivery. During :c:macro:`sigreturn`,
-+kernel will obtain :c:macro:`ss_ptr` from :c:macro:`sigcontext` and verify the
-+saved token on shadow stack itself and switch shadow stack.
 
--- 
-2.45.0
+warning: the following paths have collided (e.g. case-sensitive paths
+on a case-insensitive filesystem) and only one from the same
+colliding group is in the working tree:
 
+   'tools/memory-model/litmus-tests/Z6.0+pooncelock+poonceLock+pombonce.litmus'
+   'tools/memory-model/litmus-tests/Z6.0+pooncelock+pooncelock+pombonce.litmus'
+
+
+As you a maintainer, what is your suggestion to fix it in the source code of the 
+Linux kernel? Please send a real technical suggestion not just how could it be 
+done in an other way (which is out of the scope now).
+
+Is my renaming patch correct to solve it? Question is what is the most effective 
+and proper fix/solution which can be commited into the Linux kernel repo to fix it.
 
