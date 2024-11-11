@@ -1,229 +1,260 @@
-Return-Path: <linux-arch+bounces-9014-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8990-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82F729C47D7
-	for <lists+linux-arch@lfdr.de>; Mon, 11 Nov 2024 22:15:55 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09B8D9C4832
+	for <lists+linux-arch@lfdr.de>; Mon, 11 Nov 2024 22:38:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 43F7B2834A4
-	for <lists+linux-arch@lfdr.de>; Mon, 11 Nov 2024 21:15:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B9C34B314E7
+	for <lists+linux-arch@lfdr.de>; Mon, 11 Nov 2024 20:56:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73C7019D09F;
-	Mon, 11 Nov 2024 21:15:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F35D61C4612;
+	Mon, 11 Nov 2024 20:54:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=freemail.hu header.i=@freemail.hu header.b="vluovjKt"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="mHLLtsxP"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp-out.freemail.hu (fmfe19.freemail.hu [46.107.16.212])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1984A19F46D;
-	Mon, 11 Nov 2024 21:15:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.107.16.212
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 485831C1F13
+	for <linux-arch@vger.kernel.org>; Mon, 11 Nov 2024 20:54:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731359747; cv=none; b=L2RXomnlv27mmeIqxUNTUywVDPddXNNwiHc+ldNyDeavqV9Fa5yLDdMudhCOpXPIQFGMhqfRY2tcCsTdbG+Utz/I7tav8NXL12DYjxj1seQK/CViNK5jknRnfstd1T80v4RdZJ0jU99j9QRuv37UFqkwoDW7THly/XvAY5hQBZ0=
+	t=1731358452; cv=none; b=mQ+UCZqfqNlPEVYFecGRvk/Mj/tKJ9jc0vA/vb8JuGc4Kh0xQYnlqcafPaRX/YOzsXL/zVD/ZqO2eN5fs/jKAQOOY1BTgbf1H6tYJhJnYPAUI8KshBYLA4Kheu4GVHAcODU7p2k8iKeJpHBSUWqOLtUZ45X6RvB/MPQfD/BjKkE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731359747; c=relaxed/simple;
-	bh=VvS6bsHJ4ioFbneyQh3LFJlSq7IvHI5vbFpJR991670=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WNlaP6m10NO3lMrWzDT+m4RRGELWDb4xoGT7lHxoiuxt9IT2DshzJ0zWd472fZmwgIiGITiOB3YgER6L4sVuOrq9KHfEjR6bvPpD2KSeN7puFnybxUeePdB/Mb4aVYlDmx7fpRyW4udpWFfSfEXBG9lLQs6ru9GOe+3vCj+J3S4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=freemail.hu; spf=pass smtp.mailfrom=freemail.hu; dkim=fail (2048-bit key) header.d=freemail.hu header.i=@freemail.hu header.b=vluovjKt reason="signature verification failed"; arc=none smtp.client-ip=46.107.16.212
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=freemail.hu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=freemail.hu
-Received: from [192.168.0.16] (catv-178-48-208-49.catv.fixed.vodafone.hu [178.48.208.49])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.freemail.hu (Postfix) with ESMTPSA id 4XnMlY00H9zPXD;
-	Mon, 11 Nov 2024 22:15:36 +0100 (CET)
-Message-ID: <a42da186-195c-40af-b4ee-0eaf6672cf2c@freemail.hu>
-Date: Mon, 11 Nov 2024 22:15:30 +0100
+	s=arc-20240116; t=1731358452; c=relaxed/simple;
+	bh=paD4kFJTOMNCQapdmU7vF58hNKyPDsR/BQZ80pyfH2Q=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=BT2tJ4jaUeM/EjG5bUcek4qd5DEHjoeHmci3PNQ210RoUF45A/55IYPD6Z1k+eTHc9jm4Xg7CPfvaESIYYpNz79wksmjGENWvMTw95gQIWSLFIMRgLQk0KFQsU7cIJawq3IlvkRQWn7W/uaCGI3Waa478ZIX7Vcqb79MilxMBis=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=mHLLtsxP; arc=none smtp.client-ip=209.85.215.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-7ea9739647bso3401705a12.0
+        for <linux-arch@vger.kernel.org>; Mon, 11 Nov 2024 12:54:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1731358451; x=1731963251; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/wlYhlTfRbz917f0tizIL6fD52nDOL2jxneRKObslEg=;
+        b=mHLLtsxP2yGHS+1JjkQsdmhJ0jTZ1alds5EI/VzFJFLWKpMzbdOKp99YI+QUjVzxkt
+         7dEfmrTYmjZ+QuM/62mdzFYADPM4f61/xZ/8jBTCUHfkqtuEv7ckOeFJxd5sOHxqTmNQ
+         InwURK88Y34V6Q7wVB9Ch6y9UAWcLf+SljVUwEujYa7wRIk+5ino0bCGRYkqAp2ov1kb
+         sA8BIwmR5yH4ncC19pGLxHnQoDv0QBasSmX/UErsHzA9mNyEJtz5AiC9oY+jfy2s9AJI
+         k87L6qw+445LPCpNvM9ZBR/wgD6jryoAJnCEqK1Y0ij+LYwnZUq1ehJzlumHOrneY4iP
+         sRDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731358451; x=1731963251;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/wlYhlTfRbz917f0tizIL6fD52nDOL2jxneRKObslEg=;
+        b=g0Fn1hbNLp+VTi9ii6to1KotnIMc5O/k4l/2eg+UxZI6VVr3X8I+QPYUB/RBwl1YuM
+         gOnpVKfwdxzt1GKQL6VTn1XJEJIfutqmiLLGbrkyPY+eVqYGsQvuDURc4fWp0+xTwTVK
+         Px1hPcrgLTJzVchuozHyaUmr+WboJTPoEJVK2LmlG1jea4jcY5SiApv7bHqBsqG4MupL
+         ddVvSabJDPZAUxQ1GoBaWgDDI2IxU/bClllYsYRUYIqGe2B3gCh8NScdqAA5hAPYAOb8
+         25bu6sDPos5yfU+iOOeXoKrCZxQxGWVR8TfgUA7Xe6xOj8iCd3HcgB30Di9Xal4o/npU
+         lrWA==
+X-Forwarded-Encrypted: i=1; AJvYcCVHt/CO52LUtgz80isV/65BmdpRld00fH+C2ybz1Y0OJvYnHvMXmpr/mCrAbWfilLXinqEBSfPcqBr1@vger.kernel.org
+X-Gm-Message-State: AOJu0YwtkfmTeHJPB7VDqkZElwIJIv5bcZccMtwd6Wf8C7vYYyOStBgU
+	qI+hMbJv9berjUL3ctgD519ex981+C3v0tVE2W0D1S4WGEy7/rx8ZyxwgZCjiRQ=
+X-Google-Smtp-Source: AGHT+IHCStdYWzF0a25kqcOGnG0Pu4JGvRjMiuZ8NNCn1MCLP5RJQJdVrm6DVqL2Hypx+qG3O/OjVw==
+X-Received: by 2002:a17:90b:2747:b0:2e2:cf5c:8ee3 with SMTP id 98e67ed59e1d1-2e9b17138bcmr21222036a91.10.1731358450607;
+        Mon, 11 Nov 2024 12:54:10 -0800 (PST)
+Received: from debug.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e9a5fd1534sm9059974a91.42.2024.11.11.12.54.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Nov 2024 12:54:10 -0800 (PST)
+From: Deepak Gupta <debug@rivosinc.com>
+Date: Mon, 11 Nov 2024 12:53:51 -0800
+Subject: [PATCH v8 06/29] riscv: usercfi state for task and save/restore of
+ CSR_SSP on trap entry/exit
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] tools/memory-model: Fix litmus-tests's file names for
- case-insensitive filesystem.
-To: paulmck@kernel.org
-Cc: stern@rowland.harvard.edu, parri.andrea@gmail.com, will@kernel.org,
- peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
- dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
- akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
- linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- lkmm@lists.linux.dev, torvalds@linux-foundation.org
-References: <20241111164248.1060-1-egyszeregy@freemail.hu>
- <69be42c9-331f-4fb5-a6ae-c2932ada0a47@paulmck-laptop>
- <8925322d-1983-4e35-82f9-d8b86d32e6a6@freemail.hu>
- <1a6342c9-e316-4c78-9a07-84f45cbebb54@paulmck-laptop>
- <ec6e297b-02fb-4f57-9fc1-47751106a7d2@freemail.hu>
- <5acaaaa0-7c17-4991-aff6-8ea293667654@paulmck-laptop>
-Content-Language: hu
-From: =?UTF-8?Q?Sz=C5=91ke_Benjamin?= <egyszeregy@freemail.hu>
-In-Reply-To: <5acaaaa0-7c17-4991-aff6-8ea293667654@paulmck-laptop>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=simple/relaxed; t=1731359737;
-	s=20181004; d=freemail.hu;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	l=7430; bh=nFDyjd8uugI8QHJs1eXdfvfTTmsjnykSy5kSaBq2CSw=;
-	b=vluovjKthxu0wEJUDLZHMDgrMbf5Zs7FRKbVQmj8WxIB7fu7n9u+JFBWmb21yw9h
-	TmPQvUnQfzhO8vLXTcqZDCJ9KNvjaghLjCtLdS2AIoImPhUyXFl9pn3O7uBErqjZMPA
-	DriGHAIld14neh/FGp11SoB1kgJh6kIhkctF2UDKXuZNNp7NMPHn2ZnXZ1a+5+PG8A1
-	xXqlAQElEHQ+4fuBgJ2sMqMTvuWZJTXhBoIiICrwa/w5bwfpJ009HI0ZawGqgyH5eUi
-	K1tSIQAnKuglZ67JEEEEoHIbz/Z/IyZXZ7X+RDmK4tTM4L1yEasAhAdOQScI//Pegu2
-	upb9gyo+UA==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241111-v5_user_cfi_series-v8-6-dce14aa30207@rivosinc.com>
+References: <20241111-v5_user_cfi_series-v8-0-dce14aa30207@rivosinc.com>
+In-Reply-To: <20241111-v5_user_cfi_series-v8-0-dce14aa30207@rivosinc.com>
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+ Andrew Morton <akpm@linux-foundation.org>, 
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+ Vlastimil Babka <vbabka@suse.cz>, 
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+ Paul Walmsley <paul.walmsley@sifive.com>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+ Christian Brauner <brauner@kernel.org>, 
+ Peter Zijlstra <peterz@infradead.org>, Oleg Nesterov <oleg@redhat.com>, 
+ Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>, 
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+ linux-mm@kvack.org, linux-riscv@lists.infradead.org, 
+ devicetree@vger.kernel.org, linux-arch@vger.kernel.org, 
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ alistair.francis@wdc.com, richard.henderson@linaro.org, jim.shu@sifive.com, 
+ andybnac@gmail.com, kito.cheng@sifive.com, charlie@rivosinc.com, 
+ atishp@rivosinc.com, evan@rivosinc.com, cleger@rivosinc.com, 
+ alexghiti@rivosinc.com, samitolvanen@google.com, broonie@kernel.org, 
+ rick.p.edgecombe@intel.com, Deepak Gupta <debug@rivosinc.com>
+X-Mailer: b4 0.14.0
 
-2024. 11. 11. 21:29 keltezéssel, Paul E. McKenney írta:
-> On Mon, Nov 11, 2024 at 08:56:34PM +0100, Szőke Benjamin wrote:
->> 2024. 11. 11. 20:22 keltezéssel, Paul E. McKenney írta:
->>> On Mon, Nov 11, 2024 at 07:52:50PM +0100, Szőke Benjamin wrote:
->>>> 2024. 11. 11. 17:54 keltezéssel, Paul E. McKenney írta:
->>>>> On Mon, Nov 11, 2024 at 05:42:47PM +0100, egyszeregy@freemail.hu wrote:
->>>>>> From: Benjamin Szőke <egyszeregy@freemail.hu>
->>>>>>
->>>>>> The goal is to fix Linux repository for case-insensitive filesystem,
->>>>>> to able to clone it and editable on any operating systems.
->>>>>>
->>>>>> Rename "Z6.0+pooncelock+poonceLock+pombonce.litmus" to
->>>>>> "Z6.0+pooncelock+poonceLock+after_spinlock+pombonce.litmus".
->>>>>>
->>>>>> Signed-off-by: Benjamin Szőke <egyszeregy@freemail.hu>
->>>>>
->>>>> Ummm...  Really?
->>>>>
->>>>> Just out of curiosity, which operating-system/filesystem combination are
->>>>> you working with?  And why not instead fix that combination to handle
->>>>> mixed case?
->>>>>
->>>>> 							Thanx, Paul
->>>>
->>>> Windows and also MacOS is not case sensitive by default. My goal is to
->>>> improve Linux kernel source-tree, to able to develop it in any operating
->>>> systems for example via Visual Studio Code extensions/IntelliSense feature
->>>> or any similar IDE which is usable in any OS.
->>>
->>> Why not simply enable case sensitivity on the file tree in which you
->>> are processing Linux-kernel source code?
->>>
->>> For MacOS:  https://discussions.apple.com/thread/251191099?sortBy=rank
->>> For Windows:  https://learn.microsoft.com/en-us/windows/wsl/case-sensitivity
->>>
->>> In some cases it might work better to simply run a Linux VM on top of
->>> Windows or MacOS.
->>>
->>> They tell me that webservers already do this, so why not also for
->>> Linux-kernel source code?
->>
->> Why we not solve it as simple as it can in the source code of the Linux
->> kernel with renaming? It would be more robust and more durable to fix this
->> issue/inconviniant in the source as an overal complete solution. Nobody like
->> to figth with configuraition hell of Windows and MacOS, or build up a
->> diskspace consumer Virtual Linux with crappy GUI capapilities for coding big
->> things.
->>
->> Young developers will never be willing to join and contributing in Linux
->> kernel in the future if Linux kernel code is not editable in a high-quality,
->> easy-to-use IDE for, which is usable in any OS.
-> 
-> There are a great number of software projects out there that use mixed
-> case.  Therefore, can an IDE that does not gracefully handle mixed case
-> really be said to be either high quality or easy to use?
-> 
-> In other words, you have the option of making the IDE handle this.
-> 
->> Need to improve this kind of things and simplify/modernize developing or
->> never will be solved the following issues:
->> https://www.youtube.com/watch?v=lJLw94pAcBY
-> 
-> Sorry, but that video does not support your point.  In fact, the presenter
-> clearly states that this sort of tooling issue is not a real problem
-> for the Linux kernel near the middle of that video.
-> 
-> 							Thanx, Paul
-> 
->>>> There were some accepted patches which aim this same goal.
->>>> https://gitlab.freedesktop.org/drm/kernel/-/commit/231bb9b4c42398db3114c087ba39ba00c4b7ac2c
->>>> https://git.kernel.org/pub/scm/linux/kernel/git/vgupta/arc.git/commit/?h=for-curr&id=8bf275d61925cff45568438c73f114e46237ad7e
->>>
->>> Fair enough, as it is the maintainer's choice.  Which means that
->>> their accepting these case-sensitivity changes does not require other
->>> maintainers to do so.
->>>
->>> 							Thanx, Paul
->>>
->>>>>> ---
->>>>>>     tools/memory-model/Documentation/locking.txt                    | 2 +-
->>>>>>     tools/memory-model/Documentation/recipes.txt                    | 2 +-
->>>>>>     tools/memory-model/litmus-tests/README                          | 2 +-
->>>>>>     ...> Z6.0+pooncelock+poonceLock+after_spinlock+pombonce.litmus} | 0
->>>>>>     4 files changed, 3 insertions(+), 3 deletions(-)
->>>>>>     rename tools/memory-model/litmus-tests/{Z6.0+pooncelock+poonceLock+pombonce.litmus => Z6.0+pooncelock+poonceLock+after_spinlock+pombonce.litmus} (100%)
->>>>>>
->>>>>> diff --git a/tools/memory-model/Documentation/locking.txt b/tools/memory-model/Documentation/locking.txt
->>>>>> index 65c898c64a93..42bc3efe2015 100644
->>>>>> --- a/tools/memory-model/Documentation/locking.txt
->>>>>> +++ b/tools/memory-model/Documentation/locking.txt
->>>>>> @@ -184,7 +184,7 @@ ordering properties.
->>>>>>     Ordering can be extended to CPUs not holding the lock by careful use
->>>>>>     of smp_mb__after_spinlock():
->>>>>> -	/* See Z6.0+pooncelock+poonceLock+pombonce.litmus. */
->>>>>> +	/* See Z6.0+pooncelock+poonceLock+after_spinlock+pombonce.litmus. */
->>>>>>     	void CPU0(void)
->>>>>>     	{
->>>>>>     		spin_lock(&mylock);
->>>>>> diff --git a/tools/memory-model/Documentation/recipes.txt b/tools/memory-model/Documentation/recipes.txt
->>>>>> index 03f58b11c252..35996eb1b690 100644
->>>>>> --- a/tools/memory-model/Documentation/recipes.txt
->>>>>> +++ b/tools/memory-model/Documentation/recipes.txt
->>>>>> @@ -159,7 +159,7 @@ lock's ordering properties.
->>>>>>     Ordering can be extended to CPUs not holding the lock by careful use
->>>>>>     of smp_mb__after_spinlock():
->>>>>> -	/* See Z6.0+pooncelock+poonceLock+pombonce.litmus. */
->>>>>> +	/* See Z6.0+pooncelock+poonceLock+after_spinlock+pombonce.litmus. */
->>>>>>     	void CPU0(void)
->>>>>>     	{
->>>>>>     		spin_lock(&mylock);
->>>>>> diff --git a/tools/memory-model/litmus-tests/README b/tools/memory-model/litmus-tests/README
->>>>>> index d311a0ff1ae6..e3d451346400 100644
->>>>>> --- a/tools/memory-model/litmus-tests/README
->>>>>> +++ b/tools/memory-model/litmus-tests/README
->>>>>> @@ -149,7 +149,7 @@ Z6.0+pooncelock+pooncelock+pombonce.litmus
->>>>>>     	spin_lock() sufficient to make ordering apparent to accesses
->>>>>>     	by a process not holding the lock?
->>>>>> -Z6.0+pooncelock+poonceLock+pombonce.litmus
->>>>>> +Z6.0+pooncelock+poonceLock+after_spinlock+pombonce.litmus
->>>>>>     	As above, but with smp_mb__after_spinlock() immediately
->>>>>>     	following the spin_lock().
->>>>>> diff --git a/tools/memory-model/litmus-tests/Z6.0+pooncelock+poonceLock+pombonce.litmus b/tools/memory-model/litmus-tests/Z6.0+pooncelock+poonceLock+after_spinlock+pombonce.litmus
->>>>>> similarity index 100%
->>>>>> rename from tools/memory-model/litmus-tests/Z6.0+pooncelock+poonceLock+pombonce.litmus
->>>>>> rename to tools/memory-model/litmus-tests/Z6.0+pooncelock+poonceLock+after_spinlock+pombonce.litmus
->>>>>> -- 
->>>>>> 2.47.0.windows.2
->>>>>>
->>>>
->>
+Carves out space in arch specific thread struct for cfi status and shadow
+stack in usermode on riscv.
 
-There is a technical issue in the Linux kernel source tree's file naming/styles 
-in git clone command on case-insensitive filesystem.
+This patch does following
+- defines a new structure cfi_status with status bit for cfi feature
+- defines shadow stack pointer, base and size in cfi_status structure
+- defines offsets to new member fields in thread in asm-offsets.c
+- Saves and restore shadow stack pointer on trap entry (U --> S) and exit
+  (S --> U)
 
+Shadow stack save/restore is gated on feature availiblity and implemented
+using alternative. CSR can be context switched in `switch_to` as well but
+soon as kernel shadow stack support gets rolled in, shadow stack pointer
+will need to be switched at trap entry/exit point (much like `sp`). It can
+be argued that kernel using shadow stack deployment scenario may not be as
+prevalant as user mode using this feature. But even if there is some
+minimal deployment of kernel shadow stack, that means that it needs to be
+supported. And thus save/restore of shadow stack pointer in entry.S instead
+of in `switch_to.h`.
 
-warning: the following paths have collided (e.g. case-sensitive paths
-on a case-insensitive filesystem) and only one from the same
-colliding group is in the working tree:
+Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+Reviewed-by: Charlie Jenkins <charlie@rivosinc.com>
+---
+ arch/riscv/include/asm/processor.h   |  1 +
+ arch/riscv/include/asm/thread_info.h |  3 +++
+ arch/riscv/include/asm/usercfi.h     | 24 ++++++++++++++++++++++++
+ arch/riscv/kernel/asm-offsets.c      |  4 ++++
+ arch/riscv/kernel/entry.S            | 26 ++++++++++++++++++++++++++
+ 5 files changed, 58 insertions(+)
 
-   'tools/memory-model/litmus-tests/Z6.0+pooncelock+poonceLock+pombonce.litmus'
-   'tools/memory-model/litmus-tests/Z6.0+pooncelock+pooncelock+pombonce.litmus'
+diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/include/asm/processor.h
+index e3aba3336e63..d851bb5c6da0 100644
+--- a/arch/riscv/include/asm/processor.h
++++ b/arch/riscv/include/asm/processor.h
+@@ -14,6 +14,7 @@
+ 
+ #include <asm/ptrace.h>
+ #include <asm/hwcap.h>
++#include <asm/usercfi.h>
+ 
+ #define arch_get_mmap_end(addr, len, flags)			\
+ ({								\
+diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
+index 9c10fb180f43..bb20bb7d17c3 100644
+--- a/arch/riscv/include/asm/thread_info.h
++++ b/arch/riscv/include/asm/thread_info.h
+@@ -62,6 +62,9 @@ struct thread_info {
+ 	long			user_sp;	/* User stack pointer */
+ 	int			cpu;
+ 	unsigned long		syscall_work;	/* SYSCALL_WORK_ flags */
++#ifdef CONFIG_RISCV_USER_CFI
++	struct cfi_status	user_cfi_state;
++#endif
+ #ifdef CONFIG_SHADOW_CALL_STACK
+ 	void			*scs_base;
+ 	void			*scs_sp;
+diff --git a/arch/riscv/include/asm/usercfi.h b/arch/riscv/include/asm/usercfi.h
+new file mode 100644
+index 000000000000..4fa201b4fc4e
+--- /dev/null
++++ b/arch/riscv/include/asm/usercfi.h
+@@ -0,0 +1,24 @@
++/* SPDX-License-Identifier: GPL-2.0
++ * Copyright (C) 2024 Rivos, Inc.
++ * Deepak Gupta <debug@rivosinc.com>
++ */
++#ifndef _ASM_RISCV_USERCFI_H
++#define _ASM_RISCV_USERCFI_H
++
++#ifndef __ASSEMBLY__
++#include <linux/types.h>
++
++#ifdef CONFIG_RISCV_USER_CFI
++struct cfi_status {
++	unsigned long ubcfi_en : 1; /* Enable for backward cfi. */
++	unsigned long rsvd : ((sizeof(unsigned long)*8) - 1);
++	unsigned long user_shdw_stk; /* Current user shadow stack pointer */
++	unsigned long shdw_stk_base; /* Base address of shadow stack */
++	unsigned long shdw_stk_size; /* size of shadow stack */
++};
++
++#endif /* CONFIG_RISCV_USER_CFI */
++
++#endif /* __ASSEMBLY__ */
++
++#endif /* _ASM_RISCV_USERCFI_H */
+diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
+index e94180ba432f..766bd33f10cb 100644
+--- a/arch/riscv/kernel/asm-offsets.c
++++ b/arch/riscv/kernel/asm-offsets.c
+@@ -52,6 +52,10 @@ void asm_offsets(void)
+ #endif
+ 
+ 	OFFSET(TASK_TI_CPU_NUM, task_struct, thread_info.cpu);
++#ifdef CONFIG_RISCV_USER_CFI
++	OFFSET(TASK_TI_CFI_STATUS, task_struct, thread_info.user_cfi_state);
++	OFFSET(TASK_TI_USER_SSP, task_struct, thread_info.user_cfi_state.user_shdw_stk);
++#endif
+ 	OFFSET(TASK_THREAD_F0,  task_struct, thread.fstate.f[0]);
+ 	OFFSET(TASK_THREAD_F1,  task_struct, thread.fstate.f[1]);
+ 	OFFSET(TASK_THREAD_F2,  task_struct, thread.fstate.f[2]);
+diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+index c200d329d4bd..8f7f477517e3 100644
+--- a/arch/riscv/kernel/entry.S
++++ b/arch/riscv/kernel/entry.S
+@@ -147,6 +147,20 @@ SYM_CODE_START(handle_exception)
+ 
+ 	REG_L s0, TASK_TI_USER_SP(tp)
+ 	csrrc s1, CSR_STATUS, t0
++	/*
++	 * If previous mode was U, capture shadow stack pointer and save it away
++	 * Zero CSR_SSP at the same time for sanitization.
++	 */
++	ALTERNATIVE("nop; nop; nop; nop",
++				__stringify(			\
++				andi s2, s1, SR_SPP;	\
++				bnez s2, skip_ssp_save;	\
++				csrrw s2, CSR_SSP, x0;	\
++				REG_S s2, TASK_TI_USER_SSP(tp); \
++				skip_ssp_save:),
++				0,
++				RISCV_ISA_EXT_ZICFISS,
++				CONFIG_RISCV_USER_CFI)
+ 	csrr s2, CSR_EPC
+ 	csrr s3, CSR_TVAL
+ 	csrr s4, CSR_CAUSE
+@@ -236,6 +250,18 @@ SYM_CODE_START_NOALIGN(ret_from_exception)
+ 	 * structures again.
+ 	 */
+ 	csrw CSR_SCRATCH, tp
++
++	/*
++	 * Going back to U mode, restore shadow stack pointer
++	 */
++	ALTERNATIVE("nop; nop",
++				__stringify(					\
++				REG_L s3, TASK_TI_USER_SSP(tp); \
++				csrw CSR_SSP, s3),
++				0,
++				RISCV_ISA_EXT_ZICFISS,
++				CONFIG_RISCV_USER_CFI)
++
+ 1:
+ #ifdef CONFIG_RISCV_ISA_V_PREEMPTIVE
+ 	move a0, sp
 
+-- 
+2.45.0
 
-As you a maintainer, what is your suggestion to fix it in the source code of the 
-Linux kernel? Please send a real technical suggestion not just how could it be 
-done in an other way (which is out of the scope now).
-
-Is my renaming patch correct to solve it? Question is what is the most effective 
-and proper fix/solution which can be commited into the Linux kernel repo to fix it.
 
