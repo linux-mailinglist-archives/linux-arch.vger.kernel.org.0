@@ -1,58 +1,58 @@
-Return-Path: <linux-arch+bounces-8964-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8965-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F6E39C374F
-	for <lists+linux-arch@lfdr.de>; Mon, 11 Nov 2024 05:13:14 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B8629C3755
+	for <lists+linux-arch@lfdr.de>; Mon, 11 Nov 2024 05:13:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 76201B21548
-	for <lists+linux-arch@lfdr.de>; Mon, 11 Nov 2024 04:13:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CB599B215B8
+	for <lists+linux-arch@lfdr.de>; Mon, 11 Nov 2024 04:13:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A893714AD2B;
-	Mon, 11 Nov 2024 04:13:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 579091537DA;
+	Mon, 11 Nov 2024 04:13:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="Nucc2/qX"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="b/SQZdTG"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from DM1PR04CU001.outbound.protection.outlook.com (mail-centralusazolkn19010004.outbound.protection.outlook.com [52.103.13.4])
+Received: from BN8PR05CU002.outbound.protection.outlook.com (mail-eastus2azolkn19011038.outbound.protection.outlook.com [52.103.12.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 408F432C8E;
-	Mon, 11 Nov 2024 04:13:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.13.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FFA414373F;
+	Mon, 11 Nov 2024 04:13:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.12.38
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731298384; cv=fail; b=Kh9qHdNT13vdRPQPFD7T+VkzQhyMJHJ9PNCQ9Ngtij49CNiASHpgLrmA6HmBgCGAceN9ihsvRULsv4oAyAHrJiTyUXU6NCf7n/YGaEJVac7mma80YSf8vC/tptUCOStIh31sFo6Lrc0Cd/2h6J0UHa29PO8gW6Tt3LayPoNfpNg=
+	t=1731298397; cv=fail; b=Myr0xUn9mjWx6FKXI41tm8GQs+GDFS/G7H/tKZ4Pzqz9Gi+KIrJNCveZOIrYiFbIcTageUxIqZJKJ3L9jyPq+uPAYJ/Q9KwCWyOIjprxDe1opDxjltb3pNHSeSrYGzz7saZASl+vu06p3T6EFKc9JwKsJwMfuXKGkltGGbfkpJI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731298384; c=relaxed/simple;
-	bh=JuqL43/qKe0VaaSb9TzBx9BJWSFA0q7iS1ocUrcmNAo=;
+	s=arc-20240116; t=1731298397; c=relaxed/simple;
+	bh=QiDmu5/my4dpknxNdvQOmpefiedLm67y1Sr15eK/TGg=;
 	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=bnOtsY+wAhh3e8Dsw1b0SeetFqkDlM03nQqF7lKAnCB37fFPpAp2OkpUQzqNHtHOoHhriieZU0ADJTF2ZqVwDtxloBDSLeFSDFCVjdt+e4aYl5ftoL45bIL7OB61K1UG2Agh1nIk+ZVQntPiZPJGGqN3Sqbo0eqgzKAt5AkPCro=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=Nucc2/qX; arc=fail smtp.client-ip=52.103.13.4
+	 Content-Type:MIME-Version; b=EBzzOll45fyWmQyFE7MsY4OsXHKVZ6FwMI4HXDmtckAOC/AWFpxywDwUoipvwTzWWhT5W5l1khK7Tg0rXIJtkekPgy4hG2u7JRekzwIG7e32Le4yDus78I+zIwlMOHn/kYd+Y1aBh6c27j4jXQFAM6gJ+LGCFfppsnRE/2uE+is=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=b/SQZdTG; arc=fail smtp.client-ip=52.103.12.38
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=jn0YBVCzXre1XWw99AmXDT7ouwMfPWuovwXPK6mNKJ8RzL5RXcSoY/XWu8m54/bAefhiwUaV43DuSlj9rg8q+DSWHthWxDf+vugz296o3mZ0bWCNjijafwT/U8ts068dtwMQzg+YMinLxq5LImYzft4ZEV+65osjX9XwlKyg1Nwxf48mo1KLOqdH6iAErBgAV9VNV6kSuToNTxyPBA077590I46FHb2lJ5iitxqU5JmrmH52REA+SZx/2uKRHsH8mZfdQHWFc2P+CQQbonKVjMBaUHa11SrVAlqFgEtuXDNQBFaoe5RoyMG/vCjEm3p0OsRQWjKG68hsdAIWbWN5Iw==
+ b=nhsxZ/KlzzT/zuAWot2eQF+fGiMsWeSuXyWtYx0sVFIfcO818IfvNCsnalry9A87WahpjCCocCDRFTnOiQG9b4bGSmmtj59m8C+0SKFzangd4bmYsjk37nTr2A2rtUSs3+Ayw84DPznAHjN9NWOLKBM+TDE97Z6wM+BvV29Rs4RlcEvoYrMQygA+cGfZxWOL6/vzdZxqjOK3F1cZwBoHeOJ39lZtU+VVm7RbCEwtwhKG/G5tKwdPCLCWjyxP8A770NujIxxePd0E5Vpd5kInhwetaUvmm7r/7QDVPyoeNUAt3wlX2Mb02LVh+o+60RBkc2in0TBDN9SKVjeaS0OVZg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Cn1OFLs8aKAcwxJqP4RzepmFb1rBTfCV3GS5MviBTG8=;
- b=GpXA8NOiC/utmjg2DIyoUnl82etCKKr5KMoQ/XzPSrBv756F0MfG5bbR5XVB/E2/4oH/2zWkG0d7SnCU8vk5lTwPhMs3r/j+gY8JNijIwOpUjiyx0N+DsxN9OWG7PYxr9lKVrB481VFvpdd5olnSGe6UQ+V/AtjiemsWBfzvj5UfU/4UokJk8TY92fpesN9HVEJzW+vNeLIgszmpBbhiQwJntfuA3XYONBz6yrKLr+FqK67X4T+BODbiH4BUey80c/FpYs3Mdc4ZOQdhgLrFvau8nWTIshhlaiawAZx99C2aaCOgQ/DW4OxMVjj7Lc1oOpTckoUuPw9FYWxDYExRkQ==
+ bh=A21ZFeomPobSxK3jX9ThV6UuJLfIwvEb9WaeECKvjLw=;
+ b=kgtrFlm0uy0kZhERsxSpzrpJ48/yw+vqFH1fuOCcnXE+/6okjwzC7EmPFq5iV3CiKAf9a90UnItP9peYK1sB+RNo+Zi6qCs3M2q/YVEJX3OFVI1HPCVrORfWBcmVhPs2WEVtMZokNvpBrKH3zxFiNmSZduozz3BU2dmeJm5+0C6hS5+XFNK1/ktrxRm02bMcBvMK21YD4KjFJxafQ1jYrfzCtEGgQpHKbSlYFLvOp8T/F8oRFOG8v/5DbxRdEWMqkJiCMmi49C2fl26CiF9Tdpm22aseEvM/K05T+lADXprZ5qPoWyIL9ysIRzwuuWWvVeN70KHkvNN82Zh8KsYkSg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Cn1OFLs8aKAcwxJqP4RzepmFb1rBTfCV3GS5MviBTG8=;
- b=Nucc2/qXC0+mAptNAD7mXdEV8YPDRZRN4Ny4skqbaL+yfQl+wPr0eRdiwiv4Bvpn9Ith4LozLIP+u0zvVTgKeud1SxbK3DUZceqGvPaQ2NpuvaPGy6IxiOjqp41gKVoA3C4/vcN3j+D9WvxgGvrRZwf1B3KNLadlkkPXj/v/tsGWfAcV7+hFgzdqVLsq7FWQ+Nse7qgj/I5y7obeKGpMxzOE8u48tFp04k2K5vVE4hcvYOHTSTNLmCHq/K6YVWDW35yuyLwa3fAqgFSa8ONiSt9IR5oIZuF+S/3Wwz4xzmsgFRZhHru3YrRHylS3eTzVg5B1SL0Tndo4rLo8alwbhw==
+ bh=A21ZFeomPobSxK3jX9ThV6UuJLfIwvEb9WaeECKvjLw=;
+ b=b/SQZdTGmUR/aHOs/l0Z1S18qKjjb7/YMgDg7PbDy6eOHTOucGnX9Vwq3Wb7MckKX1Q5uGxALvsW5DXEYrTWM/BqmThyPxtYhK9AKY3r9b1eqJw3175WE2YwFMLDbtnKNaYtb4yXveXyxdzoU0aQ9KLtrSo2S12LI4YTxVwXfwZX4aTPFFBeW/1Y5kwKnT1X7ml3V/DZ9JtPu/Z1l98k9W5m1RLxSrSp69xHPEpBYyvjyA9k42FJr5OoyUjlgHLdvBhdnB6hXaQvkNS+QrT2OFf/QABBSIHl5qGWthF0KUHjWzUcyHHuKTzx93Nps+BM+GYH9HrjU+u/2cbS1gAVoA==
 Received: from BN7PR02MB4148.namprd02.prod.outlook.com (2603:10b6:406:f6::17)
  by DM4PR02MB8958.namprd02.prod.outlook.com (2603:10b6:8:bf::5) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8137.20; Mon, 11 Nov 2024 04:12:59 +0000
+ 15.20.8137.20; Mon, 11 Nov 2024 04:13:12 +0000
 Received: from BN7PR02MB4148.namprd02.prod.outlook.com
  ([fe80::1c3a:f677:7a85:4911]) by BN7PR02MB4148.namprd02.prod.outlook.com
  ([fe80::1c3a:f677:7a85:4911%5]) with mapi id 15.20.8137.022; Mon, 11 Nov 2024
- 04:12:59 +0000
+ 04:13:12 +0000
 From: Michael Kelley <mhklinux@outlook.com>
 To: Nuno Das Neves <nunodasneves@linux.microsoft.com>,
 	"linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
@@ -89,67 +89,68 @@ CC: "kys@microsoft.com" <kys@microsoft.com>, "haiyangz@microsoft.com"
 	"vkuznets@redhat.com" <vkuznets@redhat.com>, "ssengar@linux.microsoft.com"
 	<ssengar@linux.microsoft.com>, "apais@linux.microsoft.com"
 	<apais@linux.microsoft.com>
-Subject: RE: [PATCH v2 0/4] Add new headers for Hyper-V Dom0
-Thread-Topic: [PATCH v2 0/4] Add new headers for Hyper-V Dom0
-Thread-Index: AQHbMWTyoKCBm8ky3ECkxBZdOyPiHbKvoZXA
-Date: Mon, 11 Nov 2024 04:12:59 +0000
+Subject: RE: [PATCH v2 1/4] hyperv: Move hv_connection_id to hyperv-tlfs.h
+Thread-Topic: [PATCH v2 1/4] hyperv: Move hv_connection_id to hyperv-tlfs.h
+Thread-Index: AQHbMWTxR9DbWRBrEkSncYJF+rrup7KvpSgQ
+Date: Mon, 11 Nov 2024 04:13:12 +0000
 Message-ID:
- <BN7PR02MB41485DAD2E066D417FE12020D4582@BN7PR02MB4148.namprd02.prod.outlook.com>
+ <BN7PR02MB4148AD2F4AE323BFF22EEDD1D4582@BN7PR02MB4148.namprd02.prod.outlook.com>
 References:
  <1731018746-25914-1-git-send-email-nunodasneves@linux.microsoft.com>
+ <1731018746-25914-2-git-send-email-nunodasneves@linux.microsoft.com>
 In-Reply-To:
- <1731018746-25914-1-git-send-email-nunodasneves@linux.microsoft.com>
+ <1731018746-25914-2-git-send-email-nunodasneves@linux.microsoft.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach:
 X-MS-TNEF-Correlator:
 x-ms-publictraffictype: Email
 x-ms-traffictypediagnostic: BN7PR02MB4148:EE_|DM4PR02MB8958:EE_
-x-ms-office365-filtering-correlation-id: 8d49f5a1-435b-42f4-36b8-08dd020720d6
+x-ms-office365-filtering-correlation-id: 3c481909-f824-40f0-2a64-08dd020728ab
 x-microsoft-antispam:
  BCL:0;ARA:14566002|8060799006|19110799003|461199028|8062599003|15080799006|440099028|3412199025|102099032;
 x-microsoft-antispam-message-info:
- =?us-ascii?Q?R6sI6fsq0spx8yzJ6siXFXSWC1R2KBgWQJDHzWbKBbMbntI46a2GrSgXYtog?=
- =?us-ascii?Q?7PysAl86lZogiSYnUJDzs3CNipD0SoiYhBNBRHzY/ChGSX0TxzRMnxxFERJL?=
- =?us-ascii?Q?X9D/YovaOIuBTGHfqfA05dbbNYVXvuFN9UCdS5jcGor7It7TMNm6e3TWmzkG?=
- =?us-ascii?Q?M/GL6XEOfEDfsKHTqtEUguhrqu0d8mnTrX4LKax8++eb95zP2Wq4GQ33fn5p?=
- =?us-ascii?Q?i4UrCWgEAKunz0QgiY8HQRy2tMK/mzXFQsYfZ8kSaE6MUmevemtAAokt7hsy?=
- =?us-ascii?Q?UTuzp/60U0kZ6umcSUslz6giR1+jRz+JyvUoLeVTXrMJzzA3lKrSjR/e31EK?=
- =?us-ascii?Q?gAWtFnzL/xHQAr0zGc1Coktfr4S7JLJkDVHAcVwiQovzlE3joYhgbD4tyAIK?=
- =?us-ascii?Q?gUsrbFMFeN2sCOsALtjIOyQHgu6bdHNLYDpYm5Mtpxpav2pk12dMeGU5MeiV?=
- =?us-ascii?Q?YppVEqgTQoTGM/8K1IoBD/F6xnQorypZ+z/Ga/I95nnrFWW0NKHgJk/sP8J6?=
- =?us-ascii?Q?tCbtwnDpY/46i9zjdhhO6xPA1V/J2qy0XnT5OUH30RO0dzb8X8t4O4OgL1Uv?=
- =?us-ascii?Q?Kar+AhvrURYfLQD+ImF/lKMVtf4AIvVrgfSvUBqPVqkosoj4Pijl7jYd/Lpi?=
- =?us-ascii?Q?50ghjaihbE8dTWMSaOK5z32LNx6TfGt8aJvfliG3n7N5bQR2eDfS29NJ5sE5?=
- =?us-ascii?Q?IIoqi5JXv2R1bXeX29JT/lkVa4C3kH1K67ifYYWXvbT/T2K5bppSUlP1i4KL?=
- =?us-ascii?Q?lnTCexvIUSUR0Ru+V+rOj7u10dmd1Wp57UA0kGlu/susjXLC2NtpIodT+Wvc?=
- =?us-ascii?Q?vxZ2/LhElO4s4lmtS3iWDODcpZGZ35zktwx9rNXIA2RK8DvH1SsDzeinALA7?=
- =?us-ascii?Q?2JTWZUZ73c0GRN/sz/sbd9wVf3gqKA1dcaO6iIAduLjiqFJA4ZIHFbjpl7yQ?=
- =?us-ascii?Q?PaSC5QSDry0LFTJY1m0pjBXJdOORcYrq3yVPr25LegrcX3lnfpRR9dxqD8dT?=
- =?us-ascii?Q?DYgqPjIRYrQF2oBuObsAqwCS6A=3D=3D?=
+ =?us-ascii?Q?7xhiFSAKWeJ+QsWeUf4Sst7h4p3BruegqOM6cFsMgfdxFqNig3U+Rm2da7JX?=
+ =?us-ascii?Q?nE59z8UJzoNH4bo7pARtxJfMINnRl5UHkkBwlgErWHtQSjr+hc1gIWCdFOKy?=
+ =?us-ascii?Q?QiUB9oguhV2AZduluWwnuT+SnqECRiO75iznJbX+jJ+GzxGLIfjex5cx74qC?=
+ =?us-ascii?Q?go13HIbvUTHZd7h2aCS2MHg57RPC6GwhrHI3fqHjlKeQRx5RZBF3ebKqsFQT?=
+ =?us-ascii?Q?mvpg6yBigONxrG4KOgXSomNMdhVviSJOKxPKB/pPxwBEbpO3fuPTC+LqQPk5?=
+ =?us-ascii?Q?RvSCDSpinca4wAqCAqmeOjmF2WLKwKqy0zWpnlk7wqpAo7rUWd0Jmv5x26b7?=
+ =?us-ascii?Q?OGiYgq1Yxn3bFc+2aN4V1znpgyBm2fQcPQo9SIjSce4yW5rHwCEw5qiYuJcr?=
+ =?us-ascii?Q?7TEmIz52NA/GhpqlazKP0+eshDz2Hq66V5kMb7sxgm8jSEte6ivvnec0ghL+?=
+ =?us-ascii?Q?KU1gVp2EH9RpSoBKKtRdQ7sKE5/uf7S6bu8kxDEqQg3E9DQ3gt5DXTEXL+ev?=
+ =?us-ascii?Q?BSgRxX8RUWZn7Y+NptiQ0+ZKU03r3PsJDSpsLwDkv0/PZd6uStqmdyt7c1GB?=
+ =?us-ascii?Q?LIDo6axOVPIM7Pk1HSMeeiw7DUnISR6zmVVcYHsByx7hhYdCTW/XQZK5L3KS?=
+ =?us-ascii?Q?PT08i5Y7PtAWkFeUSuzY6X9oqMC+1NkTlSajzd9PYKQHhtglzXKVjxhYGug+?=
+ =?us-ascii?Q?aTsqA7A37APQ0bwM2LRhoSFI1xEicufoiMmFh/jFRDrUeMKM1dk6/R7z6qzb?=
+ =?us-ascii?Q?fwn4mHdtdRaDR+r6nvCvFYJQV/TCYDz8L/Q7UYOvgo0jeyCqoNAsKYx+FyHo?=
+ =?us-ascii?Q?NIDqJxRiVY0ocbvHlxFs8LeBXznbjUP53WyctV9YuMS1Ey9YJFAxH8V8tEnl?=
+ =?us-ascii?Q?7hvzA4SrAaLu4nS7XX2YT9eUbTdSXtymNULXcnfWHLpDa+vbttbKbAb7HLMa?=
+ =?us-ascii?Q?7yX4rHIUdgedKeaCYcVPw8bgAWPnTrRKLS65UIYOaOoX7H2vHA9gb1r7MIUT?=
+ =?us-ascii?Q?xKc2ph0KGgZ7c8N92MpqaehX5A=3D=3D?=
 x-ms-exchange-antispam-messagedata-chunkcount: 1
 x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?8YvsAJGp7aAhOS1LqofTNP0fCbhd+ZHKmmvxsAPzLgNuJ94JPpnbRMRfHvC3?=
- =?us-ascii?Q?TXM4cN2c3k/eX3M5DBwME0NYvQbY8+/0JG04iYVZV7r/Ex0vGJtD3bQIw3Wk?=
- =?us-ascii?Q?W52JK1un3m6u1WOQqx2aPWyGpmhROYlqQmTJRYlRX83v8zCqopaNgdWFHlm6?=
- =?us-ascii?Q?q42w+gv/O79oYdozqj7X7FUSarMHJGH3gIOkir1A1Lmb6AYaepQFSMkBncaW?=
- =?us-ascii?Q?eRdi4Qe2KpGOIn5m30asuZTWhUBXz4wAiNA4VuxBft81WNmh5GnwWGeMdR5U?=
- =?us-ascii?Q?nIj7tTdSkjDdurj89Xkw+rTMCHAHruXv/tD/i1R29qFhYoSsOORO+MHo4LdI?=
- =?us-ascii?Q?Cf1nGEl03SjHTHKni4W4DatqqiIKa9Vc4UF0e413EEiq6xW1deZM3ca7GFQR?=
- =?us-ascii?Q?zysFsfUaGMXzzaFroZBQFxbt6IwrvEPDkRkO6iTbKlmlF3/Qf/9VA9Xf6aYl?=
- =?us-ascii?Q?F6KDZUVXXsnz6eyXa6muwG81hkPh3Bojx2anbnRRY47736YdbYx4Ac7cl30k?=
- =?us-ascii?Q?yHP79EnvWJo+2x6mLAeUx6AV4xxIMwjQ74ezBNLX2NwtrSccRRg13pNiTCmR?=
- =?us-ascii?Q?ZNcgx9URu9x7GkJFesDfIvsmlTX4zZ0vD+b9rYqN83mZcHomhuf1g7b+jHwI?=
- =?us-ascii?Q?IlXzY6PyMJjQd0Wm7mDnejSUQpUWWKpLhA7Gt2+8WtrEuetFEi6TRGQCi08Z?=
- =?us-ascii?Q?mY/E1vlMR/6UtB3clJuDtZAvufqgg9hgS+ClI9auKsqPuSSuu9gB/0wn4/Bc?=
- =?us-ascii?Q?XarDo0EXv2cVpy2U+9BmqprJjOcHqGnIkMkIAArSqqjbe8syqMzRxVMeALRj?=
- =?us-ascii?Q?QISpBGcjvsCISL827o1mqZuTY2TuMiOM9ScaiVhLlHDas2g/jRb0k6w+Pems?=
- =?us-ascii?Q?VjLGegRB4dKc7aW38Yvp2VOrcVelkv0/fUyEhAWX2W+Qv9PYgpyXg7Wf6+sQ?=
- =?us-ascii?Q?JjWxZMvJQKEfnRIQWJsTnIvgXzHZh223pb2VBXKM6wDDW7q1y8dD7hd1FLjT?=
- =?us-ascii?Q?JH4tU1iGJqtiMCg6uolbTzwXNNFHdT4vSF7uZ0jzw8dXLDNAvAV/cpYN7QY/?=
- =?us-ascii?Q?Mw/RtO9nnzor4P9gHa1f2pixx0RHDPH8t0A5WtRw8Xx82xcbrtJKky7pJM/M?=
- =?us-ascii?Q?yHgW6qe2ylVIVqG1rxgEmYkA4um9rtKK12IZ+TqLHAZYRzmTk2zBI6L1MvoW?=
- =?us-ascii?Q?CwIF+FNqt7JPw5D+XdrFi7Q94mbiZUnYvMZUsIRwgBLt9IpeAsJGd61uPlE?=
+ =?us-ascii?Q?xo0YRJtEp43Q/d5ozg0yfwpC7s6hqyCsKFnwNNjODm7Vtn61Owkip36hVK8n?=
+ =?us-ascii?Q?Ufz/jY9X+IpZsWQXrI250uuaQNSbyXOs+G351JVEjhxCWh3/eHkJY3LfWaBG?=
+ =?us-ascii?Q?eeWwIK8fScQ2GaQyWM83oPcHwQWdSuqsZwSPMEprn8Pwfj1gz473svWSZBqe?=
+ =?us-ascii?Q?DymVQ/1tlcAnWdwxgfu+4iGj/2rlv9vUNMT5tKDCf1bIx8PTnOOpnAj/7ue7?=
+ =?us-ascii?Q?eA2sKtPAkfgF1+vcH1s0GhKPw7MCpH8BKZegYm7TjKukfKD0z/Jw7Pdy5HbE?=
+ =?us-ascii?Q?IKQ2DdUsyPpoiMHYlTbGSGH7JEH50WrBMsNqiKL1V+BdoozThf+J+Z8MUjZf?=
+ =?us-ascii?Q?pozo4FhEd3OAKp5HYn6r8Pyknkd7SIp7qbGEK+se8M3NDwDukSIjdmyBKJ9t?=
+ =?us-ascii?Q?eyLZVCo8qE/VqW702DFq60OOeK/uQ94UUVhLjx9Xt+yVN5iceVYCfjr7foRI?=
+ =?us-ascii?Q?B/8QYFTCv+qAM2KKof9mM1Se6Ek74wwbW6AQHBE0uGiJ8mG5NMiLnk31IKU9?=
+ =?us-ascii?Q?FeB93SuW+XoZcNctpICj2EY+FykdbrZa0JTfZAZa7ezp+JMEt594cE1HR0yu?=
+ =?us-ascii?Q?Rk6r2BCCEAJvMuOVYMNehrF9hL7Zg9B7BsbmdayFjADbunR3TWn5v2hd8r08?=
+ =?us-ascii?Q?mWeNv+ph1K/wfFtDQvVa+MIjKcP8thpn8/3OP48ENOgYwHVx0zPnX2ogtO2O?=
+ =?us-ascii?Q?hzdffDNrE+FzOEVSRvpVLW5hdgp/GhjDVuasZfP2DvU/3Q4vanAGgtTcrFAI?=
+ =?us-ascii?Q?QWwu82/yClq7zKkN3/rdAoCjhzhAFN9kqaL4j+5dnh2UALdI6wFMDz8dLsth?=
+ =?us-ascii?Q?SCogwnyGfja9KGZOvOtscPVzcfURIG/6PPFlaIdsVqfym1kv5z5gSGoMLuWv?=
+ =?us-ascii?Q?w2KDH/47pMw4V1AIdsVIuk7cjleBCjUoZEd7ez/vaD4I0BaP7oS7XnAQO000?=
+ =?us-ascii?Q?BcQw/KYUXV0a9AUjn25JajSzaubqhLxMXt+uw6gXOfPHMzKdejLRWe0pKhvB?=
+ =?us-ascii?Q?c8L/O69dRdSbT5TCVgHq46lj1ViercHZhgDa0f6Xrf4mUVZBdPpFiZNMMLX1?=
+ =?us-ascii?Q?+krDK5nJlX8IYSVHq7Ufrx20ZeJBky43oGd0I0W2+c76EgFZvEjhWAlGReiE?=
+ =?us-ascii?Q?wtREF0ww8f/DnVMyleXpZzPU928m9XhvQ96j8AB7cHPv255NCAPDYlqycr7j?=
+ =?us-ascii?Q?YVEBVpRTIiZX7alXCvQuchySGKZ+aUZjXHDSAk/Bkfy/hlqIamcboE7UDvs?=
  =?us-ascii?Q?=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
@@ -163,9 +164,9 @@ X-OriginatorOrg: outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: BN7PR02MB4148.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8d49f5a1-435b-42f4-36b8-08dd020720d6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3c481909-f824-40f0-2a64-08dd020728ab
 X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Nov 2024 04:12:59.5005
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Nov 2024 04:13:12.6638
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
@@ -174,110 +175,56 @@ X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR02MB8958
 From: Nuno Das Neves <nunodasneves@linux.microsoft.com> Sent: Thursday, Nov=
 ember 7, 2024 2:32 PM
 >=20
-> To support Hyper-V Dom0 (aka Linux as root partition), many new
-> definitions are required.
-
-Using "dom0" terminology here and in the Subject: line is likely to
-be confusing to folks who aren't intimately involved in Hyper-V work.
-Previous Linux kernel commit messages and code for running in the
-Hyper-V root partition use "root partition" terminology, and I couldn't
-find "dom0" having been used before. "root partition" would be more
-consistent, and it also matches the public documentation for Hyper-V.
-"dom0" is Xen specific terminology, and having it show up in Hyper-V
-patches would be confusing for the casual reader. I know "dom0" has
-been used internally at Microsoft as shorthand for "Hyper-V root
-partition", but it's probably best to completely avoid such shorthand
-in public Linux kernel patches and code.
-
-Just my $.02 ....
-
+> This definition is in the wrong file; it is part of the TLFS doc.
 >=20
-> The plan going forward is to directly import definitions from
-> Hyper-V code without waiting for them to land in the TLFS document.
-> This is a quicker and more maintainable way to import definitions,
-> and is a step toward the eventual goal of exporting headers directly
-> from Hyper-V for use in Linux.
->=20
-> This patch series introduces new headers (hvhdk.h, hvgdk.h, etc,
-> see patch #3) derived directly from Hyper-V code. hyperv-tlfs.h is
-> replaced with hvhdk.h (which includes the other new headers)
-> everywhere.
->=20
-> No functional change is expected.
->=20
-> Summary:
-> Patch 1-2: Minor cleanup patches
-> Patch 3: Add the new headers (hvhdk.h, etc..) in include/hyperv/
-> Patch 4: Switch to the new headers
->=20
+> Acked-by: Wei Liu <wei.liu@kernel.org>
 > Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
 > ---
-> Changelog:
-> v2:
-> - Rework the series to simply use the new headers everywhere
->   instead of fiddling around to keep hyperv-tlfs.h used in some
->   places, suggested by Michael Kelley and Easwar Hariharan
-
-Thanks! That should be simpler all around.
-
-Michael
-
-> - Fix compilation errors with some configs by adding missing
->   definitions and changing some names, thanks to Simon Horman for
->   catching those
-> - Add additional definitions to the new headers to support them now
->   replacing hyperv-tlfs.h everywhere
-> - Add additional context in the commit messages for patches #3 and #4
-> - In patch #2, don't remove indirect includes. Only remove includes
->   which truly aren't used, suggested by Michael Kelley
+>  include/asm-generic/hyperv-tlfs.h | 9 +++++++++
+>  include/linux/hyperv.h            | 9 ---------
+>  2 files changed, 9 insertions(+), 9 deletions(-)
 >=20
-> ---
-> Nuno Das Neves (4):
->   hyperv: Move hv_connection_id to hyperv-tlfs.h
->   hyperv: Clean up unnecessary #includes
->   hyperv: Add new Hyper-V headers in include/hyperv
->   hyperv: Switch from hyperv-tlfs.h to hyperv/hvhdk.h
+> diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hype=
+rv-tlfs.h
+> index 814207e7c37f..52274c9aefef 100644
+> --- a/include/asm-generic/hyperv-tlfs.h
+> +++ b/include/asm-generic/hyperv-tlfs.h
+> @@ -871,4 +871,13 @@ struct hv_mmio_write_input {
+>  	u8 data[HV_HYPERCALL_MMIO_MAX_DATA_LENGTH];
+>  } __packed;
 >=20
->  arch/arm64/hyperv/hv_core.c        |    3 +-
->  arch/arm64/hyperv/mshyperv.c       |    4 +-
->  arch/arm64/include/asm/mshyperv.h  |    2 +-
->  arch/x86/hyperv/hv_apic.c          |    1 -
->  arch/x86/hyperv/hv_init.c          |   21 +-
->  arch/x86/hyperv/hv_proc.c          |    3 +-
->  arch/x86/hyperv/ivm.c              |    1 -
->  arch/x86/hyperv/mmu.c              |    1 -
->  arch/x86/hyperv/nested.c           |    2 +-
->  arch/x86/include/asm/kvm_host.h    |    3 +-
->  arch/x86/include/asm/mshyperv.h    |    3 +-
->  arch/x86/include/asm/svm.h         |    2 +-
->  arch/x86/kernel/cpu/mshyperv.c     |    2 +-
->  arch/x86/kvm/vmx/hyperv_evmcs.h    |    2 +-
->  arch/x86/kvm/vmx/vmx_onhyperv.h    |    2 +-
->  arch/x86/mm/pat/set_memory.c       |    2 -
->  drivers/clocksource/hyperv_timer.c |    2 +-
->  drivers/hv/hv_balloon.c            |    4 +-
->  drivers/hv/hv_common.c             |    2 +-
->  drivers/hv/hv_kvp.c                |    2 +-
->  drivers/hv/hv_snapshot.c           |    2 +-
->  drivers/hv/hyperv_vmbus.h          |    2 +-
->  include/asm-generic/hyperv-tlfs.h  |    9 +
->  include/asm-generic/mshyperv.h     |    2 +-
->  include/clocksource/hyperv_timer.h |    2 +-
->  include/hyperv/hvgdk.h             |  303 +++++++
->  include/hyperv/hvgdk_ext.h         |   46 +
->  include/hyperv/hvgdk_mini.h        | 1295 ++++++++++++++++++++++++++++
->  include/hyperv/hvhdk.h             |  733 ++++++++++++++++
->  include/hyperv/hvhdk_mini.h        |  310 +++++++
->  include/linux/hyperv.h             |   11 +-
->  net/vmw_vsock/hyperv_transport.c   |    2 +-
->  32 files changed, 2729 insertions(+), 52 deletions(-)
->  create mode 100644 include/hyperv/hvgdk.h
->  create mode 100644 include/hyperv/hvgdk_ext.h
->  create mode 100644 include/hyperv/hvgdk_mini.h
->  create mode 100644 include/hyperv/hvhdk.h
->  create mode 100644 include/hyperv/hvhdk_mini.h
+> +/* Define connection identifier type. */
+> +union hv_connection_id {
+> +	u32 asu32;
+> +	struct {
+> +		u32 id:24;
+> +		u32 reserved:8;
+> +	} u;
+> +};
+> +
+>  #endif
+> diff --git a/include/linux/hyperv.h b/include/linux/hyperv.h
+> index 22c22fb91042..d0893ec488ae 100644
+> --- a/include/linux/hyperv.h
+> +++ b/include/linux/hyperv.h
+> @@ -768,15 +768,6 @@ struct vmbus_close_msg {
+>  	struct vmbus_channel_close_channel msg;
+>  };
 >=20
+> -/* Define connection identifier type. */
+> -union hv_connection_id {
+> -	u32 asu32;
+> -	struct {
+> -		u32 id:24;
+> -		u32 reserved:8;
+> -	} u;
+> -};
+> -
+>  enum vmbus_device_type {
+>  	HV_IDE =3D 0,
+>  	HV_SCSI,
 > --
 > 2.34.1
 
+Reviewed-by: Michael Kelley <mhklinux@outlook.com>
 
