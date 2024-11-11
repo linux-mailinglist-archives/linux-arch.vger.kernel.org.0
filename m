@@ -1,261 +1,143 @@
-Return-Path: <linux-arch+bounces-8969-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-8971-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF3B69C3C9D
-	for <lists+linux-arch@lfdr.de>; Mon, 11 Nov 2024 12:02:23 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FBC79C4304
+	for <lists+linux-arch@lfdr.de>; Mon, 11 Nov 2024 17:54:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB5C51F220D4
-	for <lists+linux-arch@lfdr.de>; Mon, 11 Nov 2024 11:02:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 441D81F254EE
+	for <lists+linux-arch@lfdr.de>; Mon, 11 Nov 2024 16:54:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31E0317BECA;
-	Mon, 11 Nov 2024 11:02:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F4D41A254F;
+	Mon, 11 Nov 2024 16:53:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="P49p6Xb9";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="tkrmPWiL";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="P49p6Xb9";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="tkrmPWiL"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=freemail.hu header.i=@freemail.hu header.b="g52+/9sB"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-out.freemail.hu (fmfe38.freemail.hu [46.107.16.243])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51D1B156C52;
-	Mon, 11 Nov 2024 11:02:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0932C1A706A;
+	Mon, 11 Nov 2024 16:53:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.107.16.243
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731322927; cv=none; b=snShHvuMv7AQbt6/S+Ua7Vhy8cQpdTVdt5+fTL562tnFjzU8b9QhXFB5qWihc/QB5XUlo+B4HgO3WBSOxD1E9cZApcM1WEqfxa3jX0eLWj4fLR7xVeAIq9bB6k0elL572dAVrU3udKy7iNV33ksN7eojdGSffYf1tvsNJrs65gk=
+	t=1731344000; cv=none; b=C1b+nxLGlBSPiPOj1MlR9ulWShXD+zkBqDq+OM+JaAx7Y80NQkXH3BKXvDlLT2q2lxe8gvZyDhPY/K0qylQz+jvzhXt8JhIkDOrVSPd7fV6ZRzbkPAiIaMXxV72tB1DVLFe3OzV99nb0/h1BqeyIoxiSEtg2KFzSzA3yjQ0S0EM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731322927; c=relaxed/simple;
-	bh=zKv3Vn3RngXApMuDLHQ3tdm8G0jfhbJLEdut14IqwrA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rOl+jegiR34GfMvAWSLxj1DJwH8Bw19jLc1vN1zGNXEBOduQhyy5WtjngUfbk1zsY9hoRJU5PPEqv5DEY+nTpLNs/OLICWT0WDi5rVyREkvGVU4XXDKb+ZvvLqEYlQYiykUavYEXh06seFc1Ak+C8eGeUJ2DCzja49/G7LFeV0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=P49p6Xb9; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=tkrmPWiL; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=P49p6Xb9; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=tkrmPWiL; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	s=arc-20240116; t=1731344000; c=relaxed/simple;
+	bh=my6kpv51R2cZYX7QWBuaiZ5YJ3cTY+lUC8c8KSMPStY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Fah51Ta2Nnhx/H9lxNWD98Sms2gippdZVknx3ceq+k8ioQDcQy+SB4N1+RZJlr/Wi03BOVb9E4jkW6dPh0qSS7svGwkzbkKpA6rINHDgRFqIi7uyrsGs5ZVpzC6yM7hy4jveWdtFlc0R/BMkpk3Ir39gVs8HsWwh0DAkCh2T3RQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=freemail.hu; spf=pass smtp.mailfrom=freemail.hu; dkim=fail (2048-bit key) header.d=freemail.hu header.i=@freemail.hu header.b=g52+/9sB reason="signature verification failed"; arc=none smtp.client-ip=46.107.16.243
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=freemail.hu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=freemail.hu
+Received: from localhost.localdomain (catv-178-48-208-49.catv.fixed.vodafone.hu [178.48.208.49])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 9C1381F38E;
-	Mon, 11 Nov 2024 11:02:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1731322923; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=uXHVH0ccgWFcGpeM6HgeltmGCkaKDRVIsW9/gEoqXsg=;
-	b=P49p6Xb9X9EU2crk2y1oMy2KeTCSI+7k6Cf4qmPXhaV50qDusoH3M+AMdTpVGy/6Sw6I3k
-	fnrYtFYt4WdUKE7CGto1/WoVovedVCYShD6+l5IRSG7wNAYlv48lXRP3KaFSgszfEodJWJ
-	sO/nDG7MsI1U1JfpVZOXgSTrqJ10mdY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1731322923;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=uXHVH0ccgWFcGpeM6HgeltmGCkaKDRVIsW9/gEoqXsg=;
-	b=tkrmPWiLNNj2qm3VuGpKD+E8ycRAHQNEVnHcYHSe5dia8bkPxhGQfF3p8F1nao0Gio6rFJ
-	jN8zHuwwIRfhMYBw==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1731322923; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=uXHVH0ccgWFcGpeM6HgeltmGCkaKDRVIsW9/gEoqXsg=;
-	b=P49p6Xb9X9EU2crk2y1oMy2KeTCSI+7k6Cf4qmPXhaV50qDusoH3M+AMdTpVGy/6Sw6I3k
-	fnrYtFYt4WdUKE7CGto1/WoVovedVCYShD6+l5IRSG7wNAYlv48lXRP3KaFSgszfEodJWJ
-	sO/nDG7MsI1U1JfpVZOXgSTrqJ10mdY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1731322923;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=uXHVH0ccgWFcGpeM6HgeltmGCkaKDRVIsW9/gEoqXsg=;
-	b=tkrmPWiLNNj2qm3VuGpKD+E8ycRAHQNEVnHcYHSe5dia8bkPxhGQfF3p8F1nao0Gio6rFJ
-	jN8zHuwwIRfhMYBw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 60442137FB;
-	Mon, 11 Nov 2024 11:02:03 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id ricQFyvkMWfuIwAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Mon, 11 Nov 2024 11:02:03 +0000
-Message-ID: <ff3174f8-c8b5-4fae-a9d9-87546d37c162@suse.cz>
-Date: Mon, 11 Nov 2024 12:02:02 +0100
+	by smtp.freemail.hu (Postfix) with ESMTPSA id 4XnFlH3WNQzRRG;
+	Mon, 11 Nov 2024 17:44:59 +0100 (CET)
+From: egyszeregy@freemail.hu
+To: stern@rowland.harvard.edu,
+	parri.andrea@gmail.com,
+	will@kernel.org,
+	peterz@infradead.org,
+	boqun.feng@gmail.com,
+	npiggin@gmail.com,
+	dhowells@redhat.com,
+	j.alglave@ucl.ac.uk,
+	luc.maranget@inria.fr,
+	paulmck@kernel.org,
+	akiyks@gmail.com,
+	dlustig@nvidia.com,
+	joel@joelfernandes.org,
+	linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	lkmm@lists.linux.dev
+Cc: =?UTF-8?q?Benjamin=20Sz=C5=91ke?= <egyszeregy@freemail.hu>
+Subject: [PATCH] tools/memory-model: Fix litmus-tests's file names for case-insensitive filesystem.
+Date: Mon, 11 Nov 2024 17:42:47 +0100
+Message-ID: <20241111164248.1060-1-egyszeregy@freemail.hu>
+X-Mailer: git-send-email 2.47.0.windows.2
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 0/4] Add fbind() and NUMA mempolicy support for KVM
- guest_memfd
-Content-Language: en-US
-To: Paolo Bonzini <pbonzini@redhat.com>, Matthew Wilcox
- <willy@infradead.org>, Shivank Garg <shivankg@amd.com>
-Cc: x86@kernel.org, viro@zeniv.linux.org.uk, brauner@kernel.org,
- jack@suse.cz, akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
- linux-api@vger.kernel.org, linux-arch@vger.kernel.org, kvm@vger.kernel.org,
- chao.gao@intel.com, pgonda@google.com, thomas.lendacky@amd.com,
- seanjc@google.com, luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
- bp@alien8.de, dave.hansen@linux.intel.com, arnd@arndb.de, kees@kernel.org,
- bharata@amd.com, nikunj@amd.com, michael.day@amd.com,
- Neeraj.Upadhyay@amd.com, linux-coco@lists.linux.dev
-References: <20241105164549.154700-1-shivankg@amd.com>
- <ZypqJ0e-J3C_K8LA@casper.infradead.org>
- <6004eaa4-934c-48f4-b502-cf7e436462fc@amd.com>
- <ZyzYUOX_r3uWin5f@casper.infradead.org>
- <10ffac79-0dba-4c30-991e-f3ca2b5ff639@redhat.com>
-From: Vlastimil Babka <vbabka@suse.cz>
-Autocrypt: addr=vbabka@suse.cz; keydata=
- xsFNBFZdmxYBEADsw/SiUSjB0dM+vSh95UkgcHjzEVBlby/Fg+g42O7LAEkCYXi/vvq31JTB
- KxRWDHX0R2tgpFDXHnzZcQywawu8eSq0LxzxFNYMvtB7sV1pxYwej2qx9B75qW2plBs+7+YB
- 87tMFA+u+L4Z5xAzIimfLD5EKC56kJ1CsXlM8S/LHcmdD9Ctkn3trYDNnat0eoAcfPIP2OZ+
- 9oe9IF/R28zmh0ifLXyJQQz5ofdj4bPf8ecEW0rhcqHfTD8k4yK0xxt3xW+6Exqp9n9bydiy
- tcSAw/TahjW6yrA+6JhSBv1v2tIm+itQc073zjSX8OFL51qQVzRFr7H2UQG33lw2QrvHRXqD
- Ot7ViKam7v0Ho9wEWiQOOZlHItOOXFphWb2yq3nzrKe45oWoSgkxKb97MVsQ+q2SYjJRBBH4
- 8qKhphADYxkIP6yut/eaj9ImvRUZZRi0DTc8xfnvHGTjKbJzC2xpFcY0DQbZzuwsIZ8OPJCc
- LM4S7mT25NE5kUTG/TKQCk922vRdGVMoLA7dIQrgXnRXtyT61sg8PG4wcfOnuWf8577aXP1x
- 6mzw3/jh3F+oSBHb/GcLC7mvWreJifUL2gEdssGfXhGWBo6zLS3qhgtwjay0Jl+kza1lo+Cv
- BB2T79D4WGdDuVa4eOrQ02TxqGN7G0Biz5ZLRSFzQSQwLn8fbwARAQABzSBWbGFzdGltaWwg
- QmFia2EgPHZiYWJrYUBzdXNlLmN6PsLBlAQTAQoAPgIbAwULCQgHAwUVCgkICwUWAgMBAAIe
- AQIXgBYhBKlA1DSZLC6OmRA9UCJPp+fMgqZkBQJkBREIBQkRadznAAoJECJPp+fMgqZkNxIQ
- ALZRqwdUGzqL2aeSavbum/VF/+td+nZfuH0xeWiO2w8mG0+nPd5j9ujYeHcUP1edE7uQrjOC
- Gs9sm8+W1xYnbClMJTsXiAV88D2btFUdU1mCXURAL9wWZ8Jsmz5ZH2V6AUszvNezsS/VIT87
- AmTtj31TLDGwdxaZTSYLwAOOOtyqafOEq+gJB30RxTRE3h3G1zpO7OM9K6ysLdAlwAGYWgJJ
- V4JqGsQ/lyEtxxFpUCjb5Pztp7cQxhlkil0oBYHkudiG8j1U3DG8iC6rnB4yJaLphKx57NuQ
- PIY0Bccg+r9gIQ4XeSK2PQhdXdy3UWBr913ZQ9AI2usid3s5vabo4iBvpJNFLgUmxFnr73SJ
- KsRh/2OBsg1XXF/wRQGBO9vRuJUAbnaIVcmGOUogdBVS9Sun/Sy4GNA++KtFZK95U7J417/J
- Hub2xV6Ehc7UGW6fIvIQmzJ3zaTEfuriU1P8ayfddrAgZb25JnOW7L1zdYL8rXiezOyYZ8Fm
- ZyXjzWdO0RpxcUEp6GsJr11Bc4F3aae9OZtwtLL/jxc7y6pUugB00PodgnQ6CMcfR/HjXlae
- h2VS3zl9+tQWHu6s1R58t5BuMS2FNA58wU/IazImc/ZQA+slDBfhRDGYlExjg19UXWe/gMcl
- De3P1kxYPgZdGE2eZpRLIbt+rYnqQKy8UxlszsBNBFsZNTUBCACfQfpSsWJZyi+SHoRdVyX5
- J6rI7okc4+b571a7RXD5UhS9dlVRVVAtrU9ANSLqPTQKGVxHrqD39XSw8hxK61pw8p90pg4G
- /N3iuWEvyt+t0SxDDkClnGsDyRhlUyEWYFEoBrrCizbmahOUwqkJbNMfzj5Y7n7OIJOxNRkB
- IBOjPdF26dMP69BwePQao1M8Acrrex9sAHYjQGyVmReRjVEtv9iG4DoTsnIR3amKVk6si4Ea
- X/mrapJqSCcBUVYUFH8M7bsm4CSxier5ofy8jTEa/CfvkqpKThTMCQPNZKY7hke5qEq1CBk2
- wxhX48ZrJEFf1v3NuV3OimgsF2odzieNABEBAAHCwXwEGAEKACYCGwwWIQSpQNQ0mSwujpkQ
- PVAiT6fnzIKmZAUCZAUSmwUJDK5EZgAKCRAiT6fnzIKmZOJGEACOKABgo9wJXsbWhGWYO7mD
- 8R8mUyJHqbvaz+yTLnvRwfe/VwafFfDMx5GYVYzMY9TWpA8psFTKTUIIQmx2scYsRBUwm5VI
- EurRWKqENcDRjyo+ol59j0FViYysjQQeobXBDDE31t5SBg++veI6tXfpco/UiKEsDswL1WAr
- tEAZaruo7254TyH+gydURl2wJuzo/aZ7Y7PpqaODbYv727Dvm5eX64HCyyAH0s6sOCyGF5/p
- eIhrOn24oBf67KtdAN3H9JoFNUVTYJc1VJU3R1JtVdgwEdr+NEciEfYl0O19VpLE/PZxP4wX
- PWnhf5WjdoNI1Xec+RcJ5p/pSel0jnvBX8L2cmniYnmI883NhtGZsEWj++wyKiS4NranDFlA
- HdDM3b4lUth1pTtABKQ1YuTvehj7EfoWD3bv9kuGZGPrAeFNiHPdOT7DaXKeHpW9homgtBxj
- 8aX/UkSvEGJKUEbFL9cVa5tzyialGkSiZJNkWgeHe+jEcfRT6pJZOJidSCdzvJpbdJmm+eED
- w9XOLH1IIWh7RURU7G1iOfEfmImFeC3cbbS73LQEFGe1urxvIH5K/7vX+FkNcr9ujwWuPE9b
- 1C2o4i/yZPLXIVy387EjA6GZMqvQUFuSTs/GeBcv0NjIQi8867H3uLjz+mQy63fAitsDwLmR
- EP+ylKVEKb0Q2A==
-In-Reply-To: <10ffac79-0dba-4c30-991e-f3ca2b5ff639@redhat.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Level: 
-X-Spamd-Result: default: False [-4.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[30];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	R_RATELIMIT(0.00)[to_ip_from(RL81e5qggtdx371s8ik49ru6xr)];
-	RCVD_COUNT_TWO(0.00)[2];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:mid,imap1.dmz-prg2.suse.org:helo]
-X-Spam-Score: -4.30
-X-Spam-Flag: NO
+Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=simple/relaxed; t=1731343500;
+	s=20181004; d=freemail.hu;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
+	l=2944; bh=cCPkD+u0S/L0jyUmIwbYJI+sFNNB67K8RH+1NXOKewo=;
+	b=g52+/9sB+0+XIfF0eM+kfn7QoNqU6pZ5WWAYlEjZldfna8PP3uR+ZpL+Xq88znJA
+	R1wgMjAtIPHRGoDubremxQyfjfSZ8mrga88kBJ5bPbzkU5MmxSzMjBny1JSq8UJXtmP
+	YIDsuMD6G18niuEtkDOFrzEliBvtT/Zox6vNuEw6SP/JXE/BgoPhxnOXpqI475zwyUZ
+	5jB51etvXr6KBKnqd/PjC5ahZjC7N+f7S8seEzlRGP/WTNyhofonPGc1S5dXzIFwIZK
+	q88zFe8VflFmswH60Tl99g7dD2CA8sR7jjIH/gJe6EHsKhvuCsMrT6p6OvYGmgoW+Rh
+	rc/gAf/c2g==
 
-On 11/8/24 18:31, Paolo Bonzini wrote:
-> On 11/7/24 16:10, Matthew Wilcox wrote:
->> On Thu, Nov 07, 2024 at 02:24:20PM +0530, Shivank Garg wrote:
->>> The folio allocation path from guest_memfd typically looks like this...
->>>
->>> kvm_gmem_get_folio
->>>    filemap_grab_folio
->>>      __filemap_get_folio
->>>        filemap_alloc_folio
->>>          __folio_alloc_node_noprof
->>>            -> goes to the buddy allocator
->>>
->>> Hence, I am trying to have a version of filemap_alloc_folio() that takes an mpol.
->> 
->> It only takes that path if cpuset_do_page_mem_spread() is true.  Is the
->> real problem that you're trying to solve that cpusets are being used
->> incorrectly?
-> 
-> If it's false it's not very different, it goes to alloc_pages_noprof(). 
-> Then it respects the process's policy, but the policy is not 
-> customizable without mucking with state that is global to the process.
-> 
-> Taking a step back: the problem is that a VM can be configured to have 
-> multiple guest-side NUMA nodes, each of which will pick memory from the 
-> right NUMA node in the host.  Without a per-file operation it's not 
-> possible to do this on guest_memfd.  The discussion was whether to use 
-> ioctl() or a new system call.  The discussion ended with the idea of 
-> posting a *proposal* asking for *comments* as to whether the system call 
-> would be useful in general beyond KVM.
-> 
-> Commenting on the system call itself I am not sure I like the 
-> file_operations entry, though I understand that it's the simplest way to 
-> implement this in an RFC series.  It's a bit surprising that fbind() is 
-> a total no-op for everything except KVM's guest_memfd.
-> 
-> Maybe whatever you pass to fbind() could be stored in the struct file *, 
-> and used as the default when creating VMAs; as if every mmap() was 
-> followed by an mbind(), except that it also does the right thing with 
-> MAP_POPULATE for example.  Or maybe that's a horrible idea?
+From: Benjamin Szőke <egyszeregy@freemail.hu>
 
-mbind() manpage has this:
+The goal is to fix Linux repository for case-insensitive filesystem,
+to able to clone it and editable on any operating systems.
 
-       The  specified  policy  will  be  ignored  for  any MAP_SHARED
-mappings in the specified memory range.  Rather the pages will be allocated
-according to the memory policy of the thread that caused the page to be
-allocated. Again, this may not be the thread that called mbind().
+Rename "Z6.0+pooncelock+poonceLock+pombonce.litmus" to
+"Z6.0+pooncelock+poonceLock+after_spinlock+pombonce.litmus".
 
-So that seems like we're not very keen on having one user of a file set a
-policy that would affect other users of the file?
+Signed-off-by: Benjamin Szőke <egyszeregy@freemail.hu>
+---
+ tools/memory-model/Documentation/locking.txt                    | 2 +-
+ tools/memory-model/Documentation/recipes.txt                    | 2 +-
+ tools/memory-model/litmus-tests/README                          | 2 +-
+ ...> Z6.0+pooncelock+poonceLock+after_spinlock+pombonce.litmus} | 0
+ 4 files changed, 3 insertions(+), 3 deletions(-)
+ rename tools/memory-model/litmus-tests/{Z6.0+pooncelock+poonceLock+pombonce.litmus => Z6.0+pooncelock+poonceLock+after_spinlock+pombonce.litmus} (100%)
 
-Now the next paragraph of the manpage says that shmem is different, and
-guest_memfd is more like shmem than a regular file.
-
-My conclusion from that is that fbind() might be too broad and we don't want
-this for actual filesystem-backed files? And if it's limited to guest_memfd,
-it shouldn't be an fbind()?
-
-> Adding linux-api to get input; original thread is at
-> https://lore.kernel.org/kvm/20241105164549.154700-1-shivankg@amd.com/.
-> 
-> Paolo
-> 
->> Backing up, it seems like you want to make a change to the page cache,
->> you've had a long discussion with people who aren't the page cache
->> maintainer, and you all understand the pros and cons of everything,
->> and here you are dumping a solution on me without talking to me, even
->> though I was at Plumbers, you didn't find me to tell me I needed to go
->> to your talk.
->> 
->> So you haven't explained a damned thing to me, and I'm annoyed at you.
->> Do better.  Starting with your cover letter.
->> 
-> 
-> 
+diff --git a/tools/memory-model/Documentation/locking.txt b/tools/memory-model/Documentation/locking.txt
+index 65c898c64a93..42bc3efe2015 100644
+--- a/tools/memory-model/Documentation/locking.txt
++++ b/tools/memory-model/Documentation/locking.txt
+@@ -184,7 +184,7 @@ ordering properties.
+ Ordering can be extended to CPUs not holding the lock by careful use
+ of smp_mb__after_spinlock():
+ 
+-	/* See Z6.0+pooncelock+poonceLock+pombonce.litmus. */
++	/* See Z6.0+pooncelock+poonceLock+after_spinlock+pombonce.litmus. */
+ 	void CPU0(void)
+ 	{
+ 		spin_lock(&mylock);
+diff --git a/tools/memory-model/Documentation/recipes.txt b/tools/memory-model/Documentation/recipes.txt
+index 03f58b11c252..35996eb1b690 100644
+--- a/tools/memory-model/Documentation/recipes.txt
++++ b/tools/memory-model/Documentation/recipes.txt
+@@ -159,7 +159,7 @@ lock's ordering properties.
+ Ordering can be extended to CPUs not holding the lock by careful use
+ of smp_mb__after_spinlock():
+ 
+-	/* See Z6.0+pooncelock+poonceLock+pombonce.litmus. */
++	/* See Z6.0+pooncelock+poonceLock+after_spinlock+pombonce.litmus. */
+ 	void CPU0(void)
+ 	{
+ 		spin_lock(&mylock);
+diff --git a/tools/memory-model/litmus-tests/README b/tools/memory-model/litmus-tests/README
+index d311a0ff1ae6..e3d451346400 100644
+--- a/tools/memory-model/litmus-tests/README
++++ b/tools/memory-model/litmus-tests/README
+@@ -149,7 +149,7 @@ Z6.0+pooncelock+pooncelock+pombonce.litmus
+ 	spin_lock() sufficient to make ordering apparent to accesses
+ 	by a process not holding the lock?
+ 
+-Z6.0+pooncelock+poonceLock+pombonce.litmus
++Z6.0+pooncelock+poonceLock+after_spinlock+pombonce.litmus
+ 	As above, but with smp_mb__after_spinlock() immediately
+ 	following the spin_lock().
+ 
+diff --git a/tools/memory-model/litmus-tests/Z6.0+pooncelock+poonceLock+pombonce.litmus b/tools/memory-model/litmus-tests/Z6.0+pooncelock+poonceLock+after_spinlock+pombonce.litmus
+similarity index 100%
+rename from tools/memory-model/litmus-tests/Z6.0+pooncelock+poonceLock+pombonce.litmus
+rename to tools/memory-model/litmus-tests/Z6.0+pooncelock+poonceLock+after_spinlock+pombonce.litmus
+-- 
+2.47.0.windows.2
 
 
