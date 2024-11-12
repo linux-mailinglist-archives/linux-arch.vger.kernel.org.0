@@ -1,119 +1,126 @@
-Return-Path: <linux-arch+bounces-9044-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9045-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1138A9C63CF
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Nov 2024 22:53:11 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B71819C6580
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Nov 2024 00:51:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9D95D285FDF
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Nov 2024 21:53:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 020D7B2D2AB
+	for <lists+linux-arch@lfdr.de>; Tue, 12 Nov 2024 23:43:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B54A218D6B;
-	Tue, 12 Nov 2024 21:53:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8C9821C165;
+	Tue, 12 Nov 2024 23:43:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L96mEZur"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="URFA3fSM"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C5592170DF;
-	Tue, 12 Nov 2024 21:53:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86F7921B42A;
+	Tue, 12 Nov 2024 23:43:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731448385; cv=none; b=rLCTtUtu9uxpZY0ATJnLGivAbeObbCExK+a5QRHQy3mjWRenjhmooIVu/Seatw+X2zLAbYlrhEhaSRsyTl5Wv9W31bq1Auju6P1Xl/MJGDohgbSolWKZxz5Yc47nlxz7S4mFtDGyVwDuNWZa7XuenSzFOvmRIL51cD98vQUGqAg=
+	t=1731455015; cv=none; b=j8dbDqVdufa5P3CjkKl6Ga9m9Qj+IkALooOO/XJXEvH11PnPzQvgYhuMZuZU9Ro9oJ3mkHMCk+cAix+GlF3YQ/uQAPvFs7UDZJesgiHZzpRW93n5zMfmg7u9EhJo+TUSSm3TGpkbRftMWh/xnMXB5ZxtSCz9bUhSWfkpLoqmf08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731448385; c=relaxed/simple;
-	bh=Cpq6m42ZBOwGk09BWFODZ3n4FLE2EVPtB3Tnhvqv+7E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fFD4F0EFxFSv/78SQOSOiCdN4OE40snZdVwjzY+8M6Dv8hIs/OzVm2gBXiazAoHjf9QC+k9ZeVj5yDCKdJieQqBO04GIvVF3gIkXJQ3BuDfva+37KA+tWen5Y6vcwYzeOqNAzwshHe1nZnD9LJcjl3kitKn10e692f9xTdK3Wz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L96mEZur; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3F91C4CECD;
-	Tue, 12 Nov 2024 21:53:04 +0000 (UTC)
+	s=arc-20240116; t=1731455015; c=relaxed/simple;
+	bh=hb1Htn+5sDXBHE+CTAnltprKQkxsZPkpf1Cx8nA+0gE=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=pBulwNb+pcxRZcRXusbTpg9apV43f4tpYufQu1jncve/zhVKln6Qdz9pB8BZ1yIeFBezaTZFroQUBnz3aHDgIyJFyLUwo6cpYB3vzjlkR4hL4IxEBXULu3zO/3KZDCL91K+6Ka93wgWa/gCy2o062IHHtdOAhR+1C3Sw9HSQSL8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=URFA3fSM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60632C4CECD;
+	Tue, 12 Nov 2024 23:43:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731448385;
-	bh=Cpq6m42ZBOwGk09BWFODZ3n4FLE2EVPtB3Tnhvqv+7E=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=L96mEZurnQMIAYAhAd4kXZCMvLVCYQA/qGVdk9Us6r1OBtniUkUi1QntDPcuxWpfS
-	 gN5cOf+UQSojoMcAWMcl1wyasAgRZCETsFaR/PvuWij3+luwAZD3hbSkDSZHkvdPUx
-	 FKfbeeDopISYavdT0aLeiO6XIdcYtSZlx0xPZegSicARxzhjOI2TYApjGecgQHnMEa
-	 7f9vnHLGj5Y9+Pn2ZNL3gqy7LSj+LaJvQiDS5E8SBbnRAAtynwRsEGQYOWMamkFqcz
-	 el0GW1jBRQVdo7NUXOdCKrcZedoZdCtbKzdPqjrbynHUnX7k8d6BLyC1cDb6+qJgiq
-	 Qym4QidTn0mxw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 84E8ECE0FA5; Tue, 12 Nov 2024 13:53:04 -0800 (PST)
-Date: Tue, 12 Nov 2024 13:53:04 -0800
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: =?utf-8?B?U3rFkWtl?= Benjamin <egyszeregy@freemail.hu>,
-	parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
-	boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
-	j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
-	dlustig@nvidia.com, joel@joelfernandes.org,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	lkmm@lists.linux.dev, torvalds@linux-foundation.org
-Subject: Re: [PATCH] tools/memory-model: Fix litmus-tests's file names for
- case-insensitive filesystem.
-Message-ID: <e3a5aa0a-2c8b-4679-9344-64135df63fe1@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <8925322d-1983-4e35-82f9-d8b86d32e6a6@freemail.hu>
- <1a6342c9-e316-4c78-9a07-84f45cbebb54@paulmck-laptop>
- <ec6e297b-02fb-4f57-9fc1-47751106a7d2@freemail.hu>
- <5acaaaa0-7c17-4991-aff6-8ea293667654@paulmck-laptop>
- <a42da186-195c-40af-b4ee-0eaf6672cf2c@freemail.hu>
- <62634bbe-edd6-4973-a96a-df543f39f240@rowland.harvard.edu>
- <61075efa-8d53-455b-bba3-e88bbf4da0a5@paulmck-laptop>
- <75a5a694-1313-44b1-baff-d72559ac9039@rowland.harvard.edu>
- <de5485b8-6d88-46f6-b982-cdfb3cf80a13@paulmck-laptop>
- <25cee4ed-1115-42d4-8422-ed7f7f4ff389@rowland.harvard.edu>
+	s=k20201202; t=1731455014;
+	bh=hb1Htn+5sDXBHE+CTAnltprKQkxsZPkpf1Cx8nA+0gE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=URFA3fSMK8EIXeMZ0vESdJGmupyx9D8vAPUB2v7VtD4SV3JlPsmGkiFYDVfe0HMji
+	 dr9JJqLtxB5bvSYy06WtXI3pQmfjizEUnvtj7Ykc8X3P38HQr9HUD3ftqn/PmQMVlk
+	 aP/kjOUUuRH8Al20dwBf3TzGKszrhzLYAGnBQ0mZRZQ5vfFPCF+QBcyJGfFXOHbDLi
+	 wKv0beyyMkHH2s9Sl58ock67+jA6Ujo0pKFBULkpn0xbSu48ARN5croBQpLE4OGn6c
+	 Xj9Beedm7j8H1lBw09yxfHshaUidSi8UTNK0q3WehymSJqjEeYxZ8gMM4j9SvJNtOX
+	 vJn3V8okTmEsg==
+Date: Wed, 13 Nov 2024 08:43:25 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Florent Revest
+ <revest@chromium.org>, linux-trace-kernel@vger.kernel.org, LKML
+ <linux-kernel@vger.kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,
+ bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, Jiri Olsa
+ <jolsa@kernel.org>, Alan Maguire <alan.maguire@oracle.com>, Mark Rutland
+ <mark.rutland@arm.com>, linux-arch@vger.kernel.org, Catalin Marinas
+ <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Huacai Chen
+ <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, Paul Walmsley
+ <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
+ <aou@eecs.berkeley.edu>, Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik
+ <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, Christian
+ Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle
+ <svens@linux.ibm.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar
+ <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+ <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin"
+ <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH v18 12/17] fprobe: Add fprobe_header encoding feature
+Message-Id: <20241113084325.86ce3d6bb44e7d67f5008825@kernel.org>
+In-Reply-To: <20241112094437.59848631@gandalf.local.home>
+References: <172991731968.443985.4558065903004844780.stgit@devnote2>
+	<172991747946.443985.11014834036464028393.stgit@devnote2>
+	<20241101102212.5e9d74d9@gandalf.local.home>
+	<20241110001054.b0a5afb2d7bb1c09b4bd6b0b@kernel.org>
+	<20241112094437.59848631@gandalf.local.home>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <25cee4ed-1115-42d4-8422-ed7f7f4ff389@rowland.harvard.edu>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, Nov 12, 2024 at 03:20:00PM -0500, Alan Stern wrote:
-> On Tue, Nov 12, 2024 at 10:26:37AM -0800, Paul E. McKenney wrote:
-> > We do have a rule for the filenames in that directory that most of
-> > them follow (I am looking at *you*, "dep+plain.litmus"!).  So we have
-> > a few options:
-> > 
-> > 1.	Status quo.  (How boring!!!)
-> > 
-> > 2.	Come up with a better rule mapping the litmus-test file
-> > 	contents to the filename, and rename things to follow that rule.
-> > 	(Holy bikeshedding, Batman!)
-> > 
-> > 3.	Keep it simple and keep the current rule, but make the
-> > 	combination of spin_lock() and smp_mb__after_spinlock()
-> > 	have a greater Hamming distance from "lock".  Szőke's
-> > 	patch changed only one of the filenames containing "Lock".
-> > 	(Bikeshedding, but narrower scope.)
-> > 
-> > 4.	One of the above, but bring the litmus tests not following
-> > 	the rule into compliance.
-> > 
-> > 5.	Give up on the idea of the name reflecting the contents of the
-> > 	file, and just number them or something.  (More bikeshedding
-> > 	and a different form of confusion.)
-> > 
-> > 6.	#5, but accompanied by some tool or script that allows easy
-> > 	searching of the litmus tests by pattern of interaction.
-> > 	(Easy for *me* to say!)
-> > 
-> > 7.	Something else entirely.
-> > 
-> > Thoughts?
+On Tue, 12 Nov 2024 09:44:37 -0500
+Steven Rostedt <rostedt@goodmis.org> wrote:
+
+> On Sun, 10 Nov 2024 00:10:54 +0900
+> Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
 > 
-> Thumbs up for 3.
+> > > > +++ b/arch/x86/include/asm/fprobe.h
+> > > > @@ -0,0 +1,9 @@
+> > > > +/* SPDX-License-Identifier: GPL-2.0 */
+> > > > +#ifndef _ASM_X86_FPROBE_H
+> > > > +#define _ASM_X86_FPROBE_H
+> > > > +
+> > > > +#ifdef CONFIG_64BIT
+> > > > +#include <asm-generic/fprobe.h>
+> > > > +#endif
+> > > > +
+> > > > +#endif /* _ASM_X86_FPROBE_H */
+> > > > \ No newline at end of file  
+> > > 
+> > > Same for the above.  
+> > 
+> > OK, but x86 and riscv, we need this default template on 64bit only.
+> > So those may keep it, right?
+> 
+> Hmm, I wonder if we could just add:
+> 
+>   generic-$(CONFIG_X86_32)
+> 
+> But since I don't see that used anywhere, we may need this for archs that
+> partially have it.
 
-Very good!  Any nominations for the lucky replacement for "Lock"?
+Since this mask is not available on 32bit (since 32-4 = 28bit is 256MB,
+which is too small for kernel space), I checked CONFIG_64BIT in 
+asm-generic header in v19. So now I can use generic-y for most
+architecture.
 
-							Thanx, Paul
+Thank you,
+
+> 
+> -- Steve
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
