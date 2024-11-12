@@ -1,176 +1,195 @@
-Return-Path: <linux-arch+bounces-9032-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9033-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEB789C4FE3
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Nov 2024 08:49:37 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C09C79C525A
+	for <lists+linux-arch@lfdr.de>; Tue, 12 Nov 2024 10:47:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 14FFAB29096
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Nov 2024 07:49:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 52D6D1F228DD
+	for <lists+linux-arch@lfdr.de>; Tue, 12 Nov 2024 09:47:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3B2C20C028;
-	Tue, 12 Nov 2024 07:45:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE7CC20E33A;
+	Tue, 12 Nov 2024 09:47:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CbwDuuvz"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gn8QF6ar"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEDF320BB59;
-	Tue, 12 Nov 2024 07:45:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08D561AB535;
+	Tue, 12 Nov 2024 09:47:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731397509; cv=none; b=S8YR5awIOLR/kpwHY7AjPuTD+PSfabDUFdamKQ3SdGWjWuOqdZboXPfOM5GDDHSr/c/XXhXYLCC0rAblxR07tGf0MA3VUUipgIMV+0snU9pNUzKw07R4HLWoC0ROBwaHNiAkC6xBlE9jRpnDZ9+31DnDOKEMajOyXsXdTRnPCCA=
+	t=1731404841; cv=none; b=mkhoyV2X5CKy1G0xe8sbIdBUOe9E/XtjHjwra6n9aJoRzYHpaSZA2/a0So4QZdV5JcNia5b5dvizLVboWOed2i2oQbMTZY4bHKXGAxN1ylrwH40yUQzlzxkMfa+XX7t5HjP2YiXWx0g98uYV0UkA9N7WLV+SvAJF2ZVEF25PP3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731397509; c=relaxed/simple;
-	bh=6Co9+HFhkrAyybpuUDGbybmXfat+6GD47OYnwCaf5jw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=khCgzn1DwhJ/2/ScmIljzz4wRoLNrOFMFwwalWt2Fs9PukjqM42xIhLnB46ns9GP5H8Koj7UU1r0q3IbPNbc5o8ZG9TH/OCERduh4rrdoHVCzt3dSDRnH18U81vsoFfK5Gcb8vRjQSrWd2BQxD8IobN3foJN+xu+cIZpHf07KBo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CbwDuuvz; arc=none smtp.client-ip=209.85.167.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-539fe02c386so6067220e87.0;
-        Mon, 11 Nov 2024 23:45:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731397506; x=1732002306; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PvuH9yhCeBMlG36zLRmS+IcsMk1yHd7W71vxP6lAfWA=;
-        b=CbwDuuvzV4zy5kimXk75YgkfJQfN4NC8aZCxb1pViLSJmbuWG7koEY7PVMsoH55Fqo
-         cDumSaWy/Bh8onpRtGYGHgaM+3a3hns2A+JRPOY47Ph0dnoG/QNGbfKKjZG/l8KNloFe
-         qFzWl2WQUK+cCT3ErRTjU7fqsKS2rOnfDqVQgDg8Uansnjgti8rJzCAgkmHzuCW9HxFz
-         dqwNNn2F6pHJ/PKxDVZM9mvIcf/EyyBcbqhQG38Nn8OwC3YRPHYIan1y9ZBI9jF37ANc
-         QIJ2ci0TG3MrrCyGbC28DHoLZmZmSz2NsZpetDBggatJQIU7M15xXr1LReGQUUObwYxe
-         HUYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731397506; x=1732002306;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PvuH9yhCeBMlG36zLRmS+IcsMk1yHd7W71vxP6lAfWA=;
-        b=bHg2YLROEfmcHqF+VwIF9FvD6ZKvo1XQupNgCjf6q0wy8xSfZS/7cZXwiqNzRNff+5
-         kM0dYlxFVPZfd/i1PELG8SbwHWBoVnYTTSR+EarZXiODi/hBhcdL8bxDXQN4LZGu4ZHE
-         YGsJpIfUESEzZtGdDmcFFHyCftKTU5RnBEad9wzYlVxeRQbjrBLOj1Jw/WTjuzvKRtk1
-         +0c3pMmq8z0i1QKO2thKyOgjbrv2/+QpSPB53mRvYC1oN5tXhv0pngUkIZNbv+Viebiy
-         yq6Oubn6qhc5LNqc58/h74txmJUVCzTiDkn67YYIN2/yuEDRWpzi8aKFVla/dTVaEApF
-         YWoQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVWLnTIHkfhrzoU5in2PZqZO/GPetbQMyqyjYObu/sY08pxCwKKYMsafqPxjX0yNsc4kBhn3O42QBzU@vger.kernel.org, AJvYcCVybPZQ6UErfO4gK0phn4ZLzb9r1rxBcMtVgi4Q8Edo4WJ2f4/8d6lsT0K9KeoEhbVs6YzDGl/+mpOO@vger.kernel.org, AJvYcCW7x8MFfaRF6EFUGvgyL+0t1H6OLUA1ycmpHLusCfNIfaJULWHNlxJQAaCmqE7sJhzGKCZX0U/uIehMTw==@vger.kernel.org, AJvYcCWuSlSGniHIDQJnjTIiBW0ehQ0AY2KUl7XMOFNGqHZvHrCWkAkclpXQa5j7AcYTTdikhpK8lL//LyQsjT8y@vger.kernel.org, AJvYcCX0CsxxeeUCQ3NR0xn0Y5fhOrgccNODGaZSpzf3MyVK8OHisH2wsGkfk2eC4w9fEcfvxMipvj83v9b3@vger.kernel.org, AJvYcCXZHkqqYK+tkDN40Vzb/VXMI3Wdm8RoOtPbMWqrUygUdHXeJCXZWFMRMDsjQvAIrLgNniubLG35GNydM0nG@vger.kernel.org
-X-Gm-Message-State: AOJu0YwC+1j8Fy/EMjQ9+OFLKXd7feNnC9fYyCJ4Drm4B7SxbRnLFj1p
-	QNGq9NoXmD7Q4UoSDYus6knan4PgYUp854vw37T56ELEzN4eLihe
-X-Google-Smtp-Source: AGHT+IGMIr+lUOiAWgiLqS9sR2Hcfvkf2KB7t1d9QR2hVKbD3J5J6DiuP1/RdyjRc4cRHYP/8VQpkg==
-X-Received: by 2002:a05:6512:3e17:b0:539:ede3:827f with SMTP id 2adb3069b0e04-53d85f231c6mr5858903e87.24.1731397505707;
-        Mon, 11 Nov 2024 23:45:05 -0800 (PST)
-Received: from ?IPV6:2001:678:a5c:1202:4fb5:f16a:579c:6dcb? (soda.int.kasm.eu. [2001:678:a5c:1202:4fb5:f16a:579c:6dcb])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2ff178eec81sm19427331fa.33.2024.11.11.23.45.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Nov 2024 23:45:05 -0800 (PST)
-Message-ID: <70772ce5-9dca-418e-9714-80ba4ae28959@gmail.com>
-Date: Tue, 12 Nov 2024 08:45:01 +0100
+	s=arc-20240116; t=1731404841; c=relaxed/simple;
+	bh=RgQLgKteT7/0JHP5evKwF5/pwbWHfdTs6vICOeDbino=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iPtJklZcw5wTR1yIKtzXgbpG5xLM8HWE3yxSH8AIZdjanRT38ygcXWHMt9LP0eGhlfxzZbUMYser6UkXBQiOEvwxqaBE5Sz0h0l0bd9PhlOzb9Pxm/BZXlbAIgsx9C+gAxtQLfdo1eBUEffQO2eP5r5uRx1X2fsf8n/pFwvp6V4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gn8QF6ar; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1731404840; x=1762940840;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RgQLgKteT7/0JHP5evKwF5/pwbWHfdTs6vICOeDbino=;
+  b=gn8QF6arubF+BTDFCkP+Ny3pOomr4NTy3C/k9nEeQ23O45v+IXlosz/K
+   0uTiu9gJeG0wNmT5+3fE1dB+KzsN/1fHIfv3L8pMGIwJj8OYw1ZKbj5/b
+   QuCXfg+DXPgwvUg1TVtImu6uWXQZHkNk1n89HB85ZjexgfN1WueQY2VAN
+   d9zXa6yja+aWzy/gtulInWPAcevs2qbnuAgWXbMPoXkKvrWFWk73bFcpE
+   9dTsW627MQM7s0XUwQdf4UdUoptPrC9H+z99J1JyWDm1FagegnM6hAD3Q
+   vHoJ0A2VVtYKSYVCkaBf8/mkglrbSv1Ebew/lb/dj9lQGHaHp8p++2zwk
+   A==;
+X-CSE-ConnectionGUID: UzQRFlTZRWOEbCAhaewW8g==
+X-CSE-MsgGUID: jpKLXKdqRMmnt9n2twKpwQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="31383943"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="31383943"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2024 01:47:19 -0800
+X-CSE-ConnectionGUID: cjOcukJIT+iEm5UhVBFeeA==
+X-CSE-MsgGUID: iQePexooTqeMVx3w9gipNw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,147,1728975600"; 
+   d="scan'208";a="92318207"
+Received: from lkp-server01.sh.intel.com (HELO bcfed0da017c) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 12 Nov 2024 01:47:12 -0800
+Received: from kbuild by bcfed0da017c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tAnUL-0000gd-0p;
+	Tue, 12 Nov 2024 09:47:09 +0000
+Date: Tue, 12 Nov 2024 17:47:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Deepak Gupta <debug@rivosinc.com>, Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Christian Brauner <brauner@kernel.org>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-arch@vger.kernel.org
+Subject: Re: [PATCH v8 12/29] riscv/shstk: If needed allocate a new shadow
+ stack on clone
+Message-ID: <202411121717.INT1geTN-lkp@intel.com>
+References: <20241111-v5_user_cfi_series-v8-12-dce14aa30207@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 3/7] Adjust symbol ordering in text output section
-To: Rong Xu <xur@google.com>
-Cc: Alice Ryhl <aliceryhl@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>,
- Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>,
- Breno Leitao <leitao@debian.org>, Brian Gerst <brgerst@gmail.com>,
- Dave Hansen <dave.hansen@linux.intel.com>, David Li <davidxl@google.com>,
- Han Shen <shenhan@google.com>, Heiko Carstens <hca@linux.ibm.com>,
- "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
- Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
- Josh Poimboeuf <jpoimboe@kernel.org>, Juergen Gross <jgross@suse.com>,
- Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
- Masahiro Yamada <masahiroy@kernel.org>, "Mike Rapoport (IBM)"
- <rppt@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>,
- Nicolas Schier <nicolas@fjasle.eu>, "Paul E. McKenney" <paulmck@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>,
- Sami Tolvanen <samitolvanen@google.com>, Thomas Gleixner
- <tglx@linutronix.de>, Wei Yang <richard.weiyang@gmail.com>,
- workflows@vger.kernel.org, Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
- Maksim Panchenko <max4bolt@gmail.com>, "David S. Miller"
- <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>,
- Yonghong Song <yonghong.song@linux.dev>, Yabin Cui <yabinc@google.com>,
- Krzysztof Pszeniczny <kpszeniczny@google.com>,
- Sriraman Tallam <tmsriram@google.com>, Stephane Eranian
- <eranian@google.com>, x86@kernel.org, linux-arch@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20241026051410.2819338-1-xur@google.com>
- <20241026051410.2819338-4-xur@google.com>
- <44193ca7-9d31-4b58-99cc-3300a6ad5289@gmail.com>
- <CAF1bQ=ShjoEQZGPjDoy_B6wZdD_jr-RevVXwEDPA_-o-Ba0Omg@mail.gmail.com>
- <e7cd2746-0ad8-452f-aa12-e3a37e8a9288@gmail.com>
- <CAF1bQ=SYeeKLUTfbqw-KH1rHJCj_CfJBuk+mZUrnnb7aDjRV2A@mail.gmail.com>
- <CAF1bQ=R18HLC2vjCGj+M=VYidrVzz3RT=U8cckXgpgrxc0kG0Q@mail.gmail.com>
-Content-Language: en-US, sv-SE
-From: Klara Modin <klarasmodin@gmail.com>
-In-Reply-To: <CAF1bQ=R18HLC2vjCGj+M=VYidrVzz3RT=U8cckXgpgrxc0kG0Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241111-v5_user_cfi_series-v8-12-dce14aa30207@rivosinc.com>
 
-On 2024-11-12 06:38, Rong Xu wrote:
-> I compared the System.map files from Klara Modin. The linker script is
-> doing what I expected: relocating the unlikely executed functions to the
-> beginning of the .text section.
-> 
-> However, the problem is with the _stext symbol. It belongs to the
-> .text section, so
-> it is positioned after the unlikely (or hot) functions. But it really
-> needs to be
-> the start of the text section.
-> 
-> I checked all vmlinux.lds.S in arch/, I found that most archs
-> explicitly assign _stext to the same address as _text, with the
-> following 3 exceptions:
->    arch/sh/kernel/vmlinux.lds.S
->    arch/mips/kernel/vmlinux.lds.S
->    arch/sparc/kernel/vmlinux.lds.S
-> 
-> Note that we already partially handled arch/sparc/kernel/vmlinux.lds.S
-> for sparc64.
-> But we need to handle sparc32 also.
-> 
-> Additionally, the boot/compressed/vmlinux.lds.S also the TEXT_TEXT
-> template. However,
-> I presume these files do not generate the .text.unlikely. or
-> .text.hot.* sections.
-> 
-> I sent the following patch to Klara because I don't have an
-> environment to build and test.
-> ====================
-> diff --git a/arch/mips/kernel/vmlinux.lds.S b/arch/mips/kernel/vmlinux.lds.S
-> index 9ff55cb80a64..5f130af44247 100644
-> --- a/arch/mips/kernel/vmlinux.lds.S
-> +++ b/arch/mips/kernel/vmlinux.lds.S
-> @@ -61,6 +61,7 @@ SECTIONS
->          /* read-only */
->          _text = .;      /* Text and read-only data */
->          .text : {
-> +               _stext = .;
->                  TEXT_TEXT
->                  SCHED_TEXT
->                  LOCK_TEXT
-> ======================
-> 
-> If Klara confirms the fix, I will send the patch for review.
-> 
-> Thanks,
-> 
-> -Rong
-> 
+Hi Deepak,
 
-This does indeed fix the issue for me.
+kernel test robot noticed the following build warnings:
 
-Thanks,
-Tested-by: Klara Modin <klarasmodin@gmail.com>
+[auto build test WARNING on 64f7b77f0bd9271861ed9e410e9856b6b0b21c48]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Deepak-Gupta/mm-Introduce-ARCH_HAS_USER_SHADOW_STACK/20241112-050530
+base:   64f7b77f0bd9271861ed9e410e9856b6b0b21c48
+patch link:    https://lore.kernel.org/r/20241111-v5_user_cfi_series-v8-12-dce14aa30207%40rivosinc.com
+patch subject: [PATCH v8 12/29] riscv/shstk: If needed allocate a new shadow stack on clone
+config: riscv-defconfig (https://download.01.org/0day-ci/archive/20241112/202411121717.INT1geTN-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241112/202411121717.INT1geTN-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411121717.INT1geTN-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from arch/riscv/kernel/process.c:17:
+   In file included from include/linux/ptrace.h:10:
+   In file included from include/linux/pid_namespace.h:7:
+   In file included from include/linux/mm.h:2213:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> arch/riscv/kernel/process.c:245:36: warning: expression result unused [-Wunused-value]
+     245 |                 ssp ? set_active_shstk(p, ssp) : 0;
+         |                                                  ^
+   2 warnings generated.
+
+
+vim +245 arch/riscv/kernel/process.c
+
+   209	
+   210	int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
+   211	{
+   212		unsigned long clone_flags = args->flags;
+   213		unsigned long usp = args->stack;
+   214		unsigned long tls = args->tls;
+   215		unsigned long ssp = 0;
+   216		struct pt_regs *childregs = task_pt_regs(p);
+   217	
+   218		/* Ensure all threads in this mm have the same pointer masking mode. */
+   219		if (IS_ENABLED(CONFIG_RISCV_ISA_SUPM) && p->mm && (clone_flags & CLONE_VM))
+   220			set_bit(MM_CONTEXT_LOCK_PMLEN, &p->mm->context.flags);
+   221	
+   222		memset(&p->thread.s, 0, sizeof(p->thread.s));
+   223	
+   224		/* p->thread holds context to be restored by __switch_to() */
+   225		if (unlikely(args->fn)) {
+   226			/* Kernel thread */
+   227			memset(childregs, 0, sizeof(struct pt_regs));
+   228			/* Supervisor/Machine, irqs on: */
+   229			childregs->status = SR_PP | SR_PIE;
+   230	
+   231			p->thread.s[0] = (unsigned long)args->fn;
+   232			p->thread.s[1] = (unsigned long)args->fn_arg;
+   233		} else {
+   234			/* allocate new shadow stack if needed. In case of CLONE_VM we have to */
+   235			ssp = shstk_alloc_thread_stack(p, args);
+   236			if (IS_ERR_VALUE(ssp))
+   237				return PTR_ERR((void *)ssp);
+   238	
+   239			*childregs = *(current_pt_regs());
+   240			/* Turn off status.VS */
+   241			riscv_v_vstate_off(childregs);
+   242			if (usp) /* User fork */
+   243				childregs->sp = usp;
+   244			/* if needed, set new ssp */
+ > 245			ssp ? set_active_shstk(p, ssp) : 0;
+   246			if (clone_flags & CLONE_SETTLS)
+   247				childregs->tp = tls;
+   248			childregs->a0 = 0; /* Return value of fork() */
+   249			p->thread.s[0] = 0;
+   250		}
+   251		p->thread.riscv_v_flags = 0;
+   252		if (has_vector())
+   253			riscv_v_thread_alloc(p);
+   254		p->thread.ra = (unsigned long)ret_from_fork;
+   255		p->thread.sp = (unsigned long)childregs; /* kernel sp */
+   256		return 0;
+   257	}
+   258	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
