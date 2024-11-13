@@ -1,102 +1,79 @@
-Return-Path: <linux-arch+bounces-9074-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9075-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDD1A9C7995
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Nov 2024 18:06:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 996259C79C9
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Nov 2024 18:19:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 749E01F21DDB
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Nov 2024 17:06:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5107D1F24E51
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Nov 2024 17:19:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A60D1FF7C4;
-	Wed, 13 Nov 2024 17:06:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2758202655;
+	Wed, 13 Nov 2024 17:19:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="aVXR1PMv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CQEYWRlu"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B56CA13D2B2
-	for <linux-arch@vger.kernel.org>; Wed, 13 Nov 2024 17:06:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74AD4202647;
+	Wed, 13 Nov 2024 17:19:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731517579; cv=none; b=bi+dIkpvnYTmZHWcDGSlEQnSZfh2HjbLfzrW9/Nsg23QWZsgggPSCp6oHNtQ0TPg7dkGMo3pUYJefMK/bWIa9g7od+4+aEqgBINR9IM/jryDIlC37uuai3SqAnUxtsuFLS9/1yTu6L1fhKxJNOEM1cA58cJ/edvd3w0PlI/7sdY=
+	t=1731518345; cv=none; b=hO4aSDtAMBvbpPMsa0ymS74HiXxtcjfLlLKDPA/w/3dlbAaldIPwiL5Q6+kMTtszAf6KNlLnqDtXMWyWzFF1WUdEOqhv94SbMBeKR6ZtECAm3PdYwDbRSuMh9ibNId/ZaZiFO1iYMeRdBFbjDm7DHgXnbGhtWfwT/uT2SWSH3tQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731517579; c=relaxed/simple;
-	bh=U9mSmdvebpc7SIfdO7D2vMyeVPrF3HfFMdaTvCTXFnA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=btaE740edLZUlKwuhK+PeYU/xGmZMFgex2lkjoSlFE9CU7o9AEoHWy9wMPtvqLcgvQPI5msuSBUnH+DvH+kK42NoW9+JfUH93c74d/WrrBtyWQCM6Io3cK+TGK4cA9swK/KFXb383AAyx8hjw9WTGhMCCIpl4wxIkD1z6jbDZhs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=aVXR1PMv; arc=none smtp.client-ip=209.85.128.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-6e5cec98cceso56840447b3.2
-        for <linux-arch@vger.kernel.org>; Wed, 13 Nov 2024 09:06:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1731517577; x=1732122377; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=O7HNwvxjs7/kFqm+0Upt4VZLTejUABVboco4/4FyZBQ=;
-        b=aVXR1PMvD8u0N/v5WwmtBrctnrDp5NkJvJ8B/kv7Lh+adIUE/fZ6FfGUjyqbgNw9KO
-         36zZzwzrVG+hzunJiycvbqw0/F7YH0ivss9xJ21PUq8Hxk19ZNDYSZNNSb03nBOYzLNJ
-         wP6xuGv1YlIPmkGqCTU/2Lk6oAt2g8kY4HsCM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731517577; x=1732122377;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=O7HNwvxjs7/kFqm+0Upt4VZLTejUABVboco4/4FyZBQ=;
-        b=Wfj+JMc5hbZFmNaAIR+spJFCPj2VGDzwg/QEbIEZYGSwknK7PpNIQRxcDv0cQpNWHm
-         72cbR9AiGxJXKmMtXu++slfiO/sTbGQc4gvgk+Q6EL90GvTbnR4oEY6ANll6PW40h2zi
-         JeA80gHzUYPngxAGgzfFCAOiv4Ry/ZfAhCFNQoSONDfluMJJI7EHzq6w91abBB7TPiUa
-         GrENeYFuXTE4heGHQmMv+DNkQTWNGIkX6bwUgSt4ehvUOqLv9ScX6ULtmmuEac25Hlz9
-         knst2slE9zhQv6SZllvpYW58sFeRjUL77R95+QLI4Z0F4gvsWLIC3ktLfA7FnrH6LLtF
-         Co0g==
-X-Forwarded-Encrypted: i=1; AJvYcCVAg0UDLmJ1GTX1PqiJGWuIbZ/J1by+k3AROq6fDFBkkSGgJzbswruXORgWmq2ywXW4MQvZZRgQUR8/@vger.kernel.org
-X-Gm-Message-State: AOJu0YykqUC9IOTban85HLlcjkPz1WJ2RqmJZHHIV8LrI79FWv4iKxJc
-	/WFDRWEuJZAqMuN+E/8x7uL28kfsZi9RtrIvuAPW819F2n8p1BTNNb+BlnzJpJYNBnuzLuLInej
-	pn4VXBFqZZlCaajYGyOFHeCM3oa+ETtm4KVewWT38lo1eeRUPrI8GNw==
-X-Google-Smtp-Source: AGHT+IG3duG8a1UDQht/mWeuhARKmr++5c3TJaN8LKjjGCuT1HlbkFbDsA3tyK+oqirwuGtWZGK1XLeNQvJ3rvg3ziw=
-X-Received: by 2002:a05:690c:6d0a:b0:6ea:8bd9:6b2f with SMTP id
- 00721157ae682-6ecb32af35fmr39075867b3.4.1731517576775; Wed, 13 Nov 2024
- 09:06:16 -0800 (PST)
+	s=arc-20240116; t=1731518345; c=relaxed/simple;
+	bh=Yms/Ur63xAavBrcDddpPwMUsz8LqhH0YS5gil59YL2U=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=Kohe0Cy8+noTR1wPPQimmChAXiemJZKMNgA0TVFXisj6ZeTWRsepEzg/+g9bISC5qC3jtv49HyeDjIK/imzrp1N5GPRuMtAZrlNh98T///B9LFEVebTkkZ3AeasqsHfRifCvVVyjvs5eiSqjlp4JEikwWiqw8hL77IK+Hhruhb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CQEYWRlu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15667C4CEF1;
+	Wed, 13 Nov 2024 17:19:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731518345;
+	bh=Yms/Ur63xAavBrcDddpPwMUsz8LqhH0YS5gil59YL2U=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=CQEYWRlurtGVSy0yZSOIQsixC32jXKt+UvGr7fPkLHZZeC1/f87BMqmhDZLKy52zT
+	 q4Kn/7xTp/70OugzMaQaOzS1mvDeNZ6u7MV7eBeeAMWjsOREBXUvCru5LRX72h1bnk
+	 q+9Rc45iTqiFhoMv4wJUih6XWtpICyzP31x+prRa9BjxZILerpCffMtlHfETWqbzW1
+	 UnKXBY9lzQ69upVBlH/jbxuD556mfgHQpiKKrNr8mQxktobilw9pbu7K4eh7s32dE5
+	 vpppPRug13mKgTPi4l3NAkl2mIdN1ukUFJDRIhp2ttSWVxc5XZFlOoimdSKh5ozqYI
+	 kyVbTrxyVZrmg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70C583809A80;
+	Wed, 13 Nov 2024 17:19:16 +0000 (UTC)
+Subject: Re: [GIT PULL] LoongArch fixes for v6.12-final
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <20241113124857.1959435-1-chenhuacai@loongson.cn>
+References: <20241113124857.1959435-1-chenhuacai@loongson.cn>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20241113124857.1959435-1-chenhuacai@loongson.cn>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-fixes-6.12-2
+X-PR-Tracked-Commit-Id: 6ce031e5d6f475d476bab55ab7d8ea168fedc4c1
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: c5f404511890d75c90e4ec06c54f06bd397d96f5
+Message-Id: <173151835529.1293865.8549829368830012392.pr-tracker-bot@kernel.org>
+Date: Wed, 13 Nov 2024 17:19:15 +0000
+To: Huacai Chen <chenhuacai@loongson.cn>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev, linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>, Jiaxun Yang <jiaxun.yang@flygoat.com>, Huacai Chen <chenhuacai@loongson.cn>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20241113124857.1959435-1-chenhuacai@loongson.cn>
-In-Reply-To: <20241113124857.1959435-1-chenhuacai@loongson.cn>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Wed, 13 Nov 2024 09:06:06 -0800
-Message-ID: <CAADWXX9-LY7aaMax6KdtDV+vOkm_WKE76Qmy4n3UHN61O=-2Lg@mail.gmail.com>
-Subject: Re: [GIT PULL] LoongArch fixes for v6.12-final
-To: Huacai Chen <chenhuacai@loongson.cn>
-Cc: Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev, 
-	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>, 
-	Jiaxun Yang <jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 13, 2024 at 4:49=E2=80=AFAM Huacai Chen <chenhuacai@loongson.cn=
-> wrote:
->
-> LoongArch fixes for v6.12-final
+The pull request you sent on Wed, 13 Nov 2024 20:48:57 +0800:
 
-Hmm. This email was in my spam folder. I'm not seeing anything
-horribly wrong with it, but I do note that loongson.cn does not seem
-to enable DKIM, and that does tend to make gmail (understandably) more
-nervous. Yes, you do have proper SPF, but in this day and age SPF+DKIM
-(and a proper DMARC policy to enable strict enforcement) really is a
-good idea.
+> git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-fixes-6.12-2
 
-Maybe you can talk to your MIS people about setting up DKIM and DMARC too?
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/c5f404511890d75c90e4ec06c54f06bd397d96f5
 
-Yes, it's a bother. But spam is a scourge.
+Thank you!
 
-                      Linus
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
