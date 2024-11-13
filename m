@@ -1,174 +1,198 @@
-Return-Path: <linux-arch+bounces-9047-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9048-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A24EC9C662B
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Nov 2024 01:42:25 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E115E9C676F
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Nov 2024 03:46:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 52FEC1F24DC8
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Nov 2024 00:42:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B4F41B239ED
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Nov 2024 02:46:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27ABAAD2F;
-	Wed, 13 Nov 2024 00:42:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B63E481C4;
+	Wed, 13 Nov 2024 02:46:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FBy8e21p"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h7MspyFC"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC56AAD24;
-	Wed, 13 Nov 2024 00:42:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E01517C
+	for <linux-arch@vger.kernel.org>; Wed, 13 Nov 2024 02:46:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731458540; cv=none; b=R5LaeoporgIH/7kPVeCh2+T/iqNT7ZmOYzSd3cvDV/HWRFDgD97f5JAuMCRAOK65Qx7gUVy9sRLJmtdaVeWvdiJprtkEG5ZwnLZmX2Rhw70Rk90tS+ZXBU1k9CLF7BTBwnDTpMZo31QuQKc2WJXRBIWbaXx+2l1u03JUR4EbkZs=
+	t=1731465975; cv=none; b=ucVlZWJ0Lqetmzo788+7+zjiabpRDUF6b8/42w6F3su85F+hG7tb3ezEFZ2U8mSGbTKlCaRldAImt0tjQkV18d/hSdg/hw1g0Xa9pTIW+rg/fC96Dba5OVfnWB1A1GYKJQegZaMyK8BWlOmc7RfphPcjzLfvkj8ERw5T/unchug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731458540; c=relaxed/simple;
-	bh=UtTCpRAQSW0k/5mHxhY2EZqFTnQ1dV5Qa9iPw8SEhkw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=uE1LB8DMOUH3FZymtsbiiiBs04+aFsUoY/ZcWBlY5M5n6KzoPUBXe1YWElqTR9UWIC61ysav3OLEZD9WpYmao9I29ehWPpNHvTtzeLZRDhn28P4RG+psRaEkEQZ8INXS8hU49wMMzYMRhU4/V00ZvIZ7YH7/9TJEoIhcjCcvg1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FBy8e21p; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26EBDC4CED4;
-	Wed, 13 Nov 2024 00:42:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731458538;
-	bh=UtTCpRAQSW0k/5mHxhY2EZqFTnQ1dV5Qa9iPw8SEhkw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=FBy8e21pLgOBkxC/k6fXB6T29dQkKz1xcv0GZ8z6MW3RKUqpDF/nQnL1a2AAIWwhc
-	 8HOdZYUfUhaTlfku4YK9SKbKuTR8O3RVvsRVGbw6Gh9y9Q3Nmy6UyHdlIc6amWoVPv
-	 EKDqSRH1LqFGtXm3aVNlBlS7JuTiOdtKQXKotd4SuH6IPC7u4VzOjZzRewdn5PsiT0
-	 yLJLbD2Q907tgWHB8d19iY91xQNxyDo8+fv8aQ/u9O7kdfQ2Yg+6mwZxgz7OkHFISq
-	 qfv3KOCQR+UCbu5YmY2lw6r11ipIXs25yS5O1aGLCoHFpIAsVz24NOZDPifM/YB3UY
-	 ZhvLuvBroh+Tg==
-From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Florent Revest <revest@chromium.org>
-Cc: linux-trace-kernel@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	bpf <bpf@vger.kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Alan Maguire <alan.maguire@oracle.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	linux-arch@vger.kernel.org
-Subject: [PATCH 19.1] Documentation: probes: Update fprobe on function-graph tracer
-Date: Wed, 13 Nov 2024 09:42:13 +0900
-Message-ID: <173145853330.190048.8075164639336145964.stgit@devnote2>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <173125393047.172790.8427492388173333634.stgit@devnote2>
-References: <173125393047.172790.8427492388173333634.stgit@devnote2>
-User-Agent: StGit/0.19
+	s=arc-20240116; t=1731465975; c=relaxed/simple;
+	bh=QlSY8hSjpQwelxlD0tuClM/F9Xa+ewfX+ZEWeIoSjFE=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=JgQ6bOxP0Jul3G6F2+IEHdxShvACV1l4ylSzFd/jQz3lhWSFICyWSFKToRKN1EOHGjj3YfZ0+kcHu4UY15x9hj4wCXXx4GIo6/PlIUXJBRBSWn3KS8A1g8FoJwM/wb82ya9sIz1u+5lf8RnEiVAZpzYLlvLeu8z+ozdbmS7qeYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h7MspyFC; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1731465974; x=1763001974;
+  h=date:from:to:cc:subject:message-id;
+  bh=QlSY8hSjpQwelxlD0tuClM/F9Xa+ewfX+ZEWeIoSjFE=;
+  b=h7MspyFC5dBGQymyjgQw/wQWm4rvYG5EoUjLhRCUiOoO24yujuXX5asO
+   hAVgEyt7WHZSwvTw32/I14pqsQr4KOQGoCq9t3CgQcBv7ez77zkSS/FDu
+   4gPfxYmTJbFRIQ7l2bIBwZcK8ElnoFC4isfwsDwYes7pgOOe1fI0KOukR
+   oAlp2EyRUDxbcX/CL3qq7Iyo6zad+bl0dXHo2KUmn07rgASGBRZ7ZhWSR
+   NGk3QUa7UtILu8aHYsS/oP70KFNhvbvBYNGGnnqHDr/nknWwSEMg2o9Sy
+   SAo2o3LkTOso+XYPvMcbjF2tdwfYr0Sy3Tp8UO8Yr2GuVZocLxtGDCMyR
+   w==;
+X-CSE-ConnectionGUID: csJjMwVvQ/2CnzE1jc/qow==
+X-CSE-MsgGUID: cwSNy97RTfm1PrNkBS0BkA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11254"; a="41961044"
+X-IronPort-AV: E=Sophos;i="6.12,149,1728975600"; 
+   d="scan'208";a="41961044"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2024 18:46:13 -0800
+X-CSE-ConnectionGUID: ABfuwlzxR8mKFXcXcdicdA==
+X-CSE-MsgGUID: 67WEDwBVQF22b7rXACMbhQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,149,1728975600"; 
+   d="scan'208";a="125243391"
+Received: from lkp-server01.sh.intel.com (HELO bcfed0da017c) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 12 Nov 2024 18:46:12 -0800
+Received: from kbuild by bcfed0da017c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tB3OT-0001xB-1U;
+	Wed, 13 Nov 2024 02:46:09 +0000
+Date: Wed, 13 Nov 2024 10:45:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-arch@vger.kernel.org
+Subject: [arnd-asm-generic:asm-generic] BUILD SUCCESS
+ 0af8e32343f8d0db31f593464fc140eaef25a281
+Message-ID: <202411131020.y0bfWPOs-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic
+branch HEAD: 0af8e32343f8d0db31f593464fc140eaef25a281  empty include/asm-generic/vga.h
 
-Update fprobe documentation for the new fprobe on function-graph
-tracer. This includes some bahvior changes and pt_regs to
-ftrace_regs interface change.
+elapsed time: 725m
 
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
----
- Changes in v19.1:
-  - Fix typo
-  - function-graph tracer -> function graph tracing feature in ftrace.
- Changes in v2:
-  - Update @fregs parameter explanation.
----
- Documentation/trace/fprobe.rst |   42 ++++++++++++++++++++++++++--------------
- 1 file changed, 27 insertions(+), 15 deletions(-)
+configs tested: 105
+configs skipped: 2
 
-diff --git a/Documentation/trace/fprobe.rst b/Documentation/trace/fprobe.rst
-index 196f52386aaa..71cd40472d36 100644
---- a/Documentation/trace/fprobe.rst
-+++ b/Documentation/trace/fprobe.rst
-@@ -9,9 +9,10 @@ Fprobe - Function entry/exit probe
- Introduction
- ============
- 
--Fprobe is a function entry/exit probe mechanism based on ftrace.
--Instead of using ftrace full feature, if you only want to attach callbacks
--on function entry and exit, similar to the kprobes and kretprobes, you can
-+Fprobe is a function entry/exit probe based on the function-graph tracing
-+feature in ftrace.
-+Instead of tracing all functions, if you want to attach callbacks on specific
-+function entry and exit, similar to the kprobes and kretprobes, you can
- use fprobe. Compared with kprobes and kretprobes, fprobe gives faster
- instrumentation for multiple functions with single handler. This document
- describes how to use fprobe.
-@@ -91,12 +92,14 @@ The prototype of the entry/exit callback function are as follows:
- 
- .. code-block:: c
- 
-- int entry_callback(struct fprobe *fp, unsigned long entry_ip, unsigned long ret_ip, struct pt_regs *regs, void *entry_data);
-+ int entry_callback(struct fprobe *fp, unsigned long entry_ip, unsigned long ret_ip, struct ftrace_regs *fregs, void *entry_data);
- 
-- void exit_callback(struct fprobe *fp, unsigned long entry_ip, unsigned long ret_ip, struct pt_regs *regs, void *entry_data);
-+ void exit_callback(struct fprobe *fp, unsigned long entry_ip, unsigned long ret_ip, struct ftrace_regs *fregs, void *entry_data);
- 
--Note that the @entry_ip is saved at function entry and passed to exit handler.
--If the entry callback function returns !0, the corresponding exit callback will be cancelled.
-+Note that the @entry_ip is saved at function entry and passed to exit
-+handler.
-+If the entry callback function returns !0, the corresponding exit callback
-+will be cancelled.
- 
- @fp
-         This is the address of `fprobe` data structure related to this handler.
-@@ -112,12 +115,10 @@ If the entry callback function returns !0, the corresponding exit callback will
-         This is the return address that the traced function will return to,
-         somewhere in the caller. This can be used at both entry and exit.
- 
--@regs
--        This is the `pt_regs` data structure at the entry and exit. Note that
--        the instruction pointer of @regs may be different from the @entry_ip
--        in the entry_handler. If you need traced instruction pointer, you need
--        to use @entry_ip. On the other hand, in the exit_handler, the instruction
--        pointer of @regs is set to the current return address.
-+@fregs
-+        This is the `ftrace_regs` data structure at the entry and exit. This
-+        includes the function parameters, or the return values. So user can
-+        access thos values via appropriate `ftrace_regs_*` APIs.
- 
- @entry_data
-         This is a local storage to share the data between entry and exit handlers.
-@@ -125,6 +126,17 @@ If the entry callback function returns !0, the corresponding exit callback will
-         and `entry_data_size` field when registering the fprobe, the storage is
-         allocated and passed to both `entry_handler` and `exit_handler`.
- 
-+Entry data size and exit handlers on the same function
-+======================================================
-+
-+Since the entry data is passed via per-task stack and it has limited size,
-+the entry data size per probe is limited to `15 * sizeof(long)`. You also need
-+to take care that the different fprobes are probing on the same function, this
-+limit becomes smaller. The entry data size is aligned to `sizeof(long)` and
-+each fprobe which has exit handler uses a `sizeof(long)` space on the stack,
-+you should keep the number of fprobes on the same function as small as
-+possible.
-+
- Share the callbacks with kprobes
- ================================
- 
-@@ -165,8 +177,8 @@ This counter counts up when;
-  - fprobe fails to take ftrace_recursion lock. This usually means that a function
-    which is traced by other ftrace users is called from the entry_handler.
- 
-- - fprobe fails to setup the function exit because of the shortage of rethook
--   (the shadow stack for hooking the function return.)
-+ - fprobe fails to setup the function exit because of failing to allocate the
-+   data buffer from the per-task shadow stack.
- 
- The `fprobe::nmissed` field counts up in both cases. Therefore, the former
- skips both of entry and exit callback and the latter skips the exit
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
+tested configs:
+alpha                       allnoconfig    gcc-14.2.0
+alpha                      allyesconfig    clang-20
+alpha                      allyesconfig    gcc-14.2.0
+arc                        allmodconfig    clang-20
+arc                         allnoconfig    gcc-14.2.0
+arc                        allyesconfig    clang-20
+arc                      hsdk_defconfig    gcc-14.2.0
+arm                        allmodconfig    clang-20
+arm                         allnoconfig    gcc-14.2.0
+arm                        allyesconfig    clang-20
+arm                   at91_dt_defconfig    clang-20
+arm               davinci_all_defconfig    gcc-14.2.0
+arm                integrator_defconfig    clang-20
+arm                  keystone_defconfig    gcc-14.2.0
+arm                  mvebu_v5_defconfig    gcc-14.2.0
+arm                 netwinder_defconfig    clang-20
+arm                      qcom_defconfig    clang-20
+arm                  shmobile_defconfig    gcc-14.2.0
+arm64                      alldefconfig    gcc-14.2.0
+arm64                      allmodconfig    clang-20
+arm64                       allnoconfig    gcc-14.2.0
+arm64                         defconfig    clang-20
+csky                        allnoconfig    gcc-14.2.0
+hexagon                    allmodconfig    clang-20
+hexagon                     allnoconfig    gcc-14.2.0
+hexagon                    allyesconfig    clang-20
+i386                       allmodconfig    clang-19
+i386                        allnoconfig    clang-19
+i386                       allyesconfig    clang-19
+i386                          defconfig    clang-19
+loongarch                  allmodconfig    gcc-14.2.0
+loongarch                   allnoconfig    gcc-14.2.0
+m68k                       allmodconfig    gcc-14.2.0
+m68k                        allnoconfig    gcc-14.2.0
+m68k                       allyesconfig    gcc-14.2.0
+m68k                 m5249evb_defconfig    gcc-14.2.0
+m68k                 m5475evb_defconfig    clang-20
+microblaze                 allmodconfig    gcc-14.2.0
+microblaze                  allnoconfig    gcc-14.2.0
+microblaze                 allyesconfig    gcc-14.2.0
+mips                        allnoconfig    gcc-14.2.0
+mips                  qi_lb60_defconfig    gcc-14.2.0
+mips                     xway_defconfig    clang-20
+nios2                       allnoconfig    gcc-14.2.0
+openrisc                    allnoconfig    clang-20
+openrisc                   allyesconfig    gcc-14.2.0
+openrisc                      defconfig    gcc-12
+parisc                     allmodconfig    gcc-14.2.0
+parisc                      allnoconfig    clang-20
+parisc                     allyesconfig    gcc-14.2.0
+parisc                        defconfig    gcc-12
+powerpc              adder875_defconfig    clang-20
+powerpc                    allmodconfig    gcc-14.2.0
+powerpc                     allnoconfig    clang-20
+powerpc                    allyesconfig    gcc-14.2.0
+powerpc                  cell_defconfig    clang-20
+powerpc           linkstation_defconfig    gcc-14.2.0
+powerpc               mpc512x_defconfig    gcc-14.2.0
+powerpc               mpc5200_defconfig    clang-20
+powerpc           mpc836x_rdk_defconfig    clang-20
+powerpc            mpc866_ads_defconfig    clang-20
+powerpc                pcm030_defconfig    clang-20
+powerpc               ppa8548_defconfig    gcc-14.2.0
+powerpc               sequoia_defconfig    gcc-14.2.0
+powerpc               tqm8555_defconfig    gcc-14.2.0
+riscv                      allmodconfig    gcc-14.2.0
+riscv                       allnoconfig    clang-20
+riscv                      allyesconfig    gcc-14.2.0
+riscv                         defconfig    gcc-12
+s390                       allmodconfig    clang-20
+s390                       allmodconfig    gcc-14.2.0
+s390                        allnoconfig    clang-20
+s390                       allyesconfig    gcc-14.2.0
+s390                          defconfig    gcc-12
+sh                         allmodconfig    gcc-14.2.0
+sh                          allnoconfig    gcc-14.2.0
+sh                         allyesconfig    gcc-14.2.0
+sh                   apsh4a3a_defconfig    gcc-14.2.0
+sh                            defconfig    gcc-12
+sh          ecovec24-romimage_defconfig    clang-20
+sh             secureedge5410_defconfig    clang-20
+sh               sh7710voipgw_defconfig    gcc-14.2.0
+sh             sh7724_generic_defconfig    clang-20
+sh                       shx3_defconfig    clang-20
+sparc                      allmodconfig    gcc-14.2.0
+sparc64                       defconfig    gcc-12
+um                         allmodconfig    clang-20
+um                          allnoconfig    clang-20
+um                         allyesconfig    clang-20
+um                         allyesconfig    gcc-12
+um                            defconfig    gcc-12
+um                       i386_defconfig    gcc-12
+um                     x86_64_defconfig    gcc-12
+x86_64                      allnoconfig    clang-19
+x86_64                     allyesconfig    clang-19
+x86_64                        defconfig    clang-19
+x86_64                            kexec    clang-19
+x86_64                            kexec    gcc-12
+x86_64                         rhel-8.3    gcc-12
+x86_64                     rhel-8.3-bpf    clang-19
+x86_64              rhel-8.3-kselftests    gcc-12
+x86_64                   rhel-8.3-kunit    clang-19
+x86_64                     rhel-8.3-ltp    clang-19
+x86_64                    rhel-8.3-rust    clang-19
+xtensa                      allnoconfig    gcc-14.2.0
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
