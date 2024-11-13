@@ -1,685 +1,193 @@
-Return-Path: <linux-arch+bounces-9049-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9050-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D5299C67AA
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Nov 2024 04:16:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4891D9C6E9D
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Nov 2024 13:06:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F0F94285623
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Nov 2024 03:16:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CD7091F2322B
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Nov 2024 12:06:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9D591662E4;
-	Wed, 13 Nov 2024 03:16:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF9BA20262C;
+	Wed, 13 Nov 2024 12:03:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RxYBvwR0"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Po2msYv1"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2072.outbound.protection.outlook.com [40.107.92.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DBDE165EE8;
-	Wed, 13 Nov 2024 03:16:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731467795; cv=none; b=Iain4bTfkW/Kp4KDEeIaqZDbIQmgGQtjLaM/b39zGCk1iwVbOSLPu3/LRj/qhmkXm1rlXr1mUuPHdGEXQxo72IiEUAnPOrW4xajKxdX6czZjGp93F40OtU8vprnfTnekpKQLxOzBbpE+o+b3zSOSw/GtZDNCyaMmcbeR0hfh8y0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731467795; c=relaxed/simple;
-	bh=qBVrdESAIEn3UxPJ5TLFxbP3smtFST1npGdqYvR9qKk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CwV0VLDYQEsknihnBKAaCvI5j/gJATFQAgIF//t9Z79gWAl67Bk260wKEYl85i0YiMViJxvFILrx3Kp3KMSR8JVnHWQaWfWOMrS3bbqcv16rc6SsQz6tlQFS6EAyRDEkL9f+f01mP/RrgHNBB3YcnVs4sePUAzHCqytSD4S4IPc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RxYBvwR0; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731467794; x=1763003794;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qBVrdESAIEn3UxPJ5TLFxbP3smtFST1npGdqYvR9qKk=;
-  b=RxYBvwR0UG9u+V1nwWGHXIAeps9ml46tpBZBFJHUNiiVHubZ6SIagWBp
-   yz0jZVegEsAYpt3B5l1dmF62c9LJwJDU1sKY/zHd0lGzE6fSTme4/Jr35
-   +fM33JSJ/UcdHzpwkdF4quF87KTH9hiZvZ3J8eaLYyoNIq7As2Ss56c9K
-   WBEGG+gmi63J7ZUf4UwAZ5lofkEZeK8vdS7/0CERnTVSMAWEce9VW7fza
-   sV7joS2mT57vG2QJxLKYOPplQwL6RplKF4UGAJMLl1AIIxs8bZanVu51D
-   l7zROVdCJa1cAuc/iZzd7CeZqcjey6y3xjdTyS4p4sAfpQLmaaS+JAoi8
-   A==;
-X-CSE-ConnectionGUID: OUN5Pkt2Qrqjn582QeD0BA==
-X-CSE-MsgGUID: X2Dw345PSz6hurYqR9kRSw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="48793870"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="48793870"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2024 19:16:32 -0800
-X-CSE-ConnectionGUID: 8Gj/hxArQh+urshGKHK6pA==
-X-CSE-MsgGUID: AipellR5SWGIt6T73UXu/A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,149,1728975600"; 
-   d="scan'208";a="125249489"
-Received: from lkp-server01.sh.intel.com (HELO bcfed0da017c) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 12 Nov 2024 19:16:24 -0800
-Received: from kbuild by bcfed0da017c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tB3ri-0001yX-1D;
-	Wed, 13 Nov 2024 03:16:22 +0000
-Date: Wed, 13 Nov 2024 11:15:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Deepak Gupta <debug@rivosinc.com>, Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Christian Brauner <brauner@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>
-Cc: oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-arch@vger.kernel.org
-Subject: Re: [PATCH v8 24/29] riscv: enable kernel access to shadow stack
- memory via FWFT sbi call
-Message-ID: <202411131001.zfDosm7U-lkp@intel.com>
-References: <20241111-v5_user_cfi_series-v8-24-dce14aa30207@rivosinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 174D820013C;
+	Wed, 13 Nov 2024 12:03:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.72
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1731499433; cv=fail; b=rLFRqpE2a3wbaGrbHA+xQ9uIGQPNDx+fyxkKnqGid6lO8+Rvd0o8neABe3MU263qFD+ayKLjrJ5QLNK6kv67nu6MP+OO7d45xKkgOhbDHe2tGEOfqzok7iNndQ5hfr4bwHYdR0wRjpDoAbuKbUARrNHeNfKOM8hUCpaiLagG0TY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1731499433; c=relaxed/simple;
+	bh=KZ1vjjhuuZlMT4PhoF5G+JMw1a4VDk+xmdCDz0FNeM8=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=qgKMTgNX6L77nSMnAFvqmQKxf1ufLYexNLyJr/1zaI9guONlIOiWMh1ulDLZQNAErzLdNl/nqJkCRMa9szJIhIyxDDeYZUAMn/eDHYr+S6Sryxnmuo15IKTyykDb1IsUnimqFynrDQBGk3tu8udNat7vvWwBXSJTeSACpEVRHgE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Po2msYv1; arc=fail smtp.client-ip=40.107.92.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=la6FBV9rrfk/sIvcggfVykfH6P/QuKc1Ueu84JI6IljfVdyW1khHt+bOpeDPQ0oW7f5lEP0iiiEe7Ab1IsTcQgRIQxW8QjXpfU6LYBphuBEy1U9Cv1FPzvOpvalZB3XgdwXguE0bgQNmtbUN13JMYwk5BXsJ2bgzm8iRtFwBQP6fxoos6rQBT0X80OTEUT+dreOdDjocDkRsGw2UFgJpqpPowzroeg8a6f2vSUGu/1YtnAVvuTYNsV7aPuxPmjpxco8CJpIyAcDCCNfgSxeIyt6d53u1GecxYxpUUJknZHQiWEPU20Pi3Or3nwJoIvkZv6hCuzb3m9ZqI3v3HCEYiw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=71yb5Zt8Yl2345mrvkA7PQOsvwSghRTspsQS5+c5nZ4=;
+ b=eO9bjhnRQojX4juvyi9iGZWf65PVvBs3luGHNWCBSaAIl+MU74LdhzoX1pck2RpfX7gHHcYQwkMgfSAZQvOhUJ8WiAblo5fZEPAq6QsqcSBYzILx0Iz5Xac8q+yCaggRIkeDlvdHF1BXyzv5+6GvgEy7KtfkxzbP95FINa6ZtvbWrlVVYiw5cxhuz9R3nVP7nI1fHrNxNfYJ82DfKX/bFEmO4YP6c6vKqaE223qS21lEoSwZbsYBmg7mYUmFuQTk01OiSEsr8OJ0TyXFF56RuP/es5Yytr4CZ5YD2Ugg7XWQ63lAzsovpPLzxdbbPZyrhaIQANAyBWYI9kVG/TEN6Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=71yb5Zt8Yl2345mrvkA7PQOsvwSghRTspsQS5+c5nZ4=;
+ b=Po2msYv1gVZQnxLzLXcwW+fwmDvlC9qpAGpYRKnmokF4Lmi9v6ySuFvn9qHR1QQLC6CZRIZII8zQVmIu6jQNlfbN6KD0W69821lv+dFeFeYICziBXL0Eqt7U6DVK2+3TqGBXZewci/uNsvJbuD+xIQYgkAsKL0y62Gj5eCloTlE=
+Received: from MN2PR13CA0027.namprd13.prod.outlook.com (2603:10b6:208:160::40)
+ by SN7PR12MB7956.namprd12.prod.outlook.com (2603:10b6:806:328::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8158.17; Wed, 13 Nov
+ 2024 12:03:48 +0000
+Received: from BN3PEPF0000B077.namprd04.prod.outlook.com
+ (2603:10b6:208:160:cafe::9a) by MN2PR13CA0027.outlook.office365.com
+ (2603:10b6:208:160::40) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8158.15 via Frontend
+ Transport; Wed, 13 Nov 2024 12:03:48 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN3PEPF0000B077.mail.protection.outlook.com (10.167.243.122) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8158.14 via Frontend Transport; Wed, 13 Nov 2024 12:03:48 +0000
+Received: from purico-ed03host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 13 Nov
+ 2024 06:03:43 -0600
+From: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+To: <linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>
+CC: <joro@8bytes.org>, <robin.murphy@arm.com>, <vasant.hegde@amd.com>,
+	<arnd@arndb.de>, <ubizjak@gmail.com>, <linux-arch@vger.kernel.org>,
+	<jgg@nvidia.com>, <kevin.tian@intel.com>, <jon.grimm@amd.com>,
+	<santosh.shukla@amd.com>, <pandoh@google.com>, <kumaranand@google.com>,
+	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+Subject: [PATCH v10 00/10] iommu/amd: Use 128-bit cmpxchg operation to update DTE
+Date: Wed, 13 Nov 2024 12:03:17 +0000
+Message-ID: <20241113120327.5239-1-suravee.suthikulpanit@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241111-v5_user_cfi_series-v8-24-dce14aa30207@rivosinc.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN3PEPF0000B077:EE_|SN7PR12MB7956:EE_
+X-MS-Office365-Filtering-Correlation-Id: a8f66d4d-e213-4c4a-b188-08dd03db3b34
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|82310400026|36860700013|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?lJxhKpCT3afexDLnrHa9CmPXFlzfN0+X3er397vBXG6D5hcnxxHk7lgi1cFN?=
+ =?us-ascii?Q?DWWaAuwMmZaUFxW0WZQJ5WW0lojbgWVn5WHehcmDVaTJ1O06fCyWSTs4Ht/Y?=
+ =?us-ascii?Q?SbK/qcOwh+qIPC7QAKVofGAUueHOsgcHENCidkJPolJ4EgzZBC3hICbg5/u6?=
+ =?us-ascii?Q?ieEA1bRvOO3IYdThssUZRImcCXeVF9lDUdY7vybQSSNM8G4Nc2O1wkCBoXtd?=
+ =?us-ascii?Q?tHc9nPbga0XUFbn0AShp+oaURG9ewb1Rj7Iwc2XJvk7R5AL8n9JWngmYqaF7?=
+ =?us-ascii?Q?ghr4Q4oz0P5NV+zV4ZdtZkGJfLobhcKiV2gyVT5yK6TuSdcVr7Jp1FIlFSit?=
+ =?us-ascii?Q?OcdYuvSiyoJuv7sZS1WGP5+t1htyVg/L74U4/DFt9Nb6OmWsP+i0dCmpovNy?=
+ =?us-ascii?Q?OUKO021CODzleGav3HTYBX8I4LTcH7sManws3CzJUdOHA2OXMiSDJCSDH+8d?=
+ =?us-ascii?Q?FbPPo9Nuf75FVuzwZ/xqdEYK+SUag4h6sdLmi/Ej79xJvHjpKeUN6S1puNtX?=
+ =?us-ascii?Q?2fCH4pKC34FvfEMngrbWdcbZkTlwFRubgpNYRZ048EItzXrIxYSZDZw51NiR?=
+ =?us-ascii?Q?euuGCzKnzZOQMaJQnEqbkngWh+03bFhcIqezEChT2iKmfKTZE/wAfYYoUwxY?=
+ =?us-ascii?Q?fWM4j/kCmzCF692VZO1cDqjRIjvYCUOSFhikoHdVy4X2GJ6Lxk4uKefcqnqU?=
+ =?us-ascii?Q?1aaZQ5pX7Dpx7fn09gH92Q7/4jfYkdkRzMi5gfdDPPkDeJP3oq6iPFQ/1mOY?=
+ =?us-ascii?Q?kpW6Tw80g4dwvtkLWnwDxP73LLGLxnjTbDo+3DUihMpYVgf0Xv6Z/Hk47MJK?=
+ =?us-ascii?Q?LwRKeApBPY5scaxeiqpzqIDp8ORXWYQaFQ8L9ROgpAKTGWForDYs11Y+Ouub?=
+ =?us-ascii?Q?VlGfO4WOizkz3utEu98S6RXwfd8qOmv/VjL7MhBf0/LBHlPlT0kAK+J6ASSB?=
+ =?us-ascii?Q?OVCSHki/toQGp917W7AZzNXc8J9CWe9zgWuGYNpzhN55DfN+FVmBPbsNO7J6?=
+ =?us-ascii?Q?OhmB+uDTPbAq4LmnUh+biuIA+rPvHtFsikF+Y/u9rTIRtJid7vAwQ9epPDke?=
+ =?us-ascii?Q?GM01LQh60S5tN54vbNbogSj6co0Og2QXYhXn7+HqhLKXQxpWegKyC2C+CaOM?=
+ =?us-ascii?Q?fII/f5wrd2WZiKTL5/+jLGTryMAGZNFRSOP/PcdlVphP6pF4/K/kX966qDSs?=
+ =?us-ascii?Q?fZyJeL6OvAchdHe0n3aGGATzdCrwLQ4+eTxqiDpw8H3TJBY8wjG60JBcyZMZ?=
+ =?us-ascii?Q?6+yW6+nys0IKtNSuP9mOTO9w7M1pETDF2X7xW6c/zg7m8FEH+dUS6aSCq+G/?=
+ =?us-ascii?Q?MOZBHc8u8V1uWORcclHea2bR+j50UUmakR/v6uGRW9ZKGX0jXiVGVMK4RvhH?=
+ =?us-ascii?Q?nx7NVi84oIAhCxf3nj6Iu/3ge6r7PhibwC3HUB+zTvqKWJ0K2pUuVT2Te5Qh?=
+ =?us-ascii?Q?3ovl0hy3Uss=3D?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(7416014)(82310400026)(36860700013)(1800799024);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Nov 2024 12:03:48.0321
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a8f66d4d-e213-4c4a-b188-08dd03db3b34
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BN3PEPF0000B077.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7956
 
-Hi Deepak,
+This series modifies current implementation to use 128-bit cmpxchg to
+update DTE when needed as specified in the AMD I/O Virtualization
+Techonology (IOMMU) Specification.
 
-kernel test robot noticed the following build errors:
+Please note that I have verified with the hardware designer, and they have
+confirmed that the IOMMU hardware has always been implemented with 256-bit
+read. The next revision of the IOMMU spec will be updated to correctly
+describe this part.  Therefore, I have updated the implementation to avoid
+unnecessary flushing.
 
-[auto build test ERROR on 64f7b77f0bd9271861ed9e410e9856b6b0b21c48]
+Changes in v10:
+* Patch 3: Update patch from Uros.
+* Patch 5,7: Change to use __READ_ONCE() with 128-bit data type.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Deepak-Gupta/mm-Introduce-ARCH_HAS_USER_SHADOW_STACK/20241112-050530
-base:   64f7b77f0bd9271861ed9e410e9856b6b0b21c48
-patch link:    https://lore.kernel.org/r/20241111-v5_user_cfi_series-v8-24-dce14aa30207%40rivosinc.com
-patch subject: [PATCH v8 24/29] riscv: enable kernel access to shadow stack memory via FWFT sbi call
-config: riscv-randconfig-r063-20241113 (https://download.01.org/0day-ci/archive/20241113/202411131001.zfDosm7U-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 592c0fe55f6d9a811028b5f3507be91458ab2713)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241113/202411131001.zfDosm7U-lkp@intel.com/reproduce)
+v9: https://lore.kernel.org/lkml/20241101162304.4688-1-suravee.suthikulpanit@amd.com/
+v8: https://lore.kernel.org/lkml/20241031184243.4184-1-suravee.suthikulpanit@amd.com/
+v7: https://lore.kernel.org/lkml/20241031091624.4895-1-suravee.suthikulpanit@amd.com/
+v6: https://lore.kernel.org/lkml/20241016051756.4317-1-suravee.suthikulpanit@amd.com/
+v5: https://lore.kernel.org/lkml/20241007041353.4756-1-suravee.suthikulpanit@amd.com/
+v4: https://lore.kernel.org/lkml/20240916171805.324292-1-suravee.suthikulpanit@amd.com/
+v3: https://lore.kernel.org/lkml/20240906121308.5013-1-suravee.suthikulpanit@amd.com/
+v2: https://lore.kernel.org/lkml/20240829180726.5022-1-suravee.suthikulpanit@amd.com/
+v1: https://lore.kernel.org/lkml/20240819161839.4657-1-suravee.suthikulpanit@amd.com/
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411131001.zfDosm7U-lkp@intel.com/
+Thanks,
+Suravee
 
-All errors (new ones prefixed by >>):
+Suravee Suthikulpanit (9):
+  iommu/amd: Misc ACPI IVRS debug info clean up
+  iommu/amd: Disable AMD IOMMU if CMPXCHG16B feature is not supported
+  iommu/amd: Introduce struct ivhd_dte_flags to store persistent DTE
+    flags
+  iommu/amd: Introduce helper function to update 256-bit DTE
+  iommu/amd: Modify set_dte_entry() to use 256-bit DTE helpers
+  iommu/amd: Introduce helper function get_dte256()
+  iommu/amd: Modify clear_dte_entry() to avoid in-place update
+  iommu/amd: Lock DTE before updating the entry with WRITE_ONCE()
+  iommu/amd: Remove amd_iommu_apply_erratum_63()
 
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:744:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     744 |         insb(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:104:53: note: expanded from macro 'insb'
-     104 | #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
-         |                                          ~~~~~~~~~~ ^
-   In file included from arch/riscv/kernel/asm-offsets.c:12:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:752:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     752 |         insw(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
-     105 | #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
-         |                                          ~~~~~~~~~~ ^
-   In file included from arch/riscv/kernel/asm-offsets.c:12:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:760:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     760 |         insl(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
-     106 | #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
-         |                                          ~~~~~~~~~~ ^
-   In file included from arch/riscv/kernel/asm-offsets.c:12:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:769:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     769 |         outsb(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
-     118 | #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from arch/riscv/kernel/asm-offsets.c:12:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:778:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     778 |         outsw(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
-     119 | #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from arch/riscv/kernel/asm-offsets.c:12:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:787:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     787 |         outsl(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
-     120 | #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from arch/riscv/kernel/asm-offsets.c:12:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:1115:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1115 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
->> arch/riscv/kernel/asm-offsets.c:520:23: error: use of undeclared identifier 'SBI_EXT_FWFT'
-     520 |         DEFINE(SBI_EXT_FWFT, SBI_EXT_FWFT);
-         |                              ^
->> arch/riscv/kernel/asm-offsets.c:521:27: error: use of undeclared identifier 'SBI_EXT_FWFT_SET'
-     521 |         DEFINE(SBI_EXT_FWFT_SET, SBI_EXT_FWFT_SET);
-         |                                  ^
->> arch/riscv/kernel/asm-offsets.c:522:32: error: use of undeclared identifier 'SBI_FWFT_SHADOW_STACK'
-     522 |         DEFINE(SBI_FWFT_SHADOW_STACK, SBI_FWFT_SHADOW_STACK);
-         |                                       ^
->> arch/riscv/kernel/asm-offsets.c:523:33: error: use of undeclared identifier 'SBI_FWFT_SET_FLAG_LOCK'
-     523 |         DEFINE(SBI_FWFT_SET_FLAG_LOCK, SBI_FWFT_SET_FLAG_LOCK);
-         |                                        ^
-   14 warnings and 4 errors generated.
-   make[3]: *** [scripts/Makefile.build:102: arch/riscv/kernel/asm-offsets.s] Error 1
-   make[3]: Target 'prepare' not remade because of errors.
-   make[2]: *** [Makefile:1203: prepare0] Error 2
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:224: __sub-make] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:224: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+Uros Bizjak (1):
+  compiler_types.h: Introduce 128-bit unqualified scalar type support
 
-
-vim +/SBI_EXT_FWFT +520 arch/riscv/kernel/asm-offsets.c
-
-    95	
-    96		DEFINE(PT_SIZE, sizeof(struct pt_regs));
-    97		OFFSET(PT_EPC, pt_regs, epc);
-    98		OFFSET(PT_RA, pt_regs, ra);
-    99		OFFSET(PT_FP, pt_regs, s0);
-   100		OFFSET(PT_S0, pt_regs, s0);
-   101		OFFSET(PT_S1, pt_regs, s1);
-   102		OFFSET(PT_S2, pt_regs, s2);
-   103		OFFSET(PT_S3, pt_regs, s3);
-   104		OFFSET(PT_S4, pt_regs, s4);
-   105		OFFSET(PT_S5, pt_regs, s5);
-   106		OFFSET(PT_S6, pt_regs, s6);
-   107		OFFSET(PT_S7, pt_regs, s7);
-   108		OFFSET(PT_S8, pt_regs, s8);
-   109		OFFSET(PT_S9, pt_regs, s9);
-   110		OFFSET(PT_S10, pt_regs, s10);
-   111		OFFSET(PT_S11, pt_regs, s11);
-   112		OFFSET(PT_SP, pt_regs, sp);
-   113		OFFSET(PT_TP, pt_regs, tp);
-   114		OFFSET(PT_A0, pt_regs, a0);
-   115		OFFSET(PT_A1, pt_regs, a1);
-   116		OFFSET(PT_A2, pt_regs, a2);
-   117		OFFSET(PT_A3, pt_regs, a3);
-   118		OFFSET(PT_A4, pt_regs, a4);
-   119		OFFSET(PT_A5, pt_regs, a5);
-   120		OFFSET(PT_A6, pt_regs, a6);
-   121		OFFSET(PT_A7, pt_regs, a7);
-   122		OFFSET(PT_T0, pt_regs, t0);
-   123		OFFSET(PT_T1, pt_regs, t1);
-   124		OFFSET(PT_T2, pt_regs, t2);
-   125		OFFSET(PT_T3, pt_regs, t3);
-   126		OFFSET(PT_T4, pt_regs, t4);
-   127		OFFSET(PT_T5, pt_regs, t5);
-   128		OFFSET(PT_T6, pt_regs, t6);
-   129		OFFSET(PT_GP, pt_regs, gp);
-   130		OFFSET(PT_ORIG_A0, pt_regs, orig_a0);
-   131		OFFSET(PT_STATUS, pt_regs, status);
-   132		OFFSET(PT_BADADDR, pt_regs, badaddr);
-   133		OFFSET(PT_CAUSE, pt_regs, cause);
-   134	
-   135		OFFSET(SUSPEND_CONTEXT_REGS, suspend_context, regs);
-   136	
-   137		OFFSET(HIBERN_PBE_ADDR, pbe, address);
-   138		OFFSET(HIBERN_PBE_ORIG, pbe, orig_address);
-   139		OFFSET(HIBERN_PBE_NEXT, pbe, next);
-   140	
-   141		OFFSET(KVM_ARCH_GUEST_ZERO, kvm_vcpu_arch, guest_context.zero);
-   142		OFFSET(KVM_ARCH_GUEST_RA, kvm_vcpu_arch, guest_context.ra);
-   143		OFFSET(KVM_ARCH_GUEST_SP, kvm_vcpu_arch, guest_context.sp);
-   144		OFFSET(KVM_ARCH_GUEST_GP, kvm_vcpu_arch, guest_context.gp);
-   145		OFFSET(KVM_ARCH_GUEST_TP, kvm_vcpu_arch, guest_context.tp);
-   146		OFFSET(KVM_ARCH_GUEST_T0, kvm_vcpu_arch, guest_context.t0);
-   147		OFFSET(KVM_ARCH_GUEST_T1, kvm_vcpu_arch, guest_context.t1);
-   148		OFFSET(KVM_ARCH_GUEST_T2, kvm_vcpu_arch, guest_context.t2);
-   149		OFFSET(KVM_ARCH_GUEST_S0, kvm_vcpu_arch, guest_context.s0);
-   150		OFFSET(KVM_ARCH_GUEST_S1, kvm_vcpu_arch, guest_context.s1);
-   151		OFFSET(KVM_ARCH_GUEST_A0, kvm_vcpu_arch, guest_context.a0);
-   152		OFFSET(KVM_ARCH_GUEST_A1, kvm_vcpu_arch, guest_context.a1);
-   153		OFFSET(KVM_ARCH_GUEST_A2, kvm_vcpu_arch, guest_context.a2);
-   154		OFFSET(KVM_ARCH_GUEST_A3, kvm_vcpu_arch, guest_context.a3);
-   155		OFFSET(KVM_ARCH_GUEST_A4, kvm_vcpu_arch, guest_context.a4);
-   156		OFFSET(KVM_ARCH_GUEST_A5, kvm_vcpu_arch, guest_context.a5);
-   157		OFFSET(KVM_ARCH_GUEST_A6, kvm_vcpu_arch, guest_context.a6);
-   158		OFFSET(KVM_ARCH_GUEST_A7, kvm_vcpu_arch, guest_context.a7);
-   159		OFFSET(KVM_ARCH_GUEST_S2, kvm_vcpu_arch, guest_context.s2);
-   160		OFFSET(KVM_ARCH_GUEST_S3, kvm_vcpu_arch, guest_context.s3);
-   161		OFFSET(KVM_ARCH_GUEST_S4, kvm_vcpu_arch, guest_context.s4);
-   162		OFFSET(KVM_ARCH_GUEST_S5, kvm_vcpu_arch, guest_context.s5);
-   163		OFFSET(KVM_ARCH_GUEST_S6, kvm_vcpu_arch, guest_context.s6);
-   164		OFFSET(KVM_ARCH_GUEST_S7, kvm_vcpu_arch, guest_context.s7);
-   165		OFFSET(KVM_ARCH_GUEST_S8, kvm_vcpu_arch, guest_context.s8);
-   166		OFFSET(KVM_ARCH_GUEST_S9, kvm_vcpu_arch, guest_context.s9);
-   167		OFFSET(KVM_ARCH_GUEST_S10, kvm_vcpu_arch, guest_context.s10);
-   168		OFFSET(KVM_ARCH_GUEST_S11, kvm_vcpu_arch, guest_context.s11);
-   169		OFFSET(KVM_ARCH_GUEST_T3, kvm_vcpu_arch, guest_context.t3);
-   170		OFFSET(KVM_ARCH_GUEST_T4, kvm_vcpu_arch, guest_context.t4);
-   171		OFFSET(KVM_ARCH_GUEST_T5, kvm_vcpu_arch, guest_context.t5);
-   172		OFFSET(KVM_ARCH_GUEST_T6, kvm_vcpu_arch, guest_context.t6);
-   173		OFFSET(KVM_ARCH_GUEST_SEPC, kvm_vcpu_arch, guest_context.sepc);
-   174		OFFSET(KVM_ARCH_GUEST_SSTATUS, kvm_vcpu_arch, guest_context.sstatus);
-   175		OFFSET(KVM_ARCH_GUEST_HSTATUS, kvm_vcpu_arch, guest_context.hstatus);
-   176		OFFSET(KVM_ARCH_GUEST_SCOUNTEREN, kvm_vcpu_arch, guest_csr.scounteren);
-   177	
-   178		OFFSET(KVM_ARCH_HOST_ZERO, kvm_vcpu_arch, host_context.zero);
-   179		OFFSET(KVM_ARCH_HOST_RA, kvm_vcpu_arch, host_context.ra);
-   180		OFFSET(KVM_ARCH_HOST_SP, kvm_vcpu_arch, host_context.sp);
-   181		OFFSET(KVM_ARCH_HOST_GP, kvm_vcpu_arch, host_context.gp);
-   182		OFFSET(KVM_ARCH_HOST_TP, kvm_vcpu_arch, host_context.tp);
-   183		OFFSET(KVM_ARCH_HOST_T0, kvm_vcpu_arch, host_context.t0);
-   184		OFFSET(KVM_ARCH_HOST_T1, kvm_vcpu_arch, host_context.t1);
-   185		OFFSET(KVM_ARCH_HOST_T2, kvm_vcpu_arch, host_context.t2);
-   186		OFFSET(KVM_ARCH_HOST_S0, kvm_vcpu_arch, host_context.s0);
-   187		OFFSET(KVM_ARCH_HOST_S1, kvm_vcpu_arch, host_context.s1);
-   188		OFFSET(KVM_ARCH_HOST_A0, kvm_vcpu_arch, host_context.a0);
-   189		OFFSET(KVM_ARCH_HOST_A1, kvm_vcpu_arch, host_context.a1);
-   190		OFFSET(KVM_ARCH_HOST_A2, kvm_vcpu_arch, host_context.a2);
-   191		OFFSET(KVM_ARCH_HOST_A3, kvm_vcpu_arch, host_context.a3);
-   192		OFFSET(KVM_ARCH_HOST_A4, kvm_vcpu_arch, host_context.a4);
-   193		OFFSET(KVM_ARCH_HOST_A5, kvm_vcpu_arch, host_context.a5);
-   194		OFFSET(KVM_ARCH_HOST_A6, kvm_vcpu_arch, host_context.a6);
-   195		OFFSET(KVM_ARCH_HOST_A7, kvm_vcpu_arch, host_context.a7);
-   196		OFFSET(KVM_ARCH_HOST_S2, kvm_vcpu_arch, host_context.s2);
-   197		OFFSET(KVM_ARCH_HOST_S3, kvm_vcpu_arch, host_context.s3);
-   198		OFFSET(KVM_ARCH_HOST_S4, kvm_vcpu_arch, host_context.s4);
-   199		OFFSET(KVM_ARCH_HOST_S5, kvm_vcpu_arch, host_context.s5);
-   200		OFFSET(KVM_ARCH_HOST_S6, kvm_vcpu_arch, host_context.s6);
-   201		OFFSET(KVM_ARCH_HOST_S7, kvm_vcpu_arch, host_context.s7);
-   202		OFFSET(KVM_ARCH_HOST_S8, kvm_vcpu_arch, host_context.s8);
-   203		OFFSET(KVM_ARCH_HOST_S9, kvm_vcpu_arch, host_context.s9);
-   204		OFFSET(KVM_ARCH_HOST_S10, kvm_vcpu_arch, host_context.s10);
-   205		OFFSET(KVM_ARCH_HOST_S11, kvm_vcpu_arch, host_context.s11);
-   206		OFFSET(KVM_ARCH_HOST_T3, kvm_vcpu_arch, host_context.t3);
-   207		OFFSET(KVM_ARCH_HOST_T4, kvm_vcpu_arch, host_context.t4);
-   208		OFFSET(KVM_ARCH_HOST_T5, kvm_vcpu_arch, host_context.t5);
-   209		OFFSET(KVM_ARCH_HOST_T6, kvm_vcpu_arch, host_context.t6);
-   210		OFFSET(KVM_ARCH_HOST_SEPC, kvm_vcpu_arch, host_context.sepc);
-   211		OFFSET(KVM_ARCH_HOST_SSTATUS, kvm_vcpu_arch, host_context.sstatus);
-   212		OFFSET(KVM_ARCH_HOST_HSTATUS, kvm_vcpu_arch, host_context.hstatus);
-   213		OFFSET(KVM_ARCH_HOST_SSCRATCH, kvm_vcpu_arch, host_sscratch);
-   214		OFFSET(KVM_ARCH_HOST_STVEC, kvm_vcpu_arch, host_stvec);
-   215		OFFSET(KVM_ARCH_HOST_SCOUNTEREN, kvm_vcpu_arch, host_scounteren);
-   216	
-   217		OFFSET(KVM_ARCH_TRAP_SEPC, kvm_cpu_trap, sepc);
-   218		OFFSET(KVM_ARCH_TRAP_SCAUSE, kvm_cpu_trap, scause);
-   219		OFFSET(KVM_ARCH_TRAP_STVAL, kvm_cpu_trap, stval);
-   220		OFFSET(KVM_ARCH_TRAP_HTVAL, kvm_cpu_trap, htval);
-   221		OFFSET(KVM_ARCH_TRAP_HTINST, kvm_cpu_trap, htinst);
-   222	
-   223		/* F extension */
-   224	
-   225		OFFSET(KVM_ARCH_FP_F_F0, kvm_cpu_context, fp.f.f[0]);
-   226		OFFSET(KVM_ARCH_FP_F_F1, kvm_cpu_context, fp.f.f[1]);
-   227		OFFSET(KVM_ARCH_FP_F_F2, kvm_cpu_context, fp.f.f[2]);
-   228		OFFSET(KVM_ARCH_FP_F_F3, kvm_cpu_context, fp.f.f[3]);
-   229		OFFSET(KVM_ARCH_FP_F_F4, kvm_cpu_context, fp.f.f[4]);
-   230		OFFSET(KVM_ARCH_FP_F_F5, kvm_cpu_context, fp.f.f[5]);
-   231		OFFSET(KVM_ARCH_FP_F_F6, kvm_cpu_context, fp.f.f[6]);
-   232		OFFSET(KVM_ARCH_FP_F_F7, kvm_cpu_context, fp.f.f[7]);
-   233		OFFSET(KVM_ARCH_FP_F_F8, kvm_cpu_context, fp.f.f[8]);
-   234		OFFSET(KVM_ARCH_FP_F_F9, kvm_cpu_context, fp.f.f[9]);
-   235		OFFSET(KVM_ARCH_FP_F_F10, kvm_cpu_context, fp.f.f[10]);
-   236		OFFSET(KVM_ARCH_FP_F_F11, kvm_cpu_context, fp.f.f[11]);
-   237		OFFSET(KVM_ARCH_FP_F_F12, kvm_cpu_context, fp.f.f[12]);
-   238		OFFSET(KVM_ARCH_FP_F_F13, kvm_cpu_context, fp.f.f[13]);
-   239		OFFSET(KVM_ARCH_FP_F_F14, kvm_cpu_context, fp.f.f[14]);
-   240		OFFSET(KVM_ARCH_FP_F_F15, kvm_cpu_context, fp.f.f[15]);
-   241		OFFSET(KVM_ARCH_FP_F_F16, kvm_cpu_context, fp.f.f[16]);
-   242		OFFSET(KVM_ARCH_FP_F_F17, kvm_cpu_context, fp.f.f[17]);
-   243		OFFSET(KVM_ARCH_FP_F_F18, kvm_cpu_context, fp.f.f[18]);
-   244		OFFSET(KVM_ARCH_FP_F_F19, kvm_cpu_context, fp.f.f[19]);
-   245		OFFSET(KVM_ARCH_FP_F_F20, kvm_cpu_context, fp.f.f[20]);
-   246		OFFSET(KVM_ARCH_FP_F_F21, kvm_cpu_context, fp.f.f[21]);
-   247		OFFSET(KVM_ARCH_FP_F_F22, kvm_cpu_context, fp.f.f[22]);
-   248		OFFSET(KVM_ARCH_FP_F_F23, kvm_cpu_context, fp.f.f[23]);
-   249		OFFSET(KVM_ARCH_FP_F_F24, kvm_cpu_context, fp.f.f[24]);
-   250		OFFSET(KVM_ARCH_FP_F_F25, kvm_cpu_context, fp.f.f[25]);
-   251		OFFSET(KVM_ARCH_FP_F_F26, kvm_cpu_context, fp.f.f[26]);
-   252		OFFSET(KVM_ARCH_FP_F_F27, kvm_cpu_context, fp.f.f[27]);
-   253		OFFSET(KVM_ARCH_FP_F_F28, kvm_cpu_context, fp.f.f[28]);
-   254		OFFSET(KVM_ARCH_FP_F_F29, kvm_cpu_context, fp.f.f[29]);
-   255		OFFSET(KVM_ARCH_FP_F_F30, kvm_cpu_context, fp.f.f[30]);
-   256		OFFSET(KVM_ARCH_FP_F_F31, kvm_cpu_context, fp.f.f[31]);
-   257		OFFSET(KVM_ARCH_FP_F_FCSR, kvm_cpu_context, fp.f.fcsr);
-   258	
-   259		/* D extension */
-   260	
-   261		OFFSET(KVM_ARCH_FP_D_F0, kvm_cpu_context, fp.d.f[0]);
-   262		OFFSET(KVM_ARCH_FP_D_F1, kvm_cpu_context, fp.d.f[1]);
-   263		OFFSET(KVM_ARCH_FP_D_F2, kvm_cpu_context, fp.d.f[2]);
-   264		OFFSET(KVM_ARCH_FP_D_F3, kvm_cpu_context, fp.d.f[3]);
-   265		OFFSET(KVM_ARCH_FP_D_F4, kvm_cpu_context, fp.d.f[4]);
-   266		OFFSET(KVM_ARCH_FP_D_F5, kvm_cpu_context, fp.d.f[5]);
-   267		OFFSET(KVM_ARCH_FP_D_F6, kvm_cpu_context, fp.d.f[6]);
-   268		OFFSET(KVM_ARCH_FP_D_F7, kvm_cpu_context, fp.d.f[7]);
-   269		OFFSET(KVM_ARCH_FP_D_F8, kvm_cpu_context, fp.d.f[8]);
-   270		OFFSET(KVM_ARCH_FP_D_F9, kvm_cpu_context, fp.d.f[9]);
-   271		OFFSET(KVM_ARCH_FP_D_F10, kvm_cpu_context, fp.d.f[10]);
-   272		OFFSET(KVM_ARCH_FP_D_F11, kvm_cpu_context, fp.d.f[11]);
-   273		OFFSET(KVM_ARCH_FP_D_F12, kvm_cpu_context, fp.d.f[12]);
-   274		OFFSET(KVM_ARCH_FP_D_F13, kvm_cpu_context, fp.d.f[13]);
-   275		OFFSET(KVM_ARCH_FP_D_F14, kvm_cpu_context, fp.d.f[14]);
-   276		OFFSET(KVM_ARCH_FP_D_F15, kvm_cpu_context, fp.d.f[15]);
-   277		OFFSET(KVM_ARCH_FP_D_F16, kvm_cpu_context, fp.d.f[16]);
-   278		OFFSET(KVM_ARCH_FP_D_F17, kvm_cpu_context, fp.d.f[17]);
-   279		OFFSET(KVM_ARCH_FP_D_F18, kvm_cpu_context, fp.d.f[18]);
-   280		OFFSET(KVM_ARCH_FP_D_F19, kvm_cpu_context, fp.d.f[19]);
-   281		OFFSET(KVM_ARCH_FP_D_F20, kvm_cpu_context, fp.d.f[20]);
-   282		OFFSET(KVM_ARCH_FP_D_F21, kvm_cpu_context, fp.d.f[21]);
-   283		OFFSET(KVM_ARCH_FP_D_F22, kvm_cpu_context, fp.d.f[22]);
-   284		OFFSET(KVM_ARCH_FP_D_F23, kvm_cpu_context, fp.d.f[23]);
-   285		OFFSET(KVM_ARCH_FP_D_F24, kvm_cpu_context, fp.d.f[24]);
-   286		OFFSET(KVM_ARCH_FP_D_F25, kvm_cpu_context, fp.d.f[25]);
-   287		OFFSET(KVM_ARCH_FP_D_F26, kvm_cpu_context, fp.d.f[26]);
-   288		OFFSET(KVM_ARCH_FP_D_F27, kvm_cpu_context, fp.d.f[27]);
-   289		OFFSET(KVM_ARCH_FP_D_F28, kvm_cpu_context, fp.d.f[28]);
-   290		OFFSET(KVM_ARCH_FP_D_F29, kvm_cpu_context, fp.d.f[29]);
-   291		OFFSET(KVM_ARCH_FP_D_F30, kvm_cpu_context, fp.d.f[30]);
-   292		OFFSET(KVM_ARCH_FP_D_F31, kvm_cpu_context, fp.d.f[31]);
-   293		OFFSET(KVM_ARCH_FP_D_FCSR, kvm_cpu_context, fp.d.fcsr);
-   294	
-   295		/*
-   296		 * THREAD_{F,X}* might be larger than a S-type offset can handle, but
-   297		 * these are used in performance-sensitive assembly so we can't resort
-   298		 * to loading the long immediate every time.
-   299		 */
-   300		DEFINE(TASK_THREAD_RA_RA,
-   301			  offsetof(struct task_struct, thread.ra)
-   302			- offsetof(struct task_struct, thread.ra)
-   303		);
-   304		DEFINE(TASK_THREAD_SP_RA,
-   305			  offsetof(struct task_struct, thread.sp)
-   306			- offsetof(struct task_struct, thread.ra)
-   307		);
-   308		DEFINE(TASK_THREAD_S0_RA,
-   309			  offsetof(struct task_struct, thread.s[0])
-   310			- offsetof(struct task_struct, thread.ra)
-   311		);
-   312		DEFINE(TASK_THREAD_S1_RA,
-   313			  offsetof(struct task_struct, thread.s[1])
-   314			- offsetof(struct task_struct, thread.ra)
-   315		);
-   316		DEFINE(TASK_THREAD_S2_RA,
-   317			  offsetof(struct task_struct, thread.s[2])
-   318			- offsetof(struct task_struct, thread.ra)
-   319		);
-   320		DEFINE(TASK_THREAD_S3_RA,
-   321			  offsetof(struct task_struct, thread.s[3])
-   322			- offsetof(struct task_struct, thread.ra)
-   323		);
-   324		DEFINE(TASK_THREAD_S4_RA,
-   325			  offsetof(struct task_struct, thread.s[4])
-   326			- offsetof(struct task_struct, thread.ra)
-   327		);
-   328		DEFINE(TASK_THREAD_S5_RA,
-   329			  offsetof(struct task_struct, thread.s[5])
-   330			- offsetof(struct task_struct, thread.ra)
-   331		);
-   332		DEFINE(TASK_THREAD_S6_RA,
-   333			  offsetof(struct task_struct, thread.s[6])
-   334			- offsetof(struct task_struct, thread.ra)
-   335		);
-   336		DEFINE(TASK_THREAD_S7_RA,
-   337			  offsetof(struct task_struct, thread.s[7])
-   338			- offsetof(struct task_struct, thread.ra)
-   339		);
-   340		DEFINE(TASK_THREAD_S8_RA,
-   341			  offsetof(struct task_struct, thread.s[8])
-   342			- offsetof(struct task_struct, thread.ra)
-   343		);
-   344		DEFINE(TASK_THREAD_S9_RA,
-   345			  offsetof(struct task_struct, thread.s[9])
-   346			- offsetof(struct task_struct, thread.ra)
-   347		);
-   348		DEFINE(TASK_THREAD_S10_RA,
-   349			  offsetof(struct task_struct, thread.s[10])
-   350			- offsetof(struct task_struct, thread.ra)
-   351		);
-   352		DEFINE(TASK_THREAD_S11_RA,
-   353			  offsetof(struct task_struct, thread.s[11])
-   354			- offsetof(struct task_struct, thread.ra)
-   355		);
-   356	
-   357		DEFINE(TASK_THREAD_F0_F0,
-   358			  offsetof(struct task_struct, thread.fstate.f[0])
-   359			- offsetof(struct task_struct, thread.fstate.f[0])
-   360		);
-   361		DEFINE(TASK_THREAD_F1_F0,
-   362			  offsetof(struct task_struct, thread.fstate.f[1])
-   363			- offsetof(struct task_struct, thread.fstate.f[0])
-   364		);
-   365		DEFINE(TASK_THREAD_F2_F0,
-   366			  offsetof(struct task_struct, thread.fstate.f[2])
-   367			- offsetof(struct task_struct, thread.fstate.f[0])
-   368		);
-   369		DEFINE(TASK_THREAD_F3_F0,
-   370			  offsetof(struct task_struct, thread.fstate.f[3])
-   371			- offsetof(struct task_struct, thread.fstate.f[0])
-   372		);
-   373		DEFINE(TASK_THREAD_F4_F0,
-   374			  offsetof(struct task_struct, thread.fstate.f[4])
-   375			- offsetof(struct task_struct, thread.fstate.f[0])
-   376		);
-   377		DEFINE(TASK_THREAD_F5_F0,
-   378			  offsetof(struct task_struct, thread.fstate.f[5])
-   379			- offsetof(struct task_struct, thread.fstate.f[0])
-   380		);
-   381		DEFINE(TASK_THREAD_F6_F0,
-   382			  offsetof(struct task_struct, thread.fstate.f[6])
-   383			- offsetof(struct task_struct, thread.fstate.f[0])
-   384		);
-   385		DEFINE(TASK_THREAD_F7_F0,
-   386			  offsetof(struct task_struct, thread.fstate.f[7])
-   387			- offsetof(struct task_struct, thread.fstate.f[0])
-   388		);
-   389		DEFINE(TASK_THREAD_F8_F0,
-   390			  offsetof(struct task_struct, thread.fstate.f[8])
-   391			- offsetof(struct task_struct, thread.fstate.f[0])
-   392		);
-   393		DEFINE(TASK_THREAD_F9_F0,
-   394			  offsetof(struct task_struct, thread.fstate.f[9])
-   395			- offsetof(struct task_struct, thread.fstate.f[0])
-   396		);
-   397		DEFINE(TASK_THREAD_F10_F0,
-   398			  offsetof(struct task_struct, thread.fstate.f[10])
-   399			- offsetof(struct task_struct, thread.fstate.f[0])
-   400		);
-   401		DEFINE(TASK_THREAD_F11_F0,
-   402			  offsetof(struct task_struct, thread.fstate.f[11])
-   403			- offsetof(struct task_struct, thread.fstate.f[0])
-   404		);
-   405		DEFINE(TASK_THREAD_F12_F0,
-   406			  offsetof(struct task_struct, thread.fstate.f[12])
-   407			- offsetof(struct task_struct, thread.fstate.f[0])
-   408		);
-   409		DEFINE(TASK_THREAD_F13_F0,
-   410			  offsetof(struct task_struct, thread.fstate.f[13])
-   411			- offsetof(struct task_struct, thread.fstate.f[0])
-   412		);
-   413		DEFINE(TASK_THREAD_F14_F0,
-   414			  offsetof(struct task_struct, thread.fstate.f[14])
-   415			- offsetof(struct task_struct, thread.fstate.f[0])
-   416		);
-   417		DEFINE(TASK_THREAD_F15_F0,
-   418			  offsetof(struct task_struct, thread.fstate.f[15])
-   419			- offsetof(struct task_struct, thread.fstate.f[0])
-   420		);
-   421		DEFINE(TASK_THREAD_F16_F0,
-   422			  offsetof(struct task_struct, thread.fstate.f[16])
-   423			- offsetof(struct task_struct, thread.fstate.f[0])
-   424		);
-   425		DEFINE(TASK_THREAD_F17_F0,
-   426			  offsetof(struct task_struct, thread.fstate.f[17])
-   427			- offsetof(struct task_struct, thread.fstate.f[0])
-   428		);
-   429		DEFINE(TASK_THREAD_F18_F0,
-   430			  offsetof(struct task_struct, thread.fstate.f[18])
-   431			- offsetof(struct task_struct, thread.fstate.f[0])
-   432		);
-   433		DEFINE(TASK_THREAD_F19_F0,
-   434			  offsetof(struct task_struct, thread.fstate.f[19])
-   435			- offsetof(struct task_struct, thread.fstate.f[0])
-   436		);
-   437		DEFINE(TASK_THREAD_F20_F0,
-   438			  offsetof(struct task_struct, thread.fstate.f[20])
-   439			- offsetof(struct task_struct, thread.fstate.f[0])
-   440		);
-   441		DEFINE(TASK_THREAD_F21_F0,
-   442			  offsetof(struct task_struct, thread.fstate.f[21])
-   443			- offsetof(struct task_struct, thread.fstate.f[0])
-   444		);
-   445		DEFINE(TASK_THREAD_F22_F0,
-   446			  offsetof(struct task_struct, thread.fstate.f[22])
-   447			- offsetof(struct task_struct, thread.fstate.f[0])
-   448		);
-   449		DEFINE(TASK_THREAD_F23_F0,
-   450			  offsetof(struct task_struct, thread.fstate.f[23])
-   451			- offsetof(struct task_struct, thread.fstate.f[0])
-   452		);
-   453		DEFINE(TASK_THREAD_F24_F0,
-   454			  offsetof(struct task_struct, thread.fstate.f[24])
-   455			- offsetof(struct task_struct, thread.fstate.f[0])
-   456		);
-   457		DEFINE(TASK_THREAD_F25_F0,
-   458			  offsetof(struct task_struct, thread.fstate.f[25])
-   459			- offsetof(struct task_struct, thread.fstate.f[0])
-   460		);
-   461		DEFINE(TASK_THREAD_F26_F0,
-   462			  offsetof(struct task_struct, thread.fstate.f[26])
-   463			- offsetof(struct task_struct, thread.fstate.f[0])
-   464		);
-   465		DEFINE(TASK_THREAD_F27_F0,
-   466			  offsetof(struct task_struct, thread.fstate.f[27])
-   467			- offsetof(struct task_struct, thread.fstate.f[0])
-   468		);
-   469		DEFINE(TASK_THREAD_F28_F0,
-   470			  offsetof(struct task_struct, thread.fstate.f[28])
-   471			- offsetof(struct task_struct, thread.fstate.f[0])
-   472		);
-   473		DEFINE(TASK_THREAD_F29_F0,
-   474			  offsetof(struct task_struct, thread.fstate.f[29])
-   475			- offsetof(struct task_struct, thread.fstate.f[0])
-   476		);
-   477		DEFINE(TASK_THREAD_F30_F0,
-   478			  offsetof(struct task_struct, thread.fstate.f[30])
-   479			- offsetof(struct task_struct, thread.fstate.f[0])
-   480		);
-   481		DEFINE(TASK_THREAD_F31_F0,
-   482			  offsetof(struct task_struct, thread.fstate.f[31])
-   483			- offsetof(struct task_struct, thread.fstate.f[0])
-   484		);
-   485		DEFINE(TASK_THREAD_FCSR_F0,
-   486			  offsetof(struct task_struct, thread.fstate.fcsr)
-   487			- offsetof(struct task_struct, thread.fstate.f[0])
-   488		);
-   489	
-   490		/*
-   491		 * We allocate a pt_regs on the stack when entering the kernel.  This
-   492		 * ensures the alignment is sane.
-   493		 */
-   494		DEFINE(PT_SIZE_ON_STACK, ALIGN(sizeof(struct pt_regs), STACK_ALIGN));
-   495	
-   496		OFFSET(KERNEL_MAP_VIRT_ADDR, kernel_mapping, virt_addr);
-   497		OFFSET(SBI_HART_BOOT_TASK_PTR_OFFSET, sbi_hart_boot_data, task_ptr);
-   498		OFFSET(SBI_HART_BOOT_STACK_PTR_OFFSET, sbi_hart_boot_data, stack_ptr);
-   499	
-   500		DEFINE(STACKFRAME_SIZE_ON_STACK, ALIGN(sizeof(struct stackframe), STACK_ALIGN));
-   501		OFFSET(STACKFRAME_FP, stackframe, fp);
-   502		OFFSET(STACKFRAME_RA, stackframe, ra);
-   503	
-   504	#ifdef CONFIG_DYNAMIC_FTRACE_WITH_ARGS
-   505		DEFINE(FREGS_SIZE_ON_STACK, ALIGN(sizeof(struct ftrace_regs), STACK_ALIGN));
-   506		DEFINE(FREGS_EPC,	    offsetof(struct ftrace_regs, epc));
-   507		DEFINE(FREGS_RA,	    offsetof(struct ftrace_regs, ra));
-   508		DEFINE(FREGS_SP,	    offsetof(struct ftrace_regs, sp));
-   509		DEFINE(FREGS_S0,	    offsetof(struct ftrace_regs, s0));
-   510		DEFINE(FREGS_T1,	    offsetof(struct ftrace_regs, t1));
-   511		DEFINE(FREGS_A0,	    offsetof(struct ftrace_regs, a0));
-   512		DEFINE(FREGS_A1,	    offsetof(struct ftrace_regs, a1));
-   513		DEFINE(FREGS_A2,	    offsetof(struct ftrace_regs, a2));
-   514		DEFINE(FREGS_A3,	    offsetof(struct ftrace_regs, a3));
-   515		DEFINE(FREGS_A4,	    offsetof(struct ftrace_regs, a4));
-   516		DEFINE(FREGS_A5,	    offsetof(struct ftrace_regs, a5));
-   517		DEFINE(FREGS_A6,	    offsetof(struct ftrace_regs, a6));
-   518		DEFINE(FREGS_A7,	    offsetof(struct ftrace_regs, a7));
-   519	#endif
- > 520		DEFINE(SBI_EXT_FWFT, SBI_EXT_FWFT);
- > 521		DEFINE(SBI_EXT_FWFT_SET, SBI_EXT_FWFT_SET);
- > 522		DEFINE(SBI_FWFT_SHADOW_STACK, SBI_FWFT_SHADOW_STACK);
- > 523		DEFINE(SBI_FWFT_SET_FLAG_LOCK, SBI_FWFT_SET_FLAG_LOCK);
+ drivers/iommu/amd/amd_iommu.h       |   4 +-
+ drivers/iommu/amd/amd_iommu_types.h |  41 ++-
+ drivers/iommu/amd/init.c            | 229 +++++++++--------
+ drivers/iommu/amd/iommu.c           | 370 ++++++++++++++++++++--------
+ include/linux/compiler_types.h      |  13 +
+ 5 files changed, 445 insertions(+), 212 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
 
