@@ -1,70 +1,70 @@
-Return-Path: <linux-arch+bounces-9076-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9077-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1418D9C7C5E
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Nov 2024 20:50:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA1CC9C7CA0
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Nov 2024 21:08:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 58518B217D1
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Nov 2024 19:50:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 705682816B9
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Nov 2024 20:08:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2426C2038DD;
-	Wed, 13 Nov 2024 19:50:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75B58206055;
+	Wed, 13 Nov 2024 20:08:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SeoDCe4J"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XYFR4g+6"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49D551885AF;
-	Wed, 13 Nov 2024 19:50:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC286204F66;
+	Wed, 13 Nov 2024 20:08:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731527424; cv=none; b=MolT09+3N7nBOOH0Ha9m9jWDEuu5+7OejYtJpPophA80pkDv0qwMyVek7lyscWh/s0Fi4CUIDL+3zjJygYGSAw8MGMb2OBQl3gVdO3z8El2EYjK3HGU7RM6H/Lchx0jrcQxtiNcO2rwiqSsjM1DV8ZTep96i9UEDbfyB9Hx4NQo=
+	t=1731528529; cv=none; b=OADtGnHih+yeeUAoyD40blqw+vSlw2bKUpZlsAlpl3PMZWbarkqABV+9Wne8IrvgIuIpSdnV6d7Z/BE1VJIVQ1cR9v34Tf/nmVhDYgUcaLsDRd31Hs2yu4tJYB3/2wx1IchNM9qjiA9gv+177Vphlj9rZXsd9+CZ8najYYN1lzE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731527424; c=relaxed/simple;
-	bh=Oc+LuTOdlevPxcwmiIdW93NWBNLrwRRkqST9yV7jHzk=;
+	s=arc-20240116; t=1731528529; c=relaxed/simple;
+	bh=jXefo8XudMMorxCLLuteQ0VmelS+jmaq9LUBvGT6Hvc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=H/RU4vibuWPNaASW3fWdMz3tPTWReJTV3tLoGAdZ3Y344Xa5VQk39esrvViOXcZlRev26nZCPhjb3e/xOZUNChpv2AOqNsLGR6rMIjKLQc8RDfiiHMVsiGQ2IKF9ZpVFwcX/IaNyBC08ihHMvRQl8GniyB+aT425wrrBzyLCbU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SeoDCe4J; arc=none smtp.client-ip=209.85.208.181
+	 To:Cc:Content-Type; b=tT3CNR4tyBTYlY6Fy+PwObw7BGqXOUgukrOnEUcGqTxEzOrYrGozQ9Hd5Un2DyXdDEGbhXDevJ/hwHpAwB6483gvQKQTo33rXh/HvXW/nacQKnxPN18OzQcgjs71yL6QcfSEDsBycsQX+xeK+n+QPjK415HfkfX5nmt+tTzJP0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XYFR4g+6; arc=none smtp.client-ip=209.85.208.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2fb51f39394so65282901fa.2;
-        Wed, 13 Nov 2024 11:50:21 -0800 (PST)
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2fb56cb61baso55679941fa.1;
+        Wed, 13 Nov 2024 12:08:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731527420; x=1732132220; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1731528526; x=1732133326; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6OuUklqc2/spqh6bD65znVHh3ypQAuDk9FVQdh8lmiQ=;
-        b=SeoDCe4JNdrsrzKKrbFHczcOZPIAfKvgYp9U0qEiC6sYpd9Kxyykf6aiaiHgAUjzko
-         94oH+YG/OjfvYyUjYAdqqS2VptPRCP/dkfYfVSaWs/yQZSvNZB+evFHmFupm25YYwqX5
-         CmbXJKtCgrCZFAJqvmPsCDG0SWUwgxr/dtCD186V5EiHoaEK30LsQRRg21N1kV40BSFJ
-         ojaMqWxsBwhaiheIhQBe99ZVEyIx/A7hlEiw7VEE8l61L/Q6jAGsbjm6Nr5nUl2GnjxH
-         gze8ytposv9E8McKLEnapvtB9/8DboS7SDvB7NyafT/gtAswf+K//WpptMr3pwe4+A/Y
-         kKNQ==
+        bh=OacZP/tiZAd9bxMgqXYn+YFBmAcj2qaR00TAZkdFGrc=;
+        b=XYFR4g+6FhbEF/A0AxgAFtyx2WwWXHjwq1GYnVuYSkK32VAWU/yUlhpIF1flbzOZwj
+         8XnN7bPrgojXR1GnRjYIeis3Non7r0cjtUEtP1PsRAWCsC0F6O8Lw0nfoi9c+S8jL1sF
+         /55MvUk3gAeG14CjfgnVNZSFr5djPSDsTAEk97eQ0EzbUI8mgWEXKFeXB+uffcaYVm5K
+         1VW7mCHUU3xYaHDdZF9rx7sAetiwGNSpz+MWBoSbBVy+qd1hIQ9Bc0IdnTcHS7d54AHH
+         0rF7AiR+AVGzlf8kKOtyfJsbGJEIzTdn1Hh7+7MNZA9zoYJcs9usq0CHMQVBdjdoy8b4
+         F6DA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731527420; x=1732132220;
+        d=1e100.net; s=20230601; t=1731528526; x=1732133326;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6OuUklqc2/spqh6bD65znVHh3ypQAuDk9FVQdh8lmiQ=;
-        b=b5DvNQFjUnjp7CHi0WgvDEVhAar31yFsF/2f6jZ3+xTdWCYIBx7/CRTg6snpYAzNvG
-         /JW9MjF7mlUXckEIKeZZYBCgxR22tt+WIeR2emZMoFN7SHvV0f9S7VpTcn7oEhPt2xoW
-         0DlruqmAR9hekbaBYy4oYRBE36xJ2QSQCPGrRRcwec+M3LUi1pCieal733zHyWwF98OG
-         TEJC3PlXWdXynH3ycoYO88Lq+Mkd+aEi/+ldjL9bIH3gR23u1RF7uOo+eh8gpz+prj0b
-         0zeDDdvSYD8SqrJ6xSjW0xPI9Xc/whfzpQRqHssBCfZFGVSVyc70dV0bN3hlwrWOAFNv
-         llew==
-X-Forwarded-Encrypted: i=1; AJvYcCW5LsWKDbBol2b58N2GkITvaRS1TLFbeJ8bbQbZt2PpwZ7d4IjrjIsOClC/yPWrXSJwObFpQY1ZvqKAYHpa@vger.kernel.org, AJvYcCW9xSHhx4bnAPXdz1YxNVBp4Ro3KUHonBZlr5EA1wXAUAyAj4frL8wM/7IRfo6VFRfvn8OS1q8Q2eOV@vger.kernel.org
-X-Gm-Message-State: AOJu0YzqGbxQienzmeqBkvb/5Q5JpKhshuFjrx9/MDszzXi0xbKkqnCr
-	FFhyeAJvhYs8OG41VGjGeJin1wAy5CCsdHPU0Ja8u1Ai10ARIgoO5rdBJI4BMzEbnutZQoNfOy3
-	ZMNsIrKDgQMM5lzyY7TUqc0oph9w=
-X-Google-Smtp-Source: AGHT+IEPKNz9D20Li+iExsg6R/ZQRB0io0za1Ty3bQ/hNr2mZDJKgUIzpNphRGleTsbog/5umI3YsX7yUAXjOJLvzjA=
-X-Received: by 2002:a05:651c:e0b:b0:2ff:559e:c94b with SMTP id
- 38308e7fff4ca-2ff559ed4e7mr4466281fa.17.1731527420081; Wed, 13 Nov 2024
- 11:50:20 -0800 (PST)
+        bh=OacZP/tiZAd9bxMgqXYn+YFBmAcj2qaR00TAZkdFGrc=;
+        b=YtbBdlkKa88u0r0TJov3gz7fx7H1yJjNFtvSb+7ABsI7G2df0Pj7/6QvjBFU9eGLmA
+         s3SLgvy3o4NI3ORjdwXRWrjnV0FTJEiKHNnYclLVhwQVPxbrdjPsTCFMmQ44YsawkaOl
+         czWhcqkOwbjSjvery+5z6zt6sRwCvYdn2vM1x8t3fUZJCxjZ6D0bb1yOZr8DrvDM62EY
+         wlAo5GTW3yOifK/UeRFkA/RlW016UWcWtbIK9BC5ukkm5Zk43+eetepUUP1ROLtbMRPC
+         LPMbEoHW3L7q1jSPLFbZ3XZJoE8tCXk+NcMPDFaXyxFUkjs4FT0gdMVGlSmGQ+DKvZJA
+         cbjQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUh5Ni4DaN5R6hN3P/DNm8QA7Bpex3CEcWHEuGsgk00k6VPzYq8yLtH1ZbnH34QnMvGBfXNmgtJsFLElO2r@vger.kernel.org, AJvYcCXmaC4L/UxqMSEtyzc6DWR4iRLQ7OKGQF/nyFS12qIL5SV+YrRdfoAij8Ir2LTykyteOAps9HyBMnUa@vger.kernel.org
+X-Gm-Message-State: AOJu0YwLONwBAyQ4AhlzisNb3Pli+KZohoVmrdA4COS4UspcI7rczf9a
+	Mr/KhVMnf9SK2Ld4FTr4cz4dLkW2QOoYdNc76pJbJK3MAWN2JeFHnYPR25Z0Prv4rDz1v/9WfCv
+	VQECTIb5lXYS7Gr9oWdT4QHxZGDs=
+X-Google-Smtp-Source: AGHT+IEJo8CGXetuwMFbv1W2aQKOun7/HjSLcAGLnb8agyhYJuKzN5jkatMrqHB1SqwQacuICSLD2qahbPJf14U4biM=
+X-Received: by 2002:a05:651c:212a:b0:2fb:5688:55c0 with SMTP id
+ 38308e7fff4ca-2ff4c633485mr21641851fa.38.1731528525823; Wed, 13 Nov 2024
+ 12:08:45 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -76,11 +76,11 @@ References: <20241113120327.5239-1-suravee.suthikulpanit@amd.com>
  <20241113132031.GF35230@nvidia.com> <CAFULd4a1PHREX6ws9Gyu=TaaZvdgLfh6peoE5Tt010uGyY9Hgw@mail.gmail.com>
  <20241113140914.GI35230@nvidia.com> <CAFULd4aGDM5ySO-PeOH0+_U89mnqYqQ7v+U0ZsMode3bxs_X7w@mail.gmail.com>
  <20241113142807.GJ35230@nvidia.com> <CAFULd4aFvGj=kz5Si9WpAr33KFtJDO5+sdNO=NBB+boS=E-E_Q@mail.gmail.com>
- <20241113163451.GK35230@nvidia.com>
-In-Reply-To: <20241113163451.GK35230@nvidia.com>
+ <20241113163451.GK35230@nvidia.com> <CAFULd4bvDhfSprPEyirvX9VmKK_fpxaVNRO02oqT_KQAdLFhfg@mail.gmail.com>
+In-Reply-To: <CAFULd4bvDhfSprPEyirvX9VmKK_fpxaVNRO02oqT_KQAdLFhfg@mail.gmail.com>
 From: Uros Bizjak <ubizjak@gmail.com>
-Date: Wed, 13 Nov 2024 20:50:08 +0100
-Message-ID: <CAFULd4bvDhfSprPEyirvX9VmKK_fpxaVNRO02oqT_KQAdLFhfg@mail.gmail.com>
+Date: Wed, 13 Nov 2024 21:08:34 +0100
+Message-ID: <CAFULd4bwyrsXFXJzZQnGyZsQo_RisQLR7qkjMdBBONQzp67xCg@mail.gmail.com>
 Subject: Re: [PATCH v10 05/10] iommu/amd: Introduce helper function to update
  256-bit DTE
 To: Jason Gunthorpe <jgg@nvidia.com>
@@ -92,104 +92,92 @@ Cc: Arnd Bergmann <arnd@arndb.de>, Suravee Suthikulpanit <suravee.suthikulpanit@
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 13, 2024 at 5:34=E2=80=AFPM Jason Gunthorpe <jgg@nvidia.com> wr=
-ote:
+On Wed, Nov 13, 2024 at 8:50=E2=80=AFPM Uros Bizjak <ubizjak@gmail.com> wro=
+te:
 >
-> On Wed, Nov 13, 2024 at 03:36:14PM +0100, Uros Bizjak wrote:
-> > On Wed, Nov 13, 2024 at 3:28=E2=80=AFPM Jason Gunthorpe <jgg@nvidia.com=
-> wrote:
-> > >
-> > > On Wed, Nov 13, 2024 at 03:14:09PM +0100, Uros Bizjak wrote:
-> > > > > > Even without atomicity guarantee, __READ_ONCE() still prevents =
-the
-> > > > > > compiler from performing unwanted optimizations (please see the=
- first
-> > > > > > comment in include/asm-generic/rwonce.h) and unwanted reorderin=
-g of
-> > > > > > reads and writes when this function is inlined. This macro does=
- cast
-> > > > > > the read to volatile, but IMO it is much more readable to use
-> > > > > > __READ_ONCE() than volatile qualifier.
-> > > > >
-> > > > > Yes it does, but please explain to me what "unwanted reordering" =
-is
-> > > > > allowed here?
-> > > >
-> > > > It is a static function that will be inlined by the compiler
-> > > > somewhere, so "unwanted reordering" depends on where it will be
-> > > > inlined. *IF* it will be called from safe code, then this limitatio=
-n
-> > > > for the compiler can be lifted.
-> > >
-> > > As long as the values are read within the spinlock the order does not
-> > > matter. READ_ONCE() is not required to contain reads within spinlocks=
-.
+> On Wed, Nov 13, 2024 at 5:34=E2=80=AFPM Jason Gunthorpe <jgg@nvidia.com> =
+wrote:
 > >
-> > Indeed. But then why complicate things with cmpxchg, when we have
-> > exclusive access to the shared memory? No other thread can access the
-> > data, protected by spinlock; it won't change between invocations of
-> > cmpxchg in the loop, and atomic access via cmpxchg is not needed.
+> > On Wed, Nov 13, 2024 at 03:36:14PM +0100, Uros Bizjak wrote:
+> > > On Wed, Nov 13, 2024 at 3:28=E2=80=AFPM Jason Gunthorpe <jgg@nvidia.c=
+om> wrote:
+> > > >
+> > > > On Wed, Nov 13, 2024 at 03:14:09PM +0100, Uros Bizjak wrote:
+> > > > > > > Even without atomicity guarantee, __READ_ONCE() still prevent=
+s the
+> > > > > > > compiler from performing unwanted optimizations (please see t=
+he first
+> > > > > > > comment in include/asm-generic/rwonce.h) and unwanted reorder=
+ing of
+> > > > > > > reads and writes when this function is inlined. This macro do=
+es cast
+> > > > > > > the read to volatile, but IMO it is much more readable to use
+> > > > > > > __READ_ONCE() than volatile qualifier.
+> > > > > >
+> > > > > > Yes it does, but please explain to me what "unwanted reordering=
+" is
+> > > > > > allowed here?
+> > > > >
+> > > > > It is a static function that will be inlined by the compiler
+> > > > > somewhere, so "unwanted reordering" depends on where it will be
+> > > > > inlined. *IF* it will be called from safe code, then this limitat=
+ion
+> > > > > for the compiler can be lifted.
+> > > >
+> > > > As long as the values are read within the spinlock the order does n=
+ot
+> > > > matter. READ_ONCE() is not required to contain reads within spinloc=
+ks.
+> > >
+> > > Indeed. But then why complicate things with cmpxchg, when we have
+> > > exclusive access to the shared memory? No other thread can access the
+> > > data, protected by spinlock; it won't change between invocations of
+> > > cmpxchg in the loop, and atomic access via cmpxchg is not needed.
+> >
+> > This is writing to memory shared by HW and HW is doing a 256 bit
+> > atomic load.
+> >
+> > It is important that the CPU do a 128 bit atomic write.
+> >
+> > cmpxchg is not required, but a 128 bit store is. cmpxchg128 is the
+> > only primitive Linux offers.
 >
-> This is writing to memory shared by HW and HW is doing a 256 bit
-> atomic load.
+> If we want to exercise only the atomic property of cmpxchg16b, then we
+> can look at arch/x86/lib/atomic64_set_cx8.S how cmpxchg8b is used to
+> implement the core of arch_atomic64_set() for x86_32:
 >
-> It is important that the CPU do a 128 bit atomic write.
+> SYM_FUNC_START(atomic64_set_cx8)
+> 1:
+> /* we don't need LOCK_PREFIX since aligned 64-bit writes
+>  * are atomic on 586 and newer */
+>     cmpxchg8b (%esi)
+>     jne 1b
 >
-> cmpxchg is not required, but a 128 bit store is. cmpxchg128 is the
-> only primitive Linux offers.
+>     RET
+> SYM_FUNC_END(atomic64_set_cx8)
+>
+> we *do* have arch_try_cmpxchg128_local() that declares cmpxchg16b
+> without lock prefix, and perhaps we can use it to create 128bit store,
+> something like:
+>
+> static __always_inline void iommu_atomic128_set(__int128 *ptr, __int128 v=
+al)
+> {
+>     __int128 old =3D *ptr;
+>
+>     do {
+>     } while (!arch_try_cmpxchg128_local(ptr, &old, val));
+> }
 
-If we want to exercise only the atomic property of cmpxchg16b, then we
-can look at arch/x86/lib/atomic64_set_cx8.S how cmpxchg8b is used to
-implement the core of arch_atomic64_set() for x86_32:
-
-SYM_FUNC_START(atomic64_set_cx8)
-1:
-/* we don't need LOCK_PREFIX since aligned 64-bit writes
- * are atomic on 586 and newer */
-    cmpxchg8b (%esi)
-    jne 1b
-
-    RET
-SYM_FUNC_END(atomic64_set_cx8)
-
-we *do* have arch_try_cmpxchg128_local() that declares cmpxchg16b
-without lock prefix, and perhaps we can use it to create 128bit store,
-something like:
+Eh, I forgot that data does not change, so we don't need the cmpxchg loop.
 
 static __always_inline void iommu_atomic128_set(__int128 *ptr, __int128 val=
 )
-{
-    __int128 old =3D *ptr;
-
-    do {
-    } while (!arch_try_cmpxchg128_local(ptr, &old, val));
+ {
+     arch_cmpxchg128_local(ptr, *ptr, val);
 }
 
-Then write_dte_upper128() would look like:
-
-static void write_dte_upper128(struct dev_table_entry *ptr, struct
-dev_table_entry *new)
-{
-    struct dev_table_entry old =3D {}; <--- do we need to initialize struct=
- here?
-
-    old.data128[1] =3D ptr->data128[1];
-
-    /*
-     * Preserve DTE_DATA2_INTR_MASK. This needs to be
-     * done here since it requires to be inside
-     * spin_lock(&dev_data->dte_lock) context.
-     */
-    new->data[2] &=3D ~DTE_DATA2_INTR_MASK;
-    new->data[2] |=3D old.data[2] & DTE_DATA2_INTR_MASK;
-
-    iommu_atomic128_set(&ptr->data128[1], new->data128[1]);
-}
-
-and in a similar way implement write_dte_lower128().
-
-(I am away from the keyboard ATM, so the above is not tested, but you
-got the idea...)
+should do the trick.
 
 Uros.
 
