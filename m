@@ -1,105 +1,178 @@
-Return-Path: <linux-arch+bounces-9083-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9084-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C5A49C8304
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Nov 2024 07:23:38 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 548889C87F1
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Nov 2024 11:45:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0AA22284B9F
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Nov 2024 06:23:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 788F3B2B1C2
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Nov 2024 10:42:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DDC31AF0DC;
-	Thu, 14 Nov 2024 06:23:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 741651DE4DF;
+	Thu, 14 Nov 2024 10:42:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KeznJqzz"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="o/WWCW0D";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="y398gvQL";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="o/WWCW0D";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="y398gvQL"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32C5D1DFD8;
-	Thu, 14 Nov 2024 06:23:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B11513A3EC;
+	Thu, 14 Nov 2024 10:42:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731565411; cv=none; b=YChHSK2r1mRMVZKscpKpV2EJUMj8xGkkqtZZwvzHpS+6GYVvQQs1xlzqDVDOB/1Q/2Hinmy9WZgWJE0Cchlwwh3hzVytK41k2OSKBHM1tD9ggWCzYLAZ+qhXPl3YUUC1Hw+coKA+8Va3Soy/Xg9tAmEJ+JFWMDDgy0ObQATV63Q=
+	t=1731580937; cv=none; b=fWEdJlLXIIHmqgrQ8mjh2VKYf9lGu7YREMUB3+JDMxUsB9zN4SJxKQqzTNc7TkmW0XuRhY24EyE3k8ynEY2guBuk3aVmcZ9vF0MqJ10mpSXyjaII9mIUcOpIrF0mJ3XTfSLwaqUGMj96ecLAkP6spai8Fe9Vo+AzAwmOWICStAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731565411; c=relaxed/simple;
-	bh=s7Mfdv4GRYa2OR5o4x+wbZZfKOfHszZQimqrnUlWVhQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qoiBVOIFlUqZmGk+0kJ1mIlqECgT1SJkA6xOp79CJnwwbmKw2MRb+cy+onRdGYqdZOWCLPYJe2V5hAcV2L+KNhSmVsfQ03n+DE/LUo0nA47D+d1JDjW5b1a5sY5cPhiWZshuSLB5Ivw1doJuq1hg9mns/JQ8OnsCtP1eTNaWitk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KeznJqzz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6C0AC4CED8;
-	Thu, 14 Nov 2024 06:23:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731565410;
-	bh=s7Mfdv4GRYa2OR5o4x+wbZZfKOfHszZQimqrnUlWVhQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=KeznJqzzU5jKxFDlGu5NtCxM3WFCgRqWb2XnrIFX2ORpth2eruoL7j5D+ulEPFdcd
-	 j98B12VGtab1OElYE84BNknpqYwFCNzoIATJqs3sZk/CESiB8o1MaoINnxsXgPZBIv
-	 JCP1zkBypluGW8dRKq1lh69Xwm+uThF0qKi4weCnH4wqvFR9W2WEU+cruKRj3KmH5y
-	 0PniR2v4OT8OCC8jwuet9WCW2mVtT5N0/f4YwmMSqmwS05cDr01BgMviDAzN7VOFT5
-	 LqmGT/FZHockIMrnHH7I4pDI8iFBlw7tF0bKXPP+AHELMdk9iyV0b+OSZawaysbBvT
-	 LCB98fjjbMPHw==
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a99eb8b607aso28862766b.2;
-        Wed, 13 Nov 2024 22:23:30 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUMrjNbI8rChPuBrlqBlcSQ4d09t4pKnjv7F6pEWf4eVKpscG0hLdXcujNFB5B33maNZQ6SvGhEMQdd@vger.kernel.org, AJvYcCX5SDnfYyImSf3hOrl3H9Xh8PAlE2tjlS/wKhPrp7MNAk/ArbBP4TVcYynqDIRIo+lvDFadoMHPaa78QhD+@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWHqhKZ9Rav8UMXEUBFTBB+/v3p9vkSFDgxuw3N748EaIgwwi7
-	Ygj8VsxKxNpzAVAx59MLE6pjkkjfzgX6tr+qXCXvn1X+wOr7Qa9NMfsYdIpYEraokMeW9eJVBXo
-	5GTh6b13uXKKqtH0NwQZdtvQReVA=
-X-Google-Smtp-Source: AGHT+IG+g5gwmqrc+hBmet+m5InXK/ExhZqLxMNhRWbxlJVd2mb6LgxKGdsrgfoA3NRDPjlFKU3UtGWk1LCYXTiCZVg=
-X-Received: by 2002:a17:907:728d:b0:a99:eb94:3e37 with SMTP id
- a640c23a62f3a-a9ef002177amr2359460566b.58.1731565409312; Wed, 13 Nov 2024
- 22:23:29 -0800 (PST)
+	s=arc-20240116; t=1731580937; c=relaxed/simple;
+	bh=gP/G5bWQY2EiykgkTFYABkRbHF6HpxNcPfbyX3U1fa4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=czHLb8ebDwsrjyUHv81THdKh/VlEZNhey2JS/Y06CgtsGyWENPu+PAPZmxWFes5rd14NCE3xHvNL7Yz613M7oS+eUqsUtNMBnNdUs92bsIDownJeItI8V4FHXDX5Sasl4XAowbrlK2o44iuNSefuwz7YEvFHQzZJUqsMyNPn7PM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=o/WWCW0D; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=y398gvQL; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=o/WWCW0D; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=y398gvQL; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 8C65B1F79C;
+	Thu, 14 Nov 2024 10:42:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1731580933; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hDmbYNzWsci4PxZKuq25OJU12sv+lOWhhjNx9ffNUhM=;
+	b=o/WWCW0Dt0HI7p5/Q0SshWlz/T1KMjlFcfxyFKl6SsAk/yIozg3tPsphsZur6P+LBaHUbP
+	8cnq/t+qdtiKLrKVb0jkwY5m39IyiVXMu4InLOVK1EbBPXgjhIUYxihSXsCIRWXE8Okr8z
+	XipZXdyzDCZRfjMsVstwA/SSmyVMdsQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1731580933;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hDmbYNzWsci4PxZKuq25OJU12sv+lOWhhjNx9ffNUhM=;
+	b=y398gvQLP8okIqeO5M6xapv7ck/Gun6tgRvK8I03Ls5wvVYhyH+4ZZw6XDsfPoBuPW2dAD
+	B6qH4dXdI91ayxAg==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1731580933; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hDmbYNzWsci4PxZKuq25OJU12sv+lOWhhjNx9ffNUhM=;
+	b=o/WWCW0Dt0HI7p5/Q0SshWlz/T1KMjlFcfxyFKl6SsAk/yIozg3tPsphsZur6P+LBaHUbP
+	8cnq/t+qdtiKLrKVb0jkwY5m39IyiVXMu4InLOVK1EbBPXgjhIUYxihSXsCIRWXE8Okr8z
+	XipZXdyzDCZRfjMsVstwA/SSmyVMdsQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1731580933;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hDmbYNzWsci4PxZKuq25OJU12sv+lOWhhjNx9ffNUhM=;
+	b=y398gvQLP8okIqeO5M6xapv7ck/Gun6tgRvK8I03Ls5wvVYhyH+4ZZw6XDsfPoBuPW2dAD
+	B6qH4dXdI91ayxAg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 5475D13721;
+	Thu, 14 Nov 2024 10:42:13 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 8kr9EwXUNWfCJgAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Thu, 14 Nov 2024 10:42:13 +0000
+Message-ID: <80d61508-f714-4d4c-b8e1-b5c0db6adbdd@suse.cz>
+Date: Thu, 14 Nov 2024 11:42:13 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241113124857.1959435-1-chenhuacai@loongson.cn> <CAADWXX9-LY7aaMax6KdtDV+vOkm_WKE76Qmy4n3UHN61O=-2Lg@mail.gmail.com>
-In-Reply-To: <CAADWXX9-LY7aaMax6KdtDV+vOkm_WKE76Qmy4n3UHN61O=-2Lg@mail.gmail.com>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Thu, 14 Nov 2024 14:23:17 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H6=_Nv0N-zXNad2TgOzTgG_BU6TPhN+U4u=+SMQ98BPJw@mail.gmail.com>
-Message-ID: <CAAhV-H6=_Nv0N-zXNad2TgOzTgG_BU6TPhN+U4u=+SMQ98BPJw@mail.gmail.com>
-Subject: Re: [GIT PULL] LoongArch fixes for v6.12-final
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Huacai Chen <chenhuacai@loongson.cn>, Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev, 
-	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>, 
-	Jiaxun Yang <jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v1 11/57] fork: Permit boot-time THREAD_SIZE
+ determination
+Content-Language: en-US
+To: Ryan Roberts <ryan.roberts@arm.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+ Anshuman Khandual <anshuman.khandual@arm.com>,
+ Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ Catalin Marinas <catalin.marinas@arm.com>,
+ David Hildenbrand <david@redhat.com>, Greg Marsden
+ <greg.marsden@oracle.com>, Ingo Molnar <mingo@redhat.com>,
+ Ivan Ivanov <ivan.ivanov@suse.com>, Juri Lelli <juri.lelli@redhat.com>,
+ Kalesh Singh <kaleshsingh@google.com>, Marc Zyngier <maz@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>, Matthias Brugger <mbrugger@suse.com>,
+ Miroslav Benes <mbenes@suse.cz>, Peter Zijlstra <peterz@infradead.org>,
+ Vincent Guittot <vincent.guittot@linaro.org>, Will Deacon <will@kernel.org>
+Cc: kasan-dev@googlegroups.com, linux-arch@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-mm@kvack.org
+References: <20241014105514.3206191-1-ryan.roberts@arm.com>
+ <20241014105912.3207374-1-ryan.roberts@arm.com>
+ <20241014105912.3207374-11-ryan.roberts@arm.com>
+From: Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20241014105912.3207374-11-ryan.roberts@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Level: 
+X-Spamd-Result: default: False [-2.80 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	FREEMAIL_TO(0.00)[arm.com,linux-foundation.org,gmail.com,kernel.org,arndb.de,redhat.com,oracle.com,suse.com,google.com,suse.cz,infradead.org,linaro.org];
+	TAGGED_RCPT(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[25];
+	ARC_NA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.cz:email,suse.cz:mid,arm.com:email]
+X-Spam-Score: -2.80
+X-Spam-Flag: NO
 
-Hi, Linus,
+On 10/14/24 12:58, Ryan Roberts wrote:
+> THREAD_SIZE defines the size of a kernel thread stack. To date, it has
+> been set at compile-time. However, when using vmap stacks, the size must
+> be a multiple of PAGE_SIZE, and given we are in the process of
+> supporting boot-time page size, we must also do the same for
+> THREAD_SIZE.
+> 
+> The alternative would be to define THREAD_SIZE for the largest supported
+> page size, but this would waste memory when using a smaller page size.
+> For example, arm64 requires THREAD_SIZE to be 16K, but when using 64K
+> pages and a vmap stack, we must increase the size to 64K. If we required
+> 64K when 4K or 16K page size was in use, we would waste 48K per kernel
+> thread.
+> 
+> So let's refactor to allow THREAD_SIZE to not be a compile-time
+> constant. THREAD_SIZE_MAX (and THREAD_ALIGN_MAX) are introduced to
+> manage the limits, as is done for PAGE_SIZE.
+> 
+> When THREAD_SIZE is a compile-time constant, behaviour and code size
+> should be equivalent.
+> 
+> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
 
-On Thu, Nov 14, 2024 at 1:06=E2=80=AFAM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Wed, Nov 13, 2024 at 4:49=E2=80=AFAM Huacai Chen <chenhuacai@loongson.=
-cn> wrote:
-> >
-> > LoongArch fixes for v6.12-final
->
-> Hmm. This email was in my spam folder. I'm not seeing anything
-> horribly wrong with it, but I do note that loongson.cn does not seem
-> to enable DKIM, and that does tend to make gmail (understandably) more
-> nervous. Yes, you do have proper SPF, but in this day and age SPF+DKIM
-> (and a proper DMARC policy to enable strict enforcement) really is a
-> good idea.
-Maybe the root cause is that "From" in my patch is loongson.cn but I
-use kernel.org's SMTP server?
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
->
-> Maybe you can talk to your MIS people about setting up DKIM and DMARC too=
-?
-OK, I will try my best to do this.
-
-Huacai
-
->
-> Yes, it's a bother. But spam is a scourge.
->
->                       Linus
 
