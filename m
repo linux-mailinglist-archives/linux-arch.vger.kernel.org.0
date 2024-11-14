@@ -1,116 +1,99 @@
-Return-Path: <linux-arch+bounces-9087-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9088-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 377BC9C90B0
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Nov 2024 18:22:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C6719C90B3
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Nov 2024 18:22:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EF1F8284ADE
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Nov 2024 17:21:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 13F511F23393
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Nov 2024 17:22:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D968188735;
-	Thu, 14 Nov 2024 17:21:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="RjPt2Oos"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D07A185939;
+	Thu, 14 Nov 2024 17:22:18 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D5FA24B29
-	for <linux-arch@vger.kernel.org>; Thu, 14 Nov 2024 17:21:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F08F4189F2A;
+	Thu, 14 Nov 2024 17:22:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731604914; cv=none; b=P5wfwk6+mdyVV5XwUnlxV9+l0lKHJBD+uF/MIQlJQI995v4fP67qV5RwXRQBQb3YEJgqMlLLNoW0ZH2CdtKfOpgi8ZA+BgxvPkoPDrKfNNsfIplgtPluvmdCVARm3kcx64u9LWd9CT5OCrompsujJC4HiX77EwNWhXOY6jzn6uc=
+	t=1731604938; cv=none; b=JkFtFEyXqmvDaE+nh2iMYNzvqCklauyjQ7t1q8nSJItUCJyvOtly7TtS7WVQ8wALEKsAXE9/bE/e+01QS4HVcwmZZwIvQ8SRd8MIjV3ozim/jK538pd2ElrQWO7r0n06SCYGNdjAyJ1QERepQQZiixHXETLp4MuqZuJ8SCDNRiY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731604914; c=relaxed/simple;
-	bh=ooLd2KnZY+iAsvZpcBbhlZVOlUE4xC2qvGpPzxWgCOE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BWdMLSyQ//Dn8e4489XR7mbkdsmda2g6oyvzF/K4mpihQefO7xyb7cNyLIvjOGM6Q0n4SLCCU0UJuHBVzqBI3OoORZmqlwHzQ3C08s8vHM31Z+m9nWyAm9WqgPtXW2MfA00X/ksuiShPmNLjOqPEco6A7ERc9QE+XdpwEmyzlVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=RjPt2Oos; arc=none smtp.client-ip=209.85.208.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2fb5fa911aaso15296481fa.2
-        for <linux-arch@vger.kernel.org>; Thu, 14 Nov 2024 09:21:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1731604910; x=1732209710; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6hn1K0JlF2yxtKRDiqqXBoVLBpc9QBlyQWe6RfRYuPk=;
-        b=RjPt2OosW4tTuisFytAmJXI6hI/1h8x0KHcPMWz++mvsf60ehqR482g3KCqm1dW1/9
-         benqXxEjyrEreMhMDAAAjJKtwaD/sPNFawvZMhr/gfR8Bpjt2V5aQH9GPol+5IoDPm/L
-         MC8lDysVCBF3quLEnuMtDwMsYELUtLIm/QYmw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731604910; x=1732209710;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6hn1K0JlF2yxtKRDiqqXBoVLBpc9QBlyQWe6RfRYuPk=;
-        b=iqpC1rR7/P5Ad7Qm2re1kfKeABMaWuiBGu8DjMq9xVSKiV3SSR1tZrn/Nkl1dtkdj8
-         HzpX7SPSJ9Dj7LGuBF2ziSKUAX2ihmSHplh8na75TTffIJ6fgWaE9ErJTJK69fI400hd
-         jQOoz8jZz0+vESg5b9YoAV+iTK8g+ASjEv734wO2jL2C/kd6Cu3Mwe7JKM1kn+zQilQq
-         INzc2lniPySRPKzstg/npoExKoOhLiWOWP095NexQhcd9YquzElZMd80OhU31QWsvcbL
-         0dSheJ3XpjHxG3KRT9i/d+sHDVeWVaZ1ny1iT4a5PXPuGT5+zg2xbngqUTJefY1GKSDG
-         VU+w==
-X-Forwarded-Encrypted: i=1; AJvYcCXwMheEFkFU3Sim1wefKhEGIBB0Xlo/TkiaMYWCHWuiXNvAHz5ov1Gjs8ylRkRYDFFUIJv0vo8lYt0t@vger.kernel.org
-X-Gm-Message-State: AOJu0YzrSbdBPfjC+WizshPRs9Vp78/KplRijEdbnhxFNgKjz4UOQuWK
-	FxfRk9dU1uO+THmURgF/obIJdXw8nBS5wWsJbHEc1glgWixY/hOg9Wi7t/EboUQWf6L8Gxfkbou
-	OUAA=
-X-Google-Smtp-Source: AGHT+IGibV1KonPV4clfKa3OrfZVKg4Q0Eg8Iw+ndBeBpXgG39uE6nAdp+Wkjtej1pxYMCEcfHsBNA==
-X-Received: by 2002:a05:651c:1593:b0:2ff:5645:121f with SMTP id 38308e7fff4ca-2ff590a1bb4mr26603581fa.40.1731604910075;
-        Thu, 14 Nov 2024 09:21:50 -0800 (PST)
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com. [209.85.167.41])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2ff5985abfcsm2421771fa.87.2024.11.14.09.21.47
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Nov 2024 09:21:48 -0800 (PST)
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-539fb49c64aso1380390e87.0
-        for <linux-arch@vger.kernel.org>; Thu, 14 Nov 2024 09:21:47 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWD99ZtcdES/GvM6AcStQgqEt0IKPcDZTUUDumrEzlMFvMK6Gb4XcFsjaHc5K3VOW+Xf19/pUDTOKjb@vger.kernel.org
-X-Received: by 2002:a05:6512:224e:b0:53d:a504:9334 with SMTP id
- 2adb3069b0e04-53da5c7b565mr2490631e87.44.1731604907586; Thu, 14 Nov 2024
- 09:21:47 -0800 (PST)
+	s=arc-20240116; t=1731604938; c=relaxed/simple;
+	bh=t9ajE/VeX04xVGpQR7Zfzq53U0A1RsxE/6M4zIt9zZ4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o/TYcmU03YyeJ0q8i2KYBbdbsgLOUZQhL5FD+LewcNBWZmjLQSrXdUNvwrPKo6VXtQMAmcpqNR19e6+9HAnrd2ZMudfBNSX72sD9Ahc7/ivSRYl8a1h27ZmmwB1WY3bKNqKBZX3gg91uXFQ57C40t4HZkx7XTF7WTDFzDubEado=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CD68F1474;
+	Thu, 14 Nov 2024 09:22:44 -0800 (PST)
+Received: from arm.com (RQ4T19M611.cambridge.arm.com [10.1.37.73])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CBA8D3F6A8;
+	Thu, 14 Nov 2024 09:22:09 -0800 (PST)
+Date: Thu, 14 Nov 2024 17:22:07 +0000
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: "Christoph Lameter (Ampere)" <cl@gentwo.org>
+Cc: Ankur Arora <ankur.a.arora@oracle.com>, linux-pm@vger.kernel.org,
+	kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	will@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+	pbonzini@redhat.com, vkuznets@redhat.com, rafael@kernel.org,
+	daniel.lezcano@linaro.org, peterz@infradead.org, arnd@arndb.de,
+	lenb@kernel.org, mark.rutland@arm.com, harisokn@amazon.com,
+	mtosatti@redhat.com, sudeep.holla@arm.com, maz@kernel.org,
+	misono.tomohiro@fujitsu.com, maobibo@loongson.cn,
+	zhenglifeng1@huawei.com, joao.m.martins@oracle.com,
+	boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
+Subject: Re: [PATCH v9 01/15] asm-generic: add barrier
+ smp_cond_load_relaxed_timeout()
+Message-ID: <ZzYxv2RfDwegDMEf@arm.com>
+References: <20241107190818.522639-1-ankur.a.arora@oracle.com>
+ <20241107190818.522639-2-ankur.a.arora@oracle.com>
+ <9cecd8a5-82e5-69ef-502b-45219a45006b@gentwo.org>
+ <87v7wy2mbi.fsf@oracle.com>
+ <88b3b176-97c7-201e-0f89-c77f1802ffd9@gentwo.org>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241113124857.1959435-1-chenhuacai@loongson.cn>
- <CAADWXX9-LY7aaMax6KdtDV+vOkm_WKE76Qmy4n3UHN61O=-2Lg@mail.gmail.com> <CAAhV-H6=_Nv0N-zXNad2TgOzTgG_BU6TPhN+U4u=+SMQ98BPJw@mail.gmail.com>
-In-Reply-To: <CAAhV-H6=_Nv0N-zXNad2TgOzTgG_BU6TPhN+U4u=+SMQ98BPJw@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Thu, 14 Nov 2024 09:21:31 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wgC===Qx3STDjBWGHuzJ0SNP16gEz3iSc6Ebo_bM-yZtw@mail.gmail.com>
-Message-ID: <CAHk-=wgC===Qx3STDjBWGHuzJ0SNP16gEz3iSc6Ebo_bM-yZtw@mail.gmail.com>
-Subject: Re: [GIT PULL] LoongArch fixes for v6.12-final
-To: Huacai Chen <chenhuacai@kernel.org>
-Cc: Huacai Chen <chenhuacai@loongson.cn>, Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev, 
-	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>, 
-	Jiaxun Yang <jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <88b3b176-97c7-201e-0f89-c77f1802ffd9@gentwo.org>
 
-On Wed, 13 Nov 2024 at 22:23, Huacai Chen <chenhuacai@kernel.org> wrote:
->
-> Maybe the root cause is that "From" in my patch is loongson.cn but I
-> use kernel.org's SMTP server?
+On Fri, Nov 08, 2024 at 11:41:08AM -0800, Christoph Lameter (Ampere) wrote:
+> On Thu, 7 Nov 2024, Ankur Arora wrote:
+> > > Calling the clock retrieval function repeatedly should be fine and is
+> > > typically done in user space as well as in kernel space for functions that
+> > > need to wait short time periods.
+> >
+> > The problem is that you might have multiple CPUs polling in idle
+> > for prolonged periods of time. And, so you want to minimize
+> > your power/thermal envelope.
+> 
+> On ARM that maps to YIELD which does not do anything for the power
+> envelope AFAICT. It switches to the other hyperthread.
 
-Ahh, yes, I didn't even notice that you went through mail.kernel.org,
-I only noticed that loongson.cn did SPF but not DKIM.
+The issue is not necessarily arm64 but poll_idle() on other
+architectures like x86 where, at the end of this series, they still call
+cpu_relax() in a loop and check local_clock() every 200 times or so
+iterations. So I wouldn't want to revert the improvement in 4dc2375c1a4e
+("cpuidle: poll_state: Avoid invoking local_clock() too often").
 
-Yeah, if loongson had had DKIM and DMARC set up to match, it would
-have been an even noisier failure about DKIM actively failing, rather
-than not having DKIM at all.
+I agree that the 200 iterations here it's pretty random and it was
+something made up for poll_idle() specifically and it could increase the
+wait period in other situations (or other architectures).
 
-If you use mail.kernel.org, using a "From:" with a kernel.org address
-too to get the full email verification is likely the best option.
+OTOH, I'm not sure we want to make this API too complex if the only
+user for a while would be poll_idle(). We could add a comment that the
+timeout granularity can be pretty coarse and architecture dependent (200
+cpu_relax() calls in one deployment, 100us on arm64 with WFE).
 
-That said, I went back and looked, and you've clearly been using this
-mail.kernel.org + loongson.cn model for a long time, and it hasn't
-been problematic. So your pull request being marked as spam might have
-been just a one-off.
-
-           Linus
+-- 
+Catalin
 
