@@ -1,103 +1,120 @@
-Return-Path: <linux-arch+bounces-9102-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9103-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B63819C9496
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Nov 2024 22:36:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F4F29C95FD
+	for <lists+linux-arch@lfdr.de>; Fri, 15 Nov 2024 00:16:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 37A8FB22851
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Nov 2024 21:36:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E8AE1282894
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Nov 2024 23:16:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 089E71AE875;
-	Thu, 14 Nov 2024 21:35:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB7721B21A4;
+	Thu, 14 Nov 2024 23:15:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="NQqKMwIs"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="AKc1qltn"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72C95487BF;
-	Thu, 14 Nov 2024 21:35:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 520871B0103
+	for <linux-arch@vger.kernel.org>; Thu, 14 Nov 2024 23:15:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731620157; cv=none; b=RmWVdMeNE4TzbsaeHpf9ys35T+VGDg4M9JaCGMS822AVIMXFO4XuK1vX/b6JkGAwiq8r8CK5bNz4aSa+f8/xJzERIQCBwmS2EyvB8eBx0Cv45MaoO9Vuul8t+iHu3lC+e3yDt57Qqsbbgxb/6MIBBWsYR4GiuqoeJBG6YvDovl8=
+	t=1731626146; cv=none; b=Eb3bs/mopq419vM/dcBmHFgxBrOMubx56xAnCoDE3SJlaQIkaeauHGkDnZPZ90jhtw3T7WfXN2qgDQr2o3GuLeYPYfIJGRXUMD2SU+UR5Utcr3cCLU7m2b4gZUhukgYgvuWkYesEo5clKrCjeHWdU21JnnBj/LUYYboRrHc095E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731620157; c=relaxed/simple;
-	bh=+e79qdIDhXLlZ9c+P2Dc6YG0KRyU6RDSSxMlbTgd9g8=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=RjE5n90Q7nyTRSUNa4U0F7khJpCD4QMVdv0DjTHUmfebcftd/2VKQTMv7krcvCThBtqYgQu02dmioc9D7QwCmseFjBO9BjasI2Za7lS6LL991L2oWRbLm/MzRwC4y6rP5SOUsrNrXCt5rMszVYYeFP/xFuz4tRe5S0KYPocAcFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=NQqKMwIs; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [192.168.35.166] (c-73-118-245-227.hsd1.wa.comcast.net [73.118.245.227])
-	by linux.microsoft.com (Postfix) with ESMTPSA id B9C9C20C8BA9;
-	Thu, 14 Nov 2024 13:35:54 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B9C9C20C8BA9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1731620155;
-	bh=XPm0EAc1K/nvytn2cDBsP3xI8cBGOIMbd0Cl3IWdsjU=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=NQqKMwIsblJDQplTM3wYIQkHUxgOW2n632p2zFLlvECKHoCZPlToMzD5erEwPYfpe
-	 0xAcZl2lQraCLw3r4lLsocd3IgabK8u3iSBdob3SxKEh55p874cPox288sd/GyuZhW
-	 Ar0G9QMjSax+jhKvh5SSd5YXIokLKru/kSANZoeY=
-Message-ID: <4743445a-09c4-4f14-b6a7-2e6509077680@linux.microsoft.com>
-Date: Thu, 14 Nov 2024 13:35:53 -0800
+	s=arc-20240116; t=1731626146; c=relaxed/simple;
+	bh=lVsLA+ch5pK0Ivhr1CMOYtJ6HXoVJIzTUjCvpU4nqRo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jLu11LwR8djshnqauESJy0JotisJza+Pa1Ch+tzyGeqR/NTiFUTC0OBSG/yhtWv4NtUnnau+tPrUHyQiIK6M3B45j81qVEwtRW9uLQskOvoZSIRkVBnwufZ3Etpn2gvKGij/DMpBDxVsXHTMeTJTI0c5Gj0hw/cB9BlpsWHWuOI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=AKc1qltn; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2113da91b53so9112415ad.3
+        for <linux-arch@vger.kernel.org>; Thu, 14 Nov 2024 15:15:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1731626144; x=1732230944; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lVsLA+ch5pK0Ivhr1CMOYtJ6HXoVJIzTUjCvpU4nqRo=;
+        b=AKc1qltnrvqJ3RV1sciU/yD9J/2xmLdJdE4E9a8TMND9eYd70jSxy8NWG8ak6vj8aN
+         tEJiKVfUI7APwommSlGZVarC5FYD1KhMdITwQfBsOrWkAVG86SlLcH57lt0zhwyDXP/x
+         6iRngkI13Nd6W9NbMpiypfukkQNFcJ60W7plw2VTGch43yS/ZFKyrqUbtmFOTXZu7hGl
+         FlKBHYepfLpGtgx9WCIoGiQbIx1zSbg7s2bqQbRMxK3n7AcDlkHe46MX0e/nZrLOpPGP
+         Pku8LmvgcOvYiNo1uL9GJJzCCbVOP+FLc48mdJLfZpazc0xAvLZ40vQ1UqxHIKlcjqsn
+         7/0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731626144; x=1732230944;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lVsLA+ch5pK0Ivhr1CMOYtJ6HXoVJIzTUjCvpU4nqRo=;
+        b=IscfjTeboeRAZSQvtwmU5ALoZKkhMtIJ4xi/mIzDszSIwyUv+UbWYn7+R0+b8KYZeA
+         lJ2+0s7Ph3gAjvb5iIibKzL/IEqBl6yf3HEIf9WviNFDkzubUODCNGC3BTnDDjxzpgXu
+         x5XnkASJJSpPLi/nXIpTunV3EO5vIrd/FTAaPKXaEvJZjWy153/kqR8yHMZZvR7QAk7L
+         NHakxPVk55FQcP8TQecfVOThLGPs4BhbjF8LZcT+MwAZapOkw/BI1XwdbvxvfyFvIL2J
+         BOuvBmU707XKD4XxTdrZeW9Y6TJU/8dpKk4SC8uXFcJrIc7xVxb3HViyGG2narPph+Rx
+         IWiQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVLkybj/COrU0IYIsZcBcucxMNzW9qmboWdT+aGSvEQZ5x63J5wghdaXwiwkUNDJe+z898SHL4+YHTX@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw9jN+Oma3Gr2EIB8vd40NYHyNroSN0hfPjNpkINN5L5Zi5/7P0
+	wePG0wqaV6++aSnyYu8naSdRSnRru7Tp9L5iI+lX7JW6Io3Rbz0aTKIj6Ku/O6I=
+X-Google-Smtp-Source: AGHT+IHndwCh8OZviLWwqtdRGD5ZEaLmwdtieo9Vt9MWEDHtv0+lyZ2wfaF39f+wWy1RScC9FPlXYg==
+X-Received: by 2002:a17:902:c407:b0:20c:9e9b:9614 with SMTP id d9443c01a7336-211d0d725c2mr7977755ad.15.1731626144617;
+        Thu, 14 Nov 2024 15:15:44 -0800 (PST)
+Received: from debug.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211d0dc30a9sm1690215ad.47.2024.11.14.15.15.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Nov 2024 15:15:44 -0800 (PST)
+Date: Thu, 14 Nov 2024 15:15:41 -0800
+From: Deepak Gupta <debug@rivosinc.com>
+To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc: "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"bp@alien8.de" <bp@alien8.de>,
+	"lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>,
+	"hpa@zytor.com" <hpa@zytor.com>,
+	"mingo@redhat.com" <mingo@redhat.com>,
+	"tglx@linutronix.de" <tglx@linutronix.de>,
+	"x86@kernel.org" <x86@kernel.org>,
+	"vbabka@suse.cz" <vbabka@suse.cz>, "arnd@arndb.de" <arnd@arndb.de>,
+	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"broonie@kernel.org" <broonie@kernel.org>,
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH RFC/RFT v2 0/2] Converge common flows for cpu assisted
+ shadow stack
+Message-ID: <ZzaEnVpBUhZsp7qB@debug.ba.rivosinc.com>
+References: <20241016-shstk_converge-v2-0-c41536eb5c3b@rivosinc.com>
+ <964caf1797be61001901b92e3b71259443d3196f.camel@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: eahariha@linux.microsoft.com, kys@microsoft.com, haiyangz@microsoft.com,
- wei.liu@kernel.org, mhklinux@outlook.com, decui@microsoft.com,
- catalin.marinas@arm.com, will@kernel.org, luto@kernel.org,
- tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
- dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
- seanjc@google.com, pbonzini@redhat.com, peterz@infradead.org,
- daniel.lezcano@linaro.org, joro@8bytes.org, robin.murphy@arm.com,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
- bhelgaas@google.com, arnd@arndb.de, sgarzare@redhat.com,
- jinankjain@linux.microsoft.com, muminulrussell@gmail.com,
- skinsburskii@linux.microsoft.com, mukeshrathor@microsoft.com,
- vkuznets@redhat.com, ssengar@linux.microsoft.com, apais@linux.microsoft.com
-Subject: Re: [PATCH v2 4/4] hyperv: Switch from hyperv-tlfs.h to
- hyperv/hvhdk.h
-To: Nuno Das Neves <nunodasneves@linux.microsoft.com>,
- linux-hyperv@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, kvm@vger.kernel.org, iommu@lists.linux.dev,
- netdev@vger.kernel.org, linux-pci@vger.kernel.org,
- linux-arch@vger.kernel.org, virtualization@lists.linux.dev
-References: <1731018746-25914-1-git-send-email-nunodasneves@linux.microsoft.com>
- <1731018746-25914-5-git-send-email-nunodasneves@linux.microsoft.com>
-Content-Language: en-US
-From: Easwar Hariharan <eahariha@linux.microsoft.com>
-In-Reply-To: <1731018746-25914-5-git-send-email-nunodasneves@linux.microsoft.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <964caf1797be61001901b92e3b71259443d3196f.camel@intel.com>
 
-On 11/7/2024 2:32 PM, Nuno Das Neves wrote:
-> Switch to using hvhdk.h everywhere in the kernel. This header includes
-> all the new Hyper-V headers in include/hyperv, which form a superset of
-> the definitions found in hyperv-tlfs.h.
-> 
-> This makes it easier to add new Hyper-V interfaces without being
-> restricted to those in the TLFS doc (reflected in hyperv-tlfs.h).
-> 
-> To be more consistent with the original Hyper-V code, the names of some
-> definitions are changed slightly. Update those where needed.
-> 
-> hyperv-tlfs.h is no longer included anywhere - hvhdk.h can serve
-> the same role, but with an easier path for adding new definitions.
+On Fri, Nov 01, 2024 at 09:47:31PM +0000, Edgecombe, Rick P wrote:
+>On Wed, 2024-10-16 at 14:57 -0700, Deepak Gupta wrote:
+>> ---
+>> base-commit: 4e0105ad0161b4262b51f034a757c4899c647487
+>> change-id: 20241010-shstk_converge-aefbcbef5d71
+>
+>Where can I find this base commit?
 
-Michael already mentioned this, I'd also agree that it's better to
-remove hyperv-tlfs.h entirely since it's been superseded.
+I am sorry. I picked up Mark's "mm: Introduce ARCH_HAS_USER_SHADOW_STACK"
+locally and then created patches.
 
-This looks good to me, I'll wait for v3 addressing the other comments to
-take a look again.
+Should have rebased with arm64/for-next.
+But for that as well base commit will be on arm64/for-next.
 
-- Easwar
+You can apply "mm: Introduce ARCH_HAS_USER_SHADOW_STACK" on "v6.12-rc1"
+and then these patches.
 
-<...>
+Alternatively I can send a v3 with above patch.
 
