@@ -1,61 +1,61 @@
-Return-Path: <linux-arch+bounces-9092-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9093-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB2909C928E
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Nov 2024 20:45:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BC3B9C9290
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Nov 2024 20:46:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4B9651F2251D
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Nov 2024 19:45:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F1BE1F2245A
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Nov 2024 19:46:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B0221AB526;
-	Thu, 14 Nov 2024 19:45:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB3241AB52F;
+	Thu, 14 Nov 2024 19:45:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="jdhT+MI+"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="3JnRGJKQ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2080.outbound.protection.outlook.com [40.107.220.80])
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2050.outbound.protection.outlook.com [40.107.244.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F8661AB500;
-	Thu, 14 Nov 2024 19:45:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.80
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A6DFBE4E;
+	Thu, 14 Nov 2024 19:45:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.50
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731613517; cv=fail; b=ZfJDB6tqAilJ0PFvECwmTNEQRaJSN1zszklO858p8vhTmyCTB/rz0r8YqqIabeJ69asN6e0Wh31CM1pw4sHGJB87b329ON4UsATSBEkhPj5EH5eWlZeC27NR9FphNTe1jryFAWdZmbWgIxc7G2z+axB6YUv18RfMzeUNH1N7HdY=
+	t=1731613520; cv=fail; b=JlQparyyjfQm6Gmgxz7WTJPzbXHgSHnZIzxi9Zw+Ep3fjgoDRarLKU+vWKRydj/ceDgYzrZs8X5J3fmJaOpB81p2tMtIuSaYJRkxcCEzLWzGNUHpi+O8O5Pj79AZJyB2BtXjCWRGDj4la7WAy2xkV61mtSWfzVOeWI6ORteJcm4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731613517; c=relaxed/simple;
-	bh=jpHJ2al8FOn0Z+Q1yy1S00HSe4XZce36Tt1fSG4E2bE=;
+	s=arc-20240116; t=1731613520; c=relaxed/simple;
+	bh=aqOOkxtxrHq9FyXo0yTVnpObYgB2GADdbwg821CPCgc=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Z9DgGEbIACyBVZ51JxxeEDUFcAh03qc4MrM16OohEt7e8S53zch9JvmXsNE1qvrmKygdPPKq+exDRJ/gt0OtWQrNjQj6P2JJzAF1nwhnk2CPwtHSzrIeW914PBhgFAv3EpQLbsvuZhM8iQ8sSica7zSwcbpLTta65JgvPRFsvZQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=jdhT+MI+; arc=fail smtp.client-ip=40.107.220.80
+	 MIME-Version:Content-Type; b=mGSG1FaaqfxS4Lc25gks0d7vfOZBEPC325PYjJ85gPFMbW3anngHuMUOqp1PdeghR4mNRpjODIjQVYgKcBA7Gmz4PPdMCsPGzsVpZrWH8CECAayq4SiFFPgq0yXxqWlJKRA2Ukkx+WYNm1LYrLG1LwGlVypZsRsoa9ZQvpCbBBs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=3JnRGJKQ; arc=fail smtp.client-ip=40.107.244.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=UsdcpuqbPQTRiWyRrT14n7rtYTgeR9sUcWP3MPK/aBbr3dPvPifFbI3hstxZ1f8/V/2ABUF6sBnSu99HdVQUlAERx6L6jTxBTdshS7A/38mr9JvPf8CG+G4ck7fky6bLhNwH0bG6ECsrkLIRWGYYQQ0dcZ2cyDN082JFwqAFzWeGlxOV44P0K9qhylGjuJDMxFGcGSzvVeTw9LD6IRtAY/Kl9mE+GOBiHmejL9ZW6R+fEjutqK5mLNKdE7eT5aK81Gp0mqZD8BKpcglW563TfCxRTByyNFlOm05FCkgSAx/YXf/e2AFBdN/HtiR+PO3nRC23UBAOQUafQCfE4YnHAA==
+ b=tTdIs4uGB9ZsnoDXnHJ1iXjgc5N9ZeA3lZe3k2bbDZVF2bSn6lkL3E+9PopSaBpqPk6lDTafKUCxnits5T4kD+RtqMPaKQC0IjSkarDE2WtZAipxSMH/04+hHIwh0MNqeeaBaydlP6hO0LkbQm+qj6kyHFGXRyjqqkyfplCvgDGUYHRU+xC5nB2q9erQm607QFY6Z9keYwwW86LGXgKnHYKkKYNnvXWv7P80kSS8+i+/6bhOWGwSGge/P0Pn5ZGbHVAdjndDcGYKbE6IUkFbkPZPO7URE0RoO6JSPRklgEZqUAspfRpaIVq98kruoK1mU4HxunjrKf8fHp4jRQiWwQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zjXHdjGcX4/L11iyd2wCJPLWf1/5/zh9tSHEiecH+R4=;
- b=AKtzdaMR9oXgXTNde8pVpFN086f2n6nFKrjMaJEWFe7aJ0V3i82hDFiFbvqZuY7YvZAfNgsMYY653aF/Q3fadspVEEvslqH3HAx57r5scCeyonCAyLosN7fQJfzWGi3osHIi8Rvcs3+7R50YduN2EEeFeAJECOmpQ7klF0S4LirGLvkaRgQmfJ7B+E+w8FkOC5COOMgLIF/iCwUiYzpyOoVakYtfAYOxzeSnDoPkfMKBPoGtZg5SNQ/l04HQSmrw54YqSPMwtDNFjBtW1rjYHlCaevH/dm8Jm0rr38CPD4FmYZeW8G4NDxI8nyV5zsGVS6kRQ4ZApPwk+jA2ntXjSA==
+ bh=KDYxgIDGppc7nsmlPgsXp5/B7SogmpnnGXWxJ6ePU7k=;
+ b=SXPv1ehQnuzNoxfi55INdbOK7hnCU54cothvouNk5SXQJRdCSPq9Y8ITuN1cvr0yuZMbYSRaxmAeS/OpnoSXTjFNEE68+uPXN7WPBy1OCGT3miPgVQrhOYhRnOOBVJ81zYuWOBOmdzOwt/trowYqVb+1lUxNGx6g1sqX/D/AfIvCI/vwGEhRkd/rdNmlvp+kuqRF+rCe4WXJgBgTZspU3cABR1u+mh4AaK4k0aOH3Jobz2IJ+nTn06MRTYEs10lv8gW0xFBR5D2Hd3gJMVt3RuTqTys+1w5pKqSehz76AS/4kAb1IM+ykl86zvmWaAb338rDmNkIYhTc08Vh4w0h9w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zjXHdjGcX4/L11iyd2wCJPLWf1/5/zh9tSHEiecH+R4=;
- b=jdhT+MI+pz8BkOSWb8g80U0nb0+mlsSQQooL4nzEK8etfKFjHifpM7tUU2L4mcc/YWqYW4mXBRLez1xm00qZExY7zJ9nx13rdrhL9V3nTJ9ojBewgrLz0HvrdYktSyK6S3bnvaE9214G432KXp6WjUeRuu6Yu0Wrl+pacftFnRw=
-Received: from DM6PR03CA0092.namprd03.prod.outlook.com (2603:10b6:5:333::25)
- by SJ2PR12MB9237.namprd12.prod.outlook.com (2603:10b6:a03:554::5) with
+ bh=KDYxgIDGppc7nsmlPgsXp5/B7SogmpnnGXWxJ6ePU7k=;
+ b=3JnRGJKQKp03Cdr9itaRAjZI1zJD2oHbZNbElsfeVaninT4+NGeSyxWCWokDCEs2tdEE73+zkNuSlLJxdIpUI3rztpIwBiNrJg0eDm3Dai1b8G42WovWi+4X9P8KVxh2g7yFCAvBdeKMGCumXsOXLBBzJDybOSbVEwZ6I8ouSaM=
+Received: from SJ0PR13CA0238.namprd13.prod.outlook.com (2603:10b6:a03:2c1::33)
+ by PH7PR12MB7820.namprd12.prod.outlook.com (2603:10b6:510:268::8) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8158.18; Thu, 14 Nov
- 2024 19:45:11 +0000
-Received: from DS1PEPF0001709D.namprd05.prod.outlook.com
- (2603:10b6:5:333:cafe::f0) by DM6PR03CA0092.outlook.office365.com
- (2603:10b6:5:333::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8137.28; Thu, 14 Nov
+ 2024 19:45:16 +0000
+Received: from MWH0EPF000989EA.namprd02.prod.outlook.com
+ (2603:10b6:a03:2c1:cafe::b7) by SJ0PR13CA0238.outlook.office365.com
+ (2603:10b6:a03:2c1::33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8158.17 via Frontend
- Transport; Thu, 14 Nov 2024 19:45:11 +0000
+ Transport; Thu, 14 Nov 2024 19:45:16 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -63,13 +63,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DS1PEPF0001709D.mail.protection.outlook.com (10.167.18.107) with Microsoft
+ MWH0EPF000989EA.mail.protection.outlook.com (10.167.241.137) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8158.14 via Frontend Transport; Thu, 14 Nov 2024 19:45:11 +0000
+ 15.20.8158.14 via Frontend Transport; Thu, 14 Nov 2024 19:45:15 +0000
 Received: from purico-ed03host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 14 Nov
- 2024 13:45:06 -0600
+ 2024 13:45:10 -0600
 From: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
 To: <linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>
 CC: <joro@8bytes.org>, <robin.murphy@arm.com>, <vasant.hegde@amd.com>,
@@ -77,9 +77,9 @@ CC: <joro@8bytes.org>, <robin.murphy@arm.com>, <vasant.hegde@amd.com>,
 	<jgg@nvidia.com>, <kevin.tian@intel.com>, <jon.grimm@amd.com>,
 	<santosh.shukla@amd.com>, <pandoh@google.com>, <kumaranand@google.com>,
 	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-Subject: [PATCH v11 3/9] iommu/amd: Introduce struct ivhd_dte_flags to store persistent DTE flags
-Date: Thu, 14 Nov 2024 19:44:30 +0000
-Message-ID: <20241114194436.389961-4-suravee.suthikulpanit@amd.com>
+Subject: [PATCH v11 4/9] iommu/amd: Introduce helper function to update 256-bit DTE
+Date: Thu, 14 Nov 2024 19:44:31 +0000
+Message-ID: <20241114194436.389961-5-suravee.suthikulpanit@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20241114194436.389961-1-suravee.suthikulpanit@amd.com>
 References: <20241114194436.389961-1-suravee.suthikulpanit@amd.com>
@@ -95,273 +95,266 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS1PEPF0001709D:EE_|SJ2PR12MB9237:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8a870175-7f90-4926-0c56-08dd04e4d9f5
+X-MS-TrafficTypeDiagnostic: MWH0EPF000989EA:EE_|PH7PR12MB7820:EE_
+X-MS-Office365-Filtering-Correlation-Id: d637c0c4-769c-4d4e-58b4-08dd04e4dcb5
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|82310400026|1800799024|36860700013;
+	BCL:0;ARA:13230040|36860700013|376014|7416014|82310400026|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?EThVgURXrk77osCc6m6WYzoJiJCwq23VzmAwXb4mLfGJfw/mUEyVdn1UWUDR?=
- =?us-ascii?Q?2BgaCNUkalNpMvtW+g454FXMw3jexs5F/jmfms4SsNLccGsjf/pPMuI5uvn4?=
- =?us-ascii?Q?kE6r6li+O7eqwkGTx/8qkGSWiFKhOybH5xJ07S+3pqBxH2yRHMS7BQaWcgdn?=
- =?us-ascii?Q?O7By48njuaCFXaNrsXoIvPZ51WaAw1G24JoK8B78qgkEd1L+Z0jPZxLo9n4S?=
- =?us-ascii?Q?Ctj/s2RS5V/W8+pCZsV7/ZbXfZc+ixYdVKskRiNo2P9ewifPU6qVxGbtOYzK?=
- =?us-ascii?Q?gcTiDIAeHfrjtCph3zxV6SSuXFSeNLhRwROHccs8ECrzvW/qwFYjGat1pkh7?=
- =?us-ascii?Q?8QKjxHoaXX0lEyOWC64aJxAo3uMmqX2R6FEbTQwc2HidTa+uqAM3eLnb1bCm?=
- =?us-ascii?Q?xFcSuYRSB8MFYpQDaDSARO8XZUWmraktzZGiJRC90EDwhE9FST5j1xJ8B0Gw?=
- =?us-ascii?Q?fmbINYlexGxJXhPDsSw8Yd0rYDievqR6UpkqCDBRxYlI6bFfwHFm1KAtCWDV?=
- =?us-ascii?Q?6qr3pWu8tYiem2Q1U2YBCIBNqzTGXiDXr0u6RrKJ54ViympG4SlKi+TnZd8f?=
- =?us-ascii?Q?TEIGq1bULKwGBUDFvYFgi3o/itgvnHbhFlZMegzbidvI/rA9ErwzYdnrb1R/?=
- =?us-ascii?Q?DNGZ9j4K6E9txzF6ZgB0yKFtDF0uQ1aZah9ldhXZGP4bbBc7mg6KeAihwZpU?=
- =?us-ascii?Q?9e2UIqfb/qbj/kpbsWhugMSUq9io/s05gXFvB0m9xxbJYDVc0XUk1GoRMW8N?=
- =?us-ascii?Q?TirQ3sx2XEqS4OFKHZWkFyUARwgLwtmnv6UpZyyJVvtpPwB3Yp5+f9QPWdIT?=
- =?us-ascii?Q?jenxC3qhjkGnbuNZbdh3CBqbf3CmYBvejCHBAAbv8eKcJbkm0zGERemP5et/?=
- =?us-ascii?Q?MzjJy6vPMrYmmZXnkjs4RfclVpfZ77L7yCTUqLGt13YMWVRO3okO1tFvGihp?=
- =?us-ascii?Q?rkGopSijZIJJqnCzeUyWpZPC6CD+1EdpwjnheMwu0ELe4GsPo9jiyhgcBFMQ?=
- =?us-ascii?Q?BMp7XQVsfas6Cd//nrZZ37uNfSMetA9+/kRGaBtIVrj4Yy7J9g5kDgcFpyDh?=
- =?us-ascii?Q?+Ck3b5yjYDVTLn2vjv/rf/ajSO0pz9JjURjpolaDho5AWc1juEkWc25ysMyQ?=
- =?us-ascii?Q?mgwqtO2oGQlh+k75p/laZAPebGCdiNPZOaQCjTmYbKc6ZffKwPmuZmwxT4Tm?=
- =?us-ascii?Q?kwYPSnrQ+5Mwy880Cv3mVafnuRVJi2WkY8QCRyoyD7paANAqn0Ukb19XhjWW?=
- =?us-ascii?Q?Z64LrArEDO9wC+g6+TJFQ1COPD4mBxxiMGanJ9UJmhPVcBn6Lp0SOgmRxRqq?=
- =?us-ascii?Q?Bqoht4GfMbWDHXr/tkfkPswtHi9EtjffBcaLOsfNpRLTGOxSluYPOLvpU2tt?=
- =?us-ascii?Q?dF3g5hiA6WQSWj6Zp19ujCrSN8LPX8z6y0FBJ2GYKRVgarp6RA=3D=3D?=
+	=?us-ascii?Q?nhvqHUUpBSzCDqtxtRq5yp6gFZM9CYDMd5XqUqUIJq1Axux1yoFlQIXLoiE6?=
+ =?us-ascii?Q?pxSYNeuSeb82pszz0gSPUVSs8a+DsUJQ3TSH2k7Mqm1bTnjPxEFNEkz2eSfM?=
+ =?us-ascii?Q?0gydY5HhPc9hgy4L2DKyN0nHZY8MWCUpfNVgQihUBQtz9eThxQlAvWjt9bs6?=
+ =?us-ascii?Q?+DP/HKZsMGDKMLEDvOMnQ1UgYmgy9kdyjKHk8J1ewKwDk8irYE1hk67E2lll?=
+ =?us-ascii?Q?l4Av/ikUyu1Bor8i65VhwrAFO4qrYJRCcr+z2/VEXp8salcSKDMYDfpfsJj+?=
+ =?us-ascii?Q?2HV71OD3d5BLZQxM4fyvxJAnx1JgU5+Oxu/RLfH3+rkHnnefbr6Cj6tcgPJW?=
+ =?us-ascii?Q?ohr2oBXjwlszezdxzx9CNrNL01vBN6GPUA4eJWYaUwrKB20xhktix16ZLzHl?=
+ =?us-ascii?Q?qGHlysZ7UhVvxytg3eFJET/uVSdTLi0yK7JJh4toIUpQXZ+BEmbev7K4k8Pj?=
+ =?us-ascii?Q?saeGXWZl0QoW8yUwEu89kjAzJkSIEMNN0EpvWpTgASc1ITwC6d0ibkuw5MFV?=
+ =?us-ascii?Q?Las8PYOkBIKU2nXIiNuRMD6KZWjs8asC0Tqivqq0Pxs8INkQU8UxuG8Wpb7k?=
+ =?us-ascii?Q?kPfuPxZktFekBi+xDWWlqnLK5rUfYgbWPJtCjEAot/iJrTaBUjKJqcRQ9Uop?=
+ =?us-ascii?Q?t75I7crb3ip13a9cpawcm9Lmj6+vIhRnnqSOU3CVXbg218IbrWN2xR6mvkCa?=
+ =?us-ascii?Q?tDXps7PfuhqXWQH6hVLPzN4Q2yREH0u10RBMkdaNdJLPJs4nXHCoQhUT+xZ+?=
+ =?us-ascii?Q?ehWjkXqfuEZI6Mn60OvyVSbN3wxFZ5sc1zKXM2oOTPXkL8GRslTh8YFJIO7x?=
+ =?us-ascii?Q?h5BWsO7UCrlSfQgE2B9BBEvy480ujsSxsam5/10/BPMpgV2xsNbNkjyy8hRp?=
+ =?us-ascii?Q?nYoirSkvPFExBj1wnseEObbqdECD6rXc5CXRy4YMBVG6zvbSkwx0aAtQKiCb?=
+ =?us-ascii?Q?qvIxCkgPfx370knYpEiPFrsen13d61L/C2ORUXBjThhF3+xW8CW8W/L05ZcH?=
+ =?us-ascii?Q?GilExRfjHPmXq353iIsXViwkTTzfSKs3fEPQn30shZC72rncHwU9OYCenA5M?=
+ =?us-ascii?Q?Y+C5it91DnILrc0NjGJ2TbLDbj8afQMFWyW7jzvnyhidJ4s9cn2KpwOK6lVI?=
+ =?us-ascii?Q?biPgGCKWJgMLJ4SQnU91qd5UCtMFz0syTiJmVG/OVxzcOaHtCzS/9Vm8XfjZ?=
+ =?us-ascii?Q?FnrpaHA8W104+IxUHERRnBfEzAPCwpMvNYLw84QO/pShtrlqWk2s49Dnig1z?=
+ =?us-ascii?Q?XS6Pz8+K8ELLTIXCUAmIlvZ3EnpvS3MbQ1H5zWMKtthKCzdNiEG6XYKhlEOQ?=
+ =?us-ascii?Q?3Nhrxk2aCgjOsG1CQe8mjtIUXcd1PeXdypArR74HHZRNiHQROEIS2iRXPETa?=
+ =?us-ascii?Q?hKaUK566ZkJkR0sJrVougg24ihPcDLcGckHdHOlzyKFtfHbmbA=3D=3D?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(7416014)(82310400026)(1800799024)(36860700013);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(376014)(7416014)(82310400026)(1800799024);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Nov 2024 19:45:11.1467
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Nov 2024 19:45:15.6842
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8a870175-7f90-4926-0c56-08dd04e4d9f5
+X-MS-Exchange-CrossTenant-Network-Message-Id: d637c0c4-769c-4d4e-58b4-08dd04e4dcb5
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	DS1PEPF0001709D.namprd05.prod.outlook.com
+	MWH0EPF000989EA.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB9237
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7820
 
-During early initialization, the driver parses IVRS IVHD block to get list
-of downstream devices along with their DTE flags (i.e INITPass, EIntPass,
-NMIPass, SysMgt, Lint0Pass, Lint1Pass). This information is currently
-store in the device DTE, and needs to be preserved when clearing
-and configuring each DTE, which makes it difficult to manage.
+The current implementation does not follow 128-bit write requirement
+to update DTE as specified in the AMD I/O Virtualization Techonology
+(IOMMU) Specification.
 
-Introduce struct ivhd_dte_flags to store IVHD DTE settings for a device or
-range of devices, which are stored in the amd_ivhd_dev_flags_list during
-initial IVHD parsing.
+Therefore, modify the struct dev_table_entry to contain union of u128 data
+array, and introduce a helper functions update_dte256() to update DTE using
+two 128-bit cmpxchg operations to update 256-bit DTE with the modified
+structure, and take into account the DTE[V, GV] bits when programming
+the DTE to ensure proper order of DTE programming and flushing.
 
+In addition, introduce a per-DTE spin_lock struct dev_data.dte_lock to
+provide synchronization when updating the DTE to prevent cmpxchg128
+failure.
+
+Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
+Suggested-by: Uros Bizjak <ubizjak@gmail.com>
 Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
 ---
- drivers/iommu/amd/amd_iommu_types.h |  16 ++++
- drivers/iommu/amd/init.c            | 113 +++++++++++++++++++++-------
- 2 files changed, 100 insertions(+), 29 deletions(-)
+ drivers/iommu/amd/amd_iommu_types.h |  10 ++-
+ drivers/iommu/amd/iommu.c           | 123 ++++++++++++++++++++++++++++
+ 2 files changed, 132 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/iommu/amd/amd_iommu_types.h b/drivers/iommu/amd/amd_iommu_types.h
-index af87b1d094c1..ae5f1e031722 100644
+index ae5f1e031722..ea7922b06325 100644
 --- a/drivers/iommu/amd/amd_iommu_types.h
 +++ b/drivers/iommu/amd/amd_iommu_types.h
-@@ -220,6 +220,8 @@
- #define DEV_ENTRY_EX            0x67
- #define DEV_ENTRY_SYSMGT1       0x68
- #define DEV_ENTRY_SYSMGT2       0x69
-+#define DTE_DATA1_SYSMGT_MASK	GENMASK_ULL(41, 40)
-+
- #define DEV_ENTRY_IRQ_TBL_EN	0x80
- #define DEV_ENTRY_INIT_PASS     0xb8
- #define DEV_ENTRY_EINT_PASS     0xb9
-@@ -516,6 +518,9 @@ extern struct kmem_cache *amd_iommu_irq_cache;
- #define for_each_pdom_dev_data_safe(pdom_dev_data, next, pdom) \
- 	list_for_each_entry_safe((pdom_dev_data), (next), &pdom->dev_data_list, list)
+@@ -427,9 +427,13 @@
+ #define DTE_GCR3_SHIFT_C	43
  
-+#define for_each_ivhd_dte_flags(entry) \
-+	list_for_each_entry((entry), &amd_ivhd_dev_flags_list, list)
+ #define DTE_GPT_LEVEL_SHIFT	54
++#define DTE_GPT_LEVEL_MASK	GENMASK_ULL(55, 54)
+ 
+ #define GCR3_VALID		0x01ULL
+ 
++/* DTE[128:179] | DTE[184:191] */
++#define DTE_DATA2_INTR_MASK	~GENMASK_ULL(55, 52)
 +
- struct amd_iommu;
- struct iommu_domain;
- struct irq_domain;
-@@ -884,6 +889,17 @@ struct dev_table_entry {
- 	u64 data[4];
+ #define IOMMU_PAGE_MASK (((1ULL << 52) - 1) & ~0xfffULL)
+ #define IOMMU_PTE_PRESENT(pte) ((pte) & IOMMU_PTE_PR)
+ #define IOMMU_PTE_DIRTY(pte) ((pte) & IOMMU_PTE_HD)
+@@ -842,6 +846,7 @@ struct devid_map {
+ struct iommu_dev_data {
+ 	/*Protect against attach/detach races */
+ 	struct mutex mutex;
++	spinlock_t dte_lock;              /* DTE lock for 256-bit access */
+ 
+ 	struct list_head list;		  /* For domain->dev_list */
+ 	struct llist_node dev_data_list;  /* For global dev_data_list */
+@@ -886,7 +891,10 @@ extern struct list_head amd_iommu_list;
+  * Structure defining one entry in the device table
+  */
+ struct dev_table_entry {
+-	u64 data[4];
++	union {
++		u64 data[4];
++		u128 data128[2];
++	};
  };
  
-+/*
-+ * Structure to sture persistent DTE flags from IVHD
-+ */
-+struct ivhd_dte_flags {
-+	struct list_head list;
-+	u16 segid;
-+	u16 devid_first;
-+	u16 devid_last;
-+	struct dev_table_entry dte;
-+};
-+
  /*
-  * One entry for unity mappings parsed out of the ACPI table.
-  */
-diff --git a/drivers/iommu/amd/init.c b/drivers/iommu/amd/init.c
-index c1607b29ebf4..015c9b045685 100644
---- a/drivers/iommu/amd/init.c
-+++ b/drivers/iommu/amd/init.c
-@@ -174,8 +174,8 @@ bool amd_iommu_snp_en;
- EXPORT_SYMBOL(amd_iommu_snp_en);
+diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
+index 5ce8e6504ba7..7e0b62f2268a 100644
+--- a/drivers/iommu/amd/iommu.c
++++ b/drivers/iommu/amd/iommu.c
+@@ -83,12 +83,125 @@ static int amd_iommu_attach_device(struct iommu_domain *dom,
+ static void set_dte_entry(struct amd_iommu *iommu,
+ 			  struct iommu_dev_data *dev_data);
  
- LIST_HEAD(amd_iommu_pci_seg_list);	/* list of all PCI segments */
--LIST_HEAD(amd_iommu_list);		/* list of all AMD IOMMUs in the
--					   system */
-+LIST_HEAD(amd_iommu_list);		/* list of all AMD IOMMUs in the system */
-+LIST_HEAD(amd_ivhd_dev_flags_list);	/* list of all IVHD device entry settings */
- 
- /* Number of IOMMUs present in the system */
- static int amd_iommus_present;
-@@ -984,6 +984,14 @@ static void iommu_enable_gt(struct amd_iommu *iommu)
- }
- 
- /* sets a specific bit in the device table entry. */
-+static void set_dte_bit(struct dev_table_entry *dte, u8 bit)
-+{
-+	int i = (bit >> 6) & 0x03;
-+	int _bit = bit & 0x3f;
++static void iommu_flush_dte_sync(struct amd_iommu *iommu, u16 devid);
 +
-+	dte->data[i] |= (1UL << _bit);
+ /****************************************************************************
+  *
+  * Helper functions
+  *
+  ****************************************************************************/
+ 
++static __always_inline void amd_iommu_atomic128_set(__int128 *ptr, __int128 val)
++{
++	/*
++	 * Note:
++	 * We use arch_try_cmpxchg128_local() because:
++	 * - Need cmpxchg16b instruction mainly for 128-bit store to DTE
++	 *   (not necessary for cmpxchg since this function is already
++	 *   protected by a spin_lock for this DTE).
++	 * - Neither need LOCK_PREFIX nor try loop because of the spin_lock.
++	 */
++	arch_try_cmpxchg128_local(ptr, ptr, val);
 +}
 +
- static void __set_dev_entry_bit(struct dev_table_entry *dev_table,
- 				u16 devid, u8 bit)
- {
-@@ -1136,6 +1144,19 @@ static bool copy_device_table(void)
- 	return true;
- }
- 
-+static bool search_ivhd_dte_flags(u16 segid, u16 first, u16 last)
++static void write_dte_upper128(struct dev_table_entry *ptr, struct dev_table_entry *new)
 +{
-+	struct ivhd_dte_flags *e;
++	struct dev_table_entry old;
 +
-+	for_each_ivhd_dte_flags(e) {
-+		if ((e->segid == segid) &&
-+		    (e->devid_first == first) &&
-+		    (e->devid_last == last))
-+			return true;
-+	}
-+	return false;
++	old.data128[1] = ptr->data128[1];
++	/*
++	 * Preserve DTE_DATA2_INTR_MASK. This needs to be
++	 * done here since it requires to be inside
++	 * spin_lock(&dev_data->dte_lock) context.
++	 */
++	new->data[2] &= ~DTE_DATA2_INTR_MASK;
++	new->data[2] |= old.data[2] & DTE_DATA2_INTR_MASK;
++
++	amd_iommu_atomic128_set(&ptr->data128[1], new->data128[1]);
 +}
 +
- void amd_iommu_apply_erratum_63(struct amd_iommu *iommu, u16 devid)
- {
- 	int sysmgt;
-@@ -1151,27 +1172,66 @@ void amd_iommu_apply_erratum_63(struct amd_iommu *iommu, u16 devid)
-  * This function takes the device specific flags read from the ACPI
-  * table and sets up the device table entry with that information
-  */
--static void __init set_dev_entry_from_acpi(struct amd_iommu *iommu,
--					   u16 devid, u32 flags, u32 ext_flags)
-+static void __init
-+set_dev_entry_from_acpi_range(struct amd_iommu *iommu, u16 first, u16 last,
-+			      u32 flags, u32 ext_flags)
- {
--	if (flags & ACPI_DEVFLAG_INITPASS)
--		set_dev_entry_bit(iommu, devid, DEV_ENTRY_INIT_PASS);
--	if (flags & ACPI_DEVFLAG_EXTINT)
--		set_dev_entry_bit(iommu, devid, DEV_ENTRY_EINT_PASS);
--	if (flags & ACPI_DEVFLAG_NMI)
--		set_dev_entry_bit(iommu, devid, DEV_ENTRY_NMI_PASS);
--	if (flags & ACPI_DEVFLAG_SYSMGT1)
--		set_dev_entry_bit(iommu, devid, DEV_ENTRY_SYSMGT1);
--	if (flags & ACPI_DEVFLAG_SYSMGT2)
--		set_dev_entry_bit(iommu, devid, DEV_ENTRY_SYSMGT2);
--	if (flags & ACPI_DEVFLAG_LINT0)
--		set_dev_entry_bit(iommu, devid, DEV_ENTRY_LINT0_PASS);
--	if (flags & ACPI_DEVFLAG_LINT1)
--		set_dev_entry_bit(iommu, devid, DEV_ENTRY_LINT1_PASS);
-+	int i;
-+	struct dev_table_entry dte = {};
-+
-+	/* Parse IVHD DTE setting flags and store information */
-+	if (flags) {
-+		struct ivhd_dte_flags *d;
- 
--	amd_iommu_apply_erratum_63(iommu, devid);
-+		if (search_ivhd_dte_flags(iommu->pci_seg->id, first, last))
-+			return;
- 
--	amd_iommu_set_rlookup_table(iommu, devid);
-+		d = kzalloc(sizeof(struct ivhd_dte_flags), GFP_KERNEL);
-+		if (!d)
-+			return;
-+
-+		pr_debug("%s: devid range %#x:%#x\n", __func__, first, last);
-+
-+		if (flags & ACPI_DEVFLAG_INITPASS)
-+			set_dte_bit(&dte, DEV_ENTRY_INIT_PASS);
-+		if (flags & ACPI_DEVFLAG_EXTINT)
-+			set_dte_bit(&dte, DEV_ENTRY_EINT_PASS);
-+		if (flags & ACPI_DEVFLAG_NMI)
-+			set_dte_bit(&dte, DEV_ENTRY_NMI_PASS);
-+		if (flags & ACPI_DEVFLAG_SYSMGT1)
-+			set_dte_bit(&dte, DEV_ENTRY_SYSMGT1);
-+		if (flags & ACPI_DEVFLAG_SYSMGT2)
-+			set_dte_bit(&dte, DEV_ENTRY_SYSMGT2);
-+		if (flags & ACPI_DEVFLAG_LINT0)
-+			set_dte_bit(&dte, DEV_ENTRY_LINT0_PASS);
-+		if (flags & ACPI_DEVFLAG_LINT1)
-+			set_dte_bit(&dte, DEV_ENTRY_LINT1_PASS);
-+
-+		/* Apply erratum 63, which needs info in initial_dte */
-+		if (FIELD_GET(DTE_DATA1_SYSMGT_MASK, dte.data[1]) == 0x1)
-+			dte.data[0] |= DTE_FLAG_IW;
-+
-+		memcpy(&d->dte, &dte, sizeof(dte));
-+		d->segid = iommu->pci_seg->id;
-+		d->devid_first = first;
-+		d->devid_last = last;
-+		list_add_tail(&d->list, &amd_ivhd_dev_flags_list);
-+	}
-+
-+	for (i = first; i <= last; i++)  {
-+		if (flags) {
-+			struct dev_table_entry *dev_table = get_dev_table(iommu);
-+
-+			memcpy(&dev_table[i], &dte, sizeof(dte));
-+		}
-+		amd_iommu_set_rlookup_table(iommu, i);
-+	}
++static void write_dte_lower128(struct dev_table_entry *ptr, struct dev_table_entry *new)
++{
++	amd_iommu_atomic128_set(&ptr->data128[0], new->data128[0]);
 +}
 +
-+static void __init set_dev_entry_from_acpi(struct amd_iommu *iommu,
-+					   u16 devid, u32 flags, u32 ext_flags)
++/*
++ * Note:
++ * IOMMU reads the entire Device Table entry in a single 256-bit transaction
++ * but the driver is programming DTE using 2 128-bit cmpxchg. So, the driver
++ * need to ensure the following:
++ *   - DTE[V|GV] bit is being written last when setting.
++ *   - DTE[V|GV] bit is being written first when clearing.
++ *
++ * This function is used only by code, which updates DMA translation part of the DTE.
++ * So, only consider control bits related to DMA when updating the entry.
++ */
++static void update_dte256(struct amd_iommu *iommu, struct iommu_dev_data *dev_data,
++			  struct dev_table_entry *new)
 +{
-+	set_dev_entry_from_acpi_range(iommu, devid, devid, flags, ext_flags);
++	unsigned long flags;
++	struct dev_table_entry *dev_table = get_dev_table(iommu);
++	struct dev_table_entry *ptr = &dev_table[dev_data->devid];
++
++	spin_lock_irqsave(&dev_data->dte_lock, flags);
++
++	if (!(ptr->data[0] & DTE_FLAG_V)) {
++		/* Existing DTE is not valid. */
++		write_dte_upper128(ptr, new);
++		write_dte_lower128(ptr, new);
++		iommu_flush_dte_sync(iommu, dev_data->devid);
++	} else if (!(new->data[0] & DTE_FLAG_V)) {
++		/* Existing DTE is valid. New DTE is not valid.  */
++		write_dte_lower128(ptr, new);
++		write_dte_upper128(ptr, new);
++		iommu_flush_dte_sync(iommu, dev_data->devid);
++	} else if (!FIELD_GET(DTE_FLAG_GV, ptr->data[0])) {
++		/*
++		 * Both DTEs are valid.
++		 * Existing DTE has no guest page table.
++		 */
++		write_dte_upper128(ptr, new);
++		write_dte_lower128(ptr, new);
++		iommu_flush_dte_sync(iommu, dev_data->devid);
++	} else if (!FIELD_GET(DTE_FLAG_GV, new->data[0])) {
++		/*
++		 * Both DTEs are valid.
++		 * Existing DTE has guest page table,
++		 * new DTE has no guest page table,
++		 */
++		write_dte_lower128(ptr, new);
++		write_dte_upper128(ptr, new);
++		iommu_flush_dte_sync(iommu, dev_data->devid);
++	} else if (FIELD_GET(DTE_GPT_LEVEL_MASK, ptr->data[2]) !=
++		   FIELD_GET(DTE_GPT_LEVEL_MASK, new->data[2])) {
++		/*
++		 * Both DTEs are valid and have guest page table,
++		 * but have different number of levels. So, we need
++		 * to upadte both upper and lower 128-bit value, which
++		 * require disabling and flushing.
++		 */
++		struct dev_table_entry clear = {};
++
++		/* First disable DTE */
++		write_dte_lower128(ptr, &clear);
++		iommu_flush_dte_sync(iommu, dev_data->devid);
++
++		/* Then update DTE */
++		write_dte_upper128(ptr, new);
++		write_dte_lower128(ptr, new);
++		iommu_flush_dte_sync(iommu, dev_data->devid);
++	} else {
++		/*
++		 * Both DTEs are valid and have guest page table,
++		 * and same number of levels. We just need to only
++		 * update the lower 128-bit. So no need to disable DTE.
++		 */
++		write_dte_lower128(ptr, new);
++	}
++
++	spin_unlock_irqrestore(&dev_data->dte_lock, flags);
++}
++
+ static inline bool pdom_is_v2_pgtbl_mode(struct protection_domain *pdom)
+ {
+ 	return (pdom && (pdom->pd_mode == PD_MODE_V2));
+@@ -209,6 +322,7 @@ static struct iommu_dev_data *alloc_dev_data(struct amd_iommu *iommu, u16 devid)
+ 		return NULL;
+ 
+ 	mutex_init(&dev_data->mutex);
++	spin_lock_init(&dev_data->dte_lock);
+ 	dev_data->devid = devid;
+ 	ratelimit_default_init(&dev_data->rs);
+ 
+@@ -1261,6 +1375,15 @@ static int iommu_flush_dte(struct amd_iommu *iommu, u16 devid)
+ 	return iommu_queue_command(iommu, &cmd);
  }
  
- int __init add_special_device(u8 type, u8 id, u32 *devid, bool cmd_line)
-@@ -1332,9 +1392,7 @@ static int __init init_iommu_from_acpi(struct amd_iommu *iommu,
- 		case IVHD_DEV_ALL:
- 
- 			DUMP_printk("  DEV_ALL\t\t\tsetting: %#02x\n", e->flags);
--
--			for (dev_i = 0; dev_i <= pci_seg->last_bdf; ++dev_i)
--				set_dev_entry_from_acpi(iommu, dev_i, e->flags, 0);
-+			set_dev_entry_from_acpi_range(iommu, 0, pci_seg->last_bdf, e->flags, 0);
- 			break;
- 		case IVHD_DEV_SELECT:
- 
-@@ -1428,14 +1486,11 @@ static int __init init_iommu_from_acpi(struct amd_iommu *iommu,
- 
- 			devid = e->devid;
- 			for (dev_i = devid_start; dev_i <= devid; ++dev_i) {
--				if (alias) {
-+				if (alias)
- 					pci_seg->alias_table[dev_i] = devid_to;
--					set_dev_entry_from_acpi(iommu,
--						devid_to, flags, ext_flags);
--				}
--				set_dev_entry_from_acpi(iommu, dev_i,
--							flags, ext_flags);
- 			}
-+			set_dev_entry_from_acpi_range(iommu, devid_start, devid, flags, ext_flags);
-+			set_dev_entry_from_acpi(iommu, devid_to, flags, ext_flags);
- 			break;
- 		case IVHD_DEV_SPECIAL: {
- 			u8 handle, type;
++static void iommu_flush_dte_sync(struct amd_iommu *iommu, u16 devid)
++{
++	int ret;
++
++	ret = iommu_flush_dte(iommu, devid);
++	if (!ret)
++		iommu_completion_wait(iommu);
++}
++
+ static void amd_iommu_flush_dte_all(struct amd_iommu *iommu)
+ {
+ 	u32 devid;
 -- 
 2.34.1
 
