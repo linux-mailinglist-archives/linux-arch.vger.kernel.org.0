@@ -1,519 +1,226 @@
-Return-Path: <linux-arch+bounces-9111-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9112-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B2EF9CF6DF
-	for <lists+linux-arch@lfdr.de>; Fri, 15 Nov 2024 22:15:19 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D71E9CFA6D
+	for <lists+linux-arch@lfdr.de>; Fri, 15 Nov 2024 23:53:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5EFE6B2C0CF
-	for <lists+linux-arch@lfdr.de>; Fri, 15 Nov 2024 21:15:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 016E2B3E4C5
+	for <lists+linux-arch@lfdr.de>; Fri, 15 Nov 2024 22:13:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AA6D1E2835;
-	Fri, 15 Nov 2024 21:15:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71799202F8D;
+	Fri, 15 Nov 2024 21:54:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="Vx946PRA"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="duRMFPaJ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 309381D5ADD;
-	Fri, 15 Nov 2024 21:15:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731705303; cv=none; b=ibBEVthDbxi8BjSaYaQY6CqaXs3FcF82R7+uPVLfwA/cpjC/nLhmIj3voAClT6LZ/u4QGhuFn5RrMT9qWBBPSzSflsj/skF6ud0k0b5RbD1EPNvFO6HmeIkxRcfFxmjW4ROfueHfeYOTxheF+vbFM6qIoIb8jPpoM62Ma+lH1oQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731705303; c=relaxed/simple;
-	bh=hmZyID0xTDejqUdHbnNnIfCcRfkvqbnrZ7rK8Oz9WJk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=br/Ais40koezOOPn+jEb7ln5YqKYcjbqGzAlwvtq/K2Cw129IUYX5G6YqfLeMcnGlvX2v+Vq78NbODNRgibP6uHBKcB+1sbdgUopq+/CbldGbfGZ/7ntRiUnvWjSTBwdz9pPVfxcWBIPs2vhLSlTFpWNWG+UTIMnP7Ik/YlqLFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=Vx946PRA; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [10.0.0.115] (c-67-182-156-199.hsd1.wa.comcast.net [67.182.156.199])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 6AE7820BEBD0;
-	Fri, 15 Nov 2024 13:14:53 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6AE7820BEBD0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1731705294;
-	bh=IOtJqBKEB6hW5aqrE09EdKHehH+hQljR82pxvDiFOrU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Vx946PRAHZaunNzhrBN6r6Eunx0XJSwCvezU7p34uq8bmwkx0jTPCzMuPBGb2qBPT
-	 A8LE/xwEbQJ+NzGbNgrWZCTjrkQQVzzzg2vG5xZdBjRK88CM1qYOR49k0z4NdpInur
-	 6MRDszJnBx80i9qdoXbBprb9zFmFTUmTZOmbumlQ=
-Message-ID: <e832dd94-04f3-413a-a1a9-870849b4bc53@linux.microsoft.com>
-Date: Fri, 15 Nov 2024 13:14:52 -0800
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11olkn2055.outbound.protection.outlook.com [40.92.19.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DD651FF05F;
+	Fri, 15 Nov 2024 21:54:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.19.55
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1731707660; cv=fail; b=XelTVaFodj2zj75lwrXcp3iQqOmB6KP47QZpZniUcRhI2OdYUeE6IXODpffjOsZ3v5WPIvqxdSpjcmXswV281cf//fx2N2UXVBsR6jMdsskmD4eJPE2xsDESnZrqcyfoMPf8n0i6fr5/1Je202KWs04g/Tn/ZCXHMbyJ3ZqYFEk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1731707660; c=relaxed/simple;
+	bh=OfAyidTgmnbKRVkYGEaFjQIIgjNw/dUA8oq/F4nKTVU=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=PXLDLBs/KLbpIZ3xk/U6/dR/c87KaNGAdju4P1yMPmWnOJx7WhEVZ8W773X92DqjhNeNY1/jab9jG3YnHUauxWZKVAhX2zkGWhNaBVHN7JvDhM112rrhb7CCGjZ1znU61ymOQGJKFY5fWhHFHsNwHxr8GhLIQXknSrv1d8ByAys=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=duRMFPaJ; arc=fail smtp.client-ip=40.92.19.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=sJ0urfyn4LoGFKpM8nEm0ge4aNMWtQg8Hz2AeVJUhOGWgLXWvcH4cbDSuE31qifp62t4clv4E8YId5c7zIfNoviDKzgC5VVQ8KKPoeTKQOYk0/zag5U8wHhd5eB54nLlk59bjkzkI7gj0FFmfC6bc9zPYVuhzxUw/EuNzNXg2KSv+3s1guh60k/pwiDDzZmNlBxWzb74SY/rPdbnF7txXPWYqg+29T4Nf1tf/iSrO+tKUqFZmJZLuvov/DoRmIMa4UCdcVAj/Cro2fy8S4EA01ZdZN0Eu9jzUfCEQ1NiM0+E2fJpmZnZMYX5s87P3P44WKkih0D27Kj5jNqyoFHvjQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OfAyidTgmnbKRVkYGEaFjQIIgjNw/dUA8oq/F4nKTVU=;
+ b=Gha1ESba3xrdhCTPm+Ieil4AYReZpaOrXSKmhNi0KAdCjDCalN6Imo8iyYkF6v3hmoZ3Um8o8stM60jV+MeXGGobtepvblMy/jJlMg9HRcWpXu6wHpe2cHNjIVXo9ZfpwLcHuSkFEVpb9WHxRzS/MAOzn3749h4CnE2yEM7YHYPtLC1NHSA8DM078ppJiuypj/IJIxnhWXKOfz63PYp0+3Q6SAPHtjctGGuEEmPuVN07MbqsOCTfOu5prYxfSOVGxIPcPmZ8seLA5/e2EVUscqEiAx8e0veXJTGeXdjl3w9hmGZPmrLgW8/GXwN8HW281YMyoivz02UyUqv0oxPk2Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OfAyidTgmnbKRVkYGEaFjQIIgjNw/dUA8oq/F4nKTVU=;
+ b=duRMFPaJ7DcJuhefavE5+iJpkmzg9ygKeX5C2OxTYemt69QxsCygyeBFci7jI+kdD+2qYpTeR6jU7R+hF2QS0YJB59S11z6Zfd1ZSDAWUMPJuKWfJjpDg8DAg0UHxMUNj2f7fLgmDf0qJw/eOLOJhqKqneg6rV8953Si8cW8K2pfZwZvjoHS10qGknnKuXazpkj2+S96rIn/6zL+jh1K2n4sGSpIg495zuyJT5fbQeAcw/cl5O6fEJxoR5kV0RwydKWRCZeD/AKnzk/TPtoaeedC60U4YA0NE4yqpYH4881yMTkqQvJWaKAkEzc0KjGJbooMPAQsAhB2eTyaMtdp3g==
+Received: from SN6PR02MB4157.namprd02.prod.outlook.com (2603:10b6:805:33::23)
+ by SN4PR0201MB8839.namprd02.prod.outlook.com (2603:10b6:806:206::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8158.17; Fri, 15 Nov
+ 2024 21:54:15 +0000
+Received: from SN6PR02MB4157.namprd02.prod.outlook.com
+ ([fe80::cedd:1e64:8f61:b9df]) by SN6PR02MB4157.namprd02.prod.outlook.com
+ ([fe80::cedd:1e64:8f61:b9df%6]) with mapi id 15.20.8158.017; Fri, 15 Nov 2024
+ 21:54:14 +0000
+From: Michael Kelley <mhklinux@outlook.com>
+To: Nuno Das Neves <nunodasneves@linux.microsoft.com>,
+	"linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+	"iommu@lists.linux.dev" <iommu@lists.linux.dev>, "netdev@vger.kernel.org"
+	<netdev@vger.kernel.org>, "linux-pci@vger.kernel.org"
+	<linux-pci@vger.kernel.org>, "linux-arch@vger.kernel.org"
+	<linux-arch@vger.kernel.org>, "virtualization@lists.linux.dev"
+	<virtualization@lists.linux.dev>
+CC: "kys@microsoft.com" <kys@microsoft.com>, "haiyangz@microsoft.com"
+	<haiyangz@microsoft.com>, "wei.liu@kernel.org" <wei.liu@kernel.org>,
+	"decui@microsoft.com" <decui@microsoft.com>, "catalin.marinas@arm.com"
+	<catalin.marinas@arm.com>, "will@kernel.org" <will@kernel.org>,
+	"luto@kernel.org" <luto@kernel.org>, "tglx@linutronix.de"
+	<tglx@linutronix.de>, "mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de"
+	<bp@alien8.de>, "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+	"seanjc@google.com" <seanjc@google.com>, "pbonzini@redhat.com"
+	<pbonzini@redhat.com>, "peterz@infradead.org" <peterz@infradead.org>,
+	"daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>, "joro@8bytes.org"
+	<joro@8bytes.org>, "robin.murphy@arm.com" <robin.murphy@arm.com>,
+	"davem@davemloft.net" <davem@davemloft.net>, "edumazet@google.com"
+	<edumazet@google.com>, "kuba@kernel.org" <kuba@kernel.org>,
+	"pabeni@redhat.com" <pabeni@redhat.com>, "lpieralisi@kernel.org"
+	<lpieralisi@kernel.org>, "kw@linux.com" <kw@linux.com>, "robh@kernel.org"
+	<robh@kernel.org>, "bhelgaas@google.com" <bhelgaas@google.com>,
+	"arnd@arndb.de" <arnd@arndb.de>, "sgarzare@redhat.com" <sgarzare@redhat.com>,
+	"jinankjain@linux.microsoft.com" <jinankjain@linux.microsoft.com>,
+	"muminulrussell@gmail.com" <muminulrussell@gmail.com>,
+	"skinsburskii@linux.microsoft.com" <skinsburskii@linux.microsoft.com>,
+	"mukeshrathor@microsoft.com" <mukeshrathor@microsoft.com>,
+	"vkuznets@redhat.com" <vkuznets@redhat.com>, "ssengar@linux.microsoft.com"
+	<ssengar@linux.microsoft.com>, "apais@linux.microsoft.com"
+	<apais@linux.microsoft.com>
+Subject: RE: [PATCH v2 4/4] hyperv: Switch from hyperv-tlfs.h to
+ hyperv/hvhdk.h
+Thread-Topic: [PATCH v2 4/4] hyperv: Switch from hyperv-tlfs.h to
+ hyperv/hvhdk.h
+Thread-Index: AQHbMWTxGjBzpDHZ/kaAtNrAPYWf6LKvtKFggAkvZwCAAAobgA==
+Date: Fri, 15 Nov 2024 21:54:14 +0000
+Message-ID:
+ <SN6PR02MB4157DE83D677F2E463774393D4242@SN6PR02MB4157.namprd02.prod.outlook.com>
+References:
+ <1731018746-25914-1-git-send-email-nunodasneves@linux.microsoft.com>
+ <1731018746-25914-5-git-send-email-nunodasneves@linux.microsoft.com>
+ <BN7PR02MB4148513F8ABA50392E11C616D4582@BN7PR02MB4148.namprd02.prod.outlook.com>
+ <e832dd94-04f3-413a-a1a9-870849b4bc53@linux.microsoft.com>
+In-Reply-To: <e832dd94-04f3-413a-a1a9-870849b4bc53@linux.microsoft.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SN6PR02MB4157:EE_|SN4PR0201MB8839:EE_
+x-ms-office365-filtering-correlation-id: d7ee0d92-ccb2-4ea9-d988-08dd05c00bdc
+x-microsoft-antispam:
+ BCL:0;ARA:14566002|8062599003|15080799006|8060799006|461199028|19110799003|102099032|3412199025|440099028;
+x-microsoft-antispam-message-info:
+ =?utf-8?B?b2Y1bEdGSUtrNnpxTUE2Qm1OMS9oMXV1WkdjSWlCeXVMU2M1SVVIa0ZNV0pE?=
+ =?utf-8?B?YjRZTzhoTTVPUGp1bGJWVUJrcDBMN3NUcU5UdktZYWVPaWV6UlpTczRzT1Rh?=
+ =?utf-8?B?cjk3djZqZVZLMkwvWC9PVklwdUNKNk9BRUwrblJVOEg1eURmL2FaUlp5djFL?=
+ =?utf-8?B?dHE5WDdzdVU0YnRHRWNpbVl5Q01HNWZxRmthdjlNc3VWanFEV2dkR0VYVmFE?=
+ =?utf-8?B?enl5RUVEaXBYSjJoS2V6TWpvK2VEYmYzVlg4cmtpdDI4N2p4ZERsWitwYnhH?=
+ =?utf-8?B?TUcrUG5NZ2ptbGdyLzd0ekljQkl6VjNGS0t1RGwyOHpHazFSZ0VWTWh5OVlk?=
+ =?utf-8?B?YXVSTVY2bHhLbjl2Z2ZFcUthcXE1aHVwWmlaU3prWWM2ZHREc2tKTzdrV1RY?=
+ =?utf-8?B?NnRJTFlEMlBteTV5MllYZElWRThnQ1NTdHVkTC82ZmxXdTA2aTk3NUFwSmNY?=
+ =?utf-8?B?L2JNdzg0UXRVcEtJZjFsY0NYSXpnS2IvU1NDY2hvNzEza1pIZEp2bWxUUnJu?=
+ =?utf-8?B?dG9qMDNWdVdrRFF4YjVTbkE3UU1OdytzK01yWk84cTdhK2RpR3RFWnhFSUpX?=
+ =?utf-8?B?YjlzUk9TUFBHNklHd3Y4b0tMdHMrVlFqUUczUy9ubWQxcmJic1BmQzZIN3lE?=
+ =?utf-8?B?RE1mSDdWN0FhN3BVSDZFc0dZejVDVWI4djNRR25wZ0RXMlpkSytVTGFRUThs?=
+ =?utf-8?B?QUxrcjlyZGFVL0dJanV3NHlTTXFhMnFxUmlyU2VnS0xYRTg5ODJ5M3VJbzdM?=
+ =?utf-8?B?V2tLdFhiQlZSeGtWcWdLbzU2anRVNmFNNWZMVGRjL1J3bWxtNUlaZWtEZHpN?=
+ =?utf-8?B?bWVXL3pxbFMrTzRCZ05NSjhkaGJqcUU2NmtNQ1kweU1iRzc4cUlJK3Zhc0ww?=
+ =?utf-8?B?R0xOVXd2b1M2eElFd0xaMFkyRmJsaXFrNVRNTHUvY1RaeDh4TjI0VmJrTlNT?=
+ =?utf-8?B?UTMxbmQ0ZHdzR1BaWDY4VlkwcXVYdldkcnUvTGplTHFXRVBhN1h5RXFORndz?=
+ =?utf-8?B?dG1ZZTZJcm41WDVjd25ZZUQrT0lFMkhmZGpDR3d0T3BsL2QvUTlRL3JIdWVu?=
+ =?utf-8?B?MGZrT1dsTTJ2TXgrbVQweTFHY3JHcEJUTzFSMUd5c2JxWXRBaWxJYW1rQjlX?=
+ =?utf-8?B?TTNCOE5jdWgzMHErVHZoeG15L2Rwb253TzROeHZ5bUdMNnk3Qm1Zekx5UVMr?=
+ =?utf-8?B?czFsaUpJVktvbXBHWW9wNk1PUTdBZm1zc0Q2N0drQUN3TXdpZDg3RnJXTnRz?=
+ =?utf-8?B?ZXFjblU2bE84Z3I5YzU4OTBiOUZsVUtYZEdsZVVJaGxMQnRCcGJaTkk1ZlhV?=
+ =?utf-8?Q?G3eNHu8u1cue+vMbP7WT9AJUFG+CDXz5iU?=
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?dmpxd0JOL1NqOXhNY0lPQlNwVG1QMWcrZUUwZVVFM210YTdGMlh2WG03cEpF?=
+ =?utf-8?B?cmlIMHBIWVdjODQxaEZ4QkpvcGVMc0JvTWJDTWlBZTdGM3E4OXkrWFVhdGdB?=
+ =?utf-8?B?SnF6ZTQzeUZwZU02b2dMb2dieFZ6UlpueW8za3U5SjY2MUlDb29ET1ZpcjM0?=
+ =?utf-8?B?Y1RWTHp3MVZud3dFT3E1cmQ5Y2xKdUpxc3hsbzZPSlRDdmo4NjZOeWN4Z0N0?=
+ =?utf-8?B?ZTlMMlhxcFJFOWFnQWlnOFJEZllkV2V5d0hqRHFCRW5MeGJ1K0hzMlpLRFha?=
+ =?utf-8?B?RTNaQnR1SG5ISW83VEtDVEhBdG9oanhHa1lWbXh2ZEtTVEplbEtlYVNlb2p2?=
+ =?utf-8?B?ZkhYZkdNSlUzVUFML3VOOUJrNUdESExZajlaejhCZFV6WHNGbkM1NHBSbUts?=
+ =?utf-8?B?U0NyWStSa3VlL0xWT3lFZ0xyd2RWalF6eXlLVDVUOTBoUFV0L3BDV05PZHVt?=
+ =?utf-8?B?TE1DVTBmQUtiZXRuM3lBSm9hN0JEMFd4ZW5KZFo5YzVuWUZSeVR5RmM3RnBx?=
+ =?utf-8?B?OWVXajNQQ0E4UmV0QUdpOXE5SFRNcGlCQUowY2F2MjZvRkJpU2tiUnhzWm50?=
+ =?utf-8?B?dFNYekIzYkVrY1hJbXcwYzN3bXNMUmFIcUo2ZHhiYzV6OXpSQnBJckdIUUVQ?=
+ =?utf-8?B?UHBXZmFMV0tueGdWdE5WVzNaY0MzejVUN1gxSzZIRml1M0J5WXQxb2E4bi8x?=
+ =?utf-8?B?RGxpY2FjMXRnNk9XUE81a2U2ZVo0ODFPcnFnUUN0T0YwREJMelBGdElqRUhG?=
+ =?utf-8?B?U1NCSzJLVWFjM29CeW9jMklaWktaZ0xPd0ozYkVQQ3JQL2ROaWFIZ2w5Z0VR?=
+ =?utf-8?B?Q2ROdG9oNjc5NzB0dmZ5blduZjUyeXpiQzNKdithYTVKU3lKQWNhc2NJS2RM?=
+ =?utf-8?B?eWNMa1dHKzVvZnlWMmJrR2Y2MHZ2eE5LVmhnSGVHc0dsYTNab2xwNlRLYzc1?=
+ =?utf-8?B?c2htbmx1QUFpc2UxWVlXNFVhUno0ZnppRzNERjJvbzlERDBKeVU3cXowNU9B?=
+ =?utf-8?B?VHNXZW8zblNSZ2l1NnJKdW83WjlRTEI0YWIxdkZCRVBwQzR4eFJrUGdRazJS?=
+ =?utf-8?B?VVVKUzU1aHFMYXNGZC9JY0drbGZTNU9nNWd6WEFqVFBkM09mdGhsbXI0emRN?=
+ =?utf-8?B?djBya21oWEp4enJ1RFczNmpPc00yOGo1M1BYNHVlR1laemZhNlZVTkZXN3Ft?=
+ =?utf-8?B?SkJ2UnN1Tm14aEgzUGhHcnUvVTdRRmhFbFp0UkRvWnBVN2hKZ2Z5emRjYis2?=
+ =?utf-8?B?Q2lSdDFoTysrencyOEh0bEc4WXhWdm0wNUxvR1lPRUZvTmRhbHhoMjJieDN2?=
+ =?utf-8?B?L2ZQU1krYzNrNXRaRTI5UmswckFYakd5YUcvQXhnQUpGM0hyV1huaktIVlZB?=
+ =?utf-8?B?cDEwZ2pheERqcHk4RldzT2xYZzhTZDlhaVJvUDlyRHplTzN1N1dQeFN0Skl6?=
+ =?utf-8?B?MXlJdUdHc0VnZ3M2Mi9HcFoyWVk2NENyenZxNHdHUkdZL2tUV1lJaFpsK0pl?=
+ =?utf-8?B?aDdHYmxKU25sSU1WbVVEa1VXWGs5WTA1RUhTTkY2MW5VUk05MG5IMExyV0RH?=
+ =?utf-8?B?MERTUlBzSzhLdkRnZG5zUnJqc2NERXc5Y3JlRHpzL25mMVJ3M3NjQ293UUZT?=
+ =?utf-8?Q?CsYUzqXgu45J8CdG2HN4ly+YrAfXqjVJAkuIFCkaU+P8=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/4] hyperv: Switch from hyperv-tlfs.h to
- hyperv/hvhdk.h
-To: Michael Kelley <mhklinux@outlook.com>,
- "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
- "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
- "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
- "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
- "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
- "virtualization@lists.linux.dev" <virtualization@lists.linux.dev>
-Cc: "kys@microsoft.com" <kys@microsoft.com>,
- "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
- "wei.liu@kernel.org" <wei.liu@kernel.org>,
- "decui@microsoft.com" <decui@microsoft.com>,
- "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
- "will@kernel.org" <will@kernel.org>, "luto@kernel.org" <luto@kernel.org>,
- "tglx@linutronix.de" <tglx@linutronix.de>,
- "mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
- "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
- "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
- "seanjc@google.com" <seanjc@google.com>,
- "pbonzini@redhat.com" <pbonzini@redhat.com>,
- "peterz@infradead.org" <peterz@infradead.org>,
- "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
- "joro@8bytes.org" <joro@8bytes.org>,
- "robin.murphy@arm.com" <robin.murphy@arm.com>,
- "davem@davemloft.net" <davem@davemloft.net>,
- "edumazet@google.com" <edumazet@google.com>,
- "kuba@kernel.org" <kuba@kernel.org>, "pabeni@redhat.com"
- <pabeni@redhat.com>, "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
- "kw@linux.com" <kw@linux.com>, "robh@kernel.org" <robh@kernel.org>,
- "bhelgaas@google.com" <bhelgaas@google.com>, "arnd@arndb.de"
- <arnd@arndb.de>, "sgarzare@redhat.com" <sgarzare@redhat.com>,
- "jinankjain@linux.microsoft.com" <jinankjain@linux.microsoft.com>,
- "muminulrussell@gmail.com" <muminulrussell@gmail.com>,
- "skinsburskii@linux.microsoft.com" <skinsburskii@linux.microsoft.com>,
- "mukeshrathor@microsoft.com" <mukeshrathor@microsoft.com>,
- "vkuznets@redhat.com" <vkuznets@redhat.com>,
- "ssengar@linux.microsoft.com" <ssengar@linux.microsoft.com>,
- "apais@linux.microsoft.com" <apais@linux.microsoft.com>
-References: <1731018746-25914-1-git-send-email-nunodasneves@linux.microsoft.com>
- <1731018746-25914-5-git-send-email-nunodasneves@linux.microsoft.com>
- <BN7PR02MB4148513F8ABA50392E11C616D4582@BN7PR02MB4148.namprd02.prod.outlook.com>
-Content-Language: en-US
-From: Nuno Das Neves <nunodasneves@linux.microsoft.com>
-In-Reply-To: <BN7PR02MB4148513F8ABA50392E11C616D4582@BN7PR02MB4148.namprd02.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR02MB4157.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: d7ee0d92-ccb2-4ea9-d988-08dd05c00bdc
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Nov 2024 21:54:14.7246
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR0201MB8839
 
-On 11/10/2024 8:13 PM, Michael Kelley wrote:
-> From: Nuno Das Neves <nunodasneves@linux.microsoft.com> Sent: Thursday, November 7, 2024 2:32 PM
->>
->> Switch to using hvhdk.h everywhere in the kernel. This header includes
->> all the new Hyper-V headers in include/hyperv, which form a superset of
->> the definitions found in hyperv-tlfs.h.
->>
->> This makes it easier to add new Hyper-V interfaces without being
->> restricted to those in the TLFS doc (reflected in hyperv-tlfs.h).
->>
->> To be more consistent with the original Hyper-V code, the names of some
->> definitions are changed slightly. Update those where needed.
->>
->> hyperv-tlfs.h is no longer included anywhere - hvhdk.h can serve
->> the same role, but with an easier path for adding new definitions.
-> 
-> Is hyperv-tlfs.h and friends being deleted? If not, the risk is that
-> someone adds a new #include of it without realizing that it has been
-> superseded by hvhdk.h.
-> 
-
-I was hesitant to delete it because I thought someone may still have
-a use for a header file that (mostly) reflects the TLFS document and
-nothing more.
-
-But in practical terms, this patchset makes it much more difficult to
-use because all the helper code (i.e. mshyperv.h) now uses hvhdk.h.
-So, maybe there is no point keeping it.
-
-> Note also that this patch does not apply cleanly to 6.12 rc's, or to
-> current linux-next trees. There's an unrelated #include added to
-> arch/x86/include/asm/kvm_host.h that causes a merge failure
-> in that file.
-> 
-
-I've been developing this series based on hyperv-next. Should I be
-basing it on linux-next?
-
-> Michael
-> 
->>
->> Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
->> ---
->>  arch/arm64/hyperv/hv_core.c        |  2 +-
->>  arch/arm64/hyperv/mshyperv.c       |  4 ++--
->>  arch/arm64/include/asm/mshyperv.h  |  2 +-
->>  arch/x86/hyperv/hv_init.c          | 20 ++++++++++----------
->>  arch/x86/hyperv/hv_proc.c          |  2 +-
->>  arch/x86/hyperv/nested.c           |  2 +-
->>  arch/x86/include/asm/kvm_host.h    |  2 +-
->>  arch/x86/include/asm/mshyperv.h    |  2 +-
->>  arch/x86/include/asm/svm.h         |  2 +-
->>  arch/x86/kernel/cpu/mshyperv.c     |  2 +-
->>  arch/x86/kvm/vmx/hyperv_evmcs.h    |  2 +-
->>  arch/x86/kvm/vmx/vmx_onhyperv.h    |  2 +-
->>  drivers/clocksource/hyperv_timer.c |  2 +-
->>  drivers/hv/hv_balloon.c            |  4 ++--
->>  drivers/hv/hv_common.c             |  2 +-
->>  drivers/hv/hv_kvp.c                |  2 +-
->>  drivers/hv/hv_snapshot.c           |  2 +-
->>  drivers/hv/hyperv_vmbus.h          |  2 +-
->>  include/asm-generic/mshyperv.h     |  2 +-
->>  include/clocksource/hyperv_timer.h |  2 +-
->>  include/linux/hyperv.h             |  2 +-
->>  net/vmw_vsock/hyperv_transport.c   |  2 +-
->>  22 files changed, 33 insertions(+), 33 deletions(-)
->>
->> diff --git a/arch/arm64/hyperv/hv_core.c b/arch/arm64/hyperv/hv_core.c
->> index 7a746a5a6b42..69004f619c57 100644
->> --- a/arch/arm64/hyperv/hv_core.c
->> +++ b/arch/arm64/hyperv/hv_core.c
->> @@ -14,7 +14,7 @@
->>  #include <linux/arm-smccc.h>
->>  #include <linux/module.h>
->>  #include <asm-generic/bug.h>
->> -#include <asm/hyperv-tlfs.h>
->> +#include <hyperv/hvhdk.h>
->>  #include <asm/mshyperv.h>
->>
->>  /*
->> diff --git a/arch/arm64/hyperv/mshyperv.c b/arch/arm64/hyperv/mshyperv.c
->> index b1a4de4eee29..fc49949b7df6 100644
->> --- a/arch/arm64/hyperv/mshyperv.c
->> +++ b/arch/arm64/hyperv/mshyperv.c
->> @@ -49,12 +49,12 @@ static int __init hyperv_init(void)
->>  	hv_set_vpreg(HV_REGISTER_GUEST_OS_ID, guest_id);
->>
->>  	/* Get the features and hints from Hyper-V */
->> -	hv_get_vpreg_128(HV_REGISTER_FEATURES, &result);
->> +	hv_get_vpreg_128(HV_REGISTER_PRIVILEGES_AND_FEATURES_INFO, &result);
->>  	ms_hyperv.features = result.as32.a;
->>  	ms_hyperv.priv_high = result.as32.b;
->>  	ms_hyperv.misc_features = result.as32.c;
->>
->> -	hv_get_vpreg_128(HV_REGISTER_ENLIGHTENMENTS, &result);
->> +	hv_get_vpreg_128(HV_REGISTER_FEATURES_INFO, &result);
->>  	ms_hyperv.hints = result.as32.a;
->>
->>  	pr_info("Hyper-V: privilege flags low 0x%x, high 0x%x, hints 0x%x, misc
->> 0x%x\n",
->> diff --git a/arch/arm64/include/asm/mshyperv.h
->> b/arch/arm64/include/asm/mshyperv.h
->> index a975e1a689dd..7595fb35fae6 100644
->> --- a/arch/arm64/include/asm/mshyperv.h
->> +++ b/arch/arm64/include/asm/mshyperv.h
->> @@ -20,7 +20,7 @@
->>
->>  #include <linux/types.h>
->>  #include <linux/arm-smccc.h>
->> -#include <asm/hyperv-tlfs.h>
->> +#include <hyperv/hvhdk.h>
->>
->>  /*
->>   * Declare calls to get and set Hyper-V VP register values on ARM64, which
->> diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
->> index 1a6354b3e582..3f9aef157c88 100644
->> --- a/arch/x86/hyperv/hv_init.c
->> +++ b/arch/x86/hyperv/hv_init.c
->> @@ -19,7 +19,7 @@
->>  #include <asm/sev.h>
->>  #include <asm/ibt.h>
->>  #include <asm/hypervisor.h>
->> -#include <asm/hyperv-tlfs.h>
->> +#include <hyperv/hvhdk.h>
->>  #include <asm/mshyperv.h>
->>  #include <asm/idtentry.h>
->>  #include <asm/set_memory.h>
->> @@ -416,24 +416,24 @@ static void __init hv_get_partition_id(void)
->>  static u8 __init get_vtl(void)
->>  {
->>  	u64 control = HV_HYPERCALL_REP_COMP_1 | HVCALL_GET_VP_REGISTERS;
->> -	struct hv_get_vp_registers_input *input;
->> -	struct hv_get_vp_registers_output *output;
->> +	struct hv_input_get_vp_registers *input;
->> +	struct hv_register_assoc *output;
->>  	unsigned long flags;
->>  	u64 ret;
->>
->>  	local_irq_save(flags);
->>  	input = *this_cpu_ptr(hyperv_pcpu_input_arg);
->> -	output = (struct hv_get_vp_registers_output *)input;
->> +	output = (struct hv_register_assoc *)input;
->>
->> -	memset(input, 0, struct_size(input, element, 1));
->> -	input->header.partitionid = HV_PARTITION_ID_SELF;
->> -	input->header.vpindex = HV_VP_INDEX_SELF;
->> -	input->header.inputvtl = 0;
->> -	input->element[0].name0 = HV_X64_REGISTER_VSM_VP_STATUS;
->> +	memset(input, 0, struct_size(input, names, 1));
->> +	input->partition_id = HV_PARTITION_ID_SELF;
->> +	input->vp_index = HV_VP_INDEX_SELF;
->> +	input->input_vtl.as_uint8 = 0;
->> +	input->names[0] = HV_X64_REGISTER_VSM_VP_STATUS;
->>
->>  	ret = hv_do_hypercall(control, input, output);
->>  	if (hv_result_success(ret)) {
->> -		ret = output->as64.low & HV_X64_VTL_MASK;
->> +		ret = output->value.reg8 & HV_X64_VTL_MASK;
->>  	} else {
->>  		pr_err("Failed to get VTL(error: %lld) exiting...\n", ret);
->>  		BUG();
->> diff --git a/arch/x86/hyperv/hv_proc.c b/arch/x86/hyperv/hv_proc.c
->> index b74c06c04ff1..ac4c834d4435 100644
->> --- a/arch/x86/hyperv/hv_proc.c
->> +++ b/arch/x86/hyperv/hv_proc.c
->> @@ -176,7 +176,7 @@ int hv_call_create_vp(int node, u64 partition_id, u32 vp_index,
->> u32 flags)
->>  		input->partition_id = partition_id;
->>  		input->vp_index = vp_index;
->>  		input->flags = flags;
->> -		input->subnode_type = HvSubnodeAny;
->> +		input->subnode_type = HV_SUBNODE_ANY;
->>  		input->proximity_domain_info = hv_numa_node_to_pxm_info(node);
->>  		status = hv_do_hypercall(HVCALL_CREATE_VP, input, NULL);
->>  		local_irq_restore(irq_flags);
->> diff --git a/arch/x86/hyperv/nested.c b/arch/x86/hyperv/nested.c
->> index 9dc259fa322e..1083dc8646f9 100644
->> --- a/arch/x86/hyperv/nested.c
->> +++ b/arch/x86/hyperv/nested.c
->> @@ -11,7 +11,7 @@
->>
->>
->>  #include <linux/types.h>
->> -#include <asm/hyperv-tlfs.h>
->> +#include <hyperv/hvhdk.h>
->>  #include <asm/mshyperv.h>
->>  #include <asm/tlbflush.h>
->>
->> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
->> index 3627eab994a3..38cd609f37c7 100644
->> --- a/arch/x86/include/asm/kvm_host.h
->> +++ b/arch/x86/include/asm/kvm_host.h
->> @@ -34,7 +34,7 @@
->>  #include <asm/asm.h>
->>  #include <asm/kvm_page_track.h>
->>  #include <asm/kvm_vcpu_regs.h>
->> -#include <asm/hyperv-tlfs.h>
->> +#include <hyperv/hvhdk.h>
->>
->>  #define __KVM_HAVE_ARCH_VCPU_DEBUGFS
->>
->> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
->> index 47ca48062547..f0564e599b7f 100644
->> --- a/arch/x86/include/asm/mshyperv.h
->> +++ b/arch/x86/include/asm/mshyperv.h
->> @@ -6,9 +6,9 @@
->>  #include <linux/nmi.h>
->>  #include <linux/msi.h>
->>  #include <linux/io.h>
->> -#include <asm/hyperv-tlfs.h>
->>  #include <asm/nospec-branch.h>
->>  #include <asm/paravirt.h>
->> +#include <hyperv/hvhdk.h>
->>
->>  /*
->>   * Hyper-V always provides a single IO-APIC at this MMIO address.
->> diff --git a/arch/x86/include/asm/svm.h b/arch/x86/include/asm/svm.h
->> index f0dea3750ca9..913af68ad660 100644
->> --- a/arch/x86/include/asm/svm.h
->> +++ b/arch/x86/include/asm/svm.h
->> @@ -5,7 +5,7 @@
->>  #include <uapi/asm/svm.h>
->>  #include <uapi/asm/kvm.h>
->>
->> -#include <asm/hyperv-tlfs.h>
->> +#include <hyperv/hvhdk.h>
->>
->>  /*
->>   * 32-bit intercept words in the VMCB Control Area, starting
->> diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
->> index e0fd57a8ba84..be0d1f4491d9 100644
->> --- a/arch/x86/kernel/cpu/mshyperv.c
->> +++ b/arch/x86/kernel/cpu/mshyperv.c
->> @@ -20,7 +20,7 @@
->>  #include <linux/random.h>
->>  #include <asm/processor.h>
->>  #include <asm/hypervisor.h>
->> -#include <asm/hyperv-tlfs.h>
->> +#include <hyperv/hvhdk.h>
->>  #include <asm/mshyperv.h>
->>  #include <asm/desc.h>
->>  #include <asm/idtentry.h>
->> diff --git a/arch/x86/kvm/vmx/hyperv_evmcs.h b/arch/x86/kvm/vmx/hyperv_evmcs.h
->> index a543fccfc574..6536290f4274 100644
->> --- a/arch/x86/kvm/vmx/hyperv_evmcs.h
->> +++ b/arch/x86/kvm/vmx/hyperv_evmcs.h
->> @@ -6,7 +6,7 @@
->>  #ifndef __KVM_X86_VMX_HYPERV_EVMCS_H
->>  #define __KVM_X86_VMX_HYPERV_EVMCS_H
->>
->> -#include <asm/hyperv-tlfs.h>
->> +#include <hyperv/hvhdk.h>
->>
->>  #include "capabilities.h"
->>  #include "vmcs12.h"
->> diff --git a/arch/x86/kvm/vmx/vmx_onhyperv.h
->> b/arch/x86/kvm/vmx/vmx_onhyperv.h
->> index eb48153bfd73..2b94ff301712 100644
->> --- a/arch/x86/kvm/vmx/vmx_onhyperv.h
->> +++ b/arch/x86/kvm/vmx/vmx_onhyperv.h
->> @@ -3,7 +3,7 @@
->>  #ifndef __ARCH_X86_KVM_VMX_ONHYPERV_H__
->>  #define __ARCH_X86_KVM_VMX_ONHYPERV_H__
->>
->> -#include <asm/hyperv-tlfs.h>
->> +#include <hyperv/hvhdk.h>
->>  #include <asm/mshyperv.h>
->>
->>  #include <linux/jump_label.h>
->> diff --git a/drivers/clocksource/hyperv_timer.c b/drivers/clocksource/hyperv_timer.c
->> index b2a080647e41..c1cc96a168c7 100644
->> --- a/drivers/clocksource/hyperv_timer.c
->> +++ b/drivers/clocksource/hyperv_timer.c
->> @@ -23,7 +23,7 @@
->>  #include <linux/acpi.h>
->>  #include <linux/hyperv.h>
->>  #include <clocksource/hyperv_timer.h>
->> -#include <asm/hyperv-tlfs.h>
->> +#include <hyperv/hvhdk.h>
->>  #include <asm/mshyperv.h>
->>
->>  static struct clock_event_device __percpu *hv_clock_event;
->> diff --git a/drivers/hv/hv_balloon.c b/drivers/hv/hv_balloon.c
->> index c38dcdfcb914..d792df113962 100644
->> --- a/drivers/hv/hv_balloon.c
->> +++ b/drivers/hv/hv_balloon.c
->> @@ -28,7 +28,7 @@
->>  #include <linux/sizes.h>
->>
->>  #include <linux/hyperv.h>
->> -#include <asm/hyperv-tlfs.h>
->> +#include <hyperv/hvhdk.h>
->>
->>  #include <asm/mshyperv.h>
->>
->> @@ -1585,7 +1585,7 @@ static int hv_free_page_report(struct
->> page_reporting_dev_info *pr_dev_info,
->>  		return -ENOSPC;
->>  	}
->>
->> -	hint->type = HV_EXT_MEMORY_HEAT_HINT_TYPE_COLD_DISCARD;
->> +	hint->heat_type = HV_EXTMEM_HEAT_HINT_COLD_DISCARD;
->>  	hint->reserved = 0;
->>  	for_each_sg(sgl, sg, nents, i) {
->>  		union hv_gpa_page_range *range;
->> diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
->> index 9c452bfbd571..9ea05cbbf50d 100644
->> --- a/drivers/hv/hv_common.c
->> +++ b/drivers/hv/hv_common.c
->> @@ -28,7 +28,7 @@
->>  #include <linux/slab.h>
->>  #include <linux/dma-map-ops.h>
->>  #include <linux/set_memory.h>
->> -#include <asm/hyperv-tlfs.h>
->> +#include <hyperv/hvhdk.h>
->>  #include <asm/mshyperv.h>
->>
->>  /*
->> diff --git a/drivers/hv/hv_kvp.c b/drivers/hv/hv_kvp.c
->> index d35b60c06114..bfb7a518b4ed 100644
->> --- a/drivers/hv/hv_kvp.c
->> +++ b/drivers/hv/hv_kvp.c
->> @@ -27,7 +27,7 @@
->>  #include <linux/connector.h>
->>  #include <linux/workqueue.h>
->>  #include <linux/hyperv.h>
->> -#include <asm/hyperv-tlfs.h>
->> +#include <hyperv/hvhdk.h>
->>
->>  #include "hyperv_vmbus.h"
->>  #include "hv_utils_transport.h"
->> diff --git a/drivers/hv/hv_snapshot.c b/drivers/hv/hv_snapshot.c
->> index 0d2184be1691..097ebd58f14e 100644
->> --- a/drivers/hv/hv_snapshot.c
->> +++ b/drivers/hv/hv_snapshot.c
->> @@ -12,7 +12,7 @@
->>  #include <linux/connector.h>
->>  #include <linux/workqueue.h>
->>  #include <linux/hyperv.h>
->> -#include <asm/hyperv-tlfs.h>
->> +#include <hyperv/hvhdk.h>
->>
->>  #include "hyperv_vmbus.h"
->>  #include "hv_utils_transport.h"
->> diff --git a/drivers/hv/hyperv_vmbus.h b/drivers/hv/hyperv_vmbus.h
->> index 76ac5185a01a..2bea654858e3 100644
->> --- a/drivers/hv/hyperv_vmbus.h
->> +++ b/drivers/hv/hyperv_vmbus.h
->> @@ -15,10 +15,10 @@
->>  #include <linux/list.h>
->>  #include <linux/bitops.h>
->>  #include <asm/sync_bitops.h>
->> -#include <asm/hyperv-tlfs.h>
->>  #include <linux/atomic.h>
->>  #include <linux/hyperv.h>
->>  #include <linux/interrupt.h>
->> +#include <hyperv/hvhdk.h>
->>
->>  #include "hv_trace.h"
->>
->> diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
->> index 8fe7aaab2599..138e416a0f9c 100644
->> --- a/include/asm-generic/mshyperv.h
->> +++ b/include/asm-generic/mshyperv.h
->> @@ -25,7 +25,7 @@
->>  #include <linux/cpumask.h>
->>  #include <linux/nmi.h>
->>  #include <asm/ptrace.h>
->> -#include <asm/hyperv-tlfs.h>
->> +#include <hyperv/hvhdk.h>
->>
->>  #define VTPM_BASE_ADDRESS 0xfed40000
->>
->> diff --git a/include/clocksource/hyperv_timer.h b/include/clocksource/hyperv_timer.h
->> index 6cdc873ac907..a4c81a60f53d 100644
->> --- a/include/clocksource/hyperv_timer.h
->> +++ b/include/clocksource/hyperv_timer.h
->> @@ -15,7 +15,7 @@
->>
->>  #include <linux/clocksource.h>
->>  #include <linux/math64.h>
->> -#include <asm/hyperv-tlfs.h>
->> +#include <hyperv/hvhdk.h>
->>
->>  #define HV_MAX_MAX_DELTA_TICKS 0xffffffff
->>  #define HV_MIN_DELTA_TICKS 1
->> diff --git a/include/linux/hyperv.h b/include/linux/hyperv.h
->> index d0893ec488ae..ed65b20defea 100644
->> --- a/include/linux/hyperv.h
->> +++ b/include/linux/hyperv.h
->> @@ -24,7 +24,7 @@
->>  #include <linux/mod_devicetable.h>
->>  #include <linux/interrupt.h>
->>  #include <linux/reciprocal_div.h>
->> -#include <asm/hyperv-tlfs.h>
->> +#include <hyperv/hvhdk.h>
->>
->>  #define MAX_PAGE_BUFFER_COUNT				32
->>  #define MAX_MULTIPAGE_BUFFER_COUNT			32 /* 128K */
->> diff --git a/net/vmw_vsock/hyperv_transport.c b/net/vmw_vsock/hyperv_transport.c
->> index e2157e387217..152b6ed8877d 100644
->> --- a/net/vmw_vsock/hyperv_transport.c
->> +++ b/net/vmw_vsock/hyperv_transport.c
->> @@ -13,7 +13,7 @@
->>  #include <linux/hyperv.h>
->>  #include <net/sock.h>
->>  #include <net/af_vsock.h>
->> -#include <asm/hyperv-tlfs.h>
->> +#include <hyperv/hvhdk.h>
->>
->>  /* Older (VMBUS version 'VERSION_WIN10' or before) Windows hosts have some
->>   * stricter requirements on the hv_sock ring buffer size of six 4K pages.
->> --
->> 2.34.1
-
+RnJvbTogTnVubyBEYXMgTmV2ZXMgPG51bm9kYXNuZXZlc0BsaW51eC5taWNyb3NvZnQuY29tPiBT
+ZW50OiBGcmlkYXksIE5vdmVtYmVyIDE1LCAyMDI0IDE6MTUgUE0NCj4gDQo+IE9uIDExLzEwLzIw
+MjQgODoxMyBQTSwgTWljaGFlbCBLZWxsZXkgd3JvdGU6DQo+ID4gRnJvbTogTnVubyBEYXMgTmV2
+ZXMgPG51bm9kYXNuZXZlc0BsaW51eC5taWNyb3NvZnQuY29tPiBTZW50OiBUaHVyc2RheSwgTm92
+ZW1iZXIgNywgMjAyNCAyOjMyIFBNDQo+ID4+DQo+ID4+IFN3aXRjaCB0byB1c2luZyBodmhkay5o
+IGV2ZXJ5d2hlcmUgaW4gdGhlIGtlcm5lbC4gVGhpcyBoZWFkZXIgaW5jbHVkZXMNCj4gPj4gYWxs
+IHRoZSBuZXcgSHlwZXItViBoZWFkZXJzIGluIGluY2x1ZGUvaHlwZXJ2LCB3aGljaCBmb3JtIGEg
+c3VwZXJzZXQgb2YNCj4gPj4gdGhlIGRlZmluaXRpb25zIGZvdW5kIGluIGh5cGVydi10bGZzLmgu
+DQo+ID4+DQo+ID4+IFRoaXMgbWFrZXMgaXQgZWFzaWVyIHRvIGFkZCBuZXcgSHlwZXItViBpbnRl
+cmZhY2VzIHdpdGhvdXQgYmVpbmcNCj4gPj4gcmVzdHJpY3RlZCB0byB0aG9zZSBpbiB0aGUgVExG
+UyBkb2MgKHJlZmxlY3RlZCBpbiBoeXBlcnYtdGxmcy5oKS4NCj4gPj4NCj4gPj4gVG8gYmUgbW9y
+ZSBjb25zaXN0ZW50IHdpdGggdGhlIG9yaWdpbmFsIEh5cGVyLVYgY29kZSwgdGhlIG5hbWVzIG9m
+IHNvbWUNCj4gPj4gZGVmaW5pdGlvbnMgYXJlIGNoYW5nZWQgc2xpZ2h0bHkuIFVwZGF0ZSB0aG9z
+ZSB3aGVyZSBuZWVkZWQuDQo+ID4+DQo+ID4+IGh5cGVydi10bGZzLmggaXMgbm8gbG9uZ2VyIGlu
+Y2x1ZGVkIGFueXdoZXJlIC0gaHZoZGsuaCBjYW4gc2VydmUNCj4gPj4gdGhlIHNhbWUgcm9sZSwg
+YnV0IHdpdGggYW4gZWFzaWVyIHBhdGggZm9yIGFkZGluZyBuZXcgZGVmaW5pdGlvbnMuDQo+ID4N
+Cj4gPiBJcyBoeXBlcnYtdGxmcy5oIGFuZCBmcmllbmRzIGJlaW5nIGRlbGV0ZWQ/IElmIG5vdCwg
+dGhlIHJpc2sgaXMgdGhhdA0KPiA+IHNvbWVvbmUgYWRkcyBhIG5ldyAjaW5jbHVkZSBvZiBpdCB3
+aXRob3V0IHJlYWxpemluZyB0aGF0IGl0IGhhcyBiZWVuDQo+ID4gc3VwZXJzZWRlZCBieSBodmhk
+ay5oLg0KPiA+DQo+IA0KPiBJIHdhcyBoZXNpdGFudCB0byBkZWxldGUgaXQgYmVjYXVzZSBJIHRo
+b3VnaHQgc29tZW9uZSBtYXkgc3RpbGwgaGF2ZQ0KPiBhIHVzZSBmb3IgYSBoZWFkZXIgZmlsZSB0
+aGF0IChtb3N0bHkpIHJlZmxlY3RzIHRoZSBUTEZTIGRvY3VtZW50IGFuZA0KPiBub3RoaW5nIG1v
+cmUuDQo+IA0KPiBCdXQgaW4gcHJhY3RpY2FsIHRlcm1zLCB0aGlzIHBhdGNoc2V0IG1ha2VzIGl0
+IG11Y2ggbW9yZSBkaWZmaWN1bHQgdG8NCj4gdXNlIGJlY2F1c2UgYWxsIHRoZSBoZWxwZXIgY29k
+ZSAoaS5lLiBtc2h5cGVydi5oKSBub3cgdXNlcyBodmhkay5oLg0KPiBTbywgbWF5YmUgdGhlcmUg
+aXMgbm8gcG9pbnQga2VlcGluZyBpdC4NCj4gDQo+ID4gTm90ZSBhbHNvIHRoYXQgdGhpcyBwYXRj
+aCBkb2VzIG5vdCBhcHBseSBjbGVhbmx5IHRvIDYuMTIgcmMncywgb3IgdG8NCj4gPiBjdXJyZW50
+IGxpbnV4LW5leHQgdHJlZXMuIFRoZXJlJ3MgYW4gdW5yZWxhdGVkICNpbmNsdWRlIGFkZGVkIHRv
+DQo+ID4gYXJjaC94ODYvaW5jbHVkZS9hc20va3ZtX2hvc3QuaCB0aGF0IGNhdXNlcyBhIG1lcmdl
+IGZhaWx1cmUNCj4gPiBpbiB0aGF0IGZpbGUuDQo+ID4NCj4gDQo+IEkndmUgYmVlbiBkZXZlbG9w
+aW5nIHRoaXMgc2VyaWVzIGJhc2VkIG9uIGh5cGVydi1uZXh0LiBTaG91bGQgSSBiZQ0KPiBiYXNp
+bmcgaXQgb24gbGludXgtbmV4dD8NCj4gDQoNClllcywgYmFzZSBpdCBvbiBsaW51eC1uZXh0LiBo
+eXBlcnYtbmV4dCB3YXMgbGFzdCBzeW5jJ2VkIHdpdGgNCnVwc3RyZWFtIGF0IDYuMTEtcmM0IGJh
+Y2sgaW4gbWlkLUF1Z3VzdCwgc28gaXQncyBwcmV0dHkgZmFyDQpvdXQtb2YtZGF0ZS4gV2VpIHdp
+bGwgbmVlZCB0byBzeW5jIGl0IGJlZm9yZSBwaWNraW5nIHVwIGFueQ0KbmV3IHBhdGNoZXMuDQoN
+Ck1pY2hhZWwNCg==
 
