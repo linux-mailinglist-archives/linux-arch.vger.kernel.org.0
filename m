@@ -1,73 +1,74 @@
-Return-Path: <linux-arch+bounces-9125-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9126-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE2CC9D0910
-	for <lists+linux-arch@lfdr.de>; Mon, 18 Nov 2024 06:50:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A55A9D0912
+	for <lists+linux-arch@lfdr.de>; Mon, 18 Nov 2024 06:50:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 07CC9B21190
-	for <lists+linux-arch@lfdr.de>; Mon, 18 Nov 2024 05:50:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E0AB4B221CD
+	for <lists+linux-arch@lfdr.de>; Mon, 18 Nov 2024 05:50:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D910823C3;
-	Mon, 18 Nov 2024 05:50:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7F6A13D279;
+	Mon, 18 Nov 2024 05:50:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="YIxZt0ch"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="2nXPTA89"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2078.outbound.protection.outlook.com [40.107.220.78])
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2075.outbound.protection.outlook.com [40.107.244.75])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A632638B;
-	Mon, 18 Nov 2024 05:50:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F209138B;
+	Mon, 18 Nov 2024 05:50:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.75
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731909007; cv=fail; b=ZsFSPoiDCrD5XMzdinibISA7cRUNaDY4FedISxGlQ9FA0D4s77SVPGKe5ZQJwu/JBfz2Me7jTk4J2zW1x/0mbblWgofZ2QtHAkvdL7kEoFsTvNCK83hQpOVQ+3Kyg20QsnNUi52L2lrLyPEuey1XoWETrjRsaGFx/wWvL4eKT6Q=
+	t=1731909016; cv=fail; b=gakZeeELrclhEGcP5zUa3iIe4au0iu2HP0OMfktEdwJdKV/j3h876eiVU6ysEF5Eu8677bJ+YT8qmCZsuZICq0fPd6g+DOzd7csB+890KF67Z25XO2VD5q4qkUVAkbaj6AMuv2TM+M9LECdCV+ErkX03eaWNM2ikAwxSTcJXD6Q=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731909007; c=relaxed/simple;
-	bh=nFDdWouLGlpM4wMMcKg6UHN1i/eStu0dbEiwYsfpj5g=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=R7SmQYUxNKeFQR8BD8RvUL1RqsH0G7HMwWQhi/IWb2ZxWu8kzGvEOJvLnUvP18TES2cg+4swY55Mw8Ynnq6ozExzSpKQ3tP2P3tJnu37bCUpR6zUr3va/O7YxmRduu5Ha7YcOpQZ9ez5zPTbaJdrxa5EHxOUWCloTGjTbK/sZdA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=YIxZt0ch; arc=fail smtp.client-ip=40.107.220.78
+	s=arc-20240116; t=1731909016; c=relaxed/simple;
+	bh=I6EQiYw8K0f5jXKss9BxucItbForiWMKXniF8tpRkio=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=FOwiTDKe3wxqwN3paKAMcX0BvwL/z6+pswK8U32c7nOVqERzF8voqw8OL6qMUH0KWwzGOpDqBYVoRWaUo5Ww0HB5TXy+XLa60ViTcnJF63Ibl0PM0+yYAYuqXx2M1Q2vVIzMJioHFhf5QmiMuhXff31sOErCklszU9mpSu6tuTk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=2nXPTA89; arc=fail smtp.client-ip=40.107.244.75
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=tsLiNwgHFr72WJbBRUKnFuX93GBPQxunUlbjtovyW4LVG8WzplDdTp+laRSmyoXjGfAFgmoNSPaIyY/JslJxrNbTYEBrJJM0zA6a0OgFGY0aeWB/2axe2PVWjbvuELGL1iHqhgbsGaB/PgElxFIfcl6nmDpFrLYxDOUHEfe8AlRRXUjpgAgxpbls5TiZhjmFH4ql7usAivaXpUPl5YqY+em3ifud6yfSBjhYiCkjrIixAUVMACe31A5s/K5nv3nAXVhRWkvtfclyk0lVZyeN2QReuCxW0cJGfWx3U+zD06YARLQNJEI9KqUtUhTEu4hSubI0VoP3h9OAte5RaaV96Q==
+ b=tXf/egnq/xhh2mY4U0idZ4REPUkLw3bdl9WumuT0ShzZLCMO8VUzJ+Atyse0eKACG4V0ayeyCGR29qdvW0PXc5S++1gqYCC3UADFdZEvkxc13I3fyyi0PS18xhZolnHiI4kd0Rf/azm/undQySZWvROWWUtduDfC4ETE1teUH9O7EC/CHCyGTBZ9cEXTdul7bY3Z6jZkWQDhsQa+vl5LpcDJzn1IEASgrvs/eyZcO8nCJPeouKHVterSLdXaLdDwU3atcm7Lt5TF9oXO2DG1rxjs3X0qX/fAns6BjWxWB36sOphSDINfWthgy9mgK+CBeFCN0peePI2mHD2Lvle8WA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7fQ9rZMGKwc9ae2ugd71bJzQxdA4VRKytsg6GNZo+hQ=;
- b=f4BK/hXs+GbM3Q5E1a5LQu8uWwT/OAemHr6YfGaT0v4PXFLQNQ5RGDR6ppnD5CpbHnbmZWgqiXhGX7IZEMnhERVve+hMoJuDLMK5YZO2aHx6PpF0bOZKzwpw8IvSk/u1OUGX8gzrgSiY3YeI+DtJRYeQDS24CaJd5jR01lLHWmLioUZPyaeuPF1Nkdeq/irjPHp2e/WgwdwEmOVdkT7Q2MdmFDhTtXYDjyYXW4vhY3rprpXOgi3Q19mxz+OvLhLiWvz+fVtFmeVPl53nlIfAd7kG5NIx7EGExX+tsdJMzcTV9e3yRo7uBWjyKdtENLMtS8JSKtxjCLiRtBmqrUEbiw==
+ bh=hgjJpIWUMULCYTGTfsX2DraU/FvbxstiAT4/BZSQ7n8=;
+ b=uFI06uapuSuklZDCILpUCSKX4HuuF33RjzGTN4qIxxDl7BZYBgqkDErXXws4MmNAQJrFnr51WUhVY5QWZP2IWsRaUj3OZKoDIreeoP8auUlYeAhFutWRGOqCjpGPpnl6MmK/A4u9Y6ihXS5Di7u+2ZuwGL6IJq+9lUMSDYOSwOkXYqeDZ4smN/6Zs1Tpr5BX633OS0nuNW2KyORW+iyi5qsGl+j/qjqXMIEpMr0QQHLHhIR8tEo7/66/5vCWpil5nsEZHwwRU1BJQ30V4WQkhOQvwqOqRsfIuwcaGVv8onTJMjijW95bsJR+M3iTgCqfpaG/xB16hqrA2JQS0bU20Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
  is 165.204.84.12) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=fail (p=quarantine sp=quarantine pct=100) action=quarantine
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7fQ9rZMGKwc9ae2ugd71bJzQxdA4VRKytsg6GNZo+hQ=;
- b=YIxZt0chjD17ZuCDjnbtYPcS/7QY445hX8HELQcQDmerrqQZ3IDmybRWTNRMFitQTgFyul/ziYhLFBxTzreWks323ZIVlRodViJ2qTjQm3PQXbIJdeAkWSuhMw26f2+hbL/awTzfFM1QuMHtGzn8iok0LxdrT3hCXswE8LVVFDo=
-Received: from CY5PR20CA0001.namprd20.prod.outlook.com (2603:10b6:930:3::10)
- by CY8PR12MB7194.namprd12.prod.outlook.com (2603:10b6:930:5a::19) with
+ bh=hgjJpIWUMULCYTGTfsX2DraU/FvbxstiAT4/BZSQ7n8=;
+ b=2nXPTA89JMkRJLcgR/lgi2si0roVW+iCfgfXS60+TAY8uvOnke/Xz5aoMYQueLQPMVQYIbpmHuLZUEAncVHz5qQ+OCE81lXr/THg3OJDeL8RO9IaEM3GTZ+F1lioCB/+61bdnZfO3h2QW0HDCCTRUc9rBp752KQVsm0xEtkW8tk=
+Received: from SJ0PR05CA0122.namprd05.prod.outlook.com (2603:10b6:a03:33d::7)
+ by DS7PR12MB5816.namprd12.prod.outlook.com (2603:10b6:8:78::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8158.22; Mon, 18 Nov
- 2024 05:50:03 +0000
-Received: from CY4PEPF0000E9D8.namprd05.prod.outlook.com
- (2603:10b6:930:3:cafe::85) by CY5PR20CA0001.outlook.office365.com
- (2603:10b6:930:3::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8158.23; Mon, 18 Nov
+ 2024 05:50:11 +0000
+Received: from MWH0EPF000A6730.namprd04.prod.outlook.com
+ (2603:10b6:a03:33d:cafe::94) by SJ0PR05CA0122.outlook.office365.com
+ (2603:10b6:a03:33d::7) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8158.23 via Frontend
- Transport; Mon, 18 Nov 2024 05:50:02 +0000
+ Transport; Mon, 18 Nov 2024 05:50:11 +0000
 X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
  165.204.84.12) smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=fail action=quarantine header.from=amd.com;
 Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
  amd.com discourages use of 165.204.84.12 as permitted sender)
 Received: from SATLEXMB04.amd.com (165.204.84.12) by
- CY4PEPF0000E9D8.mail.protection.outlook.com (10.167.241.71) with Microsoft
+ MWH0EPF000A6730.mail.protection.outlook.com (10.167.249.22) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8158.14 via Frontend Transport; Mon, 18 Nov 2024 05:50:02 +0000
+ 15.20.8158.14 via Frontend Transport; Mon, 18 Nov 2024 05:50:10 +0000
 Received: from purico-ed03host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Sun, 17 Nov
- 2024 23:49:53 -0600
+ 2024 23:50:01 -0600
 From: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
 To: <linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>
 CC: <joro@8bytes.org>, <robin.murphy@arm.com>, <vasant.hegde@amd.com>,
@@ -75,10 +76,12 @@ CC: <joro@8bytes.org>, <robin.murphy@arm.com>, <vasant.hegde@amd.com>,
 	<jgg@nvidia.com>, <kevin.tian@intel.com>, <jon.grimm@amd.com>,
 	<santosh.shukla@amd.com>, <pandoh@google.com>, <kumaranand@google.com>,
 	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-Subject: [PATCH v12 0/9] iommu/amd: Use 128-bit cmpxchg operation to update DTE
-Date: Mon, 18 Nov 2024 05:49:28 +0000
-Message-ID: <20241118054937.5203-1-suravee.suthikulpanit@amd.com>
+Subject: [PATCH v12 1/9] iommu/amd: Misc ACPI IVRS debug info clean up
+Date: Mon, 18 Nov 2024 05:49:29 +0000
+Message-ID: <20241118054937.5203-2-suravee.suthikulpanit@amd.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20241118054937.5203-1-suravee.suthikulpanit@amd.com>
+References: <20241118054937.5203-1-suravee.suthikulpanit@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -91,102 +94,195 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9D8:EE_|CY8PR12MB7194:EE_
-X-MS-Office365-Filtering-Correlation-Id: c408cd1b-6b7d-4171-b328-08dd0794d855
+X-MS-TrafficTypeDiagnostic: MWH0EPF000A6730:EE_|DS7PR12MB5816:EE_
+X-MS-Office365-Filtering-Correlation-Id: d5f2e861-9ced-4ab6-9309-08dd0794dd18
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|82310400026|1800799024|36860700013;
+	BCL:0;ARA:13230040|1800799024|36860700013|82310400026|376014|7416014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?ScMI/m1TG+R4+uQCAwVajTnznQde8kF8w6/ZkyLZ8CfxNyj3nXO0gRXAvrEZ?=
- =?us-ascii?Q?kczI9B45j2p6cVl6tbV2ksrO/fl+vkKXlWasbM+P8x+rXHsBQfE2CG6ptYr6?=
- =?us-ascii?Q?p/Wr0KLI3a/S0Verptxu3qnbS5ec0xq11ZCgoM2CJgtuP7Wkf0n7MrJ9bBOB?=
- =?us-ascii?Q?/sbzOeUVgB11lQKuwjuWgjOQpAGu+y75CkM1aUw4+FmfMYHyhKZRzgSaMQa5?=
- =?us-ascii?Q?LCUVmlCN4S1L+7Ib2do0nycblfx0QIQ0RFdA1LzOSAlMoa+GnvihBPkLixe7?=
- =?us-ascii?Q?g12d/N5yS0wZDX8NQG3/EenLy98l8pIpzuswNxSuUv+jIl+aLwFiCkRygRYU?=
- =?us-ascii?Q?EzpuAPXbuFuqII+qSXzT2VGeJl+YYiZKjMGYp8dQ9dNwo7KAEvD/bar8pVqs?=
- =?us-ascii?Q?Hznu3haCgbq6UPV/1TmhyYy2Ip2gokQJYwnyML2yGBFAHhb9u/x3s5PPQHS7?=
- =?us-ascii?Q?26rvEhD7B6ZqFxUrmhjIL1yoIsoHrdD2Jq5an5tXl42i89TLNQR3gabB3khU?=
- =?us-ascii?Q?GFyGj3riUtIvG6glDvGBOuErBDJf6QIuf4dr7jLkDMPMzgAaK3EvEqDRFOvK?=
- =?us-ascii?Q?+nHdI+P0U9G2uB2YRd2R32xfgicfbWhZbi511sdcSvlPEd84nGM8sHqsIzh1?=
- =?us-ascii?Q?kqF/PE6zYQGyMWqNTR6IKbekOzJolZcFGh5qXJdcW8Vz6qSQKWzINrOhyOKR?=
- =?us-ascii?Q?w2uwaDwY2M0tzGdBiLBPZjQ0GNTRlhJwxxxsFS1qVsueHthjkD01xUruqSzr?=
- =?us-ascii?Q?jWtKwiJ0RFnWxGztdVZKo/a5cWG++ZzDWqvF/pTlFZkwEFglCwkBo/eeP0/5?=
- =?us-ascii?Q?ao++d2bibMYWCg6a1WPSlXU8E7RM7kzpfBp//fXfhxBN14Obm1cbfSHY57CY?=
- =?us-ascii?Q?x3HPdKQ9+/um660rN3omQHVMrhxKxCjERXyM2THtgtYzsh5Nw7tnjTGQLcdb?=
- =?us-ascii?Q?1c1NIlUL1H20zHUndrimmDVLNGlXQwTnSGYdRi0vinrjNloVsy4Vd8bkrUv2?=
- =?us-ascii?Q?f1NB3xSnzPRCQyPznyvSBIia452V2f7W0RZB65+5aZXXx5JHRUygrlezAh9E?=
- =?us-ascii?Q?lw7hDcfo+wzS+mi3X+Yksg7sCrn5PTi0S70JiEn2zfyZnr3USlG7QGqcMgPZ?=
- =?us-ascii?Q?ChsQoLVqYP6gqM55W+SeTc/crcOsckCg0+LAkNPi1Z5PGtKzjNsv3411UWWf?=
- =?us-ascii?Q?mNTSuSqSCs0giQVLJXhc7OyMR5yMJRP0PZm1m7+cYrkzX0T0pPsv5DBxiIhh?=
- =?us-ascii?Q?OGT8OlBFXfZQgKmaTc++nbrsz5W1xd8MdLdZ9kdS1ep1MtrxmO1xDIMIt6+L?=
- =?us-ascii?Q?X1/Tc7M73XwBxyaXoeEGDyZvYjFpnyaO66bhZ4Tzk23Ep9himJPhIIS0rRv9?=
- =?us-ascii?Q?NywTH2UlkXpKrmNL0rKT0GLNr8Uf4tdEqrxDZzwesM6Ta1zam+dH8UgCr1Gu?=
- =?us-ascii?Q?e/IilS4aGJ8=3D?=
+	=?us-ascii?Q?rrggiR+usEk1arjOWfLTv1rwROdTvi8laIF0dldCYzN6ovo8yezv8ivbe6yI?=
+ =?us-ascii?Q?03WazP3dFn8vTIp2yePHUHXhaa+b0sCEfIzoIJy5gG1zMi1mNKvd8p/yaKNC?=
+ =?us-ascii?Q?RG19Z3At/18H2GlxTX7VnICsYi5bBvWXybv4bE2Gw5oF2hcZ9iksGQNxggL8?=
+ =?us-ascii?Q?VTBXmoCoPuLZ0KQkySUhRXRpzTUEgWU5WS2cIjAWz2BoTj+ihGc9oSDG4Y0U?=
+ =?us-ascii?Q?UApsltBc0Hmz0iwA/69gWtyxQ89BGa0bPtJsk7/ZIUxRX2JHx1iV0JopeetN?=
+ =?us-ascii?Q?bRXghFwpF2YkgDMSnPp+XiIlNHg3Q9fzfJ92PorzRXShozVy4if6+wpZ5GLV?=
+ =?us-ascii?Q?blIRh4GJlFCTFPjn5Ncu1DKV2SmrGkB6NUoDEnSkSIy0hdjXIJM7Oz5k8Adg?=
+ =?us-ascii?Q?siDOZ7umdd0j2J7csfm6fYWV5NBXG+TscIC6NjFhmzQuXqmZTERxM6lKB3+U?=
+ =?us-ascii?Q?MxH6aCrpLryROmtYnUtMVUpYAM32H2rrzesnF1gtnY8ZwohQpdki5IZt41aq?=
+ =?us-ascii?Q?UYiYStGvQJzGF/1MQ8bwU2hR3MplefrglHjAPdfUQoZr0q8gSdPCyZLIGSO4?=
+ =?us-ascii?Q?WVWctdKW8bIlpBllSbkeGcusZazVE5gdrZ43AIxqK28T47mTVjKS3qL+ofSO?=
+ =?us-ascii?Q?K4Fy6ri/HZEqrjP7Ymhn/fcIxW7F1gkbPsemy+KgNAlcYIU/1ctes4fxZzPr?=
+ =?us-ascii?Q?1q+rvqt0gIpMzsEBqZgsfdhLmeDZVIWunta+B7fVnMdZ6HR3mup4H9Swq9ns?=
+ =?us-ascii?Q?DHql744l8DXdSVb9DKS9dwCkQARFiXVdGQXrztEfEw3M9CJwGSjxZO3kxXH/?=
+ =?us-ascii?Q?GwPQsxOdBPaYGvRiYLsZE1LZe4a9DMRjoU2nskORL/+pl1nX6FDtyWFfc3ww?=
+ =?us-ascii?Q?tAvJAzBz9ZIiPay19rpDvc2vDG6VgjUDfl3lrp1UskWMLw2hPLv72IAkoDHl?=
+ =?us-ascii?Q?G937SVQVp/xH8F0fFr6Hj4DMb+WtyjPa0ZMfAmVJEDiosUndCSkxYoImYZJ2?=
+ =?us-ascii?Q?WOiyYeRTABBDzM0v1/B74AJ8NY7WdVrLcrmP8dLTs2hC0ujl7Ib9zOl3NHI+?=
+ =?us-ascii?Q?1ib2JA0I8/ClFTVVDrcvv/U+cfYWS6Ww4H1nqMYF/F8zfD3pFpe9TXTPkbs+?=
+ =?us-ascii?Q?8lsBoad0+PBREmPIDoy6O80MTp87rdT8EGx70F+0XGMcwuGwL7q1b2CLwWqE?=
+ =?us-ascii?Q?duZOTH11j4CEEbCdtdtY3FFRVRIiE/xbQuPHoOtcrvfIF/9hPrwiXGtUjanq?=
+ =?us-ascii?Q?PHr0yWV/MO0gAuO6wouRKRhYd/4mhBsSSXMm68GdpZCiwzmDLrpyjfBoT3VY?=
+ =?us-ascii?Q?0ZJqhrXxLibfLiyTsGr4TWi9i763ZY+VCtTUyKq+qsXTJIqMjt8TuWuzoSxv?=
+ =?us-ascii?Q?I1dw2/QSz0qcb/v16Tu+yCD1Bhx7ld5rB+WHMkvn1zsWl1j7AA=3D=3D?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.12;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:atlvpn-bp.amd.com;CAT:NONE;SFS:(13230040)(7416014)(376014)(82310400026)(1800799024)(36860700013);DIR:OUT;SFP:1101;
+	CIP:165.204.84.12;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:atlvpn-bp.amd.com;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(82310400026)(376014)(7416014);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2024 05:50:02.0809
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2024 05:50:10.0689
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c408cd1b-6b7d-4171-b328-08dd0794d855
+X-MS-Exchange-CrossTenant-Network-Message-Id: d5f2e861-9ced-4ab6-9309-08dd0794dd18
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.12];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	CY4PEPF0000E9D8.namprd05.prod.outlook.com
+	MWH0EPF000A6730.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7194
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5816
 
-This series modifies current implementation to use 128-bit cmpxchg to
-update DTE when needed as specified in the AMD I/O Virtualization
-Techonology (IOMMU) Specification.
+* Remove redundant AMD-Vi prefix.
+* Print IVHD device entry settings field using hex value.
+* Print root device of IVHD ACPI device entry using hex value.
 
-Please note that I have verified with the hardware designer, and they have
-confirmed that the IOMMU hardware has always been implemented with 256-bit
-read. The next revision of the IOMMU spec will be updated to correctly
-describe this part.  Therefore, I have updated the implementation to avoid
-unnecessary flushing.
+Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+---
+ drivers/iommu/amd/amd_iommu_types.h |  2 +-
+ drivers/iommu/amd/init.c            | 35 +++++++++++++----------------
+ 2 files changed, 16 insertions(+), 21 deletions(-)
 
-Also, this has been a long series. I would like to thank several folks who
-have helped review and provide suggestions along the way :)
-
-Changes in v12:
-* Patch 4: Use arch_cmpxchg128_local() instead in amd_iommu_atomic128_set()
-  and add Reviewed-by tag from Uros.
-* Patch 5: Add Reviewed-by tag from Jason.
-
-v11: https://lore.kernel.org/lkml/20241114194436.389961-1-suravee.suthikulpanit@amd.com/
-v10: https://lore.kernel.org/lkml/20241113120327.5239-1-suravee.suthikulpanit@amd.com/
-v9: https://lore.kernel.org/lkml/20241101162304.4688-1-suravee.suthikulpanit@amd.com/
-v8: https://lore.kernel.org/lkml/20241031184243.4184-1-suravee.suthikulpanit@amd.com/
-v7: https://lore.kernel.org/lkml/20241031091624.4895-1-suravee.suthikulpanit@amd.com/
-v6: https://lore.kernel.org/lkml/20241016051756.4317-1-suravee.suthikulpanit@amd.com/
-v5: https://lore.kernel.org/lkml/20241007041353.4756-1-suravee.suthikulpanit@amd.com/
-v4: https://lore.kernel.org/lkml/20240916171805.324292-1-suravee.suthikulpanit@amd.com/
-v3: https://lore.kernel.org/lkml/20240906121308.5013-1-suravee.suthikulpanit@amd.com/
-v2: https://lore.kernel.org/lkml/20240829180726.5022-1-suravee.suthikulpanit@amd.com/
-v1: https://lore.kernel.org/lkml/20240819161839.4657-1-suravee.suthikulpanit@amd.com/
-
-Thanks,
-Suravee
-Suravee Suthikulpanit (9):
-  iommu/amd: Misc ACPI IVRS debug info clean up
-  iommu/amd: Disable AMD IOMMU if CMPXCHG16B feature is not supported
-  iommu/amd: Introduce struct ivhd_dte_flags to store persistent DTE
-    flags
-  iommu/amd: Introduce helper function to update 256-bit DTE
-  iommu/amd: Modify set_dte_entry() to use 256-bit DTE helpers
-  iommu/amd: Introduce helper function get_dte256()
-  iommu/amd: Modify clear_dte_entry() to avoid in-place update
-  iommu/amd: Lock DTE before updating the entry with WRITE_ONCE()
-  iommu/amd: Remove amd_iommu_apply_erratum_63()
-
- drivers/iommu/amd/amd_iommu.h       |   4 +-
- drivers/iommu/amd/amd_iommu_types.h |  41 ++-
- drivers/iommu/amd/init.c            | 229 +++++++++--------
- drivers/iommu/amd/iommu.c           | 378 +++++++++++++++++++++-------
- 4 files changed, 440 insertions(+), 212 deletions(-)
-
+diff --git a/drivers/iommu/amd/amd_iommu_types.h b/drivers/iommu/amd/amd_iommu_types.h
+index fdb0357e0bb9..af87b1d094c1 100644
+--- a/drivers/iommu/amd/amd_iommu_types.h
++++ b/drivers/iommu/amd/amd_iommu_types.h
+@@ -468,7 +468,7 @@ extern bool amd_iommu_dump;
+ #define DUMP_printk(format, arg...)				\
+ 	do {							\
+ 		if (amd_iommu_dump)				\
+-			pr_info("AMD-Vi: " format, ## arg);	\
++			pr_info(format, ## arg);	\
+ 	} while(0);
+ 
+ /* global flag if IOMMUs cache non-present entries */
+diff --git a/drivers/iommu/amd/init.c b/drivers/iommu/amd/init.c
+index 0e0a531042ac..3a7b2b0472fa 100644
+--- a/drivers/iommu/amd/init.c
++++ b/drivers/iommu/amd/init.c
+@@ -1239,7 +1239,7 @@ static int __init add_acpi_hid_device(u8 *hid, u8 *uid, u32 *devid,
+ 	entry->cmd_line	= cmd_line;
+ 	entry->root_devid = (entry->devid & (~0x7));
+ 
+-	pr_info("%s, add hid:%s, uid:%s, rdevid:%d\n",
++	pr_info("%s, add hid:%s, uid:%s, rdevid:%#x\n",
+ 		entry->cmd_line ? "cmd" : "ivrs",
+ 		entry->hid, entry->uid, entry->root_devid);
+ 
+@@ -1331,15 +1331,14 @@ static int __init init_iommu_from_acpi(struct amd_iommu *iommu,
+ 		switch (e->type) {
+ 		case IVHD_DEV_ALL:
+ 
+-			DUMP_printk("  DEV_ALL\t\t\tflags: %02x\n", e->flags);
++			DUMP_printk("  DEV_ALL\t\t\tsetting: %#02x\n", e->flags);
+ 
+ 			for (dev_i = 0; dev_i <= pci_seg->last_bdf; ++dev_i)
+ 				set_dev_entry_from_acpi(iommu, dev_i, e->flags, 0);
+ 			break;
+ 		case IVHD_DEV_SELECT:
+ 
+-			DUMP_printk("  DEV_SELECT\t\t\t devid: %04x:%02x:%02x.%x "
+-				    "flags: %02x\n",
++			DUMP_printk("  DEV_SELECT\t\t\tdevid: %04x:%02x:%02x.%x flags: %#02x\n",
+ 				    seg_id, PCI_BUS_NUM(e->devid),
+ 				    PCI_SLOT(e->devid),
+ 				    PCI_FUNC(e->devid),
+@@ -1350,8 +1349,7 @@ static int __init init_iommu_from_acpi(struct amd_iommu *iommu,
+ 			break;
+ 		case IVHD_DEV_SELECT_RANGE_START:
+ 
+-			DUMP_printk("  DEV_SELECT_RANGE_START\t "
+-				    "devid: %04x:%02x:%02x.%x flags: %02x\n",
++			DUMP_printk("  DEV_SELECT_RANGE_START\tdevid: %04x:%02x:%02x.%x flags: %#02x\n",
+ 				    seg_id, PCI_BUS_NUM(e->devid),
+ 				    PCI_SLOT(e->devid),
+ 				    PCI_FUNC(e->devid),
+@@ -1364,8 +1362,7 @@ static int __init init_iommu_from_acpi(struct amd_iommu *iommu,
+ 			break;
+ 		case IVHD_DEV_ALIAS:
+ 
+-			DUMP_printk("  DEV_ALIAS\t\t\t devid: %04x:%02x:%02x.%x "
+-				    "flags: %02x devid_to: %02x:%02x.%x\n",
++			DUMP_printk("  DEV_ALIAS\t\t\tdevid: %04x:%02x:%02x.%x flags: %#02x devid_to: %02x:%02x.%x\n",
+ 				    seg_id, PCI_BUS_NUM(e->devid),
+ 				    PCI_SLOT(e->devid),
+ 				    PCI_FUNC(e->devid),
+@@ -1382,9 +1379,7 @@ static int __init init_iommu_from_acpi(struct amd_iommu *iommu,
+ 			break;
+ 		case IVHD_DEV_ALIAS_RANGE:
+ 
+-			DUMP_printk("  DEV_ALIAS_RANGE\t\t "
+-				    "devid: %04x:%02x:%02x.%x flags: %02x "
+-				    "devid_to: %04x:%02x:%02x.%x\n",
++			DUMP_printk("  DEV_ALIAS_RANGE\t\tdevid: %04x:%02x:%02x.%x flags: %#02x devid_to: %04x:%02x:%02x.%x\n",
+ 				    seg_id, PCI_BUS_NUM(e->devid),
+ 				    PCI_SLOT(e->devid),
+ 				    PCI_FUNC(e->devid),
+@@ -1401,8 +1396,7 @@ static int __init init_iommu_from_acpi(struct amd_iommu *iommu,
+ 			break;
+ 		case IVHD_DEV_EXT_SELECT:
+ 
+-			DUMP_printk("  DEV_EXT_SELECT\t\t devid: %04x:%02x:%02x.%x "
+-				    "flags: %02x ext: %08x\n",
++			DUMP_printk("  DEV_EXT_SELECT\t\tdevid: %04x:%02x:%02x.%x flags: %#02x ext: %08x\n",
+ 				    seg_id, PCI_BUS_NUM(e->devid),
+ 				    PCI_SLOT(e->devid),
+ 				    PCI_FUNC(e->devid),
+@@ -1414,8 +1408,7 @@ static int __init init_iommu_from_acpi(struct amd_iommu *iommu,
+ 			break;
+ 		case IVHD_DEV_EXT_SELECT_RANGE:
+ 
+-			DUMP_printk("  DEV_EXT_SELECT_RANGE\t devid: "
+-				    "%04x:%02x:%02x.%x flags: %02x ext: %08x\n",
++			DUMP_printk("  DEV_EXT_SELECT_RANGE\tdevid: %04x:%02x:%02x.%x flags: %#02x ext: %08x\n",
+ 				    seg_id, PCI_BUS_NUM(e->devid),
+ 				    PCI_SLOT(e->devid),
+ 				    PCI_FUNC(e->devid),
+@@ -1428,7 +1421,7 @@ static int __init init_iommu_from_acpi(struct amd_iommu *iommu,
+ 			break;
+ 		case IVHD_DEV_RANGE_END:
+ 
+-			DUMP_printk("  DEV_RANGE_END\t\t devid: %04x:%02x:%02x.%x\n",
++			DUMP_printk("  DEV_RANGE_END\t\tdevid: %04x:%02x:%02x.%x\n",
+ 				    seg_id, PCI_BUS_NUM(e->devid),
+ 				    PCI_SLOT(e->devid),
+ 				    PCI_FUNC(e->devid));
+@@ -1461,11 +1454,12 @@ static int __init init_iommu_from_acpi(struct amd_iommu *iommu,
+ 			else
+ 				var = "UNKNOWN";
+ 
+-			DUMP_printk("  DEV_SPECIAL(%s[%d])\t\tdevid: %04x:%02x:%02x.%x\n",
++			DUMP_printk("  DEV_SPECIAL(%s[%d])\t\tdevid: %04x:%02x:%02x.%x, flags: %#02x\n",
+ 				    var, (int)handle,
+ 				    seg_id, PCI_BUS_NUM(devid),
+ 				    PCI_SLOT(devid),
+-				    PCI_FUNC(devid));
++				    PCI_FUNC(devid),
++				    e->flags);
+ 
+ 			ret = add_special_device(type, handle, &devid, false);
+ 			if (ret)
+@@ -1525,11 +1519,12 @@ static int __init init_iommu_from_acpi(struct amd_iommu *iommu,
+ 			}
+ 
+ 			devid = PCI_SEG_DEVID_TO_SBDF(seg_id, e->devid);
+-			DUMP_printk("  DEV_ACPI_HID(%s[%s])\t\tdevid: %04x:%02x:%02x.%x\n",
++			DUMP_printk("  DEV_ACPI_HID(%s[%s])\t\tdevid: %04x:%02x:%02x.%x, flags: %#02x\n",
+ 				    hid, uid, seg_id,
+ 				    PCI_BUS_NUM(devid),
+ 				    PCI_SLOT(devid),
+-				    PCI_FUNC(devid));
++				    PCI_FUNC(devid),
++				    e->flags);
+ 
+ 			flags = e->flags;
+ 
 -- 
 2.34.1
 
