@@ -1,74 +1,74 @@
-Return-Path: <linux-arch+bounces-9130-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9134-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E1039D091B
-	for <lists+linux-arch@lfdr.de>; Mon, 18 Nov 2024 06:52:48 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D13DE9D0922
+	for <lists+linux-arch@lfdr.de>; Mon, 18 Nov 2024 06:53:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 923D6B21B5F
-	for <lists+linux-arch@lfdr.de>; Mon, 18 Nov 2024 05:52:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6127F1F21E34
+	for <lists+linux-arch@lfdr.de>; Mon, 18 Nov 2024 05:53:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3B7013D61B;
-	Mon, 18 Nov 2024 05:52:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B35D1494A6;
+	Mon, 18 Nov 2024 05:52:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="XauLj0mn"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="AIMBRyUa"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2088.outbound.protection.outlook.com [40.107.236.88])
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2075.outbound.protection.outlook.com [40.107.220.75])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F4FE1758B;
-	Mon, 18 Nov 2024 05:52:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.88
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F26E146A97;
+	Mon, 18 Nov 2024 05:52:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.75
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731909160; cv=fail; b=hNtVqz9s6mpCJS3Gau+c2R+/4QoK4wuCBNoKud9LSA+PdTZ2Cfs5VsygredEiQYBpq35O/7gAJfiio99ZlU5dAWeMO6PRDpHvh4DJJsNpUaZsLRjHUaIFUq+K/U+vucIjchPpluGKnFl9uiYqoPQYvMStSbfUD3kikjOdgS4b/g=
+	t=1731909165; cv=fail; b=qX5iKsZ3UPI7IYo9cXazid06W3C1KsEbPWwCSNwHRtFYi2D7dtbpjJrs/mdJyEPA1bBAaIOkF/VOPsZqPCmobZT56TDUfuKxtaj7vE/1MdUKQ0o5/iBRZ9YmhnzLfuILpHYnP63/RC3haw84fWsz9mQOHEXC26lPzyGGZyeiHOs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731909160; c=relaxed/simple;
-	bh=4ebb7iVJI70mR0HnYrcH3AroE6xLOnH/w4P7l6fxaZw=;
+	s=arc-20240116; t=1731909165; c=relaxed/simple;
+	bh=zueGsBGOHqH2gzKBXNI/4E6Blh6vTNp7xyEp2m45294=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Fx2N8OAWgNTIVfhhN/PlBNG0kHbLRKJeuCPglwqFjBhqUfjm1SjjpTfo2PTf3AQlBg//9MdXr4z/zNsjaA7InL0gcagtWs5qdRHah2KtpmIjlqGlXAfafurA1sCbnorG4owejwKqNlDBUFPeWTWhzyRJEgG/VowsJYscntllBfA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=XauLj0mn; arc=fail smtp.client-ip=40.107.236.88
+	 MIME-Version:Content-Type; b=IDPBNlXFujKr+d5xvv50G5DS3i8VDVLF/w3QXvqUgFgNgqXHKzDhh1v4B2iW8Rgc+GwxvvzYMKCnuvt2QrbrI0jT2dxw21JR9KjVtV/wMnuZdkKUjh9ZAhwnYl6yECzpVsvg7ZUTql9y4yqsiV/TXNXmVFyvPn97xWY64kynawg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=AIMBRyUa; arc=fail smtp.client-ip=40.107.220.75
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=KBf1rti4nzlWfwgz2V417i1z2zGkAJvY1WyILj9Rh2Xv+zXdo1GMZyH2ThfzP1VHgWzCDgadVwxfvL+NIPlFlpNMDwigAiSgU4yTN79zNDXU2XfRcAt1pBBB90fnYa7Po7xG8fGiGhCZ456Q2s/yIJOyMsBwFuqJ+CufShy1Wd3B6TLYXI7ktHCbr4DP/4o9c3zCI9FfV2n3n5FskQy9tRXcLQnOUF++7J32pTo4a8a3CsLhvETeD29oKuTR5MtYfjbvussPLWslAUqeuJswtfpYbD9X43rizZ5E6SEeRiQRUuRnbPTxZrBkrCZpW41C6cRF9d7RVL2MUROurZ267g==
+ b=n8suCdEwJZgMYu7FPVX3EjxCVNbTggaFfzTj8zlfU2sY+VONoKUcbvm4LkHYGum0Nk8DZYkiMRNhqSb9WsqaG0fkzPuq/Mu0Iz7pvqP08pM60gu32fYycfCgdmhnRFTAV1vQ0ouiELKDjkhI5L57uo5yo8QJ3xv2/siYurkCvIAULUCZaJFr9JbIZ0gd8Py7Aiwf4CdoQYRxUdXgJmCfT+sO7n9cIp8tEetHuCkoM2tRK+palpy70jTyaZCcdimxrMSZlvi8CZU1toCASN1tMnkaXbbVLJIKiqH7q1Vyh62CAOlq57KhUkdGSXMM8pwffvUi0jYgWi3+7WpY0gLKFw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2UGfiAJgc0pAnLf1ricbhysBTUjnmwroF2iTiY4F88I=;
- b=neQAWRBJtggXwLDqqOKGra4SZdzwfPlGThCNymv4XiZQzUcD4++6WqH20rrQL2TwTjHkMZV50lYs0y+c01BDKeQedki+A64shPk1/n1LnGQNauTfOf+qnu4TYuWCJv9tZK0eKTNFyMm26mgawPaG1Uo9Soux0gC28B97hdd52Kwahf1RMj79g0SwqaIh5nBA+YaS07ra2P+H37wKBr0psCXg8Ace9htuDS0Yp5lpmpupZHA9XRpscyUEEUJI7oAMlyz+UUxqRvO4Ikb+l/AW/WNM4zRmv1rN9AXhONDUejczDam9/LbL2NufpKsB+HReHHmkwtjbmux8EXs5oeu71A==
+ bh=GGKZ4JJ3gS+C78RTXX5ZzQ/0w47X/WABKZZDEeBUVAY=;
+ b=C1NsEwVQamklZ71xwOQR8psk3YuNXpcG57JdXVx9NUrXcrJdweAFLOWqmWfggr+NtAR8F0tIJ8r8FU/xBmuguFoHvCCAr1K1fkP8lnRDNePMjjn9gL/MczSlGHLWXwfH8LTe3uQNLEljZxbAGTTw6+E7dXHMNricimRo80xpCeSwYejxgfulhHfBsxrXkyWn6+VHQhcxoEwU9qRy8vI6fANMZTDreCbgDWRcRfB2Qu1P9DYs3Al4vKiW4Fx+PQUMcpTjZTcBxu9c3cZUeD1Ie1wuMAZeU/jrAbR547qDisbFj851yz7bsIdVErYw+x2BuLCP0X60973FD4jCVvYZIQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
  is 165.204.84.12) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=fail (p=quarantine sp=quarantine pct=100) action=quarantine
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2UGfiAJgc0pAnLf1ricbhysBTUjnmwroF2iTiY4F88I=;
- b=XauLj0mnbiDMAJ5U2ORSRcJpAgYNW1kio4yFWtbg8JIWdsxjTopxL/VWSh3/SQTXLKTHpOdOeq4Kn4VkxPXBpaqMJ/wQRZLeSgHMu3Twm40DFmuUNVW80VoyrO6y8TpZuyZTlqhuMRo6drhOVkIESnqy8AF4XBsi5FhdhJj5MXs=
-Received: from MN2PR15CA0011.namprd15.prod.outlook.com (2603:10b6:208:1b4::24)
- by SJ2PR12MB8689.namprd12.prod.outlook.com (2603:10b6:a03:53d::22) with
+ bh=GGKZ4JJ3gS+C78RTXX5ZzQ/0w47X/WABKZZDEeBUVAY=;
+ b=AIMBRyUazKklq1cUL1I/IDLUwIv9ii60z+I6O+hAqS0aoU3iL9zWPQ88zS3TKsmA+3pM1FOE4SEn3ZjkBEKBN/31CfDAeZ+tSMGeRe8HRnTd7070Ghpw50/zj0rdLVZHSltMJVQ6JlsazkB8Zf/H5t4GZeaRdgfolyqe3V0ig6E=
+Received: from MW4PR03CA0068.namprd03.prod.outlook.com (2603:10b6:303:b6::13)
+ by SA1PR12MB6678.namprd12.prod.outlook.com (2603:10b6:806:251::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8158.18; Mon, 18 Nov
- 2024 05:52:34 +0000
-Received: from BN2PEPF000055DF.namprd21.prod.outlook.com
- (2603:10b6:208:1b4:cafe::d1) by MN2PR15CA0011.outlook.office365.com
- (2603:10b6:208:1b4::24) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8158.22 via Frontend Transport; Mon,
- 18 Nov 2024 05:52:33 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8158.23; Mon, 18 Nov
+ 2024 05:52:40 +0000
+Received: from CO1PEPF000044F1.namprd05.prod.outlook.com
+ (2603:10b6:303:b6:cafe::cd) by MW4PR03CA0068.outlook.office365.com
+ (2603:10b6:303:b6::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8158.19 via Frontend
+ Transport; Mon, 18 Nov 2024 05:52:39 +0000
 X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
  165.204.84.12) smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=fail action=quarantine header.from=amd.com;
 Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
  amd.com discourages use of 165.204.84.12 as permitted sender)
 Received: from SATLEXMB04.amd.com (165.204.84.12) by
- BN2PEPF000055DF.mail.protection.outlook.com (10.167.245.9) with Microsoft
+ CO1PEPF000044F1.mail.protection.outlook.com (10.167.241.71) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8207.0 via Frontend Transport; Mon, 18 Nov 2024 05:52:33 +0000
+ 15.20.8158.14 via Frontend Transport; Mon, 18 Nov 2024 05:52:39 +0000
 Received: from purico-ed03host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Sun, 17 Nov
- 2024 23:50:28 -0600
+ 2024 23:50:32 -0600
 From: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
 To: <linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>
 CC: <joro@8bytes.org>, <robin.murphy@arm.com>, <vasant.hegde@amd.com>,
@@ -76,9 +76,9 @@ CC: <joro@8bytes.org>, <robin.murphy@arm.com>, <vasant.hegde@amd.com>,
 	<jgg@nvidia.com>, <kevin.tian@intel.com>, <jon.grimm@amd.com>,
 	<santosh.shukla@amd.com>, <pandoh@google.com>, <kumaranand@google.com>,
 	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-Subject: [PATCH v12 7/9] iommu/amd: Modify clear_dte_entry() to avoid in-place update
-Date: Mon, 18 Nov 2024 05:49:35 +0000
-Message-ID: <20241118054937.5203-8-suravee.suthikulpanit@amd.com>
+Subject: [PATCH v12 8/9] iommu/amd: Lock DTE before updating the entry with WRITE_ONCE()
+Date: Mon, 18 Nov 2024 05:49:36 +0000
+Message-ID: <20241118054937.5203-9-suravee.suthikulpanit@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20241118054937.5203-1-suravee.suthikulpanit@amd.com>
 References: <20241118054937.5203-1-suravee.suthikulpanit@amd.com>
@@ -94,105 +94,155 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN2PEPF000055DF:EE_|SJ2PR12MB8689:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9bacf62f-97c6-44a4-2d8e-08dd07953255
+X-MS-TrafficTypeDiagnostic: CO1PEPF000044F1:EE_|SA1PR12MB6678:EE_
+X-MS-Office365-Filtering-Correlation-Id: d9a623a5-eba2-45c7-af0d-08dd079535df
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|82310400026|7416014|36860700013|1800799024;
+	BCL:0;ARA:13230040|82310400026|1800799024|376014|7416014|36860700013;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?wE6bys6s40gdBoNOrGJaw395vJdkoGpKvqCq1FZxp3KBFzy8tIdOMDcN/6m5?=
- =?us-ascii?Q?64ayXWOXaxKpOE2B3r3PqoVUIs3fAh7wTWezV8/gnXTH8uoklsLgcDhlkyOM?=
- =?us-ascii?Q?npaMt/sLlMK+bHY8aFTA6WYiVlrn+3sGN7tcz9lCSSfEivpagVuJfbvrXWrg?=
- =?us-ascii?Q?IpQ2BkXN0HNv1N+pb6U5ueqmyYiY7ADzyfrdgPvAX/1nFMo1pPVZVX4pf4ip?=
- =?us-ascii?Q?R1md0/erRSyZK1Rv3wTmcmIR5007657WvasYy4XDPbSYYqu7+dk+8D4wj2Nv?=
- =?us-ascii?Q?ZUWyAnVZ6RNWD1q4o1TW/8qAzlyhy2JtnhikIO3oLb/eudpFOiq7+sGAXHMS?=
- =?us-ascii?Q?I/p6QDnkLHYvR5aeyM89D9DtESWPGuWNiY093wOnevKDTQlg2rNliGc4uFPY?=
- =?us-ascii?Q?e7Y8sxbdQvadiKGL9EMNYYksPl/dsyk4mPIDyy5hhMsOooyq9e+ugDupfTUM?=
- =?us-ascii?Q?12TgcfvrVVkXBOpJyiK69GFjkZHdZWHZ3m+hOnDAlpc6xX84f77HgEqTMZLL?=
- =?us-ascii?Q?v5FVXN5IKA4aI2G+oKfMa0jX11NAu2bcUo86lFKiZ0KD/ieuHXd4L5QOfIKL?=
- =?us-ascii?Q?IoPY9OV7njsVUyySkOpLFpQMG1qyylPjvJ16SOjSjBIg05sdF3dYzPXqmkAq?=
- =?us-ascii?Q?fRtN6JlnbXwS4H6zNBTDO6vy99u1NCetO3ygPPvZi85tsL881CSvAgkrX6L4?=
- =?us-ascii?Q?LuwNr3kVa2/EBJE64lhJ1Xu4J6TjvZlCXO72TIzYpeE6AqqpvrvaLsTVZhqt?=
- =?us-ascii?Q?w1cJ2BsvxNDMW57GmGB2uSPs+64kFN7D1Sch97mhk3Nalbl4re9BXlBvRwxZ?=
- =?us-ascii?Q?8pzB7EP5Q7x6ixXwRPN5QYRjfTw8dZvQpgss3THpvlHAh2UZnn8/kVYoRkE1?=
- =?us-ascii?Q?hnnXbHVYVbeROOxV2eIK1YkrShJFtfJVoTnzGgDHrtjnYFu9iWsxaUCMCC6y?=
- =?us-ascii?Q?n9P/oZmeVO8+sTqdEHcxIGDNzaDNAR8e2oa8+eZYwTgSqnX4jzF0b0PBe7i2?=
- =?us-ascii?Q?5c2RijG1aSsrVX10Tv2Vgb2Cbd3o9XDU4iw//dLEF7Symee0yMLGwou3EWCc?=
- =?us-ascii?Q?EJsyslp1oYoG6gYLFxhuc9i2xLbdGSE0javX4Qp6cDbSYBMBrh6CJCN+n+E0?=
- =?us-ascii?Q?KWVlFkISPQW8aZy8ewlyZ2dJ+5Sez60NdjHsFK2N9+2jqABhCMNpdBxmULI8?=
- =?us-ascii?Q?5TwHnyotpSg22AYli15nVYrx3UVS8EdX0Jp6zjWTt4mRP8W8iArt329Y72IO?=
- =?us-ascii?Q?N9bMRr4DtET0lJReK4I0Tk2hyneCKQeRieUnjNLQnrNlfdgbqJEuivTsUyQs?=
- =?us-ascii?Q?aS1rBbjZJtpPumhCSXf+GjJwcz/czGbgufAVxKXrj8oIHU8ow41CRAxvaqXj?=
- =?us-ascii?Q?npwEAs6+TrhGqNqHuDT/TxVcwfGugyi3OD3hjURY6rKUWNXaeA=3D=3D?=
+	=?us-ascii?Q?XsxRfRUYz4yIYOtUgE0EIzP9DD7OiYnBHdnLQ2b9OdkyfYVS+76Kzq+s7W1A?=
+ =?us-ascii?Q?+4f2THOvDFS1yizfvYb48Vcuf6Nbo+fd6jC+4PWNRkoi2VZoDqHLAkH8Ti6g?=
+ =?us-ascii?Q?vPnIvKGzyA5rxBucmBN9h9knUkcZwsQPhB5Eu29nE3/5jO7KYnAjRXqrko6m?=
+ =?us-ascii?Q?PPUe3lT3u8t6AnhK/IXIySRfjMTS2Xluyn8kuimQ0ATMD2+stOUewyj9y2K5?=
+ =?us-ascii?Q?02GKQWFdjSooj6VpD3guuIarIlO/x0byfcpZjHejXOMagSYKtgra5xenwEp7?=
+ =?us-ascii?Q?QdE+6coItwVx8IMecE0d1tOdfMxQ0GpjrMIRRWMBPUNGRoqxE2fXUEOaOsCb?=
+ =?us-ascii?Q?AH/geMa3CRXw8gm5HYY1/aAtzoorXSbqYLRL/NyQMXQa60197yANQzgc+0g1?=
+ =?us-ascii?Q?ERHix23hMJ+CxrrXQ2MLK5inYHSOH2u2HNgsGI6yM4+X4I6XKEhoO+cwIEMP?=
+ =?us-ascii?Q?wDiOhvo6Hu+jclYDZPUuUZwNcPrKdKfsib2pQWOafwiPzfN2D8I0XQQzSQkl?=
+ =?us-ascii?Q?Ifl/eaGAjeUWpcm76SPJ7+GbJG/zMMWfdcZ/GA6FpQFiegaatQssGbBfbB0n?=
+ =?us-ascii?Q?IS9rqdJnWUec8vQd5nLZ+Btonl6MU13kGw6iIuX/hy3diI25b5PqTPMSS8iW?=
+ =?us-ascii?Q?iYIS0RkkL+aOOT+LLGdZHewRL2ybzIoHFiqOGqaHjoZ1/5nosUA4iAhnRPBO?=
+ =?us-ascii?Q?08tIApf5LsjIOkvZSeW4kGCm41Duo+VFUtbZzO/qe/ItUPt2a98qV1/h9aZf?=
+ =?us-ascii?Q?aGJJH/3rdg76DE28yUf+u67Z80dBR7PWWItAXKdzDj6e8rdJf21wYwErnCJz?=
+ =?us-ascii?Q?vvmaptJaYmS85f/QFHqaUjXoxnsSZW8lP6vM4qGnbCuXRGvnyDiZi0++lmRn?=
+ =?us-ascii?Q?z4UHxAXpGTk9/wH8j3MhcrBJN8wXGJS2rh1RapDGupXRL7Ey+dEKOKYdLK8Z?=
+ =?us-ascii?Q?R9xZGLZKXVVPdEyoFqjmjnivF1DOwzZ2iGQQBkrCzqwwBQ8TQ99XiGmSEo1C?=
+ =?us-ascii?Q?J8WhpjDmbVUEnzPk7Nauov9LtXXC0wl+TFRDKz57DeBAenNQIIJoyWcfboCk?=
+ =?us-ascii?Q?OBIzUeTkixtBeBmnK49Bo+0iQHx1tDgNM5gWjc9X9k1LQ2iuSbSFurYwaCPh?=
+ =?us-ascii?Q?SnT5rdpTOglExYFSAO402U0roikP/lia930oizdU4+k67Ea9+VHBamy3pjRX?=
+ =?us-ascii?Q?+K6b7pLVNTEM01SO66mUaGrVlRx55NGBILCqZgDGgT96joJXCJg58Fv4RJE8?=
+ =?us-ascii?Q?D3nIba9yCJvuo5ZSfLDmw2ebcSlEO7wN2XXh7BVI2vIzbLq4u0ZGAC6q4bSc?=
+ =?us-ascii?Q?mzXO+R2ZBLerPLZXCyv1qhQDqPP2m3uPop2XPXtWODuKpHgaQUP2/RTCY5+g?=
+ =?us-ascii?Q?7MiZX/rU2vNw3ZQFKGCRdvokPuI+lzkQnhlDRAcl3OJPOAu68g=3D=3D?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.12;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:atlvpn-bp.amd.com;CAT:NONE;SFS:(13230040)(376014)(82310400026)(7416014)(36860700013)(1800799024);DIR:OUT;SFP:1101;
+	CIP:165.204.84.12;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:atlvpn-bp.amd.com;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(376014)(7416014)(36860700013);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2024 05:52:33.1765
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2024 05:52:39.0133
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9bacf62f-97c6-44a4-2d8e-08dd07953255
+X-MS-Exchange-CrossTenant-Network-Message-Id: d9a623a5-eba2-45c7-af0d-08dd079535df
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.12];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	BN2PEPF000055DF.namprd21.prod.outlook.com
+	CO1PEPF000044F1.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8689
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6678
 
-By reusing the make_clear_dte() and update_dte256().
+When updating only within a 64-bit tuple of a DTE, just lock the DTE and
+use WRITE_ONCE() because it is writing to memory read back by HW.
 
-Also, there is no need to set TV bit for non-SNP system when clearing DTE
-for blocked domain, and no longer need to apply erratum 63 in clear_dte()
-since it is already stored in struct ivhd_dte_flags and apply in
-set_dte_entry().
-
+Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
 Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
 ---
- drivers/iommu/amd/iommu.c | 21 +++++++++------------
- 1 file changed, 9 insertions(+), 12 deletions(-)
+ drivers/iommu/amd/amd_iommu.h |  1 +
+ drivers/iommu/amd/iommu.c     | 43 +++++++++++++++++++----------------
+ 2 files changed, 25 insertions(+), 19 deletions(-)
 
+diff --git a/drivers/iommu/amd/amd_iommu.h b/drivers/iommu/amd/amd_iommu.h
+index f9260bb8fc85..7b43894f6b90 100644
+--- a/drivers/iommu/amd/amd_iommu.h
++++ b/drivers/iommu/amd/amd_iommu.h
+@@ -185,3 +185,4 @@ struct dev_table_entry *get_dev_table(struct amd_iommu *iommu);
+ #endif
+ 
+ struct dev_table_entry *amd_iommu_get_ivhd_dte_flags(u16 segid, u16 devid);
++struct iommu_dev_data *search_dev_data(struct amd_iommu *iommu, u16 devid);
 diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
-index a1ed8d3b3887..6adab38cb84b 100644
+index 6adab38cb84b..b9d681d12810 100644
 --- a/drivers/iommu/amd/iommu.c
 +++ b/drivers/iommu/amd/iommu.c
-@@ -2098,19 +2098,16 @@ static void set_dte_entry(struct amd_iommu *iommu,
- 	}
+@@ -347,7 +347,7 @@ static struct iommu_dev_data *alloc_dev_data(struct amd_iommu *iommu, u16 devid)
+ 	return dev_data;
  }
  
--static void clear_dte_entry(struct amd_iommu *iommu, u16 devid)
-+/*
-+ * Clear DMA-remap related flags to block all DMA (blockeded domain)
-+ */
-+static void clear_dte_entry(struct amd_iommu *iommu, struct iommu_dev_data *dev_data)
+-static struct iommu_dev_data *search_dev_data(struct amd_iommu *iommu, u16 devid)
++struct iommu_dev_data *search_dev_data(struct amd_iommu *iommu, u16 devid)
  {
--	struct dev_table_entry *dev_table = get_dev_table(iommu);
--
--	/* remove entry from the device table seen by the hardware */
--	dev_table[devid].data[0]  = DTE_FLAG_V;
--
--	if (!amd_iommu_snp_en)
--		dev_table[devid].data[0] |= DTE_FLAG_TV;
--
--	dev_table[devid].data[1] &= DTE_FLAG_MASK;
-+	struct dev_table_entry new = {};
-+	struct dev_table_entry *dte = &get_dev_table(iommu)[dev_data->devid];
+ 	struct iommu_dev_data *dev_data;
+ 	struct llist_node *node;
+@@ -2838,12 +2838,12 @@ static int amd_iommu_set_dirty_tracking(struct iommu_domain *domain,
+ 					bool enable)
+ {
+ 	struct protection_domain *pdomain = to_pdomain(domain);
+-	struct dev_table_entry *dev_table;
++	struct dev_table_entry *dte;
+ 	struct iommu_dev_data *dev_data;
+ 	bool domain_flush = false;
+ 	struct amd_iommu *iommu;
+ 	unsigned long flags;
+-	u64 pte_root;
++	u64 new;
  
--	amd_iommu_apply_erratum_63(iommu, devid);
-+	make_clear_dte(dev_data, dte, &new);
-+	update_dte256(iommu, dev_data, &new);
+ 	spin_lock_irqsave(&pdomain->lock, flags);
+ 	if (!(pdomain->dirty_tracking ^ enable)) {
+@@ -2852,16 +2852,15 @@ static int amd_iommu_set_dirty_tracking(struct iommu_domain *domain,
+ 	}
+ 
+ 	list_for_each_entry(dev_data, &pdomain->dev_list, list) {
++		spin_lock(&dev_data->dte_lock);
+ 		iommu = get_amd_iommu_from_dev_data(dev_data);
+-
+-		dev_table = get_dev_table(iommu);
+-		pte_root = dev_table[dev_data->devid].data[0];
+-
+-		pte_root = (enable ? pte_root | DTE_FLAG_HAD :
+-				     pte_root & ~DTE_FLAG_HAD);
++		dte = &get_dev_table(iommu)[dev_data->devid];
++		new = dte->data[0];
++		new = (enable ? new | DTE_FLAG_HAD : new & ~DTE_FLAG_HAD);
++		dte->data[0] = new;
++		spin_unlock(&dev_data->dte_lock);
+ 
+ 		/* Flush device DTE */
+-		dev_table[dev_data->devid].data[0] = pte_root;
+ 		device_flush_dte(dev_data);
+ 		domain_flush = true;
+ 	}
+@@ -3128,17 +3127,23 @@ static void iommu_flush_irt_and_complete(struct amd_iommu *iommu, u16 devid)
+ static void set_dte_irq_entry(struct amd_iommu *iommu, u16 devid,
+ 			      struct irq_remap_table *table)
+ {
+-	u64 dte;
+-	struct dev_table_entry *dev_table = get_dev_table(iommu);
++	u64 new;
++	struct dev_table_entry *dte = &get_dev_table(iommu)[devid];
++	struct iommu_dev_data *dev_data = search_dev_data(iommu, devid);
++
++	if (dev_data)
++		spin_lock(&dev_data->dte_lock);
+ 
+-	dte	= dev_table[devid].data[2];
+-	dte	&= ~DTE_IRQ_PHYS_ADDR_MASK;
+-	dte	|= iommu_virt_to_phys(table->table);
+-	dte	|= DTE_IRQ_REMAP_INTCTL;
+-	dte	|= DTE_INTTABLEN;
+-	dte	|= DTE_IRQ_REMAP_ENABLE;
++	new = READ_ONCE(dte->data[2]);
++	new &= ~DTE_IRQ_PHYS_ADDR_MASK;
++	new |= iommu_virt_to_phys(table->table);
++	new |= DTE_IRQ_REMAP_INTCTL;
++	new |= DTE_INTTABLEN;
++	new |= DTE_IRQ_REMAP_ENABLE;
++	WRITE_ONCE(dte->data[2], new);
+ 
+-	dev_table[devid].data[2] = dte;
++	if (dev_data)
++		spin_unlock(&dev_data->dte_lock);
  }
  
- /* Update and flush DTE for the given device */
-@@ -2121,7 +2118,7 @@ static void dev_update_dte(struct iommu_dev_data *dev_data, bool set)
- 	if (set)
- 		set_dte_entry(iommu, dev_data);
- 	else
--		clear_dte_entry(iommu, dev_data->devid);
-+		clear_dte_entry(iommu, dev_data);
- 
- 	clone_aliases(iommu, dev_data->dev);
- 	device_flush_dte(dev_data);
+ static struct irq_remap_table *get_irq_table(struct amd_iommu *iommu, u16 devid)
 -- 
 2.34.1
 
