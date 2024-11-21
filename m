@@ -1,128 +1,108 @@
-Return-Path: <linux-arch+bounces-9146-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9147-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78B669D477B
-	for <lists+linux-arch@lfdr.de>; Thu, 21 Nov 2024 07:25:21 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A4619D48F0
+	for <lists+linux-arch@lfdr.de>; Thu, 21 Nov 2024 09:36:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3669D2829E8
-	for <lists+linux-arch@lfdr.de>; Thu, 21 Nov 2024 06:25:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 112DE1F22AA4
+	for <lists+linux-arch@lfdr.de>; Thu, 21 Nov 2024 08:36:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04DAA148855;
-	Thu, 21 Nov 2024 06:25:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="gKoF+BDY";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="mYZDcqEi"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 670541BC9E2;
+	Thu, 21 Nov 2024 08:36:02 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fout-a2-smtp.messagingengine.com (fout-a2-smtp.messagingengine.com [103.168.172.145])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC20C13C3D6;
-	Thu, 21 Nov 2024 06:25:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.145
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E03D31B0109
+	for <linux-arch@vger.kernel.org>; Thu, 21 Nov 2024 08:36:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732170314; cv=none; b=gQPyD4/8Zhp8WVIUigzrAf2eDXaOXDFBeF/A+1rdenkzgd5w+J95u6ihA4bGMXV113Me0eKwR2jxnHQPvp4TY+OFbKDJYKC5a9ePirotXBjwsVcsivgnRGWvWQWByTqcoRgyE21nHeZbzaP+irj/1Wtsh8xtrZpSvJwdKPrSi5k=
+	t=1732178162; cv=none; b=aBYySBb/36Su8OT/D5YACAN4wUVqIGMh1QSgrq2P/BbdkmfnwTxYjwJ4F4eaIz+8GYG1+iu1e1ZpnHrOtPPzMnB1I51k1C69RKinFev9rS8BYdaHO2NlxuE1u1vbO2opx7P30Sb4FGExvQ4YlOEWzKxdxvJoKPF1PQR5P1BbcPs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732170314; c=relaxed/simple;
-	bh=egoCVr1BilwzWHcGVBQ98EAvgTTioMWrIXHZIoN9fXA=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=tHYzzHMaP4rNjRQp40R2QSBCxdjc/ouls8JceVX42DFdyaDH26745Z54+CLJ1D9dp2ka6NlGLUuyt98ABq9ZMr4bctcintogjnZGLcz2lD2+aO3t2Yj5akhEeepAzVrNfCljpO4uE7Wtg1K7u0B5GUT7zbKsqD96k3UerF/w/nw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=gKoF+BDY; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=mYZDcqEi; arc=none smtp.client-ip=103.168.172.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfout.phl.internal (Postfix) with ESMTP id 7ADCF13806C9;
-	Thu, 21 Nov 2024 01:25:10 -0500 (EST)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-10.internal (MEProxy); Thu, 21 Nov 2024 01:25:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1732170310;
-	 x=1732256710; bh=WuODbQXwSS1VveYgLHkSG2hdi3F4z6KiShzT4+ka20E=; b=
-	gKoF+BDY0YkGc2+eaGavkKMkFS5H3vVaNH03xF6GdYxmey8Ap30miRUjhDS/4LCl
-	mu2u6AZkl3LAozqhnH1VUSyVLwTqzAbWRMZAGJE0EJ/JNEAUxvOWr+WFRGt+S+LF
-	NJiHzextz0C204Ztq0FwIDjrsIyEMqcbGlvdLlUpgqXAN1ndKg5Ifqaf605wJkfO
-	IfYC09Gj19CjZNIMK9MQ0zeeHIP2UMutSz0wO3Kz78i0xil1rkVE91GpcZbIkBXn
-	cm5mB3yaIysSFdr/bRLBz1Vh/vBmQz68r706AQ7ESSw5FMCkPyk6Ivmx5+4nDgHU
-	l65UCUEnnEnwAChEgHUYCQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1732170310; x=
-	1732256710; bh=WuODbQXwSS1VveYgLHkSG2hdi3F4z6KiShzT4+ka20E=; b=m
-	YZDcqEiWyAblC3/R+xK0hzCnqFnI79HOsjaMmaiiYAd2/WNd9/bZg5TOhDO7maNj
-	pYCC1VVN0OjhC10A2Xpu4Xj8xP+O9EtTD4avG6WTw7erFbeSqG787w2VhrmrMPQF
-	udgq0zvTl00Zq2pPXyyqYBG+eI3Xn9cISkTOLXVevvUo/GPhu8039YSV7xiv00bw
-	QlhZXPRchlq8EreWUHvrUgO8KQFoHhtmKMTmxV9M2K3GZucEsl8yQOjFbGvvzsf2
-	6zRI9lOiWE8bg93QJoSE8rZfGjHU9qbHjf3KNbveMXXDGYvCMSbxitThswxmKVsu
-	i8q8rCkv2vh+4rP/oP0Jw==
-X-ME-Sender: <xms:RdI-Zyzw_SeAGoz0u1GZwQk40Py-TBXZqSF4Wes2tkvUKc3QVEMlug>
-    <xme:RdI-Z-TmbAVszloPDHDRnztykiFqVw8mBHeRf-7GPX8y91-hmHqyhH-nw8Q3tQ6Zx
-    BPZGXJ2rEQBNeLRgxI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrfeehgdelfecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdpuffr
-    tefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnth
-    hsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredttden
-    ucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdrug
-    gvqeenucggtffrrghtthgvrhhnpefhtdfhvddtfeehudekteeggffghfejgeegteefgffg
-    vedugeduveelvdekhfdvieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
-    grihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopedutddp
-    mhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepnhhpihhtrhgvsegsrgihlhhisghrvg
-    drtghomhdprhgtphhtthhopehjvhgvthhtvghrsehkrghlrhgrhidrvghupdhrtghpthht
-    oheptghhvghnhhhurggtrghisehkvghrnhgvlhdrohhrghdprhgtphhtthhopehprhdqth
-    hrrggtkhgvrhdqsghotheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepthhorhhvrghl
-    ughssehlihhnuhigqdhfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehstghhnh
-    gvlhhlvgeslhhinhhugidrihgsmhdrtghomhdprhgtphhtthhopehhtghhsehlshhtrdgu
-    vgdprhgtphhtthhopehlihhnuhigqdgrrhgthhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-    dprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhr
-    gh
-X-ME-Proxy: <xmx:RdI-Z0V_X7AiciSx4PbadCEX4rn3Zn6QQOffxItaS3Nu102BjujRTg>
-    <xmx:RdI-Z4iagFM_S2LzuLngwgxAgF8TORQVzwBaN0DCxMhzntx3v9WwxQ>
-    <xmx:RdI-Z0DAO7qVj5KmUR2M5RPrkbvwWe2kqiRTUJkpnOr13N-MZ1Vxsg>
-    <xmx:RdI-Z5L3EDbf2VHSKnKv6B-fZZ6gnXAxY_dnY9L29GhgXiz295Iwog>
-    <xmx:RtI-Z0ttkVd_Gu4oyJyhhnRgM_ov3EpUZUre6G6eONs1xZ8xFJXuD6r8>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 962D72220071; Thu, 21 Nov 2024 01:25:09 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1732178162; c=relaxed/simple;
+	bh=CxZc5eDjKCStnjWwKxYLlY7t03NL5VaBXTpA0hwkY34=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pbgBAN4LsIVdawOOKia9+FItDGjDdDce7uDHLJ5xv6Z0dqqeRKtXpT56wNS4b784MArkBmVUAt9xZBVUE9VWjQg9/qHkJ4voVoFPbwCJ09J23xE1sYQZwn2Dj9Vx0YmPo0kmECmMGMVW/Bj6pICvkS1r19/yXbhbS2mf6m0AM3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-6eebb54fc48so5500807b3.1
+        for <linux-arch@vger.kernel.org>; Thu, 21 Nov 2024 00:36:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732178159; x=1732782959;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=d5BSoStO7FvucJJlV6RNgJWlQia+zkFcFYF1xTyTN9A=;
+        b=l0teiZctx+iIjZeIkzB1SWV4Je9CY5VFqQbzM+uMiUm+y//X5U7BHsDSbjtX5xGHV5
+         yHTc33zP2dAmZkiTCblBZ+ASEqVjPuE13LK4foH2JtTWVP1JTkgPo4d9gF1aYPVnIAR+
+         DgzbP+myCn8CskkZZzqVBOY9XZ/GnS/cejLTiAYTd6P5Ozr7TD9JtqE1L56lr6tUCVgl
+         OrGvsOHgamV4NIwbY7tsaShWf5tjUVKHJ8M7kMUkuZye+lSbHK8M3+6U5K3gracX3UTz
+         Xv0Nx/ilXMTzHGqdJgsqdHCs9Arxc1QDlSuecaCjiqHTpU021Kj/DrB84vg+KPvX/+fl
+         krog==
+X-Gm-Message-State: AOJu0YzzZ+5y6/vvJnMZZ/PuCVmuLSPef7fRZ6mvkoyftlKVVpQ/evwN
+	aIxy99M0cw9ev3MIcdGqXDvKcvwAM4rIo+PZRWg/23K0DFaDc74BUuaOb0F9
+X-Google-Smtp-Source: AGHT+IFAnzQxVVx29Rba5C6LQtvQvPjJgPqc1Fsnf8hiKGb6nsUsJZM4zD41KTThzHh70OhdLMDmvA==
+X-Received: by 2002:a05:690c:4911:b0:6ea:5da9:34cc with SMTP id 00721157ae682-6eebd141ed6mr55656397b3.7.1732178159318;
+        Thu, 21 Nov 2024 00:35:59 -0800 (PST)
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-6ee71342398sm26234747b3.89.2024.11.21.00.35.58
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Nov 2024 00:35:58 -0800 (PST)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-6eebb54fc48so5500527b3.1
+        for <linux-arch@vger.kernel.org>; Thu, 21 Nov 2024 00:35:58 -0800 (PST)
+X-Received: by 2002:a05:690c:9a90:b0:6ee:66d2:e75a with SMTP id
+ 00721157ae682-6eebd2e4599mr68852927b3.39.1732178157882; Thu, 21 Nov 2024
+ 00:35:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Thu, 21 Nov 2024 07:24:48 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Huacai Chen" <chenhuacai@kernel.org>, pr-tracker-bot@kernel.org
-Cc: "Linus Torvalds" <torvalds@linux-foundation.org>,
- linux-kernel@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>,
- "Niklas Schnelle" <schnelle@linux.ibm.com>,
- "Alexander Viro" <viro@zeniv.linux.org.uk>,
- "Julian Vetter" <jvetter@kalray.eu>, "Nicolas Pitre" <npitre@baylibre.com>,
- "Christoph Hellwig" <hch@lst.de>
-Message-Id: <bdfcadb9-b1c5-4992-9c5f-7fe59252f77d@app.fastmail.com>
-In-Reply-To: 
- <CAAhV-H7VLPngEb_pxs4Zc4OX3i5X0W0Ao=7qFhY_PMqyEBVjyQ@mail.gmail.com>
-References: <c09168a6-23e7-40fd-afc2-4c3ac6deaff6@app.fastmail.com>
- <173214663696.1393168.4436714062176910731.pr-tracker-bot@kernel.org>
- <CAAhV-H7VLPngEb_pxs4Zc4OX3i5X0W0Ao=7qFhY_PMqyEBVjyQ@mail.gmail.com>
-Subject: Re: [GIT PULL] asm-generic updates for 6.13
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+References: <20241106060938.GW1350452@ZenIV>
+In-Reply-To: <20241106060938.GW1350452@ZenIV>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Thu, 21 Nov 2024 09:35:45 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVa9487xtqMzDGo3fB=_DNRe3jebrJhqmyGY1=eJZRpcw@mail.gmail.com>
+Message-ID: <CAMuHMdVa9487xtqMzDGo3fB=_DNRe3jebrJhqmyGY1=eJZRpcw@mail.gmail.com>
+Subject: Re: [PATCHES][RFC] cleaning up asm/vga.h situation
+To: Al Viro <viro@zeniv.linux.org.uk>
+Cc: linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, 
+	Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 21, 2024, at 03:20, Huacai Chen wrote:
-> Oh, no, why the tag name is asm-generic-3.13?
+Hi Al,
 
-It looks like I typed it wrong when I wrote the tag message,
-sorry about that.
+On Wed, Nov 6, 2024 at 7:10=E2=80=AFAM Al Viro <viro@zeniv.linux.org.uk> wr=
+ote:
+>         * powerpc: more than slightly ridiculous - if VGA_CONSOLE or
+> MDA_CONSOLE is enabled, same as mips, defaults otherwise.  The ridiculous
+> part is that VGA_CONSOLE is actually impossible to enable there, but
+> MDA_CONSOLE (that is to say, support of ISA Hercules cards for the second
+> monitor) *is* possible.  On the boxen with ISA slots, that is...
 
-The contents are correct though, and the tag description
-does say 6.13.
+Once upon a time, in the previous century, you could enable VGA_CONSOLE,
+run an x86 BIOS emulator, and get a VGA text console on a (second)
+"PC style" (aka normal) graphics card in a CHRP PPC box...
+With CHRP support being removed, there is no point in resurrecting that.
 
-      Arnd
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
