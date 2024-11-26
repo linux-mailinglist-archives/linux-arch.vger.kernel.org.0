@@ -1,76 +1,76 @@
-Return-Path: <linux-arch+bounces-9170-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9171-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 831449D9C79
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Nov 2024 18:26:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C28639D9C7E
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Nov 2024 18:26:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7440E16751F
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Nov 2024 17:25:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 72373166114
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Nov 2024 17:26:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C7741DFDAE;
-	Tue, 26 Nov 2024 17:24:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D61CA1DFE29;
+	Tue, 26 Nov 2024 17:24:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VZVbAqtA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e9uZy5WL"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 895F51DF972;
-	Tue, 26 Nov 2024 17:24:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 034C51DFD98;
+	Tue, 26 Nov 2024 17:24:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732641842; cv=none; b=eclcRR78fAlkP7SUJX7coIo8KDNcydH/9hnJr/JnEPFX4eUEtmP3ZAV5IiRfS5UaoaaqSptB/4oMSIgzY0GX2xus9eAv1BGziA+qtM9VEgGY82Cy8DYdrpifJYZkqeSbsYgDD12VDkrcTNeSQmvdSOmW/m/V1FYQJlIRig2fAP8=
+	t=1732641843; cv=none; b=ABvtvt31GGpWruvDvKclfD7zxf5AepqVaL3Eri3P9AZICkFKq9Mk0HKMg4lGvT4IwWaRF0qWteZvUMa1TvSR1yQ1+x9IDgGngKGYeXmUXzFsK/DcGMFfSZ259uBCWvo66llHjVvcXAH7NEnJ0xLK7zNJGHdVHCV7D2ZR3FAYBT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732641842; c=relaxed/simple;
-	bh=UP+TeyFWhapXWWZjm7znhWw8IPamZQWNemWDE3MZkrs=;
+	s=arc-20240116; t=1732641843; c=relaxed/simple;
+	bh=eC25SyhqUQGBuichpm/2M12L5lE0TLdJk2x0WWN6EXY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MRJjB0WgZ5h/yZz7l5KiwYl4/j7b/3i+Qv0qygQV/IOrGOj/wwUOYEf65QWdtYtCSGYKrnsGESTHiGh2QdG3oRCS2g02eU8fdoerVn1y/5jBxvZREUnXa1NYJORFBGBZeKW0x9X9W6W/JG7VZr9SVPYng4ZAdOBk7jlHCCCET3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VZVbAqtA; arc=none smtp.client-ip=209.85.218.53
+	 MIME-Version; b=fTdc5/rK0zY5w90lDO5ugInMSUXW07XvAFId7YB3tmP7Rt/1EMzwX51kP+oVor9dHXUcPxolYrHJWcffhqg1eigtigAddI6g/J7uhEpeM6pZHFO0B5KdBcYlKwPcfz6K6nl3Jb0crQQLiYRHQncsWhSlC7lpiK/vwUcNQxSl2LM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e9uZy5WL; arc=none smtp.client-ip=209.85.218.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-aa545dc7105so450296566b.3;
-        Tue, 26 Nov 2024 09:24:00 -0800 (PST)
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-aa54adcb894so334377166b.0;
+        Tue, 26 Nov 2024 09:24:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732641839; x=1733246639; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1732641840; x=1733246640; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=e67gnDX037AzEtGr2TTuiC3i0rrMYCYbsdiQSpuFMPc=;
-        b=VZVbAqtATMGXVp6f/tdvQDr4Elu31/CEWZIN1LilyE74vMKXcafgXkWHUsoeF0LHjM
-         bTxjkzUUJ3XswmjwIqF8v8ECQCejyedbFPqw6FIHaAnIH62cs/PXRZTGWxeiBty/b5rD
-         BnoFho+O1fKKxB7MZm+ggGDnpcm8x6nmBXbF9S6Yxi7kG/BcaZdLNl/KQTCmGFDPGHMe
-         d5TN3RjH7iWdyIq0cjuQK5U3YAcEyUi2efQqfUdotfLjOgH0D9083EwfJIsJTwyqY/91
-         wNa5JazqRBEZKnc5dAUmfUqRUZPpzEibNFoltnbWkURWp6tvSJoZ3T3H4v5s6FqEWW/E
-         2lfg==
+        bh=ky+OlLkDMElBCNtIUb2edtqmSrtx7L7/4FrYNlOF0QA=;
+        b=e9uZy5WLP0/V+640qEBXyxSmB16ueWiwFChxZ7BOW/vXyV/kV9HoTjniEF9H6dGaaQ
+         c7Bv+1drknNdKMTNA+YyflkLYvYSpfhvbHpvxOPO2J9LixAKnJXx1L9BBRbTD/piz2Rh
+         Z+3ObOE06kaIcMIHy7j9quqoe6+ULaxziOehQ4GmZ3U76q9zHKlcoOQAO6uPrBmk/wAm
+         SpjFSuWFoWeZp84ew8F8o4x0ilokxr761xeCVDkGplGG26S7BpzrydUr9yrjGa3sgDb2
+         en0gxiDfAOdQmiOBiuqdjNz52DQrsnWfbHUPMIntOdkdyGHKUP2CKIgkdq1/KwJk243Q
+         ejog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732641839; x=1733246639;
+        d=1e100.net; s=20230601; t=1732641840; x=1733246640;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=e67gnDX037AzEtGr2TTuiC3i0rrMYCYbsdiQSpuFMPc=;
-        b=B2ZCt47rhcwd7VhQVTjnI2/iXykvOcdeDymVqaRudXhZ3RwVHnyu1iQWPKn8Qi1fkt
-         yy0x5EwhXNFxfRdcXq/gW3+61w9UsyKFi5X9nEB0NSZU+Qg3tNT3GX/bLBHRs5YTOHwb
-         O8vCXL+Wk7Ib9Tcal0WA5xXIN2xRK2zPcLh2xsbA0UU79R8lF3QDX+Pjnrajs69hUYT9
-         iABnUjDbmDr7i3MNjQEPHwycTTWtBX0fSKrSuPQkL5B34GshHxhkdrKt+fQHV8dTwy+4
-         bV/uia1bQVeeEuYIyHtUGm9TkXWNKYj+6tHAf7M9d9hIlmc66XNE/+PMHnXt424kY7R0
-         4FkA==
-X-Forwarded-Encrypted: i=1; AJvYcCU3IvcRrhIc9eO1coFKgRtOcSBhgyDfPIQah2dcW/MsIgnMmC13XYOq4gWPI1VakquRhiJcFTbO@vger.kernel.org, AJvYcCUhulyHblnh6OUUsayZy3DWBESyl+IepM5Ya9rdfB8MwkmrU52VoTWfsp/KaDWv6s+UvkrCDp3yQmTo@vger.kernel.org, AJvYcCVswgmBB5E+9++DPfFnFl4QwyBQSYjUPV4LUxFBs3HA993ijH9vCspxH3fDm5jSAfGSG4EfRTDh1HTy98YG@vger.kernel.org, AJvYcCWh1qpWHgtyJ8xDKpqjYiTt88tT8dZe4l8yeQK6djiBxpKBsp74PjmWFJrWpWxOiV95kAOBRxyHn6RFyNQv2mU=@vger.kernel.org, AJvYcCXrO7pgjNZ00WjqdGF4FEFWDDsQGceFlioU4QCDV9CE4AGhboICTkS8SnDTCbTIVuFD7XVacjnu6KOV7QEO@vger.kernel.org
-X-Gm-Message-State: AOJu0YwADh2r7GPl6gNXsFwiHugngUnjNIuT18OaaD/iYou97S6LK9qX
-	848DQlOpY8UEDXI8Ztm2J1cRoFdyGvYqumY2G6WAkPF8kws66FqE
-X-Gm-Gg: ASbGncuCUuYlOdsLwH1gUc5EzGDPw4jI3eWALxpEA/XUjGRbnKcsk+vXOD2s3kL5rLI
-	aY5194hP+mA485Xi700WgDQKAxI66ZyvwmO3hj9xbYFM3K+ToeZbrYtnH3BuXzQ3dBHy246XZVX
-	wTf2wEBDYrf/IP6NI36Vvu5fFFxjKwfH518kdWFner5AL1p1uHht/zVjVFVuDXRNzYTT1vuFfBb
-	BxN7DvoYD3NDd3Y3T6uaLRlhzZZiCoYyRLOyjxH8uvVl1k+fjLOuXDJ9ZU=
-X-Google-Smtp-Source: AGHT+IGSX3RDD4Mjs5KZqKxckix0gq8OkR9npjFRRCctDVzzyNWShDqRqCQCbZlVg9RCDHh4i4SbvQ==
-X-Received: by 2002:a17:906:1baa:b0:aa5:274b:60e9 with SMTP id a640c23a62f3a-aa5274b69ecmr1175231566b.33.1732641838563;
-        Tue, 26 Nov 2024 09:23:58 -0800 (PST)
+        bh=ky+OlLkDMElBCNtIUb2edtqmSrtx7L7/4FrYNlOF0QA=;
+        b=P5BLd+8lqm3RrLE8gKNcjNqZodOb1twFcJhWTZEg9THg/gab+Yq7YK/aIsKJqAP3nR
+         ZSug0YTJCLxqHZ8p1xL1TnKiho05O+QQXSGUoCwaTgGuTkr0iKTT46IolT1YcmjrT+9f
+         kgwGPviBBmE73EnARP4deblORiMC6+0b1Qs31L8z7XgqGN2IVFd1JO4qK2XJCRrBRqo0
+         x84IW0yC3tu5XiMQ9cQ6d1Oo5UmxG3/N+rUs/lSoYE41Xr5EAinq+cYPzt7f3KG0GyNM
+         e7R8WLyZG2zxcPTJM39+ZiTWs1rlhNuIhM4bUILSPsiVJiO9quOP0qTpxhkd3Ub9abZr
+         RYyw==
+X-Forwarded-Encrypted: i=1; AJvYcCUowTzMvyy1nDbT7aNPEQbS6kB1DKFqMZYYwm/WGdI3U5M3b/G11RGWG0s0m3qma3j6kl+Bc5Z1@vger.kernel.org, AJvYcCVzLDqMV3rIl7Y8bPHEbA/bR4hgoiIWvPaaY1PfJFxTBGwjgMz76aY2jjUlj0zRCeu62tSC4Fgw3e6QTzyT@vger.kernel.org, AJvYcCWG8J00yQ9SLjDERxD1yVYhRBaf1LDEtaBWSuPLKdseEA4oS4FMl0eWH5U/82HDqzT4RfPc0EwpQlG7/4NAVlE=@vger.kernel.org, AJvYcCXDH53Zv7m/mBWxjhw/1ouCq3xoyYIm+18jXok+nHCZplBVmqmsJhteI2ao0WfFKgOtcHPIUYon0w7SiJ/3@vger.kernel.org, AJvYcCXVZY9izTuS7GPtHD9RvubjxS1Xtg7ifvoGiXvc9i/QG1OdX/u3SfFdd+kw53obK6xNGBrTzSn95D1G@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw6qmPwRW4l+Zw3WxhnBPMmjEudaWxHpBK6F4UvD/nYrCd++Y/n
+	+tdrw8azJglvVgL79zjqjR/7mqSxc9d8Ad+63QcGUgaajjrqSS91
+X-Gm-Gg: ASbGncu/6//1edAZlJbKGZyJHaG4/HmTmh/dG8SYIOSyNM1ZrNJWpikjdv2YSOjt7fE
+	KvaROQ56sWUhDyBnq3oekRG1kZhOl7xQv1oTLL/rxuOpot0cVQUZONWMJYbmP+Sv7IH2AsnCQCn
+	+i1cP8y+I/qjOf2DZC2RucM3pri4Z0Is3lwmB67UNzU/wTdlAw0+YE4HF8vRsUjSmI7QqXpD8TS
+	Zum5bQH32NxzcdbvO0m8CpWiVTznGtVIn2tyyP/u3G4SNd2NAQWXZ71uDs=
+X-Google-Smtp-Source: AGHT+IFf/RvtHifh9xfGRhKVpgriIMG2kypuYoc32969CCQP2/adNO/7HRTialB1HvpO1MqhLIyC7Q==
+X-Received: by 2002:a17:907:784b:b0:aa5:15ab:a5d4 with SMTP id a640c23a62f3a-aa515ababeemr1070027166b.22.1732641840123;
+        Tue, 26 Nov 2024 09:24:00 -0800 (PST)
 Received: from localhost.localdomain ([46.248.82.114])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa534232086sm473832866b.42.2024.11.26.09.23.57
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa534232086sm473832866b.42.2024.11.26.09.23.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Nov 2024 09:23:58 -0800 (PST)
+        Tue, 26 Nov 2024 09:23:59 -0800 (PST)
 From: Uros Bizjak <ubizjak@gmail.com>
 To: x86@kernel.org,
 	linux-sparse@vger.kernel.org,
@@ -80,23 +80,22 @@ To: x86@kernel.org,
 	linux-arch@vger.kernel.org,
 	netdev@vger.kernel.org
 Cc: Uros Bizjak <ubizjak@gmail.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
 	Dennis Zhou <dennis@kernel.org>,
 	Tejun Heo <tj@kernel.org>,
 	Christoph Lameter <cl@linux.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@kernel.org>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
 	Linus Torvalds <torvalds@linux-foundation.org>,
 	Andy Lutomirski <luto@kernel.org>,
+	Ingo Molnar <mingo@kernel.org>,
 	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
 	Nadav Amit <nadav.amit@gmail.com>,
 	Brian Gerst <brgerst@gmail.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
 	Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH 4/6] percpu: Use TYPEOF_UNQUAL() in *_cpu_ptr() accessors
-Date: Tue, 26 Nov 2024 18:21:21 +0100
-Message-ID: <20241126172332.112212-5-ubizjak@gmail.com>
+Subject: [PATCH 5/6] percpu: Repurpose __percpu tag as a named address space qualifier
+Date: Tue, 26 Nov 2024 18:21:22 +0100
+Message-ID: <20241126172332.112212-6-ubizjak@gmail.com>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20241126172332.112212-1-ubizjak@gmail.com>
 References: <20241126172332.112212-1-ubizjak@gmail.com>
@@ -108,64 +107,70 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Use TYPEOF_UNQUAL() macro to declare the return type of *_cpu_ptr()
-accessors in the generic named address space to avoid access to
-data from pointer to non-enclosed address space type of errors.
+The patch introduces per_cpu_qual define and repurposes __percpu
+tag as a named address space qualifier using the new define.
+
+Arches can now conditionally define __per_cpu_qual as their
+named address space qualifier for percpu variables.
 
 Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Dennis Zhou <dennis@kernel.org>
 Cc: Tejun Heo <tj@kernel.org>
 Cc: Christoph Lameter <cl@linux.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
 Cc: Linus Torvalds <torvalds@linux-foundation.org>
 Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Ingo Molnar <mingo@kernel.org>
 Cc: Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
 Cc: Nadav Amit <nadav.amit@gmail.com>
 Cc: Brian Gerst <brgerst@gmail.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
 Cc: Peter Zijlstra <peterz@infradead.org>
 ---
- arch/x86/include/asm/percpu.h | 8 ++++++--
- include/linux/percpu-defs.h   | 2 +-
- 2 files changed, 7 insertions(+), 3 deletions(-)
+ include/asm-generic/percpu.h   | 15 +++++++++++++++
+ include/linux/compiler_types.h |  2 +-
+ 2 files changed, 16 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/percpu.h b/arch/x86/include/asm/percpu.h
-index 666e4137b09f..27f668660abe 100644
---- a/arch/x86/include/asm/percpu.h
-+++ b/arch/x86/include/asm/percpu.h
-@@ -73,10 +73,14 @@
- 	unsigned long tcp_ptr__ = raw_cpu_read_long(this_cpu_off);	\
- 									\
- 	tcp_ptr__ += (__force unsigned long)(_ptr);			\
--	(typeof(*(_ptr)) __kernel __force *)tcp_ptr__;			\
-+	(TYPEOF_UNQUAL(*(_ptr)) __force __kernel *)tcp_ptr__;		\
- })
- #else
--#define arch_raw_cpu_ptr(_ptr) ({ BUILD_BUG(); (typeof(_ptr))0; })
-+#define arch_raw_cpu_ptr(_ptr)						\
-+({									\
-+	BUILD_BUG();							\
-+	(TYPEOF_UNQUAL(*(_ptr)) __force __kernel *)0;			\
-+})
- #endif
+diff --git a/include/asm-generic/percpu.h b/include/asm-generic/percpu.h
+index 50597b975a49..3b93b168faa1 100644
+--- a/include/asm-generic/percpu.h
++++ b/include/asm-generic/percpu.h
+@@ -6,6 +6,21 @@
+ #include <linux/threads.h>
+ #include <linux/percpu-defs.h>
  
- #define PER_CPU_VAR(var)	%__percpu_seg:(var)__percpu_rel
-diff --git a/include/linux/percpu-defs.h b/include/linux/percpu-defs.h
-index 266297b21a5d..2921ea97d242 100644
---- a/include/linux/percpu-defs.h
-+++ b/include/linux/percpu-defs.h
-@@ -223,7 +223,7 @@ do {									\
- #define PERCPU_PTR(__p)							\
- ({									\
- 	unsigned long __pcpu_ptr = (__force unsigned long)(__p);	\
--	(typeof(*(__p)) __force __kernel *)(__pcpu_ptr);		\
-+	(TYPEOF_UNQUAL(*(__p)) __force __kernel *)(__pcpu_ptr);		\
- })
- 
++/*
++ * per_cpu_qual is the qualifier for the percpu named address space.
++ *
++ * Most arches use generic named address space for percpu variables but
++ * some arches define percpu variables in different named address space
++ * (on the x86 arch, percpu variable may be declared as being relative
++ * to the %fs or %gs segments using __seg_fs or __seg_gs named address
++ * space qualifier).
++ */
++#ifdef __per_cpu_qual
++# define per_cpu_qual __per_cpu_qual
++#else
++# define per_cpu_qual
++#endif
++
  #ifdef CONFIG_SMP
+ 
+ /*
+diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+index 981cc3d7e3aa..877fe0c43c5d 100644
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@ -57,7 +57,7 @@ static inline void __chk_io_ptr(const volatile void __iomem *ptr) { }
+ #  define __user	BTF_TYPE_TAG(user)
+ # endif
+ # define __iomem
+-# define __percpu	BTF_TYPE_TAG(percpu)
++# define __percpu	per_cpu_qual BTF_TYPE_TAG(percpu)
+ # define __rcu		BTF_TYPE_TAG(rcu)
+ 
+ # define __chk_user_ptr(x)	(void)0
 -- 
 2.42.0
 
