@@ -1,165 +1,119 @@
-Return-Path: <linux-arch+bounces-9172-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9173-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C692B9D9CA3
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Nov 2024 18:34:29 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A863A9D9C95
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Nov 2024 18:31:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3ED09B2D255
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Nov 2024 17:26:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9E707B27E1F
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Nov 2024 17:28:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FB021E00BE;
-	Tue, 26 Nov 2024 17:24:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E349C1DB52D;
+	Tue, 26 Nov 2024 17:28:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DxJ5Kt3T"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="sXLbEnkQ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F8C21DE880;
-	Tue, 26 Nov 2024 17:24:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73E071DACB4;
+	Tue, 26 Nov 2024 17:28:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732641845; cv=none; b=q2vqdQHfypL1+vf3G/rPAmofHn1j3RZBF8y65UypKbEnZ57gkqmcWV66qYmBToo51NMqFyy7C0vPYC6UGJhRbe3+Ibb4AITRRyjyYkaBaB2BpA5UDoDP5GXV7I5rUDDj434BZWBTDsQBYEUPYZ634puZzV5prporOWYrKrG/D2U=
+	t=1732642135; cv=none; b=FlHlGmpLTsYImI7Hr59xNPpa/UreAzZx3MrPw4Pz0bSzrrOg4THZx0ZbyUVp3etJ6EDRWBYUbwCvBcsg3nm3KIjvX846xxk54Ruga/QOt7BYmgojNj8l0oUnf5VW6/oLnPJuETh0MiiIWmHHEsvQBTuU4JobJd2utJsUr8Tfchw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732641845; c=relaxed/simple;
-	bh=4OHFcqeT2AuYq8OOGzyp2EVumvns8aqChYzt49dh7GI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FM3Fhpcy2+FP0U4ojPkCepnm7Qi/I9mrbt/9SPV6PnOsYhPHj0lUcOvGohHh6z71ZISAbIHNzI4okZXQP396/yqpggs6sJFgq1j5qy1bOoaMP0917yNo5tyop4tEPZjIEtRMsZ4uM8NQEs0Va6cdvxXaxR3HMy4QCGKBi/6S9Go=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DxJ5Kt3T; arc=none smtp.client-ip=209.85.218.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-aa52edbcb63so607612466b.1;
-        Tue, 26 Nov 2024 09:24:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732641841; x=1733246641; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vYQhfY8XS5QoJJ9ROocmWAxArKh2nECE5yY90QqkfaM=;
-        b=DxJ5Kt3TjyZCKe4FdtR+FlKe+nypTY20rap7N+7ElE9SJ2jwWDI/4OZls/pnafXGxw
-         A1VeeBx2+sPjNvSwftPac77KHG+nsWFnumIdIW1heQ4jWZpf1kc7YPmtgF3/TQuwXCgt
-         YZG5j38j5BFCS9o9ehoRkXAlQv7ie0QJJgIXQqAfOACdDOGzDLc3Zs618dl7uarR2yC1
-         flYQE69f887Ic9526A9xdpt3Jfd2jH5ZscWZtmmIHCXFB4lkAzyOOrx+yNAN+eI241ef
-         NiiaxEjpuH8AwlQlCO93SQB1uUbb1NlAPByCdMyGeEpHXOLTHLh6U3L4xpFetk7LwwMF
-         ydWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732641841; x=1733246641;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vYQhfY8XS5QoJJ9ROocmWAxArKh2nECE5yY90QqkfaM=;
-        b=FryF+cxf7oez3yrh+qpRJ3vq85HJbRaJYZWChtSvlGHAjHj+0QVbRdzAspyXnQ1h16
-         nPvfEqxN8quu+NqMHbN3HJTJHRlDqQZ4wcGh3uf7oEBoLXuyNvziiv061o4W+FKLqUGW
-         QUjBOJyScEbcrqoCOiEeIIWqGmyRj8/SIF0eWj3tGd6LjpBL9zszrAhqjBqc3Co/BxuD
-         hXF7cxuFYGHJBVXQR/D930GN1d4PpEJQ9dBaq/aVqZvyu6uUeOGISpuQ622OHfIRlEJC
-         crYCcWqDC/FEhPaTokcakkDjuFzXir1DyI/xvlH/jhLgw0pOjnb1u2kudBalCKyIdN8a
-         NmjQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU5LzB9ZS06BLdO4lVxTsGzkGnPVHcGhgkhQKewGTgUO5BgG4Lho+X7Xi787WfGg0RLejSs937gpHMCdx67@vger.kernel.org, AJvYcCVBZ993GV2K8b0iycgDp+o4GG7BLV9WW2/vAnfNnPDcU6384eQiuSWrigBkl+VlLdlMNXe0t7we@vger.kernel.org, AJvYcCWL7P7J0di343GjVNVNnqT78XXhRbnoOVSA3yHJ0b69dmVswMIV/q7HQl2H6hStwS+4LbrvO2nIc9B4Zn2i@vger.kernel.org, AJvYcCXIRtOaQyuQwX+hOkpBt/tG0yfllpsvjABB+y61h5mTVwOpc34DAf4Tds1ngTwH+jVZqq0Va6Ggy8R81ee5wVI=@vger.kernel.org, AJvYcCXLguZcCsJroTTRzXoC63WRgmlrj63fdk724ejyxbYD7FhHSoLOnjhjZtmXBH3rtwMfLFBtjkNQ7Cw5@vger.kernel.org
-X-Gm-Message-State: AOJu0YxZXwa6cxyqN9H7J+f03R5kag6CqdSicrqAVR7+6wBVhyrhHrs7
-	EZNYdHwovsA1SjcPVbi+WjQU2FVnn8EPaYS/eC7Z5UmucJCo4J9F
-X-Gm-Gg: ASbGnct5eNeAz39VYC6K+PS26/TScZtq7H7JqLVeVBD2nvsCL3E71tDOk3DA5d+z9Np
-	9P7HE57A0TfK8IPCbuJ5B3SF3o6hyagbkx3nz+s5h231VpenALxflhWkNTmvK2I0Kc4qh2CRTce
-	PCFp529JfphlVMFp5USdOdGs93uQOTUm1N2h9V0bBLBeHBO5fG+s8cTOIecb3W9I/p8UrXlWjRw
-	ew/mu3vY01NwLWbGO22R4rNqpzPTyDZDivUB2ccIihbJXHBS1NpEf8gsCg=
-X-Google-Smtp-Source: AGHT+IGyDslpGnIuA7EaGQJjOGzUF02XOkLJcH+fA/4c2TgsR6qaqxDya98ILXBrNs7h8xnzOadyXQ==
-X-Received: by 2002:a17:906:3d22:b0:aa5:26ac:18e2 with SMTP id a640c23a62f3a-aa57fbba709mr3970966b.23.1732641841517;
-        Tue, 26 Nov 2024 09:24:01 -0800 (PST)
-Received: from localhost.localdomain ([46.248.82.114])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa534232086sm473832866b.42.2024.11.26.09.24.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Nov 2024 09:24:01 -0800 (PST)
-From: Uros Bizjak <ubizjak@gmail.com>
-To: x86@kernel.org,
-	linux-sparse@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org,
-	linux-bcachefs@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	netdev@vger.kernel.org
-Cc: Uros Bizjak <ubizjak@gmail.com>,
-	Dennis Zhou <dennis@kernel.org>,
-	Tejun Heo <tj@kernel.org>,
-	Christoph Lameter <cl@linux.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@kernel.org>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Andy Lutomirski <luto@kernel.org>,
-	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-	Nadav Amit <nadav.amit@gmail.com>,
-	Brian Gerst <brgerst@gmail.com>,
-	Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH 6/6] percpu/x86: Enable strict percpu checks via named AS qualifiers
-Date: Tue, 26 Nov 2024 18:21:23 +0100
-Message-ID: <20241126172332.112212-7-ubizjak@gmail.com>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20241126172332.112212-1-ubizjak@gmail.com>
-References: <20241126172332.112212-1-ubizjak@gmail.com>
+	s=arc-20240116; t=1732642135; c=relaxed/simple;
+	bh=PlMMIc4AQSbkLcvBzrHB9wgiuJrm21ESzo2se5IDeG8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XVm/4ofvj/shJs2rtXNiU2EmrJUcZjRcZyhZYHqH/ddT/qq6Wh459sxxVwXkEpBK+T7u6CeXc9W1bi+Kbc/R3ly4OB3r3GVGxzomUuK/KjDb1eh4SWEb6XlNeYcQ9WIEGODqcoQ1Va7PqBOzVtKuSGYeUj1FtewHMDdz3SCxTp0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=sXLbEnkQ; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [10.0.0.115] (c-67-182-156-199.hsd1.wa.comcast.net [67.182.156.199])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 1A72420545AE;
+	Tue, 26 Nov 2024 09:28:53 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1A72420545AE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1732642133;
+	bh=H94+kE6a6Z3TCvsv5IQfa8koOq42a44wDuStW4E/6+8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=sXLbEnkQ61nv6hbtZZ2ZQwagIwQ3s57qp+UTpK189JiX/cAYSvAH5zo9QDJA5ey8k
+	 Dwt4CCS4FMIH15sSObKql/pyGsegy+eu+jPnazasSvIj/u/dhKQ5vboJ68gY5vxkaU
+	 Ik00OhGi1r1Ksyj94O5yXx79fuqOSlgwKrm8eO6s=
+Message-ID: <074bacbe-2823-4653-a6fb-a50b7785a027@linux.microsoft.com>
+Date: Tue, 26 Nov 2024 09:28:52 -0800
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 5/5] hyperv: Remove the now unused hyperv-tlfs.h files
+To: Michael Kelley <mhklinux@outlook.com>,
+ "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+ "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+ "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+ "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+ "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+ "virtualization@lists.linux.dev" <virtualization@lists.linux.dev>
+Cc: "kys@microsoft.com" <kys@microsoft.com>,
+ "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
+ "wei.liu@kernel.org" <wei.liu@kernel.org>,
+ "decui@microsoft.com" <decui@microsoft.com>,
+ "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+ "will@kernel.org" <will@kernel.org>, "luto@kernel.org" <luto@kernel.org>,
+ "tglx@linutronix.de" <tglx@linutronix.de>,
+ "mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
+ "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+ "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+ "seanjc@google.com" <seanjc@google.com>,
+ "pbonzini@redhat.com" <pbonzini@redhat.com>,
+ "peterz@infradead.org" <peterz@infradead.org>,
+ "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+ "joro@8bytes.org" <joro@8bytes.org>,
+ "robin.murphy@arm.com" <robin.murphy@arm.com>,
+ "davem@davemloft.net" <davem@davemloft.net>,
+ "edumazet@google.com" <edumazet@google.com>,
+ "kuba@kernel.org" <kuba@kernel.org>, "pabeni@redhat.com"
+ <pabeni@redhat.com>, "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+ "kw@linux.com" <kw@linux.com>, "robh@kernel.org" <robh@kernel.org>,
+ "bhelgaas@google.com" <bhelgaas@google.com>, "arnd@arndb.de"
+ <arnd@arndb.de>, "sgarzare@redhat.com" <sgarzare@redhat.com>,
+ "jinankjain@linux.microsoft.com" <jinankjain@linux.microsoft.com>,
+ "muminulrussell@gmail.com" <muminulrussell@gmail.com>,
+ "skinsburskii@linux.microsoft.com" <skinsburskii@linux.microsoft.com>,
+ "mukeshrathor@microsoft.com" <mukeshrathor@microsoft.com>,
+ "vkuznets@redhat.com" <vkuznets@redhat.com>,
+ "ssengar@linux.microsoft.com" <ssengar@linux.microsoft.com>,
+ "apais@linux.microsoft.com" <apais@linux.microsoft.com>,
+ "eahariha@linux.microsoft.com" <eahariha@linux.microsoft.com>,
+ "horms@kernel.org" <horms@kernel.org>
+References: <1732577084-2122-1-git-send-email-nunodasneves@linux.microsoft.com>
+ <1732577084-2122-6-git-send-email-nunodasneves@linux.microsoft.com>
+ <SN6PR02MB41570E0108D4E3B45571EE9FD42F2@SN6PR02MB4157.namprd02.prod.outlook.com>
+Content-Language: en-US
+From: Nuno Das Neves <nunodasneves@linux.microsoft.com>
+In-Reply-To: <SN6PR02MB41570E0108D4E3B45571EE9FD42F2@SN6PR02MB4157.namprd02.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-This patch declares percpu variables in __seg_gs/__seg_fs named AS
-and keeps them named AS qualified until they are dereferenced with
-percpu accessor. This approach enables various compiler check
-for cross-namespace variable assignments.
+On 11/25/2024 9:59 PM, Michael Kelley wrote:
+> From: Nuno Das Neves <nunodasneves@linux.microsoft.com> Sent: Monday, November 25, 2024 3:25 PM
+>>
+>> Remove all hyperv-tlfs.h files. These are no longer included
+>> anywhere. hyperv/hvhdk.h serves the same role, but with an easier
+>> path for adding new definitions.
+>>
+>> Remove the relevant lines in MAINTAINERS.
+>>
+>> Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
+> 
+> Reviewed-by: Michael Kelley <mhklinux@outlook.com>
 
-Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-Cc: Dennis Zhou <dennis@kernel.org>
-Cc: Tejun Heo <tj@kernel.org>
-Cc: Christoph Lameter <cl@linux.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
-Cc: Nadav Amit <nadav.amit@gmail.com>
-Cc: Brian Gerst <brgerst@gmail.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
----
- arch/x86/include/asm/percpu.h | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
-
-diff --git a/arch/x86/include/asm/percpu.h b/arch/x86/include/asm/percpu.h
-index 27f668660abe..61b875243ea3 100644
---- a/arch/x86/include/asm/percpu.h
-+++ b/arch/x86/include/asm/percpu.h
-@@ -95,9 +95,19 @@
- 
- #endif /* CONFIG_SMP */
- 
--#define __my_cpu_type(var)	typeof(var) __percpu_seg_override
--#define __my_cpu_ptr(ptr)	(__my_cpu_type(*(ptr))*)(__force uintptr_t)(ptr)
--#define __my_cpu_var(var)	(*__my_cpu_ptr(&(var)))
-+#if defined(CONFIG_USE_X86_SEG_SUPPORT) && \
-+    defined(CONFIG_CC_HAS_TYPEOF_UNQUAL) && !defined(__CHECKER__)
-+# define __my_cpu_type(var)	typeof(var)
-+# define __my_cpu_ptr(ptr)	(ptr)
-+# define __my_cpu_var(var)	(var)
-+
-+# define __per_cpu_qual		__percpu_seg_override
-+#else
-+# define __my_cpu_type(var)	typeof(var) __percpu_seg_override
-+# define __my_cpu_ptr(ptr)	(__my_cpu_type(*(ptr))*)(__force uintptr_t)(ptr)
-+# define __my_cpu_var(var)	(*__my_cpu_ptr(&(var)))
-+#endif
-+
- #define __percpu_arg(x)		__percpu_prefix "%" #x
- #define __force_percpu_arg(x)	__force_percpu_prefix "%" #x
- 
--- 
-2.42.0
-
+Thanks for the reviews on this series Michael!
 
