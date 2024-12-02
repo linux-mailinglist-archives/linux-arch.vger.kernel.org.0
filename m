@@ -1,56 +1,57 @@
-Return-Path: <linux-arch+bounces-9233-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9234-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC24A9DF9C6
-	for <lists+linux-arch@lfdr.de>; Mon,  2 Dec 2024 05:03:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DCAA9DF9C7
+	for <lists+linux-arch@lfdr.de>; Mon,  2 Dec 2024 05:04:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7B6D7B210BD
-	for <lists+linux-arch@lfdr.de>; Mon,  2 Dec 2024 04:03:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ABD06281717
+	for <lists+linux-arch@lfdr.de>; Mon,  2 Dec 2024 04:04:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 855E922EEF;
-	Mon,  2 Dec 2024 04:03:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE2A72A1D1;
+	Mon,  2 Dec 2024 04:04:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="POgRvMSL"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="Kb4aDy0J"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 167C9EC4
-	for <linux-arch@vger.kernel.org>; Mon,  2 Dec 2024 04:03:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F68AEC4
+	for <linux-arch@vger.kernel.org>; Mon,  2 Dec 2024 04:04:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733112204; cv=none; b=ghSFTAOSK3LNewfR8aeBBnUDc1Shr7fb2JCTNzuH2tJBxfEoNwDeok93vvlL3SWaO9D7td++l7hBkqoqGMoDaTNhp4Y7JKnUw8FuBtGS6sxnsvv+LkbOuAjdxMvNbBS/aVLD5SfgUqKS5W1ZRMD9IcnoSAhztzaESKBRsCikD+0=
+	t=1733112254; cv=none; b=RnzyKlRjYHc5lusqUWZzouVUxS64tMTIG211QUvBsNdz/HCS7IUiIUPCryAcwsETwM/Cu7KM1tHcgUh16QhSl3pyCikOG+/prQVama+eTcjFdE8nOHVlCEDvbHRsjTj/aRQOtPkgPxnhoffjgnfCsrIdo71UlRWk3TCauEMKZag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733112204; c=relaxed/simple;
-	bh=7fYcQKGoX1UknGKIVX8DEXvZjRn/msS9EJlM6TBTs8E=;
+	s=arc-20240116; t=1733112254; c=relaxed/simple;
+	bh=EwPe4jYvgPYzukCuD1+IUzWw/0U7iYlxP2mhIZJC/Cc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uPl4DxmjpYyS1oVE5uOEB8Q9noJoTVDtY4dLYfboc0tB3D6L6frNyioxORaxCUws1iACf/y+NBWldQlyQYSZmRIruib6qDUlpj+1RUJzi0iymVYn+Qrcpl/icoXH1/lN01cAXHGEpS2Nqj4cqEH7IgzE0LsZb244mvWNbnVQXYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=POgRvMSL; arc=none smtp.client-ip=62.89.141.173
+	 Content-Type:Content-Disposition:In-Reply-To; b=giKWV8dRDcCad+tWZz0zQk7TrTvI0NTZ3XT1amvq+Z/dz5/4gR6VJaItWM/kghi8x9NWbNSFu3foLCqSjJ1DT+t43+mLR79lf/az/yKsJRd1SjXk3Acz2BN/LF7rxw+wXEnPacp1NZNvR43q7OUDk444BjwJg/0l6uPphdIX+vk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=Kb4aDy0J; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
 	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=xMIiwnBUaf1TnNHRw2qjwROsN/VKTkiw/reAVb9/OcA=; b=POgRvMSLEwjm5L9/HC7djmcxUr
-	RxSuMTR+EUAwVAF9X4doHW1EM9PGd7QZzJimg2N/IKGRh/tUjUvUCjfllHiCy/gcr3TJMnhcOLFht
-	ityDu69Bi4joER0O9bi2BiUWv9IMZL5nkDnprAwgo6WDV5cUdkscpuND77R0i7ZJ1I37cjAEnEy3k
-	7WNauRVPni5HEJStPcPkeOZrQmOEqN3IvBSGoidH/bkRMaCOaxQHDxoCdZsRn+L1g6cf3mgBiPxCS
-	4spg1ixY2mwaI3Af+L/xLQoRKxgubUOFLf/epG3Wvtf2BJ9/iiuBbhS5xx5wUIGtCpYBsRUGHEN4C
-	vBn9xDLg==;
+	bh=//jd55U6GOV6bM+Vy9Mm6uYX28EYP/MNA/fX4H/tFA4=; b=Kb4aDy0J3FuVPjDtLAgx80wdt5
+	jr+vX/kd8v+ncTMUPLe4VheZ3YS+G0QSDXPCSAYGF/99d4QG2ITzwfQMDIPWvAx5iGSR1rnS9C/ir
+	BiNNUFwKeZF8wmLKKMOCb5Iq+ChqxiGekrbajoQVxLpqe4kMsCsP4tJ9s3BrGJTdC9nfblfpQlb7y
+	qdIug35peEeb5dCn8ftlJ4MHmv3lUOCnwNczVXSJ5kuk+eI8e1KdgMfi3dJdusOS5VESJHh0EGnmv
+	EFklmpIN4/rQuBbj//kIjatednIk4qC7Auj5bDMBlyVsv/tV+XFbW+yhd4lrsY0Z5c1jJIEvcDeU8
+	agF6w8yw==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.98 #2 (Red Hat Linux))
-	id 1tHxeW-00000003uoB-2bNq;
-	Mon, 02 Dec 2024 04:03:16 +0000
-Date: Mon, 2 Dec 2024 04:03:16 +0000
+	id 1tHxfK-00000003uoR-3tu9;
+	Mon, 02 Dec 2024 04:04:06 +0000
+Date: Mon, 2 Dec 2024 04:04:06 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-arch@vger.kernel.org
 Cc: Arnd Bergmann <arnd@arndb.de>,
 	Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 2/3] alpha: regularize the situation with asm/param.h
-Message-ID: <20241202040316.GB933328@ZenIV>
+Subject: [PATCH 3/3] loongarch, um, xtensa: get rid of generated
+ arch/$ARCH/include/asm/param.h
+Message-ID: <20241202040406.GC933328@ZenIV>
 References: <20241202040207.GM3387508@ZenIV>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -63,103 +64,55 @@ Content-Disposition: inline
 In-Reply-To: <20241202040207.GM3387508@ZenIV>
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-The only reason why alpha can't do what sparc et.al. are doing
-is that include/asm-generic/param.h relies upon the value of HZ
-set for userland header in uapi/asm/param.h being 100.
+For loongarch and xtensa that gets them to do what x86 et.al. are
+doing - have asm/param.h resolve to uapi variant, which is generated
+by mandatory-y += param.h and contains exact same include.
 
-We need that value to define USER_HZ and we need that definition
-to outlive the redefinition of HZ kernel-side.  And alpha needs
-it to be 1024, not 100 like everybody else.
-
-So let's add __USER_HZ to uapi/asm-generic/param.h, defaulting to
-100 and used to define HZ.  That way include/asm-generic/param.h
-can use that thing instead of open-coding it - it won't be affected
-by undefining and redefining HZ.
-
-That done, alpha asm/param.h can be removed and uapi/asm/param.h
-switched to defining __USER_HZ and EXEC_PAGESIZE and then including
-<asm-generic/param.h> - asm/param.h will resolve to uapi/asm/param.h,
-which pulls <asm-generic/param.h>, which will do the right thing
-both in the kernel and userland contexts.
+On um it will resolve to x86 uapi variant instead, which also contains
+the same include (um doesn't have uapi headers, but it does build the
+host ones).
 
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- arch/alpha/include/asm/param.h      | 12 ------------
- arch/alpha/include/uapi/asm/param.h |  9 ++-------
- include/asm-generic/param.h         |  2 +-
- include/uapi/asm-generic/param.h    |  6 +++++-
- 4 files changed, 8 insertions(+), 21 deletions(-)
- delete mode 100644 arch/alpha/include/asm/param.h
+ arch/loongarch/include/asm/Kbuild | 1 -
+ arch/um/include/asm/Kbuild        | 1 -
+ arch/xtensa/include/asm/Kbuild    | 1 -
+ 3 files changed, 3 deletions(-)
 
-diff --git a/arch/alpha/include/asm/param.h b/arch/alpha/include/asm/param.h
-deleted file mode 100644
-index cfe947ce9461..000000000000
---- a/arch/alpha/include/asm/param.h
-+++ /dev/null
-@@ -1,12 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef _ASM_ALPHA_PARAM_H
--#define _ASM_ALPHA_PARAM_H
--
--#include <uapi/asm/param.h>
--
--# undef HZ
--# define HZ		CONFIG_HZ
--# define USER_HZ	1024
--# define CLOCKS_PER_SEC	USER_HZ	/* frequency at which times() counts */
--
--#endif /* _ASM_ALPHA_PARAM_H */
-diff --git a/arch/alpha/include/uapi/asm/param.h b/arch/alpha/include/uapi/asm/param.h
-index 49c7119934e2..e4e410f9bf85 100644
---- a/arch/alpha/include/uapi/asm/param.h
-+++ b/arch/alpha/include/uapi/asm/param.h
-@@ -2,14 +2,9 @@
- #ifndef _UAPI_ASM_ALPHA_PARAM_H
- #define _UAPI_ASM_ALPHA_PARAM_H
- 
--#define HZ		1024
--
-+#define __USER_HZ	1024
- #define EXEC_PAGESIZE	8192
- 
--#ifndef NOGROUP
--#define NOGROUP		(-1)
--#endif
--
--#define MAXHOSTNAMELEN	64	/* max length of hostname */
-+#include <asm-generic/param.h>
- 
- #endif /* _UAPI_ASM_ALPHA_PARAM_H */
-diff --git a/include/asm-generic/param.h b/include/asm-generic/param.h
-index 8d3009dd28ff..8348c116aa3b 100644
---- a/include/asm-generic/param.h
-+++ b/include/asm-generic/param.h
-@@ -6,6 +6,6 @@
- 
- # undef HZ
- # define HZ		CONFIG_HZ	/* Internal kernel timer frequency */
--# define USER_HZ	100		/* some user interfaces are */
-+# define USER_HZ	__USER_HZ	/* some user interfaces are */
- # define CLOCKS_PER_SEC	(USER_HZ)       /* in "ticks" like times() */
- #endif /* __ASM_GENERIC_PARAM_H */
-diff --git a/include/uapi/asm-generic/param.h b/include/uapi/asm-generic/param.h
-index baad02ea7f93..3ed505dfea13 100644
---- a/include/uapi/asm-generic/param.h
-+++ b/include/uapi/asm-generic/param.h
-@@ -2,8 +2,12 @@
- #ifndef _UAPI__ASM_GENERIC_PARAM_H
- #define _UAPI__ASM_GENERIC_PARAM_H
- 
-+#ifndef __USER_HZ
-+#define __USER_HZ	100
-+#endif
-+
- #ifndef HZ
--#define HZ 100
-+#define HZ __USER_HZ
- #endif
- 
- #ifndef EXEC_PAGESIZE
+diff --git a/arch/loongarch/include/asm/Kbuild b/arch/loongarch/include/asm/Kbuild
+index 80ddb5edb845..b04d2cef935f 100644
+--- a/arch/loongarch/include/asm/Kbuild
++++ b/arch/loongarch/include/asm/Kbuild
+@@ -10,5 +10,4 @@ generic-y += user.h
+ generic-y += ioctl.h
+ generic-y += mmzone.h
+ generic-y += statfs.h
+-generic-y += param.h
+ generic-y += text-patching.h
+diff --git a/arch/um/include/asm/Kbuild b/arch/um/include/asm/Kbuild
+index 428f2c5158c2..2bd0cd046652 100644
+--- a/arch/um/include/asm/Kbuild
++++ b/arch/um/include/asm/Kbuild
+@@ -14,7 +14,6 @@ generic-y += kdebug.h
+ generic-y += mcs_spinlock.h
+ generic-y += mmiowb.h
+ generic-y += module.lds.h
+-generic-y += param.h
+ generic-y += parport.h
+ generic-y += percpu.h
+ generic-y += preempt.h
+diff --git a/arch/xtensa/include/asm/Kbuild b/arch/xtensa/include/asm/Kbuild
+index cc5dba738389..13fe45dea296 100644
+--- a/arch/xtensa/include/asm/Kbuild
++++ b/arch/xtensa/include/asm/Kbuild
+@@ -3,7 +3,6 @@ generated-y += syscall_table.h
+ generic-y += extable.h
+ generic-y += kvm_para.h
+ generic-y += mcs_spinlock.h
+-generic-y += param.h
+ generic-y += parport.h
+ generic-y += qrwlock.h
+ generic-y += qspinlock.h
 -- 
 2.39.5
 
