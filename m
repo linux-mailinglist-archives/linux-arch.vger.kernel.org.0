@@ -1,157 +1,144 @@
-Return-Path: <linux-arch+bounces-9241-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9242-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38C479E29D4
-	for <lists+linux-arch@lfdr.de>; Tue,  3 Dec 2024 18:47:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 019529E2F43
+	for <lists+linux-arch@lfdr.de>; Tue,  3 Dec 2024 23:49:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E05F9BA5A85
-	for <lists+linux-arch@lfdr.de>; Tue,  3 Dec 2024 15:21:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D3505B298C1
+	for <lists+linux-arch@lfdr.de>; Tue,  3 Dec 2024 22:29:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60B271F757E;
-	Tue,  3 Dec 2024 15:21:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80837209F51;
+	Tue,  3 Dec 2024 22:29:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l041LLGt"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AJzoTjec"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C083D1EF0AE;
-	Tue,  3 Dec 2024 15:21:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B4F7202F84;
+	Tue,  3 Dec 2024 22:29:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733239283; cv=none; b=gjl9YOos7gQQ0ULCgjDXPr7gRJUN9nbLMjCJTndQNGq41x+Ess0tUj5ZLQ6fkNmjQ/6X6rrmdCFCd1G5117QnqevJmLpOV3EVMApnEhN3NNFNrPMyH1voMgHvQchGaT7xFa0CVfebB5KlbiuhBH1r5Qhxdk3wnUNXcm8OyDkc7c=
+	t=1733264977; cv=none; b=hXq81poE8MoF4hRF+qeSuIbTOZLXdGunKOiPY+ucPhjm8o6x1q1X8XMBLqeid4+j3Z0ldHputaqr4/VIf2KxF/a8FcMGvyK0CnXaytYr9K0/Nk7QD7SQbiGAyfSgQ4UHlYOYyOk1QDs/9j4DTXrTmFlZ1IUaSS2wfvtTzg01gO8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733239283; c=relaxed/simple;
-	bh=t8yscXsYjfpe/1tcoMvCTfOcyi3GhvMr0P2NT0AZHzk=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=NDOTvpYXolAMvRnkODBz9ftwwnokmEUXpBuxvbS6IPchbs0U0sR4z9KRDZh/rmdwxf/ZXpmwy8Y8dJmgBcQh6PItk6N1sWvXmKL05ECSuivB7CmsRwJsKfORn82a+b655/pAmfOrRttyoy0MOtUPi0bQ6xNSa5vpkxJjDaG56TY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l041LLGt; arc=none smtp.client-ip=209.85.160.178
+	s=arc-20240116; t=1733264977; c=relaxed/simple;
+	bh=v1NJNp5Tk7wpwinjGLDTU4LArY+PKjGPBb1DekJ1O6g=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=WAlcCL537VM+zJJ73QSdiGeifHjGx2QL2Fpo6LDnks8TrTarzy1s5SwEKB8Nude1oUtleaykav4ilbsX6OnusNoxNzvUCH83qPfVXmb8yWlk6of4DrI+NrvwOMD5tOswRjGifmAda8gWfx49J8/wvMSk9mVdW0NJLnEk5iPttz4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AJzoTjec; arc=none smtp.client-ip=209.85.215.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-466966d8dbaso45712501cf.3;
-        Tue, 03 Dec 2024 07:21:21 -0800 (PST)
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-7fc99fc2b16so3640148a12.3;
+        Tue, 03 Dec 2024 14:29:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733239280; x=1733844080; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VqsVHmCOaWiBo6waU1R1vraLU/LK0vRFjavrsVUjZLY=;
-        b=l041LLGtQ09D5k9YVBUQuBVvQ8Q6hMoDvDvrGkEdSwkOK8gnKxMD+RTAhmJ8ioGzNS
-         5Iyt9SRcV/JXbqOP96OJGr/UmP5yyTMfsTcJ4Y2xhovpEDW0UErs1gfmgOJC8iUQulan
-         46EP+dxFoM6ZxrL4s5ILxNK/q4tkEUMXTwI7a3K8qhPo6Tzwbmyy8vaKHgPRwI/P3yT/
-         wJXLQulArcn+0E7DskiJCzgdBidYcFVBlA4Py9q2t9ecekhde5Tmy2GVu5wjJ024984M
-         aExkXDxAYhlVvLN06Mzn4H6Jx6YXZHh2I4H0ORIOrkq3IqW3xOgb8BcSjQhD5Qspx4ww
-         ZWOA==
+        d=gmail.com; s=20230601; t=1733264975; x=1733869775; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kOQqhZdgI8+JB/qh1dFLYIuDBxbHyOD15IWWEIuDAMg=;
+        b=AJzoTjecKLzsoGsVs3OdruKRC90CUVwafnbgu7PrVrxm59H6H8sXzEbWI2r3eosIwD
+         UNZpD83PKMoxrvQH+4tITghcnenoOkEXD+THCVPTNF1W/t4LdYCrYbqG9QRsXgUykQdz
+         5+Z7zfFIkcbUKwOroyUY22bsuw92cp0cXrFAbf7HGMeCW+zDv1wAqK60lwm+2oj5r2mD
+         /uM60E9YFzB7sBhYRhZueLyY95+zbufnaKfYPtYp8Jgw4ol2vzvAFOXYKMVhhYgNBLlA
+         xUPuLEc6weDXNNrhAd5C7uNGGWX08vCnQo+eyV8SN3KLjUVm09gAZYI2Z13YM/xgxghA
+         ZFpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733239280; x=1733844080;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=VqsVHmCOaWiBo6waU1R1vraLU/LK0vRFjavrsVUjZLY=;
-        b=Mexig+DofDUwVTNGN5G8TKshCoajvQvlzcTIFdpDoEbN33+Wpg18Vo4EjbuGXBgIPT
-         3vjRi5E+nnChK9BxdD/WPn6Vlhi/l+YS/cysywCoOF7B3eewDxrcZ4AFhOYaqYXsDgmn
-         aDnIJC7DVrjca0+ooIBQBHLcQr3+maPSI6mPsz1QKeDM/A0YrHAGF3Shps5x7kTOhyUS
-         PFEzmLCLYTURr1lWz7Mr9ZBs47aJjJS/zLdU2NFI+MuUYpFnwJ888vseEkUXy2qO/qeT
-         6oh1ulpQBG84l1gtynB1YVpgigHv/vJCS+1ahx6JI3uZeSt1MseiOy885khYFjYoInLU
-         E83A==
-X-Forwarded-Encrypted: i=1; AJvYcCU5/P+d2WqQgIndwYFoJ8P7ueJ3gqAsO4EYkOgUZIiBgGkAz3rIoipftKar3dD6vhir9iWKTA89@vger.kernel.org, AJvYcCU80hH145bh54fJjVz7ibwQjl/A3ljRFZUdpc5Um6lKDU6LmKFhHmgNGaU5PJSvy2QtfBZtEXAPvAHR5C0O@vger.kernel.org, AJvYcCUKttrQNS2eaPFdJms1IDmY383EE8A1oYSfiAYiiBPTo2mk/LUlfNK3I3/4WRQI9kelh0lM6bs1AUPU@vger.kernel.org, AJvYcCXVNEr2WK+l//1EZ3cnMT2kdAOyvXOClKQwSqHr1HVU3xrwI5Tri7yuYU7vmdpDiBav72p3B0pp7It5+W8m2PIo@vger.kernel.org
-X-Gm-Message-State: AOJu0YxJXIx7Lac+uUo0BHx1Y7QYQU+cyKJqzhpLoFTtuRJEHGDia/HD
-	7grfsPBoHcpBQKHvoxL5aZu0f/tzA9KcxeVHA8H+tofJm/8mylx0
-X-Gm-Gg: ASbGnctU6OSh2uWgz/+vqPFd/lfrqgFGKwu1qQCcyQBAt/qwSUS1rY1T38X/WL55aAj
-	NTxAV4AkeHFbwxuf4KQFdNbldy4lUcIFd0MUHHRqpXoUCtm0IDiLqvsg+ImbOHB1EnO0LAkQfs2
-	D4Bf1p66L5BKUn2gf2wMuYtcc7XPFj6Zc61wRLs4iIP3zYHzccBIAci5QPvuSQVzGFdHavXQ9Px
-	7iyMuNjSta+9Xdoru903ZmR8lL6saX76ZI89RD9MYRx9JenK3jjOtkuNTUUiwKgYLhrQRF+u1Y7
-	tGFft1DxPj6jQkfvJOGf1w==
-X-Google-Smtp-Source: AGHT+IGPHit5+V6UhQpAx4/BlJFXSsgH9I6LPVgBePoc1CSG05dOym+Yqu7WxRzxJcebBY0CylhigA==
-X-Received: by 2002:ad4:5b8f:0:b0:6d8:99cf:d2e3 with SMTP id 6a1803df08f44-6d8b737d8d2mr41162076d6.22.1733239280369;
-        Tue, 03 Dec 2024 07:21:20 -0800 (PST)
-Received: from localhost (250.4.48.34.bc.googleusercontent.com. [34.48.4.250])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6d875195da6sm61747786d6.57.2024.12.03.07.21.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Dec 2024 07:21:19 -0800 (PST)
-Date: Tue, 03 Dec 2024 10:21:19 -0500
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Kenjiro Nakayama <nakayamakenjiro@gmail.com>, 
- Pablo Neira Ayuso <pablo@netfilter.org>, 
- Jozsef Kadlecsik <kadlec@netfilter.org>, 
- "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, 
- Alan Stern <stern@rowland.harvard.edu>, 
- Andrea Parri <parri.andrea@gmail.com>, 
- Will Deacon <will@kernel.org>, 
- Peter Zijlstra <peterz@infradead.org>, 
- Boqun Feng <boqun.feng@gmail.com>, 
- Nicholas Piggin <npiggin@gmail.com>, 
- David Howells <dhowells@redhat.com>, 
- Jade Alglave <j.alglave@ucl.ac.uk>, 
- Luc Maranget <luc.maranget@inria.fr>, 
- "Paul E. McKenney" <paulmck@kernel.org>, 
- Akira Yokosawa <akiyks@gmail.com>, 
- Daniel Lustig <dlustig@nvidia.com>, 
- Joel Fernandes <joel@joelfernandes.org>, 
- Shuah Khan <shuah@kernel.org>
-Cc: netfilter-devel@vger.kernel.org, 
- coreteam@netfilter.org, 
- linux-kernel@vger.kernel.org, 
- netdev@vger.kernel.org, 
- linux-arch@vger.kernel.org, 
- lkmm@lists.linux.dev, 
- linux-kselftest@vger.kernel.org, 
- Kenjiro Nakayama <nakayamakenjiro@gmail.com>
-Message-ID: <674f21ef3048c_19a62294c6@willemb.c.googlers.com.notmuch>
-In-Reply-To: <20241202232129.7139-1-nakayamakenjiro@gmail.com>
-References: <20241202232129.7139-1-nakayamakenjiro@gmail.com>
-Subject: Re: [PATCH] selftests/net: call sendmmsg via udpgso_bench.sh
+        d=1e100.net; s=20230601; t=1733264975; x=1733869775;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kOQqhZdgI8+JB/qh1dFLYIuDBxbHyOD15IWWEIuDAMg=;
+        b=HmdPbpFZmnL4K5XnsjHDBNDORVEmtP2aSYNSGedha6xb2eu+x8jrZo438Fil40ao8K
+         jDxjSb5WgFLfFlwsWVXmJhkpDSAE31GClOcpuDW160fyD+abqYzX67kUUN5YowM1gw1j
+         dllnG/EDyLglgYeG7WbCJHDlEHPpin93jAZ590PXscg74cbM70brFgGESCSd0ZwrmB3A
+         sztQrtQllxsbg3knzBnfwFCvRJVNOgoUEUn06n8mgQQFiRdDcMDB5gpdL7AWy+ys52IS
+         8JJYo0MJBnqgRwmfhZqHYOUoHkc2nkbdueUZu/vrsUQDXNVk4Hd4DWAifGfG1kvu0FQF
+         h8Hg==
+X-Forwarded-Encrypted: i=1; AJvYcCUXtSiF3PVCzaxON6xIRx1wnoS7/w0NpMHez67cW/HuqRF5N6aLO1FFlQFt17FF0muYX0ZMe40dNR/P@vger.kernel.org, AJvYcCUbDgDtPpO0yc+ahIjRdmxFn8v73RKNqzBnQKHdRdDiv/prKTrzruRPrbxoraDDcm/XOtSqsrb0wLEHoekIWChe@vger.kernel.org, AJvYcCV2FqhGei1GjJOumGFyh4ZAnHS6Gnao6D7nvYNe57r36iXkYMKXA3x2tF0dKGCNXt7o8sEfXB1ODtmmpHkn@vger.kernel.org, AJvYcCWCFE9p2ccbH3B8Ax2ZxTyXLebOm7imzYMEAZmQQz5HCtYx602b9DeD+ln8uOPo3OeUMT/bDQSt@vger.kernel.org
+X-Gm-Message-State: AOJu0YxObALbq1K+oSVTR2eSE5Obic4RqLeZEuJrs4NdUdfeJ57Fl670
+	UfOITO+PVQCci9It0IqwRDJEqjQu0BIqSuZEz9c5w4VglsQPEtQm
+X-Gm-Gg: ASbGnctaik9TedA87IH+Crb3ICGPWTZnMef4uBV+XmWURhejxlNhPrOH45ITQ1ZmxFW
+	gr8M3SVcKUr0OV4DH5ddLqqwux9kGN2ULIK2nbuBzS0YN3XCE9E+MRgn5qymXfwLkrlf7vSEdqw
+	LNFlyB0shn2TT3/wG+nWroZhexnqH9cvgSAFSx8b3rvXA2EJ8PjXshnZij/nuNMwyyehQNZ59CI
+	uqRWrKkEtK7c/HQy37HB9xtTvyQVvMo3KB291Tad3vZ1F2AAO55yuv5HxpSlQAWlK51NKPIUlMW
+	F1Uwjm3wd0Ajh7SRWA==
+X-Google-Smtp-Source: AGHT+IGvaKP6B5Mct/zhxb1Oq+XpVrniUhSuQiZr/lzz3hOewfIePelGBKpMi3jZHY3N98/XDM2qYQ==
+X-Received: by 2002:a05:6a20:841f:b0:1e0:c5d2:f215 with SMTP id adf61e73a8af0-1e1653b7c37mr6146784637.12.1733264975288;
+        Tue, 03 Dec 2024 14:29:35 -0800 (PST)
+Received: from localhost.localdomain ([240d:0:4a45:1d00:61fb:e21e:f97a:dd9c])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7fc9c3b6ee3sm10055175a12.85.2024.12.03.14.29.29
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 03 Dec 2024 14:29:34 -0800 (PST)
+From: Kenjiro Nakayama <nakayamakenjiro@gmail.com>
+To: Pablo Neira Ayuso <pablo@netfilter.org>,
+	Jozsef Kadlecsik <kadlec@netfilter.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Andrea Parri <parri.andrea@gmail.com>,
+	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	David Howells <dhowells@redhat.com>,
+	Jade Alglave <j.alglave@ucl.ac.uk>,
+	Luc Maranget <luc.maranget@inria.fr>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Akira Yokosawa <akiyks@gmail.com>,
+	Daniel Lustig <dlustig@nvidia.com>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: netfilter-devel@vger.kernel.org,
+	coreteam@netfilter.org,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	lkmm@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	Kenjiro Nakayama <nakayamakenjiro@gmail.com>
+Subject: [PATCH net-next v2] selftests/net: call sendmmsg via udpgso_bench.sh
+Date: Wed,  4 Dec 2024 07:28:44 +0900
+Message-Id: <20241203222843.26983-1-nakayamakenjiro@gmail.com>
+X-Mailer: git-send-email 2.39.3 (Apple Git-146)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Kenjiro Nakayama wrote:
-> Currently, sendmmsg is implemented in udpgso_bench_tx.c,
-> but it is not called by any test script.
-> 
-> This patch adds a test for sendmmsg in udpgso_bench.sh.
-> This allows for basic API testing and benchmarking
-> comparisons with GSO.
+Currently, sendmmsg is implemented in udpgso_bench_tx.c,
+but it is not called by any test script.
 
-The change looks fine to me, but the commit is missing your
-Signed-off-by.
+This patch adds a test for sendmmsg in udpgso_bench.sh.
+This allows for basic API testing and benchmarking
+comparisons with GSO.
 
-Also, if resubmitting, please mark [PATCH net-next v2].
+Signed-off-by: Kenjiro Nakayama <nakayamakenjiro@gmail.com>
+---
+ tools/testing/selftests/net/udpgso_bench.sh | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> ---
->  tools/testing/selftests/net/udpgso_bench.sh | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/net/udpgso_bench.sh b/tools/testing/selftests/net/udpgso_bench.sh
-> index 640bc43452fa..88fa1d53ba2b 100755
-> --- a/tools/testing/selftests/net/udpgso_bench.sh
-> +++ b/tools/testing/selftests/net/udpgso_bench.sh
-> @@ -92,6 +92,9 @@ run_udp() {
->  	echo "udp"
->  	run_in_netns ${args}
->  
-> +	echo "udp sendmmsg"
-> +	run_in_netns ${args} -m
-> +
->  	echo "udp gso"
->  	run_in_netns ${args} -S 0
->  
-> -- 
-> 2.39.3 (Apple Git-146)
-> 
-
+diff --git a/tools/testing/selftests/net/udpgso_bench.sh b/tools/testing/selftests/net/udpgso_bench.sh
+index 640bc43452fa..88fa1d53ba2b 100755
+--- a/tools/testing/selftests/net/udpgso_bench.sh
++++ b/tools/testing/selftests/net/udpgso_bench.sh
+@@ -92,6 +92,9 @@ run_udp() {
+ 	echo "udp"
+ 	run_in_netns ${args}
+ 
++	echo "udp sendmmsg"
++	run_in_netns ${args} -m
++
+ 	echo "udp gso"
+ 	run_in_netns ${args} -S 0
+ 
+-- 
+2.39.3 (Apple Git-146)
 
 
