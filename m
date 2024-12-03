@@ -1,82 +1,83 @@
-Return-Path: <linux-arch+bounces-9237-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9238-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 475019E0F44
-	for <lists+linux-arch@lfdr.de>; Tue,  3 Dec 2024 00:22:22 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 766ED9E1100
+	for <lists+linux-arch@lfdr.de>; Tue,  3 Dec 2024 03:00:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A57D7B2457B
-	for <lists+linux-arch@lfdr.de>; Mon,  2 Dec 2024 23:22:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4106A282BBD
+	for <lists+linux-arch@lfdr.de>; Tue,  3 Dec 2024 02:00:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 435211E04A0;
-	Mon,  2 Dec 2024 23:21:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B9A24594C;
+	Tue,  3 Dec 2024 02:00:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mb0xsa1x"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HxMTZ6GI"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDB671DF244;
-	Mon,  2 Dec 2024 23:21:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFAF414A82;
+	Tue,  3 Dec 2024 02:00:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733181701; cv=none; b=LUvgldSl47SGciFdLAZHL7LElXiGwGvp/H88txVk7QHK8G4AEewDQ+4CMh15NhxhDe4r3hKQgKZ0cFDwLGDeqI8FVmiqnCs6CS9g9LUEKBafES5ZYwAnYWev8F7vX+EPvPleBTS9M02lx8rqZIDZzM6nvkBp9sFn3UibVIpbrWc=
+	t=1733191230; cv=none; b=eAbUU5NttPoi2yXzW/Egr8QDH3Hme5n1IoQsQGys+3aGFdyhSnlErF1pG9IcnaScfIJ5E3eZQzxDMPKWWkcuXnkvnv6ob6G1pbCjYXh86WtPhm4cP7ePszVB0Sm6vEy8+LTcYpUqkbe/ppNicM5E1NeheKMsmMc/EWkTurBsKJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733181701; c=relaxed/simple;
-	bh=T0fJkNN8lmu0yQW5xDMaUNuwSNQGFIOPmvlds70OAcE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=lrwZdUX3/VdnL6wp9cm0IChtAgqh5hysh6YrFrSDc3cX74Mprw0qVmkMK06FFmI7pmVDRRzRYRbZWckjrCyw+/+Rh2oP3xMGMkla2IU3MQdQZlTmgoFYXl9eZSx3KIfEmghiFXgISmSsv40sMuDfUgqhR+kM/UR/QIZOPKwEwns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mb0xsa1x; arc=none smtp.client-ip=209.85.210.171
+	s=arc-20240116; t=1733191230; c=relaxed/simple;
+	bh=EAkYqHxwoA0R0dcqG7W4lfpOriiOfn2sTkhuAvg1mYg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UW4xV4EJckC4a2a/8wiWz6J/N9f7IlT1jFY2YdX849nFc2M51yz2Z8QDcfrWjSXD/Dc7uWG3rddzfHuC2J6CEoWUJQJXar0wQKW37IvpWvW2HsN+5KC+M1PvKq1cvsW98SjGkdaSHijenwEmhxwwYUyNVy7GQ7zIStyUOAYn/is=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HxMTZ6GI; arc=none smtp.client-ip=209.85.216.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-7242f559a9fso4749262b3a.1;
-        Mon, 02 Dec 2024 15:21:39 -0800 (PST)
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2e56750bb0dso3605037a91.0;
+        Mon, 02 Dec 2024 18:00:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733181699; x=1733786499; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=LyFnOYNR7/uDCGGXOyxce2KX24RRI2ramvA/qoNn6Mw=;
-        b=mb0xsa1xL1zLWAMLj9DAEH7IrSW0MrXC93O6mb1xj13XnX4OYEh7XT5vRT319sNf4V
-         Ue0UfZrd7AQCOlfWAIG8H1YPEO0/f9a7TrmAgjegA+JUbBvNw1ZyZP7HpwpvfwCrzlWr
-         RdB8WBgEodsn3TaqKrxxwNVDUNQPWAMEuE6gXTgRq2DhocMCPQgQHBlt9PBZdB/5ryVg
-         MPHVBbc4iyu/mbKFqg7Uv8zogeFfy2MBNTOKbLtWcWyftF6yJ92fq4WLEY5EmCb4OD8Y
-         a03beInn3bbgjN8M5kNvkqVsh+8AUCZs7dAI+gdqFIU3sy7TdsnXOiMMKLyQrCoi9yi4
-         Id3Q==
+        d=gmail.com; s=20230601; t=1733191228; x=1733796028; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ifhyXCPwj2ZS4FThasjY1J6PG/17ZdtDu1I6YUbkxr0=;
+        b=HxMTZ6GImJQWlkN17o/Pknr2ONcCHIl13tPF+JErwWPinscJXZSiT4UE+1debDm0s3
+         zMsgtLr89brCFfXtKs4ixCBO0yGynZZTnt6DsJ3rN0Ysi5AnDpCoo0qq06F26WciYMyF
+         f3y/ZmM4yEEUYLhUTOBqPrSl57QUZOiN6tBwz1mSO2uoeQ8iy1zv/iLDpDEqqJzqcgXE
+         WakD/XJlP+Dv/rkh2S8dF5dgLUu5vq4uQ8TPCKhEul09HZHcQRMbvxBmbSR+ik5F32n8
+         eLFGiqf1D1Tg1OVjt1POeYPVmxotq4lTJOAB7dSBa1g6Dy5lFPCiL3GSqj4fNCqqzgwD
+         dNsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733181699; x=1733786499;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LyFnOYNR7/uDCGGXOyxce2KX24RRI2ramvA/qoNn6Mw=;
-        b=QiDzYkdYje4oEwpYj1JfSzg69HleZ0AzBpz95eSl1vnr+pbwN7WuJdaeEBlrvkCKAw
-         vMMtgEgVrUih6Hsdhs03sQTZYU87kFEn1CHVR/0JtqDc0GtR2eQPz1uL7kwdOd4YrLjN
-         VRBaos95QJy21WXifI6xrU9dkAI5T3vCIT9K0yI4mrI7AVyGw7B7YpaAYEbsbikLBKNI
-         ajRLD1MO+XPkeB5ks6ZYITxeUoE1n8r2EyhsubRdqR9u1BKwGOqOeV3ipDIVhWTkaacv
-         x803aiZ1D3JNAj5RPhHcOEgzs9yrA7QgIx6uHgXHHSfe6RxXoSZX+q6YHGQSZYNzm+vQ
-         aJtA==
-X-Forwarded-Encrypted: i=1; AJvYcCU6osT9GONdnk3yCCcqiklwZicvc0bKoEkMOLzqd2+S8oeC2LO2oVQ8EKgiQdmUP7Gmfh9N396ErU6vR1hx@vger.kernel.org, AJvYcCVCKA5/gnpEc89ZcU/jOHl7IYLgPwS1eG0Ek2Kq2dq5WRF35Xatn57AXndrhMCq67qTdVsCWEQ8ww867xKsgCtH@vger.kernel.org, AJvYcCVVIuP5aGDih7gJTWrHBjldwuqdSwllXwLufGNIm71F0cd3EY7g0/gx/BtJsMNJVeld7E5fCxy7lIhO@vger.kernel.org, AJvYcCX0WWAToW8+6VFP53KNH5WymgFd7wJeRIMKQz2tShRZgBGxJ62TO97ya2I9EFNXAyOcdyPYSIkk@vger.kernel.org
-X-Gm-Message-State: AOJu0Yywyyl+feR19dl+b56rD4xBPD3RaiKzKgJIyUoZRBHmKumE0sxE
-	E9oLb8A1MvrQ3OpI7sEnJw7m6oHOPokFy4S5H1ZuPhTz3eYvQMRE
-X-Gm-Gg: ASbGncuPl4tX6wGGmMxJmEtUHQg7EOW+OEZFTFyO03XbM3Jv/nhusxlL2INwoPjKvjJ
-	Ph01V5YV7NRhOJevjwpLyWYv91JhAgGYtGsF8CyNirQUDs9TGr3Cj9sqsndFN1lq62VN1CYUeMJ
-	t+yXKuCqWWFHhAOKXQBriVXhNUYrVCmYV8cUwzoVMGCgSGBj7oFqHlWOg650ETM5Uk9cAUAQHTd
-	4018QtHRCpf/9GObG8ahSlKU0F93PVqy1mL6qzH1OiT9OHryY57yFQX+Ks4k5KRpBr7uijc09LN
-	bN4y1EU3VeqhcTjH+A==
-X-Google-Smtp-Source: AGHT+IEXS03Fw+wgJGBsVZ94KW7dwGXzAeA8iM26jbTjQebKyiUAt9gwXwClHbNDAS7WWsC0K1AuCw==
-X-Received: by 2002:a05:6a00:39a8:b0:725:3fb5:5595 with SMTP id d2e1a72fcca58-7257fa3a10dmr317747b3a.5.1733181699099;
-        Mon, 02 Dec 2024 15:21:39 -0800 (PST)
-Received: from localhost.localdomain ([240d:0:4a45:1d00:4807:3add:383b:ddbc])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7254176fdcbsm9098432b3a.70.2024.12.02.15.21.33
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 02 Dec 2024 15:21:38 -0800 (PST)
-From: Kenjiro Nakayama <nakayamakenjiro@gmail.com>
-To: Pablo Neira Ayuso <pablo@netfilter.org>,
+        d=1e100.net; s=20230601; t=1733191228; x=1733796028;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ifhyXCPwj2ZS4FThasjY1J6PG/17ZdtDu1I6YUbkxr0=;
+        b=Y0OOt3R81xQ/n/Op5oB/2KvI2ftW+8u6XG2j16UiLsf5vn/QdjoWykGohg5xTLqfbB
+         0rv4AXZtOuRUlPIedl3IF1bNWZ55n3zmDzniPHuJRLB6HuMvdltAhijGateX/GquK/8m
+         8Tpv50XPVnDW081k+owv8g0t+mvjbsvYs+vO/MFJ9fGCmzLQ8CF7ymR0P74vkuwlFLem
+         wz1vC0fTTO/0ynqHVNPS4y3yz2MW0NsQtAqMzJh6zHtrRU1Pvomm191K+6XbG8AeKvR6
+         r7RdS2iMKkvkREmkq5+k0MOPUoKQUOxHkwa/ioj7EbO+0T2zE1BW1DClmENlrkdA1pSV
+         3CVw==
+X-Forwarded-Encrypted: i=1; AJvYcCUGR2qqhs+Bte2DAyXw1Ak0JsF8wriwEC5Hj3vArL7w83YmMl+mm30Y+0bCxM0Y8A5jle2rjT/L@vger.kernel.org, AJvYcCV6KT9jPsd0kH5F4sqigXpGYmHtBOrtmKvBs7P6IMsOB/iiIIGF/k8Jg+uU2stEWZlsdkV3+PVGRp9WU7EB@vger.kernel.org, AJvYcCWIyaFM3SasmJrEIL4foueWymvsPFix1TR/PG4yPqgV8OBbpOMZ1yJYmlHSRt9/JFxVcC5yugjxFYQgZDyNCYA1@vger.kernel.org, AJvYcCXIvJuHiKyvc0XdGdkWiyKCA1rcoaKDEwYo39smPbDMfRX/d8cdQEaVx6ZU10Sa05ZiHQg0DbD5eS+Y@vger.kernel.org, AJvYcCXXWjvuGxKjrJv1N+02NUpGCOs1zl5LOEJgJHSQAiwRAl0wSzjxrWPk2vgHgL481tGkS/8P7zelWRo5yzwL4+Bl@vger.kernel.org
+X-Gm-Message-State: AOJu0Yze7xsShEqvIxePgf+CKLn8VI68ZIHFZuE+LLKzXN/mnhE2O0mT
+	aLHVeN+fQvDa/RqqPrBhSZ8tNN6IO2WEcMuSTcoO3+M+ncXu/CPV
+X-Gm-Gg: ASbGncspduNW0rWQApz1evZZzs5JHq9OD/+CRShGWnn1gMbnMGc2QOFp29l6xGD0Q7i
+	2+OwqHEZBsX8K+aTF+d+1dlz2eCfeS+I7m1RcxBFaMya9TInj4GBHOpeUxCpDW+n1cY/A/xie6E
+	/snZvnl+T7e4gHxkO3Lk95GofIO2a2UEOr5PbIE8wgRF2kArbXLHCvnKMzyJSv++VgCHk8tIYwf
+	ME/Pz4I+j2ZSXVBeo2zNNCSkxb6L7ty7gHr7Tt+q/EPfns4qtrJnzc=
+X-Google-Smtp-Source: AGHT+IEe0uogUo+ebVsZ0JC4jhKeRE4kCvwTmE8uI2YOgw7JxmzvRPXAWvNj+Oa2WPogiVf++p7dKQ==
+X-Received: by 2002:a17:90b:1b52:b0:2ee:7a4f:9265 with SMTP id 98e67ed59e1d1-2ef012019a9mr1313043a91.15.1733191228010;
+        Mon, 02 Dec 2024 18:00:28 -0800 (PST)
+Received: from fedora ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2eee1591fbdsm1908976a91.35.2024.12.02.18.00.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Dec 2024 18:00:27 -0800 (PST)
+Date: Tue, 3 Dec 2024 02:00:15 +0000
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Kenjiro Nakayama <nakayamakenjiro@gmail.com>
+Cc: Pablo Neira Ayuso <pablo@netfilter.org>,
 	Jozsef Kadlecsik <kadlec@netfilter.org>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
 	Simon Horman <horms@kernel.org>,
 	Alan Stern <stern@rowland.harvard.edu>,
 	Andrea Parri <parri.andrea@gmail.com>,
@@ -91,52 +92,51 @@ To: Pablo Neira Ayuso <pablo@netfilter.org>,
 	Akira Yokosawa <akiyks@gmail.com>,
 	Daniel Lustig <dlustig@nvidia.com>,
 	Joel Fernandes <joel@joelfernandes.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: netfilter-devel@vger.kernel.org,
-	coreteam@netfilter.org,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	lkmm@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	Kenjiro Nakayama <nakayamakenjiro@gmail.com>
-Subject: [PATCH] selftests/net: call sendmmsg via udpgso_bench.sh
-Date: Tue,  3 Dec 2024 08:21:29 +0900
-Message-Id: <20241202232129.7139-1-nakayamakenjiro@gmail.com>
-X-Mailer: git-send-email 2.39.3 (Apple Git-146)
+	Shuah Khan <shuah@kernel.org>, netfilter-devel@vger.kernel.org,
+	coreteam@netfilter.org, linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org, linux-arch@vger.kernel.org,
+	lkmm@lists.linux.dev, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] selftests/net: call sendmmsg via udpgso_bench.sh
+Message-ID: <Z05mL1WQHBLRkIw1@fedora>
+References: <20241202232129.7139-1-nakayamakenjiro@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241202232129.7139-1-nakayamakenjiro@gmail.com>
 
-Currently, sendmmsg is implemented in udpgso_bench_tx.c,
-but it is not called by any test script.
+On Tue, Dec 03, 2024 at 08:21:29AM +0900, Kenjiro Nakayama wrote:
+> Currently, sendmmsg is implemented in udpgso_bench_tx.c,
+> but it is not called by any test script.
+> 
+> This patch adds a test for sendmmsg in udpgso_bench.sh.
+> This allows for basic API testing and benchmarking
+> comparisons with GSO.
+> ---
+>  tools/testing/selftests/net/udpgso_bench.sh | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/net/udpgso_bench.sh b/tools/testing/selftests/net/udpgso_bench.sh
+> index 640bc43452fa..88fa1d53ba2b 100755
+> --- a/tools/testing/selftests/net/udpgso_bench.sh
+> +++ b/tools/testing/selftests/net/udpgso_bench.sh
+> @@ -92,6 +92,9 @@ run_udp() {
+>  	echo "udp"
+>  	run_in_netns ${args}
+>  
+> +	echo "udp sendmmsg"
+> +	run_in_netns ${args} -m
+> +
+>  	echo "udp gso"
+>  	run_in_netns ${args} -S 0
+>  
+> -- 
+> 2.39.3 (Apple Git-146)
+> 
 
-This patch adds a test for sendmmsg in udpgso_bench.sh.
-This allows for basic API testing and benchmarking
-comparisons with GSO.
----
- tools/testing/selftests/net/udpgso_bench.sh | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/tools/testing/selftests/net/udpgso_bench.sh b/tools/testing/selftests/net/udpgso_bench.sh
-index 640bc43452fa..88fa1d53ba2b 100755
---- a/tools/testing/selftests/net/udpgso_bench.sh
-+++ b/tools/testing/selftests/net/udpgso_bench.sh
-@@ -92,6 +92,9 @@ run_udp() {
- 	echo "udp"
- 	run_in_netns ${args}
- 
-+	echo "udp sendmmsg"
-+	run_in_netns ${args} -m
-+
- 	echo "udp gso"
- 	run_in_netns ${args} -S 0
- 
--- 
-2.39.3 (Apple Git-146)
-
+Reviewed-by: Hangbin Liu <liuhangbin@gmail.com>
 
