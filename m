@@ -1,93 +1,105 @@
-Return-Path: <linux-arch+bounces-9243-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9244-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E3EC9E340F
-	for <lists+linux-arch@lfdr.de>; Wed,  4 Dec 2024 08:24:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 644889E3C02
+	for <lists+linux-arch@lfdr.de>; Wed,  4 Dec 2024 15:03:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0F92FB21412
-	for <lists+linux-arch@lfdr.de>; Wed,  4 Dec 2024 07:24:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2990D281549
+	for <lists+linux-arch@lfdr.de>; Wed,  4 Dec 2024 14:03:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E9DE18B492;
-	Wed,  4 Dec 2024 07:24:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D8C41FA152;
+	Wed,  4 Dec 2024 14:03:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sj/XXw08"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Er7TdoqP"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D2E3184
-	for <linux-arch@vger.kernel.org>; Wed,  4 Dec 2024 07:24:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A9B61F943D;
+	Wed,  4 Dec 2024 14:03:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733297089; cv=none; b=TWYhaTNpxwb0Z85qR9wjWliz8tG9prufr7XLdBKgJymoAB4t7uqJHZq13JY2aliMNYLNGSVWC16MgzPKeLMCWq8gSm+Z0UP5ZVUIhQcpgbeGh6slj2Ms/qkUTzbF9r7oJzSsTKHTo6KUm43FZRe4+4SuQDGmgVew5av4IpVXO1k=
+	t=1733320993; cv=none; b=M7dwLceiCVcQ2gM6l2u5d95Lor+2X749+EePnVEG5KUytkbQMl6YMfuDcp7/YjX/htADf8cNDjrmWt/1WEZzuBP5anDCTkQOAWWMB7VJ8cgUwOBhBRTFsewVuCZxEW0CK6tJdloWD16z7ogimqzi4an8gzTAXdPssFozjVTD7MM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733297089; c=relaxed/simple;
-	bh=Zd6OM8mfIHwQekpkQRNZQXKHnnK+oph2sfEB9l/vHwk=;
+	s=arc-20240116; t=1733320993; c=relaxed/simple;
+	bh=wiR5htVN+22hbXfWg7ML4jVM0P0Y7+RaaSQ2h6rUHR4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=flAr+Bj2lPl43CHDrjP/hrjO3X8xZJQZRXjv1BmiamR3/hUjwG9fuHVrg73fSFZUZVH5F58hEIOsld2F7+48bRw7Mjbr+WkaCIoLERufO4oCMgslGddpnzZHJYYuepoqPbArZt8Ry22VShamnAieEUVk8kCm7FfKogWuihX6h7s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=sj/XXw08; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-434a95095efso3007395e9.0
-        for <linux-arch@vger.kernel.org>; Tue, 03 Dec 2024 23:24:46 -0800 (PST)
+	 Content-Type:Content-Disposition:In-Reply-To; b=fLYOWMWnEVpdXEjdDHf2xtaECjnK5JFRzjaR4NFG2r+H2F7rJcfry0YURHIbtAaWy3s/VVukhk5D/bA9AP+meTBtrEsn0srhWpBKP7kSTsrNvun51/n5dOBoc+FyJ+yjZgh5xzqQVUVvx+iIvhCEWimQ3capxfYi4hz7l/niYG8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Er7TdoqP; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-7252f48acf2so5007521b3a.2;
+        Wed, 04 Dec 2024 06:03:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1733297085; x=1733901885; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1733320990; x=1733925790; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=q7HALTGcIVNAPzHCr/BGJOOtFQkHmcHLgf3NzrBrnCw=;
-        b=sj/XXw08LyQrnY9jqn2BrnlUWQKWjAPv998YN8g0Y9XlZXKmH+nIImbWwPisYoGMf0
-         ZgZyTUZWYSr7Higjk4ZBcOc/kQs3UQnrqEj3JOpumaQOfm3B7F2fOYgyip786ZImOw/P
-         jLIRLIOKeKmfkVXe+BKA66UhkKFA8E8rkV1yFgRI5Bwka/MMXWN1Lo2/mUNUXHe5ImMd
-         uQAlAVOv6SIxApN+OddTz7Xt+Ajy6NK9Gg+ULUZoNVbytQbDuY0jPy6oLK8Ou5hq4djb
-         XkRJUohDCP7rM6ZBwCa3bLG/CtM7ptLiYD/rfCROBmGdHQWlYLPBz8iLwBbH2gsU2YR6
-         xRFA==
+        bh=0SkLnU8JcXk82S6VfOwZc1CCUFMw4TrFjPFHV116tyI=;
+        b=Er7TdoqP+PeyhGDdrO09WzCjhyJMA2N9eIGSzvTcgdNPToFGyCZhMt8dA16RyxrA2L
+         QW+JmMrysUGUJAyA8+LP+U+RTF5xhpSXDqq49/pKlE0pHTuBPre5eNtBRfGmJYotOn0W
+         z/34vh+yNMDm8DTGHcVKxDV96/nkINDNvpnpn98IfjtGYBJUagbngbg04V6ZiKU3ZERD
+         nB5CV+pdWgzlyfY9Fr5MINiKc22vPtPvcJc+Kc7nksFgfBSqQOHliUsyxPPAexSVxRnS
+         pavjQlLUmUg3ZDEMt8lxCsjS/BybXLZXInwzGAmuFbSTQ6Asr/C/IhDagPQ38TEhQIJU
+         /iXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733297085; x=1733901885;
+        d=1e100.net; s=20230601; t=1733320991; x=1733925791;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=q7HALTGcIVNAPzHCr/BGJOOtFQkHmcHLgf3NzrBrnCw=;
-        b=UQ7Au3xrEfGHakK4RaVxsOc3OJ45RpoZPcuYqOF6j+pbCAhuy1PVVYlJOYwcJal/yJ
-         +c07QYQtOfmAwqOWuK69Vf73zICfnrOh8M2xYQrXxhVqPJdwNV+fbM70+SoLn+uoecJ8
-         lHltDrHEqhUKCE7Jhdzwb7TxqZcwzvx1iYTNVRYh1Oh/7i4YOzCyS9gObF6+2SUYPq6Q
-         /q5HWOaqLWTQlHyKl5lyC6ZJF/YqyZigPs54cIKSIMmfygw4PxC+rBIfaFUCfITCaLdP
-         t2q7utt2b6lg19SPTlOaTi8CfNzJxbmgKRN/uIBfHYCycfbLX6ASmVUDA7TqqVnpzbzB
-         vQ3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXRP74IB3Few1vb2SQwJvZTbvhMLHG42WWVOW6CbtkqN3qjQmcx/WiUBVX8TzDNPFdeebMZjQ1T4icC@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywu9MZxKEu0rh1SJmaj24FDU2br47uaxQzZZNOC/zIxzoPs/RJ2
-	VWw53TtzpP2R/04bwpflGSRyxQYG9ap01noUZQbFmVDXCqz50JflczAgQCIz5sQ=
-X-Gm-Gg: ASbGncsnQyp+oESgKdLoZlfBjIu7Jy/dlMfiqtdG+Gp7B1znHB3utujzNjuml2JwoPQ
-	pFMlz8aWJRVlZ6/4uscGRHxfreaEwsjRx5vtQjbU8uHA0MAjIyXI+tWes6DP/aZqLNvbbbmfbQp
-	tIq6oh3QnVXC+LX7g6BCiAu/WaWJoE1nOQZeOctdkuIBweF26hyZ/e7NB/qgKi+vMkrR82cRaoi
-	kulrmhyVeFOhBXnNmee+p3AhYCu9YFnRqWsKu5vsYGw0Es+Nd27VOo=
-X-Google-Smtp-Source: AGHT+IHZjJV3X8DRwpZM2LIoO92mMGlR//mHmz04yaqsi0BXvmxHIJLtu+q3X/2NMlr6oqVbQxPx4A==
-X-Received: by 2002:a5d:64e6:0:b0:385:dedb:a15b with SMTP id ffacd0b85a97d-385fd9ac147mr4271554f8f.24.1733297085485;
-        Tue, 03 Dec 2024 23:24:45 -0800 (PST)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-385ccd3a410sm17723351f8f.46.2024.12.03.23.24.44
+        bh=0SkLnU8JcXk82S6VfOwZc1CCUFMw4TrFjPFHV116tyI=;
+        b=D77/jEnysl+lOkX3lvnPCTXp2NnqFijOrg0eqCFwIYxI++a+NwnXeX0oCvdANE4qQD
+         UEdc6Tl5KxmmfiR13kLxQWTATg3VEoImLk1FXVpXvirkzSlG43BUECOa3HKwutGefYFQ
+         bPo5tRibZIuJyfNpSrn7rPRtDqKoEUDpmUOw9/UQ0J821HXQosvjwou3ejnptILJxYsh
+         4k6N7XowAN3Vw/C6QB3UYrkQlEyCl6qIFAeEOOy33FxkFHwiZjwmFZZIM3prUquVw1Bj
+         EYWrN/tyRLg2Vk4hX6D2az+ep8jf5+ammIAV+IVHy+7Keipg+lUnsDqbK8aFZQttkfn1
+         A4gg==
+X-Forwarded-Encrypted: i=1; AJvYcCU8evdWcpme1BA7FCJSeEPjzxh85oLlgY9wm6OuVkG+NEhEImyTcgZ+BYxMrptkJzkUf5ByonikeEvvoOUoZjv/@vger.kernel.org, AJvYcCUZb8yHjQg/Ug1VxzLrBb+HoGPE9/mPJSOE7/0XO/2fotxqbXWfOiiW91rZaXttXn9DQ5xAvHpeBGeB4JFd@vger.kernel.org, AJvYcCV0Q94XUQlGQZuOlcD3P7TqF0Q+geVhXn0J9G4wDhemrlOdoVVYbw641Yb/9oX17k1qTfsug/eZn/rM@vger.kernel.org, AJvYcCW2d0Ap2YZZY3i6U9F/r1rm8g8p5rDl+iqyIe6lUrUmGkYTcsWqAUzYUfvoqjZESBxAGfOccY/yaxktSqe0YDwy@vger.kernel.org, AJvYcCWQgBITDpsyRmD2QiwKKlkJAAksc+vQVx1NDnVibdPpWBa1JuiZiVuSPEWMniog7IX6upmiL74R@vger.kernel.org
+X-Gm-Message-State: AOJu0YwFMVowSzTlNueGjBS7Sr4Bg+GURMynFvIK9XDhTKta+ZkiUm/S
+	YhiwxBJVlYV0GW0jxwa7LyBdM2C27DYtP+6EzyzIou33smfO2dwm
+X-Gm-Gg: ASbGncu9srxqV8li3BvcrtTk4lSzCLE61b4u5ATI9OvT6jr+wuEg7qT9OBJJYVp2UwY
+	pM+5aCx+7jy61Qze28HQb97BeJpi9woEE1e75IsTzDVg/IO8VYAFm7i9rNghruRArEfWeVCvybO
+	clOIaaa3oIeZVkrFtr5Ydw9YIDY3Ayo3Ln7spF+QfxAcrFi/t29e0M6Y6w/qlavx3flWlJqS2f/
+	F5cMupOcKp1DP3SllL3OO6CC5ubSEkILcX3Yj4Odt01sAREI25bPKY=
+X-Google-Smtp-Source: AGHT+IEUKdzmeAo1eoMyTnSkc02brGe/K04CdFfkaSutlwK1ABZqZrvFGOq8UuSIGqZcRz48RNbWJg==
+X-Received: by 2002:aa7:8888:0:b0:71e:41b3:a56b with SMTP id d2e1a72fcca58-72587f9083amr6136440b3a.24.1733320990387;
+        Wed, 04 Dec 2024 06:03:10 -0800 (PST)
+Received: from fedora ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-725417612b5sm12374317b3a.30.2024.12.04.06.02.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Dec 2024 23:24:44 -0800 (PST)
-Date: Wed, 4 Dec 2024 10:24:41 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Uros Bizjak <ubizjak@gmail.com>
-Cc: x86@kernel.org, linux-sparse@vger.kernel.org, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
-	linux-arch@vger.kernel.org, netdev@vger.kernel.org,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-	Christoph Lameter <cl@linux.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Andy Lutomirski <luto@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-	Nadav Amit <nadav.amit@gmail.com>, Brian Gerst <brgerst@gmail.com>,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH 0/6] Enable strict percpu address space checks
-Message-ID: <5b8d0dee-8fb6-45af-ba6c-7f74aff9a4b8@stanley.mountain>
-References: <20241126172332.112212-1-ubizjak@gmail.com>
+        Wed, 04 Dec 2024 06:03:09 -0800 (PST)
+Date: Wed, 4 Dec 2024 14:02:57 +0000
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Kenjiro Nakayama <nakayamakenjiro@gmail.com>
+Cc: Pablo Neira Ayuso <pablo@netfilter.org>,
+	Jozsef Kadlecsik <kadlec@netfilter.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Andrea Parri <parri.andrea@gmail.com>,
+	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	David Howells <dhowells@redhat.com>,
+	Jade Alglave <j.alglave@ucl.ac.uk>,
+	Luc Maranget <luc.maranget@inria.fr>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Akira Yokosawa <akiyks@gmail.com>,
+	Daniel Lustig <dlustig@nvidia.com>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Shuah Khan <shuah@kernel.org>, netfilter-devel@vger.kernel.org,
+	coreteam@netfilter.org, linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org, linux-arch@vger.kernel.org,
+	lkmm@lists.linux.dev, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v2] selftests/net: call sendmmsg via
+ udpgso_bench.sh
+Message-ID: <Z1BhEQ5RsJqB2ugr@fedora>
+References: <20241203222843.26983-1-nakayamakenjiro@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -96,240 +108,37 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241126172332.112212-1-ubizjak@gmail.com>
+In-Reply-To: <20241203222843.26983-1-nakayamakenjiro@gmail.com>
 
-On Tue, Nov 26, 2024 at 06:21:17PM +0100, Uros Bizjak wrote:
-> This patchset enables strict percpu address space checks via x86 named 
-> address space qualifiers. Percpu variables are declared in
-> __seg_gs/__seg_fs named AS and kept named AS qualified until they
-> are dereferenced via percpu accessor. This approach enables various
-> compiler checks for cross-namespace variable assignments.
+On Wed, Dec 04, 2024 at 07:28:44AM +0900, Kenjiro Nakayama wrote:
+> Currently, sendmmsg is implemented in udpgso_bench_tx.c,
+> but it is not called by any test script.
 > 
-> Please note that current version of sparse doesn't know anything about
-> __typeof_unqual__() operator. Avoid the usage of __typeof_unqual__()
-> when sparse checking is active to prevent sparse errors with unknowing
-> keyword.
-
-I don't think it would be super hard to add support to Sparse.  The only places
-where typeof and typeof_unqual are different is that you have to mask away the
-qualifiers in examine_typeof()?
-
-I would take over Sparse maintainership but I'm far too sloppy to do it.  We
-should get Greg to take over, he likes abandoned projects.  ;)
-
-Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
----
- ast-inspect.c |  1 +
- ctags.c       |  1 +
- dissect.c     |  1 +
- evaluate.c    |  3 ++-
- parse.c       | 24 +++++++++++++++++++++---
- show-parse.c  |  1 +
- symbol.c      | 17 ++++++++++++++++-
- symbol.h      |  1 +
- 8 files changed, 44 insertions(+), 5 deletions(-)
-
-diff --git a/ast-inspect.c b/ast-inspect.c
-index b510cd9b1d2c..e940a93a411e 100644
---- a/ast-inspect.c
-+++ b/ast-inspect.c
-@@ -110,6 +110,7 @@ static const char *symbol_type_name(enum type type)
- 		[SYM_UNION] = "SYM_UNION",
- 		[SYM_ENUM] = "SYM_ENUM",
- 		[SYM_TYPEOF] = "SYM_TYPEOF",
-+		[SYM_TYPEOF_UNQUAL] = "SYM_TYPEOF_UNQUAL",
- 		[SYM_BITFIELD] = "SYM_BITFIELD",
- 		[SYM_LABEL] = "SYM_LABEL",
- 		[SYM_RESTRICT] = "SYM_RESTRICT",
-diff --git a/ctags.c b/ctags.c
-index aa5f9718d847..afdc42b77b98 100644
---- a/ctags.c
-+++ b/ctags.c
-@@ -151,6 +151,7 @@ static void examine_symbol(struct symbol *sym)
- 		sym->kind = 'e';
- 	case SYM_PTR:
- 	case SYM_TYPEOF:
-+	case SYM_TYPEOF_UNQUAL:
- 	case SYM_BITFIELD:
- 	case SYM_FN:
- 	case SYM_ARRAY:
-diff --git a/dissect.c b/dissect.c
-index 300d5ca99c97..9419c5931fbb 100644
---- a/dissect.c
-+++ b/dissect.c
-@@ -212,6 +212,7 @@ static void examine_sym_node(struct symbol *node, struct symbol *parent)
- 	while ((base = node->ctype.base_type) != NULL)
- 		switch (base->type) {
- 		case SYM_TYPEOF:
-+		case SYM_TYPEOF_UNQUAL:
- 			node->ctype.base_type =
- 				do_expression(U_VOID, base->initializer);
- 			break;
-diff --git a/evaluate.c b/evaluate.c
-index fe716f631987..85a6447ba3ce 100644
---- a/evaluate.c
-+++ b/evaluate.c
-@@ -358,7 +358,8 @@ static inline int classify_type(struct symbol *type, struct symbol **base)
- 	};
- 	if (type->type == SYM_NODE)
- 		type = type->ctype.base_type;
--	if (type->type == SYM_TYPEOF) {
-+	if (type->type == SYM_TYPEOF ||
-+	    type->type == SYM_TYPEOF_UNQUAL) {
- 		type = examine_symbol_type(type);
- 		if (type->type == SYM_NODE)
- 			type = type->ctype.base_type;
-diff --git a/parse.c b/parse.c
-index f868bf63a0f5..95894bf5e54d 100644
---- a/parse.c
-+++ b/parse.c
-@@ -54,7 +54,7 @@ static struct token *handle_attributes(struct token *token, struct decl_state *c
- typedef struct token *declarator_t(struct token *, struct symbol *, struct decl_state *);
- static declarator_t
- 	struct_specifier, union_specifier, enum_specifier,
--	attribute_specifier, typeof_specifier,
-+	attribute_specifier, typeof_specifier, typeof_unqual_specifier,
- 	storage_specifier, thread_specifier;
- static declarator_t generic_qualifier;
- static declarator_t autotype_specifier;
-@@ -196,6 +196,13 @@ static struct symbol_op typeof_op = {
- 	.set = Set_S|Set_T,
- };
- 
-+static struct symbol_op typeof_unqual_op = {
-+	.type = KW_SPECIFIER,
-+	.declarator = typeof_unqual_specifier,
-+	.test = Set_Any,
-+	.set = Set_S|Set_T,
-+};
-+
- static struct symbol_op autotype_op = {
- 	.type = KW_SPECIFIER,
- 	.declarator = autotype_specifier,
-@@ -480,6 +487,7 @@ static struct init_keyword {
- 	/* Typedef ... */
- 	N("typedef",		&typedef_op,	.mods = MOD_USERTYPE),
- 	A("typeof",		&typeof_op),
-+	A("typeof_unqual",	&typeof_unqual_op),
- 	N("__auto_type",	&autotype_op),
- 
- 	/* Type qualifiers */
-@@ -1052,7 +1060,7 @@ static struct token *enum_specifier(struct token *token, struct symbol *sym, str
- 	return ret;
- }
- 
--static struct token *typeof_specifier(struct token *token, struct symbol *sym, struct decl_state *ctx)
-+static struct token *typeof_specifier_helper(struct token *token, struct symbol *sym, struct decl_state *ctx, bool qual)
- {
- 
- 	if (!match_op(token, '(')) {
-@@ -1065,7 +1073,7 @@ static struct token *typeof_specifier(struct token *token, struct symbol *sym, s
- 		ctx->ctype.base_type = sym->ctype.base_type;
- 		apply_ctype(token->pos, &ctx->ctype, &sym->ctype);
- 	} else {
--		struct symbol *typeof_sym = alloc_symbol(token->pos, SYM_TYPEOF);
-+		struct symbol *typeof_sym = alloc_symbol(token->pos, qual? SYM_TYPEOF : SYM_TYPEOF_UNQUAL);
- 		token = parse_expression(token->next, &typeof_sym->initializer);
- 
- 		typeof_sym->endpos = token->pos;
-@@ -1078,6 +1086,16 @@ static struct token *typeof_specifier(struct token *token, struct symbol *sym, s
- 	return expect(token, ')', "after typeof");
- }
- 
-+static struct token *typeof_specifier(struct token *token, struct symbol *sym, struct decl_state *ctx)
-+{
-+	return typeof_specifier_helper(token, sym, ctx, true);
-+}
-+
-+static struct token *typeof_unqual_specifier(struct token *token, struct symbol *sym, struct decl_state *ctx)
-+{
-+	return typeof_specifier_helper(token, sym, ctx, false);
-+}
-+
- static struct token *autotype_specifier(struct token *token, struct symbol *sym, struct decl_state *ctx)
- {
- 	ctx->ctype.base_type = &autotype_ctype;
-diff --git a/show-parse.c b/show-parse.c
-index e2fc18bb4b3d..ceb6b3cb6f82 100644
---- a/show-parse.c
-+++ b/show-parse.c
-@@ -59,6 +59,7 @@ static void do_debug_symbol(struct symbol *sym, int indent)
- 		[SYM_UNION] = "unin",
- 		[SYM_ENUM] = "enum",
- 		[SYM_TYPEOF] = "tpof",
-+		[SYM_TYPEOF_UNQUAL] = "tpof_unqual",
- 		[SYM_BITFIELD] = "bitf",
- 		[SYM_LABEL] = "labl",
- 		[SYM_RESTRICT] = "rstr",
-diff --git a/symbol.c b/symbol.c
-index 91352a3a447b..7060acb666d9 100644
---- a/symbol.c
-+++ b/symbol.c
-@@ -541,7 +541,7 @@ static struct symbol *examine_pointer_type(struct symbol *sym)
- 	return sym;
- }
- 
--static struct symbol *examine_typeof(struct symbol *sym)
-+static struct symbol *examine_typeof_helper(struct symbol *sym, bool qual)
- {
- 	struct symbol *base = evaluate_expression(sym->initializer);
- 	unsigned long mod = 0;
-@@ -550,6 +550,8 @@ static struct symbol *examine_typeof(struct symbol *sym)
- 		base = &bad_ctype;
- 	if (base->type == SYM_NODE) {
- 		mod |= base->ctype.modifiers & MOD_TYPEOF;
-+		if (!qual)
-+			mod &= ~MOD_QUALIFIER;
- 		base = base->ctype.base_type;
- 	}
- 	if (base->type == SYM_BITFIELD)
-@@ -560,6 +562,16 @@ static struct symbol *examine_typeof(struct symbol *sym)
- 	return examine_node_type(sym);
- }
- 
-+static struct symbol *examine_typeof(struct symbol *sym)
-+{
-+	return examine_typeof_helper(sym, true);
-+}
-+
-+static struct symbol *examine_typeof_unqual(struct symbol *sym)
-+{
-+	return examine_typeof_helper(sym, false);
-+}
-+
- /*
-  * Fill in type size and alignment information for
-  * regular SYM_TYPE things.
-@@ -595,6 +607,8 @@ struct symbol *examine_symbol_type(struct symbol * sym)
- 		return sym;
- 	case SYM_TYPEOF:
- 		return examine_typeof(sym);
-+	case SYM_TYPEOF_UNQUAL:
-+		return examine_typeof_unqual(sym);
- 	case SYM_PREPROCESSOR:
- 		sparse_error(sym->pos, "ctype on preprocessor command? (%s)", show_ident(sym->ident));
- 		return NULL;
-@@ -628,6 +642,7 @@ const char* get_type_name(enum type type)
- 	[SYM_UNION] = "union",
- 	[SYM_ENUM] = "enum",
- 	[SYM_TYPEOF] = "typeof",
-+	[SYM_TYPEOF_UNQUAL] = "typeof_unqual",
- 	[SYM_BITFIELD] = "bitfield",
- 	[SYM_LABEL] = "label",
- 	[SYM_RESTRICT] = "restrict",
-diff --git a/symbol.h b/symbol.h
-index 88130c15d4bd..3552d4391621 100644
---- a/symbol.h
-+++ b/symbol.h
-@@ -65,6 +65,7 @@ enum type {
- 	SYM_UNION,
- 	SYM_ENUM,
- 	SYM_TYPEOF,
-+	SYM_TYPEOF_UNQUAL,
- 	SYM_BITFIELD,
- 	SYM_LABEL,
- 	SYM_RESTRICT,
--- 
-2.45.2
-
+> This patch adds a test for sendmmsg in udpgso_bench.sh.
+> This allows for basic API testing and benchmarking
+> comparisons with GSO.
+> 
+> Signed-off-by: Kenjiro Nakayama <nakayamakenjiro@gmail.com>
+> ---
+>  tools/testing/selftests/net/udpgso_bench.sh | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/net/udpgso_bench.sh b/tools/testing/selftests/net/udpgso_bench.sh
+> index 640bc43452fa..88fa1d53ba2b 100755
+> --- a/tools/testing/selftests/net/udpgso_bench.sh
+> +++ b/tools/testing/selftests/net/udpgso_bench.sh
+> @@ -92,6 +92,9 @@ run_udp() {
+>  	echo "udp"
+>  	run_in_netns ${args}
+>  
+> +	echo "udp sendmmsg"
+> +	run_in_netns ${args} -m
+> +
+>  	echo "udp gso"
+>  	run_in_netns ${args} -S 0
+>  
+> -- 
+> 2.39.3 (Apple Git-146)
+> 
+Reviewed-by: Hangbin Liu <liuhangbin@gmail.com>
 
