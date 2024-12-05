@@ -1,76 +1,76 @@
-Return-Path: <linux-arch+bounces-9253-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9254-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7BCA9E59FC
-	for <lists+linux-arch@lfdr.de>; Thu,  5 Dec 2024 16:43:16 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61DA09E5A00
+	for <lists+linux-arch@lfdr.de>; Thu,  5 Dec 2024 16:43:38 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8219628818B
-	for <lists+linux-arch@lfdr.de>; Thu,  5 Dec 2024 15:43:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A7ED9169BA8
+	for <lists+linux-arch@lfdr.de>; Thu,  5 Dec 2024 15:43:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A1D621D5AC;
-	Thu,  5 Dec 2024 15:43:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A171221457;
+	Thu,  5 Dec 2024 15:43:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kYdp8o10"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h1NEN0vU"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16E9921C9E3;
-	Thu,  5 Dec 2024 15:42:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B36721D598;
+	Thu,  5 Dec 2024 15:43:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733413381; cv=none; b=ezIGDW6ztWzYqEC9xgHVYYIWG72SdKE3l8TlF/ZD6eCtsJGuUtAuzsbUhJnUZrcEamf9og1hRxAJFzH5LqLVvyc7HyqvGaeKgJpxvgJLFvyRlvd69MTYcKEYpm3gTRbwe+Bkuu9p9jfu6xl/Xu1SAd9ZHiqq0rWYo6T6k+6+C14=
+	t=1733413383; cv=none; b=STJCkBgq9NW0cw7lkV4dmCXtA1FzmsFWVXG0N+qxWHc+hDG89/DPazY/uMDzXE410wHhzKXLPNTgQJu0HEvP1kiUSFMF9vzBjDtVvs8JoM0Y273u/1Q6x7E+7oLz1YUIcSikSLmKhIoS5xVnZ47brom2stPQ1Re5ClQr51R7bHI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733413381; c=relaxed/simple;
-	bh=ogmAtJgEaFLWhDuyZKKcCqZcT06MJkx7e0moOOTVcLo=;
+	s=arc-20240116; t=1733413383; c=relaxed/simple;
+	bh=unFCMuepgf1SQbq5AYrK8xHbDJUoge6TMBDvQpYj520=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AaD6gJ73EqvERTpPO+IvRX8YwrKOXG8Rra8nekJJIMDJe2m0J69iB9awcWz0KEivDZxEshLwfSFY//uR1fYdPRQAtAVIfTCFJ/zq3MWYAlyhwr5PYEBzIezYOx8/GidtXUU0A6Q9GgODYAAjzW6lCtRBS16gw7nvpB3jdaGKzXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kYdp8o10; arc=none smtp.client-ip=209.85.221.42
+	 MIME-Version; b=YjR+K7vL23gcKqp6uDcdI0XiGhQ6Ej2BtHsSaqFFq46ZoxhY2uD18U2O0gDFhi/Ww+ZH+nXOMyl2/gs5M8M8jbLDm9IT0TdKhvGynrkRW9iD8BX3mVc9v+rCWIZ+b9EAuPsCiJOHqZAS4Z6YXY09pRcl3eqAESi6VI7WimzBFBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h1NEN0vU; arc=none smtp.client-ip=209.85.128.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-385e96a285eso648154f8f.3;
-        Thu, 05 Dec 2024 07:42:59 -0800 (PST)
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-434a2f3bae4so11372355e9.3;
+        Thu, 05 Dec 2024 07:43:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733413378; x=1734018178; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1733413380; x=1734018180; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3PpdJnIt0LB5LuubDznUPiNtcUhO58iUpeI8CzsV/cw=;
-        b=kYdp8o10PdUAVd1FH7v3qN/VH6NqkwSVbMerHVWE0o0kh6lZJyyuUhyeY9wk7K9+1F
-         q7JE2IOUGrkzDW2D6H8eIozpqa4dXYc0WMKfsfFzGbpZpv/lhHHorft2jphF/bDYi71c
-         5n4jPiC1hH6uDb9nbMLNkgJootDmOwetEiuQlJnw3+3d5BCrpuWl5Iytz9rVUXG1aRMu
-         vhoFzrsbt6ew2Z8uW4PKcxWgBLGy/J0WAB+YXkdbRVMWhXPf07+hvgLu1OqtwRsYFbBt
-         EZkbgeDrL04yX6udmQszCnqY0SBde6oRr3Y/F6Uc4zZ0CyXaw4OzXSIrYQUzKYDmemPO
-         1ivg==
+        bh=G+7I9gi8mucGgoO85kNahA3U27ot3S0RhfZIOhPcQEg=;
+        b=h1NEN0vUEoWlo9MYLfR8mIwXQTJoVQgQ5DeLt84drU7UWhI2vXuO7s6xeDyLu5QzBs
+         fmp8RT/RI+FLkbKdFM1vXqmBUJ60vy8kOW9zTqNXEgjbpJ0z2Z6nUNB7WtUj8Fq9awrE
+         DPsPc74f3fXvO8zQci0HxefJ4jCX5/F2gaSe1aWn6jWIlceQ0A7YASh8Hby3P2W1agBu
+         zKfbu7OZ2qdnWgOxIjXOqBueAw8NerjuJGaZDxDsEWpW/SE8E+9u+jFG83vKmjFta3ep
+         /UpGxug478g7Cpsp1ZQR9i5YFWZWLn2B4mq5ONEbglWa+IoMSLuuSreGLDhs0FYT1AUt
+         tStA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733413378; x=1734018178;
+        d=1e100.net; s=20230601; t=1733413380; x=1734018180;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3PpdJnIt0LB5LuubDznUPiNtcUhO58iUpeI8CzsV/cw=;
-        b=Z+72ssIV35+8u1ghwsT9skRSPEyPhjPuciHxCsS597vDJGKPjQx6dpzWI7T0g2UjNZ
-         iXXNjjD00jqDA0HhnOTnhlldsWOWnufqVideZC+1/SnPeJZZRxc6/qXgThKWx6fCDdnp
-         6cnbxxZwyREYBNuj9LuBtF7C+oUqxai9d4qRCYEBHFjca/8XHZ6mZAQHddtWW/egKQ3K
-         qA9JAbUUrmGC1zOwAXoCsB8XO2G9Zn0UuArzxIkPQu9/iadUrT6KlrqAltKD0aznpbRm
-         X5863pyd8MsRZ2mnTgKAKfnNyp2REdSWRFqe/YfrGV54e4z7SVWI2D7UZVSJFsGTJkW8
-         pVHg==
-X-Forwarded-Encrypted: i=1; AJvYcCUvgJ9gOL7MzNrIgfqMR/48ljkSmYoGRgB91PYmWU/OTC4xlTDspQ4XO3o7H2Z6aFw4fFHIu8dkmf+GKygB@vger.kernel.org, AJvYcCVhmeXOw0cOWIJ/HvvNNbEnY5E6muMd4RLrn0TzMxYKhkJOSNiByozuc2ro1a0byDoTrjKwAes4OejQn01C0aw=@vger.kernel.org, AJvYcCWFlj/pySuzQL1SXKbksczoiGIUi+Ej36DsDolzE2HuKnCKB3PmMBONf6YcMCe3qCVRQWtbNS+P1JpF@vger.kernel.org, AJvYcCXQk5HjcG+d2QT0uYsodqtkSnHEwz/I8YUriu2SIpbT5FHJko2y/eF0meL4E5p5j+l/R/NoBxu1@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy11rrsTbfbI9poITA4oXHECSlc/VM4t93JKdbEfQvA+VX8Raiu
-	pfoPbDi9vNFTADJHOG2y38OLUSHu18YZi/aZSScCfR0H80IIMdC6
-X-Gm-Gg: ASbGncs4dxuRA+hZRFVqxMA08TJRLcw+w89dmGTnUMC629qgs7XJH/Z1T/+frnGfHTr
-	x2pm/Njku8UVszuKeo6CbxTyy6Isp5ZwDCu3AZwBkNqtJczSZ3Dusj35cYoRpHvofmxII0X372/
-	i6/sINH+9bVriaEZpjwAtpQxj4ys8Ri+qdwSJSyUPMSPXMz66qDHeMJy31O0hqL61jZGxZMdNV+
-	exPN6IBgUB0PiVQ3U35+PIJy+elv8kjWhL9zFqaC823/BfffoXZ2L0PL6E=
-X-Google-Smtp-Source: AGHT+IHjT8E7BvyXoaNZ42se9YSKI4Pj1z26eB19khUL1Wi5cgUCpT69kmrNNvwAPzpn4fbartlnOg==
-X-Received: by 2002:a5d:47cc:0:b0:382:31a1:8dc3 with SMTP id ffacd0b85a97d-38607ae5ee6mr7265481f8f.35.1733413378249;
-        Thu, 05 Dec 2024 07:42:58 -0800 (PST)
+        bh=G+7I9gi8mucGgoO85kNahA3U27ot3S0RhfZIOhPcQEg=;
+        b=rcoU/7sTIYMu+HjczdiiRTi/K6NZkc7dhd/AZQsJR3Tjyl2wUc3QYz0Fm9LxKmD6tE
+         sJqdSjFTs+BjyJA8PiYU81UQ2RoYHdiAGX62JND2t6ZD9AIqKvbn44TU4Y8vHhSr69VR
+         inFVRUZ/VEPM7qaD9HWGlmP2sfdoHq+xQOSUcp+X4wGCOK/WkpYcPXz/iXF9+CydQxBG
+         TI5OcwW1+/mZAMwJHM70DBlmYcjev5WV+0gug0+AiAaOMRUKz+dmhIYjih6qEAkdXUIh
+         JlTSx3gka2vaVRv2hfjyMMR5GD1Zcp+x9fmdinbkQXwQq2l2N8A0KJd6hIPA0nArg24g
+         yvMg==
+X-Forwarded-Encrypted: i=1; AJvYcCUrLl6RzSUlVLNAUpGy26j1m+CxDT77M/x/gfSz+S+ajItHDjjCxaGCZEgSjnqlQXYlPnGKIRd3jttB0F59PQQ=@vger.kernel.org, AJvYcCV3vxBpdMNw+njvj3SifsIniJ4vHhnEG4/IP//IZ1/WKaFYYbkT0r8iyOgonLN6rssi2wEacgCI@vger.kernel.org, AJvYcCXPkNokZtGyyQ1n1hQH/MzEBgOlDmEr4igtjjyYDjI6hOjFf1+hHhvauyEvd8d5HXEcEODnphZ49w9a9z3T@vger.kernel.org, AJvYcCXtzOlXxlD+suMtV0gzZL6uHVUrQcV1AKsVnsqcpW+bs2szupeagxzinID5VNPy/si7VW2u1S5gYDKc@vger.kernel.org
+X-Gm-Message-State: AOJu0YzZwgPgEGZ7CwJjzdtZ1Zl1VWTg+hih+Ym3hSry7KrjY9Wp6Vuw
+	4NgWiFGwhItesiRlIfdum8vE4j0VAcoXARgtGUySmDWJt0jz/AhY
+X-Gm-Gg: ASbGncuCozX2YVO/jab+c4G13jsm3HDIuL3g8LXexnkt9ITSvYnCeZO1JMTeyhfV7WJ
+	wtlJnYyi2L2oQMvmuSDHWN3SDEcYO9gEpkPeBPS6ANqpPXEFNpZPwx/FAyCIcocbRQ824B85Ik7
+	ARIjTzJMbcsv8sivMC7K+JXzmT4d93HScZXgbzGJKtkGNRDOilfzcEqy5XUUDnVjR34ajunW42Q
+	Kdgwhs0iyFXpgU07YkYEguqtnHkq5RukeHMebnstDxwxtaMVfcP2ahgMv4=
+X-Google-Smtp-Source: AGHT+IGfxs/UDP+NchJ2Ajwu/cJXwUlfvxqHc9BB8+DQufR3ysgRKYw2o+8A68R7dOOef3F4mH8x2w==
+X-Received: by 2002:a05:600c:83c8:b0:434:a962:2aa0 with SMTP id 5b1f17b1804b1-434d0a1533emr87442155e9.32.1733413379677;
+        Thu, 05 Dec 2024 07:42:59 -0800 (PST)
 Received: from localhost.localdomain ([46.248.82.114])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-434da11387dsm27020185e9.30.2024.12.05.07.42.56
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-434da11387dsm27020185e9.30.2024.12.05.07.42.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Dec 2024 07:42:57 -0800 (PST)
+        Thu, 05 Dec 2024 07:42:59 -0800 (PST)
 From: Uros Bizjak <ubizjak@gmail.com>
 To: x86@kernel.org,
 	linux-mm@kvack.org,
@@ -81,20 +81,18 @@ To: x86@kernel.org,
 Cc: Uros Bizjak <ubizjak@gmail.com>,
 	Nadav Amit <nadav.amit@gmail.com>,
 	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@kernel.org>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
 	Dennis Zhou <dennis@kernel.org>,
 	Tejun Heo <tj@kernel.org>,
 	Christoph Lameter <cl@linux.com>,
 	Linus Torvalds <torvalds@linux-foundation.org>,
 	Andy Lutomirski <luto@kernel.org>,
+	Ingo Molnar <mingo@kernel.org>,
 	Brian Gerst <brgerst@gmail.com>,
-	Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH v2 1/6] x86/kgdb: Use IS_ERR_PCPU() macro
-Date: Thu,  5 Dec 2024 16:40:51 +0100
-Message-ID: <20241205154247.43444-2-ubizjak@gmail.com>
+	Denys Vlasenko <dvlasenk@redhat.com>,
+	"H. Peter Anvin" <hpa@zytor.com>
+Subject: [PATCH v2 2/6] compiler.h: Introduce TYPEOF_UNQUAL() macro
+Date: Thu,  5 Dec 2024 16:40:52 +0100
+Message-ID: <20241205154247.43444-3-ubizjak@gmail.com>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20241205154247.43444-1-ubizjak@gmail.com>
 References: <20241205154247.43444-1-ubizjak@gmail.com>
@@ -106,44 +104,69 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Use IS_ERR_PCPU() when checking the error pointer in the percpu
-address space. This macro adds intermediate cast to unsigned long
-when switching named address spaces.
+Define TYPEOF_UNQUAL() to use __typeof_unqual__() as typeof operator
+when available, to return unqualified type of the expression.
 
-The patch will avoid future build errors due to pointer address space
-mismatch with enabled strict percpu address space checks.
+Current version of sparse doesn't know anything about __typeof_unqual__()
+operator. Avoid the usage of __typeof_unqual__() when sparse checking
+is active to prevent sparse errors with unknowing keyword.
 
 Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
 Acked-by: Nadav Amit <nadav.amit@gmail.com>
 Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
 Cc: Dennis Zhou <dennis@kernel.org>
 Cc: Tejun Heo <tj@kernel.org>
 Cc: Christoph Lameter <cl@linux.com>
 Cc: Linus Torvalds <torvalds@linux-foundation.org>
 Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Ingo Molnar <mingo@kernel.org>
 Cc: Brian Gerst <brgerst@gmail.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Denys Vlasenko <dvlasenk@redhat.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Peter Zijlstra <peterz@infradead.org
 ---
- arch/x86/kernel/kgdb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/compiler.h | 13 +++++++++++++
+ init/Kconfig             |  3 +++
+ 2 files changed, 16 insertions(+)
 
-diff --git a/arch/x86/kernel/kgdb.c b/arch/x86/kernel/kgdb.c
-index 9c9faa1634fb..102641fd2172 100644
---- a/arch/x86/kernel/kgdb.c
-+++ b/arch/x86/kernel/kgdb.c
-@@ -655,7 +655,7 @@ void kgdb_arch_late(void)
- 		if (breakinfo[i].pev)
- 			continue;
- 		breakinfo[i].pev = register_wide_hw_breakpoint(&attr, NULL, NULL);
--		if (IS_ERR((void * __force)breakinfo[i].pev)) {
-+		if (IS_ERR_PCPU(breakinfo[i].pev)) {
- 			printk(KERN_ERR "kgdb: Could not allocate hw"
- 			       "breakpoints\nDisabling the kernel debugger\n");
- 			breakinfo[i].pev = NULL;
+diff --git a/include/linux/compiler.h b/include/linux/compiler.h
+index 469a64dd6495..ec0429d7a153 100644
+--- a/include/linux/compiler.h
++++ b/include/linux/compiler.h
+@@ -321,6 +321,19 @@ static inline void *offset_to_ptr(const int *off)
+  */
+ #define prevent_tail_call_optimization()	mb()
+ 
++/*
++ * Define TYPEOF_UNQUAL() to use __typeof_unqual__() as typeof
++ * operator when available, to return unqualified type of the exp.
++ *
++ * XXX: Remove test for __CHECKER__ once
++ * sparse learns about __typeof_unqual__.
++ */
++#if defined(CONFIG_CC_HAS_TYPEOF_UNQUAL) && !defined(__CHECKER__)
++# define TYPEOF_UNQUAL(exp) __typeof_unqual__(exp)
++#else
++# define TYPEOF_UNQUAL(exp) __typeof__(exp)
++#endif
++
+ #include <asm/rwonce.h>
+ 
+ #endif /* __LINUX_COMPILER_H */
+diff --git a/init/Kconfig b/init/Kconfig
+index a20e6efd3f0f..c1f9eb3d5f2e 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -894,6 +894,9 @@ config ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH
+ config CC_HAS_INT128
+ 	def_bool !$(cc-option,$(m64-flag) -D__SIZEOF_INT128__=0) && 64BIT
+ 
++config CC_HAS_TYPEOF_UNQUAL
++	def_bool $(success,echo 'int foo (int a) { __typeof_unqual__(a) b = a; return b; }' | $(CC) -x c - -S -o /dev/null)
++
+ config CC_IMPLICIT_FALLTHROUGH
+ 	string
+ 	default "-Wimplicit-fallthrough=5" if CC_IS_GCC && $(cc-option,-Wimplicit-fallthrough=5)
 -- 
 2.42.0
 
