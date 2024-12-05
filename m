@@ -1,76 +1,76 @@
-Return-Path: <linux-arch+bounces-9254-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9255-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61DA09E5A00
-	for <lists+linux-arch@lfdr.de>; Thu,  5 Dec 2024 16:43:38 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA1C29E5A02
+	for <lists+linux-arch@lfdr.de>; Thu,  5 Dec 2024 16:43:48 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A7ED9169BA8
-	for <lists+linux-arch@lfdr.de>; Thu,  5 Dec 2024 15:43:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A54912867DB
+	for <lists+linux-arch@lfdr.de>; Thu,  5 Dec 2024 15:43:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A171221457;
-	Thu,  5 Dec 2024 15:43:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 672BC222575;
+	Thu,  5 Dec 2024 15:43:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h1NEN0vU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KmBBzpEI"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B36721D598;
-	Thu,  5 Dec 2024 15:43:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36429221449;
+	Thu,  5 Dec 2024 15:43:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733413383; cv=none; b=STJCkBgq9NW0cw7lkV4dmCXtA1FzmsFWVXG0N+qxWHc+hDG89/DPazY/uMDzXE410wHhzKXLPNTgQJu0HEvP1kiUSFMF9vzBjDtVvs8JoM0Y273u/1Q6x7E+7oLz1YUIcSikSLmKhIoS5xVnZ47brom2stPQ1Re5ClQr51R7bHI=
+	t=1733413385; cv=none; b=qXjsdypJqxEd8cVYd2QSSam93nEbH0uFQLdt3wbPLcM4rjjO5w3PTwVsGniiaa2lSPKhrmobKBrOr3AA/cPMJvB+5+dvFkFFzVNoss+8C2Xj7Pp+s7nEmaZk5Mu0wQKf/naY5KnELFquGFU99oBhwZDnsm9mCoJYDuRnwwhHGSA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733413383; c=relaxed/simple;
-	bh=unFCMuepgf1SQbq5AYrK8xHbDJUoge6TMBDvQpYj520=;
+	s=arc-20240116; t=1733413385; c=relaxed/simple;
+	bh=X8NiumfnTTX9YgbmHddxFsVSlZc7+dDUKK6o7LQP9GM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YjR+K7vL23gcKqp6uDcdI0XiGhQ6Ej2BtHsSaqFFq46ZoxhY2uD18U2O0gDFhi/Ww+ZH+nXOMyl2/gs5M8M8jbLDm9IT0TdKhvGynrkRW9iD8BX3mVc9v+rCWIZ+b9EAuPsCiJOHqZAS4Z6YXY09pRcl3eqAESi6VI7WimzBFBo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h1NEN0vU; arc=none smtp.client-ip=209.85.128.41
+	 MIME-Version:Content-Type; b=IXCLbbKPb0MtKt+z4JuqfCs0xWKS/MI5XCv6RPJuTXpMRPflOZyuxhNT8t5gAt4pFnmHKPlhPs+Wv2xyTXxmQyPQHi8n9+aBRHcRaV4Eja48FkgNCPYUpxpL74xHzS6aKJZvskQxRs1iGu5pRX521kg7h8EcneBRV3ngp/NG1tE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KmBBzpEI; arc=none smtp.client-ip=209.85.128.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-434a2f3bae4so11372355e9.3;
-        Thu, 05 Dec 2024 07:43:01 -0800 (PST)
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-434a9f2da82so7459515e9.2;
+        Thu, 05 Dec 2024 07:43:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733413380; x=1734018180; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1733413381; x=1734018181; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=G+7I9gi8mucGgoO85kNahA3U27ot3S0RhfZIOhPcQEg=;
-        b=h1NEN0vUEoWlo9MYLfR8mIwXQTJoVQgQ5DeLt84drU7UWhI2vXuO7s6xeDyLu5QzBs
-         fmp8RT/RI+FLkbKdFM1vXqmBUJ60vy8kOW9zTqNXEgjbpJ0z2Z6nUNB7WtUj8Fq9awrE
-         DPsPc74f3fXvO8zQci0HxefJ4jCX5/F2gaSe1aWn6jWIlceQ0A7YASh8Hby3P2W1agBu
-         zKfbu7OZ2qdnWgOxIjXOqBueAw8NerjuJGaZDxDsEWpW/SE8E+9u+jFG83vKmjFta3ep
-         /UpGxug478g7Cpsp1ZQR9i5YFWZWLn2B4mq5ONEbglWa+IoMSLuuSreGLDhs0FYT1AUt
-         tStA==
+        bh=ZP45adl0m/JgLHunU63kkKsbCdYBQc86IYFQ7X6p794=;
+        b=KmBBzpEIN09nzeZG/UAhJ8DLPdS2bX74dB5mRx3Hz846DrENlihy63TVT2Ts70CgoF
+         ExQGzahnvtKfn25QvYEvDQe4cbDvEpkv5DaFU0WOczHq5HG3SUEwN0mjle9Q3T+Ivu4k
+         XvugqFpgjtdnkH3RQkRlWxvgNNrdTnGynBY4lyJBpGfyMkMG1s9BQnzSeUeVsM+yWqxH
+         8vP7wNkWvWn8NAcpoqKAneBF16J8BffTTKowwUB/2GKAgFrjmWp9UgHV3CC5GMKHScFC
+         /AoM57rCI6zsCJRdcgHeD3ejBfl5YzjoGhKFZacB+6ocmuBx43irguvtPnTkJSWDVQjn
+         5j/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733413380; x=1734018180;
+        d=1e100.net; s=20230601; t=1733413381; x=1734018181;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=G+7I9gi8mucGgoO85kNahA3U27ot3S0RhfZIOhPcQEg=;
-        b=rcoU/7sTIYMu+HjczdiiRTi/K6NZkc7dhd/AZQsJR3Tjyl2wUc3QYz0Fm9LxKmD6tE
-         sJqdSjFTs+BjyJA8PiYU81UQ2RoYHdiAGX62JND2t6ZD9AIqKvbn44TU4Y8vHhSr69VR
-         inFVRUZ/VEPM7qaD9HWGlmP2sfdoHq+xQOSUcp+X4wGCOK/WkpYcPXz/iXF9+CydQxBG
-         TI5OcwW1+/mZAMwJHM70DBlmYcjev5WV+0gug0+AiAaOMRUKz+dmhIYjih6qEAkdXUIh
-         JlTSx3gka2vaVRv2hfjyMMR5GD1Zcp+x9fmdinbkQXwQq2l2N8A0KJd6hIPA0nArg24g
-         yvMg==
-X-Forwarded-Encrypted: i=1; AJvYcCUrLl6RzSUlVLNAUpGy26j1m+CxDT77M/x/gfSz+S+ajItHDjjCxaGCZEgSjnqlQXYlPnGKIRd3jttB0F59PQQ=@vger.kernel.org, AJvYcCV3vxBpdMNw+njvj3SifsIniJ4vHhnEG4/IP//IZ1/WKaFYYbkT0r8iyOgonLN6rssi2wEacgCI@vger.kernel.org, AJvYcCXPkNokZtGyyQ1n1hQH/MzEBgOlDmEr4igtjjyYDjI6hOjFf1+hHhvauyEvd8d5HXEcEODnphZ49w9a9z3T@vger.kernel.org, AJvYcCXtzOlXxlD+suMtV0gzZL6uHVUrQcV1AKsVnsqcpW+bs2szupeagxzinID5VNPy/si7VW2u1S5gYDKc@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZwgPgEGZ7CwJjzdtZ1Zl1VWTg+hih+Ym3hSry7KrjY9Wp6Vuw
-	4NgWiFGwhItesiRlIfdum8vE4j0VAcoXARgtGUySmDWJt0jz/AhY
-X-Gm-Gg: ASbGncuCozX2YVO/jab+c4G13jsm3HDIuL3g8LXexnkt9ITSvYnCeZO1JMTeyhfV7WJ
-	wtlJnYyi2L2oQMvmuSDHWN3SDEcYO9gEpkPeBPS6ANqpPXEFNpZPwx/FAyCIcocbRQ824B85Ik7
-	ARIjTzJMbcsv8sivMC7K+JXzmT4d93HScZXgbzGJKtkGNRDOilfzcEqy5XUUDnVjR34ajunW42Q
-	Kdgwhs0iyFXpgU07YkYEguqtnHkq5RukeHMebnstDxwxtaMVfcP2ahgMv4=
-X-Google-Smtp-Source: AGHT+IGfxs/UDP+NchJ2Ajwu/cJXwUlfvxqHc9BB8+DQufR3ysgRKYw2o+8A68R7dOOef3F4mH8x2w==
-X-Received: by 2002:a05:600c:83c8:b0:434:a962:2aa0 with SMTP id 5b1f17b1804b1-434d0a1533emr87442155e9.32.1733413379677;
-        Thu, 05 Dec 2024 07:42:59 -0800 (PST)
+        bh=ZP45adl0m/JgLHunU63kkKsbCdYBQc86IYFQ7X6p794=;
+        b=BJOzpe/oJ42YRwBGMo6z0/72Q2F9ZsepOZVVFvl89iICrBLGgbK4vWnPHtnQae5uiB
+         PygH4TE3ArXPLa0btEO1DftObqV41Bcseffo22QiLI5WKIufHZuz6Jg+j6o9Cq29rtls
+         oDcFALCeXMrkpYDcS9NiYK3s0Aaw9tuZBf1+RkSGlxKf64vqqWxmzfo//9evzN1tHsuH
+         LBZGhB6qOz6qis0lfoY0e0uAmnC7o52mCczzBEUeLXo9kL/5sOUa7GCRpV5eMiB6czJG
+         VEa15ophDyOVy7i9gUWx0HYqaq37A4dzcZFc8dJd3eNcntJ76U2HDEQcNo6gOL631i0X
+         F6Uw==
+X-Forwarded-Encrypted: i=1; AJvYcCUNt34kKS5q+7L+MoxN4/HLH4YBWRn1Vb9UOO1fzKKOnz71ndl1WoKAfog38DB63U2I9VtV84CWt5RnefijtYE=@vger.kernel.org, AJvYcCWFA5UCgkXxRIZDkTtZY5/TOKPuo2qoC4Xanizs+0jnywlgxlbkgsXva6IHQ/GnG0QJhgRVSPS0Sbh+99Ct@vger.kernel.org, AJvYcCXFybuiH3O9KQxhNAfGUx5wbIo4Rw3SECT+37jlIFMkMZ72fBVAOfAtX8rz2On8dMQBct+6cLMPksvk@vger.kernel.org, AJvYcCXmGLSxM6a6HIl9OnmpnjZKy1zG8tfgwfnUH8itgPZD8qEhpupxNQKzl46bQLEsTPyT20TOOEw7@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw7DEfdQ6qstIraUEBGfJZ+auNlQY+VNM8E6RCL/LW5dgErxCHo
+	hxoU3J6XKPQjTBLf/bfolkHleSnjgu018yCopU5wl4jar1muQgQz
+X-Gm-Gg: ASbGncu0O4UqGyH+KYFOCaG/tbgsa9gmr3fUv/zyT+zOiKZRxqVutj+CffC0VJY58KR
+	O2uqRor/NhSPEgXufZ/XxBPC+whMZnrqMpfL2muDWqLwYL0Rqao/S9NW+I8QZn/h8IF0Cx7mGLb
+	AEv9Xl/AvKuZ2OzlRFknap+2Me1UOtL8VJ+XXxeclC8SMM/ivf4weuAIYElOfJUAKSVscRuPYnb
+	3NG9wMkZpTC10jfq+7qcJiY/wPYgsyJ2jhb+l1Bh0ZX+qi+EWZhvTmkjlE=
+X-Google-Smtp-Source: AGHT+IHlSg504pBumLfceXQFWDia6MAuCEjJGazacj++iFQVK3VDRzhe2tl+FybaLA5HFJZH550yXg==
+X-Received: by 2002:a05:600c:570a:b0:434:9f81:76d5 with SMTP id 5b1f17b1804b1-434d0a06619mr87843265e9.22.1733413381210;
+        Thu, 05 Dec 2024 07:43:01 -0800 (PST)
 Received: from localhost.localdomain ([46.248.82.114])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-434da11387dsm27020185e9.30.2024.12.05.07.42.58
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-434da11387dsm27020185e9.30.2024.12.05.07.42.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Dec 2024 07:42:59 -0800 (PST)
+        Thu, 05 Dec 2024 07:43:00 -0800 (PST)
 From: Uros Bizjak <ubizjak@gmail.com>
 To: x86@kernel.org,
 	linux-mm@kvack.org,
@@ -80,19 +80,30 @@ To: x86@kernel.org,
 	netdev@vger.kernel.org
 Cc: Uros Bizjak <ubizjak@gmail.com>,
 	Nadav Amit <nadav.amit@gmail.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
 	Dennis Zhou <dennis@kernel.org>,
 	Tejun Heo <tj@kernel.org>,
 	Christoph Lameter <cl@linux.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
 	Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
 	Ingo Molnar <mingo@kernel.org>,
-	Brian Gerst <brgerst@gmail.com>,
-	Denys Vlasenko <dvlasenk@redhat.com>,
-	"H. Peter Anvin" <hpa@zytor.com>
-Subject: [PATCH v2 2/6] compiler.h: Introduce TYPEOF_UNQUAL() macro
-Date: Thu,  5 Dec 2024 16:40:52 +0100
-Message-ID: <20241205154247.43444-3-ubizjak@gmail.com>
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	Arnd Bergmann <arnd@arndb.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Will Deacon <will@kernel.org>,
+	Waiman Long <longman@redhat.com>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Brian Gerst <brgerst@gmail.com>
+Subject: [PATCH v2 3/6] percpu: Use TYPEOF_UNQUAL() in variable declarations
+Date: Thu,  5 Dec 2024 16:40:53 +0100
+Message-ID: <20241205154247.43444-4-ubizjak@gmail.com>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20241205154247.43444-1-ubizjak@gmail.com>
 References: <20241205154247.43444-1-ubizjak@gmail.com>
@@ -102,71 +113,308 @@ List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Define TYPEOF_UNQUAL() to use __typeof_unqual__() as typeof operator
-when available, to return unqualified type of the expression.
-
-Current version of sparse doesn't know anything about __typeof_unqual__()
-operator. Avoid the usage of __typeof_unqual__() when sparse checking
-is active to prevent sparse errors with unknowing keyword.
+Use TYPEOF_UNQUAL() to declare variables as a corresponding
+type without named address space qualifier to avoid
+"‘__seg_gs’ specified for auto variable ‘var’" errors.
 
 Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
 Acked-by: Nadav Amit <nadav.amit@gmail.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Dennis Zhou <dennis@kernel.org>
 Cc: Tejun Heo <tj@kernel.org>
 Cc: Christoph Lameter <cl@linux.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
 Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Brian Gerst <brgerst@gmail.com>
-Cc: Denys Vlasenko <dvlasenk@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
 Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Peter Zijlstra <peterz@infradead.org
+Cc: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Will Deacon <will@kernel.org>
+Cc: Waiman Long <longman@redhat.com>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Brian Gerst <brgerst@gmail.com>
 ---
- include/linux/compiler.h | 13 +++++++++++++
- init/Kconfig             |  3 +++
- 2 files changed, 16 insertions(+)
+ arch/x86/include/asm/percpu.h | 10 +++++-----
+ fs/bcachefs/util.h            |  2 +-
+ include/asm-generic/percpu.h  | 26 +++++++++++++-------------
+ include/linux/part_stat.h     |  2 +-
+ include/linux/percpu-defs.h   |  4 ++--
+ include/net/snmp.h            |  5 ++---
+ kernel/locking/percpu-rwsem.c |  2 +-
+ net/mpls/internal.h           |  4 ++--
+ 8 files changed, 27 insertions(+), 28 deletions(-)
 
-diff --git a/include/linux/compiler.h b/include/linux/compiler.h
-index 469a64dd6495..ec0429d7a153 100644
---- a/include/linux/compiler.h
-+++ b/include/linux/compiler.h
-@@ -321,6 +321,19 @@ static inline void *offset_to_ptr(const int *off)
+diff --git a/arch/x86/include/asm/percpu.h b/arch/x86/include/asm/percpu.h
+index e525cd85f999..666e4137b09f 100644
+--- a/arch/x86/include/asm/percpu.h
++++ b/arch/x86/include/asm/percpu.h
+@@ -180,7 +180,7 @@ do {									\
+ 	__pcpu_type_##size pto_val__ = __pcpu_cast_##size(_val);	\
+ 									\
+ 	if (0) {		                                        \
+-		typeof(_var) pto_tmp__;					\
++		TYPEOF_UNQUAL(_var) pto_tmp__;				\
+ 		pto_tmp__ = (_val);					\
+ 		(void)pto_tmp__;					\
+ 	}								\
+@@ -219,7 +219,7 @@ do {									\
+ 	__pcpu_type_##size pto_val__ = __pcpu_cast_##size(_val);	\
+ 									\
+ 	if (0) {		                                        \
+-		typeof(_var) pto_tmp__;					\
++		TYPEOF_UNQUAL(_var) pto_tmp__;				\
+ 		pto_tmp__ = (_val);					\
+ 		(void)pto_tmp__;					\
+ 	}								\
+@@ -240,7 +240,7 @@ do {									\
+ 			 (val) == (typeof(val))-1)) ? (int)(val) : 0;	\
+ 									\
+ 	if (0) {							\
+-		typeof(var) pao_tmp__;					\
++		TYPEOF_UNQUAL(var) pao_tmp__;				\
+ 		pao_tmp__ = (val);					\
+ 		(void)pao_tmp__;					\
+ 	}								\
+@@ -273,7 +273,7 @@ do {									\
   */
- #define prevent_tail_call_optimization()	mb()
+ #define raw_percpu_xchg_op(_var, _nval)					\
+ ({									\
+-	typeof(_var) pxo_old__ = raw_cpu_read(_var);			\
++	TYPEOF_UNQUAL(_var) pxo_old__ = raw_cpu_read(_var);		\
+ 									\
+ 	raw_cpu_write(_var, _nval);					\
+ 									\
+@@ -287,7 +287,7 @@ do {									\
+  */
+ #define this_percpu_xchg_op(_var, _nval)				\
+ ({									\
+-	typeof(_var) pxo_old__ = this_cpu_read(_var);			\
++	TYPEOF_UNQUAL(_var) pxo_old__ = this_cpu_read(_var);		\
+ 									\
+ 	do { } while (!this_cpu_try_cmpxchg(_var, &pxo_old__, _nval));	\
+ 									\
+diff --git a/fs/bcachefs/util.h b/fs/bcachefs/util.h
+index fb02c1c36004..415a5803b8f4 100644
+--- a/fs/bcachefs/util.h
++++ b/fs/bcachefs/util.h
+@@ -586,7 +586,7 @@ do {									\
  
-+/*
-+ * Define TYPEOF_UNQUAL() to use __typeof_unqual__() as typeof
-+ * operator when available, to return unqualified type of the exp.
-+ *
-+ * XXX: Remove test for __CHECKER__ once
-+ * sparse learns about __typeof_unqual__.
-+ */
-+#if defined(CONFIG_CC_HAS_TYPEOF_UNQUAL) && !defined(__CHECKER__)
-+# define TYPEOF_UNQUAL(exp) __typeof_unqual__(exp)
-+#else
-+# define TYPEOF_UNQUAL(exp) __typeof__(exp)
-+#endif
-+
- #include <asm/rwonce.h>
+ #define per_cpu_sum(_p)							\
+ ({									\
+-	typeof(*_p) _ret = 0;						\
++	TYPEOF_UNQUAL(*_p) _ret = 0;					\
+ 									\
+ 	int cpu;							\
+ 	for_each_possible_cpu(cpu)					\
+diff --git a/include/asm-generic/percpu.h b/include/asm-generic/percpu.h
+index 94cbd50cc870..50597b975a49 100644
+--- a/include/asm-generic/percpu.h
++++ b/include/asm-generic/percpu.h
+@@ -74,7 +74,7 @@ do {									\
  
- #endif /* __LINUX_COMPILER_H */
-diff --git a/init/Kconfig b/init/Kconfig
-index a20e6efd3f0f..c1f9eb3d5f2e 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -894,6 +894,9 @@ config ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH
- config CC_HAS_INT128
- 	def_bool !$(cc-option,$(m64-flag) -D__SIZEOF_INT128__=0) && 64BIT
+ #define raw_cpu_generic_add_return(pcp, val)				\
+ ({									\
+-	typeof(pcp) *__p = raw_cpu_ptr(&(pcp));				\
++	TYPEOF_UNQUAL(pcp) *__p = raw_cpu_ptr(&(pcp));			\
+ 									\
+ 	*__p += val;							\
+ 	*__p;								\
+@@ -82,8 +82,8 @@ do {									\
  
-+config CC_HAS_TYPEOF_UNQUAL
-+	def_bool $(success,echo 'int foo (int a) { __typeof_unqual__(a) b = a; return b; }' | $(CC) -x c - -S -o /dev/null)
-+
- config CC_IMPLICIT_FALLTHROUGH
- 	string
- 	default "-Wimplicit-fallthrough=5" if CC_IS_GCC && $(cc-option,-Wimplicit-fallthrough=5)
+ #define raw_cpu_generic_xchg(pcp, nval)					\
+ ({									\
+-	typeof(pcp) *__p = raw_cpu_ptr(&(pcp));				\
+-	typeof(pcp) __ret;						\
++	TYPEOF_UNQUAL(pcp) *__p = raw_cpu_ptr(&(pcp));			\
++	TYPEOF_UNQUAL(pcp) __ret;					\
+ 	__ret = *__p;							\
+ 	*__p = nval;							\
+ 	__ret;								\
+@@ -91,7 +91,7 @@ do {									\
+ 
+ #define __cpu_fallback_try_cmpxchg(pcp, ovalp, nval, _cmpxchg)		\
+ ({									\
+-	typeof(pcp) __val, __old = *(ovalp);				\
++	TYPEOF_UNQUAL(pcp) __val, __old = *(ovalp);			\
+ 	__val = _cmpxchg(pcp, __old, nval);				\
+ 	if (__val != __old)						\
+ 		*(ovalp) = __val;					\
+@@ -100,8 +100,8 @@ do {									\
+ 
+ #define raw_cpu_generic_try_cmpxchg(pcp, ovalp, nval)			\
+ ({									\
+-	typeof(pcp) *__p = raw_cpu_ptr(&(pcp));				\
+-	typeof(pcp) __val = *__p, ___old = *(ovalp);			\
++	TYPEOF_UNQUAL(pcp) *__p = raw_cpu_ptr(&(pcp));			\
++	TYPEOF_UNQUAL(pcp) __val = *__p, ___old = *(ovalp);		\
+ 	bool __ret;							\
+ 	if (__val == ___old) {						\
+ 		*__p = nval;						\
+@@ -115,14 +115,14 @@ do {									\
+ 
+ #define raw_cpu_generic_cmpxchg(pcp, oval, nval)			\
+ ({									\
+-	typeof(pcp) __old = (oval);					\
++	TYPEOF_UNQUAL(pcp) __old = (oval);				\
+ 	raw_cpu_generic_try_cmpxchg(pcp, &__old, nval);			\
+ 	__old;								\
+ })
+ 
+ #define __this_cpu_generic_read_nopreempt(pcp)				\
+ ({									\
+-	typeof(pcp) ___ret;						\
++	TYPEOF_UNQUAL(pcp) ___ret;					\
+ 	preempt_disable_notrace();					\
+ 	___ret = READ_ONCE(*raw_cpu_ptr(&(pcp)));			\
+ 	preempt_enable_notrace();					\
+@@ -131,7 +131,7 @@ do {									\
+ 
+ #define __this_cpu_generic_read_noirq(pcp)				\
+ ({									\
+-	typeof(pcp) ___ret;						\
++	TYPEOF_UNQUAL(pcp) ___ret;					\
+ 	unsigned long ___flags;						\
+ 	raw_local_irq_save(___flags);					\
+ 	___ret = raw_cpu_generic_read(pcp);				\
+@@ -141,7 +141,7 @@ do {									\
+ 
+ #define this_cpu_generic_read(pcp)					\
+ ({									\
+-	typeof(pcp) __ret;						\
++	TYPEOF_UNQUAL(pcp) __ret;					\
+ 	if (__native_word(pcp))						\
+ 		__ret = __this_cpu_generic_read_nopreempt(pcp);		\
+ 	else								\
+@@ -160,7 +160,7 @@ do {									\
+ 
+ #define this_cpu_generic_add_return(pcp, val)				\
+ ({									\
+-	typeof(pcp) __ret;						\
++	TYPEOF_UNQUAL(pcp) __ret;					\
+ 	unsigned long __flags;						\
+ 	raw_local_irq_save(__flags);					\
+ 	__ret = raw_cpu_generic_add_return(pcp, val);			\
+@@ -170,7 +170,7 @@ do {									\
+ 
+ #define this_cpu_generic_xchg(pcp, nval)				\
+ ({									\
+-	typeof(pcp) __ret;						\
++	TYPEOF_UNQUAL(pcp) __ret;					\
+ 	unsigned long __flags;						\
+ 	raw_local_irq_save(__flags);					\
+ 	__ret = raw_cpu_generic_xchg(pcp, nval);			\
+@@ -190,7 +190,7 @@ do {									\
+ 
+ #define this_cpu_generic_cmpxchg(pcp, oval, nval)			\
+ ({									\
+-	typeof(pcp) __ret;						\
++	TYPEOF_UNQUAL(pcp) __ret;					\
+ 	unsigned long __flags;						\
+ 	raw_local_irq_save(__flags);					\
+ 	__ret = raw_cpu_generic_cmpxchg(pcp, oval, nval);		\
+diff --git a/include/linux/part_stat.h b/include/linux/part_stat.h
+index ac8c44dd8237..c5e9cac0575e 100644
+--- a/include/linux/part_stat.h
++++ b/include/linux/part_stat.h
+@@ -33,7 +33,7 @@ struct disk_stats {
+ 
+ #define part_stat_read(part, field)					\
+ ({									\
+-	typeof((part)->bd_stats->field) res = 0;			\
++	TYPEOF_UNQUAL((part)->bd_stats->field) res = 0;			\
+ 	unsigned int _cpu;						\
+ 	for_each_possible_cpu(_cpu)					\
+ 		res += per_cpu_ptr((part)->bd_stats, _cpu)->field; \
+diff --git a/include/linux/percpu-defs.h b/include/linux/percpu-defs.h
+index 35842d1e3879..266297b21a5d 100644
+--- a/include/linux/percpu-defs.h
++++ b/include/linux/percpu-defs.h
+@@ -320,7 +320,7 @@ static __always_inline void __this_cpu_preempt_check(const char *op) { }
+ 
+ #define __pcpu_size_call_return(stem, variable)				\
+ ({									\
+-	typeof(variable) pscr_ret__;					\
++	TYPEOF_UNQUAL(variable) pscr_ret__;				\
+ 	__verify_pcpu_ptr(&(variable));					\
+ 	switch(sizeof(variable)) {					\
+ 	case 1: pscr_ret__ = stem##1(variable); break;			\
+@@ -335,7 +335,7 @@ static __always_inline void __this_cpu_preempt_check(const char *op) { }
+ 
+ #define __pcpu_size_call_return2(stem, variable, ...)			\
+ ({									\
+-	typeof(variable) pscr2_ret__;					\
++	TYPEOF_UNQUAL(variable) pscr2_ret__;				\
+ 	__verify_pcpu_ptr(&(variable));					\
+ 	switch(sizeof(variable)) {					\
+ 	case 1: pscr2_ret__ = stem##1(variable, __VA_ARGS__); break;	\
+diff --git a/include/net/snmp.h b/include/net/snmp.h
+index 468a67836e2f..4cb4326dfebe 100644
+--- a/include/net/snmp.h
++++ b/include/net/snmp.h
+@@ -159,7 +159,7 @@ struct linux_tls_mib {
+ 
+ #define __SNMP_ADD_STATS64(mib, field, addend) 				\
+ 	do {								\
+-		__typeof__(*mib) *ptr = raw_cpu_ptr(mib);		\
++		TYPEOF_UNQUAL(*mib) *ptr = raw_cpu_ptr(mib);		\
+ 		u64_stats_update_begin(&ptr->syncp);			\
+ 		ptr->mibs[field] += addend;				\
+ 		u64_stats_update_end(&ptr->syncp);			\
+@@ -176,8 +176,7 @@ struct linux_tls_mib {
+ #define SNMP_INC_STATS64(mib, field) SNMP_ADD_STATS64(mib, field, 1)
+ #define __SNMP_UPD_PO_STATS64(mib, basefield, addend)			\
+ 	do {								\
+-		__typeof__(*mib) *ptr;				\
+-		ptr = raw_cpu_ptr((mib));				\
++		TYPEOF_UNQUAL(*mib) *ptr = raw_cpu_ptr(mib);		\
+ 		u64_stats_update_begin(&ptr->syncp);			\
+ 		ptr->mibs[basefield##PKTS]++;				\
+ 		ptr->mibs[basefield##OCTETS] += addend;			\
+diff --git a/kernel/locking/percpu-rwsem.c b/kernel/locking/percpu-rwsem.c
+index 6083883c4fe0..d6964fc29f51 100644
+--- a/kernel/locking/percpu-rwsem.c
++++ b/kernel/locking/percpu-rwsem.c
+@@ -184,7 +184,7 @@ EXPORT_SYMBOL_GPL(__percpu_down_read);
+ 
+ #define per_cpu_sum(var)						\
+ ({									\
+-	typeof(var) __sum = 0;						\
++	TYPEOF_UNQUAL(var) __sum = 0;					\
+ 	int cpu;							\
+ 	compiletime_assert_atomic_type(__sum);				\
+ 	for_each_possible_cpu(cpu)					\
+diff --git a/net/mpls/internal.h b/net/mpls/internal.h
+index b9f492ddf93b..83c629529b57 100644
+--- a/net/mpls/internal.h
++++ b/net/mpls/internal.h
+@@ -33,7 +33,7 @@ struct mpls_dev {
+ 
+ #define MPLS_INC_STATS_LEN(mdev, len, pkts_field, bytes_field)		\
+ 	do {								\
+-		__typeof__(*(mdev)->stats) *ptr =			\
++		TYPEOF_UNQUAL(*(mdev)->stats) *ptr =			\
+ 			raw_cpu_ptr((mdev)->stats);			\
+ 		local_bh_disable();					\
+ 		u64_stats_update_begin(&ptr->syncp);			\
+@@ -45,7 +45,7 @@ struct mpls_dev {
+ 
+ #define MPLS_INC_STATS(mdev, field)					\
+ 	do {								\
+-		__typeof__(*(mdev)->stats) *ptr =			\
++		TYPEOF_UNQUAL(*(mdev)->stats) *ptr =			\
+ 			raw_cpu_ptr((mdev)->stats);			\
+ 		local_bh_disable();					\
+ 		u64_stats_update_begin(&ptr->syncp);			\
 -- 
 2.42.0
 
