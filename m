@@ -1,79 +1,107 @@
-Return-Path: <linux-arch+bounces-9260-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9261-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A69A59E5DE5
-	for <lists+linux-arch@lfdr.de>; Thu,  5 Dec 2024 19:04:36 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A7199E5E54
+	for <lists+linux-arch@lfdr.de>; Thu,  5 Dec 2024 19:34:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E68601885AA0
-	for <lists+linux-arch@lfdr.de>; Thu,  5 Dec 2024 18:04:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 465A0168A6E
+	for <lists+linux-arch@lfdr.de>; Thu,  5 Dec 2024 18:34:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31A3322578C;
-	Thu,  5 Dec 2024 18:04:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BMl3rzoO"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2570822B8CC;
+	Thu,  5 Dec 2024 18:34:24 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02B98225772;
-	Thu,  5 Dec 2024 18:04:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF81E225797;
+	Thu,  5 Dec 2024 18:34:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733421868; cv=none; b=tyxyokIQMm7PKvz7MMTptdkksO7IzTbBWvDSFLXOgTFhX8X4Givht2CWacb/MkYxyb0Pp9IRw8sTHT3E+mOuVw7PmuM4Lf3jRg/3yKi36REyshKCi7E4kZkTP5YWinonEJmVGPORIUfp3FdYUZz/xeH5aFjwfgiQJCVndn0Jtlg=
+	t=1733423664; cv=none; b=mAtaohFU6j1PA7UubjtaDJHcjrA5Y8gH9VlGJ5X9Vgz06/5f25vk6b0LtRIXvlarBPFm1xtX5CRRb1qHkuptLzSCClILQ7SWTzIEtufFmnPRQxZId8phFQIUbhS1j9rJ7GLNGIbgfJPy/m9maszFTMfhqjoWBh09r5lhpaWPTks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733421868; c=relaxed/simple;
-	bh=cqTQJsqIDntHz9ubpEhHjYIZ/DxpDB5vielwTC3wsVs=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=HGEHHadbWCmGcOQRduBOnQM8UBQoBnppAPEfuxTJp7ZAyfRmZfmOiddquTNm6X14XpuDipnNotsYvzCsxIzMRUq8ZhgLvqDngBQA5KYwDyxz/JouzhYdzsoC6ASVRuHK54tzmN27DrZ+NrRK5u6HxX0MraN8iZ1zjiPy/fZZm0I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BMl3rzoO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78870C4CED1;
-	Thu,  5 Dec 2024 18:04:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733421865;
-	bh=cqTQJsqIDntHz9ubpEhHjYIZ/DxpDB5vielwTC3wsVs=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=BMl3rzoO0xq+PCQvGptSbFfI5SZtwcaSI2C9H3t1lt6b1OjAAqMkiRBQaIOc8uODD
-	 OSmzrInNRJBHSPnVHncD2L+Qd576NrA9jTtO72PoKZqzJk9BdFTCnB6odRI52kf2d7
-	 y+yRwSrayL1jtkKuNQBfeyB1rB+jjVT2ozEjr/kt8CCBzMO/+UPPHcVhJ6g6Dz8Ash
-	 TR6rW3I7yofaRhwrFWrh9TwJb4j1sX31E7v4GeZQxT6SHV8J/Xz07WwkvptgHCdUvN
-	 mYsrPdv6lSJVL4LCzPoGQ0lyPfRQtnRf5lf3EpDEiFRLtec7nqgN1S4ko3Ycibhf5P
-	 lDG/1YYUlIa8Q==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70E11380A951;
-	Thu,  5 Dec 2024 18:04:41 +0000 (UTC)
-Subject: Re: [GIT PULL] LoongArch fixes for v6.13-rc2
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <20241204141818.2091423-1-chenhuacai@loongson.cn>
-References: <20241204141818.2091423-1-chenhuacai@loongson.cn>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20241204141818.2091423-1-chenhuacai@loongson.cn>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-fixes-6.13-1
-X-PR-Tracked-Commit-Id: 7f71507851fc7764b36a3221839607d3a45c2025
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 5076001689e4f8b6b178c40d268ed2ecd2eac29d
-Message-Id: <173342188008.2011200.16588416920794919491.pr-tracker-bot@kernel.org>
-Date: Thu, 05 Dec 2024 18:04:40 +0000
-To: Huacai Chen <chenhuacai@loongson.cn>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev, linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>, Jiaxun Yang <jiaxun.yang@flygoat.com>, Huacai Chen <chenhuacai@loongson.cn>
+	s=arc-20240116; t=1733423664; c=relaxed/simple;
+	bh=OUcxjilhRSUSD0E/yADisJZ2/8AfJns0Sv0memb8dWQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=BGJcHzzr5xQQl1dIDxNE6KF7YvS6ctsLOmB6Wkm9v4NB5y3A8qRYUbb1ivYnsSSIOeYIE1FgKN7sM4Ino5PzWcGtNrx1qET0ELEtTXZ6q0Mm1vNfZDMpR0n3rvpaeXFJJSASp9JryZtYLkzZLTWC/wFP5YIQhuHw7TN0Sgw//iM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73FB1C4CED1;
+	Thu,  5 Dec 2024 18:34:19 +0000 (UTC)
+Date: Thu, 5 Dec 2024 13:34:24 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Florent Revest
+ <revest@chromium.org>, linux-trace-kernel@vger.kernel.org, LKML
+ <linux-kernel@vger.kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,
+ bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, Jiri Olsa
+ <jolsa@kernel.org>, Alan Maguire <alan.maguire@oracle.com>, Mark Rutland
+ <mark.rutland@arm.com>, linux-arch@vger.kernel.org, Catalin Marinas
+ <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Huacai Chen
+ <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, Michael Ellerman
+ <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy
+ <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, Madhavan
+ Srinivasan <maddy@linux.ibm.com>, Paul Walmsley <paul.walmsley@sifive.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+ Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger
+ <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, Thomas
+ Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav
+ Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v19 12/19] fprobe: Rewrite fprobe on function-graph
+ tracer
+Message-ID: <20241205133424.37877ad5@gandalf.local.home>
+In-Reply-To: <173125386944.172790.10278368602020246931.stgit@devnote2>
+References: <173125372214.172790.6929368952404083802.stgit@devnote2>
+	<173125386944.172790.10278368602020246931.stgit@devnote2>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-The pull request you sent on Wed,  4 Dec 2024 22:18:18 +0800:
+On Mon, 11 Nov 2024 00:51:09 +0900
+"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-fixes-6.13-1
+> diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
+> index 2fc55a1a88aa..91a6382c04bd 100644
+> --- a/kernel/trace/Kconfig
+> +++ b/kernel/trace/Kconfig
+> @@ -307,12 +307,10 @@ config DYNAMIC_FTRACE_WITH_ARGS
+>  
+>  config FPROBE
+>  	bool "Kernel Function Probe (fprobe)"
+> -	depends on FUNCTION_TRACER
+> -	depends on DYNAMIC_FTRACE_WITH_REGS || DYNAMIC_FTRACE_WITH_ARGS
+> -	depends on HAVE_FTRACE_REGS_HAVING_PT_REGS || !HAVE_DYNAMIC_FTRACE_WITH_ARGS
+> -	depends on HAVE_RETHOOK
+> -	select RETHOOK
+> -	default n
+> +	depends on HAVE_FUNCTION_GRAPH_FREGS && HAVE_FTRACE_GRAPH_FUNC
+> +	depends on DYNAMIC_FTRACE_WITH_ARGS
+> +	select FUNCTION_GRAPH_TRACER
+> +	default y
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/5076001689e4f8b6b178c40d268ed2ecd2eac29d
+Please remove the "default y". This will select function graph tracer and
+will not let you to disable it without disabling this.
 
-Thank you!
+If you really want to tick off Linus, then make an option that selects other
+options "default y" ;-)
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Can you rebase the series off of v6.13-rc1? There's a minor conflict with
+the riscv Kconfig.
+
+-- Steve
+
+
+>  	help
+>  	  This option enables kernel function probe (fprobe) based on ftrace.
+>  	  The fprobe is similar to kprobes, but probes only for kernel function
 
