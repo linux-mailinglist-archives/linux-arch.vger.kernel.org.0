@@ -1,98 +1,79 @@
-Return-Path: <linux-arch+bounces-9259-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9260-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11B909E5C21
-	for <lists+linux-arch@lfdr.de>; Thu,  5 Dec 2024 17:51:39 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A69A59E5DE5
+	for <lists+linux-arch@lfdr.de>; Thu,  5 Dec 2024 19:04:36 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C520828902F
-	for <lists+linux-arch@lfdr.de>; Thu,  5 Dec 2024 16:51:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E68601885AA0
+	for <lists+linux-arch@lfdr.de>; Thu,  5 Dec 2024 18:04:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82EE1227B8F;
-	Thu,  5 Dec 2024 16:50:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31A3322578C;
+	Thu,  5 Dec 2024 18:04:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BMl3rzoO"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A33C4226EC1;
-	Thu,  5 Dec 2024 16:50:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02B98225772;
+	Thu,  5 Dec 2024 18:04:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733417452; cv=none; b=MYeAo52kFjFJlg6IzSvxkOZFcUPpa32Oz1YKkSg7YdhkxlGtu3O2isRlzUV78Z2GcfbCrYv+OgXQsR5ysgE87BFxs21ysQ2pZ5V4WyHYM2tQO+nToTl7D5NPV0q7SfwVKyOGA+Wm1ypBzjwuQLJKBz5/Dty6fkPd/MIrYUwFpYY=
+	t=1733421868; cv=none; b=tyxyokIQMm7PKvz7MMTptdkksO7IzTbBWvDSFLXOgTFhX8X4Givht2CWacb/MkYxyb0Pp9IRw8sTHT3E+mOuVw7PmuM4Lf3jRg/3yKi36REyshKCi7E4kZkTP5YWinonEJmVGPORIUfp3FdYUZz/xeH5aFjwfgiQJCVndn0Jtlg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733417452; c=relaxed/simple;
-	bh=MzsLOHp7yqamHtBjlY0//l7fYt9alEw4xvhKnqwpJSA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=CXQP50KOBkouVPAH6uP5Kfzhyr9iQVFvERhtQtBdU2c0zaRVyNGh48htEMR6Xg8a6ZK/597l1xqxPf/5iqr8FQ4Vc0TTip07mTfEpAhbj98phcZA7qrVds5tjv/iZd8MNz9EiwD1A/2if2KHxBQgLfc+hkfjzpH42E74ZHzEl28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=perches.com; spf=pass smtp.mailfrom=perches.com; arc=none smtp.client-ip=216.40.44.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=perches.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=perches.com
-Received: from omf01.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay07.hostedemail.com (Postfix) with ESMTP id A6D2B1615AF;
-	Thu,  5 Dec 2024 16:33:39 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf01.hostedemail.com (Postfix) with ESMTPA id AE1426000F;
-	Thu,  5 Dec 2024 16:33:20 +0000 (UTC)
-Message-ID: <b0e9c31f81a368375541d16dbc88783f614ede6d.camel@perches.com>
-Subject: Re: [PATCH 1/3] checkpatch: Update reference to include/asm-<arch>
-From: Joe Perches <joe@perches.com>
-To: Geert Uytterhoeven <geert+renesas@glider.be>, Oleg Nesterov	
- <oleg@redhat.com>, Arnd Bergmann <arnd@arndb.de>, Yury Norov	
- <yury.norov@gmail.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, Andy
- Whitcroft <apw@canonical.com>, Dwaipayan Ray <dwaipayanray1@gmail.com>,
- Lukas Bulwahn	 <lukas.bulwahn@gmail.com>, Masahiro Yamada
- <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas
- Schier <nicolas@fjasle.eu>
-Cc: linux-arch@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>
-Date: Thu, 05 Dec 2024 08:33:34 -0800
-In-Reply-To: <2c4a75726a976d117055055b68a31c40dcab044e.1733404444.git.geert+renesas@glider.be>
-References: <cover.1733404444.git.geert+renesas@glider.be>
-	 <2c4a75726a976d117055055b68a31c40dcab044e.1733404444.git.geert+renesas@glider.be>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.1 (3.54.1-1.fc41) 
+	s=arc-20240116; t=1733421868; c=relaxed/simple;
+	bh=cqTQJsqIDntHz9ubpEhHjYIZ/DxpDB5vielwTC3wsVs=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=HGEHHadbWCmGcOQRduBOnQM8UBQoBnppAPEfuxTJp7ZAyfRmZfmOiddquTNm6X14XpuDipnNotsYvzCsxIzMRUq8ZhgLvqDngBQA5KYwDyxz/JouzhYdzsoC6ASVRuHK54tzmN27DrZ+NrRK5u6HxX0MraN8iZ1zjiPy/fZZm0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BMl3rzoO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78870C4CED1;
+	Thu,  5 Dec 2024 18:04:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733421865;
+	bh=cqTQJsqIDntHz9ubpEhHjYIZ/DxpDB5vielwTC3wsVs=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=BMl3rzoO0xq+PCQvGptSbFfI5SZtwcaSI2C9H3t1lt6b1OjAAqMkiRBQaIOc8uODD
+	 OSmzrInNRJBHSPnVHncD2L+Qd576NrA9jTtO72PoKZqzJk9BdFTCnB6odRI52kf2d7
+	 y+yRwSrayL1jtkKuNQBfeyB1rB+jjVT2ozEjr/kt8CCBzMO/+UPPHcVhJ6g6Dz8Ash
+	 TR6rW3I7yofaRhwrFWrh9TwJb4j1sX31E7v4GeZQxT6SHV8J/Xz07WwkvptgHCdUvN
+	 mYsrPdv6lSJVL4LCzPoGQ0lyPfRQtnRf5lf3EpDEiFRLtec7nqgN1S4ko3Ycibhf5P
+	 lDG/1YYUlIa8Q==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70E11380A951;
+	Thu,  5 Dec 2024 18:04:41 +0000 (UTC)
+Subject: Re: [GIT PULL] LoongArch fixes for v6.13-rc2
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <20241204141818.2091423-1-chenhuacai@loongson.cn>
+References: <20241204141818.2091423-1-chenhuacai@loongson.cn>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20241204141818.2091423-1-chenhuacai@loongson.cn>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-fixes-6.13-1
+X-PR-Tracked-Commit-Id: 7f71507851fc7764b36a3221839607d3a45c2025
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 5076001689e4f8b6b178c40d268ed2ecd2eac29d
+Message-Id: <173342188008.2011200.16588416920794919491.pr-tracker-bot@kernel.org>
+Date: Thu, 05 Dec 2024 18:04:40 +0000
+To: Huacai Chen <chenhuacai@loongson.cn>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev, linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>, Jiaxun Yang <jiaxun.yang@flygoat.com>, Huacai Chen <chenhuacai@loongson.cn>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-Rspamd-Queue-Id: AE1426000F
-X-Rspamd-Server: rspamout05
-X-Stat-Signature: weqz4yxs4rsngq31x84j563afb4cz9gr
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1+iMORYG7c95cEvLW/2KGmp8+SUheDXAY0=
-X-HE-Tag: 1733416400-712928
-X-HE-Meta: U2FsdGVkX1/GrCFAVV1JCrdbvojW2peO21Wb4xE8Ls27bAQ65RvSuEMjGsVPAXyW7MQlWXnwLov7Ti/84i/FpUH64Gw6IDjLmriSHPYQcsNg+sDFqF7Qg1xNxflh8fS6Xn3s3D2A4Ek2XT6VQ9slbDhWhXblyARqXcs7Er2ZPNHB90HG6MKPTjjdNfq3xc3wM3o69kJZDluoEKVbHx5lGwS8hD78DEekrWh27Vq3dlcpjhycZCsDyuTc/MTcwfhRML89zzXWDs8xpH35ewGSv+R3Iw4/RjzpRpAksavpg2dIIvSVv/VVTiocHTr772iE
 
-On Thu, 2024-12-05 at 14:20 +0100, Geert Uytterhoeven wrote:
-> "include/asm-<arch>" was replaced by "arch/<arch>/include/asm" a long
-> time ago.
+The pull request you sent on Wed,  4 Dec 2024 22:18:18 +0800:
 
-Thanks.
+> git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-fixes-6.13-1
 
->=20
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
->  scripts/checkpatch.pl | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-> index 9eed3683ad76caff..dbb9c3c6fe30f906 100755
-> --- a/scripts/checkpatch.pl
-> +++ b/scripts/checkpatch.pl
-> @@ -2875,7 +2875,7 @@ sub process {
-> =20
->  			if ($realfile =3D~ m@^include/asm/@) {
->  				ERROR("MODIFIED_INCLUDE_ASM",
-> -				      "do not modify files in include/asm, change architecture speci=
-fic files in include/asm-<architecture>\n" . "$here$rawline\n");
-> +				      "do not modify files in include/asm, change architecture speci=
-fic files in arch/<architecture>/include/asm\n" . "$here$rawline\n");
->  			}
->  			$found_file =3D 1;
->  		}
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/5076001689e4f8b6b178c40d268ed2ecd2eac29d
 
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
