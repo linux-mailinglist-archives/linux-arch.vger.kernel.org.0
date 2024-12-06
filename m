@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-9284-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9285-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E94CE9E66A6
-	for <lists+linux-arch@lfdr.de>; Fri,  6 Dec 2024 06:13:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B9E19E66AD
+	for <lists+linux-arch@lfdr.de>; Fri,  6 Dec 2024 06:14:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AA25E282CC1
-	for <lists+linux-arch@lfdr.de>; Fri,  6 Dec 2024 05:13:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE3A52829A7
+	for <lists+linux-arch@lfdr.de>; Fri,  6 Dec 2024 05:14:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B62C9195FD5;
-	Fri,  6 Dec 2024 05:13:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35189194C62;
+	Fri,  6 Dec 2024 05:14:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="p0sZCFI0"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="Hvh0dBNK"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 227161925AE;
-	Fri,  6 Dec 2024 05:13:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C41EA190470;
+	Fri,  6 Dec 2024 05:14:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733462017; cv=none; b=tq4BQiQ25RGPxuG1YtVCRouEPvoB/09sQuwgGj5rd2+K49D2RL+di0fbGUKm38nXi8gHRtdupPvNKfpsQj+/HbWAom//p+3gCUycfdLHYKwVtUrWtBHsXUGhORf6q8TDEsSbtHTReVw5r7w+lF3a0Wob1/FphdFtvZ3LKb0+XYg=
+	t=1733462085; cv=none; b=bq7qOBF83aoKwgMz3HalqyRnwNFSQkg3Nn2d0HY0tqON0jYDSFb/v5kbvmxeK0XFlFIpSjbm8Zn+W4H9W0FbAShFMxipjtv8k+W2cTzLm0OM1eITUIMooHDlxq+YPGSgrSjgiyR5tLghE+1TuCiC+Yq1FKr7Znqun4rtzOoynCU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733462017; c=relaxed/simple;
-	bh=moyw06gCadeLLR6ekyVEokSeigNLHLuxHOJoCq+LZG8=;
+	s=arc-20240116; t=1733462085; c=relaxed/simple;
+	bh=BqZvvQBe2NAiV555bybaFgTHIY65v4XFOh8d4y5vS50=;
 	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=hhv1DsdmGczoj6Jf+lp2IZ8ibd/3/9F/pRVAPMMmqNE/4hJwmp3xyZXh8yvza/+yQGkgnB4xZCpW4PrC6Iso+2u7n4lRpD1FBlM8Sdcvhh+cqSKKg+z08If+TlklXG5o1p/7vpsBVDmlAVgrU54TM+x5ZPfKXnSJC0u3135C/T4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=p0sZCFI0; arc=none smtp.client-ip=13.77.154.182
+	 In-Reply-To:Content-Type; b=VvqM3+PqXVaKtklI1QgTNK46468dNgQktJNty7JLZ8yB4mVe6idlnwJpLS4UhlC7RT4leXOlKDYiDI99VjBPSGA5pUoyxKnzMXQxMSIh/BOVtbXu/bQQT7dCCpU3bBS2dQPgcARNtsNgSUw/3/3vH+kkxOE8krgR35GOc2itpTs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=Hvh0dBNK; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [100.65.0.192] (unknown [20.236.11.102])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 3E44620ACD8D;
-	Thu,  5 Dec 2024 21:13:34 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3E44620ACD8D
+Received: from [100.65.0.192] (unknown [20.236.11.29])
+	by linux.microsoft.com (Postfix) with ESMTPSA id DCC3E20ACD8D;
+	Thu,  5 Dec 2024 21:14:41 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com DCC3E20ACD8D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1733462015;
-	bh=SzjW0WRwHutz7m5U6kusET8ShP4S41Chtpc64SA8Q60=;
+	s=default; t=1733462083;
+	bh=fmWPQyjFRGq2DUlJdZzT4Pg3mAFKTaqENTg3HM7bGXs=;
 	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=p0sZCFI0tsDiifhEbWHqn2DoqZJRV/ZUxtoMpWcFIrU0eeD6kg1+0CTUscOkeovcU
-	 +0J/3inAHktEmKoVWvAarzPCWSw5DgW9URIIDAJl143QZ5PCfTvu94e7Tp7SETBYEQ
-	 ELCm01CjscFtlHT+1/uB9cUpALaaAQ3fJ47XdOIY=
-Message-ID: <34cd1209-f9d3-4cdf-b7c1-7028a9abe46c@linux.microsoft.com>
-Date: Thu, 5 Dec 2024 21:13:32 -0800
+	b=Hvh0dBNKckDBScVZZN9FBPxjIwxRPRWAjIktBLN2y3fC5OvW2S67m+oj9qsZDT5hY
+	 5k/by83lopTusK+LIkgRxkvpxQHZO4xGi0XNZqz+P31Fxv45dLNto6oVXCgd8Spwwi
+	 Q6b3836tPEjA0ievdJvUdmCOWAGIQMGjSvBrFuZA=
+Message-ID: <92399e62-e07b-48eb-9a96-9747ad5b6eb7@linux.microsoft.com>
+Date: Thu, 5 Dec 2024 21:14:40 -0800
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -67,56 +67,34 @@ Cc: linux-hyperv@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  skinsburskii@linux.microsoft.com, mukeshrathor@microsoft.com,
  vkuznets@redhat.com, ssengar@linux.microsoft.com, apais@linux.microsoft.com,
  horms@kernel.org
-Subject: Re: [PATCH v3 4/5] hyperv: Switch from hyperv-tlfs.h to
- hyperv/hvhdk.h
+Subject: Re: [PATCH v3 5/5] hyperv: Remove the now unused hyperv-tlfs.h files
 To: Nuno Das Neves <nunodasneves@linux.microsoft.com>
 References: <1732577084-2122-1-git-send-email-nunodasneves@linux.microsoft.com>
- <1732577084-2122-5-git-send-email-nunodasneves@linux.microsoft.com>
+ <1732577084-2122-6-git-send-email-nunodasneves@linux.microsoft.com>
 From: Easwar Hariharan <eahariha@linux.microsoft.com>
 Content-Language: en-US
-In-Reply-To: <1732577084-2122-5-git-send-email-nunodasneves@linux.microsoft.com>
+In-Reply-To: <1732577084-2122-6-git-send-email-nunodasneves@linux.microsoft.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 11/25/2024 3:24 PM, Nuno Das Neves wrote:
-> Switch to using hvhdk.h everywhere in the kernel. This header
-> includes all the new Hyper-V headers in include/hyperv, which form a
-> superset of the definitions found in hyperv-tlfs.h.
+> Remove all hyperv-tlfs.h files. These are no longer included
+> anywhere. hyperv/hvhdk.h serves the same role, but with an easier
+> path for adding new definitions.
 > 
-> This makes it easier to add new Hyper-V interfaces without being
-> restricted to those in the TLFS doc (reflected in hyperv-tlfs.h).
-> 
-> To be more consistent with the original Hyper-V code, the names of
-> some definitions are changed slightly. Update those where needed.
-> 
-> Update comments in mshyperv.h files to point to include/hyperv for
-> adding new definitions.
+> Remove the relevant lines in MAINTAINERS.
 > 
 > Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
 > ---
->  arch/arm64/hyperv/hv_core.c        |  2 +-
->  arch/arm64/hyperv/mshyperv.c       |  4 ++--
->  arch/arm64/include/asm/mshyperv.h  |  7 +++----
->  arch/x86/hyperv/hv_init.c          | 20 ++++++++++----------
->  arch/x86/hyperv/hv_proc.c          |  2 +-
->  arch/x86/hyperv/nested.c           |  2 +-
->  arch/x86/include/asm/kvm_host.h    |  2 +-
->  arch/x86/include/asm/mshyperv.h    |  2 +-
->  arch/x86/include/asm/svm.h         |  2 +-
->  arch/x86/kernel/cpu/mshyperv.c     |  2 +-
->  arch/x86/kvm/vmx/hyperv_evmcs.h    |  2 +-
->  arch/x86/kvm/vmx/vmx_onhyperv.h    |  2 +-
->  drivers/clocksource/hyperv_timer.c |  2 +-
->  drivers/hv/hv_balloon.c            |  4 ++--
->  drivers/hv/hv_common.c             |  2 +-
->  drivers/hv/hv_kvp.c                |  2 +-
->  drivers/hv/hv_snapshot.c           |  2 +-
->  drivers/hv/hyperv_vmbus.h          |  2 +-
->  include/asm-generic/mshyperv.h     |  7 +++----
->  include/clocksource/hyperv_timer.h |  2 +-
->  include/linux/hyperv.h             |  2 +-
->  net/vmw_vsock/hyperv_transport.c   |  6 +++---
->  22 files changed, 39 insertions(+), 41 deletions(-)
+>  MAINTAINERS                          |   3 -
+>  arch/arm64/include/asm/hyperv-tlfs.h |  71 ---
+>  arch/x86/include/asm/hyperv-tlfs.h   | 811 ------------------------
+>  include/asm-generic/hyperv-tlfs.h    | 883 ---------------------------
+>  4 files changed, 1768 deletions(-)
+>  delete mode 100644 arch/arm64/include/asm/hyperv-tlfs.h
+>  delete mode 100644 arch/x86/include/asm/hyperv-tlfs.h
+>  delete mode 100644 include/asm-generic/hyperv-tlfs.h
+> 
 
 Reviewed-by: Easwar Hariharan <eahariha@linux.microsoft.com>
 
