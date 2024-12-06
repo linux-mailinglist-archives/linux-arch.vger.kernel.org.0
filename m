@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-9277-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9278-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6574A9E61F2
-	for <lists+linux-arch@lfdr.de>; Fri,  6 Dec 2024 01:12:50 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FBD09E61F5
+	for <lists+linux-arch@lfdr.de>; Fri,  6 Dec 2024 01:13:05 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 268FF28119F
-	for <lists+linux-arch@lfdr.de>; Fri,  6 Dec 2024 00:12:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E5197188495E
+	for <lists+linux-arch@lfdr.de>; Fri,  6 Dec 2024 00:13:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F306623A9;
-	Fri,  6 Dec 2024 00:12:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA49313AD0;
+	Fri,  6 Dec 2024 00:12:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XegYTtG0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CLKBztUR"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0AE42BAF5;
-	Fri,  6 Dec 2024 00:12:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C21D1AAD7;
+	Fri,  6 Dec 2024 00:12:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733443923; cv=none; b=gpNh40zNrWEQhsERfweM2hyoKVNE2dB9mfDn5bQY7q3PP1JqlT/6lpCiMrmk1s969kxhI9z4pulD/BrGD9l+ArMuDv7AsEUP3mVS8puQqouMDpYcQXO0RrVB/JlgyqkK6JozXu5xORbC6r2MzA3iSmqg/+x0h098WM2hXET1btY=
+	t=1733443934; cv=none; b=J6D8vEOqEnbbu+gJA8sFzKXO8iNRWi44Dcu3gLhrhvlQV5e3Qtjevb3viyM+7uUMlEMF3LjGTBkpz/Hjhd5vnCOsoHTDWOI2qU3RUMBog6R8+htFrjbtxwDRtZtrrlm1hosnAHfQ54UMHQOdpYEg9LxKgScG3B3b76XcUW/9fUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733443923; c=relaxed/simple;
-	bh=BAqiSg0aNWhu4YkYuzdGa30FbNZg8tzKwHYLAcVMJ3c=;
+	s=arc-20240116; t=1733443934; c=relaxed/simple;
+	bh=wZEjksI48uEO6V4KtS7yN1QVU17ztXbJ6mD6JSkXebk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qW4T3cPi7KH2RLHh4QmHRAycIQk8ez8uxY1pU02G3i6gnwr+X5Q9JIgn4dgrJPEarSLPVvO7xC/rdTJ59HBOVCGwHBRhEbust0wwRX3PkRLMp6/8eEwBMBfJE0SZocuq8PEpcSYTpoy+9XGEjSkKwJpiyverK7VEkEkPvRp0i7w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XegYTtG0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 061D8C4CEDC;
-	Fri,  6 Dec 2024 00:12:00 +0000 (UTC)
+	 MIME-Version:Content-Type; b=dCsmbkNQWBioGRS7L957P35CTI/UoGFjfthnV/cYK7CshJxVE4PeN5pT8W3UC4V4mF7X+smk6QhCUOL2YPOc+9qtxSQJ4dzlU61QY4g5ygFs8/l202nXZm5sK8FnFC86gJuto5L7PHrSLKul5tZfuO04UNZmQZdm9t99zU7UJto=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CLKBztUR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A254C4CED1;
+	Fri,  6 Dec 2024 00:12:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733443923;
-	bh=BAqiSg0aNWhu4YkYuzdGa30FbNZg8tzKwHYLAcVMJ3c=;
+	s=k20201202; t=1733443934;
+	bh=wZEjksI48uEO6V4KtS7yN1QVU17ztXbJ6mD6JSkXebk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=XegYTtG0CwXnzI/0jhOp/9W11Kuvb3AehwzBx/XXmL1SoN/9nxaJkmH79wZdmw8W4
-	 bdLJNW7E2XnsT+7AvhweemC0zp2ogmb6w0u1BbP55eyGEBuqDnNQ1Okx0muUI1Wui3
-	 ohnhppj9TVv3CSA1U6/KlgqsrcMPKxd6cOhZJfPFCFWPj3Xki7TktrJb0Wpp60SHMl
-	 hLSPZNql+a7d+EP0nxU+bTVwi89JQkf8gS88d++gs9IXOtgk79LuNij1DDLW9gsa10
-	 hYYf6UMcj7X2jdlMKkPO+YgN8nIh0Zj4RdBlGOvJtbLB4HinDVBef4K/yrzDszUyA3
-	 oAG5BQzM7BKig==
+	b=CLKBztURGtFYdapGvnDL9RItJN7RS+mDgROM0nGR+p7owECtH9jtGaETtiAbAky7A
+	 L334JPHJGBCkmheDKcLurWETEOcWGfK250h4EEEfEn49MfDEl6U2IyAhcUXSN+yoNe
+	 FaWYrElkFH9aGZhgosX/xGxkQzIkQfYNnKil0Tc84i9LiFUKwhIxzTvOKZcAlRiSs+
+	 yav92o1xJINMs8IBSdAp5BFumU5+mh4q0NChmdlDaYjBCJKJlZx/79uJEP3Hk+nebA
+	 Jnp0LxAk5ivWWDZJOjGBQ0/xjP04r+fY9jFSmD7IDMgdcgYJFw73v7UvididqUS/0O
+	 ckN0T+AvQlh/Q==
 From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
 To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
 	Steven Rostedt <rostedt@goodmis.org>,
@@ -54,9 +54,9 @@ Cc: linux-trace-kernel@vger.kernel.org,
 	Alan Maguire <alan.maguire@oracle.com>,
 	Mark Rutland <mark.rutland@arm.com>,
 	linux-arch@vger.kernel.org
-Subject: [PATCH v20 14/19] tracing/fprobe: Remove nr_maxactive from fprobe
-Date: Fri,  6 Dec 2024 09:11:58 +0900
-Message-ID: <173344391869.50709.13076453585574096968.stgit@devnote2>
+Subject: [PATCH v20 15/19] selftests: ftrace: Remove obsolate maxactive syntax check
+Date: Fri,  6 Dec 2024 09:12:09 +0900
+Message-ID: <173344392903.50709.11550896255946412357.stgit@devnote2>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <173344373580.50709.5332611753907139634.stgit@devnote2>
 References: <173344373580.50709.5332611753907139634.stgit@devnote2>
@@ -72,140 +72,28 @@ Content-Transfer-Encoding: 8bit
 
 From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Remove depercated fprobe::nr_maxactive. This involves fprobe events to
-rejects the maxactive number.
+Since the fprobe event does not support maxactive anymore, stop
+testing the maxactive syntax error checking.
 
 Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 ---
- Changes in v2:
-  - Newly added.
----
- include/linux/fprobe.h      |    2 --
- kernel/trace/trace_fprobe.c |   43 ++++++-------------------------------------
- 2 files changed, 6 insertions(+), 39 deletions(-)
+ .../ftrace/test.d/dynevent/fprobe_syntax_errors.tc |    4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/include/linux/fprobe.h b/include/linux/fprobe.h
-index 91337bcb452f..702099f08929 100644
---- a/include/linux/fprobe.h
-+++ b/include/linux/fprobe.h
-@@ -54,7 +54,6 @@ struct fprobe_hlist {
-  * @nmissed: The counter for missing events.
-  * @flags: The status flag.
-  * @entry_data_size: The private data storage size.
-- * @nr_maxactive: The max number of active functions. (*deprecated)
-  * @entry_handler: The callback function for function entry.
-  * @exit_handler: The callback function for function exit.
-  * @hlist_array: The fprobe_hlist for fprobe search from IP hash table.
-@@ -63,7 +62,6 @@ struct fprobe {
- 	unsigned long		nmissed;
- 	unsigned int		flags;
- 	size_t			entry_data_size;
--	int			nr_maxactive;
+diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
+index 61877d166451..c9425a34fae3 100644
+--- a/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
++++ b/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
+@@ -16,9 +16,7 @@ aarch64)
+   REG=%r0 ;;
+ esac
  
- 	fprobe_entry_cb entry_handler;
- 	fprobe_exit_cb  exit_handler;
-diff --git a/kernel/trace/trace_fprobe.c b/kernel/trace/trace_fprobe.c
-index 5030aaae8183..f487fadc2c08 100644
---- a/kernel/trace/trace_fprobe.c
-+++ b/kernel/trace/trace_fprobe.c
-@@ -424,7 +424,6 @@ static struct trace_fprobe *alloc_trace_fprobe(const char *group,
- 					       const char *symbol,
- 					       struct tracepoint *tpoint,
- 					       struct module *mod,
--					       int maxactive,
- 					       int nargs, bool is_return)
- {
- 	struct trace_fprobe *tf;
-@@ -445,7 +444,6 @@ static struct trace_fprobe *alloc_trace_fprobe(const char *group,
+-check_error 'f^100 vfs_read'		# MAXACT_NO_KPROBE
+-check_error 'f^1a111 vfs_read'		# BAD_MAXACT
+-check_error 'f^100000 vfs_read'		# MAXACT_TOO_BIG
++check_error 'f^100 vfs_read'		# BAD_MAXACT
  
- 	tf->tpoint = tpoint;
- 	tf->mod = mod;
--	tf->fp.nr_maxactive = maxactive;
- 
- 	ret = trace_probe_init(&tf->tp, event, group, false, nargs);
- 	if (ret < 0)
-@@ -1098,12 +1096,11 @@ static int __trace_fprobe_create(int argc, const char *argv[])
- 	 *  FETCHARG:TYPE : use TYPE instead of unsigned long.
- 	 */
- 	struct trace_fprobe *tf = NULL;
--	int i, len, new_argc = 0, ret = 0;
-+	int i, new_argc = 0, ret = 0;
- 	bool is_return = false;
- 	char *symbol = NULL;
- 	const char *event = NULL, *group = FPROBE_EVENT_SYSTEM;
- 	const char **new_argv = NULL;
--	int maxactive = 0;
- 	char buf[MAX_EVENT_NAME_LEN];
- 	char gbuf[MAX_EVENT_NAME_LEN];
- 	char sbuf[KSYM_NAME_LEN];
-@@ -1126,33 +1123,13 @@ static int __trace_fprobe_create(int argc, const char *argv[])
- 
- 	trace_probe_log_init("trace_fprobe", argc, argv);
- 
--	event = strchr(&argv[0][1], ':');
--	if (event)
--		event++;
--
--	if (isdigit(argv[0][1])) {
--		if (event)
--			len = event - &argv[0][1] - 1;
--		else
--			len = strlen(&argv[0][1]);
--		if (len > MAX_EVENT_NAME_LEN - 1) {
--			trace_probe_log_err(1, BAD_MAXACT);
--			goto parse_error;
--		}
--		memcpy(buf, &argv[0][1], len);
--		buf[len] = '\0';
--		ret = kstrtouint(buf, 0, &maxactive);
--		if (ret || !maxactive) {
-+	if (argv[0][1] != '\0') {
-+		if (argv[0][1] != ':') {
-+			trace_probe_log_set_index(0);
- 			trace_probe_log_err(1, BAD_MAXACT);
- 			goto parse_error;
- 		}
--		/* fprobe rethook instances are iterated over via a list. The
--		 * maximum should stay reasonable.
--		 */
--		if (maxactive > RETHOOK_MAXACTIVE_MAX) {
--			trace_probe_log_err(1, MAXACT_TOO_BIG);
--			goto parse_error;
--		}
-+		event = &argv[0][2];
- 	}
- 
- 	trace_probe_log_set_index(1);
-@@ -1162,12 +1139,6 @@ static int __trace_fprobe_create(int argc, const char *argv[])
- 	if (ret < 0)
- 		goto parse_error;
- 
--	if (!is_return && maxactive) {
--		trace_probe_log_set_index(0);
--		trace_probe_log_err(1, BAD_MAXACT_TYPE);
--		goto parse_error;
--	}
--
- 	trace_probe_log_set_index(0);
- 	if (event) {
- 		ret = traceprobe_parse_event_name(&event, &group, gbuf,
-@@ -1235,7 +1206,7 @@ static int __trace_fprobe_create(int argc, const char *argv[])
- 
- 	/* setup a probe */
- 	tf = alloc_trace_fprobe(group, event, symbol, tpoint, tp_mod,
--				maxactive, argc, is_return);
-+				argc, is_return);
- 	if (IS_ERR(tf)) {
- 		ret = PTR_ERR(tf);
- 		/* This must return -ENOMEM, else there is a bug */
-@@ -1315,8 +1286,6 @@ static int trace_fprobe_show(struct seq_file *m, struct dyn_event *ev)
- 		seq_putc(m, 't');
- 	else
- 		seq_putc(m, 'f');
--	if (trace_fprobe_is_return(tf) && tf->fp.nr_maxactive)
--		seq_printf(m, "%d", tf->fp.nr_maxactive);
- 	seq_printf(m, ":%s/%s", trace_probe_group_name(&tf->tp),
- 				trace_probe_name(&tf->tp));
- 
+ check_error 'f ^non_exist_func'		# BAD_PROBE_ADDR (enoent)
+ check_error 'f ^vfs_read+10'		# BAD_PROBE_ADDR
 
 
