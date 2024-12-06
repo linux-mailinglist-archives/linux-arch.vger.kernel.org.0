@@ -1,166 +1,292 @@
-Return-Path: <linux-arch+bounces-9286-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9287-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E59DC9E6801
-	for <lists+linux-arch@lfdr.de>; Fri,  6 Dec 2024 08:36:12 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A8B19E68AA
+	for <lists+linux-arch@lfdr.de>; Fri,  6 Dec 2024 09:20:15 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9CE101883F99
+	for <lists+linux-arch@lfdr.de>; Fri,  6 Dec 2024 08:20:14 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF6721DB361;
+	Fri,  6 Dec 2024 08:20:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sVcWMR2Y"
+X-Original-To: linux-arch@vger.kernel.org
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A584C2835DA
-	for <lists+linux-arch@lfdr.de>; Fri,  6 Dec 2024 07:36:11 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A76D1D7992;
-	Fri,  6 Dec 2024 07:35:59 +0000 (UTC)
-X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D86631B4F1F;
-	Fri,  6 Dec 2024 07:35:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8833D3D6B;
+	Fri,  6 Dec 2024 08:20:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733470559; cv=none; b=jFv4RfDjV/FaePTI28LM2MNT6zpM4BRJMoiu+yiXZK1QD1GdIMYZaE3Sq+oQWSwXukNpZtWu4lQMotlyZxSJkEJB2g2jOYa2fTBZBUgJbvPAsAuw58JkdxKJgDbL30byAOAJNKym5JKlWhIxrye/SJSYyC2iKW/m87wEWQ092DY=
+	t=1733473209; cv=none; b=f20hmDQacpqqknFa7PNo6BI9XxODg+wIxBB8CNocIidQIbAOH0SA5UaA4Cf14GqLW6WGtvC1jMzk3C6p1KIuv/JqVVKVxKz018TvQwya0WzN4ZoztHms3XkV2pbUFZ9gTeod8yTA40oi75yC1gZ9EediwJ8m9Dh0mz1D1AxOby0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733470559; c=relaxed/simple;
-	bh=GWVUSjQxAvUUmMLC8RroneMaixS408dLu1A7yPcAjoc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p9rrGkZJ8BZwEnsxVHrkdCrD/s8MqD4XLBb41gch/veQpDaLLVFyEwstxFiBD3qgyx3Zn9+gTWp4RDINJoVpL+6Dr9Ha5k+0hyYoJIvXrX844o+N2Rj3gO9pew24Zkmm1etoZcvOurLaQ+K6uuuNO+51WDm290sI/o11ej7kSrA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.160.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-29e998c70f9so1211817fac.2;
-        Thu, 05 Dec 2024 23:35:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733470557; x=1734075357;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e04UQN4Bgq81Dxa3sAw+VWMHnoxLZmrzryZOBk+bxd8=;
-        b=Ag/TrsDsvhZ6lqLQlJxZ4AMdRyMNKpx7D4S1dzdzA9rxtBKP9gh+Be/uKdRfb7btRe
-         KEVwmghKJ6KR7oucOY0UMUiYrtW6eG47ZWSqkGPqJnNLTehH5dqxLxDfzsbeJd8SaEIv
-         uMBJa8T1/E9aXbnQGxN0xUBe0zsqLroV6KGMBFQ/uU/FYwd9nIGn7kA/GPcxyb5wjKd4
-         /D5gBW6qh4I1O3YaOaTtGLIA7TcEguWRQVfZ4Ko9YDlCLoHBsepYWnqo2ae5J4nM7JDM
-         iGCFEIB/GwTwDF5uQHf6bYjXIXGqdNwM1CrH4DK8mpcsmF2FitsBfR2OfHiIjlTUSOm9
-         nv7g==
-X-Forwarded-Encrypted: i=1; AJvYcCUAM7HsEoyD2jQ1BviLcCy1J5eckh5hK81YCBLYBfzRjSzv1kz1HACqZeUbFEHbAMvEtE46jjMc1gs+8CoD@vger.kernel.org, AJvYcCUJHa9+fyW7M2eY30O6gW1F1j0qDkYtvqTM57DI0Emf+FPW4WQ1mJoBu6W3WbEw2kW6dZ11LOsG@vger.kernel.org, AJvYcCWjQkulUhH0pMj/26QyPxA/7oi+GzMrD+Qu0KGosPlArvlECCH1CDw/l8lKdmC7jMTJmldcgah2B7cyoo+8Azo=@vger.kernel.org, AJvYcCXSBC/PCEDcgux1oxtJLgDU/qK8CkP7A01zy+MDFlyOjZkIMMnycFYn9lCCo0gbX3XaeJRW55LUHfxm@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/If1Z5j7GFwV205kE6WRtSM2KNnpG3yjWiQbwkrikjPayBbWi
-	EblRM6/y6/AOQt1HLBXehfEk1If+Lg25chLS8NUEL00ycGnJDnE0
-X-Gm-Gg: ASbGncvwx+5im8U8Q4Bvno+dYiRoE/qnuiceQJbA+yALu7YNI9Bgk/uiPiVAP+94y3t
-	w5C2tMqgeRhdTP+/XghoSZYWpWNb/L8iZuY8VCt9cMfXg/PI2WtzITNKvW5vszF4fQhOR6nyUtS
-	DVSbzrMFBq8J/Jtx0kRuxJG64WJ4Jd3S2BdHQA+W4YJDmhdx220F8waAUL9afBJFBczWpz4pQZR
-	rUcAaFzj3rRsRc75Mia+d2ekfPEoLbmAcJPNPrXLS7SLLTZmzZkWqhZA2C7
-X-Google-Smtp-Source: AGHT+IEuZaAtLFt7J5lrqNm1axRoJWe4AUHjojGK9/xI3HOEczyiq8ngMxRqB/ki0aT6JOUV5jSY9A==
-X-Received: by 2002:a05:6870:3b8e:b0:29e:247b:4f77 with SMTP id 586e51a60fabf-29f733405d8mr2472478fac.20.1733470556826;
-        Thu, 05 Dec 2024 23:35:56 -0800 (PST)
-Received: from V92F7Y9K0C.lan ([136.25.84.117])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7fd156e1e20sm2442332a12.32.2024.12.05.23.35.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Dec 2024 23:35:56 -0800 (PST)
-Date: Thu, 5 Dec 2024 23:35:53 -0800
-From: Dennis Zhou <dennis@kernel.org>
-To: Uros Bizjak <ubizjak@gmail.com>
-Cc: x86@kernel.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-	linux-bcachefs@vger.kernel.org, linux-arch@vger.kernel.org,
-	netdev@vger.kernel.org, Nadav Amit <nadav.amit@gmail.com>,
-	Arnd Bergmann <arnd@arndb.de>, Thomas Gleixner <tglx@linutronix.de>,
-	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-	Christoph Lameter <cl@linux.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Andy Lutomirski <luto@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-	Brian Gerst <brgerst@gmail.com>, "H. Peter Anvin" <hpa@zytor.com>,
-	Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v2 5/6] percpu: Repurpose __percpu tag as a named address
- space qualifier
-Message-ID: <Z1KpWenJGqhjtNL9@V92F7Y9K0C.lan>
-References: <20241205154247.43444-1-ubizjak@gmail.com>
- <20241205154247.43444-6-ubizjak@gmail.com>
+	s=arc-20240116; t=1733473209; c=relaxed/simple;
+	bh=VfC4fwsQwiktA5SDVFNpWJsdUEbaaVRDk7al9wcB+hM=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=icY8ojE9cRVRMj15aK69OHswkT0PaSwPcenOC5oys03FQxq0AqsESvpV1caz0NUp58x4+aACMxzpcwWIJnaEHKrUlG7dB9aHcIFXeH1t09hz84woYhgOH7lbHWXjVtj5ylg2zmAQL0op2lFarTilEf6vRMiAu3AYADBeXnMMyFs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sVcWMR2Y; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B22AC4CED1;
+	Fri,  6 Dec 2024 08:20:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733473209;
+	bh=VfC4fwsQwiktA5SDVFNpWJsdUEbaaVRDk7al9wcB+hM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=sVcWMR2YvEpnO9uxhUev5D3c9FwWniYxEwMCBRNEkIj5F+L79A4MB6g3QtXcZwaXY
+	 6MYDT7uVTRwfQxeRATzSXT5aNnCnRPatRKcZYT/lsvLK1s0mF/c5/xvGFmaFm61MSu
+	 NXoX1O+elasvkjolEPtWIObrMZhQ6XDIvB6nFeyVwjxeOzbkPoo92wdEAoQ/yrj5xf
+	 cHTl3XYoyrh9ve2nUpe5JA76ovS1TmZ1wB4zxbycBdZX0N8Qo6N3atTXi2T+C9bMtC
+	 fgmI5KJ/tjrpSpUYP2Y/cA8kU+Y+tSFBjWuSmVV+4QYBFwXNZSpnuApOhmjSGTF430
+	 zwxZBZ1jooI/Q==
+Date: Fri, 6 Dec 2024 17:20:03 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Steven Rostedt
+ <rostedt@goodmis.org>, Florent Revest <revest@chromium.org>,
+ linux-trace-kernel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, bpf <bpf@vger.kernel.org>, Alexei
+ Starovoitov <ast@kernel.org>, Jiri Olsa <jolsa@kernel.org>, Alan Maguire
+ <alan.maguire@oracle.com>, Mark Rutland <mark.rutland@arm.com>,
+ linux-arch@vger.kernel.org
+Subject: Re: [PATCH v20 00/19] tracing: fprobe: function_graph:
+ Multi-function graph and fprobe on fgraph
+Message-Id: <20241206172003.21af8b50ceed0b5e93a7771c@kernel.org>
+In-Reply-To: <173344373580.50709.5332611753907139634.stgit@devnote2>
+References: <173344373580.50709.5332611753907139634.stgit@devnote2>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241205154247.43444-6-ubizjak@gmail.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Uros,
+Hi,
 
-On Thu, Dec 05, 2024 at 04:40:55PM +0100, Uros Bizjak wrote:
-> The patch introduces per_cpu_qual define and repurposes __percpu
-> tag as a named address space qualifier using the new define.
-> 
-> Arches can now conditionally define __per_cpu_qual as their
-> named address space qualifier for percpu variables.
-> 
-> Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-> Acked-by: Nadav Amit <nadav.amit@gmail.com>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Dennis Zhou <dennis@kernel.org>
-> Cc: Tejun Heo <tj@kernel.org>
-> Cc: Christoph Lameter <cl@linux.com>
-> Cc: Linus Torvalds <torvalds@linux-foundation.org>
-> Cc: Andy Lutomirski <luto@kernel.org>
-> Cc: Ingo Molnar <mingo@kernel.org>
-> Cc: Brian Gerst <brgerst@gmail.com>
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> ---
->  include/asm-generic/percpu.h   | 15 +++++++++++++++
->  include/linux/compiler_types.h |  2 +-
->  2 files changed, 16 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/asm-generic/percpu.h b/include/asm-generic/percpu.h
-> index 50597b975a49..3b93b168faa1 100644
-> --- a/include/asm-generic/percpu.h
-> +++ b/include/asm-generic/percpu.h
-> @@ -6,6 +6,21 @@
->  #include <linux/threads.h>
->  #include <linux/percpu-defs.h>
->  
-> +/*
-> + * per_cpu_qual is the qualifier for the percpu named address space.
-> + *
-> + * Most arches use generic named address space for percpu variables but
-> + * some arches define percpu variables in different named address space
-> + * (on the x86 arch, percpu variable may be declared as being relative
-> + * to the %fs or %gs segments using __seg_fs or __seg_gs named address
-> + * space qualifier).
-> + */
-> +#ifdef __per_cpu_qual
+Sorry, I found a problem on arm64 on qemu. Let me recheck it.
 
-I read through the series and I think my only nit would be here. Can we
-name this __percpu_qual? My thoughts are that it keeps it consistent
-with the old address space identifier and largely most of the core
-percpu stuff is defined with percpu as the naming scheme.
-
-> +# define per_cpu_qual __per_cpu_qual
-> +#else
-> +# define per_cpu_qual
-> +#endif
-> +
->  #ifdef CONFIG_SMP
->  
->  /*
-> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-> index 981cc3d7e3aa..877fe0c43c5d 100644
-> --- a/include/linux/compiler_types.h
-> +++ b/include/linux/compiler_types.h
-> @@ -57,7 +57,7 @@ static inline void __chk_io_ptr(const volatile void __iomem *ptr) { }
->  #  define __user	BTF_TYPE_TAG(user)
->  # endif
->  # define __iomem
-> -# define __percpu	BTF_TYPE_TAG(percpu)
-> +# define __percpu	per_cpu_qual BTF_TYPE_TAG(percpu)
->  # define __rcu		BTF_TYPE_TAG(rcu)
->  
->  # define __chk_user_ptr(x)	(void)0
-> -- 
-> 2.42.0
-> 
+[  592.422044]     # test_fprobe_entry: EXPECTATION FAILED at lib/test_fprobe.c:38
+[  592.422044]     Expected (preempt_count() == 0 && !({ unsigned long _flags; do { ({ unsigned long __dummy; typeof(_flags) __dummy2; (void)(&__dummy == &__dummy2); 1; }); _flags = arch_local_save_flags(); } while (0); ({ ({ unsigned long __dummy; typeof(_flags) __dummy2; (void)(&__dummy == &__dummy2); 1; }); arch_irqs_disabled_flags(_flags); }); })) to be false, but is true
+[  592.427029]     # test_fprobe_entry: EXPECTATION FAILED at lib/test_fprobe.c:38
+[  592.427029]     Expected (preempt_count() == 0 && !({ unsigned long _flags; do { ({ unsigned long __dummy; typeof(_flags) __dummy2; (void)(&__dummy == &__dummy2); 1; }); _flags = arch_local_save_flags(); } while (0); ({ ({ unsigned long __dummy; typeof(_flags) __dummy2; (void)(&__dummy == &__dummy2); 1; }); arch_irqs_disabled_flags(_flags); }); })) to be false, but is true
+[  592.461632]     not ok 1 test_fprobe_entry
+[  592.564126]     # test_fprobe: EXPECTATION FAILED at lib/test_fprobe.c:38
+[  592.564126]     Expected (preempt_count() == 0 && !({ unsigned long _flags; do { ({ unsigned long __dummy; typeof(_flags) __dummy2; (void)(&__dummy == &__dummy2); 1; }); _flags = arch_local_save_flags(); } while (0); ({ ({ unsigned long __dummy; typeof(_flags) __dummy2; (void)(&__dummy == &__dummy2); 1; }); arch_irqs_disabled_flags(_flags); }); })) to be false, but is true
+[  592.568100]     # test_fprobe: EXPECTATION FAILED at lib/test_fprobe.c:38
+[  592.568100]     Expected (preempt_count() == 0 && !({ unsigned long _flags; do { ({ unsigned long __dummy; typeof(_flags) __dummy2; (void)(&__dummy == &__dummy2); 1; }); _flags = arch_local_save_flags(); } while (0); ({ ({ unsigned long __dummy; typeof(_flags) __dummy2; (void)(&__dummy == &__dummy2); 1; }); arch_irqs_disabled_flags(_flags); }); })) to be false, but is true
+[  592.603844]     not ok 2 test_fprobe
+[  592.650501]     # test_fprobe_syms: EXPECTATION FAILED at lib/test_fprobe.c:38
+[  592.650501]     Expected (preempt_count() == 0 && !({ unsigned long _flags; do { ({ unsigned long __dummy; typeof(_flags) __dummy2; (void)(&__dummy == &__dummy2); 1; }); _flags = arch_local_save_flags(); } while (0); ({ ({ unsigned long __dummy; typeof(_flags) __dummy2; (void)(&__dummy == &__dummy2); 1; }); arch_irqs_disabled_flags(_flags); }); })) to be false, but is true
+[  592.654706]     # test_fprobe_syms: EXPECTATION FAILED at lib/test_fprobe.c:38
+[  592.654706]     Expected (preempt_count() == 0 && !({ unsigned long _flags; do { ({ unsigned long __dummy; typeof(_flags) __dummy2; (void)(&__dummy == &__dummy2); 1; }); _flags = arch_local_save_flags(); } while (0); ({ ({ unsigned long __dummy; typeof(_flags) __dummy2; (void)(&__dummy == &__dummy2); 1; }); arch_irqs_disabled_flags(_flags); }); })) to be false, but is true
+[  592.699596]     not ok 3 test_fprobe_syms
+[  592.802046]     # test_fprobe_data: EXPECTATION FAILED at lib/test_fprobe.c:38
+[  592.802046]     Expected (preempt_count() == 0 && !({ unsigned long _flags; do { ({ unsigned long __dummy; typeof(_flags) __dummy2; (void)(&__dummy == &__dummy2); 1; }); _flags = arch_local_save_flags(); } while (0); ({ ({ unsigned long __dummy; typeof(_flags) __dummy2; (void)(&__dummy == &__dummy2); 1; }); arch_irqs_disabled_flags(_flags); }); })) to be false, but is true
+[  592.839950]     not ok 4 test_fprobe_data
+[  592.945481]     # test_fprobe_skip: EXPECTATION FAILED at lib/test_fprobe.c:38
+[  592.945481]     Expected (preempt_count() == 0 && !({ unsigned long _flags; do { ({ unsigned long __dummy; typeof(_flags) __dummy2; (void)(&__dummy == &__dummy2); 1; }); _flags = arch_local_save_flags(); } while (0); ({ ({ unsigned long __dummy; typeof(_flags) __dummy2; (void)(&__dummy == &__dummy2); 1; }); arch_irqs_disabled_flags(_flags); }); })) to be false, but is true
+[  592.979938]     not ok 5 test_fprobe_skip
+[  592.980046] # fprobe_test: pass:0 fail:5 skip:0 total:5
+[  592.980388] # Totals: pass:0 fail:5 skip:0 total:5
 
 Thanks,
-Dennis
+
+On Fri,  6 Dec 2024 09:08:56 +0900
+"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+
+> Hi,
+> 
+> Here is the 20th version of the series to re-implement the fprobe on
+> function-graph tracer. The previous version is;
+> 
+> https://lore.kernel.org/all/173125372214.172790.6929368952404083802.stgit@devnote2/
+> 
+> This version is rebased on v6.13-rc1 and fixes to make CONFIG_FPROBE
+> "n" by default, so that it does not enable function graph tracer by
+> default.
+> 
+> Overview
+> --------
+> This series rewrites the fprobe on this function-graph.
+> The purposes of this change are;
+> 
+>  1) Remove dependency of the rethook from fprobe so that we can reduce
+>    the return hook code and shadow stack.
+> 
+>  2) Make 'ftrace_regs' the common trace interface for the function
+>    boundary.
+> 
+> 1) Currently we have 2(or 3) different function return hook codes,
+>  the function-graph tracer and rethook (and legacy kretprobe).
+>  But since this  is redundant and needs double maintenance cost,
+>  I would like to unify those. From the user's viewpoint, function-
+>  graph tracer is very useful to grasp the execution path. For this
+>  purpose, it is hard to use the rethook in the function-graph
+>  tracer, but the opposite is possible. (Strictly speaking, kretprobe
+>  can not use it because it requires 'pt_regs' for historical reasons.)
+> 
+> 2) Now the fprobe provides the 'pt_regs' for its handler, but that is
+>  wrong for the function entry and exit. Moreover, depending on the
+>  architecture, there is no way to accurately reproduce 'pt_regs'
+>  outside of interrupt or exception handlers. This means fprobe should
+>  not use 'pt_regs' because it does not use such exceptions.
+>  (Conversely, kprobe should use 'pt_regs' because it is an abstract
+>   interface of the software breakpoint exception.)
+> 
+> This series changes fprobe to use function-graph tracer for tracing
+> function entry and exit, instead of mixture of ftrace and rethook.
+> Unlike the rethook which is a per-task list of system-wide allocated
+> nodes, the function graph's ret_stack is a per-task shadow stack.
+> Thus it does not need to set 'nr_maxactive' (which is the number of
+> pre-allocated nodes).
+> Also the handlers will get the 'ftrace_regs' instead of 'pt_regs'.
+> Since eBPF mulit_kprobe/multi_kretprobe events still use 'pt_regs' as
+> their register interface, this changes it to convert 'ftrace_regs' to
+> 'pt_regs'. Of course this conversion makes an incomplete 'pt_regs',
+> so users must access only registers for function parameters or
+> return value. 
+> 
+> Design
+> ------
+> Instead of using ftrace's function entry hook directly, the new fprobe
+> is built on top of the function-graph's entry and return callbacks
+> with 'ftrace_regs'.
+> 
+> Since the fprobe requires access to 'ftrace_regs', the architecture
+> must support CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS and
+> CONFIG_HAVE_FTRACE_GRAPH_FUNC, which enables to call function-graph
+> entry callback with 'ftrace_regs', and also
+> CONFIG_HAVE_FUNCTION_GRAPH_FREGS, which passes the ftrace_regs to
+> return_to_handler.
+> 
+> All fprobes share a single function-graph ops (means shares a common
+> ftrace filter) similar to the kprobe-on-ftrace. This needs another
+> layer to find corresponding fprobe in the common function-graph
+> callbacks, but has much better scalability, since the number of
+> registered function-graph ops is limited.
+> 
+> In the entry callback, the fprobe runs its entry_handler and saves the
+> address of 'fprobe' on the function-graph's shadow stack as data. The
+> return callback decodes the data to get the 'fprobe' address, and runs
+> the exit_handler.
+> 
+> The fprobe introduces two hash-tables, one is for entry callback which
+> searches fprobes related to the given function address passed by entry
+> callback. The other is for a return callback which checks if the given
+> 'fprobe' data structure pointer is still valid. Note that it is
+> possible to unregister fprobe before the return callback runs. Thus
+> the address validation must be done before using it in the return
+> callback.
+> 
+> Download
+> --------
+> This series can be applied against the ftrace/for-next branch in
+> linux-trace tree.
+> 
+> This series can also be found below branch.
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git/log/?h=topic/fprobe-on-fgraph
+> 
+> Thank you,
+> 
+> ---
+> 
+> Masami Hiramatsu (Google) (18):
+>       fgraph: Pass ftrace_regs to entryfunc
+>       fgraph: Replace fgraph_ret_regs with ftrace_regs
+>       fgraph: Pass ftrace_regs to retfunc
+>       fprobe: Use ftrace_regs in fprobe entry handler
+>       fprobe: Use ftrace_regs in fprobe exit handler
+>       tracing: Add ftrace_partial_regs() for converting ftrace_regs to pt_regs
+>       tracing: Add ftrace_fill_perf_regs() for perf event
+>       tracing/fprobe: Enable fprobe events with CONFIG_DYNAMIC_FTRACE_WITH_ARGS
+>       bpf: Enable kprobe_multi feature if CONFIG_FPROBE is enabled
+>       ftrace: Add CONFIG_HAVE_FTRACE_GRAPH_FUNC
+>       fprobe: Rewrite fprobe on function-graph tracer
+>       fprobe: Add fprobe_header encoding feature
+>       tracing/fprobe: Remove nr_maxactive from fprobe
+>       selftests: ftrace: Remove obsolate maxactive syntax check
+>       selftests/ftrace: Add a test case for repeating register/unregister fprobe
+>       Documentation: probes: Update fprobe on function-graph tracer
+>       ftrace: Add ftrace_get_symaddr to convert fentry_ip to symaddr
+>       bpf: Use ftrace_get_symaddr() in get_entry_ip()
+> 
+> Sven Schnelle (1):
+>       s390/tracing: Enable HAVE_FTRACE_GRAPH_FUNC
+> 
+> 
+>  Documentation/trace/fprobe.rst                     |   42 +
+>  arch/arm64/Kconfig                                 |    2 
+>  arch/arm64/include/asm/Kbuild                      |    1 
+>  arch/arm64/include/asm/ftrace.h                    |   51 +-
+>  arch/arm64/kernel/asm-offsets.c                    |   12 
+>  arch/arm64/kernel/entry-ftrace.S                   |   32 +
+>  arch/arm64/kernel/ftrace.c                         |   78 ++
+>  arch/loongarch/Kconfig                             |    4 
+>  arch/loongarch/include/asm/fprobe.h                |   12 
+>  arch/loongarch/include/asm/ftrace.h                |   32 -
+>  arch/loongarch/kernel/asm-offsets.c                |   12 
+>  arch/loongarch/kernel/ftrace_dyn.c                 |   10 
+>  arch/loongarch/kernel/mcount.S                     |   17 -
+>  arch/loongarch/kernel/mcount_dyn.S                 |   14 
+>  arch/powerpc/Kconfig                               |    1 
+>  arch/powerpc/include/asm/ftrace.h                  |   13 
+>  arch/powerpc/kernel/trace/ftrace.c                 |    2 
+>  arch/powerpc/kernel/trace/ftrace_64_pg.c           |   10 
+>  arch/riscv/Kconfig                                 |    3 
+>  arch/riscv/include/asm/Kbuild                      |    1 
+>  arch/riscv/include/asm/ftrace.h                    |   45 +
+>  arch/riscv/kernel/ftrace.c                         |   17 -
+>  arch/riscv/kernel/mcount.S                         |   24 -
+>  arch/s390/Kconfig                                  |    4 
+>  arch/s390/include/asm/fprobe.h                     |   10 
+>  arch/s390/include/asm/ftrace.h                     |   37 +
+>  arch/s390/kernel/asm-offsets.c                     |    6 
+>  arch/s390/kernel/entry.h                           |    1 
+>  arch/s390/kernel/ftrace.c                          |   48 -
+>  arch/s390/kernel/mcount.S                          |   23 -
+>  arch/x86/Kconfig                                   |    4 
+>  arch/x86/include/asm/Kbuild                        |    1 
+>  arch/x86/include/asm/ftrace.h                      |   54 +-
+>  arch/x86/kernel/ftrace.c                           |   50 +-
+>  arch/x86/kernel/ftrace_32.S                        |   13 
+>  arch/x86/kernel/ftrace_64.S                        |   17 -
+>  include/asm-generic/fprobe.h                       |   46 +
+>  include/linux/fprobe.h                             |   62 +-
+>  include/linux/ftrace.h                             |  116 +++
+>  include/linux/ftrace_regs.h                        |    2 
+>  kernel/trace/Kconfig                               |   22 -
+>  kernel/trace/bpf_trace.c                           |   38 -
+>  kernel/trace/fgraph.c                              |   57 +-
+>  kernel/trace/fprobe.c                              |  664 +++++++++++++++-----
+>  kernel/trace/ftrace.c                              |    6 
+>  kernel/trace/trace.h                               |    6 
+>  kernel/trace/trace_fprobe.c                        |  146 ++--
+>  kernel/trace/trace_functions_graph.c               |   10 
+>  kernel/trace/trace_irqsoff.c                       |    6 
+>  kernel/trace/trace_probe_tmpl.h                    |    2 
+>  kernel/trace/trace_sched_wakeup.c                  |    6 
+>  kernel/trace/trace_selftest.c                      |   11 
+>  lib/test_fprobe.c                                  |   51 --
+>  samples/fprobe/fprobe_example.c                    |    4 
+>  .../test.d/dynevent/add_remove_fprobe_repeat.tc    |   19 +
+>  .../ftrace/test.d/dynevent/fprobe_syntax_errors.tc |    4 
+>  56 files changed, 1312 insertions(+), 669 deletions(-)
+>  create mode 100644 arch/loongarch/include/asm/fprobe.h
+>  create mode 100644 arch/s390/include/asm/fprobe.h
+>  create mode 100644 include/asm-generic/fprobe.h
+>  create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_fprobe_repeat.tc
+> 
+> --
+> Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
