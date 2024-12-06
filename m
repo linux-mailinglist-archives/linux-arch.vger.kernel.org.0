@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-9278-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9279-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8FBD09E61F5
-	for <lists+linux-arch@lfdr.de>; Fri,  6 Dec 2024 01:13:05 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFD2D9E61FC
+	for <lists+linux-arch@lfdr.de>; Fri,  6 Dec 2024 01:13:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E5197188495E
-	for <lists+linux-arch@lfdr.de>; Fri,  6 Dec 2024 00:13:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6FE22168FB3
+	for <lists+linux-arch@lfdr.de>; Fri,  6 Dec 2024 00:13:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA49313AD0;
-	Fri,  6 Dec 2024 00:12:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8803E42AB3;
+	Fri,  6 Dec 2024 00:12:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CLKBztUR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cuxk5Sp5"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C21D1AAD7;
-	Fri,  6 Dec 2024 00:12:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57671B652;
+	Fri,  6 Dec 2024 00:12:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733443934; cv=none; b=J6D8vEOqEnbbu+gJA8sFzKXO8iNRWi44Dcu3gLhrhvlQV5e3Qtjevb3viyM+7uUMlEMF3LjGTBkpz/Hjhd5vnCOsoHTDWOI2qU3RUMBog6R8+htFrjbtxwDRtZtrrlm1hosnAHfQ54UMHQOdpYEg9LxKgScG3B3b76XcUW/9fUM=
+	t=1733443945; cv=none; b=nyx2xeXRlb5BuydVcIs8bqTny/0FqawUzsw/5I1LlVVPcyKfzXhGkaSJ5nuWUIgAlmNmm7r8mVR+d274Qwh4+ANG9S6Tlui21WdQqIPEvoYyX8fFVyJSxWXb/yDiO+QUus5Swm8XA8dY145Lm2N4n2A41tFJldCvmeH4uMjFp9U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733443934; c=relaxed/simple;
-	bh=wZEjksI48uEO6V4KtS7yN1QVU17ztXbJ6mD6JSkXebk=;
+	s=arc-20240116; t=1733443945; c=relaxed/simple;
+	bh=MTl3WOEWmkU7N1ZYT3IdZA3wW+cclx8nbkw1UKe91tQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dCsmbkNQWBioGRS7L957P35CTI/UoGFjfthnV/cYK7CshJxVE4PeN5pT8W3UC4V4mF7X+smk6QhCUOL2YPOc+9qtxSQJ4dzlU61QY4g5ygFs8/l202nXZm5sK8FnFC86gJuto5L7PHrSLKul5tZfuO04UNZmQZdm9t99zU7UJto=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CLKBztUR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A254C4CED1;
-	Fri,  6 Dec 2024 00:12:11 +0000 (UTC)
+	 MIME-Version:Content-Type; b=OHlj/4MWGs1FTqwrZZkV8uxxRNPV0pevvxjgj9EFTXCDA0O3ald+SsLS5sdTsvlYWEqlyymceH3tkixvy0/gYHRzxpFn2tMiCaLx4XbuAO/bMqIZY3sEkgEbAGoPVktOHLOW9n0hh96h+N5QV78G4zqklGkGoaMOAimKL8JGpgE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cuxk5Sp5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 051B4C4CEDD;
+	Fri,  6 Dec 2024 00:12:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733443934;
-	bh=wZEjksI48uEO6V4KtS7yN1QVU17ztXbJ6mD6JSkXebk=;
+	s=k20201202; t=1733443944;
+	bh=MTl3WOEWmkU7N1ZYT3IdZA3wW+cclx8nbkw1UKe91tQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=CLKBztURGtFYdapGvnDL9RItJN7RS+mDgROM0nGR+p7owECtH9jtGaETtiAbAky7A
-	 L334JPHJGBCkmheDKcLurWETEOcWGfK250h4EEEfEn49MfDEl6U2IyAhcUXSN+yoNe
-	 FaWYrElkFH9aGZhgosX/xGxkQzIkQfYNnKil0Tc84i9LiFUKwhIxzTvOKZcAlRiSs+
-	 yav92o1xJINMs8IBSdAp5BFumU5+mh4q0NChmdlDaYjBCJKJlZx/79uJEP3Hk+nebA
-	 Jnp0LxAk5ivWWDZJOjGBQ0/xjP04r+fY9jFSmD7IDMgdcgYJFw73v7UvididqUS/0O
-	 ckN0T+AvQlh/Q==
+	b=cuxk5Sp5QYZHWLqltZM7ZMcX8AlKjCoH2mtf2oMdH0a9ljBQ1KOHNIJ+IHxeScLr5
+	 SISSaBidYu13QUsA1fI47IhTYSthNE5ZGqirMxjofZDigTreaoDlR5l5BuDz5hyvNk
+	 eQF1qEPGWoa5LEq11XckN6Ygd2Qbv2xqA/sI1tHzytXM8iD67eZTHKY0VOhalDxArO
+	 6EMEu6+juYJyOpZMvmfMCXxaOEFAJpMUm1MJT9HMd9Mi818MR9DaBidRNt8hG51YaX
+	 CkVlFSsJgC9hPRl2fbuTf/b7LfahSuBWy0dtPg+Gnbxc0YSSeTh+c9LPWG9g9enDpt
+	 0Jch1wLBUg9Tg==
 From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
 To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
 	Steven Rostedt <rostedt@goodmis.org>,
@@ -54,9 +54,9 @@ Cc: linux-trace-kernel@vger.kernel.org,
 	Alan Maguire <alan.maguire@oracle.com>,
 	Mark Rutland <mark.rutland@arm.com>,
 	linux-arch@vger.kernel.org
-Subject: [PATCH v20 15/19] selftests: ftrace: Remove obsolate maxactive syntax check
-Date: Fri,  6 Dec 2024 09:12:09 +0900
-Message-ID: <173344392903.50709.11550896255946412357.stgit@devnote2>
+Subject: [PATCH v20 16/19] selftests/ftrace: Add a test case for repeating register/unregister fprobe
+Date: Fri,  6 Dec 2024 09:12:19 +0900
+Message-ID: <173344393958.50709.12251302243554551661.stgit@devnote2>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <173344373580.50709.5332611753907139634.stgit@devnote2>
 References: <173344373580.50709.5332611753907139634.stgit@devnote2>
@@ -72,28 +72,39 @@ Content-Transfer-Encoding: 8bit
 
 From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Since the fprobe event does not support maxactive anymore, stop
-testing the maxactive syntax error checking.
+This test case repeats define and undefine the fprobe dynamic event to
+ensure that the fprobe does not cause any issue with such operations.
 
 Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 ---
- .../ftrace/test.d/dynevent/fprobe_syntax_errors.tc |    4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ .../test.d/dynevent/add_remove_fprobe_repeat.tc    |   19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_fprobe_repeat.tc
 
-diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
-index 61877d166451..c9425a34fae3 100644
---- a/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
-+++ b/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
-@@ -16,9 +16,7 @@ aarch64)
-   REG=%r0 ;;
- esac
- 
--check_error 'f^100 vfs_read'		# MAXACT_NO_KPROBE
--check_error 'f^1a111 vfs_read'		# BAD_MAXACT
--check_error 'f^100000 vfs_read'		# MAXACT_TOO_BIG
-+check_error 'f^100 vfs_read'		# BAD_MAXACT
- 
- check_error 'f ^non_exist_func'		# BAD_PROBE_ADDR (enoent)
- check_error 'f ^vfs_read+10'		# BAD_PROBE_ADDR
+diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_fprobe_repeat.tc b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_fprobe_repeat.tc
+new file mode 100644
+index 000000000000..b4ad09237e2a
+--- /dev/null
++++ b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_fprobe_repeat.tc
+@@ -0,0 +1,19 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++# description: Generic dynamic event - Repeating add/remove fprobe events
++# requires: dynamic_events "f[:[<group>/][<event>]] <func-name>[%return] [<args>]":README
++
++echo 0 > events/enable
++echo > dynamic_events
++
++PLACE=$FUNCTION_FORK
++REPEAT_TIMES=64
++
++for i in `seq 1 $REPEAT_TIMES`; do
++  echo "f:myevent $PLACE" >> dynamic_events
++  grep -q myevent dynamic_events
++  test -d events/fprobes/myevent
++  echo > dynamic_events
++done
++
++clear_trace
 
 
