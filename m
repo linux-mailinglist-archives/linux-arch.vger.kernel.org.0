@@ -1,122 +1,132 @@
-Return-Path: <linux-arch+bounces-9282-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9283-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EDE79E6207
-	for <lists+linux-arch@lfdr.de>; Fri,  6 Dec 2024 01:14:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 856469E669E
+	for <lists+linux-arch@lfdr.de>; Fri,  6 Dec 2024 06:13:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 473A518858C2
-	for <lists+linux-arch@lfdr.de>; Fri,  6 Dec 2024 00:14:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3EAD11884038
+	for <lists+linux-arch@lfdr.de>; Fri,  6 Dec 2024 05:13:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D1088F66;
-	Fri,  6 Dec 2024 00:12:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBD61194C6E;
+	Fri,  6 Dec 2024 05:13:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sACSumgP"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="evohsIOa"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F0F48F5B;
-	Fri,  6 Dec 2024 00:12:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA16A193078;
+	Fri,  6 Dec 2024 05:13:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733443977; cv=none; b=Er7Bmct+jSWhPhIQEaw2SrSCQIzY7Z9k7Z6mgGncvPBfdNtG5YEnQSXsbrYOq1/oAoVAEr/c8Brlbsfdl6qZBRwRGJR1ENTkdUAfWDLlgwAZtr9AgBDUmi2UnKSlqPn4VkrYPjHpm9wRM2RrZey4WWV+YX+3RH93sSUCc6JD2Y0=
+	t=1733461983; cv=none; b=KmKhLnb6kIrzkkc56kRNBpw8htva6LIHAjGM+eshQRCqj9/JpiJhDGgGWrgIqj7Dp2wkRt/oM+D/vmj/dRrPBfepeAK9nPWWYHEBOo7razN6FFTcf+xZfL8LothlIx7zviaO22DFfSfwxY85DAw6C2+NArybxcH6M6cpQYAMQis=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733443977; c=relaxed/simple;
-	bh=BiJkgFbyZWGN3QrnPaBVi1FBGF19OgW996tdjHYY+MQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=st9Gl5E3J4M1b3Ie8G1x2sI5/WChRE0Njczq7AQgb6gj0bqmaHJPNOSlV8M5yLB9NJhvhGo7KzLlevuzsKUgLvTemKPjEzlay4yx4LlW/wCL2HG/8YSAOR6LKEEhZaWG3fE+B8ldewDcfUGiqJCZSQPpfXHRWvd3R90DInyAAKU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sACSumgP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9E25C4CEDD;
-	Fri,  6 Dec 2024 00:12:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733443976;
-	bh=BiJkgFbyZWGN3QrnPaBVi1FBGF19OgW996tdjHYY+MQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=sACSumgPzbAOgh0aP9gzhIO0B9vUC05c0X+eMvZjd4AgdFR4AxnD09+99uUUa4A2P
-	 feA/J7wuFXgtkKuVioxoJTBGPSlu072DKPdSTBQRK+ZH+Ab5X12AvxTvc0vTbNvmvh
-	 KjNn+8+ZsrqeVQxIgMQyFf4qAHJnDJDWXks5St1rLAqEsMFVDN/5uCnwc2uJ49UOVD
-	 sZxEqypde6H2eB52eYrDihGV7vD6XNbuIVxVRE/hF2suTvPit2taJutt6UM7jY9CLT
-	 /EsEj7YePnu+PuormAWPYZBh/Ar/woX5wBt4bYVGmY+RppR6RRIKkXGh3jatYVIYCE
-	 GecWstR9txfeA==
-From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Florent Revest <revest@chromium.org>
-Cc: linux-trace-kernel@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	bpf <bpf@vger.kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Alan Maguire <alan.maguire@oracle.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	linux-arch@vger.kernel.org
-Subject: [PATCH v20 19/19] bpf: Use ftrace_get_symaddr() in get_entry_ip()
-Date: Fri,  6 Dec 2024 09:12:51 +0900
-Message-ID: <173344397142.50709.1389323884732382919.stgit@devnote2>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <173344373580.50709.5332611753907139634.stgit@devnote2>
-References: <173344373580.50709.5332611753907139634.stgit@devnote2>
-User-Agent: StGit/0.19
+	s=arc-20240116; t=1733461983; c=relaxed/simple;
+	bh=VSTof/Uj6masKJoLaAu/3mhUUtoihlT9CA4iZ2vzN2Q=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=ekb+TogfBsXnFsmzrWa3bS7q9DlPIs+G1pakW5bTYkrDI/RCGUqCQ+tuMogtQBAN+i+4ir5gjiYmH4zhLpIV6l6vreNVax860UKmuNzK/zySuZmTq0oYD++OKXn+MWtE2m4Bbvvb0RUvsS8uKadiz2L1os4Od9D2MtNX75edVMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=evohsIOa; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [100.65.0.192] (unknown [20.236.11.42])
+	by linux.microsoft.com (Postfix) with ESMTPSA id DB58D20ACD8D;
+	Thu,  5 Dec 2024 21:12:58 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com DB58D20ACD8D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1733461980;
+	bh=UeJKj87W9UR5iJRJm8EOVLO3pStgIR+TvO1cTQt7BXk=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=evohsIOaYFfQe1eCWrL35euPbFbUcU8YiFIo4DvXuomC5z7qvwnPVNWkVkvtyTO46
+	 Yn0Oy0b5pR4/G+4koxJ9PiOD5s1K5XjZ34R/WB69cjeMhwcBdjYJtzQxfZiLMnvung
+	 JyqqH7VS1El1YbPoIX5fiIB9chqShvN25PcFIgO8=
+Message-ID: <3c5ec65e-93a9-48a2-a18f-f5b89e83e999@linux.microsoft.com>
+Date: Thu, 5 Dec 2024 21:12:56 -0800
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Cc: linux-hyperv@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, kvm@vger.kernel.org, iommu@lists.linux.dev,
+ netdev@vger.kernel.org, linux-pci@vger.kernel.org,
+ linux-arch@vger.kernel.org, virtualization@lists.linux.dev,
+ eahariha@linux.microsoft.com, kys@microsoft.com, haiyangz@microsoft.com,
+ wei.liu@kernel.org, mhklinux@outlook.com, decui@microsoft.com,
+ catalin.marinas@arm.com, will@kernel.org, luto@kernel.org,
+ tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+ dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+ seanjc@google.com, pbonzini@redhat.com, peterz@infradead.org,
+ daniel.lezcano@linaro.org, joro@8bytes.org, robin.murphy@arm.com,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
+ bhelgaas@google.com, arnd@arndb.de, sgarzare@redhat.com,
+ jinankjain@linux.microsoft.com, muminulrussell@gmail.com,
+ skinsburskii@linux.microsoft.com, mukeshrathor@microsoft.com,
+ vkuznets@redhat.com, ssengar@linux.microsoft.com, apais@linux.microsoft.com,
+ horms@kernel.org
+Subject: Re: [PATCH v3 3/5] hyperv: Add new Hyper-V headers in include/hyperv
+To: Nuno Das Neves <nunodasneves@linux.microsoft.com>
+References: <1732577084-2122-1-git-send-email-nunodasneves@linux.microsoft.com>
+ <1732577084-2122-4-git-send-email-nunodasneves@linux.microsoft.com>
+From: Easwar Hariharan <eahariha@linux.microsoft.com>
+Content-Language: en-US
+In-Reply-To: <1732577084-2122-4-git-send-email-nunodasneves@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+On 11/25/2024 3:24 PM, Nuno Das Neves wrote:
+> These headers contain definitions for regular Hyper-V guests (as in
+> hyperv-tlfs.h), as well as interfaces for more privileged guests like
+> the root partition (aka Dom0).
+> 
+> These files are derived from headers exported from Hyper-V, rather than
+> being derived from the TLFS document. (Although, to preserve
+> compatibility with existing Linux code, some definitions are copied
+> directly from hyperv-tlfs.h too).
+> 
+> The new files follow a naming convention according to their original
+> use:
+> - hdk "host development kit"
+> - gdk "guest development kit"
+> With postfix "_mini" implying userspace-only headers, and "_ext" for
+> extended hypercalls.
+> 
+> The use of multiple files and their original names is primarily to
+> keep the provenance of exactly where they came from in Hyper-V
+> code, which is helpful for manual maintenance and extension
+> of these definitions. Microsoft maintainers importing new definitions
+> should take care to put them in the right file. However, Linux kernel
+> code that uses any of the definitions need not be aware of the multiple
+> files or assign any meaning to the new names. Linux kernel code should
+> always just include hvhdk.h
+> 
+> Note the new headers contain both arm64 and x86_64 definitions. Some are
+> guarded by #ifdefs, and some are instead prefixed with the architecture,
+> e.g. hv_x64_*. These conventions are kept from Hyper-V code as another
+> tactic to simplify the process of importing and maintaining the
+> definitions, rather than splitting them up into their own files in
+> arch/x86/ and arch/arm64/.
+> 
+> These headers are a step toward importing headers directly from Hyper-V
+> in the future, similar to Xen public files in include/xen/interface/.
+> 
+> Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
+> ---
+>  MAINTAINERS                 |    5 +
+>  include/hyperv/hvgdk.h      |  308 +++++++++
+>  include/hyperv/hvgdk_ext.h  |   46 ++
+>  include/hyperv/hvgdk_mini.h | 1306 +++++++++++++++++++++++++++++++++++
+>  include/hyperv/hvhdk.h      |  733 ++++++++++++++++++++
+>  include/hyperv/hvhdk_mini.h |  311 +++++++++
+>  6 files changed, 2709 insertions(+)
+>  create mode 100644 include/hyperv/hvgdk.h
+>  create mode 100644 include/hyperv/hvgdk_ext.h
+>  create mode 100644 include/hyperv/hvgdk_mini.h
+>  create mode 100644 include/hyperv/hvhdk.h
+>  create mode 100644 include/hyperv/hvhdk_mini.h
 
-Rewrite get_entry_ip() to use ftrace_get_symaddr() macro.
-
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
----
- Changes in v19:
-  - Use ftrace_get_symaddr() instead of introducing new arch dependent code.
-  - Also, replace x86 code with ftrace_get_symaddr(), which does the same
-   thing.
----
- kernel/trace/bpf_trace.c |   19 ++-----------------
- 1 file changed, 2 insertions(+), 17 deletions(-)
-
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 852400170c5c..9f9a0d666020 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1048,27 +1048,12 @@ static const struct bpf_func_proto bpf_get_func_ip_proto_tracing = {
- 	.arg1_type	= ARG_PTR_TO_CTX,
- };
- 
--#ifdef CONFIG_X86_KERNEL_IBT
- static unsigned long get_entry_ip(unsigned long fentry_ip)
- {
--	u32 instr;
-+	unsigned long ret = ftrace_get_symaddr(fentry_ip);
- 
--	/* We want to be extra safe in case entry ip is on the page edge,
--	 * but otherwise we need to avoid get_kernel_nofault()'s overhead.
--	 */
--	if ((fentry_ip & ~PAGE_MASK) < ENDBR_INSN_SIZE) {
--		if (get_kernel_nofault(instr, (u32 *)(fentry_ip - ENDBR_INSN_SIZE)))
--			return fentry_ip;
--	} else {
--		instr = *(u32 *)(fentry_ip - ENDBR_INSN_SIZE);
--	}
--	if (is_endbr(instr))
--		fentry_ip -= ENDBR_INSN_SIZE;
--	return fentry_ip;
-+	return ret ? : fentry_ip;
- }
--#else
--#define get_entry_ip(fentry_ip) fentry_ip
--#endif
- 
- BPF_CALL_1(bpf_get_func_ip_kprobe, struct pt_regs *, regs)
- {
-
+Reviewed-by: Easwar Hariharan <eahariha@linux.microsoft.com>
 
