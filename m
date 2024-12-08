@@ -1,76 +1,76 @@
-Return-Path: <linux-arch+bounces-9310-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9311-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DA039E87E4
-	for <lists+linux-arch@lfdr.de>; Sun,  8 Dec 2024 21:48:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A9F89E87E7
+	for <lists+linux-arch@lfdr.de>; Sun,  8 Dec 2024 21:49:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B27321885323
-	for <lists+linux-arch@lfdr.de>; Sun,  8 Dec 2024 20:48:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C410418854F5
+	for <lists+linux-arch@lfdr.de>; Sun,  8 Dec 2024 20:49:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D95C199FC1;
-	Sun,  8 Dec 2024 20:47:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB27519C546;
+	Sun,  8 Dec 2024 20:47:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JHiTaU3P"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GwikKHmO"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 402441991C8;
-	Sun,  8 Dec 2024 20:47:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3BE6199EB2;
+	Sun,  8 Dec 2024 20:47:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733690854; cv=none; b=CLVVSgVu0BZEiBH8nPanL2Gx2SzK+npWhWmb71RUTk0yhHhGsl2S/a1sytkl21f7JtCWWxTIlfEGDnt8KuM91gmmKoeaZKBLXf1VHl9t46PHQV64UVH8NLBayLHHVTJMJmwp8JORfpSvsnNLK/Uutklre2PJirP40QkB96+a+BU=
+	t=1733690855; cv=none; b=jkxrJR4fIxDctnoeBqi/1O3paU4cvQeH7oAmQ/SkO78b5hvCYbIOJgDtKYZ3n8ShUJKbc0AU/+/CV/BTijud/pZeCG06v3+H7zJbISIJQ9kVW+R8b9api57erQzkW/SbnVccXsV+wVVRbineeE0M6yFiiQlg0EFCV/V3MIXZGMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733690854; c=relaxed/simple;
-	bh=VD2esfG+2A7H5xnu8x5ip6Z+n1iO/sQ6fWXzAj+5R9U=;
+	s=arc-20240116; t=1733690855; c=relaxed/simple;
+	bh=3gHJZMqBlwbfBRUKCL4jcDgTquYDbPdPUUNGrhzl3OA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=on1nIAgn3uJbm2ClLoqrAhm8rQuvXE4v7kgRbXSdJDVG/m55ZbfYn4ObVuPkPVhJzRYF28+lIToYiK1+2TzdY2kg0C7MVidZfQOiEwL0+c1Db4vHarf1Bp347ZmU7p5kY9EkXVmGVqNgwvJ+K2B92LIWCCdpPq2LObS15IQwc6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JHiTaU3P; arc=none smtp.client-ip=209.85.221.41
+	 MIME-Version; b=lH5phiW+HDEBzh00AAI60cTpg5k4+5uSPDbd8nsiuDqFA4kD24gSJrV2/4B1uo4531F3/clCfLHrrzP8aGLyfaqub68bBr3CkukPxvE11hlMzCOGcgUNkEgb8nJKfrBDD+nF89b5E2f2DafglkIvkVLU4vciuaihAa6FKvI0oo4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GwikKHmO; arc=none smtp.client-ip=209.85.221.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3862d161947so1666871f8f.3;
-        Sun, 08 Dec 2024 12:47:31 -0800 (PST)
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-385dece873cso1671382f8f.0;
+        Sun, 08 Dec 2024 12:47:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733690850; x=1734295650; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1733690852; x=1734295652; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FQICK2kFPsfEELpT4bODj3LxfYome5g697HLvcS8DLE=;
-        b=JHiTaU3PxOmgrxeiAfhPeZ1i9kuouRuuqKjcwuUSuA4YVoM8Yfte02Ecrf3rlXXYmC
-         Dq1oKofUJTKBcbJHIwgmfxozKFNJRgI+E+SLo7VKaGcSG6iJjME+w7amNCqUA15jBa+0
-         shM3X7jeOTJGeUaoobxYNqAzIIQskUUkJSTsSmUWyvJz0ldBeh7s7PSgAnXyP9MyBtOE
-         rx5queEX+mif8lMEn06QQBc6hRxhEiwXF+1YBt04l34dDUKZLPysluxsWKpB5WnK5fJx
-         whwM6tJMrDbZgShu9z0La7PsDa7iR6xOaJrejzBUNn/l1Un7e/WZ1zFPYteSaxCjL7qo
-         rm5w==
+        bh=6KOZI0Av9UpRI0wc6f07qNDNYBakRBN27GYpajM6B9g=;
+        b=GwikKHmOulEwk37WW465skIoxx860CxZC4BQe0DbLf/EelgtW+Qqi2Athjn4TvZHMb
+         hoN96a4Jlow0/iwTdcqHsMEvclZn4LdeEP53dd6T2lOyAq9HWFGcbRBenVkNde0qU1LN
+         a3Z3iW9Izud6cd9Cjca29Ak+oNItS6EsM/QyRFtFJ1qfk4W6b8/Ehj4PefaU/EMOpw1e
+         uwaEOz1WtrwK2KcAWZT/0zG/2VOgP3rQtaWyx4aH8mC1fYwdSH3Dgq3IOMyMt4k//F76
+         RUq8/oScF2HgRSd+LWbeh1TZzHfH9Kj0MlU1gP2iqBEoLJFpoX3GpTetdqLseXpyCOMI
+         ebdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733690850; x=1734295650;
+        d=1e100.net; s=20230601; t=1733690852; x=1734295652;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FQICK2kFPsfEELpT4bODj3LxfYome5g697HLvcS8DLE=;
-        b=kt/xCRX2FoLKb38qcmc26ouGaZ9V+nM1VU/+ZRb81jkI1moNAXm1HwGjUoRosm1UJC
-         I2+QwqFXWFtDo0HYvjGpuiK4JY7Ac6A/UQLCa5/JGEDUSas/ULtecAxzuzfhcRJFxcz0
-         u95evwMlfxzs5HfP8yiJ+HtSSX2cpObfDtli5oKhMekDc63p/GL5rDiaheAY9JvQFvj5
-         9mn8MU2+CDBePj311MMYjgBCFBBlwm5pDeAb0ZbBEKVYBMJZ4kZwQqC+1BEARcbVGB/7
-         0j87lTQetH1eylGmhqmI05e8755hVJfY8cpd2bm/0rwG8DiKnUQVFih99GhS4Tptgbh4
-         9Z+g==
-X-Forwarded-Encrypted: i=1; AJvYcCURJjf5OOAd9JWPmihROLdlbeDsAwcpqLmfO2ljPktT62uTetEBRuXase2OnkPlNMHJY3L/VhsWliolBVGb@vger.kernel.org, AJvYcCUThUvYwGybQTkmqxH4782JQwYLLyG9V8EJQvSBAwj+QFOIXKznP7W3CnuxpcwhJf21Cqd6KJku@vger.kernel.org, AJvYcCVGXsZUvPn2+GsgxctHafiDrD/o+OJ8xQypO1xjo1tNe/jNoeQR2SDheYXL9kIpfHMyeNohCNxm0KSXBCcxIWg=@vger.kernel.org, AJvYcCVPbqwg5mkyzVUQ48ziddpoKLiNfxpNrX5HHaft84pzzlOjd3hY52Qn2gihsob1y9VBRdNNpOIHTRlo@vger.kernel.org
-X-Gm-Message-State: AOJu0YzXqJFGbztDlgq0PvvvFHYhyXlu83JBkWQeCWO4j/Sd5pZNsRkv
-	4hf2iH2vflJyYvZ0PqhXfUH6fnqhjQ7tYI3vZiDPNCcNi8nholvX
-X-Gm-Gg: ASbGnctTVza//jYbr8V7Nkt75K28A/Nm303w40Ql67ApgvRNip67qq/Ka5FBQ8++Lc5
-	yG1SYLrmsJFSewlflYhOBVxk9oDQTKN1kSe70QxmK50WQF/rhyrQc/ZxcWAPOSVNey8LhK7enkZ
-	acHyh0N274GaEicPWpJQQRy5CiNv2MAgrn5MKfHc08RPn4DqK5+ghH2g/7bmtIyE16UugnyX15L
-	cZMuL+Dgzo5oAUyhUx+p8L6Q73zAvtHF62oe9/HlH7Oozk5Ai3ebIEipH8=
-X-Google-Smtp-Source: AGHT+IEgK+5BlWjK5hYmyAc92iK0vY/52y9egBCaI4T3OGpocF9n9vCZzb2/329/9E4vHrdt2CJvTg==
-X-Received: by 2002:a5d:5f8f:0:b0:385:f092:e16 with SMTP id ffacd0b85a97d-3862b3e3ae1mr6811496f8f.55.1733690850465;
-        Sun, 08 Dec 2024 12:47:30 -0800 (PST)
+        bh=6KOZI0Av9UpRI0wc6f07qNDNYBakRBN27GYpajM6B9g=;
+        b=evcxO5NN6IRHfvnB6UTEmBgOY1gKbo8CsXH7dO7nR7+xGKdOns8xT18cF89LJ1dF5W
+         35q40vZeJAnKNQa77kXPMjU1sST3I/OnHBZh1AcYgn5ZFC9izY3HdyXpi+OAeox/HjAE
+         p8ynDChTTk7wyp9KjBZy0oZ/3NqDDvmUhxORTCiSUyw/PxbvbubddPAoqFm7wY3FW6Tu
+         wBLZ5qVEt5Uh891eLmVofHY2Y8FEhmXlc49QjsTXh7RL4XnLsng08/9cLWIyAiIRNQ9X
+         L//Gv6wh4vXaDjwI3OLkroVhfKsrPJO5jrJplbAFwegtMFdFDgPJ/zREF2VN8sffNkxz
+         SYgg==
+X-Forwarded-Encrypted: i=1; AJvYcCU8GZPpNjeIUhJ1Bdi0W71WhGkbo/dJCZeunOu3gt338vhjzq/EFIoqjajy+o6kq0DGbfwC/XMdKKbEBWmXSdI=@vger.kernel.org, AJvYcCWbpgytGrKYEb7jLjALmWJZgTi6q7pxe5ra/hF5+6ub17yVy5S7fJ/dJ1Q9cGYHZc6VZUufihFVeaQm2MF9@vger.kernel.org, AJvYcCX0O9q/Isjy5HcNQdcI1IpuKtpwqXfuIv9o/TyhAQlkPHBX5ulV7QIQoR7ILEKGbvyZAADqfqtWdcBK@vger.kernel.org, AJvYcCX4HnRUrtQUaUTvKQsZtz9z44CszGEv5uUyxIZY4v72Jw32aeYQSkYyE3SeAZMxyGFhDKhUmhyp@vger.kernel.org
+X-Gm-Message-State: AOJu0YyghOp77/UGWukhHDLNoOqW3AfaYL9V8yV2mwM26nw8++YclHSd
+	kVEdFepxJRjY4qrHm3LdyO0mWK2ujhJaAsWMmmuzhysmoKQe3oEB
+X-Gm-Gg: ASbGncvVInZR+agE+EayyHuesNWZCV2JHHzJL/oNgyFK3C66kYa3SpVOkfc4yRB0K5i
+	0p5A7qmvgoYzCxaej08ljf8NxH104BVyGg1+0k4sNg1AiKCle5H7bzj1DC94VwF2d7J6D84zGgC
+	RSOa40p56dEzlK3WtJ73E+CORYSZn8SaXtHL6OPMVjILfYIz3XPsOEyAa3wPWI6uP7ydZmnBXup
+	BMF3dRNHibF7efj2tLB445rynDoIvWjIF7cxFYWIzk1gIdOZXrWgM8Lmfc=
+X-Google-Smtp-Source: AGHT+IFoKEXuuJkWVyc6E+OV4Yi3aleXB7y+UqdQJgSPCnb15ZOKQ6PeUxcw/WuP8movSkRgO7EseQ==
+X-Received: by 2002:a5d:64ab:0:b0:385:f271:a22c with SMTP id ffacd0b85a97d-3862b3f289emr7788206f8f.59.1733690852077;
+        Sun, 08 Dec 2024 12:47:32 -0800 (PST)
 Received: from localhost.localdomain ([46.248.82.114])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3861f59cc6fsm10874975f8f.34.2024.12.08.12.47.28
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3861f59cc6fsm10874975f8f.34.2024.12.08.12.47.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Dec 2024 12:47:29 -0800 (PST)
+        Sun, 08 Dec 2024 12:47:31 -0800 (PST)
 From: Uros Bizjak <ubizjak@gmail.com>
 To: x86@kernel.org,
 	linux-mm@kvack.org,
@@ -80,20 +80,21 @@ To: x86@kernel.org,
 	netdev@vger.kernel.org
 Cc: Uros Bizjak <ubizjak@gmail.com>,
 	Nadav Amit <nadav.amit@gmail.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
 	Dennis Zhou <dennis@kernel.org>,
 	Tejun Heo <tj@kernel.org>,
 	Christoph Lameter <cl@linux.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@kernel.org>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
 	Linus Torvalds <torvalds@linux-foundation.org>,
 	Andy Lutomirski <luto@kernel.org>,
-	Ingo Molnar <mingo@kernel.org>,
 	Brian Gerst <brgerst@gmail.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
 	Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH v3 5/6] percpu: Repurpose __percpu tag as a named address space qualifier
-Date: Sun,  8 Dec 2024 21:45:20 +0100
-Message-ID: <20241208204708.3742696-6-ubizjak@gmail.com>
+Subject: [PATCH v3 6/6] percpu/x86: Enable strict percpu checks via named AS qualifiers
+Date: Sun,  8 Dec 2024 21:45:21 +0100
+Message-ID: <20241208204708.3742696-7-ubizjak@gmail.com>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20241208204708.3742696-1-ubizjak@gmail.com>
 References: <20241208204708.3742696-1-ubizjak@gmail.com>
@@ -105,69 +106,63 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The patch introduces __percpu_qual define and repurposes __percpu
-tag as a named address space qualifier using the new define.
-
-Arches can now conditionally define __percpu_qual as their
-named address space qualifier for percpu variables.
+This patch declares percpu variables in __seg_gs/__seg_fs named AS
+and keeps them named AS qualified until they are dereferenced with
+percpu accessor. This approach enables various compiler check
+for cross-namespace variable assignments.
 
 Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
 Acked-by: Nadav Amit <nadav.amit@gmail.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Dennis Zhou <dennis@kernel.org>
 Cc: Tejun Heo <tj@kernel.org>
 Cc: Christoph Lameter <cl@linux.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
 Cc: Linus Torvalds <torvalds@linux-foundation.org>
 Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Ingo Molnar <mingo@kernel.org>
 Cc: Brian Gerst <brgerst@gmail.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
 Cc: Peter Zijlstra <peterz@infradead.org>
 ---
-v3: - Rename __per_cpu_qual to __percpu_qual.
+v2: - Add comment to remove test for __CHECKER__ once sparse learns
+      about __typeof_unqual__.
 ---
- include/asm-generic/percpu.h   | 13 +++++++++++++
- include/linux/compiler_types.h |  2 +-
- 2 files changed, 14 insertions(+), 1 deletion(-)
+ arch/x86/include/asm/percpu.h | 20 +++++++++++++++++---
+ 1 file changed, 17 insertions(+), 3 deletions(-)
 
-diff --git a/include/asm-generic/percpu.h b/include/asm-generic/percpu.h
-index 50597b975a49..02aeca21479a 100644
---- a/include/asm-generic/percpu.h
-+++ b/include/asm-generic/percpu.h
-@@ -6,6 +6,19 @@
- #include <linux/threads.h>
- #include <linux/percpu-defs.h>
+diff --git a/arch/x86/include/asm/percpu.h b/arch/x86/include/asm/percpu.h
+index 27f668660abe..1ef08289e667 100644
+--- a/arch/x86/include/asm/percpu.h
++++ b/arch/x86/include/asm/percpu.h
+@@ -95,9 +95,23 @@
  
+ #endif /* CONFIG_SMP */
+ 
+-#define __my_cpu_type(var)	typeof(var) __percpu_seg_override
+-#define __my_cpu_ptr(ptr)	(__my_cpu_type(*(ptr))*)(__force uintptr_t)(ptr)
+-#define __my_cpu_var(var)	(*__my_cpu_ptr(&(var)))
 +/*
-+ * __percpu_qual is the qualifier for the percpu named address space.
-+ *
-+ * Most arches use generic named address space for percpu variables but
-+ * some arches define percpu variables in different named address space
-+ * (on the x86 arch, percpu variable may be declared as being relative
-+ * to the %fs or %gs segments using __seg_fs or __seg_gs named address
-+ * space qualifier).
++ * XXX: Remove test for __CHECKER__ once
++ * sparse learns about __typeof_unqual__.
 + */
-+#ifndef __percpu_qual
-+# define __percpu_qual
++#if defined(CONFIG_USE_X86_SEG_SUPPORT) && \
++    defined(CONFIG_CC_HAS_TYPEOF_UNQUAL) && !defined(__CHECKER__)
++# define __my_cpu_type(var)	typeof(var)
++# define __my_cpu_ptr(ptr)	(ptr)
++# define __my_cpu_var(var)	(var)
++
++# define __percpu_qual		__percpu_seg_override
++#else
++# define __my_cpu_type(var)	typeof(var) __percpu_seg_override
++# define __my_cpu_ptr(ptr)	(__my_cpu_type(*(ptr))*)(__force uintptr_t)(ptr)
++# define __my_cpu_var(var)	(*__my_cpu_ptr(&(var)))
 +#endif
 +
- #ifdef CONFIG_SMP
+ #define __percpu_arg(x)		__percpu_prefix "%" #x
+ #define __force_percpu_arg(x)	__force_percpu_prefix "%" #x
  
- /*
-diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-index 981cc3d7e3aa..5d6544545658 100644
---- a/include/linux/compiler_types.h
-+++ b/include/linux/compiler_types.h
-@@ -57,7 +57,7 @@ static inline void __chk_io_ptr(const volatile void __iomem *ptr) { }
- #  define __user	BTF_TYPE_TAG(user)
- # endif
- # define __iomem
--# define __percpu	BTF_TYPE_TAG(percpu)
-+# define __percpu	__percpu_qual BTF_TYPE_TAG(percpu)
- # define __rcu		BTF_TYPE_TAG(rcu)
- 
- # define __chk_user_ptr(x)	(void)0
 -- 
 2.42.0
 
