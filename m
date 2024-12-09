@@ -1,174 +1,90 @@
-Return-Path: <linux-arch+bounces-9322-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9323-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30B209E8F18
-	for <lists+linux-arch@lfdr.de>; Mon,  9 Dec 2024 10:48:07 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 348D99E926A
+	for <lists+linux-arch@lfdr.de>; Mon,  9 Dec 2024 12:32:41 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B205216044D
+	for <lists+linux-arch@lfdr.de>; Mon,  9 Dec 2024 11:32:30 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 201E921E08B;
+	Mon,  9 Dec 2024 11:30:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="U5S9Uv8d"
+X-Original-To: linux-arch@vger.kernel.org
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DE0B4282951
-	for <lists+linux-arch@lfdr.de>; Mon,  9 Dec 2024 09:48:05 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82103215F6A;
-	Mon,  9 Dec 2024 09:48:02 +0000 (UTC)
-X-Original-To: linux-arch@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE24683CD2;
-	Mon,  9 Dec 2024 09:48:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C34A21D5B9;
+	Mon,  9 Dec 2024 11:30:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733737682; cv=none; b=Kqkq0G2v0AC+dqpvZtVHxxsEsVBwYsv2rEF6hC8RLnDB8D8pP+rkEmVErzWtRQ9JyACQ5wjbH6pa7ApjYv3u9tjlPbjR3UWyDBPB+ZneU6FQRn//ALkutJfVLPyU1ih85Sl+kkr3gA/fveRE1TqNXrffPArxnlO29enUMO6RfYo=
+	t=1733743848; cv=none; b=aaYFCYRGHCcfGSnOnSqWiAcHNkrEd/vMMKR1TYXK8xsMCh5phayUte0jUdOK6nUgkymwuiNZSrJGmBK0M8fMrTB087FQ4h2H3M0q3JFWtt5HaZZ22g118wAKxbI8e9/+qcMR0bfMisbBV3Cuhfgb5twT68vMz5bst0TVnEimcTI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733737682; c=relaxed/simple;
-	bh=cD0Vf44zr3UOAOE4zgF1nw22M7rJdbsowP9tcc1Jdi4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=mduHXgmEHn2vGqqUBxWCnfrPtNefimOYFDJHHF6gt6QZnLly8tcdrx1N+H8QYPPFcPJBAWc1Seumt8I7ASSjsPc8rNj4Q3fad3bO1S6G/KbiGwDdAjK41orcL+RG8a3GcFuhzlhoR40tcPfJSBc7mCl7SB72obPH15zB4Ag2kFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1C580175D;
-	Mon,  9 Dec 2024 01:48:28 -0800 (PST)
-Received: from udebian.localdomain (unknown [10.1.35.36])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E97E13F720;
-	Mon,  9 Dec 2024 01:47:57 -0800 (PST)
-From: Yury Khrustalev <yury.khrustalev@arm.com>
-To: linux-arch@vger.kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Kevin Brodsky <kevin.brodsky@arm.com>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Sandipan Das <sandipan@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-arm-kernel@lists.infradead.org,
-	x86@kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	nd@arm.com,
-	Yury Khrustalev <yury.khrustalev@arm.com>
-Subject: [RESEND v4 3/3] selftests/powerpc: Use PKEY_UNRESTRICTED macro
-Date: Mon,  9 Dec 2024 09:47:19 +0000
-Message-Id: <20241209094719.2431126-4-yury.khrustalev@arm.com>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20241209094719.2431126-1-yury.khrustalev@arm.com>
-References: <20241209094719.2431126-1-yury.khrustalev@arm.com>
+	s=arc-20240116; t=1733743848; c=relaxed/simple;
+	bh=LfcCjeIwv1Rz/2jvlcT6Rbw3bs7AFo4adyeax54DlSw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FKsXXIsdghc3h6Mf+V1KG0a6xLB6gCx2o91GoG3ZF9AMXuaezYkIh/DQBeZIUbDa7m2R9UXH12ELu1fQ2GX2QDp5UirZlPQ+mGsFMdie8N+i/1ZfMV/Y53YDHt0lbb+7TZaa07xUqStsEBoerW8MPZMiwc4RtfBJ4gjxj/h6Hus=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=U5S9Uv8d; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=qd1akmmoi31Ki/6nXtItmdXPQIscj5PkLzZDSYQld+U=; b=U5S9Uv8dgarrK9YOLdUsT6nkKn
+	a7ku8NIqbNIaINfaEHL88xngO9HFocBZYICcZ8YwvExjocLrI1p/ivxKESGpW2wHLAIQkIF61Jxpy
+	nAwCI+BLQKFB66+42Lhit3VyDUwIQrrdU9iNv58yRL0p2xVbhIFgeG9O4O8Y4mWRQcITkwZ53bAb9
+	oE0ZokyGiChjgQvpGBBzg9RidYhoJhQ/R6Ta5tBGotjdE5SUTB1upXCxIdcEDMVEqVlUnHerDqI8U
+	9hWt4xLEFb4L3hA+8q9475ePfYek+4hErmEifKGBVbyif/ugodaxBoTE/8cvNpi1RofFhk6Rx0CTA
+	+X0eH3QQ==;
+Received: from 77-249-17-89.cable.dynamic.v4.ziggo.nl ([77.249.17.89] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1tKbyK-00000001cGR-0mjj;
+	Mon, 09 Dec 2024 11:30:40 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id BF43F3003FF; Mon,  9 Dec 2024 12:30:39 +0100 (CET)
+Date: Mon, 9 Dec 2024 12:30:39 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Uros Bizjak <ubizjak@gmail.com>
+Cc: x86@kernel.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+	linux-bcachefs@vger.kernel.org, linux-arch@vger.kernel.org,
+	netdev@vger.kernel.org, Nadav Amit <nadav.amit@gmail.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
+	Christoph Lameter <cl@linux.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Andy Lutomirski <luto@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+	Brian Gerst <brgerst@gmail.com>,
+	Denys Vlasenko <dvlasenk@redhat.com>,
+	"H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH v3 2/6] compiler.h: Introduce TYPEOF_UNQUAL() macro
+Message-ID: <20241209113039.GN21636@noisy.programming.kicks-ass.net>
+References: <20241208204708.3742696-1-ubizjak@gmail.com>
+ <20241208204708.3742696-3-ubizjak@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241208204708.3742696-3-ubizjak@gmail.com>
 
-Replace literal 0 with macro PKEY_UNRESTRICTED where pkey_*() functions
-are used in mm selftests for memory protection keys for ppc target.
+On Sun, Dec 08, 2024 at 09:45:17PM +0100, Uros Bizjak wrote:
+> Define TYPEOF_UNQUAL() to use __typeof_unqual__() as typeof operator
+> when available, to return unqualified type of the expression.
+> 
+> Current version of sparse doesn't know anything about __typeof_unqual__()
+> operator. Avoid the usage of __typeof_unqual__() when sparse checking
+> is active to prevent sparse errors with unknowing keyword.
 
-Signed-off-by: Yury Khrustalev <yury.khrustalev@arm.com>
-Suggested-by: Kevin Brodsky <kevin.brodsky@arm.com>
-Reviewed-by: Kevin Brodsky <kevin.brodsky@arm.com>
+Ooooh, new toys.
 
----
-Note that I couldn't build these tests so I would appreciate if someone
-could check this patch. Thank you!
----
- tools/testing/selftests/powerpc/include/pkeys.h      | 2 +-
- tools/testing/selftests/powerpc/mm/pkey_exec_prot.c  | 2 +-
- tools/testing/selftests/powerpc/mm/pkey_siginfo.c    | 2 +-
- tools/testing/selftests/powerpc/ptrace/core-pkey.c   | 6 +++---
- tools/testing/selftests/powerpc/ptrace/ptrace-pkey.c | 6 +++---
- 5 files changed, 9 insertions(+), 9 deletions(-)
-
-diff --git a/tools/testing/selftests/powerpc/include/pkeys.h b/tools/testing/selftests/powerpc/include/pkeys.h
-index 51729d9a7111..430cb4bd7472 100644
---- a/tools/testing/selftests/powerpc/include/pkeys.h
-+++ b/tools/testing/selftests/powerpc/include/pkeys.h
-@@ -85,7 +85,7 @@ int pkeys_unsupported(void)
- 	SKIP_IF(!hash_mmu);
- 
- 	/* Check if the system call is supported */
--	pkey = sys_pkey_alloc(0, 0);
-+	pkey = sys_pkey_alloc(0, PKEY_UNRESTRICTED);
- 	SKIP_IF(pkey < 0);
- 	sys_pkey_free(pkey);
- 
-diff --git a/tools/testing/selftests/powerpc/mm/pkey_exec_prot.c b/tools/testing/selftests/powerpc/mm/pkey_exec_prot.c
-index 0af4f02669a1..29b91b7456eb 100644
---- a/tools/testing/selftests/powerpc/mm/pkey_exec_prot.c
-+++ b/tools/testing/selftests/powerpc/mm/pkey_exec_prot.c
-@@ -72,7 +72,7 @@ static void segv_handler(int signum, siginfo_t *sinfo, void *ctx)
- 
- 		switch (fault_type) {
- 		case PKEY_DISABLE_ACCESS:
--			pkey_set_rights(fault_pkey, 0);
-+			pkey_set_rights(fault_pkey, PKEY_UNRESTRICTED);
- 			break;
- 		case PKEY_DISABLE_EXECUTE:
- 			/*
-diff --git a/tools/testing/selftests/powerpc/mm/pkey_siginfo.c b/tools/testing/selftests/powerpc/mm/pkey_siginfo.c
-index 2db76e56d4cb..e89a164c686b 100644
---- a/tools/testing/selftests/powerpc/mm/pkey_siginfo.c
-+++ b/tools/testing/selftests/powerpc/mm/pkey_siginfo.c
-@@ -83,7 +83,7 @@ static void segv_handler(int signum, siginfo_t *sinfo, void *ctx)
- 	    mprotect(pgstart, pgsize, PROT_EXEC))
- 		_exit(1);
- 	else
--		pkey_set_rights(pkey, 0);
-+		pkey_set_rights(pkey, PKEY_UNRESTRICTED);
- 
- 	fault_count++;
- }
-diff --git a/tools/testing/selftests/powerpc/ptrace/core-pkey.c b/tools/testing/selftests/powerpc/ptrace/core-pkey.c
-index f6da4cb30cd6..64c985445cb7 100644
---- a/tools/testing/selftests/powerpc/ptrace/core-pkey.c
-+++ b/tools/testing/selftests/powerpc/ptrace/core-pkey.c
-@@ -124,16 +124,16 @@ static int child(struct shared_info *info)
- 	/* Get some pkeys so that we can change their bits in the AMR. */
- 	pkey1 = sys_pkey_alloc(0, PKEY_DISABLE_EXECUTE);
- 	if (pkey1 < 0) {
--		pkey1 = sys_pkey_alloc(0, 0);
-+		pkey1 = sys_pkey_alloc(0, PKEY_UNRESTRICTED);
- 		FAIL_IF(pkey1 < 0);
- 
- 		disable_execute = false;
- 	}
- 
--	pkey2 = sys_pkey_alloc(0, 0);
-+	pkey2 = sys_pkey_alloc(0, PKEY_UNRESTRICTED);
- 	FAIL_IF(pkey2 < 0);
- 
--	pkey3 = sys_pkey_alloc(0, 0);
-+	pkey3 = sys_pkey_alloc(0, PKEY_UNRESTRICTED);
- 	FAIL_IF(pkey3 < 0);
- 
- 	info->amr |= 3ul << pkeyshift(pkey1) | 2ul << pkeyshift(pkey2);
-diff --git a/tools/testing/selftests/powerpc/ptrace/ptrace-pkey.c b/tools/testing/selftests/powerpc/ptrace/ptrace-pkey.c
-index d89474377f11..37794f82ed66 100644
---- a/tools/testing/selftests/powerpc/ptrace/ptrace-pkey.c
-+++ b/tools/testing/selftests/powerpc/ptrace/ptrace-pkey.c
-@@ -81,16 +81,16 @@ static int child(struct shared_info *info)
- 	/* Get some pkeys so that we can change their bits in the AMR. */
- 	pkey1 = sys_pkey_alloc(0, PKEY_DISABLE_EXECUTE);
- 	if (pkey1 < 0) {
--		pkey1 = sys_pkey_alloc(0, 0);
-+		pkey1 = sys_pkey_alloc(0, PKEY_UNRESTRICTED);
- 		CHILD_FAIL_IF(pkey1 < 0, &info->child_sync);
- 
- 		disable_execute = false;
- 	}
- 
--	pkey2 = sys_pkey_alloc(0, 0);
-+	pkey2 = sys_pkey_alloc(0, PKEY_UNRESTRICTED);
- 	CHILD_FAIL_IF(pkey2 < 0, &info->child_sync);
- 
--	pkey3 = sys_pkey_alloc(0, 0);
-+	pkey3 = sys_pkey_alloc(0, PKEY_UNRESTRICTED);
- 	CHILD_FAIL_IF(pkey3 < 0, &info->child_sync);
- 
- 	info->amr1 |= 3ul << pkeyshift(pkey1);
--- 
-2.39.5
-
+I suppose __unqual_scalar_typeof() wants to be using this when
+available?
 
