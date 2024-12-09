@@ -1,124 +1,141 @@
-Return-Path: <linux-arch+bounces-9317-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9318-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D75D99E8DA7
-	for <lists+linux-arch@lfdr.de>; Mon,  9 Dec 2024 09:39:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3132F9E8EC4
+	for <lists+linux-arch@lfdr.de>; Mon,  9 Dec 2024 10:30:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8F5CA281509
-	for <lists+linux-arch@lfdr.de>; Mon,  9 Dec 2024 08:39:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B0E892845BC
+	for <lists+linux-arch@lfdr.de>; Mon,  9 Dec 2024 09:30:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 180F921518F;
-	Mon,  9 Dec 2024 08:39:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F575216391;
+	Mon,  9 Dec 2024 09:30:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L4CzFrdY"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEFB212CDAE;
-	Mon,  9 Dec 2024 08:39:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D8BE216388;
+	Mon,  9 Dec 2024 09:30:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733733590; cv=none; b=AaAG5O49jwXcxz3EJmjbTROjgNHRYTK7tmWJiMAfnCUiGyZGPerFOCdENV7jWu/Noogy8agXVAD/DiNjpKeml8Nqn4j/HV4cR/NIYXHsekilWbOMxmmngU8OGGtUlJRI5YpkdVFZaQs9PdPJJ5GgsaqBoRG6iNBpBIrwaF9BUyc=
+	t=1733736603; cv=none; b=e0CODS4mDT2WHLaOx37ZUSngFlWl+Um1L1bcfK/z4zYWdlcIfknID2N4NQulWX29WQs46elt+kz5hhOpfuIWI9tXI0QGnNwEfg+YI880J8lxosYUzCHd4K6+rMihA2AHyCZ+8rIcIH9rC+d+xWQl0wlif7jHvqowwibWgc4D+KE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733733590; c=relaxed/simple;
-	bh=Jl8XVHqMZt2C6NUaLrvrkjVEAEzOnkGkd2PgS8L6ovM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DzyCFLC0S8J4n3IvtojK5kwwAmAk1nrt0zrK7r4YyQEA3i2dUCnZQQ3cO4w2uE1W7+s3kQs5urXwjB6O6lzw7VNZLqMS/pvUTvSKPiruBLra5iqu4w3nn9pCIa5matXSKADmZ89eVipJjsByeCPYU3yXvK2+XsThRAv8h0NMhYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a9a68480164so545786766b.3;
-        Mon, 09 Dec 2024 00:39:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733733585; x=1734338385;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FkBZuLv19PU6NMyD5z5lsGrY5nzevthCnCME1a5gWHg=;
-        b=HMRiZVoRKVJcnpDra6qF7IANOLkfKknsWyxlvJXudxXtcLkm2/UV/Dt4rkTW4xlYtT
-         pGtEryOXcL+0b3JaKYgB+9A4UkLO8D2jGenbFQJ6EySmibJ8lY8rJXQ4+70rOLquAKV5
-         vUWRJk3Jsu4Q9cKmK+jyc66uppSDtM9b78qCwLYPi/Ed2Cj34F89reC+MkzrYbX3XAPB
-         MQynlNbS9YaTj9z66faO7EE8WffiJFZFF34sebjmyIvxmUAMtm0lgTLckYs4hUYMHfOh
-         YxBFZtsYkIyNg2Whb3VtRgDmwhZZBHbjctgqOY4x5f/wJsimXSycVlxuzWls0dG8j37U
-         G1Jw==
-X-Forwarded-Encrypted: i=1; AJvYcCV/KL1MQfdI7r4RW1fj/mM/fj2x1VL01Idb/XJURiXScmvcw3r/Gtjl/X16wo4hYEroKuRw9Rs5YTpAbCGN@vger.kernel.org, AJvYcCVcgP4vZbmbilMwn5jgtBHaid6nPLPtTz5ofRJjGeDYg47eXVBriNnza6AfrhI4fQ5zHoy+1pVqtovlBg4P@vger.kernel.org, AJvYcCXm1+0rWi3gfXSsWf1C1WwI1Qh1c12qnNRyAEYHgCZyZSmMOQ2JUHHb82FAZB/89uOgLKX06Rn/E/dD@vger.kernel.org
-X-Gm-Message-State: AOJu0YzyIUI6XjO5lKVPLawQVZ8MBK9sxO7seZRHWKIKb1gsGbYqKv6/
-	V6cqc5lVY2J/0xMdWW9SbIki/yXHPvrwnXxTXtyp9dcd9eMFicCoLUE7p182mkg=
-X-Gm-Gg: ASbGncspRNzVIUZ2vn4rGgtVCI3Qf/+zzWAhRWu19b0cfELebfjuVYk3Uvs5j+ee7gO
-	Chv5Z4IKrWLfLmjFsY6+XPc1sPAVXfwQd7vp5EAy5Hu4b05O2UhJSqa3qJeHN0SU8jr+j53ZAfe
-	BV2ucL95jSLn9ZJygxEUUPFOPto1zzK19zSDHPB8kwJ0/YGu2w3nsPyPOSqTxyf8s6rQ0lg69xW
-	TvcXj2bdOxzD4/lwwG3m92Ic1B4i/2bpBHprwzwvUrpkwsRKKrLAWhRNuJp3CTyLEe5v8J39qmq
-	m/0vZd0ufCwZ
-X-Google-Smtp-Source: AGHT+IGUEbVU0BSWlVfqWyxDy6KCsCOKx0H7o7k4EVwuIVlDkCo8ptmatHysFIAIBAb6frQgBvZB9g==
-X-Received: by 2002:a17:907:7809:b0:a9a:9df:5580 with SMTP id a640c23a62f3a-aa639fed45cmr1119584866b.19.1733733585031;
-        Mon, 09 Dec 2024 00:39:45 -0800 (PST)
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com. [209.85.208.54])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa68770c481sm120047266b.110.2024.12.09.00.39.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Dec 2024 00:39:44 -0800 (PST)
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5d3e8f64d5dso2098123a12.3;
-        Mon, 09 Dec 2024 00:39:44 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVi80gM9sVJ37J8rLX6LTRM5ioRO5k9UElkgq8ixkwQRym/r/DS7Yeph8rIWg/P5cjTVZ2Aut4TKahl@vger.kernel.org, AJvYcCVrkAfgBlz8+s6L3FQHEmFc3HFimh6HnQ54iWW9AErhTdV1hUZicoq3fbqw2gibgItQljbdoKG/W582fa5n@vger.kernel.org, AJvYcCW5R/3aqdy7JTQab32Q7Pwoa0ei7mNAb1s70D8AoORtth/h7LaeDiyzyRbVam0AtXnHvzVRxGwbAaOmjs4O@vger.kernel.org
-X-Received: by 2002:a05:6402:380c:b0:5d0:e3fa:17ca with SMTP id
- 4fb4d7f45d1cf-5d3be695187mr11236302a12.15.1733733584470; Mon, 09 Dec 2024
- 00:39:44 -0800 (PST)
+	s=arc-20240116; t=1733736603; c=relaxed/simple;
+	bh=yv+BSltKp4b7A7hq39KJPxFz5WT9p6xbBqie83T2ieY=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=RZAOVWYUc4ni+xpZ4J4D9kal5KE8RXQx3GR5VchGLOS4aRzPzJ5j8F5eEOf2x8520Bg1DgUsiZeQ2eW2vN/WUcd1SjVGA+AHvlgLkz22esQ+T+Imb4BDUoWODhRFYhNWycaC99ai45AQhP9bgIqwDoPhg2Qq3C587KuS7bZnlo4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L4CzFrdY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 910B1C4CED1;
+	Mon,  9 Dec 2024 09:29:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733736602;
+	bh=yv+BSltKp4b7A7hq39KJPxFz5WT9p6xbBqie83T2ieY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=L4CzFrdYneCq3dkDXjc2V6Gs5DYTie8l/t+bAoyHktrPazWKH4i0yCt+IjFxOvoV6
+	 QyY1xl/05OM+ALdiO2G474Ld3dwOMIFeR65lIwu0Q+NDQCFq6Jpy2A7PCfWY+kvls2
+	 Q3AhPAD3hQokITEPSkyU0LNrtftyWud9wX9G45X229DydbeIH+F8EDbr4QhKusvyZt
+	 hSguNZeg/EhGBJEZ7X/QsyA3FSu5KwRrNCBH/IA/QhP+Bw9t6e19X8Ll20/Xj4hfMv
+	 ANa9JxuxARej/+JkVWgtSjbYVwEo8wjkgCLXNIj0MdrHzOO/m/nFtmVIcy3zUDEUHG
+	 BE7mh+H7N73yw==
+Date: Mon, 9 Dec 2024 18:29:57 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Steven Rostedt
+ <rostedt@goodmis.org>, Florent Revest <revest@chromium.org>,
+ linux-trace-kernel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, bpf <bpf@vger.kernel.org>, Alexei
+ Starovoitov <ast@kernel.org>, Jiri Olsa <jolsa@kernel.org>, Alan Maguire
+ <alan.maguire@oracle.com>, Mark Rutland <mark.rutland@arm.com>,
+ linux-arch@vger.kernel.org
+Subject: Re: [PATCH v19 19/19] bpf: Use ftrace_get_symaddr() in
+ get_entry_ip()
+Message-Id: <20241209182957.2d5933b7db40647822b45273@kernel.org>
+In-Reply-To: <173125395146.172790.15945895464150788842.stgit@devnote2>
+References: <173125372214.172790.6929368952404083802.stgit@devnote2>
+	<173125395146.172790.15945895464150788842.stgit@devnote2>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <cover.1733404444.git.geert+renesas@glider.be> <2c4a75726a976d117055055b68a31c40dcab044e.1733404444.git.geert+renesas@glider.be>
- <b0e9c31f81a368375541d16dbc88783f614ede6d.camel@perches.com> <CAK7LNARwQq-woUeM+a-Eg=Kh3Eu045xL9Y6tbOY0FAM4+Jk4hQ@mail.gmail.com>
-In-Reply-To: <CAK7LNARwQq-woUeM+a-Eg=Kh3Eu045xL9Y6tbOY0FAM4+Jk4hQ@mail.gmail.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 9 Dec 2024 09:39:31 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVcXxQUErB6KA2MzaK6v4OO5GEmd9HfES13LE+K4thktg@mail.gmail.com>
-Message-ID: <CAMuHMdVcXxQUErB6KA2MzaK6v4OO5GEmd9HfES13LE+K4thktg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] checkpatch: Update reference to include/asm-<arch>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Joe Perches <joe@perches.com>, Oleg Nesterov <oleg@redhat.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
-	Andy Whitcroft <apw@canonical.com>, Dwaipayan Ray <dwaipayanray1@gmail.com>, 
-	Lukas Bulwahn <lukas.bulwahn@gmail.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nicolas@fjasle.eu>, linux-arch@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Yamada-san,
+On Mon, 11 Nov 2024 00:52:31 +0900
+"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
 
-On Sat, Dec 7, 2024 at 3:31=E2=80=AFPM Masahiro Yamada <masahiroy@kernel.or=
-g> wrote:
-> On Fri, Dec 6, 2024 at 1:40=E2=80=AFAM Joe Perches <joe@perches.com> wrot=
-e:
-> > On Thu, 2024-12-05 at 14:20 +0100, Geert Uytterhoeven wrote:
-> > > "include/asm-<arch>" was replaced by "arch/<arch>/include/asm" a long
-> > > time ago.
->
-> Is this check still needed?
->
-> include/asm was a symlink to include/asm-<architecture> in the old days,
-> but it no longer exists.
->
-> In which case, is this check triggered?
+> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 
+> Rewrite get_entry_ip() to use ftrace_get_symaddr() macro.
 
-Someone might still try to create a header file under include/asm/.
+I found a root problem of this patch. This get_entry_ip() is used not
+only for fprobe (kprobe_multi) but also kprobes, but that is wrong.
+On x86, both kprobes and ftrace (fentry) have the same restriction,
+it should avoid ENDBR. But on arm64, ftrace_get_symaddr() is only for
+fprobe, and kp->addr should point the symbol address.
 
-Gr{oetje,eeting}s,
+So what I should do is to use `ftrace_get_symaddr()` version for
+fprobe (kprobe_multi) and keep this original function for kprobe.
 
-                        Geert
+Let me fix that.
 
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
+Thanks,
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+> 
+> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> ---
+>  Changes in v19:
+>   - Use ftrace_get_symaddr() instead of introducing new arch dependent code.
+>   - Also, replace x86 code with ftrace_get_symaddr(), which does the same
+>    thing.
+> ---
+>  kernel/trace/bpf_trace.c |   19 ++-----------------
+>  1 file changed, 2 insertions(+), 17 deletions(-)
+> 
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index 1532e9172bf9..e848a782bc8d 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -1024,27 +1024,12 @@ static const struct bpf_func_proto bpf_get_func_ip_proto_tracing = {
+>  	.arg1_type	= ARG_PTR_TO_CTX,
+>  };
+>  
+> -#ifdef CONFIG_X86_KERNEL_IBT
+>  static unsigned long get_entry_ip(unsigned long fentry_ip)
+>  {
+> -	u32 instr;
+> +	unsigned long ret = ftrace_get_symaddr(fentry_ip);
+>  
+> -	/* We want to be extra safe in case entry ip is on the page edge,
+> -	 * but otherwise we need to avoid get_kernel_nofault()'s overhead.
+> -	 */
+> -	if ((fentry_ip & ~PAGE_MASK) < ENDBR_INSN_SIZE) {
+> -		if (get_kernel_nofault(instr, (u32 *)(fentry_ip - ENDBR_INSN_SIZE)))
+> -			return fentry_ip;
+> -	} else {
+> -		instr = *(u32 *)(fentry_ip - ENDBR_INSN_SIZE);
+> -	}
+> -	if (is_endbr(instr))
+> -		fentry_ip -= ENDBR_INSN_SIZE;
+> -	return fentry_ip;
+> +	return ret ? : fentry_ip;
+>  }
+> -#else
+> -#define get_entry_ip(fentry_ip) fentry_ip
+> -#endif
+>  
+>  BPF_CALL_1(bpf_get_func_ip_kprobe, struct pt_regs *, regs)
+>  {
+> 
+> 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
