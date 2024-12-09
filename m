@@ -1,47 +1,47 @@
-Return-Path: <linux-arch+bounces-9312-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9313-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3940E9E889D
-	for <lists+linux-arch@lfdr.de>; Mon,  9 Dec 2024 01:06:04 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B8539E88A4
+	for <lists+linux-arch@lfdr.de>; Mon,  9 Dec 2024 01:07:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 227FF163B3B
-	for <lists+linux-arch@lfdr.de>; Mon,  9 Dec 2024 00:06:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9868F16377C
+	for <lists+linux-arch@lfdr.de>; Mon,  9 Dec 2024 00:07:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 139A928EA;
-	Mon,  9 Dec 2024 00:05:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58BF72572;
+	Mon,  9 Dec 2024 00:07:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DXF9NPn9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iax8gMl+"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAEF819A;
-	Mon,  9 Dec 2024 00:05:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EADC28EA;
+	Mon,  9 Dec 2024 00:07:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733702759; cv=none; b=kJoSIN6jyKo3rqmpk43AN7pXMXgkUz9ENlC8Q+/QVlLWPnqO6bkQU8NU1UrYwmbo8/wH//uu50vbOkxwzdv2hdrBE9WXh1Ju5qdy2G2w/1nOPfenLEnfUBfC/seKq11IKcgfNvKZYTk6hsSGqxnT5iTc0GEpDq3aRFt26Fa2GgM=
+	t=1733702843; cv=none; b=eu+6LnSpb3BU4zcM/3Sv7SDHGVOPwwocZoCU4N+If7w285eHkRlQ4ZJpEWKVtSrO7ksnYwGtaT4CxYf5iPzk6/7Cle4HE62sCu0gwlVzGUvY0Now7yVc5PeAXMth0C2YYgBeSdNplYOv8l5sweF9RzRPpC/bqgFsh51Hz3n5+FA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733702759; c=relaxed/simple;
-	bh=KOSE2+0IJQr/pu3UWE4qE1sa7hIxtXcxZxP8jtFM2qk=;
+	s=arc-20240116; t=1733702843; c=relaxed/simple;
+	bh=qQNrvfENV3cjN5xREbhZ7VhcAz/yAeIeQ9LRLJN97rw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O44FhUi3NBsGKpbYlXx+pMb/lC4bcqmu2NkHl1E1415n925OZKLKz2PTWEa3q1W4hSb2RRPnfv0+V5w//nM+diDtFXIm4aghEC0NJMP5P66+5sd/OP+SRvSLc0cVtLTc/0IwPYroVlXijaJXbNthQEqpSFPDBWVmRxCoN+pgZLg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DXF9NPn9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91F2CC4CED2;
-	Mon,  9 Dec 2024 00:05:57 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=gqzSjAP1f+HNIYmxLb/akpz5szyHyd0MOauHQt2gteW+ZN9HrIldFEdMvdltVhhoKQi9tUbtUCQ8iCPaNOAZ2Qdb8/j4CPFfIoD1fHIJ8fjLJ9oNvgvYVWsW0KY6sCR+caBiFOGTuN2lvdwDh5S9CJr2BLBE9BLETp1N+SQl7KM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iax8gMl+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2E74C4CED2;
+	Mon,  9 Dec 2024 00:07:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733702758;
-	bh=KOSE2+0IJQr/pu3UWE4qE1sa7hIxtXcxZxP8jtFM2qk=;
+	s=k20201202; t=1733702842;
+	bh=qQNrvfENV3cjN5xREbhZ7VhcAz/yAeIeQ9LRLJN97rw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DXF9NPn9POFP50emVFrAtfIHqq4k8Ait3jzAckDzNP4bGmUk6T8lv6B0EIk7fxs1U
-	 u7pjIv1BdHmbkxLaCyDrqJ4fAw2qD+sefOnHMs79XCU1/ccDaVEsY8F86kazyBJr6M
-	 PjJunvWrVykhl/mhPfkYR2UxjUex+regGgNhtDqxdKH+urlUjGi4XqeldagYnbQSxW
-	 lSxM+nTE2m+KYy1gibCaV6aXWA2i8NfGqXbAcVKwqmjgyBrs7oKccYOETeAQKZYlwH
-	 3qilQ0Q/zFmyj3DBqfn5svbmu/EaZbdsza73DiOz60mE4GWluNMmHLT061A3r4GXK8
-	 TI1wK055FK+iQ==
-Date: Mon, 9 Dec 2024 00:05:56 +0000
+	b=iax8gMl+0GT3J8M4iZ9gQyDPrIu27a3sIyltOK6REilnDJPHdyhdVAXaRpTxxtOqB
+	 MuqYjX3mhFXSRTor5pSLAmTNhGqLX3rmQwUsVw1mIIQaMU8vd7TVVaPJGzHmpmf/D0
+	 daiD828J/LIghaf4mumgtHGdKuVOqThvGRQ1PTODlqAUQpPGSsDwLt9knC26SfKG8m
+	 WwmSMezcdQ82gahImT/PW3UM/9cgOCD2+zwAWFB94NzIC+EQ1lBvz5zRGeTOxXjn89
+	 QpSpbyWeYA4tGb+l7kxIZkDNWiRpm9eHgkMBH9Vmty7qgrQhdwOU8rrzaCbGYjrm8x
+	 /E28uEALgWPAg==
+Date: Mon, 9 Dec 2024 00:07:20 +0000
 From: Wei Liu <wei.liu@kernel.org>
 To: Nuno Das Neves <nunodasneves@linux.microsoft.com>
 Cc: linux-hyperv@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
@@ -63,9 +63,10 @@ Cc: linux-hyperv@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
 	mukeshrathor@microsoft.com, vkuznets@redhat.com,
 	ssengar@linux.microsoft.com, apais@linux.microsoft.com,
 	eahariha@linux.microsoft.com, horms@kernel.org
-Subject: Re: [PATCH v3 0/5] Introduce new headers for Hyper-V
-Message-ID: <Z1Y0ZB0J16oeHBbK@liuwe-devbox-debian-v2>
+Subject: Re: [PATCH v3 1/5] hyperv: Move hv_connection_id to hyperv-tlfs.h
+Message-ID: <Z1Y0uJlVn-86KHE8@liuwe-devbox-debian-v2>
 References: <1732577084-2122-1-git-send-email-nunodasneves@linux.microsoft.com>
+ <1732577084-2122-2-git-send-email-nunodasneves@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -74,32 +75,26 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1732577084-2122-1-git-send-email-nunodasneves@linux.microsoft.com>
+In-Reply-To: <1732577084-2122-2-git-send-email-nunodasneves@linux.microsoft.com>
 
-On Mon, Nov 25, 2024 at 03:24:39PM -0800, Nuno Das Neves wrote:
-> To support Linux as root partition[1] on Hyper-V many new definitions
-> are required.
+On Mon, Nov 25, 2024 at 03:24:40PM -0800, Nuno Das Neves wrote:
+> This definition is in the wrong file; it is part of the TLFS doc.
 > 
-> The plan going forward is to directly import definitions from
-> Hyper-V code without waiting for them to land in the TLFS document.
-> This is a quicker and more maintainable way to import definitions,
-> and is a step toward the eventual goal of exporting the headers
-> directly from Hyper-V for use in Linux.
-> 
-> This patch series introduces new headers (hvhdk.h, hvgdk.h, etc,
-> see patch #3) derived directly from Hyper-V code. hyperv-tlfs.h is
-> replaced with hvhdk.h (which includes the other new headers)
-> everywhere.
-> 
-> No functional change is expected.
-> 
-> Summary:
-> Patch 1-2: Minor cleanup patches
-> Patch 3: Add the new headers (hvhdk.h, etc..) in include/hyperv/
-> Patch 4: Switch to the new headers
-> Patch 5: Delete hyperv-tlfs.h files
-> 
+> Acked-by: Wei Liu <wei.liu@kernel.org>
+> Reviewed-by: Easwar Hariharan <eahariha@linux.microsoft.com>
+> Reviewed-by: Michael Kelley <mhklinux@outlook.com>
 > Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
 
-Applied to hyperv-next. Thanks.
+One comment about the ordering of the tags. It is better to organize
+them in the following order:
+
+Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
+Acked-by: Wei Liu <wei.liu@kernel.org>
+Reviewed-by: Easwar Hariharan <eahariha@linux.microsoft.com>
+Reviewed-by: Michael Kelley <mhklinux@outlook.com>
+
+I've made the change for you while applying the patch.
+
+Thanks,
+Wei.
 
