@@ -1,188 +1,275 @@
-Return-Path: <linux-arch+bounces-9352-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9353-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28B869EB69A
-	for <lists+linux-arch@lfdr.de>; Tue, 10 Dec 2024 17:37:31 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E82129EB6B5
+	for <lists+linux-arch@lfdr.de>; Tue, 10 Dec 2024 17:41:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1EF31160EE3
-	for <lists+linux-arch@lfdr.de>; Tue, 10 Dec 2024 16:37:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 104B7166833
+	for <lists+linux-arch@lfdr.de>; Tue, 10 Dec 2024 16:41:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 545011C07C2;
-	Tue, 10 Dec 2024 16:37:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCD64234976;
+	Tue, 10 Dec 2024 16:40:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lPXQkT5e"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="qaAvYq7l"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BD7F1A3BA1;
-	Tue, 10 Dec 2024 16:37:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09984234960;
+	Tue, 10 Dec 2024 16:40:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733848646; cv=none; b=YjO+JnVuzfLdsGfyoe4aa1QQXLkXXB72c1+vumaYu90L9UbIaSkfiEVUPwM5S5J9XRv8fp2cYrW5T4hehj9RgdtRQssUFoOraULfaJCxcaq1Ewiezl3jGG+j1BtRpMk24pL5r+RcBSPSqvvAiwlrqA1TQ7wGJLnhc4pxwBPMZ0Y=
+	t=1733848851; cv=none; b=pweoQsT80nT9wadjYq1TqKAi/Jg/MTlvv2FHpb6qJ/uIb3fpuj23yPrnI5kBtIjfr9tD563Y+WbdIQP6Zuhj1whzoQB5XeVDBzTMdnG+XForB6SoHI4cPpHTdoD4ZR6GDX8nfDr/Q5VQZTqhllPM59ejKIGPBJ5iExeQ9jafyY4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733848646; c=relaxed/simple;
-	bh=bMaWMUz5V3ffO6Fby9ugSZR/xOrKRSiA3Zeu/M2/xfM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PfiBnaSSekB7NcoKDR9WAMPOlNDcdANLdzEYfMtw47zOxOQc6fZ0nNZj951p9QwKCJhCRN3gN6U/LvAuJ8H+TjHO+8SB/CZEwpDSm2a0n7ZCZNxbW3EMhGqrD/1zitpUwm0T1Jyrd91W92YRNbfkWNF3UX6Z99g+9Kgz4tQiTnY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lPXQkT5e; arc=none smtp.client-ip=209.85.208.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-30227ccf803so18584321fa.2;
-        Tue, 10 Dec 2024 08:37:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733848642; x=1734453442; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mMr2qVhA4J2Ksp2znQVcePx2ayh49sbpV9PFu6+5bZw=;
-        b=lPXQkT5eLbSJihPkq8nL0G8RkVzHzRoxK5mOatJadWIYXOxVDxpn+B/NjAsr3sNkyW
-         1cOGWBUM5DRxAknBLIIa5/A6cn7p9apbJyoJY2cMcfyqNdMJmMpKTp3JSDPexsdvavMs
-         5A+p1IsBU7sMkhEMTAjkU9wVpTHamZClnZMpUD+ekJn57j2QdyqlhkalHW1p+PH98SlX
-         NVO4E10KbKrtbbotRq0efHbzE6alEW2Dxj24B3MKZedyTM0yBpAAVZr5zdXKimdq2u7+
-         Zr8TjDW/hNkxGRvO/JDpak679tjOrtPnPQ6QhFNRe+jiirI/iLSsZE5ER/mC8JIZcB4p
-         nEig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733848642; x=1734453442;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mMr2qVhA4J2Ksp2znQVcePx2ayh49sbpV9PFu6+5bZw=;
-        b=t3VqFKAyh/iCq8qnFGWP+G27/0aq73Zt7kpOaAlPc5AtRJmLAruSeGmx1BO7twHDTi
-         tiiwQUrDPTrSHNMhn86hK2i9HGubV7CN0dRLJT/mIpqj5mcNwjNDsLjXpq4hS+4ffOwZ
-         tiszA4Die3jB2y7RkgUPHIhWMDdhB7sPytKysJz3ZAVHnBuyIdnsEJDPaedDsIbNjtQz
-         g1aExzpVYkbROFnqsKwokSe2AGfz8FOavv2bao+MtAv3CxWtJErBuhG/32p9C2VrRYKN
-         7hgyZ9Pm+LXsmYcunJ5b2bKX8BJ7mJHzGNP9HtNZzrPWp1n12jnkJLMIpVM2o6shTEZU
-         nnCw==
-X-Forwarded-Encrypted: i=1; AJvYcCUIA1APIB+1IXaJSTYld/QCmEc+YQtiTxQU+0hiXS1IJ7dl3+SbEoivIoGLL3Rt+dyv1Jvqf5ol@vger.kernel.org, AJvYcCVAtMZwqvBaghoKPvWhxRe+dogpLB5F85HKRwxWfq9wGoSwj2OrY6kSANwIYysufOyMdQ13Op8MIXPA@vger.kernel.org, AJvYcCVS1daRC6bzX4QHacuXx/Axq+TYWzUsmvsvavZ1spW2QHxesWHYfTT/OqrsDUj1guESVbxvG4pzPN+tS23toYk=@vger.kernel.org, AJvYcCWsAMbak7iBv9MOlSQ3bdWPsrNby2V/vIyRjiEZ0fmnrWcAG6PKoxEImYU5NSUfjPgXf6MB+1wcUzlKZM1v@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw80Bl/eCnReMrBbhcMMYZPNkDJoWLNFA3qinKBehRBL/ZpLhU8
-	1ZWrEEvIWJM5/QBsLYrK5aFKqp4HYkloFMc2eWMz6TPz/0ZfiFDLNOIL79b00FI5tPmx/C1Q2i8
-	ZU194xuOhgBdPeZb0trwY2S6tRHQ=
-X-Gm-Gg: ASbGnct6exCBj4xdRBsNdU2qWnitw9JO2TT5yDWfxOvxcBTQYE5uwg4bj8L3Yto0dY/
-	8gAATxVLCoIkAz3+xTa3QA4+lfW3U9aSeoSU=
-X-Google-Smtp-Source: AGHT+IHiGI51RueWOS5PEJQEG+4Gh2nJXRo4OsJkgCK1jqR6c9JsfhkuPRwhfJ6Gu9P1fz4wuUEMdL6zMVunaz4Mo1A=
-X-Received: by 2002:a05:651c:150c:b0:300:41a8:125b with SMTP id
- 38308e7fff4ca-30041a813f7mr47506931fa.37.1733848642191; Tue, 10 Dec 2024
- 08:37:22 -0800 (PST)
+	s=arc-20240116; t=1733848851; c=relaxed/simple;
+	bh=bNrc3/QIRuMRADX4i6xidePb7Se8rnZoHFgWuntFk6o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oFCpfv8qG8c8jO7gPWUGOy46hsi4Cvj5OLubgtaa4VigQlAnJG2D/0JX00wI6U6zUG600ZXsKVOagBRzOoc08pZJlhMpbNTEtnELf2g/AzNlZM50ryBOpyY1WMFPgZsoQwL3JD0ngSDGwJZ4pQV8ZGPOO2pO8OXU7uc6B34DNhM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=qaAvYq7l; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [10.16.84.29] (unknown [131.107.8.93])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 564502047222;
+	Tue, 10 Dec 2024 08:40:49 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 564502047222
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1733848849;
+	bh=jrmNUEzHaPbfzPastsRVKoN7SSf1AJHpgCYDuVUBkcs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=qaAvYq7lyqspuQZ7OkIAAqOTvmA+2X29R4IObrDpeT1/2dvBSeRobjCAh6lzuXTIB
+	 mCRwtak/ZzDJ5+IqnZv+ZWmlbSk5oi8gPenZI/luDYlvBia7HUu+Z7kvfxa3KjhD8E
+	 TnsRBHVn/f7nO8STVaJc0gW220fXwfN8VhaB3pdg=
+Message-ID: <fec1aeb7-ea07-4363-9e6a-50b0c778e855@linux.microsoft.com>
+Date: Tue, 10 Dec 2024 08:40:49 -0800
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241208204708.3742696-1-ubizjak@gmail.com> <20241208204708.3742696-3-ubizjak@gmail.com>
- <20241209113039.GN21636@noisy.programming.kicks-ass.net>
-In-Reply-To: <20241209113039.GN21636@noisy.programming.kicks-ass.net>
-From: Uros Bizjak <ubizjak@gmail.com>
-Date: Tue, 10 Dec 2024 17:37:10 +0100
-Message-ID: <CAFULd4Y7-_Zax3S-m3H6ok9SvsBgS7DmJjSu=3VZ1hyzT71jjg@mail.gmail.com>
-Subject: Re: [PATCH v3 2/6] compiler.h: Introduce TYPEOF_UNQUAL() macro
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: x86@kernel.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	linux-bcachefs@vger.kernel.org, linux-arch@vger.kernel.org, 
-	netdev@vger.kernel.org, Nadav Amit <nadav.amit@gmail.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
-	Christoph Lameter <cl@linux.com>, Linus Torvalds <torvalds@linux-foundation.org>, 
-	Andy Lutomirski <luto@kernel.org>, Ingo Molnar <mingo@kernel.org>, Brian Gerst <brgerst@gmail.com>, 
-	Denys Vlasenko <dvlasenk@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>, 
-	Nathan Chancellor <nathan@kernel.org>
-Content-Type: multipart/mixed; boundary="00000000000069a3ca0628ed186b"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] hyperv: Move hv_current_partition_id to arch-generic
+ code
+To: Michael Kelley <mhklinux@outlook.com>,
+ "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+Cc: "kys@microsoft.com" <kys@microsoft.com>,
+ "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
+ "wei.liu@kernel.org" <wei.liu@kernel.org>,
+ "decui@microsoft.com" <decui@microsoft.com>,
+ "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+ "will@kernel.org" <will@kernel.org>, "tglx@linutronix.de"
+ <tglx@linutronix.de>, "mingo@redhat.com" <mingo@redhat.com>,
+ "bp@alien8.de" <bp@alien8.de>,
+ "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+ "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+ "arnd@arndb.de" <arnd@arndb.de>,
+ "jinankjain@linux.microsoft.com" <jinankjain@linux.microsoft.com>,
+ "muminulrussell@gmail.com" <muminulrussell@gmail.com>,
+ "skinsburskii@linux.microsoft.com" <skinsburskii@linux.microsoft.com>,
+ "mukeshrathor@microsoft.com" <mukeshrathor@microsoft.com>
+References: <1733523707-15954-1-git-send-email-nunodasneves@linux.microsoft.com>
+ <1733523707-15954-2-git-send-email-nunodasneves@linux.microsoft.com>
+ <SN6PR02MB4157E39FBEFB18EB9A695EECD4332@SN6PR02MB4157.namprd02.prod.outlook.com>
+Content-Language: en-US
+From: Nuno Das Neves <nunodasneves@linux.microsoft.com>
+In-Reply-To: <SN6PR02MB4157E39FBEFB18EB9A695EECD4332@SN6PR02MB4157.namprd02.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
---00000000000069a3ca0628ed186b
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+On 12/7/2024 7:01 PM, Michael Kelley wrote:
+> From: Nuno Das Neves <nunodasneves@linux.microsoft.com> Sent: Friday, December 6, 2024 2:22 PM
+>>
+>> Make hv_current_partition_id available in both x86_64 and arm64.
+>> This feature isn't specific to x86_64 and will be needed by common
+>> code.
+>>
+>> While at it, replace the BUG()s with WARN()s. Failing to get the id
+>> need not crash the machine (although it is a very bad sign).
+>>
+>> Signed-off-by: Nuno Das Neves <nudasnev@microsoft.com>
+>> ---
+>>  arch/arm64/hyperv/mshyperv.c    |  3 +++
+>>  arch/x86/hyperv/hv_init.c       | 25 +------------------------
+>>  arch/x86/include/asm/mshyperv.h |  2 --
+>>  drivers/hv/hv_common.c          | 23 +++++++++++++++++++++++
+>>  include/asm-generic/mshyperv.h  |  2 ++
+>>  5 files changed, 29 insertions(+), 26 deletions(-)
+>>
+>> diff --git a/arch/arm64/hyperv/mshyperv.c b/arch/arm64/hyperv/mshyperv.c
+>> index b1a4de4eee29..5050e748d266 100644
+>> --- a/arch/arm64/hyperv/mshyperv.c
+>> +++ b/arch/arm64/hyperv/mshyperv.c
+>> @@ -19,6 +19,9 @@
+>>
+>>  static bool hyperv_initialized;
+>>
+>> +u64 hv_current_partition_id = HV_PARTITION_ID_SELF;
+>> +EXPORT_SYMBOL_GPL(hv_current_partition_id);
+>> +
+> 
+> Instead of adding a definition of hv_current_partition_id on
+> the arm64 side, couldn't the definition on the x86 side in
+> hv_init.c be moved to hv_common.c (or maybe somewhere
+> else that is specific to running in the root partition, per my
+> comments in the cover letter), so there is only one definition
+> shared by both architectures?
+> 
+Yes, that's a better idea.
 
-On Mon, Dec 9, 2024 at 12:30=E2=80=AFPM Peter Zijlstra <peterz@infradead.or=
-g> wrote:
->
-> On Sun, Dec 08, 2024 at 09:45:17PM +0100, Uros Bizjak wrote:
-> > Define TYPEOF_UNQUAL() to use __typeof_unqual__() as typeof operator
-> > when available, to return unqualified type of the expression.
-> >
-> > Current version of sparse doesn't know anything about __typeof_unqual__=
-()
-> > operator. Avoid the usage of __typeof_unqual__() when sparse checking
-> > is active to prevent sparse errors with unknowing keyword.
->
-> Ooooh, new toys.
->
-> I suppose __unqual_scalar_typeof() wants to be using this when
-> available?
+>>  int hv_get_hypervisor_version(union hv_hypervisor_version_info *info)
+>>  {
+>>  	hv_get_vpreg_128(HV_REGISTER_HYPERVISOR_VERSION,
+>> diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+>> index 95eada2994e1..950f5ccdb9d9 100644
+>> --- a/arch/x86/hyperv/hv_init.c
+>> +++ b/arch/x86/hyperv/hv_init.c
+>> @@ -35,7 +35,7 @@
+>>  #include <clocksource/hyperv_timer.h>
+>>  #include <linux/highmem.h>
+>>
+>> -u64 hv_current_partition_id = ~0ull;
+>> +u64 hv_current_partition_id = HV_PARTITION_ID_SELF;
+>>  EXPORT_SYMBOL_GPL(hv_current_partition_id);
+>>
+>>  void *hv_hypercall_pg;
+>> @@ -394,24 +394,6 @@ static void __init hv_stimer_setup_percpu_clockev(void)
+>>  		old_setup_percpu_clockev();
+>>  }
+>>
+>> -static void __init hv_get_partition_id(void)
+>> -{
+>> -	struct hv_get_partition_id *output_page;
+>> -	u64 status;
+>> -	unsigned long flags;
+>> -
+>> -	local_irq_save(flags);
+>> -	output_page = *this_cpu_ptr(hyperv_pcpu_output_arg);
+>> -	status = hv_do_hypercall(HVCALL_GET_PARTITION_ID, NULL, output_page);
+>> -	if (!hv_result_success(status)) {
+>> -		/* No point in proceeding if this failed */
+>> -		pr_err("Failed to get partition ID: %lld\n", status);
+>> -		BUG();
+>> -	}
+>> -	hv_current_partition_id = output_page->partition_id;
+>> -	local_irq_restore(flags);
+>> -}
+>> -
+>>  #if IS_ENABLED(CONFIG_HYPERV_VTL_MODE)
+>>  static u8 __init get_vtl(void)
+>>  {
+>> @@ -606,11 +588,6 @@ void __init hyperv_init(void)
+>>
+>>  	register_syscore_ops(&hv_syscore_ops);
+>>
+>> -	if (cpuid_ebx(HYPERV_CPUID_FEATURES) & HV_ACCESS_PARTITION_ID)
+>> -		hv_get_partition_id();
+>> -
+>> -	BUG_ON(hv_root_partition && hv_current_partition_id == ~0ull);
+>> -
+>>  #ifdef CONFIG_PCI_MSI
+>>  	/*
+>>  	 * If we're running as root, we want to create our own PCI MSI domain.
+>> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
+>> index 5f0bc6a6d025..9eeca2a6d047 100644
+>> --- a/arch/x86/include/asm/mshyperv.h
+>> +++ b/arch/x86/include/asm/mshyperv.h
+>> @@ -44,8 +44,6 @@ extern bool hyperv_paravisor_present;
+>>
+>>  extern void *hv_hypercall_pg;
+>>
+>> -extern u64 hv_current_partition_id;
+>> -
+>>  extern union hv_ghcb * __percpu *hv_ghcb_pg;
+>>
+>>  bool hv_isolation_type_snp(void);
+>> diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
+>> index 7a35c82976e0..819bcfd2b149 100644
+>> --- a/drivers/hv/hv_common.c
+>> +++ b/drivers/hv/hv_common.c
+>> @@ -278,11 +278,34 @@ static void hv_kmsg_dump_register(void)
+>>  	}
+>>  }
+>>
+>> +static void __init hv_get_partition_id(void)
+>> +{
+>> +	struct hv_get_partition_id *output_page;
+>> +	u64 status;
+>> +	unsigned long flags;
+>> +
+>> +	local_irq_save(flags);
+>> +	output_page = *this_cpu_ptr(hyperv_pcpu_output_arg);
+>> +	status = hv_do_hypercall(HVCALL_GET_PARTITION_ID, NULL, output_page);
+>> +	if (!hv_result_success(status)) {
+>> +		local_irq_restore(flags);
+>> +		WARN(true, "Failed to get partition ID: %lld\n", status);
+>> +		return;
+>> +	}
+>> +	hv_current_partition_id = output_page->partition_id;
+>> +	local_irq_restore(flags);
+>> +}
+>> +
+>>  int __init hv_common_init(void)
+>>  {
+>>  	int i;
+>>  	union hv_hypervisor_version_info version;
+>>
+>> +	if (ms_hyperv.priv_high & HV_ACCESS_PARTITION_ID)
+>> +		hv_get_partition_id();
+> 
+> hv_get_partition_id() uses the hyperv_pcpu_output_arg, and at
+> this point, hyperv_pcpu_output_arg isn't set. That setup
+> is done later in hv_common_init().
+> 
+>> +
+>> +	WARN_ON(hv_root_partition && hv_current_partition_id == HV_PARTITION_ID_SELF);
+>> +
+> 
+> Since the hypercall will fail cleanly if the calling VM doesn't
+> have the HV_ACCESS_PARTITION_ID privilege, could the
+> above be simplified to just this?
+> 
+> 	if (hv_root_partition)
+> 		hv_get_partition_id():
+> 
+> A non-root partition VM doesn't need to get the partition ID, while a
+> root partition should have the privilege. If the hypercall fails, there's
+> already a WARN, so there's no value in doing another WARN. Also if
+> the hypercall succeeds, it presumably returns a specific partitionID, not
+> HV_PARTITION_ID_SELF, so we know we have what we want.
+> 
+> There's already an "if (hv_root_partition)" statement for setting up
+> the hyperv_pcpu_output_arg. The call to hv_get_partition_id() could
+> go under that existing "if" *after* the hyperv_pcpu_output_arg is
+> set. :-)
+> 
+Thank you, that makes sense. I'll make the changes you suggested for v2.
 
-Not only that, the new toy enables clang to check kernel's address
-spaces in a generic way using address_space attribute.
+Nuno
 
-Please find attached a follow-up patch that enables __percpu checks
-for all targets, supported by clang. Clang is a little bit pickier
-than gcc about named address space declarations (it warns for use of
-duplicated address space attribute), so the patch in addition to the
-obvious
+> Michael
+> 
+>>  	/* Get information about the Hyper-V host version */
+>>  	if (!hv_get_hypervisor_version(&version))
+>>  		pr_info("Hyper-V: Host Build %d.%d.%d.%d-%d-%d\n",
+>> diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
+>> index 8fe7aaab2599..8c4ff6e9aae7 100644
+>> --- a/include/asm-generic/mshyperv.h
+>> +++ b/include/asm-generic/mshyperv.h
+>> @@ -60,6 +60,8 @@ struct ms_hyperv_info {
+>>  extern struct ms_hyperv_info ms_hyperv;
+>>  extern bool hv_nested;
+>>
+>> +extern u64 hv_current_partition_id;
+>> +
+>>  extern void * __percpu *hyperv_pcpu_input_arg;
+>>  extern void * __percpu *hyperv_pcpu_output_arg;
+>>
+>> --
+>> 2.34.1
 
-+#  define __percpu_qual        __attribute__((address_space(3)))
-
-also fixes a couple of macros that could result in a duplicated
-address space attribute.
-
-The patch, applied as a follow-up to the series, survives allyesconfig
-compilation with clang-19 and produces a bootable kernel. The patch
-was tested only for x86_64 target, for other targets a couple of
-trivial fixes would be necessary (a cast or a substitution of typeof()
-with TYPEOF_UNQUAL()).
-
-AFAICS, the same approach using clang's address_space attribute can be
-implemented to also check other address spaces: __user, __iommu  and
-__rcu.
-
-Uros.
-
---00000000000069a3ca0628ed186b
-Content-Type: text/plain; charset="US-ASCII"; name="percpu-clang.diff.txt"
-Content-Disposition: attachment; filename="percpu-clang.diff.txt"
-Content-Transfer-Encoding: base64
-Content-ID: <f_m4iomhgl0>
-X-Attachment-Id: f_m4iomhgl0
-
-ZGlmZiAtLWdpdCBhL2luY2x1ZGUvYXNtLWdlbmVyaWMvcGVyY3B1LmggYi9pbmNsdWRlL2FzbS1n
-ZW5lcmljL3BlcmNwdS5oCmluZGV4IDAyYWVjYTIxNDc5YS4uNDEwOWQ4MjhhNTY0IDEwMDY0NAot
-LS0gYS9pbmNsdWRlL2FzbS1nZW5lcmljL3BlcmNwdS5oCisrKyBiL2luY2x1ZGUvYXNtLWdlbmVy
-aWMvcGVyY3B1LmgKQEAgLTE2LDcgKzE2LDEyIEBACiAgKiBzcGFjZSBxdWFsaWZpZXIpLgogICov
-CiAjaWZuZGVmIF9fcGVyY3B1X3F1YWwKLSMgZGVmaW5lIF9fcGVyY3B1X3F1YWwKKyMgaWYgX19o
-YXNfYXR0cmlidXRlKGFkZHJlc3Nfc3BhY2UpICYmIFwKKyAgICAgZGVmaW5lZChDT05GSUdfQ0Nf
-SEFTX1RZUEVPRl9VTlFVQUwpICYmICFkZWZpbmVkKF9fQ0hFQ0tFUl9fKQorIyAgZGVmaW5lIF9f
-cGVyY3B1X3F1YWwJCV9fYXR0cmlidXRlX18oKGFkZHJlc3Nfc3BhY2UoMykpKQorIyBlbHNlCisj
-ICBkZWZpbmUgX19wZXJjcHVfcXVhbAorIyBlbmRpZgogI2VuZGlmCiAKICNpZmRlZiBDT05GSUdf
-U01QCmRpZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L2RldmljZS5oIGIvaW5jbHVkZS9saW51eC9k
-ZXZpY2UuaAppbmRleCA2NjdjYjZkYjkwMTkuLjFkNmE1NWQ1MjUwYSAxMDA2NDQKLS0tIGEvaW5j
-bHVkZS9saW51eC9kZXZpY2UuaAorKysgYi9pbmNsdWRlL2xpbnV4L2RldmljZS5oCkBAIC00MzEs
-OSArNDMxLDkgQEAgc3RhdGljIGlubGluZSBpbnQgX19kZXZtX2FkZF9hY3Rpb25fb3JfcmVzZXQo
-c3RydWN0IGRldmljZSAqZGV2LCB2b2lkICgqYWN0aW9uKSgKICAqIFJFVFVSTlM6CiAgKiBQb2lu
-dGVyIHRvIGFsbG9jYXRlZCBtZW1vcnkgb24gc3VjY2VzcywgTlVMTCBvbiBmYWlsdXJlLgogICov
-Ci0jZGVmaW5lIGRldm1fYWxsb2NfcGVyY3B1KGRldiwgdHlwZSkgICAgICBcCi0JKCh0eXBlb2Yo
-dHlwZSkgX19wZXJjcHUgKilfX2Rldm1fYWxsb2NfcGVyY3B1KChkZXYpLCBzaXplb2YodHlwZSks
-IFwKLQkJCQkJCSAgICAgIF9fYWxpZ25vZl9fKHR5cGUpKSkKKyNkZWZpbmUgZGV2bV9hbGxvY19w
-ZXJjcHUoZGV2LCB0eXBlKQkJCQkgICAgXAorCSgoVFlQRU9GX1VOUVVBTCh0eXBlKSBfX3BlcmNw
-dSAqKV9fZGV2bV9hbGxvY19wZXJjcHUoKGRldiksIFwKKwkJCQlzaXplb2YodHlwZSksIF9fYWxp
-Z25vZl9fKHR5cGUpKSkKIAogdm9pZCBfX3BlcmNwdSAqX19kZXZtX2FsbG9jX3BlcmNwdShzdHJ1
-Y3QgZGV2aWNlICpkZXYsIHNpemVfdCBzaXplLAogCQkJCSAgIHNpemVfdCBhbGlnbik7CmRpZmYg
-LS1naXQgYS9pbmNsdWRlL2xpbnV4L3BlcmNwdS5oIGIvaW5jbHVkZS9saW51eC9wZXJjcHUuaApp
-bmRleCA1MmI1ZWE2NjNiOWYuLmMzYmYwNDBhYmE2NiAxMDA2NDQKLS0tIGEvaW5jbHVkZS9saW51
-eC9wZXJjcHUuaAorKysgYi9pbmNsdWRlL2xpbnV4L3BlcmNwdS5oCkBAIC0xNDgsMTMgKzE0OCwx
-MyBAQCBleHRlcm4gdm9pZCBfX3BlcmNwdSAqcGNwdV9hbGxvY19ub3Byb2Yoc2l6ZV90IHNpemUs
-IHNpemVfdCBhbGlnbiwgYm9vbCByZXNlcnZlZAogCWFsbG9jX2hvb2tzKHBjcHVfYWxsb2Nfbm9w
-cm9mKF9zaXplLCBfYWxpZ24sIHRydWUsIEdGUF9LRVJORUwpKQogCiAjZGVmaW5lIGFsbG9jX3Bl
-cmNwdV9nZnAodHlwZSwgZ2ZwKQkJCQkJXAotCSh0eXBlb2YodHlwZSkgX19wZXJjcHUgKilfX2Fs
-bG9jX3BlcmNwdV9nZnAoc2l6ZW9mKHR5cGUpLAlcCisJKFRZUEVPRl9VTlFVQUwodHlwZSkgX19w
-ZXJjcHUgKilfX2FsbG9jX3BlcmNwdV9nZnAoc2l6ZW9mKHR5cGUpLCBcCiAJCQkJCQlfX2FsaWdu
-b2ZfXyh0eXBlKSwgZ2ZwKQogI2RlZmluZSBhbGxvY19wZXJjcHUodHlwZSkJCQkJCQlcCi0JKHR5
-cGVvZih0eXBlKSBfX3BlcmNwdSAqKV9fYWxsb2NfcGVyY3B1KHNpemVvZih0eXBlKSwJCVwKKwko
-VFlQRU9GX1VOUVVBTCh0eXBlKSBfX3BlcmNwdSAqKV9fYWxsb2NfcGVyY3B1KHNpemVvZih0eXBl
-KSwJXAogCQkJCQkJX19hbGlnbm9mX18odHlwZSkpCiAjZGVmaW5lIGFsbG9jX3BlcmNwdV9ub3By
-b2YodHlwZSkJCQkJCVwKLQkoKHR5cGVvZih0eXBlKSBfX3BlcmNwdSAqKXBjcHVfYWxsb2Nfbm9w
-cm9mKHNpemVvZih0eXBlKSwJXAorCSgoVFlQRU9GX1VOUVVBTCh0eXBlKSBfX3BlcmNwdSAqKXBj
-cHVfYWxsb2Nfbm9wcm9mKHNpemVvZih0eXBlKSwgXAogCQkJCQlfX2FsaWdub2ZfXyh0eXBlKSwg
-ZmFsc2UsIEdGUF9LRVJORUwpKQogCiBleHRlcm4gdm9pZCBmcmVlX3BlcmNwdSh2b2lkIF9fcGVy
-Y3B1ICpfX3BkYXRhKTsK
---00000000000069a3ca0628ed186b--
 
