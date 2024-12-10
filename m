@@ -1,275 +1,113 @@
-Return-Path: <linux-arch+bounces-9353-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9354-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E82129EB6B5
-	for <lists+linux-arch@lfdr.de>; Tue, 10 Dec 2024 17:41:55 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F8BE9EB919
+	for <lists+linux-arch@lfdr.de>; Tue, 10 Dec 2024 19:14:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 104B7166833
-	for <lists+linux-arch@lfdr.de>; Tue, 10 Dec 2024 16:41:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1366518893EE
+	for <lists+linux-arch@lfdr.de>; Tue, 10 Dec 2024 18:14:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCD64234976;
-	Tue, 10 Dec 2024 16:40:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5784E2046A2;
+	Tue, 10 Dec 2024 18:14:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="qaAvYq7l"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XBgGZczc"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09984234960;
-	Tue, 10 Dec 2024 16:40:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9863E86320
+	for <linux-arch@vger.kernel.org>; Tue, 10 Dec 2024 18:14:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733848851; cv=none; b=pweoQsT80nT9wadjYq1TqKAi/Jg/MTlvv2FHpb6qJ/uIb3fpuj23yPrnI5kBtIjfr9tD563Y+WbdIQP6Zuhj1whzoQB5XeVDBzTMdnG+XForB6SoHI4cPpHTdoD4ZR6GDX8nfDr/Q5VQZTqhllPM59ejKIGPBJ5iExeQ9jafyY4=
+	t=1733854465; cv=none; b=bAePwZ9nvxZ5rJp1gxeBR+WkIQAzzV2WI0H5XiTuDzQ8fx6oS3rbXc7i6/c6Js2ybEg+rXbVER+f38UZMquFMFm05ALmpJH3+U6EEKaLQ0E95gmKUSaZT1PCsqm2e/YzqcOU1oVybCOY+oAm0qBW4UdL4YkLOSopM+eulJtJkiw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733848851; c=relaxed/simple;
-	bh=bNrc3/QIRuMRADX4i6xidePb7Se8rnZoHFgWuntFk6o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oFCpfv8qG8c8jO7gPWUGOy46hsi4Cvj5OLubgtaa4VigQlAnJG2D/0JX00wI6U6zUG600ZXsKVOagBRzOoc08pZJlhMpbNTEtnELf2g/AzNlZM50ryBOpyY1WMFPgZsoQwL3JD0ngSDGwJZ4pQV8ZGPOO2pO8OXU7uc6B34DNhM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=qaAvYq7l; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [10.16.84.29] (unknown [131.107.8.93])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 564502047222;
-	Tue, 10 Dec 2024 08:40:49 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 564502047222
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1733848849;
-	bh=jrmNUEzHaPbfzPastsRVKoN7SSf1AJHpgCYDuVUBkcs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=qaAvYq7lyqspuQZ7OkIAAqOTvmA+2X29R4IObrDpeT1/2dvBSeRobjCAh6lzuXTIB
-	 mCRwtak/ZzDJ5+IqnZv+ZWmlbSk5oi8gPenZI/luDYlvBia7HUu+Z7kvfxa3KjhD8E
-	 TnsRBHVn/f7nO8STVaJc0gW220fXwfN8VhaB3pdg=
-Message-ID: <fec1aeb7-ea07-4363-9e6a-50b0c778e855@linux.microsoft.com>
-Date: Tue, 10 Dec 2024 08:40:49 -0800
+	s=arc-20240116; t=1733854465; c=relaxed/simple;
+	bh=58kxISxrk23kE8TYDeRPpcHawB18ecVmjqHz2YA7IpE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=nlSWzuGlOmrXRvpBjbNSvM0rvkHCuzUkoiQwzYPsa/A0fknf7UjAllcWgfVW2dScVjfcrb9W1ozh89DLocQZGjq/y2nC9EH8MiB1mQEUNNZ4CzOgNuiuo8cR413KsAttpaZQ3+eHs8uvXRM9aa7lkBHFvHZnt7OT11DtuvCvG9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XBgGZczc; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1733854462;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=92N47u4FApm/UnRcaQzi7CS8Y7ujQ0vFLMHe5hOUSYI=;
+	b=XBgGZczc9ozUqwQx2Baoatlf579ZXFX68GavT51i+VO1NGmh5i4aHCXa177ibZLq+SHziM
+	XJV5PqyEBPwwFxprKbSSznn6p9Nw/1xTgUVLsaiobLs8XV6xa/nYz52wrJ53/S0M6J2m9N
+	5cKM6++QhOzuOwnwFRgKQAnObC587p0=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-283-EVRDHubrMeKT-pbkwqreKw-1; Tue,
+ 10 Dec 2024 13:14:21 -0500
+X-MC-Unique: EVRDHubrMeKT-pbkwqreKw-1
+X-Mimecast-MFC-AGG-ID: EVRDHubrMeKT-pbkwqreKw
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 10AB01955DA8;
+	Tue, 10 Dec 2024 18:14:18 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.2.16.40])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0926A300018D;
+	Tue, 10 Dec 2024 18:14:09 +0000 (UTC)
+From: Florian Weimer <fweimer@redhat.com>
+To: Aleksa Sarai <cyphar@cyphar.com>
+Cc: Ingo Molnar <mingo@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Steven Rostedt <rostedt@goodmis.org>,
+ Ben Segall <bsegall@google.com>,  Mel Gorman <mgorman@suse.de>,
+ Valentin Schneider <vschneid@redhat.com>,
+ Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>,  Jan Kara <jack@suse.cz>,
+ Arnd Bergmann <arnd@arndb.de>,  Shuah Khan <shuah@kernel.org>,
+ Kees Cook <kees@kernel.org>,  Mark Rutland <mark.rutland@arm.com>,
+ linux-kernel@vger.kernel.org,  linux-api@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org,  linux-arch@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, libc-alpha@sourceware.org
+Subject: Re: [PATCH RFC v3 02/10] sched_getattr: port to copy_struct_to_user
+In-Reply-To: <20241010-extensible-structs-check_fields-v3-2-d2833dfe6edd@cyphar.com>
+	(Aleksa Sarai's message of "Thu, 10 Oct 2024 07:40:35 +1100")
+References: <20241010-extensible-structs-check_fields-v3-0-d2833dfe6edd@cyphar.com>
+	<20241010-extensible-structs-check_fields-v3-2-d2833dfe6edd@cyphar.com>
+Date: Tue, 10 Dec 2024 19:14:07 +0100
+Message-ID: <87y10nz9qo.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] hyperv: Move hv_current_partition_id to arch-generic
- code
-To: Michael Kelley <mhklinux@outlook.com>,
- "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Cc: "kys@microsoft.com" <kys@microsoft.com>,
- "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
- "wei.liu@kernel.org" <wei.liu@kernel.org>,
- "decui@microsoft.com" <decui@microsoft.com>,
- "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
- "will@kernel.org" <will@kernel.org>, "tglx@linutronix.de"
- <tglx@linutronix.de>, "mingo@redhat.com" <mingo@redhat.com>,
- "bp@alien8.de" <bp@alien8.de>,
- "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
- "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
- "arnd@arndb.de" <arnd@arndb.de>,
- "jinankjain@linux.microsoft.com" <jinankjain@linux.microsoft.com>,
- "muminulrussell@gmail.com" <muminulrussell@gmail.com>,
- "skinsburskii@linux.microsoft.com" <skinsburskii@linux.microsoft.com>,
- "mukeshrathor@microsoft.com" <mukeshrathor@microsoft.com>
-References: <1733523707-15954-1-git-send-email-nunodasneves@linux.microsoft.com>
- <1733523707-15954-2-git-send-email-nunodasneves@linux.microsoft.com>
- <SN6PR02MB4157E39FBEFB18EB9A695EECD4332@SN6PR02MB4157.namprd02.prod.outlook.com>
-Content-Language: en-US
-From: Nuno Das Neves <nunodasneves@linux.microsoft.com>
-In-Reply-To: <SN6PR02MB4157E39FBEFB18EB9A695EECD4332@SN6PR02MB4157.namprd02.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-On 12/7/2024 7:01 PM, Michael Kelley wrote:
-> From: Nuno Das Neves <nunodasneves@linux.microsoft.com> Sent: Friday, December 6, 2024 2:22 PM
->>
->> Make hv_current_partition_id available in both x86_64 and arm64.
->> This feature isn't specific to x86_64 and will be needed by common
->> code.
->>
->> While at it, replace the BUG()s with WARN()s. Failing to get the id
->> need not crash the machine (although it is a very bad sign).
->>
->> Signed-off-by: Nuno Das Neves <nudasnev@microsoft.com>
->> ---
->>  arch/arm64/hyperv/mshyperv.c    |  3 +++
->>  arch/x86/hyperv/hv_init.c       | 25 +------------------------
->>  arch/x86/include/asm/mshyperv.h |  2 --
->>  drivers/hv/hv_common.c          | 23 +++++++++++++++++++++++
->>  include/asm-generic/mshyperv.h  |  2 ++
->>  5 files changed, 29 insertions(+), 26 deletions(-)
->>
->> diff --git a/arch/arm64/hyperv/mshyperv.c b/arch/arm64/hyperv/mshyperv.c
->> index b1a4de4eee29..5050e748d266 100644
->> --- a/arch/arm64/hyperv/mshyperv.c
->> +++ b/arch/arm64/hyperv/mshyperv.c
->> @@ -19,6 +19,9 @@
->>
->>  static bool hyperv_initialized;
->>
->> +u64 hv_current_partition_id = HV_PARTITION_ID_SELF;
->> +EXPORT_SYMBOL_GPL(hv_current_partition_id);
->> +
-> 
-> Instead of adding a definition of hv_current_partition_id on
-> the arm64 side, couldn't the definition on the x86 side in
-> hv_init.c be moved to hv_common.c (or maybe somewhere
-> else that is specific to running in the root partition, per my
-> comments in the cover letter), so there is only one definition
-> shared by both architectures?
-> 
-Yes, that's a better idea.
+* Aleksa Sarai:
 
->>  int hv_get_hypervisor_version(union hv_hypervisor_version_info *info)
->>  {
->>  	hv_get_vpreg_128(HV_REGISTER_HYPERVISOR_VERSION,
->> diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
->> index 95eada2994e1..950f5ccdb9d9 100644
->> --- a/arch/x86/hyperv/hv_init.c
->> +++ b/arch/x86/hyperv/hv_init.c
->> @@ -35,7 +35,7 @@
->>  #include <clocksource/hyperv_timer.h>
->>  #include <linux/highmem.h>
->>
->> -u64 hv_current_partition_id = ~0ull;
->> +u64 hv_current_partition_id = HV_PARTITION_ID_SELF;
->>  EXPORT_SYMBOL_GPL(hv_current_partition_id);
->>
->>  void *hv_hypercall_pg;
->> @@ -394,24 +394,6 @@ static void __init hv_stimer_setup_percpu_clockev(void)
->>  		old_setup_percpu_clockev();
->>  }
->>
->> -static void __init hv_get_partition_id(void)
->> -{
->> -	struct hv_get_partition_id *output_page;
->> -	u64 status;
->> -	unsigned long flags;
->> -
->> -	local_irq_save(flags);
->> -	output_page = *this_cpu_ptr(hyperv_pcpu_output_arg);
->> -	status = hv_do_hypercall(HVCALL_GET_PARTITION_ID, NULL, output_page);
->> -	if (!hv_result_success(status)) {
->> -		/* No point in proceeding if this failed */
->> -		pr_err("Failed to get partition ID: %lld\n", status);
->> -		BUG();
->> -	}
->> -	hv_current_partition_id = output_page->partition_id;
->> -	local_irq_restore(flags);
->> -}
->> -
->>  #if IS_ENABLED(CONFIG_HYPERV_VTL_MODE)
->>  static u8 __init get_vtl(void)
->>  {
->> @@ -606,11 +588,6 @@ void __init hyperv_init(void)
->>
->>  	register_syscore_ops(&hv_syscore_ops);
->>
->> -	if (cpuid_ebx(HYPERV_CPUID_FEATURES) & HV_ACCESS_PARTITION_ID)
->> -		hv_get_partition_id();
->> -
->> -	BUG_ON(hv_root_partition && hv_current_partition_id == ~0ull);
->> -
->>  #ifdef CONFIG_PCI_MSI
->>  	/*
->>  	 * If we're running as root, we want to create our own PCI MSI domain.
->> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
->> index 5f0bc6a6d025..9eeca2a6d047 100644
->> --- a/arch/x86/include/asm/mshyperv.h
->> +++ b/arch/x86/include/asm/mshyperv.h
->> @@ -44,8 +44,6 @@ extern bool hyperv_paravisor_present;
->>
->>  extern void *hv_hypercall_pg;
->>
->> -extern u64 hv_current_partition_id;
->> -
->>  extern union hv_ghcb * __percpu *hv_ghcb_pg;
->>
->>  bool hv_isolation_type_snp(void);
->> diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
->> index 7a35c82976e0..819bcfd2b149 100644
->> --- a/drivers/hv/hv_common.c
->> +++ b/drivers/hv/hv_common.c
->> @@ -278,11 +278,34 @@ static void hv_kmsg_dump_register(void)
->>  	}
->>  }
->>
->> +static void __init hv_get_partition_id(void)
->> +{
->> +	struct hv_get_partition_id *output_page;
->> +	u64 status;
->> +	unsigned long flags;
->> +
->> +	local_irq_save(flags);
->> +	output_page = *this_cpu_ptr(hyperv_pcpu_output_arg);
->> +	status = hv_do_hypercall(HVCALL_GET_PARTITION_ID, NULL, output_page);
->> +	if (!hv_result_success(status)) {
->> +		local_irq_restore(flags);
->> +		WARN(true, "Failed to get partition ID: %lld\n", status);
->> +		return;
->> +	}
->> +	hv_current_partition_id = output_page->partition_id;
->> +	local_irq_restore(flags);
->> +}
->> +
->>  int __init hv_common_init(void)
->>  {
->>  	int i;
->>  	union hv_hypervisor_version_info version;
->>
->> +	if (ms_hyperv.priv_high & HV_ACCESS_PARTITION_ID)
->> +		hv_get_partition_id();
-> 
-> hv_get_partition_id() uses the hyperv_pcpu_output_arg, and at
-> this point, hyperv_pcpu_output_arg isn't set. That setup
-> is done later in hv_common_init().
-> 
->> +
->> +	WARN_ON(hv_root_partition && hv_current_partition_id == HV_PARTITION_ID_SELF);
->> +
-> 
-> Since the hypercall will fail cleanly if the calling VM doesn't
-> have the HV_ACCESS_PARTITION_ID privilege, could the
-> above be simplified to just this?
-> 
-> 	if (hv_root_partition)
-> 		hv_get_partition_id():
-> 
-> A non-root partition VM doesn't need to get the partition ID, while a
-> root partition should have the privilege. If the hypercall fails, there's
-> already a WARN, so there's no value in doing another WARN. Also if
-> the hypercall succeeds, it presumably returns a specific partitionID, not
-> HV_PARTITION_ID_SELF, so we know we have what we want.
-> 
-> There's already an "if (hv_root_partition)" statement for setting up
-> the hyperv_pcpu_output_arg. The call to hv_get_partition_id() could
-> go under that existing "if" *after* the hyperv_pcpu_output_arg is
-> set. :-)
-> 
-Thank you, that makes sense. I'll make the changes you suggested for v2.
+> sched_getattr(2) doesn't care about trailing non-zero bytes in the
+> (ksize > usize) case, so just use copy_struct_to_user() without checking
+> ignored_trailing.
 
-Nuno
+I think this is what causes glibc's misc/tst-sched_setattr test to fail
+on recent kernels.  The previous non-modifying behavior was documented
+in the manual page:
 
-> Michael
-> 
->>  	/* Get information about the Hyper-V host version */
->>  	if (!hv_get_hypervisor_version(&version))
->>  		pr_info("Hyper-V: Host Build %d.%d.%d.%d-%d-%d\n",
->> diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
->> index 8fe7aaab2599..8c4ff6e9aae7 100644
->> --- a/include/asm-generic/mshyperv.h
->> +++ b/include/asm-generic/mshyperv.h
->> @@ -60,6 +60,8 @@ struct ms_hyperv_info {
->>  extern struct ms_hyperv_info ms_hyperv;
->>  extern bool hv_nested;
->>
->> +extern u64 hv_current_partition_id;
->> +
->>  extern void * __percpu *hyperv_pcpu_input_arg;
->>  extern void * __percpu *hyperv_pcpu_output_arg;
->>
->> --
->> 2.34.1
+       If the caller-provided attr buffer is larger than the kernel's
+       sched_attr structure, the additional bytes in the user-space
+       structure are not touched.
+
+I can just drop this part of the test if the kernel deems both behaviors
+valid.
+
+Thanks,
+Florian
 
 
