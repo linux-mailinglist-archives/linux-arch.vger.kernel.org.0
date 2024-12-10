@@ -1,204 +1,258 @@
-Return-Path: <linux-arch+bounces-9327-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9328-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66FCC9EA02B
-	for <lists+linux-arch@lfdr.de>; Mon,  9 Dec 2024 21:20:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 091909EA4B3
+	for <lists+linux-arch@lfdr.de>; Tue, 10 Dec 2024 03:08:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4711016651C
-	for <lists+linux-arch@lfdr.de>; Mon,  9 Dec 2024 20:20:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 062821888D8D
+	for <lists+linux-arch@lfdr.de>; Tue, 10 Dec 2024 02:08:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3D421957FC;
-	Mon,  9 Dec 2024 20:20:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89403145A03;
+	Tue, 10 Dec 2024 02:08:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="NsRSyzOI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GcDfIndD"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C6BC1547E2;
-	Mon,  9 Dec 2024 20:20:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 529B3143871;
+	Tue, 10 Dec 2024 02:08:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733775617; cv=none; b=We+BSuAP+cTzRWmJS7b47EBjwaDOSL5a/kIhEQoSDi+thYVt9ecMIfyGhDml9X1bgnrfWdxUNnpHCGq1MSr0YNAf39DHjT2CRL14TDH1IS7uEwwMM/mygRdfnBmlD7NTekoLwFYKK5XcuCbsOdmpOMws4k6j8u11j20DSU8CZaw=
+	t=1733796532; cv=none; b=r/WlL/aOe621B5mQcBxztXr049x33/lVMvDkAMoiCtFkDY7vKWlppHS4/tl/3TkR6hTeMHw/+Vhz0J1EI0F3FI2xyYDVhzdowMtDWCzGiCVG5QEvbcOxlQR5mVx1iknOlfLEogr1w/2AuRZdRRIEGCoeudpkSgvK6SBwl0j109A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733775617; c=relaxed/simple;
-	bh=jm161Sfr6vj9CpAF+l9YXeEuadaQnEK3Bmxbtti5Crs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=G2j/egyAnoQnDwD5aGcW4M9udbI6xTkJ1BeWjTlaQPPCqdJpVPIgc/ZqG2DyPwEGZCNUkZprLlf+WOdEZgQp/5hCLsBkTmqxCZu78Q6Xsml0cmO0qWxVrW7cZrDqiIp0+SRT5O7zgwV9AvRz1SAfz4afXHJwTTONAeRdQA4//e8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=NsRSyzOI; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [10.0.0.115] (c-67-182-156-199.hsd1.wa.comcast.net [67.182.156.199])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 453EB20CECB3;
-	Mon,  9 Dec 2024 12:20:15 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 453EB20CECB3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1733775615;
-	bh=R4826thRCnzo9UT2dSVOhBPmXdFNnd0wF4KQbWcTe4g=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=NsRSyzOIBWUwgsiQFGVRbC3/A2MikFgjENASO0p/8m5UcXCTUulPAsxip75CP4qsf
-	 ctzkCttrkZJZRspRzV/NEZllxMRMKtIgn9G1PLU5Yvlf9XL3FuOo7TSWu7X/hCgnoq
-	 ZKGVcXjSI6PhZ6rMAdjd9f15APVQTFTBH0Y/7p8k=
-Message-ID: <6cf69fbd-b6a0-4e88-85a6-749a4e2dbdaa@linux.microsoft.com>
-Date: Mon, 9 Dec 2024 12:20:14 -0800
+	s=arc-20240116; t=1733796532; c=relaxed/simple;
+	bh=Z4zPnvx+/VEifryuXNbtHvBLoTRVMkg3uBNUw3o/MOc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=LvTzc6eeTtz642loLN2KNWOfjVDSLfOz9LqY2XErY10Ywf53atmZEGwv4Tb5pGMl/HJw/hbygn14SrMnDGAYZ1JMHhY0IDE7unYK0bmkRDpZGhcgO+f5l+N4ZJnmaRaVgCRMHrJVbp+OgDl49ljP8Ss8MM+ba+hlb/NVpJ1AYjY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GcDfIndD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00F31C4CED1;
+	Tue, 10 Dec 2024 02:08:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733796531;
+	bh=Z4zPnvx+/VEifryuXNbtHvBLoTRVMkg3uBNUw3o/MOc=;
+	h=From:To:Cc:Subject:Date:From;
+	b=GcDfIndDUxzRGU3Bb5pEcjUHN9ZhNVsg5GVGtLwtxHfMf9NGLCVTLj0n1HMVTYZFI
+	 1eGpzeOaWZaunUYQhqAkjBqVZn0yr6stXUGN9l1f9GDCjH2TWEEtsC3iDczU0JVYbu
+	 uafuB1F0lshO8ycJ+a2qx0sSGgWaSfgLFyNhXTLmE7aMmjxU7vxaeCRdkYncie3Gw8
+	 8klXLoxErGGPKEot8XvAAZxzVHQTezX12yfcldBWuRP04Z0TrV3kFFv71FPWdVVfhX
+	 46a/lGt41iqrKXj7VU8XX35xVJKSeAESSlvuhuhko/xfAHeUCcOt/js0x0cQihK3mQ
+	 DdaQ8kDCRJpWA==
+From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Florent Revest <revest@chromium.org>
+Cc: linux-trace-kernel@vger.kernel.org,
+	LKML <linux-kernel@vger.kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	bpf <bpf@vger.kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Alan Maguire <alan.maguire@oracle.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	linux-arch@vger.kernel.org
+Subject: [PATCH v21 00/20] tracing: fprobe: function_graph: Multi-function graph and fprobe on fgraph
+Date: Tue, 10 Dec 2024 11:08:46 +0900
+Message-ID: <173379652547.973433.2311391879173461183.stgit@devnote2>
+X-Mailer: git-send-email 2.43.0
+User-Agent: StGit/0.19
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/2] hyperv: Move some features to common code
-To: Michael Kelley <mhklinux@outlook.com>,
- "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Cc: "kys@microsoft.com" <kys@microsoft.com>,
- "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
- "wei.liu@kernel.org" <wei.liu@kernel.org>,
- "decui@microsoft.com" <decui@microsoft.com>,
- "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
- "will@kernel.org" <will@kernel.org>, "tglx@linutronix.de"
- <tglx@linutronix.de>, "mingo@redhat.com" <mingo@redhat.com>,
- "bp@alien8.de" <bp@alien8.de>,
- "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
- "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
- "arnd@arndb.de" <arnd@arndb.de>,
- "jinankjain@linux.microsoft.com" <jinankjain@linux.microsoft.com>,
- "muminulrussell@gmail.com" <muminulrussell@gmail.com>,
- "skinsburskii@linux.microsoft.com" <skinsburskii@linux.microsoft.com>,
- "mukeshrathor@microsoft.com" <mukeshrathor@microsoft.com>
-References: <1733523707-15954-1-git-send-email-nunodasneves@linux.microsoft.com>
- <SN6PR02MB41573F55DBAAF124CFD92840D4332@SN6PR02MB4157.namprd02.prod.outlook.com>
-Content-Language: en-US
-From: Nuno Das Neves <nunodasneves@linux.microsoft.com>
-In-Reply-To: <SN6PR02MB41573F55DBAAF124CFD92840D4332@SN6PR02MB4157.namprd02.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On 12/7/2024 6:59 PM, Michael Kelley wrote:
-> From: Nuno Das Neves <nunodasneves@linux.microsoft.com> Sent: Friday, December 6, 2024 2:22 PM
->>
->> There are several bits of Hyper-V-related code that today live in
->> arch/x86 but are not really specific to x86_64 and will work on arm64
->> too.
->>
->> Some of these will be needed in the upcoming mshv driver code (for
->> Linux as root partition on Hyper-V).
-> 
-> Previously, Linux as the root partition on Hyper-V was x86 only, which is
-> why the code is currently under arch/x86. So evidently the mshv driver
-> is being expanded to support both x86 and arm64, correct? Assuming
-> that's the case, I have some thoughts about how the source code should
-> be organized and built. It's probably best to get this right to start with so
-> it doesn't need to be changed again.
+Hi,
 
-Yes, we plan on supporting both architectures (eventually). I completely agree
-that it's better to sort out these issues now rather than later.
+Here is the 21st version of the series to re-implement the fprobe on
+function-graph tracer. The previous version is;
 
-> 
-> * Patch 2 of this series moves hv_call_deposit_pages() and
->    hv_call_create_vp() to common code, but does not move
->    hv_call_add_logical_proc(). All three are used together, so
->    I'm wondering why hv_call_add_logical_proc() isn't moved.
-> 
+https://lore.kernel.org/all/173344373580.50709.5332611753907139634.stgit@devnote2/
 
-The only reason is that in our internal tree there's no common or arm64 code
-yet that uses it - there is no reason it can't also become common code!
+This version is rebased on v6.13-rc2, and adds a new patch ([1/20]) for
+moving ftrace_test_recursion_lock() in function_graph_enter() instead of
+arch dependent code. This fixes ftrace_get_symaddr on arm64 to export
+it correctly [19/20], and fixes trace_bpf.c to use get_entry_ip() for
+kprobes and new *ftrace_get_entry_ip()* for fprobe appropriately [20/20].
+Also, this adds Heiko's Ack for s390 (Thanks!)
 
-> * These three functions were originally put in a separate source
->    code file because of being specific to running in the root partition,
->    and not needed for generic Linux guest support. I think there's
->    value in keeping them in a separate file, rather than merging them
->    into hv_common.c. Maybe just move the entire hv_proc.c file?
+Overview
+--------
+This series rewrites the fprobe on this function-graph.
+The purposes of this change are;
 
-Agreed. I think it should be renamed too - this file will eventually
-contain some additional hypercall helper functions, some of which may also be
-shared by the driver code. Something like "hv_call_common.c"?
+ 1) Remove dependency of the rethook from fprobe so that we can reduce
+   the return hook code and shadow stack.
 
->    And then later, perhaps move the entire irqdomain.c file as well?
-Yes, may as well move it too.
+ 2) Make 'ftrace_regs' the common trace interface for the function
+   boundary.
 
->    There's also an interesting question of whether to move them into
->    drivers/hv, or create a new directory virt/hyperv. Hyper-V support
->    started out 15 years ago structured as a driver, hence "drivers/hv".
->    But over the time, the support has become significantly more than
->    just a driver, so "virt/hyperv" might be a better location for
->    non-driver code that had previously been under arch/x86 but is
->    now common to all architectures.
-> 
-I'd be fine with using "virt/hyperv", but I thought "virt" was only for
-KVM.
+1) Currently we have 2(or 3) different function return hook codes,
+ the function-graph tracer and rethook (and legacy kretprobe).
+ But since this  is redundant and needs double maintenance cost,
+ I would like to unify those. From the user's viewpoint, function-
+ graph tracer is very useful to grasp the execution path. For this
+ purpose, it is hard to use the rethook in the function-graph
+ tracer, but the opposite is possible. (Strictly speaking, kretprobe
+ can not use it because it requires 'pt_regs' for historical reasons.)
 
-Another option would be to create subdirectories in "drivers/hv" to
-organize the different modules more cleanly (i.e. when the /dev/mshv
-driver code is introduced).
+2) Now the fprobe provides the 'pt_regs' for its handler, but that is
+ wrong for the function entry and exit. Moreover, depending on the
+ architecture, there is no way to accurately reproduce 'pt_regs'
+ outside of interrupt or exception handlers. This means fprobe should
+ not use 'pt_regs' because it does not use such exceptions.
+ (Conversely, kprobe should use 'pt_regs' because it is an abstract
+  interface of the software breakpoint exception.)
 
-> * Today, the code for running in the root partition is built along
->    with the rest of the Hyper-V support, and so is present in kernels
->    built for normal Linux guests on Hyper-V. I haven't thought about
->    all the implications, but perhaps there's value in having a CONFIG
->    option to build for the root partition, so that code can be dropped
->    from normal kernels. There's a significant amount of new code still
->    to come for mshv that could be excluded from normal guests in this
->    way. Also, the tests of the hv_root_partition variable could be
->    changed to a function the compiler detects is always "false" in a
->    kernel built without the CONFIG option, in which case it can drop
->    the code for where hv_root_partition is "true".
-> 
-Using hv_root_partition is a good way to do it, since it won't require
-many #ifdefs or moving the existing code around too much.
+This series changes fprobe to use function-graph tracer for tracing
+function entry and exit, instead of mixture of ftrace and rethook.
+Unlike the rethook which is a per-task list of system-wide allocated
+nodes, the function graph's ret_stack is a per-task shadow stack.
+Thus it does not need to set 'nr_maxactive' (which is the number of
+pre-allocated nodes).
+Also the handlers will get the 'ftrace_regs' instead of 'pt_regs'.
+Since eBPF mulit_kprobe/multi_kretprobe events still use 'pt_regs' as
+their register interface, this changes it to convert 'ftrace_regs' to
+'pt_regs'. Of course this conversion makes an incomplete 'pt_regs',
+so users must access only registers for function parameters or
+return value. 
 
-I can certainly give it a try, and create a separate patch series
-introducing the option. I suppose "CONFIG_HYPERV_ROOT" makes sense as a
-name?
+Design
+------
+Instead of using ftrace's function entry hook directly, the new fprobe
+is built on top of the function-graph's entry and return callbacks
+with 'ftrace_regs'.
 
-> * The code currently in hv_proc.c is built for x86 only, and validly
->    assumes the page size is 4K. But when the code moves to be
->    common across architectures, that assumption is no longer
->    valid in the general case. Perhaps the intent is that kernels for
->    the root partition should always be built with page size 4K on
->    arm64, but nothing enforces that intent. Personally, I think the code
->    should be made to work with page sizes other than 4K so as to not
->    leave technical debt. But I realize you may have other priorities. If
->    there were a CONFIG option for building for the root partition,
->    that option could be setup to enforce the 4K page size on arm64.
-> 
-That makes sense. I suppose this can be done by selecting PAGE_SIZE_4KB
-under HYPERV in drivers/hv/Kconfig?
+Since the fprobe requires access to 'ftrace_regs', the architecture
+must support CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS and
+CONFIG_HAVE_FTRACE_GRAPH_FUNC, which enables to call function-graph
+entry callback with 'ftrace_regs', and also
+CONFIG_HAVE_FUNCTION_GRAPH_FREGS, which passes the ftrace_regs to
+return_to_handler.
 
-I'm not how easy it will be to make the code work with different page
-sizes, since we use alloc_page() and similar in a few places, assuming 4k.
+All fprobes share a single function-graph ops (means shares a common
+ftrace filter) similar to the kprobe-on-ftrace. This needs another
+layer to find corresponding fprobe in the common function-graph
+callbacks, but has much better scalability, since the number of
+registered function-graph ops is limited.
 
-Thanks
-Nuno
+In the entry callback, the fprobe runs its entry_handler and saves the
+address of 'fprobe' on the function-graph's shadow stack as data. The
+return callback decodes the data to get the 'fprobe' address, and runs
+the exit_handler.
 
-> Anyway, thinking through these decisions up front could avoid
-> the need for additional moves later on.
-> 
-> Michael
-> 
->> So this is a good time to move
->> them to hv_common.c.
->>
->> Signed-off-by: Nuno Das Neves <nudasnev@microsoft.com>
->>
->> Nuno Das Neves (2):
->>   hyperv: Move hv_current_partition_id to arch-generic code
->>   hyperv: Move create_vp and deposit_pages hvcalls to hv_common.c
->>
->>  arch/arm64/hyperv/mshyperv.c    |   3 +
->>  arch/x86/hyperv/hv_init.c       |  25 +----
->>  arch/x86/hyperv/hv_proc.c       | 144 ---------------------------
->>  arch/x86/include/asm/mshyperv.h |   4 -
->>  drivers/hv/hv_common.c          | 168 ++++++++++++++++++++++++++++++++
->>  include/asm-generic/mshyperv.h  |   4 +
->>  6 files changed, 176 insertions(+), 172 deletions(-)
->>
->> --
->> 2.34.1
+The fprobe introduces two hash-tables, one is for entry callback which
+searches fprobes related to the given function address passed by entry
+callback. The other is for a return callback which checks if the given
+'fprobe' data structure pointer is still valid. Note that it is
+possible to unregister fprobe before the return callback runs. Thus
+the address validation must be done before using it in the return
+callback.
 
+Download
+--------
+This series can be applied against the v6.13-rc2 kernel.
+
+This series can also be found below branch.
+
+https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git/log/?h=topic/fprobe-on-fgraph
+
+Thank you,
+
+---
+
+Masami Hiramatsu (Google) (19):
+      fgraph: Get ftrace recursion lock in function_graph_enter
+      fgraph: Pass ftrace_regs to entryfunc
+      fgraph: Replace fgraph_ret_regs with ftrace_regs
+      fgraph: Pass ftrace_regs to retfunc
+      fprobe: Use ftrace_regs in fprobe entry handler
+      fprobe: Use ftrace_regs in fprobe exit handler
+      tracing: Add ftrace_partial_regs() for converting ftrace_regs to pt_regs
+      tracing: Add ftrace_fill_perf_regs() for perf event
+      tracing/fprobe: Enable fprobe events with CONFIG_DYNAMIC_FTRACE_WITH_ARGS
+      bpf: Enable kprobe_multi feature if CONFIG_FPROBE is enabled
+      ftrace: Add CONFIG_HAVE_FTRACE_GRAPH_FUNC
+      fprobe: Rewrite fprobe on function-graph tracer
+      fprobe: Add fprobe_header encoding feature
+      tracing/fprobe: Remove nr_maxactive from fprobe
+      selftests: ftrace: Remove obsolate maxactive syntax check
+      selftests/ftrace: Add a test case for repeating register/unregister fprobe
+      Documentation: probes: Update fprobe on function-graph tracer
+      ftrace: Add ftrace_get_symaddr to convert fentry_ip to symaddr
+      bpf: Use ftrace_get_symaddr() for kprobe_multi probes
+
+Sven Schnelle (1):
+      s390/tracing: Enable HAVE_FTRACE_GRAPH_FUNC
+
+
+ Documentation/trace/fprobe.rst                     |   42 +
+ arch/arm64/Kconfig                                 |    2 
+ arch/arm64/include/asm/Kbuild                      |    1 
+ arch/arm64/include/asm/ftrace.h                    |   51 +-
+ arch/arm64/kernel/asm-offsets.c                    |   12 
+ arch/arm64/kernel/entry-ftrace.S                   |   32 +
+ arch/arm64/kernel/ftrace.c                         |   78 ++
+ arch/loongarch/Kconfig                             |    4 
+ arch/loongarch/include/asm/fprobe.h                |   12 
+ arch/loongarch/include/asm/ftrace.h                |   32 -
+ arch/loongarch/kernel/asm-offsets.c                |   12 
+ arch/loongarch/kernel/ftrace_dyn.c                 |   10 
+ arch/loongarch/kernel/mcount.S                     |   17 -
+ arch/loongarch/kernel/mcount_dyn.S                 |   14 
+ arch/powerpc/Kconfig                               |    1 
+ arch/powerpc/include/asm/ftrace.h                  |   13 
+ arch/powerpc/kernel/trace/ftrace.c                 |    8 
+ arch/powerpc/kernel/trace/ftrace_64_pg.c           |   16 
+ arch/riscv/Kconfig                                 |    3 
+ arch/riscv/include/asm/Kbuild                      |    1 
+ arch/riscv/include/asm/ftrace.h                    |   45 +
+ arch/riscv/kernel/ftrace.c                         |   17 -
+ arch/riscv/kernel/mcount.S                         |   24 -
+ arch/s390/Kconfig                                  |    4 
+ arch/s390/include/asm/fprobe.h                     |   10 
+ arch/s390/include/asm/ftrace.h                     |   37 +
+ arch/s390/kernel/asm-offsets.c                     |    6 
+ arch/s390/kernel/entry.h                           |    1 
+ arch/s390/kernel/ftrace.c                          |   48 -
+ arch/s390/kernel/mcount.S                          |   23 -
+ arch/x86/Kconfig                                   |    4 
+ arch/x86/include/asm/Kbuild                        |    1 
+ arch/x86/include/asm/ftrace.h                      |   54 +-
+ arch/x86/kernel/ftrace.c                           |   47 +
+ arch/x86/kernel/ftrace_32.S                        |   13 
+ arch/x86/kernel/ftrace_64.S                        |   17 -
+ include/asm-generic/fprobe.h                       |   46 +
+ include/linux/fprobe.h                             |   62 +-
+ include/linux/ftrace.h                             |  116 +++
+ include/linux/ftrace_regs.h                        |    2 
+ kernel/trace/Kconfig                               |   22 -
+ kernel/trace/bpf_trace.c                           |   28 +
+ kernel/trace/fgraph.c                              |   65 +-
+ kernel/trace/fprobe.c                              |  664 +++++++++++++++-----
+ kernel/trace/ftrace.c                              |    6 
+ kernel/trace/trace.h                               |    6 
+ kernel/trace/trace_fprobe.c                        |  146 ++--
+ kernel/trace/trace_functions_graph.c               |   10 
+ kernel/trace/trace_irqsoff.c                       |    6 
+ kernel/trace/trace_probe_tmpl.h                    |    2 
+ kernel/trace/trace_sched_wakeup.c                  |    6 
+ kernel/trace/trace_selftest.c                      |   11 
+ lib/test_fprobe.c                                  |   51 --
+ samples/fprobe/fprobe_example.c                    |    4 
+ .../test.d/dynevent/add_remove_fprobe_repeat.tc    |   19 +
+ .../ftrace/test.d/dynevent/fprobe_syntax_errors.tc |    4 
+ 56 files changed, 1318 insertions(+), 670 deletions(-)
+ create mode 100644 arch/loongarch/include/asm/fprobe.h
+ create mode 100644 arch/s390/include/asm/fprobe.h
+ create mode 100644 include/asm-generic/fprobe.h
+ create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_fprobe_repeat.tc
+
+--
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
