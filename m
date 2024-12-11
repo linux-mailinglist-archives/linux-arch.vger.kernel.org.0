@@ -1,117 +1,118 @@
-Return-Path: <linux-arch+bounces-9356-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9357-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E84779ECA41
-	for <lists+linux-arch@lfdr.de>; Wed, 11 Dec 2024 11:24:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BCD79ED9BD
+	for <lists+linux-arch@lfdr.de>; Wed, 11 Dec 2024 23:32:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 75DEC2831ED
-	for <lists+linux-arch@lfdr.de>; Wed, 11 Dec 2024 10:23:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 349B1282CED
+	for <lists+linux-arch@lfdr.de>; Wed, 11 Dec 2024 22:32:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59B30211A0A;
-	Wed, 11 Dec 2024 10:23:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5FF11F2373;
+	Wed, 11 Dec 2024 22:32:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pHZtto9l"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="taXi5zli"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E3432101B8;
-	Wed, 11 Dec 2024 10:23:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B70D1F0E4B;
+	Wed, 11 Dec 2024 22:32:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733912632; cv=none; b=Uv6V3Xt0Izw24aMMItO+3mUv4BCDJE8108vIcClz/3g6p3AXaMab+bgp2Wao+fAu/wE0sLklBFJRsZmsKza+wN+JsIlYLXVlvXoqB+PffqfEaf/SSqKso3H4dID1k4VQ2KgL93Spvi6g4YqiANDaChLR63+PkWTv3+Lb8Mwa+G0=
+	t=1733956333; cv=none; b=o8mSu+BqJPxJD9NVYXcP15AKTpz5f5G4iG+d35yaCpsz9zNJGqU1+nhpMIuS/BykDL2uGrbh46dVjk4Al7tiFavpnCbnRz7eowgp7crw0H4neAnA1G/9yd6gQw8UqbJ6CLewIQdrYvpXVIqZWfAqi7LFZY0XthS1pBsyxRIZRSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733912632; c=relaxed/simple;
-	bh=qqqXOv/RjcZrs4T7tVuZ+X03T1XAPT1JxkdxrPXPDr8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TCXQiDB/2mA8nhmrWuqK5JQSCVXFvrK3faLU8/JqH6Z78Xsv7wDsgco/fZwAcAHkV+L836zWwCVuOMJekxAIcZZ2JsgK1PfV8+8//z0UPhUEkATnjjMaWgNp3YGDMK33Q85hixDzP19GC2Ck5xnBRpRp7aOBp7MvLS6chDvD+8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pHZtto9l; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DE8EC4CED2;
-	Wed, 11 Dec 2024 10:23:46 +0000 (UTC)
+	s=arc-20240116; t=1733956333; c=relaxed/simple;
+	bh=SEo/hZdGOI1Q/CSoVxc2NHBSSqNSaH3b4tjYopKGg5Q=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=orDytnAGeb/8fM9FyJKi/DGo+pVosASWts2g5UXuDykr0MPL37bs56LG8b7OsZcuJQ91xLfto/AyO1CW6F6Mb0b1XwA1hXOqLpTYG952i7+0YQ1PyR/v0GuiRimJvKF5JlJs8cw3dU7kM7wPZ8K7sygSAlEDwdcU1b177R+5HKM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=taXi5zli; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38846C4CEDD;
+	Wed, 11 Dec 2024 22:32:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733912631;
-	bh=qqqXOv/RjcZrs4T7tVuZ+X03T1XAPT1JxkdxrPXPDr8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pHZtto9lS6MacDzeDayzGJlJswaNGRfYfCsycwjp8+OZqjq+9OFXosM0zNKhWjB0o
-	 8yL1UH8JmYll1s40biRGrQAbAiaac/pGywKLTbdhWCOR4uKyg9zf2ts7LwiruwI6dU
-	 UwdLST631KKkUjdn3YaEFA/uKyl0obKfDYfHudh40oavb8Fn8JJQi+60InjvTZp5oZ
-	 INnxrhqTk+F4CRoq2rVOF0VViGgx/wsNopYbiR6+/2Qh0vm4e71W6olcXExgYcvO+c
-	 JDmIo3UJafgbIjie042E5Ll43N5l9/TzaEIvg4we1AekgDXfuBi8qVksfrBRT/qbVf
-	 4BlBjcwSfM3GQ==
-Date: Wed, 11 Dec 2024 11:23:43 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: Florian Weimer <fweimer@redhat.com>, Aleksa Sarai <cyphar@cyphar.com>, 
-	Ingo Molnar <mingo@redhat.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, 
-	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Valentin Schneider <vschneid@redhat.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Jan Kara <jack@suse.cz>, Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>, 
-	Kees Cook <kees@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	linux-kernel@vger.kernel.org, linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, libc-alpha@sourceware.org
-Subject: Re: [PATCH RFC v3 02/10] sched_getattr: port to copy_struct_to_user
-Message-ID: <20241211-gemsen-zuarbeiten-ae8d062ec251@brauner>
-References: <20241010-extensible-structs-check_fields-v3-0-d2833dfe6edd@cyphar.com>
- <20241010-extensible-structs-check_fields-v3-2-d2833dfe6edd@cyphar.com>
- <87y10nz9qo.fsf@oldenburg.str.redhat.com>
+	s=k20201202; t=1733956333;
+	bh=SEo/hZdGOI1Q/CSoVxc2NHBSSqNSaH3b4tjYopKGg5Q=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=taXi5zliiFN3KW6tUo9STN8RrcaQwTguLWUw7vOA+mWtVIl/lOqyfp7tYIS/4F3zV
+	 SrlDbBAQw0pq/i+m3XA8S2V5RKELeBAQDrM9ZlzmC5W2t3P2/1WtHs4/RSCdUgq8dQ
+	 mlxsg6YPQmJkBgFPWopn0EvLsIRByEfTZmh5jsblEZTrZHF1YBr1gHB4u8SC/ZnwYc
+	 JJmrOPumN6Bq+UlMa1Yy/gqSPnI2DNXR7U5+yK9MuW0ITZJZ/qhOwGYGwKr3anAyP3
+	 KUBLzQdsNExdAOK6/2U41j0zEPH/NAHyaJyJUiYyz7Ml3I0TkGmyIhQT3WGrG4Z/r4
+	 v9nQIb5qf2Bkg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70D1D380A965;
+	Wed, 11 Dec 2024 22:32:30 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <87y10nz9qo.fsf@oldenburg.str.redhat.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v12 0/5] Tracepoints and static branch in Rust
+From: patchwork-bot+linux-riscv@kernel.org
+Message-Id: 
+ <173395634899.1729195.7492083712432982213.git-patchwork-notify@kernel.org>
+Date: Wed, 11 Dec 2024 22:32:28 +0000
+References: <20241030-tracepoint-v12-0-eec7f0f8ad22@google.com>
+In-Reply-To: <20241030-tracepoint-v12-0-eec7f0f8ad22@google.com>
+To: Alice Ryhl <aliceryhl@google.com>
+Cc: linux-riscv@lists.infradead.org, rostedt@goodmis.org, mhiramat@kernel.org,
+ mathieu.desnoyers@efficios.com, peterz@infradead.org, jpoimboe@kernel.org,
+ jbaron@akamai.com, ardb@kernel.org, ojeda@kernel.org, alex.gaynor@gmail.com,
+ wedsonaf@gmail.com, boqun.feng@gmail.com, gary@garyguo.net,
+ bjorn3_gh@protonmail.com, benno.lossin@proton.me, a.hindborg@kernel.org,
+ linux-trace-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+ linux-kernel@vger.kernel.org, arnd@arndb.de, linux-arch@vger.kernel.org,
+ tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+ dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+ seanjc@google.com, ubizjak@gmail.com, catalin.marinas@arm.com,
+ will@kernel.org, maz@kernel.org, oliver.upton@linux.dev,
+ mark.rutland@arm.com, ryan.roberts@arm.com, tabba@google.com,
+ linux-arm-kernel@lists.infradead.org, paul.walmsley@sifive.com,
+ palmer@dabbelt.com, aou@eecs.berkeley.edu, apatel@ventanamicro.com,
+ ajones@ventanamicro.com, alexghiti@rivosinc.com, conor.dooley@microchip.com,
+ samuel.holland@sifive.com, chenhuacai@kernel.org, kernel@xen0n.name,
+ maobibo@loongson.cn, yangtiezhu@loongson.cn, akpm@linux-foundation.org,
+ zhaotianrui@loongson.cn, loongarch@lists.linux.dev, cmllamas@google.com,
+ palmer@rivosinc.com
 
-On Tue, Dec 10, 2024 at 07:14:07PM +0100, Florian Weimer wrote:
-> * Aleksa Sarai:
+Hello:
+
+This series was applied to riscv/linux.git (fixes)
+by Steven Rostedt (Google) <rostedt@goodmis.org>:
+
+On Wed, 30 Oct 2024 16:04:23 +0000 you wrote:
+> An important part of a production ready Linux kernel driver is
+> tracepoints. So to write production ready Linux kernel drivers in Rust,
+> we must be able to call tracepoints from Rust code. This patch series
+> adds support for calling tracepoints declared in C from Rust.
 > 
-> > sched_getattr(2) doesn't care about trailing non-zero bytes in the
-> > (ksize > usize) case, so just use copy_struct_to_user() without checking
-> > ignored_trailing.
+> This series includes a patch that adds a user of tracepoints to the
+> rust_print sample. Please see that sample for details on what is needed
+> to use this feature in Rust code.
 > 
-> I think this is what causes glibc's misc/tst-sched_setattr test to fail
-> on recent kernels.  The previous non-modifying behavior was documented
-> in the manual page:
-> 
->        If the caller-provided attr buffer is larger than the kernel's
->        sched_attr structure, the additional bytes in the user-space
->        structure are not touched.
-> 
-> I can just drop this part of the test if the kernel deems both behaviors
-> valid.
+> [...]
 
-I think in general both behaviors are valid but I would consider zeroing
-the unknown parts of the provided buffer to be the safer option. And all
-newer extensible struct system calls do that.
+Here is the summary with links:
+  - [v12,1/5] rust: add static_branch_unlikely for static_key_false
+    https://git.kernel.org/riscv/c/6e59bcc9c8ad
+  - [v12,2/5] rust: add tracepoint support
+    https://git.kernel.org/riscv/c/ad37bcd965fd
+  - [v12,3/5] rust: samples: add tracepoint to Rust sample
+    https://git.kernel.org/riscv/c/91d39024e1b0
+  - [v12,4/5] jump_label: adjust inline asm to be consistent
+    https://git.kernel.org/riscv/c/aecaf181651c
+  - [v12,5/5] rust: add arch_static_branch
+    https://git.kernel.org/riscv/c/169484ab6677
 
-But if sched_getattr(2) wants to keep its old behavior it wouldn't be a
-problem to just handle this case:
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-diff --git a/kernel/sched/syscalls.c b/kernel/sched/syscalls.c
-index 0d71fcbaf1e3..46140ec449ba 100644
---- a/kernel/sched/syscalls.c
-+++ b/kernel/sched/syscalls.c
-@@ -1126,6 +1126,15 @@ SYSCALL_DEFINE4(sched_getattr, pid_t, pid, struct sched_attr __user *, uattr,
-        }
-
-        kattr.size = min(usize, sizeof(kattr));
-+       /*
-+        * If userspace passed a larger structure than the kernel knows
-+        * we historically didn't zero the unknown bits but
-+        * copy_struct_to_user() will. Retain the old behavior by
-+        * limiting the copy_to_user() to the size the kernel knows
-+        * about.
-+        */
-+       if (usize > sizeof(kattr))
-+               usize = sizeof(kattr);
-        return copy_struct_to_user(uattr, usize, &kattr, sizeof(kattr), NULL);
- }
 
 
