@@ -1,49 +1,49 @@
-Return-Path: <linux-arch+bounces-9359-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9360-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93AF49EDA1B
-	for <lists+linux-arch@lfdr.de>; Wed, 11 Dec 2024 23:38:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 123739EDA26
+	for <lists+linux-arch@lfdr.de>; Wed, 11 Dec 2024 23:39:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A7451628C4
-	for <lists+linux-arch@lfdr.de>; Wed, 11 Dec 2024 22:38:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9A957188664A
+	for <lists+linux-arch@lfdr.de>; Wed, 11 Dec 2024 22:39:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 497772063F4;
-	Wed, 11 Dec 2024 22:32:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DC12208961;
+	Wed, 11 Dec 2024 22:33:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dnrDcNkO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nWKDnM8z"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A4CA2063EA;
-	Wed, 11 Dec 2024 22:32:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D19082080C5;
+	Wed, 11 Dec 2024 22:33:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733956375; cv=none; b=YhMZ8JNnovSvW44MS0/NyasMHPIKtIhp2bqwPgiO2VtlSiV8KLXWIaXjqKNY53Db/z/yKugCeYraLqJSqxrH0sWMTIAy6tOK3F3DD4UGteGcYXoSmvL7ts8R3AQlloSxoq2jxDgRJQ33JiTVx5j3AiMIUSjquSTThC7pNQSdnzk=
+	t=1733956381; cv=none; b=Lz9FFVnz6SMN/zLQecwibFgSyb1j1c7eY60Tp+uK2112Nv+JelSZcAEjW1kXdCFGUIhHha7hp8eKEjObXSBY+fDMwQf//j8MGBv922RiqkN9HMnglnERTSkEJWpfvXlhflnuQ9DIeZYUD/JE3YP+yklfPtIXG1ZmYCfoVWr82o0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733956375; c=relaxed/simple;
-	bh=29u5B09z/mNiOUipvbCAR8d/HfuJKD9vMPDnfCmrneU=;
+	s=arc-20240116; t=1733956381; c=relaxed/simple;
+	bh=22J+gOpjU9cUBjJTCfbYoXOQOQ02vFL/kmDAmitv0Oc=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=I8SEnBthGNtu76sMssaHt4AQXBTItLIGBBYK44W+zhzbBCmbh+UUTudFAerDuWGImnKv8pvG4YSz3CVgW/1XEfKzQhaukImnIT/ElN3Z8W8lTS6izRAeNOVrgttt35XgYVpC8uQw+wVQOnj84we5rhhReHOi9QI6yA2oYznwj2Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dnrDcNkO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1C1BC4CED2;
-	Wed, 11 Dec 2024 22:32:54 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=fY5UEvozfHIZAp5lC8zqbdNd9Vi7etQCzkBM7Q6R7GDGZEUHp/xl+xBF3oyQ1IiHb3I91JaCbFsbaGQ84Xmgi0+7D0YYuV8w7mxbhQLb+vCVpAVuOt27xXKYeKoSoNbV3pk4Lj6btq/TplbIxhFRNDOuF3FxCGJLGkU1yc1J0qw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nWKDnM8z; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A92BFC4CED2;
+	Wed, 11 Dec 2024 22:33:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733956374;
-	bh=29u5B09z/mNiOUipvbCAR8d/HfuJKD9vMPDnfCmrneU=;
+	s=k20201202; t=1733956381;
+	bh=22J+gOpjU9cUBjJTCfbYoXOQOQ02vFL/kmDAmitv0Oc=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=dnrDcNkOoxwSBjPjDdUGrvVokaL8PbY/29PjhRdPkvydqw8DxYooD5ABeBk3HzL/N
-	 76xby5lMWnFghEv7vC3hF+lPCP97eOVPUwp3+ZSkE4SEdqJhuc4M4tsMuMgquf/1Sh
-	 MR1GipeeO24AReN6/ejtJZElR5CRC8RyZljN784IO+9YPc2RBnMzEXA7w+OQ/yoYqa
-	 adhGvjnBGfHafNdP3219wtIr4V6sPs3ti0dnt0aZa1Z6WSjl0+E+Zb5OzErlTpRYgu
-	 UkzyIpABUuFP1nVewt4cL6HBuOiiJYxbTNdocbttNyq8XlE99Zmw+EmsHH8rPlCKUB
-	 H5x4fe1dWfyKw==
+	b=nWKDnM8zbcIF2djxC8fiOIOI3aUWr7TPAJCWU7ymE3mh5w2HYnJyAIXKcD5Z/72Ik
+	 RXR4O9F/aU40PoBXvJ7XQXthLV2s4bsqOgfr50SDKFPRdnN9Us4sRkg4wVPA1v1sWs
+	 kmuwkRDqP/9t5kMphxqk619d2ax7wRCqOpRNHKzjgvwJVCBNZYsBwGByJZh6bRNViD
+	 yrqc1wHdhtHkBz1Bsd0sAtAVRFHXuN3A8nyxlLFqzm4TGzLspNaCqc2nuGjGhk5Ngr
+	 pRCorRCtj+x28DI2Z1vxcZ2g3p4dEWd2sTvDRfb/s5xPU/4+C8mw0GfDgU2OE3HHnZ
+	 3Ww2yKRibpabg==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EAD93380A965;
-	Wed, 11 Dec 2024 22:33:11 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EACB2380A965;
+	Wed, 11 Dec 2024 22:33:18 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -52,14 +52,13 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3] ftrace: Consolidate ftrace_regs accessor functions for
- archs using pt_regs
+Subject: Re: [PATCH v2 0/2] ftrace: Make ftrace_regs abstract and consolidate code
 From: patchwork-bot+linux-riscv@kernel.org
 Message-Id: 
- <173395639050.1729195.18342749493985130890.git-patchwork-notify@kernel.org>
-Date: Wed, 11 Dec 2024 22:33:10 +0000
-References: <20241010202114.2289f6fd@gandalf.local.home>
-In-Reply-To: <20241010202114.2289f6fd@gandalf.local.home>
+ <173395639774.1729195.5975449690225774291.git-patchwork-notify@kernel.org>
+Date: Wed, 11 Dec 2024 22:33:17 +0000
+References: <20241008230527.674939311@goodmis.org>
+In-Reply-To: <20241008230527.674939311@goodmis.org>
 To: Steven Rostedt <rostedt@goodmis.org>
 Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
  linux-trace-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
@@ -76,25 +75,29 @@ Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
 
 Hello:
 
-This patch was applied to riscv/linux.git (fixes)
+This series was applied to riscv/linux.git (fixes)
 by Steven Rostedt (Google) <rostedt@goodmis.org>:
 
-On Thu, 10 Oct 2024 20:21:14 -0400 you wrote:
-> From: Steven Rostedt <rostedt@goodmis.org>
+On Tue, 08 Oct 2024 19:05:27 -0400 you wrote:
+> This is based on:
 > 
-> Most architectures use pt_regs within ftrace_regs making a lot of the
-> accessor functions just calls to the pt_regs internally. Instead of
-> duplication this effort, use a HAVE_ARCH_FTRACE_REGS for architectures
-> that have their own ftrace_regs that is not based on pt_regs and will
-> define all the accessor functions, and for the architectures that just use
-> pt_regs, it will leave it undefined, and the default accessor functions
-> will be used.
+>   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git/
+>      ftrace/for-next
+> 
+> ftrace_regs was created to hold registers that store information to save
+> function parameters, return value and stack. Since it is a subset of
+> pt_regs, it should only be used by its accessor functions. But because
+> pt_regs can easily be taken from ftrace_regs (on most archs), it is
+> tempting to use it directly. But when running on other architectures, it
+> may fail to build or worse, build but crash the kernel!
 > 
 > [...]
 
 Here is the summary with links:
-  - [v3] ftrace: Consolidate ftrace_regs accessor functions for archs using pt_regs
-    https://git.kernel.org/riscv/c/e4cf33ca4812
+  - [v2,1/2] ftrace: Make ftrace_regs abstract from direct use
+    https://git.kernel.org/riscv/c/7888af4166d4
+  - [v2,2/2] ftrace: Consolidate ftrace_regs accessor functions for archs using pt_regs
+    (no matching commit)
 
 You are awesome, thank you!
 -- 
