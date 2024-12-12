@@ -1,90 +1,213 @@
-Return-Path: <linux-arch+bounces-9374-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9375-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEAF09EFE69
-	for <lists+linux-arch@lfdr.de>; Thu, 12 Dec 2024 22:37:40 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B79219EFEF1
+	for <lists+linux-arch@lfdr.de>; Thu, 12 Dec 2024 23:03:43 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7C4B128C063
-	for <lists+linux-arch@lfdr.de>; Thu, 12 Dec 2024 21:37:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C1B0E16AF95
+	for <lists+linux-arch@lfdr.de>; Thu, 12 Dec 2024 22:03:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E30C11CEAAC;
-	Thu, 12 Dec 2024 21:37:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3DD41DDC0B;
+	Thu, 12 Dec 2024 22:03:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="olHk7jG7"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QK+edNWo"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1B3019995A;
-	Thu, 12 Dec 2024 21:37:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB71B1925AF
+	for <linux-arch@vger.kernel.org>; Thu, 12 Dec 2024 22:03:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734039456; cv=none; b=q6/mnV+AzOqLutTaOicvTx/6t5L1jaq2oUf2DA35Q++vxKXpVSrbkVa5H6j46wYZs0sL+5IVRVU0rPW6qDIUU7QU03VWbgZFc6zoy7OfFYkBsV9PfMOO6ozXSVK8hNWL3P/W2X1Kn6s8Df7aTLUBvyNwFuApXlqMjaCRJlR7q1Y=
+	t=1734041015; cv=none; b=E8In7OrHuErRDMIXM5JVH0vFVY8Ip0d0tJpUu6o13Ki7EK2ZkTjMxx9RSeYXT6k7dACDS+zDa0aMhCEdYqfGhAkow1wVzt4SkdY+WqvtIhZWLdLGVyPeON0l6pyg6KZlvk5AcU0iPPMcSzrbUlronqJQrMnTizmfFzCHXpkL+Jw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734039456; c=relaxed/simple;
-	bh=hF4mJhnVVXZXfZmgDwcher6bwGaSHVExWyvvXFEjp2w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lXyxX5qTluJ/tJdDP3BHIOmLiPaozIW0VSzxubc39ffq124jgIqvMCmlpNBhxnvDXLPoe2EYrNpE+c1AJLxRtxFc3ro3bSVh4DXqzNBnyXiNj2THGFtNJ7st5QbWt6d8f4yv4AmROoCgzSmhTwbsDvKZqu6zJtNNG6k609b0/9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=olHk7jG7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAE1CC4CECE;
-	Thu, 12 Dec 2024 21:37:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734039456;
-	bh=hF4mJhnVVXZXfZmgDwcher6bwGaSHVExWyvvXFEjp2w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=olHk7jG7/rj4jRsPenllCQhTf5QGq/o+IXUWAK82q6pCJzN6i0SdtI7XXvHvfiYLW
-	 o7Yb2dtL1CH8VNEjEG8A5mpzTFx8yH0hEIFW7L1nUsgKKc9ugXfj5gaT9OXUqTDi58
-	 6N9jkLSNkjhUTqlAcmvg1HLxdVRSD5WcssiicIJ2Nxmvr9M6pJD1wQCUfPhz2WNC+t
-	 2xdjNIS1+MX5kC7hdRX17/1bm7hIdvOxPxxX9hHKaS50L38XE0/FImLbSAiegVPTIq
-	 VSrgB1QqyjlJeR5aTe0UIkwwE/K4CIPz765ubY7ooteF3fveq0wORNZ7ubo5V6o5Xr
-	 rY71XaqihMshQ==
-Date: Thu, 12 Dec 2024 13:37:34 -0800
-From: Eric Biggers <ebiggers@kernel.org>
-To: linux-kernel@vger.kernel.org
-Cc: linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-crypto@vger.kernel.org, linux-ext4@vger.kernel.org,
-	linux-f2fs-devel@lists.sourceforge.net, linux-mips@vger.kernel.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	linux-scsi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	loongarch@lists.linux.dev, sparclinux@vger.kernel.org,
-	x86@kernel.org
-Subject: Re: [PATCH v4 00/19] Wire up CRC32 library functions to
- arch-optimized code
-Message-ID: <20241212213734.GB39696@sol.localdomain>
-References: <20241202010844.144356-1-ebiggers@kernel.org>
+	s=arc-20240116; t=1734041015; c=relaxed/simple;
+	bh=CRwmUv4IRr1Zsl2l5O8iNo6qgyCr1gO6u+tuGewt/rs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=A+h0aedBVB8g+UILOEaSkXT3mcYWeziDuAPg/tGMtxR8jlSGtYjM8YnZL9Si/VJtYZP2R40gn+Nb8J+XX2ktNbtkxsxLuEgmqKOsTboprmYCky+H06EqRHlTk28QpUmM2XEQK9qjjRnAtZ05mUmdgkoLRP13Uq68U5H9sJWjJ9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QK+edNWo; arc=none smtp.client-ip=209.85.160.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-4675936f333so16911cf.0
+        for <linux-arch@vger.kernel.org>; Thu, 12 Dec 2024 14:03:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1734041011; x=1734645811; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UolAYRSfthqXCSLPGGN4mTa1qltoMW6sppP83v6THCY=;
+        b=QK+edNWoh371GonUfRzJ5W1JrRxy+8ruLx2cGxx5HtudCA/bkNH84mAekmWWw1cdL1
+         AbRcXUzmKGxyeL0hiz0w+4WOZgR4sNeDFZSFDH8GNgsH41W1B2pULl/VTbT3HtLYaVwj
+         Wxx8mlVQHeGKx/mzoT40YYu6yTflUywGjj8DDC9EHfHwbJcey49OGCNjWAg9+8eBVZuh
+         bniHEz2g5HCHqg12GgEfBRbMwHrB40e8BtAmA8An/RXBpQG42BU9iHxx9+NE6Uh4hZTV
+         kmC6G+Y1W/adB0S/nf65sWr9NB9hkTrWtXHva7VpoAdvZjoYudkjMqj1yOBRL6LVMXBV
+         lxBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734041011; x=1734645811;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UolAYRSfthqXCSLPGGN4mTa1qltoMW6sppP83v6THCY=;
+        b=sSdLIyEmlo2P1g42atWAYZM80Al+B8sa4ONoVLf1g6boYrYbdPTN6hu+Ntm+/Eq69O
+         B5/aGNh8ih8aHFd0uJ5JNVijvxFogyOPjd3PsSjo22IFZ0aJ1OLD8PGTXgdJIt/ZwgG2
+         ERGkaC3x9xfY/B01ws6nLCmJX+z3SBLC4YnYdu8LihjBlBUFCuNtNy8oBsSaHp33AAga
+         pD1D17ym+aa9veRPVXjk5XKDan+TKlNdrpfs9orSVAe4yqqsGQPr0gN8f3E3JrY1D3Hl
+         fg+LKx2XvpQgJw7Y+HP3YbEPuywVqs2YQfOUHzgLSIaquDlDd/HSWrO20u9fypsvo6on
+         KkFw==
+X-Forwarded-Encrypted: i=1; AJvYcCUMkfRMecTPNePGNWryAy/iNjg2/WDzsMI9TZ5JxGayhs7MrGqHEynFREjvFmkoHLvdrdc65VgT1RhE@vger.kernel.org
+X-Gm-Message-State: AOJu0YzAvlqHxqJorMdQmLHGQWx81ZrnJjd0m2Gfq5dMB/MdgNCNHCCJ
+	OoeRL45TjJXPi3fxXY38wrB/IEZZc7mz0IhNpnqD+J8JAsHf7rekdWDJmEUO9RxItJKWFY3CF00
+	HJgnTNnPYlsgcdMLqi7iuQ8HJO38hCkDQKuu9
+X-Gm-Gg: ASbGncvAYo46hnf6sUNcAmQnuU/ryqtl72kLZMQanu/TOD9SK3rNzXHVByE4o4sd2HK
+	gl2ZHN+8Rc1E7pBKV+/4WzuPf2tTiH7KZFjXjnZKNeSdsW45zF7XQ0ngyMuSESUikrzJz2YI=
+X-Google-Smtp-Source: AGHT+IEtTXrfsemev1bQXjp2ru2C3SgTe0WM6v4TuwBypYZLXlJpqMqyNYgXDGfoZdfwkwvY0DZhia4IV4zRNCi3yYE=
+X-Received: by 2002:a05:622a:5a86:b0:466:861a:f633 with SMTP id
+ d75a77b69052e-467a588583cmr208881cf.5.1734041011301; Thu, 12 Dec 2024
+ 14:03:31 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241202010844.144356-1-ebiggers@kernel.org>
+References: <20241102175115.1769468-1-xur@google.com> <20241102175115.1769468-8-xur@google.com>
+ <c0a6ae91-c925-40d6-8f95-59a9144d203b@linux.dev> <20241212213448.GA865755@thelio-3990X>
+In-Reply-To: <20241212213448.GA865755@thelio-3990X>
+From: Rong Xu <xur@google.com>
+Date: Thu, 12 Dec 2024 14:03:19 -0800
+Message-ID: <CAF1bQ=R9MTbCeRJi4eNMSW4s5OFVPXUhM3RPyUKr4xMn+Y1YwQ@mail.gmail.com>
+Subject: Re: [PATCH v7 7/7] Add Propeller configuration for kernel build
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Yonghong Song <yonghong.song@linux.dev>, Alice Ryhl <aliceryhl@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Bill Wendling <morbo@google.com>, Borislav Petkov <bp@alien8.de>, Breno Leitao <leitao@debian.org>, 
+	Brian Gerst <brgerst@gmail.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	David Li <davidxl@google.com>, Han Shen <shenhan@google.com>, 
+	Heiko Carstens <hca@linux.ibm.com>, "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>, 
+	Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Juergen Gross <jgross@suse.com>, Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
+	Masahiro Yamada <masahiroy@kernel.org>, "Mike Rapoport (IBM)" <rppt@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Wei Yang <richard.weiyang@gmail.com>, workflows@vger.kernel.org, 
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Maksim Panchenko <max4bolt@gmail.com>, 
+	"David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, Yabin Cui <yabinc@google.com>, 
+	Krzysztof Pszeniczny <kpszeniczny@google.com>, Sriraman Tallam <tmsriram@google.com>, 
+	Stephane Eranian <eranian@google.com>, x86@kernel.org, linux-arch@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Peter Jung <ptr1337@cachyos.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Dec 01, 2024 at 05:08:25PM -0800, Eric Biggers wrote:
-> This patchset applies to v6.13-rc1 and is also available in git via:
-> 
->     git fetch https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git crc32-lib-v4
-> 
-> CRC32 is a family of common non-cryptographic integrity check algorithms
-> that are fairly fast with a portable C implementation and become far
-> faster still with the CRC32 or carryless multiplication instructions
-> that most CPUs have.  9 architectures already have optimized code for at
-> least some CRC32 variants; however, except for arm64 this optimized code
-> was only accessible through the crypto API, not the library functions.
-> 
-> This patchset fixes that so that the CRC32 library functions use the
-> optimized code.  This allows users to just use the library instead of
-> the crypto API.  This is much simpler and also improves performance due
-> to eliminating the crypto API overhead including an indirect call.  Some
-> examples of updating users are included at the end of the patchset.
+We will take a look at this issue and get back to you. Thanks for
+reporting this.
 
-FYI, this patchset is now in linux-next via the crc-next branch in my repo.
-Additional reviews and acks would always be appreciated, of course.
+Best Regards,
 
-- Eric
+-Rong
+
+On Thu, Dec 12, 2024 at 1:34=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
+>
+> On Thu, Dec 12, 2024 at 01:20:46PM -0800, Yonghong Song wrote:
+> ...
+> > > +5) Use the create_llvm_prof tool (https://github.com/google/autofdo)=
+ to
+> > > +   generate Propeller profile. ::
+> > > +
+> > > +      $ create_llvm_prof --binary=3D<vmlinux> --profile=3D<perf_file=
+>
+> > > +                         --format=3Dpropeller --propeller_output_mod=
+ule_name
+> > > +                         --out=3D<propeller_profile_prefix>_cc_profi=
+le.txt
+> > > +                         --propeller_symorder=3D<propeller_profile_p=
+refix>_ld_profile.txt
+> >
+> > Prevously I am using perf-6.8.5-0.hs1.hsx.el9.x86_64 and it works fine.
+> > Now in my system, the perf is upgraded to 6.12.gadc218676eef
+> >
+> > [root@twshared7248.15.atn5 ~]# perf --version
+> > perf version 6.12.gadc218676eef
+> >
+> > and create_llvm_prof does not work any more.
+> >
+> > The command to collect sampling data:
+> >
+> > # perf record -e BR_INST_RETIRED.NEAR_TAKEN:k -a -N -b -c 500009 -- str=
+ess --cpu 36 --io 36 --vm 36 --vm-bytes 128M --timeout 300s
+> > stress: info: [536354] dispatching hogs: 36 cpu, 36 io, 36 vm, 0 hdd
+> > stress: info: [536354] successful run completed in 300s
+> > [ perf record: Woken up 2210 times to write data ]
+> > [ perf record: Captured and wrote 562.529 MB perf.data (701971 samples)=
+ ]
+> > # uname -r
+> > 6.11.1-0_fbk0_lto_rc19_612_gb572dfac1b39
+> >
+> > The kernel is a 6.11 lto kernel.
+> >
+> > I then run the following command:
+> > $ cat ../run.sh
+> > # perf record -e BR_INST_RETIRED.NEAR_TAKEN:k -a -N -b -c 500009 \
+> > #       -- stress --cpu 36 --io 36 --vm 36 --vm-bytes 128M --timeout 30=
+0s
+> > # good: perf-6.8.5-0.hs1.hsx.el9.x86_64
+> >
+> > # <propeller_profile_prefix>: /tmp/propeller
+> > ./create_llvm_prof --binary=3Dvmlinux-6.11.1-0_fbk0_lto_rc19_612_gb572d=
+fac1b39 \
+> >          --profile=3Dperf.data \
+> >          --format=3Dpropeller --propeller_output_module_name \
+> >          --out=3D/tmp/propeller_cc_profile.txt \
+> >          --propeller_symorder=3D/tmp/propeller_ld_profile.txt
+> >
+> > $ ./run.sh
+> > WARNING: Logging before InitGoogleLogging() is written to STDERR
+> > I20241212 13:12:18.401772 463318 llvm_propeller_binary_content.cc:376] =
+'vmlinux-6.11.1-0_fbk0_lto_rc19_612_gb572dfac1b39' is PIE: 0
+> > I20241212 13:12:18.403692 463318 llvm_propeller_binary_content.cc:380] =
+'vmlinux-6.11.1-0_fbk0_lto_rc19_612_gb572dfac1b39' is relocatable: 0
+> > I20241212 13:12:18.404873 463318 llvm_propeller_binary_content.cc:388] =
+Build Id found in 'vmlinux-6.11.1-0_fbk0_lto_rc19_612_gb572dfac1b39': eaacd=
+5a14abc48cf832b3ad0fa6c64635ab569a8
+> > I20241212 13:12:18.521499 463318 llvm_propeller_binary_content.cc:376] =
+'vmlinux-6.11.1-0_fbk0_lto_rc19_612_gb572dfac1b39' is PIE: 0
+> > I20241212 13:12:18.521530 463318 llvm_propeller_binary_content.cc:380] =
+'vmlinux-6.11.1-0_fbk0_lto_rc19_612_gb572dfac1b39' is relocatable: 0
+> > I20241212 13:12:18.521553 463318 llvm_propeller_binary_content.cc:388] =
+Build Id found in 'vmlinux-6.11.1-0_fbk0_lto_rc19_612_gb572dfac1b39': eaacd=
+5a14abc48cf832b3ad0fa6c64635ab569a8
+> > I20241212 13:12:18.521611 463318 llvm_propeller_perf_lbr_aggregator.cc:=
+51] Parsing [1/1] perf.data ...
+> > [ERROR:/home/runner/work/autofdo/autofdo/third_party/perf_data_converte=
+r/src/quipper/perf_reader.cc:1386] Event size 132 after uint64_t alignment =
+of the filename length is greater than event size 128 reported by perf for =
+the buildid event of type 0
+> > W20241212 13:12:18.521708 463318 llvm_propeller_perf_lbr_aggregator.cc:=
+55] Skipped profile [1/1] perf.data: FAILED_PRECONDITION: Failed to read pe=
+rf data file: [1/1] perf.data
+> > W20241212 13:12:18.521718 463318 llvm_propeller_perf_lbr_aggregator.cc:=
+67] Too few branch records in perf data.
+> > E20241212 13:12:18.554437 463318 create_llvm_prof.cc:238] FAILED_PRECON=
+DITION: No perf file is parsed, cannot proceed.
+> >
+> >
+> > Could you help take a look why perf 12 does not work with create_llvm_p=
+rof?
+> > The create_llvm_prof is downloaded from https://github.com/google/autof=
+do/releases/tag/v0.30.1.
+>
+> I think Peter may have reported the same issue on GitHub?
+>
+> https://github.com/google/autofdo/issues/233
+>
+> I wonder if this is a kernel side or perf tool regression?
+>
+> Cheers,
+> Nathan
 
