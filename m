@@ -1,239 +1,201 @@
-Return-Path: <linux-arch+bounces-9361-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9362-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 571299EE3C8
-	for <lists+linux-arch@lfdr.de>; Thu, 12 Dec 2024 11:10:23 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 408A29EE47E
+	for <lists+linux-arch@lfdr.de>; Thu, 12 Dec 2024 11:51:48 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 46B38286A88
-	for <lists+linux-arch@lfdr.de>; Thu, 12 Dec 2024 10:10:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F2DB4164CAC
+	for <lists+linux-arch@lfdr.de>; Thu, 12 Dec 2024 10:51:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C3952101A3;
-	Thu, 12 Dec 2024 10:10:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 317B921146F;
+	Thu, 12 Dec 2024 10:51:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BGsiyAQf"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sav9PnrJ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C7A320FA8A;
-	Thu, 12 Dec 2024 10:10:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39063211291
+	for <linux-arch@vger.kernel.org>; Thu, 12 Dec 2024 10:51:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733998217; cv=none; b=cx2fXV8h2Jk6Z2EBJ4vGX3n439TC/Esr94Vvrzq6rpKHzf4V0pVbuwdCV9nkPRUomm0QxP98RxZO/AzoAMSLghhrVj/EaVvkgStwc+EJjOrM+t93XHwGiNAQHLqwiszsNqHw2/nA5YvAeuXHoxF9kFLyYW8ml8TZ27XC0ZCBNFM=
+	t=1734000700; cv=none; b=tKdf3/GOPYAUUfKVq+F0s4yi1q1jwlPwhfl89Nu8sLr+kD9SNcD4yRwwK8I4wZ/ZMX0lM8auORdpTUPkdJccejxevPJkja4M8Wluxn7E1IQ5MOdcw3BR87PrndV5kv7aMOVIkUJZqkDiQVFLKao5ei97MqOsdSzTI85PGwKf7m4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733998217; c=relaxed/simple;
-	bh=AorsqWl1jCnLZ9DfDFY4FtXuOTptz0N+4mQHfMQ2WEY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=GKAe/jwB2pIdz4PWZTDv03XBhhaxHeg2cC1W2UaD0DhaItbfC7hdu0C3s2DsoS17CKupfaVHyey7arJ28O5V7Wp6kqZasO2Iw16xlxsOGFZI8kCf3YQzibB88veAd4FaoHssFuDQPQ/XerdH7q14OKTdlxhKeYJDJaxzWE/AKmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BGsiyAQf; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-216281bc30fso4616865ad.0;
-        Thu, 12 Dec 2024 02:10:15 -0800 (PST)
+	s=arc-20240116; t=1734000700; c=relaxed/simple;
+	bh=r8PedwbATslMjHn8HdkHK7/SPqYwOBI7VaWxxuig9FE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=d/FwLafX0gKkBmMQ4pBmAX6tjoStLTlNcY6Sw1u/6g5ECsxDU6ZEH5D/qJfJAet1Hsk0MmBOMoWDXCLHuon24cGFS1k6pRw4blkIE2oYxeLr6oCFX3gDMnSx95ttuCRn5cQIUoav8SbS1DLASdJdGASo6HjlqoNgQk9dIsK4v/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sav9PnrJ; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4361dc6322fso2918785e9.3
+        for <linux-arch@vger.kernel.org>; Thu, 12 Dec 2024 02:51:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733998215; x=1734603015; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zZanVRx4WAhit1sZ/hOnh7NH4U6nFyxymYnnlN3ZoUU=;
-        b=BGsiyAQfYNayYDDnrN2C0MP48iEcA8LpCIzLPRP9w2djVMkLDaws5P+kmoqwaXklUP
-         MyjGlUaSykPNZNUUnDVV8yPyY8DNBktoekq+EmXQADuwaiaJUv9x849dl1C/L9EnMzoG
-         v3mAgNRyy1pApKHmj7EVTkkfrymEyXZC7Vl3kvOE2CesLEonJrzjv2yI6GGst/iTVJi2
-         Yc2Fe4Djnid0YMtRd4xbste8aAyM26d7K387/eq3m4dy506quhdtolHRGUWGGXuF5Zv1
-         pJq/i5vtkiDOwF053OpLaQyhzIJyWySavczhiOoKj/uX+5eb2JHMfcgXaz+X0MMu+oRJ
-         zNVg==
+        d=google.com; s=20230601; t=1734000695; x=1734605495; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rtpsjC48mE/nmTjT+Q7/MwVuoD24o44fCuhvsg4pi50=;
+        b=sav9PnrJNBwmfEgRCNJBkS1L2H6Dkv1gJFXcd0QcZV3XczZJSQBOcjyyH1PWWnzth8
+         X6wh6yv2dJVaPM56v55qUMWZ4zJhym6NhmImyD9wAcAhkzUrXK6HaOSbC5N0A7kiq1mb
+         xYB38FlKaUI+tkGZy41ZfXiS1RfS5HxANFaeSQfz27T3SKxlne80Wb3HUqZSLHlXMnKk
+         t3Ch4eCLeX2YTah4oRyjjRKzhrCpovzYTpQKrJZW0yGxpFY46FfQ2cgCzHlV1GPhq4zf
+         UJhGWwhXuPMvb0OGhloM6gNEl2qfJQuD0cFDyjJ9gNUr+XnDusBOyYTkWswNl/aPgS6Q
+         P4XQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733998215; x=1734603015;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zZanVRx4WAhit1sZ/hOnh7NH4U6nFyxymYnnlN3ZoUU=;
-        b=CDvD+1kWsY68kN/MieHgUN4egLim/X/dI4K58kev7tZLfpo0ZiMqfQafjFtc2LIlEH
-         vhQDgzi4SQPC1bZ10zzRICFrdbjqJzxDfNhl4Qnm44c8f12UQ4/EHcjphWOW1hCDcrxt
-         nC7j8tQ5EsMaqdmoibVZ52SzdKO15iIOcB2v7Os5bw6ns5dATNs3TgbXnidkF9hj8ep/
-         5B5A/o0jASYXR0wHjUpy2cMecu6bxSH5ppVAVSiObfwyJE/oaN8LJbI8WO3wlLMIp/hf
-         wj3WZ8M9pQeAoT1QBXgSKblBME0bywNeyW7XHc1u5ds/9ZFchDnZRfV1pTpZ4NZ+5HbG
-         Ih/A==
-X-Forwarded-Encrypted: i=1; AJvYcCULlDYDiGj6Cz6+JGSwA68cbyrRBAOOTfVl8agA/EE9dMqQEAMqC35yHlXaXQar/Jnjaqdbhr9vXNKJ@vger.kernel.org, AJvYcCVJsDf67lKkN5OdX/RC6myCN5des5VfEyhrQbTGe7ulDlEpwl4ZM1GwHCD391mD8HyMsP83a+HBIt6K1A==@vger.kernel.org, AJvYcCVQfwjKVx0eEK1lV/pjPm+V+uY5d0RV6z43s27ZSAy1tZXLbiM077j0AuWRc2tMOhvGeQ6KHfpeNZ+4fiOa@vger.kernel.org
-X-Gm-Message-State: AOJu0YzqSG3HtMwfZBz9dndiYxjM7BAchA8Gv0CIAKj8chiEwGufn4+l
-	uCvLw4oJLOVPQV2AtJPdC3jU6/vFwEQt7PcL8N0CjqyjAS6Fgq5u
-X-Gm-Gg: ASbGncuDrUeq9DoIBKgO5UGTnNR9NRdNSXzRCw+jB2A/4j8mx87G65lGHiCEgbwgkfy
-	NJrhwYBjcpE5gZJCkVaoWzjCEwpvY7G4DCnQ19OaYU+7Ops2x6XbbzUXgTywFmw0y26CT2kCPv/
-	5+jYn9YSfS4NQpc3XOYS9AKPtJAUVVgomkXYVtGgcZAqbezIcl2Xez6t1fVdMXgbfGtustaIoXX
-	uhLHCTZxBhrHxG1JcDA1NLonBI9X9oHGgwduCWdtPNqd9pRNrp9c9lSssthGvYIn8DvIWB/Chhz
-	Dyme
-X-Google-Smtp-Source: AGHT+IH6gcwPQeo8o7QWFQKnzChC6uQO93gPkmdmDG/SQmzj5FSwJNJHWHb5JoN5L+bUnuXzcp5J7w==
-X-Received: by 2002:a17:902:d389:b0:215:6816:6345 with SMTP id d9443c01a7336-21778536e08mr75258075ad.16.1733998214774;
-        Thu, 12 Dec 2024 02:10:14 -0800 (PST)
-Received: from localhost.localdomain ([36.110.106.149])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7fd1570ae4esm10519521a12.43.2024.12.12.02.10.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Dec 2024 02:10:14 -0800 (PST)
-From: Guo Weikang <guoweikang.kernel@gmail.com>
-To: Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Baoquan He <bhe@redhat.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>,
-	Julian Stecklina <julian.stecklina@cyberus-technology.de>,
-	"Xin Li (Intel)" <xin@zytor.com>,
-	Guo Weikang <guoweikang.kernel@gmail.com>
-Cc: Ingo Molnar <mingo@kernel.org>,
-	Kevin Loughlin <kevinloughlin@google.com>,
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-	linux-kernel@vger.kernel.org,
-	linux-acpi@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: [PATCH] mm/early_ioremap: Add null pointer checks to prevent NULL-pointer dereference
-Date: Thu, 12 Dec 2024 18:10:00 +0800
-Message-Id: <20241212101004.1544070-1-guoweikang.kernel@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        d=1e100.net; s=20230601; t=1734000695; x=1734605495;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rtpsjC48mE/nmTjT+Q7/MwVuoD24o44fCuhvsg4pi50=;
+        b=NYz6p6geGisEgp+qVJFomK9vLMr2OxMVIoCmeASeSjKvWW9INSuMHTVRAmCSG+Gl6F
+         izfLQgwAIF/N+80ZjRhksklWysZp4qV1S3ZuL5GNmnahz4tT/OPMpKu2WnrQk+dho0Ys
+         mI3NvXBfqlNDCTzhtiIysr/smmN3Z5TaD/EfjfrNDjzGouBmM7NeBwXXtyo3rX2AkHK8
+         Eudb87WsDpaDMZv/1QTIquG8vuwLJO+dib5vgGsd+0Zn6lSSBZvhb008Ythih2vZAV93
+         XokAZzaBAO0Am86P2751k0fi2nlBszl5ztab6+q/98lzZMH9iHuTMmUHVZYEPDBYZJZV
+         zbrw==
+X-Forwarded-Encrypted: i=1; AJvYcCVV39i8911hLiaFuuZzgvcyevfqpADvFa2JngleS6PdKH+lsMmaJFC9BZT1hXs55C43jlHXXQccEHU+@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz+59vPk1PBYhkl7GiWcWO7eR2xtr7iSAO8yLE83H1RU4jf7dEF
+	UfjcXnry8Zscnvkt64TP6rdlWxnrDDLp+n6NHbDQoZzyL17GDwm1AqnvzkX/k389vivqp41z72m
+	xoRtyQqjm+mwBPZO2e8uLFfX6gbfqNs8QvpdJ
+X-Gm-Gg: ASbGncvSwWgLc4MQ9Ho00dsxv+qnLIRdAQA70ucSeM9kjbjyuQ9/rw2f3IgWUOMzhcE
+	HrzC8CJ3Z/3OkYISvRegmiqYGcTkNAlkzz/gXUuwRvguH0kcAU8Lp3vQvA/v68jP+pD8x
+X-Google-Smtp-Source: AGHT+IHyygeSxJyNs1AB/t8h2oWE3zrmWEnc+tMnMhN05YyXp5Tg5F9O0X+SggrM6je5HiwFGxlS9nrxUkLK1wXEwpM=
+X-Received: by 2002:a05:600c:5101:b0:434:a1d3:a331 with SMTP id
+ 5b1f17b1804b1-4361c3e2350mr42431505e9.22.1734000695440; Thu, 12 Dec 2024
+ 02:51:35 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20241101060237.1185533-1-boqun.feng@gmail.com> <20241101060237.1185533-3-boqun.feng@gmail.com>
+In-Reply-To: <20241101060237.1185533-3-boqun.feng@gmail.com>
+From: Alice Ryhl <aliceryhl@google.com>
+Date: Thu, 12 Dec 2024 11:51:23 +0100
+Message-ID: <CAH5fLghYjcb-mpR_rr2aC_W8rRb6g8jCFxgky7iEqVgmpHjf=Q@mail.gmail.com>
+Subject: Re: [RFC v2 02/13] rust: sync: Add basic atomic operation mapping framework
+To: Boqun Feng <boqun.feng@gmail.com>
+Cc: rust-for-linux@vger.kernel.org, rcu@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+	llvm@lists.linux.dev, lkmm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
+	Alan Stern <stern@rowland.harvard.edu>, Andrea Parri <parri.andrea@gmail.com>, 
+	Will Deacon <will@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Nicholas Piggin <npiggin@gmail.com>, David Howells <dhowells@redhat.com>, 
+	Jade Alglave <j.alglave@ucl.ac.uk>, Luc Maranget <luc.maranget@inria.fr>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, Akira Yokosawa <akiyks@gmail.com>, 
+	Daniel Lustig <dlustig@nvidia.com>, Joel Fernandes <joel@joelfernandes.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, kent.overstreet@gmail.com, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com, 
+	Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Catalin Marinas <catalin.marinas@arm.com>, torvalds@linux-foundation.org, 
+	linux-arm-kernel@lists.infradead.org, linux-fsdevel@vger.kernel.org, 
+	Trevor Gross <tmgross@umich.edu>, dakr@redhat.com, 
+	Frederic Weisbecker <frederic@kernel.org>, Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
+	Josh Triplett <josh@joshtriplett.org>, Uladzislau Rezki <urezki@gmail.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang1211@gmail.com>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The early_ioremap interface can fail and return NULL in certain cases. To
-prevent NULL-pointer dereference crashes, fixed issues in the acpi_extlog
-and copy_early_mem interfaces, improving robustness when handling early
-memory.
+On Fri, Nov 1, 2024 at 7:03=E2=80=AFAM Boqun Feng <boqun.feng@gmail.com> wr=
+ote:
+>
+> Preparation for generic atomic implementation. To unify the
+> ipmlementation of a generic method over `i32` and `i64`, the C side
+> atomic methods need to be grouped so that in a generic method, they can
+> be referred as <type>::<method>, otherwise their parameters and return
+> value are different between `i32` and `i64`, which would require using
+> `transmute()` to unify the type into a `T`.
+>
+> Introduce `AtomicIpml` to represent a basic type in Rust that has the
+> direct mapping to an atomic implementation from C. This trait is sealed,
+> and currently only `i32` and `i64` ipml this.
 
-Signed-off-by: Guo Weikang <guoweikang.kernel@gmail.com>
----
- arch/x86/kernel/setup.c             |  5 ++++-
- drivers/acpi/acpi_extlog.c          | 14 ++++++++++++++
- include/asm-generic/early_ioremap.h |  2 +-
- mm/early_ioremap.c                  |  8 +++++++-
- 4 files changed, 26 insertions(+), 3 deletions(-)
+There seems to be quite a few instances of "impl" spelled as "ipml" here.
 
-diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-index f1fea506e20f..cebee310e200 100644
---- a/arch/x86/kernel/setup.c
-+++ b/arch/x86/kernel/setup.c
-@@ -259,6 +259,7 @@ static void __init relocate_initrd(void)
- 	u64 ramdisk_image = get_ramdisk_image();
- 	u64 ramdisk_size  = get_ramdisk_size();
- 	u64 area_size     = PAGE_ALIGN(ramdisk_size);
-+	int ret = 0;
- 
- 	/* We need to move the initrd down into directly mapped mem */
- 	u64 relocated_ramdisk = memblock_phys_alloc_range(area_size, PAGE_SIZE, 0,
-@@ -272,7 +273,9 @@ static void __init relocate_initrd(void)
- 	printk(KERN_INFO "Allocated new RAMDISK: [mem %#010llx-%#010llx]\n",
- 	       relocated_ramdisk, relocated_ramdisk + ramdisk_size - 1);
- 
--	copy_from_early_mem((void *)initrd_start, ramdisk_image, ramdisk_size);
-+	ret = copy_from_early_mem((void *)initrd_start, ramdisk_image, ramdisk_size);
-+	if (ret)
-+		panic("Copy RAMDISK failed\n");
- 
- 	printk(KERN_INFO "Move RAMDISK from [mem %#010llx-%#010llx] to"
- 		" [mem %#010llx-%#010llx]\n",
-diff --git a/drivers/acpi/acpi_extlog.c b/drivers/acpi/acpi_extlog.c
-index ca87a0939135..f7fb7205028d 100644
---- a/drivers/acpi/acpi_extlog.c
-+++ b/drivers/acpi/acpi_extlog.c
-@@ -251,6 +251,10 @@ static int __init extlog_init(void)
- 	}
- 
- 	extlog_l1_hdr = acpi_os_map_iomem(l1_dirbase, l1_hdr_size);
-+	if (!extlog_l1_hdr) {
-+		rc = -ENOMEM;
-+		goto err_release_l1_hdr;
-+	}
- 	l1_head = (struct extlog_l1_head *)extlog_l1_hdr;
- 	l1_size = l1_head->total_len;
- 	l1_percpu_entry = l1_head->entries;
-@@ -268,6 +272,10 @@ static int __init extlog_init(void)
- 		goto err;
- 	}
- 	extlog_l1_addr = acpi_os_map_iomem(l1_dirbase, l1_size);
-+	if (!extlog_l1_addr) {
-+		rc = -ENOMEM;
-+		goto err_release_l1_dir;
-+	}
- 	l1_entry_base = (u64 *)((u8 *)extlog_l1_addr + l1_hdr_size);
- 
- 	/* remap elog table */
-@@ -279,6 +287,10 @@ static int __init extlog_init(void)
- 		goto err_release_l1_dir;
- 	}
- 	elog_addr = acpi_os_map_iomem(elog_base, elog_size);
-+	if (!elog_addr) {
-+		rc = -ENOMEM;
-+		goto err_release_elog;
-+	}
- 
- 	rc = -ENOMEM;
- 	/* allocate buffer to save elog record */
-@@ -300,6 +312,8 @@ static int __init extlog_init(void)
- 	if (extlog_l1_addr)
- 		acpi_os_unmap_iomem(extlog_l1_addr, l1_size);
- 	release_mem_region(l1_dirbase, l1_size);
-+err_release_l1_hdr:
-+	release_mem_region(l1_dirbase, l1_hdr_size);
- err:
- 	pr_warn(FW_BUG "Extended error log disabled because of problems parsing f/w tables\n");
- 	return rc;
-diff --git a/include/asm-generic/early_ioremap.h b/include/asm-generic/early_ioremap.h
-index 9d0479f50f97..5db59a1efb65 100644
---- a/include/asm-generic/early_ioremap.h
-+++ b/include/asm-generic/early_ioremap.h
-@@ -35,7 +35,7 @@ extern void early_ioremap_reset(void);
- /*
-  * Early copy from unmapped memory to kernel mapped memory.
-  */
--extern void copy_from_early_mem(void *dest, phys_addr_t src,
-+extern int copy_from_early_mem(void *dest, phys_addr_t src,
- 				unsigned long size);
- 
- #else
-diff --git a/mm/early_ioremap.c b/mm/early_ioremap.c
-index ce06b2884789..ff35b84a7b50 100644
---- a/mm/early_ioremap.c
-+++ b/mm/early_ioremap.c
-@@ -245,7 +245,10 @@ early_memremap_prot(resource_size_t phys_addr, unsigned long size,
- 
- #define MAX_MAP_CHUNK	(NR_FIX_BTMAPS << PAGE_SHIFT)
- 
--void __init copy_from_early_mem(void *dest, phys_addr_t src, unsigned long size)
-+/*
-+ * If no empty slot, handle that and return -ENOMEM.
-+ */
-+int __init copy_from_early_mem(void *dest, phys_addr_t src, unsigned long size)
- {
- 	unsigned long slop, clen;
- 	char *p;
-@@ -256,12 +259,15 @@ void __init copy_from_early_mem(void *dest, phys_addr_t src, unsigned long size)
- 		if (clen > MAX_MAP_CHUNK - slop)
- 			clen = MAX_MAP_CHUNK - slop;
- 		p = early_memremap(src & PAGE_MASK, clen + slop);
-+		if (!p)
-+			return -ENOMEM;
- 		memcpy(dest, p + slop, clen);
- 		early_memunmap(p, clen + slop);
- 		dest += clen;
- 		src += clen;
- 		size -= clen;
- 	}
-+	return 0;
- }
- 
- #else /* CONFIG_MMU */
--- 
-2.25.1
+> Further, different methods are put into different `*Ops` trait groups,
+> and this is for the future when smaller types like `i8`/`i16` are
+> supported but only with a limited set of API (e.g. only set(), load(),
+> xchg() and cmpxchg(), no add() or sub() etc).
+>
+> While the atomic mod is introduced, documentation is also added for
+> memory models and data races.
+>
+> Also bump my role to the maintainer of ATOMIC INFRASTRUCTURE to reflect
+> my responsiblity on the Rust atomic mod.
+>
+> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> ---
+>  MAINTAINERS                    |   4 +-
+>  rust/kernel/sync.rs            |   1 +
+>  rust/kernel/sync/atomic.rs     |  19 ++++
+>  rust/kernel/sync/atomic/ops.rs | 199 +++++++++++++++++++++++++++++++++
+>  4 files changed, 222 insertions(+), 1 deletion(-)
+>  create mode 100644 rust/kernel/sync/atomic.rs
+>  create mode 100644 rust/kernel/sync/atomic/ops.rs
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index b77f4495dcf4..e09471027a63 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -3635,7 +3635,7 @@ F:        drivers/input/touchscreen/atmel_mxt_ts.c
+>  ATOMIC INFRASTRUCTURE
+>  M:     Will Deacon <will@kernel.org>
+>  M:     Peter Zijlstra <peterz@infradead.org>
+> -R:     Boqun Feng <boqun.feng@gmail.com>
+> +M:     Boqun Feng <boqun.feng@gmail.com>
+>  R:     Mark Rutland <mark.rutland@arm.com>
+>  L:     linux-kernel@vger.kernel.org
+>  S:     Maintained
+> @@ -3644,6 +3644,8 @@ F:        arch/*/include/asm/atomic*.h
+>  F:     include/*/atomic*.h
+>  F:     include/linux/refcount.h
+>  F:     scripts/atomic/
+> +F:     rust/kernel/sync/atomic.rs
+> +F:     rust/kernel/sync/atomic/
 
+This is why mod.rs files are superior :)
+
+> @@ -0,0 +1,19 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +//! Atomic primitives.
+> +//!
+> +//! These primitives have the same semantics as their C counterparts: an=
+d the precise definitions of
+> +//! semantics can be found at [`LKMM`]. Note that Linux Kernel Memory (C=
+onsistency) Model is the
+> +//! only model for Rust code in kernel, and Rust's own atomics should be=
+ avoided.
+> +//!
+> +//! # Data races
+> +//!
+> +//! [`LKMM`] atomics have different rules regarding data races:
+> +//!
+> +//! - A normal read doesn't data-race with an atomic read.
+
+This was fixed:
+https://github.com/rust-lang/rust/pull/128778
+
+> +mod private {
+> +    /// Sealed trait marker to disable customized impls on atomic implem=
+entation traits.
+> +    pub trait Sealed {}
+> +}
+
+Just make the trait unsafe?
+
+Alice
 
