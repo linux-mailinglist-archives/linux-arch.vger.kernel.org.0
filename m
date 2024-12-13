@@ -1,252 +1,280 @@
-Return-Path: <linux-arch+bounces-9388-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9389-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CDD19F0F56
-	for <lists+linux-arch@lfdr.de>; Fri, 13 Dec 2024 15:37:40 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E5199F1746
+	for <lists+linux-arch@lfdr.de>; Fri, 13 Dec 2024 21:13:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6780A1884B36
-	for <lists+linux-arch@lfdr.de>; Fri, 13 Dec 2024 14:37:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 643537A11DF
+	for <lists+linux-arch@lfdr.de>; Fri, 13 Dec 2024 20:13:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0524D1E1C09;
-	Fri, 13 Dec 2024 14:37:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9ADA0190057;
+	Fri, 13 Dec 2024 20:13:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PfOFw51S"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E3G4Io0m"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3312B1E0E10
-	for <linux-arch@vger.kernel.org>; Fri, 13 Dec 2024 14:37:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD71A18C928;
+	Fri, 13 Dec 2024 20:13:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734100649; cv=none; b=e5zR/RJ9hJ8mALro9UqQiu7D+GAPhPUOYsUnTt3+xDznkq55sjcaNuaVFCFmCZxNNClEPJ4YAzVc8lVQr3qano0eN8/G3r/eiH5/FAy6/FGAZNQEJUccSKY6f+strw0kJXfFwZvIZ3VTe6t7AVCziCKFc9ytaepmbpEDweqMaLk=
+	t=1734120793; cv=none; b=hW/rcMZqRosPKVrIm9DeSiiFg9z/96KyimScXhYsmpB5QRC9rzE217/CxNVpstt668AoZb5tIxdWvajXPhDBKE79ieu9djgPqdIJkCWmzFB9Q3T6CD4EkxwZgzGdYe4lXxdctxU6P+5iWQMRxkylgEO86cXsY9jgtIAbbY4DANY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734100649; c=relaxed/simple;
-	bh=cSE7YfpxLSVqgzR60SozadvYSPlf/zv5LQnl9qv4L1k=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JQibWeLNmDaGeeKsyc4hcp6BXqdAo4uJqYvJu42kxbsx8hrF4l66dH4dkZoL4/uGZ8vCM2Kh1W5kUVUv2RHNFtXBYUNNVCUhndxb9LpxM/gU6ESCuCZyeCL9DoDDrBMH2Q9V0fB4zMv9RtKTAgliJf3Mah5fTufx/ptLL+EskOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=PfOFw51S; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-43625c4a50dso12453235e9.0
-        for <linux-arch@vger.kernel.org>; Fri, 13 Dec 2024 06:37:26 -0800 (PST)
+	s=arc-20240116; t=1734120793; c=relaxed/simple;
+	bh=zlbBlFFmJXawofXO/orsUEwh6fcY+2EkTgzbeKXf6Hw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=S4Tcg1mAAYu6IkeMkgFu+E4W5rY+B1715Um9zk8pCRBczWfnENWMASyLKdeqtz/4PKABX9sYRf/48k7lhReNyxmyRjP4ZxJUTyOtsaCuKwMD31zeUXGtJPkSunt+nnja+iGHigiSPre3rQgqdIu6lJ1zzO+SuRmf0TRjv5eTm4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E3G4Io0m; arc=none smtp.client-ip=209.85.222.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-7b6e24aa0dbso164532185a.1;
+        Fri, 13 Dec 2024 12:13:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1734100645; x=1734705445; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2GEPFVvt/WcPx7hwmrvPddq2GA3SILVOBgchd5bamcM=;
-        b=PfOFw51Sc6+iHmr4t7p92tJRccDwESqAyiHjn8XOfpSW8u0+dEeagmIhd8ycLxIZrt
-         CZgNE5rE74B6NCA73ubjF2qTPu5tE3eZClthiamwwwooFKoornNfDxl7c+E6MSxTPnrz
-         q5ySVQ9F9dGKl0ehQbxaNxH5lUjCV1PMj3CMIbz0KKDqC87gg19s7BsnlYjUv0yyamS9
-         NHonNwe68la396ZNorewQ0ctILQ5T9ZAdppFp/OljKJav2W4c143NmBSsziJIumfjofI
-         X1731XrUj0boIqgFoA5m2nPVsh9yFu4sIayC3IK/ZYtBVu3op4hCDmhFWl3KFz/9Kbu7
-         vohg==
+        d=gmail.com; s=20230601; t=1734120790; x=1734725590; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :feedback-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=iRonZJxea5tra4fNXdRilKepTreMvxGV66B9FX5uzo8=;
+        b=E3G4Io0mN4kbxokdXJGbREIYMcarmu4J2jLute8s4j8CJZUi9iVzl/AAHs34xGfhI/
+         jzmvpVti0HyNK2NAWSBDdvCsLFL2GIkOf5wL8t7Z/AAOFci/Ia2egVi3voi00uHCRcf/
+         lR+AzSoiaUHph+flEpEida74XE2pKrEoN4pDuW5HXkNm0nAaksBDG5IltoAMfD2O47e7
+         7aJ1k3KPy3WWx0C9QiLCua9DmndWbZnDJshrD6f7O8xQloiJSB4+EMFwdyBe8a8zgyPF
+         G0rVBzWdlwKwkrjWNu4urKB/fv9Qp7NejNVPL0BJFjk7mSnkr+jWIoVRU5u/v7PRnDWk
+         u7jA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734100645; x=1734705445;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2GEPFVvt/WcPx7hwmrvPddq2GA3SILVOBgchd5bamcM=;
-        b=Ei/u11VwAslP1IUb69XycuwYm70LA/2LHBzM1LfztAmRjk1GcDlCQOIkQWBSh+9VYy
-         wR/ti3+KGcP9t0NSeCvcDcDgxLnVgjcKrSuQ6UaW+mgu/L17Wspp40mQ5ucEyCnnxiww
-         huaf8w6gpxK80HytKREVL0dVZ0ayh/2+DAEJ0hzyqMQqGxGXhGNwDYznQgQ68Fi5uB4G
-         coZlXEZpxW4RUweWpyR3eEI0Qj3BBK5o1XluG3hVHn2n3hTC8Ltvkz8/STFkO2Nq3CSZ
-         y52t+PnR649gaEukX68WiUEcUXf9119uGTbYwhgk81apC/tzovOsOYampG2pNvQdLHe4
-         aTEg==
-X-Forwarded-Encrypted: i=1; AJvYcCXqZI6S/Tip4BjgA8YBdqHRlSRBwrfgRE+23sxq4JZt4zMBzSpSlOq/PY8SUJJ++qWPcH3H9cFiBUAB@vger.kernel.org
-X-Gm-Message-State: AOJu0YxpVxMhitQYGvLv6uflkM601ta4PjWk7S+1K1s//KPjSsWlOHRe
-	jXdMzDpIMhwQz7QGJflVip0cFxMKLrwTNPN6U0ZpbXuVgBe6QMmiLMVPbtq4crHPj5XNXYt1Bv3
-	otXy0d6BgbLBrpXp6wLnG5UKLlv+mlfU7Gx49
-X-Gm-Gg: ASbGncucHEUkz2sGVPyUSL7jvsuS4G8P1wxGq3Mp+Vv6+8A0BZfEPalc9WhDQkK4L4L
-	wxGwb9yDEOlT0hNHzskWQECMeTRa+ZojiZ8WZ5Bs=
-X-Google-Smtp-Source: AGHT+IF5nz9iFwihOnmrHXThptEMDz6uAvc2eauPyTTcPdqXIp7ICHSubzS0ZSdBwH7W3Dcgfoy53emLLyY7/WPXocY=
-X-Received: by 2002:a05:6000:154b:b0:385:f092:e00 with SMTP id
- ffacd0b85a97d-3889ad32da3mr2133093f8f.50.1734100645390; Fri, 13 Dec 2024
- 06:37:25 -0800 (PST)
+        d=1e100.net; s=20230601; t=1734120790; x=1734725590;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :feedback-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iRonZJxea5tra4fNXdRilKepTreMvxGV66B9FX5uzo8=;
+        b=snr/UMn0jK4GDOBaTwJIZ8mJqb80+z4Fim09OE68c0npHCLTVb/e0SUEHbgSGvPckN
+         6GtnmMd5Hi+CjenHSO7IXw3lxZRRVlsj02cJSYndt78WYA3SmPJEO6HMdZnxElpmkN/g
+         P7wm6JhbNCMmiDrHpxFy+nIHGgbtQCud7L8IwQsq/vnzwmkPkIq7MbUIeVOZenCmd5Nc
+         9+jAKA8kzdasKih8HTEVVH27aQbgvP6v7vExBQxqVoECoh4OCEiLCNTXD8ojA/zg0GUA
+         a7uCiVq++vnl+FnxQNn+Ezq99bU2kRwdBCWKxVW767dhvB0uri7PXCJ5XzKZjF7s9xY0
+         V2+g==
+X-Forwarded-Encrypted: i=1; AJvYcCU4MVytM+RBVQ4WD4wkdXeL2z1tOGXwM7jtHe1QELMmgYxtP7lT1kbKsN4WhlHW/chzSWPo8+zdQY933bHE@vger.kernel.org, AJvYcCVK9NqF3wS+fCEvdHBm1flsgzt6NwIqMP1CC7IrANUfZHsx/LKMsV1PIT6vNJjZQsWx7ooAQTNZizOAELvggw==@vger.kernel.org, AJvYcCVz0dPQvm5vIuj7pc3XEdo1wSYpNOEVwWEek9DI1es6Y6tNyLPcqgXLr89/02+OIUdEWJjW@vger.kernel.org, AJvYcCWG/Az1Ad9GVvnBm5H0hEDC0eww0id2FeBZ8TZdPGqYqPO9GJUZDZdjYsarIYb33BxDz3XOegrFmIa7@vger.kernel.org
+X-Gm-Message-State: AOJu0YywTPSfWuJCMNxB3k+vjmkmUJHYJ+J5Qdh1ouc2u0XFakql0Amj
+	i3VO0dgc9nREvF9xWo5hnAkMiUmqQroyFuQcZ7pNYd5VDuWdS3FSlNVTxA==
+X-Gm-Gg: ASbGnctbsRjXM2dZ1yPVPgOkcBDovxOx5P1ywgP/VYIml2bfwyKcOjqMkODqRv+F/q2
+	szwcK0L1MJbjcm+8714Uxscw4PLmadvbhU+ZBRX81U3E02AVcsT8qdTQ8mmcgXWITm79SqhHa47
+	M/bxyRWjo8pstxV98qafq8xBZggLCkirGSyO9itSIf+upSt/RMAetK2neNqW4SVZuQAlfCI8rCn
+	R6LKc9HJ8GcJ+gRtRl+XCBleOGLrFfJQfNchgihhInUvCGkBrIMKxvA2eLGmVPWqvt3SsRoXjKI
+	AuKyaJFarqhlrfeqpirO6klbFoVbCb63WomUATsx/UgM7LU=
+X-Google-Smtp-Source: AGHT+IEBWHf4XTEy2MD84YewAXauMsR7xN9Mi94snkVedBERT43cN1RkEYeGpEagZImPtqz7R0x/qg==
+X-Received: by 2002:a05:620a:6083:b0:7b6:d34e:b21a with SMTP id af79cd13be357-7b6fbf1aab1mr750908185a.37.1734120790487;
+        Fri, 13 Dec 2024 12:13:10 -0800 (PST)
+Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7b7047f3f5dsm10759385a.66.2024.12.13.12.13.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Dec 2024 12:13:10 -0800 (PST)
+Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 73AE9120006A;
+	Fri, 13 Dec 2024 15:13:09 -0500 (EST)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-04.internal (MEProxy); Fri, 13 Dec 2024 15:13:09 -0500
+X-ME-Sender: <xms:VZVcZ2qm-gu0s5limXzj9CZtxmfXx-mAmK6XnJfcqZqIlz2H7Jg3Lg>
+    <xme:VZVcZ0oz6uhXAI5mxSKLN9h20-Upxd-X6g00btvJxS-QjAmx4cL7LNMaXQOfaSIp6
+    Wps8lgGWLSKs9fybw>
+X-ME-Received: <xmr:VZVcZ7OqZAG8r-rJe68lZBczKBXcFOthWJt97mY426ybeMQERtCYzdJIEMD3>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrkeejgddufedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddttdej
+    necuhfhrohhmpeeuohhquhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilh
+    drtghomheqnecuggftrfgrthhtvghrnhepvefghfeuveekudetgfevudeuudejfeeltdfh
+    gfehgeekkeeigfdukefhgfegleefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghl
+    ihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepgh
+    hmrghilhdrtghomhesfhhigihmvgdrnhgrmhgvpdhnsggprhgtphhtthhopeehjedpmhho
+    uggvpehsmhhtphhouhhtpdhrtghpthhtoheprghlihgtvghrhihhlhesghhoohhglhgvrd
+    gtohhmpdhrtghpthhtoheprhhushhtqdhfohhrqdhlihhnuhigsehvghgvrhdrkhgvrhhn
+    vghlrdhorhhgpdhrtghpthhtoheprhgtuhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprh
+    gtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdp
+    rhgtphhtthhopehlihhnuhigqdgrrhgthhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprh
+    gtphhtthhopehllhhvmheslhhishhtshdrlhhinhhugidruggvvhdprhgtphhtthhopehl
+    khhmmheslhhishhtshdrlhhinhhugidruggvvhdprhgtphhtthhopehojhgvuggrsehkvg
+    hrnhgvlhdrohhrghdprhgtphhtthhopegrlhgvgidrghgrhihnohhrsehgmhgrihhlrdgt
+    ohhm
+X-ME-Proxy: <xmx:VZVcZ17sIOWSp0-LnbL-fy2QYuFdSefH1z64bjLq5i0dlHHmLM4ABw>
+    <xmx:VZVcZ17cTMpI_xHOYGh92J2TPP7xAIvXKWEVuYhNw1ypPrtkJoMSIQ>
+    <xmx:VZVcZ1jkRFzWZAWC-Ye4VlQO89TxiV19LoR25aIcLJrsS0YavTcA9Q>
+    <xmx:VZVcZ_7aOXLCRagx9UfKTR-SJr85felqwQWrfbxdholKhOG_rXSiXA>
+    <xmx:VZVcZwI_O8zWb7p8jSNmkNTjjYElFeZR68mnl6uDR6jLfCN-yWQAj0yk>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 13 Dec 2024 15:13:07 -0500 (EST)
+Date: Fri, 13 Dec 2024 12:13:06 -0800
+From: Boqun Feng <boqun.feng@gmail.com>
+To: Alice Ryhl <aliceryhl@google.com>
+Cc: rust-for-linux@vger.kernel.org, rcu@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	llvm@lists.linux.dev, lkmm@lists.linux.dev,
+	Miguel Ojeda <ojeda@kernel.org>,	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,	Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@samsung.com>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Andrea Parri <parri.andrea@gmail.com>,	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Nicholas Piggin <npiggin@gmail.com>,	David Howells <dhowells@redhat.com>,
+	Jade Alglave <j.alglave@ucl.ac.uk>,	Luc Maranget <luc.maranget@inria.fr>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Akira Yokosawa <akiyks@gmail.com>,	Daniel Lustig <dlustig@nvidia.com>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,	kent.overstreet@gmail.com,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com,
+	Mark Rutland <mark.rutland@arm.com>,
+	Thomas Gleixner <tglx@linutronix.de>,	Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,	torvalds@linux-foundation.org,
+ linux-arm-kernel@lists.infradead.org,	linux-fsdevel@vger.kernel.org,
+ Trevor Gross <tmgross@umich.edu>,	dakr@redhat.com,
+ Frederic Weisbecker <frederic@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Zqiang <qiang.zhang1211@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,	Albert Ou <aou@eecs.berkeley.edu>,
+ linux-riscv@lists.infradead.org
+Subject: Re: [RFC v2 04/13] rust: sync: atomic: Add generic atomics
+Message-ID: <Z1yVUmGBIxKH1xR-@tardis.local>
+References: <20241101060237.1185533-1-boqun.feng@gmail.com>
+ <20241101060237.1185533-5-boqun.feng@gmail.com>
+ <CAH5fLgjhQouU=kqVx7LET2yeWt6sKt-VO5PR5SnQ8doaG4ihuQ@mail.gmail.com>
+ <Z1seogLmy5H8-hXn@boqun-archlinux>
+ <CAH5fLgjGg8_s8imOkmPb0yLAMwD1sF1aoBZWkAy-YLNh41zCuw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241101060237.1185533-1-boqun.feng@gmail.com>
- <20241101060237.1185533-3-boqun.feng@gmail.com> <CAH5fLghYjcb-mpR_rr2aC_W8rRb6g8jCFxgky7iEqVgmpHjf=Q@mail.gmail.com>
- <Z1sYNOYJPzQmJXn6@boqun-archlinux>
-In-Reply-To: <Z1sYNOYJPzQmJXn6@boqun-archlinux>
-From: Alice Ryhl <aliceryhl@google.com>
-Date: Fri, 13 Dec 2024 15:37:13 +0100
-Message-ID: <CAH5fLgidmY7FtKLKR-Yxb6U-mQvsyatGRToqSHHRACfTdiAtUA@mail.gmail.com>
-Subject: Re: [RFC v2 02/13] rust: sync: Add basic atomic operation mapping framework
-To: Boqun Feng <boqun.feng@gmail.com>
-Cc: rust-for-linux@vger.kernel.org, rcu@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-	llvm@lists.linux.dev, lkmm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
-	Alan Stern <stern@rowland.harvard.edu>, Andrea Parri <parri.andrea@gmail.com>, 
-	Will Deacon <will@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Nicholas Piggin <npiggin@gmail.com>, David Howells <dhowells@redhat.com>, 
-	Jade Alglave <j.alglave@ucl.ac.uk>, Luc Maranget <luc.maranget@inria.fr>, 
-	"Paul E. McKenney" <paulmck@kernel.org>, Akira Yokosawa <akiyks@gmail.com>, 
-	Daniel Lustig <dlustig@nvidia.com>, Joel Fernandes <joel@joelfernandes.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, kent.overstreet@gmail.com, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com, 
-	Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Catalin Marinas <catalin.marinas@arm.com>, torvalds@linux-foundation.org, 
-	linux-arm-kernel@lists.infradead.org, linux-fsdevel@vger.kernel.org, 
-	Trevor Gross <tmgross@umich.edu>, dakr@redhat.com, 
-	Frederic Weisbecker <frederic@kernel.org>, Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
-	Josh Triplett <josh@joshtriplett.org>, Uladzislau Rezki <urezki@gmail.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang1211@gmail.com>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAH5fLgjGg8_s8imOkmPb0yLAMwD1sF1aoBZWkAy-YLNh41zCuw@mail.gmail.com>
 
-On Thu, Dec 12, 2024 at 6:07=E2=80=AFPM Boqun Feng <boqun.feng@gmail.com> w=
-rote:
->
-> On Thu, Dec 12, 2024 at 11:51:23AM +0100, Alice Ryhl wrote:
-> > On Fri, Nov 1, 2024 at 7:03=E2=80=AFAM Boqun Feng <boqun.feng@gmail.com=
-> wrote:
-> > >
-> > > Preparation for generic atomic implementation. To unify the
-> > > ipmlementation of a generic method over `i32` and `i64`, the C side
-> > > atomic methods need to be grouped so that in a generic method, they c=
-an
-> > > be referred as <type>::<method>, otherwise their parameters and retur=
-n
-> > > value are different between `i32` and `i64`, which would require usin=
-g
-> > > `transmute()` to unify the type into a `T`.
-> > >
-> > > Introduce `AtomicIpml` to represent a basic type in Rust that has the
-> > > direct mapping to an atomic implementation from C. This trait is seal=
-ed,
-> > > and currently only `i32` and `i64` ipml this.
+On Fri, Dec 13, 2024 at 03:32:47PM +0100, Alice Ryhl wrote:
+> On Thu, Dec 12, 2024 at 6:34 PM Boqun Feng <boqun.feng@gmail.com> wrote:
 > >
-> > There seems to be quite a few instances of "impl" spelled as "ipml" her=
-e.
-> >
->
-> Will fix!
->
-> > > Further, different methods are put into different `*Ops` trait groups=
-,
-> > > and this is for the future when smaller types like `i8`/`i16` are
-> > > supported but only with a limited set of API (e.g. only set(), load()=
-,
-> > > xchg() and cmpxchg(), no add() or sub() etc).
+> > On Thu, Dec 12, 2024 at 11:57:07AM +0100, Alice Ryhl wrote:
+> > [...]
+> > > > diff --git a/rust/kernel/sync/atomic/generic.rs b/rust/kernel/sync/atomic/generic.rs
+> > > > new file mode 100644
+> > > > index 000000000000..204da38e2691
+> > > > --- /dev/null
+> > > > +++ b/rust/kernel/sync/atomic/generic.rs
+> > > > @@ -0,0 +1,253 @@
+> > > > +// SPDX-License-Identifier: GPL-2.0
+> > > > +
+> > > > +//! Generic atomic primitives.
+> > > > +
+> > > > +use super::ops::*;
+> > > > +use super::ordering::*;
+> > > > +use crate::types::Opaque;
+> > > > +
+> > > > +/// A generic atomic variable.
+> > > > +///
+> > > > +/// `T` must impl [`AllowAtomic`], that is, an [`AtomicImpl`] has to be chosen.
+> > > > +///
+> > > > +/// # Invariants
+> > > > +///
+> > > > +/// Doing an atomic operation while holding a reference of [`Self`] won't cause a data race, this
+> > > > +/// is guaranteed by the safety requirement of [`Self::from_ptr`] and the extra safety requirement
+> > > > +/// of the usage on pointers returned by [`Self::as_ptr`].
+> > > > +#[repr(transparent)]
+> > > > +pub struct Atomic<T: AllowAtomic>(Opaque<T>);
+> > > > +
+> > > > +// SAFETY: `Atomic<T>` is safe to share among execution contexts because all accesses are atomic.
+> > > > +unsafe impl<T: AllowAtomic> Sync for Atomic<T> {}
 > > >
-> > > While the atomic mod is introduced, documentation is also added for
-> > > memory models and data races.
+> > > Surely it should also be Send?
 > > >
-> > > Also bump my role to the maintainer of ATOMIC INFRASTRUCTURE to refle=
-ct
-> > > my responsiblity on the Rust atomic mod.
+> >
+> > It's `Send` here because `Opaque<T>` is `Send` when `T` is `Send`. And
+> > in patch #9, I changed the definition of `AllowAtomic`, which is not a
+> > subtrait of `Send` anymore, and an `impl Send` block was added there.
+> >
+> > > > +/// Atomics that support basic atomic operations.
+> > > > +///
+> > > > +/// TODO: Unless the `impl` is a `#[repr(transparet)]` new type of an existing [`AllowAtomic`], the
+> > > > +/// impl block should be only done in atomic mod. And currently only basic integer types can
+> > > > +/// implement this trait in atomic mod.
 > > >
-> > > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> > > ---
-> > >  MAINTAINERS                    |   4 +-
-> > >  rust/kernel/sync.rs            |   1 +
-> > >  rust/kernel/sync/atomic.rs     |  19 ++++
-> > >  rust/kernel/sync/atomic/ops.rs | 199 +++++++++++++++++++++++++++++++=
-++
-> > >  4 files changed, 222 insertions(+), 1 deletion(-)
-> > >  create mode 100644 rust/kernel/sync/atomic.rs
-> > >  create mode 100644 rust/kernel/sync/atomic/ops.rs
+> > > What's up with this TODO? Can't you just write an appropriate safety
+> > > requirement?
 > > >
-> > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > index b77f4495dcf4..e09471027a63 100644
-> > > --- a/MAINTAINERS
-> > > +++ b/MAINTAINERS
-> > > @@ -3635,7 +3635,7 @@ F:        drivers/input/touchscreen/atmel_mxt_t=
-s.c
-> > >  ATOMIC INFRASTRUCTURE
-> > >  M:     Will Deacon <will@kernel.org>
-> > >  M:     Peter Zijlstra <peterz@infradead.org>
-> > > -R:     Boqun Feng <boqun.feng@gmail.com>
-> > > +M:     Boqun Feng <boqun.feng@gmail.com>
-> > >  R:     Mark Rutland <mark.rutland@arm.com>
-> > >  L:     linux-kernel@vger.kernel.org
-> > >  S:     Maintained
-> > > @@ -3644,6 +3644,8 @@ F:        arch/*/include/asm/atomic*.h
-> > >  F:     include/*/atomic*.h
-> > >  F:     include/linux/refcount.h
-> > >  F:     scripts/atomic/
-> > > +F:     rust/kernel/sync/atomic.rs
-> > > +F:     rust/kernel/sync/atomic/
 > >
-> > This is why mod.rs files are superior :)
-> >
->
-> ;-) Not going to do anything right now, but let me think about this.
->
-> > > @@ -0,0 +1,19 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +
-> > > +//! Atomic primitives.
-> > > +//!
-> > > +//! These primitives have the same semantics as their C counterparts=
-: and the precise definitions of
-> > > +//! semantics can be found at [`LKMM`]. Note that Linux Kernel Memor=
-y (Consistency) Model is the
-> > > +//! only model for Rust code in kernel, and Rust's own atomics shoul=
-d be avoided.
-> > > +//!
-> > > +//! # Data races
-> > > +//!
-> > > +//! [`LKMM`] atomics have different rules regarding data races:
-> > > +//!
-> > > +//! - A normal read doesn't data-race with an atomic read.
-> >
-> > This was fixed:
-> > https://github.com/rust-lang/rust/pull/128778
-> >
->
-> Yeah, I was aware of that effort, and good to know it's finally merged.
-> Thanks!
->
-> This will be in 1.83, right? If so, we will still need the above until
-> we bump up the minimal rustc version to 1.83 or beyond. I will handle
-> this properly with the minimal rustc 1.83 (i.e. if this goes in first,
-> will send a follow up patch). I will also mention in the above that this
-> has been changed in 1.83.
->
-> This also reminds that I should add that LKMM allows mixed-size atomic
-> accesses (as non data race), I will add that in the version.
+> > Because the limited scope of types that allows atomic is an artificial
+> > choice, i.e. we want to start with a limited number of types and make
+> > forward progress, and the types that we don't want to support atomics
+> > for now are not because of safety reasons, but more of a lack of
+> > users/motivations. So I don't think this is something we should use
+> > safety requirement to describe.
+> 
+> I found the wording very confusing. Could you reword it to say
+> something about future possibilities?
+> 
 
-This is just documentation. I don't think you need to do any special
-MSRV handling.
+Sure, how about:
 
-> > > +mod private {
-> > > +    /// Sealed trait marker to disable customized impls on atomic im=
-plementation traits.
-> > > +    pub trait Sealed {}
-> > > +}
+/// TODO: Currently the [`AllowAtomic`] types are restricted within
+/// basic integer types (and their transparent new types). In the
+/// future, we could extend the scope to more data types when there is a
+/// clear and meaningful usage, but for now, [`AllowAtomic`] should only
+/// be implemented inside atomic mod for the restricted types mentioned
+/// above.
+
+?
+
+> > > > +/// # Safety
+> > > > +///
+> > > > +/// [`Self`] must have the same size and alignment as [`Self::Repr`].
+> > > > +pub unsafe trait AllowAtomic: Sized + Send + Copy {
+> > > > +    /// The backing atomic implementation type.
+> > > > +    type Repr: AtomicImpl;
+> > > > +
+> > > > +    /// Converts into a [`Self::Repr`].
+> > > > +    fn into_repr(self) -> Self::Repr;
+> > > > +
+> > > > +    /// Converts from a [`Self::Repr`].
+> > > > +    fn from_repr(repr: Self::Repr) -> Self;
+> > >
+> > > What do you need these methods for?
+> > >
 > >
-> > Just make the trait unsafe?
-> >
->
-> And make the safety requirement of `AtomicImpl` something like:
->
->     The type must have the implementation for atomic operations.
->
-> ? Hmm.. I don't think that's a good safety requirement TBH. Actually the
-> reason that we need to restrict `AtomicImpl` types is more of an
-> iplementation issue (the implementation need to be done if we want to
-> support i8 or i16) rather than safety issue. So a sealed trait is proper
-> here. Does this make sense? Or am I missing something?
+> > Converting a `AtomicImpl` value (currently only `i32` and `i64`) to a
+> > `AllowAtomic` value without using transmute in `impl` block of
+> > `Atomic<T>`. Any better idea?
+> 
+> You could use transmute?
+> 
 
-Where is the AtomicImpl trait used?
+In a draft version, I did use transmute, but Benno commented that he
+wanted to avoid arbitrary transmute as hard as possible (if I didn't
+misunderstand him). Hence these two functions are provided. Now think
+about it, I don't think doing either way (transmute or *_repr()
+function) would affect most of users, since most of users won't need to 
+impl `AllowAtomic` themselves, therefore I think keeping it as it is is
+fine. Do you have any user observable concern of defining these
+functions?
 
-Alice
+Regards,
+Boqun
+
+> Alice
 
