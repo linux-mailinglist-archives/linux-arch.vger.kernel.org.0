@@ -1,45 +1,45 @@
-Return-Path: <linux-arch+bounces-9391-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9392-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A1759F1DDB
-	for <lists+linux-arch@lfdr.de>; Sat, 14 Dec 2024 10:59:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 478499F1E29
+	for <lists+linux-arch@lfdr.de>; Sat, 14 Dec 2024 11:57:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5C90B167D01
-	for <lists+linux-arch@lfdr.de>; Sat, 14 Dec 2024 09:59:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 92E5D188A611
+	for <lists+linux-arch@lfdr.de>; Sat, 14 Dec 2024 10:57:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78D831531DC;
-	Sat, 14 Dec 2024 09:59:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F32B718A92C;
+	Sat, 14 Dec 2024 10:57:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z2AqL/qT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F1DA2SJW"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CFD3433D8;
-	Sat, 14 Dec 2024 09:59:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1C2415666D;
+	Sat, 14 Dec 2024 10:57:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734170359; cv=none; b=qknUL0B7ed7Z2lHpuGuM9ZMPlbzKc4QZpn62wgSd/lyavkJZclLZkclsHdGR4+C46+LZnzmLZdcIpnWwKdU1+0BaEZD7ReNVHaapJ9DJFB/JMCI2wqmnB0j4MJ7rxO01XSMukflhjABsql/KW4NV5/iKv0Z2koKPT0LLaHzujvQ=
+	t=1734173855; cv=none; b=dacRksM4p0Ou7Dvmez6bYpAfTGeosuYnqY6+B2AsEUfBXX4floFXMYHChe4T/c9CDO+YLnYezkPH2AV+/XWDboVcFmsZcSixHgH+L60ftMMWiwvHzCkWSz+7mHWRl6b6G0/ALO8X/VrpcG7A0qUfb5AUH43lYx6O+Oc5t3XWenU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734170359; c=relaxed/simple;
-	bh=zPCYquVMyHszbkGVcE2/GM5XO92yWX3+ZbBjTyw9TYw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mQZlDLYgDIlt1VnnwtGXZnp8mzXQImuZbwyM3DlvFxTLrsEUEqMOWG8DVclhgx1QsxntQRtrFgoJCuyVaQGH8tTQIxVcy6BFYJRNZQQymCZQORXDgfIMSzHOoHlXUBOGpC0C+DTGZmzEjh4Xx4eosv7lqxYBLI8jdetuDvVDalM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z2AqL/qT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32D19C4CED1;
-	Sat, 14 Dec 2024 09:59:16 +0000 (UTC)
+	s=arc-20240116; t=1734173855; c=relaxed/simple;
+	bh=1UH1d6RvQEAx99qEool6QwQZ14CsvkKmJUlkp38qcds=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Vl5FWJzszvX3Pvyr4dVdtZLprIMh7MK4qRZEhruB602IuxnuXFIFhoeBmAgYgQ++9LVn5Xds1smlGFznG8mPdVFEzuDQBwijo2JXMO22ylDGH0rSuG0W+WYEWjZ+fIyyOWyaNIFdKobbJKMIywEpjuCFDGgn1H0nCD/jP31kzXo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F1DA2SJW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73DB4C4CED1;
+	Sat, 14 Dec 2024 10:57:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734170358;
-	bh=zPCYquVMyHszbkGVcE2/GM5XO92yWX3+ZbBjTyw9TYw=;
+	s=k20201202; t=1734173855;
+	bh=1UH1d6RvQEAx99qEool6QwQZ14CsvkKmJUlkp38qcds=;
 	h=From:To:Cc:Subject:Date:From;
-	b=Z2AqL/qTmZhQOqXXapTMVn6uJAQMYGDEeYuppOZtY7zRTDvZYX2h8E2e2zJRJJimz
-	 WUaIGMqcYk0nTWddN56atlY4MAPL7yvyYlL2qAOl/XLndN5tUDO/zXySB/mQyVk/P+
-	 5V5rRQ7qVlvvlDqD/Bv9wFrHwa5S/N+Q83rYKxr7rGVX4yEOILJ8WSOTAM5mzLblBr
-	 4c19sgVgviVuf7D+PD1s2ndcYR9u9cLAxZRgd+RNAGy8Whz9o8FaxGloLX73XKyvqX
-	 xhHRloyqTRPFQLr0IOoc4sdbpLJAXxdvUjhBzS//EflGISnB2H2vLV5t1fukQ2joXS
-	 81tFQqpI0TC9w==
+	b=F1DA2SJWpmQozl7GLjxxjRJ6PrWsvsn4ypA19l1fR0oGrybppMQlripztl7sx5tgR
+	 WenxIQm2w+dBPFq59pVAeumoAqEAGUu3GhJQxbULF3SNOTkZsIM3VeFZfDu3KmdnRJ
+	 oIfEXNtQJE4W7UhqISh9Gt/0TvTcsB/0i8u1G3Zv2zxOoDGxEdbxIc1jTou5pWM2qh
+	 T3gE+53Rw3lXCd63Og918pj7mbfZhAk72CwnFhOCsnlDMnispqJf9kdabmRIRwCiAI
+	 bON/jHpyJ+w9N3Bk3Kp/3DFyWLdECmDTpoVlxlrogBgkEuJT/Oa68ZDf83sDSuE5r2
+	 hjUk+ufUKbW8Q==
 From: Masahiro Yamada <masahiroy@kernel.org>
 To: linux-kbuild@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -54,9 +54,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Sami Tolvanen <samitolvanen@google.com>,
 	linux-arch@vger.kernel.org,
 	linux-modules@vger.kernel.org
-Subject: [PATCH] kbuild: keep symbols for symbol_get() even with CONFIG_TRIM_UNUSED_KSYMS
-Date: Sat, 14 Dec 2024 18:58:57 +0900
-Message-ID: <20241214095900.42990-1-masahiroy@kernel.org>
+Subject: [PATCH v2] kbuild: keep symbols for symbol_get() even with CONFIG_TRIM_UNUSED_KSYMS
+Date: Sat, 14 Dec 2024 19:57:20 +0900
+Message-ID: <20241214105726.92557-1-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -93,12 +93,17 @@ Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
+Changes in v2:
+ - Call keep_no_trim_symbols() for modules as well.
+   EXPORT_SYMBOL() may disppear if symbol_get() calls a symbol
+   within this same module.
+
  include/asm-generic/vmlinux.lds.h |  1 +
  include/linux/module.h            |  5 ++++-
- scripts/mod/modpost.c             | 25 ++++++++++++++++++++++++-
+ scripts/mod/modpost.c             | 27 +++++++++++++++++++++++++++
  scripts/mod/modpost.h             |  2 ++
  scripts/module.lds.S              |  1 +
- 5 files changed, 32 insertions(+), 2 deletions(-)
+ 5 files changed, 35 insertions(+), 1 deletion(-)
 
 diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
 index 54504013c749..02a4adb4a999 100644
@@ -129,7 +134,7 @@ index 94acbacdcdf1..405ca74c0340 100644
  /* modules using other modules: kdb wants to see this. */
  struct module_use {
 diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index 94ee49207a45..82dde0342ad5 100644
+index 94ee49207a45..27bded11875e 100644
 --- a/scripts/mod/modpost.c
 +++ b/scripts/mod/modpost.c
 @@ -503,6 +503,9 @@ static int parse_elf(struct elf_info *info, const char *filename)
@@ -142,7 +147,7 @@ index 94ee49207a45..82dde0342ad5 100644
  		}
  
  		if (sechdrs[i].sh_type == SHT_SYMTAB) {
-@@ -1443,6 +1446,24 @@ static char *remove_dot(char *s)
+@@ -1443,6 +1446,29 @@ static char *remove_dot(char *s)
  	return s;
  }
  
@@ -158,6 +163,11 @@ index 94ee49207a45..82dde0342ad5 100644
 +	for (char *s = info->no_trim_symbol; s; s = next_string(s , &size)) {
 +		struct symbol *sym;
 +
++		/*
++		 * find_symbol() returns NULL if the symbol is exported by
++		 * another module that has not been parsed yet. This is OK
++		 * because sym->used will be set to true later in this case.
++		 */
 +		sym = find_symbol(s);
 +		if (sym)
 +			sym->used = true;
@@ -167,17 +177,14 @@ index 94ee49207a45..82dde0342ad5 100644
  /*
   * The CRCs are recorded in .*.cmd files in the form of:
   * #SYMVER <name> <crc>
-@@ -1594,7 +1615,9 @@ static void read_symbols(const char *modname)
+@@ -1601,6 +1627,7 @@ static void read_symbols(const char *modname)
+ 					sizeof(mod->srcversion) - 1);
+ 	}
  
- 	check_sec_ref(mod, &info);
++	keep_no_trim_symbols(&info);
+ 	parse_elf_finish(&info);
  
--	if (!mod->is_vmlinux) {
-+	if (mod->is_vmlinux) {
-+		keep_no_trim_symbols(&info);
-+	} else {
- 		version = get_modinfo(&info, "version");
- 		if (version || all_versions)
- 			get_src_version(mod->name, mod->srcversion,
+ 	if (modversions) {
 diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
 index 8b72c227ebf4..cfcda357ccb2 100644
 --- a/scripts/mod/modpost.h
