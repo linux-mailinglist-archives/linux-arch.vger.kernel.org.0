@@ -1,216 +1,239 @@
-Return-Path: <linux-arch+bounces-9392-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9393-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 478499F1E29
-	for <lists+linux-arch@lfdr.de>; Sat, 14 Dec 2024 11:57:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F9449F3282
+	for <lists+linux-arch@lfdr.de>; Mon, 16 Dec 2024 15:13:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 92E5D188A611
-	for <lists+linux-arch@lfdr.de>; Sat, 14 Dec 2024 10:57:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CAFB8163DF5
+	for <lists+linux-arch@lfdr.de>; Mon, 16 Dec 2024 14:12:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F32B718A92C;
-	Sat, 14 Dec 2024 10:57:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B5EB205E16;
+	Mon, 16 Dec 2024 14:10:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F1DA2SJW"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="KdufFQ9y";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="/u+tT8fS"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1C2415666D;
-	Sat, 14 Dec 2024 10:57:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1329205E17;
+	Mon, 16 Dec 2024 14:10:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734173855; cv=none; b=dacRksM4p0Ou7Dvmez6bYpAfTGeosuYnqY6+B2AsEUfBXX4floFXMYHChe4T/c9CDO+YLnYezkPH2AV+/XWDboVcFmsZcSixHgH+L60ftMMWiwvHzCkWSz+7mHWRl6b6G0/ALO8X/VrpcG7A0qUfb5AUH43lYx6O+Oc5t3XWenU=
+	t=1734358254; cv=none; b=e3ZkWFP76Xn/ft7iz9wskfpbH6MyMb8jpiIFKsZFyAqhsj82on7I2xrS6c1J7dvKUYB4FerPywl+dmUxC7WUxZ2N9csiAkjBGZbVL92AIWgHqppErQUyCetTr2c3fPhSAFtI4+d5cI/LC1uiJCFRVl9fyOG5P9S3+GChxqFNxME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734173855; c=relaxed/simple;
-	bh=1UH1d6RvQEAx99qEool6QwQZ14CsvkKmJUlkp38qcds=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Vl5FWJzszvX3Pvyr4dVdtZLprIMh7MK4qRZEhruB602IuxnuXFIFhoeBmAgYgQ++9LVn5Xds1smlGFznG8mPdVFEzuDQBwijo2JXMO22ylDGH0rSuG0W+WYEWjZ+fIyyOWyaNIFdKobbJKMIywEpjuCFDGgn1H0nCD/jP31kzXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F1DA2SJW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73DB4C4CED1;
-	Sat, 14 Dec 2024 10:57:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734173855;
-	bh=1UH1d6RvQEAx99qEool6QwQZ14CsvkKmJUlkp38qcds=;
-	h=From:To:Cc:Subject:Date:From;
-	b=F1DA2SJWpmQozl7GLjxxjRJ6PrWsvsn4ypA19l1fR0oGrybppMQlripztl7sx5tgR
-	 WenxIQm2w+dBPFq59pVAeumoAqEAGUu3GhJQxbULF3SNOTkZsIM3VeFZfDu3KmdnRJ
-	 oIfEXNtQJE4W7UhqISh9Gt/0TvTcsB/0i8u1G3Zv2zxOoDGxEdbxIc1jTou5pWM2qh
-	 T3gE+53Rw3lXCd63Og918pj7mbfZhAk72CwnFhOCsnlDMnispqJf9kdabmRIRwCiAI
-	 bON/jHpyJ+w9N3Bk3Kp/3DFyWLdECmDTpoVlxlrogBgkEuJT/Oa68ZDf83sDSuE5r2
-	 hjUk+ufUKbW8Q==
-From: Masahiro Yamada <masahiroy@kernel.org>
-To: linux-kbuild@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	linux-arch@vger.kernel.org,
-	linux-modules@vger.kernel.org
-Subject: [PATCH v2] kbuild: keep symbols for symbol_get() even with CONFIG_TRIM_UNUSED_KSYMS
-Date: Sat, 14 Dec 2024 19:57:20 +0900
-Message-ID: <20241214105726.92557-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1734358254; c=relaxed/simple;
+	bh=djYBYaWoItcXUsVYqkOg6DhKy9XnOUI8nNrRC+z9rAU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=hjoSesfoksHnFiC0qcOznQy8FQRHZmfLP6VM+7eEF9gHvaTGgNRoWLcxg7gcS0NRtYnPxfz8LXyDQP7ZqmfwSlDdVRnLt79NIJaBSpeJSHMu+/aB3adyaTi9SDsqMqWzkfO98P24vptFbOdowHcQCWLdW5ad9pbA/aTrbOrM63k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=KdufFQ9y; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=/u+tT8fS; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1734358250;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=HKVp/Caa3kBEDzmNrfvKYA3RNNrY0C92zVprRqMI1SE=;
+	b=KdufFQ9yzC5Ccn77ghWA8wMSofMP42Zkq2YdPaJ2A10YNms20X7NC8Hxi+abz4ROYmqVYh
+	CKh8+qO4oFDm3McLx4thCKwPp4d9pZkbPn7YuRT6GdMzrOCCJ9LAd+SLXp9FxXhrYc1Njf
+	EASL4b3P4RxQ/VMcgorUj16d32fvKJI5JcWLHGxqYuOOu7tXzsGjHIKxOeEWngv8j8V1xD
+	VqLUtnbtI3PL9fNVv0DclRhDYLLKxW9sneh1Gx5Q8jZ+EULkpYDXOXsb4FJG7BTQMCkBGb
+	E5E9fCgAEOXWs0vcarn0iqbq9v3goh4LSx3xpzWX3C+fuKDi/c1tOtRR/bod3w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1734358250;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=HKVp/Caa3kBEDzmNrfvKYA3RNNrY0C92zVprRqMI1SE=;
+	b=/u+tT8fSj1h0nM3WDlaNJH3x66iqvvap+8AtYcWufIcKOYjQK6XUnl7D/FVY+IzgCPpSQr
+	1E+y5++vPqqWOdDQ==
+Subject: [PATCH 00/17] vDSO: Introduce generic data storage
+Date: Mon, 16 Dec 2024 15:09:56 +0100
+Message-Id: <20241216-vdso-store-rng-v1-0-f7aed1bdb3b2@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIALU0YGcC/x3MywqEMAyF4VeRrCeQekVfZXAhNmo2rSQiM0jf3
+ eryg3P+C4xV2GAoLlA+xSSGDPcpYN6msDKKz4aSypp65/D0FtGOqIwaVmypmyo/90wNQT7tyov
+ 83uB3zN7k2f6ffkrpBvZg+p5vAAAA
+X-Change-ID: 20240911-vdso-store-rng-607a3dc9e050
+To: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
+ Helge Deller <deller@gmx.de>, Andy Lutomirski <luto@kernel.org>, 
+ Thomas Gleixner <tglx@linutronix.de>, 
+ Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+ Anna-Maria Behnsen <anna-maria@linutronix.de>, 
+ Frederic Weisbecker <frederic@kernel.org>, 
+ Andrew Morton <akpm@linux-foundation.org>, 
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+ Theodore Ts'o <tytso@mit.edu>, "Jason A. Donenfeld" <Jason@zx2c4.com>, 
+ Paul Walmsley <paul.walmsley@sifive.com>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
+ Russell King <linux@armlinux.org.uk>, Heiko Carstens <hca@linux.ibm.com>, 
+ Vasily Gorbik <gor@linux.ibm.com>, 
+ Alexander Gordeev <agordeev@linux.ibm.com>, 
+ Christian Borntraeger <borntraeger@linux.ibm.com>, 
+ Sven Schnelle <svens@linux.ibm.com>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+ Christophe Leroy <christophe.leroy@csgroup.eu>, 
+ Naveen N Rao <naveen@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+ "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>
+Cc: linux-parisc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-riscv@lists.infradead.org, 
+ loongarch@lists.linux.dev, linux-s390@vger.kernel.org, 
+ linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+ linux-arch@vger.kernel.org, Nam Cao <namcao@linutronix.de>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1734358247; l=7632;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=djYBYaWoItcXUsVYqkOg6DhKy9XnOUI8nNrRC+z9rAU=;
+ b=nB6k75T44i3XiBispikp3W7OCCiI+BnnKEjikbsYEp+QxVBLBTagyb2PXd9wSlsp2iNvC4Dr8
+ 7Dg6HPvjJg+AI7LSiIsW01eZlsVkYR2FxwK80tr8AI4F5QdZPyk/VoF
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-Linus observed that the symbol_request(utf8_data_table) call fails when
-CONFIG_UNICODE=y and CONFIG_TRIM_UNUSED_KSYMS=y.
+Currently each architecture defines the setup of the vDSO data page on
+its own, mostly through copy-and-paste from some other architecture.
+Extend the existing generic vDSO implementation to also provide generic
+data storage.
+This removes duplicated code and paves the way for further changes to
+the generic vDSO implementation without having to go through a lot of
+per-architecture changes.
 
-symbol_get() relies on the symbol data being present in the ksymtab for
-symbol lookups. However, EXPORT_SYMBOL_GPL(utf8_data_table) is dropped
-due to CONFIG_TRIM_UNUSED_KSYMS, as no module references it in this case.
+Based on v6.13-rc1 and intended to be merged through the tip tree.
 
-Probably, this has been broken since commit dbacb0ef670d ("kconfig option
-for TRIM_UNUSED_KSYMS").
+This also provides the basis for some generic vDSO reworks.
+The commits from this series and the upcoming reworks can be seen at:
+https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git/log/?h=vdso/store
 
-This commit addresses the issue by leveraging modpost. Symbol names
-passed to symbol_get() are recorded in the special .no_trim_symbol
-section, which is then parsed by modpost to forcibly keep such symbols.
-The .no_trim_symbol section is discarded by the linker scripts, so there
-is no impact on the size of the final vmlinux or modules.
-
-This commit cannot resolve the issue for direct calls to __symbol_get()
-because the symbol name is not known at compile-time.
-
-Although symbol_get() may eventually be deprecated, this workaround
-should be good enough meanwhile.
-
-Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
-Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
+Thomas Weißschuh (17):
+      parisc: Remove unused symbol vdso_data
+      vdso: Introduce vdso/align.h
+      vdso: Add generic time data storage
+      vdso: Add generic random data storage
+      vdso: Add generic architecture-specific data storage
+      arm64: vdso: Switch to generic storage implementation
+      riscv: vdso: Switch to generic storage implementation
+      LoongArch: vDSO: Switch to generic storage implementation
+      arm: vdso: Switch to generic storage implementation
+      s390/vdso: Switch to generic storage implementation
+      MIPS: vdso: Switch to generic storage implementation
+      powerpc/vdso: Switch to generic storage implementation
+      x86/vdso: Switch to generic storage implementation
+      x86/vdso/vdso2c: Remove page handling
+      vdso: Remove remnants of architecture-specific random state storage
+      vdso: Remove remnants of architecture-specific time storage
+      vdso: Remove kconfig symbol GENERIC_VDSO_DATA_STORE
 
-Changes in v2:
- - Call keep_no_trim_symbols() for modules as well.
-   EXPORT_SYMBOL() may disppear if symbol_get() calls a symbol
-   within this same module.
+ MAINTAINERS                                        |   1 +
+ arch/Kconfig                                       |   4 +
+ arch/arm/include/asm/vdso.h                        |   2 +
+ arch/arm/include/asm/vdso/gettimeofday.h           |   7 +-
+ arch/arm/include/asm/vdso/vsyscall.h               |  12 +-
+ arch/arm/kernel/asm-offsets.c                      |   4 -
+ arch/arm/kernel/vdso.c                             |  34 ++----
+ arch/arm/vdso/vdso.lds.S                           |   4 +-
+ arch/arm64/include/asm/vdso.h                      |   2 +-
+ arch/arm64/include/asm/vdso/compat_gettimeofday.h  |  32 +++---
+ arch/arm64/include/asm/vdso/getrandom.h            |  12 --
+ arch/arm64/include/asm/vdso/gettimeofday.h         |  16 +--
+ arch/arm64/include/asm/vdso/vsyscall.h             |  25 +----
+ arch/arm64/kernel/vdso.c                           |  90 +--------------
+ arch/arm64/kernel/vdso/vdso.lds.S                  |   7 +-
+ arch/arm64/kernel/vdso32/vdso.lds.S                |   7 +-
+ arch/loongarch/Kconfig                             |   1 +
+ arch/loongarch/include/asm/vdso.h                  |   1 -
+ arch/loongarch/include/asm/vdso/arch_data.h        |  25 +++++
+ arch/loongarch/include/asm/vdso/getrandom.h        |   5 -
+ arch/loongarch/include/asm/vdso/gettimeofday.h     |  14 +--
+ arch/loongarch/include/asm/vdso/vdso.h             |  38 +------
+ arch/loongarch/include/asm/vdso/vsyscall.h         |  17 ---
+ arch/loongarch/kernel/asm-offsets.c                |   2 +-
+ arch/loongarch/kernel/vdso.c                       |  92 +--------------
+ arch/loongarch/vdso/vdso.lds.S                     |   8 +-
+ arch/loongarch/vdso/vgetcpu.c                      |   7 +-
+ arch/mips/include/asm/vdso/gettimeofday.h          |   9 +-
+ arch/mips/include/asm/vdso/vdso.h                  |  19 ++--
+ arch/mips/include/asm/vdso/vsyscall.h              |  14 +--
+ arch/mips/kernel/vdso.c                            |  47 +++-----
+ arch/mips/vdso/vdso.lds.S                          |   5 +-
+ arch/parisc/include/asm/vdso.h                     |   2 -
+ arch/powerpc/Kconfig                               |   1 +
+ arch/powerpc/include/asm/vdso.h                    |   1 +
+ arch/powerpc/include/asm/vdso/arch_data.h          |  37 ++++++
+ arch/powerpc/include/asm/vdso/getrandom.h          |  11 +-
+ arch/powerpc/include/asm/vdso/gettimeofday.h       |  36 +++---
+ arch/powerpc/include/asm/vdso/vsyscall.h           |  13 ---
+ arch/powerpc/include/asm/vdso_datapage.h           |  44 +-------
+ arch/powerpc/kernel/asm-offsets.c                  |   1 -
+ arch/powerpc/kernel/time.c                         |   2 +-
+ arch/powerpc/kernel/vdso.c                         | 115 ++-----------------
+ arch/powerpc/kernel/vdso/cacheflush.S              |   2 +-
+ arch/powerpc/kernel/vdso/datapage.S                |   4 +-
+ arch/powerpc/kernel/vdso/gettimeofday.S            |   4 +-
+ arch/powerpc/kernel/vdso/vdso32.lds.S              |   4 +-
+ arch/powerpc/kernel/vdso/vdso64.lds.S              |   4 +-
+ arch/powerpc/kernel/vdso/vgettimeofday.c           |  14 +--
+ arch/riscv/Kconfig                                 |   2 +-
+ arch/riscv/include/asm/vdso.h                      |   2 +-
+ .../include/asm/vdso/{time_data.h => arch_data.h}  |   8 +-
+ arch/riscv/include/asm/vdso/gettimeofday.h         |  14 +--
+ arch/riscv/include/asm/vdso/vsyscall.h             |   9 --
+ arch/riscv/kernel/sys_hwprobe.c                    |   3 +-
+ arch/riscv/kernel/vdso.c                           |  90 +--------------
+ arch/riscv/kernel/vdso/hwprobe.c                   |   6 +-
+ arch/riscv/kernel/vdso/vdso.lds.S                  |   7 +-
+ arch/s390/include/asm/vdso.h                       |   4 +-
+ arch/s390/include/asm/vdso/getrandom.h             |  12 --
+ arch/s390/include/asm/vdso/gettimeofday.h          |  15 +--
+ arch/s390/include/asm/vdso/vsyscall.h              |  20 ----
+ arch/s390/kernel/time.c                            |   6 +-
+ arch/s390/kernel/vdso.c                            |  97 +---------------
+ arch/s390/kernel/vdso32/vdso32.lds.S               |   7 +-
+ arch/s390/kernel/vdso64/vdso64.lds.S               |   8 +-
+ arch/x86/entry/vdso/vdso-layout.lds.S              |  10 +-
+ arch/x86/entry/vdso/vdso2c.c                       |  21 ----
+ arch/x86/entry/vdso/vdso2c.h                       |  20 ----
+ arch/x86/entry/vdso/vma.c                          | 125 ++-------------------
+ arch/x86/include/asm/vdso.h                        |   6 -
+ arch/x86/include/asm/vdso/getrandom.h              |  10 --
+ arch/x86/include/asm/vdso/gettimeofday.h           |  25 +----
+ arch/x86/include/asm/vdso/vsyscall.h               |  22 +---
+ drivers/char/random.c                              |   6 +-
+ include/asm-generic/vdso/vsyscall.h                |  15 +--
+ include/linux/align.h                              |  10 +-
+ include/linux/time_namespace.h                     |   2 -
+ include/linux/vdso_datastore.h                     |  10 ++
+ include/vdso/align.h                               |  15 +++
+ include/vdso/datapage.h                            | 105 ++++++++++++++---
+ include/vdso/helpers.h                             |   8 +-
+ kernel/time/namespace.c                            |  12 +-
+ kernel/time/vsyscall.c                             |  19 ++--
+ lib/Makefile                                       |   2 +
+ lib/vdso/getrandom.c                               |   4 +-
+ lib/vdso/gettimeofday.c                            |  62 +++++-----
+ lib/vdso_kernel/Makefile                           |   3 +
+ lib/vdso_kernel/datastore.c                        | 125 +++++++++++++++++++++
+ 89 files changed, 574 insertions(+), 1231 deletions(-)
+---
+base-commit: 40384c840ea1944d7c5a392e8975ed088ecf0b37
+change-id: 20240911-vdso-store-rng-607a3dc9e050
 
- include/asm-generic/vmlinux.lds.h |  1 +
- include/linux/module.h            |  5 ++++-
- scripts/mod/modpost.c             | 27 +++++++++++++++++++++++++++
- scripts/mod/modpost.h             |  2 ++
- scripts/module.lds.S              |  1 +
- 5 files changed, 35 insertions(+), 1 deletion(-)
-
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index 54504013c749..02a4adb4a999 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -1038,6 +1038,7 @@ defined(CONFIG_AUTOFDO_CLANG) || defined(CONFIG_PROPELLER_CLANG)
- 	*(.discard)							\
- 	*(.discard.*)							\
- 	*(.export_symbol)						\
-+	*(.no_trim_symbol)						\
- 	*(.modinfo)							\
- 	/* ld.bfd warns about .gnu.version* even when not emitted */	\
- 	*(.gnu.version*)						\
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 94acbacdcdf1..405ca74c0340 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -306,7 +306,10 @@ extern int modules_disabled; /* for sysctl */
- /* Get/put a kernel symbol (calls must be symmetric) */
- void *__symbol_get(const char *symbol);
- void *__symbol_get_gpl(const char *symbol);
--#define symbol_get(x) ((typeof(&x))(__symbol_get(__stringify(x))))
-+#define symbol_get(x)	({ \
-+	static const char __notrim[] \
-+		__used __section(".no_trim_symbol") = __stringify(x); \
-+	(typeof(&x))(__symbol_get(__stringify(x))); })
- 
- /* modules using other modules: kdb wants to see this. */
- struct module_use {
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index 94ee49207a45..27bded11875e 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -503,6 +503,9 @@ static int parse_elf(struct elf_info *info, const char *filename)
- 			info->modinfo_len = sechdrs[i].sh_size;
- 		} else if (!strcmp(secname, ".export_symbol")) {
- 			info->export_symbol_secndx = i;
-+		} else if (!strcmp(secname, ".no_trim_symbol")) {
-+			info->no_trim_symbol = (void *)hdr + sechdrs[i].sh_offset;
-+			info->no_trim_symbol_len = sechdrs[i].sh_size;
- 		}
- 
- 		if (sechdrs[i].sh_type == SHT_SYMTAB) {
-@@ -1443,6 +1446,29 @@ static char *remove_dot(char *s)
- 	return s;
- }
- 
-+/*
-+ * Keep symbols recorded in the .no_trim_symbol section. This is necessary to
-+ * prevent CONFIG_TRIM_UNUSED_KSYMS from dropping EXPORT_SYMBOL because
-+ * symbol_get() relies on the symbol being present in the ksymtab for lookups.
-+ */
-+static void keep_no_trim_symbols(const struct elf_info *info)
-+{
-+	unsigned long size = info->no_trim_symbol_len;
-+
-+	for (char *s = info->no_trim_symbol; s; s = next_string(s , &size)) {
-+		struct symbol *sym;
-+
-+		/*
-+		 * find_symbol() returns NULL if the symbol is exported by
-+		 * another module that has not been parsed yet. This is OK
-+		 * because sym->used will be set to true later in this case.
-+		 */
-+		sym = find_symbol(s);
-+		if (sym)
-+			sym->used = true;
-+	}
-+}
-+
- /*
-  * The CRCs are recorded in .*.cmd files in the form of:
-  * #SYMVER <name> <crc>
-@@ -1601,6 +1627,7 @@ static void read_symbols(const char *modname)
- 					sizeof(mod->srcversion) - 1);
- 	}
- 
-+	keep_no_trim_symbols(&info);
- 	parse_elf_finish(&info);
- 
- 	if (modversions) {
-diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
-index 8b72c227ebf4..cfcda357ccb2 100644
---- a/scripts/mod/modpost.h
-+++ b/scripts/mod/modpost.h
-@@ -127,6 +127,8 @@ struct elf_info {
- 	char         *strtab;
- 	char	     *modinfo;
- 	unsigned int modinfo_len;
-+	char         *no_trim_symbol;
-+	unsigned int no_trim_symbol_len;
- 
- 	/* support for 32bit section numbers */
- 
-diff --git a/scripts/module.lds.S b/scripts/module.lds.S
-index c2f80f9141d4..450f1088d5fd 100644
---- a/scripts/module.lds.S
-+++ b/scripts/module.lds.S
-@@ -16,6 +16,7 @@ SECTIONS {
- 		*(.discard)
- 		*(.discard.*)
- 		*(.export_symbol)
-+		*(.no_trim_symbol)
- 	}
- 
- 	__ksymtab		0 : ALIGN(8) { *(SORT(___ksymtab+*)) }
+Best regards,
 -- 
-2.43.0
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 
 
