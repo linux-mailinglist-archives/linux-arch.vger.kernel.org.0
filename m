@@ -1,38 +1,38 @@
-Return-Path: <linux-arch+bounces-9437-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9438-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB8D99F8061
-	for <lists+linux-arch@lfdr.de>; Thu, 19 Dec 2024 17:47:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A06BB9F8068
+	for <lists+linux-arch@lfdr.de>; Thu, 19 Dec 2024 17:48:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CFA637A2920
-	for <lists+linux-arch@lfdr.de>; Thu, 19 Dec 2024 16:47:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EB0227A32E1
+	for <lists+linux-arch@lfdr.de>; Thu, 19 Dec 2024 16:47:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AE0919E98C;
-	Thu, 19 Dec 2024 16:46:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F1DA1A0AFA;
+	Thu, 19 Dec 2024 16:46:34 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77F3213B59E;
-	Thu, 19 Dec 2024 16:46:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 970EF15688C;
+	Thu, 19 Dec 2024 16:46:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734626789; cv=none; b=MIF01BulrzIywiYoJ9fqGwN3JKPzUb1TZjyMG4UxAqOwNQBaPeBXIusvvY3NOtOXaUEy1aYtQuJg8luw6El2wuRJ1/eftxf1FFg0W0xmiwInUN0mGpieL7Akwsa5RFS627OEIs5KZJLbWpCT5D28JN0r6nnveRxPVdM0w6lTrvg=
+	t=1734626794; cv=none; b=jqpS6zotzaKUTIf7b2xeZDZj5TUnSsYdBHorArWaHnloViZ94YPPNjyeaHMF7YgSo94e4chGK5R7RsyI/NrC/cdZgPPxQyMvpbGjfekcg99+FrIhKZBO74zo4cWBAF6JtJZWKJQ4KEUO7guyQcYqsIlCuThdlEeMFodJlePssec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734626789; c=relaxed/simple;
-	bh=vs1NhHLsHKhLV3WkFMsiev7oGXBBrMsDeL+2lT3WK1Y=;
+	s=arc-20240116; t=1734626794; c=relaxed/simple;
+	bh=8o1ei1pd0KRIKfmvgfQG5dFQrtcSUP3Zm7akW9xMX/8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AdnGFrvi0HhvPO4LlHpIbxdc5UKuksbmK1y+/bsXKWkv3noNWQ7/6I1u7g8wPAqEMGQ9GJEw152TCqFasX7IB9bIGatnfG0sGXe1Er6zwySKGjS1iiSvgdLkjaTNdVp+nWcymx3k3JUmT/exzxlXT6YkmAEInADVrV4R+J2wxv4=
+	 MIME-Version; b=tlgieLnZ1cTb1+UyqsZGMIVdFPitIrOC0jXluvDPe3h7xM66HJqsefkyR2tHa6jY3Z222tmFn+Ea7+Mg7eEuRdzHTonk8z/IuDcfBtIX8oDfIFrv4cNW2eQ5UhP2qeEF8JlFPlNnyLd8e0cn0m3vjD4tRxrJ3+4hbNBEiEt8PAU=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EE9F01480;
-	Thu, 19 Dec 2024 08:46:55 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2A70A1480;
+	Thu, 19 Dec 2024 08:47:00 -0800 (PST)
 Received: from e123572-lin.arm.com (e123572-lin.cambridge.arm.com [10.1.194.54])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F018D3F58B;
-	Thu, 19 Dec 2024 08:46:23 -0800 (PST)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2B9613F58B;
+	Thu, 19 Dec 2024 08:46:28 -0800 (PST)
 From: Kevin Brodsky <kevin.brodsky@arm.com>
 To: linux-mm@kvack.org
 Cc: Kevin Brodsky <kevin.brodsky@arm.com>,
@@ -63,9 +63,9 @@ Cc: Kevin Brodsky <kevin.brodsky@arm.com>,
 	linux-um@lists.infradead.org,
 	loongarch@lists.linux.dev,
 	x86@kernel.org
-Subject: [PATCH 04/10] s390/mm: Add calls to pagetable_pud_[cd]tor
-Date: Thu, 19 Dec 2024 16:44:19 +0000
-Message-ID: <20241219164425.2277022-5-kevin.brodsky@arm.com>
+Subject: [PATCH 05/10] riscv: mm: Skip pgtable level check in {pud,p4d}_alloc_one
+Date: Thu, 19 Dec 2024 16:44:20 +0000
+Message-ID: <20241219164425.2277022-6-kevin.brodsky@arm.com>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20241219164425.2277022-1-kevin.brodsky@arm.com>
 References: <20241219164425.2277022-1-kevin.brodsky@arm.com>
@@ -77,47 +77,68 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Commit 55d2a0bd5ead ("mm: add statistics for PUD level pagetable")
-introduced PUD-level ctor/dtor helpers to improve the accounting of
-page table pages. s390 doesn't use the generic pgalloc
-implementation and it seems that it got missed in the process. Add
-the missing calls to the ctor/dtor helpers in pud_alloc_one/pud_free
-to match the other architectures.
+{pmd,pud,p4d}_alloc_one() is never called if the corresponding page
+table level is folded, as {pmd,pud,p4d}_alloc() already does the
+required check. We can therefore remove the runtime page table level
+checks in {pud,p4d}_alloc_one. The PUD helper becomes equivalent to
+the generic version, so we remove it altogether.
+
+This is consistent with the way arm64 and x86 handle this situation
+(runtime check in p4d_free() only).
 
 Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
 ---
- arch/s390/include/asm/pgalloc.h | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ arch/riscv/include/asm/pgalloc.h | 22 ++++------------------
+ 1 file changed, 4 insertions(+), 18 deletions(-)
 
-diff --git a/arch/s390/include/asm/pgalloc.h b/arch/s390/include/asm/pgalloc.h
-index 7b84ef6dc4b6..97db66ae06b9 100644
---- a/arch/s390/include/asm/pgalloc.h
-+++ b/arch/s390/include/asm/pgalloc.h
-@@ -67,15 +67,20 @@ static inline void p4d_free(struct mm_struct *mm, p4d_t *p4d)
- static inline pud_t *pud_alloc_one(struct mm_struct *mm, unsigned long address)
- {
- 	unsigned long *table = crst_table_alloc(mm);
--	if (table)
--		crst_table_init(table, _REGION3_ENTRY_EMPTY);
-+
-+	if (!table)
-+		return NULL;
-+	crst_table_init(table, _REGION3_ENTRY_EMPTY);
-+	pagetable_pud_ctor(virt_to_ptdesc(table));
- 	return (pud_t *) table;
+diff --git a/arch/riscv/include/asm/pgalloc.h b/arch/riscv/include/asm/pgalloc.h
+index f52264304f77..8ad0bbe838a2 100644
+--- a/arch/riscv/include/asm/pgalloc.h
++++ b/arch/riscv/include/asm/pgalloc.h
+@@ -12,7 +12,6 @@
+ #include <asm/tlb.h>
+ 
+ #ifdef CONFIG_MMU
+-#define __HAVE_ARCH_PUD_ALLOC_ONE
+ #define __HAVE_ARCH_PUD_FREE
+ #include <asm-generic/pgalloc.h>
+ 
+@@ -88,15 +87,6 @@ static inline void pgd_populate_safe(struct mm_struct *mm, pgd_t *pgd,
+ 	}
  }
  
+-#define pud_alloc_one pud_alloc_one
+-static inline pud_t *pud_alloc_one(struct mm_struct *mm, unsigned long addr)
+-{
+-	if (pgtable_l4_enabled)
+-		return __pud_alloc_one(mm, addr);
+-
+-	return NULL;
+-}
+-
+ #define pud_free pud_free
  static inline void pud_free(struct mm_struct *mm, pud_t *pud)
  {
--	if (!mm_pud_folded(mm))
--		crst_table_free(mm, (unsigned long *) pud);
-+	if (mm_pud_folded(mm))
-+		return;
-+	pagetable_pud_dtor(virt_to_ptdesc(pud));
-+	crst_table_free(mm, (unsigned long *) pud);
+@@ -118,15 +108,11 @@ static inline void __pud_free_tlb(struct mmu_gather *tlb, pud_t *pud,
+ #define p4d_alloc_one p4d_alloc_one
+ static inline p4d_t *p4d_alloc_one(struct mm_struct *mm, unsigned long addr)
+ {
+-	if (pgtable_l5_enabled) {
+-		gfp_t gfp = GFP_PGTABLE_USER;
+-
+-		if (mm == &init_mm)
+-			gfp = GFP_PGTABLE_KERNEL;
+-		return (p4d_t *)get_zeroed_page(gfp);
+-	}
++	gfp_t gfp = GFP_PGTABLE_USER;
+ 
+-	return NULL;
++	if (mm == &init_mm)
++		gfp = GFP_PGTABLE_KERNEL;
++	return (p4d_t *)get_zeroed_page(gfp);
  }
  
- static inline pmd_t *pmd_alloc_one(struct mm_struct *mm, unsigned long vmaddr)
+ static inline void __p4d_free(struct mm_struct *mm, p4d_t *p4d)
 -- 
 2.47.0
 
