@@ -1,210 +1,153 @@
-Return-Path: <linux-arch+bounces-9443-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9444-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD5DD9F809A
-	for <lists+linux-arch@lfdr.de>; Thu, 19 Dec 2024 17:49:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AE4239F818F
+	for <lists+linux-arch@lfdr.de>; Thu, 19 Dec 2024 18:21:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AE81916D917
-	for <lists+linux-arch@lfdr.de>; Thu, 19 Dec 2024 16:49:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7EADA16DFE3
+	for <lists+linux-arch@lfdr.de>; Thu, 19 Dec 2024 17:17:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4000C1A9B3D;
-	Thu, 19 Dec 2024 16:46:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0C8F19F41A;
+	Thu, 19 Dec 2024 17:14:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Hvb93cQE"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90CBC1A9B29;
-	Thu, 19 Dec 2024 16:46:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E285819DF60;
+	Thu, 19 Dec 2024 17:13:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734626815; cv=none; b=YE8J2Rl91uYG52M19YKTFc+vO4rcSwTZFSSXuKeBcYeygbrLweMhqLB8Uzn6HhSEEjUToC4R9+aU1AfvNj+euuUhWsXRETtduoG0dQnGe4A/mSZzHWS4mnhIelbBDIcU4DxDJsWp5ZqL4W1Fknq4OKLyMgcYlQh+/iSl91Pe2aU=
+	t=1734628442; cv=none; b=l1ZPrTskrfLb53EVF8zGu5PX8uuIyGBODx6VhKU6ZFBjFujVMe3vyAMeyx1TM9OU4HJcAXGagWoD/x0PEEy1JU0lRpgCFhMw2CFZSVaKO4V0Jaje66TSF0ouFitpyh9ZW6csPdiu8oanLEoj5Wzp9g5tjbghf6tDAjGsPE5TTPY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734626815; c=relaxed/simple;
-	bh=p16u+6he38A58mrGYiGYHXj0yO+tXnIwmYx1S0JFsAg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=m8tICWrQPkThbiO/20hGdahhXuz5XaLU0nsiY7qUas21/QjEAP7OUTOTwkb7Ef7CEAbP5wJJK5pCUSSK8H3MmyNQoWzm4+jS0MuwckVB1sbaRSbAWHnL/qWPxFZ/muEJ1xwEPWUXT31a6kkJpcPm4iBm9QrXkdHf0PSE8rvSPco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 46F061480;
-	Thu, 19 Dec 2024 08:47:21 -0800 (PST)
-Received: from e123572-lin.arm.com (e123572-lin.cambridge.arm.com [10.1.194.54])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 47EE93F58B;
-	Thu, 19 Dec 2024 08:46:49 -0800 (PST)
-From: Kevin Brodsky <kevin.brodsky@arm.com>
-To: linux-mm@kvack.org
-Cc: Kevin Brodsky <kevin.brodsky@arm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	"Mike Rapoport (IBM)" <rppt@kernel.org>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Will Deacon <will@kernel.org>,
-	Matthew Wilcox <willy@infradead.org>,
-	linux-alpha@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-csky@vger.kernel.org,
-	linux-hexagon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org,
-	linux-openrisc@vger.kernel.org,
-	linux-parisc@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-um@lists.infradead.org,
-	loongarch@lists.linux.dev,
-	x86@kernel.org
-Subject: [PATCH 10/10] mm: Introduce ctor/dtor at PGD level
-Date: Thu, 19 Dec 2024 16:44:25 +0000
-Message-ID: <20241219164425.2277022-11-kevin.brodsky@arm.com>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <20241219164425.2277022-1-kevin.brodsky@arm.com>
-References: <20241219164425.2277022-1-kevin.brodsky@arm.com>
+	s=arc-20240116; t=1734628442; c=relaxed/simple;
+	bh=B/XF+RCIDxItDDpVuhBVdHslbd/M+ZJTAW7f1trwsn4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qtvXty6/C2Z5af4Nnh+afavmXVrRcqS0UByvIzk7r9LSGlmdH7Rf+Vjoz/Sx0KKbhqqcsCrQC6i7rAGwhYpzLkCaFbnjPTB0ab7jY/Hno3Oa+429SqamJ5+cpoNwmT9qiSbHCS2AK0W+MagXP53EMnvtXTlhf5dLVqKmGqH9vEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Hvb93cQE; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1734628439; x=1766164439;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=B/XF+RCIDxItDDpVuhBVdHslbd/M+ZJTAW7f1trwsn4=;
+  b=Hvb93cQEnT2C7KoGdkh+0C/vmLAQOXlDgXUUxLrORR291wQR52CVaJaY
+   xf11FkgiIqTEZ5PB+X94Q5S+kaSSWtcX8oMSWSyGXAqk8iKL84q9JjWz9
+   CnRagrrUyxWQZcv5XeKG/gNN+tDuleVMUYgY/2wy5N1/Nk68y+2ew9/I+
+   N2b6u8bH3jQeh6RFvn7gH335TAEPmqkmRbwdIRy0r0INFRvFDhoY2MqPp
+   ZSwCchiVbLDfdtKK/3nUtO8CopgoQe8u+KVHfeuzBR84Hqky/7DcjP2Bb
+   X6zN2VPpQEKfzDbn6b6qQKxcQeRpUFeuxfaOVb+ykHpyOGTPBnW44X5el
+   w==;
+X-CSE-ConnectionGUID: vBO4Zmr5Sy25tdmE38ymsg==
+X-CSE-MsgGUID: JRci2KQ2RjiVaj71p7AA4w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11291"; a="35183119"
+X-IronPort-AV: E=Sophos;i="6.12,248,1728975600"; 
+   d="scan'208";a="35183119"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2024 09:13:58 -0800
+X-CSE-ConnectionGUID: BjE5PnWZRtuB8GpG2kHABA==
+X-CSE-MsgGUID: 7CSY673QTbyIAwyjyBTzCw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,248,1728975600"; 
+   d="scan'208";a="98779806"
+Received: from msangele-mobl.amr.corp.intel.com (HELO [10.124.221.111]) ([10.124.221.111])
+  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2024 09:13:58 -0800
+Message-ID: <a7398426-56d1-40b4-a1c9-40ae8c8a4b4b@intel.com>
+Date: Thu, 19 Dec 2024 09:13:57 -0800
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 00/10] Account page tables at all levels
+To: Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ Catalin Marinas <catalin.marinas@arm.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ Linus Walleij <linus.walleij@linaro.org>, Andy Lutomirski <luto@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>, "Mike Rapoport (IBM)"
+ <rppt@kernel.org>, Ryan Roberts <ryan.roberts@arm.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
+ Matthew Wilcox <willy@infradead.org>, linux-alpha@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+ linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+ linux-s390@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+ linux-um@lists.infradead.org, loongarch@lists.linux.dev, x86@kernel.org
+References: <20241219164425.2277022-1-kevin.brodsky@arm.com>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <20241219164425.2277022-1-kevin.brodsky@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Following on from the introduction of P4D-level ctor/dtor, let's
-finish the job and introduce ctor/dtor at PGD level. The incurred
-improvement in page accounting is minimal - the main motivation is
-to create a single, generic place where construction/destruction
-hooks can be added for all page table pages.
+On 12/19/24 08:44, Kevin Brodsky wrote:
+>   +---------------+-------------------------+-----------------------+--------------+------------------------------------+
+>   | x86           | Y                       | Y                     | Y/N          | kmem_cache at pgd level if PAE     |
+>   +---------------+-------------------------+-----------------------+--------------+------------------------------------+
 
-This patch should cover all architectures and all configurations
-where PGDs are one or more regular pages. This excludes any
-configuration where PGDs are allocated from a kmem_cache object.
+This is a really rare series that adds functionality _and_ removes code
+overall. It looks really good to me. The x86 implementation seems to be
+captured just fine in the generic one:
 
-Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
----
- arch/m68k/include/asm/mcf_pgalloc.h |  2 ++
- arch/m68k/mm/motorola.c             |  6 ++++++
- arch/s390/include/asm/pgalloc.h     |  8 +++++++-
- include/asm-generic/pgalloc.h       |  2 ++
- include/linux/mm.h                  | 10 ++++++++++
- 5 files changed, 27 insertions(+), 1 deletion(-)
+Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
 
-diff --git a/arch/m68k/include/asm/mcf_pgalloc.h b/arch/m68k/include/asm/mcf_pgalloc.h
-index 302c5bf67179..7bb9652e1d67 100644
---- a/arch/m68k/include/asm/mcf_pgalloc.h
-+++ b/arch/m68k/include/asm/mcf_pgalloc.h
-@@ -73,6 +73,7 @@ static inline void pte_free(struct mm_struct *mm, pgtable_t pgtable)
- 
- static inline void pgd_free(struct mm_struct *mm, pgd_t *pgd)
- {
-+	pagetable_pgd_dtor(virt_to_ptdesc(pgd));
- 	pagetable_free(virt_to_ptdesc(pgd));
- }
- 
-@@ -84,6 +85,7 @@ static inline pgd_t *pgd_alloc(struct mm_struct *mm)
- 
- 	if (!ptdesc)
- 		return NULL;
-+	pagetable_pgd_ctor(ptdesc);
- 	new_pgd = ptdesc_address(ptdesc);
- 
- 	memcpy(new_pgd, swapper_pg_dir, PTRS_PER_PGD * sizeof(pgd_t));
-diff --git a/arch/m68k/mm/motorola.c b/arch/m68k/mm/motorola.c
-index 37010ee15928..b0fbb369589f 100644
---- a/arch/m68k/mm/motorola.c
-+++ b/arch/m68k/mm/motorola.c
-@@ -169,6 +169,9 @@ void *get_pointer_table(int type)
- 		case TABLE_PMD:
- 			pagetable_pmd_ctor(virt_to_ptdesc(page));
- 			break;
-+		case TABLE_PGD:
-+			pagetable_pgd_ctor(virt_to_ptdesc(page));
-+			break;
- 		}
- 
- 		mmu_page_ctor(page);
-@@ -215,6 +218,9 @@ int free_pointer_table(void *table, int type)
- 		case TABLE_PMD:
- 			pagetable_pmd_dtor(virt_to_ptdesc((void *)page));
- 			break;
-+		case TABLE_PGD:
-+			pagetable_pgd_dtor(virt_to_ptdesc((void *)page));
-+			break;
- 		}
- 
- 		free_page (page);
-diff --git a/arch/s390/include/asm/pgalloc.h b/arch/s390/include/asm/pgalloc.h
-index 85a5d07365aa..00b69f4ddf17 100644
---- a/arch/s390/include/asm/pgalloc.h
-+++ b/arch/s390/include/asm/pgalloc.h
-@@ -126,11 +126,17 @@ static inline void pud_populate(struct mm_struct *mm, pud_t *pud, pmd_t *pmd)
- 
- static inline pgd_t *pgd_alloc(struct mm_struct *mm)
- {
--	return (pgd_t *) crst_table_alloc(mm);
-+	unsigned long *table = crst_table_alloc(mm);
-+
-+	if (!table)
-+		return NULL;
-+	pagetable_pgd_ctor(virt_to_ptdesc(table));
-+	return (pgd_t *) table;
- }
- 
- static inline void pgd_free(struct mm_struct *mm, pgd_t *pgd)
- {
-+	pagetable_pgd_dtor(virt_to_ptdesc(pgd));
- 	crst_table_free(mm, (unsigned long *) pgd);
- }
- 
-diff --git a/include/asm-generic/pgalloc.h b/include/asm-generic/pgalloc.h
-index daa8bea36952..112b09dc992e 100644
---- a/include/asm-generic/pgalloc.h
-+++ b/include/asm-generic/pgalloc.h
-@@ -275,6 +275,7 @@ static inline pgd_t *__pgd_alloc_noprof(struct mm_struct *mm, unsigned int order
- 	if (!ptdesc)
- 		return NULL;
- 
-+	pagetable_pgd_ctor(ptdesc);
- 	return ptdesc_address(ptdesc);
- }
- #define __pgd_alloc(...)	alloc_hooks(__pgd_alloc_noprof(__VA_ARGS__))
-@@ -284,6 +285,7 @@ static inline void __pgd_free(struct mm_struct *mm, pgd_t *pgd)
- 	struct ptdesc *ptdesc = virt_to_ptdesc(pgd);
- 
- 	BUG_ON((unsigned long)pgd & (PAGE_SIZE-1));
-+	pagetable_pgd_dtor(ptdesc);
- 	pagetable_free(ptdesc);
- }
- 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index e8b92f4bf3f1..7347da3460c5 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -3171,6 +3171,16 @@ static inline void pagetable_p4d_dtor(struct ptdesc *ptdesc)
- 	__pagetable_dtor(ptdesc);
- }
- 
-+static inline void pagetable_pgd_ctor(struct ptdesc *ptdesc)
-+{
-+	__pagetable_ctor(ptdesc);
-+}
-+
-+static inline void pagetable_pgd_dtor(struct ptdesc *ptdesc)
-+{
-+	__pagetable_dtor(ptdesc);
-+}
-+
- extern void __init pagecache_init(void);
- extern void free_initmem(void);
- 
--- 
-2.47.0
+One super tiny nit is that the PAE pgd _can_ be allocated using
+__get_free_pages(). It was originally there for Xen, but I think it's
+being used for PTI only at this point and the comments are wrong-ish.
 
+I kinda think we should just get rid of the 32-bit kmem_cache entirely.
 
