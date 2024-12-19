@@ -1,38 +1,38 @@
-Return-Path: <linux-arch+bounces-9441-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9442-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFA419F8086
-	for <lists+linux-arch@lfdr.de>; Thu, 19 Dec 2024 17:49:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F27D9F8094
+	for <lists+linux-arch@lfdr.de>; Thu, 19 Dec 2024 17:49:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F8FD16D77F
-	for <lists+linux-arch@lfdr.de>; Thu, 19 Dec 2024 16:48:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D21AF162F17
+	for <lists+linux-arch@lfdr.de>; Thu, 19 Dec 2024 16:49:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E19991A4F2D;
-	Thu, 19 Dec 2024 16:46:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95AFA1A76BB;
+	Thu, 19 Dec 2024 16:46:51 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30FEE1A4F0A;
-	Thu, 19 Dec 2024 16:46:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B5501993B9;
+	Thu, 19 Dec 2024 16:46:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734626806; cv=none; b=izhlryVY6eorJhuFZR52V5+nyI28VKmmTHFZzjgUtqGAQeIFCf6GWu/v5IAVymv6ZGX6J3ZH9U1TxRL1y5JlbhvQRn0ettjHfEvs382SYuTcy+5t3Arex0ID7K4l1c/L/UWxhDvEKV02H//4u2B96DU6QzN19xq2TZHpDBEVrS8=
+	t=1734626811; cv=none; b=JyPUZN1fbHfoY1zVLZCFSmhM3xWiXwQ+y/+nSa3MgXhRM73Cs89qAUzVAW28Ddaz1OtaAVp8PsczMSuihAqVr3yfUddKmPb23hSJjJOKh2Ayiel1emp9pSYnaFSTKhNSff4FWeGyYqxMWRnZ3t9XSsmapE5od9UQ0rWT+Cixm68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734626806; c=relaxed/simple;
-	bh=RM1s/LcJNoesIl5WZFPhuIb5E4SD7DcQuAnDOCY4mts=;
+	s=arc-20240116; t=1734626811; c=relaxed/simple;
+	bh=rdynRGTfD+5voluz4Ej0FXDVIJ97U7DtCvcgnqizSyU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YeTkaIkArTjb8SYCPi3y6/7wuDSXuiwAfjEYNlYaZj5aXxGmMIo3xrX96K+Fvi8K7vjXRICYfuXEtB13ghQ79M/QjlbwtF80Ybtbs/Oi0IgJVPJIMd4+1ui2Rc9P1vbOWaTg+bNC9Ak2YXgbkoWkXHiau0tzjE2pB37vzGaEcpA=
+	 MIME-Version; b=kHjc3yFEonVlBWf/An+CnRSRPgdxwA50Ta2jyXPleE8QSVBboEyeHGORW2JcBCH1ZdxQNf1Gs144go1pUytMOjx4u+FhvAJEMR2+WLxrHXfBT7Su1yrYDb33Pf/CeBJNuU+h9suz+m+8nXM83xDp8MQGlwOkn0VuC7Enpu31rk8=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BC7B11480;
-	Thu, 19 Dec 2024 08:47:12 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1677C1480;
+	Thu, 19 Dec 2024 08:47:17 -0800 (PST)
 Received: from e123572-lin.arm.com (e123572-lin.cambridge.arm.com [10.1.194.54])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BB7743F58B;
-	Thu, 19 Dec 2024 08:46:40 -0800 (PST)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ECA773F58B;
+	Thu, 19 Dec 2024 08:46:44 -0800 (PST)
 From: Kevin Brodsky <kevin.brodsky@arm.com>
 To: linux-mm@kvack.org
 Cc: Kevin Brodsky <kevin.brodsky@arm.com>,
@@ -63,9 +63,9 @@ Cc: Kevin Brodsky <kevin.brodsky@arm.com>,
 	linux-um@lists.infradead.org,
 	loongarch@lists.linux.dev,
 	x86@kernel.org
-Subject: [PATCH 08/10] ARM: mm: Rename PGD helpers
-Date: Thu, 19 Dec 2024 16:44:23 +0000
-Message-ID: <20241219164425.2277022-9-kevin.brodsky@arm.com>
+Subject: [PATCH 09/10] asm-generic: pgalloc: Provide generic __pgd_{alloc,free}
+Date: Thu, 19 Dec 2024 16:44:24 +0000
+Message-ID: <20241219164425.2277022-10-kevin.brodsky@arm.com>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20241219164425.2277022-1-kevin.brodsky@arm.com>
 References: <20241219164425.2277022-1-kevin.brodsky@arm.com>
@@ -77,62 +77,508 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Generic implementations of __pgd_alloc and __pgd_free are about to
-be introduced. Rename the macros in arch/arm/mm/pgd.c to avoid
-clashes. While we're at it, also pass down the mm as argument to
-those helpers, as it will be needed to call the generic
-__pgd_{alloc,free}.
+We already have a generic implementation of alloc/free up to P4D
+level, as well as pgd_free(). Let's finish the work and add a
+generic PGD-level alloc helper as well.
+
+Unlike at lower levels, almost all architectures need some specific
+magic at PGD level (typically initialising PGD entries), so
+introducing a generic pgd_alloc() isn't worth it. Instead we
+introduce two new helpers, __pgd_alloc() and __pgd_free(), and make
+use of them in the arch-specific pgd_alloc() and pgd_free() wherever
+possible. To accommodate as many arch as possible, __pgd_alloc()
+takes a page alocation order.
+
+Because pagetable_alloc() allocates zeroed pages, we are also able
+to get rid of zeroing code in some implementations of pgd_alloc().
+Some trivial implementations of pgd_free() also become unnecessary
+once __pgd_alloc() is used; remove them.
+
+Another small improvement is consistent accounting of PGD pages by
+using GFP_PGTABLE_{USER,KERNEL} as appropriate.
+
+Not all PGD allocations can be handled by the generic helpers. In
+particular, multiple architectures allocate PGDs from a kmem_cache,
+and those PGDs may not be page-sized.
 
 Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
 ---
- arch/arm/mm/pgd.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ arch/alpha/mm/init.c                  |  2 +-
+ arch/arc/include/asm/pgalloc.h        |  9 ++-------
+ arch/arm/mm/pgd.c                     |  8 +++-----
+ arch/arm64/mm/pgd.c                   |  4 ++--
+ arch/csky/include/asm/pgalloc.h       |  2 +-
+ arch/hexagon/include/asm/pgalloc.h    |  2 +-
+ arch/loongarch/mm/pgtable.c           |  7 +++----
+ arch/m68k/include/asm/sun3_pgalloc.h  |  2 +-
+ arch/microblaze/include/asm/pgalloc.h |  7 +------
+ arch/mips/include/asm/pgalloc.h       |  6 ------
+ arch/mips/mm/pgtable.c                |  8 +++-----
+ arch/nios2/mm/pgtable.c               |  3 ++-
+ arch/openrisc/include/asm/pgalloc.h   |  6 ++----
+ arch/parisc/include/asm/pgalloc.h     | 16 +---------------
+ arch/riscv/include/asm/pgalloc.h      |  3 +--
+ arch/um/kernel/mem.c                  |  7 +++----
+ arch/x86/mm/pgtable.c                 | 24 +++++++++++-------------
+ arch/xtensa/include/asm/pgalloc.h     |  2 +-
+ include/asm-generic/pgalloc.h         | 27 ++++++++++++++++++++++++++-
+ 19 files changed, 65 insertions(+), 80 deletions(-)
 
+diff --git a/arch/alpha/mm/init.c b/arch/alpha/mm/init.c
+index 4fe618446e4c..61c2198b1359 100644
+--- a/arch/alpha/mm/init.c
++++ b/arch/alpha/mm/init.c
+@@ -42,7 +42,7 @@ pgd_alloc(struct mm_struct *mm)
+ {
+ 	pgd_t *ret, *init;
+ 
+-	ret = (pgd_t *)__get_free_page(GFP_KERNEL | __GFP_ZERO);
++	ret = __pgd_alloc(mm, 0);
+ 	init = pgd_offset(&init_mm, 0UL);
+ 	if (ret) {
+ #ifdef CONFIG_ALPHA_LARGE_VMALLOC
+diff --git a/arch/arc/include/asm/pgalloc.h b/arch/arc/include/asm/pgalloc.h
+index 096b8ef58edb..dfae070fe8d5 100644
+--- a/arch/arc/include/asm/pgalloc.h
++++ b/arch/arc/include/asm/pgalloc.h
+@@ -53,19 +53,14 @@ static inline void pmd_populate(struct mm_struct *mm, pmd_t *pmd, pgtable_t pte_
+ 
+ static inline pgd_t *pgd_alloc(struct mm_struct *mm)
+ {
+-	pgd_t *ret = (pgd_t *) __get_free_page(GFP_KERNEL);
++	pgd_t *ret = __pgd_alloc(mm, 0);
+ 
+ 	if (ret) {
+ 		int num, num2;
+-		num = USER_PTRS_PER_PGD + USER_KERNEL_GUTTER / PGDIR_SIZE;
+-		memzero(ret, num * sizeof(pgd_t));
+ 
++		num = USER_PTRS_PER_PGD + USER_KERNEL_GUTTER / PGDIR_SIZE;
+ 		num2 = VMALLOC_SIZE / PGDIR_SIZE;
+ 		memcpy(ret + num, swapper_pg_dir + num, num2 * sizeof(pgd_t));
+-
+-		memzero(ret + num + num2,
+-			       (PTRS_PER_PGD - num - num2) * sizeof(pgd_t));
+-
+ 	}
+ 	return ret;
+ }
 diff --git a/arch/arm/mm/pgd.c b/arch/arm/mm/pgd.c
-index f8e9bc58a84f..2a1077747758 100644
+index 2a1077747758..4eb81b7ed03a 100644
 --- a/arch/arm/mm/pgd.c
 +++ b/arch/arm/mm/pgd.c
 @@ -17,11 +17,11 @@
  #include "mm.h"
  
  #ifdef CONFIG_ARM_LPAE
--#define __pgd_alloc()	kmalloc_array(PTRS_PER_PGD, sizeof(pgd_t), GFP_KERNEL)
--#define __pgd_free(pgd)	kfree(pgd)
-+#define _pgd_alloc(mm)		kmalloc_array(PTRS_PER_PGD, sizeof(pgd_t), GFP_KERNEL)
-+#define _pgd_free(mm, pgd)	kfree(pgd)
+-#define _pgd_alloc(mm)		kmalloc_array(PTRS_PER_PGD, sizeof(pgd_t), GFP_KERNEL)
++#define _pgd_alloc(mm)		kmalloc_array(PTRS_PER_PGD, sizeof(pgd_t), GFP_KERNEL | __GFP_ZERO)
+ #define _pgd_free(mm, pgd)	kfree(pgd)
  #else
--#define __pgd_alloc()	(pgd_t *)__get_free_pages(GFP_KERNEL, 2)
--#define __pgd_free(pgd)	free_pages((unsigned long)pgd, 2)
-+#define _pgd_alloc(mm)		(pgd_t *)__get_free_pages(GFP_KERNEL, 2)
-+#define _pgd_free(mm, pgd)	free_pages((unsigned long)pgd, 2)
+-#define _pgd_alloc(mm)		(pgd_t *)__get_free_pages(GFP_KERNEL, 2)
+-#define _pgd_free(mm, pgd)	free_pages((unsigned long)pgd, 2)
++#define _pgd_alloc(mm)		__pgd_alloc(mm, 2)
++#define _pgd_free(mm, pgd)	__pgd_free(mm, pgd)
  #endif
  
  /*
-@@ -35,7 +35,7 @@ pgd_t *pgd_alloc(struct mm_struct *mm)
- 	pmd_t *new_pmd, *init_pmd;
- 	pte_t *new_pte, *init_pte;
- 
--	new_pgd = __pgd_alloc();
-+	new_pgd = _pgd_alloc(mm);
+@@ -39,8 +39,6 @@ pgd_t *pgd_alloc(struct mm_struct *mm)
  	if (!new_pgd)
  		goto no_pgd;
  
-@@ -134,7 +134,7 @@ pgd_t *pgd_alloc(struct mm_struct *mm)
- no_pud:
- 	p4d_free(mm, new_p4d);
- no_p4d:
--	__pgd_free(new_pgd);
-+	_pgd_free(mm, new_pgd);
- no_pgd:
+-	memset(new_pgd, 0, USER_PTRS_PER_PGD * sizeof(pgd_t));
+-
+ 	/*
+ 	 * Copy over the kernel and IO PGD entries
+ 	 */
+diff --git a/arch/arm64/mm/pgd.c b/arch/arm64/mm/pgd.c
+index 0c501cabc238..8160cff35089 100644
+--- a/arch/arm64/mm/pgd.c
++++ b/arch/arm64/mm/pgd.c
+@@ -33,7 +33,7 @@ pgd_t *pgd_alloc(struct mm_struct *mm)
+ 	gfp_t gfp = GFP_PGTABLE_USER;
+ 
+ 	if (pgdir_is_page_size())
+-		return (pgd_t *)__get_free_page(gfp);
++		return __pgd_alloc(mm, 0);
+ 	else
+ 		return kmem_cache_alloc(pgd_cache, gfp);
+ }
+@@ -41,7 +41,7 @@ pgd_t *pgd_alloc(struct mm_struct *mm)
+ void pgd_free(struct mm_struct *mm, pgd_t *pgd)
+ {
+ 	if (pgdir_is_page_size())
+-		free_page((unsigned long)pgd);
++		__pgd_free(mm, pgd);
+ 	else
+ 		kmem_cache_free(pgd_cache, pgd);
+ }
+diff --git a/arch/csky/include/asm/pgalloc.h b/arch/csky/include/asm/pgalloc.h
+index 9c84c9012e53..9a3bbf16f03f 100644
+--- a/arch/csky/include/asm/pgalloc.h
++++ b/arch/csky/include/asm/pgalloc.h
+@@ -44,7 +44,7 @@ static inline pgd_t *pgd_alloc(struct mm_struct *mm)
+ 	pgd_t *ret;
+ 	pgd_t *init;
+ 
+-	ret = (pgd_t *) __get_free_page(GFP_KERNEL);
++	ret = __pgd_alloc(mm, 0);
+ 	if (ret) {
+ 		init = pgd_offset(&init_mm, 0UL);
+ 		pgd_init((unsigned long *)ret);
+diff --git a/arch/hexagon/include/asm/pgalloc.h b/arch/hexagon/include/asm/pgalloc.h
+index 55988625e6fb..289dace6d76d 100644
+--- a/arch/hexagon/include/asm/pgalloc.h
++++ b/arch/hexagon/include/asm/pgalloc.h
+@@ -22,7 +22,7 @@ static inline pgd_t *pgd_alloc(struct mm_struct *mm)
+ {
+ 	pgd_t *pgd;
+ 
+-	pgd = (pgd_t *)__get_free_page(GFP_KERNEL | __GFP_ZERO);
++	pgd = __pgd_alloc(mm, 0);
+ 
+ 	/*
+ 	 * There may be better ways to do this, but to ensure
+diff --git a/arch/loongarch/mm/pgtable.c b/arch/loongarch/mm/pgtable.c
+index 3fa69b23ff84..22a94bb3e6e8 100644
+--- a/arch/loongarch/mm/pgtable.c
++++ b/arch/loongarch/mm/pgtable.c
+@@ -23,11 +23,10 @@ EXPORT_SYMBOL(tlb_virt_to_page);
+ 
+ pgd_t *pgd_alloc(struct mm_struct *mm)
+ {
+-	pgd_t *init, *ret = NULL;
+-	struct ptdesc *ptdesc = pagetable_alloc(GFP_KERNEL & ~__GFP_HIGHMEM, 0);
++	pgd_t *init, *ret;
+ 
+-	if (ptdesc) {
+-		ret = (pgd_t *)ptdesc_address(ptdesc);
++	ret = __pgd_alloc(mm, 0);
++	if (ret) {
+ 		init = pgd_offset(&init_mm, 0UL);
+ 		pgd_init(ret);
+ 		memcpy(ret + USER_PTRS_PER_PGD, init + USER_PTRS_PER_PGD,
+diff --git a/arch/m68k/include/asm/sun3_pgalloc.h b/arch/m68k/include/asm/sun3_pgalloc.h
+index 4a137eecb6fe..e91b0133df5d 100644
+--- a/arch/m68k/include/asm/sun3_pgalloc.h
++++ b/arch/m68k/include/asm/sun3_pgalloc.h
+@@ -43,7 +43,7 @@ static inline pgd_t * pgd_alloc(struct mm_struct *mm)
+ {
+ 	pgd_t *new_pgd;
+ 
+-	new_pgd = (pgd_t *)get_zeroed_page(GFP_KERNEL);
++	new_pgd = __pgd_alloc(mm, 0);
+ 	memcpy(new_pgd, swapper_pg_dir, PAGE_SIZE);
+ 	memset(new_pgd, 0, (PAGE_OFFSET >> PGDIR_SHIFT));
+ 	return new_pgd;
+diff --git a/arch/microblaze/include/asm/pgalloc.h b/arch/microblaze/include/asm/pgalloc.h
+index 6c33b05f730f..084a8a0dc239 100644
+--- a/arch/microblaze/include/asm/pgalloc.h
++++ b/arch/microblaze/include/asm/pgalloc.h
+@@ -21,12 +21,7 @@
+ 
+ extern void __bad_pte(pmd_t *pmd);
+ 
+-static inline pgd_t *get_pgd(void)
+-{
+-	return (pgd_t *)__get_free_pages(GFP_KERNEL|__GFP_ZERO, 0);
+-}
+-
+-#define pgd_alloc(mm)		get_pgd()
++#define pgd_alloc(mm)		__pgd_alloc(mm, 0)
+ 
+ extern pte_t *pte_alloc_one_kernel(struct mm_struct *mm);
+ 
+diff --git a/arch/mips/include/asm/pgalloc.h b/arch/mips/include/asm/pgalloc.h
+index f4440edcd8fe..9ee8426b2e9d 100644
+--- a/arch/mips/include/asm/pgalloc.h
++++ b/arch/mips/include/asm/pgalloc.h
+@@ -15,7 +15,6 @@
+ 
+ #define __HAVE_ARCH_PMD_ALLOC_ONE
+ #define __HAVE_ARCH_PUD_ALLOC_ONE
+-#define __HAVE_ARCH_PGD_FREE
+ #include <asm-generic/pgalloc.h>
+ 
+ static inline void pmd_populate_kernel(struct mm_struct *mm, pmd_t *pmd,
+@@ -49,11 +48,6 @@ static inline void pud_populate(struct mm_struct *mm, pud_t *pud, pmd_t *pmd)
+ extern void pgd_init(void *addr);
+ extern pgd_t *pgd_alloc(struct mm_struct *mm);
+ 
+-static inline void pgd_free(struct mm_struct *mm, pgd_t *pgd)
+-{
+-	pagetable_free(virt_to_ptdesc(pgd));
+-}
+-
+ #define __pte_free_tlb(tlb, pte, address)			\
+ do {								\
+ 	pagetable_pte_dtor(page_ptdesc(pte));			\
+diff --git a/arch/mips/mm/pgtable.c b/arch/mips/mm/pgtable.c
+index 1506e458040d..10835414819f 100644
+--- a/arch/mips/mm/pgtable.c
++++ b/arch/mips/mm/pgtable.c
+@@ -10,12 +10,10 @@
+ 
+ pgd_t *pgd_alloc(struct mm_struct *mm)
+ {
+-	pgd_t *init, *ret = NULL;
+-	struct ptdesc *ptdesc = pagetable_alloc(GFP_KERNEL & ~__GFP_HIGHMEM,
+-			PGD_TABLE_ORDER);
++	pgd_t *init, *ret;
+ 
+-	if (ptdesc) {
+-		ret = ptdesc_address(ptdesc);
++	ret = __pgd_alloc(mm, PGD_TABLE_ORDER);
++	if (ret) {
+ 		init = pgd_offset(&init_mm, 0UL);
+ 		pgd_init(ret);
+ 		memcpy(ret + USER_PTRS_PER_PGD, init + USER_PTRS_PER_PGD,
+diff --git a/arch/nios2/mm/pgtable.c b/arch/nios2/mm/pgtable.c
+index 7c76e8a7447a..6470ed378782 100644
+--- a/arch/nios2/mm/pgtable.c
++++ b/arch/nios2/mm/pgtable.c
+@@ -11,6 +11,7 @@
+ #include <linux/sched.h>
+ 
+ #include <asm/cpuinfo.h>
++#include <asm/pgalloc.h>
+ 
+ /* pteaddr:
+  *   ptbase | vpn* | zero
+@@ -54,7 +55,7 @@ pgd_t *pgd_alloc(struct mm_struct *mm)
+ {
+ 	pgd_t *ret, *init;
+ 
+-	ret = (pgd_t *) __get_free_page(GFP_KERNEL);
++	ret = __pgd_alloc(mm, 0);
+ 	if (ret) {
+ 		init = pgd_offset(&init_mm, 0UL);
+ 		pgd_init(ret);
+diff --git a/arch/openrisc/include/asm/pgalloc.h b/arch/openrisc/include/asm/pgalloc.h
+index c6a73772a546..c068c4942467 100644
+--- a/arch/openrisc/include/asm/pgalloc.h
++++ b/arch/openrisc/include/asm/pgalloc.h
+@@ -41,15 +41,13 @@ static inline void pmd_populate(struct mm_struct *mm, pmd_t *pmd,
+  */
+ static inline pgd_t *pgd_alloc(struct mm_struct *mm)
+ {
+-	pgd_t *ret = (pgd_t *)__get_free_page(GFP_KERNEL);
++	pgd_t *ret = __pgd_alloc(mm, 0);
+ 
+-	if (ret) {
+-		memset(ret, 0, USER_PTRS_PER_PGD * sizeof(pgd_t));
++	if (ret)
+ 		memcpy(ret + USER_PTRS_PER_PGD,
+ 		       swapper_pg_dir + USER_PTRS_PER_PGD,
+ 		       (PTRS_PER_PGD - USER_PTRS_PER_PGD) * sizeof(pgd_t));
+ 
+-	}
+ 	return ret;
+ }
+ 
+diff --git a/arch/parisc/include/asm/pgalloc.h b/arch/parisc/include/asm/pgalloc.h
+index 3e8dbd79670b..2ca74a56415c 100644
+--- a/arch/parisc/include/asm/pgalloc.h
++++ b/arch/parisc/include/asm/pgalloc.h
+@@ -11,26 +11,12 @@
+ #include <asm/cache.h>
+ 
+ #define __HAVE_ARCH_PMD_ALLOC_ONE
+-#define __HAVE_ARCH_PGD_FREE
+ #include <asm-generic/pgalloc.h>
+ 
+ /* Allocate the top level pgd (page directory) */
+ static inline pgd_t *pgd_alloc(struct mm_struct *mm)
+ {
+-	pgd_t *pgd;
+-
+-	pgd = (pgd_t *) __get_free_pages(GFP_KERNEL, PGD_TABLE_ORDER);
+-	if (unlikely(pgd == NULL))
+-		return NULL;
+-
+-	memset(pgd, 0, PAGE_SIZE << PGD_TABLE_ORDER);
+-
+-	return pgd;
+-}
+-
+-static inline void pgd_free(struct mm_struct *mm, pgd_t *pgd)
+-{
+-	free_pages((unsigned long)pgd, PGD_TABLE_ORDER);
++	return __pgd_alloc(mm, PGD_TABLE_ORDER);
+ }
+ 
+ #if CONFIG_PGTABLE_LEVELS == 3
+diff --git a/arch/riscv/include/asm/pgalloc.h b/arch/riscv/include/asm/pgalloc.h
+index 3c364ecc3100..d527f141be1c 100644
+--- a/arch/riscv/include/asm/pgalloc.h
++++ b/arch/riscv/include/asm/pgalloc.h
+@@ -128,9 +128,8 @@ static inline pgd_t *pgd_alloc(struct mm_struct *mm)
+ {
+ 	pgd_t *pgd;
+ 
+-	pgd = (pgd_t *)__get_free_page(GFP_KERNEL);
++	pgd = __pgd_alloc(mm, 0);
+ 	if (likely(pgd != NULL)) {
+-		memset(pgd, 0, USER_PTRS_PER_PGD * sizeof(pgd_t));
+ 		/* Copy kernel mappings */
+ 		sync_kernel_mappings(pgd);
+ 	}
+diff --git a/arch/um/kernel/mem.c b/arch/um/kernel/mem.c
+index 53248ed04771..d98812907493 100644
+--- a/arch/um/kernel/mem.c
++++ b/arch/um/kernel/mem.c
+@@ -214,14 +214,13 @@ void free_initmem(void)
+ 
+ pgd_t *pgd_alloc(struct mm_struct *mm)
+ {
+-	pgd_t *pgd = (pgd_t *)__get_free_page(GFP_KERNEL);
++	pgd_t *pgd = __pgd_alloc(mm, 0);
+ 
+-	if (pgd) {
+-		memset(pgd, 0, USER_PTRS_PER_PGD * sizeof(pgd_t));
++	if (pgd)
+ 		memcpy(pgd + USER_PTRS_PER_PGD,
+ 		       swapper_pg_dir + USER_PTRS_PER_PGD,
+ 		       (PTRS_PER_PGD - USER_PTRS_PER_PGD) * sizeof(pgd_t));
+-	}
++
+ 	return pgd;
+ }
+ 
+diff --git a/arch/x86/mm/pgtable.c b/arch/x86/mm/pgtable.c
+index c1bfdf7b4767..00917ef609b6 100644
+--- a/arch/x86/mm/pgtable.c
++++ b/arch/x86/mm/pgtable.c
+@@ -395,15 +395,14 @@ void __init pgtable_cache_init(void)
+ 				      SLAB_PANIC, NULL);
+ }
+ 
+-static inline pgd_t *_pgd_alloc(void)
++static inline pgd_t *_pgd_alloc(struct mm_struct *mm)
+ {
+ 	/*
+ 	 * If no SHARED_KERNEL_PMD, PAE kernel is running as a Xen domain.
+ 	 * We allocate one page for pgd.
+ 	 */
+ 	if (!SHARED_KERNEL_PMD)
+-		return (pgd_t *)__get_free_pages(GFP_PGTABLE_USER,
+-						 PGD_ALLOCATION_ORDER);
++		return __pgd_alloc(mm, PGD_ALLOCATION_ORDER);
+ 
+ 	/*
+ 	 * Now PAE kernel is not running as a Xen domain. We can allocate
+@@ -412,24 +411,23 @@ static inline pgd_t *_pgd_alloc(void)
+ 	return kmem_cache_alloc(pgd_cache, GFP_PGTABLE_USER);
+ }
+ 
+-static inline void _pgd_free(pgd_t *pgd)
++static inline void _pgd_free(struct mm_struct *mm, pgd_t *pgd)
+ {
+ 	if (!SHARED_KERNEL_PMD)
+-		free_pages((unsigned long)pgd, PGD_ALLOCATION_ORDER);
++		__pgd_free(mm, pgd);
+ 	else
+ 		kmem_cache_free(pgd_cache, pgd);
+ }
+ #else
+ 
+-static inline pgd_t *_pgd_alloc(void)
++static inline pgd_t *_pgd_alloc(struct mm_struct *mm)
+ {
+-	return (pgd_t *)__get_free_pages(GFP_PGTABLE_USER,
+-					 PGD_ALLOCATION_ORDER);
++	return __pgd_alloc(mm, PGD_ALLOCATION_ORDER);
+ }
+ 
+-static inline void _pgd_free(pgd_t *pgd)
++static inline void _pgd_free(struct mm_struct *mm, pgd_t *pgd)
+ {
+-	free_pages((unsigned long)pgd, PGD_ALLOCATION_ORDER);
++	__pgd_free(mm, pgd);
+ }
+ #endif /* CONFIG_X86_PAE */
+ 
+@@ -439,7 +437,7 @@ pgd_t *pgd_alloc(struct mm_struct *mm)
+ 	pmd_t *u_pmds[MAX_PREALLOCATED_USER_PMDS];
+ 	pmd_t *pmds[MAX_PREALLOCATED_PMDS];
+ 
+-	pgd = _pgd_alloc();
++	pgd = _pgd_alloc(mm);
+ 
+ 	if (pgd == NULL)
+ 		goto out;
+@@ -482,7 +480,7 @@ pgd_t *pgd_alloc(struct mm_struct *mm)
+ 	if (sizeof(pmds) != 0)
+ 		free_pmds(mm, pmds, PREALLOCATED_PMDS);
+ out_free_pgd:
+-	_pgd_free(pgd);
++	_pgd_free(mm, pgd);
+ out:
  	return NULL;
  }
-@@ -207,5 +207,5 @@ void pgd_free(struct mm_struct *mm, pgd_t *pgd_base)
- 		p4d_free(mm, p4d);
- 	}
- #endif
--	__pgd_free(pgd_base);
-+	_pgd_free(mm, pgd_base);
+@@ -492,7 +490,7 @@ void pgd_free(struct mm_struct *mm, pgd_t *pgd)
+ 	pgd_mop_up_pmds(mm, pgd);
+ 	pgd_dtor(pgd);
+ 	paravirt_pgd_free(mm, pgd);
+-	_pgd_free(pgd);
++	_pgd_free(mm, pgd);
  }
+ 
+ /*
+diff --git a/arch/xtensa/include/asm/pgalloc.h b/arch/xtensa/include/asm/pgalloc.h
+index 7fc0f9126dd3..1919ee9c3dd6 100644
+--- a/arch/xtensa/include/asm/pgalloc.h
++++ b/arch/xtensa/include/asm/pgalloc.h
+@@ -29,7 +29,7 @@
+ static inline pgd_t*
+ pgd_alloc(struct mm_struct *mm)
+ {
+-	return (pgd_t*) __get_free_page(GFP_KERNEL | __GFP_ZERO);
++	return __pgd_alloc(mm, 0);
+ }
+ 
+ static inline void ptes_clear(pte_t *ptep)
+diff --git a/include/asm-generic/pgalloc.h b/include/asm-generic/pgalloc.h
+index bb482eeca0c3..daa8bea36952 100644
+--- a/include/asm-generic/pgalloc.h
++++ b/include/asm-generic/pgalloc.h
+@@ -262,10 +262,35 @@ static inline void p4d_free(struct mm_struct *mm, p4d_t *p4d)
+ 
+ #endif /* CONFIG_PGTABLE_LEVELS > 4 */
+ 
++static inline pgd_t *__pgd_alloc_noprof(struct mm_struct *mm, unsigned int order)
++{
++	gfp_t gfp = GFP_PGTABLE_USER;
++	struct ptdesc *ptdesc;
++
++	if (mm == &init_mm)
++		gfp = GFP_PGTABLE_KERNEL;
++	gfp &= ~__GFP_HIGHMEM;
++
++	ptdesc = pagetable_alloc_noprof(gfp, order);
++	if (!ptdesc)
++		return NULL;
++
++	return ptdesc_address(ptdesc);
++}
++#define __pgd_alloc(...)	alloc_hooks(__pgd_alloc_noprof(__VA_ARGS__))
++
++static inline void __pgd_free(struct mm_struct *mm, pgd_t *pgd)
++{
++	struct ptdesc *ptdesc = virt_to_ptdesc(pgd);
++
++	BUG_ON((unsigned long)pgd & (PAGE_SIZE-1));
++	pagetable_free(ptdesc);
++}
++
+ #ifndef __HAVE_ARCH_PGD_FREE
+ static inline void pgd_free(struct mm_struct *mm, pgd_t *pgd)
+ {
+-	pagetable_free(virt_to_ptdesc(pgd));
++	__pgd_free(mm, pgd);
+ }
+ #endif
+ 
 -- 
 2.47.0
 
