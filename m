@@ -1,80 +1,65 @@
-Return-Path: <linux-arch+bounces-9453-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9454-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE6419F9486
-	for <lists+linux-arch@lfdr.de>; Fri, 20 Dec 2024 15:36:03 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEA509F94C8
+	for <lists+linux-arch@lfdr.de>; Fri, 20 Dec 2024 15:46:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A63C1189183A
-	for <lists+linux-arch@lfdr.de>; Fri, 20 Dec 2024 14:35:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2E7C67A301B
+	for <lists+linux-arch@lfdr.de>; Fri, 20 Dec 2024 14:46:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80C20216E2D;
-	Fri, 20 Dec 2024 14:35:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EBE5218ADD;
+	Fri, 20 Dec 2024 14:46:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="WpUi0YSd"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y2t7h63B"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C3C4216604
-	for <linux-arch@vger.kernel.org>; Fri, 20 Dec 2024 14:35:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B0291DFF8;
+	Fri, 20 Dec 2024 14:45:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734705336; cv=none; b=YLbHW/7y9sZqHUx/Gx5DQ06KP62U72XRH3Ts59IlaESe8klnG4p5tpzPbLF281dmKh+rR9bB90fd1wAivbvoUrgdWFWE/s6Ka7/OP+eeHnrd/2abVUBgZuFks2+ZxnJuQ2WX6CA4Ekq2z6tc4zCynkeH3T+v1F40Zs8PoxJy4U0=
+	t=1734705961; cv=none; b=inbSIsLlSWD2rmu+NA4t3lCwUUzq8K3EuQyMbKUktmebD/EIziul83W1jv31np59KMaF/0L2MFuwy3oMzsLlDd9pC2AxLuR7CRyew0h8VuJPRUiFePYi9QM5nph9kVlckM6SKCyls+RTUBdmOH1YPqWqX/VDpTiJdsZ9qMSile4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734705336; c=relaxed/simple;
-	bh=mal3yYV/2puIWYQMpkgozfsCLOtcbEomeCKa3z1Lb4c=;
+	s=arc-20240116; t=1734705961; c=relaxed/simple;
+	bh=l+TvdBfWvVPAcsK8VbC159CKm8RgkJY+V79Gv5r8DN4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=acC7pt/rWs7jgszcRlDEZ4X9/nkqWP2pD0nMvT6tOxOQ133sADrzKWIlTNC3LvtFJCtIdiFYoCsgJVkPv2ooBGZ704a6HuSBwJJi5LM3kkOBfkK+g16di5DVNJtGnGvXaZxg0ryE2UciVodgkx5/MMg36+WqNJJh/iI2gmkQrjw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=WpUi0YSd; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-21634338cfdso25712955ad.2
-        for <linux-arch@vger.kernel.org>; Fri, 20 Dec 2024 06:35:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1734705334; x=1735310134; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nZtvjese48KZzlytF02YIE1ieOtjMj+XC4JVW8Rkw1o=;
-        b=WpUi0YSdSzwsedoFq1iaUFnMB1ZuB/fJnX1nhwb+WCgEZd4ahZWHtbpCLoc6mjeFss
-         1PqUPopcSeiI8hLGOxgW+V/A3VUH6ba4tTixAO4ugjcXcjYL+K45ZXruc6lObMUkN6bY
-         kVfj9y3z5ro0lQIIxHj3W2EENSaL7koOJMx4TRpWVrGvm7F20dLUMuyJTNoe7yrKGjvr
-         +cFzDpa810ZozN3J0g6EXhIDowHhVLHwXfmH9nX+kNz1hnIjaXisldeIkRpVQclHtPUQ
-         IAPh8QcwrW20GsAztG9Ajud2tCCI4WlH3ANIN+UKjDQRIvsINL6LSUb5Ge0SY615+g0K
-         SUzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734705334; x=1735310134;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nZtvjese48KZzlytF02YIE1ieOtjMj+XC4JVW8Rkw1o=;
-        b=cPO6gnzOev8ePcluXaXEvCnJbQnPOM5KCWmMPuKUXo+XvGlftnrrjX3XwZ9bP/bHwC
-         iYV57p/IctA36DX2dgONI8r80j0298PIDBHVBY/m99JDyj0Nf91NhQ7BBKatEsA29GBA
-         4amZy0hc7gU68LwnIqbHYzJgMP5MoDzC1J9sKxhNiyoA9kMKfqjDLMiZA0a9nW+yrHNR
-         tlQulJC/WwodAzkEC400Bkwyv1+7OXWSSnAsezTRqjftMnc+u3fakx1V6RI1Vh6QjO8D
-         rO1t0tZ9YRAbdB/je6cYT2KMY5YtO0sY74rHlEJdCF9hKc+T2z6wGvfLYkdhitwiz4LS
-         q/Pg==
-X-Forwarded-Encrypted: i=1; AJvYcCXkz0CYDdFN69IkKyyKH/xSy6je2OJy0bZyEdVUiG39pSHqeKkKEascHJNHTwoS+u3oNBDLmgeICDr7@vger.kernel.org
-X-Gm-Message-State: AOJu0YzTEdIWHSE1v9mzpAQYY0zyUt4YIHg3CGn9jX8C0sNKYVA6k0Kz
-	dLyT5aTLUXfKSJaiDUr332GjCR3ItBLiP9Hc8owm7dyqkVqwlE7tKxymL9k2ocxcJMKX1qyFHzB
-	P
-X-Gm-Gg: ASbGncvi5CFt2xyPGgvniERY8GY5hwKJfM1TSYTHl1pEpTpX/8VIBDV1mxiBUuBxVul
-	kTEQfKKpo64gjDCBHqWC3GuxnVoPlfBKhnOcuBjBlGCs9Zc6I2LVS7IGrgI3GpvqTupOwmpNc8R
-	VIUPJUT0WPV0v1s52dlEt48dvUYneo3rkQiLX+36XcHGB4htbzP0FXqSFYxZ81QumH6YzYfU/m8
-	uJyWeufJgc701ooKDRljP7YcmU8DcUPneYUi9BRRPpSBgQEanXcxfYvANz+626eGHdys7D/o5ok
-	FaiEYI3/Gw2yzLlWNrBrponbD5gA/muezcr6048VxABt+Fi6ZlkRIwE=
-X-Google-Smtp-Source: AGHT+IEB+BvsoefjQ7Vgsp4o6cvW8xDLBZZay+9fVCOXIUsW3GchN/svfJCRC88uzsyXVDtiu7XXHA==
-X-Received: by 2002:a17:902:d485:b0:215:b5d6:5fa8 with SMTP id d9443c01a7336-219e6ea8948mr44866765ad.22.1734705333728;
-        Fri, 20 Dec 2024 06:35:33 -0800 (PST)
-Received: from ?IPV6:2409:8a28:f44:3764:dc48:fb1b:dd06:cba7? ([2409:8a28:f44:3764:dc48:fb1b:dd06:cba7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dc9704dbsm29773545ad.98.2024.12.20.06.35.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Dec 2024 06:35:32 -0800 (PST)
-Message-ID: <0725252d-1339-4841-bc1d-6cf9e82b2170@bytedance.com>
-Date: Fri, 20 Dec 2024 22:35:23 +0800
+	 In-Reply-To:Content-Type; b=X8TKVXYSIBRVx3ygUrnCaKKmjRQFMEOTfTsqlu1ptE077tJ0wYGlHAnSUJuCoSD4AEJDqGh8cx8wx3kRdCWdf3Gt/W7vBC1/XXto65YeKYutEylS2C72PuLgV6xAx+j8nJefpWSLj1M5kF77Y7UOD8EpBTqzXPv35MWn7yAcOLA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y2t7h63B; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1734705960; x=1766241960;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=l+TvdBfWvVPAcsK8VbC159CKm8RgkJY+V79Gv5r8DN4=;
+  b=Y2t7h63B84LFeLPl5Vlj39/ZVv+UOwsCcCnQSTSMXvQIrKEUpcnYDhtv
+   9NGVkftjBhhkv6e72J7iw3yz9br09WXQsYW1UfLVXjVUjJHbjSd0g/JyB
+   XSLkrRCIr8MCVYNKjnWXa2C8FYE4uS1LecZhh6lFHEGT6Qb7N52Du7JIG
+   bMNS/w1Wjmv1Td4Y8v7JkJxy2GX432K9BopKX0zXpvKLd7QeAXY3llk2W
+   EM5/7BgGkdrSWuba1sNILezqEmXoAxwLYu4n7xGC4TSwDquZqbNHrMvBb
+   IsKsKDoTa4gVoeO739+MJzBrZjnr0vG/IF5UwHyGbel1aKAM3zrTMcx/v
+   Q==;
+X-CSE-ConnectionGUID: Hdq3m46dTbqatmmq178X3A==
+X-CSE-MsgGUID: fAZfb6TOQ+u2AdiisAqDcA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11292"; a="39040668"
+X-IronPort-AV: E=Sophos;i="6.12,251,1728975600"; 
+   d="scan'208";a="39040668"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2024 06:45:59 -0800
+X-CSE-ConnectionGUID: hdInxSi0Qf+/UQqd7LkLGQ==
+X-CSE-MsgGUID: OYmUDywbTrqpRN47tHU7cw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,251,1728975600"; 
+   d="scan'208";a="98311222"
+Received: from jairdeje-mobl1.amr.corp.intel.com (HELO [10.124.221.219]) ([10.124.221.219])
+  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2024 06:45:56 -0800
+Message-ID: <719c5aa7-63ad-43f1-a2e8-644ef220db4f@intel.com>
+Date: Fri, 20 Dec 2024 06:45:55 -0800
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -82,96 +67,79 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 01/10] mm: Move common parts of pagetable_*_[cd]tor to
- helpers
-Content-Language: en-US
-To: Kevin Brodsky <kevin.brodsky@arm.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, linux-mm@kvack.org,
- Andrew Morton <akpm@linux-foundation.org>,
+Subject: Re: [PATCH 00/10] Account page tables at all levels
+To: Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org
+Cc: Andrew Morton <akpm@linux-foundation.org>,
  Catalin Marinas <catalin.marinas@arm.com>,
  Dave Hansen <dave.hansen@linux.intel.com>,
  Linus Walleij <linus.walleij@linaro.org>, Andy Lutomirski <luto@kernel.org>,
- "Mike Rapoport (IBM)" <rppt@kernel.org>, Ryan Roberts
- <ryan.roberts@arm.com>, Thomas Gleixner <tglx@linutronix.de>,
- Will Deacon <will@kernel.org>, Matthew Wilcox <willy@infradead.org>,
- linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
- linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
- linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
- linux-snps-arc@lists.infradead.org, linux-um@lists.infradead.org,
- loongarch@lists.linux.dev, x86@kernel.org,
- Alexander Gordeev <agordeev@linux.ibm.com>
+ Peter Zijlstra <peterz@infradead.org>, "Mike Rapoport (IBM)"
+ <rppt@kernel.org>, Ryan Roberts <ryan.roberts@arm.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
+ Matthew Wilcox <willy@infradead.org>, linux-alpha@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+ linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+ linux-s390@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+ linux-um@lists.infradead.org, loongarch@lists.linux.dev, x86@kernel.org
 References: <20241219164425.2277022-1-kevin.brodsky@arm.com>
- <20241219164425.2277022-2-kevin.brodsky@arm.com>
- <20241219171920.GB26279@noisy.programming.kicks-ass.net>
- <75cb4ff8-eb0c-4519-a30a-f8be717ba278@arm.com>
- <0daabd32-cba4-4345-baa8-e8c66bc899ff@bytedance.com>
- <2f65f93e-9d44-4acc-b63c-8f5a35f59699@arm.com>
- <33ce9b58-4787-49cd-a7f2-34272cb3ecf7@bytedance.com>
- <7f5e6ac7-01ef-46c8-bc85-7f8399dadb19@arm.com>
-From: Qi Zheng <zhengqi.arch@bytedance.com>
-In-Reply-To: <7f5e6ac7-01ef-46c8-bc85-7f8399dadb19@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+ <a7398426-56d1-40b4-a1c9-40ae8c8a4b4b@intel.com>
+ <765aec36-55a4-4161-bb30-4ff838bc2d98@arm.com>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <765aec36-55a4-4161-bb30-4ff838bc2d98@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 12/20/24 02:58, Kevin Brodsky wrote:
+>> Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
+> Just to double-check, are your ack'ing the x86 changes specifically? If
+> so I'll add your Acked-by on patch 6, 7 and 9.
 
-
-On 2024/12/20 22:28, Kevin Brodsky wrote:
-> On 20/12/2024 15:16, Qi Zheng wrote:
->>>>
->>>> Did I miss something?
->>>>
->>>> My patch series is not only for cleanup, but also for fixes of
->>>> UAF issue [1], so is it possible to rebase your patch series onto
->>>> mine? I can post v3 ASAP.
->>>
->>> I see, yours should be merged first then. The issue is that yours would
->>> depend on some of the patches in mine, not the other way round.
->>>
->>> My suggestion would then be for you to take patch 5, 6 and 7 from my
->>> series, as they match Alexander's suggestions (and patch 5 is I think a
->>> useful simplification), and replace patch 2 in your series with those. I
->>> would then rebase my series on top and adapt it accordingly. Does that
->>> sound reasonable?
->>
->> Sounds good. But maybe just patch 5 and 6. Because I actually did
->> the work of your patch 7 in my patch 2 and 4.
-> 
-> Yes that's fair! You'd have to do adapt my patch 7 to make it fit in
-> your series so I agree it makes more sense this way.
-
-Thanks!
-
-> 
->>
->> So, is it okay to do something like the following?
->>
->> 1. I separate the ctor()/dtor() part from my patch 2, and then replace
->>     the rest with your patch 6.
->> 2. take your patch 5 form your series
-> 
-> Sounds good to me!
-> 
-> IIUC Dave Hansen gave his Acked-by for the x86 part of patch 6 [1],
-> would make sense to add it when you post your v3.
-
-OK, will add it!
-
-> 
->>
->> If it's ok, I will post the v3 next Monday. ;)
-> 
-> Perfect. I'm going offline tonight, when I come back in the new year
-> I'll review your v3 series and post a new version of this one.
-
-Thank you very much! And Happy New Year!
-
-> 
-> Cheers,
-> - Kevin
-> 
-> [1]
-> https://lore.kernel.org/linux-mm/a7398426-56d1-40b4-a1c9-40ae8c8a4b4b@intel.com/
+Feel free to add it to each patch in the series.
 
