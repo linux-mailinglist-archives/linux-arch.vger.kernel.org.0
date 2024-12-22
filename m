@@ -1,167 +1,132 @@
-Return-Path: <linux-arch+bounces-9457-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9458-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BEAB9F9A87
-	for <lists+linux-arch@lfdr.de>; Fri, 20 Dec 2024 20:32:31 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2B309FA86F
+	for <lists+linux-arch@lfdr.de>; Sun, 22 Dec 2024 23:23:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EF00F16D2AE
-	for <lists+linux-arch@lfdr.de>; Fri, 20 Dec 2024 19:32:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D03341885B08
+	for <lists+linux-arch@lfdr.de>; Sun, 22 Dec 2024 22:23:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB5BC221D8F;
-	Fri, 20 Dec 2024 19:31:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A307189F2F;
+	Sun, 22 Dec 2024 22:23:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lBvD8A5g"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="SZckhlw8"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8EF9221451;
-	Fri, 20 Dec 2024 19:31:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96AD9632;
+	Sun, 22 Dec 2024 22:23:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734723116; cv=none; b=MlsYBSzvzzWdOdwu/DpqFu+kXAEko+zXnes7THwnFF9AlWaPexzsGHnIwnrCvP6Ymkqi2YYR3AvA6BSuZFwzdzxcN4jlvKzInjUCFsoeKevTZaDjLcHK0VPqQpzZ/GRRXyYKjrew62D/8w1cpHm/o1DxlCtJ8qqQ48+XsOEKsyY=
+	t=1734906185; cv=none; b=tPdBmUo2y+ltcyMVDcWPwB//pIP2+tv/5gg1yLdhui2c4WEiinnAskUvRSaOI8WIu+ZW3BeOfIAp3SRg9G1d5bmgB07e8SsvPER3ZvtBjtB8taTgUxtcAlqJaAgwan4vSWLfjbmugGdtok3kuPJRTu16NldyIvAvpWoJduBK2zQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734723116; c=relaxed/simple;
-	bh=cWsdyve87/ahvL1Kdn+WU4yfF9lwFtfjevTBD3q3a5I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=W0ofl3mxLmM51BVC5xUsjdwv322k6C0RCA3M8JvJ6u1ZNM2rdR2RUurEowhj5FSNGKoLdax2ORsvq0RCqg5PJ4NtC9kjZ5gTlityQua8Ln/KYV/m3+7vIiDlspA+LTqI5HE1OrhejdUjzW+Il7K16AZcf/QC4LdEbaJBfyg/MP4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lBvD8A5g; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734723115; x=1766259115;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=cWsdyve87/ahvL1Kdn+WU4yfF9lwFtfjevTBD3q3a5I=;
-  b=lBvD8A5gq5ZhryWgEkUZa0tFdge/1GcQ791QTG32VqCO+Cc4YhJkljiX
-   DGiz+DiH3RGoRZ36KpD+o1zt9T3dt5D5aL42RtSCPl3fTTTYlRoU7DBaY
-   v4I4A+7Tc4dXuyaBw6ZwSwzpm/qBIikYjZ08/qGuWCt6PXHeHVNHwpsUp
-   9f3PrZ56qnpn4rhOwNeuSy5YM3Op68DXz3Dhn3sYbAew/CwKMBx5mRzJH
-   KyM+HeJf+2QSwy940k69bl+/RbS/TIQRPipzr6AHaGuaBe4tWG9S6rbU+
-   MFnWt7NzIQNXWR/vLYyWEU1Lvjk17tt8D8vvONNEFzY6KKwnQsdOrCRbw
-   w==;
-X-CSE-ConnectionGUID: VYO5eTQgQgSWLHO0uTdf1g==
-X-CSE-MsgGUID: nyNw2gJKRAmi/wiISM/PwA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11292"; a="35498885"
-X-IronPort-AV: E=Sophos;i="6.12,251,1728975600"; 
-   d="scan'208";a="35498885"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2024 11:31:53 -0800
-X-CSE-ConnectionGUID: puhYWLhrTxCkddI44a7G2Q==
-X-CSE-MsgGUID: ZOvVbemkRy6XjG3xptTdtg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,251,1728975600"; 
-   d="scan'208";a="98986706"
-Received: from jairdeje-mobl1.amr.corp.intel.com (HELO [10.124.221.219]) ([10.124.221.219])
-  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2024 11:31:52 -0800
-Message-ID: <989b55cf-1f9e-4b73-b3dd-d8b6a62be3f2@intel.com>
-Date: Fri, 20 Dec 2024 11:31:51 -0800
+	s=arc-20240116; t=1734906185; c=relaxed/simple;
+	bh=OdLf5Eyt5QplhrtHNKAnEnAB6KFzEWflQ/rmPd9JeQs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Ed5aDZdZq1LXhiuYWhg5vi+vlQYUFz8BFdhL9KoEwevatRRTwiHWHDBWjKEOP7rq9vUh5z2wfTV78LiBVSG+w6eOkxj7dpI/YZ0wojBnTNalnmDc2W/rfdLPaS2ErtbCsf2BtbVBcXsv8eMYqMHaOK0EcTuiMdLA+2wJ1BQH59s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=SZckhlw8; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Type:MIME-Version:
+	Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=V6GrayCVmn6S1ypFxxQ1HDjjfMtpzxOmP8gCcGmfaiw=; b=SZckhlw8cSsFt6hNn3IqvJQZwk
+	iEccKscpb8ZDntmweXomU0vtw8Wjjt5aP1mxs2F0cEizF3nL6mV4oaVOZyYhQszGTLnIK8WTg1eAA
+	2Wn94BltwvArqWngwACs0Gg7NKcJBKTd6Fbse+goL7tuAMLqWeTM3UES3ZSoyWgDT8dFne+LLTqx6
+	ZPTghqDnkZch5R7MtHUcclGW1IX479UW/1fsRk4mpadyPmtiMvAqAvqL1EV322Vgd9TQXVR4Gugg6
+	t/At1av4/MOaHddO74fodFXAAWanMM21NoQM+Xap6CJkPtw9jaWZzt+fQOpGj6c0HTjNDTI4lldeT
+	9fLlkdfQ==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.98 #2 (Red Hat Linux))
+	id 1tPULj-0000000B6ed-14yp;
+	Sun, 22 Dec 2024 22:22:59 +0000
+Date: Sun, 22 Dec 2024 22:22:59 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: linux-sh@vger.kernel.org
+Cc: Yoshinori Sato <ysato@users.sourceforge.jp>, linux-arch@vger.kernel.org
+Subject: [PATCH] sh: exports for delay.h
+Message-ID: <20241222222259.GF1977892@ZenIV>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 00/10] Account page tables at all levels
-To: Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- Catalin Marinas <catalin.marinas@arm.com>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- Linus Walleij <linus.walleij@linaro.org>, Andy Lutomirski <luto@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, "Mike Rapoport (IBM)"
- <rppt@kernel.org>, Ryan Roberts <ryan.roberts@arm.com>,
- Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
- Matthew Wilcox <willy@infradead.org>, linux-alpha@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
- linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
- linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-s390@vger.kernel.org, linux-snps-arc@lists.infradead.org,
- linux-um@lists.infradead.org, loongarch@lists.linux.dev, x86@kernel.org,
- Joerg Roedel <jroedel@suse.de>
-References: <20241219164425.2277022-1-kevin.brodsky@arm.com>
- <a7398426-56d1-40b4-a1c9-40ae8c8a4b4b@intel.com>
- <765aec36-55a4-4161-bb30-4ff838bc2d98@arm.com>
-From: Dave Hansen <dave.hansen@intel.com>
-Content-Language: en-US
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- xsFNBE6HMP0BEADIMA3XYkQfF3dwHlj58Yjsc4E5y5G67cfbt8dvaUq2fx1lR0K9h1bOI6fC
- oAiUXvGAOxPDsB/P6UEOISPpLl5IuYsSwAeZGkdQ5g6m1xq7AlDJQZddhr/1DC/nMVa/2BoY
- 2UnKuZuSBu7lgOE193+7Uks3416N2hTkyKUSNkduyoZ9F5twiBhxPJwPtn/wnch6n5RsoXsb
- ygOEDxLEsSk/7eyFycjE+btUtAWZtx+HseyaGfqkZK0Z9bT1lsaHecmB203xShwCPT49Blxz
- VOab8668QpaEOdLGhtvrVYVK7x4skyT3nGWcgDCl5/Vp3TWA4K+IofwvXzX2ON/Mj7aQwf5W
- iC+3nWC7q0uxKwwsddJ0Nu+dpA/UORQWa1NiAftEoSpk5+nUUi0WE+5DRm0H+TXKBWMGNCFn
- c6+EKg5zQaa8KqymHcOrSXNPmzJuXvDQ8uj2J8XuzCZfK4uy1+YdIr0yyEMI7mdh4KX50LO1
- pmowEqDh7dLShTOif/7UtQYrzYq9cPnjU2ZW4qd5Qz2joSGTG9eCXLz5PRe5SqHxv6ljk8mb
- ApNuY7bOXO/A7T2j5RwXIlcmssqIjBcxsRRoIbpCwWWGjkYjzYCjgsNFL6rt4OL11OUF37wL
- QcTl7fbCGv53KfKPdYD5hcbguLKi/aCccJK18ZwNjFhqr4MliQARAQABzUVEYXZpZCBDaHJp
- c3RvcGhlciBIYW5zZW4gKEludGVsIFdvcmsgQWRkcmVzcykgPGRhdmUuaGFuc2VuQGludGVs
- LmNvbT7CwXgEEwECACIFAlQ+9J0CGwMGCwkIBwMCBhUIAgkKCwQWAgMBAh4BAheAAAoJEGg1
- lTBwyZKwLZUP/0dnbhDc229u2u6WtK1s1cSd9WsflGXGagkR6liJ4um3XCfYWDHvIdkHYC1t
- MNcVHFBwmQkawxsYvgO8kXT3SaFZe4ISfB4K4CL2qp4JO+nJdlFUbZI7cz/Td9z8nHjMcWYF
- IQuTsWOLs/LBMTs+ANumibtw6UkiGVD3dfHJAOPNApjVr+M0P/lVmTeP8w0uVcd2syiaU5jB
- aht9CYATn+ytFGWZnBEEQFnqcibIaOrmoBLu2b3fKJEd8Jp7NHDSIdrvrMjYynmc6sZKUqH2
- I1qOevaa8jUg7wlLJAWGfIqnu85kkqrVOkbNbk4TPub7VOqA6qG5GCNEIv6ZY7HLYd/vAkVY
- E8Plzq/NwLAuOWxvGrOl7OPuwVeR4hBDfcrNb990MFPpjGgACzAZyjdmYoMu8j3/MAEW4P0z
- F5+EYJAOZ+z212y1pchNNauehORXgjrNKsZwxwKpPY9qb84E3O9KYpwfATsqOoQ6tTgr+1BR
- CCwP712H+E9U5HJ0iibN/CDZFVPL1bRerHziuwuQuvE0qWg0+0SChFe9oq0KAwEkVs6ZDMB2
- P16MieEEQ6StQRlvy2YBv80L1TMl3T90Bo1UUn6ARXEpcbFE0/aORH/jEXcRteb+vuik5UGY
- 5TsyLYdPur3TXm7XDBdmmyQVJjnJKYK9AQxj95KlXLVO38lczsFNBFRjzmoBEACyAxbvUEhd
- GDGNg0JhDdezyTdN8C9BFsdxyTLnSH31NRiyp1QtuxvcqGZjb2trDVuCbIzRrgMZLVgo3upr
- MIOx1CXEgmn23Zhh0EpdVHM8IKx9Z7V0r+rrpRWFE8/wQZngKYVi49PGoZj50ZEifEJ5qn/H
- Nsp2+Y+bTUjDdgWMATg9DiFMyv8fvoqgNsNyrrZTnSgoLzdxr89FGHZCoSoAK8gfgFHuO54B
- lI8QOfPDG9WDPJ66HCodjTlBEr/Cwq6GruxS5i2Y33YVqxvFvDa1tUtl+iJ2SWKS9kCai2DR
- 3BwVONJEYSDQaven/EHMlY1q8Vln3lGPsS11vSUK3QcNJjmrgYxH5KsVsf6PNRj9mp8Z1kIG
- qjRx08+nnyStWC0gZH6NrYyS9rpqH3j+hA2WcI7De51L4Rv9pFwzp161mvtc6eC/GxaiUGuH
- BNAVP0PY0fqvIC68p3rLIAW3f97uv4ce2RSQ7LbsPsimOeCo/5vgS6YQsj83E+AipPr09Caj
- 0hloj+hFoqiticNpmsxdWKoOsV0PftcQvBCCYuhKbZV9s5hjt9qn8CE86A5g5KqDf83Fxqm/
- vXKgHNFHE5zgXGZnrmaf6resQzbvJHO0Fb0CcIohzrpPaL3YepcLDoCCgElGMGQjdCcSQ+Ci
- FCRl0Bvyj1YZUql+ZkptgGjikQARAQABwsFfBBgBAgAJBQJUY85qAhsMAAoJEGg1lTBwyZKw
- l4IQAIKHs/9po4spZDFyfDjunimEhVHqlUt7ggR1Hsl/tkvTSze8pI1P6dGp2XW6AnH1iayn
- yRcoyT0ZJ+Zmm4xAH1zqKjWplzqdb/dO28qk0bPso8+1oPO8oDhLm1+tY+cOvufXkBTm+whm
- +AyNTjaCRt6aSMnA/QHVGSJ8grrTJCoACVNhnXg/R0g90g8iV8Q+IBZyDkG0tBThaDdw1B2l
- asInUTeb9EiVfL/Zjdg5VWiF9LL7iS+9hTeVdR09vThQ/DhVbCNxVk+DtyBHsjOKifrVsYep
- WpRGBIAu3bK8eXtyvrw1igWTNs2wazJ71+0z2jMzbclKAyRHKU9JdN6Hkkgr2nPb561yjcB8
- sIq1pFXKyO+nKy6SZYxOvHxCcjk2fkw6UmPU6/j/nQlj2lfOAgNVKuDLothIxzi8pndB8Jju
- KktE5HJqUUMXePkAYIxEQ0mMc8Po7tuXdejgPMwgP7x65xtfEqI0RuzbUioFltsp1jUaRwQZ
- MTsCeQDdjpgHsj+P2ZDeEKCbma4m6Ez/YWs4+zDm1X8uZDkZcfQlD9NldbKDJEXLIjYWo1PH
- hYepSffIWPyvBMBTW2W5FRjJ4vLRrJSUoEfJuPQ3vW9Y73foyo/qFoURHO48AinGPZ7PC7TF
- vUaNOTjKedrqHkaOcqB185ahG2had0xnFsDPlx5y
-In-Reply-To: <765aec36-55a4-4161-bb30-4ff838bc2d98@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-On 12/20/24 02:58, Kevin Brodsky wrote:
->> One super tiny nit is that the PAE pgd _can_ be allocated using
->> __get_free_pages(). It was originally there for Xen, but I think it's
->> being used for PTI only at this point and the comments are wrong-ish.
->>
->> I kinda think we should just get rid of the 32-bit kmem_cache entirely.
-> That would certainly simplify things on the x86 side! I'm not at all
-> familiar with that code though, would you be happy with providing a
-> patch? I could add it to this series if that's convenient.
+	__delay() is either exported or exists as a static inline
+on all architectures - except sh.
 
-I hacked this together yesterday:
+	Add the missing export of __delay(), move the exports of
+the rest of that bunch from sh_ksyms32.c to the place where all
+of them are defined (i.e. arch/sh/lib/delay.c).
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/daveh/devel.git/log/?h=simplify-pae-20241220
-It definitely needs some more work. I'm particularly still puzzling
-about why SHARED_KERNEL_PMD is used both as a trigger for 32b vs.
-PAGE_SIZE PAE pgd allocations _and_ for the actual PMD sharing.
-
-Xen definitely needed the whole page behavior but I'm not sure why PTI did.
-
-Either way, that series should make the PAE PGDs a _bit_ less weird at
-the cost of an extra ~2 pages per process for folks who are running
-32-bit PAE kernels with PTI disabled.
-
-But I think the diffstat is worth it:
-
- 5 files changed, 16 insertions(+), 96 deletions(-)
-
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+---
+diff --git a/arch/sh/kernel/sh_ksyms_32.c b/arch/sh/kernel/sh_ksyms_32.c
+index 5858936cb431..0b9b28144efe 100644
+--- a/arch/sh/kernel/sh_ksyms_32.c
++++ b/arch/sh/kernel/sh_ksyms_32.c
+@@ -2,7 +2,6 @@
+ #include <linux/module.h>
+ #include <linux/string.h>
+ #include <linux/uaccess.h>
+-#include <linux/delay.h>
+ #include <linux/mm.h>
+ #include <asm/checksum.h>
+ #include <asm/sections.h>
+@@ -12,9 +11,6 @@ EXPORT_SYMBOL(memcpy);
+ EXPORT_SYMBOL(memset);
+ EXPORT_SYMBOL(memmove);
+ EXPORT_SYMBOL(__copy_user);
+-EXPORT_SYMBOL(__udelay);
+-EXPORT_SYMBOL(__ndelay);
+-EXPORT_SYMBOL(__const_udelay);
+ EXPORT_SYMBOL(strlen);
+ EXPORT_SYMBOL(csum_partial);
+ EXPORT_SYMBOL(csum_partial_copy_generic);
+diff --git a/arch/sh/lib/delay.c b/arch/sh/lib/delay.c
+index dad8e6a54906..63cd32550b0c 100644
+--- a/arch/sh/lib/delay.c
++++ b/arch/sh/lib/delay.c
+@@ -7,6 +7,7 @@
+ 
+ #include <linux/sched.h>
+ #include <linux/delay.h>
++#include <linux/export.h>
+ 
+ void __delay(unsigned long loops)
+ {
+@@ -29,6 +30,7 @@ void __delay(unsigned long loops)
+ 		: "0" (loops)
+ 		: "t");
+ }
++EXPORT_SYMBOL(__delay);
+ 
+ inline void __const_udelay(unsigned long xloops)
+ {
+@@ -41,14 +43,16 @@ inline void __const_udelay(unsigned long xloops)
+ 		: "macl", "mach");
+ 	__delay(++xloops);
+ }
++EXPORT_SYMBOL(__const_udelay);
+ 
+ void __udelay(unsigned long usecs)
+ {
+ 	__const_udelay(usecs * 0x000010c6);  /* 2**32 / 1000000 */
+ }
++EXPORT_SYMBOL(__udelay);
+ 
+ void __ndelay(unsigned long nsecs)
+ {
+ 	__const_udelay(nsecs * 0x00000005);
+ }
+-
++EXPORT_SYMBOL(__ndelay);
 
