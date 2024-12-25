@@ -1,224 +1,380 @@
-Return-Path: <linux-arch+bounces-9483-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9485-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9EBF89FC555
-	for <lists+linux-arch@lfdr.de>; Wed, 25 Dec 2024 14:33:15 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6C109FC5F2
+	for <lists+linux-arch@lfdr.de>; Wed, 25 Dec 2024 16:46:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0177418838FE
-	for <lists+linux-arch@lfdr.de>; Wed, 25 Dec 2024 13:33:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1D4F57A15FD
+	for <lists+linux-arch@lfdr.de>; Wed, 25 Dec 2024 15:46:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DF1B1925AE;
-	Wed, 25 Dec 2024 13:33:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 739A83B2BB;
+	Wed, 25 Dec 2024 15:46:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MYsjoaBP"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="GzzwiWH1"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpbgjp3.qq.com (smtpbgjp3.qq.com [54.92.39.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 389C485626;
-	Wed, 25 Dec 2024 13:33:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2161122619;
+	Wed, 25 Dec 2024 15:46:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.92.39.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735133589; cv=none; b=KJvVJkrPzcZtqVwf/A3lJk84eYjemYV537N0GcOHvbq8FAEYAOwONxWHFNAMufyqny32QvNWKbhTsOjV6MyCxnedsaahTuzJvZzTOD+Dn5CJLsZGBPt80sOtrqm5mu3ZfyFMt3sX/DEDi5/PeAzVJr0nqkmxHPXsaupv+TWxhJQ=
+	t=1735141575; cv=none; b=uSEGXHqVAShrb8HMrpOOmrnjYpFFGTzMg8hRyu1miBLtQZgKhqo+OkQHF1R9wAayIwdUEVdaF8v3QKv49qk8jg0/yKLvYFV7cXswOW6YW2lRt2PEjEZBAy2AgoJMgqEcU15iJR1lCDH9XbfkHcfIYzMFO90s2pdK2nYDFSI4j/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735133589; c=relaxed/simple;
-	bh=0XOFiVo+zOtxp/fbrz4XN0saf1jD3kvygSecxNvsG2c=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=ZelpCYRljLV4vNOpxkUl3300pqK41PfNbdpnUjiD2HQguQDNUnyL8UAigOnLJrgqSDftgxvIB4QtKNB1MnvwOghlj2VFHDdma8+m9/RW/idUOL1/QONJ850zeRMcQHO8E2hhoYl09Gvu5o0KRwRkHEl7UAYYbCAP23emmn+1I9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MYsjoaBP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4477FC4CECD;
-	Wed, 25 Dec 2024 13:33:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735133588;
-	bh=0XOFiVo+zOtxp/fbrz4XN0saf1jD3kvygSecxNvsG2c=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=MYsjoaBPT40kl9GpVzu/uiFhq/vO1Z6xMABq9WStO1c8mqSnyrnIQykWTNyGTIcqt
-	 qnAzpbkKekwBnUd0vYOeCfbKnBo133PPL1duOZRrEmbC0jjA12VKj7R14H2Kf+S9a7
-	 Xg/H06ymP/ltH038UxmWAicURkpVmyF+Wl2UscoIyfhNDigBHllYXoiSBOyLUd7P5x
-	 SuFWEbigaxi2SR9gTBlQ3WtgyweK5Qk5RhSOae7C0d3Pg17FS/vk0SURKFJ67WoAWJ
-	 +uptZOXmxCdy6ZGFdB/j7uFK+ofm++HzO466cQq6fipK1FaZDIz7fTrGH0PcNcTIRd
-	 Brf7j6kGyNiwA==
-Date: Wed, 25 Dec 2024 22:33:00 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Florent Revest
- <revest@chromium.org>, linux-trace-kernel@vger.kernel.org, LKML
- <linux-kernel@vger.kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,
- bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, Jiri Olsa
- <jolsa@kernel.org>, Alan Maguire <alan.maguire@oracle.com>, Mark Rutland
- <mark.rutland@arm.com>, linux-arch@vger.kernel.org, Heiko Carstens
- <hca@linux.ibm.com>, Will Deacon <will@kernel.org>, Catalin Marinas
- <catalin.marinas@arm.com>, Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui
- <kernel@xen0n.name>, Paul Walmsley <paul.walmsley@sifive.com>, Palmer
- Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Vasily
- Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>,
- Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle
- <svens@linux.ibm.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar
- <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
- <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin"
- <hpa@zytor.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH v21 03/20] fgraph: Replace fgraph_ret_regs with
- ftrace_regs
-Message-Id: <20241225223300.68299ea8a2836c6947fe9d1c@kernel.org>
-In-Reply-To: <20241223163956.44245b4b@gandalf.local.home>
-References: <173379652547.973433.2311391879173461183.stgit@devnote2>
-	<173379656618.973433.13429645373226409113.stgit@devnote2>
-	<20241223163956.44245b4b@gandalf.local.home>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1735141575; c=relaxed/simple;
+	bh=wTZB0wUr6Wx0D7X91KZ0JvwlyMVTBs+P+lojwH8Ndyc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hrek+2sa3rrYcHRmXvPoMgPt6oT7o/n01Crl2VKIudDjWbaBdLLoSke+0fHJwGno7o3T2npixvR0SdR2Mm9DVwM1jIstCbZ44iw/KI8Xx2gexyrS7FDblyoqLNJbdFzpJxnggXRaGAdcAi5TUX/HEtSOtKxs5mcnbAmG92R1jP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=GzzwiWH1; arc=none smtp.client-ip=54.92.39.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1735141538;
+	bh=wTZB0wUr6Wx0D7X91KZ0JvwlyMVTBs+P+lojwH8Ndyc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=GzzwiWH1Hj5ZHEkHxrO50Xu7i6LGMPrxt05OeTK0eGwJuMS3H5naxMO856e/0O0bh
+	 2t1bbAuWbam5H7oTEF7MFSgKX3636V2FI8UXewQnIlTOS4iEocJduOYYBvkKeILoOB
+	 mTJjnveNfJvKoiyz91x0P2TddhkayXF8R/THK+/s=
+X-QQ-mid: bizesmtpip4t1735141367tu7h3oc
+X-QQ-Originating-IP: 8My9SmBe/TPnEzR8ckSgw6NQe7hxNFe7FClbC3SSgkk=
+Received: from [IPV6:240e:36c:db8:f700:b213:b0 ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Wed, 25 Dec 2024 23:42:34 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 16678920617421620273
+Message-ID: <D7FF3455CE14824B+a3218eef-f2b6-4a9b-8daf-1d54c533da50@uniontech.com>
+Date: Wed, 25 Dec 2024 23:42:29 +0800
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+User-Agent: =?UTF-8?B?TW96aWxsYSBUaHVuZGVyYmlyZCDmtYvor5XniYg=?=
+Subject: Re: [RESEND PATCH] fs/pipe: Introduce a check to skip sleeping
+ processes during pipe read/write
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Kent Overstreet <kent.overstreet@linux.dev>
+Cc: viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz,
+ linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+ yushengjin@uniontech.com, zhangdandan@uniontech.com,
+ guanwentao@uniontech.com, zhanjun@uniontech.com, oliver.sang@intel.com,
+ ebiederm@xmission.com, colin.king@canonical.com, josh@joshtriplett.org,
+ penberg@cs.helsinki.fi, manfred@colorfullife.com, mingo@elte.hu,
+ jes@sgi.com, hch@lst.de, aia21@cantab.net, arjan@infradead.org,
+ jgarzik@pobox.com, neukum@fachschaft.cup.uni-muenchen.de,
+ oliver@neukum.name, dada1@cosmosbay.com, axboe@kernel.dk, axboe@suse.de,
+ nickpiggin@yahoo.com.au, dhowells@redhat.com, nathans@sgi.com,
+ rolandd@cisco.com, tytso@mit.edu, bunk@stusta.de, pbadari@us.ibm.com,
+ ak@linux.intel.com, ak@suse.de, davem@davemloft.net, jsipek@cs.sunysb.edu,
+ jens.axboe@oracle.com, ramsdell@mitre.org, hch@infradead.org,
+ torvalds@linux-foundation.org, akpm@linux-foundation.org,
+ randy.dunlap@oracle.com, efault@gmx.de, rdunlap@infradead.org,
+ haveblue@us.ibm.com, drepper@redhat.com, dm.n9107@gmail.com,
+ jblunck@suse.de, davidel@xmailserver.org, mtk.manpages@googlemail.com,
+ linux-arch@vger.kernel.org, vda.linux@googlemail.com, jmorris@namei.org,
+ serue@us.ibm.com, hca@linux.ibm.com, rth@twiddle.net, lethal@linux-sh.org,
+ tony.luck@intel.com, heiko.carstens@de.ibm.com, oleg@redhat.com,
+ andi@firstfloor.org, corbet@lwn.net, crquan@gmail.com, mszeredi@suse.cz,
+ miklos@szeredi.hu, peterz@infradead.org, a.p.zijlstra@chello.nl,
+ earl_chew@agilent.com, npiggin@gmail.com, npiggin@suse.de, julia@diku.dk,
+ jaxboe@fusionio.com, nikai@nikai.net, dchinner@redhat.com, davej@redhat.com,
+ npiggin@kernel.dk, eric.dumazet@gmail.com, tim.c.chen@linux.intel.com,
+ xemul@parallels.com, tj@kernel.org, serge.hallyn@canonical.com,
+ gorcunov@openvz.org, levinsasha928@gmail.com, penberg@kernel.org,
+ amwang@redhat.com, bcrl@kvack.org, muthu.lkml@gmail.com, muthur@gmail.com,
+ mjt@tls.msk.ru, alan@lxorguk.ukuu.org.uk, raven@themaw.net, thomas@m3y3r.de,
+ will.deacon@arm.com, will@kernel.org, josef@redhat.com,
+ anatol.pomozov@gmail.com, koverstreet@google.com, zab@redhat.com,
+ balbi@ti.com, gregkh@linuxfoundation.org, mfasheh@suse.com,
+ jlbec@evilplan.org, rusty@rustcorp.com.au, asamymuthupa@micron.com,
+ smani@micron.com, sbradshaw@micron.com, jmoyer@redhat.com, sim@hostway.ca,
+ ia@cloudflare.com, dmonakhov@openvz.org, ebiggers3@gmail.com,
+ socketpair@gmail.com, penguin-kernel@i-love.sakura.ne.jp, w@1wt.eu,
+ kirill.shutemov@linux.intel.com, mhocko@suse.com, vdavydov.dev@gmail.com,
+ vdavydov@virtuozzo.com, hannes@cmpxchg.org, mhocko@kernel.org,
+ minchan@kernel.org, deepa.kernel@gmail.com, arnd@arndb.de, balbi@kernel.org,
+ swhiteho@redhat.com, konishi.ryusuke@lab.ntt.co.jp, dsterba@suse.com,
+ vegard.nossum@oracle.com, axboe@fb.com, pombredanne@nexb.com,
+ tglx@linutronix.de, joe.lawrence@redhat.com, mpatocka@redhat.com,
+ mcgrof@kernel.org, keescook@chromium.org, linux@dominikbrodowski.net,
+ jannh@google.com, shakeelb@google.com, guro@fb.com, willy@infradead.org,
+ khlebnikov@yandex-team.ru, kirr@nexedi.com, stern@rowland.harvard.edu,
+ elver@google.com, parri.andrea@gmail.com, paulmck@kernel.org,
+ rasibley@redhat.com, jstancek@redhat.com, avagin@gmail.com, cai@redhat.com,
+ josef@toxicpanda.com, hare@suse.de, colyli@suse.de,
+ johannes@sipsolutions.net, sspatil@android.com, alex_y_xu@yahoo.ca,
+ mgorman@techsingularity.net, gor@linux.ibm.com, jhubbard@nvidia.com,
+ crope@iki.fi, yzaikin@google.com, bfields@fieldses.org, jlayton@kernel.org,
+ kernel@tuxforce.de, steve@sk2.org, nixiaoming@huawei.com,
+ 0x7f454c46@gmail.com, kuniyu@amazon.co.jp, alexander.h.duyck@intel.com,
+ kuni1840@gmail.com, soheil@google.com, sridhar.samudrala@intel.com,
+ Vincenzo.Frascino@arm.com, chuck.lever@oracle.com, Kevin.Brodsky@arm.com,
+ Szabolcs.Nagy@arm.com, David.Laight@aculab.com, Mark.Rutland@arm.com,
+ linux-morello@op-lists.linaro.org, Luca.Vizzarro@arm.com,
+ max.kellermann@ionos.com, adobriyan@gmail.com, lukas@schauer.dev,
+ j.granados@samsung.com, djwong@kernel.org, kent.overstreet@linux.dev,
+ linux@weissschuh.net, kstewart@efficios.com
+References: <75B06EE0B67747ED+20241225094202.597305-1-wangyuli@uniontech.com>
+ <Z2wI3dmmrhMRT-48@smile.fi.intel.com>
+From: WangYuli <wangyuli@uniontech.com>
+Content-Language: en-US
+Autocrypt: addr=wangyuli@uniontech.com; keydata=
+ xjMEZoEsiBYJKwYBBAHaRw8BAQdAyDPzcbPnchbIhweThfNK1tg1imM+5kgDBJSKP+nX39DN
+ IVdhbmdZdWxpIDx3YW5neXVsaUB1bmlvbnRlY2guY29tPsKJBBMWCAAxFiEEa1GMzYeuKPkg
+ qDuvxdofMEb0C+4FAmaBLIgCGwMECwkIBwUVCAkKCwUWAgMBAAAKCRDF2h8wRvQL7g0UAQCH
+ 3mrGM0HzOaARhBeA/Q3AIVfhS010a0MZmPTRGVfPbwD/SrncJwwPAL4GiLPEC4XssV6FPUAY
+ 0rA68eNNI9cJLArOOARmgSyJEgorBgEEAZdVAQUBAQdA88W4CTLDD9fKwW9PB5yurCNdWNS7
+ VTL0dvPDofBTjFYDAQgHwngEGBYIACAWIQRrUYzNh64o+SCoO6/F2h8wRvQL7gUCZoEsiQIb
+ DAAKCRDF2h8wRvQL7sKvAP4mBvm7Zn1OUjFViwkma8IGRGosXAvMUFyOHVcl1RTgFQEAuJkU
+ o9ERi7qS/hbUdUgtitI89efbY0TVetgDsyeQiwU=
+In-Reply-To: <Z2wI3dmmrhMRT-48@smile.fi.intel.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------WhExkXHB8tH0jp1dn0AUe2nH"
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
+X-QQ-XMAILINFO: MgV0zj5pdGzOlcmvH/7T323+xBfWW2ao/6UK0gPLZqnNkVENG9/jAUEt
+	mm5Y66vSIDX2UW4U5ALVgDCwNTLRfAjMjaktvgx18lCJrlDPZkehAMYXMBRW3obFlHGiXhV
+	suNTb+MVlK2sUAJY8nBzlXSxqrzuV3ZR0y0Sskz8zpJIMk/a9orzcN1cGGSTwTBkaf4jwgc
+	ORfDSMJsh7p7z+OV9pB2mQnQk2gRsbtvnw2udSBwXllD+HgI7TO5yRXf1e8eV6ioUAAoBXC
+	2GgjKdQRXDF5hEGCPGC6AOjxfHttGW3WDiS8p24J05hf2OcMREsxC3oAexD49clHPyFuhIs
+	hLd92/POwB8p4Oysw+mCOuTH+HZMCFg/ko5fEBn87lxbIGm+/npZkwzqzSLyAyNgHsCfOhz
+	NiYjZEnPpfX2qUP/Lhw1jmyoc+5HqkCWQkHNX3BeBgXxELyI35N6iYgz7RwDCoDffLcQ4OP
+	TsSq7hiGfXRhwGt/7brHvxooTKoKp5q122fPcKRx0T7MwtRUxn7JS8nzC+2balfqXgk49yA
+	UeKqnsjB9LYphsFmQ0bmZFR5zGaf4xpuv3y33AnOsyYRPEttUx/XLU4elCS4rmNm4mFVIL6
+	fYMc+PYuGAv6UztfIQcgOdWWcnqopog6xOfcdLZLC4H8KtKWBGHTFD++tdbi9sqDLEdTxkB
+	xZVPhRh+hwqqb7hc9jg0aVaXAFd2iK1F8dSX9WXl206G9Io8LuHj5P3VInynHZFmu3dnMv7
+	nF/OOz2cWID2x8r92mVGo2OcUXc1CMe/Pu5Ke6FOhzWJ5rMMscBDxVCmAUwBfC//mZSSCZK
+	g/IzaH5BhCtPMllSvn/GVFWW1GUHyK+A0n4KalH4MlIcuKLds46wvOyeEUyCIWJgvKz3aHP
+	0l5RRqvTdEJRsbsjciVBkAD8+ydTWvOBiaAYPxAASZcHohDH6EtqzGAZlKD96siDUyUM1Dr
+	nWoK40YjDRWSdIkhr6VxkIFn02FIGzo7pVV3dXaYHWusulxs6l9QdHQMLJeC7DQPn5NrRxR
+	z9arhoKqX7M/UEL2MdeKFlPLjjZtGIRCttq8WyBb2fkKfvNkUfRnP2ecNPGnHybOW+ILga4
+	q800QWmOLbPuGL20fzMYCviZ6Ylz2SX2QgG92VPTK/fTSsvWe2Al7o=
+X-QQ-XMRINFO: MPJ6Tf5t3I/ycC2BItcBVIA=
+X-QQ-RECHKSPAM: 0
 
-Hi,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------WhExkXHB8tH0jp1dn0AUe2nH
+Content-Type: multipart/mixed; boundary="------------Pyex4ntCgeLsgIrwDEQ1zvm5";
+ protected-headers="v1"
+From: WangYuli <wangyuli@uniontech.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Kent Overstreet <kent.overstreet@linux.dev>
+Cc: viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz,
+ linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+ yushengjin@uniontech.com, zhangdandan@uniontech.com,
+ guanwentao@uniontech.com, zhanjun@uniontech.com, oliver.sang@intel.com,
+ ebiederm@xmission.com, colin.king@canonical.com, josh@joshtriplett.org,
+ penberg@cs.helsinki.fi, manfred@colorfullife.com, mingo@elte.hu,
+ jes@sgi.com, hch@lst.de, aia21@cantab.net, arjan@infradead.org,
+ jgarzik@pobox.com, neukum@fachschaft.cup.uni-muenchen.de,
+ oliver@neukum.name, dada1@cosmosbay.com, axboe@kernel.dk, axboe@suse.de,
+ nickpiggin@yahoo.com.au, dhowells@redhat.com, nathans@sgi.com,
+ rolandd@cisco.com, tytso@mit.edu, bunk@stusta.de, pbadari@us.ibm.com,
+ ak@linux.intel.com, ak@suse.de, davem@davemloft.net, jsipek@cs.sunysb.edu,
+ jens.axboe@oracle.com, ramsdell@mitre.org, hch@infradead.org,
+ torvalds@linux-foundation.org, akpm@linux-foundation.org,
+ randy.dunlap@oracle.com, efault@gmx.de, rdunlap@infradead.org,
+ haveblue@us.ibm.com, drepper@redhat.com, dm.n9107@gmail.com,
+ jblunck@suse.de, davidel@xmailserver.org, mtk.manpages@googlemail.com,
+ linux-arch@vger.kernel.org, vda.linux@googlemail.com, jmorris@namei.org,
+ serue@us.ibm.com, hca@linux.ibm.com, rth@twiddle.net, lethal@linux-sh.org,
+ tony.luck@intel.com, heiko.carstens@de.ibm.com, oleg@redhat.com,
+ andi@firstfloor.org, corbet@lwn.net, crquan@gmail.com, mszeredi@suse.cz,
+ miklos@szeredi.hu, peterz@infradead.org, a.p.zijlstra@chello.nl,
+ earl_chew@agilent.com, npiggin@gmail.com, npiggin@suse.de, julia@diku.dk,
+ jaxboe@fusionio.com, nikai@nikai.net, dchinner@redhat.com, davej@redhat.com,
+ npiggin@kernel.dk, eric.dumazet@gmail.com, tim.c.chen@linux.intel.com,
+ xemul@parallels.com, tj@kernel.org, serge.hallyn@canonical.com,
+ gorcunov@openvz.org, levinsasha928@gmail.com, penberg@kernel.org,
+ amwang@redhat.com, bcrl@kvack.org, muthu.lkml@gmail.com, muthur@gmail.com,
+ mjt@tls.msk.ru, alan@lxorguk.ukuu.org.uk, raven@themaw.net, thomas@m3y3r.de,
+ will.deacon@arm.com, will@kernel.org, josef@redhat.com,
+ anatol.pomozov@gmail.com, koverstreet@google.com, zab@redhat.com,
+ balbi@ti.com, gregkh@linuxfoundation.org, mfasheh@suse.com,
+ jlbec@evilplan.org, rusty@rustcorp.com.au, asamymuthupa@micron.com,
+ smani@micron.com, sbradshaw@micron.com, jmoyer@redhat.com, sim@hostway.ca,
+ ia@cloudflare.com, dmonakhov@openvz.org, ebiggers3@gmail.com,
+ socketpair@gmail.com, penguin-kernel@i-love.sakura.ne.jp, w@1wt.eu,
+ kirill.shutemov@linux.intel.com, mhocko@suse.com, vdavydov.dev@gmail.com,
+ vdavydov@virtuozzo.com, hannes@cmpxchg.org, mhocko@kernel.org,
+ minchan@kernel.org, deepa.kernel@gmail.com, arnd@arndb.de, balbi@kernel.org,
+ swhiteho@redhat.com, konishi.ryusuke@lab.ntt.co.jp, dsterba@suse.com,
+ vegard.nossum@oracle.com, axboe@fb.com, pombredanne@nexb.com,
+ tglx@linutronix.de, joe.lawrence@redhat.com, mpatocka@redhat.com,
+ mcgrof@kernel.org, keescook@chromium.org, linux@dominikbrodowski.net,
+ jannh@google.com, shakeelb@google.com, guro@fb.com, willy@infradead.org,
+ khlebnikov@yandex-team.ru, kirr@nexedi.com, stern@rowland.harvard.edu,
+ elver@google.com, parri.andrea@gmail.com, paulmck@kernel.org,
+ rasibley@redhat.com, jstancek@redhat.com, avagin@gmail.com, cai@redhat.com,
+ josef@toxicpanda.com, hare@suse.de, colyli@suse.de,
+ johannes@sipsolutions.net, sspatil@android.com, alex_y_xu@yahoo.ca,
+ mgorman@techsingularity.net, gor@linux.ibm.com, jhubbard@nvidia.com,
+ crope@iki.fi, yzaikin@google.com, bfields@fieldses.org, jlayton@kernel.org,
+ kernel@tuxforce.de, steve@sk2.org, nixiaoming@huawei.com,
+ 0x7f454c46@gmail.com, kuniyu@amazon.co.jp, alexander.h.duyck@intel.com,
+ kuni1840@gmail.com, soheil@google.com, sridhar.samudrala@intel.com,
+ Vincenzo.Frascino@arm.com, chuck.lever@oracle.com, Kevin.Brodsky@arm.com,
+ Szabolcs.Nagy@arm.com, David.Laight@aculab.com, Mark.Rutland@arm.com,
+ linux-morello@op-lists.linaro.org, Luca.Vizzarro@arm.com,
+ max.kellermann@ionos.com, adobriyan@gmail.com, lukas@schauer.dev,
+ j.granados@samsung.com, djwong@kernel.org, kent.overstreet@linux.dev,
+ linux@weissschuh.net, kstewart@efficios.com
+Message-ID: <a3218eef-f2b6-4a9b-8daf-1d54c533da50@uniontech.com>
+Subject: Re: [RESEND PATCH] fs/pipe: Introduce a check to skip sleeping
+ processes during pipe read/write
+References: <75B06EE0B67747ED+20241225094202.597305-1-wangyuli@uniontech.com>
+ <Z2wI3dmmrhMRT-48@smile.fi.intel.com>
+In-Reply-To: <Z2wI3dmmrhMRT-48@smile.fi.intel.com>
 
-On Mon, 23 Dec 2024 16:39:56 -0500
-Steven Rostedt <rostedt@goodmis.org> wrote:
+--------------Pyex4ntCgeLsgIrwDEQ1zvm5
+Content-Type: multipart/mixed; boundary="------------YbkyFbAmv3kxK4VEKPTtvkBC"
 
-> On Tue, 10 Dec 2024 11:09:26 +0900
-> "Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
-> 
-> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > 
-> > Use ftrace_regs instead of fgraph_ret_regs for tracing return value
-> > on function_graph tracer because of simplifying the callback interface.
-> > 
-> > The CONFIG_HAVE_FUNCTION_GRAPH_RETVAL is also replaced by
-> > CONFIG_HAVE_FUNCTION_GRAPH_FREGS.
-> > 
-> > Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > Acked-by: Heiko Carstens <hca@linux.ibm.com>
-> 
-> My x86-32 test failed on this patch with:
-> 
-> [    8.387985] Testing tracer preemptoff: PASSED
-> [    9.603053] Testing tracer preemptirqsoff: PASSED
-> [   10.820200] Testing tracer wakeup: PASSED
-> [   12.030489] Testing tracer wakeup_rt: PASSED
-> [   13.237925] Testing tracer wakeup_dl: PASSED
-> [   14.440146] Testing tracer function_graph:
-> [   14.611021] ------------[ cut here ]------------
-> [   14.614997] WARNING: CPU: 0 PID: 1 at kernel/sched/deadline.c:1519 update_curr_dl_se+0x205/0x270
-> [   14.614997] Modules linked in:
-> [   14.614997] CPU: 0 UID: 0 PID: 1 Comm: swapper/0 <89>E<EC><E8>^Q~A<FF>d<8B>5<80><96>wɅ<C0><B8>`<FC>9<C9>^OE<F8><8B><86><94>^D 6.13.0-rc4-test-00003-g50b6e5b87e20-dirty #811
-> [   14.614997] PSh<E5>^L5<C9><E8><99><FC>^Y<FF><83><C4>^L<EB><C3>.<8D><B4>&
-> [   14.614997] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
-> [   14.614997] EIP: update_curr_dl_se+0x205/0x270
-> [   14.614997] Code: 51 10 89 43 34 0f b7 43 48 89 53 38 66 25 40 01 66 83 f8 40 75 04 80 4b 48 81 89 d8 e8 14 5b ff ff 83 f8 01 0f 84 d4 fe ff ff <0f> 0b e9 cd fe ff ff 8d 74 26 00 ba 20 00 00 00 89 d8 e8 c4 ab ff
-> [   14.614997] EAX: c81eed9c EBX: f6f896e0 ECX: c81eed9c EDX: 00000001
-> [   14.614997] ESI: f6f89100 EDI: fffffffe EBP: c11cdaac ESP: c11cda94
-> [   14.614997] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00010082
-> [   14.614997] CR0: 80050033 CR2: ff9ff000 CR3: 0978c000 CR4: 000006f0
-> [   14.614997] Call Trace:
-> [   14.614997] irq event stamp: 11132292
-> [   14.614997] hardirqs last  enabled at (11132291): [<c82fac0c>] trace_graph_entry+0x23c/0x3d0
-> [   14.614997] hardirqs last disabled at (11132292): [<c8e9f0bc>] sysvec_apic_timer_interrupt+0xc/0x40
-> [   14.614997] softirqs last  enabled at (11059360): [<c81678ac>] return_to_handler+0x0/0x34
-> [   14.614997] softirqs last disabled at (11059355): [<c81678ac>] return_to_handler+0x0/0x34
-> [   14.614997] ---[ end trace 0000000000000000 ]---
-> [    7.652636] ------------[ cut here ]------------
-> [    7.652636] DEBUG_LOCKS_WARN_ON(1)
-> [    7.652636] WARNING: CPU: 0 PID: 1 at kernel/locking/lockdep.c:232 __lock_acquire+0xf42/0x25c0
-> [    7.652636] Modules linked in:
-> [    7.652636] CPU: 0 UID: 0 PID: 1 Comm: swapper/0 <89>E<EC><E8>^Q~A<FF>d<8B>5<80><96>wɅ<C0><B8>`<FC>9<C9>^OE<F8><8B><86><94>^D 6.13.0-rc4-test-00003-g50b6e5b87e20-dirty #811
-> [    7.652636] PSh<E5>^L5<C9><E8><99><FC>^Y<FF><83><C4>^L<EB><C3>.<8D><B4>&
-> [    7.652636] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
-> [    7.652636] EIP: __lock_acquire+0xf42/0x25c0
-> [    7.652636] Code: e8 63 ba 57 00 85 c0 0f 84 19 f9 ff ff 8b 0d a8 59 62 c9 85 c9 0f 85 0b f9 ff ff 68 c4 8c 34 c9 68 0b 23 32 c9 e8 be ce f7 ff <0f> 0b 58 31 c0 5a e9 61 f2 ff ff 8d 76 00 b9 05 00 00 00 64 a1 80
-> [    7.652636] EAX: c820bf72 EBX: 00000000 ECX: c820bf72 EDX: 00000001
-> [    7.652636] ESI: 00000000 EDI: c11a2e38 EBP: c1143e7c ESP: c1143de4
-> [    7.652636] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00010086
-> [    7.652636] CR0: 80050033 CR2: ff9ff000 CR3: 0978c000 CR4: 000006f0
-> [    7.652636] Call Trace:
-> [    7.652636] WARNING: stack recursion on stack type 3
-> [    7.652636] irq event stamp: 11215629
-> [    7.652636] hardirqs last  enabled at (11215628): [<c81917c9>] handle_softirqs+0x99/0x3b0
-> [    7.652636] hardirqs last disabled at (11215629): [<c8eaf5cd>] _raw_spin_lock_irq+0x4d/0x50
-> [    7.652636] softirqs last  enabled at (11059360): [<c81678ac>] return_to_handler+0x0/0x34
-> [    7.652636] softirqs last disabled at (11215627): [<c81678ac>] return_to_handler+0x0/0x34
-> [    7.652636] ---[ end trace 0000000000000000 ]---
-> [    7.652636] ------------[ cut here ]------------
-> [    7.652636] kernel BUG at arch/x86/mm/extable.c:373!
-> [    7.652636] ------------[ cut here ]------------
-> [    7.652636] kernel BUG at arch/x86/mm/extable.c:373!
-> [    7.652636] ------------[ cut here ]------------
-> [    7.652636] kernel BUG at arch/x86/mm/extable.c:373!
-> [    7.652636] ------------[ cut here ]------------
-> [    7.652636] kernel BUG at arch/x86/mm/extable.c:373!
-> [    7.652636] ------------[ cut here ]------------
-> [    7.652636] kernel BUG at arch/x86/mm/extable.c:373!
-> [    7.652636] ------------[ cut here ]------------
-> [    7.652636] kernel BUG at arch/x86/mm/extable.c:373!
-> [    7.652636] ------------[ cut here ]------------
-> [...]
-> 
-> Config attached.
+--------------YbkyFbAmv3kxK4VEKPTtvkBC
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Thanks for reporting!
+T24gMjAyNC8xMi8yNSAyMTozMCwgQW5keSBTaGV2Y2hlbmtvIHdyb3RlOg0KDQo+IERvbid0
+IHlvdSB0aGluayB0aGUgQ2MgbGlzdCBpcyBhIGJpdCBvdmVybG9hZGVkPw0KDQpIaSwNCg0K
+SSBhcG9sb2dpemUgZm9yIGFueSBpbmNvbnZlbmllbmNlIHRoaXMgbWF5IGNhdXNlLg0KDQpJ
+IHVuZGVyc3RhbmQgdGhhdCB1bmRlciBub3JtYWwgY2lyY3Vtc3RhbmNlcywgb25lIHdvdWxk
+IHNpbXBseSBwYXNzIHRoZSANCm1vZGlmaWVkIGNvZGUgcGF0aCBhcyBhbiBhcmd1bWVudCB0
+byB0aGUga2VybmVsJ3MgDQpzY3JpcHRzL2dldF9tYWludGFpbmVyLnBsIHNjcmlwdCB0byBk
+ZXRlcm1pbmUgdGhlIGFwcHJvcHJpYXRlIHJlY2lwaWVudHMuDQoNCkhvd2V2ZXIsIGdpdmVu
+IHRoZSB2YXN0IGFuZCBjb21wbGV4IG5hdHVyZSBvZiB0aGUgTGludXgga2VybmVsIA0KY29t
+bXVuaXR5LCB3aXRoIHRlbnMgb2YgdGhvdXNhbmRzIG9mIGRldmVsb3BlcnMgd29ybGR3aWRl
+LCBhbmQgDQpjb25zaWRlcmluZyB0aGUgdmFyeWluZyAiY3VzdG9tcyIgb2YgZGlmZmVyZW50
+IHN1YnN5c3RlbXMsIGFzIHdlbGwgYXMgDQp0aW1lIHpvbmUgZGlmZmVyZW5jZXMgYW5kIGlu
+ZGl2aWR1YWwgd29yayBoYWJpdHMsIGl0J3Mgbm90IHVuY29tbW9uIGZvciANCnBhdGNoZXMg
+dG8gYmUgc2VudCB0byBtYWlsaW5nIGxpc3RzIGFuZCBzdWJzZXF1ZW50bHkgaWdub3JlZCBv
+ciBsZWZ0IA0KcGVuZGluZy4NCg0KVGhpcyBwYXRjaCwgZm9yIGV4YW1wbGUsIGhhcyBiZWVu
+IHN1Ym1pdHRlZCBtdWx0aXBsZSB0aW1lcyB3aXRob3V0IA0KcmVjZWl2aW5nIGFueSByZXNw
+b25zZSwgdW5mb3J0dW5hdGVseS4NCg0KTXkgaW50ZW50aW9uIGlzIHNpbXBseSB0byBzZWVr
+IHlvdXIgcmV2aWV3LCBhbmQgdGhhdCBvZiBvdGhlciB0ZWNobmljYWwgDQpleHBlcnRzIGxp
+a2UgeW91cnNlbGYsIGJ1dCBJIGNhbm5vdCBiZSBjZXJ0YWluLCBwcmlvciB0byB5b3VyIHJl
+c3BvbnNlLCANCndoaWNoIHNwZWNpZmljIGV4cGVydHMgb24gd2hpY2ggbGlzdHMgd291bGQg
+YmUgd2lsbGluZyB0byBwcm92aWRlIGZlZWRiYWNrLg0KDQpJIHdvdWxkIGFwcHJlY2lhdGUg
+YW55IG90aGVyIHN1Z2dlc3Rpb25zIHlvdSBtYXkgaGF2ZS4NCg0KPj4gVW5peEJlbmNoIFBp
+cGUgYmVuY2htYXJrIHJlc3VsdHMgb24gWmhhb3hpbiBLWC1VNjc4MEEgcHJvY2Vzc29yOg0K
+Pj4NCj4+IFdpdGggdGhlIG9wdGlvbiBkaXNhYmxlZDogU2luZ2xlLWNvcmU6IDg0MS44LCBN
+dWx0aS1jb3JlICg4KTogNDYyMS42DQo+PiBXaXRoIHRoZSBvcHRpb24gZW5hYmxlZDogIFNp
+bmdsZS1jb3JlOiA4NzcuOCwgTXVsdGktY29yZSAoOCk6IDQ4NTQuNw0KPj4NCj4+IFNpbmds
+ZS1jb3JlIHBlcmZvcm1hbmNlIGltcHJvdmVkIGJ5IDQuMSUsIG11bHRpLWNvcmUgcGVyZm9y
+bWFuY2UNCj4+IGltcHJvdmVkIGJ5IDQuOCUuDQo+IC4uLg0KDQpBcyB5b3Uga25vdywgdGhl
+IGtlcm5lbCBpcyBleHRyZW1lbHkgc2Vuc2l0aXZlIHRvIHBlcmZvcm1hbmNlLg0KDQpFdmVu
+IGEgMSUgcGVyZm9ybWFuY2UgaW1wcm92ZW1lbnQgY2FuIGxlYWQgdG8gc2lnbmlmaWNhbnQg
+ZWZmaWNpZW5jeSANCmdhaW5zIGFuZCByZWR1Y2VkIGNhcmJvbiBlbWlzc2lvbnMgaW4gcHJv
+ZHVjdGlvbiBlbnZpcm9ubWVudHMsIGFzIGxvbmcgDQphcyB0aGVyZSBpcyBzdWZmaWNpZW50
+IHRlc3RpbmcgYW5kIHRoZW9yZXRpY2FsIGFuYWx5c2lzIHRvIHByb3ZlIHRoYXQgDQp0aGUg
+aW1wcm92ZW1lbnQgaXMgcmVhbCBhbmQgbm90IGR1ZSB0byBtZWFzdXJlbWVudCBlcnJvciBv
+ciBqaXR0ZXIuDQoNCj4+ICtjb25maWcgUElQRV9TS0lQX1NMRUVQRVINCj4+ICsJYm9vbCAi
+U2tpcCBzbGVlcGluZyBwcm9jZXNzZXMgZHVyaW5nIHBpcGUgcmVhZC93cml0ZSINCj4+ICsJ
+ZGVmYXVsdCBuDQo+ICduJyBpcyB0aGUgZGVmYXVsdCAnZGVmYXVsdCcsIG5vIG5lZWQgdG8g
+aGF2ZSB0aGlzIGxpbmUuDQpPSywgSSdsbCBkcm9wIGl0LiBUaGFua3MuDQo+DQo+PiArCWhl
+bHANCj4+ICsJICBUaGlzIG9wdGlvbiBpbnRyb2R1Y2VzIGEgY2hlY2sgd2hldGhlciB0aGUg
+c2xlZXAgcXVldWUgd2lsbA0KPj4gKwkgIGJlIGF3YWtlbmVkIGR1cmluZyBwaXBlIHJlYWQv
+d3JpdGUuDQo+PiArDQo+PiArCSAgSXQgb2Z0ZW4gbGVhZHMgdG8gYSBwZXJmb3JtYW5jZSBp
+bXByb3ZlbWVudC4gSG93ZXZlciwgaW4NCj4+ICsJICBsb3ctbG9hZCBvciBzaW5nbGUtdGFz
+ayBzY2VuYXJpb3MsIGl0IG1heSBpbnRyb2R1Y2UgbWlub3INCj4+ICsJICBwZXJmb3JtYW5j
+ZSBvdmVyaGVhZC4NCj4+ICsJICBJZiB1bnN1cmUsIHNheSBOLg0KPiBJbGxvZ2ljYWwsIGl0
+J3MgYWxyZWFkeSBOIGFzIHlvdSBzdGF0ZWQgYnkgcHV0dGluZyBhIHJlZHVuZGFudCBsaW5l
+LCBidXQgYWZ0ZXINCj4gcmVtb3ZpbmcgdGhhdCBsaW5lIGl0IHdpbGwgbWFrZSBzZW5zZS4N
+Cj4NCj4gLi4uDQpBcyBub3RlZCwgSSdsbCByZW1vdmUgImRlZmF1bHQgbiIgYXMgaXQgc2Vy
+dmVzIG5vIHB1cnBvc2UuDQo+DQo+PiArc3RhdGljIGlubGluZSBib29sDQo+IEhhdmUgeW91
+IGJ1aWxkIHRoaXMgd2l0aCBDbGFuZyBhbmQgYG1ha2UgVz0xIC4uLmA/DQoNCkhtbS4uLkkn
+dmUgbm90aWNlZCBhIGRpc2NyZXBhbmN5IGluIGtlcm5lbCBjb21waWxhdGlvbiByZXN1bHRz
+IHdpdGggYW5kIA0Kd2l0aG91dCAibWFrZSBXPTEiLg0KDQpXaGVuIEkgdXNlIHg4Nl82NF9k
+ZWZjb25maWcgYW5kIGNsYW5nLTE5LjEuMSAoVWJ1bnR1IDI0LjEwKSBhbmQgcnVuIA0KIm1h
+a2UiLCB0aGVyZSBhcmUgbm8gd2FybmluZ3MuDQoNCkhvd2V2ZXIsIHdoZW4gSSBydW4gIm1h
+a2UgVz0xIiwgdGhlIGtlcm5lbCBnZW5lcmF0ZXMgYSBtYXNzaXZlIG51bWJlciBvZiANCmVy
+cm9ycywgY2F1c2luZyB0aGUgY29tcGlsYXRpb24gdG8gZmFpbCBwcmVtYXR1cmVseS4NCg0K
+ZS5nLg0KDQpJbiBmaWxlIGluY2x1ZGVkIGZyb20gYXJjaC94ODYva2VybmVsL2FzbS1vZmZz
+ZXRzLmM6MTQ6DQpJbiBmaWxlIGluY2x1ZGVkIGZyb20gLi9pbmNsdWRlL2xpbnV4L3N1c3Bl
+bmQuaDo1Og0KSW4gZmlsZSBpbmNsdWRlZCBmcm9tIC4vaW5jbHVkZS9saW51eC9zd2FwLmg6
+OToNCkluIGZpbGUgaW5jbHVkZWQgZnJvbSAuL2luY2x1ZGUvbGludXgvbWVtY29udHJvbC5o
+OjIxOg0KSW4gZmlsZSBpbmNsdWRlZCBmcm9tIC4vaW5jbHVkZS9saW51eC9tbS5oOjIyMjQ6
+DQouL2luY2x1ZGUvbGludXgvdm1zdGF0Lmg6NTA0OjQzOiBlcnJvcjogYXJpdGhtZXRpYyBi
+ZXR3ZWVuIGRpZmZlcmVudCANCmVudW1lcmF0aW9uIHR5cGVzICgnZW51bSB6b25lX3N0YXRf
+aXRlbScgYW5kICdlbnVtIG51bWFfc3RhdF9pdGVtJykgDQpbLVdlcnJvciwtV2VudW0tZW51
+bS1jb252ZXJzaW9uXQ0KIMKgIDUwNCB8wqDCoMKgwqDCoMKgwqDCoCByZXR1cm4gdm1zdGF0
+X3RleHRbTlJfVk1fWk9ORV9TVEFUX0lURU1TICsNCiDCoMKgwqDCoMKgIHzCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfn5+fn5+fn5+
+fn5+fn5+fn5+fn5+IF4NCiDCoCA1MDUgfMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBpdGVtXTsNCiDCoMKgwqDCoMKgIHzCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfn5+fg0K
+Li9pbmNsdWRlL2xpbnV4L3Ztc3RhdC5oOjUxMTo0MzogZXJyb3I6IGFyaXRobWV0aWMgYmV0
+d2VlbiBkaWZmZXJlbnQgDQplbnVtZXJhdGlvbiB0eXBlcyAoJ2VudW0gem9uZV9zdGF0X2l0
+ZW0nIGFuZCAnZW51bSBudW1hX3N0YXRfaXRlbScpIA0KWy1XZXJyb3IsLVdlbnVtLWVudW0t
+Y29udmVyc2lvbl0NCiDCoCA1MTEgfMKgwqDCoMKgwqDCoMKgwqAgcmV0dXJuIHZtc3RhdF90
+ZXh0W05SX1ZNX1pPTkVfU1RBVF9JVEVNUyArDQogwqDCoMKgwqDCoCB8wqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIH5+fn5+fn5+fn5+
+fn5+fn5+fn5+fiBeDQogwqAgNTEyIHzCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgTlJfVk1fTlVNQV9FVkVOVF9JVEVNUyArDQogwqDC
+oMKgwqDCoCB8wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgIH5+fn5+fn5+fn5+fn5+fn5+fn5+fn4NCi4vaW5jbHVkZS9saW51eC92bXN0
+YXQuaDo1MjQ6NDM6IGVycm9yOiBhcml0aG1ldGljIGJldHdlZW4gZGlmZmVyZW50IA0KZW51
+bWVyYXRpb24gdHlwZXMgKCdlbnVtIHpvbmVfc3RhdF9pdGVtJyBhbmQgJ2VudW0gbnVtYV9z
+dGF0X2l0ZW0nKSANClstV2Vycm9yLC1XZW51bS1lbnVtLWNvbnZlcnNpb25dDQogwqAgNTI0
+IHzCoMKgwqDCoMKgwqDCoMKgIHJldHVybiB2bXN0YXRfdGV4dFtOUl9WTV9aT05FX1NUQVRf
+SVRFTVMgKw0KIMKgwqDCoMKgwqAgfMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB+fn5+fn5+fn5+fn5+fn5+fn5+fn4gXg0KIMKgIDUy
+NSB8wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgIE5SX1ZNX05VTUFfRVZFTlRfSVRFTVMgKw0KIMKgwqDCoMKgwqAgfMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB+fn5+fn5+fn5+
+fn5+fn5+fn5+fn5+DQozIGVycm9ycyBnZW5lcmF0ZWQuDQoNCkFuZCBJJ3ZlIG9ic2VydmVk
+IHNpbWlsYXIgYmVoYXZpb3Igd2l0aCBnY2MtMTQuMi4wLg0KDQpXaGlsZSBJJ20ga2VlbiBv
+biBhZGRyZXNzaW5nIGFzIG1hbnkgcG90ZW50aWFsIGNvbXBpbGUgZXJyb3JzIGFuZCANCndh
+cm5pbmdzIGluIHRoZSBrZXJuZWwgYXMgcG9zc2libGUsIGl0IHNlZW1zIGxpa2UgYSBsb25n
+LXRlcm0gZW5kZWF2b3IuDQoNClJlZ2FyZGluZyB0aGlzIHNwZWNpZmljIGNvZGUsIEknZCBh
+cHByZWNpYXRlIHlvdXIgaW5zaWdodHMgb24gaG93IHRvIA0KaW1wcm92ZSBpdC4NCg0KPg0K
+Pj4gK3BpcGVfY2hlY2tfd3FfaGFzX3NsZWVwZXIoc3RydWN0IHdhaXRfcXVldWVfaGVhZCAq
+d3FfaGVhZCkNCj4+ICt7DQo+PiArCWlmIChJU19FTkFCTEVEKENPTkZJR19QSVBFX1NLSVBf
+U0xFRVBFUikpDQo+PiArCQlyZXR1cm4gd3FfaGFzX3NsZWVwZXIod3FfaGVhZCk7DQo+PiAr
+CWVsc2UNCj4gUmVkdW5kYW50Lg0KPg0KPj4gKwkJcmV0dXJuIHRydWU7DQo+IAlpZiAoIWZv
+bykNCj4gCQlyZXR1cm4gdHJ1ZTsNCj4NCj4gCXJldHVybiBiYXIoLi4uKTsNCj4NCj4+ICt9
+DQoNClllcy4gSSdsbCByZXdvcmsgdGhlIGNvZGUgc3RydWN0dXJlIGhlcmUuIFRoYW5rcy4N
+Cg0KVGhhbmtzLA0KLS0gDQpXYW5nWXVsaQ0K
+--------------YbkyFbAmv3kxK4VEKPTtvkBC
+Content-Type: application/pgp-keys; name="OpenPGP_0xC5DA1F3046F40BEE.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xC5DA1F3046F40BEE.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/arch/x86/kernel/ftrace_32.S b/arch/x86/kernel/ftrace_32.S
-index 58d9ed50fe61..8e1a27d2c1eb 100644
---- a/arch/x86/kernel/ftrace_32.S
-+++ b/arch/x86/kernel/ftrace_32.S
-@@ -187,14 +187,15 @@ SYM_CODE_END(ftrace_graph_caller)
- 
- .globl return_to_handler
- return_to_handler:
--	pushl	$0
--	pushl	%edx
--	pushl	%eax
-+	subl	$(PTREGS_SIZE), %esp
-+	movl	$0, PT_EBP(%esp)
-+	movl	%edx, PT_EDX(%esp)
-+	movl	%eax, PT_EAX(%esp)
- 	movl	%esp, %eax
- 	call	ftrace_return_to_handler
- 	movl	%eax, %ecx
--	popl	%eax
--	popl	%edx
--	addl	$4, %esp		# skip ebp
-+	movl	%eax, PT_EAX(%esp)
-+	movl	%edx, PT_EDX(%esp)
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
-Aah, my bad! These should recover registers from stack...
+xjMEZoEsiBYJKwYBBAHaRw8BAQdAyDPzcbPnchbIhweThfNK1tg1imM+5kgDBJSK
+P+nX39DNIVdhbmdZdWxpIDx3YW5neXVsaUB1bmlvbnRlY2guY29tPsKJBBMWCAAx
+FiEEa1GMzYeuKPkgqDuvxdofMEb0C+4FAmaBLIgCGwMECwkIBwUVCAkKCwUWAgMB
+AAAKCRDF2h8wRvQL7g0UAQCH3mrGM0HzOaARhBeA/Q3AIVfhS010a0MZmPTRGVfP
+bwD/SrncJwwPAL4GiLPEC4XssV6FPUAY0rA68eNNI9cJLArOOARmgSyJEgorBgEE
+AZdVAQUBAQdA88W4CTLDD9fKwW9PB5yurCNdWNS7VTL0dvPDofBTjFYDAQgHwngE
+GBYIACAWIQRrUYzNh64o+SCoO6/F2h8wRvQL7gUCZoEsiQIbDAAKCRDF2h8wRvQL
+7sKvAP4mBvm7Zn1OUjFViwkma8IGRGosXAvMUFyOHVcl1RTgFQEAuJkUo9ERi7qS
+/hbUdUgtitI89efbY0TVetgDsyeQiwU=3D
+=3DBlkq
+-----END PGP PUBLIC KEY BLOCK-----
 
-	movl	PT_EAX(%esp), %eax
-	movl	PT_EDX(%esp), %edx
+--------------YbkyFbAmv3kxK4VEKPTtvkBC--
 
+--------------Pyex4ntCgeLsgIrwDEQ1zvm5--
 
-+	addl	$(PTREGS_SIZE), %esp
- 	JMP_NOSPEC ecx
- #endif
+--------------WhExkXHB8tH0jp1dn0AUe2nH
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
 
-Can you try below change?
+-----BEGIN PGP SIGNATURE-----
 
-Thank you!
+wnsEABYIACMWIQRrUYzNh64o+SCoO6/F2h8wRvQL7gUCZ2wn5QUDAAAAAAAKCRDF2h8wRvQL7pcp
+AP9me8ISLBcpHJwkzXCBAEfvjuxMbfD0Z4VJeJZomf9P3AD/YU3UZLFudoSkOuja/nG2RSmFkjU4
+Ce95Z5hedZpTxA8=
+=zG/A
+-----END PGP SIGNATURE-----
 
-
-diff --git a/arch/x86/kernel/ftrace_32.S b/arch/x86/kernel/ftrace_32.S
-index 8e1a27d2c1eb..f4e0c3361234 100644
---- a/arch/x86/kernel/ftrace_32.S
-+++ b/arch/x86/kernel/ftrace_32.S
-@@ -194,8 +194,8 @@ return_to_handler:
- 	movl	%esp, %eax
- 	call	ftrace_return_to_handler
- 	movl	%eax, %ecx
--	movl	%eax, PT_EAX(%esp)
--	movl	%edx, PT_EDX(%esp)
-+	movl	PT_EAX(%esp), %eax
-+	movl	PT_EDX(%esp), %edx
- 	addl	$(PTREGS_SIZE), %esp
- 	JMP_NOSPEC ecx
- #endif
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+--------------WhExkXHB8tH0jp1dn0AUe2nH--
 
