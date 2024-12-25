@@ -1,46 +1,46 @@
-Return-Path: <linux-arch+bounces-9486-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9488-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0843D9FC6B0
-	for <lists+linux-arch@lfdr.de>; Wed, 25 Dec 2024 23:53:11 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 889EC9FC6B5
+	for <lists+linux-arch@lfdr.de>; Wed, 25 Dec 2024 23:53:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3DFEF1882E9D
-	for <lists+linux-arch@lfdr.de>; Wed, 25 Dec 2024 22:53:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EAAF8162CDF
+	for <lists+linux-arch@lfdr.de>; Wed, 25 Dec 2024 22:53:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 174231C3C05;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 806B51C3F36;
 	Wed, 25 Dec 2024 22:52:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="HTLLIxTO"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="fSvgjwCg"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3A581B653E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3AB11B6D17;
 	Wed, 25 Dec 2024 22:52:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735167170; cv=none; b=MxY+PzFlTWelCrSdKPxr2K6VT5iGbg/Mx8LRAeKCw6uSS+lzmwEq6Tlfgzp0oE4QRGNIvB8IgSpEse/JTNVecpez4zycie1PAbSRq/wMK9kFGEXXHMET3FiEe6oAS01XPN69L2uUnFbkKgiKyaT4fSC8rpsX+2niYs2kWUwu4qg=
+	t=1735167170; cv=none; b=a2U/jITI5UBHK3FOdxT1fTTvtxWZZPcSuVz2AHw1vTo8y/KhRGO7zth6AgV7XRPhXb06A0wRwcFvSTTAHfyGsiAvN2+sZi6VHKcLv4uQV/iyvJzPW+XZx6DTzmNEmig3pCIIv81pmu5MVNRGHCGkKHAOrCUf979FZ7zSZrw7uLY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1735167170; c=relaxed/simple;
-	bh=BJ1bkF2bRq7DapBeVwwaT8+V5w9s4oEj9HKu5YbUkNM=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=DAi6XYTMc3eHbVflw1wTEsplprbPuk+7dgLBZkQPW4NQd1E9iQ60BSmDRB+EEFCFZmDFiHDBi8H+K6IoQeu9jf/n4hXH/EJeez1rE8SBNogAFa9UbmOIDllY2d+2b6OXKOJjY38TNQy09vyORT6H4tvLLxDAQHb7VmxViek+d1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=HTLLIxTO; arc=none smtp.client-ip=159.69.126.157
+	bh=y6OlfJobqzwuYVaff/mCAKdWA+e3Q9Vj2fxw7lp4Yv4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=IhiMmJLW5TCzmhbejw+dc52GwiThd2nc8WId/Zwth1iLDqm6htBmh7hhrUHMdqUFdCP20i+QajPK1TMfrfDnnQiEUoDPZKGPoj8KZqyr6uo7GifcH2ruKIyI77/7S+8pnx1x+tgTkgwNBbap5hn9SEp7gjs+nb4pyIdqrLYGCMQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=fSvgjwCg; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1735167158;
-	bh=BJ1bkF2bRq7DapBeVwwaT8+V5w9s4oEj9HKu5YbUkNM=;
-	h=From:Subject:Date:To:Cc:From;
-	b=HTLLIxTOk29n6S4nW8ho6AJBqXH4iCrANrB3B49ttizqq5tsUOQ3zChKbrPDuoJn3
-	 vllUCzMJymFTDiMXrcfKJx3Rqrz3qPAmKGgHURtuMi4dETHzRu1UmLnh+8P6wXazL8
-	 1yI9kAcTzoEV7L6EyEvrPZT0VwUIsIsRVCRUzzrE=
+	bh=y6OlfJobqzwuYVaff/mCAKdWA+e3Q9Vj2fxw7lp4Yv4=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=fSvgjwCgv9dK1dlfEzkuixJReuW1RM+a26bQrzlJdNuNGJ8A1L31oZaPPJRgm6CUA
+	 myuywrtCc8dcb1eFpcvfC7Gq7fGt4wdYY2AZ1Nfib/K54Pf4+MfuEalJoJ+qlABmpR
+	 wKzGtUKoKFQyzxhTUXXrnosQNtk580iMLSHecDc8=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH RFC 0/2] module: Introduce hash-based integrity checking
-Date: Wed, 25 Dec 2024 23:51:58 +0100
-Message-Id: <20241225-module-hashes-v1-0-d710ce7a3fd1@weissschuh.net>
+Date: Wed, 25 Dec 2024 23:51:59 +0100
+Subject: [PATCH RFC 1/2] kbuild: add stamp file for vmlinux BTF data
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -49,10 +49,9 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAI+MbGcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIxNDIyNT3dz8lNKcVN2MxOKM1GJd80RTg0Tz5GSjRGMDJaCegqLUtMwKsHn
- RSkFuzkqxtbUA2vinumQAAAA=
-X-Change-ID: 20241225-module-hashes-7a50a7cc2a30
+Message-Id: <20241225-module-hashes-v1-1-d710ce7a3fd1@weissschuh.net>
+References: <20241225-module-hashes-v1-0-d710ce7a3fd1@weissschuh.net>
+In-Reply-To: <20241225-module-hashes-v1-0-d710ce7a3fd1@weissschuh.net>
 To: Masahiro Yamada <masahiroy@kernel.org>, 
  Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
  Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>, 
@@ -62,69 +61,67 @@ Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-arch@vger.kernel.org, linux-modules@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1735167158; l=2299;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1735167158; l=2248;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=BJ1bkF2bRq7DapBeVwwaT8+V5w9s4oEj9HKu5YbUkNM=;
- b=uaPTOjI5sdkA/RCGSdoTlP3tvvx1abfZ1w4GNiwYxIPrHSzYG/Vam7ZjWI0KgQg7PbXOLoGhs
- 0vXhHWKXHk9BOq3HHgB5RyDeUmhB8mdy1vUurhPUlB03fGG1EpdQKMz
+ bh=y6OlfJobqzwuYVaff/mCAKdWA+e3Q9Vj2fxw7lp4Yv4=;
+ b=JhkV9v88E/yLjov5+gA+XlPvMyTJl/FrCdSpMdMOoSfJNwImODrjI5LzAbqlnmBEwBc3DA80b
+ qmepGfLNw0cAu8F5pjklaBegdOZzcjyq2Ll4BH7dPoUk35tZNquye38
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-The current signature-based module integrity checking has some drawbacks
-in combination with reproducible builds:
-Either the module signing key is generated at build time, which makes
-the build unreproducible, or a static key is used, which precludes
-rebuilds by third parties and makes the whole build and packaging
-process much more complicated.
-Introduce a new mechanism to ensure only well-known modules are loaded
-by embedding a list of hashes of all modules built as part of the full
-kernel build into vmlinux.
-
-To properly test the reproducibility in combination with BTF the patch
-"[PATCH bpf-next] kbuild, bpf: Enable reproducible BTF generation" [0]
-is also needed.
-
-Questions for current patch:
-* Naming
-* Can the number of built-in modules be retrieved while building
-  kernel/module/hashes.o? This would remove the need for the
-  preallocation step in link-vmlinux.sh.
-
-Further improvements:
-* Use a LSM/IMA/Keyring to store and validate hashes
-* Make compatible with lockdown
-* Use MODULE_SIG_HASH for configuration
-* Enable coexistence with MODULE_SIG
-* Set mod->sig_ok()
-* UAPI for discovery?
-
-[0] https://lore.kernel.org/lkml/20241211-pahole-reproducible-v1-1-22feae19bad9@weissschuh.net/
+The upcoming module hashes functionality will build the modules in
+between the generation of the BTF data and the final link of vmlinux.
+Having a dependency from the modules on vmlinux would make this
+impossible as it would mean having a cyclic dependency.
+Break this cyclic dependency by introducing a new target.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
-Thomas Weißschuh (2):
-      kbuild: add stamp file for vmlinux BTF data
-      module: Introduce hash-based integrity checking
+ scripts/Makefile.modfinal | 4 ++--
+ scripts/link-vmlinux.sh   | 6 ++++++
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
- Makefile                          |  8 +++++-
- include/asm-generic/vmlinux.lds.h | 11 +++++++++
- include/linux/module_hashes.h     | 17 +++++++++++++
- kernel/module/Kconfig             | 11 +++++++++
- kernel/module/Makefile            |  1 +
- kernel/module/hashes.c            | 51 +++++++++++++++++++++++++++++++++++++++
- kernel/module/internal.h          |  9 +++++++
- kernel/module/main.c              |  4 +++
- scripts/Makefile.modfinal         |  4 +--
- scripts/Makefile.vmlinux          |  5 ++++
- scripts/link-vmlinux.sh           | 31 +++++++++++++++++++++++-
- scripts/module-hashes.sh          | 26 ++++++++++++++++++++
- 12 files changed, 174 insertions(+), 4 deletions(-)
----
-base-commit: f722972b5df307d8c93c706c62d2e27e963c8f66
-change-id: 20241225-module-hashes-7a50a7cc2a30
+diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
+index 542ba462ed3ec9607e0df10e26613a4c7ac318e8..5d01b553ec9a4565c8e5a6edd05665c409003bc1 100644
+--- a/scripts/Makefile.modfinal
++++ b/scripts/Makefile.modfinal
+@@ -52,8 +52,8 @@ if_changed_except = $(if $(call newer_prereqs_except,$(2))$(cmd-check),      \
+ 	printf '%s\n' 'savedcmd_$@ := $(make-cmd)' > $(dot-target).cmd, @:)
+ 
+ # Re-generate module BTFs if either module's .ko or vmlinux changed
+-%.ko: %.o %.mod.o .module-common.o $(objtree)/scripts/module.lds $(and $(CONFIG_DEBUG_INFO_BTF_MODULES),$(KBUILD_BUILTIN),$(objtree)/vmlinux) FORCE
+-	+$(call if_changed_except,ld_ko_o,$(objtree)/vmlinux)
++%.ko: %.o %.mod.o .module-common.o $(objtree)/scripts/module.lds $(and $(CONFIG_DEBUG_INFO_BTF_MODULES),$(KBUILD_BUILTIN),$(objtree)/.tmp_vmlinux_btf.stamp) FORCE
++	+$(call if_changed_except,ld_ko_o,$(objtree)/.tmp_vmlinux_btf.stamp)
+ ifdef CONFIG_DEBUG_INFO_BTF_MODULES
+ 	+$(if $(newer-prereqs),$(call cmd,btf_ko))
+ endif
+diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+index d853ddb3b28c1238ec9079ebbbe77df26980a0a1..803c8d6f35a7f29fb68b29afa8546f4dde0bd4cb 100755
+--- a/scripts/link-vmlinux.sh
++++ b/scripts/link-vmlinux.sh
+@@ -112,6 +112,7 @@ vmlinux_link()
+ gen_btf()
+ {
+ 	local btf_data=${1}.btf.o
++	local btf_stamp=.tmp_vmlinux_btf.stamp
+ 
+ 	info BTF "${btf_data}"
+ 	LLVM_OBJCOPY="${OBJCOPY}" ${PAHOLE} -J ${PAHOLE_FLAGS} ${1}
+@@ -132,6 +133,11 @@ gen_btf()
+ 	fi
+ 	printf "${et_rel}" | dd of="${btf_data}" conv=notrunc bs=1 seek=16 status=none
+ 
++	info STAMP $btf_stamp
++	if ! cmp --silent $btf_data $btf_stamp; then
++		cp $btf_data $btf_stamp
++	fi
++
+ 	btf_vmlinux_bin_o=${btf_data}
+ }
+ 
 
-Best regards,
 -- 
-Thomas Weißschuh <linux@weissschuh.net>
+2.47.1
 
 
