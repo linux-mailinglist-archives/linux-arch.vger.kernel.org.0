@@ -1,289 +1,224 @@
-Return-Path: <linux-arch+bounces-9482-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9483-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EC4F9FC54E
-	for <lists+linux-arch@lfdr.de>; Wed, 25 Dec 2024 14:30:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EBF89FC555
+	for <lists+linux-arch@lfdr.de>; Wed, 25 Dec 2024 14:33:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C85D9162201
-	for <lists+linux-arch@lfdr.de>; Wed, 25 Dec 2024 13:30:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0177418838FE
+	for <lists+linux-arch@lfdr.de>; Wed, 25 Dec 2024 13:33:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E87411E502;
-	Wed, 25 Dec 2024 13:30:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DF1B1925AE;
+	Wed, 25 Dec 2024 13:33:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Bo1/IqxL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MYsjoaBP"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19651175B1;
-	Wed, 25 Dec 2024 13:30:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 389C485626;
+	Wed, 25 Dec 2024 13:33:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735133445; cv=none; b=Kc9+yoBtIBRhOa3J/Me6r6grGMHuhxgrlG/8Dq1ryv/9cUVZ2cBzr6r9RaQEYI3EN6NlR9ZuY+cgRgzjFCg/Q8GnM0uCJUHIA7Ahrvgjh5WCSfQzDYo2LyzgsndOaFdHp+iEuIWHc7g7aYc5riZn2j9fMFOejhx5aSjiT70hoBM=
+	t=1735133589; cv=none; b=KJvVJkrPzcZtqVwf/A3lJk84eYjemYV537N0GcOHvbq8FAEYAOwONxWHFNAMufyqny32QvNWKbhTsOjV6MyCxnedsaahTuzJvZzTOD+Dn5CJLsZGBPt80sOtrqm5mu3ZfyFMt3sX/DEDi5/PeAzVJr0nqkmxHPXsaupv+TWxhJQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735133445; c=relaxed/simple;
-	bh=kcvBIDyPM+l2ugn6KlnNQ9qBowzEm44IhAjVxgS1hgE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VmiivSQEKdpftfC8EDCV7dU78jP0kW319Pu9KB2eppA3e+2zfV5mcohqsV2mmAksJijm49tTNvEsH/QpqAisbKMa9hXdDsTa8a9fQcCL9+66HODu+K4kPVct6FfUp+gj+q8bP2m4Qu2LTDGlng2trD29lLIPii9W4r/ZU5fGFc0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Bo1/IqxL; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1735133444; x=1766669444;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kcvBIDyPM+l2ugn6KlnNQ9qBowzEm44IhAjVxgS1hgE=;
-  b=Bo1/IqxLSrcFtm6ieo4wvPwcsYnVM8SW+40gS3PhBaMPoAEZ85iGaQMb
-   QP9g5zxLAtC9vSeWj3KhBmCCBM2B/hw1ghDC9WgvHd0Qgp4b5Ja4+K+Lc
-   sWpg3P4Ip80RE5pNlBMAXRaXNqSz2aF27lwz3qyqPg5gL8b850xLWtpHF
-   eEAXTZhz3tobQnvqwX/tNWxAPAT/yT7Cm2gm8aAlZenthpnclfuGoYPVk
-   IG0/QPiTk6al6i/W92eDuINTAquMG688nr4kRPLsQQsU+xnVQQ+NUFjMw
-   gSebWz4yiytTKgFTZiHMNDS8geMWmJsRYQIPHRhjtQWBNi/NzNLTFj1f7
-   w==;
-X-CSE-ConnectionGUID: 0vbRHEcWS1iUxcufDM9Peg==
-X-CSE-MsgGUID: ZOAGTSQ4TDWKLiMtCixm6g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11296"; a="23170396"
-X-IronPort-AV: E=Sophos;i="6.12,263,1728975600"; 
-   d="scan'208";a="23170396"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Dec 2024 05:30:42 -0800
-X-CSE-ConnectionGUID: jkhGF14US/q3Ju6rco8/uw==
-X-CSE-MsgGUID: nOzcGyzTR0qIr2ScwVg7JA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="104706660"
-Received: from smile.fi.intel.com ([10.237.72.154])
-  by orviesa005.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Dec 2024 05:30:19 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1tQRSg-0000000C8M1-0pGi;
-	Wed, 25 Dec 2024 15:30:06 +0200
-Date: Wed, 25 Dec 2024 15:30:05 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: WangYuli <wangyuli@uniontech.com>
-Cc: viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	yushengjin@uniontech.com, zhangdandan@uniontech.com,
-	guanwentao@uniontech.com, zhanjun@uniontech.com,
-	oliver.sang@intel.com, ebiederm@xmission.com,
-	colin.king@canonical.com, josh@joshtriplett.org,
-	penberg@cs.helsinki.fi, manfred@colorfullife.com, mingo@elte.hu,
-	jes@sgi.com, hch@lst.de, aia21@cantab.net, arjan@infradead.org,
-	jgarzik@pobox.com, neukum@fachschaft.cup.uni-muenchen.de,
-	oliver@neukum.name, dada1@cosmosbay.com, axboe@kernel.dk,
-	axboe@suse.de, nickpiggin@yahoo.com.au, dhowells@redhat.com,
-	nathans@sgi.com, rolandd@cisco.com, tytso@mit.edu, bunk@stusta.de,
-	pbadari@us.ibm.com, ak@linux.intel.com, ak@suse.de,
-	davem@davemloft.net, jsipek@cs.sunysb.edu, jens.axboe@oracle.com,
-	ramsdell@mitre.org, hch@infradead.org,
-	torvalds@linux-foundation.org, akpm@linux-foundation.org,
-	randy.dunlap@oracle.com, efault@gmx.de, rdunlap@infradead.org,
-	haveblue@us.ibm.com, drepper@redhat.com, dm.n9107@gmail.com,
-	jblunck@suse.de, davidel@xmailserver.org,
-	mtk.manpages@googlemail.com, linux-arch@vger.kernel.org,
-	vda.linux@googlemail.com, jmorris@namei.org, serue@us.ibm.com,
-	hca@linux.ibm.com, rth@twiddle.net, lethal@linux-sh.org,
-	tony.luck@intel.com, heiko.carstens@de.ibm.com, oleg@redhat.com,
-	andi@firstfloor.org, corbet@lwn.net, crquan@gmail.com,
-	mszeredi@suse.cz, miklos@szeredi.hu, peterz@infradead.org,
-	a.p.zijlstra@chello.nl, earl_chew@agilent.com, npiggin@gmail.com,
-	npiggin@suse.de, julia@diku.dk, jaxboe@fusionio.com,
-	nikai@nikai.net, dchinner@redhat.com, davej@redhat.com,
-	npiggin@kernel.dk, eric.dumazet@gmail.com,
-	tim.c.chen@linux.intel.com, xemul@parallels.com, tj@kernel.org,
-	serge.hallyn@canonical.com, gorcunov@openvz.org,
-	levinsasha928@gmail.com, penberg@kernel.org, amwang@redhat.com,
-	bcrl@kvack.org, muthu.lkml@gmail.com, muthur@gmail.com,
-	mjt@tls.msk.ru, alan@lxorguk.ukuu.org.uk, raven@themaw.net,
-	thomas@m3y3r.de, will.deacon@arm.com, will@kernel.org,
-	josef@redhat.com, anatol.pomozov@gmail.com, koverstreet@google.com,
-	zab@redhat.com, balbi@ti.com, gregkh@linuxfoundation.org,
-	mfasheh@suse.com, jlbec@evilplan.org, rusty@rustcorp.com.au,
-	asamymuthupa@micron.com, smani@micron.com, sbradshaw@micron.com,
-	jmoyer@redhat.com, sim@hostway.ca, ia@cloudflare.com,
-	dmonakhov@openvz.org, ebiggers3@gmail.com, socketpair@gmail.com,
-	penguin-kernel@i-love.sakura.ne.jp, w@1wt.eu,
-	kirill.shutemov@linux.intel.com, mhocko@suse.com,
-	vdavydov.dev@gmail.com, vdavydov@virtuozzo.com, hannes@cmpxchg.org,
-	mhocko@kernel.org, minchan@kernel.org, deepa.kernel@gmail.com,
-	arnd@arndb.de, balbi@kernel.org, swhiteho@redhat.com,
-	konishi.ryusuke@lab.ntt.co.jp, dsterba@suse.com,
-	vegard.nossum@oracle.com, axboe@fb.com, pombredanne@nexb.com,
-	tglx@linutronix.de, joe.lawrence@redhat.com, mpatocka@redhat.com,
-	mcgrof@kernel.org, keescook@chromium.org,
-	linux@dominikbrodowski.net, jannh@google.com, shakeelb@google.com,
-	guro@fb.com, willy@infradead.org, khlebnikov@yandex-team.ru,
-	kirr@nexedi.com, stern@rowland.harvard.edu, elver@google.com,
-	parri.andrea@gmail.com, paulmck@kernel.org, rasibley@redhat.com,
-	jstancek@redhat.com, avagin@gmail.com, cai@redhat.com,
-	josef@toxicpanda.com, hare@suse.de, colyli@suse.de,
-	johannes@sipsolutions.net, sspatil@android.com, alex_y_xu@yahoo.ca,
-	mgorman@techsingularity.net, gor@linux.ibm.com, jhubbard@nvidia.com,
-	crope@iki.fi, yzaikin@google.com, bfields@fieldses.org,
-	jlayton@kernel.org, kernel@tuxforce.de, steve@sk2.org,
-	nixiaoming@huawei.com, 0x7f454c46@gmail.com, kuniyu@amazon.co.jp,
-	alexander.h.duyck@intel.com, kuni1840@gmail.com, soheil@google.com,
-	sridhar.samudrala@intel.com, Vincenzo.Frascino@arm.com,
-	chuck.lever@oracle.com, Kevin.Brodsky@arm.com,
-	Szabolcs.Nagy@arm.com, David.Laight@aculab.com,
-	Mark.Rutland@arm.com, linux-morello@op-lists.linaro.org,
-	Luca.Vizzarro@arm.com, max.kellermann@ionos.com,
-	adobriyan@gmail.com, lukas@schauer.dev, j.granados@samsung.com,
-	djwong@kernel.org, kent.overstreet@linux.dev, linux@weissschuh.net,
-	kstewart@efficios.com
-Subject: Re: [RESEND PATCH] fs/pipe: Introduce a check to skip sleeping
- processes during pipe read/write
-Message-ID: <Z2wI3dmmrhMRT-48@smile.fi.intel.com>
-References: <75B06EE0B67747ED+20241225094202.597305-1-wangyuli@uniontech.com>
+	s=arc-20240116; t=1735133589; c=relaxed/simple;
+	bh=0XOFiVo+zOtxp/fbrz4XN0saf1jD3kvygSecxNvsG2c=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=ZelpCYRljLV4vNOpxkUl3300pqK41PfNbdpnUjiD2HQguQDNUnyL8UAigOnLJrgqSDftgxvIB4QtKNB1MnvwOghlj2VFHDdma8+m9/RW/idUOL1/QONJ850zeRMcQHO8E2hhoYl09Gvu5o0KRwRkHEl7UAYYbCAP23emmn+1I9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MYsjoaBP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4477FC4CECD;
+	Wed, 25 Dec 2024 13:33:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1735133588;
+	bh=0XOFiVo+zOtxp/fbrz4XN0saf1jD3kvygSecxNvsG2c=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=MYsjoaBPT40kl9GpVzu/uiFhq/vO1Z6xMABq9WStO1c8mqSnyrnIQykWTNyGTIcqt
+	 qnAzpbkKekwBnUd0vYOeCfbKnBo133PPL1duOZRrEmbC0jjA12VKj7R14H2Kf+S9a7
+	 Xg/H06ymP/ltH038UxmWAicURkpVmyF+Wl2UscoIyfhNDigBHllYXoiSBOyLUd7P5x
+	 SuFWEbigaxi2SR9gTBlQ3WtgyweK5Qk5RhSOae7C0d3Pg17FS/vk0SURKFJ67WoAWJ
+	 +uptZOXmxCdy6ZGFdB/j7uFK+ofm++HzO466cQq6fipK1FaZDIz7fTrGH0PcNcTIRd
+	 Brf7j6kGyNiwA==
+Date: Wed, 25 Dec 2024 22:33:00 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Florent Revest
+ <revest@chromium.org>, linux-trace-kernel@vger.kernel.org, LKML
+ <linux-kernel@vger.kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,
+ bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, Jiri Olsa
+ <jolsa@kernel.org>, Alan Maguire <alan.maguire@oracle.com>, Mark Rutland
+ <mark.rutland@arm.com>, linux-arch@vger.kernel.org, Heiko Carstens
+ <hca@linux.ibm.com>, Will Deacon <will@kernel.org>, Catalin Marinas
+ <catalin.marinas@arm.com>, Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui
+ <kernel@xen0n.name>, Paul Walmsley <paul.walmsley@sifive.com>, Palmer
+ Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Vasily
+ Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle
+ <svens@linux.ibm.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar
+ <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+ <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin"
+ <hpa@zytor.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH v21 03/20] fgraph: Replace fgraph_ret_regs with
+ ftrace_regs
+Message-Id: <20241225223300.68299ea8a2836c6947fe9d1c@kernel.org>
+In-Reply-To: <20241223163956.44245b4b@gandalf.local.home>
+References: <173379652547.973433.2311391879173461183.stgit@devnote2>
+	<173379656618.973433.13429645373226409113.stgit@devnote2>
+	<20241223163956.44245b4b@gandalf.local.home>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <75B06EE0B67747ED+20241225094202.597305-1-wangyuli@uniontech.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Don't you think the Cc list is a bit overloaded?
+Hi,
 
-On Wed, Dec 25, 2024 at 05:42:02PM +0800, WangYuli wrote:
-> When a user calls the read/write system call and passes a pipe
-> descriptor, the pipe_read/pipe_write functions are invoked:
+On Mon, 23 Dec 2024 16:39:56 -0500
+Steven Rostedt <rostedt@goodmis.org> wrote:
+
+> On Tue, 10 Dec 2024 11:09:26 +0900
+> "Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
 > 
-> 1. pipe_read():
->   1). Checks if the pipe is valid and if there is any data in the
-> pipe buffer.
->   2). Waits for data:
->     *If there is no data in the pipe and the write end is still open,
-> the current process enters a sleep state (wait_event()) until data
-> is written.
->     *If the write end is closed, return 0.
->   3). Reads data:
->     *Wakes up the process and copies data from the pipe's memory
-> buffer to user space.
->     *When the buffer is full, the writing process will go to sleep,
-> waiting for the pipe state to change to be awakened (using the
-> wake_up_interruptible_sync_poll() mechanism). Once data is read
-> from the buffer, the writing process can continue writing, and the
-> reading process can continue reading new data.
->   4). Returns the number of bytes read upon successful read.
+> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > 
+> > Use ftrace_regs instead of fgraph_ret_regs for tracing return value
+> > on function_graph tracer because of simplifying the callback interface.
+> > 
+> > The CONFIG_HAVE_FUNCTION_GRAPH_RETVAL is also replaced by
+> > CONFIG_HAVE_FUNCTION_GRAPH_FREGS.
+> > 
+> > Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > Acked-by: Heiko Carstens <hca@linux.ibm.com>
 > 
-> 2. pipe_write():
->   1). Checks if the pipe is valid and if there is any available
-> space in the pipe buffer.
->   2). Waits for buffer space:
->     *If the pipe buffer is full and the reading process has not
-> read any data, pipe_write() may put the current process to sleep
-> until there is space in the buffer.
->     *If the read end of the pipe is closed (no process is waiting
-> to read), an error code -EPIPE is returned, and a SIGPIPE signal may
-> be sent to the process.
->   3). Writes data:
->     *If there is enough space in the pipe buffer, pipe_write() copies
-> data from the user space buffer to the kernel buffer of the pipe
-> (using copy_from_user()).
->     *If the amount of data the user requests to write is larger than
-> the available space in the buffer, multiple writes may be required,
-> or the process may wait for new space to be freed.
->   4). Wakes up waiting reading processes:
->     *After the data is successfully written, pipe_write() wakes up
-> any processes that may be waiting to read data (using the
-> wake_up_interruptible_sync_poll() mechanism).
->   5). Returns the number of bytes successfully written.
+> My x86-32 test failed on this patch with:
 > 
-> Check if there are any waiting processes in the process wait queue
-> by introducing wq_has_sleeper() when waking up processes for pipe
-> read/write operations.
+> [    8.387985] Testing tracer preemptoff: PASSED
+> [    9.603053] Testing tracer preemptirqsoff: PASSED
+> [   10.820200] Testing tracer wakeup: PASSED
+> [   12.030489] Testing tracer wakeup_rt: PASSED
+> [   13.237925] Testing tracer wakeup_dl: PASSED
+> [   14.440146] Testing tracer function_graph:
+> [   14.611021] ------------[ cut here ]------------
+> [   14.614997] WARNING: CPU: 0 PID: 1 at kernel/sched/deadline.c:1519 update_curr_dl_se+0x205/0x270
+> [   14.614997] Modules linked in:
+> [   14.614997] CPU: 0 UID: 0 PID: 1 Comm: swapper/0 <89>E<EC><E8>^Q~A<FF>d<8B>5<80><96>wɅ<C0><B8>`<FC>9<C9>^OE<F8><8B><86><94>^D 6.13.0-rc4-test-00003-g50b6e5b87e20-dirty #811
+> [   14.614997] PSh<E5>^L5<C9><E8><99><FC>^Y<FF><83><C4>^L<EB><C3>.<8D><B4>&
+> [   14.614997] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+> [   14.614997] EIP: update_curr_dl_se+0x205/0x270
+> [   14.614997] Code: 51 10 89 43 34 0f b7 43 48 89 53 38 66 25 40 01 66 83 f8 40 75 04 80 4b 48 81 89 d8 e8 14 5b ff ff 83 f8 01 0f 84 d4 fe ff ff <0f> 0b e9 cd fe ff ff 8d 74 26 00 ba 20 00 00 00 89 d8 e8 c4 ab ff
+> [   14.614997] EAX: c81eed9c EBX: f6f896e0 ECX: c81eed9c EDX: 00000001
+> [   14.614997] ESI: f6f89100 EDI: fffffffe EBP: c11cdaac ESP: c11cda94
+> [   14.614997] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00010082
+> [   14.614997] CR0: 80050033 CR2: ff9ff000 CR3: 0978c000 CR4: 000006f0
+> [   14.614997] Call Trace:
+> [   14.614997] irq event stamp: 11132292
+> [   14.614997] hardirqs last  enabled at (11132291): [<c82fac0c>] trace_graph_entry+0x23c/0x3d0
+> [   14.614997] hardirqs last disabled at (11132292): [<c8e9f0bc>] sysvec_apic_timer_interrupt+0xc/0x40
+> [   14.614997] softirqs last  enabled at (11059360): [<c81678ac>] return_to_handler+0x0/0x34
+> [   14.614997] softirqs last disabled at (11059355): [<c81678ac>] return_to_handler+0x0/0x34
+> [   14.614997] ---[ end trace 0000000000000000 ]---
+> [    7.652636] ------------[ cut here ]------------
+> [    7.652636] DEBUG_LOCKS_WARN_ON(1)
+> [    7.652636] WARNING: CPU: 0 PID: 1 at kernel/locking/lockdep.c:232 __lock_acquire+0xf42/0x25c0
+> [    7.652636] Modules linked in:
+> [    7.652636] CPU: 0 UID: 0 PID: 1 Comm: swapper/0 <89>E<EC><E8>^Q~A<FF>d<8B>5<80><96>wɅ<C0><B8>`<FC>9<C9>^OE<F8><8B><86><94>^D 6.13.0-rc4-test-00003-g50b6e5b87e20-dirty #811
+> [    7.652636] PSh<E5>^L5<C9><E8><99><FC>^Y<FF><83><C4>^L<EB><C3>.<8D><B4>&
+> [    7.652636] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+> [    7.652636] EIP: __lock_acquire+0xf42/0x25c0
+> [    7.652636] Code: e8 63 ba 57 00 85 c0 0f 84 19 f9 ff ff 8b 0d a8 59 62 c9 85 c9 0f 85 0b f9 ff ff 68 c4 8c 34 c9 68 0b 23 32 c9 e8 be ce f7 ff <0f> 0b 58 31 c0 5a e9 61 f2 ff ff 8d 76 00 b9 05 00 00 00 64 a1 80
+> [    7.652636] EAX: c820bf72 EBX: 00000000 ECX: c820bf72 EDX: 00000001
+> [    7.652636] ESI: 00000000 EDI: c11a2e38 EBP: c1143e7c ESP: c1143de4
+> [    7.652636] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00010086
+> [    7.652636] CR0: 80050033 CR2: ff9ff000 CR3: 0978c000 CR4: 000006f0
+> [    7.652636] Call Trace:
+> [    7.652636] WARNING: stack recursion on stack type 3
+> [    7.652636] irq event stamp: 11215629
+> [    7.652636] hardirqs last  enabled at (11215628): [<c81917c9>] handle_softirqs+0x99/0x3b0
+> [    7.652636] hardirqs last disabled at (11215629): [<c8eaf5cd>] _raw_spin_lock_irq+0x4d/0x50
+> [    7.652636] softirqs last  enabled at (11059360): [<c81678ac>] return_to_handler+0x0/0x34
+> [    7.652636] softirqs last disabled at (11215627): [<c81678ac>] return_to_handler+0x0/0x34
+> [    7.652636] ---[ end trace 0000000000000000 ]---
+> [    7.652636] ------------[ cut here ]------------
+> [    7.652636] kernel BUG at arch/x86/mm/extable.c:373!
+> [    7.652636] ------------[ cut here ]------------
+> [    7.652636] kernel BUG at arch/x86/mm/extable.c:373!
+> [    7.652636] ------------[ cut here ]------------
+> [    7.652636] kernel BUG at arch/x86/mm/extable.c:373!
+> [    7.652636] ------------[ cut here ]------------
+> [    7.652636] kernel BUG at arch/x86/mm/extable.c:373!
+> [    7.652636] ------------[ cut here ]------------
+> [    7.652636] kernel BUG at arch/x86/mm/extable.c:373!
+> [    7.652636] ------------[ cut here ]------------
+> [    7.652636] kernel BUG at arch/x86/mm/extable.c:373!
+> [    7.652636] ------------[ cut here ]------------
+> [...]
 > 
-> If no processes are waiting, there's no need to execute
-> wake_up_interruptible_sync_poll(), thus avoiding unnecessary wake-ups.
-> 
-> Unnecessary wake-ups can lead to context switches, where a process
-> is woken up to handle I/O events even when there is no immediate
-> need.
-> 
-> Only wake up processes when there are actually waiting processes to
-> reduce context switches and system overhead by checking
-> with wq_has_sleeper().
-> 
-> Additionally, by reducing unnecessary synchronization and wake-up
-> operations, wq_has_sleeper() can decrease system resource waste and
-> lock contention, improving overall system performance.
-> 
-> For pipe read/write operations, this eliminates ineffective scheduling
-> and enhances concurrency.
-> 
-> It's important to note that enabling this option means invoking
-> wq_has_sleeper() to check for sleeping processes in the wait queue
-> for every read or write operation.
-> 
-> While this is a lightweight operation, it still incurs some overhead.
-> 
-> In low-load or single-task scenarios, this overhead may not yield
-> significant benefits and could even introduce minor performance
-> degradation.
-> 
-> UnixBench Pipe benchmark results on Zhaoxin KX-U6780A processor:
-> 
-> With the option disabled: Single-core: 841.8, Multi-core (8): 4621.6
-> With the option enabled:  Single-core: 877.8, Multi-core (8): 4854.7
-> 
-> Single-core performance improved by 4.1%, multi-core performance
-> improved by 4.8%.
+> Config attached.
 
-...
+Thanks for reporting!
 
-> +config PIPE_SKIP_SLEEPER
-> +	bool "Skip sleeping processes during pipe read/write"
-> +	default n
+diff --git a/arch/x86/kernel/ftrace_32.S b/arch/x86/kernel/ftrace_32.S
+index 58d9ed50fe61..8e1a27d2c1eb 100644
+--- a/arch/x86/kernel/ftrace_32.S
++++ b/arch/x86/kernel/ftrace_32.S
+@@ -187,14 +187,15 @@ SYM_CODE_END(ftrace_graph_caller)
+ 
+ .globl return_to_handler
+ return_to_handler:
+-	pushl	$0
+-	pushl	%edx
+-	pushl	%eax
++	subl	$(PTREGS_SIZE), %esp
++	movl	$0, PT_EBP(%esp)
++	movl	%edx, PT_EDX(%esp)
++	movl	%eax, PT_EAX(%esp)
+ 	movl	%esp, %eax
+ 	call	ftrace_return_to_handler
+ 	movl	%eax, %ecx
+-	popl	%eax
+-	popl	%edx
+-	addl	$4, %esp		# skip ebp
++	movl	%eax, PT_EAX(%esp)
++	movl	%edx, PT_EDX(%esp)
 
-'n' is the default 'default', no need to have this line.
+Aah, my bad! These should recover registers from stack...
 
-> +	help
-> +	  This option introduces a check whether the sleep queue will
-> +	  be awakened during pipe read/write.
-> +
-> +	  It often leads to a performance improvement. However, in
-> +	  low-load or single-task scenarios, it may introduce minor
-> +	  performance overhead.
+	movl	PT_EAX(%esp), %eax
+	movl	PT_EDX(%esp), %edx
 
-> +	  If unsure, say N.
 
-Illogical, it's already N as you stated by putting a redundant line, but after
-removing that line it will make sense.
++	addl	$(PTREGS_SIZE), %esp
+ 	JMP_NOSPEC ecx
+ #endif
 
-...
+Can you try below change?
 
-> +static inline bool
+Thank you!
 
-Have you build this with Clang and `make W=1 ...`?
 
-> +pipe_check_wq_has_sleeper(struct wait_queue_head *wq_head)
-> +{
-> +	if (IS_ENABLED(CONFIG_PIPE_SKIP_SLEEPER))
-> +		return wq_has_sleeper(wq_head);
-> +	else
+diff --git a/arch/x86/kernel/ftrace_32.S b/arch/x86/kernel/ftrace_32.S
+index 8e1a27d2c1eb..f4e0c3361234 100644
+--- a/arch/x86/kernel/ftrace_32.S
++++ b/arch/x86/kernel/ftrace_32.S
+@@ -194,8 +194,8 @@ return_to_handler:
+ 	movl	%esp, %eax
+ 	call	ftrace_return_to_handler
+ 	movl	%eax, %ecx
+-	movl	%eax, PT_EAX(%esp)
+-	movl	%edx, PT_EDX(%esp)
++	movl	PT_EAX(%esp), %eax
++	movl	PT_EDX(%esp), %edx
+ 	addl	$(PTREGS_SIZE), %esp
+ 	JMP_NOSPEC ecx
+ #endif
 
-Redundant.
-
-> +		return true;
-
-	if (!foo)
-		return true;
-
-	return bar(...);
-
-> +}
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
