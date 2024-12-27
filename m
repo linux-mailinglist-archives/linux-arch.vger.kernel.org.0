@@ -1,52 +1,81 @@
-Return-Path: <linux-arch+bounces-9522-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9523-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 199479FD6FC
-	for <lists+linux-arch@lfdr.de>; Fri, 27 Dec 2024 19:33:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A8399FD701
+	for <lists+linux-arch@lfdr.de>; Fri, 27 Dec 2024 19:39:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BC1ED161F3E
-	for <lists+linux-arch@lfdr.de>; Fri, 27 Dec 2024 18:32:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B23A018840D0
+	for <lists+linux-arch@lfdr.de>; Fri, 27 Dec 2024 18:39:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E1D31F8662;
-	Fri, 27 Dec 2024 18:32:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 721D745005;
+	Fri, 27 Dec 2024 18:39:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="R7Vq1aTy"
+	dkim=pass (2048-bit key) header.d=colorfullife-com.20230601.gappssmtp.com header.i=@colorfullife-com.20230601.gappssmtp.com header.b="Tf6MACRt"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BB1F1F8AD8;
-	Fri, 27 Dec 2024 18:32:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AFF61F892C
+	for <linux-arch@vger.kernel.org>; Fri, 27 Dec 2024 18:39:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735324378; cv=none; b=pLjrfecbkF3TjkP42LfSk5nkd0o86mrxt1vmkaytrhpUh71BFfUxqo19UWde2JXBb4OrvEmadmd5xku1cTUTJZY8aITlbNa7aJsZPnafC6vpY2BXIo9mplgGrw9ORxBE9rTmPzjwBLMWfGmN89K2DMjd1f7SUkEZPwKa04LOv5I=
+	t=1735324758; cv=none; b=EDac5GTYfMFI0cql/gvah58z1OPhkXqdlQdfm3nUQa3aNv41UMhhPAnCkApZusQ7b73U8P2c39GJE7q4ogFs9eo2fbwLzVvIyLLy26nNMIn9Y0g/pDr38jWDnOrzzx7Ty3BY6xzJPJwEIB9t27X04PzKWLj2LqvPwwfiLoWfaTI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735324378; c=relaxed/simple;
-	bh=NSZIUSiglpCKRqhfQhFi3iBEqtu2z94/4sZiolz/UXc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ow0IgibJEC6U+Ctk+D4enQjklCIf6KxMSsCGgB41kfn7gCjJfm3EuH356fKu27SS0ufIk+uANu2B7yE4dS9eTUWG7eIitRDCbwSddEt9p//bBa+NFtPeM/HI9KVrciZBzwkPOmC6rg9C/QSoncby2hUrDy86rTxYfNuIOC1eSag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=R7Vq1aTy; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description;
-	bh=6LR+awtt9zeZB6QJo8zcf5x6gxrGRTrnc0cmu8uZ0+U=; b=R7Vq1aTy+ewUoHvs2KEL4J36J1
-	7bL/3PUwe6hE11McHHiU2sj3TE8HgVW7DJS5mWCFGEw4wPLLxYse1QL0FHNCpUgEfii96ESEv6mZz
-	zHuQELy4qLO5U8BklqEc7YXVCyELujpLfCG4nGcc3oYpy8zFV0J/7dlqV/iYQJHU6Pj2W76a9X2pZ
-	SHYHFKh0jYRS6VW72kHy3fRMAnim81c2PA2RogJpbPgxvJlSF/ODsQuAGD2sf2X/3NXMPv52OrHFa
-	rq+dZsMHoxKkdPW4wtIsx9myoVmCkLibGyKJMhtSxEF+zWoS4VNa90IUkvmfQQ/vMGx1a5tU6oYc0
-	clwReaPA==;
-Received: from [50.53.2.24] (helo=[192.168.254.17])
-	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tRF7z-00000002Pfu-0PsW;
-	Fri, 27 Dec 2024 18:32:20 +0000
-Message-ID: <478f669f-5441-4bc5-93ad-ef6e5a4b1b9a@infradead.org>
-Date: Fri, 27 Dec 2024 10:31:57 -0800
+	s=arc-20240116; t=1735324758; c=relaxed/simple;
+	bh=AAOOqgKUifCh8wKBJnpxycIwdVuSmvZhiWOzsN4i72I=;
+	h=Content-Type:Message-ID:Date:MIME-Version:From:Subject:To:Cc:
+	 References:In-Reply-To; b=EurAiss8NzjAMKjvZsMTt1cmlx0jar8Tcbe6pP/s050KmVh4/mnEL3jl0GHbsAl6JmYNxFls7p3JLPHq6GXrq1MNFhYwU+zJ3fx6RVP3HyBzfAsMsJy73AAYRadUUCCcwzqYk9H8PDaDPG2L1vL0+1b59XRdY6SMuhzngdfIw58=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=colorfullife.com; spf=pass smtp.mailfrom=colorfullife.com; dkim=pass (2048-bit key) header.d=colorfullife-com.20230601.gappssmtp.com header.i=@colorfullife-com.20230601.gappssmtp.com header.b=Tf6MACRt; arc=none smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=colorfullife.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=colorfullife.com
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5d437235769so6601621a12.2
+        for <linux-arch@vger.kernel.org>; Fri, 27 Dec 2024 10:39:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=colorfullife-com.20230601.gappssmtp.com; s=20230601; t=1735324754; x=1735929554; darn=vger.kernel.org;
+        h=in-reply-to:content-language:references:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pGKKrHnmj7bXfY6CNkPl3lP9RlKbMnPdw0Vb1t1L4Ao=;
+        b=Tf6MACRtbYTuhP1foJMd+8YVIwN2bsRn03XheJ6sV3/0Bn90IS1cYSSGBrCvCFeqiC
+         oytTZKu7qWoGjrRNBupFgIffIOMQSdXdZ67/SHI22RdRBMOYQkclVG7vce/jFGP3C7MK
+         j3tzcKMRY3hiP67KukaUMO/iLaF5eetxUEsM/1zapkqalO3AyWpETqRJYyZKW4w+zo9m
+         spP4dsHX1Rsp73wUMhqAjqMuNZ1HOe0RuGp869kZPpy9aObQtvooQd2sKJffW8z6GOgU
+         xJuIM9n5bC+iZZ71t8ZQzd6elv0LUmtEMq9sG90db/AXkzu3JXakx+5CaTs3TRGXBg1Y
+         yNlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1735324754; x=1735929554;
+        h=in-reply-to:content-language:references:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=pGKKrHnmj7bXfY6CNkPl3lP9RlKbMnPdw0Vb1t1L4Ao=;
+        b=xI0n+wLOTmIwywSjucuqt203tKi3SjzZ3vLDlx/v6ijB+CDNrPncigU5hN7OuVS/04
+         Vx1sxdie+5sVUdDYhoZReYiYLm2xiJag+5oXBbuXOTmRxqXwZwLxXXOs8NGhgUmN+ufI
+         Kt9Wo79zghYPoYUcZPDfmGhz3NSi6N/woCBTnomDRHKImRLf1AbksAk1hvE0WZVTiGnJ
+         tcpTFr1qOjjFPKFUTrW8UhgHAIPc8OB5hhtqHbL1v7D0CeJRPqWUkTPrFjMYRmFbb5rx
+         iOtvqypH7rt0x7+fZNK/q7UBRFB673hVrgG3EIRzNc8s5PRA09AcuV0Qg9rCDNWpuU+p
+         hhJg==
+X-Forwarded-Encrypted: i=1; AJvYcCXBAn1448bt4p+o3OA/RJF8mbjZBLh2ZPW/5bPqkgPQjAkCoaqNdJEpn5T2u5ORuzb26w6fWA/DYu2J@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywiw1SDCUYbXrm//VWJVjV0tkZx96sKePF2U9DbTrQzaSK+NQOS
+	iYq+b4ud6aq6LLifn6oHugjwmUnf87vlxThwZGYi+TFXxExrBlMYPyNnhuUZ+Q==
+X-Gm-Gg: ASbGncsqnR/wlZdV1d3Uej3bPAa4a3cb8/Wgg3AqRWeycGDWl+lw2RTpbNUS0KTH1tt
+	6ylZHNlE0jPQhJ/PZAHdrJamgp6QUke3z5+OiXFBk5dyzrR/A/Wp4qaM8xwcOvwVkkSVnwbV5PV
+	cEpjlYqVfh2Uq/OHKWOHcSrWcRA3crGRdBkBpwKvNjcsmGsl3HZ/eTjkeJl3g9fKxFW31SdITJj
+	Aw02mcJV09thOYEpc/f8/FTxiGN5wIDHRq7sCLY+TiJkLLwpWZaeVJME7k9i/Ihz7PTqmVUIPXz
+	teQ0rtpoXdRisTYhOj+XnvuTRwBBvF+Xx69OxEdG0MKWqMxnjJMmjpsd2EP+EZYnAjKSMKc42Gp
+	pxqPXjHwvpdHKVHwmLtQ=
+X-Google-Smtp-Source: AGHT+IGyX30uylQ7Lp173xYrAkBVWCh1ayiu28QyGEoUIErdtNdG0cTwfWOeI0uTvF3QasRnPY4l+w==
+X-Received: by 2002:a05:6402:4405:b0:5d8:16ea:cfb4 with SMTP id 4fb4d7f45d1cf-5d81dd7d02cmr26130197a12.8.1735324752643;
+        Fri, 27 Dec 2024 10:39:12 -0800 (PST)
+Received: from ?IPV6:2003:d9:9746:3700:7102:4533:6be1:ffef? (p200300d997463700710245336be1ffef.dip0.t-ipconnect.de. [2003:d9:9746:3700:7102:4533:6be1:ffef])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5d80701ca31sm11056568a12.88.2024.12.27.10.39.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Dec 2024 10:39:10 -0800 (PST)
+Content-Type: multipart/mixed; boundary="------------QFF0zz3sc1ADSPJlE0hpJV6N"
+Message-ID: <1df49d97-df0e-4471-9e40-a850b758d981@colorfullife.com>
+Date: Fri, 27 Dec 2024 19:39:06 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -54,55 +83,204 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] sh: exports for delay.h
-To: Geert Uytterhoeven <geert@linux-m68k.org>,
- Al Viro <viro@zeniv.linux.org.uk>
-Cc: linux-sh@vger.kernel.org, Yoshinori Sato <ysato@users.sourceforge.jp>,
- linux-arch@vger.kernel.org
-References: <20241222222259.GF1977892@ZenIV>
- <CAMuHMdVpTtcT9LVGNvFLm4cvrNF=fe1dVsi2zo73Yee3oYrJYQ@mail.gmail.com>
- <20241227162222.GX1977892@ZenIV>
- <CAMuHMdULCsM_ab-Wx8emtiW9_9zFmQ4KtGeNf0-QVWjjxX8SRA@mail.gmail.com>
+From: Manfred Spraul <manfred@colorfullife.com>
+Subject: Re: [RESEND PATCH] fs/pipe: Introduce a check to skip sleeping
+ processes during pipe read/write
+To: Oleg Nesterov <oleg@redhat.com>,
+ Linus Torvalds <torvalds@linux-foundation.org>
+Cc: viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz,
+ linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+ oliver.sang@intel.com, ebiederm@xmission.com, colin.king@canonical.com,
+ josh@joshtriplett.org, penberg@cs.helsinki.fi, mingo@elte.hu, jes@sgi.com,
+ hch@lst.de, aia21@cantab.net, arjan@infradead.org, jgarzik@pobox.com,
+ neukum@fachschaft.cup.uni-muenchen.de, oliver@neukum.name,
+ dada1@cosmosbay.com, axboe@kernel.dk, axboe@suse.de,
+ nickpiggin@yahoo.com.au, dhowells@redhat.com, nathans@sgi.com,
+ rolandd@cisco.com, tytso@mit.edu, bunk@stusta.de, pbadari@us.ibm.com,
+ ak@linux.intel.com, ak@suse.de, davem@davemloft.net, jsipek@cs.sunysb.edu,
+ jens.axboe@oracle.com, ramsdell@mitre.org, hch@infradead.org,
+ akpm@linux-foundation.org, randy.dunlap@oracle.com, efault@gmx.de,
+ rdunlap@infradead.org, haveblue@us.ibm.com, drepper@redhat.com,
+ dm.n9107@gmail.com, jblunck@suse.de, davidel@xmailserver.org,
+ mtk.manpages@googlemail.com, linux-arch@vger.kernel.org,
+ vda.linux@googlemail.com, jmorris@namei.org, serue@us.ibm.com,
+ hca@linux.ibm.com, rth@twiddle.net, lethal@linux-sh.org,
+ tony.luck@intel.com, heiko.carstens@de.ibm.com, andi@firstfloor.org,
+ corbet@lwn.net, crquan@gmail.com, mszeredi@suse.cz, miklos@szeredi.hu,
+ peterz@infradead.org, a.p.zijlstra@chello.nl, earl_chew@agilent.com,
+ npiggin@gmail.com, npiggin@suse.de, julia@diku.dk, jaxboe@fusionio.com,
+ nikai@nikai.net, dchinner@redhat.com, davej@redhat.com, npiggin@kernel.dk,
+ eric.dumazet@gmail.com, tim.c.chen@linux.intel.com, xemul@parallels.com,
+ tj@kernel.org, serge.hallyn@canonical.com, gorcunov@openvz.org,
+ bcrl@kvack.org, alan@lxorguk.ukuu.org.uk, will.deacon@arm.com,
+ will@kernel.org, zab@redhat.com, balbi@ti.com, gregkh@linuxfoundation.org,
+ rusty@rustcorp.com.au, socketpair@gmail.com,
+ penguin-kernel@i-love.sakura.ne.jp, mhocko@kernel.org, axboe@fb.com,
+ tglx@linutronix.de, mcgrof@kernel.org, linux@dominikbrodowski.net,
+ willy@infradead.org, paulmck@kernel.org, kernel@tuxforce.de,
+ linux-morello@op-lists.linaro.org
+References: <75B06EE0B67747ED+20241225094202.597305-1-wangyuli@uniontech.com>
+ <CAHk-=wj5A-fO+GnfwqGpXhFbfpS4+_8xU+dnXkSx+0AfwBYrxA@mail.gmail.com>
+ <20241226201158.GB11118@redhat.com>
 Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <CAMuHMdULCsM_ab-Wx8emtiW9_9zFmQ4KtGeNf0-QVWjjxX8SRA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20241226201158.GB11118@redhat.com>
+
+This is a multi-part message in MIME format.
+--------------QFF0zz3sc1ADSPJlE0hpJV6N
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+Hi,
+(I had to remove many cc, my mail server rejected to send)
 
-
-On 12/27/24 10:20 AM, Geert Uytterhoeven wrote:
-> Hi Al,
-> 
-> On Fri, Dec 27, 2024 at 5:22 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
->> On Fri, Dec 27, 2024 at 04:58:58PM +0100, Geert Uytterhoeven wrote:
->>> Please do not export __delay, as it is an internal implementation detail.
->>> Drivers should not call __delay() directly, as it has non-standardized
->>> semantics, or may not even exist.
+On 12/26/24 9:11 PM, Oleg Nesterov wrote:
+> I mostly agree, see my reply to this patch, but...
+>
+> On 12/26, Linus Torvalds wrote:
+>> If the optimization is correct, there is no point to having a config option.
 >>
->> As the matter of fact, it *does* exist and is either exported or a static
->> inline with everything used by it exported - on every architecture except sh.
-> 
-> OK, it does exist, because init/calibrate.c needs it. But that should
-> be the sole user outside architecture-specific code.
-> 
-> Unlike some other architectures, SH does not emit calls to __delay()
-> from various (static inline) *delay() functions.  Hence there is no
-> need to export it to modules. Heck, the only reason it cannot be made
-> static is because init/calibrate.c needs it.
-> 
-> Unfortunately there are still a few drivers that call __delay()
-> directly (usually with hardcoded constants, how portable, and
-> cpufreq-unfriendly), which causes people to try once in a while to
-> "fix the build" by re-adding the export on SH :-(
+>> If the optimization is incorrect, there is no point to having the code.
+>>
+>> Either way, there's no way we'd ever have a config option for this.
+> Agreed,
+>
+>>> +       if (was_full && pipe_check_wq_has_sleeper(&pipe->wr_wait))
+>>>                  wake_up_interruptible_sync_poll(&pipe->wr_wait, EPOLLOUT | EPOLLWRNORM);
+>> End result: you need to explain why the race cannot exist.
+> Agreed,
+>
+>> And I think your patch is simply buggy
+> Agreed again, but probably my reasoning was wrong,
+>
+>> But now waiters use "wait_event_interruptible_exclusive()" explicitly
+>> outside the pipe mutex, so the waiters and wakers aren't actually
+>> serialized.
+> This is what I don't understand... Could you spell ?
+> I _think_ that
+>
+> 	wait_event_whatever(WQ, CONDITION);
+> vs
+>
+> 	CONDITION = 1;
+> 	if (wq_has_sleeper(WQ))
+> 		wake_up_xxx(WQ, ...);
+> 	
+> is fine.
 
-Yeah, I did that in 2021 because of:
+This pattern is documented in wait.h:
 
-ERROR: modpost: "__delay" [drivers/net/mdio/mdio-cavium.ko] undefined!
+https://elixir.bootlin.com/linux/v6.12.6/source/include/linux/wait.h#L96
 
-mdio-cavium still uses __delay() so I guess it still breaks an SH build.
+Thus if there an issue, then the documentation should be updated.
 
--- 
-~Randy
+> Both wq_has_sleeper() and wait_event_whatever()->prepare_to_wait_event()
+> have the necessary barriers to serialize the waiters and wakers.
+>
+> Damn I am sure I missed something ;)
 
+Actually:
+
+Does this work universally? I.e. can we add the optimization into 
+__wake_up()?
+
+
+But I do not understand this comment (from 2.6.0)
+
+https://git.kernel.org/pub/scm/linux/kernel/git/tglx/history.git/commit/kernel/fork.c?h=v2.6.0&id=e220fdf7a39b54a758f4102bdd9d0d5706aa32a7
+
+> /* * Note: we use "set_current_state()" _after_ the wait-queue add, * 
+> because we need a memory barrier there on SMP, so that any * 
+> wake-function that tests for the wait-queue being active * will be 
+> guaranteed to see waitqueue addition _or_ subsequent * tests in this 
+> thread will see the wakeup having taken place. * * The spin_unlock() 
+> itself is semi-permeable and only protects * one way (it only protects 
+> stuff inside the critical region and * stops them from bleeding out - 
+> it would still allow subsequent * loads to move into the the critical 
+> region). */ voidprepare_to_wait 
+> <https://elixir.bootlin.com/linux/v2.6.0/C/ident/prepare_to_wait>(wait_queue_head_t 
+> <https://elixir.bootlin.com/linux/v2.6.0/C/ident/wait_queue_head_t>*q,wait_queue_t 
+> <https://elixir.bootlin.com/linux/v2.6.0/C/ident/wait_queue_t>*wait 
+> <https://elixir.bootlin.com/linux/v2.6.0/C/ident/wait>,intstate) { 
+> unsignedlongflags; wait 
+> <https://elixir.bootlin.com/linux/v2.6.0/C/ident/wait>->flags&=~WQ_FLAG_EXCLUSIVE 
+> <https://elixir.bootlin.com/linux/v2.6.0/C/ident/WQ_FLAG_EXCLUSIVE>; 
+> spin_lock_irqsave 
+> <https://elixir.bootlin.com/linux/v2.6.0/C/ident/spin_lock_irqsave>(&q->lock,flags); 
+> if(list_empty 
+> <https://elixir.bootlin.com/linux/v2.6.0/C/ident/list_empty>(&wait 
+> <https://elixir.bootlin.com/linux/v2.6.0/C/ident/wait>->task_list 
+> <https://elixir.bootlin.com/linux/v2.6.0/C/ident/task_list>)) 
+> __add_wait_queue 
+> <https://elixir.bootlin.com/linux/v2.6.0/C/ident/__add_wait_queue>(q,wait 
+> <https://elixir.bootlin.com/linux/v2.6.0/C/ident/wait>); 
+> set_current_state 
+> <https://elixir.bootlin.com/linux/v2.6.0/C/ident/set_current_state>(state); 
+> spin_unlock_irqrestore 
+> <https://elixir.bootlin.com/linux/v2.6.0/C/ident/spin_unlock_irqrestore>(&q->lock,flags); 
+> }
+set_current_state() now uses smp_store_mb(), which is a memory barrier 
+_after_ the store. Thus I do not see what enforces that the store 
+happens before the store for the __add_wait_queue().
+
+--
+
+     Manfred
+
+--------------QFF0zz3sc1ADSPJlE0hpJV6N
+Content-Type: text/x-patch; charset=UTF-8;
+ name="0001-__wake_up_common_lock-Optimize-for-empty-wake-queues.patch"
+Content-Disposition: attachment;
+ filename*0="0001-__wake_up_common_lock-Optimize-for-empty-wake-queues.pa";
+ filename*1="tch"
+Content-Transfer-Encoding: base64
+
+RnJvbSA3Y2I4ZjA2YWIwMjJlN2ZjMzZiYWNiZTY1ZjY1NDgyMjE0N2VjMWFhIE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBNYW5mcmVkIFNwcmF1bCA8bWFuZnJlZEBjb2xvcmZ1
+bGxpZmUuY29tPgpEYXRlOiBGcmksIDI3IERlYyAyMDI0IDE4OjIxOjQxICswMTAwClN1Ympl
+Y3Q6IFtQQVRDSF0gX193YWtlX3VwX2NvbW1vbl9sb2NrOiBPcHRpbWl6ZSBmb3IgZW1wdHkg
+d2FrZSBxdWV1ZXMKCndha2VfdXAoKSBtdXN0IHdha2UgdXAgZXZlcnkgdGFzayB0aGF0IGlz
+IGluIHRoZSB3YWl0IHF1ZXVlLgpCdXQ6IElmIHRoZXJlIGlzIGNvbmN1cnJlbmN5IGJldHdl
+ZW4gd2FrZV91cCgpIGFuZCBhZGRfd2FpdF9xdWV1ZSgpLAp0aGVuIChhcyBsb25nIGFzIHdl
+IGFyZSBub3QgdmlvbGF0aW5nIHRoZSBtZW1vcnkgb3JkZXJpbmcgcnVsZXMpIHdlCmNhbiBq
+dXN0IGNsYWltIHRoYXQgd2FrZV91cCgpIGhhcHBlbmVkICJmaXJzdCIgYW5kIGFkZF93YWl0
+X3F1ZXVlKCkKaGFwcGVuZWQgYWZ0ZXJ3YXJkcy4KRnJvbSBtZW1vcnkgb3JkZXJpbmcgcGVy
+c3BlY3RpdmU6Ci0gSWYgdGhlIHdhaXRfcXVldWUoKSBpcyBlbXB0eSwgdGhlbiB3YWtlX3Vw
+KCkganVzdCBkb2VzCiAgc3Bpbl9sb2NrKCk7CiAgbGlzdF9lbXB0eSgpCiAgc3Bpbl91bmxv
+Y2soKTsKLSBhZGRfd2FpdF9xdWV1ZSgpL3ByZXBhcmVfdG9fd2FpdCgpIGRvIGFsbCBraW5k
+IG9mIG9wZXJhdGlvbnMsCiAgYnV0IHRoZXkgbWF5IGJlY29tZSB2aXNpYmxlIG9ubHkgd2hl
+biB0aGUgc3Bpbl91bmxvY2tfaXJxcmVzdG9yZSgpCiAgaXMgZG9uZS4KVGh1cywgaW5zdGVh
+ZCBvZiBwYWlyaW5nIHRoZSBtZW1vcnkgYmFycmllciB0byB0aGUgc3BpbmxvY2ssIGFuZAp0
+aHVzIHdyaXRpbmcgdG8gYSBwb3RlbnRpYWxseSBzaGFyZWQgY2FjaGVsaW5lLCB3ZSBsb2Fk
+LWFjcXVpcmUKdGhlIG5leHQgcG9pbnRlciBmcm9tIHRoZSBsaXN0LgoKUmlza3MgYW5kIHNp
+ZGUgZWZmZWN0czoKLSBUaGUgZ3VhcmFudGVlZCBtZW1vcnkgYmFycmllciBvZiB3YWtlX3Vw
+KCkgaXMgcmVkdWNlZCB0byBsb2FkX2FjcXVpcmUuCiAgUHJldmlvdXNseSwgdGhlcmUgd2Fz
+IGFsd2F5cyBhIHNwaW5fbG9jaygpL3NwaW5fdW5sb2NrKCkgcGFpci4KLSBwcmVwYXJlX3Rv
+X3dhaXQoKSBhY3R1YWxseSBkb2VzIHR3byBvcGVyYXRpb25zIHVuZGVyIHNwaW5sb2NrOgog
+IEl0IGFkZHMgY3VycmVudCB0byB0aGUgd2FpdCBxdWV1ZSwgYW5kIGl0IGNhbGxzIHNldF9j
+dXJyZW50X3N0YXRlKCkuCiAgVGhlIGNvbW1lbnQgYWJvdmUgcHJlcGFyZV90b193YWl0KCkg
+aXMgbm90IGNsZWFyIHRvIG1lLCB0aHVzIHRoZXJlCiAgbWlnaHQgYmUgZnVydGhlciBzaWRl
+IGVmZmVjdHMuCgpPbmx5IGxpZ2h0bHkgdGVzdGVkLgpObyBiZW5jaG1hcmsgdGVzdCBkb25l
+LgotLS0KIGtlcm5lbC9zY2hlZC93YWl0LmMgfCAxNyArKysrKysrKysrKysrKysrKwogMSBm
+aWxlIGNoYW5nZWQsIDE3IGluc2VydGlvbnMoKykKCmRpZmYgLS1naXQgYS9rZXJuZWwvc2No
+ZWQvd2FpdC5jIGIva2VybmVsL3NjaGVkL3dhaXQuYwppbmRleCA1MWUzOGY1ZjQ3MDEuLjEw
+ZDAyZjY1MmFiOCAxMDA2NDQKLS0tIGEva2VybmVsL3NjaGVkL3dhaXQuYworKysgYi9rZXJu
+ZWwvc2NoZWQvd2FpdC5jCkBAIC0xMjQsNiArMTI0LDIzIEBAIHN0YXRpYyBpbnQgX193YWtl
+X3VwX2NvbW1vbl9sb2NrKHN0cnVjdCB3YWl0X3F1ZXVlX2hlYWQgKndxX2hlYWQsIHVuc2ln
+bmVkIGludCBtCiBpbnQgX193YWtlX3VwKHN0cnVjdCB3YWl0X3F1ZXVlX2hlYWQgKndxX2hl
+YWQsIHVuc2lnbmVkIGludCBtb2RlLAogCSAgICAgIGludCBucl9leGNsdXNpdmUsIHZvaWQg
+KmtleSkKIHsKKwlpZiAobGlzdF9lbXB0eSgmd3FfaGVhZC0+aGVhZCkpIHsKKwkJc3RydWN0
+IGxpc3RfaGVhZCAqcG47CisKKwkJLyoKKwkJICogcGFpcnMgd2l0aCBzcGluX3VubG9ja19p
+cnFyZXN0b3JlKCZ3cV9oZWFkLT5sb2NrKTsKKwkJICogV2UgYWN0dWFsbHkgZG8gbm90IG5l
+ZWQgdG8gYWNxdWlyZSB3cV9oZWFkLT5sb2NrLCB3ZSBqdXN0CisJCSAqIG5lZWQgdG8gYmUg
+c3VyZSB0aGF0IHRoZXJlIGlzIG5vIHByZXBhcmVfdG9fd2FpdCgpIHRoYXQKKwkJICogY29t
+cGxldGVkIG9uIGFueSBDUFUgYmVmb3JlIF9fd2FrZV91cCB3YXMgY2FsbGVkLgorCQkgKiBU
+aHVzIGluc3RlYWQgb2YgbG9hZF9hY3F1aXJpbmcgdGhlIHNwaW5sb2NrIGFuZCBkcm9wcGlu
+ZworCQkgKiBpdCBhZ2Fpbiwgd2UgbG9hZF9hY3F1aXJlIHRoZSBuZXh0IGxpc3QgZW50cnkg
+YW5kIGNoZWNrCisJCSAqIHRoYXQgdGhlIGxpc3QgaXMgbm90IGVtcHR5LgorCQkgKi8KKwkJ
+cG4gPSBzbXBfbG9hZF9hY3F1aXJlKCZ3cV9oZWFkLT5oZWFkLm5leHQpOworCisJCWlmKHBu
+ID09ICZ3cV9oZWFkLT5oZWFkKQorCQkJcmV0dXJuIDA7CisJfQogCXJldHVybiBfX3dha2Vf
+dXBfY29tbW9uX2xvY2sod3FfaGVhZCwgbW9kZSwgbnJfZXhjbHVzaXZlLCAwLCBrZXkpOwog
+fQogRVhQT1JUX1NZTUJPTChfX3dha2VfdXApOwotLSAKMi40Ny4xCgo=
+
+--------------QFF0zz3sc1ADSPJlE0hpJV6N--
 
