@@ -1,64 +1,64 @@
-Return-Path: <linux-arch+bounces-9526-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9527-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E2279FDAF0
-	for <lists+linux-arch@lfdr.de>; Sat, 28 Dec 2024 15:34:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14A6B9FDB82
+	for <lists+linux-arch@lfdr.de>; Sat, 28 Dec 2024 16:24:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ABF5B1621B5
-	for <lists+linux-arch@lfdr.de>; Sat, 28 Dec 2024 14:34:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AAEA7161193
+	for <lists+linux-arch@lfdr.de>; Sat, 28 Dec 2024 15:24:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECCE216C69F;
-	Sat, 28 Dec 2024 14:34:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39956192598;
+	Sat, 28 Dec 2024 15:23:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fK3jPx6f"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RueLrY/+"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 881A110E5
-	for <linux-arch@vger.kernel.org>; Sat, 28 Dec 2024 14:34:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6100E15CD79
+	for <linux-arch@vger.kernel.org>; Sat, 28 Dec 2024 15:23:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735396455; cv=none; b=EW+ekB1QsA1Rwl+qqT6YvpwZ5u+jKIYIOh0zXJU9XZJXwK7LCxezzEuxCaUt8ODEdohMqsAE+A0nYHNTD9+2m0QJbRKLvCBWT6VEiouc28fogbwy8NOYnOhQWygL8fY12ylcmv78sU72dFDOtgyag+KzChKuzeR3vIILDuUQTww=
+	t=1735399438; cv=none; b=Gj5r9e7e6Mm9sKHwYH5g2K0R7ZTF3RvvofkMsGoyLh4SEZSpc/23ZX+pO57+c2uaLMCgSMwKfxoBy/jQGY6iMOjYMu575ZD8eHCAo7+EGTEdZQleFSvzc+stom+e780cS915Zd6Zb80ID0ll8T7KEk2amNoaeS/JiuGo2cO/w/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735396455; c=relaxed/simple;
-	bh=fIcYTcR448Ex3EGCPk44O7csmeTF6dRZNufGCDF/GoU=;
+	s=arc-20240116; t=1735399438; c=relaxed/simple;
+	bh=nNOPcypbOzfFoodbrHPXMebriJRIgNx6X2R+SehGl1o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ug7CnVzJKefAQ8jZ8uYw8xYOvRTWT16AuYwlmOJ7aCA1YHA6dxUhg5mgh/KqFZ/BPz/4J/fTNQw+HI7fpKxlvqmTmnAXCmhWGdGsmHyXPiOyiAqX6aIFe1mbykai0lhaOH00KZjwN+AA4zI0iupbwVDZoPRSaKfSXgZ2ExK7yQk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fK3jPx6f; arc=none smtp.client-ip=170.10.129.124
+	 Content-Type:Content-Disposition:In-Reply-To; b=qSoGT9cjC01OGyd3K9v5p6D+wFYSJiUJchbZ0o1rXrWe5JA+Moc5M1LFgKyBL+bGdWE3BxC31qzfsoSc+uHzbiCPvAvQy2KukMZCdEZDaxjR9hpLJdW6vdM/u0AnFpDeYWx7vtflrr81qc9Up24mbC7FC8h9QuNtnPB/C375nAc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RueLrY/+; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1735396452;
+	s=mimecast20190719; t=1735399435;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=3wYfDZBGBizXsABpOPa1MdymfniA3R8gInZpxfq0oLA=;
-	b=fK3jPx6fqx/lo8Q2hgxR0QYBAeBLy0yEWKlGN6Oofy/0hh953nL6whCnJlo1E/ZDF/BpJH
-	suKX1XVFaqnNS+zvyfXZ9YK0VoxIIUTlLqvF4y7NqjACc/c9BEHjo5jRP0YHy4x018w2hE
-	gMDIEJEtrlUODCdCkanRglWaYoHu3tw=
-Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+	bh=sYqOueoe1exEDVDAtM1S6cZlf7MIxfxS+48IPQs/hFE=;
+	b=RueLrY/+h+B9qwdxr9pU1Dhd/LSveoz2owYyUj3QL50xgaHkgIgPwikp2p+t0Gdlu5KNQT
+	eK1MG1TBdJy+Q2cXBic058jelKgGOXnF7mJfzxb9q43VCOYUIIkXHLSAOKAeZpeYC+zzoe
+	eDZw/9ETjobBKvqPZAFVGFQ4DOSVnZs=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-479-NGz7Bx_WMiiMhWU25n3kPA-1; Sat,
- 28 Dec 2024 09:34:08 -0500
-X-MC-Unique: NGz7Bx_WMiiMhWU25n3kPA-1
-X-Mimecast-MFC-AGG-ID: NGz7Bx_WMiiMhWU25n3kPA
-Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-110-UPvp96kSN8mwEQGiMXceUQ-1; Sat,
+ 28 Dec 2024 10:23:51 -0500
+X-MC-Unique: UPvp96kSN8mwEQGiMXceUQ-1
+X-Mimecast-MFC-AGG-ID: UPvp96kSN8mwEQGiMXceUQ
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 95BCB1956086;
-	Sat, 28 Dec 2024 14:34:01 +0000 (UTC)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A7E7F19560A2;
+	Sat, 28 Dec 2024 15:23:43 +0000 (UTC)
 Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.224.13])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id AFEC5195605A;
-	Sat, 28 Dec 2024 14:33:15 +0000 (UTC)
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 9E1E219560A3;
+	Sat, 28 Dec 2024 15:22:56 +0000 (UTC)
 Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Sat, 28 Dec 2024 15:33:36 +0100 (CET)
-Date: Sat, 28 Dec 2024 15:32:49 +0100
+	oleg@redhat.com; Sat, 28 Dec 2024 16:23:18 +0100 (CET)
+Date: Sat, 28 Dec 2024 16:22:30 +0100
 From: Oleg Nesterov <oleg@redhat.com>
 To: Manfred Spraul <manfred@colorfullife.com>
 Cc: Linus Torvalds <torvalds@linux-foundation.org>, viro@zeniv.linux.org.uk,
@@ -98,11 +98,12 @@ Cc: Linus Torvalds <torvalds@linux-foundation.org>, viro@zeniv.linux.org.uk,
 	linux-morello@op-lists.linaro.org
 Subject: Re: [RESEND PATCH] fs/pipe: Introduce a check to skip sleeping
  processes during pipe read/write
-Message-ID: <20241228143248.GB5302@redhat.com>
+Message-ID: <20241228152229.GC5302@redhat.com>
 References: <75B06EE0B67747ED+20241225094202.597305-1-wangyuli@uniontech.com>
  <CAHk-=wj5A-fO+GnfwqGpXhFbfpS4+_8xU+dnXkSx+0AfwBYrxA@mail.gmail.com>
  <20241226201158.GB11118@redhat.com>
  <1df49d97-df0e-4471-9e40-a850b758d981@colorfullife.com>
+ <20241228143248.GB5302@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -111,87 +112,76 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1df49d97-df0e-4471-9e40-a850b758d981@colorfullife.com>
+In-Reply-To: <20241228143248.GB5302@redhat.com>
 User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-On 12/27, Manfred Spraul wrote:
+On 12/28, Oleg Nesterov wrote:
 >
-> >I _think_ that
-> >
-> >	wait_event_whatever(WQ, CONDITION);
-> >vs
-> >
-> >	CONDITION = 1;
-> >	if (wq_has_sleeper(WQ))
-> >		wake_up_xxx(WQ, ...);
-> >
-> >is fine.
+> >  int __wake_up(struct wait_queue_head *wq_head, unsigned int mode,
+> >  	      int nr_exclusive, void *key)
+> >  {
+> > +	if (list_empty(&wq_head->head)) {
+> > +		struct list_head *pn;
+> > +
+> > +		/*
+> > +		 * pairs with spin_unlock_irqrestore(&wq_head->lock);
+> > +		 * We actually do not need to acquire wq_head->lock, we just
+> > +		 * need to be sure that there is no prepare_to_wait() that
+> > +		 * completed on any CPU before __wake_up was called.
+> > +		 * Thus instead of load_acquiring the spinlock and dropping
+> > +		 * it again, we load_acquire the next list entry and check
+> > +		 * that the list is not empty.
+> > +		 */
+> > +		pn = smp_load_acquire(&wq_head->head.next);
+> > +
+> > +		if(pn == &wq_head->head)
+> > +			return 0;
+> > +	}
 >
-> This pattern is documented in wait.h:
+> Too subtle for me ;)
 >
-> https://elixir.bootlin.com/linux/v6.12.6/source/include/linux/wait.h#L96
->
-> Thus if there an issue, then the documentation should be updated.
+> I have some concerns, but I need to think a bit more to (try to) actually
+> understand this change.
 
-Agreed, basically the same pattern, prepare_to_wait_event() is similar
-to prepare_to_wait().
+If nothing else, consider
 
-> But I do not understand this comment (from 2.6.0)
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/tglx/history.git/commit/kernel/fork.c?h=v2.6.0&id=e220fdf7a39b54a758f4102bdd9d0d5706aa32a7
->
-> >/* * Note: we use "set_current_state()" _after_ the wait-queue add, *
-> >because we need a memory barrier there on SMP, so that any * wake-function
-> >that tests for the wait-queue being active * will be guaranteed to see
-> >waitqueue addition _or_ subsequent * tests in this thread will see the
-> >wakeup having taken place. * * The spin_unlock() itself is semi-permeable
-> >and only protects * one way (it only protects stuff inside the critical
-> >region and * stops them from bleeding out - it would still allow
-> >subsequent * loads to move into the the critical region). */
-...
-> set_current_state() now uses smp_store_mb(), which is a memory barrier
-> _after_ the store.
+	int CONDITION;
+	wait_queue_head_t WQ;
 
-And afaics this is what we actually need.
+	void wake(void)
+	{
+		CONDITION = 1;
+		wake_up(WQ);
+	}
 
-> Thus I do not see what enforces that the store happens
-> before the store for the __add_wait_queue().
+	void wait(void)
+	{
+		DEFINE_WAIT_FUNC(entry, woken_wake_function);
 
-IIUC this is fine, no need to serialize list_add() and STORE(tsk->__state),
-they can be reordered.
+		add_wait_queue(WQ, entry);
+		if (!CONDITION)
+			wait_woken(entry, ...);
+		remove_wait_queue(WQ, entry);
+	}
 
-But we need mb() between __add_wait_queue + __set_current_state (in any
-order) and the subsequent "if (CONDITION)" check.
+this code is correct even if LOAD(CONDITION) can leak into the critical
+section in add_wait_queue(), so CPU running wait() can actually do
 
-> --- a/kernel/sched/wait.c
-> +++ b/kernel/sched/wait.c
-> @@ -124,6 +124,23 @@ static int __wake_up_common_lock(struct wait_queue_head *wq_head, unsigned int m
->  int __wake_up(struct wait_queue_head *wq_head, unsigned int mode,
->  	      int nr_exclusive, void *key)
->  {
-> +	if (list_empty(&wq_head->head)) {
-> +		struct list_head *pn;
-> +
-> +		/*
-> +		 * pairs with spin_unlock_irqrestore(&wq_head->lock);
-> +		 * We actually do not need to acquire wq_head->lock, we just
-> +		 * need to be sure that there is no prepare_to_wait() that
-> +		 * completed on any CPU before __wake_up was called.
-> +		 * Thus instead of load_acquiring the spinlock and dropping
-> +		 * it again, we load_acquire the next list entry and check
-> +		 * that the list is not empty.
-> +		 */
-> +		pn = smp_load_acquire(&wq_head->head.next);
-> +
-> +		if(pn == &wq_head->head)
-> +			return 0;
-> +	}
+		// add_wait_queue
+		spin_lock(WQ->lock);
+		LOAD(CONDITION);	// false!
+		list_add(entry, head);
+		spin_unlock(WQ->lock);
 
-Too subtle for me ;)
+		if (!false)		// result of the LOAD above
+			wait_woken(entry, ...);
 
-I have some concerns, but I need to think a bit more to (try to) actually
-understand this change.
+Now suppose that another CPU executes wake() between LOAD(CONDITION)
+and list_add(entry, head). With your patch wait() will miss the event.
+The same for __pollwait(), I think...
+
+No?
 
 Oleg.
 
