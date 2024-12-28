@@ -1,81 +1,79 @@
-Return-Path: <linux-arch+bounces-9523-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9524-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A8399FD701
-	for <lists+linux-arch@lfdr.de>; Fri, 27 Dec 2024 19:39:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 166169FD93D
+	for <lists+linux-arch@lfdr.de>; Sat, 28 Dec 2024 07:36:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B23A018840D0
-	for <lists+linux-arch@lfdr.de>; Fri, 27 Dec 2024 18:39:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9EF843A26CD
+	for <lists+linux-arch@lfdr.de>; Sat, 28 Dec 2024 06:36:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 721D745005;
-	Fri, 27 Dec 2024 18:39:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44C59524B0;
+	Sat, 28 Dec 2024 06:36:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=colorfullife-com.20230601.gappssmtp.com header.i=@colorfullife-com.20230601.gappssmtp.com header.b="Tf6MACRt"
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="c1VsAsQx"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AFF61F892C
-	for <linux-arch@vger.kernel.org>; Fri, 27 Dec 2024 18:39:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 415EF3595F
+	for <linux-arch@vger.kernel.org>; Sat, 28 Dec 2024 06:36:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735324758; cv=none; b=EDac5GTYfMFI0cql/gvah58z1OPhkXqdlQdfm3nUQa3aNv41UMhhPAnCkApZusQ7b73U8P2c39GJE7q4ogFs9eo2fbwLzVvIyLLy26nNMIn9Y0g/pDr38jWDnOrzzx7Ty3BY6xzJPJwEIB9t27X04PzKWLj2LqvPwwfiLoWfaTI=
+	t=1735367795; cv=none; b=Vh1MU12TyrFwVwreIqp0fAxMm+4RjNhjK8c8jxWnuxCJi+6RiWoT8lPpdBx4veVcw4WYkGPrjcoB7+y5lmstY3YlARtDijGRSh6YRmBUNlfNafIeHRVUgn/CXeLT5WLcJcJl1bh5y0nxyRjPcgHYY096U96d44cTaH7T2D3zvxg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735324758; c=relaxed/simple;
-	bh=AAOOqgKUifCh8wKBJnpxycIwdVuSmvZhiWOzsN4i72I=;
-	h=Content-Type:Message-ID:Date:MIME-Version:From:Subject:To:Cc:
-	 References:In-Reply-To; b=EurAiss8NzjAMKjvZsMTt1cmlx0jar8Tcbe6pP/s050KmVh4/mnEL3jl0GHbsAl6JmYNxFls7p3JLPHq6GXrq1MNFhYwU+zJ3fx6RVP3HyBzfAsMsJy73AAYRadUUCCcwzqYk9H8PDaDPG2L1vL0+1b59XRdY6SMuhzngdfIw58=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=colorfullife.com; spf=pass smtp.mailfrom=colorfullife.com; dkim=pass (2048-bit key) header.d=colorfullife-com.20230601.gappssmtp.com header.i=@colorfullife-com.20230601.gappssmtp.com header.b=Tf6MACRt; arc=none smtp.client-ip=209.85.208.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=colorfullife.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=colorfullife.com
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5d437235769so6601621a12.2
-        for <linux-arch@vger.kernel.org>; Fri, 27 Dec 2024 10:39:15 -0800 (PST)
+	s=arc-20240116; t=1735367795; c=relaxed/simple;
+	bh=AnI+fDx8ege81551sFiwVqsAGZfaOg5IleFmbT3lTrw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WGHXOfKd1fc3DF3I6U6QKvW06vmPgZ+yHAogigexWiYs9sEZ55yzqkbw2z9qvoPtT6oILXTOPZbrylv12HIq2mIL4k64ecyBupSfCQFRH17wZHfYcKB0w3pPfoN004zgMJo80iiFfN8q36n/ApYH60TRwPC+qfYLId0EiBBokjI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=c1VsAsQx; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2165448243fso115095985ad.1
+        for <linux-arch@vger.kernel.org>; Fri, 27 Dec 2024 22:36:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=colorfullife-com.20230601.gappssmtp.com; s=20230601; t=1735324754; x=1735929554; darn=vger.kernel.org;
-        h=in-reply-to:content-language:references:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pGKKrHnmj7bXfY6CNkPl3lP9RlKbMnPdw0Vb1t1L4Ao=;
-        b=Tf6MACRtbYTuhP1foJMd+8YVIwN2bsRn03XheJ6sV3/0Bn90IS1cYSSGBrCvCFeqiC
-         oytTZKu7qWoGjrRNBupFgIffIOMQSdXdZ67/SHI22RdRBMOYQkclVG7vce/jFGP3C7MK
-         j3tzcKMRY3hiP67KukaUMO/iLaF5eetxUEsM/1zapkqalO3AyWpETqRJYyZKW4w+zo9m
-         spP4dsHX1Rsp73wUMhqAjqMuNZ1HOe0RuGp869kZPpy9aObQtvooQd2sKJffW8z6GOgU
-         xJuIM9n5bC+iZZ71t8ZQzd6elv0LUmtEMq9sG90db/AXkzu3JXakx+5CaTs3TRGXBg1Y
-         yNlA==
+        d=bytedance.com; s=google; t=1735367791; x=1735972591; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xz9+aZKFL34BZ+QKJapn5mhTQ8zZC8UnFG8XP+zHLMo=;
+        b=c1VsAsQxxYafqX4QhvhVwPbFl+C/B/yYf9xtjlaS9oIZVrjGx1a1j/7KXH00dYveH9
+         kvNmW7VyvG9Vq3Wb5z7g/mZfsPR3363WfRVfJc69MDc9KSZw4kBp2SOTh9oTWszWY3Sr
+         q0EtyVlloi7rjiZpF86BnI0d3jhHHDNHOBFIM1mNY+7nLzkFWjuZnuTlMCT46aCfYHvW
+         8XeKY9H6k8pry6ZgrHqFiUDdX7hsgsrxxHU/hOWmYGo4/eFq67OrCGNFOho3nG/PrKDo
+         HFdLa0RMlfKxPeD/tena4kjS4MmTV086fr/X8pIoisjj5+bFGx33XvT1FUrUCg7U6jlg
+         Vv8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735324754; x=1735929554;
-        h=in-reply-to:content-language:references:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=pGKKrHnmj7bXfY6CNkPl3lP9RlKbMnPdw0Vb1t1L4Ao=;
-        b=xI0n+wLOTmIwywSjucuqt203tKi3SjzZ3vLDlx/v6ijB+CDNrPncigU5hN7OuVS/04
-         Vx1sxdie+5sVUdDYhoZReYiYLm2xiJag+5oXBbuXOTmRxqXwZwLxXXOs8NGhgUmN+ufI
-         Kt9Wo79zghYPoYUcZPDfmGhz3NSi6N/woCBTnomDRHKImRLf1AbksAk1hvE0WZVTiGnJ
-         tcpTFr1qOjjFPKFUTrW8UhgHAIPc8OB5hhtqHbL1v7D0CeJRPqWUkTPrFjMYRmFbb5rx
-         iOtvqypH7rt0x7+fZNK/q7UBRFB673hVrgG3EIRzNc8s5PRA09AcuV0Qg9rCDNWpuU+p
-         hhJg==
-X-Forwarded-Encrypted: i=1; AJvYcCXBAn1448bt4p+o3OA/RJF8mbjZBLh2ZPW/5bPqkgPQjAkCoaqNdJEpn5T2u5ORuzb26w6fWA/DYu2J@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywiw1SDCUYbXrm//VWJVjV0tkZx96sKePF2U9DbTrQzaSK+NQOS
-	iYq+b4ud6aq6LLifn6oHugjwmUnf87vlxThwZGYi+TFXxExrBlMYPyNnhuUZ+Q==
-X-Gm-Gg: ASbGncsqnR/wlZdV1d3Uej3bPAa4a3cb8/Wgg3AqRWeycGDWl+lw2RTpbNUS0KTH1tt
-	6ylZHNlE0jPQhJ/PZAHdrJamgp6QUke3z5+OiXFBk5dyzrR/A/Wp4qaM8xwcOvwVkkSVnwbV5PV
-	cEpjlYqVfh2Uq/OHKWOHcSrWcRA3crGRdBkBpwKvNjcsmGsl3HZ/eTjkeJl3g9fKxFW31SdITJj
-	Aw02mcJV09thOYEpc/f8/FTxiGN5wIDHRq7sCLY+TiJkLLwpWZaeVJME7k9i/Ihz7PTqmVUIPXz
-	teQ0rtpoXdRisTYhOj+XnvuTRwBBvF+Xx69OxEdG0MKWqMxnjJMmjpsd2EP+EZYnAjKSMKc42Gp
-	pxqPXjHwvpdHKVHwmLtQ=
-X-Google-Smtp-Source: AGHT+IGyX30uylQ7Lp173xYrAkBVWCh1ayiu28QyGEoUIErdtNdG0cTwfWOeI0uTvF3QasRnPY4l+w==
-X-Received: by 2002:a05:6402:4405:b0:5d8:16ea:cfb4 with SMTP id 4fb4d7f45d1cf-5d81dd7d02cmr26130197a12.8.1735324752643;
-        Fri, 27 Dec 2024 10:39:12 -0800 (PST)
-Received: from ?IPV6:2003:d9:9746:3700:7102:4533:6be1:ffef? (p200300d997463700710245336be1ffef.dip0.t-ipconnect.de. [2003:d9:9746:3700:7102:4533:6be1:ffef])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5d80701ca31sm11056568a12.88.2024.12.27.10.39.07
+        d=1e100.net; s=20230601; t=1735367791; x=1735972591;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xz9+aZKFL34BZ+QKJapn5mhTQ8zZC8UnFG8XP+zHLMo=;
+        b=p+mUg0yNkEidjjjZwE2jSXCDtHPMHymb4VA1ES4vrhy+uJNbFdwsQ2cLu1PaiVrucS
+         fIF8CaANzraJYvgFXFljIjCU1kKk5W09oonlVgbv7srw59OLAMnm0hf/WEqXU22mbRmb
+         QzJEygHm99b2JxydveCorNtMiIjs+XSCjPPgLRgCvLGGIivRZ0G41cbjUbC6Ne8Xm+if
+         /BgoGi1H+NwQ47Qh4RnphKwHcAo/ZCxXTMYjjGSolWbPHHMANna4o3u1xEleUdF5TLA5
+         CHaCooTQn65IksfPGtwSCoYoyQXBVspONl63IuhyVnthyJDN3r4nXPM3nO1LQztTjUWg
+         SYOA==
+X-Forwarded-Encrypted: i=1; AJvYcCWjdlEjhNRw38U6iOaWbpBqsi39KYCkK5mkFBNFRx48xqu/38kjpMuT6fmBI3pIRSzCbQfIS/LunLdc@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJuGoKdqH7qfbmNjJijmim8E0ZRr/o3qAXyTF4X/YdKae593Ev
+	s7qlSgJe136fCZbgxuVR4izvb7/2bgMWJ6FV9BlAA9MLzBrg7mvFBPQEAM/7DDQ=
+X-Gm-Gg: ASbGnctvzbVxgSSPQDWYo+NnjGU2wBSXgSVy5JTkSqlC/jfbzS4oX/Hx2dfZhquXwiz
+	dxjyMrQB3VC0Nw4pcYyVOC2ziaFGUe/zc8Cvr1QGlgdPuNbQ8hIjlEt3mgPGIVC+buUD6ddMnl7
+	5fCsGZEU8U3T273iXSJ7xyuLPuuGAJzRcsg7BgPZkvYLYDrsJAsL85F0wxyAlr/83izpnmfhxI4
+	cvhzfdqzJVzrtPRcXIG9w+B07yWT22YyuGx/Hqxn+7wCN9YcCyt2k99wdj/F0gY8P9j/GZQ4qWM
+	ZD6NsF0lBaPOcsku23mqUVl+8Vc56cSKK05ypd54W2tTgeVdMd3gTPU=
+X-Google-Smtp-Source: AGHT+IHJr5/cBm7VE4sKmfeyqyU+nR3KXMBrwpgTBQUiz/94ds3IGaVh/bhouU9p0WQ7mj1Jxu9Qtg==
+X-Received: by 2002:a17:902:f682:b0:215:f1c2:fcc4 with SMTP id d9443c01a7336-219e6f1480cmr399252455ad.41.1735367791634;
+        Fri, 27 Dec 2024 22:36:31 -0800 (PST)
+Received: from ?IPV6:2409:8a28:f44:d7c4:e49d:ee0a:5f86:d7bd? ([2409:8a28:f44:d7c4:e49d:ee0a:5f86:d7bd])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dc97182dsm144536075ad.82.2024.12.27.22.36.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Dec 2024 10:39:10 -0800 (PST)
-Content-Type: multipart/mixed; boundary="------------QFF0zz3sc1ADSPJlE0hpJV6N"
-Message-ID: <1df49d97-df0e-4471-9e40-a850b758d981@colorfullife.com>
-Date: Fri, 27 Dec 2024 19:39:06 +0100
+        Fri, 27 Dec 2024 22:36:31 -0800 (PST)
+Message-ID: <2434dfdf-d4a0-4f81-9b65-51be86487fd2@bytedance.com>
+Date: Sat, 28 Dec 2024 14:36:06 +0800
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -83,204 +81,118 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-From: Manfred Spraul <manfred@colorfullife.com>
-Subject: Re: [RESEND PATCH] fs/pipe: Introduce a check to skip sleeping
- processes during pipe read/write
-To: Oleg Nesterov <oleg@redhat.com>,
- Linus Torvalds <torvalds@linux-foundation.org>
-Cc: viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz,
- linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
- oliver.sang@intel.com, ebiederm@xmission.com, colin.king@canonical.com,
- josh@joshtriplett.org, penberg@cs.helsinki.fi, mingo@elte.hu, jes@sgi.com,
- hch@lst.de, aia21@cantab.net, arjan@infradead.org, jgarzik@pobox.com,
- neukum@fachschaft.cup.uni-muenchen.de, oliver@neukum.name,
- dada1@cosmosbay.com, axboe@kernel.dk, axboe@suse.de,
- nickpiggin@yahoo.com.au, dhowells@redhat.com, nathans@sgi.com,
- rolandd@cisco.com, tytso@mit.edu, bunk@stusta.de, pbadari@us.ibm.com,
- ak@linux.intel.com, ak@suse.de, davem@davemloft.net, jsipek@cs.sunysb.edu,
- jens.axboe@oracle.com, ramsdell@mitre.org, hch@infradead.org,
- akpm@linux-foundation.org, randy.dunlap@oracle.com, efault@gmx.de,
- rdunlap@infradead.org, haveblue@us.ibm.com, drepper@redhat.com,
- dm.n9107@gmail.com, jblunck@suse.de, davidel@xmailserver.org,
- mtk.manpages@googlemail.com, linux-arch@vger.kernel.org,
- vda.linux@googlemail.com, jmorris@namei.org, serue@us.ibm.com,
- hca@linux.ibm.com, rth@twiddle.net, lethal@linux-sh.org,
- tony.luck@intel.com, heiko.carstens@de.ibm.com, andi@firstfloor.org,
- corbet@lwn.net, crquan@gmail.com, mszeredi@suse.cz, miklos@szeredi.hu,
- peterz@infradead.org, a.p.zijlstra@chello.nl, earl_chew@agilent.com,
- npiggin@gmail.com, npiggin@suse.de, julia@diku.dk, jaxboe@fusionio.com,
- nikai@nikai.net, dchinner@redhat.com, davej@redhat.com, npiggin@kernel.dk,
- eric.dumazet@gmail.com, tim.c.chen@linux.intel.com, xemul@parallels.com,
- tj@kernel.org, serge.hallyn@canonical.com, gorcunov@openvz.org,
- bcrl@kvack.org, alan@lxorguk.ukuu.org.uk, will.deacon@arm.com,
- will@kernel.org, zab@redhat.com, balbi@ti.com, gregkh@linuxfoundation.org,
- rusty@rustcorp.com.au, socketpair@gmail.com,
- penguin-kernel@i-love.sakura.ne.jp, mhocko@kernel.org, axboe@fb.com,
- tglx@linutronix.de, mcgrof@kernel.org, linux@dominikbrodowski.net,
- willy@infradead.org, paulmck@kernel.org, kernel@tuxforce.de,
- linux-morello@op-lists.linaro.org
-References: <75B06EE0B67747ED+20241225094202.597305-1-wangyuli@uniontech.com>
- <CAHk-=wj5A-fO+GnfwqGpXhFbfpS4+_8xU+dnXkSx+0AfwBYrxA@mail.gmail.com>
- <20241226201158.GB11118@redhat.com>
+Subject: Re: [PATCH v3 02/17] riscv: mm: Skip pgtable level check in
+ {pud,p4d}_alloc_one
+To: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: peterz@infradead.org, agordeev@linux.ibm.com, kevin.brodsky@arm.com,
+ tglx@linutronix.de, david@redhat.com, jannh@google.com, hughd@google.com,
+ yuzhao@google.com, willy@infradead.org, muchun.song@linux.dev,
+ vbabka@kernel.org, lorenzo.stoakes@oracle.com, akpm@linux-foundation.org,
+ rientjes@google.com, vishal.moola@gmail.com, Arnd Bergmann <arnd@arndb.de>,
+ Will Deacon <will@kernel.org>, aneesh.kumar@kernel.org, npiggin@gmail.com,
+ dave.hansen@linux.intel.com, rppt@kernel.org, ryan.roberts@arm.com,
+ linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
+ linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+ linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-kernel@vger.kernel.org, x86@kernel.org, linux-arch@vger.kernel.org,
+ linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+ loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+ linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+ linux-sh@vger.kernel.org, linux-um@lists.infradead.org
+References: <mhng-3d6d3e65-b264-4033-b985-fa7763cacf9e@palmer-ri-x1c9a>
+From: Qi Zheng <zhengqi.arch@bytedance.com>
 Content-Language: en-US
-In-Reply-To: <20241226201158.GB11118@redhat.com>
-
-This is a multi-part message in MIME format.
---------------QFF0zz3sc1ADSPJlE0hpJV6N
+In-Reply-To: <mhng-3d6d3e65-b264-4033-b985-fa7763cacf9e@palmer-ri-x1c9a>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Hi,
-(I had to remove many cc, my mail server rejected to send)
+Hi Palmer,
 
-On 12/26/24 9:11 PM, Oleg Nesterov wrote:
-> I mostly agree, see my reply to this patch, but...
->
-> On 12/26, Linus Torvalds wrote:
->> If the optimization is correct, there is no point to having a config option.
+On 2024/12/28 00:40, Palmer Dabbelt wrote:
+> On Mon, 23 Dec 2024 01:40:48 PST (-0800), zhengqi.arch@bytedance.com wrote:
+>> From: Kevin Brodsky <kevin.brodsky@arm.com>
 >>
->> If the optimization is incorrect, there is no point to having the code.
+>> {pmd,pud,p4d}_alloc_one() is never called if the corresponding page
+>> table level is folded, as {pmd,pud,p4d}_alloc() already does the
+>> required check. We can therefore remove the runtime page table level
+>> checks in {pud,p4d}_alloc_one. The PUD helper becomes equivalent to
+>> the generic version, so we remove it altogether.
 >>
->> Either way, there's no way we'd ever have a config option for this.
-> Agreed,
->
->>> +       if (was_full && pipe_check_wq_has_sleeper(&pipe->wr_wait))
->>>                  wake_up_interruptible_sync_poll(&pipe->wr_wait, EPOLLOUT | EPOLLWRNORM);
->> End result: you need to explain why the race cannot exist.
-> Agreed,
->
->> And I think your patch is simply buggy
-> Agreed again, but probably my reasoning was wrong,
->
->> But now waiters use "wait_event_interruptible_exclusive()" explicitly
->> outside the pipe mutex, so the waiters and wakers aren't actually
->> serialized.
-> This is what I don't understand... Could you spell ?
-> I _think_ that
->
-> 	wait_event_whatever(WQ, CONDITION);
-> vs
->
-> 	CONDITION = 1;
-> 	if (wq_has_sleeper(WQ))
-> 		wake_up_xxx(WQ, ...);
-> 	
-> is fine.
+>> This is consistent with the way arm64 and x86 handle this situation
+>> (runtime check in p4d_free() only).
+>>
+>> Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
+>> Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
+>> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+>> ---
+>>  arch/riscv/include/asm/pgalloc.h | 22 ++++------------------
+>>  1 file changed, 4 insertions(+), 18 deletions(-)
+>>
+>> diff --git a/arch/riscv/include/asm/pgalloc.h 
+>> b/arch/riscv/include/asm/pgalloc.h
+>> index f52264304f772..8ad0bbe838a24 100644
+>> --- a/arch/riscv/include/asm/pgalloc.h
+>> +++ b/arch/riscv/include/asm/pgalloc.h
+>> @@ -12,7 +12,6 @@
+>>  #include <asm/tlb.h>
+>>
+>>  #ifdef CONFIG_MMU
+>> -#define __HAVE_ARCH_PUD_ALLOC_ONE
+>>  #define __HAVE_ARCH_PUD_FREE
+>>  #include <asm-generic/pgalloc.h>
+>>
+>> @@ -88,15 +87,6 @@ static inline void pgd_populate_safe(struct 
+>> mm_struct *mm, pgd_t *pgd,
+>>      }
+>>  }
+>>
+>> -#define pud_alloc_one pud_alloc_one
+>> -static inline pud_t *pud_alloc_one(struct mm_struct *mm, unsigned 
+>> long addr)
+>> -{
+>> -    if (pgtable_l4_enabled)
+>> -        return __pud_alloc_one(mm, addr);
+>> -
+>> -    return NULL;
+>> -}
+>> -
+>>  #define pud_free pud_free
+>>  static inline void pud_free(struct mm_struct *mm, pud_t *pud)
+>>  {
+>> @@ -118,15 +108,11 @@ static inline void __pud_free_tlb(struct 
+>> mmu_gather *tlb, pud_t *pud,
+>>  #define p4d_alloc_one p4d_alloc_one
+>>  static inline p4d_t *p4d_alloc_one(struct mm_struct *mm, unsigned 
+>> long addr)
+>>  {
+>> -    if (pgtable_l5_enabled) {
+>> -        gfp_t gfp = GFP_PGTABLE_USER;
+>> -
+>> -        if (mm == &init_mm)
+>> -            gfp = GFP_PGTABLE_KERNEL;
+>> -        return (p4d_t *)get_zeroed_page(gfp);
+>> -    }
+>> +    gfp_t gfp = GFP_PGTABLE_USER;
+>>
+>> -    return NULL;
+>> +    if (mm == &init_mm)
+>> +        gfp = GFP_PGTABLE_KERNEL;
+>> +    return (p4d_t *)get_zeroed_page(gfp);
+>>  }
+>>
+>>  static inline void __p4d_free(struct mm_struct *mm, p4d_t *p4d)
+> 
+> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
 
-This pattern is documented in wait.h:
+Thank you for reviewing the patch!
 
-https://elixir.bootlin.com/linux/v6.12.6/source/include/linux/wait.h#L96
+> 
+> Are you trying to keep these together, or do you want me to try and pick 
+> up the RISC-V bits on their own?
 
-Thus if there an issue, then the documentation should be updated.
+I prefer to keep them together because later patches depend on this one.
+And this patch series has been merged into mm-unstable branch.
 
-> Both wq_has_sleeper() and wait_event_whatever()->prepare_to_wait_event()
-> have the necessary barriers to serialize the waiters and wakers.
->
-> Damn I am sure I missed something ;)
+Thanks!
 
-Actually:
-
-Does this work universally? I.e. can we add the optimization into 
-__wake_up()?
-
-
-But I do not understand this comment (from 2.6.0)
-
-https://git.kernel.org/pub/scm/linux/kernel/git/tglx/history.git/commit/kernel/fork.c?h=v2.6.0&id=e220fdf7a39b54a758f4102bdd9d0d5706aa32a7
-
-> /* * Note: we use "set_current_state()" _after_ the wait-queue add, * 
-> because we need a memory barrier there on SMP, so that any * 
-> wake-function that tests for the wait-queue being active * will be 
-> guaranteed to see waitqueue addition _or_ subsequent * tests in this 
-> thread will see the wakeup having taken place. * * The spin_unlock() 
-> itself is semi-permeable and only protects * one way (it only protects 
-> stuff inside the critical region and * stops them from bleeding out - 
-> it would still allow subsequent * loads to move into the the critical 
-> region). */ voidprepare_to_wait 
-> <https://elixir.bootlin.com/linux/v2.6.0/C/ident/prepare_to_wait>(wait_queue_head_t 
-> <https://elixir.bootlin.com/linux/v2.6.0/C/ident/wait_queue_head_t>*q,wait_queue_t 
-> <https://elixir.bootlin.com/linux/v2.6.0/C/ident/wait_queue_t>*wait 
-> <https://elixir.bootlin.com/linux/v2.6.0/C/ident/wait>,intstate) { 
-> unsignedlongflags; wait 
-> <https://elixir.bootlin.com/linux/v2.6.0/C/ident/wait>->flags&=~WQ_FLAG_EXCLUSIVE 
-> <https://elixir.bootlin.com/linux/v2.6.0/C/ident/WQ_FLAG_EXCLUSIVE>; 
-> spin_lock_irqsave 
-> <https://elixir.bootlin.com/linux/v2.6.0/C/ident/spin_lock_irqsave>(&q->lock,flags); 
-> if(list_empty 
-> <https://elixir.bootlin.com/linux/v2.6.0/C/ident/list_empty>(&wait 
-> <https://elixir.bootlin.com/linux/v2.6.0/C/ident/wait>->task_list 
-> <https://elixir.bootlin.com/linux/v2.6.0/C/ident/task_list>)) 
-> __add_wait_queue 
-> <https://elixir.bootlin.com/linux/v2.6.0/C/ident/__add_wait_queue>(q,wait 
-> <https://elixir.bootlin.com/linux/v2.6.0/C/ident/wait>); 
-> set_current_state 
-> <https://elixir.bootlin.com/linux/v2.6.0/C/ident/set_current_state>(state); 
-> spin_unlock_irqrestore 
-> <https://elixir.bootlin.com/linux/v2.6.0/C/ident/spin_unlock_irqrestore>(&q->lock,flags); 
-> }
-set_current_state() now uses smp_store_mb(), which is a memory barrier 
-_after_ the store. Thus I do not see what enforces that the store 
-happens before the store for the __add_wait_queue().
-
---
-
-     Manfred
-
---------------QFF0zz3sc1ADSPJlE0hpJV6N
-Content-Type: text/x-patch; charset=UTF-8;
- name="0001-__wake_up_common_lock-Optimize-for-empty-wake-queues.patch"
-Content-Disposition: attachment;
- filename*0="0001-__wake_up_common_lock-Optimize-for-empty-wake-queues.pa";
- filename*1="tch"
-Content-Transfer-Encoding: base64
-
-RnJvbSA3Y2I4ZjA2YWIwMjJlN2ZjMzZiYWNiZTY1ZjY1NDgyMjE0N2VjMWFhIE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBNYW5mcmVkIFNwcmF1bCA8bWFuZnJlZEBjb2xvcmZ1
-bGxpZmUuY29tPgpEYXRlOiBGcmksIDI3IERlYyAyMDI0IDE4OjIxOjQxICswMTAwClN1Ympl
-Y3Q6IFtQQVRDSF0gX193YWtlX3VwX2NvbW1vbl9sb2NrOiBPcHRpbWl6ZSBmb3IgZW1wdHkg
-d2FrZSBxdWV1ZXMKCndha2VfdXAoKSBtdXN0IHdha2UgdXAgZXZlcnkgdGFzayB0aGF0IGlz
-IGluIHRoZSB3YWl0IHF1ZXVlLgpCdXQ6IElmIHRoZXJlIGlzIGNvbmN1cnJlbmN5IGJldHdl
-ZW4gd2FrZV91cCgpIGFuZCBhZGRfd2FpdF9xdWV1ZSgpLAp0aGVuIChhcyBsb25nIGFzIHdl
-IGFyZSBub3QgdmlvbGF0aW5nIHRoZSBtZW1vcnkgb3JkZXJpbmcgcnVsZXMpIHdlCmNhbiBq
-dXN0IGNsYWltIHRoYXQgd2FrZV91cCgpIGhhcHBlbmVkICJmaXJzdCIgYW5kIGFkZF93YWl0
-X3F1ZXVlKCkKaGFwcGVuZWQgYWZ0ZXJ3YXJkcy4KRnJvbSBtZW1vcnkgb3JkZXJpbmcgcGVy
-c3BlY3RpdmU6Ci0gSWYgdGhlIHdhaXRfcXVldWUoKSBpcyBlbXB0eSwgdGhlbiB3YWtlX3Vw
-KCkganVzdCBkb2VzCiAgc3Bpbl9sb2NrKCk7CiAgbGlzdF9lbXB0eSgpCiAgc3Bpbl91bmxv
-Y2soKTsKLSBhZGRfd2FpdF9xdWV1ZSgpL3ByZXBhcmVfdG9fd2FpdCgpIGRvIGFsbCBraW5k
-IG9mIG9wZXJhdGlvbnMsCiAgYnV0IHRoZXkgbWF5IGJlY29tZSB2aXNpYmxlIG9ubHkgd2hl
-biB0aGUgc3Bpbl91bmxvY2tfaXJxcmVzdG9yZSgpCiAgaXMgZG9uZS4KVGh1cywgaW5zdGVh
-ZCBvZiBwYWlyaW5nIHRoZSBtZW1vcnkgYmFycmllciB0byB0aGUgc3BpbmxvY2ssIGFuZAp0
-aHVzIHdyaXRpbmcgdG8gYSBwb3RlbnRpYWxseSBzaGFyZWQgY2FjaGVsaW5lLCB3ZSBsb2Fk
-LWFjcXVpcmUKdGhlIG5leHQgcG9pbnRlciBmcm9tIHRoZSBsaXN0LgoKUmlza3MgYW5kIHNp
-ZGUgZWZmZWN0czoKLSBUaGUgZ3VhcmFudGVlZCBtZW1vcnkgYmFycmllciBvZiB3YWtlX3Vw
-KCkgaXMgcmVkdWNlZCB0byBsb2FkX2FjcXVpcmUuCiAgUHJldmlvdXNseSwgdGhlcmUgd2Fz
-IGFsd2F5cyBhIHNwaW5fbG9jaygpL3NwaW5fdW5sb2NrKCkgcGFpci4KLSBwcmVwYXJlX3Rv
-X3dhaXQoKSBhY3R1YWxseSBkb2VzIHR3byBvcGVyYXRpb25zIHVuZGVyIHNwaW5sb2NrOgog
-IEl0IGFkZHMgY3VycmVudCB0byB0aGUgd2FpdCBxdWV1ZSwgYW5kIGl0IGNhbGxzIHNldF9j
-dXJyZW50X3N0YXRlKCkuCiAgVGhlIGNvbW1lbnQgYWJvdmUgcHJlcGFyZV90b193YWl0KCkg
-aXMgbm90IGNsZWFyIHRvIG1lLCB0aHVzIHRoZXJlCiAgbWlnaHQgYmUgZnVydGhlciBzaWRl
-IGVmZmVjdHMuCgpPbmx5IGxpZ2h0bHkgdGVzdGVkLgpObyBiZW5jaG1hcmsgdGVzdCBkb25l
-LgotLS0KIGtlcm5lbC9zY2hlZC93YWl0LmMgfCAxNyArKysrKysrKysrKysrKysrKwogMSBm
-aWxlIGNoYW5nZWQsIDE3IGluc2VydGlvbnMoKykKCmRpZmYgLS1naXQgYS9rZXJuZWwvc2No
-ZWQvd2FpdC5jIGIva2VybmVsL3NjaGVkL3dhaXQuYwppbmRleCA1MWUzOGY1ZjQ3MDEuLjEw
-ZDAyZjY1MmFiOCAxMDA2NDQKLS0tIGEva2VybmVsL3NjaGVkL3dhaXQuYworKysgYi9rZXJu
-ZWwvc2NoZWQvd2FpdC5jCkBAIC0xMjQsNiArMTI0LDIzIEBAIHN0YXRpYyBpbnQgX193YWtl
-X3VwX2NvbW1vbl9sb2NrKHN0cnVjdCB3YWl0X3F1ZXVlX2hlYWQgKndxX2hlYWQsIHVuc2ln
-bmVkIGludCBtCiBpbnQgX193YWtlX3VwKHN0cnVjdCB3YWl0X3F1ZXVlX2hlYWQgKndxX2hl
-YWQsIHVuc2lnbmVkIGludCBtb2RlLAogCSAgICAgIGludCBucl9leGNsdXNpdmUsIHZvaWQg
-KmtleSkKIHsKKwlpZiAobGlzdF9lbXB0eSgmd3FfaGVhZC0+aGVhZCkpIHsKKwkJc3RydWN0
-IGxpc3RfaGVhZCAqcG47CisKKwkJLyoKKwkJICogcGFpcnMgd2l0aCBzcGluX3VubG9ja19p
-cnFyZXN0b3JlKCZ3cV9oZWFkLT5sb2NrKTsKKwkJICogV2UgYWN0dWFsbHkgZG8gbm90IG5l
-ZWQgdG8gYWNxdWlyZSB3cV9oZWFkLT5sb2NrLCB3ZSBqdXN0CisJCSAqIG5lZWQgdG8gYmUg
-c3VyZSB0aGF0IHRoZXJlIGlzIG5vIHByZXBhcmVfdG9fd2FpdCgpIHRoYXQKKwkJICogY29t
-cGxldGVkIG9uIGFueSBDUFUgYmVmb3JlIF9fd2FrZV91cCB3YXMgY2FsbGVkLgorCQkgKiBU
-aHVzIGluc3RlYWQgb2YgbG9hZF9hY3F1aXJpbmcgdGhlIHNwaW5sb2NrIGFuZCBkcm9wcGlu
-ZworCQkgKiBpdCBhZ2Fpbiwgd2UgbG9hZF9hY3F1aXJlIHRoZSBuZXh0IGxpc3QgZW50cnkg
-YW5kIGNoZWNrCisJCSAqIHRoYXQgdGhlIGxpc3QgaXMgbm90IGVtcHR5LgorCQkgKi8KKwkJ
-cG4gPSBzbXBfbG9hZF9hY3F1aXJlKCZ3cV9oZWFkLT5oZWFkLm5leHQpOworCisJCWlmKHBu
-ID09ICZ3cV9oZWFkLT5oZWFkKQorCQkJcmV0dXJuIDA7CisJfQogCXJldHVybiBfX3dha2Vf
-dXBfY29tbW9uX2xvY2sod3FfaGVhZCwgbW9kZSwgbnJfZXhjbHVzaXZlLCAwLCBrZXkpOwog
-fQogRVhQT1JUX1NZTUJPTChfX3dha2VfdXApOwotLSAKMi40Ny4xCgo=
-
---------------QFF0zz3sc1ADSPJlE0hpJV6N--
 
