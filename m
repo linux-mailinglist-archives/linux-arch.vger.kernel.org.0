@@ -1,181 +1,147 @@
-Return-Path: <linux-arch+bounces-9528-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9529-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 015759FDBB1
-	for <lists+linux-arch@lfdr.de>; Sat, 28 Dec 2024 17:34:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B01B39FE234
+	for <lists+linux-arch@lfdr.de>; Mon, 30 Dec 2024 04:12:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 78C6E3A13D8
-	for <lists+linux-arch@lfdr.de>; Sat, 28 Dec 2024 16:33:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AD0E13A1E8B
+	for <lists+linux-arch@lfdr.de>; Mon, 30 Dec 2024 03:12:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8316019258B;
-	Sat, 28 Dec 2024 16:33:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C70C15350B;
+	Mon, 30 Dec 2024 03:12:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="B1l7dite"
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="U4TKcd5D"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74C7A2746D
-	for <linux-arch@vger.kernel.org>; Sat, 28 Dec 2024 16:33:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69FF9142624
+	for <linux-arch@vger.kernel.org>; Mon, 30 Dec 2024 03:12:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735403633; cv=none; b=hqPLKyEs/SJXuS6Hw8/MyFK5iHO9obeStuCqUs1XXVX1F1ownVKH0DzVewSV5HABS06yuRTVjkZOLhMKt7WajAyL1MAKCSRHGYlIfDEI7KhKPPx3lwEP5DivXI51Iw0wmLerHw90y4oXWQMwP8Xyto64GFtxEUHUUnkutet6yMo=
+	t=1735528337; cv=none; b=aQ1RRk6adu8+JLvR8DCu7egwC+ywtvEaHE9tHCGRDMhSzO7sESpRGm8f1l0f+DfAMQqQRrDLtIiWs2UYPvzuTIyRIH2clWNUbv/ncC35kFDjrP9E+eNpI8QBFHhlqiye59VQhCwweD4SzODx2BZQ/hFbmxUhRDEufXpZvlrbVbM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735403633; c=relaxed/simple;
-	bh=uKHw2SIo0IpDPzWH6LZvh1VdOS4dcl+yRpwoZrDj64w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XDUyVjwGX86cB68p0VCN1sjVbTINwClsMnwOcogw7lNTx8YG+w+XERoDd1QzTQkw/5QlWlwJ2w48xRj8cviwSnqxqRX480iM8Xm8YBhaz41Esez3WXQdanQW9MXgzOKIQG9nV13scscWd4xZ7Cr8kH/a2RuP/RlBV06URL13AIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=B1l7dite; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1735403630;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=iEg8vQvfA//up54k/umvCV7B1NFVv1McUmE/HFCAq8o=;
-	b=B1l7diteuWz3Q2ii1T9nnOarHo0oqWyPRquEz+xhwMYVZUwPUI4WNccJXkPQEWZ9ytx5ev
-	3BNONR3y23vGjzgdpvFX0XjZwn1ntglPaXPT3LX7FFndSHEGNI9Aoe+xqcVHzjNKHbg/5n
-	Hk2DEf2sKWxsMdXbiP32960Dn8/DFUI=
-Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-574-ACTqEsqjPh2sCiOIhva_IA-1; Sat,
- 28 Dec 2024 11:33:48 -0500
-X-MC-Unique: ACTqEsqjPh2sCiOIhva_IA-1
-X-Mimecast-MFC-AGG-ID: ACTqEsqjPh2sCiOIhva_IA
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A7D5B19560A3;
-	Sat, 28 Dec 2024 16:33:40 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.224.13])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 33CDB19560A3;
-	Sat, 28 Dec 2024 16:32:57 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Sat, 28 Dec 2024 17:33:15 +0100 (CET)
-Date: Sat, 28 Dec 2024 17:32:32 +0100
-From: Oleg Nesterov <oleg@redhat.com>
-To: Manfred Spraul <manfred@colorfullife.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, viro@zeniv.linux.org.uk,
-	brauner@kernel.org, jack@suse.cz, linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org, oliver.sang@intel.com,
-	ebiederm@xmission.com, colin.king@canonical.com,
-	josh@joshtriplett.org, penberg@cs.helsinki.fi, mingo@elte.hu,
-	jes@sgi.com, hch@lst.de, aia21@cantab.net, arjan@infradead.org,
-	jgarzik@pobox.com, neukum@fachschaft.cup.uni-muenchen.de,
-	oliver@neukum.name, dada1@cosmosbay.com, axboe@kernel.dk,
-	axboe@suse.de, nickpiggin@yahoo.com.au, dhowells@redhat.com,
-	nathans@sgi.com, rolandd@cisco.com, tytso@mit.edu, bunk@stusta.de,
-	pbadari@us.ibm.com, ak@linux.intel.com, ak@suse.de,
-	davem@davemloft.net, jsipek@cs.sunysb.edu, jens.axboe@oracle.com,
-	ramsdell@mitre.org, hch@infradead.org, akpm@linux-foundation.org,
-	randy.dunlap@oracle.com, efault@gmx.de, rdunlap@infradead.org,
-	haveblue@us.ibm.com, drepper@redhat.com, dm.n9107@gmail.com,
-	jblunck@suse.de, davidel@xmailserver.org,
-	mtk.manpages@googlemail.com, linux-arch@vger.kernel.org,
-	vda.linux@googlemail.com, jmorris@namei.org, serue@us.ibm.com,
-	hca@linux.ibm.com, rth@twiddle.net, lethal@linux-sh.org,
-	tony.luck@intel.com, heiko.carstens@de.ibm.com, andi@firstfloor.org,
-	corbet@lwn.net, crquan@gmail.com, mszeredi@suse.cz,
-	miklos@szeredi.hu, peterz@infradead.org, a.p.zijlstra@chello.nl,
-	earl_chew@agilent.com, npiggin@gmail.com, npiggin@suse.de,
-	julia@diku.dk, jaxboe@fusionio.com, nikai@nikai.net,
-	dchinner@redhat.com, davej@redhat.com, npiggin@kernel.dk,
-	eric.dumazet@gmail.com, tim.c.chen@linux.intel.com,
-	xemul@parallels.com, tj@kernel.org, serge.hallyn@canonical.com,
-	gorcunov@openvz.org, bcrl@kvack.org, alan@lxorguk.ukuu.org.uk,
-	will.deacon@arm.com, will@kernel.org, zab@redhat.com, balbi@ti.com,
-	gregkh@linuxfoundation.org, rusty@rustcorp.com.au,
-	socketpair@gmail.com, penguin-kernel@i-love.sakura.ne.jp,
-	mhocko@kernel.org, axboe@fb.com, tglx@linutronix.de,
-	mcgrof@kernel.org, linux@dominikbrodowski.net, willy@infradead.org,
-	paulmck@kernel.org, kernel@tuxforce.de,
-	linux-morello@op-lists.linaro.org
-Subject: Re: [RESEND PATCH] fs/pipe: Introduce a check to skip sleeping
- processes during pipe read/write
-Message-ID: <20241228163231.GA19293@redhat.com>
-References: <75B06EE0B67747ED+20241225094202.597305-1-wangyuli@uniontech.com>
- <CAHk-=wj5A-fO+GnfwqGpXhFbfpS4+_8xU+dnXkSx+0AfwBYrxA@mail.gmail.com>
- <20241226201158.GB11118@redhat.com>
- <1df49d97-df0e-4471-9e40-a850b758d981@colorfullife.com>
- <20241228143248.GB5302@redhat.com>
- <20241228152229.GC5302@redhat.com>
+	s=arc-20240116; t=1735528337; c=relaxed/simple;
+	bh=RByHVD3bvwf9OBgmvjYl7zmyuddvG3+m7GzmELh8Ojk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BsCwKjsXLpGGkDYJ5gq8uLy4xJBoxzFTeN7NPwAioKmxD+QZUtzN1Y6s8GmMVlXV4JLQrUjJoABv8SgSbbTuFnTRKjAh8KtivgTKZwxNJYmRiY+Aw/MxB3iwmUhw7zsif05MLHyGrORRd4nrm9VaNyULb89Bfr9iVE6SMvePiZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=U4TKcd5D; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-21a1e6fd923so54931315ad.1
+        for <linux-arch@vger.kernel.org>; Sun, 29 Dec 2024 19:12:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1735528335; x=1736133135; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=00MV44O/wLuPQ/RpQp8S/rpHXiOskq9DnLB00pReqmw=;
+        b=U4TKcd5D4yLghx2l4BTUej/I4g4Z33Z5EuOg4tqgR1jpnnlPEVnqdX27VklOCdJMzj
+         VZOfTwRmpJpqPi2m4SQzuJdbXiHWuvKAigs0JOvPTR6wkY9L7u/t/zIoZO0s8AjE8VtS
+         2w7VNScCKvWQoQOa2cMwoDCdd6PpS3fw9sgx5WOBebldyJ9PZyFhF/9oGjf23X3wufGz
+         /8QxukHxfuamu8NP0HHvE/qQoFJfPM5DZGjRXAzmsJWZzDqGRubur3XHHzqmQrPPdktj
+         FPk97rpDrbb1LkLj+b2zZKuczfGTh5ngsdYU1MFuNTe13Mf/JBkMCsTv8QN52rmjXrVU
+         MyNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1735528335; x=1736133135;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=00MV44O/wLuPQ/RpQp8S/rpHXiOskq9DnLB00pReqmw=;
+        b=Cb9zQDr/DxTqk3KVJ+kyGLuflCpqEJMjhtLM9dObVplK1FpD1rtdlG0XgKLEEaGZYY
+         yLwvuWZXFyeUEivI76S8eq6FZkCtdFD6xLk+LVzs7D1uU1XEy6UFGDy7Qve+myY7MTxR
+         wBluXokidJQKBWLLEa1Ka9jyVlQ+JtvvGE1q40TH9j0Pg33rdIypgbzK/2/+yPDxhrVL
+         MvE17MGi89rVneIUGuAnPYOug27goChXa0uFgDr29GPNpSyB1TM6zD2YtzxR/r/vPps3
+         sUx/DtlKlnb4eFQCtI5FEQxHYIbh2XpituD4qZ4Kp/UDldjGhEjMGql0OlhyLiTuio8k
+         RVOw==
+X-Forwarded-Encrypted: i=1; AJvYcCUxOThkktcSnbKT5rQ6lgG5kTFeqKArXD4QPATB0wS2ODlJYxRbL5DwNqzSVPqPmT0w2lPwLZgPYIBg@vger.kernel.org
+X-Gm-Message-State: AOJu0YwhuEm58hZrSk7dEVPwXFjL5luyQlPi7YmvXPlOOuO4hHyJy00G
+	pBmfSIMExJiy7Fzn/oH7s7d7V3k3pOjhPO/6hES1QjzqjwvjReVKNoeNz3+/BNo=
+X-Gm-Gg: ASbGncsEYW+9wboUwUrHKsvtqgF7ZgVeR1lXwLSv5H6pbmFXtj+nRdHpjzougp9IxxO
+	8ibw0WmujRK6adDmNtsls4l4K903UrY8oCC29yIBBD3U/jzx+EAbRhp7NFY0bQZs53qIXKp8flL
+	LSPPwsMGHD25vJ0AGWhgML0Y9F2i+Kc1c9vmtZyLOsW3lepL+lLPL/jHkXblqcweBWUxvnCEohI
+	LgP0O+dzfoFsRwfadWExRP3HLT84DHUf3jPbhQhsxLP4jLMj9kLAqjyLB+0qcznWOv2WKDGppMy
+	9ldBBQ==
+X-Google-Smtp-Source: AGHT+IHVtuGTDJKnXgo1JS5AtVrvj0I/cg1dyieo6seko5BYBtWvsXqnYPIAVAFKhaTndzKmWg8VgQ==
+X-Received: by 2002:a05:6a20:9185:b0:1e5:7db5:d6e7 with SMTP id adf61e73a8af0-1e5e083f019mr66304616637.46.1735528334820;
+        Sun, 29 Dec 2024 19:12:14 -0800 (PST)
+Received: from [10.84.148.23] ([203.208.167.148])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72aad84eb45sm18191842b3a.88.2024.12.29.19.12.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 29 Dec 2024 19:12:14 -0800 (PST)
+Message-ID: <9cac5690-c570-4d43-a6bc-2b59b85497ae@bytedance.com>
+Date: Mon, 30 Dec 2024 11:12:00 +0800
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241228152229.GC5302@redhat.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 15/17] mm: pgtable: remove tlb_remove_page_ptdesc()
+Content-Language: en-US
+To: Mike Rapoport <rppt@kernel.org>, akpm@linux-foundation.org,
+ kevin.brodsky@arm.com, peterz@infradead.org
+Cc: agordeev@linux.ibm.com, tglx@linutronix.de, david@redhat.com,
+ jannh@google.com, hughd@google.com, yuzhao@google.com, willy@infradead.org,
+ muchun.song@linux.dev, vbabka@kernel.org, lorenzo.stoakes@oracle.com,
+ rientjes@google.com, vishal.moola@gmail.com, arnd@arndb.de, will@kernel.org,
+ aneesh.kumar@kernel.org, npiggin@gmail.com, dave.hansen@linux.intel.com,
+ ryan.roberts@arm.com, linux-mm@kvack.org,
+ linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+ linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
+ linux-arch@vger.kernel.org, linux-csky@vger.kernel.org,
+ linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
+ linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+ linux-openrisc@vger.kernel.org, linux-sh@vger.kernel.org,
+ linux-um@lists.infradead.org
+References: <cover.1734945104.git.zhengqi.arch@bytedance.com>
+ <b37435768345e0fcf7ea358f69b4a71767f0f530.1734945104.git.zhengqi.arch@bytedance.com>
+ <Z2_EPmOTUHhcBegW@kernel.org>
+From: Qi Zheng <zhengqi.arch@bytedance.com>
+In-Reply-To: <Z2_EPmOTUHhcBegW@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 12/28, Oleg Nesterov wrote:
->
-> If nothing else, consider
->
-> 	int CONDITION;
-> 	wait_queue_head_t WQ;
->
-> 	void wake(void)
-> 	{
-> 		CONDITION = 1;
-> 		wake_up(WQ);
-> 	}
->
-> 	void wait(void)
-> 	{
-> 		DEFINE_WAIT_FUNC(entry, woken_wake_function);
->
-> 		add_wait_queue(WQ, entry);
-> 		if (!CONDITION)
-> 			wait_woken(entry, ...);
-> 		remove_wait_queue(WQ, entry);
-> 	}
->
-> this code is correct even if LOAD(CONDITION) can leak into the critical
-> section in add_wait_queue(), so CPU running wait() can actually do
->
-> 		// add_wait_queue
-> 		spin_lock(WQ->lock);
-> 		LOAD(CONDITION);	// false!
-> 		list_add(entry, head);
-> 		spin_unlock(WQ->lock);
->
-> 		if (!false)		// result of the LOAD above
-> 			wait_woken(entry, ...);
->
-> Now suppose that another CPU executes wake() between LOAD(CONDITION)
-> and list_add(entry, head). With your patch wait() will miss the event.
-> The same for __pollwait(), I think...
->
-> No?
+Hi Mike,
 
-Even simpler,
+On 2024/12/28 17:26, Mike Rapoport wrote:
+> On Mon, Dec 23, 2024 at 05:41:01PM +0800, Qi Zheng wrote:
+>> Here we are explicitly dealing with struct page, and the following logic
+>> semms strange:
+>>
+>> tlb_remove_page_ptdesc((tlb), (page_ptdesc(pte)));
+>>
+>> tlb_remove_page_ptdesc
+>> --> tlb_remove_page(tlb, ptdesc_page(pt));
+>>
+>> So remove tlb_remove_page_ptdesc() and make callers call tlb_remove_page()
+>> directly.
+> 
+> Please don't. The ptdesc wrappers are there as a part of reducing the size
+> of struct page project [1].
+> 
+> For now struct ptdesc overlaps struct page, but the goal is to have them
+> separate and always operate on struct ptdesc when working with page tables.
 
-	void wait(void)
-	{
-		DEFINE_WAIT(entry);
+OK, so tlb_remove_page_ptdesc() and tlb_remove_ptdesc() are somewhat
+intermediate products of the project.
 
-		__set_current_state(XXX);
-		add_wait_queue(WQ, entry);
+Hi Andrew, can you help remove [PATCH v3 15/17], [PATCH v3 16/17] and
+[PATCH v3 17/17] from the mm-unstable branch?
 
-		if (!CONDITION)
-			schedule();
+For [PATCH v3 17/17], I can send it separately later, or Kevin Brodsky
+can help do this in his patch series. ;)
 
-		remove_wait_queue(WQ, entry);
-		__set_current_state(TASK_RUNNING);
-	}
+Thanks,
+Qi
 
-This code is ugly but currently correct unless I am totally confused.
-
-Oleg.
+> 
+> [1] https://kernelnewbies.org/MatthewWilcox/Memdescs
+>   
 
 
