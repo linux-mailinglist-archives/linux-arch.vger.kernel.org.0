@@ -1,97 +1,98 @@
-Return-Path: <linux-arch+bounces-9558-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9559-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B05409FFE91
-	for <lists+linux-arch@lfdr.de>; Thu,  2 Jan 2025 19:37:48 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E12E49FFE94
+	for <lists+linux-arch@lfdr.de>; Thu,  2 Jan 2025 19:38:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9389D3A24B1
-	for <lists+linux-arch@lfdr.de>; Thu,  2 Jan 2025 18:37:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F19F21883709
+	for <lists+linux-arch@lfdr.de>; Thu,  2 Jan 2025 18:38:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82B251B87E5;
-	Thu,  2 Jan 2025 18:34:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 798481BAEF8;
+	Thu,  2 Jan 2025 18:34:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="vLWG7sfu";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="iF5liQzE"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="RxWvuxry";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="CIp6ZmbE"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fout-a7-smtp.messagingengine.com (fout-a7-smtp.messagingengine.com [103.168.172.150])
+Received: from fhigh-a3-smtp.messagingengine.com (fhigh-a3-smtp.messagingengine.com [103.168.172.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E3841B87C7;
-	Thu,  2 Jan 2025 18:34:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9CD11B87C8;
+	Thu,  2 Jan 2025 18:34:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735842886; cv=none; b=kmnqlDLsSwxKgLS+ffm5YsVzh3RtZi2j7UdLDQBRWI6wC58obcZS4NBED/6Sf0IA/7SXlDKAi1Kl8Dhxd5T+CnlquNSg1Qybarja2yAZ08TfMo7VYXE/EUOEyaOOaTFatvrKumpV7qpwiLlb75GuDcjDv0G8W+/hOxjwl9TWNHA=
+	t=1735842888; cv=none; b=eIAlual7Ni11Fx7a7ZXyGqCMXu9zE1hhLUNf429CeJlVkfJPHYY7GOrfdf2UVY5FVBwIO497hhvuhU+MfkmklCa2g+fU7z6pDCl7Pcg37a4xGf7YusJrFLonJdA+20DUA7P/xgEmXSXanVGZlCS6D62i8ptBL+MzmHwWI4gWnDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735842886; c=relaxed/simple;
-	bh=w4f3TlGw9XqnVwPa+FzSha4Az1WTx3zGdxtidn31rb4=;
+	s=arc-20240116; t=1735842888; c=relaxed/simple;
+	bh=yOrtMqTEXajMX/FmL8KpbG69isM181QHBtawwM9Q2fc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=RjqsWYwXnzzsIZQS5lJko+EIVy4sPVuc0HNid+87j5famYSVFtd8Tn7h49aZWYCSkZ25EmtUtCFrbTFWbgkvcBsZRd2jR7CZ9eqncrT5YbH0Eu51B8WoOL+034JhTKL0OXrs1WYDSM1hqMCybw6bBp7mD0i8FKEHCfYt6DWxGgs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=vLWG7sfu; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=iF5liQzE; arc=none smtp.client-ip=103.168.172.150
+	 In-Reply-To:To:Cc; b=NLgRF6kQwq+tPC1oCPBy19a9HWwz/tBSJSRkQRpNrjXVAqpt2KdgKKmDqmqZ1kdoUR6ZYjBcPk8u7al/hmQTjdWfCQYQt9B5c8ZgVGx9Pmz5eNdveyvoaM+LuRTuId7hGtJcs9TGi315gi34E8x+sjnkMOsxhA15A2rRH7FU6EI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=RxWvuxry; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=CIp6ZmbE; arc=none smtp.client-ip=103.168.172.154
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from phl-compute-12.internal (phl-compute-12.phl.internal [10.202.2.52])
-	by mailfout.phl.internal (Postfix) with ESMTP id 3879D1380198;
-	Thu,  2 Jan 2025 13:34:43 -0500 (EST)
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 0056811400F8;
+	Thu,  2 Jan 2025 13:34:45 -0500 (EST)
 Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-12.internal (MEProxy); Thu, 02 Jan 2025 13:34:43 -0500
+  by phl-compute-05.internal (MEProxy); Thu, 02 Jan 2025 13:34:44 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
 	cc:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1735842883;
-	 x=1735929283; bh=nQH07M+6II9wgzwQZvbsCpY0ojvdXDETDFiSzef6zZk=; b=
-	vLWG7sfuzXPBOumAWhnaI/q9Arv45bY9sQmc27Z6iqer+atf85jQ6zwd4Cd7mEKo
-	vRCGkwnxCtsnd40bTyZmP2iX0I9khB607cQojcqEvihB5AaU1ZW25a+6yOItwGWP
-	NsG5zI4pTtpdCRmUAb0j4TnJRfxTGhTAxxLrQHauxWYBZ+iWHF4rhQ0MEh5uEukL
-	We4rEKUmkx134PD3UxOKF21vFy0m3ACOwafb8RwQu4SiWBk/skm7vHuGeNj7k7Tz
-	qhX2hCigAIdbyeR4sMjBe8+nhF0aSL5mFKFWJKX2+Wa9DsiU/eD7GXEeiVO5XxWP
-	oS3DeXHj7MSZRHYfuAD0eg==
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1735842884;
+	 x=1735929284; bh=07UcmEskV2VfZVwVOkMNDeq/FSvh/LVokBdz/HaClGo=; b=
+	RxWvuxrygYTbvaU5lmpX7gzxLP7/oVeEHKS1zWHFsMP8xqfwex+Nc29mlptQDq+l
+	/TcY1pCuvs4Olj3Jthr6BboUZwZ9pSJwVQvR9zwBTVUb10gj0m2p6wpkFy7i72ct
+	mHdZ2zaUjJObIEEx/YfyQj+ODXR8m7vUfjOFhQwO91O9Kr03Y0SLWsWRT6elAE4Q
+	pg8J+1M6TmmzynMfmbUa0qerntVSJv2oStJmA6pyd8tcomdNBlasxL3oK8aL3uzq
+	3H8Jx0HJnP3wjnyQXKLd12PkRs41JfQ7ENeBGHqzZbaBdz0bpmxdNcESOiIVA6PL
+	W1oRcYsRLK4UUJqO8TSTfw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1735842883; x=
-	1735929283; bh=nQH07M+6II9wgzwQZvbsCpY0ojvdXDETDFiSzef6zZk=; b=i
-	F5liQzEiUFTCZ7NhJZIkBs5JhiBcOVUnZmhUETsH1EYm6IC9hPsOoZZW95m5DNr1
-	iIdqpFdcsNGcJ/urr4DbWwyPj/WJQPByHMu3ssgDZrGlCndMW3D5kETTxwt2v4Hf
-	rRI+K2wE7F959gJFVrpvd36ppO2kKkv5+VW+K6j78r5F/9sPRSqzcDkFR3+La5TO
-	rhob2eXWDQRv66/psxizqTm9yvJxXUPTku3PSoZEQWfO9Yn4AHlv79Y4NsNdhy44
-	+w2XZ8jo1hRZ5/J58z5h/MUZeXNz4k2mljQTwuo+A/xbiwT7qy0va++gnWRimR/1
-	q8aYK0VwOdfhAig9k3kNQ==
-X-ME-Sender: <xms:Qtx2Z6zJnwo2J1oifckJMkIMwuA2W9EzCUD9XpJ6lrOVnQ-JHKwMhQ>
-    <xme:Qtx2Z2SCv29PsHONCCEEkDnRS44mPP-l26R2i0Prsm9mOvlFg75YWvUkf15jVegax
-    YQl_se2uC0NW8JSm1M>
-X-ME-Received: <xmr:Qtx2Z8W0QIeCNipdjEizkmgoewVTSiVhgAOLLI4kuFW_lF1sBQ0wyzp4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudefvddgudduiecutefuodetggdotefrod
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1735842884; x=
+	1735929284; bh=07UcmEskV2VfZVwVOkMNDeq/FSvh/LVokBdz/HaClGo=; b=C
+	Ip6ZmbEtc5yvgPC3b9Q9vJkKkU1f3DspqGnYXkwWH/PA1ABfpNDEdVhT/MF4EFEz
+	MaqEJs5gXusVHnVsapUaM85VfK6HX6B3DGJ12zc6dG5Nt1zlfsfimCSU9jLMq2KS
+	O/KnhkHBGuZnx6hJ6VdCOT94rSO0T43TEspJkBuGDFvR9i9WGD9/yP8mPjyOerEf
+	T+NxS+5EyjDJSujIluX37mpd8dVmFGBQ+/5qQ+Yj62Fp+nKxGCaaavW0A9x7uCrR
+	ySmp4wDrnwOnZpbeA0EdqFLPSexJW7P77Jx6l0a0dM+atvzvROb0BXIFA02cSnIx
+	DLUhEVwa9eUEKfcRUFICQ==
+X-ME-Sender: <xms:RNx2Z9L6GJhI6N8XflfXAR5RCPdu4hDuTXGXnN3kQ6LTMrakFvPbgQ>
+    <xme:RNx2Z5KTidEa5iV70XwEPEv72y1qmUQSbJOAzWwl_-ZwFkhOauPrunp0ubQE4nv0_
+    FykuaukFk9clNeFQQg>
+X-ME-Received: <xmr:RNx2Z1tZIXBfjm_ySqhK97WZyBHv2IUTbExrVDZYjVChz897F7Ex4k5D>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudefvddgudduhecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
     uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
     hnthhsucdlqddutddtmdenucfjughrpefhfffugggtgffkfhgjvfevofesthejredtredt
     jeenucfhrhhomheplfhirgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflh
-    ihghhorghtrdgtohhmqeenucggtffrrghtthgvrhhnpedvkeeihfefveekueevteefleff
-    keegudeghfdtuddugefhueevgeffgedukeejleenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorght
-    rdgtohhmpdhnsggprhgtphhtthhopeejpdhmohguvgepshhmthhpohhuthdprhgtphhtth
-    hopehlohhonhhgrghrtghhsehlihhsthhsrdhlihhnuhigrdguvghvpdhrtghpthhtohep
-    khgvrhhnvghlseigvghntdhnrdhnrghmvgdprhgtphhtthhopegthhgvnhhhuhgrtggrih
-    eskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghrnhgusegrrhhnuggsrdguvgdprhgt
-    phhtthhopehlihhnuhigqdgrrhgthhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtph
-    htthhopehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmpdhrtghpthhtohep
-    lhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:Qtx2ZwhidXmLy5kF1_0nZPKkCFshf6r5QNvKMFp3IOdLxTM9IRkXow>
-    <xmx:Qtx2Z8CxsbjdklH3lHijNfcqo2fyP2afmywijMm0p23vsuL2u7K9Zg>
-    <xmx:Qtx2ZxLLQSfKLXIEicxkVnpQ1WnzQ-LF3RLk3iSFUp5Pk6HLglkLyw>
-    <xmx:Qtx2ZzA0qxYnKcHq6ajh7GWWBkuR0T8QSSydU7L_EDiJmmPGqyqFOQ>
-    <xmx:Q9x2Z6BtXmZcbtzXxqS463FZY6mMajP3IAZQRSdQ5KUk144xVVjBt2GL>
+    ihghhorghtrdgtohhmqeenucggtffrrghtthgvrhhnpeegfefgleektddtkeduvefffeek
+    gfefgeejgefhkefhhefffeelteeuudetudfhvdenucffohhmrghinheplhgushdrshgsne
+    cuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgig
+    uhhnrdihrghnghesfhhlhihgohgrthdrtghomhdpnhgspghrtghpthhtohepjedpmhhoug
+    gvpehsmhhtphhouhhtpdhrtghpthhtoheplhhoohhnghgrrhgthheslhhishhtshdrlhhi
+    nhhugidruggvvhdprhgtphhtthhopehkvghrnhgvlhesgigvnhdtnhdrnhgrmhgvpdhrtg
+    hpthhtoheptghhvghnhhhurggtrghisehkvghrnhgvlhdrohhrghdprhgtphhtthhopegr
+    rhhnugesrghrnhgusgdruggvpdhrtghpthhtoheplhhinhhugidqrghrtghhsehvghgvrh
+    drkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepjhhirgiguhhnrdihrghnghesfhhlhihg
+    ohgrthdrtghomhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvg
+    hrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:RNx2Z-Y5QkN7QmY-qSiO7UNhoz-wdaShA0QZmB4oDCXwnLSJMPav0w>
+    <xmx:RNx2Z0YPgzNTkWHgI952T7caVwBAjlsEXzoReuWOtG6S3H9MqcS3Cg>
+    <xmx:RNx2ZyAB9fd0jsyOMmNMar67f0mjteuAlrCbZjwd_GNGCX_P7FRmKg>
+    <xmx:RNx2ZybMce785aN3rDPu8H1br231O_D3J766K8vMMgrOjOcdS2VtyA>
+    <xmx:RNx2Z04mp9emvkzhYLDlrBkz3_lw9XwL1Pwwyj-MAGocAAbL5k8vccG0>
 Feedback-ID: ifd894703:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 2 Jan 2025 13:34:41 -0500 (EST)
+ 2 Jan 2025 13:34:43 -0500 (EST)
 From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date: Thu, 02 Jan 2025 18:34:35 +0000
-Subject: [PATCH 2/3] loongarch: Introduce sys_loongarch_flush_icache
- syscall
+Date: Thu, 02 Jan 2025 18:34:36 +0000
+Subject: [PATCH 3/3] loongarch: vdso: Introduce __vdso_flush_icache
+ function
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -100,7 +101,7 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250102-la32-uapi-v1-2-db32aa769b88@flygoat.com>
+Message-Id: <20250102-la32-uapi-v1-3-db32aa769b88@flygoat.com>
 References: <20250102-la32-uapi-v1-0-db32aa769b88@flygoat.com>
 In-Reply-To: <20250102-la32-uapi-v1-0-db32aa769b88@flygoat.com>
 To: Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>
@@ -108,143 +109,193 @@ Cc: Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev,
  linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
  Jiaxun Yang <jiaxun.yang@flygoat.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5030;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6056;
  i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
- bh=w4f3TlGw9XqnVwPa+FzSha4Az1WTx3zGdxtidn31rb4=;
- b=owGbwMvMwCXmXMhTe71c8zDjabUkhvSyO3Z/38ufjGVmL2Jc/6X52XGDO5dsV1QoV1YeUZtfU
- rz3E49MRykLgxgXg6yYIkuIgFLfhsaLC64/yPoDM4eVCWQIAxenAEzkaTrD/xiRSzWJuQV7/ITa
- q6qu/NrENflx2aKnJ/uTnqzY/15AyYvhf+Dq0+dbvjf9TZ1ZO1VoQrWMqqSJwRaHX12T75hvnV4
- 5mRcA
+ bh=yOrtMqTEXajMX/FmL8KpbG69isM181QHBtawwM9Q2fc=;
+ b=owGbwMvMwCXmXMhTe71c8zDjabUkhvSyO3avLnAolIdL3+PyClOY/MVxXwCP8ARNNrmJd7j1u
+ w6cV/neUcrCIMbFICumyBIioNS3ofHigusPsv7AzGFlAhnCwMUpABOZGsTw35lt6S0lt8OLz1k2
+ ihTwzVC7cme2WqP1vumHJd1Cs/6kz2VkmK74OXm1vIbd4qcnPhQY7PxWmfoy9e+a017u92aLv6u
+ 24wUA
 X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
  fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 
-On LoongArch CPUs with ICACHET, writes automatically sync to both local and
-remote instruction caches. CPUs without this feature lack userspace cache
-flush instructions, requiring a syscall to maintain I/D cache coherence and
-propagate to remote caches.
+Introduce __vdso_flush_icache function for performing cache
+flush in userspace whenever possible.
 
-sys_loongarch_flush_icache() is defined to flush the instruction cache
-over an address range, with the flush applying to either all threads or
-just the caller.
-
-Currently all LoongArch64 implementations from Loongson comes with ICACHET,
-however most LoongArch32 implementations including openLA500 and emerging
-third party LoongArch64 implementations such as WiredNG are coming without
-ICACHET.
-
-Sadly many user space applications are assuming ICACHET support, we can't
-recall those binaries. So we'd better get UAPI for cacheflush ready soonish
-and encourage application to start using it.
-
-The syscall resolves to a ibar for now, it should be revised when we have
-actual non-ICACHET support in kernel.
+It will use ibar in userspace if CPU comes with ICACHET support,
+and fallback to syscall if not. It also made infra ready for
+possible future userspace cache flush instruction.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
- arch/loongarch/include/asm/cacheflush.h |  6 ++++++
- arch/loongarch/include/asm/syscall.h    |  2 ++
- arch/loongarch/kernel/Makefile.syscalls |  3 +--
- arch/loongarch/kernel/syscall.c         | 28 ++++++++++++++++++++++++++++
- scripts/syscall.tbl                     |  2 ++
- 5 files changed, 39 insertions(+), 2 deletions(-)
+ arch/loongarch/include/asm/vdso/vdso.h     | 10 ++++++
+ arch/loongarch/include/asm/vdso/vsyscall.h |  1 +
+ arch/loongarch/kernel/vdso.c               |  2 ++
+ arch/loongarch/mm/cache.c                  |  3 ++
+ arch/loongarch/vdso/Makefile               |  2 +-
+ arch/loongarch/vdso/flush_icache.c         | 50 ++++++++++++++++++++++++++++++
+ arch/loongarch/vdso/vdso.lds.S             |  5 +++
+ 7 files changed, 72 insertions(+), 1 deletion(-)
 
-diff --git a/arch/loongarch/include/asm/cacheflush.h b/arch/loongarch/include/asm/cacheflush.h
-index f8754d08a31ab07490717c31b9253871668b9a76..94f4a47f00860977db0b360965a22ff0a461c098 100644
---- a/arch/loongarch/include/asm/cacheflush.h
-+++ b/arch/loongarch/include/asm/cacheflush.h
-@@ -80,6 +80,12 @@ static inline void flush_cache_line(int leaf, unsigned long addr)
- 	}
- }
+diff --git a/arch/loongarch/include/asm/vdso/vdso.h b/arch/loongarch/include/asm/vdso/vdso.h
+index 1c183a9b2115a29a997ec8db0e788d87fb191dce..215b8c85fb2347a2ba9b53167a4343086efb9af3 100644
+--- a/arch/loongarch/include/asm/vdso/vdso.h
++++ b/arch/loongarch/include/asm/vdso/vdso.h
+@@ -13,6 +13,15 @@
+ #include <asm/page.h>
+ #include <asm/vdso.h>
  
-+/*
-+ * Bits in sys_loongarch_flush_icache()'s flags argument.
-+ */
-+#define SYS_LOONGARCH_FLUSH_ICACHE_LOCAL 1UL
-+#define SYS_LOONGARCH_FLUSH_ICACHE_ALL   (SYS_LOONGARCH_FLUSH_ICACHE_LOCAL)
++enum vdso_icacle_flush_mode {
++	VDSO_ICACLE_FLUSH_IBAR,
++	VDSO_ICACLE_FLUSH_FALLBACK,
++};
 +
- #include <asm-generic/cacheflush.h>
- 
- #endif /* _ASM_CACHEFLUSH_H */
-diff --git a/arch/loongarch/include/asm/syscall.h b/arch/loongarch/include/asm/syscall.h
-index e286dc58476e6e6c5d126866a8590a96e4b4089a..6bd414a98a757de3c1bc78643fa1749f07efb1c0 100644
---- a/arch/loongarch/include/asm/syscall.h
-+++ b/arch/loongarch/include/asm/syscall.h
-@@ -71,4 +71,6 @@ static inline bool arch_syscall_is_vdso_sigreturn(struct pt_regs *regs)
- 	return false;
- }
- 
-+asmlinkage long sys_loongarch_flush_icache(uintptr_t, uintptr_t, uintptr_t);
++struct vdso_icache_flush_data {
++	enum vdso_icacle_flush_mode mode;
++};
 +
- #endif	/* __ASM_LOONGARCH_SYSCALL_H */
-diff --git a/arch/loongarch/kernel/Makefile.syscalls b/arch/loongarch/kernel/Makefile.syscalls
-index ab7d9baa29152da97932c7e447a183fba265451c..11665e3000beffd24ef9d683a4ac337554e0b320 100644
---- a/arch/loongarch/kernel/Makefile.syscalls
-+++ b/arch/loongarch/kernel/Makefile.syscalls
-@@ -1,4 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0
+ struct vdso_pcpu_data {
+ 	u32 node;
+ } ____cacheline_aligned_in_smp;
+@@ -20,6 +29,7 @@ struct vdso_pcpu_data {
+ struct loongarch_vdso_data {
+ 	struct vdso_pcpu_data pdata[NR_CPUS];
+ 	struct vdso_rng_data rng_data;
++	struct vdso_icache_flush_data icache_flush_data;
+ };
  
--# No special ABIs on loongarch so far
--syscall_abis_64 +=
-+syscall_abis_64 += loongarch
-diff --git a/arch/loongarch/kernel/syscall.c b/arch/loongarch/kernel/syscall.c
-index b267db6ed79c20199504247c181cc245ef86abfd..2bc164d972b4d41c39e91481803d42bfd0184d3f 100644
---- a/arch/loongarch/kernel/syscall.c
-+++ b/arch/loongarch/kernel/syscall.c
-@@ -15,6 +15,7 @@
- #include <linux/unistd.h>
+ /*
+diff --git a/arch/loongarch/include/asm/vdso/vsyscall.h b/arch/loongarch/include/asm/vdso/vsyscall.h
+index 8987e951d0a93c34ca75de676fb9c191ff4ef3c2..a02663ddf7cdccbe4b0e4c4d87b65874ab14070a 100644
+--- a/arch/loongarch/include/asm/vdso/vsyscall.h
++++ b/arch/loongarch/include/asm/vdso/vsyscall.h
+@@ -8,6 +8,7 @@
  
- #include <asm/asm.h>
-+#include <asm/cacheflush.h>
- #include <asm/exception.h>
- #include <asm/loongarch.h>
- #include <asm/signal.h>
-@@ -51,6 +52,33 @@ SYSCALL_DEFINE6(mmap2, unsigned long, addr, unsigned long, len, unsigned long,
+ extern struct vdso_data *vdso_data;
+ extern struct vdso_rng_data *vdso_rng_data;
++extern struct vdso_icache_flush_data *vdso_icache_flush_data;
+ 
+ static __always_inline
+ struct vdso_data *__loongarch_get_k_vdso_data(void)
+diff --git a/arch/loongarch/kernel/vdso.c b/arch/loongarch/kernel/vdso.c
+index 05e5fbac102a902016e633db75d9aff7ed550c50..4085452b3e1081e115d346f5870d54dad5c6ef54 100644
+--- a/arch/loongarch/kernel/vdso.c
++++ b/arch/loongarch/kernel/vdso.c
+@@ -36,6 +36,8 @@ static union {
+ struct vdso_data *vdso_data = generic_vdso_data.data;
+ struct vdso_pcpu_data *vdso_pdata = loongarch_vdso_data.vdata.pdata;
+ struct vdso_rng_data *vdso_rng_data = &loongarch_vdso_data.vdata.rng_data;
++struct vdso_icache_flush_data *vdso_icache_flush_data =
++				&loongarch_vdso_data.vdata.icache_flush_data;
+ 
+ static int vdso_mremap(const struct vm_special_mapping *sm, struct vm_area_struct *new_vma)
+ {
+diff --git a/arch/loongarch/mm/cache.c b/arch/loongarch/mm/cache.c
+index 6be04d36ca0769658a2b52d25af50dd6ad7e07e0..a424a9b24827e5eb83a8d4db7da76b42ba3f4d8b 100644
+--- a/arch/loongarch/mm/cache.c
++++ b/arch/loongarch/mm/cache.c
+@@ -24,6 +24,7 @@
+ #include <asm/numa.h>
+ #include <asm/processor.h>
+ #include <asm/setup.h>
++#include <asm/vdso/vsyscall.h>
+ 
+ void cache_error_setup(void)
+ {
+@@ -156,6 +157,8 @@ void cpu_cache_init(void)
+ 
+ 	current_cpu_data.cache_leaves_present = leaf;
+ 	current_cpu_data.options |= LOONGARCH_CPU_PREFETCH;
++
++	vdso_icache_flush_data->mode = VDSO_ICACLE_FLUSH_IBAR;
  }
- #endif
  
+ static const pgprot_t protection_map[16] = {
+diff --git a/arch/loongarch/vdso/Makefile b/arch/loongarch/vdso/Makefile
+index fdde1bcd4e2663bd400dcc6becc4261b7d5dce3a..8407d85548a4d4ff03571f35317ba2a0881f684c 100644
+--- a/arch/loongarch/vdso/Makefile
++++ b/arch/loongarch/vdso/Makefile
+@@ -4,7 +4,7 @@
+ # Include the generic Makefile to check the built vdso.
+ include $(srctree)/lib/vdso/Makefile
+ 
+-obj-vdso-y := elf.o vgetcpu.o vgettimeofday.o vgetrandom.o \
++obj-vdso-y := elf.o flush_icache.o vgetcpu.o vgettimeofday.o vgetrandom.o \
+               vgetrandom-chacha.o sigreturn.o
+ 
+ # Common compiler flags between ABIs.
+diff --git a/arch/loongarch/vdso/flush_icache.c b/arch/loongarch/vdso/flush_icache.c
+new file mode 100644
+index 0000000000000000000000000000000000000000..e1f95572175a0bf4c136afd1107ea2f8d8933b21
+--- /dev/null
++++ b/arch/loongarch/vdso/flush_icache.c
+@@ -0,0 +1,50 @@
++// SPDX-License-Identifier: GPL-2.0-only
 +/*
-+ * On LoongArch CPUs with ICACHET, writes automatically sync to both local and
-+ * remote instruction caches. CPUs without this feature lack userspace cache
-+ * flush instructions, requiring a syscall to maintain I/D cache coherence and
-+ * propagate to remote caches.
-+ *
-+ * sys_loongarch_flush_icache() is defined to flush the instruction cache
-+ * over an address range, with the flush applying to either all threads or
-+ * just the caller.
++ * Fast user context implementation of getcpu()
 + */
-+SYSCALL_DEFINE3(loongarch_flush_icache, uintptr_t, start, uintptr_t, end,
-+	uintptr_t, flags)
++
++#include <asm/vdso.h>
++#include <asm/unistd.h>
++
++static int flush_icache_ibar(void)
 +{
-+	/* Check the reserved flags. */
-+	if (unlikely(flags & ~SYS_LOONGARCH_FLUSH_ICACHE_ALL))
-+		return -EINVAL;
-+
-+	/*
-+	 * SYS_LOONGARCH_FLUSH_ICACHE_LOCAL is not handled so far, needs
-+	 * to be realized when non-ICACHET CPUs are supported.
-+	 */
-+
-+	flush_icache_user_range(start, end);
++	__asm__ __volatile__ ("\tibar 0\n"::);
 +
 +	return 0;
 +}
 +
- void *sys_call_table[__NR_syscalls] = {
- 	[0 ... __NR_syscalls - 1] = sys_ni_syscall,
- #ifdef CONFIG_64BIT
-diff --git a/scripts/syscall.tbl b/scripts/syscall.tbl
-index ebbdb3c42e9f74613b003014c0baf44c842bb756..723fe859956809f26d6ec50ad7812933531ef687 100644
---- a/scripts/syscall.tbl
-+++ b/scripts/syscall.tbl
-@@ -298,6 +298,8 @@
- 244	csky	set_thread_area			sys_set_thread_area
- 245	csky	cacheflush			sys_cacheflush
- 
-+259	loongarch       loongarch_flush_icache	sys_loongarch_flush_icache
++static int flush_icache_fallback(uintptr_t start, uintptr_t end,
++				  uintptr_t flags)
++{
++	register long _num  __asm__ ("a7") = __NR_loongarch_flush_icache;
++	register long _arg1 __asm__ ("a0") = (long)(start);
++	register long _arg2 __asm__ ("a1") = (long)(end);
++	register long _arg3 __asm__ ("a2") = (long)(flags);
 +
- 244	nios2	cacheflush			sys_cacheflush
++	__asm__ volatile (
++		"syscall 0\n"
++		: "+r"(_arg1)
++		: "r"(_arg2), "r"(_arg3),
++		  "r"(_num)
++		: "memory", "$t0", "$t1", "$t2", "$t3", "$t4", "$t5",
++		  "$t6", "$t7", "$t8"
++	);
++
++	return _arg1;
++}
++
++extern int __vdso_flush_icache(uintptr_t start, uintptr_t end,
++			       uintptr_t flags);
++int __vdso_flush_icache(uintptr_t start, uintptr_t end, uintptr_t flags)
++{
++
++	switch (_loongarch_data.icache_flush_data.mode) {
++	case VDSO_ICACLE_FLUSH_IBAR:
++		return flush_icache_ibar();
++	case VDSO_ICACLE_FLUSH_FALLBACK:
++	default:
++		return flush_icache_fallback(start, end, flags);
++	}
++
++	return -EINVAL;
++}
+diff --git a/arch/loongarch/vdso/vdso.lds.S b/arch/loongarch/vdso/vdso.lds.S
+index 160cfaef2de45b1243502c7356f8a913658548fe..a1023d10fbb7b45c2a70ead0304c2753c05f9654 100644
+--- a/arch/loongarch/vdso/vdso.lds.S
++++ b/arch/loongarch/vdso/vdso.lds.S
+@@ -72,6 +72,11 @@ VERSION
+ 		__vdso_rt_sigreturn;
+ 	local: *;
+ 	};
++	LINUX_6.14 {
++	global:
++		__vdso_flush_icache;
++	local: *;
++	};
+ }
  
- 244	or1k	or1k_atomic			sys_or1k_atomic
+ /*
 
 -- 
 2.43.0
