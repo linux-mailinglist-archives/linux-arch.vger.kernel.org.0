@@ -1,38 +1,38 @@
-Return-Path: <linux-arch+bounces-9573-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9574-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BF14A00DCD
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Jan 2025 19:44:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1901AA00DD5
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Jan 2025 19:45:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D18317A19F9
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Jan 2025 18:44:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9FDA73A44BE
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Jan 2025 18:44:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0675C1FC7D7;
-	Fri,  3 Jan 2025 18:44:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BC4F1FCF57;
+	Fri,  3 Jan 2025 18:44:40 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 203F31FCCE2;
-	Fri,  3 Jan 2025 18:44:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 616081FCCFF;
+	Fri,  3 Jan 2025 18:44:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735929875; cv=none; b=ntMCwHreB6KG+90GSucRF4qowsWXDgCwZBZssg3fTXDnWoCvvbC0s0r/xBqi7itdhCS0QM/lPIT9BGyvnK80tbwMUaoHbEDlFtplS2DVJbOA7yVsZkcmEKnRtguer81i2g/ejk0myCrcCRSAJI+mfXfaz8GCK17p6XhRNls+KOY=
+	t=1735929880; cv=none; b=Dg0jCxrZJe6Nuh5c6NyU39Gdvbd4iBDQTY70e4qYYKRPhBq+D6fCWLma49Qd1ItzpX2bZ51b/JdAA92SH+omzTIT4C4j0ZLTz6GZa7BCJYui712X7+Hu7Pt+WhMYxBvlQDVOk3P7U9v4vWGbklTAAD5u1/tmS3gvq5n4H38SjOA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735929875; c=relaxed/simple;
-	bh=+d42x1kRe9YmxLARAEmMd1h0iW0p6A3bX2cjCR+06vI=;
+	s=arc-20240116; t=1735929880; c=relaxed/simple;
+	bh=/7xd1qwI+V6LAz4fDaB/KFFcPFfXSKau+WrvZgcwgFM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NCCEe/a4RwwTX5V2b5B4zm6xYQ/58cy8rReg+xJI093WvdmP/Wziix6D1jpjk5vv5F016Mdk12fWvRiWU6haEWs10wphb8FQp/f/isf9Eak8HcT61f/juSsc15Q9dSsE3DsXmO1CKnoaPXv3994rn2MM1Nra/M4KgnvX3TVLHVg=
+	 MIME-Version; b=dWiuOMWJ1LZ1wingwPmQY7l8ctWdS4I4ug/0ZrdmLbzY3u8lC2CisUWw/mrCfjeDa6X27kXW8BUarhBO/fHdiOJOakmRXWKR3k+gLJma3sa264RGbq28lAkL8O4idWQj8cyBKDUfJkGLrU+Af4Vsv+ZDnfupvatVjlVjtVy+tzo=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A16E7150C;
-	Fri,  3 Jan 2025 10:45:01 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ED50C1C14;
+	Fri,  3 Jan 2025 10:45:05 -0800 (PST)
 Received: from e123572-lin.arm.com (e123572-lin.cambridge.arm.com [10.1.194.54])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6B3F53F673;
-	Fri,  3 Jan 2025 10:44:29 -0800 (PST)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B7C5C3F673;
+	Fri,  3 Jan 2025 10:44:33 -0800 (PST)
 From: Kevin Brodsky <kevin.brodsky@arm.com>
 To: linux-mm@kvack.org
 Cc: Kevin Brodsky <kevin.brodsky@arm.com>,
@@ -64,9 +64,9 @@ Cc: Kevin Brodsky <kevin.brodsky@arm.com>,
 	linux-um@lists.infradead.org,
 	loongarch@lists.linux.dev,
 	x86@kernel.org
-Subject: [PATCH v2 1/6] mm: Move common part of pagetable_*_ctor to helper
-Date: Fri,  3 Jan 2025 18:44:10 +0000
-Message-ID: <20250103184415.2744423-2-kevin.brodsky@arm.com>
+Subject: [PATCH v2 2/6] parisc: mm: Ensure pagetable_pmd_[cd]tor are called
+Date: Fri,  3 Jan 2025 18:44:11 +0000
+Message-ID: <20250103184415.2744423-3-kevin.brodsky@arm.com>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20250103184415.2744423-1-kevin.brodsky@arm.com>
 References: <20250103184415.2744423-1-kevin.brodsky@arm.com>
@@ -78,84 +78,64 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-pagetable_*_ctor all have the same basic implementation. Move the
-common part to a helper to reduce duplication.
+The implementation of pmd_{alloc_one,free} on parisc requires a
+non-zero allocation order, but is completely standard aside from
+that. Let's reuse the generic implementation of pmd_alloc_one().
+Explicit zeroing is not needed as GFP_PGTABLE_KERNEL includes
+__GFP_ZERO. The generic pmd_free() can handle higher allocation
+orders so we don't need to define our own.
+
+These changes ensure that pagetable_pmd_[cd]tor are called,
+improving the accounting of page table pages.
 
 Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
 Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
 ---
- include/linux/mm.h | 28 ++++++++++++----------------
- 1 file changed, 12 insertions(+), 16 deletions(-)
+ arch/parisc/include/asm/pgalloc.h | 23 ++++++++++++-----------
+ 1 file changed, 12 insertions(+), 11 deletions(-)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 1a11f9df5c2d..065fa9449d03 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -3076,6 +3076,14 @@ static inline bool ptlock_init(struct ptdesc *ptdesc) { return true; }
- static inline void ptlock_free(struct ptdesc *ptdesc) {}
- #endif /* defined(CONFIG_SPLIT_PTE_PTLOCKS) */
+diff --git a/arch/parisc/include/asm/pgalloc.h b/arch/parisc/include/asm/pgalloc.h
+index e3e142b1c5c5..3e8dbd79670b 100644
+--- a/arch/parisc/include/asm/pgalloc.h
++++ b/arch/parisc/include/asm/pgalloc.h
+@@ -11,7 +11,6 @@
+ #include <asm/cache.h>
  
-+static inline void __pagetable_ctor(struct ptdesc *ptdesc)
-+{
-+	struct folio *folio = ptdesc_folio(ptdesc);
-+
-+	__folio_set_pgtable(folio);
-+	lruvec_stat_add_folio(folio, NR_PAGETABLE);
-+}
-+
- static inline void pagetable_dtor(struct ptdesc *ptdesc)
- {
- 	struct folio *folio = ptdesc_folio(ptdesc);
-@@ -3093,12 +3101,9 @@ static inline void pagetable_dtor_free(struct ptdesc *ptdesc)
+ #define __HAVE_ARCH_PMD_ALLOC_ONE
+-#define __HAVE_ARCH_PMD_FREE
+ #define __HAVE_ARCH_PGD_FREE
+ #include <asm-generic/pgalloc.h>
  
- static inline bool pagetable_pte_ctor(struct ptdesc *ptdesc)
+@@ -46,17 +45,19 @@ static inline void pud_populate(struct mm_struct *mm, pud_t *pud, pmd_t *pmd)
+ 
+ static inline pmd_t *pmd_alloc_one(struct mm_struct *mm, unsigned long address)
  {
--	struct folio *folio = ptdesc_folio(ptdesc);
+-	pmd_t *pmd;
++	struct ptdesc *ptdesc;
++	gfp_t gfp = GFP_PGTABLE_USER;
+ 
+-	pmd = (pmd_t *)__get_free_pages(GFP_PGTABLE_KERNEL, PMD_TABLE_ORDER);
+-	if (likely(pmd))
+-		memset ((void *)pmd, 0, PAGE_SIZE << PMD_TABLE_ORDER);
+-	return pmd;
+-}
 -
- 	if (!ptlock_init(ptdesc))
- 		return false;
--	__folio_set_pgtable(folio);
--	lruvec_stat_add_folio(folio, NR_PAGETABLE);
-+	__pagetable_ctor(ptdesc);
- 	return true;
+-static inline void pmd_free(struct mm_struct *mm, pmd_t *pmd)
+-{
+-	free_pages((unsigned long)pmd, PMD_TABLE_ORDER);
++	if (mm == &init_mm)
++		gfp = GFP_PGTABLE_KERNEL;
++	ptdesc = pagetable_alloc(gfp, PMD_TABLE_ORDER);
++	if (!ptdesc)
++		return NULL;
++	if (!pagetable_pmd_ctor(ptdesc)) {
++		pagetable_free(ptdesc);
++		return NULL;
++	}
++	return ptdesc_address(ptdesc);
  }
+ #endif
  
-@@ -3202,13 +3207,10 @@ static inline spinlock_t *pmd_lock(struct mm_struct *mm, pmd_t *pmd)
- 
- static inline bool pagetable_pmd_ctor(struct ptdesc *ptdesc)
- {
--	struct folio *folio = ptdesc_folio(ptdesc);
--
- 	if (!pmd_ptlock_init(ptdesc))
- 		return false;
--	__folio_set_pgtable(folio);
- 	ptdesc_pmd_pts_init(ptdesc);
--	lruvec_stat_add_folio(folio, NR_PAGETABLE);
-+	__pagetable_ctor(ptdesc);
- 	return true;
- }
- 
-@@ -3233,18 +3235,12 @@ static inline spinlock_t *pud_lock(struct mm_struct *mm, pud_t *pud)
- 
- static inline void pagetable_pud_ctor(struct ptdesc *ptdesc)
- {
--	struct folio *folio = ptdesc_folio(ptdesc);
--
--	__folio_set_pgtable(folio);
--	lruvec_stat_add_folio(folio, NR_PAGETABLE);
-+	__pagetable_ctor(ptdesc);
- }
- 
- static inline void pagetable_p4d_ctor(struct ptdesc *ptdesc)
- {
--	struct folio *folio = ptdesc_folio(ptdesc);
--
--	__folio_set_pgtable(folio);
--	lruvec_stat_add_folio(folio, NR_PAGETABLE);
-+	__pagetable_ctor(ptdesc);
- }
- 
- extern void __init pagecache_init(void);
 -- 
 2.47.0
 
