@@ -1,120 +1,167 @@
-Return-Path: <linux-arch+bounces-9570-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9571-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27A04A00862
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Jan 2025 12:15:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE8EEA009E6
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Jan 2025 14:27:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F2C333A32C3
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Jan 2025 11:15:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9902F163AE9
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Jan 2025 13:27:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC6561F9EBB;
-	Fri,  3 Jan 2025 11:15:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Tf96QP1n"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FB4D1F9EDF;
+	Fri,  3 Jan 2025 13:27:15 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F83D1C8FB4;
-	Fri,  3 Jan 2025 11:15:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0158F1E0087;
+	Fri,  3 Jan 2025 13:27:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735902917; cv=none; b=EJ56HUdhQAxSnZnAdteHLgtSgUbYjV+ivHvkIK47U+PzNeEU9H3iAvJKhDSyZXGEYmW27yyjllIY23efjx622zaXmXw8WAHMhscEgMdtlN+BtE72lBhg7Fu/sfHiGn+A9bvmrBwlBSrHHaTOES+A4XBjqR5p7NsNOWpVoNLKoAU=
+	t=1735910835; cv=none; b=oL/lGoh2ruLuwVpZptocCsZgMuONA2u6pjUb+TeT0rOryGnCqXEDguEc4fLsXwKE44vKGCLiM3ykI8bAVepMgaaYSjQgNxncsAqF33W4rf/tLRi2yWBI3JlvbT78HzWutkjSKESPB+X+C1cL/PJ8A5McAx19AkGluwlsbiUqNK8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735902917; c=relaxed/simple;
-	bh=/7y3mM4jq5ZFPb8rK3oYjsNkhMjCwwWF586A1GZ7fHM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qD0O8T142uNTDFpV9NJ5t/fe38LK/xhOHn3nB0xdNYMOl/oqeuwhQy6avoEnLGcBx1QsdjMxUPNvZlsWDnk03AiKMG3F/VLtAtEiMRKYyH8Xc6XrNcAzmpqFmqDprE34o5ifOWsWlM0MzU+GDiwp1S/vM/99YcGl9f1cZobDcrc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Tf96QP1n; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=CPGOdr/jsXJNO5Wu3fEBGF99GP73lSQF/IKxQW4k0R4=; b=Tf96QP1nI5zee8m+i5u3CA94h9
-	3PVNNoLdvhSBk2t6LZQP6KHn1+Y/Ig9kK3lwT2hFjHWgZiqq3VK4SzqQBmD6A0e29acKD8NJDsAzp
-	PBklhel75TRoOCf5VTzc00lXza1eWj1sW19Tjleo1fc/L5i9P5juDXyKQY9kHKExje/1wAmmZkrHj
-	FdESUWBGwWEamk3EA3c0+gwV4EPoveBGXJo3r+051uO72Cz+2Bir5nMUbKQ2FfpEvF0r1gyVxRelx
-	Ro4i1hRHlfJmHnjxqwmbD1SaYDgPeAH7HhcAneWE1IcOwP7nCEbEkp2xJxpa8O/6L3gNZJN11KFqb
-	fYAj5NUQ==;
-Received: from 77-249-17-89.cable.dynamic.v4.ziggo.nl ([77.249.17.89] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tTfdp-00000005j4l-1npS;
-	Fri, 03 Jan 2025 11:14:57 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 3EDFC3003AF; Fri,  3 Jan 2025 12:14:57 +0100 (CET)
-Date: Fri, 3 Jan 2025 12:14:57 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Qi Zheng <zhengqi.arch@bytedance.com>, agordeev@linux.ibm.com,
-	kevin.brodsky@arm.com, tglx@linutronix.de, david@redhat.com,
-	jannh@google.com, hughd@google.com, yuzhao@google.com,
-	willy@infradead.org, muchun.song@linux.dev, vbabka@kernel.org,
-	lorenzo.stoakes@oracle.com, akpm@linux-foundation.org,
-	rientjes@google.com, vishal.moola@gmail.com, arnd@arndb.de,
-	will@kernel.org, aneesh.kumar@kernel.org, npiggin@gmail.com,
-	dave.hansen@linux.intel.com, ryan.roberts@arm.com,
-	linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
-	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
-	linux-kernel@vger.kernel.org, x86@kernel.org,
-	linux-arch@vger.kernel.org, linux-csky@vger.kernel.org,
-	linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
-	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-	linux-openrisc@vger.kernel.org, linux-sh@vger.kernel.org,
-	linux-um@lists.infradead.org
-Subject: Re: [PATCH v3 15/17] mm: pgtable: remove tlb_remove_page_ptdesc()
-Message-ID: <20250103111457.GC22934@noisy.programming.kicks-ass.net>
-References: <cover.1734945104.git.zhengqi.arch@bytedance.com>
- <b37435768345e0fcf7ea358f69b4a71767f0f530.1734945104.git.zhengqi.arch@bytedance.com>
- <Z2_EPmOTUHhcBegW@kernel.org>
+	s=arc-20240116; t=1735910835; c=relaxed/simple;
+	bh=+8G2mn5XjC+6BvOgDwIaLzTXtQekFe6X8F8stkKVxBA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LG7CGOIXbrUqsTszv/QcpZXN9OTjXmXBOHS7d+GJKPIZ+E0ge2vUR/IBlizey18lsG4/Vr/OH7YCGKOUjlfmmafDjIAoHfRmRYv6CtD6JWKgOxzf0qSK6Op0Nwbel3HJS2y2Z/eEsa7H4nCd98NHOgYl+4C5oii9YttFLyrqgdc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 330911480;
+	Fri,  3 Jan 2025 05:27:39 -0800 (PST)
+Received: from [10.44.160.93] (e126510-lin.lund.arm.com [10.44.160.93])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CB2C23F673;
+	Fri,  3 Jan 2025 05:27:02 -0800 (PST)
+Message-ID: <d9a14211-4bbd-4fb6-ba87-a555a40bb67a@arm.com>
+Date: Fri, 3 Jan 2025 14:27:00 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z2_EPmOTUHhcBegW@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 10/15] riscv: pgtable: move pagetable_dtor() to
+ __tlb_remove_table()
+To: Qi Zheng <zhengqi.arch@bytedance.com>, peterz@infradead.org
+Cc: agordeev@linux.ibm.com, palmer@dabbelt.com, tglx@linutronix.de,
+ david@redhat.com, jannh@google.com, hughd@google.com, yuzhao@google.com,
+ willy@infradead.org, muchun.song@linux.dev, vbabka@kernel.org,
+ lorenzo.stoakes@oracle.com, akpm@linux-foundation.org, rientjes@google.com,
+ vishal.moola@gmail.com, arnd@arndb.de, will@kernel.org,
+ aneesh.kumar@kernel.org, npiggin@gmail.com, dave.hansen@linux.intel.com,
+ rppt@kernel.org, ryan.roberts@arm.com, linux-mm@kvack.org,
+ linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+ linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
+ linux-arch@vger.kernel.org, linux-csky@vger.kernel.org,
+ linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
+ linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+ linux-openrisc@vger.kernel.org, linux-sh@vger.kernel.org,
+ linux-um@lists.infradead.org
+References: <cover.1735549103.git.zhengqi.arch@bytedance.com>
+ <0e8f0b3835c15e99145e0006ac1020ae45a2b166.1735549103.git.zhengqi.arch@bytedance.com>
+ <1b09335c-f0b6-4ccb-9800-5fb22f7e8083@arm.com>
+ <ebce5e05-5e46-4c6e-94a0-bcf3655a862b@bytedance.com>
+ <7e2c26c8-f5df-4833-a93f-3409b00b58fd@arm.com>
+ <e9fe97d4-99d5-443e-b722-43903655a76e@bytedance.com>
+ <31e1a033-00a7-4953-81e7-0caedd0227a9@bytedance.com>
+Content-Language: en-GB
+From: Kevin Brodsky <kevin.brodsky@arm.com>
+In-Reply-To: <31e1a033-00a7-4953-81e7-0caedd0227a9@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Sat, Dec 28, 2024 at 11:26:22AM +0200, Mike Rapoport wrote:
-> On Mon, Dec 23, 2024 at 05:41:01PM +0800, Qi Zheng wrote:
-> > Here we are explicitly dealing with struct page, and the following logic
-> > semms strange:
-> > 
-> > tlb_remove_page_ptdesc((tlb), (page_ptdesc(pte)));
-> > 
-> > tlb_remove_page_ptdesc
-> > --> tlb_remove_page(tlb, ptdesc_page(pt));
-> > 
-> > So remove tlb_remove_page_ptdesc() and make callers call tlb_remove_page()
-> > directly.
-> 
-> Please don't. The ptdesc wrappers are there as a part of reducing the size
-> of struct page project [1]. 
-> 
-> For now struct ptdesc overlaps struct page, but the goal is to have them
-> separate and always operate on struct ptdesc when working with page tables.
+On 03/01/2025 10:35, Qi Zheng wrote:
+> On 2025/1/3 17:13, Qi Zheng wrote:
+>> On 2025/1/3 16:02, Kevin Brodsky wrote:
+>>> On 03/01/2025 04:48, Qi Zheng wrote:
+>>>> [...]
+>>>>
+>>>> In __tlb_batch_free_encoded_pages(), we can indeed detect PageTable()
+>>>> and call pagetable_dtor() to dtor the page table pages.
+>>>> But __tlb_batch_free_encoded_pages() is also used to free normal pages
+>>>> (not page table pages), so I don't want to add overhead there.
+>>>
+>>> Interesting, can a tlb batch refer to pages than are not PTPs then?
+>>
+>> Yes, you can see the caller of __tlb_remove_folio_pages() or
+>> tlb_remove_page_size().
 
-I don't see how the current idiotic code helps with that at all.
+I had a brief look but clearly not a good enough one! I hadn't realised
+that "table" in tlb_remove_table() means PTP, while "page" in
+tlb_remove_page() can mean any page, and it's making more sense now.
 
-Fundamentally tlb_remove_page() is about removing *pages* as from a PTE,
-there should not be a page-table anywhere near here *ever*.
+[...]
 
-Yes, some architectures use tlb_remove_page() for page-tables too, but
-that is more or less an implementation detail that can be fixed.
+>>
+>> For arm, the call to pagetable_dtor() is indeed missed in the
+>> non-MMU_GATHER_RCU_TABLE_FREE case. This needs to be fixed. But we
+>> can't fix this by adding pagetable_dtor() to tlb_remove_table(),
+>> because some architectures call tlb_remove_table() but don't support
+>> page table statistics, like sparc.
 
-So no, please keep these patches and kill this utterly idiotic code.
+When I investigated this for my own series, I found that the only case
+where ctor/dtor are not called for page-sized page tables is 32-bit
+sparc (see table at the end of [1]). However only 64-bit sparc makes use
+of tlb_remove_table() (at PTE level, where ctor/dtor are already called).
 
-The only thing that should eventually care about page-tables is
-tlb_remove_table(), and that takes a 'void *' and is expected to match
-whatever __tlb_remove_table() does.
+So really calling pagetable_dtor() from tlb_remove_table() in the
+non-MMU_GATHER_TABLE_FREE case seems to be the obvious thing to do.
 
-Flipping those to pgdesc, once its actually a thing, should be fairly
-straight forward.
+Once this is done, we should be able to replace all those confusing
+calls to tlb_remove_page() on PTPs with tlb_remove_table() and remove
+the explicit call to pagetable_dtor(). AIUI this is essentially what
+Peter suggested on v3 [2].
+
+[1]
+https://lore.kernel.org/linux-mm/20241219164425.2277022-1-kevin.brodsky@arm.com/
+[2]
+https://lore.kernel.org/linux-mm/20250103111457.GC22934@noisy.programming.kicks-ass.net/
+
+[...]
+
+> Or can we just not let tlb_remove_table() fall back to
+> tlb_remove_page()? Like the following:
+>
+> diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
+> index a59205863f431..354ffaa4bd120 100644
+> --- a/include/asm-generic/tlb.h
+> +++ b/include/asm-generic/tlb.h
+> @@ -195,8 +195,6 @@
+>   *  various ptep_get_and_clear() functions.
+>   */
+>
+> -#ifdef CONFIG_MMU_GATHER_TABLE_FREE
+> -
+>  struct mmu_table_batch {
+>  #ifdef CONFIG_MMU_GATHER_RCU_TABLE_FREE
+>         struct rcu_head         rcu;
+> @@ -219,16 +217,6 @@ static inline void __tlb_remove_table(void *table)
+>
+>  extern void tlb_remove_table(struct mmu_gather *tlb, void *table);
+>
+> -#else /* !CONFIG_MMU_GATHER_HAVE_TABLE_FREE */
+> -
+> -/*
+> - * Without MMU_GATHER_TABLE_FREE the architecture is assumed to have
+> page based
+> - * page directories and we can use the normal page batching to free
+> them.
+> - */
+> -#define tlb_remove_table(tlb, page) tlb_remove_page((tlb), (page))
+
+We still need a different implementation of tlb_remove_table() in this
+case. We could define it inline here:
+
+static inline void tlb_remove_table(struct mmu_gather *tlb, void *table)
+{
+    struct page *page = table;
+
+    pagetable_dtor(page_ptdesc(page));
+    tlb_remove_page(page);
+}
+
+- Kevin
 
