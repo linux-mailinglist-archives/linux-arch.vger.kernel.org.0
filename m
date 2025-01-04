@@ -1,143 +1,147 @@
-Return-Path: <linux-arch+bounces-9588-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9589-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE87CA0156B
-	for <lists+linux-arch@lfdr.de>; Sat,  4 Jan 2025 16:13:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6881A0158B
+	for <lists+linux-arch@lfdr.de>; Sat,  4 Jan 2025 16:32:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7316A3A2411
-	for <lists+linux-arch@lfdr.de>; Sat,  4 Jan 2025 15:13:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D38953A3F34
+	for <lists+linux-arch@lfdr.de>; Sat,  4 Jan 2025 15:31:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11FFF1B6541;
-	Sat,  4 Jan 2025 15:13:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9490C1CDA15;
+	Sat,  4 Jan 2025 15:31:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b="hHjWR7Gn"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="A6HlF1X8";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="wmF8WwtZ"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from xry111.site (xry111.site [89.208.246.23])
+Received: from fout-b7-smtp.messagingengine.com (fout-b7-smtp.messagingengine.com [202.12.124.150])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78F8B14375D;
-	Sat,  4 Jan 2025 15:13:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.208.246.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EDF51CB51B;
+	Sat,  4 Jan 2025 15:31:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736003599; cv=none; b=AJ3r7BVLzioQalVc/URYMQM5gEK03tjJjtTUh7r6M/TXGYKY2OrJiuUIJB6vT0FSV5uz5PPOkgOoB0K/QuqTX/nPjPIVS6VmNHhausIlCiQcr+plqyphlPDYwgyGY7PZE5RQu72zkBWGxB4ViUmvwBF3wiI/OyGD+xTf8Zrr6VA=
+	t=1736004707; cv=none; b=A4AFi0IXH1E/v93DitfRn1TGhLMaKe4m/K17g6HN3wBS79QU3B+7mF9voTNUQXplfKFr84q+q9RyjtGfAZgsxPg+dRuO9fqhZOkTOqieRqWesJ/ta8ByzzQ+ubcxV4gIhD7zj8k02Du38xfv3OarsSNjy4J4BD5ahahhxlI+9rE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736003599; c=relaxed/simple;
-	bh=E7sXpPzI/Y8sItiYiSPO1J4ECJ43ySequ0hT5NaXR2w=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Ej5Ji5k5HcNoOumxx/iVfrvoUSlHbFajJbXoqVmihdDcwIjbi+Meg6/acC/9hp9ClMFX4uy0gB62RcOg1FfsDFfV9+DH2cFZzCjzdW4rQBVlBnTp3sG/RfSCoFGd78m93GFN6QPOUfzR2ZAkcqD1GNGfh+yPRRTzPnG5nL/iCY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site; spf=pass smtp.mailfrom=xry111.site; dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b=hHjWR7Gn; arc=none smtp.client-ip=89.208.246.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xry111.site
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xry111.site;
-	s=default; t=1736003597;
-	bh=3qGLag7nPn1heyneisSntScc9NQLMJbK2HBK8k1x92A=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=hHjWR7Gn5uTGqZVXiP99XfmEEfFnhsU/EyQmH6E1xjhZkIFGBVMmp77Hkk7LaUnZ5
-	 IoYJMidBVqbZmsWhsT/QHzJ6Dh5YL83BffT6DtuLffaYN+6nJGl60GD6UazKyaw2bn
-	 k2tUYAV3MWGBXAsP71af34fRxpP6KkX04vl50N9o=
-Received: from [127.0.0.1] (unknown [IPv6:2001:470:683e::1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (secp384r1) server-digest SHA384)
-	(Client did not present a certificate)
-	(Authenticated sender: xry111@xry111.site)
-	by xry111.site (Postfix) with ESMTPSA id F20F966EA9;
-	Sat,  4 Jan 2025 10:13:15 -0500 (EST)
-Message-ID: <4504b10e4a0bfd09d9a3c719d234295bb638aa3f.camel@xry111.site>
-Subject: Re: [PATCH 0/3] LoongArch: initial 32-bit UAPI
-From: Xi Ruoyao <xry111@xry111.site>
-To: Arnd Bergmann <arnd@arndb.de>, Jiaxun Yang <jiaxun.yang@flygoat.com>, 
- Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>
-Cc: loongarch@lists.linux.dev, linux-kernel@vger.kernel.org, Linux-Arch
-	 <linux-arch@vger.kernel.org>
-Date: Sat, 04 Jan 2025 23:13:14 +0800
-In-Reply-To: <d4e4253b-1a06-499a-879b-e6b3c672d213@app.fastmail.com>
-References: <20250102-la32-uapi-v1-0-db32aa769b88@flygoat.com>
-	 <d4e4253b-1a06-499a-879b-e6b3c672d213@app.fastmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.2 
+	s=arc-20240116; t=1736004707; c=relaxed/simple;
+	bh=Y7FzKjlkcbsjDN2oW6kEV2UiVUr7SXpjxAxSee/tDjg=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=UoiQ1VJWGR82dP/TMCJLMhG0/vC0WUM8oI8/QFT8oajOiaPTwc2lkNSH10kVeaS2So47PX7iuSFBjVw8E1At/9SNg9tZ9CtZmmkDRUioJuSmCiMKyK5+m8D2feNHu8zUk7nteCyPbEbmtMvHJO5+pa9oygAcKaBLXlYbEkmmE1s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=A6HlF1X8; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=wmF8WwtZ; arc=none smtp.client-ip=202.12.124.150
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
+	by mailfout.stl.internal (Postfix) with ESMTP id CE35211400BB;
+	Sat,  4 Jan 2025 10:31:42 -0500 (EST)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-10.internal (MEProxy); Sat, 04 Jan 2025 10:31:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1736004702;
+	 x=1736091102; bh=wdBAHaiOaxFu7bw2LTQv+tWj0IOrhJR86UlWiABSfsk=; b=
+	A6HlF1X8eS6TJTI3gzjghnb9uMVW+7F0e8LKJKhvBClisfjQTDDwGS3as+NFq8fq
+	7pV16LQ9Y2CcBnnkGfOtyLkwYloJHB6DyJ1HYCq+6xveY+AKwXzAnZNKEtImb/c3
+	hu2izqUOKn8lJMfB/6WEbTLrGpu2bl6rrXl9I9WSv9eR3Z/Ird6DsfKlOMvgzqqQ
+	p0UB2f6bHpwCzbkgmOux2NxIqxzo1HmBb7VNKTy4dFftv7Jz4YRuWVFcKfordPDO
+	NDtLyfZBIKFA9oVzco1mh2NdW1u2LxPDqd0wuPT91CCdW5zV1YDsuk3z/YAhZs1R
+	0ix21ms+KvL3BzgltC9yKQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1736004702; x=
+	1736091102; bh=wdBAHaiOaxFu7bw2LTQv+tWj0IOrhJR86UlWiABSfsk=; b=w
+	mF8WwtZBta9cBfEqkW3LV6j+XmVcKvNC9SqQEWfShCEm1LOCpqtoYbo0MMF7xc+g
+	ztvPShYKKNj+3OAq+TDuPBIEFBsDRJA1FTgM8pvYDqnAmUVCPtR3sDWqrUzg4F6L
+	OCFYX8gE4hKHyvGnTaKyT1Cyn1C5ORQ4NYxbPGurjguryLLrXDdrzrhqQC+EhlZC
+	5qq3BgAoWiLlK+/Z4tTCQKfupJofhI6lo52A/OzED1uSGAwKJ0f2LHmdFV0UVucN
+	H548vhlLUGeeVvjY1a5xjyJg4TK23arBJE0ilO0qzPSM1WIV02WKaWrCtzG/a3Um
+	0IeQOPkVZx5QHlE5+jDNA==
+X-ME-Sender: <xms:XVR5Z_AUmEFmvpM9jLaKT-jUXSkuw9IXV_EXcNrMzjx2jNvtLkDZ-g>
+    <xme:XVR5Z1imxkU2fZMlTQNdrp_lvqX0QcuNkmp9TQpPSIPQa1VvxGuhw6HI6Gg47Uit7
+    RSa7yfPTh508DsE7aM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudefiedgjeekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddt
+    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
+    guvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefg
+    gfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepiedp
+    mhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepjhhirgiguhhnrdihrghnghesfhhlhi
+    hgohgrthdrtghomhdprhgtphhtthhopegthhgvnhhhuhgrtggriheskhgvrhhnvghlrdho
+    rhhgpdhrtghpthhtoheplhhoohhnghgrrhgthheslhhishhtshdrlhhinhhugidruggvvh
+    dprhgtphhtthhopehlihhnuhigqdgrrhgthhesvhhgvghrrdhkvghrnhgvlhdrohhrghdp
+    rhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+    dprhgtphhtthhopehkvghrnhgvlhesgigvnhdtnhdrnhgrmhgv
+X-ME-Proxy: <xmx:XVR5Z6k7iM99xV-jENKOWU-66Ov_DgblTPesaYYRu8M4G7UodfYrFw>
+    <xmx:XVR5ZxypSpX619nP58s2CREFFZoFPgheMwvJ5RbJYmxCbevaPBHmrg>
+    <xmx:XVR5Z0TtzA5tFHEn9LC24ohH7ZaNfA1mKOd3btUj8gX07aaJx4XXyg>
+    <xmx:XVR5Z0a6Ap4f8Nh3Vv9ZP3rZNOA2QvxVSSjgAWmiqqLQq1IZqe8lTA>
+    <xmx:XlR5Z5KPaFRIMIDwQfV4lH7Sw582NCxuUPq_TW9H8F6OAtpxHMAtaOIc>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id D526D2220072; Sat,  4 Jan 2025 10:31:41 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Date: Sat, 04 Jan 2025 16:31:18 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Jiaxun Yang" <jiaxun.yang@flygoat.com>,
+ "Huacai Chen" <chenhuacai@kernel.org>, "WANG Xuerui" <kernel@xen0n.name>
+Cc: loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+ Linux-Arch <linux-arch@vger.kernel.org>
+Message-Id: <03b0d959-9a25-4a67-bd66-979fd6909430@app.fastmail.com>
+In-Reply-To: <20250102-la32-uapi-v1-1-db32aa769b88@flygoat.com>
+References: <20250102-la32-uapi-v1-0-db32aa769b88@flygoat.com>
+ <20250102-la32-uapi-v1-1-db32aa769b88@flygoat.com>
+Subject: Re: [PATCH 1/3] loongarch: Wire up 32 bit syscalls
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Sat, 2025-01-04 at 16:00 +0100, Arnd Bergmann wrote:
-> On Thu, Jan 2, 2025, at 19:34, Jiaxun Yang wrote:
->=20
-> > Why am I upstreaming LoongArch32?
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > Although 32-bit systems are experiencing declining adoption in general
-> > computing, LoongArch32 remains highly relevant within specific niches.
-> > Beyond embedded applications, several vendors are actively developing
-> > application-level LoongArch32 processors. Loongson, for example, has
-> > released two open-source reference hardware implementations: openLA500
-> > and openLA1000 [6].
-> >=20
-> > The architecture also holds considerable educational value, having been
-> > integrated into China's national computer architecture curricula and
-> > embedded systems courses. Additionally, the National Student Computer
-> > System Capability Challenge (NSCSCC) [1] features LoongArch32 CPUs, whe=
-re
-> > hundreds of students design Linux-capable hardware implementations and
-> > compete on performance. This initiative has resulted in several excitin=
-g
-> > high-performance LoongArch32 cores, including LainCore[2], Wired[3],
-> > NOP-Core[4], NagiCore[5]....
->=20
-> I'm surprised that so many resources get put into 32-bit hardware
-> implementations on loongarch, when this has mostly stopped on riscv
-> and arm, where new hardware is practically all either 64-bit Linux
-> or 32-bit NOMMU microcontrollers.
->=20
-> > From an upstream perspective, we will largely reuse the infrastructure
-> > already established for LoongArch64, ensuring that the maintenance burd=
-en
-> > remains minimal.
-> >=20
-> > Porting Status
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > The LoongArch32 port has been available downstream for some time, with
-> > various system components hosted on Loongson's Gitee[6]. However, these
-> > components utilise an older downstream ABI and fall short of upstream
-> > quality.
-> >=20
-> > On the upstream front, LLVM-19 now includes experimental support for
-> > LoongArch32 (ILP32 ABI) under the loongarch32* triple, and efforts are
-> > underway to enable GNU toolchain support. My upstream-ready kernel port
-> > and musl libc port can successfully boot into a minimal Buildroot
-> > environment and execute test cases on QEMU virt machine with clang
-> > toolchain.
->=20
-> I assume the MIPS legacy means that a 64-bit kernel is going to be
-> able to run the same ILP32 binaries as a 32-bit kernel running on
-> pure 32-bit hardware, similar to powerpc/s390/x86, but unlike
-> riscv/arm?
+On Thu, Jan 2, 2025, at 19:34, Jiaxun Yang wrote:
+> 
+> +#ifdef CONFIG_32BIT
+> +SYSCALL_DEFINE6(mmap2, unsigned long, addr, unsigned long, len, unsigned long,
+> +		prot, unsigned long, flags, unsigned long, fd, unsigned long, offset)
+> +{
+> +	/*
+> +	 * Note that the shift for mmap2 is constant (12),
+> +	 * regardless of PAGE_SIZE
+> +	 */
+> +
+> +	if (offset & (~PAGE_MASK >> 12))
+> +		return -EINVAL;
+> +
+> +	return ksys_mmap_pgoff(addr, len, prot, flags, fd,
+> +			       offset >> (PAGE_SHIFT - 12));
+> +}
+> +#endif
 
-LoongArch has instructions like addi.d/addi.w, instead of addi/addi.w,
-thus on 32-bit implementation it's simply addi.d is missing, not the
-semantic of addi is changed.  So I cannot see a real reason we cannot
-support the same ILP32 userspace binaries compiled for 32-bit hardware
-on 64-bit hardware.
+I think it's time we move this into mm/mmap.c and agree on the calling
+conventions across architectures. I'm currently travelling, but I can
+dig out a patch I made a while ago to convert most 32-bit
+architectures over to a common mmap2() implementation.
 
-> We need to be careful in defining the ABI to ensure that this covers
-> all the corner cases, such as defining a signal stack layout with
-> room to save 64-bit user register contents if there is a chance that
-> a 32-bit userspace will end up using the wide registers when
-> running on a 64-bit kernel, but also avoid any dependency on 64-bit
-> registers in the ABI itself.
+As far as I can tell, the only architectures that actually want
+mmap_pgoff() are m68k, arc and hexagon. Everything else either has
+a fixed 4KB page size (so mmap_pgoff and mmap2 are the same), or
+they already enforce the mmap2 semantics.
 
-Yes such issues are nasty, we'd already need something in the calling
-convention like "on 64-bit hardware, in ILP32 ABI the saved registers
-may be unchanged or changed to the sign-extension from the lower 32 bits
-of the original value."
+There are some smaller differences between architectures at the
+moment that I think shouldn't really exist: sparc32/m68k/arm32/parisc
+skips the alignment check, sparc64 and alpha add an overflow check (on
+sys_mmap) and powerpc adds a pgprot argument check. I think the
+version you have is fine for common code (including the ones that
+don't check alignment today), not sure about the additional checks.
 
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
+     Arnd
 
