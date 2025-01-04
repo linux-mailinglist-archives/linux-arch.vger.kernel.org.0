@@ -1,136 +1,159 @@
-Return-Path: <linux-arch+bounces-9583-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9584-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96E54A013B0
-	for <lists+linux-arch@lfdr.de>; Sat,  4 Jan 2025 10:41:58 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A402A01414
+	for <lists+linux-arch@lfdr.de>; Sat,  4 Jan 2025 12:18:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6B60316343D
-	for <lists+linux-arch@lfdr.de>; Sat,  4 Jan 2025 09:41:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A53B97A1CEE
+	for <lists+linux-arch@lfdr.de>; Sat,  4 Jan 2025 11:18:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 065F717B50F;
-	Sat,  4 Jan 2025 09:41:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5966E186E2E;
+	Sat,  4 Jan 2025 11:18:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b="iCLX6xS8"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="qiz7oWqs";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="TZgAVRzs"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from xry111.site (xry111.site [89.208.246.23])
+Received: from fout-a8-smtp.messagingengine.com (fout-a8-smtp.messagingengine.com [103.168.172.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63F0116F271;
-	Sat,  4 Jan 2025 09:41:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.208.246.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CFDAA932;
+	Sat,  4 Jan 2025 11:18:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735983713; cv=none; b=s8B2A/YiNTiq61yxkMsu4XNilQlu4C6RKSVupXylhdKYtFgfAxivjWZ1t0EKat9yjlDkRlVJxrnh2uTV0AR5OaseRLiq6rCO3EHCYsBSM6NF/mGHRzXFRG6UwidS+GkVW8Yyp4IoI2PByIPEhCLO+0GrVC7eNYWyT4GDti5OBrc=
+	t=1735989518; cv=none; b=mSi06KidTRNBZdVQxVkDwbhs7sXh3Mv45ZB9WSLFSpyhbQlBvxFgcRME/MKZJUhSupLHR4ZPlSd6fC2ZwOakn3ULEzltIqKdJYDA4M5ERrbKR6NRQutTeNMh3+RxIl08fBPxIJgQfDvd3TITtbq9biNCrByx66PkI6/T4md9slw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735983713; c=relaxed/simple;
-	bh=A5b7UzYjSzEg+lubXOZ3LgEjbBkpRapYDrBmFUZOv2E=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=kq2n8CmSv/WBs8CMY2w6Z4bpuPRKwU1TzNHPQzzcIWOCAMgSXDMPlYJhJBdvWTEd4K8avIIvOuIseBVU9Jw8ik+3FSSfbxZOba0fLme7roSd3TGUara/yf4p6AcgoUWWfes43amMbs+yfc7s2ds6EyL0rUSxBd8wzhGvBUVxmVA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site; spf=pass smtp.mailfrom=xry111.site; dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b=iCLX6xS8; arc=none smtp.client-ip=89.208.246.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xry111.site
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xry111.site;
-	s=default; t=1735983112;
-	bh=9/6HpxIAu3h6hDa3wEevWjSh+p8KNvlojj0zXGI2T28=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=iCLX6xS8XvkQJ0lpgqLD9wwkgsMD1k7iIlODwiIDbBwGzY6GFpI3pgAUVKEfGEdhI
-	 VkZps/XOzItQb/haquWwOyXYL05r0fHfwvxj8MAuajPqdV2XXN3MBAqBTi6CgpNLIq
-	 wqiC1SQlZKtETfHLrfbF9MFR7ooUzRqzJWh2zheQ=
-Received: from [127.0.0.1] (unknown [IPv6:2001:470:683e::1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (secp384r1) server-digest SHA384)
-	(Client did not present a certificate)
-	(Authenticated sender: xry111@xry111.site)
-	by xry111.site (Postfix) with ESMTPSA id 4F61D6596C;
-	Sat,  4 Jan 2025 04:31:50 -0500 (EST)
-Message-ID: <3409b0608ba127c356e2a6d760c3ac2d446c9da7.camel@xry111.site>
-Subject: Re: [PATCH 2/3] loongarch: Introduce sys_loongarch_flush_icache
- syscall
-From: Xi Ruoyao <xry111@xry111.site>
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>, Huacai Chen
- <chenhuacai@kernel.org>,  WANG Xuerui <kernel@xen0n.name>
-Cc: Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Date: Sat, 04 Jan 2025 17:31:48 +0800
-In-Reply-To: <20250102-la32-uapi-v1-2-db32aa769b88@flygoat.com>
-References: <20250102-la32-uapi-v1-0-db32aa769b88@flygoat.com>
-	 <20250102-la32-uapi-v1-2-db32aa769b88@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.2 
+	s=arc-20240116; t=1735989518; c=relaxed/simple;
+	bh=SmaysFuZ96LuQ65wTE3BBxozBy8PBLsgn9KY9pnpn/8=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=pZTFmNH70IToSZUOUSr5LaL7V3TyXUQ9AXeXDH5ziiq725rBHhsjOeOI4rqLRz2hH764gW/T/gZZrY4+9AU/jE4MihSGDIQm0/SxWI1fT1Hj3X6/FrMbI4gRc668M1B+yd0YoWznjb7xmWHalFU1w/N2SdJZ7S6g97YY4SK1MTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=qiz7oWqs; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=TZgAVRzs; arc=none smtp.client-ip=103.168.172.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
+	by mailfout.phl.internal (Postfix) with ESMTP id 42309138020B;
+	Sat,  4 Jan 2025 06:18:35 -0500 (EST)
+Received: from phl-imap-12 ([10.202.2.86])
+  by phl-compute-09.internal (MEProxy); Sat, 04 Jan 2025 06:18:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1735989515;
+	 x=1736075915; bh=OWAb7sjW0oE21T2vi4FtjeJPiBdGprSVhTIcNjmJhsE=; b=
+	qiz7oWqsLV9xsCRW4sLcTd+fWOYJy2ToYvsYAx3aV6zyysobd97Liep2eb2P4wYk
+	Cc/Zco0aaZ6e8iuZYCHpgIEHTmGrU/fhnfPYyoJFObpjnc+/ue/W3/CGQWlNUB4j
+	SfdOHNwsiiNEIJYqD1D2iTgUCe2e6RwLun/rIIca2Cbeb8+tO6aKYEZYQ/uhJfqm
+	hAtc9346yIPYxjXpiMKbzuTyNd8YGHTZ+d/Q1czkzlBcHuzWpIg3WUexPxmbO6Je
+	np/UNeDzPrkmxRAIbBZwPJBlwAijmCKxwZuPEQ01unM7RDotWGP/lFug48oWUKx7
+	payArVlY7rl14u+SsbxWsA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1735989515; x=
+	1736075915; bh=OWAb7sjW0oE21T2vi4FtjeJPiBdGprSVhTIcNjmJhsE=; b=T
+	ZgAVRzsidYQ2GHUrkv9VrO4v9AyT5fBbHglUh8d8/Q5BP8mqfYuy6YwlQ9nldLfY
+	jFo7Gzrr8WCyjFLDOjSrQtH1b8wCgUMs5e9tSWQdMsXvz7fD8yTtlZhBte/lRkUH
+	vuWCQcUYDx+nO2FJQCa716i1NSJ+Fnpe4COT8DlgrTprxjwCGuUCWmXUzqATQT11
+	6wEjHHnGDhYLuoLJ5O7gwgynhVvmV6LwEExlASoI0H9ndnIRyP1rf0uyvr4XDlNE
+	4wGVVoEzy8FDRMx3dTT6dvGrs9HQeJ+DcUZl3eE5sMSOJ1va7vkQRX5lI/PGR22g
+	0c7RdL79yTdYeVfy8dQ/g==
+X-ME-Sender: <xms:Chl5Z9f0_8XIYUO-XbJU3SWdFIdg_5fbDFVEDjEXCCV2VYU04D6B3g>
+    <xme:Chl5Z7OFHrTPJomb6oVO67zBFr9Nxm6kLFrhZNJJTm7B7I_btx0wsxKJhU42nwiVv
+    GFeyxU6BvoNfgW0Hmk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudefiedgvdejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdej
+    necuhfhrohhmpedflfhirgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfh
+    hlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepjeehfeduvddtgffgvdffkeet
+    hefhlefgvdevvdekuefffeekheehgeevhfevteejnecuvehluhhsthgvrhfuihiivgeptd
+    enucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgr
+    thdrtghomhdpnhgspghrtghpthhtohepjedpmhhouggvpehsmhhtphhouhhtpdhrtghpth
+    htoheprghrnhgusegrrhhnuggsrdguvgdprhgtphhtthhopegthhgvnhhhuhgrtggrihes
+    khgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhoohhnghgrrhgthheslhhishhtshdrlh
+    hinhhugidruggvvhdprhgtphhtthhopehshhgvnhhjihhnhigrnhhgsehlohhonhhgshho
+    nhdrtghnpdhrtghpthhtoheplhhinhhugidqrghrtghhsehvghgvrhdrkhgvrhhnvghlrd
+    horhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghl
+    rdhorhhgpdhrtghpthhtohepkhgvrhhnvghlseigvghntdhnrdhnrghmvg
+X-ME-Proxy: <xmx:Chl5Z2gXgo_BJiMitYe-Nvcefu63RRvAAgKpCLy7abPTQcenracCUA>
+    <xmx:Chl5Z2_TLgSzPoIeYXdlraG5mxKRfGMhtFX1uuGShtilyyi655tO8Q>
+    <xmx:Chl5Z5uEfUKzNIVMnueSFtr6Xl7oNmAqaGlgPeXRW5J6dcA3D27uuQ>
+    <xmx:Chl5Z1FUXz64ZH_68JC9QccQUJ0lGAxH-VOnMKn1moweh1a-tAF1NQ>
+    <xmx:Cxl5Z9g9wII4AkTtXfB-lHloWudEq8XuCc_k9womY1pNmqwVnL87wxNx>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 58DEC1C20066; Sat,  4 Jan 2025 06:18:34 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Date: Sat, 04 Jan 2025 11:18:17 +0000
+From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To: "Jinyang Shen" <shenjinyang@loongson.cn>,
+ "Huacai Chen" <chenhuacai@kernel.org>, "Xuerui Wang" <kernel@xen0n.name>
+Cc: "Arnd Bergmann" <arnd@arndb.de>, loongarch@lists.linux.dev,
+ linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Message-Id: <f8769713-d9a4-4057-8df5-f1ea57707ebc@app.fastmail.com>
+In-Reply-To: <c47a9589-bc19-4e0a-866c-08e022e89539@loongson.cn>
+References: <20250102-la32-uapi-v1-0-db32aa769b88@flygoat.com>
+ <20250102-la32-uapi-v1-2-db32aa769b88@flygoat.com>
+ <c47a9589-bc19-4e0a-866c-08e022e89539@loongson.cn>
+Subject: Re: [PATCH 2/3] loongarch: Introduce sys_loongarch_flush_icache syscall
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 2025-01-02 at 18:34 +0000, Jiaxun Yang wrote:
 
-/* snip */
 
-> Sadly many user space applications are assuming ICACHET support, we can't
-> recall those binaries. So we'd better get UAPI for cacheflush ready sooni=
-sh
-> and encourage application to start using it.
+=E5=9C=A82025=E5=B9=B41=E6=9C=884=E6=97=A5=E4=B8=80=E6=9C=88 =E4=B8=8A=E5=
+=8D=889:04=EF=BC=8CJinyang Shen=E5=86=99=E9=81=93=EF=BC=9A
+[...]
+>>  =20
+>> -# No special ABIs on loongarch so far
+>> -syscall_abis_64 +=3D
+>> +syscall_abis_64 +=3D loongarch
+>
+> LoongArch64 need arch-specific syscall, but LoongArch32 needn't?
 
-To encourage the developers changing ibar to loongarch_flush_icache, we
-should minimize the extra overhead on mainstream systems.  We can add an
-vDSO layer so if the CPU has ICACHET:
+My bad, lost in rebasing :-)
 
-int vdso_loongarch_flush_icache(...)
-{
-  asm ("ibar 0");
-  return 0;
-}
+>
+[...]
+>> diff --git a/scripts/syscall.tbl b/scripts/syscall.tbl
+>> index ebbdb3c42e9f74613b003014c0baf44c842bb756..723fe859956809f26d6ec=
+50ad7812933531ef687 100644
+>> --- a/scripts/syscall.tbl
+>> +++ b/scripts/syscall.tbl
+>> @@ -298,6 +298,8 @@
+>>   244	csky	set_thread_area			sys_set_thread_area
+>>   245	csky	cacheflush			sys_cacheflush
+>>  =20
+>> +259	loongarch       loongarch_flush_icache	sys_loongarch_flush_icache
+>
+> Can we use cacheflush as arc, csky and nios2?
 
-And otherwise the vDSO wrapper invokes the real syscall.  I've
-implemented the boot-time alternative runtime patching for vDSO at
-https://lore.kernel.org/loongarch/20240816110717.10249-3-xry111@xry111.site=
-/.
+I think cacheflush syscall is more or less an outdated design inherited
+from...MIPS...
 
-> The syscall resolves to a ibar for now, it should be revised when we have
-> actual non-ICACHET support in kernel.
+Exposing flush of other cache levels to user space is not wise in securi=
+ty
+perspective. The design of cacheflush syscall is also not vDSO friendly.
+riscv_flush_icache is designed to avoid those drawbacks, and we should f=
+ollow.
 
-/* snip */
+Thanks
 
-> diff --git a/arch/loongarch/include/asm/cacheflush.h b/arch/loongarch/inc=
-lude/asm/cacheflush.h
-> index f8754d08a31ab07490717c31b9253871668b9a76..94f4a47f00860977db0b36096=
-5a22ff0a461c098 100644
-> --- a/arch/loongarch/include/asm/cacheflush.h
-> +++ b/arch/loongarch/include/asm/cacheflush.h
-> @@ -80,6 +80,12 @@ static inline void flush_cache_line(int leaf, unsigned=
- long addr)
->  	}
->  }
-> =20
-> +/*
-> + * Bits in sys_loongarch_flush_icache()'s flags argument.
-> + */
-> +#define SYS_LOONGARCH_FLUSH_ICACHE_LOCAL 1UL
-> +#define SYS_LOONGARCH_FLUSH_ICACHE_ALL   (SYS_LOONGARCH_FLUSH_ICACHE_LOC=
-AL)
-
-Not a UAPI header so not usable by the user?  How would they specify
-flags then?
-
-If you meant to add them for UAPI, it would be very problematic.  When a
-new cache type emerges in the hardware implementations, we need to grow
-SYS_LOONGARCH_FLUSH_ICACHE_ALL in the UAPI header, but we cannot change
-the already compiled JIT applications.  Thus all JIT applications have
-to be recompiled with the latest UAPI header.  This just seems an
-unnecessary severe burden to the packagers.
-
-Instead IMO it's better not to expose so much details to the userspace.
-Just remove the flags argument and flush all the icaches the kernel
-knows, so with a new cache type the user (and distro) just need to
-update or patch their kernel, w/o recompiling all JIT apps.
-
+>
+> Jinyang
+>
+[...]
 
 --=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
+- Jiaxun
 
