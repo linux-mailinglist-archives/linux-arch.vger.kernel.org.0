@@ -1,196 +1,167 @@
-Return-Path: <linux-arch+bounces-9580-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9581-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86F00A012C6
-	for <lists+linux-arch@lfdr.de>; Sat,  4 Jan 2025 07:30:51 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A555CA01347
+	for <lists+linux-arch@lfdr.de>; Sat,  4 Jan 2025 09:27:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 512693A4399
-	for <lists+linux-arch@lfdr.de>; Sat,  4 Jan 2025 06:30:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7800116356F
+	for <lists+linux-arch@lfdr.de>; Sat,  4 Jan 2025 08:27:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A84B61531D5;
-	Sat,  4 Jan 2025 06:30:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="QJmLbxxK"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 997721534FB;
+	Sat,  4 Jan 2025 08:27:55 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DF8914F123;
-	Sat,  4 Jan 2025 06:30:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7C8113AD03;
+	Sat,  4 Jan 2025 08:27:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735972248; cv=none; b=nohYPRiryor5GO8sxofSCwxdZNVMbD0t3ipWT3OdnHtYNWNaNg4Mef/ZjS5372yuNB4vVt29IidTRa1D2YVQVsSUGQyVfBi9MdkK9KhctybQnbSbYK1Jo3hbsu8fsBu1zbdVstfoyAWlJszhNHP/wEmpTz3pe355C6Jh2+2u8u0=
+	t=1735979275; cv=none; b=hp+1u5gLvgxMRC4lilG35by1Ep2v6Y/T/nCBjp+fKMkcTEF2TQyhGfn387bAzU1I3Q47IFxjkCKoqOAiyvplrCdlyS9doEdY9wjTUiJv0DZJuOLjHP95ai6j69vBbwrZiZWxQU98o1By3LwCZ1S2cwPIgrwNhc1Fu/oECoIpO0k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735972248; c=relaxed/simple;
-	bh=+VQlci/lpWUmZtr7JVADCGsdOB2jTAKsJBZPjdGGBYc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nwTt9ERmrqFg/hGAw62KEOdxS7WarJz+/+Plc1EKUvfEjiybmmOGX6BT4/v5MNoGOow3paAqn7tGuh10yFzxD/vaRlS40anLRBdCfYKKP1ic/LLoJhchH4M81AV2+q7ZOZzwiTHszp9DjvfV4V9PeRuSBRFP4TEHlB8O8YnVOLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=QJmLbxxK; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1735972239;
-	bh=+VQlci/lpWUmZtr7JVADCGsdOB2jTAKsJBZPjdGGBYc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QJmLbxxKkr86pkCAnynomJW9gzFgc8oHiUWfTE31PQu8+BN5xbKz3N47y05pW12Zc
-	 NDBf1GvgvkQJvtk9u9FKRNPn8HJvlBgxHHRfB7yyRFqgY9UQofMABPv6A+oHyLT3wJ
-	 QSAFPQlWqh2U/LefgvkI1f8DiDKaibGnHBehVIHs=
-Date: Sat, 4 Jan 2025 07:30:39 +0100
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
-	Arnd Bergmann <arnd@arndb.de>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-modules@vger.kernel.org
-Subject: Re: [PATCH RFC 2/2] module: Introduce hash-based integrity checking
-Message-ID: <5c2ef82a-7558-4397-827d-523f8fe4895b@t-8ch.de>
-References: <20241225-module-hashes-v1-0-d710ce7a3fd1@weissschuh.net>
- <20241225-module-hashes-v1-2-d710ce7a3fd1@weissschuh.net>
- <Z3iQ8FI4J7rCzICF@bombadil.infradead.org>
+	s=arc-20240116; t=1735979275; c=relaxed/simple;
+	bh=wMoy6apQo5bZZiSMcB0HeLwxkmRBasscYmByAMRQg9I=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=TD5xEjpUMFENHSHJiHvf8lOTD36RMGuIGNIDwnsJZCIlmDJcg0uTkjVPEY29iijPnfPcaISNmkBEcGcebvyYAyvmmMxRHTJ09gZwAXJSt33+tWvEaEmFJPi1yQpBgWdKpt7jIcbmeD0laHkRjIoiNvgNNZLrWBK5x+1kep7Sfy4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.80.44.60])
+	by gateway (Coremail) with SMTP id _____8CxPuMF8Xhn4+ddAA--.52538S3;
+	Sat, 04 Jan 2025 16:27:49 +0800 (CST)
+Received: from [10.80.44.60] (unknown [10.80.44.60])
+	by front1 (Coremail) with SMTP id qMiowMAxz8cB8Xhn94wTAA--.11083S2;
+	Sat, 04 Jan 2025 16:27:45 +0800 (CST)
+Message-ID: <23c2a5b5-397e-4d90-b05a-143493063f00@loongson.cn>
+Date: Sat, 4 Jan 2025 16:27:45 +0800
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Z3iQ8FI4J7rCzICF@bombadil.infradead.org>
+User-Agent: Mozilla Thunderbird
+From: Jinyang Shen <shenjinyang@loongson.cn>
+Subject: Re: [PATCH 0/3] LoongArch: initial 32-bit UAPI
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>, Huacai Chen
+ <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>
+Cc: Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev,
+ linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+References: <20250102-la32-uapi-v1-0-db32aa769b88@flygoat.com>
+Content-Language: en-US
+In-Reply-To: <20250102-la32-uapi-v1-0-db32aa769b88@flygoat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:qMiowMAxz8cB8Xhn94wTAA--.11083S2
+X-CM-SenderInfo: hvkh0yplq1t03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBj93XoWxAw4rCw43Cr1ruFykGFWrCrX_yoWrWr4kpa
+	1kur93Gr4xGryxAr43tw4Fgrn8Jw4fG3W2qa1SkryUCFsrZFyUur4xKFWkXF17uw4furW0
+	qF18u34UW3W8AabCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUvGb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Gr0_Gr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
+	kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWU
+	twAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMx
+	AIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1Y6r17
+	MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67
+	AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0
+	cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z2
+	80aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIF
+	yTuYvjxUc0eHDUUUU
 
-Hi Luis,
 
-On 2025-01-03 17:37:52-0800, Luis Chamberlain wrote:
-> On Wed, Dec 25, 2024 at 11:52:00PM +0100, Thomas Weißschuh wrote:
-> > diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
-> > index 7b329057997ad2ec310133ca84617d9bfcdb7e9f..57d317a6fa444195d0806e6bd7a2af6e338a7f01 100644
-> > --- a/kernel/module/Kconfig
-> > +++ b/kernel/module/Kconfig
-> > @@ -344,6 +344,17 @@ config MODULE_DECOMPRESS
-> >  
-> >  	  If unsure, say N.
-> >  
-> > +config MODULE_HASHES
-> > +	bool "Module hash validation"
-> > +	depends on !MODULE_SIG
+
+On 2025/1/3 02:34, Jiaxun Yang wrote:
+> This series defines the UAPI for LoongArch32, marking my initial step
+> towards upstreaming support for the architecture. Once the UAPI is
+> ratified, we can proceed to scrutinise various kernel components to
+> enable 32-bit support while simultaneously addressing user-space porting.
 > 
-> Why are these mutually exclusive? Can't you want module signatures *and*
-> this as well? What distro which is using module signatures would switch
-> to this as an alternative instead? The help menu does not clarify any of
-> this at all, and neither does the patch.
-
-The exclusivity is to keep the initial RFC patch small.
-The cover letter lists "Enable coexistence with MODULE_SIG" as
-a further improvement.
-
-In general this MODULE_HASHES would be used by distros which are
-currently using the build-time generated signing key with
-CONFIG_MODULE_SIG_KEY=certs/signing_key.pem.
-
-More concretely the Arch Linux team has expressed interest.
-
-> > +	select CRYPTO_LIB_SHA256
-> > +	help
-> > +	  Validate modules by their hashes.
-> > +	  Only modules built together with the main kernel image can be
-> > +	  validated that way.
-> > +
-> > +	  Also see the warning in MODULE_SIG about stripping modules.
-> > +
-> >  config MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS
-> >  	bool "Allow loading of modules with missing namespace imports"
-> >  	help
-> > diff --git a/kernel/module/Makefile b/kernel/module/Makefile
-> > index 50ffcc413b54504db946af4dce3b41dc4aece1a5..6fe0c14ca5a05b49c1161fcfa8aaa130f89b70e1 100644
-> > --- a/kernel/module/Makefile
-> > +++ b/kernel/module/Makefile
-> > @@ -23,3 +23,4 @@ obj-$(CONFIG_KGDB_KDB) += kdb.o
-> >  obj-$(CONFIG_MODVERSIONS) += version.o
-> >  obj-$(CONFIG_MODULE_UNLOAD_TAINT_TRACKING) += tracking.o
-> >  obj-$(CONFIG_MODULE_STATS) += stats.o
-> > +obj-$(CONFIG_MODULE_HASHES) += hashes.o
-> > diff --git a/kernel/module/hashes.c b/kernel/module/hashes.c
-> > new file mode 100644
-> > index 0000000000000000000000000000000000000000..f19eccb0e3754e3edbf5cdea6d418da5c6ae6c65
-> > --- /dev/null
-> > +++ b/kernel/module/hashes.c
-> > @@ -0,0 +1,51 @@
-> > +// SPDX-License-Identifier: GPL-2.0-or-later
-> > +
-> > +#define pr_fmt(fmt) "module/hash: " fmt
-> > +
-> > +#include <linux/int_log.h>
-> > +#include <linux/module_hashes.h>
-> > +#include <linux/module.h>
-> > +#include <crypto/sha2.h>
-> > +#include "internal.h"
-> > +
-> > +static inline size_t module_hashes_count(void)
-> > +{
-> > +	return (__stop_module_hashes - __start_module_hashes) / MODULE_HASHES_HASH_SIZE;
-> > +}
-> > +
-> > +static __init __maybe_unused int module_hashes_init(void)
-> > +{
-> > +	size_t num_hashes = module_hashes_count();
-> > +	int num_width = (intlog10(num_hashes) >> 24) + 1;
-> > +	size_t i;
-> > +
-> > +	pr_debug("Builtin hashes (%zu):\n", num_hashes);
-> > +
-> > +	for (i = 0; i < num_hashes; i++)
-> > +		pr_debug("%*zu %*phN\n", num_width, i,
-> > +			 (int)sizeof(module_hashes[i]), module_hashes[i]);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +#ifdef DEBUG
+> Why am I upstreaming LoongArch32?
+> ================================
+> Although 32-bit systems are experiencing declining adoption in general
+> computing, LoongArch32 remains highly relevant within specific niches.
+> Beyond embedded applications, several vendors are actively developing
+> application-level LoongArch32 processors. Loongson, for example, has
+> released two open-source reference hardware implementations: openLA500
+> and openLA1000 [6].
 > 
-> We have MODULE_DEBUG so just add depend on that and leverage that for
-> this instead.
-
-Ack.
-
-> > diff --git a/scripts/module-hashes.sh b/scripts/module-hashes.sh
-> > new file mode 100755
-> > index 0000000000000000000000000000000000000000..7ca4e84f4c74266b9902d9f377aa2c901a06f995
-> > --- /dev/null
-> > +++ b/scripts/module-hashes.sh
-> > @@ -0,0 +1,26 @@
-> > +#!/bin/bash
-> > +# SPDX-License-Identifier: GPL-2.0-or-later
-> > +
-> > +set -e
-> > +set -u
-> > +set -o pipefail
-> > +
-> > +prealloc="${1:-}"
-> > +
-> > +echo "#include <linux/module_hashes.h>"
-> > +echo
-> > +echo "const u8 module_hashes[][MODULE_HASHES_HASH_SIZE] __module_hashes_section = {"
-> > +
-> > +for mod in $(< modules.order); do
-> > +	mod="${mod/%.o/.ko}"
-> > +	if [ "$prealloc" = "prealloc" ]; then
-> > +		modhash=""
-> > +	else
-> > +		modhash="$(cksum -a sha256 --raw "$mod" | hexdump -v -e '"0x" 1/1 "%02x, "')"
-> > +	fi
-> > +	echo "	/* $mod */"
-> > +	echo "	{ $modhash },"
-> > +	echo
-> > +done
-> > +
-> > +echo "};"
+> The architecture also holds considerable educational value, having been
+> integrated into China's national computer architecture curricula and
+> embedded systems courses. Additionally, the National Student Computer
+> System Capability Challenge (NSCSCC) [1] features LoongArch32 CPUs, where
+> hundreds of students design Linux-capable hardware implementations and
+> compete on performance. This initiative has resulted in several exciting
+> high-performance LoongArch32 cores, including LainCore[2], Wired[3],
+> NOP-Core[4], NagiCore[5]....
 > 
-> Parallelize this.
+>>From an upstream perspective, we will largely reuse the infrastructure
+> already established for LoongArch64, ensuring that the maintenance burden
+> remains minimal.
+> 
+> Porting Status
+> ==============
+> The LoongArch32 port has been available downstream for some time, with
+> various system components hosted on Loongson's Gitee[6]. However, these
+> components utilise an older downstream ABI and fall short of upstream
+> quality.
+> 
+> On the upstream front, LLVM-19 now includes experimental support for
+> LoongArch32 (ILP32 ABI) under the loongarch32* triple, and efforts are
+> underway to enable GNU toolchain support. My upstream-ready kernel port
+> and musl libc port can successfully boot into a minimal Buildroot
+> environment and execute test cases on QEMU virt machine with clang
+> toolchain.
+> 
+> Thank you for reading. I look forward to your comments and feedback.
+> 
+> [1]: https://www.tsinghua.edu.cn/en/info/1245/13802.htm
+> [2]: https://github.com/LainChip/LainCore
+> [3]: https://github.com/gmlayer0/wired
+> [4]: https://github.com/NOP-Processor/NOP-Core
+> [5]: https://github.com/MrAMS/NagiCore
+> [6]: https://gitee.com/loongson-edu
+> 
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+> Jiaxun Yang (3):
+>        loongarch: Wire up 32 bit syscalls
+>        loongarch: Introduce sys_loongarch_flush_icache syscall
+>        loongarch: vdso: Introduce __vdso_flush_icache function
+> 
+>   arch/loongarch/include/asm/Kbuild          |  1 +
+>   arch/loongarch/include/asm/cacheflush.h    |  6 ++++
+>   arch/loongarch/include/asm/syscall.h       |  2 ++
+>   arch/loongarch/include/asm/vdso/vdso.h     | 10 ++++++
+>   arch/loongarch/include/asm/vdso/vsyscall.h |  1 +
+>   arch/loongarch/include/uapi/asm/Kbuild     |  1 +
+>   arch/loongarch/include/uapi/asm/unistd.h   |  6 ++++
+>   arch/loongarch/kernel/Makefile.syscalls    |  3 +-
+>   arch/loongarch/kernel/syscall.c            | 49 +++++++++++++++++++++++++++++
+>   arch/loongarch/kernel/vdso.c               |  2 ++
+>   arch/loongarch/mm/cache.c                  |  3 ++
+>   arch/loongarch/vdso/Makefile               |  2 +-
+>   arch/loongarch/vdso/flush_icache.c         | 50 ++++++++++++++++++++++++++++++
+>   arch/loongarch/vdso/vdso.lds.S             |  5 +++
+>   scripts/syscall.tbl                        |  2 ++
+>   15 files changed, 140 insertions(+), 3 deletions(-)
+> ---
+> base-commit: 8155b4ef3466f0e289e8fcc9e6e62f3f4dceeac2
+> change-id: 20250102-la32-uapi-8395e83a4e88
+> 
+> Best regards,
 
-Ack.
+Hi, Jiaxun,
+
+Thank you for your hard work, I'm also working on LoongArch32 kernel 
+side [1], I hope we can make it upstream together.
+
+[1]: https://github.com/shenjinyang/la32r-Linux
+
+Jinyang
+
 
