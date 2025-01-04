@@ -1,91 +1,92 @@
-Return-Path: <linux-arch+bounces-9586-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9587-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65A02A01567
-	for <lists+linux-arch@lfdr.de>; Sat,  4 Jan 2025 16:00:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DD72A01569
+	for <lists+linux-arch@lfdr.de>; Sat,  4 Jan 2025 16:07:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ACADC1883A19
-	for <lists+linux-arch@lfdr.de>; Sat,  4 Jan 2025 15:00:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E6E01883E51
+	for <lists+linux-arch@lfdr.de>; Sat,  4 Jan 2025 15:07:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 172FE1CC8A7;
-	Sat,  4 Jan 2025 15:00:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74D961865E9;
+	Sat,  4 Jan 2025 15:07:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="E40127An";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ySso9l+V"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="BcUU2d7M";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ximQM/xf"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from fhigh-b7-smtp.messagingengine.com (fhigh-b7-smtp.messagingengine.com [202.12.124.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A184F1CB51B;
-	Sat,  4 Jan 2025 15:00:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C88E46F06A;
+	Sat,  4 Jan 2025 15:07:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736002851; cv=none; b=TErB4K4ouOo48uwgJzYhmORcmYhBVli7BcFfgxzwIQ17fLLs0HCfX0jgpH+RTeEBUIdT/vADVCPRKCdfxAloIO7F8k3yb1VDpnDQpvIlnFqBlZNiRfhDQs2RScYmeRTMw3UF3H3kDBxhtwhp5OlBhcytUlNS2y4qIrUFbUPSV54=
+	t=1736003259; cv=none; b=FqmWoiFNltZFLNHoP6Xppy/f5+Y/sBkeeTl+NV4uk5i5yim+H84NXp2/Chtjkx5mhbBvuubmMMY/5CY0G5lGaRQLHK0rJlIyivDeOxDRSIeIqEO6cM2W6zGTAkWFpRyucKEEqz83+vg9OlLqp3+jl5FOYvKm2IdO+HLHqhE1b6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736002851; c=relaxed/simple;
-	bh=nDFKV6GOGYJ+WdethPN5KmpehxyL1b+Y2HmrEE55Im4=;
+	s=arc-20240116; t=1736003259; c=relaxed/simple;
+	bh=+BZz7FviI3TBCalV1e60uUEnMvA7e5Wi2s9BCNli7yU=;
 	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=aoThHSpKC1tnKc2ivKXNtG4be/a7JZnTUXg+TPT67BNQObpMcMAYnbWU3VLUTynmIgYbK/18zmdob0fz0f8n6iKMFexfvM5z7M7BQFLcbVodSocRGwc1OMi52ih0ZKiW4x2PISFnlVWstM4YTyRY7KDKbTSDvZm/SQPSbIiHqaY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=E40127An; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ySso9l+V; arc=none smtp.client-ip=202.12.124.158
+	 Subject:Content-Type; b=e80A4TUnK0agJTC3VHv1iX3A55UVfv7VFRqDnBGTLYZPuzrFwThQRKlXSYbBauBjdCzSeFihMwj0rKGVIpqkSYXIjRzfBI21pVV1NQQtc3bfRjLNLYulZtCytDnVIBdDPJrZXOyOJli3R+1vBdvORJS/Bq2n2RcfVeX0iT7BwA4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=BcUU2d7M; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ximQM/xf; arc=none smtp.client-ip=202.12.124.158
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 3496E25400F6;
-	Sat,  4 Jan 2025 10:00:47 -0500 (EST)
+	by mailfhigh.stl.internal (Postfix) with ESMTP id DA0262540182;
+	Sat,  4 Jan 2025 10:07:36 -0500 (EST)
 Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-10.internal (MEProxy); Sat, 04 Jan 2025 10:00:47 -0500
+  by phl-compute-10.internal (MEProxy); Sat, 04 Jan 2025 10:07:37 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
 	:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1736002846;
-	 x=1736089246; bh=QGjX73YFHMdjpQpQ0EBBf33GuP7pZVJBoTAIXuaEEhk=; b=
-	E40127AnDDS6kAj7zmPIXtD5Ex0r3Y96ce7KV37PcUrw+2MTw8CVhnD6kyadk+fU
-	bmhvrJaGtCvM7okcAVNHUSF+RZ6F/xoYI+tvojCX4TQWbr2byJcOaJiggLnF+A5j
-	8lqA572/DxZbrVsqTru+8rQJGvF+Uyh2t2Cn6WhSjpfuERhP1gm+A+kuYknOvQSr
-	P5bsjn+yTOSQaJXkz7L1Qpqw+pk2tvmpkEFIUSbcEBvSZve2JIydlgWDccC7sTOe
-	4tTFpEdiLBuTYXUCM47OicRD7AIUYwxG6YpCf3JpzuI1firtB301i7NDc93hjfVt
-	IAklZEyWhcEMK15inn8Uqg==
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1736003256;
+	 x=1736089656; bh=M0nmtuIJkWJPYDPQ/bqvPv6lAARcLTEvDSY0fgCKPW0=; b=
+	BcUU2d7M9akas/1GwJb3EGS8jdTpq/75SiTY7oopfHQSSnwbWWgLkfTT4TuFgxUJ
+	PDoSzZsd+uldv4iqvzbX8qkpHzjcSjfBpbTLkvwCtHP4RFtZOfYS3jbkocrjb4k1
+	t2sF0xmn50N+kiG3DWhbhsvyxdfqvccI6tYka+klpDFDZ84ptlVq0XXvlcb6nWV/
+	opEyxdkH+DzrE8QPTH9Qw8VQGR0UOj97WbK8nQ20ftIJbc/CnVpzzFSL1u6kMFFe
+	ssmucdGgQ/SDB/EvqhGv15F+eBYlJWGfCgbxQJZMOYPGS3cYgLnvs06Ff5k201/9
+	s7r0lnL1jInxOPC7aA3qZw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1736002846; x=
-	1736089246; bh=QGjX73YFHMdjpQpQ0EBBf33GuP7pZVJBoTAIXuaEEhk=; b=y
-	Sso9l+V33SgnnJRSodIn7pwyHy8kbRj9TY+aBjEMoX4pZuU4x5gxalx6axhfo/Bv
-	uQ+zgypxqexZRl4QqUWU+MRcYVKUszIC46DJ2ce2z+wlF5mk2ipM/ycHcbqh6Yog
-	g8A4Zg8TS+JahVADpcxtKXAWJ8CUgFJzfwrtvsI8JVYLPI1Gmz6QdoRuI9fs0xF0
-	EaVZHly7CdHWrJMv7bhKqiEzvgApWd5kGvU1lJpfsRVTuOA+eQW8VKo6nV8za+Z2
-	TSHCQ53uXiGTgnT8MH8mY92BudU/4p/t4kUicHVR9/xcRAQuPx6X1uen1u2m+7la
-	q18JCBAT2gpMPKir4GDRA==
-X-ME-Sender: <xms:HU15Zym3nmhUl9Cy6OG1f5No9rHEDVPGnPpqVWTO48mXrbHNDRFeew>
-    <xme:HU15Z53u5NPQMgO5HAGLqCaN8dH4VrJ0Vsoh9eDERztC_i-TQ-c8M1Dw1EaZQb-zg
-    AHTK6w4eHStUKi6uo4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudefiedgjeduucetufdoteggodetrfdotf
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1736003256; x=
+	1736089656; bh=M0nmtuIJkWJPYDPQ/bqvPv6lAARcLTEvDSY0fgCKPW0=; b=x
+	imQM/xfvLE4cCIaFymxIH+v40rhgTp7Cny8YpkgPyzwhxSdcw6ic7QtEAn4yrRVf
+	JEU+bOpQh8b4prHAsL/RYQEk/dlgeDzTik6v/LrH3Cyoxn6D30rWwf9De2qe+AbK
+	aAkp9kwMobSSMiac+Cz2TNLsjXAkcM5v7WJLJvZTLZIDi9fow6gDTIO1dCPOHE7e
+	Uy6ErA5ISa4FhUpZdTfOZF258va1YdXQKwJPUj6uDBu0bQyQMjJFQNySfQZzlqRZ
+	0KKX94z7HEuTDBrVGkx80QdVCnJZdUHLUd1rOqfMEbq/YgBMM31iJAs1oRIHjZaf
+	NSsCcSKd1DUtAhvXX/FzQ==
+X-ME-Sender: <xms:uE55Z2GMf1SP0satJQ93wS15VbEeVG79xv0y7ZjChe07nC0QSJMOWQ>
+    <xme:uE55Z3UH0GFXuEdxCVRWEm0gPFKy8y6InkQIRu7-Rx6hED5PV5ewsJAYareowi4oL
+    cfi66qa7Q167-rONq8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudefiedgjeefucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
     rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
     htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddt
     necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
     guvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefg
     gfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepiedp
+    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepjedp
     mhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepjhhirgiguhhnrdihrghnghesfhhlhi
     hgohgrthdrtghomhdprhgtphhtthhopegthhgvnhhhuhgrtggriheskhgvrhhnvghlrdho
     rhhgpdhrtghpthhtoheplhhoohhnghgrrhgthheslhhishhtshdrlhhinhhugidruggvvh
-    dprhgtphhtthhopehlihhnuhigqdgrrhgthhesvhhgvghrrdhkvghrnhgvlhdrohhrghdp
-    rhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-    dprhgtphhtthhopehkvghrnhgvlhesgigvnhdtnhdrnhgrmhgv
-X-ME-Proxy: <xmx:HU15Zwr_9vzgKU4IV3SfH_cRsAW6L4FBcweWSbUu7DJovbPBM3Tjpw>
-    <xmx:HU15Z2n_aKw5d5fbNt4E74uIewlcH4HKHr47YhP6dAsGBMLo8Gwcfg>
-    <xmx:HU15Zw3aPH1zg9Kjyv-DWM5DOMlOEwJsWxHwcMZVT8vW6i6j2gWNlQ>
-    <xmx:HU15Z9shs8nTMu1dmOSaPpkcgzdM5vuiT5VTtHuyY3-ycqS8qaxTJA>
-    <xmx:Hk15Z0-kLSDh_fHCNcjFCDsBGj51RVsV33tWKaVhwjnj1GznJPnm8pek>
+    dprhgtphhtthhopehshhgvnhhjihhnhigrnhhgsehlohhonhhgshhonhdrtghnpdhrtghp
+    thhtoheplhhinhhugidqrghrtghhsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpth
+    htoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghp
+    thhtohepkhgvrhhnvghlseigvghntdhnrdhnrghmvg
+X-ME-Proxy: <xmx:uE55ZwKjgtklv8ZgpwyUC1stA7HtBLC9HTEbRTAGmxFcGAFsYNzTJA>
+    <xmx:uE55ZwGgzkEXnyp_BXQXiHVzukGDHRlAmKXZcNY5LphEMakJLle-rg>
+    <xmx:uE55Z8XK6kN9HmdBiNSPi6j6U87BbM0NlRX5t7mzt9nFsg0foEEKMA>
+    <xmx:uE55ZzPwpyHg3AL5IYP4MVv6yF0fy-JFuY5NMXpJgx2N0GrNxefloA>
+    <xmx:uE55Z-LL3BrutndePtwcJD6o8G4of8HcUIaxha8-KIz14L1cXA1p7NhO>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 78F0A2220073; Sat,  4 Jan 2025 10:00:45 -0500 (EST)
+	id 0BB632220072; Sat,  4 Jan 2025 10:07:35 -0500 (EST)
 X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -93,73 +94,59 @@ List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Sat, 04 Jan 2025 16:00:25 +0100
+Date: Sat, 04 Jan 2025 16:07:15 +0100
 From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Jiaxun Yang" <jiaxun.yang@flygoat.com>,
+To: "Jinyang Shen" <shenjinyang@loongson.cn>,
+ "Jiaxun Yang" <jiaxun.yang@flygoat.com>,
  "Huacai Chen" <chenhuacai@kernel.org>, "WANG Xuerui" <kernel@xen0n.name>
 Cc: loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
  Linux-Arch <linux-arch@vger.kernel.org>
-Message-Id: <d4e4253b-1a06-499a-879b-e6b3c672d213@app.fastmail.com>
-In-Reply-To: <20250102-la32-uapi-v1-0-db32aa769b88@flygoat.com>
+Message-Id: <fbde518f-ffea-40dc-ab11-f37b7bd1615e@app.fastmail.com>
+In-Reply-To: <c47a9589-bc19-4e0a-866c-08e022e89539@loongson.cn>
 References: <20250102-la32-uapi-v1-0-db32aa769b88@flygoat.com>
-Subject: Re: [PATCH 0/3] LoongArch: initial 32-bit UAPI
+ <20250102-la32-uapi-v1-2-db32aa769b88@flygoat.com>
+ <c47a9589-bc19-4e0a-866c-08e022e89539@loongson.cn>
+Subject: Re: [PATCH 2/3] loongarch: Introduce sys_loongarch_flush_icache syscall
 Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
-On Thu, Jan 2, 2025, at 19:34, Jiaxun Yang wrote:
+On Sat, Jan 4, 2025, at 10:04, Jinyang Shen wrote:
+> On 2025/1/3 02:34, Jiaxun Yang wrote:
+>> +/*
+>> + * On LoongArch CPUs with ICACHET, writes automatically sync to both local and
+>> + * remote instruction caches. CPUs without this feature lack userspace cache
+>> + * flush instructions, requiring a syscall to maintain I/D cache coherence and
+>> + * propagate to remote caches.
+>> + *
+>> + * sys_loongarch_flush_icache() is defined to flush the instruction cache
+>> + * over an address range, with the flush applying to either all threads or
+>> + * just the caller.
+>> + */
+>> +SYSCALL_DEFINE3(loongarch_flush_icache, uintptr_t, start, uintptr_t, end,
+>> +	uintptr_t, flags)
 
-> Why am I upstreaming LoongArch32?
-> ================================
-> Although 32-bit systems are experiencing declining adoption in general
-> computing, LoongArch32 remains highly relevant within specific niches.
-> Beyond embedded applications, several vendors are actively developing
-> application-level LoongArch32 processors. Loongson, for example, has
-> released two open-source reference hardware implementations: openLA500
-> and openLA1000 [6].
+
+I think for consistency with other architectures, we want start/length/flags
+instead of start/end/flags.
+
+The meaning of the third argument is rather inconsistent between
+architectures already, but at least the second argument is always
+length so far.
+
+
+>> diff --git a/scripts/syscall.tbl b/scripts/syscall.tbl
+>> index ebbdb3c42e9f74613b003014c0baf44c842bb756..723fe859956809f26d6ec50ad7812933531ef687 100644
+>> --- a/scripts/syscall.tbl
+>> +++ b/scripts/syscall.tbl
+>> @@ -298,6 +298,8 @@
+>>   244	csky	set_thread_area			sys_set_thread_area
+>>   245	csky	cacheflush			sys_cacheflush
+>>   
+>> +259	loongarch       loongarch_flush_icache	sys_loongarch_flush_icache
 >
-> The architecture also holds considerable educational value, having been
-> integrated into China's national computer architecture curricula and
-> embedded systems courses. Additionally, the National Student Computer
-> System Capability Challenge (NSCSCC) [1] features LoongArch32 CPUs, where
-> hundreds of students design Linux-capable hardware implementations and
-> compete on performance. This initiative has resulted in several exciting
-> high-performance LoongArch32 cores, including LainCore[2], Wired[3],
-> NOP-Core[4], NagiCore[5]....
+> Can we use cacheflush as arc, csky and nios2?
 
-I'm surprised that so many resources get put into 32-bit hardware
-implementations on loongarch, when this has mostly stopped on riscv
-and arm, where new hardware is practically all either 64-bit Linux
-or 32-bit NOMMU microcontrollers.
+Agreed. I would also use the number 244 instead of 259 here.
 
-> From an upstream perspective, we will largely reuse the infrastructure
-> already established for LoongArch64, ensuring that the maintenance burden
-> remains minimal.
->
-> Porting Status
-> ==============
-> The LoongArch32 port has been available downstream for some time, with
-> various system components hosted on Loongson's Gitee[6]. However, these
-> components utilise an older downstream ABI and fall short of upstream
-> quality.
->
-> On the upstream front, LLVM-19 now includes experimental support for
-> LoongArch32 (ILP32 ABI) under the loongarch32* triple, and efforts are
-> underway to enable GNU toolchain support. My upstream-ready kernel port
-> and musl libc port can successfully boot into a minimal Buildroot
-> environment and execute test cases on QEMU virt machine with clang
-> toolchain.
-
-I assume the MIPS legacy means that a 64-bit kernel is going to be
-able to run the same ILP32 binaries as a 32-bit kernel running on
-pure 32-bit hardware, similar to powerpc/s390/x86, but unlike
-riscv/arm?
-
-We need to be careful in defining the ABI to ensure that this covers
-all the corner cases, such as defining a signal stack layout with
-room to save 64-bit user register contents if there is a chance that
-a 32-bit userspace will end up using the wide registers when
-running on a 64-bit kernel, but also avoid any dependency on 64-bit
-registers in the ABI itself.
-
-    Arnd
+     Arnd
 
