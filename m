@@ -1,189 +1,189 @@
-Return-Path: <linux-arch+bounces-9597-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9598-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA20EA020FC
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Jan 2025 09:39:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E28E4A0230C
+	for <lists+linux-arch@lfdr.de>; Mon,  6 Jan 2025 11:34:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 483447A2A46
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Jan 2025 08:38:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6773D3A4721
+	for <lists+linux-arch@lfdr.de>; Mon,  6 Jan 2025 10:34:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F68B1D5CD9;
-	Mon,  6 Jan 2025 08:38:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 213BF1D517B;
+	Mon,  6 Jan 2025 10:34:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="NFsLUn+3"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="UNSjWw3i"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5358118B46E
-	for <linux-arch@vger.kernel.org>; Mon,  6 Jan 2025 08:38:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56B1F2BAEC;
+	Mon,  6 Jan 2025 10:34:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736152728; cv=none; b=FmqPNF44FS4jGyhq2NYpcbEaObwxqPqOU9CPMM0p5fazj045yKzp6sTyrMF+SkNw3wRhU02KkNR6JyuTeMpOKcNRksnO4AMoxH3xN7bUsEeVkh5XQVC/JagFUae50AbAxSgPlgMHZ5sR4UOsnQ5HAPfJg0WZsg5YThv347gPbWg=
+	t=1736159645; cv=none; b=OJz+oPKXLBfpUFOsNvZ/tdQMmV6uFHG3IFDFuugAfIwz5rnfa9gXiUCo7Js4ZOSyQwek2dWBHh9pU03fSGG92LrD72pywKBu9dwsKS6IYxYlPszooyvg89KnrU0FapyNLsKAkMBpanZUa7GldidGOG6f0ANjHyfGXtvvBFGbn2Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736152728; c=relaxed/simple;
-	bh=+p2WuEDH6YSUra8No0eTrFef4hHj25RtnE5OhVgbkBA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kRYS4OMqAUcXTBpebYGwDZ5KgGM5FWrK3sAuYQLoFhyvki24Nr1VLDszL+JQRhee1JIN4JWMKQpTleXtAA+euqJBHP+cJbWvIAxO5QmcOP6v3hU4BbsEXY5+hJLdmqCbXSUHH9aeLOYxlMBs2ddMbYYE9D/k3ckpaXv//SGXt6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=NFsLUn+3; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2165cb60719so204181275ad.0
-        for <linux-arch@vger.kernel.org>; Mon, 06 Jan 2025 00:38:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1736152725; x=1736757525; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YiOAOk5kGRx9rmUPaHmWdeff0Y5xhlY6UwwEsQqm8Hw=;
-        b=NFsLUn+3yEM2FDTjs/PJX3tSiRKo819ajchol7CEUEIqTKnnIetUFjv7UyKk9Xv0ET
-         q7aG6uRRbHIpX+KcVjhoJ1Emnprv+3yQxZQXGOSnF1LI+OvH3WEF2pf7QwtTCu8uLjjn
-         9jW/akY85hecYcHCRchRcsstDpum6+k4TsAU+hM9A7kjJtE4PiLS+Fm0mQfqZrmCKFTu
-         crVPszzp3SRiel79bd/whBbXsp+IsYr7N8tCTRHLahdnVCe71ujvrd6wRyPCcGQ0sQ6U
-         xnTifguMp98uznuCkMH4eyl3EokFEp3ndOhqdaqtGP9P6UVtEG7l5et861Y6tt6TQnpe
-         Jhxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736152725; x=1736757525;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YiOAOk5kGRx9rmUPaHmWdeff0Y5xhlY6UwwEsQqm8Hw=;
-        b=WK8Ek17ozI3pQJyaktJeAgsLLKv1OyIkAonBjAnroMUar/MvKrf51AT/629TQlO/TF
-         fHFn9d1ykEDgRflT4GgGGrUCrI9ADwWETEEnoq+gToCy+DXHULPqXhGBoIpnFp5ZSh0I
-         FyPSN2yZF3rrlqiqI1FNFpzvgBFrnUJtSki4fN6LW6ZaECUVjBPhfITPuHYFjUGlFAhY
-         1xoEgeUH471rVLNUkFM9LemPLi6WOcKZBFnBBpovn+OIA0dFPDErmtoHVImnqtBr8hhI
-         hEyfDIvq4sCnnhNHXcoNMGOqCvb7iP7acmn7n9cN39mca8e/ZzQcimiq2HhRJR3SyXkF
-         dtgQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVjsBLOfxpItH5jNKWQG9Paa0b2iZR0B46O6Jnb6LVTCu8ENdPiLUvVTKI1iYkwGJPg/tlLJFASttaD@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx5pY/+vFhGFv/8noYlKLOd7DEvILF5KJ3EWLg7xCYnR81jrnXl
-	yIV7rmuYOLt8EsLBQP5EPJT/EIw9cQPd77WGCsWjaybYFRl5y2PjMONnQ4koQQ4=
-X-Gm-Gg: ASbGncv9hTmC2Uq91Xn+rAg0ZXFH3cEqjblcrgWX92E/A21hnuLvLCcTTMGn6JC1Yp6
-	Vhyocmt2ptzU+XTkuNlpL/xI01EgJyb4CfHEWrxWUWzUElUwMKn6s4YQ84Ktq0ql5b8t3GWLl1m
-	hJk4KHH1zHP0J9iop4ynDeqcv6GfRl7g0kPHVgb95gSYA4e3pDPR0Hp2WKuaIPrFGN6AGc9xeOQ
-	st/6ifi0c7tISdJU4GgEu+XJCzwCt7r1jsQTykNZJeiHxjDflbJl/ZyIYqxoZ9xvATn8jyJ0ajv
-	GW2y1Q==
-X-Google-Smtp-Source: AGHT+IGUVd4iqCCZ9lciazZSWpc6AL/Za8b2BM7ngUBHt9ys8AcRhMXZRUNC6JrwIwMnpr/5pGC4Lg==
-X-Received: by 2002:a17:903:234c:b0:215:5a53:edee with SMTP id d9443c01a7336-219e6e85b25mr837178605ad.9.1736152725600;
-        Mon, 06 Jan 2025 00:38:45 -0800 (PST)
-Received: from [10.84.148.23] ([203.208.167.148])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dc9f5087sm282364745ad.202.2025.01.06.00.38.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jan 2025 00:38:45 -0800 (PST)
-Message-ID: <ae8aa8d7-4121-4939-9890-c54e0aee7896@bytedance.com>
-Date: Mon, 6 Jan 2025 16:38:32 +0800
+	s=arc-20240116; t=1736159645; c=relaxed/simple;
+	bh=nzcOPOfstjKJI6V8ldWdOiXMruNTjZucXWDM21V/f7w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=E3ZFqSaFIrDw2bFgTiX6CVWq3KASHx6aBiaXbfDPb3Z83lx/ByMAJ0ygJ1HQl9DMVlQ0rzu7NRLN73quOkHT+UdVI5w/m16o0IutM+VRNE5eKYU8/fl/J80F8+QFdUKHOPPG9jrbCQ+4Ee3LS4cYp+sClizic/L7FMxzJaLqhbE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=UNSjWw3i; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 505NaE33006668;
+	Mon, 6 Jan 2025 10:33:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pp1; bh=T/dIATF0B0cb2CjV4kpJjZfFPga/hC
+	k4zk30iJIHW7w=; b=UNSjWw3irJn0V+Dm8j5t3FNW5/wXx/WChR9S+1E2fwnee6
+	3YnxLlHQxOWH5zrs+0j3Lht+s4UrTI6g7Yg1KPB8FMCugDt75nNJJWZKMmbDbPht
+	aD4e1ztejD6AY9RigrcvvmP08x+kE9ZPTuYPeo60tFTmnQ8k4Cpe4cZrulHW0baX
+	bOFNUKH9z8P8+JW+mRFxmH7ld8nXAdzH+SB/wWVmxjkHXf+l7Q0PcRAwggyYoIXJ
+	RPu2iCOjOnvWnlY1gzTc7zEiBMqw+MBx8ifutL9cQhg4trkc8IU7fa53qIVbDErN
+	zLxsI17bxYOGqDtgLVqTsRSbTQbHdK5UUjCL9AUQ==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4403waj0t2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 06 Jan 2025 10:33:02 +0000 (GMT)
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 506AX1FB005709;
+	Mon, 6 Jan 2025 10:33:01 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4403waj0sx-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 06 Jan 2025 10:33:01 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 506A0LB9008869;
+	Mon, 6 Jan 2025 10:33:00 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 43yfpyndxu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 06 Jan 2025 10:33:00 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 506AWwE135127994
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 6 Jan 2025 10:32:58 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8AC1920049;
+	Mon,  6 Jan 2025 10:32:58 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 535C720040;
+	Mon,  6 Jan 2025 10:32:56 +0000 (GMT)
+Received: from li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com (unknown [9.179.15.34])
+	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Mon,  6 Jan 2025 10:32:56 +0000 (GMT)
+Date: Mon, 6 Jan 2025 11:32:54 +0100
+From: Alexander Gordeev <agordeev@linux.ibm.com>
+To: Qi Zheng <zhengqi.arch@bytedance.com>
+Cc: peterz@infradead.org, kevin.brodsky@arm.com, palmer@dabbelt.com,
+        tglx@linutronix.de, david@redhat.com, jannh@google.com,
+        hughd@google.com, yuzhao@google.com, willy@infradead.org,
+        muchun.song@linux.dev, vbabka@kernel.org, lorenzo.stoakes@oracle.com,
+        akpm@linux-foundation.org, rientjes@google.com, vishal.moola@gmail.com,
+        arnd@arndb.de, will@kernel.org, aneesh.kumar@kernel.org,
+        npiggin@gmail.com, dave.hansen@linux.intel.com, rppt@kernel.org,
+        ryan.roberts@arm.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-arch@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-openrisc@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-um@lists.infradead.org
+Subject: Re: [PATCH v4 06/15] s390: pgtable: add statistics for PUD and P4D
+ level page table
+Message-ID: <Z3uxVkg3i7zXI92e@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
+References: <cover.1735549103.git.zhengqi.arch@bytedance.com>
+ <35be22a2b1666df729a9fc108c2da5cce266e4be.1735549103.git.zhengqi.arch@bytedance.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/6] Account page tables at all levels
-Content-Language: en-US
-To: Kevin Brodsky <kevin.brodsky@arm.com>
-Cc: linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
- Catalin Marinas <catalin.marinas@arm.com>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- Linus Walleij <linus.walleij@linaro.org>, Andy Lutomirski <luto@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, "Mike Rapoport (IBM)"
- <rppt@kernel.org>, Ryan Roberts <ryan.roberts@arm.com>,
- Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
- Matthew Wilcox <willy@infradead.org>, linux-alpha@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
- linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
- linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-s390@vger.kernel.org, linux-snps-arc@lists.infradead.org,
- linux-um@lists.infradead.org, loongarch@lists.linux.dev, x86@kernel.org
-References: <20250103184415.2744423-1-kevin.brodsky@arm.com>
-From: Qi Zheng <zhengqi.arch@bytedance.com>
-In-Reply-To: <20250103184415.2744423-1-kevin.brodsky@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <35be22a2b1666df729a9fc108c2da5cce266e4be.1735549103.git.zhengqi.arch@bytedance.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 3z7EZUf66yDmnmtJgcHtcRdfzcBMN59A
+X-Proofpoint-ORIG-GUID: jOq3BOzX-nfrjMJZAlUBmLDYevP81AVQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=650
+ lowpriorityscore=0 spamscore=0 suspectscore=0 bulkscore=0 mlxscore=0
+ clxscore=1011 adultscore=0 impostorscore=0 priorityscore=1501
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2501060093
 
+On Mon, Dec 30, 2024 at 05:07:41PM +0800, Qi Zheng wrote:
+> Like PMD and PTE level page table, also add statistics for PUD and P4D
+> page table.
+...
+> diff --git a/arch/s390/include/asm/tlb.h b/arch/s390/include/asm/tlb.h
+> index e95b2c8081eb8..b946964afce8e 100644
+> --- a/arch/s390/include/asm/tlb.h
+> +++ b/arch/s390/include/asm/tlb.h
+> @@ -110,24 +110,6 @@ static inline void pmd_free_tlb(struct mmu_gather *tlb, pmd_t *pmd,
+>  	tlb_remove_ptdesc(tlb, pmd);
+>  }
+>  
+> -/*
+> - * p4d_free_tlb frees a pud table and clears the CRSTE for the
+> - * region second table entry from the tlb.
+> - * If the mm uses a four level page table the single p4d is freed
+> - * as the pgd. p4d_free_tlb checks the asce_limit against 8PB
+> - * to avoid the double free of the p4d in this case.
+> - */
+> -static inline void p4d_free_tlb(struct mmu_gather *tlb, p4d_t *p4d,
+> -				unsigned long address)
+> -{
+> -	if (mm_p4d_folded(tlb->mm))
+> -		return;
+> -	__tlb_adjust_range(tlb, address, PAGE_SIZE);
+> -	tlb->mm->context.flush_mm = 1;
+> -	tlb->freed_tables = 1;
+> -	tlb_remove_ptdesc(tlb, p4d);
+> -}
+> -
+>  /*
+>   * pud_free_tlb frees a pud table and clears the CRSTE for the
+>   * region third table entry from the tlb.
+> @@ -140,11 +122,30 @@ static inline void pud_free_tlb(struct mmu_gather *tlb, pud_t *pud,
+>  {
+>  	if (mm_pud_folded(tlb->mm))
+>  		return;
+> +	pagetable_pud_dtor(virt_to_ptdesc(pud));
+>  	tlb->mm->context.flush_mm = 1;
+>  	tlb->freed_tables = 1;
+>  	tlb->cleared_p4ds = 1;
+>  	tlb_remove_ptdesc(tlb, pud);
+>  }
+>  
+> +/*
+> + * p4d_free_tlb frees a p4d table and clears the CRSTE for the
+> + * region second table entry from the tlb.
+> + * If the mm uses a four level page table the single p4d is freed
+> + * as the pgd. p4d_free_tlb checks the asce_limit against 8PB
+> + * to avoid the double free of the p4d in this case.
+> + */
+> +static inline void p4d_free_tlb(struct mmu_gather *tlb, p4d_t *p4d,
+> +				unsigned long address)
+> +{
+> +	if (mm_p4d_folded(tlb->mm))
+> +		return;
+> +	pagetable_p4d_dtor(virt_to_ptdesc(p4d));
+> +	__tlb_adjust_range(tlb, address, PAGE_SIZE);
+> +	tlb->mm->context.flush_mm = 1;
+> +	tlb->freed_tables = 1;
+> +	tlb_remove_ptdesc(tlb, p4d);
+> +}
 
-
-On 2025/1/4 02:44, Kevin Brodsky wrote:
-> v1: https://lore.kernel.org/linux-mm/20241219164425.2277022-1-kevin.brodsky@arm.com/
-> 
-> This series should be considered in conjunction with Qi's series [1].
-> Together, they ensure that page table ctor/dtor are called at all levels
-> (PTE to PGD) and all architectures, where page tables are regular pages.
-> Besides the improvement in accounting and general cleanup, this also
-> create a single place where construction/destruction hooks can be called
-> for all page tables, namely the now-generic pagetable_dtor() introduced
-> by Qi, and __pagetable_ctor() introduced in this series.
-> 
-> v2 is essentially v1 rebased on top of mm-unstable, which includes Qi's
-> v4 series. A number of patches from v1 were dropped:
-> 
-> * v1 patch 4 is superseded by patch 6 in Qi's series.
-> * v1 patch 5 and 6 moved to Qi's series from v3 onwards.
-> * v1 patch 7 is superseded by patch 4 in Qi's series.
-> 
-> Changes from v1 in the remaining patches:
-> 
-> * Patch 1 only introduces __pagetable_ctor() as there is now a single
->    generic pagetable_dtor().
-> 
-> * Patch 3 and 6: in arch/m68k/mm/motorola.c, free_pointer_table() can
->    now unconditionally call pagetable_dtor() since it is the same for all
->    levels.
-> 
-> * Patch 6 just uses pagetable_dtor() instead of introducing
->    pagetable_pgd_dtor().
-> 
-> * Added Dave Hansen's Acked-by to all patches.
-> 
-> - Kevin
-> 
-> [1] https://lore.kernel.org/linux-mm/cover.1735549103.git.zhengqi.arch@bytedance.com/
-> ---
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Andy Lutomirski <luto@kernel.org>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> Cc: Ryan Roberts <ryan.roberts@arm.com>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Matthew Wilcox <willy@infradead.org>
-> Cc: Qi Zheng <zhengqi.arch@bytedance.com>
-> Cc: linux-alpha@vger.kernel.org
-> Cc: linux-arch@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-csky@vger.kernel.org
-> Cc: linux-hexagon@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-m68k@lists.linux-m68k.org
-> Cc: linux-mips@vger.kernel.org
-> Cc: linux-openrisc@vger.kernel.org
-> Cc: linux-parisc@vger.kernel.org
-> Cc: linux-riscv@lists.infradead.org
-> Cc: linux-s390@vger.kernel.org
-> Cc: linux-snps-arc@lists.infradead.org
-> Cc: linux-um@lists.infradead.org
-> Cc: loongarch@lists.linux.dev
-> Cc: x86@kernel.org
-> ---
-> Kevin Brodsky (6):
->    mm: Move common part of pagetable_*_ctor to helper
->    parisc: mm: Ensure pagetable_pmd_[cd]tor are called
->    m68k: mm: Add calls to pagetable_pmd_[cd]tor
->    ARM: mm: Rename PGD helpers
->    asm-generic: pgalloc: Provide generic __pgd_{alloc,free}
->    mm: Introduce ctor/dtor at PGD level
-
-For this series:
-
-Acked-by: Qi Zheng <zhengqi.arch@bytedance.com>
+I understand that you want to sort p.._free_tlb() routines, but please
+do not move the code around or make a separate follow-up patch.
 
 Thanks!
-
 
