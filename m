@@ -1,80 +1,80 @@
-Return-Path: <linux-arch+bounces-9605-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9606-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5D40A025A4
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Jan 2025 13:38:03 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03111A025CF
+	for <lists+linux-arch@lfdr.de>; Mon,  6 Jan 2025 13:45:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 604EF3A2C31
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Jan 2025 12:37:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1F9FC7A2141
+	for <lists+linux-arch@lfdr.de>; Mon,  6 Jan 2025 12:45:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 738281DBB19;
-	Mon,  6 Jan 2025 12:37:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D13641DDC3A;
+	Mon,  6 Jan 2025 12:45:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="gylwNq3j"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ntA6zIAK"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC62F18A6B2;
-	Mon,  6 Jan 2025 12:37:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FDE41DCB09;
+	Mon,  6 Jan 2025 12:45:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736167079; cv=none; b=qsskk9gnpanZdfa4CyoJQTyWsB/jQ/1UR00td4/DuPsaE3gE6reOrKMHlQSHTrONjPWXGfEYskRZlmkWBJ+iucqfbo6wcqQk9mnoBnERLY4SNYo5hGugZKLCmYkf7OcYpWc/K7OPexQ2ba5XVybH9dNbgDW6PNn1NMLqFx4NxWE=
+	t=1736167504; cv=none; b=Y1OjsqCwE0Un5SEjMJSvO/2+/yz8Sztojqup/nc8GDao4eWpoZvsaLD1dqqizIY8n/X3lO1jbtBa+mRJdp2OTa5qTVGdulEbg79CBt8EHHcnIsYU6cwYRJ8T7+ztV4cTUalzK+OgxL5/JMKufk9t4Udt7Z9DJNFSbL7L/YEmfSQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736167079; c=relaxed/simple;
-	bh=VAdHGg/thRaEdrn141xDL2CcWcQFg82QBey0iO2RGE4=;
+	s=arc-20240116; t=1736167504; c=relaxed/simple;
+	bh=8EJg/o2B0qrl9zIisKpYGpGw5WHYLs2yuAvac4xx5tU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WayNx/65VOpIXScT0rSDrAINNQdtl5qfAkHTEFZCgvDEN1dsroHZgPcFNfDT7w97a5ue1lIXnAkTV99viz56rWrsq1vwotXkG2jQgIofMGZb4yV9kdgGRhdcaclDRmxcUXg6Aygt3+eAcfzxUaLni6cCsbZjpuXJIYiEWi106mY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=gylwNq3j; arc=none smtp.client-ip=148.163.156.1
+	 Content-Type:Content-Disposition:In-Reply-To; b=eLE9WqTgdv+duaOUUlH9OmUZWQeZ6TJLGO/9BCA9iXyM0Jr8fotNsct7RGL7HNnIcSxAiF3qONnID/iiZgc4+46AVJ9uchPXemrWgeRKf5OoZpIHdhm0LBHt/a3CjKtQYVsS2tUoeMRW4PWf1uViNM+O5kn1cI3ucM4Ivf81blQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ntA6zIAK; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5063qlTX013067;
-	Mon, 6 Jan 2025 12:37:03 GMT
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5063rt7j001311;
+	Mon, 6 Jan 2025 12:44:22 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=SHRVspXO3U3J22EWQcFrDH7XAHWgni
-	RmJ5qosSJnn6g=; b=gylwNq3j8Ick4RHspj1WpowzwXtJldVyTnrF8QuvAYKM9D
-	cb8krtFCzCsoyxvh89UJl26z7qHWUqnN/ImInk6EwuS0vqp4PP2dgss2yasVDKW2
-	Lff3/BNOwZhA8CZ78PF3yjvRLK1XQw15T7aqhCvEf/yXs04EvpitmkPslxE8hb51
-	wgf5maxpIuSGfKzDGpse0DX4tM9gBITxyTYA+7bWfogitjj8uwIINly3796qqLPh
-	b77+nf7AsA9eS2XD7o5ZzopzbMCJakQIq7daMPDRVe0joP4ae60Avs8p9yEVq73l
-	VN9BQgghYULTXZUzQE9YkTytypyDPG5p2Q7BERgw==
+	:references:subject:to; s=pp1; bh=7dUprz6iii0nxv85hIGsJCS0ldBed9
+	AvdLxve3ElZ/g=; b=ntA6zIAKwr9Ctlh/HzpfWqu3gi5wcUsghUZNPFXuLj0M4/
+	H59jMkbloFNTwWtw8o3p5H9IXi19JHU6qAvfVSyB+YTGOngkEj6Cc+a3/HTR+dEJ
+	5N3VFJ1yuZxAjVA4jisoUbzEW44BALuxI7AOwkwV5G7BBneSzfErmPyFIpTPlfGT
+	Jd2ibzTcSOUZNGzTc7bFfQo1QnngQXav3TC6hBOETEpRQysN2/txlZoHa83gV4RP
+	IoUPw6Av6G2MNYhJFDL3ccAE/Uk3t1/EVkGFKiHM547FEUSOtiwDBvllCcSj2D9K
+	Iy6pIoI5cQzq68XtICzdJqRDLycaxkRSF74seOJw==
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4407nh1wst-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4407nbhxr7-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 06 Jan 2025 12:37:03 +0000 (GMT)
-Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 506Cb2iQ020201;
-	Mon, 6 Jan 2025 12:37:02 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4407nh1wsr-1
+	Mon, 06 Jan 2025 12:44:21 +0000 (GMT)
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 506CgZ65013857;
+	Mon, 6 Jan 2025 12:44:21 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4407nbhxr4-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 06 Jan 2025 12:37:02 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5069MVZp003593;
-	Mon, 6 Jan 2025 12:37:01 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 43yfaswvgm-1
+	Mon, 06 Jan 2025 12:44:20 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 506BbpxD026176;
+	Mon, 6 Jan 2025 12:44:19 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 43yj11wctt-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 06 Jan 2025 12:37:01 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 506Caxhn26870206
+	Mon, 06 Jan 2025 12:44:19 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 506CiIS518219288
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 6 Jan 2025 12:36:59 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 98FB32004B;
-	Mon,  6 Jan 2025 12:36:59 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 402EF20040;
-	Mon,  6 Jan 2025 12:36:57 +0000 (GMT)
+	Mon, 6 Jan 2025 12:44:18 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 0877F20043;
+	Mon,  6 Jan 2025 12:44:18 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D881A20040;
+	Mon,  6 Jan 2025 12:44:15 +0000 (GMT)
 Received: from li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com (unknown [9.179.15.34])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Mon,  6 Jan 2025 12:36:57 +0000 (GMT)
-Date: Mon, 6 Jan 2025 13:36:55 +0100
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Mon,  6 Jan 2025 12:44:15 +0000 (GMT)
+Date: Mon, 6 Jan 2025 13:44:14 +0100
 From: Alexander Gordeev <agordeev@linux.ibm.com>
 To: Qi Zheng <zhengqi.arch@bytedance.com>
 Cc: peterz@infradead.org, kevin.brodsky@arm.com, palmer@dabbelt.com,
@@ -93,12 +93,13 @@ Cc: peterz@infradead.org, kevin.brodsky@arm.com, palmer@dabbelt.com,
         linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
         linux-openrisc@vger.kernel.org, linux-sh@vger.kernel.org,
         linux-um@lists.infradead.org
-Subject: Re: [PATCH v4 07/15] mm: pgtable: introduce pagetable_dtor()
-Message-ID: <Z3vOZ18jcCpHIcPD@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
+Subject: Re: [PATCH v4 12/15] s390: pgtable: also move pagetable_dtor() of
+ PxD to __tlb_remove_table()
+Message-ID: <Z3vQHplZqtHf6Td8@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
 References: <cover.1735549103.git.zhengqi.arch@bytedance.com>
- <8ada95453180c71b7fca92b9a9f11fa0f92d45a6.1735549103.git.zhengqi.arch@bytedance.com>
- <Z3uxwiEhYHDqdTh3@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
- <e1de887c-6193-48ee-a9b3-04c8a0cdda45@bytedance.com>
+ <ad21b9392096336cf15aee46f68f9989a9cf877e.1735549103.git.zhengqi.arch@bytedance.com>
+ <Z3uyJ2BjslzsjkZI@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
+ <2d16f0fe-9c7f-4229-b7b5-ffa3ab1b1143@bytedance.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -107,53 +108,38 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e1de887c-6193-48ee-a9b3-04c8a0cdda45@bytedance.com>
+In-Reply-To: <2d16f0fe-9c7f-4229-b7b5-ffa3ab1b1143@bytedance.com>
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: mN1kYnlUlqSgV99r0ZXPtutQd1lOYK0_
-X-Proofpoint-GUID: 4h_GDpYFs18Yd8GMGP0i2nDMJVSwVuwn
+X-Proofpoint-ORIG-GUID: pBEfcQBgF5vkTjfwUfa5dco3kr9lNTtL
+X-Proofpoint-GUID: kKTLJJdNiCahdOdrkZ96oEBulIRxKyk8
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
  definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
- lowpriorityscore=0 priorityscore=1501 phishscore=0 spamscore=0
- clxscore=1015 adultscore=0 suspectscore=0 malwarescore=0 mlxlogscore=643
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
+ suspectscore=0 mlxscore=0 mlxlogscore=520 impostorscore=0 clxscore=1015
+ adultscore=0 phishscore=0 priorityscore=1501 lowpriorityscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.19.0-2411120000 definitions=main-2501060110
 
-On Mon, Jan 06, 2025 at 06:55:58PM +0800, Qi Zheng wrote:
-> > > +static inline void pagetable_dtor(struct ptdesc *ptdesc)
-> > > +{
-> > > +	struct folio *folio = ptdesc_folio(ptdesc);
-> > > +
-> > > +	ptlock_free(ptdesc);
-> > > +	__folio_clear_pgtable(folio);
-> > > +	lruvec_stat_sub_folio(folio, NR_PAGETABLE);
-> > > +}
-> > > +
+On Mon, Jan 06, 2025 at 07:02:17PM +0800, Qi Zheng wrote:
+> > On Mon, Dec 30, 2024 at 05:07:47PM +0800, Qi Zheng wrote:
+> > > To unify the PxD and PTE TLB free path, also move the pagetable_dtor() of
+> > > PMD|PUD|P4D to __tlb_remove_table().
 > > 
-> > If I am not mistaken, it is just pagetable_pte_dtor() rename.
-> > What is the point in moving the code around?
+> > The above and Subject are still incorrect: pagetable_dtor() is
+> > called from pagetable_dtor_free(), not from __tlb_remove_table().
 > 
-> No, this is to unify pagetable_p*_dtor() into pagetable_dtor(), so
-> that we can move pagetable_dtor() to __tlb_remove_table(), and then
-> ptlock and PTE page can be freed together through RCU, which is
-> also the main purpose of this patch series.
+> Hmm, __tlb_remove_table() calls pagetable_dtor_free(), so moving to
+> pagetable_dtor_free() means moving to __tlb_remove_table(). Right?
 
-I am only talking about this patch. pagetable_dtor() code above is
-the same pagetable_pte_dtor() below - it is only the function name
-that changed. So why to move the function body? Anyway, that is
-just a nit.
+Right. But you Subject and description claim "... also move the
+pagetable_dtor()" not to pagetable_dtor_free() - which is another
+function.
 
-> Thanks!
+> And the main purpose of this patch is also to move pagetable_dtor()
+> to __tlb_remove_table(). So I think this description makes sense?
 
-> > > -static inline void pagetable_pte_dtor(struct ptdesc *ptdesc)
-> > > -{
-> > > -	struct folio *folio = ptdesc_folio(ptdesc);
-> > > -
-> > > -	ptlock_free(ptdesc);
-> > > -	__folio_clear_pgtable(folio);
-> > > -	lruvec_stat_sub_folio(folio, NR_PAGETABLE);
-> > > -}
+The patch makes sense, but the description it is incorrect ;)
 
-Thank you!
+Thanks!
 
