@@ -1,211 +1,250 @@
-Return-Path: <linux-arch+bounces-9622-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9623-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B607DA04238
-	for <lists+linux-arch@lfdr.de>; Tue,  7 Jan 2025 15:23:47 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A769A04219
+	for <lists+linux-arch@lfdr.de>; Tue,  7 Jan 2025 15:22:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A8A8A18831FC
-	for <lists+linux-arch@lfdr.de>; Tue,  7 Jan 2025 14:20:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 96CC97A06BD
+	for <lists+linux-arch@lfdr.de>; Tue,  7 Jan 2025 14:21:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BB511F5406;
-	Tue,  7 Jan 2025 14:17:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DF9A1E9B00;
+	Tue,  7 Jan 2025 14:21:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="XZA2f+w+"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 248521F0E36;
-	Tue,  7 Jan 2025 14:17:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD6491EE03B;
+	Tue,  7 Jan 2025 14:21:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736259453; cv=none; b=Kqedzc7DJptCU23Jw5RtOFtqGWJ2snTdfl2MJLVVuMrg+OzkCET2ybJst/B4u4smiF5yJIPQ58Q5s/X3Pa8QyKATOwSv8IGXfqOt/exk880ueuoiYLp/LNQXB9uQTnD9N4B9GULTGeSNQgouxFhyK0HcOwqLiBIigutHKWuttws=
+	t=1736259718; cv=none; b=HmR4grh6b6e8QZpxggL1IiIcmSXsb9q92uFk7TVWYkiCpsmqFOmFhPKJiQ0y7cPEFTKtr+jPtNebyIt5toSwsnFCE9msiChSoW6WGwV2KwQsP+p5Vw+7EBjbsP7wEWpRj5TOPoS8coF9Yd4yL+lWkrOc9HZMofaBDweTBozPxl8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736259453; c=relaxed/simple;
-	bh=LdjW4ickP4Xi4e0fu3fIWfHzf6KJRYYvI9Few8GoUtc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Av95EL+9EkFn+U5wLWu/d3/nxhW6IK+6wROrVsM6dx2B+vWlPfVUQpQ306NQxYiUXVCJgRbRevuag0tjI6WybcZ1rkFlx3ALda9LiMVluhvoKpArvpGr6C5jf1ElRDwA3zdzo2dUXWZyt9z/MLPdAXLDMYRbTZ979tSKZ5cEHig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5F4761424;
-	Tue,  7 Jan 2025 06:17:57 -0800 (PST)
-Received: from [10.44.160.93] (e126510-lin.lund.arm.com [10.44.160.93])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 91DCA3F59E;
-	Tue,  7 Jan 2025 06:17:20 -0800 (PST)
-Message-ID: <f1f98c3d-2db0-455f-80e7-b7d4c3154de6@arm.com>
-Date: Tue, 7 Jan 2025 15:17:17 +0100
+	s=arc-20240116; t=1736259718; c=relaxed/simple;
+	bh=XbIEoJ1ylQIsr8aUM5aotWzq/cv/udcop0c+xL9yzDg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fPZQktIGdhpQ+zXC4Zi6KqQg0+YQ08vXUDfIREpZRhm0qW740xsL4XiTfLngDO+GLJUTLPa7n2R4LC9kBJwoYbDTNQs71qMPueFFz5gVoUw4XsCCL6RpMuZ0OBPi+fg56/S5PHzdpgc61MgLL9nmtRaVVKGiSW8weHpU2WKATwE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=XZA2f+w+; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50785lmS018139;
+	Tue, 7 Jan 2025 14:20:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pp1; bh=PZcAQo2jVZKhpUA/J5KNxIBIcwI9ru
+	7trJmhob0Z6oo=; b=XZA2f+w+ZgaVD9bbZcCmyCGgsXz2felIn2ZCDI9+FmzGTH
+	Eainpr7pfGKSTDzrmX3jhKmLGQgNrMONcuqUzI5XahM+03uE0ABbIfzQrAkkXRdQ
+	zQyY3LcpYQtizGCGoFg+C1o070Epat0Ertl+Oj+j5GZbCQJpo6fBpvqaNlv0Uj4h
+	jCp+oWr7fNZcGMEOuZ4JkwAxZo52l1qIWDUqKRwUfHiXmblJLI3ae2nNo1pFrfBS
+	DcDWcjtyioeUbc3EdHzCB9GFsZ3E41si5WIYxTtQP1Lqc0+5shC0eyKIw8ZyhlDs
+	ilv7kx5646E7KIqpUVnFvTxFL5QXObvV+xfaYIjg==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4410f39jr5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 07 Jan 2025 14:20:55 +0000 (GMT)
+Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 507EKsge024914;
+	Tue, 7 Jan 2025 14:20:54 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4410f39jr2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 07 Jan 2025 14:20:54 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 507DRZPg013571;
+	Tue, 7 Jan 2025 14:20:53 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 43ygantsep-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 07 Jan 2025 14:20:53 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 507EKpgt21889308
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 7 Jan 2025 14:20:51 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 59FEC2004B;
+	Tue,  7 Jan 2025 14:20:51 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 92F3320043;
+	Tue,  7 Jan 2025 14:20:50 +0000 (GMT)
+Received: from li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com (unknown [9.155.204.135])
+	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Tue,  7 Jan 2025 14:20:50 +0000 (GMT)
+Date: Tue, 7 Jan 2025 15:20:49 +0100
+From: Alexander Gordeev <agordeev@linux.ibm.com>
+To: Qi Zheng <zhengqi.arch@bytedance.com>
+Cc: peterz@infradead.org, kevin.brodsky@arm.com, palmer@dabbelt.com,
+        tglx@linutronix.de, david@redhat.com, jannh@google.com,
+        hughd@google.com, yuzhao@google.com, willy@infradead.org,
+        muchun.song@linux.dev, vbabka@kernel.org, lorenzo.stoakes@oracle.com,
+        akpm@linux-foundation.org, rientjes@google.com, vishal.moola@gmail.com,
+        arnd@arndb.de, will@kernel.org, aneesh.kumar@kernel.org,
+        npiggin@gmail.com, dave.hansen@linux.intel.com, rppt@kernel.org,
+        ryan.roberts@arm.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-arch@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-openrisc@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-um@lists.infradead.org
+Subject: Re: [PATCH v4 13/15] mm: pgtable: introduce generic
+ __tlb_remove_table()
+Message-ID: <Z304QRzGgg/0HI6L@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
+References: <cover.1735549103.git.zhengqi.arch@bytedance.com>
+ <f7febc7719fd84673a8eae8af71b7b4278d3e110.1735549103.git.zhengqi.arch@bytedance.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 10/15] riscv: pgtable: move pagetable_dtor() to
- __tlb_remove_table()
-To: Qi Zheng <zhengqi.arch@bytedance.com>
-Cc: agordeev@linux.ibm.com, palmer@dabbelt.com, tglx@linutronix.de,
- david@redhat.com, jannh@google.com, hughd@google.com, yuzhao@google.com,
- willy@infradead.org, muchun.song@linux.dev, vbabka@kernel.org,
- lorenzo.stoakes@oracle.com, rientjes@google.com, vishal.moola@gmail.com,
- arnd@arndb.de, will@kernel.org, aneesh.kumar@kernel.org, npiggin@gmail.com,
- dave.hansen@linux.intel.com, rppt@kernel.org, ryan.roberts@arm.com,
- linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
- linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
- linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-kernel@vger.kernel.org, x86@kernel.org, linux-arch@vger.kernel.org,
- linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
- loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
- linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
- linux-sh@vger.kernel.org, linux-um@lists.infradead.org,
- peterz@infradead.org, akpm@linux-foundation.org
-References: <cover.1735549103.git.zhengqi.arch@bytedance.com>
- <0e8f0b3835c15e99145e0006ac1020ae45a2b166.1735549103.git.zhengqi.arch@bytedance.com>
- <1b09335c-f0b6-4ccb-9800-5fb22f7e8083@arm.com>
- <ebce5e05-5e46-4c6e-94a0-bcf3655a862b@bytedance.com>
- <7e2c26c8-f5df-4833-a93f-3409b00b58fd@arm.com>
- <e9fe97d4-99d5-443e-b722-43903655a76e@bytedance.com>
- <31e1a033-00a7-4953-81e7-0caedd0227a9@bytedance.com>
- <d9a14211-4bbd-4fb6-ba87-a555a40bb67a@arm.com>
- <de8756aa-dbf7-4f6f-91f0-934270397192@bytedance.com>
- <ee393a7f-d01e-4e5d-9bf8-779795613af1@arm.com>
- <07e0c05f-cb69-4263-885d-6d20d4442152@bytedance.com>
- <4a0b5edb-6fc7-4df4-93d9-ca834e6a760b@arm.com>
- <fca0d7de-b563-4d11-9ed8-c6b8290c4cf9@bytedance.com>
-Content-Language: en-GB
-From: Kevin Brodsky <kevin.brodsky@arm.com>
-In-Reply-To: <fca0d7de-b563-4d11-9ed8-c6b8290c4cf9@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f7febc7719fd84673a8eae8af71b7b4278d3e110.1735549103.git.zhengqi.arch@bytedance.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: pJGOWrM73oMm5Nze_uVYydJm8haany2l
+X-Proofpoint-ORIG-GUID: yqOSxHIumtcfGGAun6YrBrVvCrkUAfiN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=797
+ spamscore=0 lowpriorityscore=0 adultscore=0 malwarescore=0 impostorscore=0
+ bulkscore=0 phishscore=0 suspectscore=0 priorityscore=1501 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
+ definitions=main-2501070118
 
-On 07/01/2025 13:31, Qi Zheng wrote:
-> On 2025/1/7 19:58, Kevin Brodsky wrote:
->> On 07/01/2025 11:51, Qi Zheng wrote:
->>> [...]
->>>
->>> Author: Qi Zheng <zhengqi.arch@bytedance.com>
->>> Date:   Fri Dec 13 17:13:48 2024 +0800
->>>
->>>      mm: pgtable: completely move pagetable_dtor() to generic
->>> tlb_remove_table()
->>>
->>>      For the generic tlb_remove_table(), it is implemented in the
->>> following two
->>>      forms:
->>>
->>>      1) CONFIG_MMU_GATHER_TABLE_FREE is enabled
->>>
->>>      tlb_remove_table
->>>      --> generic __tlb_remove_table()
->>>
->>>      2) CONFIG_MMU_GATHER_TABLE_FREE is disabled
->>>
->>>      tlb_remove_table
->>>      --> tlb_remove_page
->>>
->>>      For case 1), the pagetable_dtor() has already been moved to
->>> generic
->>>      __tlb_remove_table().
->>>
->>>      For case 2), now only arm will call
->>> tlb_remove_table()/tlb_remove_ptdesc()
->>>      when CONFIG_MMU_GATHER_TABLE_FREE is disabled. Let's move
->>> pagetable_dtor()
->>>      completely to generic tlb_remove_table(), so that the
->>> architectures can
->>>      follow more easily.
->>>
->>>      Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
->
-> I missed your Suggested-by, will add it in v5.
+On Mon, Dec 30, 2024 at 05:07:48PM +0800, Qi Zheng wrote:
+> Several architectures (arm, arm64, riscv and x86) define exactly the
+> same __tlb_remove_table(), just introduce generic __tlb_remove_table() to
+> eliminate these duplications.
+> 
+> The s390 __tlb_remove_table() is nearly the same, so also make s390
+> __tlb_remove_table() version generic.
+> 
+> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+> ---
+>  arch/arm/include/asm/tlb.h      |  9 ---------
+>  arch/arm64/include/asm/tlb.h    |  7 -------
+>  arch/powerpc/include/asm/tlb.h  |  1 +
+>  arch/riscv/include/asm/tlb.h    | 12 ------------
+>  arch/s390/include/asm/tlb.h     |  9 ++++-----
+>  arch/s390/mm/pgalloc.c          |  7 -------
+>  arch/sparc/include/asm/tlb_32.h |  1 +
+>  arch/sparc/include/asm/tlb_64.h |  1 +
+>  arch/x86/include/asm/tlb.h      | 17 -----------------
+>  include/asm-generic/tlb.h       | 15 +++++++++++++--
+>  10 files changed, 20 insertions(+), 59 deletions(-)
+...
+> diff --git a/arch/s390/include/asm/tlb.h b/arch/s390/include/asm/tlb.h
+> index 79df7c0932c56..da4a7d175f69c 100644
+> --- a/arch/s390/include/asm/tlb.h
+> +++ b/arch/s390/include/asm/tlb.h
+> @@ -22,7 +22,6 @@
+>   * Pages used for the page tables is a different story. FIXME: more
+>   */
+>  
+> -void __tlb_remove_table(void *_table);
+>  static inline void tlb_flush(struct mmu_gather *tlb);
+>  static inline bool __tlb_remove_page_size(struct mmu_gather *tlb,
+>  		struct page *page, bool delay_rmap, int page_size);
+> @@ -87,7 +86,7 @@ static inline void pte_free_tlb(struct mmu_gather *tlb, pgtable_t pte,
+>  	tlb->cleared_pmds = 1;
+>  	if (mm_alloc_pgste(tlb->mm))
+>  		gmap_unlink(tlb->mm, (unsigned long *)pte, address);
+> -	tlb_remove_ptdesc(tlb, pte);
+> +	tlb_remove_ptdesc(tlb, virt_to_ptdesc(pte));
+>  }
+>  
+>  /*
+> @@ -106,7 +105,7 @@ static inline void pmd_free_tlb(struct mmu_gather *tlb, pmd_t *pmd,
+>  	tlb->mm->context.flush_mm = 1;
+>  	tlb->freed_tables = 1;
+>  	tlb->cleared_puds = 1;
+> -	tlb_remove_ptdesc(tlb, pmd);
+> +	tlb_remove_ptdesc(tlb, virt_to_ptdesc(pmd));
+>  }
+>  
+>  /*
+> @@ -124,7 +123,7 @@ static inline void pud_free_tlb(struct mmu_gather *tlb, pud_t *pud,
+>  	tlb->mm->context.flush_mm = 1;
+>  	tlb->freed_tables = 1;
+>  	tlb->cleared_p4ds = 1;
+> -	tlb_remove_ptdesc(tlb, pud);
+> +	tlb_remove_ptdesc(tlb, virt_to_ptdesc(pud));
+>  }
+>  
+>  /*
+> @@ -142,7 +141,7 @@ static inline void p4d_free_tlb(struct mmu_gather *tlb, p4d_t *p4d,
+>  	__tlb_adjust_range(tlb, address, PAGE_SIZE);
+>  	tlb->mm->context.flush_mm = 1;
+>  	tlb->freed_tables = 1;
+> -	tlb_remove_ptdesc(tlb, p4d);
+> +	tlb_remove_ptdesc(tlb, virt_to_ptdesc(p4d));
+>  }
+>  
+>  #endif /* _S390_TLB_H */
+> diff --git a/arch/s390/mm/pgalloc.c b/arch/s390/mm/pgalloc.c
+> index c73b89811a264..3e002dea6278f 100644
+> --- a/arch/s390/mm/pgalloc.c
+> +++ b/arch/s390/mm/pgalloc.c
+> @@ -193,13 +193,6 @@ void page_table_free(struct mm_struct *mm, unsigned long *table)
+>  	pagetable_dtor_free(ptdesc);
+>  }
+>  
+> -void __tlb_remove_table(void *table)
+> -{
+> -	struct ptdesc *ptdesc = virt_to_ptdesc(table);
+> -
+> -	pagetable_dtor_free(ptdesc);
+> -}
+> -
+>  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+>  static void pte_free_now(struct rcu_head *head)
+>  {
+...
+> diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
+> index 709830274b756..69de47c7ef3c5 100644
+> --- a/include/asm-generic/tlb.h
+> +++ b/include/asm-generic/tlb.h
+> @@ -153,8 +153,9 @@
+>   *
+>   *  Useful if your architecture has non-page page directories.
+>   *
+> - *  When used, an architecture is expected to provide __tlb_remove_table()
+> - *  which does the actual freeing of these pages.
+> + *  When used, an architecture is expected to provide __tlb_remove_table() or
+> + *  use the generic __tlb_remove_table(), which does the actual freeing of these
+> + *  pages.
+>   *
+>   *  MMU_GATHER_RCU_TABLE_FREE
+>   *
+> @@ -207,6 +208,16 @@ struct mmu_table_batch {
+>  #define MAX_TABLE_BATCH		\
+>  	((PAGE_SIZE - sizeof(struct mmu_table_batch)) / sizeof(void *))
+>  
+> +#ifndef __HAVE_ARCH_TLB_REMOVE_TABLE
+> +static inline void __tlb_remove_table(void *table)
+> +{
+> +	struct ptdesc *ptdesc = (struct ptdesc *)table;
+> +
+> +	pagetable_dtor(ptdesc);
+> +	pagetable_free(ptdesc);
+> +}
+> +#endif
+> +
+>  extern void tlb_remove_table(struct mmu_gather *tlb, void *table);
+>  
+>  #else /* !CONFIG_MMU_GATHER_HAVE_TABLE_FREE */
 
-Ah yes thanks!
+For s390:
 
->
->>>
->>> diff --git a/arch/arm/include/asm/tlb.h b/arch/arm/include/asm/tlb.h
->>> index b8eebdb598631..ea4fbe7b17f6f 100644
->>> --- a/arch/arm/include/asm/tlb.h
->>> +++ b/arch/arm/include/asm/tlb.h
->>> @@ -34,10 +34,6 @@ __pte_free_tlb(struct mmu_gather *tlb, pgtable_t
->>> pte, unsigned long addr)
->>>   {
->>>          struct ptdesc *ptdesc = page_ptdesc(pte);
->>>
->>> -#ifndef CONFIG_MMU_GATHER_TABLE_FREE
->>> -       pagetable_dtor(ptdesc);
->>> -#endif
->>
->> I guess this hunk will disappear since this call isn't present to start
->> with.
->
-> Yes, I plan to add this in the patch #8, and remove it in this patch.
+Acked-by: Alexander Gordeev <agordeev@linux.ibm.com>
 
-Right I guess this is required to keep patch 8 self-contained, makes sense.
-
->
->>
->>> -
->>>   #ifndef CONFIG_ARM_LPAE
->>>          /*
->>>           * With the classic ARM MMU, a pte page has two
->>> corresponding pmd
->>> diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
->>> index 69de47c7ef3c5..53ae7748f555b 100644
->>> --- a/include/asm-generic/tlb.h
->>> +++ b/include/asm-generic/tlb.h
->>> @@ -220,14 +220,20 @@ static inline void __tlb_remove_table(void
->>> *table)
->>>
->>>   extern void tlb_remove_table(struct mmu_gather *tlb, void *table);
->>>
->>> -#else /* !CONFIG_MMU_GATHER_HAVE_TABLE_FREE */
->>> +#else /* !CONFIG_MMU_GATHER_TABLE_FREE */
->>
->> Good catch!
->>
->>>
->>> +static inline void tlb_remove_page(struct mmu_gather *tlb, struct
->>> page *page);
->>
->> Nit: might be better to move the declaration up, e.g. above #ifdef
->> CONFIG_MMU_GATHER_TABLE_FREE.
->
-> Now only the tlb_remove_table() below calls it, maybe it's better to
-> keep the impact to minimum?
-
-I feel it might be better to make the declaration unconditional, but
-this is really a detail, I don't mind either way.
-
->
->>
->>>   /*
->>>    * Without MMU_GATHER_TABLE_FREE the architecture is assumed to have
->>> page based
->>>    * page directories and we can use the normal page batching to free
->>> them.
->>>    */
->>> -#define tlb_remove_table(tlb, page) tlb_remove_page((tlb), (page))
->>> +static inline void tlb_remove_table(struct mmu_gather *tlb, void
->>> *table)
->>> +{
->>> +       struct page *page = (struct page *)table;
->>>
->>> +       pagetable_dtor(page_ptdesc(page));
->>> +       tlb_remove_page(tlb, page);
->>> +}
->>>   #endif /* CONFIG_MMU_GATHER_TABLE_FREE */
->>>
->>>   #ifdef CONFIG_MMU_GATHER_RCU_TABLE_FREE
->>
->> Looks good to me otherwise.
->
-> I will add your Reviewed-by to all patches (except yours) in v5, can
-> I also add it to this new added patch? (if we agree with the discussion
-> above) ;)
-
-Yes please do, thanks!
-
-- Kevin
+Thanks!
 
