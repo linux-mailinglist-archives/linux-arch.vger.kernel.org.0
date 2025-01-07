@@ -1,40 +1,40 @@
-Return-Path: <linux-arch+bounces-9615-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9616-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E11B0A03AFA
-	for <lists+linux-arch@lfdr.de>; Tue,  7 Jan 2025 10:24:10 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B085A03BA2
+	for <lists+linux-arch@lfdr.de>; Tue,  7 Jan 2025 10:58:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 72FF6188347C
-	for <lists+linux-arch@lfdr.de>; Tue,  7 Jan 2025 09:24:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 41C19165A0A
+	for <lists+linux-arch@lfdr.de>; Tue,  7 Jan 2025 09:58:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAB5D1E0E01;
-	Tue,  7 Jan 2025 09:24:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C74671E1C1F;
+	Tue,  7 Jan 2025 09:58:11 +0000 (UTC)
 X-Original-To: linux-arch@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3686B647;
-	Tue,  7 Jan 2025 09:24:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1EC97081E;
+	Tue,  7 Jan 2025 09:58:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736241845; cv=none; b=osVFP5EfYyP0+rVSswKY0QMqUb0QI3DfLwN0UiLpax78QavNv3B3LW7k/NMP9t+1v2xrKkrIN3Rb3zFJPDaicAV/kz1+BmOe5EAhsVoR9AX7eJ2ZkM7sWZzPsOK0qhPOJso7Ks5UgcLI80RhVDm/veDotYDjAg02KpWQb/kOEjI=
+	t=1736243891; cv=none; b=N5P3xGbFMitG/jv2nuI5MrsVQm0iw/E97SjclsQI0sj2j22CWGeW/Fzd4zQobT0AvksPPTIfIKH+hRCUzrH96zDY3tsXgY7x9DIX5j3qBIgdp0J+QUI518AtXehRAOCaqioM7ReLtLvsEERWnTCFxlc+fnFZ51s5OD8IGsmOgZg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736241845; c=relaxed/simple;
-	bh=DFJhVvdeLGk2efSvJopONsRNtRHM8RshXpbuce0z+N4=;
+	s=arc-20240116; t=1736243891; c=relaxed/simple;
+	bh=zdmYeT6nirJQQeULEz/Mx26Ga9KASAi8ohiMId5QGl8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Vai0vnPDd4IvubWRqHzYG4b2XkeHhLFJY8c9RH8/UwxmfHZbrL/ru+P/gE3P1Tqgwnr3ApRRP4Y8Ua/H71AHu5n7EszDh6m77CZwJo6vlJytkJzyFTwiiwIlnjb5jS/qm7EfmO16Sp9Ibtc/5SgbMLDQ7qvsF3ZIDE8xdrck08Q=
+	 In-Reply-To:Content-Type; b=JyZ05x7LizVYQhRJsTBoR5p2pLU9xhDsiOYoHxo7Hvh3vqOhxJRVFL7xOzsDCFlAcHlCGTviQZPPbCAIQZn11fgh4CnM30ugX5xYYGZHA7CXWByXK8d6QI78NOwK6dtqrPPG3d9zHHZfsAEOYr9l6D07v6O2eWJC7ynqcEVTWnM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ADFCE143D;
-	Tue,  7 Jan 2025 01:24:31 -0800 (PST)
-Received: from [10.57.93.53] (unknown [10.57.93.53])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 96F593F66E;
-	Tue,  7 Jan 2025 01:23:54 -0800 (PST)
-Message-ID: <83df51a5-5eb9-4470-92a1-e69fd12b98b4@arm.com>
-Date: Tue, 7 Jan 2025 10:23:52 +0100
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3D1D0143D;
+	Tue,  7 Jan 2025 01:58:37 -0800 (PST)
+Received: from [10.44.160.93] (e126510-lin.lund.arm.com [10.44.160.93])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 46B0F3F673;
+	Tue,  7 Jan 2025 01:58:01 -0800 (PST)
+Message-ID: <ee393a7f-d01e-4e5d-9bf8-779795613af1@arm.com>
+Date: Tue, 7 Jan 2025 10:57:59 +0100
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -42,76 +42,102 @@ List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 07/15] mm: pgtable: introduce pagetable_dtor()
-To: Qi Zheng <zhengqi.arch@bytedance.com>,
- Alexander Gordeev <agordeev@linux.ibm.com>
-Cc: peterz@infradead.org, palmer@dabbelt.com, tglx@linutronix.de,
+Subject: Re: [PATCH v4 10/15] riscv: pgtable: move pagetable_dtor() to
+ __tlb_remove_table()
+To: Qi Zheng <zhengqi.arch@bytedance.com>
+Cc: agordeev@linux.ibm.com, palmer@dabbelt.com, tglx@linutronix.de,
  david@redhat.com, jannh@google.com, hughd@google.com, yuzhao@google.com,
  willy@infradead.org, muchun.song@linux.dev, vbabka@kernel.org,
- lorenzo.stoakes@oracle.com, akpm@linux-foundation.org, rientjes@google.com,
- vishal.moola@gmail.com, arnd@arndb.de, will@kernel.org,
- aneesh.kumar@kernel.org, npiggin@gmail.com, dave.hansen@linux.intel.com,
- rppt@kernel.org, ryan.roberts@arm.com, linux-mm@kvack.org,
- linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
- linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
- linux-arch@vger.kernel.org, linux-csky@vger.kernel.org,
- linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
- linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
- linux-openrisc@vger.kernel.org, linux-sh@vger.kernel.org,
- linux-um@lists.infradead.org
+ lorenzo.stoakes@oracle.com, rientjes@google.com, vishal.moola@gmail.com,
+ arnd@arndb.de, will@kernel.org, aneesh.kumar@kernel.org, npiggin@gmail.com,
+ dave.hansen@linux.intel.com, rppt@kernel.org, ryan.roberts@arm.com,
+ linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
+ linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+ linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-kernel@vger.kernel.org, x86@kernel.org, linux-arch@vger.kernel.org,
+ linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+ loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+ linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+ linux-sh@vger.kernel.org, linux-um@lists.infradead.org,
+ peterz@infradead.org, akpm@linux-foundation.org
 References: <cover.1735549103.git.zhengqi.arch@bytedance.com>
- <8ada95453180c71b7fca92b9a9f11fa0f92d45a6.1735549103.git.zhengqi.arch@bytedance.com>
- <Z3uxwiEhYHDqdTh3@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
- <e1de887c-6193-48ee-a9b3-04c8a0cdda45@bytedance.com>
- <Z3vOZ18jcCpHIcPD@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
- <bce4bb4e-459a-44c8-945b-8889149377fd@bytedance.com>
+ <0e8f0b3835c15e99145e0006ac1020ae45a2b166.1735549103.git.zhengqi.arch@bytedance.com>
+ <1b09335c-f0b6-4ccb-9800-5fb22f7e8083@arm.com>
+ <ebce5e05-5e46-4c6e-94a0-bcf3655a862b@bytedance.com>
+ <7e2c26c8-f5df-4833-a93f-3409b00b58fd@arm.com>
+ <e9fe97d4-99d5-443e-b722-43903655a76e@bytedance.com>
+ <31e1a033-00a7-4953-81e7-0caedd0227a9@bytedance.com>
+ <d9a14211-4bbd-4fb6-ba87-a555a40bb67a@arm.com>
+ <de8756aa-dbf7-4f6f-91f0-934270397192@bytedance.com>
 Content-Language: en-GB
 From: Kevin Brodsky <kevin.brodsky@arm.com>
-In-Reply-To: <bce4bb4e-459a-44c8-945b-8889149377fd@bytedance.com>
+In-Reply-To: <de8756aa-dbf7-4f6f-91f0-934270397192@bytedance.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 06/01/2025 14:23, Qi Zheng wrote:
-> On 2025/1/6 20:36, Alexander Gordeev wrote:
->> On Mon, Jan 06, 2025 at 06:55:58PM +0800, Qi Zheng wrote:
->>>>> +static inline void pagetable_dtor(struct ptdesc *ptdesc)
->>>>> +{
->>>>> +    struct folio *folio = ptdesc_folio(ptdesc);
->>>>> +
->>>>> +    ptlock_free(ptdesc);
->>>>> +    __folio_clear_pgtable(folio);
->>>>> +    lruvec_stat_sub_folio(folio, NR_PAGETABLE);
->>>>> +}
->>>>> +
->>>>
->>>> If I am not mistaken, it is just pagetable_pte_dtor() rename.
->>>> What is the point in moving the code around?
->>>
->>> No, this is to unify pagetable_p*_dtor() into pagetable_dtor(), so
->>> that we can move pagetable_dtor() to __tlb_remove_table(), and then
->>> ptlock and PTE page can be freed together through RCU, which is
->>> also the main purpose of this patch series.
->>
->> I am only talking about this patch. pagetable_dtor() code above is
->> the same pagetable_pte_dtor() below - it is only the function name
->> that changed. So why to move the function body? Anyway, that is
+On 06/01/2025 04:49, Qi Zheng wrote:
+> [...]
 >
-> Ah, I just don't want to put pagetable_dtor() in between
-> pagetable_pte_ctor() and ___pte_offset_map(), so I moved it above
-> pagetable_pte_ctor(). No other special reason. 😉 
+>> Once this is done, we should be able to replace all those confusing
+>> calls to tlb_remove_page() on PTPs with tlb_remove_table() and remove
+>> the explicit call to pagetable_dtor(). AIUI this is essentially what
+>> Peter suggested on v3 [2].
+>
+> Since this patch series is mainly for bug fix, I think that these things
+> can be done in separate patch series later.
 
-I think inserting pagetable_dtor() there makes sense. I wouldn't say
-that pagetable_pte_dtor() is being renamed to pagetable_dtor(), because
-in fact this patch replaces all of pagetable_{pte,pmd,pud}_dtor() with
-pagetable_dtor(), and it is arguably clearer to insert the latter higher
-up in mm.h.
+Sure that's fair.
 
-FWIW my follow-up series introduces a common __pagetable_dtor(),
-inserted below pagetable_ctor() [1].
+>
+>>
+>> [...]
+>>
+>>> Or can we just not let tlb_remove_table() fall back to
+>>> tlb_remove_page()? Like the following:
+>>>
+>>> diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
+>>> index a59205863f431..354ffaa4bd120 100644
+>>> --- a/include/asm-generic/tlb.h
+>>> +++ b/include/asm-generic/tlb.h
+>>> @@ -195,8 +195,6 @@
+>>>    *  various ptep_get_and_clear() functions.
+>>>    */
+>>>
+>>> -#ifdef CONFIG_MMU_GATHER_TABLE_FREE
+>>> -
+>>>   struct mmu_table_batch {
+>>>   #ifdef CONFIG_MMU_GATHER_RCU_TABLE_FREE
+>>>          struct rcu_head         rcu;
+>>> @@ -219,16 +217,6 @@ static inline void __tlb_remove_table(void *table)
+>>>
+>>>   extern void tlb_remove_table(struct mmu_gather *tlb, void *table);
+>>>
+>>> -#else /* !CONFIG_MMU_GATHER_HAVE_TABLE_FREE */
+>>> -
+>>> -/*
+>>> - * Without MMU_GATHER_TABLE_FREE the architecture is assumed to have
+>>> page based
+>>> - * page directories and we can use the normal page batching to free
+>>> them.
+>>> - */
+>>> -#define tlb_remove_table(tlb, page) tlb_remove_page((tlb), (page))
+>>
+>> We still need a different implementation of tlb_remove_table() in this
+>> case. We could define it inline here:
+>>
+>> static inline void tlb_remove_table(struct mmu_gather *tlb, void *table)
+>> {
+>>      struct page *page = table;
+>>
+>>      pagetable_dtor(page_ptdesc(page));
+>>      tlb_remove_page(page);
+>> }
+>
+> Right. As I said above, will add this to the updated patch #8.
+
+I think it would be preferable to make it a standalone patch, because
+this is a change to generic code that could in principle impact other
+arch's too.
 
 - Kevin
-
-[1]
-https://lore.kernel.org/linux-mm/20250103184415.2744423-2-kevin.brodsky@arm.com/
 
