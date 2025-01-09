@@ -1,133 +1,162 @@
-Return-Path: <linux-arch+bounces-9653-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9654-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 481ADA073BE
-	for <lists+linux-arch@lfdr.de>; Thu,  9 Jan 2025 11:52:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63EA5A07524
+	for <lists+linux-arch@lfdr.de>; Thu,  9 Jan 2025 12:56:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4C5DB167856
-	for <lists+linux-arch@lfdr.de>; Thu,  9 Jan 2025 10:52:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 97AA63A764C
+	for <lists+linux-arch@lfdr.de>; Thu,  9 Jan 2025 11:56:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FAFB215F4C;
-	Thu,  9 Jan 2025 10:52:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 977C4216E05;
+	Thu,  9 Jan 2025 11:56:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bzzt.net header.i=@bzzt.net header.b="qs6XAYPz";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="lWZqs6uC"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="HU3Eulhe"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from fout-b6-smtp.messagingengine.com (fout-b6-smtp.messagingengine.com [202.12.124.149])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F9F221518C;
-	Thu,  9 Jan 2025 10:52:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E5D01A23B0;
+	Thu,  9 Jan 2025 11:56:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736419956; cv=none; b=qgk4R5DLLO8X2M0oZv0b3o0G92XPz00yDmEciZGHs+QLp8o0heL4cDF8BWdEnZI8KPfo5yYJnoSOCP3FTlX0Q/KZMFbl79zL/nAJBhblTshQBxKevHMNsHV+rlQaom65jDWc7NQ/bUYjI2F+b3MQe0xqAaUNZPwYh6anrYuoPJ0=
+	t=1736423796; cv=none; b=S2r6OYsUGrJWC72UIGCMogDqgfv/dKk3teoj1XHb1c9Ip6TbQu4uTHg7BdHiL/pIQ5YTAgkW6l81JO+Y4osp/0tKVQfXv0ramVwDpOimNZx977g7AiF835MMRY4+dNNvlll5SoTewUn9V416f0h445Sb1sMSeHXuOeFmorNnCmQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736419956; c=relaxed/simple;
-	bh=0Kk7HYgdqKsT6Lkza+YhbUZPhCeM+pIpPHtXmY2BxSI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OkSw+cQLXofKYW2SQ3w5294rJFm3TxKeSGUaF3dCu1D6yAhpEMTQz6uJbPD1yN7hewHhIguETV0ZHhuWVkEdO20HshBrEzJJglMi8aTZOM7dfvVK5HegbEK34ExNiUDHkIJluQJ/XKCucxy/kDT/GE4JdkVbWKNnr8RDh8AsUSc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bzzt.net; spf=pass smtp.mailfrom=bzzt.net; dkim=pass (2048-bit key) header.d=bzzt.net header.i=@bzzt.net header.b=qs6XAYPz; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=lWZqs6uC; arc=none smtp.client-ip=202.12.124.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bzzt.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bzzt.net
-Received: from phl-compute-01.internal (phl-compute-01.phl.internal [10.202.2.41])
-	by mailfout.stl.internal (Postfix) with ESMTP id 067C5114013F;
-	Thu,  9 Jan 2025 05:52:32 -0500 (EST)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-01.internal (MEProxy); Thu, 09 Jan 2025 05:52:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bzzt.net; h=cc
-	:cc:content-transfer-encoding:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm3; t=1736419952; x=
-	1736506352; bh=0Kk7HYgdqKsT6Lkza+YhbUZPhCeM+pIpPHtXmY2BxSI=; b=q
-	s6XAYPzKBCBjqqOdz5/p51QDezFlR4f8kSiGFNYEGg5vEFZjvB4Hta9j0AZPEjLd
-	J5WrYgr4PWh8xgmnub/PHP0UCXQEb7E9cxn8Qeyh8CY2eL/klOGjn+9iYMgC2oHv
-	WgLACbsgT0RM03bJPcUQt2a6CsPhNjUL9fU11UZGbmEivbovz6NzSI3/UCGY3mHE
-	zxelcnqnVyN8HSaforauaX5WmigOx88zGdQ9oSbHez4D0RsmjzDE/NW0gTNZcFUu
-	FXpjhXvCSyxy5E1mldOImx1mzKIBmJis+/aVgoliwT8p0B5ECksdxPFdOUEHH/jr
-	DUj59EqcOXID0d4TQESiw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm2; t=1736419952; x=1736506352; bh=0
-	Kk7HYgdqKsT6Lkza+YhbUZPhCeM+pIpPHtXmY2BxSI=; b=lWZqs6uCGyR2e6Ct2
-	erxoR8ZhaG0aX9zaddmwiQq3MulqZxIvbbB1Q6gOHhfDS37DHLth562MJjxUG7ZY
-	MLkc9KiGp3+ONrw/J1ilUsS1/9cKGQPwsxbsx77bPAU89faU5OOrUup7ogij1Obb
-	gB7bvKJ/idbtcumDyjCRPgC57CF0jjSmXuFUihIdEE4Gvu19MfFrA7q8zfn7tuIa
-	99fAXFY1f1k2qQwbeEOlCO2LxiGPeX3yc3aXcUPCiWOPWBffjNCC+0zFUH8ZQsHL
-	6IwoZlLgywvRwtu9uNtvyyfroTljH+DV4VhTIymPZjqkarKiEKOBQmVwcqJx7NNp
-	RNrUg==
-X-ME-Sender: <xms:bqp_ZwSeWdhWqtywrSnjUO3eQI6M4BA6phCQQhZ9uASRFCu3KQ0IMQ>
-    <xme:bqp_Z9z7xQ2autj-d-G7-XmazD4knM8swQQjhoojKMr53x-NxKZsxnfas9_KZvfE2
-    KQpE4Z1Ql5kWehAxBg>
-X-ME-Received: <xmr:bqp_Z908xKtwoL5qpcWw9b4mp6g7Sww9LjJn8gMpG2kNrr71fRvKMdWuXbqELGTaSaRPz9Tc2WZLE_qZ-b9T4Q99tYRSxjE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudegiedgudelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevuf
-    ffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeetrhhnohhuthcugfhnghgvlhgv
-    nhcuoegrrhhnohhuthessgiiiihtrdhnvghtqeenucggtffrrghtthgvrhhnpefgiedutd
-    ehffehfeevieelhfefueejgfehveeljeettddugeehvdekjeetveehgeenucevlhhushht
-    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnohhuthessgiiii
-    htrdhnvghtpdhnsggprhgtphhtthhopedufedpmhhouggvpehsmhhtphhouhhtpdhrtghp
-    thhtoheplhhinhhugiesfigvihhsshhstghhuhhhrdhnvghtpdhrtghpthhtoheprghrnh
-    gusegrrhhnuggsrdguvgdprhgtphhtthhopegurgdrghhomhgviiesshgrmhhsuhhnghdr
-    tghomhdprhgtphhtthhopehlihhnuhigqdgrrhgthhesvhhgvghrrdhkvghrnhgvlhdroh
-    hrghdprhgtphhtthhopehlihhnuhigqdhksghuihhlugesvhhgvghrrdhkvghrnhgvlhdr
-    ohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlh
-    drohhrghdprhgtphhtthhopehlihhnuhigqdhmohguuhhlvghssehvghgvrhdrkhgvrhhn
-    vghlrdhorhhgpdhrtghpthhtohepmhgrshgrhhhirhhohieskhgvrhhnvghlrdhorhhgpd
-    hrtghpthhtohepmhgtghhrohhfsehkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:bqp_Z0Dk23fMFhiDqy_Cc2coLs40rI-v0QZoCACMG2qRm_hlftwFkQ>
-    <xmx:bqp_Z5hz9b4EDtjewMTL8V4O0IiaBmYJSshUTKl35WIc5Iv6INRhEg>
-    <xmx:bqp_ZwpkY7UUJlhUomwHsuYzcRJTsBG3K8VLG5oHmqxJuIbTv0h8hw>
-    <xmx:bqp_Z8glCN_IXqIFv6MeQM4CcPHp3TLYel23nAaPK8q1ffgkThZewQ>
-    <xmx:cKp_Z8S3geGCAJdB4xKDWZbjtN3MVgtLJnud2BWBQIRJTnwU6u6s8FMm>
-Feedback-ID: i8a1146c4:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 9 Jan 2025 05:52:28 -0500 (EST)
-From: Arnout Engelen <arnout@bzzt.net>
-To: linux@weissschuh.net
-Cc: arnd@arndb.de,
-	da.gomez@samsung.com,
-	linux-arch@vger.kernel.org,
-	linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-modules@vger.kernel.org,
-	masahiroy@kernel.org,
-	mcgrof@kernel.org,
-	nathan@kernel.org,
-	nicolas@fjasle.eu,
-	petr.pavlu@suse.com,
-	samitolvanen@google.com
-Subject: Re: [PATCH RFC 2/2] module: Introduce hash-based integrity checking
-Date: Thu,  9 Jan 2025 11:52:27 +0100
-Message-ID: <20250109105227.1012778-1-arnout@bzzt.net>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <20241225-module-hashes-v1-2-d710ce7a3fd1@weissschuh.net>
-References: <20241225-module-hashes-v1-2-d710ce7a3fd1@weissschuh.net>
+	s=arc-20240116; t=1736423796; c=relaxed/simple;
+	bh=D3sA98W32+zngVbnalNpt0EtP/yVNDM4WQtJkKd3srk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Fob445wT2XicUWr5zgwlmRnROYoeM2PTRgxyrXuarK1yJ74r/WOYDvz8g5YZNtuvMV56x64okSINL9RNRDte06qoNQ0YeecAa+laOG51/Td7FlBcWXsNRLs2Yt545wgHS4DyZyu7eoDeXwjA1x/QG22m1KQMAwJVmljaOCnVQZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=HU3Eulhe; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 508NwEl2016724;
+	Thu, 9 Jan 2025 11:55:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=TEFEUs
+	DUypMb0E06F+mIr6mms6VLi/ADn+g21sLTM6M=; b=HU3Eulheor5aaMA38MgqND
+	w5D0VsYZ9Y4ZQYJZvyu4WLwzk/lzISPX279vOi1rwp0OvImCElaqBmZ7yGv4GXtm
+	vKwEzqRIH6fu9psGCV1MCIKHOFAwC/4SQQ1AC5BtxaNM8wdtW+DAIciNpYPO6Ll6
+	rLdpqprshTa3IetrfZ8gd5phbjzubOZ9ML1FsMTvRNrN2rZkXWtL51/wIfyNRwsc
+	zmVXIeHDTR4Dx4SMQ7DiZQb0y62yBcOaIrAEugKNmaBRj2/WpqHifUmZzBe2/kuP
+	CAm9wsvyCG2SQnvkSXl/G1rirz7QoOVkinRwkhD5FGKGs504YPdGvBwjkZgyGuxw
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4423ghtph4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 09 Jan 2025 11:55:26 +0000 (GMT)
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 509BlQgB005767;
+	Thu, 9 Jan 2025 11:55:25 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4423ghtph1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 09 Jan 2025 11:55:25 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5099fC1i027929;
+	Thu, 9 Jan 2025 11:55:24 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 43yhhkcq4h-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 09 Jan 2025 11:55:24 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 509BtLGd26739390
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 9 Jan 2025 11:55:21 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id E2F272004B;
+	Thu,  9 Jan 2025 11:55:20 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 379C620043;
+	Thu,  9 Jan 2025 11:55:20 +0000 (GMT)
+Received: from osiris (unknown [9.152.212.60])
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Thu,  9 Jan 2025 11:55:20 +0000 (GMT)
+Date: Thu, 9 Jan 2025 12:55:18 +0100
+From: Heiko Carstens <hca@linux.ibm.com>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, "Theodore Ts'o" <tytso@mit.edu>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+        Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
+        Russell King <linux@armlinux.org.uk>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Naveen N Rao <naveen@kernel.org>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
+        linux-parisc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-riscv@lists.infradead.org,
+        loongarch@lists.linux.dev, linux-s390@vger.kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-arch@vger.kernel.org, Nam Cao <namcao@linutronix.de>
+Subject: Re: [PATCH 10/17] s390/vdso: Switch to generic storage implementation
+Message-ID: <20250109115518.9731-A-hca@linux.ibm.com>
+References: <20241216-vdso-store-rng-v1-0-f7aed1bdb3b2@linutronix.de>
+ <20241216-vdso-store-rng-v1-10-f7aed1bdb3b2@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241216-vdso-store-rng-v1-10-f7aed1bdb3b2@linutronix.de>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 7R5Vx0DTIiffSevdjEEF0ZCUrhmWvYEy
+X-Proofpoint-ORIG-GUID: A1txILdScefs6fUz5lPDNoUjZ1geeRhz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ mlxscore=0 impostorscore=0 bulkscore=0 priorityscore=1501 suspectscore=0
+ clxscore=1011 mlxlogscore=405 spamscore=0 adultscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
+ definitions=main-2501090091
 
-On Fri, 3 Jan 2025 17:37:52 -0800, Luis Chamberlain wrote:
-> What distro which is using module signatures would switch
-> to this as an alternative instead?
+On Mon, Dec 16, 2024 at 03:10:06PM +0100, Thomas Weiﬂschuh wrote:
+> The generic storage implementation provides the same features as the
+> custom one. However it can be shared between architectures, making
+> maintenance easier.
+> 
+> Co-developed-by: Nam Cao <namcao@linutronix.de>
+> Signed-off-by: Nam Cao <namcao@linutronix.de>
+> Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
+> ---
+>  arch/s390/Kconfig                         |  1 +
+>  arch/s390/include/asm/vdso.h              |  4 +-
+>  arch/s390/include/asm/vdso/getrandom.h    | 12 ----
+>  arch/s390/include/asm/vdso/gettimeofday.h | 15 +----
+>  arch/s390/include/asm/vdso/vsyscall.h     | 20 -------
+>  arch/s390/kernel/time.c                   |  6 +-
+>  arch/s390/kernel/vdso.c                   | 97 ++-----------------------------
+>  arch/s390/kernel/vdso32/vdso32.lds.S      |  7 +--
+>  arch/s390/kernel/vdso64/vdso64.lds.S      |  8 +--
+>  9 files changed, 17 insertions(+), 153 deletions(-)
 
-In NixOS, we disable MODULE_SIG by default (because we value
-reproducibility over having module signatures). Enabling
-MODULE_HASHES on systems that do not need to load out-of-tree
-modules would be a good step forward.
+Looks good to me and works.
 
-
-Kind regards,
-
-Arnout Engelen
+Acked-by: Heiko Carstens <hca@linux.ibm.com>
 
