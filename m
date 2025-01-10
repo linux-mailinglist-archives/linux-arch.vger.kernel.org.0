@@ -1,165 +1,81 @@
-Return-Path: <linux-arch+bounces-9700-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9709-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5705CA09B11
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Jan 2025 19:58:11 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 763E8A09BAC
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Jan 2025 20:16:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 249167A0689
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Jan 2025 18:58:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2D0C47A2A5B
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Jan 2025 19:16:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C88221C9EE;
-	Fri, 10 Jan 2025 18:42:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0B7C20A5D0;
+	Fri, 10 Jan 2025 19:16:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4qXm0akH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tkGMxF94"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38733226866
-	for <linux-arch@vger.kernel.org>; Fri, 10 Jan 2025 18:42:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F0942066C9;
+	Fri, 10 Jan 2025 19:16:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736534532; cv=none; b=evTLvrNwVUyXsV2LCCUoImCaLjyVsSf8p8TxemrNlbHNMjqOpn539JOSTJul2gr3sEcfOO4bP4kxaLr09rSXco+AUsSjsh6zTQHq+d0yk6JBzMvOBgk4E5FZo87BgUMowDHO2iRVPDrqcs+ZxA+Xycz+YQ8voU3k3rPdVIFHFss=
+	t=1736536602; cv=none; b=eo94zJlVCRfdA/zHhNR9OxuU7NKb0X4KGJfkCNGrxfMgHVxyVijhtm+4OumV5PL4nx+nOT9CiBZ4K8NLeW4QHw9qDTvd8pt3y5eymuIQeuFU9zP4BcfyvodHwu3HHHNTl99G2q76mPconj1Pj/Wih4JiUyllLgdOw884UQWH12U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736534532; c=relaxed/simple;
-	bh=yFE2RvhsdHiuE5lhdo52Dzo1ojzSWSiC8Ss1voWwr0o=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=VayOS+kfSlnSQl19zFJjzLXPD0VuE7LHZ+7QF05EKRd7dfD7j7+qJMLo4Y0vLpFSbul9dqz51eMIwOMsmpzLVY+L7ddzKy5BZ2xvpypXKV/qKwWR3fz7ZBgilhG8y0gnxsWD9tjh6Upzog8M0klCJ+zPKDmmvjeLaJKf8saMT4E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4qXm0akH; arc=none smtp.client-ip=209.85.128.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
-Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-43651b1ba8aso16459665e9.1
-        for <linux-arch@vger.kernel.org>; Fri, 10 Jan 2025 10:42:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1736534511; x=1737139311; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=t56obMWOlMyKyO7q6Si1cnEbfn2qyXwrpnzxR+4ONcI=;
-        b=4qXm0akHB0cuC/EDQ8VuOoCpDXwtoPfxrekyuf3Jr5mxf6WGp7rbhmhHeDIXklqxd6
-         T9lxWQyVYIV47B5OJUReQPTb2cO2OVBUtcNSPlShJjCRvFudrMBkxkEdOt7YD8B8s+2v
-         Xr3EQaZc/p07fpcwbTqNiK+qV7HY0Toaji/thgJjB5yEeJhTxg1FeoYSHEY8Jfy2/8EZ
-         jiZa5Ti+Lb8moW5SGa97W3jyG6bI8MyoEEfqB2DFyV9BFxFzztzkYfBsUkAjDJ+UDd9H
-         nFSU4xK+FYnLvbOSILO7311XYQqvF516GEImEec3eyOp+/ymIWgUdw/GtFKY2TxOmoyN
-         vLJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736534511; x=1737139311;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=t56obMWOlMyKyO7q6Si1cnEbfn2qyXwrpnzxR+4ONcI=;
-        b=rItV6rFwzM27t+AC7s7ISObRBghR+0+9DlabsIqpUIdDns9XSOkzpolRxu2RVnAXY9
-         FDjnDWdBH+XTmRVVwosvyWGKtQCdWYtdWC99mmFUCXCDrFtIu8kEU9h9ROLNZ6tVJpCD
-         fVt4o0pm+5mC5LnrsjcnGOytDgpEm+8tQXR2B/aWNxjumWp5SgEGY7hsx+GciPr/Wd6j
-         exGwr0EhvPwsd+moLX8ZDaAcjmB9Ab2ue+mT6SiikeJMkQa9tgfX5giPJbih7qBCMz1h
-         QXQZ247P+SEw0VnLr9aI6VCZ0f3uqybh9EzbZc+pfYpyVqbr8F6sHI6X4wbZ+6Z6XvXP
-         EePw==
-X-Forwarded-Encrypted: i=1; AJvYcCVJjAvHgybI6Wy4s5rNaUrU/G9a+WE0l4RFNAYF9OReyovP8CPf31Y4ELg/Dh/ZYaZUwvroTODgU0Mp@vger.kernel.org
-X-Gm-Message-State: AOJu0YxS7aIUhX/2ZPq8Dvq3nEdy0ptQz3M9GUt6OQGZ8HqXUf4d+wTc
-	FOnhYNjIKJBAcgpO8c7rbBOupFZykw9KqW+XjlQhgAVkHsExzJF8KzMBVqMUDCx2TgqL4Yj9otN
-	qCWWnziO1TQ==
-X-Google-Smtp-Source: AGHT+IHNze04KHr3mNrPu4oWzk1uJr6kUgfUG8uUPvBwU8SZTj2uxyjbDaOwELGdGilpgEGrHE3bExV1JNVQyA==
-X-Received: from wmba16.prod.google.com ([2002:a05:600c:6dd0:b0:434:f350:9fc])
- (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6000:70a:b0:38a:4184:1519 with SMTP id ffacd0b85a97d-38a873051e1mr10550801f8f.23.1736534511095;
- Fri, 10 Jan 2025 10:41:51 -0800 (PST)
-Date: Fri, 10 Jan 2025 18:40:55 +0000
-In-Reply-To: <20250110-asi-rfc-v2-v2-0-8419288bc805@google.com>
+	s=arc-20240116; t=1736536602; c=relaxed/simple;
+	bh=sfn3yOFMuAextGzWHj4juuUKpN4aPNdOVMwP5bH8vHM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=V5EhIgxJcsD/hafQ6yNof4dfZEUDfNe9etIgkR6CMUovQHPbKiAGd9+83U+Fv/egOKnKR59etth1Zj3VXht/D7wgFZN/izgjG554yjh80hOMyTB4TKPlo+BbZA2SRF8V4SR8I4de4qg2/OtAR2HDuZWGS3ZRXxTNwrdJWp/4P48=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tkGMxF94; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE36CC4CED6;
+	Fri, 10 Jan 2025 19:16:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736536602;
+	bh=sfn3yOFMuAextGzWHj4juuUKpN4aPNdOVMwP5bH8vHM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tkGMxF94g6FPah/+OxXGQP1MttsGxoeyi7qi9JvNIIIer94PjOrzgJDRXZcC8hRCu
+	 LYwL9WlMkZSampb7+E0QtqPEP47VzNIQGMefPcF/Byc5ezlCufHaPNVvmuTU/G2Mx6
+	 /BVcRDX4J0Lq8QlLhLe9qDglEFeglzOhuSispuaGr6cKE43klokd08zJky1JZI6Zsi
+	 3iYEsWr3dc8J9NwkV7mBYI3cp7il5RWmNp1g9UNRWzf/0qa7MnYEkFtaBKJEGQ14Tg
+	 823WI75+hXooV7yHfIHgbOEj1pRaNaRRNpMeL+HrHG0cknCOf2v7mHH29DSEn5yeZ4
+	 t2K4PXFj4wTPQ==
+Date: Fri, 10 Jan 2025 11:16:40 -0800
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: Arnout Engelen <arnout@bzzt.net>
+Cc: linux@weissschuh.net, arnd@arndb.de, da.gomez@samsung.com,
+	linux-arch@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+	masahiroy@kernel.org, nathan@kernel.org, nicolas@fjasle.eu,
+	petr.pavlu@suse.com, samitolvanen@google.com
+Subject: Re: [PATCH RFC 2/2] module: Introduce hash-based integrity checking
+Message-ID: <Z4FyGEXBK4EUi_Oq@bombadil.infradead.org>
+References: <20241225-module-hashes-v1-2-d710ce7a3fd1@weissschuh.net>
+ <20250109105227.1012778-1-arnout@bzzt.net>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250110-asi-rfc-v2-v2-0-8419288bc805@google.com>
-X-Mailer: b4 0.15-dev
-Message-ID: <20250110-asi-rfc-v2-v2-29-8419288bc805@google.com>
-Subject: [PATCH RFC v2 29/29] mm: asi: Stop ignoring asi=on cmdline flag
-From: Brendan Jackman <jackmanb@google.com>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, 
-	Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Richard Henderson <richard.henderson@linaro.org>, Matt Turner <mattst88@gmail.com>, 
-	Vineet Gupta <vgupta@kernel.org>, Russell King <linux@armlinux.org.uk>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>, 
-	Brian Cain <bcain@quicinc.com>, Huacai Chen <chenhuacai@kernel.org>, 
-	WANG Xuerui <kernel@xen0n.name>, Geert Uytterhoeven <geert@linux-m68k.org>, 
-	Michal Simek <monstr@monstr.eu>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Dinh Nguyen <dinguyen@kernel.org>, Jonas Bonn <jonas@southpole.se>, 
-	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>, Stafford Horne <shorne@gmail.com>, 
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, Yoshinori Sato <ysato@users.sourceforge.jp>, 
-	Rich Felker <dalias@libc.org>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
-	"David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
-	Richard Weinberger <richard@nod.at>, Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
-	Johannes Berg <johannes@sipsolutions.net>, Chris Zankel <chris@zankel.net>, 
-	Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Andrew Morton <akpm@linux-foundation.org>, Juri Lelli <juri.lelli@redhat.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Valentin Schneider <vschneid@redhat.com>, Uladzislau Rezki <urezki@gmail.com>, 
-	Christoph Hellwig <hch@infradead.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Mike Rapoport <rppt@kernel.org>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>, 
-	Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Ard Biesheuvel <ardb@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Cc: x86@kernel.org, linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org, 
-	loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org, 
-	linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
-	linux-um@lists.infradead.org, linux-arch@vger.kernel.org, linux-mm@kvack.org, 
-	linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	kvm@vger.kernel.org, linux-efi@vger.kernel.org, 
-	Brendan Jackman <jackmanb@google.com>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250109105227.1012778-1-arnout@bzzt.net>
 
-At this point the minimum requirements are in place for the kernel to
-operate correctly with ASI enabled.
+On Thu, Jan 09, 2025 at 11:52:27AM +0100, Arnout Engelen wrote:
+> On Fri, 3 Jan 2025 17:37:52 -0800, Luis Chamberlain wrote:
+> > What distro which is using module signatures would switch
+> > to this as an alternative instead?
+> 
+> In NixOS, we disable MODULE_SIG by default (because we value
+> reproducibility over having module signatures). Enabling
+> MODULE_HASHES on systems that do not need to load out-of-tree
+> modules would be a good step forward.
+> 
 
-Signed-off-by: Brendan Jackman <jackmanb@google.com>
----
- arch/x86/mm/asi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Mentioning this in the cover letter will also be good. So two
+distros seemt to want this.
 
-diff --git a/arch/x86/mm/asi.c b/arch/x86/mm/asi.c
-index f10f6614b26148e5ba423d8a44f640674573ee40..3e3956326936ea8550308ad004dbbb3738546f9f 100644
---- a/arch/x86/mm/asi.c
-+++ b/arch/x86/mm/asi.c
-@@ -207,14 +207,14 @@ void __init asi_check_boottime_disable(void)
- 		pr_info("ASI disabled through kernel command line.\n");
- 	} else if (ret == 2 && !strncmp(arg, "on", 2)) {
- 		enabled = true;
--		pr_info("Ignoring asi=on param while ASI implementation is incomplete.\n");
-+		pr_info("ASI enabled through kernel command line.\n");
- 	} else {
- 		pr_info("ASI %s by default.\n",
- 			enabled ? "enabled" : "disabled");
- 	}
- 
- 	if (enabled)
--		pr_info("ASI enablement ignored due to incomplete implementation.\n");
-+		setup_force_cpu_cap(X86_FEATURE_ASI);
- }
- 
- /*
-
--- 
-2.47.1.613.gc27f4b7a9f-goog
-
+  Luis
 
