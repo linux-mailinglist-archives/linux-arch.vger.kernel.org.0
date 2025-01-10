@@ -1,644 +1,436 @@
-Return-Path: <linux-arch+bounces-9678-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9680-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15E10A0958D
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Jan 2025 16:27:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DD82A099AD
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Jan 2025 19:41:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D0A00188EE9A
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Jan 2025 15:27:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F40193A0FA2
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Jan 2025 18:41:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 170AB2147EE;
-	Fri, 10 Jan 2025 15:24:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 794412153F9;
+	Fri, 10 Jan 2025 18:40:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="FqodcwGY";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="zKMtRkhX"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pys6Ek8C"
 X-Original-To: linux-arch@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 855D22139CE;
-	Fri, 10 Jan 2025 15:24:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E0A1214238
+	for <linux-arch@vger.kernel.org>; Fri, 10 Jan 2025 18:40:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736522650; cv=none; b=acK5Qdvbj0WPmgLJJ215M5a/d5jtaWkxWTh6o/u5HLM3JumrqMqK+vE0+tbZ/RYdY8QJ5O4mnXTtnv8z2cmbwc50BaF0cfF/5sqqahZHS4qyRwx4wCcb4kNh95xnOzhn3chYe+HYTJSD5u6CxeXKvLiBHY3tWRct2AHIdST7luI=
+	t=1736534455; cv=none; b=MYN5KDGYk/lDPsI3rISiLbGER2B7+9sRt41kw+B2K7JsNDq70BTmTfDBLe6ZFERwIBHhC2T24Rmq92SQjPOYBL29rXH1IzNs/YjI+oR315ay03SAiP/H9r+WoJeVJTFJTYnPgH9+uHpSy1XgjHUc9WiGQ8lykNcss/ZK6A1shDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736522650; c=relaxed/simple;
-	bh=3mc5du4uPdQNznDcCBQRfwDPKzZgpbR7l7xgd4itZ2w=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Ar2wIHn96fP3ooK5oHhpzaq/d12PgHsHKRz97LFkbbDBwkprRwTbVS+rzN9Np7hkfj5trvMZDpRGtZyC0IR0YHvH0vCAoCBqOHnM2r0pYhTmb/i6p0mH731rOyRZ9Xr6q81BXkw9bLTQSHLt4bCq1IX14CK0w2gLPfH5BQZQhf8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=FqodcwGY; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=zKMtRkhX; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1736522641;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5lzt6z/Ceqcm6iM19wuv0dkn/99Cp38KMQ6N4hkEDE8=;
-	b=FqodcwGYxuFouVnSXkfxj9ba5B81Hwca8DBPQCx/OdNscDV0DWIgBvtDB46GM/CVCSg1rc
-	wBtkSTROfYlkiAAOmaNl06LOGIhWiPR3RKFODDN96Kff1kE72/Juenms/xwH+5AjhB3UEy
-	n1fYpxvYh2ryQFxhyPCr+e/4nJ8ra/IK8fa33R1gC2vFbnIwslGt9RgmPr0S3NX8aO9t7a
-	VOfLC6U0D899C9OQXFEPpBJL0LssWMdiuL2116Nf5hHmMnKyIKeXGlrEzNyQCU3p4i/5NP
-	AFzfYWO3mAjrrTu9ODTvjKv08b1T/WzTmjKSp5E/egBKzZJCjeOUU/h6f11nkQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1736522641;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5lzt6z/Ceqcm6iM19wuv0dkn/99Cp38KMQ6N4hkEDE8=;
-	b=zKMtRkhXWyGjP4qTnJRk2ZIvrUWR34p/csyQoBAB+fjf0xf5lHgV0wfHKkk1IcpmNYBDy6
-	aR39NdCbp1kwzABQ==
-Date: Fri, 10 Jan 2025 16:23:57 +0100
-Subject: [PATCH v2 18/18] vdso: Remove remnants of architecture-specific
- time storage
+	s=arc-20240116; t=1736534455; c=relaxed/simple;
+	bh=kJv1BSQAWYUAWJ98dDzHdbU35is+ci0Kcab30EKlIOY=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=my5dBNmUnAtwjgOO/GFDHzCdA7+xJ0ilwzEFCQgA0FtaRot03WO0tsDuqB4P99tdHEeSK+qr7Q4HFvbDU8/SCnvq7FAKOmBOim3OrZgztZ2ZUM1wkTEGjbSykIb7qhLMIMteeh1dpNk3Wk+Mx5/CArhcs7WajpYxaB7PZi9pf7U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pys6Ek8C; arc=none smtp.client-ip=209.85.128.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-4361eb83f46so20335465e9.3
+        for <linux-arch@vger.kernel.org>; Fri, 10 Jan 2025 10:40:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1736534446; x=1737139246; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jjtB5lRt7h5DA7GIgQanvF90WYFKTK1R3LPSOzDiibI=;
+        b=pys6Ek8CJb8EfLfUmV87iBGG0PSkMCO5/oEsttsorElIJSUQH4gjs/SEN5q9Nx4T+M
+         U7uSBERdfRwiPSsFRGr9ptM4cA5/MuduyyfuKIKcA762vPJMp85X8T5/xchjE/rmFXMK
+         L8HjeM0qER6kMyum3EKcU3BsKSiGF6kmRB5fOASXvhm3AlOjksWZMUJn230k/93dYsyK
+         LCc+W2HaDeWRtjVHxW8haCvd+7GlZJjKdUEmuXk5pK+OpUJa060S4JpcO6YxGjfoWI3r
+         vMkNvczMiHwi+AVoYdYvBch+/4I6rCwyb20ruKr0mP/WJZ4wnxkbgJL4fPV4EubkDatP
+         Pv1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736534446; x=1737139246;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jjtB5lRt7h5DA7GIgQanvF90WYFKTK1R3LPSOzDiibI=;
+        b=kRzdovyjiCFJdGT9ai9xEmwLDlb4zqF34NoM4JO9uYj6rgtshYF54zNMkunrZbPZQb
+         YzIh0qG2Rw0+JnV+Xz/Tzk9Axl5pik67bR+F74Ikni9omYyIMIRdLz6cuHpGi86XKZgc
+         KDjkK6Kk3wvZRL/86UR+6tTtMEm8d1cAEwD4mlCXBLdZ3BdW4JTon205rb8OKaK4aSvQ
+         KniJ3jBBiyQnBnJpStIFGoajcv8X7TGzySXq3hYp+kfwi/f1xZT+vjU95t8fezCAQo+K
+         wASSjiahIUiYK2sMx0igIsX9C+soKlMA6+toSLkTKzVWNYTp8u4fdpzCqbKKswjAMleH
+         pBww==
+X-Forwarded-Encrypted: i=1; AJvYcCWVHBs56xcUw8nblrqSg/GLnkpODUgmImp3hNu/G1UpJiFSmTrHIWYKGz66eLifJjYSj3ds09qi+MQZ@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx5suB2Sv7iu/6+1mgXrZ31pm524JDYDYhs08CtV8Y4oU9ykW1/
+	gBk1XEqR0ka6/lhhr/eWicUt4goEvlX9IAc7lPTUCixSjJ05eQMabJnRFwak7QDtekdjjyFRN9r
+	SgEteW4/Aig==
+X-Google-Smtp-Source: AGHT+IGn62s/zpmNlw6cS/dnEppCTrQbKdqDl7tm1TqotCpul8Aao0CteIYxi5s8bW0nJPjX7qZkFnpNt2sQAQ==
+X-Received: from wmbjw19.prod.google.com ([2002:a05:600c:5753:b0:434:a4bc:534f])
+ (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a7b:c315:0:b0:434:ffb2:f9df with SMTP id 5b1f17b1804b1-436e26adf94mr117996365e9.17.1736534445509;
+ Fri, 10 Jan 2025 10:40:45 -0800 (PST)
+Date: Fri, 10 Jan 2025 18:40:26 +0000
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
 List-Subscribe: <mailto:linux-arch+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAJtpgWcC/z2NwQrCMBBEf6Xs2ZVsTLX1JAh+gFfpIWnTdkEbS
+ SQoJf9uzMHjvGHerBCsZxvgWK3gbeTAbslBbiroZ71MFnnIGaSQiohq1IHRjz1GifXQGmNU5s0
+ e8uDp7cjvIrvB9XKGLsOZw8v5TzmIVKqfSxxI/l1SYSQUSEqZHbVaiaE5Tc5Nd7vt3QO6lNIXN mCbbqoAAAA=
+X-Change-Id: 20241115-asi-rfc-v2-5d9bbb441186
+X-Mailer: b4 0.15-dev
+Message-ID: <20250110-asi-rfc-v2-v2-0-8419288bc805@google.com>
+Subject: [PATCH RFC v2 00/29] Address Space Isolation (ASI)
+From: Brendan Jackman <jackmanb@google.com>
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, 
+	Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Richard Henderson <richard.henderson@linaro.org>, Matt Turner <mattst88@gmail.com>, 
+	Vineet Gupta <vgupta@kernel.org>, Russell King <linux@armlinux.org.uk>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>, 
+	Brian Cain <bcain@quicinc.com>, Huacai Chen <chenhuacai@kernel.org>, 
+	WANG Xuerui <kernel@xen0n.name>, Geert Uytterhoeven <geert@linux-m68k.org>, 
+	Michal Simek <monstr@monstr.eu>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	Dinh Nguyen <dinguyen@kernel.org>, Jonas Bonn <jonas@southpole.se>, 
+	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>, Stafford Horne <shorne@gmail.com>, 
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Sven Schnelle <svens@linux.ibm.com>, Yoshinori Sato <ysato@users.sourceforge.jp>, 
+	Rich Felker <dalias@libc.org>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
+	"David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
+	Richard Weinberger <richard@nod.at>, Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
+	Johannes Berg <johannes@sipsolutions.net>, Chris Zankel <chris@zankel.net>, 
+	Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Andrew Morton <akpm@linux-foundation.org>, Juri Lelli <juri.lelli@redhat.com>, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+	Valentin Schneider <vschneid@redhat.com>, Uladzislau Rezki <urezki@gmail.com>, 
+	Christoph Hellwig <hch@infradead.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Mike Rapoport <rppt@kernel.org>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>, 
+	Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Ard Biesheuvel <ardb@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Cc: x86@kernel.org, linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org, 
+	loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org, 
+	linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
+	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
+	linux-um@lists.infradead.org, linux-arch@vger.kernel.org, linux-mm@kvack.org, 
+	linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	kvm@vger.kernel.org, linux-efi@vger.kernel.org, 
+	Brendan Jackman <jackmanb@google.com>, Junaid Shahid <junaids@google.com>, 
+	Ofir Weisse <oweisse@google.com>, Yosry Ahmed <yosryahmed@google.com>, 
+	Kevin Cheng <chengkev@google.com>, Reiji Watanabe <reijiw@google.com>
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250110-vdso-store-rng-v2-18-350c9179bbf1@linutronix.de>
-References: <20250110-vdso-store-rng-v2-0-350c9179bbf1@linutronix.de>
-In-Reply-To: <20250110-vdso-store-rng-v2-0-350c9179bbf1@linutronix.de>
-To: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
- Helge Deller <deller@gmx.de>, Andy Lutomirski <luto@kernel.org>, 
- Thomas Gleixner <tglx@linutronix.de>, 
- Vincenzo Frascino <vincenzo.frascino@arm.com>, 
- Anna-Maria Behnsen <anna-maria@linutronix.de>, 
- Frederic Weisbecker <frederic@kernel.org>, 
- Andrew Morton <akpm@linux-foundation.org>, 
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
- Theodore Ts'o <tytso@mit.edu>, "Jason A. Donenfeld" <Jason@zx2c4.com>, 
- Paul Walmsley <paul.walmsley@sifive.com>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
- Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
- Russell King <linux@armlinux.org.uk>, Heiko Carstens <hca@linux.ibm.com>, 
- Vasily Gorbik <gor@linux.ibm.com>, 
- Alexander Gordeev <agordeev@linux.ibm.com>, 
- Christian Borntraeger <borntraeger@linux.ibm.com>, 
- Sven Schnelle <svens@linux.ibm.com>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
- Christophe Leroy <christophe.leroy@csgroup.eu>, 
- Naveen N Rao <naveen@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
- "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>, 
- Guo Ren <guoren@kernel.org>
-Cc: linux-parisc@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-riscv@lists.infradead.org, 
- loongarch@lists.linux.dev, linux-s390@vger.kernel.org, 
- linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
- linux-arch@vger.kernel.org, Nam Cao <namcao@linutronix.de>, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
- linux-csky@vger.kernel.org
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1736522629; l=19980;
- i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=3mc5du4uPdQNznDcCBQRfwDPKzZgpbR7l7xgd4itZ2w=;
- b=soMXq6VOCSb3n3JHltG9wNT/aJ3wEaxywsV3UY+/oAGqnFoSvS3OQr3CuwO4FVrrT2zxgGJEz
- 1fsZGTesIH9Ci48cuGCvhd16PJNbPH+TqDYZwJH8pZnEq9y0LxqDStj
-X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
- pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
+Content-Transfer-Encoding: quoted-printable
 
-All users of the random vDSO are using the generic storage
-implementation. Remove the now unnecessary compatibility accessor
-functions and symbols.
+ASI is a technique to mitigate a broad class of CPU vulnerabilities
+by unmapping sensitive data from the kernel address space. If no data
+is mapped that needs protecting, this class of exploits cannot leak
+that data and so the kernel can skip expensive mitigation actions.
+For a more detailed overview, see the v1 RFC (which was wrongly
+labeled as a PATCH) [0].
 
-Co-developed-by: Nam Cao <namcao@linutronix.de>
-Signed-off-by: Nam Cao <namcao@linutronix.de>
-Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+This new iteration adds support for protecting against bare-metal
+processes as well as KVM guests. The basic principle is unchanged.
+
+.:: Multi-class ASI
+
+So far ASI has been a KVM-only solution, although I've been claiming
+that in principle it can be extended to also sandbox userspace.
+Dave Hansen's most important feedback at LPC [1] was that he wanted
+some evidence to support this claim. If it can be shown that ASI is
+just as powerful for bare-metal as for KVM, it's much more likely to
+actually offer an escape path from maintaining and reactively
+developing per-exploit mitigations.
+
+v1 already supported a notion of "ASI classes", with the only class
+being KVM. This RFC introduces a second class for userspace. Each
+process has a separate restricted address space ("domain") for each
+class.
+
+In v1, the only possible ASI transitions were between the KVM
+restricted address space, and the unrestricted address space. Now
+that there are multiple classes, it's possible to transition directly
+between two restricted address spaces.
+
+(Could we dodge this complexity by just transitioning via the
+ unrestricted address space? Yes, but experience from Google's
+ internal deployment suggests there's a significant benefit in
+ avoiding an asi_exit() when switching between userspace and KVM,
+ despite all the optimizations that exist to avoid that switching).
+
+Compared to v1, this version has a new mechanism to determine
+what mitigation actions are required when switching between address
+spaces.  ASI classes provide a "taint policy" which describes what
+uarch state their sandboxee might leave behind, and what uarch state
+needs to be purged before their sandboxee can safely be run. The ASI
+core takes care of doing the actual flushes.
+
+This enables a reasonably advanced model of what flushes are needed
+when; for example the kernel is now able to model "when transitioning
+from a VMM to its KVM guest there is no point in flushing speculative
+control flow state, but if we _later_ exit to the unrestricted
+address space we do need to flush it". It's quite possible this is
+actually more advanced than what is needed so suggestions are
+welcome.
+
+.:: Performance issues: bogus mitigation costs
+
+Although this implementation of ASI is pretty generous in what it
+considers "nonsensitive", there remain unnecessary performance costs
+that need to be addressed. For example:
+
+- The entire page cache is removed from the direct map. Traditional
+  file operations will hit an asi_exit(), paying a pointless cost to
+  protect data from a process that obviously has the right to read
+  that data.
+- Anything that accesses guest or user memory via the direct map
+  instead of the user address space will hit an asi_exit().
+- Pages being zeroed in the page allocator
+
+Most of these issues existed in v1 too, but now that ASI sandboxes
+userspace processes, the page-cache issue becomes very significant.
+For FIO 4k read (I suppose this workload is maximally sensitive to
+this issue) I saw a 70% degradation in throughput, with a Sapphire
+Rapids machine hard-coded to perform IBPB and RSB-stuffing on
+asi_exit().
+
+Given a result like that I haven't gone into more detailed analysis.
+Note also that I ran with an unrealistic mitigation policy, results
+would be much different if ran with platform-appropriate flushes, but
+it would presumably lead to the same conclusion.
+
+There are some interesting discussions to be had about tackling that
+problem (e.g. reintroducing "local-nonsensitivity" from Junaid's 2022
+ASI implementation [2], or creating ephemeral CPU-local mappings),
+but for this RFC I prefer to focus on deciding if the overall
+framework makes sense.
+
+.:: Next steps
+
+Aside from lack of userspace support, all the other issues listed in
+RFCv1 remain. I'll also need a proof-of-concept solution for the
+page-cache issue before we can credibly claim to be reaching a
+[PATCH], but before that I want to develop a more complete page_alloc
+integration. I plan to propose a topic about that at LSF/MM/BPF.
+
+Anyway, despite the further research needed on my side I think
+there's still useful stuff to discuss here. For example:
+
+ - Does the "tainting" model make intuitive sense? Is there a simpler
+   way to achieve something similar?
+
+ - The taints offer a model for different parts of the kernel to
+   communicate with each other about what mitigations they've taken
+   care of. For example, KVM could clear ASI taints if it existing
+   conditional-L1D-flush logic fires. Does it make sense to take
+   advantage of this? (I think yes). How does this influence the
+   design of the bugs.c kernel arguments?
+
+ - Suggestions on how to map file pages into processes that can read
+   them, while minimizing TLB management pain.
+
+Finally, a more extensive branch can be found at [3]. It has some tests
+and some of the lower-hanging fruit for optimising performance of KVM
+guests.
+
+[0] RFC v1:
+    https://lore.kernel.org/linux-mm/20240712-asi-rfc-24-v1-0-144b319a40d8@=
+google.com/
+
+[1] LPC session: https://lpc.events/event/18/contributions/1761/
+
+[2] Junaid=E2=80=99s RFC:
+    https://lore.kernel.org/all/20220223052223.1202152-1-junaids@google.com=
+/
+
+[3] GitHub branch:
+    https://github.com/googleprodkernel/linux-kvm/tree/asi-rfcv2-preview
+
+Signed-off-by: Brendan Jackman <jackmanb@google.com>
+
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	 Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	 Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	 Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	 Alexandre Chartre <alexandre.chartre@oracle.com>,
+	Liran Alon <liran.alon@oracle.com>,
+	 Jan Setje-Eilers <jan.setjeeilers@oracle.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	 Will Deacon <will@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	 Andrew Morton <akpm@linux-foundation.org>,
+	Mel Gorman <mgorman@suse.de>,
+	 Lorenzo Stoakes <lstoakes@gmail.com>,
+	David Hildenbrand <david@redhat.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	 Michal Hocko <mhocko@kernel.org>,
+	Khalid Aziz <khalid.aziz@oracle.com>,
+	 Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	 Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	 Valentin Schneider <vschneid@redhat.com>,
+	Paul Turner <pjt@google.com>, Reiji Watanabe <reijiw@google.com>,
+	 Junaid Shahid <junaids@google.com>,
+	Ofir Weisse <oweisse@google.com>,
+	 Yosry Ahmed <yosryahmed@google.com>,
+	Patrick Bellasi <derkling@google.com>,
+	 KP Singh <kpsingh@google.com>,
+	Alexandra Sandulescu <aesa@google.com>,
+	 Matteo Rizzo <matteorizzo@google.com>,
+	Jann Horn <jannh@google.com>
+	 kvm@vger.kernel.org, Brendan Jackman <jackmanb@google.com>,
+	Dennis Zhou <dennis@kernel.org>
+
 ---
- include/asm-generic/vdso/vsyscall.h | 24 +++--------------
- include/linux/time_namespace.h      |  3 ---
- include/vdso/datapage.h             | 16 +-----------
- include/vdso/helpers.h              |  8 +++---
- kernel/time/namespace.c             | 12 ++++-----
- kernel/time/vsyscall.c              | 19 +++++++-------
- lib/vdso/datastore.c                | 10 +++-----
- lib/vdso/gettimeofday.c             | 51 ++++++++++++++++++-------------------
- 8 files changed, 53 insertions(+), 90 deletions(-)
+Changes in v2:
+- Added support for sandboxing userspace processes.
+- Link to v1: https://lore.kernel.org/r/20240712-asi-rfc-24-v1-0-144b319a40=
+d8@google.com
 
-diff --git a/include/asm-generic/vdso/vsyscall.h b/include/asm-generic/vdso/vsyscall.h
-index 13e2ac3736ee9b4aea6800117997ee165a7e2b9d..d6aebd519be8edd9d2d2fe674dcc641befc267a5 100644
---- a/include/asm-generic/vdso/vsyscall.h
-+++ b/include/asm-generic/vdso/vsyscall.h
-@@ -4,8 +4,6 @@
- 
- #ifndef __ASSEMBLY__
- 
--#ifdef CONFIG_GENERIC_VDSO_DATA_STORE
--
- #ifndef __arch_get_vdso_u_time_data
- static __always_inline const struct vdso_time_data *__arch_get_vdso_u_time_data(void)
- {
-@@ -20,31 +18,17 @@ static __always_inline const struct vdso_rng_data *__arch_get_vdso_u_rng_data(vo
- }
- #endif
- 
--#else  /* !CONFIG_GENERIC_VDSO_DATA_STORE */
--
--#ifndef __arch_get_k_vdso_data
--static __always_inline struct vdso_data *__arch_get_k_vdso_data(void)
--{
--	return NULL;
--}
--#endif /* __arch_get_k_vdso_data */
--#define vdso_k_time_data __arch_get_k_vdso_data()
--
--#define __arch_get_vdso_u_time_data __arch_get_vdso_data
--
--#endif /* CONFIG_GENERIC_VDSO_DATA_STORE */
--
- #ifndef __arch_update_vsyscall
--static __always_inline void __arch_update_vsyscall(struct vdso_data *vdata)
-+static __always_inline void __arch_update_vsyscall(struct vdso_time_data *vdata)
- {
- }
- #endif /* __arch_update_vsyscall */
- 
--#ifndef __arch_sync_vdso_data
--static __always_inline void __arch_sync_vdso_data(struct vdso_data *vdata)
-+#ifndef __arch_sync_vdso_time_data
-+static __always_inline void __arch_sync_vdso_time_data(struct vdso_time_data *vdata)
- {
- }
--#endif /* __arch_sync_vdso_data */
-+#endif /* __arch_sync_vdso_time_data */
- 
- #endif /* !__ASSEMBLY__ */
- 
-diff --git a/include/linux/time_namespace.h b/include/linux/time_namespace.h
-index 4b81db223f5450218dfaf553b24195be9ba97c08..0b8b32bf0655109d368c5dacc23ca5efcbb5aa80 100644
---- a/include/linux/time_namespace.h
-+++ b/include/linux/time_namespace.h
-@@ -8,7 +8,6 @@
- #include <linux/ns_common.h>
- #include <linux/err.h>
- #include <linux/time64.h>
--#include <vdso/datapage.h>
- 
- struct user_namespace;
- extern struct user_namespace init_user_ns;
-@@ -166,6 +165,4 @@ static inline ktime_t timens_ktime_to_host(clockid_t clockid, ktime_t tim)
- }
- #endif
- 
--struct vdso_data *arch_get_vdso_data(void *vvar_page);
--
- #endif /* _LINUX_TIMENS_H */
-diff --git a/include/vdso/datapage.h b/include/vdso/datapage.h
-index 497907c3aa11fcae913f62ef7373bbe6a1026bd6..8eea8ed0e14362545dd2cfe317e88ac0c77243ac 100644
---- a/include/vdso/datapage.h
-+++ b/include/vdso/datapage.h
-@@ -128,8 +128,6 @@ struct vdso_time_data {
- 	struct arch_vdso_time_data arch_data;
- };
- 
--#define vdso_data vdso_time_data
--
- /**
-  * struct vdso_rng_data - vdso RNG state information
-  * @generation:	counter representing the number of RNG reseeds
-@@ -149,10 +147,7 @@ struct vdso_rng_data {
-  * With the hidden visibility, the compiler simply generates a PC-relative
-  * relocation, and this is what we need.
-  */
--#ifndef CONFIG_GENERIC_VDSO_DATA_STORE
--extern struct vdso_time_data _vdso_data[CS_BASES] __attribute__((visibility("hidden")));
--extern struct vdso_time_data _timens_data[CS_BASES] __attribute__((visibility("hidden")));
--#else
-+#ifdef CONFIG_GENERIC_VDSO_DATA_STORE
- extern struct vdso_time_data vdso_u_time_data[CS_BASES] __attribute__((visibility("hidden")));
- extern struct vdso_rng_data vdso_u_rng_data __attribute__((visibility("hidden")));
- extern struct vdso_arch_data vdso_u_arch_data __attribute__((visibility("hidden")));
-@@ -162,14 +157,6 @@ extern struct vdso_rng_data *vdso_k_rng_data;
- extern struct vdso_arch_data *vdso_k_arch_data;
- #endif
- 
--/**
-- * union vdso_data_store - Generic vDSO data page
-- */
--union vdso_data_store {
--	struct vdso_time_data	data[CS_BASES];
--	u8			page[1U << CONFIG_PAGE_SHIFT];
--};
--
- #ifdef CONFIG_GENERIC_VDSO_DATA_STORE
- 
- #define VDSO_ARCH_DATA_SIZE ALIGN(sizeof(struct vdso_arch_data), PAGE_SIZE)
-@@ -189,7 +176,6 @@ enum vdso_pages {
- /*
-  * The generic vDSO implementation requires that gettimeofday.h
-  * provides:
-- * - __arch_get_vdso_data(): to get the vdso datapage.
-  * - __arch_get_hw_counter(): to get the hw counter based on the
-  *   clock_mode.
-  * - gettimeofday_fallback(): fallback for gettimeofday.
-diff --git a/include/vdso/helpers.h b/include/vdso/helpers.h
-index 3ddb03bb05cbeefc110adf0e672c2cd68848a0ae..41c3087070c7ab21d7adec04e6cd30c4b32ea221 100644
---- a/include/vdso/helpers.h
-+++ b/include/vdso/helpers.h
-@@ -7,7 +7,7 @@
- #include <asm/barrier.h>
- #include <vdso/datapage.h>
- 
--static __always_inline u32 vdso_read_begin(const struct vdso_data *vd)
-+static __always_inline u32 vdso_read_begin(const struct vdso_time_data *vd)
- {
- 	u32 seq;
- 
-@@ -18,7 +18,7 @@ static __always_inline u32 vdso_read_begin(const struct vdso_data *vd)
- 	return seq;
- }
- 
--static __always_inline u32 vdso_read_retry(const struct vdso_data *vd,
-+static __always_inline u32 vdso_read_retry(const struct vdso_time_data *vd,
- 					   u32 start)
- {
- 	u32 seq;
-@@ -28,7 +28,7 @@ static __always_inline u32 vdso_read_retry(const struct vdso_data *vd,
- 	return seq != start;
- }
- 
--static __always_inline void vdso_write_begin(struct vdso_data *vd)
-+static __always_inline void vdso_write_begin(struct vdso_time_data *vd)
- {
- 	/*
- 	 * WRITE_ONCE() is required otherwise the compiler can validly tear
-@@ -40,7 +40,7 @@ static __always_inline void vdso_write_begin(struct vdso_data *vd)
- 	smp_wmb();
- }
- 
--static __always_inline void vdso_write_end(struct vdso_data *vd)
-+static __always_inline void vdso_write_end(struct vdso_time_data *vd)
- {
- 	smp_wmb();
- 	/*
-diff --git a/kernel/time/namespace.c b/kernel/time/namespace.c
-index 0775b9ec952af9639480db9480d06d12293d1ceb..12f55aa539adbc11cce4055f519dbeca8a73320c 100644
---- a/kernel/time/namespace.c
-+++ b/kernel/time/namespace.c
-@@ -165,18 +165,18 @@ static struct timens_offset offset_from_ts(struct timespec64 off)
-  *     HVCLOCK
-  *     VVAR
-  *
-- * The check for vdso_data->clock_mode is in the unlikely path of
-+ * The check for vdso_time_data->clock_mode is in the unlikely path of
-  * the seq begin magic. So for the non-timens case most of the time
-  * 'seq' is even, so the branch is not taken.
-  *
-  * If 'seq' is odd, i.e. a concurrent update is in progress, the extra check
-- * for vdso_data->clock_mode is a non-issue. The task is spin waiting for the
-+ * for vdso_time_data->clock_mode is a non-issue. The task is spin waiting for the
-  * update to finish and for 'seq' to become even anyway.
-  *
-- * Timens page has vdso_data->clock_mode set to VDSO_CLOCKMODE_TIMENS which
-+ * Timens page has vdso_time_data->clock_mode set to VDSO_CLOCKMODE_TIMENS which
-  * enforces the time namespace handling path.
-  */
--static void timens_setup_vdso_data(struct vdso_data *vdata,
-+static void timens_setup_vdso_data(struct vdso_time_data *vdata,
- 				   struct time_namespace *ns)
- {
- 	struct timens_offset *offset = vdata->offset;
-@@ -219,7 +219,7 @@ static DEFINE_MUTEX(offset_lock);
- static void timens_set_vvar_page(struct task_struct *task,
- 				struct time_namespace *ns)
- {
--	struct vdso_data *vdata;
-+	struct vdso_time_data *vdata;
- 	unsigned int i;
- 
- 	if (ns == &init_time_ns)
-@@ -235,7 +235,7 @@ static void timens_set_vvar_page(struct task_struct *task,
- 		goto out;
- 
- 	ns->frozen_offsets = true;
--	vdata = arch_get_vdso_data(page_address(ns->vvar_page));
-+	vdata = page_address(ns->vvar_page);
- 
- 	for (i = 0; i < CS_BASES; i++)
- 		timens_setup_vdso_data(&vdata[i], ns);
-diff --git a/kernel/time/vsyscall.c b/kernel/time/vsyscall.c
-index 09c1e39a6dd8e24aa161982c04078e78d52fa737..418192296ef7dd3c1772d50f129e7838883cf00c 100644
---- a/kernel/time/vsyscall.c
-+++ b/kernel/time/vsyscall.c
-@@ -15,8 +15,7 @@
- 
- #include "timekeeping_internal.h"
- 
--static inline void update_vdso_data(struct vdso_data *vdata,
--				    struct timekeeper *tk)
-+static inline void update_vdso_time_data(struct vdso_time_data *vdata, struct timekeeper *tk)
- {
- 	struct vdso_timestamp *vdso_ts;
- 	u64 nsec, sec;
-@@ -77,7 +76,7 @@ static inline void update_vdso_data(struct vdso_data *vdata,
- 
- void update_vsyscall(struct timekeeper *tk)
- {
--	struct vdso_data *vdata = vdso_k_time_data;
-+	struct vdso_time_data *vdata = vdso_k_time_data;
- 	struct vdso_timestamp *vdso_ts;
- 	s32 clock_mode;
- 	u64 nsec;
-@@ -117,23 +116,23 @@ void update_vsyscall(struct timekeeper *tk)
- 	 * update of the high resolution parts.
- 	 */
- 	if (clock_mode != VDSO_CLOCKMODE_NONE)
--		update_vdso_data(vdata, tk);
-+		update_vdso_time_data(vdata, tk);
- 
- 	__arch_update_vsyscall(vdata);
- 
- 	vdso_write_end(vdata);
- 
--	__arch_sync_vdso_data(vdata);
-+	__arch_sync_vdso_time_data(vdata);
- }
- 
- void update_vsyscall_tz(void)
- {
--	struct vdso_data *vdata = vdso_k_time_data;
-+	struct vdso_time_data *vdata = vdso_k_time_data;
- 
- 	vdata[CS_HRES_COARSE].tz_minuteswest = sys_tz.tz_minuteswest;
- 	vdata[CS_HRES_COARSE].tz_dsttime = sys_tz.tz_dsttime;
- 
--	__arch_sync_vdso_data(vdata);
-+	__arch_sync_vdso_time_data(vdata);
- }
- 
- /**
-@@ -150,7 +149,7 @@ void update_vsyscall_tz(void)
-  */
- unsigned long vdso_update_begin(void)
- {
--	struct vdso_data *vdata = vdso_k_time_data;
-+	struct vdso_time_data *vdata = vdso_k_time_data;
- 	unsigned long flags = timekeeper_lock_irqsave();
- 
- 	vdso_write_begin(vdata);
-@@ -167,9 +166,9 @@ unsigned long vdso_update_begin(void)
-  */
- void vdso_update_end(unsigned long flags)
- {
--	struct vdso_data *vdata = vdso_k_time_data;
-+	struct vdso_time_data *vdata = vdso_k_time_data;
- 
- 	vdso_write_end(vdata);
--	__arch_sync_vdso_data(vdata);
-+	__arch_sync_vdso_time_data(vdata);
- 	timekeeper_unlock_irqrestore(flags);
- }
-diff --git a/lib/vdso/datastore.c b/lib/vdso/datastore.c
-index 0959d62d78586ef458eb5f7c1e152f6b5d4cbf85..e227fbbcb79694f9a40606ac864f52cf1fdbfcf4 100644
---- a/lib/vdso/datastore.c
-+++ b/lib/vdso/datastore.c
-@@ -12,7 +12,10 @@
-  * The vDSO data page.
-  */
- #ifdef CONFIG_HAVE_GENERIC_VDSO
--static union vdso_data_store vdso_time_data_store __page_aligned_data;
-+static union {
-+	struct vdso_time_data	data[CS_BASES];
-+	u8			page[PAGE_SIZE];
-+} vdso_time_data_store __page_aligned_data;
- struct vdso_time_data *vdso_k_time_data = vdso_time_data_store.data;
- static_assert(sizeof(vdso_time_data_store) == PAGE_SIZE);
- #endif /* CONFIG_HAVE_GENERIC_VDSO */
-@@ -123,9 +126,4 @@ int vdso_join_timens(struct task_struct *task, struct time_namespace *ns)
- 
- 	return 0;
- }
--
--struct vdso_time_data *arch_get_vdso_data(void *vvar_page)
--{
--	return (struct vdso_time_data *)vvar_page;
--}
- #endif
-diff --git a/lib/vdso/gettimeofday.c b/lib/vdso/gettimeofday.c
-index 20c5b8752fcc81d9a044169b9a3ae534d840ef91..299f027116ee0e50a69c5a8a17218004e4af0ea1 100644
---- a/lib/vdso/gettimeofday.c
-+++ b/lib/vdso/gettimeofday.c
-@@ -17,12 +17,12 @@
- #endif
- 
- #ifdef CONFIG_GENERIC_VDSO_OVERFLOW_PROTECT
--static __always_inline bool vdso_delta_ok(const struct vdso_data *vd, u64 delta)
-+static __always_inline bool vdso_delta_ok(const struct vdso_time_data *vd, u64 delta)
- {
- 	return delta < vd->max_cycles;
- }
- #else
--static __always_inline bool vdso_delta_ok(const struct vdso_data *vd, u64 delta)
-+static __always_inline bool vdso_delta_ok(const struct vdso_time_data *vd, u64 delta)
- {
- 	return true;
- }
-@@ -39,7 +39,7 @@ static __always_inline u64 vdso_shift_ns(u64 ns, u32 shift)
-  * Default implementation which works for all sane clocksources. That
-  * obviously excludes x86/TSC.
-  */
--static __always_inline u64 vdso_calc_ns(const struct vdso_data *vd, u64 cycles, u64 base)
-+static __always_inline u64 vdso_calc_ns(const struct vdso_time_data *vd, u64 cycles, u64 base)
- {
- 	u64 delta = (cycles - vd->cycle_last) & VDSO_DELTA_MASK(vd);
- 
-@@ -58,7 +58,7 @@ static inline bool __arch_vdso_hres_capable(void)
- #endif
- 
- #ifndef vdso_clocksource_ok
--static inline bool vdso_clocksource_ok(const struct vdso_data *vd)
-+static inline bool vdso_clocksource_ok(const struct vdso_time_data *vd)
- {
- 	return vd->clock_mode != VDSO_CLOCKMODE_NONE;
- }
-@@ -79,21 +79,20 @@ const struct vdso_time_data *__arch_get_vdso_u_timens_data(const struct vdso_tim
- {
- 	return (void *)vd + PAGE_SIZE;
- }
--#define __arch_get_timens_vdso_data(vd) __arch_get_vdso_u_timens_data(vd)
- #endif /* CONFIG_GENERIC_VDSO_DATA_STORE */
- 
--static __always_inline int do_hres_timens(const struct vdso_data *vdns, clockid_t clk,
-+static __always_inline int do_hres_timens(const struct vdso_time_data *vdns, clockid_t clk,
- 					  struct __kernel_timespec *ts)
- {
- 	const struct timens_offset *offs = &vdns->offset[clk];
- 	const struct vdso_timestamp *vdso_ts;
--	const struct vdso_data *vd;
-+	const struct vdso_time_data *vd;
- 	u64 cycles, ns;
- 	u32 seq;
- 	s64 sec;
- 
- 	vd = vdns - (clk == CLOCK_MONOTONIC_RAW ? CS_RAW : CS_HRES_COARSE);
--	vd = __arch_get_timens_vdso_data(vd);
-+	vd = __arch_get_vdso_u_timens_data(vd);
- 	if (clk != CLOCK_MONOTONIC_RAW)
- 		vd = &vd[CS_HRES_COARSE];
- 	else
-@@ -128,19 +127,19 @@ static __always_inline int do_hres_timens(const struct vdso_data *vdns, clockid_
- }
- #else
- static __always_inline
--const struct vdso_data *__arch_get_timens_vdso_data(const struct vdso_data *vd)
-+const struct vdso_time_data *__arch_get_vdso_u_timens_data(const struct vdso_time_data *vd)
- {
- 	return NULL;
- }
- 
--static __always_inline int do_hres_timens(const struct vdso_data *vdns, clockid_t clk,
-+static __always_inline int do_hres_timens(const struct vdso_time_data *vdns, clockid_t clk,
- 					  struct __kernel_timespec *ts)
- {
- 	return -EINVAL;
- }
- #endif
- 
--static __always_inline int do_hres(const struct vdso_data *vd, clockid_t clk,
-+static __always_inline int do_hres(const struct vdso_time_data *vd, clockid_t clk,
- 				   struct __kernel_timespec *ts)
- {
- 	const struct vdso_timestamp *vdso_ts = &vd->basetime[clk];
-@@ -192,10 +191,10 @@ static __always_inline int do_hres(const struct vdso_data *vd, clockid_t clk,
- }
- 
- #ifdef CONFIG_TIME_NS
--static __always_inline int do_coarse_timens(const struct vdso_data *vdns, clockid_t clk,
-+static __always_inline int do_coarse_timens(const struct vdso_time_data *vdns, clockid_t clk,
- 					    struct __kernel_timespec *ts)
- {
--	const struct vdso_data *vd = __arch_get_timens_vdso_data(vdns);
-+	const struct vdso_time_data *vd = __arch_get_vdso_u_timens_data(vdns);
- 	const struct vdso_timestamp *vdso_ts = &vd->basetime[clk];
- 	const struct timens_offset *offs = &vdns->offset[clk];
- 	u64 nsec;
-@@ -221,14 +220,14 @@ static __always_inline int do_coarse_timens(const struct vdso_data *vdns, clocki
- 	return 0;
- }
- #else
--static __always_inline int do_coarse_timens(const struct vdso_data *vdns, clockid_t clk,
-+static __always_inline int do_coarse_timens(const struct vdso_time_data *vdns, clockid_t clk,
- 					    struct __kernel_timespec *ts)
- {
- 	return -1;
- }
- #endif
- 
--static __always_inline int do_coarse(const struct vdso_data *vd, clockid_t clk,
-+static __always_inline int do_coarse(const struct vdso_time_data *vd, clockid_t clk,
- 				     struct __kernel_timespec *ts)
- {
- 	const struct vdso_timestamp *vdso_ts = &vd->basetime[clk];
-@@ -255,7 +254,7 @@ static __always_inline int do_coarse(const struct vdso_data *vd, clockid_t clk,
- }
- 
- static __always_inline int
--__cvdso_clock_gettime_common(const struct vdso_data *vd, clockid_t clock,
-+__cvdso_clock_gettime_common(const struct vdso_time_data *vd, clockid_t clock,
- 			     struct __kernel_timespec *ts)
- {
- 	u32 msk;
-@@ -282,7 +281,7 @@ __cvdso_clock_gettime_common(const struct vdso_data *vd, clockid_t clock,
- }
- 
- static __maybe_unused int
--__cvdso_clock_gettime_data(const struct vdso_data *vd, clockid_t clock,
-+__cvdso_clock_gettime_data(const struct vdso_time_data *vd, clockid_t clock,
- 			   struct __kernel_timespec *ts)
- {
- 	int ret = __cvdso_clock_gettime_common(vd, clock, ts);
-@@ -300,7 +299,7 @@ __cvdso_clock_gettime(clockid_t clock, struct __kernel_timespec *ts)
- 
- #ifdef BUILD_VDSO32
- static __maybe_unused int
--__cvdso_clock_gettime32_data(const struct vdso_data *vd, clockid_t clock,
-+__cvdso_clock_gettime32_data(const struct vdso_time_data *vd, clockid_t clock,
- 			     struct old_timespec32 *res)
- {
- 	struct __kernel_timespec ts;
-@@ -326,7 +325,7 @@ __cvdso_clock_gettime32(clockid_t clock, struct old_timespec32 *res)
- #endif /* BUILD_VDSO32 */
- 
- static __maybe_unused int
--__cvdso_gettimeofday_data(const struct vdso_data *vd,
-+__cvdso_gettimeofday_data(const struct vdso_time_data *vd,
- 			  struct __kernel_old_timeval *tv, struct timezone *tz)
- {
- 
-@@ -343,7 +342,7 @@ __cvdso_gettimeofday_data(const struct vdso_data *vd,
- 	if (unlikely(tz != NULL)) {
- 		if (IS_ENABLED(CONFIG_TIME_NS) &&
- 		    vd->clock_mode == VDSO_CLOCKMODE_TIMENS)
--			vd = __arch_get_timens_vdso_data(vd);
-+			vd = __arch_get_vdso_u_timens_data(vd);
- 
- 		tz->tz_minuteswest = vd[CS_HRES_COARSE].tz_minuteswest;
- 		tz->tz_dsttime = vd[CS_HRES_COARSE].tz_dsttime;
-@@ -360,13 +359,13 @@ __cvdso_gettimeofday(struct __kernel_old_timeval *tv, struct timezone *tz)
- 
- #ifdef VDSO_HAS_TIME
- static __maybe_unused __kernel_old_time_t
--__cvdso_time_data(const struct vdso_data *vd, __kernel_old_time_t *time)
-+__cvdso_time_data(const struct vdso_time_data *vd, __kernel_old_time_t *time)
- {
- 	__kernel_old_time_t t;
- 
- 	if (IS_ENABLED(CONFIG_TIME_NS) &&
- 	    vd->clock_mode == VDSO_CLOCKMODE_TIMENS)
--		vd = __arch_get_timens_vdso_data(vd);
-+		vd = __arch_get_vdso_u_timens_data(vd);
- 
- 	t = READ_ONCE(vd[CS_HRES_COARSE].basetime[CLOCK_REALTIME].sec);
- 
-@@ -384,7 +383,7 @@ static __maybe_unused __kernel_old_time_t __cvdso_time(__kernel_old_time_t *time
- 
- #ifdef VDSO_HAS_CLOCK_GETRES
- static __maybe_unused
--int __cvdso_clock_getres_common(const struct vdso_data *vd, clockid_t clock,
-+int __cvdso_clock_getres_common(const struct vdso_time_data *vd, clockid_t clock,
- 				struct __kernel_timespec *res)
- {
- 	u32 msk;
-@@ -396,7 +395,7 @@ int __cvdso_clock_getres_common(const struct vdso_data *vd, clockid_t clock,
- 
- 	if (IS_ENABLED(CONFIG_TIME_NS) &&
- 	    vd->clock_mode == VDSO_CLOCKMODE_TIMENS)
--		vd = __arch_get_timens_vdso_data(vd);
-+		vd = __arch_get_vdso_u_timens_data(vd);
- 
- 	/*
- 	 * Convert the clockid to a bitmask and use it to check which
-@@ -425,7 +424,7 @@ int __cvdso_clock_getres_common(const struct vdso_data *vd, clockid_t clock,
- }
- 
- static __maybe_unused
--int __cvdso_clock_getres_data(const struct vdso_data *vd, clockid_t clock,
-+int __cvdso_clock_getres_data(const struct vdso_time_data *vd, clockid_t clock,
- 			      struct __kernel_timespec *res)
- {
- 	int ret = __cvdso_clock_getres_common(vd, clock, res);
-@@ -443,7 +442,7 @@ int __cvdso_clock_getres(clockid_t clock, struct __kernel_timespec *res)
- 
- #ifdef BUILD_VDSO32
- static __maybe_unused int
--__cvdso_clock_getres_time32_data(const struct vdso_data *vd, clockid_t clock,
-+__cvdso_clock_getres_time32_data(const struct vdso_time_data *vd, clockid_t clock,
- 				 struct old_timespec32 *res)
- {
- 	struct __kernel_timespec ts;
+---
+Brendan Jackman (21):
+      mm: asi: Make some utility functions noinstr compatible
+      x86: Create CONFIG_MITIGATION_ADDRESS_SPACE_ISOLATION
+      mm: asi: Introduce ASI core API
+      mm: asi: Add infrastructure for boot-time enablement
+      mm: asi: ASI support in interrupts/exceptions
+      mm: asi: Avoid warning from NMI userspace accesses in ASI context
+      mm: Add __PAGEFLAG_FALSE
+      mm: asi: Map non-user buddy allocations as nonsensitive
+      [TEMP WORKAROUND] mm: asi: Workaround missing partial-unmap support
+      mm: asi: Map kernel text and static data as nonsensitive
+      mm: asi: Map vmalloc/vmap data as nonsensitive
+      mm: asi: Stabilize CR3 in switch_mm_irqs_off()
+      mm: asi: Make TLB flushing correct under ASI
+      KVM: x86: asi: Restricted address space for VM execution
+      mm: asi: exit ASI before accessing CR3 from C code where appropriate
+      mm: asi: Add infrastructure for mapping userspace addresses
+      mm: asi: Restricted execution fore bare-metal processes
+      x86: Create library for flushing L1D for L1TF
+      mm: asi: Add some mitigations on address space transitions
+      x86/pti: Disable PTI when ASI is on
+      mm: asi: Stop ignoring asi=3Don cmdline flag
 
--- 
-2.47.1
+Junaid Shahid (4):
+      mm: asi: Make __get_current_cr3_fast() ASI-aware
+      mm: asi: ASI page table allocation functions
+      mm: asi: Functions to map/unmap a memory range into ASI page tables
+      mm: asi: Add basic infrastructure for global non-sensitive mappings
+
+Ofir Weisse (1):
+      mm: asi: asi_exit() on PF, skip handling if address is accessible
+
+Reiji Watanabe (1):
+      mm: asi: Map dynamic percpu memory as nonsensitive
+
+Yosry Ahmed (2):
+      mm: asi: Use separate PCIDs for restricted address spaces
+      mm: asi: exit ASI before suspend-like operations
+
+ arch/alpha/include/asm/Kbuild            |    1 +
+ arch/arc/include/asm/Kbuild              |    1 +
+ arch/arm/include/asm/Kbuild              |    1 +
+ arch/arm64/include/asm/Kbuild            |    1 +
+ arch/csky/include/asm/Kbuild             |    1 +
+ arch/hexagon/include/asm/Kbuild          |    1 +
+ arch/loongarch/include/asm/Kbuild        |    3 +
+ arch/m68k/include/asm/Kbuild             |    1 +
+ arch/microblaze/include/asm/Kbuild       |    1 +
+ arch/mips/include/asm/Kbuild             |    1 +
+ arch/nios2/include/asm/Kbuild            |    1 +
+ arch/openrisc/include/asm/Kbuild         |    1 +
+ arch/parisc/include/asm/Kbuild           |    1 +
+ arch/powerpc/include/asm/Kbuild          |    1 +
+ arch/riscv/include/asm/Kbuild            |    1 +
+ arch/s390/include/asm/Kbuild             |    1 +
+ arch/sh/include/asm/Kbuild               |    1 +
+ arch/sparc/include/asm/Kbuild            |    1 +
+ arch/um/include/asm/Kbuild               |    2 +-
+ arch/x86/Kconfig                         |   27 +
+ arch/x86/boot/compressed/ident_map_64.c  |   10 +
+ arch/x86/boot/compressed/pgtable_64.c    |   11 +
+ arch/x86/include/asm/asi.h               |  306 +++++++++
+ arch/x86/include/asm/cpufeatures.h       |    1 +
+ arch/x86/include/asm/disabled-features.h |    8 +-
+ arch/x86/include/asm/idtentry.h          |   50 +-
+ arch/x86/include/asm/kvm_host.h          |    3 +
+ arch/x86/include/asm/l1tf.h              |   11 +
+ arch/x86/include/asm/nospec-branch.h     |    2 +
+ arch/x86/include/asm/pgalloc.h           |    6 +
+ arch/x86/include/asm/pgtable_64.h        |    4 +
+ arch/x86/include/asm/processor-flags.h   |   24 +
+ arch/x86/include/asm/processor.h         |   20 +-
+ arch/x86/include/asm/pti.h               |    6 +-
+ arch/x86/include/asm/special_insns.h     |   45 +-
+ arch/x86/include/asm/tlbflush.h          |    6 +
+ arch/x86/kernel/process.c                |    2 +
+ arch/x86/kernel/process_32.c             |    2 +-
+ arch/x86/kernel/process_64.c             |    2 +-
+ arch/x86/kernel/traps.c                  |   22 +
+ arch/x86/kvm/Kconfig                     |    1 +
+ arch/x86/kvm/svm/svm.c                   |    2 +
+ arch/x86/kvm/vmx/nested.c                |    6 +
+ arch/x86/kvm/vmx/vmx.c                   |  113 ++--
+ arch/x86/kvm/x86.c                       |   81 ++-
+ arch/x86/lib/Makefile                    |    1 +
+ arch/x86/lib/l1tf.c                      |   96 +++
+ arch/x86/lib/retpoline.S                 |   10 +
+ arch/x86/mm/Makefile                     |    1 +
+ arch/x86/mm/asi.c                        | 1039 ++++++++++++++++++++++++++=
+++++
+ arch/x86/mm/fault.c                      |  124 +++-
+ arch/x86/mm/init.c                       |    7 +-
+ arch/x86/mm/init_64.c                    |   25 +-
+ arch/x86/mm/mm_internal.h                |    3 +
+ arch/x86/mm/pti.c                        |   14 +-
+ arch/x86/mm/tlb.c                        |  167 ++++-
+ arch/x86/virt/svm/sev.c                  |    2 +-
+ arch/xtensa/include/asm/Kbuild           |    1 +
+ drivers/firmware/efi/libstub/x86-5lvl.c  |    2 +-
+ include/asm-generic/asi.h                |  113 ++++
+ include/asm-generic/vmlinux.lds.h        |   11 +
+ include/linux/entry-common.h             |   11 +
+ include/linux/gfp.h                      |    5 +
+ include/linux/gfp_types.h                |   15 +-
+ include/linux/mm_types.h                 |    7 +
+ include/linux/page-flags.h               |   18 +
+ include/linux/pgtable.h                  |    3 +
+ include/trace/events/mmflags.h           |   12 +-
+ init/main.c                              |    2 +
+ kernel/entry/common.c                    |    1 +
+ kernel/fork.c                            |    5 +
+ kernel/sched/core.c                      |    9 +
+ mm/init-mm.c                             |    4 +
+ mm/internal.h                            |    2 +
+ mm/mm_init.c                             |    1 +
+ mm/page_alloc.c                          |  160 ++++-
+ mm/percpu-vm.c                           |   50 +-
+ mm/percpu.c                              |    4 +-
+ mm/vmalloc.c                             |   53 +-
+ tools/perf/builtin-kmem.c                |    1 +
+ 80 files changed, 2582 insertions(+), 190 deletions(-)
+---
+base-commit: ebd6ea9c6976c64ed5af3e6dce672616447e8e62
+change-id: 20241115-asi-rfc-v2-5d9bbb441186
+
+Best regards,
+--=20
+Brendan Jackman <jackmanb@google.com>
 
 
