@@ -1,61 +1,61 @@
-Return-Path: <linux-arch+bounces-9661-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9663-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49EB6A09519
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Jan 2025 16:24:06 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5B6AA0951E
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Jan 2025 16:24:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 86427188CB86
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Jan 2025 15:24:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 087D83A99B0
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Jan 2025 15:24:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39B9D2116F0;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8E49211A02;
 	Fri, 10 Jan 2025 15:23:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="uOv2bxTh";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="bCXOoqps"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="O/oryiOT";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="koaGwZik"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D10A211481;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC1F4211498;
 	Fri, 10 Jan 2025 15:23:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736522636; cv=none; b=SrUAez+y5btwn9W1v/DcRHpBQCNVlIdyeK1Vt4KOFtTDiDQBQYW1Ghv9eb9NEbc6TWK7kuivv5OqQXQ4FfoRLRtB/HTvB7dCDlaSXzYtRMQ7QGuowQIZantDWb1WNsgXLVCtBqp12BFs0hFQVVZgz5ittQsGqpntniWFcszk+xI=
+	t=1736522636; cv=none; b=oVnP4bY6mVzMX1DiYy6OeSa/pvIIJhORrH4NYRvv7s6ikAt+qqiBxJFxTAkHpyNBhT2wAoAMPwuaQcsKEanp235tzVCe488CPTtU1uEFslpwKq5eHS1U7R3GO8bxP52aGYgngyif/oSbV09X4ZrD81O4W8Ckpk3eN1ERHf/KyTY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1736522636; c=relaxed/simple;
-	bh=NPXgHz1pg7k88XY5Q1tIpqIToZjmPGQbKRJBGkTsdlQ=;
+	bh=zRm1/jHzhcX2cBU5SFyW7PIL5hMfUBZQzaPVvddjWs0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=PErHKMcJ3G2NhqwlBOZKrIiRJsar/K3VcklwfpmMk2NYzXcd8vTaxncc5QoZ7tTVl17snh4fnXJeMIyJY7qRHVZ0k5b7mxYPmQxNztg5JdK50KY49bQiSkdtK+SSs2QRobVdBu4uedTbZ5sBJqZtlU4Amwe5kcg6HRcD+AiNSGA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=uOv2bxTh; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=bCXOoqps; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=SDewCSClGua12bRsSSpe4eqlXM0bLQf++Zegxyfsamh9HtTFGIf7AO+zHF/chGLcYicQlUUFCxwbJDhz+C9RYXE9cJBuRreHckvgrdasqWBKqw13aokY4ZkzF1aJxwNj/YJy+wZMIZRaVuuP5kLa/KaIaSGrXEhG59zLCe6STmk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=O/oryiOT; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=koaGwZik; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1736522632;
+	s=2020; t=1736522633;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=lbUS2hSpGUfA91ZBUqWCU2EUGjDUwjlK6bc3CIpIefE=;
-	b=uOv2bxTh5LBAc6lQBNxHI225ZQIyI3sjNmKl0oWDqhbMm3+2Aq1CgAiY/WGKjYdJujeASg
-	X5yRhUXpIWcQyFWiHfZtG6b3KXCjOtxlLnuS77Gc29T2b0JYczwJsSObkhk0BIyJASuK3r
-	j78fThlBjFc9jsBeKSlPdsW6SYuzPAIVqko1senufIDxGaUR2jm7/JzErdDsY+maWiSAc/
-	mopt7buykITKw+x/h1Hd8DBYahvWn3cXYNCcE2rNgQ3kezsHOFLRDnm1wiXwQd26o4wqOT
-	ak8g0JlrxBQhbszlIVZlHKPQKAPTEJd+aSkC3Ljp36LJjFP/rGVCCl7gUWHxmg==
+	bh=gs/m1ne1xnufcZuceBub2RzRtdWIKInpIZ86AtKhTZY=;
+	b=O/oryiOTC2EPMwRnWTnGqJzrks9otGfDDqx2KBYDFHqsjuHB089iYDJ34QQ9S1PljgamlL
+	BM7zY7AL8FY07yIH12mI0070UhlPruW2yGFqEExUs8sVmzqNzO59sD5Q9pOUCNTEaFhAgE
+	RmTBJ8zhZkmwDsvXH2+VhmlkrKmgrOPsW/I0bKDSNyEqyTqw72QGPxWzolUogPArsjlTlk
+	FBAhi9sEQ/iBl54fIHofNPj8JxII6acwq4Gq+jTHYNrL+mFqfiD6T9eZL3FaVHB8DnEAX1
+	YGPwNzwwM5T96hOBZxjq760NY9XDYsr+B0XabLhMkR67wla+5lWUI/M84y165w==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1736522632;
+	s=2020e; t=1736522633;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=lbUS2hSpGUfA91ZBUqWCU2EUGjDUwjlK6bc3CIpIefE=;
-	b=bCXOoqpsmZBfuCWTLWyKzXWgI+48Fg+ZiQP8gjNQ8tgcAu+konADycZa3Bs2MBPDsKLYfI
-	V9BFQPPLHv6mNWAA==
-Date: Fri, 10 Jan 2025 16:23:41 +0100
-Subject: [PATCH v2 02/18] parisc: Remove unused symbol vdso_data
+	bh=gs/m1ne1xnufcZuceBub2RzRtdWIKInpIZ86AtKhTZY=;
+	b=koaGwZik0YK1SGnxT0Jy1pXAsLdTo31kbbEXtpZ/NVrHINMW/zi3RXZX3xxrjmrmUhWnsu
+	Ys8RJwvtX7n8wzAQ==
+Date: Fri, 10 Jan 2025 16:23:42 +0100
+Subject: [PATCH v2 03/18] vdso: Introduce vdso/align.h
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
 List-Id: <linux-arch.vger.kernel.org>
@@ -64,7 +64,7 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250110-vdso-store-rng-v2-2-350c9179bbf1@linutronix.de>
+Message-Id: <20250110-vdso-store-rng-v2-3-350c9179bbf1@linutronix.de>
 References: <20250110-vdso-store-rng-v2-0-350c9179bbf1@linutronix.de>
 In-Reply-To: <20250110-vdso-store-rng-v2-0-350c9179bbf1@linutronix.de>
 To: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
@@ -99,35 +99,69 @@ Cc: linux-parisc@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-arch@vger.kernel.org, Nam Cao <namcao@linutronix.de>, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
  linux-csky@vger.kernel.org
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1736522629; l=796;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1736522629; l=2181;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=NPXgHz1pg7k88XY5Q1tIpqIToZjmPGQbKRJBGkTsdlQ=;
- b=pQu1+khW515G686AWZAaU8xzr79tj7q5lDK175IcOzOT9nOwePjQUofvqBqqfKXCFWPJMnR3M
- 9bUkIqqwyozCTnEzLbN/eUBLTMra60lhj1W2SasaPH7bLefw8MVTs27
+ bh=zRm1/jHzhcX2cBU5SFyW7PIL5hMfUBZQzaPVvddjWs0=;
+ b=mSg1h7NuP5ae3KJ6mcjcidNOVehie+olRq8SUcCqxYpYv8FgXUocQ8b/bJZFWOvzytUY29vSW
+ 1nrXIOS1T+sC75ZNlmJCS8h+7C8Fx0isdGu7Wc6Nqqipvo2fiyJM1NW
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-The symbol vdso_data is and has been unused.
-Remove it.
+The vDSO implementation can only include headers from the vdso/
+namespace. To enable the usage of the ALIGN() macro from the vDSO, move
+linux/align.h to vdso/align.h wholly.
+As the only dependency linux/const.h is only a wrapper around
+vdso/const.h anyways adapt that dependency.
+
+Also provide a compatibility wrapper linux/align.h.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
- arch/parisc/include/asm/vdso.h | 2 --
- 1 file changed, 2 deletions(-)
+ include/linux/align.h | 10 +---------
+ include/vdso/align.h  | 15 +++++++++++++++
+ 2 files changed, 16 insertions(+), 9 deletions(-)
 
-diff --git a/arch/parisc/include/asm/vdso.h b/arch/parisc/include/asm/vdso.h
-index 2a2dc11b5545fc642a7ae4596dc174111433e948..5f581c1d64606b3ec8f9967efe31dd3d551adf76 100644
---- a/arch/parisc/include/asm/vdso.h
-+++ b/arch/parisc/include/asm/vdso.h
-@@ -12,8 +12,6 @@
- #define VDSO64_SYMBOL(tsk, name) ((tsk)->mm->context.vdso_base + (vdso64_offset_##name))
- #define VDSO32_SYMBOL(tsk, name) ((tsk)->mm->context.vdso_base + (vdso32_offset_##name))
+diff --git a/include/linux/align.h b/include/linux/align.h
+index 2b4acec7b95a27b6768d48f46519abc584c94d5d..55debf105a5d610c592e5c53a4153018ea1ae2c6 100644
+--- a/include/linux/align.h
++++ b/include/linux/align.h
+@@ -2,14 +2,6 @@
+ #ifndef _LINUX_ALIGN_H
+ #define _LINUX_ALIGN_H
  
--extern struct vdso_data *vdso_data;
+-#include <linux/const.h>
 -
- #endif /* __ASSEMBLY __ */
+-/* @a is a power of 2 value */
+-#define ALIGN(x, a)		__ALIGN_KERNEL((x), (a))
+-#define ALIGN_DOWN(x, a)	__ALIGN_KERNEL((x) - ((a) - 1), (a))
+-#define __ALIGN_MASK(x, mask)	__ALIGN_KERNEL_MASK((x), (mask))
+-#define PTR_ALIGN(p, a)		((typeof(p))ALIGN((unsigned long)(p), (a)))
+-#define PTR_ALIGN_DOWN(p, a)	((typeof(p))ALIGN_DOWN((unsigned long)(p), (a)))
+-#define IS_ALIGNED(x, a)		(((x) & ((typeof(x))(a) - 1)) == 0)
++#include <vdso/align.h>
  
- /* Default link addresses for the vDSOs */
+ #endif	/* _LINUX_ALIGN_H */
+diff --git a/include/vdso/align.h b/include/vdso/align.h
+new file mode 100644
+index 0000000000000000000000000000000000000000..02dd8626b5c5aa59d2ee0b15799b6e9adb343f65
+--- /dev/null
++++ b/include/vdso/align.h
+@@ -0,0 +1,15 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __VDSO_ALIGN_H
++#define __VDSO_ALIGN_H
++
++#include <vdso/const.h>
++
++/* @a is a power of 2 value */
++#define ALIGN(x, a)		__ALIGN_KERNEL((x), (a))
++#define ALIGN_DOWN(x, a)	__ALIGN_KERNEL((x) - ((a) - 1), (a))
++#define __ALIGN_MASK(x, mask)	__ALIGN_KERNEL_MASK((x), (mask))
++#define PTR_ALIGN(p, a)		((typeof(p))ALIGN((unsigned long)(p), (a)))
++#define PTR_ALIGN_DOWN(p, a)	((typeof(p))ALIGN_DOWN((unsigned long)(p), (a)))
++#define IS_ALIGNED(x, a)		(((x) & ((typeof(x))(a) - 1)) == 0)
++
++#endif	/* __VDSO_ALIGN_H */
 
 -- 
 2.47.1
