@@ -1,70 +1,70 @@
-Return-Path: <linux-arch+bounces-9682-lists+linux-arch=lfdr.de@vger.kernel.org>
+Return-Path: <linux-arch+bounces-9683-lists+linux-arch=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17A13A099D7
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Jan 2025 19:42:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24845A099E2
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Jan 2025 19:42:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 125FA7A49E2
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Jan 2025 18:41:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B70E63A992F
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Jan 2025 18:41:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBFFE21C9E8;
-	Fri, 10 Jan 2025 18:41:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EAD12163B3;
+	Fri, 10 Jan 2025 18:41:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GQAeyX4Y"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WN7IliZH"
 X-Original-To: linux-arch@vger.kernel.org
 Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 427A6215F5A
-	for <linux-arch@vger.kernel.org>; Fri, 10 Jan 2025 18:40:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 844762163A0
+	for <linux-arch@vger.kernel.org>; Fri, 10 Jan 2025 18:41:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736534466; cv=none; b=C8X1T+U9VdyL5GKbn2rEwCViF257IZ1mlQ4JzUbh+MwsGXGZi1lgx7mSFW2lLrdXJSs6B5aYvLZdeFR0WcoszUT24zqa3rvj962ShLDVQRtKyNin4z+yERp7g0WII+uQLJ3EWsw50vIbQiMmVY6mTc+uNHzzzkgILhLg3H2PBf4=
+	t=1736534467; cv=none; b=h7zQtty8kya76LQuYptBRMtqvKRO1SrVcDapLQa1S5IzHVuph7IIMhdB3LEuTNmQZv+ooIeviIzzS1fddyCcdSUGsJdkdezq3//yPaNyQTcINDxzmkNPem2B26mBrowrvMsB4eYr/hJIXr00RLXSZGaPOcAp9Vtj8dfWBFw9hr0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736534466; c=relaxed/simple;
-	bh=yUJhfygL4zShgEMCarvXajCch8gRGTatWhXnwaWQKgM=;
+	s=arc-20240116; t=1736534467; c=relaxed/simple;
+	bh=oS6NVhF+DSa3bfb0jLd+nVgq34roa9GfyJSa086VnQc=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Z7o9nM+y4NfK8/l4KJJGDGdoHlB54UZ2EPEliRvQf0zCXcq/giksk3us8SfeEp+z+a0WB27rYDTk5+CMMFv2b9lF2Q/HhBwp/c8Ag7Uec2n3DhQ+YrnlKRFIt0k22YeOvf3WdDKeaztb4k0MwdMegpK4B1OrvHWqu4LEZN3YZvY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GQAeyX4Y; arc=none smtp.client-ip=209.85.128.73
+	 To:Cc:Content-Type; b=ZR70oJuvwnPlOjpNRLJxYrUtmtbYA4CP0PJ4e7ca7ODRRgA/HCP5lshtkP5BvOW6aKbSyGRi80HwbRy5ZlooEETF0MzhSSjxolpjOs9bmSwNnIgJVc6RpUPFS9q6sibGwiaV4WXiJ1Qk13vJTymArD9nPkoNzJncEkYXn7dZp1I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WN7IliZH; arc=none smtp.client-ip=209.85.128.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
-Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-4362b9c1641so11437265e9.3
-        for <linux-arch@vger.kernel.org>; Fri, 10 Jan 2025 10:40:56 -0800 (PST)
+Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-43635895374so15646885e9.0
+        for <linux-arch@vger.kernel.org>; Fri, 10 Jan 2025 10:40:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1736534454; x=1737139254; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1736534457; x=1737139257; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2/DwiwuishkWohq1Selw9AVX00i6WMTVrJEAuBvDTaE=;
-        b=GQAeyX4YirKt2qq+bM+3Ddu908qkl3I/FgtJE7Gvv5IKzFedVmYvsNdyqKS1uGbu2Y
-         ntaOCS4WEQQZYeOJmi6AYvPXxtWDQ9/8PuE6HwREv1KjWMyNkEBOi7WlsaInMdtxOIo5
-         oCZoVUcGEAN7W1qInZIDDMIVOTAx2/n9ZOuLO01+tZjjD3hiQzN13b/UhdzRVLGiXZ2R
-         qIKaUB0wBNvlXLMw17DC/8CTZJMXHReri2bWpHSJ8V/j/eFWI9mmiMUujS0IPovty4iG
-         7pSRxtiUrwzX4UYOJn6do3frii+w2PhFxewhhht1AbFvi1YmipmILnmcmTuBf8LQ1X6R
-         xPqA==
+        bh=06++54m2jQMoQajJn4JgiUDifyLkkN/hJfJdF7FjHRg=;
+        b=WN7IliZHdzltLjGkykvDndAYXef6RTj23O/ltqw5zDbJO6DTFI4qHrxY4wlUsgphXn
+         Flm78XaRinJNz9Og8hpPaaiVxGt3LX+zzMkt1bKLoluo0FOEXUCBaEK2fEwTdW1Mi1Ax
+         JjsFJ2fHCZqOlsm8vYuo4EmxIyQ3vGL4abIbb8eCU0+UsZqyt5cCsmONvUjAq3xOHoJf
+         1q4ehKmM49+x+5yHVzWSHp8ZN3BFa27gJszr2uxf73dag3RmADbRXfADPVZht0nuYhzn
+         9rbYq3bcTKHZcR/ERTe7r0RdYevZfYMEjNQ4n4C7IEcaumIah03Ic1tIXyqA96zhlRic
+         GQhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736534454; x=1737139254;
+        d=1e100.net; s=20230601; t=1736534457; x=1737139257;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2/DwiwuishkWohq1Selw9AVX00i6WMTVrJEAuBvDTaE=;
-        b=m+o/misBDVo6N6jtE8K+muu5ctDLhO3tjAmOfoY4ulcwhcvFKSAbTbdn8ksBGwu9gB
-         sL9MwVlK/2AG/Q/EBP4E3p+YpVmnKMrOGGRV/ef7RtIpvmLVMV4rekA1tZXjohzdtNUB
-         3MFr50FOsmZMSCKFC/sWFSJ24qEaQUrTdqtLG4BCsR+SxRi3/uYhwFlOImMfk3tmWVWm
-         HD0TVK9lboe6PGhkB1Fy4OOpH1POWULYwX6h7M4rpc1xU4oKxNGzJTkEKumfxr3pvh1m
-         TiBAKsbjLZqewyteGmZZ3Tw0mj4VrV8WKJRBsHTskAFNuXGND1OPrT1dpkPDX/LpFBWQ
-         foDQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXeKfRmM3jhfpOvb2tZRuLDjpgf8xiWQQyH1BTYfAW2Wp+H3C6WsGvRfdSPq3AZq8bD8Jh/C4QlsY5S@vger.kernel.org
-X-Gm-Message-State: AOJu0YzbykH4LICxG4Pw7f9VqlGae+CdenYDgvMb9lWtnNE3vL3M0yOO
-	p2ZoCxLYBEN2+2U8+nVPdiZDue7ziqMeAks5o82m8GkdwwLBxFXwB77taq2grVJJIiIl3QIgL3s
-	lnOuFWJfWZQ==
-X-Google-Smtp-Source: AGHT+IFG2gVbYjLEgd+rVsDr92xsiDXdhg3a2JRtZbNVmnh3EgFoUPLrUSfZq6jOhgEgZFCkNrLAplfHg1IQBQ==
-X-Received: from wmqa17.prod.google.com ([2002:a05:600c:3491:b0:434:fa72:f1bf])
+        bh=06++54m2jQMoQajJn4JgiUDifyLkkN/hJfJdF7FjHRg=;
+        b=QTrTy6UcaMOXRM6ALD6NBqlXcB8E6TH7e4CxRWMMy/dGYy1h3E7NrQIoFMGvtPy5g5
+         93aX5tJyH9dZm5nKrr9br7Fi6VVWZWHtqhn/1X9LMF4eiNu9rQrUK65O8I86TKynRLML
+         O9jZio65yr1CxHIsZr0ttNoGj8JJqvMpUKTDVIAcVrXd8L9xhWaZVZpFQpV1arcop8GR
+         yUBEj6Xbwqmcjfqpgw5UCwLEypf1n3DQXz/U2eMeWPaIOIvsGbnguufZJD8IiBGGJtNR
+         /Tl8M+L8vDBBe5440To/IpauieijDFbAkU8pQwuhHcw755T2WpY7mFsFQ3xsm7Fd6I9G
+         fdiA==
+X-Forwarded-Encrypted: i=1; AJvYcCUc21/jtnvaJccoGhTxBqOEhY4Uy+NRiiNzZUrPsdyYPFGxtzZiEPStn4ljZrjRPNyUoI6yyZdgfuFD@vger.kernel.org
+X-Gm-Message-State: AOJu0YzYqUKAaD9C9D2Or4mBRFfe8/iSK2N8mxBfG4pyUYHLbHyh9ioi
+	WhoxUDTIYQa7q2fESqc8PZooBXUnGYtqLPNH1T0HJNKmNZPH69VqLVaEsbtSY3CQlDpr53DNp/t
+	nrSi6ZnGi6g==
+X-Google-Smtp-Source: AGHT+IGnlkbZgvto5V3RLsC0pJW1qd+uu81ptaoP4aB2W/3FKEzvBJWjRMlcB/euDId6QKmAnD2UbMWUf073rw==
+X-Received: from wmqd22.prod.google.com ([2002:a05:600c:34d6:b0:436:185e:c91d])
  (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:1d14:b0:436:5fc9:309d with SMTP id 5b1f17b1804b1-436e26f6d81mr55448175e9.30.1736534454514;
- Fri, 10 Jan 2025 10:40:54 -0800 (PST)
-Date: Fri, 10 Jan 2025 18:40:30 +0000
+ 2002:a05:600c:444a:b0:434:fe3c:c662 with SMTP id 5b1f17b1804b1-436e9d7b99cmr59996085e9.12.1736534456699;
+ Fri, 10 Jan 2025 10:40:56 -0800 (PST)
+Date: Fri, 10 Jan 2025 18:40:31 +0000
 In-Reply-To: <20250110-asi-rfc-v2-v2-0-8419288bc805@google.com>
 Precedence: bulk
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -74,8 +74,8 @@ List-Unsubscribe: <mailto:linux-arch+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20250110-asi-rfc-v2-v2-0-8419288bc805@google.com>
 X-Mailer: b4 0.15-dev
-Message-ID: <20250110-asi-rfc-v2-v2-4-8419288bc805@google.com>
-Subject: [PATCH RFC v2 04/29] mm: asi: Add infrastructure for boot-time enablement
+Message-ID: <20250110-asi-rfc-v2-v2-5-8419288bc805@google.com>
+Subject: [PATCH RFC v2 05/29] mm: asi: ASI support in interrupts/exceptions
 From: Brendan Jackman <jackmanb@google.com>
 To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
 	Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, 
@@ -126,354 +126,429 @@ Cc: x86@kernel.org, linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
 	linux-um@lists.infradead.org, linux-arch@vger.kernel.org, linux-mm@kvack.org, 
 	linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
 	kvm@vger.kernel.org, linux-efi@vger.kernel.org, 
-	Brendan Jackman <jackmanb@google.com>, Junaid Shahid <junaids@google.com>, 
-	Yosry Ahmed <yosryahmed@google.com>
+	Brendan Jackman <jackmanb@google.com>, Junaid Shahid <junaids@google.com>
 Content-Type: text/plain; charset="utf-8"
 
-Add a boot time parameter to control the newly added X86_FEATURE_ASI.
-"asi=on" or "asi=off" can be used in the kernel command line to enable
-or disable ASI at boot time. If not specified, ASI enablement depends
-on CONFIG_ADDRESS_SPACE_ISOLATION_DEFAULT_ON, which is off by default.
-asi_check_boottime_disable() is modeled after
-pti_check_boottime_disable().
+Add support for potentially switching address spaces from within
+interrupts/exceptions/NMIs etc. An interrupt does not automatically
+switch to the unrestricted address space. It can switch if needed to
+access some memory not available in the restricted address space, using
+the normal asi_exit call.
 
-The boot parameter is currently ignored until ASI is fully functional.
+On return from the outermost interrupt, if the target address space was
+the restricted address space (e.g. we were in the critical code path
+between ASI Enter and VM Enter), the restricted address space will be
+automatically restored. Otherwise, execution will continue in the
+unrestricted address space until the next explicit ASI Enter.
 
-Once we have a set of ASI features checked in that we have actually
-tested, we will stop ignoring the flag. But for now let's just add the
-infrastructure so we can implement the usage code.
+In order to keep track of when to restore the restricted address space,
+an interrupt/exception nesting depth counter is maintained per-task.
+An alternative implementation without needing this counter is also
+possible, but the counter unlocks an additional nice-to-have benefit by
+allowing detection of whether or not we are currently executing inside
+an exception context, which would be useful in a later patch.
 
-Ignoring checkpatch.pl CONFIG_DESCRIPTION because the _DEFAULT_ON
-Kconfig is trivial to explain.
+Note that for KVM on SVM, this is not actually necessary as NMIs are in
+fact maskable via CLGI. It's not clear to me if VMX has something
+equivalent but we will need this infrastructure in place for userspace
+support anyway.
 
-Checkpatch-args: --ignore CONFIG_DESCRIPTION
-Co-developed-by: Junaid Shahid <junaids@google.com>
+RFC: Once userspace ASI is implemented, this idtentry integration
+looks a bit heavy-handed. For example, we don't need this logic
+for INT 80 emulation, so having it in DEFINE_IDTENTRY_RAW is
+confusing. It could lead to a bug if the order of interrupter counter
+modifications and ASI transition logic gets flipped around somehow.
+
+checkpatch.pl SPACING is false positive. AVOID_BUG ignored for RFC.
+
+Checkpatch-args: --ignore=SPACING,AVOID_BUG
 Signed-off-by: Junaid Shahid <junaids@google.com>
-Co-developed-by: Yosry Ahmed <yosryahmed@google.com>
-Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
 Signed-off-by: Brendan Jackman <jackmanb@google.com>
 ---
- arch/x86/Kconfig                         |  9 +++++
- arch/x86/include/asm/asi.h               | 19 ++++++++--
- arch/x86/include/asm/cpufeatures.h       |  1 +
- arch/x86/include/asm/disabled-features.h |  8 ++++-
- arch/x86/mm/asi.c                        | 61 +++++++++++++++++++++++++++-----
- arch/x86/mm/init.c                       |  4 ++-
- include/asm-generic/asi.h                |  4 +++
- 7 files changed, 92 insertions(+), 14 deletions(-)
+ arch/x86/include/asm/asi.h       | 68 ++++++++++++++++++++++++++++++++++++++--
+ arch/x86/include/asm/idtentry.h  | 50 ++++++++++++++++++++++++-----
+ arch/x86/include/asm/processor.h |  5 +++
+ arch/x86/kernel/process.c        |  2 ++
+ arch/x86/kernel/traps.c          | 22 +++++++++++++
+ arch/x86/mm/asi.c                |  7 ++++-
+ include/asm-generic/asi.h        | 10 ++++++
+ 7 files changed, 153 insertions(+), 11 deletions(-)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 5a50582eb210e9d1309856a737d32b76fa1bfc85..1fcb52cb8cd5084ac3cef04af61b7d1653162bdb 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -2533,6 +2533,15 @@ config MITIGATION_ADDRESS_SPACE_ISOLATION
- 	  there are likely to be unhandled cases, in particular concerning TLB
- 	  flushes.
- 
-+
-+config ADDRESS_SPACE_ISOLATION_DEFAULT_ON
-+	bool "Enable address space isolation by default"
-+	default n
-+	depends on MITIGATION_ADDRESS_SPACE_ISOLATION
-+	help
-+	  If selected, ASI is enabled by default at boot if the asi=on or
-+	  asi=off are not specified.
-+
- config MITIGATION_RETPOLINE
- 	bool "Avoid speculative indirect branches in kernel"
- 	select OBJTOOL if HAVE_OBJTOOL
 diff --git a/arch/x86/include/asm/asi.h b/arch/x86/include/asm/asi.h
-index 7cc635b6653a3970ba9dbfdc9c828a470e27bd44..b9671ef2dd3278adceed18507fd260e21954d574 100644
+index b9671ef2dd3278adceed18507fd260e21954d574..9a9a139518289fc65f26a4d1cd311aa52cc5357f 100644
 --- a/arch/x86/include/asm/asi.h
 +++ b/arch/x86/include/asm/asi.h
-@@ -8,6 +8,7 @@
+@@ -157,6 +157,11 @@ void asi_relax(void);
+ /* Immediately exit the restricted address space if in it */
+ void asi_exit(void);
  
- #include <asm/pgtable_types.h>
- #include <asm/percpu.h>
-+#include <asm/cpufeature.h>
- #include <asm/processor.h>
- 
- #ifdef CONFIG_MITIGATION_ADDRESS_SPACE_ISOLATION
-@@ -66,6 +67,8 @@
-  * the N ASI classes.
-  */
- 
-+#define static_asi_enabled() cpu_feature_enabled(X86_FEATURE_ASI)
++static inline void asi_init_thread_state(struct thread_struct *thread)
++{
++	thread->asi_state.intr_nest_depth = 0;
++}
 +
- /*
-  * ASI uses a per-CPU tainting model to track what mitigation actions are
-  * required on domain transitions. Taints exist along two dimensions:
-@@ -131,6 +134,8 @@ struct asi {
- 
- DECLARE_PER_CPU_ALIGNED(struct asi *, curr_asi);
- 
-+void asi_check_boottime_disable(void);
-+
- void asi_init_mm_state(struct mm_struct *mm);
- 
- int asi_init_class(enum asi_class_id class_id, struct asi_taint_policy *taint_policy);
-@@ -155,7 +160,9 @@ void asi_exit(void);
  /* The target is the domain we'll enter when returning to process context. */
  static __always_inline struct asi *asi_get_target(struct task_struct *p)
  {
--	return p->thread.asi_state.target;
-+	return static_asi_enabled()
-+	       ? p->thread.asi_state.target
-+	       : NULL;
- }
- 
- static __always_inline void asi_set_target(struct task_struct *p,
-@@ -166,7 +173,9 @@ static __always_inline void asi_set_target(struct task_struct *p,
- 
- static __always_inline struct asi *asi_get_current(void)
- {
--	return this_cpu_read(curr_asi);
-+	return static_asi_enabled()
-+	       ? this_cpu_read(curr_asi)
-+	       : NULL;
- }
- 
- /* Are we currently in a restricted address space? */
-@@ -175,7 +184,11 @@ static __always_inline bool asi_is_restricted(void)
- 	return (bool)asi_get_current();
- }
- 
--/* If we exit/have exited, can we stay that way until the next asi_enter? */
-+/*
-+ * If we exit/have exited, can we stay that way until the next asi_enter?
-+ *
-+ * When ASI is disabled, this returns true.
-+ */
- static __always_inline bool asi_is_relaxed(void)
- {
- 	return !asi_get_target(current);
-diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-index 913fd3a7bac6506141de65f33b9ee61c615c7d7d..d6a808d10c3b8900d190ea01c66fc248863f05e2 100644
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@ -474,6 +474,7 @@
- #define X86_FEATURE_CLEAR_BHB_HW	(21*32+ 3) /* BHI_DIS_S HW control enabled */
- #define X86_FEATURE_CLEAR_BHB_LOOP_ON_VMEXIT (21*32+ 4) /* Clear branch history at vmexit using SW loop */
- #define X86_FEATURE_FAST_CPPC		(21*32 + 5) /* AMD Fast CPPC */
-+#define X86_FEATURE_ASI			(21*32+6) /* Kernel Address Space Isolation */
- 
+@@ -197,9 +202,10 @@ static __always_inline bool asi_is_relaxed(void)
  /*
-  * BUG word(s)
-diff --git a/arch/x86/include/asm/disabled-features.h b/arch/x86/include/asm/disabled-features.h
-index c492bdc97b0595ec77f89dc9b0cefe5e3e64be41..c7964ed4fef8b9441e1c0453da587787d8008d9d 100644
---- a/arch/x86/include/asm/disabled-features.h
-+++ b/arch/x86/include/asm/disabled-features.h
-@@ -50,6 +50,12 @@
- # define DISABLE_PTI		(1 << (X86_FEATURE_PTI & 31))
- #endif
- 
-+#ifdef CONFIG_MITIGATION_ADDRESS_SPACE_ISOLATION
-+# define DISABLE_ASI		0
-+#else
-+# define DISABLE_ASI		(1 << (X86_FEATURE_ASI & 31))
-+#endif
-+
- #ifdef CONFIG_MITIGATION_RETPOLINE
- # define DISABLE_RETPOLINE	0
- #else
-@@ -154,7 +160,7 @@
- #define DISABLED_MASK17	0
- #define DISABLED_MASK18	(DISABLE_IBT)
- #define DISABLED_MASK19	(DISABLE_SEV_SNP)
--#define DISABLED_MASK20	0
-+#define DISABLED_MASK20	(DISABLE_ASI)
- #define DISABLED_MASK21	0
- #define DISABLED_MASK_CHECK BUILD_BUG_ON_ZERO(NCAPINTS != 22)
- 
-diff --git a/arch/x86/mm/asi.c b/arch/x86/mm/asi.c
-index 105cd8b43eaf5c20acc80d4916b761559fb95d74..5baf563a078f5b3a6cd4b9f5e92baaf81b0774c4 100644
---- a/arch/x86/mm/asi.c
-+++ b/arch/x86/mm/asi.c
-@@ -4,6 +4,7 @@
- #include <linux/percpu.h>
- #include <linux/spinlock.h>
- 
-+#include <linux/init.h>
- #include <asm/asi.h>
- #include <asm/cmdline.h>
- #include <asm/cpufeature.h>
-@@ -29,6 +30,9 @@ static inline bool asi_class_id_valid(enum asi_class_id class_id)
- 
- static inline bool asi_class_initialized(enum asi_class_id class_id)
+  * Is the current task in the critical section?
+  *
+- * This is just the inverse of !asi_is_relaxed(). We have both functions in order to
+- * help write intuitive client code. In particular, asi_is_tense returns false
+- * when ASI is disabled, which is judged to make user code more obvious.
++ * This is just the inverse of !asi_is_relaxed(). We have both functions in
++ * order to help write intuitive client code. In particular, asi_is_tense
++ * returns false when ASI is disabled, which is judged to make user code more
++ * obvious.
+  */
+ static __always_inline bool asi_is_tense(void)
  {
-+	if (!boot_cpu_has(X86_FEATURE_ASI))
-+		return 0;
-+
- 	if (WARN_ON(!asi_class_id_valid(class_id)))
- 		return false;
- 
-@@ -51,6 +55,9 @@ EXPORT_SYMBOL_GPL(asi_init_class);
- 
- void asi_uninit_class(enum asi_class_id class_id)
- {
-+	if (!boot_cpu_has(X86_FEATURE_ASI))
-+		return;
-+
- 	if (!asi_class_initialized(class_id))
- 		return;
- 
-@@ -66,10 +73,36 @@ const char *asi_class_name(enum asi_class_id class_id)
- 	return asi_class_names[class_id];
+@@ -211,6 +217,62 @@ static __always_inline pgd_t *asi_pgd(struct asi *asi)
+ 	return asi ? asi->pgd : NULL;
  }
  
-+void __init asi_check_boottime_disable(void)
++static __always_inline void asi_intr_enter(void)
 +{
-+	bool enabled = IS_ENABLED(CONFIG_MITIGATION_ADDRESS_SPACE_ISOLATION_DEFAULT_ON);
-+	char arg[4];
-+	int ret;
-+
-+	ret = cmdline_find_option(boot_command_line, "asi", arg, sizeof(arg));
-+	if (ret == 3 && !strncmp(arg, "off", 3)) {
-+		enabled = false;
-+		pr_info("ASI disabled through kernel command line.\n");
-+	} else if (ret == 2 && !strncmp(arg, "on", 2)) {
-+		enabled = true;
-+		pr_info("Ignoring asi=on param while ASI implementation is incomplete.\n");
-+	} else {
-+		pr_info("ASI %s by default.\n",
-+			enabled ? "enabled" : "disabled");
++	if (static_asi_enabled() && asi_is_tense()) {
++		current->thread.asi_state.intr_nest_depth++;
++		barrier();
 +	}
-+
-+	if (enabled)
-+		pr_info("ASI enablement ignored due to incomplete implementation.\n");
 +}
 +
- static void __asi_destroy(struct asi *asi)
- {
--	lockdep_assert_held(&asi->mm->asi_init_lock);
-+	WARN_ON_ONCE(asi->ref_count <= 0);
-+	if (--(asi->ref_count) > 0)
-+		return;
++void __asi_enter(void);
++
++static __always_inline void asi_intr_exit(void)
++{
++	if (static_asi_enabled() && asi_is_tense()) {
++		/*
++		 * If an access to sensitive memory got reordered after the
++		 * decrement, the #PF handler for that access would see a value
++		 * of 0 for the counter and re-__asi_enter before returning to
++		 * the faulting access, triggering an infinite PF loop.
++		 */
++		barrier();
++
++		if (--current->thread.asi_state.intr_nest_depth == 0) {
++			/*
++			 * If the decrement got reordered after __asi_enter, an
++			 * interrupt that came between __asi_enter and the
++			 * decrement would always see a nonzero value for the
++			 * counter so it wouldn't call __asi_enter again and we
++			 * would return to process context in the wrong address
++			 * space.
++			 */
++			barrier();
++			__asi_enter();
++		}
++	}
++}
++
++/*
++ * Returns the nesting depth of interrupts/exceptions that have interrupted the
++ * ongoing critical section. If the current task is not in a critical section
++ * this is 0.
++ */
++static __always_inline int asi_intr_nest_depth(void)
++{
++	return current->thread.asi_state.intr_nest_depth;
++}
++
++/*
++ * Remember that interrupts/exception don't count as the critical section. If
++ * you want to know if the current task is in the critical section use
++ * asi_is_tense().
++ */
++static __always_inline bool asi_in_critical_section(void)
++{
++	return asi_is_tense() && !asi_intr_nest_depth();
++}
++
+ #define INIT_MM_ASI(init_mm) \
+ 	.asi_init_lock = __MUTEX_INITIALIZER(init_mm.asi_init_lock),
  
-+	free_pages((ulong)asi->pgd, PGD_ALLOCATION_ORDER);
-+	memset(asi, 0, sizeof(struct asi));
+diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
+index ad5c68f0509d4dfd0834303c0f9dabc93ef73aa4..9e00da0a3b08f83ca5e603dc2abbfd5fa3059811 100644
+--- a/arch/x86/include/asm/idtentry.h
++++ b/arch/x86/include/asm/idtentry.h
+@@ -12,6 +12,7 @@
+ #include <linux/hardirq.h>
+ 
+ #include <asm/irq_stack.h>
++#include <asm/asi.h>
+ 
+ typedef void (*idtentry_t)(struct pt_regs *regs);
+ 
+@@ -55,12 +56,15 @@ static __always_inline void __##func(struct pt_regs *regs);		\
+ 									\
+ __visible noinstr void func(struct pt_regs *regs)			\
+ {									\
+-	irqentry_state_t state = irqentry_enter(regs);			\
++	irqentry_state_t state;						\
+ 									\
++	asi_intr_enter();						\
++	state = irqentry_enter(regs);					\
+ 	instrumentation_begin();					\
+ 	__##func (regs);						\
+ 	instrumentation_end();						\
+ 	irqentry_exit(regs, state);					\
++	asi_intr_exit();						\
+ }									\
+ 									\
+ static __always_inline void __##func(struct pt_regs *regs)
+@@ -102,12 +106,15 @@ static __always_inline void __##func(struct pt_regs *regs,		\
+ __visible noinstr void func(struct pt_regs *regs,			\
+ 			    unsigned long error_code)			\
+ {									\
+-	irqentry_state_t state = irqentry_enter(regs);			\
++	irqentry_state_t state;						\
+ 									\
++	asi_intr_enter();						\
++	state = irqentry_enter(regs);					\
+ 	instrumentation_begin();					\
+ 	__##func (regs, error_code);					\
+ 	instrumentation_end();						\
+ 	irqentry_exit(regs, state);					\
++	asi_intr_exit();						\
+ }									\
+ 									\
+ static __always_inline void __##func(struct pt_regs *regs,		\
+@@ -139,7 +146,16 @@ static __always_inline void __##func(struct pt_regs *regs,		\
+  * is required before the enter/exit() helpers are invoked.
+  */
+ #define DEFINE_IDTENTRY_RAW(func)					\
+-__visible noinstr void func(struct pt_regs *regs)
++static __always_inline void __##func(struct pt_regs *regs);		\
++									\
++__visible noinstr void func(struct pt_regs *regs)			\
++{									\
++	asi_intr_enter();						\
++	__##func (regs);						\
++	asi_intr_exit();						\
++}									\
++									\
++static __always_inline void __##func(struct pt_regs *regs)
+ 
+ /**
+  * DEFINE_FREDENTRY_RAW - Emit code for raw FRED entry points
+@@ -178,7 +194,18 @@ noinstr void fred_##func(struct pt_regs *regs)
+  * is required before the enter/exit() helpers are invoked.
+  */
+ #define DEFINE_IDTENTRY_RAW_ERRORCODE(func)				\
+-__visible noinstr void func(struct pt_regs *regs, unsigned long error_code)
++static __always_inline void __##func(struct pt_regs *regs,		\
++				     unsigned long error_code);		\
++									\
++__visible noinstr void func(struct pt_regs *regs, unsigned long error_code)\
++{									\
++	asi_intr_enter();						\
++	__##func (regs, error_code);					\
++	asi_intr_exit();						\
++}									\
++									\
++static __always_inline void __##func(struct pt_regs *regs,		\
++				     unsigned long error_code)
+ 
+ /**
+  * DECLARE_IDTENTRY_IRQ - Declare functions for device interrupt IDT entry
+@@ -209,14 +236,17 @@ static void __##func(struct pt_regs *regs, u32 vector);			\
+ __visible noinstr void func(struct pt_regs *regs,			\
+ 			    unsigned long error_code)			\
+ {									\
+-	irqentry_state_t state = irqentry_enter(regs);			\
++	irqentry_state_t state;						\
+ 	u32 vector = (u32)(u8)error_code;				\
+ 									\
++	asi_intr_enter();						\
++	state = irqentry_enter(regs);					\
+ 	kvm_set_cpu_l1tf_flush_l1d();                                   \
+ 	instrumentation_begin();					\
+ 	run_irq_on_irqstack_cond(__##func, regs, vector);		\
+ 	instrumentation_end();						\
+ 	irqentry_exit(regs, state);					\
++	asi_intr_exit();						\
+ }									\
+ 									\
+ static noinline void __##func(struct pt_regs *regs, u32 vector)
+@@ -255,13 +285,16 @@ static __always_inline void instr_##func(struct pt_regs *regs)		\
+ 									\
+ __visible noinstr void func(struct pt_regs *regs)			\
+ {									\
+-	irqentry_state_t state = irqentry_enter(regs);			\
++	irqentry_state_t state;						\
+ 									\
++	asi_intr_enter();						\
++	state = irqentry_enter(regs);					\
+ 	kvm_set_cpu_l1tf_flush_l1d();                                   \
+ 	instrumentation_begin();					\
+ 	instr_##func (regs);						\
+ 	instrumentation_end();						\
+ 	irqentry_exit(regs, state);					\
++	asi_intr_exit();						\
+ }									\
+ 									\
+ void fred_##func(struct pt_regs *regs)					\
+@@ -294,13 +327,16 @@ static __always_inline void instr_##func(struct pt_regs *regs)		\
+ 									\
+ __visible noinstr void func(struct pt_regs *regs)			\
+ {									\
+-	irqentry_state_t state = irqentry_enter(regs);			\
++	irqentry_state_t state;						\
+ 									\
++	asi_intr_enter();						\
++	state = irqentry_enter(regs);					\
+ 	kvm_set_cpu_l1tf_flush_l1d();                                   \
+ 	instrumentation_begin();					\
+ 	instr_##func (regs);						\
+ 	instrumentation_end();						\
+ 	irqentry_exit(regs, state);					\
++	asi_intr_exit();						\
+ }									\
+ 									\
+ void fred_##func(struct pt_regs *regs)					\
+diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
+index f02220e6b4df911d87e2fee4b497eade61a27161..a32a53405f45e4c0473fe081e216029cf5bd0cdd 100644
+--- a/arch/x86/include/asm/processor.h
++++ b/arch/x86/include/asm/processor.h
+@@ -508,6 +508,11 @@ struct thread_struct {
+ 	struct {
+ 		/* Domain to enter when returning to process context. */
+ 		struct asi	*target;
++		/*
++		 * The depth of interrupt/exceptions interrupting an ASI
++		 * critical section
++		 */
++		int		intr_nest_depth;
+ 	} asi_state;
+ #endif
+ 
+diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+index f63f8fd00a91f3d1171f307b92179556ba2d716d..44abc161820153b7f68664b97267658b8e011101 100644
+--- a/arch/x86/kernel/process.c
++++ b/arch/x86/kernel/process.c
+@@ -96,6 +96,8 @@ int arch_dup_task_struct(struct task_struct *dst, struct task_struct *src)
+ #ifdef CONFIG_VM86
+ 	dst->thread.vm86 = NULL;
+ #endif
++	asi_init_thread_state(&dst->thread);
++
+ 	/* Drop the copied pointer to current's fpstate */
+ 	dst->thread.fpu.fpstate = NULL;
+ 
+diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
+index 2dbadf347b5f4f66625c4f49b76c41b412270d57..beea861da8d3e9a4e2afb3a92ed5f66f11d67bd6 100644
+--- a/arch/x86/kernel/traps.c
++++ b/arch/x86/kernel/traps.c
+@@ -65,6 +65,7 @@
+ #include <asm/umip.h>
+ #include <asm/insn.h>
+ #include <asm/insn-eval.h>
++#include <asm/asi.h>
+ #include <asm/vdso.h>
+ #include <asm/tdx.h>
+ #include <asm/cfi.h>
+@@ -463,6 +464,27 @@ DEFINE_IDTENTRY_DF(exc_double_fault)
+ 	}
+ #endif
+ 
++	/*
++	 * Do an asi_exit() only here because a #DF usually indicates
++	 * the system is in a really bad state, and we don't want to
++	 * cause any additional issue that would prevent us from
++	 * printing a correct stack trace.
++	 *
++	 * The additional issues are not related to a possible triple
++	 * fault, which can only occurs if a fault is encountered while
++	 * invoking this handler, but here we are already executing it.
++	 * Instead, an ASI-induced #PF here could potentially end up
++	 * getting another #DF. For example, if there was some issue in
++	 * invoking the #PF handler. The handler for the second #DF
++	 * could then again cause an ASI-induced #PF leading back to the
++	 * same recursion.
++	 *
++	 * This is not needed in the espfix64 case above, since that
++	 * code is about turning a #DF into a #GP which is okay to
++	 * handle in the restricted domain. That's also why we don't
++	 * asi_exit() in the #GP handler.
++	 */
++	asi_exit();
+ 	irqentry_nmi_enter(regs);
+ 	instrumentation_begin();
+ 	notify_die(DIE_TRAP, str, regs, error_code, X86_TRAP_DF, SIGSEGV);
+diff --git a/arch/x86/mm/asi.c b/arch/x86/mm/asi.c
+index 5baf563a078f5b3a6cd4b9f5e92baaf81b0774c4..054315d566c082c0925a00ce3a0877624c8b9957 100644
+--- a/arch/x86/mm/asi.c
++++ b/arch/x86/mm/asi.c
+@@ -235,7 +235,7 @@ static __always_inline void maybe_flush_data(struct asi *next_asi)
+ 	this_cpu_and(asi_taints, ~ASI_TAINTS_DATA_MASK);
  }
  
- int asi_init(struct mm_struct *mm, enum asi_class_id class_id, struct asi **out_asi)
-@@ -79,6 +112,9 @@ int asi_init(struct mm_struct *mm, enum asi_class_id class_id, struct asi **out_
- 
- 	*out_asi = NULL;
- 
-+	if (!boot_cpu_has(X86_FEATURE_ASI))
-+		return 0;
-+
- 	if (WARN_ON(!asi_class_initialized(class_id)))
- 		return -EINVAL;
- 
-@@ -122,7 +158,7 @@ void asi_destroy(struct asi *asi)
+-static noinstr void __asi_enter(void)
++noinstr void __asi_enter(void)
  {
- 	struct mm_struct *mm;
+ 	u64 asi_cr3;
+ 	struct asi *target = asi_get_target(current);
+@@ -250,6 +250,7 @@ static noinstr void __asi_enter(void)
+ 	 * disabling preemption should be fine.
+ 	 */
+ 	VM_BUG_ON(preemptible());
++	VM_BUG_ON(current->thread.asi_state.intr_nest_depth != 0);
  
--	if (!asi)
-+	if (!boot_cpu_has(X86_FEATURE_ASI) || !asi)
+ 	if (!target || target == this_cpu_read(curr_asi))
+ 		return;
+@@ -290,6 +291,7 @@ noinstr void asi_enter(struct asi *asi)
+ 	if (!static_asi_enabled())
  		return;
  
- 	if (WARN_ON(!asi_class_initialized(asi->class_id)))
-@@ -134,11 +170,7 @@ void asi_destroy(struct asi *asi)
- 	 * to block concurrent asi_init calls.
- 	 */
- 	mutex_lock(&mm->asi_init_lock);
--	WARN_ON_ONCE(asi->ref_count <= 0);
--	if (--(asi->ref_count) == 0) {
--		free_pages((ulong)asi->pgd, PGD_ALLOCATION_ORDER);
--		memset(asi, 0, sizeof(struct asi));
--	}
-+	__asi_destroy(asi);
- 	mutex_unlock(&mm->asi_init_lock);
- }
- EXPORT_SYMBOL_GPL(asi_destroy);
-@@ -255,6 +287,9 @@ static noinstr void __asi_enter(void)
- 
- noinstr void asi_enter(struct asi *asi)
- {
-+	if (!static_asi_enabled())
-+		return;
-+
++	VM_WARN_ON_ONCE(asi_intr_nest_depth());
  	VM_WARN_ON_ONCE(!asi);
  
  	/* Should not have an asi_enter() without a prior asi_relax(). */
-@@ -269,8 +304,10 @@ EXPORT_SYMBOL_GPL(asi_enter);
- 
+@@ -305,6 +307,7 @@ EXPORT_SYMBOL_GPL(asi_enter);
  noinstr void asi_relax(void)
  {
--	barrier();
--	asi_set_target(current, NULL);
-+	if (static_asi_enabled()) {
-+		barrier();
-+		asi_set_target(current, NULL);
-+	}
- }
- EXPORT_SYMBOL_GPL(asi_relax);
+ 	if (static_asi_enabled()) {
++		VM_WARN_ON_ONCE(asi_intr_nest_depth());
+ 		barrier();
+ 		asi_set_target(current, NULL);
+ 	}
+@@ -326,6 +329,8 @@ noinstr void asi_exit(void)
  
-@@ -279,6 +316,9 @@ noinstr void asi_exit(void)
- 	u64 unrestricted_cr3;
- 	struct asi *asi;
- 
-+	if (!static_asi_enabled())
-+		return;
+ 	asi = this_cpu_read(curr_asi);
+ 	if (asi) {
++		WARN_ON_ONCE(asi_in_critical_section());
 +
- 	preempt_disable_notrace();
+ 		maybe_flush_control(NULL);
  
- 	VM_BUG_ON(this_cpu_read(cpu_tlbstate.loaded_mm) ==
-@@ -310,6 +350,9 @@ EXPORT_SYMBOL_GPL(asi_exit);
- 
- void asi_init_mm_state(struct mm_struct *mm)
- {
-+	if (!boot_cpu_has(X86_FEATURE_ASI))
-+		return;
-+
- 	memset(mm->asi, 0, sizeof(mm->asi));
- 	mutex_init(&mm->asi_init_lock);
- }
-diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
-index de4227ed5169ff84d0ce80b677caffc475198fa6..ded3a47f2a9c1f554824d4ad19f3b48bce271274 100644
---- a/arch/x86/mm/init.c
-+++ b/arch/x86/mm/init.c
-@@ -28,6 +28,7 @@
- #include <asm/text-patching.h>
- #include <asm/memtype.h>
- #include <asm/paravirt.h>
-+#include <asm/asi.h>
- 
- /*
-  * We need to define the tracepoints somewhere, and tlb.c
-@@ -251,7 +252,7 @@ static void __init probe_page_size_mask(void)
- 	__default_kernel_pte_mask = __supported_pte_mask;
- 	/* Except when with PTI where the kernel is mostly non-Global: */
- 	if (cpu_feature_enabled(X86_FEATURE_PTI) ||
--	    IS_ENABLED(CONFIG_MITIGATION_ADDRESS_SPACE_ISOLATION))
-+	    cpu_feature_enabled(X86_FEATURE_ASI))
- 		__default_kernel_pte_mask &= ~_PAGE_GLOBAL;
- 
- 	/* Enable 1 GB linear kernel mappings if available: */
-@@ -754,6 +755,7 @@ void __init init_mem_mapping(void)
- 	unsigned long end;
- 
- 	pti_check_boottime_disable();
-+	asi_check_boottime_disable();
- 	probe_page_size_mask();
- 	setup_pcid();
- 
+ 		unrestricted_cr3 =
 diff --git a/include/asm-generic/asi.h b/include/asm-generic/asi.h
-index 6b84202837605fa57e4a910318c8353b3f816f06..eedc961ee916a9e1da631ca489ea4a7bc9e6089f 100644
+index eedc961ee916a9e1da631ca489ea4a7bc9e6089f..7f542c59c2b8a2b74432e4edb7199f9171db8a84 100644
 --- a/include/asm-generic/asi.h
 +++ b/include/asm-generic/asi.h
-@@ -65,6 +65,10 @@ static inline pgd_t *asi_pgd(struct asi *asi) { return NULL; }
+@@ -52,6 +52,8 @@ static inline bool asi_is_relaxed(void) { return true; }
+ 
+ static inline bool asi_is_tense(void) { return false; }
+ 
++static inline bool asi_in_critical_section(void) { return false; }
++
+ static inline void asi_exit(void) { }
+ 
+ static inline bool asi_is_restricted(void) { return false; }
+@@ -65,6 +67,14 @@ static inline pgd_t *asi_pgd(struct asi *asi) { return NULL; }
  
  static inline void asi_handle_switch_mm(void) { }
  
-+#define static_asi_enabled() false
++static inline void asi_init_thread_state(struct thread_struct *thread) { }
 +
-+static inline void asi_check_boottime_disable(void) { }
++static inline void asi_intr_enter(void) { }
 +
- #endif /* !CONFIG_MITIGATION_ADDRESS_SPACE_ISOLATION */
++static inline int asi_intr_nest_depth(void) { return 0; }
++
++static inline void asi_intr_exit(void) { }
++
+ #define static_asi_enabled() false
  
- #endif  /* !_ASSEMBLY_ */
+ static inline void asi_check_boottime_disable(void) { }
 
 -- 
 2.47.1.613.gc27f4b7a9f-goog
